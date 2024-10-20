@@ -3210,10 +3210,7 @@ class NvizToolWindow(GNotebook):
             "style": style,
             "size": sizeW,
         }
-        if floatSlider:
-            slider = FloatSlider(**kwargs)
-        else:
-            slider = Slider(**kwargs)
+        slider = FloatSlider(**kwargs) if floatSlider else Slider(**kwargs)
 
         slider.SetName("slider")
         if bind[0]:
@@ -3432,12 +3429,9 @@ class NvizToolWindow(GNotebook):
         else:
             self.PostViewEvent(zExag=False)
 
-        if winName in {"persp", "twist"}:
-            convert = int
-        else:
-            convert = float
-
-        view[winName]["value"] = convert(value)
+        view[winName]["value"] = (
+            int(value) if winName in {"persp", "twist"} else float(value)
+        )
 
         for win in self.win["view"][winName].values():
             self.FindWindowById(win).SetValue(value)
@@ -3881,11 +3875,7 @@ class NvizToolWindow(GNotebook):
     def _getPercent(self, value, toPercent=True):
         """Convert values 0 - 255 to percents and vice versa"""
         value = int(value)
-        if toPercent:
-            value = int(value / 255.0 * 100)
-        else:
-            value = int(value / 100.0 * 255)
-        return value
+        return int(value / 255.0 * 100) if toPercent else int(value / 100.0 * 255)
 
     def OnSurfaceWireColor(self, event):
         """Set wire color"""
@@ -4199,10 +4189,7 @@ class NvizToolWindow(GNotebook):
     def OnVectorSurface(self, event):
         """Reference surface for vector map (lines/points)"""
         id = event.GetId()
-        if id == self.win["vector"]["lines"]["surface"]:
-            vtype = "lines"
-        else:
-            vtype = "points"
+        vtype = "lines" if id == self.win["vector"]["lines"]["surface"] else "points"
         checkList = self.FindWindowById(self.win["vector"][vtype]["surface"])
         checked = []
         surfaces = []
@@ -4278,10 +4265,7 @@ class NvizToolWindow(GNotebook):
 
             check = self.win["vector"][vtype]["thematic"]["check" + attrType]
             button = self.win["vector"][vtype]["thematic"]["button" + attrType]
-            if self.FindWindowById(check).GetValue():
-                checked = True
-            else:
-                checked = False
+            checked = bool(self.FindWindowById(check).GetValue())
             self.FindWindowById(button).Enable(checked)
 
             data = self.GetLayerData("vector")

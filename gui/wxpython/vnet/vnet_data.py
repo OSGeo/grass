@@ -841,10 +841,7 @@ class VNETAnalysesProperties:
         cols = self.vnetProperties[analysis]["cmdParams"]["cols"]
 
         for col, v in cols.items():
-            if "inputField" in col:
-                colInptF = v["inputField"]
-            else:
-                colInptF = col
+            colInptF = v["inputField"] if "inputField" in col else col
             relevant_params.append(colInptF)
 
         return relevant_params
@@ -900,10 +897,7 @@ class VNETTmpVectMaps:
         """
 
         mapValSpl = vectMapName.strip().split("@")
-        if len(mapValSpl) > 1:
-            mapSet = mapValSpl[1]
-        else:
-            mapSet = grass.gisenv()["MAPSET"]
+        mapSet = mapValSpl[1] if len(mapValSpl) > 1 else grass.gisenv()["MAPSET"]
         mapName = mapValSpl[0]
         fullName = mapName + "@" + mapSet
 
@@ -1324,10 +1318,7 @@ class History:
             del kv[0]
         idx = 0
         while idx < len(kv):
-            if subkeyMaster:
-                subkey = [subkeyMaster, kv[idx]]
-            else:
-                subkey = kv[idx]
+            subkey = [subkeyMaster, kv[idx]] if subkeyMaster else kv[idx]
             value = kv[idx + 1]
             value = self._parseValue(value, read=True)
             if key not in histStepData:
@@ -1444,21 +1435,14 @@ class VNETGlobalTurnsData:
             self.turn_data[i_row][1] = new_to_angle
 
         for i_row in inside_new:
-            if col == 1:
-                angle = new_from_angle
-            else:
-                angle = new_to_angle
+            angle = new_from_angle if col == 1 else new_to_angle
 
             self.turn_data[i_row][1] = angle
             self.turn_data[i_row][2] = angle
 
     def RemoveDataValidator(self, row):
         """Angle recalculation due to direction remove"""
-        if row == 0:
-            prev_row = self.GetLinesCount() - 1
-        else:
-            prev_row = row - 1
-
+        prev_row = self.GetLinesCount() - 1 if row == 0 else row - 1
         remove_to_angle = self.turn_data[row][2]
         self.turn_data[prev_row][2] = remove_to_angle
 

@@ -1256,10 +1256,7 @@ class MapFramePanel(Panel):
 
         if self.scaleChoice.GetSelection() == 0:
             self.selectedMap = self.selected
-            if self.rasterTypeRadio.GetValue():
-                mapType = "raster"
-            else:
-                mapType = "vector"
+            mapType = "raster" if self.rasterTypeRadio.GetValue() else "vector"
 
             self.scale[0], self.center[0], foo = AutoAdjust(
                 self,
@@ -1308,10 +1305,7 @@ class MapFramePanel(Panel):
                 self.vectorTypeRadio.Show()
                 self.drawMap.Show()
                 self.staticBox.SetLabel(" %s " % _("Map selection"))
-                if self.rasterTypeRadio.GetValue():
-                    stype = "raster"
-                else:
-                    stype = "vector"
+                stype = "raster" if self.rasterTypeRadio.GetValue() else "vector"
 
                 self.select.SetElementList(type=stype)
                 self.mapText.SetLabel(self.mapOrRegionText[0])
@@ -1368,10 +1362,7 @@ class MapFramePanel(Panel):
 
     def OnElementType(self, event):
         """Changes data in map selection tree ctrl popup"""
-        if self.rasterTypeRadio.GetValue():
-            mapType = "raster"
-        else:
-            mapType = "vector"
+        mapType = "raster" if self.rasterTypeRadio.GetValue() else "vector"
         self.select.SetElementList(type=mapType)
         if self.mapType != mapType and event is not None:
             self.mapType = mapType
@@ -1488,10 +1479,7 @@ class MapFramePanel(Panel):
                     )
                 if self.mapType == "vector":
                     raster = self.instruction.FindInstructionByType("raster")
-                    if raster:
-                        rasterId = raster.id
-                    else:
-                        rasterId = None
+                    rasterId = raster.id if raster else None
 
                     if rasterId:
                         self.env["GRASS_REGION"] = gs.region_env(
@@ -1562,10 +1550,7 @@ class MapFramePanel(Panel):
             region = gs.region(env=None)
 
             raster = self.instruction.FindInstructionByType("raster")
-            if raster:
-                rasterId = raster.id
-            else:
-                rasterId = None
+            rasterId = raster.id if raster else None
 
             if rasterId:  # because of resolution
                 self.env["GRASS_REGION"] = gs.region_env(
@@ -3748,10 +3733,7 @@ class LegendDialog(PsmapDialog):
 
     def sizePositionFont(self, legendType, parent, mainSizer):
         """Insert widgets for size, position and font control"""
-        if legendType == "raster":
-            legendDict = self.rLegendDict
-        else:
-            legendDict = self.vLegendDict
+        legendDict = self.rLegendDict if legendType == "raster" else self.vLegendDict
         panel = parent
         border = mainSizer
 
@@ -4125,10 +4107,7 @@ class LegendDialog(PsmapDialog):
                 self.vectorListCtrl.SetItemData(pos, idx1)
                 self.vectorListCtrl.SetItemData(pos - 1, idx2)
                 self.vectorListCtrl.SortItems(cmp)
-                if pos > 0:
-                    selected = pos - 1
-                else:
-                    selected = 0
+                selected = pos - 1 if pos > 0 else 0
 
                 self.vectorListCtrl.Select(selected)
 
@@ -4463,11 +4442,7 @@ class LegendDialog(PsmapDialog):
         else:
             self.rasterId = None
 
-        if raster:
-            currRaster = raster["raster"]
-        else:
-            currRaster = None
-
+        currRaster = raster["raster"] if raster else None
         rasterType = getRasterType(map=currRaster)
         self.rasterCurrent.SetLabel(
             _("%(rast)s: type %(type)s") % {"rast": currRaster, "type": str(rasterType)}
@@ -4995,10 +4970,7 @@ class ScalebarDialog(PsmapDialog):
             globalvar.IMGDIR, "scalebar-simple.png"
         )
         for item, path in zip(["fancy", "simple"], imagePath):
-            if not os.path.exists(path):
-                bitmap = EmptyBitmap(0, 0)
-            else:
-                bitmap = wx.Bitmap(path)
+            bitmap = EmptyBitmap(0, 0) if not os.path.exists(path) else wx.Bitmap(path)
             self.sbCombo.Append(item="", bitmap=bitmap, clientData=item[0])
         # self.sbCombo.Append(
         #     item="simple",
@@ -5884,11 +5856,7 @@ class ImageDialog(PsmapDialog):
         panel.image["scale"].SetFormat("%f")
         panel.image["scale"].SetDigits(1)
 
-        if self.imageDict["scale"]:
-            value = float(self.imageDict["scale"])
-        else:
-            value = 0
-
+        value = float(self.imageDict["scale"]) if self.imageDict["scale"] else 0
         panel.image["scale"].SetValue(value)
 
         gridSizer.Add(scaleLabel, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
@@ -6601,10 +6569,7 @@ class RectangleDialog(PsmapDialog):
 
         :param coordinates: begin and end point coordinate (wx.Point, wx.Point)
         """
-        if type == "rectangle":
-            title = _("Rectangle settings")
-        else:
-            title = _("Line settings")
+        title = _("Rectangle settings") if type == "rectangle" else _("Line settings")
         PsmapDialog.__init__(
             self, parent=parent, id=id, title=title, settings=settings, env=env
         )

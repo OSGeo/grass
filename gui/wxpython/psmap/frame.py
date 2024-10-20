@@ -370,10 +370,7 @@ class PsMapFrame(wx.Frame):
         temp = False
         regOld = gs.region(env=self.env)
 
-        if pdf:
-            pdfname = filename
-        else:
-            pdfname = None
+        pdfname = filename if pdf else None
         # preview or pdf
         if not filename or (filename and pdf):
             temp = True
@@ -571,10 +568,7 @@ class PsMapFrame(wx.Frame):
                 s = "." + s
             suffix.append(s)
         raster = self.instruction.FindInstructionByType("raster")
-        if raster:
-            rasterId = raster.id
-        else:
-            rasterId = None
+        rasterId = raster.id if raster else None
 
         if rasterId and self.instruction[rasterId]["raster"]:
             mapName = self.instruction[rasterId]["raster"].split("@")[0] + suffix[0]
@@ -1108,10 +1102,7 @@ class PsMapFrame(wx.Frame):
         scale = mapInitRect.Get()[2] / realWidth
 
         initMap = self.instruction.FindInstructionByType("initMap")
-        if initMap:
-            id = initMap.id
-        else:
-            id = None
+        id = initMap.id if initMap else None
 
         if not id:
             id = NewId()
@@ -2102,10 +2093,7 @@ class PsMapBufferedWindow(wx.Window):
                     instr = self.instruction[self.dragId]
                     points = instr["where"]
                     # moving point
-                    if self.currentLinePoint == 0:
-                        pPaper = points[1]
-                    else:
-                        pPaper = points[0]
+                    pPaper = points[1] if self.currentLinePoint == 0 else points[0]
                     pCanvas = self.CanvasPaperCoordinates(
                         rect=Rect2DPS(pPaper, (0, 0)), canvasToPaper=False
                     )[:2]
@@ -2534,10 +2522,7 @@ class PsMapBufferedWindow(wx.Window):
         pdc.DrawBitmap(bitmap, bbox[0], bbox[1], useMask=True)
 
     def DrawRotText(self, pdc, drawId, textDict, coords, bounds):
-        if textDict["rotate"]:
-            rot = float(textDict["rotate"])
-        else:
-            rot = 0
+        rot = float(textDict["rotate"]) if textDict["rotate"] else 0
 
         if textDict["background"] != "none":
             background = textDict["background"]
@@ -2693,16 +2678,10 @@ class PsMapBufferedWindow(wx.Window):
         """Updates map frame label"""
 
         vector = self.instruction.FindInstructionByType("vector")
-        if vector:
-            vectorId = vector.id
-        else:
-            vectorId = None
+        vectorId = vector.id if vector else None
 
         raster = self.instruction.FindInstructionByType("raster")
-        if raster:
-            rasterId = raster.id
-        else:
-            rasterId = None
+        rasterId = raster.id if raster else None
 
         rasterName = "None"
         if rasterId:

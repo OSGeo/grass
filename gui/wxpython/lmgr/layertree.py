@@ -688,10 +688,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             )
 
             digitToolbar = self.mapdisplay.GetToolbar("vdigit")
-            if digitToolbar:
-                vdigitLayer = digitToolbar.GetLayer()
-            else:
-                vdigitLayer = None
+            vdigitLayer = digitToolbar.GetLayer() if digitToolbar else None
             layer = self.GetLayerInfo(self.layer_selected, key="maplayer")
             if vdigitLayer is not layer:
                 item = wx.MenuItem(
@@ -1569,10 +1566,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
                 name = None
 
-            if ctrl:
-                ctrlId = ctrl.GetId()
-            else:
-                ctrlId = None
+            ctrlId = ctrl.GetId() if ctrl else None
 
             # add a data object to hold the layer's command (does not
             # apply to generic command layers)
@@ -1606,11 +1600,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     prevMapLayer = self.GetLayerInfo(prevItem, key="maplayer")
 
                 prevItem = self.GetNextItem(prevItem)
-
-                if prevMapLayer:
-                    pos = self.Map.GetLayerIndex(prevMapLayer)
-                else:
-                    pos = -1
+                pos = self.Map.GetLayerIndex(prevMapLayer) if prevMapLayer else -1
 
             maplayer = self.Map.AddLayer(
                 pos=pos,

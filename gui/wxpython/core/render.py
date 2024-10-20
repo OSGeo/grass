@@ -100,10 +100,7 @@ class Layer:
         if mapfile:
             self.mapfile = mapfile
         else:
-            if ltype == "overlay":
-                tempfile_sfx = ".png"
-            else:
-                tempfile_sfx = ".ppm"
+            tempfile_sfx = ".png" if ltype == "overlay" else ".ppm"
 
             self.mapfile = get_tempfile_name(suffix=tempfile_sfx)
 
@@ -790,10 +787,7 @@ class RenderMapMgr(wx.EvtHandler):
             stText += "..."
 
         if self.progressInfo["range"] != len(self.progressInfo["rendered"]):
-            if stText:
-                stText = _("Rendering & ") + stText
-            else:
-                stText = _("Rendering...")
+            stText = _("Rendering & ") + stText if stText else _("Rendering...")
 
         self.updateProgress.emit(
             range=self.progressInfo["range"],
@@ -1260,16 +1254,8 @@ class Map:
         :return: list of selected layers
         """
         selected = []
-
-        if isinstance(ltype, str):
-            one_type = True
-        else:
-            one_type = False
-
-        if one_type and ltype == "overlay":
-            llist = self.overlays
-        else:
-            llist = self.layers
+        one_type = bool(isinstance(ltype, str))
+        llist = self.overlays if one_type and ltype == "overlay" else self.layers
 
         # ["raster", "vector", "wms", ... ]
         for layer in llist:
@@ -1332,10 +1318,7 @@ class Map:
         self.renderMgr.Render(force, windres)
 
     def _addLayer(self, layer, pos=-1):
-        if layer.type == "overlay":
-            llist = self.overlays
-        else:
-            llist = self.layers
+        llist = self.overlays if layer.type == "overlay" else self.layers
 
         # add maplayer to the list of layers
         if pos > -1:
@@ -1426,10 +1409,7 @@ class Map:
         """
         Debug.msg(3, "Map.DeleteLayer(): name=%s" % layer.name)
 
-        if overlay:
-            list = self.overlays
-        else:
-            list = self.layers
+        list = self.overlays if overlay else self.layers
 
         if layer in list:
             if layer.mapfile:
@@ -1583,10 +1563,7 @@ class Map:
         :return: layer index
         :return: -1 if layer not found
         """
-        if overlay:
-            list = self.overlays
-        else:
-            list = self.layers
+        list = self.overlays if overlay else self.layers
 
         if layer in list:
             return list.index(layer)

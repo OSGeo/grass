@@ -393,10 +393,7 @@ class DisplayAttributesDialog(wx.Dialog):
         """
         if action:
             self.action = action
-            if action == "display":
-                enabled = False
-            else:
-                enabled = True
+            enabled = action != "display"
             self.closeDialog.Enable(enabled)
             self.FindWindowById(wx.ID_OK).Enable(enabled)
 

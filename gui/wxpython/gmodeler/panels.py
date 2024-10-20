@@ -622,10 +622,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
             item.Show(True)
             # relations/data
             for rel in item.GetRelations():
-                if rel.GetFrom() == item:
-                    dataItem = rel.GetTo()
-                else:
-                    dataItem = rel.GetFrom()
+                dataItem = rel.GetTo() if rel.GetFrom() == item else rel.GetFrom()
                 self._addEvent(dataItem)
                 self.canvas.diagram.AddShape(dataItem)
                 self.AddLine(rel)

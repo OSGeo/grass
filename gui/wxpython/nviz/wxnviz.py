@@ -708,11 +708,7 @@ class Nviz:
         if map:
             ret = Nviz_set_attr(id, MAP_OBJ_SURF, attr, MAP_ATT, value, -1.0, self.data)
         else:
-            if attr == ATT_COLOR:
-                val = Nviz_color_from_str(value)
-            else:
-                val = float(value)
-
+            val = Nviz_color_from_str(value) if attr == ATT_COLOR else float(value)
             ret = Nviz_set_attr(id, MAP_OBJ_SURF, attr, CONST_ATT, None, val, self.data)
 
         Debug.msg(
@@ -1505,11 +1501,7 @@ class Nviz:
         if map:
             ret = GVL_isosurf_set_att_map(id, isosurf_id, attr, value)
         else:
-            if attr == ATT_COLOR:
-                val = Nviz_color_from_str(value)
-            else:
-                val = float(value)
-
+            val = Nviz_color_from_str(value) if attr == ATT_COLOR else float(value)
             ret = GVL_isosurf_set_att_const(id, isosurf_id, attr, val)
 
         Debug.msg(
@@ -2175,10 +2167,7 @@ class Texture:
 
     def Load(self):
         """Load image to texture"""
-        if self.image.HasAlpha():
-            bytesPerPixel = 4
-        else:
-            bytesPerPixel = 3
+        bytesPerPixel = 4 if self.image.HasAlpha() else 3
         bytes = bytesPerPixel * self.width * self.height
         rev_val = self.height - 1
         im = (c_ubyte * bytes)()
