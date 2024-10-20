@@ -34,9 +34,7 @@ select = [
     "COM",    # flake8-commas (COM)
     "D",      # pydocstyle (D)
     "DTZ",    # flake8-datetimez (DTZ)
-    "E4",     # pycodestyle (E, W)
-    "E7",     # pycodestyle (E, W)
-    "E9",     # pycodestyle (E, W)
+    "E",      # pycodestyle (E, W)
     "F",      # Pyflakes (F)
     "FA",     # flake8-future-annotations (FA)
     "FBT",    # flake8-boolean-trap (FBT)
@@ -127,8 +125,10 @@ ignore = [
     "DTZ006",  # call-datetime-fromtimestamp
     "DTZ007",  # call-datetime-strptime-without-zone
     "DTZ011",  # call-date-today
-    "E401",    # multiple-imports-on-one-line
+    "E265",    # no-space-after-block-comment
+    "E266",    # multiple-leading-hashes-for-block-comment
     "E402",    # module-import-not-at-top-of-file
+    "E501",    # line-too-long
     "E721",    # type-comparison
     "E722",    # bare-except
     "E731",    # lambda-assignment
