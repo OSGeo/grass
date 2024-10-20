@@ -687,18 +687,18 @@ void CleanEdges(void)
         e = edges;
         DELETE(edges, e);
     }
-    if (edges) {
-        e = edges->next;
-        do {
-            if (e->delete) {
-                t = e;
-                e = e->next;
-                DELETE(edges, t);
-            }
-            else
-                e = e->next;
-        } while (e != edges);
-    }
+    if (!edges)
+        return;
+    e = edges->next;
+    do {
+        if (e->delete) {
+            t = e;
+            e = e->next;
+            DELETE(edges, t);
+        }
+        else
+            e = e->next;
+    } while (e != edges);
 }
 
 /*---------------------------------------------------------------------
@@ -713,6 +713,8 @@ void CleanFaces(void)
         f = faces;
         DELETE(faces, f);
     }
+    if (!faces)
+        return;
     f = faces->next;
     do {
         if (f->visible) {
@@ -748,6 +750,8 @@ void CleanVertices(void)
         v = vertices;
         DELETE(vertices, v);
     }
+    if (!vertices)
+        return;
     v = vertices->next;
     do {
         if (v->mark && !v->onhull) {
