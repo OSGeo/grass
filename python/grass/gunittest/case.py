@@ -1336,12 +1336,9 @@ class TestCase(unittest.TestCase):
                 errors = " The errors are:\n" + module.outputs.stderr
             else:
                 errors = " There were no error messages."
-            if module.outputs.stdout:
-                # this is not appropriate for translation but we don't want
-                # and don't need testing to be translated
-                got = "only whitespace."
-            else:
-                got = "nothing."
+            # This is not appropriate for translation but we don't want
+            # and don't need testing to be translated
+            got = "only whitespace." if module.outputs.stdout else "nothing."
             raise RuntimeError(
                 "Module call "
                 + module.get_python()

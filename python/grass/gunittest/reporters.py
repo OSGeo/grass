@@ -234,11 +234,8 @@ def get_svn_path_authors(path, from_date=None):
 
     :returns: a set of authors
     """
-    if from_date is None:
-        # this is the SVN default for local copies
-        revision_range = "BASE:1"
-    else:
-        revision_range = "BASE:{%s}" % from_date
+    # "BASE:1" is the SVN default for local copies
+    revision_range = "BASE:1" if from_date is None else "BASE:{%s}" % from_date
     try:
         # TODO: allow also usage of --limit
         p = subprocess.Popen(
