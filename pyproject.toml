@@ -149,7 +149,6 @@ ignore = [
     "N801",    # invalid-class-name
     "N802",    # invalid-function-name
     "N803",    # invalid-argument-name
-    "N804",    # invalid-first-argument-name-for-class-method
     "N805",    # invalid-first-argument-name-for-method
     "N806",    # non-lowercase-variable-in-function
     "N812",    # lowercase-imported-as-non-lowercase
