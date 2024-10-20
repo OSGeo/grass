@@ -47,8 +47,8 @@ class TestRasterbasin(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
 
-    def tearDown(cls):
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.output)
+    def tearDown(self):
+        self.runModule("g.remove", flags="f", type="raster", name=self.output)
 
     def test_no1(self):
         lakes = "lakes"
