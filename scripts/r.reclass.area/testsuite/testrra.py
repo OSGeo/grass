@@ -26,8 +26,8 @@ class Testrr(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
 
-    def tearDown(cls):
-        cls.runModule("g.remove", type="raster", flags="f", name=cls.output)
+    def tearDown(self):
+        self.runModule("g.remove", type="raster", flags="f", name=self.output)
 
     def test_flag_c(self):
         """Testing flag c"""
