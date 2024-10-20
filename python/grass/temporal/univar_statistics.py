@@ -103,7 +103,7 @@ def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=Fals
                 for perc in stats_module.inputs.percentile:
                     perc_value = stats[
                         "percentile_"
-                        f"{str(perc).rstrip('0').rstrip('.').replace('.','_')}"
+                        f"{str(perc).rstrip('0').rstrip('.').replace('.', '_')}"
                     ]
                     string += f"{fs}{perc_value}"
         string += eol
@@ -220,7 +220,7 @@ def print_gridded_dataset_univar_statistics(
                 cols.extend(
                     [
                         "percentile_"
-                        f"{str(perc).rstrip('0').rstrip('.').replace('.','_')}"
+                        f"{str(perc).rstrip('0').rstrip('.').replace('.', '_')}"
                         for perc in percentile
                     ]
                 )
