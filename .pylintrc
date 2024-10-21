@@ -652,6 +652,7 @@ min-public-methods=1
 
 # Exceptions that will emit a warning when being caught. Defaults to
 # "BaseException, Exception".
-overgeneral-exceptions=BaseException,Exception
+overgeneral-exceptions=BaseException,
+                       Exception
 
 
