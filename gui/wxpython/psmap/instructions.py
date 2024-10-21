@@ -223,7 +223,7 @@ class Instruction:
                     buffer = []
                 continue
 
-            elif line.startswith("paper"):
+            if line.startswith("paper"):
                 instruction = "paper"
                 isBuffer = True
                 buffer.append(line)

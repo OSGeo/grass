@@ -647,11 +647,11 @@ class VNETDialog(wx.Dialog):
                 if inpLayer in browseLayers:
                     needLayers.append(inpLayer)
                     continue
-                else:
-                    wx.BeginBusyCursor()
-                    self.inpDbMgrData["browse"].AddLayer(inpLayer)
-                    wx.EndBusyCursor()
-                    needLayers.append(inpLayer)
+
+                wx.BeginBusyCursor()
+                self.inpDbMgrData["browse"].AddLayer(inpLayer)
+                wx.EndBusyCursor()
+                needLayers.append(inpLayer)
 
             for layer in browseLayers:
                 if layer not in needLayers:

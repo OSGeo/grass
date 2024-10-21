@@ -643,7 +643,7 @@ def _formatMsg(text):
     for line in text.splitlines():
         if len(line) == 0:
             continue
-        elif (
+        if (
             "GRASS_INFO_MESSAGE" in line
             or "GRASS_INFO_WARNING" in line
             or "GRASS_INFO_ERROR" in line

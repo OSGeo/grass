@@ -1195,9 +1195,8 @@ class History:
                 if newHistStepsNum >= self.maxHistSteps:
                     removedHistStep = removedHistData[line] = {}
                     continue
-                else:
-                    newHist.write("%s%s%s" % ("\n", line, "\n"))
-                    self.histStepsNum = newHistStepsNum
+                newHist.write("%s%s%s" % ("\n", line, "\n"))
+                self.histStepsNum = newHistStepsNum
             elif newHistStepsNum >= self.maxHistSteps:
                 self._parseLine(line, removedHistStep)
             else:
@@ -1300,7 +1299,7 @@ class History:
             if not line.strip():
                 newHistStep = True
                 continue
-            elif isSearchedHistStep:
+            if isSearchedHistStep:
                 self._parseLine(line, histStepData)
 
             if newHistStep:
