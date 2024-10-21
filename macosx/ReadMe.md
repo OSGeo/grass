@@ -172,6 +172,11 @@ just remove the `--prefix` and `--enable-macosx-app` flags)*:
 
 ```bash
 ./configure \
+    --enable-macosx-app \
+    --prefix=/Applications \
+    --with-cxx \
+    --with-fftw-includes=/Library/Frameworks/FFTW3.framework/unix/include \
+    --with-fftw-libs=/Library/Frameworks/FFTW3.framework/unix/lib \
     --with-freetype \
     --with-freetype-includes= \
         "/Library/Frameworks/FreeType.framework/unix/include/freetype2 \
@@ -179,36 +184,31 @@ just remove the `--prefix` and `--enable-macosx-app` flags)*:
     --with-freetype-libs=/Library/Frameworks/FreeType.framework/unix/lib \
     --with-gdal=/Library/Frameworks/GDAL.framework/Programs/gdal-config \
     --with-geos=/Library/Frameworks/GEOS.framework/Programs/geos-config \
+    --with-jpeg-includes=/Library/Frameworks/UnixImageIO.framework/unix/include \
+    --with-jpeg-libs=/Library/Frameworks/UnixImageIO.framework/unix/lib \
+    --with-odbc \
+    --with-opengl=aqua \
+    --with-png-includes=/Library/Frameworks/UnixImageIO.framework/unix/include \
+    --with-png-libs=/Library/Frameworks/UnixImageIO.framework/unix/lib \
     --with-proj \
     --with-proj-includes=/Library/Frameworks/PROJ.framework/unix/include \
     --with-proj-libs=/Library/Frameworks/PROJ.framework/unix/lib \
     --with-proj-share=/Library/Frameworks/PROJ.framework/Resources/proj \
-    --with-jpeg-includes=/Library/Frameworks/UnixImageIO.framework/unix/include \
-    --with-jpeg-libs=/Library/Frameworks/UnixImageIO.framework/unix/lib \
-    --with-png-includes=/Library/Frameworks/UnixImageIO.framework/unix/include \
-    --with-png-libs=/Library/Frameworks/UnixImageIO.framework/unix/lib \
-    --with-tiff-includes=/Library/Frameworks/UnixImageIO.framework/unix/include \
-    --with-tiff-libs=/Library/Frameworks/UnixImageIO.framework/unix/lib \
-    --without-postgres \
-    --without-mysql \
-    --with-odbc \
     --with-sqlite \
-    --with-sqlite-libs=/Library/Frameworks/SQLite3.framework/unix/lib \
     --with-sqlite-includes=/Library/Frameworks/SQLite3.framework/unix/include \
-    --with-fftw-includes=/Library/Frameworks/FFTW3.framework/unix/include \
-    --with-fftw-libs=/Library/Frameworks/FFTW3.framework/unix/lib \
-    --with-cxx \
+    --with-sqlite-libs=/Library/Frameworks/SQLite3.framework/unix/lib \
     --with-tcltk-includes="/Library/Frameworks/Tcl.framework/Headers \
             /Library/Frameworks/Tk.framework/Headers \
             /Library/Frameworks/Tk.framework/PrivateHeaders" \
     --with-tcltk-libs=/usr/local/lib \
+    --with-tiff-includes=/Library/Frameworks/UnixImageIO.framework/unix/include \
+    --with-tiff-libs=/Library/Frameworks/UnixImageIO.framework/unix/lib \
     --with-x \
-    --without-motif \
     --without-glw \
-    --with-opengl=aqua \
-    --without-readline \
-    --prefix=/Applications \
-    --enable-macosx-app
+    --without-motif \
+    --without-mysql \
+    --without-postgres \
+    --without-readline
 ```
 
 That's a long line, but you have to be very explicit in the GRASS configure
@@ -533,10 +533,21 @@ For i386:
 
 ```sh
 cd build-i386
-../configure --enable-shared --disable-static --disable-debug \
-    --disable-ffserver --disable-network --enable-gpl --enable-pthreads \
-    --enable-swscale --disable-vhook --disable-ffplay --disable-ffmpeg \
-    --disable-amd3dnow --arch=i386 --extra-cflags="-arch i386" \
+../configure \
+    --arch=i386 \
+    --disable-amd3dnow \
+    --disable-debug \
+    --disable-ffmpeg \
+    --disable-ffplay \
+    --disable-ffserver \
+    --disable-network \
+    --disable-static \
+    --disable-vhook \
+    --enable-gpl \
+    --enable-pthreads \
+    --enable-shared \
+    --enable-swscale \
+    --extra-cflags="-arch i386" \
     --extra-ldflags="-arch i386"
 ```
 
@@ -555,10 +566,21 @@ Now, the PPC build:
 
 ```sh
 cd ../build-ppc
-../configure --enable-shared --disable-static --disable-debug \
-    --disable-ffserver --disable-network --enable-gpl --enable-pthreads \
-    --enable-swscale --disable-vhook --disable-ffplay --disable-ffmpeg \
-    --enable-altivec --arch=ppc --extra-cflags="-arch ppc" \
+../configure \
+    --arch=ppc \
+    --disable-debug \
+    --disable-ffmpeg \
+    --disable-ffplay \
+    --disable-ffserver \
+    --disable-network \
+    --disable-static \
+    --disable-vhook \
+    --enable-altivec \
+    --enable-gpl \
+    --enable-pthreads \
+    --enable-shared \
+    --enable-swscale \
+    --extra-cflags="-arch ppc" \
     --extra-ldflags="-arch ppc"
 make
 ```
@@ -572,10 +594,21 @@ For x86_64:
 
 ```sh
 cd build-x86_64
-../configure --enable-shared --disable-static --disable-debug \
-    --disable-ffserver --disable-network --enable-gpl --enable-pthreads \
-    --enable-swscale --disable-vhook --disable-ffplay --disable-ffmpeg \
-    --disable-amd3dnow --arch=x86_64 --extra-cflags="-arch x86\_64" \
+../configure \
+    --arch=x86_64 \
+    --disable-amd3dnow \
+    --disable-debug \
+    --disable-ffmpeg \
+    --disable-ffplay \
+    --disable-ffserver \
+    --disable-network \
+    --disable-static \
+    --disable-vhook \
+    --enable-gpl \
+    --enable-pthreads \
+    --enable-shared \
+    --enable-swscale \
+    --extra-cflags="-arch x86\_64" \
     --extra-ldflags="-arch x86_64"
 ```
 
@@ -588,10 +621,21 @@ And ppc64:
 
 ```sh
 cd ../build-ppc64
-../configure --enable-shared --disable-static --disable-debug \
-    --disable-ffserver --disable-network --enable-gpl --enable-pthreads \
-    --enable-swscale --disable-vhook --disable-ffplay --disable-ffmpeg \
-    --enable-altivec --arch=ppc64 --extra-cflags="-arch ppc64" \
+../configure \
+    --arch=ppc64 \
+    --disable-debug \
+    --disable-ffmpeg \
+    --disable-ffplay \
+    --disable-ffserver \
+    --disable-network \
+    --disable-static \
+    --disable-vhook \
+    --enable-altivec \
+    --enable-gpl \
+    --enable-pthreads \
+    --enable-shared \
+    --enable-swscale \
+    --extra-cflags="-arch ppc64" \
     --extra-ldflags="-arch ppc64"
 ```
 
