@@ -37,41 +37,41 @@ BuildRequires:	flexiblas-devel
 %else
 BuildRequires:	blas-devel, lapack-devel
 %endif
+BuildRequires:	bzip2-devel
 BuildRequires:	cairo-devel
-BuildRequires:	gcc-c++
 BuildRequires:	desktop-file-utils
 BuildRequires:	fftw-devel
 BuildRequires:	flex
 BuildRequires:	freetype-devel
+BuildRequires:	gcc-c++
 BuildRequires:	gdal-devel
 BuildRequires:	geos-devel
 BuildRequires:	gettext
 BuildRequires:	laszip-devel
 BuildRequires:	libappstream-glib
 BuildRequires:	libpng-devel
-BuildRequires:	libtiff-devel
-BuildRequires:	libXmu-devel
-BuildRequires:	mesa-libGL-devel
-BuildRequires:	mesa-libGLU-devel
-%if (0%{?rhel} > 7 || 0%{?fedora})
-BuildRequires:	mariadb-connector-c-devel openssl-devel
-%else
-BuildRequires:	mysql-devel
-%endif
-BuildRequires:	netcdf-devel
-BuildRequires:	python3
-%if 0%{?rhel} == 7
-# EPEL7
-BuildRequires:	python%{python3_version_nodots}-numpy
-%else
-BuildRequires:	python3-numpy
-%endif
 %if 0%{?rhel} && 0%{?rhel} == 7
 BuildRequires:	postgresql-devel
 %else
 BuildRequires:	libpq-devel
 %endif
+BuildRequires:	libtiff-devel
+BuildRequires:	libXmu-devel
+BuildRequires:	libzstd-devel
+BuildRequires:	make
+%if (0%{?rhel} > 7 || 0%{?fedora})
+BuildRequires:	mariadb-connector-c-devel openssl-devel
+%else
+BuildRequires:	mysql-devel
+%endif
+BuildRequires:	mesa-libGL-devel
+BuildRequires:	mesa-libGLU-devel
+BuildRequires:	netcdf-devel
+BuildRequires:	PDAL
+BuildRequires:	PDAL-devel
+BuildRequires:	PDAL-libs
 BuildRequires:	proj-devel
+BuildRequires:	python3
 %if 0%{?rhel} == 7
 # EPEL7
 BuildRequires:	python%{python3_version_nodots}-dateutil
@@ -79,22 +79,24 @@ BuildRequires:	python%{python3_version_nodots}-dateutil
 BuildRequires:	python3-dateutil
 %endif
 BuildRequires:	python3-devel
+%if 0%{?rhel} == 7
+# EPEL7
+BuildRequires:	python%{python3_version_nodots}-numpy
+%else
+BuildRequires:	python3-numpy
+%endif
 BuildRequires:	python3-pillow
-BuildRequires:	PDAL
-BuildRequires:	PDAL-libs
-BuildRequires:	PDAL-devel
 BuildRequires:	readline-devel
 BuildRequires:	sqlite-devel
 BuildRequires:	subversion
 BuildRequires:	unixODBC-devel
 BuildRequires:	zlib-devel
-BuildRequires:	bzip2-devel
-BuildRequires:	libzstd-devel
-BuildRequires: make
 
 Requires:	bzip2-libs
-Requires:	libzstd
 Requires:	geos
+Requires:	libzstd
+Requires:	PDAL
+Requires:	PDAL-libs
 # fedora >= 34: Nothing
 %if (0%{?rhel} > 7 || 0%{?fedora} < 34)
 Requires:	proj-datumgrid
@@ -103,19 +105,17 @@ Requires:	proj-datumgrid-world
 Requires:	python3
 %if 0%{?rhel} == 7
 # EPEL7
-Requires:	python%{python3_version_nodots}-numpy
-%else
-Requires:	python3-numpy
-%endif
-%if 0%{?rhel} == 7
-# EPEL7
 Requires:	python%{python3_version_nodots}-dateutil
 %else
 Requires:	python3-dateutil
 %endif
+%if 0%{?rhel} == 7
+# EPEL7
+Requires:	python%{python3_version_nodots}-numpy
+%else
+Requires:	python3-numpy
+%endif
 Requires:	python3-wxpython4
-Requires:	PDAL
-Requires:	PDAL-libs
 
 %if "%{_lib}" == "lib"
 %global cpuarch 32
@@ -170,47 +170,49 @@ find -name \*.pl | xargs sed -i -e 's,#!/usr/bin/env perl,#!%{__perl},'
 %build
 %configure \
 	--prefix=%{_libdir} \
+	--with-blas \
+%if %{with flexiblas}
+	--with-blas-includes=%{_includedir}/flexiblas \
+%endif
+	--with-bzlib \
+	--with-cairo \
+	--with-cairo-ldflags=-lfontconfig \
 	--with-cxx \
-	--with-tiff \
-	--with-png \
-	--with-postgres \
+	--with-fftw \
+	--with-freetype \
+	--with-freetype-includes=%{_includedir}/freetype2 \
+	--with-gdal=%{_bindir}/gdal-config \
+	--with-geos=%{_bindir}/geos-config \
+	--with-lapack \
+%if %{with flexiblas}
+	--with-lapack-includes=%{_includedir}/flexiblas \
+%endif
 %if 0%{?rhel} > 7
 	--with-mysql=no \
 %else
 	--with-mysql \
 %endif
-	--with-opengl \
-	--with-odbc \
-	--with-fftw \
-	--with-blas \
-	--with-lapack \
-%if %{with flexiblas}
-	--with-blas-includes=%{_includedir}/flexiblas \
-	--with-lapack-includes=%{_includedir}/flexiblas \
-%endif
-	--with-cairo \
-	--with-freetype \
-	--with-nls \
-	--with-pdal \
-	--with-readline \
-	--with-regex \
-	--with-openmp \
-	--with-gdal=%{_bindir}/gdal-config \
-	--with-wxwidgets=%{_bindir}/wx-config \
-	--with-geos=%{_bindir}/geos-config \
-	--with-netcdf=%{_bindir}/nc-config \
 	--with-mysql-includes=%{_includedir}/mysql \
 %if (0%{?fedora} >= 27)
 	--with-mysql-libs=%{_libdir} \
 %else
 	--with-mysql-libs=%{_libdir}/mysql \
 %endif
+	--with-netcdf=%{_bindir}/nc-config \
+	--with-nls \
+	--with-odbc \
+	--with-opengl \
+	--with-openmp \
+	--with-pdal \
+	--with-png \
+	--with-postgres \
 	--with-postgres-includes=%{_includedir}/pgsql \
-	--with-cairo-ldflags=-lfontconfig \
-	--with-freetype-includes=%{_includedir}/freetype2 \
-	--with-bzlib \
-	--with-zstd \
-	--with-proj-share=%{_datadir}/proj
+	--with-proj-share=%{_datadir}/proj \
+	--with-readline \
+	--with-regex \
+	--with-tiff \
+	--with-wxwidgets=%{_bindir}/wx-config \
+	--with-zstd
 
 # .package_note hack for RHBZ #2084342 and RHBZ #2102895
 sed -i "s+ -Wl,-dT,${RPM_BUILD_DIR}/grass-%{version}/.package_note-grass-%{version}-%{release}.%{_arch}.ld++g" include/Make/Platform.make
