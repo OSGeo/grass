@@ -102,7 +102,7 @@ def main():
 
     # Read the dataset list from file
     if file:
-        fd = open(file, "r")
+        fd = open(file)
 
         line = True
         while True:
@@ -127,22 +127,25 @@ def main():
         sp = tgis.open_old_stds(name, type, dbif)
         if not force:
             gs.message(
-                _("{stds}: {gid}".format(stds=sp.get_type().upper(), gid=sp.get_id()))
+                _("{stds}: {gid}").format(stds=sp.get_type().upper(), gid=sp.get_id())
             )
         if recursive or clean:
             if not force:
                 if recursive:
-                    msg = (
+                    msg = _(
                         "The following maps of {stds} {gid} will be "
                         "unregistered from temporal database:"
                     )
                 elif clean:
-                    msg = (
+                    msg = _(
                         "The following maps of {stds} {gid} will be "
                         "unregistered from temporal database and removed "
                         "from spatial database:"
                     )
-                gs.message(_(msg.format(stds=sp.get_type(), gid=sp.get_id())))
+
+                if recursive or clean:
+                    gs.message(msg.format(stds=sp.get_type(), gid=sp.get_id()))
+
             maps = sp.get_registered_maps_as_objects(dbif=dbif)
             map_statement = ""
             count = 1
@@ -150,10 +153,10 @@ def main():
             for map in maps:
                 map.select(dbif)
                 # We may have multiple layer for a single map, hence we need
-                # to avoid multiple deletation of the same map,
+                # to avoid multiple deletions of the same map,
                 # but the database entries are still present and must be removed
                 if not force:
-                    gs.message(_("- %s" % map.get_name()))
+                    gs.message(_("- %s") % map.get_name())
                     continue
                 if clean and force:
                     if map.get_name() not in name_list:
@@ -190,8 +193,8 @@ def main():
         gs.message(
             _(
                 "Nothing removed. You must use the force flag (-{flag}) to actually "
-                "remove them.".format(flag="f")
-            )
+                "remove them."
+            ).format(flag="f")
         )
     else:
         # Execute the collected SQL statenents

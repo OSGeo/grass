@@ -152,13 +152,13 @@ def main():
                         "Temporal type of space time raster datasets must be equal\n"
                         "<%(a)s> of type %(type_a)s do not match <%(b)s> of type "
                         "%(type_b)s"
-                        % {
-                            "a": first_strds.get_id(),
-                            "type_a": first_strds.get_temporal_type(),
-                            "b": dataset.get_id(),
-                            "type_b": dataset.get_temporal_type(),
-                        }
                     )
+                    % {
+                        "a": first_strds.get_id(),
+                        "type_a": first_strds.get_temporal_type(),
+                        "b": dataset.get_id(),
+                        "type_b": dataset.get_temporal_type(),
+                    }
                 )
 
         mapmatrizes = tgis.sample_stds_by_stds_topology(
@@ -202,11 +202,8 @@ def main():
     vector_db = gs.vector.vector_db(input)
 
     # We copy the vector table and create the new layers
-    if vector_db:
-        # Use the first layer to copy the categories from
-        layers = "1,"
-    else:
-        layers = ""
+    # If vector_db, use the first layer to copy the categories from
+    layers = "1," if vector_db else ""
     first = True
     for layer in range(num_samples):
         layer += 1

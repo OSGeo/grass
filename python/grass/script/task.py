@@ -90,8 +90,7 @@ class grassTask:
             name, ext = os.path.splitext(self.name)
             if ext in {".py", ".sh"}:
                 return name
-            else:
-                return self.name
+            return self.name
 
         return self.name
 
@@ -103,10 +102,8 @@ class grassTask:
         if self.label:
             if full:
                 return self.label + " " + self.description
-            else:
-                return self.label
-        else:
-            return self.description
+            return self.label
+        return self.description
 
     def get_keywords(self):
         """Get module's keywords"""
@@ -247,11 +244,7 @@ class grassTask:
 
     def has_required(self):
         """Check if command has at least one required parameter"""
-        for p in self.params:
-            if p.get("required", False):
-                return True
-
-        return False
+        return any(p.get("required", False) for p in self.params)
 
     def set_param(self, aParam, aValue, element="value"):
         """Set param value/values."""

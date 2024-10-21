@@ -45,7 +45,7 @@ class BaseCapabilitiesTree(ET.ElementTree):
                 raise ParseError(_("Unable to parse XML file"))
             except OSError as error:
                 raise ParseError(
-                    _("Unable to open XML file '%s'.\n%s\n" % (cap_file, error))
+                    _("Unable to open XML file '%s'.\n%s\n") % (cap_file, error)
                 )
         else:
             try:
@@ -131,7 +131,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
         """!Check if format element is defined."""
         request = self._find(capability, "Request")
         get_map = self._find(request, "GetMap")
-        formats = self._findall(get_map, "Format")
+        self._findall(get_map, "Format")
 
     def _checkLayerTree(self, parent_layer, first=True):
         """!Recursively check layer tree and manage inheritance in the tree"""

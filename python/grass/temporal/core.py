@@ -769,12 +769,12 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
                 "Temporal database version mismatch detected.\n{backup}"
                 "Supported temporal database version is: {tdb}\n"
                 "Your existing temporal database version: {ctdb}\n"
-                "Current temporal database info: {info}".format(
-                    backup=backup_howto,
-                    tdb=tgis_db_version,
-                    ctdb=tgis_db_version_meta,
-                    info=get_database_info_string(),
-                )
+                "Current temporal database info: {info}"
+            ).format(
+                backup=backup_howto,
+                tdb=tgis_db_version,
+                ctdb=tgis_db_version_meta,
+                info=get_database_info_string(),
             )
 
             if tgis_db_version_meta == 2 and tgis_db_version == 3:
@@ -784,8 +784,8 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
                 msgr.fatal(
                     _(
                         "The format of your actual temporal database is "
-                        "not supported any more. {m}".format(m=message)
-                    )
+                        "not supported any more. {m}"
+                    ).format(m=message)
                 )
 
         return
@@ -862,7 +862,7 @@ def create_temporal_database(dbif):
     stvds_tables_sql = stds_tables_template_sql.replace("STDS", "stvds")
     str3ds_tables_sql = stds_tables_template_sql.replace("STDS", "str3ds")
 
-    msgr.message(_("Creating temporal database: %s" % (str(tgis_database_string))))
+    msgr.message(_("Creating temporal database: %s") % (str(tgis_database_string)))
 
     if tgis_backend == "sqlite":
         # We need to create the sqlite3 database path if it does not exist
@@ -875,8 +875,9 @@ def create_temporal_database(dbif):
                     _(
                         "Unable to create SQLite temporal database\n"
                         "Exception: %s\nPlease use t.connect to set a "
-                        "read- and writable temporal database path" % (e)
+                        "read- and writable temporal database path"
                     )
+                    % (e)
                 )
 
         # Set up the trigger that takes care of
@@ -1375,7 +1376,7 @@ class DBConnection:
         if self.dbmi.__name__ == "psycopg2":
             if len(args) == 0:
                 return sql
-            elif self.connected:
+            if self.connected:
                 try:
                     return self.cursor.mogrify(sql, args)
                 except Exception as exc:
@@ -1390,57 +1391,56 @@ class DBConnection:
         elif self.dbmi.__name__ == "sqlite3":
             if len(args) == 0:
                 return sql
-            else:
-                # Unfortunately as sqlite does not support
-                # the transformation of sql strings and qmarked or
-                # named arguments we must make our hands dirty
-                # and do it by ourself. :(
-                # Doors are open for SQL injection because of the
-                # limited python sqlite3 implementation!!!
-                pos = 0
-                count = 0
-                maxcount = 100
-                statement = sql
+            # Unfortunately as sqlite does not support
+            # the transformation of sql strings and qmarked or
+            # named arguments we must make our hands dirty
+            # and do it by ourself. :(
+            # Doors are open for SQL injection because of the
+            # limited python sqlite3 implementation!!!
+            pos = 0
+            count = 0
+            maxcount = 100
+            statement = sql
 
-                while count < maxcount:
-                    pos = statement.find("?", pos + 1)
-                    if pos == -1:
-                        break
+            while count < maxcount:
+                pos = statement.find("?", pos + 1)
+                if pos == -1:
+                    break
 
-                    if args[count] is None:
-                        statement = "%sNULL%s" % (
-                            statement[0:pos],
-                            statement[pos + 1 :],
-                        )
-                    elif isinstance(args[count], int):
-                        statement = "%s%d%s" % (
-                            statement[0:pos],
-                            args[count],
-                            statement[pos + 1 :],
-                        )
-                    elif isinstance(args[count], float):
-                        statement = "%s%f%s" % (
-                            statement[0:pos],
-                            args[count],
-                            statement[pos + 1 :],
-                        )
-                    elif isinstance(args[count], datetime):
-                        statement = "%s'%s'%s" % (
-                            statement[0:pos],
-                            str(args[count]),
-                            statement[pos + 1 :],
-                        )
-                    else:
-                        # Default is a string, this works for datetime
-                        # objects too
-                        statement = "%s'%s'%s" % (
-                            statement[0:pos],
-                            str(args[count]),
-                            statement[pos + 1 :],
-                        )
-                    count += 1
+                if args[count] is None:
+                    statement = "%sNULL%s" % (
+                        statement[0:pos],
+                        statement[pos + 1 :],
+                    )
+                elif isinstance(args[count], int):
+                    statement = "%s%d%s" % (
+                        statement[0:pos],
+                        args[count],
+                        statement[pos + 1 :],
+                    )
+                elif isinstance(args[count], float):
+                    statement = "%s%f%s" % (
+                        statement[0:pos],
+                        args[count],
+                        statement[pos + 1 :],
+                    )
+                elif isinstance(args[count], datetime):
+                    statement = "%s'%s'%s" % (
+                        statement[0:pos],
+                        str(args[count]),
+                        statement[pos + 1 :],
+                    )
+                else:
+                    # Default is a string, this works for datetime
+                    # objects too
+                    statement = "%s'%s'%s" % (
+                        statement[0:pos],
+                        str(args[count]),
+                        statement[pos + 1 :],
+                    )
+                count += 1
 
-                return statement
+            return statement
 
     def check_table(self, table_name):
         """Check if a table exists in the temporal database
@@ -1502,7 +1502,7 @@ class DBConnection:
         except:
             if connected:
                 self.close()
-            self.msgr.error(_("Unable to execute :\n %(sql)s" % {"sql": statement}))
+            self.msgr.error(_("Unable to execute :\n %(sql)s") % {"sql": statement})
             raise
 
         if connected:
@@ -1546,7 +1546,7 @@ class DBConnection:
             if connected:
                 self.close()
             self.msgr.error(
-                _("Unable to execute transaction:\n %(sql)s" % {"sql": statement})
+                _("Unable to execute transaction:\n %(sql)s") % {"sql": statement}
             )
             raise
 

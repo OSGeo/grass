@@ -229,10 +229,8 @@ class Layer:
                     scmd.append(utils.GetCmdString(c))
 
                 return ";".join(scmd)
-            else:
-                return utils.GetCmdString(self.cmd)
-        else:
-            return self.cmd
+            return utils.GetCmdString(self.cmd)
+        return self.cmd
 
     def GetType(self):
         """Get map layer type"""
@@ -462,8 +460,7 @@ class RenderLayerMgr(wx.EvtHandler):
         stdout, stderr = p.communicate()
         if p.returncode:
             return grass.decode(stderr)
-        else:
-            return None
+        return None
 
     def Abort(self):
         """Abort rendering process"""
@@ -666,8 +663,6 @@ class RenderMapMgr(wx.EvtHandler):
 
         Make image composiotion, emits updateMap event.
         """
-        stopTime = time.time()
-
         maps = []
         masks = []
         opacities = []
@@ -706,7 +701,7 @@ class RenderMapMgr(wx.EvtHandler):
                 self._rendering = False
                 if wx.IsBusy():
                     wx.EndBusyCursor()
-                raise GException(_("Rendering failed: %s" % msg))
+                raise GException(_("Rendering failed: %s") % msg)
 
         stop = time.time()
         Debug.msg(
@@ -898,7 +893,7 @@ class Map:
             env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], "WIND"
         )
         try:
-            windfile = open(filename, "r")
+            windfile = open(filename)
         except OSError as e:
             sys.exit(
                 _("Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n")
@@ -1239,7 +1234,7 @@ class Map:
 
             return grass_region
 
-        except:
+        except Exception:
             return None
 
     def GetListOfLayers(
@@ -1692,8 +1687,7 @@ class Map:
         if not list:
             if len(ovl) != 1:
                 return None
-            else:
-                return ovl[0]
+            return ovl[0]
 
         return ovl
 

@@ -44,13 +44,20 @@ jobs:
             -mindepth 1 -maxdepth 1 -type f -print -delete
           # Rehash to forget about the deleted files
           hash -r
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+      - name: Get current date cache key segment
+        id: date
+        # Year and week of year so cache key changes weekly
+        run: echo "date=$(date +%Y-%U)" >> "${GITHUB_OUTPUT}"
       - name: Setup Mamba
-        uses: mamba-org/setup-micromamba@f8b8a1e23a26f60a44c853292711bacfd3eac822 # v1.9.0
+        uses: mamba-org/setup-micromamba@617811f69075e3fd3ae68ca64220ad065877f246 # v2.0.0
         with:
           init-shell: bash
           environment-file: .github/workflows/macos_dependencies.txt
           environment-name: grass-env
+          # Persist on the same period (date).
+          cache-environment-key: environment-${{ steps.date.outputs.date }}
+
       - name: Environment info
         shell: bash -el {0}
         run: |
@@ -59,17 +66,17 @@ jobs:
       - name: Create installation directory
         run: mkdir $HOME/install
       - name: Build and install
-        shell: bash -l {0}
+        shell: micromamba-shell {0}
         run: source ./.github/workflows/macos_install.sh $HOME/install
       - name: Add the bin directory to PATH
         run: echo "$HOME/install/bin" >> $GITHUB_PATH
       - name: Check installed version
         if: ${{ !cancelled() }}
-        shell: bash -l {0}
+        shell: micromamba-shell {0}
         run: source ./.github/workflows/print_versions.sh
 
       - name: Run pytest with multiple workers in parallel
-        shell: bash -el {0}
+        shell: micromamba-shell {0}
         run: |
           export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
@@ -78,7 +85,7 @@ jobs:
             -ra . \
             -m 'not needs_solo_run'
       - name: Run pytest with a single worker (for tests marked with needs_solo_run)
-        shell: bash -el {0}
+        shell: micromamba-shell {0}
         run: |
           export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
@@ -87,7 +94,7 @@ jobs:
             -m 'needs_solo_run'
 
       - name: Run gunittest tests
-        shell: bash -el {0}
+        shell: micromamba-shell {0}
         run: |
           grass --tmp-project XY --exec \
               g.download.project url=${{ env.SampleData }} path=$HOME
@@ -100,7 +107,7 @@ jobs:
                        nc_spm_full_v2alpha2.tar.gz"
       - name: Make HTML test report available
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: testreport-macOS
           path: testreport

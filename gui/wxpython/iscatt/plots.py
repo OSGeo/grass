@@ -168,7 +168,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         return self.polygon_drawer.SetEmpty()
 
     def OnRelease(self, event):
-        if not self.mode == "zoom":
+        if self.mode != "zoom":
             return
         self.zoom_rect.set_visible(False)
         self.ZoomRectangle(event)
@@ -255,7 +255,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
             if not e:
                 continue
 
-            colors = styles[cat_id]["color"].split(":")
             if self.transpose:
                 e["theta"] = 360 - e["theta"] + 90
                 if e["theta"] >= 360:
@@ -348,15 +347,12 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
     def ZoomRectangle(self, event):
         # get the current x and y limits
-        if not self.mode == "zoom":
+        if self.mode != "zoom":
             return
         if event.inaxes is None:
             return
         if event.button != 1:
             return
-
-        cur_xlim = self.axes.get_xlim()
-        cur_ylim = self.axes.get_ylim()
 
         x1, y1 = event.xdata, event.ydata
         x2 = deepcopy(self.zoom_rect_coords["x"])
@@ -394,7 +390,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
     def PanMotion(self, event):
         "on mouse movement"
-        if not self.mode == "pan":
+        if self.mode != "pan":
             return
         if event.inaxes is None:
             return
@@ -426,7 +422,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self.canvas.draw()
 
     def ZoomRectMotion(self, event):
-        if not self.mode == "zoom":
+        if self.mode != "zoom":
             return
         if event.inaxes is None:
             return
@@ -651,13 +647,11 @@ class PolygonDrawer:
 
         x, y = zip(*self.pol.xy)
 
-        style = self._getPolygonStyle()
-
         self.line = Line2D(x, y, marker="o", markerfacecolor="r", animated=True)
         self.ax.add_line(self.line)
         # self._update_line(pol)
 
-        cid = self.pol.add_callback(self.poly_changed)
+        self.pol.add_callback(self.poly_changed)
         self.moving_ver_idx = None  # the active vert
 
         self.mode = None
@@ -811,11 +805,11 @@ class PolygonDrawer:
 
         coords = []
         for i, tup in enumerate(self.pol.xy):
-            if i == ind:
-                continue
-            elif i == 0 and ind == len(self.pol.xy) - 1:
-                continue
-            elif i == len(self.pol.xy) - 1 and ind == 0:
+            if (
+                i == ind
+                or (i == 0 and ind == len(self.pol.xy) - 1)
+                or (i == len(self.pol.xy) - 1 and ind == 0)
+            ):
                 continue
 
             coords.append(tup)
@@ -866,7 +860,7 @@ class PolygonDrawer:
 
     def motion_notify_callback(self, event):
         "on mouse movement"
-        if not self.mode == "move_vertex":
+        if self.mode != "move_vertex":
             return
         if not self.showverts:
             return

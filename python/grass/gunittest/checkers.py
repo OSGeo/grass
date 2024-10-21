@@ -638,7 +638,7 @@ def text_file_md5(
     if prepend_lines:
         for line in prepend_lines:
             hasher.update(encode(line))
-    with open(filename, "r") as f:
+    with open(filename) as f:
         for line in f:
             # replace platform newlines by standard newline
             if os.linesep != "\n":

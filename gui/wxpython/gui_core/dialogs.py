@@ -180,7 +180,6 @@ class LocationDialog(SimpleDialog):
             dbase = grass.gisenv()["GISDBASE"]
             self.element2.UpdateItems(dbase=dbase, location=location)
             self.element2.SetSelection(0)
-            mapset = self.element2.GetStringSelection()
 
     def GetValues(self):
         """Get location, mapset"""
@@ -284,8 +283,7 @@ class VectorDialog(SimpleDialog):
         if full:
             if "@" in name:
                 return name
-            else:
-                return name + "@" + grass.gisenv()["MAPSET"]
+            return name + "@" + grass.gisenv()["MAPSET"]
 
         return name.split("@", 1)[0]
 
@@ -428,7 +426,7 @@ class NewVectorDialog(VectorDialog):
         """
         if key == "add":
             return self.addbox.IsChecked()
-        elif key == "table":
+        if key == "table":
             return self.table.IsChecked()
 
         return None
@@ -1214,7 +1212,7 @@ class GroupDialog(wx.Dialog):
             try:
                 if re.compile(self.flt_pattern).search(dt):
                     flt_data.append(dt)
-            except:
+            except re.error:
                 pass
 
         return flt_data
@@ -1657,7 +1655,7 @@ class MapLayersDialogBase(wx.Dialog):
             try:
                 if re.compile(event.GetString()).search(layer):
                     list.append(layer)
-            except:
+            except re.error:
                 pass
         list = naturally_sorted(list)
 

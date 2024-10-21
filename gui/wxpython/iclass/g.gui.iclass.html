@@ -35,7 +35,6 @@ as <em>g.gui.iclass</em>.
   <li>write signature file</li>
   <li>import vector map</li>
   <li>export vector map with attribute table</li>
-
 </ul>
 
 <center>
@@ -61,6 +60,13 @@ The user can also display the cells of the image bands which fall within
 a user-specified number of standard deviations from the means in the spectral signature.
 By doing this, the user can see how much of the image
 is likely to be put into the class associated with the signature.
+
+<p><em>wxIClass</em> can also import training areas defined in a vector layer. In that case the program expects the vector layer to have the following columns defined:
+<ul>
+    <li>cat: category value</li>
+    <li>class: a string with the class name</li>
+    <li>color: a color defined using format "RRR:GGG:BBB"</li>
+</ul>
 
 <p>
 The spectral signatures are composed of region means and covariance matrices.

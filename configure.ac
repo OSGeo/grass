@@ -305,14 +305,11 @@ LOC_ARG_WITH(sqlite, SQLite)
 LOC_ARG_WITH(opengl, OpenGL)
 LOC_ARG_WITH(odbc, ODBC, no)
 LOC_ARG_WITH(fftw, FFTW)
-LOC_ARG_WITH(blas, BLAS, no)
-LOC_ARG_WITH(lapack, LAPACK, no)
 LOC_ARG_WITH(libsvm, LIBSVM, no)
 LOC_ARG_WITH(cairo, Cairo)
 LOC_ARG_WITH(freetype, FreeType)
 LOC_ARG_WITH(nls, NLS, no)
 LOC_ARG_WITH(readline, Readline, no)
-LOC_ARG_WITH(opendwg, openDWG, no)
 LOC_ARG_WITH(regex, regex)
 LOC_ARG_WITH(pthread, POSIX threads, no)
 LOC_ARG_WITH(openmp, OpenMP, no)
@@ -320,6 +317,19 @@ LOC_ARG_WITH(opencl, OpenCL, no)
 LOC_ARG_WITH(bzlib, BZIP2, no)
 LOC_ARG_WITH(zstd, Zstandard)
 LOC_ARG_WITH(pdal, PDAL)
+
+
+AC_ARG_WITH([blas],
+  [AS_HELP_STRING([--with-blas=pkg-config-package],
+    [enable BLAS support with by adding name of pkg-config package name
+     for CBLAS library, e.g. '--with-lapack-package=openblas',
+     default: cblas])],, [with_blas=no])
+
+AC_ARG_WITH([lapack],
+  [AS_HELP_STRING([--with-lapack=pkg-config-package],
+    [enable LAPACK support with by adding name of pkg-config package name
+     for LAPACKE library, e.g. '--with-lapack-package=openblas',
+     default: lapacke])],, [with_lapack=no])
 
 AC_ARG_WITH(libpng,
 [  --with-libpng[=path/libpng-config]
@@ -391,12 +401,6 @@ LOC_ARG_WITH_LIB(odbc, ODBC)
 LOC_ARG_WITH_INC(fftw, FFTW)
 LOC_ARG_WITH_LIB(fftw, FFTW)
 
-LOC_ARG_WITH_INC(blas, BLAS)
-LOC_ARG_WITH_LIB(blas, BLAS)
-
-LOC_ARG_WITH_INC(lapack, LAPACK)
-LOC_ARG_WITH_LIB(lapack, LAPACK)
-
 LOC_ARG_WITH_INC(libsvm, LIBSVM)
 LOC_ARG_WITH_LIB(libsvm, LIBSVM)
 
@@ -410,9 +414,6 @@ LOC_ARG_WITH_LIB(freetype, FreeType)
 LOC_ARG_WITH_INC(proj, External PROJ.4)
 LOC_ARG_WITH_LIB(proj, External PROJ.4)
 LOC_ARG_WITH_SHARE(proj, External PROJ.4)
-
-LOC_ARG_WITH_INC(opendwg, openDWG)
-LOC_ARG_WITH_LIB(opendwg, openDWG)
 
 LOC_ARG_WITH_INC(regex, regex)
 LOC_ARG_WITH_LIB(regex, regex)
@@ -505,7 +506,7 @@ AC_CHECK_PROGS(ENV, env)
 AC_PATH_PROG(PERL, perl, no)
 
 #AC_CHECK_HEADERS(curses.h limits.h termio.h termios.h unistd.h values.h)
-AC_CHECK_HEADERS(limits.h termio.h termios.h unistd.h values.h f2c.h g2c.h)
+AC_CHECK_HEADERS(limits.h termio.h termios.h unistd.h values.h)
 AC_CHECK_HEADERS(sys/ioctl.h sys/mtio.h sys/resource.h sys/time.h)
 AC_CHECK_HEADERS(sys/timeb.h sys/types.h sys/utsname.h)
 AC_CHECK_HEADERS(libintl.h iconv.h)
@@ -594,6 +595,9 @@ AC_SUBST(DBMIEXTRALIB)
 
 AC_CHECK_FUNCS(asprintf)
 AC_SUBST(HAVE_ASPRINTF)
+
+AC_CHECK_FUNCS(strlcat)
+AC_SUBST(HAVE_STRLCAT)
 
 # Test if strlcpy exists
 # This is a function part of *BSD libc (optionally available on Linux via libbsd)
@@ -1577,91 +1581,67 @@ AC_SUBST(FFTWLIB)
 
 # Enable BLAS option
 
-LOC_CHECK_USE(blas,BLAS,USE_BLAS)
+AC_MSG_CHECKING([whether to use (C)BLAS])
+AC_MSG_RESULT([$with_blas])
 
 BLASLIB=
 BLASINC=
+USE_BLAS=
+BLAS_PKGS="cblas blas-netlib openblas blas-atlas"
+BLAS_PKG=
+
+case "$with_blas" in
+  no)
+    ;;
+  yes)
+    USE_BLAS=1
+    ;;
+  *)
+    USE_BLAS=1
+    BLAS_PKGS="$with_blas"
+    ;;
+esac
 
 if test -n "$USE_BLAS"; then
 
-# With BLAS includes directory
-# BLAS doesn't have includes (FORTRAN library)
-# With BLAS library directory
+  blas_ok=no
 
-LOC_CHECK_INC_PATH(blas, BLAS, BLASINC)
-LOC_CHECK_LIB_PATH(blas, BLAS, BLASLIB)
+  for blas_chk in ${BLAS_PKGS}
+  do
+    if ! ${PKG_CONFIG} --exists ${blas_chk} ; then
+      continue
+    else
+      BLAS_PKG=${blas_chk}
+      break
+    fi
+  done
 
-# See if cblas.h exists (CBLAS,ATLAS,others)
-save_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$BLASINC $CPPFLAGS"
-AC_CHECK_HEADERS(cblas.h)
-CPPFLAGS="$save_CPPFLAGS"
+  if test -z "$BLAS_PKG" ; then
+    AC_MSG_ERROR([*** Unable to locate (C)BLAS pkg-conf package(s)
+                  "${BLAS_PKGS}". Perhaps you need to set PKG_CONFIG_PATH.])
+  fi
 
-LOC_CHECK_LIBS(blas,dnrm2_,BLAS,$BLASLIB,BLASLIB,$MATHLIB,,,-lg2c)
+  BLASLIB=$(${PKG_CONFIG} --libs ${BLAS_PKG})
+  BLASINC=$(${PKG_CONFIG} --cflags ${BLAS_PKG})
 
-blas_ok=no
+  save_CFLAGS="$CFLAGS"; CFLAGS="$BLASINC $CFLAGS"
+  save_LIBS="$LIBS"; LIBS="$BLASLIB"
 
-# Check for ATLAS
-save_LDFLAGS="$LDFLAGS"
-LDFLAGS="$BLASLIB $LDFLAGS"
-AC_CHECK_LIB(atlas, ATL_xerbla,
-		[AC_CHECK_LIB(f77blas, sgemm_,
-		[AC_CHECK_LIB(cblas, cblas_dgemm,
-			[blas_ok=yes; BLASLIB="-lcblas -lf77blas -latlas"],
-			[],[-lf77blas -latlas])],
-		[],[-latlas])]
-)
-LDFLAGS="$save_LDFLAGS"
+  AC_CHECK_HEADERS([cblas.h],,
+    AC_CHECK_HEADERS([cblas-atlas.h],,
+      AC_MSG_ERROR([*** Failed to find either "cblas.h" or "cblas-atlas.h" with "$CFLAGS"])))
 
-# Do we have ATLAS?
-if test $blas_ok = yes; then
-	AC_DEFINE(HAVE_LIBATLAS, 1, [Define to 1 if ATLAS exists.])
-fi
+  AC_MSG_CHECKING([for linking to (C)BLAS])
+  AC_LINK_IFELSE([AC_LANG_PROGRAM(
+    [[char cblas_dgemm();]], [[return cblas_dgemm();]])],
+    [blas_ok=yes] , [
+    AC_MSG_ERROR([*** Unable to link to (C)BLAS library with "$LIBS".])])
+  AC_MSG_RESULT([$BLAS_PKG])
 
-# BLAS in Apple vecLib framework? (Mac OS-X)
-#  not dependent on APP build
-#if test -n "$MACOSX_APP"; then
-if test $blas_ok = no; then
-	vlib_flags="-framework vecLib"
-	save_LIBS="$LIBS"
-	LIBS="$vlib_flags $LIBS"
-	AC_MSG_CHECKING([for sgemm in $vlib_flags])
-	AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[sgemm]])],[blas_ok=yes; BLASLIB="$vlib_flags"],[BLASLIB=""])
-	AC_MSG_RESULT($blas_ok)
-	LIBS="$save_LIBS"
-fi
-#fi # $MACOSX_APP
+  CFLAGS="$save_CFLAGS"
+  LIBS="$save_LIBS"
 
-# BLAS in PhiPACK libraries? (requires generic BLAS, too)
-if test $blas_ok = no; then
-	AC_CHECK_LIB(blas, sgemm_,
-		[AC_CHECK_LIB(dgemm, dgemm_,
-		[AC_CHECK_LIB(sgemm, sgemm_,
-			[blas_ok=yes; BLASLIB="-lsgemm -ldgemm -lblas"],
-			[], [-lblas])],
-			[], [-lblas])]
-	)
-fi
-
-# BLAS in Sun Performance library?
-if test $blas_ok = no; then
-	if test "x$GCC" != xyes; then # only works with Sun CC
-		AC_CHECK_LIB(sunmath, acosp,
-			[AC_CHECK_LIB(sunperf, sgemm_,
-				[blas_ok=yes; BLASLIB="-xlic_lib=sunperf -lsunmath"],
-			[], [-lsunmath])]
-		)
-	fi
-fi
-
-# Generic BLAS library
-if test $blas_ok = no; then
-	AC_CHECK_LIB(blas, sgemm_, [blas_ok=yes; BLASLIB="-lblas"])
-fi
-
-if test $blas_ok = yes; then
-AC_DEFINE(HAVE_LIBBLAS, 1, [Define to 1 if BLAS exists.])
-fi
+  AC_DEFINE(HAVE_LIBBLAS, 1, [Define to 1 if BLAS exists.])
 
 fi # $USE_BLAS
 
@@ -1672,57 +1652,74 @@ AC_SUBST(BLASINC)
 
 # Enable LAPACK option
 
-LOC_CHECK_USE(lapack,LAPACK,USE_LAPACK)
+AC_MSG_CHECKING([whether to use LAPACK(E)])
+AC_MSG_RESULT([$with_lapack])
 
 LAPACKLIB=
 LAPACKINC=
+USE_LAPACK=
+LAPACK_PKGS="lapacke openblas"
+LAPACK_PKG=
+
+case "$with_lapack" in
+  no)
+    ;;
+  yes)
+    USE_LAPACK=1
+    ;;
+  *)
+    USE_LAPACK=1
+    LAPACK_PKG="$with_lapack"
+    ;;
+esac
 
 # LAPACK is useless without BLAS
-if test -n "$USE_BLAS"; then
-if test -n "$USE_LAPACK"; then
-
-# With LAPACK includes directory
-# LAPACK doesn't have includes (FORTRAN library)
-# With LAPACK library directory
-
-lapack_ok=no
-
-LOC_CHECK_INC_PATH(lapack, LAPACK, LAPACKINC)
-LOC_CHECK_LIB_PATH(lapack, LAPACK, LAPACKLIB)
-
-# See if clapack.h exists (ATLAS)
-save_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$LAPACKINC $CPPFLAGS"
-AC_CHECK_HEADERS(clapack.h)
-CPPFLAGS="$save_CPPFLAGS"
-
-# LAPACK linked to by default?
-if test lapack_ok=no; then
-	save_LIBS="$LIBS"; LIBS="$LIBS $BLASLIB $MATHLIB $FLIBS"
-	save_LDFLAGS="$LDFLAGS"; LDFLAGS="$LAPACKLIB $LDFLAGS"
-	AC_CHECK_FUNC(dsegv_, [lapack_ok=yes])
-	LIBS="$save_LIBS"
-	LDFLAGS="$save_LDFLAGS"
+if test -z "$USE_BLAS" && test -n "$USE_LAPACK"; then
+  USE_LAPACK=
+  AC_MSG_WARN([LAPACK is disabled, BLAS configuration is missing])
 fi
 
-# Generic LAPACK library?
-if test $lapack_ok = no; then
-	save_libs="$LIBS"; LIBS="$BLASLIB $MATHLIB $LIBS"
-	save_LDFLAGS="$LDFLAGS"; LDFLAGS="$LAPACKLIB $LDFLAGS"
-	AC_CHECK_LIB(lapack, desgv_,
-		[lapack_ok=yes; LAPACKLIB="-llapack"], [], [$FLIBS])
-	LIBS="$save_LIBS"
-	LDFLAGS="$save_LDFLAGS"
-fi
+if test -n "$USE_BLAS" && test -n "$USE_LAPACK"; then
 
-if test $lapack_ok = no; then
-	LOC_CHECK_LIBS(lapack,dgesv_,LAPACK,$LAPACKLIB,LAPACKLIB,$BLASLIB $MATHLIB,,,-lg2c)
-fi
+  lapack_ok=no
 
-AC_DEFINE(HAVE_LIBLAPACK, 1, [Define to 1 if LAPACK exists.])
+  for lapack_chk in ${LAPACK_PKGS}
+  do
+    if ! ${PKG_CONFIG} --exists ${lapack_chk} ; then
+      continue
+    else
+      LAPACK_PKG=${lapack_chk}
+      break
+    fi
+  done
 
-fi # $USE_LAPACK
-fi # $USE_BLAS
+  if test -z "$LAPACK_PKG" ; then
+    AC_MSG_ERROR([*** Unable to locate LAPACK(E) pkg-conf package(s)
+                     "$LAPACK_PKGS". Perhaps you need to set PKG_CONFIG_PATH.])
+  fi
+
+  LAPACKLIB=`${PKG_CONFIG} --libs ${LAPACK_PKG}`
+  LAPACKINC=`${PKG_CONFIG} --cflags ${LAPACK_PKG}`
+
+  save_CFLAGS="$CFLAGS"; CFLAGS="$LAPACKINC $CFLAGS"
+  save_LIBS="$LIBS"; LIBS="$LAPACKLIB"
+
+  AC_CHECK_HEADERS([lapacke.h], [],
+    AC_MSG_ERROR([*** Unable to find "lapacke.h" with "$CFLAGS".]))
+
+  AC_MSG_CHECKING([for linking to LAPACK(E)])
+  AC_LINK_IFELSE([AC_LANG_PROGRAM(
+    [[char LAPACKE_dgesv();]], [[return LAPACKE_dgesv(); ]])],
+    [lapack_ok=yes] , [
+    AC_MSG_ERROR([*** Unable to link to LAPACK(E) library with "$LIBS".])])
+  AC_MSG_RESULT([$LAPACK_PKG])
+
+  CFLAGS="$save_CFLAGS"
+  LIBS="$save_LIBS"
+
+  AC_DEFINE(HAVE_LIBLAPACK, 1, [Define to 1 if LAPACK exists.])
+
+fi # $USE_BLAS $USE_LAPACK
 
 AC_SUBST(LAPACKLIB)
 AC_SUBST(LAPACKINC)
@@ -1856,44 +1853,6 @@ fi
 
 AC_SUBST(INTLLIB)
 AC_SUBST(HAVE_NLS)
-
-# Enable openDWG option
-
-LOC_CHECK_USE(opendwg,openDWG,USE_OPENDWG)
-
-OPENDWGINCPATH=
-OPENDWGLIBPATH=
-OPENDWGLIB=
-
-if test -n "${USE_OPENDWG}"; then
-
-# With OPENDWG includes directory
-
-LOC_CHECK_INC_PATH(opendwg,openDGW,OPENDWGINCPATH)
-
-LOC_CHECK_INCLUDES(ad2.h,openDWG,$OPENDWGINCPATH)
-
-# With OPENDWG library directory
-
-LOC_CHECK_LIB_PATH(opendwg,openDWG,OPENDWGLIBPATH)
-
-#search for ad2.a, ad3.a ... in openDWG toolkit directory:
-#FIX ME  how to program this test??
-#LOC_CHECK_LIBS(ad?.a,adSeekLayer,openDWG,$OPENDWGLIBPATH,OPENDWGLIB,,)
-#
-#for now hack (but working):
-TRUEOPENDWGLIBPATH=`echo "$OPENDWGLIBPATH" | cut -b3-`
-adlib=`ls -1 "$TRUEOPENDWGLIBPATH"/ad?.a | tail -1`
-OPENDWGLIB="$adlib"
-
-fi # $USE_OPENDWG
-
-AC_SUBST(OPENDWGINCPATH)
-AC_SUBST(OPENDWGLIBPATH)
-AC_SUBST(OPENDWGLIB)
-AC_SUBST(USE_OPENDWG)
-
-# Done checking OPENDWG
 
 # Enable pthread option
 
@@ -2069,7 +2028,6 @@ LOC_MSG_USE(BLAS support,USE_BLAS)
 LOC_MSG_USE(BZIP2 support,USE_BZIP2)
 LOC_MSG_USE(C++ support,USE_CXX)
 LOC_MSG_USE(Cairo support,USE_CAIRO)
-LOC_MSG_USE(DWG support,USE_OPENDWG)
 LOC_MSG_USE(FFTW support,USE_FFTW)
 LOC_MSG_USE(FreeType support,USE_FREETYPE)
 LOC_MSG_USE(GDAL support,USE_GDAL)

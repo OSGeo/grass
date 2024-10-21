@@ -222,10 +222,11 @@ class DisplayAttributesDialog(wx.Dialog):
                     ctype = columns[name]["ctype"]
                     value = columns[name]["values"][idx]
                     id = columns[name]["ids"][idx]
+                    widget = self.FindWindowById(id)
                     try:
-                        newvalue = self.FindWindowById(id).GetValue()
-                    except:
-                        newvalue = self.FindWindowById(id).GetLabel()
+                        newvalue = widget.GetValue()
+                    except AttributeError:
+                        newvalue = widget.GetLabel()
 
                     if newvalue:
                         try:
@@ -305,7 +306,6 @@ class DisplayAttributesDialog(wx.Dialog):
             columns = self.mapDBInfo.tables[table]
             for idx in range(len(columns[key]["values"])):
                 for name in columns.keys():
-                    type = columns[name]["type"]
                     value = columns[name]["values"][idx]
                     if value is None:
                         value = ""

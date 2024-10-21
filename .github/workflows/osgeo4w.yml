@@ -31,7 +31,7 @@ jobs:
         run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
       - uses: msys2/setup-msys2@ddf331adaebd714795f1042345e6ca57bd66cea8 # v2.24.1
         with:
           path-type: inherit
@@ -39,25 +39,44 @@ jobs:
           update: true
           msystem: MINGW64
           install: tar libintl make bison flex diffutils git dos2unix zip mingw-w64-x86_64-toolchain
-            mingw-w64-x86_64-fftw mingw-w64-x86_64-lapack mingw-w64-x86_64-pkgconf
+            mingw-w64-x86_64-fftw mingw-w64-x86_64-openblas mingw-w64-x86_64-pkgconf
             mingw-w64-x86_64-gcc mingw-w64-x86_64-ccache mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv
             mingw-w64-x86_64-bzip2 mingw-w64-x86_64-gettext mingw-w64-x86_64-libsystre
             mingw-w64-x86_64-libtre-git mingw-w64-x86_64-libwinpthread-git mingw-w64-x86_64-libpng
             mingw-w64-x86_64-pcre
 
-      - name: Install OSGeo4W
-        run: |
-          $exe = 'osgeo4w-setup.exe'
-          $url = 'http://download.osgeo.org/osgeo4w/v2/' + $exe
-          (New-Object System.Net.WebClient).DownloadFile($url, $exe)
-          Start-Process ('.\'+$exe) -ArgumentList '-A -g -k -q \
-            -s http://download.osgeo.org/osgeo4w/v2/ -P ${{ env.Deps }}' -Wait
-        env:
-          Deps: "proj-devel,gdal-devel,geos-devel,libtiff-devel,libpng-devel,\
-            pdal-devel,netcdf-devel,cairo-devel,fftw,freetype-devel,gdal-ecw,\
-            gdal-mrsid,liblas-devel,libxdr,libpq-devel,pdcurses,\
-            python3-matplotlib,python3-numpy,python3-ply,python3-pywin32,\
-            python3-wxpython,regex-devel,zstd-devel"
+      - name: Setup OSGeo4W environment
+        uses: echoix/setup-OSGeo4W@17deecd39e077a80bf1081443998ea8edd6f15bf  # v0.1.0
+        with:
+          package-dir: "D:/OSGeo4W_pkg"
+          packages: |
+            cairo-devel
+            fftw
+            freetype-devel
+            gdal-devel
+            gdal-ecw
+            gdal-mrsid
+            geos-devel
+            liblas-devel
+            libpng-devel
+            libpq-devel
+            libtiff-devel
+            libxdr
+            netcdf-devel
+            pdal-devel
+            pdcurses
+            proj-devel
+            python3-core
+            python3-jupyter
+            python3-matplotlib
+            python3-numpy
+            python3-pip
+            python3-ply
+            python3-pytest
+            python3-pywin32
+            python3-wxpython
+            regex-devel
+            zstd-devel
 
       - name: Set number of cores for compilation
         run: |
@@ -66,7 +85,10 @@ jobs:
 
       - name: Compile GRASS GIS
         shell: msys2 {0}
-        run: .github/workflows/build_osgeo4w.sh
+        run: |
+          export CFLAGS="${CFLAGS} -pipe"
+          export CXXFLAGS="${CXXFLAGS} -pipe"
+          .github/workflows/build_osgeo4w.sh
 
       - name: Print installed versions
         if: always()
@@ -80,12 +102,25 @@ jobs:
         shell: msys2 {0}
         run: .github/workflows/test_simple.sh
 
+      - name: Install pytest plugins
+        run: python -m pip install pytest-timeout
+        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
+      - name: Run pytest with a single worker
+        run: |
+          call %OSGEO4W_ROOT%\opt\grass\etc\env.bat
+          set PYTHONPATH=%GISBASE%\etc\python;%PYTHONPATH%
+          path %GISBASE%\lib;%GISBASE%\bin;%PATH%
+          pytest --verbose --color=yes ^
+            --durations=0 --durations-min=0.5 ^
+            -ra .
+        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
+
       - name: Run tests
         run: .github/workflows/test_thorough.bat 'C:\OSGeo4W\opt\grass\grass85.bat' 'C:\OSGeo4W\bin\python3'
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: testreport-${{ matrix.os }}
           path: testreport

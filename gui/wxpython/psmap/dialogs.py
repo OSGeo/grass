@@ -37,12 +37,13 @@ This program is free software under the GNU General Public License
 import os
 import string
 from copy import deepcopy
+from operator import itemgetter
+from pathlib import Path
 
 import wx
 import wx.lib.agw.floatspin as fs
-from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
-
 from core import globalvar
+from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
 
 if globalvar.wxPythonPhoenix:
     from wx import Validator
@@ -50,24 +51,25 @@ else:
     from wx import PyValidator as Validator
 
 import grass.script as gs
-
-from core.utils import PilImageToWxImage
+from core.gcmd import GError, GMessage, RunCommand
+from core.utils import PilImageToWxImage, cmp
 from dbmgr.vinfo import VectorDBInfo
-from gui_core.gselect import Select
-from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
+from gui_core.gselect import Select
 from gui_core.wrap import (
     BitmapButton,
     BitmapComboBox,
     BitmapFromImage,
     Button,
     CheckBox,
+    CheckListCtrlMixin,
     Choice,
     ClientDC,
     ColourPickerCtrl,
     Dialog,
     DirBrowseButton,
     EmptyBitmap,
+    EmptyImage,
     ExpandoTextCtrl,
     FileBrowseButton,
     FloatSpin,
@@ -84,11 +86,44 @@ from gui_core.wrap import (
     StaticText,
     TextCtrl,
     TextEntryDialog,
-    EmptyImage,
-    CheckListCtrlMixin,
 )
-from psmap.utils import *
-from psmap.instructions import *
+
+# Explicit imports from psmap.instructions
+from psmap.instructions import (
+    Image,
+    Labels,
+    Line,
+    MapFrame,
+    Mapinfo,
+    NewId,
+    NorthArrow,
+    Point,
+    Raster,
+    RasterLegend,
+    Rectangle,
+    Scalebar,
+    Text,
+    Vector,
+    VectorLegend,
+    VProperties,
+)
+
+# Explicit imports from psmap.utils
+from psmap.utils import (
+    AutoAdjust,
+    BBoxAfterRotation,
+    ComputeSetRegion,
+    PaperMapCoordinates,
+    PILImage,
+    Rect2D,
+    Rect2DPP,
+    SetResolution,
+    UnitConversion,
+    convertRGB,
+    getRasterType,
+    havePILImage,
+    projInfo,
+)
 
 # grass.set_raise_on_error(True)
 
@@ -524,8 +559,7 @@ class PsmapDialog(Dialog):
         if ok:
             self.parent.DialogDataChanged(id=self.id)
             return True
-        else:
-            return False
+        return False
 
     def OnOK(self, event):
         """Apply changes, close dialog"""
@@ -3585,7 +3619,7 @@ class LegendDialog(PsmapDialog):
         self.Bind(wx.EVT_CHECKBOX, self.OnIsLegend, self.isRLegend)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnDiscrete, self.discrete)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnDiscrete, self.continuous)
-        ##        self.Bind(wx.EVT_CHECKBOX, self.OnDefaultSize, panel.defaultSize)
+        # self.Bind(wx.EVT_CHECKBOX, self.OnDefaultSize, panel.defaultSize)
         self.Bind(wx.EVT_CHECKBOX, self.OnRange, self.range)
         self.rasterSelect.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnRaster)
 
@@ -3622,9 +3656,7 @@ class LegendDialog(PsmapDialog):
         self.vectorListCtrl.InsertColumn(0, _("Vector map"))
         self.vectorListCtrl.InsertColumn(1, _("Label"))
         if self.vectorId:
-            vectors = sorted(
-                self.instruction[self.vectorId]["list"], key=lambda x: x[3]
-            )
+            vectors = sorted(self.instruction[self.vectorId]["list"], key=itemgetter(3))
 
             for vector in vectors:
                 index = self.vectorListCtrl.InsertItem(
@@ -4455,7 +4487,7 @@ class LegendDialog(PsmapDialog):
         if self.instruction.FindInstructionByType("vector"):
             vectors = sorted(
                 self.instruction.FindInstructionByType("vector")["list"],
-                key=lambda x: x[3],
+                key=itemgetter(3),
             )
             self.vectorListCtrl.DeleteAllItems()
             for vector in vectors:
@@ -5965,7 +5997,7 @@ class ImageDialog(PsmapDialog):
 
     def _getImageDirectory(self):
         """Default image directory"""
-        return os.getcwd()
+        return str(Path.cwd())
 
     def _addConvergence(self, panel, gridBagSizer):
         pass

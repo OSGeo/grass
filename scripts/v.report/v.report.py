@@ -55,6 +55,8 @@
 
 import sys
 import os
+from operator import itemgetter
+
 import grass.script as gs
 from grass.script.utils import separator, decode
 
@@ -114,7 +116,7 @@ def main():
             cols = decode(line).rstrip("\r\n").split("|")
             if catcol == -1:
                 ncols = len(cols)
-                for i in range(0, ncols):
+                for i in range(ncols):
                     if cols[i] == f["key"]:
                         catcol = i
                         break
@@ -134,7 +136,7 @@ def main():
         if p.returncode != 0:
             sys.exit(1)
 
-        records1.sort(key=lambda r: r[catcol])
+        records1.sort(key=itemgetter(catcol))
 
         if len(records1) == 0:
             try:
@@ -215,9 +217,6 @@ def main():
     # print table header
     if not flags["c"]:
         sys.stdout.write(fs.join(colnames + extracolnames) + "\n")
-
-    # make and print the table:
-    numcols = len(colnames) + len(extracolnames)
 
     # calculate percents if requested
     if units == "percent" and option != "coor":

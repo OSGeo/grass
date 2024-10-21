@@ -815,7 +815,7 @@ def _read_raster3d_info(name, mapset):
     )
 
     if not g3map:
-        logging.error(_("Unable to open 3D raster map <%s>" % (name)))
+        logging.error(_("Unable to open 3D raster map <%s>"), (name))
         return None
 
     maptype = libraster3d.Rast3d_file_type_map(g3map)
@@ -830,7 +830,7 @@ def _read_raster3d_info(name, mapset):
     max = libgis.DCELL()
     ret = libraster3d.Rast3d_range_load(g3map)
     if not ret:
-        logging.error(_("Unable to load range of 3D raster map <%s>" % (name)))
+        logging.error(_("Unable to load range of 3D raster map <%s>"), (name))
         return None
     libraster3d.Rast3d_range_min_max(g3map, byref(min), byref(max))
 
@@ -844,7 +844,7 @@ def _read_raster3d_info(name, mapset):
         kvp["max"] = float(max.value)
 
     if not libraster3d.Rast3d_close(g3map):
-        logging.error(_("Unable to close 3D raster map <%s>" % (name)))
+        logging.error(_("Unable to close 3D raster map <%s>"), (name))
         return None
 
     return kvp
@@ -887,10 +887,8 @@ def _read_vector_info(name, mapset):
         with_topo = False
         if libvector.Vect_open_old2(byref(Map), name, mapset, "1") < 1:
             logging.error(
-                _(
-                    "Unable to open vector map <%s>"
-                    % (libvector.Vect_get_full_name(byref(Map)))
-                )
+                _("Unable to open vector map <%s>"),
+                (libvector.Vect_get_full_name(byref(Map))),
             )
             return None
 
@@ -1013,13 +1011,12 @@ def _read_raster_history(name, mapset):
     if ret < 0:
         logging.warning(_("Unable to read history file"))
         return None
-    else:
-        kvp["creation_time"] = decode(
-            libraster.Rast_get_history(byref(hist), libraster.HIST_MAPID)
-        )
-        kvp["creator"] = decode(
-            libraster.Rast_get_history(byref(hist), libraster.HIST_CREATOR)
-        )
+    kvp["creation_time"] = decode(
+        libraster.Rast_get_history(byref(hist), libraster.HIST_MAPID)
+    )
+    kvp["creator"] = decode(
+        libraster.Rast_get_history(byref(hist), libraster.HIST_CREATOR)
+    )
 
     return kvp
 
@@ -1051,13 +1048,12 @@ def _read_raster3d_history(name, mapset):
     if ret < 0:
         logging.warning(_("Unable to read history file"))
         return None
-    else:
-        kvp["creation_time"] = decode(
-            libraster.Rast_get_history(byref(hist), libraster3d.HIST_MAPID)
-        )
-        kvp["creator"] = decode(
-            libraster.Rast_get_history(byref(hist), libraster3d.HIST_CREATOR)
-        )
+    kvp["creation_time"] = decode(
+        libraster.Rast_get_history(byref(hist), libraster3d.HIST_MAPID)
+    )
+    kvp["creator"] = decode(
+        libraster.Rast_get_history(byref(hist), libraster3d.HIST_CREATOR)
+    )
 
     return kvp
 
@@ -1144,43 +1140,42 @@ def _convert_timestamp_from_grass(ts):
         # ATTENTION: We ignore the time zone
         # TODO: Write time zone support
         return (pdt1, pdt2)
-    else:
-        unit = None
-        start = None
-        end = None
-        if count.value >= 1:
-            if dt1.year > 0:
-                unit = "years"
-                start = dt1.year
-            elif dt1.month > 0:
-                unit = "months"
-                start = dt1.month
-            elif dt1.day > 0:
-                unit = "days"
-                start = dt1.day
-            elif dt1.hour > 0:
-                unit = "hours"
-                start = dt1.hour
-            elif dt1.minute > 0:
-                unit = "minutes"
-                start = dt1.minute
-            elif dt1.second > 0:
-                unit = "seconds"
-                start = dt1.second
-        if count.value == 2:
-            if dt2.year > 0:
-                end = dt2.year
-            elif dt2.month > 0:
-                end = dt2.month
-            elif dt2.day > 0:
-                end = dt2.day
-            elif dt2.hour > 0:
-                end = dt2.hour
-            elif dt2.minute > 0:
-                end = dt2.minute
-            elif dt2.second > 0:
-                end = dt2.second
-        return (start, end, unit)
+    unit = None
+    start = None
+    end = None
+    if count.value >= 1:
+        if dt1.year > 0:
+            unit = "years"
+            start = dt1.year
+        elif dt1.month > 0:
+            unit = "months"
+            start = dt1.month
+        elif dt1.day > 0:
+            unit = "days"
+            start = dt1.day
+        elif dt1.hour > 0:
+            unit = "hours"
+            start = dt1.hour
+        elif dt1.minute > 0:
+            unit = "minutes"
+            start = dt1.minute
+        elif dt1.second > 0:
+            unit = "seconds"
+            start = dt1.second
+    if count.value == 2:
+        if dt2.year > 0:
+            end = dt2.year
+        elif dt2.month > 0:
+            end = dt2.month
+        elif dt2.day > 0:
+            end = dt2.day
+        elif dt2.hour > 0:
+            end = dt2.hour
+        elif dt2.minute > 0:
+            end = dt2.minute
+        elif dt2.second > 0:
+            end = dt2.second
+    return (start, end, unit)
 
 
 ###############################################################################
