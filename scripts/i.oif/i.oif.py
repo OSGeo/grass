@@ -90,10 +90,7 @@ def main():
             stddev[band] = float(kv["stddev"])
     else:
         # run all bands in parallel
-        if "WORKERS" in os.environ:
-            workers = int(os.environ["WORKERS"])
-        else:
-            workers = len(bands)
+        workers = int(os.environ["WORKERS"]) if "WORKERS" in os.environ else len(bands)
         proc = {}
         pout = {}
 
@@ -142,10 +139,7 @@ def main():
         _("The Optimum Index Factor analysis result (best combination shown first):")
     )
 
-    if shell:
-        fmt = "%s,%s,%s:%.4f\n"
-    else:
-        fmt = "%s, %s, %s:  %.4f\n"
+    fmt = "%s,%s,%s:%.4f\n" if shell else "%s, %s, %s:  %.4f\n"
 
     if not output or output == "-":
         for v, p in oif:

@@ -116,10 +116,7 @@ def main():
 
     # Get mapset of the vector
     vs = vector.split("@")
-    if len(vs) > 1:
-        vect_mapset = vs[1]
-    else:
-        vect_mapset = mapset
+    vect_mapset = vs[1] if len(vs) > 1 else mapset
 
     # does map exist in CURRENT mapset?
     if vect_mapset != mapset or not gs.find_file(vector, "vector", mapset)["file"]:
@@ -373,10 +370,7 @@ def set_up_columns(vector, layer, percentile, colprefix, basecols, dbfdriver, c)
             perc = b
     if perc:
         # namespace is limited in DBF but the % value is important
-        if dbfdriver:
-            perccol = "per" + percentile
-        else:
-            perccol = "percentile_" + percentile
+        perccol = "per" + percentile if dbfdriver else "percentile_" + percentile
         percindex = basecols.index(perc)
         basecols[percindex] = perccol
 
@@ -424,10 +418,7 @@ def set_up_columns(vector, layer, percentile, colprefix, basecols, dbfdriver, c)
                     + _("Use -c flag to update values in this column.")
                 )
         else:
-            if i == "n":
-                coltype = "INTEGER"
-            else:
-                coltype = "DOUBLE PRECISION"
+            coltype = "INTEGER" if i == "n" else "DOUBLE PRECISION"
             addcols.append(currcolumn + " " + coltype)
 
     if addcols:
