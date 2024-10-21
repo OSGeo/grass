@@ -38,16 +38,18 @@ class TestBenchmarksRun(TestCase):
     def test_resolutions(self):
         """Test that resolution tests runs without nprocs and plots to file"""
         benchmarks = [
-            dict(
-                module=Module("r.univar", map="elevation", stdout_=DEVNULL, run_=False),
-                label="Standard output",
-            ),
-            dict(
-                module=Module(
+            {
+                "module": Module(
+                    "r.univar", map="elevation", stdout_=DEVNULL, run_=False
+                ),
+                "label": "Standard output",
+            },
+            {
+                "module": Module(
                     "r.univar", map="elevation", flags="g", stdout_=DEVNULL, run_=False
                 ),
-                label="Standard output",
-            ),
+                "label": "Standard output",
+            },
         ]
         resolutions = [300, 200, 100]
         results = []
@@ -67,10 +69,12 @@ class TestBenchmarksRun(TestCase):
         label = "Standard output"
         repeat = 4
         benchmarks = [
-            dict(
-                module=Module("r.univar", map="elevation", stdout_=DEVNULL, run_=False),
-                label=label,
-            )
+            {
+                "module": Module(
+                    "r.univar", map="elevation", stdout_=DEVNULL, run_=False
+                ),
+                "label": label,
+            }
         ]
         results = []
         for benchmark in benchmarks:
@@ -88,11 +92,13 @@ class TestBenchmarksRun(TestCase):
         label = "Standard output"
         repeat = 4
         benchmarks = [
-            dict(
-                module=Module("r.univar", map="elevation", stdout_=DEVNULL, run_=False),
-                label=label,
-                max_nprocs=4,
-            )
+            {
+                "module": Module(
+                    "r.univar", map="elevation", stdout_=DEVNULL, run_=False
+                ),
+                "label": label,
+                "max_nprocs": 4,
+            }
         ]
         results = []
         for benchmark in benchmarks:

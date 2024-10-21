@@ -13,6 +13,7 @@
    Joel Jones (CERL/UIUC) and Radim Blazek
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -40,8 +41,8 @@ char *tgis_get_default_database_name(void)
 {
     char default_connection[2048];
 
-    G_snprintf(default_connection, 2048, "$GISDBASE/$LOCATION_NAME/$MAPSET/%s",
-               TGISDB_DEFAULT_SQLITE_PATH);
+    snprintf(default_connection, 2048, "$GISDBASE/$LOCATION_NAME/$MAPSET/%s",
+             TGISDB_DEFAULT_SQLITE_PATH);
 
     return G_store(default_connection);
 }
@@ -57,7 +58,7 @@ int tgis_set_default_connection(void)
     char db_name[2048];
     char *tmp = tgis_get_default_database_name();
 
-    G_snprintf(db_name, 2048, "%s", tmp);
+    snprintf(db_name, 2048, "%s", tmp);
     G_free(tmp);
 
     if (strcmp(TGISDB_DEFAULT_DRIVER, "sqlite") == 0) {

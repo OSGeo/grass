@@ -151,9 +151,6 @@ void main_loop(void)
         maxwa = maxwa / nblock;
     }
 
-    /* Create the observation points */
-    create_observation_points();
-
     G_debug(2, " maxwa, nblock %d %d", maxwa, nblock);
 
     for (iblock = 1; iblock <= nblock; iblock++) {
@@ -388,7 +385,7 @@ void main_loop(void)
                                 }
 
                             } /* else */
-                        }     /*DEFined area */
+                        } /*DEFined area */
                         else {
                             w[lw].m = 1e-10; /* eliminate walker if it is out of
                                                 area */

@@ -23,14 +23,14 @@ def get_pyplot(to_file):
     The *to_file* parameter can be set to True to avoid tkinter dependency
     if the interactive show method is not needed.
     """
-    import matplotlib  # pylint: disable=import-outside-toplevel
+    import matplotlib as mpl  # pylint: disable=import-outside-toplevel
 
     if to_file:
         backend = "agg"
     else:
         backend = None
     if backend:
-        matplotlib.use(backend)
+        mpl.use(backend)
 
     import matplotlib.pyplot as plt  # pylint: disable=import-outside-toplevel
 
@@ -71,7 +71,7 @@ def nprocs_plot(results, filename=None, title=None, metric="time"):
             plt.plot(x, result.times, label=result.label)
             plt.fill_between(x, mins, maxes, color="gray", alpha=0.3)
             ylabel = "Time [s]"
-        elif metric in ["speedup", "efficiency"]:
+        elif metric in {"speedup", "efficiency"}:
             ylabel = metric.title()
             plt.plot(x, getattr(result, metric), label=result.label)
         else:
@@ -96,7 +96,7 @@ def nprocs_plot(results, filename=None, title=None, metric="time"):
         plt.title(title)
     elif metric == "times":
         plt.title("Execution time by processing elements")
-    elif metric in ["speedup", "efficiency"]:
+    elif metric in {"speedup", "efficiency"}:
         plt.title(f"{metric.title()} by processing elements")
     if filename:
         plt.savefig(filename)

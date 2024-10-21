@@ -10,24 +10,26 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from abc import ABCMeta, abstractmethod
+from datetime import datetime
+
 import grass.script as gs
 from grass.exceptions import ImplementationError
-from datetime import datetime
-from abc import ABCMeta, abstractmethod
+
+from .abstract_dataset import AbstractDataset
 from .core import (
-    get_tgis_c_library_interface,
-    get_enable_timestamp_write,
-    get_enable_mapset_check,
     get_current_mapset,
+    get_enable_mapset_check,
+    get_enable_timestamp_write,
+    get_tgis_c_library_interface,
     init_dbif,
 )
-from .abstract_dataset import AbstractDataset
-from .temporal_extent import RelativeTemporalExtent, AbsoluteTemporalExtent
 from .datetime_math import (
     datetime_to_grass_datetime_string,
-    increment_datetime_by_string,
     decrement_datetime_by_string,
+    increment_datetime_by_string,
 )
+from .temporal_extent import AbsoluteTemporalExtent, RelativeTemporalExtent
 
 
 class AbstractMapDataset(AbstractDataset):
@@ -230,8 +232,7 @@ class AbstractMapDataset(AbstractDataset):
 
         if layer is not None:
             return f"{name}:{layer}@{mapset}"
-        else:
-            return f"{name}@{mapset}"
+        return f"{name}@{mapset}"
 
     @staticmethod
     def build_id(name, mapset, layer=None):
@@ -256,8 +257,7 @@ class AbstractMapDataset(AbstractDataset):
 
         if layer is not None:
             return f"{name}:{layer}@{mapset}"
-        else:
-            return f"{name}@{mapset}"
+        return f"{name}@{mapset}"
 
     def get_layer(self):
         """Return the layer of the map
@@ -441,15 +441,11 @@ class AbstractMapDataset(AbstractDataset):
                     }
                 )
                 return False
-            else:
-                self.msgr.error(
-                    _(
-                        "Start time must be of type datetime for "
-                        "%(type)s map <%(id)s>"
-                    )
-                    % {"type": self.get_type(), "id": self.get_map_id()}
-                )
-                return False
+            self.msgr.error(
+                _("Start time must be of type datetime for %(type)s map <%(id)s>")
+                % {"type": self.get_type(), "id": self.get_map_id()}
+            )
+            return False
 
         if end_time and not isinstance(end_time, datetime):
             if self.get_layer():
@@ -465,12 +461,11 @@ class AbstractMapDataset(AbstractDataset):
                     }
                 )
                 return False
-            else:
-                self.msgr.error(
-                    _("End time must be of type datetime for " "%(type)s map <%(id)s>")
-                    % {"type": self.get_type(), "id": self.get_map_id()}
-                )
-                return False
+            self.msgr.error(
+                _("End time must be of type datetime for %(type)s map <%(id)s>")
+                % {"type": self.get_type(), "id": self.get_map_id()}
+            )
+            return False
 
         if start_time is not None and end_time is not None:
             if start_time > end_time:
@@ -488,20 +483,17 @@ class AbstractMapDataset(AbstractDataset):
                         }
                     )
                     return False
-                else:
-                    self.msgr.error(
-                        _(
-                            "End time must be greater than start "
-                            "time for %(type)s map <%(id)s>"
-                        )
-                        % {"type": self.get_type(), "id": self.get_map_id()}
+                self.msgr.error(
+                    _(
+                        "End time must be greater than start "
+                        "time for %(type)s map <%(id)s>"
                     )
-                    return False
-            else:
-                # Do not create an interval in case start and end time are
-                # equal
-                if start_time == end_time:
-                    end_time = None
+                    % {"type": self.get_type(), "id": self.get_map_id()}
+                )
+                return False
+            # Do not create an interval in case start and end time are equal
+            if start_time == end_time:
+                end_time = None
 
         self.base.set_ttype("absolute")
         self.absolute_time.set_start_time(start_time)
@@ -617,11 +609,9 @@ class AbstractMapDataset(AbstractDataset):
                         % {"type": self.get_type(), "id": self.get_id()}
                     )
                 return False
-            else:
-                # Do not create an interval in case start and end time are
-                # equal
-                if start_time == end_time:
-                    end_time = None
+            # Do not create an interval in case start and end time are equal
+            if start_time == end_time:
+                end_time = None
 
         self.base.set_ttype("relative")
 
@@ -1023,7 +1013,7 @@ class AbstractMapDataset(AbstractDataset):
             statement += self.unregister(dbif=dbif, update=update, execute=False)
 
             self.msgr.verbose(
-                _("Delete %s dataset <%s> from temporal " "database")
+                _("Delete %s dataset <%s> from temporal database")
                 % (self.get_type(), self.get_id())
             )
 
@@ -1130,7 +1120,7 @@ class AbstractMapDataset(AbstractDataset):
             datasets = None
 
         if connection_state_changed:
-            dbif.close
+            dbif.close()
 
         return datasets
 
@@ -1166,7 +1156,7 @@ class AbstractMapDataset(AbstractDataset):
         # Check if the dataset is already present
         if stds_id in datasets:
             if connection_state_changed:
-                dbif.close
+                dbif.close()
             return ""
 
         datasets.append(stds_id)
@@ -1181,7 +1171,7 @@ class AbstractMapDataset(AbstractDataset):
             statement = self.stds_register.get_update_statement_mogrified(dbif=dbif)
 
         if connection_state_changed:
-            dbif.close
+            dbif.close()
 
         return statement
 
@@ -1208,13 +1198,13 @@ class AbstractMapDataset(AbstractDataset):
         # Check if no datasets are present
         if datasets is None:
             if connection_state_changed:
-                dbif.close
+                dbif.close()
             return ""
 
         # Check if the dataset is already present
         if stds_id not in datasets:
             if connection_state_changed:
-                dbif.close
+                dbif.close()
             return ""
 
         datasets.remove(stds_id)
@@ -1229,7 +1219,7 @@ class AbstractMapDataset(AbstractDataset):
             statement = self.stds_register.get_update_statement_mogrified(dbif=dbif)
 
         if connection_state_changed:
-            dbif.close
+            dbif.close()
 
         return statement
 
@@ -1242,7 +1232,6 @@ class AbstractMapDataset(AbstractDataset):
         Currently only implemented in RasterDataset. Otherwise
         silently pass.
         """
-        pass
 
     def set_semantic_label(self, semantic_label):
         """Set semantic label identifier

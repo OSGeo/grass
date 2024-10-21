@@ -189,7 +189,6 @@ class DisplayAttributesDialog(wx.Dialog):
 
     def OnSQLStatement(self, event):
         """Update SQL statement"""
-        pass
 
     def IsFound(self):
         """Check for status
@@ -223,10 +222,11 @@ class DisplayAttributesDialog(wx.Dialog):
                     ctype = columns[name]["ctype"]
                     value = columns[name]["values"][idx]
                     id = columns[name]["ids"][idx]
+                    widget = self.FindWindowById(id)
                     try:
-                        newvalue = self.FindWindowById(id).GetValue()
-                    except:
-                        newvalue = self.FindWindowById(id).GetLabel()
+                        newvalue = widget.GetValue()
+                    except AttributeError:
+                        newvalue = widget.GetLabel()
 
                     if newvalue:
                         try:
@@ -250,21 +250,19 @@ class DisplayAttributesDialog(wx.Dialog):
                             )
                             sqlCommands.append(None)
                             continue
-                    else:
-                        if self.action == "add":
-                            continue
+                    elif self.action == "add":
+                        continue
 
                     if newvalue != value:
                         updatedColumns.append(name)
                         if newvalue == "":
                             updatedValues.append("NULL")
+                        elif ctype != str:
+                            updatedValues.append(str(newvalue))
                         else:
-                            if ctype != str:
-                                updatedValues.append(str(newvalue))
-                            else:
-                                updatedValues.append(
-                                    "'" + newvalue.replace("'", "''") + "'"
-                                )
+                            updatedValues.append(
+                                "'" + newvalue.replace("'", "''") + "'"
+                            )
                         columns[name]["values"][idx] = newvalue
 
                 if self.action != "add" and len(updatedValues) == 0:
@@ -308,7 +306,6 @@ class DisplayAttributesDialog(wx.Dialog):
             columns = self.mapDBInfo.tables[table]
             for idx in range(len(columns[key]["values"])):
                 for name in columns.keys():
-                    type = columns[name]["type"]
                     value = columns[name]["values"][idx]
                     if value is None:
                         value = ""
@@ -745,7 +742,7 @@ class ModifyTableRecord(wx.Dialog):
 
         If columns is given (list), return only values of given columns.
         """
-        valueList = list()
+        valueList = []
         for labelId, ctypeId, valueId in self.widgets:
             column = self.FindWindowById(labelId).GetLabel()
             if columns is None or column in columns:

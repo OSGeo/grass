@@ -44,7 +44,7 @@ import subprocess
 import shutil
 
 from grass.imaging import images2ims
-import grass.script as gscript
+import grass.script as gs
 
 
 def _cleanDir(tempDir):
@@ -131,17 +131,16 @@ def writeAvi(
         _cleanDir(tempDir)
         if bg_task:
             return (
-                gscript.decode(outPut)
+                gs.decode(outPut)
                 + "\n"
-                + gscript.decode(S.stderr.read())
+                + gs.decode(S.stderr.read())
                 + "\n"
                 + _("Could not write avi.")
             )
-        else:
-            # An error occurred, show
-            print(gscript.decode(outPut))
-            print(gscript.decode(S.stderr.read()))
-            raise RuntimeError(_("Could not write avi."))
+        # An error occurred, show
+        print(gs.decode(outPut))
+        print(gs.decode(S.stderr.read()))
+        raise RuntimeError(_("Could not write avi."))
     else:
         try:
             # Copy avi
@@ -151,8 +150,7 @@ def writeAvi(
             _cleanDir(tempDir)
             if bg_task:
                 return str(err)
-            else:
-                raise
+            raise
 
         # Clean up
         _cleanDir(tempDir)

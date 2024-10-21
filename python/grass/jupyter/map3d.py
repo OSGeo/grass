@@ -12,6 +12,7 @@
 #           for details.
 
 """Render 3D visualizations"""
+from __future__ import annotations
 
 import os
 import tempfile
@@ -48,7 +49,7 @@ class Map3D:
         self,
         width: int = 600,
         height: int = 400,
-        filename: str = None,
+        filename: str | None = None,
         mode: str = "fine",
         resolution_fine: int = 1,
         screen_backend: str = "auto",
@@ -56,7 +57,7 @@ class Map3D:
         text_size: float = 12,
         renderer2d: str = "cairo",
         use_region: bool = False,
-        saved_region: str = None,
+        saved_region: str | None = None,
     ):
         """Checks screen_backend and creates a temporary directory for rendering.
 
@@ -132,7 +133,7 @@ class Map3D:
                     "because pyvirtualdisplay cannot be imported"
                 ).format(screen_backend)
             )
-        elif screen_backend in ["simple", "pyvirtualdisplay"]:
+        elif screen_backend in {"simple", "pyvirtualdisplay"}:
             self._screen_backend = screen_backend
         else:
             raise ValueError(

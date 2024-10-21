@@ -1,4 +1,4 @@
-FROM ubuntu:22.04@sha256:19478ce7fc2ffbce89df29fea5725a8d12e57de52eb9ea570890dc5852aac1ac
+FROM ubuntu:22.04@sha256:0e5e4a57c2499249aafc3b40fcd541e9a456aab7296681a3994d631587203f97
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Tomas Zigo"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
@@ -29,8 +29,8 @@ WORKDIR /tmp
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends --no-install-suggests \
     adwaita-icon-theme-full \
-    build-essential \
     bison \
+    build-essential \
     bzip2 \
     cmake \
     curl \
@@ -48,16 +48,17 @@ RUN apt-get update && apt-get upgrade -y && \
     libfftw3-bin \
     libfftw3-dev \
     libfreetype6-dev \
-    libgl1-mesa-dev \
     libgdal-dev \
     libgeos-dev \
+    libgl1-mesa-dev \
     libglu1-mesa-dev \
     libgsl0-dev \
     libgtk-3-0 \
+    libgtk-3-dev \
     libjpeg-dev \
     libjsoncpp-dev \
-    libnetcdf-dev \
     libncurses5-dev \
+    libnetcdf-dev \
     libnotify4 \
     libopenblas-base \
     libopenblas-dev \
@@ -67,8 +68,8 @@ RUN apt-get update && apt-get upgrade -y && \
     libpq-dev \
     libproj-dev \
     libpython3-all-dev \
-    librsvg2-common \
     libreadline-dev \
+    librsvg2-common \
     libsdl2-2.0-0 \
     libsqlite3-dev \
     libtiff-dev \
@@ -93,6 +94,7 @@ RUN apt-get update && apt-get upgrade -y && \
     python3-ply \
     python3-setuptools \
     python3-venv \
+    python3-wxgtk4.0 \
     software-properties-common \
     sqlite3 \
     subversion \
@@ -189,26 +191,26 @@ ENV CXXFLAGS "$MYCXXFLAGS"
 ENV NUMTHREADS=4
 RUN make distclean || echo "nothing to clean"
 RUN /src/grass_build/configure \
-  --with-cxx \
   --enable-largefile \
-  --with-proj-share=/usr/share/proj \
+  --with-bzlib \
+  --with-cairo --with-cairo-ldflags=-lfontconfig \
+  --with-cxx \
+  --with-fftw \
+  --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
   --with-gdal=/usr/bin/gdal-config \
   --with-geos \
-  --with-sqlite \
-  --with-cairo --with-cairo-ldflags=-lfontconfig \
-  --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
-  --with-fftw \
-  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
   --with-netcdf \
-  --with-zstd \
-  --with-bzlib \
+  --with-nls \
   --with-pdal \
+  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
+  --with-proj-share=/usr/share/proj \
+  --with-readline \
+  --with-sqlite \
+  --with-x \
+  --with-zstd \
   --without-mysql \
   --without-odbc \
   --without-openmp \
-  --with-x \
-  --with-nls \
-  --with-readline \
     && make -j $NUMTHREADS \
     && make install && ldconfig
 

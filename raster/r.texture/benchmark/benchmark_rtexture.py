@@ -17,7 +17,7 @@ def main():
     metrics = ["time", "speedup", "efficiency"]
 
     for mapsize in mapsizes:
-        benchmark(int(mapsize**0.5), f"r.texture_{int(mapsize/1e6)}M", results)
+        benchmark(int(mapsize**0.5), f"r.texture_{int(mapsize / 1e6)}M", results)
 
     for metric in metrics:
         bm.nprocs_plot(

@@ -68,9 +68,7 @@ class VDigitError:
     def WriteLine(self):
         """Writing line failed"""
         GError(
-            message=_(
-                "Writing new feature failed. " "Operation canceled.\n\n" "Reason: %s"
-            )
+            message=_("Writing new feature failed. Operation canceled.\n\nReason: %s")
             % GetLastError(),
             parent=self.parent,
             caption=self.caption,
@@ -79,7 +77,7 @@ class VDigitError:
     def ReadLine(self, line):
         """Reading line failed"""
         GError(
-            message=_("Reading feature id %d failed. " "Operation canceled.") % line,
+            message=_("Reading feature id %d failed. Operation canceled.") % line,
             parent=self.parent,
             caption=self.caption,
         )
@@ -87,8 +85,7 @@ class VDigitError:
     def DbLink(self, dblink):
         """No dblink available"""
         GError(
-            message=_("Database link %d not available. " "Operation canceled.")
-            % dblink,
+            message=_("Database link %d not available. Operation canceled.") % dblink,
             parent=self.parent,
             caption=self.caption,
         )
@@ -96,7 +93,7 @@ class VDigitError:
     def Driver(self, driver):
         """Staring driver failed"""
         GError(
-            message=_("Unable to start database driver <%s>. " "Operation canceled.")
+            message=_("Unable to start database driver <%s>. Operation canceled.")
             % driver,
             parent=self.parent,
             caption=self.caption,
@@ -117,7 +114,7 @@ class VDigitError:
     def DbExecute(self, sql):
         """Sql query failed"""
         GError(
-            message=_("Unable to execute SQL query '%s'. " "Operation canceled.") % sql,
+            message=_("Unable to execute SQL query '%s'. Operation canceled.") % sql,
             parent=self.parent,
             caption=self.caption,
         )
@@ -125,7 +122,7 @@ class VDigitError:
     def DeadLine(self, line):
         """Dead line"""
         GError(
-            message=_("Feature id %d is marked as dead. " "Operation canceled.") % line,
+            message=_("Feature id %d is marked as dead. Operation canceled.") % line,
             parent=self.parent,
             caption=self.caption,
         )
@@ -133,7 +130,7 @@ class VDigitError:
     def FeatureType(self, ftype):
         """Unknown feature type"""
         GError(
-            message=_("Unsupported feature type %d. " "Operation canceled.") % ftype,
+            message=_("Unsupported feature type %d. Operation canceled.") % ftype,
             parent=self.parent,
             caption=self.caption,
         )
@@ -177,13 +174,13 @@ class IVDigit:
         # self.SetCategory()
 
         # layer / max category
-        self.cats = dict()
+        self.cats = {}
 
-        self._settings = dict()
+        self._settings = {}
         self.UpdateSettings()  # -> self._settings
 
         # undo/redo
-        self.changesets = list()
+        self.changesets = []
         self.changesetCurrent = -1  # first changeset to apply
 
         if self.poMapInfo:
@@ -297,10 +294,8 @@ class IVDigit:
         if threshold > 0.0:
             if UserSettings.Get(group="vdigit", key="snapToVertex", subkey="enabled"):
                 return SNAPVERTEX
-            else:
-                return SNAP
-        else:
-            return NO_SNAP
+            return SNAP
+        return NO_SNAP
 
     def _getNewFeaturesLayer(self):
         """Returns layer of new feature (from settings)"""
@@ -391,7 +386,7 @@ class IVDigit:
             del self.changesets[self.changesetCurrent + 1 : changesetLast + 1]
             self.toolbar.EnableRedo(False)
 
-        data = list()
+        data = []
         for i in range(Vect_get_num_updated_lines(self.poMapInfo) - 1, -1, -1):
             line = Vect_get_updated_line(self.poMapInfo, i)
             offset = Vect_get_updated_line_offset(self.poMapInfo, i)
@@ -536,7 +531,7 @@ class IVDigit:
 
         # collect categories for deleting if requested
         deleteRec = UserSettings.Get(group="vdigit", key="delRecord", subkey="enabled")
-        catDict = dict()
+        catDict = {}
 
         old_bboxs = []
         old_areas_cats = []
@@ -562,7 +557,7 @@ class IVDigit:
         nlines = Vedit_delete_lines(self.poMapInfo, poList)
 
         Vect_destroy_list(poList)
-        self._display.selected["ids"] = list()
+        self._display.selected["ids"] = []
 
         if nlines > 0:
             if deleteRec:
@@ -675,8 +670,7 @@ class IVDigit:
             # TODO centroid opttimization, can be edited also its area -> it
             # will appear two times in new_ lists
             return self._getCentroidAreaBboxCats(ln_id)
-        else:
-            return [self._getBbox(ln_id)], [self._getLineAreasCategories(ln_id)]
+        return [self._getBbox(ln_id)], [self._getLineAreasCategories(ln_id)]
 
     def _getCentroidAreaBboxCats(self, centroid):
         """Helper function
@@ -691,8 +685,7 @@ class IVDigit:
         area = Vect_get_centroid_area(self.poMapInfo, centroid)
         if area > 0:
             return self._getaAreaBboxCats(area)
-        else:
-            return None
+        return None
 
     def _getaAreaBboxCats(self, area):
         """Helper function
@@ -1087,7 +1080,7 @@ class IVDigit:
         # apply snapping (node or vertex)
         snap = self._getSnapMode()
         if snap != NO_SNAP:
-            modeSnap = not (snap == SNAP)
+            modeSnap = snap != SNAP
             Vedit_snap_line(
                 self.poMapInfo,
                 self.popoBgMapInfo,
@@ -1449,7 +1442,7 @@ class IVDigit:
         ftype = GV_POINTS | GV_LINES  # TODO: 3D
         layer = 1  # TODO
 
-        ids = list()
+        ids = []
         poList = Vect_new_list()
         coList = poList.contents
         if UserSettings.Get(group="vdigit", key="query", subkey="box"):
@@ -1838,7 +1831,7 @@ class IVDigit:
         :return: tuple (number of added features, list of fids)
         :return: number of features -1 on error
         """
-        fids = list()
+        fids = []
         if not self._checkMap():
             return (-1, None)
 
@@ -1892,7 +1885,7 @@ class IVDigit:
 
         if snap != NO_SNAP:
             # apply snapping (node or vertex)
-            modeSnap = not (snap == SNAP)
+            modeSnap = snap != SNAP
             Vedit_snap_line(
                 self.poMapInfo,
                 self.popoBgMapInfo,
@@ -1949,8 +1942,7 @@ class IVDigit:
                     if newc < 0:
                         self._error.WriteLine()
                         return (len(fids), fids)
-                    else:
-                        fids.append(newc)
+                    fids.append(newc)
 
             if right > 0 and Vect_get_area_centroid(self.poMapInfo, right) == 0:
                 # if Vect_get_area_points(byref(self.poMapInfo), right, bpoints) > 0 and
@@ -1967,8 +1959,7 @@ class IVDigit:
                     if newc < 0:
                         self._error.WriteLine()
                         return len(fids, fids)
-                    else:
-                        fids.append(newc)
+                    fids.append(newc)
 
             Vect_destroy_line_struct(bpoints)
 
@@ -2063,7 +2054,7 @@ class IVDigit:
 
         :return: list of layer/cats
         """
-        ret = dict()
+        ret = {}
         if not self._checkMap():
             return ret
 
@@ -2085,7 +2076,7 @@ class IVDigit:
         for i in range(cats.n_cats):
             field = cats.field[i]
             if field not in ret:
-                ret[field] = list()
+                ret[field] = []
             ret[field].append(cats.cat[i])
 
         return ret

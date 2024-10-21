@@ -14,6 +14,7 @@
 """Test parsing and structure of CSV and JSON outputs from g.mapsets"""
 
 import json
+import sys
 import pytest
 import grass.script as gs
 from grass.script import utils as gutils
@@ -30,6 +31,10 @@ def _check_parsed_list(mapsets, text, sep="|"):
     assert text == sep.join(mapsets) + "\n"
 
 
+@pytest.mark.xfail(
+    sys.platform == "win32",
+    reason="universal_newlines or text subprocess option not used",
+)
 @pytest.mark.parametrize("separator", SEPARATORS)
 def test_plain_list_output(simple_dataset, separator):
     """Test that the separators are properly applied with list flag"""
@@ -38,6 +43,10 @@ def test_plain_list_output(simple_dataset, separator):
     _check_parsed_list(mapsets, text, gutils.separator(separator))
 
 
+@pytest.mark.xfail(
+    sys.platform == "win32",
+    reason="universal_newlines or text subprocess option not used",
+)
 @pytest.mark.parametrize("separator", SEPARATORS)
 def test_plain_print_output(simple_dataset, separator):
     """Test that the separators are properly applied with print flag"""
