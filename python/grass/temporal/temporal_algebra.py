@@ -1159,11 +1159,7 @@ class TemporalAlgebraParser:
                             if returncode == 0:
                                 break
                             # Append map to result map list.
-                            elif returncode == 1:
-                                # print(map_new.get_id() + " " +
-                                #       str(map_new.get_temporal_extent_as_tuple()))
-                                # print(map_new.condition_value)
-                                # print(map_new.cmd_list)
+                            if returncode == 1:
                                 # resultlist.append(map_new)
                                 resultdict[map_new.get_id()] = map_new
 

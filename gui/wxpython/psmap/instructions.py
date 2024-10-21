@@ -698,7 +698,7 @@ class MapFrame(InstructionObject):
                     if line.split()[1].lower() in {"n", "no", "none"}:
                         instr["border"] = "n"
                         break
-                    elif line.split()[1].lower() in {"y", "yes"}:
+                    if line.split()[1].lower() in {"y", "yes"}:
                         instr["border"] = "y"
                     elif line.startswith("width"):
                         instr["width"] = line.split()[1]

@@ -1297,7 +1297,7 @@ class History:
         for line in hist:
             if not line.strip() and isSearchedHistStep:
                 break
-            elif not line.strip():
+            if not line.strip():
                 newHistStep = True
                 continue
             elif isSearchedHistStep:

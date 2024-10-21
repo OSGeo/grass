@@ -610,7 +610,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                             if returncode == 0:
                                 break
                             # Append map to result map list.
-                            elif returncode == 1:
+                            if returncode == 1:
                                 # print(map_new.cmd_list)
                                 # resultlist.append(map_new)
                                 if cmd_bool:

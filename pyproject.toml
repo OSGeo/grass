@@ -211,7 +211,6 @@ ignore = [
     "RET503",  # implicit-return
     "RET506",  # superfluous-else-raise
     "RET507",  # superfluous-else-continue
-    "RET508",  # superfluous-else-break
     "RUF003",  # ambiguous-unicode-character-comment
     "RUF005",  # collection-literal-concatenation
     "RUF012",  # mutable-class-default
