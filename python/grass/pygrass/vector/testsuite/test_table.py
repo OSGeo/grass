@@ -7,15 +7,14 @@ Created on Wed Jun 25 11:08:22 2014
 import os
 import sqlite3
 import tempfile as tmp
-from string import ascii_letters, digits
 from random import choice
+from string import ascii_letters, digits
+
 import numpy as np
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
 from grass.pygrass.vector.table import Table, get_path
-
 
 # dictionary that generate random data
 RNG = np.random.default_rng()
