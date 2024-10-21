@@ -56,14 +56,8 @@ def main():
         gs.run_command("db.connect", flags="c", quiet=True)
 
     kv = gs.db_connection()
-    if options["database"]:
-        database = options["database"]
-    else:
-        database = kv["database"]
-    if options["driver"]:
-        driver = options["driver"]
-    else:
-        driver = kv["driver"]
+    database = options["database"] or kv["database"]
+    driver = options["driver"] or kv["driver"]
     # schema needed for PG?
 
     if force:

@@ -218,10 +218,7 @@ def raster_what(map, coord, env=None, localized=False):
                        query
     :param env:
     """
-    if isinstance(map, (bytes, str)):
-        map_list = [map]
-    else:
-        map_list = map
+    map_list = [map] if isinstance(map, (bytes, str)) else map
 
     coord_list = []
     if isinstance(coord, tuple):

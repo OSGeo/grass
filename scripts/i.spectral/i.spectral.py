@@ -136,10 +136,7 @@ def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
 
     cmd = []
     for i, row in enumerate(what):
-        if not coord_legend:
-            title = "Pick " + str(i + 1)
-        else:
-            title = str(tuple(row[0:2]))
+        title = "Pick " + str(i + 1) if not coord_legend else str(tuple(row[0:2]))
 
         x_datafile = os.path.join(tmp_dir, "data_%d" % i)
         cmd.append(" '%s' title '%s'" % (x_datafile, title))

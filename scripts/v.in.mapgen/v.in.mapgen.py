@@ -73,18 +73,12 @@ def main():
     if not os.path.isfile(infile):
         grass.fatal(_("Input file <%s> not found") % infile)
 
-    if output:
-        name = output
-    else:
-        name = ""
+    name = output or ""
 
     if threeD:
         matlab = True
 
-    if threeD:
-        do3D = "z"
-    else:
-        do3D = ""
+    do3D = "z" if threeD else ""
 
     tmp = grass.tempfile()
 

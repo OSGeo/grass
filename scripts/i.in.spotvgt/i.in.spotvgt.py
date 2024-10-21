@@ -136,11 +136,7 @@ def main():
 
     spotdir = os.path.dirname(infile)
     spotname = gs.basename(infile, "hdf")
-
-    if rast:
-        name = rast
-    else:
-        name = spotname
+    name = rast or spotname
 
     if not gs.overwrite() and gs.find_file(name)["file"]:
         gs.fatal(_("<%s> already exists. Aborting.") % name)

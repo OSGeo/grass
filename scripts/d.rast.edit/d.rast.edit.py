@@ -295,10 +295,7 @@ def wxGUI():
             px, py = -dy, dx
 
             r, g, b, a = wx.Colour(fill).Get()
-            if r + g + b > 384:
-                line = "black"
-            else:
-                line = "white"
+            line = "black" if r + g + b > 384 else "white"
 
             dc.SetPen(wx.Pen(line))
             dc.DrawLine(x0, y0, x1, y1)
