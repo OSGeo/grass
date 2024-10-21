@@ -666,7 +666,7 @@ def wxGUI():
             if val not in self.colors:
                 try:
                     self.force_color(val)
-                except:
+                except ValueError:
                     self.colors[val] = "#ffffff"
 
             return self.colors[val]
