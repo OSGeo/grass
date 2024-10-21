@@ -5,15 +5,15 @@ set -e
 
 # compile
 ./configure \
-    --with-nls \
-    --with-cxx \
-    --with-readline \
     --with-bzlib \
-    --with-proj-share=/usr/share/proj \
-    --with-geos=/usr/bin/geos-config \
     --with-cairo \
-    --with-opengl-libs=/usr/include/GL \
+    --with-cxx \
     --with-freetype=yes --with-freetype-includes="/usr/include/freetype2/" \
+    --with-geos=/usr/bin/geos-config \
+    --with-nls \
+    --with-opengl-libs=/usr/include/GL \
+    --with-proj-share=/usr/share/proj \
+    --with-readline \
     --with-sqlite=yes \
     --without-pdal
 make
