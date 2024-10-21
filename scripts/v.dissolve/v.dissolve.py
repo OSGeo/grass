@@ -16,7 +16,7 @@
 #############################################################################
 
 # %module
-# % description: Dissolves adjacent or overlaping features sharing a common category number or attribute.
+# % description: Dissolves adjacent or overlapping features sharing a common category number or attribute.
 # % keyword: vector
 # % keyword: dissolve
 # % keyword: area
