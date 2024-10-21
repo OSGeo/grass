@@ -126,10 +126,7 @@ def write_footer(f, index_url, year=None, template="html"):
         from build_html import footer_tmpl
     else:
         from build_md import footer_tmpl
-    if year is None:
-        cur_year = default_year
-    else:
-        cur_year = year
+    cur_year = default_year if year is None else year
     f.write(
         footer_tmpl.substitute(
             grass_version=grass_version, index_url=index_url, year=cur_year
