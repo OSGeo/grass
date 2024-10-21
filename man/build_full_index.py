@@ -11,77 +11,100 @@ import os
 
 from operator import itemgetter
 
-from build_html import (
-    html_dir,
-    grass_version,
-    html_files,
-    write_html_header,
-    write_html_footer,
-    check_for_desc_override,
-    get_desc,
-    replace_file,
-    to_title,
-    full_index_header,
-    toc,
-    cmd2_tmpl,
-    desc1_tmpl,
-)
 
-year = None
-if len(sys.argv) > 1:
-    year = sys.argv[1]
+def build_full_index(ext):
+    if ext == "html":
+        from build_html import (
+            man_dir,
+            full_index_header,
+            cmd2_tmpl,
+            desc1_tmpl,
+            get_desc,
+            toc,
+        )
+    else:
+        from build_md import (
+            man_dir,
+            full_index_header,
+            cmd2_tmpl,
+            desc1_tmpl,
+            get_desc,
+        )
 
-os.chdir(html_dir)
+    os.chdir(man_dir)
 
-# TODO: create some master function/dict somewhere
-class_labels = {
-    "d": "display",
-    "db": "database",
-    "g": "general",
-    "i": "imagery",
-    "m": "miscellaneous",
-    "ps": "PostScript",
-    "r": "raster",
-    "r3": "3D raster",
-    "t": "temporal",
-    "v": "vector",
-}
+    # TODO: create some master function/dict somewhere
+    class_labels = {
+        "d": "display",
+        "db": "database",
+        "g": "general",
+        "i": "imagery",
+        "m": "miscellaneous",
+        "ps": "PostScript",
+        "r": "raster",
+        "r3": "3D raster",
+        "t": "temporal",
+        "v": "vector",
+    }
 
-classes = []
-for cmd in html_files("*"):
-    prefix = cmd.split(".")[0]
-    if prefix not in [item[0] for item in classes]:
-        classes.append((prefix, class_labels.get(prefix, prefix)))
-classes.sort(key=itemgetter(0))
+    classes = []
+    for cmd in get_files(man_dir, "*", extension=ext):
+        prefix = cmd.split(".")[0]
+        if prefix not in [item[0] for item in classes]:
+            classes.append((prefix, class_labels.get(prefix, prefix)))
+    classes.sort(key=itemgetter(0))
 
-# begin full index:
-filename = "full_index.html"
-f = open(filename + ".tmp", "w")
+    # begin full index:
+    filename = f"full_index.{ext}"
+    f = open(filename + ".tmp", "w")
 
-write_html_header(
-    f, "GRASS GIS %s Reference Manual: Full index" % grass_version, body_width="80%"
-)
+    write_header(
+        f,
+        "GRASS GIS {} Reference Manual - Full index".format(grass_version),
+        body_width="80%",
+        template=ext,
+    )
 
-# generate main index of all modules:
-f.write(full_index_header)
+    # generate main index of all modules:
+    f.write(full_index_header)
 
-f.write(toc)
+    if ext == "html":
+        f.write(toc)
 
-# for all module groups:
-for cls, cls_label in classes:
-    f.write(cmd2_tmpl.substitute(cmd_label=to_title(cls_label), cmd=cls))
-    # for all modules:
-    for cmd in html_files(cls):
-        basename = os.path.splitext(cmd)[0]
-        desc = check_for_desc_override(basename)
-        if desc is None:
-            desc = get_desc(cmd)
-        f.write(desc1_tmpl.substitute(cmd=cmd, basename=basename, desc=desc))
-    f.write("</table>\n")
+    # for all module groups:
+    for cls, cls_label in classes:
+        f.write(cmd2_tmpl.substitute(cmd_label=to_title(cls_label), cmd=cls))
+        # for all modules:
+        for cmd in get_files(man_dir, cls, extension=ext):
+            basename = os.path.splitext(cmd)[0]
+            desc = check_for_desc_override(basename)
+            if desc is None:
+                desc = get_desc(cmd)
+            f.write(desc1_tmpl.substitute(cmd=cmd, basename=basename, desc=desc))
+        if ext == "html":
+            f.write("</table>\n")
 
-write_html_footer(f, "index.html", year)
+    write_footer(f, f"index.{ext}", year, template=ext)
 
-f.close()
-replace_file(filename)
+    f.close()
+    replace_file(filename)
 
-# done full index
+
+if __name__ == "__main__":
+    year = None
+    if len(sys.argv) > 1:
+        year = sys.argv[1]
+
+    from build import (
+        get_files,
+        write_footer,
+        write_header,
+        to_title,
+        grass_version,
+        check_for_desc_override,
+        replace_file,
+    )
+
+    build_full_index("html")
+
+    build_full_index("md")
