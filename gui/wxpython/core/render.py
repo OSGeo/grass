@@ -1190,32 +1190,32 @@ class Map:
                 if key == "north":
                     grass_region += "north: %s; " % (region["n"])
                     continue
-                elif key == "south":
+                if key == "south":
                     grass_region += "south: %s; " % (region["s"])
                     continue
-                elif key == "east":
+                if key == "east":
                     grass_region += "east: %s; " % (region["e"])
                     continue
-                elif key == "west":
+                if key == "west":
                     grass_region += "west: %s; " % (region["w"])
                     continue
-                elif key == "e-w resol":
+                if key == "e-w resol":
                     grass_region += "e-w resol: %.10f; " % (region["ewres"])
                     continue
-                elif key == "n-s resol":
+                if key == "n-s resol":
                     grass_region += "n-s resol: %.10f; " % (region["nsres"])
                     continue
-                elif key == "cols":
+                if key == "cols":
                     if windres:
                         continue
                     grass_region += "cols: %d; " % region["cols"]
                     continue
-                elif key == "rows":
+                if key == "rows":
                     if windres:
                         continue
                     grass_region += "rows: %d; " % region["rows"]
                     continue
-                elif key == "n-s resol3" and windres3:
+                if key == "n-s resol3" and windres3:
                     grass_region += "n-s resol3: %f; " % (region["nsres3"])
                 elif key == "e-w resol3" and windres3:
                     grass_region += "e-w resol3: %f; " % (region["ewres3"])

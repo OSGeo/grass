@@ -1603,7 +1603,7 @@ class ManageSettingsWidget(wx.Panel):
                     idx = line.find(";", i_last)
                     if idx < 0:
                         break
-                    elif idx != 0:
+                    if idx != 0:
                         # find out whether it is separator
                         # $$$$; - it is separator
                         # $$$$$; - it is not separator
