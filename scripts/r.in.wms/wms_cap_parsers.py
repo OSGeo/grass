@@ -105,8 +105,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
             raise ParseError(
                 _("Missing version attribute root node in Capabilities XML file")
             )
-        else:
-            wms_version = self.getroot().attrib["version"]
+        wms_version = self.getroot().attrib["version"]
 
         if wms_version == "1.3.0":
             self.proj_tag = "CRS"

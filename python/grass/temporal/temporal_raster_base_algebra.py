@@ -972,12 +972,11 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         _("%s map <%s> not found in GRASS spatial database")
                         % (map_i.get_type(), id_input)
                     )
-                else:
-                    # Select dataset entry from database.
-                    map_i.select(dbif=self.dbif)
-                    # Create command list for map object.
-                    cmdstring = "(%s)" % (map_i.get_map_id())
-                    map_i.cmd_list = cmdstring
+                # Select dataset entry from database.
+                map_i.select(dbif=self.dbif)
+                # Create command list for map object.
+                cmdstring = "(%s)" % (map_i.get_map_id())
+                map_i.cmd_list = cmdstring
             # Return map object.
             t[0] = cmdstring
         else:

@@ -153,8 +153,7 @@ class grassTask:
                 _("Parameter element '%(element)s' not found: '%(value)s'")
                 % {"element": element, "value": value}
             )
-        else:
-            return None
+        return None
 
     def get_flag(self, aFlag):
         """Find and return a flag by name

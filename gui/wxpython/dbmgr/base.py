@@ -1662,8 +1662,8 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                             raise ValueError(
                                 _("Category number (column %s) is missing.") % keyColumn
                             )
-                        else:
-                            continue
+
+                        continue
 
                     try:
                         if tlist.columns[columnName[i]]["ctype"] == int:

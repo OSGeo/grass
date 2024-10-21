@@ -1245,42 +1245,41 @@ class TemporalAlgebraParser:
                     _("Space time %s dataset <%s> not found")
                     % (stds.get_new_map_instance(None).get_type(), id_input)
                 )
+            # Select temporal dataset entry from database.
+            stds.select(dbif=self.dbif)
+            if self.use_granularity:
+                # We create the maplist out of the map array from none-gap objects
+                maplist = []
+                map_array = stds.get_registered_maps_as_objects_by_granularity(
+                    gran=self.granularity, dbif=self.dbif
+                )
+                for entry in map_array:
+                    # Ignore gap objects
+                    if entry[0].get_id() is not None:
+                        maplist.append(entry[0])
             else:
-                # Select temporal dataset entry from database.
-                stds.select(dbif=self.dbif)
-                if self.use_granularity:
-                    # We create the maplist out of the map array from none-gap objects
-                    maplist = []
-                    map_array = stds.get_registered_maps_as_objects_by_granularity(
-                        gran=self.granularity, dbif=self.dbif
-                    )
-                    for entry in map_array:
-                        # Ignore gap objects
-                        if entry[0].get_id() is not None:
-                            maplist.append(entry[0])
-                else:
-                    maplist = stds.get_registered_maps_as_objects(dbif=self.dbif)
-                # Create map_value as empty list item.
-                for map_i in maplist:
-                    if "map_value" not in dir(map_i):
-                        map_i.map_value = []
-                    if "condition_value" not in dir(map_i):
-                        map_i.condition_value = []
-                    # Set and check global temporal type variable and map.
-                    if map_i.is_time_absolute() and self.temporaltype is None:
-                        self.temporaltype = "absolute"
-                    elif map_i.is_time_relative() and self.temporaltype is None:
-                        self.temporaltype = "relative"
-                    elif (
-                        map_i.is_time_absolute() and self.temporaltype == "relative"
-                    ) or (map_i.is_time_relative() and self.temporaltype == "absolute"):
-                        self.msgr.fatal(
-                            _(
-                                "Wrong temporal type of space time dataset "
-                                "<%s> <%s> time is required"
-                            )
-                            % (id_input, self.temporaltype)
+                maplist = stds.get_registered_maps_as_objects(dbif=self.dbif)
+            # Create map_value as empty list item.
+            for map_i in maplist:
+                if "map_value" not in dir(map_i):
+                    map_i.map_value = []
+                if "condition_value" not in dir(map_i):
+                    map_i.condition_value = []
+                # Set and check global temporal type variable and map.
+                if map_i.is_time_absolute() and self.temporaltype is None:
+                    self.temporaltype = "absolute"
+                elif map_i.is_time_relative() and self.temporaltype is None:
+                    self.temporaltype = "relative"
+                elif (map_i.is_time_absolute() and self.temporaltype == "relative") or (
+                    map_i.is_time_relative() and self.temporaltype == "absolute"
+                ):
+                    self.msgr.fatal(
+                        _(
+                            "Wrong temporal type of space time dataset "
+                            "<%s> <%s> time is required"
                         )
+                        % (id_input, self.temporaltype)
+                    )
         elif isinstance(input, self.mapclass):
             # Check if the input is a single map and return it as list with one entry.
             maplist = [input]
@@ -2651,9 +2650,9 @@ class TemporalAlgebraParser:
                         _("%s map <%s> not found in GRASS spatial database")
                         % (map_i.get_type(), id_input)
                     )
-                else:
-                    # Select dataset entry from database.
-                    map_i.select(dbif=self.dbif)
+
+                # Select dataset entry from database.
+                map_i.select(dbif=self.dbif)
             else:
                 raise FatalError(
                     _(
@@ -3400,8 +3399,7 @@ class TemporalAlgebraParser:
                 "syntax error on line %d, position %i token %s near '%s' expression "
                 "'%s'" % (t.lineno, t.lexpos, t.type, t.value, self.expression)
             )
-        else:
-            raise SyntaxError("Unexpected syntax error")
+        raise SyntaxError("Unexpected syntax error")
 
 
 if __name__ == "__main__":

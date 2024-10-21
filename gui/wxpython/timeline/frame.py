@@ -520,7 +520,7 @@ class TimelineFrame(wx.Frame):
 
             if len(indices) == 0:
                 raise GException(errorMsg)
-            elif len(indices) >= 2:
+            if len(indices) >= 2:
                 dlg = wx.SingleChoiceDialog(
                     self,
                     message=_("Please specify the space time dataset <%s>.") % dataset,
