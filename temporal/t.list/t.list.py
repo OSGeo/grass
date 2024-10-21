@@ -123,10 +123,7 @@ def main():
         outfile = open(outpath, "w")
 
     for ttype in temporal_type.split(","):
-        if ttype == "absolute":
-            time = "absolute time"
-        else:
-            time = "relative time"
+        time = "absolute time" if ttype == "absolute" else "relative time"
 
         stds_list = tgis.get_dataset_list(type, ttype, columns, where, order, dbif=dbif)
 

@@ -404,8 +404,6 @@ header_graphical_index_tmpl = """\
 <h2>Graphical index of GRASS GIS modules</h2>
 """
 
-############################################################################
-
 
 def get_desc(cmd):
     f = open(cmd)

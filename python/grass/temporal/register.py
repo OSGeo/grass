@@ -264,10 +264,7 @@ def register_maps_in_space_time_dataset(
             end = row["end"]
 
         # Use the semantic label from file
-        if "semantic_label" in row:
-            semantic_label = row["semantic_label"]
-        else:
-            semantic_label = None
+        semantic_label = row.get("semantic_label", None)
 
         is_in_db = map_object.is_in_db(dbif, mapset)
 
