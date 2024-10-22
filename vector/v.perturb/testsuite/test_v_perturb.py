@@ -157,7 +157,7 @@ class TestBasics(TestCase):
 
     def test_area_attrs_to_2d_points(self):
         """Check that values are uploaded to 2D points in areas (dmax=0)"""
-        self.assertModuleFails(
+        self.assertModuleFail(
             "v.perturb",
             input=self.original,
             output=self.perturbed,
