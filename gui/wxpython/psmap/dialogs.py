@@ -5731,8 +5731,6 @@ class TextDialog(PsmapDialog):
         y = self.unitConv.convert(value=y, fromUnit="inch", toUnit=currUnit)
         self.positionPanel.position["xCtrl"].SetValue("%5.3f" % x)
         self.positionPanel.position["yCtrl"].SetValue("%5.3f" % y)
-        # EN coordinates
-        e, n = self.textDict["east"], self.textDict["north"]
         self.positionPanel.position["eCtrl"].SetValue(str(self.textDict["east"]))
         self.positionPanel.position["nCtrl"].SetValue(str(self.textDict["north"]))
 
@@ -6027,7 +6025,7 @@ class ImageDialog(PsmapDialog):
                 pImg = PILImage.open(file)
                 img = PilImageToWxImage(pImg)
             except OSError as e:
-                GError(message=_("Unable to read file %s") % file)
+                GError(message=_("Unable to read file %s: %s") % (file, str(e)))
                 self.ClearPreview()
                 return
             self.SetSizeInfoLabel(img)
@@ -6140,15 +6138,8 @@ class ImageDialog(PsmapDialog):
 
         else:
             self.imageDict["XY"] = False
-            if self.positionPanel.position["eCtrl"].GetValue():
-                e = self.positionPanel.position["eCtrl"].GetValue()
-            else:
-                self.imageDict["east"] = self.imageDict["east"]
-
-            if self.positionPanel.position["nCtrl"].GetValue():
-                n = self.positionPanel.position["nCtrl"].GetValue()
-            else:
-                self.imageDict["north"] = self.imageDict["north"]
+            self.imageDict["east"] = self.imageDict["east"]
+            self.imageDict["north"] = self.imageDict["north"]
 
             x, y = PaperMapCoordinates(
                 mapInstr=self.instruction[self.mapId],
@@ -6211,7 +6202,6 @@ class ImageDialog(PsmapDialog):
         self.positionPanel.position["xCtrl"].SetValue("%5.3f" % x)
         self.positionPanel.position["yCtrl"].SetValue("%5.3f" % y)
         # EN coordinates
-        e, n = self.imageDict["east"], self.imageDict["north"]
         self.positionPanel.position["eCtrl"].SetValue(str(self.imageDict["east"]))
         self.positionPanel.position["nCtrl"].SetValue(str(self.imageDict["north"]))
 
@@ -6526,15 +6516,8 @@ class PointDialog(PsmapDialog):
 
         else:
             self.pointDict["XY"] = False
-            if self.positionPanel.position["eCtrl"].GetValue():
-                e = self.positionPanel.position["eCtrl"].GetValue()
-            else:
-                self.pointDict["east"] = self.pointDict["east"]
-
-            if self.positionPanel.position["nCtrl"].GetValue():
-                n = self.positionPanel.position["nCtrl"].GetValue()
-            else:
-                self.pointDict["north"] = self.pointDict["north"]
+            self.pointDict["east"] = self.pointDict["east"]
+            self.pointDict["north"] = self.pointDict["north"]
 
             x, y = PaperMapCoordinates(
                 mapInstr=self.instruction[self.mapId],
@@ -6590,7 +6573,6 @@ class PointDialog(PsmapDialog):
         self.positionPanel.position["xCtrl"].SetValue("%5.3f" % x)
         self.positionPanel.position["yCtrl"].SetValue("%5.3f" % y)
         # EN coordinates
-        e, n = self.pointDict["east"], self.pointDict["north"]
         self.positionPanel.position["eCtrl"].SetValue(str(self.pointDict["east"]))
         self.positionPanel.position["nCtrl"].SetValue(str(self.pointDict["north"]))
 
