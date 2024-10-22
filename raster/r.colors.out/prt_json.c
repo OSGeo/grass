@@ -8,7 +8,7 @@
 #include <grass/parson.h>
 
 void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g, int b,
-                     FILE *fp, JSON_Array *root_array, int perc)
+                     JSON_Array *root_array, int perc)
 {
     static DCELL v0;
     static int r0 = -1, g0 = -1, b0 = -1;
@@ -52,7 +52,7 @@ void Rast_json_print_colors(struct Colors *colors, DCELL min, DCELL max,
             DCELL val = (DCELL)i;
 
             Rast_lookup_c_colors(&i, &r, &g, &b, &set, 1, colors);
-            write_json_rule(&val, &min, &max, r, g, b, fp, root_array, perc);
+            write_json_rule(&val, &min, &max, r, g, b, root_array, perc);
         }
     }
     else {
@@ -65,10 +65,8 @@ void Rast_json_print_colors(struct Colors *colors, DCELL min, DCELL max,
             Rast_get_fp_color_rule(&val1, &r1, &g1, &b1, &val2, &r2, &g2, &b2,
                                    colors, count - 1 - i);
 
-            write_json_rule(&val1, &min, &max, r1, g1, b1, fp, root_array,
-                            perc);
-            write_json_rule(&val2, &min, &max, r2, g2, b2, fp, root_array,
-                            perc);
+            write_json_rule(&val1, &min, &max, r1, g1, b1, root_array, perc);
+            write_json_rule(&val2, &min, &max, r2, g2, b2, root_array, perc);
         }
     }
 
