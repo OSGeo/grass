@@ -257,7 +257,7 @@ class TestAggregationAbsolute(TestCase):
         rasters = [
             item
             for item in t_rast_list.outputs.stdout.split(os.linesep)
-            if (len(item) > 0 and item.startswith("b_"))
+            if item.startswith("b_")
         ]
         self.assertEqual(
             5,
