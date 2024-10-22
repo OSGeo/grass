@@ -86,7 +86,7 @@ class TestBasics(TestCase):
     perturbed = "test_perturbed"
     areas = "areas_with_cats"
     points = "points_2d"
-    points = "points_3d"
+    points_3d = "points_3d"
 
     @classmethod
     def setUpClass(cls):
