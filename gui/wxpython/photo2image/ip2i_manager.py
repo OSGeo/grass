@@ -1107,22 +1107,20 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             else:
                 flags = "a"
 
-            wx.BusyInfo(_("Rectifying images, please wait..."), parent=self)
-            wx.GetApp().Yield()
+            with wx.BusyInfo(_("Rectifying images, please wait..."), parent=self):
+                wx.GetApp().Yield()
 
-            ret, msg = RunCommand(
-                "i.rectify",
-                parent=self,
-                getErrorMsg=True,
-                quiet=True,
-                group=self.xygroup,
-                extension=self.extension,
-                order=self.gr_order,
-                method=self.gr_method,
-                flags=flags,
-            )
-
-            del busy
+                ret, msg = RunCommand(
+                    "i.rectify",
+                    parent=self,
+                    getErrorMsg=True,
+                    quiet=True,
+                    group=self.xygroup,
+                    extension=self.extension,
+                    order=self.gr_order,
+                    method=self.gr_method,
+                    flags=flags,
+                )
 
             # provide feedback on failure
             if ret != 0:
@@ -1130,19 +1128,19 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 print(self.grwiz.src_map, file=sys.stderr)
                 print(msg, file=sys.stderr)
 
-            wx.BusyInfo(_("Writing output image to group, please wait..."), parent=self)
-            wx.GetApp().Yield()
+            with wx.BusyInfo(
+                _("Writing output image to group, please wait..."), parent=self
+            ):
+                wx.GetApp().Yield()
 
-            ret1, msg1 = RunCommand(
-                "i.group",
-                parent=self,
-                getErrorMsg=True,
-                quiet=False,
-                group=self.xygroup,
-                input="".join([self.grwiz.src_map.split("@")[0], self.extension]),
-            )
-
-            del busy
+                ret1, msg1 = RunCommand(
+                    "i.group",
+                    parent=self,
+                    getErrorMsg=True,
+                    quiet=False,
+                    group=self.xygroup,
+                    input="".join([self.grwiz.src_map.split("@")[0], self.extension]),
+                )
 
             if ret1 != 0:
                 print("ip2i: Error in i.group", file=sys.stderr)
