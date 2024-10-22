@@ -25,8 +25,8 @@ per-file-ignores =
     gui/scripts/d.wms.py: E501
     gui/wxpython/image2target/g.gui.image2target.py: E501
     gui/wxpython/nviz/*: E722
-    gui/wxpython/photo2image/*: F841, E722, E265
-    gui/wxpython/photo2image/g.gui.photo2image.py: E501, F841
+    gui/wxpython/photo2image/*: E722
+    gui/wxpython/photo2image/g.gui.photo2image.py: E501
     gui/wxpython/psmap/*: F841, E266, E722
     gui/wxpython/vdigit/*: F841, E722, F405, F403
     gui/wxpython/animation/g.gui.animation.py: E501
