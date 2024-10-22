@@ -17,8 +17,8 @@ class TestRasterReport(TestCase):
     ainput = "geology"
     output = "testvselect"
 
-    def tearDown(cls):
-        cls.runModule("g.remove", type="vector", flags="f", name=cls.output)
+    def tearDown(self):
+        self.runModule("g.remove", type="vector", flags="f", name=self.output)
 
     def test_opo(self):
         """Testing operator overlap"""

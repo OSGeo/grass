@@ -20,6 +20,7 @@ import shlex
 import re
 import inspect
 import operator
+from string import digits
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -936,7 +937,7 @@ rgb2str[str2rgb["violet"]] = "violet"
 
 
 def color_resolve(color):
-    if len(color) > 0 and color[0] in "0123456789":
+    if len(color) > 0 and color[0] in digits:
         rgb = tuple(map(int, color.split(":")))
         label = color
     else:

@@ -256,11 +256,7 @@ def _get_driver_name(lock, conn, data):
     :returns: Name of the driver or None if no temporal database present
     """
     mapset = data[1]
-    if not mapset:
-        mapset = libgis.G_mapset()
-    else:
-        mapset = encode(mapset)
-
+    mapset = libgis.G_mapset() if not mapset else encode(mapset)
     drstring = libtgis.tgis_get_mapset_driver_name(mapset)
     conn.send(decode(drstring.data))
 
@@ -280,10 +276,7 @@ def _get_database_name(lock, conn, data):
     dbstring = None
     try:
         mapset = data[1]
-        if not mapset:
-            mapset = libgis.G_mapset()
-        else:
-            mapset = encode(mapset)
+        mapset = libgis.G_mapset() if not mapset else encode(mapset)
         dbstring = libtgis.tgis_get_mapset_database_name(mapset)
         dbstring = dbstring.data
 

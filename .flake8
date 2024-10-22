@@ -24,14 +24,11 @@ per-file-ignores =
     doc/python/m.distance.py: E501
     gui/scripts/d.wms.py: E501
     gui/wxpython/image2target/g.gui.image2target.py: E501
-    gui/wxpython/modules/*: F841, E722
-    gui/wxpython/nviz/*: F841, E266, E722, F403, F405
+    gui/wxpython/nviz/*: E722
     gui/wxpython/photo2image/*: F841, E722, E265
     gui/wxpython/photo2image/g.gui.photo2image.py: E501, F841
-    gui/wxpython/psmap/*: F841, E266, E722, F405, F403
+    gui/wxpython/psmap/*: F841, E266, E722
     gui/wxpython/vdigit/*: F841, E722, F405, F403
-    gui/wxpython/vnet/*: F841
-    gui/wxpython/wxgui.py: F841
     gui/wxpython/animation/g.gui.animation.py: E501
     gui/wxpython/tplot/frame.py: F841, E722
     gui/wxpython/tplot/g.gui.tplot.py: E501
@@ -68,7 +65,6 @@ per-file-ignores =
     # TODO: Is this really needed?
     python/grass/pygrass/vector/__init__.py: E402
     python/grass/pygrass/raster/__init__.py: E402
-    python/grass/gunittest/invoker.py: E721
     python/grass/pygrass/vector/__init__.py: E402
     python/grass/pygrass/modules/interface/*.py: F401
     python/grass/pygrass/modules/grid/*.py: F401
@@ -84,13 +80,11 @@ per-file-ignores =
     python/grass/temporal/temporal_granularity.py: E722
     python/grass/temporal/temporal_raster_base_algebra.py: E722
     python/grass/temporal/temporal_topology_dataset_connector.py: E722
-    python/grass/temporal/univar_statistics.py: E231
     # Current benchmarks/tests are changing sys.path before import.
     # Possibly, a different approach should be taken there anyway.
     python/grass/pygrass/tests/benchmark.py: E402, F401, F821
     # Configuration file for Sphinx:
     # Ignoring import/code mix and line length.
-    python/grass/docs/conf.py: E402
     # Files not managed by Black
     python/grass/imaging/images2gif.py: E226
     # Unused imports in init files
@@ -114,14 +108,12 @@ per-file-ignores =
     scripts/i.pansharpen/i.pansharpen.py: E722, E501
     scripts/r.in.srtm/r.in.srtm.py: E722
     scripts/r.fillnulls/r.fillnulls.py: E722
-    scripts/d.rast.edit/d.rast.edit.py: E722
     scripts/v.what.strds/v.what.strds.py: E501
     # Line too long (esp. module interface definitions)
     scripts/*/*.py: E501
     temporal/t.rast.to.vect/t.rast.to.vect.py: E501
     temporal/t.vect.algebra/t.vect.algebra.py: E501
-    # ## used (##% key: r etc)
-    temporal/t.rast.what/t.rast.what.py: E265, E266, E501
+    temporal/t.rast.what/t.rast.what.py: E501
     # Line too long (esp. module interface definitions)
     temporal/*/*.py: E501
 
