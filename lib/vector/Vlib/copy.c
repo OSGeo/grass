@@ -369,7 +369,7 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
             Vect_destroy_line_struct(NPoints);
             Vect_destroy_line_struct(CPoints);
             Vect_destroy_cats_struct(CCats);
-            Vect_destroy_map_struct(ftype);
+            Vect_close(ftype);
             return 1;
         }
     }
@@ -384,7 +384,7 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
     Vect_destroy_line_struct(NPoints);
     Vect_destroy_cats_struct(Cats);
     Vect_destroy_cats_struct(CCats);
-    Vect_destroy_map_struct(ftype);
+    Vect_close(ftype);
 
     return ret;
 }
