@@ -1015,10 +1015,7 @@ class VNETDialog(wx.Dialog):
         attrCols = an_props["cmdParams"]["cols"]
 
         for col in attrCols.keys():
-            if "inputField" in attrCols[col]:
-                colInptF = attrCols[col]["inputField"]
-            else:
-                colInptF = col
+            colInptF = attrCols[col].get("inputField", col)
 
             if col in skip:
                 continue
@@ -1245,8 +1242,6 @@ class SettingsDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
         self.vnet_mgr = vnet_mgr
-
-        maxValue = 1e8
         self.parent = parent
         self.settings = {}
 
