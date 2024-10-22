@@ -225,11 +225,21 @@ set(env_path "$ENV{PATH}")
 if(WIN32)
   set(sep "\;")
   string(REPLACE ";" "${sep}" env_path "${env_path}")
+  string(APPEND BIN_DIR "\\${CMAKE_BUILD_TYPE}")
+  string(APPEND LIB_DIR "\\${CMAKE_BUILD_TYPE}")
+  set(grass_env_command
+    ${CMAKE_COMMAND} -E env "PATH=${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}${sep}${LIB_DIR}"
+    "PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}$ENV{PYTHONPATH}"
+    "GISBASE=${RUN_GISBASE_NATIVE}" "GISRC=${GISRC}" "LC_ALL=C" "LANG=C"
+    "LANGUAGE=C" "MODULE_TOPDIR=${MODULE_TOPDIR}" "HTMLDIR=${DOC_DIR}"
+    "LC_ALL=C" "LANG=C"
+    "LANGUAGE=C"
+    "VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
+    "VERSION_DATE=\"${GRASS_VERSION_DATE}\"")
+    message(STATUS "Command ${grass_env_command}")
 else()
   set(sep ":")
-endif()
-
-set(grass_env_command
+  set(grass_env_command
     ${CMAKE_COMMAND} -E env "PATH=${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}"
     "PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}$ENV{PYTHONPATH}"
     "LD_LIBRARY_PATH=${LIB_DIR}${sep}$ENV{LD_LIBRARY_PATH}"
@@ -237,6 +247,7 @@ set(grass_env_command
     "LANGUAGE=C" "MODULE_TOPDIR=${MODULE_TOPDIR}" "HTMLDIR=${DOC_DIR}"
     "VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
     "VERSION_DATE=\"${GRASS_VERSION_DATE}\"")
+endif()
 
 set(NO_HTML_DESCR_TARGETS "g.parser;ximgview;test.raster3d.lib")
 
