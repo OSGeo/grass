@@ -519,12 +519,20 @@ class WorkspaceManager:
         :return None
         """
         if menu:
-            file_menu = menu.GetMenu(
-                menuIndex=menu.FindMenu(title=_("File")),
-            )
-            workspace_item = file_menu.FindItem(
-                id=file_menu.FindItem(itemString=_("Workspace")),
-            )[0]
+            menu_index = menu.FindMenu(_("File"))
+            if menu_index == wx.NOT_FOUND:
+                # try untranslated version
+                menu_index = menu.FindMenu("File")
+                if menu_index == wx.NOT_FOUND:
+                    return
+            file_menu = menu.GetMenu(menu_index)
+            workspace_index = file_menu.FindItem(_("Workspace"))
+            if workspace_index == wx.NOT_FOUND:
+                workspace_index = file_menu.FindItem("Workspace")
+                if workspace_index == wx.NOT_FOUND:
+                    return
+            workspace_item = file_menu.FindItemById(workspace_index)
+
             self._recent_files = RecentFilesMenu(
                 app_name="main",
                 parent_menu=workspace_item.GetSubMenu(),

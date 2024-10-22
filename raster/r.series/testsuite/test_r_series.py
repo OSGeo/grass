@@ -18,13 +18,13 @@ class TestRSeries(TestCase):
         call_module("r.mapcalc", expression=f"{cls.sum_mapcalc} = {cls.elevation} * 4")
 
     @classmethod
-    def tearDownClass(self):
-        self.del_temp_region()
+    def tearDownClass(cls):
+        cls.del_temp_region()
         call_module(
             "g.remove",
             flags="f",
             type_="raster",
-            name=self.sum_mapcalc,
+            name=cls.sum_mapcalc,
         )
 
     def tearDown(self):

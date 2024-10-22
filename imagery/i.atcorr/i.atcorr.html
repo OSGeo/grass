@@ -4,7 +4,7 @@
 map using the 6S algorithm (<em>Second Simulation of Satellite Signal
 in the Solar Spectrum</em>). A detailed algorithm description is
 available at the
-<a href="http://modis-sr.ltdri.org/">Land Surface
+<a href="https://salsa.umd.edu/">Land Surface
 Reflectance Science Computing Facility website</a>.
 
 <p><em>Important: Current region settings are ignored!</em> The
@@ -506,6 +506,16 @@ exponential profile for aerosol.
 pre-defined satellites.
 
 <p>Define your own spectral conditions:
+
+Note that "wlinf" and "wlsup" refer to the limits of the wavelength range
+defined by the user for a given simulation. Specifically:
+
+<ul>
+<li> wlinf: This represents the lower wavelength limit (or minimum wavelength)
+     of the spectral band for which the simulation is being performed.</li>
+<li> wlsup: This represents the upper wavelength limit (or maximum wavelength)
+     of the spectral band for the simulation.</li>
+</ul>
 
 <table border="1">
 
