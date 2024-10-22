@@ -667,7 +667,6 @@ class NvizToolWindow(GNotebook):
             parent=panel, id=wx.ID_ANY, label=" %s " % (_("Save image sequence"))
         )
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        vSizer = wx.BoxSizer(wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=5, hgap=10)
 
         pwd = str(Path.cwd())
@@ -1197,33 +1196,6 @@ class NvizToolWindow(GNotebook):
             flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
             border=3,
         )
-        #
-        # mask
-        #
-        # box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
-        # label = " %s " % (_("Mask")))
-        ##        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        ##        gridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
-        ##
-        # gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-        # label = _("Mask zeros:")),
-        # pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        ##
-        # elev = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-        # label = _("by elevation"))
-        # elev.Enable(False) # TODO: not implemented yet
-        ##        gridSizer.Add(item = elev, pos = (0, 1))
-        ##
-        # color = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-        # label = _("by color"))
-        # color.Enable(False) # TODO: not implemented yet
-        ##        gridSizer.Add(item = color, pos = (0, 2))
-        ##
-        # boxSizer.Add(item = gridSizer, proportion = 1,
-        # flag = wx.ALL | wx.EXPAND, border = 3)
-        # pageSizer.Add(item = boxSizer, proportion = 0,
-        ##                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
-        # border = 3)
 
         panel.SetSizer(pageSizer)
 
@@ -1853,24 +1825,6 @@ class NvizToolWindow(GNotebook):
         icolor.Bind(csel.EVT_COLOURSELECT, self.OnVectorPoints)
         gridSizer.Add(icolor, flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT, pos=(0, 4))
 
-        # icon width - seems to do nothing
-        # gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-        # label = _("width")),
-        # pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL |
-        # wx.ALIGN_RIGHT)
-        ##
-        # iwidth = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-        ##                             initial = 1,
-        ##                             min = 1,
-        # max = 1e6)
-        # iwidth.SetName('value')
-        # iwidth.SetValue(100)
-        ##        self.win['vector']['points']['width'] = iwidth.GetId()
-        ##        iwidth.Bind(wx.EVT_SPINCTRL, self.OnVectorPoints)
-        ##        iwidth.Bind(wx.EVT_TEXT, self.OnVectorPoints)
-        # gridSizer.Add(item = iwidth, pos = (1, 2),
-        # flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
-        # icon symbol
         gridSizer.Add(
             StaticText(parent=panel, id=wx.ID_ANY, label=_("symbol:")),
             pos=(0, 5),
@@ -2817,7 +2771,6 @@ class NvizToolWindow(GNotebook):
         self.UpdateFrameIndex(index=0)
 
         slider = self.FindWindowById(self.win["anim"]["frameIndex"]["slider"])
-        text = self.FindWindowById(self.win["anim"]["frameIndex"]["text"])
 
         if mode == "record":
             count = anim.GetFrameCount()
@@ -2922,7 +2875,7 @@ class NvizToolWindow(GNotebook):
         layerIdx = self.FindWindowById(self.win["constant"]["surface"]).GetSelection()
         if layerIdx == wx.NOT_FOUND:
             return
-        name = _("constant#") + str(layerIdx + 1)
+
         data = self.mapWindow.constants[layerIdx]
         for attr, value in data["constant"].items():
             if attr == "color":
@@ -3086,7 +3039,6 @@ class NvizToolWindow(GNotebook):
                 )
                 value.Bind(wx.EVT_TEXT_ENTER, self.OnVolumeIsosurfMap)
                 value.Bind(wx.EVT_KILL_FOCUS, self.OnVolumeIsosurfMap)
-            ##                value.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
             else:
                 size = (65, -1)
                 value = SpinCtrl(parent=panel, id=wx.ID_ANY, size=size, initial=0)
@@ -3122,8 +3074,6 @@ class NvizToolWindow(GNotebook):
 
     def _createSlicePanel(self, parent):
         panel = wx.Panel(parent=parent, id=wx.ID_ANY)
-
-        vSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         box = StaticBox(
             parent=panel, id=wx.ID_ANY, label=" %s " % (_("Slice attributes"))
@@ -3412,12 +3362,11 @@ class NvizToolWindow(GNotebook):
         """Surface selected, currently used for fringes"""
         name = event.GetString()
         try:
-            data = self._getLayerPropertiesByName(name, mapType="raster")["surface"]
+            self._getLayerPropertiesByName(name, mapType="raster")["surface"]
         except:
             self.EnablePage("fringe", False)
             return
 
-        layer = self._getMapLayerByName(name, mapType="raster")
         self.EnablePage("fringe", True)
 
     def OnSetRaster(self, event):
@@ -3425,7 +3374,7 @@ class NvizToolWindow(GNotebook):
         name = event.GetString()
         try:
             data = self._getLayerPropertiesByName(name, mapType="raster")["surface"]
-        except TypeError as e:
+        except TypeError:
             self.EnablePage("surface", False)
             return
 
@@ -4590,10 +4539,6 @@ class NvizToolWindow(GNotebook):
             if not winUp.IsEnabled():
                 winUp.Enable()
 
-        # update dialog
-        name = self.FindWindowById(self.win["volume"]["map"]).GetValue()
-        layer = self._getMapLayerByName(name, mapType="raster_3d")
-
         if mode == "isosurf":
             data = self.GetLayerData("volume")["volume"]["isosurface"][selection]
             self.UpdateVolumeIsosurfPage(data)
@@ -4694,8 +4639,6 @@ class NvizToolWindow(GNotebook):
         if list.GetCount() > 0:
             list.SetSelection(list.GetCount() - 1)
 
-        name = self.FindWindowById(self.win["volume"]["map"]).GetValue()
-        layer = self._getMapLayerByName(name, mapType="raster_3d")
         data = self.GetLayerData("volume")["volume"]
 
         vid = data["object"]["id"]
@@ -4736,8 +4679,6 @@ class NvizToolWindow(GNotebook):
         if sel < 1:
             return  # this should not happen
 
-        name = self.FindWindowById(self.win["volume"]["map"]).GetValue()
-        layer = self._getMapLayerByName(name, mapType="raster_3d")
         data = self.GetLayerData("volume")["volume"]
 
         id = data["object"]["id"]
@@ -4776,8 +4717,6 @@ class NvizToolWindow(GNotebook):
         if sel >= list.GetCount() - 1:
             return  # this should not happen
 
-        name = self.FindWindowById(self.win["volume"]["map"]).GetValue()
-        layer = self._getMapLayerByName(name, mapType="raster_3d")
         data = self.GetLayerData("volume")["volume"]
 
         id = data["object"]["id"]

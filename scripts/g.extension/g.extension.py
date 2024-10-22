@@ -1608,10 +1608,7 @@ def install_extension_win(name):
     source, url = resolve_source_code(url="{0}/{1}.zip".format(base_url, name))
 
     # to hide non-error messages from subprocesses
-    if gs.verbosity() <= 2:
-        outdev = open(os.devnull, "w")
-    else:
-        outdev = sys.stdout
+    outdev = open(os.devnull, "w") if gs.verbosity() <= 2 else sys.stdout
 
     # download Addons ZIP file
     os.chdir(TMPDIR)  # this is just to not leave something behind
@@ -1961,10 +1958,7 @@ def install_extension_std_platforms(name, source, url, branch):
     path_to_src_code_message = _("Path to the source code:")
 
     # to hide non-error messages from subprocesses
-    if gs.verbosity() <= 2:
-        outdev = open(os.devnull, "w")
-    else:
-        outdev = sys.stdout
+    outdev = open(os.devnull, "w") if gs.verbosity() <= 2 else sys.stdout
 
     os.chdir(TMPDIR)  # this is just to not leave something behind
     srcdir = os.path.join(TMPDIR, name)
@@ -2578,10 +2572,7 @@ def resolve_known_host_service(url, name, branch):
                         )
                         return None, None
     if match:
-        if not actual_start:
-            actual_start = match["url_start"]
-        else:
-            actual_start = ""
+        actual_start = match["url_start"] if not actual_start else ""
         if "branch" in match["url_end"]:
             suffix = match["url_end"].format(
                 name=name,

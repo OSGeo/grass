@@ -177,10 +177,7 @@ def main():
         infile = infile[:-4]
     (fdir, tile) = os.path.split(infile)
 
-    if not output:
-        tileout = tile
-    else:
-        tileout = output
+    tileout = output or tile
 
     if ".hgt" in input:
         suff = ".hgt"

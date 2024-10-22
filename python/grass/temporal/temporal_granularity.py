@@ -494,7 +494,7 @@ def compute_absolute_time_granularity(maps):
         # Keep the temporal extent to compare to the following/next map
         previous_start, previous_end = start, end
 
-    # Create a list with a single time unit only
+    # Create a set with a single time unit only
     dlist = set()
     assigned_time_unit = None
     time_unit_multipliers = {
@@ -529,11 +529,8 @@ def compute_absolute_time_granularity(maps):
     if not dlist:
         return None
 
-    if len(dlist) > 1:
-        # Find greatest common divisor
-        granularity = gcd_list(dlist)
-    else:
-        granularity = dlist.pop()
+    # Find greatest common divisor to get a single time unit
+    granularity = gcd_list(dlist) if len(dlist) > 1 else dlist.pop()
 
     if granularity is None:
         return None

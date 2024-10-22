@@ -125,7 +125,7 @@ def clean_env():
     write_gisrc(env_new, gisrc)
 
 
-def is_debug():
+def is_debug() -> bool:
     """Returns True if we are in debug mode
 
     For debug messages use ``debug()``.
@@ -133,13 +133,8 @@ def is_debug():
     global _DEBUG
     if _DEBUG is not None:
         return _DEBUG
-    _DEBUG = os.getenv("GRASS_DEBUG")
     # translate to bool (no or empty variable means false)
-    if _DEBUG:
-        _DEBUG = True
-    else:
-        _DEBUG = False
-    return _DEBUG
+    return bool(os.getenv("GRASS_DEBUG"))
 
 
 def debug(msg):
@@ -553,10 +548,7 @@ def write_gisrc(kv, filename, append=False):
 
 
 def add_mapset_to_gisrc(gisrc, grassdb, location, mapset):
-    if os.access(gisrc, os.R_OK):
-        kv = read_gisrc(gisrc)
-    else:
-        kv = {}
+    kv = read_gisrc(gisrc) if os.access(gisrc, os.R_OK) else {}
     kv["GISDBASE"] = grassdb
     kv["LOCATION_NAME"] = location
     kv["MAPSET"] = mapset
@@ -564,10 +556,7 @@ def add_mapset_to_gisrc(gisrc, grassdb, location, mapset):
 
 
 def add_last_mapset_to_gisrc(gisrc, last_mapset_path):
-    if os.access(gisrc, os.R_OK):
-        kv = read_gisrc(gisrc)
-    else:
-        kv = {}
+    kv = read_gisrc(gisrc) if os.access(gisrc, os.R_OK) else {}
     kv["LAST_MAPSET_PATH"] = last_mapset_path
     write_gisrc(kv, gisrc)
 
@@ -1333,11 +1322,8 @@ def get_shell():
             sh = os.path.basename(sh)
         else:
             # If SHELL is not set, see if there is Bash and use it.
-            if shutil.which("bash"):
-                sh = "bash"
-            else:
-                # Fallback to sh if there is no Bash on path.
-                sh = "sh"
+            # Fallback to sh if there is no Bash on path.
+            sh = "bash" if shutil.which("bash") else "sh"
             # Ensure the variable is set.
             os.environ["SHELL"] = sh
 
@@ -1651,11 +1637,8 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     else:
         f.write("test -r ~/.alias && . ~/.alias\n")
 
-    if os.getenv("ISISROOT"):
-        # GRASS GIS and ISIS blend
-        grass_name = "ISIS-GRASS"
-    else:
-        grass_name = "GRASS"
+    # GRASS GIS and ISIS blend
+    grass_name = "GRASS" if not os.getenv("ISISROOT") else "ISIS-GRASS"
 
     if sh == "zsh":
         f.write("setopt PROMPT_SUBST\n")
@@ -1667,8 +1650,8 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
             )
         )
 
+    mask2d_test = "r.mask.status -t"
     # TODO: have a function and/or module to test this
-    mask2d_test = 'test -f "$MAPSET_PATH/cell/MASK"'
     mask3d_test = 'test -d "$MAPSET_PATH/grid3/RASTER3D_MASK"'
 
     specific_addition = ""
