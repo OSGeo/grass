@@ -12,6 +12,8 @@ located in different mapsets. The output is a read-only link to
 the original raster maps which is only valid if the original raster
 maps remain in the originally indicated mapset. A VRT can also be built
 from raster maps registered with <em><a href="r.external.html">r.external</a></em>.
+However, there are known performance issues with GRASS VRTs build
+over external, registered data (see below).
 
 <p>
 Reading the whole VRT is slower than reading the equivalent single
@@ -47,6 +49,15 @@ g.list type=raster pattern=elev_state_50m_tile_* output=tilelist.csv
 # build a mosaik as VRT from tile list
 r.buildvrt file=tilelist.csv output=elev_state_50m_vrt
 </pre></div>
+
+<h2>KNOWN ISSUES</h2>
+Users may experience significant performance degradation with virtual rasters build
+with <em>r.buildvrt</em> over GDAL-linked (<em>r.external</em>) raster maps, especially
+with slower file systems with latency like NFS. Performance degradation can also be
+noticable on local file systems, but is usually less severe.
+<p>
+For GDAL-linked raster maps it is thus recommended to build GDAL VRTs, e.g with
+<em>gdalbuildvrt</em>.
 
 <h2>SEE ALSO</h2>
 
