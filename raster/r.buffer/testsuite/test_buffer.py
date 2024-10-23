@@ -20,7 +20,7 @@ class TestRBuffer(TestCase):
         gs.run_command(
             "g.remove",
             type="raster",
-            name="null_map,zero_map,buf_test,buf_no_non_null,buf_ignore_zero",
+            name="null_map,buf_test,consist_test,zero_map,buf_no_non_null,buf_ignore_zero",
             flags="f",
         )
 
@@ -39,7 +39,7 @@ class TestRBuffer(TestCase):
 
         self.assertRasterExists(output)
 
-        expected_categories = [1] + [i + 1 for i in range(len(distances) + 1)]
+        expected_categories = [i + 1 for i in range(len(distances) + 1)]
 
         self.assertRasterMinMax(
             map=output,
@@ -48,22 +48,6 @@ class TestRBuffer(TestCase):
             msg=(
                 "Buffer zones should have category values from 1 to "  # Checking if there are no abnormal values in the output raster map
                 + str(max(expected_categories))
-            ),
-        )
-
-        category_values = gs.read_command(
-            "r.stats", flags="n", input=output
-        ).splitlines()
-        category_values = [int(line.split()[0]) for line in category_values]
-
-        print("Category values:", category_values)
-
-        unique_actual_categories = set(category_values)
-        self.assertTrue(
-            unique_actual_categories.issubset(set(expected_categories)),
-            msg=(
-                "Output categories should be a subset of expected categories: "
-                + str(expected_categories)
             ),
         )
 
@@ -84,10 +68,10 @@ class TestRBuffer(TestCase):
         self.assertModule(module)
 
         self.assertRasterExists(output)
-        stats = gs.read_command("r.univar", map=output, flags="g")
-        self.assertIn(
-            "n=0", stats, msg="Output should have no non-NULL cells"
-        )  # Checking an edge case where the input raster map is null
+
+        expected_stats = {"n": 0}
+
+        self.assertRasterFitsUnivar(output, reference=expected_stats)
 
     def test_ignore_zero_values(self):
         zero_map = "zero_map"
@@ -115,8 +99,10 @@ class TestRBuffer(TestCase):
 
         print("Category values:", category_values)
 
+        expected_categories = [1, 2]
+
         self.assertNotIn(
-            0,
+            expected_categories,
             category_values,
             msg="Output should not contain buffer zones around zero values",
         )  # Check if the output raster map ignored 0 values
