@@ -13,6 +13,8 @@ class TestRHis(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        cls.use_temp_region()
+        cls.runModule("g.region", raster="elevation")
         cls.elev_shade = "elevation_shaded_relief"
         cls.use_temp_region()
         cls.runModule("r.relief", input="elevation", output=cls.elev_shade)
