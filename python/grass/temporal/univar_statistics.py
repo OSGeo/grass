@@ -154,9 +154,6 @@ def print_gridded_dataset_univar_statistics(
 
     sp = open_old_stds(input, type, dbif)
 
-    if output is not None:
-        out_file = open(output, "w")
-
     spatial_extent = None
     if region_relation:
         spatial_extent = gs.parse_command("g.region", flags="3gu")
@@ -187,9 +184,10 @@ def print_gridded_dataset_univar_statistics(
             ).format(type=sp.get_new_map_instance(None).get_type(), id=sp.get_id())
         )
 
-        if output is not None:
-            out_file.close()
         return
+
+    if output is not None:
+        out_file = open(output, "w")
 
     if no_header is False:
         cols = (
@@ -235,7 +233,7 @@ def print_gridded_dataset_univar_statistics(
     flag = "g"
     if extended is True:
         flag += "e"
-    if type == "strds" and rast_region is True:
+    if type == "strds" and rast_region is True and not zones:
         flag += "r"
 
     # Setup pygrass module to use for computation
