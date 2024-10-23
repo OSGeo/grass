@@ -33,8 +33,8 @@ void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g, int b,
     json_array_append_value(root_array, color_value);
 }
 
-void Rast_json_print_colors(struct Colors *colors, DCELL min, DCELL max,
-                            FILE *fp, int perc)
+void print_json_colors(struct Colors *colors, DCELL min, DCELL max, FILE *fp,
+                       int perc)
 {
     JSON_Value *root_value = json_value_init_array();
     JSON_Array *root_array = json_array(root_value);

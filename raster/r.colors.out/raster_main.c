@@ -40,8 +40,6 @@ int main(int argc, char **argv)
     struct Colors colors;
     struct FPRange range;
 
-    enum OutputFormat format;
-
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -86,15 +84,8 @@ int main(int argc, char **argv)
     }
 
     if (strcmp(opt.format->answer, "json") == 0) {
-        format = JSON;
-    }
-    else {
-        format = PLAIN;
-    }
-
-    if (format == JSON) {
-        Rast_json_print_colors(&colors, range.min, range.max, fp,
-                               flag.p->answer ? 1 : 0);
+        print_json_colors(&colors, range.min, range.max, fp,
+                          flag.p->answer ? 1 : 0);
     }
     else {
         Rast_print_colors(&colors, range.min, range.max, fp,
