@@ -389,7 +389,8 @@ unsigned int db_sizeof_string(const dbString *);
 int db_set_login(const char *, const char *, const char *, const char *);
 int db_set_login2(const char *, const char *, const char *, const char *,
                   const char *, const char *, int);
-int db_get_login(const char *, const char *, const char **, const char **);
+int db_get_login(const char *, const char *, const char **, const char **,
+                 const char **, const char **);
 int db_get_login2(const char *, const char *, const char **, const char **,
                   const char **, const char **);
 int db_get_login_dump(FILE *);
