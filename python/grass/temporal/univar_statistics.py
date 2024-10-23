@@ -57,7 +57,7 @@ def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=Fals
     )
 
     stats_module.inputs.map = id
-    if rast_region:
+    if rast_region and stats_module.inputs.zones:
         stats_module.env = gs.region_env(raster=id)
     stats_module.run()
 
