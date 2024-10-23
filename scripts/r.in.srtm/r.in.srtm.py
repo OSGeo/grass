@@ -76,6 +76,7 @@ import shutil
 import atexit
 import grass.script as gs
 import zipfile as zfile
+from grass.exceptions import CalledModuleError
 
 
 tmpl1sec = """BYTEORDER M
@@ -277,7 +278,7 @@ def main():
 
     try:
         gs.run_command("r.in.gdal", input=bilfile, out=tileout)
-    except gs.CalledModuleError:
+    except CalledModuleError:
         gs.fatal(_("Unable to import data"))
 
     # nice color table
