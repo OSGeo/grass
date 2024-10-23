@@ -91,10 +91,7 @@ def main():
         isConnection = False
         colnames = ["cat"]
 
-    if option == "coor":
-        extracolnames = ["x", "y", "z"]
-    else:
-        extracolnames = [option]
+    extracolnames = ["x", "y", "z"] if option == "coor" else [option]
 
     if units == "percent":
         unitsp = "meters"

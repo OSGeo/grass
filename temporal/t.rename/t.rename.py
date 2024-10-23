@@ -59,15 +59,8 @@ def main():
     # Get the current mapset to create the id of the space time dataset
     mapset = gs.gisenv()["MAPSET"]
 
-    if input.find("@") >= 0:
-        old_id = input
-    else:
-        old_id = input + "@" + mapset
-
-    if output.find("@") >= 0:
-        new_id = output
-    else:
-        new_id = output + "@" + mapset
+    old_id = input if input.find("@") >= 0 else input + "@" + mapset
+    new_id = output if output.find("@") >= 0 else output + "@" + mapset
 
     # Do not overwrite yourself
     if new_id == old_id:

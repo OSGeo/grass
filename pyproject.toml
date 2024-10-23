@@ -34,9 +34,7 @@ select = [
     "COM",    # flake8-commas (COM)
     "D",      # pydocstyle (D)
     "DTZ",    # flake8-datetimez (DTZ)
-    "E4",     # pycodestyle (E, W)
-    "E7",     # pycodestyle (E, W)
-    "E9",     # pycodestyle (E, W)
+    "E",      # pycodestyle (E, W)
     "F",      # Pyflakes (F)
     "FA",     # flake8-future-annotations (FA)
     "FBT",    # flake8-boolean-trap (FBT)
@@ -48,6 +46,7 @@ select = [
     "INT",    # flake8-gettext (INT)
     "ISC",    # flake8-implicit-str-concat (ISC)
     "LOG",    # flake8-logging (LOG)
+    "N",      # pep8-naming (N)
     "NPY",    # NumPy-specific rules (NPY)
     "PERF",   # Perflint (PERF)
     "PGH",    # pygrep-hooks (PGH)
@@ -126,15 +125,14 @@ ignore = [
     "DTZ006",  # call-datetime-fromtimestamp
     "DTZ007",  # call-datetime-strptime-without-zone
     "DTZ011",  # call-date-today
-    "E401",    # multiple-imports-on-one-line
     "E402",    # module-import-not-at-top-of-file
+    "E501",    # line-too-long
     "E721",    # type-comparison
     "E722",    # bare-except
     "E731",    # lambda-assignment
     "E741",    # ambiguous-variable-name
     "F403",    # undefined-local-with-import-star
     "F405",    # undefined-local-with-import-star-usage
-    "F601",    # multi-value-repeated-key-literal
     "F811",    # redefined-while-unused
     "F821",    # undefined-name
     "F822",    # undefined-export
@@ -144,6 +142,16 @@ ignore = [
     "FBT003",  # boolean-positional-value-in-call
     "I001",    # unsorted-imports
     "ISC003",  # explicit-string-concatenation
+    "N801",    # invalid-class-name
+    "N802",    # invalid-function-name
+    "N803",    # invalid-argument-name
+    "N806",    # non-lowercase-variable-in-function
+    "N812",    # lowercase-imported-as-non-lowercase
+    "N814",    # camelcase-imported-as-constant
+    "N815",    # mixed-case-variable-in-class-scope
+    "N816",    # mixed-case-variable-in-global-scope
+    "N818",    # error-suffix-on-exception-name
+    "N999",    # invalid-module-name
     "PERF203", # try-except-in-loop
     "PERF401", # manual-list-comprehension
     "PERF402", # manual-list-copy
@@ -238,7 +246,6 @@ ignore = [
     "SIM116",  # if-else-block-instead-of-dict-lookup
     "SIM118",  # in-dict-keys
     "SIM223",  # expr-and-false
-    "SIM401",  # if-else-block-instead-of-dict-get
     "SLF001",  # private-member-access
     "TRY002",  # raise-vanilla-class
     "TRY003",  # raise-vanilla-args
@@ -358,7 +365,7 @@ ignore = [
 "temporal/t.rast.algebra/testsu*/*_algebra_arithmetic.py" = ["FLY002"]
 "temporal/t.rast.colors/t.rast.colors.py" = ["SIM115"]
 "temporal/t.rast.series/t.rast.series.py" = ["SIM115"]
-"temporal/t.rast.what/t.rast.what.py" = ["SIM115"]
+"temporal/t.rast.what/t.rast.what.py" = ["E265", "E266", "SIM115"]
 "temporal/t.register/testsu*/*_raster_different_local.py" = ["FLY002"]
 "temporal/t.register/testsu*/*_raster_mapmetadata.py" = ["FLY002"]
 "temporal/t.register/testsuite/test_t_register_raster.py" = ["FLY002"]
