@@ -6138,8 +6138,6 @@ class ImageDialog(PsmapDialog):
 
         else:
             self.imageDict["XY"] = False
-            self.imageDict["east"] = self.imageDict["east"]
-            self.imageDict["north"] = self.imageDict["north"]
 
             x, y = PaperMapCoordinates(
                 mapInstr=self.instruction[self.mapId],
@@ -6516,8 +6514,6 @@ class PointDialog(PsmapDialog):
 
         else:
             self.pointDict["XY"] = False
-            self.pointDict["east"] = self.pointDict["east"]
-            self.pointDict["north"] = self.pointDict["north"]
 
             x, y = PaperMapCoordinates(
                 mapInstr=self.instruction[self.mapId],
