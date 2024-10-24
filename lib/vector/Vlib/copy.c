@@ -82,6 +82,8 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
                               struct Map_info *Out)
 {
     int ret, format, topo;
+    char *geometry_type = NULL;
+    char *map_name = NULL;
 
     if (Vect_level(In) < 1)
         G_fatal_error(
@@ -127,25 +129,29 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
         /* copy features */
         ret += copy_lines_2(In, field, topo, Out);
 
-        if (topo == TOPO_NONE &&
+        if (topo == TOPO_NONE) {
             /* check output feature type, centroids can be exported as
              * points; boundaries as linestrings */
-            strcmp(Vect_get_finfo_geometry_type(Out), "polygon") == 0) {
+            geometry_type = Vect_get_finfo_geometry_type(Out);
+            if (geometry_type && strcmp(geometry_type, "polygon") == 0) { 
             /* copy areas - external formats and simple features access only */
             ret += Vect__copy_areas(In, field, Out);
+            }
+            G_free(geometry_type);
         }
     }
     else {
         /* -> copy features on level 1 */
-        if (topo == TOPO_NONE)
+        if (topo == TOPO_NONE) {
+            map_name = Vect_get_full_name(In);
             G_warning(_("Vector map <%s> not open on topological level. "
                         "Areas will be skipped!"),
-                      Vect_get_full_name(In));
+                      map_name);
+            G_free(map_name);
+        }
 
         ret += copy_lines_1(In, field, Out);
     }
-    Vect_destroy_map_struct(In);
-    Vect_destroy_map_struct(Out);
     return ret > 0 ? 1 : 0;
 }
 
@@ -162,6 +168,7 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
 int copy_lines_1(struct Map_info *In, int field, struct Map_info *Out)
 {
     int ret, type;
+    char *map_name = NULL;
 
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -175,8 +182,9 @@ int copy_lines_1(struct Map_info *In, int field, struct Map_info *Out)
     while (TRUE) {
         type = Vect_read_next_line(In, Points, Cats);
         if (type == -1) {
-            G_warning(_("Unable to read vector map <%s>"),
-                      Vect_get_full_name(In));
+            map_name = Vect_get_full_name(In);
+            G_warning(_("Unable to read vector map <%s>"), map_name);
+            G_free(map_name);
             ret = 1;
             break;
         }
@@ -194,7 +202,6 @@ int copy_lines_1(struct Map_info *In, int field, struct Map_info *Out)
 
         Vect_write_line(Out, type, Points, Cats);
     }
-    Vect_destroy_map_struct(In);
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
 
@@ -221,6 +228,7 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
     struct line_cats *Cats, *CCats;
 
     const char *ftype = NULL;
+    char *map_name = NULL;
 
     Points = Vect_new_line_struct();
     CPoints = Vect_new_line_struct();
@@ -252,9 +260,9 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
         G_percent(i, nlines, 2);
         type = Vect_read_line(In, Points, Cats, i);
         if (type == -1) {
-            G_warning(_("Unable to read vector map <%s>"),
-                      Vect_get_full_name(In));
-            Vect_destroy_map_struct(In);
+            map_name = Vect_get_full_name(In);
+            G_warning(_("Unable to read vector map <%s>"), map_name);
+            G_free(map_name);
             ret = 1;
             break; /* free allocated space and return */
         }
@@ -366,11 +374,8 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
 
         if (-1 == Vect_write_line(Out, type, Points, Cats)) {
             G_warning(_("Writing new feature failed"));
-            Vect_destroy_line_struct(NPoints);
-            Vect_destroy_line_struct(CPoints);
-            Vect_destroy_cats_struct(CCats);
-            Vect_close(ftype);
-            return 1;
+            ret = 1;
+            goto free_exit;
         }
     }
 
@@ -378,7 +383,7 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
         G_important_message(
             _("%d features without category or from different layer skipped"),
             nskipped);
-
+free_exit:
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(CPoints);
     Vect_destroy_line_struct(NPoints);
@@ -503,6 +508,7 @@ int is_isle(struct Map_info *Map, int area)
 int Vect__copy_areas(struct Map_info *In, int field, struct Map_info *Out)
 {
     int i, area, nareas, cat, isle, nisles, nparts_alloc, nskipped;
+    int ret = 0;
     struct line_pnts **Points;
     struct line_cats *Cats;
 
@@ -574,11 +580,8 @@ int Vect__copy_areas(struct Map_info *In, int field, struct Map_info *Out)
             if (0 > V2__write_area_sfa(Out, (const struct line_pnts **)Points,
                                        nisles + 1, Cats)) {
                 G_warning(_("Writing area %d failed"), area);
-                Vect_destroy_cats_struct(Cats);
-                for (i = 0; i < nparts_alloc; i++)
-                    Vect_destroy_line_struct(Points[i]);
-                G_free(Points);
-                return -1;
+                ret = -1;
+                goto free_exit;
             }
         }
 #ifdef HAVE_POSTGRES
@@ -586,7 +589,8 @@ int Vect__copy_areas(struct Map_info *In, int field, struct Map_info *Out)
             if (0 > V2__update_area_pg(Out, (const struct line_pnts **)Points,
                                        nisles + 1, cat)) {
                 G_warning(_("Writing area %d failed"), area);
-                return -1;
+                ret = -1;
+                goto free_exit;
             }
         }
 #endif
@@ -598,12 +602,13 @@ int Vect__copy_areas(struct Map_info *In, int field, struct Map_info *Out)
             nskipped);
 
     /* free allocated space for isles */
+free_exit:
     for (i = 0; i < nparts_alloc; i++)
         Vect_destroy_line_struct(Points[i]);
     Vect_destroy_cats_struct(Cats);
     G_free(Points);
 
-    return 0;
+    return ret;
 }
 
 /*!
@@ -627,6 +632,7 @@ int Vect_copy_tables(struct Map_info *In, struct Map_info *Out, int field)
 {
     int i, n, type;
     struct field_info *Fi;
+    char *map_name = NULL;
 
     n = Vect_get_num_dblinks(In);
 
@@ -648,13 +654,11 @@ int Vect_copy_tables(struct Map_info *In, struct Map_info *Out, int field)
 
         if (Vect_copy_table(In, Out, Fi->number, Fi->number, Fi->name, type) !=
             0) {
-
+            map_name = Vect_get_full_name(In);
             G_warning(
                 _("Unable to copy table <%s> for layer %d from <%s> to <%s>"),
-                Fi->table, Fi->number, Vect_get_full_name(In),
-                Vect_get_name(Out));
-            Vect_destroy_map_struct(Out);
-            Vect_destroy_field_info(Fi);
+                Fi->table, Fi->number, map_name, Vect_get_name(Out));
+            G_free(map_name);
             return -1;
         }
     }
@@ -743,10 +747,10 @@ int Vect_copy_table_by_cats(struct Map_info *In, struct Map_info *Out,
                             int field_in, int field_out, const char *field_name,
                             int type, int *cats, int ncats)
 {
-    int ret;
+    int ret = 0;
     struct field_info *Fi, *Fin;
     const char *name, *key;
-    dbDriver *driver;
+    dbDriver *driver = NULL;
 
     G_debug(2, "Vect_copy_table_by_cats(): field_in = %d field_out = %d",
             field_in, field_out);
@@ -771,9 +775,7 @@ int Vect_copy_table_by_cats(struct Map_info *In, struct Map_info *Out,
     if (ret == -1) {
         G_warning(_("Unable to add database link for vector map <%s>"),
                   Out->name);
-        Vect_destroy_field_info(Fi);
-        Vect_destroy_field_info(Fin);
-        return -1;
+        goto free_exit;
     }
 
     if (cats)
@@ -786,9 +788,8 @@ int Vect_copy_table_by_cats(struct Map_info *In, struct Map_info *Out,
                                 Fin->table, key, cats, ncats);
     if (ret == DB_FAILED) {
         G_warning(_("Unable to copy table <%s>"), Fin->table);
-        Vect_destroy_field_info(Fi);
-        Vect_destroy_field_info(Fin);
-        return -1;
+        ret = -1;
+        goto free_exit;
     }
 
     driver = db_start_driver_open_database(Fin->driver,
@@ -797,30 +798,32 @@ int Vect_copy_table_by_cats(struct Map_info *In, struct Map_info *Out,
     if (!driver) {
         G_warning(_("Unable to open database <%s> with driver <%s>"),
                   Fin->database, Fin->driver);
-        Vect_destroy_field_info(Fi);
-        Vect_destroy_field_info(Fin);
-        return -1;
+        ret = -1;
+        goto free_exit;
     }
 
     /* do not allow duplicate keys */
     if (db_create_index2(driver, Fin->table, Fi->key) != DB_OK) {
         G_warning(_("Unable to create index"));
-        Vect_destroy_field_info(Fi);
-        Vect_destroy_field_info(Fin);
-        return -1;
+        ret = -1;
+        goto close_db_free_exit;
     }
 
     if (db_grant_on_table(driver, Fin->table, DB_PRIV_SELECT,
                           DB_GROUP | DB_PUBLIC) != DB_OK) {
         G_warning(_("Unable to grant privileges on table <%s>"), Fin->table);
-        Vect_destroy_field_info(Fi);
-        Vect_destroy_field_info(Fin);
-        return -1;
+        ret = -1;
+        goto close_db_free_exit;
     }
 
-    db_close_database_shutdown_driver(driver);
+close_db_free_exit:
+    if (driver) {
+        db_close_database_shutdown_driver(driver);
+    }
+
+free_exit:
     Vect_destroy_field_info(Fi);
     Vect_destroy_field_info(Fin);
 
-    return 0;
+    return ret;
 }
