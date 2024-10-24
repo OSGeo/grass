@@ -107,7 +107,6 @@ per-file-ignores =
     scripts/d.frame/d.frame.py: E722
     scripts/i.pansharpen/i.pansharpen.py: E722, E501
     scripts/r.in.srtm/r.in.srtm.py: E722
-    scripts/r.fillnulls/r.fillnulls.py: E722
     scripts/v.what.strds/v.what.strds.py: E501
     # Line too long (esp. module interface definitions)
     scripts/*/*.py: E501
