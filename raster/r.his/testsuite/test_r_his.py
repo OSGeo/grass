@@ -24,7 +24,7 @@ class TestRHis(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.runModule("g.remove", type="raster", flags="f", pattern="elevation_*")
+        cls.runModule("g.remove", type="raster", flags="f", name=[cls.intensity, cls.elev_shade])
         cls.del_temp_region()
 
     def tearDown(self):
