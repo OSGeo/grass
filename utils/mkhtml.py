@@ -16,7 +16,6 @@
 #
 #############################################################################
 
-import http
 import sys
 import os
 import string
@@ -38,11 +37,6 @@ except ImportError:
     gs = None
 
 from mkdocs import read_file, get_version_branch, get_last_git_commit, top_dir as topdir
-
-HEADERS = {
-    "User-Agent": "Mozilla/5.0",
-}
-HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
 trunk_url = ""
@@ -590,7 +584,11 @@ else:
     url_log = url_source.replace(tree, commits)
 
 git_commit = get_last_git_commit(
-    src_dir=curdir, top_dir=topdir, addon_path=addon_path or None, major_version=major
+    src_dir=curdir,
+    top_dir=topdir,
+    pgm=pgm,
+    addon_path=addon_path or None,
+    major_version=major,
 )
 if git_commit["commit"] == "unknown":
     date_tag = "Accessed: {date}".format(date=git_commit["date"])

@@ -3,6 +3,7 @@
 import os
 import json
 import subprocess
+from http import HTTPStatus
 from pathlib import Path
 from datetime import datetime
 from urllib import request as urlrequest
@@ -15,6 +16,11 @@ except ImportError:
     gs = None
 
 from generate_last_commit_file import COMMIT_DATE_FORMAT
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0",
+}
+HTTP_STATUS_CODES = list(HTTPStatus)
 
 top_dir = os.path.abspath(os.getenv("MODULE_TOPDIR"))
 
@@ -94,10 +100,11 @@ def has_src_code_git(src_dir):
         return None
 
 
-def get_last_git_commit(src_dir, top_dir, addon_path, major_version):
+def get_last_git_commit(src_dir, top_dir, pgm, addon_path, major_version):
     """Get last module/addon git commit
     :param str src_dir: module/addon source dir
     :param str top_dir: top source dir
+    :param str pgm: program name
     :param str addon_path: addon path
     :param str major_version: major GRASS version
 
@@ -114,11 +121,10 @@ def get_last_git_commit(src_dir, top_dir, addon_path, major_version):
     if gs:
         # Addons installation
         return get_git_commit_from_rest_api_for_addon_repo(
-            addon_path=addon_path,
-            src_dir=src_dir,
+            addon_path=addon_path, src_dir=src_dir, pgm=pgm, major_version=major_version
         )
     # During GRASS GIS compilation from source code without Git
-    return get_git_commit_from_file(src_dir=src_dir)
+    return get_git_commit_from_file(src_dir=src_dir, pgm=pgm)
 
 
 def parse_git_commit(
@@ -192,12 +198,16 @@ def format_git_commit_date_from_local_git(
 def get_git_commit_from_rest_api_for_addon_repo(
     addon_path,
     src_dir,
+    pgm,
+    major_version,
     git_log=None,
 ):
     """Get Git commit from remote GitHub REST API for addon repository
 
     :param str addon_path: addon path
     :param str src_dir: addon source dir
+    :param str pgm: program name
+    :param major_version int: GRASS GIS major version
     :param dict git_log: dict which store last commit and commnit date
 
     :return dict git_log: dict which store last commit and commnit date
@@ -210,12 +220,13 @@ def get_git_commit_from_rest_api_for_addon_repo(
             "https://api.github.com/repos/osgeo/grass-addons/commits?"
             "path={path}&page=1&per_page=1&sha=grass{major}".format(
                 path=addon_path,
-                major=major,
+                major=major_version,
             )
         )  # sha=git_branch_name
 
         response = download_git_commit(
             url=grass_addons_url,
+            pgm=pgm,
             response_format="application/json",
         )
         if response:
@@ -230,11 +241,13 @@ def get_git_commit_from_rest_api_for_addon_repo(
 
 def get_git_commit_from_file(
     src_dir,
+    pgm,
     git_log=None,
 ):
     """Get Git commit from JSON file
 
     :param str src_dir: addon source dir
+    :param str pgm: program name
     :param dict git_log: dict which store last commit and commnit date
 
     :return dict git_log: dict which store last commit and commnit date
@@ -243,7 +256,7 @@ def get_git_commit_from_file(
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
     json_file_path = os.path.join(
-        topdir,
+        top_dir,
         "core_modules_with_last_commit.json",
     )
     if os.path.exists(json_file_path):
@@ -258,10 +271,11 @@ def get_git_commit_from_file(
     return git_log
 
 
-def download_git_commit(url, response_format, *args, **kwargs):
+def download_git_commit(url, pgm, response_format, *args, **kwargs):
     """Download module/addon last commit from GitHub API
 
     :param str url: url address
+    :param str pgm: program name
     :param str response_format: content type
 
     :return urllib.request.urlopen or None response: response object or

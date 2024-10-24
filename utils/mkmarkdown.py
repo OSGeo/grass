@@ -21,7 +21,6 @@ import sys
 import re
 import string
 import subprocess
-import http
 from pathlib import Path
 import urllib.parse as urlparse
 from html.parser import HTMLParser
@@ -33,11 +32,6 @@ except ImportError:
     gs = None
 
 from mkdocs import read_file, get_version_branch, get_last_git_commit, top_dir
-
-HEADERS = {
-    "User-Agent": "Mozilla/5.0",
-}
-HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 
 def write_toc(data, hamburger_menu_toc=False):
