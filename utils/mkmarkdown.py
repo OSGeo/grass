@@ -40,8 +40,6 @@ HEADERS = {
 HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 
-
-
 def write_toc(data, hamburger_menu_toc=False):
     """Write Table of Contents
 
