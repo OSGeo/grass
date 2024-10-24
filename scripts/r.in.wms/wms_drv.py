@@ -155,8 +155,7 @@ class WMSDrv(WMSBase):
 
                     sleep(sleep_time)
                     continue
-                else:
-                    gs.fatal(_("Unable to write data into tempfile.\n%s") % str(e))
+                gs.fatal(_("Unable to write data into tempfile.\n%s") % str(e))
             finally:
                 temp_tile_opened.close()
 

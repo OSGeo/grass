@@ -18,15 +18,15 @@ def _check_value(param, value):
     string = (bytes, str)
 
     def raiseexcpet(exc, param, ptype, value):
-        """Function to modifa the error message"""
+        """Function to modify the error message"""
         msg = req % (param.name, param.typedesc, ptype, value, str(exc))
         if isinstance(exc, ValueError):
             raise ValueError(msg)
-        elif isinstance(exc, TypeError):
+        if isinstance(exc, TypeError):
             raise TypeError(msg)
-        else:
-            exc.message = msg
-            raise exc
+
+        exc.message = msg
+        raise exc
 
     def check_string(value):
         """Function to check that a string parameter is already a string"""

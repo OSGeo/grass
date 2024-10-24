@@ -311,9 +311,8 @@ def recv_some(p, t=0.1, e=1, tr=5, stderr=0):
         if r is None:
             if e:
                 raise Exception(message)
-            else:
-                break
-        elif r:
+            break
+        if r:
             y.append(decode(r))
         else:
             time.sleep(max((x - time.time()) / tr, 0))
@@ -415,7 +414,7 @@ class Command:
                             _("Error: ") + self.__GetError(),
                         )
                     )
-                elif rerr == sys.stderr:  # redirect message to sys
+                if rerr == sys.stderr:  # redirect message to sys
                     stderr.write("Execution failed: '%s'" % (" ".join(self.cmd)))
                     stderr.write(
                         "%sDetails:%s%s"
@@ -644,7 +643,7 @@ def _formatMsg(text):
     for line in text.splitlines():
         if len(line) == 0:
             continue
-        elif (
+        if (
             "GRASS_INFO_MESSAGE" in line
             or "GRASS_INFO_WARNING" in line
             or "GRASS_INFO_ERROR" in line

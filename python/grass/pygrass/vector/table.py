@@ -134,8 +134,7 @@ class Filters:
         """
         if not isinstance(number, int):
             raise ValueError("Must be an integer.")
-        else:
-            self._limit = "LIMIT {number}".format(number=number)
+        self._limit = "LIMIT {number}".format(number=number)
         return self
 
     def group_by(self, *groupby):

@@ -501,9 +501,8 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
             index = self.GetNextItem(lastFound, wx.LIST_NEXT_ALL, state)
             if index == -1:
                 break
-            else:
-                lastFound = index
-                indices.append(index)
+            lastFound = index
+            indices.append(index)
         return indices
 
     def DeselectAll(self):

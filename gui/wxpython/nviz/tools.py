@@ -3947,8 +3947,7 @@ class NvizToolWindow(GNotebook):
                 self.win["surface"]["position"]["reset"],
             }:
                 continue
-            else:
-                self.FindWindowById(win).SetValue(value)
+            self.FindWindowById(win).SetValue(value)
 
         data = self.GetLayerData("surface")
         id = data["surface"]["object"]["id"]
@@ -4767,8 +4766,8 @@ class NvizToolWindow(GNotebook):
                 self.win["volume"]["position"]["reset"],
             }:
                 continue
-            else:
-                self.FindWindowById(win).SetValue(value)
+
+            self.FindWindowById(win).SetValue(value)
 
         data = self.GetLayerData("volume")
         id = data["volume"]["object"]["id"]

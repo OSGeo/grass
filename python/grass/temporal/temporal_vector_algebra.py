@@ -386,7 +386,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                         if returncode == 0:
                             break
                         # Append map to result map list.
-                        elif returncode == 1:
+                        if returncode == 1:
                             # resultlist.append(map_new)
                             resultdict[map_new.get_id()] = map_new
                     if returncode == 0:
