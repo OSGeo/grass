@@ -195,7 +195,6 @@ class PsMapFrame(wx.Frame):
         self.getInitMap()
 
         # image path
-        env = gs.gisenv()
         self.imgName = gs.tempfile()
 
         # canvas for preview
@@ -513,45 +512,44 @@ class PsMapFrame(wx.Frame):
                 env=self.env,
             )
             # wx.BusyInfo does not display the message
-            busy = wx.BusyInfo(_("Generating preview, wait please"), parent=self)
-            wx.GetApp().Yield()
-            try:
-                im = PILImage.open(event.userData["filename"])
-                if self.instruction[self.pageId]["Orientation"] == "Landscape":
-                    import numpy as np
+            with wx.BusyInfo(_("Generating preview, wait please"), parent=self):
+                wx.GetApp().Yield()
+                try:
+                    im = PILImage.open(event.userData["filename"])
+                    if self.instruction[self.pageId]["Orientation"] == "Landscape":
+                        import numpy as np
 
-                    im_array = np.array(im)
-                    im = PILImage.fromarray(np.rot90(im_array, 3))
-                im.save(self.imgName, format="PNG")
-            except OSError:
-                del busy
-                program = self._getGhostscriptProgramName()
-                dlg = HyperlinkDialog(
-                    self,
-                    title=_("Preview not available"),
-                    message=_(
-                        "Preview is not available probably because Ghostscript is not "
-                        "installed or not on PATH."
-                    ),
-                    hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
-                    hyperlinkLabel=_(
-                        "You can download {program} {arch} version here."
-                    ).format(
-                        program=program,
-                        arch="64bit" if "64" in program else "32bit",
-                    ),
-                )
-                dlg.ShowModal()
-                dlg.Destroy()
-                return
+                        im_array = np.array(im)
+                        im = PILImage.fromarray(np.rot90(im_array, 3))
+                    im.save(self.imgName, format="PNG")
+                except OSError:
+                    del busy
+                    program = self._getGhostscriptProgramName()
+                    dlg = HyperlinkDialog(
+                        self,
+                        title=_("Preview not available"),
+                        message=_(
+                            "Preview is not available probably because Ghostscript is not "
+                            "installed or not on PATH."
+                        ),
+                        hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
+                        hyperlinkLabel=_(
+                            "You can download {program} {arch} version here."
+                        ).format(
+                            program=program,
+                            arch="64bit" if "64" in program else "32bit",
+                        ),
+                    )
+                    dlg.ShowModal()
+                    dlg.Destroy()
+                    return
 
-            self.book.SetSelection(1)
-            self.currentPage = 1
-            rect = self.previewCanvas.ImageRect()
-            self.previewCanvas.image = wx.Image(self.imgName, wx.BITMAP_TYPE_PNG)
-            self.previewCanvas.DrawImage(rect=rect)
+                self.book.SetSelection(1)
+                self.currentPage = 1
+                rect = self.previewCanvas.ImageRect()
+                self.previewCanvas.image = wx.Image(self.imgName, wx.BITMAP_TYPE_PNG)
+                self.previewCanvas.DrawImage(rect=rect)
 
-            del busy
             self.SetStatusText(_("Preview generated"), 0)
 
         gs.try_remove(event.userData["instrFile"])

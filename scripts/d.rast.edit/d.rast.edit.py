@@ -295,10 +295,7 @@ def wxGUI():
             px, py = -dy, dx
 
             r, g, b, a = wx.Colour(fill).Get()
-            if r + g + b > 384:
-                line = "black"
-            else:
-                line = "white"
+            line = "black" if r + g + b > 384 else "white"
 
             dc.SetPen(wx.Pen(line))
             dc.DrawLine(x0, y0, x1, y1)
@@ -647,28 +644,9 @@ def wxGUI():
             if self.angles:
                 self.status["aspect"] = self.angles[row][col]
 
-        def force_color(self, val):
-            run("g.region", rows=1, cols=1)
-            run("r.mapcalc", expression="%s = %d" % (self.tempmap, val))
-            run("r.colors", map=self.tempmap, rast=self.inmap)
-            run("r.out.ppm", input=self.tempmap, out=self.tempfile)
-            run("g.remove", flags="f", type="raster", name=self.tempmap)
-
-            tempimg = wx.Image(self.tempfile)
-            gs.try_remove(self.tempfile)
-
-            rgb = tempimg.get(0, 0)
-            color = "#%02x%02x%02x" % rgb
-            self.colors[val] = color
-            tempimg.delete()
-
         def get_color(self, val):
             if val not in self.colors:
-                try:
-                    self.force_color(val)
-                except:
-                    self.colors[val] = "#ffffff"
-
+                self.colors[val] = "#ffffff"
             return self.colors[val]
 
         def refresh_canvas(self):

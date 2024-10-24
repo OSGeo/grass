@@ -72,10 +72,7 @@ def main():
     if format.lower() == "dbf":
         format = "ESRI_Shapefile"
 
-    if format.lower() == "csv":
-        olayer = basename(output, "csv")
-    else:
-        olayer = None
+    olayer = basename(output, "csv") if format.lower() == "csv" else None
 
     # is there a simpler way of testing for --overwrite?
     dbffile = input + ".dbf"

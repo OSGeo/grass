@@ -54,10 +54,7 @@ def update_keyval_file(filename, module, returncode):
     keyval["name"] = module.name
     keyval["tested_dir"] = module.tested_dir
     if "status" not in keyval.keys():
-        if returncode is None or returncode:
-            status = "failed"
-        else:
-            status = "passed"
+        status = "failed" if returncode is None or returncode else "passed"
         keyval["status"] = status
     keyval["returncode"] = returncode
     keyval["test_file_authors"] = test_file_authors
