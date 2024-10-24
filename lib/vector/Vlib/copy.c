@@ -660,10 +660,11 @@ int Vect_copy_tables(struct Map_info *In, struct Map_info *Out, int field)
                 _("Unable to copy table <%s> for layer %d from <%s> to <%s>"),
                 Fi->table, Fi->number, map_name, Vect_get_name(Out));
             G_free((void *)map_name);
+            Vect_destroy_field_info(Fi);
             return -1;
         }
+        Vect_destroy_field_info(Fi);
     }
-    Vect_destroy_field_info(Fi);
     return 0;
 }
 
