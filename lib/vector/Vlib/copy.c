@@ -82,8 +82,8 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
                               struct Map_info *Out)
 {
     int ret, format, topo;
-    char *geometry_type = NULL;
-    char *map_name = NULL;
+    const char *geometry_type = NULL;
+    const char *map_name = NULL;
 
     if (Vect_level(In) < 1)
         G_fatal_error(
@@ -168,7 +168,7 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
 int copy_lines_1(struct Map_info *In, int field, struct Map_info *Out)
 {
     int ret, type;
-    char *map_name = NULL;
+    const char *map_name = NULL;
 
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -228,7 +228,7 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
     struct line_cats *Cats, *CCats;
 
     const char *ftype = NULL;
-    char *map_name = NULL;
+    const char *map_name = NULL;
 
     Points = Vect_new_line_struct();
     CPoints = Vect_new_line_struct();
@@ -389,7 +389,7 @@ free_exit:
     Vect_destroy_line_struct(NPoints);
     Vect_destroy_cats_struct(Cats);
     Vect_destroy_cats_struct(CCats);
-    Vect_close(ftype);
+    G_free(ftype);
 
     return ret;
 }
@@ -632,7 +632,7 @@ int Vect_copy_tables(struct Map_info *In, struct Map_info *Out, int field)
 {
     int i, n, type;
     struct field_info *Fi;
-    char *map_name = NULL;
+    const char *map_name = NULL;
 
     n = Vect_get_num_dblinks(In);
 
