@@ -11,7 +11,6 @@ Licence:    This program is free software under the GNU General Public
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.script.core import read_command
 
 INPUT_NOQUOTES = """north:                   4299000.00
 south:                   4247000.00
