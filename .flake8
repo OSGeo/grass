@@ -20,6 +20,7 @@ per-file-ignores =
     # E741 ambiguous variable name 'l'
     __init__.py: F403
     man/build_html.py: E501
+    man/build_md.py: E501
     doc/python/m.distance.py: E501
     gui/scripts/d.wms.py: E501
     gui/wxpython/image2target/g.gui.image2target.py: E501

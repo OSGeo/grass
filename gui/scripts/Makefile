@@ -1,7 +1,7 @@
 MODULE_TOPDIR = ../..
 
-include $(MODULE_TOPDIR)/include/Make/Rules.make
 include $(MODULE_TOPDIR)/include/Make/Vars.make
+include $(MODULE_TOPDIR)/include/Make/Rules.make
 include $(MODULE_TOPDIR)/include/Make/Python.make
 
 DSTDIR = $(GUIDIR)/scripts
