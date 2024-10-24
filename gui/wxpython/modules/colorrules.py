@@ -977,10 +977,7 @@ class RasterColorTable(ColorTable):
             self.cr_label.SetLabel(_("Enter raster category values or percents"))
             return
 
-        if info["datatype"] == "CELL":
-            mapRange = _("range")
-        else:
-            mapRange = _("fp range")
+        mapRange = _("range") if info["datatype"] == "CELL" else _("fp range")
         self.cr_label.SetLabel(
             _("Enter raster category values or percents (%(range)s = %(min)d-%(max)d)")
             % {
@@ -1409,10 +1406,7 @@ class VectorColorTable(ColorTable):
             idx += 1
             self.properties["tmpColumn"] = name + "_" + str(idx)
 
-        if self.version7:
-            modul = "v.db.addcolumn"
-        else:
-            modul = "v.db.addcol"
+        modul = "v.db.addcolumn" if self.version7 else "v.db.addcol"
         RunCommand(
             modul,
             parent=self,
@@ -1427,10 +1421,7 @@ class VectorColorTable(ColorTable):
             return
 
         if self.inmap:
-            if self.version7:
-                modul = "v.db.dropcolumn"
-            else:
-                modul = "v.db.dropcol"
+            modul = "v.db.dropcolumn" if self.version7 else "v.db.dropcol"
             RunCommand(
                 modul,
                 map=self.inmap,
@@ -1452,10 +1443,7 @@ class VectorColorTable(ColorTable):
         self.sourceColumn.SetValue("cat")
         self.properties["sourceColumn"] = self.sourceColumn.GetValue()
 
-        if self.attributeType == "color":
-            type = ["character"]
-        else:
-            type = ["integer"]
+        type = ["character"] if self.attributeType == "color" else ["integer"]
         self.fromColumn.InsertColumns(
             vector=self.inmap,
             layer=vlayer,
@@ -1502,10 +1490,7 @@ class VectorColorTable(ColorTable):
             self.columnsProp[self.attributeType]["name"]
             not in self.fromColumn.GetColumns()
         ):
-            if self.version7:
-                modul = "v.db.addcolumn"
-            else:
-                modul = "v.db.addcol"
+            modul = "v.db.addcolumn" if self.version7 else "v.db.addcol"
             RunCommand(
                 modul,
                 map=self.inmap,

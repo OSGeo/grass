@@ -2760,10 +2760,7 @@ class LocationWizard(wx.Object):
 
         # set ellipsoid parameters
         for item in ellipseparams:
-            if item[:4] == "f=1/":
-                item = " +rf=" + item[4:]
-            else:
-                item = " +" + item
+            item = " +rf=" + item[4:] if item[:4] == "f=1/" else " +" + item
             proj4string = "%s %s" % (proj4string, item)
 
         # set datum transform parameters if relevant

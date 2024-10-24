@@ -2016,10 +2016,7 @@ class DataCatalogTree(TreeView):
             mapset=mapset,
         )
         dlg.SetValue(value)
-        if dlg.ShowModal() == wx.ID_OK:
-            name = dlg.GetValue()
-        else:
-            name = None
+        name = dlg.GetValue() if dlg.ShowModal() == wx.ID_OK else None
         dlg.Destroy()
 
         return name

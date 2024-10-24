@@ -136,10 +136,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
 
-    if len(argv) > 1 and argv[1] == "-d":
-        printDiff = True
-    else:
-        printDiff = False
+    printDiff = bool(len(argv) > 1 and argv[1] == "-d")
 
     if len(argv) > 1 and argv[1] == "-h":
         print(sys.stderr, __doc__, file=sys.stderr)

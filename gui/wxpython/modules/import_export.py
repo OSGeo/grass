@@ -328,20 +328,14 @@ class ImportDialog(wx.Dialog):
         self.commandId += 1
         layer, output = self.list.GetLayers()[self.commandId][:2]
 
-        if "@" not in output:
-            name = output + "@" + grass.gisenv()["MAPSET"]
-        else:
-            name = output
+        name = output + "@" + grass.gisenv()["MAPSET"] if "@" not in output else output
 
         # add imported layers into layer tree
         # an alternative would be emit signal (mapCreated) and (optionally)
         # connect to this signal
         llist = self._giface.GetLayerList()
         if self.importType == "gdal":
-            if userData:
-                nBands = int(userData.get("nbands", 1))
-            else:
-                nBands = 1
+            nBands = int(userData.get("nbands", 1)) if userData else 1
 
             if UserSettings.Get(group="rasterLayer", key="opaque", subkey="enabled"):
                 nFlag = True

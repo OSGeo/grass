@@ -783,10 +783,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 # --overwrite
                 continue
             if p == "format":  # must be there
-                if self.IsPaneShown("3d"):
-                    extType = "ppm"
-                else:
-                    extType = val
+                extType = "ppm" if self.IsPaneShown("3d") else val
             if p == "output":  # must be there
                 name = val
             elif p == "size":
@@ -798,10 +795,8 @@ class MapPanel(SingleMapPanel, MainPageBase):
         elif ext[1:] != extType:
             extType = ext[1:]
 
-        if self.IsPaneShown("3d"):
-            bitmapType = "ppm"
-        else:
-            bitmapType = wx.BITMAP_TYPE_PNG  # default type
+        # default type is PNG
+        bitmapType = "ppm" if self.IsPaneShown("3d") else wx.BITMAP_TYPE_PNG
         for each in ltype:
             if each["ext"] == extType:
                 bitmapType = each["type"]

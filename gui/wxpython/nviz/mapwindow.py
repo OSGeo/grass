@@ -382,10 +382,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def OnSize(self, event):
         size = self.GetClientSize()
-        if CheckWxVersion(version=[2, 9]):
-            context = self.context
-        else:
-            context = self.GetContext()
+        context = self.context if CheckWxVersion(version=[2, 9]) else self.GetContext()
         if self.size != size and context:
             Debug.msg(
                 3, "GLCanvas.OnSize(): w = %d, h = %d" % (size.width, size.height)

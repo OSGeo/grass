@@ -431,10 +431,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                     if layer not in catsCurr[1].keys() or cat not in catsCurr[1][layer]:
                         catList.append(cat)
                 if catList != []:
-                    if action == "catadd":
-                        add = True
-                    else:
-                        add = False
+                    add = action == "catadd"
 
                     newfid = self.digit.SetLineCats(fid, layer, catList, add)
                     if len(self.cats.keys()) == 1:

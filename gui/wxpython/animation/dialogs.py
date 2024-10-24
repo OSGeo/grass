@@ -1619,10 +1619,7 @@ class AnimSimpleLayerManager(SimpleLayerManager):
         dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             layer = dlg.GetLayer()
-            if hidden:
-                signal = self.layerAdded
-            else:
-                signal = self.cmdChanged
+            signal = self.layerAdded if hidden else self.cmdChanged
             signal.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
         elif hidden:
             self._layerList.RemoveLayer(layer)

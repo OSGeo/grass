@@ -91,10 +91,7 @@ class MenuBase:
             menu.AppendSeparator()
             return
 
-        if command:
-            helpString = command + " -- " + description
-        else:
-            helpString = description
+        helpString = command + " -- " + description if command else description
 
         if shortcut:
             label += "\t" + shortcut

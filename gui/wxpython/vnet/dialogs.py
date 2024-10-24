@@ -458,7 +458,7 @@ class VNETDialog(wx.Dialog):
 
         # , 'turn_layer', 'turn_cat_layer']:
         for sel in ["input", "arc_layer", "node_layer"]:
-            if sel == "input":
+            if sel == "input":  # noqa: SIM108
                 btn = self.addToTreeBtn
             # elif sel == "turn_layer":
             #    btn = self.createTtbBtn
@@ -843,10 +843,7 @@ class VNETDialog(wx.Dialog):
     def _parseMapStr(self, vectMapStr):
         """Create full map name (add current mapset if it is not present in name)"""
         mapValSpl = vectMapStr.strip().split("@")
-        if len(mapValSpl) > 1:
-            mapSet = mapValSpl[1]
-        else:
-            mapSet = grass.gisenv()["MAPSET"]
+        mapSet = mapValSpl[1] if len(mapValSpl) > 1 else grass.gisenv()["MAPSET"]
         mapName = mapValSpl[0]
 
         return mapName, mapSet

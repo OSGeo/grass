@@ -805,11 +805,7 @@ def _parseRegion(region_str):
 
     for param in region_str:
         k, v = param.split("=")
-        if k in {"rows", "cols", "cells"}:
-            v = int(v)
-        else:
-            v = float(v)
-        region[k] = v
+        region[k] = int(v) if k in {"rows", "cols", "cells"} else float(v)
 
     return region
 

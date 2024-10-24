@@ -294,15 +294,12 @@ class ModuleNode(DictNode):
     def label(self):
         return self._label
 
-    def match(self, key, value, case_sensitive=False):
+    def match(self, key, value, case_sensitive=False) -> bool:
         """Method used for searching according to command,
         keywords or description."""
         if not self.data:
             return False
-        if isinstance(key, str):
-            keys = [key]
-        else:
-            keys = key
+        keys = [key] if isinstance(key, str) else key
 
         for key in keys:
             if key not in {"command", "keywords", "description"}:

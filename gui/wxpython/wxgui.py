@@ -139,10 +139,7 @@ def process_opt(opts, args):
             printHelp()
 
         elif o in {"-w", "--workspace"}:
-            if a != "":
-                workspaceFile = str(a)
-            else:
-                workspaceFile = args.pop(0)
+            workspaceFile = str(a) if a != "" else args.pop(0)
 
     return workspaceFile
 
