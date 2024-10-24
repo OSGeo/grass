@@ -818,9 +818,7 @@ int Vect_copy_table_by_cats(struct Map_info *In, struct Map_info *Out,
     }
 
 close_db_free_exit:
-    if (driver) {
-        db_close_database_shutdown_driver(driver);
-    }
+    db_close_database_shutdown_driver(driver);
 
 free_exit:
     Vect_destroy_field_info(Fi);
