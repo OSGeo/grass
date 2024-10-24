@@ -133,9 +133,10 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
             /* check output feature type, centroids can be exported as
              * points; boundaries as linestrings */
             geometry_type = Vect_get_finfo_geometry_type(Out);
-            if (geometry_type && strcmp(geometry_type, "polygon") == 0) { 
-            /* copy areas - external formats and simple features access only */
-            ret += Vect__copy_areas(In, field, Out);
+            if (geometry_type && strcmp(geometry_type, "polygon") == 0) {
+                /* copy areas - external formats and simple features access only
+                 */
+                ret += Vect__copy_areas(In, field, Out);
             }
             G_free(geometry_type);
         }
