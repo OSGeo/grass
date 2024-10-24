@@ -593,10 +593,7 @@ else:
     url_log = url_source.replace(tree, commits)
 
 git_commit = get_last_git_commit(
-    src_dir=curdir,
-    top_dir=topdir,
-    addon_path=addon_path or None,
-    major_version=major
+    src_dir=curdir, top_dir=topdir, addon_path=addon_path or None, major_version=major
 )
 if git_commit["commit"] == "unknown":
     date_tag = "Accessed: {date}".format(date=git_commit["date"])

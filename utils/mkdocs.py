@@ -15,8 +15,9 @@ except ImportError:
     gs = None
 
 from generate_last_commit_file import COMMIT_DATE_FORMAT
-    
+
 top_dir = os.path.abspath(os.getenv("MODULE_TOPDIR"))
+
 
 def read_file(name):
     try:
@@ -118,6 +119,7 @@ def get_last_git_commit(src_dir, top_dir, addon_path, major_version):
         )
     # During GRASS GIS compilation from source code without Git
     return get_git_commit_from_file(src_dir=src_dir)
+
 
 def parse_git_commit(
     commit,
