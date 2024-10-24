@@ -43,7 +43,6 @@ from gui_core.gselect import Select
 from gui_core.mapdisp import FrameMixin
 from core.gcmd import RunCommand, GMessage, GError, GWarning
 from core.settings import UserSettings
-from grass.exceptions import CalledModuleError
 from photo2image.ip2i_mapdisplay import MapPanel
 from gui_core.wrap import (
     SpinCtrl,
@@ -164,7 +163,7 @@ class GCPWizard:
             if p.returncode == 0:
                 print("returncode = ", str(p.returncode))
                 self.Map.region = self.Map.GetRegion()
-        except CalledModuleError:
+        except Exception:
             pass
 
         self.SwitchEnv("source")
