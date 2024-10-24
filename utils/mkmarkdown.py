@@ -32,7 +32,6 @@ except ImportError:
     # During compilation GRASS GIS
     gs = None
 
-from generate_last_commit_file import COMMIT_DATE_FORMAT
 from mkdocs import read_file, get_version_branch, get_last_git_commit, top_dir
 
 HEADERS = {
