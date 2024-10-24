@@ -138,7 +138,7 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
                  */
                 ret += Vect__copy_areas(In, field, Out);
             }
-            G_free(geometry_type);
+            G_free((void *)geometry_type);
         }
     }
     else {
@@ -148,7 +148,7 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
             G_warning(_("Vector map <%s> not open on topological level. "
                         "Areas will be skipped!"),
                       map_name);
-            G_free(map_name);
+            G_free((void *)map_name);
         }
 
         ret += copy_lines_1(In, field, Out);
@@ -185,7 +185,7 @@ int copy_lines_1(struct Map_info *In, int field, struct Map_info *Out)
         if (type == -1) {
             map_name = Vect_get_full_name(In);
             G_warning(_("Unable to read vector map <%s>"), map_name);
-            G_free(map_name);
+            G_free((void *)map_name);
             ret = 1;
             break;
         }
@@ -263,7 +263,7 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
         if (type == -1) {
             map_name = Vect_get_full_name(In);
             G_warning(_("Unable to read vector map <%s>"), map_name);
-            G_free(map_name);
+            G_free((void *)map_name);
             ret = 1;
             break; /* free allocated space and return */
         }
@@ -390,7 +390,7 @@ free_exit:
     Vect_destroy_line_struct(NPoints);
     Vect_destroy_cats_struct(Cats);
     Vect_destroy_cats_struct(CCats);
-    G_free(ftype);
+    G_free((void *)ftype);
 
     return ret;
 }
@@ -659,7 +659,7 @@ int Vect_copy_tables(struct Map_info *In, struct Map_info *Out, int field)
             G_warning(
                 _("Unable to copy table <%s> for layer %d from <%s> to <%s>"),
                 Fi->table, Fi->number, map_name, Vect_get_name(Out));
-            G_free(map_name);
+            G_free((void *)map_name);
             return -1;
         }
     }
