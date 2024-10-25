@@ -2023,7 +2023,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             panel,
             id=wx.ID_ANY,
             label=_("Learn more about formatting options"),
-            url="http://docs.python.org/2/library/datetime.html#"
+            url="https://docs.python.org/2/library/datetime.html#"
             "strftime-and-strptime-behavior",
         )
         link.SetNormalColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
