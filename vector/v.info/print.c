@@ -189,7 +189,7 @@ void print_columns(struct Map_info *Map, const char *input_opt,
     num_dblinks = Vect_get_num_dblinks(Map);
 
     if (num_dblinks <= 0) {
-        Vect_close(&Map);
+        Vect_close(Map);
         G_fatal_error(
             _("Database connection for map <%s> is not defined in DB file"),
             input_opt);
@@ -200,21 +200,21 @@ void print_columns(struct Map_info *Map, const char *input_opt,
               field_opt);
 
     if ((fi = Vect_get_field2(Map, field_opt)) == NULL) {
-        Vect_close(&Map);
+        Vect_close(Map);
         G_fatal_error(
             _("Database connection not defined for layer <%s> of <%s>"),
             field_opt, input_opt);
     }
     driver = db_start_driver(fi->driver);
     if (driver == NULL) {
-        Vect_close(&Map);
+        Vect_close(Map);
         G_fatal_error(_("Unable to open driver <%s>"), fi->driver);
     }
     db_init_handle(&handle);
     db_set_handle(&handle, fi->database, NULL);
     if (db_open_database(driver, &handle) != DB_OK) {
         db_shutdown_driver(driver);
-        Vect_close(&Map);
+        Vect_close(Map);
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                       fi->database, fi->driver);
     }
@@ -223,7 +223,7 @@ void print_columns(struct Map_info *Map, const char *input_opt,
     if (db_describe_table(driver, &table_name, &table) != DB_OK) {
         db_close_database(driver);
         db_shutdown_driver(driver);
-        Vect_close(&Map);
+        Vect_close(Map);
         G_fatal_error(_("Unable to describe table <%s>"), fi->table);
     }
 
@@ -277,7 +277,7 @@ void print_columns(struct Map_info *Map, const char *input_opt,
             json_value_free(root_value);
             db_close_database(driver);
             db_shutdown_driver(driver);
-            Vect_close(&Map);
+            Vect_close(Map);
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
