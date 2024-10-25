@@ -44,7 +44,6 @@ class PropertyItem:
 
     def mapWindowPropertyChanged(self):
         """Returns signal from MapWindowProperties."""
-        pass
 
     def _setValue(self, value):
         self.widget.SetValue(value)

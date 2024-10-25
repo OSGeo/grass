@@ -353,7 +353,7 @@ int main(int argc, char *argv[])
                     scale, opt.null->answer ? TRUE : FALSE, null_val, objheight,
                     voffset, &window, type, -1);
         } /* for each line */
-    }     /* else if area */
+    } /* else if area */
 
     if (driver) {
         db_close_database(driver);

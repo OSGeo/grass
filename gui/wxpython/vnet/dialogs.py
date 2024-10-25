@@ -582,8 +582,12 @@ class VNETDialog(wx.Dialog):
         """Tab switched"""
         if event.GetEventObject() == self.notebook:
             dbMgrIndxs = []
-            dbMgrIndxs.append(self.notebook.GetPageIndexByName("inputDbMgr"))
-            dbMgrIndxs.append(self.notebook.GetPageIndexByName("resultDbMgr"))
+            dbMgrIndxs.extend(
+                (
+                    self.notebook.GetPageIndexByName("inputDbMgr"),
+                    self.notebook.GetPageIndexByName("resultDbMgr"),
+                )
+            )
             if self.notebook.GetSelection() in dbMgrIndxs:
                 self.stBar.AddStatusItem(
                     text=_("Loading tables..."),
@@ -762,7 +766,7 @@ class VNETDialog(wx.Dialog):
             for sel in ["arc_column", "arc_backward_column", "node_column"]:
                 self.inputData[sel].SetValue("")
             return
-        elif itemsLen == 1:
+        if itemsLen == 1:
             self.inputData["arc_layer"].SetSelection(0)
             self.inputData["node_layer"].SetSelection(0)
         elif itemsLen >= 1:
@@ -1011,10 +1015,7 @@ class VNETDialog(wx.Dialog):
         attrCols = an_props["cmdParams"]["cols"]
 
         for col in attrCols.keys():
-            if "inputField" in attrCols[col]:
-                colInptF = attrCols[col]["inputField"]
-            else:
-                colInptF = col
+            colInptF = attrCols[col].get("inputField", col)
 
             if col in skip:
                 continue
@@ -1144,7 +1145,7 @@ class PtsList(PointsList):
                 if not item[1]:
                     self.CheckItem(iItem, False)
 
-        else:
+        else:  # noqa: PLR5501
             if self.IsShown("type"):
                 self.HideColumn("type")
 
@@ -1241,8 +1242,6 @@ class SettingsDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
         self.vnet_mgr = vnet_mgr
-
-        maxValue = 1e8
         self.parent = parent
         self.settings = {}
 
@@ -1541,7 +1540,7 @@ class CreateTtbDialog(wx.Dialog):
 
         for dataSel in dataSelects:
             selPanels[dataSel[0]] = Panel(parent=self)
-            if dataSel[0] in ["input", "output"]:
+            if dataSel[0] in {"input", "output"}:
                 self.inputData[dataSel[0]] = dataSel[2](
                     parent=selPanels[dataSel[0]], size=(-1, -1), type="vector"
                 )
@@ -1644,7 +1643,7 @@ class CreateTtbDialog(wx.Dialog):
                 self._updateInputDbMgrPage(show=False)
             self.inputData["arc_layer"].SetValue("")
             return
-        elif itemsLen == 1:
+        if itemsLen == 1:
             self.inputData["arc_layer"].SetSelection(0)
         elif itemsLen >= 1:
             if "1" in items:
@@ -1743,8 +1742,7 @@ class VnetStatusbar(wx.StatusBar):
             if item["key"] == statusTextItem["key"]:
                 self.statusItems.remove(item)
         self.statusItems.append(statusTextItem)
-        if self.maxPriority < statusTextItem["priority"]:
-            self.maxPriority = statusTextItem["priority"]
+        self.maxPriority = max(self.maxPriority, statusTextItem["priority"])
         self._updateStatus()
 
     def _updateStatus(self):
@@ -1770,8 +1768,7 @@ class VnetStatusbar(wx.StatusBar):
         if update:
             for item in self.statusItems:
                 self.maxPriority = 0
-                if self.maxPriority < item["priority"]:
-                    self.maxPriority = item["priority"]
+                self.maxPriority = max(self.maxPriority, item["priority"])
             self._updateStatus()
 
 
@@ -1935,24 +1932,22 @@ class TurnAnglesList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditM
 
     def OnGetItemText(self, item, col):
         val = self.data.GetValue(item, col)
-        if col in [1, 2]:
+        if col in {1, 2}:
             val = RadiansToDegrees(val)
         return str(val)
 
     def SetVirtualData(self, row, column, text):
         """Set data to table"""
-        if column in [1, 2, 3]:
+        if column in {1, 2, 3}:
             try:
                 text = float(text)
             except ValueError:
                 return
-        if column in [1, 2]:
+        if column in {1, 2}:
             text = DegreesToRadians(text)
 
             # Tested allowed range of values
-            if text > math.pi:
-                text = 0.0
-            elif text < -math.pi:
+            if text > math.pi or text < -math.pi:
                 text = 0.0
 
         self.data.SetValue(text, row, column)

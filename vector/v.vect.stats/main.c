@@ -693,7 +693,7 @@ int main(int argc, char *argv[])
                 count++;
             }
         } /* next point in box */
-    }     /* next area */
+    } /* next area */
 
     G_debug(1, "count = %d", count);
 

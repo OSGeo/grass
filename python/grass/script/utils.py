@@ -28,6 +28,8 @@ import uuid
 import random
 import string
 
+from pathlib import Path
+
 
 def float_or_dms(s):
     """Convert DMS to float.
@@ -41,7 +43,7 @@ def float_or_dms(s):
 
     :return: float value
     """
-    if s[-1] in ["E", "W", "N", "S"]:
+    if s[-1] in {"E", "W", "N", "S"}:
         s = s[:-1]
     return sum(float(x) / 60**n for (n, x) in enumerate(s.split(":")))
 
@@ -67,13 +69,13 @@ def separator(sep):
     """
     if sep == "pipe":
         return "|"
-    elif sep == "comma":
+    if sep == "comma":
         return ","
-    elif sep == "space":
+    if sep == "space":
         return " "
-    elif sep == "tab" or sep == "\\t":
+    if sep in {"tab", "\\t"}:
         return "\t"
-    elif sep == "newline" or sep == "\\n":
+    if sep in {"newline", "\\n"}:
         return "\n"
     return sep
 
@@ -89,10 +91,9 @@ def diff_files(filename_a, filename_b):
     import difflib
 
     differ = difflib.Differ()
-    fh_a = open(filename_a, "r")
-    fh_b = open(filename_b, "r")
-    result = list(differ.compare(fh_a.readlines(), fh_b.readlines()))
-    return result
+    fh_a = open(filename_a)
+    fh_b = open(filename_b)
+    return list(differ.compare(fh_a.readlines(), fh_b.readlines()))
 
 
 def try_remove(path):
@@ -189,10 +190,7 @@ def decode(bytes_, encoding=None):
     if isinstance(bytes_, str):
         return bytes_
     if isinstance(bytes_, bytes):
-        if encoding is None:
-            enc = _get_encoding()
-        else:
-            enc = encoding
+        enc = _get_encoding() if encoding is None else encoding
         return bytes_.decode(enc)
     # only text should be used
     raise TypeError("can only accept types str and bytes")
@@ -220,10 +218,7 @@ def encode(string, encoding=None):
     if isinstance(string, bytes):
         return string
     if isinstance(string, str):
-        if encoding is None:
-            enc = _get_encoding()
-        else:
-            enc = encoding
+        enc = _get_encoding() if encoding is None else encoding
         return string.encode(enc)
     # if something else than text
     raise TypeError("can only accept types str and bytes")
@@ -275,10 +270,7 @@ def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None):
     for line in lines:
         kv = line.split(sep, 1)
         k = decode(kv[0].strip())
-        if len(kv) > 1:
-            v = decode(kv[1].strip())
-        else:
-            v = dflt
+        v = decode(kv[1].strip()) if len(kv) > 1 else dflt
 
         if val_type:
             result[k] = val_type(v)
@@ -352,10 +344,7 @@ def naturally_sort(items, key=None):
         return int(text) if text.isdigit() else text.lower()
 
     def alphanum_key(actual_key):
-        if key:
-            sort_key = key(actual_key)
-        else:
-            sort_key = actual_key
+        sort_key = key(actual_key) if key else actual_key
         return [convert(c) for c in re.split("([0-9]+)", sort_key)]
 
     items.sort(key=alphanum_key)
@@ -372,10 +361,9 @@ def get_lib_path(modname, libname=None):
         getenv("GRASS_ADDON_BASE")
         and libname
         and isdir(join(getenv("GRASS_ADDON_BASE"), "etc", modname, libname))
-    ):
-        path = join(getenv("GRASS_ADDON_BASE"), "etc", modname)
-    elif getenv("GRASS_ADDON_BASE") and isdir(
-        join(getenv("GRASS_ADDON_BASE"), "etc", modname)
+    ) or (
+        getenv("GRASS_ADDON_BASE")
+        and isdir(join(getenv("GRASS_ADDON_BASE"), "etc", modname))
     ):
         path = join(getenv("GRASS_ADDON_BASE"), "etc", modname)
     elif getenv("GRASS_ADDON_BASE") and isdir(
@@ -384,7 +372,7 @@ def get_lib_path(modname, libname=None):
         path = join(os.getenv("GRASS_ADDON_BASE"), modname, modname)
     else:
         # used by g.extension compilation process
-        cwd = os.getcwd()
+        cwd = str(Path.cwd())
         idx = cwd.find(modname)
         if idx < 0:
             return None
@@ -464,10 +452,10 @@ def set_path(modulename, dirname=None, path="."):
     import sys
 
     # TODO: why dirname is checked first - the logic should be revised
-    pathlib = None
+    _pathlib = None
     if dirname:
-        pathlib = os.path.join(path, dirname)
-    if pathlib and os.path.exists(pathlib):
+        _pathlib = os.path.join(path, dirname)
+    if _pathlib and os.path.exists(_pathlib):
         # we are running the script from the script directory, therefore
         # we add the path to sys.path to reach the directory (dirname)
         sys.path.append(os.path.abspath(path))
@@ -478,7 +466,7 @@ def set_path(modulename, dirname=None, path="."):
             pathname = os.path.join(modulename, dirname) if dirname else modulename
             raise ImportError(
                 "Not able to find the path '%s' directory "
-                "(current dir '%s')." % (pathname, os.getcwd())
+                "(current dir '%s')." % (pathname, Path.cwd())
             )
 
         sys.path.insert(0, path)

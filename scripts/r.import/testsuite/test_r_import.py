@@ -13,9 +13,9 @@ class TestRImportRegion(TestCase):
     def setUpClass(cls):
         cls.runModule("g.region", raster="elevation")
 
-    def tearDown(cls):
+    def tearDown(self):
         """Remove imported map after each test method"""
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.imported)
+        self.runModule("g.remove", flags="f", type="raster", name=self.imported)
 
     def test_import_estimate(self):
         """Test e flag"""
@@ -36,15 +36,15 @@ class TestRImportRegion(TestCase):
             output=self.imported,
             resample="bilinear",
         )
-        reference = dict(
-            north=223490,
-            south=223390,
-            east=636820,
-            west=636710,
-            nsres=10,
-            ewres=10,
-            datatype="FCELL",
-        )
+        reference = {
+            "north": 223490,
+            "south": 223390,
+            "east": 636820,
+            "west": 636710,
+            "nsres": 10,
+            "ewres": 10,
+            "datatype": "FCELL",
+        }
         self.assertRasterFitsInfo(
             raster=self.imported, reference=reference, precision=1e-6
         )
@@ -59,7 +59,7 @@ class TestRImportRegion(TestCase):
             resolution="value",
             resolution_value=30,
         )
-        reference = dict(rows=3, cols=4, nsres=30, ewres=30, datatype="CELL")
+        reference = {"rows": 3, "cols": 4, "nsres": 30, "ewres": 30, "datatype": "CELL"}
         self.assertRasterFitsInfo(
             raster=self.imported, reference=reference, precision=1.1
         )
@@ -75,7 +75,7 @@ class TestRImportRegion(TestCase):
             extent="region",
             resolution="region",
         )
-        reference = dict(north=223655, south=223600)
+        reference = {"north": 223655, "south": 223600}
         self.assertRasterFitsInfo(
             raster=self.imported, reference=reference, precision=1e-6
         )
@@ -93,7 +93,7 @@ class TestRImportRegion(TestCase):
             extent="region",
             resolution="region",
         )
-        reference = dict(north=223630, south=223600, nsres=10, ewres=10)
+        reference = {"north": 223630, "south": 223600, "nsres": 10, "ewres": 10}
         self.assertRasterFitsInfo(
             raster=self.imported, reference=reference, precision=1e-6
         )
@@ -107,7 +107,7 @@ class TestRImportRegion(TestCase):
             extent="region",
             overwrite=True,
         )
-        reference = dict(south=223390, north=223450, nsres=10, ewres=10)
+        reference = {"south": 223390, "north": 223450, "nsres": 10, "ewres": 10}
         self.assertRasterFitsInfo(
             raster=self.imported, reference=reference, precision=1e-6
         )
@@ -122,7 +122,7 @@ class TestRImportRegion(TestCase):
             resolution="region",
             overwrite=True,
         )
-        reference = dict(north=223660, south=223600, nsres=10, ewres=10)
+        reference = {"north": 223660, "south": 223600, "nsres": 10, "ewres": 10}
         self.assertRasterFitsInfo(
             raster=self.imported, reference=reference, precision=1e-6
         )

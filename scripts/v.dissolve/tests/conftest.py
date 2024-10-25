@@ -13,10 +13,7 @@ import grass.script.setup as grass_setup
 def updates_as_transaction(table, cat_column, column, column_quote, cats, values):
     """Create SQL statement for categories and values for a given column"""
     sql = ["BEGIN TRANSACTION"]
-    if column_quote:
-        quote = "'"
-    else:
-        quote = ""
+    quote = "'" if column_quote else ""
     for cat, value in zip(cats, values):
         sql.append(
             f"UPDATE {table} SET {column} = {quote}{value}{quote} "
@@ -34,7 +31,7 @@ def value_update_by_category(map_name, layer, column_name, cats, values, env):
     driver = db_info["driver"]
     cat_column = "cat"
     column_type = gs.vector_columns(map_name, layer, env=env)[column_name]
-    column_quote = bool(column_type["type"] in ("CHARACTER", "TEXT"))
+    column_quote = bool(column_type["type"] in {"CHARACTER", "TEXT"})
     sql = updates_as_transaction(
         table=table,
         cat_column=cat_column,

@@ -38,7 +38,7 @@
 # %end
 
 import string
-import grass.script as grass
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 
@@ -47,13 +47,13 @@ def main():
     layer = options["layer"]
     columns = options["columns"].split(",")
 
-    mapset = grass.gisenv()["MAPSET"]
+    mapset = gs.gisenv()["MAPSET"]
 
     # does map exist in CURRENT mapset?
-    if not grass.find_file(map, element="vector", mapset=mapset)["file"]:
-        grass.fatal(_("Vector map <%s> not found in current mapset") % map)
+    if not gs.find_file(map, element="vector", mapset=mapset)["file"]:
+        gs.fatal(_("Vector map <%s> not found in current mapset") % map)
 
-    f = grass.vector_layer_db(map, layer)
+    f = gs.vector_layer_db(map, layer)
 
     table = f["table"]
     keycol = f["key"]
@@ -61,7 +61,7 @@ def main():
     driver = f["driver"]
 
     if not table:
-        grass.fatal(
+        gs.fatal(
             _(
                 "There is no table connected to the input vector map. "
                 "Unable to delete any column. Exiting."
@@ -69,7 +69,7 @@ def main():
         )
 
     if keycol in columns:
-        grass.fatal(
+        gs.fatal(
             _(
                 "Unable to delete <%s> column as it is needed to keep table <%s> "
                 "connected to the input vector map <%s>"
@@ -78,8 +78,8 @@ def main():
         )
 
     for column in columns:
-        if column not in grass.vector_columns(map, layer):
-            grass.warning(
+        if column not in gs.vector_columns(map, layer):
+            gs.warning(
                 _("Column <%s> not found in table <%s>. Skipped") % (column, table)
             )
             continue
@@ -89,7 +89,7 @@ def main():
             # http://www.sqlite.org/faq.html#q11
             colnames = []
             coltypes = []
-            for f in grass.db_describe(table, database=database, driver=driver)["cols"]:
+            for f in gs.db_describe(table, database=database, driver=driver)["cols"]:
                 if f[0] == column:
                     continue
                 colnames.append(f[0])
@@ -122,16 +122,16 @@ def main():
             sql = f'ALTER TABLE {table} DROP COLUMN "{column}"'
 
         try:
-            grass.write_command(
+            gs.write_command(
                 "db.execute", input="-", database=database, driver=driver, stdin=sql
             )
         except CalledModuleError:
-            grass.fatal(_("Deleting column failed"))
+            gs.fatal(_("Deleting column failed"))
 
     # write cmd history:
-    grass.vector_history(map)
+    gs.vector_history(map)
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

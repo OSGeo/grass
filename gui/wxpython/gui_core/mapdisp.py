@@ -130,7 +130,7 @@ class MapPanelBase(wx.Panel):
         """Initialize map display, set dimensions and map region"""
         if not grass.find_program("g.region", "--help"):
             sys.exit(
-                _("GRASS module '%s' not found. Unable to start map " "display window.")
+                _("GRASS module '%s' not found. Unable to start map display window.")
                 % "g.region"
             )
 
@@ -176,8 +176,7 @@ class MapPanelBase(wx.Panel):
         """Returns property"""
         if hasattr(self.mapWindowProperties, name):
             return getattr(self.mapWindowProperties, name)
-        else:
-            return self.statusbarManager.GetProperty(name)
+        return self.statusbarManager.GetProperty(name)
 
     def HasProperty(self, name):
         """Checks whether object has property"""
@@ -720,7 +719,7 @@ class DoubleMapPanel(MapPanelBase):
                 self.firstMapWindow.zoomChanged.connect(self.OnZoomChangedFirstMap)
             else:
                 self.secondMapWindow.zoomChanged.connect(self.OnZoomChangedSecondMap)
-        else:
+        else:  # noqa: PLR5501
             if self.MapWindow == self.firstMapWindow:
                 self.firstMapWindow.zoomChanged.disconnect(self.OnZoomChangedFirstMap)
             else:
