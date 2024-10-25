@@ -648,11 +648,12 @@ int Vect_copy_tables(struct Map_info *In, struct Map_info *Out, int field)
         if (Fi == NULL) {
             G_warning(_("Database connection not defined for layer %d"),
                       In->dblnk->field[i].number);
-            Vect_destroy_field_info(Fi);
             return -1;
         }
-        if (field > 0 && Fi->number != field)
+        if (field > 0 && Fi->number != field) {
+            Vect_destroy_field_info(Fi);
             continue;
+        }
 
         if (Vect_copy_table(In, Out, Fi->number, Fi->number, Fi->name, type) !=
             0) {
