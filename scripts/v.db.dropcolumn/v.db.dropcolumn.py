@@ -86,7 +86,7 @@ def main():
 
         if driver == "sqlite":
             # echo "Using special trick for SQLite"
-            # http://www.sqlite.org/faq.html#q11
+            # https://www.sqlite.org/faq.html#q11
             colnames = []
             coltypes = []
             for f in gs.db_describe(table, database=database, driver=driver)["cols"]:
