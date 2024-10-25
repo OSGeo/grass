@@ -163,7 +163,7 @@ class GCPWizard:
             if p.returncode == 0:
                 print("returncode = ", str(p.returncode))
                 self.Map.region = self.Map.GetRegion()
-        except:
+        except Exception:
             pass
 
         self.SwitchEnv("source")
