@@ -176,7 +176,7 @@ void print_topo(struct Map_info *Map, enum OutputFormat format,
 }
 
 void print_columns(struct Map_info *Map, const char *input_opt,
-                   const char *field_opt)
+                   const char *field_opt, enum OutputFormat format)
 {
     int num_dblinks, col, ncols;
 
@@ -215,12 +215,57 @@ void print_columns(struct Map_info *Map, const char *input_opt,
     if (db_describe_table(driver, &table_name, &table) != DB_OK)
         G_fatal_error(_("Unable to describe table <%s>"), fi->table);
 
+    JSON_Value *root_value = json_value_init_object();
+    JSON_Object *root_object = json_object(root_value);
+
+    JSON_Value *columns_value = json_value_init_array();
+    JSON_Array *columns_array = json_array(columns_value);
+
+    if (format == JSON) {
+        json_object_set_value(root_object, "columns", columns_value);
+    }
+
     ncols = db_get_table_number_of_columns(table);
-    for (col = 0; col < ncols; col++)
-        fprintf(stdout, "%s|%s\n",
-                db_sqltype_name(
-                    db_get_column_sqltype(db_get_table_column(table, col))),
+    for (col = 0; col < ncols; col++) {
+        if (format == JSON) {
+
+            JSON_Value *column_value = json_value_init_object();
+            JSON_Object *column_object = json_object(column_value);
+
+            json_object_set_string(
+                column_object, "name",
                 db_get_column_name(db_get_table_column(table, col)));
+
+            int sql_type =
+                db_get_column_sqltype(db_get_table_column(table, col));
+            json_object_set_string(column_object, "sql_type",
+                                   db_sqltype_name(sql_type));
+
+            int c_type = db_sqltype_to_Ctype(sql_type);
+            json_object_set_boolean(
+                column_object, "is_number",
+                (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE));
+
+            json_array_append_value(columns_array, column_value);
+        }
+        else {
+            fprintf(stdout, "%s|%s\n",
+                    db_sqltype_name(
+                        db_get_column_sqltype(db_get_table_column(table, col))),
+                    db_get_column_name(db_get_table_column(table, col)));
+        }
+    }
+
+    if (format == JSON) {
+        char *serialized_string = NULL;
+        serialized_string = json_serialize_to_string_pretty(root_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        json_free_serialized_string(serialized_string);
+        json_value_free(root_value);
+    }
 
     db_close_database(driver);
     db_shutdown_driver(driver);

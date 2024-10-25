@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
             }
         }
         else if (col_flag) {
-            print_columns(&Map, input_opt, field_opt);
+            print_columns(&Map, input_opt, field_opt, format);
         }
         Vect_close(&Map);
 
