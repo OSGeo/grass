@@ -1542,7 +1542,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                     column = tlist.columns[columnName[i]]
                     if len(values[i]) > 0:
                         try:
-                            idx = i - 1 if missingKey is True else i
+                            idx = i - 1 if missingKey else i
 
                             if column["ctype"] != str:
                                 tlist.itemDataMap[item][idx] = column["ctype"](
