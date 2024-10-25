@@ -109,7 +109,7 @@ def get_source_url(path, revision, line=None):
     :param revision: SVN revision (should be a number)
     :param line: line in the file (should be None for directories)
     """
-    tracurl = "http://trac.osgeo.org/grass/browser/"
+    tracurl = "https://trac.osgeo.org/grass/browser/"
     if line:
         return "{tracurl}{path}?rev={revision}#L{line}".format(**locals())
     else:

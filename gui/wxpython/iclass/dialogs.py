@@ -587,7 +587,7 @@ def ContrastColor(color):
         could be useful by other apps, consider moving it into gui_core
     """
     # gacek,
-    # http://stackoverflow.com/questions/1855884/determine-font-color-based-on-background-color
+    # https://stackoverflow.com/questions/1855884/determine-font-color-based-on-background-color
     a = 1 - (0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2]) / 255
 
     if a < 0.5:

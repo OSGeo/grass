@@ -767,7 +767,7 @@ class Settings:
             },
         }
 
-        # quick fix, http://trac.osgeo.org/grass/ticket/1233
+        # quick fix, https://trac.osgeo.org/grass/ticket/1233
         # TODO
         if sys.platform == "darwin":
             self.defaultSettings["general"]["defWindowPos"]["enabled"] = False

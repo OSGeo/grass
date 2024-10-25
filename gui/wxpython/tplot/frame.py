@@ -1379,7 +1379,7 @@ class DataCursor:
     matplotlib artist when it is selected.
 
 
-    Source: http://stackoverflow.com/questions/4652439/
+    Source: https://stackoverflow.com/questions/4652439/
             is-there-a-matplotlib-equivalent-of-matlabs-datacursormode/4674445
     """
 
