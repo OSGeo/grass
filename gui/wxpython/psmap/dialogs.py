@@ -42,9 +42,8 @@ from pathlib import Path
 
 import wx
 import wx.lib.agw.floatspin as fs
-from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
-
 from core import globalvar
+from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
 
 if globalvar.wxPythonPhoenix:
     from wx import Validator
@@ -52,24 +51,25 @@ else:
     from wx import PyValidator as Validator
 
 import grass.script as gs
-
-from core.utils import PilImageToWxImage
+from core.gcmd import GError, GMessage, RunCommand
+from core.utils import PilImageToWxImage, cmp
 from dbmgr.vinfo import VectorDBInfo
-from gui_core.gselect import Select
-from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
+from gui_core.gselect import Select
 from gui_core.wrap import (
     BitmapButton,
     BitmapComboBox,
     BitmapFromImage,
     Button,
     CheckBox,
+    CheckListCtrlMixin,
     Choice,
     ClientDC,
     ColourPickerCtrl,
     Dialog,
     DirBrowseButton,
     EmptyBitmap,
+    EmptyImage,
     ExpandoTextCtrl,
     FileBrowseButton,
     FloatSpin,
@@ -86,11 +86,44 @@ from gui_core.wrap import (
     StaticText,
     TextCtrl,
     TextEntryDialog,
-    EmptyImage,
-    CheckListCtrlMixin,
 )
-from psmap.utils import *
-from psmap.instructions import *
+
+# Explicit imports from psmap.instructions
+from psmap.instructions import (
+    Image,
+    Labels,
+    Line,
+    MapFrame,
+    Mapinfo,
+    NewId,
+    NorthArrow,
+    Point,
+    Raster,
+    RasterLegend,
+    Rectangle,
+    Scalebar,
+    Text,
+    Vector,
+    VectorLegend,
+    VProperties,
+)
+
+# Explicit imports from psmap.utils
+from psmap.utils import (
+    AutoAdjust,
+    BBoxAfterRotation,
+    ComputeSetRegion,
+    PaperMapCoordinates,
+    PILImage,
+    Rect2D,
+    Rect2DPP,
+    SetResolution,
+    UnitConversion,
+    convertRGB,
+    getRasterType,
+    havePILImage,
+    projInfo,
+)
 
 # grass.set_raise_on_error(True)
 
@@ -526,8 +559,7 @@ class PsmapDialog(Dialog):
         if ok:
             self.parent.DialogDataChanged(id=self.id)
             return True
-        else:
-            return False
+        return False
 
     def OnOK(self, event):
         """Apply changes, close dialog"""
@@ -3587,7 +3619,7 @@ class LegendDialog(PsmapDialog):
         self.Bind(wx.EVT_CHECKBOX, self.OnIsLegend, self.isRLegend)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnDiscrete, self.discrete)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnDiscrete, self.continuous)
-        ##        self.Bind(wx.EVT_CHECKBOX, self.OnDefaultSize, panel.defaultSize)
+        # self.Bind(wx.EVT_CHECKBOX, self.OnDefaultSize, panel.defaultSize)
         self.Bind(wx.EVT_CHECKBOX, self.OnRange, self.range)
         self.rasterSelect.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnRaster)
 
@@ -5699,8 +5731,6 @@ class TextDialog(PsmapDialog):
         y = self.unitConv.convert(value=y, fromUnit="inch", toUnit=currUnit)
         self.positionPanel.position["xCtrl"].SetValue("%5.3f" % x)
         self.positionPanel.position["yCtrl"].SetValue("%5.3f" % y)
-        # EN coordinates
-        e, n = self.textDict["east"], self.textDict["north"]
         self.positionPanel.position["eCtrl"].SetValue(str(self.textDict["east"]))
         self.positionPanel.position["nCtrl"].SetValue(str(self.textDict["north"]))
 
@@ -5995,7 +6025,7 @@ class ImageDialog(PsmapDialog):
                 pImg = PILImage.open(file)
                 img = PilImageToWxImage(pImg)
             except OSError as e:
-                GError(message=_("Unable to read file %s") % file)
+                GError(message=_("Unable to read file %s: %s") % (file, str(e)))
                 self.ClearPreview()
                 return
             self.SetSizeInfoLabel(img)
@@ -6108,15 +6138,6 @@ class ImageDialog(PsmapDialog):
 
         else:
             self.imageDict["XY"] = False
-            if self.positionPanel.position["eCtrl"].GetValue():
-                e = self.positionPanel.position["eCtrl"].GetValue()
-            else:
-                self.imageDict["east"] = self.imageDict["east"]
-
-            if self.positionPanel.position["nCtrl"].GetValue():
-                n = self.positionPanel.position["nCtrl"].GetValue()
-            else:
-                self.imageDict["north"] = self.imageDict["north"]
 
             x, y = PaperMapCoordinates(
                 mapInstr=self.instruction[self.mapId],
@@ -6179,7 +6200,6 @@ class ImageDialog(PsmapDialog):
         self.positionPanel.position["xCtrl"].SetValue("%5.3f" % x)
         self.positionPanel.position["yCtrl"].SetValue("%5.3f" % y)
         # EN coordinates
-        e, n = self.imageDict["east"], self.imageDict["north"]
         self.positionPanel.position["eCtrl"].SetValue(str(self.imageDict["east"]))
         self.positionPanel.position["nCtrl"].SetValue(str(self.imageDict["north"]))
 
@@ -6494,15 +6514,6 @@ class PointDialog(PsmapDialog):
 
         else:
             self.pointDict["XY"] = False
-            if self.positionPanel.position["eCtrl"].GetValue():
-                e = self.positionPanel.position["eCtrl"].GetValue()
-            else:
-                self.pointDict["east"] = self.pointDict["east"]
-
-            if self.positionPanel.position["nCtrl"].GetValue():
-                n = self.positionPanel.position["nCtrl"].GetValue()
-            else:
-                self.pointDict["north"] = self.pointDict["north"]
 
             x, y = PaperMapCoordinates(
                 mapInstr=self.instruction[self.mapId],
@@ -6558,7 +6569,6 @@ class PointDialog(PsmapDialog):
         self.positionPanel.position["xCtrl"].SetValue("%5.3f" % x)
         self.positionPanel.position["yCtrl"].SetValue("%5.3f" % y)
         # EN coordinates
-        e, n = self.pointDict["east"], self.pointDict["north"]
         self.positionPanel.position["eCtrl"].SetValue(str(self.pointDict["east"]))
         self.positionPanel.position["nCtrl"].SetValue(str(self.pointDict["north"]))
 

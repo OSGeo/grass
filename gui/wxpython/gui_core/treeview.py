@@ -256,8 +256,7 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, TreeListCtrl):
         # remove & because of & needed in menu (&Files)
         if column > 0:
             return node.data.get(self._columns[column], "")
-        else:
-            return node.label.replace("&", "")
+        return node.label.replace("&", "")
 
     def OnRightClick(self, event):
         """Select item on right click.

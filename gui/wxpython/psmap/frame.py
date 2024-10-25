@@ -16,10 +16,9 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
-
 import queue as Queue
-from math import sin, cos, pi, sqrt
+import sys
+from math import cos, pi, sin, sqrt
 
 import wx
 
@@ -29,25 +28,51 @@ except ImportError:
     import wx.lib.flatnotebook as FN
 
 import grass.script as gs
-
 from core import globalvar
-from gui_core.menu import Menu
-from core.gconsole import CmdThread, EVT_CMD_DONE
-from psmap.toolbars import PsMapToolbar
-from core.gcmd import RunCommand, GError, GMessage
+from core.gcmd import GError, GMessage, RunCommand
+from core.gconsole import EVT_CMD_DONE, CmdThread
 from core.settings import UserSettings
 from core.utils import PilImageToWxImage
-from gui_core.forms import GUI
-from gui_core.widgets import GNotebook
 from gui_core.dialogs import HyperlinkDialog
+from gui_core.forms import GUI
 from gui_core.ghelp import ShowAboutDialog
-from gui_core.wrap import ClientDC, PseudoDC, Rect, StockCursor, EmptyBitmap
-from psmap.menudata import PsMapMenuData
+from gui_core.menu import Menu
 from gui_core.toolbars import ToolSwitcher
+from gui_core.widgets import GNotebook
+from gui_core.wrap import ClientDC, EmptyBitmap, PseudoDC, Rect, StockCursor
 
-from psmap.dialogs import *
-from psmap.instructions import *
-from psmap.utils import *
+from psmap.dialogs import (
+    ImageDialog,
+    LabelsDialog,
+    LegendDialog,
+    MainVectorDialog,
+    MapDialog,
+    MapinfoDialog,
+    NorthArrowDialog,
+    PageSetupDialog,
+    PointDialog,
+    RasterDialog,
+    RectangleDialog,
+    ScalebarDialog,
+    TextDialog,
+)
+from psmap.instructions import InitMap, Instruction, NewId, SetResolution, PageSetup
+from psmap.menudata import PsMapMenuData
+from psmap.toolbars import PsMapToolbar
+from psmap.utils import (
+    AutoAdjust,
+    ComputeSetRegion,
+    GetMapBounds,
+    PaperMapCoordinates,
+    PILImage,
+    Rect2D,
+    Rect2DPP,
+    Rect2DPS,
+    UnitConversion,
+    convertRGB,
+    havePILImage,
+    projInfo,
+)
 
 
 class PsMapFrame(wx.Frame):
@@ -170,7 +195,6 @@ class PsMapFrame(wx.Frame):
         self.getInitMap()
 
         # image path
-        env = gs.gisenv()
         self.imgName = gs.tempfile()
 
         # canvas for preview
@@ -488,45 +512,44 @@ class PsMapFrame(wx.Frame):
                 env=self.env,
             )
             # wx.BusyInfo does not display the message
-            busy = wx.BusyInfo(_("Generating preview, wait please"), parent=self)
-            wx.GetApp().Yield()
-            try:
-                im = PILImage.open(event.userData["filename"])
-                if self.instruction[self.pageId]["Orientation"] == "Landscape":
-                    import numpy as np
+            with wx.BusyInfo(_("Generating preview, wait please"), parent=self):
+                wx.GetApp().Yield()
+                try:
+                    im = PILImage.open(event.userData["filename"])
+                    if self.instruction[self.pageId]["Orientation"] == "Landscape":
+                        import numpy as np
 
-                    im_array = np.array(im)
-                    im = PILImage.fromarray(np.rot90(im_array, 3))
-                im.save(self.imgName, format="PNG")
-            except OSError:
-                del busy
-                program = self._getGhostscriptProgramName()
-                dlg = HyperlinkDialog(
-                    self,
-                    title=_("Preview not available"),
-                    message=_(
-                        "Preview is not available probably because Ghostscript is not "
-                        "installed or not on PATH."
-                    ),
-                    hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
-                    hyperlinkLabel=_(
-                        "You can download {program} {arch} version here."
-                    ).format(
-                        program=program,
-                        arch="64bit" if "64" in program else "32bit",
-                    ),
-                )
-                dlg.ShowModal()
-                dlg.Destroy()
-                return
+                        im_array = np.array(im)
+                        im = PILImage.fromarray(np.rot90(im_array, 3))
+                    im.save(self.imgName, format="PNG")
+                except OSError:
+                    del busy
+                    program = self._getGhostscriptProgramName()
+                    dlg = HyperlinkDialog(
+                        self,
+                        title=_("Preview not available"),
+                        message=_(
+                            "Preview is not available probably because Ghostscript is not "
+                            "installed or not on PATH."
+                        ),
+                        hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
+                        hyperlinkLabel=_(
+                            "You can download {program} {arch} version here."
+                        ).format(
+                            program=program,
+                            arch="64bit" if "64" in program else "32bit",
+                        ),
+                    )
+                    dlg.ShowModal()
+                    dlg.Destroy()
+                    return
 
-            self.book.SetSelection(1)
-            self.currentPage = 1
-            rect = self.previewCanvas.ImageRect()
-            self.previewCanvas.image = wx.Image(self.imgName, wx.BITMAP_TYPE_PNG)
-            self.previewCanvas.DrawImage(rect=rect)
+                self.book.SetSelection(1)
+                self.currentPage = 1
+                rect = self.previewCanvas.ImageRect()
+                self.previewCanvas.image = wx.Image(self.imgName, wx.BITMAP_TYPE_PNG)
+                self.previewCanvas.DrawImage(rect=rect)
 
-            del busy
             self.SetStatusText(_("Preview generated"), 0)
 
         gs.try_remove(event.userData["instrFile"])
@@ -755,8 +778,6 @@ class PsMapFrame(wx.Frame):
         if not self._checkMapFrameExists(type_id=id):
             return
 
-        ##        dlg = RasterDialog(self, id = id, settings = self.instruction)
-        # dlg.ShowModal()
         if "mapNotebook" in self.openDialogs:
             self.openDialogs["mapNotebook"].notebook.ChangeSelection(1)
         else:
@@ -775,8 +796,6 @@ class PsMapFrame(wx.Frame):
         if not self._checkMapFrameExists(type_id=id):
             return
 
-        ##        dlg = MainVectorDialog(self, id = id, settings = self.instruction)
-        # dlg.ShowModal()
         if "mapNotebook" in self.openDialogs:
             self.openDialogs["mapNotebook"].notebook.ChangeSelection(2)
         else:
@@ -994,8 +1013,7 @@ class PsMapFrame(wx.Frame):
             Y = y - H
         if rotation == 0:
             return Rect(x, y, *textExtent)
-        else:
-            return Rect(X, Y, abs(W), abs(H)).Inflate(h, h)
+        return Rect(X, Y, abs(W), abs(H)).Inflate(h, h)
 
     def makePSFont(self, textDict):
         """creates a wx.Font object from selected postscript font. To be

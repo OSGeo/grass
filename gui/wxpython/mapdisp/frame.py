@@ -1230,8 +1230,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 render=True,
                 **args,
             )
-        else:
-            return cmd
+        return cmd
 
     def OnMeasureDistance(self, event):
         self._onMeasure(MeasureDistanceController)
@@ -1570,7 +1569,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
-        return self.toolbars["map"] if "map" in self.toolbars else None
+        return self.toolbars.get("map", None)
 
     def GetDialog(self, name):
         """Get selected dialog if exist"""

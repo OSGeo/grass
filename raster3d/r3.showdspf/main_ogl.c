@@ -1159,7 +1159,7 @@ void do__draw(file_info *Headp, struct dspec *D_spec)
         fdraw_polys(D_spec);
         break;
     case 2:
-    case3:
+    case 3:
         gdraw_polys(D_spec);
         break;
     }

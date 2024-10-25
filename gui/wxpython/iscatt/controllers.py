@@ -192,9 +192,7 @@ class ScattsManager:
         del self.busy
         self.data_set = True
 
-        todo = event.ret
         self.bad_bands = event.ret
-        bands = self.core.GetBands()
 
         self.bad_rasts = event.ret
         self.cats_mgr.SetData()
@@ -240,7 +238,7 @@ class ScattsManager:
                 )
             )
             return
-        elif ncells > WARN_NCELLS:
+        if ncells > WARN_NCELLS:
             dlg = wx.MessageDialog(
                 parent=self.guiparent,
                 message=_(
@@ -346,7 +344,7 @@ class ScattsManager:
                 ),
             )
             return False
-        elif mrange > WARN_SCATT_SIZE:
+        if mrange > WARN_SCATT_SIZE:
             dlg = wx.MessageDialog(
                 parent=self.guiparent,
                 message=_(
@@ -809,7 +807,6 @@ class CategoriesManager:
     def OnExportCatRastDone(self, event):
         ret, err = event.ret
         if ret == 0:
-            cat_attrs = self.GetCategoryAttrs(event.kwds["cat_id"])
             GMessage(
                 _("Scatter plot raster of class <%s> exported to raster map <%s>.")
                 % (event.userdata["name"], event.kwds["rast_name"])

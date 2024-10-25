@@ -1233,8 +1233,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         if string:
             if cmd is None:
                 return ""
-            else:
-                return " ".join(cmd)
+            return " ".join(cmd)
 
         return cmd
 
@@ -1420,8 +1419,7 @@ class ModelData(ModelObject):
             name.append(rel.GetLabel())
         if name:
             return "/".join(name) + "=" + self.value + " (" + self.prompt + ")"
-        else:
-            return self.value + " (" + self.prompt + ")"
+        return self.value + " (" + self.prompt + ")"
 
     def GetLabel(self):
         """Get list of names"""
@@ -1672,7 +1670,7 @@ class ModelRelation(ogl.LineShape):
         """
         if isinstance(self.fromShape, ModelData):
             return self.fromShape
-        elif isinstance(self.toShape, ModelData):
+        if isinstance(self.toShape, ModelData):
             return self.toShape
 
         return None
@@ -1743,8 +1741,7 @@ class ModelItem(ModelObject):
         """Get log info"""
         if self.label:
             return _("Condition: ") + self.label
-        else:
-            return _("Condition: not defined")
+        return _("Condition: not defined")
 
     def AddRelation(self, rel):
         """Record relation"""
@@ -2024,8 +2021,7 @@ class ProcessModelFile:
         if p is not None:
             if p.text:
                 return utils.normalize_whitespace(p.text)
-            else:
-                return ""
+            return ""
 
         return default
 
@@ -2289,7 +2285,6 @@ class ProcessModelFile:
                     "size": size,
                     "text": text,
                     "id": int(node.get("id", -1)),
-                    "text": text,
                 }
             )
 
@@ -3322,15 +3317,15 @@ class WritePythonFile(WriteScriptFile):
         """
         if string == "raster":
             return "G_OPT_R_MAP"
-        elif string == "vector":
+        if string == "vector":
             return "G_OPT_V_MAP"
-        elif string == "mapset":
+        if string == "mapset":
             return "G_OPT_M_MAPSET"
-        elif string == "file":
+        if string == "file":
             return "G_OPT_F_INPUT"
-        elif string == "dir":
+        if string == "dir":
             return "G_OPT_M_DIR"
-        elif string == "region":
+        if string == "region":
             return "G_OPT_M_REGION"
 
         return None

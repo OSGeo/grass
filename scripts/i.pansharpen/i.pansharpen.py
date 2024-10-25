@@ -749,11 +749,8 @@ def matchhist(original, target, matched):
             0  # cumulative total of cells for sum of current and all lower grey values
         )
 
-        for n in range(0, 256):
-            if str(n) in stats_dict:
-                num_cells = stats_dict[str(n)]
-            else:
-                num_cells = 0
+        for n in range(256):
+            num_cells = stats_dict.get(str(n), 0)
 
             cum_cells += num_cells
 

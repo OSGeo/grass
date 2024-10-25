@@ -727,7 +727,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Append map to result map list.
                 resultlist.append(map_i)
             return resultlist
-        elif isinstance(conclusionlist, list):
+        if isinstance(conclusionlist, list):
             # Build result command map list between conditions and conclusions.
             if self.debug:
                 print("build_condition_cmd_list", condition_topolist)
@@ -960,10 +960,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             input = t[3]
             if not isinstance(input, list):
                 # Check for mapset in given stds input.
-                if input.find("@") >= 0:
-                    id_input = input
-                else:
-                    id_input = input + "@" + self.mapset
+                id_input = input if input.find("@") >= 0 else input + "@" + self.mapset
                 # Create empty map dataset.
                 map_i = dataset_factory(self.maptype, id_input)
                 # Check for occurrence of space time dataset.

@@ -766,7 +766,7 @@ class VNETDialog(wx.Dialog):
             for sel in ["arc_column", "arc_backward_column", "node_column"]:
                 self.inputData[sel].SetValue("")
             return
-        elif itemsLen == 1:
+        if itemsLen == 1:
             self.inputData["arc_layer"].SetSelection(0)
             self.inputData["node_layer"].SetSelection(0)
         elif itemsLen >= 1:
@@ -1015,10 +1015,7 @@ class VNETDialog(wx.Dialog):
         attrCols = an_props["cmdParams"]["cols"]
 
         for col in attrCols.keys():
-            if "inputField" in attrCols[col]:
-                colInptF = attrCols[col]["inputField"]
-            else:
-                colInptF = col
+            colInptF = attrCols[col].get("inputField", col)
 
             if col in skip:
                 continue
@@ -1245,8 +1242,6 @@ class SettingsDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
         self.vnet_mgr = vnet_mgr
-
-        maxValue = 1e8
         self.parent = parent
         self.settings = {}
 
@@ -1648,7 +1643,7 @@ class CreateTtbDialog(wx.Dialog):
                 self._updateInputDbMgrPage(show=False)
             self.inputData["arc_layer"].SetValue("")
             return
-        elif itemsLen == 1:
+        if itemsLen == 1:
             self.inputData["arc_layer"].SetSelection(0)
         elif itemsLen >= 1:
             if "1" in items:

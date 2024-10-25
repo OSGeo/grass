@@ -127,8 +127,7 @@ def _make_unicode(val, enc):
 
     if enc == "default":
         return decode(val)
-    else:
-        return decode(val, encoding=enc)
+    return decode(val, encoding=enc)
 
 
 def get_commands(*, env=None):
@@ -335,10 +334,7 @@ def handle_errors(returncode, result, args, kwargs):
         args = make_command(*args, **kwargs)
         # Since we are in error handler, let's be extra cautious
         # about an empty command.
-        if args:
-            module = args[0]
-        else:
-            module = None
+        module = args[0] if args else None
         code = " ".join(args)
         return module, code
 
@@ -349,7 +345,7 @@ def handle_errors(returncode, result, args, kwargs):
         return result
     if handler.lower() == "ignore":
         return result
-    elif handler.lower() == "fatal":
+    if handler.lower() == "fatal":
         module, code = get_module_and_code(args, kwargs)
         fatal(
             _(
@@ -1650,8 +1646,7 @@ def verbosity():
     vbstr = os.getenv("GRASS_VERBOSE")
     if vbstr:
         return int(vbstr)
-    else:
-        return 2
+    return 2
 
 
 # Various utilities, not specific to GRASS
@@ -1701,10 +1696,7 @@ def mapsets(search_path=False, env=None):
 
     :return: list of mapsets
     """
-    if search_path:
-        flags = "p"
-    else:
-        flags = "l"
+    flags = "p" if search_path else "l"
     mapsets = read_command("g.mapsets", flags=flags, sep="newline", quiet=True, env=env)
     if not mapsets:
         fatal(_("Unable to list mapsets"))
@@ -2035,10 +2027,7 @@ def create_environment(gisdbase, location, mapset, env=None):
         f.write("GISDBASE: {g}\n".format(g=gisdbase))
         f.write("LOCATION_NAME: {l}\n".format(l=location))
         f.write("GUI: text\n")
-    if env:
-        env = env.copy()
-    else:
-        env = os.environ.copy()
+    env = env.copy() if env else os.environ.copy()
     env["GISRC"] = f.name
     # remove mapset-specific env vars
     env = sanitize_mapset_environment(env)

@@ -91,10 +91,7 @@ def main():
         isConnection = False
         colnames = ["cat"]
 
-    if option == "coor":
-        extracolnames = ["x", "y", "z"]
-    else:
-        extracolnames = [option]
+    extracolnames = ["x", "y", "z"] if option == "coor" else [option]
 
     if units == "percent":
         unitsp = "meters"
@@ -116,7 +113,7 @@ def main():
             cols = decode(line).rstrip("\r\n").split("|")
             if catcol == -1:
                 ncols = len(cols)
-                for i in range(0, ncols):
+                for i in range(ncols):
                     if cols[i] == f["key"]:
                         catcol = i
                         break

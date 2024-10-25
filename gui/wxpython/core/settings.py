@@ -59,8 +59,7 @@ class SettingsJSONEncoder(json.JSONEncoder):
                 return [color(e) for e in item]
             if isinstance(item, dict):
                 return {key: color(value) for key, value in item.items()}
-            else:
-                return item
+            return item
 
         return super().iterencode(color(obj))
 

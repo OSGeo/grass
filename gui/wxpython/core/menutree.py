@@ -160,10 +160,9 @@ class MenuTreeModelBuilder:
         """
         if separators:
             return copy.deepcopy(self.model)
-        else:
-            model = copy.deepcopy(self.model)
-            removeSeparators(model)
-            return model
+        model = copy.deepcopy(self.model)
+        removeSeparators(model)
+        return model
 
     def PrintTree(self, fh):
         for child in self.model.root.children:

@@ -591,7 +591,7 @@ class ProjectionsPage(TitledPage):
                 self.tproj.SetValue(self.proj)
                 nextButton.Enable(False)
                 return
-            elif self.proj.lower() == "ll":
+            if self.proj.lower() == "ll":
                 self.p4proj = "+proj=longlat"
             else:
                 self.p4proj = "+proj=" + self.proj.lower()
@@ -771,8 +771,7 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
 
         if ascending:
             return cmpVal
-        else:
-            return -cmpVal
+        return -cmpVal
 
     def GetListCtrl(self):
         """Used by listmix.ColumnSorterMixin"""
@@ -804,12 +803,10 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
         if len(data) > 0:
             if firstOnly:
                 return data[0]
-            else:
-                return data
-        elif firstOnly:
+            return data
+        if firstOnly:
             return None
-        else:
-            return []
+        return []
 
 
 class ProjParamsPage(TitledPage):
@@ -1607,9 +1604,12 @@ class EPSGPage(TitledPage):
             self, data=None, columns=[_("Code"), _("Description"), _("Parameters")]
         )
 
-        # epsg.io hyperlink
+        # A hyperlink to a CRS database (PROJ related)
         self.tlink = HyperlinkCtrl(
-            self, id=wx.ID_ANY, label="epsg.io", url="https://epsg.io/"
+            self,
+            id=wx.ID_ANY,
+            label="spatialreference.org",
+            url="https://spatialreference.org/",
         )
         self.tlink.SetNormalColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
         self.tlink.SetVisitedColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
@@ -1660,29 +1660,28 @@ class EPSGPage(TitledPage):
             if not self.epsgcode:
                 event.Veto()
                 return
-            else:
-                # check for datum transforms
-                ret = RunCommand(
-                    "g.proj", read=True, epsg=self.epsgcode, datum_trans="-1", flags="t"
-                )
+            # check for datum transforms
+            ret = RunCommand(
+                "g.proj", read=True, epsg=self.epsgcode, datum_trans="-1", flags="t"
+            )
 
-                if ret != "":
-                    dtrans = ""
-                    # open a dialog to select datum transform number
-                    dlg = SelectTransformDialog(self.parent.parent, transforms=ret)
+            if ret != "":
+                dtrans = ""
+                # open a dialog to select datum transform number
+                dlg = SelectTransformDialog(self.parent.parent, transforms=ret)
 
-                    if dlg.ShowModal() == wx.ID_OK:
-                        dtrans = dlg.GetTransform()
-                        if dtrans == "":
-                            dlg.Destroy()
-                            event.Veto()
-                            return "Datum transform is required."
-                    else:
+                if dlg.ShowModal() == wx.ID_OK:
+                    dtrans = dlg.GetTransform()
+                    if dtrans == "":
                         dlg.Destroy()
                         event.Veto()
                         return "Datum transform is required."
+                else:
+                    dlg.Destroy()
+                    event.Veto()
+                    return "Datum transform is required."
 
-                    self.parent.datum_trans = dtrans
+                self.parent.datum_trans = dtrans
             self.GetNext().SetPrev(self)
 
     def EnableNext(self, enable=True):
@@ -1692,14 +1691,14 @@ class EPSGPage(TitledPage):
     def OnTextChange(self, event):
         value = self.searchb.GetValue()
         if value == "":
-            self.tlink.SetURL("https://epsg.io/")
+            self.tlink.SetURL("https://spatialreference.org/")
             self.epsgcode = None
             self.epsgdesc = self.epsgparams = ""
             self.searchb.ChangeValue("")
             self.OnBrowseCodes(None)
             self.EnableNext(False)
         else:
-            self.tlink.SetURL(str("https://epsg.io/?q={0}".format(value)))
+            self.tlink.SetURL(f"https://spatialreference.org/ref/?&search={value}")
             data = self.epsglist.Search(index=[0, 1, 2], pattern=value, firstOnly=False)
             if data:
                 index = 0
@@ -1880,55 +1879,51 @@ class IAUPage(TitledPage):
             if not self.epsgcode:
                 event.Veto()
                 return
-            else:
-                # check for datum transforms
-                ret = RunCommand(
-                    "g.proj",
-                    read=True,
-                    proj4=self.epsgparams,
-                    datum_trans="-1",
-                    flags="t",
-                )
+            # check for datum transforms
+            ret = RunCommand(
+                "g.proj",
+                read=True,
+                proj4=self.epsgparams,
+                datum_trans="-1",
+                flags="t",
+            )
 
-                if ret != "":
-                    dtrans = ""
-                    # open a dialog to select datum transform number
-                    dlg = SelectTransformDialog(self.parent.parent, transforms=ret)
+            if ret != "":
+                dtrans = ""
+                # open a dialog to select datum transform number
+                dlg = SelectTransformDialog(self.parent.parent, transforms=ret)
 
-                    if dlg.ShowModal() == wx.ID_OK:
-                        dtrans = dlg.GetTransform()
-                        if dtrans == "":
-                            dlg.Destroy()
-                            event.Veto()
-                            return "Datum transform is required."
-                    else:
+                if dlg.ShowModal() == wx.ID_OK:
+                    dtrans = dlg.GetTransform()
+                    if dtrans == "":
                         dlg.Destroy()
                         event.Veto()
                         return "Datum transform is required."
+                else:
+                    dlg.Destroy()
+                    event.Veto()
+                    return "Datum transform is required."
 
-                    self.parent.datum_trans = dtrans
-                    self.parent.epsgcode = self.epsgcode
-                    self.parent.epsgdesc = self.epsgdesc
+                self.parent.datum_trans = dtrans
+                self.parent.epsgcode = self.epsgcode
+                self.parent.epsgdesc = self.epsgdesc
 
-                # prepare +nadgrids or +towgs84 terms for Summary page. first
-                # convert them:
-                ret, projlabel, err = RunCommand(
-                    "g.proj",
-                    flags="jft",
-                    proj4=self.epsgparams,
-                    datum_trans=self.parent.datum_trans,
-                    getErrorMsg=True,
-                    read=True,
-                )
-                # splitting on space alone would break for grid files with
-                # space in pathname
-                for projterm in projlabel.split(" +"):
-                    if (
-                        projterm.find("towgs84=") != -1
-                        or projterm.find("nadgrids=") != -1
-                    ):
-                        self.custom_dtrans_string = " +%s" % projterm
-                        break
+            # prepare +nadgrids or +towgs84 terms for Summary page. first
+            # convert them:
+            ret, projlabel, err = RunCommand(
+                "g.proj",
+                flags="jft",
+                proj4=self.epsgparams,
+                datum_trans=self.parent.datum_trans,
+                getErrorMsg=True,
+                read=True,
+            )
+            # splitting on space alone would break for grid files with
+            # space in pathname
+            for projterm in projlabel.split(" +"):
+                if projterm.find("towgs84=") != -1 or projterm.find("nadgrids=") != -1:
+                    self.custom_dtrans_string = " +%s" % projterm
+                    break
 
             self.GetNext().SetPrev(self)
 
