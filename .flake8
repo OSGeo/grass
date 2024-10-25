@@ -100,7 +100,7 @@ per-file-ignores =
     scripts/v.import/v.import.py: E722, E501
     scripts/db.univar/db.univar.py: E501
     scripts/d.frame/d.frame.py: E722
-    scripts/i.pansharpen/i.pansharpen.py: E722, E501
+    scripts/i.pansharpen/i.pansharpen.py: E501
     scripts/v.what.strds/v.what.strds.py: E501
     # Line too long (esp. module interface definitions)
     scripts/*/*.py: E501
