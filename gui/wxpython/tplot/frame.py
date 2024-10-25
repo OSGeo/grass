@@ -756,10 +756,7 @@ class TplotFrame(wx.Frame):
         """Used to write CSV file of plotted data"""
         import csv
 
-        if isinstance(y[0], list):
-            zipped = list(zip(x, *y))
-        else:
-            zipped = list(zip(x, y))
+        zipped = list(zip(x, *y)) if isinstance(y[0], list) else list(zip(x, y))
         with open(self.csvpath, "w", newline="") as fi:
             writer = csv.writer(fi)
             if self.header:

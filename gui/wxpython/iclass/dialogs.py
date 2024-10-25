@@ -588,11 +588,7 @@ def ContrastColor(color):
     # gacek,
     # https://stackoverflow.com/questions/1855884/determine-font-color-based-on-background-color
     a = 1 - (0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2]) / 255
-
-    if a < 0.5:
-        d = 0
-    else:
-        d = 255
+    d = 0 if a < 0.5 else 255
     # maybe return just bool if text should be dark or bright
     return (d, d, d)
 

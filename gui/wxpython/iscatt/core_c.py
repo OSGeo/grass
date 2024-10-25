@@ -214,11 +214,7 @@ def _regionToCellHead(region):
     }
 
     for k, v in region.items():
-        if k in {"rows", "cols", "cells", "zone"}:  # zone added in r65224
-            v = int(v)
-        else:
-            v = float(v)
-
+        v = int(v) if k in {"rows", "cols", "cells", "zone"} else float(v)
         if k in convert_dict:
             k = convert_dict[k]
 
