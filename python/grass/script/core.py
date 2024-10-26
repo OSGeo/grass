@@ -18,6 +18,8 @@ for details.
 .. sectionauthor:: Michael Barton <michael.barton asu.edu>
 """
 
+from __future__ import annotations
+
 import os
 import sys
 import atexit
@@ -855,9 +857,9 @@ def get_capture_stderr():
 # interface to g.parser
 
 
-def _parse_opts(lines):
-    options = {}
-    flags = {}
+def _parse_opts(lines: list) -> tuple[dict[str, str], dict[str, bool]]:
+    options: dict[str, str] = {}
+    flags: dict[str, bool] = {}
     for line in lines:
         if not line:
             break
@@ -887,7 +889,7 @@ def _parse_opts(lines):
     return (options, flags)
 
 
-def parser():
+def parser() -> tuple[dict[str, str], dict[str, bool]]:
     """Interface to g.parser, intended to be run from the top-level, e.g.:
 
     ::

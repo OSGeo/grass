@@ -25,8 +25,7 @@ per-file-ignores =
     gui/scripts/d.wms.py: E501
     gui/wxpython/image2target/g.gui.image2target.py: E501
     gui/wxpython/nviz/*: E722
-    gui/wxpython/photo2image/*: F841, E722, E265
-    gui/wxpython/photo2image/g.gui.photo2image.py: E501, F841
+    gui/wxpython/photo2image/g.gui.photo2image.py: E501
     gui/wxpython/psmap/*: E501, E722
     gui/wxpython/vdigit/*: F841, E722, F405, F403
     gui/wxpython/animation/g.gui.animation.py: E501
@@ -103,7 +102,6 @@ per-file-ignores =
     scripts/db.univar/db.univar.py: E501
     scripts/d.frame/d.frame.py: E722
     scripts/i.pansharpen/i.pansharpen.py: E722, E501
-    scripts/r.fillnulls/r.fillnulls.py: E722
     scripts/v.what.strds/v.what.strds.py: E501
     # Line too long (esp. module interface definitions)
     scripts/*/*.py: E501

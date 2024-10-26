@@ -1896,10 +1896,7 @@ class IVDigit:
                 modeSnap,
             )
 
-        if ftype == GV_AREA:
-            ltype = GV_BOUNDARY
-        else:
-            ltype = ftype
+        ltype = GV_BOUNDARY if ftype == GV_AREA else ftype
         newline = Vect_write_line(self.poMapInfo, ltype, self.poPoints, self.poCats)
         if newline < 0:
             self._error.WriteLine()

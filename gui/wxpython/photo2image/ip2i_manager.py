@@ -163,7 +163,7 @@ class GCPWizard:
             if p.returncode == 0:
                 print("returncode = ", str(p.returncode))
                 self.Map.region = self.Map.GetRegion()
-        except:
+        except Exception:
             pass
 
         self.SwitchEnv("source")
@@ -797,10 +797,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         else:
             item.SetPropertyVal("hide", False)
             if self.highest_only:
-                if itemIndex == self.highest_key:
-                    wxPen = "highest"
-                else:
-                    wxPen = "default"
+                wxPen = "highest" if itemIndex == self.highest_key else "default"
             else:  # noqa: PLR5501
                 if self.mapcoordlist[key][5] > self.rmsthresh:
                     wxPen = "highest"
@@ -1042,10 +1039,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         pass
 
     def _onMouseLeftUpPointer(self, mapWindow, x, y):
-        if mapWindow == self.SrcMapWindow:
-            coordtype = "source"
-        else:
-            coordtype = "target"
+        coordtype = "source" if mapWindow == self.SrcMapWindow else "target"
 
         coord = (x, y)
         self.SetGCPData(coordtype, coord, self, confirm=True)
@@ -1102,10 +1096,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         if maptype == "raster":
             self.grwiz.SwitchEnv("source")
 
-            if self.clip_to_region:
-                flags = "ac"
-            else:
-                flags = "a"
+            flags = "ac" if self.clip_to_region else "a"
 
             with wx.BusyInfo(_("Rectifying images, please wait..."), parent=self):
                 wx.GetApp().Yield()
