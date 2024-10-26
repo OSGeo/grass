@@ -481,7 +481,6 @@ else:
 url_source = ""
 addon_path = None
 if os.getenv("SOURCE_URL", ""):
-    addon_path = get_addon_path(pgm)
     addon_path = get_addon_path(base_url=base_url, pgm=pgm, major_version=major)
     if addon_path:
         # Addon is installed from the local dir
