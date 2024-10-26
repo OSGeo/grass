@@ -211,7 +211,7 @@ def write_cpp(bands, values, sensor, folder):
         :param fi: filter function
         """
         while c > 0 and fi[c - 1] > rthresh:
-            c = c - 1
+            c -= 1
         return np.ceil(li[0] * 1000 + (2.5 * c))
 
     def get_max_wavelength(c, rthresh, fi):
