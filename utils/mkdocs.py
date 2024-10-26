@@ -1,8 +1,11 @@
 # common functions used by mkmarkdown.py and mkhtml.py
 
+import sys
 import os
 import json
 import subprocess
+import urlparse
+import re
 from http import HTTPStatus
 from pathlib import Path
 from datetime import datetime
@@ -349,3 +352,84 @@ def urlopen(url, *args, **kwargs):
     """
     request = urlrequest.Request(url, headers=HEADERS)
     return urlrequest.urlopen(request, *args, **kwargs)
+
+
+def get_addon_path(base_url, pgm, major_version):
+    """Check if pgm is in the addons list and get addon path
+
+    Make or update list of the official addons source
+    code paths g.extension prefix parameter plus /grass-addons directory
+    using Git repository
+
+    :param str base_url: base URL
+    :param str pgm: program name
+    :param str major_version: GRASS major version
+
+    :return str|None: pgm path if pgm is addon else None
+    """
+    addons_base_dir = os.getenv("GRASS_ADDON_BASE")
+    if addons_base_dir and major_version:
+        grass_addons_dir = Path(addons_base_dir) / "grass-addons"
+        if gs:
+            call = gs.call
+            popen = gs.Popen
+            fatal = gs.fatal
+        else:
+            call = subprocess.call
+            popen = subprocess.Popen
+            fatal = sys.stderr.write
+        addons_branch = get_version_branch(
+            major_version=major_version,
+            addons_git_repo_url=urlparse.urljoin(base_url, "grass-addons/"),
+        )
+        if not Path(addons_base_dir).exists():
+            Path(addons_base_dir).mkdir(parents=True, exist_ok=True)
+        if not grass_addons_dir.exists():
+            call(
+                [
+                    "git",
+                    "clone",
+                    "-q",
+                    "--no-checkout",
+                    f"--branch={addons_branch}",
+                    "--filter=blob:none",
+                    urlparse.urljoin(base_url, "grass-addons/"),
+                ],
+                cwd=addons_base_dir,
+            )
+        addons_file_list = popen(
+            ["git", "ls-tree", "--name-only", "-r", addons_branch],
+            cwd=grass_addons_dir,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        addons_file_list, stderr = addons_file_list.communicate()
+        if stderr:
+            message = (
+                "Failed to get addons files list from the"
+                " Git repository <{repo_path}>.\n{error}"
+            )
+            if gs:
+                fatal(
+                    _(
+                        message,
+                    ).format(
+                        repo_path=grass_addons_dir,
+                        error=gs.decode(stderr),
+                    )
+                )
+            else:
+                message += "\n"
+                fatal(
+                    message.format(
+                        repo_path=grass_addons_dir,
+                        error=stderr.decode(),
+                    )
+                )
+        addon_paths = re.findall(
+            rf".*{pgm}*.",
+            gs.decode(addons_file_list) if gs else addons_file_list.decode(),
+        )
+        for addon_path in addon_paths:
+            if pgm == Path(addon_path).name:
+                return addon_path
