@@ -1014,10 +1014,7 @@ class GRASSStartup(wx.Frame):
 
     def OnBrowse(self, event):
         """'Browse' button clicked"""
-        if not event:
-            defaultPath = os.getenv("HOME")
-        else:
-            defaultPath = ""
+        defaultPath = os.getenv("HOME") if not event else ""
 
         dlg = wx.DirDialog(
             parent=self,

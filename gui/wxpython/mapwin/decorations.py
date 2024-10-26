@@ -323,14 +323,8 @@ class LegendController(OverlayController):
         """Resize legend according to given bbox coordinates."""
         w = abs(begin[0] - end[0])
         h = abs(begin[1] - end[1])
-        if begin[0] < end[0]:
-            x = begin[0]
-        else:
-            x = end[0]
-        if begin[1] < end[1]:
-            y = begin[1]
-        else:
-            y = end[1]
+        x = min(end[0], begin[0])
+        y = min(end[1], begin[1])
 
         at = [
             (screenSize[1] - (y + h)) / float(screenSize[1]) * 100,
