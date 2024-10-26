@@ -142,8 +142,8 @@ if __name__ == "__main__":
         """
 ## SOURCE CODE
 
-Available at: [${PGM} source code](${URL_SOURCE})</a>
-([history](${URL_LOG}"))${MD_NEWLINE}
+Available at: [${PGM} source code](${URL_SOURCE})
+([history](${URL_LOG}))${MD_NEWLINE}
 ${DATE_TAG}
 """
     )
