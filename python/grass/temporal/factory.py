@@ -18,6 +18,8 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 from .core import get_tgis_message_interface
 from .space_time_datasets import (
     Raster3DDataset,
@@ -31,7 +33,17 @@ from .space_time_datasets import (
 ###############################################################################
 
 
-def dataset_factory(type, id):
+def dataset_factory(
+    type: str, id: str
+) -> (
+    SpaceTimeRasterDataset
+    | SpaceTimeRaster3DDataset
+    | SpaceTimeVectorDataset
+    | RasterDataset
+    | Raster3DDataset
+    | VectorDataset
+    | None
+):
     """A factory functions to create space time or map datasets
 
     :param type: the dataset type: rast or raster; rast3d, raster3d or raster_3d;
@@ -39,20 +51,18 @@ def dataset_factory(type, id):
     :param id: The id of the dataset ("name@mapset")
     """
     if type == "strds":
-        sp = SpaceTimeRasterDataset(id)
-    elif type == "str3ds":
-        sp = SpaceTimeRaster3DDataset(id)
-    elif type == "stvds":
-        sp = SpaceTimeVectorDataset(id)
-    elif type in {"rast", "raster"}:
-        sp = RasterDataset(id)
-    elif type in {"raster_3d", "rast3d", "raster3d"}:
-        sp = Raster3DDataset(id)
-    elif type in {"vect", "vector"}:
-        sp = VectorDataset(id)
-    else:
-        msgr = get_tgis_message_interface()
-        msgr.error(_("Unknown dataset type: %s") % type)
-        return None
+        return SpaceTimeRasterDataset(id)
+    if type == "str3ds":
+        return SpaceTimeRaster3DDataset(id)
+    if type == "stvds":
+        return SpaceTimeVectorDataset(id)
+    if type in {"rast", "raster"}:
+        return RasterDataset(id)
+    if type in {"raster_3d", "rast3d", "raster3d"}:
+        return Raster3DDataset(id)
+    if type in {"vect", "vector"}:
+        return VectorDataset(id)
 
-    return sp
+    msgr = get_tgis_message_interface()
+    msgr.error(_("Unknown dataset type: %s") % type)
+    return None
