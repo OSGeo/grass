@@ -199,7 +199,7 @@ modclass_intro_tmpl = string.Template(
 
 
 modclass_tmpl = string.Template(
-    r"""Go [back to help overview](index.md)</a>
+    r"""Go [back to help overview](index.md)
 ### ${modclass} commands:
 | Module | Description |
 |--------|-------------|
