@@ -220,7 +220,7 @@ def write_cpp(bands, values, sensor, folder):
         :param fi: filter function
         """
         while c < len(fi) - 1 and fi[c + 1] > rthresh:
-            c = c + 1
+            c += 1
         return np.floor(li[0] * 1000 + (2.5 * c))
 
     # keep in sync with IWave::parse()
