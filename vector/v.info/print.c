@@ -208,27 +208,33 @@ void print_columns(struct Map_info *Map, const char *input_opt,
     driver = db_start_driver(fi->driver);
     if (driver == NULL) {
         Vect_close(Map);
-        G_fatal_error(_("Unable to open driver <%s>"), fi->driver);
+        const char *driver_name = fi->driver;
+        Vect_destroy_field_info(fi);
+        G_fatal_error(_("Unable to open driver <%s>"), driver_name);
     }
     db_init_handle(&handle);
     db_set_handle(&handle, fi->database, NULL);
     if (db_open_database(driver, &handle) != DB_OK) {
+        const char *database_name = fi->database;
+        const char *driver_name = fi->driver;
+        Vect_destroy_field_info(fi);
         db_shutdown_driver(driver);
         Vect_close(Map);
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-                      fi->database, fi->driver);
+                      database_name, driver_name);
     }
     db_init_string(&table_name);
     db_set_string(&table_name, fi->table);
     if (db_describe_table(driver, &table_name, &table) != DB_OK) {
-        db_close_database(driver);
-        db_shutdown_driver(driver);
+        const char *table_name = fi->table;
+        Vect_destroy_field_info(fi);
+        db_close_database_shutdown_driver(driver);
         Vect_close(Map);
-        G_fatal_error(_("Unable to describe table <%s>"), fi->table);
+        G_fatal_error(_("Unable to describe table <%s>"), table_name);
     }
 
-    JSON_Value *root_value = NULL, *columns_value = NULL;
-    JSON_Object *root_object = NULL;
+    JSON_Value *root_value = NULL, *columns_value = NULL, *column_value = NULL;
+    JSON_Object *root_object = NULL, *column_object = NULL;
     JSON_Array *columns_array = NULL;
 
     if (format == JSON) {
@@ -241,10 +247,13 @@ void print_columns(struct Map_info *Map, const char *input_opt,
 
     ncols = db_get_table_number_of_columns(table);
     for (col = 0; col < ncols; col++) {
-        if (format == JSON) {
+        switch (format) {
+        case SHELL:
+            break;
 
-            JSON_Value *column_value = json_value_init_object();
-            JSON_Object *column_object = json_object(column_value);
+        case JSON:
+            column_value = json_value_init_object();
+            column_object = json_object(column_value);
 
             json_object_set_string(
                 column_object, "name",
@@ -261,12 +270,14 @@ void print_columns(struct Map_info *Map, const char *input_opt,
                 (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE));
 
             json_array_append_value(columns_array, column_value);
-        }
-        else {
+            break;
+
+        case PLAIN:
             fprintf(stdout, "%s|%s\n",
                     db_sqltype_name(
                         db_get_column_sqltype(db_get_table_column(table, col))),
                     db_get_column_name(db_get_table_column(table, col)));
+            break;
         }
     }
 
@@ -275,8 +286,8 @@ void print_columns(struct Map_info *Map, const char *input_opt,
         serialized_string = json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             json_value_free(root_value);
-            db_close_database(driver);
-            db_shutdown_driver(driver);
+            Vect_destroy_field_info(fi);
+            db_close_database_shutdown_driver(driver);
             Vect_close(Map);
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
@@ -285,8 +296,8 @@ void print_columns(struct Map_info *Map, const char *input_opt,
         json_value_free(root_value);
     }
 
-    db_close_database(driver);
-    db_shutdown_driver(driver);
+    Vect_destroy_field_info(fi);
+    db_close_database_shutdown_driver(driver);
 }
 
 void print_shell(struct Map_info *Map, const char *field_opt,
