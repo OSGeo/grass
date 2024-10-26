@@ -20,20 +20,21 @@ This program is free software under the GNU General Public License
 """
 import os
 from itertools import cycle
+from pathlib import Path
 import numpy as np
 
 import wx
 from grass.pygrass.modules import Module
 
-import grass.script as grass
+import grass.script as gs
 from functools import reduce
 
 try:
-    import matplotlib
+    import matplotlib as mpl
 
     # The recommended way to use wx with mpl is with the WXAgg
     # backend.
-    matplotlib.use("WXAgg")
+    mpl.use("WXAgg")
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_wxagg import (
         FigureCanvasWxAgg as FigCanvas,
@@ -68,25 +69,23 @@ import wx.lib.filebrowsebutton as filebrowse
 
 from gui_core.widgets import GNotebook
 from gui_core.wrap import CheckBox, TextCtrl, Button, StaticText
+from operator import add
 
 ALPHA = 0.5
 COLORS = ["b", "g", "r", "c", "m", "y", "k"]
 LINEAR_REG_LINE_COLOR = (0.56, 0.00, 1.00)
 
 
-def check_version(*version):
+def check_version(*version) -> bool:
     """Checks if given version or newer is installed"""
     versionInstalled = []
-    for i in matplotlib.__version__.split("."):
+    for i in mpl.__version__.split("."):
         try:
             v = int(i)
             versionInstalled.append(v)
         except ValueError:
             versionInstalled.append(0)
-    if versionInstalled < list(version):
-        return False
-    else:
-        return True
+    return not versionInstalled < list(version)
 
 
 def findBetween(s, first, last):
@@ -143,7 +142,10 @@ class TplotFrame(wx.Frame):
         if self._giface.GetMapDisplay():
             self.coorval.OnClose()
             self.cats.OnClose()
-        self.__del__()
+
+        # __del__() and del keyword seem to have differences,
+        # how can self.Destroy(), called after del, work otherwise
+        self.__del__()  # noqa: PLC2801, C2801
         self.Destroy()
 
     def _layout(self):
@@ -371,7 +373,7 @@ class TplotFrame(wx.Frame):
             labelText="",
             dialogTitle=_("CVS path"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_SAVE,
         )
         self.headerLabel = StaticText(
@@ -513,7 +515,7 @@ class TplotFrame(wx.Frame):
 
     def _getExistingCategories(self, mapp, cats):
         """Get a list of categories for a vector map"""
-        vdb = grass.read_command("v.category", input=mapp, option="print")
+        vdb = gs.read_command("v.category", input=mapp, option="print")
         categories = vdb.splitlines()
         if not cats:
             return categories
@@ -613,7 +615,7 @@ class TplotFrame(wx.Frame):
                 self.plotNameListV.append(name)
                 # TODO set an appropriate distance, right now a big one is set
                 # to return the closer point to the selected one
-                out = grass.vector_what(
+                out = gs.vector_what(
                     map="pois_srvds",
                     coord=self.poi.coords(),
                     distance=10000000000000000,
@@ -669,11 +671,11 @@ class TplotFrame(wx.Frame):
                             showTraceback=False,
                             message=_(
                                 "No connection between vector map {vmap} "
-                                "and layer {la}".format(vmap=row["name"], la=lay)
-                            ),
+                                "and layer {la}"
+                            ).format(vmap=row["name"], la=lay),
                         )
                         return
-                    vals = grass.vector_db_select(
+                    vals = gs.vector_db_select(
                         map=row["name"],
                         layer=lay,
                         where=wherequery.format(key=catkey),
@@ -739,11 +741,10 @@ class TplotFrame(wx.Frame):
         """Function to set the right labels"""
         if self.drawX != "":
             self.axes2d.set_xlabel(self.drawX)
+        elif self.temporalType == "absolute":
+            self.axes2d.set_xlabel(_("Temporal resolution: %s") % x)
         else:
-            if self.temporalType == "absolute":
-                self.axes2d.set_xlabel(_("Temporal resolution: %s" % x))
-            else:
-                self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
+            self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
         if self.drawY != "":
             self.axes2d.set_ylabel(self.drawY)
         else:
@@ -755,10 +756,7 @@ class TplotFrame(wx.Frame):
         """Used to write CSV file of plotted data"""
         import csv
 
-        if isinstance(y[0], list):
-            zipped = list(zip(x, *y))
-        else:
-            zipped = list(zip(x, y))
+        zipped = list(zip(x, *y)) if isinstance(y[0], list) else list(zip(x, y))
         with open(self.csvpath, "w", newline="") as fi:
             writer = csv.writer(fi)
             if self.header:
@@ -918,8 +916,8 @@ class TplotFrame(wx.Frame):
                     message=_(
                         "Problem getting data from vector temporal"
                         " dataset. Empty list of values for cat "
-                        "{ca}.".format(ca=name_cat[1].replace("cat", ""))
-                    ),
+                        "{ca}."
+                    ).format(ca=name_cat[1].replace("cat", "")),
                 )
                 continue
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata, datasetName=name)
@@ -1008,9 +1006,8 @@ class TplotFrame(wx.Frame):
         if os.path.exists(self.csvpath) and not self.overwrite:
             dlg = wx.MessageDialog(
                 self,
-                _(
-                    "{pa} already exists, do you want "
-                    "to overwrite?".format(pa=self.csvpath)
+                _("{pa} already exists, do you want to overwrite?").format(
+                    pa=self.csvpath
                 ),
                 _("File exists"),
                 wx.OK | wx.CANCEL | wx.ICON_QUESTION,
@@ -1154,16 +1151,11 @@ class TplotFrame(wx.Frame):
         ]
         # flatten this list
         if allDatasets:
-            allDatasets = reduce(
-                lambda x, y: x + y, reduce(lambda x, y: x + y, allDatasets)
-            )
+            allDatasets = reduce(add, reduce(add, allDatasets))
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
-            allDatasets = [
-                i
-                for i in sorted(
-                    allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
-                )
-            ]
+            allDatasets = sorted(
+                allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
+            )
 
         for dataset in datasets:
             errorMsg = _("Space time dataset <%s> not found.") % dataset
@@ -1186,7 +1178,7 @@ class TplotFrame(wx.Frame):
             elif len(indices) >= 2:
                 dlg = wx.SingleChoiceDialog(
                     self,
-                    message=_("Please specify the space time dataset <%s>." % dataset),
+                    message=_("Please specify the space time dataset <%s>.") % dataset,
                     caption=_("Ambiguous dataset name"),
                     choices=[
                         (
@@ -1268,7 +1260,7 @@ class TplotFrame(wx.Frame):
             except:
                 self.coorval.SetValue(",".join(coors))
         if self.datasetsV:
-            vdatas = ",".join(map(lambda x: x[0] + "@" + x[1], self.datasetsV))
+            vdatas = ",".join(f"{x[0]}@{x[1]}" for x in self.datasetsV)
             self.datasetSelectV.SetValue(vdatas)
             if attr:
                 self.attribute.SetValue(attr)
@@ -1276,7 +1268,7 @@ class TplotFrame(wx.Frame):
                 self.cats.SetValue(cats)
         if self.datasetsR:
             self.datasetSelectR.SetValue(
-                ",".join(map(lambda x: x[0] + "@" + x[1], self.datasetsR))
+                ",".join(f"{x[0]}@{x[1]}" for x in self.datasetsR)
             )
         if title:
             self.title.SetValue(title)
@@ -1306,7 +1298,7 @@ class TplotFrame(wx.Frame):
                 break
         if found:
             try:
-                vect_list = grass.read_command(
+                vect_list = gs.read_command(
                     "t.vect.list", flags="u", input=dataset, column="name"
                 )
             except Exception:
@@ -1368,8 +1360,9 @@ def InfoFormat(timeData, values):
         elif etype == "str3ds":
             text.append(_("Space time 3D raster dataset: %s") % key)
 
-        text.append(_("Value for {date} is {val}".format(date=val[0], val=val[1])))
-        text.append("\n")
+        text.extend(
+            (_("Value for {date} is {val}").format(date=val[0], val=val[1]), "\n")
+        )
     text.append(_("Press Del to dismiss."))
 
     return "\n".join(text)
@@ -1380,7 +1373,7 @@ class DataCursor:
     matplotlib artist when it is selected.
 
 
-    Source: http://stackoverflow.com/questions/4652439/
+    Source: https://stackoverflow.com/questions/4652439/
             is-there-a-matplotlib-equivalent-of-matlabs-datacursormode/4674445
     """
 
@@ -1413,8 +1406,8 @@ class DataCursor:
             artists = [artists]
         self.artists = artists
         self.convert = convert
-        self.axes = tuple(set(art.axes for art in self.artists))
-        self.figures = tuple(set(ax.figure for ax in self.axes))
+        self.axes = tuple({art.axes for art in self.artists})
+        self.figures = tuple({ax.figure for ax in self.axes})
 
         self.annotations = {}
         for ax in self.axes:

@@ -28,10 +28,12 @@ import sys
 
 import wx
 
+from operator import itemgetter
+
 from grass.pydispatch.signal import Signal
 
 from core.globalvar import wxPythonPhoenix
-import grass.script as grass
+import grass.script as gs
 
 from gui_core.dialogs import SavedRegion
 from gui_core.wrap import (
@@ -342,10 +344,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         # TODO: find better solution
         if not pen:
-            if pdctype == "polyline":
-                pen = self.polypen
-            else:
-                pen = self.pen
+            pen = self.polypen if pdctype == "polyline" else self.pen
 
         if img and pdctype == "image":
             # self.imagedict[img]['coords'] = coords
@@ -462,10 +461,10 @@ class BufferedMapWindow(MapWindowBase, Window):
                     brush = wx.TRANSPARENT_BRUSH
                 pdc.SetBrush(brush)
                 pdc.DrawPolygon(points=coords)
-                x = min(coords, key=lambda x: x[0])[0]
-                y = min(coords, key=lambda x: x[1])[1]
-                w = max(coords, key=lambda x: x[0])[0] - x
-                h = max(coords, key=lambda x: x[1])[1] - y
+                x = min(coords, key=itemgetter(0))[0]
+                y = min(coords, key=itemgetter(1))[1]
+                w = max(coords, key=itemgetter(0))[0] - x
+                h = max(coords, key=itemgetter(1))[1] - y
                 pdc.SetIdBounds(drawid, Rect(x, y, w, h))
 
         elif pdctype == "circle":  # draw circle
@@ -499,10 +498,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         elif pdctype == "text":  # draw text on top of map
             if not img["active"]:
                 return  # only draw active text
-            if "rotation" in img:
-                rotation = float(img["rotation"])
-            else:
-                rotation = 0.0
+            rotation = float(img["rotation"]) if "rotation" in img else 0.0
             w, h = self.GetFullTextExtent(img["text"])[0:2]
             pdc.SetFont(img["font"])
             pdc.SetTextForeground(img["color"])
@@ -534,10 +530,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         :return: bbox of rotated text bbox (wx.Rect)
         :return: relCoords are text coord inside bbox
         """
-        if "rotation" in textinfo:
-            rotation = float(textinfo["rotation"])
-        else:
-            rotation = 0.0
+        rotation = float(textinfo["rotation"]) if "rotation" in textinfo else 0.0
 
         coords = textinfo["coords"]
         bbox = Rect(coords[0], coords[1], 0, 0)
@@ -558,8 +551,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             bbox[2], bbox[3] = w, h
             if relcoords:
                 return coords, bbox, relCoords
-            else:
-                return coords, bbox
+            return coords, bbox
 
         boxh = math.fabs(math.sin(math.radians(rotation)) * w) + h
         boxw = math.fabs(math.cos(math.radians(rotation)) * w) + h
@@ -578,8 +570,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         bbox.Inflate(h, h)
         if relcoords:
             return coords, bbox, relCoords
-        else:
-            return coords, bbox
+        return coords, bbox
 
     def OnPaint(self, event):
         """Draw PseudoDC's to buffered paint DC
@@ -664,7 +655,7 @@ class BufferedMapWindow(MapWindowBase, Window):
     def OnSize(self, event):
         """Scale map image so that it is the same size as the Window"""
         # re-render image on idle
-        self.resize = grass.clock()
+        self.resize = gs.clock()
 
     def OnIdle(self, event):
         """Only re-render a composite map image from GRASS during
@@ -673,7 +664,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         # use OnInternalIdle() instead ?
 
-        if self.resize and self.resize + 0.2 < grass.clock():
+        if self.resize and self.resize + 0.2 < gs.clock():
             Debug.msg(3, "BufferedWindow.OnSize():")
 
             # set size of the input image
@@ -1072,11 +1063,15 @@ class BufferedMapWindow(MapWindowBase, Window):
             reg = dispReg if utils.isInRegion(dispReg, compReg) else compReg
 
             regionCoords = []
-            regionCoords.append((reg["w"], reg["n"]))
-            regionCoords.append((reg["e"], reg["n"]))
-            regionCoords.append((reg["e"], reg["s"]))
-            regionCoords.append((reg["w"], reg["s"]))
-            regionCoords.append((reg["w"], reg["n"]))
+            regionCoords.extend(
+                (
+                    (reg["w"], reg["n"]),
+                    (reg["e"], reg["n"]),
+                    (reg["e"], reg["s"]),
+                    (reg["w"], reg["s"]),
+                    (reg["w"], reg["n"]),
+                )
+            )
 
             # draw region extent
             self.polypen = wx.Pen(
@@ -1123,7 +1118,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
     def DragItem(self, id, coords):
         """Drag an overlay decoration item"""
-        if id == 99 or id == "" or id is None:
+        if id in (99, "") or id is None:
             return
         Debug.msg(5, "BufferedWindow.DragItem(): id=%d" % id)
         x, y = self.lastpos
@@ -1465,10 +1460,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         wheel = event.GetWheelRotation()
         Debug.msg(5, "BufferedWindow.MouseAction(): wheel=%d" % wheel)
 
-        if wheel > 0:
-            zoomtype = 1
-        else:
-            zoomtype = -1
+        zoomtype = 1 if wheel > 0 else -1
         if UserSettings.Get(group="display", key="scrollDirection", subkey="selection"):
             zoomtype *= -1
         # zoom 1/2 of the screen (TODO: settings)
@@ -1500,10 +1492,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         previous = self.mouse["begin"]
         move = (current[0] - previous[0], current[1] - previous[1])
 
-        if self.digit:
-            digitToolbar = self.toolbar
-        else:
-            digitToolbar = None
+        digitToolbar = self.toolbar if self.digit else None
 
         # dragging or drawing box with left button
         if self.mouse["use"] == "pan" or event.MiddleIsDown():
@@ -1526,7 +1515,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             self.mouse["end"] = event.GetPosition()
             if event.LeftIsDown() and not (
                 digitToolbar
-                and digitToolbar.GetAction() in {"moveLine"}
+                and digitToolbar.GetAction() == "moveLine"
                 and len(self.digit.GetDisplay().GetSelected()) > 0
             ):
                 self.MouseDraw(pdc=self.pdcTmp)
@@ -2129,7 +2118,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             return
 
         region = dlg.GetName()
-        if not grass.find_file(name=region, element="windows")["name"]:
+        if not gs.find_file(name=region, element="windows")["name"]:
             GError(
                 parent=self,
                 message=_("Region <%s> not found. Operation canceled.") % region,
@@ -2171,7 +2160,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             return
 
         # test to see if it already exists and ask permission to overwrite
-        if grass.find_file(name=dlg.GetName(), element="windows")["name"]:
+        if gs.find_file(name=dlg.GetName(), element="windows")["name"]:
             overwrite = wx.MessageBox(
                 parent=self,
                 message=_(

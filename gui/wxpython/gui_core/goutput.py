@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 """
 
 import textwrap
+from string import digits
 
 import wx
 from wx import stc
@@ -573,9 +574,8 @@ class GStc(stc.StyledTextCtrl):
 
         if wrap:
             txt = textwrap.fill(txt, wrap) + "\n"
-        else:
-            if txt[-1] != "\n":
-                txt += "\n"
+        elif txt[-1] != "\n":
+            txt += "\n"
 
         if "\r" in txt:
             self.linePos = -1
@@ -620,16 +620,12 @@ class GStc(stc.StyledTextCtrl):
                 if c == "\b":
                     self.linePos -= 1
                 else:
-                    if c == "\r":
-                        pos = self.GetCurLine()[1]
-                        # self.SetCurrentPos(pos)
-                    else:
-                        self.SetCurrentPos(self.linePos)
+                    self.SetCurrentPos(self.linePos)
                     self.ReplaceSelection(c)
                     self.linePos = self.GetCurrentPos()
                     if c != " ":
                         last_c = c
-            if last_c not in ("0123456789"):
+            if last_c not in (digits):
                 self.AddTextWrapped("\n", wrap=None)
                 self.linePos = -1
         else:

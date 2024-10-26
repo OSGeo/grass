@@ -65,12 +65,9 @@ def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=Fals
 
     if not univar_stats:
         gs.warning(
-            _(
-                "Unable to get statistics for {voxel}raster map "
-                "<{rmap}>".format(
-                    rmap=id, voxel="" if stats_module.name == "r.univar" else "3d "
-                )
-            )
+            _("Unable to get statistics for raster map <%s>") % id
+            if stats_module.name == "r.univar"
+            else _("Unable to get statistics for 3d raster map <%s>") % id
         )
         return None
     eol = ""
@@ -106,7 +103,7 @@ def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=Fals
                 for perc in stats_module.inputs.percentile:
                     perc_value = stats[
                         "percentile_"
-                        f"{str(perc).rstrip('0').rstrip('.').replace('.','_')}"
+                        f"{str(perc).rstrip('0').rstrip('.').replace('.', '_')}"
                     ]
                     string += f"{fs}{perc_value}"
         string += eol
@@ -223,7 +220,7 @@ def print_gridded_dataset_univar_statistics(
                 cols.extend(
                     [
                         "percentile_"
-                        f"{str(perc).rstrip('0').rstrip('.').replace('.','_')}"
+                        f"{str(perc).rstrip('0').rstrip('.').replace('.', '_')}"
                         for perc in percentile
                     ]
                 )
@@ -307,10 +304,7 @@ def print_vector_dataset_univar_statistics(
 
     mapset = get_current_mapset()
 
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
+    id = input if input.find("@") >= 0 else input + "@" + mapset
 
     sp = dataset_factory("stvds", id)
 
@@ -440,7 +434,7 @@ def print_vector_dataset_univar_statistics(
         else:
             string += fs + fs + fs
 
-        if type == "point" or type == "centroid":
+        if type in {"point", "centroid"}:
             if "mean" in stats:
                 string += (
                     fs

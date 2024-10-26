@@ -34,16 +34,16 @@ from scipy import interpolate
 
 def usage():
     """How to use this..."""
-    print("create_iwave.py <csv file>\n")
+    print("create_iwave.py <csv file>")
     print("Generates filter function template for iwave.cpp from csv file. Note:")
     print("- csv file must have wl response for each band in each column")
     print("- first line must be a header with wl followed by band names")
     print("- all following lines will be the data.")
-    print("If spectral response is null, leave field empty in csv file. Example:\n")
+    print("If spectral response is null, leave field empty in csv file. Example:")
     print("WL(nm),band 1,band 2,band 3,band 4")
     print("455,0.93,,,")
     print("485,0.94,0.00,,")
-    print("545,0.00,0.87,0.00,\n")
+    print("545,0.00,0.87,0.00,")
     print("This script will interpolate the filter functions to 2.5 nm steps")
     print("and output a cpp template file in the IWave format to be added to iwave.cpp")
 
@@ -59,7 +59,7 @@ def read_input(csvfile):
     first column is wavelength
     values are those of the discrete band filter functions
     """
-    with open(csvfile, "r") as infile:
+    with open(csvfile) as infile:
         # get number of bands and band names
         bands = infile.readline().strip().split(",")[1:]
 
@@ -148,17 +148,28 @@ def interpolate_band(values, step=2.5):
 def plot_filter(values):
     """Plot wl response values and interpolated
     filter function. This is just for checking...
-    value is a 2 column numpy array
+    value is a 2-column numpy array
     function has to be used inside Spyder python environment
     """
+    import matplotlib.pyplot as plt
+
     filter_f, limits = interpolate_band(values)
 
     # removing nodata
     w = values[:, 1] >= 0
     response = values[w]
 
-    plot(response[:, 0], response[:, 1], "ro")
-    plot(arange(limits[0], limits[1], 2.5), filter_f)
+    fig = plt.figure()
+    ax1 = fig.add_subplot(2, 1, 1)
+    ax2 = fig.add_subplot(2, 1, 2)
+
+    ax1.plot(response[:, 0], response[:, 1], "ro")
+    rounded = np.arange(limits[0], limits[1], 0.0025) * 1000
+    if len(rounded) == len(filter_f):
+        ax2.plot(rounded, filter_f)
+    else:
+        ax2.plot(rounded[:-1], filter_f)
+    plt.show()
 
 
 def pretty_print(filter_f):
@@ -184,8 +195,7 @@ def pretty_print(filter_f):
             if i < len(filter_f):
                 pstring.append(", ")
     # trim starting \n and trailing ,
-    pstring = "".join(pstring).lstrip("\n").rstrip(", ")
-    return pstring
+    return "".join(pstring).lstrip("\n").rstrip(", ")
 
 
 def write_cpp(bands, values, sensor, folder):
@@ -228,6 +238,7 @@ def write_cpp(bands, values, sensor, folder):
         maxresponse_idx = np.argmax(fi)
         min_wavelength = get_min_wavelength(maxresponse_idx, rthresh, fi)
         max_wavelength = get_max_wavelength(maxresponse_idx, rthresh, fi)
+
     else:
         filter_f = []
         limits = []

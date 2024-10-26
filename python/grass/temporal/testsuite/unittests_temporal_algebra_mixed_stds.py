@@ -8,9 +8,7 @@ for details.
 """
 
 import datetime
-import os
 
-import grass.script
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test

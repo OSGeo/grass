@@ -2,6 +2,7 @@ import os
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.utils import xfail_windows
 
 from grass.script import utils
 
@@ -18,7 +19,7 @@ class EnvironChange(TestCase):
             os.environ[k] = v
 
     def tearDown(self):
-        for k, v in self.env.items():
+        for k in self.env.keys():
             oval = self.original_env[k]
             if oval == self.NOT_FOUND:
                 os.environ.pop(k)
@@ -39,6 +40,7 @@ class TestEncode(TestCase):
     def test_unicode(self):
         self.assertEqual(b"text", utils.encode("text"))
 
+    @xfail_windows
     def test_bytes_garbage_in_out(self):
         """If the input is bytes we should not touch it for encoding"""
         self.assertEqual(

@@ -107,16 +107,14 @@ class SbManager:
         """
         return self.statusbarItems[name].GetValue()
 
-    def HasProperty(self, name):
+    def HasProperty(self, name) -> bool:
         """Checks whether property is represented by one of contained SbItems
 
         :param name: name of SbItem (from name attribute)
 
         :return: True if particular SbItem is contained, False otherwise
         """
-        if name in self.statusbarItems:
-            return True
-        return False
+        return name in self.statusbarItems
 
     def AddStatusbarItem(self, item):
         """Adds item to statusbar"""
@@ -140,7 +138,7 @@ class SbManager:
         :param itemClasses list of classes of items to be disabled
         """
         for itemClass in itemClasses:
-            for i in range(0, len(self.statusbarItems.values())):
+            for i in range(len(self.statusbarItems.values())):
                 item = list(self.statusbarItems.values())[i]
                 if item.__class__ == itemClass:
                     self.disabledItems[i] = item
@@ -633,24 +631,21 @@ class SbGoTo(SbItem):
                         return "%s" % utils.Deg2DMS(
                             coord[0], coord[1], precision=precision
                         )
-                    else:
-                        return "%.*f; %.*f" % (precision, coord[0], precision, coord[1])
-                else:
-                    raise SbException(_("Error in projection (check the settings)"))
+                    return "%.*f; %.*f" % (precision, coord[0], precision, coord[1])
+                raise SbException(_("Error in projection (check the settings)"))
+        elif self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
+            return "%s" % utils.Deg2DMS(
+                region["center_easting"],
+                region["center_northing"],
+                precision=precision,
+            )
         else:
-            if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
-                return "%s" % utils.Deg2DMS(
-                    region["center_easting"],
-                    region["center_northing"],
-                    precision=precision,
-                )
-            else:
-                return "%.*f; %.*f" % (
-                    precision,
-                    region["center_easting"],
-                    precision,
-                    region["center_northing"],
-                )
+            return "%.*f; %.*f" % (
+                precision,
+                region["center_easting"],
+                precision,
+                region["center_northing"],
+            )
 
     def SetCenter(self):
         """Set current map center as item value"""
@@ -809,15 +804,12 @@ class SbCoordinates(SbTextItem):
                     e, n = coord
                     if proj in {"ll", "latlong", "longlat"} and format == "DMS":
                         return utils.Deg2DMS(e, n, precision=precision)
-                    else:
-                        return "%.*f; %.*f" % (precision, e, precision, n)
-                else:
-                    raise SbException(_("Error in projection (check the settings)"))
+                    return "%.*f; %.*f" % (precision, e, precision, n)
+                raise SbException(_("Error in projection (check the settings)"))
+        elif self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
+            return utils.Deg2DMS(e, n, precision=precision)
         else:
-            if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
-                return utils.Deg2DMS(e, n, precision=precision)
-            else:
-                return "%.*f; %.*f" % (precision, e, precision, n)
+            return "%.*f; %.*f" % (precision, e, precision, n)
 
 
 class SbRegionExtent(SbTextItem):
@@ -864,8 +856,7 @@ class SbRegionExtent(SbTextItem):
                 precision,
                 n,
             )
-        else:
-            return "%s - %s, %s - %s" % (w, e, s, n)
+        return "%s - %s, %s - %s" % (w, e, s, n)
 
     def ReprojectRegionFromMap(self, region, useDefinedProjection, precision, format):
         """Reproject region values
@@ -914,41 +905,38 @@ class SbRegionExtent(SbTextItem):
                         return self._formatRegion(
                             w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres
                         )
-                    else:
-                        w, s = coord1
-                        e, n = coord2
-                        ewres, nsres = coord3
-                        return self._formatRegion(
-                            w=w,
-                            s=s,
-                            e=e,
-                            n=n,
-                            ewres=ewres,
-                            nsres=nsres,
-                            precision=precision,
-                        )
-                else:
-                    raise SbException(_("Error in projection (check the settings)"))
+                    w, s = coord1
+                    e, n = coord2
+                    ewres, nsres = coord3
+                    return self._formatRegion(
+                        w=w,
+                        s=s,
+                        e=e,
+                        n=n,
+                        ewres=ewres,
+                        nsres=nsres,
+                        precision=precision,
+                    )
+                raise SbException(_("Error in projection (check the settings)"))
 
+        elif self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
+            w, s = utils.Deg2DMS(
+                region["w"], region["s"], string=False, precision=precision
+            )
+            e, n = utils.Deg2DMS(
+                region["e"], region["n"], string=False, precision=precision
+            )
+            ewres, nsres = utils.Deg2DMS(
+                region["ewres"], region["nsres"], string=False, precision=precision
+            )
+            return self._formatRegion(w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres)
         else:
-            if self.mapFrame.GetMap().projinfo["proj"] == "ll" and format == "DMS":
-                w, s = utils.Deg2DMS(
-                    region["w"], region["s"], string=False, precision=precision
-                )
-                e, n = utils.Deg2DMS(
-                    region["e"], region["n"], string=False, precision=precision
-                )
-                ewres, nsres = utils.Deg2DMS(
-                    region["ewres"], region["nsres"], string=False, precision=precision
-                )
-                return self._formatRegion(w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres)
-            else:
-                w, s = region["w"], region["s"]
-                e, n = region["e"], region["n"]
-                ewres, nsres = region["ewres"], region["nsres"]
-                return self._formatRegion(
-                    w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres, precision=precision
-                )
+            w, s = region["w"], region["s"]
+            e, n = region["e"], region["n"]
+            ewres, nsres = region["ewres"], region["nsres"]
+            return self._formatRegion(
+                w=w, s=s, e=e, n=n, ewres=ewres, nsres=nsres, precision=precision
+            )
 
 
 class SbCompRegionExtent(SbRegionExtent):
@@ -976,8 +964,7 @@ class SbCompRegionExtent(SbRegionExtent):
                 precision,
                 nsres,
             )
-        else:
-            return "%s - %s, %s - %s (%s, %s)" % (w, e, s, n, ewres, nsres)
+        return "%s - %s, %s - %s (%s, %s)" % (w, e, s, n, ewres, nsres)
 
     def _getRegion(self):
         """Returns computational region."""

@@ -23,14 +23,11 @@ def get_pyplot(to_file):
     The *to_file* parameter can be set to True to avoid tkinter dependency
     if the interactive show method is not needed.
     """
-    import matplotlib  # pylint: disable=import-outside-toplevel
+    import matplotlib as mpl  # pylint: disable=import-outside-toplevel
 
-    if to_file:
-        backend = "agg"
-    else:
-        backend = None
+    backend = "agg" if to_file else None
     if backend:
-        matplotlib.use(backend)
+        mpl.use(backend)
 
     import matplotlib.pyplot as plt  # pylint: disable=import-outside-toplevel
 
@@ -124,10 +121,7 @@ def num_cells_plot(results, filename=None, title=None, show_resolution=False):
 
     x_ticks = set()
     for result in results:
-        if show_resolution:
-            x = result.resolutions
-        else:
-            x = result.cells
+        x = result.resolutions if show_resolution else result.cells
         x_ticks.update(x)
         plt.plot(x, result.times, label=result.label)
         if hasattr(result, "all_times"):

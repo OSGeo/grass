@@ -221,9 +221,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
 
         self.Bind(aui.EVT_AUI_PANE_CLOSE, self.OnPlotPaneClosed)
 
-        dlgSize = (-1, 400)
-        # self.SetBestSize(dlgSize)
-        # self.SetInitialSize(dlgSize)
         self.SetAutoLayout(1)
         # fix goutput's pane size (required for Mac OSX)
         # if self.gwindow:
@@ -249,7 +246,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
             x = int(round(x))
             y = int(round(y))
             coords = True
-        except:
+        except TypeError:
             coords = False
 
         pane = self._getPane(scatt_id)
@@ -330,8 +327,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         return name
 
     def _getScatterPlotName(self, i):
-        name = "scatter plot %d" % i
-        return name
+        return "scatter plot %d" % i
 
     def NewScatterPlot(self, scatt_id, transpose):
         # TODO needs to be resolved (should be in this class)
@@ -572,11 +568,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         item = menu.Append(wx.ID_ANY, _("Change opacity level"))
         self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, item)
 
-        if showed:
-            text = _("Hide")
-        else:
-            text = _("Show")
-
+        text = _("Hide") if showed else _("Show")
         item = menu.Append(wx.ID_ANY, text)
         self.Bind(
             wx.EVT_MENU,
@@ -682,7 +674,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         name = cat_attrs["name"]
 
         dlg = SetOpacityDialog(
-            self, opacity=value, title=_("Change opacity of class <%s>" % name)
+            self, opacity=value, title=_("Change opacity of class <%s>") % name
         )
 
         dlg.applyOpacity.connect(

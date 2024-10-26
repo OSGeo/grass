@@ -191,7 +191,7 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
         fatal(_("Fetching data failed"))
 
     ofile = open(fname)
-    result = [tuple(x.rstrip(os.linesep).split(args["sep"])) for x in ofile.readlines()]
+    result = [tuple(x.rstrip(os.linesep).split(args["sep"])) for x in ofile]
     ofile.close()
     try_remove(fname)
 
@@ -229,8 +229,7 @@ def db_table_in_vector(table, mapset=".", env=None):
                 break
     if len(used) > 0:
         return used
-    else:
-        return None
+    return None
 
 
 def db_begin_transaction(driver):

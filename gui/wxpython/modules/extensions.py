@@ -84,8 +84,7 @@ class InstallExtensionWindow(wx.Frame):
         task = gtask.parse_interface("g.extension")
         ignoreFlags = ["l", "c", "g", "a", "f", "t", "help", "quiet"]
         if sys.platform == "win32":
-            ignoreFlags.append("d")
-            ignoreFlags.append("i")
+            ignoreFlags.extend(("d", "i"))
 
         for f in task.get_options()["flags"]:
             name = f.get("name", "")
@@ -357,11 +356,7 @@ class ExtensionTreeModelBuilder:
     def Load(self, url, full=True):
         """Load list of extensions"""
         self._emptyTree()
-
-        if full:
-            flags = "g"
-        else:
-            flags = "l"
+        flags = "g" if full else "l"
         retcode, ret, msg = RunCommand(
             "g.extension", read=True, getErrorMsg=True, url=url, flags=flags, quiet=True
         )
@@ -386,9 +381,8 @@ class ExtensionTreeModelBuilder:
                     mainNode = self.mainNodes[self._expandPrefix(prefix)]
                     currentNode = self.model.AppendNode(parent=mainNode, label=value)
                     currentNode.data = {"command": value}
-                else:
-                    if currentNode is not None:
-                        currentNode.data[key] = value
+                elif currentNode is not None:
+                    currentNode.data[key] = value
             else:
                 try:
                     prefix, name = line.strip().split(".", 1)

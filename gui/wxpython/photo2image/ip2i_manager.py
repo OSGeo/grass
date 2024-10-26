@@ -35,7 +35,7 @@ import wx
 from wx.lib.mixins.listctrl import ColumnSorterMixin, ListCtrlAutoWidthMixin
 import wx.lib.colourselect as csel
 
-import grass.script as grass
+import grass.script as gs
 
 from core import utils, globalvar
 from core.render import Map
@@ -59,9 +59,7 @@ from gui_core.wrap import (
 #
 # global variables
 #
-global src_map
-global tgt_map
-global maptype
+global src_map, tgt_map, maptype
 
 src_map = ""
 tgt_map = ""
@@ -95,9 +93,7 @@ class GCPWizard:
     def __init__(
         self, parent, giface, group, raster, raster1, camera, order, extension
     ):
-        global maptype
-        global src_map
-        global tgt_map
+        global maptype, src_map, tgt_map
         maptype = "raster"
         rendertype = "raster"
         self.parent = parent  # GMFrame
@@ -113,7 +109,7 @@ class GCPWizard:
         #
         # get environmental variables
         #
-        self.grassdatabase = grass.gisenv()["GISDBASE"]
+        self.grassdatabase = gs.gisenv()["GISDBASE"]
 
         #
         # read original environment settings
@@ -122,8 +118,8 @@ class GCPWizard:
         self.source_gisrc = os.environ["GISRC"]
         self.gisrc_dict = {}
         try:
-            f = open(self.target_gisrc, "r")
-            for line in f.readlines():
+            f = open(self.target_gisrc)
+            for line in f:
                 line = line.replace("\n", "").strip()
                 if len(line) < 1:
                     continue
@@ -167,7 +163,7 @@ class GCPWizard:
             if p.returncode == 0:
                 print("returncode = ", str(p.returncode))
                 self.Map.region = self.Map.GetRegion()
-        except:
+        except Exception:
             pass
 
         self.SwitchEnv("source")
@@ -433,7 +429,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         import re
 
         try:
-            fc = open(self.file["camera"], mode="r")
+            fc = open(self.file["camera"])
             fc_count = 0
             for line in fc:
                 fc_count += 1
@@ -442,7 +438,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     numberOfFiducial = int(line.split()[-1])
             dataFiducialX = []
             dataFiducialY = []
-            fc = open(self.file["camera"], mode="r")
+            fc = open(self.file["camera"])
             fc_count = 0
             for line in fc:
                 fc_count += 1
@@ -600,7 +596,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         """Disable GCP manager mode"""
         # leaving the method here but was used only to delete gcpmanagement
         # from layer manager which is now not needed
-        pass
 
     def CreateGCPList(self):
         """Create GCP List Control"""
@@ -630,7 +625,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         # initialize column sorter
         self.itemDataMap = self.mapcoordlist
         ncols = self.list.GetColumnCount()
-        ColumnSorterMixin.__init__(self, ncols)
+        ColumnSorterMixin.__init__(self, ncols)  # noqa: PLC2801, C2801
         # init to ascending sort on first click
         self._colSortFlag = [1] * ncols
 
@@ -802,11 +797,8 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         else:
             item.SetPropertyVal("hide", False)
             if self.highest_only:
-                if itemIndex == self.highest_key:
-                    wxPen = "highest"
-                else:
-                    wxPen = "default"
-            else:
+                wxPen = "highest" if itemIndex == self.highest_key else "default"
+            else:  # noqa: PLR5501
                 if self.mapcoordlist[key][5] > self.rmsthresh:
                     wxPen = "highest"
                 else:
@@ -960,10 +952,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(parent=self, message=_("target mapwin not defined"))
 
         try:
-            f = open(self.file["points"], "r")
+            f = open(self.file["points"])
             GCPcnt = 0
 
-            for line in f.readlines():
+            for line in f:
                 if line[0] == "#" or line == "":
                     continue
                 line = line.replace("\n", "").strip()
@@ -1047,10 +1039,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         pass
 
     def _onMouseLeftUpPointer(self, mapWindow, x, y):
-        if mapWindow == self.SrcMapWindow:
-            coordtype = "source"
-        else:
-            coordtype = "target"
+        coordtype = "source" if mapWindow == self.SrcMapWindow else "target"
 
         coord = (x, y)
         self.SetGCPData(coordtype, coord, self, confirm=True)
@@ -1107,27 +1096,22 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         if maptype == "raster":
             self.grwiz.SwitchEnv("source")
 
-            if self.clip_to_region:
-                flags = "ac"
-            else:
-                flags = "a"
+            flags = "ac" if self.clip_to_region else "a"
 
-            busy = wx.BusyInfo(_("Rectifying images, please wait..."), parent=self)
-            wx.GetApp().Yield()
+            with wx.BusyInfo(_("Rectifying images, please wait..."), parent=self):
+                wx.GetApp().Yield()
 
-            ret, msg = RunCommand(
-                "i.rectify",
-                parent=self,
-                getErrorMsg=True,
-                quiet=True,
-                group=self.xygroup,
-                extension=self.extension,
-                order=self.gr_order,
-                method=self.gr_method,
-                flags=flags,
-            )
-
-            del busy
+                ret, msg = RunCommand(
+                    "i.rectify",
+                    parent=self,
+                    getErrorMsg=True,
+                    quiet=True,
+                    group=self.xygroup,
+                    extension=self.extension,
+                    order=self.gr_order,
+                    method=self.gr_method,
+                    flags=flags,
+                )
 
             # provide feedback on failure
             if ret != 0:
@@ -1135,21 +1119,19 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 print(self.grwiz.src_map, file=sys.stderr)
                 print(msg, file=sys.stderr)
 
-            busy = wx.BusyInfo(
+            with wx.BusyInfo(
                 _("Writing output image to group, please wait..."), parent=self
-            )
-            wx.GetApp().Yield()
+            ):
+                wx.GetApp().Yield()
 
-            ret1, msg1 = RunCommand(
-                "i.group",
-                parent=self,
-                getErrorMsg=True,
-                quiet=False,
-                group=self.xygroup,
-                input="".join([self.grwiz.src_map.split("@")[0], self.extension]),
-            )
-
-            del busy
+                ret1, msg1 = RunCommand(
+                    "i.group",
+                    parent=self,
+                    getErrorMsg=True,
+                    quiet=False,
+                    group=self.xygroup,
+                    input="".join([self.grwiz.src_map.split("@")[0], self.extension]),
+                )
 
             if ret1 != 0:
                 print("ip2i: Error in i.group", file=sys.stderr)
@@ -1258,7 +1240,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         elif self.gr_order == 2:
             minNumOfItems = 6
-            diff = 6 - numOfItems
             # self.SetStatusText(_(
             # "Insufficient points, 6+ points needed for 2nd order"))
 
@@ -1536,7 +1517,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
     def OnZoomToSource(self, event):
         """Set target map window to match extents of source map window"""
 
-        if not self.MapWindow == self.TgtMapWindow:
+        if self.MapWindow != self.TgtMapWindow:
             self.MapWindow = self.TgtMapWindow
             self.Map = self.TgtMap
             self.UpdateActive(self.TgtMapWindow)
@@ -1549,7 +1530,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
     def OnZoomToTarget(self, event):
         """Set source map window to match extents of target map window"""
 
-        if not self.MapWindow == self.SrcMapWindow:
+        if self.MapWindow != self.SrcMapWindow:
             self.MapWindow = self.SrcMapWindow
             self.Map = self.SrcMap
             self.UpdateActive(self.SrcMapWindow)
@@ -1561,7 +1542,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
     def OnZoomMenuGCP(self, event):
         """Popup Zoom menu"""
-        point = wx.GetMousePosition()
         zoommenu = Menu()
         # Add items to the menu
 
@@ -1585,13 +1565,13 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
     def OnSize(self, event):
         """Adjust Map Windows after GCP Map Display has been resized"""
         # re-render image on idle
-        self.resize = grass.clock()
+        self.resize = gs.clock()
         super(MapPanel, self).OnSize(event)
 
     def OnIdle(self, event):
         """GCP Map Display resized, adjust Map Windows"""
         if self.GetMapToolbar():
-            if self.resize and self.resize + 0.2 < grass.clock():
+            if self.resize and self.resize + 0.2 < gs.clock():
                 srcwidth, srcheight = self.SrcMapWindow.GetSize()
                 tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
                 srcwidth = (srcwidth + tgtwidth) / 2
@@ -1606,7 +1586,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 self.resize = False
             elif self.resize:
                 event.RequestMore()
-        pass
 
 
 class GCPDisplay(FrameMixin, GCPPanel):
@@ -1977,10 +1956,14 @@ class EditGCP(wx.Dialog):
         except ValueError:
             return valuelist
 
-        valuelist.append(self.xcoord.GetValue())
-        valuelist.append(self.ycoord.GetValue())
-        valuelist.append(self.ecoord.GetValue())
-        valuelist.append(self.ncoord.GetValue())
+        valuelist.extend(
+            (
+                self.xcoord.GetValue(),
+                self.ycoord.GetValue(),
+                self.ecoord.GetValue(),
+                self.ncoord.GetValue(),
+            )
+        )
 
         return valuelist
 
@@ -2383,7 +2366,7 @@ class GrSettingsDialog(wx.Dialog):
 
         tmp_map = self.srcselection.GetValue()
 
-        if not tmp_map == "" and not tmp_map == src_map:
+        if tmp_map not in ("", src_map):
             self.new_src_map = tmp_map
 
     def OnTgtRastSelection(self, event):
@@ -2402,9 +2385,7 @@ class GrSettingsDialog(wx.Dialog):
         self.parent.extension = self.ext_txt.GetValue()
 
     def UpdateSettings(self):
-        global src_map
-        global tgt_map
-        global maptype
+        global src_map, tgt_map, maptype
 
         layers = None
 
@@ -2471,7 +2452,6 @@ class GrSettingsDialog(wx.Dialog):
 
         srcrender = False
         tgtrender = False
-        reload_target = False
         if self.new_src_map != src_map:
             # remove old layer
             layers = self.parent.grwiz.SrcMap.GetListOfLayers()
@@ -2503,7 +2483,6 @@ class GrSettingsDialog(wx.Dialog):
                 del layers[0]
                 layers = self.parent.grwiz.TgtMap.GetListOfLayers()
             # self.parent.grwiz.TgtMap.DeleteAllLayers()
-            reload_target = True
             tgt_map["raster"] = self.new_tgt_map["raster"]
 
             if tgt_map["raster"] != "":
@@ -2529,7 +2508,7 @@ class GrSettingsDialog(wx.Dialog):
                 self.parent.activemap.SetSelection(0)
                 self.parent.activemap.Enable(False)
                 self.parent.GetMapToolbar().Enable("zoommenu", enable=False)
-        else:
+        else:  # noqa: PLR5501
             if not self.parent.show_target:
                 self.parent.show_target = True
                 self.parent._mgr.GetPane("target").Show()

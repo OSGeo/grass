@@ -80,8 +80,6 @@ def _read_map_full_info(lock, conn, data):
             info = _read_raster_full_info(name, mapset)
         elif maptype == RPCDefs.TYPE_VECTOR:
             info = _read_vector_full_info(name, mapset)
-    except:
-        raise
     finally:
         conn.send(info)
 
@@ -258,11 +256,7 @@ def _get_driver_name(lock, conn, data):
     :returns: Name of the driver or None if no temporal database present
     """
     mapset = data[1]
-    if not mapset:
-        mapset = libgis.G_mapset()
-    else:
-        mapset = encode(mapset)
-
+    mapset = libgis.G_mapset() if not mapset else encode(mapset)
     drstring = libtgis.tgis_get_mapset_driver_name(mapset)
     conn.send(decode(drstring.data))
 
@@ -282,10 +276,7 @@ def _get_database_name(lock, conn, data):
     dbstring = None
     try:
         mapset = data[1]
-        if not mapset:
-            mapset = libgis.G_mapset()
-        else:
-            mapset = encode(mapset)
+        mapset = libgis.G_mapset() if not mapset else encode(mapset)
         dbstring = libtgis.tgis_get_mapset_database_name(mapset)
         dbstring = dbstring.data
 
@@ -295,8 +286,6 @@ def _get_database_name(lock, conn, data):
             dbstring = dbstring.replace(encode("$GISDBASE"), libgis.G_gisdbase())
             dbstring = dbstring.replace(encode("$LOCATION_NAME"), libgis.G_location())
             dbstring = dbstring.replace(encode("$MAPSET"), mapset)
-    except:
-        raise
     finally:
         conn.send(decode(dbstring))
 
@@ -353,8 +342,6 @@ def _available_mapsets(lock, conn, data):
         mapset_list.reverse()
         mapset_list.append(current_mapset)
         mapset_list.reverse()
-    except:
-        raise
     finally:
         conn.send(mapset_list)
 
@@ -387,8 +374,6 @@ def _has_timestamp(lock, conn, data):
         elif maptype == RPCDefs.TYPE_RASTER3D:
             if libgis.G_has_raster3d_timestamp(name, mapset) == 1:
                 check = True
-    except:
-        raise
     finally:
         conn.send(check)
 
@@ -437,8 +422,6 @@ def _read_timestamp(lock, conn, data):
             check = libgis.G_read_raster3d_timestamp(name, mapset, byref(ts))
 
         dates = _convert_timestamp_from_grass(ts)
-    except:
-        raise
     finally:
         conn.send((check, dates))
 
@@ -472,7 +455,9 @@ def _write_timestamp(lock, conn, data):
         check = libgis.G_scan_timestamp(byref(ts), timestring)
 
         if check != 1:
-            logging.error("Unable to convert the timestamp: " + timestring)
+            logging.error(
+                "Unable to convert the timestamp: {timestring}", timestring=timestring
+            )
             return -2
 
         if maptype == RPCDefs.TYPE_RASTER:
@@ -481,8 +466,6 @@ def _write_timestamp(lock, conn, data):
             check = libgis.G_write_vector_timestamp(name, layer, byref(ts))
         elif maptype == RPCDefs.TYPE_RASTER3D:
             check = libgis.G_write_raster3d_timestamp(name, byref(ts))
-    except:
-        raise
     finally:
         conn.send(check)
 
@@ -518,8 +501,6 @@ def _remove_timestamp(lock, conn, data):
             check = libgis.G_remove_vector_timestamp(name, layer, mapset)
         elif maptype == RPCDefs.TYPE_RASTER3D:
             check = libgis.G_remove_raster3d_timestamp(name, mapset)
-    except:
-        raise
     finally:
         conn.send(check)
 
@@ -555,11 +536,10 @@ def _read_semantic_label(lock, conn, data):
                 semantic_label = decode(ret)
         else:
             logging.error(
-                "Unable to read semantic label. Unsupported map type %s" % maptype
+                "Unable to read semantic label. Unsupported map type {maptype}",
+                maptype=maptype,
             )
             return -1
-    except:
-        raise
     finally:
         conn.send(semantic_label)
 
@@ -592,11 +572,10 @@ def _write_semantic_label(lock, conn, data):
             libraster.Rast_write_semantic_label(name, semantic_label)
         else:
             logging.error(
-                "Unable to write semantic label. Unsupported map type %s" % maptype
+                "Unable to write semantic label. Unsupported map type {maptype}",
+                maptype=maptype,
             )
             return -2
-    except:
-        raise
     finally:
         conn.send(True)
 
@@ -626,11 +605,10 @@ def _remove_semantic_label(lock, conn, data):
             check = libgis.G_remove_misc("cell_misc", "semantic_label", name)
         else:
             logging.error(
-                "Unable to remove semantic label. Unsupported map type %s" % maptype
+                "Unable to remove semantic label. Unsupported map type {maptype}",
+                maptype=maptype,
             )
             return -2
-    except:
-        raise
     finally:
         conn.send(check)
 
@@ -663,8 +641,6 @@ def _map_exists(lock, conn, data):
 
         if mapset:
             check = True
-    except:
-        raise
     finally:
         conn.send(check)
 
@@ -691,8 +667,6 @@ def _read_map_info(lock, conn, data):
             kvp = _read_vector_info(name, mapset)
         elif maptype == RPCDefs.TYPE_RASTER3D:
             kvp = _read_raster3d_info(name, mapset)
-    except:
-        raise
     finally:
         conn.send(kvp)
 
@@ -834,7 +808,7 @@ def _read_raster3d_info(name, mapset):
     )
 
     if not g3map:
-        logging.error(_("Unable to open 3D raster map <%s>" % (name)))
+        logging.error(_("Unable to open 3D raster map <%s>"), (name))
         return None
 
     maptype = libraster3d.Rast3d_file_type_map(g3map)
@@ -849,7 +823,7 @@ def _read_raster3d_info(name, mapset):
     max = libgis.DCELL()
     ret = libraster3d.Rast3d_range_load(g3map)
     if not ret:
-        logging.error(_("Unable to load range of 3D raster map <%s>" % (name)))
+        logging.error(_("Unable to load range of 3D raster map <%s>"), (name))
         return None
     libraster3d.Rast3d_range_min_max(g3map, byref(min), byref(max))
 
@@ -863,7 +837,7 @@ def _read_raster3d_info(name, mapset):
         kvp["max"] = float(max.value)
 
     if not libraster3d.Rast3d_close(g3map):
-        logging.error(_("Unable to close 3D raster map <%s>" % (name)))
+        logging.error(_("Unable to close 3D raster map <%s>"), (name))
         return None
 
     return kvp
@@ -906,10 +880,8 @@ def _read_vector_info(name, mapset):
         with_topo = False
         if libvector.Vect_open_old2(byref(Map), name, mapset, "1") < 1:
             logging.error(
-                _(
-                    "Unable to open vector map <%s>"
-                    % (libvector.Vect_get_full_name(byref(Map)))
-                )
+                _("Unable to open vector map <%s>"),
+                (libvector.Vect_get_full_name(byref(Map))),
             )
             return None
 
@@ -1001,8 +973,6 @@ def _read_map_history(lock, conn, data):
             kvp = _read_vector_history(name, mapset)
         elif maptype == RPCDefs.TYPE_RASTER3D:
             kvp = _read_raster3d_history(name, mapset)
-    except:
-        raise
     finally:
         conn.send(kvp)
 
@@ -1034,13 +1004,12 @@ def _read_raster_history(name, mapset):
     if ret < 0:
         logging.warning(_("Unable to read history file"))
         return None
-    else:
-        kvp["creation_time"] = decode(
-            libraster.Rast_get_history(byref(hist), libraster.HIST_MAPID)
-        )
-        kvp["creator"] = decode(
-            libraster.Rast_get_history(byref(hist), libraster.HIST_CREATOR)
-        )
+    kvp["creation_time"] = decode(
+        libraster.Rast_get_history(byref(hist), libraster.HIST_MAPID)
+    )
+    kvp["creator"] = decode(
+        libraster.Rast_get_history(byref(hist), libraster.HIST_CREATOR)
+    )
 
     return kvp
 
@@ -1072,13 +1041,12 @@ def _read_raster3d_history(name, mapset):
     if ret < 0:
         logging.warning(_("Unable to read history file"))
         return None
-    else:
-        kvp["creation_time"] = decode(
-            libraster.Rast_get_history(byref(hist), libraster3d.HIST_MAPID)
-        )
-        kvp["creator"] = decode(
-            libraster.Rast_get_history(byref(hist), libraster3d.HIST_CREATOR)
-        )
+    kvp["creation_time"] = decode(
+        libraster.Rast_get_history(byref(hist), libraster3d.HIST_MAPID)
+    )
+    kvp["creator"] = decode(
+        libraster.Rast_get_history(byref(hist), libraster3d.HIST_CREATOR)
+    )
 
     return kvp
 
@@ -1110,7 +1078,7 @@ def _read_vector_history(name, mapset):
         kvp["creation_time"] = decode(libvector.Vect_get_map_date(byref(Map)))
         kvp["creator"] = decode(libvector.Vect_get_person(byref(Map)))
     else:
-        None
+        kvp = None
     libvector.Vect_close(byref(Map))
 
     return kvp
@@ -1165,43 +1133,42 @@ def _convert_timestamp_from_grass(ts):
         # ATTENTION: We ignore the time zone
         # TODO: Write time zone support
         return (pdt1, pdt2)
-    else:
-        unit = None
-        start = None
-        end = None
-        if count.value >= 1:
-            if dt1.year > 0:
-                unit = "years"
-                start = dt1.year
-            elif dt1.month > 0:
-                unit = "months"
-                start = dt1.month
-            elif dt1.day > 0:
-                unit = "days"
-                start = dt1.day
-            elif dt1.hour > 0:
-                unit = "hours"
-                start = dt1.hour
-            elif dt1.minute > 0:
-                unit = "minutes"
-                start = dt1.minute
-            elif dt1.second > 0:
-                unit = "seconds"
-                start = dt1.second
-        if count.value == 2:
-            if dt2.year > 0:
-                end = dt2.year
-            elif dt2.month > 0:
-                end = dt2.month
-            elif dt2.day > 0:
-                end = dt2.day
-            elif dt2.hour > 0:
-                end = dt2.hour
-            elif dt2.minute > 0:
-                end = dt2.minute
-            elif dt2.second > 0:
-                end = dt2.second
-        return (start, end, unit)
+    unit = None
+    start = None
+    end = None
+    if count.value >= 1:
+        if dt1.year > 0:
+            unit = "years"
+            start = dt1.year
+        elif dt1.month > 0:
+            unit = "months"
+            start = dt1.month
+        elif dt1.day > 0:
+            unit = "days"
+            start = dt1.day
+        elif dt1.hour > 0:
+            unit = "hours"
+            start = dt1.hour
+        elif dt1.minute > 0:
+            unit = "minutes"
+            start = dt1.minute
+        elif dt1.second > 0:
+            unit = "seconds"
+            start = dt1.second
+    if count.value == 2:
+        if dt2.year > 0:
+            end = dt2.year
+        elif dt2.month > 0:
+            end = dt2.month
+        elif dt2.day > 0:
+            end = dt2.day
+        elif dt2.hour > 0:
+            end = dt2.hour
+        elif dt2.minute > 0:
+            end = dt2.minute
+        elif dt2.second > 0:
+            end = dt2.second
+    return (start, end, unit)
 
 
 ###############################################################################

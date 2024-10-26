@@ -25,7 +25,7 @@
 
 #define SVG_NS       "http://www.w3.org/2000/svg"
 #define XLINK_NS     "http://www.w3.org/1999/xlink"
-#define GRASS_NS     "http:/grass.itc.it/2006/gg"
+#define GRASS_NS     "http://grass.itc.it/2006/gg"
 #define RADIUS_SCALE .003
 #define WIDTH_SCALE  .001
 #define G_Areas      "G_Areas"

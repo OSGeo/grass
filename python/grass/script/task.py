@@ -21,14 +21,14 @@ for details.
 import os
 import re
 import sys
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 from xml.parsers import expat
 
 from grass.exceptions import ScriptError
 from .utils import decode, split
 from .core import Popen, PIPE, get_real_command
 
-ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
+ETREE_EXCEPTIONS = (ET.ParseError, expat.ExpatError)
 
 
 class grassTask:
@@ -63,7 +63,7 @@ class grassTask:
         if path is not None:
             try:
                 processTask(
-                    tree=etree.fromstring(get_interface_description(path)), task=self
+                    tree=ET.fromstring(get_interface_description(path)), task=self
                 )
             except ScriptError as e:
                 self.errorMsg = e.value
@@ -90,8 +90,7 @@ class grassTask:
             name, ext = os.path.splitext(self.name)
             if ext in {".py", ".sh"}:
                 return name
-            else:
-                return self.name
+            return self.name
 
         return self.name
 
@@ -103,10 +102,8 @@ class grassTask:
         if self.label:
             if full:
                 return self.label + " " + self.description
-            else:
-                return self.label
-        else:
-            return self.description
+            return self.label
+        return self.description
 
     def get_keywords(self):
         """Get module's keywords"""
@@ -148,9 +145,8 @@ class grassTask:
             if isinstance(val, (list, tuple)):
                 if value in val:
                     return p
-            else:
-                if p[element] == value:
-                    return p
+            elif p[element] == value:
+                return p
 
         if raiseError:
             raise ValueError(
@@ -248,11 +244,7 @@ class grassTask:
 
     def has_required(self):
         """Check if command has at least one required parameter"""
-        for p in self.params:
-            if p.get("required", False):
-                return True
-
-        return False
+        return any(p.get("required", False) for p in self.params)
 
     def set_param(self, aParam, aValue, element="value"):
         """Set param value/values."""
@@ -353,14 +345,8 @@ class processTask:
                 for ki in node_key_desc.findall("item"):
                     key_desc.append(ki.text)
 
-            if p.get("multiple", "no") == "yes":
-                multiple = True
-            else:
-                multiple = False
-            if p.get("required", "no") == "yes":
-                required = True
-            else:
-                required = False
+            multiple = p.get("multiple", "no") == "yes"
+            required = p.get("required", "no") == "yes"
 
             if (
                 self.task.blackList["enabled"]
@@ -429,8 +415,7 @@ class processTask:
         """Get node text"""
         p = node.find(tag)
         if p is not None:
-            res = " ".join(p.text.split())
-            return res
+            return " ".join(p.text.split())
 
         return default
 
@@ -448,15 +433,12 @@ def convert_xml_to_utf8(xml_text):
     m = re.match(pattern, xml_text)
     if m is None:
         return xml_text.encode("utf-8") if xml_text else None
-    #
     enc = m.groups()[0]
 
     # modify: change the encoding to "utf-8", for correct parsing
     xml_text_utf8 = xml_text.decode(enc.decode("ascii")).encode("utf-8")
     p = re.compile(b'encoding="' + enc + b'"', re.IGNORECASE)
-    xml_text_utf8 = p.sub(b'encoding="utf-8"', xml_text_utf8)
-
-    return xml_text_utf8
+    return p.sub(b'encoding="utf-8"', xml_text_utf8)
 
 
 def get_interface_description(cmd):
@@ -509,13 +491,12 @@ def get_interface_description(cmd):
         )
 
     desc = convert_xml_to_utf8(cmdout)
-    desc = desc.replace(
+    return desc.replace(
         b"grass-interface.dtd",
         os.path.join(os.getenv("GISBASE"), "gui", "xml", "grass-interface.dtd").encode(
             "utf-8"
         ),
     )
-    return desc
 
 
 def parse_interface(name, parser=processTask, blackList=None):
@@ -529,7 +510,7 @@ def parse_interface(name, parser=processTask, blackList=None):
     :param blackList:
     """
     try:
-        tree = etree.fromstring(get_interface_description(name))
+        tree = ET.fromstring(get_interface_description(name))
     except ETREE_EXCEPTIONS as error:
         raise ScriptError(
             _("Cannot parse interface description of<{name}> module: {error}").format(

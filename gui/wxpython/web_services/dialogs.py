@@ -25,7 +25,7 @@ import shutil
 
 from copy import deepcopy
 
-import grass.script as grass
+import grass.script as gs
 from grass.script.task import cmdlist_to_tuple, cmdtuple_to_list
 
 from core import globalvar
@@ -331,7 +331,6 @@ class WSDialogBase(wx.Dialog):
 
     def OnClose(self, event):
         """Close the dialog"""
-        """Close dialog"""
         if not self.IsModal():
             self.Destroy()
         event.Skip()
@@ -378,7 +377,7 @@ class WSDialogBase(wx.Dialog):
             self.Fit()
 
         self.statusbar.SetStatusText(
-            _("Connecting to <%s>..." % self.server.GetValue().strip())
+            _("Connecting to <$s>...") % self.server.GetValue().strip()
         )
 
         # number of panels already connected
@@ -464,14 +463,14 @@ class WSDialogBase(wx.Dialog):
             )
             self._showWsPanel(self.web_service_sel[self.choose_ws_rb.GetSelection()])
             self.statusbar.SetStatusText(
-                _("Connected to <%s>" % self.server.GetValue().strip())
+                _("Connected to <%s>") % self.server.GetValue().strip()
             )
             for btn in self.run_btns:
                 btn.Enable(True)
         # no web service found on server
         else:
             self.statusbar.SetStatusText(
-                _("Unable to connect to <%s>" % self.server.GetValue().strip())
+                _("Unable to connect to <%s>") % self.server.GetValue().strip()
             )
             for btn in self.run_btns:
                 btn.Enable(False)
@@ -587,7 +586,7 @@ class AddWSDialog(WSDialogBase):
         active_ws = self.active_ws_panel.GetWebService()
         if "WMS" not in active_ws:
             cap_file = self.active_ws_panel.GetCapFile()
-            cmd_cap_file = grass.tempfile()
+            cmd_cap_file = gs.tempfile()
             shutil.copyfile(cap_file, cmd_cap_file)
             lcmd.append("capfile=" + cmd_cap_file)
 
@@ -668,7 +667,7 @@ class WSPropertiesDialog(WSDialogBase):
                 self.revert_ws_cap_files[ws] = cmd[1]["capfile"]
                 del ws_cap_files[ws]
             else:
-                self.revert_ws_cap_files[ws] = grass.tempfile()
+                self.revert_ws_cap_files[ws] = gs.tempfile()
 
         self._setRevertCapFiles(ws_cap_files)
 
@@ -677,11 +676,11 @@ class WSPropertiesDialog(WSDialogBase):
 
     def __del__(self):
         for f in self.revert_ws_cap_files.values():
-            grass.try_remove(f)
+            gs.try_remove(f)
 
     def _setRevertCapFiles(self, ws_cap_files):
         for ws, f in ws_cap_files.items():
-            if os.path.isfile(ws_cap_files[ws]):
+            if os.path.isfile(f):
                 shutil.copyfile(f, self.revert_ws_cap_files[ws])
             else:
                 # delete file content
@@ -865,7 +864,7 @@ class SaveWMSLayerDialog(wx.Dialog):
         self.params["output"] = Select(
             parent=self,
             type="raster",
-            mapsets=[grass.gisenv()["MAPSET"]],
+            mapsets=[gs.gisenv()["MAPSET"]],
             size=globalvar.DIALOG_GSELECT_SIZE,
         )
 
@@ -1012,7 +1011,7 @@ class SaveWMSLayerDialog(wx.Dialog):
     def OnSave(self, event):
         """Import WMS raster data into GRASS as raster layer."""
         self.thread.abort(abortall=True)
-        currmapset = grass.gisenv()["MAPSET"]
+        currmapset = gs.gisenv()["MAPSET"]
 
         self.output = self.params["output"].GetValue().strip()
         l_spl = self.output.strip().split("@")
@@ -1027,9 +1026,9 @@ class SaveWMSLayerDialog(wx.Dialog):
 
         elif (
             not self.overwrite.IsChecked()
-            and grass.find_file(self.output, "cell", ".")["fullname"]
+            and gs.find_file(self.output, "cell", ".")["fullname"]
         ):
-            msg = _("Output map <%s> already exists" % self.output)
+            msg = _("Output map <%s> already exists") % self.output
 
         if msg:
             GMessage(parent=self, message=msg)
@@ -1046,9 +1045,9 @@ class SaveWMSLayerDialog(wx.Dialog):
             reg_mapset = reg_spl[1]
 
         if self.region_types["named"].GetValue():
-            if not grass.find_file(reg_spl[0], "windows", reg_mapset)["fullname"]:
-                msg = _(
-                    "Region <%s> does not exist." % self.params["region"].GetValue()
+            if not gs.find_file(reg_spl[0], "windows", reg_mapset)["fullname"]:
+                msg = (
+                    _("Region <%s> does not exist.") % self.params["region"].GetValue()
                 )
                 GWarning(parent=self, message=msg)
                 return

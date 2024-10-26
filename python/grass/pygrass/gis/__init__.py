@@ -162,8 +162,7 @@ class Gisdbase:
         """
         if location in self.locations():
             return Location(location, self.name)
-        else:
-            raise KeyError("Location: %s does not exist" % location)
+        raise KeyError("Location: %s does not exist" % location)
 
     def __iter__(self):
         for loc in self.locations():
@@ -234,8 +233,7 @@ class Location:
     def __getitem__(self, mapset):
         if mapset in self.mapsets():
             return Mapset(mapset)
-        else:
-            raise KeyError("Mapset: %s does not exist" % mapset)
+        raise KeyError("Mapset: %s does not exist" % mapset)
 
     def __iter__(self):
         lpath = self.path()
@@ -271,7 +269,7 @@ class Location:
             [...]
 
         """
-        mapsets = [mapset for mapset in self]
+        mapsets = [mapset for mapset in self]  # noqa: C416
         if permissions:
             mapsets = [
                 mapset
@@ -430,7 +428,7 @@ class VisibleMapset:
     def read(self):
         """Return the mapsets in the search path"""
         try:
-            with open(self.spath, "r") as f:
+            with open(self.spath) as f:
                 lines = f.readlines()
                 if lines:
                     return [line.strip() for line in lines]

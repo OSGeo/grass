@@ -45,7 +45,7 @@ from gui_core.wrap import (
     StaticBox,
 )
 
-import grass.script as grass
+import grass.script as gs
 
 
 class SQLBuilder(wx.Frame):
@@ -67,9 +67,9 @@ class SQLBuilder(wx.Frame):
         # variables
         self.vectmap = vectmap  # fullname
         if "@" not in self.vectmap:
-            self.vectmap = grass.find_file(self.vectmap, element="vector")["fullname"]
+            self.vectmap = gs.find_file(self.vectmap, element="vector")["fullname"]
             if not self.vectmap:
-                grass.fatal(_("Vector map <%s> not found") % vectmap)
+                gs.fatal(_("Vector map <%s> not found") % vectmap)
         self.mapname, self.mapset = self.vectmap.split("@", 1)
 
         # db info
@@ -356,11 +356,10 @@ class SQLBuilder(wx.Frame):
 
     def OnUniqueValues(self, event, justsample=False):
         """Get unique values"""
-        vals = []
         try:
             idx = self.list_columns.GetSelections()[0]
             column = self.list_columns.GetString(idx)
-        except:
+        except IndexError:
             self.list_values.Clear()
             return
 
@@ -371,7 +370,7 @@ class SQLBuilder(wx.Frame):
         )
         if justsample:
             sql += " LIMIT {}".format(255)
-        data = grass.db_select(
+        data = gs.db_select(
             sql=sql, database=self.database, driver=self.driver, sep="{_sep_}"
         )
         if not data:
@@ -415,12 +414,6 @@ class SQLBuilder(wx.Frame):
 
         idx = selection[0]
         value = self.list_values.GetString(idx)
-        idx = self.list_columns.GetSelections()[0]
-        column = self.list_columns.GetString(idx)
-
-        ctype = self.dbInfo.GetTableDesc(self.dbInfo.GetTable(self.layer))[column][
-            "type"
-        ]
 
         self._add(element="value", value=value)
 
@@ -454,7 +447,7 @@ class SQLBuilder(wx.Frame):
         elif self.btn_arithmeticpanel and self.btn_arithmeticpanel.IsShown():
             btns = self.btn_arithmetic
 
-        for key, value in btns.items():
+        for value in btns.values():
             if event.GetId() == value[1]:
                 mark = value[0]
                 break
@@ -581,10 +574,7 @@ class SQLBuilderSelect(SQLBuilder):
                 idx1 = len("select")
                 idx2 = sqlstr.lower().find("from")
                 colstr = sqlstr[idx1:idx2].strip()
-                if colstr == "*":
-                    cols = []
-                else:
-                    cols = colstr.split(",")
+                cols = [] if colstr == "*" else colstr.split(",")
                 if value in cols:
                     cols.remove(value)
                 else:
@@ -929,10 +919,7 @@ if __name__ == "__main__":
         print(__doc__, file=sys.stderr)
         sys.exit()
 
-    if len(sys.argv) == 3:
-        layer = 1
-    else:
-        layer = int(sys.argv[3])
+    layer = 1 if len(sys.argv) == 3 else int(sys.argv[3])
 
     if sys.argv[1] == "select":
         sqlBuilder = SQLBuilderSelect

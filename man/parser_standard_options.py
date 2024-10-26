@@ -47,8 +47,7 @@ def parse_options(lines, startswith="Opt"):
         index = line.index("=")
         key = line[:index].strip()
         default = line[index + 1 :].strip()
-        if default.startswith("_("):
-            default = default[2:]
+        default = default.removeprefix("_(")
         return key, default
 
     def parse_glines(glines):
@@ -72,18 +71,17 @@ def parse_options(lines, startswith="Opt"):
                 res[key] = [
                     default,
                 ]
-            else:
-                if key is not None:
-                    if key not in res:
-                        res[key] = []
-                    start, end = 0, -1
-                    if line.startswith("_("):
-                        start = 2
-                    if line.endswith(");"):
-                        end = -3
-                    elif line.endswith(";"):
-                        end = -2
-                    res[key].append(line[start:end])
+            elif key is not None:
+                if key not in res:
+                    res[key] = []
+                start, end = 0, -1
+                if line.startswith("_("):
+                    start = 2
+                if line.endswith(");"):
+                    end = -3
+                elif line.endswith(";"):
+                    end = -2
+                res[key].append(line[start:end])
         # pprint(glines)
         # pprint(res)
         return res
@@ -116,7 +114,7 @@ def parse_options(lines, startswith="Opt"):
 class OptTable:
     def __init__(self, list_of_dict):
         self.options = list_of_dict
-        self.columns = sorted(set([key for _, d in self.options for key in d.keys()]))
+        self.columns = sorted({key for _, d in self.options for key in d.keys()})
 
     def csv(self, delimiter=";", endline="\n"):
         """Return a CSV string with the options"""
@@ -138,22 +136,22 @@ class OptTable:
         """Return a HTML table with the options"""
         html = ["<table{0}>".format(" " + toptions if toptions else "")]
         # write headers
-        html.append(indent + "<thead>")
-        html.append(indent + "<tr>")
-        html.append(indent * 2 + "<th>{0}</th>".format("option"))
+        html.extend(
+            (
+                indent + "<thead>",
+                indent + "<tr>",
+                indent * 2 + "<th>{0}</th>".format("option"),
+            )
+        )
         for col in self.columns:
             html.append(indent * 2 + "<th>{0}</th>".format(col))
-        html.append(indent + "</tr>")
-        html.append(indent + "</thead>")
-        html.append(indent + "<tbody>")
+        html.extend((indent + "</tr>", indent + "</thead>", indent + "<tbody>"))
         for optname, options in self.options:
-            html.append(indent + "<tr>")
-            html.append(indent * 2 + "<td>{0}</td>".format(optname))
+            html.extend((indent + "<tr>", indent * 2 + "<td>{0}</td>".format(optname)))
             for col in self.columns:
                 html.append(indent * 2 + "<td>{0}</td>".format(options.get(col, "")))
             html.append(indent + "</tr>")
-        html.append(indent + "</tbody>")
-        html.append("</table>")
+        html.extend((indent + "</tbody>", "</table>"))
         return endline.join(html)
 
     def _repr_html_(self):
@@ -218,7 +216,7 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    cfile = args.text if args.text else urlopen(args.url, proxies=None)
+    cfile = args.text or urlopen(args.url, proxies=None)
 
     options = OptTable(parse_options(cfile.readlines(), startswith=args.startswith))
     outform = args.format

@@ -27,12 +27,14 @@ import shutil
 import copy
 import tempfile
 
+from pathlib import Path
+
 import wx
 import wx.lib.colourselect as csel
 import wx.lib.scrolledpanel as scrolled
 import wx.lib.filebrowsebutton as filebrowse
 
-import grass.script as grass
+import grass.script as gs
 from grass.script.task import cmdlist_to_tuple
 
 from core import globalvar
@@ -41,7 +43,7 @@ from core.gcmd import GMessage, RunCommand, GError
 from gui_core.gselect import Select, LayerSelect, ColumnSelect, VectorDBInfo
 from core.render import Map
 from gui_core.forms import GUI
-from core.debug import Debug as Debug
+from core.debug import Debug
 from gui_core.widgets import ColorTablesComboBox
 from gui_core.wrap import (
     SpinCtrl,
@@ -316,12 +318,14 @@ class RulesPanel:
                             int, self.ruleslines[item][self.attributeType].split(":")
                         )
                     except ValueError as e:
-                        message = _("Bad color format. Use color format '0:0:0'")
+                        message = (
+                            _("Bad color format '%s'. Use color format '0:0:0'") % e
+                        )
                     self.mainPanel.FindWindowById(item + 2000).SetValue((r, g, b))
                 else:
                     value = float(self.ruleslines[item][self.attributeType])
                     self.mainPanel.FindWindowById(item + 2000).SetValue(value)
-            except:
+            except Exception:
                 continue
 
         if message:
@@ -403,12 +407,11 @@ class ColorTable(wx.Frame):
                 layer = sel
             else:
                 layer = self.layerTree.FindItemByData(key="type", value=self.mapType)
-        except:
+        except (AttributeError, TypeError):
             layer = None
         if layer:
             mapLayer = self.layerTree.GetLayerInfo(layer, key="maplayer")
             name = mapLayer.GetName()
-            type = mapLayer.GetType()
             self.selectionInput.SetValue(name)
             self.inmap = name
 
@@ -448,7 +451,7 @@ class ColorTable(wx.Frame):
             dialogTitle=_("Choose file to load color table"),
             buttonText=_("Load"),
             toolTip=_("Type filename or click to choose file and load color table"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_OPEN,
             changeCallback=self.OnLoadRulesFile,
         )
@@ -460,7 +463,7 @@ class ColorTable(wx.Frame):
             dialogTitle=_("Choose file to save color table"),
             toolTip=_("Type filename or click to choose file and save color table"),
             buttonText=_("Save"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_SAVE,
             changeCallback=self.OnSaveRulesFile,
         )
@@ -698,7 +701,7 @@ class ColorTable(wx.Frame):
 
         self.rulesPanel.Clear()
 
-        fd = open(path, "r")
+        fd = open(path)
         self.ReadColorTable(ctable=fd.read())
         fd.close()
 
@@ -713,7 +716,7 @@ class ColorTable(wx.Frame):
         minim = maxim = count = 0
         for line in ctable.splitlines():
             try:
-                value, color = map(lambda x: x.strip(), line.split(" "))
+                value, color = (x.strip() for x in line.split(" "))
             except ValueError:
                 GMessage(parent=self, message=_("Invalid color table format"))
                 self.rulesPanel.Clear()
@@ -772,7 +775,7 @@ class ColorTable(wx.Frame):
 
         self.ReadColorTable(ctable=ctable)
 
-    def CreateColorTable(self, tmp=False):
+    def CreateColorTable(self, tmp=False) -> bool:
         """Creates color table
 
         :return: True on success
@@ -822,10 +825,7 @@ class ColorTable(wx.Frame):
 
         cmd = cmdlist_to_tuple(cmd)
         ret = RunCommand(cmd[0], **cmd[1])
-        if ret != 0:
-            return False
-
-        return True
+        return bool(ret == 0)
 
     def DoPreview(self, ltype, cmdlist):
         """Update preview (based on computational region)"""
@@ -941,7 +941,7 @@ class RasterColorTable(ColorTable):
         self.saveRules.SetValue("")
 
         if self.inmap:
-            if not grass.find_file(name=self.inmap, element="cell")["file"]:
+            if not gs.find_file(name=self.inmap, element="cell")["file"]:
                 self.inmap = None
 
         if not self.inmap:
@@ -956,7 +956,7 @@ class RasterColorTable(ColorTable):
             self.LoadTable()
             return
 
-        info = grass.raster_info(map=self.inmap)
+        info = gs.raster_info(map=self.inmap)
 
         if info:
             self.properties["min"] = info["min"]
@@ -977,10 +977,7 @@ class RasterColorTable(ColorTable):
             self.cr_label.SetLabel(_("Enter raster category values or percents"))
             return
 
-        if info["datatype"] == "CELL":
-            mapRange = _("range")
-        else:
-            mapRange = _("fp range")
+        mapRange = _("range") if info["datatype"] == "CELL" else _("fp range")
         self.cr_label.SetLabel(
             _("Enter raster category values or percents (%(range)s = %(min)d-%(max)d)")
             % {
@@ -1013,15 +1010,15 @@ class RasterColorTable(ColorTable):
             name, mapset = self.inmap.split("@")
         except ValueError:
             name = self.inmap
-            mapset = grass.find_file(self.inmap, element="cell")["mapset"]
+            mapset = gs.find_file(self.inmap, element="cell")["mapset"]
             if not mapset:
                 return
         self._tmp = tmp
         self._old_colrtable = None
-        if mapset == grass.gisenv()["MAPSET"]:
-            self._old_colrtable = grass.find_file(name=name, element="colr")["file"]
+        if mapset == gs.gisenv()["MAPSET"]:
+            self._old_colrtable = gs.find_file(name=name, element="colr")["file"]
         else:
-            self._old_colrtable = grass.find_file(name=name, element="colr2/" + mapset)[
+            self._old_colrtable = gs.find_file(name=name, element="colr2/" + mapset)[
                 "file"
             ]
 
@@ -1055,7 +1052,7 @@ class VectorColorTable(ColorTable):
         self.mapType = "vector"
         self.attributeType = attributeType  # color, size, width
         # in version 7 v.colors used, otherwise color column only
-        self.version7 = int(grass.version()["version"].split(".")[0]) >= 7
+        self.version7 = int(gs.version()["version"].split(".")[0]) >= 7
         self.colorTable = False
         self.updateColumn = True
         # vector properties
@@ -1241,15 +1238,12 @@ class VectorColorTable(ColorTable):
         else:
             self.cp.SetLabel(_("Import or export color table"))
 
-    def CheckMapset(self):
+    def CheckMapset(self) -> bool:
         """Check if current vector is in current mapset"""
-        if (
-            grass.find_file(name=self.inmap, element="vector")["mapset"]
-            == grass.gisenv()["MAPSET"]
-        ):
-            return True
-        else:
-            return False
+        return bool(
+            gs.find_file(name=self.inmap, element="vector")["mapset"]
+            == gs.gisenv()["MAPSET"]
+        )
 
     def NoConnection(self, vectorName):
         dlg = wx.MessageDialog(
@@ -1320,7 +1314,7 @@ class VectorColorTable(ColorTable):
             self.saveRules.SetValue("")
 
         if self.inmap:
-            if not grass.find_file(name=self.inmap, element="vector")["file"]:
+            if not gs.find_file(name=self.inmap, element="vector")["file"]:
                 self.inmap = None
 
         self.UpdateDialog()
@@ -1338,7 +1332,7 @@ class VectorColorTable(ColorTable):
                 message = _(
                     "Selected map <%(map)s> is not in current mapset <%(mapset)s>. "
                     "Attribute table cannot be edited."
-                ) % {"map": self.inmap, "mapset": grass.gisenv()["MAPSET"]}
+                ) % {"map": self.inmap, "mapset": gs.gisenv()["MAPSET"]}
                 wx.CallAfter(GMessage, parent=self, message=message)
                 self.DisableClearAll()
                 return
@@ -1412,11 +1406,8 @@ class VectorColorTable(ColorTable):
             idx += 1
             self.properties["tmpColumn"] = name + "_" + str(idx)
 
-        if self.version7:
-            modul = "v.db.addcolumn"
-        else:
-            modul = "v.db.addcol"
-        ret = RunCommand(
+        modul = "v.db.addcolumn" if self.version7 else "v.db.addcol"
+        RunCommand(
             modul,
             parent=self,
             map=self.inmap,
@@ -1430,11 +1421,8 @@ class VectorColorTable(ColorTable):
             return
 
         if self.inmap:
-            if self.version7:
-                modul = "v.db.dropcolumn"
-            else:
-                modul = "v.db.dropcol"
-            ret = RunCommand(
+            modul = "v.db.dropcolumn" if self.version7 else "v.db.dropcol"
+            RunCommand(
                 modul,
                 map=self.inmap,
                 layer=self.properties["layer"],
@@ -1455,10 +1443,7 @@ class VectorColorTable(ColorTable):
         self.sourceColumn.SetValue("cat")
         self.properties["sourceColumn"] = self.sourceColumn.GetValue()
 
-        if self.attributeType == "color":
-            type = ["character"]
-        else:
-            type = ["integer"]
+        type = ["character"] if self.attributeType == "color" else ["integer"]
         self.fromColumn.InsertColumns(
             vector=self.inmap,
             layer=vlayer,
@@ -1505,11 +1490,8 @@ class VectorColorTable(ColorTable):
             self.columnsProp[self.attributeType]["name"]
             not in self.fromColumn.GetColumns()
         ):
-            if self.version7:
-                modul = "v.db.addcolumn"
-            else:
-                modul = "v.db.addcol"
-            ret = RunCommand(
+            modul = "v.db.addcolumn" if self.version7 else "v.db.addcol"
+            RunCommand(
                 modul,
                 map=self.inmap,
                 layer=self.properties["layer"],
@@ -1695,7 +1677,7 @@ class VectorColorTable(ColorTable):
                 )
             else:
                 self.cr_label.SetLabel(_("Enter vector attribute values %s:") % range)
-        else:
+        else:  # noqa: PLR5501
             if self.colorTable:
                 self.cr_label.SetLabel(_("Enter vector attribute values or percents:"))
             else:
@@ -1732,17 +1714,17 @@ class VectorColorTable(ColorTable):
             name, mapset = self.inmap.split("@")
         except ValueError:
             name = self.inmap
-            mapset = grass.find_file(self.inmap, element="cell")["mapset"]
+            mapset = gs.find_file(self.inmap, element="cell")["mapset"]
             if not mapset:
                 return
 
         old_colrtable = None
-        if mapset == grass.gisenv()["MAPSET"]:
-            old_colrtable = grass.find_file(
+        if mapset == gs.gisenv()["MAPSET"]:
+            old_colrtable = gs.find_file(
                 name="colr", element=os.path.join("vector", name)
             )["file"]
         else:
-            old_colrtable = grass.find_file(
+            old_colrtable = gs.find_file(
                 name=name, element=os.path.join("vcolr2", mapset)
             )["file"]
 
@@ -1809,11 +1791,10 @@ class VectorColorTable(ColorTable):
         """Create color rules (color table or color column)"""
         if self.colorTable:
             ret = ColorTable.CreateColorTable(self)
+        elif self.updateColumn:
+            ret = self.UpdateColorColumn(tmp)
         else:
-            if self.updateColumn:
-                ret = self.UpdateColorColumn(tmp)
-            else:
-                ret = True
+            ret = True
 
         return ret
 
@@ -1901,12 +1882,12 @@ class VectorColorTable(ColorTable):
         ]
         for widget in widgets:
             if bind is True:
-                getattr(widget["widget"], "Bind")(
+                widget["widget"].Bind(
                     widget["event"],
                     widget["handler"],
                 )
             else:
-                getattr(widget["widget"], "Unbind")(widget["event"])
+                widget["widget"].Unbind(widget["event"])
 
 
 class ThematicVectorTable(VectorColorTable):
@@ -1939,17 +1920,13 @@ class ThematicVectorTable(VectorColorTable):
         value = None
         if self.properties["storeColumn"]:
             value = self.properties["storeColumn"]
+        if self.colorTable:
+            value = None
 
-        if not self.colorTable:
-            if self.attributeType == "color":
-                data["vector"][self.vectorType]["thematic"]["rgbcolumn"] = value
-            else:
-                data["vector"][self.vectorType]["thematic"]["sizecolumn"] = value
+        if self.attributeType == "color":
+            data["vector"][self.vectorType]["thematic"]["rgbcolumn"] = value
         else:
-            if self.attributeType == "color":
-                data["vector"][self.vectorType]["thematic"]["rgbcolumn"] = None
-            else:
-                data["vector"][self.vectorType]["thematic"]["sizecolumn"] = None
+            data["vector"][self.vectorType]["thematic"]["sizecolumn"] = value
 
         data["vector"][self.vectorType]["thematic"]["update"] = None
 

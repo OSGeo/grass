@@ -24,6 +24,8 @@
 #include <grass/spawn.h>
 #include "orthophoto.h"
 
+#define BUF_SIZE 99
+
 int main(int argc, char **argv)
 {
     char *p;
@@ -33,7 +35,8 @@ int main(int argc, char **argv)
     char *desc_ortho_opt;
     char *moduletorun;
     const char *grname;
-    char tosystem[99];
+    char tosystem[BUF_SIZE] = "";
+    size_t len;
 
     /* initialize grass */
     G_gisinit(argv[0]);
@@ -82,8 +85,10 @@ int main(int argc, char **argv)
     /* group validity check */
 
     /*----------------------*/
-    strncpy(group.name, group_opt->answer, 99);
-    group.name[99] = '\0';
+    len = G_strlcpy(group.name, group_opt->answer, BUF_SIZE);
+    if (len >= BUF_SIZE) {
+        G_fatal_error(_("Name <%s> is too long"), group_opt->answer);
+    }
     /* strip off mapset if it's there: I_() fns only work with current mapset */
     if ((p = strchr(group.name, '@')))
         *p = 0;
@@ -96,26 +101,26 @@ int main(int argc, char **argv)
     moduletorun = ortho_opt->answer;
     /* run the program chosen */
     if (strcmp(moduletorun, "g.gui.photo2image") == 0) {
-        strcpy(tosystem, "g.gui.photo2image");
+        (void)G_strlcpy(tosystem, "g.gui.photo2image", BUF_SIZE);
         return system((const char *)tosystem);
     }
     else if (strcmp(moduletorun, "g.gui.image2target") == 0) {
-        strcpy(tosystem, "g.gui.image2target");
+        (void)G_strlcpy(tosystem, "g.gui.image2target", BUF_SIZE);
         return system((const char *)tosystem);
     }
     else {
         if (strcmp(moduletorun, "i.group") == 0)
-            strcpy(tosystem, "i.group --ui group=");
+            (void)G_strlcpy(tosystem, "i.group --ui group=", BUF_SIZE);
         if (strcmp(moduletorun, "i.ortho.target") == 0)
-            strcpy(tosystem, "i.ortho.target --ui group=");
+            (void)G_strlcpy(tosystem, "i.ortho.target --ui group=", BUF_SIZE);
         if (strcmp(moduletorun, "i.ortho.elev") == 0)
-            strcpy(tosystem, "i.ortho.elev --ui group=");
+            (void)G_strlcpy(tosystem, "i.ortho.elev --ui group=", BUF_SIZE);
         if (strcmp(moduletorun, "i.ortho.camera") == 0)
-            strcpy(tosystem, "i.ortho.camera --ui group=");
+            (void)G_strlcpy(tosystem, "i.ortho.camera --ui group=", BUF_SIZE);
         if (strcmp(moduletorun, "i.ortho.init") == 0)
-            strcpy(tosystem, "i.ortho.init --ui group=");
+            (void)G_strlcpy(tosystem, "i.ortho.init --ui group=", BUF_SIZE);
         if (strcmp(moduletorun, "i.ortho.rectify") == 0)
-            strcpy(tosystem, "i.ortho.rectify --ui group=");
+            (void)G_strlcpy(tosystem, "i.ortho.rectify --ui group=", BUF_SIZE);
         strcat(tosystem, grname);
         return system((const char *)tosystem);
     }
