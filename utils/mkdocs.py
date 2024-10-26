@@ -4,8 +4,8 @@ import sys
 import os
 import json
 import subprocess
-import urlparse
 import re
+import urllib.parse as urlparse
 from http import HTTPStatus
 from pathlib import Path
 from datetime import datetime
