@@ -1751,7 +1751,7 @@ class RasterLegend(InstructionObject):
 
             rinfo = gs.raster_info(raster)
             if rinfo["datatype"] in {"DCELL", "FCELL"}:
-                minim, maxim = rinfo["min"], rinfo["max"]
+                maxim = rinfo["max"]
                 rows = ceil(maxim / cols)
             else:
                 cat = (

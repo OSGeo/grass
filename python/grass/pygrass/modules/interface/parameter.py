@@ -337,10 +337,7 @@ class Parameter:
         ..
         """
         if hasattr(self, "values"):
-            if self.isrange:
-                vals = self.isrange
-            else:
-                vals = ", ".join([repr(val) for val in self.values])
+            vals = self.isrange or ", ".join([repr(val) for val in self.values])
         else:
             vals = False
         if self.keydescvalues:

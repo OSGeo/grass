@@ -76,6 +76,7 @@ import shutil
 import atexit
 import grass.script as gs
 import zipfile as zfile
+from grass.exceptions import CalledModuleError
 
 
 tmpl1sec = """BYTEORDER M
@@ -177,10 +178,7 @@ def main():
         infile = infile[:-4]
     (fdir, tile) = os.path.split(infile)
 
-    if not output:
-        tileout = tile
-    else:
-        tileout = output
+    tileout = output or tile
 
     if ".hgt" in input:
         suff = ".hgt"
@@ -230,7 +228,7 @@ def main():
         try:
             zf = zfile.ZipFile(zipfile)
             zf.extractall()
-        except:
+        except (zfile.BadZipfile, zfile.LargeZipFile, PermissionError):
             gs.fatal(_("Unable to unzip file."))
 
     gs.message(_("Converting input file to BIL..."))
@@ -277,7 +275,7 @@ def main():
 
     try:
         gs.run_command("r.in.gdal", input=bilfile, out=tileout)
-    except:
+    except CalledModuleError:
         gs.fatal(_("Unable to import data"))
 
     # nice color table

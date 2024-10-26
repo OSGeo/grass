@@ -131,7 +131,6 @@ ignore = [
     "E722",    # bare-except
     "E731",    # lambda-assignment
     "E741",    # ambiguous-variable-name
-    "F401",    # unused-import
     "F403",    # undefined-local-with-import-star
     "F405",    # undefined-local-with-import-star-usage
     "F811",    # redefined-while-unused
@@ -239,7 +238,6 @@ ignore = [
     "S608",    # hardcoded-sql-expression
     "SIM102",  # collapsible-if
     "SIM105",  # suppressible-exception
-    "SIM108",  # if-else-block-instead-of-if-exp
     "SIM113",  # enumerate-for-loop
     "SIM116",  # if-else-block-instead-of-dict-lookup
     "SIM118",  # in-dict-keys
@@ -316,7 +314,9 @@ ignore = [
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
 "python/grass/pydispatch/signal.py" = ["A005"]
 "python/grass/pygrass/modules/grid/grid.py" = ["SIM115"]
+"python/grass/pygrass/modules/grid/testsuite/test_*_modules_grid_doctests.py" = ["F401"]
 "python/grass/pygrass/modules/interface/env.py" = ["SIM115"]
+"python/grass/pygrass/modules/testsuite/test_pygrass_modules_doctests.py" = ["F401"]
 "python/grass/pygrass/raster/segment.py" = ["SIM115"]
 "python/grass/pygrass/tests/*.py" = ["SIM115"]
 "python/grass/pygrass/vector/geometry.py" = ["PYI024"]
@@ -361,7 +361,7 @@ ignore = [
 "temporal/t.rast.algebra/testsu*/*_algebra_arithmetic.py" = ["FLY002"]
 "temporal/t.rast.colors/t.rast.colors.py" = ["SIM115"]
 "temporal/t.rast.series/t.rast.series.py" = ["SIM115"]
-"temporal/t.rast.what/t.rast.what.py" = ["E265", "E266", "SIM115"]
+"temporal/t.rast.what/t.rast.what.py" = ["SIM115"]
 "temporal/t.register/testsu*/*_raster_different_local.py" = ["FLY002"]
 "temporal/t.register/testsu*/*_raster_mapmetadata.py" = ["FLY002"]
 "temporal/t.register/testsuite/test_t_register_raster.py" = ["FLY002"]

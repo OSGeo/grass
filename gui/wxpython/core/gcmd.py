@@ -708,10 +708,7 @@ def RunCommand(
         kwargs["stdin"] = subprocess.PIPE
 
     # Do not change the environment, only a local copy.
-    if env:
-        env = env.copy()
-    else:
-        env = os.environ.copy()
+    env = env.copy() if env else os.environ.copy()
 
     if parent:
         env["GRASS_MESSAGE_FORMAT"] = "standard"

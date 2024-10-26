@@ -820,10 +820,7 @@ class AbstractMapDataset(AbstractDataset):
         else:
             start, end, unit = self.get_relative_time()
             new_start = start - increment
-            if end is None:
-                new_end = start + increment
-            else:
-                new_end = end + increment
+            new_end = start + increment if end is None else end + increment
 
             if update:
                 self.update_relative_time(new_start, new_end, unit, dbif=dbif)

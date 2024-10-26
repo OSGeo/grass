@@ -51,7 +51,7 @@ int db__driver_open_database(dbHandle *handle)
                 connpar.host, connpar.port, connpar.dbname, connpar.user,
                 connpar.password);
 
-        db_get_login2("mysql", name, &user, &password, &host, &port);
+        db_get_login("mysql", name, &user, &password, &host, &port);
 
         connection = mysql_init(NULL);
         res =

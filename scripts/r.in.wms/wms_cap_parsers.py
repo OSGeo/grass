@@ -500,10 +500,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
         """!Find child element.
         If the element is not found it raises xml.etree.ElementTree.ParseError.
         """
-        if not ns:
-            res = etreeElement.find(tag)
-        else:
-            res = etreeElement.find(ns(tag))
+        res = etreeElement.find(tag) if not ns else etreeElement.find(ns(tag))
 
         if res is None:
             raise ParseError(
@@ -520,10 +517,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
         """!Find all children element.
         If no element is found it raises xml.etree.ElementTree.ParseError.
         """
-        if not ns:
-            res = etreeElement.findall(tag)
-        else:
-            res = etreeElement.findall(ns(tag))
+        res = etreeElement.findall(tag) if not ns else etreeElement.findall(ns(tag))
 
         if not res:
             raise ParseError(

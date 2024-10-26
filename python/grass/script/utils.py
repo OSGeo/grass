@@ -190,10 +190,7 @@ def decode(bytes_, encoding=None):
     if isinstance(bytes_, str):
         return bytes_
     if isinstance(bytes_, bytes):
-        if encoding is None:
-            enc = _get_encoding()
-        else:
-            enc = encoding
+        enc = _get_encoding() if encoding is None else encoding
         return bytes_.decode(enc)
     # only text should be used
     raise TypeError("can only accept types str and bytes")
@@ -221,10 +218,7 @@ def encode(string, encoding=None):
     if isinstance(string, bytes):
         return string
     if isinstance(string, str):
-        if encoding is None:
-            enc = _get_encoding()
-        else:
-            enc = encoding
+        enc = _get_encoding() if encoding is None else encoding
         return string.encode(enc)
     # if something else than text
     raise TypeError("can only accept types str and bytes")
@@ -276,10 +270,7 @@ def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None):
     for line in lines:
         kv = line.split(sep, 1)
         k = decode(kv[0].strip())
-        if len(kv) > 1:
-            v = decode(kv[1].strip())
-        else:
-            v = dflt
+        v = decode(kv[1].strip()) if len(kv) > 1 else dflt
 
         if val_type:
             result[k] = val_type(v)
@@ -330,7 +321,7 @@ def split(s):
 
 
 # source:
-#    http://stackoverflow.com/questions/4836710/
+#    https://stackoverflow.com/questions/4836710/
 #    does-python-have-a-built-in-function-for-string-natural-sort/4836734#4836734
 def natural_sort(items):
     """Returns sorted list using natural sort
@@ -353,10 +344,7 @@ def naturally_sort(items, key=None):
         return int(text) if text.isdigit() else text.lower()
 
     def alphanum_key(actual_key):
-        if key:
-            sort_key = key(actual_key)
-        else:
-            sort_key = actual_key
+        sort_key = key(actual_key) if key else actual_key
         return [convert(c) for c in re.split("([0-9]+)", sort_key)]
 
     items.sort(key=alphanum_key)
