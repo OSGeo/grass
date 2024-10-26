@@ -38,7 +38,6 @@ IDXSRC = full_index index topics keywords graphical_index manual_gallery class_g
 
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
-# TODO: rename to INDICES_MD
 IDXSRC_MD = full_index index topics keywords graphical_index manual_gallery parser_standard_options $(IDXCATS)
 INDICES_MD := $(patsubst %,$(MDDIR)/source/%.md,$(IDXSRC_MD))
 
