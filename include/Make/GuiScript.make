@@ -8,10 +8,8 @@ include $(MODULE_TOPDIR)/include/Make/ScriptRules.make
 include $(MODULE_TOPDIR)/include/Make/HtmlRules.make
 
 MODULES  := $(patsubst g.gui.%.py,%,$(wildcard g.gui.*.py))
-### to be removed
 CMDHTML  := $(patsubst %,$(HTMLDIR)/g.gui.%.html,$(MODULES))
 GUIHTML  := $(patsubst %,$(HTMLDIR)/wxGUI.%.html,$(MODULES))
-###
 CMDMAN := $(patsubst %,$(MDDIR)/source/g.gui.%.md,$(MODULES))
 GUIMAN  := $(patsubst %,$(MDDIR)/source/wxGUI.%.md,$(MODULES))
 ifdef MINGW

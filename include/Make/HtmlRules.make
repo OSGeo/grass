@@ -3,7 +3,6 @@
 
 htmldesc = $(call run_grass,$(1) --html-description < /dev/null | grep -v '</body>\|</html>\|</div> <!-- end container -->' > $(2))
 
-# TODO: mode to MarkdownRules.make (?)
 mddesc = $(call run_grass,$(1) --md-description < /dev/null > $(2))
 
 IMGSRC := $(wildcard *.png) $(wildcard *.jpg) $(wildcard *.gif)

@@ -43,7 +43,6 @@ void usage_rest_md(bool rest)
     struct Option *opt;
     struct Flag *flag;
     const char *type;
-    /* char *header = NULL; */
     int new_prompt = 0;
 
     new_prompt = G__uses_new_gisprompt();
@@ -61,43 +60,9 @@ void usage_rest_md(bool rest)
     G__print_keywords(stdout, NULL, FALSE);
     fprintf(stdout, "\n---\n\n");
 
-    /* main header
-    G_asprintf(&header, "%s - GRASS GIS manual", st->pgm_name);
-    if (rest) {
-        size_t s;
-        fprintf(stdout, "%s\n", header);
-        for (s = 0; s < strlen(header); s++) {
-            fprintf(stdout, "=");
-        }
-        fprintf(stdout, "\n");
-    }
-    else {
-        fprintf(stdout, "# %s\n", header);
-    }
-    fprintf(stdout, "\n");
-    */
-
-    /* GRASS GIS logo
-    if (rest) {
-        fprintf(stdout, ".. image:: grass_logo.png\n");
-        fprintf(stdout, "   :align: center\n");
-        fprintf(stdout, "   :alt: GRASS logo\n");
-    }
-    else {
-        fprintf(stdout, "![GRASS logo](./grass_logo.png)\n");
-    }
-    */
-
     /* main header */
     if (!rest)
         fprintf(stdout, "# %s\n\n", st->pgm_name);
-
-    /* horizontal line
-    fprintf(stdout, "\n---");
-    if (rest)
-        fprintf(stdout, "-");
-    fprintf(stdout, "\n\n");
-    */
 
     /* header - GRASS module */
     if (!rest)

@@ -7,7 +7,6 @@ $(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC) $(IMGDST)  | $(HTMLDIR)
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) MODULE_TOPDIR=$(MODULE_TOPDIR) \
         $(PYTHON) $(GISBASE)/utils/mkhtml.py $* > $@
 
-# TODO: mode to Markdown.make (?)
 $(MDDIR)/source/%.md: %.md %.tmp.md $(HTMLSRC) $(IMGDST_MD) | $(MDDIR)
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) MODULE_TOPDIR=$(MODULE_TOPDIR) \
         $(PYTHON) $(GISBASE)/utils/mkmarkdown.py $* > $@
@@ -18,7 +17,6 @@ $(MANDIR)/%.$(MANSECT): $(HTMLDIR)/%.html
 %.tmp.html: $(HTMLSRC)
 	if [ "$(HTMLSRC)" != "" ] ; then $(call htmldesc,$<,$@) ; fi
 
-# TODO: mode to Markdown.make (?)
 %.tmp.md: $(HTMLSRC)
 	if [ "$(HTMLSRC)" != "" ] ; then $(call mddesc,$<,$@) ; fi
 
