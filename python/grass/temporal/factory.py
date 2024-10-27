@@ -1,21 +1,12 @@
 """
 Object factory
 
-Usage:
-
-.. code-block:: python
-
-    import grass.temporal as tgis
-
-    tgis.register_maps_in_space_time_dataset(type, name, maps)
-
-
-(C) 2012-2013 by the GRASS Development Team
+(C) 2012-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-:authors: Soeren Gebbert
+:authors: Soeren Gebbert, Edouard Choinière
 """
 
 from __future__ import annotations
