@@ -54,7 +54,7 @@ def message_server(lock, conn):
 
     The that is end through the pipe must be a list of values:
 
-    - Messages: ["INFO|VERBOSE|WARNING|ERROR|FATAL", "MESSAGE"]
+    - Messages: ["INFO|IMPORTANT|VERBOSE|WARNING|ERROR|FATAL", "MESSAGE"]
     - Debug:    ["DEBUG", level, "MESSAGE"]
     - Percent:  ["PERCENT", n, d, s]
 
