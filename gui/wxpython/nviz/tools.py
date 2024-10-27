@@ -3368,11 +3368,11 @@ class NvizToolWindow(GNotebook):
 
     def OnSetRaster(self, event):
         """Raster map selected, update surface page"""
+        surface = "surface"
         name = event.GetString()
-        try:
-            data = self._getLayerPropertiesByName(name, mapType="raster")["surface"]
-        except TypeError:
-            self.EnablePage("surface", False)
+        data = self._getLayerPropertiesByName(name, mapType="raster")
+        if not data or not data.get(surface):
+            self.EnablePage(surface, False)
             return
 
         layer = self._getMapLayerByName(name, mapType="raster")
