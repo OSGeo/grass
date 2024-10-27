@@ -68,32 +68,6 @@ def dataset_factory(type: Literal["vect", "vector"], id: str) -> VectorDataset:
     pass
 
 
-@overload
-def dataset_factory(
-    type: Literal[
-        "strds",
-        "str3ds",
-        "stvds",
-        "rast",
-        "raster",
-        "raster_3d",
-        "rast3d",
-        "raster3d",
-        "vect",
-        "vector",
-    ],
-    id: str,
-) -> (
-    SpaceTimeRasterDataset
-    | SpaceTimeRaster3DDataset
-    | SpaceTimeVectorDataset
-    | RasterDataset
-    | Raster3DDataset
-    | VectorDataset
-):
-    pass
-
-
 def dataset_factory(
     type: str, id: str
 ) -> (
