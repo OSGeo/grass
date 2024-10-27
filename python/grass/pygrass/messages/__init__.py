@@ -338,7 +338,7 @@ def get_msgr(
     ],
     *args,
     **kwargs,
-):
+) -> Messenger:
     """Return a Messenger instance.
 
        :returns: the Messenger instance.
