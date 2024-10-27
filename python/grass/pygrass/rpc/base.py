@@ -32,7 +32,8 @@ def dummy_server(lock: _LockLike, conn: Connection) -> NoReturn:
     """Dummy server process
 
     :param lock: A multiprocessing.Lock
-    :param conn: A multiprocessing.Connection object obtained from multiprocessing.Pipe
+    :param conn: A multiprocessing.connection.Connection object obtained from
+                 multiprocessing.Pipe
     """
 
     while True:
