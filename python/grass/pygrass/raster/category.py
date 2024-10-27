@@ -189,7 +189,7 @@ class Category(list):
             return None
         if err == 0:
             raise GrassError(_("Null value detected"))
-        elif err == -1:
+        if err == -1:
             raise GrassError(_("Error executing: Rast_set_cat"))
 
     def __del__(self):
