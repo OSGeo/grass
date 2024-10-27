@@ -12,13 +12,14 @@ for details.
 
 from __future__ import annotations
 
-from grass.exceptions import FatalError
-import time
-import threading
-import sys
-from multiprocessing import Process, Lock, Pipe
 import logging
+import sys
+import threading
+import time
+from multiprocessing import Lock, Pipe, Process
 from typing import TYPE_CHECKING, NoReturn
+
+from grass.exceptions import FatalError
 
 if TYPE_CHECKING:
     from multiprocessing.connection import Connection
