@@ -2,7 +2,7 @@
 Fast and exit-safe interface to PyGRASS Raster and Vector layer
 using multiprocessing
 
-(C) 2015 by the GRASS Development Team
+(C) 2015-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
