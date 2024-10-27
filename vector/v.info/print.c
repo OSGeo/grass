@@ -208,29 +208,22 @@ void print_columns(struct Map_info *Map, const char *input_opt,
     driver = db_start_driver(fi->driver);
     if (driver == NULL) {
         Vect_close(Map);
-        const char *driver_name = fi->driver;
-        Vect_destroy_field_info(fi);
-        G_fatal_error(_("Unable to open driver <%s>"), driver_name);
+        G_fatal_error(_("Unable to open driver <%s>"), fi->driver);
     }
     db_init_handle(&handle);
     db_set_handle(&handle, fi->database, NULL);
     if (db_open_database(driver, &handle) != DB_OK) {
-        const char *database_name = fi->database;
-        const char *driver_name = fi->driver;
-        Vect_destroy_field_info(fi);
         db_shutdown_driver(driver);
         Vect_close(Map);
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-                      database_name, driver_name);
+                      fi->database, fi->driver);
     }
     db_init_string(&table_name);
     db_set_string(&table_name, fi->table);
     if (db_describe_table(driver, &table_name, &table) != DB_OK) {
-        const char *table_name = fi->table;
-        Vect_destroy_field_info(fi);
         db_close_database_shutdown_driver(driver);
         Vect_close(Map);
-        G_fatal_error(_("Unable to describe table <%s>"), table_name);
+        G_fatal_error(_("Unable to describe table <%s>"), fi->table);
     }
 
     JSON_Value *root_value = NULL, *columns_value = NULL, *column_value = NULL;
@@ -286,7 +279,6 @@ void print_columns(struct Map_info *Map, const char *input_opt,
         serialized_string = json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             json_value_free(root_value);
-            Vect_destroy_field_info(fi);
             db_close_database_shutdown_driver(driver);
             Vect_close(Map);
             G_fatal_error(_("Failed to initialize pretty JSON string."));
