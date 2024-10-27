@@ -11,17 +11,18 @@ for details.
 """
 
 import sys
-from multiprocessing import Process, Lock, Pipe
 from ctypes import CFUNCTYPE, c_void_p
+from multiprocessing import Lock, Pipe, Process
 
+import grass.lib.gis as libgis
 from grass.exceptions import FatalError
+from grass.pygrass import utils
+from grass.pygrass.gis.region import Region
+from grass.pygrass.raster import RasterRow, raster2numpy_img
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.basic import Bbox
-from grass.pygrass.raster import RasterRow, raster2numpy_img
-import grass.lib.gis as libgis
+
 from .base import RPCServerBase
-from grass.pygrass.gis.region import Region
-from grass.pygrass import utils
 
 ###############################################################################
 ###############################################################################
@@ -461,6 +462,7 @@ class DataProvider(RPCServerBase):
 
 if __name__ == "__main__":
     import doctest
+
     from grass.pygrass.modules import Module
 
     Module("g.region", n=40, s=0, e=40, w=0, res=10)
