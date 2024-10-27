@@ -20,6 +20,8 @@ for details.
 
 from __future__ import annotations
 
+from typing import Literal, overload
+
 from .core import get_tgis_message_interface
 from .space_time_datasets import (
     Raster3DDataset,
@@ -33,8 +35,53 @@ from .space_time_datasets import (
 ###############################################################################
 
 
+@overload
+def dataset_factory(type: Literal["strds"], id: str) -> SpaceTimeRasterDataset:
+    pass
+
+
+@overload
+def dataset_factory(type: Literal["str3ds"], id: str) -> SpaceTimeRaster3DDataset:
+    pass
+
+
+@overload
+def dataset_factory(type: Literal["stvds"], id: str) -> SpaceTimeVectorDataset:
+    pass
+
+
+@overload
+def dataset_factory(type: Literal["rast", "raster"], id: str) -> RasterDataset:
+    pass
+
+
+@overload
 def dataset_factory(
-    type: str, id: str
+    type: Literal["raster_3d", "rast3d", "raster3d"],
+    id: str,
+) -> Raster3DDataset:
+    pass
+
+
+@overload
+def dataset_factory(type: Literal["vect", "vector"], id: str) -> VectorDataset:
+    pass
+
+
+def dataset_factory(
+    type: Literal[
+        "strds",
+        "str3ds",
+        "stvds",
+        "rast",
+        "raster",
+        "raster_3d",
+        "rast3d",
+        "raster3d",
+        "vect",
+        "vector",
+    ],
+    id: str,
 ) -> (
     SpaceTimeRasterDataset
     | SpaceTimeRaster3DDataset
