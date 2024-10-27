@@ -75,7 +75,7 @@ def dataset_factory(
 
 
 def dataset_factory(
-    type: str, id: str
+    type: str, id: str | None
 ) -> (
     SpaceTimeRasterDataset
     | SpaceTimeRaster3DDataset
