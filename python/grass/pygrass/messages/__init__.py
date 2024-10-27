@@ -15,10 +15,9 @@ for details.
 """
 
 import sys
-from multiprocessing import Process, Lock, Pipe
+from multiprocessing import Lock, Pipe, Process
 
 import grass.lib.gis as libgis
-
 from grass.exceptions import FatalError
 
 
