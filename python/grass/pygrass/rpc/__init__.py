@@ -234,9 +234,8 @@ def data_provider_server(lock, conn):
         # Avoid busy waiting
         conn.poll(None)
         data = conn.recv()
-        lock.acquire()
-        functions[data[0]](lock, conn, data)
-        lock.release()
+        with lock:
+            functions[data[0]](lock, conn, data)
 
 
 test_vector_name = "data_provider_vector_map"
