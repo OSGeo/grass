@@ -17,6 +17,7 @@ import sys
 from ctypes import CFUNCTYPE, POINTER, byref, c_int, c_void_p, cast
 from datetime import datetime
 from multiprocessing import Lock, Pipe, Process
+from typing import TYPE_CHECKING
 
 import grass.lib.date as libdate
 import grass.lib.gis as libgis
@@ -30,11 +31,10 @@ from grass.pygrass.rpc.base import RPCServerBase
 from grass.pygrass.utils import decode
 from grass.pygrass.vector import VectorTopo
 from grass.script.utils import encode
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from multiprocessing.synchronize import _LockLike
     from multiprocessing.connection import Connection
+    from multiprocessing.synchronize import _LockLike
 
 ###############################################################################
 
