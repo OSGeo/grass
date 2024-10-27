@@ -14,14 +14,21 @@ for details.
 @author Soeren Gebbert
 """
 
+from __future__ import annotations
+
 import sys
 from multiprocessing import Lock, Pipe, Process
+from typing import TYPE_CHECKING, Literal, NoReturn
 
 import grass.lib.gis as libgis
 from grass.exceptions import FatalError
 
+if TYPE_CHECKING:
+    from multiprocessing.connection import Connection
+    from multiprocessing.context import _LockLike
 
-def message_server(lock, conn):
+
+def message_server(lock: _LockLike, conn: Connection) -> NoReturn:
     """The GRASS message server function designed to be a target for
     multiprocessing.Process
 
@@ -165,14 +172,11 @@ class Messenger:
 
     """
 
-    def __init__(self, raise_on_error=False):
-        self.client_conn = None
-        self.server_conn = None
-        self.server = None
+    def __init__(self, raise_on_error: bool = False) -> None:
         self.raise_on_error = raise_on_error
         self.start_server()
 
-    def start_server(self):
+    def start_server(self) -> None:
         """Start the messenger server and open the pipe"""
         self.client_conn, self.server_conn = Pipe()
         self.lock = Lock()
@@ -180,7 +184,7 @@ class Messenger:
         self.server.daemon = True
         self.server.start()
 
-    def _check_restart_server(self):
+    def _check_restart_server(self) -> None:
         """Restart the server if it was terminated"""
         if self.server.is_alive() is True:
             return
@@ -189,55 +193,50 @@ class Messenger:
         self.start_server()
         self.warning("Needed to restart the messenger server")
 
-    def message(self, message):
+    def message(self, message: str) -> None:
         """Send a message to stderr
 
         :param message: the text of message
-        :type message: str
 
            G_message() will be called in the messenger server process
         """
         self._check_restart_server()
         self.client_conn.send(["INFO", message])
 
-    def verbose(self, message):
+    def verbose(self, message: str) -> None:
         """Send a verbose message to stderr
 
         :param message: the text of message
-        :type message: str
 
            G_verbose_message() will be called in the messenger server process
         """
         self._check_restart_server()
         self.client_conn.send(["VERBOSE", message])
 
-    def important(self, message):
+    def important(self, message: str) -> None:
         """Send an important message to stderr
 
         :param message: the text of message
-        :type message: str
 
            G_important_message() will be called in the messenger server process
         """
         self._check_restart_server()
         self.client_conn.send(["IMPORTANT", message])
 
-    def warning(self, message):
+    def warning(self, message: str) -> None:
         """Send a warning message to stderr
 
         :param message: the text of message
-        :type message: str
 
            G_warning() will be called in the messenger server process
         """
         self._check_restart_server()
         self.client_conn.send(["WARNING", message])
 
-    def error(self, message):
+    def error(self, message: str) -> None:
         """Send an error message to stderr
 
         :param message: the text of message
-        :type message: str
 
            G_important_message() with an additional "ERROR:" string at
            the start will be called in the messenger server process
@@ -245,11 +244,10 @@ class Messenger:
         self._check_restart_server()
         self.client_conn.send(["ERROR", message])
 
-    def fatal(self, message):
+    def fatal(self, message: str) -> NoReturn:
         """Send an error message to stderr, call sys.exit(1) or raise FatalError
 
         :param message: the text of message
-        :type message: str
 
            This function emulates the behavior of G_fatal_error(). It prints
            an error message to stderr and calls sys.exit(1). If raise_on_error
@@ -264,30 +262,27 @@ class Messenger:
             raise FatalError(message)
         sys.exit(1)
 
-    def debug(self, level, message):
+    def debug(self, level: int, message: str) -> None:
         """Send a debug message to stderr
 
         :param message: the text of message
-        :type message: str
 
            G_debug() will be called in the messenger server process
         """
         self._check_restart_server()
         self.client_conn.send(["DEBUG", level, message])
 
-    def percent(self, n, d, s):
+    def percent(self, n: int, d: int, s: int) -> None:
         """Send a percentage to stderr
 
         :param message: the text of message
-        :type message: str
-
 
            G_percent() will be called in the messenger server process
         """
         self._check_restart_server()
         self.client_conn.send(["PERCENT", n, d, s])
 
-    def stop(self):
+    def stop(self) -> None:
         """Stop the messenger server and close the pipe"""
         if self.server is not None and self.server.is_alive():
             self.client_conn.send(
@@ -300,12 +295,11 @@ class Messenger:
         if self.client_conn is not None:
             self.client_conn.close()
 
-    def set_raise_on_error(self, raise_on_error=True):
+    def set_raise_on_error(self, raise_on_error: bool = True) -> None:
         """Set the fatal error behavior
 
         :param raise_on_error: if True a FatalError exception will be
                                raised instead of calling sys.exit(1)
-        :type raise_on_error: bool
 
         - If raise_on_error == True, a FatalError exception will be raised
           if fatal() is called
@@ -315,7 +309,7 @@ class Messenger:
         """
         self.raise_on_error = raise_on_error
 
-    def get_raise_on_error(self):
+    def get_raise_on_error(self) -> bool:
         """Get the fatal error behavior
 
         :returns: True if a FatalError exception will be raised or False if
@@ -323,7 +317,7 @@ class Messenger:
         """
         return self.raise_on_error
 
-    def test_fatal_error(self, message):
+    def test_fatal_error(self, message: str) -> None:
         """Force the messenger server to call G_fatal_error()"""
         import time
 
