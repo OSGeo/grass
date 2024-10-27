@@ -33,7 +33,7 @@ def message_server(lock, conn):
     This function will use the G_* message C-functions from grass.lib.gis
     to provide an interface to the GRASS C-library messaging system.
 
-    The data that is send through the pipe must provide an
+    The data that is sent through the pipe must provide an
     identifier string to specify which C-function should be called.
 
     The following identifiers are supported:
