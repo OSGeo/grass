@@ -28,7 +28,7 @@ def message_server(lock, conn):
 
 
     :param lock: A multiprocessing.Lock
-    :param conn: A multiprocessing.Pipe
+    :param conn: A multiprocessing.Connection object obtained from multiprocessing.Pipe
 
     This function will use the G_* message C-functions from grass.lib.gis
     to provide an interface to the GRASS C-library messaging system.

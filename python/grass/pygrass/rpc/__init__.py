@@ -42,7 +42,8 @@ def _get_raster_image_as_np(lock, conn, data):
     a numpy array with RGB or Gray values.
 
     :param lock: A multiprocessing.Lock instance
-    :param conn: A multiprocessing.Pipe instance used to send True or False
+    :param conn: A multiprocessing.Connection object obtained from multiprocessing.Pipe
+                 used to send True or False
     :param data: The list of data entries [function_id, raster_name, extent, color]
     """
     array = None
@@ -88,7 +89,8 @@ def _get_vector_table_as_dict(lock, conn, data):
     """Get the table of a vector map layer as dictionary
 
     :param lock: A multiprocessing.Lock instance
-    :param conn: A multiprocessing.Pipe instance used to send True or False
+    :param conn: A multiprocessing.Connection object obtained from multiprocessing.Pipe
+                 instance used to send True or False
     :param data: The list of data entries [function_id, name, mapset, where]
 
     """
@@ -129,7 +131,8 @@ def _get_vector_features_as_wkb_list(lock, conn, data):
     point, centroid, line, boundary, area
 
     :param lock: A multiprocessing.Lock instance
-    :param conn: A multiprocessing.Pipe instance used to send True or False
+    :param conn: A multiprocessing.Connection object obtained from multiprocessing.Pipe
+                 used to send True or False
     :param data: The list of data entries [function_id,name,mapset,extent,
                                            feature_type, field]
 
@@ -197,7 +200,7 @@ def data_provider_server(lock, conn):
     multiprocessing.Process
 
     :param lock: A multiprocessing.Lock
-    :param conn: A multiprocessing.Pipe
+    :param conn: A multiprocessing.Connection object obtained from multiprocessing.Pipe
     """
 
     def error_handler(data):
