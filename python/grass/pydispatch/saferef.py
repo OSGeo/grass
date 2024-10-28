@@ -35,8 +35,7 @@ def safeRef(target, onDelete=None):
             return BoundMethodWeakref(target=target, onDelete=onDelete)
     if onDelete is not None:
         return weakref.ref(target, onDelete)
-    else:
-        return weakref.ref(target)
+    return weakref.ref(target)
 
 
 class BoundMethodWeakref:
@@ -92,11 +91,10 @@ class BoundMethodWeakref:
         if current is not None:
             current.deletionMethods.append(onDelete)
             return current
-        else:
-            base = super().__new__(cls)
-            cls._allInstances[key] = base
-            base.__init__(target, onDelete, *arguments, **named)
-            return base
+        base = super().__new__(cls)
+        cls._allInstances[key] = base
+        base.__init__(target, onDelete, *arguments, **named)
+        return base
 
     def __init__(self, target, onDelete=None):
         """Return a weak-reference-like instance for a bound method

@@ -105,8 +105,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
             raise ParseError(
                 _("Missing version attribute root node in Capabilities XML file")
             )
-        else:
-            wms_version = self.getroot().attrib["version"]
+        wms_version = self.getroot().attrib["version"]
 
         if wms_version == "1.3.0":
             self.proj_tag = "CRS"
@@ -501,10 +500,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
         """!Find child element.
         If the element is not found it raises xml.etree.ElementTree.ParseError.
         """
-        if not ns:
-            res = etreeElement.find(tag)
-        else:
-            res = etreeElement.find(ns(tag))
+        res = etreeElement.find(tag) if not ns else etreeElement.find(ns(tag))
 
         if res is None:
             raise ParseError(
@@ -521,10 +517,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
         """!Find all children element.
         If no element is found it raises xml.etree.ElementTree.ParseError.
         """
-        if not ns:
-            res = etreeElement.findall(tag)
-        else:
-            res = etreeElement.findall(ns(tag))
+        res = etreeElement.findall(tag) if not ns else etreeElement.findall(ns(tag))
 
         if not res:
             raise ParseError(

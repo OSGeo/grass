@@ -62,8 +62,7 @@ class TestRasterExtraction(TestCase):
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="df", type="strds", inputs="B")
-        self.runModule("t.remove", flags="df", type="strds", inputs="C")
+        self.runModule("t.remove", flags="df", type="strds", inputs="B,C")
 
     def test_simple(self):
         self.assertModule(

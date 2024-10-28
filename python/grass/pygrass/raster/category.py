@@ -187,9 +187,9 @@ class Category(list):
         # Manage C function Errors
         if err == 1:
             return None
-        elif err == 0:
+        if err == 0:
             raise GrassError(_("Null value detected"))
-        elif err == -1:
+        if err == -1:
             raise GrassError(_("Error executing: Rast_set_cat"))
 
     def __del__(self):
@@ -299,7 +299,7 @@ class Category(list):
 
         """
         self.reset()
-        with open(filename, "r") as f:
+        with open(filename) as f:
             for row in f:
                 cat = row.strip().split(sep)
                 if len(cat) == 2:
