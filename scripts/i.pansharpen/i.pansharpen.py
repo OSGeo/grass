@@ -524,7 +524,7 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
         pb.wait(), pg.wait(), pr.wait()
         try:
             pb.terminate(), pg.terminate(), pr.terminate()
-        except Exception:
+        except OSError:
             pass
 
     # Cleanup
@@ -702,7 +702,7 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
         pb.wait(), pg.wait(), pr.wait()
         try:
             pb.terminate(), pg.terminate(), pr.terminate()
-        except Exception:
+        except OSError:
             pass
 
     # Cleanup
