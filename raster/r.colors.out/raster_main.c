@@ -108,7 +108,7 @@ int main(int argc, char **argv)
             clr_frmt = HSV;
         }
         else {
-            clr_frmt = DEFAULT;
+            clr_frmt = XTERM;
         }
         print_json_colors(&colors, range.min, range.max, fp,
                           flag.p->answer ? 1 : 0, clr_frmt);

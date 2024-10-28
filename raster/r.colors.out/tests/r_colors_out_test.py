@@ -75,7 +75,7 @@ def validate_common_json_structure(data):
 
 
 def test_r_colors_out_json_with_default_flag(raster_color_dataset):
-    """Test r.colors.out command for JSON output format for default color option."""
+    """Test r.colors.out command for JSON output format for xterm color option."""
     session = raster_color_dataset
     data = gs.parse_command(
         "r.colors.out", map=session.raster_names, format="json", env=session.env
