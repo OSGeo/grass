@@ -67,3 +67,6 @@ lib/*/latex/
 .coverage
 .coverage.*
 coverage.xml
+lib/gis/.DS_Store
+lib/.DS_Store
+.DS_Store
