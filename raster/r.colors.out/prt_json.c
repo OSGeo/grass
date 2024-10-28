@@ -1,99 +1,242 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include <grass/parson.h>
 
+#include "local_proto.h"
+
+#define RGB_STRING_LENGTH 20
+#define HEX_STRING_LENGTH 8
+#define HSV_STRING_LENGTH 30
+
+/*!
+   \brief Converts RGB color values to HSV format.
+
+   \param r red component of the RGB color
+   \param g green component of the RGB color
+   \param b blue component of the RGB color
+   \param h pointer to store the calculated hue
+   \param s pointer to store the calculated saturation
+   \param v pointer to store the calculated value
+ */
+void rgb_to_hsv(int r, int g, int b, float *h, float *s, float *v)
+{
+    float r_norm = r / 255.0f;
+    float g_norm = g / 255.0f;
+    float b_norm = b / 255.0f;
+
+    float cmax = MAX(r_norm, MAX(g_norm, b_norm));
+    float cmin = MIN(r_norm, MIN(g_norm, b_norm));
+    float diff = cmax - cmin;
+
+    if (cmax == cmin) {
+        *h = 0;
+    }
+    else if (cmax == r_norm) {
+        *h = fmod((60.0f * ((g_norm - b_norm) / diff) + 360.0f), 360.0f);
+    }
+    else if (cmax == g_norm) {
+        *h = fmod((60.0f * ((b_norm - r_norm) / diff) + 120.0f), 360.0f);
+    }
+    else {
+        *h = fmod((60.0f * ((r_norm - g_norm) / diff) + 240.0f), 360.0f);
+    }
+
+    if (cmax == 0) {
+        *s = 0;
+    }
+    else {
+        *s = (diff / cmax) * 100.0f;
+    }
+
+    *v = cmax * 100.0f;
+}
+
+/*!
+ \brief Writes color entry in JSON in specified clr_frmt.
+
+   \param r red component of RGB color
+   \param g green component of RGB color
+   \param b blue component of RGB color
+    \param clr_frmt color format to be used (RGB, HEX, HSV, DEFAULT).
+   \param color_object pointer to the JSON object
+ */
+void set_color(int r, int g, int b, enum ColorFormat clr_frmt,
+               JSON_Object *color_object)
+{
+    switch (clr_frmt) {
+    case RGB: {
+        char rgb_string[RGB_STRING_LENGTH];
+        snprintf(rgb_string, sizeof(rgb_string), "rgb(%d, %d, %d)", r, g, b);
+        json_object_set_string(color_object, "rgb", rgb_string);
+        break;
+    }
+
+    case HEX: {
+        char hex_string[HEX_STRING_LENGTH];
+        snprintf(hex_string, sizeof(hex_string), "#%02X%02X%02X", r, g, b);
+        json_object_set_string(color_object, "hex", hex_string);
+        break;
+    }
+
+    case HSV: {
+        float h, s, v;
+        rgb_to_hsv(r, g, b, &h, &s, &v);
+        char hsv_string[HSV_STRING_LENGTH];
+        snprintf(hsv_string, sizeof(hsv_string), "hsv(%d, %d, %d)", (int)h,
+                 (int)s, (int)v);
+        json_object_set_string(color_object, "hsv", hsv_string);
+        break;
+    }
+
+    case DEFAULT: {
+        char default_rgb_string[RGB_STRING_LENGTH];
+        snprintf(default_rgb_string, sizeof(default_rgb_string), "%d:%d:%d", r,
+                 g, b);
+        json_object_set_string(color_object, "RGB", default_rgb_string);
+        break;
+    }
+    }
+}
+
+/*!
+   \brief Writes a JSON rule for a specific color entry.
+
+   \param val pointer to the DCELL value
+   \param min,max minimum and maximum value for percentage output (used only
+   when \p perc is non-zero)
+   \param r red component of RGB color
+   \param g green component of RGB color
+   \param b blue component of RGB color
+   \param root_array pointer to the JSON array
+   \param perc TRUE for percentage output
+     \param clr_frmt color format to be used (RBG, HEX, HSV, DEFAULT).
+ */
 void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g, int b,
-                     JSON_Array *root_array, int perc)
+                     JSON_Array *root_array, int perc,
+                     enum ColorFormat clr_frmt)
 {
     static DCELL v0;
     static int r0 = -1, g0 = -1, b0 = -1;
 
+    // Skip writing if the current color is the same as the last one
     if (v0 == *val && r0 == r && g0 == g && b0 == b)
         return;
+    // Update last processed values
     v0 = *val, r0 = r, g0 = g, b0 = b;
+
     JSON_Value *color_value = json_value_init_object();
+    if (color_value == NULL) {
+        G_fatal_error(_("Failed to initialize JSON object. Out of memory?"));
+    }
     JSON_Object *color_object = json_object(color_value);
 
-    char rgb_string[20];
-    snprintf(rgb_string, sizeof(rgb_string), "rgb(%d, %d, %d)", r, g, b);
-
+    // Set the value as a percentage if requested, otherwise set it as-is
     if (perc)
         json_object_set_number(color_object, "value",
                                100 * (*val - *min) / (*max - *min));
     else
         json_object_set_number(color_object, "value", *val);
 
-    json_object_set_string(color_object, "rgb", rgb_string);
+    set_color(r, g, b, clr_frmt, color_object);
 
     json_array_append_value(root_array, color_value);
 }
 
+/*!
+   \brief Print color table in JSON format
+
+   \param colors pointer to Colors structure
+   \param min,max minimum and maximum value for percentage output (used only
+   when \p perc is non-zero)
+   \param fp file where to print color table rules
+   \param perc TRUE for percentage output
+    \param clr_frmt color format to be used (RBG, HEX, HSV, DEFAULT).
+ */
 void print_json_colors(struct Colors *colors, DCELL min, DCELL max, FILE *fp,
-                       int perc)
+                       int perc, enum ColorFormat clr_frmt)
 {
     JSON_Value *root_value = json_value_init_array();
+    if (root_value == NULL) {
+        G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+    }
     JSON_Array *root_array = json_array(root_value);
 
     int i, count;
 
     count = 0;
     if (colors->version < 0) {
+        /* 3.0 format */
         CELL lo, hi;
 
+        // Retrieve the integer color range
         Rast_get_c_color_range(&lo, &hi, colors);
 
         for (i = lo; i <= hi; i++) {
             unsigned char r, g, b, set;
             DCELL val = (DCELL)i;
 
+            // Look up the color for the current value and write JSON rule
             Rast_lookup_c_colors(&i, &r, &g, &b, &set, 1, colors);
-            write_json_rule(&val, &min, &max, r, g, b, root_array, perc);
+            write_json_rule(&val, &min, &max, r, g, b, root_array, perc,
+                            clr_frmt);
         }
     }
     else {
+        // Get the count of floating-point color rules
         count = Rast_colors_count(colors);
 
         for (i = 0; i < count; i++) {
             DCELL val1, val2;
             unsigned char r1, g1, b1, r2, g2, b2;
 
+            // Retrieve the color rule values and their respective RGB colors
             Rast_get_fp_color_rule(&val1, &r1, &g1, &b1, &val2, &r2, &g2, &b2,
                                    colors, count - 1 - i);
 
-            write_json_rule(&val1, &min, &max, r1, g1, b1, root_array, perc);
-            write_json_rule(&val2, &min, &max, r2, g2, b2, root_array, perc);
+            // write JSON rule
+            write_json_rule(&val1, &min, &max, r1, g1, b1, root_array, perc,
+                            clr_frmt);
+            write_json_rule(&val2, &min, &max, r2, g2, b2, root_array, perc,
+                            clr_frmt);
         }
     }
 
+    //  Add special color entries for "null" and "default" values
     {
         int r, g, b;
 
+        // Get RGB color for null values and create JSON entry
         Rast_get_null_value_color(&r, &g, &b, colors);
         JSON_Value *nv_value = json_value_init_object();
+        if (nv_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
         JSON_Object *nv_object = json_object(nv_value);
-        char nv_rgb_string[20];
-        snprintf(nv_rgb_string, sizeof(nv_rgb_string), "rgb(%d, %d, %d)", r, g,
-                 b);
         json_object_set_string(nv_object, "value", "nv");
-        json_object_set_string(nv_object, "rgb", nv_rgb_string);
+        set_color(r, g, b, clr_frmt, nv_object);
         json_array_append_value(root_array, nv_value);
 
+        // Get RGB color for default values and create JSON entry
         Rast_get_default_color(&r, &g, &b, colors);
         JSON_Value *default_value = json_value_init_object();
+        if (default_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
         JSON_Object *default_object = json_object(default_value);
-        char default_rgb_string[20];
-        snprintf(default_rgb_string, sizeof(default_rgb_string),
-                 "rgb(%d, %d, %d)", r, g, b);
         json_object_set_string(default_object, "value", "default");
-        json_object_set_string(default_object, "rgb", default_rgb_string);
+        set_color(r, g, b, clr_frmt, default_object);
         json_array_append_value(root_array, default_value);
     }
 
+    // Serialize JSON array to a string and print to the file
     char *json_string = json_serialize_to_string_pretty(root_value);
     if (!json_string) {
         G_fatal_error(_("Failed to serialize JSON to pretty format."));

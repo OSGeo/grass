@@ -32,13 +32,15 @@ int main(int argc, char **argv)
         struct Option *map, *file, *format;
     } opt;
     struct {
-        struct Flag *p;
+        struct Flag *p, *r, *x, *h;
     } flag;
 
     const char *file;
     FILE *fp;
     struct Colors colors;
     struct FPRange range;
+
+    enum ColorFormat clr_frmt;
 
     G_gisinit(argv[0]);
 
@@ -64,6 +66,18 @@ int main(int argc, char **argv)
     flag.p->key = 'p';
     flag.p->description = _("Output values as percentages");
 
+    flag.r = G_define_flag();
+    flag.r->key = 'r';
+    flag.r->description = _("Output colors as rgb format");
+
+    flag.x = G_define_flag();
+    flag.x->key = 'x';
+    flag.x->description = _("Output colors as hex format");
+
+    flag.h = G_define_flag();
+    flag.h->key = 'h';
+    flag.h->description = _("Output colors as hsv format");
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -84,8 +98,20 @@ int main(int argc, char **argv)
     }
 
     if (strcmp(opt.format->answer, "json") == 0) {
+        if (flag.r->answer) {
+            clr_frmt = RGB;
+        }
+        else if (flag.x->answer) {
+            clr_frmt = HEX;
+        }
+        else if (flag.h->answer) {
+            clr_frmt = HSV;
+        }
+        else {
+            clr_frmt = DEFAULT;
+        }
         print_json_colors(&colors, range.min, range.max, fp,
-                          flag.p->answer ? 1 : 0);
+                          flag.p->answer ? 1 : 0, clr_frmt);
     }
     else {
         Rast_print_colors(&colors, range.min, range.max, fp,
