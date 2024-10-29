@@ -160,7 +160,7 @@ class NvizToolWindow(GNotebook):
             else:
                 try:
                     selection = layers[0].GetName()
-                except AttributeError:
+                except (AttributeError, IndexError):
                     continue
             if ltype == "raster":
                 self.FindWindowById(self.win["surface"]["map"]).SetValue(selection)
@@ -734,24 +734,12 @@ class NvizToolWindow(GNotebook):
         self.mainPanelData = SP.ScrolledPanel(parent=self)
         self.mainPanelData.SetupScrolling(scroll_x=False)
         self.mainPanelData.AlwaysShowScrollbars(hflag=False)
-        try:  # wxpython <= 2.8.10
-            self.foldpanelData = fpb.FoldPanelBar(
-                parent=self.mainPanelData,
-                id=wx.ID_ANY,
-                style=fpb.FPB_DEFAULT_STYLE,
-                extraStyle=fpb.FPB_SINGLE_FOLD,
-            )
-        except (AttributeError, TypeError):
-            try:  # wxpython >= 2.8.11
-                self.foldpanelData = fpb.FoldPanelBar(
-                    parent=self.mainPanelData,
-                    id=wx.ID_ANY,
-                    agwStyle=fpb.FPB_SINGLE_FOLD,
-                )
-            except TypeError:  # to be sure
-                self.foldpanelData = fpb.FoldPanelBar(
-                    parent=self.mainPanelData, id=wx.ID_ANY, style=fpb.FPB_SINGLE_FOLD
-                )
+        self.foldpanelData = fpb.FoldPanelBar(
+            parent=self.mainPanelData,
+            id=wx.ID_ANY,
+            style=fpb.FPB_SINGLE_FOLD,
+            agwStyle=fpb.FPB_SINGLE_FOLD,
+        )
 
         self.foldpanelData.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
 
@@ -814,24 +802,12 @@ class NvizToolWindow(GNotebook):
         self.mainPanelAppear = SP.ScrolledPanel(parent=self)
         self.mainPanelAppear.SetupScrolling(scroll_x=False)
         self.mainPanelAppear.AlwaysShowScrollbars(hflag=False)
-        try:  # wxpython <= 2.8.10
-            self.foldpanelAppear = fpb.FoldPanelBar(
-                parent=self.mainPanelAppear,
-                id=wx.ID_ANY,
-                style=fpb.FPB_DEFAULT_STYLE,
-                extraStyle=fpb.FPB_SINGLE_FOLD,
-            )
-        except (AttributeError, TypeError):
-            try:  # wxpython >= 2.8.11
-                self.foldpanelAppear = fpb.FoldPanelBar(
-                    parent=self.mainPanelAppear,
-                    id=wx.ID_ANY,
-                    agwStyle=fpb.FPB_SINGLE_FOLD,
-                )
-            except (AttributeError, TypeError):  # to be sure
-                self.foldpanelAppear = fpb.FoldPanelBar(
-                    parent=self.mainPanelAppear, id=wx.ID_ANY, style=fpb.FPB_SINGLE_FOLD
-                )
+        self.foldpanelAppear = fpb.FoldPanelBar(
+            parent=self.mainPanelAppear,
+            id=wx.ID_ANY,
+            style=fpb.FPB_SINGLE_FOLD,
+            extraStyle=fpb.FPB_SINGLE_FOLD,
+        )
 
         self.foldpanelAppear.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
         # light page
@@ -3384,7 +3360,7 @@ class NvizToolWindow(GNotebook):
         name = event.GetString()
         try:
             data = self._getLayerPropertiesByName(name, mapType="vector")["vector"]
-        except (AttributeError, TypeError):
+        except (AttributeError, TypeError, KeyError):
             self.EnablePage("vector", False)
             return
         layer = self._getMapLayerByName(name, mapType="vector")
