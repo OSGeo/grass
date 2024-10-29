@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <math.h>
 #include <errno.h>
+#include <string.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
@@ -130,12 +131,30 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
 
     filename = G_tempfile();
     fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
+    if (fd < 0) {
+        G_free(filename);
+        G_fatal_error(_("Failed to create temporary file: %s"),
+                      strerror(errno));
+    }
     RTree = RTreeCreateTree(fd, 0, 2);
-    remove(filename);
+    if (remove(filename) != 0) {
+        G_warning(_("Failed to remove temporary file: %s"), filename);
+    }
+    G_free(filename);
 
     filename = G_tempfile();
     xpntfd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
-    remove(filename);
+    if (xpntfd < 0) {
+        RTreeDestroyTree(RTree);
+        close(fd);
+        G_free(filename);
+        G_fatal_error(_("Failed to create xpnt temporary file: %s"),
+                      strerror(errno));
+    }
+    if (remove(filename) != 0) {
+        G_warning(_("Failed to remove xpnt temporary file: %s"), filename);
+    }
+    G_free(filename);
 
     BPoints = Vect_new_line_struct();
     Points = Vect_new_line_struct();
