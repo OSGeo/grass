@@ -19,7 +19,7 @@
 
    \param fp file where to print color table rules
  */
-void close_file(FILE *fp)
+static void close_file(FILE *fp)
 {
     if (fp != stdout)
         fclose(fp);
@@ -35,7 +35,7 @@ void close_file(FILE *fp)
    \param[out] s pointer to store the calculated saturation
    \param[out] v pointer to store the calculated value
  */
-void rgb_to_hsv(int r, int g, int b, float *h, float *s, float *v)
+static void rgb_to_hsv(int r, int g, int b, float *h, float *s, float *v)
 {
     float r_norm = (float)r / 255.0f;
     float g_norm = (float)g / 255.0f;
@@ -77,8 +77,8 @@ void rgb_to_hsv(int r, int g, int b, float *h, float *s, float *v)
    \param clr_frmt color format to be used (RGB, HEX, HSV, XTERM).
    \param color_object pointer to the JSON object
  */
-void set_color(int r, int g, int b, enum ColorFormat clr_frmt,
-               JSON_Object *color_object)
+static void set_color(int r, int g, int b, enum ColorFormat clr_frmt,
+                      JSON_Object *color_object)
 {
     switch (clr_frmt) {
     case RGB: {
@@ -130,10 +130,10 @@ void set_color(int r, int g, int b, enum ColorFormat clr_frmt,
    \param fp file where to print color table rules
    \param root_value pointer to json value
  */
-void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g, int b,
-                     JSON_Array *root_array, int perc,
-                     enum ColorFormat clr_frmt, FILE *fp,
-                     JSON_Value *root_value)
+static void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g,
+                            int b, JSON_Array *root_array, int perc,
+                            enum ColorFormat clr_frmt, FILE *fp,
+                            JSON_Value *root_value)
 {
     static DCELL v0;
     static int r0 = -1, g0 = -1, b0 = -1;
