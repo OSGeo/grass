@@ -647,11 +647,11 @@ class VNETDialog(wx.Dialog):
                 if inpLayer in browseLayers:
                     needLayers.append(inpLayer)
                     continue
-                else:
-                    wx.BeginBusyCursor()
-                    self.inpDbMgrData["browse"].AddLayer(inpLayer)
-                    wx.EndBusyCursor()
-                    needLayers.append(inpLayer)
+
+                wx.BeginBusyCursor()
+                self.inpDbMgrData["browse"].AddLayer(inpLayer)
+                wx.EndBusyCursor()
+                needLayers.append(inpLayer)
 
             for layer in browseLayers:
                 if layer not in needLayers:
@@ -1977,7 +1977,6 @@ class TurnAnglesList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditM
             index = self.GetNextItem(lastFound, wx.LIST_NEXT_ALL, state)
             if index == -1:
                 break
-            else:
-                lastFound = index
-                indices.append(index)
+            lastFound = index
+            indices.append(index)
         return indices

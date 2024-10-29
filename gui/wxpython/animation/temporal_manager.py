@@ -297,10 +297,9 @@ class TemporalManager:
                         # skip this one, already there
                         followsPoint = False
                         continue
-                    else:
-                        # append the last one (of point time)
-                        listOfMaps.append(lastTimeseries)
-                        end = None
+                    # append the last one (of point time)
+                    listOfMaps.append(lastTimeseries)
+                    end = None
                 else:
                     # append series which is None
                     listOfMaps.append(series)
