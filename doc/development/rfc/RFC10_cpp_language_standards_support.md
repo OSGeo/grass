@@ -23,9 +23,9 @@ GEOS 3.14.
 ## C++17 standard for GRASS GIS
 
 The time has come to increase the minimal C++ standard support for GRASS GIS
-code to the C++17 standard. This enables use of new C++17 features, if and when
+code to the C++17 standard. This enables the use of new C++17 features, if and when
 so is needed or recommended. There is, however, no need to make any immediate
-changes to current code. Continuous integration runners already compiles in
+changes to current code. Continuous integration runners already compile in
 C++17 mode, making sure nothing will be broken.
 
 ## References on C++17 features and support
