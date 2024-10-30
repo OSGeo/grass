@@ -744,10 +744,7 @@ class VNETAnalyses:
 
         inParams = []
         for col, v in self.data.GetAnalysisProperties()["cmdParams"]["cols"].items():
-            if "inputField" in v:
-                colInptF = v["inputField"]
-            else:
-                colInptF = col
+            colInptF = v.get("inputField", col)
 
             inParams.append(col + "=" + params[colInptF])
 

@@ -859,10 +859,7 @@ class VectorTopo(Vector):
                 ok = libvect.Vect_cat_get(
                     ctypes.byref(line_c), field, ctypes.byref(cat)
                 )
-                if ok < 1:
-                    pcat = None
-                else:
-                    pcat = cat.value
+                pcat = None if ok < 1 else cat.value
 
                 wkb_list.append((f_id, pcat, ctypes.string_at(barray, size.value)))
                 libgis.G_free(barray)

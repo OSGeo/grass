@@ -22,9 +22,9 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
-import sys
 import locale
 import struct
+import sys
 from math import sqrt
 
 try:
@@ -42,26 +42,213 @@ except ImportError:
 import wx
 
 try:
-    from ctypes import *
+    from ctypes import (
+        CFUNCTYPE,
+        byref,
+        c_char_p,
+        c_double,
+        c_float,
+        c_int,
+        c_ubyte,
+        create_string_buffer,
+        pointer,
+    )
 except KeyError as e:
     print("wxnviz.py: {}".format(e), file=sys.stderr)
 
 try:
-    from grass.lib.gis import *
-    from grass.lib.raster3d import *
-    from grass.lib.vector import *
-    from grass.lib.ogsf import *
-    from grass.lib.nviz import *
-    from grass.lib.raster import *
+    from grass.lib.ctypes_preamble import UNCHECKED, String
+    from grass.lib.gis import (
+        Colors,
+        G_find_raster2,
+        G_find_raster3d,
+        G_find_vector2,
+        G_free,
+        G_fully_qualified_name,
+        G_gisinit,
+        G_set_error_routine,
+        G_set_percent_routine,
+        G_unset_error_routine,
+        G_unset_percent_routine,
+        G_unset_window,
+        G_warning,
+    )
+    from grass.lib.nviz import (
+        DRAW_QUICK_SURFACE,
+        DRAW_QUICK_VLINES,
+        DRAW_QUICK_VOLUME,
+        DRAW_QUICK_VPOINTS,
+        MAP_OBJ_SITE,
+        MAP_OBJ_SURF,
+        MAP_OBJ_UNDEFINED,
+        MAP_OBJ_VECT,
+        MAP_OBJ_VOL,
+        Nviz_change_exag,
+        Nviz_color_from_str,
+        Nviz_del_texture,
+        Nviz_delete_arrow,
+        Nviz_delete_scalebar,
+        Nviz_draw_all,
+        Nviz_draw_arrow,
+        Nviz_draw_cplane,
+        Nviz_draw_fringe,
+        Nviz_draw_image,
+        Nviz_draw_model,
+        Nviz_draw_quick,
+        Nviz_draw_scalebar,
+        Nviz_flythrough,
+        Nviz_get_bgcolor,
+        Nviz_get_cplane_rotation,
+        Nviz_get_cplane_translation,
+        Nviz_get_current_cplane,
+        Nviz_get_exag,
+        Nviz_get_exag_height,
+        Nviz_get_focus,
+        Nviz_get_longdim,
+        Nviz_get_max_texture,
+        Nviz_get_modelview,
+        Nviz_get_viewpoint_height,
+        Nviz_get_viewpoint_position,
+        Nviz_get_xyrange,
+        Nviz_get_zrange,
+        Nviz_has_focus,
+        Nviz_init_data,
+        Nviz_init_rotation,
+        Nviz_init_view,
+        Nviz_load_image,
+        Nviz_look_here,
+        Nviz_new_map_obj,
+        Nviz_num_cplanes,
+        Nviz_off_cplane,
+        Nviz_on_cplane,
+        Nviz_resize_window,
+        Nviz_set_2D,
+        Nviz_set_arrow,
+        Nviz_set_attr,
+        Nviz_set_bgcolor,
+        Nviz_set_cplane_here,
+        Nviz_set_cplane_rotation,
+        Nviz_set_cplane_translation,
+        Nviz_set_fence_color,
+        Nviz_set_focus,
+        Nviz_set_focus_map,
+        Nviz_set_fringe,
+        Nviz_set_light_ambient,
+        Nviz_set_light_bright,
+        Nviz_set_light_color,
+        Nviz_set_light_position,
+        Nviz_set_rotation,
+        Nviz_set_scalebar,
+        Nviz_set_surface_attr_default,
+        Nviz_set_viewpoint_height,
+        Nviz_set_viewpoint_persp,
+        Nviz_set_viewpoint_position,
+        Nviz_set_viewpoint_twist,
+        Nviz_unset_attr,
+        Nviz_unset_rotation,
+        nv_data,
+    )
+    from grass.lib.ogsf import (
+        ATT_COLOR,
+        ATT_EMIT,
+        ATT_MASK,
+        ATT_SHINE,
+        ATT_TOPO,
+        ATT_TRANSP,
+        CONST_ATT,
+        DM_FLAT,
+        DM_GOURAUD,
+        DM_GRID_SURF,
+        DM_GRID_WIRE,
+        DM_POLY,
+        DM_WIRE,
+        DM_WIRE_POLY,
+        MAP_ATT,
+        MAX_ISOSURFS,
+        GP_delete_site,
+        GP_get_sitename,
+        GP_select_surf,
+        GP_set_style,
+        GP_set_style_thematic,
+        GP_set_trans,
+        GP_set_zmode,
+        GP_site_exists,
+        GP_unselect_surf,
+        GP_unset_style_thematic,
+        GS_clear,
+        GS_delete_surface,
+        GS_get_cat_at_xy,
+        GS_get_distance_alongsurf,
+        GS_get_rotation_matrix,
+        GS_get_selected_point_on_surface,
+        GS_get_surf_list,
+        GS_get_trans,
+        GS_get_val_at_xy,
+        GS_get_viewdir,
+        GS_libinit,
+        GS_num_surfs,
+        GS_set_att_const,
+        GS_set_drawmode,
+        GS_set_drawres,
+        GS_set_rotation_matrix,
+        GS_set_trans,
+        GS_set_viewdir,
+        GS_set_wire_color,
+        GS_setall_drawmode,
+        GS_setall_drawres,
+        GS_surf_exists,
+        GS_write_ppm,
+        GS_write_tif,
+        GV_delete_vector,
+        GV_get_vectname,
+        GV_select_surf,
+        GV_set_style,
+        GV_set_style_thematic,
+        GV_set_trans,
+        GV_surf_is_selected,
+        GV_unselect_surf,
+        GV_unset_style_thematic,
+        GV_vect_exists,
+        GVL_delete_vol,
+        GVL_get_trans,
+        GVL_init_region,
+        GVL_isosurf_add,
+        GVL_isosurf_del,
+        GVL_isosurf_move_down,
+        GVL_isosurf_move_up,
+        GVL_isosurf_num_isosurfs,
+        GVL_isosurf_set_att_const,
+        GVL_isosurf_set_att_map,
+        GVL_isosurf_set_drawmode,
+        GVL_isosurf_set_drawres,
+        GVL_isosurf_set_flags,
+        GVL_isosurf_unset_att,
+        GVL_libinit,
+        GVL_set_draw_wire,
+        GVL_set_trans,
+        GVL_slice_add,
+        GVL_slice_del,
+        GVL_slice_move_down,
+        GVL_slice_move_up,
+        GVL_slice_num_slices,
+        GVL_slice_set_drawmode,
+        GVL_slice_set_drawres,
+        GVL_slice_set_pos,
+        GVL_slice_set_transp,
+        GVL_vol_exists,
+    )
+    from grass.lib.raster import Rast__init_window, Rast_unset_window
+    from grass.lib.vector import Vect_read_colors
 except (ImportError, OSError, TypeError) as e:
     print("wxnviz.py: {}".format(e), file=sys.stderr)
 
+import grass.script as gs
+
 from core.debug import Debug
-from core.utils import autoCropImageFromFile
 from core.gcmd import DecodeString
 from core.globalvar import wxPythonPhoenix
+from core.utils import autoCropImageFromFile
 from gui_core.wrap import Rect
-import grass.script as gs
 
 log = None
 progress = None
@@ -708,11 +895,7 @@ class Nviz:
         if map:
             ret = Nviz_set_attr(id, MAP_OBJ_SURF, attr, MAP_ATT, value, -1.0, self.data)
         else:
-            if attr == ATT_COLOR:
-                val = Nviz_color_from_str(value)
-            else:
-                val = float(value)
-
+            val = Nviz_color_from_str(value) if attr == ATT_COLOR else float(value)
             ret = Nviz_set_attr(id, MAP_OBJ_SURF, attr, CONST_ATT, None, val, self.data)
 
         Debug.msg(
@@ -1505,11 +1688,7 @@ class Nviz:
         if map:
             ret = GVL_isosurf_set_att_map(id, isosurf_id, attr, value)
         else:
-            if attr == ATT_COLOR:
-                val = Nviz_color_from_str(value)
-            else:
-                val = float(value)
-
+            val = Nviz_color_from_str(value) if attr == ATT_COLOR else float(value)
             ret = GVL_isosurf_set_att_const(id, isosurf_id, attr, val)
 
         Debug.msg(
@@ -2175,10 +2354,7 @@ class Texture:
 
     def Load(self):
         """Load image to texture"""
-        if self.image.HasAlpha():
-            bytesPerPixel = 4
-        else:
-            bytesPerPixel = 3
+        bytesPerPixel = 4 if self.image.HasAlpha() else 3
         bytes = bytesPerPixel * self.width * self.height
         rev_val = self.height - 1
         im = (c_ubyte * bytes)()
@@ -2266,3 +2442,21 @@ class ImageTexture(Texture):
 
     def Corresponds(self, item):
         return sorted(self.GetCmd()) == sorted(item.GetCmd())
+
+
+__all__ = [
+    "DM_FLAT",
+    "DM_GOURAUD",
+    "DM_GRID_SURF",
+    "DM_GRID_WIRE",
+    "DM_POLY",
+    "DM_WIRE",
+    "DM_WIRE_POLY",
+    "DRAW_QUICK_SURFACE",
+    "DRAW_QUICK_VLINES",
+    "DRAW_QUICK_VOLUME",
+    "DRAW_QUICK_VPOINTS",
+    "MAX_ISOSURFS",
+    "ImageTexture",
+    "Nviz",
+]

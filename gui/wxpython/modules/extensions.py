@@ -356,11 +356,7 @@ class ExtensionTreeModelBuilder:
     def Load(self, url, full=True):
         """Load list of extensions"""
         self._emptyTree()
-
-        if full:
-            flags = "g"
-        else:
-            flags = "l"
+        flags = "g" if full else "l"
         retcode, ret, msg = RunCommand(
             "g.extension", read=True, getErrorMsg=True, url=url, flags=flags, quiet=True
         )

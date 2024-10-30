@@ -501,9 +501,8 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
             index = self.GetNextItem(lastFound, wx.LIST_NEXT_ALL, state)
             if index == -1:
                 break
-            else:
-                lastFound = index
-                indices.append(index)
+            lastFound = index
+            indices.append(index)
         return indices
 
     def DeselectAll(self):
@@ -568,11 +567,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         item = menu.Append(wx.ID_ANY, _("Change opacity level"))
         self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, item)
 
-        if showed:
-            text = _("Hide")
-        else:
-            text = _("Show")
-
+        text = _("Hide") if showed else _("Show")
         item = menu.Append(wx.ID_ANY, text)
         self.Bind(
             wx.EVT_MENU,

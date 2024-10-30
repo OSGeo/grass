@@ -310,10 +310,7 @@ class GStderr:
 
             if "GRASS_INFO_PERCENT" in line:
                 value = int(line.rsplit(":", 1)[1].strip())
-                if value >= 0 and value < 100:
-                    progressValue = value
-                else:
-                    progressValue = 0
+                progressValue = value if value >= 0 and value < 100 else 0
             elif "GRASS_INFO_MESSAGE" in line:
                 self.type = "message"
                 self.message += line.split(":", 1)[1].strip() + "\n"
@@ -632,10 +629,7 @@ class GConsole(wx.EvtHandler):
 
                     return
 
-            if env:
-                env = env.copy()
-            else:
-                env = os.environ.copy()
+            env = env.copy() if env else os.environ.copy()
             # activate computational region (set with g.region)
             # for all non-display commands.
             if compReg and "GRASS_REGION" in env:

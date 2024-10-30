@@ -447,10 +447,7 @@ class RDigitController(wx.EvtHandler):
         name = mapName.split("@")[0]
         background = backgroundMap.split("@")[0]
         types = {"CELL": "int", "FCELL": "float", "DCELL": "double"}
-        if background:
-            back = background
-        else:
-            back = "null()"
+        back = background or "null()"
         try:
             grast.mapcalc(
                 exp="{name} = {mtype}({back})".format(

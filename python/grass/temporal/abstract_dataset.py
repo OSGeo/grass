@@ -10,6 +10,8 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 from abc import ABCMeta, abstractmethod
 
 from .core import get_current_mapset, get_tgis_message_interface, init_dbif
@@ -504,7 +506,7 @@ class AbstractDataset(
             dbif.close()
         return statement
 
-    def is_time_absolute(self):
+    def is_time_absolute(self) -> bool | None:
         """Return True in case the temporal type is absolute
 
         :return: True if temporal type is absolute, False otherwise
@@ -513,7 +515,7 @@ class AbstractDataset(
             return self.base.get_ttype() == "absolute"
         return None
 
-    def is_time_relative(self):
+    def is_time_relative(self) -> bool | None:
         """Return True in case the temporal type is relative
 
         :return: True if temporal type is relative, False otherwise

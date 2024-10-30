@@ -230,7 +230,7 @@ build)*:
 
 To install the new Python GUI (see [REQUIREMENTS.html](../REQUIREMENTS.html)
 and [gui/wxpython/README](../gui/wxpython/README), wxpython installer
-available at [wxpython.org](http://wxpython.org/)), add this to configure (fill
+available at [wxpython.org](https://wxpython.org/)), add this to configure (fill
 in the correct version at x.x.x.x for the wxpython you have installed):
 
 ```bash

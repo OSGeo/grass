@@ -515,7 +515,7 @@ class IClassMapPanel(DoubleMapPanel):
 
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
-        return self.toolbars["iClassMap"] if "iClassMap" in self.toolbars else None
+        return self.toolbars.get("iClassMap", None)
 
     def GetClassColor(self, cat):
         """Get class color as string

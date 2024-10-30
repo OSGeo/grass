@@ -121,7 +121,7 @@ def main():
 
     app = wx.App()
 
-    wizard = GCPWizard(
+    GCPWizard(
         parent=None,
         giface=StandaloneGrassInterface(),
         group=group,

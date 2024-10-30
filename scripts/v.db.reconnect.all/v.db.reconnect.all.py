@@ -19,6 +19,8 @@
 # % keyword: vector
 # % keyword: attribute table
 # % keyword: database
+# % keyword: DBF
+# % keyword: SQLite
 # %end
 # %flag
 # % key: c
@@ -255,10 +257,7 @@ def main():
                 schema = ""
                 table = schema_table
 
-            if new_schema:
-                new_schema_table = "%s.%s" % (new_schema, table)
-            else:
-                new_schema_table = table
+            new_schema_table = "%s.%s" % (new_schema, table) if new_schema else table
 
             gs.debug(
                 "DATABASE = '%s' SCHEMA = '%s' TABLE = '%s' ->\n"

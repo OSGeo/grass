@@ -982,15 +982,9 @@ class DisplayDriver:
 
         # open existing map
         if update:
-            if tmp:
-                open_fn = Vect_open_tmp_update
-            else:
-                open_fn = Vect_open_update
-        else:  # noqa: PLR5501
-            if tmp:
-                open_fn = Vect_open_tmp_old
-            else:
-                open_fn = Vect_open_old
+            open_fn = Vect_open_tmp_update if tmp else Vect_open_update
+        else:
+            open_fn = Vect_open_tmp_old if tmp else Vect_open_old
 
         ret = open_fn(self.poMapInfo, name, mapset)
 

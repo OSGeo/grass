@@ -559,7 +559,7 @@ class Module:
         # get the xml of the module
         self.xml = get_cmd_xml.communicate()[0]
         # transform and parse the xml into an Element class:
-        # http://docs.python.org/library/xml.etree.elementtree.html
+        # https://docs.python.org/library/xml.etree.elementtree.html
         tree = fromstring(self.xml)
 
         for e in tree:

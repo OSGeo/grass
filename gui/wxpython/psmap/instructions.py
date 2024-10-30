@@ -223,7 +223,7 @@ class Instruction:
                     buffer = []
                 continue
 
-            elif line.startswith("paper"):
+            if line.startswith("paper"):
                 instruction = "paper"
                 isBuffer = True
                 buffer.append(line)
@@ -698,7 +698,7 @@ class MapFrame(InstructionObject):
                     if line.split()[1].lower() in {"n", "no", "none"}:
                         instr["border"] = "n"
                         break
-                    elif line.split()[1].lower() in {"y", "yes"}:
+                    if line.split()[1].lower() in {"y", "yes"}:
                         instr["border"] = "y"
                     elif line.startswith("width"):
                         instr["width"] = line.split()[1]
@@ -1751,7 +1751,7 @@ class RasterLegend(InstructionObject):
 
             rinfo = gs.raster_info(raster)
             if rinfo["datatype"] in {"DCELL", "FCELL"}:
-                minim, maxim = rinfo["min"], rinfo["max"]
+                maxim = rinfo["max"]
                 rows = ceil(maxim / cols)
             else:
                 cat = (

@@ -987,7 +987,7 @@ g.region raster=lsat7_2002_40 -p
 which has to be defined for the atmospheric correction. An option is to
 check the satellite overpass time with sun position as reported in the
 <a href="ftp://ftp.glcf.umd.edu/glcf/Landsat/WRS2/p016/r035/p016r035_7x20020524.ETM-EarthSat-Orthorectified/p016r035_7x20020524.met">metadata</a>
-file (<a href="http://www.grassbook.org/wp-content/uploads/ncexternal/landsat/2002/p016r035_7x20020524.met">file copy</a>; North Carolina
+file (<a href="https://grassbook.org/wp-content/uploads/ncexternal/landsat/2002/p016r035_7x20020524.met">file copy</a>; North Carolina
 sample dataset). In the case of the North Carolina sample dataset, these
 values have been stored for each channel and can be retrieved with:
 
@@ -999,7 +999,7 @@ In this case, we have: SUN_AZIMUTH = 120.8810347, SUN_ELEVATION = 64.7730999.
 <p>If the sun position metadata are unavailable, we can also calculate
 them from the overpass time as follows
 (<em><a href="r.sunmask.html">r.sunmask</a></em>
-uses <a href="http://www.nrel.gov/midc/solpos/solpos.html">SOLPOS</a>):
+uses <a href="https://www.nrel.gov/grid/solar-resource/solpos.html">SOLPOS</a>):
 
 <div class="code"><pre>
 r.sunmask -s elev=elevation out=dummy year=2002 month=5 day=24 hour=10 min=42 sec=7 timezone=-5

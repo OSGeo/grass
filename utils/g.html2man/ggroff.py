@@ -119,10 +119,7 @@ class Formatter:
             self.show(pre)
         if sep != "":
             if var:
-                if var == "index":
-                    val = self.get("index") + [0]
-                else:
-                    val = True
+                val = self.get("index") + [0] if var == "index" else True
                 self.pp_with(content, var, val)
             else:
                 self.pp(content)

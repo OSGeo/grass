@@ -119,10 +119,7 @@ def plot_percent_successful(x, xticks, xlabels, successes, filename, style):
 
     smedian = median(successes)
     smax = max(successes)
-    if successes[-1] < smedian:
-        color = "r"
-    else:
-        color = "g"
+    color = "r" if successes[-1] < smedian else "g"
     # another possibility is to color according to the gradient, ideally
     # on the whole curve but that's much more complicated
 

@@ -633,7 +633,7 @@ class ScattPlotsData(ScattPlotsCondsData):
 
     def _getEllipse(self, cat_id, scatt_id, nstd):
         # Joe Kington
-        # http://stackoverflow.com/questions/12301071/multidimensional-confidence-intervals
+        # https://stackoverflow.com/questions/12301071/multidimensional-confidence-intervals
 
         data = np.copy(self.cats[cat_id][scatt_id]["np_vals"])
 
@@ -732,7 +732,7 @@ class ScattPlotsData(ScattPlotsCondsData):
 def RasterizePolygon(pol, height, min_h, width, min_w):
 
     # Joe Kington
-    # http://stackoverflow.com/questions/3654289/scipy-create-2d-polygon-mask
+    # https://stackoverflow.com/questions/3654289/scipy-create-2d-polygon-mask
 
     #poly_verts = [(1,1), (1,4), (4,4),(4,1), (1,1)]
 
@@ -805,11 +805,7 @@ def _parseRegion(region_str):
 
     for param in region_str:
         k, v = param.split("=")
-        if k in {"rows", "cols", "cells"}:
-            v = int(v)
-        else:
-            v = float(v)
-        region[k] = v
+        region[k] = int(v) if k in {"rows", "cols", "cells"} else float(v)
 
     return region
 

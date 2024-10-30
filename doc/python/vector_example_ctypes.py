@@ -33,10 +33,7 @@ from grass.lib.vector import (
 if "GISBASE" not in os.environ:
     sys.exit("You must be in GRASS GIS to run this program.")
 
-if len(sys.argv) == 2:
-    input = sys.argv[1]
-else:
-    input = input("Name of vector map? ")
+input = sys.argv[1] if len(sys.argv) == 2 else input("Name of vector map? ")
 
 # initialize GRASS library
 G_gisinit("")

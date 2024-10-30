@@ -155,8 +155,7 @@ class WMSDrv(WMSBase):
 
                     sleep(sleep_time)
                     continue
-                else:
-                    gs.fatal(_("Unable to write data into tempfile.\n%s") % str(e))
+                gs.fatal(_("Unable to write data into tempfile.\n%s") % str(e))
             finally:
                 temp_tile_opened.close()
 
@@ -995,10 +994,7 @@ class OnEarthRequestMgr(BaseRequestMgr):
         res["y"] = (bbox["maxy"] - bbox["miny"]) / region["rows"]
         res["x"] = (bbox["maxx"] - bbox["minx"]) / region["cols"]
 
-        if res["x"] < res["y"]:
-            comp_res = "x"
-        else:
-            comp_res = "y"
+        comp_res = "x" if res["x"] < res["y"] else "y"
 
         t_res = {}
         best_patt = None

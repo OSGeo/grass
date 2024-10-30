@@ -263,7 +263,7 @@ def main():
         if OGRdatasource.lower().endswith("gml"):
             try:
                 from osgeo import gdal
-            except:
+            except ImportError:
                 gs.fatal(
                     _(
                         "Unable to load GDAL Python bindings (requires package "
@@ -338,7 +338,7 @@ def main():
         if OGRdatasource.lower().endswith("gml"):
             try:
                 from osgeo import gdal
-            except:
+            except ImportError:
                 gs.fatal(
                     _(
                         "Unable to load GDAL Python bindings (requires package "

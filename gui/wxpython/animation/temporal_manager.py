@@ -259,10 +259,8 @@ class TemporalManager:
 
         elif self.temporalType == TemporalType.RELATIVE:
             unit = self.timeseriesInfo[timeseries]["unit"]
-            if self.granularityMode == GranularityMode.ONE_UNIT:
-                gran = 1
-            else:
-                gran = granNum
+            gran = 1 if self.granularityMode == GranularityMode.ONE_UNIT else granNum
+
         # start sampling - now it can be used for both interval and point data
         # after instance, there can be a gap or an interval
         # if it is a gap we remove it and put there the previous instance instead
@@ -299,10 +297,9 @@ class TemporalManager:
                         # skip this one, already there
                         followsPoint = False
                         continue
-                    else:
-                        # append the last one (of point time)
-                        listOfMaps.append(lastTimeseries)
-                        end = None
+                    # append the last one (of point time)
+                    listOfMaps.append(lastTimeseries)
+                    end = None
                 else:
                     # append series which is None
                     listOfMaps.append(series)

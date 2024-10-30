@@ -15,8 +15,8 @@
 
 ### Python
 
-We follow the [PEP8](http://www.python.org/dev/peps/pep-0008/) style guide for
-Python. Docstrings follow [PEP257](http://www.python.org/dev/peps/pep-0257/) and
+We follow the [PEP8](https://www.python.org/dev/peps/pep-0008/) style guide for
+Python. Docstrings follow [PEP257](https://www.python.org/dev/peps/pep-0257/) and
 use
 [Sphinx style](https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html).
 

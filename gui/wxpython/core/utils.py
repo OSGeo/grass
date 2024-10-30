@@ -864,10 +864,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
             )
         )
         return
-    if windows:
-        expCmd = "set"
-    else:
-        expCmd = "export"
+    expCmd = "set" if windows else "export"
 
     for key, value in environ.items():
         fd.write("%s %s=%s\n" % (expCmd, key, value))

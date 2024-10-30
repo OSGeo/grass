@@ -1,5 +1,5 @@
 :: Software and documentation is (c) 2013 GKX Associates Inc. and 
-:: licensed under [GPL 2.0](http://www.gnu.org/licenses/gpl-2.0.html).
+:: licensed under [GPL 2.0](https://www.gnu.org/licenses/gpl-2.0.html).
 
 :: Purpose: setup path to use R, Rtools and other utilities from cmd line.
 ::

@@ -574,10 +574,7 @@ class SQLBuilderSelect(SQLBuilder):
                 idx1 = len("select")
                 idx2 = sqlstr.lower().find("from")
                 colstr = sqlstr[idx1:idx2].strip()
-                if colstr == "*":
-                    cols = []
-                else:
-                    cols = colstr.split(",")
+                cols = [] if colstr == "*" else colstr.split(",")
                 if value in cols:
                     cols.remove(value)
                 else:
@@ -922,10 +919,7 @@ if __name__ == "__main__":
         print(__doc__, file=sys.stderr)
         sys.exit()
 
-    if len(sys.argv) == 3:
-        layer = 1
-    else:
-        layer = int(sys.argv[3])
+    layer = 1 if len(sys.argv) == 3 else int(sys.argv[3])
 
     if sys.argv[1] == "select":
         sqlBuilder = SQLBuilderSelect

@@ -192,11 +192,7 @@ def main():
 
     mapset = tgis.get_current_mapset()
 
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
-
+    id = input if input.find("@") >= 0 else input + "@" + mapset
     input_strds = tgis.SpaceTimeRasterDataset(id)
 
     if not input_strds.is_in_db():
@@ -205,10 +201,7 @@ def main():
 
     input_strds.select(dbif)
 
-    if output.find("@") >= 0:
-        out_id = output
-    else:
-        out_id = output + "@" + mapset
+    out_id = output if output.find("@") >= 0 else output + "@" + mapset
 
     # The output space time raster dataset
     output_strds = tgis.SpaceTimeRasterDataset(out_id)
@@ -244,11 +237,7 @@ def main():
 
     # The lower threshold space time raster dataset
     if lower:
-
-        if lower.find("@") >= 0:
-            lower_id = lower
-        else:
-            lower_id = lower + "@" + mapset
+        lower_id = lower if lower.find("@") >= 0 else lower + "@" + mapset
 
         lower_strds = tgis.SpaceTimeRasterDataset(lower_id)
         if not lower_strds.is_in_db():
@@ -271,11 +260,7 @@ def main():
                 _("The upper option works only in conjunction with the lower option")
             )
 
-        if upper.find("@") >= 0:
-            upper_id = upper
-        else:
-            upper_id = upper + "@" + mapset
-
+        upper_id = upper if upper.find("@") >= 0 else upper + "@" + mapset
         upper_strds = tgis.SpaceTimeRasterDataset(upper_id)
         if not upper_strds.is_in_db():
             dbif.close()
@@ -293,17 +278,11 @@ def main():
 
     if input_strds.is_time_absolute():
         start = tgis.string_to_datetime(start)
-        if stop:
-            stop = tgis.string_to_datetime(stop)
-        else:
-            stop = input_strds_end
+        stop = tgis.string_to_datetime(stop) if stop else input_strds_end
         start = tgis.adjust_datetime_to_granularity(start, granularity)
     else:
         start = int(start)
-        if stop:
-            stop = int(stop)
-        else:
-            stop = input_strds_end
+        stop = int(stop) if stop else input_strds_end
 
     if input_strds.is_time_absolute():
         end = tgis.increment_datetime_by_string(start, cycle)
@@ -371,10 +350,7 @@ def main():
         num_maps = len(gran_list)
 
         for i in range(num_maps):
-            if reverse:
-                map = gran_list[num_maps - i - 1]
-            else:
-                map = gran_list[i]
+            map = gran_list[num_maps - i - 1] if reverse else gran_list[i]
             # Select input maps based on temporal topology relations
             input_maps = []
             if map.get_equal():

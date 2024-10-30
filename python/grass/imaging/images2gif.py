@@ -58,7 +58,7 @@ distribution of PIL)
 Useful links:
 
   * http://tronche.com/computer-graphics/gif/
-  * http://en.wikipedia.org/wiki/Graphics_Interchange_Format
+  * https://en.wikipedia.org/wiki/Graphics_Interchange_Format
   * http://www.w3.org/Graphics/GIF/spec-gif89a.txt
 
 """
