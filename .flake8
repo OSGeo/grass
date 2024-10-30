@@ -23,7 +23,6 @@ per-file-ignores =
     doc/python/m.distance.py: E501
     gui/scripts/d.wms.py: E501
     gui/wxpython/image2target/g.gui.image2target.py: E501
-    gui/wxpython/nviz/*: E722
     gui/wxpython/photo2image/g.gui.photo2image.py: E501
     gui/wxpython/psmap/*: E501, E722
     gui/wxpython/vdigit/*: F841, E722, F405, F403
