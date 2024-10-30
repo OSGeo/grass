@@ -7,50 +7,54 @@ def validate_plain_text_output(data):
     """Validate the structure and content of the plain text output."""
     assert data
     assert len(data) == 8, "The output does not match the expected number of items (8)."
-
-    for i, key in enumerate(data.keys()):
-        value, rgb_value = key.split(" ")
-
-        assert value, "value is not present."
-        assert rgb_value, "rgb color is not present."
-
-        if i == len(data) - 2:
-            assert (
-                value == "nv"
-            ), f"Expected 'nv' as the value for the second last item, got '{value}'."
-        elif i == len(data) - 1:
-            assert (
-                value == "default"
-            ), f"Expected 'default' as the value for the last item, got '{value}'."
-        else:
-            assert (
-                value.isdigit()
-            ), f"Invalid value '{value}' in line. Expected a number."
-
-        # Validate RGB value format
-        rgb_components = rgb_value.split(":")
-        assert len(rgb_components) == 3, "Invalid RGB format."
-        assert all(
-            0 <= int(c) <= 255 for c in rgb_components
-        ), "Invalid RGB values, Values must be between 0 and 255."
+    expected = {
+        "1 0:191:191",
+        "1.8 0:255:0",
+        "2.6 255:255:0",
+        "3.4 255:127:0",
+        "4.2 191:127:63",
+        "5 200:200:200",
+        "nv 255:255:255",
+        "default 255:255:255",
+    }
+    assert (
+        expected == data.keys()
+    ), f"test failed: expected {expected} but got {data.keys()}"
 
 
 def test_r3_colors_out_plain_output(raster3_color_dataset):
     """Test r3.colors.out command for plain output format."""
     session = raster3_color_dataset
-    data = gs.parse_command(
-        "r3.colors.out", map=session.raster3_names, format="plain", env=session.env
-    )
-
+    data = gs.parse_command("r3.colors.out", map="b", format="plain", env=session.env)
     validate_plain_text_output(data)
 
 
 def test_r3_colors_out_without_format_option(raster3_color_dataset):
     """Test r3.colors.out command without any format option."""
     session = raster3_color_dataset
-    data = gs.parse_command("r3.colors.out", map=session.raster3_names, env=session.env)
-
+    data = gs.parse_command("r3.colors.out", map="b", env=session.env)
     validate_plain_text_output(data)
+
+
+def test_r3_colors_out_with_p_flag(raster3_color_dataset):
+    """Test r3.colors.out command with percentage values."""
+    session = raster3_color_dataset
+    data = gs.parse_command("r3.colors.out", map="b", flags="p", env=session.env)
+    assert data
+    assert len(data) == 8, "The output does not match the expected number of items (8)."
+    expected = {
+        "0% 0:191:191",
+        "20% 0:255:0",
+        "40% 255:255:0",
+        "60% 255:127:0",
+        "80% 191:127:63",
+        "100% 200:200:200",
+        "nv 255:255:255",
+        "default 255:255:255",
+    }
+    assert (
+        expected == data.keys()
+    ), f"test failed: expected {expected} but got {data.keys()}"
 
 
 def validate_common_json_structure(data):
@@ -60,29 +64,23 @@ def validate_common_json_structure(data):
         len(data) == 8
     ), "The length of the output JSON does not match the expected value of 8."
 
-    assert all(
-        "value" in entry for entry in data
-    ), "Not all entries contain the 'value' key."
-
-    assert any(
-        entry.get("value") == "nv" for entry in data
-    ), "No entry contains 'nv' as the value."
-    assert any(
-        entry.get("value") == "default" for entry in data
-    ), "No entry contains 'default' as the value."
-
 
 def test_r3_colors_out_json_with_default_flag(raster3_color_dataset):
     """Test r3.colors.out command for JSON output format for xterm color option."""
     session = raster3_color_dataset
-    data = gs.parse_command(
-        "r3.colors.out", map=session.raster3_names, format="json", env=session.env
-    )
-
+    data = gs.parse_command("r3.colors.out", map="b", format="json", env=session.env)
     validate_common_json_structure(data)
-    assert all(
-        "RGB" in entry for entry in data
-    ), "Not all entries contain the 'RGB' key."
+    expected = [
+        {"value": 1, "RGB": "0:191:191"},
+        {"value": 1.8, "RGB": "0:255:0"},
+        {"value": 2.6, "RGB": "255:255:0"},
+        {"value": 3.4, "RGB": "255:127:0"},
+        {"value": 4.2, "RGB": "191:127:63"},
+        {"value": 5, "RGB": "200:200:200"},
+        {"value": "nv", "RGB": "255:255:255"},
+        {"value": "default", "RGB": "255:255:255"},
+    ]
+    assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
 def test_r3_colors_out_json_with_rgb_flag(raster3_color_dataset):
@@ -90,16 +88,23 @@ def test_r3_colors_out_json_with_rgb_flag(raster3_color_dataset):
     session = raster3_color_dataset
     data = gs.parse_command(
         "r3.colors.out",
-        map=session.raster3_names,
+        map="b",
         format="json",
         flags="r",
         env=session.env,
     )
-
     validate_common_json_structure(data)
-    assert all(
-        "rgb" in entry for entry in data
-    ), "Not all entries contain the 'rgb' key."
+    expected = [
+        {"value": 1, "rgb": "rgb(0, 191, 191)"},
+        {"value": 1.8, "rgb": "rgb(0, 255, 0)"},
+        {"value": 2.6, "rgb": "rgb(255, 255, 0)"},
+        {"value": 3.4, "rgb": "rgb(255, 127, 0)"},
+        {"value": 4.2, "rgb": "rgb(191, 127, 63)"},
+        {"value": 5, "rgb": "rgb(200, 200, 200)"},
+        {"value": "nv", "rgb": "rgb(255, 255, 255)"},
+        {"value": "default", "rgb": "rgb(255, 255, 255)"},
+    ]
+    assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
 def test_r3_colors_out_json_with_hex_flag(raster3_color_dataset):
@@ -107,16 +112,23 @@ def test_r3_colors_out_json_with_hex_flag(raster3_color_dataset):
     session = raster3_color_dataset
     data = gs.parse_command(
         "r3.colors.out",
-        map=session.raster3_names,
+        map="b",
         format="json",
         flags="x",
         env=session.env,
     )
-
     validate_common_json_structure(data)
-    assert all(
-        "hex" in entry for entry in data
-    ), "Not all entries contain the 'hex' key."
+    expected = [
+        {"value": 1, "hex": "#00BFBF"},
+        {"value": 1.8, "hex": "#00FF00"},
+        {"value": 2.6, "hex": "#FFFF00"},
+        {"value": 3.4, "hex": "#FF7F00"},
+        {"value": 4.2, "hex": "#BF7F3F"},
+        {"value": 5, "hex": "#C8C8C8"},
+        {"value": "nv", "hex": "#FFFFFF"},
+        {"value": "default", "hex": "#FFFFFF"},
+    ]
+    assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
 def test_r3_colors_out_json_with_hsv_flag(raster3_color_dataset):
@@ -124,13 +136,20 @@ def test_r3_colors_out_json_with_hsv_flag(raster3_color_dataset):
     session = raster3_color_dataset
     data = gs.parse_command(
         "r3.colors.out",
-        map=session.raster3_names,
+        map="b",
         format="json",
         flags="h",
         env=session.env,
     )
-
     validate_common_json_structure(data)
-    assert all(
-        "hsv" in entry for entry in data
-    ), "Not all entries contain the 'hsv' key."
+    expected = [
+        {"value": 1, "hsv": "hsv(180, 100, 74)"},
+        {"value": 1.8, "hsv": "hsv(120, 100, 100)"},
+        {"value": 2.6, "hsv": "hsv(60, 100, 100)"},
+        {"value": 3.4, "hsv": "hsv(29, 100, 100)"},
+        {"value": 4.2, "hsv": "hsv(30, 67, 74)"},
+        {"value": 5, "hsv": "hsv(0, 0, 78)"},
+        {"value": "nv", "hsv": "hsv(0, 0, 100)"},
+        {"value": "default", "hsv": "hsv(0, 0, 100)"},
+    ]
+    assert expected == data, f"test failed: expected {expected} but got {data}"
