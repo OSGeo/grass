@@ -737,7 +737,6 @@ class NvizToolWindow(GNotebook):
         self.foldpanelData = fpb.FoldPanelBar(
             parent=self.mainPanelData,
             id=wx.ID_ANY,
-            style=fpb.FPB_SINGLE_FOLD,
             agwStyle=fpb.FPB_SINGLE_FOLD,
         )
 
@@ -805,8 +804,7 @@ class NvizToolWindow(GNotebook):
         self.foldpanelAppear = fpb.FoldPanelBar(
             parent=self.mainPanelAppear,
             id=wx.ID_ANY,
-            style=fpb.FPB_SINGLE_FOLD,
-            extraStyle=fpb.FPB_SINGLE_FOLD,
+            agwStyle=fpb.FPB_SINGLE_FOLD,
         )
 
         self.foldpanelAppear.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
@@ -3336,7 +3334,7 @@ class NvizToolWindow(GNotebook):
         name = event.GetString()
         try:
             self._getLayerPropertiesByName(name, mapType="raster")["surface"]
-        except (AttributeError, TypeError):
+        except (AttributeError, TypeError, KeyError):
             self.EnablePage("fringe", False)
             return
 
@@ -3372,7 +3370,7 @@ class NvizToolWindow(GNotebook):
         name = event.GetString()
         try:
             data = self._getLayerPropertiesByName(name, mapType="raster_3d")["volume"]
-        except (AttributeError, TypeError):
+        except (AttributeError, TypeError, KeyError):
             self.EnablePage("volume", False)
             return
 
