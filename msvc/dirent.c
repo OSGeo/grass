@@ -1,4 +1,4 @@
-
+#include <stdlib.h>
 #include <io.h>
 #include <errno.h>
 #include <dirent.h>
@@ -20,10 +20,11 @@ DIR *opendir(const char *name)
         size_t base_length = strlen(name);
         const char *all = /* search pattern must end with suitable wildcard */
             strchr("/\\", name[base_length - 1]) ? "*" : "/*";
-
-        if ((dir = (DIR *)malloc(sizeof *dir)) != 0 &&
+        dir = (DIR *)malloc(sizeof *dir);
+        if (dir != 0 &&
             (dir->name = (char *)malloc(base_length + strlen(all) + 1)) != 0) {
-            strcat(strcpy(dir->name, name), all);
+            strcpy(dir->name, name);
+            strcat(dir->name, all);
 
             if ((dir->handle =
                      (handle_type)_findfirst(dir->name, &dir->info)) != -1) {
