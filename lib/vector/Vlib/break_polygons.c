@@ -131,29 +131,19 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
 
     filename = G_tempfile();
     fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
-    if (fd < 0) {
-        G_free(filename);
-        G_fatal_error(_("Failed to create temporary file: %s"),
-                      strerror(errno));
-    }
     RTree = RTreeCreateTree(fd, 0, 2);
-    if (remove(filename) != 0) {
-        G_warning(_("Failed to remove temporary file: %s"), filename);
-    }
+    (void)remove(filename);
     G_free(filename);
 
     filename = G_tempfile();
     xpntfd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
     if (xpntfd < 0) {
-        RTreeDestroyTree(RTree);
-        close(fd);
+        close(RTree->fd);
         G_free(filename);
         G_fatal_error(_("Failed to create xpnt temporary file: %s"),
                       strerror(errno));
     }
-    if (remove(filename) != 0) {
-        G_warning(_("Failed to remove xpnt temporary file: %s"), filename);
-    }
+    (void)remove(filename);
     G_free(filename);
 
     BPoints = Vect_new_line_struct();
@@ -670,6 +660,7 @@ void Vect_break_polygons_mem(struct Map_info *Map, int type,
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(BPoints);
     Vect_destroy_cats_struct(Cats);
+    Vect_destroy_cats_struct(ErrCats);
     G_verbose_message(_("Breaks: %d"), nbreaks);
 }
 
