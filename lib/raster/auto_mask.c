@@ -21,39 +21,6 @@
 #include "R.h"
 
 /**
- * @brief Retrieves the name of the raster mask to use.
- *
- * The returned raster map name is fully qualified, i.e., in the form
- % "name@mapset".
- *
- * This function checks if an environment variable "GRASS_MASK" is set.
- * If it is set, the value of the environment variable is returned as the mask name.
- * If it is not set, the function will default to the mask name "MASK@<mapset>",
- * where <mapset> is the current mapset.
- *
- * The memory for the returned mask name is dynamically allocated.
- * It is the caller's responsibility to free the memory with G_free when it is
- * no longer needed.
- *
- * @returns A dynamically allocated string containing the mask name.
- */
-char *Rast_mask_name(void)
-{
-    // First, see if the environment variable is defined.
-    const char *env_variable = getenv("GRASS_MASK");
-    if (env_variable != NULL && strcmp(env_variable, "") != 0) {
-        // Variable exists and is not empty.
-        return G_store(env_variable);
-    }
-
-    // Default mask name is "MASK@<current mapset>".
-    char *result = (char *)G_malloc(strlen("MASK@") + GMAPSET_MAX + 1);
-    strncpy(result, "MASK@", strlen("MASK@") + 1);
-    strncat(result, G_mapset(), GMAPSET_MAX);
-    return result;
-}
-
-/**
  * \brief Checks for auto masking.
  *
  * On first call, opens the mask file if declared and available and
