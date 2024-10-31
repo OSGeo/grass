@@ -149,10 +149,14 @@ set(GRASS_VERSION_UPDATE_PKG "0.2")
 include(GRASSInstallDirs)
 
 # Setup build locations.
-if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+if(MSVC)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CMAKE_BUILD_TYPE} ${OUTDIR}/${GRASS_INSTALL_LIBDIR})
+elseif(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTDIR}/${GRASS_INSTALL_LIBDIR})
 endif()
-if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
+if(MSVC)
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${CMAKE_BUILD_TYPE} ${OUTDIR}/${GRASS_INSTALL_LIBDIR})
+elseif(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTDIR}/${GRASS_INSTALL_LIBDIR})
 endif()
 
@@ -225,8 +229,6 @@ set(env_path "$ENV{PATH}")
 if(WIN32)
   set(sep "\;")
   string(REPLACE ";" "${sep}" env_path "${env_path}")
-  string(APPEND BIN_DIR "\\${CMAKE_BUILD_TYPE}")
-  string(APPEND LIB_DIR "\\${CMAKE_BUILD_TYPE}")
   set(grass_env_command
     ${CMAKE_COMMAND} -E env "PATH=${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}${sep}${LIB_DIR}"
     "PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}$ENV{PYTHONPATH}"
@@ -236,7 +238,6 @@ if(WIN32)
     "LANGUAGE=C"
     "VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
     "VERSION_DATE=\"${GRASS_VERSION_DATE}\"")
-    message(STATUS "Command ${grass_env_command}")
 else()
   set(sep ":")
   set(grass_env_command
