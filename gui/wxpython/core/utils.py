@@ -3,7 +3,7 @@
 
 @brief Misc utilities for wxGUI
 
-(C) 2007-2015 by the GRASS Development Team
+(C) 2007-2024 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -20,13 +20,15 @@ import shlex
 import re
 import inspect
 import operator
+from string import digits
 
 from grass.script import core as grass
 from grass.script import task as gtask
+from grass.app.runtime import get_grass_config_dir
 
 from core.gcmd import RunCommand
 from core.debug import Debug
-from core.globalvar import ETCDIR, wxPythonPhoenix
+from core.globalvar import wxPythonPhoenix
 
 
 def cmp(a, b):
@@ -44,8 +46,7 @@ def split(s):
     try:
         if sys.platform == "win32":
             return shlex.split(s.replace("\\", r"\\"))
-        else:
-            return shlex.split(s)
+        return shlex.split(s)
     except ValueError as e:
         sys.stderr.write(_("Syntax error: %s") % e)
 
@@ -74,9 +75,8 @@ def GetTempfile(pref=None):
         path, file = os.path.split(tempfile)
         if pref:
             return os.path.join(pref, file)
-        else:
-            return tempfile
-    except:
+        return tempfile
+    except Exception:
         return None
 
 
@@ -254,7 +254,7 @@ def ListOfCatsToRange(cats):
 
     try:
         cats = list(map(int, cats))
-    except:
+    except ValueError:
         return catstr
 
     i = 0
@@ -340,8 +340,7 @@ def GetVectorNumberOfLayers(vector):
             _("Vector map <%(map)s>: %(msg)s\n") % {"map": fullname, "msg": msg}
         )
         return layers
-    else:
-        Debug.msg(1, "GetVectorNumberOfLayers(): ret %s" % ret)
+    Debug.msg(1, "GetVectorNumberOfLayers(): ret %s" % ret)
 
     for layer in out.splitlines():
         layers.append(layer)
@@ -373,8 +372,7 @@ def Deg2DMS(lon, lat, string=True, hemisphere=True, precision=3):
     except ValueError:
         if string:
             return ""
-        else:
-            return None
+        return None
 
     # fix longitude
     while flon > 180.0:
@@ -456,38 +454,38 @@ def __ll_parts(value, reverse=False, precision=3):
             s = "%.*f" % (precision, s)
 
         return str(d) + ":" + m + ":" + s
-    else:  # -> reverse
+    # -> reverse
+    try:
+        d, m, s = value.split(":")
+        hs = s[-1]
+        s = s[:-1]
+    except ValueError:
         try:
-            d, m, s = value.split(":")
-            hs = s[-1]
-            s = s[:-1]
+            d, m = value.split(":")
+            hs = m[-1]
+            m = m[:-1]
+            s = "0.0"
         except ValueError:
             try:
-                d, m = value.split(":")
-                hs = m[-1]
-                m = m[:-1]
+                d = value
+                hs = d[-1]
+                d = d[:-1]
+                m = "0"
                 s = "0.0"
             except ValueError:
-                try:
-                    d = value
-                    hs = d[-1]
-                    d = d[:-1]
-                    m = "0"
-                    s = "0.0"
-                except ValueError:
-                    raise ValueError
+                raise ValueError
 
-        if hs not in {"N", "S", "E", "W"}:
-            raise ValueError
+    if hs not in {"N", "S", "E", "W"}:
+        raise ValueError
 
-        coef = 1.0
-        if hs in {"S", "W"}:
-            coef = -1.0
+    coef = 1.0
+    if hs in {"S", "W"}:
+        coef = -1.0
 
-        fm = int(m) / 60.0
-        fs = float(s) / (60 * 60)
+    fm = int(m) / 60.0
+    fs = float(s) / (60 * 60)
 
-        return coef * (float(d) + fm + fs)
+    return coef * (float(d) + fm + fs)
 
 
 def GetCmdString(cmd):
@@ -554,11 +552,10 @@ def ReprojectCoordinates(coord, projOut, projIn=None, flags=""):
             proj = ""
         if proj in {"ll", "latlong", "longlat"} and "d" not in flags:
             return (proj, (e, n))
-        else:
-            try:
-                return (proj, (float(e), float(n)))
-            except ValueError:
-                return (None, None)
+        try:
+            return (proj, (float(e), float(n)))
+        except ValueError:
+            return (None, None)
 
     return (None, None)
 
@@ -578,7 +575,7 @@ def GetListOfLocations(dbase):
                 os.path.join(location, "*")
             ):
                 listOfLocations.append(os.path.basename(location))
-        except:
+        except OSError:
             pass
 
     ListSortLower(listOfLocations)
@@ -631,7 +628,7 @@ def _getGDALFormats():
     """Get dictionary of available GDAL drivers"""
     try:
         ret = grass.read_command("r.in.gdal", quiet=True, flags="f")
-    except:
+    except grass.CalledModuleError:
         ret = None
 
     return _parseFormats(ret), _parseFormats(ret, writableOnly=True)
@@ -641,7 +638,7 @@ def _getOGRFormats():
     """Get dictionary of available OGR drivers"""
     try:
         ret = grass.read_command("v.in.ogr", quiet=True, flags="f")
-    except:
+    except grass.CalledModuleError:
         ret = None
 
     return _parseFormats(ret), _parseFormats(ret, writableOnly=True)
@@ -796,19 +793,8 @@ vectorFormatExtension = {
 
 def GetSettingsPath():
     """Get full path to the settings directory"""
-    try:
-        verFd = open(os.path.join(ETCDIR, "VERSIONNUMBER"))
-        version = int(verFd.readlines()[0].split(" ")[0].split(".")[0])
-    except (OSError, ValueError, TypeError, IndexError) as e:
-        sys.exit(_("ERROR: Unable to determine GRASS version. Details: %s") % e)
-
-    verFd.close()
-
-    # keep location of settings files rc and wx in sync with lib/init/grass.py
-    if sys.platform == "win32":
-        return os.path.join(os.getenv("APPDATA"), "GRASS%d" % version)
-
-    return os.path.join(os.getenv("HOME"), ".grass%d" % version)
+    version_major, version_minor, _ = grass.version()["version"].split(".")
+    return get_grass_config_dir(version_major, version_minor, os.environ)
 
 
 def StoreEnvVariable(key, value=None, envFile=None):
@@ -837,8 +823,12 @@ def StoreEnvVariable(key, value=None, envFile=None):
     if os.path.exists(envFile):
         try:
             fd = open(envFile)
-        except OSError as e:
-            sys.stderr.write(_("Unable to open file '%s'\n") % envFile)
+        except OSError as error:
+            sys.stderr.write(
+                _("Unable to open file '{name}': {error}\n").format(
+                    name=envFile, error=error
+                )
+            )
             return
         for line in fd:
             line = line.rstrip(os.linesep)
@@ -867,13 +857,14 @@ def StoreEnvVariable(key, value=None, envFile=None):
     # write update env file
     try:
         fd = open(envFile, "w")
-    except OSError as e:
-        sys.stderr.write(_("Unable to create file '%s'\n") % envFile)
+    except OSError as error:
+        sys.stderr.write(
+            _("Unable to create file '{name}': {error}\n").format(
+                name=envFile, error=error
+            )
+        )
         return
-    if windows:
-        expCmd = "set"
-    else:
-        expCmd = "export"
+    expCmd = "set" if windows else "export"
 
     for key, value in environ.items():
         fd.write("%s %s=%s\n" % (expCmd, key, value))
@@ -943,7 +934,7 @@ rgb2str[str2rgb["violet"]] = "violet"
 
 
 def color_resolve(color):
-    if len(color) > 0 and color[0] in "0123456789":
+    if len(color) > 0 and color[0] in digits:
         rgb = tuple(map(int, color.split(":")))
         label = color
     else:

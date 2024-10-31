@@ -155,8 +155,7 @@ class WMSDrv(WMSBase):
 
                     sleep(sleep_time)
                     continue
-                else:
-                    gs.fatal(_("Unable to write data into tempfile.\n%s") % str(e))
+                gs.fatal(_("Unable to write data into tempfile.\n%s") % str(e))
             finally:
                 temp_tile_opened.close()
 
@@ -286,7 +285,7 @@ class WMSDrv(WMSBase):
         # open source file
         src_ds = gdal.Open(src_filename)
         if src_ds is None:
-            gs.fatal(_("Unable to open %s " % src_filename))
+            gs.fatal(_("Unable to open %s ") % src_filename)
 
         src_band = src_ds.GetRasterBand(band_number)
 
@@ -494,7 +493,7 @@ class WMSRequestMgr(BaseRequestMgr):
         self.last_tile_x = False
         if self.last_tile_x_size != 0:
             self.last_tile_x = True
-            self.num_tiles_x = self.num_tiles_x + 1
+            self.num_tiles_x += 1
 
         self.num_tiles_y = rows // self.tile_rows
         self.last_tile_y_size = rows % self.tile_rows
@@ -507,7 +506,7 @@ class WMSRequestMgr(BaseRequestMgr):
         self.last_tile_y = False
         if self.last_tile_y_size != 0:
             self.last_tile_y = True
-            self.num_tiles_y = self.num_tiles_y + 1
+            self.num_tiles_y += 1
 
         self.tile_bbox = dict(self.bbox)
         self.tile_bbox["maxx"] = self.bbox["minx"] + self.tile_length_x
@@ -587,7 +586,7 @@ class WMSRequestMgr(BaseRequestMgr):
         # CRS:84 and CRS:83 are exception (CRS:83 and CRS:27 need to be tested)
         if srs_param in {84, 83} or version != "1.3.0":
             return bbox
-        elif Srs(GetSRSParamVal(srs_param)).axisorder == "yx":
+        if Srs(GetSRSParamVal(srs_param)).axisorder == "yx":
             return self._flipBbox(bbox)
 
         return bbox
@@ -736,9 +735,7 @@ class WMTSRequestMgr(BaseRequestMgr):
 
             best_diff = best_scale_den - scale_den
             mat_diff = mat_scale_den - scale_den
-            if (best_diff < mat_diff and mat_diff < 0) or (
-                best_diff > mat_diff and best_diff > 0
-            ):
+            if (best_diff < mat_diff < 0) or (best_diff > mat_diff and best_diff > 0):
                 best_t_mat = t_mat
                 best_scale_den = mat_scale_den
 
@@ -816,7 +813,7 @@ class WMTSRequestMgr(BaseRequestMgr):
                     mat_num_bbox[i[0]] = int(i_tag.text)
 
                     if i[0] in {"max_row", "max_col"}:
-                        mat_num_bbox[i[0]] = mat_num_bbox[i[0]] - 1
+                        mat_num_bbox[i[0]] -= 1
 
                 break
         return mat_num_bbox
@@ -997,10 +994,7 @@ class OnEarthRequestMgr(BaseRequestMgr):
         res["y"] = (bbox["maxy"] - bbox["miny"]) / region["rows"]
         res["x"] = (bbox["maxx"] - bbox["minx"]) / region["cols"]
 
-        if res["x"] < res["y"]:
-            comp_res = "x"
-        else:
-            comp_res = "y"
+        comp_res = "x" if res["x"] < res["y"] else "y"
 
         t_res = {}
         best_patt = None
@@ -1020,9 +1014,7 @@ class OnEarthRequestMgr(BaseRequestMgr):
             best_diff = best_res - res[comp_res]
             tile_diff = t_res[comp_res] - res[comp_res]
 
-            if (best_diff < tile_diff and tile_diff < 0) or (
-                best_diff > tile_diff and best_diff > 0
-            ):
+            if (best_diff < tile_diff < 0) or (best_diff > tile_diff and best_diff > 0):
                 best_res = t_res[comp_res]
                 best_patt = pattern
 

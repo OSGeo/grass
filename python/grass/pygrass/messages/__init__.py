@@ -262,8 +262,7 @@ class Messenger:
 
         if self.raise_on_error is True:
             raise FatalError(message)
-        else:
-            sys.exit(1)
+        sys.exit(1)
 
     def debug(self, level, message):
         """Send a debug message to stderr

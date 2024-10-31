@@ -565,9 +565,9 @@ class VDigitToolbar(BaseToolbar):
         menuItems = []
         if not self.tools or "addArea" in self.tools:
             menuItems.append((self.icons["addArea"], self.OnAddArea))
-        if not self.fType and not self.tools or "addBoundary" in self.tools:
+        if (not self.fType and not self.tools) or "addBoundary" in self.tools:
             menuItems.append((self.icons["addBoundary"], self.OnAddBoundary))
-        if not self.fType and not self.tools or "addCentroid" in self.tools:
+        if (not self.fType and not self.tools) or "addCentroid" in self.tools:
             menuItems.append((self.icons["addCentroid"], self.OnAddCentroid))
 
         self._onMenu(menuItems)
@@ -1291,10 +1291,7 @@ class VDigitToolbar(BaseToolbar):
                 layerNameList.append(layer.GetName())
 
         if updateTool:  # update toolbar
-            if not self.mapLayer:
-                value = _("Select vector map")
-            else:
-                value = layerNameSelected
+            value = _("Select vector map") if not self.mapLayer else layerNameSelected
 
             if not self.comboid:
                 if not self.tools or "selector" in self.tools:

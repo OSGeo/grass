@@ -490,11 +490,10 @@ class BboxFinder(AbstractFinder):
         ):
             if bboxlist_only:
                 return found
-            else:
-                return (
-                    read_line(f_id, self.c_mapinfo, self.table, self.writeable)
-                    for f_id in found.ids
-                )
+            return (
+                read_line(f_id, self.c_mapinfo, self.table, self.writeable)
+                for f_id in found.ids
+            )
 
     @must_be_open
     def nodes(self, bbox):
@@ -592,16 +591,15 @@ class BboxFinder(AbstractFinder):
         ):
             if bboxlist_only:
                 return boxlist
-            else:
-                return (
-                    Area(
-                        v_id=a_id,
-                        c_mapinfo=self.c_mapinfo,
-                        table=self.table,
-                        writeable=self.writeable,
-                    )
-                    for a_id in boxlist.ids
+            return (
+                Area(
+                    v_id=a_id,
+                    c_mapinfo=self.c_mapinfo,
+                    table=self.table,
+                    writeable=self.writeable,
                 )
+                for a_id in boxlist.ids
+            )
 
     @must_be_open
     def islands(self, bbox, bboxlist_only=False):
@@ -652,16 +650,15 @@ class BboxFinder(AbstractFinder):
         ):
             if bboxlist_only:
                 return found
-            else:
-                return (
-                    Isle(
-                        v_id=i_id,
-                        c_mapinfo=self.c_mapinfo,
-                        table=self.table,
-                        writeable=self.writeable,
-                    )
-                    for i_id in found.ids
+            return (
+                Isle(
+                    v_id=i_id,
+                    c_mapinfo=self.c_mapinfo,
+                    table=self.table,
+                    writeable=self.writeable,
                 )
+                for i_id in found.ids
+            )
 
 
 class PolygonFinder(AbstractFinder):

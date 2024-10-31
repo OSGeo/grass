@@ -71740,7 +71740,7 @@ msgid "Either <value> or <qcolumn> must be given"
 msgstr "Uporabiš lahko ali 'from_table' ali 'select'"
 
 #: ../scripts/i.in.spotvgt/i.in.spotvgt.py:129
-msgid "'gdalinfo' not found, install GDAL tools first (http://www.gdal.org)"
+msgid "'gdalinfo' not found, install GDAL tools first (https://gdal.org)"
 msgstr ""
 
 #: ../scripts/i.in.spotvgt/i.in.spotvgt.py:146

@@ -41,7 +41,7 @@ import os
 import re
 import sys
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 from urllib import request as urlrequest
 from urllib.error import HTTPError, URLError
@@ -64,9 +64,9 @@ def get_extensions():
         return []
 
     # read XML file
-    fo = open(fXML, "r")
+    fo = open(fXML)
     try:
-        tree = etree.fromstring(fo.read())
+        tree = ET.fromstring(fo.read())
     except Exception as e:
         gs.error(_("Unable to parse metadata file: %s") % e)
         fo.close()
@@ -104,18 +104,18 @@ def download_modules_xml_file(url, response_format, *args, **kwargs):
     try:
         response = urlopen(url, *args, **kwargs)
 
-        if not response.code == 200:
+        if response.code != 200:
             index = HTTP_STATUS_CODES.index(response.code)
             desc = HTTP_STATUS_CODES[index].description
             gs.fatal(
                 _(
                     "Download file from <{url}>, "
                     "return status code {code}, "
-                    "{desc}".format(
-                        url=url,
-                        code=response.code,
-                        desc=desc,
-                    ),
+                    "{desc}"
+                ).format(
+                    url=url,
+                    code=response.code,
+                    desc=desc,
                 ),
             )
         if response_format not in response.getheader("Content-Type"):
@@ -123,10 +123,10 @@ def download_modules_xml_file(url, response_format, *args, **kwargs):
                 _(
                     "Wrong file format downloaded. "
                     "Check url <{url}>. Allowed file format is "
-                    "{response_format}.".format(
-                        url=url,
-                        response_format=response_format,
-                    ),
+                    "{response_format}."
+                ).format(
+                    url=url,
+                    response_format=response_format,
                 ),
             )
         return response
@@ -138,8 +138,8 @@ def download_modules_xml_file(url, response_format, *args, **kwargs):
                     "The download of the modules.xml file "
                     "from the server was not successful. "
                     "File on the server <{url}> doesn't "
-                    "exists.".format(url=url),
-                ),
+                    "exists."
+                ).format(url=url),
             )
         else:
             return download_modules_xml_file(
@@ -148,11 +148,8 @@ def download_modules_xml_file(url, response_format, *args, **kwargs):
             )
     except URLError:
         gs.fatal(
-            _(
-                "Download file from <{url}>, "
-                "failed. Check internet connection.".format(
-                    url=url,
-                ),
+            _("Download file from <{url}>, failed. Check internet connection.").format(
+                url=url,
             ),
         )
 
@@ -184,7 +181,7 @@ def find_addon_name(addons):
         url=url,
         response_format="application/xml",
     )
-    tree = etree.fromstring(response.read())
+    tree = ET.fromstring(response.read())
     result = []
     for addon in addons:
         found = False
@@ -199,9 +196,8 @@ def find_addon_name(addons):
             gs.warning(
                 _(
                     "The <{}> addon cannot be reinstalled. "
-                    "Addon wasn't found among the official "
-                    "addons.".format(addon)
-                ),
+                    "Addon wasn't found among the official addons."
+                ).format(addon),
             )
     return set(result)
 

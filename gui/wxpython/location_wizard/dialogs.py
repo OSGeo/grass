@@ -594,8 +594,8 @@ class RegionDef(BaseClass, wx.Dialog):
         self.lcols.SetLabel(_("Cols: %d") % self.cols)
         self.lcells.SetLabel(_("Cells: %d") % self.cells)
         # 3D
-        self.ldepth.SetLabel(_("Depth: %d" % self.depth))
-        self.lcells3.SetLabel(_("3D Cells: %d" % self.cells3))
+        self.ldepth.SetLabel(_("Depth: %d") % self.depth)
+        self.lcells3.SetLabel(_("3D Cells: %d") % self.cells3)
 
     def OnSetButton(self, event=None):
         """Set default region"""
@@ -702,9 +702,9 @@ class SelectTransformDialog(wx.Dialog):
             height += h
             width = max(width, w)
 
-        height = height + 5
+        height += 5
         height = min(height, 400)
-        width = width + 5
+        width += 5
         width = min(width, 400)
 
         #
@@ -746,12 +746,12 @@ class SelectTransformDialog(wx.Dialog):
     def ClickTrans(self, event):
         """Get the number of the datum transform to use in g.proj"""
         self.transnum = event.GetSelection()
-        self.transnum = self.transnum - 1
+        self.transnum -= 1
 
     def GetTransform(self):
         """Get the number of the datum transform to use in g.proj"""
         self.transnum = self.translist.GetSelection()
-        self.transnum = self.transnum - 1
+        self.transnum -= 1
         return self.transnum
 
 

@@ -96,6 +96,5 @@ cat "${n5}"
 t.topology    input=precip_rel_y
 t.topology -m input=precip_rel_y
 
-t.remove type=strds input=precip_rel_d
-t.remove type=strds input=precip_rel_y
+t.remove type=strds input=precip_rel_d,precip_rel_y
 t.unregister type=raster file="${n1}"

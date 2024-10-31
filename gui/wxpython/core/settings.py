@@ -59,8 +59,7 @@ class SettingsJSONEncoder(json.JSONEncoder):
                 return [color(e) for e in item]
             if isinstance(item, dict):
                 return {key: color(value) for key, value in item.items()}
-            else:
-                return item
+            return item
 
         return super().iterencode(color(obj))
 
@@ -110,7 +109,7 @@ class Settings:
             self.locs.sort()
             # Add a default choice to not override system locale
             self.locs.insert(0, "system")
-        except:
+        except Exception:
             # No NLS
             self.locs = ["system"]
 
@@ -767,7 +766,7 @@ class Settings:
             },
         }
 
-        # quick fix, http://trac.osgeo.org/grass/ticket/1233
+        # quick fix, https://trac.osgeo.org/grass/ticket/1233
         # TODO
         if sys.platform == "darwin":
             self.defaultSettings["general"]["defWindowPos"]["enabled"] = False
@@ -922,7 +921,7 @@ class Settings:
             return dictionary
 
         try:
-            with open(self.filePath, "r") as f:
+            with open(self.filePath) as f:
                 update = json.load(f, object_hook=settings_JSON_decode_hook)
                 update_nested_dict_by_dict(settings, update)
         except json.JSONDecodeError as e:
@@ -942,7 +941,7 @@ class Settings:
             settings = self.userSettings
 
         try:
-            fd = open(self.legacyFilePath, "r")
+            fd = open(self.legacyFilePath)
         except OSError:
             sys.stderr.write(
                 _("Unable to read settings file <%s>\n") % self.legacyFilePath
@@ -961,10 +960,7 @@ class Settings:
                     del kv[0]
                 idx = 0
                 while idx < len(kv):
-                    if subkeyMaster:
-                        subkey = [subkeyMaster, kv[idx]]
-                    else:
-                        subkey = kv[idx]
+                    subkey = [subkeyMaster, kv[idx]] if subkeyMaster else kv[idx]
                     value = kv[idx + 1]
                     value = self._parseValue(value, read=True)
                     self.Append(settings, group, key, subkey, value)
@@ -992,7 +988,7 @@ class Settings:
         if not os.path.exists(dirPath):
             try:
                 os.mkdir(dirPath)
-            except:
+            except OSError:
                 GError(_("Unable to create settings directory"))
                 return
         try:

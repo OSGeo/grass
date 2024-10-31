@@ -875,7 +875,7 @@ class SpatialExtent(SQLDatabaseInterface):
         if eS > S and eS < N:
             edge_count += 1
 
-        return not edge_count == 0
+        return edge_count != 0
 
     def cover(self, extent) -> bool:
         """Return True if this extent covers the provided spatial
@@ -956,7 +956,7 @@ class SpatialExtent(SQLDatabaseInterface):
         if eB > B and eB < T:
             edge_count += 1
 
-        return not edge_count == 0
+        return edge_count != 0
 
     def covered_2d(self, extent):
         """Return True if this extent is covered by the provided spatial
@@ -1787,8 +1787,7 @@ class SpatialExtent(SQLDatabaseInterface):
         """
         if "id" in self.D:
             return self.D["id"]
-        else:
-            return None
+        return None
 
     def get_projection(self):
         """Get the projection of the spatial extent"""
@@ -1840,48 +1839,42 @@ class SpatialExtent(SQLDatabaseInterface):
         :return: None if not found"""
         if "north" in self.D:
             return self.D["north"]
-        else:
-            return None
+        return None
 
     def get_south(self):
         """Get the southern edge of the map
         :return: None if not found"""
         if "south" in self.D:
             return self.D["south"]
-        else:
-            return None
+        return None
 
     def get_east(self):
         """Get the eastern edge of the map
         :return: None if not found"""
         if "east" in self.D:
             return self.D["east"]
-        else:
-            return None
+        return None
 
     def get_west(self):
         """Get the western edge of the map
         :return: None if not found"""
         if "west" in self.D:
             return self.D["west"]
-        else:
-            return None
+        return None
 
     def get_top(self):
         """Get the top edge of the map
         :return: None if not found"""
         if "top" in self.D:
             return self.D["top"]
-        else:
-            return None
+        return None
 
     def get_bottom(self):
         """Get the bottom edge of the map
         :return: None if not found"""
         if "bottom" in self.D:
             return self.D["bottom"]
-        else:
-            return None
+        return None
 
     id = property(fget=get_id, fset=set_id)
     north = property(fget=get_north, fset=set_north)

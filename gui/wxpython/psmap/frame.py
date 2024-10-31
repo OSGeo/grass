@@ -16,10 +16,9 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
-
 import queue as Queue
-from math import sin, cos, pi, sqrt
+import sys
+from math import cos, pi, sin, sqrt
 
 import wx
 
@@ -29,25 +28,51 @@ except ImportError:
     import wx.lib.flatnotebook as FN
 
 import grass.script as gs
-
 from core import globalvar
-from gui_core.menu import Menu
-from core.gconsole import CmdThread, EVT_CMD_DONE
-from psmap.toolbars import PsMapToolbar
-from core.gcmd import RunCommand, GError, GMessage
+from core.gcmd import GError, GMessage, RunCommand
+from core.gconsole import EVT_CMD_DONE, CmdThread
 from core.settings import UserSettings
 from core.utils import PilImageToWxImage
-from gui_core.forms import GUI
-from gui_core.widgets import GNotebook
 from gui_core.dialogs import HyperlinkDialog
+from gui_core.forms import GUI
 from gui_core.ghelp import ShowAboutDialog
-from gui_core.wrap import ClientDC, PseudoDC, Rect, StockCursor, EmptyBitmap
-from psmap.menudata import PsMapMenuData
+from gui_core.menu import Menu
 from gui_core.toolbars import ToolSwitcher
+from gui_core.widgets import GNotebook
+from gui_core.wrap import ClientDC, EmptyBitmap, PseudoDC, Rect, StockCursor
 
-from psmap.dialogs import *
-from psmap.instructions import *
-from psmap.utils import *
+from psmap.dialogs import (
+    ImageDialog,
+    LabelsDialog,
+    LegendDialog,
+    MainVectorDialog,
+    MapDialog,
+    MapinfoDialog,
+    NorthArrowDialog,
+    PageSetupDialog,
+    PointDialog,
+    RasterDialog,
+    RectangleDialog,
+    ScalebarDialog,
+    TextDialog,
+)
+from psmap.instructions import InitMap, Instruction, NewId, SetResolution, PageSetup
+from psmap.menudata import PsMapMenuData
+from psmap.toolbars import PsMapToolbar
+from psmap.utils import (
+    AutoAdjust,
+    ComputeSetRegion,
+    GetMapBounds,
+    PaperMapCoordinates,
+    PILImage,
+    Rect2D,
+    Rect2DPP,
+    Rect2DPS,
+    UnitConversion,
+    convertRGB,
+    havePILImage,
+    projInfo,
+)
 
 
 class PsMapFrame(wx.Frame):
@@ -170,7 +195,6 @@ class PsMapFrame(wx.Frame):
         self.getInitMap()
 
         # image path
-        env = gs.gisenv()
         self.imgName = gs.tempfile()
 
         # canvas for preview
@@ -308,7 +332,7 @@ class PsMapFrame(wx.Frame):
 
     def OnPDFFile(self, event):
         """Generate PDF from PS with ps2pdf if available"""
-        if not sys.platform == "win32":
+        if sys.platform != "win32":
             try:
                 p = gs.Popen(["ps2pdf"], stderr=gs.PIPE)
                 p.stderr.close()
@@ -345,10 +369,7 @@ class PsMapFrame(wx.Frame):
         temp = False
         regOld = gs.region(env=self.env)
 
-        if pdf:
-            pdfname = filename
-        else:
-            pdfname = None
+        pdfname = filename if pdf else None
         # preview or pdf
         if not filename or (filename and pdf):
             temp = True
@@ -488,45 +509,44 @@ class PsMapFrame(wx.Frame):
                 env=self.env,
             )
             # wx.BusyInfo does not display the message
-            busy = wx.BusyInfo(_("Generating preview, wait please"), parent=self)
-            wx.GetApp().Yield()
-            try:
-                im = PILImage.open(event.userData["filename"])
-                if self.instruction[self.pageId]["Orientation"] == "Landscape":
-                    import numpy as np
+            with wx.BusyInfo(_("Generating preview, wait please"), parent=self):
+                wx.GetApp().Yield()
+                try:
+                    im = PILImage.open(event.userData["filename"])
+                    if self.instruction[self.pageId]["Orientation"] == "Landscape":
+                        import numpy as np
 
-                    im_array = np.array(im)
-                    im = PILImage.fromarray(np.rot90(im_array, 3))
-                im.save(self.imgName, format="PNG")
-            except OSError:
-                del busy
-                program = self._getGhostscriptProgramName()
-                dlg = HyperlinkDialog(
-                    self,
-                    title=_("Preview not available"),
-                    message=_(
-                        "Preview is not available probably because Ghostscript is not "
-                        "installed or not on PATH."
-                    ),
-                    hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
-                    hyperlinkLabel=_(
-                        "You can download {program} {arch} version here."
-                    ).format(
-                        program=program,
-                        arch="64bit" if "64" in program else "32bit",
-                    ),
-                )
-                dlg.ShowModal()
-                dlg.Destroy()
-                return
+                        im_array = np.array(im)
+                        im = PILImage.fromarray(np.rot90(im_array, 3))
+                    im.save(self.imgName, format="PNG")
+                except OSError:
+                    del busy
+                    program = self._getGhostscriptProgramName()
+                    dlg = HyperlinkDialog(
+                        self,
+                        title=_("Preview not available"),
+                        message=_(
+                            "Preview is not available probably because Ghostscript is not "
+                            "installed or not on PATH."
+                        ),
+                        hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
+                        hyperlinkLabel=_(
+                            "You can download {program} {arch} version here."
+                        ).format(
+                            program=program,
+                            arch="64bit" if "64" in program else "32bit",
+                        ),
+                    )
+                    dlg.ShowModal()
+                    dlg.Destroy()
+                    return
 
-            self.book.SetSelection(1)
-            self.currentPage = 1
-            rect = self.previewCanvas.ImageRect()
-            self.previewCanvas.image = wx.Image(self.imgName, wx.BITMAP_TYPE_PNG)
-            self.previewCanvas.DrawImage(rect=rect)
+                self.book.SetSelection(1)
+                self.currentPage = 1
+                rect = self.previewCanvas.ImageRect()
+                self.previewCanvas.image = wx.Image(self.imgName, wx.BITMAP_TYPE_PNG)
+                self.previewCanvas.DrawImage(rect=rect)
 
-            del busy
             self.SetStatusText(_("Preview generated"), 0)
 
         gs.try_remove(event.userData["instrFile"])
@@ -546,10 +566,7 @@ class PsMapFrame(wx.Frame):
                 s = "." + s
             suffix.append(s)
         raster = self.instruction.FindInstructionByType("raster")
-        if raster:
-            rasterId = raster.id
-        else:
-            rasterId = None
+        rasterId = raster.id if raster else None
 
         if rasterId and self.instruction[rasterId]["raster"]:
             mapName = self.instruction[rasterId]["raster"].split("@")[0] + suffix[0]
@@ -569,7 +586,7 @@ class PsMapFrame(wx.Frame):
             filename = dlg.GetPath()
             suffix = suffix[dlg.GetFilterIndex()]
             if not os.path.splitext(filename)[1]:
-                filename = filename + suffix
+                filename += suffix
             elif suffix not in {os.path.splitext(filename)[1], ""}:
                 filename = os.path.splitext(filename)[0] + suffix
 
@@ -755,8 +772,6 @@ class PsMapFrame(wx.Frame):
         if not self._checkMapFrameExists(type_id=id):
             return
 
-        ##        dlg = RasterDialog(self, id = id, settings = self.instruction)
-        # dlg.ShowModal()
         if "mapNotebook" in self.openDialogs:
             self.openDialogs["mapNotebook"].notebook.ChangeSelection(1)
         else:
@@ -775,8 +790,6 @@ class PsMapFrame(wx.Frame):
         if not self._checkMapFrameExists(type_id=id):
             return
 
-        ##        dlg = MainVectorDialog(self, id = id, settings = self.instruction)
-        # dlg.ShowModal()
         if "mapNotebook" in self.openDialogs:
             self.openDialogs["mapNotebook"].notebook.ChangeSelection(2)
         else:
@@ -994,8 +1007,7 @@ class PsMapFrame(wx.Frame):
             Y = y - H
         if rotation == 0:
             return Rect(x, y, *textExtent)
-        else:
-            return Rect(X, Y, abs(W), abs(H)).Inflate(h, h)
+        return Rect(X, Y, abs(W), abs(H)).Inflate(h, h)
 
     def makePSFont(self, textDict):
         """creates a wx.Font object from selected postscript font. To be
@@ -1088,10 +1100,7 @@ class PsMapFrame(wx.Frame):
         scale = mapInitRect.Get()[2] / realWidth
 
         initMap = self.instruction.FindInstructionByType("initMap")
-        if initMap:
-            id = initMap.id
-        else:
-            id = None
+        id = initMap.id if initMap else None
 
         if not id:
             id = NewId()
@@ -1509,8 +1518,8 @@ class PsMapBufferedWindow(wx.Window):
 
         if self.currScale is None:
             self.currScale = min(cW / pW, cH / pH)
-        pW = pW * self.currScale
-        pH = pH * self.currScale
+        pW *= self.currScale
+        pH *= self.currScale
 
         x = cW / 2 - pW / 2
         y = cH / 2 - pH / 2
@@ -2082,10 +2091,7 @@ class PsMapBufferedWindow(wx.Window):
                     instr = self.instruction[self.dragId]
                     points = instr["where"]
                     # moving point
-                    if self.currentLinePoint == 0:
-                        pPaper = points[1]
-                    else:
-                        pPaper = points[0]
+                    pPaper = points[1] if self.currentLinePoint == 0 else points[0]
                     pCanvas = self.CanvasPaperCoordinates(
                         rect=Rect2DPS(pPaper, (0, 0)), canvasToPaper=False
                     )[:2]
@@ -2230,9 +2236,7 @@ class PsMapBufferedWindow(wx.Window):
                 zoomFactor = 1
             # when zooming to full extent, in some cases, there was zoom
             # 1.01..., which causes problem
-            if abs(zoomFactor - 1) > 0.01:
-                zoomFactor = zoomFactor
-            else:
+            if abs(zoomFactor - 1) <= 0.01:
                 zoomFactor = 1.0
 
             if self.mouse["use"] == "zoomout":
@@ -2259,10 +2263,10 @@ class PsMapBufferedWindow(wx.Window):
         """Zoom to specified region, scroll view, redraw"""
         if not self.currScale:
             return
-        self.currScale = self.currScale * zoomFactor
+        self.currScale *= zoomFactor
 
         if self.currScale > 10 or self.currScale < 0.1:
-            self.currScale = self.currScale / zoomFactor
+            self.currScale /= zoomFactor
             return
         if not self.preview:
             # redraw paper
@@ -2516,10 +2520,7 @@ class PsMapBufferedWindow(wx.Window):
         pdc.DrawBitmap(bitmap, bbox[0], bbox[1], useMask=True)
 
     def DrawRotText(self, pdc, drawId, textDict, coords, bounds):
-        if textDict["rotate"]:
-            rot = float(textDict["rotate"])
-        else:
-            rot = 0
+        rot = float(textDict["rotate"]) if textDict["rotate"] else 0
 
         if textDict["background"] != "none":
             background = textDict["background"]
@@ -2608,8 +2609,8 @@ class PsMapBufferedWindow(wx.Window):
         iW, iH = img.GetWidth(), img.GetHeight()
 
         self.currScale = min(float(cW) / iW, float(cH) / iH)
-        iW = iW * self.currScale
-        iH = iH * self.currScale
+        iW *= self.currScale
+        iH *= self.currScale
         x = cW / 2 - iW / 2
         y = cH / 2 - iH / 2
         return Rect(int(x), int(y), int(iW), int(iH))
@@ -2675,16 +2676,10 @@ class PsMapBufferedWindow(wx.Window):
         """Updates map frame label"""
 
         vector = self.instruction.FindInstructionByType("vector")
-        if vector:
-            vectorId = vector.id
-        else:
-            vectorId = None
+        vectorId = vector.id if vector else None
 
         raster = self.instruction.FindInstructionByType("raster")
-        if raster:
-            rasterId = raster.id
-        else:
-            rasterId = None
+        rasterId = raster.id if raster else None
 
         rasterName = "None"
         if rasterId:
@@ -2716,11 +2711,8 @@ class PsMapBufferedWindow(wx.Window):
     def OnSize(self, event):
         """Init image size to match window size"""
         # not zoom all when notebook page is changed
-        if (
-            self.preview
-            and self.parent.currentPage == 1
-            or not self.preview
-            and self.parent.currentPage == 0
+        if (self.preview and self.parent.currentPage == 1) or (
+            not self.preview and self.parent.currentPage == 0
         ):
             self.ZoomAll()
         self.OnIdle(None)
