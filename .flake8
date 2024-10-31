@@ -92,7 +92,6 @@ per-file-ignores =
     scripts/r.in.wms/wms_drv.py: E402, E722
     scripts/r.in.wms/srs.py: E722
     scripts/r.semantic.label/r.semantic.label.py: E501
-    scripts/v.report/v.report.py: E721
     scripts/db.out.ogr/db.out.ogr.py: F841
     scripts/g.extension/g.extension.py: E501
     scripts/v.unpack/v.unpack.py: E501
