@@ -1049,7 +1049,7 @@ class PsMapFrame(wx.Frame):
             fn = wx.Font(
                 pointSize=fontsize, family=family, style=style, weight=weight, face=face
             )
-        except:
+        except (ValueError, wx.PyAssertionError):
             fn = wx.Font(
                 pointSize=fontsize,
                 family=wx.FONTFAMILY_DEFAULT,
@@ -1071,7 +1071,7 @@ class PsMapFrame(wx.Frame):
             dc.SetFont(fn)
             w, h, lh = dc.GetFullMultiLineTextExtent(textDict["text"])
             return (w, h)
-        except:
+        except (wx.PyAssertionError, ValueError):
             return (0, 0)
 
     def getInitMap(self):
