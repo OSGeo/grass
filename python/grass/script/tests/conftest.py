@@ -25,13 +25,24 @@ def mock_no_session(monkeypatch):
 
 
 @pytest.fixture
-def session(tmp_path):
+def empty_session(tmp_path):
     """Set up a GRASS session for the tests."""
     project = tmp_path / "test_project"
-
-    # Create a test location
     gs.create_project(project)
-
-    # Initialize the GRASS session
     with gs.setup.init(project, env=os.environ.copy()) as session:
+        yield session
+
+
+@pytest.fixture
+def session_2x2(tmp_path):
+    """Set up a GRASS session for the tests."""
+    project = tmp_path / "test_project"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        gs.run_command("g.region", rows=2, cols=2, env=session.env)
+        gs.mapcalc("ones = 1", env=session.env)
+        gs.mapcalc(
+            "nulls_and_one_1_1 = if(row() == 1 && col() == 1, 1, null())",
+            env=session.env,
+        )
         yield session
