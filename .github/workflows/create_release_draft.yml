@@ -73,7 +73,7 @@ jobs:
           sha256sum ${{ env.GRASS }}.tar.xz > ${{ env.GRASS }}.tar.xz.sha256
       - name: Publish draft distribution to GitHub (for tags only)
         if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2.0.8
+        uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8 # v2.0.9
         with:
           name: GRASS GIS ${{ github.ref_name }}
           body: |
