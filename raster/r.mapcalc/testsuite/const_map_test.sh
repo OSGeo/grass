@@ -46,7 +46,7 @@ cleanup()
  g.remove -f type=raster name=$TMPNAME > /dev/null
 }
 
-# check if a MASK is already present:
+# Create our own mask.
 MASKTMP=mask.$TMPNAME
 export GRASS_MASK=$MASKTMP
 
@@ -55,7 +55,7 @@ finalcleanup()
  echo "Restoring user region"
  g.region region=$TMPNAME
  g.remove -f type=region name=$TMPNAME > /dev/null
- # Remove our mask if present:
+ # Remove our mask if present.
  g.remove -f type=raster name=$MASKTMP > /dev/null
 }
 
