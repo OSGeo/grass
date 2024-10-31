@@ -55,7 +55,7 @@ char *Rast_mask_info(void)
  * The returned raster map name is fully qualified, i.e., in the form
  % "name@mapset".
  *
- * The uses the mask name "MASK@<mapset>", where <mapset> is the current
+ * The mask name is "MASK@<mapset>", where <mapset> is the current
  * mapset.
  *
  * The memory for the returned mask name is dynamically allocated using
