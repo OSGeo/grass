@@ -93,10 +93,7 @@ class UnitConversion:
 
     def __init__(self, parent=None):
         self.parent = parent
-        if self.parent:
-            ppi = wx.ClientDC(self.parent).GetPPI()
-        else:
-            ppi = (72, 72)
+        ppi = wx.ClientDC(self.parent).GetPPI() if self.parent else (72, 72)
         self._unitsPage = {
             "inch": {"val": 1.0, "tr": _("inch")},
             "point": {"val": 72.0, "tr": _("point")},
@@ -323,10 +320,7 @@ def ComputeSetRegion(self, mapDict, env):
         centerN = mapDict["center"][1]
 
         raster = self.instruction.FindInstructionByType("raster")
-        if raster:
-            rasterId = raster.id
-        else:
-            rasterId = None
+        rasterId = raster.id if raster else None
 
         if rasterId:
             env["GRASS_REGION"] = gs.region_env(

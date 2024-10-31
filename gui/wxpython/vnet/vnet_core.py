@@ -459,11 +459,6 @@ class VNETAnalyses:
                 return False
 
             mapName, mapSet = ParseMapStr(self.tmpTurnAn.GetVectMapName())
-            cmdCopy = [
-                "g.copy",
-                "vector=%s,%s" % (params["input"], mapName),
-                "--overwrite",
-            ]
             cmdParams.append("input=" + self.tmpTurnAn.GetVectMapName())
 
             ret, msg, err = RunCommand(
@@ -550,11 +545,6 @@ class VNETAnalyses:
         # create and run commands which goes to analysis thread
 
         mapName, mapSet = ParseMapStr(self.tmpTurnAn.GetVectMapName())
-        cmdCopy = [
-            "g.copy",
-            "vector=%s,%s" % (params["input"], mapName),
-            "--overwrite",
-        ]
         cmdParams.append("input=" + self.tmpTurnAn.GetVectMapName())
 
         ret, msg, err = RunCommand(
@@ -579,14 +569,6 @@ class VNETAnalyses:
     def _updateTtbByGlobalCosts(self, vectMapName, tlayer):
         # TODO get layer number do not use it directly
         intervals = self.turnsData["global"].GetData()
-
-        cmdUpdGlob = [
-            "v.db.update",
-            "map=",
-            self.inputData["input"].GetValue(),
-            "layer=%d" % tlayer,
-            "column=cost",
-        ]
 
         dbInfo = VectorDBInfo(vectMapName)
         table = dbInfo.GetTable(tlayer)
@@ -762,10 +744,7 @@ class VNETAnalyses:
 
         inParams = []
         for col, v in self.data.GetAnalysisProperties()["cmdParams"]["cols"].items():
-            if "inputField" in v:
-                colInptF = v["inputField"]
-            else:
-                colInptF = col
+            colInptF = v.get("inputField", col)
 
             inParams.append(col + "=" + params[colInptF])
 

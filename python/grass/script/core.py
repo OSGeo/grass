@@ -18,6 +18,8 @@ for details.
 .. sectionauthor:: Michael Barton <michael.barton asu.edu>
 """
 
+from __future__ import annotations
+
 import os
 import sys
 import atexit
@@ -334,10 +336,7 @@ def handle_errors(returncode, result, args, kwargs):
         args = make_command(*args, **kwargs)
         # Since we are in error handler, let's be extra cautious
         # about an empty command.
-        if args:
-            module = args[0]
-        else:
-            module = None
+        module = args[0] if args else None
         code = " ".join(args)
         return module, code
 
@@ -858,9 +857,9 @@ def get_capture_stderr():
 # interface to g.parser
 
 
-def _parse_opts(lines):
-    options = {}
-    flags = {}
+def _parse_opts(lines: list) -> tuple[dict[str, str], dict[str, bool]]:
+    options: dict[str, str] = {}
+    flags: dict[str, bool] = {}
     for line in lines:
         if not line:
             break
@@ -890,7 +889,7 @@ def _parse_opts(lines):
     return (options, flags)
 
 
-def parser():
+def parser() -> tuple[dict[str, str], dict[str, bool]]:
     """Interface to g.parser, intended to be run from the top-level, e.g.:
 
     ::
@@ -1699,10 +1698,7 @@ def mapsets(search_path=False, env=None):
 
     :return: list of mapsets
     """
-    if search_path:
-        flags = "p"
-    else:
-        flags = "l"
+    flags = "p" if search_path else "l"
     mapsets = read_command("g.mapsets", flags=flags, sep="newline", quiet=True, env=env)
     if not mapsets:
         fatal(_("Unable to list mapsets"))
@@ -2033,10 +2029,7 @@ def create_environment(gisdbase, location, mapset, env=None):
         f.write("GISDBASE: {g}\n".format(g=gisdbase))
         f.write("LOCATION_NAME: {l}\n".format(l=location))
         f.write("GUI: text\n")
-    if env:
-        env = env.copy()
-    else:
-        env = os.environ.copy()
+    env = env.copy() if env else os.environ.copy()
     env["GISRC"] = f.name
     # remove mapset-specific env vars
     env = sanitize_mapset_environment(env)

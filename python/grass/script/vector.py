@@ -129,10 +129,7 @@ def vector_columns(map, layer=None, getDict=True, env=None, **kwargs):
     s = read_command(
         "v.info", flags="c", map=map, layer=layer, quiet=True, env=env, **kwargs
     )
-    if getDict:
-        result = {}
-    else:
-        result = []
+    result = {} if getDict else []
     i = 0
     for line in s.splitlines():
         ctype, cname = line.split("|")
@@ -377,10 +374,7 @@ def vector_what(
     if "LC_ALL" in env:
         env["LC_ALL"] = "C"
 
-    if isinstance(map, (bytes, str)):
-        map_list = [map]
-    else:
-        map_list = map
+    map_list = [map] if isinstance(map, (bytes, str)) else map
 
     if layer:
         if isinstance(layer, (tuple, list)):

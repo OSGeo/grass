@@ -747,10 +747,7 @@ class GMFrame(wx.Frame):
             self._giface.grassdbChanged.emit(
                 grassdb=grassdb, location=location, action="new", element="location"
             )
-            if grassdb == gisenv["GISDBASE"]:
-                switch_grassdb = None
-            else:
-                switch_grassdb = grassdb
+            switch_grassdb = grassdb if grassdb != gisenv["GISDBASE"] else None
             if can_switch_mapset_interactive(self, grassdb, location, mapset):
                 switch_mapset_interactively(
                     self,
@@ -1116,10 +1113,7 @@ class GMFrame(wx.Frame):
 
         :return: command as a list"""
         layer = None
-        if event:
-            cmd = self.menucmd[event.GetId()]
-        else:
-            cmd = ""
+        cmd = self.menucmd[event.GetId()] if event else ""
 
         try:
             cmdlist = cmd.split(" ")
@@ -1135,7 +1129,7 @@ class GMFrame(wx.Frame):
             layer = self.GetLayerTree().layer_selected
             name = self.GetLayerTree().GetLayerInfo(layer, key="maplayer").name
             type = self.GetLayerTree().GetLayerInfo(layer, key="type")
-        except AttributeError:
+        except (AttributeError, TypeError):
             layer = None
 
         if layer and len(cmdlist) == 1:  # only if no parameters given
@@ -1183,7 +1177,7 @@ class GMFrame(wx.Frame):
         # available only for vector map layers
         try:
             mapLayer = tree.GetLayerInfo(layer, key="maplayer")
-        except AttributeError:
+        except (AttributeError, TypeError):
             mapLayer = None
 
         if not mapLayer or mapLayer.GetType() != "vector":
@@ -1860,7 +1854,7 @@ class GMFrame(wx.Frame):
         # available only for vector map layers
         try:
             maptype = tree.GetLayerInfo(layer, key="maplayer").type
-        except AttributeError:
+        except (AttributeError, TypeError):
             maptype = None
 
         if not maptype or maptype != "vector":

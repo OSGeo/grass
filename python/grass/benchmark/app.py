@@ -47,11 +47,7 @@ def join_results_cli(args):
     def select_only(result):
         return result.label == args.only
 
-    if args.only:
-        select_function = select_only
-    else:
-        select_function = None
-
+    select_function = select_only if args.only else None
     results = join_results_from_files(
         source_filenames=args.results,
         prefixes=args.prefixes,

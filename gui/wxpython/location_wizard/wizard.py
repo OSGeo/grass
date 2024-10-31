@@ -900,8 +900,7 @@ class ProjParamsPage(TitledPage):
                 if param["type"] == "bool":
                     if param["value"] is False:
                         continue
-                    else:
-                        self.p4projparams += " +" + param["proj4"]
+                    self.p4projparams += " +" + param["proj4"]
                 elif param["value"] is None:
                     wx.MessageBox(
                         parent=self,
@@ -1604,9 +1603,12 @@ class EPSGPage(TitledPage):
             self, data=None, columns=[_("Code"), _("Description"), _("Parameters")]
         )
 
-        # epsg.io hyperlink
+        # A hyperlink to a CRS database (PROJ related)
         self.tlink = HyperlinkCtrl(
-            self, id=wx.ID_ANY, label="epsg.io", url="https://epsg.io/"
+            self,
+            id=wx.ID_ANY,
+            label="spatialreference.org",
+            url="https://spatialreference.org/",
         )
         self.tlink.SetNormalColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
         self.tlink.SetVisitedColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
@@ -1688,14 +1690,14 @@ class EPSGPage(TitledPage):
     def OnTextChange(self, event):
         value = self.searchb.GetValue()
         if value == "":
-            self.tlink.SetURL("https://epsg.io/")
+            self.tlink.SetURL("https://spatialreference.org/")
             self.epsgcode = None
             self.epsgdesc = self.epsgparams = ""
             self.searchb.ChangeValue("")
             self.OnBrowseCodes(None)
             self.EnableNext(False)
         else:
-            self.tlink.SetURL(str("https://epsg.io/?q={0}".format(value)))
+            self.tlink.SetURL(f"https://spatialreference.org/ref/?&search={value}")
             data = self.epsglist.Search(index=[0, 1, 2], pattern=value, firstOnly=False)
             if data:
                 index = 0
@@ -2757,10 +2759,7 @@ class LocationWizard(wx.Object):
 
         # set ellipsoid parameters
         for item in ellipseparams:
-            if item[:4] == "f=1/":
-                item = " +rf=" + item[4:]
-            else:
-                item = " +" + item
+            item = " +rf=" + item[4:] if item[:4] == "f=1/" else " +" + item
             proj4string = "%s %s" % (proj4string, item)
 
         # set datum transform parameters if relevant
