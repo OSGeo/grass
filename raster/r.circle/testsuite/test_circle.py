@@ -10,7 +10,7 @@ class TestRCircle(TestCase):
     def setUpClass(cls):
         """Set up a temporary region for testing."""
         cls.use_temp_region()
-        cls.runModule("g.region", n=1000, s=0, e=1000, w=0, res=10)
+        cls.runModule("g.region", n=30, s=0, e=30, w=0, res=10)
 
     @classmethod
     def tearDownClass(cls):
@@ -30,7 +30,7 @@ class TestRCircle(TestCase):
         output = "test_circle_binary"
 
         module = SimpleModule(
-            "r.circle", output=output, coordinates=(500, 500), max=100, flags="b"
+            "r.circle", output=output, coordinates=(15, 15), max=10, flags="b"
         )
 
         self.assertModule(module)
@@ -49,7 +49,7 @@ class TestRCircle(TestCase):
         output = "test_circle_distance"
 
         module = SimpleModule(
-            "r.circle", output=output, coordinates=(500, 500), max=100
+            "r.circle", output=output, coordinates=(15, 15), max=10
         )
 
         self.assertModule(module)
@@ -59,8 +59,8 @@ class TestRCircle(TestCase):
         self.assertRasterMinMax(
             map=output,
             refmin=0,
-            refmax=100,
-            msg="Circle should have distance values from 0 to 100",
+            refmax=10,
+            msg="Circle should have distance values from 0 to 10",
         )
 
 
