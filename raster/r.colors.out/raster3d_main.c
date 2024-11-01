@@ -63,23 +63,7 @@ int main(int argc, char **argv)
     opt.format = G_define_standard_option(G_OPT_F_FORMAT);
     opt.format->guisection = _("Print");
 
-    opt.color_format = G_define_option();
-    opt.color_format->key = "color_format";
-    opt.color_format->type = TYPE_STRING;
-    opt.color_format->key_desc = "name";
-    opt.color_format->required = YES;
-    opt.color_format->multiple = NO;
-    opt.color_format->answer = "xterm";
-    opt.color_format->options = "rgb,hex,hsv,xterm";
-    opt.color_format->label = _("Color format");
-    opt.color_format->description =
-        _("Color format output for raster3d values.");
-    char *desc = NULL;
-    G_asprintf(&desc, "rgb;%s;hex;%s;hsv;%s;xterm;%s",
-               _("output color in RGB format"), _("output color in HEX format"),
-               _("output color in HSV format"),
-               _("output color in XTERM format"));
-    opt.color_format->descriptions = desc;
+    opt.color_format = G_define_standard_option(G_OPT_C_FORMAT);
     opt.color_format->guisection = _("Color");
 
     flag.p = G_define_flag();

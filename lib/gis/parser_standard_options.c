@@ -652,6 +652,21 @@ struct Option *G_define_standard_option(int opt)
         Opt->description =
             _("Either a standard color name, R:G:B triplet, or \"none\"");
         break;
+    case G_OPT_C_FORMAT:
+        Opt->key = "color_format";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = YES;
+        Opt->multiple = NO;
+        Opt->answer = "xterm";
+        Opt->options = "rgb,hex,hsv,xterm";
+        Opt->label = _("Color format");
+        Opt->description = _("Color format for output values.");
+        G_asprintf(
+            (char **)&(Opt->descriptions), "rgb;%s;hex;%s;hsv;%s;xterm;%s",
+            _("output color in RGB format"), _("output color in HEX format"),
+            _("output color in HSV format"), _("output color in XTERM format"));
+        break;
 
         /* misc */
 
