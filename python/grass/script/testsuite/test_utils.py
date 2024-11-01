@@ -2,6 +2,7 @@ import os
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.utils import xfail_windows
 
 from grass.script import utils
 
@@ -39,6 +40,7 @@ class TestEncode(TestCase):
     def test_unicode(self):
         self.assertEqual(b"text", utils.encode("text"))
 
+    @xfail_windows
     def test_bytes_garbage_in_out(self):
         """If the input is bytes we should not touch it for encoding"""
         self.assertEqual(

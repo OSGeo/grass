@@ -47,8 +47,7 @@ def parse_options(lines, startswith="Opt"):
         index = line.index("=")
         key = line[:index].strip()
         default = line[index + 1 :].strip()
-        if default.startswith("_("):
-            default = default[2:]
+        default = default.removeprefix("_(")
         return key, default
 
     def parse_glines(glines):

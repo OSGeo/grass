@@ -229,8 +229,7 @@ def db_table_in_vector(table, mapset=".", env=None):
                 break
     if len(used) > 0:
         return used
-    else:
-        return None
+    return None
 
 
 def db_begin_transaction(driver):
