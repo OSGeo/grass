@@ -43,8 +43,6 @@ from srs import Srs
 from wms_base import GetEpsg, GetSRSParamVal, WMSBase
 from wms_cap_parsers import OnEarthCapabilitiesTree, WMTSCapabilitiesTree
 
-np.arrayrange = np.arange
-
 
 class WMSDrv(WMSBase):
     def _download(self):
@@ -288,9 +286,9 @@ class WMSDrv(WMSBase):
 
         # Build color table
         lookup = [
-            np.arrayrange(256),
-            np.arrayrange(256),
-            np.arrayrange(256),
+            np.arange(256),
+            np.arange(256),
+            np.arange(256),
             np.ones(256) * 255,
         ]
 
