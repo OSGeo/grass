@@ -18,15 +18,15 @@ def _check_value(param, value):
     string = (bytes, str)
 
     def raiseexcpet(exc, param, ptype, value):
-        """Function to modifa the error message"""
+        """Function to modify the error message"""
         msg = req % (param.name, param.typedesc, ptype, value, str(exc))
         if isinstance(exc, ValueError):
             raise ValueError(msg)
-        elif isinstance(exc, TypeError):
+        if isinstance(exc, TypeError):
             raise TypeError(msg)
-        else:
-            exc.message = msg
-            raise exc
+
+        exc.message = msg
+        raise exc
 
     def check_string(value):
         """Function to check that a string parameter is already a string"""
@@ -216,7 +216,7 @@ class Parameter:
         #
         if "gisprompt" in diz and diz["gisprompt"]:
             self.typedesc = diz["gisprompt"].get("prompt", "")
-            self.input = not diz["gisprompt"]["age"] == "new"
+            self.input = diz["gisprompt"]["age"] != "new"
         else:
             self.input = True
 
@@ -337,10 +337,7 @@ class Parameter:
         ..
         """
         if hasattr(self, "values"):
-            if self.isrange:
-                vals = self.isrange
-            else:
-                vals = ", ".join([repr(val) for val in self.values])
+            vals = self.isrange or ", ".join([repr(val) for val in self.values])
         else:
             vals = False
         if self.keydescvalues:

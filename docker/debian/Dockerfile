@@ -18,8 +18,8 @@ WORKDIR /tmp
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends --no-install-suggests \
-    build-essential \
     bison \
+    build-essential \
     bzip2 \
     cmake \
     curl \
@@ -40,8 +40,8 @@ RUN apt-get update && apt-get upgrade -y && \
     libgsl0-dev \
     libjpeg-dev \
     libjsoncpp-dev \
-    libnetcdf-dev \
     libncurses-dev \
+    libnetcdf-dev \
     libopenblas-dev \
     libopenjp2-7 \
     libopenjp2-7-dev \
@@ -153,24 +153,24 @@ ENV CXXFLAGS "$MYCXXFLAGS"
 ENV NUMTHREADS=4
 RUN make distclean || echo "nothing to clean"
 RUN /src/grass_build/configure \
-  --with-cxx \
   --enable-largefile \
-  --with-proj-share=/usr/share/proj \
+  --with-bzlib \
+  --with-cairo --with-cairo-ldflags=-lfontconfig \
+  --with-cxx \
+  --with-fftw \
+  --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
   --with-gdal=/usr/bin/gdal-config \
   --with-geos \
-  --with-sqlite \
-  --with-cairo --with-cairo-ldflags=-lfontconfig \
-  --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
-  --with-fftw \
-  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
   --with-netcdf \
-  --with-zstd \
-  --with-bzlib \
   --with-pdal \
+  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
+  --with-proj-share=/usr/share/proj \
+  --with-sqlite \
+  --with-zstd \
   --without-mysql \
   --without-odbc \
-  --without-openmp \
   --without-opengl \
+  --without-openmp \
     && make -j $NUMTHREADS \
     && make install && ldconfig
 

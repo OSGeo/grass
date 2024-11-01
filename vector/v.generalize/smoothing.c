@@ -422,6 +422,7 @@ int hermite(struct line_pnts *Points, double step, double angle_thresh,
     angle_thresh *= M_PI / 180.0;
 
     head.next = NULL;
+    head.p.x = head.p.y = head.p.z = 0.0;
     point = last = &head;
 
     if (!is_loop) {

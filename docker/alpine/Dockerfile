@@ -1,4 +1,4 @@
-FROM alpine:3.20@sha256:0a4eaa0eecf5f8c050e5bba433f58c052be7587ee8af3e8b3910ef9ab5fbe9f5 as common
+FROM alpine:3.20@sha256:beefdbd8a1da6d2915566fde36db9db0b524eb737fc57cd1367effd16dc0d06d as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -11,9 +11,9 @@ ARG PYTHON_VERSION=3
 # List of packages to be installed (proj-data omitted: 570.04 MB)
 ENV GRASS_RUN_PACKAGES="\
       attr \
-      build-base \
       bash \
       bison \
+      build-base \
       bzip2 \
       cairo \
       curl \
@@ -29,15 +29,15 @@ ENV GRASS_RUN_PACKAGES="\
       gdal-driver-JP2OpenJPEG \
       gdal-driver-LIBKML \
       gdal-driver-MSSQLSpatial \
-      gdal-driver-netCDF \
       gdal-driver-ODBC \
       gdal-driver-PG \
       gdal-driver-PNG \
       gdal-driver-WMS \
+      gdal-driver-netCDF \
       gdal-tools \
-      gettext \
       geos \
       geos-dev \
+      gettext \
       git \
       gnutls \
       jsoncpp \
@@ -52,15 +52,15 @@ ENV GRASS_RUN_PACKAGES="\
       musl \
       musl-utils \
       ncurses \
-      openjpeg \
       openblas \
-      py3-numpy \
-      py3-pillow \
-      python3 \
+      openjpeg \
       pdal \
       pdal-dev \
       postgresql15-client \
       proj-util \
+      py3-numpy \
+      py3-pillow \
+      python3 \
       sqlite \
       sqlite-libs \
       subversion \
@@ -89,23 +89,23 @@ FROM common as build
 # set configuration options, without wxGUI
 ENV GRASS_CONFIG="\
       --enable-largefile \
-      --with-cxx \
-      --with-proj-share=/usr/share/proj \
-      --with-gdal \
-      --with-pdal \
-      --with-geos \
-      --with-sqlite \
       --with-bzlib \
-      --with-zstd \
       --with-cairo --with-cairo-ldflags=-lfontconfig \
+      --with-cxx \
       --with-fftw \
-      --with-postgres --with-postgres-includes=/usr/include/postgresql \
+      --with-gdal \
+      --with-geos \
       --with-openmp \
+      --with-pdal \
+      --with-postgres --with-postgres-includes=/usr/include/postgresql \
+      --with-proj-share=/usr/share/proj \
+      --with-sqlite \
+      --with-zstd \
       --without-freetype \
-      --without-opengl \
-      --without-nls \
       --without-mysql \
+      --without-nls \
       --without-odbc \
+      --without-opengl \
       "
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
@@ -132,13 +132,13 @@ ENV GRASS_BUILD_PACKAGES="\
       libjpeg-turbo-dev \
       libpng-dev \
       libpq-dev \
-      openjpeg-dev \
       openblas-dev \
+      openjpeg-dev \
       pdal \
       pdal-dev \
       proj-dev \
-      python3-dev \
       py3-numpy-dev \
+      python3-dev \
       sqlite-dev \
       tar \
       tiff-dev \
