@@ -283,8 +283,7 @@ class VectorDialog(SimpleDialog):
         if full:
             if "@" in name:
                 return name
-            else:
-                return name + "@" + grass.gisenv()["MAPSET"]
+            return name + "@" + grass.gisenv()["MAPSET"]
 
         return name.split("@", 1)[0]
 
@@ -427,7 +426,7 @@ class NewVectorDialog(VectorDialog):
         """
         if key == "add":
             return self.addbox.IsChecked()
-        elif key == "table":
+        if key == "table":
             return self.table.IsChecked()
 
         return None
@@ -467,10 +466,7 @@ def CreateNewVector(
     """
     vExternalOut = grass.parse_command("v.external.out", flags="g")
     isNative = vExternalOut["format"] == "native"
-    if cmd[0] == "v.edit" and not isNative:
-        showType = True
-    else:
-        showType = False
+    showType = bool(cmd[0] == "v.edit" and not isNative)
     dlg = NewVectorDialog(
         parent,
         title=title,
@@ -1213,7 +1209,7 @@ class GroupDialog(wx.Dialog):
             try:
                 if re.compile(self.flt_pattern).search(dt):
                     flt_data.append(dt)
-            except:
+            except re.error:
                 pass
 
         return flt_data
@@ -1341,10 +1337,7 @@ class GroupDialog(wx.Dialog):
     def GetSelectedGroup(self):
         """Return currently selected group (without mapset)"""
         g = self.groupSelect.GetValue().split("@")[0]
-        if self.edit_subg:
-            s = self.subGroupSelect.GetValue()
-        else:
-            s = None
+        s = self.subGroupSelect.GetValue() if self.edit_subg else None
         return g, s
 
     def GetGroupLayers(self, group, subgroup=None):
@@ -1375,10 +1368,7 @@ class GroupDialog(wx.Dialog):
             GMessage(parent=self, message=_("No subgroup selected."))
             return 0
 
-        if self.edit_subg:
-            subgroup = self.currentSubgroup
-        else:
-            subgroup = None
+        subgroup = self.currentSubgroup if self.edit_subg else None
 
         groups = self.GetExistGroups()
         if group in groups:
@@ -1656,7 +1646,7 @@ class MapLayersDialogBase(wx.Dialog):
             try:
                 if re.compile(event.GetString()).search(layer):
                     list.append(layer)
-            except:
+            except re.error:
                 pass
         list = naturally_sorted(list)
 

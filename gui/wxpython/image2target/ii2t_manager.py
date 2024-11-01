@@ -159,7 +159,7 @@ class GCPWizard:
         self.target_gisrc = os.environ["GISRC"]
         self.gisrc_dict = {}
         try:
-            f = open(self.target_gisrc, "r")
+            f = open(self.target_gisrc)
             for line in f:
                 line = line.replace("\n", "").strip()
                 if len(line) < 1:
@@ -488,11 +488,7 @@ class LocationPage(TitledPage):
     def OnMaptype(self, event):
         """Change map type"""
         global maptype
-
-        if event.GetInt() == 0:
-            maptype = "raster"
-        else:
-            maptype = "vector"
+        maptype = "raster" if event.GetInt() == 0 else "vector"
 
     def OnLocation(self, event):
         """Sets source location for map(s) to georectify"""
@@ -883,20 +879,6 @@ class DispMapPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
-
-        try:
-            # set computational region to match selected map and zoom display
-            # to region
-            if maptype == "raster":
-                p = RunCommand("g.region", "raster=src_map")
-            elif maptype == "vector":
-                p = RunCommand("g.region", "vector=src_map")
-
-            if p.returncode == 0:
-                print("returncode = ", str(p.returncode))
-                self.parent.Map.region = self.parent.Map.GetRegion()
-        except:
-            pass
 
     def OnTgtRastSelection(self, event):
         """Source map to display selected"""
@@ -1430,10 +1412,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         else:
             item.SetPropertyVal("hide", False)
             if self.highest_only:
-                if itemIndex == self.highest_key:
-                    wxPen = "highest"
-                else:
-                    wxPen = "default"
+                wxPen = "highest" if itemIndex == self.highest_key else "default"
             elif self.mapcoordlist[key][7] > self.rmsthresh:
                 wxPen = "highest"
             else:
@@ -1627,7 +1606,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(parent=self, message=_("target mapwin not defined"))
 
         try:
-            f = open(self.file["control_points"], "r")
+            f = open(self.file["control_points"])
             GCPcnt = 0
 
             for line in f:
@@ -1716,10 +1695,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         pass
 
     def _onMouseLeftUpPointer(self, mapWindow, x, y):
-        if mapWindow == self.SrcMapWindow:
-            coordtype = "source"
-        else:
-            coordtype = "target"
+        coordtype = "source" if mapWindow == self.SrcMapWindow else "target"
 
         coord = (x, y)
         self.SetGCPData(coordtype, coord, self, confirm=True)
@@ -1775,28 +1751,22 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         if maptype == "raster":
             self.grwiz.SwitchEnv("source")
+            flags = "ac" if self.clip_to_region else "a"
 
-            if self.clip_to_region:
-                flags = "ac"
-            else:
-                flags = "a"
+            with wx.BusyInfo(_("Rectifying images, please wait..."), parent=self):
+                wx.GetApp().Yield()
 
-            busy = wx.BusyInfo(_("Rectifying images, please wait..."), parent=self)
-            wx.GetApp().Yield()
-
-            ret, msg = RunCommand(
-                "i.ortho.rectify",
-                parent=self,
-                getErrorMsg=True,
-                quiet=True,
-                group=self.xygroup,
-                extension=self.extension,
-                method=self.gr_method,
-                angle=self.grwiz.cam_angle,
-                flags=flags,
-            )
-
-            del busy
+                ret, msg = RunCommand(
+                    "i.ortho.rectify",
+                    parent=self,
+                    getErrorMsg=True,
+                    quiet=True,
+                    group=self.xygroup,
+                    extension=self.extension,
+                    method=self.gr_method,
+                    angle=self.grwiz.cam_angle,
+                    flags=flags,
+                )
 
             # provide feedback on failure
             if ret != 0:
@@ -1828,23 +1798,21 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 )
                 ret = msg = ""
 
-                busy = wx.BusyInfo(
+                with wx.BusyInfo(
                     _("Rectifying vector map <%s>, please wait...") % vect, parent=self
-                )
-                wx.GetApp().Yield()
+                ):
+                    wx.GetApp().Yield()
 
-                ret, msg = RunCommand(
-                    "v.rectify",
-                    parent=self,
-                    getErrorMsg=True,
-                    quiet=True,
-                    input=vect,
-                    output=self.outname,
-                    group=self.xygroup,
-                    order=self.gr_order,
-                )
-
-                del busy
+                    ret, msg = RunCommand(
+                        "v.rectify",
+                        parent=self,
+                        getErrorMsg=True,
+                        quiet=True,
+                        input=vect,
+                        output=self.outname,
+                        group=self.xygroup,
+                        order=self.gr_order,
+                    )
 
                 # provide feedback on failure
                 if ret != 0:
@@ -1971,7 +1939,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         elif self.gr_order == 2:
             minNumOfItems = 6
-            diff = 6 - numOfItems
             # self.SetStatusText(_(
             # "Insufficient points, 6+ points needed for 2nd order"))
 
@@ -2270,7 +2237,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
     def OnZoomMenuGCP(self, event):
         """Popup Zoom menu"""
-        point = wx.GetMousePosition()
         zoommenu = Menu()
         # Add items to the menu
 
@@ -3376,7 +3342,6 @@ class GrSettingsDialog(wx.Dialog):
         srcrenderVector = False
         tgtrender = False
         tgtrenderVector = False
-        reload_target = False
         if self.new_src_map != src_map:
             # remove old layer
             layers = self.parent.grwiz.SrcMap.GetListOfLayers()
@@ -3414,7 +3379,6 @@ class GrSettingsDialog(wx.Dialog):
                 del layers[0]
                 layers = self.parent.grwiz.TgtMap.GetListOfLayers()
             # self.parent.grwiz.TgtMap.DeleteAllLayers()
-            reload_target = True
             tgt_map["raster"] = self.new_tgt_map["raster"]
             tgt_map["vector"] = self.new_tgt_map["vector"]
 

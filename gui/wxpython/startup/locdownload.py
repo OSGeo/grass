@@ -386,8 +386,7 @@ class LocationDownloadPanel(wx.Panel):
             )
             self.parent.download_button.SetLabel(label=_("Download"))
             return
-        else:
-            self._clearMessage()
+        self._clearMessage()
 
     def GetLocation(self):
         """Get the name of the last location downloaded by the user"""
@@ -496,9 +495,8 @@ class LocationDownloadDialog(wx.Dialog):
 
             if ret == wx.ID_NO:
                 return
-            else:
-                self.panel.thread.Terminate()
-                self.panel._change_download_btn_label()
+            self.panel.thread.Terminate()
+            self.panel._change_download_btn_label()
 
         if event:
             self.EndModal(wx.ID_CANCEL)

@@ -20,6 +20,7 @@ import shlex
 import re
 import inspect
 import operator
+from string import digits
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -45,8 +46,7 @@ def split(s):
     try:
         if sys.platform == "win32":
             return shlex.split(s.replace("\\", r"\\"))
-        else:
-            return shlex.split(s)
+        return shlex.split(s)
     except ValueError as e:
         sys.stderr.write(_("Syntax error: %s") % e)
 
@@ -75,8 +75,7 @@ def GetTempfile(pref=None):
         path, file = os.path.split(tempfile)
         if pref:
             return os.path.join(pref, file)
-        else:
-            return tempfile
+        return tempfile
     except Exception:
         return None
 
@@ -341,8 +340,7 @@ def GetVectorNumberOfLayers(vector):
             _("Vector map <%(map)s>: %(msg)s\n") % {"map": fullname, "msg": msg}
         )
         return layers
-    else:
-        Debug.msg(1, "GetVectorNumberOfLayers(): ret %s" % ret)
+    Debug.msg(1, "GetVectorNumberOfLayers(): ret %s" % ret)
 
     for layer in out.splitlines():
         layers.append(layer)
@@ -374,8 +372,7 @@ def Deg2DMS(lon, lat, string=True, hemisphere=True, precision=3):
     except ValueError:
         if string:
             return ""
-        else:
-            return None
+        return None
 
     # fix longitude
     while flon > 180.0:
@@ -457,38 +454,38 @@ def __ll_parts(value, reverse=False, precision=3):
             s = "%.*f" % (precision, s)
 
         return str(d) + ":" + m + ":" + s
-    else:  # -> reverse
+    # -> reverse
+    try:
+        d, m, s = value.split(":")
+        hs = s[-1]
+        s = s[:-1]
+    except ValueError:
         try:
-            d, m, s = value.split(":")
-            hs = s[-1]
-            s = s[:-1]
+            d, m = value.split(":")
+            hs = m[-1]
+            m = m[:-1]
+            s = "0.0"
         except ValueError:
             try:
-                d, m = value.split(":")
-                hs = m[-1]
-                m = m[:-1]
+                d = value
+                hs = d[-1]
+                d = d[:-1]
+                m = "0"
                 s = "0.0"
             except ValueError:
-                try:
-                    d = value
-                    hs = d[-1]
-                    d = d[:-1]
-                    m = "0"
-                    s = "0.0"
-                except ValueError:
-                    raise ValueError
+                raise ValueError
 
-        if hs not in {"N", "S", "E", "W"}:
-            raise ValueError
+    if hs not in {"N", "S", "E", "W"}:
+        raise ValueError
 
-        coef = 1.0
-        if hs in {"S", "W"}:
-            coef = -1.0
+    coef = 1.0
+    if hs in {"S", "W"}:
+        coef = -1.0
 
-        fm = int(m) / 60.0
-        fs = float(s) / (60 * 60)
+    fm = int(m) / 60.0
+    fs = float(s) / (60 * 60)
 
-        return coef * (float(d) + fm + fs)
+    return coef * (float(d) + fm + fs)
 
 
 def GetCmdString(cmd):
@@ -555,11 +552,10 @@ def ReprojectCoordinates(coord, projOut, projIn=None, flags=""):
             proj = ""
         if proj in {"ll", "latlong", "longlat"} and "d" not in flags:
             return (proj, (e, n))
-        else:
-            try:
-                return (proj, (float(e), float(n)))
-            except ValueError:
-                return (None, None)
+        try:
+            return (proj, (float(e), float(n)))
+        except ValueError:
+            return (None, None)
 
     return (None, None)
 
@@ -868,10 +864,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
             )
         )
         return
-    if windows:
-        expCmd = "set"
-    else:
-        expCmd = "export"
+    expCmd = "set" if windows else "export"
 
     for key, value in environ.items():
         fd.write("%s %s=%s\n" % (expCmd, key, value))
@@ -941,7 +934,7 @@ rgb2str[str2rgb["violet"]] = "violet"
 
 
 def color_resolve(color):
-    if len(color) > 0 and color[0] in "0123456789":
+    if len(color) > 0 and color[0] in digits:
         rgb = tuple(map(int, color.split(":")))
         label = color
     else:

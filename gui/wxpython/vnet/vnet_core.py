@@ -144,8 +144,7 @@ class VNETManager:
         )
         if not ret:
             return -3
-        else:
-            return 1
+        return 1
 
     def RunAnDone(self, cmd, returncode, results):
         self.results["analysis"] = cmd[0]
@@ -307,19 +306,18 @@ class VNETManager:
         if event.returncode != 0:
             GMessage(parent=self.guiparent, message=_("Creation of turntable failed."))
             return
-        else:
-            params = {}
-            for c in event.cmd:
-                spl_c = c.split("=")
-                if len(spl_c) != 2:
-                    continue
+        params = {}
+        for c in event.cmd:
+            spl_c = c.split("=")
+            if len(spl_c) != 2:
+                continue
 
-                if spl_c[0] and spl_c != "input":
-                    params[spl_c[0]] = spl_c[1]
-                if spl_c[0] == "output":
-                    params["input"] = spl_c[1]
+            if spl_c[0] and spl_c != "input":
+                params[spl_c[0]] = spl_c[1]
+            if spl_c[0] == "output":
+                params["input"] = spl_c[1]
 
-            self.vnet_data.SetParams(params, {})
+        self.vnet_data.SetParams(params, {})
 
         self.ttbCreated.emit(returncode=event.returncode)
 
@@ -461,11 +459,6 @@ class VNETAnalyses:
                 return False
 
             mapName, mapSet = ParseMapStr(self.tmpTurnAn.GetVectMapName())
-            cmdCopy = [
-                "g.copy",
-                "vector=%s,%s" % (params["input"], mapName),
-                "--overwrite",
-            ]
             cmdParams.append("input=" + self.tmpTurnAn.GetVectMapName())
 
             ret, msg, err = RunCommand(
@@ -552,11 +545,6 @@ class VNETAnalyses:
         # create and run commands which goes to analysis thread
 
         mapName, mapSet = ParseMapStr(self.tmpTurnAn.GetVectMapName())
-        cmdCopy = [
-            "g.copy",
-            "vector=%s,%s" % (params["input"], mapName),
-            "--overwrite",
-        ]
         cmdParams.append("input=" + self.tmpTurnAn.GetVectMapName())
 
         ret, msg, err = RunCommand(
@@ -581,14 +569,6 @@ class VNETAnalyses:
     def _updateTtbByGlobalCosts(self, vectMapName, tlayer):
         # TODO get layer number do not use it directly
         intervals = self.turnsData["global"].GetData()
-
-        cmdUpdGlob = [
-            "v.db.update",
-            "map=",
-            self.inputData["input"].GetValue(),
-            "layer=%d" % tlayer,
-            "column=cost",
-        ]
 
         dbInfo = VectorDBInfo(vectMapName)
         table = dbInfo.GetTable(tlayer)
@@ -764,10 +744,7 @@ class VNETAnalyses:
 
         inParams = []
         for col, v in self.data.GetAnalysisProperties()["cmdParams"]["cols"].items():
-            if "inputField" in v:
-                colInptF = v["inputField"]
-            else:
-                colInptF = col
+            colInptF = v.get("inputField", col)
 
             inParams.append(col + "=" + params[colInptF])
 
@@ -1147,14 +1124,10 @@ class SnappingNodes(wx.EvtHandler):
 
             return 0
         # map is already created and up to date for input data
-        else:
-            self.snapPts.AddRenderLayer()
-
-            self.giface.updateMap.emit(render=True, renderVector=True)
-
-            self.snapping.emit(evt="computing_points_done")
-
-            return 1
+        self.snapPts.AddRenderLayer()
+        self.giface.updateMap.emit(render=True, renderVector=True)
+        self.snapping.emit(evt="computing_points_done")
+        return 1
 
     def _onNodesDone(self, event):
         """Update map window, when map with nodes to snap is created"""

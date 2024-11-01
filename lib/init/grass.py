@@ -125,7 +125,7 @@ def clean_env():
     write_gisrc(env_new, gisrc)
 
 
-def is_debug():
+def is_debug() -> bool:
     """Returns True if we are in debug mode
 
     For debug messages use ``debug()``.
@@ -133,13 +133,8 @@ def is_debug():
     global _DEBUG
     if _DEBUG is not None:
         return _DEBUG
-    _DEBUG = os.getenv("GRASS_DEBUG")
     # translate to bool (no or empty variable means false)
-    if _DEBUG:
-        _DEBUG = True
-    else:
-        _DEBUG = False
-    return _DEBUG
+    return bool(os.getenv("GRASS_DEBUG"))
 
 
 def debug(msg):
@@ -496,7 +491,7 @@ def create_gisrc(tmpdir, gisrcrc):
 def read_gisrc(filename):
     kv = {}
     try:
-        f = open(filename, "r")
+        f = open(filename)
     except OSError:
         return kv
 
@@ -522,7 +517,7 @@ def write_gisrcrc(gisrcrc, gisrc, skip_variable=None):
     """Reads gisrc file and write to gisrcrc"""
     debug("Reading %s" % gisrc)
     number = 0
-    with open(gisrc, "r") as f:
+    with open(gisrc) as f:
         lines = f.readlines()
         for line in lines:
             if skip_variable in line:
@@ -535,7 +530,7 @@ def write_gisrcrc(gisrcrc, gisrc, skip_variable=None):
 
 def read_env_file(path):
     kv = {}
-    f = open(path, "r")
+    f = open(path)
     for line in f:
         k, v = line.split(":", 1)
         kv[k.strip()] = v.strip()
@@ -553,10 +548,7 @@ def write_gisrc(kv, filename, append=False):
 
 
 def add_mapset_to_gisrc(gisrc, grassdb, location, mapset):
-    if os.access(gisrc, os.R_OK):
-        kv = read_gisrc(gisrc)
-    else:
-        kv = {}
+    kv = read_gisrc(gisrc) if os.access(gisrc, os.R_OK) else {}
     kv["GISDBASE"] = grassdb
     kv["LOCATION_NAME"] = location
     kv["MAPSET"] = mapset
@@ -564,10 +556,7 @@ def add_mapset_to_gisrc(gisrc, grassdb, location, mapset):
 
 
 def add_last_mapset_to_gisrc(gisrc, last_mapset_path):
-    if os.access(gisrc, os.R_OK):
-        kv = read_gisrc(gisrc)
-    else:
-        kv = {}
+    kv = read_gisrc(gisrc) if os.access(gisrc, os.R_OK) else {}
     kv["LAST_MAPSET_PATH"] = last_mapset_path
     write_gisrc(kv, gisrc)
 
@@ -737,22 +726,21 @@ def cannot_create_location_reason(gisdbase, location):
             " the project <{location}>"
             " already exists."
         ).format(**locals())
-    elif os.path.isfile(path):
+    if os.path.isfile(path):
         return _(
             "Unable to create new project <{location}> because <{path}> is a file."
         ).format(**locals())
-    elif os.path.isdir(path):
+    if os.path.isdir(path):
         return _(
             "Unable to create new project <{location}> because"
             " the directory <{path}>"
             " already exists."
         ).format(**locals())
-    else:
-        return _(
-            "Unable to create new project in"
-            " the directory <{path}>"
-            " for an unknown reason."
-        ).format(**locals())
+    return _(
+        "Unable to create new project in"
+        " the directory <{path}>"
+        " for an unknown reason."
+    ).format(**locals())
 
 
 def set_mapset(
@@ -1098,7 +1086,7 @@ def set_language(grass_config_dir):
 
     # Override value is stored in wxGUI preferences file.
     try:
-        with open(os.path.join(grass_config_dir, "wx.json"), "r") as json_file:
+        with open(os.path.join(grass_config_dir, "wx.json")) as json_file:
             try:
                 language = json.load(json_file)["language"]["locale"]["lc_all"]
             except KeyError:
@@ -1334,11 +1322,8 @@ def get_shell():
             sh = os.path.basename(sh)
         else:
             # If SHELL is not set, see if there is Bash and use it.
-            if shutil.which("bash"):
-                sh = "bash"
-            else:
-                # Fallback to sh if there is no Bash on path.
-                sh = "sh"
+            # Fallback to sh if there is no Bash on path.
+            sh = "bash" if shutil.which("bash") else "sh"
             # Ensure the variable is set.
             os.environ["SHELL"] = sh
 
@@ -1419,7 +1404,7 @@ def run_batch_job(batch_job: list):
         if script_in_addon_path and os.path.exists(script_in_addon_path):
             batch_job[0] = script_in_addon_path
             return script_in_addon_path
-        elif os.path.exists(batch_job[0]):
+        if os.path.exists(batch_job[0]):
             return batch_job[0]
 
     try:
@@ -1652,11 +1637,8 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     else:
         f.write("test -r ~/.alias && . ~/.alias\n")
 
-    if os.getenv("ISISROOT"):
-        # GRASS GIS and ISIS blend
-        grass_name = "ISIS-GRASS"
-    else:
-        grass_name = "GRASS"
+    # GRASS GIS and ISIS blend
+    grass_name = "GRASS" if not os.getenv("ISISROOT") else "ISIS-GRASS"
 
     if sh == "zsh":
         f.write("setopt PROMPT_SUBST\n")
@@ -1668,8 +1650,8 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
             )
         )
 
+    mask2d_test = "r.mask.status -t"
     # TODO: have a function and/or module to test this
-    mask2d_test = 'test -f "$MAPSET_PATH/cell/MASK"'
     mask3d_test = 'test -d "$MAPSET_PATH/grid3/RASTER3D_MASK"'
 
     specific_addition = ""

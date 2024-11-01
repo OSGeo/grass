@@ -119,7 +119,7 @@ class GCPWizard:
         self.target_gisrc = os.environ["GISRC"]
         self.gisrc_dict = {}
         try:
-            f = open(self.target_gisrc, "r")
+            f = open(self.target_gisrc)
             for line in f:
                 line = line.replace("\n", "").strip()
                 if len(line) < 1:
@@ -469,11 +469,7 @@ class LocationPage(TitledPage):
     def OnMaptype(self, event):
         """Change map type"""
         global maptype
-
-        if event.GetInt() == 0:
-            maptype = "raster"
-        else:
-            maptype = "vector"
+        maptype = "raster" if event.GetInt() == 0 else "vector"
 
     def OnLocation(self, event):
         """Sets source location for map(s) to georectify"""
@@ -879,20 +875,6 @@ class DispMapPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
-
-        try:
-            # set computational region to match selected map and zoom display
-            # to region
-            if maptype == "raster":
-                p = RunCommand("g.region", "raster=src_map")
-            elif maptype == "vector":
-                p = RunCommand("g.region", "vector=src_map")
-
-            if p.returncode == 0:
-                print("returncode = ", str(p.returncode))
-                self.parent.Map.region = self.parent.Map.GetRegion()
-        except:
-            pass
 
     def OnTgtRastSelection(self, event):
         """Source map to display selected"""
@@ -1447,10 +1429,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         else:
             item.SetPropertyVal("hide", False)
             if self.highest_only:
-                if itemIndex == self.highest_key:
-                    wxPen = "highest"
-                else:
-                    wxPen = "default"
+                wxPen = "highest" if itemIndex == self.highest_key else "default"
             elif self.mapcoordlist[key][5] > self.rmsthresh:
                 wxPen = "highest"
             else:
@@ -1603,7 +1582,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(parent=self, message=_("target mapwin not defined"))
 
         try:
-            f = open(self.file["points"], "r")
+            f = open(self.file["points"])
             GCPcnt = 0
 
             for line in f:
@@ -1690,10 +1669,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         pass
 
     def _onMouseLeftUpPointer(self, mapWindow, x, y):
-        if mapWindow == self.SrcMapWindow:
-            coordtype = "source"
-        else:
-            coordtype = "target"
+        coordtype = "source" if mapWindow == self.SrcMapWindow else "target"
 
         coord = (x, y)
         self.SetGCPData(coordtype, coord, self, confirm=True)
@@ -1820,10 +1796,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
             self.grwiz.SwitchEnv("source")
 
-            if self.clip_to_region:
-                flags = "ac"
-            else:
-                flags = "a"
+            flags = "ac" if self.clip_to_region else "a"
 
             with wx.BusyInfo(_("Rectifying images, please wait..."), parent=self):
                 wx.GetApp().Yield()

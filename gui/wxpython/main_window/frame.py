@@ -861,10 +861,7 @@ class GMFrame(wx.Frame):
             self._giface.grassdbChanged.emit(
                 grassdb=grassdb, location=location, action="new", element="location"
             )
-            if grassdb == gisenv["GISDBASE"]:
-                switch_grassdb = None
-            else:
-                switch_grassdb = grassdb
+            switch_grassdb = grassdb if grassdb != gisenv["GISDBASE"] else None
             if can_switch_mapset_interactive(self, grassdb, location, mapset):
                 switch_mapset_interactively(
                     self,
@@ -1240,14 +1237,13 @@ class GMFrame(wx.Frame):
         if onlyCurrent:
             if self.currentPage:
                 return self.GetLayerTree().GetMapDisplay()
-            else:
-                return None
-        else:  # -> return list of all mapdisplays
-            mlist = []
-            for idx in range(0, self.notebookLayers.GetPageCount()):
-                mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
+            return None
+        # -> return list of all mapdisplays
+        mlist = []
+        for idx in range(self.notebookLayers.GetPageCount()):
+            mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
 
-            return mlist
+        return mlist
 
     def GetAllMapDisplays(self):
         """Get all (open) map displays"""
@@ -1269,10 +1265,7 @@ class GMFrame(wx.Frame):
 
         :return: command as a list"""
         layer = None
-        if event:
-            cmd = self.menucmd[event.GetId()]
-        else:
-            cmd = ""
+        cmd = self.menucmd[event.GetId()] if event else ""
 
         try:
             cmdlist = cmd.split(" ")
@@ -2054,7 +2047,7 @@ class GMFrame(wx.Frame):
         """Disables 3D mode for all map displays except for @p mapDisplay"""
         # TODO: it should be disabled also for newly created map windows
         # moreover mapdisp.Disable3dMode() does not work properly
-        for page in range(0, self.GetLayerNotebook().GetPageCount()):
+        for page in range(self.GetLayerNotebook().GetPageCount()):
             mapdisp = self.GetLayerNotebook().GetPage(page).maptree.GetMapDisplay()
             if self.GetLayerNotebook().GetPage(page) != mapDisplayPage:
                 mapdisp.Disable3dMode()

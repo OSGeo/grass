@@ -51,7 +51,7 @@ def replace_in_file(file_path, pattern, repl):
     """
     # using tmp file to store the replaced content
     tmp_file_path = file_path + ".tmp"
-    with open(file_path, "r") as old_file, open(tmp_file_path, "w") as new_file:
+    with open(file_path) as old_file, open(tmp_file_path, "w") as new_file:
         for line in old_file:
             new_file.write(re.sub(pattern=pattern, string=line, repl=repl))
     # remove old file since it must not exist for rename/move
@@ -107,11 +107,10 @@ def get_source_url(path, revision, line=None):
     :param revision: SVN revision (should be a number)
     :param line: line in the file (should be None for directories)
     """
-    tracurl = "http://trac.osgeo.org/grass/browser/"
+    tracurl = "https://trac.osgeo.org/grass/browser/"
     if line:
         return "{tracurl}{path}?rev={revision}#L{line}".format(**locals())
-    else:
-        return "{tracurl}{path}?rev={revision}".format(**locals())
+    return "{tracurl}{path}?rev={revision}".format(**locals())
 
 
 def html_escape(text):
@@ -150,8 +149,7 @@ def to_web_path(path):
     """
     if os.path.sep != "/":
         return path.replace(os.path.sep, "/")
-    else:
-        return path
+    return path
 
 
 def get_svn_revision():
@@ -174,8 +172,7 @@ def get_svn_revision():
             # the first one is the one of source code
             stdout = stdout.split(":")[0]
         return stdout
-    else:
-        return None
+    return None
 
 
 def get_svn_info():
@@ -237,11 +234,8 @@ def get_svn_path_authors(path, from_date=None):
 
     :returns: a set of authors
     """
-    if from_date is None:
-        # this is the SVN default for local copies
-        revision_range = "BASE:1"
-    else:
-        revision_range = "BASE:{%s}" % from_date
+    # "BASE:1" is the SVN default for local copies
+    revision_range = "BASE:1" if from_date is None else "BASE:{%s}" % from_date
     try:
         # TODO: allow also usage of --limit
         p = subprocess.Popen(
@@ -436,9 +430,9 @@ class GrassTestFilesCountingReporter:
 def percent_to_html(percent):
     if percent is None:
         return '<span style="color: {color}">unknown percentage</span>'
-    elif percent > 100 or percent < 0:
+    if percent > 100 or percent < 0:
         return "? {:.2f}% ?".format(percent)
-    elif percent < 40:
+    if percent < 40:
         color = "red"
     elif percent < 70:
         color = "orange"
@@ -490,14 +484,10 @@ def html_file_preview(filename):
 
 def returncode_to_html_text(returncode, timed_out=None):
     if returncode:
-        if timed_out is not None:
-            extra = f" (timeout >{timed_out}s)"
-        else:
-            extra = ""
+        extra = f" (timeout >{timed_out}s)" if timed_out is not None else ""
         return f'<span style="color: red">FAILED{extra}</span>'
-    else:
-        # alternatives: SUCCEEDED, passed, OK
-        return '<span style="color: green">succeeded</span>'
+    # alternatives: SUCCEEDED, passed, OK
+    return '<span style="color: green">succeeded</span>'
 
 
 # not used
@@ -507,31 +497,28 @@ def returncode_to_html_sentence(returncode):
             '<span style="color: red">&#x274c;</span>'
             " Test failed (return code %d)" % (returncode)
         )
-    else:
-        return (
-            '<span style="color: green">&#x2713;</span>'
-            " Test succeeded (return code %d)" % (returncode)
-        )
+    return (
+        '<span style="color: green">&#x2713;</span>'
+        " Test succeeded (return code %d)" % (returncode)
+    )
 
 
 def returncode_to_success_html_par(returncode):
     if returncode:
         return '<p> <span style="color: red">&#x274c;</span> Test failed</p>'
-    else:
-        return '<p> <span style="color: green">&#x2713;</span> Test succeeded</p>'
+    return '<p> <span style="color: green">&#x2713;</span> Test succeeded</p>'
 
 
 def success_to_html_text(total, successes):
     if successes < total:
         return '<span style="color: red">FAILED</span>'
-    elif successes == total:
+    if successes == total:
         # alternatives: SUCCEEDED, passed, OK
         return '<span style="color: green">succeeded</span>'
-    else:
-        return (
-            '<span style="color: red; font-size: 60%">'
-            "? more successes than total ?</span>"
-        )
+    return (
+        '<span style="color: red; font-size: 60%">'
+        "? more successes than total ?</span>"
+    )
 
 
 UNKNOWN_NUMBER_HTML = '<span style="font-size: 60%">unknown</span>'
@@ -627,8 +614,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         def format_percentage(percentage):
             if percentage is not None:
                 return "{nsper:.0f}%".format(nsper=percentage)
-            else:
-                return "unknown percentage"
+            return "unknown percentage"
 
         summary_sentence = (
             "\nExecuted {nfiles} test files in {time:}."
@@ -865,10 +851,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
 
         # this shoul be moved to some additional meta passed in constructor
         svn_info = get_svn_info()
-        if not svn_info:
-            svn_revision = ""
-        else:
-            svn_revision = svn_info["revision"]
+        svn_revision = "" if not svn_info else svn_info["revision"]
 
         summary = {}
         summary["files_total"] = self.test_files
@@ -985,8 +968,7 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
         def format_percentage(percentage):
             if percentage is not None:
                 return "{nsper:.0f}%".format(nsper=percentage)
-            else:
-                return "unknown percentage"
+            return "unknown percentage"
 
         summary_sentence = (
             "\nExecuted {nfiles} test files in {time:}."
@@ -1034,10 +1016,7 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
             num_failed = test_summary.get("failures", 0)
             num_failed += test_summary.get("errors", 0)
             if num_failed:
-                if num_failed > 1:
-                    text = " ({f} tests failed)"
-                else:
-                    text = " ({f} test failed)"
+                text = " ({f} tests failed)" if num_failed > 1 else " ({f} test failed)"
                 self._stream.write(text.format(f=num_failed))
             self._stream.write("\n")
             # TODO: here we lost the possibility to include also file name

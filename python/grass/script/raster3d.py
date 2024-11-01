@@ -47,8 +47,7 @@ def raster3d_info(map, env=None):
     def float_or_null(s):
         if s == "NULL":
             return None
-        else:
-            return float(s)
+        return float(s)
 
     s = read_command("r3.info", flags="rg", map=map, env=env)
     kv = parse_key_val(s)

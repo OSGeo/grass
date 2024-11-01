@@ -691,10 +691,7 @@ class TestCase(unittest.TestCase):
             at the end of file (as for example, Git or PEP8 requires).
         """
         self.assertFileExists(filename, msg=msg)
-        if text:
-            actual = text_file_md5(filename)
-        else:
-            actual = file_md5(filename)
+        actual = text_file_md5(filename) if text else file_md5(filename)
         if actual != md5:
             standardMsg = (
                 "File <{name}> does not have the right MD5 sum.\n"
@@ -736,10 +733,9 @@ class TestCase(unittest.TestCase):
         # and ensure uniqueness by add UUID
         if self.readable_names:
             return "tmp_" + self.id().replace(".", "_") + "_" + name
-        else:
-            # UUID might be overkill (and expensive) but it's safe and simple
-            # alternative is to create hash from the readable name
-            return "tmp_" + str(uuid.uuid4()).replace("-", "")
+        # UUID might be overkill (and expensive) but it's safe and simple
+        # alternative is to create hash from the readable name
+        return "tmp_" + str(uuid.uuid4()).replace("-", "")
 
     def _compute_difference_raster(self, first, second, name_part):
         """Compute difference of two rasters (first - second)
@@ -1340,12 +1336,9 @@ class TestCase(unittest.TestCase):
                 errors = " The errors are:\n" + module.outputs.stderr
             else:
                 errors = " There were no error messages."
-            if module.outputs.stdout:
-                # this is not appropriate for translation but we don't want
-                # and don't need testing to be translated
-                got = "only whitespace."
-            else:
-                got = "nothing."
+            # This is not appropriate for translation but we don't want
+            # and don't need testing to be translated
+            got = "only whitespace." if module.outputs.stdout else "nothing."
             raise RuntimeError(
                 "Module call "
                 + module.get_python()

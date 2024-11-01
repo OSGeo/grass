@@ -1548,37 +1548,36 @@ class ExportDialog(wx.Dialog):
         if not file_path:
             GError(parent=self, message=_("Export file is missing."))
             return False
-        else:
-            if not file_path.endswith(file_postfix):
-                filebrowsebtn.SetValue(file_path + file_postfix)
-                file_path += file_postfix
+        if not file_path.endswith(file_postfix):
+            filebrowsebtn.SetValue(file_path + file_postfix)
+            file_path += file_postfix
 
-            base_dir = os.path.dirname(file_path)
-            if not os.path.exists(base_dir):
-                GError(
-                    parent=self,
-                    message=file_path_does_not_exist_err_message.format(
-                        base_dir=base_dir,
-                    ),
-                )
-                return False
+        base_dir = os.path.dirname(file_path)
+        if not os.path.exists(base_dir):
+            GError(
+                parent=self,
+                message=file_path_does_not_exist_err_message.format(
+                    base_dir=base_dir,
+                ),
+            )
+            return False
 
-            if os.path.exists(file_path):
-                overwrite_dlg = wx.MessageDialog(
-                    self.GetParent(),
-                    message=_(
-                        "Exported animation file <{file}> exists. "
-                        "Do you want to overwrite it?"
-                    ).format(
-                        file=file_path,
-                    ),
-                    caption=_("Overwrite?"),
-                    style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
-                )
-                if overwrite_dlg.ShowModal() != wx.ID_YES:
-                    overwrite_dlg.Destroy()
-                    return False
+        if os.path.exists(file_path):
+            overwrite_dlg = wx.MessageDialog(
+                self.GetParent(),
+                message=_(
+                    "Exported animation file <{file}> exists. "
+                    "Do you want to overwrite it?"
+                ).format(
+                    file=file_path,
+                ),
+                caption=_("Overwrite?"),
+                style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
+            )
+            if overwrite_dlg.ShowModal() != wx.ID_YES:
                 overwrite_dlg.Destroy()
+                return False
+            overwrite_dlg.Destroy()
 
         return True
 
@@ -1620,10 +1619,7 @@ class AnimSimpleLayerManager(SimpleLayerManager):
         dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             layer = dlg.GetLayer()
-            if hidden:
-                signal = self.layerAdded
-            else:
-                signal = self.cmdChanged
+            signal = self.layerAdded if hidden else self.cmdChanged
             signal.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
         elif hidden:
             self._layerList.RemoveLayer(layer)
@@ -2024,7 +2020,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             panel,
             id=wx.ID_ANY,
             label=_("Learn more about formatting options"),
-            url="http://docs.python.org/2/library/datetime.html#"
+            url="https://docs.python.org/2/library/datetime.html#"
             "strftime-and-strptime-behavior",
         )
         link.SetNormalColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
