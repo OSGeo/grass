@@ -111,22 +111,19 @@ bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
 
     if (is_mask_reclass && reclass_name && reclass_mapset) {
         if (info == 1) {
+            // The original mask values were overwritten in the initial
+            // info call. Put back the original values, so that we can
+            // report them to the caller.
+            char *full_name = Rast_mask_name();
+            G_unqualified_name(full_name, "", name, mapset);
+            G_free(full_name);
             *is_mask_reclass =
                 Rast_is_reclass(name, mapset, reclass_name, reclass_mapset) > 0;
-            if (*is_mask_reclass) {
-                // The original mask values were overwritten in the initial
-                // info call. Put back the original values, so that we can
-                // report them to the caller.
-                char *full_name = Rast_mask_name();
-                G_unqualified_name(full_name, "", name, mapset);
-                G_free(full_name);
-            }
         }
         else {
             *is_mask_reclass = false;
         }
     }
-
     if (info == 1)
         return true;
     else
