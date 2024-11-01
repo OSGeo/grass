@@ -29,10 +29,10 @@ int main(int argc, char **argv)
 {
     struct GModule *module;
     struct {
-        struct Option *map, *file, *format;
+        struct Option *map, *file, *format, *color_format;
     } opt;
     struct {
-        struct Flag *p, *r, *x, *h;
+        struct Flag *p;
     } flag;
 
     const char *file;
@@ -62,21 +62,27 @@ int main(int argc, char **argv)
     opt.format = G_define_standard_option(G_OPT_F_FORMAT);
     opt.format->guisection = _("Print");
 
+    opt.color_format = G_define_option();
+    opt.color_format->key = "color_format";
+    opt.color_format->type = TYPE_STRING;
+    opt.color_format->key_desc = "name";
+    opt.color_format->required = YES;
+    opt.color_format->multiple = NO;
+    opt.color_format->answer = "xterm";
+    opt.color_format->options = "rgb,hex,hsv,xterm";
+    opt.color_format->label = _("Color format");
+    opt.color_format->description = _("Color format output for raster values.");
+    char *desc = NULL;
+    G_asprintf(&desc, "rgb;%s;hex;%s;hsv;%s;xterm;%s",
+               _("output color in RGB format"), _("output color in HEX format"),
+               _("output color in HSV format"),
+               _("output color in XTERM format"));
+    opt.color_format->descriptions = desc;
+    opt.color_format->guisection = _("Color");
+
     flag.p = G_define_flag();
     flag.p->key = 'p';
     flag.p->description = _("Output values as percentages");
-
-    flag.r = G_define_flag();
-    flag.r->key = 'r';
-    flag.r->description = _("Output colors as rgb format");
-
-    flag.x = G_define_flag();
-    flag.x->key = 'x';
-    flag.x->description = _("Output colors as hex format");
-
-    flag.h = G_define_flag();
-    flag.h->key = 'h';
-    flag.h->description = _("Output colors as hsv format");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -98,13 +104,13 @@ int main(int argc, char **argv)
     }
 
     if (strcmp(opt.format->answer, "json") == 0) {
-        if (flag.r->answer) {
+        if (strcmp(opt.color_format->answer, "rgb") == 0) {
             clr_frmt = RGB;
         }
-        else if (flag.x->answer) {
+        else if (strcmp(opt.color_format->answer, "hex") == 0) {
             clr_frmt = HEX;
         }
-        else if (flag.h->answer) {
+        else if (strcmp(opt.color_format->answer, "hsv") == 0) {
             clr_frmt = HSV;
         }
         else {

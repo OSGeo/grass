@@ -65,8 +65,8 @@ def validate_common_json_structure(data):
     ), "The length of the output JSON does not match the expected value of 8."
 
 
-def test_r3_colors_out_json_with_default_flag(raster3_color_dataset):
-    """Test r3.colors.out command for JSON output format for xterm color option."""
+def test_r3_colors_out_json_with_default_option(raster3_color_dataset):
+    """Test r3.colors.out command for JSON output format for default color option."""
     session = raster3_color_dataset
     data = gs.parse_command("r3.colors.out", map="b", format="json", env=session.env)
     validate_common_json_structure(data)
@@ -83,14 +83,34 @@ def test_r3_colors_out_json_with_default_flag(raster3_color_dataset):
     assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
-def test_r3_colors_out_json_with_rgb_flag(raster3_color_dataset):
+def test_r3_colors_out_json_with_xterm_option(raster3_color_dataset):
+    """Test r3.colors.out command for JSON output format for xterm color option."""
+    session = raster3_color_dataset
+    data = gs.parse_command(
+        "r3.colors.out", map="b", format="json", color_format="xterm", env=session.env
+    )
+    validate_common_json_structure(data)
+    expected = [
+        {"value": 1, "RGB": "0:191:191"},
+        {"value": 1.8, "RGB": "0:255:0"},
+        {"value": 2.6, "RGB": "255:255:0"},
+        {"value": 3.4, "RGB": "255:127:0"},
+        {"value": 4.2, "RGB": "191:127:63"},
+        {"value": 5, "RGB": "200:200:200"},
+        {"value": "nv", "RGB": "255:255:255"},
+        {"value": "default", "RGB": "255:255:255"},
+    ]
+    assert expected == data, f"test failed: expected {expected} but got {data}"
+
+
+def test_r3_colors_out_json_with_rgb_option(raster3_color_dataset):
     """Test r3.colors.out command for JSON output format for rgb color option."""
     session = raster3_color_dataset
     data = gs.parse_command(
         "r3.colors.out",
         map="b",
         format="json",
-        flags="r",
+        color_format="rgb",
         env=session.env,
     )
     validate_common_json_structure(data)
@@ -107,14 +127,14 @@ def test_r3_colors_out_json_with_rgb_flag(raster3_color_dataset):
     assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
-def test_r3_colors_out_json_with_hex_flag(raster3_color_dataset):
+def test_r3_colors_out_json_with_hex_option(raster3_color_dataset):
     """Test r3.colors.out command for JSON output format for hex color option."""
     session = raster3_color_dataset
     data = gs.parse_command(
         "r3.colors.out",
         map="b",
         format="json",
-        flags="x",
+        color_format="hex",
         env=session.env,
     )
     validate_common_json_structure(data)
@@ -131,14 +151,14 @@ def test_r3_colors_out_json_with_hex_flag(raster3_color_dataset):
     assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
-def test_r3_colors_out_json_with_hsv_flag(raster3_color_dataset):
+def test_r3_colors_out_json_with_hsv_option(raster3_color_dataset):
     """Test r3.colors.out command for JSON output format for hsv color option."""
     session = raster3_color_dataset
     data = gs.parse_command(
         "r3.colors.out",
         map="b",
         format="json",
-        flags="h",
+        color_format="hsv",
         env=session.env,
     )
     validate_common_json_structure(data)
