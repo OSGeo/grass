@@ -16,12 +16,14 @@ char *maskinfo(void)
     char text[100];
     int next;
     int first;
+    char mask_name[GNAME_MAX];
+    char mask_mapset[GMAPSET_MAX];
 
     results = NULL;
-    if (G_find_raster("MASK", G_mapset()) == NULL)
+    if (!Rast_mask_status(mask_name, mask_mapset, NULL, NULL, NULL))
         return "none";
-    if (Rast_get_reclass("MASK", G_mapset(), &reclass) <= 0) {
-        sprintf(text, "MASK in %s", G_mapset());
+    if (Rast_get_reclass(mask_name, mask_mapset, &reclass) <= 0) {
+        sprintf(text, "%s in %s", mask_name, mask_mapset);
         return append(results, text);
     }
 
