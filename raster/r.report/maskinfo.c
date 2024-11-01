@@ -13,7 +13,7 @@ char *maskinfo(void)
 {
     struct Reclass reclass;
     char *results;
-    char text[100];
+    char text[2 * GNAME_MAX + GMAPSET_MAX];
     int next;
     int first;
     char mask_name[GNAME_MAX];
