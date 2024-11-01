@@ -486,9 +486,8 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdi
             index = self.GetNextItem(lastFound, wx.LIST_NEXT_ALL, state)
             if index == -1:
                 break
-            else:
-                lastFound = index
-                indices.append(index)
+            lastFound = index
+            indices.append(index)
         return indices
 
     def OnEdit(self, event):
@@ -586,13 +585,9 @@ def ContrastColor(color):
         could be useful by other apps, consider moving it into gui_core
     """
     # gacek,
-    # http://stackoverflow.com/questions/1855884/determine-font-color-based-on-background-color
+    # https://stackoverflow.com/questions/1855884/determine-font-color-based-on-background-color
     a = 1 - (0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2]) / 255
-
-    if a < 0.5:
-        d = 0
-    else:
-        d = 255
+    d = 0 if a < 0.5 else 255
     # maybe return just bool if text should be dark or bright
     return (d, d, d)
 
@@ -835,10 +830,10 @@ class IClassExportAreasDialog(wx.Dialog):
             qdlg = wx.MessageDialog(
                 parent=self,
                 message=_(
-                    "Vector map <%s> already exists."
-                    " Do you want to overwrite it?" % vName
-                ),
-                caption=_("Vector <%s> exists" % vName),
+                    "Vector map <%s> already exists. Do you want to overwrite it?"
+                )
+                % vName,
+                caption=_("Vector <%s> exists") % vName,
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
             if qdlg.ShowModal() == wx.ID_YES:

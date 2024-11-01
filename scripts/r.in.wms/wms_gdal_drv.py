@@ -155,7 +155,7 @@ class WMSGdalDrv(WMSBase):
         xml_file = self._createXML()
 
         # print xml file content for debug level 1
-        file = open(xml_file, "r")
+        file = open(xml_file)
         gs.debug("WMS request XML:\n%s" % file.read(), 1)
         file.close()
 
@@ -172,7 +172,7 @@ class WMSGdalDrv(WMSBase):
 
         driver = gdal.GetDriverByName(self.gdal_drv_format)
         if driver is None:
-            gs.fatal(_("Unable to find %s driver" % format))
+            gs.fatal(_("Unable to find %s driver") % self.gdal_drv_format)
 
         metadata = driver.GetMetadata()
         if (

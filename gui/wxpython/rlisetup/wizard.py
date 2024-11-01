@@ -720,13 +720,12 @@ class FirstPage(TitledPage):
                 % vector
             )
             return False, []
-        elif links > 0:
+        if links > 0:
             layers = []
             for i in range(1, links + 1):
                 layers.append(str(i))
             return True, layers
-        else:
-            return False, []
+        return False, []
 
     def CheckInput(self):
         """Check input fields.
@@ -1819,14 +1818,13 @@ class VectorAreasPage(TitledPage):
             self.areaOK.Enable(False)
             self.areaNO.Enable(False)
             return True
-        else:
-            self.title.SetLabel(
-                _("Select sample area {areas_count} of {area_num}").format(
-                    areas_count=self.areascount + 1, area_num=self.areanum
-                )
+        self.title.SetLabel(
+            _("Select sample area {areas_count} of {area_num}").format(
+                areas_count=self.areascount + 1, area_num=self.areanum
             )
-            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
-            return False
+        )
+        wx.FindWindowById(wx.ID_FORWARD).Enable(False)
+        return False
 
     def OnYes(self, event):
         """Function to create the string for the conf file if the area
@@ -1859,8 +1857,8 @@ class VectorAreasPage(TitledPage):
                     "The raster map <%s> already exists."
                     " Please remove or rename the maps "
                     "with the prefix '%s' or select the "
-                    "option to overwrite existing maps" % (self.outname, self.outpref)
-                ),
+                    "option to overwrite existing maps"
+                ).format(self.outname, self.outpref),
             )
             self.parent.wizard.ShowPage(self.parent.samplingareapage)
             return
