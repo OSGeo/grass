@@ -40,19 +40,19 @@ def test_mask_manager_generated_name_remove_default_r_mask(session_2x2):
         assert "GRASS_MASK" in session_2x2.env
         assert session_2x2.env["GRASS_MASK"] == manager.mask_name
         gs.run_command("r.mask", raster="nulls_and_one_1_1", env=session_2x2.env)
-        # assert raster_exists(manager.mask_name, env=session_2x2.env)
+        assert raster_exists(manager.mask_name, env=session_2x2.env)
         status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
         assert status["name"].startswith(manager.mask_name)
-        # assert status["present"]
-        # assert raster_sum("ones", env=session_2x2.env) == 1
+        assert status["present"]
+        assert raster_sum("ones", env=session_2x2.env) == 1
 
     # After context: GRASS_MASK unset, mask should be removed
     assert "GRASS_MASK" not in session_2x2.env
     assert not raster_exists(manager.mask_name, env=session_2x2.env)
     status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
     assert status["name"].startswith("MASK")
-    # assert not status["present"]
-    # assert raster_sum("ones", env=session_2x2.env) == 4
+    assert not status["present"]
+    assert raster_sum("ones", env=session_2x2.env) == 4
 
 
 def test_mask_manager_generated_name_remove_true_r_mask(session_2x2):
@@ -64,19 +64,19 @@ def test_mask_manager_generated_name_remove_true_r_mask(session_2x2):
         assert "GRASS_MASK" in session_2x2.env
         assert session_2x2.env["GRASS_MASK"] == manager.mask_name
         gs.run_command("r.mask", raster="nulls_and_one_1_1", env=session_2x2.env)
-        # assert raster_exists(manager.mask_name, env=session_2x2.env)
+        assert raster_exists(manager.mask_name, env=session_2x2.env)
         status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
         assert status["name"].startswith(manager.mask_name)
-        # assert status["present"]
-        # assert raster_sum("ones", env=session_2x2.env) == 1
+        assert status["present"]
+        assert raster_sum("ones", env=session_2x2.env) == 1
 
     # After context: GRASS_MASK unset, mask should be removed
     assert "GRASS_MASK" not in session_2x2.env
     assert not raster_exists(manager.mask_name, env=session_2x2.env)
     status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
     assert status["name"].startswith("MASK")
-    # assert not status["present"]
-    # assert raster_sum("ones", env=session_2x2.env) == 4
+    assert not status["present"]
+    assert raster_sum("ones", env=session_2x2.env) == 4
 
 
 def test_mask_manager_generated_name_remove_false_r_mask(session_2x2):
@@ -87,19 +87,19 @@ def test_mask_manager_generated_name_remove_false_r_mask(session_2x2):
         assert "GRASS_MASK" in session_2x2.env
         assert session_2x2.env["GRASS_MASK"] == manager.mask_name
         gs.run_command("r.mask", raster="nulls_and_one_1_1", env=session_2x2.env)
-        # assert raster_exists(manager.mask_name, env=session_2x2.env)
+        assert raster_exists(manager.mask_name, env=session_2x2.env)
         status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
         assert status["name"].startswith(manager.mask_name)
-        # assert status["present"]
-        # assert raster_sum("ones", env=session_2x2.env) == 1
+        assert status["present"]
+        assert raster_sum("ones", env=session_2x2.env) == 1
 
     # After context: GRASS_MASK unset, mask should not be removed
     assert "GRASS_MASK" not in session_2x2.env
-    # assert raster_exists(manager.mask_name, env=session_2x2.env)
+    assert raster_exists(manager.mask_name, env=session_2x2.env)
     status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
     assert status["name"].startswith("MASK")
-    # assert not status["present"]
-    # assert raster_sum("ones", env=session_2x2.env) == 4
+    assert not status["present"]
+    assert raster_sum("ones", env=session_2x2.env) == 4
 
 
 def test_mask_manager_generated_name_remove_true_g_copy(session_2x2):
