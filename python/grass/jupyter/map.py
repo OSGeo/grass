@@ -17,6 +17,7 @@ import os
 import shutil
 import tempfile
 import weakref
+from pathlib import Path
 
 import grass.script as gs
 
@@ -158,12 +159,12 @@ class Map:
         :param `**kwargs`: named arguments passed to run_command()"""
 
         # Check module is from display library then run
-        if module[0] == "d":
+        if module[0] == "d" or Path(module).is_file():
             self._region_manager.set_region_from_command(module, **kwargs)
             self._region_manager.adjust_rendering_size_from_region()
             gs.run_command(module, env=self._env, **kwargs)
         else:
-            raise ValueError("Module must begin with letter 'd'.")
+            raise ValueError(f"Module must begin with letter 'd': {module}")
 
     def __getattr__(self, name):
         """Parse attribute to GRASS display module. Attribute should be in
@@ -172,7 +173,7 @@ class Map:
 
         # Check to make sure format is correct
         if not name.startswith("d_"):
-            raise AttributeError(_("Module must begin with 'd_'"))
+            raise AttributeError(_("Module must begin with 'd_': '{}'").format(name))
         # Reformat string
         grass_module = name.replace("_", ".")
         # Assert module exists
