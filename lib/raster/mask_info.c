@@ -28,6 +28,8 @@
  * Caller is responsible for freeing the memory of the returned string.
  *
  * @return New string with textual information
+ *
+ * @see Rast_mask_status()
  */
 char *Rast_mask_info(void)
 {
@@ -84,6 +86,30 @@ char *Rast_mask_name(void)
 }
 
 /**
+ * @brief Get name of a mask if it is present
+ *
+ * Unlike, Rast__mask_info() this always returns name of the mask
+ * if it is present regardless of the mask being a reclass or not.
+ *
+ * @param[out] name Name of the raster map used as mask
+ * @param[out] mapset Name of the map's mapset
+ *
+ * @return true if mask is present, false otherwise
+ */
+static bool Rast__get_present_mask(char *name, char *mapset)
+{
+    char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
+    char *full_name = Rast_mask_name();
+    if (!G_find_raster2(full_name, ""))
+        return false;
+    G_unqualified_name(full_name, "", rname, rmapset);
+    strncpy(name, rname, GMAPSET_MAX);
+    strncpy(mapset, rmapset, GMAPSET_MAX);
+    G_free(full_name);
+    return true;
+}
+
+/**
  * @brief Get raster mask status information
  *
  * _is_mask_reclass_ is a pointer to a bool variable which
@@ -107,16 +133,10 @@ char *Rast_mask_name(void)
 bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
                       char *reclass_name, char *reclass_mapset)
 {
-    int info = Rast__mask_info(name, mapset);
+    bool present = Rast__get_present_mask(name, mapset);
 
     if (is_mask_reclass && reclass_name && reclass_mapset) {
-        if (info == 1) {
-            // The original mask values were overwritten in the initial
-            // info call. Put back the original values, so that we can
-            // report them to the caller.
-            char *full_name = Rast_mask_name();
-            G_unqualified_name(full_name, "", name, mapset);
-            G_free(full_name);
+        if (present) {
             *is_mask_reclass =
                 Rast_is_reclass(name, mapset, reclass_name, reclass_mapset) > 0;
         }
@@ -124,10 +144,7 @@ bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
             *is_mask_reclass = false;
         }
     }
-    if (info == 1)
-        return true;
-    else
-        return false;
+    return present;
 }
 
 /**
@@ -156,21 +173,14 @@ bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
 int Rast__mask_info(char *name, char *mapset)
 {
     char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
-
-    char *full_name = Rast_mask_name();
-
-    if (!G_find_raster2(full_name, ""))
+    bool present = Rast__get_present_mask(name, mapset);
+    if (!present)
         return -1;
-    G_unqualified_name(full_name, "", rname, rmapset);
 
-    strcpy(name, rname);
-    strcpy(mapset, rmapset);
     if (Rast_is_reclass(name, mapset, rname, rmapset) > 0) {
         strcpy(name, rname);
         strcpy(mapset, rmapset);
     }
-
-    G_free(full_name);
     return 1;
 }
 
