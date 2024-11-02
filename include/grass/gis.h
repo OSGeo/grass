@@ -318,7 +318,7 @@ typedef enum {
 
     G_OPT_C,        /*!< color */
     G_OPT_CN,       /*!< color or none */
-    G_OPT_C_FORMAT, /*!< set color format to rgb,hex,hsv or xterm */
+    G_OPT_C_FORMAT, /*!< set color format to rgb,hex,hsv or triplet */
 
     G_OPT_M_UNITS,      /*!< units */
     G_OPT_M_DATATYPE,   /*!< datatype */

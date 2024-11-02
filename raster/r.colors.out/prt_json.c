@@ -10,9 +10,7 @@
 
 #include "local_proto.h"
 
-#define RGB_STRING_LENGTH 20
-#define HEX_STRING_LENGTH 8
-#define HSV_STRING_LENGTH 30
+#define COLOR_STRING_LENGTH 30
 
 /*!
    \brief Closes the file if it is not stdout.
@@ -27,6 +25,8 @@ static void close_file(FILE *fp)
 
 /*!
    \brief Converts RGB color values to HSV format.
+
+   \note This implementation is experimental and may be subject to change.
 
    \param r red component of the RGB color
    \param g green component of the RGB color
@@ -74,44 +74,38 @@ static void rgb_to_hsv(int r, int g, int b, float *h, float *s, float *v)
    \param r red component of RGB color
    \param g green component of RGB color
    \param b blue component of RGB color
-   \param clr_frmt color format to be used (RGB, HEX, HSV, XTERM).
+   \param clr_frmt color format to be used (RGB, HEX, HSV, TRIPLET).
    \param color_object pointer to the JSON object
  */
 static void set_color(int r, int g, int b, enum ColorFormat clr_frmt,
                       JSON_Object *color_object)
 {
+    char color_string[COLOR_STRING_LENGTH];
+    float h, s, v;
+
     switch (clr_frmt) {
-    case RGB: {
-        char rgb_string[RGB_STRING_LENGTH];
-        snprintf(rgb_string, sizeof(rgb_string), "rgb(%d, %d, %d)", r, g, b);
-        json_object_set_string(color_object, "rgb", rgb_string);
+    case RGB:
+        snprintf(color_string, sizeof(color_string), "rgb(%d, %d, %d)", r, g,
+                 b);
+        json_object_set_string(color_object, "rgb", color_string);
         break;
-    }
 
-    case HEX: {
-        char hex_string[HEX_STRING_LENGTH];
-        snprintf(hex_string, sizeof(hex_string), "#%02X%02X%02X", r, g, b);
-        json_object_set_string(color_object, "hex", hex_string);
+    case HEX:
+        snprintf(color_string, sizeof(color_string), "#%02X%02X%02X", r, g, b);
+        json_object_set_string(color_object, "hex", color_string);
         break;
-    }
 
-    case HSV: {
-        float h, s, v;
+    case HSV:
         rgb_to_hsv(r, g, b, &h, &s, &v);
-        char hsv_string[HSV_STRING_LENGTH];
-        snprintf(hsv_string, sizeof(hsv_string), "hsv(%d, %d, %d)", (int)h,
+        snprintf(color_string, sizeof(color_string), "hsv(%d, %d, %d)", (int)h,
                  (int)s, (int)v);
-        json_object_set_string(color_object, "hsv", hsv_string);
+        json_object_set_string(color_object, "hsv", color_string);
         break;
-    }
 
-    case XTERM: {
-        char default_rgb_string[RGB_STRING_LENGTH];
-        snprintf(default_rgb_string, sizeof(default_rgb_string), "%d:%d:%d", r,
-                 g, b);
-        json_object_set_string(color_object, "RGB", default_rgb_string);
+    case TRIPLET:
+        snprintf(color_string, sizeof(color_string), "%d:%d:%d", r, g, b);
+        json_object_set_string(color_object, "triplet", color_string);
         break;
-    }
     }
 }
 
@@ -126,7 +120,7 @@ static void set_color(int r, int g, int b, enum ColorFormat clr_frmt,
    \param b blue component of RGB color
    \param root_array pointer to the JSON array
    \param perc TRUE for percentage output
-   \param clr_frmt color format to be used (RBG, HEX, HSV, XTERM).
+   \param clr_frmt color format to be used (RBG, HEX, HSV, TRIPLET).
    \param fp file where to print color table rules
    \param root_value pointer to json value
  */
@@ -172,7 +166,7 @@ static void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g,
            when \p perc is non-zero)
    \param fp file where to print color table rules
    \param perc TRUE for percentage output
-   \param clr_frmt color format to be used (RBG, HEX, HSV, XTERM).
+   \param clr_frmt color format to be used (RBG, HEX, HSV, TRIPLET).
  */
 void print_json_colors(struct Colors *colors, DCELL min, DCELL max, FILE *fp,
                        int perc, enum ColorFormat clr_frmt)

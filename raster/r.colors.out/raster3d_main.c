@@ -93,14 +93,14 @@ int main(int argc, char **argv)
         if (strcmp(opt.color_format->answer, "rgb") == 0) {
             clr_frmt = RGB;
         }
-        else if (strcmp(opt.color_format->answer, "hex") == 0) {
-            clr_frmt = HEX;
+        else if (strcmp(opt.color_format->answer, "triplet") == 0) {
+            clr_frmt = TRIPLET;
         }
         else if (strcmp(opt.color_format->answer, "hsv") == 0) {
             clr_frmt = HSV;
         }
         else {
-            clr_frmt = XTERM;
+            clr_frmt = HEX;
         }
         print_json_colors(&colors, range.min, range.max, fp,
                           flag.p->answer ? 1 : 0, clr_frmt);

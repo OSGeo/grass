@@ -71,34 +71,34 @@ def test_r3_colors_out_json_with_default_option(raster3_color_dataset):
     data = gs.parse_command("r3.colors.out", map="b", format="json", env=session.env)
     validate_common_json_structure(data)
     expected = [
-        {"value": 1, "RGB": "0:191:191"},
-        {"value": 1.8, "RGB": "0:255:0"},
-        {"value": 2.6, "RGB": "255:255:0"},
-        {"value": 3.4, "RGB": "255:127:0"},
-        {"value": 4.2, "RGB": "191:127:63"},
-        {"value": 5, "RGB": "200:200:200"},
-        {"value": "nv", "RGB": "255:255:255"},
-        {"value": "default", "RGB": "255:255:255"},
+        {"value": 1, "hex": "#00BFBF"},
+        {"value": 1.8, "hex": "#00FF00"},
+        {"value": 2.6, "hex": "#FFFF00"},
+        {"value": 3.4, "hex": "#FF7F00"},
+        {"value": 4.2, "hex": "#BF7F3F"},
+        {"value": 5, "hex": "#C8C8C8"},
+        {"value": "nv", "hex": "#FFFFFF"},
+        {"value": "default", "hex": "#FFFFFF"},
     ]
     assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
-def test_r3_colors_out_json_with_xterm_option(raster3_color_dataset):
-    """Test r3.colors.out command for JSON output format for xterm color option."""
+def test_r3_colors_out_json_with_crgb_option(raster3_color_dataset):
+    """Test r3.colors.out command for JSON output format for triplet color option."""
     session = raster3_color_dataset
     data = gs.parse_command(
-        "r3.colors.out", map="b", format="json", color_format="xterm", env=session.env
+        "r3.colors.out", map="b", format="json", color_format="triplet", env=session.env
     )
     validate_common_json_structure(data)
     expected = [
-        {"value": 1, "RGB": "0:191:191"},
-        {"value": 1.8, "RGB": "0:255:0"},
-        {"value": 2.6, "RGB": "255:255:0"},
-        {"value": 3.4, "RGB": "255:127:0"},
-        {"value": 4.2, "RGB": "191:127:63"},
-        {"value": 5, "RGB": "200:200:200"},
-        {"value": "nv", "RGB": "255:255:255"},
-        {"value": "default", "RGB": "255:255:255"},
+        {"value": 1, "triplet": "0:191:191"},
+        {"value": 1.8, "triplet": "0:255:0"},
+        {"value": 2.6, "triplet": "255:255:0"},
+        {"value": 3.4, "triplet": "255:127:0"},
+        {"value": 4.2, "triplet": "191:127:63"},
+        {"value": 5, "triplet": "200:200:200"},
+        {"value": "nv", "triplet": "255:255:255"},
+        {"value": "default", "triplet": "255:255:255"},
     ]
     assert expected == data, f"test failed: expected {expected} but got {data}"
 

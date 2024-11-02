@@ -658,14 +658,15 @@ struct Option *G_define_standard_option(int opt)
         Opt->key_desc = "name";
         Opt->required = YES;
         Opt->multiple = NO;
-        Opt->answer = "xterm";
-        Opt->options = "rgb,hex,hsv,xterm";
+        Opt->answer = "hex";
+        Opt->options = "rgb,hex,hsv,triplet";
         Opt->label = _("Color format");
         Opt->description = _("Color format for output values.");
         G_asprintf(
-            (char **)&(Opt->descriptions), "rgb;%s;hex;%s;hsv;%s;xterm;%s",
+            (char **)&(Opt->descriptions), "rgb;%s;hex;%s;hsv;%s;triplet;%s",
             _("output color in RGB format"), _("output color in HEX format"),
-            _("output color in HSV format"), _("output color in XTERM format"));
+            _("output color in HSV format"),
+            _("output color in colon-separated RGB format"));
         break;
 
         /* misc */
