@@ -13,7 +13,7 @@ Usage:
 
 ..
 
-(C) 2012-2013 by the GRASS Development Team
+(C) 2012-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -139,7 +139,6 @@ def print_gridded_dataset_univar_statistics(
     :param nprocs: Number of cores to use for processing
     :param rast_region: If set True ignore the current region settings
            and use the raster map regions for univar statistical calculation.
-           Only available for strds.
     :param region_relation: Process only maps with the given spatial relation
            to the computational region. A string with one of the following values:
            "overlaps": maps that spatially overlap ("intersect")
