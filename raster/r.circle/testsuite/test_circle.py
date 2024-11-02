@@ -48,9 +48,7 @@ class TestRCircle(TestCase):
         """Test creating a circle with r.circle without -b flag."""
         output = "test_circle_distance"
 
-        module = SimpleModule(
-            "r.circle", output=output, coordinates=(15, 15), max=10
-        )
+        module = SimpleModule("r.circle", output=output, coordinates=(15, 15), max=10)
 
         self.assertModule(module)
 
