@@ -27,6 +27,10 @@ if TYPE_CHECKING:
     from multiprocessing.connection import Connection
     from multiprocessing.context import _LockLike
 
+    _MessagesLiteral = Literal[
+        "INFO", "IMPORTANT", "VERBOSE", "WARNING", "ERROR", "FATAL"
+    ]
+
 
 def message_server(lock: _LockLike, conn: Connection) -> NoReturn:
     """The GRASS message server function designed to be a target for
@@ -72,7 +76,7 @@ def message_server(lock: _LockLike, conn: Connection) -> NoReturn:
         # Avoid busy waiting
         conn.poll(None)
         data = conn.recv()
-        message_type = data[0]
+        message_type: Literal[_MessagesLiteral, "DEBUG", "PERCENT", "STOP"] = data[0]
 
         # Only one process is allowed to write to stderr
         with lock:
