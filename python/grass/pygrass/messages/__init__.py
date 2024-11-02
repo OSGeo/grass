@@ -6,12 +6,12 @@
 Fast and exit-safe interface to GRASS C-library message functions
 
 
-(C) 2013 by the GRASS Development Team
+(C) 2013-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+@author Soeren Gebbert, Edouard Choinière
 """
 
 from __future__ import annotations
