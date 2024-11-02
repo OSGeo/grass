@@ -86,18 +86,20 @@ def message_server(lock: _LockLike, conn: Connection) -> NoReturn:
                 libgis.G_debug(1, "Stop messenger server")
                 sys.exit()
 
-            message = data[1]
-
             if message_type == "PERCENT":
                 n = int(data[1])
                 d = int(data[2])
                 s = int(data[3])
                 libgis.G_percent(n, d, s)
-            elif message_type == "DEBUG":
-                level = data[1]
-                message = data[2]
-                libgis.G_debug(level, message)
-            elif message_type == "VERBOSE":
+                continue
+            if message_type == "DEBUG":
+                level = int(data[1])
+                message_debug = data[2]
+                libgis.G_debug(level, message_debug)
+                continue
+
+            message: str = data[1]
+            if message_type == "VERBOSE":
                 libgis.G_verbose_message(message)
             elif message_type == "INFO":
                 libgis.G_message(message)
