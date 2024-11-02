@@ -160,7 +160,7 @@ class NvizToolWindow(GNotebook):
             else:
                 try:
                     selection = layers[0].GetName()
-                except:
+                except (AttributeError, IndexError):
                     continue
             if ltype == "raster":
                 self.FindWindowById(self.win["surface"]["map"]).SetValue(selection)
@@ -734,24 +734,11 @@ class NvizToolWindow(GNotebook):
         self.mainPanelData = SP.ScrolledPanel(parent=self)
         self.mainPanelData.SetupScrolling(scroll_x=False)
         self.mainPanelData.AlwaysShowScrollbars(hflag=False)
-        try:  # wxpython <= 2.8.10
-            self.foldpanelData = fpb.FoldPanelBar(
-                parent=self.mainPanelData,
-                id=wx.ID_ANY,
-                style=fpb.FPB_DEFAULT_STYLE,
-                extraStyle=fpb.FPB_SINGLE_FOLD,
-            )
-        except:
-            try:  # wxpython >= 2.8.11
-                self.foldpanelData = fpb.FoldPanelBar(
-                    parent=self.mainPanelData,
-                    id=wx.ID_ANY,
-                    agwStyle=fpb.FPB_SINGLE_FOLD,
-                )
-            except:  # to be sure
-                self.foldpanelData = fpb.FoldPanelBar(
-                    parent=self.mainPanelData, id=wx.ID_ANY, style=fpb.FPB_SINGLE_FOLD
-                )
+        self.foldpanelData = fpb.FoldPanelBar(
+            parent=self.mainPanelData,
+            id=wx.ID_ANY,
+            agwStyle=fpb.FPB_SINGLE_FOLD,
+        )
 
         self.foldpanelData.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
 
@@ -814,24 +801,11 @@ class NvizToolWindow(GNotebook):
         self.mainPanelAppear = SP.ScrolledPanel(parent=self)
         self.mainPanelAppear.SetupScrolling(scroll_x=False)
         self.mainPanelAppear.AlwaysShowScrollbars(hflag=False)
-        try:  # wxpython <= 2.8.10
-            self.foldpanelAppear = fpb.FoldPanelBar(
-                parent=self.mainPanelAppear,
-                id=wx.ID_ANY,
-                style=fpb.FPB_DEFAULT_STYLE,
-                extraStyle=fpb.FPB_SINGLE_FOLD,
-            )
-        except:
-            try:  # wxpython >= 2.8.11
-                self.foldpanelAppear = fpb.FoldPanelBar(
-                    parent=self.mainPanelAppear,
-                    id=wx.ID_ANY,
-                    agwStyle=fpb.FPB_SINGLE_FOLD,
-                )
-            except:  # to be sure
-                self.foldpanelAppear = fpb.FoldPanelBar(
-                    parent=self.mainPanelAppear, id=wx.ID_ANY, style=fpb.FPB_SINGLE_FOLD
-                )
+        self.foldpanelAppear = fpb.FoldPanelBar(
+            parent=self.mainPanelAppear,
+            id=wx.ID_ANY,
+            agwStyle=fpb.FPB_SINGLE_FOLD,
+        )
 
         self.foldpanelAppear.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
         # light page
@@ -3360,7 +3334,7 @@ class NvizToolWindow(GNotebook):
         name = event.GetString()
         try:
             self._getLayerPropertiesByName(name, mapType="raster")["surface"]
-        except:
+        except (AttributeError, TypeError, KeyError):
             self.EnablePage("fringe", False)
             return
 
@@ -3384,7 +3358,7 @@ class NvizToolWindow(GNotebook):
         name = event.GetString()
         try:
             data = self._getLayerPropertiesByName(name, mapType="vector")["vector"]
-        except:
+        except (AttributeError, TypeError, KeyError):
             self.EnablePage("vector", False)
             return
         layer = self._getMapLayerByName(name, mapType="vector")
@@ -3396,7 +3370,7 @@ class NvizToolWindow(GNotebook):
         name = event.GetString()
         try:
             data = self._getLayerPropertiesByName(name, mapType="raster_3d")["volume"]
-        except:
+        except (AttributeError, TypeError, KeyError):
             self.EnablePage("volume", False)
             return
 
@@ -4925,7 +4899,7 @@ class NvizToolWindow(GNotebook):
         try:
             planeIndex = int(plane.split()[-1]) - 1
             self.EnablePage("cplane", enabled=True)
-        except:
+        except (ValueError, IndexError):
             planeIndex = -1
             self.EnablePage("cplane", enabled=False)
         self.mapWindow.SelectCPlane(planeIndex)
@@ -4942,7 +4916,7 @@ class NvizToolWindow(GNotebook):
         plane = self.FindWindowById(self.win["cplane"]["planes"]).GetStringSelection()
         try:
             planeIndex = int(plane.split()[-1]) - 1
-        except:  # TODO disabled page
+        except (ValueError, IndexError):  # TODO disabled page
             planeIndex = -1
 
         if event.GetId() in (
@@ -4984,7 +4958,7 @@ class NvizToolWindow(GNotebook):
         plane = self.FindWindowById(self.win["cplane"]["planes"]).GetStringSelection()
         try:
             planeIndex = int(plane.split()[-1]) - 1
-        except:  # TODO disabled page
+        except (ValueError, IndexError):  # TODO disabled page
             planeIndex = -1
 
         self.mapWindow.cplanes[planeIndex]["shading"] = shading
@@ -4999,7 +4973,7 @@ class NvizToolWindow(GNotebook):
         plane = self.FindWindowById(self.win["cplane"]["planes"]).GetStringSelection()
         try:
             planeIndex = int(plane.split()[-1]) - 1
-        except:  # TODO disabled page
+        except (ValueError, IndexError):  # TODO disabled page
             planeIndex = -1
 
         self.mapWindow.cplanes[planeIndex] = copy.deepcopy(

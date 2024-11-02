@@ -23,7 +23,6 @@ per-file-ignores =
     doc/python/m.distance.py: E501
     gui/scripts/d.wms.py: E501
     gui/wxpython/image2target/g.gui.image2target.py: E501
-    gui/wxpython/nviz/*: E722
     gui/wxpython/photo2image/g.gui.photo2image.py: E501
     gui/wxpython/psmap/*: E501, E722
     gui/wxpython/vdigit/*: F841, E722, F405, F403
@@ -89,18 +88,13 @@ per-file-ignores =
     python/grass/*/*/__init__.py: F403
     python/grass/*/*/*/__init__.py: F403
     # E402 module level import not at top of file
-    scripts/r.in.wms/wms_gdal_drv.py: E722
-    scripts/r.in.wms/wms_drv.py: E402, E722
-    scripts/r.in.wms/srs.py: E722
     scripts/r.semantic.label/r.semantic.label.py: E501
-    scripts/v.report/v.report.py: E721
     scripts/db.out.ogr/db.out.ogr.py: F841
-    scripts/g.extension/g.extension.py: F841, E722, E501
-    scripts/v.unpack/v.unpack.py: E722, E501
-    scripts/v.import/v.import.py: E722, E501
+    scripts/g.extension/g.extension.py: E501
+    scripts/v.unpack/v.unpack.py: E501n
+    scripts/v.import/v.import.py: E501
     scripts/db.univar/db.univar.py: E501
-    scripts/d.frame/d.frame.py: E722
-    scripts/i.pansharpen/i.pansharpen.py: E722, E501
+    scripts/i.pansharpen/i.pansharpen.py: E501
     scripts/v.what.strds/v.what.strds.py: E501
     # Line too long (esp. module interface definitions)
     scripts/*/*.py: E501
