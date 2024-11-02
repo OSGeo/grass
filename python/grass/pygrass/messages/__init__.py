@@ -63,7 +63,7 @@ def message_server(lock: _LockLike, conn: Connection) -> NoReturn:
     - "FATAL"      Calls G_fatal_error(), this functions is only for
                    testing purpose
 
-    The that is end through the pipe must be a list of values:
+    The data that is sent through the pipe must be a list of values:
 
     - Messages: ["INFO|IMPORTANT|VERBOSE|WARNING|ERROR|FATAL", "MESSAGE"]
     - Debug:    ["DEBUG", level, "MESSAGE"]
