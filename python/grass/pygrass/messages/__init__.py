@@ -277,7 +277,9 @@ class Messenger:
     def percent(self, n: int, d: int, s: int) -> None:
         """Send a percentage to stderr
 
-        :param message: the text of message
+        :param n: The current element
+        :param d: Total number of elements
+        :param s: Increment size
 
            G_percent() will be called in the messenger server process
         """
