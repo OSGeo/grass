@@ -174,9 +174,17 @@ class Messenger:
 
     """
 
+    client_conn: Connection
+    server_conn: Connection
+    server: Process
+
     def __init__(self, raise_on_error: bool = False) -> None:
         self.raise_on_error = raise_on_error
-        self.start_server()
+        self.client_conn, self.server_conn = Pipe()
+        self.lock = Lock()
+        self.server = Process(target=message_server, args=(self.lock, self.server_conn))
+        self.server.daemon = True
+        self.server.start()
 
     def start_server(self) -> None:
         """Start the messenger server and open the pipe"""
