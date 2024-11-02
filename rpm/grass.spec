@@ -1,8 +1,8 @@
-%global shortver 83
+%global shortver 84
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:		grass
-Version:	8.3.0
+Version:	8.4.0
 Release:	3%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
@@ -122,7 +122,6 @@ Requires:	python3-wxpython4
 %else
 %global cpuarch 64
 %endif
-
 Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 
 %description
@@ -213,6 +212,7 @@ find -name \*.pl | xargs sed -i -e 's,#!/usr/bin/env perl,#!%{__perl},'
 	--with-tiff \
 	--with-wxwidgets=%{_bindir}/wx-config \
 	--with-zstd
+
 
 # .package_note hack for RHBZ #2084342 and RHBZ #2102895
 sed -i "s+ -Wl,-dT,${RPM_BUILD_DIR}/grass-%{version}/.package_note-grass-%{version}-%{release}.%{_arch}.ld++g" include/Make/Platform.make
@@ -340,6 +340,48 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Sat Oct 26 2024 Markus Neteler <neteler@mundialis.de> - 8.4.0-3
+- Sort requirements and flags (https://github.com/OSGeo/grass/pull/4563/ by Edouard Choinière)
+
+* Fri Sep 06 2024 Sandro Mani <manisandro@gmail.com> - 8.4.0-2
+- Rebuild (PDAL)
+
+* Sun Jul 28 2024 Markus Neteler <neteler@mundialis.de> - 8.4.0-1
+- Update to 8.4.0
+
+* Thu Jul 18 2024 Fedora Release Engineering <releng@fedoraproject.org> - 8.3.2-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Tue May 14 2024 Sandro Mani <manisandro@gmail.com> - 8.3.2-3
+- Rebuild (gdal)
+
+* Tue Mar 19 2024 Sandro Mani <manisandro@gmail.com> - 8.3.2-2
+- Rebuild (PDAL)
+
+* Thu Mar 07 2024 Markus Neteler <neteler@mundialis.de> - 8.3.2-1
+- Update to 8.3.2 (#2268514)
+
+* Wed Jan 24 2024 Fedora Release Engineering <releng@fedoraproject.org> - 8.3.1-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Sat Jan 20 2024 Fedora Release Engineering <releng@fedoraproject.org> - 8.3.1-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Wed Jan  3 2024 Florian Weimer <fweimer@redhat.com> - 8.3.1-4
+- Fix C compatibility issue in MySQL port handling
+
+* Wed Nov 15 2023 Sandro Mani <manisandro@gmail.com> - 8.3.1-3
+- Rebuild (gdal)
+
+* Sat Oct 28 2023 Markus Neteler <neteler@mundialis.de> 8.3.1-2
+- fix obsolete configure parameters
+
+* Thu Oct 26 2023 Fedora Release Monitoring <release-monitoring@fedoraproject.org> - 8.3.1-1
+- Update to GRASS GIS 8.3.1 (#2246359)
+
+* Sat Oct 14 2023 Sandro Mani <manisandro@gmail.com> - 8.3.0-4
+- Rebuild (PDAL)
+
 * Sun Aug 06 2023 Alexandre Detiste <alexandre.detiste@gmail.com> - 8.3.0-3
 - Remove support for RHEL6: Grass is now Python3 only
 
