@@ -83,7 +83,7 @@ def test_r_colors_out_json_with_default_option(raster_color_dataset):
     assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
-def test_r_colors_out_json_with_crgb_option(raster_color_dataset):
+def test_r_colors_out_json_with_triplet_option(raster_color_dataset):
     """Test r.colors.out command for JSON output format for triplet color option."""
     session = raster_color_dataset
     data = gs.parse_command(
