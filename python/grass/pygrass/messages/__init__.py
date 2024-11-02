@@ -75,41 +75,37 @@ def message_server(lock: _LockLike, conn: Connection) -> NoReturn:
         message_type = data[0]
 
         # Only one process is allowed to write to stderr
-        lock.acquire()
+        with lock:
+            # Stop the pipe and the infinite loop
+            if message_type == "STOP":
+                conn.close()
+                libgis.G_debug(1, "Stop messenger server")
+                sys.exit()
 
-        # Stop the pipe and the infinite loop
-        if message_type == "STOP":
-            conn.close()
-            lock.release()
-            libgis.G_debug(1, "Stop messenger server")
-            sys.exit()
+            message = data[1]
 
-        message = data[1]
-
-        if message_type == "PERCENT":
-            n = int(data[1])
-            d = int(data[2])
-            s = int(data[3])
-            libgis.G_percent(n, d, s)
-        elif message_type == "DEBUG":
-            level = data[1]
-            message = data[2]
-            libgis.G_debug(level, message)
-        elif message_type == "VERBOSE":
-            libgis.G_verbose_message(message)
-        elif message_type == "INFO":
-            libgis.G_message(message)
-        elif message_type == "IMPORTANT":
-            libgis.G_important_message(message)
-        elif message_type == "WARNING":
-            libgis.G_warning(message)
-        elif message_type == "ERROR":
-            libgis.G_important_message("ERROR: %s" % message)
-        # This is for testing only
-        elif message_type == "FATAL":
-            libgis.G_fatal_error(message)
-
-        lock.release()
+            if message_type == "PERCENT":
+                n = int(data[1])
+                d = int(data[2])
+                s = int(data[3])
+                libgis.G_percent(n, d, s)
+            elif message_type == "DEBUG":
+                level = data[1]
+                message = data[2]
+                libgis.G_debug(level, message)
+            elif message_type == "VERBOSE":
+                libgis.G_verbose_message(message)
+            elif message_type == "INFO":
+                libgis.G_message(message)
+            elif message_type == "IMPORTANT":
+                libgis.G_important_message(message)
+            elif message_type == "WARNING":
+                libgis.G_warning(message)
+            elif message_type == "ERROR":
+                libgis.G_important_message("ERROR: %s" % message)
+            # This is for testing only
+            elif message_type == "FATAL":
+                libgis.G_fatal_error(message)
 
 
 class Messenger:
