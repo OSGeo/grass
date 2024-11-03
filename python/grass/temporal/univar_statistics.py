@@ -119,7 +119,7 @@ def print_gridded_dataset_univar_statistics(
     where,
     extended,
     no_header: bool = False,
-    fs="|",
+    fs: str = "|",
     rast_region: bool = False,
     region_relation=None,
     zones=None,
@@ -289,7 +289,7 @@ def print_vector_dataset_univar_statistics(
     where,
     extended,
     no_header: bool = False,
-    fs="|",
+    fs: str = "|",
 ) -> None:
     """Print univariate statistics for a space time vector dataset
 

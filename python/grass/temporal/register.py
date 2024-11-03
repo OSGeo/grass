@@ -45,7 +45,7 @@ def register_maps_in_space_time_dataset(
     increment=None,
     dbif=None,
     interval: bool = False,
-    fs="|",
+    fs: str = "|",
     update_cmd_list: bool = True,
 ) -> None:
     """Use this method to register maps in space time datasets.
