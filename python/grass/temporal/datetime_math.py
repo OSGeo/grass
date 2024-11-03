@@ -30,50 +30,37 @@ SECOND_AS_DAY = 1.1574074074074073e-05
 ###############################################################################
 
 
-def relative_time_to_time_delta(value):
-    """Convert the double value representing days
-    into a timedelta object.
-    """
-
+def relative_time_to_time_delta(value: float) -> timedelta:
+    """Convert the double value representing days into a timedelta object."""
     days = int(value)
     seconds = value % 1
     seconds = round(seconds * DAY_IN_SECONDS)
-
     return timedelta(days, seconds)
 
 
 ###############################################################################
 
 
-def time_delta_to_relative_time(delta):
-    """Convert the time delta into a
-    double value, representing days.
-    """
-
+def time_delta_to_relative_time(delta: timedelta) -> float:
+    """Convert the time delta into a double value, representing days."""
     return float(delta.days) + float(delta.seconds * SECOND_AS_DAY)
 
 
 ###############################################################################
 
 
-def relative_time_to_time_delta_seconds(value):
-    """Convert the double value representing seconds
-    into a timedelta object.
-    """
-
+def relative_time_to_time_delta_seconds(value: float) -> timedelta:
+    """Convert the double value representing seconds into a timedelta object."""
     days = value / 86400
     seconds = int(value % 86400)
-
     return timedelta(days, seconds)
 
 
 ###############################################################################
 
 
-def time_delta_to_relative_time_seconds(delta):
-    """Convert the time delta into a
-    double value, representing seconds.
-    """
+def time_delta_to_relative_time_seconds(delta: timedelta) -> float:
+    """Convert the time delta into a double value, representing seconds."""
 
     return float(delta.days * DAY_IN_SECONDS) + float(delta.seconds)
 
@@ -875,7 +862,7 @@ def string_to_datetime(time_string: str) -> datetime | None:
 ###############################################################################
 
 
-def datetime_to_grass_datetime_string(dt):
+def datetime_to_grass_datetime_string(dt: datetime) -> str:
     """Convert a python datetime object into a GRASS datetime string
 
     .. code-block:: python
@@ -960,7 +947,7 @@ suffix_units = {
 }
 
 
-def create_suffix_from_datetime(start_time, granularity):
+def create_suffix_from_datetime(start_time: datetime, granularity) -> str:
     """Create a datetime string based on a datetime object and a provided
     granularity that can be used as suffix for map names.
 
@@ -989,7 +976,7 @@ def create_time_suffix(mapp, end: bool = False):
     return sstring
 
 
-def create_numeric_suffix(base, count: int, zeros):
+def create_numeric_suffix(base, count: int, zeros: str) -> str:
     """Create a string based on count and number of zeros decided by zeros
 
     :param base: the basename for new map
