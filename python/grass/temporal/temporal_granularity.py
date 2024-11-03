@@ -37,7 +37,7 @@ CONVERT_GRAN["minute"] = "60 second"
 ###############################################################################
 
 
-def check_granularity_string(granularity, temporal_type):
+def check_granularity_string(granularity, temporal_type) -> bool:
     """Check if the granularity string is valid
 
     :param granularity: The granularity string

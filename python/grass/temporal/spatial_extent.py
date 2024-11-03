@@ -70,6 +70,8 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from typing import Literal
+
 from .base import SQLDatabaseInterface
 
 
@@ -1110,7 +1112,7 @@ class SpatialExtent(SQLDatabaseInterface):
             or self.get_bottom() >= T
         )
 
-    def meet_2d(self, extent):
+    def meet_2d(self, extent) -> bool:
         """Return True if this extent (A) meets with the provided spatial
         extent (B) in two dimensions.
 
@@ -1303,7 +1305,7 @@ class SpatialExtent(SQLDatabaseInterface):
             or self.meet_2d(extent)
         )
 
-    def disjoint(self, extent):
+    def disjoint(self, extent) -> bool:
         """Return True if this extent is disjoint with the provided spatial
         extent in three dimensions.
 
@@ -1321,7 +1323,17 @@ class SpatialExtent(SQLDatabaseInterface):
             or self.meet(extent)
         )
 
-    def spatial_relation_2d(self, extent):
+    def spatial_relation_2d(self, extent) -> Literal[
+        "equivalent",
+        "contain",
+        "in",
+        "cover",
+        "covered",
+        "overlap",
+        "meet",
+        "disjoint",
+        "unknown",
+    ]:
         """Returns the two dimensional spatial relation between this
         extent and the provided spatial extent in two dimensions.
 
@@ -1358,7 +1370,17 @@ class SpatialExtent(SQLDatabaseInterface):
 
         return "unknown"
 
-    def spatial_relation(self, extent):
+    def spatial_relation(self, extent) -> Literal[
+        "equivalent",
+        "contain",
+        "in",
+        "cover",
+        "covered",
+        "overlap",
+        "meet",
+        "disjoint",
+        "unknown",
+    ]:
         """Returns the two dimensional spatial relation between this
         extent and the provided spatial extent in three dimensions.
 

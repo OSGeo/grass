@@ -367,7 +367,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             self.get_select_statement(), mapset=self.mapset
         )
 
-    def select(self, dbif=None, mapset=None):
+    def select(self, dbif=None, mapset=None) -> bool:
         """Select the content from the temporal database and store it
         in the internal dictionary structure
 

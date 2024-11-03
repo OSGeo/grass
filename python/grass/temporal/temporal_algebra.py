@@ -439,6 +439,10 @@ for details.
 
 """
 
+from __future__ import annotations
+
+from typing import Literal
+
 try:
     from ply import lex, yacc
 except:
@@ -720,7 +724,7 @@ class GlobalTemporalVar:
         self.topology = []
         self.td = None
 
-    def get_type(self):
+    def get_type(self) -> Literal["global", "boolean", "operator", "timediff"] | None:
         if (
             self.tfunc is not None
             and self.compop is not None
@@ -850,7 +854,9 @@ class TemporalAlgebraParser:
         if self.dbif.connected:
             self.dbif.close()
 
-    def setup_common_granularity(self, expression, stdstype="strds", lexer=None):
+    def setup_common_granularity(
+        self, expression, stdstype="strds", lexer=None
+    ) -> bool:
         """Configure the temporal algebra to use the common granularity of all
         space time datasets in the expression to generate the map lists.
 

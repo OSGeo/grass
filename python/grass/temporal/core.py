@@ -1205,7 +1205,7 @@ class SQLDatabaseInterfaceConnection:
 
         return self.connections[mapset].execute_transaction(statement)
 
-    def _create_mapset_error_message(self, mapset):
+    def _create_mapset_error_message(self, mapset) -> str:
         return (
             "You have no permission to "
             "access mapset <%(mapset)s>, or "

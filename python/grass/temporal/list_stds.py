@@ -213,7 +213,7 @@ def _write_yaml(rows, column_names, file=sys.stdout) -> None:
         when https://github.com/yaml/pyyaml/issues/234 is resolved.
         """
 
-        def ignore_aliases(self, data):
+        def ignore_aliases(self, data) -> bool:
             return True
 
         def increase_indent(self, flow: bool = False, indentless: bool = False):

@@ -543,7 +543,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return count_temporal_topology_relationships(maps1=maps, dbif=dbif)
 
-    def check_temporal_topology(self, maps=None, dbif=None):
+    def check_temporal_topology(self, maps=None, dbif=None) -> bool:
         """Check the temporal topology of all maps of the current space time
         dataset or of an optional list of maps
 
@@ -2000,7 +2000,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return maps
 
-    def shift(self, gran, dbif=None):
+    def shift(self, gran, dbif=None) -> bool:
         """Temporally shift each registered map with the provided granularity
 
         :param gran: The granularity to be used for shifting
@@ -2469,7 +2469,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return is_registered
 
-    def register_map(self, map, dbif=None):
+    def register_map(self, map, dbif=None) -> bool:
         """Register a map in the space time dataset.
 
          This method takes care of the registration of a map

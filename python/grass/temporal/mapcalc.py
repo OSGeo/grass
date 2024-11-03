@@ -38,7 +38,7 @@ def dataset_mapcalculator(
     nprocs=1,
     register_null: bool = False,
     spatial: bool = False,
-):
+) -> int:
     """Perform map-calculations of maps from different space time
     raster/raster3d datasets, using a specific sampling method
     to select temporal related maps.

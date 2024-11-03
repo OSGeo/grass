@@ -9,8 +9,11 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 import getpass
 from datetime import datetime
+from typing import Literal
 
 import grass.script.array as garray
 
@@ -181,14 +184,14 @@ class RasterDataset(AbstractMapDataset):
         AbstractMapDataset.__init__(self)
         self.reset(ident)
 
-    def is_stds(self):
+    def is_stds(self) -> Literal[False]:
         """Return True if this class is a space time dataset
 
         :return: True if this class is a space time dataset, False otherwise
         """
         return False
 
-    def get_type(self):
+    def get_type(self) -> Literal["raster"]:
         return "raster"
 
     def get_new_instance(self, ident):
@@ -269,7 +272,7 @@ class RasterDataset(AbstractMapDataset):
         """
         return self.ciface.has_raster_timestamp(self.get_name(), self.get_mapset())
 
-    def read_timestamp_from_grass(self):
+    def read_timestamp_from_grass(self) -> bool:
         """Read the timestamp of this map from the map metadata
         in the grass file system based spatial database and
         set the internal time stamp that should be inserted/updated
@@ -300,7 +303,7 @@ class RasterDataset(AbstractMapDataset):
 
         return True
 
-    def write_timestamp_to_grass(self):
+    def write_timestamp_to_grass(self) -> bool:
         """Write the timestamp of this map into the map metadata in
         the grass file system based spatial database.
 
@@ -332,7 +335,7 @@ class RasterDataset(AbstractMapDataset):
 
         return True
 
-    def remove_timestamp_from_grass(self):
+    def remove_timestamp_from_grass(self) -> bool:
         """Remove the timestamp from the grass file system based
         spatial database
 
@@ -350,7 +353,7 @@ class RasterDataset(AbstractMapDataset):
 
         return True
 
-    def read_semantic_label_from_grass(self):
+    def read_semantic_label_from_grass(self) -> bool:
         """Read the semantic label of this map from the map metadata
         in the GRASS file system based spatial database and
         set the internal semantic label that should be inserted/updated
@@ -371,7 +374,7 @@ class RasterDataset(AbstractMapDataset):
 
         return True
 
-    def write_semantic_label_to_grass(self):
+    def write_semantic_label_to_grass(self) -> bool:
         """Write the semantic label of this map into the map metadata in
         the GRASS file system based spatial database.
 
@@ -398,7 +401,7 @@ class RasterDataset(AbstractMapDataset):
         """
         return self.ciface.raster_map_exists(self.get_name(), self.get_mapset())
 
-    def load(self):
+    def load(self) -> bool:
         """Load all info from an existing raster map into the internal structure
 
         This method checks first if the map exists, in case it exists
@@ -610,14 +613,14 @@ class Raster3DDataset(AbstractMapDataset):
         AbstractMapDataset.__init__(self)
         self.reset(ident)
 
-    def is_stds(self):
+    def is_stds(self) -> Literal[False]:
         """Return True if this class is a space time dataset
 
         :return: True if this class is a space time dataset, False otherwise
         """
         return False
 
-    def get_type(self):
+    def get_type(self) -> Literal["raster3d"]:
         return "raster3d"
 
     def get_new_instance(self, ident):
@@ -709,7 +712,7 @@ class Raster3DDataset(AbstractMapDataset):
         """
         return self.ciface.has_raster3d_timestamp(self.get_name(), self.get_mapset())
 
-    def read_timestamp_from_grass(self):
+    def read_timestamp_from_grass(self) -> bool:
         """Read the timestamp of this map from the map metadata
         in the grass file system based spatial database and
         set the internal time stamp that should be inserted/updated
@@ -740,7 +743,7 @@ class Raster3DDataset(AbstractMapDataset):
 
         return True
 
-    def write_timestamp_to_grass(self):
+    def write_timestamp_to_grass(self) -> bool:
         """Write the timestamp of this map into the map metadata
         in the grass file system based spatial database.
 
@@ -772,7 +775,7 @@ class Raster3DDataset(AbstractMapDataset):
 
         return True
 
-    def remove_timestamp_from_grass(self):
+    def remove_timestamp_from_grass(self) -> bool:
         """Remove the timestamp from the grass file system based spatial database
 
         :return: True if success, False on error
@@ -796,7 +799,7 @@ class Raster3DDataset(AbstractMapDataset):
         """
         return self.ciface.raster3d_map_exists(self.get_name(), self.get_mapset())
 
-    def load(self):
+    def load(self) -> bool:
         """Load all info from an existing 3d raster map into the internal structure
 
         This method checks first if the map exists, in case it exists
@@ -978,14 +981,14 @@ class VectorDataset(AbstractMapDataset):
         AbstractMapDataset.__init__(self)
         self.reset(ident)
 
-    def is_stds(self):
+    def is_stds(self) -> Literal[False]:
         """Return True if this class is a space time dataset
 
         :return: True if this class is a space time dataset, False otherwise
         """
         return False
 
-    def get_type(self):
+    def get_type(self) -> Literal["vector"]:
         return "vector"
 
     def get_new_instance(self, ident):
@@ -1052,7 +1055,7 @@ class VectorDataset(AbstractMapDataset):
             self.get_name(), self.get_mapset(), self.get_layer()
         )
 
-    def read_timestamp_from_grass(self):
+    def read_timestamp_from_grass(self) -> bool:
         """Read the timestamp of this map from the map metadata
         in the grass file system based spatial database and
         set the internal time stamp that should be inserted/updated
@@ -1081,7 +1084,7 @@ class VectorDataset(AbstractMapDataset):
 
         return True
 
-    def write_timestamp_to_grass(self):
+    def write_timestamp_to_grass(self) -> bool:
         """Write the timestamp of this map into the map metadata in
         the grass file system based spatial database.
 
@@ -1110,7 +1113,7 @@ class VectorDataset(AbstractMapDataset):
 
         return True
 
-    def remove_timestamp_from_grass(self):
+    def remove_timestamp_from_grass(self) -> bool:
         """Remove the timestamp from the grass file system based spatial
         database
 
@@ -1135,7 +1138,7 @@ class VectorDataset(AbstractMapDataset):
         """
         return self.ciface.vector_map_exists(self.get_name(), self.get_mapset())
 
-    def load(self):
+    def load(self) -> bool:
         """Load all info from an existing vector map into the internal structure
 
         This method checks first if the map exists, in case it exists
@@ -1240,14 +1243,14 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
         """
         self.semantic_label = semantic_label
 
-    def is_stds(self):
+    def is_stds(self) -> Literal[True]:
         """Return True if this class is a space time dataset
 
         :return: True if this class is a space time dataset, False otherwise
         """
         return True
 
-    def get_type(self):
+    def get_type(self) -> Literal["strds"]:
         return "strds"
 
     def get_new_instance(self, ident):
@@ -1349,14 +1352,14 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
     def __init__(self, ident) -> None:
         AbstractSpaceTimeDataset.__init__(self, ident)
 
-    def is_stds(self):
+    def is_stds(self) -> Literal[True]:
         """Return True if this class is a space time dataset
 
         :return: True if this class is a space time dataset, False otherwise
         """
         return True
 
-    def get_type(self):
+    def get_type(self) -> Literal["str3ds"]:
         return "str3ds"
 
     def get_new_instance(self, ident):
@@ -1470,14 +1473,14 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
     def __init__(self, ident) -> None:
         AbstractSpaceTimeDataset.__init__(self, ident)
 
-    def is_stds(self):
+    def is_stds(self) -> Literal[True]:
         """Return True if this class is a space time dataset
 
         :return: True if this class is a space time dataset, False otherwise
         """
         return True
 
-    def get_type(self):
+    def get_type(self) -> Literal["stvds"]:
         return "stvds"
 
     def get_new_instance(self, ident):

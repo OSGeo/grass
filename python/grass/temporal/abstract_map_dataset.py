@@ -194,7 +194,7 @@ class AbstractMapDataset(AbstractDataset):
         return name, layer, mapset
 
     @staticmethod
-    def build_id_from_search_path(name, element):
+    def build_id_from_search_path(name, element) -> str:
         """Convenient method to build the unique identifier while
         checking the current seach path for the correct mapset.
 
@@ -235,7 +235,7 @@ class AbstractMapDataset(AbstractDataset):
         return f"{name}@{mapset}"
 
     @staticmethod
-    def build_id(name, mapset, layer=None):
+    def build_id(name, mapset, layer=None) -> str:
         """Convenient method to build the unique identifier
 
         Existing layer and mapset definitions in the name
@@ -411,7 +411,7 @@ class AbstractMapDataset(AbstractDataset):
         """Set the temporal type to relative"""
         self.base.set_ttype("relative")
 
-    def set_absolute_time(self, start_time, end_time=None):
+    def set_absolute_time(self, start_time, end_time=None) -> bool:
         """Set the absolute time with start time and end time
 
          The end time is optional and must be set to None in case of time
@@ -543,7 +543,7 @@ class AbstractMapDataset(AbstractDataset):
             if get_enable_timestamp_write():
                 self.write_timestamp_to_grass()
 
-    def set_relative_time(self, start_time, end_time, unit):
+    def set_relative_time(self, start_time, end_time, unit) -> bool:
         """Set the relative time interval
 
          The end time is optional and must be set to None in case of time
@@ -932,7 +932,7 @@ class AbstractMapDataset(AbstractDataset):
         if update:
             self.spatial_extent.update(dbif)
 
-    def check_for_correct_time(self):
+    def check_for_correct_time(self) -> bool:
         """Check for correct time
 
         :return: True in case of success, False otherwise
