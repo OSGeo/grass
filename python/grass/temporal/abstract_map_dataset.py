@@ -196,7 +196,7 @@ class AbstractMapDataset(AbstractDataset):
     @staticmethod
     def build_id_from_search_path(name: str, element) -> str:
         """Convenient method to build the unique identifier while
-        checking the current seach path for the correct mapset.
+        checking the current search path for the correct mapset.
 
         Existing mapset definitions in the name string will be reused.
 
@@ -225,7 +225,7 @@ class AbstractMapDataset(AbstractDataset):
             else:
                 gs.fatal(
                     _(
-                        "Map <{map_name}> of element tpye '{element}' not found on \
+                        "Map <{map_name}> of element type '{element}' not found on \
                             search path"
                     ).format(element=element, map_name=name)
                 )

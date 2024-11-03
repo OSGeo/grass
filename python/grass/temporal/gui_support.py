@@ -27,7 +27,7 @@ def tlist_grouped(type, group_type: bool = False, dbif=None):
 
     .. code-block:: python
 
-        >>> import grass.temporalas tgis
+        >>> import grass.temporal as tgis
         >>> tgis.tlist_grouped('strds')['PERMANENT']
         ['precipitation', 'temperature']
 

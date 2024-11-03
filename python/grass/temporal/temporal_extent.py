@@ -861,7 +861,7 @@ class TemporalExtent(SQLDatabaseInterface):
         )
 
     def overlapped(self, extent) -> bool:
-        """Return True if this temporal extent (A) overlapps the provided
+        """Return True if this temporal extent (A) overlaps the provided
         temporal extent (B)
         ::
 

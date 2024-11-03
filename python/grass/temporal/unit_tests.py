@@ -1,5 +1,5 @@
 """
-Depricazed unittests
+Deprecated unittests
 
 (C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public

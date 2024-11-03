@@ -298,7 +298,7 @@ class RasterMetadata(RasterMetadataBase):
 
     The metadata includes the datatype, number of cols, rows and cells and
     the north-south and east west resolution of the map. Additionally the
-    minimum and maximum valuesare stored.
+    minimum and maximum values are stored.
 
     Usage:
 

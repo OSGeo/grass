@@ -2558,7 +2558,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         stds_register_table = self.get_map_register()
         stds_ttype = self.get_temporal_type()
 
-        # The gathered SQL statemets are stroed here
+        # The gathered SQL statements are stored here
         statement = ""
 
         # Check temporal types
