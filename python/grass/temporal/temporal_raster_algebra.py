@@ -77,7 +77,7 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
         spatial: bool = False,
         register_null: bool = False,
         dry_run: bool = False,
-        nprocs=1,
+        nprocs: int = 1,
         time_suffix=None,
     ) -> None:
         TemporalRasterBaseAlgebraParser.__init__(

@@ -39,9 +39,9 @@ def extract_dataset(
     expression,
     base,
     time_suffix,
-    nprocs=1,
+    nprocs: int = 1,
     register_null: bool = False,
-    layer=1,
+    layer: int = 1,
     vtype="point,line,boundary,centroid,area,face",
 ) -> None:
     """Extract a subset of a space time raster, raster3d or vector dataset

@@ -36,7 +36,7 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
         spatial: bool = False,
         register_null: bool = False,
         dry_run: bool = False,
-        nprocs=1,
+        nprocs: int = 1,
     ) -> None:
         TemporalRasterBaseAlgebraParser.__init__(
             self,

@@ -222,7 +222,7 @@ def increment_datetime_by_string(mydate, increment, mult=1):
 ###############################################################################
 
 
-def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
+def modify_datetime_by_string(mydate, increment, mult=1, sign: int = 1):
     """Return a new datetime object incremented with the provided
     relative dates specified as string.
     Additional a multiplier can be specified to multiply the increment

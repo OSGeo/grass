@@ -124,7 +124,7 @@ def print_gridded_dataset_univar_statistics(
     region_relation=None,
     zones=None,
     percentile=None,
-    nprocs=1,
+    nprocs: int = 1,
 ) -> None:
     """Print univariate statistics for a space time raster or raster3d dataset.
     Returns None if the space time raster dataset is empty or if applied
