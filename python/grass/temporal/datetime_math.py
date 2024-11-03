@@ -725,7 +725,7 @@ def compute_datetime_delta(start, end):
 ###############################################################################
 
 
-def check_datetime_string(time_string, use_dateutil: bool = True):
+def check_datetime_string(time_string: str, use_dateutil: bool = True):
     """Check if  a string can be converted into a datetime object and return the object
 
     In case datutil is not installed the supported ISO string formats are:
@@ -831,7 +831,7 @@ def check_datetime_string(time_string, use_dateutil: bool = True):
 ###############################################################################
 
 
-def string_to_datetime(time_string):
+def string_to_datetime(time_string: str):
     """Convert a string into a datetime object
 
     In case datutil is not installed the supported ISO string formats are:
@@ -981,7 +981,7 @@ def create_time_suffix(mapp, end: bool = False):
     return sstring
 
 
-def create_numeric_suffix(base, count, zeros):
+def create_numeric_suffix(base, count: int, zeros):
     """Create a string based on count and number of zeros decided by zeros
 
     :param base: the basename for new map

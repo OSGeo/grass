@@ -41,6 +41,8 @@ for details.
 
 """
 
+from __future__ import annotations
+
 import copy
 
 import grass.pygrass.modules as pymod
@@ -170,7 +172,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
     def __init__(
         self,
-        pid=None,
+        pid: int | None = None,
         run: bool = True,
         debug: bool = False,
         spatial: bool = False,

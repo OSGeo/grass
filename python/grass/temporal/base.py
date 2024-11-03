@@ -25,6 +25,8 @@ for details.
 :author: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 from datetime import datetime
 
 from .core import (
@@ -627,7 +629,7 @@ class DatasetBase(SQLDatabaseInterface):
         self,
         table=None,
         ident=None,
-        name=None,
+        name: str | None = None,
         mapset=None,
         creator=None,
         ctime=None,
@@ -854,7 +856,7 @@ class RasterBase(DatasetBase):
     def __init__(
         self,
         ident=None,
-        name=None,
+        name: str | None = None,
         mapset=None,
         creator=None,
         creation_time=None,
@@ -878,7 +880,7 @@ class Raster3DBase(DatasetBase):
     def __init__(
         self,
         ident=None,
-        name=None,
+        name: str | None = None,
         mapset=None,
         creator=None,
         creation_time=None,
@@ -902,7 +904,7 @@ class VectorBase(DatasetBase):
     def __init__(
         self,
         ident=None,
-        name=None,
+        name: str | None = None,
         mapset=None,
         layer=None,
         creator=None,
@@ -984,7 +986,7 @@ class STDSBase(DatasetBase):
         self,
         table=None,
         ident=None,
-        name=None,
+        name: str | None = None,
         mapset=None,
         semantic_type=None,
         creator=None,
@@ -1053,7 +1055,7 @@ class STRDSBase(STDSBase):
     def __init__(
         self,
         ident=None,
-        name=None,
+        name: str | None = None,
         mapset=None,
         semantic_type=None,
         creator=None,
@@ -1079,7 +1081,7 @@ class STR3DSBase(STDSBase):
     def __init__(
         self,
         ident=None,
-        name=None,
+        name: str | None = None,
         mapset=None,
         semantic_type=None,
         creator=None,
@@ -1105,7 +1107,7 @@ class STVDSBase(STDSBase):
     def __init__(
         self,
         ident=None,
-        name=None,
+        name: str | None = None,
         mapset=None,
         semantic_type=None,
         creator=None,

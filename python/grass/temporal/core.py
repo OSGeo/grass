@@ -30,6 +30,8 @@ for details.
 :author: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 # import traceback
 import os
 from pathlib import Path
@@ -1114,7 +1116,7 @@ class SQLDatabaseInterfaceConnection:
 
         return self.connections[mapset].mogrify_sql_statement(content)
 
-    def check_table(self, table_name, mapset=None):
+    def check_table(self, table_name: str, mapset=None):
         """Check if a table exists in the temporal database
 
         :param table_name: The name of the table to be checked for existence
@@ -1228,7 +1230,7 @@ class DBConnection:
       - postgresql via psycopg2
     """
 
-    def __init__(self, backend=None, dbstring=None) -> None:
+    def __init__(self, backend=None, dbstring: str | None = None) -> None:
         """Constructor of a database connection
 
         param backend:The database backend sqlite or pg
@@ -1279,7 +1281,7 @@ class DBConnection:
             if self.connected:
                 self.connection.rollback()
 
-    def connect(self, dbstring=None) -> None:
+    def connect(self, dbstring: str | None = None) -> None:
         """Connect to the DBMI to execute SQL statements
 
         Supported backends are sqlite3 and postgresql
@@ -1442,7 +1444,7 @@ class DBConnection:
 
             return statement
 
-    def check_table(self, table_name):
+    def check_table(self, table_name: str):
         """Check if a table exists in the temporal database
 
         :param table_name: The name of the table to be checked for existence

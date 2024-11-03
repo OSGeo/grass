@@ -167,7 +167,7 @@ class AbstractMapDataset(AbstractDataset):
         return self.base.get_map_id()
 
     @staticmethod
-    def split_name(name, layer=None, mapset=None):
+    def split_name(name: str, layer=None, mapset=None):
         """Convenient method to split a map name into three potentially
         contained parts: map name, map layer and mapset. For the layer and
         mapset, default keyword arguments can be given if not present in
@@ -194,7 +194,7 @@ class AbstractMapDataset(AbstractDataset):
         return name, layer, mapset
 
     @staticmethod
-    def build_id_from_search_path(name, element) -> str:
+    def build_id_from_search_path(name: str, element) -> str:
         """Convenient method to build the unique identifier while
         checking the current seach path for the correct mapset.
 
@@ -235,7 +235,7 @@ class AbstractMapDataset(AbstractDataset):
         return f"{name}@{mapset}"
 
     @staticmethod
-    def build_id(name, mapset, layer=None) -> str:
+    def build_id(name: str, mapset, layer=None) -> str:
         """Convenient method to build the unique identifier
 
         Existing layer and mapset definitions in the name

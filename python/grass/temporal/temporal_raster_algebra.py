@@ -52,6 +52,8 @@ for details.
 
 """
 
+from __future__ import annotations
+
 try:
     from ply import yacc
 except ImportError:
@@ -71,7 +73,7 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
 
     def __init__(
         self,
-        pid=None,
+        pid: int | None = None,
         run: bool = False,
         debug: bool = True,
         spatial: bool = False,

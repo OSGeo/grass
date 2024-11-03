@@ -42,6 +42,8 @@ for details.
 
 """
 
+from __future__ import annotations
+
 try:
     from ply import yacc
 except ImportError:
@@ -143,7 +145,11 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
     )
 
     def __init__(
-        self, pid=None, run: bool = False, debug: bool = True, spatial: bool = False
+        self,
+        pid: int | None = None,
+        run: bool = False,
+        debug: bool = True,
+        spatial: bool = False,
     ) -> None:
         TemporalAlgebraParser.__init__(self, pid, run, debug, spatial)
 
@@ -153,7 +159,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         self.m_mremove = pygrass.Module("g.remove", quiet=True, run_=False)
         self.m_buffer = pygrass.Module("v.buffer", quiet=True, run_=False)
 
-    def parse(self, expression, basename=None, overwrite: bool = False):
+    def parse(self, expression, basename: str | None = None, overwrite: bool = False):
         # Check for space time dataset type definitions from temporal algebra
         lx = TemporalVectorAlgebraLexer()
         lx.build()

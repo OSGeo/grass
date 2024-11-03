@@ -115,7 +115,7 @@ def collect_map_names(sp, dbif, start, end, sampling):
 
 
 def aggregate_raster_maps(
-    inputs, base, start, end, count, method, register_null, dbif, offset: int = 0
+    inputs, base, start, end, count: int, method, register_null, dbif, offset: int = 0
 ):
     """Aggregate a list of raster input maps with r.series
 

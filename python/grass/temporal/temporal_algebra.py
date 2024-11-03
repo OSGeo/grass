@@ -786,7 +786,7 @@ class TemporalAlgebraParser:
 
     def __init__(
         self,
-        pid=None,
+        pid: int | None = None,
         run: bool = True,
         debug: bool = False,
         spatial: bool = False,

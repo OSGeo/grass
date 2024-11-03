@@ -10,6 +10,8 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 import copy
 import os
 import sys
@@ -181,7 +183,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.metadata.print_history()
 
     def set_initial_values(
-        self, temporal_type, semantic_type=None, title=None, description=None
+        self,
+        temporal_type,
+        semantic_type=None,
+        title=None,
+        description: str | None = None,
     ) -> None:
         """Set the initial values of the space time dataset
 
