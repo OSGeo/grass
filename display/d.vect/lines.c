@@ -343,7 +343,7 @@ int draw_line(int type, int ltype, int line, const struct line_pnts *Points,
             }
             else {
                 D_symbol(Symb, x0, y0, line_color, fill_color);
-            } 
+            }
         }
         else {
             G_warning(_("Symbol is NULL; unable to display points"));
