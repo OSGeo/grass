@@ -753,7 +753,7 @@ class GlobalTemporalVar:
 
         return valuelist
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.tfunc) + str(self.compop) + str(self.value)
 
 
@@ -761,7 +761,7 @@ class FatalError(Exception):
     def __init__(self, msg) -> None:
         self.value = msg
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.value
 
 

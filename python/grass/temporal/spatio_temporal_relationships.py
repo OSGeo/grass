@@ -609,7 +609,7 @@ class SpatioTemporalTopologyBuilder:
     def __getitem__(self, index):
         return self._store[index.get_id()]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._store)
 
     def __contains__(self, _map) -> bool:
