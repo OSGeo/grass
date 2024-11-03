@@ -20,7 +20,7 @@ class TestRBuffer(TestCase):
         gs.run_command(
             "g.remove",
             type="raster",
-            name="null_map,buf_test,consist_test,zero_map,buf_no_non_null,buf_ignore_zero",
+            name="buf_test,zero_map,buf_no_non_null,null_map,zero_map",
             flags="f",
         )
 
@@ -45,10 +45,7 @@ class TestRBuffer(TestCase):
             map=output,
             refmin=min(expected_categories),
             refmax=max(expected_categories),
-            msg=(
-                "Buffer zones should have category values from 1 to "  # Checking if there are no abnormal values in the output raster map
-                + str(max(expected_categories))
-            ),
+            msg=f"Buffer zones should have category values from 1 to {max(expected_categories)}",
         )
 
     def test_no_non_null_values(self):
@@ -70,15 +67,14 @@ class TestRBuffer(TestCase):
         self.assertRasterExists(output)
 
         expected_stats = {"n": 0}
-
         self.assertRasterFitsUnivar(output, reference=expected_stats)
 
     def test_ignore_zero_values(self):
         zero_map = "zero_map"
-        self.runModule("r.mapcalc", expression=f"{zero_map} = if(row() % 2 == 0, 0, 1)")
+        self.runModule("r.mapcalc", expression=f"{zero_map} = 0")
 
         output = "buf_ignore_zero"
-        distances = [100, 200]
+        distances = [100]
 
         module = SimpleModule(
             "r.buffer",
@@ -92,20 +88,8 @@ class TestRBuffer(TestCase):
 
         self.assertRasterExists(output)
 
-        category_values = gs.read_command(
-            "r.stats", flags="n", input=output
-        ).splitlines()
-        category_values = [int(line.split()[0]) for line in category_values]
-
-        print("Category values:", category_values)
-
-        expected_categories = [1, 2]
-
-        self.assertNotIn(
-            expected_categories,
-            category_values,
-            msg="Output should not contain buffer zones around zero values",
-        )  # Check if the output raster map ignored 0 values
+        expected_stats = {"n": 0}
+        self.assertRasterFitsUnivar(output, reference=expected_stats)
 
 
 if __name__ == "__main__":
