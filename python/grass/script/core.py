@@ -1447,7 +1447,7 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag="", env=Non
     :return: list of elements
     """
     if type == "cell":
-        verbose(_('Element type should be "raster" and not "%s"') % type)
+        verbose(_('Element type should be "raster" and not "%s"') % type, env=env)
 
     result = []
     for line in read_command(
@@ -1520,7 +1520,9 @@ def list_grouped(
         flag += "t"
     for i in range(len(types)):
         if types[i] == "cell":
-            verbose(_('Element type should be "raster" and not "%s"') % types[i])
+            verbose(
+                _('Element type should be "raster" and not "%s"') % types[i], env=env
+            )
             types[i] = "raster"
     result = {}
     if check_search_path:
@@ -1543,7 +1545,7 @@ def list_grouped(
         try:
             name, mapset = line.split("@")
         except ValueError:
-            warning(_("Invalid element '%s'") % line)
+            warning(_("Invalid element '%s'") % line, env=env)
             continue
 
         if store_types:
@@ -1701,7 +1703,7 @@ def mapsets(search_path=False, env=None):
     flags = "p" if search_path else "l"
     mapsets = read_command("g.mapsets", flags=flags, sep="newline", quiet=True, env=env)
     if not mapsets:
-        fatal(_("Unable to list mapsets"))
+        fatal(_("Unable to list mapsets"), env=env)
 
     return mapsets.splitlines()
 

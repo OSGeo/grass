@@ -648,15 +648,14 @@ class ModifyTableRecord(wx.Dialog):
                     self.boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
                     cId += 1
                     continue
-                else:
-                    valueWin = SpinCtrl(
-                        parent=self.dataPanel,
-                        id=wx.ID_ANY,
-                        value=value,
-                        min=-1e9,
-                        max=1e9,
-                        size=(250, -1),
-                    )
+                valueWin = SpinCtrl(
+                    parent=self.dataPanel,
+                    id=wx.ID_ANY,
+                    value=value,
+                    min=-1e9,
+                    max=1e9,
+                    size=(250, -1),
+                )
             else:
                 valueWin = TextCtrl(
                     parent=self.dataPanel, id=wx.ID_ANY, value=value, size=(250, -1)

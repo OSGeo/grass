@@ -1390,7 +1390,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 GError(parent=self, message=e.value)
             # when nviz.tools is not yet ready
             # during opening 3D view 2nd time
-            except:
+            except Exception:
                 pass
 
         stop = gs.clock()

@@ -44,7 +44,6 @@ import wx
 try:
     from ctypes import (
         CFUNCTYPE,
-        UNCHECKED,
         byref,
         c_char_p,
         c_double,
@@ -58,7 +57,9 @@ except KeyError as e:
     print("wxnviz.py: {}".format(e), file=sys.stderr)
 
 try:
+    from grass.lib.ctypes_preamble import UNCHECKED, String
     from grass.lib.gis import (
+        Colors,
         G_find_raster2,
         G_find_raster3d,
         G_find_vector2,
@@ -73,20 +74,15 @@ try:
         G_warning,
     )
     from grass.lib.nviz import (
-        ATT_COLOR,
-        ATT_EMIT,
-        ATT_MASK,
-        ATT_SHINE,
-        ATT_TOPO,
-        ATT_TRANSP,
-        CONST_ATT,
-        MAP_ATT,
+        DRAW_QUICK_SURFACE,
+        DRAW_QUICK_VLINES,
+        DRAW_QUICK_VOLUME,
+        DRAW_QUICK_VPOINTS,
         MAP_OBJ_SITE,
         MAP_OBJ_SURF,
         MAP_OBJ_UNDEFINED,
         MAP_OBJ_VECT,
         MAP_OBJ_VOL,
-        Colors,
         Nviz_change_exag,
         Nviz_color_from_str,
         Nviz_del_texture,
@@ -153,6 +149,32 @@ try:
         nv_data,
     )
     from grass.lib.ogsf import (
+        ATT_COLOR,
+        ATT_EMIT,
+        ATT_MASK,
+        ATT_SHINE,
+        ATT_TOPO,
+        ATT_TRANSP,
+        CONST_ATT,
+        DM_FLAT,
+        DM_GOURAUD,
+        DM_GRID_SURF,
+        DM_GRID_WIRE,
+        DM_POLY,
+        DM_WIRE,
+        DM_WIRE_POLY,
+        MAP_ATT,
+        MAX_ISOSURFS,
+        GP_delete_site,
+        GP_get_sitename,
+        GP_select_surf,
+        GP_set_style,
+        GP_set_style_thematic,
+        GP_set_trans,
+        GP_set_zmode,
+        GP_site_exists,
+        GP_unselect_surf,
+        GP_unset_style_thematic,
         GS_clear,
         GS_delete_surface,
         GS_get_cat_at_xy,
@@ -177,6 +199,16 @@ try:
         GS_surf_exists,
         GS_write_ppm,
         GS_write_tif,
+        GV_delete_vector,
+        GV_get_vectname,
+        GV_select_surf,
+        GV_set_style,
+        GV_set_style_thematic,
+        GV_set_trans,
+        GV_surf_is_selected,
+        GV_unselect_surf,
+        GV_unset_style_thematic,
+        GV_vect_exists,
         GVL_delete_vol,
         GVL_get_trans,
         GVL_init_region,
@@ -205,35 +237,13 @@ try:
         GVL_slice_set_transp,
         GVL_vol_exists,
     )
-    from grass.lib.raster import Rast__init_window, Rast_unset_window, Vect_read_colors
-    from grass.lib.raster3d import (
-        GP_delete_site,
-        GP_get_sitename,
-        GP_select_surf,
-        GP_set_style,
-        GP_set_style_thematic,
-        GP_set_trans,
-        GP_set_zmode,
-        GP_site_exists,
-        GP_unselect_surf,
-        GP_unset_style_thematic,
-    )
-    from grass.lib.vector import (
-        GV_delete_vector,
-        GV_get_vectname,
-        GV_select_surf,
-        GV_set_style,
-        GV_set_style_thematic,
-        GV_set_trans,
-        GV_surf_is_selected,
-        GV_unselect_surf,
-        GV_unset_style_thematic,
-        GV_vect_exists,
-    )
+    from grass.lib.raster import Rast__init_window, Rast_unset_window
+    from grass.lib.vector import Vect_read_colors
 except (ImportError, OSError, TypeError) as e:
     print("wxnviz.py: {}".format(e), file=sys.stderr)
 
 import grass.script as gs
+
 from core.debug import Debug
 from core.gcmd import DecodeString
 from core.globalvar import wxPythonPhoenix
@@ -2432,3 +2442,21 @@ class ImageTexture(Texture):
 
     def Corresponds(self, item):
         return sorted(self.GetCmd()) == sorted(item.GetCmd())
+
+
+__all__ = [
+    "DM_FLAT",
+    "DM_GOURAUD",
+    "DM_GRID_SURF",
+    "DM_GRID_WIRE",
+    "DM_POLY",
+    "DM_WIRE",
+    "DM_WIRE_POLY",
+    "DRAW_QUICK_SURFACE",
+    "DRAW_QUICK_VLINES",
+    "DRAW_QUICK_VOLUME",
+    "DRAW_QUICK_VPOINTS",
+    "MAX_ISOSURFS",
+    "ImageTexture",
+    "Nviz",
+]

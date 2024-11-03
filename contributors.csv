@@ -1,25 +1,25 @@
 cvs_id,name,email,country,osgeo_id,rfc2_agreed,orcid
--,Ivan Shmakov,<ivan siamics.net>,Russia,1gray,yes,-
--,Eric Patton,<eric.patton canada.ca>,Canada,epatton,yes,-
--,Laura Toma,<ltoma bowdoin.edu>,USA,ltoma,yes,-
--,Markus Metz,<markus.metz.giswork googlemail.com>,Germany,mmetz,yes,0000-0002-4038-8754
--,Maris Nartiss,<maris.gis gmail.com>,Latvia,marisn,yes,0000-0002-3875-740X
--,Marco Pasetti,<marco.pasetti alice.it>,Italy,marcopx,yes,-
--,Yann Chemin,<dr.yann.chemin gmail.com>,France,ychemin,yes,0000-0001-9232-5512
--,Colin Nielsen,<colin.nielsen gmail.com>,USA,cnielsen,yes,-
--,Anne Ghisla,<a.ghisla gmail.com>,Italy,aghisla,yes,-
--,Helmut Kudrnovsky,<hellik web.de>,Austria,hellik,yes,0000-0001-6622-7169
 -,Anna Petrášová,<kratochanna gmail.com>,Czech Republic,annakrat,yes,0000-0002-5120-5538
+-,Anne Ghisla,<a.ghisla gmail.com>,Italy,aghisla,yes,-
+-,Colin Nielsen,<colin.nielsen gmail.com>,USA,cnielsen,yes,-
+-,Eric Patton,<eric.patton canada.ca>,Canada,epatton,yes,-
+-,Helmut Kudrnovsky,<hellik web.de>,Austria,hellik,yes,0000-0001-6622-7169
+-,Ivan Shmakov,<ivan siamics.net>,Russia,1gray,yes,-
+-,Laura Toma,<ltoma bowdoin.edu>,USA,ltoma,yes,-
 -,Luca Delucchi,<lucadeluge gmail.com>,Italy,lucadelu,yes,0000-0002-0493-3516
--,Václav Petráš,<wenzeslaus gmail.com>,Czech Republic,wenzeslaus,yes,0000-0001-5566-9236
--,Pietro Zambelli,<peter.zamb gmail.com>,Italy,zarch,yes,0000-0002-6187-3572
--,Štěpán Turek,<stepan.turek seznam.cz>,Czech Republic,turek,yes,-
+-,Marco Pasetti,<marco.pasetti alice.it>,Italy,marcopx,yes,-
 -,Margherita Di Leo,<diregola gmail com>,Italy,madi,yes,0000-0002-0279-7557
--,Veronica Andreo,<veroandreo gmail.com>,Argentina,veroandreo,yes,0000-0002-4633-2161
--,Stefan Blumentrath,<stefan.blumentrath nina.no>,Norway,sbl,yes,0000-0001-6675-1331
--,Ondřej Pešek,<pesej.ondrek gmail.com>,Czech Republic,pesekon2,yes,0000-0002-2363-8002
--,Tomáš Zigo,<tomas.zigo slovanet.sk>,Slovak Republic,tmszi,yes,-
+-,Maris Nartiss,<maris.gis gmail.com>,Latvia,marisn,yes,0000-0002-3875-740X
+-,Markus Metz,<markus.metz.giswork googlemail.com>,Germany,mmetz,yes,0000-0002-4038-8754
 -,Nicklas Larsson,<n_larsson yahoo.com>,Hungary/Sweden,nilason,yes,-
+-,Ondřej Pešek,<pesej.ondrek gmail.com>,Czech Republic,pesekon2,yes,0000-0002-2363-8002
+-,Pietro Zambelli,<peter.zamb gmail.com>,Italy,zarch,yes,0000-0002-6187-3572
+-,Stefan Blumentrath,<stefan.blumentrath nina.no>,Norway,sbl,yes,0000-0001-6675-1331
+-,Štěpán Turek,<stepan.turek seznam.cz>,Czech Republic,turek,yes,-
+-,Tomáš Zigo,<tomas.zigo slovanet.sk>,Slovak Republic,tmszi,yes,-
+-,Václav Petráš,<wenzeslaus gmail.com>,Czech Republic,wenzeslaus,yes,0000-0001-5566-9236
+-,Veronica Andreo,<veroandreo gmail.com>,Argentina,veroandreo,yes,0000-0002-4633-2161
+-,Yann Chemin,<dr.yann.chemin gmail.com>,France,ychemin,yes,0000-0001-9232-5512
 alex,Alex Shevlakov,<sixote yahoo.com>,Russia,-,-,-
 andreas,Andreas Lange,<andreas.c.lange gmx.de>,Germany,-,-,-
 benjamin,Benjamin Ducke,<benducke fastmail.fm>,Germany,benducke,yes,0000-0002-0560-4749
@@ -52,9 +52,9 @@ michel,Michel Wurtz,<mw teledetection.fr>,France,-,-,-
 mike,Mike Thomas,<miketh brisbane.paradigmgeo.com>,Australia,-,-,-
 moritz,Moritz Lennert,<mlennert club.worldonline.be>,Belgium,mlennert,yes,0000-0002-2870-4515
 msieczka,Maciej Sieczka,<msieczka sieczka.org>,Poland,msieczka,yes,-
+pallech,Serena Pallecchi,<pallecch cli.di.unipi.it>,Italy,-,-,-
 paul,Paul Kelly,<paul-grass stjohnspoint.co.uk>,UK,pkelly,yes,-
 paulo,Paulo Marcondes,<pmarc.debian gmail.com>,Brazil,pmarcondes,-,-
-pallech,Serena Pallecchi,<pallecch cli.di.unipi.it>,Italy,-,-,-
 radim,Radim Blazek,<radim.blazek gmail.com>,Czech Republic,rblazek,-,-
 roberto,Roberto Micarelli,<miro iol.it>,Italy,-,-,-
 robertoa,Roberto Antolin,<rantolin.geo gmail.com>,Spain,rantolin,yes,-

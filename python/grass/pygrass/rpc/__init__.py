@@ -11,17 +11,18 @@ for details.
 """
 
 import sys
-from multiprocessing import Process, Lock, Pipe
 from ctypes import CFUNCTYPE, c_void_p
+from multiprocessing import Lock, Pipe, Process
 
+import grass.lib.gis as libgis
 from grass.exceptions import FatalError
+from grass.pygrass import utils
+from grass.pygrass.gis.region import Region
+from grass.pygrass.raster import RasterRow, raster2numpy_img
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.basic import Bbox
-from grass.pygrass.raster import RasterRow, raster2numpy_img
-import grass.lib.gis as libgis
+
 from .base import RPCServerBase
-from grass.pygrass.gis.region import Region
-from grass.pygrass import utils
 
 ###############################################################################
 ###############################################################################
@@ -41,7 +42,8 @@ def _get_raster_image_as_np(lock, conn, data):
     a numpy array with RGB or Gray values.
 
     :param lock: A multiprocessing.Lock instance
-    :param conn: A multiprocessing.Pipe instance used to send True or False
+    :param conn: A multiprocessing.connection.Connection object obtained from
+                 multiprocessing.Pipe used to send True or False
     :param data: The list of data entries [function_id, raster_name, extent, color]
     """
     array = None
@@ -87,7 +89,8 @@ def _get_vector_table_as_dict(lock, conn, data):
     """Get the table of a vector map layer as dictionary
 
     :param lock: A multiprocessing.Lock instance
-    :param conn: A multiprocessing.Pipe instance used to send True or False
+    :param conn: A multiprocessing.connection.Connection object obtained from
+                 multiprocessing.Pipe used to send True or False
     :param data: The list of data entries [function_id, name, mapset, where]
 
     """
@@ -128,7 +131,8 @@ def _get_vector_features_as_wkb_list(lock, conn, data):
     point, centroid, line, boundary, area
 
     :param lock: A multiprocessing.Lock instance
-    :param conn: A multiprocessing.Pipe instance used to send True or False
+    :param conn: A multiprocessing.connection.Connection object obtained from
+                 multiprocessing.Pipe used to send True or False
     :param data: The list of data entries [function_id,name,mapset,extent,
                                            feature_type, field]
 
@@ -196,7 +200,8 @@ def data_provider_server(lock, conn):
     multiprocessing.Process
 
     :param lock: A multiprocessing.Lock
-    :param conn: A multiprocessing.Pipe
+    :param conn: A multiprocessing.connection.Connection object obtained from
+                 multiprocessing.Pipe
     """
 
     def error_handler(data):
@@ -229,9 +234,8 @@ def data_provider_server(lock, conn):
         # Avoid busy waiting
         conn.poll(None)
         data = conn.recv()
-        lock.acquire()
-        functions[data[0]](lock, conn, data)
-        lock.release()
+        with lock:
+            functions[data[0]](lock, conn, data)
 
 
 test_vector_name = "data_provider_vector_map"
@@ -461,6 +465,7 @@ class DataProvider(RPCServerBase):
 
 if __name__ == "__main__":
     import doctest
+
     from grass.pygrass.modules import Module
 
     Module("g.region", n=40, s=0, e=40, w=0, res=10)
