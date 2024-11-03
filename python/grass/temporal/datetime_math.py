@@ -725,7 +725,7 @@ def compute_datetime_delta(start, end):
 ###############################################################################
 
 
-def check_datetime_string(time_string, use_dateutil=True):
+def check_datetime_string(time_string, use_dateutil: bool = True):
     """Check if  a string can be converted into a datetime object and return the object
 
     In case datutil is not installed the supported ISO string formats are:
@@ -966,7 +966,7 @@ def create_suffix_from_datetime(start_time, granularity):
     return start_time.strftime(suffix_units[granularity.split(" ")[1]])
 
 
-def create_time_suffix(mapp, end=False):
+def create_time_suffix(mapp, end: bool = False):
     """Create a datetime string based on a map datetime object
 
     :param mapp: a temporal map dataset

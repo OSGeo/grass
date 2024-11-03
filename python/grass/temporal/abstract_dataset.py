@@ -392,7 +392,7 @@ class AbstractDataset(
     def delete(self):
         """Delete dataset from database if it exists"""
 
-    def insert(self, dbif=None, execute=True):
+    def insert(self, dbif=None, execute: bool = True):
         """Insert dataset into database
 
         :param dbif: The database interface to be used
@@ -434,7 +434,7 @@ class AbstractDataset(
             dbif.close()
         return statement
 
-    def update(self, dbif=None, execute=True, ident=None):
+    def update(self, dbif=None, execute: bool = True, ident=None):
         """Update the dataset entry in the database from the internal structure
         excluding None variables
 
@@ -468,7 +468,7 @@ class AbstractDataset(
             dbif.close()
         return statement
 
-    def update_all(self, dbif=None, execute=True, ident=None):
+    def update_all(self, dbif=None, execute: bool = True, ident=None):
         """Update the dataset entry in the database from the internal structure
         and include None variables.
 

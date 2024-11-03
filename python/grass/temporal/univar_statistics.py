@@ -34,7 +34,9 @@ from .open_stds import open_old_stds
 ###############################################################################
 
 
-def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=False):
+def compute_univar_stats(
+    registered_map_info, stats_module, fs, rast_region: bool = False
+):
     """Compute univariate statistics for a map of a space time raster or raster3d
     dataset
 
@@ -116,9 +118,9 @@ def print_gridded_dataset_univar_statistics(
     output,
     where,
     extended,
-    no_header=False,
+    no_header: bool = False,
     fs="|",
-    rast_region=False,
+    rast_region: bool = False,
     region_relation=None,
     zones=None,
     percentile=None,
@@ -278,7 +280,16 @@ def print_gridded_dataset_univar_statistics(
 
 
 def print_vector_dataset_univar_statistics(
-    input, output, twhere, layer, type, column, where, extended, no_header=False, fs="|"
+    input,
+    output,
+    twhere,
+    layer,
+    type,
+    column,
+    where,
+    extended,
+    no_header: bool = False,
+    fs="|",
 ) -> None:
     """Print univariate statistics for a space time vector dataset
 

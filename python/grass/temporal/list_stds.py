@@ -216,7 +216,7 @@ def _write_yaml(rows, column_names, file=sys.stdout) -> None:
         def ignore_aliases(self, data):
             return True
 
-        def increase_indent(self, flow=False, indentless=False):
+        def increase_indent(self, flow: bool = False, indentless: bool = False):
             return super().increase_indent(flow=flow, indentless=False)
 
     dict_rows = []
@@ -481,7 +481,7 @@ def list_maps_of_stds(
     where,
     separator,
     method,
-    no_header=False,
+    no_header: bool = False,
     gran=None,
     dbif=None,
     outpath=None,

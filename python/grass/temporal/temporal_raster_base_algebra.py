@@ -171,11 +171,11 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
     def __init__(
         self,
         pid=None,
-        run=True,
-        debug=False,
-        spatial=False,
-        register_null=False,
-        dry_run=False,
+        run: bool = True,
+        debug: bool = False,
+        spatial: bool = False,
+        register_null: bool = False,
+        dry_run: bool = False,
         nprocs=1,
         time_suffix=None,
     ) -> None:
@@ -203,15 +203,15 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         maplistA,
         maplistB=None,
         topolist=["EQUAL"],
-        assign_val=False,
-        count_map=False,
-        compare_bool=False,
-        compare_cmd=False,
+        assign_val: bool = False,
+        count_map: bool = False,
+        compare_bool: bool = False,
+        compare_cmd: bool = False,
         compop=None,
         aggregate=None,
-        new=False,
-        convert=False,
-        operator_cmd=False,
+        new: bool = False,
+        convert: bool = False,
+        operator_cmd: bool = False,
     ):
         """Build temporal topology for two space time data sets, copy map objects
         for given relation into map list.
@@ -420,7 +420,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         aggregate,
         temporal_topo_list=["EQUAL"],
         spatial_topo_list=[],
-        convert=False,
+        convert: bool = False,
     ):
         """Function to evaluate two map lists with boolean values by boolean
         comparison operator.
@@ -550,7 +550,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         maplist,
         topolist=["EQUAL"],
         temporal="l",
-        cmd_bool=False,
+        cmd_bool: bool = False,
         cmd_type=None,
         operator=None,
     ):
@@ -643,7 +643,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         condition_topolist=["EQUAL"],
         conclusion_topolist=["EQUAL"],
         temporal="l",
-        null=False,
+        null: bool = False,
     ):
         """This function build the r.mapcalc command strings for spatial conditionals.
         For Example: 'if(a1 == 1, b1, c2)'

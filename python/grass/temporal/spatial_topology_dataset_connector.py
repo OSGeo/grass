@@ -292,7 +292,7 @@ class SpatialTopologyDatasetConnector:
             return None
         return self._spatial_topology["COVERED"]
 
-    def _generate_map_list_string(self, map_list, line_wrap=True):
+    def _generate_map_list_string(self, map_list, line_wrap: bool = True):
         count = 0
         string = ""
         for map_ in map_list:

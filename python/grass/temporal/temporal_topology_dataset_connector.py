@@ -475,7 +475,7 @@ class TemporalTopologyDatasetConnector:
             return None
         return self._temporal_topology["CONTAINS"]
 
-    def _generate_map_list_string(self, map_list, line_wrap=True):
+    def _generate_map_list_string(self, map_list, line_wrap: bool = True):
         count = 0
         string = ""
         for map_ in map_list:

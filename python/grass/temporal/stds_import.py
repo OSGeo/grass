@@ -54,7 +54,14 @@ imported_maps = {}
 
 
 def _import_raster_maps_from_gdal(
-    maplist, overr, exp, location, link, format_, set_current_region=False, memory=300
+    maplist,
+    overr,
+    exp,
+    location,
+    link,
+    format_,
+    set_current_region: bool = False,
+    memory=300,
 ) -> None:
     impflags = ""
     if overr:
@@ -113,7 +120,7 @@ def _import_raster_maps_from_gdal(
 ############################################################################
 
 
-def _import_raster_maps(maplist, set_current_region=False) -> None:
+def _import_raster_maps(maplist, set_current_region: bool = False) -> None:
     # We need to disable the projection check because of its
     # simple implementation
     impflags = "o"
@@ -208,13 +215,13 @@ def import_stds(
     title=None,
     descr=None,
     location=None,
-    link=False,
-    exp=False,
-    overr=False,
-    create=False,
+    link: bool = False,
+    exp: bool = False,
+    overr: bool = False,
+    create: bool = False,
     stds_type="strds",
     base=None,
-    set_current_region=False,
+    set_current_region: bool = False,
     memory=300,
 ) -> None:
     """Import space time datasets of type raster and vector

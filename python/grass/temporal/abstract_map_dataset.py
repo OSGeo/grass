@@ -343,7 +343,7 @@ class AbstractMapDataset(AbstractDataset):
         if self.is_topology_build():
             self.print_topology_shell_info()
 
-    def insert(self, dbif=None, execute=True):
+    def insert(self, dbif=None, execute: bool = True):
         """Insert the map content into the database from the internal
         structure
 
@@ -364,7 +364,7 @@ class AbstractMapDataset(AbstractDataset):
             self.write_timestamp_to_grass()
         return AbstractDataset.insert(self, dbif=dbif, execute=execute)
 
-    def update(self, dbif=None, execute=True):
+    def update(self, dbif=None, execute: bool = True):
         """Update the map content in the database from the internal structure
         excluding None variables
 
@@ -383,7 +383,7 @@ class AbstractMapDataset(AbstractDataset):
             self.write_timestamp_to_grass()
         return AbstractDataset.update(self, dbif, execute)
 
-    def update_all(self, dbif=None, execute=True):
+    def update_all(self, dbif=None, execute: bool = True):
         """Update the map content in the database from the internal structure
         including None variables
 
@@ -721,7 +721,7 @@ class AbstractMapDataset(AbstractDataset):
 
             self.set_absolute_time(start, end)
 
-    def temporal_buffer(self, increment, update=False, dbif=None) -> None:
+    def temporal_buffer(self, increment, update: bool = False, dbif=None) -> None:
         """Create a temporal buffer based on an increment
 
         For absolute time the increment must be a string of type "integer
@@ -870,7 +870,7 @@ class AbstractMapDataset(AbstractDataset):
         """
         self.spatial_extent.set_spatial_extent(spatial_extent)
 
-    def spatial_buffer(self, size, update=False, dbif=None) -> None:
+    def spatial_buffer(self, size, update: bool = False, dbif=None) -> None:
         """Buffer the spatial extent by a given size in all
         spatial directions.
 
@@ -902,7 +902,7 @@ class AbstractMapDataset(AbstractDataset):
         if update:
             self.spatial_extent.update(dbif)
 
-    def spatial_buffer_2d(self, size, update=False, dbif=None) -> None:
+    def spatial_buffer_2d(self, size, update: bool = False, dbif=None) -> None:
         """Buffer the spatial extent by a given size in 2d
         spatial directions.
 
@@ -972,7 +972,7 @@ class AbstractMapDataset(AbstractDataset):
 
         return True
 
-    def delete(self, dbif=None, update=True, execute=True):
+    def delete(self, dbif=None, update: bool = True, execute: bool = True):
         """Delete a map entry from database if it exists
 
          Remove dependent entries:
@@ -1034,7 +1034,7 @@ class AbstractMapDataset(AbstractDataset):
 
         return statement
 
-    def unregister(self, dbif=None, update=True, execute=True):
+    def unregister(self, dbif=None, update: bool = True, execute: bool = True):
         """Remove the map entry in each space time dataset in which this map
         is registered
 
@@ -1125,7 +1125,7 @@ class AbstractMapDataset(AbstractDataset):
 
     # this fn should not be in a class for maps,
     # but instead in a class for stds: AbstractSpaceTimeDataset ?
-    def add_stds_to_register(self, stds_id, dbif=None, execute=True):
+    def add_stds_to_register(self, stds_id, dbif=None, execute: bool = True):
         """Add a new space time dataset to the register
 
         :param stds_id: The id of the space time dataset to be registered
@@ -1174,7 +1174,7 @@ class AbstractMapDataset(AbstractDataset):
 
         return statement
 
-    def remove_stds_from_register(self, stds_id, dbif=None, execute=True):
+    def remove_stds_from_register(self, stds_id, dbif=None, execute: bool = True):
         """Remove a space time dataset from the register
 
         :param stds_id: The id of the space time dataset to removed from

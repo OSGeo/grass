@@ -832,13 +832,13 @@ def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
 def create_temporal_relation_sql_where_statement(
     start,
     end,
-    use_start=True,
-    use_during=False,
-    use_overlap=False,
-    use_contain=False,
-    use_equal=False,
-    use_follows=False,
-    use_precedes=False,
+    use_start: bool = True,
+    use_during: bool = False,
+    use_overlap: bool = False,
+    use_contain: bool = False,
+    use_equal: bool = False,
+    use_follows: bool = False,
+    use_precedes: bool = False,
 ):
     """Create a SQL WHERE statement for temporal relation selection of maps in
     space time datasets

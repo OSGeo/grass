@@ -250,7 +250,7 @@ class RasterMetadataBase(SQLDatabaseInterface):
         """Print information about this class in shell style"""
         self._print_info_body(shell=True)
 
-    def _print_info_head(self, shell=False) -> None:
+    def _print_info_head(self, shell: bool = False) -> None:
         """Print information about this class (head part).
 
         No header printed in shell style mode.
@@ -262,7 +262,7 @@ class RasterMetadataBase(SQLDatabaseInterface):
                 " +-------------------- Metadata information ----------------------------------+"  # noqa: E501
             )
 
-    def _print_info_body(self, shell=False) -> None:
+    def _print_info_body(self, shell: bool = False) -> None:
         """Print information about this class (body part).
 
         :param bool shell: True for human readable style otherwise shell style
@@ -660,7 +660,7 @@ class VectorMetadata(SQLDatabaseInterface):
     def __init__(
         self,
         ident=None,
-        is_3d=False,
+        is_3d: bool = False,
         number_of_points=None,
         number_of_lines=None,
         number_of_boundaries=None,
@@ -1023,7 +1023,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
         self._print_info_body(shell=True)
         self._print_info_tail(shell=True)
 
-    def _print_info_head(self, shell=False) -> None:
+    def _print_info_head(self, shell: bool = False) -> None:
         """Print information about this class (head part).
 
         No header printed in shell style mode.
@@ -1035,13 +1035,13 @@ class STDSMetadataBase(SQLDatabaseInterface):
                 " +-------------------- Metadata information ----------------------------------+"  # noqa: E501
             )
 
-    def _print_info_body(self, shell=False) -> None:
+    def _print_info_body(self, shell: bool = False) -> None:
         """Print information about this class (body part).
 
         :param bool shell: True for human readable style otherwise shell style
         """
 
-    def _print_info_tail(self, shell=False) -> None:
+    def _print_info_tail(self, shell: bool = False) -> None:
         """Print information about this class (tail part).
 
         :param bool shell: True for human readable style otherwise shell style
@@ -1273,7 +1273,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
     max_max = property(fget=get_max_max)
     aggregation_type = property(fset=set_aggregation_type, fget=get_aggregation_type)
 
-    def _print_info_body(self, shell=False) -> None:
+    def _print_info_body(self, shell: bool = False) -> None:
         """Print information about this class (body part).
 
         :param bool shell: True for human readable style otherwise shell style
@@ -1460,7 +1460,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
         self._print_info_head(shell=True)
         super().print_shell_info()
 
-    def _print_info_body(self, shell=False) -> None:
+    def _print_info_body(self, shell: bool = False) -> None:
         """Print information about this class (body part).
 
         :param bool shell: True for human readable style otherwise shell style
@@ -1615,7 +1615,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
         self._print_info_head(shell=True)
         super().print_shell_info()
 
-    def _print_info_body(self, shell=False) -> None:
+    def _print_info_body(self, shell: bool = False) -> None:
         """Print information about this class (body part).
 
         :param bool shell: True for human readable style otherwise shell style
@@ -1879,7 +1879,7 @@ class STVDSMetadata(STDSMetadataBase):
         self._print_info_head(shell=True)
         super().print_shell_info()
 
-    def _print_info_body(self, shell=False) -> None:
+    def _print_info_body(self, shell: bool = False) -> None:
         """Print information about this class (body part).
 
         :param bool shell: True for human readable style otherwise shell style

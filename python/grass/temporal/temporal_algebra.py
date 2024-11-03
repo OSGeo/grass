@@ -783,11 +783,11 @@ class TemporalAlgebraParser:
     def __init__(
         self,
         pid=None,
-        run=True,
-        debug=False,
-        spatial=False,
-        register_null=False,
-        dry_run=False,
+        run: bool = True,
+        debug: bool = False,
+        spatial: bool = False,
+        register_null: bool = False,
+        dry_run: bool = False,
         nprocs=1,
         time_suffix=None,
     ) -> None:
@@ -958,7 +958,7 @@ class TemporalAlgebraParser:
         maptype="rast",
         mapclass=RasterDataset,
         basename=None,
-        overwrite=False,
+        overwrite: bool = False,
     ):
         """Parse the algebra expression and run the computation
 
@@ -998,7 +998,12 @@ class TemporalAlgebraParser:
         return name
 
     def generate_new_map(
-        self, base_map, bool_op="and", copy=True, rename=True, remove=False
+        self,
+        base_map,
+        bool_op="and",
+        copy: bool = True,
+        rename: bool = True,
+        remove: bool = False,
     ):
         """Generate a new map using the spatio-temporal extent of the base map
 
@@ -1030,7 +1035,9 @@ class TemporalAlgebraParser:
         map_new.uid = name
         return map_new
 
-    def overlay_map_extent(self, mapA, mapB, bool_op=None, temp_op="l", copy=False):
+    def overlay_map_extent(
+        self, mapA, mapB, bool_op=None, temp_op="l", copy: bool = False
+    ):
         """Compute the spatio-temporal extent of two topological related maps
 
         :param mapA: The first map
@@ -1213,7 +1220,9 @@ class TemporalAlgebraParser:
                 if self.dry_run is False:
                     m.run()
 
-    def check_stds(self, input, clear=False, stds_type=None, check_type=True):
+    def check_stds(
+        self, input, clear: bool = False, stds_type=None, check_type: bool = True
+    ):
         """Check if input space time dataset exist in database and return its map list.
 
         :param input: Name of space time data set as string or list of maps.
@@ -1389,9 +1398,9 @@ class TemporalAlgebraParser:
         maplistA,
         maplistB=None,
         topolist=["EQUAL"],
-        assign_val=False,
-        count_map=False,
-        compare_bool=False,
+        assign_val: bool = False,
+        count_map: bool = False,
+        compare_bool: bool = False,
         compop=None,
         aggregate=None,
     ):
@@ -1756,7 +1765,12 @@ class TemporalAlgebraParser:
         return (p.relations, p.temporal, p.function, p.aggregate)
 
     def perform_temporal_selection(
-        self, maplistA, maplistB, topolist=["EQUAL"], inverse=False, assign_val=False
+        self,
+        maplistA,
+        maplistB,
+        topolist=["EQUAL"],
+        inverse: bool = False,
+        assign_val: bool = False,
     ):
         """This function performs temporal selection operation.
 
@@ -2252,7 +2266,7 @@ class TemporalAlgebraParser:
         # Sort resulting list of maps chronological.
         return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
-    def eval_condition_list(self, maplist, inverse=False):
+    def eval_condition_list(self, maplist, inverse: bool = False):
         """This function evaluates conditional values of a map list.
         A recursive function is used to evaluate comparison statements
         from left to right in the given conditional list.

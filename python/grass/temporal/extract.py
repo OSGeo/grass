@@ -40,7 +40,7 @@ def extract_dataset(
     base,
     time_suffix,
     nprocs=1,
-    register_null=False,
+    register_null: bool = False,
     layer=1,
     vtype="point,line,boundary,centroid,area,face",
 ) -> None:

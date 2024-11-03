@@ -67,7 +67,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # SpaceTimeRasterDataset related only
         self.semantic_label = None
 
-    def get_name(self, semantic_label=True):
+    def get_name(self, semantic_label: bool = True):
         """Get dataset name including semantic label filter if enabled.
 
         :param bool semantic_label: True to return dataset name
@@ -363,7 +363,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 self.msgr.fatal(_("Unsupported temporal unit: %s") % (unit))
             self.relative_time.set_unit(unit)
 
-    def insert(self, dbif=None, execute=True):
+    def insert(self, dbif=None, execute: bool = True):
         """Insert the space time dataset content into the database from the internal
         structure
 
@@ -615,7 +615,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return True
 
-    def sample_by_dataset(self, stds, method=None, spatial=False, dbif=None):
+    def sample_by_dataset(self, stds, method=None, spatial: bool = False, dbif=None):
         """Sample this space time dataset with the temporal topology
         of a second space time dataset
 
@@ -822,7 +822,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return obj_list
 
-    def sample_by_dataset_sql(self, stds, method=None, spatial=False, dbif=None):
+    def sample_by_dataset_sql(
+        self, stds, method=None, spatial: bool = False, dbif=None
+    ):
         """Sample this space time dataset with the temporal topology
         of a second space time dataset using SQL queries.
 
@@ -2358,7 +2360,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if connection_state_changed:
             dbif.close()
 
-    def delete(self, dbif=None, execute=True):
+    def delete(self, dbif=None, execute: bool = True):
         """Delete a space time dataset from the temporal database
 
         This method removes the space time dataset from the temporal
@@ -2666,7 +2668,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return True
 
-    def unregister_map(self, map, dbif=None, execute=True):
+    def unregister_map(self, map, dbif=None, execute: bool = True):
         """Unregister a map from the space time dataset.
 
         This method takes care of the un-registration of a map

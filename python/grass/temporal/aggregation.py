@@ -224,7 +224,7 @@ def aggregate_by_topology(
     nprocs=1,
     spatial=None,
     dbif=None,
-    overwrite=False,
+    overwrite: bool = False,
     file_limit=1000,
 ):
     """Aggregate a list of raster input maps with r.series

@@ -246,7 +246,7 @@ def get_enable_timestamp_write():
 message_interface = None
 
 
-def _init_tgis_message_interface(raise_on_error=False) -> None:
+def _init_tgis_message_interface(raise_on_error: bool = False) -> None:
     """Initiate the global message interface
 
     :param raise_on_error: If True raise a FatalError exception in case of
@@ -302,7 +302,7 @@ def get_tgis_c_library_interface():
 raise_on_error = False
 
 
-def set_raise_on_error(raise_exp=True):
+def set_raise_on_error(raise_exp: bool = True):
     """Define behavior on fatal error, invoked using the tgis messenger
     interface (msgr.fatal())
 
@@ -512,7 +512,7 @@ def get_available_temporal_mapsets():
 ###############################################################################
 
 
-def init(raise_fatal_error=False, skip_db_version_check=False):
+def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
     """This function set the correct database backend from GRASS environmental
     variables and creates the grass temporal database structure for raster,
     vector and raster3d maps as well as for the space-time datasets strds,

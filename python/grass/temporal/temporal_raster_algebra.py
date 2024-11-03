@@ -72,11 +72,11 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
     def __init__(
         self,
         pid=None,
-        run=False,
-        debug=True,
-        spatial=False,
-        register_null=False,
-        dry_run=False,
+        run: bool = False,
+        debug: bool = True,
+        spatial: bool = False,
+        register_null: bool = False,
+        dry_run: bool = False,
         nprocs=1,
         time_suffix=None,
     ) -> None:
@@ -98,7 +98,7 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
             self.m_mapcalc = pymod.Module("r.mapcalc")
         self.m_mremove = pymod.Module("g.remove")
 
-    def parse(self, expression, basename=None, overwrite=False):
+    def parse(self, expression, basename=None, overwrite: bool = False):
         # Check for space time dataset type definitions from temporal algebra
         lx = TemporalRasterAlgebraLexer()
         lx.build()

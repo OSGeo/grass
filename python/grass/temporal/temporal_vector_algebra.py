@@ -142,7 +142,9 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         ),  # 2
     )
 
-    def __init__(self, pid=None, run=False, debug=True, spatial=False) -> None:
+    def __init__(
+        self, pid=None, run: bool = False, debug: bool = True, spatial: bool = False
+    ) -> None:
         TemporalAlgebraParser.__init__(self, pid, run, debug, spatial)
 
         self.m_overlay = pygrass.Module("v.overlay", quiet=True, run_=False)
@@ -151,7 +153,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         self.m_mremove = pygrass.Module("g.remove", quiet=True, run_=False)
         self.m_buffer = pygrass.Module("v.buffer", quiet=True, run_=False)
 
-    def parse(self, expression, basename=None, overwrite=False):
+    def parse(self, expression, basename=None, overwrite: bool = False):
         # Check for space time dataset type definitions from temporal algebra
         lx = TemporalVectorAlgebraLexer()
         lx.build()
@@ -183,15 +185,15 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         maplistA,
         maplistB=None,
         topolist=["EQUAL"],
-        assign_val=False,
-        count_map=False,
-        compare_bool=False,
-        compare_cmd=False,
+        assign_val: bool = False,
+        count_map: bool = False,
+        compare_bool: bool = False,
+        compare_cmd: bool = False,
         compop=None,
         aggregate=None,
-        new=False,
-        convert=False,
-        overlay_cmd=False,
+        new: bool = False,
+        convert: bool = False,
+        overlay_cmd: bool = False,
     ):
         """Build temporal topology for two space time data sets, copy map objects
         for given relation into map list.
