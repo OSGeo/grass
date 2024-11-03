@@ -27,8 +27,6 @@ except:
 DAY_IN_SECONDS = 86400
 SECOND_AS_DAY = 1.1574074074074073e-05
 
-###############################################################################
-
 
 def relative_time_to_time_delta(value: float) -> timedelta:
     """Convert the double value representing days into a timedelta object."""
@@ -38,15 +36,9 @@ def relative_time_to_time_delta(value: float) -> timedelta:
     return timedelta(days, seconds)
 
 
-###############################################################################
-
-
 def time_delta_to_relative_time(delta: timedelta) -> float:
     """Convert the time delta into a double value, representing days."""
     return float(delta.days) + float(delta.seconds * SECOND_AS_DAY)
-
-
-###############################################################################
 
 
 def relative_time_to_time_delta_seconds(value: float) -> timedelta:
@@ -54,9 +46,6 @@ def relative_time_to_time_delta_seconds(value: float) -> timedelta:
     days = value / 86400
     seconds = int(value % 86400)
     return timedelta(days, seconds)
-
-
-###############################################################################
 
 
 def time_delta_to_relative_time_seconds(delta: timedelta) -> float:
@@ -135,9 +124,6 @@ def decrement_datetime_by_string(
     return modify_datetime_by_string(mydate, increment, mult, sign=-1)
 
 
-###############################################################################
-
-
 def increment_datetime_by_string(
     mydate: datetime, increment: str, mult=1
 ) -> datetime | None:
@@ -210,9 +196,6 @@ def increment_datetime_by_string(
     :return: The new datetime object or none in case of an error
     """
     return modify_datetime_by_string(mydate, increment, mult, sign=1)
-
-
-###############################################################################
 
 
 def modify_datetime_by_string(
@@ -717,9 +700,6 @@ def compute_datetime_delta(start, end):
     return comp
 
 
-###############################################################################
-
-
 def check_datetime_string(time_string: str, use_dateutil: bool = True):
     """Check if  a string can be converted into a datetime object and return the object
 
@@ -823,9 +803,6 @@ def check_datetime_string(time_string: str, use_dateutil: bool = True):
         return _("Unable to parse time string: %s") % time_string
 
 
-###############################################################################
-
-
 def string_to_datetime(time_string: str) -> datetime | None:
     """Convert a string into a datetime object
 
@@ -857,9 +834,6 @@ def string_to_datetime(time_string: str) -> datetime | None:
         return None
 
     return time_object
-
-
-###############################################################################
 
 
 def datetime_to_grass_datetime_string(dt: datetime) -> str:
@@ -931,6 +905,8 @@ def datetime_to_grass_datetime_string(dt: datetime) -> str:
 
 
 ###############################################################################
+
+
 suffix_units = {
     "years": "%Y",
     "year": "%Y",
