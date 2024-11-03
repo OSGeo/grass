@@ -10,9 +10,10 @@ for details.
 import datetime
 
 import grass.script as gs
-import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+
+import grass.temporal as tgis
 
 
 class TestTemporalRaster3dAlgebra(TestCase):

@@ -13,9 +13,10 @@ import datetime
 import os
 
 import grass.script as gs
-import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+
+import grass.temporal as tgis
 
 
 class TestRasterRegisterFunctions(TestCase):

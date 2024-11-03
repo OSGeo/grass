@@ -9,10 +9,11 @@ for details.
 
 import datetime
 
-import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.utils import xfail_windows
+
+import grass.temporal as tgis
 
 
 class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
