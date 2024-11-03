@@ -9,6 +9,8 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 import copy
 from datetime import datetime, timedelta
 
@@ -79,7 +81,9 @@ def time_delta_to_relative_time_seconds(delta):
 ###############################################################################
 
 
-def decrement_datetime_by_string(mydate: datetime, increment, mult=1):
+def decrement_datetime_by_string(
+    mydate: datetime, increment: str, mult=1
+) -> datetime | None:
     """Return a new datetime object decremented with the provided
     relative dates specified as string.
     Additional a multiplier can be specified to multiply the increment
@@ -147,7 +151,9 @@ def decrement_datetime_by_string(mydate: datetime, increment, mult=1):
 ###############################################################################
 
 
-def increment_datetime_by_string(mydate: datetime, increment, mult=1):
+def increment_datetime_by_string(
+    mydate: datetime, increment: str, mult=1
+) -> datetime | None:
     """Return a new datetime object incremented with the provided
     relative dates specified as string.
     Additional a multiplier can be specified to multiply the increment
@@ -222,7 +228,9 @@ def increment_datetime_by_string(mydate: datetime, increment, mult=1):
 ###############################################################################
 
 
-def modify_datetime_by_string(mydate: datetime, increment, mult=1, sign: int = 1):
+def modify_datetime_by_string(
+    mydate: datetime, increment: str, mult=1, sign: int = 1
+) -> datetime | None:
     """Return a new datetime object incremented with the provided
     relative dates specified as string.
     Additional a multiplier can be specified to multiply the increment
@@ -295,7 +303,7 @@ def modify_datetime_by_string(mydate: datetime, increment, mult=1, sign: int = 1
 
 def modify_datetime(
     mydate: datetime, years=0, months=0, weeks=0, days=0, hours=0, minutes=0, seconds=0
-):
+) -> datetime:
     """Return a new datetime object incremented with the provided
     relative dates and times"""
 
@@ -831,7 +839,7 @@ def check_datetime_string(time_string: str, use_dateutil: bool = True):
 ###############################################################################
 
 
-def string_to_datetime(time_string: str):
+def string_to_datetime(time_string: str) -> datetime | None:
     """Convert a string into a datetime object
 
     In case datutil is not installed the supported ISO string formats are:
