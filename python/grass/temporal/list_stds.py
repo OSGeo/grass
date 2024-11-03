@@ -150,7 +150,7 @@ def _open_output_file(file, encoding="utf-8", **kwargs):
             yield stream
 
 
-def _write_line(items, separator, file):
+def _write_line(items, separator, file) -> None:
     if not separator:
         separator = ","
     output = separator.join([f"{item}" for item in items])
@@ -158,8 +158,8 @@ def _write_line(items, separator, file):
         print(f"{output}", file=stream)
 
 
-def _write_plain(rows, header, separator, file):
-    def write_plain_row(items, separator, file):
+def _write_plain(rows, header, separator, file) -> None:
+    def write_plain_row(items, separator, file) -> None:
         output = separator.join([f"{item}" for item in items])
         print(f"{output}", file=file)
 
@@ -171,7 +171,7 @@ def _write_plain(rows, header, separator, file):
             write_plain_row(items=row, separator=separator, file=stream)
 
 
-def _write_json(rows, column_names, file):
+def _write_json(rows, column_names, file) -> None:
     # Lazy import output format-specific dependencies.
     # pylint: disable=import-outside-toplevel
     import datetime
@@ -197,7 +197,7 @@ def _write_json(rows, column_names, file):
         json.dump({"data": dict_rows, "metadata": meta}, stream, cls=ResultsEncoder)
 
 
-def _write_yaml(rows, column_names, file=sys.stdout):
+def _write_yaml(rows, column_names, file=sys.stdout) -> None:
     # Lazy import output format-specific dependencies.
     # pylint: disable=import-outside-toplevel
     import yaml
@@ -238,7 +238,7 @@ def _write_yaml(rows, column_names, file=sys.stdout):
         )
 
 
-def _write_csv(rows, column_names, separator, file=sys.stdout):
+def _write_csv(rows, column_names, separator, file=sys.stdout) -> None:
     # Lazy import output format-specific dependencies.
     # pylint: disable=import-outside-toplevel
     import csv
@@ -486,7 +486,7 @@ def list_maps_of_stds(
     dbif=None,
     outpath=None,
     output_format=None,
-):
+) -> None:
     """List the maps of a space time dataset using different methods
 
     :param type: The type of the maps raster, raster3d or vector

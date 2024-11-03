@@ -16,7 +16,7 @@ from grass.gunittest.main import test
 
 class TestTemporalAlgebraMixedDatasets(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         """Initiate the temporal GIS and set the region"""
         tgis.init(True)  # Raise on error instead of exit(1)
         cls.use_temp_region()
@@ -92,14 +92,14 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         )
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         """Remove the temporary region"""
         cls.runModule("t.remove", flags="rf", type="str3ds", inputs="A", quiet=True)
         cls.runModule("t.remove", flags="rf", type="strds", inputs="B", quiet=True)
         cls.runModule("t.remove", flags="rf", type="stvds", inputs="C", quiet=True)
         cls.del_temp_region()
 
-    def test_temporal_select_operators1(self):
+    def test_temporal_select_operators1(self) -> None:
         """Testing the temporal select operator. Including temporal relations."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
@@ -134,7 +134,7 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         self.assertEqual(pc["STDS"]["name"], "R")
         self.assertEqual(pc["STDS"]["stdstype"], "str3ds")
 
-    def test_temporal_select_operators2(self):
+    def test_temporal_select_operators2(self) -> None:
         """Testing the temporal select operator. Including temporal relations."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
@@ -169,7 +169,7 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         self.assertEqual(pc["STDS"]["name"], "R")
         self.assertEqual(pc["STDS"]["stdstype"], "str3ds")
 
-    def test_temporal_select_operators3(self):
+    def test_temporal_select_operators3(self) -> None:
         """Testing the temporal select operator. Including temporal relations
         and negation operation."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
@@ -191,7 +191,7 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
 
-    def test_temporal_select_operators4(self):
+    def test_temporal_select_operators4(self) -> None:
         """Testing the temporal select operator. Including temporal relations and
         temporal operators."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
@@ -211,7 +211,7 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "2 days")
 
-    def test_temporal_select_operators5(self):
+    def test_temporal_select_operators5(self) -> None:
         """Testing the temporal select operator. Including temporal relations and
         temporal operators."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
@@ -231,7 +231,7 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
 
-    def test_temporal_hash_operator1(self):
+    def test_temporal_hash_operator1(self) -> None:
         """Testing the hash operator function in conditional statement."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
@@ -252,7 +252,7 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
 
-    def test_temporal_hash_operator2(self):
+    def test_temporal_hash_operator2(self) -> None:
         """Testing the hash operator function in conditional statement."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
@@ -273,7 +273,7 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
 
-    def test_different_stds_handling1(self):
+    def test_different_stds_handling1(self) -> None:
         """Testing the handling of different stds types as output."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         ta.parse(
@@ -294,7 +294,7 @@ class TestTemporalAlgebraMixedDatasets(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
 
-    def test_different_stds_handling2(self):
+    def test_different_stds_handling2(self) -> None:
         """Testing the handling of different stds types as output."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True, dry_run=True)
         pc = ta.parse(

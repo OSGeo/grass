@@ -66,7 +66,7 @@ from .temporal_algebra import (
 class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
     """Lexical analyzer for the GRASS GIS temporal vector algebra"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         TemporalAlgebraLexer.__init__(self)
 
     # Buffer functions from v.buffer
@@ -142,7 +142,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         ),  # 2
     )
 
-    def __init__(self, pid=None, run=False, debug=True, spatial=False):
+    def __init__(self, pid=None, run=False, debug=True, spatial=False) -> None:
         TemporalAlgebraParser.__init__(self, pid, run, debug, spatial)
 
         self.m_overlay = pygrass.Module("v.overlay", quiet=True, run_=False)
@@ -573,7 +573,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                 dbif.close()
             t[0] = t[3]
 
-    def p_overlay_operation(self, t):
+    def p_overlay_operation(self, t) -> None:
         """
         expr : stds AND stds
              | expr AND stds
@@ -620,7 +620,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         if self.debug:
             print(str(t[1]) + t[2] + str(t[3]))
 
-    def p_overlay_operation_relation(self, t):
+    def p_overlay_operation_relation(self, t) -> None:
         """
         expr : stds T_OVERLAY_OPERATOR stds
              | expr T_OVERLAY_OPERATOR stds
@@ -651,7 +651,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         if self.debug:
             print(str(t[1]) + t[2] + str(t[3]))
 
-    def p_buffer_operation(self, t):
+    def p_buffer_operation(self, t) -> None:
         """
         expr : buff_function LPAREN stds COMMA number RPAREN
              | buff_function LPAREN expr COMMA number RPAREN
@@ -694,7 +694,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
             t[0] = resultlist
 
-    def p_buff_function(self, t):
+    def p_buff_function(self, t) -> None:
         """buff_function    : BUFF_POINT
         | BUFF_LINE
         | BUFF_AREA

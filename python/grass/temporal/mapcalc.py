@@ -408,7 +408,7 @@ def dataset_mapcalculator(
 ###############################################################################
 
 
-def _run_mapcalc2d(expr):
+def _run_mapcalc2d(expr) -> None:
     """Helper function to run r.mapcalc in parallel"""
     try:
         gs.run_command(
@@ -421,7 +421,7 @@ def _run_mapcalc2d(expr):
 ###############################################################################
 
 
-def _run_mapcalc3d(expr):
+def _run_mapcalc3d(expr) -> None:
     """Helper function to run r3.mapcalc in parallel"""
     try:
         gs.run_command(

@@ -59,7 +59,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, ident):
+    def __init__(self, ident) -> None:
         AbstractDataset.__init__(self)
         self.reset(ident)
         self.map_counter = 0
@@ -128,14 +128,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param name: The name of the register table
         """
 
-    def print_self(self):
+    def print_self(self) -> None:
         """Print the content of the internal structure to stdout"""
         self.base.print_self()
         self.temporal_extent.print_self()
         self.spatial_extent.print_self()
         self.metadata.print_self()
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
 
         if self.get_type() == "strds":
@@ -167,14 +167,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             " +----------------------------------------------------------------------------+"  # noqa: E501
         )
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         self.base.print_shell_info()
         self.temporal_extent.print_shell_info()
         self.spatial_extent.print_shell_info()
         self.metadata.print_shell_info()
 
-    def print_history(self):
+    def print_history(self) -> None:
         """Print history information about this class in human readable
         shell style
         """
@@ -182,7 +182,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
     def set_initial_values(
         self, temporal_type, semantic_type=None, title=None, description=None
-    ):
+    ) -> None:
         """Set the initial values of the space time dataset
 
          In addition the command creation string is generated
@@ -213,7 +213,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.metadata.set_description(description)
         self.metadata.set_command(self.create_command_string())
 
-    def set_aggregation_type(self, aggregation_type):
+    def set_aggregation_type(self, aggregation_type) -> None:
         """Set the aggregation type of the space time dataset
 
         :param aggregation_type: The aggregation type of the space time
@@ -221,7 +221,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
         self.metadata.set_aggregation_type(aggregation_type)
 
-    def update_command_string(self, dbif=None):
+    def update_command_string(self, dbif=None) -> None:
         """Append the current command string to any existing command string
         in the metadata class and calls metadata update
 
@@ -311,7 +311,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return self.temporal_extent.get_granularity()
 
-    def set_granularity(self, granularity):
+    def set_granularity(self, granularity) -> None:
         """Set the granularity
 
         The granularity is usually computed by the space time dataset at
@@ -343,7 +343,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         self.temporal_extent.set_granularity(granularity)
 
-    def set_relative_time_unit(self, unit):
+    def set_relative_time_unit(self, unit) -> None:
         """Set the relative time unit which may be of type:
         years, months, days, hours, minutes or seconds
 
@@ -500,7 +500,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return gaps
 
-    def print_spatio_temporal_relationships(self, maps=None, spatial=None, dbif=None):
+    def print_spatio_temporal_relationships(
+        self, maps=None, spatial=None, dbif=None
+    ) -> None:
         """Print the spatio-temporal relationships for each map of the space
         time dataset or for each map of the optional list of maps
 
@@ -2173,7 +2175,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return maps
 
-    def snap(self, dbif=None):
+    def snap(self, dbif=None) -> None:
         """For each registered map snap the end time to the start time of
         its temporal nearest neighbor in the future
 
@@ -2231,7 +2233,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if connection_state_changed:
             dbif.close()
 
-    def _update_map_timestamps(self, maps, date_list, dbif):
+    def _update_map_timestamps(self, maps, date_list, dbif) -> None:
         """Update the timestamps of maps with the start and end time
         stored in the date_list.
 
@@ -2278,7 +2280,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     ds.select(dbif)
                     ds.update_from_registered_maps(dbif)
 
-    def rename(self, ident, dbif=None):
+    def rename(self, ident, dbif=None) -> None:
         """Rename the space time dataset
 
         This method renames the space time dataset, the map register table
@@ -2749,7 +2751,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return statement
 
-    def update_from_registered_maps(self, dbif=None):
+    def update_from_registered_maps(self, dbif=None) -> None:
         """This methods updates the modification time, the spatial and
         temporal extent as well as type specific metadata. It should always
         been called after maps are registered or unregistered/deleted from

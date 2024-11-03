@@ -59,7 +59,7 @@ from datetime import datetime
 ###############################################################################
 
 
-def profile_function(func):
+def profile_function(func) -> None:
     """Profiling function provided by the temporal framework"""
     do_profiling = os.getenv("GRASS_TGIS_PROFILE")
 
@@ -246,7 +246,7 @@ def get_enable_timestamp_write():
 message_interface = None
 
 
-def _init_tgis_message_interface(raise_on_error=False):
+def _init_tgis_message_interface(raise_on_error=False) -> None:
     """Initiate the global message interface
 
     :param raise_on_error: If True raise a FatalError exception in case of
@@ -276,7 +276,7 @@ def get_tgis_message_interface():
 c_library_interface = None
 
 
-def _init_tgis_c_library_interface():
+def _init_tgis_c_library_interface() -> None:
     """Set the global C-library interface variable that
     provides a fast and exit safe interface to the C-library libgis,
     libraster, libraster3d and libvector functions
@@ -451,7 +451,7 @@ def get_sql_template_path():
 ###############################################################################
 
 
-def stop_subprocesses():
+def stop_subprocesses() -> None:
     """Stop the messenger and C-interface subprocesses
     that are started by tgis.init()
     """
@@ -807,7 +807,7 @@ def get_database_info_string():
 ###############################################################################
 
 
-def _create_temporal_database_views(dbif):
+def _create_temporal_database_views(dbif) -> None:
     """Create all views in the temporal database (internal use only)
 
     Used by create_temporal_database() and upgrade_temporal_database().
@@ -828,7 +828,7 @@ def _create_temporal_database_views(dbif):
         dbif.execute_transaction(sql_filepath)
 
 
-def create_temporal_database(dbif):
+def create_temporal_database(dbif) -> None:
     """This function will create the temporal database
 
     It will create all tables and triggers that are needed to run
@@ -935,7 +935,7 @@ def create_temporal_database(dbif):
 ###############################################################################
 
 
-def upgrade_temporal_database(dbif):
+def upgrade_temporal_database(dbif) -> None:
     """This function will upgrade the temporal database if needed.
 
     It will update all tables and triggers that are requested by
@@ -998,7 +998,7 @@ def upgrade_temporal_database(dbif):
 ###############################################################################
 
 
-def _create_tgis_metadata_table(content, dbif=None):
+def _create_tgis_metadata_table(content, dbif=None) -> None:
     """!Create the temporal gis metadata table which stores all metadata
     information about the temporal database.
 
@@ -1025,7 +1025,7 @@ def _create_tgis_metadata_table(content, dbif=None):
 
 
 class SQLDatabaseInterfaceConnection:
-    def __init__(self):
+    def __init__(self) -> None:
         self.tgis_mapsets = get_available_temporal_mapsets()
         self.current_mapset = get_current_mapset()
         self.connections = {}
@@ -1052,7 +1052,7 @@ class SQLDatabaseInterfaceConnection:
         mapset = decode(mapset)
         return self.connections[mapset].dbmi
 
-    def rollback(self, mapset=None):
+    def rollback(self, mapset=None) -> None:
         """
         Roll back the last transaction. This must be called
         in case a new query should be performed after a db error.
@@ -1062,7 +1062,7 @@ class SQLDatabaseInterfaceConnection:
         if mapset is None:
             mapset = self.current_mapset
 
-    def connect(self):
+    def connect(self) -> None:
         """Connect to the DBMI to execute SQL statements
 
         Supported backends are sqlite3 and postgresql
@@ -1078,7 +1078,7 @@ class SQLDatabaseInterfaceConnection:
     def is_connected(self):
         return self.connected
 
-    def close(self):
+    def close(self) -> None:
         """Close the DBMI connection
 
         There may be several temporal databases in a location, hence
@@ -1228,7 +1228,7 @@ class DBConnection:
       - postgresql via psycopg2
     """
 
-    def __init__(self, backend=None, dbstring=None):
+    def __init__(self, backend=None, dbstring=None) -> None:
         """Constructor of a database connection
 
         param backend:The database backend sqlite or pg
@@ -1261,14 +1261,14 @@ class DBConnection:
             "\n  dbstring: %s" % (backend, self.dbstring),
         )
 
-    def __del__(self):
+    def __del__(self) -> None:
         if self.connected is True:
             self.close()
 
     def is_connected(self):
         return self.connected
 
-    def rollback(self):
+    def rollback(self) -> None:
         """
         Roll back the last transaction. This must be called
         in case a new query should be performed after a db error.
@@ -1279,7 +1279,7 @@ class DBConnection:
             if self.connected:
                 self.connection.rollback()
 
-    def connect(self, dbstring=None):
+    def connect(self, dbstring=None) -> None:
         """Connect to the DBMI to execute SQL statements
 
         Supported backends are sqlite3 and postgresql
@@ -1328,7 +1328,7 @@ class DBConnection:
                 )
             )
 
-    def close(self):
+    def close(self) -> None:
         """Close the DBMI connection
         TODO:
         There may be several temporal databases in a location, hence

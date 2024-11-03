@@ -68,7 +68,7 @@ from .temporal_granularity import compute_absolute_time_granularity
 class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):
     """Lexical analyzer for the GRASS GIS temporal algebra"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         TemporalAlgebraLexer.__init__(self)
 
     # Supported r.mapcalc functions.
@@ -178,7 +178,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         dry_run=False,
         nprocs=1,
         time_suffix=None,
-    ):
+    ) -> None:
         TemporalAlgebraParser.__init__(
             self,
             pid=pid,
@@ -742,7 +742,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 cmd_type="condition",
             )
 
-    def p_statement_assign(self, t):
+    def p_statement_assign(self, t) -> None:
         # This function executes the processing of raster/raster3d algebra
         # that was build based on the expression
         """
@@ -982,7 +982,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         if self.debug:
             print("map(" + t[3] + ")")
 
-    def p_arith1_operation(self, t):
+    def p_arith1_operation(self, t) -> None:
         # A % B
         # A / B
         # A * B
@@ -1057,7 +1057,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_arith1_operation_numeric1(self, t):
+    def p_arith1_operation_numeric1(self, t) -> None:
         # A % 1
         # A / 4
         # A * 5
@@ -1107,7 +1107,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_arith1_operation_numeric2(self, t):
+    def p_arith1_operation_numeric2(self, t) -> None:
         # 1 % A
         # 4 / A
         # 5 * A
@@ -1157,7 +1157,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_arith2_operation(self, t):
+    def p_arith2_operation(self, t) -> None:
         # A + B
         # A - B
         # A + td(B)
@@ -1226,7 +1226,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_arith2_operation_numeric1(self, t):
+    def p_arith2_operation_numeric1(self, t) -> None:
         # A + 2
         # A - 3
         # A + map(b4)
@@ -1268,7 +1268,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_arith2_operation_numeric2(self, t):
+    def p_arith2_operation_numeric2(self, t) -> None:
         # 2 + A
         # 3 - A
         # map(b2) + A
@@ -1310,7 +1310,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_arith1_operation_relation(self, t):
+    def p_arith1_operation_relation(self, t) -> None:
         # A {*, equal, l} B
         # A {*, equal, l} td(B)
         # A {*, equal, l} B {/, during, r} C
@@ -1349,7 +1349,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_arith2_operation_relation(self, t):
+    def p_arith2_operation_relation(self, t) -> None:
         # A {+, equal, l} B
         # A {+, equal, l} td(b)
         # A {+, equal, l} B {-, during, r} C
@@ -1388,7 +1388,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_arith_operation_numeric_string(self, t):
+    def p_arith_operation_numeric_string(self, t) -> None:
         # 1 + 1
         # 1 - 1
         # 1 * 1
@@ -1408,7 +1408,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         if self.debug:
             print(numstring)
 
-    def p_mapcalc_function(self, t):
+    def p_mapcalc_function(self, t) -> None:
         # Supported mapcalc functions.
         """
         mapcalc_arith : ABS
@@ -1429,7 +1429,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         if self.debug:
             print(t[1])
 
-    def p_mapcalc_operation1(self, t):
+    def p_mapcalc_operation1(self, t) -> None:
         # sin(A)
         # log(B)
         """
@@ -1458,7 +1458,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_mapexpr_operation(self, t):
+    def p_mapexpr_operation(self, t) -> None:
         # sin(map(a))
         """
         mapexpr : mapcalc_arith LPAREN mapexpr RPAREN
@@ -1474,7 +1474,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         if self.debug:
             print(mapstring)
 
-    def p_s_var_expr_1(self, t):
+    def p_s_var_expr_1(self, t) -> None:
         #   isnull(A)
         """
         s_var_expr : ISNULL LPAREN stds RPAREN
@@ -1502,7 +1502,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_s_var_expr_2(self, t):
+    def p_s_var_expr_2(self, t) -> None:
         #   isntnull(A)
         """
         s_var_expr : ISNTNULL LPAREN stds RPAREN
@@ -1530,7 +1530,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_s_var_expr_3(self, t):
+    def p_s_var_expr_3(self, t) -> None:
         #   A <= 2
         """
         s_var_expr : stds comp_op number
@@ -1558,7 +1558,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_s_var_expr_4(self, t):
+    def p_s_var_expr_4(self, t) -> None:
         #   exist(B)
         """
         s_var_expr : EXIST LPAREN stds RPAREN
@@ -1586,7 +1586,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_s_var_expr_comp(self, t):
+    def p_s_var_expr_comp(self, t) -> None:
         #   A <= 2 || B == 10
         #   A < 3 && A > 1
         """
@@ -1621,7 +1621,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_s_var_expr_comp_op(self, t):
+    def p_s_var_expr_comp_op(self, t) -> None:
         #   A <= 2 {||} B == 10
         #   A < 3 {&&, equal} A > 1
         """
@@ -1655,7 +1655,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_s_expr_condition_if(self, t):
+    def p_s_expr_condition_if(self, t) -> None:
         #   if(s_var_expr, B)
         #   if(A == 1, B)
         """
@@ -1681,7 +1681,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_s_numeric_condition_if(self, t):
+    def p_s_numeric_condition_if(self, t) -> None:
         #   if(s_var_expr, 1)
         #   if(A == 5, 10)
         """
@@ -1712,7 +1712,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_s_expr_condition_if_relation(self, t):
+    def p_s_expr_condition_if_relation(self, t) -> None:
         #   if({equal||during}, s_var_expr, A)
         """
         expr : IF LPAREN T_REL_OPERATOR COMMA s_var_expr  COMMA stds RPAREN
@@ -1740,7 +1740,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_s_expr_condition_elif(self, t):
+    def p_s_expr_condition_elif(self, t) -> None:
         #   if(s_var_expr, A, B)
         """
         expr : IF LPAREN s_var_expr  COMMA stds COMMA stds RPAREN
@@ -1773,7 +1773,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_s_numeric_condition_elif(self, t):
+    def p_s_numeric_condition_elif(self, t) -> None:
         #   if(s_var_expr, 1, 2)
         #   if(A == 5, 10, 0)
         """
@@ -1821,7 +1821,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_s_numeric_expr_condition_elif(self, t):
+    def p_s_numeric_expr_condition_elif(self, t) -> None:
         #   if(s_var_expr, 1, A)
         #   if(A == 5 && C > 5, A, null())
         """
@@ -1876,7 +1876,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_s_numeric_expr_condition_elif_relation(self, t):
+    def p_s_numeric_expr_condition_elif_relation(self, t) -> None:
         #   if({during},s_var_expr, 1, A)
         #   if({during}, A == 5, A, null())
         """
@@ -1934,7 +1934,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_s_expr_condition_elif_relation(self, t):
+    def p_s_expr_condition_elif_relation(self, t) -> None:
         #   if({equal||during}, s_var_expr, A, B)
         """
         expr : IF LPAREN T_REL_OPERATOR COMMA s_var_expr  COMMA stds COMMA stds RPAREN
@@ -1970,7 +1970,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print(map.cmd_list)
 
-    def p_ts_var_expr1(self, t):
+    def p_ts_var_expr1(self, t) -> None:
         # Combination of spatial and temporal conditional expressions.
         # Examples:
         #   A <= 2 || start_date <= 2013-01-01
@@ -2016,7 +2016,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
         t[0] = resultlist
 
-    def p_hash_operation(self, t):
+    def p_hash_operation(self, t) -> None:
         # Calculate the number of maps within an interval of another map from a
         # second space time dataset.
         # A # B

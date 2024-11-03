@@ -29,12 +29,12 @@ class AbstractDataset(
 
     __metaclass__ = ABCMeta
 
-    def __init__(self):
+    def __init__(self) -> None:
         SpatialTopologyDatasetConnector.__init__(self)
         TemporalTopologyDatasetConnector.__init__(self)
         self.msgr = get_tgis_message_interface()
 
-    def reset_topology(self):
+    def reset_topology(self) -> None:
         """Reset any information about temporal topology"""
 
         self.reset_spatial_topology()
@@ -88,12 +88,12 @@ class AbstractDataset(
 
         return None
 
-    def set_topology_build_true(self):
+    def set_topology_build_true(self) -> None:
         """Use this method when the spatio-temporal topology was build"""
         self.set_spatial_topology_build_true()
         self.set_temporal_topology_build_true()
 
-    def set_topology_build_false(self):
+    def set_topology_build_false(self) -> None:
         """Use this method when the spatio-temporal topology was not build"""
         self.set_spatial_topology_build_false()
         self.set_temporal_topology_build_false()
@@ -110,13 +110,13 @@ class AbstractDataset(
 
         return d
 
-    def print_topology_info(self):
+    def print_topology_info(self) -> None:
         if self.is_temporal_topology_build():
             self.print_temporal_topology_info()
         if self.is_spatial_topology_build():
             self.print_spatial_topology_info()
 
-    def print_topology_shell_info(self):
+    def print_topology_shell_info(self) -> None:
         if self.is_temporal_topology_build():
             self.print_temporal_topology_shell_info()
         if self.is_spatial_topology_build():
@@ -223,7 +223,7 @@ class AbstractDataset(
     def print_self(self):
         """Print the content of the internal structure to stdout"""
 
-    def set_id(self, ident):
+    def set_id(self, ident) -> None:
         """Set the identifier of the dataset"""
         self.base.set_id(ident)
         self.temporal_extent.set_id(ident)
@@ -351,7 +351,7 @@ class AbstractDataset(
         """Return the spatial extent"""
         return self.spatial_extent
 
-    def select(self, dbif=None, mapset=None):
+    def select(self, dbif=None, mapset=None) -> None:
         """Select temporal dataset entry from database and fill
         the internal structure
 
@@ -589,7 +589,7 @@ class AbstractDatasetComparisonKeyStartTime:
          sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyStartTime)
     """
 
-    def __init__(self, obj, *args):
+    def __init__(self, obj, *args) -> None:
         self.obj = obj
 
     def __lt__(self, other):
@@ -641,7 +641,7 @@ class AbstractDatasetComparisonKeyEndTime:
          sorted_map_list = sorted(map_list, key=AbstractDatasetComparisonKeyEndTime)
     """
 
-    def __init__(self, obj, *args):
+    def __init__(self, obj, *args) -> None:
         self.obj = obj
 
     def __lt__(self, other):

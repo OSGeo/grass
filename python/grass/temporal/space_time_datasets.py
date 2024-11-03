@@ -177,7 +177,7 @@ class RasterDataset(AbstractMapDataset):
 
     """
 
-    def __init__(self, ident):
+    def __init__(self, ident) -> None:
         AbstractMapDataset.__init__(self)
         self.reset(ident)
 
@@ -253,7 +253,7 @@ class RasterDataset(AbstractMapDataset):
             return garray.array(self.get_map_id())
         return garray.array()
 
-    def reset(self, ident):
+    def reset(self, ident) -> None:
         """Reset the internal structure and set the identifier"""
         self.base = RasterBase(ident=ident)
         self.absolute_time = RasterAbsoluteTime(ident=ident)
@@ -462,7 +462,7 @@ class RasterDataset(AbstractMapDataset):
 
         return False
 
-    def set_semantic_label(self, semantic_label):
+    def set_semantic_label(self, semantic_label) -> None:
         """Set semantic label identifier
 
         Metadata is updated in order to propagate semantic label into
@@ -606,7 +606,7 @@ class Raster3DDataset(AbstractMapDataset):
 
     """
 
-    def __init__(self, ident):
+    def __init__(self, ident) -> None:
         AbstractMapDataset.__init__(self)
         self.reset(ident)
 
@@ -693,7 +693,7 @@ class Raster3DDataset(AbstractMapDataset):
             return garray.array3d(self.get_map_id())
         return garray.array3d()
 
-    def reset(self, ident):
+    def reset(self, ident) -> None:
         """Reset the internal structure and set the identifier"""
         self.base = Raster3DBase(ident=ident)
         self.absolute_time = Raster3DAbsoluteTime(ident=ident)
@@ -974,7 +974,7 @@ class VectorDataset(AbstractMapDataset):
 
     """
 
-    def __init__(self, ident):
+    def __init__(self, ident) -> None:
         AbstractMapDataset.__init__(self)
         self.reset(ident)
 
@@ -1037,7 +1037,7 @@ class VectorDataset(AbstractMapDataset):
         """
         return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
-    def reset(self, ident):
+    def reset(self, ident) -> None:
         """Reset the internal structure and set the identifier"""
         self.base = VectorBase(ident=ident)
         self.absolute_time = VectorAbsoluteTime(ident=ident)
@@ -1230,10 +1230,10 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
     ...
     """
 
-    def __init__(self, ident):
+    def __init__(self, ident) -> None:
         AbstractSpaceTimeDataset.__init__(self, ident)
 
-    def set_semantic_label(self, semantic_label):
+    def set_semantic_label(self, semantic_label) -> None:
         """Set semantic label
 
         :param str semantic_label: semantic label (eg. S2_1)
@@ -1263,7 +1263,7 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
         """Return the name of the map register table"""
         return self.metadata.get_raster_register()
 
-    def set_map_register(self, name):
+    def set_map_register(self, name) -> None:
         """Set the name of the map register table"""
         self.metadata.set_raster_register(name)
 
@@ -1301,7 +1301,7 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
         """
         return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
-    def reset(self, ident):
+    def reset(self, ident) -> None:
         """Reset the internal structure and set the identifier"""
         self.base = STRDSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))
@@ -1346,7 +1346,7 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
     ...
     """
 
-    def __init__(self, ident):
+    def __init__(self, ident) -> None:
         AbstractSpaceTimeDataset.__init__(self, ident)
 
     def is_stds(self):
@@ -1372,7 +1372,7 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
         """Return the name of the map register table"""
         return self.metadata.get_raster3d_register()
 
-    def set_map_register(self, name):
+    def set_map_register(self, name) -> None:
         """Set the name of the map register table"""
         self.metadata.set_raster3d_register(name)
 
@@ -1422,7 +1422,7 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
             return self.spatial_extent.disjoint_union(dataset.spatial_extent)
         return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
-    def reset(self, ident):
+    def reset(self, ident) -> None:
         """Reset the internal structure and set the identifier"""
         self.base = STR3DSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))
@@ -1467,7 +1467,7 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
     ...
     """
 
-    def __init__(self, ident):
+    def __init__(self, ident) -> None:
         AbstractSpaceTimeDataset.__init__(self, ident)
 
     def is_stds(self):
@@ -1493,7 +1493,7 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
         """Return the name of the map register table"""
         return self.metadata.get_vector_register()
 
-    def set_map_register(self, name):
+    def set_map_register(self, name) -> None:
         """Set the name of the map register table"""
         self.metadata.set_vector_register(name)
 
@@ -1531,7 +1531,7 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
         """
         return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
-    def reset(self, ident):
+    def reset(self, ident) -> None:
         """Reset the internal structure and set the identifier"""
         self.base = STVDSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))

@@ -38,7 +38,7 @@ from .core import (
 
 
 class DictSQLSerializer:
-    def __init__(self):
+    def __init__(self) -> None:
         self.D = {}
         self.dbmi_paramstyle = get_tgis_dbmi_paramstyle()
 
@@ -174,7 +174,7 @@ class DictSQLSerializer:
 
         return sql, tuple(args)
 
-    def deserialize(self, row):
+    def deserialize(self, row) -> None:
         """Convert the content of the dbmi dictionary like row into the
         internal dictionary
 
@@ -184,11 +184,11 @@ class DictSQLSerializer:
         for key in row.keys():
             self.D[key] = row[key]
 
-    def clear(self):
+    def clear(self) -> None:
         """Initialize the internal storage"""
         self.D = {}
 
-    def print_self(self):
+    def print_self(self) -> None:
         """Print the content of the internal dictionary to stdout"""
         print(self.D)
 
@@ -243,7 +243,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
     """  # noqa: E501
 
-    def __init__(self, table=None, ident=None):
+    def __init__(self, table=None, ident=None) -> None:
         """Constructor of this class
 
         :param table: The name of the table
@@ -280,7 +280,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             + "';\n"
         )
 
-    def delete(self, dbif=None):
+    def delete(self, dbif=None) -> None:
         """Delete the entry of this object from the temporal database
 
         :param dbif: The database interface to be used,
@@ -432,7 +432,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         mapset = get_current_mapset()
         return dbif.mogrify_sql_statement(self.get_insert_statement(), mapset=mapset)
 
-    def insert(self, dbif=None):
+    def insert(self, dbif=None) -> None:
         """Serialize the content of this object and store it in the temporal
         database using the internal identifier
 
@@ -489,7 +489,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             self.get_update_statement(ident), mapset=mapset
         )
 
-    def update(self, dbif=None, ident=None):
+    def update(self, dbif=None, ident=None) -> None:
         """Serialize the content of this object and update it in the temporal
         database using the internal identifier
 
@@ -547,7 +547,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
         return dbif.mogrify_sql_statement(self.get_update_all_statement(ident))
 
-    def update_all(self, dbif=None, ident=None):
+    def update_all(self, dbif=None, ident=None) -> None:
         """Serialize the content of this object, including None objects,
         and update it in the temporal database using the internal identifier
 
@@ -632,7 +632,7 @@ class DatasetBase(SQLDatabaseInterface):
         creator=None,
         ctime=None,
         ttype=None,
-    ):
+    ) -> None:
         """Constructor
 
         :param table: The name of the temporal database table
@@ -665,7 +665,7 @@ class DatasetBase(SQLDatabaseInterface):
         self.set_ctime(ctime)
         self.set_ttype(ttype)
 
-    def set_id(self, ident):
+    def set_id(self, ident) -> None:
         """Convenient method to set the unique identifier (primary key)
 
         :param ident: The unique identifier must be a combination
@@ -688,21 +688,21 @@ class DatasetBase(SQLDatabaseInterface):
                 self.set_layer(layer)
             self.set_name(name)
 
-    def set_name(self, name):
+    def set_name(self, name) -> None:
         """Set the name of the dataset
 
         :param name: The name of the dataset
         """
         self.D["name"] = name
 
-    def set_mapset(self, mapset):
+    def set_mapset(self, mapset) -> None:
         """Set the mapset of the dataset
 
         :param mapset: The name of the mapset in which this dataset is stored
         """
         self.D["mapset"] = mapset
 
-    def set_layer(self, layer):
+    def set_layer(self, layer) -> None:
         """Convenient method to set the layer of the map (part of primary key)
 
         Layer are supported for vector maps
@@ -711,14 +711,14 @@ class DatasetBase(SQLDatabaseInterface):
         """
         self.D["layer"] = layer
 
-    def set_creator(self, creator):
+    def set_creator(self, creator) -> None:
         """Set the creator of the dataset
 
         :param creator: The name of the creator
         """
         self.D["creator"] = creator
 
-    def set_ctime(self, ctime=None):
+    def set_ctime(self, ctime=None) -> None:
         """Set the creation time of the dataset,
         if nothing set the current time is used
 
@@ -729,7 +729,7 @@ class DatasetBase(SQLDatabaseInterface):
         else:
             self.D["creation_time"] = ctime
 
-    def set_ttype(self, ttype):
+    def set_ttype(self, ttype) -> None:
         """Set the temporal type of the dataset: absolute or relative,
         if nothing set absolute time will assumed
 
@@ -818,7 +818,7 @@ class DatasetBase(SQLDatabaseInterface):
     ttype = property(fget=get_ttype, fset=set_ttype)
     creator = property(fget=get_creator, fset=set_creator)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(
@@ -833,7 +833,7 @@ class DatasetBase(SQLDatabaseInterface):
         print(" | Temporal type: ............. " + str(self.get_ttype()))
         print(" | Creation time: ............. " + str(self.get_ctime()))
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         print("id=" + str(self.get_id()))
         print("name=" + str(self.get_name()))
@@ -859,7 +859,7 @@ class RasterBase(DatasetBase):
         creator=None,
         creation_time=None,
         temporal_type=None,
-    ):
+    ) -> None:
         DatasetBase.__init__(
             self,
             "raster_base",
@@ -883,7 +883,7 @@ class Raster3DBase(DatasetBase):
         creator=None,
         creation_time=None,
         temporal_type=None,
-    ):
+    ) -> None:
         DatasetBase.__init__(
             self,
             "raster3d_base",
@@ -908,7 +908,7 @@ class VectorBase(DatasetBase):
         creator=None,
         creation_time=None,
         temporal_type=None,
-    ):
+    ) -> None:
         DatasetBase.__init__(
             self,
             "vector_base",
@@ -991,17 +991,17 @@ class STDSBase(DatasetBase):
         ctime=None,
         ttype=None,
         mtime=None,
-    ):
+    ) -> None:
         DatasetBase.__init__(self, table, ident, name, mapset, creator, ctime, ttype)
 
         self.set_semantic_type(semantic_type)
         self.set_mtime(mtime)
 
-    def set_semantic_type(self, semantic_type):
+    def set_semantic_type(self, semantic_type) -> None:
         """Set the semantic type of the space time dataset"""
         self.D["semantic_type"] = semantic_type
 
-    def set_mtime(self, mtime=None):
+    def set_mtime(self, mtime=None) -> None:
         """Set the modification time of the space time dataset, if nothing set
         the current time is used
         """
@@ -1030,14 +1030,14 @@ class STDSBase(DatasetBase):
 
     semantic_type = property(fget=get_semantic_type, fset=set_semantic_type)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         DatasetBase.print_info(self)
         #      0123456789012345678901234567890
         print(" | Modification time:.......... " + str(self.get_mtime()))
         print(" | Semantic type:.............. " + str(self.get_semantic_type()))
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         DatasetBase.print_shell_info(self)
         print("modification_time='{}'".format(str(self.get_mtime())))
@@ -1059,7 +1059,7 @@ class STRDSBase(STDSBase):
         creator=None,
         ctime=None,
         ttype=None,
-    ):
+    ) -> None:
         STDSBase.__init__(
             self,
             "strds_base",
@@ -1085,7 +1085,7 @@ class STR3DSBase(STDSBase):
         creator=None,
         ctime=None,
         ttype=None,
-    ):
+    ) -> None:
         STDSBase.__init__(
             self,
             "str3ds_base",
@@ -1111,7 +1111,7 @@ class STVDSBase(STDSBase):
         creator=None,
         ctime=None,
         ttype=None,
-    ):
+    ) -> None:
         STDSBase.__init__(
             self,
             "stvds_base",
@@ -1145,7 +1145,7 @@ class AbstractSTDSRegister(SQLDatabaseInterface):
 
     """
 
-    def __init__(self, table=None, ident=None, registered_stds=None):
+    def __init__(self, table=None, ident=None, registered_stds=None) -> None:
         """Constructor
 
         :param table: The name of the temporal database table
@@ -1162,7 +1162,7 @@ class AbstractSTDSRegister(SQLDatabaseInterface):
         self.set_id(ident)
         self.set_registered_stds(registered_stds)
 
-    def set_id(self, ident):
+    def set_id(self, ident) -> None:
         """Convenient method to set the unique identifier (primary key)
 
         :param ident: The unique identifier must be a combination
@@ -1172,7 +1172,7 @@ class AbstractSTDSRegister(SQLDatabaseInterface):
         self.ident = ident
         self.D["id"] = ident
 
-    def set_registered_stds(self, registered_stds):
+    def set_registered_stds(self, registered_stds) -> None:
         """Get the comma separated list of space time datasets ids
         in which this map is registered
 
@@ -1211,7 +1211,7 @@ class AbstractSTDSRegister(SQLDatabaseInterface):
 class RasterSTDSRegister(AbstractSTDSRegister):
     """Time stamped raster map base information class"""
 
-    def __init__(self, ident=None, registered_stds=None):
+    def __init__(self, ident=None, registered_stds=None) -> None:
         AbstractSTDSRegister.__init__(
             self, "raster_stds_register", ident, registered_stds
         )
@@ -1220,7 +1220,7 @@ class RasterSTDSRegister(AbstractSTDSRegister):
 class Raster3DSTDSRegister(AbstractSTDSRegister):
     """Time stamped 3D raster map base information class"""
 
-    def __init__(self, ident=None, registered_stds=None):
+    def __init__(self, ident=None, registered_stds=None) -> None:
         AbstractSTDSRegister.__init__(
             self, "raster3d_stds_register", ident, registered_stds
         )
@@ -1229,7 +1229,7 @@ class Raster3DSTDSRegister(AbstractSTDSRegister):
 class VectorSTDSRegister(AbstractSTDSRegister):
     """Time stamped vector map base information class"""
 
-    def __init__(self, ident=None, registered_stds=None):
+    def __init__(self, ident=None, registered_stds=None) -> None:
         AbstractSTDSRegister.__init__(
             self, "vector_stds_register", ident, registered_stds
         )

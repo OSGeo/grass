@@ -37,7 +37,7 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
         register_null=False,
         dry_run=False,
         nprocs=1,
-    ):
+    ) -> None:
         TemporalRasterBaseAlgebraParser.__init__(
             self,
             pid=pid,
@@ -81,14 +81,14 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
 
         return self.process_chain_dict
 
-    def p_statement_assign(self, t):
+    def p_statement_assign(self, t) -> None:
         # The expression should always return a list of maps.
         """
         statement : stds EQUALS expr
         """
         TemporalRasterBaseAlgebraParser.p_statement_assign(self, t)
 
-    def p_ts_neighbor_operation(self, t):
+    def p_ts_neighbor_operation(self, t) -> None:
         # Examples:
         # A[1,0,-1]
         # B[-2]

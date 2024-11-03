@@ -655,7 +655,7 @@ class TemporalAlgebraLexer:
     #        pass
 
     # Track line numbers.
-    def t_newline(self, t):
+    def t_newline(self, t) -> None:
         r"\n+"
         t.lineno += len(t.value)
 
@@ -685,13 +685,13 @@ class TemporalAlgebraLexer:
         )
 
     # Build the lexer
-    def build(self, **kwargs):
+    def build(self, **kwargs) -> None:
         self.lexer = lex.lex(
             module=self, optimize=False, nowarn=True, debug=0, **kwargs
         )
 
     # Just for testing
-    def test(self, data):
+    def test(self, data) -> None:
         self.name_list = {}
         print(data)
         self.lexer.input(data)
@@ -711,7 +711,7 @@ class GlobalTemporalVar:
     if-statements can be stored in this class.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.tfunc = None
         self.compop = None
         self.value = None
@@ -754,7 +754,7 @@ class GlobalTemporalVar:
 
 
 class FatalError(Exception):
-    def __init__(self, msg):
+    def __init__(self, msg) -> None:
         self.value = msg
 
     def __str__(self):
@@ -790,7 +790,7 @@ class TemporalAlgebraParser:
         dry_run=False,
         nprocs=1,
         time_suffix=None,
-    ):
+    ) -> None:
         self.run = run
         # Compute the processes and output but Do not start the processes
         self.dry_run = dry_run
@@ -846,7 +846,7 @@ class TemporalAlgebraParser:
             "MEET",
         ]
 
-    def __del__(self):
+    def __del__(self) -> None:
         if self.dbif.connected:
             self.dbif.close()
 
@@ -1174,7 +1174,7 @@ class TemporalAlgebraParser:
         resultlist = resultdict.values()
         return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
-    def remove_maps(self):
+    def remove_maps(self) -> None:
         """Removes empty or intermediate maps of different type."""
 
         map_names = {}
@@ -1191,7 +1191,7 @@ class TemporalAlgebraParser:
                 self.msgr.message(_("Removing un-needed or empty %s maps") % (key))
                 self._remove_maps(value, key)
 
-    def _remove_maps(self, namelist, map_type):
+    def _remove_maps(self, namelist, map_type) -> None:
         """Remove maps of specific type
 
         :param namelist: List of map names to be removed
@@ -2318,7 +2318,7 @@ class TemporalAlgebraParser:
             return inverselist
         return resultlist
 
-    def p_statement_assign(self, t):
+    def p_statement_assign(self, t) -> None:
         # The expression should always return a list of maps
         # This function starts all the work and is the last one that is called from the
         # parser
@@ -2551,24 +2551,24 @@ class TemporalAlgebraParser:
         if self.debug:
             print(t[1], "=", t[3])
 
-    def p_stds_1(self, t):
+    def p_stds_1(self, t) -> None:
         # Definition of a space time dataset
         """
         stds : NAME
         """
         t[0] = t[1]
 
-    def p_paren_expr(self, t):
+    def p_paren_expr(self, t) -> None:
         """expr : LPAREN expr RPAREN"""
         t[0] = t[2]
 
-    def p_number(self, t):
+    def p_number(self, t) -> None:
         """number : INT
         | FLOAT
         """
         t[0] = t[1]
 
-    def p_expr_strds_function(self, t):
+    def p_expr_strds_function(self, t) -> None:
         # Explicitly specify a space time raster dataset
         # R = A : strds(B)
         """
@@ -2581,7 +2581,7 @@ class TemporalAlgebraParser:
             if self.debug:
                 print("Opening STRDS: ", t[0])
 
-    def p_expr_str3ds_function(self, t):
+    def p_expr_str3ds_function(self, t) -> None:
         # Explicitly specify a space time raster dataset
         # R = A : str3ds(B)
         """
@@ -2594,7 +2594,7 @@ class TemporalAlgebraParser:
             if self.debug:
                 print("Opening STR3DS: ", t[0])
 
-    def p_expr_stvds_function(self, t):
+    def p_expr_stvds_function(self, t) -> None:
         # Explicitly specify a space time vector dataset
         # R = A : stvds(B)
         """
@@ -2709,7 +2709,7 @@ class TemporalAlgebraParser:
         if self.debug:
             print("merge(", t[3], ",", t[5], ")")
 
-    def p_t_hash(self, t):
+    def p_t_hash(self, t) -> None:
         """
         t_hash_var : stds HASH stds
                    | expr HASH stds
@@ -2725,7 +2725,7 @@ class TemporalAlgebraParser:
             )
             t[0] = resultlist
 
-    def p_t_hash2(self, t):
+    def p_t_hash2(self, t) -> None:
         """
         t_hash_var : stds T_HASH_OPERATOR stds
                    | stds T_HASH_OPERATOR expr
@@ -2742,13 +2742,13 @@ class TemporalAlgebraParser:
             )
             t[0] = resultlist
 
-    def p_t_hash_paren(self, t):
+    def p_t_hash_paren(self, t) -> None:
         """
         t_hash_var : LPAREN t_hash_var RPAREN
         """
         t[0] = t[2]
 
-    def p_t_td_var(self, t):
+    def p_t_td_var(self, t) -> None:
         """
         t_td_var : TD LPAREN stds RPAREN
                  | TD LPAREN expr RPAREN
@@ -2778,7 +2778,7 @@ class TemporalAlgebraParser:
         if self.debug:
             print("td(" + str(t[3]) + ")")
 
-    def p_t_time_var(self, t):
+    def p_t_time_var(self, t) -> None:
         # Temporal variables that return a double or integer value
         """
         t_var : START_DOY
@@ -2803,7 +2803,7 @@ class TemporalAlgebraParser:
 
         t[0] = t[1]
 
-    def p_compare_op(self, t):
+    def p_compare_op(self, t) -> None:
         # Compare operators that are supported for temporal expressions
         """
         comp_op : CEQUALS
@@ -2815,7 +2815,7 @@ class TemporalAlgebraParser:
         """
         t[0] = t[1]
 
-    def p_t_var_expr_td_hash(self, t):
+    def p_t_var_expr_td_hash(self, t) -> None:
         # Examples:
         #    A # B == 2
         #    td(A) < 31
@@ -2848,7 +2848,7 @@ class TemporalAlgebraParser:
         if self.debug:
             print(t[1], t[2], t[3])
 
-    def p_t_var_expr_number(self, t):
+    def p_t_var_expr_number(self, t) -> None:
         # Examples:
         #    start_month(A) > 2
         #    start_day(B) < 14
@@ -2877,7 +2877,7 @@ class TemporalAlgebraParser:
         if self.debug:
             print(t[1], t[3], t[5], t[6])
 
-    def p_t_var_expr_time(self, t):
+    def p_t_var_expr_time(self, t) -> None:
         # Examples:
         #   start_time(A) == "12:30:00"
         #   start_date(B) <= "2001-01-01"
@@ -2914,7 +2914,7 @@ class TemporalAlgebraParser:
         if self.debug:
             print(t[1], t[3], t[5], t[6])
 
-    def p_t_var_expr_comp(self, t):
+    def p_t_var_expr_comp(self, t) -> None:
         """
         t_var_expr : t_var_expr AND AND t_var_expr
                    | t_var_expr OR OR t_var_expr
@@ -2946,7 +2946,7 @@ class TemporalAlgebraParser:
         if self.debug:
             print(t[1], t[2] + t[3], t[4])
 
-    def p_t_var_expr_comp_op(self, t):
+    def p_t_var_expr_comp_op(self, t) -> None:
         """
         t_var_expr : t_var_expr T_COMP_OPERATOR t_var_expr
         """
@@ -2976,7 +2976,7 @@ class TemporalAlgebraParser:
         if self.debug:
             print(t[1], t[2], t[3])
 
-    def p_expr_t_select(self, t):
+    def p_expr_t_select(self, t) -> None:
         # Temporal equal selection
         # The temporal topology relation equals is implicit
         # Examples:
@@ -3003,7 +3003,7 @@ class TemporalAlgebraParser:
         if self.debug:
             print(str(t[1]), "* = ", t[1], t[2], t[3])
 
-    def p_expr_t_not_select(self, t):
+    def p_expr_t_not_select(self, t) -> None:
         # Temporal equal selection
         # The temporal topology relation equals is implicit
         # Examples:
@@ -3030,7 +3030,7 @@ class TemporalAlgebraParser:
         if self.debug:
             print(t[1] + "* = ", t[1], t[2], t[3])
 
-    def p_expr_t_select_operator(self, t):
+    def p_expr_t_select_operator(self, t) -> None:
         # Temporal equal selection
         # The temporal topology relation equals is implicit
         # Examples:
@@ -3072,7 +3072,7 @@ class TemporalAlgebraParser:
         if self.debug:
             print(t[1] + "* = ", t[1], t[2], t[3])
 
-    def p_expr_condition_if(self, t):
+    def p_expr_condition_if(self, t) -> None:
         # Examples
         # if( start_date() < "2005-06-01", A:B)
         """
@@ -3096,7 +3096,7 @@ class TemporalAlgebraParser:
         if self.debug:
             print(str(t[5]) + "* = ", "if condition", str(t[3]), " then ", str(t[5]))
 
-    def p_expr_condition_if_relation(self, t):
+    def p_expr_condition_if_relation(self, t) -> None:
         # Examples
         # if({equal} start_date() < "2005-06-01", A:B)
         """
@@ -3129,7 +3129,7 @@ class TemporalAlgebraParser:
                 str(t[7]),
             )
 
-    def p_expr_condition_elif(self, t):
+    def p_expr_condition_elif(self, t) -> None:
         # Examples
         # if( start_date() < "2005-06-01", if(start_time() < "12:30:00", A:B), A!:B)
         """
@@ -3170,7 +3170,7 @@ class TemporalAlgebraParser:
                 str(t[7]),
             )
 
-    def p_expr_condition_elif_relation(self, t):
+    def p_expr_condition_elif_relation(self, t) -> None:
         # Examples
         # if({equal}, start_date() < "2005-06-01",
         #                               if(start_time() < "12:30:00", A:B), A!:B)
@@ -3230,7 +3230,7 @@ class TemporalAlgebraParser:
                     str(t[9]),
                 )
 
-    def p_expr_t_buff(self, t):
+    def p_expr_t_buff(self, t) -> None:
         # Examples
         # buff_t(A : B, "10 minutes")  # Select the part of A that is temporally
         #                                equal to B and create a buffer of 10 minutes
@@ -3271,7 +3271,7 @@ class TemporalAlgebraParser:
             elif len(t) == 7:
                 print(str(t[3]) + "* = buff_t(", str(t[3]), ",", str(t[5]), ")")
 
-    def p_expr_t_snap(self, t):
+    def p_expr_t_snap(self, t) -> None:
         # Examples
         # tsnap(A : B)  # Snap the maps of A temporally.
         """
@@ -3290,7 +3290,7 @@ class TemporalAlgebraParser:
         if self.debug:
             print(str(t[3]) + "* = tsnap(", str(t[3]), ")")
 
-    def p_expr_t_shift(self, t):
+    def p_expr_t_shift(self, t) -> None:
         # Examples
         # tshift(A : B, "10 minutes")  # Shift the selection from A temporally
         #                                by 10 minutes.
@@ -3329,7 +3329,7 @@ class TemporalAlgebraParser:
             elif len(t) == 7:
                 print(str(t[3]) + "* = tshift(", str(t[3]), ",", str(t[5]), ")")
 
-    def p_expr_time_const(self, t):
+    def p_expr_time_const(self, t) -> None:
         # Examples
         # start_doy(A, -1)  # Get the start DOY from the preceding map
         #                     of the time series as a numerical constant
