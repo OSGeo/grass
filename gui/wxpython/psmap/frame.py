@@ -1047,7 +1047,7 @@ class PsMapFrame(wx.Frame):
 
         try:
             fn = wx.Font(
-                pointSize=fontsize, family=family, style=style, weight=weight, face=face
+                pointSize=fontsize, family=family, style=style, weight=weight, faceName=face
             )
         except (ValueError, wx.PyAssertionError):
             fn = wx.Font(
