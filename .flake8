@@ -84,7 +84,9 @@ per-file-ignores =
     python/grass/imaging/images2gif.py: E226
     # Unused imports in init files
     # F403 star import used; unable to detect undefined names
-    python/grass/*/__init__.py: F401
+    python/grass/*/__init__.py: F401, F403
+    python/grass/*/*/__init__.py: F403
+    python/grass/*/*/*/__init__.py: F403
     # E402 module level import not at top of file
     scripts/r.semantic.label/r.semantic.label.py: E501
     scripts/db.out.ogr/db.out.ogr.py: F841
