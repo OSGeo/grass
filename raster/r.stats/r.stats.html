@@ -164,6 +164,73 @@ r.stats -an input=elevation nsteps=10 sort=desc separator=tab
 55.578793-65.6539       760000.000000
 </pre></div>
 
+<h3>JSON Format</h3>
+
+<div class="code"><pre>
+g.region raster=elevation
+r.stats -an input=elevation nsteps=10 sort=desc format=json
+</pre></div>
+
+<div class="code"><pre>
+[
+    {
+        "categories": [
+            {
+                "range": {
+                    "low": 116.02943572998046,
+                    "high": 126.10454292297364
+                }
+            }
+        ],
+        "area": 1188100
+    },
+    {
+        "categories": [
+            {
+                "range": {
+                    "low": 105.9543285369873,
+                    "high": 116.02943572998046
+                }
+            }
+        ],
+        "area": 857300
+    },
+    {
+        "categories": [
+            {
+                "range": {
+                    "low": 126.10454292297364,
+                    "high": 136.17965011596681
+                }
+            }
+        ],
+        "area": 504700
+    },
+    {
+        "categories": [
+            {
+                "range": {
+                    "low": 95.879221343994146,
+                    "high": 105.9543285369873
+                }
+            }
+        ],
+        "area": 336900
+    },
+    {
+        "categories": [
+            {
+                "range": {
+                    "low": 85.804114151000974,
+                    "high": 95.879221343994146
+                }
+            }
+        ],
+        "area": 66500
+    }
+]
+</pre></div>
+
 <h3>Report raster cell counts in multiple raster maps</h3>
 
 Report raster cell counts of landuse and geological categories within
