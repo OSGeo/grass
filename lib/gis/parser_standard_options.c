@@ -97,6 +97,7 @@
    - colors
    - G_OPT_C
    - G_OPT_CN
+   - G_OPT_C_FORMAT
 
    - misc
    - G_OPT_M_DIR
