@@ -82,8 +82,7 @@ def main():
             line = sys.stdin.readline().strip()
             if not line:  # EOF
                 break
-            else:
-                coords.append(line.split(","))
+            coords.append(line.split(","))
     else:
         # read from coord= command line option
         p = None

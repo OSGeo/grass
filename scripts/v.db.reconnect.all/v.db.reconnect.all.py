@@ -19,6 +19,8 @@
 # % keyword: vector
 # % keyword: attribute table
 # % keyword: database
+# % keyword: DBF
+# % keyword: SQLite
 # %end
 # %flag
 # % key: c

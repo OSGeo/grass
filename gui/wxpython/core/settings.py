@@ -766,7 +766,7 @@ class Settings:
             },
         }
 
-        # quick fix, http://trac.osgeo.org/grass/ticket/1233
+        # quick fix, https://trac.osgeo.org/grass/ticket/1233
         # TODO
         if sys.platform == "darwin":
             self.defaultSettings["general"]["defWindowPos"]["enabled"] = False
@@ -960,10 +960,7 @@ class Settings:
                     del kv[0]
                 idx = 0
                 while idx < len(kv):
-                    if subkeyMaster:
-                        subkey = [subkeyMaster, kv[idx]]
-                    else:
-                        subkey = kv[idx]
+                    subkey = [subkeyMaster, kv[idx]] if subkeyMaster else kv[idx]
                     value = kv[idx + 1]
                     value = self._parseValue(value, read=True)
                     self.Append(settings, group, key, subkey, value)

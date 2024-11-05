@@ -169,11 +169,8 @@ class ProcessWorkspaceFile:
                 size = None
 
             extentAttr = display.get("extent", "")
-            if extentAttr:
-                # w, s, e, n
-                extent = map(float, extentAttr.split(","))
-            else:
-                extent = None
+            # w, s, e, n
+            extent = map(float, extentAttr.split(",")) if extentAttr else None
 
             # projection
             node_projection = display.find("projection")
@@ -312,10 +309,7 @@ class ProcessWorkspaceFile:
                     )
                 )
 
-        if layer.find("selected") is not None:
-            selected = True
-        else:
-            selected = False
+        selected = layer.find("selected") is not None
 
         #
         # Vector digitizer settings
@@ -330,10 +324,7 @@ class ProcessWorkspaceFile:
         # Nviz (3D settings)
         #
         node_nviz = layer.find("nviz")
-        if node_nviz is not None:
-            nviz = self.__processLayerNviz(node_nviz)
-        else:
-            nviz = None
+        nviz = self.__processLayerNviz(node_nviz) if node_nviz is not None else None
 
         return (cmd, selected, vdigit, nviz)
 
@@ -729,10 +720,7 @@ class ProcessWorkspaceFile:
                 try:
                     value = cast(node_tag.text)
                 except ValueError:
-                    if cast == str:
-                        value = ""
-                    else:
-                        value = None
+                    value = "" if cast == str else None
             if dc:
                 dc[tag] = {}
                 dc[tag]["value"] = value

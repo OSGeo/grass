@@ -100,11 +100,11 @@ distance, worst possible fit.
 <h3>Mean shift</h3>
 Mean shift image segmentation consists of 2 steps: anisotrophic
 filtering and 2. clustering. For anisotrophic filtering new cell values
-are calculated from all pixels not farther than <b>hs</b> pixels away
+are calculated from all pixels not farther than <b>radius</b> pixels away
 from the current pixel and with a spectral difference not larger than
 <b>hr</b>. That means that pixels that are too different from the current
 pixel are not considered in the calculation of new pixel values.
-<b>hs</b> and <b>hr</b> are the spatial and spectral (range) bandwidths
+<b>radius</b> and <b>hr</b> are the spatial and spectral (range) bandwidths
 for anisotrophic filtering. Cell values are iteratively recalculated
 (shifted to the segment's mean) until the maximum number of iterations
 is reached or until the largest shift is smaller than <b>threshold</b>.
@@ -251,8 +251,6 @@ compactness), if it looks good it should be added.
 </ul>
 <h3>Use of Segmentation Results</h3>
 <ul>
-<li>Improve the optional output from this module, or better yet, add a
-module for <em>i.segment.metrics</em>.</li>
 <li>Providing updates to <em><a href="i.maxlik.html">i.maxlik</a></em>
 to ensure the segmentation output can be used as input for the
 existing classification functionality.</li>
@@ -277,6 +275,9 @@ is at available on the wiki.
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="https://grass.osgeo.org/grass8/manuals/addons/i.segment.stats.html">i.segment.stats</a> (addon),
+<a href="https://grass.osgeo.org/grass8/manuals/addons/i.segment.uspo.html">i.segment.uspo</a> (addon),
+<a href="https://grass.osgeo.org/grass8/manuals/addons/i.segment.hierarchical.html">i.segment.hierarchical</a> (addon)
 <a href="g.gui.iclass.html">g.gui.iclass</a>,
 <a href="i.group.html">i.group</a>,
 <a href="i.maxlik.html">i.maxlik</a>,
