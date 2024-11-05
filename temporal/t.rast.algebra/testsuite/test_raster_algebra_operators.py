@@ -12,7 +12,6 @@ import os
 
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
-from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.main import test
 
 

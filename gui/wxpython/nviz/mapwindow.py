@@ -382,10 +382,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def OnSize(self, event):
         size = self.GetClientSize()
-        if CheckWxVersion(version=[2, 9]):
-            context = self.context
-        else:
-            context = self.GetContext()
+        context = self.context if CheckWxVersion(version=[2, 9]) else self.GetContext()
         if self.size != size and context:
             Debug.msg(
                 3, "GLCanvas.OnSize(): w = %d, h = %d" % (size.width, size.height)
@@ -1393,7 +1390,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 GError(parent=self, message=e.value)
             # when nviz.tools is not yet ready
             # during opening 3D view 2nd time
-            except:
+            except Exception:
                 pass
 
         stop = gs.clock()

@@ -108,4 +108,7 @@ def mapcalc3d(
             overwrite=overwrite,
         )
     except CalledModuleError:
-        fatal(_("An error occurred while running r3.mapcalc with expression: %s") % e)
+        fatal(
+            _("An error occurred while running r3.mapcalc with expression: %s") % e,
+            env=env,
+        )

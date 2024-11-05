@@ -50,6 +50,27 @@ char *Rast_mask_info(void)
 }
 
 /**
+ * @brief Retrieves the name of the raster mask to use.
+ *
+ * The returned raster map name is fully qualified, i.e., in the form
+ % "name@mapset".
+ *
+ * The mask name is "MASK@<mapset>", where <mapset> is the current
+ * mapset.
+ *
+ * The memory for the returned mask name is dynamically allocated using
+ * G_store(). It is the caller's responsibility to free the memory with
+ * G_free() when it is no longer needed.
+ *
+ * @returns A dynamically allocated string containing the mask name.
+ */
+char *Rast_mask_name(void)
+{
+    // Mask name is always "MASK@<current mapset>".
+    return G_fully_qualified_name("MASK", G_mapset());
+}
+
+/**
  * @brief Get raster mask status information
  *
  * _is_mask_reclass_ is a pointer to a bool variable which

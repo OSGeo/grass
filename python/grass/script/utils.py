@@ -321,7 +321,7 @@ def split(s):
 
 
 # source:
-#    http://stackoverflow.com/questions/4836710/
+#    https://stackoverflow.com/questions/4836710/
 #    does-python-have-a-built-in-function-for-string-natural-sort/4836734#4836734
 def natural_sort(items):
     """Returns sorted list using natural sort
