@@ -54,6 +54,7 @@ from .core import (
     verbosity,
     warning,
     write_command,
+    PIPE,
 )
 
 from .db import (
@@ -92,6 +93,7 @@ from .utils import (
     append_node_pid,
     append_uuid,
     append_random,
+    separator,
 )
 
 from .vector import (
@@ -107,6 +109,7 @@ from .vector import (
 from . import setup  # noqa: F401
 
 __all__ = [
+    "PIPE",
     # utils imports
     "KeyValue",
     "append_node_pid",
@@ -187,6 +190,7 @@ __all__ = [
     "region_env",
     "run_command",
     "sanitize_mapset_environment",
+    "separator",
     "set_capture_stderr",
     "set_path",
     "set_raise_on_error",
