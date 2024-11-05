@@ -7,7 +7,8 @@ Status: Draft
 ## Summary
 
 Set a new minimum build requirement for C++ code to support the C++17 standard. This
-supersedes the [RFC 7: Language Standards Support](language_standards_support.md) with respect to C++ standard support.
+supersedes the [RFC 7: Language Standards Support](language_standards_support.md)
+with respect to C++ standard support.
 
 ## Background
 
