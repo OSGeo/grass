@@ -366,16 +366,18 @@ class LocationDownloadPanel(wx.Panel):
         if hasattr(self.parent, "showInfoBarMessage"):
             self.parent.showInfoBarMessage.emit(
                 message=message,
-                buttons=[
-                    {
-                        "id": self._infobar_message_btn_id,
-                        "label": self._abort_btn_label,
-                        "handler": self.OnAbort,
-                        "btnsAction": self._infobar_message_btns,
-                    }
-                ]
-                if buttons is None
-                else buttons,
+                buttons=(
+                    [
+                        {
+                            "id": self._infobar_message_btn_id,
+                            "label": self._abort_btn_label,
+                            "handler": self.OnAbort,
+                            "btnsAction": self._infobar_message_btns,
+                        }
+                    ]
+                    if buttons is None
+                    else buttons
+                ),
             )
             self._infobar_message_btns["addBtn"] = False
 
@@ -454,10 +456,9 @@ class LocationDownloadPanel(wx.Panel):
             if hasattr(self.parent, "download_button"):
                 self.parent.download_button.SetLabel(label=_("Download"))
             return
-        else:
-            if hasattr(self.parent, "dismissShowInfoBarMessage"):
-                self.parent.dismissShowInfoBarMessage.emit()
-            self._clearMessage()
+        if hasattr(self.parent, "dismissShowInfoBarMessage"):
+            self.parent.dismissShowInfoBarMessage.emit()
+        self._clearMessage()
 
     def GetLocation(self):
         """Get the name of the last location downloaded by the user"""
