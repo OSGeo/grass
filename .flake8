@@ -77,11 +77,10 @@ per-file-ignores =
     python/grass/temporal/temporal_topology_dataset_connector.py: E722
     # Current benchmarks/tests are changing sys.path before import.
     # Possibly, a different approach should be taken there anyway.
-    python/grass/pygrass/tests/benchmark.py: E402, F821
+    python/grass/pygrass/tests/benchmark.py: F821
     # Configuration file for Sphinx:
     # Ignoring import/code mix and line length.
     # Files not managed by Black
-    python/grass/imaging/images2gif.py: E226
     # Unused imports in init files
     # F403 star import used; unable to detect undefined names
     python/grass/*/__init__.py: F401, F403
