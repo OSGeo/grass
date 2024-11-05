@@ -54,6 +54,7 @@ from .core import (
     verbosity,
     warning,
     write_command,
+    PIPE,
 )
 
 from .db import (
@@ -108,6 +109,7 @@ from .vector import (
 from . import setup  # noqa: F401
 
 __all__ = [
+    "PIPE",
     # utils imports
     "KeyValue",
     "append_node_pid",
