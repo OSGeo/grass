@@ -666,7 +666,7 @@ struct Option *G_define_standard_option(int opt)
         G_asprintf(
             (char **)&(Opt->descriptions), "rgb;%s;hex;%s;hsv;%s;triplet;%s",
             _("output color in RGB format"), _("output color in HEX format"),
-            _("output color in HSV format"),
+            _("output color in HSV format (experimental)"),
             _("output color in colon-separated RGB format"));
         break;
 
