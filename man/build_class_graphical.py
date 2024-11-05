@@ -165,7 +165,7 @@ def generate_page_for_category(
         img_class = "linkimg"
         if skip_no_image and not img:
             continue
-        elif not img:
+        if not img:
             img = "grass_logo.png"
             img_class = "default-img"
         if basename.startswith("wxGUI"):

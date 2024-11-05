@@ -91,10 +91,7 @@ def main():
         isConnection = False
         colnames = ["cat"]
 
-    if option == "coor":
-        extracolnames = ["x", "y", "z"]
-    else:
-        extracolnames = [option]
+    extracolnames = ["x", "y", "z"] if option == "coor" else [option]
 
     if units == "percent":
         unitsp = "meters"
@@ -227,7 +224,7 @@ def main():
 
         # calculate percentages
         records4 = [float(r[-1]) * 100 / total for r in records3]
-        if type(records1[0]) == int:
+        if isinstance(records1[0], int):
             records3 = [[r1] + [r4] for r1, r4 in zip(records1, records4)]
         else:
             records3 = [r1 + [r4] for r1, r4 in zip(records1, records4)]
