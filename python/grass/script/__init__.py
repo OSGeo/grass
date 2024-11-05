@@ -201,7 +201,6 @@ __all__ = [
     "tempname",
     "text_to_string",
     "try_remove",
-    "try_remove",
     "try_rmdir",
     "use_temp_region",
     "vector_columns",
