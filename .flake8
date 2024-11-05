@@ -88,13 +88,10 @@ per-file-ignores =
     python/grass/*/*/__init__.py: F403
     python/grass/*/*/*/__init__.py: F403
     # E402 module level import not at top of file
-    scripts/r.in.wms/wms_gdal_drv.py: E722
-    scripts/r.in.wms/wms_drv.py: E402, E722
-    scripts/r.in.wms/srs.py: E722
     scripts/r.semantic.label/r.semantic.label.py: E501
     scripts/db.out.ogr/db.out.ogr.py: F841
     scripts/g.extension/g.extension.py: E501
-    scripts/v.unpack/v.unpack.py: E501
+    scripts/v.unpack/v.unpack.py: E501n
     scripts/v.import/v.import.py: E501
     scripts/db.univar/db.univar.py: E501
     scripts/i.pansharpen/i.pansharpen.py: E501
