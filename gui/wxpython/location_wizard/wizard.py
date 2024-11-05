@@ -900,8 +900,7 @@ class ProjParamsPage(TitledPage):
                 if param["type"] == "bool":
                     if param["value"] is False:
                         continue
-                    else:
-                        self.p4projparams += " +" + param["proj4"]
+                    self.p4projparams += " +" + param["proj4"]
                 elif param["value"] is None:
                     wx.MessageBox(
                         parent=self,
