@@ -9,7 +9,7 @@ class TestRBuffer(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule("g.region", raster="roadsmajor")
+        cls.runModule("g.region", n=223000, s=220000, w=640000, e=643000, nsres=100)
 
     @classmethod
     def tearDownClass(cls):
