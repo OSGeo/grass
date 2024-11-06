@@ -7,7 +7,7 @@ The documentation is intended to be
 used by GRASS GIS developers only because the documented API is
 not guaranteed to be stable. If you are thinking about doing some
 development using this API, please contact other developers at
-`grass-dev <http://lists.osgeo.org/listinfo/grass-dev>`_ mailing list.
+`grass-dev <https://lists.osgeo.org/listinfo/grass-dev>`_ mailing list.
 
 
 .. toctree::

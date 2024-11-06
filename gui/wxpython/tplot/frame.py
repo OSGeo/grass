@@ -756,10 +756,7 @@ class TplotFrame(wx.Frame):
         """Used to write CSV file of plotted data"""
         import csv
 
-        if isinstance(y[0], list):
-            zipped = list(zip(x, *y))
-        else:
-            zipped = list(zip(x, y))
+        zipped = list(zip(x, *y)) if isinstance(y[0], list) else list(zip(x, y))
         with open(self.csvpath, "w", newline="") as fi:
             writer = csv.writer(fi)
             if self.header:
@@ -1178,7 +1175,7 @@ class TplotFrame(wx.Frame):
 
             if len(indices) == 0:
                 raise GException(errorMsg)
-            elif len(indices) >= 2:
+            if len(indices) >= 2:
                 dlg = wx.SingleChoiceDialog(
                     self,
                     message=_("Please specify the space time dataset <%s>.") % dataset,
@@ -1376,7 +1373,7 @@ class DataCursor:
     matplotlib artist when it is selected.
 
 
-    Source: http://stackoverflow.com/questions/4652439/
+    Source: https://stackoverflow.com/questions/4652439/
             is-there-a-matplotlib-equivalent-of-matlabs-datacursormode/4674445
     """
 
