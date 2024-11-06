@@ -21,7 +21,7 @@ class TestRCircle(TestCase):
         gs.run_command(
             "g.remove",
             type="raster",
-            name="test_circle_binary,test_circle_distance",
+            name="test_circle_binary,test_circle_distance,test_circle_mult",
             flags="f",
         )
 
@@ -48,9 +48,7 @@ class TestRCircle(TestCase):
         """Test creating a circle with r.circle without -b flag."""
         output = "test_circle_distance"
 
-        module = SimpleModule(
-            "r.circle", output=output, coordinates=(15, 15), max=10
-        )
+        module = SimpleModule("r.circle", output=output, coordinates=(15, 15), max=10)
 
         self.assertModule(module)
 
@@ -61,6 +59,25 @@ class TestRCircle(TestCase):
             refmin=0,
             refmax=10,
             msg="Circle should have distance values from 0 to 10",
+        )
+
+    def test_create_circle_with_multiplier(self):
+        """Test creating a circle with r.circle with a multiplier."""
+        output = "test_circle_multi"
+
+        module = SimpleModule(
+            "r.circle", output=output, coordinates=(15, 15), max=10, multiplier=2
+        )
+
+        self.assertModule(module)
+
+        self.assertRasterExists(output)
+
+        self.assertRasterMinMax(
+            map=output,
+            refmin=0,
+            refmax=20,
+            msg="Circle should have distance values from 0 to 20",
         )
 
 
