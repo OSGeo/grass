@@ -358,8 +358,13 @@ static int calc_mu_cov(int *fds, double **covar, double *mu, double *stddev,
     }
     G_percent(1, 1, 1);
 
-    if (count < 2)
+    if (count < 2) {
+        G_free(sum2);
+        G_free(sd);
+        G_free(sumsq);
+        G_free(rowbuf);
         return 0;
+    }
 
     for (i = 0; i < bands; i++) {
         if (stddev) {
