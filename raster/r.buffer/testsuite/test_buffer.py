@@ -20,7 +20,7 @@ class TestRBuffer(TestCase):
         gs.run_command(
             "g.remove",
             type="raster",
-            name="buf_test,zero_map,buf_no_non_null,null_map,zero_map",
+            name="buf_test,zero_map,buf_no_non_null,null_map,buf_ignore_zero",
             flags="f",
         )
 
