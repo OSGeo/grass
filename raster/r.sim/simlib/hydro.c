@@ -156,6 +156,8 @@ void main_loop(void)
     for (iblock = 1; iblock <= nblock; iblock++) {
         /* ++icoub; */
 
+        G_message(_("Processing block %d of %d"), iblock, nblock);
+
         lw = 0;
         walkwe = 0.;
         barea = stepx * stepy;
