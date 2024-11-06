@@ -571,6 +571,8 @@ static int write_pca(double **eigmat, double *mu, double *stddev, int *inp_fd,
     G_free(min);
     G_free(max);
     G_free(old_range);
+    G_free(pcs);
+    G_free(out_fd);
 
     return 0;
 }
