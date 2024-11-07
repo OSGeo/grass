@@ -34,6 +34,8 @@
                 pytest
               ];
 
+            LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
+
             shellHook = ''
               function dev-help {
                 echo -e "\nWelcome to a GRASS development environment !"

@@ -27,6 +27,8 @@ import shutil
 import copy
 import tempfile
 
+from pathlib import Path
+
 import wx
 import wx.lib.colourselect as csel
 import wx.lib.scrolledpanel as scrolled
@@ -41,7 +43,7 @@ from core.gcmd import GMessage, RunCommand, GError
 from gui_core.gselect import Select, LayerSelect, ColumnSelect, VectorDBInfo
 from core.render import Map
 from gui_core.forms import GUI
-from core.debug import Debug as Debug
+from core.debug import Debug
 from gui_core.widgets import ColorTablesComboBox
 from gui_core.wrap import (
     SpinCtrl,
@@ -316,12 +318,14 @@ class RulesPanel:
                             int, self.ruleslines[item][self.attributeType].split(":")
                         )
                     except ValueError as e:
-                        message = _("Bad color format. Use color format '0:0:0'")
+                        message = (
+                            _("Bad color format '%s'. Use color format '0:0:0'") % e
+                        )
                     self.mainPanel.FindWindowById(item + 2000).SetValue((r, g, b))
                 else:
                     value = float(self.ruleslines[item][self.attributeType])
                     self.mainPanel.FindWindowById(item + 2000).SetValue(value)
-            except:
+            except Exception:
                 continue
 
         if message:
@@ -403,12 +407,11 @@ class ColorTable(wx.Frame):
                 layer = sel
             else:
                 layer = self.layerTree.FindItemByData(key="type", value=self.mapType)
-        except:
+        except (AttributeError, TypeError):
             layer = None
         if layer:
             mapLayer = self.layerTree.GetLayerInfo(layer, key="maplayer")
             name = mapLayer.GetName()
-            type = mapLayer.GetType()
             self.selectionInput.SetValue(name)
             self.inmap = name
 
@@ -448,7 +451,7 @@ class ColorTable(wx.Frame):
             dialogTitle=_("Choose file to load color table"),
             buttonText=_("Load"),
             toolTip=_("Type filename or click to choose file and load color table"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_OPEN,
             changeCallback=self.OnLoadRulesFile,
         )
@@ -460,7 +463,7 @@ class ColorTable(wx.Frame):
             dialogTitle=_("Choose file to save color table"),
             toolTip=_("Type filename or click to choose file and save color table"),
             buttonText=_("Save"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_SAVE,
             changeCallback=self.OnSaveRulesFile,
         )
@@ -698,7 +701,7 @@ class ColorTable(wx.Frame):
 
         self.rulesPanel.Clear()
 
-        fd = open(path, "r")
+        fd = open(path)
         self.ReadColorTable(ctable=fd.read())
         fd.close()
 
@@ -772,7 +775,7 @@ class ColorTable(wx.Frame):
 
         self.ReadColorTable(ctable=ctable)
 
-    def CreateColorTable(self, tmp=False):
+    def CreateColorTable(self, tmp=False) -> bool:
         """Creates color table
 
         :return: True on success
@@ -822,10 +825,7 @@ class ColorTable(wx.Frame):
 
         cmd = cmdlist_to_tuple(cmd)
         ret = RunCommand(cmd[0], **cmd[1])
-        if ret != 0:
-            return False
-
-        return True
+        return bool(ret == 0)
 
     def DoPreview(self, ltype, cmdlist):
         """Update preview (based on computational region)"""
@@ -977,10 +977,7 @@ class RasterColorTable(ColorTable):
             self.cr_label.SetLabel(_("Enter raster category values or percents"))
             return
 
-        if info["datatype"] == "CELL":
-            mapRange = _("range")
-        else:
-            mapRange = _("fp range")
+        mapRange = _("range") if info["datatype"] == "CELL" else _("fp range")
         self.cr_label.SetLabel(
             _("Enter raster category values or percents (%(range)s = %(min)d-%(max)d)")
             % {
@@ -1241,15 +1238,12 @@ class VectorColorTable(ColorTable):
         else:
             self.cp.SetLabel(_("Import or export color table"))
 
-    def CheckMapset(self):
+    def CheckMapset(self) -> bool:
         """Check if current vector is in current mapset"""
-        if (
+        return bool(
             gs.find_file(name=self.inmap, element="vector")["mapset"]
             == gs.gisenv()["MAPSET"]
-        ):
-            return True
-        else:
-            return False
+        )
 
     def NoConnection(self, vectorName):
         dlg = wx.MessageDialog(
@@ -1412,11 +1406,8 @@ class VectorColorTable(ColorTable):
             idx += 1
             self.properties["tmpColumn"] = name + "_" + str(idx)
 
-        if self.version7:
-            modul = "v.db.addcolumn"
-        else:
-            modul = "v.db.addcol"
-        ret = RunCommand(
+        modul = "v.db.addcolumn" if self.version7 else "v.db.addcol"
+        RunCommand(
             modul,
             parent=self,
             map=self.inmap,
@@ -1430,11 +1421,8 @@ class VectorColorTable(ColorTable):
             return
 
         if self.inmap:
-            if self.version7:
-                modul = "v.db.dropcolumn"
-            else:
-                modul = "v.db.dropcol"
-            ret = RunCommand(
+            modul = "v.db.dropcolumn" if self.version7 else "v.db.dropcol"
+            RunCommand(
                 modul,
                 map=self.inmap,
                 layer=self.properties["layer"],
@@ -1455,10 +1443,7 @@ class VectorColorTable(ColorTable):
         self.sourceColumn.SetValue("cat")
         self.properties["sourceColumn"] = self.sourceColumn.GetValue()
 
-        if self.attributeType == "color":
-            type = ["character"]
-        else:
-            type = ["integer"]
+        type = ["character"] if self.attributeType == "color" else ["integer"]
         self.fromColumn.InsertColumns(
             vector=self.inmap,
             layer=vlayer,
@@ -1505,11 +1490,8 @@ class VectorColorTable(ColorTable):
             self.columnsProp[self.attributeType]["name"]
             not in self.fromColumn.GetColumns()
         ):
-            if self.version7:
-                modul = "v.db.addcolumn"
-            else:
-                modul = "v.db.addcol"
-            ret = RunCommand(
+            modul = "v.db.addcolumn" if self.version7 else "v.db.addcol"
+            RunCommand(
                 modul,
                 map=self.inmap,
                 layer=self.properties["layer"],

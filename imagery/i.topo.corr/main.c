@@ -184,8 +184,8 @@ int main(int argc, char *argv[])
             }
             /* ----- */
             dem.fd = Rast_open_old(base->answer, "");
-            G_snprintf(out.name, GNAME_MAX - 1, "%s.%s", output->answer,
-                       input->answers[i]);
+            snprintf(out.name, GNAME_MAX - 1, "%s.%s", output->answer,
+                     input->answers[i]);
             out.fd = Rast_open_new(out.name, DCELL_TYPE);
             out.rast = Rast_allocate_buf(out.type);
             band.rast = Rast_allocate_buf(band.type);

@@ -247,10 +247,10 @@ class Info:
         ]
 
     def items(self):
-        return [(k, self.__getattribute__(k)) for k in self.keys()]
+        return [(k, getattr(self, k)) for k in self.keys()]
 
     def __iter__(self):
-        return ((k, self.__getattribute__(k)) for k in self.keys())
+        return ((k, getattr(self, k)) for k in self.keys())
 
     def _repr_html_(self):
         return dict2html(dict(self.items()), keys=self.keys(), border="1", kdec="b")
@@ -393,10 +393,10 @@ class RasterAbstractBase:
         if isinstance(key, slice):
             # Get the start, stop, and step from the slice
             return (self.get_row(ii) for ii in range(*key.indices(len(self))))
-        elif isinstance(key, tuple):
+        if isinstance(key, tuple):
             x, y = key
             return self.get(x, y)
-        elif isinstance(key, int):
+        if isinstance(key, int):
             if not self.is_open():
                 raise IndexError("Can not operate on a closed map. Call open() first.")
             if key < 0:  # Handle negative indices
@@ -408,8 +408,7 @@ class RasterAbstractBase:
                     )
                 )
             return self.get_row(key)
-        else:
-            fatal("Invalid argument type.")
+        fatal("Invalid argument type.")
 
     def __iter__(self):
         """Return a constructor of the class"""
@@ -434,8 +433,7 @@ class RasterAbstractBase:
                 self.mapset = mapset or ""
                 return bool(mapset)
             return bool(utils.get_mapset_raster(self.name, self.mapset))
-        else:
-            return False
+        return False
 
     def is_open(self):
         """Return True if the map is open False otherwise.
@@ -485,8 +483,7 @@ class RasterAbstractBase:
 
         if mapset and mapset != gis_env["MAPSET"]:
             return "{name}@{mapset}".format(name=name, mapset=mapset)
-        else:
-            return name
+        return name
 
     def rename(self, newname):
         """Rename the map"""

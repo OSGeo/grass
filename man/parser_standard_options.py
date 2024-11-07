@@ -47,8 +47,7 @@ def parse_options(lines, startswith="Opt"):
         index = line.index("=")
         key = line[:index].strip()
         default = line[index + 1 :].strip()
-        if default.startswith("_("):
-            default = default[2:]
+        default = default.removeprefix("_(")
         return key, default
 
     def parse_glines(glines):
@@ -115,7 +114,7 @@ def parse_options(lines, startswith="Opt"):
 class OptTable:
     def __init__(self, list_of_dict):
         self.options = list_of_dict
-        self.columns = sorted(set([key for _, d in self.options for key in d.keys()]))
+        self.columns = sorted({key for _, d in self.options for key in d.keys()})
 
     def csv(self, delimiter=";", endline="\n"):
         """Return a CSV string with the options"""

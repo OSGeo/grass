@@ -65,7 +65,7 @@ def main():
 
     app = wx.App()
 
-    wizard = GCPWizard(parent=None, giface=StandaloneGrassInterface())
+    GCPWizard(parent=None, giface=StandaloneGrassInterface())
 
     app.MainLoop()
 

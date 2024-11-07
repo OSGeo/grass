@@ -137,8 +137,7 @@ class TreeModel:
     def _getNode(self, node, index):
         if len(index) == 1:
             return node.children[index[0]]
-        else:
-            return self._getNode(node.children[index[0]], index[1:])
+        return self._getNode(node.children[index[0]], index[1:])
 
     def RemoveNode(self, node):
         """Removes node. If node is root, removes root's children, root is kept."""
@@ -229,15 +228,13 @@ class DictNode:
             for child in self.children:
                 child.nprint(text, indent + 2)
 
-    def match(self, key, value):
+    def match(self, key, value) -> bool:
         """Method used for searching according to given parameters.
 
         :param value: dictionary value to be matched
         :param key: data dictionary key
         """
-        if key in self.data and self.data[key] == value:
-            return True
-        return False
+        return bool(key in self.data and self.data[key] == value)
 
 
 class DictFilterNode(DictNode):
@@ -259,7 +256,7 @@ class DictFilterNode(DictNode):
 
         if method == "exact":
             return self._match_exact(**kwargs)
-        elif method == "filtering":
+        if method == "filtering":
             return self._match_filtering(**kwargs)
 
     def _match_exact(self, **kwargs):
@@ -269,7 +266,7 @@ class DictFilterNode(DictNode):
                 return False
         return True
 
-    def _match_filtering(self, **kwargs):
+    def _match_filtering(self, **kwargs) -> bool:
         """Match method for filtering."""
         if (
             "type" in kwargs
@@ -277,13 +274,11 @@ class DictFilterNode(DictNode):
             and kwargs["type"] != self.data["type"]
         ):
             return False
-        if (
+        return not (
             "name" in kwargs
             and "name" in self.data
             and not kwargs["name"].search(self.data["name"])
-        ):
-            return False
-        return True
+        )
 
 
 class ModuleNode(DictNode):
@@ -299,15 +294,12 @@ class ModuleNode(DictNode):
     def label(self):
         return self._label
 
-    def match(self, key, value, case_sensitive=False):
+    def match(self, key, value, case_sensitive=False) -> bool:
         """Method used for searching according to command,
         keywords or description."""
         if not self.data:
             return False
-        if isinstance(key, str):
-            keys = [key]
-        else:
-            keys = key
+        keys = [key] if isinstance(key, str) else key
 
         for key in keys:
             if key not in {"command", "keywords", "description"}:

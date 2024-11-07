@@ -31,6 +31,9 @@ Program was refactored by Anna Petrasova to remove most global variables.
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -163,7 +166,7 @@ int main(int argc, char *argv[])
     struct {
         struct Option *elevin, *dist, *coord, *direction, *horizon, *step,
             *start, *end, *bufferzone, *e_buff, *w_buff, *n_buff, *s_buff,
-            *maxdistance, *format, *output;
+            *maxdistance, *format, *output, *nprocs;
     } parm;
 
     struct {
@@ -175,6 +178,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("solar"));
     G_add_keyword(_("sun position"));
+    G_add_keyword(_("parallel"));
     module->label =
         _("Computes horizon angle height from a digital elevation model.");
     module->description =
@@ -309,6 +313,8 @@ int main(int argc, char *argv[])
         _("Name of file for output (use output=- for stdout)");
     parm.output->guisection = _("Point mode");
 
+    parm.nprocs = G_define_standard_option(G_OPT_M_NPROCS);
+
     flag.horizonDistance = G_define_flag();
     flag.horizonDistance->key = 'l';
     flag.horizonDistance->description =
@@ -327,6 +333,8 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    G_set_omp_num_threads(parm.nprocs);
 
     struct Cell_head cellhd;
     struct Cell_head new_cellhd;
@@ -857,6 +865,7 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         horizons = json_value_get_array(horizons_value);
         break;
     }
+
     for (int i = 0; i < printCount; i++) {
         JSON_Value *value;
         JSON_Object *object;
@@ -1179,6 +1188,7 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
             _("Calculating map %01d of %01d (angle %.2f, raster map <%s>)"),
             (k + 1), arrayNumInt, angle_deg, shad_filename);
 
+#pragma omp parallel for schedule(static, 1) default(shared)
         for (int j = hor_row_start; j < hor_row_end; j++) {
             G_percent(j - hor_row_start, hor_numrows - 1, 2);
             for (int i = hor_col_start; i < hor_col_end; i++) {
@@ -1219,12 +1229,11 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
                     if (settings->degreeOutput) {
                         shadow_angle *= rad2deg;
                     }
-
                     horizon_raster[j - buffer_s][i - buffer_w] = shadow_angle;
 
                 } /* undefs */
-            }
-        }
+            } /* end of loop over columns */
+        } /* end of parallel section */
 
         G_debug(1, "OUTGR() starts...");
         OUTGR(settings, shad_filename, cellhd);
@@ -1265,4 +1274,9 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
         Rast_write_history(shad_filename, &history);
         G_free(shad_filename);
     }
+
+    /* free memory */
+    for (int l = 0; l < hor_numrows; l++)
+        G_free(horizon_raster[l]);
+    G_free(horizon_raster);
 }

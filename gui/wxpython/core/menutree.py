@@ -36,7 +36,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 import wx
 
@@ -62,7 +62,7 @@ class MenuTreeModelBuilder:
             group="appearance", key="menustyle", subkey="selection"
         )
 
-        xmlTree = etree.parse(filename)
+        xmlTree = ET.parse(filename)
         if expandAddons:
             expAddons(xmlTree)
             for message in getToolboxMessages():
@@ -108,30 +108,14 @@ class MenuTreeModelBuilder:
             shortcut = item.find("shortcut")  # optional
             wxId = item.find("id")  # optional
             icon = item.find("icon")  # optional
-            if gcmd is not None:
-                gcmd = gcmd.text
-            else:
-                gcmd = ""
-            if desc.text:
-                desc = _(desc.text)
-            else:
-                desc = ""
-            if keywords is None or keywords.text is None:
-                keywords = ""
-            else:
-                keywords = keywords.text
-            if shortcut is not None:
-                shortcut = shortcut.text
-            else:
-                shortcut = ""
-            if wxId is not None:
-                wxId = eval("wx." + wxId.text)
-            else:
-                wxId = wx.ID_ANY
-            if icon is not None:
-                icon = icon.text
-            else:
-                icon = ""
+            gcmd = gcmd.text if gcmd is not None else ""
+            desc = _(desc.text) if desc.text else ""
+            keywords = (
+                "" if keywords is None or keywords.text is None else keywords.text
+            )
+            shortcut = shortcut.text if shortcut is not None else ""
+            wxId = eval("wx." + wxId.text) if wxId is not None else wx.ID_ANY
+            icon = icon.text if icon is not None else ""
             label = origLabel
             if gcmd:
                 if self.menustyle == 1:
@@ -160,10 +144,9 @@ class MenuTreeModelBuilder:
         """
         if separators:
             return copy.deepcopy(self.model)
-        else:
-            model = copy.deepcopy(self.model)
-            removeSeparators(model)
-            return model
+        model = copy.deepcopy(self.model)
+        removeSeparators(model)
+        return model
 
     def PrintTree(self, fh):
         for child in self.model.root.children:

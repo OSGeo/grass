@@ -393,7 +393,7 @@ def check_for_desc_override(basename):
 
 
 def read_file(name):
-    f = open(name, "r")
+    f = open(name)
     s = f.read()
     f.close()
     return s
@@ -440,7 +440,7 @@ def html_files(cls=None, ignore_gui=True):
             and (cls != "*" or len(cmd.split(".")) >= 3)
             and cmd not in {"full_index.html", "index.html"}
             and cmd not in exclude_mods
-            and (ignore_gui and not cmd.startswith("wxGUI.") or not ignore_gui)
+            and ((ignore_gui and not cmd.startswith("wxGUI.")) or not ignore_gui)
         ):
             yield cmd
 
@@ -464,10 +464,7 @@ def write_html_cmd_overview(f):
 
 
 def write_html_footer(f, index_url, year=None):
-    if year is None:
-        cur_year = default_year
-    else:
-        cur_year = year
+    cur_year = default_year if year is None else year
     f.write(
         footer_tmpl.substitute(
             grass_version=grass_version, index_url=index_url, year=cur_year
@@ -476,7 +473,7 @@ def write_html_footer(f, index_url, year=None):
 
 
 def get_desc(cmd):
-    f = open(cmd, "r")
+    f = open(cmd)
     while True:
         line = f.readline()
         if not line:
@@ -494,8 +491,7 @@ def get_desc(cmd):
             sp = line.split("-", 1)
             if len(sp) > 1:
                 return sp[1].strip()
-            else:
-                return None
+            return None
 
     return ""
 
