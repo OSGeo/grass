@@ -622,10 +622,7 @@ class VDigitSettingsDialog(wx.Dialog):
         layer = UserSettings.Get(group="vdigit", key="layer", subkey="value")
         mapLayer = self.parent.toolbars["vdigit"].GetLayer()
         tree = self.parent.tree
-        if tree:
-            item = tree.FindItemByData("maplayer", mapLayer)
-        else:
-            item = None
+        item = tree.FindItemByData("maplayer", mapLayer) if tree else None
         row = 0
         for attrb in ["length", "area", "perimeter"]:
             # checkbox
@@ -664,10 +661,7 @@ class VDigitSettingsDialog(wx.Dialog):
                 column.SetStringSelection(
                     tree.GetLayerInfo(item, key="vdigit")["geomAttr"][attrb]["column"]
                 )
-                if attrb == "area":
-                    type = "area"
-                else:
-                    type = "length"
+                type = "area" if attrb == "area" else "length"
                 unitsIdx = Units.GetUnitsIndex(
                     type,
                     tree.GetLayerInfo(item, key="vdigit")["geomAttr"][attrb]["units"],
@@ -797,8 +791,6 @@ class VDigitSettingsDialog(wx.Dialog):
 
     def OnChangeAddRecord(self, event):
         """Checkbox 'Add new record' status changed"""
-        pass
-        # self.category.SetValue(self.digit.SetCategory())
 
     def OnChangeSnappingValue(self, event):
         """Change snapping value - update static text"""
@@ -808,11 +800,10 @@ class VDigitSettingsDialog(wx.Dialog):
             region = self.parent.MapWindow.Map.GetRegion()
             res = (region["nsres"] + region["ewres"]) / 2.0
             threshold = self.digit.GetDisplay().GetThreshold(value=res)
+        elif self.snappingUnit.GetSelection() == 1:  # map units
+            threshold = value
         else:
-            if self.snappingUnit.GetSelection() == 1:  # map units
-                threshold = value
-            else:
-                threshold = self.digit.GetDisplay().GetThreshold(value=value)
+            threshold = self.digit.GetDisplay().GetThreshold(value=value)
 
         if value == 0:
             self.snappingInfo.SetLabel(_("Snapping disabled"))
@@ -990,34 +981,27 @@ class VDigitSettingsDialog(wx.Dialog):
         # geometry attributes (workspace)
         mapLayer = self.parent.toolbars["vdigit"].GetLayer()
         tree = self._giface.GetLayerTree()
-        if tree:
-            item = tree.FindItemByData("maplayer", mapLayer)
-        else:
-            item = None
+        item = tree.FindItemByData("maplayer", mapLayer) if tree else None
         for key, val in self.geomAttrb.items():
             checked = self.FindWindowById(val["check"]).IsChecked()
             column = self.FindWindowById(val["column"]).GetValue()
             unitsIdx = self.FindWindowById(val["units"]).GetSelection()
             if item and not tree.GetLayerInfo(item, key="vdigit"):
-                tree.SetLayerInfo(item, key="vdigit", value={"geomAttr": dict()})
+                tree.SetLayerInfo(item, key="vdigit", value={"geomAttr": {}})
 
             if checked:  # enable
-                if key == "area":
-                    type = key
-                else:
-                    type = "length"
-                unitsKey = Units.GetUnitsKey(type, unitsIdx)
+                _type = key if key == "area" else "length"
+                unitsKey = Units.GetUnitsKey(_type, unitsIdx)
                 tree.GetLayerInfo(item, key="vdigit")["geomAttr"][key] = {
                     "column": column,
                     "units": unitsKey,
                 }
-            else:
-                if (
-                    item
-                    and tree.GetLayerInfo(item, key="vdigit")
-                    and key in tree.GetLayerInfo(item, key="vdigit")["geomAttr"]
-                ):
-                    del tree.GetLayerInfo(item, key="vdigit")["geomAttr"][key]
+            elif (
+                item
+                and tree.GetLayerInfo(item, key="vdigit")
+                and key in tree.GetLayerInfo(item, key="vdigit")["geomAttr"]
+            ):
+                del tree.GetLayerInfo(item, key="vdigit")["geomAttr"][key]
 
         # query tool
         if self.queryLength.GetValue():
@@ -1106,5 +1090,4 @@ class VDigitSettingsDialog(wx.Dialog):
         self.digit.UpdateSettings()
 
         # redraw map if auto-rendering is enabled
-        if self.parent.IsAutoRendered():
-            self.parent.OnRender(None)
+        self.parent.OnRender(None)

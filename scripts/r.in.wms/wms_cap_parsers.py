@@ -21,11 +21,11 @@ import pathlib
 
 from xml.etree.ElementTree import ParseError
 
-import xml.etree.ElementTree as etree
-import grass.script as grass
+import xml.etree.ElementTree as ET
+import grass.script as gs
 
 
-class BaseCapabilitiesTree(etree.ElementTree):
+class BaseCapabilitiesTree(ET.ElementTree):
     def __init__(self, cap_file):
         """!Initialize xml.etree.ElementTree"""
         is_file = False
@@ -40,16 +40,16 @@ class BaseCapabilitiesTree(etree.ElementTree):
                 raise
         if is_file:
             try:
-                etree.ElementTree.__init__(self, file=cap_file)
+                ET.ElementTree.__init__(self, file=cap_file)
             except ParseError:
                 raise ParseError(_("Unable to parse XML file"))
             except OSError as error:
                 raise ParseError(
-                    _("Unable to open XML file '%s'.\n%s\n" % (cap_file, error))
+                    _("Unable to open XML file '%s'.\n%s\n") % (cap_file, error)
                 )
         else:
             try:
-                etree.ElementTree.__init__(self, element=etree.fromstring(cap_file))
+                ET.ElementTree.__init__(self, element=ET.fromstring(cap_file))
             except ParseError:
                 raise ParseError(_("Unable to parse XML file"))
 
@@ -99,14 +99,13 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
         BaseCapabilitiesTree.__init__(self, cap_file)
         self.xml_ns = WMSXMLNsHandler(self)
 
-        grass.debug("Checking WMS capabilities tree.", 4)
+        gs.debug("Checking WMS capabilities tree.", 4)
 
         if "version" not in self.getroot().attrib:
             raise ParseError(
-                _("Missing version attribute root node " "in Capabilities XML file")
+                _("Missing version attribute root node in Capabilities XML file")
             )
-        else:
-            wms_version = self.getroot().attrib["version"]
+        wms_version = self.getroot().attrib["version"]
 
         if wms_version == "1.3.0":
             self.proj_tag = "CRS"
@@ -125,13 +124,13 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
         self._checkFormats(capability)
         self._checkLayerTree(root_layer)
 
-        grass.debug("Check of WMS capabilities tree was finished.", 4)
+        gs.debug("Check of WMS capabilities tree was finished.", 4)
 
     def _checkFormats(self, capability):
         """!Check if format element is defined."""
         request = self._find(capability, "Request")
         get_map = self._find(request, "GetMap")
-        formats = self._findall(get_map, "Format")
+        self._findall(get_map, "Format")
 
     def _checkLayerTree(self, parent_layer, first=True):
         """!Recursively check layer tree and manage inheritance in the tree"""
@@ -140,9 +139,9 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
 
         layers = parent_layer.findall(self.xml_ns.Ns("Layer"))
 
-        for l in layers:
-            self._initLayer(l, parent_layer)
-            self._checkLayerTree(l, False)
+        for layer in layers:
+            self._initLayer(layer, parent_layer)
+            self._checkLayerTree(layer, False)
 
     def _initLayer(self, layer, parent_layer):
         """Inherit elements from parent layer
@@ -189,7 +188,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
             for s in styles:
                 s_name = s.find(self.xml_ns.Ns("Name"))
                 if s_name is None or not s_name.text:
-                    grass.debug("Removed invalid <Style> element.", 4)
+                    gs.debug("Removed invalid <Style> element.", 4)
                     layer.remove(s)
 
             self._inhNotSame(
@@ -234,17 +233,17 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
                 continue
 
             is_there = False
-            for elem in elem:
+            for _elem in elem:
                 cmp_text = None
                 if cmp_type == "attribute":
-                    if add_arg in elem.attrib:
-                        cmp_text = elem.attrib[add_arg]
+                    if add_arg in _elem.attrib:
+                        cmp_text = _elem.attrib[add_arg]
 
                 elif cmp_type == "element_content":
-                    cmp_text = elem.text
+                    cmp_text = _elem.text
 
                 elif cmp_type == "child_element_content":
-                    cmp = elem.find(self.xml_ns.Ns(add_arg))
+                    cmp = _elem.find(self.xml_ns.Ns(add_arg))
                     if cmp is not None:
                         cmp_text = cmp.text
 
@@ -325,7 +324,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
         BaseCapabilitiesTree.__init__(self, cap_file)
         self.xml_ns = WMTSXMLNsHandler()
 
-        grass.debug("Checking WMTS capabilities tree.", 4)
+        gs.debug("Checking WMTS capabilities tree.", 4)
 
         contents = self._find(self.getroot(), "Contents", self.xml_ns.NsWmts)
 
@@ -333,24 +332,24 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
 
         for mat_set in tile_mat_sets:
             if not self._checkMatSet(mat_set):
-                grass.debug("Removed invalid <TileMatrixSet> element.", 4)
+                gs.debug("Removed invalid <TileMatrixSet> element.", 4)
                 contents.remove(mat_set)
 
         # are there any <TileMatrixSet> elements after the check
         self._findall(contents, "TileMatrixSet", self.xml_ns.NsWmts)
 
         layers = self._findall(contents, "Layer", self.xml_ns.NsWmts)
-        for l in layers:
-            if not self._checkLayer(l):
-                grass.debug("Removed invalid <Layer> element.", 4)
-                contents.remove(l)
+        for layer in layers:
+            if not self._checkLayer(layer):
+                gs.debug("Removed invalid <Layer> element.", 4)
+                contents.remove(layer)
 
         # are there any <Layer> elements after the check
         self._findall(contents, "Layer", self.xml_ns.NsWmts)
 
-        grass.debug("Check of WMTS capabilities tree was finished.", 4)
+        gs.debug("Check of WMTS capabilities tree was finished.", 4)
 
-    def _checkMatSet(self, mat_set):
+    def _checkMatSet(self, mat_set) -> bool:
         """!Check <TileMatrixSet>."""
         mat_set_id = mat_set.find(self.xml_ns.NsOws("Identifier"))
         if mat_set_id is None or not mat_set_id.text:
@@ -366,19 +365,16 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
 
         for t_mat in tile_mats:
             if not self._checkMat(t_mat):
-                grass.debug("Removed invalid <TileMatrix> element.", 4)
+                gs.debug("Removed invalid <TileMatrix> element.", 4)
                 mat_set.remove(t_mat)
 
         tile_mats = mat_set.findall(self.xml_ns.NsWmts("TileMatrix"))
-        if not tile_mats:
-            return False
-
-        return True
+        return bool(tile_mats)
 
     def _checkMat(self, t_mat):
         """!Check <TileMatrix>."""
 
-        def _checkElement(t_mat, e, func):
+        def _checkElement(t_mat, e, func) -> bool:
             element = t_mat.find(self.xml_ns.NsWmts(e))
             if element is None or not element.text:
                 return False
@@ -388,9 +384,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
             except ValueError:
                 return False
 
-            if e < 0:
-                return False
-            return True
+            return not e < 0
 
         for e, func in [
             ["ScaleDenominator", float],
@@ -436,7 +430,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
         for s in styles:
             s_name = s.find(self.xml_ns.NsOws("Identifier"))
             if s_name is None or not s_name.text:
-                grass.debug("Removed invalid <Style> element.", 4)
+                gs.debug("Removed invalid <Style> element.", 4)
                 layer.remove(s_name)
 
         contents = self.getroot().find(self.xml_ns.NsWmts("Contents"))
@@ -445,12 +439,12 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
         for link in mat_set_links:
             # <TileMatrixSetLink> does not point to existing  <TileMatrixSet>
             if not self._checkMatSetLink(link, mat_sets):
-                grass.debug("Removed invalid <TileMatrixSetLink> element.", 4)
+                gs.debug("Removed invalid <TileMatrixSetLink> element.", 4)
                 layer.remove(link)
 
         return True
 
-    def _checkMatSetLink(self, link, mat_sets):
+    def _checkMatSetLink(self, link, mat_sets) -> bool:
         """!Check <TileMatrixSetLink> element."""
         mat_set_link_id = link.find(self.xml_ns.NsWmts("TileMatrixSet")).text
         found = False
@@ -473,7 +467,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
             )
             for limit in tile_mat_limits:
                 if not self._checkMatSetLimit(limit):
-                    grass.debug("Removed invalid <TileMatrixLimits> element.", 4)
+                    gs.debug("Removed invalid <TileMatrixLimits> element.", 4)
                     tile_mat_limits.remove(limit)
 
             # are there any <TileMatrixLimits> elements after the check
@@ -481,13 +475,10 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
                 self.xml_ns.NsWmts("TileMatrixLimits")
             )
             if not tile_mat_limits:
-                grass.debug("Removed invalid <TileMatrixSetLimits> element.", 4)
+                gs.debug("Removed invalid <TileMatrixSetLimits> element.", 4)
                 link.remove(tile_mat_set_limits)
 
-        if not found:
-            return False
-
-        return True
+        return found
 
     def _checkMatSetLimit(self, limit):
         """!Check <TileMatrixLimits> element."""
@@ -509,10 +500,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
         """!Find child element.
         If the element is not found it raises xml.etree.ElementTree.ParseError.
         """
-        if not ns:
-            res = etreeElement.find(tag)
-        else:
-            res = etreeElement.find(ns(tag))
+        res = etreeElement.find(tag) if not ns else etreeElement.find(ns(tag))
 
         if res is None:
             raise ParseError(
@@ -529,10 +517,7 @@ class WMTSCapabilitiesTree(BaseCapabilitiesTree):
         """!Find all children element.
         If no element is found it raises xml.etree.ElementTree.ParseError.
         """
-        if not ns:
-            res = etreeElement.findall(tag)
-        else:
-            res = etreeElement.findall(ns(tag))
+        res = etreeElement.findall(tag) if not ns else etreeElement.findall(ns(tag))
 
         if not res:
             raise ParseError(
@@ -563,11 +548,11 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
         """
         BaseCapabilitiesTree.__init__(self, cap_file)
 
-        grass.debug("Checking OnEarth capabilities tree.", 4)
+        gs.debug("Checking OnEarth capabilities tree.", 4)
 
         self._checkLayerTree(self.getroot())
 
-        grass.debug("Check if OnEarth capabilities tree was finished.", 4)
+        gs.debug("Check if OnEarth capabilities tree was finished.", 4)
 
     def _checkLayerTree(self, parent_layer, first=True):
         """!Recursively check layer tree."""
@@ -580,12 +565,12 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
             layers = parent_layer.findall("TiledGroup")
             layers += parent_layer.findall("TiledGroups")
 
-        for l in layers:
-            if not self._checkLayer(l):
-                grass.debug(("Removed invalid <%s> element." % l.tag), 4)
-                parent_layer.remove(l)
-            if l.tag == "TiledGroups":
-                self._checkLayerTree(l, False)
+        for layer in layers:
+            if not self._checkLayer(layer):
+                gs.debug(("Removed invalid <%s> element." % layer.tag), 4)
+                parent_layer.remove(layer)
+            if layer.tag == "TiledGroups":
+                self._checkLayerTree(layer, False)
 
     def _find(self, etreeElement, tag):
         """!Find child element.
@@ -604,7 +589,7 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
 
         return res
 
-    def _checkLayer(self, layer):
+    def _checkLayer(self, layer) -> bool:
         """!Check <TiledGroup>/<TiledGroups> elements."""
         if layer.tag == "TiledGroups":
             return True
@@ -623,15 +608,12 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
 
             # check if there are any valid urls
             if not urls:
-                grass.debug("<TilePattern>  was removed. It has no valid url.", 4)
+                gs.debug("<TilePattern>  was removed. It has no valid url.", 4)
                 layer.remove(patt)
             patt.text = "\n".join(urls)
 
         t_patts = layer.findall("TilePattern")
-        if not t_patts:
-            return False
-
-        return True
+        return bool(t_patts)
 
     def _getUrls(self, tile_pattern):
         """!Get all urls from tile pattern."""

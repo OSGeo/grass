@@ -23,6 +23,8 @@ import os
 import sys
 import copy
 
+from pathlib import Path
+
 import wx
 import wx.lib.colourselect as csel
 import wx.lib.scrolledpanel as SP
@@ -43,7 +45,7 @@ try:
     import wx.lib.agw.floatspin as fs
 except ImportError:
     fs = None
-import grass.script as grass
+import grass.script as gs
 
 from core import globalvar
 from gui_core.gselect import VectorDBInfo
@@ -158,7 +160,7 @@ class NvizToolWindow(GNotebook):
             else:
                 try:
                     selection = layers[0].GetName()
-                except:
+                except (AttributeError, IndexError):
                     continue
             if ltype == "raster":
                 self.FindWindowById(self.win["surface"]["map"]).SetValue(selection)
@@ -263,7 +265,7 @@ class NvizToolWindow(GNotebook):
                     foldpanel.GetFoldPanel(panelIdx).GetParent().GetGrandParent()
                 )
                 width = self.GetSize()[0]
-                if sys.platform in ("darwin", "win32"):
+                if sys.platform in {"darwin", "win32"}:
                     width -= 60  # 60px right margin to show scrollbar
                 scrolledPanel.SetVirtualSize(width=width, height=length[2])
                 scrolledPanel.Layout()
@@ -665,10 +667,9 @@ class NvizToolWindow(GNotebook):
             parent=panel, id=wx.ID_ANY, label=" %s " % (_("Save image sequence"))
         )
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        vSizer = wx.BoxSizer(wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=5, hgap=10)
 
-        pwd = os.getcwd()
+        pwd = str(Path.cwd())
         dir = filebrowse.DirBrowseButton(
             parent=panel,
             id=wx.ID_ANY,
@@ -733,24 +734,11 @@ class NvizToolWindow(GNotebook):
         self.mainPanelData = SP.ScrolledPanel(parent=self)
         self.mainPanelData.SetupScrolling(scroll_x=False)
         self.mainPanelData.AlwaysShowScrollbars(hflag=False)
-        try:  # wxpython <= 2.8.10
-            self.foldpanelData = fpb.FoldPanelBar(
-                parent=self.mainPanelData,
-                id=wx.ID_ANY,
-                style=fpb.FPB_DEFAULT_STYLE,
-                extraStyle=fpb.FPB_SINGLE_FOLD,
-            )
-        except:
-            try:  # wxpython >= 2.8.11
-                self.foldpanelData = fpb.FoldPanelBar(
-                    parent=self.mainPanelData,
-                    id=wx.ID_ANY,
-                    agwStyle=fpb.FPB_SINGLE_FOLD,
-                )
-            except:  # to be sure
-                self.foldpanelData = fpb.FoldPanelBar(
-                    parent=self.mainPanelData, id=wx.ID_ANY, style=fpb.FPB_SINGLE_FOLD
-                )
+        self.foldpanelData = fpb.FoldPanelBar(
+            parent=self.mainPanelData,
+            id=wx.ID_ANY,
+            agwStyle=fpb.FPB_SINGLE_FOLD,
+        )
 
         self.foldpanelData.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
 
@@ -813,24 +801,11 @@ class NvizToolWindow(GNotebook):
         self.mainPanelAppear = SP.ScrolledPanel(parent=self)
         self.mainPanelAppear.SetupScrolling(scroll_x=False)
         self.mainPanelAppear.AlwaysShowScrollbars(hflag=False)
-        try:  # wxpython <= 2.8.10
-            self.foldpanelAppear = fpb.FoldPanelBar(
-                parent=self.mainPanelAppear,
-                id=wx.ID_ANY,
-                style=fpb.FPB_DEFAULT_STYLE,
-                extraStyle=fpb.FPB_SINGLE_FOLD,
-            )
-        except:
-            try:  # wxpython >= 2.8.11
-                self.foldpanelAppear = fpb.FoldPanelBar(
-                    parent=self.mainPanelAppear,
-                    id=wx.ID_ANY,
-                    agwStyle=fpb.FPB_SINGLE_FOLD,
-                )
-            except:  # to be sure
-                self.foldpanelAppear = fpb.FoldPanelBar(
-                    parent=self.mainPanelAppear, id=wx.ID_ANY, style=fpb.FPB_SINGLE_FOLD
-                )
+        self.foldpanelAppear = fpb.FoldPanelBar(
+            parent=self.mainPanelAppear,
+            id=wx.ID_ANY,
+            agwStyle=fpb.FPB_SINGLE_FOLD,
+        )
 
         self.foldpanelAppear.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
         # light page
@@ -1086,7 +1061,7 @@ class NvizToolWindow(GNotebook):
                 parent=panel, id=wx.ID_ANY, size=(100, -1), choices=[_("map")]
             )
 
-            if code not in ("color", "shine"):
+            if code not in {"color", "shine"}:
                 use.Insert(item=_("unset"), pos=0)
                 self.win["surface"][code]["required"] = False
             else:
@@ -1195,33 +1170,6 @@ class NvizToolWindow(GNotebook):
             flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
             border=3,
         )
-        #
-        # mask
-        #
-        # box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
-        # label = " %s " % (_("Mask")))
-        ##        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        ##        gridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
-        ##
-        # gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-        # label = _("Mask zeros:")),
-        # pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        ##
-        # elev = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-        # label = _("by elevation"))
-        # elev.Enable(False) # TODO: not implemented yet
-        ##        gridSizer.Add(item = elev, pos = (0, 1))
-        ##
-        # color = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-        # label = _("by color"))
-        # color.Enable(False) # TODO: not implemented yet
-        ##        gridSizer.Add(item = color, pos = (0, 2))
-        ##
-        # boxSizer.Add(item = gridSizer, proportion = 1,
-        # flag = wx.ALL | wx.EXPAND, border = 3)
-        # pageSizer.Add(item = boxSizer, proportion = 0,
-        ##                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
-        # border = 3)
 
         panel.SetSizer(pageSizer)
 
@@ -1851,24 +1799,6 @@ class NvizToolWindow(GNotebook):
         icolor.Bind(csel.EVT_COLOURSELECT, self.OnVectorPoints)
         gridSizer.Add(icolor, flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT, pos=(0, 4))
 
-        # icon width - seems to do nothing
-        # gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-        # label = _("width")),
-        # pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL |
-        # wx.ALIGN_RIGHT)
-        ##
-        # iwidth = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-        ##                             initial = 1,
-        ##                             min = 1,
-        # max = 1e6)
-        # iwidth.SetName('value')
-        # iwidth.SetValue(100)
-        ##        self.win['vector']['points']['width'] = iwidth.GetId()
-        ##        iwidth.Bind(wx.EVT_SPINCTRL, self.OnVectorPoints)
-        ##        iwidth.Bind(wx.EVT_TEXT, self.OnVectorPoints)
-        # gridSizer.Add(item = iwidth, pos = (1, 2),
-        # flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
-        # icon symbol
         gridSizer.Add(
             StaticText(parent=panel, id=wx.ID_ANY, label=_("symbol:")),
             pos=(0, 5),
@@ -2008,7 +1938,7 @@ class NvizToolWindow(GNotebook):
 
     def GselectOnPopup(self, ltype, exclude=False):
         """Update gselect.Select() items"""
-        maps = list()
+        maps = []
         for layer in self.mapWindow.Map.GetListOfLayers(ltype=ltype, active=True):
             maps.append(layer.GetName())
         return maps, exclude
@@ -2642,11 +2572,11 @@ class NvizToolWindow(GNotebook):
         if nameOnly:
             return name
 
-        if nvizType == "surface" or nvizType == "fringe":
+        if nvizType in {"surface", "fringe"}:
             return self._getLayerPropertiesByName(name, mapType="raster")
-        elif nvizType == "vector":
+        if nvizType == "vector":
             return self._getLayerPropertiesByName(name, mapType="vector")
-        elif nvizType == "volume":
+        if nvizType == "volume":
             return self._getLayerPropertiesByName(name, mapType="raster_3d")
 
         return None
@@ -2790,8 +2720,7 @@ class NvizToolWindow(GNotebook):
         frameCount = anim.GetFrameCount()
         if index >= frameCount:
             index = frameCount - 1
-        if index < 0:
-            index = 0
+        index = max(index, 0)
 
         if sliderWidget:
             slider = self.FindWindowById(self.win["anim"]["frameIndex"]["slider"])
@@ -2816,7 +2745,6 @@ class NvizToolWindow(GNotebook):
         self.UpdateFrameIndex(index=0)
 
         slider = self.FindWindowById(self.win["anim"]["frameIndex"]["slider"])
-        text = self.FindWindowById(self.win["anim"]["frameIndex"]["text"])
 
         if mode == "record":
             count = anim.GetFrameCount()
@@ -2856,7 +2784,7 @@ class NvizToolWindow(GNotebook):
         if not prefix:
             GMessage(parent=self, message=_("No file prefix given."))
             return
-        elif not os.path.exists(dir):
+        if not os.path.exists(dir):
             GMessage(parent=self, message=_("Directory %s does not exist.") % dir)
             return
 
@@ -2914,20 +2842,19 @@ class NvizToolWindow(GNotebook):
             if item > wx.NOT_FOUND:
                 checklist.Delete(item)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnConstantSelection(self, event):
         """Constant selected"""
         layerIdx = self.FindWindowById(self.win["constant"]["surface"]).GetSelection()
         if layerIdx == wx.NOT_FOUND:
             return
-        name = _("constant#") + str(layerIdx + 1)
+
         data = self.mapWindow.constants[layerIdx]
         for attr, value in data["constant"].items():
             if attr == "color":
                 value = self._getColorFromString(value)
-            if attr in ("color", "value", "resolution", "transp"):
+            if attr in {"color", "value", "resolution", "transp"}:
                 if attr == "transp":
                     self.FindWindowById(self.win["constant"][attr]).SetValue(
                         self._getPercent(value)
@@ -2955,8 +2882,7 @@ class NvizToolWindow(GNotebook):
         # update properties
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnFringe(self, event):
         """Show/hide fringe"""
@@ -3038,7 +2964,7 @@ class NvizToolWindow(GNotebook):
             else:
                 use = None
             # check for required properties
-            if code not in ("topo", "color", "shine"):
+            if code not in {"topo", "color", "shine"}:
                 use.Insert(item=_("unset"), pos=0)
                 self.win["volume"][code]["required"] = False
             else:
@@ -3087,13 +3013,12 @@ class NvizToolWindow(GNotebook):
                 )
                 value.Bind(wx.EVT_TEXT_ENTER, self.OnVolumeIsosurfMap)
                 value.Bind(wx.EVT_KILL_FOCUS, self.OnVolumeIsosurfMap)
-            ##                value.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
             else:
                 size = (65, -1)
                 value = SpinCtrl(parent=panel, id=wx.ID_ANY, size=size, initial=0)
                 if code == "topo":
                     value.SetRange(minVal=-1e9, maxVal=1e9)
-                elif code in ("shine", "transp"):
+                elif code in {"shine", "transp"}:
                     value.SetRange(minVal=0, maxVal=100)
 
                 value.Bind(wx.EVT_SPINCTRL, self.OnVolumeIsosurfMap)
@@ -3123,8 +3048,6 @@ class NvizToolWindow(GNotebook):
 
     def _createSlicePanel(self, parent):
         panel = wx.Panel(parent=parent, id=wx.ID_ANY)
-
-        vSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         box = StaticBox(
             parent=panel, id=wx.ID_ANY, label=" %s " % (_("Slice attributes"))
@@ -3245,7 +3168,7 @@ class NvizToolWindow(GNotebook):
         floatSlider=False,
     ):
         """Add control (Slider + TextCtrl)"""
-        data[name] = dict()
+        data[name] = {}
         if sliderHor:
             style = wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | wx.SL_BOTTOM
             sizeW = (size, -1)
@@ -3253,18 +3176,15 @@ class NvizToolWindow(GNotebook):
             style = wx.SL_VERTICAL | wx.SL_AUTOTICKS | wx.SL_INVERSE
             sizeW = (-1, size)
 
-        kwargs = dict(
-            parent=parent,
-            id=wx.ID_ANY,
-            minValue=range[0],
-            maxValue=range[1],
-            style=style,
-            size=sizeW,
-        )
-        if floatSlider:
-            slider = FloatSlider(**kwargs)
-        else:
-            slider = Slider(**kwargs)
+        kwargs = {
+            "parent": parent,
+            "id": wx.ID_ANY,
+            "minValue": range[0],
+            "maxValue": range[1],
+            "style": style,
+            "size": sizeW,
+        }
+        slider = FloatSlider(**kwargs) if floatSlider else Slider(**kwargs)
 
         slider.SetName("slider")
         if bind[0]:
@@ -3323,9 +3243,8 @@ class NvizToolWindow(GNotebook):
                 for win in data[name].values():
                     if win == id:
                         return name
-            else:
-                if data[name] == id:
-                    return name
+            elif data[name] == id:
+                return name
 
         return None
 
@@ -3408,19 +3327,17 @@ class NvizToolWindow(GNotebook):
         color = str(color[0]) + ":" + str(color[1]) + ":" + str(color[2])
         self._display.SetBgColor(str(color))
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnSetSurface(self, event):
         """Surface selected, currently used for fringes"""
         name = event.GetString()
         try:
-            data = self._getLayerPropertiesByName(name, mapType="raster")["surface"]
-        except:
+            self._getLayerPropertiesByName(name, mapType="raster")["surface"]
+        except (AttributeError, TypeError, KeyError):
             self.EnablePage("fringe", False)
             return
 
-        layer = self._getMapLayerByName(name, mapType="raster")
         self.EnablePage("fringe", True)
 
     def OnSetRaster(self, event):
@@ -3428,7 +3345,7 @@ class NvizToolWindow(GNotebook):
         name = event.GetString()
         try:
             data = self._getLayerPropertiesByName(name, mapType="raster")["surface"]
-        except TypeError as e:
+        except TypeError:
             self.EnablePage("surface", False)
             return
 
@@ -3441,7 +3358,7 @@ class NvizToolWindow(GNotebook):
         name = event.GetString()
         try:
             data = self._getLayerPropertiesByName(name, mapType="vector")["vector"]
-        except:
+        except (AttributeError, TypeError, KeyError):
             self.EnablePage("vector", False)
             return
         layer = self._getMapLayerByName(name, mapType="vector")
@@ -3453,7 +3370,7 @@ class NvizToolWindow(GNotebook):
         name = event.GetString()
         try:
             data = self._getLayerPropertiesByName(name, mapType="raster_3d")["volume"]
-        except:
+        except (AttributeError, TypeError, KeyError):
             self.EnablePage("volume", False)
             return
 
@@ -3476,30 +3393,24 @@ class NvizToolWindow(GNotebook):
 
         self.AdjustSliderRange(slider=slider, value=value)
 
-        if winName == "height":
-            view = self.mapWindow.iview  # internal
-        else:
-            view = self.mapWindow.view
+        # iview is internal
+        view = self.mapWindow.iview if winName == "height" else self.mapWindow.view
 
         if winName == "z-exag" and value >= 0:
             self.PostViewEvent(zExag=True)
         else:
             self.PostViewEvent(zExag=False)
 
-        if winName in ("persp", "twist"):
-            convert = int
-        else:
-            convert = float
-
-        view[winName]["value"] = convert(value)
+        view[winName]["value"] = (
+            int(value) if winName in {"persp", "twist"} else float(value)
+        )
 
         for win in self.win["view"][winName].values():
             self.FindWindowById(win).SetValue(value)
 
         self.mapWindow.iview["dir"]["use"] = False
         self.mapWindow.render["quick"] = True
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
         event.Skip()
 
@@ -3537,14 +3448,13 @@ class NvizToolWindow(GNotebook):
             self.PostViewEvent(zExag=True)
             self.UpdateSettings()
             self.mapWindow.Refresh(False)
-        else:  # here
-            if self.FindWindowById(event.GetId()).GetValue():
-                self.mapDisplay.Raise()
-                self.mapWindow.mouse["use"] = "lookHere"
-                self.mapWindow.SetNamedCursor("cross")
-            else:
-                self.mapWindow.mouse["use"] = "default"
-                self.mapWindow.SetNamedCursor("default")
+        elif self.FindWindowById(event.GetId()).GetValue():
+            self.mapDisplay.Raise()
+            self.mapWindow.mouse["use"] = "lookHere"
+            self.mapWindow.SetNamedCursor("cross")
+        else:
+            self.mapWindow.mouse["use"] = "default"
+            self.mapWindow.SetNamedCursor("default")
 
     def OnResetView(self, event):
         """Reset to default view (view page)"""
@@ -3572,8 +3482,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnLookFrom(self, event):
         """Position of view/light changed by buttons"""
@@ -3687,13 +3596,12 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def EnablePage(self, name, enabled=True):
         """Enable/disable all widgets on page"""
         for key, item in self.win[name].items():
-            if key in ("map", "surface", "new", "planes"):
+            if key in {"map", "surface", "new", "planes"}:
                 continue
             if isinstance(item, dict):
                 for skey, sitem in self.win[name][key].items():
@@ -3701,21 +3609,15 @@ class NvizToolWindow(GNotebook):
                         for ssitem in self.win[name][key][skey].values():
                             if not isinstance(ssitem, bool) and isinstance(ssitem, int):
                                 self.FindWindowById(ssitem).Enable(enabled)
-                    else:
-                        # type(bool) != types.IntType but
-                        # isinstance(bool) == types.IntType
-                        if not isinstance(sitem, bool) and isinstance(sitem, int):
-                            self.FindWindowById(sitem).Enable(enabled)
-            else:
-                if not isinstance(item, bool) and isinstance(item, int):
-                    self.FindWindowById(item).Enable(enabled)
+                    elif not isinstance(sitem, bool) and isinstance(sitem, int):
+                        self.FindWindowById(sitem).Enable(enabled)
+            elif not isinstance(item, bool) and isinstance(item, int):
+                self.FindWindowById(item).Enable(enabled)
 
     def SetMapObjUseMap(self, nvizType, attrb, map=None):
         """Update dialog widgets when attribute type changed"""
-        if attrb in ("topo", "color", "shine"):
-            incSel = -1  # decrement selection (no 'unset')
-        else:
-            incSel = 0
+        # decrement selection (no 'unset')
+        incSel = -1 if attrb in {"topo", "color", "shine"} else 0
         if nvizType == "volume" and attrb == "topo":
             return
         if map is True:  # map
@@ -3818,15 +3720,13 @@ class NvizToolWindow(GNotebook):
             event = wxUpdateProperties(data=data)
             wx.PostEvent(self.mapWindow, event)
 
-            if self.mapDisplay.IsAutoRendered():
-                self.mapWindow.Refresh(False)
+            self.mapWindow.Refresh(False)
 
     def OnSurfaceResolution(self, event):
         """Draw resolution changed"""
         self.SetSurfaceResolution()
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def SetSurfaceResolution(self):
         """Set draw resolution"""
@@ -3874,8 +3774,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnSurfaceModeAll(self, event):
         """Set draw mode (including wire color) for all loaded surfaces"""
@@ -3911,8 +3810,7 @@ class NvizToolWindow(GNotebook):
             event = wxUpdateProperties(data=data)
             wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def _getColorString(self, color):
         """Convert color tuple to R:G:B format
@@ -3947,11 +3845,7 @@ class NvizToolWindow(GNotebook):
     def _getPercent(self, value, toPercent=True):
         """Convert values 0 - 255 to percents and vice versa"""
         value = int(value)
-        if toPercent:
-            value = int(value / 255.0 * 100)
-        else:
-            value = int(value / 100.0 * 255)
-        return value
+        return int(value / 255.0 * 100) if toPercent else int(value / 100.0 * 255)
 
     def OnSurfaceWireColor(self, event):
         """Set wire color"""
@@ -3963,8 +3857,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnSurfaceAxis(self, event):
         """Surface position, axis changed"""
@@ -4009,13 +3902,12 @@ class NvizToolWindow(GNotebook):
         self.AdjustSliderRange(slider=slider, value=value)
 
         for win in self.win["surface"]["position"].values():
-            if win in (
+            if win in {
                 self.win["surface"]["position"]["axis"],
                 self.win["surface"]["position"]["reset"],
-            ):
+            }:
                 continue
-            else:
-                self.FindWindowById(win).SetValue(value)
+            self.FindWindowById(win).SetValue(value)
 
         data = self.GetLayerData("surface")
         id = data["surface"]["object"]["id"]
@@ -4038,8 +3930,7 @@ class NvizToolWindow(GNotebook):
         wx.PostEvent(self.mapWindow, event)
 
         self.mapWindow.render["quick"] = True
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
         #        self.UpdatePage('surface')
 
     def OnSurfacePositionChanged(self, event):
@@ -4057,7 +3948,7 @@ class NvizToolWindow(GNotebook):
 
         :param vecType: vector type (lines, points)
         """
-        if vecType != "lines" and vecType != "points":
+        if vecType not in {"lines", "points"}:
             return False
 
         for win in self.win["vector"][vecType].keys():
@@ -4073,11 +3964,10 @@ class NvizToolWindow(GNotebook):
                         self.FindWindowById(
                             self.win["vector"][vecType][win][swin]
                         ).Enable(False)
+            elif enabled:
+                self.FindWindowById(self.win["vector"][vecType][win]).Enable(True)
             else:
-                if enabled:
-                    self.FindWindowById(self.win["vector"][vecType][win]).Enable(True)
-                else:
-                    self.FindWindowById(self.win["vector"][vecType][win]).Enable(False)
+                self.FindWindowById(self.win["vector"][vecType][win]).Enable(False)
 
         return True
 
@@ -4119,8 +4009,7 @@ class NvizToolWindow(GNotebook):
                 event = wxUpdateProperties(data=data)
                 wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
         event.Skip()
 
@@ -4159,8 +4048,8 @@ class NvizToolWindow(GNotebook):
             mode["type"] = "surface"
             mode["surface"] = {}
             checklist = self.FindWindowById(self.win["vector"]["lines"]["surface"])
-            value = list()
-            checked = list()
+            value = []
+            checked = []
             for surface in range(checklist.GetCount()):
                 value.append(checklist.GetString(surface))
                 checked.append(checklist.IsChecked(surface))
@@ -4188,8 +4077,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnVectorPointsMode(self, event):
         rasters = self.mapWindow.GetLayerNames("raster")
@@ -4270,10 +4158,7 @@ class NvizToolWindow(GNotebook):
     def OnVectorSurface(self, event):
         """Reference surface for vector map (lines/points)"""
         id = event.GetId()
-        if id == self.win["vector"]["lines"]["surface"]:
-            vtype = "lines"
-        else:
-            vtype = "points"
+        vtype = "lines" if id == self.win["vector"]["lines"]["surface"] else "points"
         checkList = self.FindWindowById(self.win["vector"][vtype]["surface"])
         checked = []
         surfaces = []
@@ -4289,8 +4174,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnVectorPoints(self, event):
         """Set vector points mode, apply changes if auto-rendering is enabled"""
@@ -4320,8 +4204,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnCheckThematic(self, event):
         """Switch on/off thematic mapping"""
@@ -4351,10 +4234,7 @@ class NvizToolWindow(GNotebook):
 
             check = self.win["vector"][vtype]["thematic"]["check" + attrType]
             button = self.win["vector"][vtype]["thematic"]["button" + attrType]
-            if self.FindWindowById(check).GetValue():
-                checked = True
-            else:
-                checked = False
+            checked = bool(self.FindWindowById(check).GetValue())
             self.FindWindowById(button).Enable(checked)
 
             data = self.GetLayerData("vector")
@@ -4381,8 +4261,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def HasGRASSRGB(self, name):
         """Check if GRASSRGB column exist."""
@@ -4485,8 +4364,7 @@ class NvizToolWindow(GNotebook):
         self._display.SetVolumeDrawBox(vid, checked)
         data["draw"]["box"]["enabled"] = checked
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def SetVolumeDrawMode(self, selection):
         """Set isosurface draw mode"""
@@ -4508,8 +4386,7 @@ class NvizToolWindow(GNotebook):
             data["draw"]["shading"]["slice"]["desc"] = "flat"
             data["draw"]["shading"]["slice"]["value"] = mode
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnVolumeResolution(self, event):
         """Set isosurface/slice draw resolution"""
@@ -4527,8 +4404,7 @@ class NvizToolWindow(GNotebook):
             self._display.SetSliceRes(id, res)
             data["draw"]["resolution"]["slice"]["value"] = res
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnInOutMode(self, event):
         """Change isosurfaces mode inout"""
@@ -4540,8 +4416,7 @@ class NvizToolWindow(GNotebook):
         if ret == 1:
             data["isosurface"][isosurfId]["inout"]["value"] = event.GetInt()
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnVolumeIsosurfMap(self, event):
         """Set surface attribute"""
@@ -4582,16 +4457,14 @@ class NvizToolWindow(GNotebook):
             else:
                 # disable -> make transparent
                 self._display.SetIsosurfaceTransp(vid, id, False, "255")
+        elif list.IsChecked(index):
+            value = data["slice"][id]["transp"]["value"]
+            self._display.SetSliceTransp(vid, id, value)
         else:
-            if list.IsChecked(index):
-                value = data["slice"][id]["transp"]["value"]
-                self._display.SetSliceTransp(vid, id, value)
-            else:
-                # disable -> make transparent
-                self._display.SetSliceTransp(vid, id, 255)
+            # disable -> make transparent
+            self._display.SetSliceTransp(vid, id, 255)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnVolumeSelect(self, event):
         """Isosurface/Slice item selected"""
@@ -4605,7 +4478,7 @@ class NvizToolWindow(GNotebook):
         selection = event.GetSelection()
         if selection == -1:
             return
-        elif selection == 0:
+        if selection == 0:
             winUp.Enable(False)
             if not winDown.IsEnabled():
                 winDown.Enable()
@@ -4618,10 +4491,6 @@ class NvizToolWindow(GNotebook):
                 winDown.Enable()
             if not winUp.IsEnabled():
                 winUp.Enable()
-
-        # update dialog
-        name = self.FindWindowById(self.win["volume"]["map"]).GetValue()
-        layer = self._getMapLayerByName(name, mapType="raster_3d")
 
         if mode == "isosurf":
             data = self.GetLayerData("volume")["volume"]["isosurface"][selection]
@@ -4704,8 +4573,7 @@ class NvizToolWindow(GNotebook):
         else:
             self.UpdateVolumeSlicePage(sliceData)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
         event.Skip()
 
@@ -4724,8 +4592,6 @@ class NvizToolWindow(GNotebook):
         if list.GetCount() > 0:
             list.SetSelection(list.GetCount() - 1)
 
-        name = self.FindWindowById(self.win["volume"]["map"]).GetValue()
-        layer = self._getMapLayerByName(name, mapType="raster_3d")
         data = self.GetLayerData("volume")["volume"]
 
         vid = data["object"]["id"]
@@ -4744,15 +4610,13 @@ class NvizToolWindow(GNotebook):
                 self.UpdateVolumeIsosurfPage(data["isosurface"][list.GetSelection()])
             else:
                 self.UpdateVolumeSlicePage(data["slice"][list.GetSelection()])
+        elif mode == "isosurf":
+            self.UpdateVolumeIsosurfPage(data["attribute"])
         else:
-            if mode == "isosurf":
-                self.UpdateVolumeIsosurfPage(data["attribute"])
-            else:
-                self.UpdateVolumeSlicePage(None)
+            self.UpdateVolumeSlicePage(None)
         self.UpdateIsosurfButtons(list)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
         event.Skip()
 
@@ -4768,8 +4632,6 @@ class NvizToolWindow(GNotebook):
         if sel < 1:
             return  # this should not happen
 
-        name = self.FindWindowById(self.win["volume"]["map"]).GetValue()
-        layer = self._getMapLayerByName(name, mapType="raster_3d")
         data = self.GetLayerData("volume")["volume"]
 
         id = data["object"]["id"]
@@ -4792,8 +4654,7 @@ class NvizToolWindow(GNotebook):
         # update buttons
         self.UpdateIsosurfButtons(list)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
         event.Skip()
 
@@ -4809,8 +4670,6 @@ class NvizToolWindow(GNotebook):
         if sel >= list.GetCount() - 1:
             return  # this should not happen
 
-        name = self.FindWindowById(self.win["volume"]["map"]).GetValue()
-        layer = self._getMapLayerByName(name, mapType="raster_3d")
         data = self.GetLayerData("volume")["volume"]
 
         id = data["object"]["id"]
@@ -4833,8 +4692,7 @@ class NvizToolWindow(GNotebook):
         # update buttons
         self.UpdateIsosurfButtons(list)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
         event.Skip()
 
@@ -4857,13 +4715,13 @@ class NvizToolWindow(GNotebook):
         self.AdjustSliderRange(slider=slider, value=value)
 
         for win in self.win["volume"]["position"].values():
-            if win in (
+            if win in {
                 self.win["volume"]["position"]["axis"],
                 self.win["volume"]["position"]["reset"],
-            ):
+            }:
                 continue
-            else:
-                self.FindWindowById(win).SetValue(value)
+
+            self.FindWindowById(win).SetValue(value)
 
         data = self.GetLayerData("volume")
         id = data["volume"]["object"]["id"]
@@ -4886,8 +4744,7 @@ class NvizToolWindow(GNotebook):
         wx.PostEvent(self.mapWindow, event)
 
         self.mapWindow.render["quick"] = True
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnVolumeAxis(self, event):
         """Volume position, axis changed"""
@@ -4941,8 +4798,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnVolumeSliceAxes(self, event):
         """Slice axis changed"""
@@ -4964,8 +4820,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnSliceTransparency(self, event):
         """Slice transparency changed"""
@@ -4986,8 +4841,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnSliceReset(self, event):
         """Slice position reset"""
@@ -5009,8 +4863,7 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnSlicePositionChange(self, event):
         """Slice position is changing"""
@@ -5033,14 +4886,12 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnSlicePositionChanged(self, event):
         """Slice position is changed"""
         self.mapWindow.render["quick"] = False
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnCPlaneSelection(self, event):
         """Cutting plane selected"""
@@ -5048,7 +4899,7 @@ class NvizToolWindow(GNotebook):
         try:
             planeIndex = int(plane.split()[-1]) - 1
             self.EnablePage("cplane", enabled=True)
-        except:
+        except (ValueError, IndexError):
             planeIndex = -1
             self.EnablePage("cplane", enabled=False)
         self.mapWindow.SelectCPlane(planeIndex)
@@ -5057,8 +4908,7 @@ class NvizToolWindow(GNotebook):
                 planeIndex, changes=["rotation", "position", "shading"]
             )
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
         self.UpdateCPlanePage(planeIndex)
 
     def OnCPlaneChanging(self, event):
@@ -5066,7 +4916,7 @@ class NvizToolWindow(GNotebook):
         plane = self.FindWindowById(self.win["cplane"]["planes"]).GetStringSelection()
         try:
             planeIndex = int(plane.split()[-1]) - 1
-        except:  # TODO disabled page
+        except (ValueError, IndexError):  # TODO disabled page
             planeIndex = -1
 
         if event.GetId() in (
@@ -5083,14 +4933,12 @@ class NvizToolWindow(GNotebook):
         event = wxUpdateCPlane(update=(action,), current=planeIndex)
         wx.PostEvent(self.mapWindow, event)
 
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnCPlaneChangeDone(self, event):
         """Cutting plane change done"""
         self.mapWindow.render["quick"] = False
-        if self.mapDisplay.IsAutoRendered():
-            self.mapWindow.Refresh(False)
+        self.mapWindow.Refresh(False)
 
     def OnCPlaneChangeText(self, event):
         """Cutting plane changed by textctrl"""
@@ -5110,7 +4958,7 @@ class NvizToolWindow(GNotebook):
         plane = self.FindWindowById(self.win["cplane"]["planes"]).GetStringSelection()
         try:
             planeIndex = int(plane.split()[-1]) - 1
-        except:  # TODO disabled page
+        except (ValueError, IndexError):  # TODO disabled page
             planeIndex = -1
 
         self.mapWindow.cplanes[planeIndex]["shading"] = shading
@@ -5125,7 +4973,7 @@ class NvizToolWindow(GNotebook):
         plane = self.FindWindowById(self.win["cplane"]["planes"]).GetStringSelection()
         try:
             planeIndex = int(plane.split()[-1]) - 1
-        except:  # TODO disabled page
+        except (ValueError, IndexError):  # TODO disabled page
             planeIndex = -1
 
         self.mapWindow.cplanes[planeIndex] = copy.deepcopy(
@@ -5287,7 +5135,7 @@ class NvizToolWindow(GNotebook):
 
                 self.FindWindowById(self.win["view"]["persp"][control]).SetValue(pval)
 
-        elif pageId in ("surface", "vector", "volume"):
+        elif pageId in {"surface", "vector", "volume"}:
             name = self.FindWindowById(self.win[pageId]["map"]).GetValue()
             data = self.GetLayerData(pageId)
             if data:
@@ -5414,7 +5262,7 @@ class NvizToolWindow(GNotebook):
 
     def UpdateSurfacePage(self, layer, data, updateName=True):
         """Update surface page"""
-        desc = grass.raster_info(layer.name)["title"]
+        desc = gs.raster_info(layer.name)["title"]
         if updateName:
             self.FindWindowById(self.win["surface"]["map"]).SetValue(layer.name)
         self.FindWindowById(self.win["surface"]["desc"]).SetLabel(desc)
@@ -5540,7 +5388,7 @@ class NvizToolWindow(GNotebook):
 
     def UpdateVectorPage(self, layer, data, updateName=True):
         """Update vector page"""
-        vInfo = grass.vector_info_topo(layer.GetName())
+        vInfo = gs.vector_info_topo(layer.GetName())
         if not vInfo:
             return
         if vInfo["map3d"]:
@@ -5783,18 +5631,17 @@ class NvizToolWindow(GNotebook):
                     self.FindWindowById(self.win["volume"][attrb]["const"]).SetColour(
                         color
                     )
-            else:
+            else:  # noqa: PLR5501
                 if data[attrb]["map"]:
                     self.vetoGSelectEvt = True
                     win = self.FindWindowById(self.win["volume"][attrb]["map"])
                     win.SetValue(value)
-                else:
-                    if value:
-                        win = self.FindWindowById(self.win["volume"][attrb]["const"])
-                        if attrb == "topo":
-                            win.SetValue(float(value))
-                        else:
-                            win.SetValue(self._getPercent(value))
+                elif value:
+                    win = self.FindWindowById(self.win["volume"][attrb]["const"])
+                    if attrb == "topo":
+                        win.SetValue(float(value))
+                    else:
+                        win.SetValue(self._getPercent(value))
 
             self.SetMapObjUseMap(nvizType="volume", attrb=attrb, map=data[attrb]["map"])
         # set inout
@@ -5866,7 +5713,7 @@ class NvizToolWindow(GNotebook):
         """Get named page"""
         if name == "view":
             self.SetSelection(0)
-        elif name in ("surface", "vector", "volume"):
+        elif name in {"surface", "vector", "volume"}:
             self.SetSelection(1)
         else:
             self.SetSelection(2)
@@ -5907,8 +5754,8 @@ class PositionWindow(Window):
         w, h = self.GetClientSize()
         x, y = pos
         if scale:
-            x = x * w
-            y = y * h
+            x *= w
+            y *= h
         self.pdc.Clear()
         self.pdc.BeginDrawing()
         self.pdc.DrawLine(w // 2, h // 2, int(x), int(y))

@@ -97,6 +97,7 @@
    - colors
    - G_OPT_C
    - G_OPT_CN
+   - G_OPT_C_FORMAT
 
    - misc
    - G_OPT_M_DIR
@@ -652,6 +653,22 @@ struct Option *G_define_standard_option(int opt)
         Opt->description =
             _("Either a standard color name, R:G:B triplet, or \"none\"");
         break;
+    case G_OPT_C_FORMAT:
+        Opt->key = "color_format";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = YES;
+        Opt->multiple = NO;
+        Opt->answer = "hex";
+        Opt->options = "rgb,hex,hsv,triplet";
+        Opt->label = _("Color format");
+        Opt->description = _("Color format for output values.");
+        G_asprintf(
+            (char **)&(Opt->descriptions), "rgb;%s;hex;%s;hsv;%s;triplet;%s",
+            _("output color in RGB format"), _("output color in HEX format"),
+            _("output color in HSV format (experimental)"),
+            _("output color in colon-separated RGB format"));
+        break;
 
         /* misc */
 
@@ -942,6 +959,17 @@ struct Option *G_define_standard_option(int opt)
         Opt->options = "start,during,overlap,contain,equal,follows,precedes";
         Opt->description =
             _("The method to be used for sampling the input dataset");
+        break;
+    case G_OPT_F_FORMAT:
+        Opt->key = "format";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = YES;
+        Opt->label = _("Output format");
+        Opt->answer = "plain";
+        Opt->options = "plain,json";
+        Opt->descriptions = _("plain;Plain text output;"
+                              "json;JSON (JavaScript Object Notation);");
         break;
     }
 

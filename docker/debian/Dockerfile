@@ -1,7 +1,5 @@
-FROM debian:stable@sha256:82f8da149d6d567c74564cccd6f355fb5ade42a958e4cde10a1100eaeb24d42e
-# currently Debian 12
+FROM debian:bookworm-20240612-slim@sha256:67f3931ad8cb1967beec602d8c0506af1e37e8d73c2a0b38b181ec5d8560d395
 
-# docker run -it --rm debian:stable bash
 # apt-get update && apt-get install lsb-release -y && lsb_release -a
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann"
@@ -11,7 +9,8 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # define versions to be used (PDAL is not available on Debian, so we compile it here)
 # https://github.com/PDAL/PDAL/releases
-ARG PDAL_VERSION=2.5.5
+# renovate: datasource=github-tags depName=PDAL/PDAL
+ARG PDAL_VERSION=2.7.2
 
 SHELL ["/bin/bash", "-c"]
 
@@ -19,8 +18,8 @@ WORKDIR /tmp
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends --no-install-suggests \
-    build-essential \
     bison \
+    build-essential \
     bzip2 \
     cmake \
     curl \
@@ -41,8 +40,8 @@ RUN apt-get update && apt-get upgrade -y && \
     libgsl0-dev \
     libjpeg-dev \
     libjsoncpp-dev \
-    libnetcdf-dev \
     libncurses-dev \
+    libnetcdf-dev \
     libopenblas-dev \
     libopenjp2-7 \
     libopenjp2-7-dev \
@@ -61,6 +60,7 @@ RUN apt-get update && apt-get upgrade -y && \
     netcdf-bin \
     proj-bin \
     proj-data \
+    python-is-python3 \
     python3 \
     python3-dateutil \
     python3-dev \
@@ -88,15 +88,15 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
 WORKDIR /src
 RUN mkdir vdatum && \
     cd vdatum && \
-    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2012.zip && unzip -j -u usa_geoid2012.zip -d /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2009.zip && unzip -j -u usa_geoid2009.zip -d /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2003.zip && unzip -j -u usa_geoid2003.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm08_25/egm08_25.gtx && mv egm08_25.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm96_15/egm96_15.gtx && mv egm96_15.gtx /usr/share/proj; \
     wget -q http://download.osgeo.org/proj/vdatum/usa_geoid1999.zip && unzip -j -u usa_geoid1999.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2003.zip && unzip -j -u usa_geoid2003.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2009.zip && unzip -j -u usa_geoid2009.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2012.zip && unzip -j -u usa_geoid2012.zip -d /usr/share/proj; \
     wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconc.gtx && mv vertconc.gtx /usr/share/proj; \
     wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertcone.gtx && mv vertcone.gtx /usr/share/proj; \
     wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconw.gtx && mv vertconw.gtx /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/egm96_15/egm96_15.gtx && mv egm96_15.gtx /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/egm08_25/egm08_25.gtx && mv egm08_25.gtx /usr/share/proj; \
     cd .. && \
     rm -rf vdatum
 
@@ -116,16 +116,16 @@ RUN wget -q \
       -DCMAKE_C_COMPILER=gcc \
       -DCMAKE_CXX_COMPILER=g++ \
       -DCMAKE_MAKE_PROGRAM=make \
-      -DBUILD_PLUGIN_PYTHON=ON \
+      -DBUILD_PGPOINTCLOUD_TESTS=OFF \
       -DBUILD_PLUGIN_CPD=OFF \
       -DBUILD_PLUGIN_GREYHOUND=ON \
       -DBUILD_PLUGIN_HEXBIN=ON \
-      -DHEXER_INCLUDE_DIR=/usr/include/ \
-      -DBUILD_PLUGIN_NITF=OFF \
       -DBUILD_PLUGIN_ICEBRIDGE=ON \
+      -DBUILD_PLUGIN_NITF=OFF \
       -DBUILD_PLUGIN_PGPOINTCLOUD=OFF \
-      -DBUILD_PGPOINTCLOUD_TESTS=OFF \
+      -DBUILD_PLUGIN_PYTHON=ON \
       -DBUILD_PLUGIN_SQLITE=ON \
+      -DHEXER_INCLUDE_DIR=/usr/include/ \
       -DWITH_LASZIP=OFF \
       -DWITH_LAZPERF=ON \
       -DWITH_TESTS=ON && \
@@ -150,28 +150,27 @@ ENV CFLAGS "$MYCFLAGS"
 ENV CXXFLAGS "$MYCXXFLAGS"
 
 # Configure compile and install GRASS GIS
-ENV GRASS_PYTHON=/usr/bin/python3
 ENV NUMTHREADS=4
 RUN make distclean || echo "nothing to clean"
 RUN /src/grass_build/configure \
-  --with-cxx \
   --enable-largefile \
-  --with-proj-share=/usr/share/proj \
+  --with-bzlib \
+  --with-cairo --with-cairo-ldflags=-lfontconfig \
+  --with-cxx \
+  --with-fftw \
+  --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
   --with-gdal=/usr/bin/gdal-config \
   --with-geos \
-  --with-sqlite \
-  --with-cairo --with-cairo-ldflags=-lfontconfig \
-  --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
-  --with-fftw \
-  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
   --with-netcdf \
-  --with-zstd \
-  --with-bzlib \
   --with-pdal \
+  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
+  --with-proj-share=/usr/share/proj \
+  --with-sqlite \
+  --with-zstd \
   --without-mysql \
   --without-odbc \
-  --without-openmp \
   --without-opengl \
+  --without-openmp \
     && make -j $NUMTHREADS \
     && make install && ldconfig
 
@@ -194,12 +193,12 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
 ENV PROJ_NETWORK=ON
 
 # Create generic GRASS GIS lib name regardless of version number
-RUN ln -sf /usr/local/grass84 /usr/local/grass
+RUN ln -sf /usr/local/grass85 /usr/local/grass
 
 # show GRASS GIS, PROJ, GDAL etc versions
-RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
+RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     pdal --version && \
-    python3 --version
+    python --version
 
 # Reduce the image size
 RUN apt-get autoremove -y
@@ -208,24 +207,23 @@ RUN rm -r /src/grass_build/.git
 
 WORKDIR /scripts
 
-# install external GRASS GIS session Python API
-RUN pip3 install grass-session --break-system-packages
-
-# add GRASS GIS envs for python usage
-ENV GISBASE "/usr/local/grass/"
-ENV GRASSBIN "/usr/local/bin/grass"
-ENV PYTHONPATH "${PYTHONPATH}:$GISBASE/etc/python/"
-ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:$GISBASE/lib"
+# enable GRASS GIS Python session support
+## grass --config python-path
+ENV PYTHONPATH "/usr/local/grass/etc/python:${PYTHONPATH}"
+# enable GRASS GIS ctypes imports
+## grass --config path
+ENV LD_LIBRARY_PATH "/usr/local/grass/lib:$LD_LIBRARY_PATH"
 
 WORKDIR /tmp
 COPY docker/testdata/simple.laz .
 WORKDIR /scripts
 COPY docker/testdata/test_grass_session.py .
-## just scan the LAZ file
-# Not yet ready for GRASS GIS 8:
-#RUN /usr/bin/python3 /scripts/test_grass_session.py
+## run GRASS GIS python session and scan the test LAZ file
+RUN python /scripts/test_grass_session.py
+RUN rm -rf /tmp/grasstest_epsg_25832
 # test LAZ file
-RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
+RUN grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
 
 WORKDIR /grassdb
 VOLUME /grassdb
+CMD ["$GRASSBIN", "--version"]

@@ -18,15 +18,15 @@ def _check_value(param, value):
     string = (bytes, str)
 
     def raiseexcpet(exc, param, ptype, value):
-        """Function to modifa the error message"""
+        """Function to modify the error message"""
         msg = req % (param.name, param.typedesc, ptype, value, str(exc))
         if isinstance(exc, ValueError):
             raise ValueError(msg)
-        elif isinstance(exc, TypeError):
+        if isinstance(exc, TypeError):
             raise TypeError(msg)
-        else:
-            exc.message = msg
-            raise exc
+
+        exc.message = msg
+        raise exc
 
     def check_string(value):
         """Function to check that a string parameter is already a string"""
@@ -34,9 +34,7 @@ def _check_value(param, value):
             if type(value) in (int, float):
                 value = str(value)
             if type(value) not in string:
-                msg = (
-                    "The Parameter <%s> require a string," " %s instead is provided: %r"
-                )
+                msg = "The Parameter <%s> require a string, %s instead is provided: %r"
                 raise ValueError(msg % (param.name, type(value), value))
         return value
 
@@ -164,8 +162,8 @@ class Parameter:
         if diz is None:
             raise TypeError("Xparameter or diz are required")
         self.name = diz["name"]
-        self.required = True if diz["required"] == "yes" else False
-        self.multiple = True if diz["multiple"] == "yes" else False
+        self.required = diz["required"] == "yes"
+        self.multiple = diz["multiple"] == "yes"
         # check the type
         if diz["type"] in GETTYPE:
             self.type = GETTYPE[diz["type"]]
@@ -218,7 +216,7 @@ class Parameter:
         #
         if "gisprompt" in diz and diz["gisprompt"]:
             self.typedesc = diz["gisprompt"].get("prompt", "")
-            self.input = False if diz["gisprompt"]["age"] == "new" else True
+            self.input = diz["gisprompt"]["age"] != "new"
         else:
             self.input = True
 
@@ -339,10 +337,7 @@ class Parameter:
         ..
         """
         if hasattr(self, "values"):
-            if self.isrange:
-                vals = self.isrange
-            else:
-                vals = ", ".join([repr(val) for val in self.values])
+            vals = self.isrange or ", ".join([repr(val) for val in self.values])
         else:
             vals = False
         if self.keydescvalues:

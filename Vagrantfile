@@ -13,10 +13,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   vm_ram = ENV['VAGRANT_VM_RAM'] || 1024
   vm_cpu = ENV['VAGRANT_VM_CPU'] || 1
 
-  config.vm.box = "bionic64"
+  config.vm.box = "noble64"
 
   config.vm.hostname = "grass-gis-vagrant"
-  config.vm.box_url = "https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64-vagrant.box"
+  config.vm.box = "alvistack/ubuntu-24.04"
   config.vm.define "grass-gis-vagrant" do |host|
 
     config.vm.network :forwarded_port, guest: 80, host: 8080
@@ -36,17 +36,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # host.vm.synced_folder grassdata_dir, "/home/vagrant/grassdata"
 
     ppaRepos = [
-      "ppa:ubuntugis/ubuntugis-unstable"
+      # TODO: enable PPA & PDAL support when available
+      # "ppa:ubuntugis/ubuntugis-unstable"
     ]
 
     packageList = [
-      "autoconf2.13",
+      "autoconf2.69",
       "autotools-dev",
-      "make",
+      "bison",
+      "flex",
       "g++",
       "gettext",
-      "flex",
-      "bison",
+      "libblas-dev",
       "libcairo2-dev",
       "libfftw3-dev",
       "libfreetype6-dev",
@@ -54,30 +55,30 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "libgeos-dev",
       "libglu1-mesa-dev",
       "libjpeg-dev",
-      "libpng-dev",
-      "libtiff-dev",
+      "liblapack-dev",
       "libmysqlclient-dev",
       "libncurses5-dev",
+      "libnetcdf-dev",
+      "libpng-dev",
       "libpq-dev",
       "libproj-dev",
-      "proj-bin",
       "libreadline-dev",
       "libsqlite3-dev",
+      "libtiff-dev",
       "libxmu-dev",
+      "make",
+      "netcdf-bin",
+      "proj-bin",
       "python3",
-      "python3-wxgtk4.0",
       "python3-dateutil",
       "python3-dev",
       "python3-numpy",
-      "python3-ply",
       "python3-pil",
-      "libnetcdf-dev",
-      "netcdf-bin",
-      "libblas-dev",
-      "liblapack-dev",
+      "python3-ply",
+      "python3-wxgtk4.0",
       "unixodbc-dev",
       "zlib1g-dev",
-      "liblas-c-dev"
+      # "libpdal-dev"
     ]
 
     unless File.exists?(".no_apt_cache")
@@ -88,7 +89,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     if Dir.glob("#{File.dirname(__FILE__)}/.vagrant/machines/grass-gis-vagrant/*/id").empty?
       pkg_cmd = "sed -i 's#deb http://archive.ubuntu.com/ubuntu#deb mirror://mirrors.ubuntu.com/mirrors.txt#' /etc/apt/sources.list; "
-      pkg_cmd << "apt-get update -qq; apt-get install -q -y python-software-properties; "
+      pkg_cmd << "apt-get update -qq; apt-get install -q -y python3-software-properties; "
 
       if ppaRepos.length > 0
 	ppaRepos.each { |repo| pkg_cmd << "add-apt-repository -y " << repo << " ; " }

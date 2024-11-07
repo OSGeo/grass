@@ -22,7 +22,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
-import grass.script as grass
+import grass.script as gs
 
 
 class DebugMsg:
@@ -41,7 +41,7 @@ class DebugMsg:
     def SetLevel(self):
         """Initialize gui debug level"""
         try:
-            self.debuglevel = int(grass.gisenv().get("WX_DEBUG", 0))
+            self.debuglevel = int(gs.gisenv().get("WX_DEBUG", 0))
             if self.debuglevel < 0 or self.debuglevel > 5:
                 raise ValueError(_("Wx debug level {0}.").format(self.debuglevel))
         except ValueError as e:
@@ -49,8 +49,8 @@ class DebugMsg:
             sys.stderr.write(
                 _(
                     "WARNING: Ignoring unsupported wx debug level (must be >=0 and "
-                    "<=5). {0}\n".format(e)
-                )
+                    "<=5). {0}\n"
+                ).format(e)
             )
 
     def msg(self, level, message, *args):
