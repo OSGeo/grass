@@ -1,6 +1,7 @@
 MODULE_TOPDIR = ../..
 
 LIB = RASTER
+LIBES = $(PARSONLIB)
 EXTRA_INC =
 
 include $(MODULE_TOPDIR)/include/Make/Vars.make

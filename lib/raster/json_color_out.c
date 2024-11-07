@@ -1,3 +1,16 @@
+/*!
+   \file lib/raster/json_color_out.c
+
+   \brief Raster Library - Print color table in json format
+
+   (C) 2010-2024 by the GRASS Development Team
+
+   This program is free software under the GNU General Public
+   License (>=v2). Read the file COPYING that comes with GRASS
+   for details.
+
+ */
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,8 +20,6 @@
 #include <grass/glocale.h>
 #include <grass/parson.h>
 #include <grass/raster.h>
-
-#include "local_proto.h"
 
 #define COLOR_STRING_LENGTH 30
 
@@ -77,7 +88,7 @@ static void rgb_to_hsv(int r, int g, int b, float *h, float *s, float *v)
    \param clr_frmt color format to be used (RGB, HEX, HSV, TRIPLET).
    \param color_object pointer to the JSON object
  */
-static void set_color(int r, int g, int b, enum ColorFormat clr_frmt,
+static void set_color(int r, int g, int b, ColorFormat clr_frmt,
                       JSON_Object *color_object)
 {
     char color_string[COLOR_STRING_LENGTH];
@@ -126,7 +137,7 @@ static void set_color(int r, int g, int b, enum ColorFormat clr_frmt,
  */
 static void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g,
                             int b, JSON_Array *root_array, int perc,
-                            enum ColorFormat clr_frmt, FILE *fp,
+                            ColorFormat clr_frmt, FILE *fp,
                             JSON_Value *root_value)
 {
     static DCELL v0;
@@ -168,8 +179,8 @@ static void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g,
    \param perc TRUE for percentage output
    \param clr_frmt color format to be used (RBG, HEX, HSV, TRIPLET).
  */
-void print_json_colors(struct Colors *colors, DCELL min, DCELL max, FILE *fp,
-                       int perc, enum ColorFormat clr_frmt)
+void Rast_print_json_colors(struct Colors *colors, DCELL min, DCELL max,
+                            FILE *fp, int perc, ColorFormat clr_frmt)
 {
     JSON_Value *root_value = json_value_init_array();
     if (root_value == NULL) {
