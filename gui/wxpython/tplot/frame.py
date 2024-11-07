@@ -212,7 +212,7 @@ class TplotFrame(wx.Frame):
             self.coorval = gselect.CoordinatesSelect(
                 parent=self.controlPanelRaster, giface=self._giface
             )
-        except (AttributeError, TypeError):
+        except (AttributeError, TypeError, NotImplementedError):
             self.coorval = TextCtrl(
                 parent=self.controlPanelRaster,
                 id=wx.ID_ANY,
@@ -1460,7 +1460,7 @@ class DataCursor:
                 for a in event.artist.get_xdata():
                     try:
                         d = self.convert(a)
-                    except (ValueError, TypeError):
+                    except (IndexError, ValueError):
                         d = a
                     xData.append(d)
                 x = xData[np.argmin(abs(xData - x))]
