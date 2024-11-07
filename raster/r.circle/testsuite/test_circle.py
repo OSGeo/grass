@@ -9,6 +9,7 @@ class TestRCircle(TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up a temporary region for testing."""
+        cls.output = "test_circle"
         cls.use_temp_region()
         cls.runModule("g.region", n=30, s=0, e=30, w=0, res=10)
 
@@ -21,24 +22,23 @@ class TestRCircle(TestCase):
         gs.run_command(
             "g.remove",
             type="raster",
-            name="test_circle_binary,test_circle_distance,test_circle_mult",
+            name=self.output,
             flags="f",
         )
 
     def test_create_circle_with_b_flag(self):
         """Test creating a binary circle with r.circle using -b flag."""
-        output = "test_circle_binary"
 
         module = SimpleModule(
-            "r.circle", output=output, coordinates=(15, 15), max=10, flags="b"
+            "r.circle", output=self.output, coordinates=(15, 15), max=10, flags="b"
         )
 
         self.assertModule(module)
 
-        self.assertRasterExists(output)
+        self.assertRasterExists(self.output)
 
         self.assertRasterMinMax(
-            map=output,
+            map=self.output,
             refmin=1,
             refmax=1,
             msg="Binary circle should have category value of 1",
@@ -46,16 +46,17 @@ class TestRCircle(TestCase):
 
     def test_create_circle_without_b_flag(self):
         """Test creating a circle with r.circle without -b flag."""
-        output = "test_circle_distance"
 
-        module = SimpleModule("r.circle", output=output, coordinates=(15, 15), max=10)
+        module = SimpleModule(
+            "r.circle", output=self.output, coordinates=(15, 15), max=10
+        )
 
         self.assertModule(module)
 
-        self.assertRasterExists(output)
+        self.assertRasterExists(self.output)
 
         self.assertRasterMinMax(
-            map=output,
+            map=self.output,
             refmin=0,
             refmax=10,
             msg="Circle should have distance values from 0 to 10",
@@ -63,18 +64,17 @@ class TestRCircle(TestCase):
 
     def test_create_circle_with_multiplier(self):
         """Test creating a circle with r.circle with a multiplier."""
-        output = "test_circle_multi"
 
         module = SimpleModule(
-            "r.circle", output=output, coordinates=(15, 15), max=10, multiplier=2
+            "r.circle", output=self.output, coordinates=(15, 15), max=10, multiplier=2
         )
 
         self.assertModule(module)
 
-        self.assertRasterExists(output)
+        self.assertRasterExists(self.output)
 
         self.assertRasterMinMax(
-            map=output,
+            map=self.output,
             refmin=0,
             refmax=20,
             msg="Circle should have distance values from 0 to 20",
