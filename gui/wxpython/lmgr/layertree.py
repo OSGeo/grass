@@ -688,10 +688,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             )
 
             digitToolbar = self.mapdisplay.GetToolbar("vdigit")
-            if digitToolbar:
-                vdigitLayer = digitToolbar.GetLayer()
-            else:
-                vdigitLayer = None
+            vdigitLayer = digitToolbar.GetLayer() if digitToolbar else None
             layer = self.GetLayerInfo(self.layer_selected, key="maplayer")
             if vdigitLayer is not layer:
                 item = wx.MenuItem(
@@ -756,7 +753,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     # self.popupMenu.Enable(self.popupID['bgmap'],  False)
                     self.popupMenu.Enable(self.popupID["topo"], False)
                 # else:
-                ###    self.popupMenu.Enable(self.popupID['bgmap'], True)
+                #    self.popupMenu.Enable(self.popupID['bgmap'], True)
 
             item = wx.MenuItem(
                 self.popupMenu, id=self.popupID["meta"], text=_("Metadata")
@@ -1569,10 +1566,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
                 name = None
 
-            if ctrl:
-                ctrlId = ctrl.GetId()
-            else:
-                ctrlId = None
+            ctrlId = ctrl.GetId() if ctrl else None
 
             # add a data object to hold the layer's command (does not
             # apply to generic command layers)
@@ -1606,11 +1600,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     prevMapLayer = self.GetLayerInfo(prevItem, key="maplayer")
 
                 prevItem = self.GetNextItem(prevItem)
-
-                if prevMapLayer:
-                    pos = self.Map.GetLayerIndex(prevMapLayer)
-                else:
-                    pos = -1
+                pos = self.Map.GetLayerIndex(prevMapLayer) if prevMapLayer else -1
 
             maplayer = self.Map.AddLayer(
                 pos=pos,
@@ -1742,7 +1732,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         try:
             item.properties.Close(True)
-        except:
+        except AttributeError:
             pass
 
         if item != self.root:
@@ -1758,7 +1748,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         try:
             if self.GetLayerInfo(item, key="type") != "group":
                 self.Map.DeleteLayer(self.GetLayerInfo(item, key="maplayer"))
-        except:
+        except (AttributeError, TypeError):
             pass
 
         # redraw map if auto-rendering is enabled
@@ -1997,10 +1987,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def OnDrop(self, dropTarget, dragItem):
         # save everything associated with item to drag
-        try:
-            old = dragItem  # make sure this member exists
-        except:
-            return
+        old = dragItem  # make sure this member exists
 
         Debug.msg(4, "LayerTree.OnDrop(): layer=%s" % (self.GetItemText(dragItem)))
 
@@ -2046,7 +2033,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 newctrl.SetValue(
                     self.GetLayerInfo(dragItem, key="maplayer").GetCmd(string=True)
                 )
-            except:
+            except Exception:
                 pass
             newctrl.Bind(wx.EVT_TEXT_ENTER, self.OnCmdChanged)
             data = self.GetPyData(dragItem)
@@ -2066,12 +2053,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # decide where to put recreated item
         if dropTarget is not None and dropTarget != self.GetRootItem():
-            if parent:
-                # new item is a group
-                afteritem = parent
-            else:
-                # new item is a single layer
-                afteritem = dropTarget
+            # new item is a group (parent is truthy) or else new item is a single layer
+            afteritem = parent or dropTarget
 
             # dragItem dropped on group
             if self.GetLayerInfo(afteritem, key="type") == "group":
@@ -2336,8 +2319,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         item = self.GetFirstChild(self.root)[0]
         if key == "name":
             return self.__FindSubItemByName(item, value)
-        else:
-            return self.__FindSubItemByData(item, key, value)
+        return self.__FindSubItemByData(item, key, value)
 
     def FindItemByIndex(self, index):
         """Find item by index (starting at 0)
@@ -2403,7 +2385,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         while item and item.IsOk():
             try:
                 itemLayer = self.GetLayerInfo(item, key="maplayer")
-            except KeyError:
+            except (KeyError, TypeError):
                 return None
 
             if itemLayer and value == itemLayer.GetName():

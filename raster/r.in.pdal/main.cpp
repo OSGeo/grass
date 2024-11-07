@@ -69,8 +69,8 @@ int main(int argc, char *argv[])
     SEGMENT base_segment;
     struct PointBinning point_binning;
     void *raster_row;
-    struct Cell_head region;
-    struct Cell_head input_region;
+    struct Cell_head region = {};
+    struct Cell_head input_region = {};
     int rows, cols; /* scan box size */
 
     char buff[BUFFSIZE];
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     bin_index_nodes.max_nodes = 0;
     bin_index_nodes.nodes = NULL;
 
-    struct Cell_head loc_wind;
+    struct Cell_head loc_wind = {};
 
     G_gisinit(argv[0]);
 

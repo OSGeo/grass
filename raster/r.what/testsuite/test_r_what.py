@@ -510,7 +510,7 @@ class TestRasterWhat(TestCase):
         )
         self.assertFileExists(filename="result.csv", msg="CSV file was not created")
         if os.path.isfile("result.csv"):
-            file = open("result.csv", "r")
+            file = open("result.csv")
             fileData = file.read()
             self.assertLooksLike(
                 actual=fileData,

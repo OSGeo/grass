@@ -411,8 +411,9 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 message=_(
                     "Unable to switch to 3D display mode.\nThe Nviz python extension "
                     "was not found or loaded properly.\n"
-                    "Switching back to 2D display mode.\n\nDetails: %s" % errorMsg
-                ),
+                    "Switching back to 2D display mode.\n\nDetails: %s"
+                )
+                % errorMsg,
             )
             return
 
@@ -782,10 +783,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 # --overwrite
                 continue
             if p == "format":  # must be there
-                if self.IsPaneShown("3d"):
-                    extType = "ppm"
-                else:
-                    extType = val
+                extType = "ppm" if self.IsPaneShown("3d") else val
             if p == "output":  # must be there
                 name = val
             elif p == "size":
@@ -797,10 +795,8 @@ class MapPanel(SingleMapPanel, MainPageBase):
         elif ext[1:] != extType:
             extType = ext[1:]
 
-        if self.IsPaneShown("3d"):
-            bitmapType = "ppm"
-        else:
-            bitmapType = wx.BITMAP_TYPE_PNG  # default type
+        # default type is PNG
+        bitmapType = "ppm" if self.IsPaneShown("3d") else wx.BITMAP_TYPE_PNG
         for each in ltype:
             if each["ext"] == extType:
                 bitmapType = each["type"]
@@ -830,7 +826,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 overwrite=overwrite,
                 getErrorMsg=True,
             )
-            if not returncode == 0:
+            if returncode != 0:
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 return
             # set region for composite
@@ -838,7 +834,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             returncode, messages = RunCommand(
                 "g.region", raster=tmpName + ".red", quiet=True, getErrorMsg=True
             )
-            if not returncode == 0:
+            if returncode != 0:
                 gs.del_temp_region()
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 return
@@ -861,7 +857,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 quiet=True,
                 name=[tmpName + ".red", tmpName + ".green", tmpName + ".blue"],
             )
-            if not returncode == 0:
+            if returncode != 0:
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 gs.try_remove(pngFile)
                 return
@@ -1229,8 +1225,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 render=True,
                 **args,
             )
-        else:
-            return cmd
+        return cmd
 
     def OnMeasureDistance(self, event):
         self._onMeasure(MeasureDistanceController)
@@ -1569,7 +1564,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
-        return self.toolbars["map"] if "map" in self.toolbars else None
+        return self.toolbars.get("map", None)
 
     def GetDialog(self, name):
         """Get selected dialog if exist"""

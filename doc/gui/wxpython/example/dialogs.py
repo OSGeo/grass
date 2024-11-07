@@ -20,7 +20,7 @@ import wx
 # So we need to import it before any of the GUI code.
 # NOTE: in this particular case, we don't really need the grass library;
 # NOTE: we import it just for the side effects of gettext.install()
-import grass
+import grass  # noqa: F401
 
 from core import globalvar
 from gui_core.dialogs import SimpleDialog
