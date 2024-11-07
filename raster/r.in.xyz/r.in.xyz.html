@@ -111,10 +111,10 @@ g.region -p
 # points_per_cell = n_points / (rows * cols)
 
 g.region -e
-# UTM location:
+# UTM project:
 # points_per_sq_m = n_points / (ns_extent * ew_extent)
 
-# Lat/Lon location:
+# Lat/Lon project:
 # points_per_sq_m = n_points / (ns_extent * ew_extent*cos(lat) * (1852*60)^2)
 </pre></div>
 
@@ -245,7 +245,7 @@ r.univar myelev
 </pre></div>
 
 <h3>Import of LiDAR data and DEM creation</h3>
-Import the <a href="http://www.grassbook.org/ncexternal/index.html">Jockey's
+Import the <a href="https://grassbook.org/ncexternal/index.html">Jockey's
 Ridge, NC, LIDAR dataset</a> (compressed file "lidaratm2.txt.gz"), and process it
 into a clean DEM:
 

@@ -1,0 +1,113 @@
+---
+name: Coverity Scan
+
+on:
+  workflow_dispatch: # run whenever a contributor calls it
+  schedule:
+    - cron: '48 5 * * *' # Run at 05:48
+    # Coverity will let GRASS do a scan a maximum of twice per day, so this
+    # schedule will help GRASS fit within that limit with some additional space
+    # for manual runs
+permissions:
+  contents: read
+  # action based off of
+  # https://github.com/OSGeo/PROJ/blob/905c9a6c2da3dc6b7aa2c89d3ab78d9d1a9cd070/.github/workflows/coverity-scan.yml
+jobs:
+  coverity:
+    runs-on: ubuntu-22.04
+    if: github.repository == 'OSGeo/grass'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Get dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y wget git gawk findutils
+          xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+              sudo apt-get install -y --no-install-recommends --no-install-suggests
+
+      - name: Create installation directory
+        run: |
+          mkdir $HOME/install
+
+      - name: Download Coverity Build Tool
+        run: |
+          wget -q https://scan.coverity.com/download/cxx/linux64 \
+            --post-data "token=${TOKEN}&project=grass" -O cov-analysis-linux64.tar.gz
+          mkdir cov-analysis-linux64
+          tar xzf cov-analysis-linux64.tar.gz --strip 1 -C cov-analysis-linux64
+        env:
+          TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
+
+      - name: Set number of cores for compilation
+        run: |
+          echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
+
+      - name: Set LD_LIBRARY_PATH for compilation
+        run: |
+          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+
+      - name: Print build environment variables
+        run: |
+          printenv | sort
+          gcc --version
+          ldd --version
+
+      - name: Configure
+        run: |
+          echo "CFLAGS=${{ env.CFLAGS }}" >> $GITHUB_ENV
+          echo "CXXFLAGS=${{ env.CXXFLAGS }}" >> $GITHUB_ENV
+          ./configure \
+              --enable-largefile \
+              --prefix="$HOME/install/" \
+              --with-blas \
+              --with-bzlib \
+              --with-cxx \
+              --with-fftw \
+              --with-freetype \
+              --with-freetype-includes="/usr/include/freetype2/" \
+              --with-geos \
+              --with-lapack \
+              --with-netcdf \
+              --with-pdal \
+              --with-proj-share=/usr/share/proj \
+              --with-readline \
+              --with-sqlite \
+              --with-tiff \
+              --with-zstd \
+              --without-openmp \
+              --without-pthread
+
+        env:
+          CFLAGS: -fPIC -g
+          CXXFLAGS: -fPIC -g
+
+      - name: Build with cov-build
+        run: |
+          pwd
+          export PATH="$(pwd)/cov-analysis-linux64/bin:${PATH}"
+          cov-build --dir cov-int make
+
+      - name: Put results into Tarball
+        run: |
+          tar czvf grass.tgz cov-int
+
+      - name: Submit to Coverity Scan
+        run: |
+          version=$(head -n 3 include/VERSION | xargs | sed 's/ /./g')
+          commit=$(git rev-parse --short HEAD)
+          branch=$(git rev-parse --abbrev-ref HEAD)
+          desc="Version:${version}, commit:${commit}, branch:${branch}."
+          echo "Submitting ${desc}"
+          desc_url_enc=$(echo "$desc" | sed 's/:/%3A/g' | sed 's/,/%2C/g' | sed 's/ /%20/g')
+          tar czvf grass.tgz cov-int
+          curl \
+            --form "token=${TOKEN}" \
+            --form "email=${EMAIL}" \
+            --form "file=@grass.tgz" \
+            --form "version=${version}-${commit}" \
+            --form "description=${desc_url_enc}" \
+            'https://scan.coverity.com/builds?project=grass'
+        env:
+          TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
+          EMAIL: ${{ secrets.COVERITY_USER }}

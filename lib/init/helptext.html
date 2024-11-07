@@ -2,7 +2,7 @@
 
 <p>
 When <a href="grass.html">launching</a> GRASS GIS for the first time, you will open a
-<b>default Location</b> "world_latlog_wgs84" where you can find a map layer
+<b>default project</b> "world_latlog_wgs84" where you can find a map layer
 called "country_boundaries" showing a world map in the WGS84 coordinate system.
 </p>
 
@@ -14,24 +14,24 @@ called "country_boundaries" showing a world map in the WGS84 coordinate system.
 <p>
 The main component of the Data tab is the <em>Data Catalog</em>
 which shows the GRASS GIS hierarchical structure consisting of
-Database <img src="grassdb.png" alt="[GRASS Database]">,
-Location <img src="location.png" alt="[Location]"> and
-Mapset <img src="mapset.png" alt="[Mapset]">.
+database <img src="grassdb.png" alt="[GRASS Database]">,
+project <img src="location.png" alt="[project]"> and
+mapset <img src="mapset.png" alt="[mapset]">.
 </p>
 <dl>
-  <dt><img src="grassdb.png" alt="[GRASS Database]">&nbsp;<b>GRASS Database</b> (directory with projects)</dt>
+  <dt><img src="grassdb.png" alt="[GRASS Database]">&nbsp;<b>GRASS database</b> (directory with projects)</dt>
   <dd>Running GRASS GIS for the first time, a folder named "grassdata" is automatically
     created. Depending on your operating system, you can find it in your $HOME
     directory (*nix) or My Documents (MS Windows).</dd>
-  <dt><img src="location.png" alt="[Location]">&nbsp;<b>Location</b> (a project)</dt>
-  <dd>A Location is defined by its coordinate reference system (CRS).
-    In the case of the default Location, it is a geographic coordinate reference system
+  <dt><img src="location.png" alt="[project]">&nbsp;<b>project</b> (previously called location)</dt>
+  <dd>A project is defined by its coordinate reference system (CRS).
+    In the case of the default project, it is a geographic coordinate reference system
     WGS84 (EPSG:4326). If you have data in another CRS than WGS84, you should create
-    a new Location corresponding to your system.</dd>
-  <dt><img src="mapset.png" alt="[Mapset]">&nbsp;<b>Mapset</b> (a subproject)</dt>
-  <dd>Each Location can have many Mapsets for managing different aspects of
-    a project or project's subregions. When creating a new Location, GRASS GIS
-    automatically creates a special Mapset called PERMANENT where the core
+    a new project corresponding to your system.</dd>
+  <dt><img src="mapset.png" alt="[mapset]">&nbsp;<b>mapset</b> (a subproject)</dt>
+  <dd>Each project can have many mapsets for managing different aspects of
+    a project or project's subregions. When creating a new project, GRASS GIS
+    automatically creates a special mapset called PERMANENT where the core
     data for the project can be stored.</dd>
 </dl>
 
@@ -40,30 +40,30 @@ For more info about data hierarchy, see
 <a href="grass_database.html">GRASS GIS Database</a> page.
 </p>
 
-<h2>GRASS started in the default Location, now what?</h2>
+<h2>GRASS started in the default project, now what?</h2>
 
 <p>
 First, if you would like to get to know GRASS better before importing your own data,
 please download provided samples such as the &quot;North Carolina&quot; dataset.
 You can simply reach them through
-&quot;Download sample location to current database&quot; management icon
-<img src="location-download.png" alt="[Download Location]">.
+&quot;Download sample project to current database&quot; management icon
+<img src="location-download.png" alt="[Download project]">.
 </p>
 
 <p>
-To work with your own data, you typically want to first create a new Location
+To work with your own data, you typically want to first create a new project
 with a <a href="https://en.wikipedia.org/wiki/Spatial_reference_system">
 coordinate reference system (CRS)</a> suitable for your study area or one that
-matches your data's CRS. The Location Wizard <img src="location-add.png" alt="[Add Location]">
+matches your data's CRS. The Project Wizard <img src="location-add.png" alt="[Add project]">
 will help you with that by guiding you through a series of dialogs to browse
 and select predefined projections (also via EPSG code) or to define individual
 projections.
 
-<h3>Creating a New Location with the Location Wizard</h3>
+<h3>Creating a New project with the Project Wizard</h3>
 <p>
 If you know the CRS of your data or study area,
-you can fill <a href="https://epsg.io">EPSG code</a>
-or description and Location Wizard finds appropriate CRS from a predefined list
+you can fill <a href="https://spatialreference.org/">EPSG code</a>
+or description and Project Wizard finds appropriate CRS from a predefined list
 of projections.
 
 If you do not know CRS of you data, you can read it from your georeferenced
@@ -72,16 +72,16 @@ included).
 </p>
 
 <h3>Importing data</h3>
-After creating a new Location, you are ready to import your data. You can use
+After creating a new project, you are ready to import your data. You can use
 simple raster or vector data import <img src="raster-import.png" alt="[Raster import]">,
 <img src="vector-import.png" alt="[Vector import]"> or a variety of more specialized tools.
-If the data's CRS does not match your Location's CRS, data will be automatically reprojected.
+If the data's CRS does not match your project's CRS, data will be automatically reprojected.
 
 After import your raster or vector data are added as a layer to Map Display.
 To change layer properties, go to Display tab.
 To analyze your data, search for a tool in the Modules tab.
 
-<h2>Text-based startup and Location creation</h2>
+<h2>Text-based startup and project creation</h2>
 
 GRASS GIS can be run entirely without using the graphical user interface.
 See <a href="grass.html">examples</a> of running GRASS GIS from a command line.
@@ -97,4 +97,6 @@ See <a href="grass.html">examples</a> of running GRASS GIS from a command line.
 </em>
 
 <p>
- <a href="https://epsg.io/">List of EPSG codes</a> (Database of worldwide coordinate systems)
+ <a href="https://spatialreference.org/">List of EPSG codes</a> (Database of worldwide coordinate systems),
+ <a href="https://crs-explorer.proj.org/">CRS Explorer - PROJ codes</a>, and
+ <a href="https://epsg.org/">EPSG Geodetic Parameter Dataset</a>

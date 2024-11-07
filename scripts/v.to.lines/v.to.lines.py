@@ -40,7 +40,7 @@
 # % guisection: Area
 # %end
 
-import grass.script as grass
+import grass.script as gs
 from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
 import os
@@ -55,17 +55,17 @@ def main():
     min_cat = None
     max_cat = None
     point = None
-    overwrite = grass.overwrite()
+    overwrite = gs.overwrite()
 
     quiet = True
 
-    if grass.verbosity() > 2:
+    if gs.verbosity() > 2:
         quiet = False
 
-    in_info = grass.vector_info(input)
+    in_info = gs.vector_info(input)
     # check for wild mixture of vector types
     if in_info["points"] > 0 and in_info["boundaries"] > 0:
-        grass.fatal(
+        gs.fatal(
             _(
                 "The input vector map contains both polygons and points,"
                 " cannot handle mixed types"
@@ -79,28 +79,28 @@ def main():
         layer = 1  # hardcoded for now
         out_temp = "{inp}_point_tmp_{pid}".format(inp=input_name, pid=pid)
         if method == "delaunay":
-            grass.message(
+            gs.message(
                 _("Processing point data (%d points found)...") % in_info["points"]
             )
-            grass.run_command(
+            gs.run_command(
                 "v.delaunay", input=input, layer=layer, output=out_temp, quiet=quiet
             )
 
-        grass.run_command("v.db.addtable", map=out_temp, quiet=True)
+        gs.run_command("v.db.addtable", map=out_temp, quiet=True)
         input = out_temp
-        in_info = grass.vector_info(input)
+        in_info = gs.vector_info(input)
 
     # process areas
     if in_info["areas"] == 0 and in_info["boundaries"] == 0:
-        grass.fatal(_("The input vector map does not contain polygons"))
+        gs.fatal(_("The input vector map does not contain polygons"))
 
     out_type = "{inp}_type_{pid}".format(inp=input_name, pid=pid)
     input_tmp = "{inp}_tmp_{pid}".format(inp=input_name, pid=pid)
     remove_names = "%s,%s" % (out_type, input_tmp)
-    grass.message(_("Processing area data (%d areas found)...") % in_info["areas"])
+    gs.message(_("Processing area data (%d areas found)...") % in_info["areas"])
 
     try:
-        grass.run_command(
+        gs.run_command(
             "v.category",
             layer="2",
             type="boundary",
@@ -110,19 +110,19 @@ def main():
             quiet=quiet,
         )
     except CalledModuleError:
-        grass.run_command(
+        gs.run_command(
             "g.remove", flags="f", type="vector", name=input_tmp, quiet=quiet
         )
-        grass.fatal(_("Error creating layer 2"))
+        gs.fatal(_("Error creating layer 2"))
     try:
-        grass.run_command("v.db.addtable", map=input_tmp, layer="2", quiet=quiet)
+        gs.run_command("v.db.addtable", map=input_tmp, layer="2", quiet=quiet)
     except CalledModuleError:
-        grass.run_command(
+        gs.run_command(
             "g.remove", flags="f", type="vector", name=input_tmp, quiet=quiet
         )
-        grass.fatal(_("Error creating new table for layer 2"))
+        gs.fatal(_("Error creating new table for layer 2"))
     try:
-        grass.run_command(
+        gs.run_command(
             "v.to.db",
             map=input_tmp,
             option="sides",
@@ -131,12 +131,12 @@ def main():
             quiet=quiet,
         )
     except CalledModuleError:
-        grass.run_command(
+        gs.run_command(
             "g.remove", flags="f", type="vector", name=input_tmp, quiet=quiet
         )
-        grass.fatal(_("Error populating new table for layer 2"))
+        gs.fatal(_("Error populating new table for layer 2"))
     try:
-        grass.run_command(
+        gs.run_command(
             "v.type",
             input=input_tmp,
             output=out_type,
@@ -146,11 +146,11 @@ def main():
             layer="2",
         )
     except CalledModuleError:
-        grass.run_command(
+        gs.run_command(
             "g.remove", flags="f", type="vector", name=remove_names, quiet=quiet
         )
-        grass.fatal(_("Error converting polygon to line"))
-    report = grass.read_command(
+        gs.fatal(_("Error converting polygon to line"))
+    report = gs.read_command(
         "v.category", flags="g", input=out_type, option="report", quiet=quiet
     )
     report = decode(report).split("\n")
@@ -161,7 +161,7 @@ def main():
             break
     if min_cat and max_cat:
         try:
-            grass.run_command(
+            gs.run_command(
                 "v.edit",
                 map=out_type,
                 tool="delete",
@@ -171,27 +171,27 @@ def main():
                 cats="{mi}-{ma}".format(mi=min_cat, ma=max_cat),
             )
         except CalledModuleError:
-            grass.run_command(
+            gs.run_command(
                 "g.remove", flags="f", type="vector", name=remove_names, quiet=quiet
             )
-            grass.fatal(_("Error removing centroids"))
+            gs.fatal(_("Error removing centroids"))
 
     try:
         try:
             # TODO: fix magic numbers for layer here and there
-            grass.run_command(
+            gs.run_command(
                 "v.db.droptable", map=out_type, layer=1, flags="f", quiet=True
             )
         except CalledModuleError:
-            grass.run_command(
+            gs.run_command(
                 "g.remove", flags="f", type="vector", name=remove_names, quiet=quiet
             )
-            grass.fatal(_("Error removing table from layer 1"))
+            gs.fatal(_("Error removing table from layer 1"))
     # TODO: when this except is happaning, it seems that never, so it seems wrong
     except Exception:
-        grass.warning(_("No table for layer %d" % 1))
+        gs.warning(_("No table for layer %d") % 1)
     try:
-        grass.run_command(
+        gs.run_command(
             "v.category",
             input=out_type,
             option="transfer",
@@ -201,19 +201,15 @@ def main():
             overwrite=overwrite,
         )
     except CalledModuleError:
-        grass.run_command(
+        gs.run_command(
             "g.remove", flags="f", type="vector", name=remove_names, quiet=quiet
         )
-        grass.fatal(_("Error adding categories"))
-    grass.run_command(
-        "g.remove", flags="f", type="vector", name=remove_names, quiet=quiet
-    )
+        gs.fatal(_("Error adding categories"))
+    gs.run_command("g.remove", flags="f", type="vector", name=remove_names, quiet=quiet)
     if point:
-        grass.run_command(
-            "g.remove", flags="f", type="vector", name=out_temp, quiet=quiet
-        )
+        gs.run_command("g.remove", flags="f", type="vector", name=out_temp, quiet=quiet)
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

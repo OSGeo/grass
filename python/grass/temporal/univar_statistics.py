@@ -7,7 +7,9 @@ Usage:
 
     import grass.temporal as tgis
 
-    tgis.print_gridded_dataset_univar_statistics(type, input, output, where, extended, no_header, fs, rast_region)
+    tgis.print_gridded_dataset_univar_statistics(
+        type, input, output, where, extended, no_header, fs, rast_region
+    )
 
 ..
 
@@ -18,6 +20,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 from multiprocessing import Pool
 from subprocess import PIPE
 
@@ -32,10 +35,12 @@ from .open_stds import open_old_stds
 
 
 def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=False):
-    """Compute univariate statistics for a map of a space time raster or raster3d dataset
+    """Compute univariate statistics for a map of a space time raster or raster3d
+    dataset
 
     :param registered_map_info: dict or db row with tgis info for a registered map
-    :param stats_module: Pre-configured PyGRASS Module to compute univariate statistics with
+    :param stats_module: Pre-configured PyGRASS Module to compute univariate statistics
+                        with
     :param fs: Field separator
     :param rast_region: If set True ignore the current region settings
            and use the raster map regions for univar statistical calculation.
@@ -60,12 +65,9 @@ def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=Fals
 
     if not univar_stats:
         gs.warning(
-            _(
-                "Unable to get statistics for {voxel}raster map "
-                "<{rmap}>".format(
-                    rmap=id, voxel="" if stats_module.name == "r.univar" else "3d "
-                )
-            )
+            _("Unable to get statistics for raster map <%s>") % id
+            if stats_module.name == "r.univar"
+            else _("Unable to get statistics for 3d raster map <%s>") % id
         )
         return None
     eol = ""
@@ -100,7 +102,8 @@ def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=Fals
             if stats_module.inputs.percentile:
                 for perc in stats_module.inputs.percentile:
                     perc_value = stats[
-                        f"percentile_{str(perc).rstrip('0').rstrip('.').replace('.','_')}"
+                        "percentile_"
+                        f"{str(perc).rstrip('0').rstrip('.').replace('.', '_')}"
                     ]
                     string += f"{fs}{perc_value}"
         string += eol
@@ -216,7 +219,8 @@ def print_gridded_dataset_univar_statistics(
             if percentile:
                 cols.extend(
                     [
-                        f"percentile_{str(perc).rstrip('0').rstrip('.').replace('.','_')}"
+                        "percentile_"
+                        f"{str(perc).rstrip('0').rstrip('.').replace('.', '_')}"
                         for perc in percentile
                     ]
                 )
@@ -300,10 +304,7 @@ def print_vector_dataset_univar_statistics(
 
     mapset = get_current_mapset()
 
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
+    id = input if input.find("@") >= 0 else input + "@" + mapset
 
     sp = dataset_factory("stvds", id)
 
@@ -344,7 +345,7 @@ def print_vector_dataset_univar_statistics(
             + fs
         )
         string += "min" + fs + "max" + fs + "range"
-        if type in ("point", "centroid"):
+        if type in {"point", "centroid"}:
             string += (
                 fs
                 + "mean"
@@ -433,7 +434,7 @@ def print_vector_dataset_univar_statistics(
         else:
             string += fs + fs + fs
 
-        if type == "point" or type == "centroid":
+        if type in {"point", "centroid"}:
             if "mean" in stats:
                 string += (
                     fs
