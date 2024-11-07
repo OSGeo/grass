@@ -18,13 +18,13 @@ This program is free software under the GNU General Public License
 """
 
 import socket
-import grass.script as gs
-
 from time import sleep
+
+import grass.script as gs
 
 try:
     from osgeo import gdal
-except:
+except ImportError:
     gs.fatal(
         _(
             "Unable to load GDAL Python bindings (requires package 'python-gdal' "
@@ -32,21 +32,16 @@ except:
         )
     )
 
-import numpy as np
-
-np.arrayrange = np.arange
-
-from math import pi, floor
-
-from urllib.error import HTTPError
 from http.client import HTTPException
-
+from math import floor, pi
+from urllib.error import HTTPError
 from xml.etree.ElementTree import ParseError
 
-from wms_base import GetEpsg, GetSRSParamVal, WMSBase
+import numpy as np
 
-from wms_cap_parsers import WMTSCapabilitiesTree, OnEarthCapabilitiesTree
 from srs import Srs
+from wms_base import GetEpsg, GetSRSParamVal, WMSBase
+from wms_cap_parsers import OnEarthCapabilitiesTree, WMTSCapabilitiesTree
 
 
 class WMSDrv(WMSBase):
@@ -155,8 +150,7 @@ class WMSDrv(WMSBase):
 
                     sleep(sleep_time)
                     continue
-                else:
-                    gs.fatal(_("Unable to write data into tempfile.\n%s") % str(e))
+                gs.fatal(_("Unable to write data into tempfile.\n%s") % str(e))
             finally:
                 temp_tile_opened.close()
 
@@ -292,9 +286,9 @@ class WMSDrv(WMSBase):
 
         # Build color table
         lookup = [
-            np.arrayrange(256),
-            np.arrayrange(256),
-            np.arrayrange(256),
+            np.arange(256),
+            np.arange(256),
+            np.arange(256),
             np.ones(256) * 255,
         ]
 

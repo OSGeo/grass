@@ -90,6 +90,7 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows,
 
     if (stat < 0) {
         Rast_unopen(rfd);
+        fclose(ifd);
         return 1;
     }
 
@@ -98,6 +99,7 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows,
     Rast_short_history(raster_map, "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(raster_map, &history);
+    fclose(ifd);
 
     return 0;
 }

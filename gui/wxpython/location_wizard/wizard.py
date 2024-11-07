@@ -900,8 +900,7 @@ class ProjParamsPage(TitledPage):
                 if param["type"] == "bool":
                     if param["value"] is False:
                         continue
-                    else:
-                        self.p4projparams += " +" + param["proj4"]
+                    self.p4projparams += " +" + param["proj4"]
                 elif param["value"] is None:
                     wx.MessageBox(
                         parent=self,
@@ -2760,10 +2759,7 @@ class LocationWizard(wx.Object):
 
         # set ellipsoid parameters
         for item in ellipseparams:
-            if item[:4] == "f=1/":
-                item = " +rf=" + item[4:]
-            else:
-                item = " +" + item
+            item = " +rf=" + item[4:] if item[:4] == "f=1/" else " +" + item
             proj4string = "%s %s" % (proj4string, item)
 
         # set datum transform parameters if relevant
