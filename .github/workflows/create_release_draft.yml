@@ -63,7 +63,8 @@ jobs:
         run: |
           cd ..
           tar -cvf ${{ env.OUT_DIR }}/${{ env.GRASS }}.tar \
-            --exclude=".gi*" --exclude=".tr*" grass
+            --exclude=".gi*" --exclude=".tr*" \
+            --transform s/grass/${{ env.GRASS }}/ grass
           cd ${{ env.OUT_DIR }}
           gzip -9k ${{ env.GRASS }}.tar
           md5sum ${{ env.GRASS }}.tar.gz > ${{ env.GRASS }}.tar.gz.md5
