@@ -103,24 +103,26 @@ class TestDisplay(TestCase):
         # Create InteractiveMap with ipyleaflet backend
         interactive_map = gj.InteractiveMap(map_backend="ipyleaflet")
         interactive_map.add_raster("elevation")
-        interactive_map.add_vector("roadsmajor")
-        interactive_map.add_query_button()
-        self.assertIsNotNone(interactive_map.map)
-        self.assertTrue(interactive_map.query_mode is False)
-        # Toggle query button to activate
-        interactive_map.query_mode = True
-        self.assertTrue(interactive_map.query_mode)
-        # Toggle query button to deactivate
-        interactive_map.query_mode = False
-        self.assertFalse(interactive_map.query_mode)
+        button = interactive_map.setup_query_interface()
+        self.assertIsNotNone(interactive_map._controllers[button].query_raster((0, 0)))
+
+    @unittest.skipIf(not can_import_ipyleaflet(), "Cannot import ipyleaflet")
+    def test_draw(self):
+        """Test the draw_computational_region method."""
+        # Create InteractiveMap
+        interactive_map = gj.InteractiveMap(map_backend="ipyleaflet")
+        button = interactive_map.setup_drawing_interface()
+        interactive_map._controllers[button].activate()
+        self.assertIsNotNone(interactive_map._controllers[button].save_button_control)
 
     @unittest.skipIf(not can_import_ipyleaflet(), "Cannot import ipyleaflet")
     def test_draw_computational_region(self):
         """Test the draw_computational_region method."""
         # Create InteractiveMap
-        interactive_map = gj.InteractiveMap()
-        interactive_map.draw_computational_region()
-        self.assertTrue(callable(interactive_map.draw_computational_region))
+        interactive_map = gj.InteractiveMap(map_backend="ipyleaflet")
+        button = interactive_map.setup_computational_region_interface()
+        interactive_map._controllers[button].activate()
+        self.assertIsNotNone(interactive_map._controllers[button].save_button_control)
 
 
 if __name__ == "__main__":

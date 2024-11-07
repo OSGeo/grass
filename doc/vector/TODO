@@ -103,7 +103,7 @@ the necessity to calculate always the box on the fly (when it is not
 stored in the structure) which can be time consuming for example for
 areas or long lines.
 
-* See also http://trac.osgeo.org/grass/ticket/542
+* See also https://trac.osgeo.org/grass/ticket/542
 * Update: implemented in r46898 (2011/07) by Markus Metz
 
 Switching to update mode
@@ -143,7 +143,7 @@ display a shapefile or PostGIS layers directly:
   d.vect map=PG:dbname=test@OGR layer=roads   # display table roads from database test
 
 * Update: in progress,
-  see http://trac.osgeo.org/grass/wiki/Grass7/VectorLib/OGRInterface#DirectOGRreadaccess
+  see https://trac.osgeo.org/grass/wiki/Grass7/VectorLib/OGRInterface#DirectOGRreadaccess
 
 Simple feature API and sequential reading
 -----------------------------------------
@@ -249,10 +249,10 @@ probably better to use copy of 'coor' file and attributes written to
 SQLite database.
 
 Update: see
-	http://trac.osgeo.org/grass/browser/grass-addons/grass7/vector/v.pack
+	https://trac.osgeo.org/grass/browser/grass-addons/grass7/vector/v.pack
 	and
-	http://trac.osgeo.org/grass/browser/grass-addons/grass7/vector/v.unpack
+	https://trac.osgeo.org/grass/browser/grass-addons/grass7/vector/v.unpack
 	by Luca Delucchi
 
 1/2009: Other suggestions moved to
- http://trac.osgeo.org/grass/
+ https://trac.osgeo.org/grass/

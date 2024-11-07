@@ -352,16 +352,16 @@ class TemporalOperatorParser:
         # Check for correct type.
         if not self.optype == "relation":
             raise SyntaxError('Wrong optype "%s" must be "relation"' % self.optype)
-        else:
-            # Set three operator components.
-            if isinstance(t[2], list):
-                self.relations = t[2]
-            else:
-                self.relations = [t[2]]
-            self.temporal = None
-            self.function = None
 
-            t[0] = t[2]
+        # Set three operator components.
+        if isinstance(t[2], list):
+            self.relations = t[2]
+        else:
+            self.relations = [t[2]]
+        self.temporal = None
+        self.function = None
+
+        t[0] = t[2]
 
     def p_relation_bool_operator(self, t):
         # {||, during}
@@ -374,17 +374,17 @@ class TemporalOperatorParser:
         """
         if not self.optype == "boolean":
             raise SyntaxError('Wrong optype "%s" must be "boolean"' % self.optype)
-        else:
-            # Set three operator components.
-            if isinstance(t[5], list):
-                self.relations = t[5]
-            else:
-                self.relations = [t[5]]
-            self.temporal = "l"
-            self.function = t[2] + t[3]
-            self.aggregate = t[2]
 
-            t[0] = t[2]
+        # Set three operator components.
+        if isinstance(t[5], list):
+            self.relations = t[5]
+        else:
+            self.relations = [t[5]]
+        self.temporal = "l"
+        self.function = t[2] + t[3]
+        self.aggregate = t[2]
+
+        t[0] = t[2]
 
     def p_relation_bool_combi_operator(self, t):
         # {||, during, &}
@@ -401,17 +401,17 @@ class TemporalOperatorParser:
         """
         if not self.optype == "boolean":
             raise SyntaxError('Wrong optype "%s" must be "boolean"' % self.optype)
-        else:
-            # Set three operator components.
-            if isinstance(t[5], list):
-                self.relations = t[5]
-            else:
-                self.relations = [t[5]]
-            self.temporal = "l"
-            self.function = t[2] + t[3]
-            self.aggregate = t[7]
 
-            t[0] = t[2]
+        # Set three operator components.
+        if isinstance(t[5], list):
+            self.relations = t[5]
+        else:
+            self.relations = [t[5]]
+        self.temporal = "l"
+        self.function = t[2] + t[3]
+        self.aggregate = t[7]
+
+        t[0] = t[2]
 
     def p_relation_bool_combi_operator2(self, t):
         # {||, during, left}
@@ -424,17 +424,17 @@ class TemporalOperatorParser:
         """
         if not self.optype == "boolean":
             raise SyntaxError('Wrong optype "%s" must be "boolean"' % self.optype)
-        else:
-            # Set three operator components.
-            if isinstance(t[5], list):
-                self.relations = t[5]
-            else:
-                self.relations = [t[5]]
-            self.temporal = t[7]
-            self.function = t[2] + t[3]
-            self.aggregate = t[2]
 
-            t[0] = t[2]
+        # Set three operator components.
+        if isinstance(t[5], list):
+            self.relations = t[5]
+        else:
+            self.relations = [t[5]]
+        self.temporal = t[7]
+        self.function = t[2] + t[3]
+        self.aggregate = t[2]
+
+        t[0] = t[2]
 
     def p_relation_bool_combi_operator3(self, t):
         # {||, during, |, left}
@@ -451,17 +451,17 @@ class TemporalOperatorParser:
         """
         if not self.optype == "boolean":
             raise SyntaxError('Wrong optype "%s" must be "relation"' % self.optype)
-        else:
-            # Set three operator components.
-            if isinstance(t[5], list):
-                self.relations = t[5]
-            else:
-                self.relations = [t[5]]
-            self.temporal = t[9]
-            self.function = t[2] + t[3]
-            self.aggregate = t[7]
 
-            t[0] = t[2]
+        # Set three operator components.
+        if isinstance(t[5], list):
+            self.relations = t[5]
+        else:
+            self.relations = [t[5]]
+        self.temporal = t[9]
+        self.function = t[2] + t[3]
+        self.aggregate = t[7]
+
+        t[0] = t[2]
 
     def p_select_relation_operator(self, t):
         # {!:}
@@ -477,27 +477,28 @@ class TemporalOperatorParser:
         """
         if not self.optype == "select":
             raise SyntaxError('Wrong optype "%s" must be "select"' % self.optype)
-        else:
-            if len(t) == 4:
-                # Set three operator components.
-                self.relations = ["equal", "equivalent"]
-                self.temporal = "l"
-                self.function = t[2]
-            elif len(t) == 6:
-                if isinstance(t[4], list):
-                    self.relations = t[4]
-                else:
-                    self.relations = [t[4]]
-                self.temporal = "l"
-                self.function = t[2]
-            elif len(t) == 8:
-                if isinstance(t[4], list):
-                    self.relations = t[4]
-                else:
-                    self.relations = [t[4]]
-                self.temporal = t[6]
-                self.function = t[2]
-            t[0] = t[2]
+
+        if len(t) == 4:
+            # Set three operator components.
+            self.relations = ["equal", "equivalent"]
+            self.temporal = "l"
+            self.function = t[2]
+        elif len(t) == 6:
+            if isinstance(t[4], list):
+                self.relations = t[4]
+            else:
+                self.relations = [t[4]]
+            self.temporal = "l"
+            self.function = t[2]
+        elif len(t) == 8:
+            if isinstance(t[4], list):
+                self.relations = t[4]
+            else:
+                self.relations = [t[4]]
+            self.temporal = t[6]
+            self.function = t[2]
+
+        t[0] = t[2]
 
     def p_hash_relation_operator(self, t):
         # {#}
@@ -513,27 +514,28 @@ class TemporalOperatorParser:
         """
         if not self.optype == "hash":
             raise SyntaxError('Wrong optype "%s" must be "hash"' % self.optype)
-        else:
-            if len(t) == 4:
-                # Set three operator components.
-                self.relations = ["equal"]
-                self.temporal = "l"
-                self.function = t[2]
-            elif len(t) == 6:
-                if isinstance(t[4], list):
-                    self.relations = t[4]
-                else:
-                    self.relations = [t[4]]
-                self.temporal = "l"
-                self.function = t[2]
-            elif len(t) == 8:
-                if isinstance(t[4], list):
-                    self.relations = t[4]
-                else:
-                    self.relations = [t[4]]
-                self.temporal = t[6]
-                self.function = t[2]
-            t[0] = t[2]
+
+        if len(t) == 4:
+            # Set three operator components.
+            self.relations = ["equal"]
+            self.temporal = "l"
+            self.function = t[2]
+        elif len(t) == 6:
+            if isinstance(t[4], list):
+                self.relations = t[4]
+            else:
+                self.relations = [t[4]]
+            self.temporal = "l"
+            self.function = t[2]
+        elif len(t) == 8:
+            if isinstance(t[4], list):
+                self.relations = t[4]
+            else:
+                self.relations = [t[4]]
+            self.temporal = t[6]
+            self.function = t[2]
+
+        t[0] = t[2]
 
     def p_raster_relation_operator(self, t):
         # {+}
@@ -549,27 +551,28 @@ class TemporalOperatorParser:
         """
         if not self.optype == "raster":
             raise SyntaxError('Wrong optype "%s" must be "raster"' % self.optype)
-        else:
-            if len(t) == 4:
-                # Set three operator components.
-                self.relations = ["equal"]
-                self.temporal = "l"
-                self.function = t[2]
-            elif len(t) == 6:
-                if isinstance(t[4], list):
-                    self.relations = t[4]
-                else:
-                    self.relations = [t[4]]
-                self.temporal = "l"
-                self.function = t[2]
-            elif len(t) == 8:
-                if isinstance(t[4], list):
-                    self.relations = t[4]
-                else:
-                    self.relations = [t[4]]
-                self.temporal = t[6]
-                self.function = t[2]
-            t[0] = t[2]
+
+        if len(t) == 4:
+            # Set three operator components.
+            self.relations = ["equal"]
+            self.temporal = "l"
+            self.function = t[2]
+        elif len(t) == 6:
+            if isinstance(t[4], list):
+                self.relations = t[4]
+            else:
+                self.relations = [t[4]]
+            self.temporal = "l"
+            self.function = t[2]
+        elif len(t) == 8:
+            if isinstance(t[4], list):
+                self.relations = t[4]
+            else:
+                self.relations = [t[4]]
+            self.temporal = t[6]
+            self.function = t[2]
+
+        t[0] = t[2]
 
     def p_overlay_relation_operator(self, t):
         # {+}
@@ -585,27 +588,28 @@ class TemporalOperatorParser:
         """
         if not self.optype == "overlay":
             raise SyntaxError('Wrong optype "%s" must be "overlay"' % self.optype)
-        else:
-            if len(t) == 4:
-                # Set three operator components.
-                self.relations = ["equal"]
-                self.temporal = "l"
-                self.function = t[2]
-            elif len(t) == 6:
-                if isinstance(t[4], list):
-                    self.relations = t[4]
-                else:
-                    self.relations = [t[4]]
-                self.temporal = "l"
-                self.function = t[2]
-            elif len(t) == 8:
-                if isinstance(t[4], list):
-                    self.relations = t[4]
-                else:
-                    self.relations = [t[4]]
-                self.temporal = t[6]
-                self.function = t[2]
-            t[0] = t[2]
+
+        if len(t) == 4:
+            # Set three operator components.
+            self.relations = ["equal"]
+            self.temporal = "l"
+            self.function = t[2]
+        elif len(t) == 6:
+            if isinstance(t[4], list):
+                self.relations = t[4]
+            else:
+                self.relations = [t[4]]
+            self.temporal = "l"
+            self.function = t[2]
+        elif len(t) == 8:
+            if isinstance(t[4], list):
+                self.relations = t[4]
+            else:
+                self.relations = [t[4]]
+            self.temporal = t[6]
+            self.function = t[2]
+
+        t[0] = t[2]
 
     def p_relation(self, t):
         # The list of relations. Temporal and spatial relations are supported

@@ -210,10 +210,7 @@ class Map3D:
             with Display(
                 size=(self._width, self._height), **additional_kwargs
             ) as display:
-                if has_env_copy:
-                    env = display.env()
-                else:
-                    env = os.environ.copy()
+                env = display.env() if has_env_copy else os.environ.copy()
                 self._region_manager.set_region_from_command(env=env, **kwargs)
                 self.overlay.region_manager.set_region_from_env(env)
                 gs.run_command(module, env=env, **kwargs)

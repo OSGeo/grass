@@ -169,13 +169,13 @@ def main():
                         "datasets must be equal\n<%(a)s> of type "
                         "%(type_a)s do not match <%(b)s> of type "
                         "%(type_b)s"
-                        % {
-                            "a": first_strds.get_id(),
-                            "type_a": first_strds.get_temporal_type(),
-                            "b": dataset.get_id(),
-                            "type_b": dataset.get_temporal_type(),
-                        }
                     )
+                    % {
+                        "a": first_strds.get_id(),
+                        "type_a": first_strds.get_temporal_type(),
+                        "b": dataset.get_id(),
+                        "type_b": dataset.get_temporal_type(),
+                    }
                 )
 
         mapmatrizes = tgis.sample_stds_by_stds_topology(
@@ -202,8 +202,7 @@ def main():
                     if name is None:
                         isvalid = False
                         break
-                    else:
-                        mapname_list.append(name)
+                    mapname_list.append(name)
 
             if isvalid:
                 entry = mapmatrizes[0][i]
@@ -225,9 +224,9 @@ def main():
     pymap = Vector(output)
     try:
         pymap.open("r")
-    except:
+    except Exception:
         dbif.close()
-        gs.fatal(_("Unable to create vector map <%s>" % output))
+        gs.fatal(_("Unable to create vector map <%s>") % output)
 
     if len(pymap.dblinks) == 0:
         try:
@@ -235,7 +234,7 @@ def main():
             gs.run_command("v.db.addtable", map=output)
         except CalledModuleError:
             dbif.close()
-            gs.fatal(_("Unable to add table <%s> to vector map <%s>" % output))
+            gs.fatal(_("Unable to add table <%s> to vector map <%s>") % output)
     if pymap.is_open():
         pymap.close()
 

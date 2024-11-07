@@ -60,9 +60,8 @@ def retRLiPath():
     rlipath = os.path.join(grass_config_dir, "r.li")
     if os.path.exists(rlipath):
         return rlipath
-    else:
-        os.mkdir(rlipath)
-        return rlipath
+    os.mkdir(rlipath)
+    return rlipath
 
 
 def checkMapExists(name, typ="raster") -> bool:
@@ -153,8 +152,9 @@ def sampleAreaVector(
                     "The raster map <%s> already exists."
                     " Please remove or rename the maps "
                     "with the prefix '%s' or select the "
-                    "option to overwrite existing maps" % (rast_name, outpref)
+                    "option to overwrite existing maps"
                 )
+                % (rast_name, outpref)
             )
             return None
         convertFeature(vect, rast_name, cat, rast, layer, overwrite)
