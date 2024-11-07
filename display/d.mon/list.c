@@ -14,11 +14,13 @@ char *get_path(const char *name, int fpath)
     char tmpdir[GPATH_MAX];
 
     G_temp_element(tmpdir);
-    strcat(tmpdir, "/");
-    strcat(tmpdir, "MONITORS");
+    (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
+    (void)G_strlcat(tmpdir, "MONITORS", sizeof(tmpdir));
     if (name) {
-        strcat(tmpdir, "/");
-        strcat(tmpdir, name);
+        (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
+        if (G_strlcat(tmpdir, name, sizeof(tmpdir)) >= sizeof(tmpdir)) {
+            G_fatal_error(_("Failed to append <%s> to path"), name);
+        }
     }
 
     if (fpath) {
@@ -132,10 +134,13 @@ void list_files(const char *name, FILE *fd_out)
     DIR *dirp;
 
     G_temp_element(tmpdir);
-    strcat(tmpdir, "/");
-    strcat(tmpdir, "MONITORS");
-    strcat(tmpdir, "/");
-    strcat(tmpdir, name);
+    (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
+    (void)G_strlcat(tmpdir, "MONITORS", sizeof(tmpdir));
+    (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
+
+    if (G_strlcat(tmpdir, name, sizeof(tmpdir)) >= sizeof(tmpdir)) {
+        G_fatal_error(_("Failed to append <%s> to path"), name);
+    }
 
     G_file_name(mon_path, tmpdir, NULL, G_mapset());
     fprintf(fd_out, "path=%s\n", mon_path);

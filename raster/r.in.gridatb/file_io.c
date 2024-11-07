@@ -12,6 +12,9 @@ void rdwr_gridatb(void)
     float idx;
 
     fp = fopen(file, "r");
+    if (!fp) {
+        G_fatal_error(_("Unable to open file: %s"), file);
+    }
 
     buf[0] = 0;
     if (fscanf(fp, "%[^\n]", buf) != 1)

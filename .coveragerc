@@ -9,6 +9,7 @@ omit =
     ${INITIAL_PWD-.}/.github/*
     ${INITIAL_PWD-.}/bin.*/*
     ${INITIAL_PWD-.}/dist.*/*
+    **/gui/wxpython/*/**
     **/OBJ.*/*
 source =
     .

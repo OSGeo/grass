@@ -35,7 +35,7 @@ def function(receiver):
     if hasattr(receiver, im_func):
         # an instance-method...
         return receiver, getattr(getattr(receiver, im_func), func_code), 1
-    elif not hasattr(receiver, func_code):
+    if not hasattr(receiver, func_code):
         raise ValueError("unknown receiver type %s %s" % (receiver, type(receiver)))
     return receiver, getattr(receiver, func_code), 0
 
@@ -86,5 +86,5 @@ def robustApply(receiver, *arguments, **named):
         )
         # fc does not have a **kwds type parameter, therefore
         # remove unacceptable arguments.
-        named = dict([(k, v) for k, v in named.items() if k in acceptable])
+        named = {k: v for k, v in named.items() if k in acceptable}
     return receiver(*arguments, **named)

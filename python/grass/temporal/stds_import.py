@@ -286,7 +286,7 @@ def import_stds(
     # We use a new list file name for map registration
     new_list_file_name = list_file_name + "_new"
     # Save current working directory path
-    old_cwd = os.getcwd()
+    old_cwd = Path.cwd()
 
     # Switch into the data directory
     os.chdir(directory)
@@ -372,7 +372,7 @@ def import_stds(
         fs = "|"
         maplist = []
         mapset = get_current_mapset()
-        list_file = open(list_file_name, "r")
+        list_file = open(list_file_name)
         new_list_file = open(new_list_file_name, "w")
 
         # get number of lines to correctly form the suffix
@@ -426,7 +426,7 @@ def import_stds(
         # Read the init file
         fs = "="
         init = {}
-        init_file = open(init_file_name, "r")
+        init_file = open(init_file_name)
         while True:
             line = init_file.readline()
             if not line:

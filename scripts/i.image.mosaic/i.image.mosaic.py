@@ -56,9 +56,8 @@ def get_limit(map):
 def make_expression(i, count):
     if i > count:
         return "null()"
-    else:
-        e = make_expression(i + 1, count)
-        return "if(isnull($image%d),%s,$image%d+$offset%d)" % (i, e, i, i)
+    e = make_expression(i + 1, count)
+    return "if(isnull($image%d),%s,$image%d+$offset%d)" % (i, e, i, i)
 
 
 def main():

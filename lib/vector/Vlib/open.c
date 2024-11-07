@@ -572,6 +572,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             if (access(file_path, F_OK) == 0) /* fidx file exists? */
                 unlink(file_path);
         }
+        Map->support_updated = TRUE;
     }
 
     return level;

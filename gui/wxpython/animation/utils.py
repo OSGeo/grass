@@ -69,8 +69,7 @@ def validateTimeseriesName(timeseries, etype="strds"):
         nameShort, mapset = timeseries.split("@", 1)
         if nameShort in trastDict[mapset]:
             return timeseries
-        else:
-            raise GException(_("Space time dataset <%s> not found.") % timeseries)
+        raise GException(_("Space time dataset <%s> not found.") % timeseries)
 
     mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
     for mapset in mapsets:

@@ -123,7 +123,7 @@ int db_set_default_connection(void)
          * that here?) or $MAPSET/sqlite/mapname.sql as with dbf?
          */
 
-        /* http://www.sqlite.org/lockingv3.html
+        /* https://www.sqlite.org/lockingv3.html
          * When SQLite creates a journal file on Unix, it opens the
          * directory that contains that file and calls fsync() on the
          * directory, in an effort to push the directory information to disk.

@@ -14,19 +14,23 @@ if [ -z "$GISBASE" ] ; then
 fi
 
 #### check if we have sed
-if [ ! -x "`which sed`" ] ; then
+if [ ! -x "$(which sed)" ] ; then
     echo "$PROG: sed required, please install first" 1>&2
     exit 1
 fi
 
-#### check if we have md5sum
-if [ ! -x "`which md5sum`" ] ; then
-    echo "$PROG: md5sum required, please install first" 1>&2
-    exit 1
+#### check if we have md5sum or md5
+if [ -x "$(which md5sum)" ] ; then
+  MD5="md5sum | cut -d' ' -f1"
+elif [ -x "$(which md5)" ] ; then
+  MD5="md5 -q"
+else
+  echo "$PROG: md5sum or md5 required, please install first" 1>&2
+  exit 1
 fi
 
 #### check if we have cut
-if [ ! -x "`which cut`" ] ; then
+if [ ! -x "$(which cut)" ] ; then
     echo "$PROG: cut required, please install first" 1>&2
     exit 1
 fi
@@ -38,47 +42,47 @@ export LC_NUMERIC=C
 # enforce ZLIB
 export GRASS_COMPRESSOR=ZLIB
 
-eval `g.gisenv`
-: ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
+eval "$(g.gisenv)"
+: "${GISBASE?}" "${GISDBASE?}" "${LOCATION_NAME?}" "${MAPSET?}"
 MAPSET_PATH=$GISDBASE/$LOCATION_NAME/$MAPSET
 
 # some definitions
 PIXEL=3
 PID=$$
-TMPNAME="`echo ${PID}_tmp_testmap | sed 's+\.+_+g'`"
+TMPNAME=$(echo ${PID}_tmp_testmap | sed 's+\.+_+g')
 
 # some functions - keep order here
 cleanup()
 {
  echo "Removing temporary map"
- g.remove -f type=raster name=$TMPNAME > /dev/null
+ g.remove -f type=raster name="$TMPNAME" > /dev/null
 }
 
 # check if a MASK is already present:
-MASKTMP=mask.$TMPNAME
-USERMASK=usermask_${MASKTMP}
-if test -f $MAPSET_PATH/cell/MASK
+MASKTMP="mask.${TMPNAME}"
+USERMASK="usermask_${MASKTMP}"
+if test -f "${MAPSET_PATH}/cell/MASK"
 then
  echo "A user raster mask (MASK) is present. Saving it..."
- g.rename raster=MASK,$USERMASK > /dev/null
+ g.rename raster=MASK,"$USERMASK" > /dev/null
 fi
 
 finalcleanup()
 {
  echo "Restoring user region"
- g.region region=$TMPNAME
- g.remove -f type=region name=$TMPNAME > /dev/null
+ g.region region="$TMPNAME"
+ g.remove -f type=region name="$TMPNAME" > /dev/null
  #restore user mask if present:
- if test -f $MAPSET_PATH/cell/$USERMASK ; then
+ if test -f "${MAPSET_PATH}/cell/${USERMASK}" ; then
   echo "Restoring user MASK"
   g.remove -f type=raster name=MASK > /dev/null
-  g.rename raster=$USERMASK,MASK > /dev/null
+  g.rename raster="$USERMASK",MASK > /dev/null
  fi
 }
 
 check_exit_status()
 {
- if [ $1 -ne 0 ] ; then
+ if [ "$1" -ne 0 ] ; then
   echo "An error occurred."
   cleanup ; finalcleanup
   exit 1
@@ -106,7 +110,7 @@ check_md5sum()
 }
 
 echo "Saving current & setting test region."
-g.region save=$TMPNAME
+g.region save="$TMPNAME"
 check_exit_status $?
 g.region s=0 n=$PIXEL w=0 e=$PIXEL res=1 tbres=1
 check_exit_status $?
@@ -118,8 +122,8 @@ r.mapcalc "$TMPNAME = 1"
 check_exit_status $?
 
 echo "MD5 checksum on output of INT/CELL test."
-MD5="`r.out.ascii $TMPNAME precision=15 | md5sum | cut -d' ' -f1`"
-check_md5sum "549e7dabe70df893803690571d2e1503" "$MD5"
+SUM=$(r.out.ascii "$TMPNAME" precision=15 | eval "$MD5")
+check_md5sum "549e7dabe70df893803690571d2e1503" "$SUM"
 
 cleanup
 echo "INT/CELL md5sum test successful"
@@ -132,8 +136,8 @@ r.mapcalc "$TMPNAME = $VALUE"
 check_exit_status $?
 
 echo "MD5 checksum on output of FLOAT/FCELL test."
-MD5="`r.out.ascii $TMPNAME precision=15 | md5sum | cut -d' ' -f1`"
-check_md5sum "379f3d880b6d509051af6b4ccf470762" "$MD5"
+SUM=$(r.out.ascii "$TMPNAME" precision=15 | eval "$MD5")
+check_md5sum "379f3d880b6d509051af6b4ccf470762" "$SUM"
 
 cleanup
 echo "FLOAT/FCELL md5sum test successful"

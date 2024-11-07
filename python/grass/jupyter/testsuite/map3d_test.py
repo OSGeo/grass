@@ -26,6 +26,7 @@ from pathlib import Path
 import grass.jupyter as gj
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.utils import xfail_windows
 
 
 def can_import_ipython():
@@ -81,12 +82,14 @@ class TestMap3D(TestCase):
             else:
                 file.unlink(missing_ok=True)
 
+    @xfail_windows
     def test_defaults(self):
         """Check that default settings work"""
         renderer = gj.Map3D()
         renderer.render(elevation_map="elevation", color_map="elevation")
         self.assertFileExists(renderer.filename)
 
+    @xfail_windows
     def test_filename(self):
         """Check that custom filename works"""
         custom_filename = "test_filename.png"
@@ -96,12 +99,14 @@ class TestMap3D(TestCase):
         renderer.render(elevation_map="elevation", color_map="elevation")
         self.assertFileExists(custom_filename)
 
+    @xfail_windows
     def test_hw(self):
         """Check that custom width and height works"""
         renderer = gj.Map3D(width=200, height=400)
         renderer.render(elevation_map="elevation", color_map="elevation")
         self.assertFileExists(renderer.filename)
 
+    @xfail_windows
     def test_overlay(self):
         """Check that overlay works"""
         renderer = gj.Map3D()

@@ -25,7 +25,7 @@ vulnerability, please follow these steps:
 
 ## Supported Versions
 
-Please refer to our [Release Schedule](https://trac.osgeo.org/grass/wiki/Release/Schedule)
+Please refer to our [download section](https://grass.osgeo.org/download/)
 for details on which versions are currently supported.
 
 ## Security Measures

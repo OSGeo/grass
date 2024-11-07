@@ -156,15 +156,9 @@ class IClassVDigit(IVDigit):
         poMapInfoNew = pointer(Map_info())
 
         if not tmp:
-            if update:
-                open_fn = Vect_open_update
-            else:
-                open_fn = Vect_open_new
-        else:  # noqa: PLR5501
-            if update:
-                open_fn = Vect_open_tmp_update
-            else:
-                open_fn = Vect_open_tmp_new
+            open_fn = Vect_open_update if update else Vect_open_new
+        else:
+            open_fn = Vect_open_tmp_update if update else Vect_open_tmp_new
 
         if update:
             if open_fn(poMapInfoNew, name, "") == -1:

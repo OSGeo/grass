@@ -37,8 +37,7 @@ def GetUnicodeValue(value):
     if isinstance(value, bytes):
         enc = GetDbEncoding()
         return str(value, enc, errors="replace")
-    else:
-        return str(value)
+    return str(value)
 
 
 def GetDbEncoding():

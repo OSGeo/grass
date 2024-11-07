@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
     char *n_array, *min_array, *max_array, *sum_array, *sumsq_array,
         *index_array;
     void *raster_row, *ptr;
-    struct Cell_head region;
+    struct Cell_head region = {0};
     int rows, last_rows, row0, cols; /* scan box size */
     int row, col;                    /* counters */
 

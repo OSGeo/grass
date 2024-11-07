@@ -352,7 +352,7 @@ def main():
 
     # assign "Data Description" field in all four component maps
     num_comp = len(parms[satellites.index(satellite)])
-    for i in range(0, num_comp):
+    for i in range(num_comp):
         comp = names[i]
         gs.run_command(
             "r.support",

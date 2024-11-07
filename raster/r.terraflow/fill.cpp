@@ -518,7 +518,7 @@ void assignFinalDirections(AMI_STREAM<plateauStats> *statstr,
             continue;
         }
     }
-};
+}
 
 /* ********************************************************************** */
 class directionElevationMerger {

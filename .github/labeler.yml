@@ -123,9 +123,7 @@ docs:
               - '**/*.png'
               - '**.cff'
               - CITING
-              - CHANGES
               - AUTHORS
-              - NEWS
               - TODO
           - all-globs-to-all-files:
               - '!doc/development/rfc/**'

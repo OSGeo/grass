@@ -57,7 +57,7 @@ class TestRasterreport(TestCase):
             The expected statics of the output raster
         """
         output = method
-        ## Get the boundary and set up region for the projected map
+        # Get the boundary and set up region for the projected map
         stdout = call_module(
             "r.proj",
             project=src_project,
@@ -80,7 +80,7 @@ class TestRasterreport(TestCase):
             res=1,
         )
 
-        ## Project the map
+        # Project the map
         self.assertModule(
             "r.proj",
             project=src_project,
@@ -91,13 +91,13 @@ class TestRasterreport(TestCase):
             quiet=True,
         )
 
-        ## Validate the output
+        # Validate the output
         self.assertRasterFitsUnivar(output, reference=statics, precision=1e-7)
         self.assertRasterFitsInfo(output, reference=raster_info, precision=1e-7)
 
     def test_nearest(self):
         """Testing method nearest"""
-        ## Set up variables and validation values
+        # Set up variables and validation values
         method = "nearest"
         statics = """n=40930
         min=55.5787925720215
@@ -109,7 +109,7 @@ class TestRasterreport(TestCase):
 
     def test_bilinear(self):
         """Testing method bilinear"""
-        ## Set up variables and validation values
+        # Set up variables and validation values
         method = "bilinear"
         statics = """n=40845
         min=56.3932914733887
@@ -121,7 +121,7 @@ class TestRasterreport(TestCase):
 
     def test_bicubic(self):
         """Testing method bicubic"""
-        ## Set up variables and validation values
+        # Set up variables and validation values
         method = "bicubic"
         statics = """n=40677
         min=56.2407836914062
@@ -133,7 +133,7 @@ class TestRasterreport(TestCase):
 
     def test_lanczos(self):
         """Testing method lanczos"""
-        ## Set up variables and validation values
+        # Set up variables and validation values
         method = "lanczos"
         statics = """n=40585
         min=56.2350921630859
@@ -145,7 +145,7 @@ class TestRasterreport(TestCase):
 
     def test_bilinear_f(self):
         """Testing method bilinear_f"""
-        ## Set up variables and validation values
+        # Set up variables and validation values
         method = "bilinear_f"
         statics = """n=40930
         min=55.5787925720215
@@ -157,7 +157,7 @@ class TestRasterreport(TestCase):
 
     def test_bicubic_f(self):
         """Testing method bicubic_f"""
-        ## Set up variables and validation values
+        # Set up variables and validation values
         method = "bicubic_f"
         statics = """n=40930
         min=55.5787925720215
@@ -169,7 +169,7 @@ class TestRasterreport(TestCase):
 
     def test_lanczos_f(self):
         """Testing method lanczos_f"""
-        ## Set up variables and validation values
+        # Set up variables and validation values
         method = "lanczos_f"
         statics = """n=40930
         min=55.5787925720215

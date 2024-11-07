@@ -21,10 +21,7 @@ import subprocess
 from datetime import datetime
 
 pgm = sys.argv[1]
-if len(sys.argv) > 1:
-    year = sys.argv[2]
-else:
-    year = str(datetime.now().year)
+year = sys.argv[2] if len(sys.argv) > 1 else str(datetime.now().year)
 
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.txt" % pgm

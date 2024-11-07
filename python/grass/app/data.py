@@ -15,8 +15,12 @@ This is not a stable part of the API. Use at your own risk.
 import os
 import tempfile
 import getpass
+import subprocess
 import sys
 from shutil import copytree, ignore_patterns
+from pathlib import Path
+
+import grass.script as gs
 import grass.grassdb.config as cfg
 
 from grass.grassdb.checks import is_location_valid
@@ -162,3 +166,69 @@ def ensure_default_data_hierarchy():
     mapset_path = os.path.join(gisdbase, location, mapset)
 
     return gisdbase, location, mapset, mapset_path
+
+
+class MapsetLockingException(Exception):
+    pass
+
+
+def lock_mapset(mapset_path, force_lock_removal, message_callback):
+    """Acquire a lock for a mapset and return name of new lock file
+
+    Raises MapsetLockingException when it is not possible to acquire a lock for the
+    given mapset either because of existing lock or due to insufficient permissions.
+    A corresponding localized message is given in the exception.
+
+    A *message_callback* is a function which will be called to report messages about
+    certain states. Specifically, the function is called when forcibly unlocking the
+    mapset.
+
+    Assumes that the runtime is set up (specifically that GISBASE is in
+    the environment).
+    """
+    if not os.path.exists(mapset_path):
+        raise MapsetLockingException(_("Path '{}' doesn't exist").format(mapset_path))
+    if not os.access(mapset_path, os.W_OK):
+        error = _("Path '{}' not accessible.").format(mapset_path)
+        stat_info = Path(mapset_path).stat()
+        mapset_uid = stat_info.st_uid
+        if mapset_uid != os.getuid():
+            error = "{error}\n{detail}".format(
+                error=error,
+                detail=_("You are not the owner of '{}'.").format(mapset_path),
+            )
+        raise MapsetLockingException(error)
+    # Check for concurrent use
+    lockfile = os.path.join(mapset_path, ".gislock")
+    locker_path = os.path.join(os.environ["GISBASE"], "etc", "lock")
+    ret = subprocess.run(
+        [locker_path, lockfile, "%d" % os.getpid()], check=False
+    ).returncode
+    msg = None
+    if ret == 2:
+        if not force_lock_removal:
+            msg = _(
+                "{user} is currently running GRASS in selected mapset"
+                " (file {file} found). Concurrent use of one mapset not allowed.\n"
+                "You can force launching GRASS using -f flag"
+                " (assuming your have sufficient access permissions)."
+                " Confirm in a process manager "
+                "that there is no other process using the mapset."
+            ).format(user=Path(lockfile).owner(), file=lockfile)
+        else:
+            message_callback(
+                _(
+                    "{user} is currently running GRASS in selected mapset"
+                    " (file {file} found), but forcing to launch GRASS anyway..."
+                ).format(user=Path(lockfile).owner(), file=lockfile)
+            )
+            gs.try_remove(lockfile)
+    elif ret != 0:
+        msg = _(
+            "Unable to properly access lock file '{name}'.\n"
+            "Please resolve this with your system administrator."
+        ).format(name=lockfile)
+
+    if msg:
+        raise MapsetLockingException(msg)
+    return lockfile

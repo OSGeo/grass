@@ -149,6 +149,32 @@ variable <em>GISRC</em>). If <b>store=mapset</b> is given then the
 variables are stored in <tt>&lt;gisdbase&gt;/&lt;project&gt;/&lt;mapset&gt;/VAR</tt>
 after the current GRASS session is closed.
 
+<h2>EXAMPLES</h2>
+
+<h3>Cache for raster operations</h3>
+
+The maximum memory to be used, i.e. the cache size for raster rows, is set
+to 300 MB by default (GRASS variable <em>MEMORYMB</em>). To speed up
+raster operations, it is recommended to increase this setting if enough RAM
+is available. It is important to note that parallel processes will each
+consume this amount of RAM.
+
+Set the maximum memory to be used (in MB), i.e. the cache size for raster rows:
+
+<div class="code"><pre>
+# set to 6 GB (default: 300 MB)
+g.gisenv set="MEMORYMB=6000"
+</pre></div>
+
+<h3>Number of threads for parallel computing</h3>
+
+Set the number of threads for parallel computing:
+
+<div class="code"><pre>
+# set to use 12 threads (default: 1)
+g.gisenv set="NPROCS=12"
+</pre></div>
+
 <h3>GRASS Debugging</h3>
 
 To print debugging messages, the variable <em>DEBUG</em> must be set to level
@@ -189,7 +215,8 @@ from <a href="wxGUI.html">wxGUI</a>.
 </em>
 
 <p>
-See also <a href="variables.html">variables list</a>
+See also <a href="variables.html#list-of-selected-grass-gisenv-variables">
+list of selected GRASS gisenv variables</a>
 
 <h2>AUTHOR</h2>
 

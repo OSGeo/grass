@@ -15,6 +15,7 @@ import ctypes
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.utils import xfail_windows
 
 from grass.script.core import tempname
 import grass.script as gs
@@ -44,16 +45,19 @@ from grass.lib.imagery import (
 
 
 class GetSignaturesDirTestCase(TestCase):
+    @xfail_windows
     def test_get_sig(self):
         cdir = ctypes.create_string_buffer(GNAME_MAX)
         I_get_signatures_dir(cdir, I_SIGFILE_TYPE_SIG)
         self.assertEqual(utils.decode(cdir.value), f"signatures{HOST_DIRSEP}sig")
 
+    @xfail_windows
     def test_get_sigset(self):
         cdir = ctypes.create_string_buffer(GNAME_MAX)
         I_get_signatures_dir(cdir, I_SIGFILE_TYPE_SIGSET)
         self.assertEqual(utils.decode(cdir.value), f"signatures{HOST_DIRSEP}sigset")
 
+    @xfail_windows
     def test_get_libsvm(self):
         elem = ctypes.create_string_buffer(GNAME_MAX)
         I_get_signatures_dir(elem, I_SIGFILE_TYPE_LIBSVM)

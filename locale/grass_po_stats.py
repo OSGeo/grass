@@ -21,10 +21,12 @@ import os
 import subprocess
 import sys
 
+from pathlib import Path
+
 
 def read_po_files(inputdirpath):
     """Return a dictionary with for each language the list of *.po files"""
-    originalpath = os.getcwd()
+    originalpath = Path.cwd()
     os.chdir(inputdirpath)
     languages = {}
     for pofile in sorted(glob.glob("*.po")):
@@ -79,10 +81,9 @@ def langDefinition(fil):
     f.close()
     if len(lang) == 2:
         return " ".join(lang)
-    elif len(lang) == 1:
+    if len(lang) == 1:
         return lang[0]
-    else:
-        return ""
+    return ""
 
 
 def get_stats(languages, directory):
@@ -144,7 +145,7 @@ def writejson(stats, outfile):
     fout.close()
     try:
         os.remove("messages.mo")
-    except:
+    except OSError:
         pass
 
 

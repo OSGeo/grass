@@ -12,6 +12,7 @@ import datetime
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.utils import xfail_windows
 
 
 class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
@@ -64,6 +65,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         cls.runModule("t.unregister", maps="singletmap", quiet=True)
         cls.del_temp_region()
 
+    @xfail_windows
     def test_simple_operator(self):
         """Test implicit aggregation
 
@@ -149,6 +151,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), None)
 
+    @xfail_windows
     def test_single_map_simple_operator(self):
         """Test implicit aggregation
 

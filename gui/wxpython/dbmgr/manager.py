@@ -70,7 +70,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
         self.parent = parent
         try:
             mapdisplay = self.parent.GetMapDisplay()
-        except:
+        except AttributeError:
             mapdisplay = None
 
         DbMgrBase.__init__(

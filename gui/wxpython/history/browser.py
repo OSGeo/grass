@@ -59,11 +59,11 @@ def get_translated_value(key, value):
     if key == "timestamp":
         exec_datetime = datetime.fromisoformat(value)
         return exec_datetime.strftime("%Y-%m-%d %H:%M:%S")
-    elif key == "runtime":
+    if key == "runtime":
         return _("{} sec").format(value)
-    elif key == "status":
+    if key == "status":
         return _(value.capitalize())
-    elif key in {"mask2d", "mask3d"}:
+    if key in {"mask2d", "mask3d"}:
         return _(str(value))
 
 

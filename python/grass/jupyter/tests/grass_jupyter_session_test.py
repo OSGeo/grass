@@ -27,8 +27,8 @@ def test_init_finish(tmp_path):
 import os
 import grass.script as gs
 import grass.jupyter as gj
-gs.core._create_location_xy("{tmp_path}", "{location}")
-session = gj.init("{tmp_path / location}")
+gs.core._create_location_xy(r"{tmp_path}", r"{location}")
+session = gj.init(r"{tmp_path / location}")
 gs.read_command("g.region", flags="p")
 print(os.environ["GISRC"])
 session.finish()
@@ -49,8 +49,8 @@ def test_init_with_auto_finish(tmp_path):
 import os
 import grass.script as gs
 import grass.jupyter as gj
-gs.core._create_location_xy("{tmp_path}", "{location}")
-session = gj.init("{tmp_path / location}")
+gs.core._create_location_xy(r"{tmp_path}", r"{location}")
+session = gj.init(r"{tmp_path / location}")
 print(os.environ["GISRC"])
 """
 

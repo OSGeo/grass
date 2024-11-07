@@ -178,7 +178,7 @@ class Vector(Layer):
         else:
             import ipyleaflet  # pylint: disable=import-outside-toplevel
 
-            with open(self._filename, "r", encoding="utf-8") as file:
+            with open(self._filename, encoding="utf-8") as file:
                 data = json.load(file)
             # allow using opacity directly to keep interface
             # consistent for both backends

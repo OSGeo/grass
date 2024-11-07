@@ -12,6 +12,7 @@ Licence:   This program is free software under the GNU General Public
 import os
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.utils import xfail_windows
 
 
 class BasicTest(TestCase):
@@ -60,6 +61,7 @@ class BasicTest(TestCase):
         self.assertModule("v.out.lidar", input=self.vector_points, output=self.las_file)
         self.assertFileExists(self.las_file)
 
+    @xfail_windows
     def test_output_identical(self):
         """Test to see if the standard outputs are created
 

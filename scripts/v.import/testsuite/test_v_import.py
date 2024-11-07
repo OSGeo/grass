@@ -18,9 +18,9 @@ from grass.gunittest.main import test
 class TestVImport(TestCase):
     imported = "test_v_import_imported"
 
-    def tearDown(cls):
+    def tearDown(self):
         """Remove imported map after each test method"""
-        cls.runModule("g.remove", flags="f", type="vector", name=cls.imported)
+        self.runModule("g.remove", flags="f", type="vector", name=self.imported)
 
     def test_import_same_proj_gpkg(self):
         """Import GPKG in same proj, default params"""

@@ -102,7 +102,6 @@ SUBDIRS = \
 	v.out.ogr \
 	v.in.ogr \
 	v.external \
-	v.in.dwg \
 	v.in.lidar \
 	v.external.out
 

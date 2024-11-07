@@ -77,6 +77,7 @@
 #endif
 #include <grass/gis.h>
 #include <grass/vector.h>
+#include <grass/raster.h>
 #include <grass/linkm.h>
 #include <grass/bitmap.h>
 #include <grass/glocale.h>
@@ -219,7 +220,7 @@ int main(int argc, char *argv[])
     parm.logfile->required = NO;
     parm.logfile->description =
         _("Name for sampling points output text file. For each observation "
-          "vector point the time series of sediment transport is stored.");
+          "vector point the time series of water discharge is stored.");
     parm.logfile->guisection = _("Output");
 
     parm.nwalk = G_define_option();
@@ -407,8 +408,8 @@ int main(int argc, char *argv[])
 #else
     threads = 1;
 #endif
-    if (threads > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
-        G_warning(_("Parallel processing disabled due to active MASK."));
+    if (threads > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
         threads = 1;
     }
     G_message(_("Number of threads: %d"), threads);
@@ -524,6 +525,8 @@ int main(int argc, char *argv[])
         G_message(_("Using metric conversion factor %f, step=%f"), wp.conv,
                   wp.step);
 
+    wp.observation = parm.observation->answer;
+    wp.logfile = parm.logfile->answer;
     init_library_globals(&wp);
 
     if ((wp.depth == NULL) && (wp.disch == NULL) && (wp.err == NULL))

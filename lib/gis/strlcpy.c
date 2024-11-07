@@ -22,6 +22,9 @@
 
 #include <stddef.h>
 
+static size_t G__strlcpy(char *restrict dst, const char *restrict src,
+                         size_t dsize);
+
 /**
  * \brief Safe string copy function.
  *
@@ -46,12 +49,18 @@
  * \warning The src string must be a valid NUL-terminated C string. Passing an
  *          unterminated string may result in buffer overrun.
  */
-
-size_t G_strlcpy(char *restrict dst, const char *restrict src, size_t dsize)
+size_t G_strlcpy(char *dst, const char *src, size_t dsize)
 {
 #ifdef HAVE_STRLCPY
     return strlcpy(dst, src, dsize);
 #else
+    return G__strlcpy(dst, src, dsize);
+#endif
+}
+
+static size_t G__strlcpy(char *restrict dst, const char *restrict src,
+                         size_t dsize)
+{
     const char *osrc = src;
     size_t nleft = dsize;
 
@@ -72,5 +81,4 @@ size_t G_strlcpy(char *restrict dst, const char *restrict src, size_t dsize)
     }
 
     return (src - osrc - 1); /* count does not include NUL */
-#endif
 }

@@ -93,20 +93,20 @@ class AnalysisControllerBase:
 
         :param coords: EN coordinates
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _disconnectAll(self):
         """Disconnect all mouse signals
         to stop drawing."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _connectAll(self):
         """Connect all mouse signals to draw."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _getPen(self):
         """Returns wx.Pen instance."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def Stop(self, restore=True):
         """Analysis mode is stopped.

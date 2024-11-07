@@ -51,7 +51,7 @@ def test_init_session_finish(tmp_path):
     gs.run_command("g.region", flags="p", env=session.env)
     session_file = session.env["GISRC"]
     session.finish()
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # noqa: PT011
         session.finish()
     assert not session.active
     assert not os.path.exists(session_file)

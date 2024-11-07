@@ -6,17 +6,28 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS GIS
 for details.
 
-:authors: Vaclav Petras
+:authors: Vaclav Petras, Edouard Choinière
 """
 
-import os
-import fnmatch
-import unittest
+from __future__ import annotations
+
 import collections
+import fnmatch
+import os
 import re
+import unittest
+from pathlib import PurePath
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 
-def fnmatch_exclude_with_base(files, base, exclude):
+def fnmatch_exclude_with_base(
+    files: Iterable[str],
+    base: str | os.PathLike,
+    exclude: Iterable[str | os.PathLike | PurePath],
+) -> list[str]:
     """Return list of files not matching any exclusion pattern
 
     :param files: list of file names
@@ -24,23 +35,13 @@ def fnmatch_exclude_with_base(files, base, exclude):
     :param exclude: list of fnmatch glob patterns for exclusion
     """
     not_excluded = []
-    patterns = []
-    # Make all dir separators slashes and drop leading current dir
-    # for both patterns and (later) for files.
-    for pattern in exclude:
-        pattern = pattern.replace(os.sep, "/")
-        if pattern.startswith("./"):
-            patterns.append(pattern[2:])
-        else:
-            patterns.append(pattern)
+    patterns = {str(PurePath(item)) for item in exclude}
+    base_path = PurePath(base)
     for filename in files:
-        full_file_path = os.path.join(base, filename)
-        test_filename = full_file_path.replace(os.sep, "/")
-        if full_file_path.startswith("./"):
-            test_filename = full_file_path[2:]
+        test_filename: PurePath = base_path / filename
         matches = False
         for pattern in patterns:
-            if fnmatch.fnmatch(test_filename, pattern):
+            if fnmatch.fnmatch(str(test_filename), pattern):
                 matches = True
                 break
         if not matches:
@@ -116,16 +117,16 @@ def discover_modules(
             dirs.remove(testsuite_dir)  # do not recurse to testsuite
             full = os.path.join(root, testsuite_dir)
 
-            all_files = os.listdir(full)
+            files = os.listdir(full)
             if file_pattern:
-                files = fnmatch.filter(all_files, file_pattern)
+                files = fnmatch.filter(files, file_pattern)
             if file_regexp:
-                files = [f for f in all_files if re.match(file_regexp, f)]
+                files = [f for f in files if re.match(file_regexp, f)]
             if exclude:
                 files = fnmatch_exclude_with_base(files, full, exclude)
             files = sorted(files)
             # get test/module name without .py
-            # extpecting all files to end with .py
+            # expecting all files to end with .py
             # this will not work for invoking bat files but it works fine
             # as long as we handle only Python files (and using Python
             # interpreter for invoking)
@@ -234,4 +235,18 @@ class GrassTestLoader(unittest.TestLoader):
 
 
 if __name__ == "__main__":
-    GrassTestLoader().discover()
+    for expression in [r".*\.py$", r".*\.sh$"]:
+        modules = discover_modules(
+            start_dir=".",
+            grass_location="all",
+            file_regexp=expression,
+            skip_dirs=GrassTestLoader.skip_dirs,
+            testsuite_dir=GrassTestLoader.testsuite_dir,
+            all_locations_value=GrassTestLoader.all_tests_value,
+            universal_location_value=GrassTestLoader.universal_tests_value,
+            import_modules=False,
+            exclude=None,
+        )
+        print("Expression:", expression)
+        print(len(modules))
+        print([module.file_path for module in modules])

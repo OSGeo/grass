@@ -188,8 +188,17 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    strcpy(Current.name, vold->answer);
-    strcpy(Trans.name, vnew->answer);
+    if (G_strlcpy(Current.name, vold->answer, sizeof(Current.name)) >=
+        sizeof(Current.name)) {
+        G_fatal_error(_("Input vector map name <%s> is too long"),
+                      vold->answer);
+    }
+
+    if (G_strlcpy(Trans.name, vnew->answer, sizeof(Trans.name)) >=
+        sizeof(Trans.name)) {
+        G_fatal_error(_("Output vector map name <%s> is too long"),
+                      vnew->answer);
+    }
 
     Vect_check_input_output_name(vold->answer, vnew->answer, G_FATAL_EXIT);
 

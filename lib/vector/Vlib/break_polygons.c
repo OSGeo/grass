@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <math.h>
 #include <errno.h>
+#include <string.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
@@ -131,11 +132,19 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
     filename = G_tempfile();
     fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
     RTree = RTreeCreateTree(fd, 0, 2);
-    remove(filename);
+    (void)remove(filename);
+    G_free(filename);
 
     filename = G_tempfile();
     xpntfd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
-    remove(filename);
+    if (xpntfd < 0) {
+        close(RTree->fd);
+        G_free(filename);
+        G_fatal_error(_("Failed to create xpnt temporary file: %s"),
+                      strerror(errno));
+    }
+    (void)remove(filename);
+    G_free(filename);
 
     BPoints = Vect_new_line_struct();
     Points = Vect_new_line_struct();
@@ -651,6 +660,7 @@ void Vect_break_polygons_mem(struct Map_info *Map, int type,
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(BPoints);
     Vect_destroy_cats_struct(Cats);
+    Vect_destroy_cats_struct(ErrCats);
     G_verbose_message(_("Breaks: %d"), nbreaks);
 }
 

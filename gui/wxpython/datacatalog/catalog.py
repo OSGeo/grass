@@ -19,6 +19,8 @@ for details.
 import wx
 import os
 
+from pathlib import Path
+
 from core.debug import Debug
 from datacatalog.tree import DataCatalogTree
 from datacatalog.toolbars import DataCatalogToolbar, DataCatalogSearch
@@ -200,7 +202,10 @@ class DataCatalog(wx.Panel):
     def OnAddGrassDB(self, event):
         """Add grass database"""
         dlg = wx.DirDialog(
-            self, _("Choose GRASS data directory:"), os.getcwd(), wx.DD_DEFAULT_STYLE
+            self,
+            _("Choose GRASS data directory:"),
+            str(Path.cwd()),
+            wx.DD_DEFAULT_STYLE,
         )
         if dlg.ShowModal() == wx.ID_OK:
             grassdatabase = dlg.GetPath()

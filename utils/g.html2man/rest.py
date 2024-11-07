@@ -1,4 +1,5 @@
 import sys
+from operator import itemgetter
 
 
 def match(node, tag, attr=None, val=None):
@@ -26,8 +27,7 @@ def find(node, tag, attr=None, val=None):
     raise ValueError("child not found")
 
 
-def children(node):
-    return node[2]
+children = itemgetter(2)
 
 
 def text(node):

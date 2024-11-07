@@ -824,7 +824,7 @@ class DisplayDriver:
 
                 found = False
                 cats = self.poCats.contents
-                for i in range(0, cats.n_cats):
+                for i in range(cats.n_cats):
                     for cat in self.selected["cats"]:
                         if cats.cat[i] == cat:
                             found = True
@@ -868,10 +868,7 @@ class DisplayDriver:
                 pos[0], pos[1], 0.0, points.x[idx], points.y[idx], points.z[idx], 0
             )
 
-            if idx == 0:
-                minDist = dist
-                Gid = idx
-            elif minDist > dist:
+            if idx == 0 or minDist > dist:
                 minDist = dist
                 Gid = idx
 
@@ -985,15 +982,9 @@ class DisplayDriver:
 
         # open existing map
         if update:
-            if tmp:
-                open_fn = Vect_open_tmp_update
-            else:
-                open_fn = Vect_open_update
-        else:  # noqa: PLR5501
-            if tmp:
-                open_fn = Vect_open_tmp_old
-            else:
-                open_fn = Vect_open_old
+            open_fn = Vect_open_tmp_update if tmp else Vect_open_update
+        else:
+            open_fn = Vect_open_tmp_old if tmp else Vect_open_old
 
         ret = open_fn(self.poMapInfo, name, mapset)
 

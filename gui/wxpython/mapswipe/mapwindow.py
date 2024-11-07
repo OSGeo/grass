@@ -81,8 +81,7 @@ class SwipeBufferedWindow(BufferedMapWindow):
         """Overridden method which returns simulated window size."""
         if self._mode == "swipe":
             return self.specialSize
-        else:
-            return super().GetClientSize()
+        return super().GetClientSize()
 
     def SetClientSize(self, size):
         """Overridden method which sets simulated window size."""
@@ -100,8 +99,7 @@ class SwipeBufferedWindow(BufferedMapWindow):
         """Returns coordinates of rendered image"""
         if self._mode == "swipe":
             return self.specialCoords
-        else:
-            return (0, 0)
+        return (0, 0)
 
     def SetImageCoords(self, coords):
         """Sets coordinates of rendered image"""

@@ -310,8 +310,8 @@ int main(int argc, char *argv[])
                     "threads setting."));
     ncb.threads = 1;
 #endif
-    if (ncb.threads > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
-        G_warning(_("Parallel processing disabled due to active MASK."));
+    if (ncb.threads > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
         ncb.threads = 1;
     }
     if (strcmp(parm.weighting_function->answer, "none") && flag.circle->answer)

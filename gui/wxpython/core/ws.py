@@ -99,7 +99,6 @@ class RenderWMSMgr(wx.EvtHandler):
 
         self.updateMap = True
         fetchData = True  # changed to True when calling Render()
-        zoomChanged = False
 
         if self.renderedRegion is None or cmd != self.fetched_data_cmd:
             fetchData = True
@@ -111,7 +110,6 @@ class RenderWMSMgr(wx.EvtHandler):
 
             for c in ["e-w resol", "n-s resol"]:
                 if self.renderedRegion and region[c] != self.renderedRegion[c]:
-                    zoomChanged = True
                     break
 
         if fetchData:

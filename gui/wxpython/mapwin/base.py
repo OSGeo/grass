@@ -370,10 +370,10 @@ class MapWindowBase:
         return True
 
     def Pixel2Cell(self, xyCoords):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def Cell2Pixel(self, enCoords):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def OnMotion(self, event):
         """Tracks mouse motion and update statusbar
@@ -453,8 +453,8 @@ class MapWindowBase:
 
     def DisactivateWin(self):
         """Use when the class instance is hidden in MapFrame."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def ActivateWin(self):
         """Used when the class instance is activated in MapFrame."""
-        raise NotImplementedError()
+        raise NotImplementedError

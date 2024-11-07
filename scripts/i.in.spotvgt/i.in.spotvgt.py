@@ -20,7 +20,7 @@
 #############################################################################
 #
 # REQUIREMENTS:
-#      -  gdal: http://www.gdal.org
+#      -  gdal: https://gdal.org
 #
 # Notes:
 # * According to the faq (http://www.vgt.vito.be/faq/faq.html), SPOT vegetation
@@ -125,9 +125,7 @@ def main():
 
     # check for gdalinfo (just to check if installation is complete)
     if not gs.find_program("gdalinfo", "--help"):
-        gs.fatal(
-            _("'gdalinfo' not found, install GDAL tools first (http://www.gdal.org)")
-        )
+        gs.fatal(_("'gdalinfo' not found, install GDAL tools first (https://gdal.org)"))
 
     pid = str(os.getpid())
     tmpfile = gs.tempfile()
@@ -136,11 +134,7 @@ def main():
 
     spotdir = os.path.dirname(infile)
     spotname = gs.basename(infile, "hdf")
-
-    if rast:
-        name = rast
-    else:
-        name = spotname
+    name = rast or spotname
 
     if not gs.overwrite() and gs.find_file(name)["file"]:
         gs.fatal(_("<%s> already exists. Aborting.") % name)

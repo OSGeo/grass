@@ -63,6 +63,9 @@
 #include <string.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
+#include <errno.h>
+
 #include "binio.h"
 #include "v5d.h"
 #include "vis5d.h"
@@ -1232,7 +1235,10 @@ static int read_comp_header(int f, v5dstruct *v)
     unsigned int id;
 
     /* reset file position to start of file */
-    lseek(f, 0, SEEK_SET);
+    if (lseek(f, 0, SEEK_SET) == -1) {
+        G_warning(_("Unable to seek: %s"), strerror(errno));
+        return 0;
+    }
 
     /* read file ID */
     read_int4(f, (int *)&id);
@@ -1334,8 +1340,8 @@ static int read_comp_header(int f, v5dstruct *v)
 
                 /* skip ahead by 'gridsize' bytes */
                 if (lseek(f, gridsize, SEEK_CUR) == -1) {
-                    printf("Error:  Unexpected end of file, ");
-                    printf("file may be corrupted.\n");
+                    G_warning(_("Error: Unexpected end of file, file may be "
+                                "corrupted."));
                     return 0;
                 }
                 min = -(125.0 + gb) / ga;
@@ -1478,7 +1484,10 @@ static int read_comp_grid(v5dstruct *v, int time, int var, float *ga, float *gb,
 
     /* move to position in file */
     pos = grid_position(v, time, var);
-    lseek(f, pos, SEEK_SET);
+    if (lseek(f, pos, SEEK_SET) == -1) {
+        G_warning(_("Unable to seek: %s"), strerror(errno));
+        return 0;
+    }
 
     if (v->FileFormat == 0x80808083) {
         /* read McIDAS grid and file numbers */
@@ -1551,7 +1560,13 @@ static int read_comp_grid(v5dstruct *v, int time, int var, float *ga, float *gb,
  */
 static int read_v5d_header(v5dstruct *v)
 {
-#define SKIP(N) lseek(f, N, SEEK_CUR)
+#define SKIP(N)                                                  \
+    do {                                                         \
+        if (lseek(f, N, SEEK_CUR) == -1) {                       \
+            G_warning(_("Unable to seek: %s"), strerror(errno)); \
+            return 0;                                            \
+        }                                                        \
+    } while (0)
     int end_of_header = 0;
     unsigned int id;
     int idlen, var, numargs;
@@ -1870,13 +1885,19 @@ static int read_v5d_header(v5dstruct *v)
         case TAG_END:
             /* end of header */
             end_of_header = 1;
-            lseek(f, length, SEEK_CUR);
+            if (lseek(f, length, SEEK_CUR) == -1) {
+                G_warning(_("Unable to seek: %s"), strerror(errno));
+                return 0;
+            }
             break;
 
         default:
             /* unknown tag, skip to next tag */
             printf("Unknown tag: %d  length=%d\n", tag, length);
-            lseek(f, length, SEEK_CUR);
+            if (lseek(f, length, SEEK_CUR) == -1) {
+                G_warning(_("Unable to seek: %s"), strerror(errno));
+                return 0;
+            }
             break;
         }
     }
@@ -1966,7 +1987,10 @@ int v5dReadCompressedGrid(v5dstruct *v, int time, int var, float *ga, float *gb,
 
     /* move to position in file */
     pos = grid_position(v, time, var);
-    lseek(v->FileDesc, pos, SEEK_SET);
+    if (lseek(v->FileDesc, pos, SEEK_SET) == -1) {
+        G_warning(_("Unable to seek: %s"), strerror(errno));
+        return 0;
+    }
 
     /* read ga, gb arrays */
     read_float4_array(v->FileDesc, ga, v->Nl[var]);
@@ -2118,7 +2142,10 @@ static int write_v5d_header(v5dstruct *v)
     }
 
     /* set file pointer to start of file */
-    lseek(f, 0, SEEK_SET);
+    if (lseek(f, 0, SEEK_SET) == -1) {
+        G_warning(_("Unable to seek: %s"), strerror(errno));
+        return 0;
+    }
     v->CurPos = 0;
 
     /*
@@ -2222,7 +2249,10 @@ static int write_v5d_header(v5dstruct *v)
         /* We're writing to a brand new file.  Reserve 10000 bytes */
         /* for future header growth. */
         WRITE_TAG(v, TAG_END, 10000);
-        lseek(f, 10000, SEEK_CUR);
+        if (lseek(f, 10000, SEEK_CUR) == -1) {
+            G_warning(_("Unable to seek: %s"), strerror(errno));
+            return 0;
+        }
 
         /* Let file pointer indicate where first grid is stored */
         v->FirstGridPos = ltell(f);
@@ -2336,7 +2366,7 @@ int v5dWriteCompressedGrid(const v5dstruct *v, int time, int var,
     pos = grid_position(v, time, var);
     if (lseek(v->FileDesc, pos, SEEK_SET) < 0) {
         /* lseek failed, return error */
-        printf("Error in v5dWrite[Compressed]Grid: seek failed, disk full?\n");
+        G_warning(_("Unable to seek: %s"), strerror(errno));
         return 0;
     }
 
@@ -2452,9 +2482,15 @@ int v5dCloseFile(v5dstruct *v)
     if (v->Mode == 'w') {
         /* rewrite header because writing grids updates the minval and */
         /* maxval fields */
-        lseek(v->FileDesc, 0, SEEK_SET);
+        if (lseek(v->FileDesc, 0, SEEK_SET) == -1) {
+            G_warning(_("Unable to seek: %s"), strerror(errno));
+            return 0;
+        }
         status = write_v5d_header(v);
-        lseek(v->FileDesc, 0, SEEK_END);
+        if (lseek(v->FileDesc, 0, SEEK_END) == -1) {
+            G_warning(_("Unable to seek: %s"), strerror(errno));
+            return 0;
+        }
         close(v->FileDesc);
     }
     else if (v->Mode == 'r') {

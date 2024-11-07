@@ -48,10 +48,7 @@ def main():
     output = options["output"]
     donodata = flags["i"]
 
-    if donodata:
-        statsflags = "1g"
-    else:
-        statsflags = "1gn"
+    statsflags = "1g" if donodata else "1gn"
     parameters = {
         "flags": statsflags,
         "input": options["input"],

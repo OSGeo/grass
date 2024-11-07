@@ -18,6 +18,8 @@ import tempfile
 
 import xml.etree.ElementTree as ET
 
+from pathlib import Path
+
 import wx
 import wx.aui
 
@@ -103,7 +105,7 @@ class WorkspaceManager:
         dlg = wx.FileDialog(
             parent=self.lmgr,
             message=_("Choose workspace file"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("GRASS Workspace File (*.gxw)|*.gxw"),
         )
 
@@ -177,9 +179,10 @@ class WorkspaceManager:
                 parent=self.lmgr,
                 message=_(
                     "Reading workspace file <%s> failed.\n"
-                    "Invalid file, unable to parse XML document."
+                    "Invalid file, unable to parse XML document.\n"
+                    "Error details: %s"
                 )
-                % filename,
+                % (filename, str(e)),
             )
             return False
 
@@ -362,7 +365,7 @@ class WorkspaceManager:
         dlg = wx.FileDialog(
             parent=self.lmgr,
             message=_("Choose file to save current workspace"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("GRASS Workspace File (*.gxw)|*.gxw"),
             style=wx.FD_SAVE,
         )
@@ -434,7 +437,11 @@ class WorkspaceManager:
         except Exception as e:
             GError(
                 parent=self.lmgr,
-                message=_("Writing current settings to workspace file failed."),
+                message=_(
+                    "Writing current settings to workspace file <%s> failed.\n"
+                    "Error details: %s"
+                )
+                % (tmpfile, str(e)),
             )
             return False
 
@@ -512,12 +519,20 @@ class WorkspaceManager:
         :return None
         """
         if menu:
-            file_menu = menu.GetMenu(
-                menuIndex=menu.FindMenu(title=_("File")),
-            )
-            workspace_item = file_menu.FindItem(
-                id=file_menu.FindItem(itemString=_("Workspace")),
-            )[0]
+            menu_index = menu.FindMenu(_("File"))
+            if menu_index == wx.NOT_FOUND:
+                # try untranslated version
+                menu_index = menu.FindMenu("File")
+                if menu_index == wx.NOT_FOUND:
+                    return
+            file_menu = menu.GetMenu(menu_index)
+            workspace_index = file_menu.FindItem(_("Workspace"))
+            if workspace_index == wx.NOT_FOUND:
+                workspace_index = file_menu.FindItem("Workspace")
+                if workspace_index == wx.NOT_FOUND:
+                    return
+            workspace_item = file_menu.FindItemById(workspace_index)
+
             self._recent_files = RecentFilesMenu(
                 app_name="main",
                 parent_menu=workspace_item.GetSubMenu(),

@@ -450,6 +450,7 @@ AMI_STREAM<AEvent> *init_event_list(char *rastName, Viewpoint *vp,
     Rast_set_null_value(inrast[2], ncols, data_type);
 
     /*scan through the raster data */
+    // int isnull = 0;
     dimensionType i, j;
     double ax, ay;
     AEvent e;
@@ -483,7 +484,7 @@ AMI_STREAM<AEvent> *init_event_list(char *rastName, Viewpoint *vp,
             e.col = j;
 
             /*read the elevation value into the event */
-            Rast_is_null_value(&(inrast[1][j]), data_type);
+            // isnull = Rast_is_null_value(&(inrast[1][j]), data_type);
             e.elev[1] = inrast[1][j];
 
             /* adjust for curvature */
@@ -971,18 +972,19 @@ void save_io_vis_and_elev_to_GRASS(IOVisibilityGrid *visgrid, char *elevfname,
         for (j = 0; j < Rast_window_cols(); j++) {
 
             /* read the current elevation value */
+            // int isNull = 0;
 
             switch (elev_data_type) {
             case CELL_TYPE:
-                Rast_is_c_null_value(&((CELL *)elevrast)[j]);
+                // isNull = Rast_is_c_null_value(&((CELL *)elevrast)[j]);
                 elev = (double)(((CELL *)elevrast)[j]);
                 break;
             case FCELL_TYPE:
-                Rast_is_f_null_value(&((FCELL *)elevrast)[j]);
+                // isNull = Rast_is_f_null_value(&((FCELL *)elevrast)[j]);
                 elev = (double)(((FCELL *)elevrast)[j]);
                 break;
             case DCELL_TYPE:
-                Rast_is_d_null_value(&((DCELL *)elevrast)[j]);
+                // isNull = Rast_is_d_null_value(&((DCELL *)elevrast)[j]);
                 elev = (double)(((DCELL *)elevrast)[j]);
                 break;
             }

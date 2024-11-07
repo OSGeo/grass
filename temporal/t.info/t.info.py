@@ -91,7 +91,7 @@ def main():
             " +----------------------------------------------------------------------------+"  # noqa: E501
         )
         return
-    elif system and not history:
+    if system and not history:
         print("dbmi_python_interface='" + str(dbif.get_dbmi().__name__) + "'")
         print("dbmi_string='" + str(tgis.get_tgis_database_string()) + "'")
         print("sql_template_path='" + str(tgis.get_sql_template_path()) + "'")
@@ -103,11 +103,7 @@ def main():
     if not system and not name:
         gs.fatal(_("Please specify %s=") % ("name"))
 
-    if name.find("@") >= 0:
-        id_ = name
-    else:
-        id_ = name + "@" + gs.gisenv()["MAPSET"]
-
+    id_ = name if name.find("@") >= 0 else name + "@" + gs.gisenv()["MAPSET"]
     dataset = tgis.dataset_factory(type_, id_)
 
     if not dataset.is_in_db(dbif):

@@ -226,10 +226,7 @@ def status(args):
     version_info = read_version_file()
     today = datetime.date.today().isoformat()
     version = construct_version(version_info)
-    if not version_info.micro.endswith("dev"):
-        tag = version
-    else:
-        tag = None
+    tag = version if not version_info.micro.endswith("dev") else None
     if args.bash:
         status_as_bash(version_info=version_info, today=today, version=version, tag=tag)
     else:

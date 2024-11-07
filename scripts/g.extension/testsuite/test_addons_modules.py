@@ -15,7 +15,7 @@ COPYRIGHT: (C) 2015 Vaclav Petras, and by the GRASS Development Team
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-from grass.gunittest.utils import silent_rmtree
+from grass.gunittest.utils import silent_rmtree, xfail_windows
 from grass.script.utils import decode
 
 import os
@@ -52,6 +52,7 @@ wx.metadata
 class TestModulesMetadata(TestCase):
     url = "file://" + os.path.abspath("data")
 
+    @xfail_windows
     def test_listing(self):
         """List individual extensions/modules/addons"""
         module = SimpleModule("g.extension", flags="l", url=self.url)
@@ -90,6 +91,7 @@ class TestModulesFromDifferentSources(TestCase):
         """Remove created files"""
         silent_rmtree(self.install_prefix)
 
+    @xfail_windows
     def test_directory_install(self):
         """Test installing extension from directory"""
         self.assertModule(
@@ -102,6 +104,7 @@ class TestModulesFromDifferentSources(TestCase):
         for file in self.files:
             self.assertFileExists(file)
 
+    @xfail_windows
     def test_targz_install(self):
         """Test installing extension from local .tar.gz"""
         self.assertModule(
@@ -113,6 +116,7 @@ class TestModulesFromDifferentSources(TestCase):
         for file in self.files:
             self.assertFileExists(file)
 
+    @xfail_windows
     def test_remote_targz_without_dir_install(self):
         """Test installing extension from (remote) .tar.gz without main dir"""
         self.assertModule(
@@ -125,6 +129,7 @@ class TestModulesFromDifferentSources(TestCase):
         for file in self.files:
             self.assertFileExists(file)
 
+    @xfail_windows
     def test_remote_zip_install(self):
         """Test installing extension from .zip specified by URL (local)"""
         self.assertModule(

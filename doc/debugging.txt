@@ -69,7 +69,7 @@ C Code debugging Software:
       ddd `which r.plane`
       RUN -> here enter Parameters/Flags
 
-      http://www.gnu.org/software/ddd/
+      https://www.gnu.org/software/ddd/
        (GNU DDD is a graphical front-end for command-line debuggers such as
         GDB, DBX, WDB, Ladebug, JDB, XDB, the Perl debugger, the bash debugger, or the
         Python debugger. )

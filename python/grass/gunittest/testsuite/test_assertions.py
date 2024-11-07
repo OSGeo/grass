@@ -11,6 +11,7 @@ from grass.pygrass.modules import Module
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.utils import xfail_windows
 
 
 class TestTextAssertions(TestCase):
@@ -34,6 +35,7 @@ class TestTextAssertions(TestCase):
     def test_assertLooksLike_multiline(self):
         self.assertLooksLike("a=123\nb=456\nc=789", "a=...\nb=...\nc=...")
 
+    @xfail_windows
     def test_assertLooksLike_multiline_platform_dependent(self):
         self.assertLooksLike(
             "a=123\nb=456\nc=789", "a=...{nl}b=...{nl}c=...".format(nl=os.linesep)
@@ -384,6 +386,7 @@ class TestFileAssertions(TestCase):
             self.failureException, self.assertFileExists, filename=self.emtpy_file
         )
 
+    @xfail_windows
     def test_assertFileMd5(self):
         self.assertFileMd5(filename=self.file_with_md5, md5=self.file_md5)
         self.assertRaises(

@@ -68,7 +68,8 @@ def test_create_overwrite(xy_session):
             .strip()
             .split()
         )
-        assert len(rasters) == 1 and rasters[0] == "a"
+        assert len(rasters) == 1
+        assert rasters[0] == "a"
     with experimental.MapsetSession(
         name, create=True, overwrite=True, env=xy_session.env
     ) as session:
@@ -86,7 +87,8 @@ def test_create_overwrite(xy_session):
             .strip()
             .split()
         )
-        assert len(rasters) == 1 and rasters[0] == "a"
+        assert len(rasters) == 1
+        assert rasters[0] == "a"
     assert os.path.exists(session_file)
 
 
@@ -103,7 +105,8 @@ def test_ensure(xy_session):
             .strip()
             .split()
         )
-        assert len(rasters) == 1 and rasters[0] == "a"
+        assert len(rasters) == 1
+        assert rasters[0] == "a"
     with experimental.MapsetSession(name, ensure=True, env=xy_session.env) as session:
         session_mapset = gs.read_command("g.mapset", flags="p", env=session.env).strip()
         assert name == session_mapset
@@ -112,7 +115,8 @@ def test_ensure(xy_session):
             .strip()
             .split()
         )
-        assert len(rasters) == 1 and rasters[0] == "a"
+        assert len(rasters) == 1
+        assert rasters[0] == "a"
         gs.run_command("r.mapcalc", expression="b = 1", env=session.env)
         rasters = (
             gs.read_command("g.list", type="raster", mapset=".", env=session.env)

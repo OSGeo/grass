@@ -64,7 +64,7 @@ def get_extensions():
         return []
 
     # read XML file
-    fo = open(fXML, "r")
+    fo = open(fXML)
     try:
         tree = ET.fromstring(fo.read())
     except Exception as e:
@@ -104,7 +104,7 @@ def download_modules_xml_file(url, response_format, *args, **kwargs):
     try:
         response = urlopen(url, *args, **kwargs)
 
-        if not response.code == 200:
+        if response.code != 200:
             index = HTTP_STATUS_CODES.index(response.code)
             desc = HTTP_STATUS_CODES[index].description
             gs.fatal(

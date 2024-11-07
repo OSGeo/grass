@@ -10,12 +10,14 @@ map from elevation map where
   <dd>the local surface topographic slope (delta vertical) / (delta
       horizontal).</dd>
 </dl>
-<p>Input maps may have NULL values.  For example, if you have a MASK for a
-watershed (basin map from <em>r.water.outlet</em>), the following command will
-create a masked elevation map (belev):
+<p>Input maps may have NULL values. For example, if you have a raster mask set
+for a watershed (using basin map from <em>r.water.outlet</em>), the following
+command will create a masked elevation map (belev):
+
 <div class="code"><pre>
 r.mapcalc "belev = if(isnull(basin), basin, elev)"
 </pre></div>
+
 <p>
 <em>r.stats -Anc</em> prints out averaged statistics for topographic index.
 

@@ -46,7 +46,7 @@ References
   Resources Analysis Support System (GRASS) Geographic Information
   System (GIS)*. ISPRS International Journal of
   Geo-Information. 2(1):201-219. `doi:10.3390/ijgi2010201
-  <http://dx.doi.org/10.3390/ijgi2010201>`_
+  <https://doi.org/10.3390/ijgi2010201>`_
 * `Python related articles in the GRASS GIS Wiki
   <https://grasswiki.osgeo.org/wiki/Category:Python>`_
 * `GRASS GIS 8 Programmer's Manual
@@ -54,7 +54,7 @@ References
 
 This project has been funded with support from the `Google Summer of
 Code 2012
-<http://trac.osgeo.org/grass/wiki/GSoC#PythonhighlevelmapinteractionforGRASSGIS>`_
+<https://trac.osgeo.org/grass/wiki/GSoC#PythonhighlevelmapinteractionforGRASSGIS>`_
 
 ..
     Indices and tables

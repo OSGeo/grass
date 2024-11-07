@@ -28,6 +28,9 @@
 #include <stddef.h>
 #include <string.h>
 
+static size_t G__strlcat(char *restrict dst, const char *restrict src,
+                         size_t dsize);
+
 /**
  * \brief Size-bounded string concatenation
  *
@@ -51,12 +54,18 @@
  *         including the terminating NUL character). If the return value
  *         is >= dsize, truncation occurred.
  */
-
-size_t G_strlcat(char *restrict dst, const char *restrict src, size_t dsize)
+size_t G_strlcat(char *dst, const char *src, size_t dsize)
 {
 #ifdef HAVE_STRLCAT
     return strlcat(dst, src, dsize);
 #else
+    return G__strlcat(dst, src, dsize);
+#endif
+}
+
+static size_t G__strlcat(char *restrict dst, const char *restrict src,
+                         size_t dsize)
+{
     const char *odst = dst;
     const char *osrc = src;
     size_t n = dsize;
@@ -80,5 +89,4 @@ size_t G_strlcat(char *restrict dst, const char *restrict src, size_t dsize)
     *dst = '\0';
 
     return (dlen + (src - osrc)); /* count does not include NUL */
-#endif
 }

@@ -67,13 +67,17 @@ int put_a_row(int row, CELL *buf)
 
 static int read_row(int file, void *buf, int row, int buf_len)
 {
-    lseek(file, ((off_t)row) * buf_len, 0);
+    if (lseek(file, ((off_t)row) * buf_len, 0) == -1) {
+        G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+    }
     return (read(file, buf, buf_len) == buf_len);
 }
 
 static int write_row(int file, const void *buf, int row, int buf_len)
 {
-    lseek(file, ((off_t)row) * buf_len, 0);
+    if (lseek(file, ((off_t)row) * buf_len, 0) == -1) {
+        G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+    }
     return (write(file, buf, buf_len) == buf_len);
 }
 

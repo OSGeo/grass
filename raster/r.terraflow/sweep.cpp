@@ -65,7 +65,7 @@ sweepOutput::sweepOutput()
 #ifdef OUTPUT_TCI
     tci = (tci_type)nodataType::ELEVATION_NODATA;
 #endif
-};
+}
 
 /* ------------------------------------------------------------ */
 /* computes output parameters of cell (i,j) given the flow value, the

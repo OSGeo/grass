@@ -6,11 +6,9 @@ Purpose:   This script is to demonstrate a unit test for r.object.geometry
 
 import json
 import os
-from sys import stderr
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.gunittest.gmodules import call_module
 
 from grass.gunittest.gmodules import SimpleModule
 
