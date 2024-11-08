@@ -598,7 +598,7 @@ int main(int argc, char *argv[])
         const char *style = "ndwi";
 
         if (G_find_color_rule("ndwi")) {
-            Rast_make_fp_colors(&colors, style, -200.0, 200.0);
+            Rast_make_fp_colors(&colors, style, -1.0, 1.0);
         }
         else
             G_fatal_error(_("Unknown color request '%s'"), style);
