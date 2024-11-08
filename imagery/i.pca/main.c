@@ -359,11 +359,7 @@ static int calc_mu_cov(int *fds, double **covar, double *mu, double *stddev,
     G_percent(1, 1, 1);
 
     if (count < 2) {
-        G_free(sum2);
-        G_free(sd);
-        G_free(sumsq);
-        G_free(rowbuf);
-        return 0;
+        goto cleanup;
     }
 
     for (i = 0; i < bands; i++) {
@@ -383,22 +379,25 @@ static int calc_mu_cov(int *fds, double **covar, double *mu, double *stddev,
             if (j != i)
                 covar[j][i] = covar[i][j];
         }
-
-        G_free(sum2[i]);
-        G_free(rowbuf[i]);
     }
     for (i = 0; i < bands; i++)
         mu[i] = sum[i] / count;
 
+cleanup:
+    for (i = 0; i < bands; i++) {
+        if (sum2[i])
+            G_free(sum2[i]);
+        if (rowbuf[i])
+            G_free(rowbuf[i]);
+    }
     G_free(rowbuf);
-
     G_free(sum2);
     if (sd)
         G_free(sd);
     if (sumsq)
         G_free(sumsq);
 
-    return 1;
+    return 0;
 }
 
 static int write_pca(double **eigmat, double *mu, double *stddev, int *inp_fd,
