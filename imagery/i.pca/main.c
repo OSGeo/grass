@@ -314,6 +314,7 @@ static int calc_mu_cov(int *fds, double **covar, double *mu, double *stddev,
     DCELL **rowbuf = (DCELL **)G_malloc(bands * sizeof(DCELL *));
     double **sum2 = (double **)G_calloc(bands, sizeof(double *));
     double *sumsq, *sd, *sum;
+    int ret = 1;
 
     if (stddev) {
         sumsq = (double *)G_calloc(bands, sizeof(double));
@@ -359,6 +360,7 @@ static int calc_mu_cov(int *fds, double **covar, double *mu, double *stddev,
     G_percent(1, 1, 1);
 
     if (count < 2) {
+        ret = 0;
         goto cleanup;
     }
 
@@ -397,7 +399,7 @@ cleanup:
     if (sumsq)
         G_free(sumsq);
 
-    return 0;
+    return ret;
 }
 
 static int write_pca(double **eigmat, double *mu, double *stddev, int *inp_fd,
