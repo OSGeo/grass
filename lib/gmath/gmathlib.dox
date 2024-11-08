@@ -464,8 +464,8 @@ implemented.
 <BR>
 <P>
 Getting BLAS/LAPACK (one package) if not already provided by the system:
-<BR><TT><A HREF="http://www.netlib.org/lapack/">http://www.netlib.org/lapack/</A></TT>
-<BR><TT><A HREF="http://netlib.bell-labs.com/netlib/master/readme.html">http://netlib.bell-labs.com/netlib/master/readme.html</A></TT>
+<BR><TT><a href="https://www.netlib.org/lapack/">https://www.netlib.org/lapack/</A></TT>
+<BR><TT><a href="https://netlib.bell-labs.com/netlib/master/readme.html">https://netlib.bell-labs.com/netlib/master/readme.html</A></TT>
 <BR>
 <P>
 Pre-compiled binaries of LAPACK/BLAS are provided on many Linux

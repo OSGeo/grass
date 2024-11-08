@@ -92,10 +92,7 @@ def main():
 
         return 0
 
-    if options["output"]:
-        map_name = options["output"]
-    else:
-        map_name = data_names[0].split("@")[0]
+    map_name = options["output"] or data_names[0].split("@")[0]
 
     gfile = grass.find_file(name=map_name, element="cell", mapset=".")
     if gfile["file"]:

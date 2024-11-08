@@ -34,9 +34,7 @@ select = [
     "COM",    # flake8-commas (COM)
     "D",      # pydocstyle (D)
     "DTZ",    # flake8-datetimez (DTZ)
-    "E4",     # pycodestyle (E, W)
-    "E7",     # pycodestyle (E, W)
-    "E9",     # pycodestyle (E, W)
+    "E",      # pycodestyle (E, W)
     "F",      # Pyflakes (F)
     "FA",     # flake8-future-annotations (FA)
     "FBT",    # flake8-boolean-trap (FBT)
@@ -48,6 +46,7 @@ select = [
     "INT",    # flake8-gettext (INT)
     "ISC",    # flake8-implicit-str-concat (ISC)
     "LOG",    # flake8-logging (LOG)
+    "N",      # pep8-naming (N)
     "NPY",    # NumPy-specific rules (NPY)
     "PERF",   # Perflint (PERF)
     "PGH",    # pygrep-hooks (PGH)
@@ -126,16 +125,14 @@ ignore = [
     "DTZ006",  # call-datetime-fromtimestamp
     "DTZ007",  # call-datetime-strptime-without-zone
     "DTZ011",  # call-date-today
-    "E401",    # multiple-imports-on-one-line
     "E402",    # module-import-not-at-top-of-file
+    "E501",    # line-too-long
     "E721",    # type-comparison
     "E722",    # bare-except
     "E731",    # lambda-assignment
     "E741",    # ambiguous-variable-name
-    "F401",    # unused-import
     "F403",    # undefined-local-with-import-star
     "F405",    # undefined-local-with-import-star-usage
-    "F601",    # multi-value-repeated-key-literal
     "F811",    # redefined-while-unused
     "F821",    # undefined-name
     "F822",    # undefined-export
@@ -145,6 +142,16 @@ ignore = [
     "FBT003",  # boolean-positional-value-in-call
     "I001",    # unsorted-imports
     "ISC003",  # explicit-string-concatenation
+    "N801",    # invalid-class-name
+    "N802",    # invalid-function-name
+    "N803",    # invalid-argument-name
+    "N806",    # non-lowercase-variable-in-function
+    "N812",    # lowercase-imported-as-non-lowercase
+    "N814",    # camelcase-imported-as-constant
+    "N815",    # mixed-case-variable-in-class-scope
+    "N816",    # mixed-case-variable-in-global-scope
+    "N818",    # error-suffix-on-exception-name
+    "N999",    # invalid-module-name
     "PERF203", # try-except-in-loop
     "PERF401", # manual-list-comprehension
     "PERF402", # manual-list-copy
@@ -201,9 +208,6 @@ ignore = [
     "RET501",  # unnecessary-return-none
     "RET502",  # implicit-return-value
     "RET503",  # implicit-return
-    "RET506",  # superfluous-else-raise
-    "RET507",  # superfluous-else-continue
-    "RET508",  # superfluous-else-break
     "RUF003",  # ambiguous-unicode-character-comment
     "RUF005",  # collection-literal-concatenation
     "RUF012",  # mutable-class-default
@@ -234,12 +238,10 @@ ignore = [
     "S608",    # hardcoded-sql-expression
     "SIM102",  # collapsible-if
     "SIM105",  # suppressible-exception
-    "SIM108",  # if-else-block-instead-of-if-exp
     "SIM113",  # enumerate-for-loop
     "SIM116",  # if-else-block-instead-of-dict-lookup
     "SIM118",  # in-dict-keys
     "SIM223",  # expr-and-false
-    "SIM401",  # if-else-block-instead-of-dict-get
     "SLF001",  # private-member-access
     "TRY002",  # raise-vanilla-class
     "TRY003",  # raise-vanilla-args
@@ -312,7 +314,9 @@ ignore = [
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
 "python/grass/pydispatch/signal.py" = ["A005"]
 "python/grass/pygrass/modules/grid/grid.py" = ["SIM115"]
+"python/grass/pygrass/modules/grid/testsuite/test_*_modules_grid_doctests.py" = ["F401"]
 "python/grass/pygrass/modules/interface/env.py" = ["SIM115"]
+"python/grass/pygrass/modules/testsuite/test_pygrass_modules_doctests.py" = ["F401"]
 "python/grass/pygrass/raster/segment.py" = ["SIM115"]
 "python/grass/pygrass/tests/*.py" = ["SIM115"]
 "python/grass/pygrass/vector/geometry.py" = ["PYI024"]

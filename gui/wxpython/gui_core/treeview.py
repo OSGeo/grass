@@ -209,10 +209,7 @@ class CTreeView(AbstractTreeViewMixin, CustomTreeCtrl):
     """Tree view class inheriting from wx.TreeCtrl"""
 
     def __init__(self, model, parent, **kw):
-        if hasAgw:
-            style = "agwStyle"
-        else:
-            style = "style"
+        style = "agwStyle" if hasAgw else "style"
 
         if style not in kw:
             kw[style] = (

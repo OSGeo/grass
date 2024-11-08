@@ -163,13 +163,12 @@ class SuccessTest(TestCase):
         cls.del_temp_region()
         shutil.rmtree(cls.sig_dir1, ignore_errors=True)
         shutil.rmtree(cls.sig_dir2, ignore_errors=True)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.b1, quiet=True)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.b2, quiet=True)
         cls.runModule(
-            "g.remove", flags="f", type="raster", name=cls.v1_class, quiet=True
-        )
-        cls.runModule(
-            "g.remove", flags="f", type="raster", name=cls.v2_class, quiet=True
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=(cls.b1, cls.b2, cls.v1_class, cls.v2_class),
+            quiet=True,
         )
         cls.runModule("g.remove", flags="f", type="group", name=cls.group, quiet=True)
 
