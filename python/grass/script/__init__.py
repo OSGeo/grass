@@ -110,20 +110,17 @@ from . import setup  # noqa: F401
 
 __all__ = [
     "PIPE",
-    # utils imports
     "KeyValue",
     "append_node_pid",
     "append_random",
     "append_uuid",
     "basename",
-    # core imports
     "call",
     "clock",
     "compare_key_value_text_files",
     "create_environment",
     "create_location",
     "create_project",
-    # db imports
     "db_begin_transaction",
     "db_commit_transaction",
     "db_connection",
@@ -163,9 +160,7 @@ __all__ = [
     "list_strings",
     "locn_is_latlong",
     "make_command",
-    # raster imports
     "mapcalc",
-    # raster3d imports
     "mapcalc3d",
     "mapcalc_start",
     "mapsets",
@@ -204,7 +199,6 @@ __all__ = [
     "try_rmdir",
     "use_temp_region",
     "vector_columns",
-    # vector imports
     "vector_db",
     "vector_db",
     "vector_db_select",
