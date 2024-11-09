@@ -1,7 +1,7 @@
 @Echo OFF 
 
 :: Software and documentation is (c) 2013 GKX Associates Inc. and 
-:: licensed under [GPL 2.0](http://www.gnu.org/licenses/gpl-2.0.html).
+:: licensed under [GPL 2.0](https://www.gnu.org/licenses/gpl-2.0.html).
 
 :: Help is at bottom of script or just run script with single argument: help
 
@@ -520,7 +520,7 @@ goto:eof
 :Rhelp
 
 echo (c) 2013 G. Grothendieck 
-echo License: GPL 2.0 ( http://www.gnu.org/licenses/gpl-2.0.html )
+echo License: GPL 2.0 ( https://www.gnu.org/licenses/gpl-2.0.html )
 echo Launch script for R and associated functions.  
 echo Usage:  R.bat [subcommand] [arguments]
 echo Subcommands where (0) means takes no arguments; (A) means may need Admin priv

@@ -6,20 +6,28 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
+  workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
+permissions: {}
 jobs:
   formatting-check:
     name: Formatting Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-      - name: Run clang-format style check for C/C++/Protobuf programs.
-        uses: jidicula/clang-format-action@v4.11.0
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          clang-format-version: '15'
-          check-path: .
+          persist-credentials: false
+      - uses: DoozyX/clang-format-lint-action@c71d0bf4e21876ebec3e5647491186f8797fde31 # v0.18.2
+        with:
+          source: "."
+          clangFormatVersion: 18.1.8
+          inplace: True
+      - name: Create and uploads code suggestions to apply
+        id: diff
+        uses: ./.github/actions/create-upload-suggestions
+        with:
+          tool-name: clang-format
+          # To keep repo's file structure in formatted changes artifact
+          extra-upload-changes: .clang-format

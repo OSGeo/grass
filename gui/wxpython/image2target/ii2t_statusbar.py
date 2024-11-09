@@ -11,11 +11,7 @@ Classes:
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
-
-@author Vaclav Petras <wenzeslaus gmail.com> (statusbar refactoring)
-@author Anna Kratochvilova <kratochanna gmail.com> (statusbar refactoring)
 """
-
 
 import wx
 
@@ -98,8 +94,7 @@ class SbGoToGCP(SbItem):
         and sets the spin limits accordingly."""
         self.statusbar.SetStatusText("")
         maximum = self.mapFrame.GetListCtrl().GetItemCount()
-        if maximum < 1:
-            maximum = 1
+        maximum = max(maximum, 1)
         self.widget.SetRange(0, maximum)
         self.Show()
 

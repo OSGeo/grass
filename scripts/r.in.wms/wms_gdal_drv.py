@@ -13,18 +13,19 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
 
-import grass.script as grass
+import grass.script as gs
 
 try:
     from osgeo import gdal
-except:
-    grass.fatal(
+except ImportError:
+    gs.fatal(
         _(
-            "Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"
+            "Unable to load GDAL Python bindings (requires package 'python-gdal' being "
+            "installed)"
         )
     )
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 from wms_base import WMSBase, GetSRSParamVal
 
@@ -57,65 +58,64 @@ class WMSGdalDrv(WMSBase):
         """
         self._debug("_createXML", "started")
 
-        gdal_wms = etree.Element("GDAL_WMS")
-        service = etree.SubElement(gdal_wms, "Service")
-        name = etree.Element("name")
+        gdal_wms = ET.Element("GDAL_WMS")
+        service = ET.SubElement(gdal_wms, "Service")
         service.set("name", "WMS")
 
-        version = etree.SubElement(service, "Version")
+        version = ET.SubElement(service, "Version")
         version.text = self.params["wms_version"]
 
-        server_url = etree.SubElement(service, "ServerUrl")
+        server_url = ET.SubElement(service, "ServerUrl")
         server_url.text = self.params["url"]
 
-        srs = etree.SubElement(service, self.params["proj_name"])
+        srs = ET.SubElement(service, self.params["proj_name"])
         srs.text = GetSRSParamVal(self.params["srs"])
 
-        image_format = etree.SubElement(service, "ImageFormat")
+        image_format = ET.SubElement(service, "ImageFormat")
         image_format.text = self.params["format"]
 
-        image_format = etree.SubElement(service, "Transparent")
+        image_format = ET.SubElement(service, "Transparent")
         image_format.text = self.params["transparent"]
 
-        layers = etree.SubElement(service, "Layers")
+        layers = ET.SubElement(service, "Layers")
         layers.text = self.params["layers"]
 
-        styles = etree.SubElement(service, "Styles")
+        styles = ET.SubElement(service, "Styles")
         styles.text = self.params["styles"]
 
-        data_window = etree.SubElement(gdal_wms, "DataWindow")
+        data_window = ET.SubElement(gdal_wms, "DataWindow")
 
-        upper_left_x = etree.SubElement(data_window, "UpperLeftX")
+        upper_left_x = ET.SubElement(data_window, "UpperLeftX")
         upper_left_x.text = str(self.bbox["minx"])
 
-        upper_left_y = etree.SubElement(data_window, "UpperLeftY")
+        upper_left_y = ET.SubElement(data_window, "UpperLeftY")
         upper_left_y.text = str(self.bbox["maxy"])
 
-        lower_right_x = etree.SubElement(data_window, "LowerRightX")
+        lower_right_x = ET.SubElement(data_window, "LowerRightX")
         lower_right_x.text = str(self.bbox["maxx"])
 
-        lower_right_y = etree.SubElement(data_window, "LowerRightY")
+        lower_right_y = ET.SubElement(data_window, "LowerRightY")
         lower_right_y.text = str(self.bbox["miny"])
 
-        size_x = etree.SubElement(data_window, "SizeX")
+        size_x = ET.SubElement(data_window, "SizeX")
         size_x.text = str(self.region["cols"])
 
-        size_y = etree.SubElement(data_window, "SizeY")
+        size_y = ET.SubElement(data_window, "SizeY")
         size_y.text = str(self.region["rows"])
 
         # RGB + alpha
         self.temp_map_bands_num = 4
-        block_size_x = etree.SubElement(gdal_wms, "BandsCount")
+        block_size_x = ET.SubElement(gdal_wms, "BandsCount")
         block_size_x.text = str(self.temp_map_bands_num)
 
-        block_size_x = etree.SubElement(gdal_wms, "BlockSizeX")
+        block_size_x = ET.SubElement(gdal_wms, "BlockSizeX")
         block_size_x.text = str(self.tile_size["cols"])
 
-        block_size_y = etree.SubElement(gdal_wms, "BlockSizeY")
+        block_size_y = ET.SubElement(gdal_wms, "BlockSizeY")
         block_size_y.text = str(self.tile_size["rows"])
 
         if self.params["username"] and self.params["password"]:
-            user_password = etree.SubElement(gdal_wms, "UserPwd")
+            user_password = ET.SubElement(gdal_wms, "UserPwd")
             user_password.text = "%s:%s" % (
                 self.params["username"],
                 self.params["password"],
@@ -123,7 +123,7 @@ class WMSGdalDrv(WMSBase):
 
         xml_file = self._tempfile()
 
-        etree.ElementTree(gdal_wms).write(xml_file)
+        ET.ElementTree(gdal_wms).write(xml_file)
 
         self._debug("_createXML", "finished -> %s" % xml_file)
 
@@ -134,17 +134,18 @@ class WMSGdalDrv(WMSBase):
 
         @return temp_map with stored downloaded data
         """
-        grass.message("Downloading data from WMS server...")
+        gs.message("Downloading data from WMS server...")
 
         # GDAL WMS driver does not flip geographic coordinates
         # according to WMS standard 1.3.0.
         if (
             "+proj=latlong" in self.proj_srs or "+proj=longlat" in self.proj_srs
         ) and self.params["wms_version"] == "1.3.0":
-            grass.warning(
+            gs.warning(
                 _(
                     "If module will not be able to fetch the data in this "
-                    + "geographic projection, \n try 'WMS_GRASS' driver or use WMS version 1.1.1."
+                    "geographic projection, \n try 'WMS_GRASS' driver or use WMS "
+                    "version 1.1.1."
                 )
             )
 
@@ -154,8 +155,8 @@ class WMSGdalDrv(WMSBase):
         xml_file = self._createXML()
 
         # print xml file content for debug level 1
-        file = open(xml_file, "r")
-        grass.debug("WMS request XML:\n%s" % file.read(), 1)
+        file = open(xml_file)
+        gs.debug("WMS request XML:\n%s" % file.read(), 1)
         file.close()
 
         if self.proxy:
@@ -163,24 +164,22 @@ class WMSGdalDrv(WMSBase):
         if self.proxy_user_pw:
             gdal.SetConfigOption("GDAL_HTTP_PROXYUSERPWD", str(self.proxy_user_pw))
         wms_dataset = gdal.Open(xml_file, gdal.GA_ReadOnly)
-        grass.try_remove(xml_file)
+        gs.try_remove(xml_file)
         if wms_dataset is None:
-            grass.fatal(_("Unable to open GDAL WMS driver"))
+            gs.fatal(_("Unable to open GDAL WMS driver"))
 
         self._debug("_download", "GDAL dataset created")
 
         driver = gdal.GetDriverByName(self.gdal_drv_format)
         if driver is None:
-            grass.fatal(_("Unable to find %s driver" % format))
+            gs.fatal(_("Unable to find %s driver") % self.gdal_drv_format)
 
         metadata = driver.GetMetadata()
         if (
             gdal.DCAP_CREATECOPY not in metadata
             or metadata[gdal.DCAP_CREATECOPY] == "NO"
         ):
-            grass.fatal(
-                _("Driver %s supports CreateCopy() method.") % self.gdal_drv_name
-            )
+            gs.fatal(_("Driver %s supports CreateCopy() method.") % self.gdal_drv_name)
 
         self._debug("_download", "calling GDAL CreateCopy...")
 
@@ -193,7 +192,7 @@ class WMSGdalDrv(WMSBase):
             )
 
         if temp_map_dataset is None:
-            grass.fatal(_("Incorrect WMS query"))
+            gs.fatal(_("Incorrect WMS query"))
 
         temp_map_dataset = None
         wms_dataset = None

@@ -25,7 +25,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com> (MapPanelBase)
 @author Anna Kratochvilova <kratochanna gmail.com> (MapPanelBase)
-"""
+"""  # noqa: E501
 
 import os
 import sys
@@ -78,7 +78,7 @@ class DMonMap(Map):
         self._giface = giface
 
         # environment settings
-        self.env = dict()
+        self.env = {}
 
         self.cmdfile = cmdfile
 
@@ -108,7 +108,7 @@ class DMonMap(Map):
         self.renderMgr = RenderMapMgr(self)
 
         # update legend file variable with the one d.mon uses
-        with open(monFile["env"], "r") as f:
+        with open(monFile["env"]) as f:
             lines = f.readlines()
             for line in lines:
                 if "GRASS_LEGEND_FILE" in line:
@@ -123,7 +123,7 @@ class DMonMap(Map):
 
         nlayers = 0
         try:
-            fd = open(self.cmdfile, "r")
+            fd = open(self.cmdfile)
             lines = fd.readlines()
             fd.close()
             # detect d.out.file, delete the line from the cmd file and export
@@ -169,7 +169,7 @@ class DMonMap(Map):
             # next number in rendering order
             next_layer = 0
             mapFile = None
-            render_env = dict()
+            render_env = {}
             for line in lines:
                 if line.startswith("#"):
                     if "GRASS_RENDER_FILE" in line:
@@ -196,7 +196,7 @@ class DMonMap(Map):
 
                 args = {}
 
-                if ltype in ("barscale", "rastleg", "northarrow", "text", "vectleg"):
+                if ltype in {"barscale", "rastleg", "northarrow", "text", "vectleg"}:
                     # TODO: this is still not optimal
                     # it is there to prevent adding the same overlay multiple times
                     if cmd in self.oldOverlays:
@@ -227,7 +227,8 @@ class DMonMap(Map):
                         if layersOrder[i] == -1:
                             layersOrder[i] = next_layer
                             next_layer += 1
-                        # layer must be put higher in render order (same cmd was insered more times)
+                        # layer must be put higher in render order (same cmd was
+                        # insered more times)
                         # TODO delete rendurant cmds from cmd file?
                         else:
                             for j, l_order in enumerate(layersOrder):
@@ -253,7 +254,7 @@ class DMonMap(Map):
                 )
                 if render_env:
                     mapLayer.GetRenderMgr().UpdateRenderEnv(render_env)
-                    render_env = dict()
+                    render_env = {}
 
                 newLayer = self._addLayer(mapLayer)
 
@@ -333,14 +334,14 @@ class Layer:
     def __getattr__(self, name):
         if name == "cmd":
             return cmdtuple_to_list(self._maplayer.GetCmd())
-        elif hasattr(self._maplayer, name):
+        if hasattr(self._maplayer, name):
             return getattr(self._maplayer, name)
-        elif name == "maplayer":
+        if name == "maplayer":
             return self._maplayer
-        elif name == "type":
+        if name == "type":
             return self._maplayer.GetType()
             # elif name == 'ctrl':
-        elif name == "label":
+        if name == "label":
             return self._maplayer.GetName()
             # elif name == 'propwin':
 
@@ -369,7 +370,7 @@ class LayerList:
         return result
 
     def next(self):
-        return self.__next__()
+        return next(self)
 
     def GetSelectedLayers(self, checkedOnly=True):
         # hidden and selected vs checked and selected
@@ -385,8 +386,7 @@ class LayerList:
         layers = self.GetSelectedLayers()
         if len(layers) > 0:
             return layers[0]
-        else:
-            return None
+        return None
 
     def AddLayer(self, ltype, name=None, checked=None, opacity=1.0, cmd=None):
         """Adds a new layer to the layer list.

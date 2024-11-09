@@ -59,19 +59,20 @@ int main(int argc, char *argv[])
     int formats;
     const char *epsg = NULL;
 
+    /* We don't call G_gisinit() here because it validates the
+     * mapset, whereas this module may legitimately be used
+     * (to create a new location) when none exists. */
     G_set_program_name(argv[0]);
-    G_no_gisinit(); /* We don't call G_gisinit() here because it validates the
-                     * mapset, whereas this module may legitmately be used
-                     * (to create a new location) when none exists */
+    G_no_gisinit();
 
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("projection"));
-    G_add_keyword(_("create location"));
+    G_add_keyword(_("create project"));
 #ifdef HAVE_OGR
     module->label = _("Prints or modifies GRASS projection information files "
                       "(in various co-ordinate system descriptions).");
-    module->description = _("Can also be used to create new GRASS locations.");
+    module->description = _("Can also be used to create new GRASS projects.");
 #else
     module->description =
         _("Prints and manipulates GRASS projection information files.");
@@ -212,15 +213,15 @@ int main(int argc, char *argv[])
     create = G_define_flag();
     create->key = 'c';
     create->guisection = _("Modify");
-    create->description = _("Modify current location projection files");
+    create->description = _("Modify current project's projection files");
 
     location = G_define_option();
-    location->key = "location";
+    location->key = "project";
     location->type = TYPE_STRING;
     location->key_desc = "name";
     location->required = NO;
     location->guisection = _("Create");
-    location->description = _("Name of new location to create");
+    location->description = _("Name of new project (location) to create");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);

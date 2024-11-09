@@ -91,23 +91,16 @@ header_graphical_index_tmpl = """\
 
 
 def file_matches(filename, patterns):
-    for pattern in patterns:
-        if fnmatch.fnmatch(filename, pattern):
-            return True
-    return False
+    return any(fnmatch.fnmatch(filename, pattern) for pattern in patterns)
 
 
-def starts_with_module(string, module):
+def starts_with_module(string, module) -> bool:
     # not solving:
     # module = module.replace('wxGUI.', 'g.gui.')
     # TODO: matches g.mapsets images for g.mapset and d.rast.num for d.rast
-    if string.startswith(module.replace(".", "_")):
-        return True
-    if string.startswith(module.replace(".", "")):
-        return True
-    if string.startswith(module):
-        return True
-    return False
+    return bool(
+        string.startswith((module.replace(".", "_"), module.replace(".", ""), module))
+    )
 
 
 def get_module_image(module, images):
@@ -128,7 +121,7 @@ def get_module_image(module, images):
             return image
         if basename == module:
             return image
-    return sorted(candidates, key=len)[0]
+    return min(candidates, key=len)
 
 
 def generate_page_for_category(
@@ -140,12 +133,12 @@ def generate_page_for_category(
 
     output.write(
         header1_tmpl.substitute(
-            title="GRASS GIS %s Reference " "Manual: Graphical index" % grass_version
+            title="GRASS GIS %s Reference Manual: Graphical index" % grass_version
         )
     )
     output.write(header_graphical_index_tmpl)
 
-    if module_family.lower() not in ["general", "postscript"]:
+    if module_family.lower() not in {"general", "postscript"}:
         if module_family == "raster3d":
             # covert keyword to nice form
             module_family = "3D raster"
@@ -172,7 +165,7 @@ def generate_page_for_category(
         img_class = "linkimg"
         if skip_no_image and not img:
             continue
-        elif not img:
+        if not img:
             img = "grass_logo.png"
             img_class = "default-img"
         if basename.startswith("wxGUI"):

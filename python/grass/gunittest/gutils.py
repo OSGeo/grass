@@ -21,7 +21,7 @@ def get_current_mapset():
     return call_module("g.mapset", flags="p").strip()
 
 
-def is_map_in_mapset(name, type, mapset=None):
+def is_map_in_mapset(name, type, mapset=None) -> bool:
     """Check is map is present in the mapset (current mapset by default)
 
     This function is different from what we would expect in GRASS
@@ -39,9 +39,9 @@ def is_map_in_mapset(name, type, mapset=None):
     # so anything accepted by g.findfile will work but this can change in the
     # future (the documentation is clear about what's legal)
     # supporting both short and full names
-    if type == "rast" or type == "raster":
+    if type in {"rast", "raster"}:
         type = "cell"
-    elif type == "rast3d" or type == "raster3d":
+    elif type in {"rast3d", "raster3d"}:
         type = "grid3"
     elif type == "vect":
         type = "vector"
@@ -60,7 +60,4 @@ def is_map_in_mapset(name, type, mapset=None):
     info = text_to_keyvalue(decode(output), sep="=")
     # file is the key questioned in grass.script.core find_file()
     # return code should be equivalent to checking the output
-    if info["file"]:
-        return True
-    else:
-        return False
+    return bool(info["file"])
