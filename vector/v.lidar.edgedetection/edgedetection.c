@@ -373,10 +373,10 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
                                 _("Impossible to write to aux table"));
 
                     } /*else (1) */
-                }     /*else */
+                } /*else */
             }
-        }                                 /*end if obs */
-    }                                     /*end for */
+        } /*end if obs */
+    } /*end for */
     G_percent(num_points, num_points, 2); /* finish it */
 
     db_commit_transaction(driver);

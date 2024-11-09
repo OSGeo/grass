@@ -313,7 +313,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             + "';\n"
         )
 
-    def is_in_db(self, dbif=None, mapset=None):
+    def is_in_db(self, dbif=None, mapset=None) -> bool:
         """Check if this object is present in the temporal database
 
         :param dbif: The database interface to be used,
@@ -342,10 +342,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             dbif.close()
 
         # Nothing found
-        if row is None:
-            return False
-
-        return True
+        return row is not None
 
     def get_select_statement(self):
         """Return the sql statement and the argument list in
@@ -469,10 +466,9 @@ class SQLDatabaseInterface(DictSQLSerializer):
             return self.serialize(
                 "UPDATE", self.get_table_name(), "WHERE id = '" + str(ident) + "'"
             )
-        else:
-            return self.serialize(
-                "UPDATE", self.get_table_name(), "WHERE id = '" + str(self.ident) + "'"
-            )
+        return self.serialize(
+            "UPDATE", self.get_table_name(), "WHERE id = '" + str(self.ident) + "'"
+        )
 
     def get_update_statement_mogrified(self, dbif=None, ident=None):
         """Return the update statement as mogrified string
@@ -532,12 +528,11 @@ class SQLDatabaseInterface(DictSQLSerializer):
             return self.serialize(
                 "UPDATE ALL", self.get_table_name(), "WHERE id = '" + str(ident) + "'"
             )
-        else:
-            return self.serialize(
-                "UPDATE ALL",
-                self.get_table_name(),
-                "WHERE id = '" + str(self.ident) + "'",
-            )
+        return self.serialize(
+            "UPDATE ALL",
+            self.get_table_name(),
+            "WHERE id = '" + str(self.ident) + "'",
+        )
 
     def get_update_all_statement_mogrified(self, dbif=None, ident=None):
         """Return the update all statement as mogrified string
@@ -752,8 +747,7 @@ class DatasetBase(SQLDatabaseInterface):
         """
         if "id" in self.D:
             return self.D["id"]
-        else:
-            return None
+        return None
 
     def get_map_id(self):
         """Convenient method to get the unique map identifier
@@ -766,10 +760,8 @@ class DatasetBase(SQLDatabaseInterface):
             if self.id.find(":") >= 0:
                 # Remove the layer identifier from the id
                 return self.id.split("@")[0].split(":")[0] + "@" + self.id.split("@")[1]
-            else:
-                return self.id
-        else:
-            return None
+            return self.id
+        return None
 
     def get_layer(self):
         """Convenient method to get the layer of the map (part of primary key)
@@ -780,48 +772,42 @@ class DatasetBase(SQLDatabaseInterface):
         """
         if "layer" in self.D:
             return self.D["layer"]
-        else:
-            return None
+        return None
 
     def get_name(self):
         """Get the name of the dataset
         :return: None if not found"""
         if "name" in self.D:
             return self.D["name"]
-        else:
-            return None
+        return None
 
     def get_mapset(self):
         """Get the name of mapset of this dataset
         :return: None if not found"""
         if "mapset" in self.D:
             return self.D["mapset"]
-        else:
-            return None
+        return None
 
     def get_creator(self):
         """Get the creator of the dataset
         :return: None if not found"""
         if "creator" in self.D:
             return self.D["creator"]
-        else:
-            return None
+        return None
 
     def get_ctime(self):
         """Get the creation time of the dataset, datatype is datetime
         :return: None if not found"""
         if "creation_time" in self.D:
             return self.D["creation_time"]
-        else:
-            return None
+        return None
 
     def get_ttype(self):
         """Get the temporal type of the map
         :return: None if not found"""
         if "temporal_type" in self.D:
             return self.D["temporal_type"]
-        else:
-            return None
+        return None
 
     # Properties of this class
     id = property(fget=get_id, fset=set_id)
@@ -1030,8 +1016,7 @@ class STDSBase(DatasetBase):
         """
         if "semantic_type" in self.D:
             return self.D["semantic_type"]
-        else:
-            return None
+        return None
 
     def get_mtime(self):
         """Get the modification time of the space time dataset, datatype is
@@ -1041,8 +1026,7 @@ class STDSBase(DatasetBase):
         """
         if "modification_time" in self.D:
             return self.D["modification_time"]
-        else:
-            return None
+        return None
 
     semantic_type = property(fget=get_semantic_type, fset=set_semantic_type)
 
@@ -1204,8 +1188,7 @@ class AbstractSTDSRegister(SQLDatabaseInterface):
         """
         if "id" in self.D:
             return self.D["id"]
-        else:
-            return None
+        return None
 
     def get_registered_stds(self):
         """Get the comma separated list of space time datasets ids
@@ -1215,8 +1198,7 @@ class AbstractSTDSRegister(SQLDatabaseInterface):
         """
         if "registered_stds" in self.D:
             return self.D["registered_stds"]
-        else:
-            return None
+        return None
 
     # Properties of this class
     id = property(fget=get_id, fset=set_id)

@@ -130,7 +130,7 @@ int db__driver_fetch(dbCursor *cn, int position, int *more)
         G_debug(3, "col %d, litetype %d, sqltype %d: val = '%s'", col, litetype,
                 sqltype, text);
 
-        /* http://www.sqlite.org/capi3ref.html#sqlite3_column_type
+        /* https://www.sqlite.org/capi3ref.html#sqlite3_column_type
            SQLITE_INTEGER  1
            SQLITE_FLOAT    2
            SQLITE_TEXT     3

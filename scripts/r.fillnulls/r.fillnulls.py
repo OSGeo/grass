@@ -273,7 +273,7 @@ def main():
                 type="area",
                 quiet=quiet,
             )
-        except:
+        except CalledModuleError:
             gs.fatal(
                 _(
                     "abandoned. Removing temporary maps, restoring "
@@ -320,7 +320,7 @@ def main():
             holename = prefix + "hole_" + cat
             # GTC Hole is a NULL area in a raster map
             gs.message(_("Filling hole %s of %s") % (hole_n, len(cat_list)))
-            hole_n = hole_n + 1
+            hole_n += 1
             # cut out only CAT hole for processing
             try:
                 gs.run_command(
@@ -481,7 +481,7 @@ def main():
                     tmp_rmaps.remove(holename + "_edges")
                     tmp_rmaps.remove(holename + "_dem")
                     tmp_vmaps.remove(holename)
-                except:
+                except ValueError:
                     pass
                 gs.warning(
                     _(
@@ -545,7 +545,7 @@ def main():
                 tmp_rmaps.remove(holename + "_grown")
                 tmp_rmaps.remove(holename + "_edges")
                 tmp_rmaps.remove(holename + "_dem")
-            except:
+            except ValueError:
                 pass
             try:
                 gs.run_command(
@@ -569,7 +569,7 @@ def main():
                 )
             try:
                 tmp_vmaps.remove(holename)
-            except:
+            except ValueError:
                 pass
             try:
                 gs.run_command(

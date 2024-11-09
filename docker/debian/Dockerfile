@@ -18,8 +18,8 @@ WORKDIR /tmp
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends --no-install-suggests \
-    build-essential \
     bison \
+    build-essential \
     bzip2 \
     cmake \
     curl \
@@ -40,8 +40,8 @@ RUN apt-get update && apt-get upgrade -y && \
     libgsl0-dev \
     libjpeg-dev \
     libjsoncpp-dev \
-    libnetcdf-dev \
     libncurses-dev \
+    libnetcdf-dev \
     libopenblas-dev \
     libopenjp2-7 \
     libopenjp2-7-dev \
@@ -88,15 +88,15 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
 WORKDIR /src
 RUN mkdir vdatum && \
     cd vdatum && \
-    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2012.zip && unzip -j -u usa_geoid2012.zip -d /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2009.zip && unzip -j -u usa_geoid2009.zip -d /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2003.zip && unzip -j -u usa_geoid2003.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm08_25/egm08_25.gtx && mv egm08_25.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm96_15/egm96_15.gtx && mv egm96_15.gtx /usr/share/proj; \
     wget -q http://download.osgeo.org/proj/vdatum/usa_geoid1999.zip && unzip -j -u usa_geoid1999.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2003.zip && unzip -j -u usa_geoid2003.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2009.zip && unzip -j -u usa_geoid2009.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2012.zip && unzip -j -u usa_geoid2012.zip -d /usr/share/proj; \
     wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconc.gtx && mv vertconc.gtx /usr/share/proj; \
     wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertcone.gtx && mv vertcone.gtx /usr/share/proj; \
     wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconw.gtx && mv vertconw.gtx /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/egm96_15/egm96_15.gtx && mv egm96_15.gtx /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/egm08_25/egm08_25.gtx && mv egm08_25.gtx /usr/share/proj; \
     cd .. && \
     rm -rf vdatum
 
@@ -116,16 +116,16 @@ RUN wget -q \
       -DCMAKE_C_COMPILER=gcc \
       -DCMAKE_CXX_COMPILER=g++ \
       -DCMAKE_MAKE_PROGRAM=make \
-      -DBUILD_PLUGIN_PYTHON=ON \
+      -DBUILD_PGPOINTCLOUD_TESTS=OFF \
       -DBUILD_PLUGIN_CPD=OFF \
       -DBUILD_PLUGIN_GREYHOUND=ON \
       -DBUILD_PLUGIN_HEXBIN=ON \
-      -DHEXER_INCLUDE_DIR=/usr/include/ \
-      -DBUILD_PLUGIN_NITF=OFF \
       -DBUILD_PLUGIN_ICEBRIDGE=ON \
+      -DBUILD_PLUGIN_NITF=OFF \
       -DBUILD_PLUGIN_PGPOINTCLOUD=OFF \
-      -DBUILD_PGPOINTCLOUD_TESTS=OFF \
+      -DBUILD_PLUGIN_PYTHON=ON \
       -DBUILD_PLUGIN_SQLITE=ON \
+      -DHEXER_INCLUDE_DIR=/usr/include/ \
       -DWITH_LASZIP=OFF \
       -DWITH_LAZPERF=ON \
       -DWITH_TESTS=ON && \
@@ -153,24 +153,24 @@ ENV CXXFLAGS "$MYCXXFLAGS"
 ENV NUMTHREADS=4
 RUN make distclean || echo "nothing to clean"
 RUN /src/grass_build/configure \
-  --with-cxx \
   --enable-largefile \
-  --with-proj-share=/usr/share/proj \
+  --with-bzlib \
+  --with-cairo --with-cairo-ldflags=-lfontconfig \
+  --with-cxx \
+  --with-fftw \
+  --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
   --with-gdal=/usr/bin/gdal-config \
   --with-geos \
-  --with-sqlite \
-  --with-cairo --with-cairo-ldflags=-lfontconfig \
-  --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
-  --with-fftw \
-  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
   --with-netcdf \
-  --with-zstd \
-  --with-bzlib \
   --with-pdal \
+  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
+  --with-proj-share=/usr/share/proj \
+  --with-sqlite \
+  --with-zstd \
   --without-mysql \
   --without-odbc \
-  --without-openmp \
   --without-opengl \
+  --without-openmp \
     && make -j $NUMTHREADS \
     && make install && ldconfig
 

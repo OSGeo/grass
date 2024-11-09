@@ -94,20 +94,15 @@ header_graphical_index_tmpl = """\
 """
 
 
-def img_in_html(filename, imagename):
+def img_in_html(filename, imagename) -> bool:
     # for some reason, calling search just once is much faster
     # than calling it on every line (time is spent in _compile)
     pattern = re.compile("<img .*src=.{0}.*>".format(imagename))
-    if re.search(pattern, Path(filename).read_text()):
-        return True
-    return False
+    return bool(re.search(pattern, Path(filename).read_text()))
 
 
 def file_matches(filename, patterns):
-    for pattern in patterns:
-        if fnmatch.fnmatch(filename, pattern):
-            return True
-    return False
+    return any(fnmatch.fnmatch(filename, pattern) for pattern in patterns)
 
 
 def get_files(directory, patterns, exclude_patterns):
@@ -137,8 +132,7 @@ def title_from_names(module_name, img_name):
     img_name = img_name.strip()
     if img_name:
         return "{name} ({desc})".format(name=module_name, desc=img_name)
-    else:
-        return "{name}".format(name=module_name)
+    return "{name}".format(name=module_name)
 
 
 def get_module_name(filename):

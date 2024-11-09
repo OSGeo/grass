@@ -817,7 +817,7 @@ void em_buffer<T, Key>::cleanup()
                 }
                 j++;
             } // if data[i] != NULL
-        }     // for i
+        } // for i
 
         // set the index
         assert(index == j + empty);
