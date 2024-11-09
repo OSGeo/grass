@@ -74,7 +74,6 @@ per-file-ignores =
     python/grass/temporal/temporal_algebra.py: E722
     python/grass/temporal/temporal_granularity.py: E722
     python/grass/temporal/temporal_raster_base_algebra.py: E722
-    python/grass/temporal/temporal_topology_dataset_connector.py: E722
     # Current benchmarks/tests are changing sys.path before import.
     # Possibly, a different approach should be taken there anyway.
     python/grass/pygrass/tests/benchmark.py: E402, F821
