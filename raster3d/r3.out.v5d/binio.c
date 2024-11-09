@@ -202,13 +202,14 @@ int read_float4(int f, float *x)
     else {
         return 0;
     }
-#endif
+#else
     if (read(f, x, 4) == 4) {
         return 1;
     }
     else {
         return 0;
     }
+#endif
 }
 
 /*
