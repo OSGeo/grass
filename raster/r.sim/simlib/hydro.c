@@ -151,9 +151,6 @@ void main_loop(void)
         maxwa = maxwa / nblock;
     }
 
-    /* Create the observation points */
-    create_observation_points();
-
     G_debug(2, " maxwa, nblock %d %d", maxwa, nblock);
 
     for (iblock = 1; iblock <= nblock; iblock++) {

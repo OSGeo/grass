@@ -81,9 +81,7 @@ def _read_from_plain_text(history_path):
     stores only executed commands."""
     content_list = []
     try:
-        with open(
-            history_path, encoding="utf-8", mode="r", errors="replace"
-        ) as file_history:
+        with open(history_path, encoding="utf-8", errors="replace") as file_history:
             content_list = [
                 {"command": line.strip(), "command_info": None} for line in file_history
             ]
@@ -287,7 +285,7 @@ def _add_entry_to_JSON(history_path, entry):
     :param dict entry: entry consisting of 'command' and 'command_info' keys
     """
     try:
-        with open(history_path, encoding="utf-8", mode="r") as file_history:
+        with open(history_path, encoding="utf-8") as file_history:
             existing_data = json.load(file_history)
     except (OSError, ValueError):
         existing_data = []

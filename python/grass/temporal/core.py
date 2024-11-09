@@ -32,6 +32,7 @@ for details.
 
 # import traceback
 import os
+from pathlib import Path
 
 import grass.script as gs
 from grass.pygrass import messages
@@ -768,12 +769,12 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
                 "Temporal database version mismatch detected.\n{backup}"
                 "Supported temporal database version is: {tdb}\n"
                 "Your existing temporal database version: {ctdb}\n"
-                "Current temporal database info: {info}".format(
-                    backup=backup_howto,
-                    tdb=tgis_db_version,
-                    ctdb=tgis_db_version_meta,
-                    info=get_database_info_string(),
-                )
+                "Current temporal database info: {info}"
+            ).format(
+                backup=backup_howto,
+                tdb=tgis_db_version,
+                ctdb=tgis_db_version_meta,
+                info=get_database_info_string(),
             )
 
             if tgis_db_version_meta == 2 and tgis_db_version == 3:
@@ -783,8 +784,8 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
                 msgr.fatal(
                     _(
                         "The format of your actual temporal database is "
-                        "not supported any more. {m}".format(m=message)
-                    )
+                        "not supported any more. {m}"
+                    ).format(m=message)
                 )
 
         return
@@ -813,7 +814,7 @@ def _create_temporal_database_views(dbif):
 
     :param dbif: The database interface to be used
     """
-    template_path = get_sql_template_path()
+    template_path = Path(get_sql_template_path())
 
     for sql_filename in (
         "raster_views",
@@ -823,9 +824,7 @@ def _create_temporal_database_views(dbif):
         "str3ds_views",
         "stvds_views",
     ):
-        sql_filepath = open(
-            os.path.join(template_path, sql_filename + ".sql"), "r"
-        ).read()
+        sql_filepath = (template_path / f"{sql_filename}.sql").read_text()
         dbif.execute_transaction(sql_filepath)
 
 
@@ -839,34 +838,18 @@ def create_temporal_database(dbif):
     """
     global tgis_backend, tgis_version, tgis_db_version, tgis_database_string
 
-    template_path = get_sql_template_path()
+    template_path = Path(get_sql_template_path())
     msgr = get_tgis_message_interface()
 
     # Read all SQL scripts and templates
-    map_tables_template_sql = open(
-        os.path.join(template_path, "map_tables_template.sql"), "r"
-    ).read()
-    raster_metadata_sql = open(
-        os.path.join(get_sql_template_path(), "raster_metadata_table.sql"), "r"
-    ).read()
-    raster3d_metadata_sql = open(
-        os.path.join(template_path, "raster3d_metadata_table.sql"), "r"
-    ).read()
-    vector_metadata_sql = open(
-        os.path.join(template_path, "vector_metadata_table.sql"), "r"
-    ).read()
-    stds_tables_template_sql = open(
-        os.path.join(template_path, "stds_tables_template.sql"), "r"
-    ).read()
-    strds_metadata_sql = open(
-        os.path.join(template_path, "strds_metadata_table.sql"), "r"
-    ).read()
-    str3ds_metadata_sql = open(
-        os.path.join(template_path, "str3ds_metadata_table.sql"), "r"
-    ).read()
-    stvds_metadata_sql = open(
-        os.path.join(template_path, "stvds_metadata_table.sql"), "r"
-    ).read()
+    map_tables_template_sql = (template_path / "map_tables_template.sql").read_text()
+    raster_metadata_sql = (template_path / "raster_metadata_table.sql").read_text()
+    raster3d_metadata_sql = (template_path / "raster3d_metadata_table.sql").read_text()
+    vector_metadata_sql = (template_path / "vector_metadata_table.sql").read_text()
+    stds_tables_template_sql = (template_path / "stds_tables_template.sql").read_text()
+    strds_metadata_sql = (template_path / "strds_metadata_table.sql").read_text()
+    str3ds_metadata_sql = (template_path / "str3ds_metadata_table.sql").read_text()
+    stvds_metadata_sql = (template_path / "stvds_metadata_table.sql").read_text()
 
     # Create the raster, raster3d and vector tables SQL statements
     raster_tables_sql = map_tables_template_sql.replace("GRASS_MAP", "raster")
@@ -879,7 +862,7 @@ def create_temporal_database(dbif):
     stvds_tables_sql = stds_tables_template_sql.replace("STDS", "stvds")
     str3ds_tables_sql = stds_tables_template_sql.replace("STDS", "str3ds")
 
-    msgr.message(_("Creating temporal database: %s" % (str(tgis_database_string))))
+    msgr.message(_("Creating temporal database: %s") % (str(tgis_database_string)))
 
     if tgis_backend == "sqlite":
         # We need to create the sqlite3 database path if it does not exist
@@ -892,27 +875,22 @@ def create_temporal_database(dbif):
                     _(
                         "Unable to create SQLite temporal database\n"
                         "Exception: %s\nPlease use t.connect to set a "
-                        "read- and writable temporal database path" % (e)
+                        "read- and writable temporal database path"
                     )
+                    % (e)
                 )
 
         # Set up the trigger that takes care of
         # the correct deletion of entries across the different tables
-        delete_trigger_sql = open(
-            os.path.join(template_path, "sqlite3_delete_trigger.sql"), "r"
-        ).read()
-        indexes_sql = open(
-            os.path.join(template_path, "sqlite3_indexes.sql"), "r"
-        ).read()
+        delete_trigger_sql = (template_path / "sqlite3_delete_trigger.sql").read_text()
+        indexes_sql = (template_path / "sqlite3_indexes.sql").read_text()
     else:
         # Set up the trigger that takes care of
         # the correct deletion of entries across the different tables
-        delete_trigger_sql = open(
-            os.path.join(template_path, "postgresql_delete_trigger.sql"), "r"
-        ).read()
-        indexes_sql = open(
-            os.path.join(template_path, "postgresql_indexes.sql"), "r"
-        ).read()
+        delete_trigger_sql = (
+            template_path / "postgresql_delete_trigger.sql"
+        ).read_text()
+        indexes_sql = (template_path / "postgresql_indexes.sql").read_text()
 
     # Connect now to the database
     if dbif.connected is not True:
@@ -989,22 +967,19 @@ def upgrade_temporal_database(dbif):
         dbif.close()
         return
 
-    template_path = get_sql_template_path()
+    template_path = Path(get_sql_template_path())
     try:
-        upgrade_db_sql = open(
-            os.path.join(
-                template_path,
-                "upgrade_db_%s_to_%s.sql" % (upgrade_db_from, tgis_db_version),
-            ),
-            "r",
-        ).read()
+        upgrade_db_sql = (
+            template_path
+            / "upgrade_db_{}_to_{}.sql".format(upgrade_db_from, tgis_db_version)
+        ).read_text()
     except FileNotFoundError:
         msgr.fatal(
             _("Unsupported TGIS DB upgrade scenario: from version %s to %s")
             % (upgrade_db_from, tgis_db_version)
         )
 
-    drop_views_sql = open(os.path.join(template_path, "drop_views.sql"), "r").read()
+    drop_views_sql = (template_path / "drop_views.sql").read_text()
 
     msgr.message(
         _("Upgrading temporal database <%s> from version %s to %s...")
@@ -1401,7 +1376,7 @@ class DBConnection:
         if self.dbmi.__name__ == "psycopg2":
             if len(args) == 0:
                 return sql
-            elif self.connected:
+            if self.connected:
                 try:
                     return self.cursor.mogrify(sql, args)
                 except Exception as exc:
@@ -1416,57 +1391,56 @@ class DBConnection:
         elif self.dbmi.__name__ == "sqlite3":
             if len(args) == 0:
                 return sql
-            else:
-                # Unfortunately as sqlite does not support
-                # the transformation of sql strings and qmarked or
-                # named arguments we must make our hands dirty
-                # and do it by ourself. :(
-                # Doors are open for SQL injection because of the
-                # limited python sqlite3 implementation!!!
-                pos = 0
-                count = 0
-                maxcount = 100
-                statement = sql
+            # Unfortunately as sqlite does not support
+            # the transformation of sql strings and qmarked or
+            # named arguments we must make our hands dirty
+            # and do it by ourself. :(
+            # Doors are open for SQL injection because of the
+            # limited python sqlite3 implementation!!!
+            pos = 0
+            count = 0
+            maxcount = 100
+            statement = sql
 
-                while count < maxcount:
-                    pos = statement.find("?", pos + 1)
-                    if pos == -1:
-                        break
+            while count < maxcount:
+                pos = statement.find("?", pos + 1)
+                if pos == -1:
+                    break
 
-                    if args[count] is None:
-                        statement = "%sNULL%s" % (
-                            statement[0:pos],
-                            statement[pos + 1 :],
-                        )
-                    elif isinstance(args[count], int):
-                        statement = "%s%d%s" % (
-                            statement[0:pos],
-                            args[count],
-                            statement[pos + 1 :],
-                        )
-                    elif isinstance(args[count], float):
-                        statement = "%s%f%s" % (
-                            statement[0:pos],
-                            args[count],
-                            statement[pos + 1 :],
-                        )
-                    elif isinstance(args[count], datetime):
-                        statement = "%s'%s'%s" % (
-                            statement[0:pos],
-                            str(args[count]),
-                            statement[pos + 1 :],
-                        )
-                    else:
-                        # Default is a string, this works for datetime
-                        # objects too
-                        statement = "%s'%s'%s" % (
-                            statement[0:pos],
-                            str(args[count]),
-                            statement[pos + 1 :],
-                        )
-                    count += 1
+                if args[count] is None:
+                    statement = "%sNULL%s" % (
+                        statement[0:pos],
+                        statement[pos + 1 :],
+                    )
+                elif isinstance(args[count], int):
+                    statement = "%s%d%s" % (
+                        statement[0:pos],
+                        args[count],
+                        statement[pos + 1 :],
+                    )
+                elif isinstance(args[count], float):
+                    statement = "%s%f%s" % (
+                        statement[0:pos],
+                        args[count],
+                        statement[pos + 1 :],
+                    )
+                elif isinstance(args[count], datetime):
+                    statement = "%s'%s'%s" % (
+                        statement[0:pos],
+                        str(args[count]),
+                        statement[pos + 1 :],
+                    )
+                else:
+                    # Default is a string, this works for datetime
+                    # objects too
+                    statement = "%s'%s'%s" % (
+                        statement[0:pos],
+                        str(args[count]),
+                        statement[pos + 1 :],
+                    )
+                count += 1
 
-                return statement
+            return statement
 
     def check_table(self, table_name):
         """Check if a table exists in the temporal database
@@ -1528,7 +1502,7 @@ class DBConnection:
         except:
             if connected:
                 self.close()
-            self.msgr.error(_("Unable to execute :\n %(sql)s" % {"sql": statement}))
+            self.msgr.error(_("Unable to execute :\n %(sql)s") % {"sql": statement})
             raise
 
         if connected:
@@ -1572,7 +1546,7 @@ class DBConnection:
             if connected:
                 self.close()
             self.msgr.error(
-                _("Unable to execute transaction:\n %(sql)s" % {"sql": statement})
+                _("Unable to execute transaction:\n %(sql)s") % {"sql": statement}
             )
             raise
 

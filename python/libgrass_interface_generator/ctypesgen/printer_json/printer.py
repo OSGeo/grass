@@ -7,7 +7,7 @@ from ctypesgen.messages import status_message
 
 
 # From:
-# http://stackoverflow.com/questions/1036409/recursively-convert-python-object-graph-to-dictionary
+# https://stackoverflow.com/questions/1036409/recursively-convert-python-object-graph-to-dictionary
 def todict(obj, classkey="Klass"):
     if isinstance(obj, dict):
         for k in obj.keys():

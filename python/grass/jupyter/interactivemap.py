@@ -178,7 +178,7 @@ class Vector(Layer):
         else:
             import ipyleaflet  # pylint: disable=import-outside-toplevel
 
-            with open(self._filename, "r", encoding="utf-8") as file:
+            with open(self._filename, encoding="utf-8") as file:
                 data = json.load(file)
             # allow using opacity directly to keep interface
             # consistent for both backends
@@ -295,8 +295,8 @@ class InteractiveMap:
             import xyzservices  # pylint: disable=import-outside-toplevel
 
         # Store height and width
-        self.width = width
-        self.height = height
+        self.width = int(width)
+        self.height = int(height)
         self._controllers = {}
 
         # Store vector and raster name
@@ -745,7 +745,7 @@ class InteractiveQueryController:
         _ipywidgets: The ipywidgets module.
         raster_name: The name of the raster layer.
         vector_name: The name of the vector layer.
-        width: The width of the map.
+        width: The width of the map as an int.
         query_control: The query control.
 
     """
