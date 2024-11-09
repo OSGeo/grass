@@ -550,33 +550,32 @@ class RLiSetupToolbar(BaseToolbar):
                     ),
                 )
             )
-        else:
-            return self._getToolbarData(
+        return self._getToolbarData(
+            (
+                drawTool,
+                (None,),
                 (
-                    drawTool,
-                    (None,),
-                    (
-                        ("pan", BaseIcons["pan"].label),
-                        BaseIcons["pan"],
-                        self.parent.OnPan,
-                        wx.ITEM_CHECK,
-                    ),
-                    (
-                        ("zoomIn", BaseIcons["zoomIn"].label),
-                        BaseIcons["zoomIn"],
-                        self.parent.OnZoomIn,
-                        wx.ITEM_CHECK,
-                    ),
-                    (
-                        ("zoomOut", BaseIcons["zoomOut"].label),
-                        BaseIcons["zoomOut"],
-                        self.parent.OnZoomOut,
-                        wx.ITEM_CHECK,
-                    ),
-                    (
-                        ("zoomExtent", BaseIcons["zoomExtent"].label),
-                        BaseIcons["zoomExtent"],
-                        self.parent.OnZoomToMap,
-                    ),
-                )
+                    ("pan", BaseIcons["pan"].label),
+                    BaseIcons["pan"],
+                    self.parent.OnPan,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomIn", BaseIcons["zoomIn"].label),
+                    BaseIcons["zoomIn"],
+                    self.parent.OnZoomIn,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomOut", BaseIcons["zoomOut"].label),
+                    BaseIcons["zoomOut"],
+                    self.parent.OnZoomOut,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomExtent", BaseIcons["zoomExtent"].label),
+                    BaseIcons["zoomExtent"],
+                    self.parent.OnZoomToMap,
+                ),
             )
+        )

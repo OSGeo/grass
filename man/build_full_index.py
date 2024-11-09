@@ -9,7 +9,23 @@
 import sys
 import os
 
-from build_html import *
+from operator import itemgetter
+
+from build_html import (
+    html_dir,
+    grass_version,
+    html_files,
+    write_html_header,
+    write_html_footer,
+    check_for_desc_override,
+    get_desc,
+    replace_file,
+    to_title,
+    full_index_header,
+    toc,
+    cmd2_tmpl,
+    desc1_tmpl,
+)
 
 year = None
 if len(sys.argv) > 1:
@@ -36,7 +52,7 @@ for cmd in html_files("*"):
     prefix = cmd.split(".")[0]
     if prefix not in [item[0] for item in classes]:
         classes.append((prefix, class_labels.get(prefix, prefix)))
-classes.sort(key=lambda tup: tup[0])
+classes.sort(key=itemgetter(0))
 
 # begin full index:
 filename = "full_index.html"

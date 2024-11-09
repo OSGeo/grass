@@ -54,10 +54,7 @@ def update_keyval_file(filename, module, returncode):
     keyval["name"] = module.name
     keyval["tested_dir"] = module.tested_dir
     if "status" not in keyval.keys():
-        if returncode is None or returncode:
-            status = "failed"
-        else:
-            status = "passed"
+        status = "failed" if returncode is None or returncode else "passed"
         keyval["status"] = status
     keyval["returncode"] = returncode
     keyval["test_file_authors"] = test_file_authors
@@ -244,7 +241,7 @@ class GrassTestFilesInvoker:
 
         Path(stdout_path).write_text(stdout)
         with open(stderr_path, "w") as stderr_file:
-            if type(stderr) == "bytes":
+            if isinstance(stderr, bytes):
                 stderr_file.write(decode(stderr))
             elif isinstance(stderr, str):
                 stderr_file.write(stderr)

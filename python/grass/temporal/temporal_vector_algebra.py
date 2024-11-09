@@ -232,19 +232,6 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             "STARTED",
             "FINISHED",
         ]
-        complementdict = {
-            "EQUAL": "EQUAL",
-            "FOLLOWS": "PRECEDES",
-            "PRECEDES": "FOLLOWS",
-            "OVERLAPS": "OVERLAPPED",
-            "OVERLAPPED": "OVERLAPS",
-            "DURING": "CONTAINS",
-            "CONTAINS": "DURING",
-            "STARTS": "STARTED",
-            "STARTED": "STARTS",
-            "FINISHES": "FINISHED",
-            "FINISHED": "FINISHES",
-        }
         resultdict = {}
         # Check if given temporal relation are valid.
         for topo in topolist:
@@ -399,7 +386,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                         if returncode == 0:
                             break
                         # Append map to result map list.
-                        elif returncode == 1:
+                        if returncode == 1:
                             # resultlist.append(map_new)
                             resultdict[map_new.get_id()] = map_new
                     if returncode == 0:
@@ -577,7 +564,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                         # Register map in result space time dataset.
                         if self.debug:
                             print(map_i.get_temporal_extent_as_tuple())
-                        success = resultstds.register_map(map_i, dbif=dbif)
+                        resultstds.register_map(map_i, dbif=dbif)
                     resultstds.update_from_registered_maps(dbif)
 
             # Remove intermediate maps

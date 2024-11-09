@@ -325,10 +325,7 @@ def _get_get_registered_maps_as_objects_delta_gran(
                 msgr.fatal(_("Empty entry in map list, this should not happen"))
 
         start, end = map_object.get_temporal_extent_as_tuple()
-        if end:
-            delta = end - start
-        else:
-            delta = None
+        delta = end - start if end else None
         delta_first = start - first_time
 
         if map_object.is_time_absolute():

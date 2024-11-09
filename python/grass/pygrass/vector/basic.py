@@ -137,7 +137,7 @@ class Bbox:
         )
 
     def items(self):
-        return [(k, self.__getattribute__(k)) for k in self.keys()]
+        return [(k, getattr(self, k)) for k in self.keys()]
 
     def nsewtb(self, tb=True):
         """Return a list of values from bounding box
@@ -149,8 +149,7 @@ class Bbox:
         """
         if tb:
             return (self.north, self.south, self.east, self.west, self.top, self.bottom)
-        else:
-            return (self.north, self.south, self.east, self.west)
+        return (self.north, self.south, self.east, self.west)
 
 
 class BoxList:
@@ -215,7 +214,7 @@ class BoxList:
         3
 
         """
-        indx = self.__len__()
+        indx = len(self)
         libvect.Vect_boxlist_append(self.c_boxlist, indx, box.c_bbox)
 
     #    def extend(self, boxlist):
@@ -308,14 +307,13 @@ class Ilist:
                 self.c_ilist.contents.value[indx]
                 for indx in range(*key.indices(len(self)))
             ]
-        elif isinstance(key, int):
+        if isinstance(key, int):
             if key < 0:  # Handle negative indices
                 key += self.c_ilist.contents.n_values
             if key >= self.c_ilist.contents.n_values:
                 raise IndexError("Index out of range")
             return self.c_ilist.contents.value[key]
-        else:
-            raise ValueError("Invalid argument type: %r." % key)
+        raise ValueError("Invalid argument type: %r." % key)
 
     def __setitem__(self, key, value):
         if self.contains(value):
@@ -329,7 +327,7 @@ class Ilist:
         return (self.c_ilist.contents.value[i] for i in range(self.__len__()))
 
     def __repr__(self):
-        return "Ilist(%r)" % [i for i in self.__iter__()]
+        return "Ilist(%r)" % list(self.__iter__())
 
     def __contains__(self, item):
         return item in self.__iter__()

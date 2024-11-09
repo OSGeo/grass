@@ -98,9 +98,9 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    if (db_set_login2(driver->answer, database->answer, user->answer,
-                      password->answer, host->answer, port->answer,
-                      G_get_overwrite()) == DB_FAILED) {
+    if (db_set_login(driver->answer, database->answer, user->answer,
+                     password->answer, host->answer, port->answer,
+                     G_get_overwrite()) == DB_FAILED) {
         G_fatal_error(_("Unable to set user/password"));
     }
 

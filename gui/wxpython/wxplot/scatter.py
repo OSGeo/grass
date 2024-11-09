@@ -176,11 +176,7 @@ class ScatterFrame(BasePlotFrame):
         frequency can be in cell counts, percents, or area
         """
         datalist = []
-
-        if self.scattertype == "bubble":
-            freqflag = "cn"
-        else:
-            freqflag = "n"
+        freqflag = "cn" if self.scattertype == "bubble" else "n"
 
         try:
             ret = RunCommand(

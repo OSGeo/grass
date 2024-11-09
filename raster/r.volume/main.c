@@ -12,10 +12,10 @@
  *                 <landa.martin gmail.com>
  * PURPOSE:      r.volume is a program to compute the total, and average of
  *               cell values within regions of a map defined by clumps or
- *               patches on a second map (or MASK). It also computes the
- *               "volume" by multiplying the total within a clump by the area
- *               of each cell. It also outputs the "centroid" location of each
- *               clump. Output is to standard out.
+ *               patches on a second map (or by raster mask). It also computes
+ *               the "volume" by multiplying the total within a clump by the
+ *               area of each cell. It also outputs the "centroid" location of
+ *               each clump. Output is to standard out.
  *
  * COPYRIGHT:    (C) 1999-2006, 2013 by the GRASS Development Team
  *
@@ -43,7 +43,8 @@ int main(int argc, char *argv[])
     CELL i, max;
 
     int row, col, rows, cols;
-    int out_mode, use_MASK;
+    int out_mode;
+    bool use_mask;
     unsigned long *n, *e;
     long int *count;
     int fd_data, fd_clump;
@@ -92,7 +93,8 @@ int main(int argc, char *argv[])
     opt.clump->required = NO;
     opt.clump->label = _("Name of input clump raster map");
     opt.clump->description = _("Preferably the output of r.clump. "
-                               "If no clump map is given than MASK is used.");
+                               "If no clump map is given, "
+                               "raster mask is used instead.");
 
     opt.centroids = G_define_standard_option(G_OPT_V_OUTPUT);
     opt.centroids->key = "centroids";
@@ -134,24 +136,28 @@ int main(int argc, char *argv[])
     out_mode = (!flag.report->answer);
 
     /*
-     * see if MASK or a separate "clumpmap" raster map is to be used
+     * see if raster mask or a separate "clumpmap" raster map is to be used
      * -- it must(!) be one of those two choices.
      */
-    use_MASK = 0;
+    use_mask = false;
+    char mask_name[GNAME_MAX];
+    char mask_mapset[GMAPSET_MAX];
     if (!clumpmap) {
-        clumpmap = "MASK";
-        use_MASK = 1;
-        if (!G_find_raster2(clumpmap, G_mapset()))
-            G_fatal_error(_("No MASK found. If no clump map is given than the "
-                            "MASK is required. "
-                            "You need to define a clump raster map or create a "
-                            "MASK by r.mask command."));
-        G_important_message(_("No clump map given, using MASK"));
+        bool present =
+            Rast_mask_status(mask_name, mask_mapset, NULL, NULL, NULL);
+        if (!present)
+            G_fatal_error(_("No clump map <%s> given and no raster mask found. "
+                            "You need to define a clump raster map or create "
+                            "a raster mask using r.mask."),
+                          opt.clump->key);
+        clumpmap = mask_name;
+        use_mask = true;
+        G_important_message(_("No clump map given, using raster mask"));
     }
 
     /* open input and clump raster maps */
     fd_data = Rast_open_old(datamap, "");
-    fd_clump = Rast_open_old(clumpmap, use_MASK ? G_mapset() : "");
+    fd_clump = Rast_open_old(clumpmap, use_mask ? mask_mapset : "");
 
     /* initialize vector map (for centroids) if needed */
     if (centroidsmap) {
@@ -175,7 +181,7 @@ int main(int argc, char *argv[])
     }
 
     /* initialize data accumulation arrays */
-    max = Rast_get_max_c_cat(clumpmap, use_MASK ? G_mapset() : "");
+    max = Rast_get_max_c_cat(clumpmap, use_mask ? mask_mapset : "");
 
     sum = (double *)G_malloc((max + 1) * sizeof(double));
     count = (long int *)G_malloc((max + 1) * sizeof(long int));
