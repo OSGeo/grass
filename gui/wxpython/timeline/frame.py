@@ -22,6 +22,7 @@ import numpy as np
 
 import wx
 from functools import reduce
+from operator import add
 
 try:
     import matplotlib as mpl
@@ -57,7 +58,7 @@ ALPHA = 1
 COLORS = ["b", "g", "r", "c", "m", "y", "k"]
 
 
-def check_version(*version):
+def check_version(*version) -> bool:
     """Checks if given version or newer is installed"""
     versionInstalled = []
     for i in mpl.__version__.split("."):
@@ -66,10 +67,7 @@ def check_version(*version):
             versionInstalled.append(v)
         except ValueError:
             versionInstalled.append(0)
-    if versionInstalled < list(version):
-        return False
-    else:
-        return True
+    return versionInstalled >= list(version)
 
 
 class TimelineFrame(wx.Frame):
@@ -274,10 +272,9 @@ class TimelineFrame(wx.Frame):
         self.axes3d.clear()
         self.axes3d.grid(False)
         # self.axes3d.grid(True)
-        if self.temporalType == "absolute":
-            convert = mdates.date2num
-        else:
-            convert = lambda x: x  # noqa: E731
+        convert = (
+            mdates.date2num if self.temporalType == "absolute" else lambda x: x
+        )  # noqa: E731
 
         colors = cycle(COLORS)
         plots = []
@@ -323,10 +320,9 @@ class TimelineFrame(wx.Frame):
         """Draws 2D plot (temporal extents)"""
         self.axes2d.clear()
         self.axes2d.grid(True)
-        if self.temporalType == "absolute":
-            convert = mdates.date2num
-        else:
-            convert = lambda x: x  # noqa: E731
+        convert = (
+            mdates.date2num if self.temporalType == "absolute" else lambda x: x
+        )  # noqa: E731
 
         colors = cycle(COLORS)
 
@@ -498,16 +494,11 @@ class TimelineFrame(wx.Frame):
         ]
         # flatten this list
         if allDatasets:
-            allDatasets = reduce(
-                lambda x, y: x + y, reduce(lambda x, y: x + y, allDatasets)
-            )
+            allDatasets = reduce(add, reduce(add, allDatasets))
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
-            allDatasets = [
-                i
-                for i in sorted(
-                    allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
-                )
-            ]
+            allDatasets = sorted(
+                allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
+            )
 
         for dataset in datasets:
             errorMsg = _("Space time dataset <%s> not found.") % dataset
@@ -527,10 +518,10 @@ class TimelineFrame(wx.Frame):
 
             if len(indices) == 0:
                 raise GException(errorMsg)
-            elif len(indices) >= 2:
+            if len(indices) >= 2:
                 dlg = wx.SingleChoiceDialog(
                     self,
-                    message=_("Please specify the space time dataset <%s>." % dataset),
+                    message=_("Please specify the space time dataset <%s>.") % dataset,
                     caption=_("Ambiguous dataset name"),
                     choices=[
                         (
@@ -572,9 +563,7 @@ class TimelineFrame(wx.Frame):
             GError(parent=self, message=str(error), showTraceback=False)
             return
         self.datasets = datasets
-        self.datasetSelect.SetValue(
-            ",".join(map(lambda x: x[0] + "@" + x[1], datasets))
-        )
+        self.datasetSelect.SetValue(",".join(f"{x[0]}@{x[1]}" for x in datasets))
         self._redraw()
 
     def Show3D(self, show):
@@ -594,11 +583,11 @@ class LookUp:
         if type_ == "bar":
             self.data[yrange] = {"name": datasetName}
             for i, (start, end) in enumerate(xranges):
-                self.data[yrange][(start, end)] = i
+                self.data[yrange][start, end] = i
         elif type_ == "point":
-            self.data[(yrange, yrange)] = {"name": datasetName}
+            self.data[yrange, yrange] = {"name": datasetName}
             for i, start in enumerate(xranges):
-                self.data[(yrange, yrange)][(start, start)] = i
+                self.data[yrange, yrange][start, start] = i
 
     def GetInformation(self, x, y):
         keys = None
@@ -630,10 +619,14 @@ def InfoFormat(timeData, datasetName, mapIndex):
     elif etype == "str3ds":
         text.append(_("Space time 3D raster dataset: %s") % name)
 
-    text.append(_("Mapset: %s") % mapset)
-    text.append(_("Map name: %s") % timeData[datasetName]["names"][mapIndex])
-    text.append(_("Start time: %s") % timeData[datasetName]["start_datetime"][mapIndex])
-    text.append(_("End time: %s") % timeData[datasetName]["end_datetime"][mapIndex])
+    text.extend(
+        (
+            _("Mapset: %s") % mapset,
+            _("Map name: %s") % timeData[datasetName]["names"][mapIndex],
+            _("Start time: %s") % timeData[datasetName]["start_datetime"][mapIndex],
+            _("End time: %s") % timeData[datasetName]["end_datetime"][mapIndex],
+        )
+    )
 
     if not timeData[datasetName]["validTopology"]:
         text.append(_("WARNING: invalid topology"))
@@ -648,7 +641,7 @@ class DataCursor:
     matplotlib artist when it is selected.
 
 
-    Source: http://stackoverflow.com/questions/4652439/
+    Source: https://stackoverflow.com/questions/4652439/
             is-there-a-matplotlib-equivalent-of-matlabs-datacursormode/4674445
     """
 

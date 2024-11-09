@@ -94,10 +94,10 @@ def main():
 
         print("Gran from stds %0.15f" % (granularity))
 
-        if unit == "years" or unit == "year":
+        if unit in {"years", "year"}:
             bottom = float(start.year - 1900)
             top = float(granularity * num_maps)
-        elif unit == "months" or unit == "month":
+        elif unit in {"months", "month"}:
             bottom = float((start.year - 1900) * 12 + start.month)
             top = float(granularity * num_maps)
         else:
@@ -106,13 +106,13 @@ def main():
             hours = 0.0
             minutes = 0.0
             seconds = 0.0
-            if unit == "days" or unit == "day":
+            if unit in {"days", "day"}:
                 days = float(granularity)
-            if unit == "hours" or unit == "hour":
+            if unit in {"hours", "hour"}:
                 hours = float(granularity)
-            if unit == "minutes" or unit == "minute":
+            if unit in {"minutes", "minute"}:
                 minutes = float(granularity)
-            if unit == "seconds" or unit == "second":
+            if unit in {"seconds", "second"}:
                 seconds = float(granularity)
 
             granularity = float(
@@ -162,7 +162,7 @@ def main():
                 overwrite=gs.overwrite(),
             )
         except CalledModuleError:
-            gs.fatal(_("Unable to create 3D raster map <%s>" % output))
+            gs.fatal(_("Unable to create 3D raster map <%s>") % output)
 
     gs.run_command("g.remove", flags="f", type="raster", name=null_map)
 
@@ -183,10 +183,7 @@ def main():
         gs.warning(_("%s failed to set units.") % "r3.support")
 
     # Register the space time voxel cube in the temporal GIS
-    if output.find("@") >= 0:
-        id = output
-    else:
-        id = output + "@" + mapset
+    id = output if output.find("@") >= 0 else output + "@" + mapset
 
     start, end = sp.get_temporal_extent_as_tuple()
     r3ds = tgis.Raster3DDataset(id)

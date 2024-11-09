@@ -181,16 +181,16 @@ class DataCatalogNode(DictFilterNode):
     def label(self):
         data = self.data
         if data["type"] == "mapset":
-            owner = data["owner"] if data["owner"] else _("name unknown")
+            owner = data["owner"] or _("name unknown")
             if data["current"]:
                 return _("{name}  (current)").format(**data)
-            elif data["is_different_owner"] and data["lock"]:
+            if data["is_different_owner"] and data["lock"]:
                 return _("{name}  (in use, owner: {owner})").format(
                     name=data["name"], owner=owner
                 )
-            elif data["lock"]:
+            if data["lock"]:
                 return _("{name}  (in use)").format(**data)
-            elif data["is_different_owner"]:
+            if data["is_different_owner"]:
                 return _("{name}  (owner: {owner})").format(
                     name=data["name"], owner=owner
                 )
@@ -359,8 +359,7 @@ class DataCatalogTree(TreeView):
         dbs = UserSettings.Get(
             group="datacatalog", key="grassdbs", subkey="listAsString"
         )
-        dbs = [db for db in dbs.split(",") if os.path.isdir(db)]
-        return dbs
+        return [db for db in dbs.split(",") if os.path.isdir(db)]
 
     def _saveGrassDBs(self):
         """Save current grass dbs in tree to settings"""
@@ -958,7 +957,7 @@ class DataCatalogTree(TreeView):
         if node.data["type"] == "mapset":
             if node.data["current"]:
                 return wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
-            elif node.data["lock"] or node.data["is_different_owner"]:
+            if node.data["lock"] or node.data["is_different_owner"]:
                 return wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT)
         return wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
 
@@ -1294,25 +1293,24 @@ class DataCatalogTree(TreeView):
                     if not new_name:
                         return
                 # within one location, different mapsets
-                else:
-                    if map_exists(
-                        new_name,
-                        element=self.copy_layer[i].data["type"],
+                elif map_exists(
+                    new_name,
+                    element=self.copy_layer[i].data["type"],
+                    env=env,
+                    mapset=self.selected_mapset[0].data["name"],
+                ):
+                    new_name = self._getNewMapName(
+                        _("New name for <{n}>").format(
+                            n=self.copy_layer[i].data["name"]
+                        ),
+                        _("Select new name"),
+                        self.copy_layer[i].data["name"],
                         env=env,
                         mapset=self.selected_mapset[0].data["name"],
-                    ):
-                        new_name = self._getNewMapName(
-                            _("New name for <{n}>").format(
-                                n=self.copy_layer[i].data["name"]
-                            ),
-                            _("Select new name"),
-                            self.copy_layer[i].data["name"],
-                            env=env,
-                            mapset=self.selected_mapset[0].data["name"],
-                            element=self.copy_layer[i].data["type"],
-                        )
-                        if not new_name:
-                            return
+                        element=self.copy_layer[i].data["type"],
+                    )
+                    if not new_name:
+                        return
 
                 string = (
                     self.copy_layer[i].data["name"]
@@ -1380,15 +1378,20 @@ class DataCatalogTree(TreeView):
                     )
                     if not new_name:
                         continue
-                callback = lambda gisrc2=gisrc2, gisrc=gisrc, cLayer=self.copy_layer[
-                    i
-                ], cMapset=self.copy_mapset[
-                    i
-                ], cMode=self.copy_mode, sMapset=self.selected_mapset[
-                    0
-                ], name=new_name: self._onDoneReprojection(
-                    env2, gisrc2, gisrc, cLayer, cMapset, cMode, sMapset, name
-                )
+
+                def callback(
+                    gisrc2=gisrc2,
+                    gisrc=gisrc,
+                    cLayer=self.copy_layer[i],
+                    cMapset=self.copy_mapset[i],
+                    cMode=self.copy_mode,
+                    sMapset=self.selected_mapset[0],
+                    name=new_name,
+                ):
+                    self._onDoneReprojection(
+                        env2, gisrc2, gisrc, cLayer, cMapset, cMode, sMapset, name
+                    )
+
                 dlg = CatalogReprojectionDialog(
                     self,
                     self._giface,
@@ -1679,9 +1682,9 @@ class DataCatalogTree(TreeView):
             all_names.append(name)
         # if self.selected_location[0].data['name'] == gisenv()['LOCATION_NAME'] and
         # self.selected_mapset[0]:
-        for ltype in names:
-            if names[ltype]:
-                self._giface.lmgr.AddMaps(list(reversed(names[ltype])), ltype, True)
+        for ltype, value in names.items():
+            if value:
+                self._giface.lmgr.AddMaps(list(reversed(value)), ltype, True)
 
         if len(self._giface.GetLayerList()) == 1:
             # zoom to map if there is only one map layer
@@ -2013,10 +2016,7 @@ class DataCatalogTree(TreeView):
             mapset=mapset,
         )
         dlg.SetValue(value)
-        if dlg.ShowModal() == wx.ID_OK:
-            name = dlg.GetValue()
-        else:
-            name = None
+        name = dlg.GetValue() if dlg.ShowModal() == wx.ID_OK else None
         dlg.Destroy()
 
         return name
@@ -2049,8 +2049,7 @@ class DataCatalogTree(TreeView):
                         currentMapset = False
                         break
             return currentGrassDb, currentLocation, currentMapset
-        else:
-            return True, True, True
+        return True, True, True
 
     def _popupMenuLayer(self):
         """Create popup menu for layers"""
@@ -2092,10 +2091,8 @@ class DataCatalogTree(TreeView):
 
         if not isinstance(self._giface, StandaloneGrassInterface):
             if all(
-                [
-                    each.data["name"] == genv["LOCATION_NAME"]
-                    for each in self.selected_location
-                ]
+                each.data["name"] == genv["LOCATION_NAME"]
+                for each in self.selected_location
             ):
                 if len(self.selected_layer) > 1:
                     item = wx.MenuItem(menu, wx.ID_ANY, _("&Display layers"))

@@ -20,6 +20,8 @@ import sys
 import math
 import numpy as np
 
+from pathlib import Path
+
 import wx
 
 from wx.lib import plot
@@ -313,11 +315,9 @@ class ProfileFrame(BasePlotFrame):
             dist, elev = line.strip().split(" ")
             if (
                 dist is None
-                or dist == ""
-                or dist == "nan"
+                or dist in ("", "nan")
                 or elev is None
-                or elev == ""
-                or elev == "nan"
+                or elev in ("", "nan")
             ):
                 continue
             dist = float(dist)
@@ -398,8 +398,7 @@ class ProfileFrame(BasePlotFrame):
 
         if len(self.plotlist) > 0:
             return self.plotlist
-        else:
-            return None
+        return None
 
     def Update(self):
         """Update profile after changing options"""
@@ -412,7 +411,7 @@ class ProfileFrame(BasePlotFrame):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Choose prefix for file(s) where to save profile values..."),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("Comma separated value (*.csv)|*.csv"),
             style=wx.FD_SAVE,
         )
@@ -472,7 +471,7 @@ class ProfileFrame(BasePlotFrame):
                 statstr = "Profile of %s\n\n" % rast
 
                 iterable = (i[1] for i in self.raster[r]["datalist"])
-                a = np.fromiter(iterable, np.float)
+                a = np.fromiter(iterable, float)
 
                 statstr += "n: %f\n" % a.size
                 statstr += "minimum: %f\n" % np.amin(a)

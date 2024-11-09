@@ -71,23 +71,18 @@ def version_as_string(version):
     return ".".join(texts)
 
 
-def CheckWxPhoenix():
-    if "phoenix" in wx.version():
-        return True
-    return False
+def CheckWxPhoenix() -> bool:
+    return "phoenix" in wx.version()
 
 
-def CheckWxVersion(version):
+def CheckWxVersion(version) -> bool:
     """Check wx version.
 
     :return: True if current wx version is greater or equal than
-    specifed version otherwise False
+    specified version otherwise False
     """
     parsed_version = parse_version_string(wx.__version__)
-    if parsed_version < version:
-        return False
-
-    return True
+    return not parsed_version < version
 
 
 def CheckForWx():
@@ -230,11 +225,10 @@ def UpdateGRASSAddOnCommands(eList=None):
                     and name not in grassScripts[ext]
                 ):
                     grassScripts[ext].append(name)
-            else:
-                if fname not in grassCmd:
-                    grassCmd.add(fname)
-                    Debug.msg(3, "AddOn commands: %s", fname)
-                    nCmd += 1
+            elif fname not in grassCmd:
+                grassCmd.add(fname)
+                Debug.msg(3, "AddOn commands: %s", fname)
+                nCmd += 1
 
     Debug.msg(1, "Number of GRASS AddOn commands: %d", nCmd)
 

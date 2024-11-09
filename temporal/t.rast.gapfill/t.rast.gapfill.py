@@ -208,12 +208,12 @@ def main():
                     gs.fatal(
                         _(
                             "Map with name <%s> already exists. "
-                            "Please use another base name." % (_id)
+                            "Please use another base name."
                         )
+                        % (_id)
                     )
-                else:
-                    if new_map.is_in_db(dbif):
-                        overwrite_flags[new_id] = True
+                elif new_map.is_in_db(dbif):
+                    overwrite_flags[new_id] = True
 
             map_names.append(new_map.get_name())
             map_positions.append(position)

@@ -28,15 +28,15 @@ jobs:
       PYTHON_VERSION: "3.10"
       MIN_PYTHON_VERSION: "3.8"
       # renovate: datasource=pypi depName=black
-      BLACK_VERSION: "24.4.2"
+      BLACK_VERSION: "24.10.0"
       # renovate: datasource=pypi depName=flake8
-      FLAKE8_VERSION: "7.1.0"
+      FLAKE8_VERSION: "7.1.1"
       # renovate: datasource=pypi depName=pylint
       PYLINT_VERSION: "2.12.2"
       # renovate: datasource=pypi depName=bandit
-      BANDIT_VERSION: "1.7.9"
+      BANDIT_VERSION: "1.7.10"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.5.1"
+      RUFF_VERSION: "0.7.2"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -54,10 +54,10 @@ jobs:
           echo Bandit: ${{ env.BANDIT_VERSION }}
           echo Ruff: ${{ env.RUFF_VERSION }}
 
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Set up Python
-        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
@@ -66,8 +66,11 @@ jobs:
 
       - name: Install Ruff
         run: pip install ruff==${{ env.RUFF_VERSION }}
-      - name: Run Ruff
-        run: ruff check --output-format=github . --preview --fix --unsafe-fixes
+      - name: Run Ruff (output annotations on fixable errors)
+        run: ruff check --output-format=github . --preview --unsafe-fixes
+        continue-on-error: true
+      - name: Run Ruff (apply fixes for suggestions)
+        run: ruff check . --preview --fix --unsafe-fixes
       - name: Create and uploads code suggestions to apply for Ruff
         # Will fail fast here if there are changes required
         id: diff-ruff
@@ -126,13 +129,13 @@ jobs:
           bandit -c pyproject.toml -iii -r . -f sarif -o bandit.sarif --exit-zero
 
       - name: Upload Bandit Scan Results
-        uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: bandit.sarif
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@b611370bb5703a7efb587f9d136a52ea24c5c38c # v3.25.11
+        uses: github/codeql-action/upload-sarif@4f3212b61783c3c68e8309a0f18a699764811cda # v3.27.1
         with:
           sarif_file: bandit.sarif
 
@@ -144,7 +147,7 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
 
-      - uses: rui314/setup-mold@2e332a0b602c2fc65d2d3995941b1b29a5f554a0 # v1
+      - uses: rui314/setup-mold@b015f7e3f2938ad3a5ed6e5111a8c6c7c1d6db6e # v1
       - name: Build
         run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
 
@@ -198,7 +201,7 @@ jobs:
           cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
 
       - name: Make Sphinx documentation available
-        uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
           name: sphinx-grass
           path: sphinx-grass

@@ -115,11 +115,10 @@ def main():
                     "db.execute", input="-", stdin="DROP TABLE %s" % output
                 )
                 break
-            else:
-                gs.fatal(_("Table <%s> already exists") % output)
+            gs.fatal(_("Table <%s> already exists") % output)
 
     # treat DB as real vector map...
-    layer = db_table if db_table else None
+    layer = db_table or None
 
     vopts = {}
     if options["encoding"]:

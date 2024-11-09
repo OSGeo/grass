@@ -126,8 +126,7 @@ class IClassVDigit(IVDigit):
         return 1
 
     def _getNewFeaturesCat(self):
-        cat = self.mapWindow.GetCurrentCategory()
-        return cat
+        return self.mapWindow.GetCurrentCategory()
 
     def DeleteAreasByCat(self, cats):
         """Delete areas (centroid+boundaries) by categories
@@ -157,15 +156,9 @@ class IClassVDigit(IVDigit):
         poMapInfoNew = pointer(Map_info())
 
         if not tmp:
-            if update:
-                open_fn = Vect_open_update
-            else:
-                open_fn = Vect_open_new
+            open_fn = Vect_open_update if update else Vect_open_new
         else:
-            if update:
-                open_fn = Vect_open_tmp_update
-            else:
-                open_fn = Vect_open_tmp_new
+            open_fn = Vect_open_tmp_update if update else Vect_open_tmp_new
 
         if update:
             if open_fn(poMapInfoNew, name, "") == -1:

@@ -19,6 +19,8 @@
 # % keyword: vector
 # % keyword: attribute table
 # % keyword: database
+# % keyword: DBF
+# % keyword: SQLite
 # %end
 # %flag
 # % key: c
@@ -255,10 +257,7 @@ def main():
                 schema = ""
                 table = schema_table
 
-            if new_schema:
-                new_schema_table = "%s.%s" % (new_schema, table)
-            else:
-                new_schema_table = table
+            new_schema_table = "%s.%s" % (new_schema, table) if new_schema else table
 
             gs.debug(
                 "DATABASE = '%s' SCHEMA = '%s' TABLE = '%s' ->\n"
@@ -298,7 +297,7 @@ def main():
                 try:
                     gs.run_command(
                         "v.db.connect",
-                        flags="o",
+                        overwrite=True,
                         quiet=True,
                         map=vect,
                         layer=layer,
@@ -316,16 +315,15 @@ def main():
                         % (table, vect, str(layer))
                     )
 
-            else:
-                if database != new_database_subst:
-                    gs.warning(
-                        _(
-                            "Layer <%d> will not be reconnected "
-                            "because database or schema do not "
-                            "match."
-                        )
-                        % layer
+            elif database != new_database_subst:
+                gs.warning(
+                    _(
+                        "Layer <%d> will not be reconnected "
+                        "because database or schema do not "
+                        "match."
                     )
+                    % layer
+                )
     return 0
 
 

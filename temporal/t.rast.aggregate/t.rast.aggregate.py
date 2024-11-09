@@ -175,7 +175,7 @@ def main():
         if has_end_time is True:
             if start_time >= end_time:
                 break
-        else:
+        else:  # noqa: PLR5501
             if start_time > end_time:
                 break
 
@@ -218,10 +218,7 @@ def main():
             dbif,
             gs.overwrite(),
         )
-        if register_null:
-            register_null = False
-        else:
-            register_null = True
+        register_null = not register_null
 
         tgis.register_map_object_list(
             "rast",

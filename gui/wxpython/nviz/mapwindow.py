@@ -243,7 +243,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def InitFly(self):
         """Initialize fly through dictionary"""
-        fly = {
+        return {
             "interval": 10,  # interval for timerFly
             "value": [0, 0, 0],  # calculated values for navigation
             "mode": 0,  # fly through mode (0, 1)
@@ -263,8 +263,6 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             "arrowStep": 50,  # step in pixels (when using arrows)
             "flySpeedStep": 2,
         }
-
-        return fly
 
     def OnTimerFly(self, event):
         """Fly event was emitted, move the scene"""
@@ -310,8 +308,8 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         else:
             my = 0.0
 
-        mx = mx / (1.0 - dx)
-        my = my / (1.0 - dy)
+        mx /= 1.0 - dx
+        my /= 1.0 - dy
 
         # Quadratic seems smoother
         mx *= abs(mx)
@@ -384,10 +382,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def OnSize(self, event):
         size = self.GetClientSize()
-        if CheckWxVersion(version=[2, 9]):
-            context = self.context
-        else:
-            context = self.GetContext()
+        context = self.context if CheckWxVersion(version=[2, 9]) else self.GetContext()
         if self.size != size and context:
             Debug.msg(
                 3, "GLCanvas.OnSize(): w = %d, h = %d" % (size.width, size.height)
@@ -414,7 +409,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         Debug.msg(1, "GLCanvas.OnPaint()")
 
         self.render["overlays"] = True
-        dc = wx.PaintDC(self)
+        wx.PaintDC(self)
         self.DoPaint()
 
     def DoPaint(self):
@@ -536,7 +531,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         Used for fly-through mode.
         """
-        if not self.mouse["use"] == "fly":
+        if self.mouse["use"] != "fly":
             return
 
         key = event.GetKeyCode()
@@ -569,11 +564,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 self.ProcessFlyByArrows(keyCode=key)
 
             # change speed of flight when using mouse
-            else:
-                if key == wx.WXK_UP:
-                    self.ChangeFlySpeed(increase=True)
-                elif key == wx.WXK_DOWN:
-                    self.ChangeFlySpeed(increase=False)
+            elif key == wx.WXK_UP:
+                self.ChangeFlySpeed(increase=True)
+            elif key == wx.WXK_DOWN:
+                self.ChangeFlySpeed(increase=False)
 
         elif key in {wx.WXK_HOME, wx.WXK_PAGEUP} and self.timerFly.IsRunning():
             self.ChangeFlySpeed(increase=True)
@@ -599,7 +593,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         Used for fly-through mode.
         """
-        if not self.mouse["use"] == "fly":
+        if self.mouse["use"] != "fly":
             return
 
         key = event.GetKeyCode()
@@ -1396,7 +1390,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 GError(parent=self, message=e.value)
             # when nviz.tools is not yet ready
             # during opening 3D view 2nd time
-            except:
+            except Exception:
                 pass
 
         stop = gs.clock()
@@ -1441,7 +1435,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 GError(parent=self, message=e.value)
 
         if force and self.baseId > 0:  # unload base surface when quitting
-            ret = self._display.UnloadSurface(self.baseId)
+            self._display.UnloadSurface(self.baseId)
             self.baseId = -1
         if update:
             self.lmgr.nviz.UpdateSettings()
@@ -2079,14 +2073,13 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                         )
                     )
                     self._display.SetIsosurfaceMode(id, mode)
-            else:
-                if data["draw"]["shading"]["slice"]["value"] < 0:  # need to calculate
-                    mode = data["draw"]["shading"]["slice"]["value"] = (
-                        self.nvizDefault.GetDrawMode(
-                            shade=data["draw"]["shading"]["slice"], string=False
-                        )
+            elif data["draw"]["shading"]["slice"]["value"] < 0:  # need to calculate
+                mode = data["draw"]["shading"]["slice"]["value"] = (
+                    self.nvizDefault.GetDrawMode(
+                        shade=data["draw"]["shading"]["slice"], string=False
                     )
-                    self._display.SetSliceMode(id, mode)
+                )
+                self._display.SetSliceMode(id, mode)
             data["draw"]["shading"].pop("update")
 
         #
@@ -2138,10 +2131,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         #
         sliceId = 0
         for slice in data["slice"]:
-            ret = self._display.AddSlice(id, slice_id=sliceId)
+            self._display.AddSlice(id, slice_id=sliceId)
             if "update" in slice["position"]:
                 pos = slice["position"]
-                ret = self._display.SetSlicePosition(
+                self._display.SetSlicePosition(
                     id,
                     sliceId,
                     pos["x1"],
@@ -2362,10 +2355,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             try:
                 if type == "raster":
                     return data["surface"]["object"]["id"]
-                elif type == "vector":
+                if type == "vector":
                     if vsubtyp == "vpoint":
                         return data["vector"]["points"]["object"]["id"]
-                    elif vsubtyp == "vline":
+                    if vsubtyp == "vline":
                         return data["vector"]["lines"]["object"]["id"]
                 elif type == "raster_3d":
                     return data["volume"]["object"]["id"]
@@ -2476,7 +2469,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     cmd += mode[3]
                 if "wire" in mode[4]:
                     cmd += mode[4]
-                if "coarse" in mode[0] or "both" in mode[0] and "wire" in mode[3]:
+                if "coarse" in mode[0] or ("both" in mode[0] and "wire" in mode[3]):
                     cmd += mode[5]
             #
             # attributes
@@ -2491,13 +2484,12 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     cmdColorMap += (
                         "%s," % self.tree.GetLayerInfo(item, key="maplayer").GetName()
                     )
+                elif nvizData["color"]["map"]:
+                    cmdColorMap += "%s," % nvizData["color"]["value"]
                 else:
-                    if nvizData["color"]["map"]:
-                        cmdColorMap += "%s," % nvizData["color"]["value"]
-                    else:
-                        cmdColorVal += "%s," % nvizData["color"]["value"]
-                        # TODO
-                        # transparency, shine, mask
+                    cmdColorVal += "%s," % nvizData["color"]["value"]
+                    # TODO
+                    # transparency, shine, mask
             for item in self.constants:
                 cmdColorVal += "%s," % item["constant"]["color"]
             if cmdColorMap.split("=")[1]:
@@ -2756,8 +2748,6 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def DisactivateWin(self):
         """Use when the class instance is hidden in MapFrame."""
-        pass
 
     def ActivateWin(self):
         """Used when the class instance is activated in MapFrame."""
-        pass

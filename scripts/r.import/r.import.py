@@ -289,7 +289,7 @@ def main():
             env=src_env,
         )
         gs.run_command("g.region", vector=tgtregion, env=src_env)
-        parameters["flags"] = parameters["flags"] + region_flag
+        parameters["flags"] += region_flag
     try:
         gs.run_command("r.in.gdal", env=src_env, **parameters)
     except CalledModuleError:

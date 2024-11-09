@@ -47,6 +47,8 @@ import sys
 import glob
 import ctypes
 
+from pathlib import Path
+
 import wx
 
 from core import globalvar
@@ -279,8 +281,7 @@ class ListCtrlComboPopup(ComboPopup):
     def GetComboCtrl(self):
         if globalvar.wxPythonPhoenix:
             return super().GetComboCtrl()
-        else:
-            return self.GetCombo()
+        return self.GetCombo()
 
     def GetStringValue(self):
         """Get value as a string separated by commas"""
@@ -414,7 +415,7 @@ class ListCtrlComboPopup(ComboPopup):
             self.multiple = kargs["multiple"]
         if "onPopup" in kargs:
             self.onPopup = kargs["onPopup"]
-        if kargs.get("layerTree", None):
+        if kargs.get("layerTree"):
             self.filterItems = []  # reset
             ltype = kargs["type"]
             for layer in kargs["layerTree"].GetVisibleLayers(skipDigitized=True):
@@ -482,7 +483,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             try:
                 self.seltree.EnsureVisible(item)
                 self.seltree.SelectItem(item)
-            except:
+            except Exception:
                 pass
 
     def _getElementList(self, element, mapsets=None, elements=None, exclude=False):
@@ -522,8 +523,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             if elem not in elementdict:
                 self.AddItem(_("Not selectable element"), node=False)
                 return
-            else:
-                renamed_elements.append(elementdict[elem])
+            renamed_elements.append(elementdict[elem])
 
         if element in {"stds", "strds", "str3ds", "stvds"}:
             if not self.tgis_error:
@@ -663,8 +663,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
         data = {"node": node, "mapset": mapset}
 
-        item = self.seltree.AppendItem(parent, text=value, data=data)
-        return item
+        return self.seltree.AppendItem(parent, text=value, data=data)
 
     def OnKeyUp(self, event):
         """Enables to select items using keyboard
@@ -754,14 +753,13 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
         if self.multiple:
             self.value.append(fullName)
-        else:
-            if self.nmaps > 1:  # see key_desc
-                if len(self.value) >= self.nmaps:
-                    self.value = [fullName]
-                else:
-                    self.value.append(fullName)
-            else:
+        elif self.nmaps > 1:  # see key_desc
+            if len(self.value) >= self.nmaps:
                 self.value = [fullName]
+            else:
+                self.value.append(fullName)
+        else:
+            self.value = [fullName]
 
     def _onItemConfirmed(self, event):
         item = event.GetItem()
@@ -923,7 +921,7 @@ class VectorDBInfo:
         :param layer: vector layer number
         """
         if layer not in self.layers:
-            raise GException(_("No table linked to layer <{}>.".format(layer)))
+            raise GException(_("No table linked to layer <{}>.").format(layer))
         return self.layers[layer]["table"]
 
     def GetDbSettings(self, layer):
@@ -1291,7 +1289,7 @@ class MapsetSelect(wx.ComboBox):
         style = 0
         # disabled, read-only widget has no TextCtrl children (TODO: rewrite)
         # if not new and not multiple:
-        ###     style = wx.CB_READONLY
+        #     style = wx.CB_READONLY
 
         wx.ComboBox.__init__(self, parent, id, size=size, style=style, **kwargs)
         self.searchPath = searchPath
@@ -1375,12 +1373,6 @@ class SubGroupSelect(wx.ComboBox):
         """Insert subgroups for defined group"""
         if not group:
             return
-        gisenv = gs.gisenv()
-        try:
-            name, mapset = group.split("@", 1)
-        except ValueError:
-            name = group
-            mapset = gisenv["MAPSET"]
 
         mlist = RunCommand("i.group", group=group, read=True, flags="sg").splitlines()
         try:
@@ -1402,10 +1394,7 @@ class FormatSelect(wx.Choice):
         super().__init__(parent, id=wx.ID_ANY, size=size, **kwargs)
         self.SetName("FormatSelect")
 
-        if ogr:
-            ftype = "ogr"
-        else:
-            ftype = "gdal"
+        ftype = "ogr" if ogr else "gdal"
 
         formats = []
         for f in GetFormats()[ftype][srcType].items():
@@ -1512,10 +1501,7 @@ class GdalSelect(wx.Panel):
         self.protocolWidgets = {}
         self.pgWidgets = {}
 
-        if ogr:
-            fType = "ogr"
-        else:
-            fType = "gdal"
+        fType = "ogr" if ogr else "gdal"
 
         # file
         fileMask = "%(all)s (*)|*|" % {"all": _("All files")}
@@ -1566,7 +1552,7 @@ class GdalSelect(wx.Panel):
             labelText=_("File:"),
             dialogTitle=_("Choose file to import"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
             fileMask=fileMask,
         )
@@ -1583,7 +1569,7 @@ class GdalSelect(wx.Panel):
             labelText=_("Directory:"),
             dialogTitle=_("Choose input directory"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
         )
         browse.GetChildren()[1].SetName("GdalSelectDataSource")
@@ -1636,7 +1622,7 @@ class GdalSelect(wx.Panel):
             labelText=_("Name:"),
             dialogTitle=_("Choose file"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
         )
         browse.GetChildren()[1].SetName("GdalSelectDataSource")
@@ -1671,7 +1657,7 @@ class GdalSelect(wx.Panel):
             labelText=_("Directory:"),
             dialogTitle=_("Choose input directory"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
         )
         self.dbWidgets["dirbrowse"] = browse
@@ -2261,18 +2247,18 @@ class GdalSelect(wx.Panel):
                         message=_(
                             "Getting raster <{table}> SRID from PostgreSQL"
                             " DB <{db}>, host <{host}> failed."
-                            " {error}.".format(
-                                table=table,
-                                db=self._getPDDBConnectionParam(
-                                    dsn,
-                                    conn_param="dbname",
-                                ),
-                                host=self._getPDDBConnectionParam(
-                                    dsn,
-                                    conn_param="host",
-                                ),
-                                error=gs.utils.decode(error),
+                            " {error}."
+                        ).format(
+                            table=table,
+                            db=self._getPDDBConnectionParam(
+                                dsn,
+                                conn_param="dbname",
                             ),
+                            host=self._getPDDBConnectionParam(
+                                dsn,
+                                conn_param="host",
+                            ),
+                            error=gs.utils.decode(error),
                         ),
                     )
                 if ret:
@@ -2291,19 +2277,14 @@ class GdalSelect(wx.Panel):
                 lines = ret.splitlines()
                 projectionMatch = "0"
                 if lines:
-                    bandNumber, bandType, projectionMatch = map(
-                        lambda x: x.strip(), lines[0].split(",")
+                    bandNumber, bandType, projectionMatch = (
+                        x.strip() for x in lines[0].split(",")
                     )
 
             return projectionMatch
 
         def getProjMatchCaption(projectionMatch):
-            if projectionMatch == "0":
-                projectionMatchCaption = _("No")
-            else:
-                projectionMatchCaption = _("Yes")
-
-            return projectionMatchCaption
+            return _("No") if projectionMatch == "0" else _("Yes")
 
         dsn = self.GetDsn()
         if not dsn:
@@ -2321,8 +2302,8 @@ class GdalSelect(wx.Panel):
 
             layerId = 1
             for line in ret.splitlines():
-                layerName, featureType, projectionMatch, geometryColumn = map(
-                    lambda x: x.strip(), line.split(",")
+                layerName, featureType, projectionMatch, geometryColumn = (
+                    x.strip() for x in line.split(",")
                 )
                 projectionMatchCaption = getProjMatchCaption(projectionMatch)
                 grassName = GetValidLayerName(layerName)
@@ -2335,52 +2316,43 @@ class GdalSelect(wx.Panel):
                     (layerId, layerName, featureType, int(projectionMatch), grassName)
                 )
                 layerId += 1
-        else:
-            if self._sourceType == "file":
-                baseName = os.path.basename(dsn)
+        elif self._sourceType == "file":
+            baseName = os.path.basename(dsn)
+            grassName = GetValidLayerName(baseName.split(".", -1)[0])
+            projectionMatch = hasRastSameProjAsLocation(dsn)
+            projectionMatchCaption = getProjMatchCaption(projectionMatch)
+            listData.append((layerId, baseName, projectionMatchCaption, grassName))
+            data.append((layerId, baseName, int(projectionMatch), grassName))
+        elif self._sourceType == "dir":
+            ext = self.dirWidgets["extension"].GetValue()
+            for filename in glob.glob(
+                os.path.join(dsn, "%s") % self._getExtPatternGlob(ext)
+            ):
+                baseName = os.path.basename(filename)
                 grassName = GetValidLayerName(baseName.split(".", -1)[0])
-                projectionMatch = hasRastSameProjAsLocation(dsn)
+                projectionMatch = hasRastSameProjAsLocation(filename)
                 projectionMatchCaption = getProjMatchCaption(projectionMatch)
                 listData.append((layerId, baseName, projectionMatchCaption, grassName))
                 data.append((layerId, baseName, int(projectionMatch), grassName))
-            elif self._sourceType == "dir":
-                ext = self.dirWidgets["extension"].GetValue()
-                for filename in glob.glob(
-                    os.path.join(dsn, "%s") % self._getExtPatternGlob(ext)
-                ):
-                    baseName = os.path.basename(filename)
-                    grassName = GetValidLayerName(baseName.split(".", -1)[0])
-                    projectionMatch = hasRastSameProjAsLocation(filename)
-                    projectionMatchCaption = getProjMatchCaption(projectionMatch)
-                    listData.append(
-                        (layerId, baseName, projectionMatchCaption, grassName)
-                    )
-                    data.append((layerId, baseName, int(projectionMatch), grassName))
-                    layerId += 1
-            elif (
-                self.dbWidgets["format"].GetStringSelection() == "PostGIS Raster driver"
-            ):
-                rasters = self._getPGDBRasters(dsn)
-                for raster in rasters:
-                    grassName = GetValidLayerName(raster)
-                    projectionMatch = hasRastSameProjAsLocation(dsn, table=raster)
-                    projectionMatchCaption = getProjMatchCaption(projectionMatch)
-                    listData.append(
-                        (layerId, raster, projectionMatchCaption, grassName)
-                    )
-                    data.append((layerId, raster, int(projectionMatch), grassName))
-                    layerId += 1
-            elif self.dbWidgets["format"].GetStringSelection() == "Rasterlite":
-                rasters = self._getRasterliteDBRasters(dsn)
-                for raster in rasters:
-                    grassName = GetValidLayerName(raster)
-                    projectionMatch = hasRastSameProjAsLocation(dsn)
-                    projectionMatchCaption = getProjMatchCaption(projectionMatch)
-                    listData.append(
-                        (layerId, raster, projectionMatchCaption, grassName)
-                    )
-                    data.append((layerId, raster, int(projectionMatch), grassName))
-                    layerId += 1
+                layerId += 1
+        elif self.dbWidgets["format"].GetStringSelection() == "PostGIS Raster driver":
+            rasters = self._getPGDBRasters(dsn)
+            for raster in rasters:
+                grassName = GetValidLayerName(raster)
+                projectionMatch = hasRastSameProjAsLocation(dsn, table=raster)
+                projectionMatchCaption = getProjMatchCaption(projectionMatch)
+                listData.append((layerId, raster, projectionMatchCaption, grassName))
+                data.append((layerId, raster, int(projectionMatch), grassName))
+                layerId += 1
+        elif self.dbWidgets["format"].GetStringSelection() == "Rasterlite":
+            rasters = self._getRasterliteDBRasters(dsn)
+            for raster in rasters:
+                grassName = GetValidLayerName(raster)
+                projectionMatch = hasRastSameProjAsLocation(dsn)
+                projectionMatchCaption = getProjMatchCaption(projectionMatch)
+                listData.append((layerId, raster, projectionMatchCaption, grassName))
+                data.append((layerId, raster, int(projectionMatch), grassName))
+                layerId += 1
 
         # emit signal
         self.reloadDataRequired.emit(listData=listData, data=data)
@@ -2457,21 +2429,13 @@ class GdalSelect(wx.Panel):
         """Show related manual page"""
         cmd = ""
         if self.dest:
-            if self.ogr:
-                cmd = "v.external.out"
-            else:
-                cmd = "r.external.out"
+            cmd = "v.external.out" if self.ogr else "r.external.out"
+        elif self.link:
+            cmd = "v.external" if self.ogr else "r.external"
+        elif self.ogr:
+            cmd = "v.in.ogr"
         else:
-            if self.link:
-                if self.ogr:
-                    cmd = "v.external"
-                else:
-                    cmd = "r.external"
-            else:
-                if self.ogr:
-                    cmd = "v.in.ogr"
-                else:
-                    cmd = "r.in.gdal"
+            cmd = "r.in.gdal"
 
         RunCommand("g.manual", entry=cmd)
 
@@ -2535,17 +2499,17 @@ class GdalSelect(wx.Panel):
                 parent=self,
                 message=_(
                     "Getting list of tables from PostgreSQL DB <{db}>,"
-                    " host <{host}> failed. {error}.".format(
-                        db=self._getPGDBConnectionParam(
-                            dsn,
-                            conn_param="dbname",
-                        ),
-                        host=self._getPGDBConnectionParam(
-                            dsn,
-                            conn_param="host",
-                        ),
-                        error=gs.utils.decode(error),
+                    " host <{host}> failed. {error}."
+                ).format(
+                    db=self._getPGDBConnectionParam(
+                        dsn,
+                        conn_param="dbname",
                     ),
+                    host=self._getPGDBConnectionParam(
+                        dsn,
+                        conn_param="host",
+                    ),
+                    error=gs.utils.decode(error),
                 ),
             )
         if ret:
@@ -2627,17 +2591,17 @@ class GdalSelect(wx.Panel):
                         message=_(
                             "Getting list of tables columns data types"
                             " from PostGIS DB <{db}>, host <{host}> failed."
-                            " {error}.".format(
-                                db=self._getPGDBConnectionParam(
-                                    dsn,
-                                    conn_param="dbname",
-                                ),
-                                host=self._getPGDBConnectionParam(
-                                    dsn,
-                                    conn_param="host",
-                                ),
-                                error=gs.utils.decode(error),
+                            " {error}."
+                        ).format(
+                            db=self._getPGDBConnectionParam(
+                                dsn,
+                                conn_param="dbname",
                             ),
+                            host=self._getPGDBConnectionParam(
+                                dsn,
+                                conn_param="host",
+                            ),
+                            error=gs.utils.decode(error),
                         ),
                     )
                 if ret:
@@ -2657,8 +2621,8 @@ class GdalSelect(wx.Panel):
                 parent=self,
                 message=_(
                     "PostgreSQL DB <{psql}> program was not found."
-                    " Please, install it.".format(psql=self._psql)
-                ),
+                    " Please, install it."
+                ).format(psql=self._psql),
             )
         Debug.msg(3, f"GdalSelect._getPGDBRasters(): return {rasters}")
         return rasters
@@ -2762,7 +2726,7 @@ class ElementSelect(wx.Choice):
         if elements:
             values = []
             valuesDesc = []
-            for idx in range(0, len(self.values)):
+            for idx in range(len(self.values)):
                 value = self.values[idx]
                 if value in elements:
                     values.append(value)
@@ -2822,9 +2786,9 @@ class OgrTypeSelect(wx.Panel):
         sel = self.ftype.GetSelection()
         if sel == 0:
             return "point"
-        elif sel == 1:
+        if sel == 1:
             return "line"
-        elif sel == 2:
+        if sel == 2:
             return "boundary"
 
 
@@ -2888,12 +2852,11 @@ class CoordinatesSelect(Panel):
 
             self.registered = True
             self._giface.GetMapDisplay().Raise()
-        else:
-            if self.mapWin and self.mapWin.UnregisterMouseEventHandler(
-                wx.EVT_LEFT_DOWN, self._onMapClickHandler
-            ):
-                self.registered = False
-                return
+        elif self.mapWin and self.mapWin.UnregisterMouseEventHandler(
+            wx.EVT_LEFT_DOWN, self._onMapClickHandler
+        ):
+            self.registered = False
+            return
 
     def drawCleanUp(self):
         if self.drawMapWin:
@@ -2917,7 +2880,7 @@ class CoordinatesSelect(Panel):
             coords = self._getCoords()
             if coords is not None:
                 for i in range(len(coords) // 2):
-                    i = i * 2
+                    i *= 2
                     self.pointsToDraw.AddItem(coords=(coords[i], coords[i + 1]))
 
             self._giface.updateMap.emit(render=False, renderVector=False, delay=delay)
@@ -3041,27 +3004,22 @@ class VectorCategorySelect(wx.Panel):
         return False
 
     def _onClick(self, evt=None):
-        if self.task is not None:
-            if not self._chckMap():
-                self.buttonVecSelect.SetValue(False)
-                return
-        else:
-            if not self._isMapSelected():
-                self.buttonVecSelect.SetValue(False)
-                return
-        if self._vectorSelect is None:
-            if self.mapdisp:
-                if self.buttonVecSelect.IsEnabled():
-                    switcher = self.mapdisp.GetToolSwitcher()
-                    switcher.ToolChanged(self.buttonVecSelect.GetId())
+        if (self.task is not None and not self._chckMap()) or not self._isMapSelected():
+            self.buttonVecSelect.SetValue(False)
+            return
 
-                self._vectorSelect = VectorSelectBase(self.mapdisp, self.giface)
-                if not self.mapdisp.GetWindow().RegisterMouseEventHandler(
-                    wx.EVT_LEFT_DOWN, self._onMapClickHandler, "cross"
-                ):
-                    return
-                self.registered = True
-                self.mapdisp.Raise()
+        if self._vectorSelect is None and self.mapdisp:
+            if self.buttonVecSelect.IsEnabled():
+                switcher = self.mapdisp.GetToolSwitcher()
+                switcher.ToolChanged(self.buttonVecSelect.GetId())
+
+            self._vectorSelect = VectorSelectBase(self.mapdisp, self.giface)
+            if not self.mapdisp.GetWindow().RegisterMouseEventHandler(
+                wx.EVT_LEFT_DOWN, self._onMapClickHandler, "cross"
+            ):
+                return
+            self.registered = True
+            self.mapdisp.Raise()
         else:
             self.OnClose()
 
@@ -3082,16 +3040,10 @@ class VectorCategorySelect(wx.Panel):
         if event == "unregistered":
             return
 
-        if self.task is None:
-            if not self._isMapSelected():
-                self.OnClose()
-            else:
-                self.catsField.SetValue(self._vectorSelect.GetLineStringSelectedCats())
+        if (self.task is None and not self._isMapSelected()) or not self._chckMap():
+            self.OnClose()
         else:
-            if not self._chckMap():
-                self.OnClose()
-            else:
-                self.catsField.SetValue(self._vectorSelect.GetLineStringSelectedCats())
+            self.catsField.SetValue(self._vectorSelect.GetLineStringSelectedCats())
 
     def GetTextWin(self):
         return self.catsField
