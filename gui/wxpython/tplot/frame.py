@@ -212,7 +212,7 @@ class TplotFrame(wx.Frame):
             self.coorval = gselect.CoordinatesSelect(
                 parent=self.controlPanelRaster, giface=self._giface
             )
-        except (AttributeError, TypeError, NotImplementedError):
+        except NotImplementedError:
             self.coorval = TextCtrl(
                 parent=self.controlPanelRaster,
                 id=wx.ID_ANY,
@@ -281,7 +281,7 @@ class TplotFrame(wx.Frame):
             self.cats = gselect.VectorCategorySelect(
                 parent=self.controlPanelVector, giface=self._giface
             )
-        except (AttributeError, TypeError):
+        except NotImplementedError:
             self.cats = TextCtrl(
                 parent=self.controlPanelVector,
                 id=wx.ID_ANY,
