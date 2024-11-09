@@ -107,7 +107,8 @@ class SimpleDialog(wx.Dialog):
 
         self.sizer.Add(self.dataSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
 
-        # self.sizer.Add(item = self.informLabel, proportion = 0, flag = wx.ALL, border = 5)
+        # self.sizer.Add(item = self.informLabel, proportion = 0,
+        # flag = wx.ALL, border = 5)
         self.sizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
     def ValidatorCallback(self, win):
@@ -119,7 +120,7 @@ class SimpleDialog(wx.Dialog):
 class LocationDialog(SimpleDialog):
     """Dialog used to select location"""
 
-    def __init__(self, parent, title=_("Select GRASS location and mapset")):
+    def __init__(self, parent, title=_("Select GRASS project and mapset")):
         SimpleDialog.__init__(self, parent, title)
 
         self.element1 = LocationSelect(
@@ -139,7 +140,7 @@ class LocationDialog(SimpleDialog):
             validator=SimpleValidator(callback=self.ValidatorCallback),
         )
         self.element1.SetFocus()
-        self.warning = _("Location or mapset is not defined.")
+        self.warning = _("Project or mapset is not defined.")
         self._layout()
         self.SetMinSize(self.GetSize())
 
@@ -147,7 +148,7 @@ class LocationDialog(SimpleDialog):
         """Do layout"""
         self.dataSizer.Add(
             StaticText(
-                parent=self.panel, id=wx.ID_ANY, label=_("Name of GRASS location:")
+                parent=self.panel, id=wx.ID_ANY, label=_("Name of GRASS project:")
             ),
             proportion=0,
             flag=wx.ALL,
@@ -179,7 +180,6 @@ class LocationDialog(SimpleDialog):
             dbase = grass.gisenv()["GISDBASE"]
             self.element2.UpdateItems(dbase=dbase, location=location)
             self.element2.SetSelection(0)
-            mapset = self.element2.GetStringSelection()
 
     def GetValues(self):
         """Get location, mapset"""
@@ -190,7 +190,7 @@ class MapsetDialog(SimpleDialog):
     """Dialog used to select mapset"""
 
     def __init__(
-        self, parent, title=_("Select mapset in GRASS location"), location=None
+        self, parent, title=_("Select mapset in GRASS project"), location=None
     ):
         SimpleDialog.__init__(self, parent, title)
 
@@ -283,8 +283,7 @@ class VectorDialog(SimpleDialog):
         if full:
             if "@" in name:
                 return name
-            else:
-                return name + "@" + grass.gisenv()["MAPSET"]
+            return name + "@" + grass.gisenv()["MAPSET"]
 
         return name.split("@", 1)[0]
 
@@ -304,7 +303,8 @@ class NewVectorDialog(VectorDialog):
         :param title: window title
         :param disableAdd: disable 'add layer' checkbox
         :param disableTable: disable 'create table' checkbox
-        :param showType: True to show feature type selector (used for creating new empty OGR layers)
+        :param showType: True to show feature type selector (used for creating new
+                         empty OGR layers)
 
         :return: dialog instance
         """
@@ -426,7 +426,7 @@ class NewVectorDialog(VectorDialog):
         """
         if key == "add":
             return self.addbox.IsChecked()
-        elif key == "table":
+        if key == "table":
             return self.table.IsChecked()
 
         return None
@@ -466,10 +466,7 @@ def CreateNewVector(
     """
     vExternalOut = grass.parse_command("v.external.out", flags="g")
     isNative = vExternalOut["format"] == "native"
-    if cmd[0] == "v.edit" and not isNative:
-        showType = True
-    else:
-        showType = False
+    showType = bool(cmd[0] == "v.edit" and not isNative)
     dlg = NewVectorDialog(
         parent,
         title=title,
@@ -491,9 +488,7 @@ def CreateNewVector(
     if dlg.table.IsEnabled() and not key:
         GError(
             parent=parent,
-            message=_(
-                "Invalid or empty key column.\n" "Unable to create vector map <%s>."
-            )
+            message=_("Invalid or empty key column.\nUnable to create vector map <%s>.")
             % outmap,
         )
         dlg.Destroy()
@@ -792,7 +787,7 @@ class GroupDialog(wx.Dialog):
             StaticText(
                 parent=self,
                 id=wx.ID_ANY,
-                label=_("Select existing group or " "enter name of new group:"),
+                label=_("Select existing group or enter name of new group:"),
             ),
             flag=wx.TOP,
             border=10,
@@ -820,7 +815,7 @@ class GroupDialog(wx.Dialog):
             StaticText(
                 parent=self.subg_panel,
                 id=wx.ID_ANY,
-                label=_("Select existing subgroup or " "enter name of new subgroup:"),
+                label=_("Select existing subgroup or enter name of new subgroup:"),
             )
         )
 
@@ -1137,7 +1132,7 @@ class GroupDialog(wx.Dialog):
         """Group was selected, check if changes were applied"""
         self._checkChange()
         group, s = self.GetSelectedGroup()
-        maps = list()
+        maps = []
         groups = self.GetExistGroups()
         if group in groups:
             maps = self.GetGroupLayers(group)
@@ -1177,7 +1172,7 @@ class GroupDialog(wx.Dialog):
         subgroup = self.subGroupSelect.GetValue().strip()
         group = self.currentGroup
 
-        gmaps = list()
+        gmaps = []
         groups = self.GetExistGroups()
 
         self.subgmaps = {}
@@ -1208,14 +1203,13 @@ class GroupDialog(wx.Dialog):
         """Apply filter for strings in data list"""
         flt_data = []
         if len(self.flt_pattern) == 0:
-            flt_data = data[:]
-            return flt_data
+            return data[:]
 
         for dt in data:
             try:
                 if re.compile(self.flt_pattern).search(dt):
                     flt_data.append(dt)
-            except:
+            except re.error:
                 pass
 
         return flt_data
@@ -1230,7 +1224,7 @@ class GroupDialog(wx.Dialog):
         if self.currentGroup and self.dataChanged:
             dlg = wx.MessageDialog(
                 self,
-                message=_("Group <%s> was changed, " "do you want to apply changes?")
+                message=_("Group <%s> was changed, do you want to apply changes?")
                 % self.currentGroup,
                 caption=_("Unapplied changes"),
                 style=wx.YES_NO | wx.ICON_QUESTION | wx.YES_DEFAULT,
@@ -1245,7 +1239,7 @@ class GroupDialog(wx.Dialog):
         if self.currentSubgroup and self.dataChanged:
             dlg = wx.MessageDialog(
                 self,
-                message=_("Subgroup <%s> was changed, " "do you want to apply changes?")
+                message=_("Subgroup <%s> was changed, do you want to apply changes?")
                 % self.currentSubgroup,
                 caption=_("Unapplied changes"),
                 style=wx.YES_NO | wx.ICON_QUESTION | wx.YES_DEFAULT,
@@ -1331,7 +1325,7 @@ class GroupDialog(wx.Dialog):
                 label = _("Group <%s> was successfully created.") % group
             else:
                 label = _("Group <%s> was successfully changed.") % group
-        else:
+        else:  # noqa: PLR5501
             if create:
                 label = _("Creating of new group <%s> failed.") % group
             else:
@@ -1343,15 +1337,12 @@ class GroupDialog(wx.Dialog):
     def GetSelectedGroup(self):
         """Return currently selected group (without mapset)"""
         g = self.groupSelect.GetValue().split("@")[0]
-        if self.edit_subg:
-            s = self.subGroupSelect.GetValue()
-        else:
-            s = None
+        s = self.subGroupSelect.GetValue() if self.edit_subg else None
         return g, s
 
     def GetGroupLayers(self, group, subgroup=None):
         """Get layers in group"""
-        kwargs = dict()
+        kwargs = {}
         kwargs["group"] = group
         if subgroup:
             kwargs["subgroup"] = subgroup
@@ -1377,10 +1368,7 @@ class GroupDialog(wx.Dialog):
             GMessage(parent=self, message=_("No subgroup selected."))
             return 0
 
-        if self.edit_subg:
-            subgroup = self.currentSubgroup
-        else:
-            subgroup = None
+        subgroup = self.currentSubgroup if self.edit_subg else None
 
         groups = self.GetExistGroups()
         if group in groups:
@@ -1472,13 +1460,11 @@ class MapLayersDialogBase(wx.Dialog):
         """Method used only by MapLayersDialogForModeler,
         for other subclasses does nothing.
         """
-        pass
 
     def _addApplyButton(self):
         """Method used only by MapLayersDialog,
         for other subclasses does nothing.
         """
-        pass
 
     def _fullyQualifiedNames(self):
         """Adds CheckBox which determines is fully qualified names are retuned."""
@@ -1660,7 +1646,7 @@ class MapLayersDialogBase(wx.Dialog):
             try:
                 if re.compile(event.GetString()).search(layer):
                     list.append(layer)
-            except:
+            except re.error:
                 pass
         list = naturally_sorted(list)
 
@@ -1872,8 +1858,7 @@ class SetOpacityDialog(wx.Dialog):
     def GetOpacity(self):
         """Button 'OK' pressed"""
         # return opacity value
-        opacity = float(self.value.GetValue()) / 100
-        return opacity
+        return float(self.value.GetValue()) / 100
 
     def OnApply(self, event):
         self.applyOpacity.emit(value=self.GetOpacity())
@@ -1881,8 +1866,8 @@ class SetOpacityDialog(wx.Dialog):
 
 def GetImageHandlers(image):
     """Get list of supported image handlers"""
-    lext = list()
-    ltype = list()
+    lext = []
+    ltype = []
     try:
         for h in image.GetHandlers():
             lext.append(h.GetExtension())
@@ -2334,7 +2319,7 @@ class HyperlinkDialog(wx.Dialog):
 
         label = StaticText(self, label=message)
         sizer.Add(label, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=10)
-        hyperlinkLabel = hyperlinkLabel if hyperlinkLabel else hyperlink
+        hyperlinkLabel = hyperlinkLabel or hyperlink
         hyperlinkCtrl = HyperlinkCtrl(
             self,
             id=wx.ID_ANY,
@@ -2599,7 +2584,8 @@ class DefaultFontDialog(wx.Dialog):
         return fontdict, fontdict_reverse, fontlist
 
     def RenderText(self, font, text, size):
-        """Renders an example text with the selected font and resets the bitmap widget"""
+        """Renders an example text with the selected font and resets the bitmap
+        widget"""
         env = os.environ.copy()
         driver = UserSettings.Get(group="display", key="driver", subkey="type")
         if driver == "png":

@@ -9,7 +9,6 @@ SUBDIRS = \
 	d.polar \
 	d.rast.edit \
 	d.rast.leg \
-	d.redraw \
 	d.shade \
 	d.what.rast \
 	d.what.vect \
@@ -20,6 +19,7 @@ SUBDIRS = \
 	db.test \
 	db.univar \
 	g.download.location \
+	g.download.project \
 	g.extension \
 	g.extension.all \
 	g.manual \

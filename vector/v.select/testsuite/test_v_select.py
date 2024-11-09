@@ -13,25 +13,12 @@ from grass.gunittest.case import TestCase
 
 
 class TestRasterReport(TestCase):
-    binput = "bridges"
+    binput = "zipcodes"
     ainput = "geology"
     output = "testvselect"
-    overlap = "geonames_wake"
-    disjoint = "schools_wake"
-    equals = "streets_wake"
-    touches = "zipcodes_wake"
-    within = "geonames_wake"
 
-    @classmethod
-    def setUpClass(cls):
-        cls.use_temp_region()
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.del_temp_region()
-
-    def tearDown(cls):
-        cls.runModule("g.remove", type="vector", flags="f", name=cls.output)
+    def tearDown(self):
+        self.runModule("g.remove", type="vector", flags="f", name=self.output)
 
     def test_opo(self):
         """Testing operator overlap"""
@@ -42,8 +29,8 @@ class TestRasterReport(TestCase):
             output=self.output,
             operator="overlap",
         )
-        topology = dict(points=1088, lines=0, areas=0)
-        self.assertVectorFitsTopoInfo(self.overlap, topology)
+        topology = {"areas": 97}
+        self.assertVectorFitsTopoInfo(self.output, topology)
 
     def test_opd(self):
         """Testign operator disjoint"""
@@ -54,8 +41,8 @@ class TestRasterReport(TestCase):
             output=self.output,
             operator="disjoint",
         )
-        topology = dict(points=167, lines=0, areas=0)
-        self.assertVectorFitsTopoInfo(self.disjoint, topology)
+        topology = {"areas": 1770}
+        self.assertVectorFitsTopoInfo(self.output, topology)
 
     def test_ope(self):
         """Testing operator equals"""
@@ -66,8 +53,7 @@ class TestRasterReport(TestCase):
             output=self.output,
             operator="equals",
         )
-        topology = dict(points=0, lines=49746, areas=0)
-        self.assertVectorFitsTopoInfo(self.equals, topology)
+        self.assertVectorDoesNotExist(self.output)
 
     def test_opt(self):
         """Testing operator touches"""
@@ -78,8 +64,7 @@ class TestRasterReport(TestCase):
             output=self.output,
             operator="touches",
         )
-        topology = dict(points=0, lines=0, areas=48)
-        self.assertVectorFitsTopoInfo(self.touches, topology)
+        self.assertVectorDoesNotExist(self.output)
 
     def test_opw(self):
         """Testing operator within"""
@@ -90,8 +75,8 @@ class TestRasterReport(TestCase):
             output=self.output,
             operator="within",
         )
-        topology = dict(points=1088, lines=0, areas=0)
-        self.assertVectorFitsTopoInfo(self.within, topology)
+        topology = {"areas": 17}
+        self.assertVectorFitsTopoInfo(self.output, topology)
 
 
 if __name__ == "__main__":

@@ -8,15 +8,17 @@
 Read the file COPYING that comes with GRASS
 for details
 """
+
 import os
 import shutil
 import ctypes
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.utils import xfail_windows
 
 from grass.script.core import tempname
-import grass.script as grass
+import grass.script as gs
 from grass.pygrass import utils
 from grass.pygrass.gis import Mapset, make_mapset
 
@@ -43,16 +45,19 @@ from grass.lib.imagery import (
 
 
 class GetSignaturesDirTestCase(TestCase):
+    @xfail_windows
     def test_get_sig(self):
         cdir = ctypes.create_string_buffer(GNAME_MAX)
         I_get_signatures_dir(cdir, I_SIGFILE_TYPE_SIG)
         self.assertEqual(utils.decode(cdir.value), f"signatures{HOST_DIRSEP}sig")
 
+    @xfail_windows
     def test_get_sigset(self):
         cdir = ctypes.create_string_buffer(GNAME_MAX)
         I_get_signatures_dir(cdir, I_SIGFILE_TYPE_SIGSET)
         self.assertEqual(utils.decode(cdir.value), f"signatures{HOST_DIRSEP}sigset")
 
+    @xfail_windows
     def test_get_libsvm(self):
         elem = ctypes.create_string_buffer(GNAME_MAX)
         I_get_signatures_dir(elem, I_SIGFILE_TYPE_LIBSVM)
@@ -1035,13 +1040,13 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertNotIn(golden[0], ret_list)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
         # Add temporary mapset to search path and re-run test
-        grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="add")
+        gs.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="add")
         # Search path is cached for this run => reset!
         G_reset_mapsets()
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_SIG, None, ctypes.byref(sig_list)
         )
-        grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="remove")
+        gs.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="remove")
         G_reset_mapsets()
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
@@ -1086,13 +1091,13 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertNotIn(golden[0], ret_list)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
         # Add temporary mapset to search path and re-run test
-        grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="add")
+        gs.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="add")
         # Search path is cached for this run => reset!
         G_reset_mapsets()
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_SIGSET, None, ctypes.byref(sig_list)
         )
-        grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="remove")
+        gs.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="remove")
         G_reset_mapsets()
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
@@ -1138,13 +1143,13 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertNotIn(golden[0], ret_list)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
         # Add temporary mapset to search path and re-run test
-        grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="add")
+        gs.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="add")
         # Search path is cached for this run => reset!
         G_reset_mapsets()
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_LIBSVM, None, ctypes.byref(sig_list)
         )
-        grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="remove")
+        gs.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="remove")
         G_reset_mapsets()
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)

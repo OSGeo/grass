@@ -3,6 +3,7 @@ Created on Tue Apr  2 18:37:02 2013
 
 @author: pietro
 """
+
 from collections import OrderedDict
 from copy import deepcopy
 
@@ -63,6 +64,6 @@ class TypeDict(OrderedDict):
     def used(self):
         key_dict = {}
         for key in self:
-            if self.__getattr__(key):
-                key_dict[key] = self.__getattr__(key)
+            if getattr(self, key):
+                key_dict[key] = getattr(self, key)
         return key_dict

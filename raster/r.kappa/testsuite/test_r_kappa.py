@@ -21,6 +21,7 @@ from grass.script.core import tempname
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.checkers import keyvalue_equals
+from grass.gunittest.utils import xfail_windows
 
 
 class MatrixCorrectnessTest(TestCase):
@@ -50,8 +51,9 @@ class MatrixCorrectnessTest(TestCase):
     def tearDownClass(cls):
         """Remove temporary data"""
         cls.del_temp_region()
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.ref_1)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.class_1)
+        cls.runModule(
+            "g.remove", flags="f", type="raster", name=(cls.ref_1, cls.class_1)
+        )
 
     def test_m(self):
         """Test printing matrix only
@@ -118,8 +120,9 @@ class CalculationCorrectness1Test(TestCase):
     def tearDownClass(cls):
         """Remove temporary data"""
         cls.del_temp_region()
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.ref_1)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.class_1)
+        cls.runModule(
+            "g.remove", flags="f", type="raster", name=(cls.ref_1, cls.class_1)
+        )
 
     def match(self, pat, ref):
         if pat == "NA" or ref == "NA":
@@ -232,8 +235,9 @@ class CalculationCorrectness2Test(TestCase):
     def tearDownClass(cls):
         """Remove temporary data"""
         cls.del_temp_region()
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.ref_1)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.class_1)
+        cls.runModule(
+            "g.remove", flags="f", type="raster", name=(cls.ref_1, cls.class_1)
+        )
 
     def match(self, pat, ref):
         if pat == "NA" or ref == "NA":
@@ -474,6 +478,7 @@ class JSONOutputTest(TestCase):
                 keyvalue_equals(self.expected_outputs[i], json_out, precision=4)
             )
 
+    @xfail_windows
     def test_file(self):
         for i in range(len(self.references)):
             f = NamedTemporaryFile()

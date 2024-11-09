@@ -40,17 +40,18 @@ point (.) as decimal separator.
 If no <b>group</b> is given, the rectified vector will be written to
 the current mapset. If a <b>group</b> is given and a target has been
 set for this group with <em><a href="i.target.html">i.target</a></em>,
-the rectified vector will be written to the target location and mapset.
+the rectified vector will be written to the target project and mapset.
 
 <h3>Coordinate transformation and RMSE</h3>
 <p>The desired order of transformation (1, 2, or 3) is selected with the
 <b>order</b> option.
 
-<em>v.rectify</em> will calculate the RMSE if the <b>-r</b> flag is
-given and print out statistcs in tabular format. The last row gives a
-summary with the first column holding the number of active points,
-followed by average deviations for each dimension and both forward and
-backward transformation and finally forward and backward overall RMSE.
+If the <b>-r</b> flag is given, <em>v.rectify</em> will calculate the 
+Root Mean Square Error (RMSE) and print out statistics in tabular format.
+The last row gives a summary with the first column holding the number of 
+active points, followed by average deviations for each dimension and both 
+forward and backward transformation and finally forward and backward 
+overall RMSE.
 
 <h4>2D linear affine transformation (1st order transformation)</h4>
 

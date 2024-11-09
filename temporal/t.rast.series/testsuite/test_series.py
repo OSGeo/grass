@@ -7,11 +7,13 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import os
-import grass.pygrass.modules as pymod
+
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.utils import xfail_windows
 
 
 class TestSnapAbsoluteSTRDS(TestCase):
@@ -58,11 +60,15 @@ class TestSnapAbsoluteSTRDS(TestCase):
             type="raster",
             maps="series_average,series_maximum,series_minimum,series_minimum_2",
         )
-        cls.runModule("g.remove", flags="f", type="raster", name="series_average")
-        cls.runModule("g.remove", flags="f", type="raster", name="series_maximum")
-        cls.runModule("g.remove", flags="f", type="raster", name="series_minimum")
-        cls.runModule("g.remove", flags="f", type="raster", name="series_minimum_2")
-        cls.runModule("g.remove", flags="f", type="raster", name="series_quantile")
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=(
+                "series_average,series_maximum"
+                + ",series_minimum,series_minimum_2,series_quantile"
+            ),
+        )
 
     def test_time_stamp(self):
         self.assertModule(
@@ -144,6 +150,7 @@ class TestSnapAbsoluteSTRDS(TestCase):
             map="series_minimum_2", refmin=300, refmax=300, msg="Minimum must be 300"
         )
 
+    @xfail_windows
     def test_quantile(self):
         self.assertModule(
             "t.rast.series",
@@ -202,10 +209,12 @@ class TestSnapRelativeSTRDS(TestCase):
             type="raster",
             maps="series_average,series_maximum,series_minimum,series_minimum_2",
         )
-        cls.runModule("g.remove", flags="f", type="raster", name="series_average")
-        cls.runModule("g.remove", flags="f", type="raster", name="series_maximum")
-        cls.runModule("g.remove", flags="f", type="raster", name="series_minimum")
-        cls.runModule("g.remove", flags="f", type="raster", name="series_minimum_2")
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name="series_average,series_maximum,series_minimum,series_minimum_2",
+        )
 
     def test_average(self):
         self.assertModule(

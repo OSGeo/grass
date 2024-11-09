@@ -4,7 +4,6 @@ Created on Sun Jun 23 13:40:19 2013
 @author: pietro
 """
 
-
 dcont = """    <tr>
       <td>{key}</td>
       <td>{value}</td>
@@ -84,12 +83,12 @@ def dict2html(
     def fun(x):
         return x
 
-    keys = keys if keys else sorted(dic.keys())
+    keys = keys or sorted(dic.keys())
     header = "<table border=%r>" % border if border else "<table>"
     kd = "<%s>%s</%s>" % (kdec, kfmt, kdec) if kdec else kfmt
     vd = "<%s>%s</%s>" % (vdec, vfmt, vdec) if vdec else vfmt
-    kfun = kfun if kfun else fun
-    vfun = vfun if vfun else fun
+    kfun = kfun or fun
+    vfun = vfun or fun
     content = [dcont.format(key=kd % kfun(k), value=vd % vfun(dic[k])) for k in keys]
     return "\n".join(
         [

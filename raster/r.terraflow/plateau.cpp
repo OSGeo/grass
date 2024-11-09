@@ -311,7 +311,7 @@ class duplicateFixer {
     ccforest<cclabel_type> *colTree;
 
 public:
-    duplicateFixer(ccforest<cclabel_type> *p) : colTree(p){};
+    duplicateFixer(ccforest<cclabel_type> *p) : colTree(p) {};
     int compare(const plateauType &a, const plateauType &b)
     {
         int c = ijCmpPlateauType::compare(a, b);
