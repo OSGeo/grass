@@ -24,6 +24,7 @@ from grass.gunittest.checkers import (
     file_md5,
     text_file_md5,
 )
+from grass.gunittest.utils import xfail_windows
 
 
 class TestValuesEqual(TestCase):
@@ -386,6 +387,7 @@ class TestMd5Sums(TestCase):
         try_remove(cls.correct_file_name_unix_nl)
         try_remove(cls.wrong_file_name)
 
+    @xfail_windows
     def test_text_file_binary(self):
         r"""File with ``\n`` (LF) newlines as binary (MD5 has ``\n``)."""
         self.assertEqual(

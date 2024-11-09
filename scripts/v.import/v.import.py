@@ -103,7 +103,7 @@ import atexit
 import xml.etree.ElementTree as ET  # only needed for GDAL version < 2.4.1
 import re  # only needed for GDAL version < 2.4.1
 
-import grass.script as grass
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 # initialize global vars
@@ -118,15 +118,14 @@ def cleanup():
         os.environ["GISRC"] = str(TGTGISRC)
     # remove temp location
     if TMPLOC:
-        grass.try_rmdir(os.path.join(GISDBASE, TMPLOC))
+        gs.try_rmdir(os.path.join(GISDBASE, TMPLOC))
     if SRCGISRC:
-        grass.try_remove(SRCGISRC)
+        gs.try_remove(SRCGISRC)
 
 
 def gdal_version():
     """Returns the GDAL version as tuple"""
-    version = grass.parse_command("g.version", flags="reg")["gdal"]
-    return version
+    return gs.parse_command("g.version", flags="reg")["gdal"]
 
 
 def GDAL_COMPUTE_VERSION(maj, min, rev):
@@ -137,7 +136,7 @@ def is_projection_matching(OGRdatasource, layer):
     """Returns True if current location projection
     matches dataset projection, otherwise False"""
     try:
-        grass.run_command(
+        gs.run_command(
             "v.in.ogr", input=OGRdatasource, layer=layer, flags="j", quiet=True
         )
         return True
@@ -172,17 +171,17 @@ def fix_gfsfile(input):
 
 def main():
     global TMPLOC, SRCGISRC, TGTGISRC, GISDBASE
-    overwrite = grass.overwrite()
+    overwrite = gs.overwrite()
 
     # list formats and exit
     if flags["f"]:
-        grass.run_command("v.in.ogr", flags="f")
+        gs.run_command("v.in.ogr", flags="f")
         return 0
 
     # list layers and exit
     if flags["l"]:
         try:
-            grass.run_command("v.in.ogr", flags="l", input=options["input"])
+            gs.run_command("v.in.ogr", flags="l", input=options["input"])
         except CalledModuleError:
             return 1
         return 0
@@ -204,9 +203,9 @@ def main():
     if options["datum_trans"] and options["datum_trans"] == "-1":
         # list datum transform parameters
         if not options["epsg"]:
-            grass.fatal(_("Missing value for parameter <%s>") % "epsg")
+            gs.fatal(_("Missing value for parameter <%s>") % "epsg")
 
-        return grass.run_command(
+        return gs.run_command(
             "g.proj", epsg=options["epsg"], datum_trans=options["datum_trans"]
         )
 
@@ -219,27 +218,27 @@ def main():
     # try v.in.ogr directly
     if flags["o"] or is_projection_matching(OGRdatasource, layers):
         try:
-            grass.run_command(
+            gs.run_command(
                 "v.in.ogr",
                 input=OGRdatasource,
                 flags=vflags,
                 overwrite=overwrite,
                 **vopts,
             )
-            grass.message(
+            gs.message(
                 _("Input <%s> successfully imported without reprojection")
                 % OGRdatasource
             )
             return 0
         except CalledModuleError:
-            grass.fatal(_("Unable to import <%s>") % OGRdatasource)
+            gs.fatal(_("Unable to import <%s>") % OGRdatasource)
 
-    grassenv = grass.gisenv()
+    grassenv = gs.gisenv()
     tgtloc = grassenv["LOCATION_NAME"]
 
     # make sure target is not xy
-    if grass.parse_command("g.proj", flags="g")["name"] == "xy_location_unprojected":
-        grass.fatal(
+    if gs.parse_command("g.proj", flags="g")["name"] == "xy_location_unprojected":
+        gs.fatal(
             _("Coordinate reference system not available for current project <%s>")
             % tgtloc
         )
@@ -247,9 +246,9 @@ def main():
     tgtmapset = grassenv["MAPSET"]
     GISDBASE = grassenv["GISDBASE"]
     TGTGISRC = os.environ["GISRC"]
-    SRCGISRC = grass.tempfile()
+    SRCGISRC = gs.tempfile()
 
-    TMPLOC = grass.append_node_pid("tmp_v_import_location")
+    TMPLOC = gs.append_node_pid("tmp_v_import_location")
 
     f = open(SRCGISRC, "w")
     f.write("MAPSET: PERMANENT\n")
@@ -258,16 +257,14 @@ def main():
     f.write("GUI: text\n")
     f.close()
 
-    tgtsrs = grass.read_command("g.proj", flags="j", quiet=True)
-
     # create temp location from input without import
-    grass.verbose(_("Creating temporary project for <%s>...") % OGRdatasource)
+    gs.verbose(_("Creating temporary project for <%s>...") % OGRdatasource)
     try:
         if OGRdatasource.lower().endswith("gml"):
             try:
                 from osgeo import gdal
-            except:
-                grass.fatal(
+            except ImportError:
+                gs.fatal(
                     _(
                         "Unable to load GDAL Python bindings (requires package "
                         "'python-gdal' being installed)"
@@ -275,7 +272,7 @@ def main():
                 )
             if int(gdal.VersionInfo("VERSION_NUM")) < GDAL_COMPUTE_VERSION(2, 4, 1):
                 fix_gfsfile(OGRdatasource)
-        grass.run_command(
+        gs.run_command(
             "v.in.ogr",
             input=OGRdatasource,
             project=TMPLOC,
@@ -285,9 +282,7 @@ def main():
             **vopts,
         )
     except CalledModuleError:
-        grass.fatal(
-            _("Unable to create project from OGR datasource <%s>") % OGRdatasource
-        )
+        gs.fatal(_("Unable to create project from OGR datasource <%s>") % OGRdatasource)
 
     # switch to temp location
     os.environ["GISRC"] = str(SRCGISRC)
@@ -296,14 +291,14 @@ def main():
         kwargs = {}
         if options["datum_trans"]:
             kwargs["datum_trans"] = options["datum_trans"]
-        grass.run_command("g.proj", flags="c", epsg=options["epsg"], **kwargs)
+        gs.run_command("g.proj", flags="c", epsg=options["epsg"], **kwargs)
 
     # print projection at verbose level
-    grass.verbose(grass.read_command("g.proj", flags="p").rstrip(os.linesep))
+    gs.verbose(gs.read_command("g.proj", flags="p").rstrip(os.linesep))
 
     # make sure input is not xy
-    if grass.parse_command("g.proj", flags="g")["name"] == "xy_location_unprojected":
-        grass.fatal(
+    if gs.parse_command("g.proj", flags="g")["name"] == "xy_location_unprojected":
+        gs.fatal(
             _("Coordinate reference system not available for input <%s>")
             % OGRdatasource
         )
@@ -313,15 +308,15 @@ def main():
         os.environ["GISRC"] = str(TGTGISRC)
 
         # v.in.region in tgt
-        vreg = grass.append_node_pid("tmp_v_import_region")
+        vreg = gs.append_node_pid("tmp_v_import_region")
 
-        grass.run_command("v.in.region", output=vreg, quiet=True)
+        gs.run_command("v.in.region", output=vreg, quiet=True)
 
         # reproject to src
         # switch to temp location
         os.environ["GISRC"] = str(SRCGISRC)
         try:
-            grass.run_command(
+            gs.run_command(
                 "v.proj",
                 input=vreg,
                 output=vreg,
@@ -331,20 +326,20 @@ def main():
                 overwrite=overwrite,
             )
         except CalledModuleError:
-            grass.fatal(_("Unable to reproject to source project"))
+            gs.fatal(_("Unable to reproject to source project"))
 
         # set region from region vector
-        grass.run_command("g.region", res="1")
-        grass.run_command("g.region", vector=vreg)
+        gs.run_command("g.region", res="1")
+        gs.run_command("g.region", vector=vreg)
 
     # import into temp location
-    grass.message(_("Importing <%s> ...") % OGRdatasource)
+    gs.message(_("Importing <%s> ...") % OGRdatasource)
     try:
         if OGRdatasource.lower().endswith("gml"):
             try:
                 from osgeo import gdal
-            except:
-                grass.fatal(
+            except ImportError:
+                gs.fatal(
                     _(
                         "Unable to load GDAL Python bindings (requires package "
                         "'python-gdal' being installed)"
@@ -352,33 +347,33 @@ def main():
                 )
             if int(gdal.VersionInfo("VERSION_NUM")) < GDAL_COMPUTE_VERSION(2, 4, 1):
                 fix_gfsfile(OGRdatasource)
-        grass.run_command(
+        gs.run_command(
             "v.in.ogr", input=OGRdatasource, flags=vflags, overwrite=overwrite, **vopts
         )
     except CalledModuleError:
-        grass.fatal(_("Unable to import OGR datasource <%s>") % OGRdatasource)
+        gs.fatal(_("Unable to import OGR datasource <%s>") % OGRdatasource)
 
     # if output is not define check source mapset
     if not output:
-        output = grass.list_grouped("vector")["PERMANENT"][0]
+        output = gs.list_grouped("vector")["PERMANENT"][0]
 
     # switch to target location
     os.environ["GISRC"] = str(TGTGISRC)
 
     # check if map exists
     if (
-        not grass.overwrite()
-        and grass.find_file(output, element="vector", mapset=".")["mapset"]
+        not gs.overwrite()
+        and gs.find_file(output, element="vector", mapset=".")["mapset"]
     ):
-        grass.fatal(_("option <%s>: <%s> exists.") % ("output", output))
+        gs.fatal(_("option <%s>: <%s> exists.") % ("output", output))
 
     if options["extent"] == "region":
-        grass.run_command("g.remove", type="vector", name=vreg, flags="f", quiet=True)
+        gs.run_command("g.remove", type="vector", name=vreg, flags="f", quiet=True)
 
     # v.proj
-    grass.message(_("Reprojecting <%s>...") % output)
+    gs.message(_("Reprojecting <%s>...") % output)
     try:
-        grass.run_command(
+        gs.run_command(
             "v.proj",
             project=TMPLOC,
             mapset="PERMANENT",
@@ -386,12 +381,12 @@ def main():
             overwrite=overwrite,
         )
     except CalledModuleError:
-        grass.fatal(_("Unable to to reproject vector <%s>") % output)
+        gs.fatal(_("Unable to to reproject vector <%s>") % output)
 
     return 0
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     atexit.register(cleanup)
     sys.exit(main())

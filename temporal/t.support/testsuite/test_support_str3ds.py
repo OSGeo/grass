@@ -9,10 +9,9 @@ for details.
 """
 
 import os
-import grass.pygrass.modules as pymod
+
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
-from grass.gunittest.gmodules import SimpleModule
 
 
 class TestSupportAbsoluteSTR3DS(TestCase):

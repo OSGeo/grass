@@ -51,8 +51,8 @@ int main(int argc, char *argv[])
     struct PointBinning point_binning;
     void *base_array;
     void *raster_row;
-    struct Cell_head region;
-    struct Cell_head input_region;
+    struct Cell_head region = {0};
+    struct Cell_head input_region = {0};
     int rows, last_rows, row0, cols; /* scan box size */
     int row;                         /* counters */
 
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     int return_filter;
 
     const char *projstr;
-    struct Cell_head cellhd, loc_wind;
+    struct Cell_head cellhd = {0}, loc_wind = {0};
 
     unsigned int n_filtered;
 

@@ -11,51 +11,52 @@ for details.
 
 import getpass
 from datetime import datetime
+
+import grass.script.array as garray
+
 from .abstract_map_dataset import AbstractMapDataset
 from .abstract_space_time_dataset import AbstractSpaceTimeDataset
 from .base import (
     Raster3DBase,
-    RasterBase,
-    VectorBase,
-    STR3DSBase,
-    STVDSBase,
-    STRDSBase,
-    VectorSTDSRegister,
     Raster3DSTDSRegister,
+    RasterBase,
     RasterSTDSRegister,
+    STR3DSBase,
+    STRDSBase,
+    STVDSBase,
+    VectorBase,
+    VectorSTDSRegister,
 )
 from .metadata import (
     Raster3DMetadata,
     RasterMetadata,
-    VectorMetadata,
-    STRDSMetadata,
     STR3DSMetadata,
+    STRDSMetadata,
     STVDSMetadata,
+    VectorMetadata,
 )
 from .spatial_extent import (
-    RasterSpatialExtent,
     Raster3DSpatialExtent,
-    VectorSpatialExtent,
-    STRDSSpatialExtent,
+    RasterSpatialExtent,
     STR3DSSpatialExtent,
+    STRDSSpatialExtent,
     STVDSSpatialExtent,
+    VectorSpatialExtent,
 )
 from .temporal_extent import (
-    RasterAbsoluteTime,
-    RasterRelativeTime,
     Raster3DAbsoluteTime,
     Raster3DRelativeTime,
-    VectorAbsoluteTime,
-    VectorRelativeTime,
-    STRDSAbsoluteTime,
-    STRDSRelativeTime,
+    RasterAbsoluteTime,
+    RasterRelativeTime,
     STR3DSAbsoluteTime,
     STR3DSRelativeTime,
+    STRDSAbsoluteTime,
+    STRDSRelativeTime,
     STVDSAbsoluteTime,
     STVDSRelativeTime,
+    VectorAbsoluteTime,
+    VectorRelativeTime,
 )
-import grass.script.array as garray
-
 
 GRASS_TIMESTAMP_FMT = "%a %b  %d %H:%M:%S %Y"
 
@@ -287,10 +288,8 @@ class RasterDataset(AbstractMapDataset):
 
         if check < 1:
             self.msgr.error(
-                _(
-                    "Unable to read timestamp file "
-                    "for raster map <%s>" % (self.get_map_id())
-                )
+                _("Unable to read timestamp file for raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -315,19 +314,15 @@ class RasterDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to create timestamp file "
-                    "for raster map <%s>" % (self.get_map_id())
-                )
+                _("Unable to create timestamp file for raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
         if check == -2:
             self.msgr.error(
-                _(
-                    "Invalid datetime in timestamp for raster map "
-                    "<%s>" % (self.get_map_id())
-                )
+                _("Invalid datetime in timestamp for raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -349,7 +344,7 @@ class RasterDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _("Unable to remove timestamp for raster map <%s>" % (self.get_name()))
+                _("Unable to remove timestamp for raster map <%s>") % (self.get_name())
             )
             return False
 
@@ -389,10 +384,8 @@ class RasterDataset(AbstractMapDataset):
         )
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to write semantic label for raster map <%s>"
-                    % (self.get_name())
-                )
+                _("Unable to write semantic label for raster map <%s>")
+                % (self.get_name())
             )
             return False
 
@@ -640,15 +633,13 @@ class Raster3DDataset(AbstractMapDataset):
         """Return True if the spatial extents overlap"""
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.overlapping(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
+        return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
     def spatial_relation(self, dataset):
         """Return the two or three dimensional spatial relation"""
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.spatial_relation(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
+        return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 
     def spatial_intersection(self, dataset):
         """Return the three or two dimensional intersection as spatial_extent
@@ -659,8 +650,7 @@ class Raster3DDataset(AbstractMapDataset):
         """
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.intersect(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.intersect_2d(dataset.spatial_extent)
+        return self.spatial_extent.intersect_2d(dataset.spatial_extent)
 
     def spatial_union(self, dataset):
         """Return the three or two dimensional union as spatial_extent
@@ -671,8 +661,7 @@ class Raster3DDataset(AbstractMapDataset):
         """
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.union(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.union_2d(dataset.spatial_extent)
+        return self.spatial_extent.union_2d(dataset.spatial_extent)
 
     def spatial_disjoint_union(self, dataset):
         """Return the three or two dimensional union as spatial_extent object.
@@ -682,8 +671,7 @@ class Raster3DDataset(AbstractMapDataset):
         """
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.disjoint_union(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
+        return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
     def get_np_array(self):
         """Return this 3D raster map as memmap numpy style array to access the
@@ -740,10 +728,8 @@ class Raster3DDataset(AbstractMapDataset):
 
         if check < 1:
             self.msgr.error(
-                _(
-                    "Unable to read timestamp file "
-                    "for 3D raster map <%s>" % (self.get_map_id())
-                )
+                _("Unable to read timestamp file for 3D raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -768,19 +754,15 @@ class Raster3DDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to create timestamp file "
-                    "for 3D raster map <%s>" % (self.get_map_id())
-                )
+                _("Unable to create timestamp file for 3D raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
         if check == -2:
             self.msgr.error(
-                _(
-                    "Invalid datetime in timestamp for 3D raster "
-                    "map <%s>" % (self.get_map_id())
-                )
+                _("Invalid datetime in timestamp for 3D raster map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -801,10 +783,7 @@ class Raster3DDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to remove timestamp for raster map "
-                    "<%s>" % (self.get_name())
-                )
+                _("Unable to remove timestamp for raster map <%s>") % (self.get_name())
             )
             return False
 
@@ -1090,10 +1069,8 @@ class VectorDataset(AbstractMapDataset):
 
         if check < 1:
             self.msgr.error(
-                _(
-                    "Unable to read timestamp file "
-                    "for vector map <%s>" % (self.get_map_id())
-                )
+                _("Unable to read timestamp file for vector map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -1119,19 +1096,15 @@ class VectorDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to create timestamp file "
-                    "for vector map <%s>" % (self.get_map_id())
-                )
+                _("Unable to create timestamp file for vector map <%s>")
+                % (self.get_map_id())
             )
             return False
 
         if check == -2:
             self.msgr.error(
-                _(
-                    "Invalid datetime in timestamp for vector "
-                    "map <%s>" % (self.get_map_id())
-                )
+                _("Invalid datetime in timestamp for vector map <%s>")
+                % (self.get_map_id())
             )
             return False
 
@@ -1147,9 +1120,8 @@ class VectorDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _(
-                    "Unable to remove timestamp for vector "
-                    "map <%s>" % (self.get_name())
+                _("Unable to remove timestamp for vector map <%s>").format(
+                    self.get_name()
                 )
             )
             return False
@@ -1409,16 +1381,14 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
 
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.overlapping(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
+        return self.spatial_extent.overlapping_2d(dataset.spatial_extent)
 
     def spatial_relation(self, dataset):
         """Return the two or three dimensional spatial relation"""
 
         if self.get_type() == dataset.get_type() or dataset.get_type() == "str3ds":
             return self.spatial_extent.spatial_relation(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
+        return self.spatial_extent.spatial_relation_2d(dataset.spatial_extent)
 
     def spatial_intersection(self, dataset):
         """Return the three or two dimensional intersection as spatial_extent
@@ -1429,8 +1399,7 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
         """
         if self.get_type() == dataset.get_type() or dataset.get_type() == "raster3d":
             return self.spatial_extent.intersect(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.intersect_2d(dataset.spatial_extent)
+        return self.spatial_extent.intersect_2d(dataset.spatial_extent)
 
     def spatial_union(self, dataset):
         """Return the three or two dimensional union as spatial_extent
@@ -1441,8 +1410,7 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
         """
         if self.get_type() == dataset.get_type() or dataset.get_type() == "raster3d":
             return self.spatial_extent.union(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.union_2d(dataset.spatial_extent)
+        return self.spatial_extent.union_2d(dataset.spatial_extent)
 
     def spatial_disjoint_union(self, dataset):
         """Return the three or two dimensional union as spatial_extent object.
@@ -1452,8 +1420,7 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
         """
         if self.get_type() == dataset.get_type() or dataset.get_type() == "raster3d":
             return self.spatial_extent.disjoint_union(dataset.spatial_extent)
-        else:
-            return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
+        return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
     def reset(self, ident):
         """Reset the internal structure and set the identifier"""
