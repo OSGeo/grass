@@ -14,9 +14,6 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 """
 
-import os
-
-import grass.script as gs
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
