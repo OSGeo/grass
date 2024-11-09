@@ -91,12 +91,12 @@ def check_monitor():
 def read_monitor_file(monitor, ftype="env"):
     mfile = check_monitor_file(monitor, ftype)
     try:
-        fd = open(mfile, "r")
+        fd = open(mfile)
     except OSError as e:
         fatal(_("Unable to get monitor info. %s"), e)
 
     lines = []
-    for line in fd.readlines():
+    for line in fd:
         lines.append(line)
 
     fd.close()
@@ -188,11 +188,11 @@ def calculate_frame(frame, at, width, height):
 
     This function does also the necessary formatting.
 
-    >>> calculate_frame('apple', "0,49.8,0,50.2", 500, 500)
+    >>> calculate_frame("apple", "0,49.8,0,50.2", 500, 500)
     'GRASS_RENDER_FRAME=251,500,0,251 # apple\\n'
-    >>> calculate_frame('orange', "50.2,0,49.8,100", 500, 500)
+    >>> calculate_frame("orange", "50.2,0,49.8,100", 500, 500)
     'GRASS_RENDER_FRAME=500,249,249,500 # orange\\n'
-    >>> calculate_frame('odd_number', "0,49.8,0,50.2", 367, 367)
+    >>> calculate_frame("odd_number", "0,49.8,0,50.2", 367, 367)
     'GRASS_RENDER_FRAME=184,367,0,184 # odd_number\\n'
 
     The following would give 182,367,0,184 if we would be truncating
@@ -201,12 +201,12 @@ def calculate_frame(frame, at, width, height):
     0.502 times 367 is 184.234 which fits with the (correct) width of
     the frame which is 184.
 
-    >>> calculate_frame('test_truncating_bug', "0,50.2,0,50.2", 367, 367)
+    >>> calculate_frame("test_truncating_bug", "0,50.2,0,50.2", 367, 367)
     'GRASS_RENDER_FRAME=183,367,0,184 # test_truncating_bug\\n'
     """
     try:
         b, t, l, r = list(map(float, at.split(",")))
-    except:
+    except ValueError:
         fatal(_("Invalid frame position: %s") % at)
 
     top = round(height - (t / 100.0 * height))
@@ -238,7 +238,7 @@ def create_frame(monitor, frame, at, overwrite=False):
                 width = int(line.split("=", 1)[1].rsplit(" ", 1)[0])
             elif "HEIGHT" in line:
                 height = int(line.split("=", 1)[1].rsplit(" ", 1)[0])
-        except:
+        except (ValueError, IndexError):
             pass
 
     if width < 0 or height < 0:
@@ -311,21 +311,19 @@ def main():
                 fatal(_("Required parameter <%s> not set") % "at")
             # create new frame if not exists
             create_frame(monitor, options["frame"], options["at"])
-    else:
-        if os.getenv("GRASS_OVERWRITE", "0") == "1":
-            warning(
-                _("Frame <%s> already exists and will be overwritten")
-                % options["frame"]
+    elif os.getenv("GRASS_OVERWRITE", "0") == "1":
+        warning(
+            _("Frame <%s> already exists and will be overwritten") % options["frame"]
+        )
+        create_frame(monitor, options["frame"], options["at"], overwrite=True)
+    elif options["at"]:
+        warning(
+            _(
+                "Frame <%s> already found. An existing frame can be "
+                "overwritten by '%s' flag."
             )
-            create_frame(monitor, options["frame"], options["at"], overwrite=True)
-        else:
-            if options["at"]:
-                warning(
-                    _(
-                        "Frame <%s> already found. An existing frame can be overwritten by '%s' flag."
-                    )
-                    % (options["frame"], "--overwrite")
-                )
+            % (options["frame"], "--overwrite")
+        )
 
     # select givenframe
     select_frame(monitor, options["frame"])

@@ -33,7 +33,7 @@ for other platforms you may have to install some of them.
   PROJ: [https://proj.org/](https://proj.org/)
 - **GDAL/OGR** for import and export of most external raster and vector map formats
   GDAL: [https://gdal.org](https://gdal.org)
-- **Python >= 3.7** (for temporal framework, scripts, wxGUI, and ctypes interface)
+- **Python >= 3.8** (for temporal framework, scripts, wxGUI, and ctypes interface)
   [https://www.python.org](https://www.python.org)
 
 ## Optional packages
@@ -49,7 +49,7 @@ Note: also the respective development packages (commonly named `xxx-dev` or
   [https://facebook.github.io/zstd](https://facebook.github.io/zstd)
 - **FFTW 2.x or 3.x** (library for computing the Discrete Fourier Transform),
   required for `i.fft` and `i.ifft` and other modules
-  [http://www.fftw.org](http://www.fftw.org)
+  [https://fftw.org](https://fftw.org)
 - **GEOS** (Geometry Engine library),
   needed for `v.buffer` and adds extended options to the `v.select` module
   [https://libgeos.org/](https://libgeos.org/)
@@ -81,7 +81,7 @@ Note: also the respective development packages (commonly named `xxx-dev` or
 - **SQLite libraries** (for the SQLite database interface)
   [https://www.sqlite.org](https://www.sqlite.org)
 - **unixODBC** (for the ODBC database interface)
-  [http://www.unixodbc.org](http://www.unixodbc.org)
+  [https://www.unixodbc.org](https://www.unixodbc.org)
 - **R Statistics** (for the R statistical language interface)
   [https://cran.r-project.org](https://cran.r-project.org)
 - **FreeType2** (for TrueType font support and `d.text.freetype`)

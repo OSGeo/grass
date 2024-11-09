@@ -18,16 +18,18 @@ for details.
 """
 
 from datetime import datetime
+
 import grass.script as gs
-from .core import get_tgis_message_interface, init_dbif, get_current_mapset
-from .open_stds import open_old_stds
+
 from .abstract_map_dataset import AbstractMapDataset
-from .factory import dataset_factory
+from .core import get_current_mapset, get_tgis_message_interface, init_dbif
 from .datetime_math import (
     check_datetime_string,
     increment_datetime_by_string,
     string_to_datetime,
 )
+from .factory import dataset_factory
+from .open_stds import open_old_stds
 
 ###############################################################################
 
@@ -156,10 +158,7 @@ def register_maps_in_space_time_dataset(
 
     # Read the map list from file
     if file:
-        if hasattr(file, "readline"):
-            fd = file
-        else:
-            fd = open(file, "r")
+        fd = file if hasattr(file, "readline") else open(file)
 
         line = True
         while True:
@@ -215,7 +214,8 @@ def register_maps_in_space_time_dataset(
             increment = None
             msgr.warning(
                 _(
-                    "The increment option will be ignored because of time stamps in input file"
+                    "The increment option will be ignored because of time stamps in "
+                    "input file"
                 )
             )
 
@@ -223,7 +223,8 @@ def register_maps_in_space_time_dataset(
             increment = None
             msgr.warning(
                 _(
-                    "The interval flag will be ignored because of time stamps in input file"
+                    "The interval flag will be ignored because of time stamps in input "
+                    "file"
                 )
             )
         fd.close()
@@ -260,10 +261,7 @@ def register_maps_in_space_time_dataset(
             end = row["end"]
 
         # Use the semantic label from file
-        if "semantic_label" in row:
-            semantic_label = row["semantic_label"]
-        else:
-            semantic_label = None
+        semantic_label = row.get("semantic_label", None)
 
         is_in_db = map_object.is_in_db(dbif, mapset)
 
@@ -373,7 +371,8 @@ def register_maps_in_space_time_dataset(
 
         # Try to read an existing time stamp from the grass spatial database
         # in case this map wasn't already registered in the temporal database
-        # Read the spatial database time stamp only, if no time stamp was provided for this map
+        # Read the spatial database time stamp only, if no time stamp was provided for
+        # this map
         # as method argument or in the input file
         if not is_in_db and not start:
             map_object.read_timestamp_from_grass()
@@ -446,11 +445,11 @@ def register_maps_in_space_time_dataset(
     # Update affected datasets
     if datatsets_to_modify:
         for dataset in datatsets_to_modify:
-            if type in ["rast", "raster"]:
+            if type in {"rast", "raster"}:
                 ds = dataset_factory("strds", dataset)
-            elif type in ["raster_3d", "rast3d", "raster3d"]:
+            elif type in {"raster_3d", "rast3d", "raster3d"}:
                 ds = dataset_factory("str3ds", dataset)
-            elif type in ["vect", "vector"]:
+            elif type in {"vect", "vector"}:
                 ds = dataset_factory("stvds", dataset)
             ds.select(dbif)
             ds.update_from_registered_maps(dbif)
@@ -534,7 +533,8 @@ def assign_valid_time_to_map(
             msgr.debug(
                 1,
                 _(
-                    "Set absolute valid time for map <{mid}> to {start_time} - {end_time}"
+                    "Set absolute valid time for map <{mid}> to "
+                    "{start_time} - {end_time}"
                 ).format(
                     mid=map_object.get_map_id(),
                     start_time=str(start_time),
@@ -551,7 +551,7 @@ def assign_valid_time_to_map(
             end_time = int(end)
 
         if increment:
-            start_time = start_time + mult * int(increment)
+            start_time += mult * int(increment)
             if interval:
                 end_time = start_time + int(increment)
 
@@ -573,7 +573,8 @@ def assign_valid_time_to_map(
             msgr.debug(
                 1,
                 _(
-                    "Set relative valid time for map <{mid}> to {start} - {end} with unit {unit}"
+                    "Set relative valid time for map <{mid}> to "
+                    "{start} - {end} with unit {unit}"
                 ).format(
                     mid=map_object.get_map_id(),
                     start=start_time,
@@ -602,8 +603,9 @@ def register_map_object_list(
     :param dbif: The database interface to be used
 
     """
-    import grass.pygrass.modules as pymod
     import copy
+
+    import grass.pygrass.modules as pymod
 
     dbif, connection_state_changed = init_dbif(None)
 
@@ -615,7 +617,7 @@ def register_map_object_list(
             map_layer.load()
             # In case of a empty map continue, do not register empty maps
             if delete_empty:
-                if type in ["raster", "raster_3d", "rast", "rast3d"]:
+                if type in {"raster", "raster_3d", "rast", "rast3d"}:
                     if (
                         map_layer.metadata.get_min() is None
                         and map_layer.metadata.get_max() is None
@@ -634,10 +636,7 @@ def register_map_object_list(
             string = f"{id}|{start}|{end}\n"
             register_file.write(string)
 
-    if output_stds:
-        output_stds_id = output_stds.get_id()
-    else:
-        output_stds_id = None
+    output_stds_id = output_stds.get_id() if output_stds else None
 
     register_maps_in_space_time_dataset(
         type, output_stds_id, unit=unit, file=filename, dbif=dbif

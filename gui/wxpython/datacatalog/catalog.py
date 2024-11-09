@@ -19,6 +19,8 @@ for details.
 import wx
 import os
 
+from pathlib import Path
+
 from core.debug import Debug
 from datacatalog.tree import DataCatalogTree
 from datacatalog.toolbars import DataCatalogToolbar, DataCatalogSearch
@@ -98,7 +100,7 @@ class DataCatalog(wx.Panel):
             # get reason why last used mapset is not usable
             last_mapset_path = gisenv()["LAST_MAPSET_PATH"]
             self.reason_id = get_reason_id_mapset_not_usable(last_mapset_path)
-            if self.reason_id in ("non-existent", "invalid", "different-owner"):
+            if self.reason_id in {"non-existent", "invalid", "different-owner"}:
                 # show non-standard situation info
                 wx.CallLater(delay, self.showFallbackSessionInfo)
             elif self.reason_id == "locked":
@@ -200,7 +202,10 @@ class DataCatalog(wx.Panel):
     def OnAddGrassDB(self, event):
         """Add grass database"""
         dlg = wx.DirDialog(
-            self, _("Choose GRASS data directory:"), os.getcwd(), wx.DD_DEFAULT_STYLE
+            self,
+            _("Choose GRASS data directory:"),
+            str(Path.cwd()),
+            wx.DD_DEFAULT_STYLE,
         )
         if dlg.ShowModal() == wx.ID_OK:
             grassdatabase = dlg.GetPath()

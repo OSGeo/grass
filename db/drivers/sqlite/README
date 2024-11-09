@@ -14,7 +14,7 @@ db.connect driver=sqlite \
 The database is created automatically when used first time.
 That is SQLite feature followed also in the driver.
 
-SQLite uses "type affinity", (http://www.sqlite.org/datatype3.html)
+SQLite uses "type affinity", (https://www.sqlite.org/datatype3.html)
 that means column types are recommended, but not required.
 
 If the driver in GRASS has to determine column type, it first reads

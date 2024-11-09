@@ -59,8 +59,7 @@ class SettingsJSONEncoder(json.JSONEncoder):
                 return [color(e) for e in item]
             if isinstance(item, dict):
                 return {key: color(value) for key, value in item.items()}
-            else:
-                return item
+            return item
 
         return super().iterencode(color(obj))
 
@@ -73,7 +72,7 @@ def settings_JSON_decode_hook(obj):
         return tuple(int(hexcode[i : i + 2], 16) for i in range(0, len(hexcode), 2))
 
     for k, v in obj.items():
-        if isinstance(v, str) and v.startswith("#") and len(v) in [7, 9]:
+        if isinstance(v, str) and v.startswith("#") and len(v) in {7, 9}:
             obj[k] = colorhex2tuple(v)
     return obj
 
@@ -110,7 +109,7 @@ class Settings:
             self.locs.sort()
             # Add a default choice to not override system locale
             self.locs.insert(0, "system")
-        except:
+        except Exception:
             # No NLS
             self.locs = ["system"]
 
@@ -151,6 +150,10 @@ class Settings:
                 # region
                 "region": {
                     "resAlign": {"enabled": False},
+                },
+                "singleWinPanesLayoutPos": {
+                    "enabled": False,
+                    "pos": "",
                 },
                 # init
                 "init": {
@@ -767,7 +770,7 @@ class Settings:
             },
         }
 
-        # quick fix, http://trac.osgeo.org/grass/ticket/1233
+        # quick fix, https://trac.osgeo.org/grass/ticket/1233
         # TODO
         if sys.platform == "darwin":
             self.defaultSettings["general"]["defWindowPos"]["enabled"] = False
@@ -922,7 +925,7 @@ class Settings:
             return dictionary
 
         try:
-            with open(self.filePath, "r") as f:
+            with open(self.filePath) as f:
                 update = json.load(f, object_hook=settings_JSON_decode_hook)
                 update_nested_dict_by_dict(settings, update)
         except json.JSONDecodeError as e:
@@ -942,7 +945,7 @@ class Settings:
             settings = self.userSettings
 
         try:
-            fd = open(self.legacyFilePath, "r")
+            fd = open(self.legacyFilePath)
         except OSError:
             sys.stderr.write(
                 _("Unable to read settings file <%s>\n") % self.legacyFilePath
@@ -951,7 +954,7 @@ class Settings:
 
         try:
             line = ""
-            for line in fd.readlines():
+            for line in fd:
                 line = line.rstrip("%s" % os.linesep)
                 group, key = line.split(self.sep)[0:2]
                 kv = line.split(self.sep)[2:]
@@ -961,10 +964,7 @@ class Settings:
                     del kv[0]
                 idx = 0
                 while idx < len(kv):
-                    if subkeyMaster:
-                        subkey = [subkeyMaster, kv[idx]]
-                    else:
-                        subkey = kv[idx]
+                    subkey = [subkeyMaster, kv[idx]] if subkeyMaster else kv[idx]
                     value = kv[idx + 1]
                     value = self._parseValue(value, read=True)
                     self.Append(settings, group, key, subkey, value)
@@ -992,7 +992,7 @@ class Settings:
         if not os.path.exists(dirPath):
             try:
                 os.mkdir(dirPath)
-            except:
+            except OSError:
                 GError(_("Unable to create settings directory"))
                 return
         try:
@@ -1032,7 +1032,7 @@ class Settings:
                         value = float(value)
                     except ValueError:
                         pass
-        else:  # -> write settings
+        else:  # -> write settings  # noqa: PLR5501
             if isinstance(value, type(())):  # -> color
                 value = str(value[0]) + ":" + str(value[1]) + ":" + str(value[2])
 
@@ -1062,15 +1062,13 @@ class Settings:
             if subkey is None:
                 if key is None:
                     return settings[group]
-                else:
-                    return settings[group][key]
-            else:
-                if isinstance(subkey, type(tuple())) or isinstance(
-                    subkey, type(list())
-                ):
-                    return settings[group][key][subkey[0]][subkey[1]]
-                else:
-                    return settings[group][key][subkey]
+
+                return settings[group][key]
+
+            if isinstance(subkey, (list, tuple)):
+                return settings[group][key][subkey[0]][subkey[1]]
+
+            return settings[group][key][subkey]
 
         except KeyError:
             print(
@@ -1101,15 +1099,16 @@ class Settings:
             if subkey is None:
                 if key is None:
                     settings[group] = value
-                else:
-                    settings[group][key] = value
-            else:
-                if isinstance(subkey, type(tuple())) or isinstance(
-                    subkey, type(list())
-                ):
-                    settings[group][key][subkey[0]][subkey[1]] = value
-                else:
-                    settings[group][key][subkey] = value
+                    return
+                settings[group][key] = value
+                return
+
+            if isinstance(subkey, (list, tuple)):
+                settings[group][key][subkey[0]][subkey[1]] = value
+                return
+            settings[group][key][subkey] = value
+            return
+
         except KeyError:
             raise GException(
                 "%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey)
@@ -1201,7 +1200,7 @@ UserSettings = Settings()
 
 
 def GetDisplayVectSettings():
-    settings = list()
+    settings = []
     if not UserSettings.Get(
         group="vectorLayer", key="featureColor", subkey=["transparent", "enabled"]
     ):
@@ -1225,14 +1224,15 @@ def GetDisplayVectSettings():
     else:
         settings.append("fcolor=none")
 
-    settings.append(
-        "width=%s" % UserSettings.Get(group="vectorLayer", key="line", subkey="width")
-    )
-    settings.append(
-        "icon=%s" % UserSettings.Get(group="vectorLayer", key="point", subkey="symbol")
-    )
-    settings.append(
-        "size=%s" % UserSettings.Get(group="vectorLayer", key="point", subkey="size")
+    settings.extend(
+        (
+            "width=%s"
+            % UserSettings.Get(group="vectorLayer", key="line", subkey="width"),
+            "icon=%s"
+            % UserSettings.Get(group="vectorLayer", key="point", subkey="symbol"),
+            "size=%s"
+            % UserSettings.Get(group="vectorLayer", key="point", subkey="size"),
+        )
     )
     types = []
     for ftype in ["point", "line", "boundary", "centroid", "area", "face"]:

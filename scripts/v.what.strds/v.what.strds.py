@@ -49,7 +49,7 @@
 # % description: Instead of creating a new vector map update the attribute table with value(s)
 # %end
 
-import grass.script as grass
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 ############################################################################
@@ -82,9 +82,7 @@ class Sample:
         elif date == "end":
             output = str(self.end).split(" ")[0].replace("-", "_")
         else:
-            grass.fatal(
-                "The values accepted by printDay in Sample are:" " 'start', 'end'"
-            )
+            gs.fatal("The values accepted by printDay in Sample are: 'start', 'end'")
         if self.granu:
             if self.granu.find("minute") != -1 or self.granu.find("second") != -1:
                 output += "_" + str(self.start).split(" ")[1].replace(":", "_")
@@ -109,22 +107,22 @@ def main():
     tempwhere = options["t_where"]
 
     if output and flags["u"]:
-        grass.fatal(_("Cannot combine 'output' option and 'u' flag"))
+        gs.fatal(_("Cannot combine 'output' option and 'u' flag"))
     elif not output and not flags["u"]:
-        grass.fatal(_("'output' option or 'u' flag must be given"))
+        gs.fatal(_("'output' option or 'u' flag must be given"))
     elif not output and flags["u"]:
-        grass.warning(
+        gs.warning(
             _("Attribute table of vector {name} will be updated...").format(name=input)
         )
 
-    if where == "" or where == " " or where == "\n":
+    if where in {"", " ", "\n"}:
         where = None
 
-    overwrite = grass.overwrite()
+    overwrite = gs.overwrite()
 
     quiet = True
 
-    if grass.verbosity() > 2:
+    if gs.verbosity() > 2:
         quiet = False
 
     # Check the number of sample strds and the number of columns
@@ -148,7 +146,7 @@ def main():
 
         if not rows:
             dbif.close()
-            grass.fatal(
+            gs.fatal(
                 _("Space time raster dataset <%s> is empty") % first_strds.get_id()
             )
         for row in rows:
@@ -165,19 +163,19 @@ def main():
         for name in strds_names[1:]:
             dataset = tgis.open_old_stds(name, "strds", dbif)
             if dataset.get_temporal_type() != first_strds.get_temporal_type():
-                grass.fatal(
+                gs.fatal(
                     _(
                         "Temporal type of space time raster "
                         "datasets must be equal\n<%(a)s> of type "
                         "%(type_a)s do not match <%(b)s> of type "
                         "%(type_b)s"
-                        % {
-                            "a": first_strds.get_id(),
-                            "type_a": first_strds.get_temporal_type(),
-                            "b": dataset.get_id(),
-                            "type_b": dataset.get_temporal_type(),
-                        }
                     )
+                    % {
+                        "a": first_strds.get_id(),
+                        "type_a": first_strds.get_temporal_type(),
+                        "b": dataset.get_id(),
+                        "type_b": dataset.get_temporal_type(),
+                    }
                 )
 
         mapmatrizes = tgis.sample_stds_by_stds_topology(
@@ -204,8 +202,7 @@ def main():
                     if name is None:
                         isvalid = False
                         break
-                    else:
-                        mapname_list.append(name)
+                    mapname_list.append(name)
 
             if isvalid:
                 entry = mapmatrizes[0][i]
@@ -227,17 +224,17 @@ def main():
     pymap = Vector(output)
     try:
         pymap.open("r")
-    except:
+    except Exception:
         dbif.close()
-        grass.fatal(_("Unable to create vector map <%s>" % output))
+        gs.fatal(_("Unable to create vector map <%s>") % output)
 
     if len(pymap.dblinks) == 0:
         try:
             pymap.close()
-            grass.run_command("v.db.addtable", map=output)
+            gs.run_command("v.db.addtable", map=output)
         except CalledModuleError:
             dbif.close()
-            grass.fatal(_("Unable to add table <%s> to vector map <%s>" % output))
+            gs.fatal(_("Unable to add table <%s> to vector map <%s>") % output)
     if pymap.is_open():
         pymap.close()
 
@@ -257,7 +254,7 @@ def main():
             column_string = "%s %s" % (column_name, coltype)
             column_string.replace(".", "_")
             try:
-                grass.run_command(
+                gs.run_command(
                     "v.db.addcolumn",
                     map=output,
                     column=column_string,
@@ -265,12 +262,12 @@ def main():
                 )
             except CalledModuleError:
                 dbif.close()
-                grass.fatal(
-                    _("Unable to add column %s to vector map " "<%s> ")
+                gs.fatal(
+                    _("Unable to add column %s to vector map <%s> ")
                     % (column_string, output)
                 )
             try:
-                grass.run_command(
+                gs.run_command(
                     "v.what.rast",
                     map=output,
                     raster=name,
@@ -280,7 +277,7 @@ def main():
                 )
             except CalledModuleError:
                 dbif.close()
-                grass.fatal(
+                gs.fatal(
                     _(
                         "Unable to run v.what.rast for vector map"
                         " <%s> and raster map <%s>"
@@ -295,5 +292,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

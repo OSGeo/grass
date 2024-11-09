@@ -51,8 +51,8 @@ int main(int argc, char *argv[])
     struct PointBinning point_binning;
     void *base_array;
     void *raster_row;
-    struct Cell_head region;
-    struct Cell_head input_region;
+    struct Cell_head region = {0};
+    struct Cell_head input_region = {0};
     int rows, last_rows, row0, cols; /* scan box size */
     int row;                         /* counters */
 
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     int return_filter;
 
     const char *projstr;
-    struct Cell_head cellhd, loc_wind;
+    struct Cell_head cellhd = {0}, loc_wind = {0};
 
     unsigned int n_filtered;
 
@@ -300,9 +300,10 @@ int main(int argc, char *argv[])
     over_flag = G_define_flag();
     over_flag->key = 'o';
     over_flag->label =
-        _("Override projection check (use current location's projection)");
-    over_flag->description = _(
-        "Assume that the dataset has same projection as the current location");
+        _("Override projection check (use current project's CRS)");
+    over_flag->description =
+        _("Assume that the dataset has the same coordinate reference system as "
+          "the current project");
 
     scan_flag = G_define_flag();
     scan_flag->key = 's';

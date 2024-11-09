@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <math.h>
+#include <grass/gis.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 #include "distance.h"
@@ -182,17 +183,17 @@ int do_scalebar(void)
 
     /* draw units label */
     if (sb.units == SB_UNITS_AUTO)
-        strcpy(num, G_database_unit_name(TRUE));
+        (void)G_strlcpy(num, G_database_unit_name(TRUE), sizeof(num));
     else if (sb.units == SB_UNITS_METERS)
-        strcpy(num, _("meters"));
+        (void)G_strlcpy(num, _("meters"), sizeof(num));
     else if (sb.units == SB_UNITS_KM)
-        strcpy(num, _("kilometers"));
+        (void)G_strlcpy(num, _("kilometers"), sizeof(num));
     else if (sb.units == SB_UNITS_FEET)
-        strcpy(num, _("feet"));
+        (void)G_strlcpy(num, _("feet"), sizeof(num));
     else if (sb.units == SB_UNITS_MILES)
-        strcpy(num, _("miles"));
+        (void)G_strlcpy(num, _("miles"), sizeof(num));
     else if (sb.units == SB_UNITS_NMILES)
-        strcpy(num, _("nautical miles"));
+        (void)G_strlcpy(num, _("nautical miles"), sizeof(num));
 
     text_box_path(72.0 * (x + length / 2),
                   72.0 * (PS.page_height - (sb.y + 0.075)), CENTER, UPPER, num,

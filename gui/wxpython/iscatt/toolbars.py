@@ -69,7 +69,8 @@ class MainToolbar(BaseToolbar):
             "zoomExtent": MetaIcon(
                 img="zoom-extent",
                 label=_(
-                    "Zoom to scatter plot data extend mode (click on scatter plot for zooming to extend)"
+                    "Zoom to scatter plot data extend mode (click on scatter plot for "
+                    "zooming to extend)"
                 ),
             ),
             "cats_mgr": MetaIcon(
@@ -149,7 +150,7 @@ class MainToolbar(BaseToolbar):
         if event.IsChecked():
             for i_tool_data in self.controller.data:
                 i_tool_name = get_tool_name(i_tool_data[0])
-                if not i_tool_name or i_tool_name in ["cats_mgr", "sel_pol_mode"]:
+                if not i_tool_name or i_tool_name in {"cats_mgr", "sel_pol_mode"}:
                     continue
                 if i_tool_name == tool_name:
                     continue
@@ -174,7 +175,7 @@ class MainToolbar(BaseToolbar):
     def UnsetMode(self):
         for i_tool_data in self.controller.data:
             i_tool_name = get_tool_name(i_tool_data[0])
-            if not i_tool_name or i_tool_name in ["cats_mgr", "sel_pol_mode"]:
+            if not i_tool_name or i_tool_name in {"cats_mgr", "sel_pol_mode"}:
                 continue
             i_tool_id = vars(self)[i_tool_name]
             self.ToggleTool(i_tool_id, False)
@@ -308,7 +309,7 @@ class EditingToolbar(BaseToolbar):
         self.scatt_mgr.modeSet.connect(self.ModeSet)
 
     def ModeSet(self, mode):
-        if mode in ["zoom", "pan", "zoom_extend", None]:
+        if mode in {"zoom", "pan", "zoom_extend", None}:
             self.UnsetMode()
 
     def UnsetMode(self):

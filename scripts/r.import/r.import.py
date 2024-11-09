@@ -118,7 +118,7 @@ import os
 import atexit
 import math
 
-import grass.script as grass
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 
@@ -132,16 +132,16 @@ TMP_REG_NAME = None
 def cleanup():
     # remove temp location
     if TMPLOC:
-        grass.try_rmdir(os.path.join(GISDBASE, TMPLOC))
+        gs.try_rmdir(os.path.join(GISDBASE, TMPLOC))
     if SRCGISRC:
-        grass.try_remove(SRCGISRC)
+        gs.try_remove(SRCGISRC)
     if (
         TMP_REG_NAME
-        and grass.find_file(
-            name=TMP_REG_NAME, element="vector", mapset=grass.gisenv()["MAPSET"]
+        and gs.find_file(
+            name=TMP_REG_NAME, element="vector", mapset=gs.gisenv()["MAPSET"]
         )["fullname"]
     ):
-        grass.run_command(
+        gs.run_command(
             "g.remove", type="vector", name=TMP_REG_NAME, flags="f", quiet=True
         )
 
@@ -150,7 +150,7 @@ def is_projection_matching(GDALdatasource):
     """Returns True if current location projection
     matches dataset projection, otherwise False"""
     try:
-        grass.run_command("r.in.gdal", input=GDALdatasource, flags="j", quiet=True)
+        gs.run_command("r.in.gdal", input=GDALdatasource, flags="j", quiet=True)
         return True
     except CalledModuleError:
         return False
@@ -170,16 +170,17 @@ def main():
         output = "rimport_tmp"  # will be removed with the entire tmp location
     if options["resolution_value"]:
         if tgtres != "value":
-            grass.fatal(
+            gs.fatal(
                 _("To set custom resolution value, select 'value' in resolution option")
             )
         tgtres_value = float(options["resolution_value"])
         if tgtres_value <= 0:
-            grass.fatal(_("Resolution value can't be smaller than 0"))
+            gs.fatal(_("Resolution value can't be smaller than 0"))
     elif tgtres == "value":
-        grass.fatal(
+        gs.fatal(
             _(
-                "Please provide the resolution for the imported dataset or change to 'estimated' resolution"
+                "Please provide the resolution for the imported dataset or change to "
+                "'estimated' resolution"
             )
         )
 
@@ -191,30 +192,30 @@ def main():
     if options["extent"] == "region":
         region_flag += "r"
     if flags["o"] or is_projection_matching(GDALdatasource):
-        parameters = dict(
-            input=GDALdatasource,
-            output=output,
-            memory=memory,
-            flags="ak" + additional_flags + region_flag,
-        )
+        parameters = {
+            "input": GDALdatasource,
+            "output": output,
+            "memory": memory,
+            "flags": "ak" + additional_flags + region_flag,
+        }
         if bands:
             parameters["band"] = bands
         try:
-            grass.run_command("r.in.gdal", **parameters)
-            grass.verbose(
+            gs.run_command("r.in.gdal", **parameters)
+            gs.verbose(
                 _("Input <%s> successfully imported without reprojection")
                 % GDALdatasource
             )
             return 0
         except CalledModuleError:
-            grass.fatal(_("Unable to import GDAL dataset <%s>") % GDALdatasource)
+            gs.fatal(_("Unable to import GDAL dataset <%s>") % GDALdatasource)
 
-    grassenv = grass.gisenv()
+    grassenv = gs.gisenv()
     tgtloc = grassenv["LOCATION_NAME"]
 
     # make sure target is not xy
-    if grass.parse_command("g.proj", flags="g")["name"] == "xy_location_unprojected":
-        grass.fatal(
+    if gs.parse_command("g.proj", flags="g")["name"] == "xy_location_unprojected":
+        gs.fatal(
             _("Coordinate reference system not available for current project <%s>")
             % tgtloc
         )
@@ -222,66 +223,64 @@ def main():
     tgtmapset = grassenv["MAPSET"]
     GISDBASE = grassenv["GISDBASE"]
 
-    TMPLOC = grass.append_node_pid("tmp_r_import_location")
-    TMP_REG_NAME = grass.append_node_pid("tmp_r_import_region")
+    TMPLOC = gs.append_node_pid("tmp_r_import_location")
+    TMP_REG_NAME = gs.append_node_pid("tmp_r_import_region")
 
-    SRCGISRC, src_env = grass.create_environment(GISDBASE, TMPLOC, "PERMANENT")
+    SRCGISRC, src_env = gs.create_environment(GISDBASE, TMPLOC, "PERMANENT")
 
     # create temp location from input without import
-    grass.verbose(_("Creating temporary project for <%s>...") % GDALdatasource)
+    gs.verbose(_("Creating temporary project for <%s>...") % GDALdatasource)
     # creating a new location with r.in.gdal requires a sanitized env
     env = os.environ.copy()
-    env = grass.sanitize_mapset_environment(env)
-    parameters = dict(
-        input=GDALdatasource,
-        output=output,
-        memory=memory,
-        flags="c",
-        title=title,
-        project=TMPLOC,
-        quiet=True,
-    )
+    env = gs.sanitize_mapset_environment(env)
+    parameters = {
+        "input": GDALdatasource,
+        "output": output,
+        "memory": memory,
+        "flags": "c",
+        "title": title,
+        "project": TMPLOC,
+        "quiet": True,
+    }
     if bands:
         parameters["band"] = bands
     try:
-        grass.run_command("r.in.gdal", env=env, **parameters)
+        gs.run_command("r.in.gdal", env=env, **parameters)
     except CalledModuleError:
-        grass.fatal(_("Unable to read GDAL dataset <%s>") % GDALdatasource)
+        gs.fatal(_("Unable to read GDAL dataset <%s>") % GDALdatasource)
 
     # prepare to set region in temp location
     if "r" in region_flag:
         tgtregion = TMP_REG_NAME
-        grass.run_command("v.in.region", output=tgtregion, flags="d")
+        gs.run_command("v.in.region", output=tgtregion, flags="d")
 
     # switch to temp location
 
     # print projection at verbose level
-    grass.verbose(
-        grass.read_command("g.proj", flags="p", env=src_env).rstrip(os.linesep)
-    )
+    gs.verbose(gs.read_command("g.proj", flags="p", env=src_env).rstrip(os.linesep))
 
     # make sure input is not xy
     if (
-        grass.parse_command("g.proj", flags="g", env=src_env)["name"]
+        gs.parse_command("g.proj", flags="g", env=src_env)["name"]
         == "xy_location_unprojected"
     ):
-        grass.fatal(
+        gs.fatal(
             _("Coordinate reference system not available for input <%s>")
             % GDALdatasource
         )
 
     # import into temp location
-    grass.verbose(_("Importing <%s> to temporary project...") % GDALdatasource)
-    parameters = dict(
-        input=GDALdatasource,
-        output=output,
-        memory=memory,
-        flags="ak" + additional_flags,
-    )
+    gs.verbose(_("Importing <%s> to temporary project...") % GDALdatasource)
+    parameters = {
+        "input": GDALdatasource,
+        "output": output,
+        "memory": memory,
+        "flags": "ak" + additional_flags,
+    }
     if bands:
         parameters["band"] = bands
     if "r" in region_flag:
-        grass.run_command(
+        gs.run_command(
             "v.proj",
             project=tgtloc,
             mapset=tgtmapset,
@@ -289,14 +288,14 @@ def main():
             output=tgtregion,
             env=src_env,
         )
-        grass.run_command("g.region", vector=tgtregion, env=src_env)
-        parameters["flags"] = parameters["flags"] + region_flag
+        gs.run_command("g.region", vector=tgtregion, env=src_env)
+        parameters["flags"] += region_flag
     try:
-        grass.run_command("r.in.gdal", env=src_env, **parameters)
+        gs.run_command("r.in.gdal", env=src_env, **parameters)
     except CalledModuleError:
-        grass.fatal(_("Unable to import GDAL dataset <%s>") % GDALdatasource)
+        gs.fatal(_("Unable to import GDAL dataset <%s>") % GDALdatasource)
 
-    outfiles = grass.list_grouped("raster", env=src_env)["PERMANENT"]
+    outfiles = gs.list_grouped("raster", env=src_env)["PERMANENT"]
 
     # is output a group?
     group = False
@@ -305,18 +304,17 @@ def main():
         group = True
         path = os.path.join(GISDBASE, TMPLOC, "group", output, "POINTS")
         if os.path.exists(path):
-            grass.fatal(_("Input contains GCPs, rectification is required"))
+            gs.fatal(_("Input contains GCPs, rectification is required"))
 
     if "r" in region_flag:
-        grass.run_command(
+        gs.run_command(
             "g.remove", type="vector", flags="f", name=tgtregion, env=src_env
         )
 
-    # switch to target location
-    if "r" in region_flag:
-        grass.run_command("g.remove", type="vector", flags="f", name=tgtregion)
+        # switch to target location
+        gs.run_command("g.remove", type="vector", flags="f", name=tgtregion)
 
-    region = grass.region()
+    region = gs.region()
 
     rflags = None
     if flags["n"]:
@@ -334,7 +332,7 @@ def main():
         if options["extent"] == "input":
             # r.proj -g
             try:
-                tgtextents = grass.read_command(
+                tgtextents = gs.read_command(
                     "r.proj",
                     project=TMPLOC,
                     mapset="PERMANENT",
@@ -344,37 +342,37 @@ def main():
                     quiet=True,
                 )
             except CalledModuleError:
-                grass.fatal(_("Unable to get reprojected map extent"))
+                gs.fatal(_("Unable to get reprojected map extent"))
             try:
-                srcregion = grass.parse_key_val(tgtextents, val_type=float, vsep=" ")
+                srcregion = gs.parse_key_val(tgtextents, val_type=float, vsep=" ")
                 n = srcregion["n"]
                 s = srcregion["s"]
                 e = srcregion["e"]
                 w = srcregion["w"]
             except ValueError:  # import into latlong, expect 53:39:06.894826N
-                srcregion = grass.parse_key_val(tgtextents, vsep=" ")
-                n = grass.float_or_dms(srcregion["n"][:-1]) * (
+                srcregion = gs.parse_key_val(tgtextents, vsep=" ")
+                n = gs.float_or_dms(srcregion["n"][:-1]) * (
                     -1 if srcregion["n"][-1] == "S" else 1
                 )
-                s = grass.float_or_dms(srcregion["s"][:-1]) * (
+                s = gs.float_or_dms(srcregion["s"][:-1]) * (
                     -1 if srcregion["s"][-1] == "S" else 1
                 )
-                e = grass.float_or_dms(srcregion["e"][:-1]) * (
+                e = gs.float_or_dms(srcregion["e"][:-1]) * (
                     -1 if srcregion["e"][-1] == "W" else 1
                 )
-                w = grass.float_or_dms(srcregion["w"][:-1]) * (
+                w = gs.float_or_dms(srcregion["w"][:-1]) * (
                     -1 if srcregion["w"][-1] == "W" else 1
                 )
 
-            env["GRASS_REGION"] = grass.region_env(n=n, s=s, e=e, w=w)
+            env["GRASS_REGION"] = gs.region_env(n=n, s=s, e=e, w=w)
 
         # v.in.region in tgt
-        grass.run_command("v.in.region", output=vreg, quiet=True, env=env)
+        gs.run_command("v.in.region", output=vreg, quiet=True, env=env)
 
         # reproject to src
         # switch to temp location
         try:
-            grass.run_command(
+            gs.run_command(
                 "v.proj",
                 input=vreg,
                 output=vreg,
@@ -384,29 +382,29 @@ def main():
                 env=src_env,
             )
             # test if v.proj created a valid area
-            if grass.vector_info_topo(vreg, env=src_env)["areas"] != 1:
-                grass.fatal(_("Please check the 'extent' parameter"))
+            if gs.vector_info_topo(vreg, env=src_env)["areas"] != 1:
+                gs.fatal(_("Please check the 'extent' parameter"))
         except CalledModuleError:
-            grass.fatal(_("Unable to reproject to source project"))
+            gs.fatal(_("Unable to reproject to source project"))
 
         # set region from region vector
-        grass.run_command("g.region", raster=outfile, env=src_env)
-        grass.run_command("g.region", vector=vreg, env=src_env)
+        gs.run_command("g.region", raster=outfile, env=src_env)
+        gs.run_command("g.region", vector=vreg, env=src_env)
         # align to first band
-        grass.run_command("g.region", align=outfile, env=src_env)
+        gs.run_command("g.region", align=outfile, env=src_env)
         # get number of cells
-        cells = grass.region(env=src_env)["cells"]
+        cells = gs.region(env=src_env)["cells"]
 
         estres = math.sqrt((n - s) * (e - w) / cells)
         # remove from source location for multi bands import
-        grass.run_command(
+        gs.run_command(
             "g.remove", type="vector", name=vreg, flags="f", quiet=True, env=src_env
         )
 
         # switch to target location
-        grass.run_command("g.remove", type="vector", name=vreg, flags="f", quiet=True)
+        gs.run_command("g.remove", type="vector", name=vreg, flags="f", quiet=True)
 
-        grass.message(
+        gs.message(
             _("Estimated target resolution for input band <{out}>: {res}").format(
                 out=outfile, res=estres
             )
@@ -417,23 +415,23 @@ def main():
         env = os.environ.copy()
 
         if options["extent"] == "input":
-            env["GRASS_REGION"] = grass.region_env(n=n, s=s, e=e, w=w)
+            env["GRASS_REGION"] = gs.region_env(n=n, s=s, e=e, w=w)
 
         res = None
         if tgtres == "estimated":
             res = estres
         elif tgtres == "value":
             res = tgtres_value
-            grass.message(
+            gs.message(
                 _("Using given resolution for input band <{out}>: {res}").format(
                     out=outfile, res=res
                 )
             )
             # align to requested resolution
-            env["GRASS_REGION"] = grass.region_env(res=res, flags="a", env=env)
+            env["GRASS_REGION"] = gs.region_env(res=res, flags="a", env=env)
         else:
-            curr_reg = grass.region()
-            grass.message(
+            curr_reg = gs.region()
+            gs.message(
                 _(
                     "Using current region resolution for input band "
                     "<{out}>: nsres={ns}, ewres={ew}"
@@ -441,9 +439,9 @@ def main():
             )
 
         # r.proj
-        grass.message(_("Reprojecting <%s>...") % outfile)
+        gs.message(_("Reprojecting <%s>...") % outfile)
         try:
-            grass.run_command(
+            gs.run_command(
                 "r.proj",
                 project=TMPLOC,
                 mapset="PERMANENT",
@@ -456,16 +454,16 @@ def main():
                 env=env,
             )
         except CalledModuleError:
-            grass.fatal(_("Unable to to reproject raster <%s>") % outfile)
+            gs.fatal(_("Unable to to reproject raster <%s>") % outfile)
 
-        if grass.raster_info(outfile)["min"] is None:
-            grass.fatal(_("The reprojected raster <%s> is empty") % outfile)
+        if gs.raster_info(outfile)["min"] is None:
+            gs.fatal(_("The reprojected raster <%s> is empty") % outfile)
 
     if flags["e"]:
         return 0
 
     if group:
-        grass.run_command("i.group", group=output, input=",".join(outfiles))
+        gs.run_command("i.group", group=output, input=",".join(outfiles))
 
     # TODO: write metadata with r.support
 
@@ -473,6 +471,6 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     atexit.register(cleanup)
     sys.exit(main())

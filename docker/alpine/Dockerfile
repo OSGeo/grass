@@ -1,4 +1,4 @@
-FROM alpine:3.19@sha256:c5b1261d6d3e43071626931fc004f70149baeba2c8ec672bd4f27761f8e1ad6b as common
+FROM alpine:3.20@sha256:beefdbd8a1da6d2915566fde36db9db0b524eb737fc57cd1367effd16dc0d06d as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -11,9 +11,9 @@ ARG PYTHON_VERSION=3
 # List of packages to be installed (proj-data omitted: 570.04 MB)
 ENV GRASS_RUN_PACKAGES="\
       attr \
-      build-base \
       bash \
       bison \
+      build-base \
       bzip2 \
       cairo \
       curl \
@@ -35,9 +35,9 @@ ENV GRASS_RUN_PACKAGES="\
       gdal-driver-PNG \
       gdal-driver-WMS \
       gdal-tools \
-      gettext \
       geos \
       geos-dev \
+      gettext \
       git \
       gnutls \
       jsoncpp \
@@ -52,15 +52,15 @@ ENV GRASS_RUN_PACKAGES="\
       musl \
       musl-utils \
       ncurses \
-      openjpeg \
       openblas \
-      py3-numpy \
-      py3-pillow \
-      python3 \
+      openjpeg \
       pdal \
       pdal-dev \
       postgresql15-client \
       proj-util \
+      py3-numpy \
+      py3-pillow \
+      python3 \
       sqlite \
       sqlite-libs \
       subversion \
@@ -89,23 +89,23 @@ FROM common as build
 # set configuration options, without wxGUI
 ENV GRASS_CONFIG="\
       --enable-largefile \
-      --with-cxx \
-      --with-proj-share=/usr/share/proj \
-      --with-gdal \
-      --with-pdal \
-      --with-geos \
-      --with-sqlite \
       --with-bzlib \
-      --with-zstd \
       --with-cairo --with-cairo-ldflags=-lfontconfig \
+      --with-cxx \
       --with-fftw \
-      --with-postgres --with-postgres-includes=/usr/include/postgresql \
+      --with-gdal \
+      --with-geos \
       --with-openmp \
+      --with-pdal \
+      --with-postgres --with-postgres-includes=/usr/include/postgresql \
+      --with-proj-share=/usr/share/proj \
+      --with-sqlite \
+      --with-zstd \
       --without-freetype \
-      --without-opengl \
-      --without-nls \
       --without-mysql \
+      --without-nls \
       --without-odbc \
+      --without-opengl \
       "
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
@@ -132,13 +132,13 @@ ENV GRASS_BUILD_PACKAGES="\
       libjpeg-turbo-dev \
       libpng-dev \
       libpq-dev \
-      openjpeg-dev \
       openblas-dev \
+      openjpeg-dev \
       pdal \
       pdal-dev \
       proj-dev \
-      python3-dev \
       py3-numpy-dev \
+      python3-dev \
       sqlite-dev \
       tar \
       tiff-dev \
@@ -191,12 +191,10 @@ FROM common as grass
 
 # GRASS GIS specific
 # allow work with MAPSETs that are not owned by current user
-ENV GRASSBIN="/usr/local/bin/grass" \
-    GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
+ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     SHELL="/bin/bash" \
     # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
     PROJ_NETWORK=ON \
-    GRASSBIN=grass \
     LC_ALL="en_US.UTF-8" \
     PYTHONPATH="/usr/local/grass/etc/python:$PYTHONPATH"
 
@@ -204,22 +202,25 @@ ENV GRASSBIN="/usr/local/bin/grass" \
 COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
 COPY --from=build /usr/local/grass* /usr/local/grass/
 COPY --from=build /usr/lib/gdalplugins/*_GRASS.so /usr/lib/gdalplugins/
+# Set GISBASE
+ENV GISBASE /usr/local/grass
+
 # run simple LAZ test
 COPY docker/testdata/simple.laz /tmp/
-COPY docker/testdata/test_grass_python.py docker/alpine/grass_tests.sh /scripts/
-COPY docker/testdata/test_grass_python.py /scripts/
+COPY docker/testdata/test_grass_python.py docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts/
 
-# install external Python API
+# run GRASS GIS python session and scan the test LAZ file; some cleanup
+# also show installed version
 RUN ln -sf /usr/local/grass $(grass --config path); \
-    # run some tests and cleanup
-    $SHELL /scripts/grass_tests.sh \
+    rm -rf /tmp/grasstest_epsg_25832; \
+    $SHELL /scripts/grass_tests.sh; \
+    python /scripts/test_grass_session.py && rm -rf /tmp/grasstest_epsg_25832; \
+    grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g \
     && rm -f /scripts/grass_tests.sh /tmp/simple.laz /scripts/test_grass_python.py; \
-    # delete unused packages
     apk del --no-cache gettext pdal-dev; \
-    # show installed version
-    grass --tmp-location XY --exec g.version -rge \
+    grass --tmp-project XY --exec g.version -rge \
     && pdal --version \
-    && python3 --version
+    && python --version
 
 # Data workdir
 WORKDIR /grassdb

@@ -21,10 +21,7 @@ import subprocess
 from datetime import datetime
 
 pgm = sys.argv[1]
-if len(sys.argv) > 1:
-    year = sys.argv[2]
-else:
-    year = str(datetime.now().year)
+year = sys.argv[2] if len(sys.argv) > 1 else str(datetime.now().year)
 
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.txt" % pgm
@@ -36,7 +33,7 @@ footer_index = string.Template(
 
 :doc:`Main Page <index>` - :doc:`${INDEXNAMECAP} index <${INDEXNAME}>` - :doc:`Full index <full_index>`
 2003-${YEAR} `GRASS Development Team <https://grass.osgeo.org>`_
-"""
+"""  # noqa: E501
 )
 
 footer_noindex = string.Template(
@@ -63,7 +60,7 @@ replacement = {
     "`* `": "`",
     ">`_*": ">`_",
     ">`_,*": ">`_,",
-    '``*\ "': '``"',
+    r'``*\ "': '``"',
     "***": "**",
 }
 
