@@ -71,23 +71,18 @@ def version_as_string(version):
     return ".".join(texts)
 
 
-def CheckWxPhoenix():
-    if "phoenix" in wx.version():
-        return True
-    return False
+def CheckWxPhoenix() -> bool:
+    return "phoenix" in wx.version()
 
 
-def CheckWxVersion(version):
+def CheckWxVersion(version) -> bool:
     """Check wx version.
 
     :return: True if current wx version is greater or equal than
-    specifed version otherwise False
+    specified version otherwise False
     """
     parsed_version = parse_version_string(wx.__version__)
-    if parsed_version < version:
-        return False
-
-    return True
+    return not parsed_version < version
 
 
 def CheckForWx():
@@ -105,7 +100,7 @@ def CheckForWx():
     except ImportError as e:
         print("ERROR: wxGUI requires wxPython. {}".format(e), file=sys.stderr)
         print(
-            "You can still use GRASS GIS modules in" " the command line or in Python.",
+            "You can still use GRASS GIS modules in the command line or in Python.",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -167,7 +162,7 @@ GM_WINDOW_MIN_SIZE = (525, 400)
 # use UBUNTU_MENUPROXY=0 to disable global menu on ubuntu but in the same time
 # to get smaller lmgr
 # [1] https://wiki.ubuntu.com/DesktopExperienceTeam/ApplicationMenu#Troubleshooting
-if sys.platform in ("win32", "darwin") or os.environ.get("UBUNTU_MENUPROXY"):
+if sys.platform in {"win32", "darwin"} or os.environ.get("UBUNTU_MENUPROXY"):
     GM_WINDOW_SIZE = (GM_WINDOW_MIN_SIZE[0], 600)
 else:
     GM_WINDOW_SIZE = (625, 600)
@@ -213,12 +208,12 @@ def UpdateGRASSAddOnCommands(eList=None):
             os.environ["PATH"] = path + os.pathsep + os.environ["PATH"]
 
         for fname in os.listdir(path):
-            if fname in ["docs", "modules.xml"]:
+            if fname in {"docs", "modules.xml"}:
                 continue
             if grassScripts:  # win32
                 name, ext = os.path.splitext(fname)
                 if name not in grassCmd:
-                    if ext not in [BIN_EXT, SCT_EXT]:
+                    if ext not in {BIN_EXT, SCT_EXT}:
                         continue
                     if name not in grassCmd:
                         grassCmd.add(name)
@@ -230,11 +225,10 @@ def UpdateGRASSAddOnCommands(eList=None):
                     and name not in grassScripts[ext]
                 ):
                     grassScripts[ext].append(name)
-            else:
-                if fname not in grassCmd:
-                    grassCmd.add(fname)
-                    Debug.msg(3, "AddOn commands: %s", fname)
-                    nCmd += 1
+            elif fname not in grassCmd:
+                grassCmd.add(fname)
+                Debug.msg(3, "AddOn commands: %s", fname)
+                nCmd += 1
 
     Debug.msg(1, "Number of GRASS AddOn commands: %d", nCmd)
 
@@ -251,7 +245,7 @@ toolbarSize = (24, 24)
 hasAgw = CheckWxVersion([2, 8, 11, 0])
 wxPythonPhoenix = CheckWxPhoenix()
 
-gtk3 = True if "gtk3" in wx.PlatformInfo else False
+gtk3 = "gtk3" in wx.PlatformInfo
 
 """@Add GUIDIR/scripts into path"""
 os.environ["PATH"] = os.path.join(GUIDIR, "scripts") + os.pathsep + os.environ["PATH"]

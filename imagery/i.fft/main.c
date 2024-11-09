@@ -105,8 +105,9 @@ int main(int argc, char *argv[])
     inputfd = Rast_open_old(Cellmap_orig, "");
 
     if (Rast_maskfd() >= 0)
-        G_warning(_("Raster MASK found, consider to remove "
-                    "(see man-page). Will continue..."));
+        G_warning(_("Raster mask active, consider removing it"
+                    " and running again without it (see documentation for"
+                    " details). This current process will now continue..."));
 
     G_get_set_window(&window); /* get the current window for later */
 
@@ -125,7 +126,7 @@ int main(int argc, char *argv[])
     cell_real = Rast_allocate_d_buf();
     cell_imag = Rast_allocate_d_buf();
 
-#define C(i, j) ((i)*cols + (j))
+#define C(i, j) ((i) * cols + (j))
 
     /* Read in cell map values */
     G_message(_("Reading the raster map <%s>..."), Cellmap_orig);

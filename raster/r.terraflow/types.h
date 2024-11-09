@@ -74,7 +74,7 @@ typedef int bfs_depth_type;
 static const bfs_depth_type DEPTH_INITIAL = 1;
 
 #define IS_BOUNDARY(i, j, nr, nc) \
-    (((i) == 0) || ((i) == ((nr)-1)) || ((j) == 0) || ((j) == ((nc)-1)))
+    (((i) == 0) || ((i) == ((nr) - 1)) || ((j) == 0) || ((j) == ((nc) - 1)))
 
 /* ---------------------------------------------------------------------- */
 
@@ -96,8 +96,8 @@ public:
 class ijBaseType {
 public:
     dimension_type i, j;
-    ijBaseType() : i(-1), j(-1){};
-    ijBaseType(dimension_type gi, dimension_type gj) : i(gi), j(gj){};
+    ijBaseType() : i(-1), j(-1) {};
+    ijBaseType(dimension_type gi, dimension_type gj) : i(gi), j(gj) {};
     friend int operator==(const ijBaseType &a, const ijBaseType &b)
     {
         return (compare(a, b) == 0);

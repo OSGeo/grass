@@ -145,14 +145,20 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd)
     CELL *dir;
 
     /* fill single-cell depressions, except on outer rows and columns */
-    lseek(fe, 0, SEEK_SET);
+    if (lseek(fe, 0, SEEK_SET) == -1) {
+        G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+    }
     advance_band3(fe, bnd);
     advance_band3(fe, bnd);
     for (i = 1; i < nl - 1; i += 1) {
-        lseek(fe, (off_t)(i + 1) * bnd->sz, SEEK_SET);
+        if (lseek(fe, (off_t)(i + 1) * bnd->sz, SEEK_SET) == -1) {
+            G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+        }
         advance_band3(fe, bnd);
         if (fill_row(nl, bnd->ns, bnd)) {
-            lseek(fe, (off_t)i * bnd->sz, SEEK_SET);
+            if (lseek(fe, (off_t)i * bnd->sz, SEEK_SET) == -1) {
+                G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+            }
             if (write(fe, bnd->b[1], bnd->sz) < 0)
                 G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
                               errno, strerror(errno));
@@ -172,8 +178,12 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd)
     dir = G_calloc(bnd->ns, sizeof(CELL));
     bufsz = bnd->ns * sizeof(CELL);
 
-    lseek(fe, 0, SEEK_SET);
-    lseek(fd, 0, SEEK_SET);
+    if (lseek(fe, 0, SEEK_SET) == -1) {
+        G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+    }
+    if (lseek(fd, 0, SEEK_SET) == -1) {
+        G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+    }
     advance_band3(fe, bnd);
     for (i = 0; i < nl; i += 1) {
         advance_band3(fe, bnd);

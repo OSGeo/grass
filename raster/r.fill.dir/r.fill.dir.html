@@ -69,11 +69,11 @@ raster map can further be processed to derive slopes and other
 attributes required by other hydrological models.
 
 <p>
-As any GRASS GIS module, <em>r.fill.dir</em> is sensitive to the
-computational region settings. Thus
+As any GRASS GIS module, <em>r.fill.dir</em> respects the
+computational region settings. Thus,
 the module can be used to generate a flow direction map for any
-sub-area within the full map layer. Also, <em>r.fill.dir</em> is
-sensitive to any raster <em>MASK</em> in effect.
+sub-area within the full raster map layer. Also, <em>r.fill.dir</em>
+will take into account an active raster mask.
 
 <h2>NOTES</h2>
 
