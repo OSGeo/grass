@@ -188,7 +188,7 @@ int gvld_isosurf(geovol *gvl)
 
         /* transparency */
         check_transp[i] = 0;
-        ktrans[i] = (255 << 24);
+        ktrans[i] = (255U << 24);
         if (CONST_ATT == isosurf->att[ATT_TRANSP].att_src &&
             isosurf->att[ATT_TRANSP].constant != 0.0) {
             ktrans[i] = (255 - (int)isosurf->att[ATT_TRANSP].constant) << 24;

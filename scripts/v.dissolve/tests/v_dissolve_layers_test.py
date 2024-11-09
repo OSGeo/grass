@@ -50,10 +50,7 @@ def test_layer_2(dataset_layer_2):
     for method, stats_column in zip(stats, expected_stats_columns):
         assert stats_column in columns
         column_info = columns[stats_column]
-        if method == "count":
-            correct_type = "integer"
-        else:
-            correct_type = "double precision"
+        correct_type = "integer" if method == "count" else "double precision"
         assert (
             columns[stats_column]["type"].lower() == correct_type
         ), f"{stats_column} has a wrong type"

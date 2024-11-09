@@ -117,7 +117,7 @@ static void symbol(const SYMBOL *Symb, double x0, double y0,
             break;
 
         } /* switch */
-    }     /* for loop */
+    } /* for loop */
 }
 
 /*!

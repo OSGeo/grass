@@ -46,6 +46,8 @@ COPYING coming with GRASS for details.
 @author Stepan Turek <stepan.turek seznam.cz> (CoordinatesSelect)
 """
 
+from __future__ import annotations
+
 import sys
 import textwrap
 import os
@@ -56,6 +58,7 @@ import queue as Queue
 import codecs
 
 from threading import Thread
+from pathlib import Path
 
 import wx
 
@@ -63,7 +66,7 @@ import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.newevent import NewEvent
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 # needed when started from command line and for testing
 if __name__ == "__main__":
@@ -137,8 +140,7 @@ def text_beautify(someString, width=70):
                 textwrap.wrap(utils.normalize_whitespace(someString), width)
             ).strip(".,;:")
         )
-    else:
-        return escape_ampersand(utils.normalize_whitespace(someString).strip(".,;:"))
+    return escape_ampersand(utils.normalize_whitespace(someString).strip(".,;:"))
 
 
 def escape_ampersand(text):
@@ -191,10 +193,7 @@ class UpdateThread(Thread):
         if not pMap:
             pMap = self.task.get_param("input", raiseError=False)
 
-        if pMap:
-            map = pMap.get("value", "")
-        else:
-            map = None
+        map = pMap.get("value", "") if pMap else None
 
         # avoid running db.describe several times
         cparams = {}
@@ -276,10 +275,7 @@ class UpdateThread(Thread):
                 elif p.get("element", "") in {"layer", "layer_all"}:  # -> layer
                     # get layer
                     layer = p.get("value", "")
-                    if layer != "":
-                        layer = p.get("value", "")
-                    else:
-                        layer = p.get("default", "")
+                    layer = p.get("value", "") if layer != "" else p.get("default", "")
 
                     # get map name
                     pMapL = self.task.get_param(
@@ -305,8 +301,6 @@ class UpdateThread(Thread):
                     pTable = self.task.get_param(
                         "dbtable", element="element", raiseError=False
                     )
-                    if pTable:
-                        table = pTable.get("value", "")
 
             if name == "LayerSelect":
                 # determine format
@@ -722,10 +716,7 @@ class TaskFrame(wx.Frame):
         sizeFrame = self.GetBestSize()
         self.SetMinSize(sizeFrame)
 
-        if hasattr(self, "closebox"):
-            scale = 0.33
-        else:
-            scale = 0.50
+        scale = 0.33 if hasattr(self, "closebox") else 0.5
         self.SetSize(
             wx.Size(
                 round(sizeFrame[0]),
@@ -806,16 +797,14 @@ class TaskFrame(wx.Frame):
             # was closed also when aborted but better is leave it open
             wx.CallLater(2000, self.Close)
 
-    def OnMapCreated(self, name, ltype):
+    def OnMapCreated(self, name, ltype, add: bool | None = None):
         """Map created or changed
 
         :param name: map name
         :param ltype: layer type (prompt value)
+        :param add: whether to display layer or not
         """
-        if hasattr(self, "addbox") and self.addbox.IsChecked():
-            add = True
-        else:
-            add = False
+        add = bool(hasattr(self, "addbox") and self.addbox.IsChecked())
 
         if self._giface:
             self._giface.mapCreated.emit(name=name, ltype=ltype, add=add)
@@ -1155,10 +1144,7 @@ class CmdPanel(wx.Panel):
             else:
                 title_sizer = wx.BoxSizer(wx.HORIZONTAL)
                 title_txt = StaticText(parent=which_panel)
-                if p["key_desc"]:
-                    ltype = ",".join(p["key_desc"])
-                else:
-                    ltype = p["type"]
+                ltype = ",".join(p["key_desc"]) if p["key_desc"] else p["type"]
                 # red star for required options
                 if p.get("required", False):
                     required_txt = StaticText(parent=which_panel, label="*")
@@ -1543,7 +1529,6 @@ class CmdPanel(wx.Panel):
                         if value:
                             selection.SetValue(value)
 
-                        formatSelector = True
                         # A gselect.Select is a combobox with two children: a textctl
                         # and a popupwindow; we target the textctl here
                         textWin = selection.GetTextCtrl()
@@ -1900,10 +1885,7 @@ class CmdPanel(wx.Panel):
                             win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
 
                         elif prompt == "mapset":
-                            if p.get("age", "old") == "old":
-                                new = False
-                            else:
-                                new = True
+                            new = p.get("age", "old") != "old"
 
                             win = gselect.MapsetSelect(
                                 parent=which_panel,
@@ -2008,14 +1990,11 @@ class CmdPanel(wx.Panel):
 
                 # file selector
                 elif p.get("prompt", "") != "color" and p.get("prompt", "") == "file":
-                    if p.get("age", "new") == "new":
-                        fmode = wx.FD_SAVE
-                    else:
-                        fmode = wx.FD_OPEN
+                    fmode = wx.FD_SAVE if p.get("age", "new") == "new" else wx.FD_OPEN
                     # check wildcard
                     try:
                         fExt = os.path.splitext(p.get("key_desc", ["*.*"])[0])[1]
-                    except:
+                    except IndexError:
                         fExt = None
                     if not fExt:
                         fMask = "*"
@@ -2034,7 +2013,7 @@ class CmdPanel(wx.Panel):
                         dialogTitle=_("Choose %s")
                         % p.get("description", _("file")).lower(),
                         buttonText=_("Browse"),
-                        startDirectory=os.getcwd(),
+                        startDirectory=str(Path.cwd()),
                         fileMode=fmode,
                         changeCallback=self.OnSetValue,
                     )
@@ -2145,7 +2124,7 @@ class CmdPanel(wx.Panel):
                         dialogTitle=_("Choose %s")
                         % p.get("description", _("Directory")),
                         buttonText=_("Browse"),
-                        startDirectory=os.getcwd(),
+                        startDirectory=str(Path.cwd()),
                         newDirectory=True,
                         changeCallback=self.OnSetValue,
                     )
@@ -2587,7 +2566,7 @@ class CmdPanel(wx.Panel):
 
         data = ""
         try:
-            f = open(path, "r")
+            f = open(path)
         except OSError as e:
             gcmd.GError(
                 parent=self,
@@ -2624,7 +2603,7 @@ class CmdPanel(wx.Panel):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Save input as..."),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
         )
 
@@ -2763,18 +2742,14 @@ class CmdPanel(wx.Panel):
             if event.GetId() == verbose.GetId() and quiet.IsChecked():
                 quiet.SetValue(False)
                 self.task.get_flag("quiet")["value"] = False
-            elif verbose.IsChecked():
+            elif event.GetId() == quiet.GetId() and verbose.IsChecked():
                 verbose.SetValue(False)
                 self.task.get_flag("verbose")["value"] = False
 
         event.Skip()
 
     def OnPageChange(self, event):
-        if not event:
-            sel = self.notebook.GetSelection()
-        else:
-            sel = event.GetSelection()
-
+        sel = self.notebook.GetSelection() if not event else event.GetSelection()
         idx = self.notebook.GetPageIndexByName("manual")
         if idx > -1 and sel == idx:
             # calling LoadPage() is strangely time-consuming (only first call)
@@ -2852,7 +2827,6 @@ class CmdPanel(wx.Panel):
         needed. It's a hook, actually.  Beware of what is 'self' in
         the method def, though. It will be called with no arguments.
         """
-        pass
 
     def OnCheckBoxMulti(self, event):
         """Fill the values as a ','-separated string according to
@@ -3206,8 +3180,7 @@ class GUI:
 
         if self.checkError:
             return self.grass_task, err
-        else:
-            return self.grass_task
+        return self.grass_task
 
     def GetCommandInputMapParamKey(self, cmd):
         """Get parameter key for input raster/vector map
@@ -3219,7 +3192,7 @@ class GUI:
         """
         # parse the interface description
         if not self.grass_task:
-            tree = etree.fromstring(gtask.get_interface_description(cmd))
+            tree = ET.fromstring(gtask.get_interface_description(cmd))
             self.grass_task = gtask.processTask(tree).get_task()
 
             for p in self.grass_task.params:

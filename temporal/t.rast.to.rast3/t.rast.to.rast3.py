@@ -162,7 +162,7 @@ def main():
                 overwrite=gs.overwrite(),
             )
         except CalledModuleError:
-            gs.fatal(_("Unable to create 3D raster map <%s>" % output))
+            gs.fatal(_("Unable to create 3D raster map <%s>") % output)
 
     gs.run_command("g.remove", flags="f", type="raster", name=null_map)
 
@@ -183,10 +183,7 @@ def main():
         gs.warning(_("%s failed to set units.") % "r3.support")
 
     # Register the space time voxel cube in the temporal GIS
-    if output.find("@") >= 0:
-        id = output
-    else:
-        id = output + "@" + mapset
+    id = output if output.find("@") >= 0 else output + "@" + mapset
 
     start, end = sp.get_temporal_extent_as_tuple()
     r3ds = tgis.Raster3DDataset(id)

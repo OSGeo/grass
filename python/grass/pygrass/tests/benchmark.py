@@ -12,11 +12,11 @@ import collections
 import copy
 import cProfile
 import sys
-import os
 from jinja2 import Template
+from pathlib import Path
 
-sys.path.append(os.getcwd())
-sys.path.append("%s/.." % (os.getcwd()))
+sys.path.append(str(Path.cwd()))
+sys.path.append("%s/.." % (str(Path.cwd())))
 
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster

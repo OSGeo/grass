@@ -136,10 +136,7 @@ class NvizSettings:
                 sel = UserSettings.Get(
                     group="nviz", key="volume", subkey=["draw", "mode"]
                 )
-                if sel == 0:
-                    desc = "isosurface"
-                else:
-                    desc = "slice"
+                desc = "isosurface" if sel == 0 else "slice"
                 data["draw"]["mode"] = {
                     "value": sel,
                     "desc": desc,

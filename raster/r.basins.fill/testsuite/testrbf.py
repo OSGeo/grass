@@ -5,8 +5,8 @@ Purpose:    Tests r.basins.fill and its flags/options.
 Author:     Sunveer Singh
 Copyright:  (C) 2017 by Sunveer Singh and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public
-	    License (>=v2). Read the file COPYING that comes with GRASS
-	    for details.
+            License (>=v2). Read the file COPYING that comes with GRASS
+            for details.
 """
 
 import unittest
@@ -47,8 +47,8 @@ class TestRasterbasin(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
 
-    def tearDown(cls):
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.output)
+    def tearDown(self):
+        self.runModule("g.remove", flags="f", type="raster", name=self.output)
 
     def test_no1(self):
         lakes = "lakes"

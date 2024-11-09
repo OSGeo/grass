@@ -136,11 +136,11 @@ class QueryDialog(wx.Dialog):
             )
         else:
             label1 = nodes[0].label
-            texts.append((_("Copy '%s'" % self._cutLabel(label1)), label1))
+            texts.append((_("Copy '%s'") % self._cutLabel(label1), label1))
             col1 = self._colNames[1]
             if nodes[0].data and col1 in nodes[0].data and nodes[0].data[col1]:
                 label2 = nodes[0].data[col1]
-                texts.insert(0, (_("Copy '%s'" % self._cutLabel(label2)), label2))
+                texts.insert(0, (_("Copy '%s'") % self._cutLabel(label2), label2))
                 texts.append((_("Copy line"), label1 + ": " + label2))
 
         ids = []
@@ -148,7 +148,9 @@ class QueryDialog(wx.Dialog):
             id = NewId()
             ids.append(id)
             self.Bind(
-                wx.EVT_MENU, lambda evt, t=text[1], id=id: self._copyText(t), id=id
+                wx.EVT_MENU,
+                lambda evt, t=text[1], id=id: self._copyText(t),  # noqa: A006
+                id=id,
             )
 
             menu.Append(id, text[0])

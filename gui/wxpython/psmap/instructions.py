@@ -35,17 +35,27 @@ This program is free software under the GNU General Public License
 import os
 import string
 from math import ceil
-from time import strftime, localtime
+from time import localtime, strftime
 
-import wx
 import grass.script as gs
-from grass.script.task import cmdlist_to_tuple
-
+import wx
 from core.gcmd import GError, GMessage, GWarning
 from core.utils import GetCmdString
 from dbmgr.vinfo import VectorDBInfo
+from grass.script.task import cmdlist_to_tuple
 from gui_core.wrap import NewId as wxNewId
-from psmap.utils import *
+
+from psmap.utils import (  # Add any additional required names from psmap.utils here
+    BBoxAfterRotation,
+    GetMapBounds,
+    PaperMapCoordinates,
+    Rect2D,
+    Rect2DPP,
+    SetResolution,
+    UnitConversion,
+    getRasterType,
+    projInfo,
+)
 
 
 def NewId():
@@ -86,10 +96,7 @@ class Instruction:
 
     def __contains__(self, id):
         """Test if instruction is included"""
-        for each in self.instruction:
-            if each.id == id:
-                return True
-        return False
+        return any(each.id == id for each in self.instruction)
 
     def __delitem__(self, id):
         """Delete instruction"""
@@ -216,7 +223,7 @@ class Instruction:
                     buffer = []
                 continue
 
-            elif line.startswith("paper"):
+            if line.startswith("paper"):
                 instruction = "paper"
                 isBuffer = True
                 buffer.append(line)
@@ -474,11 +481,8 @@ class Instruction:
                     for line in text:
                         if line.find("# north arrow") >= 0:
                             commentFound = True
-                    if (
-                        i == "image"
-                        and commentFound
-                        or i == "northArrow"
-                        and not commentFound
+                    if (i == "image" and commentFound) or (
+                        i == "northArrow" and not commentFound
                     ):
                         continue
                     newInstr = myInstrDict[i](id, settings=self, env=self.env)
@@ -573,7 +577,6 @@ class InstructionObject:
 
     def Read(self, instruction, text, **kwargs):
         """Read instruction and save them"""
-        pass
 
     def PercentToReal(self, e, n):
         """Converts text coordinates from percent of region to map coordinates"""
@@ -695,7 +698,7 @@ class MapFrame(InstructionObject):
                     if line.split()[1].lower() in {"n", "no", "none"}:
                         instr["border"] = "n"
                         break
-                    elif line.split()[1].lower() in {"y", "yes"}:
+                    if line.split()[1].lower() in {"y", "yes"}:
                         instr["border"] = "y"
                     elif line.startswith("width"):
                         instr["width"] = line.split()[1]
@@ -1215,7 +1218,7 @@ class Image(InstructionObject):
         # if eps, read info from header
         if os.path.splitext(fileName)[1].lower() == ".eps":
             bbInfo = "%%BoundingBox"
-            file = open(imagePath, "r")
+            file = open(imagePath)
             w = h = 0
             while file:
                 line = file.readline()
@@ -1224,9 +1227,9 @@ class Image(InstructionObject):
                     break
             file.close()
             return float(w), float(h)
-        else:  # we can use wx.Image
-            img = wx.Image(fileName, type=wx.BITMAP_TYPE_ANY)
-            return img.GetWidth(), img.GetHeight()
+        # we can use wx.Image
+        img = wx.Image(fileName, type=wx.BITMAP_TYPE_ANY)
+        return img.GetWidth(), img.GetHeight()
 
 
 class NorthArrow(Image):
@@ -1737,22 +1740,18 @@ class RasterLegend(InstructionObject):
     def EstimateHeight(self, raster, discrete, fontsize, cols=None, height=None):
         """Estimate height to draw raster legend"""
         if discrete == "n":
-            if height:
-                height = height
-            else:
+            if not height:
                 height = self.unitConv.convert(
                     value=fontsize * 10, fromUnit="point", toUnit="inch"
                 )
 
         if discrete == "y":
-            if cols:
-                cols = cols
-            else:
+            if not cols:
                 cols = 1
 
             rinfo = gs.raster_info(raster)
             if rinfo["datatype"] in {"DCELL", "FCELL"}:
-                minim, maxim = rinfo["min"], rinfo["max"]
+                maxim = rinfo["max"]
                 rows = ceil(maxim / cols)
             else:
                 cat = (
@@ -1776,9 +1775,7 @@ class RasterLegend(InstructionObject):
         if discrete == "n":
             rinfo = gs.raster_info(raster)
             minim, maxim = rinfo["min"], rinfo["max"]
-            if width:
-                width = width
-            else:
+            if not width:
                 width = self.unitConv.convert(
                     value=fontsize * 2, fromUnit="point", toUnit="inch"
                 )
@@ -1789,14 +1786,10 @@ class RasterLegend(InstructionObject):
             width += textPart
 
         elif discrete == "y":
-            if cols:
-                cols = cols
-            else:
+            if not cols:
                 cols = 1
 
-            if width:
-                width = width
-            else:
+            if not width:
                 paperWidth = (
                     paperInstr["Width"] - paperInstr["Right"] - paperInstr["Left"]
                 )
@@ -1876,14 +1869,10 @@ class VectorLegend(InstructionObject):
 
     def EstimateSize(self, vectorInstr, fontsize, width=None, cols=None):
         """Estimate size to draw vector legend"""
-        if width:
-            width = width
-        else:
+        if not width:
             width = fontsize / 24.0
 
-        if cols:
-            cols = cols
-        else:
+        if not cols:
             cols = 1
 
         vectors = vectorInstr["list"]
@@ -1954,11 +1943,7 @@ class Vector(InstructionObject):
         instr = {}
 
         for line in text:
-            if (
-                line.startswith("vpoints")
-                or line.startswith("vlines")
-                or line.startswith("vareas")
-            ):
+            if line.startswith(("vpoints", "vlines", "vareas")):
                 # subtype
                 if line.startswith("vpoints"):
                     subType = "points"
