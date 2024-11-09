@@ -74,7 +74,7 @@ def test_without_context_manager(xy_session):
 def test_multiple_sequential_with_context_manager(xy_session):
     """Session creates, starts, and finishes"""
     session_file = xy_session.env["GISRC"]
-    for i in range(0, 5):
+    for i in range(5):
         with experimental.TemporaryMapsetSession(env=xy_session.env) as session:
             assert session.active
             gs.run_command("g.region", flags="p", env=session.env)
@@ -104,7 +104,7 @@ def test_multiple_parallel_without_context_manager(xy_session):
     """Session creates, starts, and finishes"""
     session_file = xy_session.env["GISRC"]
     sessions = []
-    for i in range(0, 5):
+    for i in range(5):
         session_file = xy_session.env["GISRC"]
         session = experimental.TemporaryMapsetSession(env=xy_session.env)
         gs.run_command("g.region", flags="p", env=session.env)

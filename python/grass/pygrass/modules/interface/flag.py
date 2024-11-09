@@ -52,10 +52,8 @@ class Flag:
         if self.value:
             if self.special:
                 return "--%s" % self.name[0]
-            else:
-                return "-%s" % self.name
-        else:
-            return ""
+            return "-%s" % self.name
+        return ""
 
     def get_python(self):
         """Return the python representation of a flag.

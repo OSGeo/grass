@@ -37,6 +37,8 @@ import shutil
 import atexit
 import tarfile
 
+from pathlib import Path
+
 from grass.script.utils import try_rmdir, try_remove
 from grass.script import core as grass
 
@@ -80,7 +82,7 @@ def main():
 
     grass.message(_("Packing <%s> to <%s>...") % (gfile["fullname"], outfile))
     basedir = os.path.sep.join(os.path.normpath(gfile["file"]).split(os.path.sep)[:-2])
-    olddir = os.getcwd()
+    olddir = Path.cwd()
 
     # copy elements
     info = grass.parse_command("r.info", flags="e", map=infile)
@@ -93,7 +95,7 @@ def main():
         if map_file["file"]:
             vrt = os.path.join(map_file["file"], "vrt")
             if os.path.exists(vrt):
-                with open(vrt, "r") as f:
+                with open(vrt) as f:
                     for r in f:
                         map, mapset = r.split("@")
                         map_basedir = os.path.sep.join(
@@ -180,7 +182,7 @@ def main():
 
     os.chdir(olddir)
 
-    grass.verbose(_("Raster map saved to '%s'" % outfile))
+    grass.verbose(_("Raster map saved to '%s'") % outfile)
 
 
 if __name__ == "__main__":

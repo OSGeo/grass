@@ -159,17 +159,16 @@ def download_git_commit(url, response_format, *args, **kwargs):
     """
     try:
         response = urlopen(url, *args, **kwargs)
-        if not response.code == 200:
+        if response.code != 200:
             index = HTTP_STATUS_CODES.index(response.code)
             desc = HTTP_STATUS_CODES[index].description
             gs.fatal(
                 _(
-                    "Download commit from <{url}>, return status code "
-                    "{code}, {desc}".format(
-                        url=url,
-                        code=response.code,
-                        desc=desc,
-                    ),
+                    "Download commit from <{url}>, return status code {code}, {desc}"
+                ).format(
+                    url=url,
+                    code=response.code,
+                    desc=desc,
                 ),
             )
         if response_format not in response.getheader("Content-Type"):
@@ -177,10 +176,10 @@ def download_git_commit(url, response_format, *args, **kwargs):
                 _(
                     "Wrong downloaded commit file format. "
                     "Check url <{url}>. Allowed file format is "
-                    "{response_format}.".format(
-                        url=url,
-                        response_format=response_format,
-                    ),
+                    "{response_format}."
+                ).format(
+                    url=url,
+                    response_format=response_format,
                 ),
             )
         return response
@@ -190,16 +189,16 @@ def download_git_commit(url, response_format, *args, **kwargs):
                 "The download of the commit from the GitHub API "
                 "server wasn't successful, <{}>. Commit and commit "
                 "date will not be included in the <{}> addon html manual "
-                "page.".format(err.msg, pgm)
-            ),
+                "page."
+            ).format(err.msg, pgm),
         )
     except URLError:
         gs.warning(
             _(
                 "Download file from <{url}>, failed. Check internet "
                 "connection. Commit and commit date will not be included "
-                "in the <{pgm}> addon manual page.".format(url=url, pgm=pgm)
-            ),
+                "in the <{pgm}> addon manual page."
+            ).format(url=url, pgm=pgm),
         )
 
 
@@ -367,7 +366,7 @@ def has_src_code_git(src_dir, is_addon):
                                                  if core module or addon
                                                  source code has Git
     """
-    actual_dir = os.getcwd()
+    actual_dir = Path.cwd()
     if is_addon:
         os.chdir(src_dir)
     else:
@@ -407,15 +406,14 @@ def get_last_git_commit(src_dir, addon_path, is_addon):
             commit=process_result.stdout.decode(),
             src_dir=src_dir,
         )
-    elif gs:
+    if gs:
         # Addons installation
         return get_git_commit_from_rest_api_for_addon_repo(
             addon_path=addon_path,
             src_dir=src_dir,
         )
     # During GRASS GIS compilation from source code without Git
-    else:
-        return get_git_commit_from_file(src_dir=src_dir)
+    return get_git_commit_from_file(src_dir=src_dir)
 
 
 html_page_footer_pages_path = os.getenv("HTML_PAGE_FOOTER_PAGES_PATH") or ""
@@ -850,10 +848,9 @@ def to_title(name):
     """Convert name of command class/family to form suitable for title"""
     if name == "raster3d":
         return "3D raster"
-    elif name == "postscript":
+    if name == "postscript":
         return "PostScript"
-    else:
-        return name.capitalize()
+    return name.capitalize()
 
 
 index_titles = {}

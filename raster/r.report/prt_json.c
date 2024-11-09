@@ -129,7 +129,7 @@ JSON_Value *make_categories(int start, int end, int level)
     return array_value;
 }
 
-void print_json()
+void print_json(void)
 {
     compute_unit_format(0, nunits - 1, JSON);
 
