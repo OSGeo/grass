@@ -43,8 +43,8 @@
  * Define our own 1 and 2-byte data types.  We use these names to avoid
  * collisions with types defined by the OS include files.
  */
-typedef unsigned char V5Dubyte;   /* Must be 1 byte, except for cray */
-typedef unsigned short V5Dushort; /* Must be 2 byte, except for cray */
+typedef unsigned char V5Dubyte;   /* Must be 1 byte */
+typedef unsigned short V5Dushort; /* Must be 2 byte */
 
 #define MISSING       1.0e35
 #define IS_MISSING(X) ((X) >= 1.0e30)

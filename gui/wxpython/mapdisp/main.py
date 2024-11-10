@@ -108,7 +108,7 @@ class DMonMap(Map):
         self.renderMgr = RenderMapMgr(self)
 
         # update legend file variable with the one d.mon uses
-        with open(monFile["env"], "r") as f:
+        with open(monFile["env"]) as f:
             lines = f.readlines()
             for line in lines:
                 if "GRASS_LEGEND_FILE" in line:
@@ -123,7 +123,7 @@ class DMonMap(Map):
 
         nlayers = 0
         try:
-            fd = open(self.cmdfile, "r")
+            fd = open(self.cmdfile)
             lines = fd.readlines()
             fd.close()
             # detect d.out.file, delete the line from the cmd file and export
@@ -334,14 +334,14 @@ class Layer:
     def __getattr__(self, name):
         if name == "cmd":
             return cmdtuple_to_list(self._maplayer.GetCmd())
-        elif hasattr(self._maplayer, name):
+        if hasattr(self._maplayer, name):
             return getattr(self._maplayer, name)
-        elif name == "maplayer":
+        if name == "maplayer":
             return self._maplayer
-        elif name == "type":
+        if name == "type":
             return self._maplayer.GetType()
             # elif name == 'ctrl':
-        elif name == "label":
+        if name == "label":
             return self._maplayer.GetName()
             # elif name == 'propwin':
 
@@ -370,7 +370,7 @@ class LayerList:
         return result
 
     def next(self):
-        return self.__next__()
+        return next(self)
 
     def GetSelectedLayers(self, checkedOnly=True):
         # hidden and selected vs checked and selected
@@ -386,8 +386,7 @@ class LayerList:
         layers = self.GetSelectedLayers()
         if len(layers) > 0:
             return layers[0]
-        else:
-            return None
+        return None
 
     def AddLayer(self, ltype, name=None, checked=None, opacity=1.0, cmd=None):
         """Adds a new layer to the layer list.
@@ -579,8 +578,8 @@ class MapApp(wx.App):
             ),
         )
 
-        self.Map.saveToFile.connect(self.mapDisplay.DOutFile)
-        self.Map.dToRast.connect(self.mapDisplay.DToRast)
+        self.Map.saveToFile.connect(lambda cmd: self.mapDisplay.DOutFile(cmd))
+        self.Map.dToRast.connect(lambda cmd: self.mapDisplay.DToRast(cmd))
         self.Map.query.connect(
             lambda ltype, maps: self.mapDisplay.SetQueryLayersAndActivate(
                 ltype=ltype, maps=maps

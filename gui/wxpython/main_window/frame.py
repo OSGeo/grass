@@ -25,6 +25,8 @@ import stat
 import platform
 import re
 
+from pathlib import Path
+
 from core import globalvar
 
 try:
@@ -339,7 +341,9 @@ class GMFrame(wx.Frame):
     def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
         self.datacatalog = DataCatalog(parent=parent, giface=self._giface)
-        self.datacatalog.showNotification.connect(self.SetStatusText)
+        self.datacatalog.showNotification.connect(
+            lambda message: self.SetStatusText(message)
+        )
 
     def _createDisplay(self, parent):
         """Initialize Display widget"""
@@ -361,7 +365,9 @@ class GMFrame(wx.Frame):
                 giface=self._giface,
                 model=self._moduleTreeBuilder.GetModel(),
             )
-            self.search.showNotification.connect(self.SetStatusText)
+            self.search.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
         else:
             self.search = None
 
@@ -381,8 +387,12 @@ class GMFrame(wx.Frame):
             menuModel=self._moduleTreeBuilder.GetModel(),
             gcstyle=GC_PROMPT,
         )
-        self.goutput.showNotification.connect(self.SetStatusText)
-        self.goutput.contentChanged.connect(self._focusPage)
+        self.goutput.showNotification.connect(
+            lambda message: self.SetStatusText(message)
+        )
+        self.goutput.contentChanged.connect(
+            lambda notification: self._focusPage(notification)
+        )
 
         self._gconsole.mapCreated.connect(self.OnMapCreated)
         self._gconsole.Bind(
@@ -395,7 +405,9 @@ class GMFrame(wx.Frame):
         """Initialize history browser widget"""
         if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
             self.history = HistoryBrowser(parent=parent, giface=self._giface)
-            self.history.showNotification.connect(self.SetStatusText)
+            self.history.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
             self.history.runIgnoredCmdPattern.connect(
                 lambda cmd: self.RunSpecialCmd(command=cmd),
             )
@@ -857,10 +869,7 @@ class GMFrame(wx.Frame):
             self._giface.grassdbChanged.emit(
                 grassdb=grassdb, location=location, action="new", element="location"
             )
-            if grassdb == gisenv["GISDBASE"]:
-                switch_grassdb = None
-            else:
-                switch_grassdb = grassdb
+            switch_grassdb = grassdb if grassdb != gisenv["GISDBASE"] else None
             if can_switch_mapset_interactive(self, grassdb, location, mapset):
                 switch_mapset_interactively(
                     self,
@@ -969,7 +978,7 @@ class GMFrame(wx.Frame):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Choose model to run"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("GRASS Model File (*.gxm)|*.gxm"),
         )
         if dlg.ShowModal() == wx.ID_OK:
@@ -1236,14 +1245,13 @@ class GMFrame(wx.Frame):
         if onlyCurrent:
             if self.currentPage:
                 return self.GetLayerTree().GetMapDisplay()
-            else:
-                return None
-        else:  # -> return list of all mapdisplays
-            mlist = []
-            for idx in range(0, self.notebookLayers.GetPageCount()):
-                mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
+            return None
+        # -> return list of all mapdisplays
+        mlist = []
+        for idx in range(self.notebookLayers.GetPageCount()):
+            mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
 
-            return mlist
+        return mlist
 
     def GetAllMapDisplays(self):
         """Get all (open) map displays"""
@@ -1265,10 +1273,7 @@ class GMFrame(wx.Frame):
 
         :return: command as a list"""
         layer = None
-        if event:
-            cmd = self.menucmd[event.GetId()]
-        else:
-            cmd = ""
+        cmd = self.menucmd[event.GetId()] if event else ""
 
         try:
             cmdlist = cmd.split(" ")
@@ -1372,7 +1377,7 @@ class GMFrame(wx.Frame):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Choose script file to run"),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("Python script (*.py)|*.py|Bash script (*.sh)|*.sh"),
         )
 
@@ -1400,8 +1405,8 @@ class GMFrame(wx.Frame):
                     "Do you want to set the permissions "
                     "that allows you to run this script "
                     "(note that you must be the owner of the file)?"
-                    % os.path.basename(filename)
-                ),
+                )
+                % os.path.basename(filename),
                 caption=_("Set permission?"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )
@@ -1526,9 +1531,7 @@ class GMFrame(wx.Frame):
                 self._giface.WriteCmdLog(" ".join(command))
 
         def write_changed():
-            self._giface.WriteLog(
-                _('Working directory changed to:\n"%s"') % os.getcwd()
-            )
+            self._giface.WriteLog(_('Working directory changed to:\n"%s"') % Path.cwd())
 
         def write_end():
             self._giface.WriteCmdLog(" ")
@@ -1582,7 +1585,7 @@ class GMFrame(wx.Frame):
             dlg = wx.DirDialog(
                 parent=self,
                 message=_("Choose a working directory"),
-                defaultPath=os.getcwd(),
+                defaultPath=str(Path.cwd()),
             )
 
             if dlg.ShowModal() == wx.ID_OK:
@@ -2052,7 +2055,7 @@ class GMFrame(wx.Frame):
         """Disables 3D mode for all map displays except for @p mapDisplay"""
         # TODO: it should be disabled also for newly created map windows
         # moreover mapdisp.Disable3dMode() does not work properly
-        for page in range(0, self.GetLayerNotebook().GetPageCount()):
+        for page in range(self.GetLayerNotebook().GetPageCount()):
             mapdisp = self.GetLayerNotebook().GetPage(page).maptree.GetMapDisplay()
             if self.GetLayerNotebook().GetPage(page) != mapDisplayPage:
                 mapdisp.Disable3dMode()

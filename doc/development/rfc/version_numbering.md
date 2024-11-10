@@ -1,4 +1,4 @@
-# RFC: Version Numbering
+# RFC 9: Version Numbering
 
 Author: Vaclav Petras
 

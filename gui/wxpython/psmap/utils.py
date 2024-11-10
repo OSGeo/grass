@@ -93,10 +93,7 @@ class UnitConversion:
 
     def __init__(self, parent=None):
         self.parent = parent
-        if self.parent:
-            ppi = wx.ClientDC(self.parent).GetPPI()
-        else:
-            ppi = (72, 72)
+        ppi = wx.ClientDC(self.parent).GetPPI() if self.parent else (72, 72)
         self._unitsPage = {
             "inch": {"val": 1.0, "tr": _("inch")},
             "point": {"val": 72.0, "tr": _("point")},
@@ -162,17 +159,15 @@ def convertRGB(rgb):
                 return name
         return str(rgb.Red()) + ":" + str(rgb.Green()) + ":" + str(rgb.Blue())
     # transform a GRASS named color or an r:g:b string into a wx.Colour tuple
-    else:
-        color = (
-            int(gs.parse_color(rgb)[0] * 255),
-            int(gs.parse_color(rgb)[1] * 255),
-            int(gs.parse_color(rgb)[2] * 255),
-        )
-        color = wx.Colour(*color)
-        if color.IsOk():
-            return color
-        else:
-            return None
+    color = (
+        int(gs.parse_color(rgb)[0] * 255),
+        int(gs.parse_color(rgb)[1] * 255),
+        int(gs.parse_color(rgb)[2] * 255),
+    )
+    color = wx.Colour(*color)
+    if color.IsOk():
+        return color
+    return None
 
 
 def PaperMapCoordinates(mapInstr, x, y, paperToMap=True, env=None):
@@ -198,18 +193,16 @@ def PaperMapCoordinates(mapInstr, x, y, paperToMap=True, env=None):
 
         if projInfo()["proj"] == "ll":
             return e, n
-        else:
-            return int(e), int(n)
+        return int(e), int(n)
 
-    else:
-        diffEW = x - region["w"]
-        diffNS = region["n"] - y
-        diffX = mapWidthPaper * diffEW / mapWidthEN
-        diffY = mapHeightPaper * diffNS / mapHeightEN
-        xPaper = mapInstr["rect"].GetX() + diffX
-        yPaper = mapInstr["rect"].GetY() + diffY
+    diffEW = x - region["w"]
+    diffNS = region["n"] - y
+    diffX = mapWidthPaper * diffEW / mapWidthEN
+    diffY = mapHeightPaper * diffNS / mapHeightEN
+    xPaper = mapInstr["rect"].GetX() + diffX
+    yPaper = mapInstr["rect"].GetY() + diffY
 
-        return xPaper, yPaper
+    return xPaper, yPaper
 
 
 def AutoAdjust(self, scaleType, rect, env, map=None, mapType=None, region=None):
@@ -327,10 +320,7 @@ def ComputeSetRegion(self, mapDict, env):
         centerN = mapDict["center"][1]
 
         raster = self.instruction.FindInstructionByType("raster")
-        if raster:
-            rasterId = raster.id
-        else:
-            rasterId = None
+        rasterId = raster.id if raster else None
 
         if rasterId:
             env["GRASS_REGION"] = gs.region_env(
@@ -403,8 +393,7 @@ def getRasterType(map):
     file = gs.find_file(name=map, element="cell")
     if file.get("file"):
         return gs.raster_info(map)["datatype"]
-    else:
-        return None
+    return None
 
 
 def BBoxAfterRotation(w, h, angle):

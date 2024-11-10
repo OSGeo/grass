@@ -53,6 +53,7 @@
 # % required: create, edit
 # % requires: base, create
 # %end
+from __future__ import annotations
 
 import os
 
@@ -139,7 +140,7 @@ def main():
                 rdigit.OnMapSelection()
             # use Close instead of QuitRDigit for standalone tool
             self.rdigit.quitDigitizer.disconnect(self.QuitRDigit)
-            self.rdigit.quitDigitizer.connect(self.Close)
+            self.rdigit.quitDigitizer.connect(lambda: self.Close())
 
             # add Map Display panel to Map Display frame
             sizer = wx.BoxSizer(wx.VERTICAL)
@@ -163,11 +164,12 @@ def main():
                 render=True,
             )
 
-        def OnMapCreated(self, name, ltype):
+        def OnMapCreated(self, name, ltype, add: bool | None = None):
             """Add new created raster layer into map
 
             :param str name: map name
             :param str ltype: layer type
+            :param bool add: unused
             """
             self._mapObj.Clean()
             self._addLayer(name=name, ltype=ltype)
@@ -191,10 +193,8 @@ def main():
 
         if not edit_map:
             gs.fatal(
-                _(
-                    "Raster map <{}> not found in current mapset.".format(
-                        options["edit"],
-                    ),
+                _("Raster map <{}> not found in current mapset.").format(
+                    options["edit"],
                 ),
             )
         else:
@@ -207,11 +207,8 @@ def main():
         )["fullname"]
         if not base_map:
             gs.fatal(
-                _(
-                    "Base raster map <{}> not found in "
-                    "current mapset.".format(
-                        options["base"],
-                    ),
+                _("Base raster map <{}> not found in current mapset.").format(
+                    options["base"],
                 ),
             )
         kwargs["base_map"] = base_map

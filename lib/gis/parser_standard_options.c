@@ -97,6 +97,7 @@
    - colors
    - G_OPT_C
    - G_OPT_CN
+   - G_OPT_C_FORMAT
 
    - misc
    - G_OPT_M_DIR
@@ -651,6 +652,22 @@ struct Option *G_define_standard_option(int opt)
         Opt->label = _("Color");
         Opt->description =
             _("Either a standard color name, R:G:B triplet, or \"none\"");
+        break;
+    case G_OPT_C_FORMAT:
+        Opt->key = "color_format";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = YES;
+        Opt->multiple = NO;
+        Opt->answer = "hex";
+        Opt->options = "rgb,hex,hsv,triplet";
+        Opt->label = _("Color format");
+        Opt->description = _("Color format for output values.");
+        G_asprintf(
+            (char **)&(Opt->descriptions), "rgb;%s;hex;%s;hsv;%s;triplet;%s",
+            _("output color in RGB format"), _("output color in HEX format"),
+            _("output color in HSV format (experimental)"),
+            _("output color in colon-separated RGB format"));
         break;
 
         /* misc */

@@ -386,10 +386,12 @@ const char *db_whoami(void);
 void db_zero(void *, int);
 void db_zero_string(dbString *);
 unsigned int db_sizeof_string(const dbString *);
-int db_set_login(const char *, const char *, const char *, const char *);
+int db_set_login(const char *, const char *, const char *, const char *,
+                 const char *, const char *, int);
 int db_set_login2(const char *, const char *, const char *, const char *,
                   const char *, const char *, int);
-int db_get_login(const char *, const char *, const char **, const char **);
+int db_get_login(const char *, const char *, const char **, const char **,
+                 const char **, const char **);
 int db_get_login2(const char *, const char *, const char **, const char **,
                   const char **, const char **);
 int db_get_login_dump(FILE *);
