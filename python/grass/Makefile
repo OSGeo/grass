@@ -10,10 +10,12 @@ SUBDIRS = \
 	benchmark \
 	exceptions \
 	experimental \
+	getosm \
 	grassdb \
 	gunittest \
 	imaging \
 	jupyter \
+	projpicker \
 	pydispatch \
 	pygrass \
 	script \

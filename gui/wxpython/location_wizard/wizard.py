@@ -19,6 +19,7 @@ Classes:
  - wizard::EPSGPage
  - wizard::IAUPage
  - wizard::CustomPage
+ - wizard::ProjPickerPage
  - wizard::SummaryPage
  - wizard::LocationWizard
  - wizard::WizardWithHelpButton
@@ -37,7 +38,7 @@ This program is free software under the GNU General Public License
 import os
 import locale
 import functools
-
+import socket
 from pathlib import Path
 
 import wx
@@ -71,6 +72,7 @@ from gui_core.wrap import (
     HyperlinkCtrl,
 )
 from location_wizard.dialogs import SelectTransformDialog
+from projpicker_gui.panel import EVT_ITEM_DESELECTED, EVT_ITEM_SELECTED, ProjPickerPanel
 
 from grass.grassdb.checks import location_exists
 from grass.script import decode
@@ -360,11 +362,16 @@ class CoordinateSystemPage(TitledPage):
         global coordsys
 
         # toggles
+        self.radioProjPicker = wx.RadioButton(
+            parent=self,
+            id=wx.ID_ANY,
+            label=_("Select CRS interactively in a map (requires Internet)"),
+            style=wx.RB_GROUP,
+        )
         self.radioEpsg = wx.RadioButton(
             parent=self,
             id=wx.ID_ANY,
             label=_("Select CRS from a list by EPSG or description"),
-            style=wx.RB_GROUP,
         )
         # self.radioIau = wx.RadioButton(
         #    parent=self, id=wx.ID_ANY,
@@ -391,19 +398,20 @@ class CoordinateSystemPage(TitledPage):
 
         # layout
         self.sizer.SetVGap(10)
-        self.sizer.Add(self.radioEpsg, flag=wx.ALIGN_LEFT, pos=(1, 1))
+        self.sizer.Add(self.radioProjPicker, flag=wx.ALIGN_LEFT, pos=(1, 1))
+        self.sizer.Add(self.radioEpsg, flag=wx.ALIGN_LEFT, pos=(2, 1))
         # self.sizer.Add(self.radioIau,
         #               flag=wx.ALIGN_LEFT, pos=(1, 1))
-        self.sizer.Add(self.radioFile, flag=wx.ALIGN_LEFT, pos=(2, 1))
-        self.sizer.Add(self.radioXy, flag=wx.ALIGN_LEFT, pos=(3, 1))
+        self.sizer.Add(self.radioFile, flag=wx.ALIGN_LEFT, pos=(3, 1))
+        self.sizer.Add(self.radioXy, flag=wx.ALIGN_LEFT, pos=(4, 1))
         self.sizer.Add(
             StaticText(parent=self, label=_("Additional methods:")),
             flag=wx.ALIGN_LEFT,
-            pos=(4, 1),
+            pos=(5, 1),
         )
-        self.sizer.Add(self.radioWkt, flag=wx.ALIGN_LEFT, pos=(5, 1))
-        self.sizer.Add(self.radioProj, flag=wx.ALIGN_LEFT, pos=(6, 1))
-        self.sizer.Add(self.radioSrs, flag=wx.ALIGN_LEFT, pos=(7, 1))
+        self.sizer.Add(self.radioWkt, flag=wx.ALIGN_LEFT, pos=(6, 1))
+        self.sizer.Add(self.radioProj, flag=wx.ALIGN_LEFT, pos=(7, 1))
+        self.sizer.Add(self.radioSrs, flag=wx.ALIGN_LEFT, pos=(8, 1))
         self.sizer.AddGrowableCol(1)
 
         # bindings
@@ -414,14 +422,39 @@ class CoordinateSystemPage(TitledPage):
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioSrs.GetId())
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioProj.GetId())
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioXy.GetId())
+        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioProjPicker.GetId())
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
+
+    def HasInternet(self, host="8.8.8.8", port=53, timeout=3):
+        # https://stackoverflow.com/a/33117579/16079666
+        """
+        Host: 8.8.8.8 (google-public-dns-a.google.com)
+        OpenPort: 53/tcp
+        Service: domain (DNS/TCP)
+        """
+        try:
+            socket.setdefaulttimeout(timeout)
+            socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+        except:
+            return False
+        return True
 
     def OnEnterPage(self, event):
         global coordsys
 
+        has_internet = self.HasInternet()
+        if has_internet:
+            self.radioProjPicker.Enable()
+        else:
+            self.radioProjPicker.Disable()
+
         if not coordsys:
-            coordsys = "epsg"
-            self.radioEpsg.SetValue(True)
+            if has_internet:
+                coordsys = "projpicker"
+                self.radioProjPicker.SetValue(True)
+            else:
+                coordsys = "epsg"
+                self.radioEpsg.SetValue(True)
         else:
             if coordsys == "proj":
                 self.radioSrs.SetValue(True)
@@ -437,6 +470,14 @@ class CoordinateSystemPage(TitledPage):
                 self.radioProj.SetValue(True)
             if coordsys == "xy":
                 self.radioXy.SetValue(True)
+            if coordsys == "projpicker":
+                if has_internet:
+                    self.radioProjPicker.SetValue(True)
+                else:
+                    coordsys = "epsg"
+                    self.radioEpsg.SetValue(True)
+                    self.SetNext(self.parent.epsgpage)
+                    self.parent.sumpage.SetPrev(self.parent.epsgpage)
 
         if event.GetDirection():
             if coordsys == "proj":
@@ -460,6 +501,9 @@ class CoordinateSystemPage(TitledPage):
             if coordsys == "xy":
                 self.SetNext(self.parent.sumpage)
                 self.parent.sumpage.SetPrev(self.parent.csystemspage)
+            if coordsys == "projpicker":
+                self.SetNext(self.parent.projpickerpage)
+                self.parent.sumpage.SetPrev(self.parent.projpickerpage)
 
         if not wx.FindWindowById(wx.ID_FORWARD).IsEnabled():
             wx.FindWindowById(wx.ID_FORWARD).Enable()
@@ -495,6 +539,10 @@ class CoordinateSystemPage(TitledPage):
             coordsys = "xy"
             self.SetNext(self.parent.sumpage)
             self.parent.sumpage.SetPrev(self.parent.csystemspage)
+        elif event.GetId() == self.radioProjPicker.GetId():
+            coordsys = "projpicker"
+            self.SetNext(self.parent.projpickerpage)
+            self.parent.sumpage.SetPrev(self.parent.projpickerpage)
 
 
 class ProjectionsPage(TitledPage):
@@ -2157,6 +2205,87 @@ class CustomPage(TitledPage):
             nextButton.Enable()
 
 
+class ProjPickerPage(TitledPage):
+    """Wizard page for selecting CRS interactively in a map"""
+
+    def __init__(self, wizard, parent):
+        TitledPage.__init__(self, wizard, _("Select CRS interactively in a map"))
+        global coordsys
+
+        self.sizer = wx.BoxSizer()
+
+        # definition of variables
+        self.parent = parent
+        self.epsgcode = None
+        self.epsgdesc = ""
+
+        # EPSG only?
+        self.projpicker = ProjPickerPanel(
+            self, filter_bbox=lambda b: b.crs_auth_name == "EPSG"
+        )
+        self.sizer.Add(self.projpicker, 1, wx.EXPAND)
+
+        # events
+        self.projpicker.Bind(EVT_ITEM_SELECTED, self.OnItemSelected)
+        self.projpicker.Bind(EVT_ITEM_DESELECTED, self.OnItemDeselected)
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
+
+    def OnItemSelected(self, event):
+        self.epsgcode = event.crs.crs_code
+        self.epsgdesc = event.crs.crs_name
+        self.EnableNext()
+
+    def OnItemDeselected(self, event):
+        self.epsgcode = None
+        self.epsgdesc = ""
+        self.EnableNext(False)
+
+    def OnEnterPage(self, event):
+        self.parent.datum_trans = None
+        if event.GetDirection():
+            if not self.epsgcode:
+                # disable 'next' button by default
+                self.EnableNext(False)
+            else:
+                self.EnableNext()
+
+        event.Skip()
+
+    def OnPageChanging(self, event):
+        if event.GetDirection():
+            if not self.epsgcode:
+                event.Veto()
+                return
+            # check for datum transforms
+            ret = RunCommand(
+                "g.proj", read=True, epsg=self.epsgcode, datum_trans="-1", flags="t"
+            )
+
+            if ret != "":
+                dtrans = ""
+                # open a dialog to select datum transform number
+                dlg = SelectTransformDialog(self.parent.parent, transforms=ret)
+
+                if dlg.ShowModal() == wx.ID_OK:
+                    dtrans = dlg.GetTransform()
+                    if dtrans == "":
+                        dlg.Destroy()
+                        event.Veto()
+                        return "Datum transform is required."
+                else:
+                    dlg.Destroy()
+                    event.Veto()
+                    return "Datum transform is required."
+
+                self.parent.datum_trans = dtrans
+            self.GetNext().SetPrev(self)
+
+    def EnableNext(self, enable=True):
+        nextButton = wx.FindWindowById(wx.ID_FORWARD)
+        nextButton.Enable(enable)
+
+
 class SummaryPage(TitledPage):
     """Shows summary result of choosing coordinate system parameters
     prior to creating location"""
@@ -2277,12 +2406,13 @@ class SummaryPage(TitledPage):
         proj4string = self.parent.CreateProj4String()
         iauproj4string = self.parent.iaupage.epsgparams
         epsgcode = self.parent.epsgpage.epsgcode
+        epsgcode_projpicker = self.parent.projpickerpage.epsgcode
         datum = self.parent.datumpage.datum
         dtrans = self.parent.datum_trans
         global coordsys
 
         # print coordsys,proj4string
-        if coordsys in {"proj", "epsg", "iau", "wkt", "file"}:
+        if coordsys in {"proj", "epsg", "iau", "wkt", "file", "projpicker"}:
             extra_opts = {}
             extra_opts["project"] = "project"
             extra_opts["getErrorMsg"] = True
@@ -2325,6 +2455,14 @@ class SummaryPage(TitledPage):
                     flags="jft",
                     wkt="-",
                     stdin=self.parent.wktpage.wktstring,
+                    **extra_opts,
+                )
+            elif coordsys == "projpicker":
+                ret, projlabel, err = RunCommand(
+                    "g.proj",
+                    flags="jft",
+                    epsg=epsgcode_projpicker,
+                    datum_trans=dtrans,
                     **extra_opts,
                 )
 
@@ -2378,6 +2516,11 @@ class SummaryPage(TitledPage):
                 + self.parent.custompage.custom_dtrans_string
             )
             self.lproj4string.SetLabel("%s" % combo_str.replace(" +", os.linesep + "+"))
+        elif coordsys == "projpicker":
+            label = "EPSG code %s (%s)" % (
+                self.parent.projpickerpage.epsgcode,
+                self.parent.projpickerpage.epsgdesc,
+            )
 
         self.lprojection.SetLabel(label)
 
@@ -2428,6 +2571,7 @@ class LocationWizard(wx.Object):
         self.wktpage = WKTPage(self.wizard, self)
         self.ellipsepage = EllipsePage(self.wizard, self)
         self.custompage = CustomPage(self.wizard, self)
+        self.projpickerpage = ProjPickerPage(self.wizard, self)
         self.sumpage = SummaryPage(self.wizard, self)
 
         #
@@ -2466,6 +2610,9 @@ class LocationWizard(wx.Object):
         self.custompage.SetPrev(self.csystemspage)
         self.custompage.SetNext(self.sumpage)
 
+        self.projpickerpage.SetPrev(self.csystemspage)
+        self.projpickerpage.SetNext(self.sumpage)
+
         self.sumpage.SetPrev(self.csystemspage)
 
         #
@@ -2482,6 +2629,7 @@ class LocationWizard(wx.Object):
         self.wktpage.DoLayout()
         self.ellipsepage.DoLayout()
         self.custompage.DoLayout()
+        self.projpickerpage.DoLayout()
         self.sumpage.DoLayout()
         self.wizard.FitToPage(self.datumpage)
         size = self.wizard.GetPageSize()
@@ -2736,6 +2884,18 @@ class LocationWizard(wx.Object):
                     dbase=self.startpage.grassdatabase,
                     location=self.startpage.location,
                     wkt=self.wktpage.wktstring,
+                    desc=self.startpage.locTitle,
+                )
+            elif coordsys == "projpicker":
+                if not self.projpickerpage.epsgcode:
+                    return _("EPSG code missing.")
+
+                grass.create_location(
+                    dbase=self.startpage.grassdatabase,
+                    location=self.startpage.location,
+                    epsg=self.projpickerpage.epsgcode,
+                    datum=self.datumpage.datum,
+                    datum_trans=self.datum_trans,
                     desc=self.startpage.locTitle,
                 )
 

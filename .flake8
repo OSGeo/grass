@@ -81,6 +81,8 @@ per-file-ignores =
     # Ignoring import/code mix and line length.
     # Files not managed by Black
     python/grass/imaging/images2gif.py: E226
+    # .common.is_verbose used by g.projpicker
+    python/grass/projpicker/projpicker.py: F401
     # Unused imports in init files
     # F403 star import used; unable to detect undefined names
     python/grass/*/__init__.py: F401, F403

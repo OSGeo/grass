@@ -1,0 +1,137 @@
+"""
+This module provides common variables and functions for other ProjPicker
+modules.
+"""
+
+import collections
+import os
+import re
+
+_PROJPICKER_VERBOSE_ENV = "PROJPICKER_VERBOSE"
+
+# regular expression patterns
+# coordinate separator
+_COOR_SEP = ","
+_COOR_SEP_PAT = rf"[ \t]*[{_COOR_SEP} \t][ \t]*"
+# positive float
+_POS_FLOAT_PAT = r"(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)"
+
+# bbox table schema
+_BBOX_SCHEMA = """
+CREATE TABLE bbox (
+    proj_table TEXT NOT NULL CHECK (length(proj_table) >= 1),
+    crs_name TEXT NOT NULL CHECK (length(crs_name) >= 2),
+    crs_auth_name TEXT NOT NULL CHECK (length(crs_auth_name) >= 1),
+    crs_code TEXT NOT NULL CHECK (length(crs_code) >= 1),
+    usage_auth_name TEXT NOT NULL CHECK (length(usage_auth_name) >= 1),
+    usage_code TEXT NOT NULL CHECK (length(usage_code) >= 1),
+    extent_auth_name TEXT NOT NULL CHECK (length(extent_auth_name) >= 1),
+    extent_code TEXT NOT NULL CHECK (length(extent_code) >= 1),
+    south_lat FLOAT CHECK (south_lat BETWEEN -90 AND 90),
+    north_lat FLOAT CHECK (north_lat BETWEEN -90 AND 90),
+    west_lon FLOAT CHECK (west_lon BETWEEN -180 AND 180),
+    east_lon FLOAT CHECK (east_lon BETWEEN -180 AND 180),
+    bottom FLOAT,
+    top FLOAT,
+    left FLOAT,
+    right FLOAT,
+    unit TEXT NOT NULL CHECK (length(unit) >= 2),
+    area_sqkm FLOAT CHECK (area_sqkm > 0),
+    CONSTRAINT pk_bbox PRIMARY KEY (
+        crs_auth_name, crs_code,
+        usage_auth_name, usage_code
+    ),
+    CONSTRAINT check_bbox_lat CHECK (south_lat <= north_lat)
+)
+"""
+
+# all column names in the bbox table
+_BBOX_COLUMNS = re.sub(
+    r"^ +| +$",
+    "",
+    re.sub(
+        r"\n",
+        " ",
+        re.sub(
+            r"(?:^[A-Z]| ).*",
+            "",
+            re.sub(
+                r"\([^(]*\)",
+                "",
+                re.sub(
+                    r"^(?:CREATE TABLE.*|\))$|^ *", "", _BBOX_SCHEMA, flags=re.MULTILINE
+                ),
+                flags=re.DOTALL,
+            ),
+            flags=re.MULTILINE,
+        ),
+    ),
+).split()
+
+# BBox namedtuple class
+BBox = collections.namedtuple("BBox", _BBOX_COLUMNS)
+
+
+def is_verbose():
+    """
+    Check if the current session is in a verbose mode.
+
+    Returns:
+        bool: True if verbose, False otherwise.
+    """
+    return os.environ.get(_PROJPICKER_VERBOSE_ENV, "NO") == "YES"
+
+
+def get_float(x):
+    """
+    Typecast x into float; return None on failure.
+
+    Args:
+        x (str or float): Float in str or float.
+
+    Returns:
+        float or None: Typecasted x in float if successful, None otherwise.
+    """
+    # pylint: disable=invalid-name
+    try:
+        return float(x)
+    except ValueError:
+        return None
+
+
+def query_using_cursor(projpicker_cur, sql, unit="any", proj_table="any"):
+    """
+    Return a list of BBox instances in unit in proj_table using a SQL
+    statement.
+
+    Args:
+        projpicker_cur (sqlite3.Cursor): projpicker.db cursor.
+        sql (str): SQL statement with optional AND_UNIT and AND_PROJ_TABLE.
+        unit (str): Unit values from projpicker.db. Defaults to "any".
+        proj_table (str): Proj table values from projpicker.db. Defaults to
+            "any".
+
+    Returns:
+        list: List of queried BBox instances sorted by area.
+    """
+    outbbox = []
+    params = []
+    if unit == "any" and proj_table == "any":
+        sql = sql.replace("AND_UNIT", "").replace("AND_PROJ_TABLE", "")
+    elif unit == "any":
+        sql = sql.replace("AND_UNIT", "").replace(
+            "AND_PROJ_TABLE", "AND proj_table = ?"
+        )
+        params.append(proj_table)
+    elif proj_table == "any":
+        sql = sql.replace("AND_PROJ_TABLE", "").replace("AND_UNIT", "AND unit = ?")
+        params.append(unit)
+    else:
+        sql = sql.replace("AND_UNIT", "AND unit = ?").replace(
+            "AND_PROJ_TABLE", "AND proj_table = ?"
+        )
+        params.extend([unit, proj_table])
+    projpicker_cur.execute(sql, params)
+    for row in map(BBox._make, projpicker_cur.fetchall()):
+        outbbox.append(row)
+    return outbbox
