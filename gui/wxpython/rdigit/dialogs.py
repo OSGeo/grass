@@ -117,9 +117,8 @@ class NewRasterDialog(wx.Dialog):
                 if dlgOverwrite.ShowModal() != wx.ID_YES:
                     dlgOverwrite.Destroy()
                     return
-                else:
-                    dlgOverwrite.Destroy()
-                    self.EndModal(wx.ID_OK)
+                dlgOverwrite.Destroy()
+                self.EndModal(wx.ID_OK)
             else:
                 self.EndModal(wx.ID_OK)
 

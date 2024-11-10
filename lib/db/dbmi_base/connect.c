@@ -87,11 +87,11 @@ int db_get_connection(dbConnection *connection)
     connection->group = (char *)G_getenv_nofatal2("DB_GROUP", G_VAR_MAPSET);
 
     /* try to get user/password */
-    db_get_login2(connection->driverName, connection->databaseName,
-                  (const char **)&(connection->user),
-                  (const char **)&(connection->password),
-                  (const char **)&(connection->hostName),
-                  (const char **)&(connection->port));
+    db_get_login(connection->driverName, connection->databaseName,
+                 (const char **)&(connection->user),
+                 (const char **)&(connection->password),
+                 (const char **)&(connection->hostName),
+                 (const char **)&(connection->port));
 
     return DB_OK;
 }

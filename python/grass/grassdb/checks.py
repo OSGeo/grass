@@ -222,13 +222,13 @@ def get_reason_id_mapset_not_usable(mapset_path):
     if not os.path.exists(mapset_path):
         return "non-existent"
     # Check whether mapset is valid
-    elif not is_mapset_valid(mapset_path):
+    if not is_mapset_valid(mapset_path):
         return "invalid"
     # Check whether mapset is owned by current user
-    elif not is_current_user_mapset_owner(mapset_path):
+    if not is_current_user_mapset_owner(mapset_path):
         return "different-owner"
     # Check whether mapset is locked
-    elif is_mapset_locked(mapset_path):
+    if is_mapset_locked(mapset_path):
         return "locked"
     return None
 

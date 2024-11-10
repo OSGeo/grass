@@ -464,10 +464,7 @@ def write_html_cmd_overview(f):
 
 
 def write_html_footer(f, index_url, year=None):
-    if year is None:
-        cur_year = default_year
-    else:
-        cur_year = year
+    cur_year = default_year if year is None else year
     f.write(
         footer_tmpl.substitute(
             grass_version=grass_version, index_url=index_url, year=cur_year
@@ -494,8 +491,7 @@ def get_desc(cmd):
             sp = line.split("-", 1)
             if len(sp) > 1:
                 return sp[1].strip()
-            else:
-                return None
+            return None
 
     return ""
 

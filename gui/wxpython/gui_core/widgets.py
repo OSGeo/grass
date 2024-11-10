@@ -188,8 +188,7 @@ class NotebookController:
             if ret:
                 del self.notebookPages[page]
             return ret
-        else:
-            return False
+        return False
 
     def RemovePage(self, page):
         """Delete page without deleting the associated window.
@@ -203,8 +202,7 @@ class NotebookController:
             if ret:
                 del self.notebookPages[page]
             return ret
-        else:
-            return False
+        return False
 
     def SetSelectionByName(self, page):
         """Set active notebook page.
@@ -814,8 +812,7 @@ class SimpleValidator(Validator):
         if len(text) == 0:
             self.callback(ctrl)
             return False
-        else:
-            return True
+        return True
 
     def TransferToWindow(self):
         """Transfer data from validator to window.
@@ -865,8 +862,7 @@ class GenericValidator(Validator):
         if not self._condition(text):
             self._callback(ctrl)
             return False
-        else:
-            return True
+        return True
 
     def TransferToWindow(self):
         """Transfer data from validator to window."""
@@ -1183,8 +1179,7 @@ class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMixin):
 
         if checked is not None:
             return tuple(data)
-        else:
-            return (tuple(data), tuple(checkedList))
+        return (tuple(data), tuple(checkedList))
 
     def LoadData(self, data=None, selectOne=True):
         """Load data into list"""
@@ -1608,7 +1603,7 @@ class ManageSettingsWidget(wx.Panel):
                     idx = line.find(";", i_last)
                     if idx < 0:
                         break
-                    elif idx != 0:
+                    if idx != 0:
                         # find out whether it is separator
                         # $$$$; - it is separator
                         # $$$$$; - it is not separator

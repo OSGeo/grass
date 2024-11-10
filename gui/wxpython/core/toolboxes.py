@@ -861,9 +861,8 @@ def module_test():
     if someDiff:
         print("Difference between files.")
         return 1
-    else:
-        print("OK")
-        return 0
+    print("OK")
+    return 0
 
 
 def validate_file(filename):

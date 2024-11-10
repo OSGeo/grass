@@ -727,11 +727,11 @@ class GlobalTemporalVar:
             and self.value is not None
         ):
             return "global"
-        elif self.boolean is not None:
+        if self.boolean is not None:
             return "boolean"
-        elif self.relationop is not None and self.topology != []:
+        if self.relationop is not None and self.topology != []:
             return "operator"
-        elif self.td is not None:
+        if self.td is not None:
             return "timediff"
 
     def get_type_value(self):
@@ -992,10 +992,7 @@ class TemporalAlgebraParser:
         same object for map name generation in multiple threads.
         """
         self.count += 1
-        if self.pid is not None:
-            pid = self.pid
-        else:
-            pid = os.getpid()
+        pid = self.pid if self.pid is not None else os.getpid()
         name = "tmp_map_name_%i_%i" % (pid, self.count)
         self.names[name] = name
         return name
@@ -1159,11 +1156,7 @@ class TemporalAlgebraParser:
                             if returncode == 0:
                                 break
                             # Append map to result map list.
-                            elif returncode == 1:
-                                # print(map_new.get_id() + " " +
-                                #       str(map_new.get_temporal_extent_as_tuple()))
-                                # print(map_new.condition_value)
-                                # print(map_new.cmd_list)
+                            if returncode == 1:
                                 # resultlist.append(map_new)
                                 resultdict[map_new.get_id()] = map_new
 
@@ -1234,10 +1227,7 @@ class TemporalAlgebraParser:
         """
         if isinstance(input, str):
             # Check for mapset in given stds input.
-            if input.find("@") >= 0:
-                id_input = input
-            else:
-                id_input = input + "@" + self.mapset
+            id_input = input if input.find("@") >= 0 else input + "@" + self.mapset
             # Create empty spacetime dataset.
             if stds_type:
                 stds = dataset_factory(stds_type, id_input)
@@ -1249,42 +1239,41 @@ class TemporalAlgebraParser:
                     _("Space time %s dataset <%s> not found")
                     % (stds.get_new_map_instance(None).get_type(), id_input)
                 )
+            # Select temporal dataset entry from database.
+            stds.select(dbif=self.dbif)
+            if self.use_granularity:
+                # We create the maplist out of the map array from none-gap objects
+                maplist = []
+                map_array = stds.get_registered_maps_as_objects_by_granularity(
+                    gran=self.granularity, dbif=self.dbif
+                )
+                for entry in map_array:
+                    # Ignore gap objects
+                    if entry[0].get_id() is not None:
+                        maplist.append(entry[0])
             else:
-                # Select temporal dataset entry from database.
-                stds.select(dbif=self.dbif)
-                if self.use_granularity:
-                    # We create the maplist out of the map array from none-gap objects
-                    maplist = []
-                    map_array = stds.get_registered_maps_as_objects_by_granularity(
-                        gran=self.granularity, dbif=self.dbif
-                    )
-                    for entry in map_array:
-                        # Ignore gap objects
-                        if entry[0].get_id() is not None:
-                            maplist.append(entry[0])
-                else:
-                    maplist = stds.get_registered_maps_as_objects(dbif=self.dbif)
-                # Create map_value as empty list item.
-                for map_i in maplist:
-                    if "map_value" not in dir(map_i):
-                        map_i.map_value = []
-                    if "condition_value" not in dir(map_i):
-                        map_i.condition_value = []
-                    # Set and check global temporal type variable and map.
-                    if map_i.is_time_absolute() and self.temporaltype is None:
-                        self.temporaltype = "absolute"
-                    elif map_i.is_time_relative() and self.temporaltype is None:
-                        self.temporaltype = "relative"
-                    elif (
-                        map_i.is_time_absolute() and self.temporaltype == "relative"
-                    ) or (map_i.is_time_relative() and self.temporaltype == "absolute"):
-                        self.msgr.fatal(
-                            _(
-                                "Wrong temporal type of space time dataset "
-                                "<%s> <%s> time is required"
-                            )
-                            % (id_input, self.temporaltype)
+                maplist = stds.get_registered_maps_as_objects(dbif=self.dbif)
+            # Create map_value as empty list item.
+            for map_i in maplist:
+                if "map_value" not in dir(map_i):
+                    map_i.map_value = []
+                if "condition_value" not in dir(map_i):
+                    map_i.condition_value = []
+                # Set and check global temporal type variable and map.
+                if map_i.is_time_absolute() and self.temporaltype is None:
+                    self.temporaltype = "absolute"
+                elif map_i.is_time_relative() and self.temporaltype is None:
+                    self.temporaltype = "relative"
+                elif (map_i.is_time_absolute() and self.temporaltype == "relative") or (
+                    map_i.is_time_relative() and self.temporaltype == "absolute"
+                ):
+                    self.msgr.fatal(
+                        _(
+                            "Wrong temporal type of space time dataset "
+                            "<%s> <%s> time is required"
                         )
+                        % (id_input, self.temporaltype)
+                    )
         elif isinstance(input, self.mapclass):
             # Check if the input is a single map and return it as list with one entry.
             maplist = [input]
@@ -1634,7 +1623,7 @@ class TemporalAlgebraParser:
 
     def assign_bool_value(
         self, map_i, temporal_topo_list=["EQUAL"], spatial_topo_list=[]
-    ):
+    ) -> bool:
         """Function to assign boolean map value based on the map_values from the
         compared map list by topological relationships.
 
@@ -1668,10 +1657,7 @@ class TemporalAlgebraParser:
                                 str(relationmap.get_temporal_extent_as_tuple())
                                 + str(boolean),
                             )
-        if all(condition_value_list):
-            resultbool = True
-        else:
-            resultbool = False
+        resultbool = bool(all(condition_value_list))
         map_i.condition_value = [resultbool]
 
         return resultbool
@@ -2296,20 +2282,14 @@ class TemporalAlgebraParser:
                     ele_index = conditionlist.index(ele)
                     right = conditionlist.pop(ele_index)
                     left = conditionlist.pop(ele_index - 2)
-                    if any([left, right]):
-                        result = True
-                    else:
-                        result = False
+                    result = bool(any([left, right]))
                     conditionlist[ele_index - 2] = result
                     recurse_compare(conditionlist)
                 if ele == "&&":
                     ele_index = conditionlist.index(ele)
                     right = conditionlist.pop(ele_index)
                     left = conditionlist.pop(ele_index - 2)
-                    if all([left, right]):
-                        result = True
-                    else:
-                        result = False
+                    result = bool(all([left, right]))
                     conditionlist[ele_index - 2] = result
                     recurse_compare(conditionlist)
 
@@ -2336,8 +2316,7 @@ class TemporalAlgebraParser:
                     inverselist.append(map_i)
         if inverse:
             return inverselist
-        else:
-            return resultlist
+        return resultlist
 
     def p_statement_assign(self, t):
         # The expression should always return a list of maps
@@ -2644,10 +2623,7 @@ class TemporalAlgebraParser:
             input = t[3]
             if not isinstance(input, list):
                 # Check for mapset in given stds input.
-                if input.find("@") >= 0:
-                    id_input = input
-                else:
-                    id_input = input + "@" + self.mapset
+                id_input = input if input.find("@") >= 0 else input + "@" + self.mapset
                 # Create empty map dataset.
                 map_i = dataset_factory(self.maptype, id_input)
                 # Check for occurrence of space time dataset.
@@ -2656,9 +2632,9 @@ class TemporalAlgebraParser:
                         _("%s map <%s> not found in GRASS spatial database")
                         % (map_i.get_type(), id_input)
                     )
-                else:
-                    # Select dataset entry from database.
-                    map_i.select(dbif=self.dbif)
+
+                # Select dataset entry from database.
+                map_i.select(dbif=self.dbif)
             else:
                 raise FatalError(
                     _(
@@ -3080,10 +3056,7 @@ class TemporalAlgebraParser:
             # Evaluate temporal operator.
             operators = self.eval_toperator(t[2], optype="select")
             # Check for negative selection.
-            if operators[2] == "!:":
-                negation = True
-            else:
-                negation = False
+            negation = operators[2] == "!:"
             # Perform selection.
             selectlist = self.perform_temporal_selection(
                 maplistA, maplistB, topolist=operators[0], inverse=negation
@@ -3405,8 +3378,7 @@ class TemporalAlgebraParser:
                 "syntax error on line %d, position %i token %s near '%s' expression "
                 "'%s'" % (t.lineno, t.lexpos, t.type, t.value, self.expression)
             )
-        else:
-            raise SyntaxError("Unexpected syntax error")
+        raise SyntaxError("Unexpected syntax error")
 
 
 if __name__ == "__main__":

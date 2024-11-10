@@ -281,8 +281,7 @@ class ListCtrlComboPopup(ComboPopup):
     def GetComboCtrl(self):
         if globalvar.wxPythonPhoenix:
             return super().GetComboCtrl()
-        else:
-            return self.GetCombo()
+        return self.GetCombo()
 
     def GetStringValue(self):
         """Get value as a string separated by commas"""
@@ -524,8 +523,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             if elem not in elementdict:
                 self.AddItem(_("Not selectable element"), node=False)
                 return
-            else:
-                renamed_elements.append(elementdict[elem])
+            renamed_elements.append(elementdict[elem])
 
         if element in {"stds", "strds", "str3ds", "stvds"}:
             if not self.tgis_error:
@@ -1396,10 +1394,7 @@ class FormatSelect(wx.Choice):
         super().__init__(parent, id=wx.ID_ANY, size=size, **kwargs)
         self.SetName("FormatSelect")
 
-        if ogr:
-            ftype = "ogr"
-        else:
-            ftype = "gdal"
+        ftype = "ogr" if ogr else "gdal"
 
         formats = []
         for f in GetFormats()[ftype][srcType].items():
@@ -1506,10 +1501,7 @@ class GdalSelect(wx.Panel):
         self.protocolWidgets = {}
         self.pgWidgets = {}
 
-        if ogr:
-            fType = "ogr"
-        else:
-            fType = "gdal"
+        fType = "ogr" if ogr else "gdal"
 
         # file
         fileMask = "%(all)s (*)|*|" % {"all": _("All files")}
@@ -2292,12 +2284,7 @@ class GdalSelect(wx.Panel):
             return projectionMatch
 
         def getProjMatchCaption(projectionMatch):
-            if projectionMatch == "0":
-                projectionMatchCaption = _("No")
-            else:
-                projectionMatchCaption = _("Yes")
-
-            return projectionMatchCaption
+            return _("No") if projectionMatch == "0" else _("Yes")
 
         dsn = self.GetDsn()
         if not dsn:
@@ -2442,15 +2429,9 @@ class GdalSelect(wx.Panel):
         """Show related manual page"""
         cmd = ""
         if self.dest:
-            if self.ogr:
-                cmd = "v.external.out"
-            else:
-                cmd = "r.external.out"
+            cmd = "v.external.out" if self.ogr else "r.external.out"
         elif self.link:
-            if self.ogr:
-                cmd = "v.external"
-            else:
-                cmd = "r.external"
+            cmd = "v.external" if self.ogr else "r.external"
         elif self.ogr:
             cmd = "v.in.ogr"
         else:
@@ -2745,7 +2726,7 @@ class ElementSelect(wx.Choice):
         if elements:
             values = []
             valuesDesc = []
-            for idx in range(0, len(self.values)):
+            for idx in range(len(self.values)):
                 value = self.values[idx]
                 if value in elements:
                     values.append(value)
@@ -2805,9 +2786,9 @@ class OgrTypeSelect(wx.Panel):
         sel = self.ftype.GetSelection()
         if sel == 0:
             return "point"
-        elif sel == 1:
+        if sel == 1:
             return "line"
-        elif sel == 2:
+        if sel == 2:
             return "boundary"
 
 

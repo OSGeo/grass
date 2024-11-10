@@ -202,8 +202,7 @@ def main():
                     if name is None:
                         isvalid = False
                         break
-                    else:
-                        mapname_list.append(name)
+                    mapname_list.append(name)
 
             if isvalid:
                 entry = mapmatrizes[0][i]
@@ -225,7 +224,7 @@ def main():
     pymap = Vector(output)
     try:
         pymap.open("r")
-    except:
+    except Exception:
         dbif.close()
         gs.fatal(_("Unable to create vector map <%s>") % output)
 

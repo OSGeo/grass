@@ -779,10 +779,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         #  print(relations)
 
         tb = SpatioTemporalTopologyBuilder()
-        if spatial:
-            spatial = "2D"
-        else:
-            spatial = None
+        spatial = "2D" if spatial else None
 
         mapsA = self.get_registered_maps_as_objects(dbif=dbif)
         mapsB = stds.get_registered_maps_as_objects_with_gaps(dbif=dbif)
@@ -1429,10 +1426,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                         start1, end1 = maps[i].get_temporal_extent_as_tuple()
                         start2, end2 = maps[i + 1].get_temporal_extent_as_tuple()
                         end = start2
-                        if end1 is not None:
-                            start = end1
-                        else:
-                            start = start1
+                        start = end1 if end1 is not None else start1
 
                         map = self.get_new_map_instance(None)
 
@@ -1626,8 +1620,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             try:
                 if value.startswith("0"):
                     return value.lstrip("0")
-                else:
-                    return "{0:02d}".format(int(value))
+                return "{0:02d}".format(int(value))
             except ValueError:
                 return None
 

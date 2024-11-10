@@ -202,11 +202,10 @@ class Popen(subprocess.Popen):
 
             handle = win32api.OpenProcess(1, 0, self.pid)
             return win32api.TerminateProcess(handle, 0) != 0
-        else:
-            try:
-                os.kill(-self.pid, signal.SIGTERM)  # kill whole group
-            except OSError:
-                pass
+        try:
+            os.kill(-self.pid, signal.SIGTERM)  # kill whole group
+        except OSError:
+            pass
 
     if sys.platform == "win32":
 
@@ -312,9 +311,8 @@ def recv_some(p, t=0.1, e=1, tr=5, stderr=0):
         if r is None:
             if e:
                 raise Exception(message)
-            else:
-                break
-        elif r:
+            break
+        if r:
             y.append(decode(r))
         else:
             time.sleep(max((x - time.time()) / tr, 0))
@@ -416,7 +414,7 @@ class Command:
                             _("Error: ") + self.__GetError(),
                         )
                     )
-                elif rerr == sys.stderr:  # redirect message to sys
+                if rerr == sys.stderr:  # redirect message to sys
                     stderr.write("Execution failed: '%s'" % (" ".join(self.cmd)))
                     stderr.write(
                         "%sDetails:%s%s"
@@ -645,7 +643,7 @@ def _formatMsg(text):
     for line in text.splitlines():
         if len(line) == 0:
             continue
-        elif (
+        if (
             "GRASS_INFO_MESSAGE" in line
             or "GRASS_INFO_WARNING" in line
             or "GRASS_INFO_ERROR" in line
@@ -710,10 +708,7 @@ def RunCommand(
         kwargs["stdin"] = subprocess.PIPE
 
     # Do not change the environment, only a local copy.
-    if env:
-        env = env.copy()
-    else:
-        env = os.environ.copy()
+    env = env.copy() if env else os.environ.copy()
 
     if parent:
         env["GRASS_MESSAGE_FORMAT"] = "standard"
@@ -750,8 +745,7 @@ def RunCommand(
     if not read:
         if not getErrorMsg:
             return ret
-        else:
-            return ret, _formatMsg(stderr)
+        return ret, _formatMsg(stderr)
 
     if stdout:
         Debug.msg(3, "gcmd.RunCommand(): return stdout\n'%s'" % stdout)
