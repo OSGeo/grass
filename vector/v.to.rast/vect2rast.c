@@ -150,16 +150,16 @@ int vect_to_rast(const char *vector_map, const char *raster_map,
     }
 
     if (ftype & GV_POINT && !Vect_get_num_primitives(&Map, GV_POINT)) {
-	G_warning(_("No points selected from vector map <%s>"), vector_map);
+        G_warning(_("No points selected from vector map <%s>"), vector_map);
     }
     if (ftype & GV_LINE && !Vect_get_num_primitives(&Map, GV_LINE)) {
-	G_warning(_("No lines selected from vector map <%s>"), vector_map);
+        G_warning(_("No lines selected from vector map <%s>"), vector_map);
     }
     if (ftype & GV_BOUNDARY && !Vect_get_num_primitives(&Map, GV_BOUNDARY)) {
-	G_warning(_("No boundaries selected from vector map <%s>"), vector_map);
+        G_warning(_("No boundaries selected from vector map <%s>"), vector_map);
     }
     if (ftype & GV_CENTROID && !Vect_get_num_primitives(&Map, GV_CENTROID)) {
-	G_warning(_("No centroids selected from vector map <%s>"), vector_map);
+        G_warning(_("No centroids selected from vector map <%s>"), vector_map);
     }
 
     nlines = Vect_get_num_primitives(&Map, ftype);
