@@ -107,23 +107,23 @@ fi
 exec 3>&1 > >(tee mswindows/osgeo4w/package.log) 2>&1
 
 DLLS="
-	/mingw64/bin/zlib1.dll
+	/mingw64/bin/libblas.dll
 	/mingw64/bin/libbz2-1.dll
-	/mingw64/bin/libiconv-2.dll
+	/mingw64/bin/libfftw3-3.dll
+	/mingw64/bin/libgcc_s_seh-1.dll
 	/mingw64/bin/libgfortran-5.dll
+	/mingw64/bin/libgomp-1.dll
+	/mingw64/bin/libiconv-2.dll
 	/mingw64/bin/libintl-8.dll
+	/mingw64/bin/liblapack.dll
+	/mingw64/bin/libomp.dll
+	/mingw64/bin/libquadmath-0.dll
+	/mingw64/bin/libreadline8.dll
+	/mingw64/bin/libstdc++-6.dll
 	/mingw64/bin/libsystre-0.dll
 	/mingw64/bin/libtre-5.dll
 	/mingw64/bin/libwinpthread-1.dll
-	/mingw64/bin/libgomp-1.dll
-	/mingw64/bin/libomp.dll
-	/mingw64/bin/libstdc++-6.dll
-	/mingw64/bin/libgcc_s_seh-1.dll
-	/mingw64/bin/libfftw3-3.dll
-	/mingw64/bin/libblas.dll
-	/mingw64/bin/liblapack.dll
-	/mingw64/bin/libquadmath-0.dll
-	/mingw64/bin/libreadline8.dll
+	/mingw64/bin/zlib1.dll
 "
 
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
@@ -144,49 +144,48 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 
 	log configure
 	./configure \
+		--bindir=${OSGEO4W_ROOT_MSYS}/bin \
+		--enable-largefile \
+		--enable-shared \
 		--host=x86_64-w64-mingw32 \
-		--with-libs="${OSGEO4W_ROOT_MSYS}/lib ${OSGEO4W_ROOT_MSYS}/bin" \
-		--with-includes=${OSGEO4W_ROOT_MSYS}/include \
+		--includedir=${OSGEO4W_ROOT_MSYS}/include \
 		--libexecdir=${OSGEO4W_ROOT_MSYS}/bin \
 		--prefix=${OSGEO4W_ROOT_MSYS}/apps/grass \
-		--bindir=${OSGEO4W_ROOT_MSYS}/bin \
-		--includedir=${OSGEO4W_ROOT_MSYS}/include \
-		--with-opengl=windows \
-		--without-x \
-		--with-cxx \
-		--enable-shared \
-		--enable-largefile \
-		--with-fftw \
-		--with-freetype \
-		--with-freetype-includes=${OSGEO4W_ROOT_MSYS}/include/freetype2 \
-		--with-proj-share=${OSGEO4W_ROOT_MSYS}/share/proj \
-		--with-proj-includes=${OSGEO4W_ROOT_MSYS}/include \
-		--with-proj-libs=${OSGEO4W_ROOT_MSYS}/lib \
-		--with-postgres \
-		--with-postgres-includes=${OSGEO4W_ROOT_MSYS}/include \
-		--with-postgres-libs=${OSGEO4W_ROOT_MSYS}/lib \
-		--with-gdal=$PWD/mswindows/osgeo4w/gdal-config \
-		--with-geos=$PWD/mswindows/osgeo4w/geos-config \
-                --with-libpng=$PWD/mswindows/osgeo4w/libpng-config \
-		--with-sqlite \
-		--with-sqlite-includes=$OSGEO4W_ROOT_MSYS/include \
-		--with-sqlite-libs=$PWD/mswindows/osgeo4w/lib \
-		--with-regex \
-		--with-nls \
-		--with-zstd \
-		--with-odbc \
-		--with-netcdf=${OSGEO4W_ROOT_MSYS}/bin/nc-config \
 		--with-blas \
-		--with-lapack \
-		--with-lapack-includes=/mingw64/include \
-		--with-openmp \
+		--with-bzlib \
 		--with-cairo \
 		--with-cairo-includes=${OSGEO4W_ROOT_MSYS}/include \
 		--with-cairo-ldflags="-L$PWD/mswindows/osgeo4w/lib -lcairo" \
-		--with-bzlib \
+		--with-cxx \
+		--with-fftw \
+		--with-freetype \
+		--with-freetype-includes=${OSGEO4W_ROOT_MSYS}/include/freetype2 \
+		--with-gdal=$PWD/mswindows/osgeo4w/gdal-config \
+		--with-geos=$PWD/mswindows/osgeo4w/geos-config \
+		--with-includes=${OSGEO4W_ROOT_MSYS}/include \
+		--with-lapack \
+		--with-lapack-includes=/mingw64/include \
 		--with-liblas=$PWD/mswindows/osgeo4w/liblas-config \
+		--with-libpng=$PWD/mswindows/osgeo4w/libpng-config \
+		--with-libs="${OSGEO4W_ROOT_MSYS}/lib ${OSGEO4W_ROOT_MSYS}/bin" \
 		--with-netcdf=${OSGEO4W_ROOT_MSYS}/bin/nc-config \
-		--without-pdal
+		--with-nls \
+		--with-odbc \
+		--with-opengl=windows \
+		--with-openmp \
+		--with-postgres \
+		--with-postgres-includes=${OSGEO4W_ROOT_MSYS}/include \
+		--with-postgres-libs=${OSGEO4W_ROOT_MSYS}/lib \
+		--with-proj-includes=${OSGEO4W_ROOT_MSYS}/include \
+		--with-proj-libs=${OSGEO4W_ROOT_MSYS}/lib \
+		--with-proj-share=${OSGEO4W_ROOT_MSYS}/share/proj \
+		--with-regex \
+		--with-sqlite \
+		--with-sqlite-includes=$OSGEO4W_ROOT_MSYS/include \
+		--with-sqlite-libs=$PWD/mswindows/osgeo4w/lib \
+		--with-zstd \
+		--without-pdal \
+		--without-x
 
 	touch mswindows/osgeo4w/configure-stamp
 fi
