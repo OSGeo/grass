@@ -25,7 +25,7 @@ per-file-ignores =
     gui/scripts/d.wms.py: E501
     gui/wxpython/image2target/g.gui.image2target.py: E501
     gui/wxpython/photo2image/g.gui.photo2image.py: E501
-    gui/wxpython/psmap/*: E501, E722
+    gui/wxpython/psmap/*: E501
     gui/wxpython/vdigit/*: F841, E722, F405, F403
     gui/wxpython/animation/g.gui.animation.py: E501
     gui/wxpython/tplot/frame.py: F841, E722
@@ -75,7 +75,6 @@ per-file-ignores =
     python/grass/temporal/temporal_algebra.py: E722
     python/grass/temporal/temporal_granularity.py: E722
     python/grass/temporal/temporal_raster_base_algebra.py: E722
-    python/grass/temporal/temporal_topology_dataset_connector.py: E722
     # Current benchmarks/tests are changing sys.path before import.
     # Possibly, a different approach should be taken there anyway.
     python/grass/pygrass/tests/benchmark.py: E402, F821
