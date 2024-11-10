@@ -17,22 +17,22 @@ class TestRDistance(TestCase):
         cls.del_temp_region()
 
     def test_distance(self):
+        """Test distance calculation between roadsmajor and lakes."""
         module = SimpleModule("r.distance", map=("roadsmajor", "lakes"))
         self.assertModule(module)
 
         # Capture the output from r.distance
         result = module.outputs.stdout.strip().split("\n")
 
-        # Define the expected results (all lines)
         expected_results = ["1:39000:500:642750:222250:642750:222750"]
 
-        # Compare each line of actual result with expected results
         for i, component in enumerate(result):
             self.assertEqual(
                 component, expected_results[i], f"Mismatch at line {i + 1}"
             )
 
     def test_distance_o_flag(self):
+        """Test distance calculation with -o flag for overlap in lakes."""
         module = SimpleModule("r.distance", map=("lakes", "lakes"), flags="o")
         self.assertModule(module)
 
@@ -46,6 +46,7 @@ class TestRDistance(TestCase):
             )
 
     def test_distance_n_flag(self):
+        """Test distance calculation with -n flag for excluding zero distances."""
         module = SimpleModule("r.distance", map=("lakes", "roadsmajor"), flags="n")
         self.assertModule(module)
 
