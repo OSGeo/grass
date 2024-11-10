@@ -93,12 +93,12 @@ class TestEqualRamSegOutput(TestCase):
 
         outputs = outputs or self.outputs
 
-        flags = dict(ram="", seg="m")
-        kw = dict(
-            elevation=self.elevation,
-            threshold=1000,
-            overwrite=True,
-        )
+        flags = {"ram": "", "seg": "m"}
+        kw = {
+            "elevation": self.elevation,
+            "threshold": 1000,
+            "overwrite": True,
+        }
         kw.update(input_args)
         # run module with/without -m
         for n, f in flags.items():
@@ -138,7 +138,7 @@ class TestEqualRamSegOutput(TestCase):
             + "\n"
         )
 
-        self.assertTrue(all([all(p) for p in passes]), msg=msg)
+        self.assertTrue(all(all(p) for p in passes), msg=msg)
 
     def md_table(self, passes):
         columns = lambda l: "| " + (" | ".join(map(str, l))) + " |"
