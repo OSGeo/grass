@@ -2,3 +2,4 @@ mkdocs
 pymdown-extensions
 mkdocs-glightbox
 mkdocs-material
+pyyaml-env-tag
