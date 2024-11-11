@@ -632,6 +632,7 @@ int do_cum_mfd(void)
 
     G_free(dist_to_nbr);
     G_free(weight);
+    G_free(contour);
 
     return 0;
 }
