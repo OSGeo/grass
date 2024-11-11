@@ -105,16 +105,31 @@ PERMANENT
     specify paths where support files (etc/) may be found external to
     standard distribution.</dd>
 
+  <dt>GRASS_COMPATIBILITY_TEST</dt>
+  <dd>[libgis]<br>
+    By default it is not possible to run C modules with a libgis that has a
+    different <tt>GIS_H_VERSION</tt>, the compatibility test will exit with a
+    fatal error. Setting this variable to 0 (zero) with
+    <tt>GRASS_COMPATIBILITY_TEST=0</tt> allows the test to be passed with a
+    warning.</dd>
+
   <dt>GRASS_COMPRESSOR</dt>
   <dd>[libraster]<br>
     the compression method for new raster maps can be set with the
     environment variable GRASS_COMPRESSOR. Supported methods are RLE,
     ZLIB, LZ4, BZIP2, and ZSTD. The default is ZSTD if available,
     otherwise ZLIB, which can be changed with e.g.
-    <tt>GRASS_COMPRESSOR=ZSTD</tt></dd>, granted that GRASS has been
+    <tt>GRASS_COMPRESSOR=ZSTD</tt>, granted that GRASS has been
     compiled with the requested compressor. Compressors that are always
     available are RLE, ZLIB, and LZ4. The compressors BZIP2 and ZSTD
-    must be enabled when configuring GRASS for compilation.
+    must be enabled when configuring GRASS for compilation.</dd>
+
+  <dt>GRASS_CONFIG_DIR</dt>
+  <dd>[grass startup script]<br>
+    specifies root path for GRASS configuration directory.
+    If not specified, the default placement of the
+    configuration directory is used: <tt>$HOME</tt> on GNU/Linux,
+    <tt>$HOME/Library</tt> on Mac OS X, and <tt>%APPDATA%</tt> on MS Windows.</dd>
 
   <dt>GRASS_DB_ENCODING</dt>
   <dd>[various modules, wxGUI]<br>
@@ -377,7 +392,7 @@ PERMANENT
 
   <dt>TMPDIR, TEMP, TMP</dt>
   <dd>[Various GRASS GIS commands and wxGUI]<br>
-  <!-- what about Windows %TEMP% and http://trac.osgeo.org/grass/ticket/560#comment:21 ? -->
+  <!-- what about Windows %TEMP% and https://trac.osgeo.org/grass/ticket/560#comment:21 ? -->
 	The default wxGUI temporary directory is chosen from a
 	platform-dependent list, but the user can control the selection of
 	this directory by setting one of the TMPDIR, TEMP or TMP
@@ -524,10 +539,10 @@ g.gisenv set=DEBUG=0
   <dd>See <tt>GRASS_GUI</tt> environmental variable for details.</dd>
 
   <dt>LOCATION</dt>
-  <dd>full path to location directory</dd>
+  <dd>full path to project (previously called location) directory</dd>
 
   <dt>LOCATION_NAME</dt>
-  <dd>initial location name</dd>
+  <dd>initial project name</dd>
 
   <dt>MAPSET</dt>
   <dd>initial mapset</dd>

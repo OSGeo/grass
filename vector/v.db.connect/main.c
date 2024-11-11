@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *inopt, *dbdriver, *dbdatabase, *dbtable, *field_opt, *dbkey,
         *sep_opt;
-    struct Flag *overwrite, *print, *columns, *delete, *shell_print;
+    struct Flag *print, *columns, *delete, *shell_print;
     dbDriver *driver;
     dbString table_name;
     dbTable *table;
@@ -100,11 +100,6 @@ int main(int argc, char **argv)
     columns->description = _("Print types/names of table columns for specified "
                              "layer and exit");
     columns->guisection = _("Print");
-
-    overwrite = G_define_flag();
-    overwrite->key = 'o';
-    overwrite->description =
-        _("Overwrite connection parameter for certain layer");
 
     delete = G_define_flag();
     delete->key = 'd';
@@ -208,7 +203,7 @@ int main(int argc, char **argv)
                         }
                     }
                 }
-            }      /* end print */
+            } /* end print */
             else { /* columns */
                 char *database_novar;
 
@@ -246,8 +241,8 @@ int main(int argc, char **argv)
                 db_close_database(driver);
                 db_shutdown_driver(driver);
             }
-        }  /* end else num_dblinks */
-    }      /* end print/columns */
+        } /* end else num_dblinks */
+    } /* end print/columns */
     else { /* define new dbln settings or delete */
 
         if (delete->answer) {
@@ -271,9 +266,9 @@ int main(int argc, char **argv)
                 G_debug(3, "Vect_map_check_dblink = %d", ret);
                 if (ret == 1) {
                     /* field already defined */
-                    if (!overwrite->answer)
-                        G_fatal_error(_("Use -o to overwrite existing link "
-                                        "for layer <%d>"),
+                    if (!G_get_overwrite())
+                        G_fatal_error(_("Use --overwrite to overwrite "
+                                        "existing link for layer <%d>"),
                                       field);
                     else {
                         dbColumn *column;

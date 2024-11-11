@@ -42,6 +42,7 @@ def test_basic_stats(simple_dataset):
             map=simple_dataset.vector_name,
             column=simple_dataset.column_name,
             format="json",
+            env=simple_dataset.session.env,
         )
     )
     assert "statistics" in data
@@ -72,6 +73,7 @@ def test_extra_stats(simple_dataset):
             column=simple_dataset.column_name,
             flags="e",
             format="json",
+            env=simple_dataset.session.env,
         )
     )
     stats = data["statistics"]
@@ -93,6 +95,7 @@ def test_quartiles_default_percentile(simple_dataset):
             column=simple_dataset.column_name,
             flags="e",
             format="json",
+            env=simple_dataset.session.env,
         )
     )
     assert "statistics" in data
@@ -134,6 +137,7 @@ def test_percentiles(simple_dataset):
             flags="e",
             percentile=percentiles,
             format="json",
+            env=simple_dataset.session.env,
         )
     )
     stats = data["statistics"]
@@ -160,6 +164,7 @@ def test_fixed_values(simple_dataset):
             flags="e",
             percentile=percentiles,
             format="json",
+            env=simple_dataset.session.env,
         )
     )
     assert "statistics" in data

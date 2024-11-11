@@ -161,6 +161,24 @@ those for space-time raster datasets (check with <code>t.vect.list --help</code>
 </ul>
 
 <p>
+Similar to the <em>where</em> option, selected modules like
+<a href="t.rast.univar.html">t.rast.univar</a> support a
+<em>region_relation</em> option to limit computations to maps of
+the space time raster dataset that have a given spatial relation to the
+current computational region. Supported spatial relations are:
+<ul>
+ <li>"overlaps": process only maps that spatially overlap ("intersect")
+with the current computational region</li>
+ <li>"is_contained": process only maps that are fully within the current
+computational region</li>
+ <li>"contains": process only maps that contain (fully cover) the current
+computational region</li>
+</ul>
+Space time raster datasets may contain raster maps with varying spatial
+extent like for example series of scenes of satellite images. For such
+cases the <em>region_relation</em> option can be useful.
+
+<p>
 Moreover, there is <a href="v.what.strds.html">v.what.strds</a>, that
 uploads space-time raster dataset values at positions of vector points,
 to the attribute table of the vector map.
@@ -244,11 +262,11 @@ their raster pendants, but with 3D raster map layers:
 
 <ul>
 <li> Gebbert, S., Pebesma, E. 2014. <i>TGRASS: A temporal GIS for field based environmental modeling</i>.
-     Environmental Modelling &amp; Software 53, 1-12 (<a href="http://dx.doi.org/10.1016/j.envsoft.2013.11.001">DOI</a>)
+     Environmental Modelling &amp; Software 53, 1-12 (<a href="https://doi.org/10.1016/j.envsoft.2013.11.001">DOI</a>)
      - <a href="http://ifgi.uni-muenster.de/~epebe_01/tgrass.pdf">preprint PDF</a></li>
 
 <li> Gebbert, S., Pebesma, E. 2017. <i>The GRASS GIS temporal framework</i>. International Journal of
-     Geographical Information Science 31, 1273-1292 (<a href="http://dx.doi.org/10.1080/13658816.2017.1306862">DOI</a>)</li>
+     Geographical Information Science 31, 1273-1292 (<a href="https://doi.org/10.1080/13658816.2017.1306862">DOI</a>)</li>
 
 <li> Gebbert, S., Leppelt, T., Pebesma, E., 2019. <i>A topology based spatio-temporal map algebra for big data analysis</i>.
      Data 4, 86. (<a href="https://doi.org/10.3390/data4020086">DOI</a>)</li>

@@ -8,12 +8,11 @@ for details.
 
 :authors: Vaclav Petras
 """
-from __future__ import print_function
 
 import os
+from pathlib import Path
 import shutil
 import subprocess
-import sys
 import hashlib
 import uuid
 import unittest
@@ -35,13 +34,7 @@ from .checkers import (
 from .utils import safe_repr
 from .gutils import is_map_in_mapset
 
-pyversion = sys.version_info[0]
-if pyversion == 2:
-    from StringIO import StringIO
-else:
-    from io import StringIO
-
-    unicode = str
+from io import StringIO
 
 
 class TestCase(unittest.TestCase):
@@ -62,7 +55,7 @@ class TestCase(unittest.TestCase):
     readable_names = False  # prefer shorter but unreadable map and file names
 
     def __init__(self, methodName):
-        super(TestCase, self).__init__(methodName)
+        super().__init__(methodName)
         self.grass_modules = []
         self.supplementary_files = []
         # Python unittest doc is saying that strings use assertMultiLineEqual
@@ -184,9 +177,7 @@ class TestCase(unittest.TestCase):
                 first = first.replace(os.linesep, "\n")
             if os.linesep in second:
                 second = second.replace(os.linesep, "\n")
-        return super(TestCase, self).assertMultiLineEqual(
-            first=first, second=second, msg=msg
-        )
+        return super().assertMultiLineEqual(first=first, second=second, msg=msg)
 
     def assertLooksLike(self, actual, reference, msg=None):
         r"""Test that ``actual`` text is the same as ``reference`` with ellipses.
@@ -199,11 +190,9 @@ class TestCase(unittest.TestCase):
         # actual is in the system codec while the passed reference is in utf-8;
         # re-decode reference into the system codec for proper comparison
         reference = decode(encode(reference, "utf-8"))
+        self.assertTrue(isinstance(actual, str), ("actual argument is not a string"))
         self.assertTrue(
-            isinstance(actual, (str, unicode)), ("actual argument is not a string")
-        )
-        self.assertTrue(
-            isinstance(reference, (str, unicode)),
+            isinstance(reference, str),
             ("reference argument is not a string"),
         )
         if os.linesep != "\n" and os.linesep in actual:
@@ -497,7 +486,7 @@ class TestCase(unittest.TestCase):
         flag and few other, use `assertModuleKeyValue` for the full interface
         of arbitrary module.
         """
-        parameters = dict(map=map, column=column, flags="g")
+        parameters = {"map": map, "column": column, "flags": "g"}
         if layer:
             parameters.update(layer=layer)
         if type:
@@ -587,7 +576,7 @@ class TestCase(unittest.TestCase):
             self.fail(self._formatMessage(msg, stdmsg))
 
     def _get_detailed_message_about_no_map(self, name, type):
-        msg = "There is no map <{n}> of type <{t}>" " in the current mapset".format(
+        msg = "There is no map <{n}> of type <{t}> in the current mapset".format(
             n=name, t=type
         )
         related = call_module(
@@ -702,11 +691,8 @@ class TestCase(unittest.TestCase):
             at the end of file (as for example, Git or PEP8 requires).
         """
         self.assertFileExists(filename, msg=msg)
-        if text:
-            actual = text_file_md5(filename)
-        else:
-            actual = file_md5(filename)
-        if not actual == md5:
+        actual = text_file_md5(filename) if text else file_md5(filename)
+        if actual != md5:
             standardMsg = (
                 "File <{name}> does not have the right MD5 sum.\n"
                 "Expected is <{expected}>,"
@@ -747,10 +733,9 @@ class TestCase(unittest.TestCase):
         # and ensure uniqueness by add UUID
         if self.readable_names:
             return "tmp_" + self.id().replace(".", "_") + "_" + name
-        else:
-            # UUID might be overkill (and expensive) but it's safe and simple
-            # alternative is to create hash from the readable name
-            return "tmp_" + str(uuid.uuid4()).replace("-", "")
+        # UUID might be overkill (and expensive) but it's safe and simple
+        # alternative is to create hash from the readable name
+        return "tmp_" + str(uuid.uuid4()).replace("-", "")
 
     def _compute_difference_raster(self, first, second, name_part):
         """Compute difference of two rasters (first - second)
@@ -908,14 +893,14 @@ class TestCase(unittest.TestCase):
         If statistics is not given ``dict(min=-precision, max=precision)``
         is used.
 
-        Be ware – comparison is performed on overall statistics and thus
+        Beware - comparison is performed on overall statistics and thus
         differences in individual cell values not changing overall
         statistics might go unnoticed. Use `assertRastersEqual()`
         for cell to cell equivalence testing.
         """
         if statistics is None or sorted(statistics.keys()) == ["max", "min"]:
             if statistics is None:
-                statistics = dict(min=-precision, max=precision)
+                statistics = {"min": -precision, "max": precision}
             diff = self._compute_difference_raster(
                 reference, actual, "assertRastersNoDifference"
             )
@@ -955,7 +940,7 @@ class TestCase(unittest.TestCase):
 
         This method should not be used to test r.mapcalc or r.univar.
 
-        Be ware – comparison is performed on overall statistics and thus
+        Beware - comparison is performed on overall statistics and thus
         differences in individual cell values not changing overall
         statistics might go unnoticed. Use `assertRastersEqual()`
         for cell to cell equivalence testing.
@@ -982,7 +967,7 @@ class TestCase(unittest.TestCase):
         """
         if statistics is None or sorted(statistics.keys()) == ["max", "min"]:
             if statistics is None:
-                statistics = dict(min=-precision, max=precision)
+                statistics = {"min": -precision, "max": precision}
             diff = self._compute_difference_raster3d(
                 reference, actual, "assertRasters3dNoDifference"
             )
@@ -1239,8 +1224,9 @@ class TestCase(unittest.TestCase):
         """
         import difflib
 
-        fromlines = open(actual).readlines()
-        tolines = open(reference).readlines()
+        with open(actual) as f1, open(reference) as f2:
+            fromlines = f1.readlines()
+            tolines = f2.readlines()
         context_lines = 3  # number of context lines
         # TODO: filenames are set to "actual" and "reference", isn't it too general?
         # it is even more useful if map names or file names are some generated
@@ -1262,31 +1248,32 @@ class TestCase(unittest.TestCase):
         if remove_files:
             os.remove(actual)
             os.remove(reference)
-        stdmsg = (
-            "There is a difference between vectors when compared as" " ASCII files.\n"
-        )
+        stdmsg = "There is a difference between vectors when compared as ASCII files.\n"
 
-        output = StringIO()
         # TODO: there is a diff size constant which we can use
         # we are setting it unlimited but we can just set it large
         maxlines = 100
         i = 0
-        for line in diff:
-            if i >= maxlines:
-                break
-            output.write(line)
-            i += 1
-        stdmsg += output.getvalue()
-        output.close()
+        with StringIO() as output:
+            for line in diff:
+                if i >= maxlines:
+                    break
+                output.write(line)
+                i += 1
+            stdmsg += output.getvalue()
+
         # it seems that there is not better way of asking whether there was
         # a difference (always a iterator object is returned)
         if i > 0:
             # do HTML diff only if there is not too many lines
-            # TODO: this might be tough to do with some more sophisticated way of reports
+            # TODO: this might be tough to do with some more sophisticated way of
+            # reports
             if self.html_reports and i < maxlines:
-                # TODO: this might be here and somehow stored as file or done in reporter again if right information is stored
+                # TODO: this might be here and somehow stored as file or done in
+                # reporter again if right information is stored
                 # i.e., files not deleted or the whole strings passed
-                # alternative is make_table() which is the same but creates just a table not a whole document
+                # alternative is make_table() which is the same but creates just a table
+                # not a whole document
                 # TODO: all HTML files might be collected by the main reporter
                 # TODO: standardize the format of name of HTML file
                 # for one test id there is only one possible file of this name
@@ -1299,11 +1286,9 @@ class TestCase(unittest.TestCase):
                     "actual",
                     context=True,
                     numlines=context_lines,
+                    charset="utf-8",
                 )
-                htmldiff_file = open(htmldiff_file_name, "w")
-                for line in htmldiff:
-                    htmldiff_file.write(line)
-                htmldiff_file.close()
+                Path(htmldiff_file_name).write_text(htmldiff, encoding="utf-8")
 
             self.fail(self._formatMessage(msg, stdmsg))
 
@@ -1351,12 +1336,9 @@ class TestCase(unittest.TestCase):
                 errors = " The errors are:\n" + module.outputs.stderr
             else:
                 errors = " There were no error messages."
-            if module.outputs.stdout:
-                # this is not appropriate for translation but we don't want
-                # and don't need testing to be translated
-                got = "only whitespace."
-            else:
-                got = "nothing."
+            # This is not appropriate for translation but we don't want
+            # and don't need testing to be translated
+            got = "only whitespace." if module.outputs.stdout else "nothing."
             raise RuntimeError(
                 "Module call "
                 + module.get_python()
@@ -1369,7 +1351,8 @@ class TestCase(unittest.TestCase):
     # should be done by some other function
     # TODO: this should be the function used for valgrind or profiling or debug
     # TODO: it asserts the rc but it does much more, so testModule?
-    # TODO: do we need special function for testing module failures or just add parameter returncode=0?
+    # TODO: do we need special function for testing module failures or just add
+    # parameter returncode=0?
     # TODO: consider not allowing to call this method more than once
     # the original idea was to run this method just once for test method
     # but for "integration" tests  (script-like tests with more than one module)
@@ -1460,9 +1443,7 @@ def _module_from_parameters(module, **kwargs):
         if not isinstance(module, str):
             raise ValueError("module can be only string or PyGRASS Module")
         if isinstance(module, Module):
-            raise ValueError(
-                "module can be only string if other" " parameters are given"
-            )
+            raise ValueError("module can be only string if other parameters are given")
             # allow passing all parameters in one dictionary called parameters
         if list(kwargs.keys()) == ["parameters"]:
             kwargs = kwargs["parameters"]

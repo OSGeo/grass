@@ -30,7 +30,7 @@ try:
 except ImportError:
     pass
 
-import grass.script as grass
+import grass.script as gs
 
 
 class IClassVDigitWindow(VDigitWindow):
@@ -53,7 +53,7 @@ class IClassVDigitWindow(VDigitWindow):
         if not action:
             return
 
-        region = grass.region()
+        region = gs.region()
         e, n = self.Pixel2Cell(event.GetPosition())
         if not (
             (region["s"] <= n <= region["n"]) and (region["w"] <= e <= region["e"])
@@ -89,7 +89,7 @@ class IClassVDigitWindow(VDigitWindow):
             event.Skip()
             return
 
-        super(IClassVDigitWindow, self)._onLeftDown(event)
+        super()._onLeftDown(event)
 
     def _addRecord(self):
         return False
@@ -98,7 +98,7 @@ class IClassVDigitWindow(VDigitWindow):
         pass
 
     def _onRightUp(self, event):
-        super(IClassVDigitWindow, self)._onRightUp(event)
+        super()._onRightUp(event)
         self.parent.UpdateChangeState(changes=True)
 
     def GetCurrentCategory(self):
@@ -126,8 +126,7 @@ class IClassVDigit(IVDigit):
         return 1
 
     def _getNewFeaturesCat(self):
-        cat = self.mapWindow.GetCurrentCategory()
-        return cat
+        return self.mapWindow.GetCurrentCategory()
 
     def DeleteAreasByCat(self, cats):
         """Delete areas (centroid+boundaries) by categories
@@ -157,15 +156,9 @@ class IClassVDigit(IVDigit):
         poMapInfoNew = pointer(Map_info())
 
         if not tmp:
-            if update:
-                open_fn = Vect_open_update
-            else:
-                open_fn = Vect_open_new
+            open_fn = Vect_open_update if update else Vect_open_new
         else:
-            if update:
-                open_fn = Vect_open_tmp_update
-            else:
-                open_fn = Vect_open_tmp_new
+            open_fn = Vect_open_tmp_update if update else Vect_open_tmp_new
 
         if update:
             if open_fn(poMapInfoNew, name, "") == -1:

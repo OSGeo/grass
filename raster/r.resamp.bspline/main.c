@@ -718,12 +718,14 @@ int main(int argc, char *argv[])
             else {
                 if (observ)
                     G_free(observ);
+                if (observ_marked)
+                    G_free(observ_marked);
                 if (npoints == 0)
                     G_warning(_("No data within this subregion. "
                                 "Consider increasing the spline step."));
             }
         } /*! END WHILE; last_column = TRUE */
-    }     /*! END WHILE; last_row = TRUE */
+    } /*! END WHILE; last_row = TRUE */
 
     Segment_close(&in_seg); /* release memory  */
 

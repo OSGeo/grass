@@ -1,14 +1,5 @@
 #!/usr/bin/env python3
 
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 from os import listdir
 from os.path import join, isdir
 import shutil
@@ -123,11 +114,11 @@ def make_mapset(mapset, location=None, gisdbase=None):
     res = libgis.G_make_mapset(gisdbase, location, mapset)
     if res == -1:
         raise GrassError("Cannot create new mapset")
-    elif res == -2:
+    if res == -2:
         raise GrassError("Illegal name")
 
 
-class Gisdbase(object):
+class Gisdbase:
     """Return Gisdbase object. ::
 
         >>> from grass.script.core import gisenv
@@ -171,8 +162,7 @@ class Gisdbase(object):
         """
         if location in self.locations():
             return Location(location, self.name)
-        else:
-            raise KeyError("Location: %s does not exist" % location)
+        raise KeyError("Location: %s does not exist" % location)
 
     def __iter__(self):
         for loc in self.locations():
@@ -201,7 +191,7 @@ class Gisdbase(object):
         )
 
 
-class Location(object):
+class Location:
     """Location object ::
 
         >>> from grass.script.core import gisenv
@@ -243,8 +233,7 @@ class Location(object):
     def __getitem__(self, mapset):
         if mapset in self.mapsets():
             return Mapset(mapset)
-        else:
-            raise KeyError("Mapset: %s does not exist" % mapset)
+        raise KeyError("Mapset: %s does not exist" % mapset)
 
     def __iter__(self):
         lpath = self.path()
@@ -280,7 +269,7 @@ class Location(object):
             [...]
 
         """
-        mapsets = [mapset for mapset in self]
+        mapsets = [mapset for mapset in self]  # noqa: C416
         if permissions:
             mapsets = [
                 mapset
@@ -296,7 +285,7 @@ class Location(object):
         return join(self.gisdbase, self.name)
 
 
-class Mapset(object):
+class Mapset:
     """Mapset ::
 
         >>> from grass.script.core import gisenv
@@ -421,7 +410,7 @@ class Mapset(object):
         return join(self.gisdbase, self.location, self.name)
 
 
-class VisibleMapset(object):
+class VisibleMapset:
     """VisibleMapset object"""
 
     def __init__(self, mapset, location="", gisdbase=""):
@@ -434,13 +423,12 @@ class VisibleMapset(object):
         return repr(self.read())
 
     def __iter__(self):
-        for mapset in self.read():
-            yield mapset
+        yield from self.read()
 
     def read(self):
         """Return the mapsets in the search path"""
         try:
-            with open(self.spath, "r") as f:
+            with open(self.spath) as f:
                 lines = f.readlines()
                 if lines:
                     return [line.strip() for line in lines]

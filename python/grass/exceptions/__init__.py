@@ -70,14 +70,10 @@ class CalledModuleError(subprocess.CalledProcessError):
         :param errors: errors provided by the module (e.g., stderr)
         """
         # CalledProcessError has undocumented constructor
-        super(CalledModuleError, self).__init__(returncode, module)
-        if not module or module in code:
-            # No need to include module name if it is directly in code
-            # of if it is not set.
-            executed = code
-        else:
-            # Make sure module name is there if provided and not in code.
-            executed = f"{module} {code}"
+        super().__init__(returncode, module)
+        # No need to include module name if it is directly in code of if it is not set.
+        # Otherwise, make sure module name is there if provided and not in code.
+        executed = code if not module or module in code else f"{module} {code}"
         if errors:
             # We assume actual errors, e.g., captured stderr.
             err = _("See the following errors:\n{errors}").format(errors=errors)

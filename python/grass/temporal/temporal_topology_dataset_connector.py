@@ -15,11 +15,11 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
+
 import copy
 
 
-class TemporalTopologyDatasetConnector(object):
+class TemporalTopologyDatasetConnector:
     """This class implements a temporal topology access structure to connect
     temporal related datasets
 
@@ -55,6 +55,8 @@ class TemporalTopologyDatasetConnector(object):
                 map.print_info()
 
             start = start.next()
+
+    .. code-block:: python
 
          >>> import grass.temporal as tgis
          >>> tgis.init()
@@ -104,7 +106,8 @@ class TemporalTopologyDatasetConnector(object):
          finished=a@P
          >>> rlist = tmr.get_temporal_relations()
          >>> if "FINISHED" in rlist.keys():
-         ...    print(rlist["FINISHED"][0].get_id())
+         ...     print(rlist["FINISHED"][0].get_id())
+         ...
          a@P
 
     """
@@ -157,47 +160,47 @@ class TemporalTopologyDatasetConnector(object):
         relations = {}
         try:
             relations["equal"] = len(self._temporal_topology["EQUAL"])
-        except:
+        except KeyError:
             relations["equal"] = 0
         try:
             relations["follows"] = len(self._temporal_topology["FOLLOWS"])
-        except:
+        except KeyError:
             relations["follows"] = 0
         try:
             relations["precedes"] = len(self._temporal_topology["PRECEDES"])
-        except:
+        except KeyError:
             relations["precedes"] = 0
         try:
             relations["overlaps"] = len(self._temporal_topology["OVERLAPS"])
-        except:
+        except KeyError:
             relations["overlaps"] = 0
         try:
             relations["overlapped"] = len(self._temporal_topology["OVERLAPPED"])
-        except:
+        except KeyError:
             relations["overlapped"] = 0
         try:
             relations["during"] = len(self._temporal_topology["DURING"])
-        except:
+        except KeyError:
             relations["during"] = 0
         try:
             relations["contains"] = len(self._temporal_topology["CONTAINS"])
-        except:
+        except KeyError:
             relations["contains"] = 0
         try:
             relations["starts"] = len(self._temporal_topology["STARTS"])
-        except:
+        except KeyError:
             relations["starts"] = 0
         try:
             relations["started"] = len(self._temporal_topology["STARTED"])
-        except:
+        except KeyError:
             relations["started"] = 0
         try:
             relations["finishes"] = len(self._temporal_topology["FINISHES"])
-        except:
+        except KeyError:
             relations["finishes"] = 0
         try:
             relations["finished"] = len(self._temporal_topology["FINISHED"])
-        except:
+        except KeyError:
             relations["finished"] = 0
 
         return relations
@@ -504,7 +507,7 @@ class TemporalTopologyDatasetConnector(object):
         """Print information about this class in human readable style"""
 
         print(
-            " +-------------------- Temporal Topology -------------------------------------+"
+            " +-------------------- Temporal Topology -------------------------------------+"  # noqa: E501
         )
         #          0123456789012345678901234567890
         if self.next() is not None:

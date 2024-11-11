@@ -37,7 +37,7 @@ int read_colortable(void)
     int fontsize, cols, nodata, tickbar, discrete;
     double w, h, x, y, lw;
     int range_override;
-    double min, max, tmpD;
+    double min = 0.0, max = 0.0, tmpD = 0.0;
     int r, g, b, ret;
     PSCOLOR color;
 

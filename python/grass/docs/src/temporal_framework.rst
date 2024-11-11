@@ -290,7 +290,7 @@ to access its registered maps.
     strds = tgis.SpaceTimeRasterDataset(id)
 
     # Check if the space time raster dataset is in the temporal database
-    if strds.is_in_db(dbif=dbif) == False:
+    if strds.is_in_db(dbif=dbif) is False:
         dbif.close()
         gs.fatal(_("Space time %s dataset <%s> not found") % (
             strds.get_new_map_instance(None).get_type(), id))
@@ -355,14 +355,14 @@ for different space time datasets (raster, 3D raster and vector):
     dbif.connect()
 
     # First we check if the dataset is already in the database
-    if stds.is_in_db(dbif=dbif) and overwrite == False:
+    if stds.is_in_db(dbif=dbif) and overwrite is False:
         dbif.close()
         gs.fatal(_("Space time %s dataset <%s> is already in the database. "
                    "Use the overwrite flag.") %
                  (stds.get_new_map_instance(None).get_type(), name))
 
     # We delete the exiting dataset and create a new one in case we are allowed to overwrite it
-    if stds.is_in_db(dbif=dbif) and overwrite == True:
+    if stds.is_in_db(dbif=dbif) and overwrite is True:
         gs.warning(_("Overwrite space time %s dataset <%s> "
                      "and unregister all maps.") %
                    (stds.get_new_map_instance(None).get_type(), name))
@@ -399,7 +399,7 @@ Temporal shifting
 
     stds = tgis.dataset_factory(type, id)
 
-    if stds.is_in_db(dbif) == False:
+    if stds.is_in_db(dbif) is False:
         dbif.close()
         gs.fatal(_("Space time dataset <%s> not found in temporal database") % (id))
 
@@ -414,7 +414,7 @@ Temporal shifting
 References
 ----------
 
-* Gebbert, S., Pebesma, E., 2014. *TGRASS: A temporal GIS for field based environmental modeling*. Environmental Modelling & Software. 2(1):201-219. `doi:10.1016/j.envsoft.2013.11.001 <http://dx.doi.org/10.1016/j.envsoft.2013.11.001>`_
+* Gebbert, S., Pebesma, E., 2014. *TGRASS: A temporal GIS for field based environmental modeling*. Environmental Modelling & Software. 2(1):201-219. `doi:10.1016/j.envsoft.2013.11.001 <https://doi.org/10.1016/j.envsoft.2013.11.001>`_
 * `TGRASS related articles in the GRASS GIS Wiki <https://grasswiki.osgeo.org/wiki/Temporal_data_processing>`_
 * Supplementary material of the publication *The GRASS GIS Temporal Framework*
   to be published in

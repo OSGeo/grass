@@ -21,10 +21,7 @@ import subprocess
 from datetime import datetime
 
 pgm = sys.argv[1]
-if len(sys.argv) > 1:
-    year = sys.argv[2]
-else:
-    year = str(datetime.now().year)
+year = sys.argv[2] if len(sys.argv) > 1 else str(datetime.now().year)
 
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.txt" % pgm
@@ -36,7 +33,7 @@ footer_index = string.Template(
 
 :doc:`Main Page <index>` - :doc:`${INDEXNAMECAP} index <${INDEXNAME}>` - :doc:`Full index <full_index>`
 2003-${YEAR} `GRASS Development Team <https://grass.osgeo.org>`_
-"""
+"""  # noqa: E501
 )
 
 footer_noindex = string.Template(
@@ -54,7 +51,7 @@ def read_file(name):
         s = f.read()
         f.close()
         return s
-    except IOError:
+    except OSError:
         return ""
 
 
@@ -63,7 +60,7 @@ replacement = {
     "`* `": "`",
     ">`_*": ">`_",
     ">`_,*": ">`_,",
-    '``*\ "': '``"',
+    r'``*\ "': '``"',
     "***": "**",
 }
 
@@ -81,9 +78,8 @@ tmp_data = read_file(tmp_file)
 if tmp_data:
     sys.stdout.write(tmp_data)
 
-process = subprocess.Popen(
-    "pandoc -s -r html %s -w rst" % src_file, shell=True, stdout=subprocess.PIPE
-)
+arguments = ["pandoc", "-s", "-r", "html", src_file, "-w", "rst"]
+process = subprocess.Popen(arguments, stdout=subprocess.PIPE)
 html_text = process.communicate()[0]
 if html_text:
     for k, v in replacement.iteritems():

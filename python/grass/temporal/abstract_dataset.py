@@ -9,14 +9,14 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
+from __future__ import annotations
+
 from abc import ABCMeta, abstractmethod
-from .core import (
-    get_tgis_message_interface,
-    init_dbif,
-    get_current_mapset,
-)
-from .temporal_topology_dataset_connector import TemporalTopologyDatasetConnector
+
+from .core import get_current_mapset, get_tgis_message_interface, init_dbif
 from .spatial_topology_dataset_connector import SpatialTopologyDatasetConnector
+from .temporal_topology_dataset_connector import TemporalTopologyDatasetConnector
 
 ###############################################################################
 
@@ -78,7 +78,7 @@ class AbstractDataset(
         """
         if self.is_temporal_topology_build() and not self.is_spatial_topology_build():
             return self.get_number_of_temporal_relations()
-        elif self.is_spatial_topology_build() and not self.is_temporal_topology_build():
+        if self.is_spatial_topology_build() and not self.is_temporal_topology_build():
             self.get_number_of_spatial_relations()
         else:
             return (
@@ -303,7 +303,7 @@ class AbstractDataset(
         """
         return self.relative_time.get_unit()
 
-    def check_relative_time_unit(self, unit):
+    def check_relative_time_unit(self, unit) -> bool:
         """Check if unit is of type  year(s), month(s), day(s), hour(s),
         minute(s) or second(s)
 
@@ -325,9 +325,7 @@ class AbstractDataset(
             "second",
             "seconds",
         ]
-        if unit not in units:
-            return False
-        return True
+        return not unit not in units
 
     def get_temporal_type(self):
         """Return the temporal type of this dataset
@@ -508,25 +506,23 @@ class AbstractDataset(
             dbif.close()
         return statement
 
-    def is_time_absolute(self):
+    def is_time_absolute(self) -> bool | None:
         """Return True in case the temporal type is absolute
 
         :return: True if temporal type is absolute, False otherwise
         """
         if "temporal_type" in self.base.D:
             return self.base.get_ttype() == "absolute"
-        else:
-            return None
+        return None
 
-    def is_time_relative(self):
+    def is_time_relative(self) -> bool | None:
         """Return True in case the temporal type is relative
 
         :return: True if temporal type is relative, False otherwise
         """
         if "temporal_type" in self.base.D:
             return self.base.get_ttype() == "relative"
-        else:
-            return None
+        return None
 
     def get_temporal_extent(self):
         """Return the temporal extent of the correct internal type"""
@@ -578,7 +574,7 @@ class AbstractDataset(
 ###############################################################################
 
 
-class AbstractDatasetComparisonKeyStartTime(object):
+class AbstractDatasetComparisonKeyStartTime:
     """This comparison key can be used to sort lists of abstract datasets
     by start time
 
@@ -630,7 +626,7 @@ class AbstractDatasetComparisonKeyStartTime(object):
 ###############################################################################
 
 
-class AbstractDatasetComparisonKeyEndTime(object):
+class AbstractDatasetComparisonKeyEndTime:
     """This comparison key can be used to sort lists of abstract datasets
     by end time
 

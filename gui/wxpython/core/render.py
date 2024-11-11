@@ -22,6 +22,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+from pathlib import Path
 import sys
 import glob
 import math
@@ -60,7 +61,7 @@ def get_tempfile_name(suffix, create=False):
     return name
 
 
-class Layer(object):
+class Layer:
     """Virtual class which stores information about layers (map layers and
     overlays) of the map composition.
 
@@ -99,10 +100,7 @@ class Layer(object):
         if mapfile:
             self.mapfile = mapfile
         else:
-            if ltype == "overlay":
-                tempfile_sfx = ".png"
-            else:
-                tempfile_sfx = ".ppm"
+            tempfile_sfx = ".png" if ltype == "overlay" else ".ppm"
 
             self.mapfile = get_tempfile_name(suffix=tempfile_sfx)
 
@@ -118,7 +116,7 @@ class Layer(object):
         self.name = name
 
         if self.type == "command":
-            self.cmd = list()
+            self.cmd = []
             for c in cmd:
                 self.cmd.append(cmdlist_to_tuple(c))
         else:
@@ -228,10 +226,8 @@ class Layer(object):
                     scmd.append(utils.GetCmdString(c))
 
                 return ";".join(scmd)
-            else:
-                return utils.GetCmdString(self.cmd)
-        else:
-            return self.cmd
+            return utils.GetCmdString(self.cmd)
+        return self.cmd
 
     def GetType(self):
         """Get map layer type"""
@@ -263,14 +259,13 @@ class Layer(object):
         """
         if fullyQualified:
             return self.name
-        else:
-            if "@" in self.name:
-                return {
-                    "name": self.name.split("@")[0],
-                    "mapset": self.name.split("@")[1],
-                }
-            else:
-                return {"name": self.name, "mapset": ""}
+
+        if "@" in self.name:
+            return {
+                "name": self.name.split("@")[0],
+                "mapset": self.name.split("@")[1],
+            }
+        return {"name": self.name, "mapset": ""}
 
     def GetRenderedSize(self):
         """Get currently rendered size of layer as tuple, None if not rendered"""
@@ -284,11 +279,9 @@ class Layer(object):
         """Check if layer is hidden"""
         return self.hidden
 
-    def IsRendered(self):
+    def IsRendered(self) -> bool:
         """!Check if layer was rendered (if the image file exists)"""
-        if os.path.exists(self.mapfile):
-            return True
-        return False
+        return bool(os.path.exists(self.mapfile))
 
     def SetType(self, ltype):
         """Set layer type"""
@@ -368,7 +361,7 @@ class MapLayer(Layer):
     def __init__(self, *args, **kwargs):
         """Represents map layer in the map canvas"""
         Layer.__init__(self, *args, **kwargs)
-        if self.type in ("vector", "thememap"):
+        if self.type in {"vector", "thememap"}:
             self._legrow = get_tempfile_name(suffix=".legrow", create=True)
         else:
             self._legrow = ""
@@ -439,7 +432,7 @@ class RenderLayerMgr(wx.EvtHandler):
         env_cmd = env.copy()
         env_cmd.update(self._render_env)
         env_cmd["GRASS_RENDER_FILE"] = self.layer.mapfile
-        if self.layer.GetType() in ("vector", "thememap"):
+        if self.layer.GetType() in {"vector", "thememap"}:
             if not self.layer._legrow:
                 self.layer._legrow = grass.tempfile(create=True)
             if os.path.isfile(self.layer._legrow):
@@ -464,8 +457,7 @@ class RenderLayerMgr(wx.EvtHandler):
         stdout, stderr = p.communicate()
         if p.returncode:
             return grass.decode(stderr)
-        else:
-            return None
+        return None
 
     def Abort(self):
         """Abort rendering process"""
@@ -668,11 +660,9 @@ class RenderMapMgr(wx.EvtHandler):
 
         Make image composiotion, emits updateMap event.
         """
-        stopTime = time.time()
-
-        maps = list()
-        masks = list()
-        opacities = list()
+        maps = []
+        masks = []
+        opacities = []
 
         # TODO: g.pnmcomp is now called every time
         # even when only overlays are rendered
@@ -708,7 +698,7 @@ class RenderMapMgr(wx.EvtHandler):
                 self._rendering = False
                 if wx.IsBusy():
                     wx.EndBusyCursor()
-                raise GException(_("Rendering failed: %s" % msg))
+                raise GException(_("Rendering failed: %s") % msg)
 
         stop = time.time()
         Debug.msg(
@@ -721,14 +711,13 @@ class RenderMapMgr(wx.EvtHandler):
         new_legend = []
         with open(self.Map.legfile, "w") as outfile:
             for layer in reversed(self.layers):
-                if layer.GetType() not in ("vector", "thememap"):
+                if layer.GetType() not in {"vector", "thememap"}:
                     continue
 
                 if os.path.isfile(layer._legrow) and not layer.hidden:
-                    with open(layer._legrow) as infile:
-                        line = infile.read()
-                        outfile.write(line)
-                        new_legend.append(line)
+                    line = Path(layer._legrow).read_text()
+                    outfile.write(line)
+                    new_legend.append(line)
 
         self._rendering = False
         if wx.IsBusy():
@@ -798,10 +787,7 @@ class RenderMapMgr(wx.EvtHandler):
             stText += "..."
 
         if self.progressInfo["range"] != len(self.progressInfo["rendered"]):
-            if stText:
-                stText = _("Rendering & ") + stText
-            else:
-                stText = _("Rendering...")
+            stText = _("Rendering & ") + stText if stText else _("Rendering...")
 
         self.updateProgress.emit(
             range=self.progressInfo["range"],
@@ -816,7 +802,7 @@ class RenderMapMgr(wx.EvtHandler):
         self.renderingFailed.emit(cmd=cmd, error=error)
 
 
-class Map(object):
+class Map:
     def __init__(self, gisrc=None):
         """Map composition (stack of map layers and overlays)
 
@@ -824,16 +810,16 @@ class Map(object):
         """
         Debug.msg(1, "Map.__init__(): gisrc=%s" % gisrc)
         # region/extent settings
-        self.wind = dict()  # WIND settings (wind file)
-        self.region = dict()  # region settings (g.region)
+        self.wind = {}  # WIND settings (wind file)
+        self.region = {}  # region settings (g.region)
         self.width = 640  # map width
         self.height = 480  # map height
 
         # list of layers
-        self.layers = list()  # stack of available GRASS layer
+        self.layers = []  # stack of available GRASS layer
 
-        self.overlays = list()  # stack of available overlays
-        self.ovlookup = dict()  # lookup dictionary for overlay items and overlays
+        self.overlays = []  # stack of available overlays
+        self.ovlookup = {}  # lookup dictionary for overlay items and overlays
 
         # path to external gisrc
         self.gisrc = gisrc
@@ -866,10 +852,10 @@ class Map(object):
 
     def _projInfo(self):
         """Return region projection and map units information"""
-        projinfo = dict()
+        projinfo = {}
         if not grass.find_program("g.proj", "--help"):
             sys.exit(
-                _("GRASS tool '%s' not found. Unable to start map " "display window.")
+                _("GRASS tool '%s' not found. Unable to start map display window.")
                 % "g.proj"
             )
         env = os.environ.copy()
@@ -882,8 +868,8 @@ class Map(object):
 
         for line in ret.splitlines():
             if ":" in line:
-                key, val = map(lambda x: x.strip(), line.split(":", 1))
-                if key in ["units"]:
+                key, val = (x.strip() for x in line.split(":", 1))
+                if key == "units":
                     val = val.lower()
                 projinfo[key] = val
             elif "XY location (unprojected)" in line:
@@ -901,14 +887,14 @@ class Map(object):
             env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], "WIND"
         )
         try:
-            windfile = open(filename, "r")
-        except IOError as e:
+            windfile = open(filename)
+        except OSError as e:
             sys.exit(
                 _("Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n")
                 % {"file": filename, "ret": e}
             )
 
-        for line in windfile.readlines():
+        for line in windfile:
             line = line.strip()
             try:
                 key, value = line.split(":", 1)
@@ -1049,7 +1035,8 @@ class Map(object):
         :param rast: list of raster maps
         :param zoom: zoom to raster map (ignore NULLs)
         :param vect: list of vector maps
-        :param rast3d: 3d raster map (not list, no support of multiple 3d rasters in g.region)
+        :param rast3d: 3d raster map (not list, no support of multiple 3d rasters in
+                       g.region)
         :param regionName:  named region or None
         :param n,s,e,w: force extent
         :param default: force default region settings
@@ -1197,32 +1184,32 @@ class Map(object):
                 if key == "north":
                     grass_region += "north: %s; " % (region["n"])
                     continue
-                elif key == "south":
+                if key == "south":
                     grass_region += "south: %s; " % (region["s"])
                     continue
-                elif key == "east":
+                if key == "east":
                     grass_region += "east: %s; " % (region["e"])
                     continue
-                elif key == "west":
+                if key == "west":
                     grass_region += "west: %s; " % (region["w"])
                     continue
-                elif key == "e-w resol":
+                if key == "e-w resol":
                     grass_region += "e-w resol: %.10f; " % (region["ewres"])
                     continue
-                elif key == "n-s resol":
+                if key == "n-s resol":
                     grass_region += "n-s resol: %.10f; " % (region["nsres"])
                     continue
-                elif key == "cols":
+                if key == "cols":
                     if windres:
                         continue
                     grass_region += "cols: %d; " % region["cols"]
                     continue
-                elif key == "rows":
+                if key == "rows":
                     if windres:
                         continue
                     grass_region += "rows: %d; " % region["rows"]
                     continue
-                elif key == "n-s resol3" and windres3:
+                if key == "n-s resol3" and windres3:
                     grass_region += "n-s resol3: %f; " % (region["nsres3"])
                 elif key == "e-w resol3" and windres3:
                     grass_region += "e-w resol3: %f; " % (region["ewres3"])
@@ -1241,7 +1228,7 @@ class Map(object):
 
             return grass_region
 
-        except:
+        except Exception:
             return None
 
     def GetListOfLayers(
@@ -1256,7 +1243,8 @@ class Map(object):
         """Returns list of layers of selected properties or list of
         all layers.
 
-        :param ltype: layer type, e.g. raster/vector/wms/overlay (value or tuple of values)
+        :param ltype: layer type, e.g. raster/vector/wms/overlay (value or tuple of
+                      values)
         :param mapset: all layers from given mapset (only for maplayers)
         :param name: all layers with given name
         :param active: only layers with 'active' attribute set to True or False
@@ -1266,16 +1254,8 @@ class Map(object):
         :return: list of selected layers
         """
         selected = []
-
-        if isinstance(ltype, str):
-            one_type = True
-        else:
-            one_type = False
-
-        if one_type and ltype == "overlay":
-            llist = self.overlays
-        else:
-            llist = self.layers
+        one_type = bool(isinstance(ltype, str))
+        llist = self.overlays if one_type and ltype == "overlay" else self.layers
 
         # ["raster", "vector", "wms", ... ]
         for layer in llist:
@@ -1338,10 +1318,7 @@ class Map(object):
         self.renderMgr.Render(force, windres)
 
     def _addLayer(self, layer, pos=-1):
-        if layer.type == "overlay":
-            llist = self.overlays
-        else:
-            llist = self.layers
+        llist = self.overlays if layer.type == "overlay" else self.layers
 
         # add maplayer to the list of layers
         if pos > -1:
@@ -1432,15 +1409,11 @@ class Map(object):
         """
         Debug.msg(3, "Map.DeleteLayer(): name=%s" % layer.name)
 
-        if overlay:
-            list = self.overlays
-        else:
-            list = self.layers
+        _list = self.overlays if overlay else self.layers
 
-        if layer in list:
+        if layer in _list:
             if layer.mapfile:
-                base = os.path.split(layer.mapfile)[0]
-                mapfile = os.path.split(layer.mapfile)[1]
+                base, mapfile = os.path.split(layer.mapfile)
                 tempbase = mapfile.split(".")[0]
                 if base == "" or tempbase == "":
                     return None
@@ -1451,11 +1424,11 @@ class Map(object):
                 for f in glob.glob(basefile):
                     os.remove(f)
 
-            if layer.GetType() in ("vector", "thememap"):
+            if layer.GetType() in {"vector", "thememap"}:
                 if os.path.isfile(layer._legrow):
                     os.remove(layer._legrow)
 
-            list.remove(layer)
+            _list.remove(layer)
 
             self.layerRemoved.emit(layer=layer)
             return layer
@@ -1590,13 +1563,10 @@ class Map(object):
         :return: layer index
         :return: -1 if layer not found
         """
-        if overlay:
-            list = self.overlays
-        else:
-            list = self.layers
+        _list = self.overlays if overlay else self.layers
 
-        if layer in list:
-            return list.index(layer)
+        if layer in _list:
+            return _list.index(layer)
 
         return -1
 
@@ -1694,8 +1664,7 @@ class Map(object):
         if not list:
             if len(ovl) != 1:
                 return None
-            else:
-                return ovl[0]
+            return ovl[0]
 
         return ovl
 

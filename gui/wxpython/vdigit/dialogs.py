@@ -19,7 +19,6 @@ This program is free software under the GNU General Public License
 """
 
 import copy
-import six
 
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -425,17 +424,14 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         newfid = -1
 
         # add/delete new category
-        for action, catsCurr in six.iteritems(check):
+        for action, catsCurr in check.items():
             for layer in catsCurr[0].keys():
                 catList = []
                 for cat in catsCurr[0][layer]:
                     if layer not in catsCurr[1].keys() or cat not in catsCurr[1][layer]:
                         catList.append(cat)
                 if catList != []:
-                    if action == "catadd":
-                        add = True
-                    else:
-                        add = False
+                    add = action == "catadd"
 
                     newfid = self.digit.SetLineCats(fid, layer, catList, add)
                     if len(self.cats.keys()) == 1:
@@ -592,7 +588,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdi
                 self.SetItem(index, 1, str(cat))
                 self.SetItemData(index, i)
                 itemData[i] = (str(layer), str(cat))
-                i = i + 1
+                i += 1
 
         if not update:
             self.SetColumnWidth(0, 100)
@@ -775,4 +771,3 @@ class CheckListFeature(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMi
 
     def OnCheckItem(self, index, flag):
         """Mapset checked/unchecked"""
-        pass

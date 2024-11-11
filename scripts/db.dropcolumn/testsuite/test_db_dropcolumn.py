@@ -35,7 +35,7 @@ class TestDbDropColumn(TestCase):
 
         m = SimpleModule("db.columns", table=self.mapName)
         self.assertModule(m)
-        self.assertRegexpMatches(decode(m.outputs.stdout), self.colName)
+        self.assertRegex(decode(m.outputs.stdout), self.colName)
 
     def test_drop_column_with_force(self):
         """Drop column with force, the column should not be in the table"""
@@ -46,7 +46,7 @@ class TestDbDropColumn(TestCase):
 
         m = SimpleModule("db.columns", table=self.mapName)
         self.assertModule(m)
-        self.assertNotRegexpMatches(decode(m.outputs.stdout), self.colName)
+        self.assertNotRegex(decode(m.outputs.stdout), self.colName)
 
 
 if __name__ == "__main__":

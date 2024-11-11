@@ -16,7 +16,7 @@ for details.
     >>> p = tgis.TemporalVectorAlgebraLexer()
     >>> p.build()
     >>> p.debug = True
-    >>> expression =  'E = A : B ^ C : D'
+    >>> expression = "E = A : B ^ C : D"
     >>> p.test(expression)
     E = A : B ^ C : D
     LexToken(NAME,'E',1,0)
@@ -28,7 +28,7 @@ for details.
     LexToken(NAME,'C',1,12)
     LexToken(T_SELECT,':',1,14)
     LexToken(NAME,'D',1,16)
-    >>> expression =  'E = buff_a(A, 10)'
+    >>> expression = "E = buff_a(A, 10)"
     >>> p.test(expression)
     E = buff_a(A, 10)
     LexToken(NAME,'E',1,0)
@@ -41,26 +41,26 @@ for details.
     LexToken(RPAREN,')',1,16)
 
 """
-from __future__ import print_function
 
 try:
-    import ply.yacc as yacc
+    from ply import yacc
 except ImportError:
     pass
 
+import copy
+
 import grass.pygrass.modules as pygrass
 
-import copy
+from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
+from .core import get_current_mapset, init_dbif
+from .open_stds import open_new_stds
+from .space_time_datasets import VectorDataset
+from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .temporal_algebra import (
+    GlobalTemporalVar,
     TemporalAlgebraLexer,
     TemporalAlgebraParser,
-    GlobalTemporalVar,
 )
-from .core import init_dbif, get_current_mapset
-from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
-from .open_stds import open_new_stds
-from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
-from .space_time_datasets import VectorDataset
 
 
 class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
@@ -96,7 +96,7 @@ class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
     t_XOR = r"\^"
     t_NOT = r"\~"
     # t_T_OVERLAY_OPERATOR = r'\{([a-zA-Z\|]+[,])?([\|&+=]?[\|&+=\^\~])\}'
-    t_T_OVERLAY_OPERATOR = r"\{[\|&+\^\~][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"
+    t_T_OVERLAY_OPERATOR = r"\{[\|&+\^\~][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"  # noqa: E501
 
     # Parse symbols
     def temporal_symbol(self, t):
@@ -153,16 +153,16 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
     def parse(self, expression, basename=None, overwrite=False):
         # Check for space time dataset type definitions from temporal algebra
-        l = TemporalVectorAlgebraLexer()
-        l.build()
-        l.lexer.input(expression)
+        lx = TemporalVectorAlgebraLexer()
+        lx.build()
+        lx.lexer.input(expression)
 
         while True:
-            tok = l.lexer.token()
+            tok = lx.lexer.token()
             if not tok:
                 break
 
-            if tok.type == "STVDS" or tok.type == "STRDS" or tok.type == "STR3DS":
+            if tok.type in {"STVDS", "STRDS", "STR3DS"}:
                 raise SyntaxError("Syntax error near '%s'" % (tok.type))
 
         self.lexer = TemporalVectorAlgebraLexer()
@@ -232,19 +232,6 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             "STARTED",
             "FINISHED",
         ]
-        complementdict = {
-            "EQUAL": "EQUAL",
-            "FOLLOWS": "PRECEDES",
-            "PRECEDES": "FOLLOWS",
-            "OVERLAPS": "OVERLAPPED",
-            "OVERLAPPED": "OVERLAPS",
-            "DURING": "CONTAINS",
-            "CONTAINS": "DURING",
-            "STARTS": "STARTED",
-            "STARTED": "STARTS",
-            "FINISHES": "FINISHED",
-            "FINISHED": "FINISHES",
-        }
         resultdict = {}
         # Check if given temporal relation are valid.
         for topo in topolist:
@@ -291,9 +278,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         resultlist = resultdict.values()
 
         # Sort list of maps chronological.
-        resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
-
-        return resultlist
+        return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
     def overlay_cmd_value(self, map_i, tbrelations, function, topolist=["EQUAL"]):
         """Function to evaluate two map lists by given overlay operator.
@@ -306,7 +291,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         :return: Map object with command list with  operators that has been
                       evaluated by implicit aggregration.
         """
-        # Build comandlist list with elements from related maps and given relation operator.
+        # Build comandlist list with elements from related maps and given relation
+        # operator.
         resultlist = []
         # Define overlay operation dictionary.
         overlaydict = {"&": "and", "|": "or", "^": "xor", "~": "not", "+": "disor"}
@@ -315,14 +301,14 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         mapainput = map_i.get_id()
         # Append command list of given map to result command list.
         if "cmd_list" in dir(map_i):
-            resultlist = resultlist + map_i.cmd_list
+            resultlist += map_i.cmd_list
         for topo in topolist:
             if topo.upper() in tbrelations.keys():
                 relationmaplist = tbrelations[topo.upper()]
                 for relationmap in relationmaplist:
                     # Append command list of given map to result command list.
                     if "cmd_list" in dir(relationmap):
-                        resultlist = resultlist + relationmap.cmd_list
+                        resultlist += relationmap.cmd_list
                     # Generate an intermediate name
                     name = self.generate_map_name()
                     # Put it into the removalbe map list
@@ -379,7 +365,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             map_new = self.generate_new_map(
                 base_map=map_i, bool_op="and", copy=True, rename=False, remove=True
             )
-            # Combine temporal and spatial extents of intermediate map with related maps.
+            # Combine temporal and spatial extents of intermediate map with related maps
             for topo in topolist:
                 if topo in tbrelations.keys():
                     for map_j in tbrelations[topo]:
@@ -400,7 +386,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                         if returncode == 0:
                             break
                         # Append map to result map list.
-                        elif returncode == 1:
+                        if returncode == 1:
                             # resultlist.append(map_new)
                             resultdict[map_new.get_id()] = map_new
                     if returncode == 0:
@@ -410,8 +396,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             #    resultlist.append(map_new)
         # Get sorted map objects as values from result dictionary.
         resultlist = resultdict.values()
-        resultlist = sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
-        return resultlist
+        return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
     def p_statement_assign(self, t):
         # The expression should always return a list of maps.
@@ -446,20 +431,22 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                         # Execute command list.
                         for cmd in map_i.cmd_list:
                             try:
-                                # We need to check if the input maps have areas in case of v.overlay
-                                # otherwise v.overlay will break
+                                # We need to check if the input maps have areas in case
+                                # of v.overlay. Otherwise v.overlay will break.
                                 if cmd.name == "v.overlay":
                                     for name in (
                                         cmd.inputs["ainput"].value,
                                         cmd.inputs["binput"].value,
                                     ):
-                                        # self.msgr.message("Check if map <" + name + "> exists")
+                                        # self.msgr.message("Check if map <" + name +
+                                        # "> exists")
                                         if name.find("@") < 0:
                                             name = name + "@" + get_current_mapset()
                                         tmp_map = map_i.get_new_instance(name)
                                         if not tmp_map.map_exists():
                                             raise Exception
-                                        # self.msgr.message("Check if map <" + name + "> has areas")
+                                        # self.msgr.message("Check if map <" + name +
+                                        # "> has areas")
                                         tmp_map.load()
                                         if tmp_map.metadata.get_number_of_areas() == 0:
                                             raise Exception
@@ -503,7 +490,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             register_list.append(map_i)
                     else:
                         # Test if temporal extents have been changed by temporal
-                        # relation operators (i|r). This is a code copy from temporal_algebra.py
+                        # relation operators (i|r). This is a code copy from
+                        # temporal_algebra.py
                         map_i_extent = map_i.get_temporal_extent_as_tuple()
                         map_test = map_i.get_new_instance(map_i.get_id())
                         map_test.select(dbif)
@@ -558,11 +546,12 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                                 # Update map in temporal database.
                                 map_i.update_all(dbif=dbif)
                             elif map_i.is_in_db(dbif=dbif) and self.overwrite is False:
-                                # Raise error if map exists and no overwrite flag is given.
+                                # Raise error if map exists and no overwrite flag is
+                                # given.
                                 self.msgr.fatal(
                                     _(
-                                        "Error vector map %s exist in temporal database. "
-                                        "Use overwrite flag.  : \n%s"
+                                        "Error vector map %s exist in temporal "
+                                        "database. Use overwrite flag.  : \n%s"
                                     )
                                     % (map_i.get_map_id(), cmd.outputs.stderr)
                                 )
@@ -575,7 +564,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                         # Register map in result space time dataset.
                         if self.debug:
                             print(map_i.get_temporal_extent_as_tuple())
-                        success = resultstds.register_map(map_i, dbif=dbif)
+                        resultstds.register_map(map_i, dbif=dbif)
                     resultstds.update_from_registered_maps(dbif)
 
             # Remove intermediate maps
