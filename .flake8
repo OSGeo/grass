@@ -29,7 +29,6 @@ per-file-ignores =
     gui/wxpython/animation/g.gui.animation.py: E501
     gui/wxpython/tplot/frame.py: F841, E722
     gui/wxpython/tplot/g.gui.tplot.py: E501
-    gui/wxpython/rdigit/g.gui.rdigit.py: F841
     gui/wxpython/iclass/digit.py: F405, F403
     gui/wxpython/iclass/frame.py: F405, F403
     gui/wxpython/iclass/g.gui.iclass.py: E501
