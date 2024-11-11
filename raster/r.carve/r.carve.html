@@ -22,44 +22,44 @@ North Carolina sample dataset:
 <div class="code"><pre>
 # set computational region
 g.region raster=elev_lid792_1m -p
-
 # digitize a ditch for the farm pond
 echo "L  3 1
  638692.93595422 220198.90026383
  638737.42270627 220149.74706926
  638984.43306379 220148.19158842
  1     1" | v.in.ascii -n input=- output=ditch format=standard
-
 # visualize original data
 d.mon wx0
 d.rast elev_lid792_1m
 d.vect ditch
-
+sleep 5
 # carve
 r.carve raster=elev_lid792_1m vector=ditch output=carved_dem width=3 depth=0.5
-
 # visualize resulting carved DEM map
 d.rast carved_dem
-
+sleep 5
 # visualize
 r.relief input=elev_lid792_1m output=elev_lid792_1m_shaded
 r.relief input=carved_dem output=carved_dem_shaded
 d.rast elev_lid792_1m_shaded
+sleep 5
 d.erase
 d.rast carved_dem_shaded
-
+sleep 5
 # flow accumulation
 r.watershed elevation=elev_lid792_1m accumulation=elev_lid792_1m_accum
 r.watershed elevation=carved_dem accumulation=carved_dem_accum
 d.rast elev_lid792_1m_accum
+sleep 5
 d.erase
 d.rast carved_dem_accum
-
 # differences
 r.mapcalc "accum_diff = elev_lid792_1m_accum - carved_dem_accum"
-r.colors accum_diff color=differences
-d.erase
+r.colors -e accum_diff color=differences
+r.null map=accum_diff setnull=0
 d.rast accum_diff
+sleep 5
+d.vect ditch width=2 color=0:29:57:255
 </pre></div>
 
 <center>
