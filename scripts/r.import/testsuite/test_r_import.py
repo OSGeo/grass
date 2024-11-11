@@ -93,7 +93,7 @@ class TestRImportRegion(TestCase):
             srcnodata="21,22",
         )
         self.assertRasterMinMax(self.imported, refmin=22, refmax=22)
-        reference = dict(north=223655, south=223600)
+        reference = {"north": 223655, "south": 223600}
         self.assertRasterFitsInfo(
             raster=self.imported, reference=reference, precision=1e-6
         )
