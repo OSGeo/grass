@@ -41,7 +41,6 @@
 # %end
 
 import re
-from pathlib import Path
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
