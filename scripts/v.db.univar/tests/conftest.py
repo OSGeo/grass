@@ -7,15 +7,28 @@ from types import SimpleNamespace
 import pytest
 
 import grass.script as gs
+from grass.script.db import DBHandler
 
 
 def updates_as_transaction(table, cat_column, column, cats, values):
-    """Create SQL statement for categories and values for a given column"""
-    sql = ["BEGIN TRANSACTION"]
+    """Create SQL statement for categories and values for a given column
+
+    :param str table: DB table name
+    :param str cat_column: DB table cat column name
+    :param str column: DB table update column name
+    :param list cats: DB table cat column values
+    :param str column: DB table update column name
+    :param list values: DB table update column values
+
+    :return sqls: SQLs
+    :rtype list
+    """
+    sqls = []
     for cat, value in zip(cats, values):
-        sql.append(f"UPDATE {table} SET {column} = {value} WHERE {cat_column} = {cat};")
-    sql.append("END TRANSACTION")
-    return "\n".join(sql)
+        sqls.append(
+            f"UPDATE {table} SET {column} = {value} WHERE {cat_column} = {cat};"
+        )
+    return sqls
 
 
 def value_update_by_category(map_name, layer, column_name, cats, values, env):
@@ -25,16 +38,15 @@ def value_update_by_category(map_name, layer, column_name, cats, values, env):
     database = db_info["database"]
     driver = db_info["driver"]
     cat_column = "cat"
-    sql = updates_as_transaction(
+    sqls = updates_as_transaction(
         table=table,
         cat_column=cat_column,
         column=column_name,
         cats=cats,
         values=values,
     )
-    gs.write_command(
-        "db.execute", input="-", database=database, driver=driver, stdin=sql, env=env
-    )
+    db_handler = DBHandler(driver_name=driver, database=database)
+    db_handler.execute(sql=sqls)
 
 
 @pytest.fixture(scope="module")

@@ -19,8 +19,14 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import annotations
+
 import os
+
+from ctypes import byref
+
 from .core import (
+    gisenv,
     run_command,
     parse_command,
     read_command,
@@ -137,6 +143,15 @@ def db_connection(force=False, env=None):
         run_command("db.connect", flags="c", env=env)
         conn = parse_command("db.connect", flags="g", env=env)
 
+    if conn and conn.get("driver") == "sqlite":
+        gis_env = gisenv()
+        conn["database"] = (
+            conn["database"]
+            .replace("$GISDBASE", gis_env["GISDBASE"])
+            .replace("$LOCATION_NAME", gis_env["LOCATION_NAME"])
+            .replace("$MAPSET", gis_env["MAPSET"])
+        )
+
     return conn
 
 
@@ -233,23 +248,145 @@ def db_table_in_vector(table, mapset=".", env=None):
     return None
 
 
-def db_begin_transaction(driver):
-    """Begin transaction.
+class DBHandler:
+    """DB handler
 
-    :return: SQL command as string
+    Allow execute SQL command(s) in transaction mode.
+
+    Public methods:
+
+    ::execute
     """
-    if driver in {"sqlite", "pg"}:
-        return "BEGIN"
-    if driver == "mysql":
-        return "START TRANSACTION"
-    return ""
 
+    def __init__(self, driver_name: str, database: str) -> None:
+        """Constructor
 
-def db_commit_transaction(driver):
-    """Commit transaction.
+        :param driver_name: DB driver name
+        :param database: database name
+        """
+        self._driver_name = driver_name
+        self._database = database
+        self._import_c_interface()
 
-    :return: SQL command as string
-    """
-    if driver in {"sqlite", "pg", "mysql"}:
-        return "COMMIT"
-    return ""
+    def _import_c_interface(self):
+        """Import C interface"""
+        try:
+            from grass.lib.dbmi import (
+                db_begin_transaction,
+                db_close_database_shutdown_driver,
+                db_commit_transaction,
+                db_execute_immediate,
+                db_free_string,
+                db_init_string,
+                db_set_string,
+                db_start_driver_open_database,
+                dbString,
+                DB_OK,
+            )
+            from grass.lib.gis import G_gisinit
+            from grass.lib.vector import (
+                Map_info,
+                Vect_subst_var,
+            )
+        except (ImportError, OSError, TypeError) as e:
+            fatal(_("Unable to import C functions: {e}").format(e))
+
+        class CInterface:
+            def __init__(self):
+                self.db_begin_transaction = db_begin_transaction
+                self.db_execute_immediate = db_execute_immediate
+                self.db_free_string = db_free_string
+                self.db_init_string = db_init_string
+                self.db_close_database_shutdown_driver = (
+                    db_close_database_shutdown_driver
+                )
+                self.db_commit_transaction = db_commit_transaction
+                self.db_set_string = db_set_string
+                self.db_start_driver_open_database = db_start_driver_open_database
+                self.dbString = dbString
+                self.DB_OK = DB_OK
+                self.G_gisinit = G_gisinit
+                self.Map_info = Map_info
+                self.Vect_subst_var = Vect_subst_var
+
+        self._c_interface = CInterface()
+
+    def _init_driver(self):
+        """Init DB driver"""
+        map = self._c_interface.Map_info()
+        self._pdriver = self._c_interface.db_start_driver_open_database(
+            self._driver_name,
+            self._c_interface.Vect_subst_var(self._database, byref(map)),
+        )
+        if not self._pdriver:
+            fatal(
+                _("Unable to open database <{db}> by driver <{driver}>.").format(
+                    db=self._database, driver=self._driver_name
+                )
+            )
+
+    def _begin_transaction(self):
+        """Begin DB transaction."""
+        ret = self._c_interface.db_begin_transaction(self._pdriver)
+        if ret != self._c_interface.DB_OK:
+            self._shutdown_driver()
+            fatal(
+                _(
+                    "Error while starting database <{db}> transaction by"
+                    " driver <{driver}>."
+                ).format(db=self._database, driver=self._driver_name)
+            )
+
+    def _commit_transaction(self):
+        """Commit DB transaction."""
+        ret = self._c_interface.db_commit_transaction(self._pdriver)
+        if ret != self._c_interface.DB_OK:
+            self._shutdown_driver()
+            fatal(
+                _(
+                    "Error while commit database <{db}> transaction"
+                    " by driver <{driver}>."
+                ).format(db=self._database, driver=self._driver_name)
+            )
+
+    def _execute(self, sql: str | list | tuple) -> None:
+        """Execute SQL
+
+        :param sql: SQL command string or list of SQLs commands
+        """
+        stmt = self._c_interface.dbString()
+        self._c_interface.db_init_string(byref(stmt))
+        self._c_interface.db_set_string(byref(stmt), sql)
+        if (
+            self._c_interface.db_execute_immediate(self._pdriver, byref(stmt))
+            != self._c_interface.DB_OK
+        ):
+            self._c_interface.db_free_string(byref(stmt))
+            self._shutdown_driver()
+            fatal(_("Error while executing SQL <{}>.").format(sql))
+        self._c_interface.db_free_string(byref(stmt))
+
+    def _shutdown_driver(self):
+        """Close DB and shutdown driver"""
+        self._c_interface.db_close_database_shutdown_driver(self._pdriver)
+
+    def execute(self, sql: str | list | tuple) -> None:
+        """Execute SQL
+
+        :param sql: SQL command string or list of SQLs statement
+        """
+        self._c_interface.G_gisinit("")
+        self._init_driver()
+
+        # Begin DB transaction
+        self._begin_transaction()
+        # Execute SQL string
+        if isinstance(sql, (list, tuple)):
+            for statement in sql:
+                self._execute(sql=statement)
+        else:
+            self._execute(sql)
+        # Commit DB transaction
+        self._commit_transaction()
+
+        self._shutdown_driver()

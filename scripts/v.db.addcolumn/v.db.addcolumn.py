@@ -40,32 +40,14 @@
 # % key_desc: name type
 # %end
 
-import atexit
-import os
-from pathlib import Path
 import re
 
-from grass.exceptions import CalledModuleError
 import grass.script as gs
-
-rm_files = []
-
-
-def cleanup():
-    for file in rm_files:
-        if os.path.isfile(file):
-            try:
-                os.remove(file)
-            except Exception as e:
-                gs.warning(
-                    _("Unable to remove file {file}: {message}").format(
-                        file=file, message=e
-                    )
-                )
+from grass.exceptions import CalledModuleError
+from grass.script.db import DBHandler
 
 
 def main():
-    global rm_files
     map = options["map"]
     layer = options["layer"]
     columns = options["columns"]
@@ -100,7 +82,9 @@ def main():
     driver = f["driver"]
     column_existing = gs.vector_columns(map, int(layer)).keys()
 
-    add_str = "BEGIN TRANSACTION\n"
+    db_handler = DBHandler(driver_name=driver, database=database)
+
+    sqls = []
     pattern = re.compile(r"\s+")
     for col in columns:
         if not col:
@@ -120,19 +104,11 @@ def main():
             )
             continue
         gs.verbose(_("Adding column <{}> to the table").format(col_name))
-        add_str += f'ALTER TABLE {table} ADD COLUMN "{col_name}" {col_type};\n'
-    add_str += "END TRANSACTION"
-    sql_file = gs.tempfile()
-    rm_files.append(sql_file)
+        sqls.append(f'ALTER TABLE {table} ADD COLUMN "{col_name}" {col_type};')
+
     cols_add_str = ",".join([col[0] for col in columns])
-    Path(sql_file).write_text(add_str)
     try:
-        gs.run_command(
-            "db.execute",
-            input=sql_file,
-            database=database,
-            driver=driver,
-        )
+        db_handler.execute(sql=sqls)
     except CalledModuleError:
         gs.fatal(_("Error adding columns {}").format(cols_add_str))
     # write cmd history:
@@ -141,5 +117,4 @@ def main():
 
 if __name__ == "__main__":
     options, flags = gs.parser()
-    atexit.register(cleanup)
     main()

@@ -8,19 +8,37 @@ import pytest
 
 import grass.script as gs
 import grass.script.setup as grass_setup
+from grass.script.db import DBHandler
 
 
-def updates_as_transaction(table, cat_column, column, column_quote, cats, values):
-    """Create SQL statement for categories and values for a given column"""
-    sql = ["BEGIN TRANSACTION"]
+def updates_as_transaction(
+    table,
+    cat_column,
+    column,
+    column_quote,
+    cats,
+    values,
+):
+    """Create SQL statement for categories and values for a given column
+
+    :param str table: DB table name
+    :param str cat_column: DB table cat column name
+    :param str column: DB table update column name
+    :param str column_quote: DB table column quote
+    :param list cats: DB table cat column values
+    :param list values: DB table update column values
+
+    :return sqls: SQLs
+    :rtype list
+    """
+    sqls = []
     quote = "'" if column_quote else ""
     for cat, value in zip(cats, values):
-        sql.append(
+        sqls.append(
             f"UPDATE {table} SET {column} = {quote}{value}{quote} "
             f"WHERE {cat_column} = {cat};"
         )
-    sql.append("END TRANSACTION")
-    return "\n".join(sql)
+    return sqls
 
 
 def value_update_by_category(map_name, layer, column_name, cats, values, env):
@@ -32,7 +50,7 @@ def value_update_by_category(map_name, layer, column_name, cats, values, env):
     cat_column = "cat"
     column_type = gs.vector_columns(map_name, layer, env=env)[column_name]
     column_quote = bool(column_type["type"] in {"CHARACTER", "TEXT"})
-    sql = updates_as_transaction(
+    sqls = updates_as_transaction(
         table=table,
         cat_column=cat_column,
         column=column_name,
@@ -40,9 +58,8 @@ def value_update_by_category(map_name, layer, column_name, cats, values, env):
         cats=cats,
         values=values,
     )
-    gs.write_command(
-        "db.execute", input="-", database=database, driver=driver, stdin=sql, env=env
-    )
+    db_handler = DBHandler(driver_name=driver, database=database)
+    db_handler.execute(sql=sqls)
 
 
 @pytest.fixture(scope="module")

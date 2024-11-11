@@ -37,9 +37,9 @@
 # % required: yes
 # %end
 
-import string
 import grass.script as gs
 from grass.exceptions import CalledModuleError
+from grass.script.db import DBHandler
 
 
 def main():
@@ -59,6 +59,8 @@ def main():
     keycol = f["key"]
     database = f["database"]
     driver = f["driver"]
+
+    db_handler = DBHandler(driver_name=driver, database=database)
 
     if not table:
         gs.fatal(
@@ -103,28 +105,20 @@ def main():
             colnames = ", ".join([f'"{col}"' for col in colnames])
             coltypes = ", ".join(coltypes)
 
-            cmds = [
-                "BEGIN TRANSACTION",
-                "CREATE TEMPORARY TABLE ${table}_backup (${coldef})",
-                "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",
-                "DROP TABLE ${table}",
-                "CREATE TABLE ${table}(${coldef})",
-                "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",
-                "CREATE UNIQUE INDEX ${table}_cat ON ${table} (${keycol} )",
-                "DROP TABLE ${table}_backup",
-                "COMMIT",
+            sql = [
+                f"CREATE TEMPORARY TABLE {table}_backup ({coltypes})",
+                f"INSERT INTO {table}_backup SELECT {colnames} FROM {table}",
+                f"DROP TABLE {table}",
+                f"CREATE TABLE {table}({coltypes})",
+                f"INSERT INTO {table} SELECT {colnames} FROM {table}_backup",
+                f"CREATE UNIQUE INDEX {table}_cat ON {table} ({keycol} )",
+                f"DROP TABLE {table}_backup",
             ]
-            tmpl = string.Template(";\n".join(cmds))
-            sql = tmpl.substitute(
-                table=table, coldef=coltypes, colnames=colnames, keycol=keycol
-            )
         else:
             sql = f'ALTER TABLE {table} DROP COLUMN "{column}"'
 
         try:
-            gs.write_command(
-                "db.execute", input="-", database=database, driver=driver, stdin=sql
-            )
+            db_handler.execute(sql=sql)
         except CalledModuleError:
             gs.fatal(_("Deleting column failed"))
 
