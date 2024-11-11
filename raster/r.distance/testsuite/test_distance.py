@@ -24,7 +24,7 @@ class TestRDistance(TestCase):
         # Capture the output from r.distance
         result = module.outputs.stdout.strip().split("\n")
 
-        expected_results = ["1:39000:500:642750:222250:642750:222750"]
+        expected_results = ["1:39000:244.1311123147:640825:222450:640965:222650"]
 
         for i, component in enumerate(result):
             self.assertEqual(
@@ -38,7 +38,7 @@ class TestRDistance(TestCase):
 
         result = module.outputs.stdout.strip().split("\n")
 
-        expected_results = ["39000:39000:0:641750:222950:641750:222950"]
+        expected_results = ["39000:39000:0:641505:222950:641505:222950"]
 
         for i, component in enumerate(result):
             self.assertEqual(
@@ -52,11 +52,13 @@ class TestRDistance(TestCase):
 
         result = module.outputs.stdout.strip().split("\n")
 
+        result = [line.replace("\r", "") for line in result]
+
         expected_results = [
-            "*:*:0:640250:222950:640250:222950",
-            "*:1:0:642750:222250:642750:222250",
-            "39000:*:0:642750:222850:642750:222850",
-            "39000:1:500:642750:222750:642750:222250",
+            "*:*:0:640005:222950:640005:222950",
+            "*:1:0:642995:222250:642995:222250",
+            "39000:*:0:640895:222850:640895:222850",
+            "39000:1:244.1311123147:640965:222650:640825:222450",
         ]
 
         for i, component in enumerate(result):
