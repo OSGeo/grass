@@ -19,6 +19,8 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import annotations
+
 import os
 
 from ctypes import byref
@@ -256,11 +258,11 @@ class DBHandler:
     ::execute
     """
 
-    def __init__(self, driver_name, database):
+    def __init__(self, driver_name: str, database: str) -> None:
         """Constructor
 
-        :param str driver_name: DB driver name
-        :param str database: database name
+        :param driver_name: DB driver name
+        :param database: database name
         """
         self._driver_name = driver_name
         self._database = database
@@ -347,11 +349,10 @@ class DBHandler:
                 ).format(db=self._database, driver=self._driver_name)
             )
 
-    def _execute(self, sql):
+    def _execute(self, sql: str | list | tuple) -> None:
         """Execute SQL
 
-        :param str|list|tuple sql: SQL command string or list of SQLs
-                                   commands
+        :param sql: SQL command string or list of SQLs commands
         """
         stmt = self._c_interface.dbString()
         self._c_interface.db_init_string(byref(stmt))
@@ -369,11 +370,10 @@ class DBHandler:
         """Close DB and shutdown driver"""
         self._c_interface.db_close_database_shutdown_driver(self._pdriver)
 
-    def execute(self, sql):
+    def execute(self, sql: str | list | tuple) -> None:
         """Execute SQL
 
-        :param str|list|tuple sql: SQL command string or list of SQLs
-                                   statement
+        :param sql: SQL command string or list of SQLs statement
         """
         self._c_interface.G_gisinit("")
         self._init_driver()
