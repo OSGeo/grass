@@ -54,7 +54,7 @@ def main():
 
     os.environ["GRASS_RENDER_FILE_READ"] = "TRUE"
 
-    colors = "red black blue green gray violet".split()
+    colors = ["red", "black", "blue", "green", "gray", "violet"]
     line = 2
     iloop = 0
     jloop = 0
