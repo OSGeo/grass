@@ -337,7 +337,7 @@ endif()
 find_package(Python3 REQUIRED)
 if(Python3_FOUND)
   set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
-  set(Python_SITEARCH ${Python3_SITEARCH})
+  set(PYTHON_SITEARCH ${Python3_SITEARCH})
   #[[
   find_package(PythonLibs REQUIRED)
   find_package(Numpy)
