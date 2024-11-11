@@ -45,7 +45,7 @@
 import sys
 import string
 
-import grass.script as gscript
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 from grass.script.db import DBHandler
 
@@ -60,10 +60,10 @@ def main():
     db_handler = DBHandler(driver_name=driver, database=database)
 
     # check if DB parameters are set, and if not set them.
-    gscript.run_command("db.connect", flags="c")
+    gs.run_command("db.connect", flags="c")
 
     if not database or not driver:
-        kv = gscript.db_connection()
+        kv = gs.db_connection()
         if not database:
             database = kv["database"]
         if not driver:
@@ -71,10 +71,10 @@ def main():
     # schema needed for PG?
 
     if force:
-        gscript.message(_("Forcing ..."))
+        gs.message(_("Forcing ..."))
 
     if column == "cat":
-        gscript.warning(
+        gs.warning(
             _(
                 "Deleting <%s> column which may be needed to keep "
                 "table connected to a vector map"
@@ -83,23 +83,22 @@ def main():
         )
 
     cols = [
-        f[0]
-        for f in gscript.db_describe(table, database=database, driver=driver)["cols"]
+        f[0] for f in gs.db_describe(table, database=database, driver=driver)["cols"]
     ]
     if column not in cols:
-        gscript.fatal(_("Column <%s> not found in table") % column)
+        gs.fatal(_("Column <%s> not found in table") % column)
 
     if not force:
-        gscript.message(_("Column <%s> would be deleted.") % column)
-        gscript.message("")
-        gscript.message(
-            _("You must use the force flag (-f) to actually " "remove it. Exiting.")
+        gs.message(_("Column <%s> would be deleted.") % column)
+        gs.message("")
+        gs.message(
+            _("You must use the force flag (-f) to actually remove it. Exiting.")
         )
         return 0
 
     sqls = []
     if driver == "sqlite":
-        sqlite3_version = gscript.read_command(
+        sqlite3_version = gs.read_command(
             "db.select",
             sql="SELECT sqlite_version();",
             flags="c",
@@ -115,7 +114,7 @@ def main():
             # for older sqlite3 versions, use old way to remove column
             colnames = []
             coltypes = []
-            for f in gscript.db_describe(table)["cols"]:
+            for f in gs.db_describe(table)["cols"]:
                 if f[0] != column:
                     colnames.append(f[0])
                     coltypes.append("%s %s" % (f[0], f[1]))
@@ -140,11 +139,11 @@ def main():
     try:
         db_handler.execute(sql=";".join(sqls))
     except CalledModuleError:
-        gscript.fatal(_("Cannot continue (problem deleting column)"))
+        gs.fatal(_("Cannot continue (problem deleting column)"))
 
     return 0
 
 
 if __name__ == "__main__":
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     sys.exit(main())

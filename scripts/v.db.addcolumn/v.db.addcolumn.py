@@ -41,8 +41,9 @@
 # %end
 
 import re
+from pathlib import Path
 
-import grass.script as grass
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 from grass.script.db import DBHandler
 
@@ -54,23 +55,23 @@ def main():
     columns = [col.strip() for col in columns.split(",")]
 
     # does map exist in CURRENT mapset?
-    mapset = grass.gisenv()["MAPSET"]
-    exists = bool(grass.find_file(map, element="vector", mapset=mapset)["file"])
+    mapset = gs.gisenv()["MAPSET"]
+    exists = bool(gs.find_file(map, element="vector", mapset=mapset)["file"])
 
     if not exists:
-        grass.fatal(_("Vector map <{}> not found in current mapset").format(map))
+        gs.fatal(_("Vector map <{}> not found in current mapset").format(map))
 
     try:
-        f = grass.vector_db(map)[int(layer)]
+        f = gs.vector_db(map)[int(layer)]
     except KeyError:
-        if grass.vector_db(map):
-            grass.fatal(
+        if gs.vector_db(map):
+            gs.fatal(
                 _(
                     "There is no table connected to layer <{layer}> of <{name}>. "
                     "Run v.db.connect or v.db.addtable first."
                 ).format(name=map, layer=layer)
             )
-        grass.fatal(
+        gs.fatal(
             _(
                 "There is no table connected to <{name}>. "
                 "Run v.db.connect or v.db.addtable first."
@@ -80,7 +81,7 @@ def main():
     table = f["table"]
     database = f["database"]
     driver = f["driver"]
-    column_existing = grass.vector_columns(map, int(layer)).keys()
+    column_existing = gs.vector_columns(map, int(layer)).keys()
 
     db_handler = DBHandler(driver_name=driver, database=database)
 
@@ -88,10 +89,10 @@ def main():
     pattern = re.compile(r"\s+")
     for col in columns:
         if not col:
-            grass.fatal(_("There is an empty column. Did you leave a trailing comma?"))
+            gs.fatal(_("There is an empty column. Did you leave a trailing comma?"))
         whitespace = re.search(pattern, col)
         if not whitespace:
-            grass.fatal(
+            gs.fatal(
                 _(
                     "Incorrect new column(s) format, use"
                     " <'name type [,name type, ...]'> format, please."
@@ -99,21 +100,22 @@ def main():
             )
         col_name, col_type = col.split(whitespace.group(0), 1)
         if col_name in column_existing:
-            grass.error(
+            gs.error(
                 _("Column <{}> is already in the table. Skipping.").format(col_name)
             )
             continue
-        grass.verbose(_("Adding column <{}> to the table").format(col_name))
+        gs.verbose(_("Adding column <{}> to the table").format(col_name))
         sqls.append(f'ALTER TABLE {table} ADD COLUMN "{col_name}" {col_type};')
+
     cols_add_str = ",".join([col[0] for col in columns])
     try:
         db_handler.execute(sql=sqls)
     except CalledModuleError:
-        grass.fatal(_("Error adding columns {}").format(cols_add_str))
+        gs.fatal(_("Error adding columns {}").format(cols_add_str))
     # write cmd history:
-    grass.vector_history(map)
+    gs.vector_history(map)
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

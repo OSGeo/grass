@@ -68,8 +68,12 @@ class BinningTest(TestCase):
 
         This is executed after each test run.
         """
-        self.runModule("g.remove", flags="f", type="raster", name=self.bin_raster)
-        self.runModule("g.remove", flags="f", type="raster", name=self.ref_raster)
+        self.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=(self.bin_raster, self.ref_raster),
+        )
 
     @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
     def test_method_n(self):

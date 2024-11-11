@@ -1,5 +1,7 @@
 """Fixtures for v.dissolve tests"""
 
+import os
+
 from types import SimpleNamespace
 
 import pytest
@@ -30,10 +32,7 @@ def updates_as_transaction(
     :rtype list
     """
     sqls = []
-    if column_quote:
-        quote = "'"
-    else:
-        quote = ""
+    quote = "'" if column_quote else ""
     for cat, value in zip(cats, values):
         sqls.append(
             f"UPDATE {table} SET {column} = {quote}{value}{quote} "
@@ -42,15 +41,15 @@ def updates_as_transaction(
     return sqls
 
 
-def value_update_by_category(map_name, layer, column_name, cats, values):
+def value_update_by_category(map_name, layer, column_name, cats, values, env):
     """Update column value for multiple rows based on category"""
-    db_info = gs.vector_db(map_name)[layer]
+    db_info = gs.vector_db(map_name, env=env)[layer]
     table = db_info["table"]
     database = db_info["database"]
     driver = db_info["driver"]
     cat_column = "cat"
-    column_type = gs.vector_columns(map_name, layer)[column_name]
-    column_quote = bool(column_type["type"] in ("CHARACTER", "TEXT"))
+    column_type = gs.vector_columns(map_name, layer, env=env)[column_name]
+    column_quote = bool(column_type["type"] in {"CHARACTER", "TEXT"})
     sqls = updates_as_transaction(
         table=table,
         cat_column=cat_column,
@@ -81,10 +80,29 @@ def dataset(tmp_path_factory):
     num_points = len(cats)
 
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with grass_setup.init(tmp_path / location):
-        gs.run_command("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
-        gs.run_command("v.random", output=point_map_name, npoints=num_points, seed=42)
-        gs.run_command("v.voronoi", input=point_map_name, output=map_name)
+    with grass_setup.init(tmp_path / location, env=os.environ.copy()) as session:
+        gs.run_command(
+            "g.region",
+            s=0,
+            n=80,
+            w=0,
+            e=120,
+            b=0,
+            t=50,
+            res=10,
+            res3=10,
+            env=session.env,
+        )
+        gs.run_command(
+            "v.random",
+            output=point_map_name,
+            npoints=num_points,
+            seed=42,
+            env=session.env,
+        )
+        gs.run_command(
+            "v.voronoi", input=point_map_name, output=map_name, env=session.env
+        )
         gs.run_command(
             "v.db.addtable",
             map=map_name,
@@ -93,6 +111,7 @@ def dataset(tmp_path_factory):
                 f"{float_column_name} double precision",
                 f"{str_column_name} text",
             ],
+            env=session.env,
         )
         value_update_by_category(
             map_name=map_name,
@@ -100,6 +119,7 @@ def dataset(tmp_path_factory):
             column_name=int_column_name,
             cats=cats,
             values=int_values,
+            env=session.env,
         )
         value_update_by_category(
             map_name=map_name,
@@ -107,6 +127,7 @@ def dataset(tmp_path_factory):
             column_name=float_column_name,
             cats=cats,
             values=float_values,
+            env=session.env,
         )
         value_update_by_category(
             map_name=map_name,
@@ -114,8 +135,10 @@ def dataset(tmp_path_factory):
             column_name=str_column_name,
             cats=cats,
             values=str_values,
+            env=session.env,
         )
         yield SimpleNamespace(
+            session=session,
             vector_name=map_name,
             int_column_name=int_column_name,
             int_values=int_values,
@@ -144,10 +167,29 @@ def discontinuous_dataset(tmp_path_factory):
     num_points = len(cats)
 
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with grass_setup.init(tmp_path / location):
-        gs.run_command("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
-        gs.run_command("v.random", output=point_map_name, npoints=num_points, seed=42)
-        gs.run_command("v.voronoi", input=point_map_name, output=map_name)
+    with grass_setup.init(tmp_path / location, env=os.environ.copy()) as session:
+        gs.run_command(
+            "g.region",
+            s=0,
+            n=80,
+            w=0,
+            e=120,
+            b=0,
+            t=50,
+            res=10,
+            res3=10,
+            env=session.env,
+        )
+        gs.run_command(
+            "v.random",
+            output=point_map_name,
+            npoints=num_points,
+            seed=42,
+            env=session.env,
+        )
+        gs.run_command(
+            "v.voronoi", input=point_map_name, output=map_name, env=session.env
+        )
         gs.run_command(
             "v.db.addtable",
             map=map_name,
@@ -156,6 +198,7 @@ def discontinuous_dataset(tmp_path_factory):
                 f"{float_column_name} double precision",
                 f"{str_column_name} text",
             ],
+            env=session.env,
         )
         value_update_by_category(
             map_name=map_name,
@@ -163,6 +206,7 @@ def discontinuous_dataset(tmp_path_factory):
             column_name=int_column_name,
             cats=cats,
             values=int_values,
+            env=session.env,
         )
         value_update_by_category(
             map_name=map_name,
@@ -170,6 +214,7 @@ def discontinuous_dataset(tmp_path_factory):
             column_name=float_column_name,
             cats=cats,
             values=float_values,
+            env=session.env,
         )
         value_update_by_category(
             map_name=map_name,
@@ -177,8 +222,10 @@ def discontinuous_dataset(tmp_path_factory):
             column_name=str_column_name,
             cats=cats,
             values=str_values,
+            env=session.env,
         )
         yield SimpleNamespace(
+            session=session,
             vector_name=map_name,
             int_column_name=int_column_name,
             int_values=int_values,
@@ -210,18 +257,40 @@ def dataset_layer_2(tmp_path_factory):
     layer = 2
 
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with grass_setup.init(tmp_path / location):
-        gs.run_command("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
-        gs.run_command("v.random", output=point_map_name, npoints=num_points, seed=42)
+    with grass_setup.init(tmp_path / location, env=os.environ.copy()) as session:
+        gs.run_command(
+            "g.region",
+            s=0,
+            n=80,
+            w=0,
+            e=120,
+            b=0,
+            t=50,
+            res=10,
+            res3=10,
+            env=session.env,
+        )
+        gs.run_command(
+            "v.random",
+            output=point_map_name,
+            npoints=num_points,
+            seed=42,
+            env=session.env,
+        )
         gs.run_command(
             "v.category",
             input=point_map_name,
             layer=[1, layer],
             output=point_map_name_layer_2,
             option="transfer",
+            env=session.env,
         )
         gs.run_command(
-            "v.voronoi", input=point_map_name_layer_2, layer=layer, output=map_name
+            "v.voronoi",
+            input=point_map_name_layer_2,
+            layer=layer,
+            output=map_name,
+            env=session.env,
         )
         gs.run_command(
             "v.db.addtable",
@@ -232,6 +301,7 @@ def dataset_layer_2(tmp_path_factory):
                 f"{float_column_name} double precision",
                 f"{str_column_name} text",
             ],
+            env=session.env,
         )
         value_update_by_category(
             map_name=map_name,
@@ -239,6 +309,7 @@ def dataset_layer_2(tmp_path_factory):
             column_name=int_column_name,
             cats=cats,
             values=int_values,
+            env=session.env,
         )
         value_update_by_category(
             map_name=map_name,
@@ -246,6 +317,7 @@ def dataset_layer_2(tmp_path_factory):
             column_name=float_column_name,
             cats=cats,
             values=float_values,
+            env=session.env,
         )
         value_update_by_category(
             map_name=map_name,
@@ -253,8 +325,10 @@ def dataset_layer_2(tmp_path_factory):
             column_name=str_column_name,
             cats=cats,
             values=str_values,
+            env=session.env,
         )
         yield SimpleNamespace(
+            session=session,
             vector_name=map_name,
             int_column_name=int_column_name,
             int_values=int_values,

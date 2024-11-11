@@ -7,4 +7,4 @@ from .raster import *
 from .raster3d import *
 from .vector import *
 from .utils import *
-from . import setup
+from . import setup  # noqa: F401

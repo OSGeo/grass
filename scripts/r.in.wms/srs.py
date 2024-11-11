@@ -79,7 +79,7 @@ class Srs:
             # code is always the last value
             try:
                 self.code = int(values[-1])
-            except:
+            except (IndexError, ValueError):
                 self.code = values[-1]
 
         elif len(values) == 2:  # it's an authority:code code
@@ -105,7 +105,7 @@ class Srs:
         """
 
         return "urn:%s:def:crs:%s:%s:%s" % (
-            (self.naming_authority and self.naming_authority or "ogc"),
+            ((self.naming_authority and self.naming_authority) or "ogc"),
             (self.authority or ""),
             (self.version or ""),
             (self.code or ""),
