@@ -10,7 +10,7 @@ of pixels in the map. If the polar diagram does not reach the
 outer circle, no data (NULL) pixels were found in the map.
 <p>The vector in the diagram indicates a prevailing direction, its length
 the strength of such direction. In case all angle vectors are oriented
-along the same direction, the length for the vector is maximal (in fact 
+along the same direction, the length for the vector is maximal (in fact
 it is equal to length of the most populated bin of the underlying histogram).
 <p>As a side effect, the quality of the angle map can be derived from
 the diagram. Strong spikes may indicate an over-representation of
@@ -37,12 +37,17 @@ aspect is undefined (i.e. flat areas).
 <h2>EXAMPLE</h2>
 
 In this example, the polar diagram of the 'aspect' angle map in the
-North Carolina sample dataset location is generated:
+North Carolina sample dataset is generated:
 
 <div class="code"><pre>
 g.region raster=aspect -p
 d.polar aspect
 </pre></div>
+
+<h2>XGRAPH REQUIREMENT</h2>
+
+<a href="http://www.xgraph.org">Xgraph</a> must be installed for the
+<b>-x</b> flag to function.
 
 <h2>SEE ALSO</h2>
 
@@ -53,26 +58,14 @@ d.polar aspect
 <a href="r.slope.aspect.html">r.slope.aspect</a>
 </em>
 
-
-<h2>XGRAPH REQUIREMENT</h2>
-
-<a href="http://www.xgraph.org">Xgraph</a> must be installed for the
-<b>-x</b> flag to function.
-
 <h2>REFERENCES</h2>
 
 J. Hofierka, H. Mitasova, and M. Neteler (2009): Terrain parameterization in GRASS.
 In T. Hengl and H.I. Reuter, editors, Geomorphometry: concepts, software, applications. Elsevier
-(<a href="http://dx.doi.org/10.1016/S0166-2481(08)00017-2">DOI</a>)
-
+(<a href="https://doi.org/10.1016/S0166-2481(08)00017-2">DOI</a>)
 
 <h2>AUTHORS</h2>
 
 Markus Neteler, ITC-irst, Italy<br>
 Bruno Caprile, ITC-irst, Italy<br>
 Hamish Bowman, Otago University, New Zealand<br>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

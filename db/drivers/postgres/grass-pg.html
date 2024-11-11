@@ -6,7 +6,7 @@ PostgreSQL server.
 <h2>Creating a PostgreSQL database</h2>
 
 A new database is created with <tt>createdb</tt>, see
-the <a href="http://www.postgresql.org/docs/manuals/">PostgreSQL
+the <a href="https://www.postgresql.org/docs/manuals/">PostgreSQL
 manual</a> for details.
 
 <h2>Connecting GRASS to PostgreSQL</h2>
@@ -23,13 +23,13 @@ db.tables -p
 
 From the <a href="https://www.postgresql.org/docs/10/static/libpq-pgpass.html">PostgresQL manual</a>:
 <p>
-The file <em>.pgpass</em> in a user's home directory can contain 
-passwords to be used if the connection requires a password (and no 
-password has been specified otherwise). On Microsoft Windows the file 
-is named <em>%APPDATA%\postgresql\pgpass.conf</em> (where 
-<em>%APPDATA%</em> refers to the Application Data subdirectory in the 
-user's profile). Alternatively, a password file can be specified using 
-the connection parameter passfile or the environment variable 
+The file <em>.pgpass</em> in a user's home directory can contain
+passwords to be used if the connection requires a password (and no
+password has been specified otherwise). On Microsoft Windows the file
+is named <em>%APPDATA%\postgresql\pgpass.conf</em> (where
+<em>%APPDATA%</em> refers to the Application Data subdirectory in the
+user's profile). Alternatively, a password file can be specified using
+the connection parameter passfile or the environment variable
 PGPASSFILE.
 
 This file should contain lines of the following format:
@@ -60,7 +60,6 @@ db.execute sql="UPDATE mytable SET ID = nextval('mytable_seq')"
 db.execute sql="DROP SEQUENCE mytable_seq"
 </pre></div>
 
-
 <h2>Attribute import into PostgreSQL</h2>
 
 CSV import into PostgreSQL:
@@ -77,7 +76,7 @@ coordinates. See <a href="v.in.db.html">here</a> for examples.
 
 <h2>PostGIS: PostgreSQL with vector geometry</h2>
 
-<a href="http://postgis.refractions.net/">PostGIS</a>: 
+<a href="http://postgis.refractions.net/">PostGIS</a>:
 adds geographic object support to PostgreSQL.
 
 <h3>Example: Import from PostGIS</h3>
@@ -121,7 +120,7 @@ v.info -t test
 <li><a href="http://e00pg.sourceforge.net/">e00pg</a>: E00 to PostGIS filter,
 see also <em><a href="v.in.e00.html">v.in.e00</a></em>.
 </li>
-<li>GDAL/OGR <a href="http://www.gdal.org/">ogrinfo and ogr2ogr</a>:
+<li>GDAL/OGR <a href="https://gdal.org/">ogrinfo and ogr2ogr</a>:
 GIS vector format converter and library, e.g. ArcInfo or SHAPE to PostGIS.<br>
   <tt>ogr2ogr -f "PostgreSQL" shapefile ??</tt>
 </li>
@@ -142,13 +141,8 @@ GIS vector format converter and library, e.g. ArcInfo or SHAPE to PostGIS.<br>
 <h2>REFERENCES</h2>
 
 <ul>
-<li><a href="http://www.postgresql.org/">PostgreSQL web site</a></li>
-<li><a href="http://www.pgadmin.org/">pgAdmin graphical user interface</a></li>
-<li><a href="http://www.gdal.org/drv_pg.html">GDAL/OGR PostgreSQL
+<li><a href="https://www.postgresql.org/">PostgreSQL web site</a></li>
+<li><a href="https://www.pgadmin.org/">pgAdmin graphical user interface</a></li>
+<li><a href="https://gdal.org/drv_pg.html">GDAL/OGR PostgreSQL
 driver documentation</a></li>
 </ul>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

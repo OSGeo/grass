@@ -5,7 +5,7 @@
 # IMPORTANT: The binaryInstall.src file is a source file, NOT an
 # executable shell script!! Used to generate grass-MAJ.MIN.VER-ARCH-DD_MM_YYYY-install.sh by
 # make bindist
-#  
+#
 # GRASS binary package installation tool
 # platform independent
 #
@@ -75,7 +75,7 @@ echo "GRASS GIS $NAME_VER binary package installation tool"
 echo ""
 
 # Check for correct package name:
-if [ ! -f $1 ] ; then 
+if [ ! -f $1 ] ; then
     echo "ERROR: Wrong package name $1. File does not exists."
     echo ""
     exit
@@ -95,7 +95,7 @@ PACKAGE_DIR=`pwd`
 echo $PACKAGE_NAME | grep "\.tar\.gz" > /dev/null
 if [ $? -eq 0 ] ; then
     UNPACK=gunzip
-    	
+
     # Is gunzip there?
     IFSSAVE="$IFS"
     IFS=":"
@@ -109,7 +109,7 @@ if [ $? -eq 0 ] ; then
     IFS="$IFSSAVE"
     if [ ! "$GUNZIP" ] ; then
         echo "No gunzip installed. Please get from:"
-        echo "   http://www.gnu.org/software/gzip/gzip.html"
+        echo "   https://www.gnu.org/software/gzip/gzip.html"
         exit
     fi
 else
@@ -117,7 +117,7 @@ else
     echo $PACKAGE_NAME | grep "\.tar\.bz2" > /dev/null
     if [ $? -eq 0 ] ; then
         UNPACK=bunzip2
-    
+
         # Is bunzip2 there?
         IFSSAVE="$IFS"
         IFS=":"
@@ -181,7 +181,7 @@ fi
 
 # Check if BINDIR is a directory
 if [ ! -d "$BINDIR" ] ; then
-    
+
     # Check if BINDIR is a file
     if [ -f "$BINDIR" ] ; then
     	echo ""
@@ -189,9 +189,9 @@ if [ ! -d "$BINDIR" ] ; then
 	echo "Please specify a directory for the binary executable directory."
 	exit
     fi
-   
+
     mkdir -p $BINDIR
-    
+
     if [ $? -ne 0 ] ; then
 	echo "An error occurred trying to create $BINDIR ! Exiting."
 	exit
@@ -205,17 +205,17 @@ if [ ! -d "$DESTDIR" ] ; then
 
     # Check if a word "grass" is in string $DESTDIR
     echo $DESTDIR | grep "grass" > /dev/null
-    
+
     if [ $? -eq 1 ] ; then
     	echo "WARNING: Your destination path $DESTDIR does not contain the word 'grass'"
         echo "Continue (y/n)?"
-        read ans         
-        
+        read ans
+
 	if [ "$ans" = "n" -o "$ans" = "N" ] ; then
             exit
         fi
     fi
-    
+
     # Check if DESTDIR is a file
     if [ -f "$DESTDIR" ] ; then
     	echo ""
@@ -225,7 +225,7 @@ if [ ! -d "$DESTDIR" ] ; then
     fi
 
     mkdir -p $DESTDIR
-    
+
     if [ $? -ne 0 ] ; then
     	echo "An error occurred trying to create $DESTDIR! Exiting."
     	exit
@@ -240,12 +240,12 @@ else
 
     	# Check if a word "grass" is in string $DESTDIR
         echo $DESTDIR | grep "grass" > /dev/null
-        
+
 	if [ $? -eq 1 ] ; then
             echo "WARNING: Your destination path $DESTDIR does not contain the word 'grass'"
             echo "Continue (y/n)?"
-            read ans         
-            
+            read ans
+
 	    if [ "$ans" = "n" -o "$ans" = "N" ] ; then
             	exit
             fi
@@ -256,12 +256,12 @@ else
 	if [ $? -ne 0 ] ; then
 	    echo "ERROR: Destination directory $DESTDIR is not"
 	    echo "writable, try installing as root!"
-	    echo "Exiting."    
+	    echo "Exiting."
 	    exit 1
         fi
 	rm -f $DESTDIR/test$$ > /dev/null
 
-    fi        
+    fi
 fi
 
 
@@ -319,7 +319,7 @@ echo""
 
 echo "Generating display font configuration file..."
 
-GISBASE="$DESTDIR" GISRC=junk LD_LIBRARY_PATH_VAR="${DESTDIR}/lib:$LD_LIBRARY_PATH_VAR" "${DESTDIR}/bin/g.mkfontcap" -o
+GISBASE="$DESTDIR" GISRC=junk LD_LIBRARY_PATH_VAR="${DESTDIR}/lib:$LD_LIBRARY_PATH_VAR" "${DESTDIR}/bin/g.mkfontcap" --overwrite
 
 echo""
 

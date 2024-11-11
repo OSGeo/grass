@@ -1,6 +1,6 @@
 /*** TODO: make non-interactive and merge with main imagery library ***/
 
-Markus wrote on the grass-dev ML,  
+Markus wrote on the grass-dev ML,
 Date: 2008-10-22
 Subject: Re: Re: i.ortho.photo
 
@@ -18,7 +18,7 @@ Subject: Re: Re: i.ortho.photo
 Possibly a lot is already done in lib/image3/ ?
 
 - See
-  http://grasswiki.osgeo.org/wiki/Image_processing#Ideas_collection_for_improving_GRASS.27_Image_processing_capabilities
+  https://grasswiki.osgeo.org/wiki/Image_processing#Ideas_collection_for_improving_GRASS.27_Image_processing_capabilities
 - image modules:
     - merge of i.rectify and i.rectify3
     - addition of new resampling algorithms such as bilinear, cubic convolution
@@ -30,4 +30,4 @@ Possibly a lot is already done in lib/image3/ ?
 -----------------
 See also
 
-http://trac.osgeo.org/grass/wiki/Grass7Planning
+https://trac.osgeo.org/grass/wiki/Grass7Planning

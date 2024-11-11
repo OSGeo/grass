@@ -1,8 +1,8 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.split</em> splits vector lines into shorter segments using 
+<em>v.split</em> splits vector lines into shorter segments using
 a maximal distance between nodes. The resulting length of all segments
-is expected to be equal and not higher than the given <b>length</b> 
+is expected to be equal and not higher than the given <b>length</b>
 parameter.
 
 <h2>NOTES</h2>
@@ -49,7 +49,7 @@ v.to.db map=v_split_2 layer=2 option=query query_layer=1 query_column=cat column
 
 <h2>EXAMPLES</h2>
 
-The examples are based on the North Carolina sample data location.
+The examples are based on the North Carolina sample data.
 
 <h3>Example 1: Inserting nodes to railroad lines map</h3>
 
@@ -89,7 +89,6 @@ v.split -n input=myrr output=myrr_split length=1000
 d.vect myrr_split display=shape,topo
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -102,8 +101,3 @@ d.vect myrr_split display=shape,topo
 <h2>AUTHOR</h2>
 
 Radim Blazek
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

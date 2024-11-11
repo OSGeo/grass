@@ -1,7 +1,6 @@
-/*  
- ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       g.message 
+ * MODULE:       g.message
  * AUTHOR(S):    Jachym Cepicky - jachym AT les-ejk cz
  *               Hamish Bowman - hamish_b AT yahoo com
  *               Martin Landa - landa.martin AT gmail.com
@@ -27,16 +26,21 @@ int main(int argc, char *argv[])
     struct GModule *module;
     int debug_level;
 
-    G_gisinit(argv[0]);
+    /* We don't call G_gisinit() here because it validates the
+     * mapset, whereas this module may legitimately be even
+     * without a valid mapset. */
+    G_set_program_name(argv[0]);
+    G_no_gisinit();
+    G_set_gisrc_mode(G_GISRC_MODE_MEMORY);
 
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("support"));
     G_add_keyword(_("scripts"));
-    module->label =
-	_("Prints a message, warning, progress info, or fatal error in the GRASS way.");
+    module->label = _("Prints a message, warning, progress info, or fatal "
+                      "error in the GRASS way.");
     module->description =
-	_("This module should be used in scripts for messages served to user.");
+        _("This module should be used in scripts for messages served to user.");
 
     warning = G_define_flag();
     warning->key = 'w';
@@ -63,7 +67,7 @@ int main(int argc, char *argv[])
     important->guisection = _("Level");
     important->label = _("Print message in all modes except of quiet mode");
     important->description = _("Message is printed on GRASS_VERBOSE>=1");
-    
+
     verbose = G_define_flag();
     verbose->key = 'v';
     verbose->guisection = _("Level");
@@ -88,34 +92,35 @@ int main(int argc, char *argv[])
     debug_opt->description = _("Level to use for debug messages");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
-    if (fatal->answer + warning->answer + debug_flag->answer +
-	verbose->answer > 1)
-	G_fatal_error(_("Select only one message level"));
+    if (fatal->answer + warning->answer + debug_flag->answer + verbose->answer >
+        1)
+        G_fatal_error(_("Select only one message level"));
 
     debug_level = atoi(debug_opt->answer);
-    
+
     if (fatal->answer)
-	G_fatal_error("%s", message->answer);
+        G_fatal_error("%s", message->answer);
     else if (warning->answer)
-	G_warning("%s", message->answer);
+        G_warning("%s", message->answer);
     else if (percent->answer) {
-	int i, n, s;
-	i = n = s = -1;
-	sscanf(message->answer, "%d %d %d", &i, &n, &s);
-	if (s == -1) 
-	    G_fatal_error(_("Unable to parse input message"));
-	G_percent(i, n, s);
+        int i, n, s;
+
+        i = n = s = -1;
+        sscanf(message->answer, "%d %d %d", &i, &n, &s);
+        if (s == -1)
+            G_fatal_error(_("Unable to parse input message"));
+        G_percent(i, n, s);
     }
     else if (debug_flag->answer)
-	G_debug(debug_level, "%s", message->answer);
+        G_debug(debug_level, "%s", message->answer);
     else if (important->answer)
-	G_important_message("%s", message->answer);
+        G_important_message("%s", message->answer);
     else if (verbose->answer)
-	G_verbose_message("%s", message->answer);
+        G_verbose_message("%s", message->answer);
     else
-	G_message("%s", message->answer);
+        G_message("%s", message->answer);
 
     exit(EXIT_SUCCESS);
 }

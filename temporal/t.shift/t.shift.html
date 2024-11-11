@@ -1,34 +1,35 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.shift</em> is designed to temporally shift all registered maps in 
-a space time dataset with a user defined granularity. Raster, 3D raster 
+<em>t.shift</em> is designed to temporally shift all registered maps in
+a space time dataset with a user defined granularity. Raster, 3D raster
 and vector space time datasets are supported.
 <p>
-The format of the absolute time granularity is "number unit". Number is 
-an integer, unit is the temporal unit that can be one of year(s), 
+The format of the absolute time granularity is "number unit". Number is
+an integer, unit is the temporal unit that can be one of year(s),
 month(s), week(s), day(s), hour(s), minute(s) or second(s).
 <p>
-The granularity in case of relative time is an integer. The temporal 
+The granularity in case of relative time is an integer. The temporal
 unit is the unit of the space time dataset and can not be modified.
 
 <h2>NOTES</h2>
-Be careful when shifting space time datasets with absolute time. The 
-temporal granularity may change if you shift a space time dataset with 
-a unit that is different from the space time dataset granularity. Be 
-aware that the shifting with months and years may result in incorrect 
-days per month. Shifting the date 20012-03-31 with a granularity of one 
-month will result in 2012-04-31 which is incorrect. In this case an 
-error will raise and the shifting will not performed for the whole 
+
+Be careful when shifting space time datasets with absolute time. The
+temporal granularity may change if you shift a space time dataset with
+a unit that is different from the space time dataset granularity. Be
+aware that the shifting with months and years may result in incorrect
+days per month. Shifting the date 20012-03-31 with a granularity of one
+month will result in 2012-04-31 which is incorrect. In this case an
+error will raise and the shifting will not performed for the whole
 dataset.
 <p>
-You can use the extraction module to shift only a subset of maps from a 
-space time dataset. Be aware that the shifting of maps affect all space 
+You can use the extraction module to shift only a subset of maps from a
+space time dataset. Be aware that the shifting of maps affect all space
 time datasets in which they are registered.
 
 <h2>EXAMPLE</h2>
 
-We create 6 raster maps and register them in a space time raster 
-dataset using an increment of one day. Then we shift the time intervals 
+We create 6 raster maps and register them in a space time raster
+dataset using an increment of one day. Then we shift the time intervals
 with a granularity of 12 hours.
 
 <div class="code"><pre>
@@ -91,15 +92,15 @@ t.info type=strds input=precipitation_daily
  | Description:
  | Test dataset with daily precipitation
  | Command history:
- | # 2014-11-23 19:20:26 
+ | # 2014-11-23 19:20:26
  | t.create type="strds" temporaltype="absolute"
  |     output="precipitation_daily" title="Daily precipitation"
  |     description="Test dataset with daily precipitation"
- | # 2014-11-23 19:20:26 
+ | # 2014-11-23 19:20:26
  | t.register -i type="rast" input="precipitation_daily"
  |     maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6" start="2012-01-01"
  |     increment="1 day"
- | 
+ |
  +----------------------------------------------------------------------------+
 
 t.rast.list input=precipitation_daily
@@ -158,18 +159,18 @@ t.info type=strds input=precipitation_daily
  | Description:
  | Test dataset with daily precipitation
  | Command history:
- | # 2014-11-23 19:20:26 
+ | # 2014-11-23 19:20:26
  | t.create type="strds" temporaltype="absolute"
  |     output="precipitation_daily" title="Daily precipitation"
  |     description="Test dataset with daily precipitation"
- | # 2014-11-23 19:20:26 
+ | # 2014-11-23 19:20:26
  | t.register -i type="rast" input="precipitation_daily"
  |     maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6" start="2012-01-01"
  |     increment="1 day"
- | # 2014-11-23 19:21:08 
+ | # 2014-11-23 19:21:08
  | t.shift type="strds" input="precipitation_daily"
  |     granularity="12 hours"
- | 
+ |
  +----------------------------------------------------------------------------+
 
 
@@ -195,9 +196,3 @@ prec_6|PERMANENT|2012-01-06 12:00:00|2012-01-07 12:00:00
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
-

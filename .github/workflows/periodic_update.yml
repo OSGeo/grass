@@ -1,0 +1,51 @@
+---
+name: Periodic update
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API, or on a schedule.
+on:
+  workflow_dispatch:
+  schedule:
+    # At 10:32 on every first Wednesday of the month.
+    # See https://crontab.guru/#32_10_*/100,1-7_*_WED
+    - cron: "32 10 */100,1-7 * WED"
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  update-configure:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Create URL to the run output
+        id: vars
+        run: echo "run-url=https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: "Check that autoconf scripts are up-to-date:"
+        run: |
+          rm -f config.guess config.sub
+          wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess && chmod +x config.guess
+          wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub && chmod +x config.sub
+      # Display changes, only to follow along in the logs.
+      - run: git diff -- config.guess config.sub
+      - name: Double check if files are modified
+        run: git status --ignored
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f # v7.0.5
+        with:
+          commit-message: "config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/"
+          branch: periodic/update-configure
+          title: "configure: update to latest config.guess and config.sub"
+          body: |
+            This updates config.guess and config.sub to their latest versions.
+            If the two files are deleted in this PR, please check the logs of the workflow here:
+            [Workflow run summary](${{ steps.vars.outputs.run-url }})
+
+            Automated changes by [create-pull-request](https://github.com/peter-evans/create-pull-request) GitHub action
+      - name: Check outputs
+        if: ${{ steps.cpr.outputs.pull-request-number }}
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"

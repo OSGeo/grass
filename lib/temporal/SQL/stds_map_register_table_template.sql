@@ -1,5 +1,5 @@
 --#############################################################################
--- This SQL script generates the table in which all registered GRASS_MAP maps 
+-- This SQL script generates the table in which all registered GRASS_MAP maps
 -- are listed in.
 --
 -- This table will be created for each STDS.

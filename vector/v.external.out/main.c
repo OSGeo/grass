@@ -1,13 +1,12 @@
-
 /****************************************************************
  *
  * MODULE:       v.external.out
- * 
+ *
  * AUTHOR(S):    Martin Landa <landa.martin gmail.com>
- *               
+ *
  * PURPOSE:      Make GRASS write vector maps utilizing the OGR library.
  *               (Partly based on r.external.out code)
- *               
+ *
  * COPYRIGHT:    (C) 2010-2014 by Martin Landa and the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -33,10 +32,10 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct _options options;
-    struct _flags   flags;
+    struct _flags flags;
 
-    char * format;
-    
+    char *format;
+
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -54,8 +53,8 @@ int main(int argc, char *argv[])
     parse_args(argc, argv, &options, &flags);
 
     if (flags.f->answer) {
-	list_formats();
-	exit(EXIT_SUCCESS);
+        list_formats();
+        exit(EXIT_SUCCESS);
     }
 
     if (flags.r->answer) {
@@ -72,20 +71,20 @@ int main(int argc, char *argv[])
 
     format = NULL;
     if (options.format->answer) {
-	format = G_store(options.format->answer);
-	check_format(format);
+        format = G_store(options.format->answer);
+        check_format(format);
     }
-    
+
     if (options.dsn->answer) {
-	make_link(options.dsn->answer, format,
-		  options.opts->answer, options.opts->answers);
+        make_link(options.dsn->answer, format, options.opts->answer,
+                  options.opts->answers);
     }
     else if (options.input->answer) {
-	read_status_file(options.input);
+        read_status_file(options.input);
     }
-    
+
     if (flags.p->answer || flags.g->answer) {
-	print_status(flags.g->answer ? TRUE : FALSE);
+        print_status(flags.g->answer ? TRUE : FALSE);
     }
 
     if (options.output->answer) {
@@ -94,6 +93,6 @@ int main(int argc, char *argv[])
 
     if (options.dsn->answer || options.input->answer)
         G_message(_("Current output format for vectors: %s"), format);
-    
+
     exit(EXIT_SUCCESS);
 }

@@ -1,12 +1,11 @@
-
 /****************************************************************************
  *
  * Function:     Rast_map_to_img_str() based on r.to.ppm
  * AUTHOR(S):    Bill Brown, USA-CERL (original contributor)
- *               Markus Neteler <neteler itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Jachym Cepicky <jachym les-ejk.cz>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>
  *               Soeren Gebbert
  * PURPOSE:      converts a GRASS raster map into an ARGB or
@@ -32,33 +31,33 @@
 
 /* \brief Convert a raster map layer into a string with
  *        32Bit ARGB, 32Bit RGB or 8Bit Gray little endian encoding.
- * 
- * The raster color table is used for coloring the image. Null values are 
+ *
+ * The raster color table is used for coloring the image. Null values are
  * marked as transparent. Only little endian encoding is supported.
- * 
- * This function uses Rast_window_rows() and Rast_window_cols() to 
+ *
+ * This function uses Rast_window_rows() and Rast_window_cols() to
  * get rows and cols, hence use Rast_set_window() to set the required
  * region for raster access.
- * 
+ *
  * \param name The name of the raster map layer to convert
  * \param color_mode The color modes to use:
  *                  Color mode 1 -> 32Bit ARGB (0xAARRGGBB)
  *                  Color mode 2 -> 32Bit RGB  (0xffRRGGBB)
  *                  Color mode 3 -> grey scale formular: .33R+ .5G+ .17B
  *                  Color mode 4 -> grey scale formular: .30R+ .59G+ .11B
- * 
- * \param result: An unsigned char pointer to store the result. 
+ *
+ * \param result: An unsigned char pointer to store the result.
  *                It must have size 4*cols*rows in case of
- *                ARGB and RGB, 
+ *                ARGB and RGB,
  *                rows*cols in case of gray scale.
- * 
- * \return: 0 in case map not found, -1 in case the color mode is incorrect, 1 on success
- * 
+ *
+ * \return: 0 in case map not found, -1 in case the color mode is incorrect, 1
+ * on success
+ *
  */
-int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
+int Rast_map_to_img_str(char *name, int color_mode, unsigned char *result)
 {
-    unsigned char *set = NULL, *red = NULL, *green = NULL, 
-                  *blue = NULL;
+    unsigned char *set = NULL, *red = NULL, *green = NULL, *blue = NULL;
     unsigned char alpha;
     const char *mapset = NULL;
     CELL *cell_buf = NULL;
@@ -68,19 +67,19 @@ int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
     int rtype, row, col;
     size_t i;
     int map = 0;
-    
+
     struct Colors colors;
     int rows = Rast_window_rows();
     int cols = Rast_window_cols();
 
-    if(color_mode > 3 || color_mode < 1)
-        return(-1);
+    if (color_mode > 3 || color_mode < 1)
+        return (-1);
 
     mapset = G_find_raster2(name, "");
-    
-    if(!mapset)
-        return(0);
-    
+
+    if (!mapset)
+        return (0);
+
     map = Rast_open_old(name, "");
 
     cell_buf = Rast_allocate_c_buf();
@@ -90,29 +89,29 @@ int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
     red = G_malloc(cols);
     green = G_malloc(cols);
     blue = G_malloc(cols);
-    set  = G_malloc(cols);
+    set = G_malloc(cols);
 
     Rast_read_colors(name, mapset, &colors);
 
     rtype = Rast_get_map_type(map);
     if (rtype == CELL_TYPE)
-        voidc = (CELL *) cell_buf;
+        voidc = (CELL *)cell_buf;
     else if (rtype == FCELL_TYPE)
-        voidc = (FCELL *) fcell_buf;
+        voidc = (FCELL *)fcell_buf;
     else if (rtype == DCELL_TYPE)
-        voidc = (DCELL *) dcell_buf;
+        voidc = (DCELL *)dcell_buf;
 
     i = 0;
-    
-    if(color_mode == 1 || color_mode == 2) {/* 32BIT ARGB COLOR IMAGE with transparency */
+
+    if (color_mode == 1 ||
+        color_mode == 2) { /* 32BIT ARGB COLOR IMAGE with transparency */
         for (row = 0; row < rows; row++) {
             Rast_get_row(map, (void *)voidc, row, rtype);
-            Rast_lookup_colors((void *)voidc, red, green, blue, set,
-                               cols, &colors, rtype);
-                               
+            Rast_lookup_colors((void *)voidc, red, green, blue, set, cols,
+                               &colors, rtype);
+
             alpha = (unsigned char)255;
-            if ( color_mode == 1 && Rast_is_null_value( voidc, rtype ) )
-            {
+            if (color_mode == 1 && Rast_is_null_value(voidc, rtype)) {
                 alpha = (unsigned char)0;
             }
             for (col = 0; col < cols; col++) {
@@ -132,25 +131,26 @@ int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
             }
         }
     }
-    else {/* GREYSCALE IMAGE */
+    else { /* GREYSCALE IMAGE */
         for (row = 0; row < rows; row++) {
             Rast_get_row(map, (void *)voidc, row, rtype);
-            Rast_lookup_colors((void *)voidc, red, green, blue, set,
-                               cols, &colors, rtype);
-            
-            if(color_mode == 3) {
+            Rast_lookup_colors((void *)voidc, red, green, blue, set, cols,
+                               &colors, rtype);
+
+            if (color_mode == 3) {
                 for (col = 0; col < cols; col++) {
                     /*.33R+ .5G+ .17B */
-                    result[i++] = ((red[col])   * 11 + 
-                                   (green[col]) * 16 +
-                                   (blue[col])  * 5) >> 5;
+                    result[i++] = ((red[col]) * 11 + (green[col]) * 16 +
+                                   (blue[col]) * 5) >>
+                                  5;
                 }
-            } else {
+            }
+            else {
                 for (col = 0; col < cols; col++) {
                     /*NTSC Y equation: .30R+ .59G+ .11B */
-                    result[i++] = ((red[col])   * 19 + 
-                                   (green[col]) * 38 + 
-                                   (blue[col])  * 7) >> 6;
+                    result[i++] = ((red[col]) * 19 + (green[col]) * 38 +
+                                   (blue[col]) * 7) >>
+                                  6;
                 }
             }
         }
@@ -166,6 +166,6 @@ int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
     G_free(blue);
     G_free(set);
     Rast_close(map);
-    
-    return(1);
+
+    return (1);
 }

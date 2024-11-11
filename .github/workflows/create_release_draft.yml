@@ -1,0 +1,94 @@
+---
+name: Create or check a release draft
+
+on:
+  push:
+    branches:
+      - main
+      - releasebranch_*
+    tags:
+      - '**'
+  pull_request:
+    paths:
+      - .github/**
+      - utils/**
+
+concurrency:
+  group: >-
+    ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+env:
+  OUT_DIR: ${{ github.workspace }}/../grass_outdir
+  GRASS: grass-${{ github.ref_name }}
+permissions: {}
+jobs:
+  build:
+    name: Package and create release draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checks-out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: '3.11'
+      - name: Create output directory
+        run: |
+          mkdir ${{ env.OUT_DIR }}
+      - name: Generate ChangeLog file
+        run: |
+          python utils/gitlog2changelog.py
+          mv ChangeLog ${{ env.OUT_DIR }}/ChangeLog
+          gzip ${{ env.OUT_DIR }}/ChangeLog
+      - name: Generate Git derived data files
+        run: |
+          echo "Generate VERSION_GIT file:"
+          ./utils/generate_version_git_file.sh
+          cat include/VERSION_GIT
+          echo "Generate GENERATE_LAST_COMMIT_FILE:"
+          python utils/generate_last_commit_file.py .
+          cat core_modules_with_last_commit.json
+          echo "Create core modules patch file:"
+          git add core_modules_with_last_commit.json
+          git diff --cached > \
+            ${{ env.OUT_DIR }}/core_modules_with_last_commit.patch
+      - name: Create tarballs (for tags only)
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          cd ..
+          tar -cvf ${{ env.OUT_DIR }}/${{ env.GRASS }}.tar \
+            --exclude=".gi*" --exclude=".tr*" \
+            --transform s/grass/${{ env.GRASS }}/ grass
+          cd ${{ env.OUT_DIR }}
+          gzip -9k ${{ env.GRASS }}.tar
+          md5sum ${{ env.GRASS }}.tar.gz > ${{ env.GRASS }}.tar.gz.md5
+          sha256sum ${{ env.GRASS }}.tar.gz > ${{ env.GRASS }}.tar.gz.sha256
+          xz -9e ${{ env.GRASS }}.tar
+          md5sum ${{ env.GRASS }}.tar.xz > ${{ env.GRASS }}.tar.xz.md5
+          sha256sum ${{ env.GRASS }}.tar.xz > ${{ env.GRASS }}.tar.xz.sha256
+      - name: Publish draft distribution to GitHub (for tags only)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8 # v2.0.9
+        with:
+          name: GRASS GIS ${{ github.ref_name }}
+          body: |
+            Overview of changes
+            - First change
+            - Second change
+          draft: true
+          prerelease: ${{ contains(github.ref, 'RC') }}
+          files: |
+              ${{ env.OUT_DIR }}/${{ env.GRASS }}.tar.gz
+              ${{ env.OUT_DIR }}/${{ env.GRASS }}.tar.gz.md5
+              ${{ env.OUT_DIR }}/${{ env.GRASS }}.tar.gz.sha256
+              ${{ env.OUT_DIR }}/${{ env.GRASS }}.tar.xz
+              ${{ env.OUT_DIR }}/${{ env.GRASS }}.tar.xz.md5
+              ${{ env.OUT_DIR }}/${{ env.GRASS }}.tar.xz.sha256
+              ${{ env.OUT_DIR }}/ChangeLog.gz
+              ${{ env.OUT_DIR }}/core_modules_with_last_commit.patch

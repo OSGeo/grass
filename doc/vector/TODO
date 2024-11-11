@@ -13,7 +13,7 @@ was thinking for example about completely new vector library based on
 OGC standard, using either OGR directly or an abstraction layer and
 OGR as an option (driver). That does not mean that I prefer simple
 feature specification over current GRASS implementation, I am not sure
-which one is better. In any case it would be pitty to drop current
+which one is better. In any case it would be pity to drop current
 topological format with all its flexibility. Each approach has
 advantages and disadvantages. I think that it the best to have in OS
 GIS all alternatives file/database and topology/simple feature.
@@ -52,7 +52,7 @@ vectors. The geometry of GRASS vectors (coor file) is never loaded
 whole to the memory. OTOH the support structures (topology and spatial
 index) are loaded to memory on runtime. It should be possible to use
 files for topology and spatial index also on runtime and that way
-decrease the memory occupied by running module (practicaly to
+decrease the memory occupied by running module (practically to
 zero). The speed will decrease a bit but not significantly because
 files are usually cached by system.
 
@@ -77,7 +77,7 @@ The space which was occupied by a line in coor file is lost after call
 to Vect_delete_line(). A list of the free positions be kept and
 Vect_write_line() should write in that free space if possible instead
 of to append a new line to the end of the file. There is already empty
-structure 'recycle' in 'dig_head' where the list could be imlemented
+structure 'recycle' in 'dig_head' where the list could be implemented
 (without changing 'dig_head' size, to keep binary compatibility).
 
 * Note: currently wxGUI vector digitizer 'undo' depends on this 'feature'
@@ -97,13 +97,13 @@ Remove bounding box from support structures (?)
 The vector structures (P_line, P_area, P_isle) store bounding box in
 N,S,E,W,T,B (doubles). Especially in case of element type GV_POINT the
 bounding box occupies a lot of space (2-3 times more than the point
-itself). I am not sure if this is realy good idea, it is necesssary to
+itself). I am not sure if this is really good idea, it is necesssary to
 valutate also how often Vect_line_box() is called and the impact of
 the necessity to calculate always the box on the fly (when it is not
 stored in the structure) which can be time consuming for example for
 areas or long lines.
 
-* See also http://trac.osgeo.org/grass/ticket/542
+* See also https://trac.osgeo.org/grass/ticket/542
 * Update: implemented in r46898 (2011/07) by Markus Metz
 
 Switching to update mode
@@ -138,12 +138,12 @@ the fly. OGR vectors would be specified by virtual mapset name
 OGR layer will be equivalent to GRASS layer (it is necessary to
 implement layer names, see above). It would be for example possible to
 display a shapefile or PostGIS layers directly:
-  
+
   d.vect map=./shapefiles/@OGR layer=roads    # display shapefile ./shapefiles/roads.shp
   d.vect map=PG:dbname=test@OGR layer=roads   # display table roads from database test
 
-* Update: in progess,
-  see http://trac.osgeo.org/grass/wiki/Grass7/VectorLib/OGRInterface#DirectOGRreadaccess
+* Update: in progress,
+  see https://trac.osgeo.org/grass/wiki/Grass7/VectorLib/OGRInterface#DirectOGRreadaccess
 
 Simple feature API and sequential reading
 -----------------------------------------
@@ -174,7 +174,7 @@ RDBMS. I think that either everything must be stored in RDBMS
 that data are 'too distant' when RDBMS is used with geometry in file.
 
 I think that more work should be done on the drivers which are using
-embeded databases stored in files (SQLite,MySQL,DBF) with scope to
+embedded databases stored in files (SQLite,MySQL,DBF) with scope to
 reach similar functionality (functions, queries) which are in true
 RDBMS without penalty of communication with server. It should be also
 considered the possibility to change the default location of database
@@ -212,7 +212,7 @@ DBF driver
 ----------
 Add on the fly index for select/update.
 
-Implent db_copy_table() in drivers
+Implement db_copy_table() in drivers
 ----------------------------------
 db_copy_table() is implement in client library and it always reads and
 writes all the data which is slow. It would be better to send this
@@ -225,7 +225,7 @@ Load drivers as dynamic libraries
 ---------------------------------
 Database drivers are implemented as executables which communicate with
 modules via pipes. This implementation creates some problems with
-portability (especially on Windows) and it makes comunication slow (I
+portability (especially on Windows) and it makes communication slow (I
 am not sure how much). It would be probably desirable to implement
 drivers as loadable modules (dlopen() and equivalents).
 
@@ -242,17 +242,17 @@ v.select.
 v.pack/v.unpack
 ---------------
 Write it. New modules to pack/unpack a vector to/from single file
-(probably tar). I am not sure about format. Originaly I was thinking
+(probably tar). I am not sure about format. Originally I was thinking
 about ASCII+DBF as it can be read also without GRASS but ASCII and DBF
-can lose precision and DBF has other limitations. It whould be
+can lose precision and DBF has other limitations. It would be
 probably better to use copy of 'coor' file and attributes written to
 SQLite database.
 
 Update: see
-	http://trac.osgeo.org/grass/browser/grass-addons/grass7/vector/v.pack
+	https://trac.osgeo.org/grass/browser/grass-addons/grass7/vector/v.pack
 	and
-	http://trac.osgeo.org/grass/browser/grass-addons/grass7/vector/v.unpack
+	https://trac.osgeo.org/grass/browser/grass-addons/grass7/vector/v.unpack
 	by Luca Delucchi
 
 1/2009: Other suggestions moved to
- http://trac.osgeo.org/grass/
+ https://trac.osgeo.org/grass/

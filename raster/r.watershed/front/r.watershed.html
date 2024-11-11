@@ -73,9 +73,9 @@ represent the amount of overland flow each cell contributes to surface
 flow. If omitted, a value of one (1) is assumed.
 
 <p>
-Raster <b>retention</b> map specifies correction factors per cell for 
-flow distribution. This map indicates the percentage of overland flow 
-units leaving each cell. Values should be between zero and 100. If 
+Raster <b>retention</b> map specifies correction factors per cell for
+flow distribution. This map indicates the percentage of overland flow
+units leaving each cell. Values should be between zero and 100. If
 omitted, a value of 100 is assumed.
 
 <p>
@@ -86,9 +86,9 @@ given, <em>r.watershed</em> assumes no disturbed land. This input is
 used for the RUSLE calculations.
 
 <p>
-Option <b>blocking</b> specifies terrain that will block overland 
-surface flow. Blocking cells and streams stop the slope length for the 
-RUSLE.  All cells that are not NULL and not zero indicate blocking 
+Option <b>blocking</b> specifies terrain that will block overland
+surface flow. Blocking cells and streams stop the slope length for the
+RUSLE.  All cells that are not NULL and not zero indicate blocking
 terrain.
 
 <p>
@@ -137,7 +137,7 @@ upslope area draining through a point per unit contour length and
 <tt>tan(&beta;)</tt> is the local slope angle. The SPI reflects the
 power of water flow at any point in the catchment and the
 tendency for gravitational forces to move that water downslope (Moore
-et al. 1991).  This value will be negative if <tt>&alpha; &lt; 0</tt>, 
+et al. 1991).  This value will be negative if <tt>&alpha; &lt; 0</tt>,
 i.e. for cells with possible surface runoff from outside of the current
 geographic region.
 
@@ -196,7 +196,7 @@ The output <b>slope_steepness</b> raster map stores slope steepness
 (S) factor for the Universal Soil Loss Equation (RUSLE).  Equations
 taken from article entitled
 <em>Revised Slope Steepness Factor for the Universal Soil
-Loss Equation</em> (McCool et al. 1987).  Since the S factor is a small 
+Loss Equation</em> (McCool et al. 1987).  Since the S factor is a small
 number (usually less than one), the GRASS output map is of type DCELL.
 
 <h3>A<sup>T</sup> least-cost search algorithm</h3>
@@ -248,7 +248,7 @@ factor to a higher value can reduce the amount of small sliver basins.
 <h3>In-memory mode and disk swap mode</h3>
 
 There are two versions of this program: <em>ram</em> and <em>seg</em>.
-<em>ram</em> is used by default, <em>seg</em> can be used by setting 
+<em>ram</em> is used by default, <em>seg</em> can be used by setting
 the <b>-m</b> flag.
 
 <p>
@@ -283,7 +283,7 @@ of <em><a href="r.terraflow.html">r.terraflow</a></em> are several times higher 
 
 The upper limit of the <em>ram</em> version is 2 billion
 (2<sup>31</sup> - 1) cells, whereas the upper limit for
-the <em>seg</em> version is 9 billion-billion (2<sup>63</sup> - 1 = 
+the <em>seg</em> version is 9 billion-billion (2<sup>63</sup> - 1 =
 <a href="https://en.wikipedia.org/wiki/9223372036854775807">9.223372e+18</a>)
 cells.<br>  In some situations, the region size (number of cells) may
 be too large for the amount of time or memory
@@ -484,7 +484,7 @@ cut-off value. This only works with SFD, not with MFD.
   v.db.dropcolumn map=rwater_course column=label
 </pre></div>
 
-<!-- can't set line attribute to catchment it is in as v.what.rast and 
+<!-- can't set line attribute to catchment it is in as v.what.rast and
   v.distance only work for point features. Could create endpoint node
   points map and upload to that ?? -->
 <!-- Note value column containing accumulation cells in output vector
@@ -517,37 +517,37 @@ Symposium '89</b>, pp 275-281 (Baltimore, MD, 18-19 March 1989).<br>
 URL: <a href="http://chuck.ehlschlaeger.info/older/IGIS/paper.html">
 http://chuck.ehlschlaeger.info/older/IGIS/paper.html</a>
 
-<li>Holmgren P. (1994). <i>Multiple flow direction algorithms for runoff 
+<li>Holmgren P. (1994). <i>Multiple flow direction algorithms for runoff
 modelling in grid based elevation models: An empirical evaluation.</i>
 <b>Hydrological Processes</b> Vol 8(4), 327-334.<br>
-DOI: <a href="http://dx.doi.org/10.1002/hyp.3360080405">10.1002/hyp.3360080405</a>
+DOI: <a href="https://doi.org/10.1002/hyp.3360080405">10.1002/hyp.3360080405</a>
 
 <li>Kinner D., Mitasova H., Harmon R., Toma L., Stallard R. (2005).
 <i>GIS-based Stream Network Analysis for The Chagres River Basin,
 Republic of Panama</i>. <b>The Rio Chagres: A Multidisciplinary Profile of
 a Tropical Watershed</b>, R. Harmon (Ed.), Springer/Kluwer, p.83-95.<br>
-URL: <a href="http://www4.ncsu.edu/~hmitaso/measwork/panama/panama.html">
-http://www4.ncsu.edu/~hmitaso/measwork/panama/panama.html</a>
+URL: <a href="http://fatra.cnr.ncsu.edu/~hmitaso/measwork/panama/panama.html">
+http://fatra.cnr.ncsu.edu/~hmitaso/measwork/panama/panama.html</a>
 
 <li>McCool et al. (1987). <i>Revised Slope Steepness Factor for the Universal
 Soil Loss Equation</i>, <b>Transactions of the ASAE</b> Vol 30(5).
 
-<li>Metz M., Mitasova H., Harmon R. (2011). <i>Efficient extraction of 
-drainage networks from massive, radar-based elevation models with least 
+<li>Metz M., Mitasova H., Harmon R. (2011). <i>Efficient extraction of
+drainage networks from massive, radar-based elevation models with least
 cost path search</i>, <b>Hydrol. Earth Syst. Sci.</b> Vol 15, 667-678.<br>
-DOI: <a href="http://dx.doi.org/10.5194/hess-15-667-2011">10.5194/hess-15-667-2011</a>
+DOI: <a href="https://doi.org/10.5194/hess-15-667-2011">10.5194/hess-15-667-2011</a>
 
 <li>
-Moore I.D., Grayson R.B., Ladson A.R. (1991). <i>Digital terrain 
-modelling: a review of hydrogical, geomorphological, and biological 
-applications</i>, <b>Hydrological Processes</b>, Vol 5(1), 3-30<br> 
-DOI: <a href="http://dx.doi.org/10.1002/hyp.3360050103">10.1002/hyp.3360050103</a>
+Moore I.D., Grayson R.B., Ladson A.R. (1991). <i>Digital terrain
+modelling: a review of hydrogical, geomorphological, and biological
+applications</i>, <b>Hydrological Processes</b>, Vol 5(1), 3-30<br>
+DOI: <a href="https://doi.org/10.1002/hyp.3360050103">10.1002/hyp.3360050103</a>
 
-<li>Quinn P., K. Beven K., Chevallier P., Planchon O. (1991). <i>The 
-prediction of hillslope flow paths for distributed hydrological modelling 
-using Digital Elevation Models</i>, <b>Hydrological Processes</b> Vol 5(1), 
+<li>Quinn P., K. Beven K., Chevallier P., Planchon O. (1991). <i>The
+prediction of hillslope flow paths for distributed hydrological modelling
+using Digital Elevation Models</i>, <b>Hydrological Processes</b> Vol 5(1),
 p.59-79.<br>
-DOI: <a href="http://dx.doi.org/10.1002/hyp.3360050106">10.1002/hyp.3360050106</a>
+DOI: <a href="https://doi.org/10.1002/hyp.3360050106">10.1002/hyp.3360050106</a>
 
 <li>Weltz M. A., Renard K.G., Simanton J. R. (1987). <i>Revised Universal Soil
 Loss Equation for Western Rangelands</i>, <b>U.S.A./Mexico Symposium of
@@ -575,7 +575,6 @@ Food Production In Arid Zones</b> (Tucson, AZ, 12-16 Oct. 1987).
 <a href="r.stream.extract.html">r.stream.extract</a>
 </em>
 
-
 <h2>AUTHORS</h2>
 
 Original version:
@@ -585,8 +584,3 @@ Faster sorting algorithm and MFD support:
 Markus Metz &lt;markus.metz.giswork at gmail.com&gt;
 <br>
 Retention for flow distribution by Andreas Gericke (IGB Berlin)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

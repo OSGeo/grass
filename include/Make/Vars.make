@@ -27,4 +27,3 @@ ARCH_OBJS = $(patsubst %.o,$(OBJDIR)/%.o,$(MOD_OBJS))
 LOCAL_HEADERS := $(wildcard *.h)
 
 LINK = $(CC)
-

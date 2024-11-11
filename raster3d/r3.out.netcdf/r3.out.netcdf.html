@@ -7,35 +7,35 @@ written in the current working directory. The module is sensitive
 to mapset region settings (set with <em>g.region</em>) and the vertical unit settings
 of the 3D raster map. The vertical unit can be set with <a href="r3.support.html">r3.support</a>.
 
-<h2>Note</h2>
+<h2>NOTES</h2>
 
-The resulting netCDF file will have time as third dimension in case a temporal 
+The resulting netCDF file will have time as third dimension in case a temporal
 vertical unit is specified for the input map, otherwise the third dimension is assumed as spatial.
-If the 3D raster map has a time stamp with absolute time, the start time will be 
+If the 3D raster map has a time stamp with absolute time, the start time will be
 used as starting point for the netCDF time series. If the absolute time stamp is missing
 the date "Jan. 01. 1900 00:00:00" will be used as default. In case of relative time stamp no start time
 is set in the netCDF file. The number of depths of the 3D raster map are the number of time slices
-in the netCDF file. You can use <em>t.rast.to.rast3</em> to convert a 
-space time raster dataset into a 3D raster map representing a space time voxel 
+in the netCDF file. You can use <em>t.rast.to.rast3</em> to convert a
+space time raster dataset into a 3D raster map representing a space time voxel
 cube, then export the raster time series as netCDF file.
 <p>
 Spatial coordinates are exported as cell centered coordinates. The projection can be optionally stored
-in the metadata as <em>crs</em> attributes . 
+in the metadata as <em>crs</em> attributes .
 The netCDF projection metadata storage follows the spatial_ref GDAL/netCDF suggestion
-<a href="http://www.gdal.org/frmt_netcdf.html">here</a> 
-and the netCDF CF 1.6 convention 
-<a href="http://cf-pcmdi.llnl.gov/documents/cf-conventions/1.6/cf-conventions.html#coordinate-system">here</a>  
+<a href="https://gdal.org/frmt_netcdf.html">here</a>
+and the netCDF CF 1.6 convention
+<a href="http://cf-pcmdi.llnl.gov/documents/cf-conventions/1.6/cf-conventions.html#coordinate-system">here</a>
 using WKT projection information. Additional a PROJ string is
-stored in the <em>crs</em> attribute section. 
-The export of projection parameters is suppressed when the XY-projection is set. 
+stored in the <em>crs</em> attribute section.
+The export of projection parameters is suppressed when the XY-projection is set.
 <p>
-The range of the 3D raster map is set in the netCDF output file. Optionally a the netCDF missing value and 
+The range of the 3D raster map is set in the netCDF output file. Optionally a the netCDF missing value and
 _FillValue can be set using the <em>null</em> option. As default the netCDF floating point _FillValues are used
 to fill empty cell.
 <p>
 The netCDF library must be installed on the system and activated at configuration time to compile this module.
 
-<h2>Examples</h2> 
+<h2>EXAMPLES</h2>
 
 <div class="code"><pre>
 g.region s=-90 n=90 w=-180 e=180 b=0 t=5 res=10 res3=10 tbres=1 -p3
@@ -49,7 +49,7 @@ r3.info volume_float
  +----------------------------------------------------------------------------+
  | Layer:    volume_float                   Date: Thu Jun 14 08:40:56 2012    |
  | Mapset:   PERMANENT                      Login of Creator: soeren          |
- | Location: TestLL                                                           |
+ | Project:  TestLL                                                           |
  | DataBase: /1/soeren/grassdata                                              |
  | Title:    volume_float                                                     |
  | Units:    none                                                             |
@@ -89,13 +89,13 @@ r3.info volume_float
  +----------------------------------------------------------------------------+
 
 #####################################################################
-# We use the netCDF ncdump tool to have a look at the header 
+# We use the netCDF ncdump tool to have a look at the header
 # and coordinates of the exported netCDF file
 #####################################################################
 
 r3.out.netcdf --o input=volume_float output=test_float.nc
 ncdump -c test_float.nc
- 
+
 netcdf test_float {
 dimensions:
         longitude = 36 ;
@@ -124,14 +124,14 @@ variables:
 
 // global attributes:
                 :Conventions = "CF-1.5" ;
-                :history = "GRASS GIS 7 netCDF export of r3.out.netcdf" ;
+                :history = "GRASS GIS netCDF export of r3.out.netcdf" ;
 data:
 
- longitude = -175, -165, -155, -145, -135, -125, -115, -105, -95, -85, -75, 
-    -65, -55, -45, -35, -25, -15, -5, 5, 15, 25, 35, 45, 55, 65, 75, 85, 95, 
+ longitude = -175, -165, -155, -145, -135, -125, -115, -105, -95, -85, -75,
+    -65, -55, -45, -35, -25, -15, -5, 5, 15, 25, 35, 45, 55, 65, 75, 85, 95,
     105, 115, 125, 135, 145, 155, 165, 175 ;
 
- latitude = 85, 75, 65, 55, 45, 35, 25, 15, 5, -5, -15, -25, -35, -45, -55, 
+ latitude = 85, 75, 65, 55, 45, 35, 25, 15, 5, -5, -15, -25, -35, -45, -55,
     -65, -75, -85 ;
 
  z = 0.5, 1.5, 2.5, 3.5, 4.5 ;
@@ -142,7 +142,7 @@ data:
 #####################################################################
 
 r3.out.netcdf --o -p null=-1 input=volume_float output=test_float.nc
-ncdump -c test_float.nc 
+ncdump -c test_float.nc
 
 netcdf test_float {
 dimensions:
@@ -179,14 +179,14 @@ variables:
 
 // global attributes:
                 :Conventions = "CF-1.5" ;
-                :history = "GRASS GIS 7 netCDF export of r3.out.netcdf" ;
+                :history = "GRASS GIS netCDF export of r3.out.netcdf" ;
 data:
 
- longitude = -175, -165, -155, -145, -135, -125, -115, -105, -95, -85, -75, 
-    -65, -55, -45, -35, -25, -15, -5, 5, 15, 25, 35, 45, 55, 65, 75, 85, 95, 
+ longitude = -175, -165, -155, -145, -135, -125, -115, -105, -95, -85, -75,
+    -65, -55, -45, -35, -25, -15, -5, 5, 15, 25, 35, 45, 55, 65, 75, 85, 95,
     105, 115, 125, 135, 145, 155, 165, 175 ;
 
- latitude = 85, 75, 65, 55, 45, 35, 25, 15, 5, -5, -15, -25, -35, -45, -55, 
+ latitude = 85, 75, 65, 55, 45, 35, 25, 15, 5, -5, -15, -25, -35, -45, -55,
     -65, -75, -85 ;
 
  z = 0.5, 1.5, 2.5, 3.5, 4.5 ;
@@ -199,7 +199,7 @@ data:
 r3.timestamp map=volume_float date='1 Jan 2001/5 Jan 2001'
 r3.support map=volume_float vunit="days"
 r3.out.netcdf --o -p null=-1 input=volume_float output=test_float.nc
-ncdump -c test_float.nc 
+ncdump -c test_float.nc
 
 netcdf test_float {
 dimensions:
@@ -236,19 +236,19 @@ variables:
 
 // global attributes:
                 :Conventions = "CF-1.5" ;
-                :history = "GRASS GIS 7 netCDF export of r3.out.netcdf" ;
+                :history = "GRASS GIS netCDF export of r3.out.netcdf" ;
 data:
 
- longitude = -175, -165, -155, -145, -135, -125, -115, -105, -95, -85, -75, 
-    -65, -55, -45, -35, -25, -15, -5, 5, 15, 25, 35, 45, 55, 65, 75, 85, 95, 
+ longitude = -175, -165, -155, -145, -135, -125, -115, -105, -95, -85, -75,
+    -65, -55, -45, -35, -25, -15, -5, 5, 15, 25, 35, 45, 55, 65, 75, 85, 95,
     105, 115, 125, 135, 145, 155, 165, 175 ;
 
- latitude = 85, 75, 65, 55, 45, 35, 25, 15, 5, -5, -15, -25, -35, -45, -55, 
+ latitude = 85, 75, 65, 55, 45, 35, 25, 15, 5, -5, -15, -25, -35, -45, -55,
     -65, -75, -85 ;
 
  time = 0, 1, 2, 3, 4 ;
 }
-	
+
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -260,9 +260,5 @@ data:
 </em>
 
 <h2>AUTHORS</h2>
-S&ouml;ren Gebbert
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+S&ouml;ren Gebbert

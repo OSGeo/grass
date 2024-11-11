@@ -16,7 +16,6 @@ db.connect -p
 
 The dbf/ subdirectory in the mapset must exist or must be created by the user.
 
-
 <h2>Creating a DBF table</h2>
 
 DBF tables are created by GRASS when generating a vector map
@@ -26,7 +25,6 @@ If a DBF table has to be created manually, <a href="db.execute.html">db.execute<
 can be used or a spreadsheet application. Also <a href="db.copy.html">db.copy</a>
 is sometimes useful as well as <a href="db.in.ogr.html">db.in.ogr</a> to import external
 tables.
-
 
 <h2>Supported SQL commands by DBF driver</h2>
 
@@ -46,7 +44,6 @@ tables.
   UPDATE table SET assignment1[,assignment2,...] WHERE condition
 </pre></div>
 
-
 <h2>Operators available in conditions</h2>
 
 <div class="code"><pre>
@@ -61,16 +58,16 @@ tables.
 </pre></div>
 
 <p>
-Arithmetic expressions using constants and field values are allowed 
+Arithmetic expressions using constants and field values are allowed
 in condition clauses and in the RHS of assignments.
 <br>
-Usual precedence rules and bracketing (using '(' and ')') are supported. 
+Usual precedence rules and bracketing (using '(' and ')') are supported.
 <br>
-Type conversion is performed if necessary (experimental). 
+Type conversion is performed if necessary (experimental).
 
 <p>
-Conditions allow boolean expressions using the AND, OR and NOT operators, 
-with the usual precedence rules. 
+Conditions allow boolean expressions using the AND, OR and NOT operators,
+with the usual precedence rules.
 
 <p>
 NULLs can be tested by 'colname IS NULL' in conditions. The negation is
@@ -79,7 +76,6 @@ NULLs can be tested by 'colname IS NULL' in conditions. The negation is
 <p>
 Sorting: Empty fields in a character column are sorted to the end.
 
-
 <h2>LIMITATIONS OF THE DBF DRIVER</h2>
 
 The DBF driver supports only a <b>few SQL statements</b> since the DBF tables are
@@ -87,9 +83,9 @@ intended for simple table storage. DBF column names are limited to 10 characters
 (as defined in the DBF specifications). For example,
 
 <ul>
-<li> aggregate functions (sum, count, min, max,...) are <b>not</b> supported 
+<li> aggregate functions (sum, count, min, max,...) are <b>not</b> supported
 in SELECT clauses;</li>
-<li> mathematic functions (sin, cos, exp, log,...) are <b>not</b> supported 
+<li> mathematic functions (sin, cos, exp, log,...) are <b>not</b> supported
 in expressions;</li>
 <li> SQL query with IN are <b>not</b> supported.</li>
 </ul>
@@ -103,7 +99,7 @@ DBMI-DBF driver error:
 SQL parser error: syntax error, unexpected NAME processing 'IN'..
 </pre></div>
 indicates that an unsupported SQL statement (here, 'IN') was used. The only
-solution is to switch the DBMI backend to a real SQL engine (SQLite, 
+solution is to switch the DBMI backend to a real SQL engine (SQLite,
 PostgreSQL, MySQL etc.). See <a href="sql.html">SQL support in GRASS GIS</a>.
 
 <p>
@@ -126,8 +122,3 @@ column names on the fly.
 <a href="sql.html">SQL support in GRASS GIS</a><br>
 <a href="http://shapelib.maptools.org/dbf_api.html">DBF Specifications</a> (Shapelib)
 </em>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

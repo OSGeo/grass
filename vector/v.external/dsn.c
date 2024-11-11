@@ -17,20 +17,21 @@ char *get_datasource_name(const char *opt_dsn, int use_ogr)
 
         /* dbname is mandatory */
         p = G_strcasestr(opt_dsn, "dbname");
-        if (!p) 
+        if (!p)
             G_fatal_error(_("Invalid connection string (dbname missing)"));
-        
+
         /* get dbname */
         p += strlen("dbname=");
         for (i = 0, pp = p; *pp != ' ' && *pp != '\0'; pp++, i++)
             database[i] = *pp;
         database[i] = '\0';
-        
+
         /* build connection string */
         sprintf(connect_str, "%s", opt_dsn);
-        
+
         /* add db.login settings (user, password, host, port) */
-        if (DB_OK == db_get_login2("pg", database, &user, &passwd, &host, &port)) {
+        if (DB_OK ==
+            db_get_login("pg", database, &user, &passwd, &host, &port)) {
             if (user) {
                 if (!G_strcasestr(opt_dsn, "user=")) {
                     strcat(connect_str, " user=");
@@ -60,7 +61,7 @@ char *get_datasource_name(const char *opt_dsn, int use_ogr)
                 G_free((char *)port);
             }
         }
-        
+
         if (use_ogr) {
             dsn = G_store(connect_str);
         }

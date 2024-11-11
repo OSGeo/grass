@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>db.in.ogr</em> imports attribute tables in various formats as
-supported by the <a href="http://www.gdal.org/">OGR library</a>
+supported by the <a href="https://gdal.org/">OGR library</a>
 on the local system (DBF, CSV, PostgreSQL, SQLite, MySQL, ODBC,
 etc.). Optionally a unique <b>key</b> (ID) column can be
 added to the table.
@@ -12,7 +12,7 @@ added to the table.
 
 Limited type recognition can be done for Integer, Real, String, Date, Time and DateTime
 columns through a descriptive file with same name as the CSV file, but .csvt extension
-(see details <a href="http://www.gdal.org/drv_csv.html">here</a>).
+(see details <a href="https://gdal.org/drv_csv.html">here</a>).
 
 <div class="code"><pre>
 # NOTE: create koeppen_gridcode.csvt first for automated type recognition
@@ -38,7 +38,7 @@ db.in.ogr input=/path/to/sqlite.db db_table=census_raleigh output=census_raleigh
 
 <h3>Import of a PostgreSQL table</h3>
 <div class="code"><pre>
-# HINT: if the database contains spatial tables, but you want to import a non-spatial 
+# HINT: if the database contains spatial tables, but you want to import a non-spatial
 table, set the environmental variable PG_LIST_ALL_TABLES to YES before importing
 
 db.in.ogr input="PG:host=localhost dbname=ecad user=neteler" \
@@ -72,8 +72,3 @@ db.in.ogr input=address.xls db_table=address_data
 <h2>AUTHOR</h2>
 
 Markus Neteler
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

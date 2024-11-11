@@ -1,5 +1,5 @@
 :: Software and documentation is (c) 2013 GKX Associates Inc. and 
-:: licensed under [GPL 2.0](http://www.gnu.org/licenses/gpl-2.0.html).
+:: licensed under [GPL 2.0](https://www.gnu.org/licenses/gpl-2.0.html).
 
 :: Purpose: setup path to use R, Rtools and other utilities from cmd line.
 ::
@@ -77,7 +77,7 @@ set R_MIKTEX_PATH=C:\Program Files (x86)\MiKTeX 2.9\miktex\bin
 :: If you have installed at least one package (at which point R will ask to 
 ::  set up a personal library -- which you should allow) then R_LIBS_USER
 ::  is similar to output of .libPaths() with first comnponent being your
-::  personal library and second compnent being library holding packages that 
+::  personal library and second component being library holding packages that 
 ::  come with R.  
 :: Be sure NOT to store the packages that you downloaded from CRAN
 ::  in the %R_HOME%\library directory.

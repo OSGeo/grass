@@ -73,77 +73,78 @@ int G_recursive_copy(const char *src, const char *dst)
     struct stat sb;
 
     if (G_lstat(src, &sb) < 0)
-	return 1;
+        return 1;
 
     /* src is a file */
     if (!S_ISDIR(sb.st_mode)) {
-	char buf[4096];
-	int fd, fd2;
-	size_t len, len2;
+        char buf[4096];
+        int fd, fd2;
+        ssize_t len, len2;
 
-	if (G_lstat(dst, &sb) == 0 && S_ISDIR(sb.st_mode)) {
-	    char path[GPATH_MAX];
-	    const char *p = strrchr(src, '/');
+        if (G_lstat(dst, &sb) == 0 && S_ISDIR(sb.st_mode)) {
+            char path[GPATH_MAX];
+            const char *p = strrchr(src, '/');
 
-	    /* src => dst/src */
-	    sprintf(path, "%s/%s", dst, (p ? p + 1 : src));
-	    return G_recursive_copy(src, path);
-	}
+            /* src => dst/src */
+            sprintf(path, "%s/%s", dst, (p ? p + 1 : src));
+            return G_recursive_copy(src, path);
+        }
 
-	/* src => dst */
-	if ((fd = open(src, O_RDONLY)) < 0)
-	    return 1;
+        /* src => dst */
+        if ((fd = open(src, O_RDONLY)) < 0)
+            return 1;
 
-	if ((fd2 =
-	     open(dst, O_CREAT | O_TRUNC | O_WRONLY,
-		  sb.st_mode & 0777)) < 0) {
-	    close(fd);
-	    return 1;
-	}
+        if ((fd2 = open(dst, O_CREAT | O_TRUNC | O_WRONLY, sb.st_mode & 0777)) <
+            0) {
+            close(fd);
+            return 1;
+        }
 
-	while ((len = read(fd, buf, sizeof(buf))) > 0) {
-	    while (len && (len2 = write(fd2, buf, len)) >= 0)
-		len -= len2;
-	}
+        while ((len = read(fd, buf, sizeof(buf))) > 0) {
+            while (len && (len2 = write(fd2, buf, len)) >= 0)
+                len -= len2;
+        }
 
-	close(fd);
-	close(fd2);
+        close(fd);
+        close(fd2);
 
-	return 0;
+        return 0;
     }
 
     /* src is a directory */
     if (G_lstat(dst, &sb) < 0) {
-	if (G_mkdir(dst))
-	    return 1;
+        if (G_mkdir(dst))
+            return 1;
     }
     else
-	/* if dst already exists and it's a file, try to remove it */
-    if (!S_ISDIR(sb.st_mode)) {
-	if (remove(dst) < 0 || G_mkdir(dst) < 0)
-	    return 1;
-    }
+        /* if dst already exists and it's a file, try to remove it */
+        if (!S_ISDIR(sb.st_mode)) {
+            if (remove(dst) < 0 || G_mkdir(dst) < 0)
+                return 1;
+        }
 
     dirp = opendir(src);
     if (!dirp)
-	return 1;
+        return 1;
 
     for (;;) {
-	char path[GPATH_MAX], path2[GPATH_MAX];
-	struct dirent *dp = readdir(dirp);
+        char path[GPATH_MAX], path2[GPATH_MAX];
+        struct dirent *dp = readdir(dirp);
 
-	if (!dp)
-	    break;
+        if (!dp)
+            break;
 
-	/* do not copy hidden files */
-	if (dp->d_name[0] == '.')
-	    continue;
+        /* do not copy hidden files */
+        if (dp->d_name[0] == '.')
+            continue;
 
-	sprintf(path, "%s/%s", src, dp->d_name);
-	sprintf(path2, "%s/%s", dst, dp->d_name);
+        sprintf(path, "%s/%s", src, dp->d_name);
+        sprintf(path2, "%s/%s", dst, dp->d_name);
 
-	if (G_recursive_copy(path, path2) != 0)
-	    return 1;
+        if (G_recursive_copy(path, path2) != 0) {
+            closedir(dirp);
+            return 1;
+        }
     }
 
     closedir(dirp);

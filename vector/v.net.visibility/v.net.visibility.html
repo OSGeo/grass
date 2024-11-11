@@ -29,25 +29,25 @@ v.buffer input=map output=bufferedmap buffer=1 type=point,line,area,boundary
 </pre></div>
 
 <p>
-The first argument is the input map. It supports lines, boundaries 
+The first argument is the input map. It supports lines, boundaries
 (so, areas) and points. For the algorithm  was written to work with lines
 and boundaries not intersecting each other (that includes overlapping).
 <br>
 The resulting map containing the visibility graph is given in the output map.
 <p>
-If you need to add additional points to compute a shortest path 
+If you need to add additional points to compute a shortest path
 between them afterwards you can use the <b>coordinates</b> parameter, e.g.:
 <div class="code"><pre>
 coordinates=25556200,6686400,25556400,6686600
 </pre></div>
-where 25556200,6686400 are the coordinate of the first point and 
-25556400,6686600 are the coordinates of the second point. Of course 
-you can give as many points as you need. They will be added to the 
-visibility graph and edges from them will be computed. You can 
-always add those points after computing the visibility graph. Simply 
-use the <b>visibility</b> parameter. The input will be the original 
-vector map, the vis will be the computed visibility graph and the 
-output the new visibility graph which will be the vis + the new 
+where 25556200,6686400 are the coordinate of the first point and
+25556400,6686600 are the coordinates of the second point. Of course
+you can give as many points as you need. They will be added to the
+visibility graph and edges from them will be computed. You can
+always add those points after computing the visibility graph. Simply
+use the <b>visibility</b> parameter. The input will be the original
+vector map, the vis will be the computed visibility graph and the
+output the new visibility graph which will be the vis + the new
 points given with coordinate (edges will be computed as well).
 <div class="code"><pre>
 v.net.visibility input=map visibility=vis_map output=new_vis_map \
@@ -70,7 +70,8 @@ d.vect graph
 d.vect areas_7_11_25 color=red type=boundary
 </pre></div>
 
-<h3>Example 2</h3>d.er  
+<h3>Example 2</h3>
+
 An example on how to use <em><a href="v.buffer.html">v.buffer</a></em>
 along with the module:
 <div class="code"><pre>
@@ -80,8 +81,8 @@ d.vect graph
 d.vect lines col=red
 </pre></div>
 
-
 <h3>Example 3</h3>
+
 An example on how to use the coordinate parameter. This will compute the
 visibility graph of the vector map lines with the point 2555678,6686343:
 <div class="code"><pre>
@@ -91,7 +92,8 @@ d.vect lines col=red
 </pre></div>
 
 <h3>Example 4</h3>
-<!-- does not quite ork yet? -->
+
+<!-- does not quite work yet? -->
 An example (North Carolina sample data) on how to use the coordinate
 parameter with the vis parameter.
 Here the vector map graph is computed then a new visibility graph is computed
@@ -111,8 +113,8 @@ d.vect new_graph
 d.vect areas_7_11_25 color=red type=boundary
 </pre></div>
 
-
 <h3>Example 5</h3>
+
 An example for connections of points (Spearfish):
 <div class="code"><pre>
 v.net.visibility input=archsites output=graph
@@ -191,9 +193,10 @@ v.net.visibility input=simple output=graph
 </pre></div>
 
 <h2>KNOWN ISSUES</h2>
-In some cases when 3 points or nodes are collinear, some wrong edges 
-are added. This happens only really rarly and shouldn't be a big 
-problem. When two points have the exact same x coordinate and are 
+
+In some cases when 3 points or nodes are collinear, some wrong edges
+are added. This happens only really rarly and shouldn't be a big
+problem. When two points have the exact same x coordinate and are
 visible, some wrong edges are added.
 
 <h2>SEE ALSO</h2>
@@ -208,11 +211,7 @@ visible, some wrong edges are added.
 <a href="v.to.db.html">v.to.db</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
+
 Maximilian Maldacker<br>
 Mentor: Wolf Bergenheim
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

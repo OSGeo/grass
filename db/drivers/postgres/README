@@ -5,7 +5,7 @@ This driver was originally written by Alex Shevlakov using dbf driver
 DBF driver was not good starting point, so I (R. Blazek) have rewritten it again
 using ODBC, postgres driver and adding new code.
 
-Driver supports only some field types, other types are ignored and warning is printed 
+Driver supports only some field types, other types are ignored and warning is printed
 by G_warning().
 
 FIELD TYPES:
@@ -19,7 +19,7 @@ Check also for PostgreSQL data types for defining them in GRASS:
 
 
 Supported types in ./globals.h:
-(See http://www.postgresql.org/docs/9.4/interactive/datatype.html)
+(See https://www.postgresql.org/docs/9.4/interactive/datatype.html)
 
 DB_C_TYPE_INT:
 bit, int2, smallint, int4, int, integer, int8, bigint, serial, oid
@@ -32,4 +32,3 @@ character, char, character varying, varchar,  text, bool, boolean
 
 DB_C_TYPE_DATETIME:
 date, time, timestamp
-

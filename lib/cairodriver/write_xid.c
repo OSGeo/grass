@@ -1,4 +1,3 @@
-
 #include <grass/glocale.h>
 
 #include "cairodriver.h"
@@ -11,14 +10,13 @@ void cairo_write_xid(void)
 
     fp = fopen(ca.file_name, "w");
     if (!fp)
-	G_fatal_error(_("Unable to open output file <%s>"), ca.file_name);
+        G_fatal_error(_("Unable to open output file <%s>"), ca.file_name);
 
-    sprintf(buf, "0x%08lx\n", (unsigned long) ca.win);
+    sprintf(buf, "0x%08lx\n", (unsigned long)ca.win);
 
     if (fputs(buf, fp) < 0)
-	G_fatal_error(_("Unable to write output file <%s>"), ca.file_name);
+        G_fatal_error(_("Unable to write output file <%s>"), ca.file_name);
 
     fclose(fp);
 #endif
 }
-

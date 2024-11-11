@@ -1,0 +1,73 @@
+---
+name: Additional Checks
+
+# Checks which are not in standardized tools such as custom checks by scripts
+# in the source code or small 3rd party checks without large projects behind them.
+# Number of disconnected, but simple checks can be combined into one workflow
+# (and job) to reduce the number of jobs.
+
+on:
+  push:
+    branches:
+      - main
+      - releasebranch_*
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  additional-checks:
+    name: Additional checks
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository contents
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 31
+
+      - name: Check what files were changed
+        uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+        id: changes
+        with:
+          filters: |
+            precommit:
+              - '.pre-commit-config.yaml'
+
+      - name: Check for CRLF endings
+        uses: erclu/check-crlf@94acb86c2a41b0a46bd8087b63a06f0457dd0c6c # v1.2.0
+        with:
+          # Ignore all test data, Windows-specific directories and scripts.
+          exclude: mswindows .*\.bat .*/testsuite/data/.*
+
+      - name: Set up Python
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: '3.10'
+
+      - name: Check that files with the same content are the same
+        run: |
+          diff Dockerfile docker/ubuntu/Dockerfile
+
+      - name: Generate core modules with last commit JSON file and test it
+        run: |
+          python -m pip install pytest pytest-depends
+          python utils/generate_last_commit_file.py .
+          pytest utils/test_generate_last_commit_file.py
+
+      - name: Generate release notes using git log
+        run: |
+          python -m pip install PyYAML requests
+          # Git works without any special permissions.
+          # Using current branch or the branch against the PR is open.
+          # Using the last 30 commits (for branches, tags, and PRs).
+          # End is the current (latest) commit.
+          python ./utils/generate_release_notes.py log \
+              ${{ github.ref_name }} \
+              $(git rev-parse HEAD~30) \
+              ""
+
+      - run: pip install pre-commit && pre-commit run -a
+        if: ${{ steps.changes.outputs.precommit == 'true' }}

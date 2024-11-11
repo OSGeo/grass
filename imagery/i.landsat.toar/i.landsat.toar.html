@@ -24,6 +24,15 @@ not found in the metadata file then the command line values are used.
 raster is set to null in the output raster and it is not included in
 the equations.
 
+<p>
+<b>Attention</b>: This module does <b>not</b> respect the current
+region settings, in order to have the largest possible sample of pixels
+from where to get the darkest one of the scene and perform the DOS
+correction. To limit the results to a custom region, the user is
+advised to clip the results (with <a href="r.clip.html">r.clip</a>, for
+instance) or to define the region first, import the images with region
+cropping, and then running the module.
+
 <h2>Uncorrected at-sensor values (method=uncorrected, default)</h2>
 
 The standard geometric and radiometric corrections result in a
@@ -109,26 +118,26 @@ in <em>i.gensigset</em>).
 
 <h3>On Landsat-8 metadata file </h3>
 
-NASA reports a structure of the L1G Metadata file 
-(<a href="http://landsat.usgs.gov/documents/LDCM-DFCB-004.pdf">LDCM-DFCB-004.pdf</a>) 
+NASA reports a structure of the L1G Metadata file
+(<a href="http://landsat.usgs.gov/documents/LDCM-DFCB-004.pdf">LDCM-DFCB-004.pdf</a>)
 for Landsat Data Continuity Mission (i.e. Landsat-8).
 
 <p>
-NASA retains in MIN_MAX_RADIANCE group the necessary information 
-to transform Digital Numbers (DN) in radiance values. Then, 
-<em>i.landsat.toar</em> replaces the possible standard values with the 
-metadata values. The results match with the values reported by the 
+NASA retains in MIN_MAX_RADIANCE group the necessary information
+to transform Digital Numbers (DN) in radiance values. Then,
+<em>i.landsat.toar</em> replaces the possible standard values with the
+metadata values. The results match with the values reported by the
 metada file in RADIOMETRIC_RESCALING group.
 
 <p>
-Also, NASA reports the same values of reflectance for all bands 
-in max-min values and in gain-bias values. This is strange that all 
-bands have the same range of reflectance. Also, they wrote in the 
-web page as to calculate reflectance directly from DN, first with 
+Also, NASA reports the same values of reflectance for all bands
+in max-min values and in gain-bias values. This is strange that all
+bands have the same range of reflectance. Also, they wrote in the
+web page as to calculate reflectance directly from DN, first with
 RADIOMETRIC_RESCALING values and second divided by sin(sun_elevation).
 
 <p>
-This is a simple rescaling 
+This is a simple rescaling
 
 <ul>
   <li> reflectance = radiance / sun_radiance = (DN * RADIANCE_MULT + RADIANCE_ADD) / sun_radiance</li>
@@ -138,8 +147,8 @@ This is a simple rescaling
 </ul>
 
 <p>
-The problem arises when we need ESUN values (not provided) to 
-compute sun_radiance and DOS. We assume that REFLECTANCE_MAXIMUM 
+The problem arises when we need ESUN values (not provided) to
+compute sun_radiance and DOS. We assume that REFLECTANCE_MAXIMUM
 corresponds to the RADIANCE_MAXIMUM, then
 
 <ul>
@@ -147,17 +156,17 @@ corresponds to the RADIANCE_MAXIMUM, then
   <li> Esun = (PI * d^2) * RADIANCE_MAXIMUM / REFLECTANCE_MAXIMUM </li>
 </ul>
 
-where <em>d</em> is the earth-sun distance provided by metadata file 
+where <em>d</em> is the earth-sun distance provided by metadata file
 or computed inside the program.
 
 <p>
-The <em>i.landsat.toar</em> reverts back the NASA rescaling to continue 
-using Lmax, Lmin, and Esun values to compute the constant to convert 
-DN to radiance and radiance to reflectance with the "traditional" 
+The <em>i.landsat.toar</em> reverts back the NASA rescaling to continue
+using Lmax, Lmin, and Esun values to compute the constant to convert
+DN to radiance and radiance to reflectance with the "traditional"
 equations and simple atmospheric corrections.
 
 <b>Attention</b>: When MAXIMUM values are not provided,
-<em>i.landsat.toar</em> tries to calculate Lmax, Lmin, and Esun from 
+<em>i.landsat.toar</em> tries to calculate Lmax, Lmin, and Esun from
 RADIOMETRIC_RESCALING (in tests the results were the same).
 
 <h3>Calibration constants</h3>
@@ -226,7 +235,7 @@ g.copy raster=lsat7_2002_80,lsat7_2002.8
 </pre></div>
 
 Calculation of reflectance values from DN using DOS1 (metadata obtained
-from <a href="http://www.grassbook.org/wp-content/uploads/ncexternal/landsat/2002/p016r035_7x20020524.met.gz">p016r035_7x20020524.met.gz</a>):
+from <a href="https://grassbook.org/wp-content/uploads/ncexternal/landsat/2002/p016r035_7x20020524.met.gz">p016r035_7x20020524.met.gz</a>):
 
 <div class="code"><pre>
 i.landsat.toar input=lsat7_2002. output=lsat7_2002_toar. sensor=tm7 \
@@ -235,7 +244,6 @@ i.landsat.toar input=lsat7_2002. output=lsat7_2002_toar. sensor=tm7 \
 </pre></div>
 
 The resulting Landsat channels are named <tt>lsat7_2002_toar.1 .. lsat7_2002_toar.8</tt>.
-
 
 <h2>REFERENCES</h2>
 
@@ -283,8 +291,3 @@ The resulting Landsat channels are named <tt>lsat7_2002_toar.1 .. lsat7_2002_toa
 
 E. Jorge Tizado  (ej.tizado unileon es), Dept. Biodiversity and Environmental Management,
 University of Le&oacute;n, Spain
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

@@ -3,7 +3,7 @@
  * MODULE:       DBMI library
  * AUTHOR(S):    Joel Jones (CERL/UIUC) <jjones zorro.cecer.army.mil>
  *               Radim Blazek <radim.blazek gmail.com>,
- *               Brad Douglas <rez touchofmadness.com>, 
+ *               Brad Douglas <rez touchofmadness.com>,
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Roberto Flor, Hamish Bowman <hamish_b yahoo.com>,
  *               Markus Neteler <neteler itc.it>,
@@ -26,7 +26,7 @@
 DBMI Library
 
 Original author: Joel Jones (jjones * zorro.cecer.army.mil | jjones * uiuc.edu )
-            Ref: http://lists.osgeo.org/pipermail/grass-dev/1995-February/002015.html
+            Ref: https://lists.osgeo.org/pipermail/grass-dev/1995-February/002015.html
 
 Directory contents:
 
@@ -38,7 +38,7 @@ dbmi: DataBase Management Interface (db_*() functions)
 sqlp: SQL parser library
 stubs: stubs for unimplemented DB functions
 
-The DBMI drivers are stored in 
+The DBMI drivers are stored in
 ../../db/drivers/
 
 The DBMI user modules are stored in

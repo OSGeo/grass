@@ -3,7 +3,7 @@
 G. Grothendieck
 
 Software and documentation is (c) 2013 GKX Associates Inc. and licensed
-under [GPL 2.0](http://www.gnu.org/licenses/gpl-2.0.html).
+under [GPL 2.0](https://www.gnu.org/licenses/gpl-2.0.html).
 
 ## Introduction ##
 
@@ -44,7 +44,7 @@ used with `vim` or other text editor.
 
 ### Purpose ###
 
-The purpose of `R.bat` is to facilitiate the use of R from the Windows `cmd`
+The purpose of `R.bat` is to facilitate the use of R from the Windows `cmd`
 line by eliminating the need to make any system changes.  There is no need to
 modify the Windows path or to set any environment variables for standard
 configurations of R.  It will automatically locate R (and Rtools and
@@ -68,7 +68,7 @@ Typical usage of `R.bat` to launch R gui is the following ^[
 If `R.exe` were on the Windows path and before `R.bat` then it would
 have to be written as follows: `R.bat gui`]:
 
-```
+```bash
 R gui
 ```
 
@@ -96,7 +96,7 @@ remainder becomes the default subcommand.  For example, if `R.bat` were renamed
 Other executable files that come with R (`R.exe`, `Rcmd.exe`, `Rscript.exe`)
 can be run in a similar way:
 
-```
+```bash
 R --help
 R cmd --help
 R script --help
@@ -109,7 +109,7 @@ discussed later.)
 
 There are also some support commands:
 
-```
+```bash
 R cd
 R dir
 R ls
@@ -128,7 +128,7 @@ Below is a list with typical values.  These values are determined by the script
 heuristically (or the user can set any before running `R.bat` or
 `R.bat` itself can be customized by setting any of them near top of the script).
 
-```
+```text
 R_ARCH=x64
 R_CMD=RShow
 R_HOME=C:\Program Files\R\R-2.15.3
@@ -161,7 +161,7 @@ values for these variables.
 
 The command
 
-```
+```bash
 R path
 ```
 
@@ -178,7 +178,7 @@ since  `R.bat` will not have to run each time that `R` is started. ^[On a
 Note that if both `R.bat` and `R.exe` exist on the Windows path then the first
 on the path will be called if one uses:
 
-```
+```bash
 R ...arguments...
 ```
 
@@ -192,7 +192,7 @@ described later.)
 
 The command
 
-```
+```bash
 R tools
 ```
 
@@ -210,7 +210,7 @@ installation in `R_ROOT` which has the most recent date will be used.
 
 If we enter this at the `cmd` line:
 
-```
+```bash
 set R_VER=R-2.14.0
 ```
 
@@ -218,7 +218,7 @@ then for the remainder of this `cmd` line session that version will be used.
 If one wishes to use two different R versions at once we could spawn a new `cmd`
 line session:
 
-```
+```bash
 start
 ```
 
@@ -229,7 +229,7 @@ window it will use the specified version.
 One can change the registry entry permanently to refer to a particlar version
 like this:
 
-```
+```bash
 cmd /c set R_VER=R-2.14.0 ^& R SetReg
 ```
 
@@ -242,7 +242,7 @@ determined by which R install directory is the most recent.  To make a
 particular R install directory the most recent run the following in a `cmd`
 line session with Administrator privileges:
 
-```
+```bash
 R dir
 el cmd /c set R_VER=R-2.14.0 ^& R touch
 ```
@@ -307,14 +307,14 @@ be ignored since it would be regarded as a comment by R.)
 
 For example, if we have a file `test.bat` with the following two lines:
 
-```
+```R
 #Rscript %0 %*
 print(pi)
 ```
 
 then we can invoke it from the Windows cmd line like this:
 
-```
+```bash
 test
 ```
 
@@ -338,7 +338,7 @@ There is more information on this in the comments at the top of the script.
 
 The command
 
-```
+```bash
 Rpathset
 ```
 
@@ -350,7 +350,7 @@ the R binaries will be on the path so they can be accessed directly without
 
 `Rpathset` is an alternative to
 
-```
+```bash
 R path
 ```
 
@@ -366,7 +366,7 @@ work on untested Windows configurations.
 
 `Rpathset.bat` might be used like this:
 
-```
+```bash
 Rpathset
 Rgui
 ```
@@ -384,7 +384,7 @@ another.  If used to transfer packages from one version of R to another it is
 recommended that the user run `upgrade.packages()` in the target.  For example,
 assuming the default location for the user libraries:
 
-```
+```bash
 cd %userprofile%\Documents\win-library
 copydir 2.15\library 3.0\library
 
@@ -405,7 +405,7 @@ overwrite such packages delete them from the target first using the Windows
 
 `el.js` runs its arguments elevated (i.e. with Administrator privileges).  For example,
 
-```
+```bash
 el R touch
 ```
 
@@ -430,6 +430,6 @@ This batch file creates a pdf of this documentation from the markdown file
 found [here](https://code.google.com/p/pandoc/downloads/list).  It is run
 without arguments:
 
-```
+```bash
 make-batchfiles-pdf
 ```

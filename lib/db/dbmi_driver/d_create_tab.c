@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_create_tab.c
- * 
+ *
  * \brief DBMI Library (driver) - create table
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -18,10 +18,10 @@
 #include "dbstubs.h"
 
 /*!
-  \brief Create table
+   \brief Create table
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_d_create_table(void)
 {
@@ -37,8 +37,8 @@ int db_d_create_table(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

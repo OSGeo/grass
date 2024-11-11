@@ -1,24 +1,24 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.overlay</em> allows the user to overlay two vector maps. Features 
-in <b>ainput</b> can be lines or areas and are cut with areas in 
-<b>binput</b>. Simple <i>clipping</i> can be performed with the <b>and</b> 
+<em>v.overlay</em> allows the user to overlay two vector maps. Features
+in <b>ainput</b> can be lines or areas and are cut with areas in
+<b>binput</b>. Simple <i>clipping</i> can be performed with the <b>and</b>
 operator.
 <p>
-If areas in <b>ainput</b> are overlaid with areas in <b>binput</b>, 
-it is sometimes necessary to snap areas of <b>binput</b> to those of 
-<b>ainput</b>, otherwise areas can go missing or many sliver areas 
-can be created. Snapping is enabled by default and can be disabled by 
-setting the <b>snap</b> option to a negative value. Recommended values 
-are between 0.00000001 and 0.0001. Using larger values for snapping can 
-have undesired side-effects, but may sometimes be necessary to get a 
-clean output (see example below). In general, it is recommended to start 
-with a small snapping threshold, gradually increasing the threshold until 
-the result is reasonably clean. Snapping modifies only boundaries in 
-binput, which are snapped to boundaries in ainput. Boundaries in <b>ainput</b> 
+If areas in <b>ainput</b> are overlaid with areas in <b>binput</b>,
+it is sometimes necessary to snap areas of <b>binput</b> to those of
+<b>ainput</b>, otherwise areas can go missing or many sliver areas
+can be created. Snapping is enabled by default and can be disabled by
+setting the <b>snap</b> option to a negative value. Recommended values
+are between 0.00000001 and 0.0001. Using larger values for snapping can
+have undesired side-effects, but may sometimes be necessary to get a
+clean output (see example below). In general, it is recommended to start
+with a small snapping threshold, gradually increasing the threshold until
+the result is reasonably clean. Snapping modifies only boundaries in
+binput, which are snapped to boundaries in ainput. Boundaries in <b>ainput</b>
 are not modified.
-<!-- This is outdated 
-There are 3 links attached to features in output map, 
+<!-- This is outdated
+There are 3 links attached to features in output map,
 <ul>
 <li><b>field 1</b>: link to the new table, new table has 3 columns
     <ul>
@@ -32,24 +32,25 @@ There are 3 links attached to features in output map,
 -->
 
 <h2>NOTES</h2>
-Currently only areas in <b>ainput</b> are supported for the operators 
+
+Currently only areas in <b>ainput</b> are supported for the operators
 <em>or</em> and <em>xor</em>! See also <em><a href="v.select.html">v.select</a></em>.
 
-The operator defines what kind of operation will be done. Features are 
-written to output, if the result of an operation <b>ainput</b> operator <b>binput</b> 
+The operator defines what kind of operation will be done. Features are
+written to output, if the result of an operation <b>ainput</b> operator <b>binput</b>
 is true.
 
 <p>
-If the <i>first</i> number of the <b>olayer</b> option is greater than 0, then the 
-resulting output map has a merged attribute table in the given layer 
-number. The original column names have a prefix (<em>a_</em> and 
+If the <i>first</i> number of the <b>olayer</b> option is greater than 0, then the
+resulting output map has a merged attribute table in the given layer
+number. The original column names have a prefix (<em>a_</em> and
 <em>b_</em>) corresponding to <b>ainput</b> and <b>binput</b> map.
 <p>
-If the <i>second</i> number of the <b>olayer</b> option is greater than 0, then the 
+If the <i>second</i> number of the <b>olayer</b> option is greater than 0, then the
 categories of <b>ainput</b> in layer <b>alayer</b> are transferred to
 the output layer with the second number.
 <p>
-If the <i>third</i> number of the <b>olayer</b> option is greater than 0, then the 
+If the <i>third</i> number of the <b>olayer</b> option is greater than 0, then the
 categories of <b>binput</b> in layer <em>blayer</em> are transferred to
 the output layer with the third number.
 
@@ -70,7 +71,6 @@ connect the copied tables to the output map.-->
 
 <h2>EXAMPLES</h2>
 
-
 Preparation of example data (North Carolina sample dataset):
 
 <div class="code"><pre>
@@ -83,7 +83,6 @@ g.region vector=zipcodes_wake,box -p res=100 -a
 g.region n=n+1000 s=s-1000 w=w-1000 e=e+1000 -p
 d.mon wx0
 </pre></div>
-
 
 <h3>AND operator</h3>
 
@@ -98,9 +97,8 @@ d.vect map=v_overlay_AND
 
 <center>
 <img src="v_overlay_op_and.png" alt="v.overlay with AND operator"><br>
-<i>Figure: v.overlay with AND operator (selected polygons in grey color)</i>
+<i>Figure: v.overlay with AND operator (selected polygons in yellow color)</i>
 </center>
-
 
 <h3>OR operator</h3>
 
@@ -115,9 +113,8 @@ d.vect map=v_overlay_OR
 
 <center>
 <img src="v_overlay_op_or.png" alt="v.overlay with OR operator"><br>
-<i>Figure: v.overlay with OR operator (selected polygons in grey color)</i>
+<i>Figure: v.overlay with OR operator (selected polygons in yellow color)</i>
 </center>
-
 
 <h3>XOR operator</h3>
 
@@ -132,9 +129,8 @@ d.vect map=v_overlay_XOR
 
 <center>
 <img src="v_overlay_op_xor.png" alt="v.overlay with XOR operator"><br>
-<i>Figure: v.overlay with XOR operator (selected polygons in grey color)</i>
+<i>Figure: v.overlay with XOR operator (selected polygons in yellow color)</i>
 </center>
-
 
 <h3>NOT operator</h3>
 
@@ -149,9 +145,8 @@ d.vect map=v_overlay_NOT
 
 <center>
 <img src="v_overlay_op_not.png" alt="v.overlay with NOT operator"><br>
-<i>Figure: v.overlay with NOT operator (selected polygon in grey color)</i>
+<i>Figure: v.overlay with NOT operator (selected polygon in yellow color)</i>
 </center>
-
 
 <h3>Overlay operations: AND, OR, NOT, XOR</h3>
 
@@ -179,7 +174,6 @@ v.overlay ainput=poly1 binput=poly2 operator=xor output=poly_1_2_xor
 <br>
 <i>Figure: v.overlay results of AND, OR, NOT, XOR operations</i>
 </center>
-
 
 <h3>Polygons overlaid with polygons</h3>
 <div class="code"><pre>
@@ -233,8 +227,8 @@ b_UA_TYPE|UA
 </center>
 
 <p>
-As can be seen by the resulting large number of centroids on boundaries, 
-the urban areas do not match exactly the Census 2000 areas. In this case 
+As can be seen by the resulting large number of centroids on boundaries,
+the urban areas do not match exactly the Census 2000 areas. In this case
 a clean result can be obtained by snapping with a threshold of 0.1 m.
 
 <h3>Lines overlaid with polygons</h3>
@@ -260,7 +254,6 @@ v.overlay ainput=roadsmajor atype=line binput=raleigh out=roadsmajor_raleigh ope
 </table>
 </center>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -275,8 +268,3 @@ v.overlay ainput=roadsmajor atype=line binput=raleigh out=roadsmajor_raleigh ope
 Radim Blazek, ITC-Irst, Trento, Italy<br>
 Markus Metz<br>
 Speedup for large, complex input areas sponsored by <a href="https://www.mundialis.de">mundialis</a>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

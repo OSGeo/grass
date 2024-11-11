@@ -14,7 +14,7 @@ lanczos3 will be sharper than lanczos2.
 <p>
 r.resamp.filter implements FIR (finite impulse response) filtering. All
 of the functions are low-pass filters, as they are symmetric. See
-<a href="http://en.wikipedia.org/wiki/Window_function">Wikipedia: Window function</a>
+<a href="https://en.wikipedia.org/wiki/Window_function">Wikipedia: Window function</a>
 for examples of common window functions and their frequency responses.
 
 <p>
@@ -40,7 +40,6 @@ All of the kernels specified by the <b>filter</b> parameter are
 multiplied together. Typical usage will use either a single kernel or an
 infinite kernel along with a finite window.
 
-
 <h2>NOTES</h2>
 
 Resampling modules (<em>r.resample, r.resamp.stats, r.resamp.interp,
@@ -63,18 +62,33 @@ supposed to be proportional to the order ("a" parameter), so lanczos3
 should use 3 times as many samples (at the same sampling frequency, i.e.
 cover 3 times as large a time interval) as lanczos1 in order to get a
 similar frequency response (higher-order filters will fall off faster, but
-the frequency at which the fall-off starts should be the same). See 
-<a href="http://en.wikipedia.org/wiki/File:Lanczos-kernel.svg">Wikipedia: Lanczos-kernel.svg</a>
+the frequency at which the fall-off starts should be the same). See
+<a href="https://en.wikipedia.org/wiki/File:Lanczos-kernel.svg">Wikipedia: Lanczos-kernel.svg</a>
 for an illustration. If both graphs were drawn on the same axes, they
 would have roughly the same shape, but the a=3 window would have a longer
 tail. By scaling the axes to the same width, the a=3 window has a narrower
 central lobe.
 
 <p>
-For longitude-latitude locations, the interpolation algorithm is based on
+For longitude-latitude coordinate reference systems,
+the interpolation algorithm is based on
 degree fractions, not on the absolute distances between cell centers.  Any
 attempt to implement the latter would violate the integrity of the
 interpolation method.
+
+<h3>PERFORMANCE</h3>
+<p>By specifying the number of parallel processes with <b>nprocs</b> option,
+<em>r.resamp.filter</em> can run faster, see benchmarks below.
+
+<div align="center" style="margin: 10px">
+     <img src="r_resamp_filter_benchmark_size.png" alt="benchmark for number of cells" border="0">
+     <br>
+     <i>Figure: Benchmark shows execution time for different
+     number of cells. See benchmark script in the source code.</i>
+     </div>
+<p>To reduce the memory requirements to minimum, set option <b>memory</b> to zero.
+To take advantage of the parallelization, GRASS GIS
+needs to compiled with OpenMP enabled.
 
 
 <h2>SEE ALSO</h2>
@@ -94,8 +108,3 @@ Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation
 <h2>AUTHOR</h2>
 
 Glynn Clements
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

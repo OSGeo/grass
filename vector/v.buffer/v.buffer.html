@@ -8,7 +8,7 @@ segments are generated).
 
 <h2>NOTES</h2>
 
-Internal buffers for areas can be generated with negative distance 
+Internal buffers for areas can be generated with negative distance
 values ("inward buffer" or "negative buffer" or "shrinking").
 <p>
 <em>v.buffer</em> fusions the geometries of buffers by default.
@@ -37,7 +37,7 @@ generates buffers using built-in buffering algorithm (which is still
 buggy for some input data).
 
 <p>
-The options <b>minordistance</b>, <b>angle</b>, <b>tolerance</b> are 
+The options <b>minordistance</b>, <b>angle</b>, <b>tolerance</b> are
 kept for backward compatibility and have no effect with GEOS buffering.
 
 <h3>Corner settings</h3>
@@ -50,7 +50,7 @@ The following vector line related corners (also called "cap") exist:
 </ul>
 
 By default <em>v.buffer</em> creates rounded buffers (blue color on
-figure below): 
+figure below):
 
 <center>
   <img src="v_buffer_line.png">
@@ -65,14 +65,14 @@ polylines (green color on the figure below):
   <img src="v_buffer_line_c.png">
 </center>
 
-Using <b>-s</b> with a point vector map as input data, square buffers are 
+Using <b>-s</b> with a point vector map as input data, square buffers are
 created instead of round buffers.
 
 <center>
   <img src="v_buffer_point_s.png">
 </center>
 
-<!-- Only support by GRASS buffer 
+<!-- Only support by GRASS buffer
 Flag <b>-s</b> also influences corners around polygons (see red color
 on the figure below):
 
@@ -101,7 +101,7 @@ shown in black)
 <h3>Circles around input points</h3>
 
 <div class="code"><pre>
-v.buffer input=hospitals output=hospitals_circled type=point distance=2000 
+v.buffer input=hospitals output=hospitals_circled type=point distance=2000
 </pre></div>
 
 <center>
@@ -151,11 +151,10 @@ Not all features are buffered, only the polygons that allow creation inside
 a topological cleaned polygon.
 </center>
 
-
 <h2>REFERENCES</h2>
 
 <ul>
-<li><a href="http://trac.osgeo.org/geos">GEOS Library</a></li>
+<li><a href="https://trac.osgeo.org/geos">GEOS Library</a></li>
 </ul>
 
 <h2>SEE ALSO</h2>
@@ -175,8 +174,3 @@ Radim Blazek<br>
 Rewritten by Rosen Matev (with support through the
  Google Summer of Code program 2008)<br>
 Rewritten by Markus Metz (2011, 2012)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

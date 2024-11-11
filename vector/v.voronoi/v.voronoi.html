@@ -1,24 +1,24 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.voronoi</em> creates a Voronoi diagram (Thiessen polygons) from 
-points or centroids. 
-<p>The bounds of the output map are limited by the current region 
+<em>v.voronoi</em> creates a Voronoi diagram (Thiessen polygons) from
+points or centroids.
+<p>The bounds of the output map are limited by the current region
 (see <em><a href="g.region.html">g.region</a></em>).
 
 <p>
 The <em>-a</em> flag can be used to create a Voronoi diagram for areas.
 
 <p>
-The <em>-s</em> flag can be used to extract the center line of areas or 
-skeletons of areas with <em>thin</em> >= 0. Smaller values for the 
-<em>thin</em> option will preserve more detail, while negative values 
+The <em>-s</em> flag can be used to extract the center line of areas or
+skeletons of areas with <em>thin</em> >= 0. Smaller values for the
+<em>thin</em> option will preserve more detail, while negative values
 will extract only the center line.
 
 <h2>NOTES</h2>
 
-<em>v.voronoi</em> suffers from numerical instability, results can 
-sometimes contain many artefacts. When creating Voronoi diagrams for areas 
-or skeletons for areas, it is highly recommended to simplify the areas first 
+<em>v.voronoi</em> suffers from numerical instability, results can
+sometimes contain many artefacts. When creating Voronoi diagrams for areas
+or skeletons for areas, it is highly recommended to simplify the areas first
 with <em><a href="v.generalize.html">v.generalize</a></em>.
 
 <p>
@@ -29,11 +29,11 @@ then optionally convert the result to a raster map with
 <em><a href="v.to.rast.html">v.to.rast</a></em>.
 
 <p>
-The extraction of skeletons and center lines with the <em>-s</em> flag 
-is a brute force approach. Faster and more accurate algorithms to 
-extract skeletons from areas exist but are not yet implemented. In the 
-meantime, skeletons and center lines can be simplified with the 
-Douglas-Peucker algorithm: 
+The extraction of skeletons and center lines with the <em>-s</em> flag
+is a brute force approach. Faster and more accurate algorithms to
+extract skeletons from areas exist but are not yet implemented. In the
+meantime, skeletons and center lines can be simplified with the
+Douglas-Peucker algorithm:
 <em><a href="v.generalize.html">v.generalize method=douglas</a></em>.
 
 <h2>EXAMPLE</h2>
@@ -79,26 +79,22 @@ Result:
 </center>
 
 <h2>REFERENCES</h2>
+
 <em>Steve J. Fortune,  (1987).  A Sweepline Algorithm for
     Voronoi Diagrams, Algorithmica 2, 153-174
-    (<a href="http://dx.doi.org/10.1007/BF01840357">DOI</a>).</em>
-
+    (<a href="https://doi.org/10.1007/BF01840357">DOI</a>).</em>
 
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="g.region.html">g.region</a>,
-<a href="v.delaunay.html">v.delaunay</a>, 
+<a href="v.delaunay.html">v.delaunay</a>,
 <a href="v.hull.html">v.hull</a>
 </em>
 
-
 <h2>AUTHORS</h2>
+
 James Darrell McCauley, Purdue University<br>
 GRASS 5 update, improvements: <a href="mailto:aaime@libero.it">Andrea Aime</a>, Modena, Italy<br>
 GRASS 5.7 update: Radim Blazek<br>
 Markus Metz
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

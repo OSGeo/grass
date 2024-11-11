@@ -16,7 +16,6 @@ places. This scale can be set using <b>las_xyscale</b> and <b>las_xscale</b>
 options. For example, the scale value 0.01 will preserve two decimal
 places while the value 1.0 will preserve none.
 
-
 <h2>NOTES</h2>
 
 The typical file extensions for the LAS format are .las and .laz (compressed).
@@ -24,7 +23,6 @@ The compressed LAS (.laz) format can be exported only if libLAS has been
 compiled with <a href="http://www.laszip.org/">LASzip</a> support.
 It is also good when libLAS was compiled with GDAL. This is needed when
 working with projections.
-
 
 <h2>EXAMPLE</h2>
 
@@ -37,19 +35,18 @@ r.to.vect input=fractals output=fractals type=point -z
 v.out.lidar input=fractals output=fractals.las
 </pre></div>
 
-
 <h2>REFERENCES</h2>
 
 <a href="https://www.asprs.org/committee-general/laser-las-file-format-exchange-activities.html">
 ASPRS LAS format</a><br>
 <a href="http://www.liblas.org/">LAS library</a> <br>
 
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="v.out.ogr.html">v.out.ogr</a>
+</em>
 
 <h2>AUTHOR</h2>
 
 Vaclav Petras
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

@@ -1,6 +1,6 @@
 /*! \page vlibPg GRASS-PostGIS data provider
 
-by GRASS Development Team (http://grass.osgeo.org)
+by GRASS Development Team (https://grass.osgeo.org)
 
 \tableofcontents
 
@@ -10,14 +10,14 @@ by GRASS Development Team (http://grass.osgeo.org)
 write PostGIS data directly without any external library (like in the
 case of \ref vlibOgr). GRASS-PostGIS data provider is implemented
 using <a
-href="http://www.postgresql.org/docs/9.2/static/libpq.html">libpq
+href="https://www.postgresql.org/docs/9.2/static/libpq.html">libpq
 library</a>.
 
 Note that GRASS-PostGIS data provider is compiled only when GRASS is
 configured with <tt>--with-postgres</tt> switch.
 
 See the <a
-href="http://trac.osgeo.org/grass/wiki/Grass7/VectorLib/PostGISInterface">trac
+href="https://trac.osgeo.org/grass/wiki/Grass7/VectorLib/PostGISInterface">trac
 page</a> for more info.
 
 \section vlibFn List of functions
@@ -91,7 +91,7 @@ access is provided by functions starting with <tt>V2_</tt> prefix.
 - Vect_open_topo_pg()
 - Vect__build_sfa()
 - Vect_build_pg()
- 
+
 \section vlibPgSeeAlso See Also
 
  - \ref vlibOgr

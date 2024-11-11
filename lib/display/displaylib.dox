@@ -1,6 +1,6 @@
 /*! \page displaylib GRASS Display Library
 
-by GRASS Development Team (http://grass.osgeo.org)
+by GRASS Development Team (https://grass.osgeo.org)
 
 This library provides a wide assortment of higher level graphics
 commands which in turn use the graphics library primitives. It is

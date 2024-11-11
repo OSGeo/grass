@@ -34,9 +34,11 @@ class TokenizeTestCase(TestCase):
         tokens = libgis.G_tokenize("a,'b,c',d", ",")
         num_of_tokens = libgis.G_number_of_tokens(tokens)
         self.assertEqual(
-            num_of_tokens, 4,
+            num_of_tokens,
+            4,
             msg="Got wrong number of tokens (expecting that the text"
-                "delimiter is ignored)")
+            "delimiter is ignored)",
+        )
         # alternatively this can be done using test with expected failure
 
 
@@ -57,7 +59,7 @@ class Tokenize2TestCase(TestCase):
 
     def test_tokenize2_with_alternative_text_delim(self):
         """Test G_tokenize2 with ; as delim and double quote text delim"""
-        tokens = libgis.G_tokenize2('a;"b;c";d', ';', '"')
+        tokens = libgis.G_tokenize2('a;"b;c";d', ";", '"')
         num_of_tokens = libgis.G_number_of_tokens(tokens)
         self.assertEqual(num_of_tokens, 3, msg="Got wrong number of tokens")
 
@@ -70,12 +72,14 @@ class Tokenize2TestCase(TestCase):
     def test_tokenize2_with_real_text(self):
         """Test G_tokenize2 with real world text"""
         tokens = libgis.G_tokenize2(
-            '440,617722.81,3464034.494,951.987,'
+            "440,617722.81,3464034.494,951.987,"
             '"Low Erosion (1,5)","High Deposition (8,6)"',
-            ',', '"')
+            ",",
+            '"',
+        )
         num_of_tokens = libgis.G_number_of_tokens(tokens)
         self.assertEqual(num_of_tokens, 6, msg="Got wrong number of tokens")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

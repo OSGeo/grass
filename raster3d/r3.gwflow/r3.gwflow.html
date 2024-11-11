@@ -4,7 +4,7 @@ This numerical module calculates implicit transient and steady state,
 confined groundwater flow in three dimensions based on volume maps
 and the current 3D region settings.
 All initial- and boundary-conditions must be provided as volume maps.
-The unit in the location must be meters.
+The unit of the current coordinate refernce system must be meters.
 <p>This module is sensitive to mask settings. All cells which are outside
 the mask are ignored and handled as no flow boundaries.
 <p>The module calculates the piezometric head and optionally the water
@@ -12,7 +12,7 @@ balance for each cell and the groundwater velocity field in 3 dimensions.
 The vector components can be visualized with ParaView if they are exported
 with <em>r3.out.vtk</em>.
 
-<p>The groundwater flow will always be calculated transient. 
+<p>The groundwater flow will always be calculated transient.
 For steady state computation the user should set the timestep
 to a large number (billions of seconds) or set the
 specific yield raster map to zero.
@@ -69,8 +69,9 @@ large maps (maps of size 10.000 cells will need more than one Gigabyte
 of RAM). The user should always prefer to use a sparse matrix solver.
 
 <h2>EXAMPLE 1</h2>
+
 This small script creates a working groundwater flow area and
-data. It cannot be run in a lat/lon location.
+data. It cannot be run in a lat/lon project.
 
 <div class="code"><pre>
 # set the region accordingly
@@ -95,6 +96,7 @@ paraview --data=/tmp/gwdata3d.vtk
 </pre></div>
 
 <h2>EXAMPLE 2</h2>
+
 This will create a nice 3D model with geological layer with different
 hydraulic conductivities. Make sure you are not in a lat/lon projection.
 
@@ -132,12 +134,8 @@ paraview --data=/tmp/gwdata3d.vtk
 </em>
 
 <h2>AUTHOR</h2>
+
 S&ouml;ren Gebbert
 <p>This work is based on the Diploma Thesis of S&ouml;ren Gebbert available
 <a href="https://grass.osgeo.org/gdp/hydrology/gebbert2007_diplom_stroemung_grass_gis.pdf">here</a>
 at Technical University Berlin, Germany.
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

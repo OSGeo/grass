@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       i.fft
  * AUTHOR(S):    David B. Satnik and Ali R. Vali (original contributors),
  *               Markus Neteler <neteler itc.it>
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
  *               Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      processes a single input raster map layer
  *               and constructs the real and imaginary Fourier
@@ -60,17 +59,18 @@ int main(int argc, char *argv[])
     /* Global variable & function declarations */
     struct GModule *module;
     struct {
-	struct Option *orig, *real, *imag;
+        struct Option *orig, *real, *imag;
     } opt;
     const char *Cellmap_real, *Cellmap_imag;
     const char *Cellmap_orig;
-    int inputfd, realfd, imagfd;	/* the input and output file descriptors */
+    int inputfd, realfd, imagfd; /* the input and output file descriptors */
     struct Cell_head window;
     DCELL *cell_real, *cell_imag;
-    int rows, cols;		/* number of rows & columns */
-    long totsize;		/* Total number of data points */
-    double (*data)[2];		/* Data structure containing real & complex values of FFT */
-    int i, j;			/* Loop control variables */
+    int rows, cols; /* number of rows & columns */
+    long totsize;   /* Total number of data points */
+    double(
+        *data)[2]; /* Data structure containing real & complex values of FFT */
+    int i, j;      /* Loop control variables */
 
     G_gisinit(argv[0]);
 
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("transformation"));
     G_add_keyword(_("Fast Fourier Transform"));
     module->description =
-	_("Fast Fourier Transform (FFT) for image processing.");
+        _("Fast Fourier Transform (FFT) for image processing.");
 
     /* define options */
     /* define options */
@@ -87,14 +87,16 @@ int main(int argc, char *argv[])
 
     opt.real = G_define_standard_option(G_OPT_R_OUTPUT);
     opt.real->key = "real";
-    opt.real->description = _("Name for output real part arrays stored as raster map");
+    opt.real->description =
+        _("Name for output real part arrays stored as raster map");
 
     opt.imag = G_define_standard_option(G_OPT_R_OUTPUT);
     opt.imag->key = "imaginary";
-    opt.imag->description = _("Name for output imaginary part arrays stored as raster map");
-    
+    opt.imag->description =
+        _("Name for output imaginary part arrays stored as raster map");
+
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     Cellmap_orig = opt.orig->answer;
     Cellmap_real = opt.real->answer;
@@ -103,10 +105,11 @@ int main(int argc, char *argv[])
     inputfd = Rast_open_old(Cellmap_orig, "");
 
     if (Rast_maskfd() >= 0)
-	G_warning(_("Raster MASK found, consider to remove "
-		    "(see man-page). Will continue..."));
+        G_warning(_("Raster mask active, consider removing it"
+                    " and running again without it (see documentation for"
+                    " details). This current process will now continue..."));
 
-    G_get_set_window(&window);	/* get the current window for later */
+    G_get_set_window(&window); /* get the current window for later */
 
     /* get the rows and columns in the current window */
     rows = Rast_window_rows();
@@ -126,16 +129,15 @@ int main(int argc, char *argv[])
 #define C(i, j) ((i) * cols + (j))
 
     /* Read in cell map values */
-    G_message(_("Reading the raster map <%s>..."),
-	      Cellmap_orig);
+    G_message(_("Reading the raster map <%s>..."), Cellmap_orig);
     for (i = 0; i < rows; i++) {
-	Rast_get_d_row(inputfd, cell_real, i);
-	for (j = 0; j < cols; j++) {
-	    data[C(i, j)][0] = cell_real[j];
-	    data[C(i, j)][1] = 0.0;
-	}
+        Rast_get_d_row(inputfd, cell_real, i);
+        for (j = 0; j < cols; j++) {
+            data[C(i, j)][0] = cell_real[j];
+            data[C(i, j)][1] = 0.0;
+        }
 
-	G_percent(i+1, rows, 2);
+        G_percent(i + 1, rows, 2);
     }
 
     /* close input cell map */
@@ -149,39 +151,39 @@ int main(int argc, char *argv[])
     realfd = Rast_open_fp_new(Cellmap_real);
     imagfd = Rast_open_fp_new(Cellmap_imag);
 
-#define SWAP1(a, b)				\
-    do {					\
-	double temp = (a);			\
-	(a) = (b);				\
-	(b) = temp;				\
+#define SWAP1(a, b)        \
+    do {                   \
+        double temp = (a); \
+        (a) = (b);         \
+        (b) = temp;        \
     } while (0)
 
-#define SWAP2(a, b)				\
-    do {					\
-	SWAP1(data[(a)][0], data[(b)][0]);	\
-	SWAP1(data[(a)][1], data[(b)][1]);	\
+#define SWAP2(a, b)                        \
+    do {                                   \
+        SWAP1(data[(a)][0], data[(b)][0]); \
+        SWAP1(data[(a)][1], data[(b)][1]); \
     } while (0)
 
     /* rotate the data array for standard display */
     G_message(_("Rotating data..."));
     for (i = 0; i < rows; i++)
-	for (j = 0; j < cols / 2; j++)
-	    SWAP2(C(i, j), C(i, j + cols / 2));
+        for (j = 0; j < cols / 2; j++)
+            SWAP2(C(i, j), C(i, j + cols / 2));
     for (i = 0; i < rows / 2; i++)
-	for (j = 0; j < cols; j++)
-	    SWAP2(C(i, j), C(i + rows / 2, j));
+        for (j = 0; j < cols; j++)
+            SWAP2(C(i, j), C(i + rows / 2, j));
 
     G_message(_("Writing transformed data..."));
 
     for (i = 0; i < rows; i++) {
-	for (j = 0; j < cols; j++) {
-	    cell_real[j] = data[C(i, j)][0];
-	    cell_imag[j] = data[C(i, j)][1];
-	}
-	Rast_put_d_row(realfd, cell_real);
-	Rast_put_d_row(imagfd, cell_imag);
+        for (j = 0; j < cols; j++) {
+            cell_real[j] = data[C(i, j)][0];
+            cell_imag[j] = data[C(i, j)][1];
+        }
+        Rast_put_d_row(realfd, cell_real);
+        Rast_put_d_row(imagfd, cell_imag);
 
-	G_percent(i+1, rows, 2);
+        G_percent(i + 1, rows, 2);
     }
 
     Rast_close(realfd);

@@ -57,6 +57,7 @@ extent.
 This module is not well suited for interpolating sparse input data and
 closing large gaps. For such purposes more appropriate
 methods are available, such as
+<em><a href="v.surf.bspline.html">v.surf.bspline</a></em>,
 <em><a href="v.surf.idw.html">v.surf.idw</a></em> or
 <em><a href="v.surf.rst.html">v.surf.rst</a></em>.
 
@@ -90,16 +91,15 @@ categorized cells and then filling the resulting data gaps without
 "inventing" any new values. In such cases, the "mode" or "median"
 interpolators should be used.
 
-
 <h3>Usage</h3>
 
 The most critical user-provided settings are the interpolation/gap
 filling method (<b>mode</b>) and the maximum distance, up to which
 <em>r.fill.stats</em> will scan for cells with values (<b>distance</b>).
 The distance can be expressed as a number of cells (default) or in the
-current GRASS location's units (if the <b>-m</b> flag is given). The latter
-are typically meters, but can be any other units of a <em>planar</em>
-coordinate system.
+current coordinate reference system's units (if the <b>-m</b> flag is given).
+The latter are typically meters, but can be any other units of a
+<em>planar</em> coordinate system.
 
 <p>
 
@@ -190,14 +190,14 @@ with different settings for <b>distance</b> and <b>power</b> might be required
 to achieve good results. In some cases (e.g. when dealing with low-noise or
 classified data), it might be desirable to turn off data smoothing by
 setting the <b>-k</b> (keep) flag. This will ensure that the original
-cell data is copied through to the result map without alteration. 
+cell data is copied through to the result map without alteration.
 
 <center>
 <a href="r_fill_stats_smoothing.png">
     <img src="r_fill_stats_smoothing.png" alt="Smooth versus preserve" width="600" height="300">
 </a>
 <p><em>
-Effect of smoothing the original data: The top row shows a gap-filled surface computed from a rasterized Lidar point  
+Effect of smoothing the original data: The top row shows a gap-filled surface computed from a rasterized Lidar point
 cloud (using <tt>mode=wmean</tt> and <tt>power=2</tt>), and the derived slope, aspect,
 and profile curvature maps. The smoothing effect is clearly visible.
 The bottom row shows the effect of setting the <b>-k</b> flag: Preserving the original
@@ -213,7 +213,7 @@ uses a window (kernel) for computations that considers only the
 immediate neighborhood of each cell. When performed on noisy data,
 such local operations result in equally noisy derivatives if the
 original data is preserved (by setting the <b>-k</b> flag) and no smoothing
-is performed.  
+is performed.
 
 <p>
 
@@ -320,7 +320,6 @@ When using a small search radius, <b>cells</b> must also be set to a
 small value. Otherwise, there may not be enough cells with data within
 the search radius to support interpolation.
 
-
 <h2>NOTES</h2>
 
 The straight-line metric used for converting distances in map units to
@@ -362,7 +361,6 @@ the amount of RAM that will be needed.
 If the <b>-s</b> flag is set, floating point type output will be
 saved as a "single precision" raster map, saving ~50% disk space
 compared to the default "double precision" output.
-
 
 <h2>EXAMPLES</h2>
 
@@ -468,7 +466,7 @@ d.mon stop=cairo
 <h3>Outlier removal and gap-filling of SRTM elevation data</h3>
 
 In this example, the SRTM elevation map in the
-North Carolina sample dataset location is filtered for outlier
+North Carolina sample dataset is filtered for outlier
 elevation values; missing pixels are then re-interpolated to obtain
 a complete elevation map:
 
@@ -504,19 +502,15 @@ d.legend diff_orig_idw
 <a href="r.fillnulls.html">r.fillnulls</a>,
 <a href="r.neighbors.html">r.neighbors</a>,
 <a href="r.surf.idw.html">r.surf.idw</a>,
+<a href="v.surf.bspline.html">v.surf.bspline</a>,
 <a href="v.surf.idw.html">v.surf.idw</a>,
-<a href="v.surf.rst.html">v.surf.rst</a>
+<a href="v.surf.rst.html">v.surf.rst</a>,
+<a href="v.fill.holes.html">v.fill.holes</a>
 </em>
 
 <p>
-<a href="http://en.wikipedia.org/wiki/Inverse_distance_weighting">Inverse Distance Weighting in Wikipedia</a>
+<a href="https://en.wikipedia.org/wiki/Inverse_distance_weighting">Inverse Distance Weighting in Wikipedia</a>
 
 <h2>AUTHOR</h2>
 
 Benjamin Ducke
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
-

@@ -1,7 +1,7 @@
 #ifndef GEOMETRICAL_CONTITIONS_H
 #define GEOMETRICAL_CONTITIONS_H
 
-/* ************************************************************************/
+/* *********************************************************************** */
 /*       igeom               geometrical conditions                       */
 /*               --------------------------------------                   */
 /*                                                                        */
@@ -89,6 +89,12 @@
 /*                                                                        */
 /*         30      worldview4        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
+/*         31      AVIRIS            * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         32      Hyperion VNIR     * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         33      Hyperion SWIR     * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
 /*     note:       for hrv and tm experiments long. and lat. are the      */
 /*                 coordinates of the scene center.                       */
 /*                 lat. must be > 0 for north lat., < 0 for south lat.    */
@@ -96,49 +102,49 @@
 /*                                                                        */
 /*                 solar and viewing positions are computed               */
 /*                                                                        */
-/* ************************************************************************/
+/* *********************************************************************** */
 
-struct GeomCond
-{
-	long int igeom;	/* geometrical conditions */
+struct GeomCond {
+    long int igeom; /* geometrical conditions */
 
-	/* primary */
-	double asol;
-	double phi0;
-	double avis;
-	double phiv;
-	long int month;
-	long int jday;
-	double xlon;
-	double xlat;
+    /* primary */
+    double asol;
+    double phi0;
+    double avis;
+    double phiv;
+    long int month;
+    long int jday;
+    double xlon;
+    double xlat;
 
-	/* some vars */
-	double phi;
-	double phirad;
-	double xmus; 
-	double xmuv; 
-	double xmup; 
-	double xmud;
-	double adif;
+    /* some vars */
+    double phi;
+    double phirad;
+    double xmus;
+    double xmuv;
+    double xmup;
+    double xmud;
+    double adif;
 
     double dsol;
 
-	void  print();
+    void print();
 
 private:
-	/* conversion routines */
-	void possol(double tu);
-	void landsat(double tu);
-	void posobs(double tu, int nc, int nl);
-	void posnoa(double tu, int nc, double xlonan, double campm, double hna);
+    /* conversion routines */
+    void possol(double tu);
+    void landsat(double tu);
+    void posobs(double tu, int nc, int nl);
+    void posnoa(double tu, int nc, double xlonan, double campm, double hna);
 
-	void day_number(long int ia, long int& j);
-	void pos_fft (long int j, double tu);
+    void day_number(long int ia, long int &j);
+    void pos_fft(long int j, double tu);
 
-	double varsol();	/* returns dsol as in fortran proggie */
-	void parse();
+    double varsol(); /* returns dsol as in fortran proggie */
+    void parse();
+
 public:
-	static GeomCond Parse();
+    static GeomCond Parse();
 };
 
 #endif /* GEOMETRICAL_CONTITIONS_H */

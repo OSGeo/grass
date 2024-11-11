@@ -2,9 +2,9 @@
 
 <em>v.external.out</em> instructs GRASS to write vector maps in
 external data format (e.g. ESRI Shapefile, Mapinfo, and others)
-using <a href="http://www.gdal.org/">OGR library</a>. PostGIS data can
+using <a href="https://gdal.org/">OGR library</a>. PostGIS data can
 be also written by
-built-in <a href="http://trac.osgeo.org/grass/wiki/Grass7/VectorLib/PostGISInterface">GRASS-PostGIS
+built-in <a href="https://trac.osgeo.org/grass/wiki/Grass7/VectorLib/PostGISInterface">GRASS-PostGIS
 data provider</a>.
 
 <h2>NOTES</h2>
@@ -24,11 +24,11 @@ GRASS is not compiled with PostgreSQL support.
 <p>
 Creation <b>options</b> refer to the output format specified
 by <b>format</b> option. See the list of valid creation options
-at <a href="http://www.gdal.org/ogr_formats.html">OGR formats
+at <a href="https://gdal.org/drivers/vector/">OGR formats
 specification page</a>, example
-for <a href="http://www.gdal.org/drv_shapefile.html">ESRI
+for <a href="https://gdal.org/drv_shapefile.html">ESRI
 Shapefile</a>
-or <a href="http://www.gdal.org/drv_pg.html">PostgreSQL/PostGIS</a>
+or <a href="https://gdal.org/drv_pg.html">PostgreSQL/PostGIS</a>
 format (section &quot;Layer Creation Options&quot;). Options are
 comma-separated pairs (<tt>key=value</tt>), the options are
 case-insensitive,
@@ -52,7 +52,7 @@ compared to PostgreSQL/PostGIS driver from OGR library:
   <li><tt>SRID=&lt;value&gt;</tt> - spatial reference identifier,
   default: not defined</li>
   <li><tt>TOPOLOGY=YES|NO</tt> - enable/disable
-  native <a href="http://grasswiki.osgeo.org/wiki/PostGIS_Topology">PostGIS
+  native <a href="https://grasswiki.osgeo.org/wiki/PostGIS_Topology">PostGIS
   topology</a>, default: NO</li>
 </ul>
 
@@ -168,7 +168,7 @@ v.external.out -r
 # do some processing in native format
 </pre></div>
 
-Restore previous settings from &quot;gisdb_topo.txt&quot; file by 
+Restore previous settings from &quot;gisdb_topo.txt&quot; file by
 specifying <b>loadsettings</b> option.
 
 <div class="code"><pre>
@@ -180,10 +180,10 @@ v.external.out loadsettings=gisdb_topo.txt
 <h2>REFERENCES</h2>
 
 <ul>
-  <li><a href="http://trac.osgeo.org/grass/wiki/Grass7/VectorLib/OGRInterface">GRASS-OGR data provider</a></li>
-  <li><a href="http://www.gdal.org/ogr__api_8h.html">OGR vector library C API</a> documentation</li>
-  <li><a href="http://trac.osgeo.org/grass/wiki/Grass7/VectorLib/PostGISInterface">GRASS-PostGIS data provider</a></li>
-  <li><a href="http://www.postgresql.org/docs/9.1/static/libpq.html">libpq - C Library</a></li>
+  <li><a href="https://trac.osgeo.org/grass/wiki/Grass7/VectorLib/OGRInterface">GRASS-OGR data provider</a></li>
+  <li><a href="https://gdal.org/api/">OGR vector library C API</a> documentation</li>
+  <li><a href="https://trac.osgeo.org/grass/wiki/Grass7/VectorLib/PostGISInterface">GRASS-PostGIS data provider</a></li>
+  <li><a href="https://www.postgresql.org/docs/9.1/static/libpq.html">libpq - C Library</a></li>
 </ul>
 
 <h2>SEE ALSO</h2>
@@ -197,14 +197,9 @@ v.external.out loadsettings=gisdb_topo.txt
 
 <p>
 See
-also GRASS <a href="http://grasswiki.osgeo.org/wiki/Working_with_external_data_in_GRASS_7">user wiki page</a> for more examples.
+also GRASS <a href="https://grasswiki.osgeo.org/wiki/Working_with_external_data_in_GRASS_7">user wiki page</a> for more examples.
 
 <h2>AUTHOR</h2>
 
 Martin Landa, Czech Technical University in Prague, Czech Republic
 (development supported by Fondazione Edmund Mach and Comune di Trento, Italy)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

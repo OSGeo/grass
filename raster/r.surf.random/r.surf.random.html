@@ -6,11 +6,6 @@ whose range can be expressed by the user. It is essentially the same as
 It uses the random number generator drand48() or rand()<!-- cite? -->,
 depending on the user's platform.
 
-<p><center>
-<img src="r_surf_random_hist.png" alt="r.surf.random map histogram"><br>
-<i>Histogram of map generated with r.surf.random</i>
-</center>
-
 <h2>EXAMPLE</h2>
 
 <div class="code"><pre>
@@ -21,10 +16,31 @@ r.surf.random out=random min=0 max=100
 r.univar random
 </pre></div>
 
+<!--
+d.legend -d raster=random@user1 title=random font=Vera
+-->
+
+<div align="center" style="margin: 10px">
+<a href="r_surf_random.jpg">
+<img src="r_surf_random.jpg" width="600" height="293" alt="r.random.surface example (min: 10; max: 100)" border="0">
+</a><br>
+<i>Figure: Random surface example (min: 10; max: 100)</i>
+</div>
+
+<p>
+With the histogram tool the cell values versus count can be shown.
+<p>
+<div align="center" style="margin: 10px">
+<a href="r_surf_random_hist.png">
+<img src="r_surf_random_hist.png" width="600" height="280" alt="r.random.surface example histogram (min: 10; max: 100)" border="0">
+</a><br>
+<i>Figure: Histogram of random surface example (min: 10; max: 100)</i>
+</div>
+
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.random.surface.html">r.random.surface</a>, 
+<a href="r.random.surface.html">r.random.surface</a>,
 <a href="r.surf.contour.html">r.surf.contour</a>,
 <a href="r.surf.fractal.html">r.surf.fractal</a>,
 <a href="r.surf.gauss.html">r.surf.gauss</a>,
@@ -38,15 +54,3 @@ Jo Wood<br>
 Midlands Regional Research Laboratory (ASSIST)<br>
 University of Leicester<br>
 <i>October 1991</i>
-<br>
-
-<!-- almost certainly no longer valid
-<address>jwo at le.ac.uk</address>
-
-<br><a href="http://www.geog.le.ac.uk/assist/index.html">ASSIST's home</a>
--->
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
