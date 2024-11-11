@@ -387,7 +387,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             else:
                 try:
                     map_sub = map_i.get_id()
-                except:
+                except AttributeError:
                     map_sub = map_i
             return map_sub
 
