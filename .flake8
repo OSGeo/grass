@@ -50,8 +50,6 @@ per-file-ignores =
     gui/wxpython/tools/build_modules_xml.py: E722
     gui/wxpython/web_services/cap_interface.py: E501
     gui/wxpython/web_services/widgets.py: F841, E402
-    gui/wxpython/rlisetup/sampling_frame.py: F841
-    gui/wxpython/rlisetup/wizard.py: E722
     # Generated file
     gui/wxpython/menustrings.py: E501
     # F821 undefined name 'cmp'
