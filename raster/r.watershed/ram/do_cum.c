@@ -218,6 +218,8 @@ int do_cum(void)
         }
     }
     G_free(astar_pts);
+    G_free(contour);
+    G_free(dist_to_nbr);
 
     return 0;
 }
