@@ -9,6 +9,8 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 import copy
 from datetime import datetime, timedelta
 
@@ -25,53 +27,29 @@ except:
 DAY_IN_SECONDS = 86400
 SECOND_AS_DAY = 1.1574074074074073e-05
 
-###############################################################################
 
-
-def relative_time_to_time_delta(value):
-    """Convert the double value representing days
-    into a timedelta object.
-    """
-
+def relative_time_to_time_delta(value: float) -> timedelta:
+    """Convert the double value representing days into a timedelta object."""
     days = int(value)
     seconds = value % 1
     seconds = round(seconds * DAY_IN_SECONDS)
-
     return timedelta(days, seconds)
 
 
-###############################################################################
-
-
-def time_delta_to_relative_time(delta):
-    """Convert the time delta into a
-    double value, representing days.
-    """
-
+def time_delta_to_relative_time(delta: timedelta) -> float:
+    """Convert the time delta into a double value, representing days."""
     return float(delta.days) + float(delta.seconds * SECOND_AS_DAY)
 
 
-###############################################################################
-
-
-def relative_time_to_time_delta_seconds(value):
-    """Convert the double value representing seconds
-    into a timedelta object.
-    """
-
+def relative_time_to_time_delta_seconds(value: float) -> timedelta:
+    """Convert the double value representing seconds into a timedelta object."""
     days = value / 86400
     seconds = int(value % 86400)
-
     return timedelta(days, seconds)
 
 
-###############################################################################
-
-
-def time_delta_to_relative_time_seconds(delta):
-    """Convert the time delta into a
-    double value, representing seconds.
-    """
+def time_delta_to_relative_time_seconds(delta: timedelta) -> float:
+    """Convert the time delta into a double value, representing seconds."""
 
     return float(delta.days * DAY_IN_SECONDS) + float(delta.seconds)
 
@@ -79,7 +57,9 @@ def time_delta_to_relative_time_seconds(delta):
 ###############################################################################
 
 
-def decrement_datetime_by_string(mydate, increment, mult=1):
+def decrement_datetime_by_string(
+    mydate: datetime, increment: str, mult=1
+) -> datetime | None:
     """Return a new datetime object decremented with the provided
     relative dates specified as string.
     Additional a multiplier can be specified to multiply the increment
@@ -144,10 +124,9 @@ def decrement_datetime_by_string(mydate, increment, mult=1):
     return modify_datetime_by_string(mydate, increment, mult, sign=-1)
 
 
-###############################################################################
-
-
-def increment_datetime_by_string(mydate, increment, mult=1):
+def increment_datetime_by_string(
+    mydate: datetime, increment: str, mult=1
+) -> datetime | None:
     """Return a new datetime object incremented with the provided
     relative dates specified as string.
     Additional a multiplier can be specified to multiply the increment
@@ -219,10 +198,9 @@ def increment_datetime_by_string(mydate, increment, mult=1):
     return modify_datetime_by_string(mydate, increment, mult, sign=1)
 
 
-###############################################################################
-
-
-def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
+def modify_datetime_by_string(
+    mydate: datetime, increment: str, mult=1, sign: int = 1
+) -> datetime | None:
     """Return a new datetime object incremented with the provided
     relative dates specified as string.
     Additional a multiplier can be specified to multiply the increment
@@ -294,8 +272,8 @@ def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
 
 
 def modify_datetime(
-    mydate, years=0, months=0, weeks=0, days=0, hours=0, minutes=0, seconds=0
-):
+    mydate: datetime, years=0, months=0, weeks=0, days=0, hours=0, minutes=0, seconds=0
+) -> datetime:
     """Return a new datetime object incremented with the provided
     relative dates and times"""
 
@@ -373,7 +351,7 @@ def modify_datetime(
 ###############################################################################
 
 
-def adjust_datetime_to_granularity(mydate, granularity):
+def adjust_datetime_to_granularity(mydate: datetime, granularity):
     """Modify the datetime object to fit the given granularity
 
     - Years will start at the first of January
@@ -722,13 +700,10 @@ def compute_datetime_delta(start, end):
     return comp
 
 
-###############################################################################
-
-
-def check_datetime_string(time_string, use_dateutil=True):
+def check_datetime_string(time_string: str, use_dateutil: bool = True):
     """Check if  a string can be converted into a datetime object and return the object
 
-    In case datutil is not installed the supported ISO string formats are:
+    In case dateutil is not installed the supported ISO string formats are:
 
     - YYYY-mm-dd
     - YYYY-mm-dd HH:MM:SS
@@ -828,10 +803,7 @@ def check_datetime_string(time_string, use_dateutil=True):
         return _("Unable to parse time string: %s") % time_string
 
 
-###############################################################################
-
-
-def string_to_datetime(time_string):
+def string_to_datetime(time_string: str) -> datetime | None:
     """Convert a string into a datetime object
 
     In case datutil is not installed the supported ISO string formats are:
@@ -864,10 +836,7 @@ def string_to_datetime(time_string):
     return time_object
 
 
-###############################################################################
-
-
-def datetime_to_grass_datetime_string(dt):
+def datetime_to_grass_datetime_string(dt: datetime) -> str:
     """Convert a python datetime object into a GRASS datetime string
 
     .. code-block:: python
@@ -936,6 +905,8 @@ def datetime_to_grass_datetime_string(dt):
 
 
 ###############################################################################
+
+
 suffix_units = {
     "years": "%Y",
     "year": "%Y",
@@ -952,7 +923,7 @@ suffix_units = {
 }
 
 
-def create_suffix_from_datetime(start_time, granularity):
+def create_suffix_from_datetime(start_time: datetime, granularity) -> str:
     """Create a datetime string based on a datetime object and a provided
     granularity that can be used as suffix for map names.
 
@@ -966,7 +937,7 @@ def create_suffix_from_datetime(start_time, granularity):
     return start_time.strftime(suffix_units[granularity.split(" ")[1]])
 
 
-def create_time_suffix(mapp, end=False):
+def create_time_suffix(mapp, end: bool = False):
     """Create a datetime string based on a map datetime object
 
     :param mapp: a temporal map dataset
@@ -981,7 +952,7 @@ def create_time_suffix(mapp, end=False):
     return sstring
 
 
-def create_numeric_suffix(base, count, zeros):
+def create_numeric_suffix(base, count: int, zeros: str) -> str:
     """Create a string based on count and number of zeros decided by zeros
 
     :param base: the basename for new map

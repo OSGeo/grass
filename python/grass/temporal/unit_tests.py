@@ -1,5 +1,5 @@
 """
-Depricazed unittests
+Deprecated unittests
 
 (C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -36,7 +36,7 @@ core.set_raise_on_error(True)
 ###############################################################################
 
 
-def test_increment_datetime_by_string():
+def test_increment_datetime_by_string() -> None:
     # First test
     print("# Test 1")
     dt = datetime(2001, 9, 1, 0, 0, 0)
@@ -105,7 +105,7 @@ def test_increment_datetime_by_string():
 ###############################################################################
 
 
-def test_adjust_datetime_to_granularity():
+def test_adjust_datetime_to_granularity() -> None:
     # First test
     print("Test 1")
     dt = datetime(2001, 8, 8, 12, 30, 30)
@@ -223,7 +223,7 @@ def test_adjust_datetime_to_granularity():
 ###############################################################################
 
 
-def test_compute_datetime_delta():
+def test_compute_datetime_delta() -> None:
     print("Test 1")
     start = datetime(2001, 1, 1, 0, 0, 0)
     end = datetime(2001, 1, 1, 0, 0, 0)
@@ -566,7 +566,7 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
 
-def test_compute_absolute_time_granularity():
+def test_compute_absolute_time_granularity() -> None:
     # First we test intervals
     print("Test 1")
     maps = []
@@ -886,7 +886,7 @@ def test_compute_absolute_time_granularity():
 ###############################################################################
 
 
-def test_spatial_extent_intersection():
+def test_spatial_extent_intersection() -> None:
     # Generate the extents
 
     A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
@@ -970,7 +970,7 @@ def test_spatial_extent_intersection():
 ###############################################################################
 
 
-def test_spatial_relations():
+def test_spatial_relations() -> None:
     # Generate the extents
 
     A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
@@ -1352,7 +1352,7 @@ def test_spatial_relations():
 ###############################################################################
 
 
-def test_temporal_topology_builder():
+def test_temporal_topology_builder() -> None:
     map_listA = []
 
     _map = RasterDataset(ident="1@a")
@@ -1465,7 +1465,7 @@ def test_temporal_topology_builder():
 ###############################################################################
 
 
-def test_map_list_sorting():
+def test_map_list_sorting() -> None:
     map_list = []
 
     _map = RasterDataset(ident="1@a")
@@ -1518,7 +1518,7 @@ def test_map_list_sorting():
 ###############################################################################
 
 
-def test_1d_rtree():
+def test_1d_rtree() -> None:
     """Testing the rtree ctypes wrapper"""
 
     tree = rtree.RTreeCreateTree(-1, 0, 1)
@@ -1548,7 +1548,7 @@ def test_1d_rtree():
 ###############################################################################
 
 
-def test_2d_rtree():
+def test_2d_rtree() -> None:
     """Testing the rtree ctypes wrapper"""
 
     tree = rtree.RTreeCreateTree(-1, 0, 2)
@@ -1580,7 +1580,7 @@ def test_2d_rtree():
 ###############################################################################
 
 
-def test_3d_rtree():
+def test_3d_rtree() -> None:
     """Testing the rtree ctypes wrapper"""
 
     tree = rtree.RTreeCreateTree(-1, 0, 3)
@@ -1622,7 +1622,7 @@ def test_3d_rtree():
 ###############################################################################
 
 
-def test_4d_rtree():
+def test_4d_rtree() -> None:
     """Testing the rtree ctypes wrapper"""
 
     tree = rtree.RTreeCreateTree(-1, 0, 4)
