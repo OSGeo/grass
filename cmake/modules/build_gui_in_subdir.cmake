@@ -44,11 +44,18 @@ function(build_gui_in_subdir dir_name)
   set(OUT_SCRIPT_FILE
       "${OUTDIR}/${GRASS_INSTALL_SCRIPTDIR}/${G_TARGET_NAME}${SCRIPT_EXT}")
 
+  if(UNIX)
   add_custom_command(
     OUTPUT ${OUT_SCRIPT_FILE}
     COMMAND ${CMAKE_COMMAND} -E copy ${SRC_SCRIPT_FILE} ${OUT_SCRIPT_FILE}
     COMMAND /bin/chmod 755 ${OUT_SCRIPT_FILE}
     DEPENDS g.parser ${SRC_SCRIPT_FILE})
+  else()
+  add_custom_command(
+    OUTPUT ${OUT_SCRIPT_FILE}
+    COMMAND ${CMAKE_COMMAND} -E copy ${SRC_SCRIPT_FILE} ${OUT_SCRIPT_FILE}
+    DEPENDS g.parser ${SRC_SCRIPT_FILE})
+  endif()
 
   if(WITH_DOCS)
 
@@ -79,6 +86,27 @@ function(build_gui_in_subdir dir_name)
     set(OUT_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_TARGET_NAME}.html)
     set(GUI_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/wxGUI.${G_NAME}.html)
 
+    if(WIN32)
+    add_custom_command(
+      OUTPUT ${OUT_HTML_FILE}
+      COMMAND ${CMAKE_COMMAND} -E copy ${G_SRC_DIR}/${G_TARGET_NAME}.html
+              ${CMAKE_CURRENT_BINARY_DIR}/${G_TARGET_NAME}.html
+      COMMAND
+        ${grass_env_command} ${PYTHON_EXECUTABLE}
+        ${OUTDIR}/${GRASS_INSTALL_SCRIPTDIR}/${G_TARGET_NAME}${SCRIPT_EXT}
+        --html-description < nul | findstr /V
+        "</body>\|</html>\|</div> <!-- end container -->" > ${TMP_HTML_FILE}
+      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY}
+              ${G_TARGET_NAME} ${GRASS_VERSION_DATE} > ${OUT_HTML_FILE}
+      COMMENT "Creating ${OUT_HTML_FILE}"
+      COMMAND ${copy_images_command}
+      COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
+              ${CMAKE_CURRENT_BINARY_DIR}/${G_TARGET_NAME}.html
+      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY}
+              ${G_TARGET_NAME} ${GRASS_VERSION_DATE} > ${GUI_HTML_FILE}
+      COMMENT "Creating ${GUI_HTML_FILE}"
+      DEPENDS ${OUT_SCRIPT_FILE} GUI_WXPYTHON LIB_PYTHON)
+    else()
     add_custom_command(
       OUTPUT ${OUT_HTML_FILE}
       COMMAND ${CMAKE_COMMAND} -E copy ${G_SRC_DIR}/${G_TARGET_NAME}.html
@@ -98,6 +126,7 @@ function(build_gui_in_subdir dir_name)
               ${G_TARGET_NAME} ${GRASS_VERSION_DATE} > ${GUI_HTML_FILE}
       COMMENT "Creating ${GUI_HTML_FILE}"
       DEPENDS ${OUT_SCRIPT_FILE} GUI_WXPYTHON LIB_PYTHON)
+    endif()
 
     install(FILES ${OUT_HTML_FILE} ${GUI_HTML_FILE}
             DESTINATION ${GRASS_INSTALL_DOCDIR})
