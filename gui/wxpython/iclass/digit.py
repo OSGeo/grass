@@ -25,8 +25,21 @@ from core.gcmd import GWarning
 
 try:
     from grass.lib.gis import G_verbose, G_set_verbose
-    from grass.lib.vector import *
-    from grass.lib.vedit import *
+    from grass.lib.vector import (
+        Map_info,
+        Vect_get_area_cat,
+        Vect_is_3d,
+        Vect_open_update,
+        Vect_open_new,
+        Vect_open_tmp_update,
+        Vect_open_tmp_new,
+        Vect_copy_map_lines,
+        Vect_build,
+        Vect_get_num_lines,
+        Vect_close,
+    )
+    from grass.lib.vedit import Vedit_delete_areas_cat, TYPE_CENTROIDIN
+    from ctypes import pointer
 except ImportError:
     pass
 
