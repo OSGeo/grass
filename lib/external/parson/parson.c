@@ -2455,6 +2455,12 @@ JSON_Status json_object_set_string(JSON_Object *object, const char *name,
     return status;
 }
 
+JSON_Status json_object_set_string_parson(JSON_Object *object, const char *name,
+                                          const char *string)
+{
+    return json_object_set_string(object, name, string);
+}
+
 JSON_Status json_object_set_string_with_len(JSON_Object *object,
                                             const char *name,
                                             const char *string, size_t len)

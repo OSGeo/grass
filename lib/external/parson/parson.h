@@ -200,6 +200,8 @@ JSON_Status json_object_set_value(JSON_Object *object, const char *name,
                                   JSON_Value *value);
 JSON_Status json_object_set_string(JSON_Object *object, const char *name,
                                    const char *string);
+JSON_Status json_object_set_string_parson(JSON_Object *object, const char *name,
+                                          const char *string);
 JSON_Status json_object_set_string_with_len(
     JSON_Object *object, const char *name, const char *string,
     size_t len); /* length shouldn't include last null character */
