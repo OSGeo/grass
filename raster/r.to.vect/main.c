@@ -48,8 +48,10 @@ int row_length, row_count, n_rows;
 int total_areas;
 int n_alloced_ptrs;
 
-int smooth_flag; /* this is 0 for no smoothing, 1 for smoothing of lines */
-int value_flag;  /* use raster values as categories */
+int smooth_flag;   /* this is 0 for no smoothing, 1 for smoothing of lines */
+int value_flag;    /* use raster values as categories */
+int centroid_flag; /* re-center centroids */
+
 struct Categories RastCats;
 int has_cats; /* Category labels available */
 struct field_info *Fi;
@@ -131,6 +133,7 @@ int main(int argc, char *argv[])
     feature = Vect_option_to_types(feature_opt);
     smooth_flag = (smooth_flg->answer) ? SMOOTH : NO_SMOOTH;
     value_flag = value_flg->answer;
+    centroid_flag = centroid_flg->answer;
     notab_flag = notab_flg->answer;
 
     if (z_flg->answer && (feature != GV_POINT))
@@ -356,48 +359,6 @@ int main(int argc, char *argv[])
     if (driver != NULL) {
         db_commit_transaction(driver);
         db_close_database_shutdown_driver(driver);
-    }
-
-    if (centroid_flg->answer && !no_topol->answer && feature == GV_AREA) {
-        int line, nlines;
-        int area, ret;
-        struct line_pnts *Points;
-        double x, y;
-
-        Vect_build_partial(&Map, GV_BUILD_ATTACH_ISLES);
-        nlines = Vect_get_num_lines(&Map);
-
-        Points = Vect_new_line_struct();
-
-        for (line = 1; line <= nlines; line++) {
-            if (!Vect_line_alive(&Map, line))
-                continue;
-            if (Vect_get_line_type(&Map, line) != GV_CENTROID)
-                continue;
-            if (Vect_read_line(&Map, Points, Cats, line) < 1) {
-                G_fatal_error(
-                    _("Unable to read feature %d from vector map <%s>"), line,
-                    Vect_get_full_name(&Map));
-            }
-            area = Vect_find_area(&Map, Points->x[0], Points->y[0]);
-            if (area == 0) {
-                G_warning(_("No area for line %d"), line);
-            }
-            else {
-                ret = Vect_get_point_in_area(&Map, area, &x, &y);
-                if (ret < 0) {
-                    G_warning(_("Unable to calculate area centroid"));
-                }
-                else {
-                    Points->x[0] = x;
-                    Points->y[0] = y;
-                    if (Vect_rewrite_line(&Map, line, GV_CENTROID, Points,
-                                          Cats) < 1) {
-                        G_fatal_error(_("Unable to rewrite centroid!"));
-                    }
-                }
-            }
-        }
     }
 
     if (!no_topol->answer)
