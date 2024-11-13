@@ -108,22 +108,41 @@ function(build_script_in_subdir dir_name)
     set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.tmp.html)
     set(OUT_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.html)
 
-    add_custom_command(
-      OUTPUT ${OUT_HTML_FILE}
-      COMMAND ${CMAKE_COMMAND} -E copy ${G_SRC_DIR}/${G_NAME}.html
-              ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.html
-      COMMAND
-        ${grass_env_command} ${PYTHON_EXECUTABLE}
-        ${OUTDIR}/${G_DEST_DIR}/${G_NAME}${SCRIPT_EXT}
-        --html-description < /dev/null | grep -v
-        '</body>\|</html>\|</div> <!-- end container -->' > ${TMP_HTML_FILE}
-      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${G_NAME} >
-              ${OUT_HTML_FILE}
-      COMMAND ${copy_images_command}
-      COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
-              ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.html
-      COMMENT "Creating ${OUT_HTML_FILE}"
-      DEPENDS ${TRANSLATE_C_FILE} LIB_PYTHON)
+    if(WIN32)
+      add_custom_command(
+        OUTPUT ${OUT_HTML_FILE}
+        COMMAND ${CMAKE_COMMAND} -E copy ${G_SRC_DIR}/${G_NAME}.html
+                ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.html
+        COMMAND
+          ${grass_env_command} ${PYTHON_EXECUTABLE}
+          ${OUTDIR}/${G_DEST_DIR}/${G_NAME}${SCRIPT_EXT}
+          --html-description < nul | findstr /V
+          "</body>\|</html>\|</div> <!-- end container -->" > ${TMP_HTML_FILE}
+        COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${G_NAME} >
+                ${OUT_HTML_FILE}
+        COMMAND ${copy_images_command}
+        COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
+                ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.html
+        COMMENT "Creating ${OUT_HTML_FILE}"
+        DEPENDS ${TRANSLATE_C_FILE} LIB_PYTHON)
+    else()
+      add_custom_command(
+        OUTPUT ${OUT_HTML_FILE}
+        COMMAND ${CMAKE_COMMAND} -E copy ${G_SRC_DIR}/${G_NAME}.html
+                ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.html
+        COMMAND
+          ${grass_env_command} ${PYTHON_EXECUTABLE}
+          ${OUTDIR}/${G_DEST_DIR}/${G_NAME}${SCRIPT_EXT}
+          --html-description < /dev/null | grep -v
+          '</body>\|</html>\|</div> <!-- end container -->' > ${TMP_HTML_FILE}
+        COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${G_NAME} >
+                ${OUT_HTML_FILE}
+        COMMAND ${copy_images_command}
+        COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
+                ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.html
+        COMMENT "Creating ${OUT_HTML_FILE}"
+        DEPENDS ${TRANSLATE_C_FILE} LIB_PYTHON)
+    endif()
 
     install(FILES ${OUT_HTML_FILE} DESTINATION ${GRASS_INSTALL_DOCDIR})
 
