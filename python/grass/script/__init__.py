@@ -1,7 +1,7 @@
 """Python interface to launch GRASS GIS modules in scripts
 """
 
-from . import setup  # noqa: F401
+from . import setup
 from .core import (
     PIPE,
     Popen,
@@ -181,6 +181,7 @@ __all__ = [
     "set_capture_stderr",
     "set_path",
     "set_raise_on_error",
+    "setup",
     "split",
     "start_command",
     "tempdir",
