@@ -250,7 +250,7 @@ class ProfileFrame(BasePlotFrame):
             # delete extra first segment point
             try:
                 self.seglist.pop(0)
-            except:
+            except IndexError:
                 pass
 
         #
@@ -291,7 +291,6 @@ class ProfileFrame(BasePlotFrame):
         # freezing with large, high resolution maps
         region = gs.region()
         curr_res = min(float(region["nsres"]), float(region["ewres"]))
-        transect_rec = 0
         if self.transect_length / curr_res > 500:
             transect_res = self.transect_length / 500
         else:
@@ -486,7 +485,7 @@ class ProfileFrame(BasePlotFrame):
                 statstr += "median: %f\n" % np.median(a)
                 statstr += "distance along transect: %f\n\n" % self.transect_length
                 message.append(statstr)
-            except:
+            except (ValueError, TypeError, KeyError):
                 pass
 
         stats = PlotStatsFrame(self, id=wx.ID_ANY, message=message, title=title)
