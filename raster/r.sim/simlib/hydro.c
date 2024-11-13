@@ -104,6 +104,7 @@ int iterout, mx2o, my2o;
 int miter, nwalka;
 double timec;
 int ts, timesec;
+double mintimestep;
 
 double rain_val;
 double manin_val;
