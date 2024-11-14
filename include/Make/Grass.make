@@ -59,6 +59,7 @@ DOCSDIR         = $(ARCH_DISTDIR)/docs
 ETC             = $(ARCH_DISTDIR)/etc
 GUIDIR          = $(ARCH_DISTDIR)/gui
 HTMLDIR         = $(ARCH_DISTDIR)/docs/html
+MDDIR           = $(ARCH_DISTDIR)/docs/mkdocs
 SCRIPTDIR       = $(ARCH_DISTDIR)/scripts
 MSG_DIR         = $(ARCH_DISTDIR)/etc/msgs
 MO_DIR          = $(ARCH_DISTDIR)/locale
