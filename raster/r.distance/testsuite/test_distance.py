@@ -63,7 +63,7 @@ class TestRDistance(TestCase):
 
     def test_null_distance(self):
         """Test r.distance when comparing a map to itself with overlapping features."""
-        module = SimpleModule("r.distance", map=("map3", "map4"), flags="n")
+        module = SimpleModule("r.distance", map=("map3", "map2"), flags="n")
         self.assertModule(module)
 
         result = module.outputs.stdout.strip().split("\n")
