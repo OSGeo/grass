@@ -109,10 +109,13 @@ a threshold water depth value (<b>hmax)</b>, given in [m]. When it is reached,
 diffusion term increases as given by <b>halpha</b> and advection term
 (direction of flow) is given as "prevailing" direction of flow computed
 as average of flow directions from the previous <b>hbeta</b> number of grid cells.
-The model is for shallow water flow, where "shallow" is defined by <b>hmax</b>,
-default 0.3 meters. Depending on the area of interest and the used digital
-elevation model, <b>hmax</b>, <b>halpha</b> and <b>hbeta</b> might need to
-be adjusted in order to deal realistically with elevation depressions or obstacles.
+The model tries to keep water "shallow" with maximum shallow water
+depth defined by <b>hmax</b> default 0.3 meters. However, water depths
+much higher than <b>hmax</b> can be observed if water accumulates in
+natural sinks or river beds.Depending on the area of interest and the
+used digital elevation model, <b>hmax</b>, <b>halpha</b> and
+<b>hbeta</b> might need to be adjusted in order to deal realistically
+with elevation depressions or obstacles.
 
 <h2>NOTES</h2>
 
