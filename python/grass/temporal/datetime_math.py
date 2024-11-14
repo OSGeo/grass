@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import copy
 from datetime import datetime, timedelta
+from typing import TypedDict
 
 from .core import get_tgis_message_interface
 
@@ -490,7 +491,20 @@ def adjust_datetime_to_granularity(mydate: datetime, granularity):
 ###############################################################################
 
 
-def compute_datetime_delta(start, end):
+class datetime_delta(TypedDict):
+    """Typed dictionary to return the accumulated delta in year, month, day,
+    hour, minute and second as well as max_days. At runtime, it is a plain dict."""
+
+    year: int
+    month: int
+    day: int
+    hour: int
+    minute: int
+    second: int
+    max_days: int
+
+
+def compute_datetime_delta(start: datetime, end: datetime) -> datetime_delta:
     """Return a dictionary with the accumulated delta in year, month, day,
     hour, minute and second
 
@@ -618,90 +632,99 @@ def compute_datetime_delta(start, end):
          >>> compute_datetime_delta(start, end)
          {'hour': 0, 'month': 12, 'second': 31622405, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 0}
 
-    :return: A dictionary with year, month, day, hour, minute and second as
-             keys()
+    :return: A dictionary with year, month, day, hour, minute, second and max_days as keys()
     """  # noqa: E501
-    comp = {}
+    _year: int = 0
+    _month: int = 0
+    _day: int = 0
+    _hour: int = 0
+    _minute: int = 0
+    _second: int = 0
 
-    day_diff = (end - start).days
-
-    comp["max_days"] = day_diff
+    day_diff: int = (end - start).days
 
     # Date
     # Count full years
-    d = end.year - start.year
-    comp["year"] = d
+    _year: int = end.year - start.year
 
     # Count full months
     if start.month == 1 and end.month == 1:
-        comp["month"] = 0
+        _month = 0
     elif start.day == 1 and end.day == 1:
         d = end.month - start.month
         if d < 0:
-            d += 12 * comp["year"]
+            d += 12 * _year
         elif d == 0:
-            d = 12 * comp["year"]
-        comp["month"] = d
+            d = 12 * _year
+        _month = d
 
     # Count full days
     if start.day == 1 and end.day == 1:
-        comp["day"] = 0
+        _day = 0
     else:
-        comp["day"] = day_diff
+        _day = day_diff
 
     # Time
     # Hours
     if start.hour == 0 and end.hour == 0:
-        comp["hour"] = 0
+        _hour = 0
     else:
         d = end.hour - start.hour
         if d < 0:
             d += 24 + 24 * day_diff
         else:
             d += 24 * day_diff
-        comp["hour"] = d
+        _hour = d
 
     # Minutes
     if start.minute == 0 and end.minute == 0:
-        comp["minute"] = 0
+        _minute = 0
     else:
         d = end.minute - start.minute
         if d != 0:
-            if comp["hour"]:
-                d += 60 * comp["hour"]
+            if _hour:
+                d += 60 * _hour
             else:
                 d += 24 * 60 * day_diff
         elif d == 0:
-            d = 60 * comp["hour"] if comp["hour"] else 24 * 60 * day_diff
+            d = 60 * _hour if _hour else 24 * 60 * day_diff
 
-        comp["minute"] = d
+        _minute = d
 
     # Seconds
     if start.second == 0 and end.second == 0:
-        comp["second"] = 0
+        _second = 0
     else:
         d = end.second - start.second
         if d != 0:
-            if comp["minute"]:
-                d += 60 * comp["minute"]
-            elif comp["hour"]:
-                d += 3600 * comp["hour"]
+            if _minute:
+                d += 60 * _minute
+            elif _hour:
+                d += 3600 * _hour
             else:
                 d += 24 * 60 * 60 * day_diff
         elif d == 0:
-            if comp["minute"]:
-                d = 60 * comp["minute"]
-            elif comp["hour"]:
-                d = 3600 * comp["hour"]
+            if _minute:
+                d = 60 * _minute
+            elif _hour:
+                d = 3600 * _hour
             else:
                 d = 24 * 60 * 60 * day_diff
-        comp["second"] = d
+        _second = d
 
-    return comp
+    return datetime_delta(
+        year=_year,
+        month=_month,
+        day=_day,
+        hour=_hour,
+        minute=_minute,
+        second=_second,
+        max_days=day_diff,
+    )
 
 
 def check_datetime_string(time_string: str, use_dateutil: bool = True):
-    """Check if  a string can be converted into a datetime object and return the object
+    """Check if a string can be converted into a datetime object and return the object
 
     In case dateutil is not installed the supported ISO string formats are:
 
@@ -924,11 +947,11 @@ suffix_units = {
 }
 
 
-def create_suffix_from_datetime(start_time: datetime, granularity) -> str:
+def create_suffix_from_datetime(start_time: datetime, granularity: str) -> str:
     """Create a datetime string based on a datetime object and a provided
     granularity that can be used as suffix for map names.
 
-    dateteime=2001-01-01 00:00:00, granularity="1 month" returns "2001_01"
+    datetime=2001-01-01 00:00:00, granularity="1 month" returns "2001_01"
 
     :param start_time: The datetime object
     :param granularity: The granularity for example "1 month" or "100 seconds"
@@ -947,8 +970,8 @@ def create_time_suffix(mapp, end: bool = False):
     start = mapp.temporal_extent.get_start_time()
     sstring = start.isoformat().replace(":", "_").replace("-", "_")
     if end:
-        end = mapp.temporal_extent.get_end_time()
-        estring = end.isoformat().replace(":", "_").replace("-", "_")
+        end_time = mapp.temporal_extent.get_end_time()
+        estring = end_time.isoformat().replace(":", "_").replace("-", "_")
         return "{st}_{en}".format(st=sstring, en=estring)
     return sstring
 
