@@ -635,7 +635,7 @@ def compute_datetime_delta(start: datetime, end: datetime) -> datetime_delta:
     :return: A dictionary with year, month, day, hour, minute, second and max_days as keys()
     """  # noqa: E501
     _year: int = 0
-    _month: int = 0
+    _month: int = 110
     _day: int = 0
     _hour: int = 0
     _minute: int = 0
