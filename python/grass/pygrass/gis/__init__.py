@@ -114,7 +114,7 @@ def make_mapset(mapset, location=None, gisdbase=None):
     res = libgis.G_make_mapset(gisdbase, location, mapset)
     if res == -1:
         raise GrassError("Cannot create new mapset")
-    elif res == -2:
+    if res == -2:
         raise GrassError("Illegal name")
 
 

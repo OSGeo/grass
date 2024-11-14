@@ -86,21 +86,25 @@ class gThread(threading.Thread, wx.EvtHandler):
         gThread.requestId = id
 
     def run(self):
+        variables = {
+            "callable": None,
+            "ondone": None,
+            "userdata": None,
+            "onterminate": None,
+        }
         while True:
             requestId, args, kwds = self.requestQ.get()
             for key in ("callable", "ondone", "userdata", "onterminate"):
                 if key in kwds:
-                    vars()[key] = kwds[key]
+                    variables[key] = kwds[key]
                     del kwds[key]
-                else:
-                    vars()[key] = None
 
             ret = None
             exception = None
             time.sleep(0.01)
 
             self._terminate_evt = wxThdTerminate(
-                onterminate=vars()["onterminate"],
+                onterminate=variables["onterminate"],
                 kwds=kwds,
                 args=args,
                 pid=requestId,
@@ -109,7 +113,7 @@ class gThread(threading.Thread, wx.EvtHandler):
             if self.terminate:
                 return
 
-            ret = vars()["callable"](*args, **kwds)
+            ret = variables["callable"](*args, **kwds)
 
             if self.terminate:
                 return
@@ -119,12 +123,12 @@ class gThread(threading.Thread, wx.EvtHandler):
             self.resultQ.put((requestId, ret))
 
             event = wxCmdDone(
-                ondone=vars()["ondone"],
+                ondone=variables["ondone"],
                 kwds=kwds,
                 args=args,  # TODO expand args to kwds
                 ret=ret,
                 exception=exception,
-                userdata=vars()["userdata"],
+                userdata=variables["userdata"],
                 pid=requestId,
             )
 

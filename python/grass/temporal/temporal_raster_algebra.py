@@ -52,6 +52,8 @@ for details.
 
 """
 
+from __future__ import annotations
+
 try:
     from ply import yacc
 except ImportError:
@@ -71,15 +73,15 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
 
     def __init__(
         self,
-        pid=None,
-        run=False,
-        debug=True,
-        spatial=False,
-        register_null=False,
-        dry_run=False,
-        nprocs=1,
+        pid: int | None = None,
+        run: bool = False,
+        debug: bool = True,
+        spatial: bool = False,
+        register_null: bool = False,
+        dry_run: bool = False,
+        nprocs: int = 1,
         time_suffix=None,
-    ):
+    ) -> None:
         TemporalRasterBaseAlgebraParser.__init__(
             self,
             pid=pid,
@@ -98,7 +100,7 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
             self.m_mapcalc = pymod.Module("r.mapcalc")
         self.m_mremove = pymod.Module("g.remove")
 
-    def parse(self, expression, basename=None, overwrite=False):
+    def parse(self, expression, basename=None, overwrite: bool = False):
         # Check for space time dataset type definitions from temporal algebra
         lx = TemporalRasterAlgebraLexer()
         lx.build()
@@ -127,14 +129,14 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
 
         return self.process_chain_dict
 
-    def p_statement_assign(self, t):
+    def p_statement_assign(self, t) -> None:
         # The expression should always return a list of maps.
         """
         statement : stds EQUALS expr
         """
         TemporalRasterBaseAlgebraParser.p_statement_assign(self, t)
 
-    def p_ts_neighbour_operation(self, t):
+    def p_ts_neighbour_operation(self, t) -> None:
         # Spatial and temporal neighbour operations via indexing
         # Examples:
         # A[1,0]

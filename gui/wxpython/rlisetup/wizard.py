@@ -687,7 +687,7 @@ class FirstPage(TitledPage):
     def OnLayer(self, event):
         try:
             self.vectorlayer = self.vectlayer.GetValue()
-        except:
+        except AttributeError:
             self.vectorlayer = None
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())

@@ -1045,19 +1045,9 @@ class PsMapFrame(wx.Frame):
         if "Bold" in fontstyle:
             weight = wx.FONTWEIGHT_BOLD
 
-        try:
-            fn = wx.Font(
-                pointSize=fontsize, family=family, style=style, weight=weight, face=face
-            )
-        except:
-            fn = wx.Font(
-                pointSize=fontsize,
-                family=wx.FONTFAMILY_DEFAULT,
-                style=wx.FONTSTYLE_NORMAL,
-                weight=wx.FONTWEIGHT_NORMAL,
-            )
-
-        return fn
+        return wx.Font(
+            pointSize=fontsize, family=family, style=style, weight=weight, faceName=face
+        )
 
     def getTextExtent(self, textDict):
         """Estimates bounding rectangle of text"""
@@ -1071,7 +1061,7 @@ class PsMapFrame(wx.Frame):
             dc.SetFont(fn)
             w, h, lh = dc.GetFullMultiLineTextExtent(textDict["text"])
             return (w, h)
-        except:
+        except (wx.PyAssertionError, ValueError, KeyError):
             return (0, 0)
 
     def getInitMap(self):
