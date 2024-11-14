@@ -240,7 +240,7 @@ def import_stds(
     :param memory: Cache size for raster rows, used in r.in.gdal
     """
 
-    old_state = gs.raise_on_error
+    old_state = gs.get_raise_on_error()
     gs.set_raise_on_error(True)
 
     # Check if input file and extraction directory exits
