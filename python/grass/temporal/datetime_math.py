@@ -659,10 +659,7 @@ def compute_datetime_delta(start: datetime, end: datetime) -> datetime_delta:
         _month = d
 
     # Count full days
-    if start.day == 1 and end.day == 1:
-        _day = 0
-    else:
-        _day = day_diff
+    _day = 0 if start.day == 1 and end.day == 1 else day_diff
 
     # Time
     # Hours
