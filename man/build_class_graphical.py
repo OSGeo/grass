@@ -17,18 +17,21 @@ import sys
 import os
 import fnmatch
 
-# from build_html import *
-from build_html import (
+from build import (
     default_year,
-    header1_tmpl,
     grass_version,
-    modclass_intro_tmpl,
     to_title,
-    html_files,
+    get_files,
     check_for_desc_override,
-    get_desc,
-    write_html_footer,
+    write_footer,
     replace_file,
+)
+
+from build_html import (
+    header1_tmpl,
+    modclass_intro_tmpl,
+    get_desc,
+    man_dir,
 )
 
 
@@ -156,7 +159,7 @@ def generate_page_for_category(
     output.write('<ul class="img-list">')
 
     # for all modules:
-    for cmd in html_files(short_family, ignore_gui=False):
+    for cmd in get_files(man_dir, short_family, ignore_gui=False):
         basename = os.path.splitext(cmd)[0]
         desc = check_for_desc_override(basename)
         if desc is None:
@@ -184,7 +187,7 @@ def generate_page_for_category(
 
     output.write("</ul>")
 
-    write_html_footer(output, "index.html", year)
+    write_footer(output, "index.html", year, template="html")
 
     output.close()
     replace_file(filename)

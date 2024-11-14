@@ -1,0 +1,43 @@
+---
+site_name: !ENV SITE_NAME
+site_url: https://grass.osgeo.org/grass-stable/manuals/
+docs_dir: source
+extra:
+  homepage: ./index.html
+theme:
+  name: material
+  custom_dir: overrides
+  language: en
+  logo: grass_logo.png
+  features:
+    - content.code.copy
+    - navigation.footer
+  palette:
+    primary: custom
+copyright: !ENV COPYRIGHT
+extra_css:
+  - grassdocs.css
+plugins:
+  - search
+  - glightbox
+use_directory_urls: false
+nav:
+  - Startup: grass.md
+  - Databases: database.md
+  - Display: display.md
+  - General: general.md
+  - Imagery: imagery.md
+  - Keywords: keywords.md
+  - Misc: miscellaneous.md
+  - Raster: raster.md
+  - Raster 3D: raster3d.md
+  - SQL: sql.md
+  - Temporal: temporal.md
+  - Variables: variables.md
+  - Vector: vector.md
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - attr_list
+  - md_in_html
