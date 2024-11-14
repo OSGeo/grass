@@ -721,7 +721,7 @@ def compute_datetime_delta(start: datetime, end: datetime) -> datetime_delta:
 
 
 def check_datetime_string(time_string: str, use_dateutil: bool = True):
-    """Check if a string can be converted into a datetime object and return the object
+    """Check if  a string can be converted into a datetime object and return the object
 
     In case dateutil is not installed the supported ISO string formats are:
 
@@ -944,11 +944,11 @@ suffix_units = {
 }
 
 
-def create_suffix_from_datetime(start_time: datetime, granularity: str) -> str:
+def create_suffix_from_datetime(start_time: datetime, granularity) -> str:
     """Create a datetime string based on a datetime object and a provided
     granularity that can be used as suffix for map names.
 
-    datetime=2001-01-01 00:00:00, granularity="1 month" returns "2001_01"
+    dateteime=2001-01-01 00:00:00, granularity="1 month" returns "2001_01"
 
     :param start_time: The datetime object
     :param granularity: The granularity for example "1 month" or "100 seconds"
@@ -967,8 +967,8 @@ def create_time_suffix(mapp, end: bool = False):
     start = mapp.temporal_extent.get_start_time()
     sstring = start.isoformat().replace(":", "_").replace("-", "_")
     if end:
-        end_time = mapp.temporal_extent.get_end_time()
-        estring = end_time.isoformat().replace(":", "_").replace("-", "_")
+        end = mapp.temporal_extent.get_end_time()
+        estring = end.isoformat().replace(":", "_").replace("-", "_")
         return "{st}_{en}".format(st=sstring, en=estring)
     return sstring
 
