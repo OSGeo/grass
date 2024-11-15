@@ -212,7 +212,7 @@ class TplotFrame(wx.Frame):
             self.coorval = gselect.CoordinatesSelect(
                 parent=self.controlPanelRaster, giface=self._giface
             )
-        except:
+        except NotImplementedError:
             self.coorval = TextCtrl(
                 parent=self.controlPanelRaster,
                 id=wx.ID_ANY,
@@ -281,7 +281,7 @@ class TplotFrame(wx.Frame):
             self.cats = gselect.VectorCategorySelect(
                 parent=self.controlPanelVector, giface=self._giface
             )
-        except:
+        except NotImplementedError:
             self.cats = TextCtrl(
                 parent=self.controlPanelVector,
                 id=wx.ID_ANY,
@@ -1029,10 +1029,10 @@ class TplotFrame(wx.Frame):
 
         try:
             getcoors = self.coorval.coordsField.GetValue()
-        except:
+        except AttributeError:
             try:
                 getcoors = self.coorval.GetValue()
-            except:
+            except AttributeError:
                 getcoors = None
         if getcoors and getcoors != "":
             try:
@@ -1257,7 +1257,7 @@ class TplotFrame(wx.Frame):
                 return
             try:
                 self.coorval.coordsField.SetValue(",".join(coors))
-            except:
+            except AttributeError:
                 self.coorval.SetValue(",".join(coors))
         if self.datasetsV:
             vdatas = ",".join(f"{x[0]}@{x[1]}" for x in self.datasetsV)
@@ -1448,7 +1448,7 @@ class DataCursor:
         """Intended to be called through "mpl_connect"."""
         # Rather than trying to interpolate, just display the clicked coords
         # This will only be called if it's within "tolerance", anyway.
-        x, y = event.mouseevent.xdata, event.mouseevent.ydata
+        x = event.mouseevent.xdata
         annotation = self.annotations[event.artist.axes]
         if x is not None:
             if not self.display_all:
@@ -1460,7 +1460,7 @@ class DataCursor:
                 for a in event.artist.get_xdata():
                     try:
                         d = self.convert(a)
-                    except:
+                    except (IndexError, ValueError):
                         d = a
                     xData.append(d)
                 x = xData[np.argmin(abs(xData - x))]

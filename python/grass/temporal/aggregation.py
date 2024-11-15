@@ -115,7 +115,7 @@ def collect_map_names(sp, dbif, start, end, sampling):
 
 
 def aggregate_raster_maps(
-    inputs, base, start, end, count, method, register_null, dbif, offset=0
+    inputs, base, start, end, count: int, method, register_null, dbif, offset: int = 0
 ):
     """Aggregate a list of raster input maps with r.series
 
@@ -219,13 +219,13 @@ def aggregate_by_topology(
     topo_list,
     basename,
     time_suffix,
-    offset=0,
+    offset: int = 0,
     method="average",
-    nprocs=1,
+    nprocs: int = 1,
     spatial=None,
     dbif=None,
-    overwrite=False,
-    file_limit=1000,
+    overwrite: bool = False,
+    file_limit: int = 1000,
 ):
     """Aggregate a list of raster input maps with r.series
 

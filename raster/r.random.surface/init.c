@@ -35,12 +35,10 @@ void Init(void)
     else
         MinRes = NS;
 
-    if (NULL == G_find_file("cell", "MASK", G_mapset())) {
-        MapCount = Rs * Cs;
-        FDM = -1;
-    }
-    else {
-        FDM = Rast_open_old("MASK", G_mapset());
+    char mask_name[GNAME_MAX];
+    char mask_mapset[GMAPSET_MAX];
+    if (Rast_mask_status(mask_name, mask_mapset, NULL, NULL, NULL)) {
+        FDM = Rast_open_old(mask_name, mask_mapset);
         {
             MapCount = 0;
             CellBuffer = Rast_allocate_c_buf();
@@ -52,6 +50,10 @@ void Init(void)
                 }
             }
         }
+    }
+    else {
+        MapCount = Rs * Cs;
+        FDM = -1;
     }
 
     if (Uniform->answer)

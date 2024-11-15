@@ -1,0 +1,5 @@
+mkdocs
+mkdocs-glightbox
+mkdocs-material
+pymdown-extensions
+pyyaml-env-tag

@@ -47,8 +47,9 @@ ifneq ($(strip $(MINGW)),)
 endif
 
 HTMLFILES := $(wildcard *.html)
+MDFILES := $(wildcard *.md)
 
-default: $(FILES) $(patsubst %,$(HTMLDIR)/%,$(HTMLFILES))
+default: $(FILES) $(patsubst %,$(HTMLDIR)/%,$(HTMLFILES)) $(patsubst %,$(MDDIR)/source/%,$(MDFILES))
 
 ifneq ($(strip $(MINGW)),)
 $(ARCH_BINDIR)/$(START_UP): grass.sh

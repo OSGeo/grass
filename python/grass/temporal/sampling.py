@@ -34,8 +34,8 @@ def sample_stds_by_stds_topology(
     header,
     separator,
     method,
-    spatial=False,
-    print_only=True,
+    spatial: bool = False,
+    print_only: bool = True,
 ):
     """Sample the input space time datasets with a sample
     space time dataset, return the created map matrix and optionally

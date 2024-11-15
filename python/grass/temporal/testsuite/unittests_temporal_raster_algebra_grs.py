@@ -9,14 +9,15 @@ for details.
 
 import datetime
 
-import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+
+import grass.temporal as tgis
 
 
 class TestTemporalRasterAlgebra(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         """Initiate the temporal GIS and set the region"""
         tgis.init(True)  # Raise on error instead of exit(1)
         cls.use_temp_region()
@@ -141,12 +142,12 @@ class TestTemporalRasterAlgebra(TestCase):
             end="2001-07-01",
         )
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         return
         self.runModule("t.remove", flags="rf", inputs="R", quiet=True)
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         return
         """Remove the temporary region
         """
@@ -154,7 +155,7 @@ class TestTemporalRasterAlgebra(TestCase):
         cls.runModule("t.unregister", maps="singletmap", quiet=True)
         cls.del_temp_region()
 
-    def test_1(self):
+    def test_1(self) -> None:
         """Simple arithmetik test"""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         expr = "R = if(C == 9,  A - 1)"
@@ -189,7 +190,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(pc["STDS"]["name"], "R")
         self.assertEqual(pc["STDS"]["stdstype"], "strds")
 
-    def test_2(self):
+    def test_2(self) -> None:
         """Simple arithmetik test"""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         expr = "R = A + B + C"
@@ -224,7 +225,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(pc["STDS"]["name"], "R")
         self.assertEqual(pc["STDS"]["stdstype"], "strds")
 
-    def test_3(self):
+    def test_3(self) -> None:
         """Simple arithmetik test with null map"""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         expr = "R = A + B + C + tmap(nullmap)"
@@ -259,7 +260,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(pc["STDS"]["name"], "R")
         self.assertEqual(pc["STDS"]["stdstype"], "strds")
 
-    def test_4(self):
+    def test_4(self) -> None:
         """Simple arithmetik test"""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         expr = "R = if(D == 11,  A - 1, A + 1)"
@@ -281,7 +282,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
 
-    def test_simple_arith_hash_1(self):
+    def test_simple_arith_hash_1(self) -> None:
         """Simple arithmetic test including the hash operator"""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression="R = A + (A # A)", basename="r", overwrite=True)
@@ -295,7 +296,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
 
-    def test_simple_arith_hash_2(self):
+    def test_simple_arith_hash_2(self) -> None:
         """Simple arithmetic test including the hash operator"""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression="R = (A + A) # A", basename="r", overwrite=True)
@@ -309,7 +310,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
 
-    def test_simple_arith_td_1(self):
+    def test_simple_arith_td_1(self) -> None:
         """Simple arithmetic test"""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         expr = "R = A + td(A:D)"
@@ -331,7 +332,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
 
-    def test_simple_arith_if_1(self):
+    def test_simple_arith_if_1(self) -> None:
         """Simple arithmetic test with if condition"""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         expr = 'R = if(start_date(A) >= "2001-02-01", A + A)'
@@ -351,7 +352,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 2, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
 
-    def test_simple_arith_if_2(self):
+    def test_simple_arith_if_2(self) -> None:
         """Simple arithmetic test with if condition"""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         expr = "R = if(A#A == 1, A - A)"
@@ -371,7 +372,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
 
-    def test_complex_arith_if_1(self):
+    def test_complex_arith_if_1(self) -> None:
         """Complex arithmetic test with if condition"""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         expr = 'R = if(start_date(A) < "2001-03-01" && A#A == 1, A+C, A-C)'
@@ -391,7 +392,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
 
-    def test_temporal_neighbors(self):
+    def test_temporal_neighbors(self) -> None:
         """Simple temporal neighborhood computation test"""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         expr = "R = (A[0,0,-1] : D) + (A[0,0,1] : D)"
@@ -411,7 +412,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 5, 6))
 
-    def test_map(self):
+    def test_map(self) -> None:
         """Test STDS + single map without timestamp"""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         expr = "R = A + map(singletmap)"
@@ -431,7 +432,7 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
 
-    def test_tmap_map(self):
+    def test_tmap_map(self) -> None:
         """Test STDS + single map with and without timestamp"""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         expr = "R = tmap(singletmap) + A + map(singletmap)"

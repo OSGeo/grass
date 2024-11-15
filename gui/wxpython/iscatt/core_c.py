@@ -19,7 +19,7 @@ from multiprocessing import Process, Queue
 import numpy as np
 
 try:
-    from grass.lib.gis import G_get_window
+    from grass.lib.gis import G_get_window, struct_Cell_head
     from grass.lib.imagery import (
         SC_SCATT_CONDITIONS,
         SC_SCATT_DATA,
@@ -35,10 +35,9 @@ try:
         I_sc_insert_scatt_data,
         I_scd_init_scatt_data,
         scdScattData,
-        struct_Cell_head,
-        struct_Range,
         struct_scCats,
     )
+    from grass.lib.raster import struct_Range
 except ImportError as e:
     sys.stderr.write(_("Loading ctypes libs failed: %s") % e)
 
