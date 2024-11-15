@@ -60,15 +60,14 @@ from gui_core.wrap import (
 )
 
 import grass.script as gs
-
-rinwms_path = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
-if rinwms_path not in sys.path:
-    sys.path.append(rinwms_path)
-
 from wms_base import WMSDriversInfo
 from srs import Srs
 
 from grass.pydispatch.signal import Signal
+
+rinwms_path = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
+if rinwms_path not in sys.path:
+    sys.path.append(rinwms_path)
 
 
 class WSPanel(wx.Panel):
@@ -750,7 +749,6 @@ class WSPanel(wx.Panel):
         self.projs_list = []
         projs_list = []
 
-        intersect_proj = []
         first = True
         for curr in curr_sel_ls:
             layer_projs = curr["cap_intf_l"].GetLayerData("srs")
