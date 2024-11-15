@@ -24,19 +24,26 @@ set -eu
 #
 ###############################################################################
 
-# define $TMP if not present
-if test -z "${TMP}" ; then
-  TMP="/tmp"
-fi
-
-# TODO: path to LUA file setting to be improved (./utils/pandoc_codeblock.lua)
-#wget https://raw.githubusercontent.com/OSGeo/grass/refs/heads/main/utils/pandoc_codeblock.lua -O "${TMP}/pandoc_codeblock.lua"
-TMP="utils"
+# path to LUA file (./utils/pandoc_codeblock.lua)
+UTILSPATH="utils"
 
 # run recursively: HTML to MD
-for f in `find . -name *.html`; do
+for f in $(find . -name *.html); do
     echo "${f}"
-    cat "${f}" | sed 's#<div class="code"><pre>#<pre><code>#g' | sed 's#</pre></div>#</code></pre>#g' | pandoc \
-        --from=html --to=markdown -t gfm --lua-filter "${TMP}/pandoc_codeblock.lua" | \
-        sed 's+  $++g' | sed 's+\.html)+\.md)+g' > "${f%%.html}.md"
+
+    # HTML: Process the tmp file to selectively replace .html with .md only in relative URLs
+    sed -E '
+  # Step 1: Preserve https or http URLs with .html
+  s|(<a href="https?://[^"]+\.html)">|\1_KEEPHTML">|g;
+  # Step 2: Replace .html with .md for other links
+  s|(<a href=")([^"]+)\.html">|\1\2.md">|g;
+  # Step 3: Restore preserved https or http URLs
+  s|_KEEPHTML">|">|g;
+' "${f%%.html}.html" > "${f%%.html}_tmp.html"
+
+    cat "${f%%.html}_tmp.html" | sed 's#<div class="code"><pre>#<pre><code>#g' | sed 's#</pre></div>#</code></pre>#g' | pandoc \
+        --from=html --to=markdown -t gfm --lua-filter "${UTILSPATH}/pandoc_codeblock.lua" > "${f%%.html}.md"
+
+    rm -f "${f%%.html}_tmp.html"
+
 done
