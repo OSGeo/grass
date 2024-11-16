@@ -1,7 +1,7 @@
 """
 @package web_services.widgets
 
-@brief Widgets for web services (WMS, WMTS, NasaOnEarh)
+@brief Widgets for web services (WMS, WMTS, NasaOnEarth)
 
 List of classes:
  - widgets::WSPanel
@@ -841,7 +841,7 @@ class WSPanel(wx.Panel):
         """Get formats
 
         WMS has formats defined generally for whole cap.
-        In WMTS and NASA OnEarh formats are defined for layer.
+        In WMTS and NASA OnEarth formats are defined for layer.
         """
         formats_label = []
         if layer is None:
@@ -920,7 +920,7 @@ class LayersList(TreeCtrl):
 
     def LoadData(self, cap=None):
         """Load data into list"""
-        # detete first all items
+        # delete first all items
         self.DeleteAllItems()
 
         if not cap:
