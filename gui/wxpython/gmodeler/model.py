@@ -770,7 +770,7 @@ class Model:
                     p["value"] = ""
 
     def DeleteIntermediateData(self, log):
-        """Detele intermediate data"""
+        """Delete intermediate data"""
         rast, vect, rast3d, msg = self.GetIntermediateData()
 
         if rast:
@@ -3736,5 +3736,5 @@ class ModelParamDialog(wx.Dialog):
         return errList
 
     def DeleteIntermediateData(self) -> bool:
-        """Check if to detele intermediate data"""
+        """Check if to delete intermediate data"""
         return bool(self.interData.IsShown() and self.interData.IsChecked())
