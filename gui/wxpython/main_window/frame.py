@@ -1120,7 +1120,7 @@ class GMFrame(wx.Frame):
         """Handles display commands.
 
         :param command: command in a list
-        :return int: False if failed, True if succcess
+        :return int: False if failed, True if success
         """
         if not self.currentPage:
             self.NewDisplay(show=True)

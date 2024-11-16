@@ -161,7 +161,7 @@ class Model:
                     self.canvas.parent.DefineCondition(mo)
 
     def Normalize(self):
-        # check for inconsistecies
+        # check for inconsistencies
         for idx in range(1, len(self.items)):
             if not self.items[idx].GetBlock() and isinstance(
                 self.items[idx - 1], ModelLoop

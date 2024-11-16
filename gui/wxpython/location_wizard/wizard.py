@@ -1357,7 +1357,7 @@ class EllipsePage(TitledPage):
     # FIXME: index number doesn't translate when you've given a valid name
     # from the other list
     def OnText(self, event):
-        """Ellipspoid code changed"""
+        """Ellipsoid code changed"""
         self.ellipse = event.GetString()
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
         if len(self.ellipse) == 0 or (

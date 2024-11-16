@@ -11,7 +11,7 @@ Classes:
  - dialogs::ModelLoopDialog
  - dialogs::ModelConditionDialog
  - dialogs::ModelListCtrl
- - dialogs::ValiableListCtrl
+ - dialogs::VariableListCtrl
  - dialogs::ItemListCtrl
  - dialogs::ItemCheckListCtrl
 

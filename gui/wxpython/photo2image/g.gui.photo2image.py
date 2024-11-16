@@ -67,7 +67,7 @@
 # %end
 
 """
-Module to run GCP management tool as stadalone application.
+Module to run GCP management tool as standalone application.
 """
 import os
 import grass.script as gs

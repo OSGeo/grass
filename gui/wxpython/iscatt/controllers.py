@@ -505,7 +505,7 @@ class PlotsRenderingManager:
     """Manages rendering of scatter plot.
 
     .. todo::
-        still space for optimalization
+        still space for optimization
     """
 
     def __init__(self, scatt_mgr, cats_mgr, core):

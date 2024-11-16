@@ -214,7 +214,7 @@ class CatRastUpdater:
 
     def SyncWithMap(self):
         # TODO possible optimization - bbox only of vertex and its two
-        # neighbours
+        # neighbors
 
         region = self.an_data.GetRegion()
 
@@ -237,7 +237,7 @@ class CatRastUpdater:
 
     def EditedFeature(self, new_bboxs, new_areas_cats, old_bboxs, old_areas_cats):
         # TODO possible optimization - bbox only of vertex and its two
-        # neighbours
+        # neighbors
 
         bboxs = old_bboxs + new_bboxs
         areas_cats = old_areas_cats + new_areas_cats
