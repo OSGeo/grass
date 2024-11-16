@@ -21946,11 +21946,6 @@ msgstr "rótulos:"
 #~ msgid "Deactive overwrite"
 #~ msgstr "Desativar susbstituição"
 
-#~ msgid "Systematic contiguos"
-#~ msgstr "Contiguo sistemático"
-
-#~ msgid "Systematic non contiguos"
-#~ msgstr "Não contiguo sistemático"
 
 #, python-format
 #~ msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."

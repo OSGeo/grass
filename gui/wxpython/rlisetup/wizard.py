@@ -374,13 +374,13 @@ class RLIWizard:
             fil.write("SAMPLEAREA -1|-1|%r|%r\n" % (rl, cl))
             if self.units.distrtype == "non_overlapping":
                 fil.write("RANDOMNONOVERLAPPING %s\n" % self.units.distr1)
-            elif self.units.distrtype == "systematic_contiguos":
+            elif self.units.distrtype == "systematic_contiguous":
                 fil.write("SYSTEMATICCONTIGUOUS\n")
             elif self.units.distrtype == "stratified_random":
                 fil.write(
                     "STRATIFIEDRANDOM %s|%s\n" % (self.units.distr1, self.units.distr2)
                 )
-            elif self.units.distrtype == "systematic_noncontiguos":
+            elif self.units.distrtype == "systematic_noncontiguous":
                 fil.write("SYSTEMATICNONCONTIGUOUS %s\n" % self.units.distr1)
             elif self.units.distrtype == "centered_oversites":
                 fil.write("")
@@ -1434,7 +1434,7 @@ class SampleUnitsKeyPage(TitledPage):
             self.panelSizer.Hide(self.distr2Txt)
             self.panelSizer.Layout()
         elif chosen == 1:
-            self.distrtype = "systematic_contiguos"
+            self.distrtype = "systematic_contiguous"
             self.distr1Label.SetLabel("")
             self.distr2Label.SetLabel("")
             self.panelSizer.Hide(self.distr1Txt)
@@ -1448,7 +1448,7 @@ class SampleUnitsKeyPage(TitledPage):
             self.panelSizer.Show(self.distr2Txt)
             self.panelSizer.Layout()
         elif chosen == 3:
-            self.distrtype = "systematic_noncontiguos"
+            self.distrtype = "systematic_noncontiguous"
             self.distr1Label.SetLabel(_("Insert distance between units"))
             self.panelSizer.Show(self.distr1Txt)
             self.distr2Label.SetLabel("")
@@ -2182,7 +2182,7 @@ class SummaryPage(TitledPage):
             if self.parent.units.distrtype == "non_overlapping":
                 self.unitsmorelabel.SetLabel(_("Number sampling units:"))
                 self.unitsmoretxt.SetLabel(self.parent.units.distr1)
-            elif self.parent.units.distrtype == "systematic_noncontiguos":
+            elif self.parent.units.distrtype == "systematic_noncontiguous":
                 self.unitsmorelabel.SetLabel(_("Distance between units:"))
                 self.unitsmoretxt.SetLabel(self.parent.units.distr1)
             elif self.parent.units.distrtype == "stratified_random":

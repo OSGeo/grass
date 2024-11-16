@@ -20720,11 +20720,6 @@ msgstr "标签："
 #~ msgid "Automatically hightlight selected features in map display"
 #~ msgstr "地图显示窗口中自动高亮所选择要素"
 
-#~ msgid "Systematic contiguos"
-#~ msgstr "系统连续"
-
-#~ msgid "Systematic non contiguos"
-#~ msgstr "系统不连续"
 
 #~ msgid ""
 #~ "Unable to get current geographic extent. Force quiting wxGUI. Please "

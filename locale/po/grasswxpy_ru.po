@@ -22052,10 +22052,10 @@ msgstr "подписи:"
 #~ msgid "Georectifier manual"
 #~ msgstr "Руководство для инструмента геопривязки"
 
-#~ msgid "Systematic contiguos"
+#~ msgid "Systematic contiguous"
 #~ msgstr "Систематическая непрерывная выборка"
 
-#~ msgid "Systematic non contiguos"
+#~ msgid "Systematic non contiguous"
 #~ msgstr "Систематическая несвязная выборка"
 
 #, python-brace-format

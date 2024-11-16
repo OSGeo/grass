@@ -22328,11 +22328,6 @@ msgstr "etiquetas:"
 #~ msgid "Deactive overwrite"
 #~ msgstr "Desactivar sobreescribir"
 
-#~ msgid "Systematic contiguos"
-#~ msgstr "Sistemático continuo"
-
-#~ msgid "Systematic non contiguos"
-#~ msgstr "Sistemático no continuo"
 
 #, python-format
 #~ msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
