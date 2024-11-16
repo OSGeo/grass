@@ -15044,7 +15044,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/menutree.py:155
 #, python-format
-msgid "Unknow tag %s"
+msgid "Unknown tag %s"
 msgstr "Etichetta sconosciuta %s"
 
 #: ../gui/wxpython/core/debug.py:46
