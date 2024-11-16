@@ -13205,7 +13205,7 @@ msgid "Zoom to saved region extents"
 msgstr "Přiblížit na uložený region"
 
 #: ../gui/wxpython/mapwin/buffered.py:2103
-msgid "Set compulational region from named region"
+msgid "Set computational region from named region"
 msgstr "Nastavit výpočetní region podle pojmenovaného regionu"
 
 #: ../gui/wxpython/mapwin/buffered.py:2114

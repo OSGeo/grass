@@ -13132,7 +13132,7 @@ msgid "Zoom to saved region extents"
 msgstr "Nagyítás a mentett régió terjedelmére"
 
 #: ../gui/wxpython/mapwin/buffered.py:2103
-msgid "Set compulational region from named region"
+msgid "Set computational region from named region"
 msgstr "Számítási régió beállítása névvel bíró régióval"
 
 #: ../gui/wxpython/mapwin/buffered.py:2114

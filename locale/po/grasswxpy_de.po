@@ -13102,7 +13102,7 @@ msgid "Zoom to saved region extents"
 msgstr "Auf die Ausdehnung der gespeicherten Region vergrößern"
 
 #: ../gui/wxpython/mapwin/buffered.py:2102
-msgid "Set compulational region from named region"
+msgid "Set computational region from named region"
 msgstr ""
 
 #: ../gui/wxpython/mapwin/buffered.py:2113

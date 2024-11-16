@@ -13975,7 +13975,7 @@ msgid "Zoom to saved region extents"
 msgstr "Задать масштаб до размера сохранённого фрагмента"
 
 #: ../gui/wxpython/mapwin/buffered.py:2103
-msgid "Set compulational region from named region"
+msgid "Set computational region from named region"
 msgstr "Задать расчётный фрагмент от именованного фрагмента"
 
 #: ../gui/wxpython/mapwin/buffered.py:2114

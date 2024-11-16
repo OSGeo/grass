@@ -13849,7 +13849,7 @@ msgid "Zoom to saved region extents"
 msgstr "Zoomer sur les limites de la région enregistrée"
 
 #: ../gui/wxpython/mapwin/buffered.py:2103
-msgid "Set compulational region from named region"
+msgid "Set computational region from named region"
 msgstr "Définir la région de calcul à partir d'une région enregistrée"
 
 #: ../gui/wxpython/mapwin/buffered.py:2114
