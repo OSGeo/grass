@@ -36,6 +36,9 @@ if TYPE_CHECKING:
     from multiprocessing.connection import Connection
     from multiprocessing.synchronize import _LockLike
 
+
+logger = logging.getLogger(__name__)
+
 ###############################################################################
 
 
@@ -472,8 +475,9 @@ def _write_timestamp(lock: _LockLike, conn: Connection, data):
         check = libgis.G_scan_timestamp(byref(ts), timestring)
 
         if check != 1:
-            logging.error(
-                "Unable to convert the timestamp: {timestring}", timestring=timestring
+            logger.error(
+                "Unable to convert the timestamp: %(timestring)s",
+                {"timestring": timestring},
             )
             return -2
 
@@ -554,9 +558,9 @@ def _read_semantic_label(lock: _LockLike, conn: Connection, data):
             if ret:
                 semantic_label = decode(ret)
         else:
-            logging.error(
-                "Unable to read semantic label. Unsupported map type {maptype}",
-                maptype=maptype,
+            logger.error(
+                "Unable to read semantic label. Unsupported map type %(maptype)s",
+                {"maptype": maptype},
             )
             return -1
     finally:
@@ -591,9 +595,9 @@ def _write_semantic_label(lock: _LockLike, conn: Connection, data):
                 raise ValueError(_("Invalid semantic label"))
             libraster.Rast_write_semantic_label(name, semantic_label)
         else:
-            logging.error(
-                "Unable to write semantic label. Unsupported map type {maptype}",
-                maptype=maptype,
+            logger.error(
+                "Unable to write semantic label. Unsupported map type %(maptype)s",
+                {"maptype": maptype},
             )
             return -2
     finally:
@@ -625,9 +629,9 @@ def _remove_semantic_label(lock: _LockLike, conn: Connection, data):
         if maptype == RPCDefs.TYPE_RASTER:
             check = libgis.G_remove_misc("cell_misc", "semantic_label", name)
         else:
-            logging.error(
-                "Unable to remove semantic label. Unsupported map type {maptype}",
-                maptype=maptype,
+            logger.error(
+                "Unable to remove semantic label. Unsupported map type %(maptype)s",
+                {"maptype": maptype},
             )
             return -2
     finally:
@@ -743,11 +747,11 @@ def _read_raster_info(name, mapset):
         libraster.Rast_init_fp_range(byref(range))
         ret = libraster.Rast_read_fp_range(name, mapset, byref(range))
         if ret < 0:
-            logging.warning(_("Unable to read range file"))
+            logger.warning(_("Unable to read range file"))
             kvp["min"] = None
             kvp["max"] = None
         elif ret == 2:
-            logging.info(_("Raster range file is empty"))
+            logger.info(_("Raster range file is empty"))
             kvp["min"] = None
             kvp["max"] = None
         else:
@@ -761,11 +765,11 @@ def _read_raster_info(name, mapset):
         libraster.Rast_init_range(byref(range))
         ret = libraster.Rast_read_range(name, mapset, byref(range))
         if ret < 0:
-            logging.warning(_("Unable to read range file"))
+            logger.warning(_("Unable to read range file"))
             kvp["min"] = None
             kvp["max"] = None
         elif ret == 2:
-            logging.info(_("Raster range file is empty"))
+            logger.info(_("Raster range file is empty"))
             kvp["min"] = None
             kvp["max"] = None
         else:
@@ -831,7 +835,7 @@ def _read_raster3d_info(name, mapset):
     )
 
     if not g3map:
-        logging.error(_("Unable to open 3D raster map <%s>"), (name))
+        logger.error(_("Unable to open 3D raster map <%s>"), name)
         return None
 
     maptype = libraster3d.Rast3d_file_type_map(g3map)
@@ -846,7 +850,7 @@ def _read_raster3d_info(name, mapset):
     max = libgis.DCELL()
     ret = libraster3d.Rast3d_range_load(g3map)
     if not ret:
-        logging.error(_("Unable to load range of 3D raster map <%s>"), (name))
+        logger.error(_("Unable to load range of 3D raster map <%s>"), name)
         return None
     libraster3d.Rast3d_range_min_max(g3map, byref(min), byref(max))
 
@@ -860,7 +864,7 @@ def _read_raster3d_info(name, mapset):
         kvp["max"] = float(max.value)
 
     if not libraster3d.Rast3d_close(g3map):
-        logging.error(_("Unable to close 3D raster map <%s>"), (name))
+        logger.error(_("Unable to close 3D raster map <%s>"), name)
         return None
 
     return kvp
@@ -902,9 +906,9 @@ def _read_vector_info(name, mapset):
         libvector.Vect_set_open_level(1)  # no topology
         with_topo = False
         if libvector.Vect_open_old2(byref(Map), name, mapset, "1") < 1:
-            logging.error(
+            logger.error(
                 _("Unable to open vector map <%s>"),
-                (libvector.Vect_get_full_name(byref(Map))),
+                libvector.Vect_get_full_name(byref(Map)),
             )
             return None
 
@@ -1026,7 +1030,7 @@ def _read_raster_history(name, mapset):
     hist = libraster.History()
     ret = libraster.Rast_read_history(name, mapset, byref(hist))
     if ret < 0:
-        logging.warning(_("Unable to read history file"))
+        logger.warning(_("Unable to read history file"))
         return None
     kvp["creation_time"] = decode(
         libraster.Rast_get_history(byref(hist), libraster.HIST_MAPID)
@@ -1063,7 +1067,7 @@ def _read_raster3d_history(name, mapset):
     hist = libraster.History()
     ret = libraster3d.Rast3d_read_history(name, mapset, byref(hist))
     if ret < 0:
-        logging.warning(_("Unable to read history file"))
+        logger.warning(_("Unable to read history file"))
         return None
     kvp["creation_time"] = decode(
         libraster.Rast_get_history(byref(hist), libraster3d.HIST_MAPID)
