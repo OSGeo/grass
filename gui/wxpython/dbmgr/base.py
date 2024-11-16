@@ -4030,7 +4030,7 @@ class FieldStatistics(wx.Frame):
             database=database,
         )
         if not dataStr:
-            GError(parent=self.parent, message=_("Unable to calculte statistics."))
+            GError(parent=self.parent, message=_("Unable to calculate statistics."))
             self.Close()
             return
 
@@ -4039,7 +4039,7 @@ class FieldStatistics(wx.Frame):
             GError(
                 parent=self.parent,
                 message=_(
-                    "Unable to calculte statistics. "
+                    "Unable to calculate statistics. "
                     "Invalid number of lines %d (should be %d)."
                 )
                 % (len(dataLines), len(stats)),
@@ -4066,7 +4066,7 @@ class FieldStatistics(wx.Frame):
         )
         if not dataVar:
             GWarning(
-                parent=self.parent, message=_("Unable to calculte standard deviation.")
+                parent=self.parent, message=_("Unable to calculate standard deviation.")
             )
         varSum = 0
         for var in decode(dataVar).splitlines():

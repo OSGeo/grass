@@ -19232,19 +19232,19 @@ msgid "Statistics is not support for DBF tables."
 msgstr "Les statistiques ne sont pas suportées pour les tables DBF."
 
 #: ../gui/wxpython/dbmgr/base.py:4062
-msgid "Unable to calculte statistics."
+msgid "Unable to calculate statistics."
 msgstr "Impossible de calculer les statistiques"
 
 #: ../gui/wxpython/dbmgr/base.py:4071
 #, python-format
 msgid ""
-"Unable to calculte statistics. Invalid number of lines %d (should be %d)."
+"Unable to calculate statistics. Invalid number of lines %d (should be %d)."
 msgstr ""
 "Impossible de calculer les statistiques. Nombre de lignes %d invalides "
 "(devrait être %d)."
 
 #: ../gui/wxpython/dbmgr/base.py:4098
-msgid "Unable to calculte standard deviation."
+msgid "Unable to calculate standard deviation."
 msgstr "Impossible de calculer l'écart-type."
 
 #: ../gui/wxpython/dbmgr/base.py:4106
