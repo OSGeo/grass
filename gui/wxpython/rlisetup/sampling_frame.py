@@ -327,9 +327,9 @@ class RLiSetupMapPanel(wx.Panel):
             circle.point[0], circle.point[1], circle.radius
         )
         self._registeredGraphics.Draw()
-        self.createCricle(circle)
+        self.createCircle(circle)
 
-    def createCricle(self, c):
+    def createCircle(self, c):
         dlg = wx.TextEntryDialog(
             None,
             "Name of sample circle region",
