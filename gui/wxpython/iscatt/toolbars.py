@@ -95,19 +95,19 @@ class MainToolbar(BaseToolbar):
             (
                 ("pan", icons["pan"].label),
                 icons["pan"],
-                lambda event: self.SetPloltsMode(event, "pan"),
+                lambda event: self.SetPlotsMode(event, "pan"),
                 wx.ITEM_CHECK,
             ),
             (
                 ("zoom", icons["zoomIn"].label),
                 icons["zoomIn"],
-                lambda event: self.SetPloltsMode(event, "zoom"),
+                lambda event: self.SetPlotsMode(event, "zoom"),
                 wx.ITEM_CHECK,
             ),
             (
                 ("zoom_extend", icons["zoomExtent"].label),
                 icons["zoomExtent"],
-                lambda event: self.SetPloltsMode(event, "zoom_extend"),
+                lambda event: self.SetPlotsMode(event, "zoom_extend"),
                 wx.ITEM_CHECK,
             ),
             (None,),
@@ -145,7 +145,7 @@ class MainToolbar(BaseToolbar):
     def GetToolId(self, toolName):  # TODO can be useful in base
         return vars(self)[toolName]
 
-    def SetPloltsMode(self, event, tool_name):
+    def SetPlotsMode(self, event, tool_name):
         self.scatt_mgr.modeSet.disconnect(self.ModeSet)
         if event.IsChecked():
             for i_tool_data in self.controller.data:
