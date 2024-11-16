@@ -251,14 +251,14 @@ class WSPanel(wx.Panel):
         )
 
         labels = {}
-        self.l_odrder_list = None
+        self.l_order_list = None
         if "WMS" in self.ws:
             labels["l_order"] = StaticBox(
                 parent=adv_setts_panel,
                 id=wx.ID_ANY,
                 label=_("Order of layers in raster"),
             )
-            self.l_odrder_list = wx.ListBox(
+            self.l_order_list = wx.ListBox(
                 adv_setts_panel,
                 id=wx.ID_ANY,
                 choices=[],
@@ -351,7 +351,7 @@ class WSPanel(wx.Panel):
             gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
             gridSizer.Add(
-                self.l_odrder_list,
+                self.l_order_list,
                 pos=(0, 0),
                 span=(4, 1),
                 flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
@@ -427,8 +427,8 @@ class WSPanel(wx.Panel):
 
     def OnUp(self, event):
         """Move selected layer up"""
-        if self.l_odrder_list.GetSelections():
-            pos = self.l_odrder_list.GetSelection()
+        if self.l_order_list.GetSelections():
+            pos = self.l_order_list.GetSelection()
             if pos:
                 self.sel_layers.insert(pos - 1, self.sel_layers.pop(pos))
             if pos > 0:
@@ -438,8 +438,8 @@ class WSPanel(wx.Panel):
 
     def OnDown(self, event):
         """Move selected to down"""
-        if self.l_odrder_list.GetSelections():
-            pos = self.l_odrder_list.GetSelection()
+        if self.l_order_list.GetSelections():
+            pos = self.l_order_list.GetSelection()
             if pos != len(self.sel_layers) - 1:
                 self.sel_layers.insert(pos + 1, self.sel_layers.pop(pos))
             if pos < len(self.sel_layers) - 1:
@@ -461,14 +461,14 @@ class WSPanel(wx.Panel):
             return cap
 
         layer_capts = [getlayercaption(sel_layer) for sel_layer in self.sel_layers]
-        self.l_odrder_list.Set(layer_capts)
-        if self.l_odrder_list.IsEmpty():
+        self.l_order_list.Set(layer_capts)
+        if self.l_order_list.IsEmpty():
             self.enableButtons(False)
         else:
             self.enableButtons(True)
             if selected is not None:
-                self.l_odrder_list.SetSelection(selected)
-                self.l_odrder_list.EnsureVisible(selected)
+                self.l_order_list.SetSelection(selected)
+                self.l_order_list.EnsureVisible(selected)
 
     def OnTransparent(self, event):
         checked = event.IsChecked()
