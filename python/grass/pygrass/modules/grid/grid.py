@@ -582,7 +582,7 @@ class GridModule:
             self.height = ceil(region.rows / self.processes)
 
     def get_works(self):
-        """Return a list of tuble with the parameters for cmd_exe function"""
+        """Return a list of tuples with the parameters for cmd_exe function"""
         works = []
         reg = Region()
         if self.move:

@@ -525,7 +525,7 @@ class Model:
     def _substituteFile(self, item, params=None, checkOnly=False):
         """Substitute variables in command file inputs
 
-        :param bool checkOnly: tuble - True to check variable, don't touch files
+        :param bool checkOnly: True to check variable, don't touch files
 
         :return: list of undefined variables
         """
