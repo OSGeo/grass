@@ -12,8 +12,8 @@ Created on Thu Aug  9 14:04:12 2012
 # (C) 2003-2024 by Luca Delucchi and the GRASS Development Team
 
 import os
-from pathlib import Path
 import string
+from pathlib import Path
 
 # TODO: better fix this in include/Make/Rest.make, see bug RT #5361
 
