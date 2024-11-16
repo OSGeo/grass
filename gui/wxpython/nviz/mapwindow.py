@@ -335,7 +335,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.fly["value"][2] = -my * 100.0 * self.fly["interval"] / 1000.0
 
     def ChangeFlySpeed(self, increase):
-        """Increase/decrease flight spped"""
+        """Increase/decrease flight speed"""
         if increase:
             self.fly["flySpeed"] += self.fly["flySpeedStep"]
         else:
