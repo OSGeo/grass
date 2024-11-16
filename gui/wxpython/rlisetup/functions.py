@@ -18,9 +18,9 @@ class SamplingType:
     MMVWINC = samplingtype=moving, regionbox=mouse, shape=circle
     MMVWINR = samplingtype moving, regionbox=mouse, shape=rectangle
 
-    KUNITSC = samplingtype=units, regionbox=keyboard, shape=cirlce
+    KUNITSC = samplingtype=units, regionbox=keyboard, shape=circle
     KUNITSR = samplingtype=units, regionbox=keyboard, shape=rectangle
-    MUNITSC = samplingtype=units, regionbox=mouse, shape=cirlce
+    MUNITSC = samplingtype=units, regionbox=mouse, shape=circle
     MUNITSR = samplingtype=units, regionbox=mouse, shape=rectangle
     """
 

@@ -360,7 +360,7 @@ class RLIWizard:
             fil.write("SAMPLEAREA -1|-1|%r|%r" % (rl, cl))
             fil.write("|%s" % self.msAreaList[0].raster)
             fil.write("\nMOVINGWINDOW\n")
-        # KUNITSC = samplingtype=units, regionbox=keyboard, shape=cirlce
+        # KUNITSC = samplingtype=units, regionbox=keyboard, shape=circle
         # KUNITSR = samplingtype=units, regionbox=keyboard, shape=rectangle
         elif samtype in {SamplingType.KUNITSC, SamplingType.KUNITSR}:
             if samtype == SamplingType.KUNITSC:
@@ -388,7 +388,7 @@ class RLIWizard:
         # elif self.samplingareapage.samplingtype == SamplingType.UNITS and
         # self.samplingareapage.regionbox=='mouse':
 
-        # MUNITSC = samplingtype=units, regionbox=mouse, shape=cirlce
+        # MUNITSC = samplingtype=units, regionbox=mouse, shape=circle
         # MUNITSR = samplingtype=units, regionbox=mouse, shape=rectangle
         elif self.samplingareapage.samplingtype in {
             SamplingType.MUNITSR,
