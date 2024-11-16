@@ -446,7 +446,7 @@ class VDigitToolbar(BaseToolbar):
             return True
 
     def OnTool(self, event):
-        """Tool selected -> untoggles previusly selected tool in
+        """Tool selected -> untoggles previously selected tool in
         toolbar"""
         Debug.msg(
             3,
@@ -478,7 +478,7 @@ class VDigitToolbar(BaseToolbar):
             event.Skip()
 
     def OnAddPoint(self, event):
-        """Add point to the vector map Laier"""
+        """Add point to the vector map layer"""
         Debug.msg(2, "VDigitToolbar.OnAddPoint()")
         self.action = {"desc": "addLine", "type": "point", "id": self.addPoint}
         self.MapWindow.mouse["box"] = "point"

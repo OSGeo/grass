@@ -1000,7 +1000,7 @@ class VNETHistory:
 
 
 def AddTmpMapAnalysisMsg(mapName, tmp_maps):  # TODO
-    """Wraped AddTmpVectMap"""
+    """Wraps AddTmpVectMap"""
     msg = _(
         "Temporary map %s  already exists.\n"
         + "Do you want to continue in analysis and overwrite it?"

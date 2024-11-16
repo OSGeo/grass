@@ -141,7 +141,7 @@ def sampleAreaVector(
             vect=vect.split("@")[0], rast=rast.split("@")[0]
         )
         rast_name = "{pref}{cat}".format(pref=outpref, cat=cat)
-        # check if raster already axist
+        # check if raster already exists
 
         if (
             len(grass.list_strings("raster", pattern=rast_name, mapset=".")) == 1

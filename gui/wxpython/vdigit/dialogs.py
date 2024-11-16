@@ -387,7 +387,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         # restore original list
         self.cats = copy.deepcopy(self.cats_orig)
 
-        # polulate list
+        # populate list
         self.itemDataMap = self.list.Populate(self.cats[self.fid], update=True)
 
         event.Skip()
@@ -529,7 +529,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         # make copy of cats (used for 'reload')
         self.cats_orig = copy.deepcopy(self.cats)
 
-        # polulate list
+        # populate list
         self.fid = list(self.cats.keys())[0]
         self.itemDataMap = self.list.Populate(self.cats[self.fid], update=True)
 
