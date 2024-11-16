@@ -227,7 +227,7 @@ int points_analyse(FILE *ascii_in, FILE *ascii, char *fs, char *td,
                         }
                     }
                 } /* if (x or y) */
-            }     /* PROJECTION_LL */
+            } /* PROJECTION_LL */
             else {
                 if (strlen(tokens[i]) == 0) {
                     if (i == xcol) {

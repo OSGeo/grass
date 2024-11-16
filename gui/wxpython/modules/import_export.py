@@ -18,9 +18,13 @@ This program is free software under the GNU General Public License
 
 @author Martin Landa <landa.martin gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com> (GroupDialog, SymbolDialog)
+@author William Welch <ww.dev icloud.com> (commands running queue)
 """
 
 import os
+from collections import deque
+
+from pathlib import Path
 
 import wx
 from core import globalvar
@@ -57,6 +61,8 @@ class ImportDialog(wx.Dialog):
         self.options_par = {}
 
         self.commandId = -1  # id of running command
+
+        self._commands_running = deque()
 
         wx.Dialog.__init__(
             self, parent, id, title, style=style, name="MultiImportDialog"
@@ -120,8 +126,9 @@ class ImportDialog(wx.Dialog):
         # buttons
         #
         # cancel
+        self._DEFAULT_CLOSE_BTN_TEXT = _("Close dialog")
         self.btn_close = CloseButton(parent=self.panel)
-        self.btn_close.SetToolTip(_("Close dialog"))
+        self.btn_close.SetToolTip(_(self._DEFAULT_CLOSE_BTN_TEXT))
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
         # run
         self.btn_run = Button(parent=self.panel, id=wx.ID_OK, label=_("&Import"))
@@ -129,7 +136,7 @@ class ImportDialog(wx.Dialog):
         self.btn_run.SetDefault()
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
 
-        self.Bind(wx.EVT_CLOSE, lambda evt: self.Destroy())
+        self.Bind(wx.EVT_CLOSE, self._handleCloseEvent)
 
         self.notebook = GNotebook(parent=self, style=globalvar.FNPageDStyle)
 
@@ -234,15 +241,15 @@ class ImportDialog(wx.Dialog):
 
     def _getCommand(self):
         """Get command"""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _getBlackListedParameters(self):
         """Get parameters which will not be showed in Settings page"""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _getBlackListedFlags(self):
         """Get flags which will not be showed in Settings page"""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def _nameValidationFailed(self, layers_list):
         """Output map name validation callback
@@ -268,13 +275,39 @@ class ImportDialog(wx.Dialog):
                 return False
         return True
 
+    def _handleCloseEvent(self, event: wx.CloseEvent):
+        if event.CanVeto() and len(self._commands_running) > 0:
+            # prevent dialog close while async commands are running
+            event.Veto()
+            return
+        self.Destroy()
+
+    def _addToCommandQueue(self):
+        self._commands_running.append(True)
+
+        # disable the dialog close button
+        self.btn_close.SetToolTip(
+            _("Dialog cannot be closed while command is running.")
+        )
+        self.btn_close.Disable()
+
+    def _removeFromCommandQueue(self):
+        try:
+            self._commands_running.pop()
+        except IndexError:
+            pass
+        finally:
+            if len(self._commands_running) == 0:
+                # enable the dialog close button
+                self.btn_close.Enable()
+                self.btn_close.SetToolTip(self._DEFAULT_CLOSE_BTN_TEXT)
+
     def OnClose(self, event=None):
         """Close dialog"""
         self.Close()
 
     def OnRun(self, event):
         """Import/Link data (each layes as separate vector map)"""
-        pass
 
     def OnCheckOverwrite(self, event):
         """Check/uncheck overwrite checkbox widget"""
@@ -295,20 +328,14 @@ class ImportDialog(wx.Dialog):
         self.commandId += 1
         layer, output = self.list.GetLayers()[self.commandId][:2]
 
-        if "@" not in output:
-            name = output + "@" + grass.gisenv()["MAPSET"]
-        else:
-            name = output
+        name = output + "@" + grass.gisenv()["MAPSET"] if "@" not in output else output
 
         # add imported layers into layer tree
         # an alternative would be emit signal (mapCreated) and (optionally)
         # connect to this signal
         llist = self._giface.GetLayerList()
         if self.importType == "gdal":
-            if userData:
-                nBands = int(userData.get("nbands", 1))
-            else:
-                nBands = 1
+            nBands = int(userData.get("nbands", 1)) if userData else 1
 
             if UserSettings.Get(group="rasterLayer", key="opaque", subkey="enabled"):
                 nFlag = True
@@ -344,11 +371,9 @@ class ImportDialog(wx.Dialog):
         .. todo::
             not yet implemented
         """
-        pass
 
     def OnCmdDone(self, event):
         """Do what has to be done after importing"""
-        pass
 
     def _getLayersToReprojetion(self, projMatch_idx, grassName_idx):
         """If there are layers with different projection from loation projection,
@@ -462,7 +487,6 @@ class GdalImportDialog(ImportDialog):
         dsn = self.dsnInput.GetDsn()
         if not dsn:
             return
-        ext = self.dsnInput.GetFormatExt()
 
         for layer, output, listId in data:
             userData = {}
@@ -497,7 +521,7 @@ class GdalImportDialog(ImportDialog):
             if nBandsStr:
                 try:
                     nBands = int(nBandsStr.rstrip("\n"))
-                except:
+                except ValueError:
                     pass
             if nBands < 0:
                 GWarning(_("Unable to determine number of raster bands"), parent=self)
@@ -520,6 +544,7 @@ class GdalImportDialog(ImportDialog):
             ):
                 cmd.append("--overwrite")
 
+            self._addToCommandQueue()
             # run in Layer Manager
             self._giface.RunCmd(
                 cmd, onDone=self.OnCmdDone, userData=userData, addLayer=False
@@ -528,9 +553,11 @@ class GdalImportDialog(ImportDialog):
     def OnCmdDone(self, event):
         """Load layers and close if required"""
         if not hasattr(self, "AddLayers"):
+            self._removeFromCommandQueue()
             return
 
         self.AddLayers(event.returncode, event.cmd, event.userData)
+        self._removeFromCommandQueue()
 
         if event.returncode == 0 and self.closeOnFinish.IsChecked():
             self.Close()
@@ -539,8 +566,7 @@ class GdalImportDialog(ImportDialog):
         """Get command"""
         if self.link:
             return "r.external"
-        else:
-            return "r.import"
+        return "r.import"
 
     def _getBlackListedParameters(self):
         """Get flags which will not be showed in Settings page"""
@@ -615,7 +641,7 @@ class OgrImportDialog(ImportDialog):
             return
 
         if not data:
-            GMessage(_("No layers selected. Operation canceled."), parent=self)
+            GMessage(parent=self, message=_("No layers selected. Operation canceled."))
             return
 
         if not self._validateOutputMapName():
@@ -646,13 +672,7 @@ class OgrImportDialog(ImportDialog):
             if ext and layer.rfind(ext) > -1:
                 layer = layer.replace("." + ext, "")
             if "|" in layer:
-                layer, geometry = layer.split("|", 1)
-            else:
-                geometry = None
-
-                # TODO: v.import has no geometry option
-                # if geometry:
-                #    cmd.append('geometry=%s' % geometry)
+                layer = layer.split("|", 1)[0]
 
             cmd = self.getSettingsPageCmd()
             cmd.append("input=%s" % dsn)
@@ -672,6 +692,7 @@ class OgrImportDialog(ImportDialog):
             ):
                 cmd.append("--overwrite")
 
+            self._addToCommandQueue()
             # run in Layer Manager
             self._giface.RunCmd(
                 cmd, onDone=self.OnCmdDone, userData=userData, addLayer=False
@@ -680,9 +701,12 @@ class OgrImportDialog(ImportDialog):
     def OnCmdDone(self, event):
         """Load layers and close if required"""
         if not hasattr(self, "AddLayers"):
+            self._removeFromCommandQueue()
             return
 
         self.AddLayers(event.returncode, event.cmd, event.userData)
+
+        self._removeFromCommandQueue()
 
         if self.popOGR:
             os.environ.pop("GRASS_VECTOR_OGR")
@@ -694,8 +718,7 @@ class OgrImportDialog(ImportDialog):
         """Get command"""
         if self.link:
             return "v.external"
-        else:
-            return "v.import"
+        return "v.import"
 
     def _getBlackListedParameters(self):
         """Get parametrs which will not be showed in Settings page"""
@@ -839,7 +862,7 @@ class DxfImportDialog(ImportDialog):
             labelText="",
             dialogTitle=_("Choose DXF file to import"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=0,
             changeCallback=self.OnSetDsn,
             fileMask="DXF File (*.dxf)|*.dxf",
@@ -883,15 +906,19 @@ class DxfImportDialog(ImportDialog):
             ):
                 cmd.append("--overwrite")
 
+            self._commands_running.append(True)
             # run in Layer Manager
             self._giface.RunCmd(cmd, onDone=self.OnCmdDone, addLayer=False)
 
     def OnCmdDone(self, event):
         """Load layers and close if required"""
         if not hasattr(self, "AddLayers"):
+            self._removeFromCommandQueue()
             return
 
         self.AddLayers(event.returncode, event.cmd)
+
+        self._removeFromCommandQueue()
 
         if self.closeOnFinish.IsChecked():
             self.Close()

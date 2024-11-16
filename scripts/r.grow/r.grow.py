@@ -110,7 +110,7 @@ def main():
 
     if metric == "euclidean":
         metric = "squared"
-        radius = radius * radius
+        radius *= radius
 
     # check if input file exists
     if not gs.find_file(input)["file"]:

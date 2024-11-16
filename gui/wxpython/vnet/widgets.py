@@ -133,7 +133,7 @@ class PointsList(
         # initialize column sorter
         self.itemDataMap = []
         ncols = self.GetColumnCount()
-        ColumnSorterMixin.__init__(self, ncols)
+        ColumnSorterMixin.__init__(self, ncols)  # noqa: PLC2801, C2801
 
         # init to ascending sort on first click
         self._colSortFlag = [1] * ncols
@@ -217,7 +217,6 @@ class PointsList(
         if colNum < 0:
             return None
 
-        iColEd = self.dataTypes["colEditable"]
         if self.selIdxs[key][colNum] != -1:
             return self.selIdxs[key][colNum]
 
@@ -230,7 +229,6 @@ class PointsList(
         :return: -1 if column does not has values to choose
         """
         colNum = self._getColumnNum(colName)
-        iColEd = self.dataTypes["colEditable"]
         return self.selIdxs[key][colNum]
 
     def EditCellIndex(self, index, colName, cellData):
@@ -532,7 +530,7 @@ class PointsList(
 
         return False
 
-    def IsShown(self, colName):
+    def IsShown(self, colName) -> bool:
         """Is column shown
 
         :param colName: name of column
@@ -542,10 +540,7 @@ class PointsList(
         :return: False - if is not shown
         """
 
-        if self._getColumnNum(colName) == -1:
-            return False
-        else:
-            return True
+        return self._getColumnNum(colName) != -1
 
 
 class EditItem(wx.Dialog):

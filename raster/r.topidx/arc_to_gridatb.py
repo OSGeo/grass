@@ -9,9 +9,8 @@ def match(pattern, string):
     if m:
         match.value = m.group(1)
         return True
-    else:
-        match.value = None
-        return False
+    match.value = None
+    return False
 
 
 if len(sys.argv) != 3 or re.match("^-*help", sys.argv[1]):

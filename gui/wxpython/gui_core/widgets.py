@@ -80,7 +80,7 @@ except ImportError:  # not sure about TGBTButton version
     from wx.lib.buttons import GenBitmapTextButton as BitmapTextButton
 
 if wxPythonPhoenix:
-    from wx import Validator as Validator
+    from wx import Validator
 else:
     from wx import PyValidator as Validator
 
@@ -170,7 +170,7 @@ class NotebookController:
             self.classObject.InsertPage(self.widget, *args, **kwargs)
         except (
             TypeError
-        ) as e:  # documentation says 'index', but certain versions of wx require 'n'
+        ):  # documentation says 'index', but certain versions of wx require 'n'
             kwargs["n"] = kwargs["index"]
             del kwargs["index"]
             self.classObject.InsertPage(self.widget, *args, **kwargs)
@@ -188,8 +188,7 @@ class NotebookController:
             if ret:
                 del self.notebookPages[page]
             return ret
-        else:
-            return False
+        return False
 
     def RemovePage(self, page):
         """Delete page without deleting the associated window.
@@ -203,8 +202,7 @@ class NotebookController:
             if ret:
                 del self.notebookPages[page]
             return ret
-        else:
-            return False
+        return False
 
     def SetSelectionByName(self, page):
         """Set active notebook page.
@@ -348,7 +346,6 @@ class GNotebook(FN.FlatNotebook):
 
     def SetPageImage(self, page, index):
         """Does nothing because we don't want images for this style"""
-        pass
 
     def __getattr__(self, name):
         return getattr(self.controller, name)
@@ -436,7 +433,6 @@ class NumTextCtrl(TextCtrl):
     """Class derived from wx.TextCtrl for numerical values only"""
 
     def __init__(self, parent, **kwargs):
-        ##        self.precision = kwargs.pop('prec')
         TextCtrl.__init__(
             self, parent=parent, validator=NTCValidator(flag="DIGIT_ONLY"), **kwargs
         )
@@ -754,7 +750,7 @@ class TimeISOValidator(BaseValidator):
         if text:
             try:
                 datetime.strptime(text, "%Y-%m-%d")
-            except:
+            except ValueError:
                 self._notvalid()
                 return False
 
@@ -816,8 +812,7 @@ class SimpleValidator(Validator):
         if len(text) == 0:
             self.callback(ctrl)
             return False
-        else:
-            return True
+        return True
 
     def TransferToWindow(self):
         """Transfer data from validator to window.
@@ -867,8 +862,7 @@ class GenericValidator(Validator):
         if not self._condition(text):
             self._callback(ctrl)
             return False
-        else:
-            return True
+        return True
 
     def TransferToWindow(self):
         """Transfer data from validator to window."""
@@ -1185,8 +1179,7 @@ class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMixin):
 
         if checked is not None:
             return tuple(data)
-        else:
-            return (tuple(data), tuple(checkedList))
+        return (tuple(data), tuple(checkedList))
 
     def LoadData(self, data=None, selectOne=True):
         """Load data into list"""
@@ -1335,7 +1328,7 @@ class SearchModuleWidget(wx.Panel):
             nodes.update(self._model.SearchNodes(key=key, value=value))
 
         nodes = list(nodes)
-        nodes.sort(key=self._model.GetIndexOfNode)
+        nodes.sort(key=lambda node: self._model.GetIndexOfNode(node))
         self._results = nodes
         self._resultIndex = -1
         return sorted([node.data["command"] for node in nodes if node.data["command"]])
@@ -1568,7 +1561,7 @@ class ManageSettingsWidget(wx.Panel):
             return data
 
         try:
-            fd = open(self.settingsFile, "r")
+            fd = open(self.settingsFile)
         except OSError:
             return data
 
@@ -1610,7 +1603,7 @@ class ManageSettingsWidget(wx.Panel):
                     idx = line.find(";", i_last)
                     if idx < 0:
                         break
-                    elif idx != 0:
+                    if idx != 0:
                         # find out whether it is separator
                         # $$$$; - it is separator
                         # $$$$$; - it is not separator
@@ -1799,7 +1792,7 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         colLocs = [0]
         loc = 0
         for n in range(self.GetColumnCount()):
-            loc = loc + self.GetColumnWidth(n)
+            loc += self.GetColumnWidth(n)
             colLocs.append(loc)
 
         col = bisect(colLocs, x + self.GetScrollPos(wx.HORIZONTAL)) - 1

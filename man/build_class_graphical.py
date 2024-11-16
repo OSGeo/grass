@@ -17,18 +17,21 @@ import sys
 import os
 import fnmatch
 
-# from build_html import *
-from build_html import (
+from build import (
     default_year,
-    header1_tmpl,
     grass_version,
-    modclass_intro_tmpl,
     to_title,
-    html_files,
+    get_files,
     check_for_desc_override,
-    get_desc,
-    write_html_footer,
+    write_footer,
     replace_file,
+)
+
+from build_html import (
+    header1_tmpl,
+    modclass_intro_tmpl,
+    get_desc,
+    man_dir,
 )
 
 
@@ -91,23 +94,16 @@ header_graphical_index_tmpl = """\
 
 
 def file_matches(filename, patterns):
-    for pattern in patterns:
-        if fnmatch.fnmatch(filename, pattern):
-            return True
-    return False
+    return any(fnmatch.fnmatch(filename, pattern) for pattern in patterns)
 
 
-def starts_with_module(string, module):
+def starts_with_module(string, module) -> bool:
     # not solving:
     # module = module.replace('wxGUI.', 'g.gui.')
     # TODO: matches g.mapsets images for g.mapset and d.rast.num for d.rast
-    if string.startswith(module.replace(".", "_")):
-        return True
-    if string.startswith(module.replace(".", "")):
-        return True
-    if string.startswith(module):
-        return True
-    return False
+    return bool(
+        string.startswith((module.replace(".", "_"), module.replace(".", ""), module))
+    )
 
 
 def get_module_image(module, images):
@@ -163,7 +159,7 @@ def generate_page_for_category(
     output.write('<ul class="img-list">')
 
     # for all modules:
-    for cmd in html_files(short_family, ignore_gui=False):
+    for cmd in get_files(man_dir, short_family, ignore_gui=False):
         basename = os.path.splitext(cmd)[0]
         desc = check_for_desc_override(basename)
         if desc is None:
@@ -172,7 +168,7 @@ def generate_page_for_category(
         img_class = "linkimg"
         if skip_no_image and not img:
             continue
-        elif not img:
+        if not img:
             img = "grass_logo.png"
             img_class = "default-img"
         if basename.startswith("wxGUI"):
@@ -191,7 +187,7 @@ def generate_page_for_category(
 
     output.write("</ul>")
 
-    write_html_footer(output, "index.html", year)
+    write_footer(output, "index.html", year, template="html")
 
     output.close()
     replace_file(filename)

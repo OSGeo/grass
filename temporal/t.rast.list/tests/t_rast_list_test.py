@@ -7,12 +7,9 @@ import json
 
 import pytest
 
-try:
-    import yaml
-except ImportError:
-    yaml = None
-
 import grass.script as gs
+
+yaml = pytest.importorskip("yaml", reason="PyYAML package not available")
 
 
 @pytest.mark.needs_solo_run
@@ -62,7 +59,6 @@ def test_json(space_time_raster_dataset):
 
 
 @pytest.mark.needs_solo_run
-@pytest.mark.skipif(yaml is None, reason="PyYAML package not available")
 def test_yaml(space_time_raster_dataset):
     """Check JSON can be parsed and contains the right values"""
     result = yaml.safe_load(
@@ -87,7 +83,7 @@ def test_yaml(space_time_raster_dataset):
 
 @pytest.mark.needs_solo_run
 @pytest.mark.parametrize(
-    "separator,delimiter", [(None, ","), (",", ","), (";", ";"), ("tab", "\t")]
+    ("separator", "delimiter"), [(None, ","), (",", ","), (";", ";"), ("tab", "\t")]
 )
 def test_csv(space_time_raster_dataset, separator, delimiter):
     """Check CSV can be parsed with different separators"""

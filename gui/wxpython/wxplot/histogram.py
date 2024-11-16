@@ -154,7 +154,7 @@ class HistogramPlotFrame(BasePlotFrame):
         # set xlabel based on first raster map in list to be histogrammed
         #
         units = self.raster[self.rasterList[0]]["units"]
-        if units != "" and units != "(none)" and units is not None:
+        if units not in ("", "(none)") and units is not None:
             self.xlabel = _("Raster cell values %s") % units
         else:
             self.xlabel = _("Raster cell values")
@@ -243,8 +243,7 @@ class HistogramPlotFrame(BasePlotFrame):
 
         if len(self.plotlist) > 0:
             return self.plotlist
-        else:
-            return None
+        return None
 
     def Update(self):
         """Update histogram after changing options"""

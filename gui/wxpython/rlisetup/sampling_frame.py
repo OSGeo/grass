@@ -264,7 +264,7 @@ class RLiSetupMapPanel(wx.Panel):
 
         catbuf = "=%d a\n" % self.catId
         polyfile.write(catbuf)
-        self.catId = self.catId + 1
+        self.catId += 1
 
         polyfile.close()
         region_settings = grass.parse_command("g.region", flags="p", delimiter=":")
@@ -315,7 +315,6 @@ class RLiSetupMapPanel(wx.Panel):
     def _radiusDrawn(self, x, y):
         """When drawing finished, get region values"""
         mouse = self.mapWindow.mouse
-        item = self._registeredGraphics.GetItem(0)
         p1 = mouse["begin"]
         p2 = mouse["end"]
         dist, (north, east) = self.mapWindow.Distance(p1, p2, False)
@@ -550,33 +549,32 @@ class RLiSetupToolbar(BaseToolbar):
                     ),
                 )
             )
-        else:
-            return self._getToolbarData(
+        return self._getToolbarData(
+            (
+                drawTool,
+                (None,),
                 (
-                    drawTool,
-                    (None,),
-                    (
-                        ("pan", BaseIcons["pan"].label),
-                        BaseIcons["pan"],
-                        self.parent.OnPan,
-                        wx.ITEM_CHECK,
-                    ),
-                    (
-                        ("zoomIn", BaseIcons["zoomIn"].label),
-                        BaseIcons["zoomIn"],
-                        self.parent.OnZoomIn,
-                        wx.ITEM_CHECK,
-                    ),
-                    (
-                        ("zoomOut", BaseIcons["zoomOut"].label),
-                        BaseIcons["zoomOut"],
-                        self.parent.OnZoomOut,
-                        wx.ITEM_CHECK,
-                    ),
-                    (
-                        ("zoomExtent", BaseIcons["zoomExtent"].label),
-                        BaseIcons["zoomExtent"],
-                        self.parent.OnZoomToMap,
-                    ),
-                )
+                    ("pan", BaseIcons["pan"].label),
+                    BaseIcons["pan"],
+                    self.parent.OnPan,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomIn", BaseIcons["zoomIn"].label),
+                    BaseIcons["zoomIn"],
+                    self.parent.OnZoomIn,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomOut", BaseIcons["zoomOut"].label),
+                    BaseIcons["zoomOut"],
+                    self.parent.OnZoomOut,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomExtent", BaseIcons["zoomExtent"].label),
+                    BaseIcons["zoomExtent"],
+                    self.parent.OnZoomToMap,
+                ),
             )
+        )

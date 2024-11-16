@@ -17,12 +17,10 @@ def fix(content):
         tag, attrs, body = content
         if tag == "div" and ("class", "toc") in attrs:
             return None
-        else:
-            return (tag, attrs, fix(body))
-    elif isinstance(content, list):
+        return (tag, attrs, fix(body))
+    if isinstance(content, list):
         return [fixed for item in content for fixed in [fix(item)] if fixed is not None]
-    else:
-        return content
+    return content
 
 
 def main():

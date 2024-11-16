@@ -85,8 +85,8 @@ class SwipeMapPanel(DoubleMapPanel):
         self.secondMapWindow.mapQueried.connect(self.Query)
 
         # bind tracking cursosr to mirror it
-        self.firstMapWindow.Bind(wx.EVT_MOTION, self.TrackCursor)
-        self.secondMapWindow.Bind(wx.EVT_MOTION, self.TrackCursor)
+        self.firstMapWindow.Bind(wx.EVT_MOTION, lambda evt: self.TrackCursor(evt))
+        self.secondMapWindow.Bind(wx.EVT_MOTION, lambda evt: self.TrackCursor(evt))
 
         self.MapWindow = self.firstMapWindow  # current by default
         self.firstMapWindow.zoomhistory = self.secondMapWindow.zoomhistory
@@ -545,15 +545,15 @@ class SwipeMapPanel(DoubleMapPanel):
             we are pasting together 2 rendered images, so
             we need to know when both are finished."""
 
-            def __init__(self2):
+            def __init__(self2):  # noqa: N805
                 self2.called = 0
 
-            def __call__(self2):
+            def __call__(self2):  # noqa: N805
                 self2.called += 1
                 if self2.called == 2:
                     self2.process()
 
-            def process(self2):
+            def process(self2):  # noqa: N805
                 # create empty white image  - needed for line
                 im = wx.Image(width, height)
                 im.Replace(0, 0, 0, 255, 255, 255)
@@ -659,7 +659,6 @@ class SwipeMapPanel(DoubleMapPanel):
 
         So far not implemented.
         """
-        pass
 
     def SetViewMode(self, mode):
         """Sets view mode.
@@ -784,7 +783,9 @@ class SwipeMapPanel(DoubleMapPanel):
         else:
             self._queryDialog = QueryDialog(parent=self, data=result)
             self._queryDialog.Bind(wx.EVT_CLOSE, self._oncloseQueryDialog)
-            self._queryDialog.redirectOutput.connect(self._giface.WriteLog)
+            self._queryDialog.redirectOutput.connect(
+                lambda output: self._giface.WriteLog(output)
+            )
             self._queryDialog.Show()
 
     def _oncloseQueryDialog(self, event):

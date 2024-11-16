@@ -48,6 +48,7 @@ sepia: yellowish-brown through to white
 slope: r.slope.aspect-type slope colors for raster values 0-90
 soilmoisture: soilmoisture color table (0.0-1.0)
 srtm: color palette for Shuttle Radar Topography Mission elevation
+srtm_percent: color palette for Shuttle Radar Topography Mission using relative elevation
 srtm_plus: color palette for Shuttle Radar Topography Mission elevation (with seafloor colors)
 terrain: global elevation color table covering -11000 to +8850m
 viridis: perceptually uniform sequential color table viridis

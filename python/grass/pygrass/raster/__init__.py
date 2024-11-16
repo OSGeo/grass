@@ -327,17 +327,16 @@ class RasterSegment(RasterAbstractBase):
         if isinstance(key, slice):
             # Get the start, stop, and step from the slice
             return [self.put_row(ii, row) for ii in range(*key.indices(len(self)))]
-        elif isinstance(key, tuple):
+        if isinstance(key, tuple):
             x, y = key
             return self.put(x, y, row)
-        elif isinstance(key, int):
+        if isinstance(key, int):
             if key < 0:  # Handle negative indices
                 key += self._rows
             if key >= self._rows:
                 raise IndexError(_("Index out of range: %r.") % key)
             return self.put_row(key, row)
-        else:
-            raise TypeError("Invalid argument type.")
+        raise TypeError("Invalid argument type.")
 
     @must_be_open
     def map2segment(self):

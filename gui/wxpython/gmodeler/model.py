@@ -38,7 +38,7 @@ import re
 import mimetypes
 import time
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 from xml.sax import saxutils
 
 import wx
@@ -323,7 +323,7 @@ class Model:
         """
         # parse workspace file
         try:
-            gxmXml = ProcessModelFile(etree.parse(filename))
+            gxmXml = ProcessModelFile(ET.parse(filename))
         except Exception as e:
             raise GException("{}".format(e))
 
@@ -475,12 +475,9 @@ class Model:
         #     item.SetId(i)
         #     i += 1
 
-    def IsValid(self):
+    def IsValid(self) -> bool:
         """Return True if model is valid"""
-        if self.Validate():
-            return False
-
-        return True
+        return not self.Validate()
 
     def Validate(self):
         """Validate model, return None if model is valid otherwise
@@ -549,7 +546,7 @@ class Model:
 
         for finput in self.fileInput:
             # read lines
-            fd = open(finput, "r")
+            fd = open(finput)
             try:
                 data = self.fileInput[finput] = fd.read()
             finally:
@@ -820,12 +817,9 @@ class Model:
         for item in self.items:
             item.Update()
 
-    def IsParameterized(self):
+    def IsParameterized(self) -> bool:
         """Return True if model is parameterized"""
-        if self.Parameterize():
-            return True
-
-        return False
+        return bool(self.Parameterize())
 
     def Parameterize(self):
         """Return parameterized options"""
@@ -839,10 +833,7 @@ class Model:
                 if gtype in {"raster", "vector", "mapset", "file", "region", "dir"}:
                     gisprompt = True
                     prompt = gtype
-                    if gtype == "raster":
-                        element = "cell"
-                    else:
-                        element = gtype
+                    element = "cell" if gtype == "raster" else gtype
                     ptype = "string"
                 else:
                     gisprompt = False
@@ -947,8 +938,9 @@ class ModelObject:
 
         result = []
         for rel in self.rels:
-            if fdir == "from" and rel.GetFrom() == self:
-                result.append(rel)
+            if fdir == "from":
+                if rel.GetFrom() == self:
+                    result.append(rel)
             elif rel.GetTo() == self:
                 result.append(rel)
 
@@ -1107,10 +1099,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
                     group="modeler", key="action", subkey=("width", "default")
                 )
             )
-        if self.isEnabled:
-            style = wx.SOLID
-        else:
-            style = wx.DOT
+        style = wx.SOLID if self.isEnabled else wx.DOT
 
         pen = wx.Pen(wx.BLACK, width, style)
         self.SetPen(pen)
@@ -1238,8 +1227,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         if string:
             if cmd is None:
                 return ""
-            else:
-                return " ".join(cmd)
+            return " ".join(cmd)
 
         return cmd
 
@@ -1396,7 +1384,6 @@ class ModelData(ModelObject):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        pass
 
     def IsIntermediate(self):
         """Checks if data item is intermediate"""
@@ -1426,8 +1413,7 @@ class ModelData(ModelObject):
             name.append(rel.GetLabel())
         if name:
             return "/".join(name) + "=" + self.value + " (" + self.prompt + ")"
-        else:
-            return self.value + " (" + self.prompt + ")"
+        return self.value + " (" + self.prompt + ")"
 
     def GetLabel(self):
         """Get list of names"""
@@ -1461,10 +1447,7 @@ class ModelData(ModelObject):
         self.SetLabel()
         for direction in ("from", "to"):
             for rel in self.GetRelations(direction):
-                if direction == "from":
-                    action = rel.GetTo()
-                else:
-                    action = rel.GetFrom()
+                action = rel.GetTo() if direction == "from" else rel.GetFrom()
 
                 task = GUI(show=None).ParseCommand(cmd=action.GetLog(string=False))
                 task.set_param(rel.GetLabel(), self.value)
@@ -1533,10 +1516,7 @@ class ModelData(ModelObject):
                     group="modeler", key="action", subkey=("width", "default")
                 )
             )
-        if self.intermediate:
-            style = wx.DOT
-        else:
-            style = wx.SOLID
+        style = wx.DOT if self.intermediate else wx.SOLID
 
         return wx.Pen(wx.BLACK, width, style)
 
@@ -1584,7 +1564,7 @@ class ModelDataSingle(ModelData, ogl.EllipseShape):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        ogl.EllipseShape.__init__(self, width, height)
+        ogl.EllipseShape.__init__(self, width, height)  # noqa: PLC2801, C2801
         if self.parent.GetCanvas():
             self.SetCanvas(self.parent.GetCanvas())
 
@@ -1599,7 +1579,7 @@ class ModelDataSeries(ModelData, ogl.CompositeShape):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        ogl.CompositeShape.__init__(self)
+        ogl.CompositeShape.__init__(self)  # noqa: PLC2801, C2801
         if self.parent.GetCanvas():
             self.SetCanvas(self.parent.GetCanvas())
 
@@ -1678,7 +1658,7 @@ class ModelRelation(ogl.LineShape):
         """
         if isinstance(self.fromShape, ModelData):
             return self.fromShape
-        elif isinstance(self.toShape, ModelData):
+        if isinstance(self.toShape, ModelData):
             return self.toShape
 
         return None
@@ -1726,10 +1706,7 @@ class ModelItem(ModelObject):
 
     def _setPen(self):
         """Set pen"""
-        if self.isEnabled:
-            style = wx.SOLID
-        else:
-            style = wx.DOT
+        style = wx.SOLID if self.isEnabled else wx.DOT
 
         pen = wx.Pen(wx.BLACK, 1, style)
         self.SetPen(pen)
@@ -1749,8 +1726,7 @@ class ModelItem(ModelObject):
         """Get log info"""
         if self.label:
             return _("Condition: ") + self.label
-        else:
-            return _("Condition: not defined")
+        return _("Condition: not defined")
 
     def AddRelation(self, rel):
         """Record relation"""
@@ -1995,10 +1971,7 @@ class ProcessModelFile:
         self.root = self.tree.getroot()
         # check if input is a valid GXM file
         if self.root is None or self.root.tag != "gxm":
-            if self.root is not None:
-                tagName = self.root.tag
-            else:
-                tagName = _("empty")
+            tagName = self.root.tag if self.root is not None else _("empty")
             raise GException(_("Details: unsupported tag name '{0}'.").format(tagName))
 
         # list of actions, data
@@ -2030,8 +2003,7 @@ class ProcessModelFile:
         if p is not None:
             if p.text:
                 return utils.normalize_whitespace(p.text)
-            else:
-                return ""
+            return ""
 
         return default
 
@@ -2109,10 +2081,7 @@ class ProcessModelFile:
             aId = int(action.get("id", -1))
             label = action.get("name")
             comment = action.find("comment")
-            if comment is not None:
-                commentString = comment.text
-            else:
-                commentString = ""
+            commentString = comment.text if comment is not None else ""
 
             self.actions.append(
                 {
@@ -2263,7 +2232,7 @@ class ProcessModelFile:
             pos, size = self._getDim(node)
             text = self._filterValue(self._getNodeText(node, "condition")).strip()
             aid = {"if": [], "else": []}
-            for b in aid.keys():
+            for b in aid.keys():  # noqa: PLC0206
                 bnode = node.find(b)
                 if bnode is None:
                     continue
@@ -2295,7 +2264,6 @@ class ProcessModelFile:
                     "size": size,
                     "text": text,
                     "id": int(node.get("id", -1)),
-                    "text": text,
                 }
             )
 
@@ -2526,10 +2494,7 @@ class WriteModelFile:
             # relations
             for ft in ("from", "to"):
                 for rel in data.GetRelations(ft):
-                    if ft == "from":
-                        aid = rel.GetTo().GetId()
-                    else:
-                        aid = rel.GetFrom().GetId()
+                    aid = rel.GetTo().GetId() if ft == "from" else rel.GetFrom().GetId()
                     self.fd.write(
                         '%s<relation dir="%s" id="%d" name="%s">\n'
                         % (" " * self.indent, ft, aid, rel.GetLabel())
@@ -2647,7 +2612,7 @@ class WriteScriptFile(ABC):
             self._writePythonAction(
                 item, variables, self.model.GetIntermediateData()[:3]
             )
-        elif isinstance(item, ModelLoop) or isinstance(item, ModelCondition):
+        elif isinstance(item, (ModelLoop, ModelCondition)):
             # substitute condition
             cond = item.GetLabel()
             for variable in self.model.GetVariables():
@@ -2825,12 +2790,11 @@ class WriteActiniaFile(WriteScriptFile):
             dlg = wx.MessageDialog(
                 self.model.canvas,
                 message=_(
-                    f"Module {task.get_name()} in your model contains "
-                    f"parameterized flags. actinia does not support "
-                    f"parameterized flags. The following flags are therefore "
-                    f"not being written in the generated json: "
-                    f"{itemParameterizedFlags}"
-                ),
+                    "Module {task_name} in your model contains "
+                    "parameterized flags. Actinia does not support "
+                    "parameterized flags. The following flags are therefore "
+                    "not being written in the generated JSON: {flags}"
+                ).format(task_name=task.get_name(), flags=itemParameterizedFlags),
                 caption=_("Warning"),
                 style=wx.OK_DEFAULT | wx.ICON_WARNING,
             )
@@ -2999,10 +2963,7 @@ if __name__ == "__main__":
         parameterized_params = item.GetParameterizedParams()
 
         for flag in parameterized_params["flags"]:
-            if flag["label"]:
-                desc = flag["label"]
-            else:
-                desc = flag["description"]
+            desc = flag["label"] or flag["description"]
 
             if flag["value"]:
                 value = '\n{}default="{}"'.format(
@@ -3268,12 +3229,7 @@ if __name__ == "__main__":
         return ret
 
     def _getParamDesc(self, param):
-        if param["label"]:
-            desc = param["label"]
-        else:
-            desc = param["description"]
-
-        return desc
+        return param["label"] or param["description"]
 
     def _getParamValue(self, param):
         if param["value"] and "output" not in param["name"]:
@@ -3329,15 +3285,15 @@ class WritePythonFile(WriteScriptFile):
         """
         if string == "raster":
             return "G_OPT_R_MAP"
-        elif string == "vector":
+        if string == "vector":
             return "G_OPT_V_MAP"
-        elif string == "mapset":
+        if string == "mapset":
             return "G_OPT_M_MAPSET"
-        elif string == "file":
+        if string == "file":
             return "G_OPT_F_INPUT"
-        elif string == "dir":
+        if string == "dir":
             return "G_OPT_M_DIR"
-        elif string == "region":
+        if string == "region":
             return "G_OPT_M_REGION"
 
         return None
@@ -3386,10 +3342,7 @@ class WritePythonFile(WriteScriptFile):
         for item in modelItems:
             parametrizedParams = item.GetParameterizedParams()
             for flag in parametrizedParams["flags"]:
-                if flag["label"]:
-                    desc = flag["label"]
-                else:
-                    desc = flag["description"]
+                desc = flag["label"] or flag["description"]
                 self.fd.write(
                     r"""# %option
 # % key: {flag_name}
@@ -3410,10 +3363,7 @@ class WritePythonFile(WriteScriptFile):
                 self.fd.write("# %end\n")
 
             for param in parametrizedParams["params"]:
-                if param["label"]:
-                    desc = param["label"]
-                else:
-                    desc = param["description"]
+                desc = param["label"] or param["description"]
                 self.fd.write(
                     r"""# %option
 # % key: {param_name}
@@ -3494,7 +3444,7 @@ def cleanup():
                 r"""    %s("g.remove", flags="f", type="vector",
                 name=%s)
 """
-                % (run_command, ",".join(('"' + x + '"' for x in vect)))
+                % (run_command, ",".join(f'"{x}"' for x in vect))
             )
         if rast3d:
             self.fd.write(
@@ -3785,9 +3735,6 @@ class ModelParamDialog(wx.Dialog):
 
         return errList
 
-    def DeleteIntermediateData(self):
+    def DeleteIntermediateData(self) -> bool:
         """Check if to detele intermediate data"""
-        if self.interData.IsShown() and self.interData.IsChecked():
-            return True
-
-        return False
+        return bool(self.interData.IsShown() and self.interData.IsChecked())

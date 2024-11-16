@@ -9,7 +9,14 @@
 
 import os
 
-from build_rest import *
+from build_rest import (
+    rest_dir,
+    grass_version,
+    write_rest_header,
+    write_rest_cmd_overview,
+    write_rest_footer,
+    replace_file,
+)
 
 os.chdir(rest_dir)
 

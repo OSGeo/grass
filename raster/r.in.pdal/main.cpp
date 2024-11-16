@@ -17,6 +17,8 @@
  *
  *****************************************************************************/
 
+#include <cstdio>
+
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
@@ -67,8 +69,8 @@ int main(int argc, char *argv[])
     SEGMENT base_segment;
     struct PointBinning point_binning;
     void *raster_row;
-    struct Cell_head region;
-    struct Cell_head input_region;
+    struct Cell_head region = {};
+    struct Cell_head input_region = {};
     int rows, cols; /* scan box size */
 
     char buff[BUFFSIZE];
@@ -79,7 +81,7 @@ int main(int argc, char *argv[])
     bin_index_nodes.max_nodes = 0;
     bin_index_nodes.nodes = NULL;
 
-    struct Cell_head loc_wind;
+    struct Cell_head loc_wind = {};
 
     G_gisinit(argv[0]);
 
@@ -892,9 +894,10 @@ int main(int argc, char *argv[])
     char file_list[4096];
 
     if (file_list_opt->answer)
-        G_snprintf(file_list, sizeof(file_list), "%s", file_list_opt->answer);
+        std::snprintf(file_list, sizeof(file_list), "%s",
+                      file_list_opt->answer);
     else
-        G_snprintf(file_list, sizeof(file_list), "%s", input_opt->answer);
+        std::snprintf(file_list, sizeof(file_list), "%s", input_opt->answer);
 
     Rast_set_history(&history, HIST_DATSRC_1, file_list);
     Rast_write_history(outmap, &history);

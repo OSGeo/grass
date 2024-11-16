@@ -139,7 +139,9 @@ class IClassMapPanel(DoubleMapPanel):
         # TODO: for vdigit: it does nothing here because areas do not produce
         # this info
         self.firstMapWindow.digitizingInfo.connect(
-            self.statusbarManager.statusbarItems["coordinates"].SetAdditionalInfo
+            lambda text: self.statusbarManager.statusbarItems[
+                "coordinates"
+            ].SetAdditionalInfo(text)
         )
         self.firstMapWindow.digitizingInfoUnavailable.connect(
             lambda: self.statusbarManager.statusbarItems[
@@ -263,7 +265,7 @@ class IClassMapPanel(DoubleMapPanel):
 
         return vectorName
 
-    def RemoveTempVector(self):
+    def RemoveTempVector(self) -> bool:
         """Removes temporary vector map with training areas"""
         ret = RunCommand(
             prog="g.remove",
@@ -272,20 +274,16 @@ class IClassMapPanel(DoubleMapPanel):
             type="vector",
             name=self.trainingAreaVector,
         )
-        if ret != 0:
-            return False
-        return True
+        return bool(ret == 0)
 
-    def RemoveTempRaster(self, raster):
+    def RemoveTempRaster(self, raster) -> bool:
         """Removes temporary raster maps"""
         self.GetFirstMap().Clean()
         self.GetSecondMap().Clean()
         ret = RunCommand(
             prog="g.remove", parent=self, flags="f", type="raster", name=raster
         )
-        if ret != 0:
-            return False
-        return True
+        return bool(ret == 0)
 
     def AddToolbar(self, name):
         """Add defined toolbar to the window
@@ -517,7 +515,7 @@ class IClassMapPanel(DoubleMapPanel):
 
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
-        return self.toolbars["iClassMap"] if "iClassMap" in self.toolbars else None
+        return self.toolbars.get("iClassMap", None)
 
     def GetClassColor(self, cat):
         """Get class color as string
@@ -572,7 +570,7 @@ class IClassMapPanel(DoubleMapPanel):
     def OnZoomToTraining(self, event):
         """Set preview display to match extents of training display"""
 
-        if not self.MapWindow == self.GetSecondWindow():
+        if self.MapWindow != self.GetSecondWindow():
             self.MapWindow = self.GetSecondWindow()
             self.Map = self.GetSecondMap()
             self.UpdateActive(self.GetSecondWindow())
@@ -585,7 +583,7 @@ class IClassMapPanel(DoubleMapPanel):
     def OnZoomToPreview(self, event):
         """Set preview display to match extents of training display"""
 
-        if not self.MapWindow == self.GetFirstWindow():
+        if self.MapWindow != self.GetFirstWindow():
             self.MapWindow = self.GetFirstWindow()
             self.Map = self.GetFirstMap()
             self.UpdateActive(self.GetFirstWindow())
@@ -648,11 +646,14 @@ class IClassMapPanel(DoubleMapPanel):
 
         warning = ""
         if topo["areas"] == 0:
-            warning = _("No areas in vector map <%s>.\n" % vector)
+            warning = _("No areas in vector map <%s>.\n") % vector
         if topo["points"] or topo["lines"]:
-            warning += _(
-                "Vector map <%s> contains points or lines, "
-                "these features are ignored." % vector
+            warning += (
+                _(
+                    "Vector map <%s> contains points or lines, "
+                    "these features are ignored."
+                )
+                % vector
             )
 
         return warning
@@ -817,7 +818,7 @@ class IClassMapPanel(DoubleMapPanel):
                     parent=self,
                 )
 
-    def ExportAreas(self, vectorName, withTable):
+    def ExportAreas(self, vectorName, withTable) -> bool:
         """Export training areas to new vector map (with attribute table).
 
         :param str vectorName: name of exported vector map
@@ -930,9 +931,7 @@ class IClassMapPanel(DoubleMapPanel):
         )
         wx.EndBusyCursor()
         os.remove(dbFile.name)
-        if ret != 0:
-            return False
-        return True
+        return bool(ret == 0)
 
     def _runDBUpdate(self, tmpFile, table, column, value, cat):
         """Helper function for UPDATE statement

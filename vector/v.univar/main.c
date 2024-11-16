@@ -19,7 +19,7 @@
 /* TODO
  * - add flag to weigh by line/boundary length and area size
  *   Roger Bivand on GRASS devel ml on July 2 2004
- *   http://lists.osgeo.org/pipermail/grass-dev/2004-July/014976.html
+ *   https://lists.osgeo.org/pipermail/grass-dev/2004-July/014976.html
  *   "[...] calculating weighted means, weighting by line length
  *   or area surface size [does not make sense]. I think it would be
  *   better to treat each line or area as a discrete, unweighted, unit
