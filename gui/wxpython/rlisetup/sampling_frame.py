@@ -315,7 +315,6 @@ class RLiSetupMapPanel(wx.Panel):
     def _radiusDrawn(self, x, y):
         """When drawing finished, get region values"""
         mouse = self.mapWindow.mouse
-        item = self._registeredGraphics.GetItem(0)
         p1 = mouse["begin"]
         p2 = mouse["end"]
         dist, (north, east) = self.mapWindow.Distance(p1, p2, False)

@@ -18,7 +18,7 @@ from .factory import dataset_factory
 ###############################################################################
 
 
-def tlist_grouped(type, group_type=False, dbif=None):
+def tlist_grouped(type, group_type: bool = False, dbif=None):
     """List of temporal elements grouped by mapsets.
 
     Returns a dictionary where the keys are mapset
@@ -27,7 +27,7 @@ def tlist_grouped(type, group_type=False, dbif=None):
 
     .. code-block:: python
 
-        >>> import grass.temporalas tgis
+        >>> import grass.temporal as tgis
         >>> tgis.tlist_grouped('strds')['PERMANENT']
         ['precipitation', 'temperature']
 
