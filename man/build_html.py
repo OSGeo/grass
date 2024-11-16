@@ -1,5 +1,6 @@
 import os
 import string
+from pathlib import Path
 
 # File template pieces follow
 
