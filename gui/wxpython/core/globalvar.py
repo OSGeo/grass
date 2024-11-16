@@ -233,7 +233,7 @@ def UpdateGRASSAddOnCommands(eList=None):
     Debug.msg(1, "Number of GRASS AddOn commands: %d", nCmd)
 
 
-"""@brief Collected GRASS-relared binaries/scripts"""
+"""@brief Collected GRASS-related binaries/scripts"""
 grassCmd, grassScripts = get_commands()
 Debug.msg(1, "Number of core GRASS commands: %d", len(grassCmd))
 UpdateGRASSAddOnCommands()

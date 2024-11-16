@@ -91,7 +91,7 @@ class LayerList:
 
         .. todo::
             if common usage is just to check the presence of layer,
-            intoroduce a new method ContainsLayerByName(name)
+            introduce a new method ContainsLayerByName(name)
         """
         raise NotImplementedError
 
