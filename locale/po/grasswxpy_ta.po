@@ -14260,7 +14260,7 @@ msgstr "பிழை:"
 
 #: ../gui/wxpython/core/gcmd.py:504
 #, python-format
-msgid "Unable to exectute command: '%s'"
+msgid "Unable to execute command: '%s'"
 msgstr "கட்டளையை செயல்படுத்த முடியவில்லை: '%s'"
 
 #: ../gui/wxpython/core/utils.py:50

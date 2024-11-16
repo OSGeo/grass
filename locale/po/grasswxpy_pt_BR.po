@@ -15110,7 +15110,7 @@ msgstr "Erro:"
 
 #: ../gui/wxpython/core/gcmd.py:504
 #, python-format
-msgid "Unable to exectute command: '%s'"
+msgid "Unable to execute command: '%s'"
 msgstr "Não foi possível executar o comando: '%s'"
 
 #: ../gui/wxpython/core/utils.py:50
