@@ -146,7 +146,7 @@ def build_keywords(ext):
 
         for key in sortedKeys:
             if ext == "html":
-                keyword_line = '<dt><b><a name="{key}" class="urlblack">{key}</a></b></dt><dd>'.format(
+                keyword_line = '<dt><b><a name="{key}" class="urlblack">{key}</a></b></dt><dd>'.format(  # noqa: E501
                     key=key
                 )
             else:
@@ -156,7 +156,7 @@ def build_keywords(ext):
                     man_dir, value, addons_man_files
                 )
                 if ext == "html":
-                    keyword_line += f' <a href="{man_file_path}">{value.replace(f".{ext}", "")}</a>,'
+                    keyword_line += f' <a href="{man_file_path}">{value.replace(f".{ext}", "")}</a>,'  # noqa: E501
                 else:
                     keyword_line += f' [{value.rsplit(".", 1)[0]}]({man_file_path}),'
             keyword_line = keyword_line.rstrip(",")
@@ -168,12 +168,12 @@ def build_keywords(ext):
             keywordsfile.write("</dl>\n")
         if ext == "html":
             # create toc
-            toc = '<div class="toc">\n<h4 class="toc">Table of contents</h4><p class="toc">'
+            toc = '<div class="toc">\n<h4 class="toc">Table of contents</h4><p class="toc">'  # noqa: E501
             test_length = 0
             all_keys = len(char_list.keys())
             for k in sorted(char_list.keys()):
                 test_length += 1
-                #    toc += '<li><a href="#%s" class="toc">%s</a></li>' % (char_list[k], k)
+                # toc += '<li><a href="#%s" class="toc">%s</a></li>' % (char_list[k], k)
                 if test_length % 4 == 0 and test_length != all_keys:
                     toc += '\n<a href="#%s" class="toc">%s</a>, ' % (char_list[k], k)
                 elif test_length % 4 == 0 and test_length == all_keys:
