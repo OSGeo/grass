@@ -78,48 +78,56 @@ def build_topics(ext):
         topicsfile.write(headertopics_tmpl)
 
         for key, values in sorted(keywords.items(), key=lambda s: s[0].lower()):
-            keyfile = open(os.path.join(man_dir, f"topic_%s.{ext}" % key), "w")
-            if ext == "html":
-                keyfile.write(
-                    header1_tmpl.substitute(
-                        title="GRASS GIS "
-                        "%s Reference Manual: Topic %s"
-                        % (grass_version, key.replace("_", " "))
+            with Path(man_dir, f"topic_%s.{ext}" % key).open("w") as keyfile:
+                if ext == "html":
+                    keyfile.write(
+                        header1_tmpl.substitute(
+                            title="GRASS GIS "
+                            "%s Reference Manual: Topic %s"
+                            % (grass_version, key.replace("_", " "))
+                        )
                     )
-                )
-            keyfile.write(headerkey_tmpl.substitute(keyword=key.replace("_", " ")))
-            num_modules = 0
-            for mod, desc in sorted(values.items()):
-                num_modules += 1
-                keyfile.write(
-                    desc1_tmpl.substitute(
-                        cmd=mod, desc=desc, basename=mod.replace(f".{ext}", "")
+                keyfile.write(headerkey_tmpl.substitute(keyword=key.replace("_", " ")))
+                num_modules = 0
+                for mod, desc in sorted(values.items()):
+                    num_modules += 1
+                    keyfile.write(
+                        desc1_tmpl.substitute(
+                            cmd=mod, desc=desc, basename=mod.replace(f".{ext}", "")
+                        )
                     )
-                )
-            if num_modules >= min_num_modules_for_topic:
-                topicsfile.writelines(
-                    [moduletopics_tmpl.substitute(key=key, name=key.replace("_", " "))]
-                )
-            if ext == "html":
-                keyfile.write("</table>\n")
-            else:
-                keyfile.write("\n")
-            # link to the keywords index
-            # TODO: the labels in keywords index are with spaces and capitals
-            # this should be probably changed to lowercase with underscores
-            if ext == "html":
-                keyfile.write(
-                    "<p><em>See also the corresponding keyword"
-                    ' <a href="keywords.html#{key}">{key}</a>'
-                    " for additional references.</em>".format(key=key.replace("_", " "))
-                )
-            else:
-                # expecting markdown
-                keyfile.write(
-                    "*See also the corresponding keyword"
-                    " [{key}](keywords.md#{key})"
-                    " for additional references.*\n".format(key=key.replace("_", " "))
-                )
+                if num_modules >= min_num_modules_for_topic:
+                    topicsfile.writelines(
+                        [
+                            moduletopics_tmpl.substitute(
+                                key=key, name=key.replace("_", " ")
+                            )
+                        ]
+                    )
+                if ext == "html":
+                    keyfile.write("</table>\n")
+                else:
+                    keyfile.write("\n")
+                # link to the keywords index
+                # TODO: the labels in keywords index are with spaces and capitals
+                # this should be probably changed to lowercase with underscores
+                if ext == "html":
+                    keyfile.write(
+                        "<p><em>See also the corresponding keyword"
+                        ' <a href="keywords.html#{key}">{key}</a>'
+                        " for additional references.</em>".format(
+                            key=key.replace("_", " ")
+                        )
+                    )
+                else:
+                    # expecting markdown
+                    keyfile.write(
+                        "*See also the corresponding keyword"
+                        " [{key}](keywords.md#{key})"
+                        " for additional references.*\n".format(
+                            key=key.replace("_", " ")
+                        )
+                    )
 
             write_footer(keyfile, f"index.{ext}", year, template=ext)
         if ext == "html":
