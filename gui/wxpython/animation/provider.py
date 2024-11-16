@@ -657,7 +657,7 @@ def CompositeProcess(
     :param tempDir: directory for rendering
     :param cmdList: list of d.rast/d.vect commands
     :param region: region as a dict or None
-    :param opacites: list of opacities
+    :param opacities: list of opacities
     :param bgcolor: background color as a tuple of 3 values 0 to 255
     :param fileQueue: the inter process communication queue
                       storing the file name of the image
@@ -896,7 +896,7 @@ def test():
     if os.path.exists(tempDir):
         shutil.rmtree(tempDir)
     os.mkdir(tempDir)
-    # comment this line to keep the directory after prgm ends
+    # comment this line to keep the directory after program ends
     #    cleanUp = CleanUp(tempDir)
     #    import atexit
     #    atexit.register(cleanUp)
