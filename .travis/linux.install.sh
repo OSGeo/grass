@@ -4,6 +4,6 @@
 set -e
 
 sudo apt-get update -y
-    sudo apt-get install -y wget git gawk findutils
-    xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
-        sudo apt-get install -y --no-install-recommends --no-install-suggests
+sudo apt-get install -y wget git gawk findutils
+xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+    sudo apt-get install -y --no-install-recommends --no-install-suggests
