@@ -19,10 +19,14 @@
 #ifndef __UNION_FIND
 #define __UNION_FIND
 
-#include <assert.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cassert>
+#include <cstdlib>
+#include <cstring>
 #include <iostream>
+
+extern "C" {
+#include <grass/glocale.h>
+}
 
 /* initial range guesstimate */
 #define UNION_INITIAL_SIZE 2000
@@ -68,11 +72,19 @@ unionFind<T>::unionFind()
 {
     maxsize = UNION_INITIAL_SIZE;
     /*  parent = new (long)[maxsize]; */
-    parent = (T *)calloc(maxsize, sizeof(T));
-    assert(parent);
+    if (void *new_parent = std::calloc(maxsize, sizeof(T))) {
+        parent = static_cast<T *>(new_parent);
+    }
+    else {
+        G_fatal_error(_("Not enough memory for %s"), "parent");
+    }
     /*  rank = new (long)[maxsize]; */
-    rank = (T *)calloc(maxsize, sizeof(T));
-    assert(rank);
+    if (void *new_rank = std::calloc(maxsize, sizeof(T))) {
+        rank = static_cast<T *>(new_rank);
+    }
+    else {
+        G_fatal_error(_("Not enough memory for %s"), "rank");
+    }
 }
 
 /************************************************************/
@@ -126,13 +138,21 @@ inline void unionFind<T>::makeSet(T x)
     if (x >= maxsize) {
         /* reallocate parent */
         cout << "UnionFind::makeSet: reallocate double " << maxsize << "\n";
-        parent = (T *)realloc(parent, 2 * maxsize * sizeof(T));
-        assert(parent);
-        memset(parent + maxsize, 0, maxsize * sizeof(T));
-        /*reallocate rank */
-        rank = (T *)realloc(rank, 2 * maxsize * sizeof(T));
-        assert(rank);
-        memset(rank + maxsize, 0, maxsize * sizeof(T));
+        if (void *new_parent = std::realloc(parent, 2 * maxsize * sizeof(T))) {
+            parent = static_cast<T *>(new_parent);
+            std::memset(parent + maxsize, 0, maxsize * sizeof(T));
+        }
+        else {
+            G_fatal_error(_("Not enough memory for %s"), "parent");
+        }
+        /* reallocate rank */
+        if (void *new_rank = std::realloc(rank, 2 * maxsize * sizeof(T))) {
+            rank = static_cast<T *>(new_rank);
+            std::memset(rank + maxsize, 0, maxsize * sizeof(T));
+        }
+        else {
+            G_fatal_error(_("Not enough memory for %s"), "rank");
+        }
         /*update maxsize */
         maxsize *= 2;
     }

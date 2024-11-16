@@ -25,6 +25,7 @@ import textwrap
 import sys
 import wx
 from wx.html import HtmlWindow
+from operator import itemgetter
 
 try:
     from wx.lib.agw.hyperlink import HyperLinkCtrl
@@ -37,7 +38,7 @@ except ImportError:
     from wx import AboutDialogInfo
     from wx import AboutBox
 
-import grass.script as grass
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 # needed just for testing
@@ -111,7 +112,7 @@ class AboutWindow(wx.Frame):
     def _pageInfo(self):
         """Info page"""
         # get version and web site
-        vInfo = grass.version()
+        vInfo = gs.version()
         if not vInfo:
             sys.stderr.write(_("Unable to get GRASS version\n"))
 
@@ -188,16 +189,26 @@ class AboutWindow(wx.Frame):
 
         # show only basic info
         # row += 1
-        # infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-        #                                        label = '%s:' % _('GIS Library Revision')),
-        #                   pos = (row, 0),
-        #                   flag = wx.ALIGN_RIGHT)
-
-        # infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-        #                                        label = vInfo['libgis_revision'] + ' (' +
-        #                                        vInfo['libgis_date'].split(' ')[0] + ')'),
-        #                   pos = (row, 1),
-        #                   flag = wx.ALIGN_LEFT)
+        # infoGridSizer.Add(
+        #     item=wx.StaticText(
+        #         parent=infoTxt, id=wx.ID_ANY, label="%s:" % _("GIS Library Revision")
+        #     ),
+        #     pos=(row, 0),
+        #     flag=wx.ALIGN_RIGHT,
+        # )
+        #
+        # infoGridSizer.Add(
+        #     item=wx.StaticText(
+        #         parent=infoTxt,
+        #         id=wx.ID_ANY,
+        #         label=vInfo["libgis_revision"]
+        #         + " ("
+        #         + vInfo["libgis_date"].split(" ")[0]
+        #         + ")",
+        #     ),
+        #     pos=(row, 1),
+        #     flag=wx.ALIGN_LEFT,
+        # )
 
         row += 2
         infoGridSizer.Add(
@@ -235,7 +246,7 @@ class AboutWindow(wx.Frame):
             pos=(row, 0),
             flag=wx.ALIGN_RIGHT,
         )
-        self.langUsed = grass.gisenv().get("LANG", None)
+        self.langUsed = gs.gisenv().get("LANG", None)
         if not self.langUsed:
             import locale
 
@@ -263,7 +274,7 @@ class AboutWindow(wx.Frame):
         """Copyright information"""
         copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
         if os.path.exists(copyfile):
-            copyrightFile = open(copyfile, "r")
+            copyrightFile = open(copyfile)
             copytext = copyrightFile.read()
             copyrightFile.close()
         else:
@@ -292,7 +303,7 @@ class AboutWindow(wx.Frame):
         """Licence about"""
         licfile = os.path.join(os.getenv("GISBASE"), "GPL.TXT")
         if os.path.exists(licfile):
-            licenceFile = open(licfile, "r")
+            licenceFile = open(licfile)
             license = "".join(licenceFile.readlines())
             licenceFile.close()
         else:
@@ -319,10 +330,7 @@ class AboutWindow(wx.Frame):
     def _pageCitation(self):
         """Citation information"""
         try:
-            # import only when needed
-            import grass.script as gscript
-
-            text = gscript.read_command("g.version", flags="x")
+            text = gs.read_command("g.version", flags="x")
         except CalledModuleError as error:
             text = _(
                 "Unable to provide citation suggestion,"
@@ -377,8 +385,8 @@ class AboutWindow(wx.Frame):
             contribfile = os.path.join(os.getenv("GISBASE"), "contributors.csv")
         if os.path.exists(contribfile):
             contribFile = codecs.open(contribfile, encoding="utf-8", mode="r")
-            contribs = list()
-            errLines = list()
+            contribs = []
+            errLines = []
             for line in contribFile.readlines()[1:]:
                 line = line.rstrip("\n")
                 try:
@@ -443,7 +451,7 @@ class AboutWindow(wx.Frame):
                 text = StaticText(parent=contribwin, id=wx.ID_ANY, label=item)
                 text.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
                 contribBox.Add(text)
-            for vals in sorted(contribs, key=lambda x: x[0]):
+            for vals in sorted(contribs, key=itemgetter(0)):
                 for item in vals:
                     contribBox.Add(
                         StaticText(parent=contribwin, id=wx.ID_ANY, label=item)
@@ -462,8 +470,8 @@ class AboutWindow(wx.Frame):
         translatorsfile = os.path.join(os.getenv("GISBASE"), "translators.csv")
         if os.path.exists(translatorsfile):
             translatorsFile = codecs.open(translatorsfile, encoding="utf-8", mode="r")
-            translators = dict()
-            errLines = list()
+            translators = {}
+            errLines = []
             for line in translatorsFile.readlines()[1:]:
                 line = line.rstrip("\n")
                 try:
@@ -473,7 +481,7 @@ class AboutWindow(wx.Frame):
                     continue
                 for language in languages.split(" "):
                     if language not in translators:
-                        translators[language] = list()
+                        translators[language] = []
                     translators[language].append((name, email))
             translatorsFile.close()
 
@@ -557,16 +565,16 @@ class AboutWindow(wx.Frame):
         """Return string for the status of translation"""
         allStr = "%s :" % k.upper()
         try:
-            allStr += _("   %d translated" % v["good"])
-        except:
+            allStr += _("   %d translated") % v["good"]
+        except KeyError:
             pass
         try:
-            allStr += _("   %d fuzzy" % v["fuzzy"])
-        except:
+            allStr += _("   %d fuzzy") % v["fuzzy"]
+        except KeyError:
             pass
         try:
-            allStr += _("   %d untranslated" % v["bad"])
-        except:
+            allStr += _("   %d untranslated") % v["bad"]
+        except KeyError:
             pass
         return allStr
 
@@ -577,29 +585,29 @@ class AboutWindow(wx.Frame):
         langBox.Add(tkey)
         try:
             tgood = StaticText(
-                parent=par, id=wx.ID_ANY, label=_("%d translated" % v["good"])
+                parent=par, id=wx.ID_ANY, label=_("%d translated") % v["good"]
             )
             tgood.SetForegroundColour(wx.Colour(35, 142, 35))
             langBox.Add(tgood)
-        except:
+        except KeyError:
             tgood = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tgood)
         try:
             tfuzzy = StaticText(
-                parent=par, id=wx.ID_ANY, label=_("   %d fuzzy" % v["fuzzy"])
+                parent=par, id=wx.ID_ANY, label=_("   %d fuzzy") % v["fuzzy"]
             )
             tfuzzy.SetForegroundColour(wx.Colour(255, 142, 0))
             langBox.Add(tfuzzy)
-        except:
+        except KeyError:
             tfuzzy = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tfuzzy)
         try:
             tbad = StaticText(
-                parent=par, id=wx.ID_ANY, label=_("   %d untranslated" % v["bad"])
+                parent=par, id=wx.ID_ANY, label=_("   %d untranslated") % v["bad"]
             )
             tbad.SetForegroundColour(wx.Colour(255, 0, 0))
             langBox.Add(tbad)
-        except:
+        except KeyError:
             tbad = StaticText(parent=par, id=wx.ID_ANY, label="")
             langBox.Add(tbad)
         return langBox
@@ -623,7 +631,7 @@ class AboutWindow(wx.Frame):
         # panel.Collapse(True)
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         for k, v in js.items():
-            if k != "total" and k != "name":
+            if k not in {"total", "name"}:
                 box = self._langBox(win, k, v)
                 pageSizer.Add(box, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
 
@@ -737,7 +745,7 @@ class HelpWindow(HtmlWindow):
         HtmlWindow.__init__(self, parent=parent, **kwargs)
 
         self.loaded = False
-        self.history = list()
+        self.history = []
         self.historyIdx = 0
         self.fspath = os.path.join(os.getenv("GISBASE"), "docs", "html")
 
@@ -751,7 +759,8 @@ class HelpWindow(HtmlWindow):
                 self.history.append(url)
                 self.loaded = True
             else:
-                # FIXME: calling LoadPage() is strangely time-consuming (only first call)
+                # FIXME: calling LoadPage() is strangely time-consuming
+                #        (only first call)
                 # self.LoadPage(self.fspath + command + ".html")
                 self.loaded = False
         else:
@@ -801,7 +810,7 @@ class HelpWindow(HtmlWindow):
         try:
             contents = []
             skip = False
-            for line in open(htmlFile, "rb").readlines():
+            for line in open(htmlFile, "rb"):
                 if "DESCRIPTION" in line:
                     skip = False
                 if not skip:
@@ -835,7 +844,7 @@ class HelpWindow(HtmlWindow):
                             contents.append(line)
             self.SetPage("".join(contents))
             self.loaded = True
-        except:  # The Manual file was not found
+        except Exception:  # The Manual file was not found
             self.loaded = False
 
 
@@ -962,7 +971,7 @@ def ShowAboutDialog(prgName, startYear):
 
 def _grassDevTeam(start):
     try:
-        end = grass.version()["date"]
+        end = gs.version()["date"]
     except KeyError:
         sys.stderr.write(_("Unable to get GRASS version\n"))
 

@@ -625,6 +625,25 @@ int Vect_get_field_number(struct Map_info *Map, const char *field)
     return atoi(field);
 }
 
+/*!
+   \brief Free a struct field_info and all memory associated with it.
+
+   \param[in,out] fi pointer to field_info structure
+ */
+void Vect_destroy_field_info(struct field_info *fi)
+{
+    if (!fi)
+        return;
+    if (fi->name)
+        G_free(fi->name);
+    G_free(fi->driver);
+    G_free(fi->database);
+    G_free(fi->table);
+    G_free(fi->key);
+    G_free(fi);
+    fi = NULL;
+}
+
 static int read_dblinks_nat(struct Map_info *Map)
 {
     FILE *fd;

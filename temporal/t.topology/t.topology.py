@@ -47,8 +47,7 @@
 # % key: s
 # % description: Print spatio-temporal topological relationships and exit
 # %end
-import grass.script as grass
-
+import grass.script as gs
 
 ############################################################################
 
@@ -75,10 +74,7 @@ def main():
     spatial = None
 
     if spatio_temporal_relations:
-        if sp.get_type() == "strds":
-            spatial = "2D"
-        else:
-            spatial = "3D"
+        spatial = "2D" if sp.get_type() == "strds" else "3D"
 
     if temporal_relations or spatio_temporal_relations:
         sp.print_spatio_temporal_relationships(maps=maps, spatial=spatial)
@@ -88,7 +84,7 @@ def main():
 
     #      0123456789012345678901234567890
     print(
-        " +-------------------- Temporal topology -------------------------------------+"
+        " +-------------------- Temporal topology -------------------------------------+"  # noqa: E501
     )
     if where:
         print(" | Is subset of dataset: ...... True")
@@ -124,7 +120,7 @@ def main():
     print(" | Granularity: ............... %s" % str(gran))
 
     print(
-        " +-------------------- Topological relations ---------------------------------+"
+        " +-------------------- Topological relations ---------------------------------+"  # noqa: E501
     )
     dict_ = sp.count_temporal_relations(maps)
 
@@ -158,10 +154,10 @@ def main():
             if key == "precedes":
                 print(" | Precedes: .................. %s" % (dict_[key]))
     print(
-        " +----------------------------------------------------------------------------+"
+        "+----------------------------------------------------------------------------+"  # noqa: E501
     )
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

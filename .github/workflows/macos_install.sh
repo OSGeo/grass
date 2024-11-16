@@ -12,9 +12,7 @@ INSTALL_PREFIX=$1
 
 CONFIGURE_FLAGS="\
   --prefix=${INSTALL_PREFIX} \
-  --with-blas \
-  --with-blas-includes=${CONDA_PREFIX}/include \
-  --with-blas-libs=${CONDA_PREFIX}/lib \
+  --with-blas=openblas \
   --with-bzlib \
   --with-bzlib-includes=${CONDA_PREFIX}/include \
   --with-bzlib-libs=${CONDA_PREFIX}/lib \
@@ -31,9 +29,7 @@ CONFIGURE_FLAGS="\
   --with-gdal=${CONDA_PREFIX}/bin/gdal-config \
   --with-geos=${CONDA_PREFIX}/bin/geos-config \
   --with-includes=${CONDA_PREFIX}/include \
-  --with-lapack
-  --with-lapack-includes=${CONDA_PREFIX}/include \
-  --with-lapack-libs=${CONDA_PREFIX}/lib \
+  --with-lapack=openblas \
   --with-libpng=${CONDA_PREFIX}/bin/libpng-config \
   --with-libs=${CONDA_PREFIX}/lib \
   --with-netcdf=${CONDA_PREFIX}/bin/nc-config \
@@ -68,7 +64,7 @@ export CPPFLAGS="-isystem${CONDA_PREFIX}/include"
 
 ./configure $CONFIGURE_FLAGS
 
-EXEMPT="-Wno-error=deprecated-non-prototype -Wno-error=strict-prototypes"
+EXEMPT=""
 make -j"$(sysctl -n hw.ncpu)" CFLAGS="$CFLAGS -Werror $EXEMPT" \
     CXXFLAGS="$CXXFLAGS -Werror $EXEMPT"
 

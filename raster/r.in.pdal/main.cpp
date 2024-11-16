@@ -17,6 +17,8 @@
  *
  *****************************************************************************/
 
+#include <cstdio>
+
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
@@ -67,8 +69,8 @@ int main(int argc, char *argv[])
     SEGMENT base_segment;
     struct PointBinning point_binning;
     void *raster_row;
-    struct Cell_head region;
-    struct Cell_head input_region;
+    struct Cell_head region = {};
+    struct Cell_head input_region = {};
     int rows, cols; /* scan box size */
 
     char buff[BUFFSIZE];
@@ -79,7 +81,7 @@ int main(int argc, char *argv[])
     bin_index_nodes.max_nodes = 0;
     bin_index_nodes.nodes = NULL;
 
-    struct Cell_head loc_wind;
+    struct Cell_head loc_wind = {};
 
     G_gisinit(argv[0]);
 
@@ -248,10 +250,10 @@ int main(int argc, char *argv[])
 
     reproject_flag->key = 'w';
     reproject_flag->label =
-        _("Reproject to location's coordinate system if needed");
+        _("Reproject to project's coordinate system if needed");
     reproject_flag->description =
         _("Reprojects input dataset to the coordinate system of"
-          " the GRASS location (by default only datasets with the"
+          " the GRASS project (by default only datasets with"
           " matching coordinate system can be imported");
     reproject_flag->guisection = _("Projection");
 
@@ -393,9 +395,10 @@ int main(int argc, char *argv[])
 
     over_flag->key = 'o';
     over_flag->label =
-        _("Override projection check (use current location's projection)");
-    over_flag->description = _(
-        "Assume that the dataset has same projection as the current location");
+        _("Override projection check (use current project's CRS)");
+    over_flag->description =
+        _("Assume that the dataset has the same coordinate reference system as "
+          "the current project");
     over_flag->guisection = _("Projection");
 
     Flag *base_rast_res_flag = G_define_flag();
@@ -731,7 +734,7 @@ int main(int argc, char *argv[])
 
     // we reproject when requested regardless of the input projection
     if (reproject_flag->answer) {
-        G_message(_("Reprojecting the input to the location projection"));
+        G_message(_("Reprojecting the input to the project's CRS"));
         char *proj_wkt = location_projection_as_wkt(false);
 
         pdal::Options o4;
@@ -781,8 +784,8 @@ int main(int argc, char *argv[])
     // getting projection is possible only after prepare
     if (over_flag->answer) {
         G_important_message(_("Overriding projection check and assuming"
-                              " that the projection of input matches"
-                              " the location projection"));
+                              " that the CRS of input matches"
+                              " the project's CRS"));
     }
     else if (!reproject_flag->answer) {
         pdal::SpatialReference spatial_reference =
@@ -891,9 +894,10 @@ int main(int argc, char *argv[])
     char file_list[4096];
 
     if (file_list_opt->answer)
-        G_snprintf(file_list, sizeof(file_list), "%s", file_list_opt->answer);
+        std::snprintf(file_list, sizeof(file_list), "%s",
+                      file_list_opt->answer);
     else
-        G_snprintf(file_list, sizeof(file_list), "%s", input_opt->answer);
+        std::snprintf(file_list, sizeof(file_list), "%s", input_opt->answer);
 
     Rast_set_history(&history, HIST_DATSRC_1, file_list);
     Rast_write_history(outmap, &history);

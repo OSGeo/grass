@@ -119,18 +119,13 @@ int main(int argc, char **argv)
         _("GROUP BY conditions of SQL statement without 'group by' keyword");
     options.group->guisection = _("Selection");
 
-    options.format = G_define_option();
-    options.format->key = "format";
-    options.format->type = TYPE_STRING;
-    options.format->required = YES;
-    options.format->label = _("Output format");
+    options.format = G_define_standard_option(G_OPT_F_FORMAT);
     options.format->options = "plain,csv,json,vertical";
     options.format->descriptions =
         "plain;Configurable plain text output;"
         "csv;CSV (Comma Separated Values);"
         "json;JSON (JavaScript Object Notation);"
         "vertical;Plain text vertical output (instead of horizontal)";
-    options.format->answer = "plain";
     options.format->guisection = _("Format");
 
     options.fsep = G_define_standard_option(G_OPT_F_SEP);

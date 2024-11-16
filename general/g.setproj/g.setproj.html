@@ -14,8 +14,8 @@
 <h2>NAME</h2>
 
 <em><b>g.setproj</b></em> allows the user to create the PROJ_INFO and the
-PROJ_UNITS files to record the projection information associated with a
-current location.
+PROJ_UNITS files to record the coordinate reference system (CRS) information
+associated with a current project (previously called location).
 <br>
 
 <h2>SYNOPSIS</h2>
@@ -25,15 +25,15 @@ current location.
 <h2>DESCRIPTION</h2>
 
 Allows a user to create a PROJ_INFO file in the PERMANENT mapset of the
-current location. PROJ_INFO file is used to record the projection information
-associated with the specified mapset.
+current project. PROJ_INFO file is used to record the CRS information
+associated with the specified project.
 
 <h2>NOTES</h2>
 
 The user running <em>g.setproj</em> must own the PERMANENT
 mapset and it must be currently selected.
 It is highly recommended to run <em>g.setproj</em> after
-creating a new location so that conversion programs (such
+creating a new project so that conversion programs (such
 as <em>v.proj</em>) can be run.
 
 <p>The user will be prompted for the projection name.

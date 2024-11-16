@@ -316,8 +316,9 @@ typedef enum {
     G_OPT_F_OUTPUT,    /*!< new output file */
     G_OPT_F_SEP,       /*!< data field separator */
 
-    G_OPT_C,  /*!< color */
-    G_OPT_CN, /*!< color or none */
+    G_OPT_C,        /*!< color */
+    G_OPT_CN,       /*!< color or none */
+    G_OPT_C_FORMAT, /*!< set color format to rgb,hex,hsv or triplet */
 
     G_OPT_M_UNITS,      /*!< units */
     G_OPT_M_DATATYPE,   /*!< datatype */
@@ -352,7 +353,9 @@ typedef enum {
     G_OPT_MAP_TYPE,  /*!< The type of an input map: raster, vect, rast3d */
     G_OPT_T_TYPE,    /*!< The temporal type of a space time dataset */
     G_OPT_T_WHERE,   /*!< A temporal GIS framework SQL WHERE statement */
-    G_OPT_T_SAMPLE   /*!< Temporal sample methods */
+    G_OPT_T_SAMPLE,  /*!< Temporal sample methods */
+
+    G_OPT_F_FORMAT, /*!< set output format to plain text or JSON */
 } STD_OPT;
 
 /*!
