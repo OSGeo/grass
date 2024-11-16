@@ -1053,10 +1053,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         # register data structures for drawing GCP's
         #
         self.pointsToDrawTgt = self.TgtMapWindow.RegisterGraphicsToDraw(
-            graphicsType="point", setStatusFunc=self.SetGCPSatus
+            graphicsType="point", setStatusFunc=self.SetGCPStatus
         )
         self.pointsToDrawSrc = self.SrcMapWindow.RegisterGraphicsToDraw(
-            graphicsType="point", setStatusFunc=self.SetGCPSatus
+            graphicsType="point", setStatusFunc=self.SetGCPStatus
         )
 
         # connect to the map windows signals
@@ -1410,7 +1410,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         # overwrite result map
         self.overwrite = UserSettings.Get(group="gcpman", key="map", subkey="overwrite")
 
-    def SetGCPSatus(self, item, itemIndex):
+    def SetGCPStatus(self, item, itemIndex):
         """Before GCP is drawn, decides it's colour and whether it
         will be drawn.
         """
