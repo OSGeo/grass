@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 # This script tests the export of voxel data
 # into the VTK format. Almost all options of
 # r3.out.vtk are tested. Validation data for each test
@@ -38,7 +39,7 @@ r3.out.vtk -s --o top=elev_top bottom=elev_bottom input=volume_null output=test_
 r3.out.vtk -sp --o top=elev_top bottom=elev_bottom input=volume_null output=test_volume_null_1_points_elevation.vtk precision=3 null=0
 
 # Comparison of references and vtk files
-for i in `ls *.ref` ; do
-    diff $i "`basename $i .ref`.vtk" ;
+for i in $(ls -- *.ref); do
+    diff "$i" "$(basename "$i" .ref).vtk"
 done
-rm *.vtk
+rm -- ./*.vtk

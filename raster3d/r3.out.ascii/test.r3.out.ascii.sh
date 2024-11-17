@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 # Tests for r3.out.ascii and r3.in.ascii
 # This script tests the export of voxel data using r3.out.ascii
 # as well as the import of the generated data with r3.in.ascii
@@ -80,7 +81,7 @@ r3.in.ascii --o output=test_double_nsbt_null_large input=test_double_nsbt_null_l
 r3.info test_double_nsbt_null_large
 
 # Show differences between references and created text files
-for i in `ls *.ref` ; do
-    diff $i "`basename $i .ref`.txt" ;
+for i in $(ls -- *.ref); do
+    diff "$i" "$(basename "$i" .ref).txt"
 done
-rm *.txt
+rm -- ./*.txt
