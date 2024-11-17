@@ -38,7 +38,7 @@ fi
 
 echo ""
 
-if [ $GIS_FLAG_F -eq 1 ]; then
+if [ "$GIS_FLAG_F" -eq 1 ]; then
     g.message message="Flag -f set"
 else
     g.message message="Flag -f not set"
