@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-PNG_DLL_VERSION=$($(dirname $0)/libpng-config --dll-version)
+PNG_DLL_VERSION=$($(dirname "$0")/libpng-config --dll-version)
 CONFIG_LIBS="$OSGEO4W_ROOT_MSYS/lib/gdal_i.lib"
 CONFIG_DEP_LIBS="$OSGEO4W_ROOT_MSYS/lib/libpng$PNG_DLL_VERSION.lib $OSGEO4W_ROOT_MSYS/lib/zlib.lib"
 CONFIG_PREFIX="$OSGEO4W_ROOT_MSYS"
@@ -18,7 +18,7 @@ Options:
 	[--cflags]
 	[--ogr-enabled]
 EOF
-	exit $1
+	exit "$1"
 }
 
 if test $# -eq 0; then
@@ -27,19 +27,19 @@ fi
 
 case $1 in 
   --libs)
-    echo $CONFIG_LIBS
+    echo "$CONFIG_LIBS"
     ;;
 
   --dep-libs)
-    echo $CONFIG_DEP_LIBS
+    echo "$CONFIG_DEP_LIBS"
     ;;
 
   --cflags)
-    echo $CONFIG_CFLAGS
+    echo "$CONFIG_CFLAGS"
     ;;
 
   --prefix)
-    echo $CONFIG_PREFIX
+    echo "$CONFIG_PREFIX"
     ;;
 
   --ogr-enabled)

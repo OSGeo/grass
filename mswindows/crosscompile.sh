@@ -66,13 +66,13 @@ EOT
 		exit
 		;;
 	--mxe-path=*)
-		mxe_path=`echo $opt | sed 's/^[^=]*=//'`
+		mxe_path=$(echo "$opt" | sed 's/^[^=]*=//')
 		;;
 	--addons-path=*)
-		addons_path=`echo $opt | sed 's/^[^=]*=//'`
+		addons_path=$(echo "$opt" | sed 's/^[^=]*=//')
 		;;
 	--freetype-include=*)
-		freetype_include=`echo $opt | sed 's/^[^=]*=//'`
+		freetype_include=$(echo "$opt" | sed 's/^[^=]*=//')
 		;;
 	--update)
 		update=1
@@ -95,11 +95,11 @@ fi
 
 # check paths
 errors=0
-if [ ! -d $mxe_path ]; then
+if [ ! -d "$mxe_path" ]; then
 	echo "$mxe_path: not found"
 	errors=1
 fi
-if [ ! -d $freetype_include ]; then
+if [ ! -d "$freetype_include" ]; then
 	echo "$freetype_include: not found"
 	errors=1
 fi
@@ -114,7 +114,7 @@ fi
 ################################################################################
 # Start
 
-echo "Started cross-compilation: `date`"
+echo "Started cross-compilation: $(date)"
 echo
 
 # update the current branch if requested
@@ -131,7 +131,7 @@ LDFLAGS="-lcurses" \
 ./configure \
 --with-blas \
 --with-bzlib \
---with-freetype-includes=$freetype_include \
+--with-freetype-includes="$freetype_include" \
 --with-geos \
 --with-lapack \
 --with-netcdf \
@@ -144,19 +144,19 @@ LDFLAGS="-lcurses" \
 
 make clean default
 
-if [ -d $addons_path ]; then
-	MODULE_TOPDIR=`pwd`
+if [ -d "$addons_path" ]; then
+	MODULE_TOPDIR=$(pwd)
 	(
-	cd $addons_path
+	cd "$addons_path"
 	if [ $update -eq 1 -a -d .git ]; then
 		git pull
 	fi
 	cd src
-	make MODULE_TOPDIR=$MODULE_TOPDIR clean default
+	make MODULE_TOPDIR="$MODULE_TOPDIR" clean default
 	)
 fi
 
-build_arch=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
+build_arch=$(sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make)
 for i in \
 	config.log \
 	error.log \
@@ -164,7 +164,7 @@ for i in \
 	include/Make/Doxyfile_arch_latex \
 	include/Make/Platform.make \
 ; do
-	cp -a $i $i.$build_arch
+	cp -a $i "$i.$build_arch"
 done
 
 ################################################################################
@@ -184,15 +184,15 @@ RANLIB=$mxe_bin-ranlib \
 WINDRES=$mxe_bin-windres \
 PKG_CONFIG=$mxe_bin-pkg-config \
 ./configure \
---build=$build_arch \
+--build="$build_arch" \
 --host=$arch \
 --with-blas \
 --with-bzlib \
---with-freetype-includes=$mxe_shared/include/freetype2 \
---with-gdal=$mxe_shared/bin/gdal-config \
---with-geos=$mxe_shared/bin/geos-config \
+--with-freetype-includes="$mxe_shared/include/freetype2" \
+--with-gdal="$mxe_shared/bin/gdal-config" \
+--with-geos="$mxe_shared/bin/geos-config" \
 --with-lapack \
---with-netcdf=$mxe_shared/bin/nc-config \
+--with-netcdf="$mxe_shared/bin/nc-config" \
 --with-nls \
 --with-opengl=windows \
 --with-openmp \
@@ -203,18 +203,18 @@ PKG_CONFIG=$mxe_bin-pkg-config \
 
 make clean default
 
-if [ -d $addons_path ]; then
+if [ -d "$addons_path" ]; then
 	(
-	cd $addons_path
+	cd "$addons_path"
 	if [ $update -eq 1 -a -d .git ]; then
 		git pull
 	fi
 	cd src
-	make MODULE_TOPDIR=$MODULE_TOPDIR clean default
+	make MODULE_TOPDIR="$MODULE_TOPDIR" clean default
 	)
 fi
 
-arch=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
+arch=$(sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make)
 for i in \
 	config.log \
 	error.log \
@@ -222,7 +222,7 @@ for i in \
 	include/Make/Doxyfile_arch_latex \
 	include/Make/Platform.make \
 ; do
-	cp -a $i $i.$arch
+	cp -a $i "$i.$arch"
 done
 
 ################################################################################
@@ -235,8 +235,8 @@ for i in \
 	docs \
 	gui/wxpython/xml \
 ; do
-	rm -rf $dist/$i
-	cp -a $build_dist/$i $dist/$i
+	rm -rf "$dist/$i"
+	cp -a "$build_dist/$i" "$dist/$i"
 done
 
 ################################################################################
@@ -303,26 +303,26 @@ for i in \
 	libzstd.dll \
 	zlib1.dll \
 ; do
-	cp -a $mxe_shared/bin/$i $dist/lib
+	cp -a "$mxe_shared/bin/$i" "$dist/lib"
 done
 
 for i in \
 	gdal \
 	proj \
 ; do
-	rm -rf $dist/share/$i
-	cp -a $mxe_shared/share/$i $dist/share/$i
+	rm -rf "$dist/share/$i"
+	cp -a "$mxe_shared/share/$i" "$dist/share/$i"
 done
 
 ################################################################################
 # Post-compile process
 
-version=`sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make`
+version=$(sed -n '/^INST_DIR[ \t]*=/{s/^.*grass//; p}' include/Make/Platform.make)
 
-rm -f $dist/grass.tmp
-cp -a bin.$arch/grass.py $dist/etc/grass$version.py
+rm -f "$dist/grass.tmp"
+cp -a bin."$arch"/grass.py "$dist/etc/grass$version.py"
 
-cat<<'EOT' | sed "s/\$version/$version/g" > $dist/grass.bat
+cat<<'EOT' | sed "s/\$version/$version/g" > "$dist/grass.bat"
 @echo off
 setlocal EnableDelayedExpansion
 
@@ -411,17 +411,17 @@ if not exist "%GISBASE%\etc\fontcap" (
 "%GRASS_PYTHON%" "%GISBASE%\etc\grass$version.py" %*
 if %ERRORLEVEL% geq 1 pause
 EOT
-unix2dos $dist/grass.bat
+unix2dos "$dist/grass.bat"
 
 # package if requested
 if [ $package -eq 1 ]; then
-	date=`date +%Y%m%d`
+	date=$(date +%Y%m%d)
 	rm -f grass
-	ln -s $dist grass
-	rm -f grass*-$arch-*.zip
-	zip -r grass$version-$arch-$date.zip grass
+	ln -s "$dist" grass
+	rm -f grass*-"$arch"-*.zip
+	zip -r "grass$version-$arch-$date.zip" grass
 	rm -f grass
 fi
 
 echo
-echo "Completed cross-compilation: `date`"
+echo "Completed cross-compilation: $(date)"

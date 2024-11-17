@@ -73,7 +73,7 @@ Options:
 	[--defines]
 	[--includes]
 EOF
-	exit $1
+	exit "$1"
 }
 
 if test $# -eq 0; then
@@ -82,15 +82,15 @@ fi
 
 case $1 in 
   --libs) 
-    echo $OSGEO4W_ROOT_MSYS/lib/liblas_c.lib
+    echo "$OSGEO4W_ROOT_MSYS"/lib/liblas_c.lib
     ;;
 
   --prefix)
-    echo ${prefix}
+    echo "${prefix}"
      ;;
 
   --ldflags)
-    echo -L${libdir}
+    echo -L"${libdir}"
     ;;
 
   --defines)
@@ -98,7 +98,7 @@ case $1 in
     ;;
 
   --includes)
-    echo ${INCLUDES}
+    echo "${INCLUDES}"
     ;;
 
   --cflags)

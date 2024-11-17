@@ -24,7 +24,7 @@ which ()
   do
     for dir in $PATH
     do
-      if test -f $dir/$file
+      if test -f "$dir"/"$file"
       then
         echo "$dir/$file"
         continue 2
@@ -51,7 +51,7 @@ fix_path ()
     path=$basedir/$filename
     if [ -d "$path" ] ;
     then
-      eval "$var"=$path
+      eval "$var"="$path"
       return
     fi
   done
@@ -62,22 +62,22 @@ get_full_path ()
   file=$1
 
   # if the file is a symlink, try to resolve it
-  if [ -h $file ];
+  if [ -h "$file" ];
   then
-    file=`ls -l $file | awk '{ print $NF }'`
+    file=$(ls -l "$file" | awk '{ print $NF }')
   fi
 
   case $file in
     /*) echo "$file";;
-    */*) tmp=`pwd`/$file; echo $tmp | sed -e 's;/\./;/;' ;;
-    *) which $file ;;
+    */*) tmp=$(pwd)/$file; echo "$tmp" | sed -e 's;/\./;/;' ;;
+    *) which "$file" ;;
   esac
 }
 
-me=`get_full_path $0`
+me=$(get_full_path "$0")
 
 # Script might have been renamed but assume mysql_<something>config<something>
-basedir=`echo $me | sed -e 's;/bin/mysql_.*config.*;;'`
+basedir=$(echo "$me" | sed -e 's;/bin/mysql_.*config.*;;')
 
 ldata='/var/lib/mysql'
 execdir='/usr/sbin'
@@ -85,12 +85,12 @@ bindir='/usr/bin'
 
 # If installed, search for the compiled in directory first (might be "lib64")
 pkglibdir='/usr/lib/x86_64-linux-gnu'
-pkglibdir_rel=`echo $pkglibdir | sed -e "s;^$basedir/;;"`
-fix_path pkglibdir $pkglibdir_rel lib/x86_64-linux-gnu/mysql lib/x86_64-linux-gnu
+pkglibdir_rel=$(echo $pkglibdir | sed -e "s;^$basedir/;;")
+fix_path pkglibdir "$pkglibdir_rel" lib/x86_64-linux-gnu/mysql lib/x86_64-linux-gnu
 
 plugindir='/usr/lib/mysql/plugin'
-plugindir_rel=`echo $plugindir | sed -e "s;^$basedir/;;"`
-fix_path plugindir $plugindir_rel lib/x86_64-linux-gnu/mysql/plugin lib/x86_64-linux-gnu/plugin
+plugindir_rel=$(echo $plugindir | sed -e "s;^$basedir/;;")
+fix_path plugindir "$plugindir_rel" lib/x86_64-linux-gnu/mysql/plugin lib/x86_64-linux-gnu/plugin
 
 pkgincludedir='/usr/include/mysql'
 if [ -f "$basedir/include/mysql/mysql.h" ]; then
@@ -131,25 +131,25 @@ for remove in DDBUG_OFF DSAFE_MUTEX DFORCE_INIT_OF_VARS \
 do
   # The first option we might strip will always have a space before it because
   # we set -I$pkgincludedir as the first option
-  cflags=`echo "$cflags"|sed -e "s/ -$remove  */ /g"` 
-  cxxflags=`echo "$cxxflags"|sed -e "s/ -$remove  */ /g"` 
+  cflags=$(echo "$cflags"|sed -e "s/ -$remove  */ /g") 
+  cxxflags=$(echo "$cxxflags"|sed -e "s/ -$remove  */ /g") 
 done
-cflags=`echo "$cflags"|sed -e 's/ *\$//'` 
-cxxflags=`echo "$cxxflags"|sed -e 's/ *\$//'` 
+cflags=$(echo "$cflags"|sed -e 's/ *\$//') 
+cxxflags=$(echo "$cxxflags"|sed -e 's/ *\$//') 
 
 # Same for --libs(_r)
 for remove in lmtmalloc static-libcxa i-static static-intel
 do
   # We know the strings starts with a space
-  libs=`echo "$libs"|sed -e "s/ -$remove  */ /g"` 
-  libs_r=`echo "$libs_r"|sed -e "s/ -$remove  */ /g"` 
-  embedded_libs=`echo "$embedded_libs"|sed -e "s/ -$remove  */ /g"` 
+  libs=$(echo "$libs"|sed -e "s/ -$remove  */ /g") 
+  libs_r=$(echo "$libs_r"|sed -e "s/ -$remove  */ /g") 
+  embedded_libs=$(echo "$embedded_libs"|sed -e "s/ -$remove  */ /g") 
 done
 
 # Strip trailing and ending space if any, and '+' (FIXME why?)
-libs=`echo "$libs" | sed -e 's;  \+; ;g' | sed -e 's;^ *;;' | sed -e 's; *\$;;'`
-libs_r=`echo "$libs_r" | sed -e 's;  \+; ;g' | sed -e 's;^ *;;' | sed -e 's; *\$;;'`
-embedded_libs=`echo "$embedded_libs" | sed -e 's;  \+; ;g' | sed -e 's;^ *;;' | sed -e 's; *\$;;'`
+libs=$(echo "$libs" | sed -e 's;  \+; ;g' | sed -e 's;^ *;;' | sed -e 's; *\$;;')
+libs_r=$(echo "$libs_r" | sed -e 's;  \+; ;g' | sed -e 's;^ *;;' | sed -e 's; *\$;;')
+embedded_libs=$(echo "$embedded_libs" | sed -e 's;  \+; ;g' | sed -e 's;^ *;;' | sed -e 's; *\$;;')
 
 usage () {
         cat <<EOF
@@ -188,7 +188,7 @@ while test $# -gt 0; do
         --version) echo "$version" ;;
         --embedded-libs | --embedded | --libmysqld-libs) echo "$embedded_libs" ;;
         --variable=*)
-          var=`echo "$1" | sed 's,^[^=]*=,,'`
+          var=$(echo "$1" | sed 's,^[^=]*=,,')
           case "$var" in
             pkgincludedir) echo "$pkgincludedir" ;;
             pkglibdir) echo "$pkglibdir" ;;

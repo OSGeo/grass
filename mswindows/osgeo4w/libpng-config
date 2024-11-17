@@ -13,8 +13,8 @@
 # Adopted for GRASS GIS by Huidae Cho
 
 prefix="${OSGEO4W_ROOT_MSYS}"
-version="$(sed '/^#define PNG_LIBPNG_VER_STRING/!d; s/^[^"]*"\|"//g' ${prefix}/include/libpng*/png.h)"
-dll_version="$(sed '/^#define PNG_LIBPNG_VER_DLLNUM/!d; s/^[^0-9]*\|[^0-9]*$//g' ${prefix}/include/libpng*/png.h)"
+version="$(sed '/^#define PNG_LIBPNG_VER_STRING/!d; s/^[^"]*"\|"//g' "${prefix}"/include/libpng*/png.h)"
+dll_version="$(sed '/^#define PNG_LIBPNG_VER_DLLNUM/!d; s/^[^0-9]*\|[^0-9]*$//g' "${prefix}"/include/libpng*/png.h)"
 exec_prefix="${prefix}"
 libdir="${prefix}/lib"
 includedir="${prefix}/include/libpng${dll_version}"
@@ -51,7 +51,7 @@ Known values for OPTION are:
   --version       print version information
 EOF
 
-    exit $1
+    exit "$1"
 }
 
 if test $# -eq 0; then
@@ -62,16 +62,16 @@ while test $# -gt 0; do
     case "$1" in
 
     --prefix)
-        echo ${prefix}
+        echo "${prefix}"
         ;;
 
     --version)
-        echo ${version}
+        echo "${version}"
         exit 0
         ;;
 
     --dll-version)
-        echo ${dll_version}
+        echo "${dll_version}"
         exit 0
         ;;
 
@@ -80,43 +80,43 @@ while test $# -gt 0; do
         ;;
 
     --ccopts)
-        echo ${ccopts}
+        echo "${ccopts}"
         ;;
 
     --cppflags)
-        echo ${cppflags}
+        echo "${cppflags}"
         ;;
 
     --cflags)
-        echo ${I_opts} ${cppflags} ${ccopts}
+        echo "${I_opts}" "${cppflags}" "${ccopts}"
         ;;
 
     --libdir)
-        echo ${libdir}
+        echo "${libdir}"
         ;;
 
     --libs)
-        echo ${libs}
+        echo "${libs}"
         ;;
 
     --I_opts)
-        echo ${I_opts}
+        echo "${I_opts}"
         ;;
 
     --L_opts)
-        echo ${L_opts}
+        echo "${L_opts}"
         ;;
 
     --R_opts)
-        echo ${R_opts}
+        echo "${R_opts}"
         ;;
 
     --ldopts)
-        echo ${ldopts}
+        echo "${ldopts}"
         ;;
 
     --ldflags)
-        echo ${ldopts} ${L_opts} ${R_opts} ${libs}
+        echo "${ldopts}" "${L_opts}" "${R_opts}" "${libs}"
         ;;
 
     --static)
