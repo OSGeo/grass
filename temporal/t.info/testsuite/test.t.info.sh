@@ -44,7 +44,6 @@ t.info -g type=raster input=prec_1
 t.info type=raster input=prec_2
 t.info -g type=raster input=prec_2
 
-
 t.register type=raster_3d -i input=precip_abs1 maps=prec_1,prec_2 start="2001-01-01" increment="20 years"
 t.info type=str3ds input=precip_abs1
 t.info -g type=str3ds input=precip_abs1
@@ -69,7 +68,6 @@ t.info type=vector input=lidar_abs_1
 t.info -g type=vector input=lidar_abs_1
 t.info type=vector input=lidar_abs_2
 t.info -g type=vector input=lidar_abs_2
-
 
 t.register type=raster -i input=pluies_nc maps=prec_1,prec_2 start="2001-01-01" increment="20 years"
 t.info type=strds input=pluies_nc

@@ -19,9 +19,9 @@ r.mapcalc --o expr="prec_4 = rand(0, 510)" -s
 r.mapcalc --o expr="prec_5 = rand(0, 300)" -s
 r.mapcalc --o expr="prec_6 = rand(0, 650)" -s
 
-n1=`g.tempfile pid=1 -d` # Only map names
-n2=`g.tempfile pid=2 -d` # Map names and start time
-n3=`g.tempfile pid=3 -d` # Map names start time and increment
+n1=$(g.tempfile pid=1 -d) # Only map names
+n2=$(g.tempfile pid=2 -d) # Map names and start time
+n3=$(g.tempfile pid=3 -d) # Map names start time and increment
 
 cat > "${n1}" << EOF
 prec_1
@@ -100,6 +100,6 @@ t.unregister --v type=raster file="${n1}"
 
 # @test of correct @failure handling
 t.register --o -i input=precip_abs8 maps=preac_1,prec_2 file="${n3}" # Maps and file set
-t.register --o -i input=precip_abs8 file="${n3}" # No relative unit set
+t.register --o -i input=precip_abs8 file="${n3}"                     # No relative unit set
 
 t.remove --v type=strds input=precip_abs8

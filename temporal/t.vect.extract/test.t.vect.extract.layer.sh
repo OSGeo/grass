@@ -34,8 +34,6 @@ t.vect.extract --o input=prec_observer where="start_time >= '2001-05-01'" expr="
 t.info type=stvds input=test_extract_3
 t.vect.univar input=test_extract_3 column=prec
 
-
-
 # @postprocess
 t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1

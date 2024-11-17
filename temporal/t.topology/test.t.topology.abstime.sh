@@ -23,12 +23,12 @@ r.mapcalc --o expr="C = 3"
 g.region s=70 n=90 w=10 e=130 b=10 t=50 res=10 res3=10 -p3 # overlap B
 r.mapcalc --o expr="D = 3"
 
-n1=`g.tempfile pid=1 -d`
-n2=`g.tempfile pid=2 -d`
-n3=`g.tempfile pid=3 -d`
-n4=`g.tempfile pid=4 -d`
-n5=`g.tempfile pid=5 -d`
-n6=`g.tempfile pid=6 -d`
+n1=$(g.tempfile pid=1 -d)
+n2=$(g.tempfile pid=2 -d)
+n3=$(g.tempfile pid=3 -d)
+n4=$(g.tempfile pid=4 -d)
+n5=$(g.tempfile pid=5 -d)
+n6=$(g.tempfile pid=6 -d)
 
 cat > "${n1}" << EOF
 prec_1
@@ -81,8 +81,6 @@ B|1990-06-05|1990-06-18
 C|1990-06-10|1990-06-13
 D|1990-06-16|1990-06-20
 EOF
-
-
 
 # The first @test
 # We create the space time raster inputs and register the raster maps with absolute time interval

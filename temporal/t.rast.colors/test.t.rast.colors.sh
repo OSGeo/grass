@@ -24,6 +24,5 @@ r.colors.out map=prec_2
 t.rast.colors input=precip_abs color=grey.log
 r.colors.out map=prec_3
 
-
 t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs

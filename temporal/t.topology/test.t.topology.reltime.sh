@@ -14,11 +14,11 @@ r.mapcalc --o expr="prec_4 = rand(0, 510)" -s
 r.mapcalc --o expr="prec_5 = rand(0, 300)" -s
 r.mapcalc --o expr="prec_6 = rand(0, 650)" -s
 
-n1=`g.tempfile pid=1 -d`
-n2=`g.tempfile pid=2 -d`
-n3=`g.tempfile pid=3 -d`
-n4=`g.tempfile pid=4 -d`
-n5=`g.tempfile pid=5 -d`
+n1=$(g.tempfile pid=1 -d)
+n2=$(g.tempfile pid=2 -d)
+n3=$(g.tempfile pid=3 -d)
+n4=$(g.tempfile pid=4 -d)
+n5=$(g.tempfile pid=5 -d)
 
 cat > "${n1}" << EOF
 prec_1
@@ -64,7 +64,6 @@ prec_4|2004|2004
 prec_5|2005|2005
 prec_6|2006|2007
 EOF
-
 
 # The first @test
 # We create the space time raster inputs and register the raster maps with relolute time interval

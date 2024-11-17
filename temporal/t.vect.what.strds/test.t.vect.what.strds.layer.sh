@@ -29,7 +29,7 @@ v.db.addtable map=soils table=soils_4 layer=4
 v.db.addtable map=soils table=soils_5 layer=5
 v.db.addtable map=soils table=soils_6 layer=6
 
-n1=`g.tempfile pid=1 -d`
+n1=$(g.tempfile pid=1 -d)
 
 cat > "${n1}" << EOF
 soils:1
@@ -50,7 +50,7 @@ t.rast.list input=sand_frac_abs_1 columns=name,start_time,end_time
 
 t.create --o type=strds temporaltype=absolute output=sand_frac_abs_2 title="A test" descr="A test"
 t.register -i type=raster input=sand_frac_abs_2 maps=sand_frac_1,sand_frac_2,sand_frac_3,sand_frac_4,sand_frac_5,sand_frac_6 \
-            start="2001-03-01 00:00:00" increment="1 months"
+    start="2001-03-01 00:00:00" increment="1 months"
 t.rast.list input=sand_frac_abs_2 columns=name,start_time,end_time
 
 # Start the @test
