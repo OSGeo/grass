@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 # This script tests r.colors and r.colors.out as well
 # as r3.colors and r3.colors.out which have the same code base
 # Color rules are set with r/r3.colors and exported using r/r3.colors.out
@@ -60,7 +61,7 @@ r3.colors -a map=volume_double_null rules=example3 && r3.colors.out --o map=volu
 r3.colors    map=volume_double_null rules=example4 && r3.colors.out --o map=volume_double_null rules=test_volume_double_example4.txt
 r3.colors -n map=volume_double_null volume=volume_double_null && r3.colors.out --o map=volume_double_null rules=test_volume_double_example4_inv.txt
 # Apply a raster color table to the volume map
-r3.colors    map=volume_double_null raster=test_elev_double   && r3.colors.out --o map=volume_double_null rules=test_volume_double_example5.txt
+r3.colors    map=volume_double_null raster=test_elev_double && r3.colors.out --o map=volume_double_null rules=test_volume_double_example5.txt
 
 # Test the removement the raster3d color table, a default color table will be created
 r3.colors -r map=volume_double_null && r3.colors.out --o map=volume_double_null rules=test_volume_double_default.txt
