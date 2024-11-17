@@ -16,12 +16,10 @@
 set -u
 # More set commands later on.
 
-if [ $# -eq 0 ]
-then
+if [ $# -eq 0 ]; then
     NUM_SERIALS=3
     NUM_PARALLELS=50
-elif [ $# -eq 2 ]
-then
+elif [ $# -eq 2 ]; then
     # Allow user to set a large number of processes.
     NUM_SERIALS=$3
     NUM_PARALLELS=$4
@@ -36,7 +34,7 @@ else
 fi
 
 # Remove maps at exit.
-cleanup () {
+cleanup() {
     EXIT_CODE=$?
     g.remove type=raster pattern="test_parallel_ser_*" -f --quiet
     g.remove type=raster pattern="test_parallel_par_*" -f --quiet
@@ -57,15 +55,13 @@ set -x
 # Since this is useful mostly for making sure the command works for this
 # script, so the command should be exactly the same.
 
-for i in `seq 1 $NUM_SERIALS`
-do
+for i in $(seq 1 "$NUM_SERIALS"); do
     r.import input="$DATA" output="test_parallel_ser_$i"
 done
 
 # Parallel
 
-for i in `seq 1 $NUM_PARALLELS`
-do
+for i in $(seq 1 "$NUM_PARALLELS"); do
     r.import input="$DATA" output="test_parallel_par_$i" &
 done
 
@@ -74,8 +70,7 @@ wait
 EXPECTED=$NUM_PARALLELS
 NUM=$(g.list type=raster pattern='test_parallel_par_*' mapset=. | wc -l)
 
-if [ ${NUM} -ne ${EXPECTED} ]
-then
+if [ "${NUM}" -ne "${EXPECTED}" ]; then
     echo "Parallel test: Got ${NUM} but expected ${EXPECTED} maps"
     exit 1
 fi
