@@ -23,17 +23,17 @@ for dllfile in "$@"; do
 
 	dllbase=${dllfile%.dll}
 	dllname=${dllbase#lib}
-	dllname=${dllname%.$VERSION}
+	dllname=${dllname%."$VERSION"}
 	defname=$dllname.def
 	libname=$dllname.lib
 
  	echo "$dllfile => $dllname"
 
-	(cd $dlldir; dumpbin "$DUMPBIN_EXPORT" $dllfile) |
+	(cd "$dlldir"; dumpbin "$DUMPBIN_EXPORT" "$dllfile") |
 		sed -nf mswindows/osgeo4w/mklibs.sed |
-		egrep -v "^[	 ]*(_+IMPORT_DESCRIPTOR_.*|_+NULL_IMPORT_DESCRIPTOR)$" >mswindows/osgeo4w/vc/${defname%$VERSION}
+		egrep -v "^[	 ]*(_+IMPORT_DESCRIPTOR_.*|_+NULL_IMPORT_DESCRIPTOR)$" >mswindows/osgeo4w/vc/"${defname%"$VERSION"}"
 
 	(cd mswindows/osgeo4w/vc ;
-	    lib -nologo -def:${defname} -subsystem:windows -machine:x64
-	    lib -nologo $libname || exit)
+	    lib -nologo -def:"${defname}" -subsystem:windows -machine:x64
+	    lib -nologo "$libname" || exit)
 done
