@@ -17,35 +17,34 @@
 ############# nothing to configure below ############
 
 # $1 is current path to GRASS.app/Contents/MacOS, defaults to /Applications
-if [ "$1" != "" ] ; then
-	GISBASE=$1
+if [ "$1" != "" ]; then
+    GISBASE=$1
 else
-	GISBASE="/Applications/GRASS-$GRASS_MMVER.app/Contents/MacOS"
+    GISBASE="/Applications/GRASS-$GRASS_MMVER.app/Contents/MacOS"
 fi
 
-GRASS_MMVER=`cut -d . -f 1-2 "$GISBASE/etc/VERSIONNUMBER"`
-GRASSVERSION=`cat "$GISBASE/etc/VERSIONNUMBER"`
+GRASS_MMVER=$(cut -d . -f 1-2 "$GISBASE/etc/VERSIONNUMBER")
+GRASSVERSION=$(cat "$GISBASE/etc/VERSIONNUMBER")
 HTMLDIR="$GISBASE_USER/Modules/docs/html"
 HTMLDIRG="$GISBASE_SYSTEM/Modules/docs/html"
 
-write_html_header()
-{
-# $1: filename
-# $2: page title
-# $3: is it main index
+write_html_header() {
+    # $1: filename
+    # $2: page title
+    # $3: is it main index
 
-echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">
+    echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">
 <html>
 <head>
  <title>$2</title>
  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
- <meta name=\"Author\" content=\"GRASS Development Team\">" > $1
-if [ "$3" ] ; then
-	echo " <meta name=\"AppleTitle\" content=\"$2\">
+ <meta name=\"Author\" content=\"GRASS Development Team\">" > "$1"
+    if [ "$3" ]; then
+        echo " <meta name=\"AppleTitle\" content=\"$2\">
  <meta name=\"AppleIcon\" content=\"GRASS-$GRASS_MMVER/grass_icon.png\">
- <meta name=\"robots\" content=\"anchors\">" >> $1
-fi
-echo " <link rel=\"stylesheet\" href=\"grassdocs.css\" type=\"text/css\">
+ <meta name=\"robots\" content=\"anchors\">" >> "$1"
+    fi
+    echo " <link rel=\"stylesheet\" href=\"grassdocs.css\" type=\"text/css\">
 </head>
 <body bgcolor=\"#FFFFFF\">
 
@@ -66,17 +65,16 @@ consulting companies.</p>
 Geographic Resources Analysis Support System (GRASS), an open source (GNU
 GPL'ed), image processing and geographic information system (GIS).</p>
 
-" >> $1
+" >> "$1"
 }
 
-write_html_footer()
-{
-# $1: filename
-echo "<hr class=\"header\">" >> $1
-echo "<p><a href=\"$GISBASE/docs/html/index.html\">Help Index</a> | <a href=\"$GISBASE/docs/html/full_index.html\">Full Index</a> | <a href=\"$HTMLDIR/addon_index.html\">Addon Index</a><br>" >> $1
-echo "&copy; 2003-2008 <a href=\"https://grass.osgeo.org\">GRASS Development Team</a></p>" >> $1
-echo "</body>" >> $1
-echo "</html>" >> $1
+write_html_footer() {
+    # $1: filename
+    echo '<hr class="header">' >> "$1"
+    echo "<p><a href=\"$GISBASE/docs/html/index.html\">Help Index</a> | <a href=\"$GISBASE/docs/html/full_index.html\">Full Index</a> | <a href=\"$HTMLDIR/addon_index.html\">Addon Index</a><br>" >> "$1"
+    echo '&copy; 2003-2008 <a href="https://grass.osgeo.org">GRASS Development Team</a></p>' >> "$1"
+    echo "</body>" >> "$1"
+    echo "</html>" >> "$1"
 }
 
 FULLINDEX=addon_index.html
@@ -91,24 +89,24 @@ cp -f "$GISBASE/docs/html/grass_logo.png" "$HTMLDIR/"
 cp -f "$GISBASE/docs/html/grass_icon.png" "$HTMLDIR/"
 
 #process all global HTML pages:
-if [ -d "$HTMLDIRG" ] ; then
-cd "$HTMLDIRG"
+if [ -d "$HTMLDIRG" ]; then
+    cd "$HTMLDIRG" || exit
 
-#get list of available GRASS modules:
-CMDLISTG=`ls -1 *.*.html 2> /dev/null | grep -v index.html | cut -d'.' -f1 | sort -u`
+    #get list of available GRASS modules:
+    CMDLISTG=$(ls -1 *.*.html 2> /dev/null | grep -v index.html | cut -d'.' -f1 | sort -u)
 else
-CMDLISTG=""
+    CMDLISTG=""
 fi
 
 #process all user HTML pages:
-cd "$HTMLDIR"
+cd "$HTMLDIR" || exit
 
 # don't really need to delete these, as removed global modules won't get indexed,
 # though old symlinks will accumulate.  I'm just worried about wildcard deletes.
 #rm -f global_*.html
 
 #get list of available GRASS modules:
-CMDLIST=`ls -1 *.*.html 2> /dev/null | grep -v index.html | cut -d'.' -f1 | sort -u`
+CMDLIST=$(ls -1 -- *.*.html 2> /dev/null | grep -v index.html | cut -d'.' -f1 | sort -u)
 
 #write main index:
 #echo "Generating HTML manual pages index (help system)..."
@@ -125,42 +123,38 @@ echo "</table>" >> $FULLINDEX
 # global commands:
 echo "<h3>Global addon command index:</h3>" >> $FULLINDEX
 echo "<table>" >> $FULLINDEX
-if [ "$CMDLISTG" = "" ] ; then
-  echo "<tr><td valign=\"top\"><td>[There are no global addon help pages.]</td></tr>" >> $FULLINDEX
+if [ "$CMDLISTG" = "" ]; then
+    echo '<tr><td valign="top"><td>[There are no global addon help pages.]</td></tr>' >> $FULLINDEX
 else
-  for i in $CMDLISTG
-  do
-    cd "$HTMLDIRG"
-    CMDLISTI="`ls -1 $i.*.html`"
-    cd "$HTMLDIR"
-    for i in $CMDLISTI
-    do
-      BASENAME=`basename $i .html`
-      SHORTDESC="`cat "$HTMLDIRG/$i" | awk '/NAME/,/SYNOPSIS/' | grep '<em>' | cut -d'-' -f2- | sed 's+^ ++g' | grep -vi 'SYNOPSIS' | head -n 1`"
-#      echo "<tr><td valign=\"top\"><a href=\"$HTMLDIRG/$i\">$BASENAME</a></td> <td>$SHORTDESC</td></tr>" >> $FULLINDEX
-      # make them local to user to simplify page links
-      echo "<tr><td valign=\"top\"><a href=\"global_$i\">$BASENAME</a></td> <td>$SHORTDESC</td></tr>" >> $FULLINDEX
-      ln -sf "$HTMLDIRG/$i" global_$i
+    for i in $CMDLISTG; do
+        cd "$HTMLDIRG" || exit
+        CMDLISTI="$(ls -1 -- "$i".*.html)"
+        cd "$HTMLDIR" || exit
+        for i in $CMDLISTI; do
+            BASENAME=$(basename "$i" .html)
+            SHORTDESC="$(cat "$HTMLDIRG/$i" | awk '/NAME/,/SYNOPSIS/' | grep '<em>' | cut -d'-' -f2- | sed 's+^ ++g' | grep -vi 'SYNOPSIS' | head -n 1)"
+            #      echo "<tr><td valign=\"top\"><a href=\"$HTMLDIRG/$i\">$BASENAME</a></td> <td>$SHORTDESC</td></tr>" >> $FULLINDEX
+            # make them local to user to simplify page links
+            echo "<tr><td valign=\"top\"><a href=\"global_$i\">$BASENAME</a></td> <td>$SHORTDESC</td></tr>" >> $FULLINDEX
+            ln -sf "$HTMLDIRG/$i" global_"$i"
+        done
     done
-  done
 fi
 echo "</table>" >> $FULLINDEX
 
 # user commands:
 echo "<h3>User addon command index:</h3>" >> $FULLINDEX
 echo "<table>" >> $FULLINDEX
-if [ "$CMDLIST" = "" ] ; then
-  echo "<tr><td valign=\"top\"><td>[There are no user addon help pages.]</td></tr>" >> $FULLINDEX
+if [ "$CMDLIST" = "" ]; then
+    echo '<tr><td valign="top"><td>[There are no user addon help pages.]</td></tr>' >> $FULLINDEX
 else
-  for i in $CMDLIST
-  do
-    for i in `ls -1 $i.*.html`
-    do
-      BASENAME=`basename $i .html`
-      SHORTDESC="`cat $i | awk '/NAME/,/SYNOPSIS/' | grep '<em>' | cut -d'-' -f2- | sed 's+^ ++g' | grep -vi 'SYNOPSIS' | head -n 1`"
-      echo "<tr><td valign="top"><a href=\"$i\">$BASENAME</a></td> <td>$SHORTDESC</td></tr>" >> $FULLINDEX
+    for i in $CMDLIST; do
+        for i in $(ls -1 -- "$i".*.html); do
+            BASENAME=$(basename "$i" .html)
+            SHORTDESC="$(cat "$i" | awk '/NAME/,/SYNOPSIS/' | grep '<em>' | cut -d'-' -f2- | sed 's+^ ++g' | grep -vi 'SYNOPSIS' | head -n 1)"
+            echo "<tr><td valign="top"><a href=\"$i\">$BASENAME</a></td> <td>$SHORTDESC</td></tr>" >> $FULLINDEX
+        done
     done
-  done
 fi
 echo "</table>" >> $FULLINDEX
 
@@ -169,9 +163,8 @@ write_html_footer $FULLINDEX
 
 # user redirects to app dir for main index files
 
-for i in index full_index display database general imagery misc postscript raster raster3D vector
-do
-echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">
+for i in index full_index display database general imagery misc postscript raster raster3D vector; do
+    echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">
 <html>
 <head>
  <title></title>
@@ -185,6 +178,6 @@ done
 
 # add Help Viewer links in user docs folder
 
-mkdir -p $HOME/Library/Documentation/Help/
-ln -sfh ../../GRASS/$GRASS_MMVER/Modules/docs/html $HOME/Library/Documentation/Help/GRASS-$GRASS_MMVER-addon
-ln -sfh $GISBASE/docs/html $HOME/Library/Documentation/Help/GRASS-$GRASS_MMVER
+mkdir -p "$HOME/Library/Documentation/Help/"
+ln -sfh "../../GRASS/$GRASS_MMVER/Modules/docs/html" "$HOME/Library/Documentation/Help/GRASS-$GRASS_MMVER-addon"
+ln -sfh "$GISBASE/docs/html" "$HOME/Library/Documentation/Help/GRASS-$GRASS_MMVER"
