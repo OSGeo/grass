@@ -336,9 +336,9 @@ for src; do
 
                     *[0-7])
                         mkdir_umask=$(
-                            expr $umask + 22 \
-                                - $umask % 100 % 40 + $umask % 20 \
-                                - $umask % 10 % 4 + $umask % 2
+                            expr "$umask" + 22 \
+                                - "$umask" % 100 % 40 + "$umask" % 20 \
+                                - "$umask" % 10 % 4 + "$umask" % 2
                         )
                         ;;
                     *) mkdir_umask=$umask,go-w ;;
