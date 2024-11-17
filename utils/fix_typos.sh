@@ -39,14 +39,14 @@
 if ! test -d fix_typos; then
     # Get our fork of codespell that adds --words-white-list and full filename support for -S option
     mkdir fix_typos
-    cd fix_typos
+    cd fix_typos || exit
     git clone https://github.com/rouault/codespell
-    cd codespell
+    cd codespell || exit
     git checkout gdal_improvements
     cd ..
     # Aggregate base dictionary + QGIS one + Debian Lintian one
     curl https://raw.githubusercontent.com/qgis/QGIS/master/scripts/spelling.dat | sed "s/:/->/" | grep -v "colour->" | grep -v "colours->" > qgis.txt
-    curl https://anonscm.debian.org/cgit/lintian/lintian.git/plain/data/spelling/corrections| grep "||" | grep -v "#" | sed "s/||/->/" > debian.txt
+    curl https://anonscm.debian.org/cgit/lintian/lintian.git/plain/data/spelling/corrections | grep "||" | grep -v "#" | sed "s/||/->/" > debian.txt
     cat codespell/data/dictionary.txt qgis.txt debian.txt | awk 'NF' > grassgis_dict.txt
     echo "difered->deferred" >> grassgis_dict.txt
     echo "differed->deferred" >> grassgis_dict.txt
@@ -70,7 +70,7 @@ WORDS_WHITE_LIST="$WORDS_WHITE_LIST,thru,parm,parms"
 
 MYPATH=$(pwd)
 
-touch $MYPATH/fix_typos/typos_whitelist.txt
-python3 $MYPATH/fix_typos/codespell/codespell.py -w -i 3 -q 2 -S $EXCLUDED_FILES \
-       -x $MYPATH/fix_typos/typos_whitelist.txt --words-white-list=$WORDS_WHITE_LIST \
-       -D $MYPATH/fix_typos/grassgis_dict.txt  .
+touch "$MYPATH"/fix_typos/typos_whitelist.txt
+python3 "$MYPATH"/fix_typos/codespell/codespell.py -w -i 3 -q 2 -S "$EXCLUDED_FILES" \
+    -x "$MYPATH"/fix_typos/typos_whitelist.txt --words-white-list=$WORDS_WHITE_LIST \
+    -D "$MYPATH"/fix_typos/grassgis_dict.txt .
