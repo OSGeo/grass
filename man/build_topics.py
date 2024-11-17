@@ -129,7 +129,8 @@ def build_topics(ext):
                         )
                     )
 
-            write_footer(keyfile, f"index.{ext}", year, template=ext)
+                write_footer(keyfile, f"index.{ext}", year, template=ext)
+
         if ext == "html":
             topicsfile.write("</ul>\n")
         write_footer(topicsfile, f"index.{ext}", year, template=ext)
