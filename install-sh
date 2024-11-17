@@ -215,7 +215,7 @@ if test -z "$dir_arg"; then
       else
 	u_plus_rw='% 200'
       fi
-      cp_umask=`expr '(' 777 - $mode % 1000 ')' $u_plus_rw`;;
+      cp_umask=$(expr '(' 777 - "$mode" % 1000 ')' "$u_plus_rw");;
     *)
       if test -z "$stripcmd"; then
 	u_plus_rw=
@@ -267,11 +267,11 @@ do
 	exit 1
       fi
       dstdir=$dst
-      dst=$dstdir/`basename "$src"`
+      dst=$dstdir/$(basename "$src")
       dstdir_status=0
     else
       # Prefer dirname, but fall back on a substitute if dirname fails.
-      dstdir=`
+      dstdir=$(
 	(dirname "$dst") 2>/dev/null ||
 	expr X"$dst" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
 	     X"$dst" : 'X\(//\)[^/]' \| \
@@ -295,7 +295,7 @@ do
 		   q
 		 }
 		 s/.*/./; q'
-      `
+      )
 
       test -d "$dstdir"
       dstdir_status=$?
@@ -309,7 +309,7 @@ do
       '')
 	# Create intermediate dirs using mode 755 as modified by the umask.
 	# This is like FreeBSD 'install' as of 1997-10-28.
-	umask=`umask`
+	umask=$(umask)
 	case $stripcmd.$umask in
 	  # Optimize common cases.
 	  *[2367][2367]) mkdir_umask=$umask;;
@@ -341,22 +341,22 @@ do
 	    tmpdir=${TMPDIR-/tmp}/ins$RANDOM-$$
 	    trap 'ret=$?; rmdir "$tmpdir/d" "$tmpdir" 2>/dev/null; exit $ret' 0
 
-	    if (umask $mkdir_umask &&
-		exec $mkdirprog $mkdir_mode -p -- "$tmpdir/d") >/dev/null 2>&1
+	    if (umask "$mkdir_umask" &&
+		exec $mkdirprog "$mkdir_mode" -p -- "$tmpdir/d") >/dev/null 2>&1
 	    then
 	      if test -z "$dir_arg" || {
 		   # Check for POSIX incompatibilities with -m.
 		   # HP-UX 11.23 and IRIX 6.5 mkdir -m -p sets group- or
 		   # other-writeable bit of parent directory when it shouldn't.
 		   # FreeBSD 6.1 mkdir -m -p sets mode of existing directory.
-		   ls_ld_tmpdir=`ls -ld "$tmpdir"`
+		   ls_ld_tmpdir=$(ls -ld "$tmpdir")
 		   case $ls_ld_tmpdir in
 		     d????-?r-*) different_mode=700;;
 		     d????-?--*) different_mode=755;;
 		     *) false;;
 		   esac &&
-		   $mkdirprog -m$different_mode -p -- "$tmpdir" && {
-		     ls_ld_tmpdir_1=`ls -ld "$tmpdir"`
+		   $mkdirprog -m"$different_mode" -p -- "$tmpdir" && {
+		     ls_ld_tmpdir_1=$(ls -ld "$tmpdir")
 		     test "$ls_ld_tmpdir" = "$ls_ld_tmpdir_1"
 		   }
 		 }
@@ -365,7 +365,7 @@ do
 	      rmdir "$tmpdir/d" "$tmpdir"
 	    else
 	      # Remove any dirs left behind by ancient mkdir implementations.
-	      rmdir ./$mkdir_mode ./-p ./-- 2>/dev/null
+	      rmdir "./$mkdir_mode" ./-p ./-- 2>/dev/null
 	    fi
 	    trap '' 0;;
 	esac;;
@@ -373,8 +373,8 @@ do
 
     if
       $posix_mkdir && (
-	umask $mkdir_umask &&
-	$doit_exec $mkdirprog $mkdir_mode -p -- "$dstdir"
+	umask "$mkdir_umask" &&
+	$doit_exec "$mkdirprog" "$mkdir_mode" -p -- "$dstdir"
       )
     then :
     else
@@ -394,7 +394,7 @@ do
       oIFS=$IFS
       IFS=/
       $posix_glob set -f
-      set fnord $dstdir
+      set fnord "$dstdir"
       shift
       $posix_glob set +f
       IFS=$oIFS
@@ -411,12 +411,12 @@ do
 	else
 	  if $posix_mkdir; then
 	    (umask=$mkdir_umask &&
-	     $doit_exec $mkdirprog $mkdir_mode -p -- "$dstdir") && break
+	     $doit_exec "$mkdirprog" "$mkdir_mode" -p -- "$dstdir") && break
 	    # Don't fail if two instances are running concurrently.
 	    test -d "$prefix" || exit 1
 	  else
 	    case $prefix in
-	      *\'*) qprefix=`echo "$prefix" | sed "s/'/'\\\\\\\\''/g"`;;
+	      *\'*) qprefix=$(echo "$prefix" | sed "s/'/'\\\\\\\\''/g");;
 	      *) qprefix=$prefix;;
 	    esac
 	    prefixes="$prefixes '$qprefix'"
@@ -427,7 +427,7 @@ do
 
       if test -n "$prefixes"; then
 	# Don't fail if two instances are running concurrently.
-	(umask $mkdir_umask &&
+	(umask "$mkdir_umask" &&
 	 eval "\$doit_exec \$mkdirprog $prefixes") ||
 	  test -d "$dstdir" || exit 1
 	obsolete_mkdir_used=true
@@ -436,10 +436,10 @@ do
   fi
 
   if test -n "$dir_arg"; then
-    { test -z "$chowncmd" || $doit $chowncmd "$dst"; } &&
-    { test -z "$chgrpcmd" || $doit $chgrpcmd "$dst"; } &&
+    { test -z "$chowncmd" || $doit "$chowncmd" "$dst"; } &&
+    { test -z "$chgrpcmd" || $doit "$chgrpcmd" "$dst"; } &&
     { test "$obsolete_mkdir_used$chowncmd$chgrpcmd" = false ||
-      test -z "$chmodcmd" || $doit $chmodcmd $mode "$dst"; } || exit 1
+      test -z "$chmodcmd" || $doit "$chmodcmd" "$mode" "$dst"; } || exit 1
   else
 
     # Make a couple of temp file names in the proper directory.
@@ -450,7 +450,7 @@ do
     trap 'ret=$?; rm -f "$dsttmp" "$rmtmp" && exit $ret' 0
 
     # Copy the file name to the temp name.
-    (umask $cp_umask && $doit_exec $cpprog "$src" "$dsttmp") &&
+    (umask "$cp_umask" && $doit_exec "$cpprog" "$src" "$dsttmp") &&
 
     # and set any options; do chmod last to preserve setuid bits.
     #
@@ -458,20 +458,20 @@ do
     # ignore errors from any of these, just make sure not to ignore
     # errors from the above "$doit $cpprog $src $dsttmp" command.
     #
-    { test -z "$chowncmd" || $doit $chowncmd "$dsttmp"; } &&
-    { test -z "$chgrpcmd" || $doit $chgrpcmd "$dsttmp"; } &&
-    { test -z "$stripcmd" || $doit $stripcmd "$dsttmp"; } &&
-    { test -z "$chmodcmd" || $doit $chmodcmd $mode "$dsttmp"; } &&
+    { test -z "$chowncmd" || $doit "$chowncmd" "$dsttmp"; } &&
+    { test -z "$chgrpcmd" || $doit "$chgrpcmd" "$dsttmp"; } &&
+    { test -z "$stripcmd" || $doit "$stripcmd" "$dsttmp"; } &&
+    { test -z "$chmodcmd" || $doit "$chmodcmd" "$mode" "$dsttmp"; } &&
 
     # If -C, don't bother to copy if it wouldn't change the file.
     if $copy_on_change &&
-       old=`LC_ALL=C ls -dlL "$dst"	2>/dev/null` &&
-       new=`LC_ALL=C ls -dlL "$dsttmp"	2>/dev/null` &&
+       old=$(LC_ALL=C ls -dlL "$dst"	2>/dev/null) &&
+       new=$(LC_ALL=C ls -dlL "$dsttmp"	2>/dev/null) &&
 
        eval "$initialize_posix_glob" &&
        $posix_glob set -f &&
-       set X $old && old=:$2:$4:$5:$6 &&
-       set X $new && new=:$2:$4:$5:$6 &&
+       set X "$old" && old=:$2:$4:$5:$6 &&
+       set X "$new" && new=:$2:$4:$5:$6 &&
        $posix_glob set +f &&
 
        test "$old" = "$new" &&
@@ -480,7 +480,7 @@ do
       rm -f "$dsttmp"
     else
       # Rename the file to the real destination.
-      $doit $mvcmd -f "$dsttmp" "$dst" 2>/dev/null ||
+      $doit "$mvcmd" -f "$dsttmp" "$dst" 2>/dev/null ||
 
       # The rename failed, perhaps because mv can't rename something else
       # to itself, or perhaps because mv is so ancient that it does not
@@ -493,9 +493,9 @@ do
 	# file should still install successfully.
 	{
 	  test ! -f "$dst" ||
-	  $doit $rmcmd -f "$dst" 2>/dev/null ||
-	  { $doit $mvcmd -f "$dst" "$rmtmp" 2>/dev/null &&
-	    { $doit $rmcmd -f "$rmtmp" 2>/dev/null; :; }
+	  $doit "$rmcmd" -f "$dst" 2>/dev/null ||
+	  { $doit "$mvcmd" -f "$dst" "$rmtmp" 2>/dev/null &&
+	    { $doit "$rmcmd" -f "$rmtmp" 2>/dev/null; :; }
 	  } ||
 	  { echo "$0: cannot unlink or rename $dst" >&2
 	    (exit 1); exit 1
@@ -503,7 +503,7 @@ do
 	} &&
 
 	# Now rename the file to the real destination.
-	$doit $mvcmd "$dsttmp" "$dst"
+	$doit "$mvcmd" "$dsttmp" "$dst"
       }
     fi || exit 1
 
