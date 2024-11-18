@@ -1,21 +1,27 @@
 from os.path import join, exists
+import ctypes
 import grass.lib.gis as libgis
 
-libgis.G_gisinit("")
 
-import grass.lib.vector as libvect
-import ctypes
+def _init_imports():
+    libgis.G_gisinit("")
+    global libvect, VTYPE, GrassError, must_be_open, Location, _GEOOBJ, read_line, read_next_line, _Area, Info, Bbox, Cats, Ilist
 
-# import pygrass modules
-from grass.pygrass.vector.vector_type import VTYPE
-from grass.pygrass.errors import GrassError, must_be_open
-from grass.pygrass.gis import Location
+    import grass.lib.vector as libvect
+    from grass.pygrass.vector.vector_type import VTYPE
+    from grass.pygrass.errors import GrassError, must_be_open
+    from grass.pygrass.gis import Location
+    from grass.pygrass.vector.geometry import (
+        GEOOBJ as _GEOOBJ,
+        read_line,
+        read_next_line,
+    )
+    from grass.pygrass.vector.geometry import Area as _Area
+    from grass.pygrass.vector.abstract import Info
+    from grass.pygrass.vector.basic import Bbox, Cats, Ilist
 
-from grass.pygrass.vector.geometry import GEOOBJ as _GEOOBJ
-from grass.pygrass.vector.geometry import read_line, read_next_line
-from grass.pygrass.vector.geometry import Area as _Area
-from grass.pygrass.vector.abstract import Info
-from grass.pygrass.vector.basic import Bbox, Cats, Ilist
+
+_init_imports()
 
 
 _NUMOF = {

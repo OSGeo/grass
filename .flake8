@@ -55,9 +55,8 @@ per-file-ignores =
     python/grass/pydispatch/saferef.py: F821
     # C wrappers call libgis.G_gisinit before importing other modules.
     # TODO: Is this really needed?
-    python/grass/pygrass/vector/__init__.py: E402
     python/grass/pygrass/raster/__init__.py: E402
-    python/grass/pygrass/vector/__init__.py: E402
+    python/grass/pygrass/vector/__init__.py: E501
     python/grass/pygrass/raster/category.py: E721
     python/grass/pygrass/utils.py: E402
     python/grass/temporal/abstract_space_time_dataset.py: E722
