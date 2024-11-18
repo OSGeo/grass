@@ -1,7 +1,7 @@
 """
 @package wxplot.base
 
-@brief Base classes for iinteractive plotting using PyPlot
+@brief Base classes for interactive plotting using PyPlot
 
 Classes:
  - base::PlotIcons

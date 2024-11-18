@@ -580,7 +580,7 @@ class DoubleMapPanel(MapPanelBase):
     It is expected that derived class will call _bindWindowsActivation()
     when both map windows will be initialized.
 
-    Drived class should have method GetMapToolbar() returns toolbar
+    Derived classes should have method GetMapToolbar() returns toolbar
     which has methods SetActiveMap() and Enable().
 
     @note To access maps use getters only
@@ -605,7 +605,7 @@ class DoubleMapPanel(MapPanelBase):
         r"""
 
         \a firstMap is set as active (by assign it to \c self.Map).
-        Derived class should assging to \c self.MapWindow to make one
+        Derived class should assigning to \c self.MapWindow to make one
         map window current by default.
 
         :param parent: gui parent

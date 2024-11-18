@@ -193,7 +193,7 @@ class ProfileFrame(BasePlotFrame):
         # title of window
         self.ptitle = _("Profile of")
 
-        # Initialize lattitude-longitude geodesic distance calculation
+        # Initialize latitude-longitude geodesic distance calculation
         if self._is_lat_lon_proj and haveCtypes:
             gislib.G_begin_distance_calculations()
 

@@ -1972,7 +1972,7 @@ class PsMapBufferedWindow(wx.Window):
                         pdcType = "rect"
                         lineCoords = None
                         if r[2] < 2 or r[3] < 2:
-                            # to avoid strange behaviour
+                            # to avoid strange behavior
                             return
 
                     self.Draw(
