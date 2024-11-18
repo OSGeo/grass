@@ -31,7 +31,7 @@ jobs:
           # list of files that changed across commits
           fetch-depth: 0
       - name: Lint code base
-        uses: super-linter/super-linter/slim@b92721f792f381cedc002ecdbb9847a15ece5bb8 # v7.1.0
+        uses: super-linter/super-linter/slim@e1cb86b6e8d119f789513668b4b30bf17fe1efe4 # v7.2.0
         env:
           DEFAULT_BRANCH: main
           # To report GitHub Actions status checks
