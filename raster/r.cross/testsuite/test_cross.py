@@ -53,7 +53,7 @@ class TestRCross(TestCase):
         # Parse r.category output
         category_output = category_module.outputs.stdout.strip().split("\n")
         actual_categories = {
-            int(line.split("\t")[0]): line.split("\t")[1]
+            int(line.split("\t")[0]): line.split("\t")[1].strip()
             for line in category_output
             if "\t" in line
         }
@@ -100,7 +100,7 @@ class TestRCross(TestCase):
 
         category_output = category_module.outputs.stdout.strip().split("\n")
         actual_categories = {
-            int(line.split("\t")[0]): line.split("\t")[1]
+            int(line.split("\t")[0]): line.split("\t")[1].strip()
             for line in category_output
             if "\t" in line
         }
