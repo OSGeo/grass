@@ -485,7 +485,7 @@ class ProfileFrame(BasePlotFrame):
                 statstr += "median: %f\n" % np.median(a)
                 statstr += "distance along transect: %f\n\n" % self.transect_length
                 message.append(statstr)
-            except (ValueError, TypeError, KeyError):
+            except (ValueError, TypeError, KeyError, IndexError):
                 pass
 
         stats = PlotStatsFrame(self, id=wx.ID_ANY, message=message, title=title)
