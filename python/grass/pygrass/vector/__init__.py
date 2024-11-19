@@ -2,25 +2,24 @@ from os.path import join, exists
 import grass.lib.gis as libgis
 
 
-def _init_imports():
-    libgis.G_gisinit("")
-    global ctypes, libvect, VTYPE, GrassError, must_be_open, Location, _GEOOBJ, read_line, read_next_line, _Area, Info, Bbox, Cats, Ilist
-    import ctypes
-    import grass.lib.vector as libvect
-    from grass.pygrass.vector.vector_type import VTYPE
-    from grass.pygrass.errors import GrassError, must_be_open
-    from grass.pygrass.gis import Location
-    from grass.pygrass.vector.geometry import (
-        GEOOBJ as _GEOOBJ,
-        read_line,
-        read_next_line,
-    )
-    from grass.pygrass.vector.geometry import Area as _Area
-    from grass.pygrass.vector.abstract import Info
-    from grass.pygrass.vector.basic import Bbox, Cats, Ilist
+# flake8: noqa: E402
+libgis.G_gisinit("")
 
+import ctypes
+import grass.lib.vector as libvect
+from grass.pygrass.vector.vector_type import VTYPE
+from grass.pygrass.errors import GrassError, must_be_open
+from grass.pygrass.gis import Location
+from grass.pygrass.vector.geometry import (
+    GEOOBJ as _GEOOBJ,
+    read_line,
+    read_next_line,
+)
+from grass.pygrass.vector.geometry import Area as _Area
+from grass.pygrass.vector.abstract import Info
+from grass.pygrass.vector.basic import Bbox, Cats, Ilist
 
-_init_imports()
+# flake8: qa
 
 
 _NUMOF = {
