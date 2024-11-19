@@ -60,20 +60,14 @@ from gui_core.wrap import (
 )
 
 import grass.script as gs
+from grass.pydispatch.signal import Signal
 
 rinwms_path = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
 if rinwms_path not in sys.path:
     sys.path.append(rinwms_path)
 
-
-def init_imports():
-    global WMSDriversInfo, Srs, Signal
-    from wms_base import WMSDriversInfo
-    from srs import Srs
-    from grass.pydispatch.signal import Signal
-
-
-init_imports()
+from wms_base import WMSDriversInfo  # noqa:E402
+from srs import Srs  # noqa:E402
 
 
 class WSPanel(wx.Panel):
