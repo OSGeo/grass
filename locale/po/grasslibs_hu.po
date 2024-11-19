@@ -8813,14 +8813,3 @@ msgstr ""
 #, c-format
 msgid "[%s]: No such color"
 msgstr "[%s]: Nincs ilyen szín"
-
-#, fuzzy
-#~ msgid "Map <{}> not found in current mapset"
-#~ msgstr "<%s> térkép nincs az aktuális térképcsoportban"
-
-#, fuzzy, python-brace-format
-#~ msgid "Mapset <{mapset}> is the current mapset."
-#~ msgstr "<%s> térképcsoport nem az  aktuális térképcsoport"
-
-#~ msgid "The error message: %s"
-#~ msgstr "A hibaüzenet: %s"

@@ -67446,11 +67446,3 @@ msgstr ""
 #, python-format
 msgid "Generating output raster map <%s>..."
 msgstr ""
-
-#, fuzzy
-#~ msgid "Input raster 1"
-#~ msgstr "உள்ளீடு"
-
-#, fuzzy
-#~ msgid "JSON output"
-#~ msgstr "வெளியீடு"

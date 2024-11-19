@@ -8813,13 +8813,3 @@ msgstr ""
 #, c-format
 msgid "[%s]: No such color"
 msgstr ""
-
-#, python-format
-#~ msgid "Parameter '%(name)s' (%(desc)s) is missing."
-#~ msgstr "মানদণ্ড '%(name)s' (%(desc)s) টি অনুপস্থিত।"
-
-#~ msgid "<required>"
-#~ msgstr "<required>"
-
-#~ msgid "color"
-#~ msgstr "বর্ণ"

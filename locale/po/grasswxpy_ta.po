@@ -14950,10 +14950,6 @@ msgstr ""
 msgid "Set computational region extent interactively"
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
-msgstr ""
-
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr ""
@@ -19663,17 +19659,3 @@ msgstr ""
 #: ../gui/wxpython/psmap/frame.py:2711
 msgid "labels: "
 msgstr ""
-
-#, fuzzy, python-format
-#~ msgid "Unable to rename location: %s"
-#~ msgstr "'%s' கோப்பை உருவாக்க முடியவில்லை\n"
-
-#, python-format
-#~ msgid "Invalid map size %d,%d\n"
-#~ msgstr "தவறான வரைபட அளவு %d, %d\n"
-
-#~ msgid "GRASS GIS Data Catalog"
-#~ msgstr "GRASS GIS தகவல் அட்டவணை"
-
-#~ msgid "Search:"
-#~ msgstr "தேடு:"

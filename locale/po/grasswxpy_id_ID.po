@@ -14937,10 +14937,6 @@ msgstr ""
 msgid "Set computational region extent interactively"
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
-msgstr ""
-
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr ""
@@ -19649,31 +19645,3 @@ msgstr ""
 #: ../gui/wxpython/psmap/frame.py:2711
 msgid "labels: "
 msgstr ""
-
-#, fuzzy
-#~ msgid "The copied layer needs to be reprojected:"
-#~ msgstr "Layer yang akan dihapus"
-
-#, fuzzy
-#~ msgid "Kriging"
-#~ msgstr "Tiling "
-
-#, fuzzy
-#~ msgid "Export variance map as well: "
-#~ msgstr "Ekspor peta raster "
-
-#, fuzzy
-#~ msgid "Ready."
-#~ msgstr "Muat-ulang"
-
-#, fuzzy
-#~ msgid ":"
-#~ msgstr "X:"
-
-#, fuzzy
-#~ msgid "Block size:"
-#~ msgstr "Tema ikon:"
-
-#, fuzzy
-#~ msgid "Model: "
-#~ msgstr "Mode"

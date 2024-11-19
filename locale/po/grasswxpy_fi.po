@@ -14975,10 +14975,6 @@ msgstr ""
 msgid "Set computational region extent interactively"
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
-msgstr ""
-
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr ""
@@ -19696,32 +19692,3 @@ msgstr ""
 #: ../gui/wxpython/psmap/frame.py:2711
 msgid "labels: "
 msgstr ""
-
-#~ msgid "Location Name:"
-#~ msgstr "Paikan Nimi:"
-
-#, fuzzy
-#~ msgid "(Un)dock Map Display"
-#~ msgstr "Karttanäyttö"
-
-#, fuzzy
-#~ msgid "Unable to display the map"
-#~ msgstr "Vektorikarttaa ei voida päivittää."
-
-#~ msgid "layer"
-#~ msgstr "taso"
-
-#~ msgid "style"
-#~ msgstr "tyyli"
-
-#~ msgid "Ready."
-#~ msgstr "Valmis."
-
-#~ msgid "Repository"
-#~ msgstr "Etäkirjasto"
-
-#~ msgid "Location Title:"
-#~ msgstr "Paikan Otsikko:"
-
-#~ msgid "Location <%s> created"
-#~ msgstr "Paikka <%s> luotu"

@@ -67663,27 +67663,3 @@ msgstr ""
 #, python-format
 msgid "Generating output raster map <%s>..."
 msgstr ""
-
-#, fuzzy
-#~ msgid "Input raster 1"
-#~ msgstr "Input szín trékép neve"
-
-#, fuzzy
-#~ msgid "Name for output vector gridded spatial units"
-#~ msgstr "Output VRML fájl neve"
-
-#, fuzzy
-#~ msgid "Name for output plot of model feature importances"
-#~ msgstr "Input szín trékép neve"
-
-#, fuzzy
-#~ msgid "Categories of basemap A to be used"
-#~ msgstr "Input szín trékép neve"
-
-#, fuzzy
-#~ msgid "Categories of basemap B to be used"
-#~ msgstr "Input szín trékép neve"
-
-#, fuzzy
-#~ msgid "JSON output"
-#~ msgstr "Output"
