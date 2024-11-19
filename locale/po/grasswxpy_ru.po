@@ -13975,7 +13975,7 @@ msgid "Zoom to saved region extents"
 msgstr "Задать масштаб до размера сохранённого фрагмента"
 
 #: ../gui/wxpython/mapwin/buffered.py:2103
-msgid "Set compulational region from named region"
+msgid "Set computational region from named region"
 msgstr "Задать расчётный фрагмент от именованного фрагмента"
 
 #: ../gui/wxpython/mapwin/buffered.py:2114
@@ -15414,7 +15414,7 @@ msgstr "Ошибка: "
 
 #: ../gui/wxpython/core/gcmd.py:504
 #, python-format
-msgid "Unable to exectute command: '%s'"
+msgid "Unable to execute command: '%s'"
 msgstr "Не удалось выполнить команду: «%s»"
 
 #: ../gui/wxpython/core/utils.py:50
@@ -15492,7 +15492,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/menutree.py:155
 #, python-format
-msgid "Unknow tag %s"
+msgid "Unknown tag %s"
 msgstr "Неизвестный тег %s"
 
 #: ../gui/wxpython/core/debug.py:46
@@ -19344,19 +19344,19 @@ msgid "Statistics is not support for DBF tables."
 msgstr "Статистика для таблиц DBF не поддерживается."
 
 #: ../gui/wxpython/dbmgr/base.py:4062
-msgid "Unable to calculte statistics."
+msgid "Unable to calculate statistics."
 msgstr "Не удалось вычислить статистику."
 
 #: ../gui/wxpython/dbmgr/base.py:4071
 #, python-format
 msgid ""
-"Unable to calculte statistics. Invalid number of lines %d (should be %d)."
+"Unable to calculate statistics. Invalid number of lines %d (should be %d)."
 msgstr ""
 "Не удалось вычислить статистику. Недопустимое количество линий %d (должно "
 "быть %d)."
 
 #: ../gui/wxpython/dbmgr/base.py:4098
-msgid "Unable to calculte standard deviation."
+msgid "Unable to calculate standard deviation."
 msgstr "Не удалось рассчитать стандартное отклонение."
 
 #: ../gui/wxpython/dbmgr/base.py:4106
@@ -22052,10 +22052,10 @@ msgstr "подписи:"
 #~ msgid "Georectifier manual"
 #~ msgstr "Руководство для инструмента геопривязки"
 
-#~ msgid "Systematic contiguos"
+#~ msgid "Systematic contiguous"
 #~ msgstr "Систематическая непрерывная выборка"
 
-#~ msgid "Systematic non contiguos"
+#~ msgid "Systematic non contiguous"
 #~ msgstr "Систематическая несвязная выборка"
 
 #, python-brace-format

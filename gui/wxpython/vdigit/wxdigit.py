@@ -667,7 +667,7 @@ class IVDigit:
         ltype = Vect_read_line(self.poMapInfo, None, None, ln_id)
 
         if ltype == GV_CENTROID:
-            # TODO centroid opttimization, can be edited also its area -> it
+            # TODO centroid optimization, can be edited also its area -> it
             # will appear two times in new_ lists
             return self._getCentroidAreaBboxCats(ln_id)
         return [self._getBbox(ln_id)], [self._getLineAreasCategories(ln_id)]

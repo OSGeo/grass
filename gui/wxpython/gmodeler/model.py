@@ -161,7 +161,7 @@ class Model:
                     self.canvas.parent.DefineCondition(mo)
 
     def Normalize(self):
-        # check for inconsistecies
+        # check for inconsistencies
         for idx in range(1, len(self.items)):
             if not self.items[idx].GetBlock() and isinstance(
                 self.items[idx - 1], ModelLoop
@@ -525,7 +525,7 @@ class Model:
     def _substituteFile(self, item, params=None, checkOnly=False):
         """Substitute variables in command file inputs
 
-        :param bool checkOnly: tuble - True to check variable, don't touch files
+        :param bool checkOnly: True to check variable, don't touch files
 
         :return: list of undefined variables
         """
@@ -770,7 +770,7 @@ class Model:
                     p["value"] = ""
 
     def DeleteIntermediateData(self, log):
-        """Detele intermediate data"""
+        """Delete intermediate data"""
         rast, vect, rast3d, msg = self.GetIntermediateData()
 
         if rast:
@@ -3736,5 +3736,5 @@ class ModelParamDialog(wx.Dialog):
         return errList
 
     def DeleteIntermediateData(self) -> bool:
-        """Check if to detele intermediate data"""
+        """Check if to delete intermediate data"""
         return bool(self.interData.IsShown() and self.interData.IsChecked())

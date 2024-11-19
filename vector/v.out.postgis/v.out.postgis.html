@@ -39,7 +39,7 @@ PostGIS Topology related options (relevant only for <b>-l</b> flag):
   <li><tt>TOPO_TOLERANCE=&lt;value&gt;</tt> - tolerance for PostGIS
   Topology schema,
   see <a href="http://www.postgis.net/docs/manual-2.0/CreateTopology.html">CreateTopology</a>
-  function for defails, default: <tt>0</tt></li>
+  function for details, default: <tt>0</tt></li>
   <li><tt>TOPO_GEO_ONLY=YES|NO</tt> - store in PostGIS Topology schema
   only data relevant to Topo-Geo data model,
   default: <tt>NO</tt></li>
@@ -90,7 +90,7 @@ vector map is 3D. If <b>-2</b> flag is given then the output is always
 
 <p>
 Multigeometries are not currently supported. Features with the same
-category are exported as multiple singe features.
+category are exported as multiple single features.
 
 <p>
 <em>v.out.postgis</em> also allows exporting vector features as
@@ -154,7 +154,7 @@ In this case GRASS vector data are exported to PostGIS database using
 OGR library, namely using PostgreSQL driver. Contrary to
 the <em><a href="v.out.ogr.html">v.out.ogr</a></em>
 module, <em>v.out.postgis</em> is using directly PostGIS data provider
-which is part of GRASS vector engine. Beside
+which is part of GRASS vector engine. Besides
 that, <em>v.out.postgis</em> is optimized for PostGIS export including
 topological access to the data.
 
