@@ -16,22 +16,17 @@ from jinja2 import Template
 from pathlib import Path
 
 
-def path_setup():
-    sys.path.append(str(Path.cwd()))
-    sys.path.append("%s/.." % (str(Path.cwd())))
+sys.path.append(str(Path.cwd()))
+sys.path.append("%s/.." % (str(Path.cwd())))
 
 
-def import_dependencies():
-    import grass.lib.gis as libgis
-    import grass.lib.raster as libraster
-    import grass.script as gs
-    import ctypes
+# flake8: noqa: E402
+import grass.lib.gis as libgis
+import grass.lib.raster as libraster
+import grass.script as gs
+import ctypes
 
-    return libgis, libraster, gs, ctypes
-
-
-path_setup()
-libgis, libraster, gs, ctypes = import_dependencies()
+# flake8: qa
 
 
 def test__RasterSegment_value_access__if():
