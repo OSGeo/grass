@@ -15220,10 +15220,6 @@ msgstr ""
 msgid "Set computational region extent interactively"
 msgstr "Számítási régió interaktív beállítása"
 
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
-msgstr "Számítási régió beállítása névvel bíró régióval"
-
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr "Számítási régió mentése névvel bíró régióba"

@@ -15316,10 +15316,6 @@ msgstr "Nastavit výpočetní region podle aktuálního okna"
 msgid "Set computational region extent interactively"
 msgstr "Nastavit výpočetní region interaktivně"
 
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
-msgstr "Nastavit výpočetní region podle pojmenovaného regionu"
-
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr "Uložit výpočetní region jako pojmenovaný region"

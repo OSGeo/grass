@@ -16173,10 +16173,6 @@ msgstr "Задайте охват расчётного фрагмента из �
 msgid "Set computational region extent interactively"
 msgstr "Задайте охват расчётного фрагмента в интерактивном режиме"
 
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
-msgstr "Задайте охват расчётного фрагмента из именованного фрагмента"
-
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr "Сохраните охват расчётного фрагмента из именованного фрагмента"
@@ -22051,12 +22047,6 @@ msgstr "подписи:"
 
 #~ msgid "Georectifier manual"
 #~ msgstr "Руководство для инструмента геопривязки"
-
-#~ msgid "Systematic contiguous"
-#~ msgstr "Систематическая непрерывная выборка"
-
-#~ msgid "Systematic non contiguous"
-#~ msgstr "Систематическая несвязная выборка"
 
 #, python-brace-format
 #~ msgid ""
