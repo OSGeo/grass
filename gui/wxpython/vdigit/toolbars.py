@@ -705,7 +705,6 @@ class VDigitToolbar(BaseToolbar):
 
     def OnAdditionalToolMenu(self, event):
         """Menu for additional tools"""
-        point = wx.GetMousePosition()
         toolMenu = Menu()
 
         for label, itype, handler, desc in (
