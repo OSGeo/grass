@@ -68574,3 +68574,532 @@ msgstr ""
 #, python-format
 msgid "Generating output raster map <%s>..."
 msgstr ""
+
+#, fuzzy
+#~ msgid "Name of training vector map"
+#~ msgstr "벡터 지도의 이름"
+
+#, fuzzy
+#~ msgid "layer name or number to use for data"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "layer number/name for the training layer"
+#~ msgstr "주제도 제작을 위한 레이어 번호 또는 이름"
+
+#, fuzzy
+#~ msgid "layer number/name for the ML results"
+#~ msgstr "레이어 번호 또는 이름(쓰기용)"
+
+#, fuzzy
+#~ msgid "number of jobs to use during the domain exploration"
+#~ msgstr "새 영역 내 열의 개수"
+
+#, fuzzy
+#~ msgid "Export the classify results to raster maps"
+#~ msgstr "래스터 지도의 통계를 보고합니다"
+
+#, fuzzy
+#~ msgid "Test different classification methods"
+#~ msgstr "감독 분류"
+
+#, fuzzy
+#~ msgid "append the classification results"
+#~ msgstr "감독 분류"
+
+#, fuzzy
+#~ msgid "Vector output stream"
+#~ msgstr "출력 래스터 지도를 위한 이름"
+
+#, fuzzy
+#~ msgid "Flow accumulation raster"
+#~ msgstr "출력 3차원 흐름누적 래스터 지도를 위한 이름"
+
+#, fuzzy
+#~ msgid "Averaging distance [map units]"
+#~ msgstr "지도 단위의 길이"
+
+#, fuzzy
+#~ msgid "Draws the boxplot of the raster maps of a space-time raster dataset"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "input space-time raster dataset"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Resolution of plot"
+#~ msgstr "해상도만 추측합니다"
+
+#, fuzzy
+#~ msgid "Font size of labels"
+#~ msgstr "글꼴크기"
+
+#, fuzzy
+#~ msgid "Date format"
+#~ msgstr "테이블 포맷"
+
+#, fuzzy
+#~ msgid "density"
+#~ msgstr "조밀화"
+
+#, fuzzy
+#~ msgid "Name of the column containing unique ID of spatial units"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Name of the column containing response variable"
+#~ msgstr "분절 규칙을 포함하는 파일의 이름"
+
+#, fuzzy
+#~ msgid "Input raster 1"
+#~ msgstr "입력파일"
+
+#, fuzzy
+#~ msgid "Input distance raster (optional)"
+#~ msgstr "감독 분류"
+
+#, fuzzy
+#~ msgid "Spatial resolution of output weighting layer"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Output weighting layer name"
+#~ msgstr "출력 기반 이름"
+
+#, fuzzy
+#~ msgid "Name for output vector gridded spatial units"
+#~ msgstr "출력 벡터 지도를 위한 이름"
+
+#, fuzzy
+#~ msgid "Name for output plot of model feature importances"
+#~ msgstr "보고서를 보관할 출력 파일을 위한 이름"
+
+#, fuzzy
+#~ msgid "Name for output file with log of the random forest run"
+#~ msgstr "보고서를 보관할 출력 파일을 위한 이름"
+
+#, fuzzy
+#~ msgid "Categories of basemap A to be used"
+#~ msgstr "보여질 래스터 지도의 이름"
+
+#, fuzzy
+#~ msgid "Categories of basemap B to be used"
+#~ msgstr "보여질 래스터 지도의 이름"
+
+#, fuzzy
+#~ msgid "Number of cores to be used for the parallel process"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Feature selection and tuning"
+#~ msgstr "어떤 피처도 선택하지 않았으므로 수정할 것이 없습니다"
+
+#~ msgid "Location:"
+#~ msgstr "로케이션:"
+
+#~ msgid ""
+#~ "Remove all registered maps from the temporal and also from the spatial "
+#~ "database"
+#~ msgstr "시간과 공간 데이터베이스로부터 모든 등록된 지도를 제거합니다"
+
+#, fuzzy
+#~ msgid ""
+#~ "Type of raster map to be created / Storage type for resultant raster map"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Footprint of the data as vector map"
+#~ msgstr "점 %d개를 벡터 지도에 저장했습니다. "
+
+#, fuzzy
+#~ msgid "Name or IP of server to be connected"
+#~ msgstr "생성될 점의 개수"
+
+#, fuzzy
+#~ msgid "Name of input raster map(s) used by GRASS script"
+#~ msgstr "마스크로 쓸 래스터 지도의 이름"
+
+#, fuzzy
+#~ msgid "Name of input vector map(s) used by GRASS script"
+#~ msgstr "편집할 벡터 지도의 이름"
+
+#, fuzzy
+#~ msgid "band reference"
+#~ msgstr "차이"
+
+#, fuzzy
+#~ msgid "Upgrades the version of a space time dataset (TGRASS DB)."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "print log file to file?"
+#~ msgstr "파일로 쓸 수 없습니다"
+
+#, fuzzy
+#~ msgid "Output buffer map"
+#~ msgstr "출력 지도"
+
+#, fuzzy
+#~ msgid "JSON output"
+#~ msgstr "출력"
+
+#~ msgid "The number of points to allocate"
+#~ msgstr "할당할 점의 개수"
+
+#~ msgid "Report information about input raster and exit"
+#~ msgstr "입력 래스터에 관한 정보를 보고하고 종료합니다"
+
+#, fuzzy
+#~ msgid "No band reference assigned to <{}>"
+#~ msgstr "레이어 <%s>에 할당된 테이블이 없습니다"
+
+#, fuzzy
+#~ msgid "Unable to assign/dissociate band reference. {}"
+#~ msgstr "OGR 공간 참조를 생성할 수 없습니다"
+
+#, fuzzy
+#~ msgid "Name of raster map to import by actinia"
+#~ msgstr "보고에 쓰일 래스터 지도의 이름"
+
+#~ msgid ""
+#~ "Processing all selected output files will require %d bytes of disk space "
+#~ "for temp files"
+#~ msgstr ""
+#~ "모든 선택된 출력 파일들을 처리하려면 임시 파일을 위한 %d 바이트의 디스크 "
+#~ "공간이 필요합니다"
+
+#~ msgid "Can't get WKT-style parameter string"
+#~ msgstr "WKT 형식의 매개변수 문자열을 얻을 수 없습니다"
+
+#~ msgid "invalid"
+#~ msgstr "무효합니다"
+
+#, fuzzy
+#~ msgid "No output requested"
+#~ msgstr "출력 래스터 지도의 이름"
+
+#, fuzzy
+#~ msgid "Only 'terrain' points output vector map"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Unable to create 3D raster <%s>"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Error writing cell (%d,%d,%d) with value %f, nrows = %d"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Name for output 2D/3D raster map"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid ""
+#~ "Attribute column containing z coordinates (only for 3D interpolation "
+#~ "based on 2D point layer)"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Number of horizontal lags"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Nugget effect of horizontal variogram"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Sill of horizontal variogram"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Sill of vertical variogram"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Range of horizontal variogram"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Range of vertical variogram"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid ""
+#~ "Number of horizontal pieces must be at least 1. Default value will be "
+#~ "used..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid ""
+#~ "Number of vertical pieces must be at least 1. Default value will be "
+#~ "used..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Please set up nugget effect..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Please set up range..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Coordinates of point no. %d are zeros."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Computing %s variogram properties..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Memory allocation failed..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Unable to compute experimental variogram..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Interpolating unknown values..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Unused points: %d (out of region)"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Overlays two vector maps."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Grid-decimated point cloud"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Layer number where blue color is stored as category"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Do not add categories to points and do not create attribute table"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Could not rewind input file"
+#~ msgstr "출력할 격자지도"
+
+#~ msgid "Page length (default: %d lines)"
+#~ msgstr "쪽길이 (기본값: %d줄)"
+
+#~ msgid "Page width (default: %d characters)"
+#~ msgstr "쪽넓이 (기본값: %d글자)"
+
+#~ msgid "-%c/-%c and %s= are mutually exclusive"
+#~ msgstr "-%c/-%c와 %s=를 같이 지정할 수 없습니다"
+
+#, fuzzy
+#~ msgid "-%c/-%c and -%c/-%c are mutually exclusive"
+#~ msgstr "-%c/-%c와 -%c를 같이 지정할 수 없습니다"
+
+#~ msgid "Default value: GRASS_GUI if defined otherwise wxpython"
+#~ msgstr "기본값: 정의되었을 경우 GRASS_GUI 아니면 wxpython"
+
+#, fuzzy
+#~ msgid "Default: path to the current GRASS database"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "PID file not found"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Command file not found"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Renaming reclass maps"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Prefix for output raster maps (.base, .max, .maxdir, .spotdist)"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Reading dig file..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Reading dig_att file..."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Surface interpolation utility for raster map."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Outputs a raster map showing the anisotropic cumulative cost."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "String to represent no data cell"
+#~ msgstr "자료 없는 셀값을 표현할 문자열"
+
+#~ msgid "%s available in mapset <%s>:"
+#~ msgstr "지도세트 <%2$s> 안에 유효한 %1$s:"
+
+#~ msgid "gui"
+#~ msgstr "GUI"
+
+#, fuzzy
+#~ msgid "Type of the aggregation space time dataset, default is strds"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Please specify output= or outfile="
+#~ msgstr "출력할 래스터맵"
+
+#, fuzzy
+#~ msgid "Please specify output= and samplingpos="
+#~ msgstr "출력할 래스터맵"
+
+#, fuzzy
+#~ msgid "Please specify input= or infile="
+#~ msgstr "출력할 래스터맵"
+
+#, fuzzy
+#~ msgid "Please specify input= and datapos="
+#~ msgstr "출력할 래스터맵"
+
+#, fuzzy
+#~ msgid "Display the "
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Unable To create table: %s"
+#~ msgstr "출력할 래스터맵"
+
+#, fuzzy
+#~ msgid "One of options <%s> or <%s> must be specified"
+#~ msgstr "출력할 래스터맵"
+
+#, fuzzy
+#~ msgid "Converts a GRASS site_lists file into a vector map."
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "Unable to guess site_list format"
+#~ msgstr "출력할 격자지도"
+
+#, fuzzy
+#~ msgid "%d sites written."
+#~ msgstr "출력할 격자지도"
+
+#~ msgid ""
+#~ "Unable to process the hole map at once. Please set the %s option to some "
+#~ "value lower than 100."
+#~ msgstr ""
+#~ "전체 지도를 한 번에 처리할 수 없습니다. %s 옵션을 100보다 작은 값으로 설정"
+#~ "하세요."
+
+#~ msgid ""
+#~ "Unable to process the hole map at once. Please set the '%s' option to "
+#~ "some value lower than 100."
+#~ msgstr ""
+#~ "전체 지도를 한 번에 처리할 수 없습니다. '%s' 옵션을 100보다 작은 값으로 설"
+#~ "정하세요."
+
+#~ msgid "Scale Y labels cannot be used with thisrange of data (%f, %f)"
+#~ msgstr "축척 Y 꼬리표는 자료의 범위 (%f ,%f)와 함께 사용할 수 없습니다"
+
+#~ msgid ""
+#~ "column '%s', type 'string': unknown width -> stored as varchar(250) some "
+#~ "data may be lost"
+#~ msgstr ""
+#~ "열 '%s', 유형 'string': 알려지지 않은 폭 -> varchar(250)으로 저장되고 일"
+#~ "부 자료를 잃을 수 있습니다"
+
+#~ msgid "Unabel to read segment file"
+#~ msgstr "분절 파일을 읽을 수 없습니다"
+
+#~ msgid "Unable create DBF database: %s"
+#~ msgstr "DBF 데이터베이스를 생성할 수 없습니다: %s"
+
+#~ msgid "Unable to create PROJ_EPSG file: %s"
+#~ msgstr "PROJ_EPSG 파일을 생성할 수 없습니다: %s"
+
+#~ msgid "Error in pj_do_proj6"
+#~ msgstr "pj_do_proj6 내에 오류"
+
+#~ msgid ""
+#~ "East-West (ewres: %f) and North-South (nwres: %f) resolution differ "
+#~ "significantly. Did you assign %s= and %s= correctly?"
+#~ msgstr ""
+#~ "동-서(ewres: %f)와 남-북(nsres: %f)의 해상도가 많이 다릅니다. %s=와 %s=를 "
+#~ "바르게 입력하셨나요?"
+
+#~ msgid "Error in pj_do_proj (can't re-projection GCP %i)"
+#~ msgstr "pj_do_proj 내에 오류 (GCP %i를 재투영할 수 없습니다)"
+
+#~ msgid "Error in pj_do_proj"
+#~ msgstr "pj_do_proj 내에 오류"
+
+#~ msgid "Error in pj_do_proj (projection of input coordinate pair)"
+#~ msgstr "pj_do_proj 내에 오류 (입력 좌표쌍의 투영)"
+
+#~ msgid "Could not read georeferenced file %s using either OGR nor GDAL"
+#~ msgstr "OGR 또는 GDAL을 이용해서 지리 참조 파일 %s를 읽을 수 없었습니다"
+
+#~ msgid "Error in pj_do_proj1"
+#~ msgstr "pj_do_proj1 내에 오류"
+
+#~ msgid "Error in pj_do_proj2"
+#~ msgstr "pj_do_proj2 내에 오류"
+
+#~ msgid "Error in pj_do_proj3"
+#~ msgstr "pj_do_proj3 내에 오류"
+
+#~ msgid "Error in pj_do_proj5"
+#~ msgstr "pj_do_proj5 내에 오류"
+
+#~ msgid "If overlapping is not desired, the data need to be cleaned."
+#~ msgstr "중첩을 원하지 않으면 자료를 정리할 필요가 있습니다."
+
+#~ msgid "OGR projection for layer <%s> can not be converted to proj4"
+#~ msgstr "레이어 <%s>를 위한 OGR 투영을 proj4로 변환할 수 없습니다"
+
+#~ msgid "Error in pj_do_transform"
+#~ msgstr "pj_do_transform 내에 오류"
+
+#~ msgid "Unable to re-open segment file"
+#~ msgstr "분절 파일을 다시 열 수 없습니다"
+
+#~ msgid "dseg_open(): unable to create segment file"
+#~ msgstr "dseg_open(): 분절 파일을 생성할 수 없습니다"
+
+#~ msgid "Unable to re-open file '%s'"
+#~ msgstr "파일 '%s'를 다시 열 수 없습니다"
+
+#~ msgid "Can not initialize temporary file"
+#~ msgstr "임시 파일을 초기화할 수 없습니다"
+
+#~ msgid ""
+#~ "eading the input map -%s- and -%s- and creating some temporary files..."
+#~ msgstr "입력 지도 -%s-와 -%s-를 읽으면서 임시 파일을 생성하는 중입니다..."
+
+#~ msgid "Can not read control points for group <%s>"
+#~ msgstr "그룹 <%s>를 위한 제어점을 읽을 수 없습니다"
+
+#~ msgid "<%s> not found"
+#~ msgstr "<%s>를 찾을 수 없습니다"
+
+#~ msgid ""
+#~ "Makes each cell value a function of the attribute values assigned to the "
+#~ "vector points or centroids around it, and stores new cell values in an "
+#~ "output raster map."
+#~ msgstr ""
+#~ "각 셀의 값은 그 주변 벡터 점 또는 도심에 할당된 속성값들의 함수가 되며, "
+#~ "새 셀의 값은 출력 래스터 지도에 저장됩니다."
+
+#~ msgid "%s=%s,%s: files are the same, no copy required"
+#~ msgstr "%s=%s,%s: 파일이 똑같아서 복사할 필요가 없습니다"

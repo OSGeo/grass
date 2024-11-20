@@ -15316,6 +15316,10 @@ msgstr "Nastavit výpočetní region podle aktuálního okna"
 msgid "Set computational region extent interactively"
 msgstr "Nastavit výpočetní region interaktivně"
 
+#: ../gui/wxpython/mapdisp/frame.py:1531
+msgid "Set computational region from named region"
+msgstr "Nastavit výpočetní region podle pojmenovaného regionu"
+
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr "Uložit výpočetní region jako pojmenovaný region"
@@ -20101,3 +20105,786 @@ msgstr ""
 #: ../gui/wxpython/psmap/frame.py:2711
 msgid "labels: "
 msgstr "popisky:"
+
+#~ msgid "Location Name:"
+#~ msgstr "Název lokace:"
+
+#~ msgid "Change location and mapset"
+#~ msgstr "Změnit lokaci a mapset"
+
+#, fuzzy
+#~ msgid "(Un)dock Map Display"
+#~ msgstr "Mapové okno"
+
+#~ msgid "Show comp. extent"
+#~ msgstr "Zobr. výpoč. region"
+
+#~ msgid "Display mode"
+#~ msgstr "Mód displeje"
+
+#~ msgid "Display resolution"
+#~ msgstr "Rozlišení okna"
+
+#~ msgid "Go to"
+#~ msgstr "Přejít na"
+
+#~ msgid "Use defined projection"
+#~ msgstr "Použít definované kartografické zobrazení"
+
+#~ msgid "MASK"
+#~ msgstr "MASKA"
+
+#~ msgid "Extent"
+#~ msgstr "Rozsah"
+
+#, fuzzy
+#~ msgid "Unable to display the map"
+#~ msgstr "Nelze odstranit mapset"
+
+#, fuzzy, python-format
+#~ msgid "Unable to rename location: %s"
+#~ msgstr ""
+#~ "Nelze přejmenovat lokaci. \n"
+#~ "\n"
+#~ "%s"
+
+#, fuzzy, python-format
+#~ msgid "Unable to delete location: %s"
+#~ msgstr "Nelze odstranit lokaci"
+
+#, python-format
+#~ msgid ""
+#~ "'%s' is not a GRASS module.\n"
+#~ "\n"
+#~ "Unable to add new action to the model."
+#~ msgstr ""
+#~ "'%s' není GRASS modul. \n"
+#~ "\n"
+#~ "Nelze přidat novou akci do modelu."
+
+#~ msgid "Run python script"
+#~ msgstr "Spustit skript Pythonu"
+
+#~ msgid "Go to GCP No."
+#~ msgstr "Jdi na vlicovací bod č."
+
+#~ msgid "Vector network analysis settings"
+#~ msgstr "Nastavení analýzy vektorové sítě"
+
+#~ msgid "Quit raster digitizer"
+#~ msgstr "Ukončit digitalizaci rastru"
+
+#~ msgid "Modules"
+#~ msgstr "Moduly"
+
+#~ msgid "Choose GRC file to load"
+#~ msgstr "Vyberte soubor GRC k načtení"
+
+#~ msgid "Old GRASS Workspace File (*.grc)|*.grc"
+#~ msgstr "Starý soubor pracovní plochy GRASSu (*.grc)|*.grc"
+
+#~ msgid "Set up vector cleaning tools"
+#~ msgstr "Nastavit vektorový čistící nástroj"
+
+#~ msgid "break lines/boundaries"
+#~ msgstr "přerušit linie/hranice"
+
+#~ msgid "remove duplicates"
+#~ msgstr "odstranit zdvojené prvky"
+
+#~ msgid "remove dangles"
+#~ msgstr "Odstranit přívěsky"
+
+#~ msgid "change boundary dangles to lines"
+#~ msgstr "Změní přívěsky hranic na linie"
+
+#~ msgid "remove bridges"
+#~ msgstr "odstranit mosty"
+
+#~ msgid "change bridges to lines"
+#~ msgstr "Změnit mosty na linie"
+
+#~ msgid "snap lines/boundaries"
+#~ msgstr "spojit linie/hranice"
+
+#~ msgid "remove duplicate area centroids"
+#~ msgstr "Odstranit duplicitní centroidy v ploše"
+
+#~ msgid "break polygons"
+#~ msgstr "rozdělí polygony"
+
+#~ msgid "prune lines/boundaries"
+#~ msgstr "prořezat linie/hranice"
+
+#~ msgid "remove small areas"
+#~ msgstr "Odstranit malé plochy"
+
+#~ msgid "remove lines/boundaries of zero length"
+#~ msgstr "Odstranit linie/hranice nulové délky"
+
+#~ msgid "Choose cleaning tools and set thresholds"
+#~ msgstr "Vybrat čistící nástroj a nastavit prahovou hodnotu"
+
+#~ msgid "Select input vector map:"
+#~ msgstr "Vyberte vstupní vektorovou mapu:"
+
+#~ msgid " Feature type: "
+#~ msgstr "Typ prvku:"
+
+#~ msgid "Select output vector map:"
+#~ msgstr "Vybrat výstupní vektorovou mapu:"
+
+#~ msgid "Copy the current command string to the clipboard (Ctrl+C)"
+#~ msgstr "Kopírovat příkaz do schránky (Ctrl+C)"
+
+#~ msgid "line"
+#~ msgstr "linie"
+
+#~ msgid "boundary"
+#~ msgstr "hranice"
+
+#~ msgid "centroid"
+#~ msgstr "centroid"
+
+#~ msgid "face"
+#~ msgstr "povrch"
+
+#, python-format
+#~ msgid "%s. cleaning tool removed, will be ignored"
+#~ msgstr "%s. čistící nástroj odstraněn, bude ignorováno"
+
+#~ msgid "Please select a cleaning tool to remove"
+#~ msgstr "Prosím vyberte čistící nástroj pro odstranění"
+
+#, python-format
+#~ msgid "%s. cleaning tool moved up"
+#~ msgstr "%s. čistící nástroj byl posunut nahoru"
+
+#~ msgid "1. cleaning tool can not be moved up "
+#~ msgstr "První čistící nástroj již nejde posunout výš"
+
+#~ msgid "Please select a cleaning tool to move up"
+#~ msgstr "Prosím vyberte čistící nástroj pro posun nahoru"
+
+#, python-format
+#~ msgid "%s. cleaning tool moved down"
+#~ msgstr "%s. čistící nástroj posunut dolů"
+
+#~ msgid "Last cleaning tool can not be moved down "
+#~ msgstr "Poslední čistící nástroj již nejde posunout dolů"
+
+#~ msgid "Please select a cleaning tool to move down"
+#~ msgstr "Prosím vyberte čistící nástroj, který chcete posunout dolů"
+
+#, python-format
+#~ msgid "cleaning tool: '%s'"
+#~ msgstr "čistící nástroj: '%s'"
+
+#, python-format
+#~ msgid "Threshold for %(num)s. tool '%(tool)s': %(thresh)s"
+#~ msgstr "Prahová hodnota pro %(num)s.nástroj '%(tool)s': %(thresh)s"
+
+#~ msgid "Executing selected cleaning operations..."
+#~ msgstr "Spustit vybrané čistící nástroje...."
+
+#~ msgid "Vector cleaning command copied to clipboard"
+#~ msgstr "Příkaz pro čištění vektoru byl zkopírován do schránky"
+
+#~ msgid "Install selected add-ons GRASS module"
+#~ msgstr "Instalovat vybrané GRASS moduly"
+
+#~ msgid "Load GRC file (Tcl/Tk GUI)"
+#~ msgstr "Načíst soubor GRC (Tcl/Tk grafické prostředí)"
+
+#~ msgid "Load map layers from GRC file to layer tree"
+#~ msgstr "Načíst mapové vrstvy ze souboru GRD do stromu vrstev"
+
+#~ msgid "Displays version and copyright information."
+#~ msgstr "Zobrazí verzi a informace o licenci a autorských právech"
+
+#~ msgid ""
+#~ "Creates a raster map layer and vector point map containing randomly "
+#~ "located points."
+#~ msgstr ""
+#~ "Vytvoří rastrovou vrstvu a bodovou vektorovou vrstvu obsahující náhodně "
+#~ "rozmístěné body."
+
+#~ msgid "Command prompt"
+#~ msgstr "Příkazový řádek"
+
+#~ msgid "Output window"
+#~ msgstr "Okno s výstupem"
+
+#~ msgid "Clear command prompt content"
+#~ msgstr "Vyčistit obsah příkazového řádku"
+
+#~ msgid "Save output window content to the file"
+#~ msgstr "Uložit obsah okna s výstupem do souboru"
+
+#~ msgid "Module dialog settings"
+#~ msgstr "Nastavení dialogu pro moduly"
+
+#~ msgid "Close dialog when module is successfully finished"
+#~ msgstr "Zavřít dialog při úspěšném ukončení modulu"
+
+#~ msgid "Quit digitizer"
+#~ msgstr "Ukončit digitalizaci"
+
+#~ msgid "Vector Digitizer manual"
+#~ msgstr "Manuál vektorové digitalizace"
+
+#~ msgid "Redo"
+#~ msgstr "Znovu"
+
+#~ msgid "style"
+#~ msgstr "styl"
+
+#~ msgid "Apply SQL statement in Attribute Table Manager"
+#~ msgstr "Použít příkaz SQL ve správci atributových tabulek"
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "Vrstva k odstranění"
+
+#~ msgid "No GRASS-python library found."
+#~ msgstr "Nenalezena knihovna GRASS-Python."
+
+#~ msgid "Input Data"
+#~ msgstr "Vstupní data"
+
+#~ msgid "Point dataset:"
+#~ msgstr "bodová data:"
+
+#~ msgid "Kriging"
+#~ msgstr "Krigování"
+
+#~ msgid "Name for the output raster map:"
+#~ msgstr "Název výstupní rastrové mapy:"
+
+#~ msgid "Export variance map as well: "
+#~ msgstr "Exportovat také mapu rozdílu:"
+
+#~ msgid "Kriging Module"
+#~ msgstr "modul Krigování"
+
+#~ msgid "Ready."
+#~ msgstr "Připraven."
+
+#~ msgid "Variogram fitting"
+#~ msgstr "Přizpůsobení variogramu"
+
+#~ msgid "Plot/refresh variogram"
+#~ msgstr "Vykreslit variogram"
+
+#~ msgid ":"
+#~ msgstr ":"
+
+#~ msgid "Kriging techniques"
+#~ msgstr "Techniky krigování"
+
+#~ msgid "Block size:"
+#~ msgstr "Velikost bloku:"
+
+#~ msgid "Auto-fit variogram"
+#~ msgstr "Automatické přizpůsobení variogramu"
+
+#~ msgid "Model: "
+#~ msgstr "Model:"
+
+#~ msgid "Work in progress! No functionality provided."
+#~ msgstr "Na vývoji se pracuje! Zatím žádnou funkci nemá."
+
+#~ msgid "Defines raster output format utilizing GDAL library."
+#~ msgstr "Určuje výstupní formát rastrů vytvořený pomocí knihovny GDAL."
+
+#~ msgid "Quit wxGUI session."
+#~ msgstr "Ukončit sezení wxGUI."
+
+#~ msgid "Region"
+#~ msgstr "Region"
+
+#~ msgid "Display region"
+#~ msgstr "Zobrazit celý region"
+
+#~ msgid "legend"
+#~ msgstr "legenda"
+
+#, fuzzy
+#~ msgid "Hide {overlay}"
+#~ msgstr "Překrýt další vrstvou"
+
+#, fuzzy
+#~ msgid "Show text object"
+#~ msgstr "Zobr. výpoč. region"
+
+#~ msgid ""
+#~ "Drag text with mouse in pointer mode to position.\n"
+#~ "Double-click to change options"
+#~ msgstr ""
+#~ "Přesuňte myší (v módu ukazatele) na novou pozici.\n"
+#~ "Dvojklik pro změnu nastavení."
+
+#~ msgid "Add text layer"
+#~ msgstr "Přidat vrstvu s textem"
+
+#~ msgid "Show/hide scale bar"
+#~ msgstr "Zobrazit/skrýt měřítko"
+
+#~ msgid "Show/hide legend"
+#~ msgstr "Zobrazit/skrýt legendu"
+
+#~ msgid "Show/hide north arrow"
+#~ msgstr "Zobrazit/skrýt směrovou růžici"
+
+#~ msgid "Ordinary or block kriging"
+#~ msgstr "Běžné nebo blokové krigování"
+
+#~ msgid "Performs ordinary or block kriging."
+#~ msgstr "Provede běžné nebo blokové krigování."
+
+#~ msgid "Overlays two vector maps."
+#~ msgstr "Překrytí dvou vektorových map."
+
+#~ msgid "Print/add/remove a timestamp for a 3D raster map"
+#~ msgstr "Vytiskni/přidej/smaž časové razítko pro 3D rastrovou mapu"
+
+#~ msgid "Unsupported units"
+#~ msgstr "Nepodporované jednotky"
+
+#, fuzzy
+#~ msgid "Failed to copy map: invalid map type ({} vs. {})."
+#~ msgstr "Nelze načíst seznam EPSG kódů: %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "Failed to copy map: action is allowed only within the current mapset."
+#~ msgstr " %d map bylo smazáno ze současného mapsetu"
+
+#~ msgid "Map layers"
+#~ msgstr "Mapové vrstvy"
+
+#, fuzzy
+#~ msgid "Temporary map '%s' with result "
+#~ msgstr "Soubor již existuje"
+
+#, fuzzy
+#~ msgid "Vector map %s already exists. "
+#~ msgstr "Soubor již existuje"
+
+#, fuzzy
+#~ msgid "Temporary map %s  already exists.\n"
+#~ msgstr "Soubor již existuje"
+
+#, fuzzy
+#~ msgid "Temporary map '%s' was changed outside "
+#~ msgstr "Soubor již existuje"
+
+#~ msgid "Exit GUI"
+#~ msgstr "Konec grafického prostředí"
+
+#~ msgid "Invalid input data"
+#~ msgstr "Neplatná vstupní data"
+
+#, fuzzy
+#~ msgid "No mapsets readable"
+#~ msgstr "3D mód není k dispozici"
+
+#, fuzzy
+#~ msgid "Editing"
+#~ msgstr "Vyhodnocuji model..."
+
+#, fuzzy
+#~ msgid "Renaming"
+#~ msgstr "Přejmenovat"
+
+#, fuzzy
+#~ msgid "Copying"
+#~ msgstr "Kopírovat tabulku"
+
+#, fuzzy
+#~ msgid "List raster3D dataset maps"
+#~ msgstr "Připojit rastrová data"
+
+#, fuzzy
+#~ msgid "Extract subset of raster3D dataset"
+#~ msgstr "Import rastrových dat"
+
+#, fuzzy
+#~ msgid "Raster3D calculations"
+#~ msgstr "3D rastrový kalkulátor"
+
+#, fuzzy
+#~ msgid "Univariate raster3D dataset statistics"
+#~ msgstr "Univariantní statistika rastrové vrstvy"
+
+#~ msgid "Repository"
+#~ msgstr "Repozitář"
+
+#~ msgid "Multiple import formats using OGR"
+#~ msgstr "Import různých formátů pomocí OGR"
+
+#, fuzzy
+#~ msgid "Common export formats using OGR"
+#~ msgstr "Export do běžných formátů"
+
+#~ msgid "Unable to render map layer <%s>."
+#~ msgstr "Nelze vykreslit mapovou vrstvu <%s>."
+
+#~ msgid "Unable to render overlay <%s>."
+#~ msgstr "Nelze vykreslit překrytí <%s>."
+
+#~ msgid "Digitize"
+#~ msgstr "Digitalizovat"
+
+#, fuzzy
+#~ msgid "Add default servers"
+#~ msgstr "Přidat smyčku"
+
+#~ msgid "Set computational region from selected map(s) (ignore NULLs)"
+#~ msgstr ""
+#~ "Nastavit výpočetní region podle podle vybrané mapy (ignoruje NULL hodnoty)"
+
+#~ msgid "Load settings:"
+#~ msgstr "Načíst nastavení:"
+
+#, fuzzy
+#~ msgid "Add linked layers into layer tree ({mightNotWork})"
+#~ msgstr "Přidat připojené vrstvy do stromu vrstev"
+
+#, fuzzy
+#~ msgid "Add imported layers into layer tree ({mightNotWork})"
+#~ msgstr "Přidat importované vrstvy do stromu vrstev"
+
+#~ msgid "Multiple GPS export formats using GPSBabel"
+#~ msgstr "Export různých formátů GPS pomocí GPSBabel"
+
+#~ msgid "Historical GRASS vector import"
+#~ msgstr "Import starého vektorového formátu GRASS"
+
+#~ msgid "Historical GRASS vector import (all maps)"
+#~ msgstr "Import starého vektorového formátu GRASS (všechny mapy)"
+
+#, fuzzy
+#~ msgid ""
+#~ "Converts all older versions of GRASS vector maps in current mapset to "
+#~ "current format."
+#~ msgstr "Převede starou verzi GRASS vektoru (< 5.7) do současného formátu"
+
+#, fuzzy
+#~ msgid "GPS data import"
+#~ msgstr "GPSBabel GPS import"
+
+#~ msgid "GEOnet import"
+#~ msgstr "GEOnet import"
+
+#~ msgid "IDW from raster points (alternate method for sparse points)"
+#~ msgstr ""
+#~ "Interpolace IDW z rastrových bodů (alternativní metoda pro malý počet "
+#~ "bodů)"
+
+#~ msgid "Create optimally placed labels"
+#~ msgstr "Vytvořit optimálně umístěné popisky"
+
+#~ msgid "Bit pattern comparison "
+#~ msgstr "Korelace (bit pattern comparsion) pro ID pixelů s nízkou kvalitou"
+
+#, fuzzy
+#~ msgid "Data file <%(name)s> imported successfully."
+#~ msgstr "Vektorová mapa <%(name)s> (%(type)s) úspěšně načtena"
+
+#, fuzzy
+#~ msgid "Launches graphical attribute table manager."
+#~ msgstr "Správce atributových dat"
+
+#, fuzzy
+#~ msgid "Select space time raster dataset(s):"
+#~ msgstr "Vybrat zdrojový mapset:"
+
+#~ msgid "Manage"
+#~ msgstr "Spravovat"
+
+#, fuzzy
+#~ msgid ""
+#~ "Welcome to GRASS GIS %s%s\n"
+#~ "The world's leading open source GIS"
+#~ msgstr ""
+#~ "Vítejte v GRASS GIS %s\n"
+#~ "Vedoucím open source GIS"
+
+#~ msgid ""
+#~ "Select an existing project location and mapset\n"
+#~ "or define a new location"
+#~ msgstr ""
+#~ "Vyberte existující lokaci projektu nebo mapset\n"
+#~ "nebo definujte novou lokaci"
+
+#~ msgid ""
+#~ "Project location\n"
+#~ "(projection/coordinate system)"
+#~ msgstr ""
+#~ "Lokace projektu\n"
+#~ "(projekce/souřadnicový systém)"
+
+#~ msgid ""
+#~ "Accessible mapsets\n"
+#~ "(directories of GIS files)"
+#~ msgstr ""
+#~ "Přístupné mapsety\n"
+#~ "(adresáře GIS dat)"
+
+#~ msgid "Define new location"
+#~ msgstr "Definovat novou lokaci"
+
+#~ msgid ""
+#~ "Rename/delete selected\n"
+#~ "mapset or location"
+#~ msgstr ""
+#~ "Přejmenovat/odstranit vybraný\n"
+#~ "mapset nebo lokaci"
+
+#~ msgid "Start &GRASS"
+#~ msgstr "Spustit &GRASS"
+
+#, fuzzy
+#~ msgid "Warning: "
+#~ msgstr "Upozornění"
+
+#, fuzzy
+#~ msgid "No GRASS location found in '%s'."
+#~ msgstr "Vybrat GRASS location a mapset"
+
+#~ msgid "Starting GRASS for the first time"
+#~ msgstr "Spuštění GIS GRASS poprvé"
+
+#, fuzzy
+#~ msgid "Develop 3D rasters"
+#~ msgstr "Vytvořit rastrovou mapu"
+
+#~ msgid "Imports older versions of GRASS vector maps."
+#~ msgstr "Importuje starší verze GRASS vektorových map."
+
+#~ msgid "Vector to volume"
+#~ msgstr "Převod vektorové vrstvy na volume"
+
+#~ msgid "Sites to vector"
+#~ msgstr "Vytvoření vektorové vrstvy z bodů (sites, GRASS 5.x)"
+
+#~ msgid "V&olumes"
+#~ msgstr "&3D rastr"
+
+#~ msgid "Develop volumes"
+#~ msgstr "Vytvořit 3D rastrové mapy"
+
+#~ msgid "3D Mask"
+#~ msgstr "3D Maska"
+
+#~ msgid "Volume calculator"
+#~ msgstr "3D mapový kalkulátor"
+
+#~ msgid "Basic volume metadata"
+#~ msgstr "Základní metadata 3D rastrové vrstvy"
+
+#~ msgid "Voxel statistics"
+#~ msgstr "Základní statistiky 3D pixelu (voxel)"
+
+#~ msgid "Volume"
+#~ msgstr "3D rastr"
+
+#~ msgid ""
+#~ "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS "
+#~ "vector points map."
+#~ msgstr ""
+#~ "Importuje US-NGA GEOnet jmenný server (GNS) soubory o státech do "
+#~ "vektorové bodové mapy mapy GRASSu"
+
+#, fuzzy
+#~ msgid ""
+#~ "Outputs a raster map showing the anisotropic cumulative cost. Computes "
+#~ "anisotropic cumulative cost of moving between different geographic "
+#~ "locations on an input elevation raster map whose cell category values "
+#~ "represent elevation combined with an input raster map layer whose cell "
+#~ "values represent friction cost."
+#~ msgstr ""
+#~ "Vytvoří rastrovou mapu obsahující anizotropické kumulativní náklady "
+#~ "pohybumezi různými geografickými polohami po vstupní rastrové mapě s "
+#~ "výškou, jejížhodnoty buněk reprezentují výšku kombinovanou s další mapou, "
+#~ "jejíž hodnoty reprezentují frikční povrch."
+
+#~ msgid "Surface interpolation utility for raster map."
+#~ msgstr "Nástroj pro interpolaci povrchů rastrových map."
+
+#~ msgid "Surface generation program."
+#~ msgstr "Tvorba povrchu"
+
+#~ msgid "Compares bit patterns with a raster map."
+#~ msgstr "Porovnává bitové vzory s rastrovou mapou."
+
+#, fuzzy
+#~ msgid ""
+#~ "Calculates univariate statistics from the non-null cells for each "
+#~ "registered raster3d map of a space time raster3d dataset."
+#~ msgstr ""
+#~ "Spočítá univariantní statistiku z ne-nullových 3D buněk 3D rastrové "
+#~ "vrstvy."
+
+#~ msgid "&Fetch"
+#~ msgstr "&Stáhnout"
+
+#~ msgid "Animation already axists"
+#~ msgstr "Animace již existuje"
+
+#~ msgid "GRASS GIS Raster Map Calculator"
+#~ msgstr "GRASS GIS rastrový mapový kalkulátor"
+
+#~ msgid "GRASS GIS 3D Raster Map Calculator"
+#~ msgstr "GRASS GIS 3D rastrový mapový kalkulátor"
+
+#~ msgid "Define GRASS Database and Location Name"
+#~ msgstr "Definujte adresář databáze GRASSu a název lokace"
+
+#~ msgid "GIS Data Directory:"
+#~ msgstr "Adresář GIS dat:"
+
+#~ msgid "Project Location"
+#~ msgstr "Lokace projektu"
+
+#~ msgid "Location Title"
+#~ msgstr "Název lokace"
+
+#~ msgid "Choose method for creating a new location"
+#~ msgstr "Zvolte způsob vytvoření nové lokace"
+
+#~ msgid "Select EPSG code of spatial reference system"
+#~ msgstr "Zvolit EPSG kód souřadnicového referenčního systému"
+
+#~ msgid ""
+#~ "Read projection and datum terms from a Well Known Text (WKT) .prj file"
+#~ msgstr ""
+#~ "Načíst kartografické zobrazení a datum ze souboru typu Well Known Text "
+#~ "(WKT) .prj"
+
+#~ msgid "Select coordinate system parameters from a list"
+#~ msgstr "Zvolit parametry souřadnicového systému ze seznamu"
+
+#~ msgid "Specify projection and datum terms using custom PROJ.4 parameters"
+#~ msgstr "Určit kartografické zobrazení a datum s použitím PROJ.4 parametrů"
+
+#~ msgid "Choose projection"
+#~ msgstr "Vybrat kartografické zobrazení"
+
+#~ msgid "Choose EPSG Code"
+#~ msgstr "Zvolte kód EPSG"
+
+#~ msgid "Path to the EPSG-codes file:"
+#~ msgstr "Cesta k souboru s kódy EPSG:"
+
+#~ msgid "Choose EPSG codes file"
+#~ msgstr "Vyberte soubor s kódy EPSG"
+
+#~ msgid "Choose method of specifying georeferencing parameters"
+#~ msgstr "Zvolte metodu nebo specifikujte parametry georeference"
+
+#~ msgid "Location Title:"
+#~ msgstr "Popis lokace:"
+
+#~ msgid "Location wizard canceled. Location not created."
+#~ msgstr "Průvodce vytvořením lokace byl zavřen. Lokace nebyla vytvořena."
+
+#~ msgid ""
+#~ "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You "
+#~ "will need to change the default GIS data directory in the GRASS startup "
+#~ "screen."
+#~ msgstr ""
+#~ "Lokace <%(loc)s> bude vytvořena v adresáři s GIS daty <%(dir)s>. Je "
+#~ "potřeba změnit výchozí adresář s GIS daty na úvodní obrazovce GRASSu."
+
+#~ msgid "New GIS data directory"
+#~ msgstr "Nový adresář GIS dat"
+
+#~ msgid "Common formats import"
+#~ msgstr "Import z běžných formátů"
+
+#~ msgid ""
+#~ "Exports a vector map layer to any of the supported OGR vector formats. By "
+#~ "default a vector map layer is exported to Esri Shapefile format."
+#~ msgstr ""
+#~ "Exportuje vektorovou vrstvu do některého z podporovaných vektorových "
+#~ "formátů OGR. Ve výchozím nastavení je vrstva exportována do formátu Esri "
+#~ "Shapefile."
+
+#~ msgid "Reports and Statistics"
+#~ msgstr "Zprávy, výpisy a statistiky"
+
+#~ msgid "Click here to show search module engine"
+#~ msgstr "Klikněte zde pro zobrazení vyhledávacího modulu"
+
+#~ msgid "Click here to hide search module engine"
+#~ msgstr "Klikněte zde pro skrytí vyhledávacího modulu"
+
+#~ msgid "GRASS GIS Animation tool"
+#~ msgstr "Nástroj pro animace GRASS GISu"
+
+#~ msgid "Import/link raster or vector data"
+#~ msgstr "Importovat/připojit rastrová nebo vektorová data"
+
+#~ msgid "GRASS GIS %s Layer Manager"
+#~ msgstr "Správce vrstev GRASS GISu %s"
+
+#~ msgid "Switch to new location?"
+#~ msgstr "Přepnout na novou lokaci?"
+
+#~ msgid "Do you want to set the default region extents and resolution now?"
+#~ msgstr ""
+#~ "Přejete si nyní nastavit výchozí nastavení regionu a jeho rozlišení?"
+
+#~ msgid "Location <%s> created"
+#~ msgstr "Lokace <%s> vytvořena"
+
+#~ msgid "GRASS GIS Vector Network Analysis Tool"
+#~ msgstr "Nástroj pro analýzu vektorové sítě GRASS GISu"
+
+#~ msgid "GRASS GIS Attribute Table Manager"
+#~ msgstr "Správce atributových tabulek GRASS GISu"
+
+#~ msgid "GRASS GIS Graphical Modeler"
+#~ msgstr "GRASS GIS grafické modelování"
+
+#~ msgid "GRASS GIS - Map display"
+#~ msgstr "GRASS GIS - Mapové okno"
+
+#~ msgid "GRASS GIS Histogramming Tool (d.histogram)"
+#~ msgstr "Nástroj pro histogramy GRASS GISu (d.histogram)"
+
+#~ msgid "Set raster output format"
+#~ msgstr "Nastavit výstupní formát rastrů"
+
+#~ msgid "Set vector output format"
+#~ msgstr "Nastavit výstupní formát vektorů"
+
+#~ msgid "Search:"
+#~ msgstr "Hledat:"
+
+#~ msgid "GRASS GIS Attribute Table Manager - "
+#~ msgstr "Správce atributových tabulek GRASS GISu - "
+
+#~ msgid "Unable to create location"
+#~ msgstr "Nelze vytvořit lokaci"
+
+#~ msgid "Read projection and datum terms from a georeferenced data file"
+#~ msgstr ""
+#~ "Načíst kartografické zobrazení a datum z již georeferencovaného souboru"
+
+#~ msgid "Create a generic Cartesian coordinate system (XY)"
+#~ msgstr "Vytvořit obecný kartézský souřadnicový systém (XY)"
+
+#~ msgid "Do you want to create GRASS location <%s>?"
+#~ msgstr "Přejete si založit lokaci GRASSu <%s>?"
+
+#~ msgid "Create new location?"
+#~ msgstr "Vytvořit novou lokaci?"
+
+#~ msgid "Ask when quiting wxGUI or closing display"
+#~ msgstr "Zeptat se při ukončení wxGUI nebo při zavírání mapového okna"
+
+#~ msgid "Automatically hightlight selected features in map display"
+#~ msgstr "Automaticky zvýraznit vybrané prvky v mapovém okně"

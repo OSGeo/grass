@@ -15073,6 +15073,10 @@ msgstr ""
 msgid "Set computational region extent interactively"
 msgstr ""
 
+#: ../gui/wxpython/mapdisp/frame.py:1531
+msgid "Set computational region from named region"
+msgstr ""
+
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr ""
@@ -19827,3 +19831,235 @@ msgstr ""
 #: ../gui/wxpython/psmap/frame.py:2711
 msgid "labels: "
 msgstr ""
+
+#~ msgid "MASK"
+#~ msgstr "마스크"
+
+#, fuzzy
+#~ msgid "Unable to display the map"
+#~ msgstr "지도 세트를 삭제할 수 없습니다"
+
+#, fuzzy, python-format
+#~ msgid "Unable to rename location: %s"
+#~ msgstr "로케이션을 삭제할 수 없습니다"
+
+#, fuzzy, python-format
+#~ msgid "Unable to delete location: %s"
+#~ msgstr "로케이션을 삭제할 수 없습니다"
+
+#, python-format
+#~ msgid "Invalid map size %d,%d\n"
+#~ msgstr "무효한 지도 크기 %d,%d\n"
+
+#~ msgid ""
+#~ "Unable to load GDAL Python bindings.\n"
+#~ "WMS layers can not be displayed without the bindings.\n"
+#~ msgstr ""
+#~ "GDAL 파이썬 바인딩을 적재할 수 없습니다.\n"
+#~ "바인딩 없이 WMS 레이어를 보여 줄 수 없습니다.\n"
+
+#~ msgid "Set up vector cleaning tools"
+#~ msgstr "벡터 정리 도구를 설정합니다"
+
+#~ msgid "remove duplicates"
+#~ msgstr "중복을 제거합니다"
+
+#~ msgid "remove dangles"
+#~ msgstr "댕글을 제거합니다"
+
+#~ msgid "remove bridges"
+#~ msgstr "브리지를 제거합니다"
+
+#~ msgid "remove duplicate area centroids"
+#~ msgstr "중복된 면 도심을 제거합니다"
+
+#~ msgid "remove small areas"
+#~ msgstr "작은 면을 제거합니다"
+
+#~ msgid "remove lines/boundaries of zero length"
+#~ msgstr "길이가 0인 선/경계를 제거합니다"
+
+#~ msgid "remove small angles at nodes"
+#~ msgstr "교점에 위치한 작은 각을 제거합니다"
+
+#~ msgid "Choose cleaning tools and set thresholds"
+#~ msgstr "정리 도구를 선택하고 임계값을 설정합니다"
+
+#, python-format
+#~ msgid "%s. cleaning tool removed, will be ignored"
+#~ msgstr "%s. 정리 도구가 제거됐습니다, 무시합니다"
+
+#~ msgid "Please select a cleaning tool to remove"
+#~ msgstr "제거할 정리 도구를 선택하세요"
+
+#, python-format
+#~ msgid "%s. cleaning tool moved up"
+#~ msgstr "%s. 정리 도구를 위로 이동했습니다"
+
+#~ msgid "1. cleaning tool can not be moved up "
+#~ msgstr "1. 정리 도구를 위로 이동할 수 없습니다"
+
+#~ msgid "Please select a cleaning tool to move up"
+#~ msgstr "위로 이동할 정리 도구를 선택하세요"
+
+#, python-format
+#~ msgid "%s. cleaning tool moved down"
+#~ msgstr "%s. 정리 도구를 아래로 이동했습니다"
+
+#~ msgid "Last cleaning tool can not be moved down "
+#~ msgstr "마지막 정리 도구는 아래로 이동할 수 없습니다"
+
+#~ msgid "Please select a cleaning tool to move down"
+#~ msgstr "아래로 이동할 정리 도구를 선택하세요"
+
+#, python-format
+#~ msgid "cleaning tool: '%s'"
+#~ msgstr "정리 도구: '%s'"
+
+#~ msgid "Name of input vector map"
+#~ msgstr "입력 벡터 지도의 이름"
+
+#~ msgid "Executing selected cleaning operations..."
+#~ msgstr "선택된 정리 조작을 실행하는 중입니다..."
+
+#~ msgid "Vector cleaning command copied to clipboard"
+#~ msgstr "벡터 정리 명령을 클립보드로 복사했습니다"
+
+#, python-brace-format
+#~ msgid "Unknown format '{0}'."
+#~ msgstr "알려지지 않은 포맷 '{0}'."
+
+#~ msgid "Quit Cartographic Composer"
+#~ msgstr "지도 작성자를 종료합니다"
+
+#~ msgid ""
+#~ "Due to the limitations of your operating system, the script path cannot "
+#~ "contain certain non-ascii characters. Please rename the script or move it "
+#~ "to a different location."
+#~ msgstr ""
+#~ "운영 체계의 한계 때문에 스크립트의 경로는 특정 ASCII가 아닌 문자를 포함할 "
+#~ "수 없습니다. 스크립트의 이름을 바꾸거나 다른 장소로 이동하세요."
+
+#~ msgid ""
+#~ "Do you really want to delete map <{m}> of type <{etype}> from mapset "
+#~ "<{mapset}> in location <{loc}>?"
+#~ msgstr ""
+#~ "로케이션 <{loc}> 내 지도세트 <{mapset}>으로부터 <{etype}> 타입의 지도 <{m}"
+#~ ">를 정말로 삭제하길 원하십니까?"
+
+#~ msgid "Animation already axists"
+#~ msgstr "애니메이션이 이미 존재합니다"
+
+#~ msgid "GRASS GIS Raster Map Calculator"
+#~ msgstr "GRASS GIS 래스터 지도 계산기"
+
+#~ msgid "GRASS GIS 3D Raster Map Calculator"
+#~ msgstr "GRASS GIS 3차원 래스터 지도 계산기"
+
+#~ msgid "Common formats import"
+#~ msgstr "일반적인 포맷 가져오기"
+
+#~ msgid ""
+#~ "Allocates subnets for nearest centers (direction from center). center "
+#~ "node must be opened (costs >= 0). Costs of center node are used in "
+#~ "calculation"
+#~ msgstr ""
+#~ "최근접 중심을 위한 서브넷을 할당합니다 (중심으로부터의 방향). 중심 교점이 "
+#~ "열려 있어야 합니다 (비용 >= 0). 중심 교점의 비용은 계산에 사용됩니다."
+
+#~ msgid "Reports and Statistics"
+#~ msgstr "보고 및 통계"
+
+#~ msgid "GRASS GIS Vector Digitizer"
+#~ msgstr "GRASS GIS 벡터 디지타이저"
+
+#~ msgid "GRASS GIS Cartographic Composer"
+#~ msgstr "GRASS GIS 지도 작성자"
+
+#~ msgid "GRASS GIS Map Swipe"
+#~ msgstr "GRASS GIS 지도 밀기"
+
+#~ msgid "GRASS GIS Animation tool"
+#~ msgstr "GRASS GIS 애니메이션 도구"
+
+#~ msgid "GRASS GIS %s Layer Manager"
+#~ msgstr "GRASS GIS %s 레이어 관리자"
+
+#~ msgid "Unable to exit GRASS shell: unknown PID"
+#~ msgstr "GRASS 셸을 종료할 수 없습니다: 알려지지 않은 PID"
+
+#~ msgid "Remove vector legend"
+#~ msgstr "벡터 범례를 제거합니다"
+
+#~ msgid "GRASS GIS Vector Network Analysis Tool"
+#~ msgstr "GRASS GIS 벡터 네트워크 분석 도구"
+
+#~ msgid "GRASS GIS - Map display"
+#~ msgstr "GRASS GIS - 지도 디스플레이"
+
+#~ msgid "GRASS GIS Map Display: %(name)s - %(loc)s/%(mapset)s"
+#~ msgstr "GRASS GIS 지도 디스플레이: %(name)s - %(loc)s/%(mapset)s"
+
+#~ msgid "Maximum number of animations is %s."
+#~ msgstr "애니메이션의 최대 개수는 %s입니다"
+
+#~ msgid "GRASS GIS Temporal Plot Tool"
+#~ msgstr "GRASS GIS 시간 도표 도구"
+
+#~ msgid "GRASS GIS Histogramming Tool (d.histogram)"
+#~ msgstr "GRASS GIS 주상도 도구 (d.histogram)"
+
+#~ msgid ""
+#~ "Neighborhood analysis tool for vector point maps. Makes each cell value a "
+#~ "function of the attribute values assigned to the vector points or "
+#~ "centroids around it, and stores new cell values in an output raster map."
+#~ msgstr ""
+#~ "벡터 점 지도를 위한 이웃 분석 도구. 각 셀의 값은 그 주변 벡터 점 또는 도심"
+#~ "에 할당된 속성값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도에 저장됩니"
+#~ "다."
+
+#~ msgid "Attaches, deletes or reports vector categories to map geometry."
+#~ msgstr "지도 지형의 벡터 범주를 부착, 삭제, 또는 보고합니다."
+
+#~ msgid "GRASS GIS Location Download"
+#~ msgstr "GRASS GIS 로케이션 내려받기"
+
+#~ msgid "GRASS GIS Interactive Scatter Plot Tool"
+#~ msgstr "GRASS GIS 대화식 산점도 도구"
+
+#~ msgid "GRASS GIS Histogramming Tool"
+#~ msgstr "GRASS GIS 주상도 도구"
+
+#~ msgid "GRASS GIS Supervised Classification Tool"
+#~ msgstr "GRASS GIS 감독 분류 도구"
+
+#~ msgid "GRASS GIS Timeline Tool"
+#~ msgstr "GRASS GIS 시간선 도구"
+
+#~ msgid "GRASS GIS Data Catalog"
+#~ msgstr "GRASS GIS 자료 목록"
+
+#~ msgid "GRASS GIS Attribute Table Manager"
+#~ msgstr "GRASS GIS 속성 테이블 관리자"
+
+#~ msgid "GRASS GIS Attribute Table Manager - "
+#~ msgstr "GRASS GIS 속성 테이블 관리자"
+
+#~ msgid "GRASS GIS Graphical Modeler"
+#~ msgstr "GRASS GIS 그래픽 모델러"
+
+#~ msgid "GRASS GIS Setup for r.li modules"
+#~ msgstr "r.li 모듈을 위한 GRASS GIS 설정"
+
+#~ msgid "Select EPSG code of spatial reference system"
+#~ msgstr "공간 참조 체계의 EPSG 코드를 선택하세요"
+
+#~ msgid "GRASS GIS Simple Python Editor"
+#~ msgstr "GRASS GIS 단순한 파이썬 편집기"
+
+#~ msgid "GRASS GIS SQL Query Utility"
+#~ msgstr "GRASS GIS SQL 질의 유틸리티"
+
+#~ msgid ""
+#~ "Do you want to quit GRASS including shell prompt or just close the GUI?"
+#~ msgstr "셸 프롬프트와 함께 GRASS를 종료할까요? 아니면 GUI만 닫을까요?"

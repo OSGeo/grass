@@ -14948,6 +14948,10 @@ msgstr ""
 msgid "Set computational region extent interactively"
 msgstr ""
 
+#: ../gui/wxpython/mapdisp/frame.py:1531
+msgid "Set computational region from named region"
+msgstr ""
+
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr ""
@@ -19657,3 +19661,272 @@ msgstr ""
 #: ../gui/wxpython/psmap/frame.py:2711
 msgid "labels: "
 msgstr ""
+
+#, fuzzy, python-format
+#~ msgid "Unable to rename location: %s"
+#~ msgstr "Không thể vẽ chồng <%s>."
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "Lớp cần xóa"
+
+#, fuzzy
+#~ msgid "Export variance map as well: "
+#~ msgstr "Xuất bản đồ raster"
+
+#, fuzzy
+#~ msgid ":"
+#~ msgstr "X:"
+
+#, fuzzy
+#~ msgid "Block size:"
+#~ msgstr "Kích thước biểu tượng:"
+
+#, fuzzy
+#~ msgid "Model: "
+#~ msgstr "Chế độ:"
+
+#, fuzzy
+#~ msgid "legend"
+#~ msgstr "Chú giải"
+
+#, fuzzy
+#~ msgid "Hide {overlay}"
+#~ msgstr "Thêm lớp chồng"
+
+#, fuzzy
+#~ msgid "Show text object"
+#~ msgstr "Hiển thị phạm vi tính toán"
+
+#~ msgid ""
+#~ "Drag text with mouse in pointer mode to position.\n"
+#~ "Double-click to change options"
+#~ msgstr ""
+#~ "Kéo chữ bằng chuột trong chế độ con trỏ đến vị trí mong muốn.\n"
+#~ " Nhắp đúp để thay đổi các tùy chọn"
+
+#, fuzzy
+#~ msgid "Show/hide scale bar"
+#~ msgstr "Hiện/giấu thước tỉ lệ và mũi tên hướng Bắc"
+
+#~ msgid "Show/hide legend"
+#~ msgstr "Hiện/giấu chú giải"
+
+#, fuzzy
+#~ msgid "Show/hide north arrow"
+#~ msgstr "Hiện/giấu thước tỉ lệ và mũi tên hướng Bắc"
+
+#~ msgid "Print/add/remove a timestamp for a 3D raster map"
+#~ msgstr "In/thêm/bỏ đánh dấu thời gian khỏi một bản đồ raster 3 chiều"
+
+#, fuzzy
+#~ msgid "Unsupported units"
+#~ msgstr "Kiểu lớp '%s' không được hỗ trợ"
+
+#, fuzzy
+#~ msgid "Vector map %s already exists. "
+#~ msgstr "Không tìm thấy bản đồ <%s>."
+
+#, fuzzy
+#~ msgid "Temporary map %s  already exists.\n"
+#~ msgstr "Không tìm thấy bản đồ <%s>."
+
+#~ msgid "Exit GUI"
+#~ msgstr "Thoát khỏi giao diện đồ họa"
+
+#, fuzzy
+#~ msgid "No mapsets readable"
+#~ msgstr "Không có chế độ xem 3D"
+
+#, fuzzy
+#~ msgid "Editing"
+#~ msgstr "Miền hợp lệ"
+
+#, fuzzy
+#~ msgid "Copying"
+#~ msgstr "Chép bảng"
+
+#, fuzzy
+#~ msgid "List raster3D dataset maps"
+#~ msgstr "Danh sách lớp"
+
+#, fuzzy
+#~ msgid "Extract subset of raster3D dataset"
+#~ msgstr "Nhập dữ liệu raster"
+
+#, fuzzy
+#~ msgid "Univariate raster3D dataset statistics"
+#~ msgstr "Thống kế raster một biến"
+
+#, fuzzy
+#~ msgid "Historical GRASS vector import"
+#~ msgstr "Nhập dữ liệu vec-tơ GRASS kiểu cũ"
+
+#, fuzzy
+#~ msgid "Historical GRASS vector import (all maps)"
+#~ msgstr "Nhập dữ liệu vec-tơ GRASS kiểu cũ"
+
+#, fuzzy
+#~ msgid ""
+#~ "Converts all older versions of GRASS vector maps in current mapset to "
+#~ "current format."
+#~ msgstr "Nhập bản đồ véc tơ phiên bản cũ của GRASS"
+
+#, fuzzy
+#~ msgid "GPS data import"
+#~ msgstr "Nhập Dữ liệu GPS của GPSBabel"
+
+#~ msgid "GEOnet import"
+#~ msgstr "Nhập dữ liệu GEOnet"
+
+#~ msgid "Multiple import formats using OGR"
+#~ msgstr "Nhập nhiều loại định dạng bằng cách dùng OGR"
+
+#~ msgid "Multiple GPS export formats using GPSBabel"
+#~ msgstr "Xuất nhiều loại định dạng GPS bằng cách dùng GPSBabel"
+
+#, fuzzy
+#~ msgid "Common export formats using OGR"
+#~ msgstr "Các định dạng xuất phổ biến"
+
+#~ msgid "IDW from raster points (alternate method for sparse points)"
+#~ msgstr ""
+#~ "Tính IDW (trọng số nghịch đảo theo khoảng cách) từ các điểm raster "
+#~ "(phương pháp thay thế dùng cho các điểm phân tán)"
+
+#~ msgid "Create optimally placed labels"
+#~ msgstr "Tạo các nhãn được đặt sao cho tối ưu"
+
+#~ msgid "Bit pattern comparison "
+#~ msgstr "So sánh kiểu bit "
+
+#, fuzzy
+#~ msgid "Select space time raster dataset(s):"
+#~ msgstr "Chọn tập bản đồ nguồn:"
+
+#, fuzzy
+#~ msgid "Data file <%(name)s> imported successfully."
+#~ msgstr "Đóng thành công bản đồ véc tơ  <%(name)s> (%(type)s) "
+
+#, fuzzy
+#~ msgid "Add default servers"
+#~ msgstr "Thêm nhóm lớp"
+
+#~ msgid "Manage"
+#~ msgstr "Quản lý"
+
+#, fuzzy
+#~ msgid ""
+#~ "Welcome to GRASS GIS %s%s\n"
+#~ "The world's leading open source GIS"
+#~ msgstr ""
+#~ "Chào mừng bạn đã đến với GRASS GIS %s\n"
+#~ "Hệ Thông Tin Địa Lý mã nguồn mở hàng đầu thế giới"
+
+#~ msgid ""
+#~ "Select an existing project location and mapset\n"
+#~ "or define a new location"
+#~ msgstr ""
+#~ "Chọn một vị trí dự án đang tồn tại và tập bản đồ\n"
+#~ "hoặc xác định một vị trí mới"
+
+#~ msgid ""
+#~ "Accessible mapsets\n"
+#~ "(directories of GIS files)"
+#~ msgstr ""
+#~ "Các tập bản đồ có thể truy xuất được\n"
+#~ "(các thư mục tệp tin GIS)"
+
+#, fuzzy
+#~ msgid "Start &GRASS"
+#~ msgstr "Khởi động GRASS"
+
+#, fuzzy
+#~ msgid "Warning: "
+#~ msgstr "Cảnh báo"
+
+#~ msgid "Starting GRASS for the first time"
+#~ msgstr "Khởi động GRASS lần đầu tiên"
+
+#, fuzzy
+#~ msgid "Develop 3D rasters"
+#~ msgstr "Phát triển bản đồ raster"
+
+#, fuzzy
+#~ msgid "Add linked layers into layer tree ({mightNotWork})"
+#~ msgstr "Thêm các lớp được liên kết vào sơ đồ lớp hình cây"
+
+#, fuzzy
+#~ msgid "Add imported layers into layer tree ({mightNotWork})"
+#~ msgstr "Thêm các lớp đã nhập vào sơ đồ lớp hình cây"
+
+#~ msgid "Imports older versions of GRASS vector maps."
+#~ msgstr "Nhập bản đồ véc tơ phiên bản cũ của GRASS"
+
+#~ msgid "Vector to volume"
+#~ msgstr "Vec-tơ thành thể tích"
+
+#~ msgid "Sites to vector"
+#~ msgstr "Đia điểm thành vec-tơ"
+
+#, fuzzy
+#~ msgid "V&olumes"
+#~ msgstr "Thể tích"
+
+#~ msgid "Develop volumes"
+#~ msgstr "Phát triển các thể tích"
+
+#~ msgid "3D Mask"
+#~ msgstr "Mặt nạ 3D"
+
+#~ msgid "Volume calculator"
+#~ msgstr "Trình toán toán thể tích"
+
+#~ msgid "Basic volume metadata"
+#~ msgstr "Mô tả cơ bản dữ liệu thể tích"
+
+#~ msgid "Voxel statistics"
+#~ msgstr "Thống kê voxel"
+
+#, fuzzy
+#~ msgid "Volume"
+#~ msgstr "Thể tích"
+
+#~ msgid ""
+#~ "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS "
+#~ "vector points map."
+#~ msgstr ""
+#~ "Nhập các tập tin quốc gia từ máy chủ US-NGA GEOnetNames (GNS) vào thành "
+#~ "một bản đồ điểm vec-tơ."
+
+#, fuzzy
+#~ msgid ""
+#~ "Outputs a raster map showing the anisotropic cumulative cost. Computes "
+#~ "anisotropic cumulative cost of moving between different geographic "
+#~ "locations on an input elevation raster map whose cell category values "
+#~ "represent elevation combined with an input raster map layer whose cell "
+#~ "values represent friction cost."
+#~ msgstr ""
+#~ "Xuất ra một lớp bản đồ raster cho thấy chi phí tích lũy không đẳng hướng "
+#~ "của sự di chuyển giữa các vị trí địa lý khác nhau trên một lớp bản đồ "
+#~ "raster độ cao đầu vào có các giá trị phạm trù ô biểu thị độ cao cùng với "
+#~ "một lớp bản đồ raster đầu vào có các giá trị ô biểu thị chi phí va chạm."
+
+#~ msgid "Surface interpolation utility for raster map."
+#~ msgstr "Tiện ích nội suy bề mặt dùng cho bản đồ raster."
+
+#~ msgid "Surface generation program."
+#~ msgstr "Chương trình tạo bề mặt."
+
+#~ msgid "Compares bit patterns with a raster map."
+#~ msgstr "So sánh kiểu bit với một bản đồ raster."
+
+#, fuzzy
+#~ msgid ""
+#~ "Calculates univariate statistics from the non-null cells for each "
+#~ "registered raster3d map of a space time raster3d dataset."
+#~ msgstr ""
+#~ "Tính toán thống kê một biến từ các ô không rỗng của một bản đồ raster3d."
+
+#~ msgid "Digitize"
+#~ msgstr "Số hóa"

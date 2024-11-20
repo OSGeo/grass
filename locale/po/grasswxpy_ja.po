@@ -15242,6 +15242,10 @@ msgstr ""
 msgid "Set computational region extent interactively"
 msgstr ""
 
+#: ../gui/wxpython/mapdisp/frame.py:1531
+msgid "Set computational region from named region"
+msgstr ""
+
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr ""
@@ -20051,3 +20055,799 @@ msgstr "クリックそれからドラッグをしてオブジェクトのサイ
 #: ../gui/wxpython/psmap/frame.py:2711
 msgid "labels: "
 msgstr ""
+
+#~ msgid "Location Name:"
+#~ msgstr "ロケーション名："
+
+#~ msgid "Change location and mapset"
+#~ msgstr "ロケーションとマップセットを変更"
+
+#, fuzzy
+#~ msgid "(Un)dock Map Display"
+#~ msgstr "マップディスプレイ"
+
+#~ msgid "Show comp. extent"
+#~ msgstr "編集範囲表示"
+
+#~ msgid "Display mode"
+#~ msgstr "表示モード"
+
+#~ msgid "Go to"
+#~ msgstr "進む"
+
+#~ msgid "Use defined projection"
+#~ msgstr "定義された投影法を使用"
+
+#~ msgid "MASK"
+#~ msgstr "マスク "
+
+#~ msgid "Extent"
+#~ msgstr "範囲"
+
+#, fuzzy
+#~ msgid "Unable to display the map"
+#~ msgstr "マップセットを削除できません "
+
+#, fuzzy, python-format
+#~ msgid "Unable to rename location: %s"
+#~ msgstr ""
+#~ "ロケーション名を変更できません.\n"
+#~ "\n"
+#~ "%s"
+
+#, fuzzy, python-format
+#~ msgid "Unable to delete location: %s"
+#~ msgstr "ロケーションを作成できません"
+
+#, python-format
+#~ msgid "Invalid map size %d,%d\n"
+#~ msgstr "マップのサイズが違います %d,%d\n"
+
+#~ msgid ""
+#~ "Unable to load GDAL Python bindings.\n"
+#~ "WMS layers can not be displayed without the bindings.\n"
+#~ msgstr ""
+#~ "GDAL Python バインディングをロードできません。\n"
+#~ "WMSレイヤーはバインディングなしで表示はできません。\n"
+
+#~ msgid "Combined (labels and module names)"
+#~ msgstr "組み合わせ（ラベルとモジュール名）"
+
+#~ msgid "Expert (module names only)"
+#~ msgstr "エキスパート (モジュール名のみ)"
+
+#~ msgid "Fancy green"
+#~ msgstr "ファンシーグリーン"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to write file '%(filePath)s'.\n"
+#~ "\n"
+#~ "Details: %(error)s"
+#~ msgstr ""
+#~ "ファイル '%(filePath)s'に書き込めません\n"
+#~ "\n"
+#~ "詳細: %(error)s"
+
+#, python-format
+#~ msgid ""
+#~ "'%s' is not a GRASS module.\n"
+#~ "\n"
+#~ "Unable to add new action to the model."
+#~ msgstr ""
+#~ "'%s' はGRASSのモジュールではありません.\n"
+#~ "\n"
+#~ "モデルに新しい動作は追加できません."
+
+#~ msgid "Run python script"
+#~ msgstr "Pythonスクリプト実行"
+
+#~ msgid "Go to GCP No."
+#~ msgstr "GCP No. へ進む"
+
+#~ msgid "Data Toolbar"
+#~ msgstr "データツールバー "
+
+#~ msgid "Vector Toolbar"
+#~ msgstr "ベクトルツールバー "
+
+#~ msgid "Choose GRC file to load"
+#~ msgstr "ロードする GRC ファイルの選択 "
+
+#~ msgid "Old GRASS Workspace File (*.grc)|*.grc"
+#~ msgstr "旧 GRASS ワークスペースファイル (*.grc)|*.grc"
+
+#~ msgid "Set up vector cleaning tools"
+#~ msgstr "ベクトルクリーニングツール設定"
+
+#~ msgid "break lines/boundaries"
+#~ msgstr "ライン/境界を分割"
+
+#~ msgid "remove duplicates"
+#~ msgstr "重複を削除"
+
+#~ msgid "remove dangles"
+#~ msgstr "ダングル削除"
+
+#~ msgid "change boundary dangles to lines"
+#~ msgstr "境界の突き出しをラインに変換"
+
+#~ msgid "remove bridges"
+#~ msgstr "接続点削除"
+
+#~ msgid "change bridges to lines"
+#~ msgstr "接続点をラインに変更"
+
+#~ msgid "snap lines/boundaries"
+#~ msgstr "ライン/境界を切取る(snap)"
+
+#~ msgid "remove duplicate area centroids"
+#~ msgstr "重複したエリア中心を消去"
+
+#~ msgid "break polygons"
+#~ msgstr "ポリゴン分割"
+
+#~ msgid "prune lines/boundaries"
+#~ msgstr "ライン/境界を取払う(prune)"
+
+#~ msgid "remove small areas"
+#~ msgstr "狭小エリア削除"
+
+#~ msgid "remove lines/boundaries of zero length"
+#~ msgstr "長さ０のライン/境界を削除"
+
+#~ msgid "remove small angles at nodes"
+#~ msgstr "角度の小さいノード群を消去"
+
+#~ msgid "Choose cleaning tools and set thresholds"
+#~ msgstr "クリーニングツールの選択としきい値のセット"
+
+#~ msgid "Select input vector map:"
+#~ msgstr "入力ベクトルマップ選択:"
+
+#~ msgid " Feature type: "
+#~ msgstr "フィーチャタイプ："
+
+#~ msgid "Select output vector map:"
+#~ msgstr "出力ベクトルマップ選択："
+
+#~ msgid "Copy the current command string to the clipboard (Ctrl+C)"
+#~ msgstr "クリップボードに現在のコマンド設定をコピー (Ctrl+C)"
+
+#~ msgid "line"
+#~ msgstr "ライン"
+
+#~ msgid "boundary"
+#~ msgstr "境界"
+
+#~ msgid "centroid"
+#~ msgstr "セントロイド"
+
+#~ msgid "face"
+#~ msgstr "表層"
+
+#, python-format
+#~ msgid "%s. cleaning tool removed, will be ignored"
+#~ msgstr "%s. クリーニングツールは削除されたか, 無視されます"
+
+#~ msgid "Please select a cleaning tool to remove"
+#~ msgstr "削除するクリーニングツールを選択してください"
+
+#, python-format
+#~ msgid "%s. cleaning tool moved up"
+#~ msgstr "%s. クリーニングツールを上に移動"
+
+#~ msgid "1. cleaning tool can not be moved up "
+#~ msgstr "1. クリーニングツールは、上に移動することはできません"
+
+#~ msgid "Please select a cleaning tool to move up"
+#~ msgstr "上に移動するクリーニングツールを選択してください"
+
+#, python-format
+#~ msgid "%s. cleaning tool moved down"
+#~ msgstr "%s. クリーニングツールは下へ移動されました"
+
+#~ msgid "Last cleaning tool can not be moved down "
+#~ msgstr "最後のクリーニングツールは、下に移動することはできません"
+
+#~ msgid "Please select a cleaning tool to move down"
+#~ msgstr "下に移動するクリーニングツールを選択してください"
+
+#, python-format
+#~ msgid "cleaning tool: '%s'"
+#~ msgstr "クリーニングツール: '%s'"
+
+#, python-format
+#~ msgid "Threshold for %(num)s. tool '%(tool)s': %(thresh)s"
+#~ msgstr "しきい値 %(num)s. ツール '%(tool)s': %(thresh)s"
+
+#~ msgid "Name of input vector map"
+#~ msgstr "入力するベクトルマップ名"
+
+#~ msgid "Name for output vector map"
+#~ msgstr "出力するベクトルマップ名"
+
+#~ msgid "Executing selected cleaning operations..."
+#~ msgstr "選択したクリーニング処理を実行..."
+
+#~ msgid "Vector cleaning command copied to clipboard"
+#~ msgstr "ベクトルクリーニングコマンドをクリップボードにコピー"
+
+#~ msgid "Install selected add-ons GRASS module"
+#~ msgstr "選択されたアドオンGRASSモジュールのインストール"
+
+#~ msgid "Load GRC file (Tcl/Tk GUI)"
+#~ msgstr "GRCファイル のロード(Tcl/Tk GUI)  "
+
+#~ msgid "Load map layers from GRC file to layer tree"
+#~ msgstr "GRC ファイルからマップレイヤーをレイヤーツリーにロード "
+
+#~ msgid "Displays version and copyright information."
+#~ msgstr "ディスプレイバージョン コピーライト情報 "
+
+#~ msgid ""
+#~ "Creates a raster map layer and vector point map containing randomly "
+#~ "located points."
+#~ msgstr ""
+#~ "ランダムに定義された地点を含むラスターマップレイヤーとベクトルポイントを作"
+#~ "成"
+
+#~ msgid "Quit digitizer"
+#~ msgstr "デジタイザー終了"
+
+#~ msgid "Redo"
+#~ msgstr "やり直し"
+
+#~ msgid "Quit Cartographic Composer"
+#~ msgstr "カートグラフィックコンポーザーを終了する"
+
+#~ msgid ""
+#~ "Do you really want to delete map <{m}> of type <{etype}> from mapset "
+#~ "<{mapset}> in location <{loc}>?"
+#~ msgstr ""
+#~ "下記の情報を削除してよろしいですか マップ <{m}> タイプ <{etype}> マップ"
+#~ "セット <{mapset}> ロケーション<{loc}>?"
+
+#~ msgid "Displaying {name}..."
+#~ msgstr "表示中 {name}..."
+
+#~ msgid " -- completed. Go to Layers tab for further operations."
+#~ msgstr " -- 完了しました. 次の処理のためにレイヤタブを表示してください."
+
+#~ msgid "Failed to display layer: not in current mapset or invalid layer"
+#~ msgstr ""
+#~ "レイヤを表示出来ません: マップセットが選択されてない、あるいはレイヤが違い"
+#~ "ます"
+
+#~ msgid "layer"
+#~ msgstr "レイヤー"
+
+#~ msgid "style"
+#~ msgstr "スタイル"
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "消去するレイヤー"
+
+#~ msgid ""
+#~ "Map <{layer}> marked for copying. You can paste it to the current mapset "
+#~ "<{mapset}>."
+#~ msgstr ""
+#~ "マップ <{layer}> がコピーのためにマークされました. 現在のマップセット "
+#~ "<{mapset}> に貼り付け出来ます."
+
+#~ msgid "Copy map"
+#~ msgstr "マップのコピー"
+
+#~ msgid "Failed to copy map: new map has the same name"
+#~ msgstr "コピー出来ません: 同じマップ名です"
+
+#~ msgid ""
+#~ "Map <{map}> already exists in the current mapset. Do you want to "
+#~ "overwrite it?"
+#~ msgstr "マップ <{map}> は既に存在します. 上書きしてもよろしいですか?"
+
+#~ msgid "Moving maps not implemented"
+#~ msgstr "移動出来るマップは有りません"
+
+#~ msgid "Maps can be copied only to current mapset"
+#~ msgstr "マップは現在のマップセットにのみコピーすることが出来ます"
+
+#~ msgid "No GRASS-python library found."
+#~ msgstr "GRASS-python ライブラリーが見つかりません."
+
+#~ msgid "Input Data"
+#~ msgstr "入力データ"
+
+#~ msgid "Point dataset:"
+#~ msgstr "点データセット:"
+
+#~ msgid "Kriging"
+#~ msgstr "クリギング"
+
+#~ msgid "Name for the output raster map:"
+#~ msgstr "出力するラスターマップ名："
+
+#~ msgid "Export variance map as well: "
+#~ msgstr "分散マップと同様にエクスポート: "
+
+#~ msgid "Kriging Module"
+#~ msgstr "クリギングモジュール"
+
+#~ msgid "Ready."
+#~ msgstr "用意."
+
+#~ msgid "Variogram fitting"
+#~ msgstr "バリオグラム推定"
+
+#~ msgid "Plot/refresh variogram"
+#~ msgstr "バリオグラムによる表示/再表示"
+
+#~ msgid ":"
+#~ msgstr ":  "
+
+#~ msgid "Kriging techniques"
+#~ msgstr "クリギング技法"
+
+#~ msgid "Block size:"
+#~ msgstr "ブロックサイズ："
+
+#~ msgid "Auto-fit variogram"
+#~ msgstr "バリオグラムによる自動配分"
+
+#~ msgid "Model: "
+#~ msgstr "モデル："
+
+#~ msgid "Work in progress! No functionality provided."
+#~ msgstr "作業中です! 他の機能は動作しません."
+
+#~ msgid "Display region"
+#~ msgstr "領域表示"
+
+#, fuzzy
+#~ msgid "legend"
+#~ msgstr "凡例"
+
+#, fuzzy
+#~ msgid "Hide {overlay}"
+#~ msgstr "ベクターマップレイヤーの追加 "
+
+#~ msgid "Show text object"
+#~ msgstr "編集範囲表示"
+
+#~ msgid ""
+#~ "Drag text with mouse in pointer mode to position.\n"
+#~ "Double-click to change options"
+#~ msgstr ""
+#~ "テキストの位置をマウスでドラッグ\n"
+#~ "ダブルクリックでオプション変更 "
+
+#~ msgid "Add text layer"
+#~ msgstr "テキストレイヤー追加 "
+
+#, fuzzy
+#~ msgid "Show/hide scale bar"
+#~ msgstr "スケールと方位 表示/非表示"
+
+#~ msgid "Show/hide legend"
+#~ msgstr "凡例 表示/非表示"
+
+#, fuzzy
+#~ msgid "Show/hide north arrow"
+#~ msgstr "スケールと方位 表示/非表示"
+
+#~ msgid "Ordinary or block kriging"
+#~ msgstr "通常またはブロッククリギング"
+
+#~ msgid "Performs ordinary or block kriging."
+#~ msgstr "通常またはブロッククリギングを実行."
+
+#~ msgid "Overlays two vector maps."
+#~ msgstr "２つのベクトルマップの重ね合せ"
+
+#~ msgid "Print/add/remove a timestamp for a 3D raster map"
+#~ msgstr "3Dラスターマップのタイムスタンプ出力/追加/削除 "
+
+#~ msgid ""
+#~ "Units of current projection are not supported,\n"
+#~ " meters will be used!"
+#~ msgstr ""
+#~ "現在の投影の単位はサポートされていません,\n"
+#~ " メートルが使用されます!"
+
+#~ msgid "Unsupported units"
+#~ msgstr "サポートしていないレイヤーのタイプ '%s'"
+
+#~ msgid "Map layers"
+#~ msgstr "マップレイヤー"
+
+#, fuzzy
+#~ msgid "Temporary map '%s' with result "
+#~ msgstr "ファイルはすでに存在します"
+
+#, fuzzy
+#~ msgid "Vector map %s already exists. "
+#~ msgstr "ファイルはすでに存在します"
+
+#, fuzzy
+#~ msgid "Temporary map %s  already exists.\n"
+#~ msgstr "ファイルはすでに存在します"
+
+#, fuzzy
+#~ msgid "Temporary map '%s' was changed outside "
+#~ msgstr "ファイルはすでに存在します"
+
+#~ msgid "Exit GUI"
+#~ msgstr "GUI 終了 "
+
+#, fuzzy
+#~ msgid "Invalid input data"
+#~ msgstr "間違った領域"
+
+#, fuzzy
+#~ msgid "No mapsets readable"
+#~ msgstr "3Dビューモードは使用できません"
+
+#, fuzzy
+#~ msgid "Editing"
+#~ msgstr "検証モデル..."
+
+#, fuzzy
+#~ msgid "Renaming"
+#~ msgstr "名前変更 "
+
+#, fuzzy
+#~ msgid "Copying"
+#~ msgstr "テーブルコピー"
+
+#, fuzzy
+#~ msgid "List raster3D dataset maps"
+#~ msgstr "レイヤ一覧  "
+
+#, fuzzy
+#~ msgid "Extract subset of raster3D dataset"
+#~ msgstr "ラスターデータのインポート "
+
+#, fuzzy
+#~ msgid "Raster3D calculations"
+#~ msgstr "ラスターマップカリキュレータ"
+
+#, fuzzy
+#~ msgid "Univariate raster3D dataset statistics"
+#~ msgstr "単変量ラスター統計"
+
+#~ msgid "Repository"
+#~ msgstr "リポジトリ"
+
+#~ msgid "Load settings:"
+#~ msgstr "ロードする設定:"
+
+#~ msgid "Unable to render map layer <%s>."
+#~ msgstr "マップレイヤー <%s> をレンダリング出来ません"
+
+#~ msgid "Unable to render overlay <%s>."
+#~ msgstr "<%s> をレンダーオーバーレイできません"
+
+#~ msgid "Historical GRASS vector import"
+#~ msgstr "旧GRASSベクトルのインポート "
+
+#~ msgid "Historical GRASS vector import (all maps)"
+#~ msgstr "旧GRASSベクトルのインポート（全てのマップ）"
+
+#~ msgid ""
+#~ "Converts all older versions of GRASS vector maps in current mapset to "
+#~ "current format."
+#~ msgstr "旧GRASSフォーマットベクトルマップインポート "
+
+#, fuzzy
+#~ msgid "GPS data import"
+#~ msgstr "GPSBabelのインポート "
+
+#~ msgid "GEOnet import"
+#~ msgstr "GEOnetのインポート "
+
+#~ msgid "Multiple import formats using OGR"
+#~ msgstr "OGRを使用した複数ファイルのインポート"
+
+#~ msgid "Multiple GPS export formats using GPSBabel"
+#~ msgstr "GPSBabelフォーマットのエクスポート "
+
+#~ msgid "Common export formats using OGR"
+#~ msgstr "OGRを使用した一般的エクスポートフォーマット"
+
+#~ msgid "IDW from raster points (alternate method for sparse points)"
+#~ msgstr "ラスターポイントの加重平均補間 (まばらなポイントの代替方法)  "
+
+#~ msgid "Create optimally placed labels"
+#~ msgstr "最適な位置にラベルを作成"
+
+#~ msgid "Bit pattern comparison "
+#~ msgstr "ビットパタ-ン比較"
+
+#, fuzzy
+#~ msgid "Launches graphical attribute table manager."
+#~ msgstr "属性テーブルマネージャー"
+
+#, fuzzy
+#~ msgid "Select space time raster dataset(s):"
+#~ msgstr "元のマップセットの選択："
+
+#~ msgid "Set computational region from selected map(s) (ignore NULLs)"
+#~ msgstr "選択したマップから計算領域をセット (未選択は不可) "
+
+#, fuzzy
+#~ msgid "Data file <%(name)s> imported successfully."
+#~ msgstr "ベクトルマップ <%(name)s> (%(type)s) がアンロードされました"
+
+#, fuzzy
+#~ msgid "Add default servers"
+#~ msgstr "ループ追加 "
+
+#~ msgid "Manage"
+#~ msgstr "管理"
+
+#, fuzzy
+#~ msgid ""
+#~ "Welcome to GRASS GIS %s%s\n"
+#~ "The world's leading open source GIS"
+#~ msgstr ""
+#~ "世界をリードするオープンソースGIS \n"
+#~ "GRASS GIS %s へようこそ"
+
+#~ msgid ""
+#~ "Select an existing project location and mapset\n"
+#~ "or define a new location"
+#~ msgstr ""
+#~ "既存プロジェクトのロケーションとマップセットの選択\n"
+#~ "またはロケーションの新規作成"
+
+#~ msgid ""
+#~ "Accessible mapsets\n"
+#~ "(directories of GIS files)"
+#~ msgstr ""
+#~ "利用可能なマップセット\n"
+#~ "(GISファイルのディレクトリ)"
+
+#~ msgid "Define new location"
+#~ msgstr "ロケーションの新規作成"
+
+#~ msgid ""
+#~ "Rename/delete selected\n"
+#~ "mapset or location"
+#~ msgstr ""
+#~ "名前変更 または 削除\n"
+#~ "(選択したマップセット・ロケーション)"
+
+#~ msgid "Start &GRASS"
+#~ msgstr "GRASSの起動(&G)"
+
+#, fuzzy
+#~ msgid "Warning: "
+#~ msgstr "警告"
+
+#~ msgid "Starting GRASS for the first time"
+#~ msgstr "GRASSの初回実行"
+
+#, fuzzy
+#~ msgid "Develop 3D rasters"
+#~ msgstr "ラスターマップの作成"
+
+#, fuzzy
+#~ msgid "Add linked layers into layer tree ({mightNotWork})"
+#~ msgstr "レイヤーツリーにレイヤーを追加 "
+
+#, fuzzy
+#~ msgid "Add imported layers into layer tree ({mightNotWork})"
+#~ msgstr "レイヤーツリーにインポートレイヤーを追加 "
+
+#~ msgid "Imports older versions of GRASS vector maps."
+#~ msgstr "旧GRASSフォーマットベクトルマップインポート "
+
+#~ msgid "Vector to volume"
+#~ msgstr "ベクトル → ボリューム "
+
+#~ msgid "Sites to vector"
+#~ msgstr "サイト → ベクトル "
+
+#~ msgid "V&olumes"
+#~ msgstr "ボリューム(&o)"
+
+#~ msgid "Develop volumes"
+#~ msgstr "ボリュームの作成"
+
+#~ msgid "3D Mask"
+#~ msgstr "3D マスク"
+
+#~ msgid "Volume calculator"
+#~ msgstr "ボリュームカリキュレータ"
+
+#~ msgid "Basic volume metadata"
+#~ msgstr "基本ボリュームメタデータ"
+
+#~ msgid "Voxel statistics"
+#~ msgstr "3Dグリッド統計"
+
+#~ msgid "Volume"
+#~ msgstr "ボリューム"
+
+#~ msgid ""
+#~ "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS "
+#~ "vector points map."
+#~ msgstr ""
+#~ "US-NGA GEOnet Names Server (GNS)  からGRASSベクトルマップへインポート "
+
+#, fuzzy
+#~ msgid ""
+#~ "Outputs a raster map showing the anisotropic cumulative cost. Computes "
+#~ "anisotropic cumulative cost of moving between different geographic "
+#~ "locations on an input elevation raster map whose cell category values "
+#~ "represent elevation combined with an input raster map layer whose cell "
+#~ "values represent friction cost."
+#~ msgstr ""
+#~ "出力ラスターマップレイヤーの異なる地理的な場所の間に、そのセルのカテゴリー"
+#~ "値の標高を持つセルの値を摩擦コストを表す入力ラスターマップレイヤーと結合を"
+#~ "表す入力標高ラスターマップレイヤー上を移動する異方性の累積的なコストを示し"
+#~ "ています "
+
+#~ msgid "Surface interpolation utility for raster map."
+#~ msgstr "ラスターマップの曲面補間ユーティリティ"
+
+#~ msgid "Surface generation program."
+#~ msgstr "曲面作成プログラム"
+
+#~ msgid "Compares bit patterns with a raster map."
+#~ msgstr "ラスターマップのビットパターン比較"
+
+#, fuzzy
+#~ msgid ""
+#~ "Calculates univariate statistics from the non-null cells for each "
+#~ "registered raster3d map of a space time raster3d dataset."
+#~ msgstr "3Dラスターマップの非-NULLセルから単変量統計解析を行う"
+
+#~ msgid "Digitize"
+#~ msgstr "デジタイズ"
+
+#~ msgid "Failed to copy map: action is allowed only within the same location."
+#~ msgstr "マップをコピー出来ません: 同じロケーション内にのみコピー出来ます."
+
+#~ msgid "&Fetch"
+#~ msgstr "取得(&F)"
+
+#~ msgid "Fetch list of available modules from GRASS Addons SVN repository"
+#~ msgstr "GRASSのアドオンSVNリポジトリから利用可能なモジュールの参照リスト"
+
+#~ msgid "GRASS GIS Raster Map Calculator"
+#~ msgstr "GRASS GISラスターマップカリキュレータ"
+
+#~ msgid "GRASS GIS 3D Raster Map Calculator"
+#~ msgstr "GRASS GIS 3Dラスターマップカリキュレータ"
+
+#~ msgid "Define GRASS Database and Location Name"
+#~ msgstr "データベースとロケーション名の設定 "
+
+#~ msgid "GIS Data Directory:"
+#~ msgstr "GISデータディレクトリ："
+
+#~ msgid "Project Location"
+#~ msgstr "プロジェクトロケーション "
+
+#~ msgid "Location Title"
+#~ msgstr "ロケーションタイトル"
+
+#~ msgid "Choose method for creating a new location"
+#~ msgstr "新しいロケーションの作成方法を選択 "
+
+#~ msgid "Select coordinate system parameters from a list"
+#~ msgstr "パラメータをリストから選択"
+
+#~ msgid "Specify projection and datum terms using custom PROJ.4 parameters"
+#~ msgstr "PRJ.4パラメータ入力"
+
+#~ msgid "Choose projection"
+#~ msgstr "投影法の選択 "
+
+#~ msgid "Choose EPSG Code"
+#~ msgstr "EPSGコードの選択"
+
+#~ msgid "Path to the EPSG-codes file:"
+#~ msgstr "EPSGコードファイルのパス："
+
+#~ msgid "Choose EPSG codes file"
+#~ msgstr "EPSGコードファイルの選択"
+
+#~ msgid "Choose method of specifying georeferencing parameters"
+#~ msgstr "地理参照パラメータの定義方法の選択"
+
+#~ msgid "Location Title:"
+#~ msgstr "ロケーションタイトル:"
+
+#~ msgid "Location wizard canceled. Location not created."
+#~ msgstr ""
+#~ "ロケーションウイザードはキャンセルされました。ロケーションは作成されません"
+
+#~ msgid ""
+#~ "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You "
+#~ "will need to change the default GIS data directory in the GRASS startup "
+#~ "screen."
+#~ msgstr ""
+#~ "ロケーション <%(loc)s> がディレクトリ<%(dir)s>に作成されます 必要ならば"
+#~ "GRASSのスタートアップ画面でデフォルトディレクトリを変更してください"
+
+#~ msgid "New GIS data directory"
+#~ msgstr "新しいGISデータディレクトリ"
+
+#~ msgid "Reports and Statistics"
+#~ msgstr "レポートと統計"
+
+#~ msgid "GRASS GIS Vector Digitizer"
+#~ msgstr "GRASS GIS ベクトルデジタイザ"
+
+#~ msgid "Click here to show search module engine"
+#~ msgstr "クリックで検索モジュールエンジン表示"
+
+#~ msgid "Click here to hide search module engine"
+#~ msgstr "クリックで検索モジュールエンジン非表示"
+
+#~ msgid "Import/link raster or vector data"
+#~ msgstr "ラスターマップのインポート "
+
+#~ msgid "Do you want to set the default region extents and resolution now?"
+#~ msgstr "デフォルト領域と解像度をセットしますか？"
+
+#~ msgid "Location <%s> created"
+#~ msgstr "ロケーション <%s> が作成されました"
+
+#~ msgid "Click to allow editing other mapsets"
+#~ msgstr "クリックして他のマップセットを編集できるようにします"
+
+#~ msgid "GRASS GIS Data Catalog"
+#~ msgstr "GRASS GIS データカタログ"
+
+#~ msgid "Editing {name}"
+#~ msgstr "修正 {name}"
+
+#~ msgid "GRASS GIS Attribute Table Manager"
+#~ msgstr "GRASS GIS 属性テーブルマネージャー "
+
+#~ msgid "GRASS GIS - Map display"
+#~ msgstr "GRASS GIS - マップ ディスプレイ "
+
+#~ msgid "GRASS GIS Timeline Tool"
+#~ msgstr "GRASS GIS タイムラインツール"
+
+#~ msgid "Click to restrict editing to current mapset only"
+#~ msgstr "クリックし編集を現在のマップセットのみに限定します"
+
+#~ msgid "Search:"
+#~ msgstr "検索:"
+
+#~ msgid ""
+#~ "Type to search database by map type or name. Use prefix 'r:', 'v:' and "
+#~ "'r3:'to show only raster, vector or 3D raster data, respectively. Use "
+#~ "Python regular expressions to refine your search."
+#~ msgstr ""
+#~ "マップタイプや名前でデータベースを検索します プレフィックス 'r:', 'v:' 及"
+#~ "び 'r3:'を使用するとラスタ,ベクトル3Dラスタのみを表示できます.Python正規表"
+#~ "現を使用して検索を絞り込みます."
+
+#~ msgid "Unable to create location"
+#~ msgstr "ロケーションを作成できません"
+
+#~ msgid "Select EPSG code of spatial reference system"
+#~ msgstr "EPSGコードを指定"
+
+#~ msgid "Read projection and datum terms from a georeferenced data file"
+#~ msgstr "地理参照ファイルを選択"
+
+#~ msgid "Do you want to create GRASS location <%s>?"
+#~ msgstr "GRASS ロケーションを作成しますか <%s>?"
+
+#~ msgid "Ask when quiting wxGUI or closing display"
+#~ msgstr "ｗｘGUIの終了または画面を閉じる時に問い合わせる"
+
+#~ msgid ""
+#~ "Unable to get current geographic extent. Force quiting wxGUI. Please "
+#~ "manually run g.region to fix the problem."
+#~ msgstr ""
+#~ "現在の地理的範囲を取得することができません。wxGUIを強制終了します。手動で"
+#~ "g.regionを実行し問題を解決してください"

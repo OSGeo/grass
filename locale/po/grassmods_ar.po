@@ -73026,3 +73026,321 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Generating output raster map <%s>..."
 msgstr "اسم خريطة الراستر المخرجة"
+
+#, fuzzy, c-format
+#~ msgid "Unable to create new location <%s>"
+#~ msgstr "%s:لم يتم إنشاء الجدول"
+
+#, fuzzy
+#~ msgid "Name of training vector map"
+#~ msgstr "اسم الخريطة الراسترية المدخلة"
+
+#, fuzzy
+#~ msgid "layer name or number to use for data"
+#~ msgstr "اسم الملف الراسترى الموجود"
+
+#, fuzzy
+#~ msgid "layer number/name for the training layer"
+#~ msgstr "اسم الملف الراسترى الموجود"
+
+#, fuzzy
+#~ msgid "layer number/name for the ML results"
+#~ msgstr "اسم الملف الراسترى الموجود"
+
+#, fuzzy
+#~ msgid "Data with statistics in npy format."
+#~ msgstr "ملف المدخل"
+
+#, fuzzy
+#~ msgid "Numpy array with vector cats."
+#~ msgstr "%d نقطة كتبت للمخرج\n"
+
+#, fuzzy
+#~ msgid "Numpy array with columns names."
+#~ msgstr "لاتشمل اسماء الأعمدة في المخرج"
+
+#, fuzzy
+#~ msgid "number of jobs to use during the domain exploration"
+#~ msgstr "عدد الأعمدة"
+
+#, fuzzy
+#~ msgid "Export to numpy files"
+#~ msgstr "اسم الملف المخرج"
+
+#, fuzzy
+#~ msgid "Export the classify results to raster maps"
+#~ msgstr "نوع التخزين للخريطة الراسترية الناتجة "
+
+#, fuzzy
+#~ msgid "Test different classification methods"
+#~ msgstr "اسم ملف ناتج التصنيف"
+
+#, fuzzy
+#~ msgid "append the classification results"
+#~ msgstr "اسم الخريطة ااراسترية الكنتورية"
+
+#, fuzzy
+#~ msgid "Vector input of stream network created by r.stream.extract"
+#~ msgstr "اسم الملف الراسترى الجديد"
+
+#, fuzzy
+#~ msgid "Vector output stream"
+#~ msgstr "اسم الخريطة الراسترية المخرجة"
+
+#, fuzzy
+#~ msgid "Flow accumulation raster"
+#~ msgstr "حساب الظلال من نموذج الإرتفاعت الرقمى"
+
+#, fuzzy
+#~ msgid "Flow accumulation units"
+#~ msgstr "موقع قاعدة البيانات"
+
+#, fuzzy
+#~ msgid "Multiplier to convert flow accumulation to your chosen unit"
+#~ msgstr "عامل المضاعفة لتحويل وحدات الارتفاعات الي امتار"
+
+#, fuzzy
+#~ msgid "Averaging distance [map units]"
+#~ msgstr "%s:خط %d:%s\n"
+
+#, fuzzy
+#~ msgid "Plots to generate"
+#~ msgstr "عدد النقاط المطلوب تخصيصها"
+
+#, fuzzy
+#~ msgid "Draws the boxplot of the raster maps of a space-time raster dataset"
+#~ msgstr "عرض ملفات الراستر للموقع والخروج"
+
+#, fuzzy
+#~ msgid "input space-time raster dataset"
+#~ msgstr "اسم الخريطة الراسترية الناتجة"
+
+#, fuzzy
+#~ msgid "Resolution of plot"
+#~ msgstr "درجة وضوح الخريطة المخرجة"
+
+#, fuzzy
+#~ msgid "Draw notch"
+#~ msgstr "%f : الطول\n"
+
+#, fuzzy
+#~ msgid "Font size of labels"
+#~ msgstr "اسم الجدول"
+
+#, fuzzy
+#~ msgid "Date format"
+#~ msgstr "الخريطة المخرجة"
+
+#, fuzzy
+#~ msgid "limit value axis"
+#~ msgstr "عرض القيم مفصولة بفاصلة"
+
+#, fuzzy
+#~ msgid "The width of the boxplots"
+#~ msgstr "عرض قائمة مستويات الكنتور"
+
+#, fuzzy
+#~ msgid "density"
+#~ msgstr "التوقيع ..."
+
+#, fuzzy
+#~ msgid "Vector with spatial units"
+#~ msgstr "لم توجد<%s>الخريطة الفيكتورية"
+
+#, fuzzy
+#~ msgid "Required inputs"
+#~ msgstr "خروج"
+
+#, fuzzy
+#~ msgid "Name of the column containing unique ID of spatial units"
+#~ msgstr "اسم الخريطة الراسترية المحتوية على معلومات التكلفة لخلية الشبكة"
+
+#, fuzzy
+#~ msgid "Name of the column containing response variable"
+#~ msgstr "اسم الخريطة الراسترية المحتوية على معلومات التكلفة لخلية الشبكة"
+
+#, fuzzy
+#~ msgid "Input raster 1"
+#~ msgstr "ملف المدخل"
+
+#, fuzzy
+#~ msgid "Input raster 2 (optional)"
+#~ msgstr "اسم خريطة الراستر المخرجة"
+
+#, fuzzy
+#~ msgid "Input distance raster (optional)"
+#~ msgstr "اسم ملف ناتج التصنيف"
+
+#, fuzzy
+#~ msgid "Distance to zones of interest"
+#~ msgstr "المسافة العظمى بين النقاط بوحدات الخريطة"
+
+#, fuzzy
+#~ msgid "Spatial resolution of output weighting layer"
+#~ msgstr "درجة وضوح الخريطة المخرجة"
+
+#, fuzzy
+#~ msgid "Output weighting layer name"
+#~ msgstr "إسم الجدول المخرج"
+
+#, fuzzy
+#~ msgid "Name for output vector gridded spatial units"
+#~ msgstr "اسم خريطة النقط الفيكتورية المخرجة"
+
+#, fuzzy
+#~ msgid "Name for output plot of model feature importances"
+#~ msgstr "اسم ملف التقرير"
+
+#, fuzzy
+#~ msgid "Name for output file with log of the random forest run"
+#~ msgstr "اسم ملف التقرير"
+
+#, fuzzy
+#~ msgid "Categories of basemap A to be used"
+#~ msgstr "اسم الخريطة الراسترية  للعرض كخلفية"
+
+#, fuzzy
+#~ msgid "Format: 1,2,3"
+#~ msgstr "الخريطة المخرجة"
+
+#, fuzzy
+#~ msgid "Categories of basemap B to be used"
+#~ msgstr "اسم الخريطة الراسترية  للعرض كخلفية"
+
+#, fuzzy
+#~ msgid "Number of cores to be used for the parallel process"
+#~ msgstr "عدد نقاط الإستيفاء"
+
+#, fuzzy
+#~ msgid "Feature selection and tuning"
+#~ msgstr "الصفر قيمة حقيقية"
+
+#, fuzzy
+#~ msgid "Overwrite connection parameter for certain layer"
+#~ msgstr "طباعة إحداثيات الإتصال الحلى و الخروج"
+
+#, fuzzy
+#~ msgid "Location:"
+#~ msgstr "%s لم يمكن فتح "
+
+#, fuzzy, python-format
+#~ msgid "Unable to open file '%s' for reading. Details: %s"
+#~ msgstr "[%s]لم يتم فتح ملف الخلية ل "
+
+#, fuzzy, python-format
+#~ msgid "Unable to open file '%s' for writing. Details: %s"
+#~ msgstr "[%s]لم يتم فتح ملف الخلية ل "
+
+#, fuzzy, python-format
+#~ msgid "Unable to add column <%s>."
+#~ msgstr "[%s]لم يتم فتح ملف الخلية ل "
+
+#, fuzzy
+#~ msgid ""
+#~ "Creates a raster map from LAS LiDAR points using univariate statistics "
+#~ "and r.in.xyz."
+#~ msgstr ""
+#~ "انشاء خرائط راسترية من ملفات بيانية متعدد الأضلاعخط فى الدليل الحالى"
+
+#, fuzzy
+#~ msgid "Raster map to be used as pixel geometry reference"
+#~ msgstr "<%s> اسم الملف المستخدم لل"
+
+#, fuzzy
+#~ msgid "External raster map to be used as pixel geometry reference"
+#~ msgstr "<%s> اسم الملف المستخدم لل"
+
+#, fuzzy
+#~ msgid ""
+#~ "Type of raster map to be created / Storage type for resultant raster map"
+#~ msgstr "نوع التخزين للخريطة الراسترية الناتجة "
+
+#, fuzzy
+#~ msgid "Footprint of the data as vector map"
+#~ msgstr "ضبط المنطقة الحالية من ابعاد هذه الخريطة الفيكتورية"
+
+#, fuzzy
+#~ msgid "cloud computing"
+#~ msgstr "الخريطة المخرجة"
+
+#, fuzzy
+#~ msgid "Path to ASCII file containing authentication parameters"
+#~ msgstr "اسم الخريطة الراسترية الحاوية على درجات الإنحدار"
+
+#, fuzzy
+#~ msgid "Name or IP of server to be connected"
+#~ msgstr "الملف الراسترى الطلوب إدخالة"
+
+#, fuzzy
+#~ msgid "Path to the input GRASS script"
+#~ msgstr "اسم الملف المخرج"
+
+#, fuzzy
+#~ msgid "Path to the input qsub script"
+#~ msgstr "اسم الملف المخرج"
+
+#, fuzzy
+#~ msgid "Name of input raster map(s) used by GRASS script"
+#~ msgstr "اسم ملف القناع"
+
+#, fuzzy
+#~ msgid "Name of input vector map(s) used by GRASS script"
+#~ msgstr "اسم الخريطة الراسترية المدخلة"
+
+#, fuzzy
+#~ msgid "This value is not used in r.sun calcluations"
+#~ msgstr "مؤشر القيمة المنعدمة"
+
+#, fuzzy
+#~ msgid "Observed distribution"
+#~ msgstr "متوسط التوزيع"
+
+#, fuzzy
+#~ msgid "Modeled distribution"
+#~ msgstr "متوسط التوزيع"
+
+#, fuzzy
+#~ msgid "print log file to file?"
+#~ msgstr "اسم الخريطة الراسترية الموجودة"
+
+#, fuzzy
+#~ msgid "evaluation area"
+#~ msgstr "انحياز الإرتفاعات"
+
+#, fuzzy
+#~ msgid "Output buffer map"
+#~ msgstr "الخريطة المخرجة"
+
+#, fuzzy
+#~ msgid "JSON output"
+#~ msgstr "الخريطة المخرجة"
+
+#, fuzzy, c-format
+#~ msgid "Column type (Ogr_ftype: %d) not supported (Ogr_fieldname: %s)"
+#~ msgstr "نوع العمود غير مدعم"
+
+#, fuzzy, c-format
+#~ msgid "Unable to re-open data source <%s>"
+#~ msgstr "<%s> لم يمكن فتح"
+
+#, fuzzy
+#~ msgid "Print table structure"
+#~ msgstr "طباعة الجداول والخروج"
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "Column '%s' : type character varying is stored as varchar(250) some data "
+#~ "may be lost"
+#~ msgstr ""
+#~ "نوع حرف متغيرخزن كحروف متغيرة250    قد يتم فقد بعض البيانات :'%s' العمود "
+
+#, fuzzy
+#~ msgid "File Size %"
+#~ msgstr "نوع المظهر"
+
+#~ msgid "Report information about input raster and exit"
+#~ msgstr "تقرير عن الراستر المدخلة والخروج"
+
+#, fuzzy, c-format
+#~ msgid "Note: one (or both) of %s and %s must be specified"
+#~ msgstr "طبقتين يجب تحديدهم"

@@ -15709,6 +15709,10 @@ msgstr "Imposta la regione computazionale dall'estensione del display"
 msgid "Set computational region extent interactively"
 msgstr "Imposta la region computazionale interattivamente"
 
+#: ../gui/wxpython/mapdisp/frame.py:1531
+msgid "Set computational region from named region"
+msgstr "Imposta regione computazionale da una regione precedentemente salvata"
+
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr "Salva la regione computazionale a una regione con nome"
@@ -20673,3 +20677,1110 @@ msgstr "Clicca e trascina per ridimensionare l'oggetto"
 #: ../gui/wxpython/psmap/frame.py:2711
 msgid "labels: "
 msgstr "etichette:"
+
+#~ msgid "&Delete location"
+#~ msgstr "&Elimina location"
+
+#~ msgid "&Rename location"
+#~ msgstr "&Rinomina location"
+
+#~ msgid "Abort download location"
+#~ msgstr "Termina lo scaricamento della location"
+
+#~ msgid "Location Name:"
+#~ msgstr "Nome della Location:"
+
+#~ msgid "Change location and mapset"
+#~ msgstr "Cambia location e mapset"
+
+#~ msgid "Show comp. extent"
+#~ msgstr "Mostra regione computazionale"
+
+#~ msgid "Display mode"
+#~ msgstr "Modalità di visualizzazione"
+
+#~ msgid "Display resolution"
+#~ msgstr "Risoluzione del display"
+
+#~ msgid "Go to"
+#~ msgstr "Vai a"
+
+#~ msgid "Use defined projection"
+#~ msgstr "Usa proiezione definita"
+
+#~ msgid "MASK"
+#~ msgstr "MASK"
+
+#~ msgid "Extent"
+#~ msgstr "Estensione"
+
+#~ msgid ""
+#~ "There was a problem printing.\n"
+#~ "Perhaps your current printer is not set correctly?"
+#~ msgstr ""
+#~ "C'è un problema di stampa.\n"
+#~ "La stampante è impostata correttamente?"
+
+#, fuzzy
+#~ msgid "Unable to display the map"
+#~ msgstr "Impossibile eliminare il mapset"
+
+#~ msgid "Download sample location"
+#~ msgstr "Scarica location di esempio"
+
+#, fuzzy, python-format
+#~ msgid "Unable to rename location: %s"
+#~ msgstr ""
+#~ "Impossibile rinominare la location.\n"
+#~ "\n"
+#~ "%s"
+
+#, fuzzy, python-format
+#~ msgid "Unable to delete location: %s"
+#~ msgstr "Impossibile eliminare la location"
+
+#, python-format
+#~ msgid "Invalid map size %d,%d\n"
+#~ msgstr "Dimensione mappa non valida: %d,%d\n"
+
+#~ msgid ""
+#~ "Unable to load GDAL Python bindings.\n"
+#~ "WMS layers can not be displayed without the bindings.\n"
+#~ msgstr ""
+#~ "Impossibile caricare i bindings Python di GDAL.\n"
+#~ "I layers WMS non possono essere visualizzati senza i bindings.\n"
+
+#~ msgid "Combined (labels and module names)"
+#~ msgstr "Combinata (descrizione e nome dei moduli)"
+
+#~ msgid "Expert (module names only)"
+#~ msgstr "Avanzato (solo nome dei moduli)"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to write file '%(filePath)s'.\n"
+#~ "\n"
+#~ "Details: %(error)s"
+#~ msgstr ""
+#~ "Impossibile scrivere il file '%(filePath)s'.\n"
+#~ "\n"
+#~ "Dettagli: %(error)s"
+
+#, python-format
+#~ msgid ""
+#~ "'%s' is not a GRASS module.\n"
+#~ "\n"
+#~ "Unable to add new action to the model."
+#~ msgstr ""
+#~ "'%s' non è un modulo di GRASS.\n"
+#~ "\n"
+#~ "Impossibile aggiungere la nuova azione al modello."
+
+#~ msgid "Run python script"
+#~ msgstr "Esegui script python"
+
+#~ msgid "Go to GCP No."
+#~ msgstr "Vai al GCP No."
+
+#~ msgid "Vector network analysis settings"
+#~ msgstr "Impostazioni dell'analisi di reti vettoriali."
+
+#~ msgid "Quit raster digitizer"
+#~ msgstr "Esci dal digitalizzatore raster"
+
+#~ msgid ""
+#~ "Unable to parse user toolboxes XML files. Default main menu will be "
+#~ "loaded."
+#~ msgstr ""
+#~ "Impossibile analizzare i file XML degli strumenti dell'utente. Verrà "
+#~ "caricato il menù principale di default."
+
+#~ msgid ""
+#~ "Unable to parse user toolboxes XML files. Default module tree will be "
+#~ "loaded."
+#~ msgstr ""
+#~ "Impossibile analizzare i file XML degli strumenti dell'utente. Verrà "
+#~ "caricato l'alebro del modulo di default."
+
+#~ msgid "Data Toolbar"
+#~ msgstr "Barra degli strumenti dei dati"
+
+#~ msgid "Vector Toolbar"
+#~ msgstr "Barra degli  strumenti vettoriale"
+
+#~ msgid "Modules"
+#~ msgstr "Moduli"
+
+#~ msgid "Choose GRC file to load"
+#~ msgstr "Scegli il file GRC da caricare"
+
+#~ msgid "Old GRASS Workspace File (*.grc)|*.grc"
+#~ msgstr "Vecchi file d'ambiente di lavoro di GRASS (*.grc)|*.grc"
+
+#~ msgid "Quit Map Swipe"
+#~ msgstr "Esci dal Map Swipe"
+
+#~ msgid "Set up vector cleaning tools"
+#~ msgstr "Imposta gli strumenti di pulizia vettoriale"
+
+#~ msgid "break lines/boundaries"
+#~ msgstr "rompe linee/aree"
+
+#~ msgid "remove duplicates"
+#~ msgstr "rimuove duplicati"
+
+#~ msgid "remove dangles"
+#~ msgstr "rimuove sporgenze"
+
+#~ msgid "change boundary dangles to lines"
+#~ msgstr "cambia sporgenze dei confini a linee"
+
+#~ msgid "remove bridges"
+#~ msgstr "rimuove ponti"
+
+#~ msgid "change bridges to lines"
+#~ msgstr "cambia ponti in linee"
+
+#~ msgid "snap lines/boundaries"
+#~ msgstr "unisce linee/aree"
+
+#~ msgid "remove duplicate area centroids"
+#~ msgstr "Rimuove i centroidi duplicati"
+
+#~ msgid "break polygons"
+#~ msgstr "Separa poligoni"
+
+#~ msgid "prune lines/boundaries"
+#~ msgstr "ridurre linee/aree"
+
+#~ msgid "remove small areas"
+#~ msgstr "rimuove aree piccole"
+
+#~ msgid "remove lines/boundaries of zero length"
+#~ msgstr "rimuove linee/aree con lunghezza zero"
+
+#~ msgid "remove small angles at nodes"
+#~ msgstr "rimuovo piccoli angoli ai nodi"
+
+#~ msgid "Choose cleaning tools and set thresholds"
+#~ msgstr "Scegli gli strumenti di pulizia e imposta le soglie"
+
+#~ msgid "Select input vector map:"
+#~ msgstr "Seleziona vettoriale di input:"
+
+#~ msgid " Feature type: "
+#~ msgstr "Tipologia delle feature:"
+
+#~ msgid "Select output vector map:"
+#~ msgstr "Seleziona vettoriale di output:"
+
+#~ msgid "Copy the current command string to the clipboard (Ctrl+C)"
+#~ msgstr "Copia la seguente stringa di comando negli appunti (Ctrl+C)"
+
+#~ msgid "line"
+#~ msgstr "linea"
+
+#~ msgid "boundary"
+#~ msgstr "area"
+
+#~ msgid "centroid"
+#~ msgstr "centroide"
+
+#~ msgid "face"
+#~ msgstr "superficie"
+
+#, python-format
+#~ msgid "%s. cleaning tool removed, will be ignored"
+#~ msgstr "%s. strumento di pulizia rimosso, sarà ignorato"
+
+#~ msgid "Please select a cleaning tool to remove"
+#~ msgstr "Seleziona uno strumento di pulizia per rimuovere"
+
+#, python-format
+#~ msgid "%s. cleaning tool moved up"
+#~ msgstr "%s. strumento di pulizia spostato sopra"
+
+#~ msgid "1. cleaning tool can not be moved up "
+#~ msgstr "1. strumento di pulizia non può essere mosso sopra"
+
+#~ msgid "Please select a cleaning tool to move up"
+#~ msgstr "Seleziona uno strumento di pulizia da muovere sopra"
+
+#, python-format
+#~ msgid "%s. cleaning tool moved down"
+#~ msgstr "%s. strumento di pulizia da muovere sotto"
+
+#~ msgid "Last cleaning tool can not be moved down "
+#~ msgstr "L'ultimo strumento di pulizia non può essere mosso sotto"
+
+#~ msgid "Please select a cleaning tool to move down"
+#~ msgstr "Selezionare uno strumento di pulizia da muovere sotto"
+
+#, python-format
+#~ msgid "cleaning tool: '%s'"
+#~ msgstr "strumento di pulizia: '%s'"
+
+#, python-format
+#~ msgid "Threshold for %(num)s. tool '%(tool)s': %(thresh)s"
+#~ msgstr "Soglia per %(num)s. strumento '%(tool)s': %(thresh)s"
+
+#~ msgid "Name of input vector map"
+#~ msgstr "Nome del vettoriale di input"
+
+#~ msgid "Name for output vector map"
+#~ msgstr "Nome per il vettoriale di output"
+
+#~ msgid "Threshold"
+#~ msgstr "Soglia"
+
+#, python-format
+#~ msgid "'%s' not defined"
+#~ msgstr "'%s' non definito"
+
+#, python-format
+#~ msgid ""
+#~ "Some parameters not defined. Operation canceled.\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Alcuni parametri non definiti. Operazione cancellata.\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Executing selected cleaning operations..."
+#~ msgstr "Operazione di pulizia selezionate in esecuzione..."
+
+#~ msgid "Vector cleaning command copied to clipboard"
+#~ msgstr "Comando di pulizia vettoriale copiato negli appunti"
+
+#~ msgid "Install selected add-ons GRASS module"
+#~ msgstr "Installa il modulo GRASS add-ons selezionato"
+
+#~ msgid "Fetching list of modules from GRASS-Addons (be patient)..."
+#~ msgstr "Scaricando la lista dei moduli da GRASS-Addons (attenedere)..."
+
+#~ msgid "Draw sample region "
+#~ msgstr "Disegna regione campione"
+
+#~ msgid "Draw Sampling "
+#~ msgstr "Disegna campioni"
+
+#~ msgid "Select sample area "
+#~ msgstr "Seleziona area campione"
+
+#~ msgid "Load GRC file (Tcl/Tk GUI)"
+#~ msgstr "Carica file GRC (Tcl/Tk GUI)"
+
+#~ msgid "Load map layers from GRC file to layer tree"
+#~ msgstr "Carica layers da file GRC al layer tree"
+
+#~ msgid "Version and copyright"
+#~ msgstr "Versione e copyright"
+
+#~ msgid "Displays version and copyright information."
+#~ msgstr "Visualizza informazioni sulla versione e sul copyright"
+
+#~ msgid ""
+#~ "Creates a raster map layer and vector point map containing randomly "
+#~ "located points."
+#~ msgstr ""
+#~ "Crea un raster e vettore puntuale contenenti punti posizionati "
+#~ "casualmente."
+
+#, python-brace-format
+#~ msgid "ZIP file is unreadable: {0}"
+#~ msgstr "Il file ZIP non è leggibile: {0}"
+
+#, python-brace-format
+#~ msgid "Archive file is unreadable: {0}"
+#~ msgstr "Il file archivio non è leggibile: {0}"
+
+#, python-brace-format
+#~ msgid "Download file from <{url}>, return status code {code}, "
+#~ msgstr "File scaricato da <{url}>, codice dello stato di ritorno {code},"
+
+#, python-brace-format
+#~ msgid "Download file from <{url}>, failed. Check internet connection."
+#~ msgstr ""
+#~ "File scaricato da <{url}>, fallito. Controllare la connessione internet."
+
+#, python-brace-format
+#~ msgid "Download of <{url}> failed or file <{name}> is not a ZIP file"
+#~ msgstr ""
+#~ "Scaricamento di <{url}> è fallito o il file <{name}> is not a file ZIP"
+
+#, python-brace-format
+#~ msgid "Unknown format '{0}'."
+#~ msgstr "Formato sconosciuto '{0}'."
+
+#~ msgid "Command prompt"
+#~ msgstr "Prompt dei comandi"
+
+#~ msgid "Output window"
+#~ msgstr "Finestra di output"
+
+#~ msgid "Clear command prompt content"
+#~ msgstr "Pulisci il contenuto della prompt dei comandi"
+
+#~ msgid "Save output window content to the file"
+#~ msgstr "Salva il contenuto della finestra nel file"
+
+#~ msgid "&Log file"
+#~ msgstr "&Log file"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Unable to write file '{filePath}'.\n"
+#~ "\n"
+#~ "Details: {error}"
+#~ msgstr ""
+#~ "Impossibile scrivere il file '{filePath}'.\n"
+#~ "\n"
+#~ "Dettagli: {error}"
+
+#~ msgid "Type to search in all modules. Press Enter for next match."
+#~ msgstr ""
+#~ "Digita per cercare in tutti i moduli. Premere Enter per il prossimo."
+
+#~ msgid "Module dialog settings"
+#~ msgstr "Impostazioni finestre del modulo"
+
+#~ msgid "Close dialog when module is successfully finished"
+#~ msgstr "Chiudi dialogo quando il modulo è finito correttamente"
+
+#~ msgid "Run selected module from the tree"
+#~ msgstr "Esegui il modulo selezionato dall'albero dei comandi"
+
+#~ msgid "Show manual for selected module from the tree"
+#~ msgstr ""
+#~ "Visualizza manuale per il modulo selezionato dall'albergo dei comandi"
+
+#~ msgid "Quit digitizer"
+#~ msgstr "Esci dal digitalizzatore"
+
+#~ msgid "Vector Digitizer manual"
+#~ msgstr "Manuale del Digitalizzatore Vettoriale"
+
+#~ msgid "Redo"
+#~ msgstr "Riprisitina"
+
+#~ msgid "Quit Cartographic Composer"
+#~ msgstr "Esci dal Compositore Cartografico"
+
+#~ msgid "Please follow instructions on GRASS Trac Wiki."
+#~ msgstr "Seguire le istruzioni riportate nel GRASS Trac Wiki."
+
+#~ msgid "Fetching list of modules from GRASS-Addons SVN (be patient)..."
+#~ msgstr ""
+#~ "Controllando la lista dei moduli dal SVN GRASS-Addons (attendere)..."
+
+#~ msgid "failed to open '{0}'"
+#~ msgstr "fallito ad aprire '{0}'"
+
+#~ msgid "Installs new extension from GRASS AddOns SVN repository."
+#~ msgstr "Installa nuova estensione da GRASS AddOns SVN repository."
+
+#~ msgid "GRASS SVN revision"
+#~ msgstr "Revisione GRASS SVN"
+
+#~ msgid ""
+#~ "Do you really want to delete map <{m}> of type <{etype}> from mapset "
+#~ "<{mapset}> in location <{loc}>?"
+#~ msgstr ""
+#~ "Si vuole veramente eliminare la mappa <{m}> di tipo <{etype}> dal mapset "
+#~ "<{mapset}> nella location <{loc}>?"
+
+#~ msgid "Displaying {name}..."
+#~ msgstr "Visualizzazione di {name}..."
+
+#~ msgid " -- completed. Go to Layers tab for further operations."
+#~ msgstr " -- completato. Andare alla scheda Layers per ulteriori operazioni."
+
+#~ msgid "Failed to display layer: not in current mapset or invalid layer"
+#~ msgstr ""
+#~ "Impossibile visualizzare il layer: non è nel mapset corrente o il layer "
+#~ "non è valido"
+
+#~ msgid "layer"
+#~ msgstr "layer"
+
+#~ msgid "style"
+#~ msgstr "Stile"
+
+#~ msgid "Apply SQL statement in Attribute Table Manager"
+#~ msgstr "Applica istruzione SQL nel Gestore Tabella degli Attributi"
+
+#~ msgid "Raster temporal dataset (strds)"
+#~ msgstr "Dataset temporale raster (strds)"
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "Layer da eliminare"
+
+#~ msgid ""
+#~ "Map <{layer}> marked for copying. You can paste it to the current mapset "
+#~ "<{mapset}>."
+#~ msgstr ""
+#~ "Mappa <{layer}> selezionata per la copia. Può essere incollata nel mapset "
+#~ "corrente <{mapset}>."
+
+#~ msgid "Copy map"
+#~ msgstr "Copia mappa"
+
+#~ msgid "Failed to copy map: new map has the same name"
+#~ msgstr "Impossibile copiare la mappa: la nuova mappa ha lo stesso nome"
+
+#~ msgid ""
+#~ "Map <{map}> already exists in the current mapset. Do you want to "
+#~ "overwrite it?"
+#~ msgstr ""
+#~ "La mappa <{map}> esiste già nel mapset corrente. Vuoi sovrascriverla?"
+
+#~ msgid "Moving maps not implemented"
+#~ msgstr "Spostamento delle mappe non implementato"
+
+#~ msgid "Maps can be copied only to current mapset"
+#~ msgstr "Le mappe possono essere copiate solo nel mapset corrente"
+
+#~ msgid "No GRASS-python library found."
+#~ msgstr "Nessuna librerie GRASS-python trovata."
+
+#~ msgid "Input Data"
+#~ msgstr "Dati di input"
+
+#~ msgid "Point dataset:"
+#~ msgstr "Dataset puntuale:"
+
+#~ msgid "Kriging"
+#~ msgstr "Kriging"
+
+#~ msgid "Name for the output raster map:"
+#~ msgstr "Nome per la mappa raster di output:"
+
+#~ msgid "Export variance map as well: "
+#~ msgstr "Esporta mappa della varianza come: "
+
+#~ msgid "Kriging Module"
+#~ msgstr "Modulo Kriging"
+
+#~ msgid "Ready."
+#~ msgstr "Pronto."
+
+#~ msgid "Variogram fitting"
+#~ msgstr "Ottimizzazione del variogramma"
+
+#~ msgid "Plot/refresh variogram"
+#~ msgstr "Traccia/aggiorna variogramma"
+
+#~ msgid ":"
+#~ msgstr ":"
+
+#~ msgid "Kriging techniques"
+#~ msgstr "Tecniche di Kriging"
+
+#~ msgid "Block size:"
+#~ msgstr "Dimensione del blocco:"
+
+#~ msgid "Auto-fit variogram"
+#~ msgstr "Auto ottimizzazione del variogramma"
+
+#~ msgid "Model: "
+#~ msgstr "Modello:"
+
+#~ msgid "Work in progress! No functionality provided."
+#~ msgstr "Lavori in corso! Non esiste ancora la funzione."
+
+#~ msgid "Region"
+#~ msgstr "Regione"
+
+#~ msgid "Display region"
+#~ msgstr "Visualizza region"
+
+#~ msgid "legend"
+#~ msgstr "legenda"
+
+#~ msgid "Hide {overlay}"
+#~ msgstr "Nascondi {overlay}"
+
+#~ msgid "Show text object"
+#~ msgstr "Mostra oggetto testuale"
+
+#~ msgid ""
+#~ "Drag text with mouse in pointer mode to position.\n"
+#~ "Double-click to change options"
+#~ msgstr ""
+#~ "Trascina il testo con il mouse in modalità puntatore per posizionarlo.\n"
+#~ "Dai un doppio clic per modificare le opzioni."
+
+#~ msgid "Add text layer"
+#~ msgstr "Aggiungi livello testo"
+
+#~ msgid "Show/hide scale bar"
+#~ msgstr "Mostra/nascondi barra della scala"
+
+#~ msgid "Show/hide legend"
+#~ msgstr "Mostra/nascondi legenda"
+
+#~ msgid "Show/hide north arrow"
+#~ msgstr "Mostra/nascondi freccia del nord"
+
+#~ msgid "Ordinary or block kriging"
+#~ msgstr "Kriging ordinario o a blocchi"
+
+#~ msgid "Performs ordinary or block kriging."
+#~ msgstr "Esegue kriging ordinario o a blocchi"
+
+#~ msgid "Overlays two vector maps."
+#~ msgstr "Overlay due vettori."
+
+#~ msgid "Print/add/remove a timestamp for a 3D raster map"
+#~ msgstr "Stampa/aggiunge/rimuove un timestamp per un raster 3D"
+
+#~ msgid ""
+#~ "Unable to import matplotlib (try to install it).\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Impossibile importare matplotlib (provare ad installarlo).\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Units of current projection are not supported,\n"
+#~ " meters will be used!"
+#~ msgstr ""
+#~ "Le unità dell'attuale proiezione non sono supportate,\n"
+#~ " saranno usati i metri"
+
+#~ msgid "Unsupported units"
+#~ msgstr "Unità non supportate"
+
+#~ msgid "Map layers"
+#~ msgstr "Layer"
+
+#~ msgid "Search modules"
+#~ msgstr "Cerca moduli"
+
+#~ msgid ""
+#~ "Failed to query vector map <{map}>. Check database settings and topology."
+#~ msgstr ""
+#~ "Interrogazione del vettoriale <{map}> fallita. Controllare le "
+#~ "impostazioni del database e la topologia."
+
+#, fuzzy
+#~ msgid "Temporary map '%s' with result "
+#~ msgstr "La mappa di output <%s> esiste già."
+
+#, fuzzy
+#~ msgid "Vector map %s already exists. "
+#~ msgstr "La mappa di output <%s> esiste già."
+
+#, fuzzy
+#~ msgid "Temporary map %s  already exists.\n"
+#~ msgstr "La mappa di output <%s> esiste già."
+
+#, fuzzy
+#~ msgid "Temporary map '%s' was changed outside "
+#~ msgstr "La mappa di output <%s> esiste già."
+
+#~ msgid "Exit GUI"
+#~ msgstr "Esci dalla GUI"
+
+#~ msgid "Invalid input data"
+#~ msgstr "Dati di input invalido"
+
+#, fuzzy
+#~ msgid "No mapsets readable"
+#~ msgstr "Nessuna impostazione disponibile"
+
+#~ msgid "Editing"
+#~ msgstr "Modificando"
+
+#~ msgid "Renaming"
+#~ msgstr "Rinominando"
+
+#~ msgid "Copying"
+#~ msgstr "Copiando"
+
+#~ msgid "List raster3D dataset maps"
+#~ msgstr "Mostra mappe di un dataset raster 3D"
+
+#~ msgid "Extract subset of raster3D dataset"
+#~ msgstr "Estrae un sottoinsieme di un dataset raster 3D"
+
+#~ msgid "Raster3D calculations"
+#~ msgstr "Analisi raster3D"
+
+#~ msgid "Univariate raster3D dataset statistics"
+#~ msgstr "Statistiche univariate del dataset raster 3D"
+
+#~ msgid "Repository"
+#~ msgstr "Repository"
+
+#~ msgid "Load settings:"
+#~ msgstr "Impostazioni locali:"
+
+#~ msgid "Unable to render map layer <%s>."
+#~ msgstr "Impossibile visualizzare layer <%s>."
+
+#~ msgid "Unable to render overlay <%s>."
+#~ msgstr "Impossibile visualizzare <%s> sovrapposto"
+
+#~ msgid "Unpacks a raster map packed with r.pack."
+#~ msgstr "Estrai un raster compresso con r.pack"
+
+#~ msgid "Historical GRASS vector import"
+#~ msgstr "Import vecchi GRASS vector"
+
+#~ msgid "Historical GRASS vector import (all maps)"
+#~ msgstr "Import vecchi GRASS vector (tutte le mappe)"
+
+#~ msgid ""
+#~ "Converts all older versions of GRASS vector maps in current mapset to "
+#~ "current format."
+#~ msgstr ""
+#~ "Converte tutti i vecchi vettoriali di GRASS nel corrente mapset "
+#~ "all'attuale formato."
+
+#~ msgid "GPS data import"
+#~ msgstr "Importa dati GPS"
+
+#~ msgid "GEOnet import"
+#~ msgstr "Importa GEONET"
+
+#~ msgid "Unpacks a vector map packed with v.pack."
+#~ msgstr "Estrai un vettoriale impacchettato con v.pack."
+
+#~ msgid "Multiple import formats using OGR"
+#~ msgstr "Importa diversi formati utilizzando OGR"
+
+#~ msgid "Multiple GPS export formats using GPSBabel"
+#~ msgstr "Esporta in diversi formati GPS usando GPSBabel"
+
+#~ msgid ""
+#~ "Exports a vector map to a GPS receiver or file format supported by "
+#~ "GPSBabel."
+#~ msgstr ""
+#~ "Esporta un vettoriale in un GPS o un file con un formato supportato da "
+#~ "GPSBabel."
+
+#~ msgid "Common export formats using OGR"
+#~ msgstr "Esporta diversi formati usando OGR"
+
+#~ msgid "IDW from raster points (alternate method for sparse points)"
+#~ msgstr "IDW per punti raster (metodo alternativo per punti sparsi)"
+
+#~ msgid "Create optimally placed labels"
+#~ msgstr "Crea label posizionate ottimalmente"
+
+#~ msgid "Bit pattern comparison "
+#~ msgstr "Controllo dei bit pattern"
+
+#, fuzzy
+#~ msgid "Launches graphical attribute table manager."
+#~ msgstr "Gestore Tabella degli Attributi"
+
+#~ msgid "Set computational region from selected map(s) (ignore NULLs)"
+#~ msgstr ""
+#~ "Imposta la regione computazionale dalla/e mappa/e selezionata/e (ignora "
+#~ "nulli)"
+
+#~ msgid "Data file <%(name)s> imported successfully."
+#~ msgstr "File dei dati <%(name)s> importato con successo."
+
+#~ msgid "Add default servers"
+#~ msgstr "Aggiungi server di default"
+
+#~ msgid "Add linked layers into layer tree ({mightNotWork})"
+#~ msgstr "Aggiungi layers linkato nel layer tree ({mightNotWork})"
+
+#~ msgid "Add imported layers into layer tree ({mightNotWork})"
+#~ msgstr "Aggiungi i layer importati nel layer tree ({mightNotWork})"
+
+#~ msgid "Digitize"
+#~ msgstr "Digitalizza"
+
+#~ msgid "GRASS SVN Revision"
+#~ msgstr "Revisione SVN GRASS"
+
+#~ msgid "this might not work for multiple bands"
+#~ msgstr "questo potrebbe non funzionare per più bande"
+
+#~ msgid "Failed to copy map: action is allowed only within the same location."
+#~ msgstr ""
+#~ "Impossibile copiare la mappa: l'azione è permessa solo all'interno della "
+#~ "stessa location."
+
+#~ msgid "Repository (leave empty to use the official one)"
+#~ msgstr "Repository (lasciare vuoto per utilizzare quello ufficiale)"
+
+#~ msgid "&Fetch"
+#~ msgstr "&Trova"
+
+#~ msgid "Fetch list of available modules from GRASS Addons SVN repository"
+#~ msgstr "Trova lista dei moduli disponibile dal repository svn GRASS Addons"
+
+#~ msgid "Please provide an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"
+#~ msgstr ""
+#~ "Fornire il valore dell'ordine (1 se 4 punti fiduciali, 2 se 8 punti "
+#~ "fiduciali)"
+
+#~ msgid "Animation already axists"
+#~ msgstr "Animazione già esistente"
+
+#~ msgid "GRASS GIS Raster Map Calculator"
+#~ msgstr "GRASS GIS Calcolatore per Raster Map Algebra"
+
+#~ msgid "GRASS GIS 3D Raster Map Calculator"
+#~ msgstr "GRASS GIS Calcolatore per Raster 3D Map Algebra"
+
+#~ msgid "GRASS GIS Histogramming Tool"
+#~ msgstr "GRASS GIS Strumento Istogramma"
+
+#~ msgid "Define GRASS Database and Location Name"
+#~ msgstr "Definisci il nome del GRASS Database e della Location"
+
+#~ msgid ""
+#~ "This option allows setting default computation region immediately after "
+#~ "new location is created. Default computation region can be defined later "
+#~ "using g.region based on imported data."
+#~ msgstr ""
+#~ "Questa opzione permette di impostare la regione computazionale di default "
+#~ "subito dopo aver creato una nuova location. La regione computazionale di "
+#~ "default può essere definita anche più tardi utilizzando g.region basato "
+#~ "sui dati importati."
+
+#~ msgid "Create user mapset"
+#~ msgstr "Crea il mapset dell'utente"
+
+#~ msgid "GIS Data Directory:"
+#~ msgstr "Cartella del Database GIS:"
+
+#~ msgid "Project Location"
+#~ msgstr "Location del progetto"
+
+#~ msgid "Location Title"
+#~ msgstr "Nome della Location"
+
+#~ msgid "Optional location title, you can leave this field blank."
+#~ msgstr ""
+#~ "Titolo della location opzionale, si può lasciare questo campo bianco."
+
+#~ msgid "Choose method for creating a new location"
+#~ msgstr "Scegli il metodo per creare una nuova location"
+
+#~ msgid ""
+#~ "Read projection and datum terms from a Well Known Text (WKT) .prj file"
+#~ msgstr "Leggi proiezione e datum da un Well Known Text (WKT) .prj file"
+
+#~ msgid "Select coordinate system parameters from a list"
+#~ msgstr "Seleziona il sistema di coordinate da una lista"
+
+#~ msgid "Specify projection and datum terms using custom PROJ.4 parameters"
+#~ msgstr "Specifica proiezione e datum utilizzando parametri PROJ.4"
+
+#~ msgid "Simple methods:"
+#~ msgstr "Metodi semplici:"
+
+#~ msgid "Advanced methods:"
+#~ msgstr "Metodi avanzati:"
+
+#~ msgid "Choose projection"
+#~ msgstr "Scegli la proiezione"
+
+#~ msgid "Select Well Known Text (WKT) .prj file"
+#~ msgstr "Seleziona il file .prj Well Known Text (WKT)"
+
+#~ msgid "WKT .prj file:"
+#~ msgstr "File WTK .prj:"
+
+#~ msgid "Choose EPSG Code"
+#~ msgstr "Scegli codice EPSG"
+
+#~ msgid "Path to the EPSG-codes file:"
+#~ msgstr "Percorso al file dei codici EPSG"
+
+#~ msgid "Choose EPSG codes file"
+#~ msgstr "Scegli file dei codici EPSG"
+
+#~ msgid "Choose method of specifying georeferencing parameters"
+#~ msgstr "Scegli metodo per specificare i parametri di georeferenziazione"
+
+#~ msgid "Location Title:"
+#~ msgstr "Nome della Location:"
+
+#~ msgid "Location wizard canceled. Location not created."
+#~ msgstr "Location wizard cancellato. Location non creato"
+
+#~ msgid ""
+#~ "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You "
+#~ "will need to change the default GIS data directory in the GRASS startup "
+#~ "screen."
+#~ msgstr ""
+#~ "Location <%(loc)s> sarà creata nella cartella dei dati GIS <%(dir)s>. "
+#~ "Dovrai cambiare la cartella dei dati GIS nella schermata di avvio di "
+#~ "GRASS."
+
+#~ msgid "New GIS data directory"
+#~ msgstr "Nuova cartella del Database GIS"
+
+#~ msgid "Common formats import"
+#~ msgstr "Formati comuni di importazione"
+
+#~ msgid "Import of common formats with reprojection"
+#~ msgstr "Importa formati comuni affettuando riproiezione"
+
+#~ msgid ""
+#~ "Imports raster data into a GRASS raster map using GDAL library and "
+#~ "reprojects on the fly."
+#~ msgstr ""
+#~ "Importa dati raster in una mappa raster di GRASS usando la libreria GDAL "
+#~ "e riproiettando al volo"
+
+#~ msgid ""
+#~ "Imports a raster map as GRASS GIS specific archive file (packed with r."
+#~ "pack)"
+#~ msgstr ""
+#~ "Importa una mappa raster come un file di archivio specifico per GRASS GIS "
+#~ "(creato con r.pack)"
+
+#~ msgid ""
+#~ "Imports vector data into a GRASS vector map using OGR library and "
+#~ "reprojects on the fly."
+#~ msgstr ""
+#~ "Importa dati raster in una mappa vettoriale di GRASS usando la libreria "
+#~ "OGR e riproiettando al volo"
+
+#~ msgid ""
+#~ "Imports a vector map as GRASS GIS specific archive file (packed with v."
+#~ "pack)"
+#~ msgstr ""
+#~ "Importa una mappa vettoriale da un file archivio specifico di GRASS GIS "
+#~ "(creato con v.pack)"
+
+#~ msgid ""
+#~ "Exports a vector map layer to any of the supported OGR vector formats. By "
+#~ "default a vector map layer is exported to Esri Shapefile format."
+#~ msgstr ""
+#~ "Esporta un vettoriale in tutti i formati supportati da OGR. Di default un "
+#~ "vettoriale è esportato nel formato Esri Shapefile"
+
+#~ msgid ""
+#~ "Creates a Voronoi diagram in current region from an input vector map "
+#~ "containing points or centroids."
+#~ msgstr ""
+#~ "Crea un diagramma di Voronoi nella regione attuale da un vettoriale "
+#~ "contenente punti o centroidi."
+
+#~ msgid "Reports and Statistics"
+#~ msgstr "Report e statistiche"
+
+#~ msgid "GRASS GIS Vector Digitizer"
+#~ msgstr "GRASS GIS Digitalizzatore vettoriale"
+
+#~ msgid "Documents"
+#~ msgstr "Documenti"
+
+#~ msgid "My Documents"
+#~ msgstr "Miei Documenti"
+
+#~ msgid "GRASS GIS Simple Python Editor"
+#~ msgstr "GRASS GIS semplice editor di Python"
+
+#~ msgid "Click here to show search module engine"
+#~ msgstr "Clicca qui per visualizzare il modulo di ricerca"
+
+#~ msgid "Click here to hide search module engine"
+#~ msgstr "Clicca qui per nascondere il modulo di ricerca"
+
+#~ msgid "GRASS GIS Cartographic Composer"
+#~ msgstr "GRASS GIS Compositore Cartografico"
+
+#~ msgid "GRASS GIS Map Swipe"
+#~ msgstr "GRASS GIS Map Swipe "
+
+#~ msgid "GRASS GIS Animation tool"
+#~ msgstr "GRASS GIS Strumento Animazione"
+
+#~ msgid "Start region:"
+#~ msgstr "Regione di partenza:"
+
+#~ msgid "GRASS GIS Temporal Plot Tool"
+#~ msgstr "Strumento Grafico Temporale di GRASS GIS"
+
+#~ msgid "Import/link raster or vector data"
+#~ msgstr "Importa/connetti dati raster/vettoriali"
+
+#~ msgid "GRASS GIS %s Layer Manager"
+#~ msgstr "GRASS GIS %s Layer Manager"
+
+#~ msgid ""
+#~ "Location <%s> created.\n"
+#~ "\n"
+#~ "Do you want to switch to the new location?"
+#~ msgstr ""
+#~ "Location <%s> creata.\n"
+#~ "\n"
+#~ "Volete spostarvi nella nuova location?"
+
+#~ msgid "Switch to new location?"
+#~ msgstr "Spostarsi nella nuova location?"
+
+#~ msgid "Do you want to set the default region extents and resolution now?"
+#~ msgstr ""
+#~ "Vuoi impostare l'estensione e la risoluzione della region di default ora?"
+
+#~ msgid "Location <%s> created"
+#~ msgstr "Location <%s> creata!"
+
+#~ msgid "Unable to exit GRASS shell: unknown PID"
+#~ msgstr "Impossibile uscire dalla shell di GRASS: PID sconosciuto"
+
+#~ msgid "Remove vector legend"
+#~ msgstr "Rimuove legenda vettoriale"
+
+#~ msgid "GRASS GIS Vector Network Analysis Tool"
+#~ msgstr "GRASS GIS Strumento Analisi di Reti Vettoriali"
+
+#~ msgid "Click to allow editing other mapsets"
+#~ msgstr "Cliccare per permettere le modifiche in altri mapset"
+
+#~ msgid "GRASS GIS Data Catalog"
+#~ msgstr "Catalogo Dati di GRASS GIS"
+
+#~ msgid "GRASS locations in {0}"
+#~ msgstr "Le Location di GRASS in {0}"
+
+#~ msgid "Editing {name}"
+#~ msgstr "Modifica in corso {name}"
+
+#~ msgid "GRASS GIS Attribute Table Manager"
+#~ msgstr "GRASS GIS Gestore Tabella degli Attributi"
+
+#~ msgid "READONLY - "
+#~ msgstr "SOLA LETTURA -"
+
+#~ msgid "Inconsistent number of columns in the table <%(table)s>."
+#~ msgstr "Numero di colonne inconsistente nella tabella <%(table)s>."
+
+#~ msgid "GRASS GIS Graphical Modeler"
+#~ msgstr "GRASS GIS Modeler Grafico"
+
+#~ msgid "GRASS GIS Timeline Tool"
+#~ msgstr "GRASS GIS Strumento Timeline"
+
+#~ msgid "GRASS GIS - Map display"
+#~ msgstr "GRASS GIS - Map display"
+
+#~ msgid "Maximum number of animations is %s."
+#~ msgstr "Numero massimo di animazioni è %s."
+
+#~ msgid "Animate region change (2D view only)"
+#~ msgstr "Cambiamento della regione dell'animazione (solo nella vista 2D)"
+
+#~ msgid "GRASS GIS Histogramming Tool (d.histogram)"
+#~ msgstr "GRASS GIS Strumento Istogramma (d.histogram)"
+
+#~ msgid ""
+#~ "Generates a raster map containing distances to nearest raster features."
+#~ msgstr "Genera un raster della distanza dagli elementi del layer di input."
+
+#~ msgid "Attaches, deletes or reports vector categories to map geometry."
+#~ msgstr ""
+#~ "Attacca, elimina o visualizza le categorie di un vettore per geometrie "
+#~ "della mappa."
+
+#~ msgid "GRASS GIS Location Download"
+#~ msgstr "GRASS GIS Scaricemento  dellaLocation"
+
+#~ msgid "GRASS GIS Interactive Scatter Plot Tool"
+#~ msgstr "Strumento Scatter Plot Interattivo di GRASS GIS"
+
+#~ msgid "GRASS GIS Supervised Classification Tool"
+#~ msgstr "GRASS GIS Strumento Classificazione Supervisionata"
+
+#~ msgid "Unpack GRASS raster map"
+#~ msgstr "Estrai mappa raster di GRASS"
+
+#~ msgid "Set raster output format"
+#~ msgstr "Imposta il formato di output per i raster"
+
+#~ msgid "Unpack GRASS vector map"
+#~ msgstr "Estrai mappa vettoriale di GRASS"
+
+#~ msgid "Set vector output format"
+#~ msgstr "Imposta il formato di output per i vettoriali"
+
+#~ msgid "Click to restrict editing to current mapset only"
+#~ msgstr "Cliccare per restringere le modifiche solo al mapset corrente"
+
+#~ msgid "Search:"
+#~ msgstr "Ricerca:"
+
+#~ msgid ""
+#~ "Type to search database by map type or name. Use prefix 'r:', 'v:' and "
+#~ "'r3:'to show only raster, vector or 3D raster data, respectively. Use "
+#~ "Python regular expressions to refine your search."
+#~ msgstr ""
+#~ "Digitare per effettuare una ricerca nel database in base al tipo di mappa "
+#~ "o nome. Usare il prefisso 'r:', 'v:' e 'r3:' per visualizzare "
+#~ "rispettivamente solo i dati raster, vettoriali o raster 3D. Utilizzare le "
+#~ "normali espressioni di Python per affinare la ricerca."
+
+#~ msgid " (readonly)"
+#~ msgstr "(sola lettura)"
+
+#~ msgid "GRASS GIS Attribute Table Manager - "
+#~ msgstr "GRASS GIS Gestore Tabella degli Attributi -"
+
+#~ msgid "GRASS GIS Setup for r.li modules"
+#~ msgstr "GRASS GIS Setup per i moduli r.li"
+
+#~ msgid "Resize legend"
+#~ msgstr "Ridimensiona legenda"
+
+#~ msgid "Unable to create location"
+#~ msgstr "Impossibile creare la location"
+
+#~ msgid "Select EPSG code of spatial reference system"
+#~ msgstr "Seleziona il codice EPSG del sistema di coordinate"
+
+#~ msgid "Read projection and datum terms from a georeferenced data file"
+#~ msgstr "Leggi proiezioni e datum da un file georiferito"
+
+#~ msgid "Create a generic Cartesian coordinate system (XY)"
+#~ msgstr "Crea un sistema di coordinate cartesiane generico (XY) "
+
+#~ msgid "Do you want to create GRASS location <%s>?"
+#~ msgstr "Vuoi creare la GRASS location <%s>?"
+
+#~ msgid "Create new location?"
+#~ msgstr "Crea nuova location?"
+
+#~ msgid "GRASS GIS SQL Query Utility"
+#~ msgstr "GRASS GIS Strumento Interrogazione SQL"
+
+#~ msgid "Double-click or Ctrl-Enter to run selected module"
+#~ msgstr "Doppio click o Ctrl-Enter per eseguire il modulo selezionato"
+
+#~ msgid "Ask when quiting wxGUI or closing display"
+#~ msgstr "Chiedi quando si sta chiudendo wxGUI o un display"
+
+#~ msgid "Automatically hightlight selected features in map display"
+#~ msgstr ""
+#~ "Evidenzia automaticamente gli elementi selezionati nel visualizzatore di "
+#~ "mappe"
+
+#~ msgid "Deactive overwrite"
+#~ msgstr "Disattiva la sovrascrittura "
+
+#, python-format
+#~ msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
+#~ msgstr ""
+#~ "Impossibile caricare il tema delle icone. Motivazione: %s. Esce da "
+#~ "wxGUI..."
+
+#~ msgid ""
+#~ "Unable to get current geographic extent. Force quiting wxGUI. Please "
+#~ "manually run g.region to fix the problem."
+#~ msgstr ""
+#~ "Impossibile ottenere l'estensione geografica attuale. Uscita forzata da "
+#~ "wxGUI. Per favore eseguire manualmente g.region per risolvere il problema"

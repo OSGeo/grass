@@ -67819,3 +67819,610 @@ msgstr ""
 #, python-format
 msgid "Generating output raster map <%s>..."
 msgstr ""
+
+#, fuzzy
+#~ msgid "layer name or number to use for data"
+#~ msgstr "จำนวนชั้นข้อมูล"
+
+#, fuzzy
+#~ msgid "Draws the boxplot of the raster maps of a space-time raster dataset"
+#~ msgstr "ชื่อของแผนที่เชิงภาพผลลัพธ์"
+
+#, fuzzy
+#~ msgid "input space-time raster dataset"
+#~ msgstr "ชื่อของแผนที่เชิงภาพผลลัพธ์"
+
+#, fuzzy
+#~ msgid "Resolution of plot"
+#~ msgstr "คำนำหน้า สำหรับ แผนที่เชิงภาพ ผลลัพธ์"
+
+#, fuzzy
+#~ msgid "Name of the column containing unique ID of spatial units"
+#~ msgstr "Column ตารางรายละเอียด  ด้วยค่าที่จะใช้  interpolate"
+
+#, fuzzy
+#~ msgid "Name of the column containing response variable"
+#~ msgstr "Column ตารางรายละเอียด  ด้วยค่าที่จะใช้  interpolate"
+
+#, fuzzy
+#~ msgid "Input raster 1"
+#~ msgstr "นำเข้า ล้มเหลว"
+
+#, fuzzy
+#~ msgid "Input raster 2 (optional)"
+#~ msgstr "ไฟล์ผลลัพธ์ แผนที่  aspect ( หรือ fy)"
+
+#, fuzzy
+#~ msgid "Input distance raster (optional)"
+#~ msgstr "ไฟล์ผลลัพธ์ แผนที่  aspect ( หรือ fy)"
+
+#, fuzzy
+#~ msgid "Spatial resolution of output weighting layer"
+#~ msgstr "คำนำหน้า สำหรับ แผนที่เชิงภาพ ผลลัพธ์"
+
+#, fuzzy
+#~ msgid "Name for output vector gridded spatial units"
+#~ msgstr "ชื่อของแผนที่เชิงภาพผลลัพธ์"
+
+#, fuzzy
+#~ msgid "Name for output plot of model feature importances"
+#~ msgstr "ชื่อของแผนที่เชิงภาพผลลัพธ์"
+
+#, fuzzy
+#~ msgid "Name for output file with log of the random forest run"
+#~ msgstr "ชื่อของไฟล์ผลลัพธ์"
+
+#, fuzzy
+#~ msgid "Categories of basemap A to be used"
+#~ msgstr "ชื่อของชั้นข้อมูลผลลัพธ์ที่ใช้สำหรับ เขียว"
+
+#, fuzzy
+#~ msgid "Categories of basemap B to be used"
+#~ msgstr "ชื่อของชั้นข้อมูลผลลัพธ์ที่ใช้สำหรับ เขียว"
+
+#, fuzzy
+#~ msgid "Number of cores to be used for the parallel process"
+#~ msgstr "จำนวนของ quadrats"
+
+#, fuzzy
+#~ msgid "Upgrades the version of a space time dataset (TGRASS DB)."
+#~ msgstr "ชื่อของฐานข้อมูลใหม่"
+
+#, fuzzy
+#~ msgid "JSON output"
+#~ msgstr "ไม่มีแผนที่ผลลัพธ์"
+
+#~ msgid "nsply = %d"
+#~ msgstr "nsply = %d"
+
+#~ msgid "nsplx = %d"
+#~ msgstr "nsplx = %d"
+
+#~ msgid "npoints = %d, nterrain = %d"
+#~ msgstr "npoints = %d, nterrain = %d"
+
+#~ msgid "Only TERRAIN points"
+#~ msgstr "TERRAIN points เท่านั้น"
+
+#, fuzzy
+#~ msgid "Error writing cell (%d,%d,%d) with value %f, nrows = %d"
+#~ msgstr "ข้อผิดพลาด ขณะ เขียน ไฟล์แผนที่ ผลลัพธ์!"
+
+#, fuzzy
+#~ msgid "Force 2D interpolation even if input is 3D"
+#~ msgstr "บังคับออกผลลัพธ์ แบบ  integer"
+
+#, fuzzy
+#~ msgid "Number of vertical lags (only for 3D variogram)"
+#~ msgstr "จำนวน ทศนิยม สำหรับ  floats"
+
+#, fuzzy
+#~ msgid ""
+#~ "Number of vertical pieces must be at least 1. Default value will be "
+#~ "used..."
+#~ msgstr "จำนวน classes จะต้อง < 256!"
+
+#, fuzzy
+#~ msgid "Error closing file..."
+#~ msgstr "ผิดพลาดขณะปิด  ascii  ไฟล์ "
+
+#, fuzzy
+#~ msgid "Memory allocation failed..."
+#~ msgstr "วิธี Interpolation"
+
+#, fuzzy
+#~ msgid "%d features skipped, only points are accepted"
+#~ msgstr "ค่า Integer ถูกนำเข้า"
+
+#, fuzzy
+#~ msgid "Unused points: %d (out of region)"
+#~ msgstr "ใช้เฉพาะ จุด ที่อยู่ในขอบเขต ปัจจุบัน"
+
+#, fuzzy
+#~ msgid "Old auxiliar table could not be dropped"
+#~ msgstr "ตาราง Auxiliar ไม่สามารถ dropped"
+
+#, fuzzy
+#~ msgid "Base map <%s> has too many categories (max: %d)"
+#~ msgstr "** <%s> มี signatures มากเกินไป (จำกัดที่ 255)"
+
+#, fuzzy
+#~ msgid ""
+#~ "Data types depend on database backend, but all support VARCHAR(), INT, "
+#~ "DOUBLE PRECISION and DATE"
+#~ msgstr ""
+#~ "ชื่อและชนิดของ column ใหม่ (ชนิดขึ้นอยู่กับ ฐานข้อมูล, แต่ต้องรองรับ VARCHAR(), INT, "
+#~ "DOUBLE และ DATE)"
+
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "%sCOMPRESS <%s>"
+#~ msgstr ""
+#~ "\n"
+#~ "%sCOMPRESS [%s]"
+
+#, fuzzy
+#~ msgid "Grid-decimated point cloud"
+#~ msgstr "ไม่พบข้อมูลจุด"
+
+#, fuzzy
+#~ msgid "Layer number where blue color is stored as category"
+#~ msgstr "ชั้นข้อมูลที่จะเพิ่ม column"
+
+#~ msgid "Region\n"
+#~ msgstr "ขอบเขต\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "%d classes, %.2f%% points stable\n"
+#~ msgstr ""
+#~ "\n"
+#~ "%d classes, %.2f%% points stable\n"
+
+#~ msgid "Page length (default: %d lines)"
+#~ msgstr "ความยาว หน้า (ค่าตั้งต้น: %d บรรทัด)"
+
+#~ msgid "Page width (default: %d characters)"
+#~ msgstr "ความกว้าง หน้า (ค่าตั้งต้น: %d ตัวอักษร)"
+
+#~ msgid ""
+#~ "\n"
+#~ "You can use the -o flag to r.in.gdal to override this check and use the "
+#~ "location definition for the dataset.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "คุณสามารถใช้  -o สำหรับ r.in.gdal เพื่อยกเลิกการตรวจสอบ และใช้ การกำหนดของ "
+#~ "ตำแหน่ง สำหรับ ชุดข้อมูล\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "You can use the -o flag to %s to override this projection check.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "คุณสามารถใช้ -o กับ %s เพื่อยกเลิกการตรวจสอบ projection.\n"
+
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "You can use the -o flag to r.external to override this check and use the "
+#~ "location definition for the dataset.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "คุณสามารถใช้  -o สำหรับ r.in.gdal เพื่อยกเลิกการตรวจสอบ และใช้ การกำหนดของ "
+#~ "ตำแหน่ง สำหรับ ชุดข้อมูล\n"
+
+#, fuzzy
+#~ msgid "-%c/-%c and %s= are mutually exclusive"
+#~ msgstr "weight= และ -c คือ mutually exclusive"
+
+#, fuzzy
+#~ msgid "Location name (not location path)"
+#~ msgstr "ชื่อ LOCATION ใหม่ (ไม่ใช่ location path)"
+
+#, fuzzy
+#~ msgid "Unpacks a vector map packed with v.pack."
+#~ msgstr "ปรับปรุง metadata ของแผนที่เชิงเส้น."
+
+#, fuzzy
+#~ msgid "Default: path to the current GRASS database"
+#~ msgstr "แสดงชื่อ ของกรอบ"
+
+#, fuzzy
+#~ msgid "No flag given"
+#~ msgstr "ไม่ได้ระบุชื่อแผนที่"
+
+#, fuzzy
+#~ msgid "Command file not found"
+#~ msgstr "ไม่พบ Column <%s>"
+
+#~ msgid "Renaming reclass maps"
+#~ msgstr "กำลังเปลี่ยนชื่อ  reclass maps"
+
+#~ msgid ""
+#~ "Correction of the v.lidar.growing output. It is the last of the three "
+#~ "algorithms for LIDAR filtering."
+#~ msgstr ""
+#~ "Correction ของผลลัพธ์จาก v.lidar.growing . มันเป็นอันสุดท้าย ของ 3 algorithms "
+#~ "สำหรับ LIDAR filtering."
+
+#~ msgid "Interpolation spline step value in east direction"
+#~ msgstr "ค่าขั้น ของ Interpolation spline ใน east direction"
+
+#~ msgid "Interpolation spline step value in north direction"
+#~ msgstr "ค่าขั้น ของ Interpolation spline ใน north direction"
+
+#, fuzzy
+#~ msgid "Prefix for output raster maps (.base, .max, .maxdir, .spotdist)"
+#~ msgstr "ชื่อของแผนที่เชิงภาพผลลัพธ์"
+
+#, fuzzy
+#~ msgid "Also produce maximum spotting distance"
+#~ msgstr "สร้าง maximum SPOTTING distance"
+
+#, fuzzy
+#~ msgid "Displays thematic vector map"
+#~ msgstr "แสดง thematic vectormap"
+
+#~ msgid "Update color values to GRASSRGB column in attribute table"
+#~ msgstr "ปรับปรุงค่าสีไปเป็น column GRASSRGB ในตาราง"
+
+#, fuzzy
+#~ msgid ""
+#~ "Displays a thematic vector area map in the active frame on the graphics "
+#~ "monitor."
+#~ msgstr "แสดง ชั้นข้อมูลเชิงเส้นของ  GRASS ในกรอบที่กำลังทำงานบนจอแสดงผล"
+
+#, fuzzy
+#~ msgid "Text color or \"none\""
+#~ msgstr "สีตัวอักษร"
+
+#, fuzzy
+#~ msgid "Color in GRASS format for drawing text"
+#~ msgstr "สีสำหรับวาดตัวอักษร"
+
+#, fuzzy
+#~ msgid "Color in GRASS format for drawing grid, or \"none\""
+#~ msgstr "สีสำหรับวาดกริด, หรือ \"none\""
+
+#, fuzzy
+#~ msgid ""
+#~ "Allows creation and/or modification of raster3d map layer support files."
+#~ msgstr "ยอมให้สร้าง และ/หรือ เปลี่ยนแปลง ไฟล์ support ของชั้นข้อมูลเชิงภาพ."
+
+#~ msgid "dig_att file doesn't exist."
+#~ msgstr "ไม่มี dig_att ไฟล์."
+
+#~ msgid "Attaching categories..."
+#~ msgstr "กำลังแนบ หมวดหมู่ ..."
+
+#~ msgid "Line %d label: %d matched another label: %d."
+#~ msgstr "เส้น %d แถบข้อความ: %d ตรงกับ แถบข้อความ อื่น: %d."
+
+#~ msgid "[%d] centroids written to output file."
+#~ msgstr "[%d] จุดศูนย์ถ่วง ถูกเขียนไปที่ ไฟล์ผลลัพธ์"
+
+#, fuzzy
+#~ msgid "No category labels (dig_cats) found, no table created"
+#~ msgstr "ไม่พบ แถบข้อความของหมวดหมู่  (dig_cats) , ไม่ได้สร้างตาราง.\n"
+
+#~ msgid "Reading dig file..."
+#~ msgstr "กำลังอ่าน dig ไฟล์ ..."
+
+#~ msgid "Input file is version 4."
+#~ msgstr "ไฟล์ที่นำเข้า เป็นรุ่น 4."
+
+#~ msgid ""
+#~ "Input file is not portable. We will attempt to convert anyway but "
+#~ "conversion may fail. Please read manual for detail information."
+#~ msgstr ""
+#~ "ไฟล์ที่นำเข้า เป็นไม่เป็น portable. เราจะใช้การแปลง แต่ว่า อาจจะล้มเหลว. โปรดอ่านคู่มือ "
+#~ "สำหรับรายละเอียด"
+
+#~ msgid "[%d] points read to memory"
+#~ msgstr "[%d] จุด ที่อ่านไปไว้ที่หน่วยความจำ"
+
+#~ msgid "[%d] lines read to memory"
+#~ msgstr "[%d] เส้น ที่อ่านไปไว้ที่หน่วยความจำ"
+
+#~ msgid "[%d] points read and written to output"
+#~ msgstr "[%d] จุดที่ อ่านและเขียน ไปที่ผลลัพธ์"
+
+#~ msgid "[%d] lines read and written to output"
+#~ msgstr "[%d] เส้นที่ อ่านและเขียน ไปที่ผลลัพธ์"
+
+#~ msgid "[%d] area boundaries read and written to output"
+#~ msgstr "[%d] area boundaries ที่ อ่านและเขียน ไปที่ผลลัพธ์"
+
+#~ msgid "[%d] dead points skipped"
+#~ msgstr "[%d] dead points ที่ข้าม"
+
+#~ msgid "[%d] dead lines skipped"
+#~ msgstr "[%d] dead lines ที่ข้าม"
+
+#~ msgid "[%d] dead area boundaries skipped"
+#~ msgstr "[%d] dead area boundaries ที่ข้าม"
+
+#~ msgid "[%d] elements of unknown type skipped"
+#~ msgstr "[%d] elements ที่ไม่ทราบชนิด  ที่ข้าม"
+
+#~ msgid "[%d] elements read to memory"
+#~ msgstr "[%d] elements อ่านไปไว้ที่หน่วยความจำ"
+
+#~ msgid "Reading dig_att file..."
+#~ msgstr "กำลังอ่าน dig_att ไฟล์ ..."
+
+#~ msgid "[%d] point categories read"
+#~ msgstr "[%d] จุด ของ หมวดหมู่ ที่อ่าน"
+
+#~ msgid "[%d] centroids read"
+#~ msgstr "[%d] จุดศูนย์ถ่วง ที่อ่าน"
+
+#~ msgid "[%d] dead point categories skipped"
+#~ msgstr "[%d] dead point categories ที่ข้าม"
+
+#~ msgid "[%d] dead line categories skipped"
+#~ msgstr "[%d] dead line categories ที่ข้าม"
+
+#~ msgid "[%d] dead centroids skipped"
+#~ msgstr "[%d] dead centroids ที่ข้าม"
+
+#~ msgid "[%d] categories of unknown type skipped"
+#~ msgstr "[%d] หมวดหมู่ที่ไม่ทราบชนิด ที่ข้าม"
+
+#~ msgid "[%d] categories read into memory"
+#~ msgstr "[%d] หมวดหมู่ อ่านไปไว้ที่หน่วยความจำ"
+
+#~ msgid "OLD_T_NEW Got a bad type code [%x]"
+#~ msgstr "OLD_T_NEW ได้รหัส ชนิด ที่ไม่เหมาะสม [%x]"
+
+#~ msgid "NEW_T_OLD Got a bad type code [%x]"
+#~ msgstr "NEW_T_OLD ได้รหัส ชนิด ที่ไม่เหมาะสม [%x]"
+
+#~ msgid "Char string to represent no data cell"
+#~ msgstr "ตัวอักษร ที่ใช้แทน  no data cell"
+
+#~ msgid "Unknown metric: [%s]."
+#~ msgstr "Metric ที่ไม่รู้จัก: [%s]"
+
+#~ msgid "String representing no data cell value"
+#~ msgstr "ตัวอักษรที่ใช้แทน ข้อมูล cell ที่ไม่มีค่า"
+
+#, fuzzy
+#~ msgid "Surface interpolation utility for raster map."
+#~ msgstr "เครื่องมือ Surface interpolation สำหรับ ชั้นข้อมูลแผนที่เชิงภาพ"
+
+#, fuzzy
+#~ msgid ""
+#~ "Computes anisotropic cumulative cost of moving between different "
+#~ "geographic locations on an input elevation raster map whose cell category "
+#~ "values represent elevation combined with an input raster map layer whose "
+#~ "cell values represent friction cost."
+#~ msgstr ""
+#~ "ส่งออก ชั้นข้อมูลแผนที่เชิงภาพ ที่แสดง anisotropic cumulative cost ของ การเคลื่อนที่ "
+#~ "ระหว่าง ตำแหน่งภูมิศาสตร์ที่ต่างกัน บนชั้นข้อมูลแผนที่ความสูง เชิงภาพ ที่ ค่า หมวดหมู่ cell แทน "
+#~ "ความสูงที่รวมด้วย ชั้นข้อมูลแผนที่เชิงภาพ ที่ค่า cell แทน friction cost."
+
+#~ msgid "Name of layer to be used for INTENSITY"
+#~ msgstr "ชื่อชั้นข้อมูลที่จะใช้สำหรับ INTENSITY"
+
+#~ msgid "Name of layer to be used for SATURATION"
+#~ msgstr "ชื่อชั้นข้อมูลที่จะใช้สำหรับ SATURATION"
+
+#~ msgid "Surface generation program."
+#~ msgstr "โปรแกรมสร้าง Surface"
+
+#~ msgid ""
+#~ "Lat/long databases not supported by r.surf.idw2. Use r.surf.idw instead!"
+#~ msgstr "ฐานข้อมูล แลต/ลอง ไม่รองรับโดย r.surf.idw2. ใช้ r.surf.idw แทน!"
+
+#~ msgid "%s=%s - illegal number of interpolation points"
+#~ msgstr "%s=%s - จำนวนจุดที่ใช้ทำ  interpolation ไม่ถูกต้อง"
+
+#, fuzzy
+#~ msgid "String to represent no data cell"
+#~ msgstr "ตัวอักษร ที่ใช้แทน  no data cell"
+
+#~ msgid "Character to represent no data cell"
+#~ msgstr "ตัวอักษณที่แสดง ไม่มีข้อมูล cell"
+
+#~ msgid "Run verbosely"
+#~ msgstr "แสดงรายละเอียด การทำงาน"
+
+#, fuzzy
+#~ msgid "%s available in mapset <%s>:"
+#~ msgstr "รายการทั้งหมด ของชุดแผนที่ที่ใช้งานได้"
+
+#~ msgid "Null value indicator"
+#~ msgstr "ตัวชี้ค่า Null"
+
+#~ msgid "Suppress warnings"
+#~ msgstr "หยุดการเตือน"
+
+#, fuzzy
+#~ msgid "Create raster map from result (optional)"
+#~ msgstr "ชื่อของแผนที่เชิงภาพ ที่ 1 ที่จะ บิดสี "
+
+#, fuzzy
+#~ msgid "Table file to be exported or DB connection string"
+#~ msgstr "ไฟล์ตารางที่จะนำเข้า หรือ การเชื่อมต่อ  DB"
+
+#, fuzzy
+#~ msgid "Type of the aggregation space time dataset, default is strds"
+#~ msgstr "ชื่อของฐานข้อมูลใหม่"
+
+#, fuzzy
+#~ msgid "Greater value option that sets the >= area size limit [hectares]"
+#~ msgstr "เงื่อนไข ใหญ่ กว่ากำหนด <= จำกัดขนาดพื้นที่ [hectares]"
+
+#, fuzzy
+#~ msgid "Color in GRASS format for drawing grid or \"none\" not drawing"
+#~ msgstr "สีสำหรับวาดกริด, หรือ \"none\""
+
+#, fuzzy
+#~ msgid ""
+#~ "Color in GRASS format for drawing null values (X symbol) or \"none\" not "
+#~ "drawing"
+#~ msgstr "สีสำหรับวาดกริด, หรือ \"none\""
+
+#, fuzzy
+#~ msgid "Color for showing unknown information or \"none\""
+#~ msgstr "สีสำหรับ ข้อมูลที่ไม่ทราบ"
+
+#, fuzzy
+#~ msgid ""
+#~ "Color in GRASS format for showing unknown information (? symbol) or "
+#~ "\"none\" not showing"
+#~ msgstr "สีสำหรับวาดกริด, หรือ \"none\""
+
+#, fuzzy
+#~ msgid "input= and file= are mutually exclusive"
+#~ msgstr "weight= และ -c คือ mutually exclusive"
+
+#, fuzzy
+#~ msgid "Options <%s>, <%s>, and <%s> are mutually exclusive"
+#~ msgstr "weight= และ -c คือ mutually exclusive"
+
+#, fuzzy
+#~ msgid "-t, -r, rules=, basemap= and fprange= are mutually exclusive"
+#~ msgstr "weight= และ -c คือ mutually exclusive"
+
+#, fuzzy
+#~ msgid "file= and expression= are mutually exclusive"
+#~ msgstr "weight= และ -c คือ mutually exclusive"
+
+#, fuzzy
+#~ msgid "samplingpos= and outfile= are mutually exclusive"
+#~ msgstr "weight= และ -c คือ mutually exclusive"
+
+#, fuzzy
+#~ msgid "Please specify output= or outfile="
+#~ msgstr "โปรดระบุ z Column"
+
+#, fuzzy
+#~ msgid "Please specify output= and samplingpos="
+#~ msgstr "โปรดระบุ z Column"
+
+#, fuzzy
+#~ msgid "datapos= and infile= are mutually exclusive"
+#~ msgstr "weight= และ -c คือ mutually exclusive"
+
+#, fuzzy
+#~ msgid "Please specify input= or infile="
+#~ msgstr "โปรดระบุ z Column"
+
+#, fuzzy
+#~ msgid "Please specify input= and datapos="
+#~ msgstr "โปรดระบุ z Column"
+
+#, fuzzy
+#~ msgid "Display the "
+#~ msgstr "แสดง"
+
+#, fuzzy
+#~ msgid "Option <%s> and <%s> are mutually exclusive"
+#~ msgstr "weight= และ -c คือ mutually exclusive"
+
+#, fuzzy
+#~ msgid "radius= and x_radius=/y_radius= are mutually exclusive"
+#~ msgstr "weight= และ -c คือ mutually exclusive"
+
+#, fuzzy
+#~ msgid "weight= and gauss= are mutually exclusive"
+#~ msgstr "weight= และ -c คือ mutually exclusive"
+
+#~ msgid "Color for drawing grid or \"none\""
+#~ msgstr "สีกรด สำหรับการวาด หรือ \"none\""
+
+#~ msgid "Gather the histogram quietly"
+#~ msgstr "จับกลุ่ม  histogram  แบบเงียบ"
+
+#~ msgid "Not enough memory for adx"
+#~ msgstr "หน่วยความจำไม่พอ สำหรับ adx"
+
+#~ msgid "Not enough memory for ady"
+#~ msgstr "หน่วยความจำไม่พอ สำหรับ ady"
+
+#~ msgid "Not enough memory for adxx"
+#~ msgstr "หน่วยความจำไม่พอ สำหรับ adxx"
+
+#~ msgid "Not enough memory for adyy"
+#~ msgstr "หน่วยความจำไม่พอ สำหรับ adyy"
+
+#~ msgid "Not enough memory for adxy"
+#~ msgstr "หน่วยความจำไม่พอ สำหรับ adxy"
+
+#~ msgid "Cannot create quaddata"
+#~ msgstr "ไม่สามารถสร้าง Quaddata"
+
+#, fuzzy
+#~ msgid "Not enough memory"
+#~ msgstr "หน่วยความจำไม่พอ สำหรับ az"
+
+#, fuzzy
+#~ msgid "Options <%s/%s> and <%s> are mutually exclusive"
+#~ msgstr "weight= และ -c คือ mutually exclusive"
+
+#, fuzzy
+#~ msgid "One of options <%s> or <%s> must be specified"
+#~ msgstr ""
+#~ "ต้องระบุ 1 เงื่อนไข ของ \"-i\" or \"-r\" หรือ เงื่อนไข \"color\", \"rast\" or "
+#~ "\"rules\" !"
+
+#, fuzzy
+#~ msgid "Option <%s> must be specified"
+#~ msgstr ""
+#~ "ต้องระบุ 1 เงื่อนไข ของ \"-i\" or \"-r\" หรือ เงื่อนไข \"color\", \"rast\" or "
+#~ "\"rules\" !"
+
+#~ msgid "sites"
+#~ msgstr "sites"
+
+#, fuzzy
+#~ msgid "%d sites written."
+#~ msgstr "%d ข้อมูล เขียนแล้ว"
+
+#~ msgid "Performing 1 arg map function on map %s"
+#~ msgstr "การทำงานคำสั่งแผนที่ 1 ตัวแปร บน แผนที่   %s "
+
+#~ msgid "Performing 2 arg map function on maps %s and %s"
+#~ msgstr "การทำงานคำสั่งแผนที่ 2 ตัวแปร บน แผนที่   %s และ %s"
+
+#~ msgid "Performing map %s + %s"
+#~ msgstr "การทำงานคำสั่งแผนที่  %s + %s"
+
+#~ msgid "Can't call bad map-function"
+#~ msgstr "ไม่สามารถใช้คำสั่ง แผนที่ ที่ไม่ดี"
+
+#~ msgid "Bad arguments to mapfunc %s (argc = %d)"
+#~ msgstr "ตัวแปรไม่ดี ที่จะใช้กับ mapfunc %s (argc = %d)"
+
+#~ msgid "No function defined to perform map %c map"
+#~ msgstr "ไม่มีคำสั่งกำหนด ที่จะทำงานแผนที่ %c แผนที่"
+
+#~ msgid "Can't call bad num-function"
+#~ msgstr "ไม่สามารถใช้ num-function ที่ไม่ดี"
+
+#~ msgid "Bad arguments to numfunc %s"
+#~ msgstr "ตัวแปรไม่ดี ที่จะใช้กับ  numfunc %s"
+
+#~ msgid "No function defined to perform ``number %c number''"
+#~ msgstr "ไม่มีคำสั่งกำหนด ที่จะทำงาน ``number %c number''"
+
+#~ msgid "No function defined to perform ``point %c point''"
+#~ msgstr "ไม่มีคำสั่งกำหนด ที่จะทำงาน ``point %c point''"
+
+#~ msgid "Can't call bad any-function"
+#~ msgstr "ไม่สามารถ เรียก คำสั่งที่ไม่ดี"
+
+#~ msgid "Bad arguments to anyfunc %s (argc = %d)"
+#~ msgstr "ตัวแปรไม่ดี ใช้กับ คำสั่งใดๆ %s (argc = %d)"
+
+#~ msgid "Can't call bad function"
+#~ msgstr "ไม่สามารถใช้ คำสั่ง ที่ไม่ดี"
+
+#~ msgid "Bad arguments to pointfunc %s"
+#~ msgstr "ตัวแปรไม่ดี ที่จะใช้กับ pointfunc %s"
+
+#~ msgid "Cache size (MiB)"
+#~ msgstr "ขนาด Cache (MiB)"

@@ -69828,3 +69828,1076 @@ msgstr ""
 #, python-format
 msgid "Generating output raster map <%s>..."
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "Classification of a vector maps based on the values in attribute tables"
+#~ msgstr ""
+#~ "Vytiskne/nastaví připojení databáze pro vektorovou mapu k atributové "
+#~ "tabulce"
+
+#, fuzzy
+#~ msgid "Name of training vector map"
+#~ msgstr "Název vektorové vrstvy"
+
+#, fuzzy
+#~ msgid "layer name or number to use for data"
+#~ msgstr "Číslo vrstvy (to)"
+
+#, fuzzy
+#~ msgid "Numpy array with columns names."
+#~ msgstr "Příliš mnoho názvů sloupců"
+
+#, fuzzy
+#~ msgid "number of jobs to use during the domain exploration"
+#~ msgstr "Počet sloupců v nové oblasti"
+
+#, fuzzy
+#~ msgid "Export to numpy files"
+#~ msgstr "Formát výstupních souborů"
+
+#, fuzzy
+#~ msgid "Export the classify results to raster maps"
+#~ msgstr "Typ uložení výsledné rastrové mapy"
+
+#, fuzzy
+#~ msgid "append the classification results"
+#~ msgstr "Název existující rastrové mapy obsahující výsledky klasifikace"
+
+#, fuzzy
+#~ msgid "Vector output stream"
+#~ msgstr "Název výstupní rastrové mapy"
+
+#, fuzzy
+#~ msgid "Averaging distance [map units]"
+#~ msgstr "Vzdálenost odstupu fotoaparátu (v mapových jednotkách)"
+
+#, fuzzy
+#~ msgid "Draws the boxplot of the raster maps of a space-time raster dataset"
+#~ msgstr "Název výstupní rastrové mapy"
+
+#, fuzzy
+#~ msgid "input space-time raster dataset"
+#~ msgstr "Název výstupní rastrové mapy"
+
+#, fuzzy
+#~ msgid "Resolution of plot"
+#~ msgstr "Rozlišení VZ= %f; SJ=%f"
+
+#, fuzzy
+#~ msgid "Font size of labels"
+#~ msgstr "Vytiskni označení kategorií"
+
+#, fuzzy
+#~ msgid "Date format"
+#~ msgstr "Vstupní formát"
+
+#, fuzzy
+#~ msgid "The width of the boxplots"
+#~ msgstr "Šířka linie textu"
+
+#, fuzzy
+#~ msgid "density"
+#~ msgstr "zhutnění"
+
+#, fuzzy
+#~ msgid "Vector with spatial units"
+#~ msgstr "Vektorové body"
+
+#, fuzzy
+#~ msgid "Required inputs"
+#~ msgstr "Načítám vstupy..."
+
+#, fuzzy
+#~ msgid "Name of the column containing unique ID of spatial units"
+#~ msgstr "Název číselného sloupce obsahujícího šířku linie"
+
+#, fuzzy
+#~ msgid "Name of the column containing response variable"
+#~ msgstr "Jméno sloupce obsahujícího souřadnici x"
+
+#, fuzzy
+#~ msgid "Format: All values must be >0"
+#~ msgstr "Mezní hodnota musí být >= 0"
+
+#, fuzzy
+#~ msgid "Input raster 1"
+#~ msgstr "Formát vstupního souboru"
+
+#, fuzzy
+#~ msgid "Input raster 2 (optional)"
+#~ msgstr "Výstupní mapa expozice (nebo fy)"
+
+#, fuzzy
+#~ msgid "Input distance raster (optional)"
+#~ msgstr "Výstupní mapa expozice (nebo fy)"
+
+#, fuzzy
+#~ msgid "Distance to zones of interest"
+#~ msgstr "Zóna(y) vzdáleností"
+
+#, fuzzy
+#~ msgid "Spatial resolution of output weighting layer"
+#~ msgstr "Přípona výstupních souborů"
+
+#, fuzzy
+#~ msgid "Output weighting layer name"
+#~ msgstr "Název výstupní tabulky"
+
+#, fuzzy
+#~ msgid "Name for output vector gridded spatial units"
+#~ msgstr "Jméno výstupního vektoru pro zarovnané body bystřin"
+
+#, fuzzy
+#~ msgid "Name for output plot of model feature importances"
+#~ msgstr "Název sloupce atributu, který má být použit pro velikost bufferu"
+
+#, fuzzy
+#~ msgid "Name for output file with log of the random forest run"
+#~ msgstr "Název výstupního souboru"
+
+#, fuzzy
+#~ msgid "Categories of basemap A to be used"
+#~ msgstr "Název rastrové vrstvy, která bude zobrazena"
+
+#, fuzzy
+#~ msgid "Format: 1,2,3"
+#~ msgstr "Formát"
+
+#, fuzzy
+#~ msgid "Categories of basemap B to be used"
+#~ msgstr "Název rastrové vrstvy, která bude zobrazena"
+
+#, fuzzy
+#~ msgid "Number of cores to be used for the parallel process"
+#~ msgstr "Počet úrovní, které budou použity pro každou součást"
+
+#, fuzzy
+#~ msgid "Feature selection and tuning"
+#~ msgstr "Obrácený výběr"
+
+#, fuzzy
+#~ msgid ""
+#~ "Number of k-fold cross-validation for grid search parameter optimization"
+#~ msgstr "Provede proceduru křížové validace bez rastrové aproximace"
+
+#~ msgid "Overwrite connection parameter for certain layer"
+#~ msgstr "Přepiš parametry připojení pro danou vrstvu"
+
+#~ msgid "Location:"
+#~ msgstr "Lokace:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Type of raster map to be created / Storage type for resultant raster map"
+#~ msgstr "Typ uložení výsledné rastrové mapy"
+
+#, fuzzy
+#~ msgid "Footprint of the data as vector map"
+#~ msgstr "Nastav region tak, aby odpovídal této vektorové mapě"
+
+#, fuzzy
+#~ msgid "cloud computing"
+#~ msgstr "detekce mraků"
+
+#, fuzzy
+#~ msgid "Path to ASCII file containing authentication parameters"
+#~ msgstr "Jméno souboru obsahující počáteční signatury"
+
+#, fuzzy
+#~ msgid "Name or IP of server to be connected"
+#~ msgstr "Název rastrové mapy, která má být rekodifikována"
+
+#, fuzzy
+#~ msgid "Name of input raster map(s) used by GRASS script"
+#~ msgstr "Název vstupní rastrové mapy"
+
+#, fuzzy
+#~ msgid "Name of input vector map(s) used by GRASS script"
+#~ msgstr "Název vstupní vektorové mapy (A)"
+
+#, fuzzy
+#~ msgid "Name of band reference identifier (example: S2_1)"
+#~ msgstr "Název tabulku referenčního systému"
+
+#, fuzzy
+#~ msgid "Upgrades the version of a space time dataset (TGRASS DB)."
+#~ msgstr "Modifikuje metadata množiny časoprostorových dat."
+
+#, fuzzy
+#~ msgid "Observed distribution"
+#~ msgstr "distribuce třídy"
+
+#, fuzzy
+#~ msgid "Modeled distribution"
+#~ msgstr "distribuce třídy"
+
+#, fuzzy
+#~ msgid "print log file to file?"
+#~ msgstr "Nelze zapisovat do souboru"
+
+#, fuzzy
+#~ msgid "evaluation area"
+#~ msgstr "Chyba v neurčitosti nadmořských výšek"
+
+#, fuzzy
+#~ msgid "Output buffer map"
+#~ msgstr "Výstupní mapa"
+
+#, c-format
+#~ msgid ""
+#~ "Id: %5d\n"
+#~ "Angle: %.8f\n"
+#~ msgstr ""
+#~ "Linie: %5d\n"
+#~ "Úhel: %.8f\n"
+
+#, fuzzy
+#~ msgid "JSON output"
+#~ msgstr "Žádné výstupní mapy"
+
+#~ msgid "Betweenness threshold in network generalization"
+#~ msgstr "Práhová hodnota pro generalizi sítě"
+
+#, c-format
+#~ msgid "One of '%s' or '%s' parameters must be set"
+#~ msgstr "Jeden z parametrů [%s] nebo [%s] musí být použit"
+
+#~ msgid "Print table structure"
+#~ msgstr "Vypiš strukturu tabulky"
+
+#~ msgid ""
+#~ "Creates a raster map layer and vector point map containing randomly "
+#~ "located points."
+#~ msgstr ""
+#~ "Vytvoří rastrovou mapu a bodovou vektorovou mapu obsahující náhodně "
+#~ "rozmístěné body."
+
+#~ msgid "The number of points to allocate"
+#~ msgstr "Počet bodů, které mají být rozmístěny"
+
+#~ msgid "Generate points also for NULL category"
+#~ msgstr "Generuje také body s kategorií null"
+
+#~ msgid "Report information about input raster and exit"
+#~ msgstr "Nahlaš informace o vstupním rastru a ukonči se"
+
+#, c-format
+#~ msgid "Note: one (or both) of %s and %s must be specified"
+#~ msgstr "Musí být zadána alespoň jedna volba z %s a %s"
+
+#, fuzzy
+#~ msgid "Unable to assign/dissociate band reference. {}"
+#~ msgstr "Nelze otevřít databázipro referenční tabulku"
+
+#, fuzzy
+#~ msgid "Name of raster map to import by actinia"
+#~ msgstr "Název rastrové vrstvy, která bude zobrazena"
+
+#, fuzzy
+#~ msgid "Name of vector map to import in actinia"
+#~ msgstr "Jméno vektorové mapy k editaci"
+
+#~ msgid "Maximum memory to be used with -m flag (in MB)"
+#~ msgstr "Maximální velikost použité paměti bude použité s volbou -m (v MB)"
+
+#~ msgid "Sorry, you must choose an output map."
+#~ msgstr "Promiňte, musíte zadat nějakou výstupní mapu."
+
+#~ msgid "nwalk (%d) > maxw (%d)!"
+#~ msgstr "nwalk (%d) > maxw (%d)!"
+
+#~ msgid "Sampling intervals (by row and col); default: ~10,000 pixels"
+#~ msgstr ""
+#~ "Vzorkovací intervaly (podle řádku a sloupce); výchozí: ~10 000 pixelů"
+
+#~ msgid "Area centroid without category"
+#~ msgstr "Centroid plochy bez categorie"
+
+#, fuzzy
+#~ msgid "No output requested"
+#~ msgstr "Žádné výstupní mapy"
+
+#~ msgid "modifyNull: error flushing tiles in cube"
+#~ msgstr "modifyNull: chyba při zarovnání dlaždic do kostky"
+
+#~ msgid " "
+#~ msgstr " "
+
+#~ msgid "Reading data ..."
+#~ msgstr "Čtu data... "
+
+#~ msgid "Writing to map ..."
+#~ msgstr "Zapisuji do vrstvy ..."
+
+#~ msgid ""
+#~ "Unable to convert input raster map projection information to GRASS format "
+#~ "for checking"
+#~ msgstr ""
+#~ "Nelze převést informace o vstupní mapové projekci do formátu GRASSu (pro "
+#~ "kontrolu)"
+
+#, fuzzy
+#~ msgid "Calculating %s"
+#~ msgstr "Počítám mapy ..."
+
+#~ msgid "Defines raster output format utilizing GDAL library."
+#~ msgstr "Určuje výstupní formát rastrů vytvořený pomocí knihovny GDAL."
+
+#~ msgid "Unknown geometry type"
+#~ msgstr "Neznámý typ geometrie"
+
+#~ msgid "Allocating memory for bilinear interpolation"
+#~ msgstr "Přidělení paměti pro bilineární interpolaci"
+
+#~ msgid "Allocating memory for bicubic interpolation"
+#~ msgstr "Přidělení paměti pro bikubickou interpolaci"
+
+#~ msgid "Not enough centres for selected nlayer. Nothing will be allocated."
+#~ msgstr ""
+#~ "Nedostatečný počet středů pro vybranou vrstvu (nlayer). Nic nebude "
+#~ "přiděleno."
+
+#~ msgid "Only 'terrain' points output vector map"
+#~ msgstr "Výstupní vektorová mapa s počátečními body"
+
+#~ msgid "nsply = %d"
+#~ msgstr "nsply = %d"
+
+#~ msgid "nsplx = %d"
+#~ msgstr "nsplx = %d"
+
+#~ msgid "read vector region map"
+#~ msgstr "číst region vektorové vrstvy"
+
+#~ msgid "npoints = %d, nterrain = %d"
+#~ msgstr "npoints = %d, nterrain = %d"
+
+#~ msgid "Mean calculation"
+#~ msgstr "Výpočet střední hodnoty"
+
+#~ msgid "Only TERRAIN points"
+#~ msgstr "Pouze body terénu"
+
+#, fuzzy
+#~ msgid "Output formating"
+#~ msgstr "Výstupní formát"
+
+#, fuzzy
+#~ msgid "Unable to create 2D raster <%s>"
+#~ msgstr "Nejsem schopen vytvořit rastrovou mapu <%s>"
+
+#, fuzzy
+#~ msgid "Unable to create 3D raster <%s>"
+#~ msgstr "Nejsem schopen vytvořit rastrovou mapu <%s>"
+
+#, fuzzy
+#~ msgid "Error writing cell (%d,%d,%d) with value %f, nrows = %d"
+#~ msgstr "Chyba při zápisu souboru cell_misc/%s/gdal"
+
+#, fuzzy
+#~ msgid "Force 2D interpolation even if input is 3D"
+#~ msgstr "Vynutit 2D výstup, i když je vstup 3D"
+
+#, fuzzy
+#~ msgid "Name for output 2D/3D raster map"
+#~ msgstr "Název výstupní rastrové mapy"
+
+#, fuzzy
+#~ msgid "Vertical variogram function"
+#~ msgstr "Vertikální měřítko"
+
+#, fuzzy
+#~ msgid "Number of horizontal lags"
+#~ msgstr "Počet řádků"
+
+#, fuzzy
+#~ msgid "Number of vertical lags (only for 3D variogram)"
+#~ msgstr "Počet míst za desetinnou čárkou"
+
+#, fuzzy
+#~ msgid ""
+#~ "Number of vertical pieces must be at least 1. Default value will be "
+#~ "used..."
+#~ msgstr "Počet tříd musí být < 256!"
+
+#, fuzzy
+#~ msgid "Please set up name of output layer..."
+#~ msgstr "Název výstupní vrstvy"
+
+#, fuzzy
+#~ msgid "Coordinates of point no. %d are zeros."
+#~ msgstr "Mapa souřadnic počátečních bodů (V,S)"
+
+#, fuzzy
+#~ msgid "Computing %s variogram properties..."
+#~ msgstr "Počítám matici kovariance..."
+
+#, fuzzy
+#~ msgid "Anisotropy ratio must be greater than zero..."
+#~ msgstr "%s = %s -- musí být větší než nula"
+
+#, fuzzy
+#~ msgid "Error writing file"
+#~ msgstr "Chyba při zápisu souboru PGM"
+
+#, fuzzy
+#~ msgid "Error closing file..."
+#~ msgstr "Chyba při zavírání souboru ASCII"
+
+#, fuzzy
+#~ msgid "Memory allocation failed..."
+#~ msgstr "Interpolační metoda"
+
+#, fuzzy
+#~ msgid "Interpolating unknown values..."
+#~ msgstr "Interpolační metoda"
+
+#, fuzzy
+#~ msgid "%d features skipped, only points are accepted"
+#~ msgstr "Celočíselné hodnoty jsou importovány"
+
+#, fuzzy
+#~ msgid "Unused points: %d (out of region)"
+#~ msgstr "Použít pouze body v současném regionu"
+
+#~ msgid "Overlays two vector maps."
+#~ msgstr "Překrytí dvo vektorových map."
+
+#~ msgid "Old auxiliar table could not be dropped"
+#~ msgstr "Nemohla být odstraněna pomocná tabulka"
+
+#, fuzzy
+#~ msgid "Base map <%s> has too many categories (max: %d)"
+#~ msgstr "<%s> obsahuje příliš mnoho příznaků (limit je 255)"
+
+#~ msgid ""
+#~ "Line terminated unexpectedly\n"
+#~ "previous (%d) point %p (%d,%d,%d) %p %p"
+#~ msgstr ""
+#~ "Řádek neočekávaně skončil\n"
+#~ "předchozí (%d) bod %p (%d,%d,%d) %p %p"
+
+#~ msgid "Name and type of the new column(s)"
+#~ msgstr "Názvy a typy nových sloupců"
+
+#, fuzzy
+#~ msgid "Grid-decimated point cloud"
+#~ msgstr "Žádná bodová data nenalezena"
+
+#, fuzzy
+#~ msgid "Layer number where red color is stored as category"
+#~ msgstr "Číslo vrstvy, ke které se mají sloupce přidat"
+
+#, fuzzy
+#~ msgid "Layer number where blue color is stored as category"
+#~ msgstr "Číslo vrstvy, ke které se mají sloupce přidat"
+
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "%sCOMPRESS <%s>"
+#~ msgstr ""
+#~ "\n"
+#~ "%sKOMPRIMUJI [%s]"
+
+#~ msgid "Location: %s\n"
+#~ msgstr "Lokace: %s\n"
+
+#~ msgid "Region\n"
+#~ msgstr "Region\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "%d classes, %.2f%% points stable\n"
+#~ msgstr ""
+#~ "\n"
+#~ "%d tříd, %.2f%% bodů stabilních\n"
+
+#, fuzzy
+#~ msgid "Could not rewind input file"
+#~ msgstr "Nelze otevřít výstupní soubor <%s>"
+
+#~ msgid "Override projection (use location's projection)"
+#~ msgstr "Přepsat kartografické zobrazení (použít zobrazení lokace)"
+
+#~ msgid ""
+#~ "\n"
+#~ "You can use the -o flag to r.external to override this check and use the "
+#~ "location definition for the dataset.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Přepínačem -o můžete tuto kontrolu zrušit a použít definici lokace pro "
+#~ "dataset.\n"
+
+#~ msgid "%s: Error writing temporary file"
+#~ msgstr "%s: Chyba při zapisování do dočasného souboru"
+
+#~ msgid ""
+#~ "\n"
+#~ "You can use the -o flag to r.in.gdal to override this check and use the "
+#~ "location definition for the dataset.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Můžete použít přepínač -o zrušení této kontroly.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "You can use the -o flag to %s to override this projection check.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Můžete použít přepínač -o pro %s a přeskočit toto ověření.\n"
+
+#~ msgid "Page length (default: %d lines)"
+#~ msgstr "Délka stránky (výchozí: %d řádků)"
+
+#~ msgid "Page width (default: %d characters)"
+#~ msgstr "Šířka stránky (výchozí: %d znaků)"
+
+#~ msgid "Lokace:"
+#~ msgstr "Location:"
+
+#, fuzzy
+#~ msgid "Default: path to the current GRASS database"
+#~ msgstr "Název cílového mapsetu"
+
+#, fuzzy
+#~ msgid "Command file not found"
+#~ msgstr "Rastrový (cell) soubor nebyl nalezen"
+
+#, fuzzy
+#~ msgid "Env file not found"
+#~ msgstr "Rastrový (cell) soubor nebyl nalezen"
+
+#, fuzzy
+#~ msgid "PID file not found"
+#~ msgstr "Rastrový (cell) soubor nebyl nalezen"
+
+#, fuzzy
+#~ msgid "Starting monitor <%s> with env file '%s'"
+#~ msgstr "Natavuji jméno mapy na <%s>, které přepíše <%s>"
+
+#, fuzzy
+#~ msgid "Text color or \"none\""
+#~ msgstr "Barva textu"
+
+#, fuzzy
+#~ msgid "-%c/-%c and %s= are mutually exclusive"
+#~ msgstr "-s a -n se navzájem vylučují"
+
+#, fuzzy
+#~ msgid "-%c/-%c and -%c/-%c are mutually exclusive"
+#~ msgstr "-s a -n se navzájem vylučují"
+
+#, fuzzy
+#~ msgid "Unpacks a vector map packed with v.pack."
+#~ msgstr "aktualizuji metadat vektorové mapy."
+
+#, fuzzy
+#~ msgid "Default value: GRASS_GUI if defined otherwise wxpython"
+#~ msgstr "Výchozí hodnota: GRASS_GUI pokud není jinak definováno tcltk"
+
+#, fuzzy
+#~ msgid "No default DB driver defined"
+#~ msgstr "Základní ovladač není nastaven"
+
+#, fuzzy
+#~ msgid "No flag given"
+#~ msgstr "Chyba při načítání souboru se souřadnicemi"
+
+#, fuzzy
+#~ msgid "Renaming reclass maps"
+#~ msgstr "Načítám rastrovou mapu..."
+
+#, fuzzy
+#~ msgid "Unable to read REF file for group <%s>"
+#~ msgstr "Nelze číst soubor REF podskupiny <%s> ve skupině <%s>."
+
+#, fuzzy
+#~ msgid "Option <%s> and <%s> are mutually exclusive"
+#~ msgstr "-s a -n se navzájem vylučují"
+
+#, fuzzy
+#~ msgid "input= and file= are mutually exclusive"
+#~ msgstr "input= a source= se vzájemně vylučují"
+
+#, fuzzy
+#~ msgid "file= and expression= are mutually exclusive"
+#~ msgstr "input= a source= se vzájemně vylučují"
+
+#, fuzzy
+#~ msgid "radius= and x_radius=/y_radius= are mutually exclusive"
+#~ msgstr "weight= a -c se navzájem vylučují"
+
+#, fuzzy
+#~ msgid "weight= and gauss= are mutually exclusive"
+#~ msgstr "weight= a -c se navzájem vylučují"
+
+#, fuzzy
+#~ msgid "-t, -r, rules=, basemap= and fprange= are mutually exclusive"
+#~ msgstr "-r a -e se navzájem vylučují"
+
+#, fuzzy
+#~ msgid "samplingpos= and outfile= are mutually exclusive"
+#~ msgstr "input= a source= se vzájemně vylučují"
+
+#, fuzzy
+#~ msgid "Please specify output= or outfile="
+#~ msgstr "Prosím, zadejte sloupec z"
+
+#, fuzzy
+#~ msgid "Please specify output= and samplingpos="
+#~ msgstr "Prosím, zadejte sloupec z"
+
+#, fuzzy
+#~ msgid "datapos= and infile= are mutually exclusive"
+#~ msgstr "input= a source= se vzájemně vylučují"
+
+#, fuzzy
+#~ msgid "Please specify input= or infile="
+#~ msgstr "Prosím, zadejte sloupec z"
+
+#, fuzzy
+#~ msgid "Please specify input= and datapos="
+#~ msgstr "Prosím, zadejte sloupec z"
+
+#, fuzzy
+#~ msgid "Options <%s>, <%s>, and <%s> are mutually exclusive"
+#~ msgstr "-s a -n se navzájem vylučují"
+
+#, fuzzy
+#~ msgid "Options <%s/%s> and <%s> are mutually exclusive"
+#~ msgstr "-s a -n se navzájem vylučují"
+
+#, fuzzy
+#~ msgid "One of options <%s> or <%s> must be specified"
+#~ msgstr ""
+#~ "Jeden z přepínačů \"-i\" nebo \"-r\" nebo voleb \"color\", \"rast\" nebo "
+#~ "\"rules\" MUSÍ být zadána!"
+
+#, fuzzy
+#~ msgid "Option <%s> must be specified"
+#~ msgstr ""
+#~ "Jeden z přepínačů \"-i\" nebo \"-r\" nebo voleb \"color\", \"rast\" nebo "
+#~ "\"rules\" MUSÍ být zadána!"
+
+#, fuzzy
+#~ msgid "Color in GRASS format for drawing text"
+#~ msgstr "Vypiš podporované formáty a ukonči se"
+
+#, fuzzy
+#~ msgid "Prefix for output raster maps (.base, .max, .maxdir, .spotdist)"
+#~ msgstr "Název výstupní rastrové mapy (red-červená)"
+
+#, fuzzy
+#~ msgid "Also produce maximum spotting distance"
+#~ msgstr ""
+#~ "Vytvoř též maximální vzdálenost, na kterou může přeskočit jiskra a "
+#~ "způsobit požár"
+
+#, fuzzy
+#~ msgid "Display the "
+#~ msgstr "zobrazení"
+
+#, fuzzy
+#~ msgid ""
+#~ "Allows creation and/or modification of raster3d map layer support files."
+#~ msgstr ""
+#~ "Umožňuje vytvořit a/nebo modifikovat podpůrné soubory rastrové mapy."
+
+#, fuzzy
+#~ msgid "Unable to create vector map"
+#~ msgstr "Nelze číst vektorovou mapy"
+
+#, fuzzy
+#~ msgid "Unable To create table: %s"
+#~ msgstr "Neschopen vytvořit tabulku: %s"
+
+#, fuzzy
+#~ msgid "Not enough memory"
+#~ msgstr "Není dostatek paměti"
+
+#~ msgid "OLD_T_NEW Got a bad type code [%x]"
+#~ msgstr "OLD_T_NEW dostal jsem špatný typ kódu [%x]"
+
+#~ msgid "NEW_T_OLD Got a bad type code [%x]"
+#~ msgstr "NEW_T_OLD dostal jsem špatný typ kódu [%x]"
+
+#~ msgid "Reading dig file..."
+#~ msgstr "Načítám soubor dig..."
+
+#~ msgid "Input file is version 3."
+#~ msgstr "Vstupní soubor je verze 3."
+
+#~ msgid "Input file is version 4."
+#~ msgstr "Vstupní soubor je verze 4."
+
+#~ msgid ""
+#~ "Input file is not portable. We will attempt to convert anyway but "
+#~ "conversion may fail. Please read manual for detail information."
+#~ msgstr ""
+#~ "Vstupní soubor není přenositelný. Přesto se jej pokusím změnit, ale "
+#~ "převod může selhat. Prosím, přečtěte si manuál pro detailnější informace."
+
+#~ msgid "[%d] points read to memory"
+#~ msgstr "[%d]bodů načteno do paměti"
+
+#~ msgid "[%d] lines read to memory"
+#~ msgstr "[%d] linií načteno do paměti"
+
+#~ msgid "[%d] points read and written to output"
+#~ msgstr "[%d] bodů načteno a zapsáno do výstupu"
+
+#~ msgid "[%d] lines read and written to output"
+#~ msgstr "[%d] linií načteno a zapsáno do výstupu"
+
+#~ msgid "[%d] area boundaries read and written to output"
+#~ msgstr "[%d] hranic oblasti bylo načteno a zapsáno do výstupu"
+
+#~ msgid "[%d] dead points skipped"
+#~ msgstr "[%d] mrtvých bodů přeskočeno"
+
+#~ msgid "[%d] dead lines skipped"
+#~ msgstr "[%d] mrtvých linií přeskočeno"
+
+#~ msgid "[%d] dead area boundaries skipped"
+#~ msgstr "[%d] mrtvých hranic oblastí přeskočeno"
+
+#~ msgid "[%d] elements of unknown type skipped"
+#~ msgstr "[%d]prvků neznámého typu přeskočeno"
+
+#~ msgid "[%d] elements read to memory"
+#~ msgstr "[%d] prvků načteno do paměti."
+
+#~ msgid "Reading dig_att file..."
+#~ msgstr "Načítám soubor dig_att..."
+
+#~ msgid "Unknown type: %c"
+#~ msgstr "Neznámý typ: %c"
+
+#~ msgid "[%d] point categories read"
+#~ msgstr "[%d] kategorií bodů načteno"
+
+#~ msgid "[%d] line categories read"
+#~ msgstr "[%d] kategorií linií načteno"
+
+#~ msgid "[%d] centroids read"
+#~ msgstr "[%d] centroidů načteno"
+
+#~ msgid "[%d] dead point categories skipped"
+#~ msgstr "[%d] mrtvých bodů kategorií přeskočeno"
+
+#~ msgid "[%d] dead line categories skipped"
+#~ msgstr "[%d] mrtvých kategorií linií přeskočeno"
+
+#~ msgid "[%d] dead centroids skipped"
+#~ msgstr "[%d] mrtvých centroidů přeskočeno"
+
+#~ msgid "[%d] categories of unknown type skipped"
+#~ msgstr "[%d] kategorií neznámého typu přeskočeno"
+
+#~ msgid "[%d] categories read into memory"
+#~ msgstr "[%d] kategorií načteno do paměti."
+
+#~ msgid "No category labels (dig_cats) found, no table created"
+#~ msgstr ""
+#~ "Nebyly nalezeny žádné štítky kategorií (dig_cats), nebyla vytvořena "
+#~ "tabulka."
+
+#~ msgid "Unable to open dig_cats file"
+#~ msgstr "Nelze otevřít soubor dig_cats"
+
+#~ msgid "Failed opening input dig file."
+#~ msgstr "Otevření vstupního souboru dig selhalo."
+
+#~ msgid "dig_att file doesn't exist."
+#~ msgstr "Soubor dig_att neexistuje."
+
+#~ msgid "Failed opening input dig_att file."
+#~ msgstr "Otevření vstupního souboru dig_att selhalo."
+
+#~ msgid "Attaching categories..."
+#~ msgstr "Přidávám kategorie..."
+
+#~ msgid "Failed to attach an attribute (category %d) to a line."
+#~ msgstr "Selhalo přidávání atributu (kategorie %d) k linii."
+
+#~ msgid "Line %d label: %d matched another label: %d."
+#~ msgstr "Linie %d štítek: %d odpovídá jinému štítku: %d."
+
+#~ msgid "Writing new file..."
+#~ msgstr "Zapisuji nový soubor..."
+
+#~ msgid "[%d] points and lines written to output file."
+#~ msgstr "[%d] body a linie byly zapsány do výstupního souboru."
+
+#~ msgid "[%d] centroids written to output file."
+#~ msgstr "[%d] centroidy byly zapsány do výstupního souboru."
+
+#~ msgid "Interpolation spline step value in east direction"
+#~ msgstr "Hodnota kroku spline interpolace v východním směru"
+
+#~ msgid "Interpolation spline step value in north direction"
+#~ msgstr "Hodnota kroku spline interpolace v severním směru"
+
+#~ msgid "Cache size (MiB)"
+#~ msgstr "Velikost cache (MiB)"
+
+#~ msgid "Can't call bad function"
+#~ msgstr "Nelze volat špatnou funkci"
+
+#~ msgid "Bad arguments to pointfunc %s"
+#~ msgstr "Chybné argumenty pro pointfunc %s"
+
+#~ msgid "No function defined to perform ``point %c point''"
+#~ msgstr "Není definována žádná funkce pro vykonání \"bod %c bod\""
+
+#~ msgid "Performing 1 arg map function on map %s"
+#~ msgstr "Vykonávám funkci s 1 argumentem na mapě %s"
+
+#~ msgid "Performing 2 arg map function on maps %s and %s"
+#~ msgstr "Vykonávám funkci s 2 argumenty na mapách %s a %s"
+
+#~ msgid "Performing map %s + %s"
+#~ msgstr "Vykonávání mapa %s + %s"
+
+#~ msgid "Can't call bad map-function"
+#~ msgstr "Nelze volat špatnou mapovou funkci"
+
+#~ msgid "Bad arguments to mapfunc %s (argc = %d)"
+#~ msgstr "Špatné argumenty mapové funkce %s (argc = %d)"
+
+#~ msgid "No function defined to perform map %c map"
+#~ msgstr "Není definována žádná funkce pro vykonání mapa %c mapa"
+
+#~ msgid "Can't call bad num-function"
+#~ msgstr "Nelze volat špatnou numerickou funkci"
+
+#~ msgid "Bad arguments to numfunc %s"
+#~ msgstr "Špatné agrumenty numerické funkce %s"
+
+#~ msgid "No function defined to perform ``number %c number''"
+#~ msgstr "Není definována žádná funkce pro vykonání \"číslo %c číslo\""
+
+#~ msgid "Can't call bad any-function"
+#~ msgstr "Nelze volat chybnou funkci"
+
+#~ msgid "Bad arguments to anyfunc %s (argc = %d)"
+#~ msgstr "Chybné argumenty pro anyfunc %s (argc = %d)"
+
+#~ msgid "Not enough memory for adx"
+#~ msgstr "Pro adx není dostatek paměti"
+
+#~ msgid "Not enough memory for ady"
+#~ msgstr "Pro ady není dostatek paměti"
+
+#~ msgid "Not enough memory for adxx"
+#~ msgstr "Pro adxx není dostatek paměti"
+
+#~ msgid "Not enough memory for adyy"
+#~ msgstr "Pro adyy není dostatek paměti"
+
+#~ msgid "Not enough memory for adxy"
+#~ msgstr "Pro adxy není dostatek paměti"
+
+#~ msgid "Cannot create quaddata"
+#~ msgstr "Nelze vytvořit quaddata"
+
+#~ msgid "Cannot create quadfunc"
+#~ msgstr "Nelze vytvořit quadfunc"
+
+#~ msgid "Cannot create tree info"
+#~ msgstr "Nelze vytvořit tree info"
+
+#~ msgid "sites"
+#~ msgstr "body"
+
+#~ msgid "Converts a GRASS site_lists file into a vector map."
+#~ msgstr "PřevedeGRASS bodovou vrstvu na vektorovou mapu."
+
+#~ msgid "Unable to guess site_list format"
+#~ msgstr "Nelze přiřadit formát pro GRASS site"
+
+#~ msgid "Input format: dimension: %d strings: %d FP: %d"
+#~ msgstr "Vstupní formát: dimeenze: %d řetězec: %d FP: %d"
+
+#~ msgid ""
+#~ "Floating point category values, using sequential integer for category"
+#~ msgstr ""
+#~ "Hodnoty kategorií map desetinnou čárkou, použiji postupný převod celých "
+#~ "čísel pro kategorie"
+
+#~ msgid "No category values, using sequential integer for category"
+#~ msgstr ""
+#~ "Žádná hodnota kategorie, použiji postupný převod celých čísel  pro "
+#~ "kategorie"
+
+#~ msgid "Transferring sites to vector point map..."
+#~ msgstr "Převádím GRASS site na vektorovou mapu..."
+
+#~ msgid "%d sites written."
+#~ msgstr "%d bodů zapsáno."
+
+#~ msgid "Name of layer to be used for INTENSITY"
+#~ msgstr "Název mapy, která má být použita jako INTENZITA  systému IHS"
+
+#~ msgid "Name of layer to be used for SATURATION"
+#~ msgstr "Název mapy, která má být použita jako NASYCENOST v systému IHS"
+
+#, fuzzy
+#~ msgid "Create raster map from result (optional)"
+#~ msgstr "Název rastrové mapy pro vložení do skupiny"
+
+#, fuzzy
+#~ msgid ""
+#~ "Computes anisotropic cumulative cost of moving between different "
+#~ "geographic locations on an input elevation raster map whose cell category "
+#~ "values represent elevation combined with an input raster map layer whose "
+#~ "cell values represent friction cost."
+#~ msgstr ""
+#~ "Vytvoří rastrovou mapu obsahující anisotropické kumulativní náklady "
+#~ "pohybumezi různými geografickými polohami po vstupní rastrové mapě s "
+#~ "výškou, jejížhodnoty buněk reprezentují výšku kombinovanou s další mapou, "
+#~ "jejíž hodnoty reprezentují frikční povrch."
+
+#~ msgid "Name of output layer to be used for GREEN"
+#~ msgstr "Název výstupní mapy, která bude použita jako ZELENÁ v systému RGB"
+
+#~ msgid "Name of output layer to be used for BLUE"
+#~ msgstr "Název výstupní mapy, která bude použita jako MODRÁ v systému RGB"
+
+#~ msgid "Surface interpolation utility for raster map."
+#~ msgstr "Nástroj pro interpolaci povrchů rastrových map."
+
+#~ msgid "Surface generation program."
+#~ msgstr "Program pro tvorbu povrchů."
+
+#~ msgid ""
+#~ "Lat/long databases not supported by r.surf.idw2. Use r.surf.idw instead!"
+#~ msgstr ""
+#~ "Location v systému lat/long není r.surf.idw2 není podporována, použijte r."
+#~ "surf.idw"
+
+#~ msgid "%s=%s - illegal number of interpolation points"
+#~ msgstr "%s=%s - neplatný počet bodů pro interpolaci"
+
+#, fuzzy
+#~ msgid "Interpolating raster map <%s>... %d row... "
+#~ msgid_plural "Interpolating raster map <%s>... %d rows... "
+#~ msgstr[0] "Interpoluji rastrovou mapu <%s> ... řádek %d ..."
+#~ msgstr[1] "Interpoluji rastrovou mapu <%s> ... řádek %d ..."
+
+#~ msgid "Char string to represent no data cell"
+#~ msgstr "Znak pro označení buněk s hodnotou NULL"
+
+#, fuzzy
+#~ msgid "Option <%s> or <%s> must be specified"
+#~ msgstr ""
+#~ "Jeden z přepínačů \"-i\" nebo \"-r\" nebo voleb \"color\", \"rast\" nebo "
+#~ "\"rules\" MUSÍ být zadána!"
+
+#~ msgid "Unknown metric: [%s]."
+#~ msgstr "Neznámá metrika: [%s]."
+
+#~ msgid "String representing no data cell value"
+#~ msgstr "Textový řetězec reprezentující buňky s hodnotou \"no data\""
+
+#, fuzzy
+#~ msgid "String to represent no data cell"
+#~ msgstr "Znak pro označení buněk s hodnotou NULL"
+
+#~ msgid "Character to represent no data cell"
+#~ msgstr "Znak pro označení buněk s hodnotou NULL"
+
+#~ msgid "Run verbosely"
+#~ msgstr "Rozšířený výpis"
+
+#, fuzzy
+#~ msgid "%s available in mapset <%s>:"
+#~ msgstr "Vypiš přítomné vrstvy a ukonči se"
+
+#~ msgid "Null value indicator"
+#~ msgstr "Indikátor hodnoty NULL záznamu"
+
+#~ msgid "Suppress warnings"
+#~ msgstr "Potlač varování"
+
+#, fuzzy
+#~ msgid "Type of the aggregation space time dataset, default is strds"
+#~ msgstr "Název souboru s filtrem"
+
+#, fuzzy
+#~ msgid ""
+#~ "Calculates univariate statistics from the non-null cells for each "
+#~ "registered raster3d map of a space time raster3d dataset."
+#~ msgstr "Spočítá univariantní statistiku z ne-nullových buněk rastrové mapy."
+
+#, fuzzy
+#~ msgid "Data to be classified: column name or expression"
+#~ msgstr "Jméno sloupce nebo výraz"
+
+#~ msgid "%ld categories"
+#~ msgstr "%ld kategorií"
+
+#~ msgid " seed is set to %d"
+#~ msgstr " počátek nastaven na %d"
+
+#~ msgid "Setting grey color table for <%s> (data range)"
+#~ msgstr "Nastavuji šedou barevnou tabulku pro <%s> (podle rozsahu dat)"
+
+#~ msgid ""
+#~ "column '%s', type 'string': unknown width -> stored as varchar(250) some "
+#~ "data may be lost"
+#~ msgstr ""
+#~ "sloupec '%s' typu 'string': neznámé šířky -> uložen jako varchar(250), "
+#~ "některá data mohou být ztracena"
+
+#~ msgid "Table should contain only two columns"
+#~ msgstr "Tabulka by měla obsahovat pouze dva sloupce"
+
+#~ msgid "Column names differ"
+#~ msgstr "Jména sloupců se liší."
+
+#~ msgid "Error in pj_do_proj"
+#~ msgstr "Chyba v pj_do_proj"
+
+#~ msgid "Non-zero data only"
+#~ msgstr "Pouze nenulová data"
+
+#~ msgid "Error in pj_do_proj (can't re-projection GCP %i)"
+#~ msgstr "Chyba v pj_do_proj (nelze reprojekovat GCP %i)"
+
+#~ msgid "Number of points must be > 0 (%d given)"
+#~ msgstr "počet bodů,musí být > 0 (zadáno %d)"
+
+#~ msgid ""
+#~ "%d areas represent more (overlapping) features, because polygons overlap "
+#~ "in input layer(s). Such areas are linked to more than 1 row in attribute "
+#~ "table. The number of features for those areas is stored as category in "
+#~ "layer %d"
+#~ msgstr ""
+#~ "%d ploch zastupuje více (překrývání) prvků, polygony ve vstupní "
+#~ "vrstvě(ách) se totiž překrývají. Takovéto plochy jsou linkovány k více "
+#~ "než 1 záznamu v atributové tabulce. Číslo prvků pro tyto plochy jsou "
+#~ "uloženy jako kategorie ve vrstvě %d"
+
+#~ msgid "Error in pj_do_transform"
+#~ msgstr "Chyba v pj_do_transform"
+
+#~ msgid "Error in pj_do_proj6"
+#~ msgstr "Chyba v pj_do_proj6"
+
+#~ msgid "Key columns differ"
+#~ msgstr "Klíčové sloupce jsou různé."
+
+#~ msgid "Column types differ"
+#~ msgstr "Typy sloupců se liší."
+
+#~ msgid "Missing table"
+#~ msgstr "Postrádám tabulku"
+
+#~ msgid "Number of columns differ"
+#~ msgstr "Počet sloupců se liší."
+
+#~ msgid "Start of 1. MP >= end of 2. MP for points' cats %[d], [%d]"
+#~ msgstr "Počátek 1. MP >= konec 2. MP pro body kategorie %[d],[%d] "

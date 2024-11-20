@@ -15155,6 +15155,10 @@ msgstr "Iestatīt aprēķinu reģiona apjomu no kartes skata"
 msgid "Set computational region extent interactively"
 msgstr "Interaktīvi iestatīt aprēķinu reģiona apjomu"
 
+#: ../gui/wxpython/mapdisp/frame.py:1531
+msgid "Set computational region from named region"
+msgstr ""
+
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr ""
@@ -19898,3 +19902,177 @@ msgstr ""
 #: ../gui/wxpython/psmap/frame.py:2711
 msgid "labels: "
 msgstr ""
+
+#~ msgid "&Delete location"
+#~ msgstr "&Dzēst novietojumu"
+
+#~ msgid "&Rename location"
+#~ msgstr "Pā&rsaukt novietojumu"
+
+#, fuzzy
+#~ msgid "Abort download location"
+#~ msgstr "Pārtraukt lejupielādi"
+
+#~ msgid "Invalid location name"
+#~ msgstr "Nederīgs novietojuma nosaukums"
+
+#, fuzzy
+#~ msgid "Unable to rename selected location"
+#~ msgstr "Nav iespējams dzēst novietojumu"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to rename location.\n"
+#~ "\n"
+#~ "{}"
+#~ msgstr "Nav iespējams izveidot novietojumu"
+
+#, fuzzy
+#~ msgid "Unable to delete selected locations"
+#~ msgstr "Nav iespējams dzēst karšu kopu"
+
+#, fuzzy
+#~ msgid "Delete selected locations"
+#~ msgstr "Dzēst izvēlēto novietojumu"
+
+#, fuzzy
+#~ msgid "Error when deleting locations"
+#~ msgstr "Kļūda nolasot failu '%s'."
+
+#~ msgid "Location Name:"
+#~ msgstr "Novietojuma nosaukums:"
+
+#, fuzzy
+#~ msgid "Create new model (Ctrl+N)"
+#~ msgstr "Veidot jaunu modeli"
+
+#, fuzzy
+#~ msgid "Load model from file (Ctrl+O)"
+#~ msgstr "Ielādēt modeli no datnes"
+
+#, fuzzy
+#~ msgid "(Un)dock Map Display"
+#~ msgstr "Kartes skats"
+
+#~ msgid "Show comp. extent"
+#~ msgstr "Rādīt aprēķinu reģionu"
+
+#~ msgid "Display resolution"
+#~ msgstr "Ekrāna izšķirtspēja"
+
+#~ msgid "Go to"
+#~ msgstr "Iet uz"
+
+#~ msgid "MASK"
+#~ msgstr "MASKA"
+
+#~ msgid "Extent"
+#~ msgstr "Apjoms"
+
+#, fuzzy
+#~ msgid "Unable to display the map"
+#~ msgstr "Nav iespējams dzēst karšu kopu"
+
+#~ msgid "Download sample location"
+#~ msgstr "Lejupielādēt parauga novietojumu"
+
+#, python-format
+#~ msgid "GRASS GIS %s Startup%s"
+#~ msgstr "GRASS GIS %s palaišana %s"
+
+#, fuzzy, python-format
+#~ msgid "Unable to rename mapset: %s"
+#~ msgstr "Nav iespējams izveidot jaunu karšu kopu: %s"
+
+#, fuzzy, python-format
+#~ msgid "Unable to delete location: %s"
+#~ msgstr "Nav iespējams dzēst novietojumu"
+
+#, python-format
+#~ msgid "Invalid map size %d,%d\n"
+#~ msgstr "Nederīgs kartes izmērs %d,%d\n"
+
+#~ msgid "Run python script"
+#~ msgstr "Darbināt Python skriptu"
+
+#~ msgid "Vector network analysis settings"
+#~ msgstr "Vektordatu tīkla analīzes iestatījumi"
+
+#~ msgid "Raster Digitizer manual"
+#~ msgstr "Rastra digitizētāja rokasgrāmata"
+
+#~ msgid "Quit raster digitizer"
+#~ msgstr "Iziet no rastra digitizētāja"
+
+#~ msgid "Data Toolbar"
+#~ msgstr "Datu rīkjosla"
+
+#~ msgid "Vector Toolbar"
+#~ msgstr "Vektoru rīkjosla"
+
+#~ msgid "Modules"
+#~ msgstr "Moduļi"
+
+#~ msgid "Select input vector map:"
+#~ msgstr "Izvēlieties ievades vektoru karti:"
+
+#~ msgid " Feature type: "
+#~ msgstr " Objekta tips: "
+
+#~ msgid "Select output vector map:"
+#~ msgstr "Izvēlieties izvades vektoru karti:"
+
+#~ msgid "line"
+#~ msgstr "līnija"
+
+#~ msgid "boundary"
+#~ msgstr "robeža"
+
+#~ msgid "centroid"
+#~ msgstr "centroīds"
+
+#~ msgid "face"
+#~ msgstr "fasete"
+
+#~ msgid "Name of input vector map"
+#~ msgstr "Ievades vektordatu kartes nosaukums"
+
+#~ msgid "Name for output vector map"
+#~ msgstr "Izvades vektordatu kartes nosaukums"
+
+#~ msgid "Threshold"
+#~ msgstr "Robežvērtība"
+
+#~ msgid "Plot options"
+#~ msgstr "Grafika iestatījumi"
+
+#~ msgid "Quit plot tool"
+#~ msgstr "Iziet no grafiku rīka"
+
+#~ msgid "Version and copyright"
+#~ msgstr "Versija un autortiesības"
+
+#, fuzzy
+#~ msgid "Quit Simple Python Editor"
+#~ msgstr "Vienkāršs Python redaktors"
+
+#~ msgid "Command prompt"
+#~ msgstr "Komandrinda"
+
+#~ msgid "Output window"
+#~ msgstr "Izvades logs"
+
+#~ msgid "Clear command prompt content"
+#~ msgstr "Notīrīt komandrindas ievades saturu"
+
+#~ msgid "Save output window content to the file"
+#~ msgstr "Saglabāt loga izvadi failā"
+
+#~ msgid "&Log file"
+#~ msgstr "Žurnā&la datne"
+
+#~ msgid "Quit digitizer"
+#~ msgstr "Iziet no digitizētāja"
+
+#~ msgid "Redo"
+#~ msgstr "Pārdarīt"

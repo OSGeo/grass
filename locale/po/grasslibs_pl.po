@@ -8914,3 +8914,260 @@ msgstr ""
 #, c-format
 msgid "[%s]: No such color"
 msgstr "[%s]: Nie ma takiego koloru"
+
+#~ msgid "Illegal latitude for North"
+#~ msgstr "Niedozwolona szerokość geograficzna dla granicy północnej"
+
+#~ msgid "Illegal latitude for South"
+#~ msgstr "Niedozwolona szerokość geograficzna dla granicy południowej"
+
+#~ msgid "GISRC - variable not set"
+#~ msgstr "GISRC - zmienna nie zdefiniowana"
+
+#, c-format
+#~ msgid ""
+#~ "Unable to create signature file <%s> for subgroup <%s> of group <%s> - "
+#~ "<%s> is not current mapset"
+#~ msgstr ""
+#~ "Nie można utworzyć pliku <%s> dla podgrupy <%s> grupy <%s> - <%s> nie "
+#~ "jest bieżącym mapsetem"
+
+#, c-format
+#~ msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s>"
+#~ msgstr "Nie można utworzyć pliku <%s> dla podgrupy <%s> grupy <%s>"
+
+#~ msgid "Unable to open OGR DBMI driver"
+#~ msgstr "Nie można otworzyć sterownika OGR DBMI"
+
+#~ msgid ""
+#~ "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' "
+#~ "available in OGR DB table"
+#~ msgstr ""
+#~ "Wszystkie testy FID zawiodły. Żadne z 'FID', 'ogc_fid', 'ogr_fid', 'gid' "
+#~ "nie jest dostępne w tabeli bazy danych OGR"
+
+#, fuzzy
+#~ msgid "Map <{}> not found in current mapset"
+#~ msgstr "mapa <%s> nie znajduje się w bieżącym mapsecie"
+
+#, fuzzy
+#~ msgid "Illegal dataset name <{}>. Character '.' not allowed."
+#~ msgstr ""
+#~ "Niedozwolona nazwa mapy wektorowej <%s>. Znak '%c' nie jest dozwolony."
+
+#~ msgid "Unable to read range file"
+#~ msgstr "Nie można odczytać pliku zakresu"
+
+#, python-format
+#~ msgid "Unable to create timestamp file for raster map <%s>"
+#~ msgstr "Nie można utworzyć pliku znacznika czasu dla mapy rastrowej <%s>."
+
+#, fuzzy, python-format
+#~ msgid "Unable to read band reference file for raster map <%s>"
+#~ msgstr "Nie można odczytać pliku kategorii mapy rastrowej <%s>"
+
+#, fuzzy, python-format
+#~ msgid "Unable to write band identifier for raster map <%s>"
+#~ msgstr "Nie można utworzyć pliku znacznika czasu dla mapy rastrowej <%s>."
+
+#, fuzzy, python-brace-format
+#~ msgid "Mapset <{mapset}> is the current mapset."
+#~ msgstr "mapset <%s> nie jest bieżącym mapsetem"
+
+#, c-format
+#~ msgid "Unable to locate symbol <%s>"
+#~ msgstr "Nie znaleziono symbolu <%s>"
+
+#~ msgid "Unable to load GDAL library"
+#~ msgstr "Nie można załadować biblioteki GDAL"
+
+#, c-format
+#~ msgid "Datum <%s> not recognised by GRASS and no parameters found"
+#~ msgstr ""
+#~ "Datum <%s> nie zostało rozpoznane przez GRASS i nie znaleziono parametrów"
+
+#, c-format
+#~ msgid ""
+#~ "Datum <%s> apparently recognised by GRASS but no parameters found. You "
+#~ "may want to look into this."
+#~ msgstr ""
+#~ "Datum <%s> najwyraźniej zostało rozpoznane przez GRASS, ale nie "
+#~ "znaleziono parametrów. Należy to sprawdzić."
+
+#, c-format
+#~ msgid ""
+#~ "Invalid transformation number %d; valid range is 1 to %d. Leaving datum "
+#~ "transform parameters unspecified."
+#~ msgstr ""
+#~ "Niewłaściwy numer transformacji %d; właściwy zakres jest od 1 do %d. "
+#~ "Parametry transformacji elipsoidy pozostaną niesprecyzowane."
+
+#~ msgid "Fixing subtle input data rounding error of west boundary (%g>%g)"
+#~ msgstr ""
+#~ "Korekta niewielkiego błędu zaokrąglenia danych wejściowych dla granicy "
+#~ "zachodniej (%g>%g)"
+
+#~ msgid "Fixing subtle input data rounding error of east boundary (%g>%g)"
+#~ msgstr ""
+#~ "Korekta niewielkiego błędu zaokrąglenia danych wejściowych dla granicy "
+#~ "wschodniej (%g>%g)"
+
+#, fuzzy
+#~ msgid "No centroid defined for area %d. Area not exported."
+#~ msgstr "Połączenie z bazą danych dla warstwy %d nie jest zdefiniowane"
+
+#, fuzzy
+#~ msgid "Out of memmory"
+#~ msgstr "Brak wolnej pamięci"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to check table. There is no temporal database connection defined "
+#~ "for mapset <%(mapset)s>"
+#~ msgstr "Nie można otworzyć pliku definicji bazy danych wektora '%s'"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to fetch one. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr "Nie można otworzyć pliku nagłówka dla mapy wektorowej <%s>"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to fetch all. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr "Nie można otworzyć pliku nagłówka dla mapy wektorowej <%s>"
+
+#, fuzzy
+#~ msgid "Unable to find a temporary null file <%s>"
+#~ msgstr "nie można znaleć tymczasowego pliku NULL: %s"
+
+#, fuzzy
+#~ msgid "Unable to open null file <%s>"
+#~ msgstr "G_spawn: nie można otworzyć pliku %s"
+
+#~ msgid "ERROR: option <%s>: <%s> exists.\n"
+#~ msgstr "BŁĄD: opcja <%s>: <%s> istnieje.\n"
+
+#, fuzzy
+#~ msgid "Unable to open file '%s'"
+#~ msgstr "Nie można otworzyć pliku %s"
+
+#, fuzzy
+#~ msgid "Vector map <%s> is not opened on topology level"
+#~ msgstr "Mapa wektorowa <%s> nie jest otwarta na poziomie >= 2"
+
+#~ msgid "Background color"
+#~ msgstr "Kolor tła"
+
+#, fuzzy
+#~ msgid "Removing empty 3D raster maps"
+#~ msgstr "Nazwa źródłowej mapy rastrowej"
+
+#, fuzzy
+#~ msgid "Mode type: {0} not supported."
+#~ msgstr "Obiekty OGR typu %d nie są obsługiwane"
+
+#~ msgid "Attributes for category %d not found"
+#~ msgstr "Nie odnaleziono atrybutów kategorii %d"
+
+#~ msgid "Category must be integer"
+#~ msgstr "Kategoria musi być całkowitoliczbowa"
+
+#~ msgid "Memory error in writing timestamp"
+#~ msgstr "Błąd pamięci podczas zapisu znacznika czasu"
+
+#~ msgid "Illegal TimeStamp string"
+#~ msgstr "Niepoprawny znacznik czasu"
+
+#~ msgid ""
+#~ "Dev note: Adapted sites library used for vector points. (module should be "
+#~ "updated to GRASS 6 vector library)"
+#~ msgstr ""
+#~ "Uwaga programistyczna: Punkty wektorowe obsłużone przez zadaptowaną "
+#~ "bibliotekę site'ów. Moduł powinien zostać zaktualizowany do biblioteki "
+#~ "wektorowej GRASS 6."
+
+#~ msgid "Cannot fetch row"
+#~ msgstr "Nie można pobrać wiersza"
+
+#~ msgid "G_oldsite_new_struct: invalid # dims or fields"
+#~ msgstr "G_oldsite_new_struct: błedne # wymiary lub pola"
+
+#~ msgid "syntax error"
+#~ msgstr "błąd składni"
+
+#~ msgid "R/G/B not in range 0-255"
+#~ msgstr "R/G/B poza zakresem 0-255"
+
+#~ msgid "invalid color name"
+#~ msgstr "nieprawidłowa nazwa koloru"
+
+#~ msgid "Example: income < 1000 and inhab >= 10000"
+#~ msgstr "Przykład: dochód < 1000 i inhab >= 10000"
+
+#~ msgid "Unable to initialise PROJ.4 with the following parameter list:"
+#~ msgstr "Nie można zainicjować PROJ.4 następującą listą parametrów:"
+
+#~ msgid "The error message: %s"
+#~ msgstr "Informacja o błędzie: %s"
+
+#~ msgid "BUG in descriptions, option '%s' in <%s> does not exist"
+#~ msgstr "BUG (błąd) w opisach, opcja '%s' w <%s> nie istnieje"
+
+#~ msgid "Unable to seek"
+#~ msgstr "Nie można przeszukać"
+
+#~ msgid "which is missing."
+#~ msgstr ", której brak."
+
+#~ msgid "whose header file can't be opened."
+#~ msgstr ", której pliku nagłówkowego nie można otworzyć."
+
+#~ msgid "Illegal row value"
+#~ msgstr "Niedozwolona wartość wiersza"
+
+#~ msgid "Illegal col value"
+#~ msgstr "Niedozwolona wartość kolumny"
+
+#~ msgid "Illegal n-s3 resolution value"
+#~ msgstr "Niedozwolona wartość rozdzielczości n-s3"
+
+#~ msgid "Illegal row3 value"
+#~ msgstr "Niedozwolona wartość row3"
+
+#~ msgid "Illegal e-w3 resolution value"
+#~ msgstr "Niedozwolona wartość rozdzielczości e-w3"
+
+#~ msgid "Illegal col3 value"
+#~ msgstr "Niedozwolona wartość col3"
+
+#~ msgid "Illegal e-w resolution value"
+#~ msgstr "Niedozwolona wartość rozdzielczości e-w"
+
+#~ msgid "North must be north of South"
+#~ msgstr "Północ musi być na północ od południa"
+
+#~ msgid "East must be larger than West"
+#~ msgstr "Wartość dla wschodu musi być większa niż dla zachodu"
+
+#~ msgid "Invalid coordinates"
+#~ msgstr "Błędne współrzędne"
+
+#~ msgid "Illegal n-s resolution value"
+#~ msgstr "Niedozwolona wartość rozdzielczości n-s"
+
+#~ msgid "Illegal t-b3 resolution value"
+#~ msgstr "Niedozwolona wartość rozdzielczości t-b3"
+
+#~ msgid "Illegal depths value"
+#~ msgstr "Niedozwolona wartość głębi"
+
+#~ msgid "Top must be larger than Bottom"
+#~ msgstr "Wartość górnej granicy musi być większa od dolnej"
+
+#~ msgid "Unable to open header file for raster map <%s@%s>"
+#~ msgstr "Nie można odczytać pliku nagłówkowego mapy rastrowej <%s@%s>"
+
+#~ msgid "Copy %s <%s> to current mapset as <%s>"
+#~ msgstr "Kopiuj %s <%s> do bieżącego mapsetu jako <%s>"

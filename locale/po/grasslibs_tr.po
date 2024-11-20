@@ -8820,3 +8820,177 @@ msgstr ""
 #, c-format
 msgid "[%s]: No such color"
 msgstr "[%s]:Böyle bir renk yok"
+
+#~ msgid "Illegal latitude for North"
+#~ msgstr "Kuzey için uygun olmayan enlem"
+
+#~ msgid "Illegal latitude for South"
+#~ msgstr "Güney için uygun olmayan enlem"
+
+#~ msgid "GISRC - variable not set"
+#~ msgstr "GISRC - değişken ayarlanmadı"
+
+#~ msgid "Unable to open OGR DBMI driver"
+#~ msgstr "OGR DBMI sürücüsü açılamıyor"
+
+#, fuzzy, python-format
+#~ msgid "Unable to read band reference file for raster map <%s>"
+#~ msgstr "<%s> raster haritasının kategori dosyası okunamıyor"
+
+#, fuzzy, python-format
+#~ msgid "Unable to write band identifier for raster map <%s>"
+#~ msgstr "<%s> raster haritasının renk dosyası okunamıyor"
+
+#, fuzzy, c-format
+#~ msgid "Unable to create band file for <%s>"
+#~ msgstr "<%s> için aralık dosyası açılamıyor"
+
+#, c-format
+#~ msgid "Unable to locate symbol <%s>"
+#~ msgstr "<%s> simgesi yüklenemedi"
+
+#~ msgid "Unable to load GDAL library"
+#~ msgstr "GDAL kütüphanesi yüklenemedi"
+
+#, c-format
+#~ msgid "Datum <%s> not recognised by GRASS and no parameters found"
+#~ msgstr "<%s> Datum'u GRASS tarafından tanınmıyor ve değişkenler yok"
+
+#, c-format
+#~ msgid ""
+#~ "Datum <%s> apparently recognised by GRASS but no parameters found. You "
+#~ "may want to look into this."
+#~ msgstr ""
+#~ "<%s> Datum'u GRASS tarafından tanınıyor ama değişkenler yok. Bunları "
+#~ "girmelisiniz."
+
+#, fuzzy
+#~ msgid "No centroid defined for area %d. Area not exported."
+#~ msgstr "%d katmanının veritabanı bağlantısı belirlenmedi"
+
+#, fuzzy
+#~ msgid "Out of memmory"
+#~ msgstr "Yetersiz bellek"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to check table. There is no temporal database connection defined "
+#~ "for mapset <%(mapset)s>"
+#~ msgstr "[%s deki %s] için üst bilgi dosyası oluşturulamıyor"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to fetch one. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr "<%s> raster haritasının kategori dosyası okunamıyor"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to fetch all. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr "<%s> raster haritasının kategori dosyası okunamıyor"
+
+#, fuzzy
+#~ msgid "Unable to find a temporary null file <%s>"
+#~ msgstr "%s geçici boş dosyası bulunamadı"
+
+#, fuzzy
+#~ msgid "Unable to open null file <%s>"
+#~ msgstr "datum tablo dosyası açılamıyor <%s>"
+
+#, fuzzy
+#~ msgid "ERROR: <%s> is not a valid GRASS location"
+#~ msgstr "Üzgünüm <%s> geçerli bir seçenek değil\n"
+
+#~ msgid "ERROR: option <%s>: <%s> exists.\n"
+#~ msgstr "Hata: seçenek <%s>: <%s> mevcut.\n"
+
+#, fuzzy
+#~ msgid "Hit RETURN to continue"
+#~ msgstr "Devam etmek için ENTER'a basın -->"
+
+#, fuzzy
+#~ msgid "Vector map <%s> is not opened on topology level"
+#~ msgstr "Veritabanı bağlantısı eklenemiyor, harita WRITE modunda açılmadı"
+
+#~ msgid "Background color"
+#~ msgstr "Arkaplan rengi"
+
+#, fuzzy
+#~ msgid "Removing empty 3D raster maps"
+#~ msgstr "Girdi raster haritası adı"
+
+#, fuzzy
+#~ msgid "Mode type: {0} not supported."
+#~ msgstr "%d OGR obje tipi desteklenmiyor"
+
+#, fuzzy
+#~ msgid "Attributes for category %d not found"
+#~ msgstr "%d kategorisinin veritabanı kaydı bulunamıyor"
+
+#, fuzzy
+#~ msgid "Cannot fetch row"
+#~ msgstr "Katman bilgisi alınamıyor"
+
+#~ msgid "syntax error"
+#~ msgstr "Girdi yazım hatası"
+
+#~ msgid "invalid color name"
+#~ msgstr "Geçersiz renk adı"
+
+#~ msgid "Example: income < 1000 and inhab >= 10000"
+#~ msgstr "Örnek:  income < 1000 and inhab >= 10000"
+
+#~ msgid "Unable to initialise PROJ.4 with the following parameter list:"
+#~ msgstr "Takip eden parametreler,  PROJ.4 ile başlamak için yetersiz:"
+
+#~ msgid "The error message: %s"
+#~ msgstr "Hata mesajı:%s"
+
+#~ msgid "which is missing."
+#~ msgstr "kayıp olan"
+
+#~ msgid "whose header file can't be opened."
+#~ msgstr "üstbilgi dosyası açılamayan"
+
+#~ msgid "Illegal row value"
+#~ msgstr "Uygun olmayan satır değeri"
+
+#~ msgid "Illegal col value"
+#~ msgstr "Uygun olmayan sütun değeri"
+
+#~ msgid "Illegal n-s3 resolution value"
+#~ msgstr "Uygun olmayan kuzey-güney3 çözünürlük değeri"
+
+#~ msgid "Illegal row3 value"
+#~ msgstr "Uygun olmayan satır3 değeri"
+
+#~ msgid "Illegal e-w3 resolution value"
+#~ msgstr "Uygun olmayan doğu-batı3 çözünürlük değeri"
+
+#~ msgid "Illegal col3 value"
+#~ msgstr "Uygun olmayan  sütun3 değeri"
+
+#~ msgid "Illegal e-w resolution value"
+#~ msgstr "Uygun olmayan doğu-batı çözünürlük değeri"
+
+#~ msgid "North must be north of South"
+#~ msgstr "Kuzey güneyin kuzeyinde olmalıdır"
+
+#~ msgid "East must be larger than West"
+#~ msgstr "Doğu batıdan büyük olmalıdır"
+
+#~ msgid "Invalid coordinates"
+#~ msgstr "Geçersiz koordinatlar"
+
+#~ msgid "Illegal n-s resolution value"
+#~ msgstr "Uygun olmayan kuzey-güney çözünürlük değeri"
+
+#~ msgid "Illegal t-b3 resolution value"
+#~ msgstr "Uygun olmayan tepe-dip3 çözünürlük değeri"
+
+#~ msgid "Illegal depths value"
+#~ msgstr "Uygun olmayan derinlik değeri"
+
+#~ msgid "Top must be larger than Bottom"
+#~ msgstr "Tepe dipten büyük olmalıdır"

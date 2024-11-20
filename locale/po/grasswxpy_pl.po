@@ -15292,6 +15292,10 @@ msgstr "Ustaw zasięg wyświetlonej mapy jako region obliczeniowy"
 msgid "Set computational region extent interactively"
 msgstr ""
 
+#: ../gui/wxpython/mapdisp/frame.py:1531
+msgid "Set computational region from named region"
+msgstr ""
+
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr "Zapisz region obliczeniowy do nazwanego regionu"
@@ -20103,3 +20107,554 @@ msgstr "Kliknij i przeciągnij aby zmienić rozmiar obiektu"
 #: ../gui/wxpython/psmap/frame.py:2711
 msgid "labels: "
 msgstr "etykiety:"
+
+#~ msgid "Location Name:"
+#~ msgstr "Nazwa lokacji:"
+
+#~ msgid "Change location and mapset"
+#~ msgstr "Zmień lokację i mapset"
+
+#, fuzzy
+#~ msgid "(Un)dock Map Display"
+#~ msgstr "Okno Mapy"
+
+#~ msgid "Show comp. extent"
+#~ msgstr "Pokaż bieżący region"
+
+#~ msgid "Display mode"
+#~ msgstr "Tryb wyświetlania"
+
+#~ msgid "Display resolution"
+#~ msgstr "Rozdzielczość wyświetlania"
+
+#~ msgid "Go to"
+#~ msgstr "Idź do"
+
+#~ msgid "Use defined projection"
+#~ msgstr "Wybierz zdefiniowane odwzorowanie"
+
+#~ msgid "MASK"
+#~ msgstr "MASKA"
+
+#~ msgid "Extent"
+#~ msgstr "Zakres"
+
+#, fuzzy
+#~ msgid "Unable to display the map"
+#~ msgstr "Nie można usunąć mapsetu"
+
+#, fuzzy, python-format
+#~ msgid "Unable to rename location: %s"
+#~ msgstr ""
+#~ "Nie można zmienić nazwy lokacji.\n"
+#~ "\n"
+#~ "%s"
+
+#, fuzzy, python-format
+#~ msgid "Unable to delete location: %s"
+#~ msgstr "Nie można usunąć lokacji"
+
+#~ msgid "Combined (labels and module names)"
+#~ msgstr "Zaawansowany (etykiety i nazwy modułów)"
+
+#, python-format
+#~ msgid ""
+#~ "'%s' is not a GRASS module.\n"
+#~ "\n"
+#~ "Unable to add new action to the model."
+#~ msgstr ""
+#~ "'%s' nie jest modułem GRASS.\n"
+#~ "\n"
+#~ "Nie można dodać nowej akcji do modelu."
+
+#~ msgid "Run python script"
+#~ msgstr "Uruchom skrypt pythona"
+
+#~ msgid "Go to GCP No."
+#~ msgstr "Idź do GCP nr"
+
+#~ msgid "Quit raster digitizer"
+#~ msgstr "Wyjdź z digitizera"
+
+#~ msgid "Data Toolbar"
+#~ msgstr "Pasek narzędzi danych"
+
+#~ msgid "Vector Toolbar"
+#~ msgstr "Narzędzia wektoryzacji"
+
+#~ msgid "Modules"
+#~ msgstr "Moduły"
+
+#~ msgid "Choose GRC file to load"
+#~ msgstr "Wybierz plik GRC"
+
+#~ msgid "Old GRASS Workspace File (*.grc)|*.grc"
+#~ msgstr "Stary plik projektu GRASS (*.grc)|*.grc"
+
+#~ msgid "Set up vector cleaning tools"
+#~ msgstr "Wybierz narzędzia czyszczenia topologii"
+
+#~ msgid "break lines/boundaries"
+#~ msgstr "podziel linie/granice"
+
+#~ msgid "remove duplicates"
+#~ msgstr "usuń duplikaty"
+
+#~ msgid "remove dangles"
+#~ msgstr "usuń węzły wiszące"
+
+#~ msgid "change boundary dangles to lines"
+#~ msgstr "zamień węzły wiszące granic na linie"
+
+#~ msgid "remove bridges"
+#~ msgstr "usuń mosty"
+
+#~ msgid "change bridges to lines"
+#~ msgstr "zamień mosty na linie"
+
+#~ msgid "snap lines/boundaries"
+#~ msgstr "dociągnij linie/granice"
+
+#~ msgid "remove duplicate area centroids"
+#~ msgstr "usuń zduplikowane centroidy obiektów"
+
+#~ msgid "break polygons"
+#~ msgstr "poligony na linie"
+
+#~ msgid "remove small areas"
+#~ msgstr "usuń małe obszary"
+
+#~ msgid "remove lines/boundaries of zero length"
+#~ msgstr "usuń linie/granice o zerowej długości"
+
+#~ msgid "remove small angles at nodes"
+#~ msgstr "usuń małe łuki na węzłach"
+
+#~ msgid "Choose cleaning tools and set thresholds"
+#~ msgstr "Wybierz narzędzia i ustaw progi"
+
+#~ msgid "Select input vector map:"
+#~ msgstr "Wybierz wejściową mapę wektorową:"
+
+#~ msgid " Feature type: "
+#~ msgstr "Typ obiektu:"
+
+#~ msgid "Select output vector map:"
+#~ msgstr "Wybierz docelową mapę wektorową:"
+
+#~ msgid "Copy the current command string to the clipboard (Ctrl+C)"
+#~ msgstr "Kopiuj bieżącą komendę do schowka (Ctrl+C)"
+
+#~ msgid "line"
+#~ msgstr "linia"
+
+#~ msgid "boundary"
+#~ msgstr "granica"
+
+#~ msgid "centroid"
+#~ msgstr "centroid"
+
+#~ msgid "face"
+#~ msgstr "powierzchnia"
+
+#~ msgid "Name of input vector map"
+#~ msgstr "Nazwa wejściowej mapy wektorowej"
+
+#~ msgid "Name for output vector map"
+#~ msgstr "Nazwa wyjściowej mapy wektorowej"
+
+#~ msgid "Threshold"
+#~ msgstr "Krok"
+
+#, python-format
+#~ msgid "'%s' not defined"
+#~ msgstr "'%s' nie zdefiniowany"
+
+#~ msgid "Plot options"
+#~ msgstr "Opcje wydruku"
+
+#~ msgid "Quit plot tool"
+#~ msgstr "Wyjdź z narzędzia wydruku"
+
+#~ msgid "Load GRC file (Tcl/Tk GUI)"
+#~ msgstr "Wczytaj plik GRC (Tcl/Tk GUI)"
+
+#~ msgid "Load map layers from GRC file to layer tree"
+#~ msgstr "Wczytuje warstwy mapy z pliku GRC do listy warstw."
+
+#~ msgid "Version and copyright"
+#~ msgstr "Wersja i prawa autorskie"
+
+#~ msgid "Displays version and copyright information."
+#~ msgstr "Wyświetla numer wersji i informację o prawach autorskich."
+
+#~ msgid ""
+#~ "Creates a raster map layer and vector point map containing randomly "
+#~ "located points."
+#~ msgstr "Tworzy mapę rastrową i wektorową zawierającą losowe punkty."
+
+#~ msgid "Command prompt"
+#~ msgstr "Okno polecenia"
+
+#~ msgid "Output window"
+#~ msgstr "Okno wyjścia"
+
+#~ msgid "Clear command prompt content"
+#~ msgstr "Wyczyść okno polecenia"
+
+#~ msgid "Save output window content to the file"
+#~ msgstr "Zapisz zawartość okna do pliku"
+
+#~ msgid "&Log file"
+#~ msgstr "Do &pliku"
+
+#~ msgid ""
+#~ "Toggle to save list of executed commands into a file; content saved when "
+#~ "switching off."
+#~ msgstr ""
+#~ "Zapisz listę wykonanych poleceń do pliku;zawartość zostanie zapisana przy "
+#~ "wyjściu."
+
+#~ msgid "Quit digitizer"
+#~ msgstr "Wyjdź z digitizera"
+
+#~ msgid "Vector Digitizer manual"
+#~ msgstr "Podręcznik digitizera"
+
+#~ msgid "Redo"
+#~ msgstr "Powtórz"
+
+#~ msgid "Quit Cartographic Composer"
+#~ msgstr "Wyjdź z kompozytora wydruków"
+
+#~ msgid "Please follow instructions on GRASS Trac Wiki."
+#~ msgstr "Postępuj zgdnie z instrukcjami na GRASS Trac Wiki."
+
+#~ msgid "GRASS SVN revision"
+#~ msgstr "Rewizja GRASS SVN"
+
+#~ msgid "Displaying {name}..."
+#~ msgstr "Wyświetlanie {name}..."
+
+#~ msgid "layer"
+#~ msgstr "warstwa"
+
+#~ msgid "style"
+#~ msgstr "styl"
+
+#, fuzzy
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "Warstwa do usunięcia"
+
+#~ msgid "Copy map"
+#~ msgstr "Kopiuj mapę"
+
+#~ msgid "Failed to copy map: new map has the same name"
+#~ msgstr "Nie można skopiować mapy: nowa mapa ma tę samą nazwę"
+
+#~ msgid ""
+#~ "Map <{map}> already exists in the current mapset. Do you want to "
+#~ "overwrite it?"
+#~ msgstr "Mapa<{map}> już istnieje w bieżącym Mapsecie. Chcesz ją nadpisać?"
+
+#~ msgid "Moving maps not implemented"
+#~ msgstr "Przenoszenie map nie jest zaimplementowane"
+
+#~ msgid "Maps can be copied only to current mapset"
+#~ msgstr "Można kopiować mapy tylko do bieżącego Mapsetu"
+
+#~ msgid "No GRASS-python library found."
+#~ msgstr "Nie znaleziono biblioteki GRASS-python."
+
+#~ msgid "Input Data"
+#~ msgstr "Dane wejściowe"
+
+#~ msgid "Point dataset:"
+#~ msgstr "Zestaw danych punktowych:"
+
+#~ msgid "Kriging"
+#~ msgstr "Kriging"
+
+#~ msgid "Name for the output raster map:"
+#~ msgstr "Nazwa wyjściowej mapy rastrowej:"
+
+#~ msgid "Kriging Module"
+#~ msgstr "Moduł krigingu"
+
+#~ msgid "Ready."
+#~ msgstr "Gotowe."
+
+#~ msgid "Variogram fitting"
+#~ msgstr "Dopasowanie histogramu"
+
+#~ msgid "Plot/refresh variogram"
+#~ msgstr "Rysuj/odśwież wariogram"
+
+#~ msgid ":"
+#~ msgstr ":"
+
+#~ msgid "Kriging techniques"
+#~ msgstr "Techniki krigingu"
+
+#~ msgid "Block size:"
+#~ msgstr "Rozmiar bloku:"
+
+#~ msgid "Model: "
+#~ msgstr "Model: "
+
+#~ msgid "Quit wxGUI session."
+#~ msgstr "Zamyka sesję wxGUI"
+
+#~ msgid "Region"
+#~ msgstr "Region"
+
+#~ msgid "Display region"
+#~ msgstr "Wyświetl ustawienia"
+
+#~ msgid "legend"
+#~ msgstr "legenda"
+
+#, fuzzy
+#~ msgid "Hide {overlay}"
+#~ msgstr "Dodaj warstwę tematyczną"
+
+#~ msgid "Show text object"
+#~ msgstr "Pokaż obiekt tekstowy"
+
+#~ msgid ""
+#~ "Drag text with mouse in pointer mode to position.\n"
+#~ "Double-click to change options"
+#~ msgstr ""
+#~ "Przeciągnij tekst myszą (tryb wskaźnika) do nowego położenia.\n"
+#~ "Dwuklik dla zmiany opcji."
+
+#~ msgid "Add text layer"
+#~ msgstr "Dodaj warstwę tekstową"
+
+#, fuzzy
+#~ msgid "Show/hide scale bar"
+#~ msgstr "Podziałka liniowa"
+
+#, fuzzy
+#~ msgid "Show/hide legend"
+#~ msgstr "Pokaż legendę"
+
+#, fuzzy
+#~ msgid "Show/hide north arrow"
+#~ msgstr "Dodaj strzałkę północy"
+
+#~ msgid "Overlays two vector maps."
+#~ msgstr "Przykrywa dwie mapy wektorowe."
+
+#~ msgid "Print/add/remove a timestamp for a 3D raster map"
+#~ msgstr "Odświerz/dodaj/usuń znacznik czasu dla mapy rastrowej 3D"
+
+#~ msgid "Failed to copy map: action is allowed only within the same location."
+#~ msgstr ""
+#~ "NIe można skopiować mapy: akcja jest możliwa tylko w tej samej lokacji."
+
+#~ msgid "Repository (leave empty to use the official one)"
+#~ msgstr "Repozytorium (zostaw puste aby użyć oficjalnego)"
+
+#~ msgid "&Fetch"
+#~ msgstr "&Pobierz"
+
+#~ msgid "Fetch list of available modules from GRASS Addons SVN repository"
+#~ msgstr "Pobierz listę wtyczek"
+
+#~ msgid "Animation already axists"
+#~ msgstr "Animacja już istnieje"
+
+#~ msgid "GRASS GIS Raster Map Calculator"
+#~ msgstr "Kalkulator Map GRASS GIS"
+
+#~ msgid "GRASS GIS 3D Raster Map Calculator"
+#~ msgstr "Kalkulator map rastrowych 3D GRASS GIS"
+
+#~ msgid "GRASS GIS Histogramming Tool"
+#~ msgstr "Narzędzie histogramu GRASS GIS"
+
+#~ msgid "Define GRASS Database and Location Name"
+#~ msgstr "Zdefiniuj bazę danych GRASS-a i nazwę lokacji"
+
+#~ msgid "GIS Data Directory:"
+#~ msgstr "Katalog danych GIS:"
+
+#~ msgid "Project Location"
+#~ msgstr "Lokacja projektu"
+
+#~ msgid "Optional location title, you can leave this field blank."
+#~ msgstr "Opcjonalna nazwa lokacji, możesz zostawić to pole puste."
+
+#~ msgid "Choose method for creating a new location"
+#~ msgstr "Wybierz metodę utworzenia nowej lokacji"
+
+#~ msgid "Select coordinate system parameters from a list"
+#~ msgstr "Wybierz parametry układu współrzędnych z listy"
+
+#~ msgid "Specify projection and datum terms using custom PROJ.4 parameters"
+#~ msgstr "Określ odwzorowanie i datum na podstawie parametrów w PROJ.4"
+
+#~ msgid "Simple methods:"
+#~ msgstr "Zwykłe metody:"
+
+#~ msgid "Advanced methods:"
+#~ msgstr "Zaawansowane metody:"
+
+#~ msgid "Choose projection"
+#~ msgstr "Wybierz odwzorowanie"
+
+#~ msgid "Select Well Known Text (WKT) .prj file"
+#~ msgstr "Wybierz plik Well Known Text (WKT) .prj"
+
+#~ msgid "WKT .prj file:"
+#~ msgstr "Plik WKT .prj:"
+
+#~ msgid "Choose EPSG Code"
+#~ msgstr "Wybierz kod EPSG"
+
+#~ msgid "Path to the EPSG-codes file:"
+#~ msgstr "Ścieżka do pliku z kodami EPSG:"
+
+#~ msgid "Choose EPSG codes file"
+#~ msgstr "Wybierz plik z kodami EPSG"
+
+#~ msgid "Choose method of specifying georeferencing parameters"
+#~ msgstr "Wybierz metodę oznaczenia parametrów georeferencji"
+
+#~ msgid "Location Title:"
+#~ msgstr "Tytuł lokacji:"
+
+#~ msgid "Location wizard canceled. Location not created."
+#~ msgstr "Anulowano pracę kreatora lokacji. Lokacja nie została utworzona."
+
+#~ msgid ""
+#~ "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You "
+#~ "will need to change the default GIS data directory in the GRASS startup "
+#~ "screen."
+#~ msgstr ""
+#~ "Lokacja <%(loc)s> zostanie utworzona w katalogu z danymi GIS <%(dir)s>. "
+#~ "Zmień domyślny katalog do danych GIS w trakcie uruchamiania programu. "
+
+#~ msgid "New GIS data directory"
+#~ msgstr "Nowy katalog danych GIS"
+
+#~ msgid "Common formats import"
+#~ msgstr "z popularnych formatów   /GDAL/"
+
+#~ msgid "Import of common formats with reprojection"
+#~ msgstr "z popularnych formatów z reprojekcją"
+
+#~ msgid "Reports and Statistics"
+#~ msgstr "Raporty i statystyki"
+
+#~ msgid "GRASS GIS Vector Digitizer"
+#~ msgstr "Narzędzia wektoryzacji"
+
+#~ msgid "Click here to show search module engine"
+#~ msgstr "Wyszukiwarka modułów"
+
+#~ msgid "Click here to hide search module engine"
+#~ msgstr "Ukryj wyszukiwarkę modułów"
+
+#~ msgid "Import/link raster or vector data"
+#~ msgstr "Import/linkowanie danych rastrowych lub wektorowych"
+
+#~ msgid "GRASS GIS %s Layer Manager"
+#~ msgstr "Menadżer warstw %s GRASS GIS"
+
+#~ msgid ""
+#~ "Location <%s> created.\n"
+#~ "\n"
+#~ "Do you want to switch to the new location?"
+#~ msgstr ""
+#~ "Lokacja <%s> została utworzona.\n"
+#~ "\n"
+#~ "Czy chcesz przełączyć do nowej lokacji?"
+
+#~ msgid "Switch to new location?"
+#~ msgstr "Czy przełączyć na nową lokację?"
+
+#~ msgid "Do you want to set the default region extents and resolution now?"
+#~ msgstr "Czy chcesz teraz zdefiniować zakres i rozdzielczość regionu?"
+
+#~ msgid "Location <%s> created"
+#~ msgstr "Lokacja <%s> została utworzona"
+
+#~ msgid "Remove vector legend"
+#~ msgstr "Usuń legendę wektorową"
+
+#~ msgid "GRASS GIS Data Catalog"
+#~ msgstr "Katalog danych GRASS GIS"
+
+#~ msgid "Editing {name}"
+#~ msgstr "Edycja {name}..."
+
+#~ msgid "GRASS GIS Attribute Table Manager"
+#~ msgstr "Menadżer Tabeli Atrybutów GRASS GIS"
+
+#~ msgid "READONLY - "
+#~ msgstr "tylko do odczytu -"
+
+#~ msgid "GRASS GIS Graphical Modeler"
+#~ msgstr "Graficzny modeler GRASS GIS"
+
+#~ msgid "GRASS GIS - Map display"
+#~ msgstr "GRASS GIS - Okno mapy"
+
+#~ msgid "GRASS GIS Histogramming Tool (d.histogram)"
+#~ msgstr "Histogram GRASS GIS (d.histogram)"
+
+#~ msgid "Attaches, deletes or reports vector categories to map geometry."
+#~ msgstr "Dołącza, usuwa lub raportuje kategorie wektorowe do geometrii map."
+
+#~ msgid "Unpack GRASS raster map"
+#~ msgstr "Rozpakuj mapę rastrową"
+
+#~ msgid "Set raster output format"
+#~ msgstr "Wybierz wyjściowy format rastra"
+
+#~ msgid "Unpack GRASS vector map"
+#~ msgstr "Rozpakuj mapę wektorową"
+
+#~ msgid "Set vector output format"
+#~ msgstr "Wybierz wyjściowy format wektora"
+
+#~ msgid "Search:"
+#~ msgstr "Znajdź:"
+
+#~ msgid " (readonly)"
+#~ msgstr "(tylko do odczytu)"
+
+#~ msgid "GRASS GIS Attribute Table Manager - "
+#~ msgstr "Menadżer Tabeli Atrybutów GRASS GIS -"
+
+#~ msgid "GRASS GIS Setup for r.li modules"
+#~ msgstr "Ustawienia modułów r.li GRASS GIS"
+
+#~ msgid "Resize legend"
+#~ msgstr "Zmień rozmiar legendy"
+
+#~ msgid "Location Title"
+#~ msgstr "Nazwa lokacji"
+
+#~ msgid "Unable to create location"
+#~ msgstr "Nie można utworzyć lokacji"
+
+#~ msgid "Select EPSG code of spatial reference system"
+#~ msgstr "Wybierz kod EPSG układu współrzędnych"
+
+#~ msgid "Read projection and datum terms from a georeferenced data file"
+#~ msgstr "Czytaj odwzorowanie i datum z pliku danych georeferencyjnych"
+
+#~ msgid "Do you want to create GRASS location <%s>?"
+#~ msgstr "Czy chcesz utworzyć lokację GRASS-a <%s>?"
+
+#~ msgid "Create new location?"
+#~ msgstr "Utworzyć nową lokację?"
+
+#~ msgid "Ask when quiting wxGUI or closing display"
+#~ msgstr "Pytaj przy zamykaniu wxGUI lub okna"
+
+#~ msgid "Deactive overwrite"
+#~ msgstr "Wyłącz nadpisywanie"

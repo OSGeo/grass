@@ -15220,6 +15220,10 @@ msgstr ""
 msgid "Set computational region extent interactively"
 msgstr "Számítási régió interaktív beállítása"
 
+#: ../gui/wxpython/mapdisp/frame.py:1531
+msgid "Set computational region from named region"
+msgstr "Számítási régió beállítása névvel bíró régióval"
+
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr "Számítási régió mentése névvel bíró régióba"
@@ -20013,3 +20017,497 @@ msgstr "Kattintson és húzza az objektumot az átméretezéshez"
 #: ../gui/wxpython/psmap/frame.py:2711
 msgid "labels: "
 msgstr "címkék:"
+
+#~ msgid "Abort download location"
+#~ msgstr "Hely letöltés megszakítása"
+
+#~ msgid "Location Name:"
+#~ msgstr "Hely név:"
+
+#~ msgid "Change location and mapset"
+#~ msgstr "Hely és térképcsoport váltás"
+
+#~ msgid "Use defined projection"
+#~ msgstr "Felhasználó definiált vetület"
+
+#~ msgid "MASK"
+#~ msgstr "MASZK"
+
+#~ msgid "Extent"
+#~ msgstr "Terjedelem"
+
+#, fuzzy
+#~ msgid "Unable to display the map"
+#~ msgstr "Nem tudom törölni a térképcsoportot"
+
+#, fuzzy, python-format
+#~ msgid "Unable to rename location: %s"
+#~ msgstr ""
+#~ "Nem tudom átnevezni a helyet.\n"
+#~ "\n"
+#~ "%s"
+
+#, fuzzy, python-format
+#~ msgid "Unable to delete location: %s"
+#~ msgstr "Nem tudom törölni a helyet"
+
+#~ msgid "Vector network analysis settings"
+#~ msgstr "Vektor hálózat elemzés beállítások"
+
+#~ msgid "Data Toolbar"
+#~ msgstr "Adatok eszközsor"
+
+#~ msgid "Vector Toolbar"
+#~ msgstr "Vektor eszközsor"
+
+#~ msgid "Old GRASS Workspace File (*.grc)|*.grc"
+#~ msgstr "Régi GRASS munkaterület fájl (*.grc)|*.grc"
+
+#~ msgid "Set up vector cleaning tools"
+#~ msgstr "Vektor tisztító eszközök beállítása"
+
+#~ msgid "break lines/boundaries"
+#~ msgstr "törésvonalak/határok"
+
+#~ msgid "remove duplicates"
+#~ msgstr "duplikáltak eltávolítása"
+
+#~ msgid "remove dangles"
+#~ msgstr "lógó vonalak eltávolítása"
+
+#~ msgid "change boundary dangles to lines"
+#~ msgstr "lógó határvonalak módosítása vonallá"
+
+#~ msgid "remove bridges"
+#~ msgstr "hidak eltávolítása"
+
+#~ msgid "change bridges to lines"
+#~ msgstr "hidak módosítása vonallá"
+
+#~ msgid "snap lines/boundaries"
+#~ msgstr "vonalak/határok illesztése"
+
+#~ msgid "remove duplicate area centroids"
+#~ msgstr "duplikált terület centrálisok eltávolítása"
+
+#~ msgid "remove small areas"
+#~ msgstr "kis területek eltávolítása"
+
+#~ msgid "remove lines/boundaries of zero length"
+#~ msgstr "zéró hosszúságú vonalak/határok eltávolítása"
+
+#~ msgid "remove small angles at nodes"
+#~ msgstr "kis szögek megszüntetése a töréspontokban"
+
+#~ msgid "Choose cleaning tools and set thresholds"
+#~ msgstr "Tisztítási eszközök kiválasztása és küszöbértékek beállítása"
+
+#~ msgid "Select input vector map:"
+#~ msgstr "Válasszon input vektor térképet:"
+
+#~ msgid " Feature type: "
+#~ msgstr "Elemtípus:"
+
+#~ msgid "Select output vector map:"
+#~ msgstr "Output vektor térkép:"
+
+#~ msgid "Copy the current command string to the clipboard (Ctrl+C)"
+#~ msgstr "Aktuális parancs szöveg vágólapra másolása (Ctrl+C)"
+
+#~ msgid "line"
+#~ msgstr "vonal"
+
+#~ msgid "boundary"
+#~ msgstr "határ"
+
+#~ msgid "centroid"
+#~ msgstr "centrális"
+
+#~ msgid "face"
+#~ msgstr "lap"
+
+#, python-format
+#~ msgid "%s. cleaning tool removed, will be ignored"
+#~ msgstr "%s. tisztítási eszközt eltávolították, nem veszem figyelembe"
+
+#~ msgid "Please select a cleaning tool to remove"
+#~ msgstr "Válassza ki az eltávolítandó tisztítási eszköszt"
+
+#, python-format
+#~ msgid "%s. cleaning tool moved up"
+#~ msgstr "%s. tisztítási eszközt felfelé mozgattam"
+
+#~ msgid "1. cleaning tool can not be moved up "
+#~ msgstr "1. tisztítási eszközt nem tudom felfelé mozgatni"
+
+#~ msgid "Please select a cleaning tool to move up"
+#~ msgstr "Válassza ki a felfelé mozgatandó tisztítási eszközt"
+
+#, python-format
+#~ msgid "%s. cleaning tool moved down"
+#~ msgstr "%s. tisztítási eszközt lefelé mozgattam"
+
+#~ msgid "Last cleaning tool can not be moved down "
+#~ msgstr "Az utolsó tisztítási eszköz nem mozgatható lefelé"
+
+#~ msgid "Please select a cleaning tool to move down"
+#~ msgstr "Válassza ki a lefelé mozgatandó tisztítási eszközt"
+
+#, python-format
+#~ msgid "cleaning tool: '%s'"
+#~ msgstr "tisztítási eszköz: '%s'"
+
+#, python-format
+#~ msgid "Threshold for %(num)s. tool '%(tool)s': %(thresh)s"
+#~ msgstr "Küszöbérték a 1%(num)s. eszközhöz '%(tool)s': %(thresh)s"
+
+#~ msgid "Name of input vector map"
+#~ msgstr "Input vektor térkép neve"
+
+#~ msgid "Name for output vector map"
+#~ msgstr "Output vektor térkép neve"
+
+#~ msgid "Threshold"
+#~ msgstr "Küszöbérték"
+
+#, python-format
+#~ msgid ""
+#~ "Some parameters not defined. Operation canceled.\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Néhány paramétert nem adott meg. A művelet megszakadt.\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Executing selected cleaning operations..."
+#~ msgstr "A kiválasztott tisztítási műveletek végrehajtása..."
+
+#~ msgid "Vector cleaning command copied to clipboard"
+#~ msgstr "A vektor tisztítás parancsot a vágólapra másoltam"
+
+#~ msgid "Install selected add-ons GRASS module"
+#~ msgstr "Kiválasztott GRASS bővítmények telepítése"
+
+#~ msgid "Fetching list of modules from GRASS-Addons (be patient)..."
+#~ msgstr "Modulok lekérdezése a GRASS bővítményekből (legyen türelmes)..."
+
+#~ msgid "Plot options"
+#~ msgstr "Rajzolási beállítások"
+
+#, python-brace-format
+#~ msgid "ZIP file is unreadable: {0}"
+#~ msgstr "ZIP fájl nem olvasható: {0}"
+
+#, python-brace-format
+#~ msgid "Archive file is unreadable: {0}"
+#~ msgstr "Archív fájl nem olvasható: {0}"
+
+#, python-brace-format
+#~ msgid "Download file from <{url}>, return status code {code}, "
+#~ msgstr "<{url}> fájl letöltése, visszaadott státusz kód {code},"
+
+#, python-brace-format
+#~ msgid "Download file from <{url}>, failed. Check internet connection."
+#~ msgstr ""
+#~ "<{url}> fájl letöltése sikertelen. Ellenőrizze az internet kapcsolatot."
+
+#, python-brace-format
+#~ msgid "Download of <{url}> failed or file <{name}> is not a ZIP file"
+#~ msgstr "A <{url}> letöltése sikertelen vagy a <{name}> fájl nem ZIP fájl"
+
+#, python-brace-format
+#~ msgid "Unknown format '{0}'."
+#~ msgstr "Ismeretlen formátum '{0}'."
+
+#~ msgid "Command prompt"
+#~ msgstr "Parancs prompt"
+
+#~ msgid "Output window"
+#~ msgstr "Output ablak"
+
+#~ msgid "Clear command prompt content"
+#~ msgstr "Parancs prompt tartalmának törlése"
+
+#~ msgid "Save output window content to the file"
+#~ msgstr "Output ablak tartalmának mentése fájlba"
+
+#~ msgid "&Log file"
+#~ msgstr "Napló fájl"
+
+#~ msgid ""
+#~ "Toggle to save list of executed commands into a file; content saved when "
+#~ "switching off."
+#~ msgstr ""
+#~ "Átkapcsolás a végrehajtott parancsok fájlba mentésére; a tartalmat a "
+#~ "kikapcsolásnál mentjük."
+
+#, python-brace-format
+#~ msgid ""
+#~ "Unable to write file '{filePath}'.\n"
+#~ "\n"
+#~ "Details: {error}"
+#~ msgstr ""
+#~ "Nem tudom írni a '{filePath}' fájlt.\n"
+#~ "\n"
+#~ "Részletek: {error}"
+
+#~ msgid "Quit digitizer"
+#~ msgstr "Kilépés a digitalizálóból"
+
+#~ msgid "Vector Digitizer manual"
+#~ msgstr "Vektor digitalizálás kézikönyv"
+
+#~ msgid "Redo"
+#~ msgstr "Újra"
+
+#~ msgid "Quit Cartographic Composer"
+#~ msgstr "Kilépés a kartográfiai szerkesztőből"
+
+#~ msgid "Please follow instructions on GRASS Trac Wiki."
+#~ msgstr "Kérjük kövesse az utasításokat a GRASS Trac Wiki-n."
+
+#~ msgid "Availiable analyses"
+#~ msgstr "Elérhető elemzések"
+
+#~ msgid "Failed to display layer: not in current mapset or invalid layer"
+#~ msgstr ""
+#~ "Nem sikerült a réteget megjeleníteni: nincs az aktuális térképcsoportban "
+#~ "vagy hibás réteg"
+
+#~ msgid "Animation already axists"
+#~ msgstr "Animáció már létezik"
+
+#~ msgid "GRASS GIS Raster Map Calculator"
+#~ msgstr "GRASS GIS raszter térkép kalkulátor"
+
+#~ msgid "GRASS GIS 3D Raster Map Calculator"
+#~ msgstr "GRASS GIS 3D raszter térkép kalkulátor"
+
+#~ msgid "Define GRASS Database and Location Name"
+#~ msgstr "GRASS adatbázis és hely név megadása"
+
+#~ msgid ""
+#~ "This option allows setting default computation region immediately after "
+#~ "new location is created. Default computation region can be defined later "
+#~ "using g.region based on imported data."
+#~ msgstr ""
+#~ "Ez a beállítás lehetővé teszi az alapértelmezett számítási régió azonnali "
+#~ "beállítását a hely létrehozása után. Az alapértelmezett számítási régió "
+#~ "később beállítható az importált adatok alapján a g.region használatával."
+
+#~ msgid "Create user mapset"
+#~ msgstr "Felhasználói térképcsoport létrehozás"
+
+#~ msgid ""
+#~ "This option allows creating user mapset immediately after new location is "
+#~ "created. Note that GRASS always creates PERMANENT mapset."
+#~ msgstr ""
+#~ "Ez  a beállítás lehetővé teszi felhasználói térképcsoportok azonnali "
+#~ "létrehozását a hely létrehozása után. Vegye észre, hogy a GRASS mindig "
+#~ "létrehozza a PERMANENT térképcsoportot."
+
+#~ msgid "GIS Data Directory:"
+#~ msgstr "GISadat könyvtár:"
+
+#~ msgid "Project Location"
+#~ msgstr "Projekt hely"
+
+#~ msgid "Location Title"
+#~ msgstr "Hely név"
+
+#~ msgid "Choose method for creating a new location"
+#~ msgstr "Válasszon módszert az új hely létrehozásához"
+
+#~ msgid ""
+#~ "Read projection and datum terms from a Well Known Text (WKT) .prj file"
+#~ msgstr ""
+#~ "Olvass be a vetületet és a dátumot egy Well Known Text (WKT) .prj fájlból"
+
+#~ msgid "Select coordinate system parameters from a list"
+#~ msgstr "Válassza ki a koordináta-rendszer paramétereit egy listából"
+
+#~ msgid "Simple methods:"
+#~ msgstr "Egyszerű módszerek:"
+
+#~ msgid "Advanced methods:"
+#~ msgstr "Haladó módszerek:"
+
+#~ msgid "Choose projection"
+#~ msgstr "Válasszon vetületet"
+
+#~ msgid "Select Well Known Text (WKT) .prj file"
+#~ msgstr "Válasszon Well Known Text (WKT) .prj fájlt"
+
+#~ msgid "WKT .prj file:"
+#~ msgstr "WKT .prj fáll:"
+
+#~ msgid "Choose EPSG Code"
+#~ msgstr "Válasszon EPSG kódot"
+
+#~ msgid "Path to the EPSG-codes file:"
+#~ msgstr "Elérési út az EPSG kódok fájlhoz:"
+
+#~ msgid "Choose EPSG codes file"
+#~ msgstr "Válasszon EPSG kódok fájlt"
+
+#~ msgid "Location Title:"
+#~ msgstr "Hely név:"
+
+#~ msgid "Location wizard canceled. Location not created."
+#~ msgstr "a hely varázsló futása megszakadt. A helyet nem hoztam létre."
+
+#~ msgid ""
+#~ "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You "
+#~ "will need to change the default GIS data directory in the GRASS startup "
+#~ "screen."
+#~ msgstr ""
+#~ "<%(loc)s> helyet a <%(dir)s> GIS adat könyvtárban hoztam létre. Meg kell "
+#~ "változtatnia az alapértelmezett GIS adat könyvtárat a GRASS induló "
+#~ "képernyőjén."
+
+#~ msgid "New GIS data directory"
+#~ msgstr "Új GIS adatkönyvtár"
+
+#~ msgid ""
+#~ "Exports a vector map layer to any of the supported OGR vector formats. By "
+#~ "default a vector map layer is exported to Esri Shapefile format."
+#~ msgstr ""
+#~ "Vektor térkép réteg export bármelyik támogatott OGR vektor formátumba. "
+#~ "Alapértelmezés szerint a vektor térkép réteget ESRI shape fájl formátumba "
+#~ "exportáljuk."
+
+#~ msgid "Reports and Statistics"
+#~ msgstr "Jelentések és statisztikák"
+
+#~ msgid "GRASS GIS Vector Digitizer"
+#~ msgstr "GRASS GIS vektor dgitalizáló"
+
+#~ msgid "Documents"
+#~ msgstr "Dokumentációk"
+
+#~ msgid "My Documents"
+#~ msgstr "Dokumentumaim"
+
+#~ msgid "GRASS GIS Simple Python Editor"
+#~ msgstr "GRASS GIS Egyszerű Python szerkesztő"
+
+#~ msgid "GRASS GIS Cartographic Composer"
+#~ msgstr "GRASS GIS kartográfiai szerkesztő"
+
+#~ msgid "GRASS GIS Animation tool"
+#~ msgstr "GRASS GIS animáció eszköz"
+
+#~ msgid "Start region:"
+#~ msgstr "Kezdő régió:"
+
+#~ msgid "GRASS GIS %s Layer Manager"
+#~ msgstr "GRASS GIS %s réteg kezelő"
+
+#~ msgid "Switch to new location?"
+#~ msgstr "Váltás az új helyre?"
+
+#~ msgid "Do you want to set the default region extents and resolution now?"
+#~ msgstr ""
+#~ "Be akarja állítani az alapértelmezett régió terjedelmét és a felbontást "
+#~ "most?"
+
+#~ msgid "Location <%s> created"
+#~ msgstr "<%s> helyet létrehoztam"
+
+#~ msgid "Unable to exit GRASS shell: unknown PID"
+#~ msgstr "Nem tudok kilépni a GRASS burokból: ismeretlen PID"
+
+#~ msgid "Remove vector legend"
+#~ msgstr "Vektor jelmagyarázat eltávolítás"
+
+#~ msgid "GRASS GIS Vector Network Analysis Tool"
+#~ msgstr "GRASS GIS vektor hálózat elemzés eszköz"
+
+#~ msgid "Click to allow editing other mapsets"
+#~ msgstr "Kattintson más térképcsoportok szerkesztésének az engedélyezéséhez"
+
+#~ msgid "GRASS GIS Attribute Table Manager"
+#~ msgstr "GRASS GIS attribútum tábla kezelő"
+
+#~ msgid "GRASS GIS Graphical Modeler"
+#~ msgstr "GRASS GIS Grafikus Modellező"
+
+#~ msgid "Maximum number of animations is %s."
+#~ msgstr "Az animációk maximális száma %s."
+
+#~ msgid "Animate region change (2D view only)"
+#~ msgstr "Területváltozás animálása (csak 2D nézet)"
+
+#~ msgid "GRASS GIS Temporal Plot Tool"
+#~ msgstr "GRASS GIS időbeli rajz eszköz"
+
+#~ msgid "GRASS GIS Location Download"
+#~ msgstr "GRASS GIS hely letöltés"
+
+#~ msgid "Unpack GRASS raster map"
+#~ msgstr "GRASS raszter térkép kicsomagolása"
+
+#~ msgid "Set raster output format"
+#~ msgstr "Raszter output formátum beállítás"
+
+#~ msgid "Unpack GRASS vector map"
+#~ msgstr "GRASS vektor térkép kicsomagolás"
+
+#~ msgid "Set vector output format"
+#~ msgstr "Vektor output formátum beállítás"
+
+#~ msgid ""
+#~ "Location <%s> created.\n"
+#~ "\n"
+#~ "Do you want to switch to the new location?"
+#~ msgstr ""
+#~ "<%s> helyet létrehoztam.\n"
+#~ "\n"
+#~ "Át akar váltani az új helyre?"
+
+#~ msgid "Search:"
+#~ msgstr "Keresés:"
+
+#~ msgid "GRASS locations in {0}"
+#~ msgstr "GRASS hely ebben {0}"
+
+#~ msgid " (readonly)"
+#~ msgstr "(csak olvasható)"
+
+#~ msgid "GRASS GIS Attribute Table Manager - "
+#~ msgstr "GRASS GIS attribútum tábla kezelő -"
+
+#~ msgid "GRASS GIS Setup for r.li modules"
+#~ msgstr "GRASS GIS beállítás az r.li modulhoz"
+
+#~ msgid "Resize legend"
+#~ msgstr "Jelmagyarázat átméretezés"
+
+#~ msgid "Optional location title, you can leave this field blank."
+#~ msgstr "Opcionális hely cím, ezt a mezőt üresen hagyhatja."
+
+#~ msgid "Unable to create location"
+#~ msgstr "Nem tudom létrehozni a helyet"
+
+#~ msgid "Select EPSG code of spatial reference system"
+#~ msgstr "Válasszon EPSG kódot a vetülethez"
+
+#~ msgid "Read projection and datum terms from a georeferenced data file"
+#~ msgstr "Olvass be a vetületet és a dátumot egy georeferált adatfájlból"
+
+#~ msgid "Create a generic Cartesian coordinate system (XY)"
+#~ msgstr "Hozzon létre egy általános derékszögű koordináta-rendszert (XY)"
+
+#~ msgid "Do you want to create GRASS location <%s>?"
+#~ msgstr "Létre akar hozni egy GRASS helyet <%s>?"
+
+#~ msgid "Create new location?"
+#~ msgstr "Új hely létrehozása?"
+
+#~ msgid "GRASS GIS Histogramming Tool (d.histogram)"
+#~ msgstr "GRASS GIS hisztogram eszköz (d.histogram)"
+
+#, python-format
+#~ msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
+#~ msgstr "Nem tudom betölteni az ikon témát. Ok: %s. Kilépés a wxGUI-ból..."

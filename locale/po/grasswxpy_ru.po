@@ -16173,6 +16173,10 @@ msgstr "Задайте охват расчётного фрагмента из �
 msgid "Set computational region extent interactively"
 msgstr "Задайте охват расчётного фрагмента в интерактивном режиме"
 
+#: ../gui/wxpython/mapdisp/frame.py:1531
+msgid "Set computational region from named region"
+msgstr "Задайте охват расчётного фрагмента из именованного фрагмента"
+
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr "Сохраните охват расчётного фрагмента из именованного фрагмента"
@@ -21173,3 +21177,937 @@ msgstr ""
 #: ../gui/wxpython/psmap/frame.py:2711
 msgid "labels: "
 msgstr "подписи:"
+
+#~ msgid "&Delete location"
+#~ msgstr "&Удалить область"
+
+#~ msgid "&Rename location"
+#~ msgstr "&Переименовать область"
+
+#~ msgid "Abort download location"
+#~ msgstr "Отмена загрузки области"
+
+#~ msgid "Invalid location name"
+#~ msgstr "Недопустимое имя области"
+
+#~ msgid "Unable to rename selected location"
+#~ msgstr "Не удалось переименовать выбранную область"
+
+#~ msgid ""
+#~ "Unable to rename location.\n"
+#~ "\n"
+#~ "{}"
+#~ msgstr ""
+#~ "Не удалось переименовать область.\n"
+#~ "\n"
+#~ "{}"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Cannot delete one or more locations for the following reasons:\n"
+#~ "\n"
+#~ "{reasons}\n"
+#~ "\n"
+#~ "No locations will be deleted."
+#~ msgstr ""
+#~ "Не удалось удалить одну или несколько областей по следующим причинам:\n"
+#~ "\n"
+#~ "{reasons}\n"
+#~ "\n"
+#~ "Области не будут удалены."
+
+#~ msgid "Unable to delete selected locations"
+#~ msgstr "Не удалось удалить выбранные области"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Do you want to continue with deleting one or more of the following "
+#~ "locations?\n"
+#~ "\n"
+#~ "{deletes}\n"
+#~ "\n"
+#~ "All mapsets included in these locations will be permanently deleted!"
+#~ msgstr ""
+#~ "Продолжить удаление одной или нескольких из следующих областей?\n"
+#~ "\n"
+#~ "{deletes}\n"
+#~ "\n"
+#~ "Все наборы, включённые в эти области, будут полностью удалены!"
+
+#~ msgid "Delete selected locations"
+#~ msgstr "Удалить выбранные области"
+
+#~ msgid "Error when deleting locations"
+#~ msgstr "Ошибка при удалении областей"
+
+#, python-brace-format
+#~ msgid ""
+#~ "The following error occurred when deleting location <{path}>:\n"
+#~ "\n"
+#~ "{error}\n"
+#~ "\n"
+#~ "Deleting of locations was interrupted."
+#~ msgstr ""
+#~ "Возникла следующая ошибка при удалении области <{path}>:\n"
+#~ "\n"
+#~ "{error}\n"
+#~ "\n"
+#~ "Удаление областей было прервано."
+
+#~ msgid "Location Name:"
+#~ msgstr "Имя области:"
+
+#~ msgid "Create new model (Ctrl+N)"
+#~ msgstr "Создать новую модель (Ctrl+N)"
+
+#~ msgid "Load model from file (Ctrl+O)"
+#~ msgstr "Загрузить модуль из файла (Ctrl+O)"
+
+#~ msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
+#~ msgstr ""
+#~ "Конвертирует облака точек LAS LiDAR в векторную карту GRASS с применением "
+#~ "libLAS."
+
+#~ msgid "Change location and mapset"
+#~ msgstr "Изменение области и набора"
+
+#, fuzzy
+#~ msgid "(Un)dock Map Display"
+#~ msgstr "Отображение карты"
+
+#~ msgid "Show comp. extent"
+#~ msgstr "Показать расч. охват"
+
+#~ msgid "Display mode"
+#~ msgstr "Режим отображения"
+
+#~ msgid "Display resolution"
+#~ msgstr "Разрешение отображения"
+
+#~ msgid "Go to"
+#~ msgstr "Переход"
+
+#~ msgid "Use defined projection"
+#~ msgstr "Использовать определённую проекцию"
+
+#~ msgid "MASK"
+#~ msgstr "MASK"
+
+#~ msgid "Extent"
+#~ msgstr "Охват"
+
+#~ msgid ""
+#~ "There was a problem printing.\n"
+#~ "Perhaps your current printer is not set correctly?"
+#~ msgstr ""
+#~ "Проблема печати.\n"
+#~ "Возможно, текущий принтер настроен неправильно?"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Map <{0}@{1}> is not in the current location and therefore cannot be "
+#~ "displayed.\n"
+#~ "\n"
+#~ "To display this map switch to mapset <{1}> first."
+#~ msgstr ""
+#~ "Карта <{0}@{1}> в текущей области отсутствует и поэтому не может быть "
+#~ "отображена.\n"
+#~ "\n"
+#~ "Для отображения этой карты сначала необходимо переключиться на набор <{1}"
+#~ ">."
+
+#~ msgid "Unable to display the map"
+#~ msgstr "Не удалось отобразить карту"
+
+#~ msgid "Download sample location"
+#~ msgstr "Загрузить пример области"
+
+#, python-format
+#~ msgid "GRASS GIS %s Startup%s"
+#~ msgstr "Запуск ГИС GRASS %s%s"
+
+#, python-format
+#~ msgid "Unable to rename mapset: %s"
+#~ msgstr "Не удалось переименовать набор: %s"
+
+#, python-format
+#~ msgid "Unable to rename location: %s"
+#~ msgstr "Не удалось переименовать область: %s"
+
+#, python-format
+#~ msgid "Unable to delete location: %s"
+#~ msgstr "Не удалось удалить область: %s"
+
+#, python-format
+#~ msgid "Invalid map size %d,%d\n"
+#~ msgstr "Недопустимый размер карты %d,%d\n"
+
+#~ msgid ""
+#~ "Unable to load GDAL Python bindings.\n"
+#~ "WMS layers can not be displayed without the bindings.\n"
+#~ msgstr ""
+#~ "Не удалось загрузить привязки Python для GDAL.\n"
+#~ "Слои WMS без этих привязок отображаться не будут.\n"
+
+#~ msgid "Combined (labels and module names)"
+#~ msgstr "Совмещённый (подписи и названия модулей)"
+
+#~ msgid "Expert (module names only)"
+#~ msgstr "Экспертный (только названия модулей)"
+
+#~ msgid "Fancy green"
+#~ msgstr "Нарядный зелёный цвет"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to write file '%(filePath)s'.\n"
+#~ "\n"
+#~ "Details: %(error)s"
+#~ msgstr ""
+#~ "Не удалось записать файл «%(filePath)s».\n"
+#~ "\n"
+#~ "Подробная информация: %(error)s"
+
+#, python-brace-format
+#~ msgid ""
+#~ "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some "
+#~ "systems also python-matplotlib-wx) package(s) to be installed. {0}"
+#~ msgstr ""
+#~ "Для временной шкалы требуется установка пакета (пакетов) «matplotlib» "
+#~ "(python-matplotlib, а в некоторых системах ещё и python-matplotlib-wx). "
+#~ "{0}"
+
+#, python-format
+#~ msgid ""
+#~ "'%s' is not a GRASS module.\n"
+#~ "\n"
+#~ "Unable to add new action to the model."
+#~ msgstr ""
+#~ "«%s» не является модулем GRASS.\n"
+#~ "\n"
+#~ "Не удалось добавить новое действие для модели."
+
+#~ msgid "Run python script"
+#~ msgstr "Запуск сценария python"
+
+#~ msgid "Unable to create new GRASS Database"
+#~ msgstr "Не удалось создать новую базу данных GRASS"
+
+#~ msgid "Go to GCP No."
+#~ msgstr "Перейти к наземной контрольной точке №"
+
+#~ msgid "Vector network analysis settings"
+#~ msgstr "Параметры анализа векторной сети"
+
+#~ msgid "Raster Digitizer manual"
+#~ msgstr "Руководство средства оцифровки растра"
+
+#~ msgid "Quit raster digitizer"
+#~ msgstr "Выход из средства оцифровки растра"
+
+#~ msgid ""
+#~ "Unable to parse user toolboxes XML files. Default main menu will be "
+#~ "loaded."
+#~ msgstr ""
+#~ "Не удалось обработать XML-файлы пользовательской панели элементов. Будет "
+#~ "загружено главное меню по умолчанию."
+
+#~ msgid ""
+#~ "Unable to parse user toolboxes XML files. Default module tree will be "
+#~ "loaded."
+#~ msgstr ""
+#~ "Не удалось обработать XML-файлы пользовательской панели элементов. Будет "
+#~ "загружено дерево модулей по умолчанию."
+
+#~ msgid "There were some issues when loading menu or Modules tab:"
+#~ msgstr "Возникли проблемы при загрузке меню или вкладки «Модули»:"
+
+#~ msgid "Data Toolbar"
+#~ msgstr "Панель инструментов обработки данных"
+
+#~ msgid "Vector Toolbar"
+#~ msgstr "Панель векторных инструментов"
+
+#~ msgid "Modules"
+#~ msgstr "Модули"
+
+#~ msgid "Choose GRC file to load"
+#~ msgstr "Выберите загружаемый файл GRC"
+
+#~ msgid "Old GRASS Workspace File (*.grc)|*.grc"
+#~ msgstr "Старый файл проекта GRASS (*.grc)|*.grc"
+
+#~ msgid "Quit Map Swipe"
+#~ msgstr "Завершить работу «Map Swipe»"
+
+#~ msgid "Set up vector cleaning tools"
+#~ msgstr "Настроить параметры инструментов для чистки вектора"
+
+#~ msgid "break lines/boundaries"
+#~ msgstr "выполнить разрыв линий или границ"
+
+#~ msgid "remove duplicates"
+#~ msgstr "удалить дубликаты"
+
+#~ msgid "remove dangles"
+#~ msgstr "удалить висячие линии"
+
+#~ msgid "change boundary dangles to lines"
+#~ msgstr "преобразовать висячие дуги в линии"
+
+#~ msgid "remove bridges"
+#~ msgstr "удалить мосты"
+
+#~ msgid "change bridges to lines"
+#~ msgstr "преобразовать мосты в линии"
+
+#~ msgid "snap lines/boundaries"
+#~ msgstr "выполнить привязку линий или границ"
+
+#~ msgid "remove duplicate area centroids"
+#~ msgstr "удалить дублирующиеся центроиды полигонов"
+
+#~ msgid "break polygons"
+#~ msgstr "выполнить разрыв полигонов"
+
+#~ msgid "prune lines/boundaries"
+#~ msgstr "упростить линии или границы"
+
+#~ msgid "remove small areas"
+#~ msgstr "удалить небольшие полигоны"
+
+#~ msgid "remove lines/boundaries of zero length"
+#~ msgstr "удалить линии или границы нулевой длины"
+
+#~ msgid "remove small angles at nodes"
+#~ msgstr "удалить небольшие углы на узлах"
+
+#~ msgid "Choose cleaning tools and set thresholds"
+#~ msgstr "Выбрать инструменты для чистки и установить пороги"
+
+#~ msgid "Select input vector map:"
+#~ msgstr "Выбрать входную векторную карту:"
+
+#~ msgid " Feature type: "
+#~ msgstr " Тип объекта: "
+
+#~ msgid "Select output vector map:"
+#~ msgstr "Выбрать выходную векторную карту:"
+
+#~ msgid "Copy the current command string to the clipboard (Ctrl+C)"
+#~ msgstr "Копировать текущую командную строку в буфер памяти (Ctrl+C)"
+
+#~ msgid "line"
+#~ msgstr "линия"
+
+#~ msgid "boundary"
+#~ msgstr "граница"
+
+#~ msgid "centroid"
+#~ msgstr "центроид"
+
+#~ msgid "face"
+#~ msgstr "грань"
+
+#, python-format
+#~ msgid "%s. cleaning tool removed, will be ignored"
+#~ msgstr "%s. инструмент для чистки удалён, будет проигнорировано"
+
+#~ msgid "Please select a cleaning tool to remove"
+#~ msgstr "Выберите инструмент для чистки, который нужно удалить"
+
+#, python-format
+#~ msgid "%s. cleaning tool moved up"
+#~ msgstr "%s. инструмент для чистки перемещён вверх"
+
+#~ msgid "1. cleaning tool can not be moved up "
+#~ msgstr "1. инструмент для чистки не может быть перемещён вверх "
+
+#~ msgid "Please select a cleaning tool to move up"
+#~ msgstr "Выберите инструмент для чистки, который нужно переместить вверх"
+
+#, python-format
+#~ msgid "%s. cleaning tool moved down"
+#~ msgstr "%s. инструмент для чистки перемещён вниз"
+
+#~ msgid "Last cleaning tool can not be moved down "
+#~ msgstr "Последний инструмент для чистки не может быть перемещён вниз "
+
+#~ msgid "Please select a cleaning tool to move down"
+#~ msgstr "Выберите инструмент для чистки, который нужно переместить вниз"
+
+#, python-format
+#~ msgid "cleaning tool: '%s'"
+#~ msgstr "инструмент для чистки: «%s»"
+
+#, python-format
+#~ msgid "Threshold for %(num)s. tool '%(tool)s': %(thresh)s"
+#~ msgstr "Порог для %(num)s. инструмент «%(tool)s»: %(thresh)s"
+
+#~ msgid "Name of input vector map"
+#~ msgstr "Имя входной векторной карты"
+
+#~ msgid "Name for output vector map"
+#~ msgstr "Имя выходной векторной карты"
+
+#~ msgid "Threshold"
+#~ msgstr "Порог"
+
+#, python-format
+#~ msgid "'%s' not defined"
+#~ msgstr "«%s» не определён"
+
+#, python-format
+#~ msgid ""
+#~ "Some parameters not defined. Operation canceled.\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Некоторые параметры не определены. Операция отменена.\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Executing selected cleaning operations..."
+#~ msgstr "Выполняются выбранные операции чистки…"
+
+#~ msgid "Vector cleaning command copied to clipboard"
+#~ msgstr "Команда чистки вектора скопирована в буфер обмена"
+
+#~ msgid "Install selected add-ons GRASS module"
+#~ msgstr "Установить выбранный модуль из дополнительных компонентов GRASS"
+
+#~ msgid "Fetching list of modules from GRASS-Addons (be patient)..."
+#~ msgstr ""
+#~ "Получение списка модулей из дополнительных компонентов GRASS (подождите)…"
+
+#~ msgid "Draw sample region "
+#~ msgstr "Создание фрагмента для выборки "
+
+#~ msgid "Draw Sampling "
+#~ msgstr "Создание выборки "
+
+#~ msgid "Select sample area "
+#~ msgstr "Выбор объекта выборки "
+
+#~ msgid "Plot options"
+#~ msgstr "Параметры графика"
+
+#~ msgid "Quit plot tool"
+#~ msgstr "Завершить работу инструмента постройки графика"
+
+#~ msgid "Load GRC file (Tcl/Tk GUI)"
+#~ msgstr "Загрузить файл GRC (Tcl/Tk GUI)"
+
+#~ msgid "Load map layers from GRC file to layer tree"
+#~ msgstr "Загрузить слои карты из файла GRC в дерево слоёв"
+
+#~ msgid "Version and copyright"
+#~ msgstr "Версия и копирайт"
+
+#~ msgid "Displays version and copyright information."
+#~ msgstr "Показать версию и информацию о копирайте."
+
+#~ msgid ""
+#~ "Creates a raster map layer and vector point map containing randomly "
+#~ "located points."
+#~ msgstr ""
+#~ "Создаёт слой растровой карты и карту векторных точек со случайно "
+#~ "расположенными точками."
+
+#, python-brace-format
+#~ msgid "ZIP file is unreadable: {0}"
+#~ msgstr "ZIP-файл не читается: {0}"
+
+#, python-brace-format
+#~ msgid "Archive file is unreadable: {0}"
+#~ msgstr "Архивный файл не читается: {0}"
+
+#, python-brace-format
+#~ msgid "Download file from <{url}>, return status code {code}, "
+#~ msgstr "Загрузка файла с <{url}>, возврат кода состояния {code}, "
+
+#, python-brace-format
+#~ msgid "Download file from <{url}>, failed. Check internet connection."
+#~ msgstr "Ошибка загрузки файла с <{url}>. Проверьте соединение с интернет."
+
+#, python-brace-format
+#~ msgid "Download of <{url}> failed or file <{name}> is not a ZIP file"
+#~ msgstr "Ошибка загрузки с <{url}> или файл <{name}> не является ZIP-файлом"
+
+#, python-brace-format
+#~ msgid "Unknown format '{0}'."
+#~ msgstr "Неизвестный формат «{0}»."
+
+#~ msgid "Do you want to import {}to the newly created location?"
+#~ msgstr "Импортировать {}во вновь созданную область?"
+
+#~ msgid "Quit Simple Python Editor"
+#~ msgstr "Выйти из простого редактора Python"
+
+#~ msgid "Command prompt"
+#~ msgstr "Командная строка"
+
+#~ msgid "Output window"
+#~ msgstr "Окно вывода"
+
+#~ msgid "Clear command prompt content"
+#~ msgstr "Очистить содержимое командной строки"
+
+#~ msgid "Save output window content to the file"
+#~ msgstr "Сохранить содержимое окна вывода в файл"
+
+#~ msgid "&Log file"
+#~ msgstr "&Файл журнала"
+
+#~ msgid ""
+#~ "Toggle to save list of executed commands into a file; content saved when "
+#~ "switching off."
+#~ msgstr ""
+#~ "Переключиться на сохранение списка выполненных команд в файл; содержимое "
+#~ "сохраняется при отключении."
+
+#, python-brace-format
+#~ msgid ""
+#~ "Unable to write file '{filePath}'.\n"
+#~ "\n"
+#~ "Details: {error}"
+#~ msgstr ""
+#~ "Не удалось выполнить запись в файл «{filePath}».\n"
+#~ "\n"
+#~ "Подробная информация: {error}"
+
+#~ msgid "Type to search in all modules. Press Enter for next match."
+#~ msgstr ""
+#~ "Введите запрос для поиска по всем модулям. Нажмите Enter для перехода к "
+#~ "следующему совпадению."
+
+#, python-format
+#~ msgid "%d modules match"
+#~ msgstr "Число совпадений по модулям: %d"
+
+#~ msgid "Module dialog settings"
+#~ msgstr "Параметры диалогового окна модуля"
+
+#~ msgid "Close dialog when module is successfully finished"
+#~ msgstr "Закрывать диалоговое окно при успешном завершении работы модуля"
+
+#, python-format
+#~ msgid "Do advanced search using %s module"
+#~ msgstr "Выполнить расширенный поиск с помощью модуля %s"
+
+#~ msgid "Double-click to run selected module"
+#~ msgstr "Двойной щелчок для запуска выбранного модуля"
+
+#~ msgid "Run selected module from the tree"
+#~ msgstr "Запустить из дерева выбранный модуль"
+
+#~ msgid "Show manual for selected module from the tree"
+#~ msgstr "Открыть из дерева справку для выбранного модуля"
+
+#~ msgid "Quit digitizer"
+#~ msgstr "Завершить работу средства оцифровки"
+
+#~ msgid "Vector Digitizer manual"
+#~ msgstr "Руководство для средства оцифровки вектора"
+
+#~ msgid "Redo"
+#~ msgstr "Вернуть"
+
+#~ msgid "Quit Cartographic Composer"
+#~ msgstr "Завершить работу компоновщика карт"
+
+#~ msgid "Please follow instructions on GRASS Trac Wiki."
+#~ msgstr "Следуйте инструкциями на GRASS Trac Wiki."
+
+#~ msgid "The copied layer needs to be reprojected:"
+#~ msgstr "Необходимо выполнить репроекцию скопированного слоя:"
+
+#~ msgid "Name for the output raster map:"
+#~ msgstr "Имя выходной растровой карты:"
+
+#~ msgid "Export variance map as well: "
+#~ msgstr "Экспортировать также карту дисперсии: "
+
+#~ msgid ":"
+#~ msgstr ":"
+
+#~ msgid "Block size:"
+#~ msgstr "Размер блока:"
+
+#~ msgid "Model: "
+#~ msgstr "Модель: "
+
+#~ msgid "Region"
+#~ msgstr "Регион"
+
+#~ msgid "Display region"
+#~ msgstr "Показать регион"
+
+#~ msgid "legend"
+#~ msgstr "легенда"
+
+#~ msgid "Hide {overlay}"
+#~ msgstr "Скрыть {overlay}"
+
+#~ msgid "Show text object"
+#~ msgstr "Показать текстовый объект"
+
+#~ msgid ""
+#~ "Drag text with mouse in pointer mode to position.\n"
+#~ "Double-click to change options"
+#~ msgstr ""
+#~ "Перетащите текст (в режиме указателя) в нужное место.\n"
+#~ "Для изменения параметров используйте двойной клик мышкой"
+
+#~ msgid "Add text layer"
+#~ msgstr "Добавить текстовый слой"
+
+#~ msgid "Show/hide scale bar"
+#~ msgstr "Показать/скрыть линейку шкалы"
+
+#~ msgid "Show/hide legend"
+#~ msgstr "Показать/скрыть легенду"
+
+#~ msgid "Show/hide north arrow"
+#~ msgstr "Показать/скрыть указатель на север"
+
+#~ msgid "Overlays two vector maps."
+#~ msgstr "Наложить два векторных слоя"
+
+#~ msgid "Print/add/remove a timestamp for a 3D raster map"
+#~ msgstr "Вывести/добавить/удалить временную метку для 3D растрового слоя"
+
+#~ msgid "Unsupported units"
+#~ msgstr "Неподдерживаемые единицы"
+
+#~ msgid "Map layers"
+#~ msgstr "Слои карты"
+
+#~ msgid "Vector map %s already exists. "
+#~ msgstr "Векторная карта %s уже существует. "
+
+#~ msgid "Temporary map %s  already exists.\n"
+#~ msgstr "Временная карта %s уже существует.\n"
+
+#~ msgid "Exit GUI"
+#~ msgstr "Выйти из интерфейса"
+
+#~ msgid "No mapsets readable"
+#~ msgstr "Отсутствуют читаемые наборы"
+
+#~ msgid "Editing"
+#~ msgstr "Редактирование"
+
+#~ msgid "Copying"
+#~ msgstr "Копирование"
+
+#~ msgid "List raster3D dataset maps"
+#~ msgstr "Вывод списка карт трёхмерного растрового слоя"
+
+#~ msgid "Extract subset of raster3D dataset"
+#~ msgstr "Извлечение вырезки трёхмерного растрового набора данных"
+
+#~ msgid "Univariate raster3D dataset statistics"
+#~ msgstr "Одномерная статистика трёхмерного растрового набора данных"
+
+#~ msgid "Load settings:"
+#~ msgstr "Загрузить параметры:"
+
+#~ msgid "Unable to render map layer <%s>."
+#~ msgstr "Невозможно перерисовать слой <%s>."
+
+#~ msgid "Unable to render overlay <%s>."
+#~ msgstr "Невозможно перерисовать оверлей <%s>."
+
+#~ msgid "Historical GRASS vector import"
+#~ msgstr "Импорт старого вектора GRASS"
+
+#~ msgid "Historical GRASS vector import (all maps)"
+#~ msgstr "Импорт старого вектора GRASS (все карты)"
+
+#~ msgid ""
+#~ "Converts all older versions of GRASS vector maps in current mapset to "
+#~ "current format."
+#~ msgstr ""
+#~ "Преобразует все старые версии векторных карт GRASS в данном наборе в "
+#~ "текущий формат."
+
+#~ msgid "GPS data import"
+#~ msgstr "Импорт данных GPS"
+
+#~ msgid "GEOnet import"
+#~ msgstr "Импорт GEOnet"
+
+#~ msgid "Multiple import formats using OGR"
+#~ msgstr "Форматы импорта использующие OGR"
+
+#~ msgid "Multiple GPS export formats using GPSBabel"
+#~ msgstr "Несколько форматов экспорта GPS с использованием GPSBabel"
+
+#~ msgid "Common export formats using OGR"
+#~ msgstr "Распространённые форматы экспорта с помощью OGR"
+
+#~ msgid "Create optimally placed labels"
+#~ msgstr "Создание оптимально расположенных подписей"
+
+#~ msgid "Bit pattern comparison "
+#~ msgstr "Битовое сравнение шаблонов"
+
+#~ msgid "Launches graphical attribute table manager."
+#~ msgstr "Запускает графический диспетчер таблицы атрибутов."
+
+#~ msgid "Select space time raster dataset(s):"
+#~ msgstr "Выберите пространственно-временной растровый набор(ы) данных:"
+
+#~ msgid "Data file <%(name)s> imported successfully."
+#~ msgstr "Файл данных <%(name)s> импортирован успешно."
+
+#~ msgid "Add default servers"
+#~ msgstr "Добавить серверы по умолчанию"
+
+#~ msgid "Manage"
+#~ msgstr "Управлять"
+
+#~ msgid ""
+#~ "Welcome to GRASS GIS %s%s\n"
+#~ "The world's leading open source GIS"
+#~ msgstr ""
+#~ "Добро пожаловать в ГИС GRASS %s%s\n"
+#~ "Ведущую мировую геоинформационную систему с открытым кодом"
+
+#~ msgid ""
+#~ "Select an existing project location and mapset\n"
+#~ "or define a new location"
+#~ msgstr ""
+#~ "Выберите существующую область проекта и набор\n"
+#~ "или задайте новую область"
+
+#~ msgid ""
+#~ "Accessible mapsets\n"
+#~ "(directories of GIS files)"
+#~ msgstr ""
+#~ "Доступные наборы\n"
+#~ "(каталоги GIS-файлов)"
+
+#~ msgid "Define new location"
+#~ msgstr "Определить новую область"
+
+#~ msgid ""
+#~ "Rename/delete selected\n"
+#~ "mapset or location"
+#~ msgstr ""
+#~ "Переименовать/удалить выбранный\n"
+#~ "набор или область"
+
+#~ msgid "Start &GRASS"
+#~ msgstr "Запустить &GRASS"
+
+#~ msgid "Warning: "
+#~ msgstr "Предупреждение: "
+
+#~ msgid "Develop 3D rasters"
+#~ msgstr "Разработка трёхмерных растров"
+
+#~ msgid "Add linked layers into layer tree ({mightNotWork})"
+#~ msgstr "Добавить связанные слои в дерево слоёв ({mightNotWork})"
+
+#~ msgid "Add imported layers into layer tree ({mightNotWork})"
+#~ msgstr "Добавить импортированные слои в дерево слоёв ({mightNotWork})"
+
+#~ msgid "Imports older versions of GRASS vector maps."
+#~ msgstr "Импорт старых версий векторных слоев GRASS."
+
+#~ msgid "Vector to volume"
+#~ msgstr "Вектор в объем"
+
+#~ msgid "Sites to vector"
+#~ msgstr "Сайты в вектор"
+
+#~ msgid "V&olumes"
+#~ msgstr "О&бъемы"
+
+#~ msgid "Develop volumes"
+#~ msgstr "Обработать объемы"
+
+#~ msgid "3D Mask"
+#~ msgstr "3D маска"
+
+#~ msgid "Volume calculator"
+#~ msgstr "Калькулятор объёмов"
+
+#~ msgid "Basic volume metadata"
+#~ msgstr "Основные метаданные объема"
+
+#~ msgid "Voxel statistics"
+#~ msgstr "Статистика по объёмным пикселам"
+
+#~ msgid "Volume"
+#~ msgstr "Объем"
+
+#~ msgid ""
+#~ "Outputs a raster map showing the anisotropic cumulative cost. Computes "
+#~ "anisotropic cumulative cost of moving between different geographic "
+#~ "locations on an input elevation raster map whose cell category values "
+#~ "represent elevation combined with an input raster map layer whose cell "
+#~ "values represent friction cost."
+#~ msgstr ""
+#~ "Выводит растровый слой, показывающий анизотропную кумулятивную стоимость. "
+#~ "Рассчитывает анизотропную кумулятивную стоимость передвижения между "
+#~ "различными географическими местоположениями на входной растровой карте "
+#~ "высот, значения категорий ячеек которой содержат значения высот, "
+#~ "комбинированные со слоем входной растровой карты, значения ячеек которой "
+#~ "содержат расходы на преодоление."
+
+#~ msgid "Surface interpolation utility for raster map."
+#~ msgstr "Утилита интерполяции поверхности для растровой карты."
+
+#~ msgid "Surface generation program."
+#~ msgstr "Программа формирования поверхности."
+
+#~ msgid "Compares bit patterns with a raster map."
+#~ msgstr "Сравнить битовые шаблоны с растровым слоем."
+
+#~ msgid ""
+#~ "Calculates univariate statistics from the non-null cells for each "
+#~ "registered raster3d map of a space time raster3d dataset."
+#~ msgstr ""
+#~ "Вычисляет одномерную статистику из ненулевых ячеек для каждой "
+#~ "зарегистрированной трёхмерной растровой карты трёхмерного пространственно-"
+#~ "временного растрового набора данных."
+
+#~ msgid "Digitize"
+#~ msgstr "Оцифровать"
+
+#~ msgid "Define GRASS Database and Location Name"
+#~ msgstr "Укажите базу данных GRASS и название области"
+
+#~ msgid "GIS Data Directory:"
+#~ msgstr "Каталог с ГИС-данными:"
+
+#~ msgid "Project Location"
+#~ msgstr "Расположение проекта"
+
+#~ msgid "Choose method for creating a new location"
+#~ msgstr "Выберите метод для создания новой области"
+
+#~ msgid "Choose projection"
+#~ msgstr "Выберите проекцию"
+
+#~ msgid "Choose EPSG Code"
+#~ msgstr "Укажите код EPSG"
+
+#~ msgid "Path to the EPSG-codes file:"
+#~ msgstr "Путь к файлу кодов EPSG:"
+
+#~ msgid "Choose EPSG codes file"
+#~ msgstr "Выбрать файл кодов EPSG"
+
+#~ msgid "Choose method of specifying georeferencing parameters"
+#~ msgstr "Выберите метод определения параметров привязки"
+
+#~ msgid "Location wizard canceled. Location not created."
+#~ msgstr "Работа мастера создания области прервана. Область не создана."
+
+#~ msgid "Do you want to set the default region extents and resolution now?"
+#~ msgstr "Вы хотите установить охват и разрешение региона сейчас?"
+
+#~ msgid "Location <%s> created"
+#~ msgstr "Область <%s> создана"
+
+#~ msgid "GRASS GIS - Map display"
+#~ msgstr "ГИС GRASS — Окно слоя"
+
+#~ msgid "GRASS GIS Attribute Table Manager"
+#~ msgstr "Менеджер атрибутивных таблиц ГИС GRASS"
+
+#~ msgid "Unable to create location"
+#~ msgstr "Невозможно создать область"
+
+#~ msgid "Do you want to create GRASS location <%s>?"
+#~ msgstr "Вы хотите создать новую область GRASS <%s>?"
+
+#~ msgid "Create new location?"
+#~ msgstr "Создать новую область?"
+
+#~ msgid "Ask when quiting wxGUI or closing display"
+#~ msgstr ""
+#~ "Запрашивать подтверждение при завершении wxGUI или закрытии отображения"
+
+#~ msgid "Automatically hightlight selected features in map display"
+#~ msgstr "Автоматически подсвечивать выбранные объекты на отображении карты"
+
+#~ msgid ""
+#~ "Permission denied <{}>. Please change file permission for writting.{}"
+#~ msgstr "В доступе оказано <{}>. Измените разрешение на запись файла.{}"
+
+#~ msgid "Deactive overwrite"
+#~ msgstr "Отключить перезапись"
+
+#~ msgid "Quit georectification tool"
+#~ msgstr "Выйти из инструмента геопривязки"
+
+#~ msgid "Georectifier settings"
+#~ msgstr "Параметры инструмента геопривязки"
+
+#~ msgid "Georectifier manual"
+#~ msgstr "Руководство для инструмента геопривязки"
+
+#~ msgid "Systematic contiguous"
+#~ msgstr "Систематическая непрерывная выборка"
+
+#~ msgid "Systematic non contiguous"
+#~ msgstr "Систематическая несвязная выборка"
+
+#, python-brace-format
+#~ msgid ""
+#~ "The following error occured when deleting mapset <{path}>:\n"
+#~ "\n"
+#~ "{error}\n"
+#~ "\n"
+#~ "Deleting of mapsets was interrupted."
+#~ msgstr ""
+#~ "Следующая ошибка произошла при удалении набора <{path}>:\n"
+#~ "\n"
+#~ "{error}\n"
+#~ "\n"
+#~ "Удаление наборов было прервано."
+
+#, python-brace-format
+#~ msgid ""
+#~ "The following error occured when deleting location <{path}>:\n"
+#~ "\n"
+#~ "{error}\n"
+#~ "\n"
+#~ "Deleting of locations was interrupted."
+#~ msgstr ""
+#~ "При удалении области <{path}> возникла следующая ошибка:\n"
+#~ "\n"
+#~ "{error}\n"
+#~ "\n"
+#~ "Удаление областей было прервано."
+
+#, python-brace-format
+#~ msgid ""
+#~ "The following error occured when deleting database <{path}>:\n"
+#~ "\n"
+#~ "{error}\n"
+#~ "\n"
+#~ "Deleting of GRASS database was interrupted."
+#~ msgstr ""
+#~ "При удалении базы данных <{path}> произошла следующая ошибка:\n"
+#~ "\n"
+#~ "{error}\n"
+#~ "\n"
+#~ "Удаление базы данных GRASS было прервано."
+
+#, python-format
+#~ msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
+#~ msgstr ""
+#~ "Не удалось загрузить тему значков. Причина: %s. Завершение работы wxGUI…"
+
+#~ msgid ""
+#~ "Unable to get current geographic extent. Force quiting wxGUI. Please "
+#~ "manually run g.region to fix the problem."
+#~ msgstr ""
+#~ "Не удалось получить текущий географический охват. Принудительно завершите "
+#~ "работу wxGUI. Для решения проблемы запустите g.region вручную."

@@ -9363,3 +9363,2016 @@ msgstr "Неподдерживаемый значок %d"
 #, c-format
 msgid "[%s]: No such color"
 msgstr "[%s]: Нет такого цвета"
+
+#~ msgid "create temporary location (use with the --exec flag)"
+#~ msgstr "создать временную область (используется с флагом --exec)"
+
+#~ msgid "Creating new GRASS GIS location <{}>..."
+#~ msgstr "Создание новой области GRASS GIS <{}>…"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to create temporary directory <grass7-%(user)s-%(lock)s>! Exiting."
+#~ msgstr ""
+#~ "Не удалось создать временный каталог <grass7-%(user)s-%(lock)s>! "
+#~ "Завершение работы."
+
+#, python-format
+#~ msgid ""
+#~ "Invalid user interface specified - <%s>. Use the --help option to see "
+#~ "valid interface names."
+#~ msgstr ""
+#~ "Указан недопустимый интерфейс пользователя — <%s>. Используйте параметр --"
+#~ "helpдля вывода допустимых имён интерфейса."
+
+#, python-brace-format
+#~ msgid ""
+#~ "Error in GUI startup. See messages above (if any) and if necessary, "
+#~ "please report this error to the GRASS developers.\n"
+#~ "On systems with package manager, make sure you have the right GUI "
+#~ "package, probably named grass-gui, installed.\n"
+#~ "To run GRASS GIS in text mode use the --text flag.\n"
+#~ "Use '--help' for further options\n"
+#~ "     {cmd_name} --help\n"
+#~ "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
+#~ msgstr ""
+#~ "Ошибка при запуске графического интерфейса. Просмотрите сообщения выше "
+#~ "(если имеются) и при необходимости, сообщите об ошибке разработчикам "
+#~ "GRASS.\n"
+#~ "На системах с менеджером пакетов необходимо убедиться в том, что "
+#~ "установлен правильный пакет графического интерфейса, вероятно с именем "
+#~ "grass-gui.\n"
+#~ "Для запуска ГИС GRASS в текстовом режиме необходимо использовать флаг --"
+#~ "text.\n"
+#~ "Также для получения информации о других параметрах можно использовать "
+#~ "флаг --help \n"
+#~ "     {cmd_name} --help\n"
+#~ "Смотрите также: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
+
+#~ msgid ""
+#~ "Exit was requested in GUI.\n"
+#~ "GRASS GIS will not start. Bye."
+#~ msgstr ""
+#~ "В графическом интерфейсе было инициировано завершение работы.\n"
+#~ "Запуск ГИС GRASS не состоится. До свиданья."
+
+#~ msgid ""
+#~ "Invalid return code from GUI startup script.\n"
+#~ "Please advise GRASS developers of this error."
+#~ msgstr ""
+#~ "Недопустимый код возврата от сценария запуска графического интерфейса.\n"
+#~ "Сообщите об этой ошибке разработчикам GRASS."
+
+#~ msgid "Cleaning up temporary files..."
+#~ msgstr "Выполняется удаление временных файлов…"
+
+#, python-brace-format
+#~ msgid ""
+#~ "<{0}> requested, but not available. Run GRASS in text mode (--text) or "
+#~ "install missing package (usually 'grass-gui')."
+#~ msgstr ""
+#~ "Требуется наличие отсутствующего модуля <{0}>. Запустите GRASS в "
+#~ "текстовом режиме (--text) или установите недостающий пакет (обычно «grass-"
+#~ "gui»)."
+
+#, c-format
+#~ msgid "Unable to open %s file <%s>"
+#~ msgstr "Не удалось открыть файл %s: <%s>"
+
+#, c-format
+#~ msgid "Unable to create %s file <%s>"
+#~ msgstr "Не удалось создать файл %s: <%s>"
+
+#~ msgid "Illegal latitude for North"
+#~ msgstr "Неверное значение северной широты"
+
+#~ msgid "Illegal latitude for South"
+#~ msgstr "Неверное значение южной широты"
+
+#, c-format
+#~ msgid "<%s> or <%s>"
+#~ msgstr "<%s> или <%s>"
+
+#, c-format
+#~ msgid "<%s> and <%s>"
+#~ msgstr "<%s> и <%s>"
+
+#, c-format
+#~ msgid "Option <%s> requires <%s>"
+#~ msgstr "Опция <%s> должна использоваться совместно с опцией <%s>"
+
+#~ msgid "GISRC - variable not set"
+#~ msgstr "GISRC — переменная не установлена"
+
+#, c-format
+#~ msgid ""
+#~ "Unable to create signature file <%s> for subgroup <%s> of group <%s> - "
+#~ "<%s> is not current mapset"
+#~ msgstr ""
+#~ "Не удалось создать файл сигнатуры <%s> для подгруппы <%s> группы <%s> — "
+#~ "<%s> не является текущим набором"
+
+#, c-format
+#~ msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s>"
+#~ msgstr ""
+#~ "Не удалось создать файл сигнатуры <%s> для подгруппы <%s> группы <%s>"
+
+#~ msgid "Attempt to access feature with invalid id (%"
+#~ msgstr "Попытка доступа к объекту с недопустимым ИД (%"
+
+#~ msgid "Unable to open OGR DBMI driver"
+#~ msgstr "Не удалось открыть драйвер OGR DBMI"
+
+#~ msgid ""
+#~ "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' "
+#~ "available in OGR DB table"
+#~ msgstr ""
+#~ "Все тесты FID выполнены с ошибками. Поля «FID», «ogc_fid», «ogr_fid», "
+#~ "«gid» недоступны в таблице базы данных OGR"
+
+#~ msgid "Unable to rewrite feature/offset %"
+#~ msgstr "Не удалось переписать объект/смещение %"
+
+#~ msgid "Unable to delete feature/offset %"
+#~ msgstr "Не удалось удалить объект/смещение %"
+
+#~ msgid "Unable to restore feature/offset %"
+#~ msgstr "Не удалось восстановить объект/смещение %"
+
+#~ msgid "input='-' must be used when stdin is specified"
+#~ msgstr "input='-' необходимо использовать при указании stdin"
+
+#~ msgid "stdin must be string or buffer, not PIPE"
+#~ msgstr "stdin должен быть строкой или буфером, но не PIPE"
+
+#~ msgid "stdin must be used when input='-'"
+#~ msgstr "При указании input='-' необходимо использовать stdin"
+
+#~ msgid "You cannot merge stdout and stderr and not capture them"
+#~ msgstr "Нельзя объединить stdout и stderr без выполнения их захвата"
+
+#~ msgid "stdout argument not allowed, it could be overridden"
+#~ msgstr ""
+#~ "Использование аргумента stdout недопустимо, так как он может быть "
+#~ "перезаписан"
+
+#~ msgid "stderr argument not allowed, it could be overridden"
+#~ msgstr ""
+#~ "Использование аргумента stderr недопустимо, так как он может быть "
+#~ "перезаписан"
+
+#~ msgid "Vector doesn't contain points"
+#~ msgstr "Вектор не содержит точек"
+
+#~ msgid "The map is close!"
+#~ msgstr "Карта закрыта!"
+
+#~ msgid "The self.c_mapinfo pointer must be correctly initiated"
+#~ msgstr "Указатель self.c_mapinfo должен быть правильно инициализирован"
+
+#~ msgid "Map <{}> not found in current mapset"
+#~ msgstr "Карта <%s> не найдена в текущем наборе"
+
+#, python-format
+#~ msgid "Deleting table <%s> which is attached to following map(s):"
+#~ msgstr ""
+#~ "Удаление таблицы <%s>, которая прикреплена к следующей карте (картам):"
+
+#~ msgid "You must use the force flag to actually remove it. Exiting."
+#~ msgstr ""
+#~ "Для фактического удаления таблицы необходимо использовать флаг "
+#~ "принудительного удаления. Завершение работы."
+
+#, python-format
+#~ msgid "Unable to read line of feature %i"
+#~ msgstr "Не удалось прочитать строку объекта %i"
+
+#, python-format
+#~ msgid "Unable to read area with id %i"
+#~ msgstr "Не удалось прочитать полигон с ИД %i"
+
+#, python-brace-format
+#~ msgid "Mode type: {0} not supported ('r', 'w')"
+#~ msgstr "Тип режима: {0} не поддерживается («r», «w»)"
+
+#, python-brace-format
+#~ msgid "Map name {0} not valid"
+#~ msgstr "Недопустимое имя карты {0}"
+
+#~ msgid "Execution of subprocesses was not successful"
+#~ msgstr "Неудачное выполнение подпроцессов"
+
+#, python-brace-format
+#~ msgid "Raster type: {0} not supported"
+#~ msgstr "Тип растра: {0} не поддерживается"
+
+#~ msgid "Error executing: Rast_get_ith_cat"
+#~ msgstr "Ошибка выполнения: Rast_get_ith_cat"
+
+#~ msgid "Null value detected"
+#~ msgstr "Обнаружено нулевое значение"
+
+#~ msgid "Error executing: Rast_set_cat"
+#~ msgstr "Ошибка выполнения: Rast_set_cat"
+
+#~ msgid "The map does not exist, I can't open in 'r' mode"
+#~ msgstr "Карта не существует, не удалось открыть в режиме «r»"
+
+#, python-brace-format
+#~ msgid "Raster map <{0}> already exists and will be not overwritten"
+#~ msgstr "Растровая карта <{0}> уже существует и не будет перезаписана"
+
+#~ msgid "Raster type not defined"
+#~ msgstr "Тип растра не определён"
+
+#, python-brace-format
+#~ msgid "Mode type: {0} not supported ('r', 'w','rw')"
+#~ msgstr "Тип режима: {0} не поддерживается («r», «w»,«rw»)"
+
+#, python-format
+#~ msgid "Index out of range: %r."
+#~ msgstr "Индекс вне диапазона: %r."
+
+#, python-brace-format
+#~ msgid "Raster map <{0}> already exists. Use overwrite."
+#~ msgstr "Растровая карта <{0}> уже существует. Воспользуйтесь перезаписью."
+
+#, python-brace-format
+#~ msgid "Raster map <{0}> does not exist"
+#~ msgstr "Растровая карта <{0}> не существует"
+
+#, python-brace-format
+#~ msgid "Overwrite type: {0} not supported (True/False)"
+#~ msgstr "Тип перезаписи: {0} не поддерживается (Истина/Ложь)"
+
+#~ msgid "Object not found in the temporal database"
+#~ msgstr "Объект не найден во временной базе данных"
+
+#~ msgid "Missing identifier"
+#~ msgstr "Отсутствует указатель"
+
+#~ msgid "Wrong identifier, the mapset is missing"
+#~ msgstr "Неверный указатель, отсутствует набор"
+
+#~ msgid ""
+#~ "Projections are different. Unable to compute overlapping_2d for spatial "
+#~ "extents"
+#~ msgstr ""
+#~ "Проекции различаются. Не удалось рассчитать overlapping_2d на "
+#~ "пространственную протяжённость"
+
+#~ msgid ""
+#~ "Projections are different. Unable to compute is_in_2d for spatial extents"
+#~ msgstr ""
+#~ "Проекции различаются. Не удалось рассчитать is_in_2d на пространственную "
+#~ "протяжённость"
+
+#~ msgid ""
+#~ "Projections are different. Unable to compute equivalent_2d for spatial "
+#~ "extents"
+#~ msgstr ""
+#~ "Проекции различаются. Не удалось рассчитать equivalent_2d на "
+#~ "пространственную протяжённость"
+
+#~ msgid ""
+#~ "Projections are different. Unable to compute cover_2d for spatial extents"
+#~ msgstr ""
+#~ "Проекции различаются. Не удалось рассчитать cover_2d на пространственную "
+#~ "протяжённость"
+
+#~ msgid ""
+#~ "Projections are different. Unable to compute cover for spatial extents"
+#~ msgstr ""
+#~ "Проекции различаются. Не удалось рассчитать is_in_d на пространственную "
+#~ "протяжённость"
+
+#~ msgid "Volume computation is not supported for LL projections"
+#~ msgstr "Расчёт объёмов для проекций LL не поддерживается"
+
+#~ msgid "Area computation is not supported for LL projections"
+#~ msgstr "Расчёт площади для проекций LL не поддерживается"
+
+#, python-format
+#~ msgid "Unknown dataset type: %s"
+#~ msgstr "Неизвестный тип набора данных: %s"
+
+#, python-format
+#~ msgid "Unable to get statistics for raster map <%s>"
+#~ msgstr "Не удалось получить статистику для растровой карты <%s>"
+
+#, python-format
+#~ msgid "Unable to get statistics for 3d raster map <%s>"
+#~ msgstr "Не удалось получить статистику для трёхмерной растровой карты <%s>"
+
+#, python-format
+#~ msgid "Space time %(sp)s dataset <%(i)s> not found"
+#~ msgstr "Пространственно-временной набор данных %(sp)s <%(i)s> не найден"
+
+#, python-format
+#~ msgid "Space time %(sp)s dataset <%(i)s> is empty"
+#~ msgstr "Пространственно-временной набор данных %(sp)s <%(i)s> пуст"
+
+#, python-format
+#~ msgid "Unable to get statistics for vector map <%s>"
+#~ msgstr "Не удалось получить статистику для векторной карты <%s>"
+
+#, python-format
+#~ msgid ""
+#~ "Start time must be of type datetime for %(type)s map <%(id)s> with layer: "
+#~ "%(l)s"
+#~ msgstr ""
+#~ "Время начала должно иметь тип «datetime» для карты %(type)s <%(id)s> со "
+#~ "слоем: %(l)s"
+
+#, python-format
+#~ msgid "Start time must be of type datetime for %(type)s map <%(id)s>"
+#~ msgstr ""
+#~ "Время начала должно иметь тип «datetime» для карты %(type)s <%(id)s>"
+
+#, python-format
+#~ msgid ""
+#~ "End time must be of type datetime for %(type)s map <%(id)s> with layer: "
+#~ "%(l)s"
+#~ msgstr ""
+#~ "Время завершения должно иметь тип «datetime» для карты %(type)s <%(id)s> "
+#~ "со слоем: %(l)s"
+
+#, python-format
+#~ msgid "End time must be of type datetime for %(type)s map <%(id)s>"
+#~ msgstr ""
+#~ "Время завершения должно иметь тип «datetime» для карты %(type)s <%(id)s>"
+
+#, python-format
+#~ msgid ""
+#~ "End time must be greater than start time for %(type)s map <%(id)s> with "
+#~ "layer: %(l)s"
+#~ msgstr ""
+#~ "Время завершения должно быть больше времени начала для карты %(type)s "
+#~ "<%(id)s> со слоем: %(l)s"
+
+#, python-format
+#~ msgid "End time must be greater than start time for %(type)s map <%(id)s>"
+#~ msgstr ""
+#~ "Время завершения должно быть больше времени начала для карты %(type)s "
+#~ "<%(id)s>"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to update dataset <%(ds)s> of type %(type)s in the temporal "
+#~ "database. The mapset of the dataset does not match the current mapset"
+#~ msgstr ""
+#~ "Не удалось обновить набор данных <%(ds)s> типа %(type)s во временной базе "
+#~ "данных. Набор этого набора данных не совпадает с текущим набором"
+
+#, python-format
+#~ msgid ""
+#~ "Unsupported relative time unit type for %(type)s map <%(id)s> with layer "
+#~ "%(l)s: %(u)s"
+#~ msgstr ""
+#~ "Неподдерживаемый тип единицы относительного времени для карты %(type)s "
+#~ "<%(id)s> со слоем %(l)s: %(u)s"
+
+#, python-format
+#~ msgid "Unsupported relative time unit type for %(type)s map <%(id)s>: %(u)s"
+#~ msgstr ""
+#~ "Неподдерживаемый тип единицы относительного времени для карты %(type)s "
+#~ "<%(id)s>: %(u)s"
+
+#, python-format
+#~ msgid ""
+#~ "End time must be greater than start time for %(typ)s map <%(id)s> with "
+#~ "layer %(l)s"
+#~ msgstr ""
+#~ "Время завершения должно быть больше времени начала для карты %(typ)s "
+#~ "<%(id)s> со слоем %(l)s"
+
+#, python-format
+#~ msgid ""
+#~ "Map <%(id)s> with layer %(layer)s has incorrect time interval, start time "
+#~ "is greater than end time"
+#~ msgstr ""
+#~ "Неверный интервал времени у карты <%(id)s> со слоем %(layer)s, время "
+#~ "начала больше времени завершения"
+
+#, python-format
+#~ msgid ""
+#~ "Map <%s> has incorrect time interval, start time is greater than end time"
+#~ msgstr ""
+#~ "Неверный интервал времени у карты <%s>, время начала больше времени "
+#~ "завершения"
+
+#, python-format
+#~ msgid "Map <%s> has incorrect start time"
+#~ msgstr "Неверный интервал времени у карты <%s>"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal "
+#~ "database. The mapset of the dataset does not match the current mapset"
+#~ msgstr ""
+#~ "Не удалось удалить набор данных <%(ds)s> типа %(type)s из временной базы "
+#~ "данных. Набор этого набора данных не совпадает с текущим набором"
+
+#, python-format
+#~ msgid "Delete %s dataset <%s> from temporal database"
+#~ msgstr "Удаление набора %s <%s> из временной базы данных"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to unregister dataset <%(ds)s> of type %(type)s from the temporal "
+#~ "database. The mapset of the dataset does not match the current mapset"
+#~ msgstr ""
+#~ "Не удалось отменить регистрацию набора данных <%(ds)s> типа %(type)s во "
+#~ "временной базе данных. Набор этого набора данных не совпадает с текущим "
+#~ "набором"
+
+#~ msgid "Band references can only be assigned to raster maps"
+#~ msgstr "Привязки к каналам могут назначаться только для растровых карт"
+
+#, python-format
+#~ msgid "Unknown type: %s"
+#~ msgstr "Неизвестный тип: %s"
+
+#, python-format
+#~ msgid "Space time %(sp)s dataset <%(name)s> not found"
+#~ msgstr "Пространственно-временной набор данных %(sp)s <%(name)s> не найден"
+
+#~ msgid "Space time datasets can only be created in the current mapset"
+#~ msgstr ""
+#~ "Пространственно-временные наборы данных могут быть созданы только в "
+#~ "текущем наборе"
+
+#~ msgid "Illegal dataset name <{}>. Character '.' not allowed."
+#~ msgstr ""
+#~ "Неправильное имя набора данных <%s>. Не разрешается использовать символ "
+#~ "«.»."
+
+#, python-format
+#~ msgid ""
+#~ "Space time %(sp)s dataset <%(name)s> is already in the database. Use the "
+#~ "overwrite flag."
+#~ msgstr ""
+#~ "Пространственно-временной набор данных %(sp)s <%(name)s> уже существует в "
+#~ "базе данных. Необходимо использовать флаг перезаписи."
+
+#, python-format
+#~ msgid ""
+#~ "Overwriting space time %(sp)s dataset <%(name)s> and unregistering all "
+#~ "maps"
+#~ msgstr ""
+#~ "Перезапись пространственно-временного набора данных %(sp)s <%(name)s> и "
+#~ "отмена регистрации всех карт"
+
+#, python-format
+#~ msgid "Creating a new space time %s dataset"
+#~ msgstr "Создание нового пространственно-временного набора данных %s"
+
+#, python-format
+#~ msgid ""
+#~ "Map <%s> is already in temporal database, use overwrite flag to overwrite"
+#~ msgstr ""
+#~ "Карта <%s> уже находится во временной базе данных, для перезаписи карты "
+#~ "необходимо использовать флаг перезаписи"
+
+#, python-format
+#~ msgid "Unable to export raster map <%s>"
+#~ msgstr "Не удалось выполнить экспорт растровой карты <%s>"
+
+#, python-format
+#~ msgid "Unable to export color rules for raster map <%s> r.out.gdal"
+#~ msgstr ""
+#~ "Не удалось выполнить экспорт правил выделения цветом для растровой карты "
+#~ "<%s> r.out.gdal"
+
+#, python-format
+#~ msgid "Unable to export raster map <%s> with r.pack"
+#~ msgstr ""
+#~ "Не удалось экспортировать растровую карту <%s> с помощью модуля r.pack"
+
+#, python-format
+#~ msgid "Unable to export vector map <%s> as GML with v.out.ogr"
+#~ msgstr ""
+#~ "Не удалось экспортировать векторную карту <%s> в виде GML с помощью "
+#~ "модуля v.out.ogr"
+
+#, python-format
+#~ msgid "Unable to export vector map <%s> as GPKG with v.out.ogr"
+#~ msgstr ""
+#~ "Не удалось экспортировать векторную карту <%s> в виде GPKG с помощью "
+#~ "модуля v.out.ogr"
+
+#, python-format
+#~ msgid "Unable to export vector map <%s> with v.pack"
+#~ msgstr ""
+#~ "Не удалось экспортировать векторную карту <%s> с помощью модуля v.pack"
+
+#, python-format
+#~ msgid "Unable to export raster map <%s> with r3.pack"
+#~ msgstr ""
+#~ "Не удалось экспортировать растровую карту <%s> с помощью модуля r3.pack"
+
+#, python-format
+#~ msgid "%s= and %s= are mutually exclusive"
+#~ msgstr "%s= и %s= не могут использоваться совместно"
+
+#, python-format
+#~ msgid "%s= and the %s flag are mutually exclusive"
+#~ msgstr "%s= и флаг %s не могут использоваться совместно"
+
+#~ msgid "The increment option requires the start option"
+#~ msgstr "Параметр «increment» требует наличия параметра «start»"
+
+#~ msgid "The interval flag requires the start option"
+#~ msgstr "Флаг «interval» требует наличия параметра «start»"
+
+#, python-format
+#~ msgid "Please specify %s= and %s="
+#~ msgstr "Необходимо указать параметры %s= и %s="
+
+#, python-format
+#~ msgid "Please specify %s= or %s="
+#~ msgstr "Необходимо указать параметры %s= или %s="
+
+#, python-format
+#~ msgid ""
+#~ "Space time %(sp)s dataset <%(name)s> with relative time found, but no "
+#~ "relative unit set for %(sp)s maps"
+#~ msgstr ""
+#~ "Найден пространственно временной набор данных %(sp)s <%(name)s> с "
+#~ "относительным временем, но для карт %(sp)s отсутствует относительная "
+#~ "единица измерения"
+
+#~ msgid ""
+#~ "The increment option will be ignored because of time stamps in input file"
+#~ msgstr ""
+#~ "Параметр «increment» будет проигнорирован, в связи с наличием временных "
+#~ "меток во входном файле"
+
+#~ msgid ""
+#~ "The interval flag will be ignored because of time stamps in input file"
+#~ msgstr ""
+#~ "Флаг «interval» будет проигнорирован, в связи с наличием временных меток "
+#~ "во входном файле"
+
+#~ msgid "Gathering map information..."
+#~ msgstr "Сбор информации о карте…"
+
+#, python-format
+#~ msgid "Unable to update %(t)s map <%(id)s>. The map does not exist."
+#~ msgstr "Не удалось обновить карту %(t)s <%(id)s>. Карта не существует."
+
+#, python-format
+#~ msgid ""
+#~ "Unable to register %(t)s map <%(id)s> with layer %(l)s. The map has "
+#~ "timestamp and the start time is not set."
+#~ msgstr ""
+#~ "Не удалось зарегистрировать карту %(t)s <%(id)s> со слоем %(l)s. В карте "
+#~ "присутствует метка времени и не задано время начала."
+
+#, python-format
+#~ msgid ""
+#~ "Unable to register %(t)s map <%(id)s>. The map has no timestamp and the "
+#~ "start time is not set."
+#~ msgstr ""
+#~ "Не удалось зарегистрировать карту %(t)s <%(id)s>. В карте отсутствует "
+#~ "временная метка и не задано время начала."
+
+#, python-format
+#~ msgid "%(u)s= can only be set for relative time"
+#~ msgstr "%(u)s= может быть задан только для относительного времени"
+
+#, python-format
+#~ msgid "%(u)s= must be set in case of relative time stamps"
+#~ msgstr ""
+#~ "%(u)s= должен быть задан только при наличии меток относительного времени"
+
+#, python-format
+#~ msgid ""
+#~ "Map is already registered in temporal database. Unable to update %(t)s "
+#~ "map <%(id)s> with layer %(l)s. Overwrite flag is not set."
+#~ msgstr ""
+#~ "Карта уже зарегистрирована во временной базе данных. Не удалось обновить "
+#~ "карту %(t)s <%(id)s> со слоем %(l)s. Флаг перезаписи не установлен."
+
+#, python-format
+#~ msgid ""
+#~ "Map is already registered in temporal database. Unable to update %(t)s "
+#~ "map <%(id)s>. Overwrite flag is not set."
+#~ msgstr ""
+#~ "Карта уже зарегистрирована во временной базе данных. Не удалось обновить "
+#~ "карту %(t)s <%(id)s>. Флаг перезаписи не установлен."
+
+#, python-format
+#~ msgid ""
+#~ "Unable to update %(t)s map <%(id)s> with layer %(l)s. The temporal types "
+#~ "are different."
+#~ msgstr ""
+#~ "Не удалось обновить карту %(t)s <%(id)s> со слоем %(l)s. Отличаются "
+#~ "временные типы."
+
+#, python-format
+#~ msgid ""
+#~ "Unable to update %(t)s map <%(id)s>. The temporal types are different."
+#~ msgstr ""
+#~ "Не удалось обновить карту %(t)s <%(id)s>. Отличаются временные типы."
+
+#~ msgid "Registering maps in the temporal database..."
+#~ msgstr "Регистрация карт во временной базе данных…"
+
+#~ msgid "Registering maps in the space time dataset..."
+#~ msgstr "Регистрация карт в пространственно-временной базе данных…"
+
+#~ msgid "Updating space time dataset..."
+#~ msgstr "Обновление пространственно-временного набора данных…"
+
+#, python-format
+#~ msgid "Unable to convert string \"%s\"into a datetime object"
+#~ msgstr "Не удалось преобразовать строку «%s» в объект «datetime»"
+
+#~ msgid "Error occurred in increment computation"
+#~ msgstr "Произошла ошибка при вычислении шага времени"
+
+#, python-format
+#~ msgid ""
+#~ "Set absolute valid time for map <%(id)s> with layer %(layer)s to "
+#~ "%(start)s - %(end)s"
+#~ msgstr ""
+#~ "Задать допустимое значение абсолютного времени для карты <%(id)s> со "
+#~ "слоем %(layer)s в диапазоне %(start)s — %(end)s"
+
+#, python-format
+#~ msgid "Set absolute valid time for map <%s> to %s - %s"
+#~ msgstr ""
+#~ "Задать допустимое значение абсолютного времени для карты <%s> в диапазоне "
+#~ "%s — %s"
+
+#, python-format
+#~ msgid ""
+#~ "Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
+#~ msgstr ""
+#~ "Задать допустимое значение относительного времени для карты <%s> со слоем "
+#~ "%s в диапазоне %i — %s с единицей измерения %s"
+
+#, python-format
+#~ msgid "Set relative valid time for map <%s> to %i - %s with unit %s"
+#~ msgstr ""
+#~ "Задать допустимое значение относительного времени для карты <%s> в "
+#~ "диапазоне %i — %s с единицей измерения %s"
+
+#, python-format
+#~ msgid "Unknown temporal type \"%s\""
+#~ msgstr "Неизвестный временной тип «%s»"
+
+#, python-format
+#~ msgid "Wrong granularity: \"%s\""
+#~ msgstr "Неверная детализация: «%s»"
+
+#, python-format
+#~ msgid "Unsupported temporal unit: %s"
+#~ msgstr "Неподдерживаемая единица времени: %s"
+
+#, python-format
+#~ msgid "Created register table <%s> for space time %s  dataset <%s>"
+#~ msgstr ""
+#~ "Создана таблица регистрации <%s> пространственно-временного набора данных "
+#~ "%s <%s>"
+
+#~ msgid "The space time datasets must be of the same temporal type"
+#~ msgstr ""
+#~ "Пространственно-временной набор данных должен принадлежать к тому же "
+#~ "временному типу"
+
+#~ msgid "The temporal map type of the sample dataset must be interval"
+#~ msgstr "Временной тип карты в выборке набора данных должен быть интервалом"
+
+#, python-format
+#~ msgid "Unable to get map ids from register table <%s>"
+#~ msgstr "Не удалось получить ids карты из таблицы регистрации <%s>"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to shift dataset <%(ds)s> of type %(type)s in the temporal "
+#~ "database. The mapset of the dataset does not match the current mapset"
+#~ msgstr ""
+#~ "Не удалось выполнить смещение набора данных <%(ds)s> типа %(type)s во "
+#~ "временной базе данных. Набор этого набора данных не совпадает с текущим "
+#~ "набором"
+
+#, python-format
+#~ msgid "Wrong granularity format: %s"
+#~ msgstr "Неверный формат детализации: %s"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to snap dataset <%(ds)s> of type %(type)s in the temporal "
+#~ "database. The mapset of the dataset does not match the current mapset"
+#~ msgstr ""
+#~ "Не удалось выполнить привязку набора данных <%(ds)s> типа %(type)s во "
+#~ "временной базе данных. Набор этого набора данных не совпадает с текущим "
+#~ "набором"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to rename dataset <%(ds)s> of type %(type)s in the temporal "
+#~ "database. The mapset of the dataset does not match the current mapset"
+#~ msgstr ""
+#~ "Не удалось переименовать набор данных <%(ds)s> типа %(type)s во временной "
+#~ "базе данных. Набор этого набора данных не совпадает с текущим набором"
+
+#~ msgid "Renaming of space time datasets is not supported for PostgreSQL."
+#~ msgstr ""
+#~ "Переименование пространственно-временного набора данных не поддерживается "
+#~ "для PostgreSQL."
+
+#, python-format
+#~ msgid "Delete space time %s  dataset <%s> from temporal database"
+#~ msgstr ""
+#~ "Удаление пространственно-временного набора данных %s <%s> из временной "
+#~ "базы данных"
+
+#, python-format
+#~ msgid "Drop map register table: %s"
+#~ msgstr "Удалить таблицу регистрации карты: %s"
+
+#~ msgid "Error in register table request"
+#~ msgstr "Ошибка в запросе таблицы регистрации"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to register map in dataset <%(ds)s> of type %(type)s. The mapset "
+#~ "of the dataset does not match the current mapset"
+#~ msgstr ""
+#~ "Не удалось зарегистрировать карту в наборе данных <%(ds)s> типа %(type)s. "
+#~ "Набор этого набора данных не совпадает с текущим набором"
+
+#~ msgid ""
+#~ "Only a map that was inserted in the temporal database can be registered "
+#~ "in a space time dataset"
+#~ msgstr ""
+#~ "В пространственно-временном наборе данных может быть зарегистрирована "
+#~ "только карта, внесённая во временную базу данных"
+
+#, python-format
+#~ msgid "Map <%(id)s> with layer %(l)s has invalid time"
+#~ msgstr "В карте <%(id)s> со слоем %(l)s используется недопустимое время"
+
+#, python-format
+#~ msgid "Map <%s> has invalid time"
+#~ msgstr "В карте <%s> используется недопустимое время"
+
+#, python-format
+#~ msgid ""
+#~ "Temporal type of space time dataset <%(id)s> and map <%(map)s> with layer "
+#~ "%(l)s are different"
+#~ msgstr ""
+#~ "Имеются отличия временного типа у пространственно-временного набора "
+#~ "данных <%(id)s> и карты <%(map)s> со слоем %(l)s"
+
+#, python-format
+#~ msgid ""
+#~ "Temporal type of space time dataset <%(id)s> and map <%(map)s> are "
+#~ "different"
+#~ msgstr ""
+#~ "Имеются отличия временного типа у пространственно-временного набора "
+#~ "данных <%(id)s> и карты <%(map)s>"
+
+#, python-format
+#~ msgid "Set temporal unit for space time %s dataset <%s> to %s"
+#~ msgstr ""
+#~ "Задать для пространственно-временного набора данных %s <%s> тип единицы "
+#~ "измерения %s"
+
+#, python-format
+#~ msgid ""
+#~ "Relative time units of space time dataset <%(id)s> and map <%(map)s> with "
+#~ "layer %(l)s are different"
+#~ msgstr ""
+#~ "Имеются отличия единиц измерения относительного времени у пространственно-"
+#~ "временного набора данных <%(id)s> и карты <%(map)s> со слоем %(l)s"
+
+#, python-format
+#~ msgid ""
+#~ "Relative time units of space time dataset <%(id)s> and map <%(map)s> are "
+#~ "different"
+#~ msgstr ""
+#~ "Имеются отличия единиц измерения относительного времени у пространственно-"
+#~ "временного набора данных <%(id)s> и карты <%(map)s>"
+
+#~ msgid "Only maps from the same mapset can be registered"
+#~ msgstr "Могут быть зарегистрированы только карты из одного набора"
+
+#, python-format
+#~ msgid "Map <%(map)s> with layer %(l)s is already registered."
+#~ msgstr "Карта <%(map)s> со слоем %(l)s уже зарегистрирована."
+
+#, python-format
+#~ msgid "Map <%s> is already registered."
+#~ msgstr "Карта <%s> уже зарегистрирована."
+
+#, python-format
+#~ msgid ""
+#~ "Unable to unregister map from dataset <%(ds)s> of type %(type)s in the "
+#~ "temporal database. The mapset of the dataset does not match the current "
+#~ "mapset"
+#~ msgstr ""
+#~ "Не удалось отменить регистрацию карты из набора данных <%(ds)s> типа "
+#~ "%(type)s во временной базе данных. Набор этого набора данных не совпадает "
+#~ "с текущим набором"
+
+#, python-format
+#~ msgid ""
+#~ "Map <%(map)s> with layer %(l)s is not registered in space time dataset "
+#~ "<%(base)s>"
+#~ msgstr ""
+#~ "Карта <%(map)s> со слом %(l)s не зарегистрирована в пространственно-"
+#~ "временном наборе данных <%(base)s>"
+
+#, python-format
+#~ msgid "Map <%(map)s> is not registered in space time dataset <%(base)s>"
+#~ msgstr ""
+#~ "Карта <%(map)s> не зарегистрирована в пространственно-временном наборе "
+#~ "данных <%(base)s>"
+
+#, python-format
+#~ msgid ""
+#~ "Update metadata, spatial and temporal extent from all registered maps of "
+#~ "<%s>"
+#~ msgstr ""
+#~ "Обновление метаданных, пространственной и временной протяжённости из всех "
+#~ "зарегистрированных карт набора данных <%s>"
+
+#~ msgid "Starting spatio-temporal sampling..."
+#~ msgstr "Запуск пространственно-временной выборки…"
+
+#~ msgid "Starting temporal sampling..."
+#~ msgstr "Запуск временной выборки…"
+
+#~ msgid "No samples found for map calculation"
+#~ msgstr "Выборка для расчёта карты не обнаружена"
+
+#~ msgid ""
+#~ "Found more than a single map in a sample granule. Only the first map is "
+#~ "used for computation. Use t.rast.aggregate.ds to create synchronous "
+#~ "raster datasets."
+#~ msgstr ""
+#~ "В одном фрагменте выборки обнаружено более одной карты. Для вычислений "
+#~ "используется только первая карта. Используйте t.rast.aggregate.ds для "
+#~ "создания синхронных растровых наборов данных."
+
+#~ msgid "No maps registered in input dataset"
+#~ msgstr "Карты во входном наборе данных не зарегистрированы"
+
+#~ msgid "Starting mapcalc computation..."
+#~ msgstr "Запуск вычислений с помощью mapcalc…"
+
+#, python-format
+#~ msgid "Apply mapcalc expression: \"%s\""
+#~ msgstr "Применение выражения mapcalc: «%s»"
+
+#~ msgid "Error while mapcalc computation"
+#~ msgstr "Ошибка в процессе вычислений с использованием mapcalc"
+
+#~ msgid "Starting map registration in temporal database..."
+#~ msgstr "Запуск регистрации карты во временной базе данных…"
+
+#~ msgid "Removing {}/{} ({}%) maps because empty..."
+#~ msgstr "Удаление пустых карт {}/{} ({}%)…"
+
+#, python-format
+#~ msgid "The temporal operators <%s> support only absolute time."
+#~ msgstr "Временные операторы <%s> поддерживают только абсолютное время."
+
+#, python-brace-format
+#~ msgid ""
+#~ "Output granularity seems not to be valid. Please use one of the following "
+#~ "values : {gr}"
+#~ msgstr ""
+#~ "Недопустимая выходная детализация. Используйте одно из следующих "
+#~ "значений: {gr}"
+
+#~ msgid "Invalid absolute granularity"
+#~ msgstr "Недопустимая абсолютная детализация"
+
+#~ msgid "Probably you need to invert 'from_gran' and 'to_gran'"
+#~ msgstr "Возможно, необходимо инвертировать значения «from_gran» и «to_gran»"
+
+#, python-format
+#~ msgid ""
+#~ "Error vector maps with basename %s exist. Use --o flag to overwrite "
+#~ "existing file"
+#~ msgstr ""
+#~ "Ошибка наличия карт с базовым именем %s. Используйте флаг --o для "
+#~ "перезаписи существующего файла"
+
+#, python-format
+#~ msgid ""
+#~ "Error starting %s : \n"
+#~ "%s"
+#~ msgstr ""
+#~ "Ошибка запуска %s : \n"
+#~ "%s"
+
+#, python-format
+#~ msgid ""
+#~ "Error vector map %s exist in temporal database. Use overwrite flag.  : \n"
+#~ "%s"
+#~ msgstr ""
+#~ "Ошибка наличия векторной карты %s во временной базе данных. Используйте "
+#~ "флаг перезаписи.  : \n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Spatio-temporal topological operators are not supported in granularity "
+#~ "algebra mode"
+#~ msgstr ""
+#~ "Пространственно-временные топологические операторы не поддерживаются в "
+#~ "режиме алгебры детализации времени"
+
+#~ msgid "All input space time datasets must have a valid temporal topology."
+#~ msgstr ""
+#~ "Все входные пространственно-временные наборы данных должны иметь "
+#~ "допустимую временную топологию."
+
+#~ msgid "All input space time datasets must have the same temporal type."
+#~ msgstr ""
+#~ "Все входные пространственно-временные наборы данных должны принадлежать к "
+#~ "одному временному типу."
+
+#, python-format
+#~ msgid "Removing un-needed or empty %s maps"
+#~ msgstr "Удаление ненужных или пустых карт %s"
+
+#, python-format
+#~ msgid "Space time %s dataset <%s> not found"
+#~ msgstr "Не найден пространственно-временной набор данных %s <%s>"
+
+#, python-format
+#~ msgid ""
+#~ "Wrong temporal type of space time dataset "
+#~ "<%s>                                       <%s> time is required"
+#~ msgstr ""
+#~ "Неверный временной тип пространственно-временного набора данных "
+#~ "<%s>                                       время должно иметь тип <%s>"
+
+#~ msgid "Wrong type of input "
+#~ msgstr "Неверный тип ввода "
+
+#, python-format
+#~ msgid ""
+#~ "The resulting space time dataset type <%(a)s> is different from the "
+#~ "requested type <%(b)s>"
+#~ msgstr ""
+#~ "Итоговый тип пространственно-временного набора данных <%(a)s> отличается "
+#~ "от требуемого типа <%(b)s>"
+
+#~ msgid ""
+#~ "Maps that should be registered in the resulting space time dataset have "
+#~ "different types."
+#~ msgstr ""
+#~ "Карты, подлежащие регистрации в итоговом пространственно-временном наборе "
+#~ "данных, принадлежат к разным типам."
+
+#, python-format
+#~ msgid "%s map <%s> not found in GRASS spatial database"
+#~ msgstr "Карта %s <%s> не найдена в пространственной базе данных GRASS"
+
+#~ msgid ""
+#~ "Wrong map type. TMAP only supports single maps that are registered in the "
+#~ "temporal GRASS database"
+#~ msgstr ""
+#~ "Неверный тип карты. TMAP поддерживает только отдельные карты, "
+#~ "зарегистрированные во временной базе данных GRASS"
+
+#~ msgid "Merging empty map lists"
+#~ msgstr "Объединение списков пустых карт"
+
+#~ msgid "First Map list is empty, can't merge it. Return only last map list"
+#~ msgstr ""
+#~ "Список первой карты пуст, объединение невозможно. Будет возвращён только "
+#~ "список последней карты"
+
+#~ msgid "Second Map list is empty, can't merge it. Return only first map list"
+#~ msgstr ""
+#~ "Список второй карты пуст, объединение невозможно. Будет возвращён только "
+#~ "список первой карты"
+
+#~ msgid "Space time datasets to merge must have the same temporal type"
+#~ msgstr ""
+#~ "Объединяемые пространственно-временные наборы данных должны принадлежать "
+#~ "к одному временному типу"
+
+#~ msgid "You need to specify the base name of new created maps"
+#~ msgstr "Необходимо указать базовое имя новых создаваемых карт"
+
+#, python-format
+#~ msgid "Applying r.mapcalc expression: \"%s\""
+#~ msgstr "Применение выражения модуля r.mapcalc: «%s»"
+
+#, python-format
+#~ msgid "Applying r3.mapcalc expression: \"%s\""
+#~ msgstr "Применение выражения модуля r3.mapcalc: «%s»"
+
+#, python-format
+#~ msgid "Applying v.extract where statement: \"%s\""
+#~ msgstr "Применение инструкции с ключевым словом «where» в v.extract: «%s»"
+
+#~ msgid "Error in computation process"
+#~ msgstr "Ошибка в процессе вычислений"
+
+#~ msgid ""
+#~ "Unable to initialize the temporal DBMI interface. Please use t.connect to "
+#~ "specify the driver and the database string"
+#~ msgstr ""
+#~ "Не удалось инициализировать интерфейс DBMI. Используйте t.connect для "
+#~ "указания драйвера и строки базы данных"
+
+#~ msgid ""
+#~ "The format of your actual temporal database is not supported any more.\n"
+#~ "Please create a backup of your temporal database to avoid lossing data.\n"
+#~ "SOLUTION: "
+#~ msgstr ""
+#~ "Формат существующей временной базы данных больше не поддерживается.\n"
+#~ "Во избежание потери данных создайте резервную копию временной базы "
+#~ "данных.\n"
+#~ "РЕШЕНИЕ: "
+
+#~ msgid ""
+#~ "Run t.upgrade command installed from GRASS Addons in order to upgrade "
+#~ "your temporal database.\n"
+#~ msgstr ""
+#~ "Запустите команду t.upgrade, устанавливаемую из состава дополнительных "
+#~ "модулей GRASS для обновления временной базы данных.\n"
+
+#~ msgid ""
+#~ "You need to export it by restoring the GRASS GIS version used for "
+#~ "creating this DB.Notes: Use t.rast.export and t.vect.export to make a "
+#~ "backup of your existing space time datasets. To save the timestamps of "
+#~ "your existing maps and space time datasets, use t.rast.list, t.vect.list "
+#~ "and t.rast3d.list. You can register the existing time stamped maps easily "
+#~ "if you export columns=id,start_time,end_time into text files and use t."
+#~ "register to register them again in new created space time datasets (t."
+#~ "create). After the backup remove the existing temporal database, a new "
+#~ "one will be created automatically.\n"
+#~ msgstr ""
+#~ "Для экспорта базы необходимо восстановить версию ГИС GRASS, которая "
+#~ "использовалась при создании этой базы данных. Примечания: Для создания "
+#~ "резервных копий существующих пространственно-временных наборов данных "
+#~ "можно использовать t.rast.export и t.vect.export. Для сохранения "
+#~ "временных меток существующих карт и пространственно-временных наборов "
+#~ "данных используйте t.rast.list, t.vect.list и t.rast3d.list. Регистрация "
+#~ "существующих карт с временными метками может быть выполнена путём "
+#~ "экспорта столбцов=id, start_time,end_time в текстовые файлы, после чего с "
+#~ "помощью t.register выполняется повторная регистрация в заново созданных "
+#~ "пространственно-временных наборах данных (t.create). После создания "
+#~ "резервной копии удалите существующую временную базу данных, после чего "
+#~ "новая база данных будет создана автоматически.\n"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to receive temporal database metadata.\n"
+#~ "Current temporal database info:%(info)s"
+#~ msgstr ""
+#~ "Не удалось получить метаданные временной базы данных.\n"
+#~ "Информация о текущей временной базе данных:%(info)s"
+
+#, python-format
+#~ msgid ""
+#~ "Unsupported temporal database: version mismatch.\n"
+#~ " %(backup)s Supported temporal API version is: %(api)i.\n"
+#~ "Please update your GRASS GIS installation.\n"
+#~ "Current temporal database info:%(info)s"
+#~ msgstr ""
+#~ "Временная база данных не поддерживается: несовпадение версий.\n"
+#~ " %(backup)s Поддерживаемая версия временного API: %(api)i.\n"
+#~ "Обновите установку ГИС GRASS.\n"
+#~ "Информация о текущей временной базе данных:%(info)s"
+
+#, python-format
+#~ msgid ""
+#~ "Unsupported temporal database: version mismatch.\n"
+#~ " %(backup)sSupported temporal database version is: %(tdb)i\n"
+#~ "Current temporal database info:%(info)s"
+#~ msgstr ""
+#~ "Временная база данных не поддерживается: несовпадение версий.\n"
+#~ " %(backup)s Поддерживаемая версия временной базы данных: %(tdb)i\n"
+#~ "Информация о текущей временной базе данных:%(info)s"
+
+#, python-format
+#~ msgid "Creating temporal database: %s"
+#~ msgstr "Создание временной базы данных: %s"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to create SQLite temporal database\n"
+#~ "Exception: %s\n"
+#~ "Please use t.connect to set a read- and writable temporal database path"
+#~ msgstr ""
+#~ "Не удалось создать временную базу данных SQLite\n"
+#~ "Исключение: %s\n"
+#~ "Используйте t.connect для задания пути чтения-записи временной базы данных"
+
+#~ msgid "Temporal database is up-to-date. Operation canceled"
+#~ msgstr "Временная база данных не нуждается в обновлении. Отмена операции"
+
+#, python-format
+#~ msgid "Unsupported TGIS DB upgrade scenario: from version %s to %s"
+#~ msgstr "Сценарий обновления неподдерживаемой TGIS DB: с версии %s до %s"
+
+#, python-format
+#~ msgid "Upgrading temporal database <%s> from version %s to %s..."
+#~ msgstr "Обновление временной базы данных <%s> с версии %s до %s…"
+
+#~ msgid "Unable to mogrify sql statement. "
+#~ msgstr "Не удалось применить функцию «mogrify» к инструкции sql. "
+
+#~ msgid "Unable to check table. "
+#~ msgstr "Не удалось проверить таблицу. "
+
+#~ msgid "Unable to execute sql statement. "
+#~ msgstr "Не удалось выполнить инструкцию sql. "
+
+#~ msgid "Unable to fetch one. "
+#~ msgstr "Не удалось выполнить функцию «fetchone». "
+
+#~ msgid "Unable to fetch all. "
+#~ msgstr "Не удалось выполнить функцию «fetchall». "
+
+#~ msgid "Unable to execute transaction. "
+#~ msgstr "Не удалось выполнить транзакцию. "
+
+#, python-format
+#~ msgid ""
+#~ "Unable to connect to %(db)s database: %(string)s\n"
+#~ "Exception: \"%(ex)s\"\n"
+#~ "Please use t.connect to set a read- and writable temporal database backend"
+#~ msgstr ""
+#~ "Не удалось установить соединение с базой данных %(db)s: %(string)s\n"
+#~ "Исключение: «%(ex)s»\n"
+#~ "Используйте t.connect для создания модуля чтения и записи временной базы "
+#~ "данных"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to execute :\n"
+#~ " %(sql)s"
+#~ msgstr ""
+#~ "Не удалось выполнить:\n"
+#~ " %(sql)s"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to execute transaction:\n"
+#~ " %(sql)s"
+#~ msgstr ""
+#~ "Не удалось выполнить транзакцию:\n"
+#~ " %(sql)s"
+
+#, python-format
+#~ msgid "Wrong increment format: %s"
+#~ msgstr "Неверный формат приращения: %s"
+
+#~ msgid "Time string seems to specify relative time"
+#~ msgstr "Вероятно, строка времени содержит относительное время"
+
+#~ msgid "Dates Before Christ (BC) are not supported"
+#~ msgstr "Даты до нашей эры (до н.э.) не поддерживаются"
+
+#~ msgid "Time zones are not supported"
+#~ msgstr "Временные зоны не поддерживаются"
+
+#, python-format
+#~ msgid "Unable to parse time string: %s"
+#~ msgstr "Не удалось выполнить анализ строки времени: %s"
+
+#, python-format
+#~ msgid "Dataset <%s> not found in temporal database"
+#~ msgstr "Набор данных <%s> не найден во временной базе данных"
+
+#, python-format
+#~ msgid "Unable to import/link raster map <%s> from file %s."
+#~ msgstr "Не удалось импортировать/связать растровую карту <%s> из файла %s."
+
+#, python-format
+#~ msgid "Unable to set the color rules for raster map <%s>."
+#~ msgstr ""
+#~ "Не удалось задать правила выделения цветом для растровой карты <%s>."
+
+#, python-format
+#~ msgid "Unable to unpack raster map <%s> from file %s."
+#~ msgstr "Не удалось распаковать растровую карту <%s> из файла %s."
+
+#, python-format
+#~ msgid "Unable to import vector map <%s> from file %s."
+#~ msgstr "Не удалось импортировать векторную карту <%s> из файла %s."
+
+#, python-format
+#~ msgid "Unable to unpack vector map <%s> from file %s."
+#~ msgstr "Не удалось распаковать векторную карту <%s> из файла %s."
+
+#, python-format
+#~ msgid "Space time raster dataset archive <%s> not found"
+#~ msgstr ""
+#~ "Не найден архив пространственно-временного растрового набора данных <%s>"
+
+#, python-format
+#~ msgid "Extraction directory <%s> not found"
+#~ msgstr "Не найден каталог для извлечения <%s>"
+
+#, python-format
+#~ msgid ""
+#~ "Checking validity of input file (size: %0.1f MB). Make take a while..."
+#~ msgstr ""
+#~ "Проверка правильности входного файла (размер: %0.1f МБ). Процесс проверки "
+#~ "может занять некоторое время…"
+
+#, python-format
+#~ msgid "Unable to find init file <%s>"
+#~ msgstr "Не удалось найти файл инициализации <%s>"
+
+#, python-format
+#~ msgid "Unable to find list file <%s>"
+#~ msgstr "Не удалось найти файл списка <%s>"
+
+#, python-format
+#~ msgid "Unable to find projection file <%s>"
+#~ msgstr "Не удалось найти файл проекции <%s>"
+
+#~ msgid "Extracting data..."
+#~ msgstr "Извлечение данных…"
+
+#~ msgid "Projection information does not match. Proceeding..."
+#~ msgstr "Информация о проекции не совпадает. Продолжение обработки…"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Difference between PROJ_INFO file of imported map and of current "
+#~ "location:\n"
+#~ "{diff}"
+#~ msgstr ""
+#~ "Отличия между файлом PROJ_INFO импортированной карты и текущей областью:\n"
+#~ "{diff}"
+
+#~ msgid "Projection information does not match. Aborting."
+#~ msgstr "Информация о проекции не совпадает. Отмена операции."
+
+#, python-format
+#~ msgid "Unable to create location %(l)s. Reason: %(e)s"
+#~ msgstr "Не удалось создать область %(l)s. Причина: %(e)s"
+
+#, python-format
+#~ msgid "Unable to switch to location %s"
+#~ msgstr "Не удалось переключиться на область %s"
+
+#, python-format
+#~ msgid "Unable to create default temporal database in new location %s"
+#~ msgstr ""
+#~ "Не удалось создать временную базу данных по умолчанию в новой области %s"
+
+#, python-format
+#~ msgid "Key words %(t)s, %(s)s or %(n)s not found in init file."
+#~ msgstr ""
+#~ "Ключевые слова %(t)s, %(s)s или %(n)s не найдены в файле инициализации."
+
+#~ msgid "Number of maps mismatch in init and list file."
+#~ msgstr "Несовпадение количества карт в файле инициализации и списка."
+
+#~ msgid "The archive file is of wrong space time dataset type"
+#~ msgstr ""
+#~ "Файл архива относится к неверному типу пространственно-временного набора "
+#~ "данных"
+
+#, python-format
+#~ msgid "Unable to find GeoTIFF raster file <%s> in archive."
+#~ msgstr "Не удалось найти в архиве растровый файл GeoTIFF <%s>."
+
+#, python-format
+#~ msgid "Unable to find AAIGrid raster file <%s> in archive."
+#~ msgstr "Не удалось найти в архиве растровый файл AAIGrid <%s>."
+
+#, python-format
+#~ msgid "Unable to find GML vector file <%s> in archive."
+#~ msgstr "Не удалось найти в архиве векторный файл GML <%s>."
+
+#, python-format
+#~ msgid "Unable to find GRASS package file <%s> in archive."
+#~ msgstr "Не удалось найти в архиве файл пакета GRASS <%s>."
+
+#~ msgid "Unsupported input format"
+#~ msgstr "Входной формат не поддерживается"
+
+#, python-format
+#~ msgid ""
+#~ "Space time %(t)s dataset <%(sp)s> is already in the database. Use the "
+#~ "overwrite flag."
+#~ msgstr ""
+#~ "Пространственно-временной набор данных %(t)s <%(sp)s> уже находится в "
+#~ "базе данных. Используйте флаг перезаписи."
+
+#, python-format
+#~ msgid ""
+#~ "Overwrite space time %(sp)s dataset <%(id)s> and unregister all maps."
+#~ msgstr ""
+#~ "Перезапись пространственно-временного набора данных %(sp)s <%(id)s> и "
+#~ "отмена регистрации всех карт."
+
+#, python-format
+#~ msgid "Key word %s not found in init file."
+#~ msgstr "Ключевое слово %s не найдено в файле инициализации."
+
+#, python-format
+#~ msgid "Create space time %s dataset."
+#~ msgstr "Создание пространственно-временного набора данных %s."
+
+#~ msgid "Switching to original location failed"
+#~ msgstr "Не удалось переключиться на исходную область"
+
+#, python-format
+#~ msgid "Invalid element '%s'"
+#~ msgstr "Недопустимый элемент «%s»"
+
+#, python-format
+#~ msgid "Error computing map <%s>"
+#~ msgstr "Ошибка вычисления карты <%s>"
+
+#~ msgid "Unable to read range file"
+#~ msgstr "Не удалось прочитать файл диапазона"
+
+#, python-format
+#~ msgid "Unable to load range of 3D raster map <%s>"
+#~ msgstr "Не удалось загрузить диапазон трёхмерной растровой карты <%s>"
+
+#, python-format
+#~ msgid "Unable to read timestamp file for raster map <%s>"
+#~ msgstr "Не удалось прочитать метку времени файла для растровой карты <%s>"
+
+#, python-format
+#~ msgid "Unable to create timestamp file for raster map <%s>"
+#~ msgstr "Не удалось создать файл метки времени для растровой карты <%s>"
+
+#, python-format
+#~ msgid "Invalid datetime in timestamp for raster map <%s>"
+#~ msgstr ""
+#~ "Недопустимое значение даты и времени в метке времени для растровой карты "
+#~ "<%s>"
+
+#~ msgid "Internal error"
+#~ msgstr "Внутренняя ошибка"
+
+#, python-format
+#~ msgid "Unable to remove timestamp for raster map <%s>"
+#~ msgstr "Не удалось удалить метку времени для растровой карты <%s>"
+
+#, python-format
+#~ msgid "Unable to read band reference file for raster map <%s>"
+#~ msgstr ""
+#~ "Не удалось прочитать файл привязки к каналам для растровой карты <%s>"
+
+#, python-format
+#~ msgid "Unable to write band identifier for raster map <%s>"
+#~ msgstr "Не удалось записать указатель каналов для растровой карты <%s>"
+
+#, python-format
+#~ msgid "Unable to read timestamp file for 3D raster map <%s>"
+#~ msgstr ""
+#~ "Не удалось прочитать метку времени файла для трёхмерной растровой карты "
+#~ "<%s>"
+
+#, python-format
+#~ msgid "Unable to create timestamp file for 3D raster map <%s>"
+#~ msgstr ""
+#~ "Не удалось создать файл метки времени для трёхмерной растровой карты <%s>"
+
+#, python-format
+#~ msgid "Invalid datetime in timestamp for 3D raster map <%s>"
+#~ msgstr ""
+#~ "Недопустимое значение даты и времени в метке времени для трёхмерной "
+#~ "растровой карты <%s>"
+
+#, python-format
+#~ msgid "Unable to read timestamp file for vector map <%s>"
+#~ msgstr "Не удалось прочитать файл метки времени для векторной карты <%s>"
+
+#, python-format
+#~ msgid "Unable to create timestamp file for vector map <%s>"
+#~ msgstr "Не удалось создать файл метки времени для векторной карты <%s>"
+
+#, python-format
+#~ msgid "Invalid datetime in timestamp for vector map <%s>"
+#~ msgstr "Недопустимое значение метки времени для векторной карты <%s>"
+
+#, python-format
+#~ msgid "Unable to remove timestamp for vector map <%s>"
+#~ msgstr "Не удалось удалить метку времени для векторной карты <%s>"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to insert dataset <%(ds)s> of type %(type)s in the temporal "
+#~ "database. The mapset of the dataset does not match the current mapset"
+#~ msgstr ""
+#~ "Не удалось вставить набор данных <%(ds)s> типа %(type)s во временную базу "
+#~ "данных. Набор этого набора данных не совпадает с текущим набором"
+
+#, python-format
+#~ msgid "Aggregating %s raster maps"
+#~ msgstr "Число растровых карт для агрегации: %s"
+
+#, python-format
+#~ msgid ""
+#~ "Raster map <%(name)s> is already in temporal database, use overwrite flag "
+#~ "to overwrite"
+#~ msgstr ""
+#~ "Растровая карта <%(name)s> уже находится во временной базе данных, для "
+#~ "перезаписи карты используйте флаг перезаписи"
+
+#, python-format
+#~ msgid "Computing aggregation of maps between %(st)s - %(end)s"
+#~ msgstr "Вычисляется агрегация карт в диапазоне %(st)s — %(end)s"
+
+#~ msgid "Error occurred in r.series computation"
+#~ msgstr "Произошла ошибка при вычислении r.series"
+
+#, python-format
+#~ msgid "Aggregating %(len)i raster maps from %(start)s to %(end)s"
+#~ msgstr "Агрегация растровых карт (%(len)i) с %(start)s по %(end)s"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to perform aggregation. Output raster map <%(name)s> exists and "
+#~ "overwrite flag was not set"
+#~ msgstr ""
+#~ "Не удалось выполнить агрегацию. Выходная растровая карта <%(name)s> "
+#~ "существует, а флаг перезаписи не установлен"
+
+#, python-format
+#~ msgid ""
+#~ "The limit of open files (%i) was reached (%i). The module r.series will "
+#~ "be run with flag z, to avoid open files limit exceeding."
+#~ msgstr ""
+#~ "Ограничение на количество открытых файлов (%i) достигло предела (%i). "
+#~ "Чтобы избежать превышения предела на количество открытых файлов, модуль r."
+#~ "series будет запущен с флагом z."
+
+#~ msgid "Empty map list"
+#~ msgstr "Список карт пуст"
+
+#~ msgid "Empty entry in map list, this should not happen"
+#~ msgstr "Пустая запись в списке карт, что недопустимо"
+
+#~ msgid "Mapset PERMANENT cannot be deleted (a whole location can be)"
+#~ msgstr "Набор PERMANENT удалить невозможно (можно удалить область целиком)"
+
+#~ msgid "Mapset PERMANENT cannot be renamed"
+#~ msgstr "Набор PERMANENT переименовать невозможно"
+
+#, python-brace-format
+#~ msgid "Mapset <{mapset}> doesn't exist in GRASS Location <{location}>"
+#~ msgstr "Набор <{mapset}> не существует в области GRASS <{location}>"
+
+#, python-format
+#~ msgid "<%s> is not a GRASS Mapset because it is not a directory"
+#~ msgstr "<%s> не может быть набором GRASS, потому что не является каталогом"
+
+#, python-format
+#~ msgid ""
+#~ "<%s> is not a valid GRASS Mapset because it does not have a WIND file"
+#~ msgstr ""
+#~ "<%s> не является допустимым набором GRASS, потому что не содержит файл "
+#~ "WIND"
+
+#, python-format
+#~ msgid ""
+#~ "<%s> is not a valid GRASS Mapset because its WIND file is not readable"
+#~ msgstr ""
+#~ "<%s> не является допустимым набором GRASS, потому что файл WIND в нём "
+#~ "недоступен для чтения"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Mapset <{mapset}> or Location <{location}> is invalid for an unknown "
+#~ "reason"
+#~ msgstr ""
+#~ "Набор <{mapset}> или область <{location}> недопустима по неизвестной "
+#~ "причине"
+
+#, python-format
+#~ msgid ""
+#~ "<%s> is not a valid GRASS Location because PERMANENT Mapset is missing"
+#~ msgstr ""
+#~ "<%s> не является допустимой областью GRASS, поскольку в ней отсутствует "
+#~ "набор PERMANENT"
+
+#, python-format
+#~ msgid ""
+#~ "<%s> is not a valid GRASS Location because PERMANENT is not a directory"
+#~ msgstr ""
+#~ "<%s> не может быть допустимой областью GRASS, поскольку PERMANENT не "
+#~ "является каталогом"
+
+#, python-format
+#~ msgid ""
+#~ "<%s> is not a valid GRASS Location because PERMANENT Mapset does not have "
+#~ "a DEFAULT_WIND file (default computational region)"
+#~ msgstr ""
+#~ "<%s> не может быть допустимой областью GRASS, поскольку в наборе "
+#~ "PERMANENT нет файла DEFAULT_WIND (область вычисления по умолчанию)"
+
+#, python-brace-format
+#~ msgid "Location <{location_path}> is invalid for an unknown reason"
+#~ msgstr "Область <{location_path}> недопустима по неизвестной причине"
+
+#, python-brace-format
+#~ msgid ""
+#~ "<{location}> looks like a mapset, not a location. Did you mean just "
+#~ "<{one_dir_up}>?"
+#~ msgstr ""
+#~ "<{location}> похожа на набор, а не на область. Может быть, имелось в виду "
+#~ "<{one_dir_up}>?"
+
+#, python-brace-format
+#~ msgid ""
+#~ "It looks like <{location}> contains locations. Did you mean to specify "
+#~ "one of them?"
+#~ msgstr ""
+#~ "Вероятно, <{location}> содержит области. Может быть, нужно было указать "
+#~ "одну из них?"
+
+#~ msgid ""
+#~ "Name '{}' is not a valid name for location or mapset. Please use only "
+#~ "ASCII characters excluding characters {} and space."
+#~ msgstr ""
+#~ "Имя «{}» недопустимо для области или набора. Необходимо использовать "
+#~ "только ASCII-символы, исключая символы «{}» и пробел."
+
+#~ msgid ""
+#~ "Name '{}' is reserved for direct read access to OGR layers. Please use "
+#~ "another name for your mapset."
+#~ msgstr ""
+#~ "Имя «{}» зарезервировано для непосредственного доступа к чтению слоёв "
+#~ "OGR. Для набора необходимо использовать другое имя."
+
+#, python-brace-format
+#~ msgid ""
+#~ "Mapset  <{mapset}> already exists. Please consider using another name for "
+#~ "your mapset."
+#~ msgstr "Набор <{mapset}> уже существует. Используйте для набора другое имя."
+
+#, python-brace-format
+#~ msgid ""
+#~ "Location  <{location}> already exists. Please consider using another name "
+#~ "for your location."
+#~ msgstr ""
+#~ "Область <{location}> уже существует. Используйте для области другое имя."
+
+#, python-brace-format
+#~ msgid "Mapset <{mapset}> is required for a valid location."
+#~ msgstr "Набор <{mapset}> необходим для допустимой области."
+
+#, python-brace-format
+#~ msgid "Mapset <{mapset}> is the current mapset."
+#~ msgstr "Набор <{mapset}> является текущим набором."
+
+#, python-brace-format
+#~ msgid "Mapset <{mapset}> is in use."
+#~ msgstr "Набор <{mapset}> уже используется."
+
+#, python-brace-format
+#~ msgid "Mapset <{mapset}> is owned by a different user."
+#~ msgstr "Владельцем набора <{mapset}> является другой пользователь."
+
+#, python-brace-format
+#~ msgid "Location <{location}> is the current location."
+#~ msgstr "Область <{location}> является текущей областью."
+
+#, python-brace-format
+#~ msgid "GRASS database <{grassdb}> is the current database."
+#~ msgstr "База данных GRASS <{grassdb}> является текущей базой данных."
+
+#, python-format
+#~ msgid "Module run %s %s ended with error"
+#~ msgstr "Работа модуля %s %s завершена с ошибкой"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "Process ended with non-zero return code %s"
+#~ msgstr ""
+#~ "\n"
+#~ "Процесс завершён с кодом возврата больше нуля %s"
+
+#, python-format
+#~ msgid ""
+#~ ". See the following errors:\n"
+#~ "%s"
+#~ msgstr ""
+#~ ". Произошли следующие ошибки:\n"
+#~ "%s"
+
+#~ msgid ". See errors in the (error) output."
+#~ msgstr ". Смотри ошибки в выводе (ошибок)."
+
+#~ msgid "Install PIL or Pillow to use this function"
+#~ msgstr "Для использования этой функции необходимо установить PIL или Pillow"
+
+#~ msgid ""
+#~ "Install a newer version of PIL or Pillow to use this function (missing "
+#~ "ImageOps module)"
+#~ msgstr ""
+#~ "Для использования этой функции необходимо установить более новую версию "
+#~ "PIL или Pillow (отсутствует модуль ImageOps)"
+
+#, python-format
+#~ msgid "Parameter element '%(element)s' not found: '%(value)s'"
+#~ msgstr "Не найден элемент параметра «%(element)s»: «%(value)s»"
+
+#, python-format
+#~ msgid "Flag not found: %s"
+#~ msgstr "Не найден флаг: %s"
+
+#, python-format
+#~ msgid "Parameter '%(name)s' (%(desc)s) is missing."
+#~ msgstr "Отсутствует параметр «%(name)s» (%(desc)s)."
+
+#~ msgid "<required>"
+#~ msgstr "<обязательно>"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Unable to fetch interface description for command '<{cmd}>'.\n"
+#~ "\n"
+#~ "Details: <{det}>"
+#~ msgstr ""
+#~ "Не удалось получить описание интерфейса для команды «<{cmd}>».\n"
+#~ "\n"
+#~ "Подробная информация: <{det}>"
+
+#, python-brace-format
+#~ msgid "Cannot parse interface description of<{name}> module: {error}"
+#~ msgstr ""
+#~ "Не удалось выполнить анализ описания интерфейса модуля<{name}>: {error}"
+
+#, python-format
+#~ msgid "An error occurred while running r3.mapcalc with expression: %s"
+#~ msgstr "Возникла ошибка при выполнении r3.mapcalc с выражением: %s"
+
+#, python-brace-format
+#~ msgid "Cannot find the executable {0}"
+#~ msgstr "Не удалось найти исполняемый файл {0}"
+
+#, python-format
+#~ msgid ""
+#~ "To run the module <%s> add underscore at the end of the option <%s> to "
+#~ "avoid conflict with Python keywords. Underscore at the beginning is "
+#~ "deprecated in GRASS GIS 7.0 and will be removed in version 7.1."
+#~ msgstr ""
+#~ "Для запуска модуля <%s> добавьте символ подчёркивания в конце параметра "
+#~ "<%s> во избежание конфликта с ключевыми словами языка Python. Добавление "
+#~ "символа подчёркивания в начале параметра в ГИС GRASS 7.0 не "
+#~ "рекомендуется, и не будет поддерживаться в версии 7.1."
+
+#, python-brace-format
+#~ msgid ""
+#~ "Module {module} ({code}) failed with non-zero return code {returncode}"
+#~ msgstr ""
+#~ "Сбой работы модуля {module} ({code}) с кодом возврата больше нуля "
+#~ "{returncode}"
+
+#~ msgid "Mixing value types. Will try to compare after integer conversion"
+#~ msgstr ""
+#~ "Смешаны типы значений. Сравнение будет выполнено после преобразования в "
+#~ "целочисленный тип"
+
+#, python-format
+#~ msgid "Element type should be \"cell\" and not \"%s\""
+#~ msgstr "Тип элемента должен быть «cell», а не «%s»"
+
+#, python-format
+#~ msgid "Element type should be \"raster\" and not \"%s\""
+#~ msgstr "Тип элемента должен быть «raster», а не «%s»"
+
+#~ msgid "Unable to list mapsets"
+#~ msgstr "Не удалось получить список наборов"
+
+#, python-format
+#~ msgid "Location <%s> already exists. Operation canceled."
+#~ msgstr "Область <%s> уже существует. Операция отменена."
+
+#, python-format
+#~ msgid "Location <%s> already exists and will be overwritten"
+#~ msgstr "Область <%s> уже существует и будет перезаписана"
+
+#, python-brace-format
+#~ msgid "Debug level {0}"
+#~ msgstr "Уровень отладки {0}"
+
+#, python-brace-format
+#~ msgid ""
+#~ "WARNING: Ignoring unsupported debug level (must be >=0 and <=5). {0}\n"
+#~ msgstr ""
+#~ "ПРЕДУПРЕЖДЕНИЕ: Неподдерживаемый уровень отладки игнорируется (должен "
+#~ "быть >=0 и <=5). {0}\n"
+
+#, python-format
+#~ msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
+#~ msgstr ""
+#~ "Неверное имя файла <%s>. Имя не может быть «NULL» или начинаться с «.»."
+
+#, python-format
+#~ msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
+#~ msgstr "Неверное имя файла <%(s)s>. <%(il)s> не допускается.\n"
+
+#, python-format
+#~ msgid "Database connection not defined for layer %s"
+#~ msgstr "Соединение с базой данных не определено для слоя %s"
+
+#, python-format
+#~ msgid "Missing layer %(layer)d in vector map <%(map)s>"
+#~ msgstr "Отсутствует слой %(layer)d в векторной карте <%(map)s>"
+
+#~ msgid "vector_db_select() failed"
+#~ msgstr "Ошибка выполнения vector_db_select()"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Number of given vector maps ({m}) differs from number of layers ({l})"
+#~ msgstr "Число заданных векторных карт ({m}) отличается от числа слоёв ({l})"
+
+#, python-brace-format
+#~ msgid ""
+#~ "v.what output is not valid JSON format:\n"
+#~ " {ret}"
+#~ msgstr ""
+#~ "Вывод v.what не является допустимым форматом JSON:\n"
+#~ " {ret}"
+
+#, python-format
+#~ msgid ""
+#~ "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in "
+#~ "current mapset."
+#~ msgstr ""
+#~ "Не удалось записать историю в <%(map)s>. Растровая карта <%(map)s> не "
+#~ "найдена в текущем наборе."
+
+#, python-format
+#~ msgid "An error occurred while running r.mapcalc with expression: %s"
+#~ msgstr "Возникла ошибка при выполнении r.mapcalc с выражением: %s"
+
+#~ msgid "No data"
+#~ msgstr "Нет данных"
+
+#~ msgid "value"
+#~ msgstr "значение"
+
+#~ msgid "label"
+#~ msgstr "метка"
+
+#~ msgid "color"
+#~ msgstr "цвет"
+
+#, python-format
+#~ msgid ""
+#~ "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be "
+#~ "provided"
+#~ msgstr ""
+#~ "Ошибка разработчика: необходимо предоставить «%(sql)s», «%(filename)s» "
+#~ "или «%(table)s»"
+
+#~ msgid "Fetching data failed"
+#~ msgstr "Ошибка получения данных"
+
+#, python-format
+#~ msgid "Invalid kind <%s>"
+#~ msgstr "Недопустимый вид <%s>"
+
+#, python-format
+#~ msgid "Invalid size <%d>"
+#~ msgstr "Недопустимый размер <%d>"
+
+#~ msgid ""
+#~ "grass.script.array.read is deprecated and does not work on MS Windows, "
+#~ "pass raster name in the constructor"
+#~ msgstr ""
+#~ "Модуль grass.script.array.read устарел и не работает на MS Windows, "
+#~ "необходимо передать в конструктор имя растровой карты"
+
+#, python-format
+#~ msgid "Invalid FP size <%d>"
+#~ msgstr "Недопустимый размер значения с плавающей точкой <%d>"
+
+#, python-format
+#~ msgid "Invalid integer size <%d>"
+#~ msgstr "Недопустимый размер целочисленного значения <%d>"
+
+#~ msgid ""
+#~ "grass.script.array3d.read is deprecated and does not work on MS Windows, "
+#~ "pass 3D raster name in the constructor"
+#~ msgstr ""
+#~ "Модуль grass.script.array3d.read устарел и не работает на MS Windows, "
+#~ "необходимо передать в конструктор имя трёхмерной растровой карты"
+
+#~ msgid "Cleaning up default sqlite database ..."
+#~ msgstr "Очистка базы данных sqlite по умолчанию …"
+
+#, c-format
+#~ msgid "Unable to create band file for <%s>"
+#~ msgstr "Не удалось создать файл каналов для <%s>"
+
+#, c-format
+#~ msgid "Unable to locate symbol <%s>"
+#~ msgstr "Невозможно найти символ <%s>"
+
+#~ msgid "Unable to load GDAL library"
+#~ msgstr "Невозможно загрузить библиотеку GDAL"
+
+#, c-format
+#~ msgid "Error writing compressed data for row %d of <%s>"
+#~ msgstr "Ошибка записи сжатых данных для ряда %d в <%s>"
+
+#, c-format
+#~ msgid "Error writing uncompressed data for row %d of <%s>"
+#~ msgstr "Ошибка записи несжатых данных для ряда %d в <%s>"
+
+#, c-format
+#~ msgid "Error writing compressed null data for row %d of <%s>"
+#~ msgstr "Ошибка записи сжатых данных с нулевым значением для ряда %d в <%s>"
+
+#, c-format
+#~ msgid "Datum <%s> not recognised by GRASS and no parameters found"
+#~ msgstr "Датум <%s> не распознан GRASS, параметры не найдены"
+
+#, c-format
+#~ msgid ""
+#~ "Datum <%s> apparently recognised by GRASS but no parameters found. You "
+#~ "may want to look into this."
+#~ msgstr ""
+#~ "Датум <%s> распознан GRASS, но параметры не найдены. Необходимо ваше "
+#~ "участие."
+
+#, c-format
+#~ msgid ""
+#~ "Invalid transformation number %d; valid range is 1 to %d. Leaving datum "
+#~ "transform parameters unspecified."
+#~ msgstr ""
+#~ "Неправильный номер трансформации %d; правильный диапазон от 1 до %d. "
+#~ "Параметры трансформации датума оставлены незаполненными."
+
+#~ msgid "Fixing subtle input data rounding error of west boundary (%g>%g)"
+#~ msgstr "Исправление ошибки округления для западной границы (%g>%g)"
+
+#~ msgid "Fixing subtle input data rounding error of east boundary (%g>%g)"
+#~ msgstr "Исправление ошибки округления для восточной границы (%g>%g)"
+
+#~ msgid "No centroid defined for area %d. Area not exported."
+#~ msgstr ""
+#~ "Не определён центроид для полигона %d. Экспорт полигона не выполнен."
+
+#~ msgid "Out of memmory"
+#~ msgstr "Не хватает памяти"
+
+#~ msgid ""
+#~ "Unable to check table. There is no temporal database connection defined "
+#~ "for mapset <%(mapset)s>"
+#~ msgstr ""
+#~ "Не удалось проверить таблицу. Не определено соединение с временной базой "
+#~ "данных для набора <%(mapset)s>"
+
+#~ msgid ""
+#~ "Unable to fetch one. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr ""
+#~ "Не удалось выполнить функцию «fetchone». Не определено соединение с "
+#~ "временной базой данных для набора <%(mapset)s>"
+
+#~ msgid ""
+#~ "Unable to fetch all. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr ""
+#~ "Не удалось выполнить функцию «fetchall». Не определено соединение с "
+#~ "временной базой данных для набора <%(mapset)s>"
+
+#~ msgid "Unable to find a temporary null file <%s>"
+#~ msgstr "Не удалось найти временный файл с нулевым значением <%s>"
+
+#~ msgid "Unable to open null file <%s>"
+#~ msgstr "Не удалось открыть файл с нулевым значением <%s>"
+
+#~ msgid "ERROR: <%s> is not a valid GRASS location"
+#~ msgstr "ОШИБКА: <%s> не является допустимой областью GRASS"
+
+#~ msgid "ERROR: option <%s>: <%s> exists.\n"
+#~ msgstr "ОШИБКА: параметр <%s>: <%s> существует.\n"
+
+#~ msgid "Unable to open file '%s'"
+#~ msgstr "Не удалось открыть файл «%s»"
+
+#~ msgid "Hit RETURN to continue"
+#~ msgstr "Для продолжения нажмите клавишу ВВОД…"
+
+#~ msgid "Vector map <%s> is not opened on topology level"
+#~ msgstr "Векторная карта <%s> не открыта на уровне топологии"
+
+#~ msgid "Background color"
+#~ msgstr "Цвет фона"
+
+#~ msgid "Removing empty 3D raster maps"
+#~ msgstr "Удаление пустых трёхмерных растровых карт"
+
+#~ msgid "Mode type: {0} not supported."
+#~ msgstr "Тип режима: {0} не поддерживается."
+
+#~ msgid "Attributes for category %d not found"
+#~ msgstr "Атрибуты для категории %d не найдены"
+
+#~ msgid "Category must be integer"
+#~ msgstr "Категория должна быть целочисленной"
+
+#~ msgid "Memory error in writing timestamp"
+#~ msgstr "Ошибка памяти при записи временной метки"
+
+#~ msgid "Illegal TimeStamp string"
+#~ msgstr "Неверная строка временной метки"
+
+#~ msgid ""
+#~ "Dev note: Adapted sites library used for vector points. (module should be "
+#~ "updated to GRASS 6 vector library)"
+#~ msgstr ""
+#~ "Заметка разреботчика: Библиотека сайтов адаптированная для векторных "
+#~ "точек. (модуль должен быть обновлен для векторной библиотеки GRASS 6)"
+
+#~ msgid "Cannot fetch row"
+#~ msgstr "Невозможно получить ряд"
+
+#~ msgid "G_oldsite_new_struct: invalid # dims or fields"
+#~ msgstr "G_oldsite_new_struct: неправильное число размерностей или полей"
+
+#~ msgid "syntax error"
+#~ msgstr "синтаксическая ошибка"
+
+#~ msgid "R/G/B not in range 0-255"
+#~ msgstr "R/G/B вне диапазона 0-255"
+
+#~ msgid "invalid color name"
+#~ msgstr "неверное имя цвета"
+
+#~ msgid "Example: income < 1000 and inhab >= 10000"
+#~ msgstr "Пример: income < 1000 and inhab >= 10000"
+
+#~ msgid "Unable to initialise PROJ.4 with the following parameter list:"
+#~ msgstr ""
+#~ "Невозможно иннициализировать PROJ.4 со следующим списком параметров:"
+
+#~ msgid "The error message: %s"
+#~ msgstr "Сообщение об ошибке: %s"
+
+#~ msgid "BUG in descriptions, option '%s' in <%s> does not exist"
+#~ msgstr "Ошибка в описаниях, опция %s в <%s> не существует"
+
+#~ msgid "which is missing."
+#~ msgstr "который отсутствует."
+
+#~ msgid "whose header file can't be opened."
+#~ msgstr "чей файл заголовка не может быть открыт."
+
+#~ msgid "Illegal row value"
+#~ msgstr "Неправильная величина строки"
+
+#~ msgid "Illegal col value"
+#~ msgstr "Неправильная величина столбца"
+
+#~ msgid "Illegal n-s3 resolution value"
+#~ msgstr "Неправильное разрешение n-s3"
+
+#~ msgid "Illegal row3 value"
+#~ msgstr "Неправильное значение row3"
+
+#~ msgid "Illegal e-w3 resolution value"
+#~ msgstr "Неправильное разрешение e-w3"
+
+#~ msgid "Illegal col3 value"
+#~ msgstr "Неправильное значение col3"
+
+#~ msgid "Illegal e-w resolution value"
+#~ msgstr "Неверно задано разрешение восток-запад"
+
+#~ msgid "North must be north of South"
+#~ msgstr "Север должен быть к северу от Юга"
+
+#~ msgid "East must be larger than West"
+#~ msgstr "Восток должен быть больше Запада"
+
+#~ msgid "Invalid coordinates"
+#~ msgstr "Неверные координаты"
+
+#~ msgid "Illegal n-s resolution value"
+#~ msgstr "Неверно задано разрешение север-юг"
+
+#~ msgid "Illegal t-b3 resolution value"
+#~ msgstr "Неправильное разрешение t-b3"
+
+#~ msgid "Illegal depths value"
+#~ msgstr "Неправильное значение глубины"
+
+#~ msgid "Top must be larger than Bottom"
+#~ msgstr "Верх должен быть больше Низа"
+
+#~ msgid "Unable to open header file for raster map <%s@%s>"
+#~ msgstr "Невозможно открыть файл заголовка для растрового слоя <%s@%s>"

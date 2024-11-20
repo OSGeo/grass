@@ -8814,3 +8814,25 @@ msgstr "Ikon tidak didukung %d"
 #, c-format
 msgid "[%s]: No such color"
 msgstr "[%s]: Tidak ada warna seperti itu"
+
+#, fuzzy
+#~ msgid "Map <{}> not found in current mapset"
+#~ msgstr "mapset <%s> bukan mapset terkini"
+
+#, fuzzy, python-format
+#~ msgid "Unable to read band reference file for raster map <%s>"
+#~ msgstr "Tidak dapat menyimpan rekap untuk peta raster 3D <%s>"
+
+#, fuzzy, python-format
+#~ msgid "Unable to write band identifier for raster map <%s>"
+#~ msgstr "Tidak dapat menyimpan rekap untuk peta raster 3D <%s>"
+
+#, fuzzy, python-brace-format
+#~ msgid "Mapset <{mapset}> is the current mapset."
+#~ msgstr "mapset <%s> bukan mapset terkini"
+
+#~ msgid "Unbale to open raster <%s>"
+#~ msgstr "Tidak dapat membuka raster <%s>"
+
+#~ msgid "Copy %s <%s> to current mapset as <%s>"
+#~ msgstr "Salin %s <%s> ke current mapset sebagai <%s>"

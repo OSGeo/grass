@@ -9023,3 +9023,435 @@ msgstr ""
 #, c-format
 msgid "[%s]: No such color"
 msgstr "[%s]: Diese Farbe gibt es nicht."
+
+#, python-brace-format
+#~ msgid ""
+#~ "<{0}> requested, but not available. Run GRASS in text mode (--text) or "
+#~ "install missing package (usually 'grass-gui')."
+#~ msgstr ""
+#~ "<{0}> angefordert, aber nicht verfügbar. GRASS im Textmodus ausführen (--"
+#~ "text) oder fehlendes Paket installieren (normalerweise 'grass-gui')."
+
+#~ msgid "Illegal latitude for North"
+#~ msgstr "Ungültige geographische Breite für Nord."
+
+#~ msgid "Illegal latitude for South"
+#~ msgstr "Ungültige geographische Breite für Süd."
+
+#, c-format
+#~ msgid "<%s> or <%s>"
+#~ msgstr "<%s> oder <%s>"
+
+#, c-format
+#~ msgid "<%s> and <%s>"
+#~ msgstr "<%s> und <%s>"
+
+#~ msgid "GISRC - variable not set"
+#~ msgstr "GISRC - Variable nicht gesetzt."
+
+#, c-format
+#~ msgid ""
+#~ "Unable to create signature file <%s> for subgroup <%s> of group <%s> - "
+#~ "<%s> is not current mapset"
+#~ msgstr ""
+#~ "Kann die Signatur-Datei <%s> für die Untergruppe <%s> der Gruppe <%s> - "
+#~ "<%s> nicht erstellen, da es nicht im aktuellen Mapset ist."
+
+#, c-format
+#~ msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s>"
+#~ msgstr ""
+#~ "Kann die Signatur-Datei <%s> für die Untergruppe <%s> der Gruppe <%s> "
+#~ "nicht erstellen."
+
+#~ msgid "Attempt to access feature with invalid id (%"
+#~ msgstr "Zugriffsversuch auf ein Objekt mit ungültiger ID (%)"
+
+#~ msgid "Unable to open OGR DBMI driver"
+#~ msgstr "Kann den OGR DBMI-Treiber nicht öffnen."
+
+#~ msgid ""
+#~ "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' "
+#~ "available in OGR DB table"
+#~ msgstr ""
+#~ "Alle FID Tests fehlgeschlagen. Weder 'FID' noch 'ogc_fid', 'ogr_fid', "
+#~ "'gid' sind in der OGR DB Tabelle vorhanden."
+
+#~ msgid "Map <{}> not found in current mapset"
+#~ msgstr "Karte <{}> nicht im aktuellen Mapset <%s> gefunden."
+
+#~ msgid "Area computation is not supported for LL projections"
+#~ msgstr "Die Flächenberechnung wird für LL-Projektionen nicht unterstützt."
+
+#~ msgid "Band references can only be assigned to raster maps"
+#~ msgstr "Bandreferenzen können nur Rasterkarten zugewiesen werden"
+
+#, python-format
+#~ msgid "Unknown type: %s"
+#~ msgstr "Unbekannter Typ: %s"
+
+#~ msgid "Illegal dataset name <{}>. Character '.' not allowed."
+#~ msgstr "Ungültiger Datensatz-Name <{}>. Zeichen '.' ist nicht erlaubt."
+
+#, python-format
+#~ msgid "%s= and %s= are mutually exclusive"
+#~ msgstr "%s= und %s= schließen sich gegenseitig aus."
+
+#, python-format
+#~ msgid "%s= and the %s flag are mutually exclusive"
+#~ msgstr "%s= und Flag %s schließen sich gegenseitig aus."
+
+#, python-format
+#~ msgid "%(u)s= can only be set for relative time"
+#~ msgstr "%(u)s= kann nur für relative Zeit eingestellt werden"
+
+#, python-format
+#~ msgid "%(u)s= must be set in case of relative time stamps"
+#~ msgstr "%(u)s= muss bei relativen Zeitstempeln gesetzt werden"
+
+#, python-format
+#~ msgid "Apply mapcalc expression: \"%s\""
+#~ msgstr "Mapcalc-Ausdruck anwenden: \"%s\""
+
+#~ msgid "All input space time datasets must have a valid temporal topology."
+#~ msgstr ""
+#~ "Alle eingegebenen Raum-Zeit-Datensätze müssen eine gültige zeitliche "
+#~ "Topologie aufweisen."
+
+#~ msgid "All input space time datasets must have the same temporal type."
+#~ msgstr ""
+#~ "Alle eingegebenen Raum-Zeit-Datensätze müssen den gleichen zeitlichen Typ "
+#~ "haben."
+
+#, python-format
+#~ msgid "%s map <%s> not found in GRASS spatial database"
+#~ msgstr "%s Karte <%s> nicht in der GRASS Geodatenbank gefunden"
+
+#, python-format
+#~ msgid "Applying r.mapcalc expression: \"%s\""
+#~ msgstr "Anwendung des r.mapcalc Ausdrucks: \"%s\""
+
+#, python-format
+#~ msgid "Applying r3.mapcalc expression: \"%s\""
+#~ msgstr "Anwendung des r3.mapcalc Ausdrucks: \"%s\""
+
+#, python-format
+#~ msgid "Applying v.extract where statement: \"%s\""
+#~ msgstr "Anwendung von v.extract where-Anweisung: \"%s\""
+
+#~ msgid "Internal error"
+#~ msgstr "Interner Fehler"
+
+#, python-format
+#~ msgid "Unable to read band reference file for raster map <%s>"
+#~ msgstr "Bandreferenzdatei für Rasterkarte kann nicht gelesen werden <%s>"
+
+#, python-format
+#~ msgid "Unable to write band identifier for raster map <%s>"
+#~ msgstr "Bandbezeichner für Rasterkarte kann nicht geschrieben werden <%s>"
+
+#, python-format
+#~ msgid "Aggregating %s raster maps"
+#~ msgstr "Aggregieren von %s Rasterkarten"
+
+#, python-format
+#~ msgid "Aggregating %(len)i raster maps from %(start)s to %(end)s"
+#~ msgstr "Aggregieren von %(len)i Rasterkarten von %(start)s bis %(end)s"
+
+#, python-format
+#~ msgid "<%s> is not a GRASS Mapset because it is not a directory"
+#~ msgstr "<%s> ist kein GRASS Mapset, weil es kein Verzeichnis ist"
+
+#, python-format
+#~ msgid ""
+#~ "<%s> is not a valid GRASS Mapset because it does not have a WIND file"
+#~ msgstr ""
+#~ "<%s> ist kein gültiges GRASS-Mapset, da es keine WIND-Datei enthält."
+
+#, python-format
+#~ msgid ""
+#~ "<%s> is not a valid GRASS Mapset because its WIND file is not readable"
+#~ msgstr ""
+#~ "<%s> ist kein gültiges GRASS Mapset, weil seine WIND-Datei nicht lesbar "
+#~ "ist"
+
+#, python-format
+#~ msgid ""
+#~ "<%s> is not a valid GRASS Location because PERMANENT Mapset is missing"
+#~ msgstr "<%s> ist keine gültige GRASS Location, weil PERMANENT Mapset fehlt"
+
+#, python-format
+#~ msgid ""
+#~ "<%s> is not a valid GRASS Location because PERMANENT is not a directory"
+#~ msgstr ""
+#~ "<%s> ist keine gültige GRASS Location, weil PERMANENT kein Verzeichnis ist"
+
+#, python-format
+#~ msgid ""
+#~ "<%s> is not a valid GRASS Location because PERMANENT Mapset does not have "
+#~ "a DEFAULT_WIND file (default computational region)"
+#~ msgstr ""
+#~ "<%s> ist keine gültige GRASS Location, weil PERMANENT Mapset keine "
+#~ "DEFAULT_WIND Datei hat (Standard Berechnungsregion)"
+
+#, python-brace-format
+#~ msgid ""
+#~ "<{location}> looks like a mapset, not a location. Did you mean just "
+#~ "<{one_dir_up}>?"
+#~ msgstr ""
+#~ "<{location}> sieht aus wie ein Mapset, nicht wie eine Location. Ist nur "
+#~ "<{one_dir_up}> gemeint?"
+
+#, python-brace-format
+#~ msgid "Mapset <{mapset}> is the current mapset."
+#~ msgstr "Mapset <{mapset}> ist das aktuellen Mapset."
+
+#, python-brace-format
+#~ msgid "Mapset <{mapset}> is in use."
+#~ msgstr "Mapset <{mapset}> ist in Gebrauch."
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "Process ended with non-zero return code %s"
+#~ msgstr ""
+#~ "\n"
+#~ "Prozess mit Rückgabecode ungleich Null beendet %s"
+
+#, python-format
+#~ msgid ""
+#~ ". See the following errors:\n"
+#~ "%s"
+#~ msgstr ""
+#~ ". Siehe die folgenden Fehler:\n"
+#~ "%s"
+
+#~ msgid ". See errors in the (error) output."
+#~ msgstr ". Siehe Fehler in der (Fehler-)Ausgabe."
+
+#, python-format
+#~ msgid "Flag not found: %s"
+#~ msgstr "Schalter nicht gefunden: %s"
+
+#~ msgid "<required>"
+#~ msgstr "<benötigt>"
+
+#, python-brace-format
+#~ msgid "Cannot parse interface description of<{name}> module: {error}"
+#~ msgstr ""
+#~ "Die Schnittstellenbeschreibung des Moduls{name}> kann nicht geparst "
+#~ "werden: {error}"
+
+#, fuzzy, python-format
+#~ msgid "An error occurred while running r3.mapcalc with expression: %s"
+#~ msgstr ""
+#~ "Bei der Ausführung von r3.mapcalc mit expression ist ein Fehler "
+#~ "aufgetreten: %s"
+
+#, python-brace-format
+#~ msgid "Cannot find the executable {0}"
+#~ msgstr "Kann die ausführbare Datei nicht finden {0}"
+
+#, fuzzy, python-format
+#~ msgid "An error occurred while running r.mapcalc with expression: %s"
+#~ msgstr ""
+#~ "Bei der Ausführung von r.mapcalc mit Ausdruck ist ein Fehler aufgetreten: "
+#~ "%s"
+
+#~ msgid "color"
+#~ msgstr "Farbe"
+
+#, c-format
+#~ msgid "Unable to locate symbol <%s>"
+#~ msgstr "Kann das Symbol <%s> nicht lokalisieren."
+
+#~ msgid "Unable to load GDAL library"
+#~ msgstr "Kann die GDAL-Bibliothek nicht laden."
+
+#, c-format
+#~ msgid "Datum <%s> not recognised by GRASS and no parameters found"
+#~ msgstr "Datum <%s> von GRASS nicht erkannt und keine Parameter gefunden."
+
+#, c-format
+#~ msgid ""
+#~ "Datum <%s> apparently recognised by GRASS but no parameters found. You "
+#~ "may want to look into this."
+#~ msgstr ""
+#~ "Datum <%s> wurde von GRASS erkannt, doch es wurden keine Parameter "
+#~ "gefunden. Sie sollten dies genauer untersuchen."
+
+#, c-format
+#~ msgid ""
+#~ "Invalid transformation number %d; valid range is 1 to %d. Leaving datum "
+#~ "transform parameters unspecified."
+#~ msgstr ""
+#~ "Ungültige Transformationsnummer %d; gültiger Wertebereich 1 bis %d. "
+#~ "Datumstransformationsparameter bleiben unbestimmt."
+
+#~ msgid "Using <%s@%s>"
+#~ msgstr "Verwende <%s@%s>"
+
+#~ msgid "Fixing subtle input data rounding error of west boundary (%g>%g)"
+#~ msgstr ""
+#~ "Repariere subtilen Rundungsfehler der Eingabe der Westgrenze (%g>%g)."
+
+#~ msgid "Fixing subtle input data rounding error of east boundary (%g>%g)"
+#~ msgstr ""
+#~ "Repariere subtilen Rundungsfehler der Eingabe der Ostgrenze (%g>%g)."
+
+#~ msgid "No centroid defined for area %d. Area not exported."
+#~ msgstr "Kein Zentroid für Fläche %d definiert. Fläche nicht exportiert."
+
+#~ msgid "Out of memmory"
+#~ msgstr "Nicht genügend Arbeitsspeicher"
+
+#~ msgid ""
+#~ "Unable to check table. There is no temporal database connection defined "
+#~ "for mapset <%(mapset)s>"
+#~ msgstr ""
+#~ "Tabelle kann nicht überprüft werden. Es ist keine temporäre "
+#~ "Datenbankverbindung für Mapset <%(Mapset)s> definiert."
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to fetch one. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr "Vektor Karte"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to fetch all. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr "Vektor Karte"
+
+#~ msgid "Unable to find a temporary null file <%s>"
+#~ msgstr "Kann keine temporäre NULL-Datei %s finden."
+
+#~ msgid "Unable to open null file <%s>"
+#~ msgstr "Kann die NULL-Datei <%s> nicht öffnen."
+
+#~ msgid "ERROR: <%s> is not a valid GRASS location"
+#~ msgstr "FEHLER: <%s> ist keine gültige GRASS location"
+
+#~ msgid "ERROR: option <%s>: <%s> exists.\n"
+#~ msgstr "FEHLER: Option <%s>: <%s> existiert bereits.\n"
+
+#~ msgid "Unable to open file '%s'"
+#~ msgstr "Kann Datei '%s' nicht öffnen"
+
+#~ msgid "Hit RETURN to continue"
+#~ msgstr "RETURN zum Weitermachen drücken"
+
+#~ msgid "Vector map <%s> is not opened on topology level"
+#~ msgstr "Vektorkarte <%s> ist nicht im Topologielevel geöffnet."
+
+#~ msgid "Background color"
+#~ msgstr "Hintergrundfarbe"
+
+#~ msgid "Removing empty 3D raster maps"
+#~ msgstr "Entfernen der leeren 3D Rasterkarte"
+
+#~ msgid "Mode type: {0} not supported."
+#~ msgstr "Modus-Typ: {0} nicht unterstützt."
+
+#~ msgid "Attributes for category %d not found"
+#~ msgstr "Attribute für Kategorie %d nicht gefunden."
+
+#~ msgid "Category must be integer"
+#~ msgstr "Kategorie muss ein Integer sein."
+
+#~ msgid "Memory error in writing timestamp"
+#~ msgstr "Speicherfehler beim Schreiben des Zeitstempel."
+
+#~ msgid "Illegal TimeStamp string"
+#~ msgstr "Ungültige Zeichenkette für Zeitstempel."
+
+#~ msgid ""
+#~ "Dev note: Adapted sites library used for vector points. (module should be "
+#~ "updated to GRASS 6 vector library)"
+#~ msgstr ""
+#~ "Dev note: Angepasste sites Bibliothek für Vektorpunkte verwendet. (Modul "
+#~ "sollte für die GRASS 6 Vector Library aktualisiert werden)."
+
+#~ msgid "Cannot fetch row"
+#~ msgstr "Kann die Zeile nicht holen."
+
+#~ msgid "G_oldsite_new_struct: invalid # dims or fields"
+#~ msgstr "G_oldsite_new_struct: Ungültige # Dimensionen oder Felder"
+
+#~ msgid "syntax error"
+#~ msgstr "Syntaxfehler"
+
+#~ msgid "R/G/B not in range 0-255"
+#~ msgstr "R/G/B nicht im Wertebereich 0-255."
+
+#~ msgid "invalid color name"
+#~ msgstr "ungültiger Farbname"
+
+#~ msgid "Example: income < 1000 and inhab >= 10000"
+#~ msgstr "Beispiel: Einkommen < 1000 AND Einwohner >= 10000"
+
+#~ msgid "Unable to initialise PROJ.4 with the following parameter list:"
+#~ msgstr "Kann PROJ.4 nicht mit der folgenden Parameterliste initialisieren:"
+
+#~ msgid "The error message: %s"
+#~ msgstr "Die Fehlermeldung: %s"
+
+#~ msgid "BUG in descriptions, option '%s' in <%s> does not exist"
+#~ msgstr "BUG in Beschreibungen, Option '%s' in <%s> existiert nicht."
+
+#~ msgid "Unable to seek"
+#~ msgstr "Suchen unmöglich."
+
+#~ msgid "which is missing."
+#~ msgstr "welche fehlt."
+
+#~ msgid "whose header file can't be opened."
+#~ msgstr "deren Header-Datei nicht geöffnet werden kann."
+
+#~ msgid "Illegal row value"
+#~ msgstr "Ungültiger Zeilenwert."
+
+#~ msgid "Illegal col value"
+#~ msgstr "Ungültiger Spaltenwert."
+
+#~ msgid "Illegal n-s3 resolution value"
+#~ msgstr "Ungültige N-S3 Auflösung."
+
+#~ msgid "Illegal row3 value"
+#~ msgstr "Ungültiger row3-Wert."
+
+#~ msgid "Illegal e-w3 resolution value"
+#~ msgstr "Ungültige E-W3 Auflösung."
+
+#~ msgid "Illegal col3 value"
+#~ msgstr "Ungültiger col3-Wert."
+
+#~ msgid "Illegal e-w resolution value"
+#~ msgstr "Ungültige O-W Ausdehnung."
+
+#~ msgid "North must be north of South"
+#~ msgstr "Nordwert muss nördlich des Südwertes liegen."
+
+#~ msgid "East must be larger than West"
+#~ msgstr "Ostwert muss größer als der Westwert sein."
+
+#~ msgid "Invalid coordinates"
+#~ msgstr "Ungültige Koordinaten."
+
+#~ msgid "Illegal n-s resolution value"
+#~ msgstr "Ungültige N-S Auflösung."
+
+#~ msgid "Illegal t-b3 resolution value"
+#~ msgstr "Ungültige t-b3 Auflösung."
+
+#~ msgid "Illegal depths value"
+#~ msgstr "Ungültiger Tiefenwert."
+
+#~ msgid "Top must be larger than Bottom"
+#~ msgstr "Top muss größer sein als Bottom."
+
+#~ msgid "Unable to open header file for raster map <%s@%s>"
+#~ msgstr "Kann Header-Datei der Rasterkarte <%s@%s> nicht öffnen."
+
+#~ msgid "Copy %s <%s> to current mapset as <%s>"
+#~ msgstr "Kopiere %s <%s> in das aktuelle Mapset als <%s>"

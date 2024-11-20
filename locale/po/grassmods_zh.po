@@ -68319,3 +68319,563 @@ msgstr ""
 #, python-format
 msgid "Generating output raster map <%s>..."
 msgstr ""
+
+#, fuzzy
+#~ msgid "layer name or number to use for data"
+#~ msgstr "图层 %d"
+
+#, fuzzy
+#~ msgid "Export the classify results to raster maps"
+#~ msgstr "转换后的栅格图的存储类型"
+
+#, fuzzy
+#~ msgid "Vector output stream"
+#~ msgstr "没有输出地图"
+
+#, fuzzy
+#~ msgid "Draws the boxplot of the raster maps of a space-time raster dataset"
+#~ msgstr ""
+#~ "#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+#~ "输出栅格图的名称\n"
+#~ "#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+#~ "输出栅格文件的名称"
+
+#, fuzzy
+#~ msgid "input space-time raster dataset"
+#~ msgstr ""
+#~ "#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+#~ "输出栅格图的名称\n"
+#~ "#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+#~ "输出栅格文件的名称"
+
+#, fuzzy
+#~ msgid "Resolution of plot"
+#~ msgstr "输出栅格图的名称"
+
+#, fuzzy
+#~ msgid "Font size of labels"
+#~ msgstr "打印类别标签"
+
+#, fuzzy
+#~ msgid "Date format"
+#~ msgstr "输出的格式"
+
+#, fuzzy
+#~ msgid "Vector with spatial units"
+#~ msgstr "矢量地图<%s>非3D"
+
+#, fuzzy
+#~ msgid "Name of the column containing unique ID of spatial units"
+#~ msgstr "含有线宽的数量属性字段名称"
+
+#, fuzzy
+#~ msgid "Name of the column containing response variable"
+#~ msgstr "含有线宽的数量属性字段名称"
+
+#, fuzzy
+#~ msgid "Input raster 1"
+#~ msgstr "输入文件"
+
+#, fuzzy
+#~ msgid "Input raster 2 (optional)"
+#~ msgstr "输出栅格文件的标题"
+
+#, fuzzy
+#~ msgid "Input distance raster (optional)"
+#~ msgstr "高程栅格图的名称"
+
+#, fuzzy
+#~ msgid "Distance to zones of interest"
+#~ msgstr "缓冲区距离"
+
+#, fuzzy
+#~ msgid "Spatial resolution of output weighting layer"
+#~ msgstr "输出栅格图的名称"
+
+#, fuzzy
+#~ msgid "Output weighting layer name"
+#~ msgstr "输出的表名称"
+
+#, fuzzy
+#~ msgid "Name for output vector gridded spatial units"
+#~ msgstr ""
+#~ "#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+#~ "输出栅格图的名称\n"
+#~ "#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+#~ "输出栅格文件的名称"
+
+#, fuzzy
+#~ msgid "Name for output plot of model feature importances"
+#~ msgstr "输入栅格图的名称"
+
+#, fuzzy
+#~ msgid "Name for output file with log of the random forest run"
+#~ msgstr "输出文件的名称"
+
+#, fuzzy
+#~ msgid "Categories of basemap A to be used"
+#~ msgstr "栅格地图的名称 <%s>"
+
+#, fuzzy
+#~ msgid "Categories of basemap B to be used"
+#~ msgstr "栅格地图的名称 <%s>"
+
+#, fuzzy
+#~ msgid "Number of cores to be used for the parallel process"
+#~ msgstr "每部分的等级数"
+
+#~ msgid "Overwrite connection parameter for certain layer"
+#~ msgstr "覆盖指定图层的连接参数"
+
+#, fuzzy
+#~ msgid ""
+#~ "Type of raster map to be created / Storage type for resultant raster map"
+#~ msgstr "转换后的栅格图的存储类型"
+
+#, fuzzy
+#~ msgid "Footprint of the data as vector map"
+#~ msgstr "设置区域以匹配这个矢量图"
+
+#, fuzzy
+#~ msgid "Name of input raster map(s) used by GRASS script"
+#~ msgstr "输入栅格图的名称"
+
+#, fuzzy
+#~ msgid "Upgrades the version of a space time dataset (TGRASS DB)."
+#~ msgstr "新的栅格文件的名称"
+
+#, fuzzy
+#~ msgid "evaluation area"
+#~ msgstr "高程起点"
+
+#, fuzzy
+#~ msgid "Output buffer map"
+#~ msgstr "输出图"
+
+#, fuzzy
+#~ msgid "JSON output"
+#~ msgstr "输出"
+
+#~ msgid "Print table structure"
+#~ msgstr "打印表结构"
+
+#~ msgid "The number of points to allocate"
+#~ msgstr "指定点的数量"
+
+#~ msgid "Report information about input raster and exit"
+#~ msgstr "报告输入栅格的信息并退出"
+
+#, fuzzy
+#~ msgid "Only 'terrain' points output vector map"
+#~ msgstr "起始点矢量图"
+
+#, fuzzy
+#~ msgid "Error writing cell (%d,%d,%d) with value %f, nrows = %d"
+#~ msgstr "尝试读取dbmscap文件失败\n"
+
+#, fuzzy
+#~ msgid "Force 2D interpolation even if input is 3D"
+#~ msgstr "强制输出整型值"
+
+#, fuzzy
+#~ msgid "Vertical variogram function"
+#~ msgstr "垂直比例因子"
+
+#, fuzzy
+#~ msgid "Number of vertical lags (only for 3D variogram)"
+#~ msgstr "浮点数的小数位数"
+
+#, fuzzy
+#~ msgid ""
+#~ "Number of vertical pieces must be at least 1. Default value will be "
+#~ "used..."
+#~ msgstr "打印的份数"
+
+#, fuzzy
+#~ msgid "Coordinates of point no. %d are zeros."
+#~ msgstr "地图东向和北向格网坐标的起点"
+
+#, fuzzy
+#~ msgid "Error closing file..."
+#~ msgstr "关闭 VTK-ASCII 文件时发生错误"
+
+#, fuzzy
+#~ msgid "Memory allocation failed..."
+#~ msgstr "使用的插值方法"
+
+#, fuzzy
+#~ msgid "Interpolating unknown values..."
+#~ msgstr "使用的插值方法"
+
+#, fuzzy
+#~ msgid "%d features skipped, only points are accepted"
+#~ msgstr "导入的整数值"
+
+#, fuzzy
+#~ msgid "Unused points: %d (out of region)"
+#~ msgstr "使用当前的区域"
+
+#, fuzzy
+#~ msgid "Overlays two vector maps."
+#~ msgstr "输入的 2D 矢量地图的名称"
+
+#, fuzzy
+#~ msgid "Old auxiliar table could not be dropped"
+#~ msgstr "未发现矢量地图<%s>"
+
+#, fuzzy
+#~ msgid "Grid-decimated point cloud"
+#~ msgstr "未找到任何记录。\n"
+
+#, fuzzy
+#~ msgid "Layer number where blue color is stored as category"
+#~ msgstr "无法创建属性表"
+
+#, fuzzy
+#~ msgid "Raster map containing midflame wind velocitys (ft/min)"
+#~ msgstr "包含midflame风速(英尺/分钟)的栅格图的名称"
+
+#~ msgid "Page length (default: %d lines)"
+#~ msgstr "页面长度(默认：%d行)"
+
+#~ msgid "Page width (default: %d characters)"
+#~ msgstr "页面宽度(默认：%d字符)"
+
+#, fuzzy
+#~ msgid "Displays GRASS version info."
+#~ msgstr "未知的类型"
+
+#, fuzzy
+#~ msgid "Unpacks a vector map packed with v.pack."
+#~ msgstr "包含结果的栅格图的名称"
+
+#, fuzzy
+#~ msgid "Default: path to the current GRASS database"
+#~ msgstr "从当前区域设置"
+
+#, fuzzy
+#~ msgid "Color in GRASS format for drawing grid or \"none\" not drawing"
+#~ msgstr "列出支持的格式然后退出"
+
+#, fuzzy
+#~ msgid "No flag given"
+#~ msgstr "没有指定数据地图"
+
+#, fuzzy
+#~ msgid "PID file not found"
+#~ msgstr "像元文件未发现\n"
+
+#, fuzzy
+#~ msgid "Command file not found"
+#~ msgstr "字段 <%s> 未找到"
+
+#, fuzzy
+#~ msgid "Renaming reclass maps"
+#~ msgstr "创建 %i 栅格地图\n"
+
+#, fuzzy
+#~ msgid "Prefix for output raster maps (.base, .max, .maxdir, .spotdist)"
+#~ msgstr ""
+#~ "#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+#~ "输出栅格图的名称\n"
+#~ "#-#-#-#-#  grassmods_zh.po (grassmods_zh)  #-#-#-#-#\n"
+#~ "输出栅格文件的名称"
+
+#, fuzzy
+#~ msgid "Also produce maximum spotting distance"
+#~ msgstr "同时生成最大的测定点距离"
+
+#, fuzzy
+#~ msgid "Displays thematic vector map"
+#~ msgstr "输入的 2D 矢量地图的名称"
+
+#, fuzzy
+#~ msgid ""
+#~ "Displays a thematic vector area map in the active frame on the graphics "
+#~ "monitor."
+#~ msgstr "选择字体，该字体用于图形监视器上文本的显示。"
+
+#, fuzzy
+#~ msgid "Text color or \"none\""
+#~ msgstr "文本颜色"
+
+#, fuzzy
+#~ msgid "Color in GRASS format for drawing text"
+#~ msgstr "列出支持的格式然后退出"
+
+#~ msgid "Failed opening input dig file."
+#~ msgstr "无法打开输入的dig文件。"
+
+#~ msgid "dig_att file doesn't exist."
+#~ msgstr "dig_att文件不存在。"
+
+#, fuzzy
+#~ msgid "Attaching categories..."
+#~ msgstr "分类...\n"
+
+#, fuzzy
+#~ msgid "Line %d label: %d matched another label: %d."
+#~ msgstr "警告：线%d的标签：%d与以知标签：%d相同。"
+
+#, fuzzy
+#~ msgid "[%d] centroids written to output file."
+#~ msgstr "%-5d个质心写入输出文件。\n"
+
+#, fuzzy
+#~ msgid "No category labels (dig_cats) found, no table created"
+#~ msgstr "未发现类别标签(dig_cats)，不创建任何表。\n"
+
+#, fuzzy
+#~ msgid "Reading dig file..."
+#~ msgstr "读取dig文件...\n"
+
+#, fuzzy
+#~ msgid "Input file is version 4."
+#~ msgstr "输入文件的版本是4。\n"
+
+#, fuzzy
+#~ msgid ""
+#~ "Input file is not portable. We will attempt to convert anyway but "
+#~ "conversion may fail. Please read manual for detail information."
+#~ msgstr ""
+#~ "警告：输入文件是不可转换的。我们尝试将其转化，但转换可能失败。请阅读手册以"
+#~ "获得详细信息。"
+
+#, fuzzy
+#~ msgid "[%d] points read to memory"
+#~ msgstr "%-5d个点读入内存\n"
+
+#, fuzzy
+#~ msgid "[%d] lines read to memory"
+#~ msgstr "%-5d条线读入内存\n"
+
+#, fuzzy
+#~ msgid "[%d] points read and written to output"
+#~ msgstr "读取%-5d个点并写入输出文件\n"
+
+#, fuzzy
+#~ msgid "[%d] lines read and written to output"
+#~ msgstr "读取%-5d条线并写入输出文件\n"
+
+#, fuzzy
+#~ msgid "[%d] area boundaries read and written to output"
+#~ msgstr "读取%-5d个区域的边界并写入输出文件\n"
+
+#, fuzzy
+#~ msgid "[%d] dead points skipped"
+#~ msgstr "跳过%-5d个坏点\n"
+
+#, fuzzy
+#~ msgid "[%d] dead lines skipped"
+#~ msgstr "跳过%-5d条坏线\n"
+
+#, fuzzy
+#~ msgid "[%d] dead area boundaries skipped"
+#~ msgstr "跳过%-5d个坏的区域边界\n"
+
+#, fuzzy
+#~ msgid "[%d] elements of unknown type skipped"
+#~ msgstr "跳过%-5d个未知类型的元素\n"
+
+#, fuzzy
+#~ msgid "[%d] elements read to memory"
+#~ msgstr "%-5d个元素读入内存。\n"
+
+#, fuzzy
+#~ msgid "Reading dig_att file..."
+#~ msgstr "读取dig_att文件...\n"
+
+#~ msgid "Unknown type: %c"
+#~ msgstr "未知的类型：%c"
+
+#, fuzzy
+#~ msgid "[%d] point categories read"
+#~ msgstr "读取%-5d个点类别\n"
+
+#, fuzzy
+#~ msgid "[%d] centroids read"
+#~ msgstr "读取%-5d个质心\n"
+
+#, fuzzy
+#~ msgid "[%d] dead point categories skipped"
+#~ msgstr "跳过%-5d个坏点类别\n"
+
+#, fuzzy
+#~ msgid "[%d] dead line categories skipped"
+#~ msgstr "跳过%-5d个坏线类别\n"
+
+#, fuzzy
+#~ msgid "[%d] dead centroids skipped"
+#~ msgstr "跳过%-5d个坏的质心\n"
+
+#, fuzzy
+#~ msgid "[%d] categories of unknown type skipped"
+#~ msgstr "跳过%-5d个未知类型的类别\n"
+
+#, fuzzy
+#~ msgid "[%d] categories read into memory"
+#~ msgstr "%-5d个类别读入内存。\n"
+
+#, fuzzy
+#~ msgid "OLD_T_NEW Got a bad type code [%x]"
+#~ msgstr "系统错误：OLD_T_NEW得到一个错误的类型代码%x"
+
+#, fuzzy
+#~ msgid "NEW_T_OLD Got a bad type code [%x]"
+#~ msgstr "系统错误：NEW_T_OLD得到一个错误的类型代码%x"
+
+#~ msgid "Char string to represent no data cell"
+#~ msgstr "表示无数据像元的字符串"
+
+#~ msgid "Unknown metric: [%s]."
+#~ msgstr "未知的量度：[%s]"
+
+#~ msgid "String representing no data cell value"
+#~ msgstr "代表无数据像元值的字符串"
+
+#, fuzzy
+#~ msgid "Surface interpolation utility for raster map."
+#~ msgstr "栅格图层的表面插值工具。"
+
+#, fuzzy
+#~ msgid ""
+#~ "Computes anisotropic cumulative cost of moving between different "
+#~ "geographic locations on an input elevation raster map whose cell category "
+#~ "values represent elevation combined with an input raster map layer whose "
+#~ "cell values represent friction cost."
+#~ msgstr ""
+#~ "输出一个栅格图层来显示在输入栅格图上不同位置间移动时的累计成本，输入栅格图"
+#~ "的像元类别值表示成本。"
+
+#~ msgid "Name of layer to be used for INTENSITY"
+#~ msgstr "亮度图层的名称"
+
+#~ msgid "Name of layer to be used for SATURATION"
+#~ msgstr "饱和度图层的名称"
+
+#~ msgid "Name of output layer to be used for GREEN"
+#~ msgstr "输出的绿色图层的名称"
+
+#~ msgid "Surface generation program."
+#~ msgstr "表面生成程序。"
+
+#, fuzzy
+#~ msgid ""
+#~ "Lat/long databases not supported by r.surf.idw2. Use r.surf.idw instead!"
+#~ msgstr "r.flow 不支持经纬度数据库。请使用 'r.watershed' 计算流的积聚。"
+
+#~ msgid "%s=%s - illegal number of interpolation points"
+#~ msgstr "%s=%s - 非法的内插点数"
+
+#, fuzzy
+#~ msgid "String to represent no data cell"
+#~ msgstr "表示无数据像元的字符串"
+
+#~ msgid "Character to represent no data cell"
+#~ msgstr "用来表示无数据像元的字符"
+
+#~ msgid "Run verbosely"
+#~ msgstr "以详细模式运行"
+
+#, fuzzy
+#~ msgid "%s available in mapset <%s>:"
+#~ msgstr "列出可用的格式并退出"
+
+#~ msgid "Null value indicator"
+#~ msgstr "空值指示符"
+
+#, fuzzy
+#~ msgid "Suppress warnings"
+#~ msgstr "禁止页眉"
+
+#, fuzzy
+#~ msgid "Create raster map from result (optional)"
+#~ msgstr "需要查询的已有栅格地图的名称"
+
+#, fuzzy
+#~ msgid "Type of the aggregation space time dataset, default is strds"
+#~ msgstr "新的栅格文件的名称"
+
+#, fuzzy
+#~ msgid ""
+#~ "Calculates univariate statistics from the non-null cells for each "
+#~ "registered raster3d map of a space time raster3d dataset."
+#~ msgstr "计算栅格地图中非空像元的一元统计值"
+
+#, fuzzy
+#~ msgid "Please specify output= or outfile="
+#~ msgstr "请指定 z 字段。"
+
+#, fuzzy
+#~ msgid "Please specify output= and samplingpos="
+#~ msgstr "请指定 z 字段。"
+
+#, fuzzy
+#~ msgid "Please specify input= or infile="
+#~ msgstr "请指定 z 字段。"
+
+#, fuzzy
+#~ msgid "Please specify input= and datapos="
+#~ msgstr "请指定 z 字段。"
+
+#, fuzzy
+#~ msgid "Display the "
+#~ msgstr "读取地图"
+
+#~ msgid "Not enough memory for adx"
+#~ msgstr "没有足够的内存用于 adx"
+
+#~ msgid "Not enough memory for ady"
+#~ msgstr "没有足够的内存用于 ady"
+
+#~ msgid "Not enough memory for adxx"
+#~ msgstr "没有足够的内存用于 adxx"
+
+#~ msgid "Not enough memory for adyy"
+#~ msgstr "没有足够的内存用于 adyy"
+
+#~ msgid "Not enough memory for adxy"
+#~ msgstr "没有足够的内存用于 adxy"
+
+#~ msgid "Cannot create tree info"
+#~ msgstr "无法创建树的信息"
+
+#, fuzzy
+#~ msgid "Unable To create table: %s"
+#~ msgstr "无法创建文件 [%s]"
+
+#, fuzzy
+#~ msgid "Not enough memory"
+#~ msgstr "没有足够的内存用于 az"
+
+#, fuzzy
+#~ msgid "One of options <%s> or <%s> must be specified"
+#~ msgstr "必须指定'from_table'或'select'选项。"
+
+#, fuzzy
+#~ msgid "Option <%s> must be specified"
+#~ msgstr "必须指定'from_table'或'select'选项。"
+
+#, fuzzy
+#~ msgid "Converts a GRASS site_lists file into a vector map."
+#~ msgstr "将栅格图转化为矢量图层。"
+
+#, fuzzy
+#~ msgid "%d sites written."
+#~ msgstr "%d 个点写入矢量文件"
+
+#, fuzzy
+#~ msgid "Performing map %s + %s"
+#~ msgstr "读取地图 %s 时发生错误"
+
+#~ msgid ""
+#~ "column '%s', type 'string': unknown width -> stored as varchar(250) some "
+#~ "data may be lost"
+#~ msgstr ""
+#~ "列'%s'，类型'string'：未知的宽度->存储为varchar(250)可能会丢失一部分数据"
+
+#~ msgid "Non-zero data only"
+#~ msgstr "只保留非零数据"
+
+#~ msgid "Error in pj_do_proj (projection of input coordinate pair)"
+#~ msgstr "pj_do_proj (输入坐标对的投影) 有错误"
