@@ -31,9 +31,6 @@ per-file-ignores =
     gui/wxpython/iclass/frame.py: F405, F403
     gui/wxpython/iclass/g.gui.iclass.py: E501
     gui/wxpython/iclass/statistics.py: F841, F405, F403
-    gui/wxpython/wxplot/histogram.py: E722
-    gui/wxpython/wxplot/profile.py: F841, E722
-    gui/wxpython/wxplot/base.py: F841, E722
     gui/wxpython/location_wizard/dialogs.py: F841
     gui/wxpython/location_wizard/wizard.py: E722
     gui/wxpython/mapdisp/main.py: E722
