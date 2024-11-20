@@ -361,7 +361,7 @@ static int calc_mu_cov(int *fds, double **covar, double *mu, double *stddev,
 
     if (count < 2) {
         ret = 0;
-        goto cleanup;
+        goto free_exit;
     }
 
     for (i = 0; i < bands; i++) {
@@ -385,19 +385,15 @@ static int calc_mu_cov(int *fds, double **covar, double *mu, double *stddev,
     for (i = 0; i < bands; i++)
         mu[i] = sum[i] / count;
 
-cleanup:
+free_exit:
     for (i = 0; i < bands; i++) {
-        if (sum2[i])
-            G_free(sum2[i]);
-        if (rowbuf[i])
-            G_free(rowbuf[i]);
+        G_free(sum2[i]);
+        G_free(rowbuf[i]);
     }
     G_free(rowbuf);
     G_free(sum2);
-    if (sd)
-        G_free(sd);
-    if (sumsq)
-        G_free(sumsq);
+    G_free(sd);
+    G_free(sumsq);
 
     return ret;
 }
