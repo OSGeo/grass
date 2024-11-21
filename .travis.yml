@@ -31,6 +31,7 @@ env:
     - GRASS_EXTRA_CXXFLAGS="-Werror -fPIC -Wfatal-errors"
 
 before_install:
+  - pyenv global 3.10
   - pyenv help
   - pyenv --version
   - pyenv version-origin
@@ -105,8 +106,8 @@ before_script:
   - python --version -VV
   - python3 --version -VV
   - python3.10 --version -VV
-  - python3.9 --version -VV
-  - which python3.9
+  # - python3.9 --version -VV
+  # - which python3.9
   # see https://github.com/astral-sh/uv/issues/6265
 
 script:
