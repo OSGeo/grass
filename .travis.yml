@@ -32,12 +32,16 @@ env:
 
 before_install:
   - python --version
+  - python --version -VV
   - pyenv root
   - which pyenv && pyenv versions
   - which python
   - ls -la /etc/alternatives
   - ls -la /opt/pyenv/
+  - ls -la /opt/pyenv/shims
   - cat /opt/pyenv/version
+  - cat /opt/python
+  - ls -ls /opt/
   - ./.travis/$TRAVIS_OS_NAME.before_install.sh
 
 install:
@@ -50,7 +54,7 @@ install:
   # - pyenv install 3.9
   - uv python install 3.9
   - which python
-  - python --version
+  - python --version -VV
   - printenv | grep PY | sort
   - printenv | grep python | sort
   - printenv | grep py | sort
@@ -62,8 +66,14 @@ before_script:
   - uv python find
   - uv python find --system
   - uv python dir
+  - ls -la $(uv python dir)
   - uv python dir --bin
-  - python --version
+  - ls -la $(uv python dir --bin)
+  - python --version -VV
+  - python3 --version -VV
+  - python3.9 --version -VV
+  - python3.9 --version -VV
+  - python3.10 --version -VV
   # see https://github.com/astral-sh/uv/issues/6265
 
 script:
