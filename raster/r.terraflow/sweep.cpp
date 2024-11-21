@@ -65,7 +65,7 @@ sweepOutput::sweepOutput()
 #ifdef OUTPUT_TCI
     tci = (tci_type)nodataType::ELEVATION_NODATA;
 #endif
-};
+}
 
 /* ------------------------------------------------------------ */
 /* computes output parameters of cell (i,j) given the flow value, the
@@ -118,7 +118,7 @@ FLOW_DATASTR *initializePQ()
     if (stats)
         stats->comment("sweep:initialize flow data structure", opt->verbose);
 
-    FLOW_DATASTR *flowpq;
+    FLOW_DATASTR *flowpq = nullptr;
 #ifdef IM_PQUEUE
     if (stats)
         stats->comment("FLOW_DATASTRUCTURE: in-memory pqueue");
@@ -347,6 +347,6 @@ void pushFlow(const sweepItem &swit, const flowValue &flow,
                 } /* if (!is_nodata(elev_neighb)) */
             }
         } /* for dj */
-    }     /* for di */
+    } /* for di */
     return;
 }

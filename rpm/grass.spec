@@ -1,8 +1,8 @@
-%global shortver 83
+%global shortver 84
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:		grass
-Version:	8.3.0
+Version:	8.4.0
 Release:	3%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
@@ -37,41 +37,41 @@ BuildRequires:	flexiblas-devel
 %else
 BuildRequires:	blas-devel, lapack-devel
 %endif
+BuildRequires:	bzip2-devel
 BuildRequires:	cairo-devel
-BuildRequires:	gcc-c++
 BuildRequires:	desktop-file-utils
 BuildRequires:	fftw-devel
 BuildRequires:	flex
 BuildRequires:	freetype-devel
+BuildRequires:	gcc-c++
 BuildRequires:	gdal-devel
 BuildRequires:	geos-devel
 BuildRequires:	gettext
 BuildRequires:	laszip-devel
 BuildRequires:	libappstream-glib
 BuildRequires:	libpng-devel
-BuildRequires:	libtiff-devel
-BuildRequires:	libXmu-devel
-BuildRequires:	mesa-libGL-devel
-BuildRequires:	mesa-libGLU-devel
-%if (0%{?rhel} > 7 || 0%{?fedora})
-BuildRequires:	mariadb-connector-c-devel openssl-devel
-%else
-BuildRequires:	mysql-devel
-%endif
-BuildRequires:	netcdf-devel
-BuildRequires:	python3
-%if 0%{?rhel} == 7
-# EPEL7
-BuildRequires:	python%{python3_version_nodots}-numpy
-%else
-BuildRequires:	python3-numpy
-%endif
 %if 0%{?rhel} && 0%{?rhel} == 7
 BuildRequires:	postgresql-devel
 %else
 BuildRequires:	libpq-devel
 %endif
+BuildRequires:	libtiff-devel
+BuildRequires:	libXmu-devel
+BuildRequires:	libzstd-devel
+BuildRequires:	make
+%if (0%{?rhel} > 7 || 0%{?fedora})
+BuildRequires:	mariadb-connector-c-devel openssl-devel
+%else
+BuildRequires:	mysql-devel
+%endif
+BuildRequires:	mesa-libGL-devel
+BuildRequires:	mesa-libGLU-devel
+BuildRequires:	netcdf-devel
+BuildRequires:	PDAL
+BuildRequires:	PDAL-devel
+BuildRequires:	PDAL-libs
 BuildRequires:	proj-devel
+BuildRequires:	python3
 %if 0%{?rhel} == 7
 # EPEL7
 BuildRequires:	python%{python3_version_nodots}-dateutil
@@ -79,22 +79,24 @@ BuildRequires:	python%{python3_version_nodots}-dateutil
 BuildRequires:	python3-dateutil
 %endif
 BuildRequires:	python3-devel
+%if 0%{?rhel} == 7
+# EPEL7
+BuildRequires:	python%{python3_version_nodots}-numpy
+%else
+BuildRequires:	python3-numpy
+%endif
 BuildRequires:	python3-pillow
-BuildRequires:	PDAL
-BuildRequires:	PDAL-libs
-BuildRequires:	PDAL-devel
 BuildRequires:	readline-devel
 BuildRequires:	sqlite-devel
 BuildRequires:	subversion
 BuildRequires:	unixODBC-devel
 BuildRequires:	zlib-devel
-BuildRequires:	bzip2-devel
-BuildRequires:	libzstd-devel
-BuildRequires: make
 
 Requires:	bzip2-libs
-Requires:	libzstd
 Requires:	geos
+Requires:	libzstd
+Requires:	PDAL
+Requires:	PDAL-libs
 # fedora >= 34: Nothing
 %if (0%{?rhel} > 7 || 0%{?fedora} < 34)
 Requires:	proj-datumgrid
@@ -103,26 +105,23 @@ Requires:	proj-datumgrid-world
 Requires:	python3
 %if 0%{?rhel} == 7
 # EPEL7
-Requires:	python%{python3_version_nodots}-numpy
-%else
-Requires:	python3-numpy
-%endif
-%if 0%{?rhel} == 7
-# EPEL7
 Requires:	python%{python3_version_nodots}-dateutil
 %else
 Requires:	python3-dateutil
 %endif
+%if 0%{?rhel} == 7
+# EPEL7
+Requires:	python%{python3_version_nodots}-numpy
+%else
+Requires:	python3-numpy
+%endif
 Requires:	python3-wxpython4
-Requires:	PDAL
-Requires:	PDAL-libs
 
 %if "%{_lib}" == "lib"
 %global cpuarch 32
 %else
 %global cpuarch 64
 %endif
-
 Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 
 %description
@@ -170,47 +169,50 @@ find -name \*.pl | xargs sed -i -e 's,#!/usr/bin/env perl,#!%{__perl},'
 %build
 %configure \
 	--prefix=%{_libdir} \
+	--with-blas \
+%if %{with flexiblas}
+	--with-blas-includes=%{_includedir}/flexiblas \
+%endif
+	--with-bzlib \
+	--with-cairo \
+	--with-cairo-ldflags=-lfontconfig \
 	--with-cxx \
-	--with-tiff \
-	--with-png \
-	--with-postgres \
+	--with-fftw \
+	--with-freetype \
+	--with-freetype-includes=%{_includedir}/freetype2 \
+	--with-gdal=%{_bindir}/gdal-config \
+	--with-geos=%{_bindir}/geos-config \
+	--with-lapack \
+%if %{with flexiblas}
+	--with-lapack-includes=%{_includedir}/flexiblas \
+%endif
 %if 0%{?rhel} > 7
 	--with-mysql=no \
 %else
 	--with-mysql \
 %endif
-	--with-opengl \
-	--with-odbc \
-	--with-fftw \
-	--with-blas \
-	--with-lapack \
-%if %{with flexiblas}
-	--with-blas-includes=%{_includedir}/flexiblas \
-	--with-lapack-includes=%{_includedir}/flexiblas \
-%endif
-	--with-cairo \
-	--with-freetype \
-	--with-nls \
-	--with-pdal \
-	--with-readline \
-	--with-regex \
-	--with-openmp \
-	--with-gdal=%{_bindir}/gdal-config \
-	--with-wxwidgets=%{_bindir}/wx-config \
-	--with-geos=%{_bindir}/geos-config \
-	--with-netcdf=%{_bindir}/nc-config \
 	--with-mysql-includes=%{_includedir}/mysql \
 %if (0%{?fedora} >= 27)
 	--with-mysql-libs=%{_libdir} \
 %else
 	--with-mysql-libs=%{_libdir}/mysql \
 %endif
+	--with-netcdf=%{_bindir}/nc-config \
+	--with-nls \
+	--with-odbc \
+	--with-opengl \
+	--with-openmp \
+	--with-pdal \
+	--with-png \
+	--with-postgres \
 	--with-postgres-includes=%{_includedir}/pgsql \
-	--with-cairo-ldflags=-lfontconfig \
-	--with-freetype-includes=%{_includedir}/freetype2 \
-	--with-bzlib \
-	--with-zstd \
-	--with-proj-share=%{_datadir}/proj
+	--with-proj-share=%{_datadir}/proj \
+	--with-readline \
+	--with-regex \
+	--with-tiff \
+	--with-wxwidgets=%{_bindir}/wx-config \
+	--with-zstd
+
 
 # .package_note hack for RHBZ #2084342 and RHBZ #2102895
 sed -i "s+ -Wl,-dT,${RPM_BUILD_DIR}/grass-%{version}/.package_note-grass-%{version}-%{release}.%{_arch}.ld++g" include/Make/Platform.make
@@ -320,7 +322,7 @@ fi
 %{_docdir}/%{name}%{shortver}
 
 %files libs
-%license AUTHORS COPYING GPL.TXT CHANGES
+%license AUTHORS COPYING GPL.TXT
 %{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 %{_libdir}/%{name}%{shortver}/lib/*.so
 %dir %{_libdir}/%{name}%{shortver}/driver
@@ -338,6 +340,48 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Sat Oct 26 2024 Markus Neteler <neteler@mundialis.de> - 8.4.0-3
+- Sort requirements and flags (https://github.com/OSGeo/grass/pull/4563/ by Edouard Choinière)
+
+* Fri Sep 06 2024 Sandro Mani <manisandro@gmail.com> - 8.4.0-2
+- Rebuild (PDAL)
+
+* Sun Jul 28 2024 Markus Neteler <neteler@mundialis.de> - 8.4.0-1
+- Update to 8.4.0
+
+* Thu Jul 18 2024 Fedora Release Engineering <releng@fedoraproject.org> - 8.3.2-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Tue May 14 2024 Sandro Mani <manisandro@gmail.com> - 8.3.2-3
+- Rebuild (gdal)
+
+* Tue Mar 19 2024 Sandro Mani <manisandro@gmail.com> - 8.3.2-2
+- Rebuild (PDAL)
+
+* Thu Mar 07 2024 Markus Neteler <neteler@mundialis.de> - 8.3.2-1
+- Update to 8.3.2 (#2268514)
+
+* Wed Jan 24 2024 Fedora Release Engineering <releng@fedoraproject.org> - 8.3.1-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Sat Jan 20 2024 Fedora Release Engineering <releng@fedoraproject.org> - 8.3.1-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Wed Jan  3 2024 Florian Weimer <fweimer@redhat.com> - 8.3.1-4
+- Fix C compatibility issue in MySQL port handling
+
+* Wed Nov 15 2023 Sandro Mani <manisandro@gmail.com> - 8.3.1-3
+- Rebuild (gdal)
+
+* Sat Oct 28 2023 Markus Neteler <neteler@mundialis.de> 8.3.1-2
+- fix obsolete configure parameters
+
+* Thu Oct 26 2023 Fedora Release Monitoring <release-monitoring@fedoraproject.org> - 8.3.1-1
+- Update to GRASS GIS 8.3.1 (#2246359)
+
+* Sat Oct 14 2023 Sandro Mani <manisandro@gmail.com> - 8.3.0-4
+- Rebuild (PDAL)
+
 * Sun Aug 06 2023 Alexandre Detiste <alexandre.detiste@gmail.com> - 8.3.0-3
 - Remove support for RHEL6: Grass is now Python3 only
 

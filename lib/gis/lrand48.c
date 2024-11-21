@@ -41,7 +41,7 @@ static const uint32 b0 = 0xB;
 
 static int seeded;
 
-#define LO(x) ((x)&0xFFFFU)
+#define LO(x) ((x) & 0xFFFFU)
 #define HI(x) ((x) >> 16)
 
 /*!

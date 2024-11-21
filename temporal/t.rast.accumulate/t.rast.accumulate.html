@@ -62,10 +62,10 @@ grass hopper reproduction cycles that are critical to agriculture.
 # Get the temperature data
 wget http://www-pool.math.tu-berlin.de/~soeren/grass/temperature_mean_1990_2000_daily_celsius.tar.gz
 
-# Create a temporary location directory
+# Create a temporary project directory
 mkdir -p /tmp/grassdata/LL
 
-# Start GRASS and create a new location with PERMANENT mapset
+# Start GRASS and create a new project with PERMANENT mapset
 grass -c EPSG:4326 /tmp/grassdata/LL/PERMANENT
 
 # Import the temperature data

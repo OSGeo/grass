@@ -258,7 +258,7 @@ class BufferedWindow(wx.Window):
             return
         try:
             id = self.imagedict[self.img]
-        except:
+        except KeyError:
             return
 
         # paint images to PseudoDC
@@ -471,7 +471,7 @@ class HistogramFrame(wx.Frame):
         dlg = wx.FileDialog(
             parent=self,
             message=_(
-                "Choose a file name to save the image " "(no need to add extension)"
+                "Choose a file name to save the image (no need to add extension)"
             ),
             wildcard=filetype,
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
@@ -496,7 +496,6 @@ class HistogramFrame(wx.Frame):
 
     def PrintMenu(self, event):
         """Print options and output menu"""
-        point = wx.GetMousePosition()
         printmenu = Menu()
         # Add items to the menu
         setup = wx.MenuItem(printmenu, id=wx.ID_ANY, text=_("Page setup"))
@@ -525,7 +524,7 @@ class HistogramFrame(wx.Frame):
         """
         try:
             self.propwin.Close(True)
-        except:
+        except Exception:
             pass
         self.Map.Clean()
         self.Destroy()

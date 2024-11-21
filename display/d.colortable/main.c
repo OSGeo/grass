@@ -222,7 +222,7 @@ int main(int argc, char **argv)
             if (atcat > (int)dmax)
                 break;
         } /* col loop */
-    }     /* int map */
+    } /* int map */
 
     else {
 

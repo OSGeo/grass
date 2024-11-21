@@ -15,10 +15,13 @@ class TestVTo3D(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
 
-    def tearDown(cls):
+    def tearDown(self):
         """Remove contours map after each test method"""
-        cls.runModule(
-            "g.remove", flags="f", type="vector", name=[cls.contours2d, cls.contours3d]
+        self.runModule(
+            "g.remove",
+            flags="f",
+            type="vector",
+            name=[self.contours2d, self.contours3d],
         )
 
     def test_contours(self):
@@ -35,9 +38,9 @@ class TestVTo3D(TestCase):
             column="z",
             flags="r",
         )
-        is3d = dict(map3d=0)
+        is3d = {"map3d": 0}
         self.assertVectorFitsTopoInfo(vector=self.contours2d, reference=is3d)
-        missing = dict(nmissing=0, nnull=0)
+        missing = {"nmissing": 0, "nnull": 0}
         self.assertVectorFitsUnivar(map=self.contours2d, column="z", reference=missing)
 
 

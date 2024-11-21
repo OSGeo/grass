@@ -203,9 +203,9 @@ as follows:
 
 <!--
   original:
-  doc/help_loc_structure.odg
+  doc/help_project_structure.odg
 -->
-\image html "loc_struct.png" "Diagram of GRASS file structure"
+\image html "help_project_structure.png" "Diagram of GRASS file structure"
 
 \section Compiling_and_Installing_GRASS_Modules Compiling and Installing GRASS Modules
 

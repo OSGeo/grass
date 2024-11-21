@@ -280,8 +280,7 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        G_snprintf(buf, 2048, "update %s set %s = ", Fi->table,
-                   opt.col->answer);
+        snprintf(buf, 2048, "update %s set %s = ", Fi->table, opt.col->answer);
 
         db_set_string(&stmt, buf);
 
@@ -297,23 +296,23 @@ int main(int argc, char *argv[])
                 Rast3d_is_null_value_num(&cache[point].dvalue, DCELL_TYPE);
 
         if (is_empty) {
-            G_snprintf(buf, 2048, "NULL");
+            snprintf(buf, 2048, "NULL");
         }
         else {
             if (typeIntern == FCELL_TYPE)
-                G_snprintf(buf, 2048, "%.10f", cache[point].fvalue);
+                snprintf(buf, 2048, "%.10f", cache[point].fvalue);
             if (typeIntern == DCELL_TYPE)
-                G_snprintf(buf, 2048, "%.15f", cache[point].dvalue);
+                snprintf(buf, 2048, "%.15f", cache[point].dvalue);
         }
 
         db_append_string(&stmt, buf);
 
-        G_snprintf(buf, 2048, " where %s = %d", Fi->key, cache[point].cat);
+        snprintf(buf, 2048, " where %s = %d", Fi->key, cache[point].cat);
 
         db_append_string(&stmt, buf);
         /* user provides where condition: */
         if (opt.where->answer) {
-            G_snprintf(buf, 2048, " AND %s", opt.where->answer);
+            snprintf(buf, 2048, " AND %s", opt.where->answer);
             db_append_string(&stmt, buf);
         }
         G_debug(3, "%s", db_get_string(&stmt));

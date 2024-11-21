@@ -389,6 +389,35 @@ Internal variables:
 </pre></div>
 Note, that the row() and col() indexing starts with 1.
 
+<h3>Data types and their precision</h3>
+
+There are three data types that can be used within the mapcalc expression. They
+are defined with certain precision and within certain value range. The
+following table reports precision and value range info on AMD64 (x86-64)
+architectures compiled with GCC/CLANG. Note that although this setting is the
+most frequent one, the ranges could differ for different architectures.
+
+<p><div class="code"><pre>
+data type               precision and value range info
+-------------------------------------------------------------------------------
+ int                    a 32-bit integer with a range from -2,147,483,647 to
+                        +2,147,483,647. The value -2,147,483,648 is reserved
+                        for NODATA.
+ float                  a 32-bit float (Float32) with a range from -3.4E38 to
+                        3.4E38. However, the integer precision can be only
+                        ensured between -16,777,216 and 16,777,216. If your
+                        raster overpasses this range, it is strongly suggested
+                        to use the type double instead.
+ double                 a 64-bit float (Float64) with a range from -1.79E308 to
+                        1.79E308. It is 8 bytes, 15-17 digits precision.
+ null                   NULL value. Refer to section "NULL support" below.
+</pre></div>
+
+Note that the value counter wraps around when the value overflows its range.
+E.g., if your expression is <tt>a = int(2147483648)</tt>, you will get NULL
+value. For expression <tt>a = int(2147483649)</tt>, you will reach the lowest
+value possible instead, i.e. -2147483647.
+
 <h3>Floating point values in the expression</h3>
 
 Floating point numbers are allowed in the expression. A floating point

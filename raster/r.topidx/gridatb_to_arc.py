@@ -10,7 +10,7 @@ if (
     or re.match("^-*help", sys.argv[1])
 ):
     print("Usage: gridatb.to.arc.py gridatb_file arc_file [xllcorner yllcorner]")
-    exit()
+    sys.exit()
 
 xllcorner = 0
 yllcorner = 0
@@ -23,11 +23,11 @@ outfname = sys.argv[2]
 
 if not os.path.isfile(infname):
     print(f"{infname}: File not found")
-    exit()
+    sys.exit()
 
 if os.path.isfile(outfname):
     print(f"{outfname}: File already exists")
-    exit()
+    sys.exit()
 
 inf = open(infname)
 
@@ -37,7 +37,7 @@ m = re.match("^[ \t]*([0-9.]+)[ \t]+([0-9.]+)[ \t]+([0-9.]+)[ \t]*$", inline)
 if not m:
     print(f"{infname}: Invalid input file format")
     inf.close()
-    exit()
+    sys.exit()
 
 ncols = m.group(1)
 nrows = m.group(2)

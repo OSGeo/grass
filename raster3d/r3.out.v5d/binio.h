@@ -37,11 +37,6 @@ extern void flip4(const unsigned int *src, unsigned int *dest, int n);
 
 extern void flip2(const unsigned short *src, unsigned short *dest, int n);
 
-#ifdef _CRAY
-extern void cray_to_ieee_array(long *dest, const float *source, int n);
-extern void ieee_to_cray_array(float *dest, const long *source, int n);
-#endif
-
 /**********************************************************************/
 
 /*****                     Read Functions                         *****/

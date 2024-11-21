@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 06:51-0700\n"
+"POT-Creation-Date: 2024-05-23 03:37-0600\n"
 "PO-Revision-Date: 2023-06-28 19:08+0000\n"
 "Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.16.4\n"
 
 #: ../lib/nviz/render.c:43
@@ -1007,8 +1007,8 @@ msgstr "Проигнорировано точек: %d (слишком высок
 #: ../lib/rst/interp_float/vinput2d.c:273
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given NPMIN="
-"%d"
+"%d points given for interpolation (after thinning) is less than given "
+"NPMIN=%d"
 msgstr "%d точек для интерполяции (после прореживания) меньше чем NPMIN=%d"
 
 #: ../lib/rst/interp_float/vinput2d.c:279
@@ -1345,7 +1345,7 @@ msgstr "Ошибка выполнения proj_trans(): %d"
 #: ../lib/vector/Vlib/read_ogr.c:157 ../lib/vector/Vlib/read_ogr.c:239
 #: ../lib/vector/Vlib/write_ogr.c:70 ../lib/vector/Vlib/write_ogr.c:105
 #: ../lib/vector/Vlib/write_ogr.c:146 ../lib/vector/Vlib/rewind_ogr.c:47
-#: ../lib/vector/Vlib/rewind_ogr.c:71 ../lib/vector/Vlib/field.c:732
+#: ../lib/vector/Vlib/rewind_ogr.c:71 ../lib/vector/Vlib/field.c:751
 #: ../lib/vector/Vlib/build_sfa.c:720
 msgid "GRASS is not compiled with OGR support"
 msgstr "GRASS собран без поддержки OGR"
@@ -1889,8 +1889,8 @@ msgstr ""
 #, c-format
 msgid "Bug in UI description. Description for option <%s> missing"
 msgstr ""
-"Ошибка в описании графического интерфейса. Отсутствует описания для опции <"
-"%s>"
+"Ошибка в описании графического интерфейса. Отсутствует описания для опции "
+"<%s>"
 
 #: ../lib/gis/parser.c:419
 #, c-format
@@ -2520,7 +2520,7 @@ msgid "SYNOPSIS"
 msgstr "СИНОПСИС"
 
 #: ../lib/gis/parser_html.c:159 ../lib/gis/parser_rest_md.c:215
-#: ../lib/init/grass.py:364
+#: ../lib/init/grass.py:366
 msgid "Flags"
 msgstr "Флаги"
 
@@ -2530,7 +2530,7 @@ msgid "Force launching GUI dialog"
 msgstr "Принудительный вывод диалогового окна интерфейса"
 
 #: ../lib/gis/parser_html.c:207 ../lib/gis/parser_rest_md.c:255
-#: ../lib/init/grass.py:385
+#: ../lib/init/grass.py:386
 msgid "Parameters"
 msgstr "Параметры"
 
@@ -2904,11 +2904,13 @@ msgid "'.' for current mapset"
 msgstr "«.» для текущего набора"
 
 #: ../lib/gis/parser_standard_options.c:701
-msgid "Location name"
+#, fuzzy
+msgid "Project (location) name"
 msgstr "Имя области"
 
 #: ../lib/gis/parser_standard_options.c:702
-msgid "Location name (not location path)"
+#, fuzzy
+msgid "Project name (not path to project)"
 msgstr "Имя области (не путь расположения)"
 
 #: ../lib/gis/parser_standard_options.c:712
@@ -3452,12 +3454,12 @@ msgstr "Попытка создания временного файла, пре�
 msgid "Unrecognised access mode: %o"
 msgstr "Не распознан режим доступа: %o"
 
-#: ../lib/gis/mapset_msc.c:222
+#: ../lib/gis/mapset_msc.c:223
 #, c-format
 msgid "Unable to make mapset element %s (%s): %s"
 msgstr "Не удалось создать элемент набора %s (%s): %s"
 
-#: ../lib/gis/mapset_msc.c:228
+#: ../lib/gis/mapset_msc.c:229
 #, c-format
 msgid "Unable to access mapset element %s (%s): %s"
 msgstr "Не удалось получить доступ к элементу набора %s (%s): %s"
@@ -3835,8 +3837,8 @@ msgstr "сформировано с помощью %s"
 #: ../lib/raster/open.c:192
 #, c-format
 msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
-"%s> which does not exist"
+"Unable to open raster map <%s@%s> since it is a reclass of raster map "
+"<%s@%s> which does not exist"
 msgstr ""
 "Не удалось открыть растровую карту <%s@%s>, так как она является "
 "реклассификацей несуществующей растровой карты <%s@%s>"
@@ -4387,28 +4389,30 @@ msgstr "Файл квантования для растровой карты <%s
 msgid "WARNING"
 msgstr "ПРЕДУПРЕЖДЕНИЕ"
 
-#: ../lib/init/grass.py:210 ../lib/init/grass.py:2671
+#: ../lib/init/grass.py:210 ../lib/init/grass.py:2687
 msgid "Exiting..."
 msgstr "Завершение работы…"
 
-#: ../lib/init/grass.py:363
+#: ../lib/init/grass.py:365
 msgid "Usage"
 msgstr "Использование"
 
-#: ../lib/init/grass.py:365
+#: ../lib/init/grass.py:367
 msgid "print this help message"
 msgstr "вывести эту справку"
 
-#: ../lib/init/grass.py:366
+#: ../lib/init/grass.py:368
 msgid "show version information and exit"
 msgstr "вывести информацию о версии и выйти"
 
-#: ../lib/init/grass.py:367
-msgid "create given database, location or mapset if it doesn't exist"
+#: ../lib/init/grass.py:369
+#, fuzzy
+msgid "create given database, project or mapset if it doesn't exist"
 msgstr "в случае отсутствия создать указанную базу данных, область или набор"
 
-#: ../lib/init/grass.py:369
-msgid "exit after creation of location or mapset. Only with -c flag"
+#: ../lib/init/grass.py:370
+#, fuzzy
+msgid "exit after creation of project or mapset. Only with -c flag"
 msgstr "выйти после создания области или набора. Только с флагом -c"
 
 #: ../lib/init/grass.py:372
@@ -4447,102 +4451,117 @@ msgid ""
 "version"
 msgstr "параметры: arch,build,compiler,date,path,revision,svn_revision,version"
 
-#: ../lib/init/grass.py:386
+#: ../lib/init/grass.py:387
 msgid "initial GRASS database directory"
 msgstr "исходный каталог базы данных GRASS"
 
-#: ../lib/init/grass.py:387
-msgid "directory containing Locations"
+#: ../lib/init/grass.py:388
+#, fuzzy
+msgid "directory containing GRASS projects"
 msgstr "каталог для размещения областей"
 
-#: ../lib/init/grass.py:388
-msgid "initial GRASS Location"
+#: ../lib/init/grass.py:389
+#, fuzzy
+msgid "initial GRASS project (location)"
 msgstr "исходная область GRASS"
 
-#: ../lib/init/grass.py:390
+#: ../lib/init/grass.py:391
+#, fuzzy
 msgid ""
-"directory containing Mapsets with one common coordinate system (projection)"
+"directory containing mapsets with one common coordinate reference system"
 msgstr ""
 "каталог для размещения наборов с единой общей системой координат (проекция)"
 
-#: ../lib/init/grass.py:393
-msgid "initial GRASS Mapset"
+#: ../lib/init/grass.py:394
+#, fuzzy
+msgid "initial GRASS mapset"
 msgstr "исходный набор GRASS"
 
-#: ../lib/init/grass.py:394
-msgid "fully qualified initial Mapset directory"
+#: ../lib/init/grass.py:395
+#, fuzzy
+msgid "fully qualified initial mapset directory"
 msgstr "полное имя исходного каталога наборов"
 
-#: ../lib/init/grass.py:395
+#: ../lib/init/grass.py:396
 msgid "Environment variables relevant for startup"
 msgstr "Переменные окружения, имеющие отношение к запуску"
 
-#: ../lib/init/grass.py:396
+#: ../lib/init/grass.py:397
 msgid "select GUI (text, gui, gtext)"
 msgstr "выбор графического интерфейса (text, gui, gtext)"
 
-#: ../lib/init/grass.py:397
+#: ../lib/init/grass.py:398
 msgid "set html web browser for help pages"
 msgstr "задать браузер html-файлов для просмотра справки"
 
-#: ../lib/init/grass.py:399
+#: ../lib/init/grass.py:400
 msgid "set additional path(s) to local GRASS modules or user scripts"
 msgstr ""
 "задать дополнительный путь (пути) к локальным модулям GRASS или "
 "пользовательским сценариям"
 
-#: ../lib/init/grass.py:402
+#: ../lib/init/grass.py:403
 msgid "set additional GISBASE for locally installed GRASS Addons"
 msgstr ""
 "задать дополнительный GISBASE для локально установленных расширений GRASS"
 
-#: ../lib/init/grass.py:404
+#: ../lib/init/grass.py:405
 msgid "set Python interpreter name to override 'python'"
 msgstr "задать имя интерпретатора Python для переопределения значения «python»"
 
-#: ../lib/init/grass.py:405
+#: ../lib/init/grass.py:406
 msgid "execute GRASS module or script"
 msgstr "запустить модуль или сценарий GRASS"
 
-#: ../lib/init/grass.py:406
+#: ../lib/init/grass.py:407
 msgid "provided executable will be executed in GRASS session"
 msgstr "данный исполняемый файл будет выполнен в сеансе GRASS"
 
-#: ../lib/init/grass.py:407
+#: ../lib/init/grass.py:408
 msgid "GRASS module, script or any other executable"
 msgstr "модуль, сценарий или любой другой исполняемый файл GRASS"
 
-#: ../lib/init/grass.py:408
+#: ../lib/init/grass.py:409
 msgid "parameters of the executable"
 msgstr "параметры исполняемого файла"
 
-#: ../lib/init/grass.py:409
+#: ../lib/init/grass.py:410
 msgid "standard flags"
 msgstr "стандартные флаги"
 
-#: ../lib/init/grass.py:410
-msgid "create temporary location (use with the --exec flag)"
-msgstr "создать временную область (используется с флагом --exec)"
+#: ../lib/init/grass.py:411 ../lib/init/grass.py:2313
+msgid "deprecated, use --tmp-project instead"
+msgstr ""
 
 #: ../lib/init/grass.py:412
+msgid "location was renamed to project"
+msgstr ""
+
+#: ../lib/init/grass.py:413
+#, fuzzy
+msgid "create temporary project (use with the --exec flag)"
+msgstr "создать временный набор (используется с флагом --exec)"
+
+#: ../lib/init/grass.py:415
 msgid "created in a temporary directory and deleted at exit"
 msgstr "создаётся во временном каталоге и удаляется при выходе"
 
-#: ../lib/init/grass.py:414
+#: ../lib/init/grass.py:417
 msgid "create temporary mapset (use with the --exec flag)"
 msgstr "создать временный набор (используется с флагом --exec)"
 
-#: ../lib/init/grass.py:416
-msgid "created in the specified location and deleted at exit"
+#: ../lib/init/grass.py:418
+#, fuzzy
+msgid "created in the specified project and deleted at exit"
 msgstr "создаётся в указанном расположении и удаляется при выходе"
 
-#: ../lib/init/grass.py:442
+#: ../lib/init/grass.py:443
 msgid "The APPDATA variable is not set, ask your operating system support"
 msgstr ""
 "Переменная APPDATA не задана, обратитесь в службу поддержки операционной "
 "системы"
 
-#: ../lib/init/grass.py:449
+#: ../lib/init/grass.py:450
 msgid ""
 "The APPDATA variable points to directory which does not exist, ask your "
 "operating system support"
@@ -4550,33 +4569,33 @@ msgstr ""
 "Переменная APPDATA указывает на несуществующий каталог, обратитесь в службу "
 "поддержки операционной системы"
 
-#: ../lib/init/grass.py:464
+#: ../lib/init/grass.py:465
 #, python-format
 msgid "Failed to create configuration directory '%s' with error: %s"
 msgstr "Сбой создания каталога конфигурации «%s» с ошибкой: %s"
 
-#: ../lib/init/grass.py:506
+#: ../lib/init/grass.py:507
 #, python-brace-format
 msgid "Unable to create temporary directory <{tmpdir_name}>! Exiting."
 msgstr ""
 "Не удалось создать временный каталог <{tmpdir_name}>! Завершение работы."
 
-#: ../lib/init/grass.py:566
+#: ../lib/init/grass.py:567
 #, python-brace-format
 msgid "Invalid line in RC file ({file}): '{line}' ({error})\n"
 msgstr "Недопустимая строка в файле RC ({file}): «{line}» ({error})\n"
 
-#: ../lib/init/grass.py:573
+#: ../lib/init/grass.py:574
 #, python-brace-format
 msgid "Empty RC file ({file})"
 msgstr "Пустой файл RC ({file})"
 
-#: ../lib/init/grass.py:668
+#: ../lib/init/grass.py:669
 #, python-format
 msgid "GUI <%s> not supported in this version"
 msgstr "Графический интерфейс <%s> не поддерживается в этой версии"
 
-#: ../lib/init/grass.py:897
+#: ../lib/init/grass.py:898
 msgid ""
 "The python command does not work as expected.\n"
 "Please check your installation or set the GRASS_PYTHON environment variable."
@@ -4585,12 +4604,12 @@ msgstr ""
 "Проверьте правильность установки или задайте переменную окружения "
 "GRASS_PYTHON."
 
-#: ../lib/init/grass.py:902
+#: ../lib/init/grass.py:903
 msgid "GRASS GUI not found. Please check your installation."
 msgstr ""
 "Не найден графический интерфейс GRASS. Проверьте правильность установки."
 
-#: ../lib/init/grass.py:904
+#: ../lib/init/grass.py:905
 msgid ""
 "{}\n"
 "Switching to text based interface mode."
@@ -4598,7 +4617,7 @@ msgstr ""
 "{}\n"
 "Выполняется переключение на текстовый режим работы."
 
-#: ../lib/init/grass.py:913
+#: ../lib/init/grass.py:914
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -4610,40 +4629,38 @@ msgstr ""
 "(переменная DISPLAY не установлена.)\n"
 "Выполняется переключение на текстовый режим работы."
 
-#: ../lib/init/grass.py:988
-#, python-brace-format
+#: ../lib/init/grass.py:989
+#, fuzzy, python-brace-format
 msgid ""
-"Unable to create new location because the location <{location}> already "
-"exists."
+"Unable to create new project because the project <{location}> already exists."
 msgstr ""
 "Не удалось создать новую область, так как область <{location}> уже "
 "существует."
 
-#: ../lib/init/grass.py:994
-#, python-brace-format
-msgid "Unable to create new location <{location}> because <{path}> is a file."
+#: ../lib/init/grass.py:995
+#, fuzzy, python-brace-format
+msgid "Unable to create new project <{location}> because <{path}> is a file."
 msgstr ""
 "Не удалось создать новую область <{location}>, потому что <{path}> является "
 "файлом."
 
-#: ../lib/init/grass.py:998
-#, python-brace-format
+#: ../lib/init/grass.py:999
+#, fuzzy, python-brace-format
 msgid ""
-"Unable to create new location <{location}> because the directory <{path}> "
+"Unable to create new project <{location}> because the directory <{path}> "
 "already exists."
 msgstr ""
 "Не удалось создать новую область <{location}>, потому что каталог <{path}> "
 "уже существует."
 
-#: ../lib/init/grass.py:1004
-#, python-brace-format
+#: ../lib/init/grass.py:1005
+#, fuzzy, python-brace-format
 msgid ""
-"Unable to create new location in the directory <{path}> for an unknown "
-"reason."
+"Unable to create new project in the directory <{path}> for an unknown reason."
 msgstr ""
 "Не удалось создать новую область в каталоге <{path}> по неизвестной причине."
 
-#: ../lib/init/grass.py:1088
+#: ../lib/init/grass.py:1089
 msgid ""
 "Mapset <{}> already exists. Unable to create a new temporary mapset of that "
 "name."
@@ -4651,34 +4668,36 @@ msgstr ""
 "Набор <{}> уже существует. Не удалось создать новый временный наборс таким "
 "именем."
 
-#: ../lib/init/grass.py:1093
+#: ../lib/init/grass.py:1094
 msgid "Mapset <{}> already exists."
 msgstr "Набор <{}> уже существует."
 
-#: ../lib/init/grass.py:1101
+#: ../lib/init/grass.py:1102
 msgid "A new mapset can be created using '-c' flag."
 msgstr "Новый набор может быть создан с помощью флага «-c»."
 
-#: ../lib/init/grass.py:1103
+#: ../lib/init/grass.py:1104
 msgid "Maybe you meant a different directory."
 msgstr "Вероятно, имелся в виду другой каталог."
 
-#: ../lib/init/grass.py:1132
-msgid "Provide CRS to create a location"
+#: ../lib/init/grass.py:1133
+#, fuzzy
+msgid "Provide CRS to create a project"
 msgstr "Для создания области необходимо предоставить CRS"
 
-#: ../lib/init/grass.py:1136
-msgid "Creating new GRASS GIS location <{}>..."
-msgstr "Создание новой области GRASS GIS <{}>…"
+#: ../lib/init/grass.py:1137
+#, fuzzy
+msgid "Creating new GRASS GIS project <{}>..."
+msgstr "Создание нового набора GRASS GIS <{}>…"
 
-#: ../lib/init/grass.py:1149
+#: ../lib/init/grass.py:1150
 #, python-brace-format
 msgid "Unable to create new mapset <{mapset}> because <{path}> is a file."
 msgstr ""
 "Не удалось создать новый набор <{mapset}>, потому что <{path}> является "
 "файлом."
 
-#: ../lib/init/grass.py:1158
+#: ../lib/init/grass.py:1159
 msgid ""
 "The mapset <{}> is missing the WIND file (computational region). It will be "
 "fixed now. Note that this warning may become an error in future versions."
@@ -4687,28 +4706,29 @@ msgstr ""
 "будет исправлена. Имейте в виду, что данное предупреждение в будущих версиях "
 "программы может перейти в разряд ошибки."
 
-#: ../lib/init/grass.py:1168
+#: ../lib/init/grass.py:1169
 #, fuzzy, python-brace-format
 msgid ""
 "No CRS is needed for creating mapset <{mapset}>, but <{geofile}> was "
-"provided as CRS. Did you mean to create a new location?"
+"provided as CRS. Did you mean to create a new project?"
 msgstr ""
 "Для создания набора не требуется CRS. Вероятно, предполагалось создать новую "
 "область?"
 
-#: ../lib/init/grass.py:1175
+#: ../lib/init/grass.py:1176
 msgid "Creating new GRASS GIS mapset <{}>..."
 msgstr "Создание нового набора GRASS GIS <{}>…"
 
-#: ../lib/init/grass.py:1206
+#: ../lib/init/grass.py:1207
+#, fuzzy
 msgid ""
-"GRASS GIS database directory, location and mapset not set properly. Use GUI "
+"GRASS GIS database directory, project and mapset not set properly. Use GUI "
 "or command line to set them."
 msgstr ""
 "Каталог базы данных, область и набор GRASS GIS заданы неверно. Задайте их в "
 "графическом интерфейсе или командной строке."
 
-#: ../lib/init/grass.py:1266
+#: ../lib/init/grass.py:1267
 #, python-brace-format
 msgid ""
 "Error reading data path information from g.gisenv.\n"
@@ -4725,22 +4745,22 @@ msgstr ""
 "\n"
 "Проверьте файл <{file}>."
 
-#: ../lib/init/grass.py:1566
+#: ../lib/init/grass.py:1569
 #, python-format
 msgid "Path '%s' doesn't exist"
 msgstr "Путь «%s» не существует"
 
-#: ../lib/init/grass.py:1568
+#: ../lib/init/grass.py:1571
 #, python-format
 msgid "Path '%s' not accessible."
 msgstr "Путь «%s» недоступен."
 
-#: ../lib/init/grass.py:1575
+#: ../lib/init/grass.py:1578
 #, python-format
 msgid "You are not the owner of '%s'."
 msgstr "Данный пользователь не является владельцем «%s»."
 
-#: ../lib/init/grass.py:1585
+#: ../lib/init/grass.py:1588
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
@@ -4755,7 +4775,7 @@ msgstr ""
 "что для проведения этой операции необходимо соответствующее разрешение).  "
 "Для уверенности следите за работой программы в диспетчер задач…"
 
-#: ../lib/init/grass.py:1596
+#: ../lib/init/grass.py:1599
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
@@ -4764,7 +4784,7 @@ msgstr ""
 "%(user)s в данный момент использует GRASS в выбранном наборе (найден файл "
 "%(file)s). Выполняется принудительный запуск GRASS…"
 
-#: ../lib/init/grass.py:1603
+#: ../lib/init/grass.py:1606
 #, python-format
 msgid ""
 "Unable to properly access '%s'.\n"
@@ -4773,25 +4793,25 @@ msgstr ""
 "Не удалось получить доступ к «%s».\n"
 "Поставьте в известность обслуживающий персонал."
 
-#: ../lib/init/grass.py:1632
+#: ../lib/init/grass.py:1635
 msgid "Building user fontcap..."
 msgstr "Построение файла fontcap пользователя…"
 
-#: ../lib/init/grass.py:1701
+#: ../lib/init/grass.py:1704
 msgid "The SHELL variable is not set"
 msgstr "Переменная SHELL не установлена"
 
-#: ../lib/init/grass.py:1718
+#: ../lib/init/grass.py:1721
 #, python-brace-format
 msgid "Unsupported shell <{sh}>: {env_file}"
 msgstr "Командная оболочка <{sh}> не поддерживается: {env_file}"
 
-#: ../lib/init/grass.py:1738
+#: ../lib/init/grass.py:1741
 #, python-format
 msgid "Executing <%s> ..."
 msgstr "Выполнение <%s> …"
 
-#: ../lib/init/grass.py:1762
+#: ../lib/init/grass.py:1765
 #, python-brace-format
 msgid ""
 "Execution of <{cmd}> failed:\n"
@@ -4800,157 +4820,166 @@ msgstr ""
 "Сбой выполнения <{cmd}>:\n"
 "{error}"
 
-#: ../lib/init/grass.py:1775
+#: ../lib/init/grass.py:1778
 #, python-format
 msgid "Execution of <%s> finished."
 msgstr "Выполнение <%s> завершено."
 
-#: ../lib/init/grass.py:1819
+#: ../lib/init/grass.py:1822
 #, python-brace-format
 msgid "Unable to close GUI. {0}"
 msgstr "Не удалось закрыть графический интерфейс. {0}"
 
-#: ../lib/init/grass.py:1838
+#: ../lib/init/grass.py:1841
 #, python-format
 msgid "Welcome to GRASS GIS %s"
 msgstr "Добро пожаловать в GRASS GIS %s"
 
-#: ../lib/init/grass.py:1865
+#: ../lib/init/grass.py:1868
 msgid "GRASS GIS homepage:"
 msgstr "Домашняя страница GRASS GIS:"
 
 #. GTC Running through: SHELL NAME
-#: ../lib/init/grass.py:1867
+#: ../lib/init/grass.py:1870
 msgid "This version running through:"
 msgstr "Эта версия работает в командной оболочке:"
 
-#: ../lib/init/grass.py:1870
+#: ../lib/init/grass.py:1873
 msgid "Help is available with the command:"
 msgstr "Вывод справки:"
 
-#: ../lib/init/grass.py:1871
+#: ../lib/init/grass.py:1874
 msgid "See the licence terms with:"
 msgstr "Вывод условий лицензии:"
 
-#: ../lib/init/grass.py:1872
+#: ../lib/init/grass.py:1875
 msgid "See citation options with:"
 msgstr "Вывод параметров ссылки:"
 
-#: ../lib/init/grass.py:1877
+#: ../lib/init/grass.py:1880
 msgid "If required, restart the GUI with:"
 msgstr "При необходимости перезагрузки графического интерфейса:"
 
-#: ../lib/init/grass.py:1879
+#: ../lib/init/grass.py:1882
 msgid "Start the GUI with:"
 msgstr "Запуск графического интерфейса:"
 
-#: ../lib/init/grass.py:1881
+#: ../lib/init/grass.py:1884
 msgid "When ready to quit enter:"
 msgstr "Завершение работы:"
 
-#: ../lib/init/grass.py:2071
+#: ../lib/init/grass.py:2074
 msgid "2D and 3D raster MASKs present"
 msgstr "Имеются двух- и трёхмерные растровые маски"
 
-#: ../lib/init/grass.py:2072
+#: ../lib/init/grass.py:2075
 msgid "Raster MASK present"
 msgstr "Имеется растровая маска"
 
-#: ../lib/init/grass.py:2073
+#: ../lib/init/grass.py:2076
 msgid "3D raster MASK present"
 msgstr "Имеется трёхмерная растровая маска"
 
-#: ../lib/init/grass.py:2118
+#: ../lib/init/grass.py:2121
 msgid "Done."
 msgstr "Готово."
 
-#: ../lib/init/grass.py:2120
+#: ../lib/init/grass.py:2123
 msgid "Goodbye from GRASS GIS"
 msgstr "До новых встреч с GRASS GIS"
 
-#: ../lib/init/grass.py:2181
+#: ../lib/init/grass.py:2184
 msgid "Please install the GRASS GIS development package"
 msgstr "Установите пакет для разработки GRASS GIS"
 
-#: ../lib/init/grass.py:2230
+#: ../lib/init/grass.py:2233
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr "Параметр <%s> не поддерживается"
 
-#: ../lib/init/grass.py:2279
+#: ../lib/init/grass.py:2282
 #, python-format
 msgid "use mapset %(metavar)s"
 msgstr "используйте набор %(metavar)s"
 
-#: ../lib/init/grass.py:2285
-#, python-format
-msgid "use temporary mapset in location %(metavar)s"
+#: ../lib/init/grass.py:2288
+#, fuzzy, python-format
+msgid "use temporary mapset in project %(metavar)s"
 msgstr "используйте временный набор в области %(metavar)s"
 
-#: ../lib/init/grass.py:2293
-msgid "path to mapset (or location if creating one)"
+#: ../lib/init/grass.py:2296
+#, fuzzy
+msgid "path to mapset (or project if creating one)"
 msgstr "путь к набору (или области при её создании)"
 
-#: ../lib/init/grass.py:2296
+#: ../lib/init/grass.py:2299
 msgid "use temporary mapset"
 msgstr "используйте временный набор"
 
-#: ../lib/init/grass.py:2303
-#, python-format
-msgid "use temporary location with %(metavar)s (EPSG, georeferenced file, ...)"
+#: ../lib/init/grass.py:2306
+#, fuzzy, python-format
+msgid "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
 msgstr ""
 "используйте временную область с %(metavar)s (EPSG, файл географической "
 "привязки, …)"
 
-#: ../lib/init/grass.py:2310
+#: ../lib/init/grass.py:2319
 msgid "remove lock if present"
 msgstr "снять блокировку при её наличии"
 
-#: ../lib/init/grass.py:2359
+#: ../lib/init/grass.py:2331
+msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
+msgstr ""
+
+#: ../lib/init/grass.py:2375
 msgid "execute module or script (followed by executable with arguments)"
 msgstr ""
 "выполнить модуль или сценарий (следует за исполняемым файлом с аргументами)"
 
-#: ../lib/init/grass.py:2415
+#: ../lib/init/grass.py:2431
 msgid "Flag -e requires also flag -c"
 msgstr "Флаг -e требует наличия флага -c"
 
-#: ../lib/init/grass.py:2417
-msgid "Flag -c requires name of location or mapset"
+#: ../lib/init/grass.py:2433
+#, fuzzy
+msgid "Flag -c requires name of project or mapset"
 msgstr "Флаг -c требует имени области или набора"
 
-#: ../lib/init/grass.py:2420
-msgid "Either --tmp-location or --tmp-mapset can be used, not both"
+#: ../lib/init/grass.py:2436
+#, fuzzy
+msgid "Either --tmp-project or --tmp-mapset can be used, not both"
 msgstr ""
 "Аргументы --tmp-location или --tmp-mapset могут использоваться только "
 "отдельно, совместное использование не допускается"
 
-#: ../lib/init/grass.py:2427
+#: ../lib/init/grass.py:2443
+#, fuzzy
 msgid ""
-"Coordinate reference system argument (e.g. EPSG) is needed for --tmp-location"
+"Coordinate reference system argument (e.g. EPSG) is needed for --tmp-project"
 msgstr ""
 "Аргумент базовой системы координат (например, EPSG) необходим для --tmp-"
 "location"
 
-#: ../lib/init/grass.py:2434
+#: ../lib/init/grass.py:2450
+#, fuzzy
 msgid ""
-"Only one argument (e.g. EPSG) is needed for --tmp-location, mapset name <{}> "
+"Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> "
 "provided"
 msgstr ""
 "--tmp-location требует наличия только одного аргумента (например, EPSG), "
 "предоставлено имя набора <{}>"
 
-#: ../lib/init/grass.py:2528
-#, python-brace-format
+#: ../lib/init/grass.py:2544
+#, fuzzy, python-brace-format
 msgid ""
 "Unable to start GRASS GIS. You have the choice to:\n"
 " - Launch the graphical user interface with the '--gui' switch\n"
 "     {cmd_name} --gui\n"
-" - Launch with path to the location/mapset as an argument\n"
-"     {cmd_name} /path/to/location/mapset`\n"
-" - Create a location with '-c' and launch in its PERMANENT mapset\n"
-"     {cmd_name} -c EPSG:number /path/to/location\n"
-"     {cmd_name} -c geofile /path/to/location\n"
+" - Launch with path to the project/mapset as an argument\n"
+"     {cmd_name} /path/to/project/mapset`\n"
+" - Create a project with '-c' and launch in its PERMANENT mapset\n"
+"     {cmd_name} -c EPSG:number /path/to/project\n"
+"     {cmd_name} -c geofile /path/to/project\n"
 " - Create manually the GISRC file ({gisrcrc})\n"
 " - Use '--help' for further options\n"
 "     {cmd_name} --help\n"
@@ -4970,31 +4999,32 @@ msgstr ""
 "     {cmd_name} --help\n"
 "См. также: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 
-#: ../lib/init/grass.py:2549
+#: ../lib/init/grass.py:2565
 msgid "Starting GRASS GIS..."
 msgstr "Запуск GRASS GIS…"
 
-#: ../lib/init/grass.py:2598
+#: ../lib/init/grass.py:2614
 msgid ""
 "Failed to start GRASS GIS, grassdata directory cannot be found or created."
 msgstr ""
 "При запуске GRASS GIS возникла ошибка, каталог grassdata не может быть "
 "найден или удалён."
 
-#: ../lib/init/grass.py:2605
+#: ../lib/init/grass.py:2621
+#, fuzzy
 msgid ""
-"Failed to start GRASS GIS, no default location to copy in the installation "
-"or copying failed."
+"Failed to start GRASS GIS, no default project to copy in the installation or "
+"copying failed."
 msgstr ""
 "Ошибка при запуске GRASS GIS, отсутствует область по умолчанию для "
 "копирования в место установки или произошла ошибка копирования."
 
-#: ../lib/init/grass.py:2708
+#: ../lib/init/grass.py:2724
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr "Запуск <%s> графического интерфейса в фоновом режиме, подождите…"
 
-#: ../lib/init/grass.py:2746
+#: ../lib/init/grass.py:2762
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Ошибка при запуске командной оболочки «%s»"
@@ -5114,7 +5144,7 @@ msgid "Unable to position file"
 msgstr "Не удалось выполнить позиционирование в файле"
 
 #: ../lib/raster3d/close.c:101 ../lib/raster3d/close.c:108
-#: ../lib/raster3d/close.c:190 ../lib/raster3d/header.c:208
+#: ../lib/raster3d/close.c:190 ../lib/raster3d/header.c:282
 #, c-format
 msgid "Unable to write header for 3D raster map <%s>"
 msgstr "Не удалось записать заголовок для трёхмерной растровой карты <%s>"
@@ -5135,7 +5165,6 @@ msgid "Error in cache"
 msgstr "Ошибка в кэше"
 
 #: ../lib/raster3d/maskfn.c:76
-#, c-format
 msgid "Adding rule: %lf - %lf"
 msgstr "Добавление правила: %lf - %lf"
 
@@ -6572,8 +6601,8 @@ msgstr "Ошибка dglShortestPath: %s"
 #, c-format
 msgid "Unable to find point with defined unique category for node <%d>."
 msgstr ""
-"Не удалось найти точку, в которой определена уникальная категория для узла <"
-"%d>."
+"Не удалось найти точку, в которой определена уникальная категория для узла "
+"<%d>."
 
 #: ../lib/vector/Vlib/net_analyze.c:301 ../lib/vector/Vlib/net_analyze.c:342
 #, c-format
@@ -6582,8 +6611,8 @@ msgid ""
 "<%d>.\n"
 "The unique category layer may not be valid."
 msgstr ""
-"Присутствует более одной точки на узел <%d> с уникальной категорией в поле  <"
-"%d>.\n"
+"Присутствует более одной точки на узел <%d> с уникальной категорией в поле  "
+"<%d>.\n"
 "Слой уникальной категории может быть недопустимым."
 
 #: ../lib/vector/Vlib/net_analyze.c:454
@@ -6741,8 +6770,8 @@ msgstr "Не удалось добавить сетевую дугу для со
 #: ../lib/vector/Vlib/net_build.c:359
 #, c-format
 msgid ""
-"There exists more than one point of node <%d> with unique category field  <"
-"%d>.\n"
+"There exists more than one point of node <%d> with unique category field  "
+"<%d>.\n"
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
@@ -6807,8 +6836,8 @@ msgid ""
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
-"Линия с ИД <%d> имеет больше уникальных категорий, определённых в поле <"
-"%d>.\n"
+"Линия с ИД <%d> имеет больше уникальных категорий, определённых в поле "
+"<%d>.\n"
 "Слой уникальных категорий не является допустимым, в связи с чем результаты "
 "могут оказаться некорректными."
 
@@ -7488,7 +7517,7 @@ msgstr "Не определён источник данных OGR"
 msgid "OGR layer not defined"
 msgstr "Не определён слой OGR"
 
-#: ../lib/vector/Vlib/open_ogr.c:77 ../lib/vector/Vlib/field.c:746
+#: ../lib/vector/Vlib/open_ogr.c:77 ../lib/vector/Vlib/field.c:765
 #, c-format
 msgid "Unable to open OGR data source '%s'"
 msgstr "Не удалось открыть источник данных OGR «%s»"
@@ -8496,17 +8525,17 @@ msgstr "База данных по умолчанию не задана"
 msgid "Requested dblink %d, maximum link number %d"
 msgstr "Запрашиваемый dblink %d, максимальное число связей %d"
 
-#: ../lib/vector/Vlib/field.c:670 ../lib/vector/Vlib/field.c:678
+#: ../lib/vector/Vlib/field.c:689 ../lib/vector/Vlib/field.c:697
 #, c-format
 msgid "Error in rule on row %d in <%s>"
 msgstr "Ошибка в правиле, ряд %d в <%s>"
 
-#: ../lib/vector/Vlib/field.c:765
+#: ../lib/vector/Vlib/field.c:784
 #, c-format
 msgid "Unable to open OGR layer <%s>"
 msgstr "Не удалось открыть слой OGR <%s>"
 
-#: ../lib/vector/Vlib/field.c:793
+#: ../lib/vector/Vlib/field.c:812
 #, c-format
 msgid ""
 "Feature table <%s> has no primary key defined. Unable to define DB links."
@@ -8514,21 +8543,21 @@ msgstr ""
 "В таблице объектов <%s> не определён первичный ключ. Не удалось определить "
 "связи базы данных."
 
-#: ../lib/vector/Vlib/field.c:812
+#: ../lib/vector/Vlib/field.c:831
 msgid "GRASS not compiled with PostgreSQL support"
 msgstr "GRASS собран без поддержки PostgreSQL"
 
-#: ../lib/vector/Vlib/field.c:845
+#: ../lib/vector/Vlib/field.c:864
 msgid "Unknown vector map format"
 msgstr "Неизвестный формат векторной карты"
 
-#: ../lib/vector/Vlib/field.c:879
+#: ../lib/vector/Vlib/field.c:898
 #, c-format
 msgid "Unable to create database definition file for vector map <%s>"
 msgstr ""
 "Не удалось создать файл определения базы данных для векторной карты <%s>"
 
-#: ../lib/vector/Vlib/field.c:976
+#: ../lib/vector/Vlib/field.c:995
 msgid "Bug: attempt to update map which is not in current mapset"
 msgstr "Ошибка: попытка обновить карту, отсутствующую в текущем наборе"
 
@@ -9100,30 +9129,30 @@ msgstr ""
 "выпуском. Перестройте топологию."
 
 #: ../lib/vector/diglib/portable.c:210 ../lib/vector/diglib/portable.c:243
-#: ../lib/vector/diglib/portable.c:684 ../lib/vector/diglib/plus_struct.c:576
+#: ../lib/vector/diglib/portable.c:684 ../lib/vector/diglib/plus_struct.c:614
 msgid "Vector exceeds supported file size limit"
 msgstr "Вектор превышает поддерживаемое ограничение на размер файла"
 
-#: ../lib/vector/diglib/spindex.c:449
+#: ../lib/vector/diglib/spindex.c:457
 #, c-format
 msgid "Unable to delete node %d from spatial index"
 msgstr "Не удалось удалить узел %d из пространственного индекса"
 
-#: ../lib/vector/diglib/spindex.c:492
+#: ../lib/vector/diglib/spindex.c:500
 #, c-format
 msgid "Unable to delete line %d from spatial index"
 msgstr "Не удалось удалить линию %d из пространственного индекса"
 
-#: ../lib/vector/diglib/spindex.c:528
+#: ../lib/vector/diglib/spindex.c:536
 msgid "Attempt to delete sidx for dead area"
 msgstr "Попытка удаления sidx для уже удалённого полигона"
 
-#: ../lib/vector/diglib/spindex.c:545
+#: ../lib/vector/diglib/spindex.c:553
 #, c-format
 msgid "Unable to delete area %d from spatial index"
 msgstr "Не удалось удалить полигон %d из пространственного индекса"
 
-#: ../lib/vector/diglib/spindex.c:594
+#: ../lib/vector/diglib/spindex.c:602
 #, c-format
 msgid "Unable to delete isle %d from spatial index"
 msgstr "Не удалось удалить остров %d из пространственного индекса"
@@ -9140,7 +9169,7 @@ msgstr "Не удалось загрузить файл в память, фай�
 msgid "Vector memory mode not supported, using 'AUTO'"
 msgstr "Векторный режим памяти не поддерживается, используется «AUTO»"
 
-#: ../lib/vector/diglib/plus_struct.c:529
+#: ../lib/vector/diglib/plus_struct.c:567
 #, c-format
 msgid ""
 "This version of GRASS (%d.%d) is too old to read this topology format. Try "
@@ -9150,7 +9179,7 @@ msgstr ""
 "GRASS (%d.%d). Попробуйте перестроить топологию или обновить GRASS по "
 "крайней мере до версии %d."
 
-#: ../lib/vector/diglib/plus_struct.c:538
+#: ../lib/vector/diglib/plus_struct.c:576
 #, c-format
 msgid ""
 "Your GRASS version does not fully support topology format %d.%d of the "
@@ -9159,7 +9188,7 @@ msgstr ""
 "Данная версия GRASS не полностью поддерживает формат %d.%d топологии "
 "вектора. Рекомендуется перестроить топологию или обновить GRASS."
 
-#: ../lib/vector/diglib/plus_struct.c:551
+#: ../lib/vector/diglib/plus_struct.c:589
 #, c-format
 msgid ""
 "Old topology format version %d.%d is not supported by this release. Try to "
@@ -9251,46 +9280,46 @@ msgstr "Формат вектора «%s» не поддерживается"
 msgid "Format definition is not correct: %s"
 msgstr "Некорректное определение формата: %s"
 
-#: ../lib/vector/diglib/plus_area.c:221 ../lib/vector/diglib/plus_area.c:735
+#: ../lib/vector/diglib/plus_area.c:223 ../lib/vector/diglib/plus_area.c:741
 #, c-format
 msgid "Line %d already has area/isle %d to left"
 msgstr "У линии %d уже есть полигон или остров %d слева"
 
-#: ../lib/vector/diglib/plus_area.c:231 ../lib/vector/diglib/plus_area.c:743
+#: ../lib/vector/diglib/plus_area.c:234 ../lib/vector/diglib/plus_area.c:750
 #, c-format
 msgid "Line %d already has area/isle %d to right"
 msgstr "У линии %d уже есть полигон или остров %d справа"
 
-#: ../lib/vector/diglib/plus_area.c:285
+#: ../lib/vector/diglib/plus_area.c:289
 msgid "Isle already registered in area"
 msgstr "Остров уже зарегистрирован в полигоне"
 
-#: ../lib/vector/diglib/plus_area.c:319
+#: ../lib/vector/diglib/plus_area.c:323
 msgid "Attempt to delete isle from dead area"
 msgstr "Попытка удаления острова из уже удалённого полигона"
 
-#: ../lib/vector/diglib/plus_area.c:328
+#: ../lib/vector/diglib/plus_area.c:332
 #, c-format
 msgid "Attempt to delete not registered isle %d from area %d"
 msgstr "Попытка удаления незарегистрированного острова %d из полигона %d"
 
-#: ../lib/vector/diglib/plus_area.c:375
+#: ../lib/vector/diglib/plus_area.c:379
 msgid "Attempt to delete dead area"
 msgstr "Попытка удаления уже удалённого полигона"
 
-#: ../lib/vector/diglib/plus_area.c:415
+#: ../lib/vector/diglib/plus_area.c:419
 #, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
 msgstr ""
 "Для полигона зарегистрирован удалённый центроид %d (ошибка в векторной "
 "библиотеке)"
 
-#: ../lib/vector/diglib/plus_area.c:439
+#: ../lib/vector/diglib/plus_area.c:443
 #, c-format
 msgid "Attempt to delete area %d info from dead isle %d"
 msgstr "Попытка удаления информации о полигоне %d из уже удалённого острова %d"
 
-#: ../lib/vector/diglib/plus_area.c:801
+#: ../lib/vector/diglib/plus_area.c:809
 #, c-format
 msgid "Attempt to delete isle %d info from dead area %d"
 msgstr ""
@@ -9334,6 +9363,12 @@ msgstr "Неподдерживаемый значок %d"
 #, c-format
 msgid "[%s]: No such color"
 msgstr "[%s]: Нет такого цвета"
+
+#~ msgid "create temporary location (use with the --exec flag)"
+#~ msgstr "создать временную область (используется с флагом --exec)"
+
+#~ msgid "Creating new GRASS GIS location <{}>..."
+#~ msgstr "Создание новой области GRASS GIS <{}>…"
 
 #, python-format
 #~ msgid ""
@@ -9431,11 +9466,11 @@ msgstr "[%s]: Нет такого цвета"
 
 #, c-format
 #~ msgid ""
-#~ "Unable to create signature file <%s> for subgroup <%s> of group <%s> - <"
-#~ "%s> is not current mapset"
+#~ "Unable to create signature file <%s> for subgroup <%s> of group <%s> - "
+#~ "<%s> is not current mapset"
 #~ msgstr ""
-#~ "Не удалось создать файл сигнатуры <%s> для подгруппы <%s> группы <%s> — <"
-#~ "%s> не является текущим набором"
+#~ "Не удалось создать файл сигнатуры <%s> для подгруппы <%s> группы <%s> — "
+#~ "<%s> не является текущим набором"
 
 #, c-format
 #~ msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s>"
@@ -9672,14 +9707,14 @@ msgstr "[%s]: Нет такого цвета"
 #~ "End time must be greater than start time for %(type)s map <%(id)s> with "
 #~ "layer: %(l)s"
 #~ msgstr ""
-#~ "Время завершения должно быть больше времени начала для карты %(type)s <"
-#~ "%(id)s> со слоем: %(l)s"
+#~ "Время завершения должно быть больше времени начала для карты %(type)s "
+#~ "<%(id)s> со слоем: %(l)s"
 
 #, python-format
 #~ msgid "End time must be greater than start time for %(type)s map <%(id)s>"
 #~ msgstr ""
-#~ "Время завершения должно быть больше времени начала для карты %(type)s <"
-#~ "%(id)s>"
+#~ "Время завершения должно быть больше времени начала для карты %(type)s "
+#~ "<%(id)s>"
 
 #, python-format
 #~ msgid ""
@@ -9694,22 +9729,22 @@ msgstr "[%s]: Нет такого цвета"
 #~ "Unsupported relative time unit type for %(type)s map <%(id)s> with layer "
 #~ "%(l)s: %(u)s"
 #~ msgstr ""
-#~ "Неподдерживаемый тип единицы относительного времени для карты %(type)s <"
-#~ "%(id)s> со слоем %(l)s: %(u)s"
+#~ "Неподдерживаемый тип единицы относительного времени для карты %(type)s "
+#~ "<%(id)s> со слоем %(l)s: %(u)s"
 
 #, python-format
 #~ msgid "Unsupported relative time unit type for %(type)s map <%(id)s>: %(u)s"
 #~ msgstr ""
-#~ "Неподдерживаемый тип единицы относительного времени для карты %(type)s <"
-#~ "%(id)s>: %(u)s"
+#~ "Неподдерживаемый тип единицы относительного времени для карты %(type)s "
+#~ "<%(id)s>: %(u)s"
 
 #, python-format
 #~ msgid ""
 #~ "End time must be greater than start time for %(typ)s map <%(id)s> with "
 #~ "layer %(l)s"
 #~ msgstr ""
-#~ "Время завершения должно быть больше времени начала для карты %(typ)s <"
-#~ "%(id)s> со слоем %(l)s"
+#~ "Время завершения должно быть больше времени начала для карты %(typ)s "
+#~ "<%(id)s> со слоем %(l)s"
 
 #, python-format
 #~ msgid ""
@@ -9806,8 +9841,8 @@ msgstr "[%s]: Нет такого цвета"
 #, python-format
 #~ msgid "Unable to export color rules for raster map <%s> r.out.gdal"
 #~ msgstr ""
-#~ "Не удалось выполнить экспорт правил выделения цветом для растровой карты <"
-#~ "%s> r.out.gdal"
+#~ "Не удалось выполнить экспорт правил выделения цветом для растровой карты "
+#~ "<%s> r.out.gdal"
 
 #, python-format
 #~ msgid "Unable to export raster map <%s> with r.pack"
@@ -10146,8 +10181,8 @@ msgstr "[%s]: Нет такого цвета"
 
 #, python-format
 #~ msgid ""
-#~ "Map <%(map)s> with layer %(l)s is not registered in space time dataset <"
-#~ "%(base)s>"
+#~ "Map <%(map)s> with layer %(l)s is not registered in space time dataset "
+#~ "<%(base)s>"
 #~ msgstr ""
 #~ "Карта <%(map)s> со слом %(l)s не зарегистрирована в пространственно-"
 #~ "временном наборе данных <%(base)s>"
@@ -10160,8 +10195,8 @@ msgstr "[%s]: Нет такого цвета"
 
 #, python-format
 #~ msgid ""
-#~ "Update metadata, spatial and temporal extent from all registered maps of <"
-#~ "%s>"
+#~ "Update metadata, spatial and temporal extent from all registered maps of "
+#~ "<%s>"
 #~ msgstr ""
 #~ "Обновление метаданных, пространственной и временной протяжённости из всех "
 #~ "зарегистрированных карт набора данных <%s>"
@@ -10273,11 +10308,11 @@ msgstr "[%s]: Нет такого цвета"
 
 #, python-format
 #~ msgid ""
-#~ "Wrong temporal type of space time dataset <"
-#~ "%s>                                       <%s> time is required"
+#~ "Wrong temporal type of space time dataset "
+#~ "<%s>                                       <%s> time is required"
 #~ msgstr ""
-#~ "Неверный временной тип пространственно-временного набора данных <"
-#~ "%s>                                       время должно иметь тип <%s>"
+#~ "Неверный временной тип пространственно-временного набора данных "
+#~ "<%s>                                       время должно иметь тип <%s>"
 
 #~ msgid "Wrong type of input "
 #~ msgstr "Неверный тип ввода "
@@ -10677,8 +10712,8 @@ msgstr "[%s]: Нет такого цвета"
 #, python-format
 #~ msgid "Invalid datetime in timestamp for raster map <%s>"
 #~ msgstr ""
-#~ "Недопустимое значение даты и времени в метке времени для растровой карты <"
-#~ "%s>"
+#~ "Недопустимое значение даты и времени в метке времени для растровой карты "
+#~ "<%s>"
 
 #~ msgid "Internal error"
 #~ msgstr "Внутренняя ошибка"
@@ -10699,8 +10734,8 @@ msgstr "[%s]: Нет такого цвета"
 #, python-format
 #~ msgid "Unable to read timestamp file for 3D raster map <%s>"
 #~ msgstr ""
-#~ "Не удалось прочитать метку времени файла для трёхмерной растровой карты <"
-#~ "%s>"
+#~ "Не удалось прочитать метку времени файла для трёхмерной растровой карты "
+#~ "<%s>"
 
 #, python-format
 #~ msgid "Unable to create timestamp file for 3D raster map <%s>"
@@ -10989,8 +11024,8 @@ msgstr "[%s]: Нет такого цвета"
 #~ "avoid conflict with Python keywords. Underscore at the beginning is "
 #~ "deprecated in GRASS GIS 7.0 and will be removed in version 7.1."
 #~ msgstr ""
-#~ "Для запуска модуля <%s> добавьте символ подчёркивания в конце параметра <"
-#~ "%s> во избежание конфликта с ключевыми словами языка Python. Добавление "
+#~ "Для запуска модуля <%s> добавьте символ подчёркивания в конце параметра "
+#~ "<%s> во избежание конфликта с ключевыми словами языка Python. Добавление "
 #~ "символа подчёркивания в начале параметра в ГИС GRASS 7.0 не "
 #~ "рекомендуется, и не будет поддерживаться в версии 7.1."
 

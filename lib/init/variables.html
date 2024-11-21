@@ -124,6 +124,13 @@ PERMANENT
     available are RLE, ZLIB, and LZ4. The compressors BZIP2 and ZSTD
     must be enabled when configuring GRASS for compilation.</dd>
 
+  <dt>GRASS_CONFIG_DIR</dt>
+  <dd>[grass startup script]<br>
+    specifies root path for GRASS configuration directory.
+    If not specified, the default placement of the
+    configuration directory is used: <tt>$HOME</tt> on GNU/Linux,
+    <tt>$HOME/Library</tt> on Mac OS X, and <tt>%APPDATA%</tt> on MS Windows.</dd>
+
   <dt>GRASS_DB_ENCODING</dt>
   <dd>[various modules, wxGUI]<br>
     encoding for vector attribute data (utf-8, ascii, iso8859-1, koi8-r)</dd>
@@ -385,7 +392,7 @@ PERMANENT
 
   <dt>TMPDIR, TEMP, TMP</dt>
   <dd>[Various GRASS GIS commands and wxGUI]<br>
-  <!-- what about Windows %TEMP% and http://trac.osgeo.org/grass/ticket/560#comment:21 ? -->
+  <!-- what about Windows %TEMP% and https://trac.osgeo.org/grass/ticket/560#comment:21 ? -->
 	The default wxGUI temporary directory is chosen from a
 	platform-dependent list, but the user can control the selection of
 	this directory by setting one of the TMPDIR, TEMP or TMP
@@ -532,10 +539,10 @@ g.gisenv set=DEBUG=0
   <dd>See <tt>GRASS_GUI</tt> environmental variable for details.</dd>
 
   <dt>LOCATION</dt>
-  <dd>full path to location directory</dd>
+  <dd>full path to project (previously called location) directory</dd>
 
   <dt>LOCATION_NAME</dt>
-  <dd>initial location name</dd>
+  <dd>initial project name</dd>
 
   <dt>MAPSET</dt>
   <dd>initial mapset</dd>

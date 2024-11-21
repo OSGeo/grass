@@ -30,7 +30,7 @@ There are a few exceptions to this:
 
 <tt>r.in.*</tt> programs read the data cell-for-cell, with no resampling. When
 reading non-georeferenced data, the imported map will usually have its
-lower-left corner at (0,0) in the location's coordinate system; the user
+lower-left corner at (0,0) in the project's coordinate system; the user
 needs to use <a href="r.region.html">r.region</a> to "place" the imported map.
 <p>
 Some programs which need to perform specific types of resampling (e.g.
@@ -45,13 +45,13 @@ final result.
 
 The module <a href="r.in.gdal.html">r.in.gdal</a> offers a common
 interface for many different raster formats. Additionally, it also
-offers options such as on-the-fly location creation or extension of
+offers options such as on-the-fly project creation or extension of
 the default region to match the extent of the imported raster map.
 For special cases, other import modules are available. The full map
 is always imported.
 <p>
 For importing scanned maps, the user will need to create a
-x,y-location, scan the map in the desired resolution and save it into
+x,y-project, scan the map in the desired resolution and save it into
 an appropriate raster format (e.g. tiff, jpeg, png, pbm) and then use
 <a href="r.in.gdal.html">r.in.gdal</a> to import it. Based on
 reference points the scanned map can be recified to obtain geocoded
@@ -73,7 +73,7 @@ first change the region, then explicitly resample the map with e.g.
 <a href="r.resamp.stats.html">r.resamp.stats</a>, then export the
 resampled map.
 <p>
-GRASS GIS raster map exchange between different locations (same projection)
+GRASS GIS raster map exchange between different projects with the same CRS
 can be done in a lossless way using the <a href="r.pack.html">r.pack</a>
 and <a href="r.unpack.html">r.unpack</a> modules.
 
