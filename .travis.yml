@@ -80,8 +80,7 @@ before_script:
   - ls -la $(uv python dir --bin)
   - python --version -VV
   - python3 --version -VV
-  - python3.9 --version -VV
-  - python3.9 --version -VV
+  # - python3.9 --version -VV
   - python3.10 --version -VV
   - pyenv rehash
   - pyenv
@@ -95,7 +94,6 @@ before_script:
   - pyenv shims
   - which python
   - which python3
-  - which python3.9
   - which python3.10
   - uv python list
   - uv python find
@@ -106,9 +104,9 @@ before_script:
   - ls -la $(uv python dir --bin)
   - python --version -VV
   - python3 --version -VV
-  - python3.9 --version -VV
-  - python3.9 --version -VV
   - python3.10 --version -VV
+  - python3.9 --version -VV
+  - which python3.9
   # see https://github.com/astral-sh/uv/issues/6265
 
 script:
