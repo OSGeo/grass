@@ -31,6 +31,15 @@ env:
     - GRASS_EXTRA_CXXFLAGS="-Werror -fPIC -Wfatal-errors"
 
 before_install:
+  - pyenv
+  - pyenv --version
+  - pyenv version-origin
+  - pyenv version-name
+  - pyenv version-file
+  - pyenv version
+  - pyenv shell
+  - pyenv prefix
+  - pyenv shims
   - python --version
   - python --version -VV
   - pyenv root
@@ -62,6 +71,32 @@ install:
 
 before_script:
   - which python
+  - uv python list
+  - uv python find
+  - uv python find --system
+  - uv python dir
+  - ls -la $(uv python dir)
+  - uv python dir --bin
+  - ls -la $(uv python dir --bin)
+  - python --version -VV
+  - python3 --version -VV
+  - python3.9 --version -VV
+  - python3.9 --version -VV
+  - python3.10 --version -VV
+  - pyenv rehash
+  - pyenv
+  - pyenv --version
+  - pyenv version-origin
+  - pyenv version-name
+  - pyenv version-file
+  - pyenv version
+  - pyenv shell
+  - pyenv prefix
+  - pyenv shims
+  - which python
+  - which python3
+  - which python3.9
+  - which python3.10
   - uv python list
   - uv python find
   - uv python find --system
