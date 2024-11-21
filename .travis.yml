@@ -31,7 +31,7 @@ env:
     - GRASS_EXTRA_CXXFLAGS="-Werror -fPIC -Wfatal-errors"
 
 before_install:
-  - pyenv
+  - pyenv help
   - pyenv --version
   - pyenv version-origin
   - pyenv version-name
@@ -83,7 +83,7 @@ before_script:
   # - python3.9 --version -VV
   - python3.10 --version -VV
   - pyenv rehash
-  - pyenv
+  - pyenv help
   - pyenv --version
   - pyenv version-origin
   - pyenv version-name
