@@ -15863,10 +15863,6 @@ msgstr "Definir a extensão da região computacional a partir da exibição"
 msgid "Set computational region extent interactively"
 msgstr "Definir a extensão da região computacional interativamente"
 
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
-msgstr "Definir a região computacional da região nomeada"
-
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr "Salvar região computacional para região nomeada"
@@ -21945,7 +21941,6 @@ msgstr "rótulos:"
 
 #~ msgid "Deactive overwrite"
 #~ msgstr "Desativar susbstituição"
-
 
 #, python-format
 #~ msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
