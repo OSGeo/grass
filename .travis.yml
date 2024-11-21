@@ -40,7 +40,7 @@ before_install:
   - ls -la /opt/pyenv/
   - ls -la /opt/pyenv/shims
   - cat /opt/pyenv/version
-  - cat /opt/python
+  - ls -la /opt/python
   - ls -ls /opt/
   - ./.travis/$TRAVIS_OS_NAME.before_install.sh
 
