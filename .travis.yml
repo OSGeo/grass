@@ -34,11 +34,10 @@ before_install:
   - pyenv root
   - which pyenv && pyenv versions
   - which python
-  - pip install uv --upgrade
   - ./.travis/$TRAVIS_OS_NAME.before_install.sh
 
 install:
-  - pip install uv
+  - curl -LsSf https://astral.sh/uv/install.sh | sh
   - uv python list
   - uv python find
   - uv python find --system
