@@ -15709,10 +15709,6 @@ msgstr "Imposta la regione computazionale dall'estensione del display"
 msgid "Set computational region extent interactively"
 msgstr "Imposta la region computazionale interattivamente"
 
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
-msgstr "Imposta regione computazionale da una regione precedentemente salvata"
-
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr "Salva la regione computazionale a una regione con nome"

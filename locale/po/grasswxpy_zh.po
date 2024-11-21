@@ -15117,10 +15117,6 @@ msgstr ""
 msgid "Set computational region extent interactively"
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
-msgstr ""
-
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr ""
@@ -20719,7 +20715,6 @@ msgstr "标签："
 
 #~ msgid "Automatically hightlight selected features in map display"
 #~ msgstr "地图显示窗口中自动高亮所选择要素"
-
 
 #~ msgid ""
 #~ "Unable to get current geographic extent. Force quiting wxGUI. Please "

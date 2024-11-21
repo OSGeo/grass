@@ -6948,8 +6948,8 @@ msgstr "SIMWE Oberflächenabflussmodellierung"
 #: ../gui/wxpython/menustrings.py:428 ../gui/wxpython/menustrings.py:1391
 msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
 msgstr ""
-"Hydrologische Simulation des Oberflächenabfluss mittels \"path "
-"sampling\" (SIMWE)."
+"Hydrologische Simulation des Oberflächenabfluss mittels \"path sampling\" "
+"(SIMWE)."
 
 #: ../gui/wxpython/menustrings.py:429 ../gui/wxpython/menustrings.py:1392
 msgid "SIMWE Sediment flux modeling"
@@ -15225,10 +15225,6 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:1560
 msgid "Set computational region extent interactively"
-msgstr ""
-
-#: ../gui/wxpython/mapdisp/frame.py:1563
-msgid "Set computational region from named region"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:1566
