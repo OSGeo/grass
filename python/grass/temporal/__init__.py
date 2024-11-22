@@ -174,16 +174,12 @@ from .temporal_granularity import (
     gran_to_gran,
 )
 
-# From temporal_operator.py
 from .temporal_operator import TemporalOperatorLexer, TemporalOperatorParser
 
-# From temporal_raster3d_algebra.py
 from .temporal_raster3d_algebra import TemporalRaster3DAlgebraParser
 
-# From temporal_raster_algebra.py
 from .temporal_raster_algebra import TemporalRasterAlgebraParser
 
-# From temporal_raster_base_algebra.py
 from .temporal_raster_base_algebra import (
     TemporalRasterAlgebraLexer,
     TemporalRasterBaseAlgebraParser,
@@ -201,23 +197,18 @@ from .univar_statistics import (
 
 __all__ = [
     "AbsoluteTemporalExtent",
-    # From abstract_dataset
     "AbstractDataset",
     "AbstractDatasetComparisonKeyEndTime",
     "AbstractDatasetComparisonKeyStartTime",
-    # From abstract_map_dataset
     "AbstractMapDataset",
     "AbstractSTDSRegister",
-    # From abstract_space_time_dataset
     "AbstractSpaceTimeDataset",
     "CLibrariesInterface",
     "DBConnection",
     "DatasetBase",
-    # From base
     "DictSQLSerializer",
     "FatalError",
     "GlobalTemporalVar",
-    # From c_libraries_interface
     "RPCDefs",
     "Raster3DAbsoluteTime",
     "Raster3DBase",
@@ -228,10 +219,8 @@ __all__ = [
     "Raster3DSpatialExtent",
     "RasterAbsoluteTime",
     "RasterBase",
-    # From space_time_datasets
     "RasterDataset",
     "RasterMetadata",
-    # From metadata
     "RasterMetadataBase",
     "RasterRelativeTime",
     "RasterSTDSRegister",
@@ -262,30 +251,19 @@ __all__ = [
     "SpaceTimeRaster3DDataset",
     "SpaceTimeRasterDataset",
     "SpaceTimeVectorDataset",
-    # From spatial_extent
     "SpatialExtent",
-    # From spatial_topology_dataset_connector
     "SpatialTopologyDatasetConnector",
-    # From spatio_temporal_relationships
     "SpatioTemporalTopologyBuilder",
-    # From temporal_algebra
     "TemporalAlgebraLexer",
     "TemporalAlgebraParser",
-    # From temporal_extent
     "TemporalExtent",
-    # From temporal_operator
     "TemporalOperatorLexer",
     "TemporalOperatorParser",
-    # From temporal_raster3d_algebra
     "TemporalRaster3DAlgebraParser",
-    # From temporal_raster_base_algebra
     "TemporalRasterAlgebraLexer",
-    # From temporal_raster_algebra
     "TemporalRasterAlgebraParser",
     "TemporalRasterBaseAlgebraParser",
-    # From temporal_topology_dataset_connector
     "TemporalTopologyDatasetConnector",
-    # From temporal_vector_algebra
     "TemporalVectorAlgebraLexer",
     "TemporalVectorAlgebraParser",
     "VectorAbsoluteTime",
@@ -301,11 +279,9 @@ __all__ = [
     "assign_valid_time_to_map",
     "c_library_server",
     "check_datetime_string",
-    # From temporal_granularity
     "check_granularity_string",
     "check_new_map_dataset",
     "check_new_stds",
-    # From aggregation
     "collect_map_names",
     "compute_absolute_time_granularity",
     "compute_common_absolute_time_granularity",
@@ -313,7 +289,6 @@ __all__ = [
     "compute_common_relative_time_granularity",
     "compute_datetime_delta",
     "compute_relative_time_granularity",
-    # From univar_statistics
     "compute_univar_stats",
     "count_temporal_topology_relationships",
     "create_numeric_suffix",
@@ -321,15 +296,11 @@ __all__ = [
     "create_temporal_database",
     "create_temporal_relation_sql_where_statement",
     "create_time_suffix",
-    # From factory
     "dataset_factory",
-    # From mapcalc
     "dataset_mapcalculator",
     "datetime_to_grass_datetime_string",
     "decrement_datetime_by_string",
-    # From stds_export
     "export_stds",
-    # From extract
     "extract_dataset",
     "gcd",
     "gcd_list",
@@ -338,7 +309,6 @@ __all__ = [
     "get_current_location",
     "get_current_mapset",
     "get_database_info_string",
-    # From list_stds
     "get_dataset_list",
     "get_enable_mapset_check",
     "get_enable_timestamp_write",
@@ -358,7 +328,6 @@ __all__ = [
     "gran_plural_unit",
     "gran_singular_unit",
     "gran_to_gran",
-    # From stds_import
     "import_stds",
     "increment_datetime_by_string",
     "init",
@@ -368,24 +337,19 @@ __all__ = [
     "modify_datetime_by_string",
     "open_new_map_dataset",
     "open_new_stds",
-    # From open_stds
     "open_old_stds",
     "print_gridded_dataset_univar_statistics",
     "print_spatio_temporal_topology_relationships",
     "print_temporal_topology_relationships",
     "print_vector_dataset_univar_statistics",
-    # From core
     "profile_function",
     "register_map_object_list",
-    # From register
     "register_maps_in_space_time_dataset",
-    # From datetime_math
     "relative_time_to_time_delta",
     "relative_time_to_time_delta_seconds",
     "run_mapcalc2d",
     "run_mapcalc3d",
     "run_vector_extraction",
-    # From sampling
     "sample_stds_by_stds_topology",
     "set_raise_on_error",
     "set_spatial_relationship",
@@ -396,7 +360,6 @@ __all__ = [
     "time_delta_to_relative_time",
     "time_delta_to_relative_time_seconds",
     "tlist",
-    # From gui_support
     "tlist_grouped",
     "upgrade_temporal_database",
 ]
