@@ -261,6 +261,6 @@ def get_desc(cmd):
 
 ############################################################################
 
-man_dir = os.path.join(os.environ["MDDIR"], "source")
+man_dir = os.path.join(os.environ["ARCH_DISTDIR"], "docs", "mkdocs", "source")
 
 ############################################################################
