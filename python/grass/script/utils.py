@@ -345,7 +345,7 @@ def naturally_sort(items, key=None):
 
     def alphanum_key(actual_key):
         sort_key = key(actual_key) if key else actual_key
-        return [convert(c) for c in re.split("([0-9]+)", sort_key)]
+        return [convert(c) for c in re.split(r"([0-9]+)", sort_key)]
 
     items.sort(key=alphanum_key)
 
@@ -501,15 +501,15 @@ def legalize_vector_name(name, fallback_prefix="x"):
     # The implementation is based on Vect_legal_filename().
     if not name:
         raise ValueError("name cannot be empty")
-    if fallback_prefix and re.match("[^A-Za-z]", fallback_prefix[0]):
+    if fallback_prefix and re.match(r"[^A-Za-z]", fallback_prefix[0]):
         raise ValueError("fallback_prefix must start with an ASCII letter")
-    if fallback_prefix and re.match("[^A-Za-z]", name[0], flags=re.ASCII):
+    if fallback_prefix and re.match(r"[^A-Za-z]", name[0], flags=re.ASCII):
         # We prefix here rather than just replace, because in cases of unique
         # identifiers, e.g., columns or node names, replacing the first
         # character by the same replacement character increases chances of
         # conflict (e.g. column names 10, 20, 30).
         name = "{fallback_prefix}{name}".format(**locals())
-    name = re.sub("[^A-Za-z0-9_]", "_", name, flags=re.ASCII)
+    name = re.sub(r"[^A-Za-z0-9_]", "_", name, flags=re.ASCII)
     keywords = ["and", "or", "not"]
     if name in keywords:
         name = "{name}_".format(**locals())

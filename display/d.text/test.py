@@ -73,8 +73,8 @@ src = Path(__file__).read_text()
 print(
     ".L 0\n"
     + re.sub(
-        '(".*?")',
+        r'(".*?")',
         "\n.C red\n,\\g<0>\n.C gray\n",
-        re.sub("\n", "\n.L 1\n.L 0\n", re.sub("(?m)^#.*\n?", "", src)),
+        re.sub(r"\n", "\n.L 1\n.L 0\n", re.sub(r"(?m)^#.*\n?", "", src)),
     )
 )
