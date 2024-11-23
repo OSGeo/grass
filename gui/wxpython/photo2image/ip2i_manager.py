@@ -433,7 +433,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             fc_count = 0
             for line in fc:
                 fc_count += 1
-                if re.search("NUM", line):
+                if re.search(r"NUM", line):
                     storeLine = fc_count
                     numberOfFiducial = int(line.split()[-1])
             dataFiducialX = []
