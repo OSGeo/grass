@@ -125,6 +125,7 @@ DLLS="
     /mingw64/bin/libharfbuzz-0.dll
     /mingw64/bin/libiconv-2.dll
     /mingw64/bin/libintl-8.dll
+    /mingw64/bin/libopenblas.dll
     /mingw64/bin/libpcre-1.dll
     /mingw64/bin/libpixman-1-0.dll
     /mingw64/bin/libpng16-16.dll
@@ -134,7 +135,6 @@ DLLS="
     /mingw64/bin/libtre-5.dll
     /mingw64/bin/libwinpthread-1.dll
     /mingw64/bin/zlib1.dll
-    /mingw64/bin/libopenblas.dll
 "
 
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
