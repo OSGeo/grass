@@ -147,7 +147,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
     rm -f mswindows/osgeo4w/package.log.*
 
     mkdir -p dist.x86_64-w64-mingw32/bin
-    cp -uv "$DLLS" dist.x86_64-w64-mingw32/bin
+    cp -uv $DLLS dist.x86_64-w64-mingw32/bin
 
     mkdir -p mswindows/osgeo4w/lib
     cp -uv "$OSGEO4W_ROOT_MSYS/lib/libpq.lib" mswindows/osgeo4w/lib/pq.lib
@@ -247,7 +247,7 @@ if [ -n "$PACKAGE_PATCH" ]; then
     unix2dos "etc/preremove/grass${PACKAGE_POSTFIX}.bat"
 
     # copy dependencies (TODO: to be reduced)
-    cp -uv "$DLLS" "apps/grass/grass$POSTFIX/bin"
+    cp -uv $DLLS "apps/grass/grass$POSTFIX/bin"
     cp -uv /mingw64/etc/fonts/fonts.conf "apps/grass/grass$POSTFIX/etc"
 
     # creating grass package
