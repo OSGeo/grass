@@ -2288,7 +2288,7 @@ class Nviz:
         """Fly through the scene
 
         :param flyInfo: fly parameters
-        :param mode: 0 or 1 for different fly behaviour
+        :param mode: 0 or 1 for different fly behavior
         :param exagInfo: parameters changing fly speed
         """
         fly = (c_float * 3)()

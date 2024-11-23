@@ -658,7 +658,7 @@ class RenderMapMgr(wx.EvtHandler):
     def OnRenderDone(self, env):
         """Rendering process done
 
-        Make image composiotion, emits updateMap event.
+        Make image composition, emits updateMap event.
         """
         maps = []
         masks = []
@@ -1393,7 +1393,7 @@ class Map:
     def DeleteAllLayers(self, overlay=False):
         """Delete all layers
 
-        :param overlay: True to delete also overlayes
+        :param overlay: True to also delete overlays
         """
         self.layers = []
         if overlay:
