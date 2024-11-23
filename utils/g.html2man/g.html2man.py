@@ -47,7 +47,7 @@ def main():
     sf.close()
 
     # strip excess whitespace
-    blank_re = re.compile("[ \t\n]*\n([ \t]*\n)*")
+    blank_re = re.compile(r"[ \t\n]*\n([ \t]*\n)*")
     s = blank_re.sub("\n", s)
     s = s.lstrip()
 
