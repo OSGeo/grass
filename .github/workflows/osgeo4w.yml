@@ -82,8 +82,6 @@ jobs:
       - name: Compile GRASS GIS
         shell: msys2 {0}
         run: |
-          export CFLAGS="${CFLAGS} -pipe"
-          export CXXFLAGS="${CXXFLAGS} -pipe"
           .github/workflows/build_osgeo4w.sh
 
       - name: Print installed versions

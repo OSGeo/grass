@@ -21,6 +21,8 @@ export C_INCLUDE_PATH=".:${OSGEO4W_ROOT_MSYS}/include:${SRC}/dist.${ARCH}/includ
 export PYTHONHOME=${OSGEO4W_ROOT_MSYS}/apps/Python312
 export ARCH=x86_64-w64-mingw32
 
+CFLAGS="$CFLAGS -pipe" \
+CXXFLAGS="$CXXFLAGS -pipe" \
 ./configure \
     --bindir=${OSGEO4W_ROOT_MSYS}/bin \
     --enable-largefile \

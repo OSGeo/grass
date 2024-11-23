@@ -1,8 +1,9 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 set -e
 
-PWD="$(pwd)"
+export ARCH=x86_64-w64-mingw32
+export SRC=$PWD
 
 if ! [ -d mswindows ]; then
     echo Start from GRASS toplevel dir
@@ -136,19 +137,18 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	log remove old logs
 	rm -f mswindows/osgeo4w/package.log.*
 
-	mkdir -p dist.x86_64-w64-mingw32/bin
-	cp -uv $DLLS dist.x86_64-w64-mingw32/bin
-
 	mkdir -p mswindows/osgeo4w/lib
 	cp -uv $OSGEO4W_ROOT_MSYS/lib/sqlite3_i.lib mswindows/osgeo4w/lib/sqlite3.lib
 
 
 	log configure
+	CFLAGS="$CFLAGS -pipe" \
+	CXXFLAGS="$CXXFLAGS -pipe" \
 	./configure \
 		--bindir=${OSGEO4W_ROOT_MSYS}/bin \
 		--enable-largefile \
 		--enable-shared \
-		--host=x86_64-w64-mingw32 \
+		--host=${ARCH} \
 		--includedir=${OSGEO4W_ROOT_MSYS}/include \
 		--libexecdir=${OSGEO4W_ROOT_MSYS}/bin \
 		--prefix=${OSGEO4W_ROOT_MSYS}/apps/grass \
@@ -156,17 +156,17 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-bzlib \
 		--with-cairo \
 		--with-cairo-includes=${OSGEO4W_ROOT_MSYS}/include \
-		--with-cairo-ldflags="-L$PWD/mswindows/osgeo4w/lib -lcairo" \
+		--with-cairo-ldflags="-L${SRC}/mswindows/osgeo4w/lib -lcairo" \
+		--with-cairo-libs=${OSGEO4W_ROOT_MSYS}/lib \
 		--with-cxx \
 		--with-fftw \
 		--with-freetype \
 		--with-freetype-includes=${OSGEO4W_ROOT_MSYS}/include/freetype2 \
-		--with-gdal=$PWD/mswindows/osgeo4w/gdal-config \
-		--with-geos=$PWD/mswindows/osgeo4w/geos-config \
+		--with-gdal=${SRC}/mswindows/osgeo4w/gdal-config \
+		--with-geos=${SRC}/mswindows/osgeo4w/geos-config \
 		--with-includes=${OSGEO4W_ROOT_MSYS}/include \
 		--with-lapack \
-		--with-liblas=$PWD/mswindows/osgeo4w/liblas-config \
-		--with-libpng=$PWD/mswindows/osgeo4w/libpng-config \
+		--with-liblas=${SRC}/mswindows/osgeo4w/liblas-config \
 		--with-libs="${OSGEO4W_ROOT_MSYS}/lib ${OSGEO4W_ROOT_MSYS}/bin" \
 		--with-netcdf=${OSGEO4W_ROOT_MSYS}/bin/nc-config \
 		--with-nls \
@@ -179,10 +179,11 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-proj-includes=${OSGEO4W_ROOT_MSYS}/include \
 		--with-proj-libs=${OSGEO4W_ROOT_MSYS}/lib \
 		--with-proj-share=${OSGEO4W_ROOT_MSYS}/share/proj \
+		--with-readline \
 		--with-regex \
 		--with-sqlite \
-		--with-sqlite-includes=$OSGEO4W_ROOT_MSYS/include \
-		--with-sqlite-libs=$PWD/mswindows/osgeo4w/lib \
+		--with-sqlite-includes=${OSGEO4W_ROOT_MSYS}/include \
+		--with-sqlite-libs=${OSGEO4W_ROOT_MSYS}/lib \
 		--with-zstd \
 		--without-pdal \
 		--without-x
@@ -238,8 +239,8 @@ if [ -n "$PACKAGE_PATCH" ]; then
     unix2dos etc/postinstall/grass${PACKAGE_POSTFIX}.bat
     unix2dos etc/preremove/grass${PACKAGE_POSTFIX}.bat
 
-    # copy dependencies (TODO: to be reduced)
-    cp -uv $DLLS apps/grass/grass$POSTFIX/bin
+    # copy dependencies
+    cp -uv $(/usr/bin/find apps/grass/grass$POSTFIX -iname "*.dll" -o -iname "*.exe" | PATH=$PWD/apps/grass/grass$POSTFIX/lib:$PWD/bin:/mingw64/bin:/usr/bin /usr/bin/xargs /usr/bin/ldd | /usr/bin/sed -ne 's#^.* => \(/mingw64/bin/.*\) (.*)$#\1#p' | /usr/bin/sort -u) apps/grass/grass$POSTFIX/bin
 
     # copy R batch files
     cp -uv $SRC/mswindows/external/rbatch/* apps/grass/grass$POSTFIX/bin
