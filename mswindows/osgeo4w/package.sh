@@ -167,6 +167,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-includes=${OSGEO4W_ROOT_MSYS}/include \
 		--with-lapack \
 		--with-liblas=${SRC}/mswindows/osgeo4w/liblas-config \
+		--with-libpng=${SRC}/mswindows/osgeo4w/libpng-config \
 		--with-libs="${OSGEO4W_ROOT_MSYS}/lib ${OSGEO4W_ROOT_MSYS}/bin" \
 		--with-netcdf=${OSGEO4W_ROOT_MSYS}/bin/nc-config \
 		--with-nls \
