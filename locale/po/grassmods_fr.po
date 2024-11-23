@@ -1578,8 +1578,8 @@ msgid ""
 "Unable to convert input map coordinate reference system to GRASS format; "
 "cannot create new project."
 msgstr ""
-"Impossible de convertir la projection de la couche en entrée au format GRASS "
-"; impossible de créer le nouveau projet"
+"Impossible de convertir la projection de la couche en entrée au format "
+"GRASS ; impossible de créer le nouveau projet"
 
 #: ../raster/r.external/proj.c:140 ../raster/r.in.gdal/main.c:1035
 #: ../raster/r.in.gdal/proj.c:139 ../vector/v.in.lidar/main.c:522
@@ -1638,7 +1638,7 @@ msgstr "Le PROJ_INFO du jeu de données est : \n"
 #: ../raster/r.in.lidar/projection.c:89 ../raster3d/r3.in.lidar/projection.c:90
 #: ../vector/v.in.lidar/projection.c:87 ../vector/v.external/proj.c:360
 #: ../vector/v.in.pdal/projection.c:87 ../vector/v.in.ogr/proj.c:492
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid ""
 "\n"
 "In case of no significant differences in the coordinate reference system "
@@ -4444,7 +4444,7 @@ msgid "unable to open input file <%s>"
 msgstr ""
 
 #: ../raster/r.quant/read_rules.c:89
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid ""
 "\n"
 "Enter the rule or 'help' for the format description or 'end' to exit:\n"
@@ -4561,7 +4561,7 @@ msgid "Failed to set raster attribute table"
 msgstr ""
 
 #: ../raster/r.out.gdal/main.c:51
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Supported formats:\n"
 msgstr "Formats supportés :\n"
 
@@ -12802,7 +12802,7 @@ msgid "Amount of memory cannot be negative."
 msgstr "Maximum de mémoire à utiliser (en MB)"
 
 #: ../raster/r.viewshed/main.cpp:616
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid " Converting %d to %d MB"
 msgstr " Conversion de %d en %d MB"
 
@@ -23481,12 +23481,12 @@ msgid "Region%s"
 msgstr ""
 
 #: ../imagery/i.cluster/main.c:261
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "  North: %12.2f  East: %12.2f%s"
 msgstr "  Nord : %12.2f  Est : %12.2f%s"
 
 #: ../imagery/i.cluster/main.c:263
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "  South: %12.2f  West: %12.2f%s"
 msgstr "  Sud : %12.2f  Ouest : %12.2f%s"
 
@@ -23496,7 +23496,7 @@ msgid "  Res:   %12.2f  Res:  %12.2f%s"
 msgstr ""
 
 #: ../imagery/i.cluster/main.c:267
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "  Rows:  %12d  Cols: %12d  Cells: %d%s"
 msgstr "  Lignes :  %12d  Colonnes : %12d  Cellules : %d%s"
 
@@ -23526,17 +23526,17 @@ msgid " Minimum class size:           %d%s"
 msgstr ""
 
 #: ../imagery/i.cluster/main.c:278
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid " Minimum class separation:     %f%s"
 msgstr " Séparation minimale des classes : %f%s"
 
 #: ../imagery/i.cluster/main.c:280
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid " Percent convergence:          %f%s"
 msgstr " Pourcentage de convergence :         %f%s"
 
 #: ../imagery/i.cluster/main.c:282
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid " Maximum number of iterations: %d%s"
 msgstr " Nombre maximum d'itérations : %d%s"
 
@@ -28076,7 +28076,7 @@ msgid "Lists all database drivers."
 msgstr "Lister tous les pilotes de bases de données."
 
 #: ../db/db.execute/main.c:55 ../db/db.select/main.c:62
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Unable to open file <%s>: %s"
 msgstr "Impossible d'ouvrir le fichier <%s> : %s"
 
@@ -28981,7 +28981,7 @@ msgid "The password was stored in file (%s%cdblogin)"
 msgstr ""
 
 #: ../db/db.select/main.c:104
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Test %s."
 msgstr "Test %s."
 
@@ -57802,7 +57802,7 @@ msgstr ""
 #: ../vector/v.vol.rst/user1.c:586 ../vector/v.vol.rst/user1.c:640
 #: ../vector/v.vol.rst/user1.c:694 ../vector/v.vol.rst/user1.c:748
 #: ../vector/v.vol.rst/user1.c:802
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Error closing output file %s"
 msgstr "Erreur en fermant le fichier de sortie %s"
 
@@ -66437,7 +66437,7 @@ msgid ""
 msgstr ""
 
 #: ../display/d.vect.thematic/main.c:515
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid ""
 "\n"
 "Total number of records: %.0f\n"
@@ -68934,7 +68934,7 @@ msgid "Either <value> or <qcolumn> must be given"
 msgstr ""
 
 #: ../scripts/i.in.spotvgt/i.in.spotvgt.py:129
-msgid "'gdalinfo' not found, install GDAL tools first (http://www.gdal.org)"
+msgid "'gdalinfo' not found, install GDAL tools first (https://gdal.org)"
 msgstr ""
 
 #: ../scripts/i.in.spotvgt/i.in.spotvgt.py:146

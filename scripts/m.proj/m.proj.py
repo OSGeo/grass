@@ -236,14 +236,8 @@ def main():
         gcore.debug("output file=[%s]" % outfile)
 
     # set up output style
-    if not decimal:
-        outfmt = ["-w5"]
-    else:
-        outfmt = ["-f", "%.8f"]
-    if not copy_input:
-        copyinp = []
-    else:
-        copyinp = ["-E"]
+    outfmt = ["-w5"] if not decimal else ["-f", "%.8f"]
+    copyinp = [] if not copy_input else ["-E"]
 
     # do the conversion
     # Convert cs2cs DMS format to GRASS DMS format:

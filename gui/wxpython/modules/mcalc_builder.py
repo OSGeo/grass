@@ -608,7 +608,7 @@ class MapCalcFrame(wx.Frame):
             if newmcalcstr[-1] != " ":
                 newmcalcstr += " "
                 position_offset += 1
-        except:
+        except IndexError:
             pass
 
         newmcalcstr += what
@@ -617,7 +617,7 @@ class MapCalcFrame(wx.Frame):
         try:
             if newmcalcstr[-1] != " " and mcalcstr[position] != " ":
                 newmcalcstr += " "
-        except:
+        except IndexError:
             newmcalcstr += " "
 
         newmcalcstr += mcalcstr[position:]
@@ -632,7 +632,7 @@ class MapCalcFrame(wx.Frame):
                 try:
                     if newmcalcstr[position + position_offset] == " ":
                         position_offset += 1
-                except:
+                except IndexError:
                     pass
 
         self.text_mcalc.SetInsertionPoint(position + position_offset)
@@ -681,10 +681,7 @@ class MapCalcFrame(wx.Frame):
             self.log.RunCmd(cmd, onDone=self.OnDone)
             self.parent.Raise()
         else:
-            if self.overwrite.IsChecked():
-                overwrite = True
-            else:
-                overwrite = False
+            overwrite = bool(self.overwrite.IsChecked())
             params = {"expression": "%s=%s" % (name, expr), "overwrite": overwrite}
             if seed_flag:
                 params["flags"] = "s"

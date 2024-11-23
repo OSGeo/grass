@@ -458,7 +458,7 @@ class VNETDialog(wx.Dialog):
 
         # , 'turn_layer', 'turn_cat_layer']:
         for sel in ["input", "arc_layer", "node_layer"]:
-            if sel == "input":
+            if sel == "input":  # noqa: SIM108
                 btn = self.addToTreeBtn
             # elif sel == "turn_layer":
             #    btn = self.createTtbBtn
@@ -647,11 +647,11 @@ class VNETDialog(wx.Dialog):
                 if inpLayer in browseLayers:
                     needLayers.append(inpLayer)
                     continue
-                else:
-                    wx.BeginBusyCursor()
-                    self.inpDbMgrData["browse"].AddLayer(inpLayer)
-                    wx.EndBusyCursor()
-                    needLayers.append(inpLayer)
+
+                wx.BeginBusyCursor()
+                self.inpDbMgrData["browse"].AddLayer(inpLayer)
+                wx.EndBusyCursor()
+                needLayers.append(inpLayer)
 
             for layer in browseLayers:
                 if layer not in needLayers:
@@ -843,10 +843,7 @@ class VNETDialog(wx.Dialog):
     def _parseMapStr(self, vectMapStr):
         """Create full map name (add current mapset if it is not present in name)"""
         mapValSpl = vectMapStr.strip().split("@")
-        if len(mapValSpl) > 1:
-            mapSet = mapValSpl[1]
-        else:
-            mapSet = grass.gisenv()["MAPSET"]
+        mapSet = mapValSpl[1] if len(mapValSpl) > 1 else grass.gisenv()["MAPSET"]
         mapName = mapValSpl[0]
 
         return mapName, mapSet
@@ -1015,10 +1012,7 @@ class VNETDialog(wx.Dialog):
         attrCols = an_props["cmdParams"]["cols"]
 
         for col in attrCols.keys():
-            if "inputField" in attrCols[col]:
-                colInptF = attrCols[col]["inputField"]
-            else:
-                colInptF = col
+            colInptF = attrCols[col].get("inputField", col)
 
             if col in skip:
                 continue
@@ -1245,8 +1239,6 @@ class SettingsDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
         self.vnet_mgr = vnet_mgr
-
-        maxValue = 1e8
         self.parent = parent
         self.settings = {}
 
@@ -1985,7 +1977,6 @@ class TurnAnglesList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditM
             index = self.GetNextItem(lastFound, wx.LIST_NEXT_ALL, state)
             if index == -1:
                 break
-            else:
-                lastFound = index
-                indices.append(index)
+            lastFound = index
+            indices.append(index)
         return indices

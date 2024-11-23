@@ -98,22 +98,6 @@
 # % description: Use stdin as input and ignore coordinates and point option
 # %end
 
-## Temporary disabled the r.what flags due to test issues
-##%flag
-##% key: f
-##% description: Show the category labels of the grid cell(s)
-##%end
-
-##%flag
-##% key: r
-##% description: Output color values as RRR:GGG:BBB
-##%end
-
-##%flag
-##% key: i
-##% description: Output integer category values, not cell values
-##%end
-
 # %flag
 # % key: v
 # % description: Show the category for vector points map
@@ -410,10 +394,7 @@ def one_point_per_row_output(
 
             for i in range(len(values)):
                 start, end = map_list[i].get_temporal_extent_as_tuple()
-                if vcat:
-                    cat_str = "{ca}{sep}".format(ca=cat, sep=separator)
-                else:
-                    cat_str = ""
+                cat_str = "{ca}{sep}".format(ca=cat, sep=separator) if vcat else ""
                 if site_input:
                     coor_string = (
                         "%(x)10.10f%(sep)s%(y)10.10f%(sep)s%(site_name)s%(sep)s"
@@ -480,10 +461,7 @@ def one_point_per_col_output(
                 out_str = "start%(sep)send" % ({"sep": separator})
 
                 # Define different separator for coordinates and sites
-                if separator == ",":
-                    coor_sep = ";"
-                else:
-                    coor_sep = ","
+                coor_sep = ";" if separator == "," else ","
 
                 for row in matrix:
                     if vcat:
@@ -517,10 +495,7 @@ def one_point_per_col_output(
 
         first = False
 
-        if vcat:
-            ncol = 4
-        else:
-            ncol = 3
+        ncol = 4 if vcat else 3
         for col in range(num_cols - ncol):
             start, end = output_time_list[count][col].get_temporal_extent_as_tuple()
             time_string = "%(start)s%(sep)s%(end)s" % (
@@ -567,10 +542,7 @@ def one_point_per_timerow_output(
 
         if write_header:
             if first is True:
-                if vcat:
-                    header = "cat{sep}".format(sep=separator)
-                else:
-                    header = ""
+                header = "cat{sep}".format(sep=separator) if vcat else ""
                 if site_input:
                     header += "x%(sep)sy%(sep)ssite" % ({"sep": separator})
                 else:

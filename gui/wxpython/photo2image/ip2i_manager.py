@@ -20,7 +20,7 @@ This program is free software under the GNU General Public License
 
 @author Original author Michael Barton
 @author Original version improved by Martin Landa <landa.martin gmail.com>
-@author Rewritten by Markus Metz redesign georectfier -> GCP Manage
+@author Rewritten by Markus Metz redesign georectifier -> GCP Manage
 @author Support for GraphicsSet added by Stepan Turek <stepan.turek seznam.cz> (2012)
 @author Yann modified: graphical replacement of i.photo.2image
         (was in v6 using Vask lib)
@@ -163,7 +163,7 @@ class GCPWizard:
             if p.returncode == 0:
                 print("returncode = ", str(p.returncode))
                 self.Map.region = self.Map.GetRegion()
-        except:
+        except Exception:
             pass
 
         self.SwitchEnv("source")
@@ -336,10 +336,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         # register data structures for drawing GCP's
         #
         self.pointsToDrawTgt = self.TgtMapWindow.RegisterGraphicsToDraw(
-            graphicsType="point", setStatusFunc=self.SetGCPSatus
+            graphicsType="point", setStatusFunc=self.SetGCPStatus
         )
         self.pointsToDrawSrc = self.SrcMapWindow.RegisterGraphicsToDraw(
-            graphicsType="point", setStatusFunc=self.SetGCPSatus
+            graphicsType="point", setStatusFunc=self.SetGCPStatus
         )
 
         # connect to the map windows signals
@@ -778,7 +778,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         self.pointsToDrawSrc.SetPropertyVal("text", textProp)
         self.pointsToDrawTgt.SetPropertyVal("text", copy(textProp))
 
-    def SetGCPSatus(self, item, itemIndex):
+    def SetGCPStatus(self, item, itemIndex):
         """Before GCP is drawn, decides it's colour and whether it
         will be drawn.
         """
@@ -797,10 +797,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         else:
             item.SetPropertyVal("hide", False)
             if self.highest_only:
-                if itemIndex == self.highest_key:
-                    wxPen = "highest"
-                else:
-                    wxPen = "default"
+                wxPen = "highest" if itemIndex == self.highest_key else "default"
             else:  # noqa: PLR5501
                 if self.mapcoordlist[key][5] > self.rmsthresh:
                     wxPen = "highest"
@@ -1036,16 +1033,13 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             targetMapWin.UpdateMap(render=False)
 
     def OnFocus(self, event):
-        # TODO: it is here just to remove old or obsolete beavior of base class
+        # TODO: it is here just to remove old or obsolete behavior of base class
         #       gcp/MapPanel?
         # self.grwiz.SwitchEnv('source')
         pass
 
     def _onMouseLeftUpPointer(self, mapWindow, x, y):
-        if mapWindow == self.SrcMapWindow:
-            coordtype = "source"
-        else:
-            coordtype = "target"
+        coordtype = "source" if mapWindow == self.SrcMapWindow else "target"
 
         coord = (x, y)
         self.SetGCPData(coordtype, coord, self, confirm=True)
@@ -1102,27 +1096,22 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         if maptype == "raster":
             self.grwiz.SwitchEnv("source")
 
-            if self.clip_to_region:
-                flags = "ac"
-            else:
-                flags = "a"
+            flags = "ac" if self.clip_to_region else "a"
 
-            busy = wx.BusyInfo(_("Rectifying images, please wait..."), parent=self)
-            wx.GetApp().Yield()
+            with wx.BusyInfo(_("Rectifying images, please wait..."), parent=self):
+                wx.GetApp().Yield()
 
-            ret, msg = RunCommand(
-                "i.rectify",
-                parent=self,
-                getErrorMsg=True,
-                quiet=True,
-                group=self.xygroup,
-                extension=self.extension,
-                order=self.gr_order,
-                method=self.gr_method,
-                flags=flags,
-            )
-
-            del busy
+                ret, msg = RunCommand(
+                    "i.rectify",
+                    parent=self,
+                    getErrorMsg=True,
+                    quiet=True,
+                    group=self.xygroup,
+                    extension=self.extension,
+                    order=self.gr_order,
+                    method=self.gr_method,
+                    flags=flags,
+                )
 
             # provide feedback on failure
             if ret != 0:
@@ -1130,21 +1119,19 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 print(self.grwiz.src_map, file=sys.stderr)
                 print(msg, file=sys.stderr)
 
-            busy = wx.BusyInfo(
+            with wx.BusyInfo(
                 _("Writing output image to group, please wait..."), parent=self
-            )
-            wx.GetApp().Yield()
+            ):
+                wx.GetApp().Yield()
 
-            ret1, msg1 = RunCommand(
-                "i.group",
-                parent=self,
-                getErrorMsg=True,
-                quiet=False,
-                group=self.xygroup,
-                input="".join([self.grwiz.src_map.split("@")[0], self.extension]),
-            )
-
-            del busy
+                ret1, msg1 = RunCommand(
+                    "i.group",
+                    parent=self,
+                    getErrorMsg=True,
+                    quiet=False,
+                    group=self.xygroup,
+                    input="".join([self.grwiz.src_map.split("@")[0], self.extension]),
+                )
 
             if ret1 != 0:
                 print("ip2i: Error in i.group", file=sys.stderr)
@@ -1253,7 +1240,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         elif self.gr_order == 2:
             minNumOfItems = 6
-            diff = 6 - numOfItems
             # self.SetStatusText(_(
             # "Insufficient points, 6+ points needed for 2nd order"))
 
@@ -1556,7 +1542,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
     def OnZoomMenuGCP(self, event):
         """Popup Zoom menu"""
-        point = wx.GetMousePosition()
         zoommenu = Menu()
         # Add items to the menu
 
@@ -2467,7 +2452,6 @@ class GrSettingsDialog(wx.Dialog):
 
         srcrender = False
         tgtrender = False
-        reload_target = False
         if self.new_src_map != src_map:
             # remove old layer
             layers = self.parent.grwiz.SrcMap.GetListOfLayers()
@@ -2499,7 +2483,6 @@ class GrSettingsDialog(wx.Dialog):
                 del layers[0]
                 layers = self.parent.grwiz.TgtMap.GetListOfLayers()
             # self.parent.grwiz.TgtMap.DeleteAllLayers()
-            reload_target = True
             tgt_map["raster"] = self.new_tgt_map["raster"]
 
             if tgt_map["raster"] != "":

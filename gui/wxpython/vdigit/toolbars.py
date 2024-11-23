@@ -446,7 +446,7 @@ class VDigitToolbar(BaseToolbar):
             return True
 
     def OnTool(self, event):
-        """Tool selected -> untoggles previusly selected tool in
+        """Tool selected -> untoggles previously selected tool in
         toolbar"""
         Debug.msg(
             3,
@@ -478,7 +478,7 @@ class VDigitToolbar(BaseToolbar):
             event.Skip()
 
     def OnAddPoint(self, event):
-        """Add point to the vector map Laier"""
+        """Add point to the vector map layer"""
         Debug.msg(2, "VDigitToolbar.OnAddPoint()")
         self.action = {"desc": "addLine", "type": "point", "id": self.addPoint}
         self.MapWindow.mouse["box"] = "point"
@@ -1035,6 +1035,8 @@ class VDigitToolbar(BaseToolbar):
         # select the given map layer for editing
         self.StartEditing(self.layers[selection])
 
+        wx.CallLater(100, self.MapWindow.SetFocus)
+
         event.Skip()
 
     def StartEditing(self, mapLayer):
@@ -1291,10 +1293,7 @@ class VDigitToolbar(BaseToolbar):
                 layerNameList.append(layer.GetName())
 
         if updateTool:  # update toolbar
-            if not self.mapLayer:
-                value = _("Select vector map")
-            else:
-                value = layerNameSelected
+            value = _("Select vector map") if not self.mapLayer else layerNameSelected
 
             if not self.comboid:
                 if not self.tools or "selector" in self.tools:

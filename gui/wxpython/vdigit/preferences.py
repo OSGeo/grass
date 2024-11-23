@@ -622,10 +622,7 @@ class VDigitSettingsDialog(wx.Dialog):
         layer = UserSettings.Get(group="vdigit", key="layer", subkey="value")
         mapLayer = self.parent.toolbars["vdigit"].GetLayer()
         tree = self.parent.tree
-        if tree:
-            item = tree.FindItemByData("maplayer", mapLayer)
-        else:
-            item = None
+        item = tree.FindItemByData("maplayer", mapLayer) if tree else None
         row = 0
         for attrb in ["length", "area", "perimeter"]:
             # checkbox
@@ -664,10 +661,7 @@ class VDigitSettingsDialog(wx.Dialog):
                 column.SetStringSelection(
                     tree.GetLayerInfo(item, key="vdigit")["geomAttr"][attrb]["column"]
                 )
-                if attrb == "area":
-                    type = "area"
-                else:
-                    type = "length"
+                type = "area" if attrb == "area" else "length"
                 unitsIdx = Units.GetUnitsIndex(
                     type,
                     tree.GetLayerInfo(item, key="vdigit")["geomAttr"][attrb]["units"],
@@ -987,10 +981,7 @@ class VDigitSettingsDialog(wx.Dialog):
         # geometry attributes (workspace)
         mapLayer = self.parent.toolbars["vdigit"].GetLayer()
         tree = self._giface.GetLayerTree()
-        if tree:
-            item = tree.FindItemByData("maplayer", mapLayer)
-        else:
-            item = None
+        item = tree.FindItemByData("maplayer", mapLayer) if tree else None
         for key, val in self.geomAttrb.items():
             checked = self.FindWindowById(val["check"]).IsChecked()
             column = self.FindWindowById(val["column"]).GetValue()
@@ -999,11 +990,8 @@ class VDigitSettingsDialog(wx.Dialog):
                 tree.SetLayerInfo(item, key="vdigit", value={"geomAttr": {}})
 
             if checked:  # enable
-                if key == "area":
-                    type = key
-                else:
-                    type = "length"
-                unitsKey = Units.GetUnitsKey(type, unitsIdx)
+                _type = key if key == "area" else "length"
+                unitsKey = Units.GetUnitsKey(_type, unitsIdx)
                 tree.GetLayerInfo(item, key="vdigit")["geomAttr"][key] = {
                     "column": column,
                     "units": unitsKey,
