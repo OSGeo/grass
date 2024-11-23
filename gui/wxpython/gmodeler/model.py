@@ -2672,7 +2672,7 @@ class WriteScriptFile(ABC):
     @staticmethod
     def _getModuleNickname(item):
         return "{module_name}{module_id}".format(
-            module_name=re.sub("[^a-zA-Z]+", "", item.GetLabel()),
+            module_name=re.sub(r"[^a-zA-Z]+", "", item.GetLabel()),
             module_id=item.GetId(),
         )
 
