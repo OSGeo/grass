@@ -12,12 +12,12 @@
 
 struct Options {
     struct Option *input, *dsn, *layer, *type, *format, *field, *dsco, *lco,
-        *otype;
+        *otype, *method;
 };
 
 struct Flags {
     struct Flag *cat, *esristyle, *update, *nocat, *new, *append, *force2d,
-        *multi, *list, *oldslow;
+        *multi, *list;
 };
 
 /* args.c */

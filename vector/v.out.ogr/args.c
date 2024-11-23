@@ -77,6 +77,19 @@ void parse_args(int argc, char **argv, struct Options *options,
         _("OGR layer creation option (format specific, NAME=VALUE)");
     options->lco->guisection = _("Creation");
 
+    options->method = G_define_option();
+    options->method->key = "method";
+    options->method->type = TYPE_STRING;
+    options->method->required = NO;
+    options->method->options = "fast,slow";
+    options->method->answer = "fast";
+    options->method->label = _("Method to use for export, "
+                               "default is fast export, "
+                               "use slow export in case of problems with "
+                               "the fast method");
+    G_asprintf((char **)&options->method->descriptions, "fast;%s;slow;%s",
+               _("new, faster method"), _("old, slower method"));
+
     flags->update = G_define_flag();
     flags->update->key = 'u';
     flags->update->description =
@@ -132,14 +145,6 @@ void parse_args(int argc, char **argv, struct Options *options,
     flags->list->key = 'l';
     flags->list->description = _("List supported output formats and exit");
     flags->list->suppress_required = YES;
-
-    flags->oldslow = G_define_flag();
-    flags->oldslow->key = 'o';
-    flags->oldslow->label = _("Use old, slower method for export");
-    flags->oldslow->description = _("Use old, slower method for export "
-                                    "if there are problems with the new, "
-                                    "faster method");
-    flags->oldslow->suppress_required = YES;
 
     G_option_requires(flags->append, options->layer, NULL);
 

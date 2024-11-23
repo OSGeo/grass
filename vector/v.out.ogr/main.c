@@ -820,7 +820,7 @@ int main(int argc, char *argv[])
                      Vect_get_num_primitives(&In, otype)),
                   Vect_get_num_primitives(&In, otype));
 
-        if (flags.oldslow->answer) {
+        if (strcmp(options.method->answer, "slow") == 0) {
             n_feat += export_lines(
                 &In, field, otype, flags.multi->answer ? TRUE : FALSE, donocat,
                 ftype == GV_BOUNDARY ? TRUE : FALSE, Ogr_featuredefn, Ogr_layer,
@@ -843,7 +843,7 @@ int main(int argc, char *argv[])
                      Vect_get_num_areas(&In)),
                   Vect_get_num_areas(&In));
 
-        if (flags.oldslow->answer) {
+        if (strcmp(options.method->answer, "slow") == 0) {
             n_feat += export_areas(
                 &In, field, flags.multi->answer ? TRUE : FALSE, donocat,
                 Ogr_featuredefn, Ogr_layer, Fi, Driver, ncol, colctype, colname,
