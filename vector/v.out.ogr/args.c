@@ -133,6 +133,14 @@ void parse_args(int argc, char **argv, struct Options *options,
     flags->list->description = _("List supported output formats and exit");
     flags->list->suppress_required = YES;
 
+    flags->oldslow = G_define_flag();
+    flags->oldslow->key = 'o';
+    flags->oldslow->label = _("Use old, slower method for export");
+    flags->oldslow->description = _("Use old, slower method for export "
+                                    "if there are problems with the new, "
+                                    "faster method");
+    flags->oldslow->suppress_required = YES;
+
     G_option_requires(flags->append, options->layer, NULL);
 
     if (G_parser(argc, argv))
