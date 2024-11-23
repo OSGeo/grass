@@ -107,7 +107,6 @@ fi
 exec 3>&1 > >(tee mswindows/osgeo4w/package.log) 2>&1
 
 DLLS="
-	/mingw64/bin/libblas.dll
 	/mingw64/bin/libbz2-1.dll
 	/mingw64/bin/libfftw3-3.dll
 	/mingw64/bin/libgcc_s_seh-1.dll
@@ -115,8 +114,10 @@ DLLS="
 	/mingw64/bin/libgomp-1.dll
 	/mingw64/bin/libiconv-2.dll
 	/mingw64/bin/libintl-8.dll
-	/mingw64/bin/liblapack.dll
-	/mingw64/bin/libomp.dll
+	/mingw64/bin/libopenblas.dll
+	/mingw64/bin/libpcre-1.dll
+	/mingw64/bin/libpixman-1-0.dll
+	/mingw64/bin/libpng16-16.dll
 	/mingw64/bin/libquadmath-0.dll
 	/mingw64/bin/libreadline8.dll
 	/mingw64/bin/libstdc++-6.dll
@@ -164,7 +165,6 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-geos=$PWD/mswindows/osgeo4w/geos-config \
 		--with-includes=${OSGEO4W_ROOT_MSYS}/include \
 		--with-lapack \
-		--with-lapack-includes=/mingw64/include \
 		--with-liblas=$PWD/mswindows/osgeo4w/liblas-config \
 		--with-libpng=$PWD/mswindows/osgeo4w/libpng-config \
 		--with-libs="${OSGEO4W_ROOT_MSYS}/lib ${OSGEO4W_ROOT_MSYS}/bin" \

@@ -261,6 +261,7 @@ ignore = [
 # "A005", # builtin-module-shadowing
 # "PLW0108", # unnecessary-lambda
 # Ignore `E402` (import violations) in all `__init__.py` files
+"**.py" = ["PYI066"]
 "*/testsuite/**.py" = ["PT009", "PT027"]
 "__init__.py" = ["E402"]
 "display/d.mon/render_cmd.py" = ["SIM115"]
@@ -317,6 +318,7 @@ ignore = [
 "python/grass/pygrass/modules/grid/testsuite/test_*_modules_grid_doctests.py" = ["F401"]
 "python/grass/pygrass/modules/interface/env.py" = ["SIM115"]
 "python/grass/pygrass/modules/testsuite/test_pygrass_modules_doctests.py" = ["F401"]
+"python/grass/pygrass/raster/category.py" = ["FURB189"]
 "python/grass/pygrass/raster/segment.py" = ["SIM115"]
 "python/grass/pygrass/tests/*.py" = ["SIM115"]
 "python/grass/pygrass/vector/geometry.py" = ["PYI024"]
@@ -326,7 +328,7 @@ ignore = [
 "python/grass/script/core.py" = ["SIM115"]
 "python/grass/script/db.py" = ["SIM115"]
 "python/grass/script/raster.py" = ["SIM115"]
-"python/grass/script/utils.py" = ["SIM115"]
+"python/grass/script/utils.py" = ["FURB189", "SIM115"]
 "python/grass/temporal/aggregation.py" = ["SIM115"]
 "python/grass/temporal/register.py" = ["SIM115"]
 "python/grass/temporal/stds_export.py" = ["SIM115"]

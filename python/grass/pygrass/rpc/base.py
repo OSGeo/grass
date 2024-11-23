@@ -25,6 +25,10 @@ if TYPE_CHECKING:
     from multiprocessing.connection import Connection
     from multiprocessing.synchronize import _LockLike
 
+
+logger: logging.Logger = logging.getLogger(__name__)
+
+
 ###############################################################################
 
 
@@ -134,7 +138,7 @@ class RPCServerBase:
 
     def start_server(self):
         """This function must be re-implemented in the subclasses"""
-        logging.debug("Start the libgis server")
+        logger.debug("Start the libgis server")
 
         self.client_conn, self.server_conn = Pipe(True)
         self.lock = Lock()
@@ -147,7 +151,7 @@ class RPCServerBase:
 
     def _check_restart_server(self, caller="main thread") -> None:
         """Restart the server if it was terminated"""
-        logging.debug("Check libgis server restart")
+        logger.debug("Check libgis server restart")
 
         with self.threadLock:
             if self.server is not None and self.server.is_alive() is True:
@@ -159,9 +163,9 @@ class RPCServerBase:
             self.start_server()
 
             if self.stopped is not True:
-                logging.warning(
-                    "Needed to restart the libgis server, caller: {caller}",
-                    caller=caller,
+                logger.warning(
+                    "Needed to restart the libgis server, caller: %(caller)s",
+                    {"caller": caller},
                 )
 
         self.stopped = False
@@ -169,7 +173,8 @@ class RPCServerBase:
     def safe_receive(self, message):
         """Receive the data and throw a FatalError exception in case the server
         process was killed and the pipe was closed by the checker thread"""
-        logging.debug("Receive message: {message}")
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug("Receive message: %s", message)
 
         try:
             ret = self.client_conn.recv()
@@ -186,7 +191,7 @@ class RPCServerBase:
 
         This method should be called at exit using the package atexit
         """
-        logging.debug("Stop libgis server")
+        logger.debug("Stop libgis server")
 
         self.stop_checker_thread()
         if self.server is not None and self.server.is_alive():
