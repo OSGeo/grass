@@ -24,6 +24,22 @@ set -eu
 #
 ###############################################################################
 
+# cleanup at user break
+cleanup()
+{
+   rm -f "${f%%.html}_tmp.html"
+}
+
+# what to do in case of user break:
+exitprocedure()
+{
+   echo "User break!"
+   cleanup
+   exit 1
+}
+# shell check for user break (signal list: trap -l)
+trap "exitprocedure" 2 3 15
+
 # path to LUA file (./utils/pandoc_codeblock.lua)
 UTILSPATH="utils"
 
