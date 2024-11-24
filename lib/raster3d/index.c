@@ -117,6 +117,7 @@ int Rast3d_flush_index(RASTER3D_Map *map)
     indexLength = map->nTiles * sizeof(long);
     if (write(map->data_fd, tmp, indexLength) != indexLength) {
         Rast3d_error("Rast3d_flush_index: can't write file");
+        Rast3d_free(tmp);
         return 0;
     }
 
