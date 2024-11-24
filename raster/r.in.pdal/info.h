@@ -34,8 +34,8 @@ extern "C" {
 }
 
 void get_extent(struct StringList *, double *, double *, double *, double *,
-                double *, double *);
-void print_extent(struct StringList *);
-void print_lasinfo(struct StringList *);
+                double *, double *, bool);
+void print_extent(struct StringList *, bool);
+void print_lasinfo(struct StringList *, bool);
 
 #endif // INFO_H

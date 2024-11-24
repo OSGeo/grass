@@ -13,7 +13,8 @@
 #include <cmath>
 
 void get_extent(struct StringList *infiles, double *min_x, double *max_x,
-                double *min_y, double *max_y, double *min_z, double *max_z)
+                double *min_y, double *max_y, double *min_z, double *max_z,
+                bool nosrs)
 {
     pdal::StageFactory factory;
     bool first = 1;
@@ -25,15 +26,25 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
 
         std::string pdal_read_driver = factory.inferReaderDriver(infile);
         if (pdal_read_driver.empty())
-            G_fatal_error("Cannot determine input file type of <%s>", infile);
+            G_fatal_error(_("Cannot determine input file type of <%s>"),
+                          infile);
 
         pdal::PointTable table;
         pdal::Options las_opts;
         pdal::Option las_opt("filename", infile);
         las_opts.add(las_opt);
+        if (nosrs) {
+            pdal::Option nosrs_opt("nosrs", true);
+            las_opts.add(nosrs_opt);
+        }
         pdal::LasReader las_reader;
         las_reader.setOptions(las_opts);
-        las_reader.prepare(table);
+        try {
+            las_reader.prepare(table);
+        }
+        catch (const std::exception &err) {
+            G_fatal_error(_("PDAL error: %s"), err.what());
+        }
         const pdal::LasHeader &las_header = las_reader.header();
         if (first) {
             *min_x = las_header.minX();
@@ -62,16 +73,16 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
     }
 }
 
-void print_extent(struct StringList *infiles)
+void print_extent(struct StringList *infiles, bool nosrs)
 {
     double min_x, max_x, min_y, max_y, min_z, max_z;
 
-    get_extent(infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z);
+    get_extent(infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z, nosrs);
     fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n", max_y, min_y, max_x,
             min_x, min_z, max_z);
 }
 
-void print_lasinfo(struct StringList *infiles)
+void print_lasinfo(struct StringList *infiles, bool nosrs)
 {
     pdal::StageFactory factory;
     pdal::MetadataNode meta_node;
@@ -86,15 +97,25 @@ void print_lasinfo(struct StringList *infiles)
 
         std::string pdal_read_driver = factory.inferReaderDriver(infile);
         if (pdal_read_driver.empty())
-            G_fatal_error("Cannot determine input file type of <%s>", infile);
+            G_fatal_error(_("Cannot determine input file type of <%s>"),
+                          infile);
 
         pdal::PointTable table;
         pdal::Options las_opts;
         pdal::Option las_opt("filename", infile);
         las_opts.add(las_opt);
+        if (nosrs) {
+            pdal::Option nosrs_opt("nosrs", true);
+            las_opts.add(nosrs_opt);
+        }
         pdal::LasReader las_reader;
         las_reader.setOptions(las_opts);
-        las_reader.prepare(table);
+        try {
+            las_reader.prepare(table);
+        }
+        catch (const std::exception &err) {
+            G_fatal_error(_("PDAL error: %s"), err.what());
+        }
         const pdal::LasHeader &h = las_reader.header();
         pdal::PointLayoutPtr point_layout = table.layout();
         const pdal::Dimension::IdList &dims = point_layout->dims();

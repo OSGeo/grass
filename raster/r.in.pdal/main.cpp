@@ -446,12 +446,12 @@ int main(int argc, char *argv[])
 
     /* If we print extent, there is no need to validate rest of the input */
     if (print_extent_flag->answer) {
-        print_extent(&infiles);
+        print_extent(&infiles, over_flag->answer);
         exit(EXIT_SUCCESS);
     }
 
     if (print_info_flag->answer) {
-        print_lasinfo(&infiles);
+        print_lasinfo(&infiles, over_flag->answer);
         exit(EXIT_SUCCESS);
     }
 
@@ -507,7 +507,8 @@ int main(int argc, char *argv[])
     if (extents_flag->answer) {
         double min_x, max_x, min_y, max_y, min_z, max_z;
 
-        get_extent(&infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z);
+        get_extent(&infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z,
+                   over_flag->answer);
 
         region.east = xmax = max_x;
         region.west = xmin = min_x;
@@ -711,16 +712,22 @@ int main(int argc, char *argv[])
 
         std::string pdal_read_driver = factory.inferReaderDriver(infile);
         if (pdal_read_driver.empty())
-            G_fatal_error("Cannot determine input file type of <%s>", infile);
+            G_fatal_error(_("Cannot determine input file type of <%s>"),
+                          infile);
 
         pdal::Options las_opts;
         pdal::Option las_opt("filename", infile);
         las_opts.add(las_opt);
+        if (over_flag->answer) {
+            pdal::Option nosrs_opt("nosrs", true);
+            las_opts.add(nosrs_opt);
+        }
         // stages created by factory are destroyed with the factory
         pdal::Stage *reader = factory.createStage(pdal_read_driver);
         if (!reader)
-            G_fatal_error("PDAL reader creation failed, a wrong format of <%s>",
-                          infile);
+            G_fatal_error(
+                _("PDAL reader creation failed, a wrong format of <%s>"),
+                infile);
         reader->setOptions(las_opts);
         readers.push_back(reader);
         merge_filter.setInput(*reader);
@@ -779,7 +786,12 @@ int main(int argc, char *argv[])
     //  consumption, so using 10k in case it is faster for some cases
     pdal::point_count_t point_table_capacity = 10000;
     pdal::FixedPointTable point_table(point_table_capacity);
-    binning_writer.prepare(point_table);
+    try {
+        binning_writer.prepare(point_table);
+    }
+    catch (const std::exception &err) {
+        G_fatal_error(_("PDAL error: %s"), err.what());
+    }
 
     // getting projection is possible only after prepare
     if (over_flag->answer) {
