@@ -47,6 +47,7 @@ jobs:
 
       - name: Setup OSGeo4W environment
         uses: echoix/setup-OSGeo4W@f4311523e39f2c8b10e34ebbc3f2ff437ecfb9ed # v0.2.0
+        id: osgeo4w
         with:
           package-dir: "D:/OSGeo4W_pkg"
           packages: |
@@ -96,7 +97,9 @@ jobs:
         run: .github/workflows/print_versions.sh
 
       - name: Test executing of the grass command
-        run: .github/workflows/test_simple.bat 'C:\OSGeo4W\opt\grass\grass85.bat'
+        run: .github/workflows/test_simple.bat '${{env.O4WROOT}}\opt\grass\grass85.bat'
+        env:
+          O4WROOT: ${{ steps.osgeo4w.outputs.root }}
 
       - name: Test executing of the grass command in bash
         shell: msys2 {0}
@@ -116,7 +119,9 @@ jobs:
         shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
 
       - name: Run tests
-        run: .github/workflows/test_thorough.bat 'C:\OSGeo4W\opt\grass\grass85.bat' 'C:\OSGeo4W\bin\python3'
+        run: .github/workflows/test_thorough.bat '${{env.O4WROOT}}\opt\grass\grass85.bat' '${{env.O4WROOT}}\bin\python3'
+        env:
+          O4WROOT: ${{ steps.osgeo4w.outputs.root }}
 
       - name: Make HTML test report available
         if: ${{ always() }}
