@@ -57,8 +57,12 @@ for f in $(find . -name *.html); do
   s|_KEEPHTML">|">|g;
 ' "${f%%.html}.html" > "${f%%.html}_tmp.html"
 
-    cat "${f%%.html}_tmp.html" | sed 's#<div class="code"><pre>#<pre><code>#g' | sed 's#</pre></div>#</code></pre>#g' | pandoc \
-        --from=html --to=markdown -t gfm --lua-filter "${UTILSPATH}/pandoc_codeblock.lua" > "${f%%.html}.md"
+    cat "${f%%.html}_tmp.html" | \
+        sed 's#<div class="code"><pre>#<pre><code>#g' | \
+        sed 's#</pre></div>#</code></pre>#g' | \
+        pandoc --from=html --to=markdown -t gfm \
+               --lua-filter "${UTILSPATH}/pandoc_codeblock.lua" | \
+        sed 's+ \\\$+ \$+g' > "${f%%.html}.md"
 
     rm -f "${f%%.html}_tmp.html"
 
