@@ -1,5 +1,6 @@
 import os
 import string
+from pathlib import Path
 
 # File template pieces follow
 
@@ -79,7 +80,8 @@ overview_tmpl = string.Template(
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Graphical User Interface</h3>
        <ul>
-        <li class="box"><span><a href="wxGUI.html">wxGUI</a></span></li>
+        <li class="box"><a href="wxguiintro.html">Intro: Graphical User Interface</a></li>
+        <li class="box"><span><a href="wxGUI.html">wxGUI details</a></span></li>
         <li class="box"><a href="wxGUI.components.html">wxGUI components</a></li>
         <li class="box"><a href="wxGUI.toolboxes.html">wxGUI toolboxes</a></li>
        </ul>
@@ -406,25 +408,25 @@ header_graphical_index_tmpl = """\
 
 
 def get_desc(cmd):
-    f = open(cmd)
-    while True:
-        line = f.readline()
-        if not line:
-            return ""
-        if "NAME" in line:
-            break
+    with Path(cmd).open() as f:
+        while True:
+            line = f.readline()
+            if not line:
+                return ""
+            if "NAME" in line:
+                break
 
-    while True:
-        line = f.readline()
-        if not line:
-            return ""
-        if "SYNOPSIS" in line:
-            break
-        if "<em>" in line:
-            sp = line.split("-", 1)
-            if len(sp) > 1:
-                return sp[1].strip()
-            return None
+        while True:
+            line = f.readline()
+            if not line:
+                return ""
+            if "SYNOPSIS" in line:
+                break
+            if "<em>" in line:
+                sp = line.split("-", 1)
+                if len(sp) > 1:
+                    return sp[1].strip()
+                return None
 
     return ""
 

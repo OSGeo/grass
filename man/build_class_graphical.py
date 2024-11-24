@@ -131,65 +131,62 @@ def generate_page_for_category(
     short_family, module_family, imgs, year, skip_no_image=False
 ):
     filename = module_family + "_graphical.html"
-
-    output = open(filename + ".tmp", "w")
-
-    output.write(
-        header1_tmpl.substitute(
-            title="GRASS GIS %s Reference Manual: Graphical index" % grass_version
-        )
-    )
-    output.write(header_graphical_index_tmpl)
-
-    if module_family.lower() not in {"general", "postscript"}:
-        if module_family == "raster3d":
-            # covert keyword to nice form
-            module_family = "3D raster"
+    with open(filename + ".tmp", "w") as output:
         output.write(
-            modclass_intro_tmpl.substitute(
-                modclass=module_family, modclass_lower=module_family.lower()
+            header1_tmpl.substitute(
+                title="GRASS GIS %s Reference Manual: Graphical index" % grass_version
             )
         )
-    if module_family == "wxGUI":
-        output.write("<h3>wxGUI components:</h3>")
-    elif module_family == "guimodules":
-        output.write("<h3>g.gui.* modules:</h3>")
-    else:
-        output.write("<h3>{0} modules:</h3>".format(to_title(module_family)))
-    output.write('<ul class="img-list">')
+        output.write(header_graphical_index_tmpl)
 
-    # for all modules:
-    for cmd in get_files(man_dir, short_family, ignore_gui=False):
-        basename = os.path.splitext(cmd)[0]
-        desc = check_for_desc_override(basename)
-        if desc is None:
-            desc = get_desc(cmd)
-        img = get_module_image(basename, imgs)
-        img_class = "linkimg"
-        if skip_no_image and not img:
-            continue
-        if not img:
-            img = "grass_logo.png"
-            img_class = "default-img"
-        if basename.startswith("wxGUI"):
-            basename = basename.replace(".", " ")
-        output.write(
-            "<li>"
-            '<a href="{html}">'
-            '<img class="{img_class}" src="{img}">'
-            '<span class="name">{name}</span> '
-            '<span class="desc">{desc}</span>'
-            "</a>"
-            "</li>".format(
-                html=cmd, img=img, name=basename, desc=desc, img_class=img_class
+        if module_family.lower() not in {"general", "postscript"}:
+            if module_family == "raster3d":
+                # covert keyword to nice form
+                module_family = "3D raster"
+            output.write(
+                modclass_intro_tmpl.substitute(
+                    modclass=module_family, modclass_lower=module_family.lower()
+                )
             )
-        )
+        if module_family == "wxGUI":
+            output.write("<h3>wxGUI components:</h3>")
+        elif module_family == "guimodules":
+            output.write("<h3>g.gui.* modules:</h3>")
+        else:
+            output.write("<h3>{0} modules:</h3>".format(to_title(module_family)))
+        output.write('<ul class="img-list">')
 
-    output.write("</ul>")
+        # for all modules:
+        for cmd in get_files(man_dir, short_family, ignore_gui=False):
+            basename = os.path.splitext(cmd)[0]
+            desc = check_for_desc_override(basename)
+            if desc is None:
+                desc = get_desc(cmd)
+            img = get_module_image(basename, imgs)
+            img_class = "linkimg"
+            if skip_no_image and not img:
+                continue
+            if not img:
+                img = "grass_logo.png"
+                img_class = "default-img"
+            if basename.startswith("wxGUI"):
+                basename = basename.replace(".", " ")
+            output.write(
+                "<li>"
+                '<a href="{html}">'
+                '<img class="{img_class}" src="{img}">'
+                '<span class="name">{name}</span> '
+                '<span class="desc">{desc}</span>'
+                "</a>"
+                "</li>".format(
+                    html=cmd, img=img, name=basename, desc=desc, img_class=img_class
+                )
+            )
 
-    write_footer(output, "index.html", year, template="html")
+        output.write("</ul>")
 
-    output.close()
+        write_footer(output, "index.html", year, template="html")
+
     replace_file(filename)
 
 

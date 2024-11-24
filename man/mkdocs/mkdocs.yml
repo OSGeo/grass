@@ -22,6 +22,7 @@ plugins:
   - glightbox
 use_directory_urls: false
 nav:
+  - GUI: wxGUI.md
   - Startup: grass.md
   - Databases: database.md
   - Display: display.md

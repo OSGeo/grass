@@ -259,6 +259,7 @@ ignore = [
 # See https://docs.astral.sh/ruff/settings/#lint_per-file-ignores
 # "A005", # builtin-module-shadowing
 # "PLW0108", # unnecessary-lambda
+# "SIM115", # open-file-with-context-handler
 # Ignore `E402` (import violations) in all `__init__.py` files
 "**.py" = ["PYI066"]
 "*/testsuite/**.py" = ["PT009", "PT027"]
@@ -299,8 +300,6 @@ ignore = [
 "lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
 "lib/init/grass.py" = ["SIM115"]
 "locale/grass_po_stats.py" = ["SIM115"]
-"man/build_*.py" = ["SIM115"]
-"man/parser_standard_options.py" = ["SIM115"]
 "python/grass/__init__.py" = ["PYI056"]
 "python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
 "python/grass/exp*/tests/grass_script_tmp_mapset_session_test.py" = ["SIM117"]
