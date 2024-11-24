@@ -3,4 +3,4 @@
 `sqlptest` reads SQL statements (one per row) from standard
 input and writes results of parser to standard output.
 
-Some test statemets are in `./test`.
+Some test statements are in `./test`.
