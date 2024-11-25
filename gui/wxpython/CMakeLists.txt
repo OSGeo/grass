@@ -67,25 +67,30 @@ add_custom_target(
   COMMAND
     ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/../xml/grass-interface.dtd
-    ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/xml
-  DEPENDS GUI_WXPYTHON)
+    ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/xml)
+
+add_dependencies(copy_wxpython_xml GUI_WXPYTHON)
 
 add_custom_target(
   compile_python_files
   COMMAND ${PYTHON_EXECUTABLE} -m compileall
           ${OUTDIR}/${GRASS_INSTALL_SCRIPTDIR}
-  COMMAND ${PYTHON_EXECUTABLE} -m compileall ${OUTDIR}/${WXPYTHON_DIR}
-  DEPENDS ALL_MODULES)
+  COMMAND ${PYTHON_EXECUTABLE} -m compileall ${OUTDIR}/${WXPYTHON_DIR})
+
+add_dependencies(compile_python_files ALL_MODULES)
+
+add_custom_command(
+  OUTPUT "${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml"
+  COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE}
+          ${CMAKE_CURRENT_SOURCE_DIR}/tools/build_modules_xml.py
+  COMMENT "Generating interface description for all modules..."
+)
 
 add_custom_target(
   build_modules_items_xml
-  COMMAND
-    ${grass_env_command} ${PYTHON_EXECUTABLE}
-    ${CMAKE_CURRENT_SOURCE_DIR}/tools/build_modules_xml.py >
-    ${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml
-  DEPENDS copy_wxpython_xml compile_python_files ${g_gui_targets}
-  COMMENT "Generating interface description for all modules..."
-  VERBATIM)
+  DEPENDS "${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml")
+
+add_dependencies(build_modules_items_xml copy_wxpython_xml compile_python_files ${g_gui_targets})
 
 add_custom_target(
   build_xml_menudata
