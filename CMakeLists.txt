@@ -227,6 +227,9 @@ set(HTML2MAN VERSION_NUMBER=${GRASS_VERSION_NUMBER} ${PYTHON_EXECUTABLE}
 set(env_path "$ENV{PATH}")
 
 if(WIN32)
+  set(NULL_DEVICE nul)
+  set(SEARCH_COMMAND findstr /v)
+  set(HTML_SEARCH_STR "\"</body>\|</html>\|</div> <!-- end container -->\"")
   set(sep "\;")
   string(REPLACE ";" "${sep}" env_path "${env_path}")
   set(grass_env_command
@@ -239,6 +242,9 @@ if(WIN32)
     "VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
     "VERSION_DATE=\"${GRASS_VERSION_DATE}\"")
 else()
+  set(NULL_DEVICE /dev/null)
+  set(SEARCH_COMMAND grep -v)
+  set(HTML_SEARCH_STR "\'</body>\|</html>\|</div> <!-- end container -->\'")
   set(sep ":")
   set(grass_env_command
     ${CMAKE_COMMAND} -E env "PATH=${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}"
