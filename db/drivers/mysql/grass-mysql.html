@@ -1,7 +1,7 @@
 <!-- meta page description: MySQL DATABASE DRIVER -->
 
-MySQL database driver enables GRASS to store vector attributes in
-MySQL server.
+MySQL database driver enables GRASS to store vector attributes
+in MySQL server.
 
 <p>
 Because vector attribute tables
@@ -36,30 +36,31 @@ The parameter 'database' can be given in two formats:
 	     <li> port - server port number
 	 </ul>
 </ul>
+<p>
 Examples of connection parameters:
 <pre>
-  db.connect driver=mysql database=mytest
-  db.connect driver=mysql database='dbname=mytest,host=test.grass.org'
+db.connect driver=mysql database=mytest
+db.connect driver=mysql database='dbname=mytest,host=test.grass.org'
 </pre>
 
 <h2>Data types</h2>
 
 GRASS supports almost all MySQL data types with following limitations:
 <ul>
-    <li> Binary columns (BINARY, VARBINARY, TINYBLOB, MEDIUMBLOB,
-    BLOB, LONGBLOB) are not not supported.
-    If a table with binary column(s) is used in GRASS
-    a warning is printed and only the supported columns are
-    returned in query results.
+<li> Binary columns (BINARY, VARBINARY, TINYBLOB, MEDIUMBLOB,
+BLOB, LONGBLOB) are not not supported.
+If a table with binary column(s) is used in GRASS
+a warning is printed and only the supported columns are
+returned in query results.
 
-    <li> Columns of type SET and ENUM are represented as string (VARCHAR).
+<li> Columns of type SET and ENUM are represented as string (VARCHAR).
 
-    <li> Very large integers in columns of type BIGINT can be lost
-    or corrupted because GRASS does not support 64 bin integeres
-    on most platforms.
+<li> Very large integers in columns of type BIGINT can be lost
+or corrupted because GRASS does not support 64 bin integeres
+on most platforms.
 
-    <li> GRASS does not currently distinguish types TIMESTAMP and
-    DATETIME. Both types are in GRASS interpreted as TIMESTAMP.
+<li> GRASS does not currently distinguish types TIMESTAMP and
+DATETIME. Both types are in GRASS interpreted as TIMESTAMP.
 </ul>
 
 <h2>Indexes</h2>
@@ -104,7 +105,16 @@ GRASS for MySQL driver.
 
 Attempting to use a reserved SQL word as column or table name will result
 in a "SQL syntax" error. The list of reserved words for MySQL can be
-found in the <a href="http://dev.mysql.com/doc/refman/5.7/en/reserved-words.html#table-reserved-words-5.7.4">MySQL manual</a>.
+found in the <a href="https://dev.mysql.com/doc/refman/8.4/en/keywords.html#keywords-in-current-series">MySQL manual</a>.
+
+<h2>AUTHOR</h2>
+
+Radim Blazek
+
+<p>
+Credits: Development of the driver was sponsored by
+<a href="https://www.faunalia.it">Faunalia</a> (Italy)
+as part of a project for <a href="https://www.atac.roma.it/">ATAC</a>.
 
 <h2>SEE ALSO</h2>
 
@@ -112,13 +122,3 @@ found in the <a href="http://dev.mysql.com/doc/refman/5.7/en/reserved-words.html
 <a href="db.connect.html">db.connect</a>,
 <a href="sql.html">SQL support in GRASS GIS</a>
 </em>
-
-<h2>Credits</h2>
-
-Development of the driver was sponsored by
-<a href="https://www.faunalia.it">Faunalia</a> (Italy)
-as part of a project for <a href="http://www.atac.roma.it/">ATAC</a>.
-
-<h2>AUTHOR</h2>
-
-Radim Blazek
