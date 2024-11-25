@@ -1,11 +1,11 @@
 from os.path import join, exists
 import grass.lib.gis as libgis
+import ctypes
 
 
 # flake8: noqa: E402
 libgis.G_gisinit("")
 
-import ctypes
 import grass.lib.vector as libvect
 from grass.pygrass.vector.vector_type import VTYPE
 from grass.pygrass.errors import GrassError, must_be_open
@@ -14,8 +14,8 @@ from grass.pygrass.vector.geometry import (
     GEOOBJ as _GEOOBJ,
     read_line,
     read_next_line,
+    Area as _Area,
 )
-from grass.pygrass.vector.geometry import Area as _Area
 from grass.pygrass.vector.abstract import Info
 from grass.pygrass.vector.basic import Bbox, Cats, Ilist
 
