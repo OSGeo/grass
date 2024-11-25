@@ -712,6 +712,7 @@ class DisplayDriver:
         pz = c_double()
         if not self._validLine(lineNearest):
             return {"line": -1, "point": None}
+        _ = Vect_read_line(poMapInfo, self.poPoints, self.poCats, lineNearest)
         Vect_line_distance(
             self.poPoints,
             point[0],
@@ -855,6 +856,7 @@ class DisplayDriver:
 
         if not self._validLine(line):
             return -1
+        _ = Vect_read_line(poMapInfo, self.poPoints, self.poCats, lineNearest)
 
         minDist = 0.0
         Gid = -1
