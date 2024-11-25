@@ -56,37 +56,35 @@ def build_full_index(ext):
 
     # begin full index:
     filename = f"full_index.{ext}"
-    f = open(filename + ".tmp", "w")
+    with open(filename + ".tmp", "w") as f:
+        write_header(
+            f,
+            "GRASS GIS {} Reference Manual - Full index".format(grass_version),
+            body_width="80%",
+            template=ext,
+        )
 
-    write_header(
-        f,
-        "GRASS GIS {} Reference Manual - Full index".format(grass_version),
-        body_width="80%",
-        template=ext,
-    )
+        # generate main index of all modules:
+        f.write(full_index_header)
 
-    # generate main index of all modules:
-    f.write(full_index_header)
-
-    if ext == "html":
-        f.write(toc)
-
-    # for all module groups:
-    for cls, cls_label in classes:
-        f.write(cmd2_tmpl.substitute(cmd_label=to_title(cls_label), cmd=cls))
-        # for all modules:
-        for cmd in get_files(man_dir, cls, extension=ext):
-            basename = os.path.splitext(cmd)[0]
-            desc = check_for_desc_override(basename)
-            if desc is None:
-                desc = get_desc(cmd)
-            f.write(desc1_tmpl.substitute(cmd=cmd, basename=basename, desc=desc))
         if ext == "html":
-            f.write("</table>\n")
+            f.write(toc)
 
-    write_footer(f, f"index.{ext}", year, template=ext)
+        # for all module groups:
+        for cls, cls_label in classes:
+            f.write(cmd2_tmpl.substitute(cmd_label=to_title(cls_label), cmd=cls))
+            # for all modules:
+            for cmd in get_files(man_dir, cls, extension=ext):
+                basename = os.path.splitext(cmd)[0]
+                desc = check_for_desc_override(basename)
+                if desc is None:
+                    desc = get_desc(cmd)
+                f.write(desc1_tmpl.substitute(cmd=cmd, basename=basename, desc=desc))
+            if ext == "html":
+                f.write("</table>\n")
 
-    f.close()
+        write_footer(f, f"index.{ext}", year, template=ext)
+
     replace_file(filename)
 
 

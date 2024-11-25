@@ -5,6 +5,7 @@
 
 import os
 import glob
+from pathlib import Path
 
 year = os.getenv("VERSION_DATE")
 
@@ -35,9 +36,9 @@ def build_topics(ext):
 
     files = glob.glob1(man_dir, f"*.{ext}")
     for fname in files:
-        fil = open(os.path.join(man_dir, fname))
-        # TODO maybe move to Python re (regex)
-        lines = fil.readlines()
+        with Path(man_dir, fname).open() as fil:
+            # TODO maybe move to Python re (regex)
+            lines = fil.readlines()
         try:
             if ext == "html":
                 index_keys = lines.index("<h2>KEYWORDS</h2>\n") + 1
@@ -68,63 +69,71 @@ def build_topics(ext):
         elif fname not in keywords[key]:
             keywords[key][fname] = desc
 
-    topicsfile = open(os.path.join(man_dir, f"topics.{ext}"), "w")
-    topicsfile.write(
-        header1_tmpl.substitute(
-            title="GRASS GIS %s Reference Manual - Topics index" % grass_version
+    with Path(man_dir, f"topics.{ext}").open("w") as topicsfile:
+        topicsfile.write(
+            header1_tmpl.substitute(
+                title="GRASS GIS %s Reference Manual - Topics index" % grass_version
+            )
         )
-    )
-    topicsfile.write(headertopics_tmpl)
+        topicsfile.write(headertopics_tmpl)
 
-    for key, values in sorted(keywords.items(), key=lambda s: s[0].lower()):
-        keyfile = open(os.path.join(man_dir, f"topic_%s.{ext}" % key), "w")
-        if ext == "html":
-            keyfile.write(
-                header1_tmpl.substitute(
-                    title="GRASS GIS "
-                    "%s Reference Manual: Topic %s"
-                    % (grass_version, key.replace("_", " "))
-                )
-            )
-        keyfile.write(headerkey_tmpl.substitute(keyword=key.replace("_", " ")))
-        num_modules = 0
-        for mod, desc in sorted(values.items()):
-            num_modules += 1
-            keyfile.write(
-                desc1_tmpl.substitute(
-                    cmd=mod, desc=desc, basename=mod.replace(f".{ext}", "")
-                )
-            )
-        if num_modules >= min_num_modules_for_topic:
-            topicsfile.writelines(
-                [moduletopics_tmpl.substitute(key=key, name=key.replace("_", " "))]
-            )
-        if ext == "html":
-            keyfile.write("</table>\n")
-        else:
-            keyfile.write("\n")
-        # link to the keywords index
-        # TODO: the labels in keywords index are with spaces and capitals
-        # this should be probably changed to lowercase with underscores
-        if ext == "html":
-            keyfile.write(
-                "<p><em>See also the corresponding keyword"
-                ' <a href="keywords.html#{key}">{key}</a>'
-                " for additional references.</em>".format(key=key.replace("_", " "))
-            )
-        else:
-            # expecting markdown
-            keyfile.write(
-                "*See also the corresponding keyword"
-                " [{key}](keywords.md#{key})"
-                " for additional references.*\n".format(key=key.replace("_", " "))
-            )
+        for key, values in sorted(keywords.items(), key=lambda s: s[0].lower()):
+            with Path(man_dir, f"topic_%s.{ext}" % key).open("w") as keyfile:
+                if ext == "html":
+                    keyfile.write(
+                        header1_tmpl.substitute(
+                            title="GRASS GIS "
+                            "%s Reference Manual: Topic %s"
+                            % (grass_version, key.replace("_", " "))
+                        )
+                    )
+                keyfile.write(headerkey_tmpl.substitute(keyword=key.replace("_", " ")))
+                num_modules = 0
+                for mod, desc in sorted(values.items()):
+                    num_modules += 1
+                    keyfile.write(
+                        desc1_tmpl.substitute(
+                            cmd=mod, desc=desc, basename=mod.replace(f".{ext}", "")
+                        )
+                    )
+                if num_modules >= min_num_modules_for_topic:
+                    topicsfile.writelines(
+                        [
+                            moduletopics_tmpl.substitute(
+                                key=key, name=key.replace("_", " ")
+                            )
+                        ]
+                    )
+                if ext == "html":
+                    keyfile.write("</table>\n")
+                else:
+                    keyfile.write("\n")
+                # link to the keywords index
+                # TODO: the labels in keywords index are with spaces and capitals
+                # this should be probably changed to lowercase with underscores
+                if ext == "html":
+                    keyfile.write(
+                        "<p><em>See also the corresponding keyword"
+                        ' <a href="keywords.html#{key}">{key}</a>'
+                        " for additional references.</em>".format(
+                            key=key.replace("_", " ")
+                        )
+                    )
+                else:
+                    # expecting markdown
+                    keyfile.write(
+                        "*See also the corresponding keyword"
+                        " [{key}](keywords.md#{key})"
+                        " for additional references.*\n".format(
+                            key=key.replace("_", " ")
+                        )
+                    )
 
-        write_footer(keyfile, f"index.{ext}", year, template=ext)
-    if ext == "html":
-        topicsfile.write("</ul>\n")
-    write_footer(topicsfile, f"index.{ext}", year, template=ext)
-    topicsfile.close()
+                write_footer(keyfile, f"index.{ext}", year, template=ext)
+
+        if ext == "html":
+            topicsfile.write("</ul>\n")
+        write_footer(topicsfile, f"index.{ext}", year, template=ext)
 
 
 if __name__ == "__main__":
