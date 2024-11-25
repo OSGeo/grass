@@ -53,7 +53,6 @@ per-file-ignores =
     python/grass/pygrass/raster/__init__.py: E402
     python/grass/pygrass/vector/__init__.py: E402
     python/grass/pygrass/raster/category.py: E721
-    python/grass/pygrass/utils.py: E402
     python/grass/temporal/abstract_space_time_dataset.py: E722
     python/grass/temporal/c_libraries_interface.py: E722
     python/grass/temporal/core.py: E722

@@ -5,12 +5,15 @@ from sqlite3 import OperationalError
 
 import grass.lib.gis as libgis
 
+# flake8: noqa: E402
 libgis.G_gisinit("")
 
 import grass.lib.raster as libraster
 from grass.lib.ctypes_preamble import String
 from grass.script import core as grasscore
 from grass.script import utils as grassutils
+
+# flake8: qa
 
 from grass.pygrass.errors import GrassError
 
