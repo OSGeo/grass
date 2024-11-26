@@ -39,11 +39,11 @@ The general procedure to calculate an index from a raster map is two-fold:
 <li>run <em>g.gui.rlisetup</em>: create a configuration file selecting
     the parts of raster map to be analyzed. This file allows re-running
     an analysis easily. It is stored on Windows in the directory <tt>C:\Users\userxy\AppData\Roaming\GRASS8\r.li\</tt>, on GNU/Linux in
-    <tt>$HOME/.grass8/r.li/</tt>. <!-- TODO: and Mac OSX? -->
+    <tt>$HOME/.grass8/r.li/</tt>.</li> <!-- TODO: and Mac OSX? -->
 
 <li>run one or more of the <em>r.li.<b>[index]</b></em> modules (e.g.,
     <em>r.li.<b>patchdensity</b></em>) to calculate the selected index
-    using on the areas selected on configuration file.
+    using on the areas selected on configuration file.</li>
 </ol>
 
 <!-- mhh ??:
@@ -65,21 +65,21 @@ in the Spearfish sample dataset, using a 5x5 moving window:
   <li> run
 <div class="code"><pre>
   g.gui.rlisetup
-</pre></div>
-  <li> The main <em>g.gui.rlisetup</em> window is displayed, click on "New"
-  <li> The new configuration window is now displayed, enter the
-	configuration file name (e.g., "my_conf", do not use absolute paths)
+</pre></div></li>
+  <li> The main <em>g.gui.rlisetup</em> window is displayed, click on "New"</li>
+  <li> The new configuration window is now displayed, enter the<br>
+	configuration file name (e.g., "my_conf", do not use absolute paths)<br><br>
 
-  Now the new configuration window is displayed.
-	Enter the configuration file name (e.g., "my_conf", do not use absolute paths)
-	and the name of raster map (e.g., "geology").
-	The other fields are not needed for this configuration.
-  <li> Click on "Setup sampling frame", select "Whole map layer" and click "OK"
-  <li> Click on "Setup sampling areas", select "Moving window" and click "OK"
-  <li> Click on "Use keyboard to enter moving window dimension"
-  <li> Select "Rectangle" and enter 5 in the "height" and "width" fields
-  <li> Click on "Save settings"
-  <li> Close the <em>g.gui.rlisetup</em> window
+  Now the new configuration window is displayed.<br>
+	Enter the configuration file name (e.g., "my_conf", do not use absolute paths)<br>
+	and the name of raster map (e.g., "geology").<br>
+	The other fields are not needed for this configuration.</li>
+  <li> Click on "Setup sampling frame", select "Whole map layer" and click "OK"</li>
+  <li> Click on "Setup sampling areas", select "Moving window" and click "OK"</li>
+  <li> Click on "Use keyboard to enter moving window dimension"</li>
+  <li> Select "Rectangle" and enter 5 in the "height" and "width" fields</li>
+  <li> Click on "Save settings"</li>
+  <li> Close the <em>g.gui.rlisetup</em> window</li>
   </ol>
 
 <li> CALCULATE PATCHDENSITY INDEX
@@ -87,12 +87,12 @@ in the Spearfish sample dataset, using a 5x5 moving window:
   <li> set the region settings to the "<tt>geology</tt>" raster map:
 <div class="code"><pre>
   g.region raster=geology -p
-</pre></div>
+</pre></div></li>
 
   <li> run <em>r.li.patchdensity</em>:
 <div class="code"><pre>
   r.li.patchdensity input=geology conf=my_conf out=patchdens
-</pre></div>
+</pre></div></li>
   </ol>
 </ol>
 
@@ -188,12 +188,12 @@ for more information about development.
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351
- (<a href="https://research.fs.usda.gov/treesearch/3064">PDF</a>).
+ (<a href="https://research.fs.usda.gov/treesearch/3064">PDF</a>).</li>
 
 <li>
 Baker, W.L. and Y. Cai. 1992. The r.le programs for multiscale analysis of
 landscape structure using the GRASS geographical information system.
-Landscape Ecology 7(4):291-302.
+Landscape Ecology 7(4):291-302.</li>
 </ul>
 
 <h2>AUTHORS</h2>

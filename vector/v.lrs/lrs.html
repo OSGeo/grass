@@ -70,8 +70,8 @@ the end of segment 3+2000 - 3+3000. This information
 must be entered to the system and it is done by optional MP attributes:
 
 <ul>
-<li>end_mp - end MP
-<li>end_off - end offset
+<li>end_mp - end MP</li>
+<li>end_off - end offset</li>
 </ul>
 In this case original MP on km 4 will have these attributes:
 <div class="code"><pre>
@@ -100,7 +100,7 @@ lines. The command <em>v.build.polylines</em> creates this map structure.
 
 <h3>LRS table structure</h3>
 
-<table border=1>
+<table border="1">
 <tr><td><b>Attribute</b></td><td><b>Type</b></td><td><b>Description</b></td></tr>
 <tr><td>rsid</td><td> integer</td><td> reference segment ID, unique in the table</td></tr>
 <tr><td>lcat</td><td> integer</td><td> category of the line in the LRS map</td></tr>
@@ -116,12 +116,12 @@ lines. The command <em>v.build.polylines</em> creates this map structure.
 
 <h3>Available commands</h3>
 <ul>
-<li><a href="v.lrs.create.html">v.lrs.create</a> to create a linear referencing system,
-<li><a href="v.lrs.label.html">v.lrs.label</a> to create stationing on the LRS,
+<li><a href="v.lrs.create.html">v.lrs.create</a> to create a linear referencing system,</li>
+<li><a href="v.lrs.label.html">v.lrs.label</a> to create stationing on the LRS,</li>
 <li><a href="v.lrs.segment.html">v.lrs.segment</a> to create points/segments on LRS,
- and
+ and</li>
 <li><a href="v.lrs.where.html">v.lrs.where</a> to find line id and real km+offset
-for given points in vector map using linear referencing system.
+for given points in vector map using linear referencing system.</li>
 </ul>
 
 <h3>Input lines for v.lrs.segment and v.lrs.label</h3>
@@ -157,12 +157,12 @@ with another one, but MP are used only for one:
 Explanations of selected options:
 <ul>
 <li>llayer: vector layer in line map (usually 1; see <a href="vectorintro.html">vectorintro</a>
-    for "layer" concept)
+    for "layer" concept)</li>
 <li>player: vector layer in point map (usually 1; see <a href="vectorintro.html">vectorintro</a>
-    for "layer" concept)
-<li>rsdriver: Driver name for LRS table - DBMI SQL driver (dbf, pg, mysql, sqlite, etc)
-<li>rsdatabase: Database name for LRS table - DBMI SQL database name (e.g., "lrsdb")
-<li>rstable: Name of the LRS table - DBMI SQL table name (e.g., "streamslrs")
+    for "layer" concept)</li>
+<li>rsdriver: Driver name for LRS table - DBMI SQL driver (dbf, pg, mysql, sqlite, etc)</li>
+<li>rsdatabase: Database name for LRS table - DBMI SQL database name (e.g., "lrsdb")</li>
+<li>rstable: Name of the LRS table - DBMI SQL table name (e.g., "streamslrs")</li>
 </ul>
 
 <h2>SEE ALSO</h2>

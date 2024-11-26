@@ -41,9 +41,9 @@ Available statistics for populating the raster are (<b>method</b>):
 </blockquote>
 
 <ul>
-<li><em>Variance</em> and derivatives use the biased estimator (n). [subject to change]
+<li><em>Variance</em> and derivatives use the biased estimator (n). [subject to change]</li>
 <li><em>Coefficient of variance</em> is given in percentage and defined as
-<tt>(stddev/mean)*100</tt>.
+<tt>(stddev/mean)*100</tt>.</li>
 </ul>
 
 <p>
@@ -289,14 +289,14 @@ r.colors lidar_min.rst_scaled rule=bcyr -n -e
 <li> Support for multiple map output from a single run.<br>
      <tt>method=string[,string,...] output=name[,name,...]</tt><br>
      This can be easily handled by a wrapper script, with the added
-     benefit of it being very simple to parallelize that way.
+     benefit of it being very simple to parallelize that way.</li>
 </ul>
 
 <h2>KNOWN ISSUES</h2>
 
 <ul>
 <li> "<tt>nan</tt>" can leak into <em>coeff_var</em> maps.
-  <br>Cause unknown. Possible work-around: "<tt>r.null setnull=nan</tt>"
+  <br>Cause unknown. Possible work-around: "<tt>r.null setnull=nan</tt>"</li>
 <!-- Another method:  r.mapcalc 'No_nan = if(map == map, map, null() )' -->
 </ul>
 

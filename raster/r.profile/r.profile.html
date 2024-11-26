@@ -59,7 +59,7 @@ the end point coordinates entered for the segmanet.
 
 <p>To extract the numbers in scripts, following parameters can be used:
 <div class="code"><pre>
-r.profile input=dgm12.5 coordinates=3570631,5763556 2>/dev/null
+r.profile input=dgm12.5 coordinates=3570631,5763556 2&gt;/dev/null
 </pre></div>
 
 This filters out everything except the numbers.
@@ -131,7 +131,7 @@ Coordinate pairs can also be "piped" into <em>r.profile</em> (variant 2b):
 echo "641712,226095
 641546,224138
 641546,222048
-641049,221186" > coors.txt
+641049,221186" &gt; coors.txt
 cat coors.txt | r.profile elevation resolution=1000 file=-
 </pre></div>
 

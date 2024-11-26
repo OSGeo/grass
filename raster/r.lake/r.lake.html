@@ -52,16 +52,16 @@ in the original script is shown below:
 
 <div class="code"><pre>
 ${seedmap} = if( ${dem}, \
-if( if( isnull(${seedmap}),0,${seedmap}>0), ${wlevel}-${dem}, \
+if( if( isnull(${seedmap}),0,${seedmap} &gt; 0), ${wlevel}-${dem}, \
  if( \
-  if(isnull(${seedmap}[-1,0]),0, ${seedmap}[-1,0]>0 && ${wlevel}>${dem}) ||\
-  if(isnull(${seedmap}[-1,1]),0, ${seedmap}[-1,1]>0 && ${wlevel}>${dem}) ||\
-  if(isnull(${seedmap}[0,1]), 0, ${seedmap}[0,1]>0  && ${wlevel}>${dem}) ||\
-  if(isnull(${seedmap}[1,1]), 0, ${seedmap}[1,1]>0  && ${wlevel}>${dem}) ||\
-  if(isnull(${seedmap}[1,0]), 0, ${seedmap}[1,0]>0  && ${wlevel}>${dem}) ||\
-  if(isnull(${seedmap}[1,-1]),0, ${seedmap}[1,-1]>0 && ${wlevel}>${dem}) ||\
-  if(isnull(${seedmap}[0,-1]),0, ${seedmap}[0,-1]>0 && ${wlevel}>${dem}) ||\
-  if(isnull(${seedmap}[-1,-1]),0, ${seedmap}[-1,-1]>0 && ${wlevel}>${dem}),\
+  if(isnull(${seedmap}[-1,0]),0, ${seedmap}[-1,0] &gt; 0 &amp;&amp; ${wlevel} &gt; ${dem}) ||\
+  if(isnull(${seedmap}[-1,1]),0, ${seedmap}[-1,1] &gt; 0 &amp;&amp; ${wlevel} &gt; ${dem}) ||\
+  if(isnull(${seedmap}[0,1]), 0, ${seedmap}[0,1] &gt; 0  &amp;&amp; ${wlevel} &gt; ${dem}) ||\
+  if(isnull(${seedmap}[1,1]), 0, ${seedmap}[1,1] &gt; 0  &amp;&amp; ${wlevel} &gt; ${dem}) ||\
+  if(isnull(${seedmap}[1,0]), 0, ${seedmap}[1,0] &gt; 0  &amp;&amp; ${wlevel} &gt; ${dem}) ||\
+  if(isnull(${seedmap}[1,-1]),0, ${seedmap}[1,-1] &gt; 0 &amp;&amp; ${wlevel} &gt; ${dem}) ||\
+  if(isnull(${seedmap}[0,-1]),0, ${seedmap}[0,-1] &gt; 0 &amp;&amp; ${wlevel} &gt; ${dem}) ||\
+  if(isnull(${seedmap}[-1,-1]),0, ${seedmap}[-1,-1] &gt; 0 &amp;&amp; ${wlevel} &gt; ${dem}),\
  ${wlevel}-${dem}, null() )))
 </pre></div>
 
@@ -100,7 +100,7 @@ d.vect streets_wake
 
 <p>
 <center>
-<img src="r_lake_lidar_dem.jpg" border=1><br>
+<img src="r_lake_lidar_dem.jpg" border="1"><br>
 Small flooding along a street (<em>r.lake</em>, using Lidar 1m DEM)
 </center>
 
