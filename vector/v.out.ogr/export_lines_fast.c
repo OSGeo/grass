@@ -122,7 +122,7 @@ int export_lines_single(struct Map_info *In, int field, int otype, int donocat,
         cat = ci->cat[cat_index][0];
         /* make sure the cidx is ordered by cat */
         if (cat < last_cat)
-            G_fatal_error("Categor index is not sorted ascending by cat!");
+            G_fatal_error("Category index is not sorted ascending by cat!");
         last_cat = cat;
 
         i = ci->cat[cat_index][2];
