@@ -39,11 +39,11 @@ static void reverse_points(struct line_pnts *Points)
 #endif
 
 /* export areas as single/multi-polygons */
-int export_areas(struct Map_info *In, int field, int multi, int donocat,
-                 OGRFeatureDefnH Ogr_featuredefn, OGRLayerH Ogr_layer,
-                 struct field_info *Fi, dbDriver *driver, int ncol,
-                 int *colctype, const char **colname, int doatt, int nocat,
-                 int *noatt, int *fout, int outer_ring_ccw)
+int export_areas_fast(struct Map_info *In, int field, int multi, int donocat,
+                      OGRFeatureDefnH Ogr_featuredefn, OGRLayerH Ogr_layer,
+                      struct field_info *Fi, dbDriver *driver, int ncol,
+                      int *colctype, const char **colname, int doatt, int nocat,
+                      int *noatt, int *fout, int outer_ring_ccw)
 {
     if (multi)
         /* export as multi-polygons */
@@ -65,11 +65,21 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
                         int outer_ring_ccw)
 {
     int i;
-    int cat, area, n_areas;
+    int cat, last_cat, db_cat, centroid, area;
     int n_exported;
 
     struct line_pnts *Points;
     struct line_cats *Cats;
+
+    int findex;
+    struct Cat_index *ci;
+    int cat_index, n_cats;
+
+    dbString dbstring;
+    char buf[SQL_BUFFER_SIZE];
+    dbCursor cursor;
+    int more;
+    int key_col_index;
 
     OGRGeometryH Ogr_geometry;
     OGRFeatureH Ogr_feature;
@@ -79,59 +89,147 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
 
     n_exported = 0;
 
-    n_areas = Vect_get_num_areas(In);
-    for (area = 1; area <= n_areas; area++) {
-        G_percent(area, n_areas, 5);
+    /* get category index for given field */
+    findex = Vect_cidx_get_field_index(In, field);
+    if (findex == -1) {
+        G_fatal_error(_("Unable to export multi-features. No category index "
+                        "for layer %d."),
+                      field);
+    }
+
+    ci = &(In->plus.cidx[findex]);
+    n_cats = ci->n_cats;
+
+    if (donocat)
+        G_message(_("Exporting features with category..."));
+
+    /* select attributes ordered by category value */
+    db_init_string(&dbstring);
+    sprintf(buf, "SELECT * FROM %s ORDER BY %s ASC", Fi->table, Fi->key);
+    G_debug(2, "SQL: %s", buf);
+    db_set_string(&dbstring, buf);
+    if (db_open_select_cursor(driver, &dbstring, &cursor, DB_SEQUENTIAL) !=
+        DB_OK) {
+        G_fatal_error(_("Cannot select attributes sorted by %s"), Fi->key);
+    }
+
+    if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
+        G_fatal_error(_("Unable to fetch data from table"));
+
+    /* get index of key column */
+    key_col_index = -1;
+    for (i = 0; i < ncol; i++) {
+        if (strcmp(Fi->key, colname[i]) == 0) {
+            key_col_index = i;
+            break;
+        }
+    }
+
+    last_cat = -1;
+    db_cat = -1;
+    for (cat_index = 0; cat_index < n_cats; cat_index++) {
+
+        G_percent(cat_index, n_cats, 5);
 
         /* get area's category */
-        Vect_get_area_cats(In, area, Cats);
-        cat = -1;
-        if (Cats->n_cats > 0) {
-            Vect_cat_get(Cats, field, &cat);
-        }
-        G_debug(3, "area = %d ncats = %d", area, Cats->n_cats);
-        if (cat < 0 && !donocat) {
-            (*n_nocat)++;
-            continue; /* skip areas without category, do not export
-                       * not labeled */
+        if (!(ci->cat[cat_index][1] & GV_CENTROID))
+            continue;
+
+        cat = ci->cat[cat_index][0];
+        /* make sure the cidx is ordered by cat */
+        if (cat < last_cat)
+            G_fatal_error(_("Category index is not sorted ascending by cat!"));
+        last_cat = cat;
+
+        centroid = ci->cat[cat_index][2];
+
+        area = Vect_get_centroid_area(In, centroid);
+
+        if (area < 1) {
+            /* centroid not in area or duplicate centroid */
+            continue;
         }
 
         /* create polygon from area */
         Ogr_geometry = create_polygon(In, area, Points, outer_ring_ccw);
 
-        /* output one feature for each category */
-        for (i = -1; i < Cats->n_cats; i++) {
-            if (i == -1) {
-                if (cat >= 0)
-                    continue; /* cat(s) exists */
-                (*n_nocat)++;
-            }
-            else {
-                if (Cats->field[i] == field)
-                    cat = Cats->cat[i];
-                else
-                    continue;
-            }
-
-            /* add feature */
-            Ogr_feature = OGR_F_Create(Ogr_featuredefn);
-            OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
-
-            mk_att(cat, Fi, driver, ncol, colctype, colname, doatt, nocat,
-                   Ogr_feature, n_noatt);
-            if (OGR_L_CreateFeature(Ogr_layer, Ogr_feature) != OGRERR_NONE) {
-                G_fatal_error(_("Failed to create OGR feature"));
-            }
-            else
-                n_exported++;
-
-            OGR_F_Destroy(Ogr_feature);
+        /* add feature */
+        Ogr_feature = OGR_F_Create(Ogr_featuredefn);
+        OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
+        /* get attributes */
+        mk_att_fast(cat, Fi, ncol, colctype, colname, doatt, nocat, Ogr_feature,
+                    n_noatt, &cursor, &more, &db_cat, key_col_index);
+        if (OGR_L_CreateFeature(Ogr_layer, Ogr_feature) != OGRERR_NONE) {
+            G_fatal_error(_("Failed to create OGR feature"));
         }
+        else
+            n_exported++;
+
+        OGR_F_Destroy(Ogr_feature);
         OGR_G_DestroyGeometry(Ogr_geometry);
     }
 
+    if (donocat)
+        G_message(_("Exporting features without category..."));
+
+    if (doatt) {
+        db_close_cursor(&cursor);
+        if (donocat) {
+            cat = -1;
+            if (db_open_select_cursor(driver, &dbstring, &cursor,
+                                      DB_SEQUENTIAL) != DB_OK) {
+                G_fatal_error(_("Cannot select attributes for cat = %d"), cat);
+            }
+            if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
+                G_fatal_error(_("Unable to fetch data from table"));
+        }
+    }
+
+    for (area = 1; area <= Vect_get_num_areas(In); area++) {
+        centroid = Vect_get_area_centroid(In, area);
+        /* skip areas without centroid */
+        if (centroid == 0)
+            continue;
+
+        /* get areas's category */
+        Vect_get_area_cats(In, area, Cats);
+        Vect_cat_get(Cats, field, &cat);
+        /* skip areas with category */
+        if (cat >= 0)
+            continue;
+        /* skip areas without category, do not export not labeled */
+        if (cat < 0 && !donocat) {
+            (*n_nocat)++;
+            continue;
+        }
+
+        (*n_nocat)++;
+
+        /* create polygon from area */
+        Ogr_geometry = create_polygon(In, area, Points, outer_ring_ccw);
+
+        /* add feature */
+        Ogr_feature = OGR_F_Create(Ogr_featuredefn);
+        OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
+        /* no attributes for features without category */
+        cat = -1;
+        db_cat = -2;
+        mk_att_fast(cat, Fi, ncol, colctype, colname, doatt, nocat, Ogr_feature,
+                    n_noatt, &cursor, &more, &db_cat, key_col_index);
+        if (OGR_L_CreateFeature(Ogr_layer, Ogr_feature) != OGRERR_NONE) {
+            G_fatal_error(_("Failed to create OGR feature"));
+        }
+        else
+            n_exported++;
+
+        OGR_F_Destroy(Ogr_feature);
+        OGR_G_DestroyGeometry(Ogr_geometry);
+    }
+
+    if (donocat && doatt)
+        db_close_cursor(&cursor);
+
     Vect_destroy_line_struct(Points);
-    Vect_destroy_cats_struct(Cats);
 
     return n_exported;
 }
@@ -143,12 +241,21 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
                        int nocat, int *n_noatt, int *n_nocat,
                        int outer_ring_ccw)
 {
-    int i, n_exported, area;
-    int cat, ncats_field, line, findex, ipart;
+    int i, n_exported, area, centroid;
+    int cat, last_cat, db_cat, line, findex, ipart;
 
     struct line_pnts *Points;
     struct line_cats *Cats;
-    struct ilist *cat_list, *line_list, *lcats;
+    struct ilist *line_list, *lcats;
+
+    struct Cat_index *ci;
+    int cat_index, n_cats;
+
+    dbString dbstring;
+    char buf[SQL_BUFFER_SIZE];
+    dbCursor cursor;
+    int more;
+    int key_col_index;
 
     OGRGeometryH Ogr_geometry, Ogr_geometry_part;
     OGRFeatureH Ogr_feature;
@@ -156,7 +263,6 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    cat_list = Vect_new_list();
     line_list = Vect_new_list();
     lcats = Vect_new_list();
 
@@ -164,27 +270,70 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
 
     /* check if category index is available for given field */
     findex = Vect_cidx_get_field_index(In, field);
-    if (findex == -1)
+    if (findex == -1) {
         G_fatal_error(_("Unable to export multi-features. No category index "
                         "for layer %d."),
                       field);
+    }
+
+    ci = &(In->plus.cidx[findex]);
+    n_cats = ci->n_cats;
 
     /* determine type */
     wkbtype_part = wkbPolygon;
     wkbtype = get_multi_wkbtype(wkbtype_part);
 
-    ncats_field = Vect_cidx_get_unique_cats_by_index(In, findex, cat_list);
-    G_debug(1, "n_cats = %d for layer %d", ncats_field, field);
-
     if (donocat)
         G_message(_("Exporting features with category..."));
 
-    for (i = 0; i < cat_list->n_values; i++) {
-        G_percent(i, cat_list->n_values - 1, 5);
+    key_col_index = -1;
+    more = 1;
+    if (doatt) {
+        /* select attributes ordered by category value */
+        db_init_string(&dbstring);
+        sprintf(buf, "SELECT * FROM %s ORDER BY %s ASC", Fi->table, Fi->key);
+        G_debug(2, "SQL: %s", buf);
+        db_set_string(&dbstring, buf);
+        if (db_open_select_cursor(driver, &dbstring, &cursor, DB_SEQUENTIAL) !=
+            DB_OK) {
+            G_fatal_error(_("Cannot select attributes sorted by %s"), Fi->key);
+        }
 
-        cat = cat_list->value[i];
-        /* find all centroids with given category */
-        Vect_cidx_find_all(In, field, GV_CENTROID, cat, line_list);
+        if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
+            G_fatal_error(_("Unable to fetch data from table"));
+
+        /* get index of key column */
+        key_col_index = -1;
+        for (i = 0; i < ncol; i++) {
+            if (strcmp(Fi->key, colname[i]) == 0) {
+                key_col_index = i;
+                break;
+            }
+        }
+    }
+
+    last_cat = -1;
+    db_cat = -1;
+    cat_index = 0;
+    while (cat_index < n_cats) {
+
+        G_percent(cat_index, n_cats, 5);
+
+        cat = ci->cat[cat_index][0];
+
+        /* make sure the cidx is ordered by cat */
+        if (cat < last_cat)
+            G_fatal_error(_("Category index is not sorted ascending by cat!"));
+        last_cat = cat;
+
+        /* collect all features with current cat */
+        Vect_reset_list(line_list);
+        while (cat_index < n_cats && ci->cat[cat_index][0] == cat) {
+            if (ci->cat[cat_index][1] & GV_CENTROID) {
+                Vect_list_append(line_list, ci->cat[cat_index][2]);
+            }
+            cat_index++;
+        }
 
         /* create multi-feature */
         Ogr_geometry = OGR_G_CreateGeometry(wkbtype);
@@ -220,9 +369,10 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
             /* write multi-feature */
             Ogr_feature = OGR_F_Create(Ogr_featuredefn);
             OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
-
-            mk_att(cat, Fi, driver, ncol, colctype, colname, doatt, nocat,
-                   Ogr_feature, n_noatt);
+            /* get attributes */
+            mk_att_fast(cat, Fi, ncol, colctype, colname, doatt, nocat,
+                        Ogr_feature, n_noatt, &cursor, &more, &db_cat,
+                        key_col_index);
             if (OGR_L_CreateFeature(Ogr_layer, Ogr_feature) != OGRERR_NONE) {
                 G_fatal_error(_("Failed to create OGR feature"));
             }
@@ -242,20 +392,39 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
     if (donocat)
         G_message(_("Exporting features without category..."));
 
-    /* check lines without category, if -c flag is given write them as
+    /* check areas without category, if -c flag is given write them as
      * one multi-feature */
     Ogr_geometry = OGR_G_CreateGeometry(wkbtype);
 
+    if (doatt) {
+        db_close_cursor(&cursor);
+        if (donocat) {
+            cat = -1;
+            if (db_open_select_cursor(driver, &dbstring, &cursor,
+                                      DB_SEQUENTIAL) != DB_OK) {
+                G_fatal_error(_("Cannot select attributes for cat = %d"), cat);
+            }
+            if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
+                G_fatal_error(_("Unable to fetch data from table"));
+        }
+    }
+
     for (area = 1; area <= Vect_get_num_areas(In); area++) {
+        centroid = Vect_get_area_centroid(In, area);
+        /* skip areas without centroid */
+        if (centroid == 0)
+            continue;
+
         /* get areas's category */
         Vect_get_area_cats(In, area, Cats);
         Vect_cat_get(Cats, field, &cat);
-        if (cat > 0)
-            continue; /* skip features with category */
+        /* skip areas with category */
+        if (cat >= 0)
+            continue;
+        /* skip areas without category, do not export not labeled */
         if (cat < 0 && !donocat) {
             (*n_nocat)++;
-            continue; /* skip lines without category, do not export
-                       * not labeled */
+            continue;
         }
 
         /* create polygon from area */
@@ -271,9 +440,11 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
         /* write multi-feature */
         Ogr_feature = OGR_F_Create(Ogr_featuredefn);
         OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
-
-        mk_att(cat, Fi, driver, ncol, colctype, colname, doatt, nocat,
-               Ogr_feature, n_noatt);
+        /* no attributes for features without category */
+        cat = -1;
+        db_cat = -2;
+        mk_att_fast(cat, Fi, ncol, colctype, colname, doatt, nocat, Ogr_feature,
+                    n_noatt, &cursor, &more, &db_cat, key_col_index);
         if (OGR_L_CreateFeature(Ogr_layer, Ogr_feature) != OGRERR_NONE) {
             G_fatal_error(_("Failed to create OGR feature"));
         }
@@ -289,9 +460,11 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
 
     OGR_G_DestroyGeometry(Ogr_geometry);
 
+    if (donocat && doatt)
+        db_close_cursor(&cursor);
+
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
-    Vect_destroy_list(cat_list);
     Vect_destroy_list(line_list);
     Vect_destroy_list(lcats);
 
