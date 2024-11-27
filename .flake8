@@ -40,7 +40,6 @@ per-file-ignores =
     gui/wxpython/mapwin/base.py: E722
     gui/wxpython/mapwin/buffered.py: E722
     gui/wxpython/mapwin/graphics.py: E722
-    gui/wxpython/startup/locdownload.py: E722, E402
     gui/wxpython/timeline/g.gui.timeline.py: E501
     # Generated file
     gui/wxpython/menustrings.py: E501
