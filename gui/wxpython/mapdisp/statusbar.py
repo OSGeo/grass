@@ -756,7 +756,7 @@ class SbCoordinates(SbTextItem):
             self.SetValue(e.message)
         # TODO: remove these excepts, they just hide errors, solve problems
         # differently
-        except TypeError as e:
+        except TypeError:
             self.SetValue("")
         except AttributeError:
             # during initialization MapFrame has no MapWindow
