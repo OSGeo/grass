@@ -258,7 +258,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
 
         notebook.AddPage(page=panel, text=" %s " % _("Fly-through"))
         pageSizer = wx.BoxSizer(wx.VERTICAL)
-        # fly throuhg mode
+        # fly through mode
         box = StaticBox(
             parent=panel, id=wx.ID_ANY, label=" %s " % (_("Fly-through mode"))
         )
@@ -704,7 +704,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                 group, key, subkey, subkey1 = gks.split(":")
                 value = self.settings.Get(group, key, [subkey, subkey1])
             if subkey == "position":
-                if subkey1 in ("x", "y"):
+                if subkey1 in {"x", "y"}:
                     value = float(value) * 100
             win = self.FindWindowById(self.winId[gks])
             if win.GetName() == "GetSelection":
@@ -731,7 +731,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                 value = win.GetValue()
 
             if subkey == "position":
-                if subkey1 in ("x", "y"):
+                if subkey1 in {"x", "y"}:
                     value = float(value) / 100
             if subkey1:
                 self.settings.Set(group, value, key, [subkey, subkey1])

@@ -9,14 +9,16 @@ for browsing, modifying and managing GRASS maps.
 Data Catalog allows you to:
 
 <ul>
-  <li>browse GRASS locations and mapsets in the current GIS directory</li>
+  <li>browse GRASS projects and mapsets in the current GIS directory</li>
   <li>browse GRASS 2D/3D raster and vector maps</li>
-  <li>rename, copy, move and delete GRASS maps including reprojection between different locations</li>
+  <li>rename, copy, move and delete GRASS maps including reprojection between different projects</li>
   <li>drag and drop maps for copying and moving</li>
   <li>searching and filtering maps using regular expressions</li>
-  <li>display map in current location</li>
+  <li>display map in current project</li>
   <li>show metadata of maps</li>
 </ul>
+
+Note that projects are called <em>locations</em> at some places and in old documentation.
 
 <center>
   <img src="datacatalog.png" border="0" alt="data catalog screenshot">
@@ -31,12 +33,12 @@ To allow changing data outside of your current mapset, you need to press <em>Unl
 
 <h3>WARNING</h3>
 When renaming, copying or deleting maps outside of Data Catalog, you need to reload
-the current mapset or entire database, because it is currently not synchronised.
+the current mapset or entire database, because it is currently not synchronized.
 
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="wxGUI.html">wxGUI</a><br>
+  <a href="wxGUI.html">wxGUI</a>,
   <a href="wxGUI.components.html">wxGUI components</a>
 </em>
 

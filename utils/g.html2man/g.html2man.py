@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from pathlib import Path
 import sys
 import re
 from ghtml import HTMLParser
@@ -16,12 +17,10 @@ def fix(content):
         tag, attrs, body = content
         if tag == "div" and ("class", "toc") in attrs:
             return None
-        else:
-            return (tag, attrs, fix(body))
-    elif isinstance(content, list):
+        return (tag, attrs, fix(body))
+    if isinstance(content, list):
         return [fixed for item in content for fixed in [fix(item)] if fixed is not None]
-    else:
-        return content
+    return content
 
 
 def main():
@@ -48,14 +47,13 @@ def main():
     sf.close()
 
     # strip excess whitespace
-    blank_re = re.compile("[ \t\n]*\n([ \t]*\n)*")
+    blank_re = re.compile(r"[ \t\n]*\n([ \t]*\n)*")
     s = blank_re.sub("\n", s)
     s = s.lstrip()
 
     # write groff
-    with open(sys.argv[2], "wb") as outf:
-        s = s.encode("UTF-8")
-        outf.write(s)
+    s = s.encode("UTF-8")
+    Path(sys.argv[2]).write_bytes(s)
 
 
 if __name__ == "__main__":

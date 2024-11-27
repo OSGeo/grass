@@ -40,31 +40,32 @@ point (.) as decimal separator.
 If no <b>group</b> is given, the rectified vector will be written to
 the current mapset. If a <b>group</b> is given and a target has been
 set for this group with <em><a href="i.target.html">i.target</a></em>,
-the rectified vector will be written to the target location and mapset.
+the rectified vector will be written to the target project and mapset.
 
 <h3>Coordinate transformation and RMSE</h3>
 <p>The desired order of transformation (1, 2, or 3) is selected with the
 <b>order</b> option.
 
-<em>v.rectify</em> will calculate the RMSE if the <b>-r</b> flag is
-given and print out statistcs in tabular format. The last row gives a
-summary with the first column holding the number of active points,
-followed by average deviations for each dimension and both forward and
-backward transformation and finally forward and backward overall RMSE.
+If the <b>-r</b> flag is given, <em>v.rectify</em> will calculate the
+Root Mean Square Error (RMSE) and print out statistics in tabular format.
+The last row gives a summary with the first column holding the number of
+active points, followed by average deviations for each dimension and both
+forward and backward transformation and finally forward and backward
+overall RMSE.
 
 <h4>2D linear affine transformation (1st order transformation)</h4>
 
 <dl>
-	<dd> x' = a1 + b1 * x + c1 * y
-	<dd> y' = a2 + b2 * x + c2 * y
+<dd> x' = a1 + b1 * x + c1 * y
+<dd> y' = a2 + b2 * x + c2 * y
 </dl>
 
 <h4>3D linear affine transformation (1st order transformation)</h4>
 
 <dl>
-	<dd> x' = a1 + b1 * x + c1 * y + d1 * z
-	<dd> y' = a2 + b2 * x + c2 * y + d2 * z
-	<dd> z' = a3 + b3 * x + c3 * y + d3 * z
+<dd> x' = a1 + b1 * x + c1 * y + d1 * z
+<dd> y' = a2 + b2 * x + c2 * y + d2 * z
+<dd> z' = a3 + b3 * x + c3 * y + d3 * z
 </dl>
 
 The a,b,c,d coefficients are determined by least squares regression
@@ -110,7 +111,7 @@ Processing manual</a></em>
 <a href="m.transform.html">m.transform</a>,
 <a href="r.proj.html">r.proj</a>,
 <a href="v.proj.html">v.proj</a>,
-<a href="v.transform.html">v.transform</a>,
+<a href="v.transform.html">v.transform</a>
 </em>
 
 <br>

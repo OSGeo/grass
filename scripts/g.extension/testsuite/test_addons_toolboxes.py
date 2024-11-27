@@ -15,8 +15,10 @@ COPYRIGHT: (C) 2015 Vaclav Petras, and by the GRASS Development Team
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.utils import xfail_windows
 
 import os
+
 
 FULL_TOOLBOXES_OUTPUT = """\
 Hydrology (HY)
@@ -39,6 +41,7 @@ mcda (MC)
 class TestToolboxesMetadata(TestCase):
     url = "file://" + os.path.abspath("data")
 
+    @xfail_windows
     def test_listing(self):
         """List toolboxes and their content"""
         module = SimpleModule("g.extension", flags="lt", url=self.url)

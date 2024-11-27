@@ -48,6 +48,9 @@ void print_json(const char *type, I_SIGFILE_TYPE sigtype, const char *mapset)
         fprintf(stdout, "],\n");
         fprintf(stdout, "\"sigset\": [");
         print_inline(I_SIGFILE_TYPE_SIGSET, mapset);
+        fprintf(stdout, "],\n");
+        fprintf(stdout, "\"libsvm\": [");
+        print_inline(I_SIGFILE_TYPE_LIBSVM, mapset);
         fprintf(stdout, "]\n");
     }
     else if (sigtype == I_SIGFILE_TYPE_SIG) {
@@ -58,6 +61,11 @@ void print_json(const char *type, I_SIGFILE_TYPE sigtype, const char *mapset)
     else if (sigtype == I_SIGFILE_TYPE_SIGSET) {
         fprintf(stdout, "\"sigset\": [");
         print_inline(I_SIGFILE_TYPE_SIGSET, mapset);
+        fprintf(stdout, "]\n");
+    }
+    else if (sigtype == I_SIGFILE_TYPE_LIBSVM) {
+        fprintf(stdout, "\"libsvm\": [");
+        print_inline(I_SIGFILE_TYPE_LIBSVM, mapset);
         fprintf(stdout, "]\n");
     }
     fprintf(stdout, "}\n");
@@ -104,21 +112,13 @@ int main(int argc, char *argv[])
     parms.type->type = TYPE_STRING;
     parms.type->key_desc = "name";
     parms.type->required = NO;
-    parms.type->options = "sig,sigset";
+    parms.type->options = "sig,sigset,libsvm";
     parms.type->guidependency = "remove,rename,copy";
     parms.type->gisprompt = "old,sigtype,sigtype";
     parms.type->description = _("Type of signature file");
     parms.type->guisection = _("Main");
 
-    parms.format = G_define_option();
-    parms.format->key = "format";
-    parms.format->type = TYPE_STRING;
-    parms.format->required = NO;
-    parms.format->label = _("Output format");
-    parms.format->options = "plain,json";
-    parms.format->descriptions = "plain;Plain text output;"
-                                 "json;JSON (JavaScript Object Notation);";
-    parms.format->answer = "plain";
+    parms.format = G_define_standard_option(G_OPT_F_FORMAT);
     parms.format->guisection = _("Print");
 
     parms.mapset = G_define_standard_option(G_OPT_M_MAPSET);
@@ -174,6 +174,8 @@ int main(int argc, char *argv[])
         sigtype = I_SIGFILE_TYPE_SIG;
     else if (strcmp(parms.type->answer, "sigset") == 0)
         sigtype = I_SIGFILE_TYPE_SIGSET;
+    else if (strcmp(parms.type->answer, "libsvm") == 0)
+        sigtype = I_SIGFILE_TYPE_LIBSVM;
 
     if (parms.copy->answers) {
         int i = 0;
@@ -213,6 +215,8 @@ int main(int argc, char *argv[])
             if (strcmp(parms.format->answer, "plain") == 0) {
                 print_plain("sig", I_SIGFILE_TYPE_SIG, parms.mapset->answer);
                 print_plain("sigset", I_SIGFILE_TYPE_SIGSET,
+                            parms.mapset->answer);
+                print_plain("libsvm", I_SIGFILE_TYPE_LIBSVM,
                             parms.mapset->answer);
             }
             else

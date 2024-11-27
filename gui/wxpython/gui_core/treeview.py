@@ -56,7 +56,7 @@ class AbstractTreeViewMixin(VirtualTree):
 
     def __init__(self, model, parent, *args, **kw):
         self._model = model
-        super(AbstractTreeViewMixin, self).__init__(parent=parent, *args, **kw)
+        super().__init__(parent=parent, *args, **kw)
 
         self.selectionChanged = Signal("TreeView.selectionChanged")
         self.itemActivated = Signal("TreeView.itemActivated")
@@ -91,8 +91,7 @@ class AbstractTreeViewMixin(VirtualTree):
         """
         node = self._model.GetNodeByIndex(index)
         # remove & because of & needed in menu (&Files)
-        label = node.label.replace("&", "")
-        return label
+        return node.label.replace("&", "")
 
     def OnGetChildrenCount(self, index):
         """Overridden method necessary to communicate with tree model."""
@@ -202,7 +201,7 @@ class TreeView(AbstractTreeViewMixin, wx.TreeCtrl):
     """Tree view class inheriting from wx.TreeCtrl"""
 
     def __init__(self, model, parent, *args, **kw):
-        super(TreeView, self).__init__(parent=parent, model=model, *args, **kw)
+        super().__init__(parent=parent, model=model, *args, **kw)
         self.RefreshItems()
 
 
@@ -210,10 +209,7 @@ class CTreeView(AbstractTreeViewMixin, CustomTreeCtrl):
     """Tree view class inheriting from wx.TreeCtrl"""
 
     def __init__(self, model, parent, **kw):
-        if hasAgw:
-            style = "agwStyle"
-        else:
-            style = "style"
+        style = "agwStyle" if hasAgw else "style"
 
         if style not in kw:
             kw[style] = (
@@ -223,7 +219,7 @@ class CTreeView(AbstractTreeViewMixin, CustomTreeCtrl):
                 | CT.TR_LINES_AT_ROOT
                 | CT.TR_SINGLE
             )
-        super(CTreeView, self).__init__(parent=parent, model=model, **kw)
+        super().__init__(parent=parent, model=model, **kw)
         self.SetBackgroundColour(wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW))
         self.RefreshItems()
 
@@ -235,7 +231,7 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, TreeListCtrl):
             flags = kw["style"]
             kw["agwStyle"] = flags
             del kw["style"]
-        super(TreeListView, self).__init__(parent=parent, model=model, **kw)
+        super().__init__(parent=parent, model=model, **kw)
         for column in columns:
             self.AddColumn(column)
         self.SetMainColumn(0)
@@ -257,9 +253,7 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, TreeListCtrl):
         # remove & because of & needed in menu (&Files)
         if column > 0:
             return node.data.get(self._columns[column], "")
-        else:
-            label = node.label.replace("&", "")
-            return label
+        return node.label.replace("&", "")
 
     def OnRightClick(self, event):
         """Select item on right click.
@@ -279,8 +273,8 @@ class TreeFrame(wx.Frame):
         wx.Frame.__init__(self, None, title="Test tree")
 
         panel = wx.Panel(self)
-        #        self.tree = TreeListView(model=model, parent=panel, columns=['col1', 'xxx'])
-        #        self.tree = TreeView(model=model, parent=panel)
+        # self.tree = TreeListView(model=model, parent=panel, columns=["col1", "xxx"])
+        # self.tree = TreeView(model=model, parent=panel)
         self.tree = CTreeView(model=model, parent=panel)
         self.tree.selectionChanged.connect(self.OnSelChanged)
         self.tree.itemActivated.connect(self.OnItemActivated)
@@ -305,17 +299,19 @@ def main():
     root = tree.root
     n1 = tree.AppendNode(parent=root, data={"label": "node1"})
     n2 = tree.AppendNode(parent=root, data={"label": "node2"})
-    n3 = tree.AppendNode(parent=root, data={"label": "node3"})  # pylint: disable=W0612
+    n3 = tree.AppendNode(  # noqa: F841 # pylint: disable=W0612
+        parent=root, data={"label": "node3"}
+    )
     n11 = tree.AppendNode(parent=n1, data={"label": "node11", "xxx": "A"})
-    n12 = tree.AppendNode(
+    n12 = tree.AppendNode(  # noqa: F841 # pylint: disable=W0612
         parent=n1, data={"label": "node12", "xxx": "B"}
-    )  # pylint: disable=W0612
-    n21 = tree.AppendNode(
+    )
+    n21 = tree.AppendNode(  # noqa: F841 # pylint: disable=W0612
         parent=n2, data={"label": "node21", "xxx": "A"}
-    )  # pylint: disable=W0612
-    n111 = tree.AppendNode(
+    )
+    n111 = tree.AppendNode(  # noqa: F841 # pylint: disable=W0612
         parent=n11, data={"label": "node111", "xxx": "A"}
-    )  # pylint: disable=W0612
+    )
 
     app = wx.App()
     frame = TreeFrame(model=tree)

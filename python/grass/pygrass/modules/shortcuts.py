@@ -1,14 +1,26 @@
 import fnmatch
 
-
-from grass.script.core import get_commands
 from grass.pygrass.modules.interface import Module
 
-_CMDS = list(get_commands()[0])
-_CMDS.sort()
+
+def _get_commands():
+    """Get a list of commands (tool names)"""
+    if _get_commands.list_of_commands is None:
+        # Retrieve and store the list during the the first call of the function.
+        # pylint: disable=import-outside-toplevel
+        from grass.script.core import get_commands
+
+        _get_commands.list_of_commands = list(get_commands()[0])
+        _get_commands.list_of_commands.sort()
+    return _get_commands.list_of_commands
 
 
-class MetaModule(object):
+# Initialize the attribute of the function to indicate
+# that the data is not initialized.
+_get_commands.list_of_commands = None
+
+
+class MetaModule:
     """Example how to use MetaModule
 
     >>> g = MetaModule('g')
@@ -47,12 +59,12 @@ class MetaModule(object):
 
     def __init__(self, prefix, cls=None):
         self.prefix = prefix
-        self.cls = cls if cls else Module
+        self.cls = cls or Module
 
     def __dir__(self):
         return [
             mod[(len(self.prefix) + 1) :].replace(".", "_")
-            for mod in fnmatch.filter(_CMDS, "%s.*" % self.prefix)
+            for mod in fnmatch.filter(_get_commands(), "%s.*" % self.prefix)
         ]
 
     def __getattr__(self, name):

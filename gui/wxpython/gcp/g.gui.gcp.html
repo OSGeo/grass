@@ -15,8 +15,8 @@ to POINTS file). This guarantees that accidental changes are not
 permanent and can be undone by reloading the Ground Control Points.
 
 <p>
-The GCP Manager must be started in the target location, not in the
-source location.
+The GCP Manager must be started in the target project, not in the
+source project.
 
 <p>
 The GCP Manager is structured into three panels:
@@ -26,11 +26,11 @@ The GCP Manager is structured into three panels:
   manipulate and analyze GCPs are provided in the toolbar. This panel can
   be moved out of the GCP manager window by either dragging with the
   caption or by clicking on the pin button on the right in the caption.
-  This panel can also be placed below the map displays by dragging.
+  This panel can also be placed below the map displays by dragging.</li>
   <li>The two panels in the lower part are used for map and GCP display,
-  the left pane showing a map from the source location and the right
-  pane showing a reference map from the target location. Numbered Ground
-  Control Points are shown on both map displays.
+  the left pane showing a map from the source project and the right
+  pane showing a reference map from the target project. Numbered Ground
+  Control Points are shown on both map displays.</li>
 </ul>
 
 
@@ -50,7 +50,7 @@ displays and one for managing the GCP list.
 <em>List of ground control points</em>
 <p>
 The list of Ground Control Points can be sorted by clicking on a column
-header. Clicking on a cloumn header will sort the GCPs ascending, a
+header. Clicking on a column header will sort the GCPs ascending, a
 second click on the same column will sort the GCPs descending. Overall
 RMS error and individual RMS errors of all points are often improved if
 the GCP with the highest RMS error is adjusted. Individual coordinates
@@ -64,8 +64,8 @@ unused GCP).
 <p>
 <em>Two panels for map display</em>
 <p>
-The left panel is used to display a map from the source location, the
-right panel to display a map from the target location. Zooming in and
+The left panel is used to display a map from the source project, the
+right panel to display a map from the target project. Zooming in and
 out is always possible with the mouse wheel and done for each map canvas
 separately.
 <p>
@@ -214,9 +214,9 @@ canvas (source or target).</dd>
         <dt><em>Select rectification method</em></dt>
           <dd>Set the polynomial order for georectification. This order will
           also be used for RMS error calculation.</dd>
-        <dt><em>Clip to computational region in target location</em></dt>
+        <dt><em>Clip to computational region in target project</em></dt>
           <dd>Clip raster maps to the current computational region in the
-          target location when georectifying.</dd>
+          target project when georectifying.</dd>
         <dt><em>Extension for output maps</em></dt>
           <dd>Change the extension for output map names when doing the actual
           georectification.</dd>
@@ -292,7 +292,7 @@ error is displayed.
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="wxGUI.html">wxGUI</a><br>
+  <a href="wxGUI.html">wxGUI</a>,
   <a href="wxGUI.components.html">wxGUI components</a>
 </em>
 

@@ -50,12 +50,7 @@ def main():
 
     fs = separator(options["separator"])
     threeD = flags["z"]
-
-    if threeD:
-        do3D = "z"
-    else:
-        do3D = ""
-
+    do3D = "z" if threeD else ""
     tmp = grass.tempfile()
 
     # set up input file
@@ -78,7 +73,7 @@ def main():
 
         outf.close()
         runfile = tmp
-    else:
+    else:  # noqa: PLR5501
         # read from a real file
         if fs == " ":
             runfile = infile

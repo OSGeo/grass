@@ -26,19 +26,6 @@
 #include <gdal_version.h>
 #include <ogr_api.h>
 
-/* define type of input datasource
- * as of GDAL 2.2, all functions having as argument a GDAL/OGR dataset
- * must use the GDAL version, not the OGR version */
-#if GDAL_VERSION_NUM >= 2020000
-typedef GDALDatasetH ds_t;
-#define ds_getlayerbyindex(ds, i) GDALDatasetGetLayer((ds), (i))
-#define ds_close(ds)              GDALClose(ds)
-#else
-typedef OGRDataSourceH ds_t;
-#define ds_getlayerbyindex(ds, i) OGR_DS_GetLayer((ds), (i))
-#define ds_close(ds)              OGR_DS_Destroy(ds)
-#endif
-
 extern int n_polygons;
 extern int n_polygon_boundaries;
 extern double split_distance;

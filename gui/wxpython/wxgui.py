@@ -100,10 +100,10 @@ class GMApp(wx.App):
                     warning(
                         _(
                             "Current version of wxPython {} is lower than "
-                            "minimum required version {}".format(
-                                wx.__version__,
-                                ".".join(map(str, min_required_wx_version)),
-                            )
+                            "minimum required version {}"
+                        ).format(
+                            wx.__version__,
+                            ".".join(map(str, min_required_wx_version)),
                         )
                     )
                 else:
@@ -135,14 +135,11 @@ def process_opt(opts, args):
     """Process command-line arguments"""
     workspaceFile = None
     for o, a in opts:
-        if o in ("-h", "--help"):
+        if o in {"-h", "--help"}:
             printHelp()
 
-        elif o in ("-w", "--workspace"):
-            if a != "":
-                workspaceFile = str(a)
-            else:
-                workspaceFile = args.pop(0)
+        elif o in {"-w", "--workspace"}:
+            workspaceFile = str(a) if a != "" else args.pop(0)
 
     return workspaceFile
 
@@ -164,7 +161,7 @@ def main(argv=None):
     app = GMApp(workspaceFile)
 
     # suppress wxPython logs
-    q = wx.LogNull()
+    q = wx.LogNull()  # noqa: F841
     set_raise_on_error(True)
 
     # register GUI PID

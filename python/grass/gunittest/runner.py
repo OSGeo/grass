@@ -12,7 +12,6 @@ File content taken from Python's  ``unittest.runner``, it will be used as
 a template. It is not expected that something will left.
 """
 
-
 import sys
 import time
 
@@ -21,7 +20,7 @@ import unittest
 __unittest = True
 
 
-class _WritelnDecorator(object):
+class _WritelnDecorator:
     """Used to decorate file-like objects with a handy 'writeln' method"""
 
     def __init__(self, stream):
@@ -44,13 +43,11 @@ class TestResult(unittest.TestResult):
     # where are also unused, so perhaps we can remove them
     # stream set to None and not included in interface, it would not make sense
     def __init__(self, stream=None, descriptions=None, verbosity=None):
-        super(TestResult, self).__init__(
-            stream=stream, descriptions=descriptions, verbosity=verbosity
-        )
+        super().__init__(stream=stream, descriptions=descriptions, verbosity=verbosity)
         self.successes = []
 
     def addSuccess(self, test):
-        super(TestResult, self).addSuccess(test)
+        super().addSuccess(test)
         self.successes.append(test)
 
     # TODO: better would be to pass start at the beginning
@@ -72,9 +69,7 @@ class TextTestResult(TestResult):
     separator2 = "-" * 70
 
     def __init__(self, stream, descriptions, verbosity):
-        super(TextTestResult, self).__init__(
-            stream=stream, descriptions=descriptions, verbosity=verbosity
-        )
+        super().__init__(stream=stream, descriptions=descriptions, verbosity=verbosity)
         self.stream = _WritelnDecorator(stream)
         self.showAll = verbosity > 1
         self.dots = verbosity == 1
@@ -88,18 +83,17 @@ class TextTestResult(TestResult):
         doc_first_line = test.shortDescription()
         if self.descriptions and doc_first_line:
             return "\n".join((str(test), doc_first_line))
-        else:
-            return str(test)
+        return str(test)
 
     def startTest(self, test):
-        super(TextTestResult, self).startTest(test)
+        super().startTest(test)
         if self.showAll:
             self.stream.write(self.getDescription(test))
             self.stream.write(" ... ")
             self.stream.flush()
 
     def addSuccess(self, test):
-        super(TextTestResult, self).addSuccess(test)
+        super().addSuccess(test)
         if self.showAll:
             self.stream.writeln("ok")
         elif self.dots:
@@ -107,7 +101,7 @@ class TextTestResult(TestResult):
             self.stream.flush()
 
     def addError(self, test, err):
-        super(TextTestResult, self).addError(test, err)
+        super().addError(test, err)
         if self.showAll:
             self.stream.writeln("ERROR")
         elif self.dots:
@@ -115,7 +109,7 @@ class TextTestResult(TestResult):
             self.stream.flush()
 
     def addFailure(self, test, err):
-        super(TextTestResult, self).addFailure(test, err)
+        super().addFailure(test, err)
         if self.showAll:
             self.stream.writeln("FAIL")
         elif self.dots:
@@ -123,7 +117,7 @@ class TextTestResult(TestResult):
             self.stream.flush()
 
     def addSkip(self, test, reason):
-        super(TextTestResult, self).addSkip(test, reason)
+        super().addSkip(test, reason)
         if self.showAll:
             self.stream.writeln("skipped {0!r}".format(reason))
         elif self.dots:
@@ -131,7 +125,7 @@ class TextTestResult(TestResult):
             self.stream.flush()
 
     def addExpectedFailure(self, test, err):
-        super(TextTestResult, self).addExpectedFailure(test, err)
+        super().addExpectedFailure(test, err)
         if self.showAll:
             self.stream.writeln("expected failure")
         elif self.dots:
@@ -139,7 +133,7 @@ class TextTestResult(TestResult):
             self.stream.flush()
 
     def addUnexpectedSuccess(self, test):
-        super(TextTestResult, self).addUnexpectedSuccess(test)
+        super().addUnexpectedSuccess(test)
         if self.showAll:
             self.stream.writeln("unexpected success")
         elif self.dots:
@@ -165,11 +159,11 @@ class TextTestResult(TestResult):
         self.time_taken = time_taken
 
     def stopTestRun(self):
-        super(TextTestResult, self).stopTestRun()
+        super().stopTestRun()
         self.printErrors()
         self.stream.writeln(self.separator2)
         run = self.testsRun
-        self.stream.write("Ran %d test%s" % (run, run != 1 and "s" or ""))
+        self.stream.write("Ran %d test%s" % (run, (run != 1 and "s") or ""))
         if self.time_taken:
             self.stream.write(" in %.3fs" % (self.time_taken))
         self.stream.writeln()
@@ -212,9 +206,7 @@ class KeyValueTestResult(TestResult):
     separator2 = "-" * 70
 
     def __init__(self, stream, test_type=None):
-        super(KeyValueTestResult, self).__init__(
-            stream=stream, descriptions=None, verbosity=None
-        )
+        super().__init__(stream=stream, descriptions=None, verbosity=None)
         self._stream = _WritelnDecorator(stream)
 
         self.start_time = None
@@ -235,14 +227,14 @@ class KeyValueTestResult(TestResult):
         self.time_taken = time_taken
 
     def stopTest(self, test):
-        super(KeyValueTestResult, self).stopTest(test)
+        super().stopTest(test)
         if hasattr(test, "grass_modules"):
             self._grass_modules.extend(test.grass_modules)
         if hasattr(test, "supplementary_files"):
             self._supplementary_files.extend(test.supplementary_files)
 
     def stopTestRun(self):
-        super(KeyValueTestResult, self).stopTestRun()
+        super().stopTestRun()
         infos = []
 
         run = self.testsRun
@@ -276,28 +268,28 @@ class KeyValueTestResult(TestResult):
         # write test details and just write status=failed
         if not run:
             run = errored + failed + succeeded
-        infos.append("total=%d" % (run))
-
-        infos.append("failures=%d" % failed)
-        infos.append("errors=%d" % errored)
-        infos.append("successes=%d" % succeeded)
-        infos.append("skipped=%d" % skipped)
-
-        # TODO: document this: if not supported by view,
-        # expected_failures should be counted as failures and vice versa
-        # or both add to skipped as unclear?
-        infos.append("expected_failures=%d" % expectedFails)
-        infos.append("unexpected_successes=%d" % unexpectedSuccesses)
-
-        # TODO: include each module just once? list good and bad modules?
-        infos.append("tested_modules=%s" % ",".join(self._grass_modules))
-        infos.append("supplementary_files=%s" % ",".join(self._supplementary_files))
-
-        # module, modules?, c, c++?, python
-        # TODO: include also type modules?
-        # TODO: include also C++ code?
-        # TODO: distinguish C and Python modules?
-        infos.append("test_type=%s" % (self.test_type))
+        infos.extend(
+            (
+                "total=%d" % (run),
+                "failures=%d" % failed,
+                "errors=%d" % errored,
+                "successes=%d" % succeeded,
+                "skipped=%d" % skipped,
+                # TODO: document this: if not supported by view,
+                # expected_failures should be counted as failures and vice versa
+                # or both add to skipped as unclear?
+                "expected_failures=%d" % expectedFails,
+                "unexpected_successes=%d" % unexpectedSuccesses,
+                # TODO: include each module just once? list good and bad modules?
+                "tested_modules=%s" % ",".join(self._grass_modules),
+                "supplementary_files=%s" % ",".join(self._supplementary_files),
+                # module, modules?, c, c++?, python
+                # TODO: include also type modules?
+                # TODO: include also C++ code?
+                # TODO: distinguish C and Python modules?
+                "test_type=%s" % (self.test_type),
+            )
+        )
 
         self._stream.write("\n".join(infos))
         self._stream.write("\n")
@@ -310,14 +302,12 @@ class MultiTestResult(TestResult):
     # where are also unused, so perhaps we can remove them
     # stream set to None and not included in interface, it would not make sense
     def __init__(self, results, forgiving=False, descriptions=None, verbosity=None):
-        super(MultiTestResult, self).__init__(
-            descriptions=descriptions, verbosity=verbosity, stream=None
-        )
+        super().__init__(descriptions=descriptions, verbosity=verbosity, stream=None)
         self._results = results
         self._forgiving = forgiving
 
     def startTest(self, test):
-        super(MultiTestResult, self).startTest(test)
+        super().startTest(test)
         for result in self._results:
             try:
                 result.startTest(test)
@@ -329,7 +319,7 @@ class MultiTestResult(TestResult):
 
     def stopTest(self, test):
         """Called when the given test has been run"""
-        super(MultiTestResult, self).stopTest(test)
+        super().stopTest(test)
         for result in self._results:
             try:
                 result.stopTest(test)
@@ -340,7 +330,7 @@ class MultiTestResult(TestResult):
                     raise
 
     def addSuccess(self, test):
-        super(MultiTestResult, self).addSuccess(test)
+        super().addSuccess(test)
         for result in self._results:
             try:
                 result.addSuccess(test)
@@ -351,7 +341,7 @@ class MultiTestResult(TestResult):
                     raise
 
     def addError(self, test, err):
-        super(MultiTestResult, self).addError(test, err)
+        super().addError(test, err)
         for result in self._results:
             try:
                 result.addError(test, err)
@@ -362,7 +352,7 @@ class MultiTestResult(TestResult):
                     raise
 
     def addFailure(self, test, err):
-        super(MultiTestResult, self).addFailure(test, err)
+        super().addFailure(test, err)
         for result in self._results:
             try:
                 result.addFailure(test, err)
@@ -373,7 +363,7 @@ class MultiTestResult(TestResult):
                     raise
 
     def addSkip(self, test, reason):
-        super(MultiTestResult, self).addSkip(test, reason)
+        super().addSkip(test, reason)
         for result in self._results:
             try:
                 result.addSkip(test, reason)
@@ -384,7 +374,7 @@ class MultiTestResult(TestResult):
                     raise
 
     def addExpectedFailure(self, test, err):
-        super(MultiTestResult, self).addExpectedFailure(test, err)
+        super().addExpectedFailure(test, err)
         for result in self._results:
             try:
                 result.addExpectedFailure(test, err)
@@ -395,7 +385,7 @@ class MultiTestResult(TestResult):
                     raise
 
     def addUnexpectedSuccess(self, test):
-        super(MultiTestResult, self).addUnexpectedSuccess(test)
+        super().addUnexpectedSuccess(test)
         for result in self._results:
             try:
                 result.addUnexpectedSuccess(test)
@@ -407,7 +397,7 @@ class MultiTestResult(TestResult):
 
     def printErrors(self):
         "Called by TestRunner after test run"
-        super(MultiTestResult, self).printErrors()
+        super().printErrors()
         for result in self._results:
             try:
                 result.printErrors()
@@ -422,7 +412,7 @@ class MultiTestResult(TestResult):
 
         See startTest for a method called before each test.
         """
-        super(MultiTestResult, self).startTestRun()
+        super().startTestRun()
         for result in self._results:
             try:
                 result.startTestRun()
@@ -437,7 +427,7 @@ class MultiTestResult(TestResult):
 
         See stopTest for a method called after each test.
         """
-        super(MultiTestResult, self).stopTestRun()
+        super().stopTestRun()
         for result in self._results:
             try:
                 result.stopTestRun()
@@ -462,7 +452,7 @@ class MultiTestResult(TestResult):
                     raise
 
 
-class GrassTestRunner(object):
+class GrassTestRunner:
     def __init__(
         self,
         stream=sys.stderr,

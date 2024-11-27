@@ -85,7 +85,7 @@ class PointListToolbar(BaseToolbar):
                     icons["pointDelete"],
                     self.OnDeletePoint,
                 ),
-                (None,)  # ,
+                (None,),  # ,
                 # ('isec_turn_edit', icons['isec_turn_edit'],
                 # self.dialog.OnDefIsecTurnCosts,
                 # wx.ITEM_CHECK),
@@ -235,6 +235,5 @@ class AnalysisToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        icons = {}
 
         return self._getToolbarData(())

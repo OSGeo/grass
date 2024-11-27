@@ -295,13 +295,13 @@ to importing the dataset.
 
 <h2>NOTES</h2>
 
-<h3>Format and projection support</h3>
+<h3>Format and coordinate reference system support</h3>
 
 The typical file extensions for the LAS format are .las and .laz
 (compressed). The compressed LAS (.laz) format can be imported only if
 libLAS has been compiled with LASzip support. It is also recommended to
-compile libLAS with GDAL which is used to test if the LAS projection
-matches that of the GRASS location.
+compile libLAS with GDAL which is used to test if the LAS coordinate
+reference system (CRS) matches that of the GRASS project (previously called location).
 
 <h3>LAS file import preparations</h3>
 
@@ -367,7 +367,7 @@ Attempt to use it with other statistical methods will result in an error.
 <h2>EXAMPLES</h2>
 
 Simple example of binning of point from a LAS file into a newly created
-raster map in an existing location/mapset (using metric units):
+raster map in an existing project/mapset (using metric units):
 
 <div class="code"><pre>
 # set the computational region automatically, resol. for binning is 5m
@@ -443,10 +443,10 @@ r.in.lidar input=points.las output=lidar_dem_percentile_95 \
 Further hints: how to calculate number of LiDAR points/square meter:
 <div class="code"><pre>
 g.region -e
-  # Metric location:
+  # Metric project:
   # points_per_sq_m = n_points / (ns_extent * ew_extent)
 
-  # Lat/Lon location:
+  # Lat/Lon project:
   # points_per_sq_m = n_points / (ns_extent * ew_extent*cos(lat) * (1852*60)^2)
 </pre></div>
 
@@ -462,11 +462,11 @@ available at
 # print LAS file info
 r.in.lidar -p input="Serpent Mound Model LAS Data.las"
 
-# using v.in.lidar to create a new location
-# create location with projection information of the LAS data
-v.in.lidar -i input="Serpent Mound Model LAS Data.las" location=Serpent_Mound
+# using v.in.lidar to create a new project
+# create project with CRS information of the LAS data
+v.in.lidar -i input="Serpent Mound Model LAS Data.las" project=Serpent_Mound
 
-# quit and restart GRASS in the newly created location "Serpent_Mound"
+# quit and restart GRASS in the newly created project "Serpent_Mound"
 
 # scan the extents of the LAS data
 r.in.lidar -sg input="Serpent Mound Model LAS Data.las"
@@ -517,11 +517,11 @@ would be lised in the file as:
 </pre></div>
 On Linux and OSX, this file can be automatically generated with the command:
 <div class="code"><pre>
-ls /home/user/data/*.laz > /home/user/data/filelist.txt
+ls /home/user/data/*.laz &gt; /home/user/data/filelist.txt
 </pre></div>
 On Windows:
 <div class="code"><pre>
-dir /b c:\users\user\data\*.laz > c:\users\user\data\filelist.txt
+dir /b c:\users\user\data\*.laz &gt; c:\users\user\data\filelist.txt
 </pre></div>
 
 The mean height above ground example above would then be:
@@ -597,14 +597,14 @@ Development Team.
 <li>
 V. Petras, A. Petrasova, J. Jeziorska, H. Mitasova (2016):
 <em>Processing UAV and lidar point clouds in GRASS GIS</em>.
-XXIII ISPRS Congress 2016 [<a href="http://www.int-arch-photogramm-remote-sens-spatial-inf-sci.net/XLI-B7/945/2016/">ISPRS Archives</a>, <a href="https://www.researchgate.net/publication/304340172_Processing_UAV_and_lidar_point_clouds_in_GRASS_GIS">ResearchGate</a>]
+XXIII ISPRS Congress 2016 [<a href="http://www.int-arch-photogramm-remote-sens-spatial-inf-sci.net/XLI-B7/945/2016/">ISPRS Archives</a>, <a href="https://www.researchgate.net/publication/304340172_Processing_UAV_and_lidar_point_clouds_in_GRASS_GIS">ResearchGate</a>]</li>
 <li>
 <a href="https://www.asprs.org/committee-general/laser-las-file-format-exchange-activities.html">
-ASPRS LAS format</a>
+ASPRS LAS format</a></li>
 <li>
-<a href="http://www.liblas.org/">LAS library</a>
+<a href="http://www.liblas.org/">LAS library</a></li>
 <li>
-<a href="http://test.liblas.org/doxygen/liblas_8h.htm">LAS library C API</a> documentation
+<a href="http://test.liblas.org/doxygen/liblas_8h.htm">LAS library C API</a> documentation</li>
 </ul>
 
 <h2>AUTHORS</h2>
