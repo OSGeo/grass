@@ -46,8 +46,8 @@ Vector features can be selected in several ways:
     box, size defined by <b>threshold</b>)</li>
     <li><b>bbox</b> - using bounding box</li>
     <li><b>polygon</b> - using polygon (at least 3 coordinate pairs have to be set)</li>
-    <li><b>where</b> - using where statement (attribute data)
-    <li><b>query</b> - special query (e.g. minimal vector line length)
+    <li><b>where</b> - using where statement (attribute data)</li>
+    <li><b>query</b> - special query (e.g. minimal vector line length)</li>
 </ul>
 
 Additional parameters for vector feature specification are:
@@ -165,7 +165,7 @@ Additional parameters for vector feature specification are:
     and <b>zbulk</b> parameter. Also input vector map must be 3D.</li>
 
     <li><b>select</b> - Print comma separated list of selected line
-      id's. No editing is done.
+      id's. No editing is done.</li>
 </ul>
 
 <h2>EXAMPLES</h2>
@@ -181,7 +181,7 @@ v.edit tool=create map=vectmap
 Create new vector map and read data from file 'roads.txt':
 
 <div class="code"><pre>
-v.out.ascii in=roads format=standard > roads.txt;
+v.out.ascii in=roads format=standard &gt; roads.txt;
 v.edit tool=create map=vectmap input=roads.txt
 </pre></div>
 

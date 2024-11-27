@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.li.patchnum</em> calculates the "patch number index" as:<br>
-<I> f(sample_area)= Patch_Number </I><br>
+<i> f(sample_area)= Patch_Number </i><br>
 
 <p>
 This index is calculated using a 4 neighbour algorithm, diagonal cells
@@ -33,7 +33,7 @@ r.li.patchnum input=my_map conf=my_conf out=my_out
 Forest map (Spearfish sample dataset) example:
 <div class="code"><pre>
 g.region raster=landcover.30m -p
-r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
+r.mapcalc "forests = if(landcover.30m &gt;= 41 &amp;&amp; landcover.30m &lt;= 43,1,null())"
 r.li.patchnum input=forests conf=movwindow7 out=forests_patchnum_mov7
 r.univar forests_patchnum_mov7
 </pre></div>
@@ -56,7 +56,7 @@ d.vect forests type=boundary
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.li.html">r.li</a> - package overview<br>
+<a href="r.li.html">r.li</a> - package overview,
 <a href="g.gui.rlisetup.html">g.gui.rlisetup</a>
 </em>
 

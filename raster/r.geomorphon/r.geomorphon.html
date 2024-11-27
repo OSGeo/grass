@@ -54,39 +54,39 @@ especially with low resolution DEMS.
 
 <h2>OPTIONS</h2>
 
-<DL>
-<DT><b>-m</b></DT>
-<DD>All distance parameters (search, skip, flat distances) are supplied as meters instead of cells (default). To avoid situation when supplied distances is smaller than one cell program first check if supplied distance is longer than one cell in both NS and WE directions. For LatLong projection only NS distance checked, because in latitude angular unit comprise always bigger or equal distance than longitude one. If distance is supplied in cells, For all projections is recalculated into meters according formula: <code>number_of_cells*resolution_along_NS_direction</code>. It is important if geomorphons are calculated for large areas in LatLong projection.</DD>
-<DT><b>elevation</b></DT>
-<DD>Digital elevation model. Data can be of any type and any projection. During calculation DEM is stored as floating point raster.</DD>
-<DT><b>search</b></DT>
-<DD>Determines length on the geodesic distances in all eight directions where line-of-sight is calculated. To speed up calculation is determines only these cells which centers falls into the distance.</DD>
-<DT><b>skip</b></DT>
-<DD>Determines length on the geodesic distances at the beginning of calculation all eight directions where line-of-sight is yet calculated. To speed up calculation this distance is always recalculated into number of cell which are skipped at the beginning of every line-of-sight and is equal in all direction.  This parameter eliminates forms of very small extend, smaller than skip parameter.</DD>
-<DT><b>flat</b></DT>
-<DD>The difference (in degrees) between zenith and nadir line-of-sight which indicate flat direction. If higher threshold produce more flat maps. If resolution of the map is low (more than 1 km per cell) threshold should be very small (much smaller than 1 degree) because on such distance 1 degree of difference means several meters of high difference.</DD>
-<DT><b>dist</b></DT>
-<DD>>Flat distance. This is additional parameter defining the distance above which the threshold starts to decrease to avoid problems with pseudo-flat line-of-sights if real elevation difference appears on the distance where its value is higher (TO BE CORRECTED).</DD>
-<DT><b>comparison</b></DT>
-<DD>Comparison mode for zenith/nadir line-of-sight search. "anglev1" is
+<dl>
+<dt><b>-m</b></dt>
+<dd>All distance parameters (search, skip, flat distances) are supplied as meters instead of cells (default). To avoid situation when supplied distances is smaller than one cell program first check if supplied distance is longer than one cell in both NS and WE directions. For LatLong projection only NS distance checked, because in latitude angular unit comprise always bigger or equal distance than longitude one. If distance is supplied in cells, For all projections is recalculated into meters according formula: <code>number_of_cells*resolution_along_NS_direction</code>. It is important if geomorphons are calculated for large areas in LatLong projection.</dd>
+<dt><b>elevation</b></dt>
+<dd>Digital elevation model. Data can be of any type and any projection. During calculation DEM is stored as floating point raster.</dd>
+<dt><b>search</b></dt>
+<dd>Determines length on the geodesic distances in all eight directions where line-of-sight is calculated. To speed up calculation is determines only these cells which centers falls into the distance.</dd>
+<dt><b>skip</b></dt>
+<dd>Determines length on the geodesic distances at the beginning of calculation all eight directions where line-of-sight is yet calculated. To speed up calculation this distance is always recalculated into number of cell which are skipped at the beginning of every line-of-sight and is equal in all direction.  This parameter eliminates forms of very small extend, smaller than skip parameter.</dd>
+<dt><b>flat</b></dt>
+<dd>The difference (in degrees) between zenith and nadir line-of-sight which indicate flat direction. If higher threshold produce more flat maps. If resolution of the map is low (more than 1 km per cell) threshold should be very small (much smaller than 1 degree) because on such distance 1 degree of difference means several meters of high difference.</dd>
+<dt><b>dist</b></dt>
+<dd>Flat distance. This is additional parameter defining the distance above which the threshold starts to decrease to avoid problems with pseudo-flat line-of-sights if real elevation difference appears on the distance where its value is higher (TO BE CORRECTED).</dd>
+<dt><b>comparison</b></dt>
+<dd>Comparison mode for zenith/nadir line-of-sight search. "anglev1" is
 the original r.geomorphon comparison mode. "anglev2" is an improved
 mode, which better handles angle thresholds and zenith/nadir angles
 that are exactly equal. "anglev2_distance" in addition to that takes
 the zenith/nadir distances into account when the angles are exactly
-equal.</DD>
-<DT><b>forms</b></DT>
-<DD>Returns geomorphic map with 10 most popular terrestrial forms. Legend for forms, its definition by the number of <em>+</em> and <em>-</em> and its idealized  visualisation are presented at the image.
+equal.</dd>
+<dt><b>forms</b></dt>
+<dd>Returns geomorphic map with 10 most popular terrestrial forms. Legend for forms, its definition by the number of <em>+</em> and <em>-</em> and its idealized  visualisation are presented at the image.
 <center>
 
 <h3>Forms represented by geomorphons:</h3>
 <img src="legend.png" alt="forms legend" border="1"><br>
-</center></DD>
-<DT><b>ternary</b></DT>
-<DD>returns code of one of 498 unique ternary patterns for every cell. The code is a decimal representation of 8-tuple minimalised patterns written in ternary system. Full list of patterns is available in source code directory as patterns.txt. This map can be used to create alternative form classification using supervised approach.</DD>
-<DT><b>positive</b> and <b>negative</b></DT>
-<DD>returns codes binary patterns for zenith (positive) and nadir (negative) line of sights. The code is a decimal representation of 8-tuple minimalised patterns written in binary system. Full list of patterns is available in source code directory as patterns.txt.</DD>
-<DT><b>coordinates</b></DT>
-<DD>The central point of a single geomorphon to profile. The central
+</center></dd>
+<dt><b>ternary</b></dt>
+<dd>returns code of one of 498 unique ternary patterns for every cell. The code is a decimal representation of 8-tuple minimalised patterns written in ternary system. Full list of patterns is available in source code directory as patterns.txt. This map can be used to create alternative form classification using supervised approach.</dd>
+<dt><b>positive</b> and <b>negative</b></dt>
+<dd>returns codes binary patterns for zenith (positive) and nadir (negative) line of sights. The code is a decimal representation of 8-tuple minimalised patterns written in binary system. Full list of patterns is available in source code directory as patterns.txt.</dd>
+<dt><b>coordinates</b></dt>
+<dd>The central point of a single geomorphon to profile. The central
 point must be within the computational region, which should be large
 enough to accommodate the search radius. Setting the region larger than
 that will not produce more accurate data, but in the current
@@ -94,32 +94,32 @@ implementation will slow the computation down. For the best results
 remember to align the region to the raster cells. Profiling is mutually
 exclusive with any raster outputs, but other parameters and flags (such
 as <b>elevation</b>, <b>search</b>, <b>comparison</b>, <b>-m</b> and
-<b>-e</b>) work as usual.</DD>
-<DT><b>profiledata</b></DT>
-<DD>The output file name for the complete profile data, "-" means to
+<b>-e</b>) work as usual.</dd>
+<dt><b>profiledata</b></dt>
+<dd>The output file name for the complete profile data, "-" means to
 write to the standard output. The data is in a machine-readable format
 and it includes assorted values describing the computation context and
-parameters, as well as its intermediate and final results.</DD>
-<DT><b>profileformat</b></DT>
-<DD>Format of the profile data: "json", "yaml" or "xml".</DD>
-</DL>
+parameters, as well as its intermediate and final results.</dd>
+<dt><b>profileformat</b></dt>
+<dd>Format of the profile data: "json", "yaml" or "xml".</dd>
+</dl>
 <P><em>NOTE: parameters below are experimental. The usefulness of these parameters are currently under investigation.</em></P>
-<DL>
-<DT><b>intensity</b></DT>
-<DD>returns average difference between central cell of geomorphon and eight cells in visibility neighbourhood. This parameter shows local (as is visible) exposition/abasement of the form in the terrain.</DD>
-<DT><b>range</b></DT>
-<DD>returns difference between minimum and maximum values of visibility neighbourhood.</DD>
-<DT><b>variance</b></DT>
-<DD>returns variance (difference between particular values and mean value) of visibility neighbourhood.</DD>
-<DT><b>extend</b></DT>
-<DD>returns area of the polygon created by the 8 points where line-of-sight cuts the terrain (see image in description section).</DD>
-<DT><b>azimuth</b></DT>
-<DD>returns orientation of the polygon constituting geomorphon. This orientation is currently calculated as a orientation of least square fit line to the eight verticles of this polygon.</DD>
-<DT><b>elongation</b></DT>
-<DD>returns proportion between sides of the bounding box rectangle calculated for geomorphon rotated to fit least square line.</DD>
-<DT><b>width</b></DT>
-<DD>returns length of the shorter side of the bounding box rectangle calculated for geomorphon rotated to fit least square line.</DD>
-</DL>
+<dl>
+<dt><b>intensity</b></dt>
+<dd>returns average difference between central cell of geomorphon and eight cells in visibility neighbourhood. This parameter shows local (as is visible) exposition/abasement of the form in the terrain.</dd>
+<dt><b>range</b></dt>
+<dd>returns difference between minimum and maximum values of visibility neighbourhood.</dd>
+<dt><b>variance</b></dt>
+<dd>returns variance (difference between particular values and mean value) of visibility neighbourhood.</dd>
+<dt><b>extend</b></dt>
+<dd>returns area of the polygon created by the 8 points where line-of-sight cuts the terrain (see image in description section).</dd>
+<dt><b>azimuth</b></dt>
+<dd>returns orientation of the polygon constituting geomorphon. This orientation is currently calculated as a orientation of least square fit line to the eight verticles of this polygon.</dd>
+<dt><b>elongation</b></dt>
+<dd>returns proportion between sides of the bounding box rectangle calculated for geomorphon rotated to fit least square line.</dd>
+<dt><b>width</b></dt>
+<dd>returns length of the shorter side of the bounding box rectangle calculated for geomorphon rotated to fit least square line.</dd>
+</dl>
 
 <h2>NOTES</h2>
 

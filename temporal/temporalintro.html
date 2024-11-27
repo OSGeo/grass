@@ -6,13 +6,13 @@ are designed to handle time series data:
 <ul>
   <li> <em>Space time raster datasets</em> (strds) are designed to
   manage raster map time series. Modules that process strds have the
-  naming prefix <em>t.rast</em>.
+  naming prefix <em>t.rast</em>.</li>
   <li> <em>Space time 3D raster datasets</em> (str3ds) are designed to
   manage 3D raster map time series. Modules that process str3ds have
-  the naming prefix <em>t.rast3d</em>.
+  the naming prefix <em>t.rast3d</em>.</li>
   <li> <em>Space time vector datasets</em> (stvds) are designed to
   manage vector map time series. Modules that process stvds have the
-  naming prefix <em>t.vect</em>.
+  naming prefix <em>t.vect</em>.</li>
 </ul>
 
 These new data types can be managed, analyzed and processed with
@@ -35,9 +35,9 @@ a space-time dataset will always modify the metadata of the registered
 map. This is critical if:
 <ul>
     <li>The user has no write access to the maps from other mapsets
-		he/she wants to register</li>
+    he/she wants to register</li>
     <li>If registered maps are removed from other mapsets, the temporal
-		database will not be updated and will contain ghost maps</li>
+    database will not be updated and will contain ghost maps</li>
 </ul>
 
 SQLite3 or PostgreSQL are supported as temporal database backends.
