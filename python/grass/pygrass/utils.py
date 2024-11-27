@@ -83,24 +83,23 @@ def findmaps(type, pattern=None, mapset="", location="", gisdbase=""):
             (m, mset.name, mset.location, mset.gisdbase)
             for m in mset.glist(type, pattern)
         ]
-    elif gisdbase and location:
+    if gisdbase and location:
         loc = Location(location, gisdbase)
         return find_in_location(type, pattern, loc)
-    elif gisdbase:
+    if gisdbase:
         gis = Gisdbase(gisdbase)
         return find_in_gisdbase(type, pattern, gis)
-    elif location:
+    if location:
         loc = Location(location)
         return find_in_location(type, pattern, loc)
-    elif mapset:
+    if mapset:
         mset = Mapset(mapset)
         return [
             (m, mset.name, mset.location, mset.gisdbase)
             for m in mset.glist(type, pattern)
         ]
-    else:
-        gis = Gisdbase()
-        return find_in_gisdbase(type, pattern, gis)
+    gis = Gisdbase()
+    return find_in_gisdbase(type, pattern, gis)
 
 
 def remove(oldname, maptype):
@@ -136,11 +135,10 @@ def decode(obj, encoding=None):
     """
     if isinstance(obj, String):
         return grassutils.decode(obj.data, encoding=encoding)
-    elif isinstance(obj, bytes):
+    if isinstance(obj, bytes):
         return grassutils.decode(obj)
-    else:
-        # eg None
-        return obj
+    # eg None
+    return obj
 
 
 def getenv(env):
@@ -337,9 +335,8 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
                 result.append((poi.id, poi.x, poi.y, None))
     if not column:
         return result
-    else:
-        poi.attrs.commit()
-        return True
+    poi.attrs.commit()
+    return True
 
 
 def r_export(rast, output="", fmt="png", **kargs):
@@ -355,8 +352,7 @@ def r_export(rast, output="", fmt="png", **kargs):
             **kargs,
         )
         return output
-    else:
-        raise ValueError("Raster map does not exist.")
+    raise ValueError("Raster map does not exist.")
 
 
 def get_lib_path(modname, libname=None):

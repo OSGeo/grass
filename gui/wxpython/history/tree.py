@@ -62,8 +62,7 @@ class HistoryBrowserNode(DictFilterNode):
     def label(self):
         if "day" in self.data.keys():
             return self.dayToLabel(self.data["day"])
-        else:
-            return self.data["name"]
+        return self.data["name"]
 
     @property
     def time_sort(self):
@@ -91,14 +90,13 @@ class HistoryBrowserNode(DictFilterNode):
 
         if day == current_date:
             return _("{base_date} (today)").format(base_date=base_date)
-        elif day == current_date - datetime.timedelta(days=1):
+        if day == current_date - datetime.timedelta(days=1):
             return _("{base_date} (yesterday)").format(base_date=base_date)
-        elif day >= (current_date - datetime.timedelta(days=current_date.weekday())):
+        if day >= (current_date - datetime.timedelta(days=current_date.weekday())):
             return _("{base_date} (this week)").format(base_date=base_date)
-        elif day.year == current_date.year:
+        if day.year == current_date.year:
             return _("{base_date}").format(base_date=base_date)
-        else:
-            return _("{base_date}, {year}").format(base_date=base_date, year=day.year)
+        return _("{base_date}, {year}").format(base_date=base_date, year=day.year)
 
 
 class HistoryTreeModel(TreeModel):
@@ -338,12 +336,11 @@ class HistoryBrowserTree(CTreeView):
         """
         if not command_node.data["timestamp"]:
             return self._model.GetIndexOfNode(command_node)[1]
-        else:
-            return history.filter(
-                json_data=self.ReadFromHistory(),
-                command=command_node.data["name"],
-                timestamp=self._timestampToISO(command_node.data["timestamp"]),
-            )
+        return history.filter(
+            json_data=self.ReadFromHistory(),
+            command=command_node.data["name"],
+            timestamp=self._timestampToISO(command_node.data["timestamp"]),
+        )
 
     def ReadFromHistory(self):
         """Read content of command history log.
@@ -409,13 +406,10 @@ class HistoryBrowserTree(CTreeView):
             if command_index is None:
                 # If no command index is specified, return the first found day node
                 return day_nodes[0]
-            else:
-                # Search for command nodes under the first day node
-                command_nodes = self._model.SearchNodes(
-                    parent=day_nodes[0], type=COMMAND
-                )
-                if 0 <= command_index < len(command_nodes):
-                    return command_nodes[command_index]
+            # Search for command nodes under the first day node
+            command_nodes = self._model.SearchNodes(parent=day_nodes[0], type=COMMAND)
+            if 0 <= command_index < len(command_nodes):
+                return command_nodes[command_index]
 
         return None
 
@@ -557,14 +551,12 @@ class HistoryBrowserTree(CTreeView):
         selected_command = self.selected_command[0]
         command = selected_command.data["name"]
 
-        lst = re.split(r"\s+", command)
         if (
             globalvar.ignoredCmdPattern
             and re.compile(globalvar.ignoredCmdPattern).search(command)
             and "--help" not in command
             and "--ui" not in command
         ):
-            self.runIgnoredCmdPattern.emit(cmd=lst)
             self.runIgnoredCmdPattern.emit(cmd=split(command))
             return
         if re.compile(r"^r[3]?\.mapcalc").search(command):
@@ -587,7 +579,7 @@ class HistoryBrowserTree(CTreeView):
         try:
             if node.data["type"] == TIME_PERIOD:
                 return self._iconTypes.index(node.data["type"])
-            elif node.data["type"] == COMMAND:
+            if node.data["type"] == COMMAND:
                 return self._iconTypes.index(node.data["status"])
         except ValueError:
             return 0

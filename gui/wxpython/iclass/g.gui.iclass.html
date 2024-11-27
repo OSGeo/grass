@@ -35,7 +35,6 @@ as <em>g.gui.iclass</em>.
   <li>write signature file</li>
   <li>import vector map</li>
   <li>export vector map with attribute table</li>
-
 </ul>
 
 <center>
@@ -62,6 +61,13 @@ a user-specified number of standard deviations from the means in the spectral si
 By doing this, the user can see how much of the image
 is likely to be put into the class associated with the signature.
 
+<p><em>wxIClass</em> can also import training areas defined in a vector layer. In that case the program expects the vector layer to have the following columns defined:
+<ul>
+    <li>cat: category value</li>
+    <li>class: a string with the class name</li>
+    <li>color: a color defined using format "RRR:GGG:BBB"</li>
+</ul>
+
 <p>
 The spectral signatures are composed of region means and covariance matrices.
 These region means and covariance matrices are used in
@@ -76,7 +82,7 @@ used for seed means for the clusters in
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="wxGUI.html">wxGUI</a><br>
+  <a href="wxGUI.html">wxGUI</a>,
   <a href="wxGUI.components.html">wxGUI components</a>,
   <a href="wxGUI.iscatt.html">Interactive Scatter Plot Tool</a>
 </em>
@@ -84,12 +90,12 @@ used for seed means for the clusters in
 <p>
 See also
 user <a href="https://grasswiki.osgeo.org/wiki/WxIClass">wiki</a> page
-and <a href="http://trac.osgeo.org/grass/wiki/wxGUIDevelopment/wxIClass">development</a> page.
+and <a href="https://trac.osgeo.org/grass/wiki/wxGUIDevelopment/wxIClass">development</a> page.
 
 <h2>AUTHORS</h2>
 
 Anna Kratochvilova,
- <a href="http://www.cvut.cz">Czech Technical University in Prague</a>, Czech Republic<br>
+ <a href="https://www.cvut.cz">Czech Technical University in Prague</a>, Czech Republic<br>
 
 Vaclav Petras,
- <a href="http://www.cvut.cz">Czech Technical University in Prague</a>, Czech Republic
+ <a href="https://www.cvut.cz">Czech Technical University in Prague</a>, Czech Republic

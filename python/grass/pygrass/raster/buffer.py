@@ -20,13 +20,12 @@ class Buffer(np.ndarray):
     def mtype(self):
         if self.dtype in CELL:
             return "CELL"
-        elif self.dtype in FCELL:
+        if self.dtype in FCELL:
             return "FCELL"
-        elif self.dtype in DCELL:
+        if self.dtype in DCELL:
             return DCELL
-        else:
-            err = "Raster type: %r not supported by GRASS."
-            raise TypeError(err % self.dtype)
+        err = "Raster type: %r not supported by GRASS."
+        raise TypeError(err % self.dtype)
 
     def __new__(
         cls, shape, mtype="FCELL", buffer=None, offset=0, strides=None, order=None

@@ -79,10 +79,7 @@ def append_left_addon_paths(paths, config_dir, env):
     # addons (base)
     addon_base = env.get("GRASS_ADDON_BASE")
     if not addon_base:
-        if MACOS:
-            name = "Addons"
-        else:
-            name = "addons"
+        name = "addons" if not MACOS else "Addons"
         addon_base = os.path.join(config_dir, name)
         env["GRASS_ADDON_BASE"] = addon_base
 
@@ -174,10 +171,7 @@ def set_python_path_variable(install_path, env):
     """Set PYTHONPATH to find GRASS Python package in subprocesses"""
     path = env.get("PYTHONPATH")
     etcpy = os.path.join(install_path, "etc", "python")
-    if path:
-        path = etcpy + os.pathsep + path
-    else:
-        path = etcpy
+    path = etcpy + os.pathsep + path if path else etcpy
     env["PYTHONPATH"] = path
 
 
