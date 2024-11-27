@@ -221,11 +221,11 @@ Symbol  description
 
   ==    equal
   !=    not equal
-  >     greater than
-  >=    greater than or equal
-  <     less than
-  <=    less than or equal
-  &&    and
+  &gt;     greater than
+  &gt;=    greater than or equal
+  &lt;     less than
+  &lt;=    less than or equal
+  &amp;&amp;    and
   ||    or
 </pre></div>
 
@@ -280,27 +280,27 @@ The structure is similar to the select operator with the extension of an aggrega
 </pre></div>
 
 <br>
-This aggregation operator (| or &) define the behaviour if a map is related the more
+This aggregation operator (| or &amp;) define the behaviour if a map is related the more
 than one map, e.g for the topological relations 'contains'.
-Should all (&) conditions for the related maps be true or is it sufficient to
+Should all (&amp;) conditions for the related maps be true or is it sufficient to
 have any (|) condition that is true. The resulting boolean value is then compared
-to the first condition by the comparison operator (|| or &&).
+to the first condition by the comparison operator (|| or &amp;&amp;).
 As default the aggregation operator is related to the comparison operator: <br>
 
 Comparison operator -&gt; aggregation operator:
 
 <div class="code"><pre>
-|| -> | and && -> &
+|| -&gt; | and &amp;&amp; -&gt; &amp;
 </pre></div>
 
 Examples:
 
 <div class="code"><pre>
 Condition 1 {||, equal, r} Condition 2
-Condition 1 {&&, equal|during, l} Condition 2
-Condition 1 {&&, equal|contains, |, l} Condition 2
-Condition 1 {&&, equal|during, l} Condition 2 && Condition 3
-Condition 1 {&&, equal|during, l} Condition 2 {&&,contains, |, r} Condition 3
+Condition 1 {&amp;&amp;, equal|during, l} Condition 2
+Condition 1 {&amp;&amp;, equal|contains, |, l} Condition 2
+Condition 1 {&amp;&amp;, equal|during, l} Condition 2 &amp;&amp; Condition 3
+Condition 1 {&amp;&amp;, equal|during, l} Condition 2 {&amp;&amp;,contains, |, r} Condition 3
 </pre></div>
 
 <h4>Hash operator</h4>
@@ -320,7 +320,7 @@ that contain maps from B will be returned.
 <p>
 
 <div class="code"><pre>
-C = if({equal}, A {#, contains} B > 2, A {:, contains} B)
+C = if({equal}, A {#, contains} B &gt; 2, A {:, contains} B)
 </pre></div>
 
 This expression selects all maps from A that temporally contains at least 2
@@ -365,7 +365,7 @@ The module supports the following boolean vector operations:<br>
 <div class="code"><pre>
  Boolean Name   Operator Meaning         Precedence   Correspondent function
 ----------------------------------------------------------------------------------
- AND            &        Intersection          1      (v.overlay operator=and)
+ AND            &amp;        Intersection          1      (v.overlay operator=and)
  OR             |        Union                 1      (v.overlay operator=or)
  DISJOINT OR    +        Disjoint union        1      (v.patch)
  XOR            ^        Symmetric difference  1      (v.overlay operator=xor)
@@ -402,15 +402,15 @@ calculations would implicitly aggregate all maps of B into one result map for
 a1 of A:
 
 <div class="code"><pre>
-C = A {&, contains} B --> c1 = a1 & b1 & b2 & b3
+C = A {&, contains} B --&gt; c1 = a1 &amp; b1 &amp; b2 &amp; b3
 </pre></div>
 
 Keep attention that the aggregation behaviour is not symmetric:
 
 <div class="code"><pre>
-C = B {&, during} A --> c1 = b1 & a1
-                        c2 = b2 & a1
-                        c3 = b3 & a1
+C = B {&amp;, during} A --&gt; c1 = b1 &amp; a1
+                        c2 = b2 &amp; a1
+                        c3 = b3 &amp; a1
 </pre></div>
 
 <h3>Examples: </h3>
@@ -429,7 +429,7 @@ during and equal temporal relations to store the result in space time
 vector dataset D with intersected time stamps.
 
 <div class="code"><pre>
-D = buff_p(A, 1) {&,overlaps|overlapped|equal|during|contains,i} buff_p(B, 1)
+D = buff_p(A, 1) {&amp;,overlaps|overlapped|equal|during|contains,i} buff_p(B, 1)
 </pre></div>
 
 Select all maps from space time dataset B which are during the temporal

@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <p>The module fills a lake to a target water level from a given start point. The user
-can think of it as <em><a href="r.grow">r.grow</a></em> with additional
+can think of it as <em><a href="r.grow.html">r.grow</a></em> with additional
 checks for elevation. The resulting
 raster map contains cells with values representing lake depth and NULL for all other
 cells beyond the lake. Lake depth is reported relative to specified water level
@@ -44,24 +44,24 @@ It equals the mapcalc's expression <em>"negative = 0 - positive"</em>.
 <h3>r.mapcalc equivalent - for GRASS hackers</h3>
 
 This module was initially created as a script using
-<em><a href="r.mapcalc">r.mapcalc</a></em>.
+<em><a href="r.mapcalc.html">r.mapcalc</a></em>.
 This had some limitations - it was slow and no
 checks where done to find out required iteration count. The shell script
-code (using <em><a href="r.mapcalc">r.mapcalc</a></em>) used
+code (using <em><a href="r.mapcalc.html">r.mapcalc</a></em>) used
 in the original script is shown below:
 
 <div class="code"><pre>
 ${seedmap} = if( ${dem}, \
-if( if( isnull(${seedmap}),0,${seedmap}>0), ${wlevel}-${dem}, \
+if( if( isnull(${seedmap}),0,${seedmap} &gt; 0), ${wlevel}-${dem}, \
  if( \
-  if(isnull(${seedmap}[-1,0]),0, ${seedmap}[-1,0]>0 && ${wlevel}>${dem}) ||\
-  if(isnull(${seedmap}[-1,1]),0, ${seedmap}[-1,1]>0 && ${wlevel}>${dem}) ||\
-  if(isnull(${seedmap}[0,1]), 0, ${seedmap}[0,1]>0  && ${wlevel}>${dem}) ||\
-  if(isnull(${seedmap}[1,1]), 0, ${seedmap}[1,1]>0  && ${wlevel}>${dem}) ||\
-  if(isnull(${seedmap}[1,0]), 0, ${seedmap}[1,0]>0  && ${wlevel}>${dem}) ||\
-  if(isnull(${seedmap}[1,-1]),0, ${seedmap}[1,-1]>0 && ${wlevel}>${dem}) ||\
-  if(isnull(${seedmap}[0,-1]),0, ${seedmap}[0,-1]>0 && ${wlevel}>${dem}) ||\
-  if(isnull(${seedmap}[-1,-1]),0, ${seedmap}[-1,-1]>0 && ${wlevel}>${dem}),\
+  if(isnull(${seedmap}[-1,0]),0, ${seedmap}[-1,0] &gt; 0 &amp;&amp; ${wlevel} &gt; ${dem}) ||\
+  if(isnull(${seedmap}[-1,1]),0, ${seedmap}[-1,1] &gt; 0 &amp;&amp; ${wlevel} &gt; ${dem}) ||\
+  if(isnull(${seedmap}[0,1]), 0, ${seedmap}[0,1] &gt; 0  &amp;&amp; ${wlevel} &gt; ${dem}) ||\
+  if(isnull(${seedmap}[1,1]), 0, ${seedmap}[1,1] &gt; 0  &amp;&amp; ${wlevel} &gt; ${dem}) ||\
+  if(isnull(${seedmap}[1,0]), 0, ${seedmap}[1,0] &gt; 0  &amp;&amp; ${wlevel} &gt; ${dem}) ||\
+  if(isnull(${seedmap}[1,-1]),0, ${seedmap}[1,-1] &gt; 0 &amp;&amp; ${wlevel} &gt; ${dem}) ||\
+  if(isnull(${seedmap}[0,-1]),0, ${seedmap}[0,-1] &gt; 0 &amp;&amp; ${wlevel} &gt; ${dem}) ||\
+  if(isnull(${seedmap}[-1,-1]),0, ${seedmap}[-1,-1] &gt; 0 &amp;&amp; ${wlevel} &gt; ${dem}),\
  ${wlevel}-${dem}, null() )))
 </pre></div>
 
@@ -100,7 +100,7 @@ d.vect streets_wake
 
 <p>
 <center>
-<img src="r_lake_lidar_dem.jpg" border=1><br>
+<img src="r_lake_lidar_dem.jpg" border="1"><br>
 Small flooding along a street (<em>r.lake</em>, using Lidar 1m DEM)
 </center>
 

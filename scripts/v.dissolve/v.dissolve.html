@@ -276,8 +276,8 @@ specified manually with the <b>result_columns</b> option:
 
 <div class="code"><pre>
 v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_4 \
-	aggregate_columns=ACRES,NEW_PERC_G aggregate_methods=sum,avg \
-	result_columns=acres,new_perc_g
+    aggregate_columns=ACRES,NEW_PERC_G aggregate_methods=sum,avg \
+    result_columns=acres,new_perc_g
 </pre></div>
 
 <p>
@@ -336,9 +336,9 @@ functions with multiple parameters, for example specify separator to be
 used with <em>group_concat</em>:
 
 <div class="code"><pre>
-    v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_7 \
-        aggregate_columns="group_concat(MB_NAME, ';')" \
-        result_columns="names TEXT"
+v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_7 \
+    aggregate_columns="group_concat(MB_NAME, ';')" \
+    result_columns="names TEXT"
 </pre></div>
 
 <p>

@@ -27,16 +27,13 @@ side, eg.:
 
 
 <div class="code"><pre>
-t.rast.extract input=tempmean_monthly where="start_time &gt; '2010-01-05'" \
-               output=selected_tempmean_monthly basename=new_tmean_month \
-               expression="if(tempmean_monthly &lt; 0, null(), tempmean_monthly)"
-</div>
+t.rast.extract input=tempmean_monthly where="start_time &gt; '2010-01-05'" output=selected_tempmean_monthly basename=new_tmean_month expression="if(tempmean_monthly &lt; 0, null(), tempmean_monthly)"
+</pre></div>
 
 <h2>EXAMPLE</h2>
 
 <div class="code"><pre>
-t.rast.extract input=tempmean_monthly output=tempmean_monthly_later_2012 \
-               where="start_time &gt;= '2012-01-01'"
+t.rast.extract input=tempmean_monthly output=tempmean_monthly_later_2012 where="start_time &gt;= '2012-01-01'"
 
 t.rast.list tempmean_monthly_later_2012
 name|mapset|start_time|end_time

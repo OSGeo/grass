@@ -153,7 +153,7 @@ t.rast.mapcalc input=leafhopper_cycle_1_1990_2000_yearly_clean,leafhopper_cycle_
 		 if(isnull(leafhopper_cycle_1_1990_2000_yearly_clean), \
 		 null() ,1),2),3)"
 
-cat > color.table << EOF
+cat &gt; color.table &lt;&lt; EOF
 3 yellow
 2 blue
 1 red
@@ -240,7 +240,7 @@ t.rast.mapcalc input=leafhopper_indi_min_month_c3_1990_2000,leafhopper_indi_max_
                output=leafhopper_monthly_indicator_c3_1990_2000 \
                expression="if(leafhopper_indi_min_month_c3_1990_2000 == 1, 1, if(leafhopper_indi_max_month_c3_1990_2000 == 3, 3, 2))"
 
-cat > color.table << EOF
+cat &gt; color.table &lt;&lt; EOF
 3 red
 2 yellow
 1 green
