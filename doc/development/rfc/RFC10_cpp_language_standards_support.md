@@ -2,7 +2,7 @@
 
 Author of the first draft: Nicklas Larsson
 
-Status: Draft
+Status: Motion passed, 28 November 2024
 
 ## Summary
 
