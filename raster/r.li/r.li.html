@@ -61,48 +61,50 @@ in the Spearfish sample dataset, using a 5x5 moving window:
 
 <ol>
 <li> CREATE A NEW CONFIGURATION FILE
-  <ol>
-  <li> run
+<ol>
+<li> run
 <div class="code"><pre>
-  g.gui.rlisetup
-</pre></div></li>
-  <li> The main <em>g.gui.rlisetup</em> window is displayed, click on "New"</li>
-  <li> The new configuration window is now displayed, enter the<br>
-	configuration file name (e.g., "my_conf", do not use absolute paths)<br><br>
-
-  Now the new configuration window is displayed.<br>
-	Enter the configuration file name (e.g., "my_conf", do not use absolute paths)<br>
-	and the name of raster map (e.g., "geology").<br>
-	The other fields are not needed for this configuration.</li>
-  <li> Click on "Setup sampling frame", select "Whole map layer" and click "OK"</li>
-  <li> Click on "Setup sampling areas", select "Moving window" and click "OK"</li>
-  <li> Click on "Use keyboard to enter moving window dimension"</li>
-  <li> Select "Rectangle" and enter 5 in the "height" and "width" fields</li>
-  <li> Click on "Save settings"</li>
-  <li> Close the <em>g.gui.rlisetup</em> window</li>
-  </ol>
+g.gui.rlisetup
+</pre></div>
+</li>
+<li> The main <em>g.gui.rlisetup</em> window is displayed, click on "New"</li>
+<li> The new configuration window is now displayed, enter the<br>
+configuration file name (e.g., "my_conf", do not use absolute paths)
+<br><br>
+Now the new configuration window is displayed.<br>
+Enter the configuration file name (e.g., "my_conf", do not use absolute paths)<br>
+and the name of raster map (e.g., "geology").<br>
+The other fields are not needed for this configuration.</li>
+<li> Click on "Setup sampling frame", select "Whole map layer" and click "OK"</li>
+<li> Click on "Setup sampling areas", select "Moving window" and click "OK"</li>
+<li> Click on "Use keyboard to enter moving window dimension"</li>
+<li> Select "Rectangle" and enter 5 in the "height" and "width" fields</li>
+<li> Click on "Save settings"</li>
+<li> Close the <em>g.gui.rlisetup</em> window</li>
+</ol></li>
 
 <li> CALCULATE PATCHDENSITY INDEX
-  <ol>
-  <li> set the region settings to the "<tt>geology</tt>" raster map:
+<ol>
+<li> set the region settings to the "<tt>geology</tt>" raster map:
 <div class="code"><pre>
-  g.region raster=geology -p
-</pre></div></li>
-
-  <li> run <em>r.li.patchdensity</em>:
+g.region raster=geology -p
+</pre></div>
+</li>
+<li> run <em>r.li.patchdensity</em>:
 <div class="code"><pre>
-  r.li.patchdensity input=geology conf=my_conf out=patchdens
-</pre></div></li>
-  </ol>
+r.li.patchdensity input=geology conf=my_conf out=patchdens
+</pre></div>
+</li>
+</ol></li>
 </ol>
 
 The resulting patch density is stored in "<tt>patchdens</tt>" raster map.
 
 You can verify the result for example with contour lines:
 <div class="code"><pre>
-  r.contour in=patchdens out=patchdens step=5
-  d.rast patchdens
-  d.vect -c patchdens
+r.contour in=patchdens out=patchdens step=5
+d.rast patchdens
+d.vect -c patchdens
 </pre></div>
 
 Note that if you want to run another index with the same area

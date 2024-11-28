@@ -133,7 +133,7 @@ r.colors elev_lid792_1m_diff color=differences
 r.univar -e elev_lid792_1m_diff
 
 # vectorize filled areas (here all fills are of positive value, see r.univar output)
-r.mapcalc "elev_lid792_1m_fill_area = if(elev_lid792_1m_diff > 0.0, 1, null() )"
+r.mapcalc "elev_lid792_1m_fill_area = if(elev_lid792_1m_diff &gt; 0.0, 1, null() )"
 r.to.vect input=elev_lid792_1m_fill_area output=elev_lid792_1m_fill_area type=area
 
 # generate shaded terrain for better visibility of results
