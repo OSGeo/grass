@@ -1102,6 +1102,22 @@ else
     AC_MSG_RESULT(yes)
   ],[AC_MSG_RESULT(no)])
 
+  # reader.las has "nosrs" option only from 2.4.3
+  AC_PATH_PROG([PDAL_CONFIG], [pdal-config], [no])
+  if test "$PDAL_CONFIG" = "no"; then
+    AC_MSG_ERROR([pdal-config not found.])
+  fi
+
+  AC_MSG_CHECKING([if PDAL version is greater than 2.4.3])
+  PDAL_VERSION=$($PDAL_CONFIG --version)
+
+  AS_VERSION_COMPARE([$PDAL_VERSION], [2.4.3],
+  [AC_MSG_RESULT([no ($PDAL_VERSION)])],
+  [AC_DEFINE([HAVE_PDAL_VERSION_GT_2_4_3], [1], [Define to 1 if PDAL version is greater than 2.4.3])
+  AC_MSG_RESULT([yes ($PDAL_VERSION)])],
+  [AC_DEFINE([HAVE_PDAL_VERSION_GT_2_4_3], [1], [Define to 1 if PDAL version is greater than 2.4.3])
+  AC_MSG_RESULT([yes ($PDAL_VERSION)])])
+
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 fi

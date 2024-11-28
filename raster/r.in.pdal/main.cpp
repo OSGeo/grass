@@ -718,10 +718,12 @@ int main(int argc, char *argv[])
         pdal::Options las_opts;
         pdal::Option las_opt("filename", infile);
         las_opts.add(las_opt);
+#ifdef HAVE_PDAL_VERSION_GT_2_4_3
         if (over_flag->answer) {
             pdal::Option nosrs_opt("nosrs", true);
             las_opts.add(nosrs_opt);
         }
+#endif
         // stages created by factory are destroyed with the factory
         pdal::Stage *reader = factory.createStage(pdal_read_driver);
         if (!reader)
