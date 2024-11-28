@@ -40,9 +40,16 @@ extern "C" {
 #include "string_list.h"
 }
 
+#ifdef PDAL_USE_NOSRS
 void get_extent(struct StringList *, double *, double *, double *, double *,
                 double *, double *, bool);
 void print_extent(struct StringList *, bool);
 void print_lasinfo(struct StringList *, bool);
+#else
+void get_extent(struct StringList *, double *, double *, double *, double *,
+                double *, double *);
+void print_extent(struct StringList *);
+void print_lasinfo(struct StringList *);
+#endif
 
 #endif // INFO_H

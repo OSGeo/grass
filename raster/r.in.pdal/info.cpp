@@ -12,9 +12,14 @@
 #include "info.h"
 #include <cmath>
 
+#ifdef PDAL_USE_NOSRS
 void get_extent(struct StringList *infiles, double *min_x, double *max_x,
                 double *min_y, double *max_y, double *min_z, double *max_z,
                 bool nosrs)
+#else
+void get_extent(struct StringList *infiles, double *min_x, double *max_x,
+                double *min_y, double *max_y, double *min_z, double *max_z)
+#endif
 {
     pdal::StageFactory factory;
     bool first = 1;
@@ -75,16 +80,28 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
     }
 }
 
+#ifdef PDAL_USE_NOSRS
 void print_extent(struct StringList *infiles, bool nosrs)
+#else
+void print_extent(struct StringList *infiles)
+#endif
 {
     double min_x, max_x, min_y, max_y, min_z, max_z;
 
+#ifdef PDAL_USE_NOSRS
     get_extent(infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z, nosrs);
+#else
+    get_extent(infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z);
+#endif
     fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n", max_y, min_y, max_x,
             min_x, min_z, max_z);
 }
 
+#ifdef PDAL_USE_NOSRS
 void print_lasinfo(struct StringList *infiles, bool nosrs)
+#else
+void print_lasinfo(struct StringList *infiles)
+#endif
 {
     pdal::StageFactory factory;
     pdal::MetadataNode meta_node;

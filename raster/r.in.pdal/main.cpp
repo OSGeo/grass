@@ -446,12 +446,20 @@ int main(int argc, char *argv[])
 
     /* If we print extent, there is no need to validate rest of the input */
     if (print_extent_flag->answer) {
+#ifdef PDAL_USE_NOSRS
         print_extent(&infiles, over_flag->answer);
+#else
+        print_extent(&infiles);
+#endif
         exit(EXIT_SUCCESS);
     }
 
     if (print_info_flag->answer) {
+#ifdef PDAL_USE_NOSRS
         print_lasinfo(&infiles, over_flag->answer);
+#else
+        print_lasinfo(&infiles);
+#endif
         exit(EXIT_SUCCESS);
     }
 
@@ -507,8 +515,12 @@ int main(int argc, char *argv[])
     if (extents_flag->answer) {
         double min_x, max_x, min_y, max_y, min_z, max_z;
 
+#ifdef PDAL_USE_NOSRS
         get_extent(&infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z,
                    over_flag->answer);
+#else
+        get_extent(&infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z);
+#endif
 
         region.east = xmax = max_x;
         region.west = xmin = min_x;
