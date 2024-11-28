@@ -420,7 +420,7 @@ maps from space time dataset B which have equal time stamps and are
 temporary before Jan. 1. 2005 and store them in space time dataset D.
 
 <div class="code"><pre>
-D = if(start_date(A) < "2005-01-01", A & B)
+D = if(start_date(A) &lt; "2005-01-01", A &amp; B)
 </pre></div>
 
 Buffer all vector points from space time vector dataset A and B with a

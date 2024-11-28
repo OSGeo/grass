@@ -44,7 +44,7 @@ Example for Spearfish forest areas:
 g.region raster=landcover.30m -p
 # extract forested areas:
 r.category landcover.30m
-r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43, 1, null())"
+r.mapcalc "forests = if(landcover.30m &gt;= 41 &amp;&amp; landcover.30m &lt;= 43, 1, null())"
 
 # patch density (7x7 moving window defined in g.gui.rlisetup):
 r.li.patchdensity forests conf=movwindow7 out=forests_p_dens7

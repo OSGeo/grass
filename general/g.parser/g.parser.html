@@ -523,7 +523,7 @@ if ( !$ENV{'GISBASE'} ) {
 
 if( $ARGV[0] ne '@ARGS_PARSED@' ){
     my $arg = "";
-    for (my $i=0; $i < @ARGV;$i++) {
+    for (my $i=0; $i &lt; @ARGV;$i++) {
         $arg .= " $ARGV[$i] ";
     }
     system("$ENV{GISBASE}/bin/g.parser $0 $arg");

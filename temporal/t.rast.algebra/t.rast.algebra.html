@@ -497,7 +497,7 @@ t.rast.colors input=ndvi color=ndvi
 Sum maps from STRDS A with maps from STRDS B which have equal time stamps
 and are temporally before Jan. 1. 2005 and store them in STRDS D:
 <div class="code"><pre>
-D = if(start_date(A) < "2005-01-01", A + B)
+D = if(start_date(A) &lt; "2005-01-01", A + B)
 </pre></div>
 
 Create the sum of all maps from STRDS A and B that have equal time stamps
@@ -528,7 +528,7 @@ C = if(A &gt; 100 &amp;&amp; A &lt; 1600 &amp;&amp; td(A) &gt; 30, B)
 Same expression with explicit definition of the temporal topology relation
 and temporal operators:
 <div class="code"><pre>
-C = if({equal}, A &gt; 100 &amp;&amp; A < 1600 {&amp;&amp;,equal} td(A) &gt; 30, B)
+C = if({equal}, A &gt; 100 &amp;&amp; A &lt; 1600 {&amp;&amp;,equal} td(A) &gt; 30, B)
 </pre></div>
 
 <h3>Conditional computation</h3>
