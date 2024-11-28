@@ -554,11 +554,11 @@ gs.run_command('r.in.lidar', file=file_list_name,
 <li>The "<tt>nan</tt>" value (as defined in C language) can leak into
     <em>coeff_var</em> raster maps. Cause is unknown. Possible
     work-around is: <tt>r.null setnull=nan</tt> or
-    <tt>r.mapcalc 'no_nan = if(map == map, map, null())'</tt>.
+    <tt>r.mapcalc 'no_nan = if(map == map, map, null())'</tt>.</li>
 <li>Only one method can be applied for a single run and multiple map
     output from a single run
     (e.g. <tt>method=string[,string,...] output=name[,name,...]</tt>
-    or <tt>n=string mean=string</tt>) is no supported.
+    or <tt>n=string mean=string</tt>) is no supported.</li>
 <!-- not really:
 <li> Merge with r.in.xyz.
 -->
