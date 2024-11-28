@@ -155,9 +155,6 @@
 /* Define to 1 if PDAL NoFilenameWriter is present. */
 #undef HAVE_PDAL_NOFILENAMEWRITER
 
-/* Define to 1 if PDAL version is > 2.4.3. */
-#undef HAVE_PDAL_VERSION_GT_2_4_3
-
 /* Define to 1 if glXCreateGLXPixmap exists. */
 #undef HAVE_PIXMAPS
 

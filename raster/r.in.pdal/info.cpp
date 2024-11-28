@@ -33,7 +33,8 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
         pdal::Options las_opts;
         pdal::Option las_opt("filename", infile);
         las_opts.add(las_opt);
-#ifdef HAVE_PDAL_VERSION_GT_2_4_3
+#ifdef PDAL_USE_NOSRS
+        std::cout << "Have NOSRS\n";
         if (nosrs) {
             pdal::Option nosrs_opt("nosrs", true);
             las_opts.add(nosrs_opt);
@@ -106,7 +107,7 @@ void print_lasinfo(struct StringList *infiles, bool nosrs)
         pdal::Options las_opts;
         pdal::Option las_opt("filename", infile);
         las_opts.add(las_opt);
-#ifdef HAVE_PDAL_VERSION_GT_2_4_3
+#ifdef PDAL_USE_NOSRS
         if (nosrs) {
             pdal::Option nosrs_opt("nosrs", true);
             las_opts.add(nosrs_opt);
