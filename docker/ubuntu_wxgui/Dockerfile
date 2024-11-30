@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # define versions to be used (PDAL is not available on Ubuntu/Debian, so we compile it here)
 # https://github.com/PDAL/PDAL/releases
 # renovate: datasource=github-tags depName=PDAL/PDAL
-ARG PDAL_VERSION=2.7.1
+ARG PDAL_VERSION=7.7.7
 
 SHELL ["/bin/bash", "-c"]
 
