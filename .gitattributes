@@ -12,3 +12,7 @@
 
 # Jupyter notebooks
 *.ipynb     text eol=lf
+
+# Binary files
+*.raw       binary
+*.laz       binary
