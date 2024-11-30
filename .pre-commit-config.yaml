@@ -78,3 +78,9 @@ repos:
     rev: v1.35.1
     hooks:
       - id: yamllint
+  # TODO: In a next release, the plain editorconfig-checker repo could be used
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
+    rev: 3.0.3
+    hooks:
+      - id: editorconfig-checker
+        alias: ec
