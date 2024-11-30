@@ -1,0 +1,14 @@
+# TODO: Enable the following with a related change in .editorconfig:
+# *.csv      text eol=crlf
+
+# Scripts
+*.bash      text eol=lf
+*.sh        text eol=lf
+# Windows scripts should be CRLF
+# TODO: Enable the following with a related change in .editorconfig:
+# *.bat       text eol=crlf
+*.cmd       text eol=crlf
+*.ps1       text eol=crlf
+
+# Jupyter notebooks
+*.ipynb     text eol=lf
