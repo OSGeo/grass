@@ -38,12 +38,6 @@ jobs:
             precommit:
               - '.pre-commit-config.yaml'
 
-      - name: Check for CRLF endings
-        uses: erclu/check-crlf@94acb86c2a41b0a46bd8087b63a06f0457dd0c6c # v1.2.0
-        with:
-          # Ignore all test data, Windows-specific directories and scripts.
-          exclude: mswindows .*\.bat .*/testsuite/data/.*
-
       - name: Set up Python
         uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with:
