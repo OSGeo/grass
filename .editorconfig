@@ -101,3 +101,22 @@ trim_trailing_whitespace = false
 
 [mswindows/{generic.manifest,Installer-Files/*.url}]
 end_of_line = crlf
+
+# Binary files
+[**/PERMANENT/vector/*/{cidx,coor,sidx,topo}]
+trim_trailing_whitespace = unset
+end_of_line = unset
+charset = unset
+insert_final_newline = unset
+
+[*.{laz,raw,rgb}]
+trim_trailing_whitespace = unset
+end_of_line = unset
+charset = unset
+insert_final_newline = unset
+
+[{lib/vector/diglib/test*.ok,**/*.nib/keyedobjects.nib}]
+trim_trailing_whitespace = unset
+end_of_line = unset
+charset = unset
+insert_final_newline = unset
