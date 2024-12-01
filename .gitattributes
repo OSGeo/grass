@@ -16,3 +16,6 @@
 # Binary files
 *.raw       binary
 *.laz       binary
+*/PERMANENT/vector/*/[cs]idx    binary
+*/PERMANENT/vector/*/coor       binary
+*/PERMANENT/vector/*/topo       binary
