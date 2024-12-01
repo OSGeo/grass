@@ -29,7 +29,7 @@ syntaxError:display/displaydrivers.html
 # dist.x86_64-pc-linux-gnu
 syntaxError:dist.x86_64-pc-linux-gnu/*
 
-# doc 
+# doc
 syntaxError:doc/*
 
 # docker
@@ -51,7 +51,7 @@ negativeIndex:imagery/i.atcorr/computations.cpp:1025
 syntaxError:include/Makefile
 syntaxError:include/VERSION:1
 
-# text files 
+# text files
 syntaxError:INSTALL.md
 syntaxError:install-sh
 syntaxError:GPL.TXT
@@ -131,7 +131,7 @@ syntaxError:mswindows/*
 invalidFunctionArg:raster/r.sim/simlib/random.c:36
 invalidFunctionArg:raster/r.sim/simlib/random.c:57
 
-## Different rules under different ifdef. 
+## Different rules under different ifdef.
 ctuOneDefinitionRuleViolation:raster/r.in.pdal/grassrasterwriter.h:39
 syntaxError:raster/rasterintro.html
 syntaxError:raster/Makefile:155

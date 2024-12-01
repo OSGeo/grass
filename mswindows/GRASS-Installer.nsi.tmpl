@@ -4,7 +4,7 @@
 ;Written by Marco Pasetti
 ;Updated for OSGeo4W by Colin Nielsen, Helmut Kudrnovsky, and Martin Landa
 ;Last Update: $Id$
-;Mail to: grass-dev@lists.osgeo.org 
+;Mail to: grass-dev@lists.osgeo.org
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
@@ -102,7 +102,7 @@ ShowUnInstDetails hide
 ;StrReplace Function
 ;Replaces all occurrences of a given needle within a haystack with another string
 ;Written by dandaman32
- 
+
 Var STR_REPLACE_VAR_0
 Var STR_REPLACE_VAR_1
 Var STR_REPLACE_VAR_2
@@ -112,7 +112,7 @@ Var STR_REPLACE_VAR_5
 Var STR_REPLACE_VAR_6
 Var STR_REPLACE_VAR_7
 Var STR_REPLACE_VAR_8
- 
+
 Function StrReplace
 	Exch $STR_REPLACE_VAR_2
 	Exch 1
@@ -140,7 +140,7 @@ Function StrReplace
 	Pop $STR_REPLACE_VAR_1 ; stack as it was before the function was called
 	Exch $STR_REPLACE_VAR_0
 FunctionEnd
- 
+
 !macro _strReplaceConstructor OUT NEEDLE NEEDLE2 HAYSTACK
 	Push "${HAYSTACK}"
 	Push "${NEEDLE}"
@@ -148,7 +148,7 @@ FunctionEnd
 	Call StrReplace
 	Pop "${OUT}"
 !macroend
- 
+
 !define StrReplace '!insertmacro "_strReplaceConstructor"'
 
 ;----------------------------------------------------------------------------------------------------------------------------
@@ -184,35 +184,35 @@ Function .onInit
 
 	Var /GLOBAL UNINSTALL_STRING
 	Var /GLOBAL INSTALL_PATH
-	
+
 	Var /GLOBAL INSTALLED_VERSION_NUMBER
 	Var /GLOBAL INSTALLED_GIT_REVISION
 	Var /GLOBAL INSTALLED_BINARY_REVISION
-	
+
 	Var /GLOBAL INSTALLED_VERSION
-	
+
 	Var /GLOBAL DISPLAYED_INSTALLED_VERSION
-	
+
 	Var /GLOBAL MESSAGE_0_
 	Var /GLOBAL MESSAGE_1_
 	Var /GLOBAL MESSAGE_2_
 	Var /GLOBAL MESSAGE_3_
-	
+
 	ReadRegStr $UNINSTALL_STRING HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "UninstallString"
 	ReadRegStr $INSTALL_PATH HKLM "Software\${GRASS_BASE}" "InstallPath"
 	ReadRegStr $INSTALLED_VERSION_NUMBER HKLM "Software\${GRASS_BASE}" "VersionNumber"
 	ReadRegStr $INSTALLED_GIT_REVISION HKLM "Software\${GRASS_BASE}" "GitRevision"
-	
+
 	${If} $INSTALLED_GIT_REVISION == ""
 		ReadRegStr $INSTALLED_GIT_REVISION HKLM "Software\${GRASS_BASE}" "Revision"
-	${EndIf}	
-	
+	${EndIf}
+
 	ReadRegStr $INSTALLED_BINARY_REVISION HKLM "Software\${GRASS_BASE}" "BinaryRevision"
-	
+
 	StrCpy $MESSAGE_0_ "${CHECK_INSTALL_NAME} is already installed on your system.$\r$\n"
 	StrCpy $MESSAGE_0_ "$MESSAGE_0_$\r$\n"
-	
-	!if ${INSTALLER_TYPE} == "Release"		
+
+	!if ${INSTALLER_TYPE} == "Release"
 		${If} $INSTALLED_BINARY_REVISION == ""
 			StrCpy $DISPLAYED_INSTALLED_VERSION "$INSTALLED_VERSION_NUMBER"
 		${Else}
@@ -221,32 +221,32 @@ Function .onInit
 	!else
 		StrCpy $DISPLAYED_INSTALLED_VERSION "$INSTALLED_VERSION_NUMBER-$INSTALLED_GIT_REVISION-$INSTALLED_BINARY_REVISION"
 	!endif
-	
+
 	StrCpy $MESSAGE_0_ "$MESSAGE_0_The installed release is $DISPLAYED_INSTALLED_VERSION$\r$\n"
-	
+
 	StrCpy $MESSAGE_1_ "$MESSAGE_0_$\r$\n"
 	StrCpy $MESSAGE_1_ "$MESSAGE_1_You are going to install a newer release of ${CHECK_INSTALL_NAME}$\r$\n"
 	StrCpy $MESSAGE_1_ "$MESSAGE_1_$\r$\n"
 	StrCpy $MESSAGE_1_ "$MESSAGE_1_Press OK to uninstall GRASS $DISPLAYED_INSTALLED_VERSION"
 	StrCpy $MESSAGE_1_ "$MESSAGE_1_ and install ${DISPLAYED_NAME} or Cancel to quit."
-	
+
 	StrCpy $MESSAGE_2_ "$MESSAGE_0_$\r$\n"
 	StrCpy $MESSAGE_2_ "$MESSAGE_2_You are going to install an older release of ${CHECK_INSTALL_NAME}$\r$\n"
 	StrCpy $MESSAGE_2_ "$MESSAGE_2_$\r$\n"
 	StrCpy $MESSAGE_2_ "$MESSAGE_2_Press OK to uninstall GRASS $DISPLAYED_INSTALLED_VERSION"
 	StrCpy $MESSAGE_2_ "$MESSAGE_2_ and install ${DISPLAYED_NAME} or Cancel to quit."
-	
+
 	StrCpy $MESSAGE_3_ "$MESSAGE_0_$\r$\n"
 	StrCpy $MESSAGE_3_ "$MESSAGE_3_This is the latest release available.$\r$\n"
 	StrCpy $MESSAGE_3_ "$MESSAGE_3_$\r$\n"
 	StrCpy $MESSAGE_3_ "$MESSAGE_3_Press OK to reinstall ${DISPLAYED_NAME} or Cancel to quit."
-	
+
 	IntOp $INSTALLED_GIT_REVISION $INSTALLED_GIT_REVISION * 1
 	IntOp $INSTALLED_BINARY_REVISION $INSTALLED_BINARY_REVISION * 1
 	IntOp $INSTALLED_VERSION $INSTALLED_GIT_REVISION + $INSTALLED_BINARY_REVISION
-	
+
 	!define /math VERSION ${GIT_REVISION} + ${BINARY_REVISION}
-	
+
 	${If} $INSTALLED_VERSION_NUMBER == ""
 	${Else}
 		${If} $INSTALLED_VERSION < ${VERSION}
@@ -275,9 +275,9 @@ Function .onInit
 			quit_reinstall:
 				Abort
 			continue_reinstall:
-		${EndIf}	
+		${EndIf}
 	${EndIf}
-	
+
 	${If} $INSTALLED_VERSION_NUMBER == ""
 	${Else}
 		${If} $0 = 0
@@ -295,10 +295,10 @@ FunctionEnd
 
 Function CheckUpdate
 
-	${If} $ASK_FOR_PATH == "NO"	
+	${If} $ASK_FOR_PATH == "NO"
 		Abort
 	${EndIf}
-	
+
 FunctionEnd
 
 ;----------------------------------------------------------------------------------------------------------------------------
@@ -310,26 +310,26 @@ FunctionEnd
 
 ;Function CheckInstDir
 ;	Var /GLOBAL INSTDIR_TEST
-;	Var /GLOBAL INSTDIR_LENGTH	
+;	Var /GLOBAL INSTDIR_LENGTH
 ;	Var /GLOBAL INSTDIR_TEST_LENGTH
 ;	Var /GLOBAL MESSAGE_CHKINST_
-;	
+;
 ;	StrCpy $MESSAGE_CHKINST_ "WARNING: you are about to install GRASS into a directory that has spaces$\r$\n"
 ;	StrCpy $MESSAGE_CHKINST_ "$MESSAGE_CHKINST_in either its name or the path of directories leading up to it.$\r$\n"
 ;	StrCpy $MESSAGE_CHKINST_ "$MESSAGE_CHKINST_Some functionalities of GRASS might be hampered by this. We would highly$\r$\n"
 ;	StrCpy $MESSAGE_CHKINST_ "$MESSAGE_CHKINST_appreciate if you tried and reported any problems, so that we can fix them.$\r$\n"
 ;	StrCpy $MESSAGE_CHKINST_ "$MESSAGE_CHKINST_However, if you want to avoid any such issues, we recommend that you$\r$\n"
 ;	StrCpy $MESSAGE_CHKINST_ "$MESSAGE_CHKINST_choose a simple installation path without spaces, such as: C:\${GRASS_BASE}.$\r$\n"
-;	
+;
 ;	${StrReplace} "$INSTDIR_TEST" " " "" "$INSTDIR"
-;	
+;
 ;	StrLen $INSTDIR_LENGTH "$INSTDIR"
 ;	StrLen $INSTDIR_TEST_LENGTH "$INSTDIR_TEST"
-;	
-;	${If} $INSTDIR_TEST_LENGTH < $INSTDIR_LENGTH	
+;
+;	${If} $INSTDIR_TEST_LENGTH < $INSTDIR_LENGTH
 ;		MessageBox MB_OK|MB_ICONEXCLAMATION "$MESSAGE_CHKINST_"
 ;	${EndIf}
-;	
+;
 ;FunctionEnd
 
 ;----------------------------------------------------------------------------------------------------------------------------
@@ -351,39 +351,39 @@ Function ReplaceLineStr
  Push $R7 ; input string length
  Push $R8 ; line string length
  Push $R9 ; global
- 
+
   StrLen $R7 $R1
- 
+
   GetTempFileName $R4
- 
+
   FileOpen $R5 $R4 w
   FileOpen $R3 $R2 r
- 
+
   ReadLoop:
   ClearErrors
    FileRead $R3 $R6
     IfErrors Done
- 
+
    StrLen $R8 $R6
    StrCpy $R9 $R6 $R7 -$R8
    StrCmp $R9 $R1 0 +3
- 
+
     FileWrite $R5 "$R0$\r$\n"
     Goto ReadLoop
- 
+
     FileWrite $R5 $R6
     Goto ReadLoop
- 
+
   Done:
- 
+
   FileClose $R3
   FileClose $R5
- 
+
   SetDetailsPrint none
    Delete $R2
    Rename $R4 $R2
   SetDetailsPrint both
- 
+
  Pop $R9
  Pop $R8
  Pop $R7
@@ -491,24 +491,24 @@ Var /GLOBAL DOWNLOAD_MESSAGE_
 Section "GRASS" SecGRASS
 
 	SectionIn RO
-	
+
 	;Set the INSTALL_DIR variable
 	Var /GLOBAL INSTALL_DIR
-	
-	${If} $ASK_FOR_PATH == "NO"	
+
+	${If} $ASK_FOR_PATH == "NO"
 		StrCpy $INSTALL_DIR "$INSTALL_PATH"
 	${Else}
 		StrCpy $INSTALL_DIR "$INSTDIR"
 	${EndIf}
-	
+
 	;Set to try to overwrite existing files
-	SetOverwrite try	
-	
+	SetOverwrite try
+
 	;Set the GIS_DATABASE directory
 	SetShellVarContext current
-	Var /GLOBAL GIS_DATABASE	
+	Var /GLOBAL GIS_DATABASE
 	StrCpy $GIS_DATABASE "$DOCUMENTS\grassdata"
-	
+
 	;Create the GIS_DATABASE directory
 	CreateDirectory "$GIS_DATABASE"
 
@@ -516,7 +516,7 @@ Section "GRASS" SecGRASS
 	SetOutPath "$INSTALL_DIR"
 	File .\Installer-Files\GRASS-WebSite.url
 	File .\Installer-Files\WinGRASS-README.url
-	
+
 	;add GRASS files
 	SetOutPath "$INSTALL_DIR"
 	File /r ${PACKAGE_FOLDER}\*.*
@@ -524,12 +524,12 @@ Section "GRASS" SecGRASS
 	;grant $INSTDIR\etc read write accessible and show if succeeded: error if it failed
 	AccessControl::GrantOnFile "$INSTDIR\etc" "(S-1-5-32-545)" "FullAccess"
 	Pop $R0
-	DetailPrint $R0	
-	;grant modifying/overwriting fontcap file and show if succeeded: error if it failed	
+	DetailPrint $R0
+	;grant modifying/overwriting fontcap file and show if succeeded: error if it failed
 	AccessControl::GrantOnFile "$INSTDIR\etc\fontcap" "(S-1-5-32-545)" "FullAccess"
 	Pop $R0
-	DetailPrint $R0	
-	
+	DetailPrint $R0
+
 	;create run_gmkfontcap.bat
 	ClearErrors
 	FileOpen $0 $INSTALL_DIR\etc\run_gmkfontcap.bat w
@@ -567,12 +567,12 @@ Section "GRASS" SecGRASS
 	FileOpen $0 $INSTALL_DIR\etc\run_gmkfontcap.bat.manifest w
 	IfErrors done_create_run_gmkfontcap.bat.manifest
 	FileWrite $0 '	<?xml version="1.0" encoding="UTF-8" standalone="yes"?>$\r$\n'
-	FileWrite $0 '<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">$\r$\n' 
+	FileWrite $0 '<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">$\r$\n'
 	FileWrite $0 '  <assemblyIdentity version="1.0.0.0"$\r$\n'
 	FileWrite $0 '     processorArchitecture="X86"$\r$\n'
 	FileWrite $0 '     name="run_gmkfontcap"$\r$\n'
-	FileWrite $0 '     type="win32"/>$\r$\n' 
-	FileWrite $0 '  <description>GRASS help script:run_gmkfontcap<description>$\r$\n' 
+	FileWrite $0 '     type="win32"/>$\r$\n'
+	FileWrite $0 '  <description>GRASS help script:run_gmkfontcap<description>$\r$\n'
 	FileWrite $0 '  <!-- Identify the application security requirements. -->$\r$\n'
 	FileWrite $0 '  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">$\r$\n'
 	FileWrite $0 '    <security>$\r$\n'
@@ -586,13 +586,13 @@ Section "GRASS" SecGRASS
 	FileWrite $0 '</assembly>$\r$\n'
 	FileClose $0
 	done_create_run_gmkfontcap.bat.manifest:
-	
+
 	;Run g.mkfontcap outside a grass session during installation to catch all fonts
 	ExecWait '"$INSTALL_DIR\etc\run_gmkfontcap.bat"'
 
 	;set $INSTDIR\etc back to read accessible
-	AccessControl::SetOnFile "$INSTDIR\etc" "(S-1-5-32-545)" "GenericRead + GenericExecute"	
-	
+	AccessControl::SetOnFile "$INSTDIR\etc" "(S-1-5-32-545)" "GenericRead + GenericExecute"
+
 	;Install demolocation into the GIS_DATABASE directory
 	SetOutPath "$GIS_DATABASE\demolocation"
 	File /r ${DEMOLOCATION_PATH}\*.*
@@ -605,9 +605,9 @@ Section "GRASS" SecGRASS
 
 	;Create the Uninstaller
 	WriteUninstaller "$INSTALL_DIR\Uninstall-GRASS.exe"
-	
+
 	;Registry Key Entries
-	
+
 	;HKEY_LOCAL_MACHINE Install entries
 	;Set the Name, Version and Revision of GRASS + PublisherInfo + InstallPath
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "Name" "${GRASS_BASE}"
@@ -617,11 +617,11 @@ Section "GRASS" SecGRASS
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "Publisher" "${PUBLISHER}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "WebSite" "${WEB_SITE}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "InstallPath" "$INSTALL_DIR"
-	
+
 	;HKEY_LOCAL_MACHINE Uninstall entries
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayName" "GRASS GIS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "UninstallString" "$INSTALL_DIR\Uninstall-GRASS.exe"
-	
+
 	!if ${INSTALLER_TYPE} == "Release"
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}"\
 		"DisplayVersion" "${VERSION_NUMBER}-${BINARY_REVISION}"
@@ -629,31 +629,31 @@ Section "GRASS" SecGRASS
 		WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}"\
 		"DisplayVersion" "${VERSION_NUMBER}-${GIT_REVISION}-${BINARY_REVISION}"
 	!endif
-	
+
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayIcon" "$INSTALL_DIR\gui\icons\grass.ico"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "EstimatedSize" 1
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "HelpLink" "${WIKI_PAGE}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "URLInfoAbout" "${WEB_SITE}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "Publisher" "${PUBLISHER}"
-        
+
 
 	;Create the Desktop Shortcut
 	SetShellVarContext current
-	
+
 	CreateShortCut "$DESKTOP\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "--gui"\
 	"$INSTALL_DIR\gui\icons\grass.ico" "" SW_SHOWNORMAL "" "Launch GRASS GIS ${VERSION_NUMBER}"
-	
+
 	;Create the Windows Start Menu Shortcuts
 	SetShellVarContext all
-	
+
 	CreateDirectory "$SMPROGRAMS\${GRASS_BASE}"
-	
+
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "--gui"\
 	"$INSTALL_DIR\gui\icons\grass.ico" "" SW_SHOWNORMAL "" "Launch GRASS GIS ${VERSION_NUMBER}"
-	
+
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\Uninstall ${GRASS_BASE}.lnk" "$INSTALL_DIR\Uninstall-GRASS.exe" ""\
 	"$INSTALL_DIR\Uninstall-GRASS.exe" "" SW_SHOWNORMAL "" "Uninstall GRASS GIS ${VERSION_NUMBER}"
-	
+
 	;Create the grass_command.bat
 	ClearErrors
 	FileOpen $0 $INSTALL_DIR\${GRASS_COMMAND}.bat w
@@ -680,20 +680,20 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'if %ERRORLEVEL% GEQ 1 pause'
 	FileClose $0
 	done_create_grass_command.bat:
-	
+
 	;Set the UNIX_LIKE GRASS Path
 	Var /GLOBAL UNIX_LIKE_DRIVE
 	Var /GLOBAL UNIX_LIKE_GRASS_PATH
-  
+
 	StrCpy $UNIX_LIKE_DRIVE "$INSTALL_DIR" 3
 	StrCpy $UNIX_LIKE_GRASS_PATH "$INSTALL_DIR" "" 3
-  
+
 	;replace "\" with "/" in $UNIX_LIKE_DRIVE
 	${StrReplace} "$UNIX_LIKE_DRIVE" "\" "/" "$UNIX_LIKE_DRIVE"
-  
+
 	;replace ":" with "" in $UNIX_LIKE_DRIVE
 	${StrReplace} "$UNIX_LIKE_DRIVE" ":" "" "$UNIX_LIKE_DRIVE"
-	
+
 	;replace "\" with "/" in $UNIX_LIKE_GRASS_PATH
 	${StrReplace} "$UNIX_LIKE_GRASS_PATH" "\" "/" "$UNIX_LIKE_GRASS_PATH"
 
@@ -709,28 +709,28 @@ Section "GRASS" SecGRASS
 	;It first read the $PROFILE variable, to scan the OS version:
 	;If equal to "drive:\Users\UserName", the OS is Vista, and the $USERNAME variable set to $PROFILE -  "drive:\Users\"
 	;If not, the OS is XP or previous, and the $USERNAME variable set to $PROFILE -  "drive:\Documents and Settings\"
-	
+
 	${If} $USERNAME == ""
 		StrCpy $PROFILE_DRIVE "$PROFILE" 2
 		StrCpy $PROFILE_ROOT "$PROFILE" 5 -3
-		${If} $USERNAME = "Users"		
+		${If} $USERNAME = "Users"
 			${StrReplace} "$USERNAME" "$PROFILE_DRIVE\Users\" "" "$PROFILE"
 		${Else}
 			${StrReplace} "$USERNAME" "$PROFILE_DRIVE\Documents and Settings\" "" "$PROFILE"
 		${EndIf}
 	${EndIf}
-		
+
 	;Get the short form of the install path (to allow for paths with spaces)
 	VAR /GLOBAL INST_DIR_SHORT
 	GetFullPathName /SHORT $INST_DIR_SHORT $INSTALL_DIR
 
 	;Set the Unix-Like GIS_DATABASE Path
  	;Var /GLOBAL UNIX_LIKE_GIS_DATABASE_PATH
-  
+
 	;replace \ with / in $GIS_DATABASE
 	;${StrReplace} "$UNIX_LIKE_GIS_DATABASE_PATH" "\" "/" "$GIS_DATABASE"
 
-	SetShellVarContext current  
+	SetShellVarContext current
 	${If} ${FileExists} "$APPDATA\GRASS@GRASS_VERSION_MAJOR@\rc"
 	      DetailPrint "File $APPDATA\GRASS@GRASS_VERSION_MAJOR@\rc already exists. Skipping."
 	${Else}
@@ -742,7 +742,7 @@ Section "GRASS" SecGRASS
 	      FileWrite $0 'GISDBASE: $GIS_DATABASE$\r$\n'
 	      FileWrite $0 'LOCATION_NAME: demolocation$\r$\n'
 	      FileWrite $0 'MAPSET: PERMANENT$\r$\n'
-	      FileClose $0	
+	      FileClose $0
 	      done_create_grass_rc:
 	${EndIf}
 
@@ -751,7 +751,7 @@ Section "GRASS" SecGRASS
 	Push 'gisbase = "/c/OSGeo4W/apps/grass/grass-@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@"' ; string that a line must begin with *WS Sensitive*
 	Push 'gisbase = "$INSTDIR"' ; string to replace whole line with
 	Call ReplaceLineStr
-	
+
 	;replace config_projshare
 	Push "$INSTDIR\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" ; file to modify
 	Push 'config_projshare = "/c/OSGeo4W/share/proj"' ; string that a line must begin with *WS Sensitive*
@@ -759,7 +759,7 @@ Section "GRASS" SecGRASS
 	Call ReplaceLineStr
 
 	;replace BU with numeric group name for local users. Users  S-1-5-32-545 does not work for Windows Enterprise. Try Authenticated Users S-1-5-11
-        AccessControl::SetOnFile "$INSTDIR\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" "(S-1-5-11)" "GenericRead + GenericExecute"                 
+        AccessControl::SetOnFile "$INSTDIR\etc\grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@.py" "(S-1-5-11)" "GenericRead + GenericExecute"
 SectionEnd
 
 ;--------------------------------------------------------------------------
@@ -789,30 +789,30 @@ Function DownloadInstallMSRuntime
 	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_ installation without the $EXTENDED_ARCHIVE_NAME.$\r$\n"
 
 	MessageBox MB_OKCANCEL "$DOWNLOAD_MESSAGE_" IDOK download IDCANCEL cancel_download
-	
-	download:	
-	SetShellVarContext current	
+
+	download:
+	SetShellVarContext current
 	InitPluginsDir
 	NSISdl::download "$HTTP_PATH/$ARCHIVE_NAME" "$TEMP\$ARCHIVE_NAME"
 
 	Pop $0
 	StrCmp $0 "success" download_ok download_failed
-		
-	download_ok:	
+
+	download_ok:
 	InitPluginsDir
 	untgz::extract -d "$TEMP\$ORIGINAL_UNTAR_FOLDER" -zbz2 "$TEMP\$ARCHIVE_NAME"
 	Pop $0
 	StrCmp $0 "success" untar_ok untar_failed
-	
+
 	download_failed:
 	DetailPrint "$0" ;print error message to log
 	MessageBox MB_OK "Download Failed.$\r$\nGRASS will be installed without the $EXTENDED_ARCHIVE_NAME."
 	Goto end
-	
+
 	cancel_download:
 	MessageBox MB_OK "Download Cancelled.$\r$\nGRASS will be installed without the $EXTENDED_ARCHIVE_NAME."
 	Goto end
-	
+
 	untar_failed:
 	DetailPrint "$0" ;print error message to log
 
@@ -822,7 +822,7 @@ Function DownloadInstallMSRuntime
 	CopyFiles "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\*.dll" "$INSTALL_DIR\extrabin"
 	DetailPrint "MS runtime files installed."
 	Goto end
-	
+
 	end:
 
 FunctionEnd
@@ -831,15 +831,15 @@ Section "Important Microsoft Runtime DLLs" SecMSRuntime
 
 	;Set the size (in KB)  of the archive file
 	StrCpy $ARCHIVE_SIZE_KB 833
-	
+
 	;Set the size (in KB) of the unpacked archive file
 	AddSize 13500
-	
+
 	StrCpy $HTTP_PATH "http://download.osgeo.org/osgeo4w/v2/${PLATFORM}/release/msvcrt2019/"
         StrCpy $ARCHIVE_NAME "msvcrt2019-14.2-1.tar.bz2"
 	StrCpy $EXTENDED_ARCHIVE_NAME "Microsoft Visual C++ Redistributable Packages"
 	StrCpy $ORIGINAL_UNTAR_FOLDER "install_msruntime"
-	
+
 	Call DownloadInstallMSRuntime
 
 SectionEnd
@@ -847,7 +847,7 @@ SectionEnd
 Function DownloadDataSet
 
 	; IntOp $ARCHIVE_SIZE_MB $ARCHIVE_SIZE_KB / 1024
-	
+
 	StrCpy $DOWNLOAD_MESSAGE_ "The installer will download the $EXTENDED_ARCHIVE_NAME sample data set.$\r$\n"
 	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_$\r$\n"
 	; StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_The archive is about $ARCHIVE_SIZE_MB MB and may take"
@@ -859,40 +859,40 @@ Function DownloadDataSet
 	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_$\r$\n"
 	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_Press OK to continue or Cancel to skip the download and complete the GRASS"
 	StrCpy $DOWNLOAD_MESSAGE_ "$DOWNLOAD_MESSAGE_ installation without the $EXTENDED_ARCHIVE_NAME data set.$\r$\n"
-	
+
 	MessageBox MB_OKCANCEL "$DOWNLOAD_MESSAGE_" IDOK download IDCANCEL cancel_download
-	
-	download:	
-	SetShellVarContext current	
+
+	download:
+	SetShellVarContext current
 	InitPluginsDir
 	NSISdl::download "$HTTP_PATH/$ARCHIVE_NAME" "$TEMP\$ARCHIVE_NAME"
 
 	Pop $0
 	StrCmp $0 "success" download_ok download_failed
-		
-	download_ok:	
+
+	download_ok:
 	InitPluginsDir
 	untgz::extract -d "$GIS_DATABASE" "$TEMP\$ARCHIVE_NAME"
 	Pop $0
 	StrCmp $0 "success" untar_ok untar_failed
-	
-	untar_ok:       
+
+	untar_ok:
 	Rename "$GIS_DATABASE\$ORIGINAL_UNTAR_FOLDER" "$GIS_DATABASE\$CUSTOM_UNTAR_FOLDER"
 	Delete "$TEMP\$ARCHIVE_NAME"
 	Goto end
-	
+
 	download_failed:
 	DetailPrint "$0" ;print error message to log
 	MessageBox MB_OK "Download Failed.$\r$\nGRASS will be installed without the $EXTENDED_ARCHIVE_NAME sample data set."
 	Goto end
-	
+
 	cancel_download:
 	MessageBox MB_OK "Download Cancelled.$\r$\nGRASS will be installed without the $EXTENDED_ARCHIVE_NAME sample data set."
 	Goto end
-	
+
 	untar_failed:
 	DetailPrint "$0" ;print error message to log
-	
+
 	end:
 
 FunctionEnd
@@ -901,34 +901,34 @@ Section /O "North Carolina (Wake County) Data Set" SecNorthCarolinaSDB
 
 	;Set the size (in KB)  of the archive file
 	StrCpy $ARCHIVE_SIZE_KB 144213
-	
+
 	;Set the size (in KB) of the unpacked archive file
 	AddSize 254521
-  
+
   	StrCpy $HTTP_PATH "https://grass.osgeo.org/sampledata/north_carolina/"
 	StrCpy $ARCHIVE_NAME "nc_spm_08_grass7.tar.gz"
 	StrCpy $EXTENDED_ARCHIVE_NAME "North Carolina (Wake County)"
 	StrCpy $ORIGINAL_UNTAR_FOLDER "nc_spm_08_grass7"
 	StrCpy $CUSTOM_UNTAR_FOLDER "North_Carolina"
-	
-	Call DownloadDataSet	
-	
+
+	Call DownloadDataSet
+
 SectionEnd
 
 Section /O "South Dakota (Spearfish County) Data Set" SecSpearfishSDB
 
 	;Set the size (in KB)  of the archive file
 	StrCpy $ARCHIVE_SIZE_KB 20803
-	
+
 	;Set the size (in KB) of the unpacked archive file
 	AddSize 42171
-	
+
 	StrCpy $HTTP_PATH "https://grass.osgeo.org/sampledata"
 	StrCpy $ARCHIVE_NAME "spearfish_grass70data-0.3.tar.gz"
 	StrCpy $EXTENDED_ARCHIVE_NAME "South Dakota (Spearfish County)"
 	StrCpy $ORIGINAL_UNTAR_FOLDER "spearfish60_grass7"
 	StrCpy $CUSTOM_UNTAR_FOLDER "Spearfish60_grass7"
-	
+
 	Call DownloadDataSet
 
 SectionEnd
@@ -940,7 +940,7 @@ Function .onInstSuccess
 	${If} ${SectionIsSelected} ${SecMSRuntime}
 		Delete "$TEMP\$ARCHIVE_NAME"
 		RMDir /r "$TEMP\$ORIGINAL_UNTAR_FOLDER"
-		RMDir "$TEMP\$ORIGINAL_UNTAR_FOLDER"	
+		RMDir "$TEMP\$ORIGINAL_UNTAR_FOLDER"
 	${EndIf}
 FunctionEnd
 
@@ -951,23 +951,23 @@ FunctionEnd
 Section "Uninstall"
 	;remove files & folders
 	RMDir /r "$INSTDIR"
-		        	
+
 	;remove the Desktop ShortCut
 	SetShellVarContext current
 	Delete "$DESKTOP\${GRASS_BASE}.lnk"
-	
+
 	;remove the Programs Start ShortCuts
 	SetShellVarContext all
 	RMDir /r "$SMPROGRAMS\${GRASS_BASE}"
-	
+
 	;remove the $APPDATA\GRASS@GRASS_VERSION_MAJOR@ folder
 	;disabled, don't remove user settings
 	; SetShellVarContext current
-	;RMDir /r "$APPDATA\GRASS@GRASS_VERSION_MAJOR@"	
+	;RMDir /r "$APPDATA\GRASS@GRASS_VERSION_MAJOR@"
 	;${If} ${FileExists} "$APPDATA\GRASS@GRASS_VERSION_MAJOR@\addons\*.*"
 	;      RMDir /r "$APPDATA\GRASS@GRASS_VERSION_MAJOR@\addons"
 	;${EndIf}
-	
+
 	;remove the Registry Entries
 	DeleteRegKey HKLM "Software\${GRASS_BASE}"
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}"
