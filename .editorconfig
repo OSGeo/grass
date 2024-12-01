@@ -54,6 +54,7 @@ indent_style = space
 [{Makefile,*.make,*.make.in}]
 # TODO: To enable when files are fixed:
 # indent_style = tab
+indent_size = 4
 
 [*.y{a,}ml]
 indent_style = space
