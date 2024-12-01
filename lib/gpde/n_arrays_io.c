@@ -150,6 +150,7 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d *array)
 
     /* Close file */
     Rast_close(map);
+    G_free(rast);
 
     return data;
 }
