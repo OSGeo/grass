@@ -100,8 +100,8 @@ libpythonlatex:
 	$(call run_grass,$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex)
 	@echo
 	@echo "Build finished; the LaTeX files are in $(BUILDDIR)/latex."
-	@echo "Run \`make' in that directory to run these through (pdf)latex" \
-	      "(use \`make latexpdf' here to do that automatically)."
+	@echo	"Run \`make' in that directory to run these through (pdf)latex" \
+			"(use \`make latexpdf' here to do that automatically)."
 
 libpythonlatexpdf:
 	@echo "SPHINXBUILD: Using <$(SPHINXBUILD)>"
@@ -119,5 +119,5 @@ libpythonman:
 libpythondoctest:
 	@echo "SPHINXBUILD: Using <$(SPHINXBUILD)>"
 	$(call run_grass,$(SPHINXBUILD) -b doctest $(ALLSPHINXOPTS) $(BUILDDIR)/doctest)
-	@echo "Testing of doctests in the sources finished, look at the " \
-	      "results in $(BUILDDIR)/doctest/output.txt."
+	@echo	"Testing of doctests in the sources finished, look at the " \
+			"results in $(BUILDDIR)/doctest/output.txt."
