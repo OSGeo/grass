@@ -104,7 +104,7 @@ jobs:
               --min-success 100 --config .github/workflows/macos_gunittest.cfg
         env:
           SampleData: "https://grass.osgeo.org/sampledata/north_carolina/\
-                       nc_spm_full_v2alpha2.tar.gz"
+            nc_spm_full_v2alpha2.tar.gz"
       - name: Make HTML test report available
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
