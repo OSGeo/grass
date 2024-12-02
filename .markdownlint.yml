@@ -1,3 +1,5 @@
 ---
 
 default: true
+
+MD041: false # first-line-h1
