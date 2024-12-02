@@ -21,17 +21,16 @@ t.register -i --o maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
 # We need to create three space time dataset and register the maps
 # in several space time datasets
 t.create --o type=strds temporaltype=absolute output=precip_abs1 \
-	title="Test" descr="This is the 1 test strds" semantictype=sum
+    title="Test" descr="This is the 1 test strds" semantictype=sum
 t.register --o input=precip_abs1 maps=prec_1,prec_2,prec_3
 
 t.create --o type=strds temporaltype=absolute output=precip_abs2 \
-	title="Test" descr="This is the 2 test strds" semantictype=sum
+    title="Test" descr="This is the 2 test strds" semantictype=sum
 t.register --o input=precip_abs2 maps=prec_3,prec_4,prec_5
 
 t.create --o type=strds temporaltype=absolute output=precip_abs3 \
-	title="Test" descr="This is the 3 test strds" semantictype=sum
+    title="Test" descr="This is the 3 test strds" semantictype=sum
 t.register --o input=precip_abs3 maps=prec_4,prec_5,prec_6
-
 
 # @test to merge two and three space time datasets
 t.merge inputs=precip_abs1 output=precip_abs4

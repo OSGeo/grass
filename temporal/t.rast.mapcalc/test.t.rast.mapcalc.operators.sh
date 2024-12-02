@@ -25,34 +25,33 @@ t.info precip_abs2
 # The first @test
 t.rast.mapcalc --v -sn inputs=precip_abs1,precip_abs2 output=precip_abs3 \
     expression="if(start_time() >= 0 && end_time() >= 0, (precip_abs1*td() + precip_abs2) / td(), null()) " base=new_prec \
-           method=equal nprocs=5
+    method=equal nprocs=5
 t.info type=strds input=precip_abs3
 
 t.rast.mapcalc --v -sn inputs=precip_abs1,precip_abs2 output=precip_abs3 \
     expression="if(start_year()>=0&&start_month()>=0&&start_day()>=0&&start_hour()>=0&&start_minute()>=0&&start_second()>=0, (precip_abs1*td() + precip_abs2) / td(), null()) " base=new_prec \
-           method=equal nprocs=5
+    method=equal nprocs=5
 t.info type=strds input=precip_abs3
 
 t.rast.mapcalc --v -sn inputs=precip_abs1,precip_abs2 output=precip_abs3 \
     expression="if(end_year()>=0&&end_month()>=0&&end_day()>=0&&end_hour()>=0&&end_minute()>=0&&end_second()>=0, (precip_abs1*td() + precip_abs2) / td(), null()) " base=new_prec \
-           method=equal nprocs=5
+    method=equal nprocs=5
 t.info type=strds input=precip_abs3
 
 # The first @test
 t.rast.mapcalc --v -sn inputs=precip_abs1,precip_abs2 output=precip_abs3 \
     expression="if(start_doy() >= 0 && start_dow() >= 0, (precip_abs1*td() + precip_abs2) / td(), null()) " base=new_prec \
-           method=equal nprocs=5
+    method=equal nprocs=5
 t.info type=strds input=precip_abs3
 
 # The first @test
 t.rast.mapcalc --v -sn inputs=precip_abs1,precip_abs2 output=precip_abs3 \
     expression="if(end_doy() >= 0 && end_dow() >= 0, (precip_abs1*td() + precip_abs2) / td(), null()) " base=new_prec \
-           method=equal nprocs=5
+    method=equal nprocs=5
 t.info type=strds input=precip_abs3
 
 t.rast.mapcalc --v -sn inputs=precip_abs1 output=precip_abs3 \
     expression="if(precip_abs1 == prec_1, prec_1, null())" base=new_prec
-
 
 # @postprocess
 t.remove -fr type=strds input=precip_abs1,precip_abs2,precip_abs3

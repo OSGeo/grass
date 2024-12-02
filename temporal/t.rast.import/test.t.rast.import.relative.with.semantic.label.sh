@@ -39,7 +39,7 @@ r.mapcalc expr="prec_4 = rand(0, 510)" -s
 r.mapcalc expr="prec_5 = rand(0, 300)" -s
 r.mapcalc expr="prec_6 = rand(0, 650)" -s
 
-n1=`g.tempfile pid=1 -d`
+n1=$(g.tempfile pid=1 -d)
 
 cat > "${n1}" << EOF
 prec_1|1|2|S2_1
@@ -50,7 +50,7 @@ prec_5|5|6|S2_5
 prec_6|6|7|S2_6
 EOF
 
-eval `g.gisenv`
+eval $(g.gisenv)
 
 t.create type=strds temporaltype=relative output=precip_rel \
     title="A test with input files" descr="A test with input files"
@@ -61,8 +61,8 @@ t.register type=raster input=precip_rel file="${n1}" unit="years"
 t.rast.export input=precip_rel output=strds_export.tar.bz2 compression=bzip2 format=GTiff directory=test
 
 # Checking different flags
-t.rast.import --o input=strds_export.tar.bz2 output=precip_rel directory=test\
-          -oe title="A test" description="Description of a test"
+t.rast.import --o input=strds_export.tar.bz2 output=precip_rel directory=test \
+    -oe title="A test" description="Description of a test"
 r.info prec_1
 
 # Check the raster maps semantic label

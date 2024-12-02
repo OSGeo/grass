@@ -21,25 +21,25 @@
 # and reliable method is probably to not depend on Apple's customizations and
 # execute pythonw directly, 32bit if necessary.
 
-if [ -z "$GISBASE" ] ; then
+if [ -z "$GISBASE" ]; then
     echo "You must be in GRASS GIS to run this program." >&2
     exit 1
 fi
 
-SYSARCH=`uname -p`
-SYSVER=`uname -r | cut -d . -f 1`
+SYSARCH=$(uname -p)
+SYSVER=$(uname -r | cut -d . -f 1)
 
-if [ ! "$GRASS_PYTHONWX" ] ; then
-	GRASS_PYTHONWX="pythonw"
+if [ ! "$GRASS_PYTHONWX" ]; then
+    GRASS_PYTHONWX="pythonw"
 fi
 # can't run python 64bit if wx not 64bit, assume OSX 10.5+  possible 64bit
-if [ $(($SYSVER)) -gt 5 ] && [ "$GRASS_WX64BIT" = "0" ] ; then
-	case $SYSARCH in
-		powerpc) pyarch="-ppc" ;;
-		i386) pyarch="-i386" ;;
-		*) pyarch="" ;;
-	esac
-	exec /usr/bin/arch $pyarch "$GRASS_PYTHONWX" "$@"
+if [ $((SYSVER)) -gt 5 ] && [ "$GRASS_WX64BIT" = "0" ]; then
+    case $SYSARCH in
+        powerpc) pyarch="-ppc" ;;
+        i386) pyarch="-i386" ;;
+        *) pyarch="" ;;
+    esac
+    exec /usr/bin/arch $pyarch "$GRASS_PYTHONWX" "$@"
 else
-	exec "$GRASS_PYTHONWX" "$@"
+    exec "$GRASS_PYTHONWX" "$@"
 fi

@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 # NC dataset, https://grass.osgeo.org/download/data/
 
 OUTFILE=callgrind.out.1196
@@ -10,7 +11,7 @@ CMD="r.stats -a $MAP"
 
 time $CMD
 
-valgrind --tool=callgrind --callgrind-out-file=$OUTFILE --trace-children=yes $CMD
+valgrind --tool=callgrind --callgrind-out-file=$OUTFILE --trace-children=yes "$CMD"
 
 # http://kcachegrind.sourceforge.net
 kcachegrind $OUTFILE

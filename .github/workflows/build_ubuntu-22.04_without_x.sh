@@ -19,9 +19,10 @@ fi
 # Adding -Werror to make's CFLAGS is a workaround for configuring with
 # an old version of configure, which issues compiler warnings and
 # errors out. This may be removed with upgraded configure.in file.
-makecmd="make"
-if [[ "$#" -eq 2 ]]; then
-    makecmd="make CFLAGS='$CFLAGS $2' CXXFLAGS='$CXXFLAGS $2'"
+makecmd=("make")
+if [[ $# -ge 2 ]]; then
+    ARGS=("$@")
+    makecmd=("make" "CFLAGS=$CFLAGS ${ARGS[@]:1}" "CXXFLAGS=$CXXFLAGS ${ARGS[@]:1}")
 fi
 
 # non-existent variables as an errors
@@ -50,5 +51,5 @@ export INSTALL_PREFIX=$1
     --without-openmp \
     --without-pthread
 
-eval $makecmd
+"${makecmd[@]}"
 make install
