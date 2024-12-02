@@ -345,30 +345,28 @@ int draw_line(int type, int ltype, int line, const struct line_pnts *Points,
                 D_symbol(Symb, x0, y0, line_color, fill_color);
             } 
         }
-        else {
-            G_warning(_("Symbol is NULL; unable to display points"));
-        }
-
         /* reset to defaults */
         var_size = size;
         rotation = 0.0;
     }
     else if (color || custom_rgb || zcolors) {
-        if (!cvarr_rgb && !cats_color_flag && !zcolors && !colors)
-            D_RGB_color(color->r, color->g, color->b);
-        else {
-            if (custom_rgb)
-                D_RGB_color((unsigned char)red, (unsigned char)grn,
-                            (unsigned char)blu);
-            else
+        if (color) {
+            if (!cvarr_rgb && !cats_color_flag && !zcolors && !colors)
                 D_RGB_color(color->r, color->g, color->b);
-        }
+            else {
+                if (custom_rgb)
+                    D_RGB_color((unsigned char)red, (unsigned char)grn,
+                            (unsigned char)blu);
+                else
+                    D_RGB_color(color->r, color->g, color->b);
+            }
 
-        /* Plot the lines */
-        if (Points->n_points == 1) /* line with one coor */
-            D_polydots_abs(x, y, Points->n_points);
-        else /* use different user defined render methods */
-            D_polyline_abs(x, y, Points->n_points);
+            /* Plot the lines */
+            if (Points->n_points == 1) /* line with one coor */
+                D_polydots_abs(x, y, Points->n_points);
+            else /* use different user defined render methods */
+                D_polyline_abs(x, y, Points->n_points);
+        }   
     }
 
     switch (ltype) {
@@ -391,5 +389,6 @@ int draw_line(int type, int ltype, int line, const struct line_pnts *Points,
         break;
     }
 
+    G_free(Symb);
     return 1;
 }
