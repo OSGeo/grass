@@ -356,7 +356,7 @@ int draw_line(int type, int ltype, int line, const struct line_pnts *Points,
             else {
                 if (custom_rgb)
                     D_RGB_color((unsigned char)red, (unsigned char)grn,
-                            (unsigned char)blu);
+                                (unsigned char)blu);
                 else
                     D_RGB_color(color->r, color->g, color->b);
             }
