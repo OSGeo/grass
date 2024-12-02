@@ -366,7 +366,7 @@ int draw_line(int type, int ltype, int line, const struct line_pnts *Points,
                 D_polydots_abs(x, y, Points->n_points);
             else /* use different user defined render methods */
                 D_polyline_abs(x, y, Points->n_points);
-        }   
+        }
     }
 
     switch (ltype) {
