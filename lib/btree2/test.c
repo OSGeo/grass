@@ -30,7 +30,7 @@ void generate_random_points(double points[][2], int num_points)
     }
 }
 
-int main(int argc, char *argv[])
+int main(void)
 {
 
     srand(time(NULL));
