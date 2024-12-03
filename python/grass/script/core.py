@@ -953,11 +953,13 @@ def tempfile(create=True, env=None):
 
 
 def tempdir(env=None):
-    """Returns the name of a temporary dir, created with g.tempfile."""
-    tmp = tempfile(create=False, env=env)
-    os.mkdir(tmp)
+    """Returns the name of a temporary directory, created with g.tempfile.
 
-    return tmp
+    :param env: environment
+
+    :return: path to a temporary directory
+    """
+    return read_command("g.tempfile", flags="f", pid=os.getpid(), env=env).strip()
 
 
 def tempname(length, lowercase=False):
