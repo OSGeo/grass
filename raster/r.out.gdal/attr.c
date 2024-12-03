@@ -49,14 +49,15 @@ int export_attr(GDALDatasetH hMEMDS, int band, const char *name,
      * GFU_MaxCount
      */
 
-    /* TODO: cats.ncats > 0 && rcount > 0
-     * how to merge categories and color rules ?
-     * what to do for a cell value that has a category but no color rule ?
-     * what to do for a cell value that has a color rule but no category ?
-     */
     if (cats.ncats > 0 && rcount > 0) {
         int use_minmax = 0;
         int r1, g1, b1, r2, g2, b2;
+
+        /* merge categories and color rules:
+         * go through categories and fetch corresponding color
+         * write out value, label, red, green, blue
+         * or the minmax variant
+         */
 
         if (maptype == CELL_TYPE) {
             for (i = 0; i < cats.ncats; i++) {
