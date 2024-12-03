@@ -326,7 +326,7 @@ static void write_env(int loc)
 
 static FILE *open_env(const char *mode, int loc)
 {
-    char buf[GPATH_MAX];
+    char buf[GPATH_MAX] = {0}; // initialized
 
     if (loc == G_VAR_GISRC) {
         if (!st->gisrc)

@@ -152,7 +152,7 @@ int thin_lines(int iterations)
                         }
 
                     } /* end blank pixel */
-                }     /* end col loop */
+                } /* end col loop */
 
                 for (col = box_left; col <= box_right; col++)
                     row_buf[col] = med[col];
@@ -163,7 +163,7 @@ int thin_lines(int iterations)
                 /* row, since put_a_row(row, med_row) was called and med */
                 med = bottom;
             } /* end row loop */
-        }     /* j-loop */
+        } /* j-loop */
 
         G_message(n_("Deleted %d pixel", "Deleted %d pixels", deleted),
                   deleted);

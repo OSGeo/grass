@@ -48,13 +48,12 @@ def main():
     output = options["output"]
     donodata = flags["i"]
 
-    if donodata:
-        statsflags = "1g"
-    else:
-        statsflags = "1gn"
-    parameters = dict(
-        flags=statsflags, input=options["input"], separator=options["separator"]
-    )
+    statsflags = "1g" if donodata else "1gn"
+    parameters = {
+        "flags": statsflags,
+        "input": options["input"],
+        "separator": options["separator"],
+    }
     if output:
         parameters.update(output=output)
 

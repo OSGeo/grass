@@ -259,7 +259,7 @@ int main(int argc, char **argv)
 #else
         G_warning(_("Input and output projects are the same"));
 #endif
-        G_get_window(&outcellhd);
+    G_get_window(&outcellhd);
 
     if (gprint_bounds->answer && !print_bounds->answer)
         print_bounds->answer = gprint_bounds->answer;

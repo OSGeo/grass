@@ -83,8 +83,9 @@
 # % description: Perform a dry run, compute all dependencies and module calls but don't run them
 # %end
 
-import grass.script
 import sys
+
+import grass.script as gs
 
 
 def main():
@@ -103,10 +104,10 @@ def main():
     # Check for PLY istallation
     try:
         # Intentionally unused imports
-        import ply.lex as lex  # noqa: F401
-        import ply.yacc as yacc  # noqa: F401
+        from ply import lex  # noqa: F401
+        from ply import yacc  # noqa: F401
     except ImportError:
-        grass.script.fatal(
+        gs.fatal(
             _(
                 "Please install PLY (Lex and Yacc Python implementation) to use the "
                 "temporal algebra modules. You can use t.rast.mapcalc that provides a "
@@ -130,11 +131,9 @@ def main():
         if not p.setup_common_granularity(
             expression=expression, lexer=tgis.TemporalRasterAlgebraLexer()
         ):
-            grass.script.fatal(
-                _("Unable to process the expression in granularity algebra mode")
-            )
+            gs.fatal(_("Unable to process the expression in granularity algebra mode"))
 
-    pc = p.parse(expression, basename, grass.script.overwrite())
+    pc = p.parse(expression, basename, gs.overwrite())
 
     if dry_run is True:
         import pprint
@@ -143,5 +142,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.script.parser()
+    options, flags = gs.parser()
     sys.exit(main())

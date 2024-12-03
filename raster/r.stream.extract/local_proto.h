@@ -5,7 +5,7 @@
 #include "flag.h"
 #include "seg.h"
 
-#define INDEX(r, c) ((r)*ncols + (c))
+#define INDEX(r, c) ((r) * ncols + (c))
 #define MAXDEPTH    1000 /* maximum supported tree depth of stream network */
 
 #define POINT       struct a_point

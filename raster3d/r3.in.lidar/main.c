@@ -361,13 +361,12 @@ int main(int argc, char *argv[])
 
     /* for the CRS info */
     const char *projstr;
-    struct Cell_head current_region;
-    struct Cell_head file_region;
-
+    struct Cell_head current_region = {0};
+    struct Cell_head file_region = {0};
     G_get_set_window(&current_region);
 
     /* extent for all data */
-    struct Cell_head data_region;
+    struct Cell_head data_region = {0};
 
     long unsigned header_count = 0;
     int i;

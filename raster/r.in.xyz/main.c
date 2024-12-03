@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
     double zrange_min, zrange_max, vrange_min, vrange_max, d_tmp;
     char *fs; /* field delim */
     off_t filesize;
-    int linesize;
+    int linesize = 0;
     unsigned long estimated_lines, line;
     int from_stdin;
     int can_seek;
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
     char *n_array, *min_array, *max_array, *sum_array, *sumsq_array,
         *index_array;
     void *raster_row, *ptr;
-    struct Cell_head region;
+    struct Cell_head region = {0};
     int rows, last_rows, row0, cols; /* scan box size */
     int row, col;                    /* counters */
 
@@ -1213,7 +1213,14 @@ int scan_bounds(FILE *fp, int xcol, int ycol, int zcol, int vcol, char *fs,
     unsigned long line;
     int first, max_col;
     char buff[BUFFSIZE];
-    double min_x, max_x, min_y, max_y, min_z, max_z, min_v, max_v;
+    double min_x = 0.0;
+    double max_x = 0.0;
+    double min_y = 0.0;
+    double max_y = 0.0;
+    double min_z = 0.0;
+    double max_z = 0.0;
+    double min_v = 0.0;
+    double max_v = 0.0;
     char **tokens;
     int ntokens; /* number of tokens */
     double x, y, z, v;
