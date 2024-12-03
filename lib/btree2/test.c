@@ -40,7 +40,8 @@ int main(int argc, char *argv[])
         double points[MAX_POINTS][2];
         generate_random_points(points, num);
 
-        double target[2] = {(rand() % 2000) / 100.0, (rand() % 2000) / 100.0};
+        /* double target[2] = {(rand() % 2000) / 100.0, (rand() % 2000) /
+         * 100.0};*/
 
         struct kdtree *kdt = kdtree_create(2, NULL);
 
