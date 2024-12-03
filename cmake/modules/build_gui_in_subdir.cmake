@@ -27,7 +27,7 @@ function(build_gui_in_subdir dir_name)
   set(SCRIPT_EXT "")
   if(WIN32)
     set(SCRIPT_EXT ".py")
-    set(PGM_NAME ${G_NAME})
+    set(PGM_NAME ${G_TARGET_NAME})
     configure_file(${CMAKE_SOURCE_DIR}/cmake/windows_launch.bat.in
                    ${OUTDIR}/${GRASS_INSTALL_SCRIPTDIR}/${G_TARGET_NAME}.bat @ONLY)
   endif()

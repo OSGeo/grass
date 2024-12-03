@@ -82,7 +82,8 @@ add_dependencies(compile_python_files ALL_MODULES)
 add_custom_command(
   OUTPUT "${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml"
   COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE}
-          ${CMAKE_CURRENT_SOURCE_DIR}/tools/build_modules_xml.py
+          ${CMAKE_CURRENT_SOURCE_DIR}/tools/build_modules_xml.py >
+          "${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml"
   COMMENT "Generating interface description for all modules..."
 )
 
