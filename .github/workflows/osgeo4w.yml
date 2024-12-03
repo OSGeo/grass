@@ -42,7 +42,7 @@ jobs:
             mingw-w64-x86_64-fftw mingw-w64-x86_64-openblas mingw-w64-x86_64-pkgconf
             mingw-w64-x86_64-gcc mingw-w64-x86_64-ccache mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv
             mingw-w64-x86_64-bzip2 mingw-w64-x86_64-gettext mingw-w64-x86_64-libsystre
-            mingw-w64-x86_64-libtre-git mingw-w64-x86_64-libwinpthread-git mingw-w64-x86_64-libpng
+            mingw-w64-x86_64-libtre-git mingw-w64-x86_64-libwinpthread-git
             mingw-w64-x86_64-pcre
 
       - name: Setup OSGeo4W environment
@@ -52,20 +52,15 @@ jobs:
           package-dir: "D:/OSGeo4W_pkg"
           packages: |
             cairo-devel
-            fftw
             freetype-devel
             gdal-devel
-            gdal-ecw
-            gdal-mrsid
             geos-devel
+            libjpeg-turbo-devel
             liblas-devel
             libpng-devel
             libpq-devel
             libtiff-devel
-            libxdr
             netcdf-devel
-            pdal-devel
-            pdcurses
             proj-devel
             python3-core
             python3-jupyter
@@ -75,8 +70,9 @@ jobs:
             python3-ply
             python3-pytest
             python3-pywin32
+            python3-six
             python3-wxpython
-            regex-devel
+            sqlite3-devel
             zstd-devel
 
       - name: Set number of cores for compilation
@@ -87,8 +83,6 @@ jobs:
       - name: Compile GRASS GIS
         shell: msys2 {0}
         run: |
-          export CFLAGS="${CFLAGS} -pipe"
-          export CXXFLAGS="${CXXFLAGS} -pipe"
           .github/workflows/build_osgeo4w.sh
 
       - name: Print installed versions
