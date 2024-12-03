@@ -50,7 +50,7 @@ int export_attr(GDALDatasetH hMEMDS, int band, const char *name,
      */
 
     if (cats.ncats > 0 && rcount > 0) {
-        int use_minmax = 0;
+        bool use_minmax = false;
         int r1, g1, b1, r2, g2, b2;
 
         /* merge categories and color rules:
@@ -62,8 +62,11 @@ int export_attr(GDALDatasetH hMEMDS, int band, const char *name,
         if (maptype == CELL_TYPE) {
             for (i = 0; i < cats.ncats; i++) {
                 label = Rast_get_ith_c_cat(&cats, i, &CellMin, &CellMax);
+                if (!label || !*label) {
+                    G_fatal_error(_("No label for category entry no %d "), i);
+                }
                 if (CellMin != CellMax) {
-                    use_minmax = 1;
+                    use_minmax = true;
                     break;
                 }
             }
@@ -71,8 +74,11 @@ int export_attr(GDALDatasetH hMEMDS, int band, const char *name,
         else {
             for (i = 0; i < cats.ncats; i++) {
                 label = Rast_get_ith_d_cat(&cats, i, &dfCellMin, &dfCellMax);
+                if (!label || !*label) {
+                    G_fatal_error(_("No label for category entry no %d "), i);
+                }
                 if (dfCellMin != dfCellMax) {
-                    use_minmax = 1;
+                    use_minmax = true;
                     break;
                 }
             }
@@ -192,13 +198,16 @@ int export_attr(GDALDatasetH hMEMDS, int band, const char *name,
         GDALDestroyRasterAttributeTable(hrat);
     }
     else if (cats.ncats > 0 && rcount == 0) {
-        int use_minmax = 0;
+        bool use_minmax = false;
 
         if (maptype == CELL_TYPE) {
             for (i = 0; i < cats.ncats; i++) {
                 label = Rast_get_ith_c_cat(&cats, i, &CellMin, &CellMax);
+                if (!label || !*label) {
+                    G_fatal_error(_("No label for category entry no %d "), i);
+                }
                 if (CellMin != CellMax) {
-                    use_minmax = 1;
+                    use_minmax = true;
                     break;
                 }
             }
@@ -206,8 +215,11 @@ int export_attr(GDALDatasetH hMEMDS, int band, const char *name,
         else {
             for (i = 0; i < cats.ncats; i++) {
                 label = Rast_get_ith_d_cat(&cats, i, &dfCellMin, &dfCellMax);
+                if (!label || !*label) {
+                    G_fatal_error(_("No label for category entry no %d "), i);
+                }
                 if (dfCellMin != dfCellMax) {
-                    use_minmax = 1;
+                    use_minmax = true;
                     break;
                 }
             }
