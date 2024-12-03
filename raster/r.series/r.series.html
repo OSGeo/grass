@@ -12,29 +12,29 @@ assigned to the corresponding cells in the input raster map layers.
 Following methods are available:
 
 <ul>
- <li>average: average value
- <li>count: count of non-NULL cells
- <li>median: median value
- <li>mode: most frequently occurring value
- <li>minimum: lowest value
- <li>min_raster: raster map number with the minimum time-series value
- <li>maximum: highest value
- <li>max_raster: raster map number with the maximum time-series value
- <li>stddev: standard deviation
- <li>range: range of values (max - min)
- <li>sum: sum of values
- <li>variance: statistical variance
- <li>diversity: number of different values
- <li>slope: linear regression slope
- <li>offset: linear regression offset
- <li>detcoeff: linear regression coefficient of determination
- <li>tvalue: linear regression t-value
- <li>quart1: first quartile
- <li>quart3: third quartile
- <li>perc90: ninetieth percentile
- <li>quantile: arbitrary quantile
- <li>skewness: skewness
- <li>kurtosis: kurtosis
+ <li>average: average value</li>
+ <li>count: count of non-NULL cells</li>
+ <li>median: median value</li>
+ <li>mode: most frequently occurring value</li>
+ <li>minimum: lowest value</li>
+ <li>min_raster: raster map number with the minimum time-series value</li>
+ <li>maximum: highest value</li>
+ <li>max_raster: raster map number with the maximum time-series value</li>
+ <li>stddev: standard deviation</li>
+ <li>range: range of values (max - min)</li>
+ <li>sum: sum of values</li>
+ <li>variance: statistical variance</li>
+ <li>diversity: number of different values</li>
+ <li>slope: linear regression slope</li>
+ <li>offset: linear regression offset</li>
+ <li>detcoeff: linear regression coefficient of determination</li>
+ <li>tvalue: linear regression t-value</li>
+ <li>quart1: first quartile</li>
+ <li>quart3: third quartile</li>
+ <li>perc90: ninetieth percentile</li>
+ <li>quantile: arbitrary quantile</li>
+ <li>skewness: skewness</li>
+ <li>kurtosis: kurtosis</li>
 </ul>
 
 Note that most parameters accept multiple answers, allowing multiple
@@ -196,7 +196,7 @@ r.series in=one,two out=result_avg,res_slope,result_count meth=sum,slope,count
 
 <p>Example to use the file option of r.series:
 <div class="code"><pre>
-cat > input.txt &lt;&lt; EOF
+cat &gt; input.txt &lt;&lt; EOF
 map1
 map2
 map3
@@ -211,7 +211,7 @@ weight 0.75 should be assigned to map2. As the other maps do not have
 weights we can leave it out:
 
 <div class="code"><pre>
-cat > input.txt &lt;&lt; EOF
+cat &gt; input.txt &lt;&lt; EOF
 map1
 map2|0.75
 map3

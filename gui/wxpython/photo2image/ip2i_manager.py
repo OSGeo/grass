@@ -426,14 +426,13 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GMessage(_("A POINTS file exists, renaming it to POINTS_BAK"))
 
         # """Make a POINTS file """
-        import re
 
         try:
             fc = open(self.file["camera"])
             fc_count = 0
             for line in fc:
                 fc_count += 1
-                if re.search(r"NUM", line):
+                if "NUM" in line:
                     storeLine = fc_count
                     numberOfFiducial = int(line.split()[-1])
             dataFiducialX = []

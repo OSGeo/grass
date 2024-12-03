@@ -433,7 +433,7 @@ r.fill.stats input=ground output=ground_filled uncertainty=uncertainty distance=
 </pre></div>
 
 <center>
-<a href="r_fill_stats_lidar.png"><img src="r_fill_stats_lidar.png" alt="Point density and ground surface" width=600 height=600></a>
+<a href="r_fill_stats_lidar.png"><img src="r_fill_stats_lidar.png" alt="Point density and ground surface" width="600" height="600"></a>
 <p><em>
 Binning of Lidar and resulting ground surface with filled gaps.
 Note the remaining NULL cells (white) in the resulting ground surface.
@@ -476,7 +476,7 @@ d.mon wx0
 d.histogram elev_srtm_30m
 
 # remove SRTM outliers, i.e. SRTM below 50m (esp. lakes), leading to no data areas
-r.mapcalc "elev_srtm_30m_filt = if(elev_srtm_30m < 50.0, null(), elev_srtm_30m)"
+r.mapcalc "elev_srtm_30m_filt = if(elev_srtm_30m &lt; 50.0, null(), elev_srtm_30m)"
 d.histogram elev_srtm_30m_filt
 d.rast elev_srtm_30m_filt
 

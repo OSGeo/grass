@@ -136,7 +136,7 @@ of all January maps in the new STRDS as compared to the original one,
 
 <div class="code"><pre>
 t.rast.mapcalc input=tempmean_monthly output=january_under_0 basename=january_under_0 \
-    expression="if(start_month() == 1 && tempmean_monthly > 0, null(), tempmean_monthly)"
+    expression="if(start_month() == 1 &amp;&amp; tempmean_monthly &gt; 0, null(), tempmean_monthly)"
 
 # print minimum and maximum only for January in the new strds
 t.rast.list january_under_0 columns=name,start_time,min,max | grep 01-01

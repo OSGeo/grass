@@ -2,79 +2,78 @@
 
 <em>v.surf.bspline</em> performs a bilinear/bicubic spline
 interpolation with Tykhonov regularization. The <b>input</b> is a 2D
-or 3D vector <em>points</em> map. Values to interpolate can be the z
+or 3D vector <em>point</em> layer. Values to interpolate can be the z
 values of 3D points or the values in a user-specified attribute column
-in a 2D or 3D vector map. Output can be a raster
-(<b>raster_output</b>) or vector (<b>output</b>) map.  Optionally, a
-"sparse point" vector map can be input which indicates the location
+in a 2D or 3D vector layer. Output can be a raster
+(<b>raster_output</b>) or vector (<b>output</b>) layer.  Optionally, a
+"sparse point" vector layer can be input which indicates the location
 of <b>output</b> vector points.
 
 <h2>NOTES</h2>
 
 <p>From a theoretical perspective, the interpolating procedure takes
 place in two parts: the first is an estimate of the linear coefficients
-of a spline function is derived from the observation points using a
-least squares regression; the second is the computation of the
-interpolated surface (or interpolated vector points). As used here, the
+of a spline function, which is derived from the observation points using a
+least squares regression. The second is the computation of the
+interpolated surface or interpolated vector points. As used here, the
 splines are 2D piece-wise non-zero polynomial functions calculated
-within a limited, 2D area. The length (in mapping units) of each spline
+within a limited, 2D area. The length, in mapping units, of each spline
 step is defined by <b>ew_step</b> for the east-west direction and
 <b>ns_step</b> for the north-south direction. For optimal performance,
 the length of spline step should be no less than the distance between
 observation points. Each vector point observation is modeled as a
 linear function of the non-zero splines in the area around the
 observation. The least squares regression predicts the the coefficients
-of these linear functions. Regularization, avoids the need to have one
+of these linear functions. Regularization avoids the need to have one
 observation and one coefficient for each spline (in order to avoid
 instability).
 
 <p>With regularly distributed data points, a spline step corresponding
 to the maximum distance between two points in both the east and north
-directions is sufficient. But often data points are not regularly
-distributed and require statistial regularization or estimation. In
+directions is sufficient. However, data points are often not regularly
+distributed and require statistical regularization or estimation. In
 such cases, v.surf.bspline will attempt to minimize the gradient of
 bilinear splines or the curvature of bicubic splines in areas lacking
-point observations. As a general rule, spline step length should be
+point observations. As a general rule, the spline step length should be
 greater than the mean distance between observation points (twice the
 distance between points is a good starting point). Separate east-west
 and north-south spline step length arguments allows the user to
 account for some degree of anisotropy in the distribution of
-observation points. Short spline step lengths - especially spline step
-lengths that are less than the distance between observation points -
+observation points. Short spline step lengths, especially spline step
+lengths that are less than the distance between observation points, 
 can greatly increase the processing time.
 
-<p>Moreover, the maximum number of splines for each direction at each
+<p>The maximum number of splines for each direction at each
 time is fixed, regardless of the spline step length. As the total
-number of splines used increases (i.e., with small spline step
+number of splines increases (i.e., with small spline step
 lengths), the region is automatically split into subregions for
 interpolation. Each subregion can contain no more than 150x150
 splines. To avoid subregion boundary problems, subregions are created
 to partially overlap each other. A weighted mean of observations,
 based on point locations, is calculated within each subregion.
 
-<p>The Tykhonov regularization parameter (<b>lambda_i</b>) acts to
+<p>The Tykhonov regularization parameter, <b>lambda_i</b>, acts to
 smooth the interpolation. With a small <b>lambda_i</b>, the
 interpolated surface closely follows observation points; a larger
 value will produce a smoother interpolation.
 
-<p>The input can be a 2D or 3D vector points map. If input is 3D
+<p>The input can be a 2D or 3D point vector layer. If input is 3D
 and <b>column</b> is not given than z-coordinates are used for
 interpolation. Parameter <b>column</b> is required when input is 2D
-vector map.
+vector layer.
 
-<p><em>v.surf.bspline</em> can produce a <b>raster_output</b> OR
-a <b>output</b> (but NOT simultaneously). Note that topology is not
-build for output vector point map. The topology can be built if
-required by <em><a href="v.build.html">v.build</a></em>.
+<p><em>v.surf.bspline</em> can produce raster (<b>raster_output</b>) OR
+vector <b>output</b> but NOT simultaneously. Note that topology is not
+built for output point vector layer. If required, the topology can be built 
+using <em><a href="v.build.html">v.build</a></em>.
 
-<p>If output is a vector points map and a <b>sparse</b> vector points
-map is not specified, the output vector map will contain points at the
-same locations as observation points in the input map, but the values
-of the output points are interpolated values. If instead
-a <b>sparse</b> vector points map is specified, the output vector map
-will contain points at the same locations as the sparse vector map
-points, and values will be those of the interpolated raster surface at
-those points.
+<p>If output is a point vector layer and <b>sparse</b> is not specified, 
+the output vector layer will contain points at the
+same locations as observation points in the input layer but the values
+of the output points will be interpolated values. If a <b>sparse</b> 
+point vector layer is specified, the output vector layer will contain points 
+at the same locations as the sparse vector layer points. The values will be 
+those of the interpolated raster surface at those points.
 
 <p>A cross validation "leave-one-out" analysis is available to help to
 determine the optimal <b>lambda_i</b> value that produces an
@@ -96,7 +95,7 @@ created when cross-validation is selected.
 v.surf.bspline input=point_vector output=interpolate_surface method=bicubic
 </pre></div>
 
-A bicubic spline interpolation will be done and a vector points map
+A bicubic spline interpolation will be done and a point vector layer
 with estimated (i.e., interpolated) values will be created.
 
 <h3>Basic interpolation and raster output with a longer spline step</h3>
@@ -106,7 +105,7 @@ v.surf.bspline input=point_vector raster=interpolate_surface ew_step=25 ns_step=
 </pre></div>
 
 A bilinear spline interpolation will be done with a spline step length
-of 25 map units. An interpolated raster map will be created at the
+of 25 map units. An interpolated raster layer will be created at the
 current region resolution.
 
 <h3>Estimation of lambda_i parameter with a cross validation process</h3>
@@ -121,8 +120,8 @@ v.surf.bspline -c input=point_vector
 v.surf.bspline input=point_vector sparse=sparse_points output=interpolate_surface
 </pre></div>
 
-An output map of vector points will be created, corresponding to the
-sparse vector map, with interpolated values.
+An output layer of vector points will be created, corresponding to the
+sparse vector layer, with interpolated values.
 
 <h3>Using attribute values instead z-coordinates</h3>
 
@@ -144,13 +143,11 @@ v.surf.bspline input=elev_lid792_bepts raster=elev_lid792_rast \
 
 <h2>KNOWN ISSUES</h2>
 
-Known issues:
-
 <p>
 In order to avoid RAM memory problems, an auxiliary table is needed
 for recording some intermediate calculations. This requires
-the <i>GROUP BY</i> SQL function is used, which is not supported by
-the DBF driver. For this reason, vector map output
+the <i>GROUP BY</i> SQL function is used. This function is not 
+supported by the DBF driver. For this reason, vector output
 (<b>output</b>) is not permitted with the DBF driver. There are
 no problems with the raster map output from the DBF driver.
 
