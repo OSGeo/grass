@@ -107,7 +107,7 @@ void G__usage_xml(void)
     char *type;
     char *s, *top;
     int i;
-    const char *encoding;
+    const char *encoding = NULL;
     int new_prompt = 0;
 
     new_prompt = G__uses_new_gisprompt();
@@ -152,7 +152,7 @@ void G__usage_xml(void)
 
     if (st->module_info.keywords) {
         fprintf(stdout, "\t<keywords>\n\t\t");
-        G__print_keywords(stdout, print_escaped_for_xml);
+        G__print_keywords(stdout, print_escaped_for_xml, FALSE);
         fprintf(stdout, "\n\t</keywords>\n");
     }
 

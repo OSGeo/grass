@@ -40,7 +40,8 @@ private:
     void oda550(const double v, const AtmosModel &atms);
 
 public:
-    /* Set the visibility, this will overide any previous estimates of taer55 */
+    /* Set the visibility, this will override any previous estimates of taer55
+     */
     void set_visibility(const double vis, const AtmosModel &atms)
     {
         if (vis > 0)

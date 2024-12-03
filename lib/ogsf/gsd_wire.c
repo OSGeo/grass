@@ -434,12 +434,12 @@ int gsd_wire_surf_const(geosurf *surf, float k)
 
    Not yet implemented.
 
-   \param gs surface (geosurf)
-   \param user_func user defined function
+   \param gs surface (geosurf) [unused]
+   \param user_func user defined function [unused]
 
    \return 1
  */
-int gsd_wire_surf_func(geosurf *gs, int (*user_func)(void))
+int gsd_wire_surf_func(geosurf *gs UNUSED, int (*user_func)(void) UNUSED)
 {
     return (1);
 }
@@ -544,7 +544,7 @@ int gsd_wire_arrows(geosurf *surf)
 
             gsd_arrow(pt, curcolor, xres * 2, n, sz, surf);
         } /* ea col */
-    }     /* ea row */
+    } /* ea row */
 
     gsd_popmatrix();
     gsd_colormode(CM_DIFFUSE);
@@ -645,7 +645,7 @@ int gsd_coarse_surf_map(geosurf *surf)
      */
     check_transp = 0;
     tratt = &(surf->att[ATT_TRANSP]);
-    ktrans = (255 << 24);
+    ktrans = (255U << 24);
     trans_src = surf->att[ATT_TRANSP].att_src;
 
     if (CONST_ATT == trans_src && surf->att[ATT_TRANSP].constant != 0.0) {
@@ -798,7 +798,7 @@ int gsd_coarse_surf_map(geosurf *surf)
                 if (check_transp) {
                     GET_MAPATT(trbuff, offset2[ii], ttr);
                     ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                    ktrans = (char)(255 - ktrans) << 24;
+                    ktrans = (char)(255U - ktrans) << 24;
                 }
 
                 if (check_material) {

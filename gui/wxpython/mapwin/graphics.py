@@ -15,7 +15,6 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support, GraphicsSet)
 """
 
-
 from copy import copy
 
 import wx
@@ -209,7 +208,7 @@ class GraphicsSet:
         :param penName: the 'default' pen is used if is not defined
         :type penName: str
         :param label: label, which will be drawn with point. It is
-                      relavant just for 'point' type.
+                      relevant just for 'point' type.
         :type label: str
         :param hide: if it is True, the item is not drawn when self.Draw
                      is called. Hidden items are also counted in drawing

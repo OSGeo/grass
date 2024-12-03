@@ -69,7 +69,10 @@ int NetA_init_distinct(dbDriver *driver, dbString *sql, int **lengths,
         G_warning(_("Out of memory"));
         return -1;
     }
-    db_open_select_cursor(driver, sql, &cursor, DB_SEQUENTIAL);
+    if (db_open_select_cursor(driver, sql, &cursor, DB_SEQUENTIAL) != DB_OK) {
+        G_warning(_("Unable to open select cursor: %s"), db_get_string(sql));
+        return -1;
+    }
     count = index = 0;
     /*calculate the lengths of the routes */
     table = db_get_cursor_table(&cursor);
@@ -105,7 +108,7 @@ static int cmp_int(const void *a, const void *b)
    \param walk_length walk length as string
    \param timetable pointer to neta_timetable
    \param route_ids list of route ids
-   \param stop_ids lits of stop ids
+   \param stop_ids list of stop ids
 
    \return 0 on success
    \return non-zero value on failure
@@ -128,6 +131,10 @@ int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
     struct field_info *Fi;
 
     Fi = Vect_get_field(In, route_layer);
+    if (Fi == NULL)
+        G_fatal_error(_("Database connection not defined for layer %d"),
+                      route_layer);
+
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
     if (driver == NULL)
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
@@ -308,6 +315,7 @@ int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
         }
         db_close_cursor(&cursor);
     }
+    Vect_destroy_field_info(Fi);
     db_close_database_shutdown_driver(driver);
 
     return 0;
@@ -335,13 +343,13 @@ static neta_heap_data *new_heap_data(int conns, int v)
    \param new_dst new 'to' node
    \param v ?
    \param route id of route
-   \param rows ?
+   \param rows ? (unused)
    \param update ?
    \param[out] result pointer to neta_timetable_result structure
    \param heap ?
  */
 void NetA_update_dijkstra(int old_conns, int new_conns, int to, int new_dst,
-                          int v, int route, int rows, int update,
+                          int v, int route, int rows UNUSED, int update,
                           neta_timetable_result *result, dglHeap_s *heap)
 {
     if (result->dst[new_conns][to] == -1 ||

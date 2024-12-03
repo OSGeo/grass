@@ -10,19 +10,21 @@ for details.
 :authors: Thomas Leppelt and Soeren Gebbert
 
 """
-from __future__ import print_function
+
+from __future__ import annotations
 
 try:
-    import ply.yacc as yacc
+    from ply import yacc
 except ImportError:
     pass
 
-from .temporal_raster_base_algebra import (
-    TemporalRasterBaseAlgebraParser,
-    TemporalRasterAlgebraLexer,
-)
 import grass.pygrass.modules as pymod
+
 from .space_time_datasets import Raster3DDataset
+from .temporal_raster_base_algebra import (
+    TemporalRasterAlgebraLexer,
+    TemporalRasterBaseAlgebraParser,
+)
 
 
 class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
@@ -30,15 +32,14 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
 
     def __init__(
         self,
-        pid=None,
-        run=False,
-        debug=True,
-        spatial=False,
-        register_null=False,
-        dry_run=False,
-        nprocs=1,
-    ):
-
+        pid: int | None = None,
+        run: bool = False,
+        debug: bool = True,
+        spatial: bool = False,
+        register_null: bool = False,
+        dry_run: bool = False,
+        nprocs: int = 1,
+    ) -> None:
         TemporalRasterBaseAlgebraParser.__init__(
             self,
             pid=pid,
@@ -53,18 +54,18 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
         self.m_mapcalc = pymod.Module("r3.mapcalc")
         self.m_mremove = pymod.Module("g.remove")
 
-    def parse(self, expression, basename=None, overwrite=False):
+    def parse(self, expression, basename=None, overwrite: bool = False):
         # Check for space time dataset type definitions from temporal algebra
-        l = TemporalRasterAlgebraLexer()
-        l.build()
-        l.lexer.input(expression)
+        lx = TemporalRasterAlgebraLexer()
+        lx.build()
+        lx.lexer.input(expression)
 
         while True:
-            tok = l.lexer.token()
+            tok = lx.lexer.token()
             if not tok:
                 break
 
-            if tok.type == "STVDS" or tok.type == "STRDS" or tok.type == "STR3DS":
+            if tok.type in {"STVDS", "STRDS", "STR3DS"}:
                 raise SyntaxError("Syntax error near '%s'" % (tok.type))
 
         self.lexer = TemporalRasterAlgebraLexer()
@@ -82,14 +83,14 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
 
         return self.process_chain_dict
 
-    def p_statement_assign(self, t):
+    def p_statement_assign(self, t) -> None:
         # The expression should always return a list of maps.
         """
         statement : stds EQUALS expr
         """
         TemporalRasterBaseAlgebraParser.p_statement_assign(self, t)
 
-    def p_ts_neighbor_operation(self, t):
+    def p_ts_neighbor_operation(self, t) -> None:
         # Examples:
         # A[1,0,-1]
         # B[-2]
@@ -135,14 +136,14 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
                         cmdstring = "%s" % (map_new.cmd_list)
                     elif "cmd_list" not in dir(map_new) and len(t) == 5:
                         cmdstring = "%s" % (map_n.get_id())
-                    elif "cmd_list" in dir(map_new) and len(t) in (9, 11):
+                    elif "cmd_list" in dir(map_new) and len(t) in {9, 11}:
                         cmdstring = "%s[%s,%s,%s]" % (
                             map_new.cmd_list,
                             row_neighbor,
                             col_neighbor,
                             depth_neighbor,
                         )
-                    elif "cmd_list" not in dir(map_new) and len(t) in (9, 11):
+                    elif "cmd_list" not in dir(map_new) and len(t) in {9, 11}:
                         cmdstring = "%s[%s,%s,%s]" % (
                             map_n.get_id(),
                             row_neighbor,

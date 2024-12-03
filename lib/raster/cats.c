@@ -1136,7 +1136,7 @@ char *Rast_get_ith_cat(const struct Categories *pcats, int i, void *rast1,
  \endcode
  *
  * \todo Eliminate pcats->num. Num has no meaning in new Categories
- * structure and only stores (int) largets data value for backwards
+ * structure and only stores (int) largest data value for backwards
  * compatibility.
  *
  * \param title title

@@ -3,20 +3,17 @@ Created on Wed Jun 18 17:21:42 2014
 
 @author: pietro
 """
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-from grass.script.core import run_command
 from grass.pygrass.vector import VectorTopo
 
 
 class VectorTopoTestCase(TestCase):
-
     tmpname = "VectorTopoTestCase_map"
 
     @classmethod
     def setUpClass(cls):
-
         from grass.pygrass import utils
 
         utils.create_test_vector_map(cls.tmpname)
@@ -38,9 +35,9 @@ class VectorTopoTestCase(TestCase):
         """Test that getitem handle correctly the slice starting from 1"""
         vcoords = ((10.0, 6.0), (12.0, 6.0))
         with VectorTopo(self.tmpname, mode="r") as vect:
-            coords = tuple([pnt.coords() for pnt in vect[:3]])
+            coords = tuple(pnt.coords() for pnt in vect[:3])
             self.assertTupleEqual(vcoords, coords)
-            coords = tuple([pnt.coords() for pnt in vect[1:3]])
+            coords = tuple(pnt.coords() for pnt in vect[1:3])
             self.assertTupleEqual(vcoords, coords)
             self.vect.close()
 

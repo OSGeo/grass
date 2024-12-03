@@ -32,7 +32,7 @@ int PS_colortable(void)
     double grey_color_val;
     RASTER_MAP_TYPE rast_type;
 
-    /* let user know what's happenning */
+    /* let user know what's happening */
     G_message(_("Creating color table for <%s in %s>..."), ct.name, ct.mapset);
 
     if (Rast_read_cats(ct.name, ct.mapset, &PS.cats) == -1) {

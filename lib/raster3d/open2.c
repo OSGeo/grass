@@ -24,7 +24,7 @@
  * otherwise.
  *
  *  \param name The name of the map
- *  \param typeIntern The internal storage type for in memory chached tiles
+ *  \param typeIntern The internal storage type for in memory cached tiles
  *  \param cache The type of the caching
  *  \param region The region of the map
  *  \param type The type of the map (FCELL_TYPE, or DCELL_TYPE)

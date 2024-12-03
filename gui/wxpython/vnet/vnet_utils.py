@@ -34,10 +34,7 @@ except ImportError:
 def ParseMapStr(mapStr):
     """Create full map name (add current mapset if it is not present in name)"""
     mapValSpl = mapStr.strip().split("@")
-    if len(mapValSpl) > 1:
-        mapSet = mapValSpl[1]
-    else:
-        mapSet = grass.gisenv()["MAPSET"]
+    mapSet = mapValSpl[1] if len(mapValSpl) > 1 else grass.gisenv()["MAPSET"]
     mapName = mapValSpl[0]
 
     return mapName, mapSet
@@ -90,7 +87,6 @@ def SnapToNode(e, n, tresh, vectMap):
 
 
 def GetNearestNodeCat(e, n, layer, tresh, vectMap):
-
     if not haveCtypes:
         return -2
 
@@ -134,7 +130,6 @@ def GetNearestNodeCat(e, n, layer, tresh, vectMap):
     vectlib.Vect_select_lines_by_box(openedMap, byref(box), vectlib.GV_POINT, List)
 
     found = 0
-    dcost = 0
 
     Cats = POINTER(vectlib.line_cats)
     Cats = vectlib.Vect_new_cats_struct()

@@ -21,7 +21,7 @@ void deleteHa(float old_min_cost, int row, int col, struct costHa *heap,
     long i;
 
     if (*heap_len < 1) {
-        printf("programming ERROR: can't delete a cell from an ampty list");
+        printf("programming ERROR: can't delete a cell from an empty list");
         exit(1);
     }
     /* search the old_cell from the heap */

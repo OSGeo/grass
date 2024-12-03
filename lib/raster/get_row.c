@@ -11,6 +11,7 @@
    \author Original author CERL
  */
 
+#include <stdint.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -257,9 +258,9 @@ static void read_data(int fd, int row, unsigned char *data_buf, int *nbytes)
 }
 
 /* copy cell file data to user buffer translated by window column mapping */
-static void cell_values_int(int fd, const unsigned char *data,
-                            const COLUMN_MAPPING *cmap, int nbytes, void *cell,
-                            int n)
+static void cell_values_int(int fd UNUSED, const unsigned char *data UNUSED,
+                            const COLUMN_MAPPING *cmap, int nbytes UNUSED,
+                            void *cell, int n)
 {
     CELL *c = cell;
     COLUMN_MAPPING cmapold = 0;
@@ -302,8 +303,8 @@ static void cell_values_int(int fd, const unsigned char *data,
     }
 }
 
-static void cell_values_float(int fd, const unsigned char *data,
-                              const COLUMN_MAPPING *cmap, int nbytes,
+static void cell_values_float(int fd, const unsigned char *data UNUSED,
+                              const COLUMN_MAPPING *cmap, int nbytes UNUSED,
                               void *cell, int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -321,8 +322,8 @@ static void cell_values_float(int fd, const unsigned char *data,
     }
 }
 
-static void cell_values_double(int fd, const unsigned char *data,
-                               const COLUMN_MAPPING *cmap, int nbytes,
+static void cell_values_double(int fd, const unsigned char *data UNUSED,
+                               const COLUMN_MAPPING *cmap, int nbytes UNUSED,
                                void *cell, int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -368,6 +369,12 @@ static void gdal_values_int(int fd, const unsigned char *data,
         case GDT_Byte:
             c[i] = *(GByte *)d;
             break;
+/* GDT_Int8 was introduced in GDAL 3.7 */
+#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 7, 0)
+        case GDT_Int8:
+            c[i] = *(int8_t *)d;
+            break;
+#endif
         case GDT_Int16:
             c[i] = *(GInt16 *)d;
             break;
@@ -390,8 +397,8 @@ static void gdal_values_int(int fd, const unsigned char *data,
     }
 }
 
-static void gdal_values_float(int fd, const unsigned char *data,
-                              const COLUMN_MAPPING *cmap, int nbytes,
+static void gdal_values_float(int fd UNUSED, const unsigned char *data,
+                              const COLUMN_MAPPING *cmap, int nbytes UNUSED,
                               void *cell, int n)
 {
     COLUMN_MAPPING cmapold = 0;
@@ -416,8 +423,8 @@ static void gdal_values_float(int fd, const unsigned char *data,
     }
 }
 
-static void gdal_values_double(int fd, const unsigned char *data,
-                               const COLUMN_MAPPING *cmap, int nbytes,
+static void gdal_values_double(int fd UNUSED, const unsigned char *data,
+                               const COLUMN_MAPPING *cmap, int nbytes UNUSED,
                                void *cell, int n)
 {
     COLUMN_MAPPING cmapold = 0;
@@ -917,7 +924,7 @@ int Rast__read_null_bits(int fd, int row, unsigned char *flags)
 }
 
 #define check_null_bit(flags, bit_num) \
-    ((flags)[(bit_num) >> 3] & ((unsigned char)0x80 >> ((bit_num)&7)) ? 1 : 0)
+    ((flags)[(bit_num) >> 3] & ((unsigned char)0x80 >> ((bit_num) & 7)) ? 1 : 0)
 
 static void get_null_value_row_nomask(int fd, char *flags, int row)
 {

@@ -2,7 +2,7 @@
  *
  * MODULE:       r.out.gdal
  * AUTHOR(S):    Vytautas Vebra <olivership@gmail.com>
- * PURPOSE:      Exports GRASS raster to GDAL suported formats;
+ * PURPOSE:      Exports GRASS raster to GDAL supported formats;
  *               based on GDAL library.
  *
  * COPYRIGHT:    (C) 2006-2009 by the GRASS Development Team

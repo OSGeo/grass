@@ -36,8 +36,8 @@
 
 # %option G_OPT_R_INPUT
 # % key: zones
-# % label: Raster map withh zones to compute statistics for
-# % description: Raster map withh zones to compute statistics for (needs to be CELL)
+# % label: Raster map with zones to compute statistics for
+# % description: Raster map with zones to compute statistics for (needs to be CELL)
 # % required: no
 # %end
 
@@ -70,7 +70,6 @@
 # %end
 
 import grass.script as gs
-
 
 ############################################################################
 

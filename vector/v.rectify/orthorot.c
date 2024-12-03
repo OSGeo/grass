@@ -538,7 +538,7 @@ void copy_matrix(int n, int m, double **src_matrix, double **dest_matrix)
     }
 }
 
-double trace(int n, int m, double **matrix)
+double trace(int n, int m UNUSED, double **matrix)
 {
     int i;
     double t = 0.0;

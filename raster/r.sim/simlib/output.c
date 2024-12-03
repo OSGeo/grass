@@ -42,8 +42,7 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
         /* In case of time series we extent the output name with the time value
          */
         if (ts == 1) {
-            G_snprintf(buf, sizeof(buf), "%s_%.*d", outwalk, ndigit,
-                       tt_minutes);
+            snprintf(buf, sizeof(buf), "%s_%.*d", outwalk, ndigit, tt_minutes);
             outwalk_time = G_store(buf);
             if (Vect_open_new(&Out, outwalk_time, WITH_Z) < 0)
                 G_fatal_error(_("Unable to create vector map <%s>"),
@@ -88,7 +87,7 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
 
 /* Soeren 8. Mar 2011 TODO:
  * This function needs to be refractured and splittet into smaller parts */
-int output_data(int tt, double ft)
+int output_data(int tt, double ft UNUSED)
 {
 
     FCELL *depth_cell, *disch_cell, *err_cell;
@@ -146,7 +145,7 @@ int output_data(int tt, double ft)
     if (depth) {
         depth_cell = Rast_allocate_f_buf();
         if (ts == 1) {
-            G_snprintf(buf, sizeof(buf), "%s.%.*d", depth, ndigit, tt_minutes);
+            snprintf(buf, sizeof(buf), "%s.%.*d", depth, ndigit, tt_minutes);
             depth0 = G_store(buf);
             depth_fd = Rast_open_fp_new(depth0);
         }
@@ -157,7 +156,7 @@ int output_data(int tt, double ft)
     if (disch) {
         disch_cell = Rast_allocate_f_buf();
         if (ts == 1) {
-            G_snprintf(buf, sizeof(buf), "%s.%.*d", disch, ndigit, tt_minutes);
+            snprintf(buf, sizeof(buf), "%s.%.*d", disch, ndigit, tt_minutes);
             disch0 = G_store(buf);
             disch_fd = Rast_open_fp_new(disch0);
         }
@@ -168,7 +167,7 @@ int output_data(int tt, double ft)
     if (err) {
         err_cell = Rast_allocate_f_buf();
         if (ts == 1) {
-            G_snprintf(buf, sizeof(buf), "%s.%.*d", err, ndigit, tt_minutes);
+            snprintf(buf, sizeof(buf), "%s.%.*d", err, ndigit, tt_minutes);
             err0 = G_store(buf);
             err_fd = Rast_open_fp_new(err0);
         }
@@ -179,7 +178,7 @@ int output_data(int tt, double ft)
     if (conc) {
         conc_cell = Rast_allocate_f_buf();
         if (ts == 1) {
-            G_snprintf(buf, sizeof(buf), "%s.%.*d", conc, ndigit, tt_minutes);
+            snprintf(buf, sizeof(buf), "%s.%.*d", conc, ndigit, tt_minutes);
             conc0 = G_store(buf);
             conc_fd = Rast_open_fp_new(conc0);
         }
@@ -190,7 +189,7 @@ int output_data(int tt, double ft)
     if (flux) {
         flux_cell = Rast_allocate_f_buf();
         if (ts == 1) {
-            G_snprintf(buf, sizeof(buf), "%s.%.*d", flux, ndigit, tt_minutes);
+            snprintf(buf, sizeof(buf), "%s.%.*d", flux, ndigit, tt_minutes);
             flux0 = G_store(buf);
             flux_fd = Rast_open_fp_new(flux0);
         }
@@ -201,7 +200,7 @@ int output_data(int tt, double ft)
     if (erdep) {
         erdep_cell = Rast_allocate_f_buf();
         if (ts == 1) {
-            G_snprintf(buf, sizeof(buf), "%s.%.*d", erdep, ndigit, tt_minutes);
+            snprintf(buf, sizeof(buf), "%s.%.*d", erdep, ndigit, tt_minutes);
             erdep0 = G_store(buf);
             erdep_fd = Rast_open_fp_new(erdep0);
         }
@@ -607,7 +606,7 @@ int output_data(int tt, double ft)
     return 1;
 }
 
-int output_et()
+int output_et(void)
 {
 
     FCELL *tc_cell, *et_cell;

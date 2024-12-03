@@ -7,7 +7,7 @@
    Higher level functions for reading/writing/manipulating vectors.
 
    See write_ogr.c (OGR interface) and write_pg.c (PostGIS interface)
-   for imlementation issues.
+   for implementation issues.
 
    \todo SFA version of V2__delete_area_cats_from_cidx_nat()
    \todo function to delete corresponding entry in fidx
@@ -339,6 +339,7 @@ void V2__add_line_to_topo_sfa(struct Map_info *Map, int line,
     G_debug(3, "V2__add_line_to_topo_sfa(): line = %d npoints = %d", line,
             points->n_points);
 
+    first = TRUE;
     plus = &(Map->plus);
     Line = plus->Line[line];
     type = Line->type;

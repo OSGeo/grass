@@ -142,8 +142,8 @@ static void set_file_pointer(int fd, int row)
     fcb->row_ptr[row] = lseek(fcb->data_fd, 0L, SEEK_CUR);
 }
 
-static void convert_float(float *work_buf, int size, char *null_buf,
-                          const FCELL *rast, int row, int n)
+static void convert_float(float *work_buf, char *null_buf, const FCELL *rast,
+                          int n)
 {
     int i;
 
@@ -162,8 +162,8 @@ static void convert_float(float *work_buf, int size, char *null_buf,
     }
 }
 
-static void convert_double(double *work_buf, int size, char *null_buf,
-                           const DCELL *rast, int row, int n)
+static void convert_double(double *work_buf, char *null_buf, const DCELL *rast,
+                           int n)
 {
     int i;
 
@@ -203,9 +203,9 @@ static void put_fp_data(int fd, char *null_buf, const void *rast, int row,
         set_file_pointer(fd, row);
 
     if (data_type == FCELL_TYPE)
-        convert_float(work_buf, size, null_buf, rast, row, n);
+        convert_float(work_buf, null_buf, rast, n);
     else
-        convert_double(work_buf, size, null_buf, rast, row, n);
+        convert_double(work_buf, null_buf, rast, n);
 
     if (compressed)
         write_data_compressed(fd, row, work_buf, n, fcb->cellhd.compressed);

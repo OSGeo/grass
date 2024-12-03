@@ -120,7 +120,7 @@ int G_str_to_color(const char *str, int *red, int *grn, int *blu)
         return 1;
     }
 
-    int hex;
+    unsigned int hex;
 
     if (sscanf(buf, "#%x", &hex) == 1) {
         *red = (hex >> 16) & 0xFF;

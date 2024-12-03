@@ -417,7 +417,7 @@ dbTable *db_clone_table(dbTable *src)
 }
 
 /*!
-   \brief Create SQL CREATE sring from table definition
+   \brief Create SQL CREATE string from table definition
 
    \param table pointer to dbTable
    \param sql dbString to store the SQL CREATE string

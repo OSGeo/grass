@@ -15,8 +15,8 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
+
 import wx
-import six
 import numpy as np
 from math import ceil
 from multiprocessing import Process, Queue
@@ -29,9 +29,9 @@ from core.settings import UserSettings
 from gui_core.wrap import Menu, NewId
 
 try:
-    import matplotlib
+    import matplotlib as mpl
 
-    matplotlib.use("WXAgg")
+    mpl.use("WXAgg")
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigCanvas
     from matplotlib.lines import Line2D
@@ -47,7 +47,7 @@ except ImportError as e:
         ).format(e)
     )
 
-import grass.script as grass
+import grass.script as gs
 from grass.pydispatch.signal import Signal
 
 
@@ -55,7 +55,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
     def __init__(self, parent, scatt_id, scatt_mgr, transpose, id=wx.ID_ANY):
         # TODO should not be transpose and scatt_id but x, y
         wx.Panel.__init__(self, parent, id)
-        # bacause of aui (if floatable it can not take cursor from parent)
+        # because of aui (if floatable it can not take cursor from parent)
         ManageBusyCursorMixin.__init__(self, window=self)
 
         self.parent = parent
@@ -100,7 +100,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self.axes.draw_artist(self.zoom_rect)
 
     def _createWidgets(self):
-
         # Create the mpl Figure and FigCanvas objects.
         # 5x4 inches, 100 dots-per-inch
         #
@@ -153,7 +152,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self._stopCategoryEdit()
 
     def GetCoords(self):
-
         coords = self.polygon_drawer.GetCoords()
         if coords is None:
             return
@@ -170,7 +168,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         return self.polygon_drawer.SetEmpty()
 
     def OnRelease(self, event):
-        if not self.mode == "zoom":
+        if self.mode != "zoom":
             return
         self.zoom_rect.set_visible(False)
         self.ZoomRectangle(event)
@@ -200,7 +198,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         # self.canvas.mpl_disconnect(self.cidmotion)
 
     def _doLayout(self):
-
         self.main_sizer = wx.BoxSizer(wx.VERTICAL)
         self.main_sizer.Add(self.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
         self.SetSizer(self.main_sizer)
@@ -244,8 +241,9 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
             aspect="equal",
         )
 
-        callafter_list.append([self.axes.draw_artist, [img]])
-        callafter_list.append([grass.try_remove, [merged_img.filename]])
+        callafter_list.extend(
+            ([self.axes.draw_artist, [img]], [gs.try_remove, [merged_img.filename]])
+        )
 
         for cat_id in cats_order:
             if cat_id == 0:
@@ -257,7 +255,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
             if not e:
                 continue
 
-            colors = styles[cat_id]["color"].split(":")
             if self.transpose:
                 e["theta"] = 360 - e["theta"] + 90
                 if e["theta"] >= 360:
@@ -318,14 +315,13 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
     def CleanUp(self):
         self.plotClosed.emit(scatt_id=self.scatt_id)
-        self.Destroy()
 
     def ZoomWheel(self, event):
         # get the current x and y limits
         if not event.inaxes:
             return
         # tcaswell
-        # http://stackoverflow.com/questions/11551049/matplotlib-plot-zooming-with-scroll-wheel
+        # https://stackoverflow.com/questions/11551049/matplotlib-plot-zooming-with-scroll-wheel
         cur_xlim = self.axes.get_xlim()
         cur_ylim = self.axes.get_ylim()
 
@@ -351,15 +347,12 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
     def ZoomRectangle(self, event):
         # get the current x and y limits
-        if not self.mode == "zoom":
+        if self.mode != "zoom":
             return
         if event.inaxes is None:
             return
         if event.button != 1:
             return
-
-        cur_xlim = self.axes.get_xlim()
-        cur_ylim = self.axes.get_ylim()
 
         x1, y1 = event.xdata, event.ydata
         x2 = deepcopy(self.zoom_rect_coords["x"])
@@ -397,7 +390,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
     def PanMotion(self, event):
         "on mouse movement"
-        if not self.mode == "pan":
+        if self.mode != "pan":
             return
         if event.inaxes is None:
             return
@@ -429,7 +422,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self.canvas.draw()
 
     def ZoomRectMotion(self, event):
-        if not self.mode == "zoom":
+        if self.mode != "zoom":
             return
         if event.inaxes is None:
             return
@@ -448,12 +441,11 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
 
 def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
-
     _rendDtFilesToMemmaps(rend_dt)
 
     init = True
     merged_img = None
-    merge_tmp = grass.tempfile()
+    merge_tmp = gs.tempfile()
     for cat_id in cats_order:
         if cat_id not in scatts:
             continue
@@ -467,7 +459,6 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
                 del rend_dt[cat_id]
             continue
         if init:
-
             b2_i = scatt["bands_info"]["b1"]
             b1_i = scatt["bands_info"]["b2"]
 
@@ -502,7 +493,7 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
                 rend_dt[cat_id]["color"] = styles[cat_id]["color"]
 
             rend_dt[cat_id]["dt"] = np.memmap(
-                grass.tempfile(), dtype="uint8", mode="w+", shape=(sh[0], sh[1], 4)
+                gs.tempfile(), dtype="uint8", mode="w+", shape=(sh[0], sh[1], 4)
             )
 
             # colored_cat = np.zeros(dtype='uint8', )
@@ -523,46 +514,54 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
             MergeArrays(merged_img, rend_dt[cat_id]["dt"], styles[cat_id]["opacity"])
 
         """
-                #c_img_a = np.memmap(grass.tempfile(), dtype="uint16", mode='w+', shape = shape)
-                c_img_a = colored_cat.astype('uint16')[:,:,3] * styles[cat_id]['opacity']
+            # c_img_a = np.memmap(
+            #     grass.tempfile(), dtype="uint16", mode="w+", shape=shape
+            # )
+            c_img_a = colored_cat.astype("uint16")[:, :, 3] * styles[cat_id]["opacity"]
 
-                #TODO apply strides and there will be no need for loop
-                #b = as_strided(a, strides=(0, a.strides[3], a.strides[3], a.strides[3]), shape=(3, a.shape[0], a.shape[1]))
+            # TODO apply strides and there will be no need for loop
+            # b = as_strided(
+            #     a,
+            #     strides=(0, a.strides[3], a.strides[3], a.strides[3]),
+            #     shape=(3, a.shape[0], a.shape[1]),
+            # )
 
-                for i in range(3):
-                    merged_img[:,:,i] = (merged_img[:,:,i] * (255 - c_img_a) + colored_cat[:,:,i] * c_img_a) / 255;
-                merged_img[:,:,3] = (merged_img[:,:,3] * (255 - c_img_a) + 255 * c_img_a) / 255;
+            for i in range(3):
+                merged_img[:, :, i] = (
+                    merged_img[:, :, i] * (255 - c_img_a)
+                    + colored_cat[:, :, i] * c_img_a
+                ) / 255
+            merged_img[:, :, 3] = (
+                merged_img[:, :, 3] * (255 - c_img_a) + 255 * c_img_a
+            ) / 255
 
-                del c_img_a
-            """
-
+            del c_img_a
+        """
     _rendDtMemmapsToFiles(rend_dt)
 
     merged_img = {"dt": merged_img.filename, "sh": merged_img.shape}
     output_queue.put((merged_img, full_extend, rend_dt))
 
 
-# _rendDtMemmapsToFiles and _rendDtFilesToMemmaps are workarounds for older numpy versions,
-# where memmap objects are not pickable
+# _rendDtMemmapsToFiles and _rendDtFilesToMemmaps are workarounds for older numpy
+# versions, where memmap objects are not pickable
 
 
 def _rendDtMemmapsToFiles(rend_dt):
-
-    for k, v in six.iteritems(rend_dt):
+    for k, v in rend_dt.items():
         if "dt" in v:
             rend_dt[k]["sh"] = v["dt"].shape
             rend_dt[k]["dt"] = v["dt"].filename
 
 
 def _rendDtFilesToMemmaps(rend_dt):
-
-    for k, v in six.iteritems(rend_dt):
+    for k, v in rend_dt.items():
         if "dt" in v:
             rend_dt[k]["dt"] = np.memmap(filename=v["dt"], shape=v["sh"])
             del rend_dt[k]["sh"]
 
 
-def _renderCat(cat_id, rend_dt, scatt, styles):
+def _renderCat(cat_id, rend_dt, scatt, styles) -> bool:
     return True
 
     if cat_id not in rend_dt:
@@ -571,14 +570,11 @@ def _renderCat(cat_id, rend_dt, scatt, styles):
         return False
     if scatt["render"]:
         return True
-    if cat_id != 0 and rend_dt[cat_id]["color"] != styles[cat_id]["color"]:
-        return True
-
-    return False
+    return bool(cat_id != 0 and rend_dt[cat_id]["color"] != styles[cat_id]["color"])
 
 
 def _getColorMap(cat_id, styles):
-    cmap = matplotlib.cm.jet
+    cmap = mpl.cm.jet
     if cat_id == 0:
         cmap.set_bad("w", 1.0)
         cmap._init()
@@ -598,7 +594,6 @@ def _getColorMap(cat_id, styles):
 
 class ScatterPlotContextMenu:
     def __init__(self, plot):
-
         self.plot = plot
         self.canvas = plot.canvas
         self.cidpress = self.canvas.mpl_connect("button_press_event", self.ContexMenu)
@@ -627,7 +622,8 @@ class ScatterPlotContextMenu:
     def ShowMenu(self, menu):
         self.plot.PopupMenu(menu)
         menu.Destroy()
-        self.plot.ReleaseMouse()
+        if self.plot.HasCapture():
+            self.plot.ReleaseMouse()
 
 
 class PolygonDrawer:
@@ -638,7 +634,8 @@ class PolygonDrawer:
     def __init__(self, ax, pol, empty_pol):
         if pol.figure is None:
             raise RuntimeError(
-                "You must first add the polygon to a figure or canvas before defining the interactor"
+                "You must first add the polygon to a figure or canvas before defining "
+                "the interactor"
             )
         self.ax = ax
         self.canvas = pol.figure.canvas
@@ -650,13 +647,11 @@ class PolygonDrawer:
 
         x, y = zip(*self.pol.xy)
 
-        style = self._getPolygonStyle()
-
         self.line = Line2D(x, y, marker="o", markerfacecolor="r", animated=True)
         self.ax.add_line(self.line)
         # self._update_line(pol)
 
-        cid = self.pol.add_callback(self.poly_changed)
+        self.pol.add_callback(self.poly_changed)
         self.moving_ver_idx = None  # the active vert
 
         self.mode = None
@@ -692,7 +687,6 @@ class PolygonDrawer:
         self.mode = mode
 
     def SetSelectionPolygonMode(self, activate):
-
         self.Show(activate)
         if not activate and self.mode:
             self.SetMode(None)
@@ -708,8 +702,7 @@ class PolygonDrawer:
         if self.empty_pol:
             return None
 
-        coords = deepcopy(self.pol.xy)
-        return coords
+        return deepcopy(self.pol.xy)
 
     def SetEmpty(self):
         self._setEmptyPol(True)
@@ -722,7 +715,6 @@ class PolygonDrawer:
         self._show(not empty_pol)
 
     def _show(self, show):
-
         self.show = show
 
         self.line.set_visible(self.show)
@@ -738,7 +730,6 @@ class PolygonDrawer:
         self.canvas.draw()
 
     def DrawCallback(self, event):
-
         style = self._getPolygonStyle()
         self.pol.set_facecolor(style["sel_pol"])
         self.line.set_markerfacecolor(style["sel_pol_vertex"])
@@ -814,11 +805,11 @@ class PolygonDrawer:
 
         coords = []
         for i, tup in enumerate(self.pol.xy):
-            if i == ind:
-                continue
-            elif i == 0 and ind == len(self.pol.xy) - 1:
-                continue
-            elif i == len(self.pol.xy) - 1 and ind == 0:
+            if (
+                i == ind
+                or (i == 0 and ind == len(self.pol.xy) - 1)
+                or (i == len(self.pol.xy) - 1 and ind == 0)
+            ):
                 continue
 
             coords.append(tup)
@@ -851,7 +842,6 @@ class PolygonDrawer:
         self.Redraw()
 
     def _addVertex(self, event):
-
         if self.empty_pol:
             pt = (event.xdata, event.ydata)
             self.pol.xy = np.array([pt, pt])
@@ -870,7 +860,7 @@ class PolygonDrawer:
 
     def motion_notify_callback(self, event):
         "on mouse movement"
-        if not self.mode == "move_vertex":
+        if self.mode != "move_vertex":
             return
         if not self.showverts:
             return
@@ -930,7 +920,7 @@ class ModestImage(mi.AxesImage):
         self.minx = minx
         self.miny = miny
 
-        super(ModestImage, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def set_data(self, A):
         """
@@ -941,7 +931,7 @@ class ModestImage(mi.AxesImage):
         self._full_res = A
         self._A = A
 
-        if self._A.dtype != np.uint8 and not np.can_cast(self._A.dtype, np.float):
+        if self._A.dtype != np.uint8 and not np.can_cast(self._A.dtype, float):
             raise TypeError("Image data can not convert to float")
 
         if self._A.ndim not in (2, 3) or (
@@ -1003,7 +993,7 @@ class ModestImage(mi.AxesImage):
 
     def draw(self, renderer, *args, **kwargs):
         self._scale_to_res()
-        super(ModestImage, self).draw(renderer, *args, **kwargs)
+        super().draw(renderer, *args, **kwargs)
 
 
 def imshow(
@@ -1032,12 +1022,11 @@ def imshow(
     @author: Chris Beaumont <beaumont@hawaii.edu>
     """
 
-    if not axes._hold:
-        axes.cla()
+    axes.cla()
     if norm is not None:
         assert isinstance(norm, mcolors.Normalize)
     if aspect is None:
-        aspect = matplotlib.rcParams["image.aspect"]
+        aspect = mpl.rcParams["image.aspect"]
     axes.set_aspect(aspect)
 
     if extent:
@@ -1082,7 +1071,7 @@ def imshow(
     # to tightly fit the image, regardless of dataLim.
     im.set_extent(im.get_extent())
 
-    axes.images.append(im)
+    axes.add_image(im)
     im._remove_method = lambda h: axes.images.remove(h)
 
     return im

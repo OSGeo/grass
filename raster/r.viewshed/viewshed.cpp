@@ -17,7 +17,7 @@
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the
  * line-of-sight that connects their centers does not intersect the
- * terrain. The terrain is NOT viewed as a tesselation of flat cells,
+ * terrain. The terrain is NOT viewed as a tessellation of flat cells,
  * i.e. if the line-of-sight does not pass through the cell center,
  * elevation is determined using bilinear interpolation.
  * The viewshed algorithm is efficient both in
@@ -261,6 +261,7 @@ MemoryVisibilityGrid *viewshed_in_memory(char *inputfname, GridHeader *hd,
         e.elev[0] = data[0][i];
         e.elev[1] = data[1][i];
         e.elev[2] = data[2][i];
+        e.angle = -1.0;
 
         if (!is_nodata(visgrid->grid->hd, data[1][i]) &&
             !is_point_outside_max_dist(*vp, *hd, sn.row, sn.col,
@@ -499,6 +500,7 @@ IOVisibilityGrid *viewshed_external(char *inputfname, GridHeader *hd,
         e.elev[0] = data[0][i];
         e.elev[1] = data[1][i];
         e.elev[2] = data[2][i];
+        e.angle = -1.0;
         if (!is_nodata(visgrid->hd, data[1][i]) &&
             !is_point_outside_max_dist(*vp, *hd, sn.row, sn.col,
                                        viewOptions.maxDist)) {

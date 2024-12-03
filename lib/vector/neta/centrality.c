@@ -116,7 +116,7 @@ int NetA_eigenvector_centrality(dglGraph_s *graph, int iterations, double error,
    the behaviour of this method is undefined.
 
    \param graph input graph
-   \param[out] betweenness betweeness values
+   \param[out] betweenness betweenness values
    \param[out] closeness cloneness values
 
    \return 0 on success
@@ -240,4 +240,4 @@ int NetA_betweenness_closeness(dglGraph_s *graph, double *betweenness,
     G_free(dst);
 
     return 0;
-};
+}

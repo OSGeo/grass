@@ -96,9 +96,9 @@ v.out.ascii bridges | m.proj -o -d input=-
 
 <h3>Reproject Long/Lat WGS84 coordinate pair to current map projection</h3>
 
-To convert a Long/Lat WGS84 coordinate pair to the current map projection
+To convert a Long/Lat WGS84 coordinate pair to the current map CRS
 using the <b>-i</b> flag which sets the target projection parameters
-automatically from the current location definition:
+automatically from the current project definition:
 <div class="code"><pre>
 echo "-78.61168178 33.92225767" | m.proj -i input=-
 645513.47|19180.31|0.00
@@ -155,7 +155,7 @@ performs an inverse projection to latitude-longitude and then projects
 the coordinate list to the target projection.
 <p>
 Datum conversions are automatically handled by the PROJ library if
-<tt>+datum</tt> setings are specified on <b>both</b> the input <b>and</b> output
+<tt>+datum</tt> settings are specified on <b>both</b> the input <b>and</b> output
 projections on the command line. The <tt>+towgs84</tt> parameter can be used to
 define either 3 or 7 term datum transform coefficients, satisfying this requirement.
 <p>If a datum is specified there is no need for the <tt>+ellps=</tt> or underlying

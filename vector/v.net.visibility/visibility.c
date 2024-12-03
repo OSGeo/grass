@@ -19,8 +19,8 @@
 
 /** for all points initiate their vis line to the one directly below
  */
-void init_vis(struct Point *points, int num_points, struct Line *lines,
-              int num_lines)
+void init_vis(struct Point *points, int num_points, struct Line *lines UNUSED,
+              int num_lines UNUSED)
 {
     int i;
     double d;

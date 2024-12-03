@@ -24,14 +24,14 @@ double **matrix(int nrl, int nrh, int ncl, int nch)
     return m;
 }
 
-int free_vector(double *v, int nl, int nh)
+int free_vector(double *v, int nl, int nh UNUSED)
 {
     G_free((char *)(v + nl));
 
     return 0;
 }
 
-int free_matrix(double **m, int nrl, int nrh, int ncl, int nch)
+int free_matrix(double **m, int nrl, int nrh, int ncl, int nch UNUSED)
 {
     int i;
 

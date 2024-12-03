@@ -31,6 +31,8 @@ Use PIL to create a series of images.
 """
 
 import os
+from operator import itemgetter
+from string import digits
 
 try:
     import numpy as np
@@ -54,7 +56,7 @@ def checkImages(images):
 
     for im in images:
         if PIL and isinstance(im, PIL.Image.Image):
-            # We assume PIL images are allright
+            # We assume PIL images are alright
             images2.append(im)
 
         elif np and isinstance(im, np.ndarray):
@@ -92,12 +94,10 @@ def checkImages(images):
 def _getFilenameParts(filename):
     if "*" in filename:
         return tuple(filename.split("*", 1))
-    else:
-        return os.path.splitext(filename)
+    return os.path.splitext(filename)
 
 
 def _getFilenameWithFormatter(filename, N):
-
     # Determine sequence number formatter
     formatter = "%04i"
     if N < 10:
@@ -118,7 +118,7 @@ def _getSequenceNumber(filename, part1, part2):
     # Get all numeric chars
     seq2 = ""
     for c in seq:
-        if c in "0123456789":
+        if c in digits:
             seq2 += c
         else:
             break
@@ -197,7 +197,7 @@ def readIms(filename, asNumpy=True):
 
     # Check dir exists
     if not os.path.isdir(dirname):
-        raise IOError("Directory not found: " + str(dirname))
+        raise OSError("Directory not found: " + str(dirname))
 
     # Get two parts of the filename
     part1, part2 = _getFilenameParts(filename)
@@ -215,7 +215,7 @@ def readIms(filename, asNumpy=True):
             images.append((im.copy(), nr))
 
     # Sort images
-    images.sort(key=lambda x: x[1])
+    images.sort(key=itemgetter(1))
     images = [im[0] for im in images]
 
     # Convert to numpy if needed

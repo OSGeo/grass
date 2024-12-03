@@ -11,25 +11,36 @@ cols=5`
 
 # FIXME: as an example it should make extensive use of code comments and document
 #  each and every step along the way.  (e.g. explain c_char_p().value memory pointer
-#  to string conversion for Python programmers not familar with C pointers)
+#  to string conversion for Python programmers not familiar with C pointers)
 #
 #  FIXME: explain at a basic level what ctypes is & does.
 
 import os
 import sys
+import math
 
-from grass.lib.gis import *
-from grass.lib.raster import *
+from ctypes import POINTER, c_int, c_float, c_double, c_void_p, cast
+
+from grass.lib.gis import G_gisinit, G_find_raster2, G_free
+from grass.lib.raster import (
+    Rast_map_type,
+    CELL_TYPE,
+    FCELL_TYPE,
+    DCELL_TYPE,
+    Rast_open_old,
+    Rast_allocate_buf,
+    Rast_window_rows,
+    Rast_window_cols,
+    Rast_get_row,
+    Rast_close,
+)
 
 # check if GRASS is running or not
 if "GISBASE" not in os.environ:
     sys.exit("You must be in GRASS GIS to run this program")
 
 # parse command line arguments, prompt user for a raster map name if one wasn't given
-if len(sys.argv) == 2:
-    input = sys.argv[1]
-else:
-    input = raw_input("Name of raster map? ")
+input = sys.argv[1] if len(sys.argv) == 2 else input("Name of raster map? ")
 
 # initialize GRASS library
 G_gisinit("")

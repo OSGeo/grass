@@ -230,8 +230,12 @@ int input_proj4(char *proj4params)
         if (fgets(buff, sizeof(buff), infd) == NULL)
             G_warning(_("Failed to read PROJ.4 parameter from stdin"));
     }
-    else
-        strcpy(buff, proj4params);
+    else {
+        if (G_strlcpy(buff, proj4params, sizeof(buff)) >= sizeof(buff)) {
+            G_fatal_error(_("PROJ.4 parameter string is too long: %s"),
+                          proj4params);
+        }
+    }
 
 #if PROJ_VERSION_MAJOR >= 6
     if (!strstr(buff, "+type=crs"))

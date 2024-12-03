@@ -7,11 +7,11 @@ static double get_slope2(CELL, CELL, double);
 
 int do_astar(void)
 {
-    int count;
+    size_t count;
     int upr, upc, r, c, ct_dir;
     CELL alt_val, alt_nbr[8];
     CELL is_in_list, is_worked, flat_is_done, nbr_flat_is_done;
-    int index_doer, index_up;
+    size_t index_doer, index_up;
 
     /* sides
      * |7|1|4|
@@ -176,7 +176,7 @@ int do_astar(void)
                     }
                 }
             } /* end if in region */
-        }     /* end sides */
+        } /* end sides */
         FLAG_SET(worked, r, c);
     }
     G_percent(count, do_points, 1); /* finish it */
@@ -202,7 +202,7 @@ int do_astar(void)
 
 /* compare two heap points */
 /* return 1 if a < b else 0 */
-static int cmp_pnt(CELL elea, CELL eleb, int addeda, int addedb)
+static int cmp_pnt(CELL elea, CELL eleb, size_t addeda, size_t addedb)
 {
     if (elea == eleb) {
         return (addeda < addedb);
@@ -211,9 +211,9 @@ static int cmp_pnt(CELL elea, CELL eleb, int addeda, int addedb)
 }
 
 /* standard sift-up routine for d-ary min heap */
-static int sift_up(int start, CELL ele)
+static int sift_up(size_t start, CELL ele)
 {
-    register int parent, child, child_idx, child_added;
+    register size_t parent, child, child_idx, child_added;
     CELL elep;
 
     child = start;
@@ -268,9 +268,9 @@ int add_pt(int r, int c, CELL ele)
 /* drop point routine for min heap */
 int drop_pt(void)
 {
-    register int child, childr, parent;
+    register size_t child, childr, parent;
     CELL ele, eler;
-    register int i;
+    register size_t i;
 
     if (heap_size == 1) {
         heap_index[1] = -1;

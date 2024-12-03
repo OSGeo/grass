@@ -151,9 +151,6 @@ void main_loop(void)
         maxwa = maxwa / nblock;
     }
 
-    /* Create the observation points */
-    create_observation_points();
-
     G_debug(2, " maxwa, nblock %d %d", maxwa, nblock);
 
     for (iblock = 1; iblock <= nblock; iblock++) {
@@ -273,7 +270,7 @@ void main_loop(void)
             eff = 0.0;
 
 #pragma omp parallel firstprivate(l, lw, k, decr, d1, hhc, velx, vely, eff, \
-                                  gaux, gauy) // nwalka
+                                      gaux, gauy) // nwalka
             {
 #if defined(_OPENMP)
                 int steps =
@@ -305,7 +302,7 @@ void main_loop(void)
                         }
 
                         if (zz[k][l] != UNDEF) {
-                            if (infil != NULL) { /* infiltration part */
+                            if (inf[k][l] != UNDEF) { /* infiltration part */
                                 if (inf[k][l] - si[k][l] > 0.) {
 
                                     decr = pow(
@@ -388,7 +385,7 @@ void main_loop(void)
                                 }
 
                             } /* else */
-                        }     /*DEFined area */
+                        } /*DEFined area */
                         else {
                             w[lw].m = 1e-10; /* eliminate walker if it is out of
                                                 area */

@@ -38,7 +38,7 @@
 #include <grass/bitmap.h>
 
 #define BM_col_to_byte(x) ((x) >> 3) /* x / 8 */
-#define BM_col_to_bit(x)  ((x)&7)    /* x % 8 */
+#define BM_col_to_bit(x)  ((x) & 7)  /* x % 8 */
 
 static int Mode = BM_FLAT;
 static int Size = 1;
@@ -152,6 +152,7 @@ int BM_set_mode(int mode, int size)
     case BM_FLAT:
     case BM_SPARSE:
         Mode = mode;
+        break;
     default:
         fprintf(stderr, "BM_set_mode:  Unknown mode: %d\n", mode);
         ret--;
@@ -314,8 +315,11 @@ struct BM *BM_file_read(FILE *fp)
     if (NULL == (map = (struct BM *)malloc(sizeof(struct BM))))
         return (NULL);
 
-    if (fread(&c, sizeof(char), sizeof(char), fp) != sizeof(char))
+    if (fread(&c, sizeof(char), sizeof(char), fp) != sizeof(char)) {
+        free(map);
         return NULL;
+    }
+
     if (c != BM_MAGIC) {
         free(map);
         return NULL;

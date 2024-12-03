@@ -89,6 +89,12 @@
 /*                                                                        */
 /*         30      worldview4        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
+/*         31      AVIRIS            * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         32      Hyperion VNIR     * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         33      Hyperion SWIR     * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
 /*     note:       for hrv and tm experiments long. and lat. are the      */
 /*                 coordinates of the scene center.                       */
 /*                 lat. must be > 0 for north lat., < 0 for south lat.    */

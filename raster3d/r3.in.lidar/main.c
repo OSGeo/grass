@@ -89,7 +89,7 @@ static void raster3d_divide_by_flat(RASTER3D_Map *a, RASTER3D_Map *b,
             for (col = 0; col < region->cols; col++) {
                 tmp = Rast3d_get_double(b, col, row, 0);
                 /* since it is count, using cast to integer to check
-                   againts zero, limits the value to max of CELL */
+                   against zero, limits the value to max of CELL */
                 if (((CELL)tmp) > 0) {
                     tmp = Rast3d_get_double(a, col, row, depth) / tmp;
                     Rast3d_put_double(c, col, row, depth, tmp);
@@ -287,9 +287,10 @@ int main(int argc, char *argv[])
     over_flag = G_define_flag();
     over_flag->key = 'o';
     over_flag->label =
-        _("Override projection check (use current location's projection)");
-    over_flag->description = _(
-        "Assume that the dataset has same projection as the current location");
+        _("Override projection check (use current projects's CRS)");
+    over_flag->description =
+        _("Assume that the dataset has the same coordinate "
+          "reference system as the current project");
 
     print_flag = G_define_flag();
     print_flag->key = 'p';
@@ -360,13 +361,12 @@ int main(int argc, char *argv[])
 
     /* for the CRS info */
     const char *projstr;
-    struct Cell_head current_region;
-    struct Cell_head file_region;
-
+    struct Cell_head current_region = {0};
+    struct Cell_head file_region = {0};
     G_get_set_window(&current_region);
 
     /* extent for all data */
-    struct Cell_head data_region;
+    struct Cell_head data_region = {0};
 
     long unsigned header_count = 0;
     int i;

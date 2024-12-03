@@ -9,7 +9,6 @@ for details.
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 """
 
-
 import os
 import shutil
 import sys
@@ -109,7 +108,7 @@ def split_mapset_path(mapset_path):
     """Split mapset path to three parts - grassdb, location, mapset"""
     mapset_path = Path(mapset_path)
     if len(mapset_path.parts) < 3:
-        ValueError(
+        raise ValueError(
             _("Mapset path '{}' needs at least three components").format(mapset_path)
         )
     mapset = mapset_path.name
@@ -119,7 +118,7 @@ def split_mapset_path(mapset_path):
     return os.fspath(grassdb), location, mapset
 
 
-def resolve_mapset_path(path, location=None, mapset=None):
+def resolve_mapset_path(path, location=None, mapset=None) -> MapsetPath:
     """Resolve full path to mapset from given combination of parameters.
 
     Full or relative path to mapset can be provided as *path*. If the *path*
@@ -174,7 +173,7 @@ def resolve_mapset_path(path, location=None, mapset=None):
         from grass.grassdb.checks import is_mapset_valid
 
         if not is_mapset_valid(path) and is_mapset_valid(path / default_mapset):
-            path = path / default_mapset
+            path /= default_mapset
         parts = path.parts
         if len(parts) < 3:
             raise ValueError(

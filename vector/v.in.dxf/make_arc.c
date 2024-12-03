@@ -73,7 +73,7 @@ int make_arc(int offset, /* offset into array of points */
     return arr_size - offset;
 }
 
-int make_arc_from_polyline(int arr_size, double bulge, double prev_bulge)
+int make_arc_from_polyline(int arr_size, double bulge UNUSED, double prev_bulge)
 {
     int arc_arr_size;
     float ang1, ang2;

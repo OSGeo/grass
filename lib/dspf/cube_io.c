@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <stdlib.h>
 #include <grass/gis.h>
 #include "viz.h"
@@ -197,14 +198,14 @@ int read_cube(Cube_data *Cube, file_info *headfax)
     size |= inchar;
 
     if (0 >= (ret = my_fread((char *)Buffer, 1, size, fp))) {
-        fprintf(stderr, "Error reading display file offset %" PRI_OFF_T "\n",
+        fprintf(stderr, "Error reading display file offset %" PRId64 "\n",
                 G_ftell(fp));
         return (-1);
     }
 
     if (ret != size) {
         fprintf(stderr,
-                "Error (size) reading display file offset %" PRI_OFF_T "\n",
+                "Error (size) reading display file offset %" PRId64 "\n",
                 G_ftell(fp));
         return (-1);
     }
@@ -251,21 +252,6 @@ int read_cube(Cube_data *Cube, file_info *headfax)
     return Cube->n_thresh = t_cnt;
 }
 
-#ifdef NEWCODE
-int my_fread(char *buf, int size, int cnt, FILE *fp)
-{
-    static char in_buf[10240];
-    static char *start, *end;
-    char *outp;
-    int ret;
-
-    if (ret = fread(in_buf, 1, 10240, fp))
-        ;
-
-    return 0;
-}
-#else
-
 static int cptr = 0;
 
 int my_fread(char *buf, int size, int cnt, FILE *fp)
@@ -303,4 +289,3 @@ int new_dspf(file_info *hfax)
 
     return 0;
 }
-#endif

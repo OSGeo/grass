@@ -453,12 +453,12 @@ int N_convert_array_2d_null_to_zero(N_array_2d *a)
                 count);
     if (a->type == FCELL_TYPE)
         G_debug(2,
-                "N_convert_array_2d_null_to_zero: %i valuess of type "
+                "N_convert_array_2d_null_to_zero: %i values of type "
                 "FCELL_TYPE are converted",
                 count);
     if (a->type == DCELL_TYPE)
         G_debug(2,
-                "N_convert_array_2d_null_to_zero: %i valuess of type "
+                "N_convert_array_2d_null_to_zero: %i values of type "
                 "DCELL_TYPE are converted",
                 count);
 

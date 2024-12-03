@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
     primary = 0;
     result = cross(fd, non_zero, primary, outfd);
 
-    /* print message STEP mesage */
+    /* print message STEP message */
     G_message(_("%s: STEP 2 ..."), G_program_name());
 
     /* now close all files */

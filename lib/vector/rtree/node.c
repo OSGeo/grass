@@ -292,7 +292,7 @@ void RTreeDestroyNode(struct RTree_Node *n, int nodes)
 {
     int i;
 
-    if (n->level > 0) { /* it is not leaf -> destroy childs */
+    if (n->level > 0) { /* it is not leaf -> destroy children */
         for (i = 0; i < nodes; i++) {
             if (n->branch[i].child.ptr) {
                 RTreeDestroyNode(n->branch[i].child.ptr, nodes);

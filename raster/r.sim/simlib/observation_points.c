@@ -68,7 +68,7 @@ void create_observation_points(void)
             y = pts->y[0];
             cat = cts->cat[0];
 
-            /* Check region bounds befor inserting point */
+            /* Check region bounds before inserting point */
             if (x <= cellhd.east && x >= cellhd.west && y <= cellhd.north &&
                 y >= cellhd.south) {
                 insert_next_point(&points, x, y, cat);

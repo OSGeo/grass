@@ -484,7 +484,7 @@ int dig_isle_alloc_line(struct P_isle *isle, int add)
 /*!
    \brief For now just print message and return error code
  */
-int dig_out_of_memory()
+int dig_out_of_memory(void)
 {
     G_warning(_("Out of memory"));
     return -1;

@@ -1,7 +1,7 @@
 #########################################################################
 #                         Variable names
 # xxxINCDIR  directory(ies) including header files (example: /usr/include)
-# xxxINC  cc option(s) for include directory (example: -I/usr/inlude)
+# xxxINC  cc option(s) for include directory (example: -I/usr/include)
 # xxxLIBDIR  directory(ies) containing library (example: /usr/lib)
 # xxxLIBPATH cc option for library directory (example: -L/usr/lib)
 # xxx_LIBNAME library name (example: gis)
@@ -59,6 +59,7 @@ DOCSDIR         = $(ARCH_DISTDIR)/docs
 ETC             = $(ARCH_DISTDIR)/etc
 GUIDIR          = $(ARCH_DISTDIR)/gui
 HTMLDIR         = $(ARCH_DISTDIR)/docs/html
+MDDIR           = $(ARCH_DISTDIR)/docs/mkdocs
 SCRIPTDIR       = $(ARCH_DISTDIR)/scripts
 MSG_DIR         = $(ARCH_DISTDIR)/etc/msgs
 MO_DIR          = $(ARCH_DISTDIR)/locale
@@ -152,6 +153,7 @@ libs = \
 	NVIZ:nviz \
 	OGSF:ogsf \
 	OPTRI:optri \
+	PARSON:parson \
 	PNGDRIVER:pngdriver \
 	PSDRIVER:psdriver \
 	QTREE:qtree \

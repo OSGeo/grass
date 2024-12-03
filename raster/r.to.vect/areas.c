@@ -100,7 +100,7 @@ static int update_width(struct area_table *, int);
 static int nabors(void);
 
 #define get_raster_value(ptr, col) \
-    Rast_get_d_value(G_incr_void_ptr(ptr, (col)*data_size), data_type)
+    Rast_get_d_value(G_incr_void_ptr(ptr, (col) * data_size), data_type)
 
 /* extract_areas - trace boundaries of polygons in file */
 
@@ -668,7 +668,7 @@ static int add_to_list(int x, int y)
 /* assign_area - make current area number correspond to the passed */
 /* category number and allocate more space to store areas if necessary */
 
-static int assign_area(double cat, int kase)
+static int assign_area(double cat, int kase UNUSED)
 {
     a_list_new->free = 0;
     a_list_new->cat = cat;

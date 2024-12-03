@@ -86,11 +86,11 @@ int Nviz_draw_cplane(nv_data *data, int bound1, int bound2)
    \brief Draw current clip plane
 
    \param data nviz data
-   \param current id of current clip plane
+   \param current id of current clip plane [unused]
    \param surf1 first surface id
    \param surf2 second surface id
  */
-void cp_draw(nv_data *data, int current, int surf1, int surf2)
+void cp_draw(nv_data *data, int current UNUSED, int surf1, int surf2)
 {
     int i, nsurfs;
     int surf_min = 0, surf_max = 0, temp;
@@ -248,7 +248,7 @@ int Nviz_get_cplane_translation(nv_data *data, int id, float *dx, float *dy,
 
    \param type type of fence (FC_ABOVE, FC_BELOW, FC_BLEND, FC_GREY, FC_OFF)
  */
-int Nviz_set_fence_color(nv_data *data, int type)
+int Nviz_set_fence_color(nv_data *data UNUSED, int type)
 {
     GS_set_fencecolor(type);
 

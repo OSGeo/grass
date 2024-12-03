@@ -16,7 +16,7 @@
 int dareatheme(struct Map_info *Map, struct cat_list *Clist,
                dbCatValArray *cvarr, double *breaks, int nbreaks,
                const struct color_rgb *colors, const struct color_rgb *bcolor,
-               int chcat, struct Cell_head *window, int default_width)
+               int chcat, struct Cell_head *window, int default_width UNUSED)
 {
 
     int num, area, isle, n_isles, n_points;

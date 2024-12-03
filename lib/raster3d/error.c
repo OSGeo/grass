@@ -17,7 +17,7 @@
  *  \return void
  */
 
-void Rast3d_skip_error(const char *msg)
+void Rast3d_skip_error(const char *msg UNUSED)
 {
 }
 

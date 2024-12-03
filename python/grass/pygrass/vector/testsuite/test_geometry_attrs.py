@@ -3,26 +3,17 @@ Created on Thu Jun 19 14:13:53 2014
 
 @author: pietro
 """
-import sys
-import unittest
-import numpy as np
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-import grass.lib.vector as libvect
-from grass.script.core import run_command
-
 from grass.pygrass.vector import VectorTopo
 
 
 class GeometryAttrsTestCase(TestCase):
-
     tmpname = "GeometryAttrsCase_map"
 
     @classmethod
     def setUpClass(cls):
-
         from grass.pygrass import utils
 
         utils.create_test_vector_map(cls.tmpname)
@@ -61,11 +52,11 @@ class GeometryAttrsTestCase(TestCase):
         newvalue = 100.0
         newpairs = ("setitem_point_2", 1000.0)
 
-        self.attrs.__setitem__("name", newname)
+        self.attrs.__setitem__("name", newname)  # noqa: PLC2801
         self.assertEqual(self.attrs["name"], newname)
-        self.attrs.__setitem__("value", newvalue)
+        self.attrs.__setitem__("value", newvalue)  # noqa: PLC2801
         self.assertEqual(self.attrs["value"], newvalue)
-        self.attrs.__setitem__(("name", "value"), newpairs)
+        self.attrs.__setitem__(("name", "value"), newpairs)  # noqa: PLC2801
         self.assertEqual(self.attrs["name", "value"], newpairs)
 
 

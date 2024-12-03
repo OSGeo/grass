@@ -102,14 +102,14 @@ double trunca()
     for (i = 0; i < 83; i++) {
         if (rmu[i] > 0.8)
             break;
-        k = i - 1;
+        k = i;
     }
 
     int kk = 0;
     for (i = 0; i < 83; i++) {
         if (rmu[i] > 0.94)
             break;
-        kk = i - 1;
+        kk = i;
     }
 
     double aa =
@@ -118,7 +118,7 @@ double trunca()
     double x1 = (double)(log10(sixs_trunc.pha[kk]));
     double x2 = (double)acos(rmu[kk]);
 
-    for (i = kk + 1; i < 83; i++) {
+    for (i = kk; i < 83; i++) {
         double a;
         if (fabs(rmu[i] - 1) <= 1e-08)
             a = x1 - aa * x2;
@@ -445,9 +445,14 @@ void os(const double tamoy, const double trmoy, const double pizmoy,
         /* compute position of the plane layer */
         double taup = tap + trp;
         iplane = -1;
-        for (int i = 0; i <= ntp; i++)
+        for (int i = 0; i <= ntp; i++) {
             if (taup >= h[i])
                 iplane = i;
+        }
+        if (iplane == -1) {
+            G_fatal_error(
+                _("Position of the plane layer could not be determined"));
+        }
 
         /* update the layer from the end to the position to update if necessary
          */
@@ -614,8 +619,8 @@ void os(const double tamoy, const double trmoy, const double pizmoy,
             }
         }
 
-        /* inm2 is inialized with scattering computed at n-2
-           i3 is inialized with primary scattering */
+        /* inm2 is initialized with scattering computed at n-2
+           i3 is initialized with primary scattering */
         for (k = -mu; k <= mu; k++) {
             if (k < 0) {
                 inm1[STDI(k)] = i1[snt][STDI(k)];
@@ -756,7 +761,7 @@ void os(const double tamoy, const double trmoy, const double pizmoy,
             }
             roavion0 = i1[iplane][STDI(mu)];
 
-            /*  convergence test (geometrical serie) */
+            /*  convergence test (geometrical series) */
             if (ig > 2) {
                 double a1 = roavion2;
                 double d1 = roavion1;
@@ -793,7 +798,7 @@ void os(const double tamoy, const double trmoy, const double pizmoy,
                 }
 
                 if (z < 0.0001) {
-                    /* successful test (geometrical serie) */
+                    /* successful test (geometrical series) */
                     double y1;
 
                     for (int l = -mu; l <= mu; l++) {
@@ -1006,9 +1011,14 @@ void iso(const double tamoy, const double trmoy, const double pizmoy,
         /* compute position of the plane layer */
         double taup = tap + trp;
         iplane = -1;
-        for (int i = 0; i <= ntp; i++)
+        for (int i = 0; i <= ntp; i++) {
             if (taup >= h[i])
                 iplane = i;
+        }
+        if (iplane == -1) {
+            G_fatal_error(
+                _("Position of the plane layer could not be determined"));
+        }
 
         /* update the layer from the end to the position to update if necessary
          */
@@ -1102,8 +1112,8 @@ void iso(const double tamoy, const double trmoy, const double pizmoy,
         for (int i = 0; i <= snt; i++)
             i1[i][STDI(k)] = 0.0;
 
-    /* inm2 is inialized with scattering computed at n-2
-       i3 is inialized with primary scattering */
+    /* inm2 is initialized with scattering computed at n-2
+       i3 is initialized with primary scattering */
     for (k = -mu; k <= mu; k++) {
         if (k == 0)
             continue;
@@ -1199,7 +1209,7 @@ void iso(const double tamoy, const double trmoy, const double pizmoy,
         }
         tavion0 = i1[iplane][STDI(mu)];
 
-        /* convergence test (geometrical serie) */
+        /* convergence test (geometrical series) */
         if (ig > 2) {
             double z = 0;
             double a1 = tavion2;
@@ -1233,7 +1243,7 @@ void iso(const double tamoy, const double trmoy, const double pizmoy,
             }
 
             if (z < 0.0001) {
-                /* successful test (geometrical serie) */
+                /* successful test (geometrical series) */
 
                 for (int l = -mu; l <= mu; l++) {
                     if (l == 0)
@@ -1393,7 +1403,7 @@ double chand(const double xtau, const GeomCond &geom)
   the computation of the aerosol reflectance and the mixed Rayleigh-aerosol
   reflectance. The polarization is addressed in computing the Rayleigh
   reflectance (Subroutine CHAND.f) by semi-empirical fitting of the vectorized
-  Successive Orders of Scattering method (Deuzé et al, 1989).
+  Successive Orders of Scattering method (Deuze et al, 1989).
 */
 void atmref(const double tamoy, const double trmoy, const double pizmoy,
             const double tamoyp, const double trmoyp,

@@ -360,7 +360,8 @@ void GeomCond::parse()
     }
     case 4:
         campm = 1.0f; /* avhrr PM, case 4 must fall through to case 5 */
-    case 5:           /* avhrr PM and avhrr AM */
+        FALLTHROUGH;
+    case 5: /* avhrr PM and avhrr AM */
     {
         cin >> month;
         cin >> jday;
@@ -397,6 +398,9 @@ void GeomCond::parse()
     case 28: /* planetscope0e    * enter month,day,hh.ddd,long.,lat. */
     case 29: /* planetscope0f10  * enter month,day,hh.ddd,long.,lat. */
     case 30: /* worldview4       * enter month,day,hh.ddd,long.,lat. */
+    case 31: /* AVIRIS           * enter month,day,hh.ddd,long.,lat. */
+    case 32: /* Hyperion VNIR    * enter month,day,hh.ddd,long.,lat. */
+    case 33: /* Hyperion SWIR    * enter month,day,hh.ddd,long.,lat. */
     {
         cin >> month;
         cin >> jday;
@@ -480,7 +484,10 @@ void GeomCond::print()
                                    string(" planetscope 0c 0d observation"),
                                    string(" planetscope 0e observation  "),
                                    string(" planetscope 0f 10 observation"),
-                                   string(" worldview4 observation      ")};
+                                   string(" worldview4 observation      "),
+                                   string(" AVIRIS observation          "),
+                                   string(" Hyperion VNIR observation   "),
+                                   string(" Hyperion SWIR observation   ")};
 
     static const string head(" geometrical conditions identity  ");
     static const string line(" -------------------------------  ");

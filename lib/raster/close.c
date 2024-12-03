@@ -171,7 +171,7 @@ static int close_old(int fd)
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
     /* if R__.auto_mask was only allocated for reading map rows to create
-       non-existant null rows, and not for actuall mask, free R__.mask_row
+       non-existent null rows, and not for actual mask, free R__.mask_row
        if(R__.auto_mask <=0)
        G_free (R__.mask_buf);
        This is obsolete since now the mask_bus is always allocated
@@ -433,7 +433,7 @@ static int close_new(int fd, int ok)
         else {
             remove(fcb->null_temp_name);
             remove(path); /* again ? */
-        }                 /* null_cur_row > 0 */
+        } /* null_cur_row > 0 */
 
         if (fcb->open_mode == OPEN_NEW_COMPRESSED) { /* auto compression */
             fcb->row_ptr[fcb->cellhd.rows] = lseek(fcb->data_fd, 0L, SEEK_CUR);

@@ -3,15 +3,7 @@ Created on Tue Apr  2 18:31:47 2013
 
 @author: pietro
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
+
 import re
 
 from grass.pygrass.modules.interface.docstring import docstring_property
@@ -22,20 +14,19 @@ def _check_value(param, value):
     """Function to check the correctness of a value and
     return the checked value and the original.
     """
-    must_val = "The Parameter <%s>, must be one of the following values: %r"
     req = "The Parameter <%s>, require: %s, get: %s instead: %r\n%s"
-    string = (type(b""), type(""))
+    string = (bytes, str)
 
     def raiseexcpet(exc, param, ptype, value):
-        """Function to modifa the error message"""
+        """Function to modify the error message"""
         msg = req % (param.name, param.typedesc, ptype, value, str(exc))
         if isinstance(exc, ValueError):
             raise ValueError(msg)
-        elif isinstance(exc, TypeError):
+        if isinstance(exc, TypeError):
             raise TypeError(msg)
-        else:
-            exc.message = msg
-            raise exc
+
+        exc.message = msg
+        raise exc
 
     def check_string(value):
         """Function to check that a string parameter is already a string"""
@@ -43,9 +34,7 @@ def _check_value(param, value):
             if type(value) in (int, float):
                 value = str(value)
             if type(value) not in string:
-                msg = (
-                    "The Parameter <%s> require a string," " %s instead is provided: %r"
-                )
+                msg = "The Parameter <%s> require a string, %s instead is provided: %r"
                 raise ValueError(msg % (param.name, type(value), value))
         return value
 
@@ -53,7 +42,7 @@ def _check_value(param, value):
     if value is None:
         return param.default, param.default
 
-    # find errors with multiple parmeters
+    # find errors with multiple parameters
     if isinstance(value, (list, tuple)):
         if param.keydescvalues:
             return (
@@ -98,14 +87,35 @@ def _check_value(param, value):
             if (param.min is not None and newvalue < param.min) or (
                 param.max is not None and newvalue > param.max
             ):
-                err_str = (
-                    "The Parameter <%s>, must be between: "
-                    "%g<=value<=%g, %r is outside."
-                )
-                raise ValueError(err_str % (param.name, param.min, param.max, newvalue))
+                if param.min is None:
+                    err_str = (
+                        f"The Parameter <{param.name}> must be lower than "
+                        f"{param.max}, {newvalue} is outside."
+                    )
+                elif param.max is None:
+                    err_str = (
+                        f"The Parameter <{param.name}> must be higher than "
+                        f"{param.min}, {newvalue} is out of range."
+                    )
+                else:
+                    err_str = (
+                        f"The Parameter <{param.name}> must be between: "
+                        f"{param.min}<=value<={param.max}, {newvalue} is outside."
+                    )
+                raise ValueError(err_str)
         # check if value is in the list of valid values
         if param.values is not None and newvalue not in param.values:
-            raise ValueError(must_val % (param.name, param.values))
+            good = False
+            if param.type == str:
+                for param_value in param.values:
+                    if param_value.startswith(newvalue):
+                        good = True
+                        break
+            if not good:
+                raise ValueError(
+                    f"The Parameter <{param.name}>, must be one of the following "
+                    f"values: {param.values!r} not '{newvalue}'"
+                )
     return (
         (
             [
@@ -119,23 +129,29 @@ def _check_value(param, value):
 
 
 # TODO add documentation
-class Parameter(object):
+class Parameter:
     """The Parameter object store all information about a parameter of a
     GRASS GIS module. ::
 
-        >>> param = Parameter(diz=dict(name='int_number', required='yes',
-        ...                            multiple='no', type='integer',
-        ...                            values=[2, 4, 6, 8]))
+        >>> param = Parameter(
+        ...     diz=dict(
+        ...         name="int_number",
+        ...         required="yes",
+        ...         multiple="no",
+        ...         type="integer",
+        ...         values=[2, 4, 6, 8],
+        ...     )
+        ... )
         >>> param.value = 2
         >>> param.value
         2
         >>> param.value = 3
         Traceback (most recent call last):
            ...
-        ValueError: The Parameter <int_number>, must be one of the following values: [2, 4, 6, 8]
+        ValueError: The Parameter <int_number>, must be one of the following values: [2, 4, 6, 8] not '3'
 
     ...
-    """
+    """  # noqa: E501
 
     def __init__(self, xparameter=None, diz=None):
         self._value = None
@@ -146,8 +162,8 @@ class Parameter(object):
         if diz is None:
             raise TypeError("Xparameter or diz are required")
         self.name = diz["name"]
-        self.required = True if diz["required"] == "yes" else False
-        self.multiple = True if diz["multiple"] == "yes" else False
+        self.required = diz["required"] == "yes"
+        self.multiple = diz["multiple"] == "yes"
         # check the type
         if diz["type"] in GETTYPE:
             self.type = GETTYPE[diz["type"]]
@@ -165,7 +181,8 @@ class Parameter(object):
             try:
                 # Check for integer ranges: "3-30" or float ranges: "0.0-1.0"
                 isrange = re.match(
-                    "(?P<min>-*\d+.*\d*)*-(?P<max>\d+.*\d*)*", diz["values"][0]
+                    r"(?P<min>-?(?:\d*\.)?\d+)?-(?P<max>-?(?:\d*\.)?\d+)?",
+                    diz["values"][0],
                 )
                 if isrange:
                     mn, mx = isrange.groups()
@@ -199,7 +216,7 @@ class Parameter(object):
         #
         if "gisprompt" in diz and diz["gisprompt"]:
             self.typedesc = diz["gisprompt"].get("prompt", "")
-            self.input = False if diz["gisprompt"]["age"] == "new" else True
+            self.input = diz["gisprompt"]["age"] != "new"
         else:
             self.input = True
 
@@ -225,9 +242,16 @@ class Parameter(object):
     def get_bash(self):
         """Return the BASH representation of the parameter. ::
 
-            >>> param = Parameter(diz=dict(name='int_number', required='yes',
-            ...                            multiple='no', type='integer',
-            ...                            values=[2, 4, 6, 8], default=8))
+            >>> param = Parameter(
+            ...     diz=dict(
+            ...         name="int_number",
+            ...         required="yes",
+            ...         multiple="no",
+            ...         type="integer",
+            ...         values=[2, 4, 6, 8],
+            ...         default=8,
+            ...     )
+            ... )
             >>> param.get_bash()
             'int_number=8'
 
@@ -237,9 +261,11 @@ class Parameter(object):
         if isinstance(self.rawvalue, (list, tuple)):
             value = sep.join(
                 [
-                    sep.join([str(v) for v in val])
-                    if isinstance(val, tuple)
-                    else str(val)
+                    (
+                        sep.join([str(v) for v in val])
+                        if isinstance(val, tuple)
+                        else str(val)
+                    )
                     for val in self.rawvalue
                 ]
             )
@@ -250,9 +276,16 @@ class Parameter(object):
     def get_python(self):
         """Return a string with the Python representation of the parameter. ::
 
-            >>> param = Parameter(diz=dict(name='int_number', required='yes',
-            ...                            multiple='no', type='integer',
-            ...                            values=[2, 4, 6, 8], default=8))
+            >>> param = Parameter(
+            ...     diz=dict(
+            ...         name="int_number",
+            ...         required="yes",
+            ...         multiple="no",
+            ...         type="integer",
+            ...         values=[2, 4, 6, 8],
+            ...         default=8,
+            ...     )
+            ... )
             >>> param.get_python()
             'int_number=8'
 
@@ -286,11 +319,17 @@ class Parameter(object):
 
         ::
 
-            >>> param = Parameter(diz=dict(name='int_number',
-            ...                            description="Set an number",
-            ...                            required='yes',
-            ...                            multiple='no', type='integer',
-            ...                            values=[2, 4, 6, 8], default=8))
+            >>> param = Parameter(
+            ...     diz=dict(
+            ...         name="int_number",
+            ...         description="Set an number",
+            ...         required="yes",
+            ...         multiple="no",
+            ...         type="integer",
+            ...         values=[2, 4, 6, 8],
+            ...         default=8,
+            ...     )
+            ... )
             >>> print(param.__doc__)
             int_number: 8, required, integer
                 Set an number
@@ -298,10 +337,7 @@ class Parameter(object):
         ..
         """
         if hasattr(self, "values"):
-            if self.isrange:
-                vals = self.isrange
-            else:
-                vals = ", ".join([repr(val) for val in self.values])
+            vals = self.isrange or ", ".join([repr(val) for val in self.values])
         else:
             vals = False
         if self.keydescvalues:

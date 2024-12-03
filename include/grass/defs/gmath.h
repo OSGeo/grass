@@ -127,7 +127,7 @@ extern int G_math_solver_sparse_cg(G_math_spvector **, double *, double *, int,
 extern int G_math_solver_sparse_bicgstab(G_math_spvector **, double *, double *,
                                          int, int, double);
 
-/* solver algoithms and helper functions */
+/* solver algorithms and helper functions */
 extern void G_math_gauss_elimination(double **, double *, int);
 extern void G_math_lu_decomposition(double **, double *, int);
 extern int G_math_cholesky_decomposition(double **, int, int);

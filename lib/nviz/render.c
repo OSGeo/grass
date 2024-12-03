@@ -147,32 +147,30 @@ void Nviz_destroy_render_window(struct render_window *rwin)
    \brief Create render window
 
    \param rwin pointer to render_window struct
-   \param display display instance (NULL for offscreen)
+   \param display display instance (NULL for offscreen) [unused]
    \param width window width
    \param height window height
 
    \return 0 on success
    \return -1 on error
  */
-int Nviz_create_render_window(struct render_window *rwin, void *display,
+int Nviz_create_render_window(struct render_window *rwin, void *display UNUSED,
                               int width, int height)
 {
 #if defined(OPENGL_X11)
-    int attributeList[] = {
-        GLX_RGBA,
-        GLX_RED_SIZE,
-        1,
-        GLX_GREEN_SIZE,
-        1,
-        GLX_BLUE_SIZE,
-        1,
-        GLX_DEPTH_SIZE,
-        1,
+    int attributeList[] = {GLX_RGBA,
+                           GLX_RED_SIZE,
+                           1,
+                           GLX_GREEN_SIZE,
+                           1,
+                           GLX_BLUE_SIZE,
+                           1,
+                           GLX_DEPTH_SIZE,
+                           1,
 #if !defined(OPENGL_FBO)
-        GLX_DOUBLEBUFFER,
+                           GLX_DOUBLEBUFFER,
 #endif
-        None
-    };
+                           None};
     XVisualInfo *v;
 
     rwin->displayId = XOpenDisplay((char *)display);
@@ -205,21 +203,19 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
     XFree(v);
 #elif defined(OPENGL_AQUA)
 #if defined(OPENGL_AGL)
-    int attributeList[] = {
-        AGL_RGBA,
-        AGL_RED_SIZE,
-        1,
-        AGL_GREEN_SIZE,
-        1,
-        AGL_BLUE_SIZE,
-        1,
-        AGL_DEPTH_SIZE,
-        1,
+    int attributeList[] = {AGL_RGBA,
+                           AGL_RED_SIZE,
+                           1,
+                           AGL_GREEN_SIZE,
+                           1,
+                           AGL_BLUE_SIZE,
+                           1,
+                           AGL_DEPTH_SIZE,
+                           1,
 #if !defined(OPENGL_FBO)
-        AGL_DOUBLEBUFFER,
+                           AGL_DOUBLEBUFFER,
 #endif
-        AGL_NONE
-    };
+                           AGL_NONE};
 
     /* TODO: open mac display */
 

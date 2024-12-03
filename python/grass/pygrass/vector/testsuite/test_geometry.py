@@ -3,20 +3,18 @@ Created on Thu Jun 19 14:13:53 2014
 
 @author: pietro
 """
+
 import sys
 import unittest
+
 import numpy as np
 
+import grass.lib.vector as libvect
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-import grass.lib.vector as libvect
-from grass.script.core import run_command
-
-from grass.pygrass.vector import Vector, VectorTopo
-from grass.pygrass.vector.geometry import Point, Line, Node
-from grass.pygrass.vector.geometry import Area, Boundary, Centroid
+from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.basic import Bbox
+from grass.pygrass.vector.geometry import Area, Line, Node, Point
 
 
 class PointTestCase(TestCase):
@@ -85,7 +83,7 @@ class PointTestCase(TestCase):
         point1 = Point(1, 0)
         self.assertFalse(point0 == point1)
         self.assertFalse(point0 == (1, 0))
-        self.assertTrue(point0 == point0)
+        self.assertTrue(point0 == point0)  # noqa: PLR0124
         self.assertTrue(point0 == (0, 0))
 
     def test_repr(self):
@@ -97,16 +95,13 @@ class PointTestCase(TestCase):
     def test_buffer(self):
         """Test buffer method"""
         # TODO: verify if the buffer depends from the mapset's projection
-        pass
 
 
 class LineTestCase(TestCase):
-
     tmpname = "LineTestCase_map"
 
     @classmethod
     def setUpClass(cls):
-
         from grass.pygrass import utils
 
         utils.create_test_vector_map(cls.tmpname)
@@ -192,12 +187,10 @@ class LineTestCase(TestCase):
 
 
 class NodeTestCase(TestCase):
-
     tmpname = "NodeTestCase_map"
 
     @classmethod
     def setUpClass(cls):
-
         # Tests are based on a stream network
         from grass.pygrass import utils
 
@@ -251,12 +244,10 @@ class NodeTestCase(TestCase):
 
 
 class AreaTestCase(TestCase):
-
     tmpname = "AreaTestCase_map"
 
     @classmethod
     def setUpClass(cls):
-
         # Tests are based on a stream network
         from grass.pygrass import utils
 
@@ -341,17 +332,13 @@ class AreaTestCase(TestCase):
         self.assertEqual(len(boundaries), 4)
 
         string_list = []
-        string_list.append(
-            "LINESTRING (0.0000000000000000 0.0000000000000000, 0.0000000000000000 4.0000000000000000)"
-        )
-        string_list.append(
-            "LINESTRING (0.0000000000000000 4.0000000000000000, 4.0000000000000000 4.0000000000000000)"
-        )
-        string_list.append(
-            "LINESTRING (4.0000000000000000 4.0000000000000000, 4.0000000000000000 0.0000000000000000)"
-        )
-        string_list.append(
-            "LINESTRING (4.0000000000000000 0.0000000000000000, 0.0000000000000000 0.0000000000000000)"
+        string_list.extend(
+            (
+                "LINESTRING (0.0000000000000000 0.0000000000000000, 0.0000000000000000 4.0000000000000000)",
+                "LINESTRING (0.0000000000000000 4.0000000000000000, 4.0000000000000000 4.0000000000000000)",
+                "LINESTRING (4.0000000000000000 4.0000000000000000, 4.0000000000000000 0.0000000000000000)",
+                "LINESTRING (4.0000000000000000 0.0000000000000000, 0.0000000000000000 0.0000000000000000)",
+            )
         )
 
         for boundary, i in zip(boundaries, range(4)):

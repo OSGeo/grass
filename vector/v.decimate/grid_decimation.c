@@ -79,7 +79,7 @@ void grid_decimation_set_region(struct GridDecimation *grid_decimation,
 
 void grid_decimation_create_list_with_point(
     struct GridDecimation *grid_decimation, size_t index,
-    struct DecimationPoint *point, size_t npoints)
+    struct DecimationPoint *point, size_t npoints UNUSED)
 {
     struct DecimationPoint **point_list =
         G_malloc(1 * sizeof(struct DecimationPoint *));

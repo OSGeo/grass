@@ -196,7 +196,7 @@ int G_no_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 /* G_*_compress_bound() returns an upper bound on the compressed size
  * which can be larger than the input size
  * some compressors are a bit faster if the size of the destination
- * is at least the upper bound (no need to test for buffer overlflow)
+ * is at least the upper bound (no need to test for buffer overflow)
  * read comments on the specific compressor interfaces
  */
 int G_compress_bound(int src_sz, int number)

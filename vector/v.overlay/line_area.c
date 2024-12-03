@@ -112,7 +112,7 @@ static int merge_line(struct Map_info *Map, int line, struct line_pnts *MPoints,
                 if (abs(curr_line) != abs(first)) {
                     Vect_read_line(Map, NULL, Cats, abs(curr_line));
 
-                    /* catgories must be identical */
+                    /* categories must be identical */
                     if (compare_cats(MCats, Cats) == 0)
                         next_line = curr_line;
                 }

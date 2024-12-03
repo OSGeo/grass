@@ -14,7 +14,7 @@ lanczos3 will be sharper than lanczos2.
 <p>
 r.resamp.filter implements FIR (finite impulse response) filtering. All
 of the functions are low-pass filters, as they are symmetric. See
-<a href="http://en.wikipedia.org/wiki/Window_function">Wikipedia: Window function</a>
+<a href="https://en.wikipedia.org/wiki/Window_function">Wikipedia: Window function</a>
 for examples of common window functions and their frequency responses.
 
 <p>
@@ -63,14 +63,15 @@ should use 3 times as many samples (at the same sampling frequency, i.e.
 cover 3 times as large a time interval) as lanczos1 in order to get a
 similar frequency response (higher-order filters will fall off faster, but
 the frequency at which the fall-off starts should be the same). See
-<a href="http://en.wikipedia.org/wiki/File:Lanczos-kernel.svg">Wikipedia: Lanczos-kernel.svg</a>
+<a href="https://en.wikipedia.org/wiki/File:Lanczos-kernel.svg">Wikipedia: Lanczos-kernel.svg</a>
 for an illustration. If both graphs were drawn on the same axes, they
 would have roughly the same shape, but the a=3 window would have a longer
 tail. By scaling the axes to the same width, the a=3 window has a narrower
 central lobe.
 
 <p>
-For longitude-latitude locations, the interpolation algorithm is based on
+For longitude-latitude coordinate reference systems,
+the interpolation algorithm is based on
 degree fractions, not on the absolute distances between cell centers.  Any
 attempt to implement the latter would violate the integrity of the
 interpolation method.

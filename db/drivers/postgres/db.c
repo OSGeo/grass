@@ -19,7 +19,7 @@
 #include "globals.h"
 #include "proto.h"
 
-static void notice_processor(void *arg, const char *message)
+static void notice_processor(void *arg UNUSED, const char *message)
 {
     /* print notice messages only on verbose level */
     if (G_verbose() > G_verbose_std()) {
@@ -54,7 +54,7 @@ int db__driver_open_database(dbHandle *handle)
         return DB_FAILED;
     }
 
-    db_get_login2("pg", name, &user, &password, &host, &port);
+    db_get_login("pg", name, &user, &password, &host, &port);
 
     pg_conn = PQsetdbLogin(host, port, pgconn.options, pgconn.tty,
                            pgconn.dbname, user, password);
@@ -241,7 +241,7 @@ int create_delete_db(dbHandle *handle, int create)
             pgconn.host, pgconn.port, pgconn.options, pgconn.tty, pgconn.dbname,
             pgconn.user, pgconn.password, pgconn.host, pgconn.port,
             pgconn.schema);
-    db_get_login2("pg", template_db, &user, &password, &host, &port);
+    db_get_login("pg", template_db, &user, &password, &host, &port);
 
     pg_conn = PQsetdbLogin(host, port, pgconn.options, pgconn.tty,
                            pgconn.dbname, user, password);

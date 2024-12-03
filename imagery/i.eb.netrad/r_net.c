@@ -5,8 +5,9 @@
 
 #define PI M_PI
 
-double r_net(double bbalb, double ndvi, double tempk, double dtair, double e0,
-             double tsw, double doy, double utc, double sunzangle)
+double r_net(double bbalb, double ndvi UNUSED, double tempk, double dtair,
+             double e0, double tsw, double doy, double utc UNUSED,
+             double sunzangle)
 {
 
     /* Tsw =  atmospheric transmissivity single-way (~0.7 -) */
@@ -34,7 +35,7 @@ double r_net(double bbalb, double ndvi, double tempk, double dtair, double e0,
     Kin = 1358.0 * (cos(sunzangle * PI / 180) * tsw / (ds * ds));
 
     /* Lin is incoming longwave radiation */
-    Lin = (e_atm)*5.67 * pow(10, -8) * pow((tempk - dtair), 4);
+    Lin = (e_atm) * 5.67 * pow(10, -8) * pow((tempk - dtair), 4);
 
     /* Lout is surface grey body emission in Longwave spectrum */
     Lout = e0 * 5.67 * pow(10, -8) * pow(tempk, 4);

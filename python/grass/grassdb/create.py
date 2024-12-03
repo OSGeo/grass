@@ -9,23 +9,32 @@ for details.
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 """
 
-
 import os
 import shutil
 import getpass
 
+from grass.grassdb.manage import resolve_mapset_path, MapsetPath
+
+
+def _directory_to_mapset(path: MapsetPath):
+    """Turn an existing directory into a mapset"""
+    # copy DEFAULT_WIND file and its permissions from PERMANENT
+    # to WIND in the new mapset
+    region_path1 = path.path.parent / "PERMANENT" / "DEFAULT_WIND"
+    region_path2 = path.path / "WIND"
+    shutil.copy(region_path1, region_path2)
+
 
 def create_mapset(database, location, mapset):
     """Creates a mapset in a specified location"""
-    location_path = os.path.join(database, location)
-    mapset_path = os.path.join(location_path, mapset)
+    path = resolve_mapset_path(
+        database,
+        location,
+        mapset,
+    )
     # create an empty directory
-    os.mkdir(mapset_path)
-    # copy DEFAULT_WIND file and its permissions from PERMANENT
-    # to WIND in the new mapset
-    region_path1 = os.path.join(location_path, "PERMANENT", "DEFAULT_WIND")
-    region_path2 = os.path.join(location_path, mapset, "WIND")
-    shutil.copy(region_path1, region_path2)
+    os.mkdir(path)
+    _directory_to_mapset(path)
     # set permissions to u+rw,go+r (disabled; why?)
     # os.chmod(os.path.join(database,location,mapset,'WIND'), 0644)
 

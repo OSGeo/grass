@@ -1,6 +1,6 @@
 i.segment basically works in three steps:
 
-[Note: the word "segment" has two meanings here - data segments which are like data tiles (SEGMENT library) and image objects that are the result of the segmentation algorithm. In following, an attemps is made to systematically use 'segment' for the former and 'object' for the latter.]
+[Note: the word "segment" has two meanings here - data segments which are like data tiles (SEGMENT library) and image objects that are the result of the segmentation algorithm. In following, an attempts is made to systematically use 'segment' for the former and 'object' for the latter.]
 
 1) open input files and put the data in data segments: open_files(), implemented in open_files.c
    Pre-defined boundaries can be supplied with the "bounds" option. The meaning of these boundaries is that objects will not cross these boundaries.

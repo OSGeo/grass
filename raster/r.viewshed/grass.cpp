@@ -17,7 +17,7 @@
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the
  * line-of-sight that connects their centers does not intersect the
- * terrain. The terrain is NOT viewed as a tesselation of flat cells,
+ * terrain. The terrain is NOT viewed as a tessellation of flat cells,
  * i.e. if the line-of-sight does not pass through the cell center,
  * elevation is determined using bilinear interpolation.
  * The viewshed algorithm is efficient both in
@@ -295,7 +295,7 @@ size_t init_event_list_in_memory(AEvent *eventList, char *rastName,
             /*don't insert in eventlist nodata cell events */
             if (isnull) {
                 /* record this cell as being NODATA; this is necessary so
-                   that we can distingush invisible events, from nodata
+                   that we can distinguish invisible events, from nodata
                    events in the output */
                 add_result_to_inmem_visibilitygrid(visgrid, i, j,
                                                    hd->nodata_value);
@@ -382,7 +382,7 @@ size_t init_event_list_in_memory(AEvent *eventList, char *rastName,
 /* ************************************************************ */
 /* input: an arcascii file, a grid header and a viewpoint; action:
    figure out all events in the input file, and write them to the
-   stream.  It assumes the file pointer is positioned rigth after the
+   stream.  It assumes the file pointer is positioned right after the
    grid header so that this function can read all grid elements.
 
    if data is not NULL, it creates an array that stores all events on
@@ -450,6 +450,7 @@ AMI_STREAM<AEvent> *init_event_list(char *rastName, Viewpoint *vp,
     Rast_set_null_value(inrast[2], ncols, data_type);
 
     /*scan through the raster data */
+    // int isnull = 0;
     dimensionType i, j;
     double ax, ay;
     AEvent e;
@@ -483,7 +484,7 @@ AMI_STREAM<AEvent> *init_event_list(char *rastName, Viewpoint *vp,
             e.col = j;
 
             /*read the elevation value into the event */
-            Rast_is_null_value(&(inrast[1][j]), data_type);
+            // isnull = Rast_is_null_value(&(inrast[1][j]), data_type);
             e.elev[1] = inrast[1][j];
 
             /* adjust for curvature */
@@ -524,7 +525,7 @@ AMI_STREAM<AEvent> *init_event_list(char *rastName, Viewpoint *vp,
             /*don't insert the nodata cell events */
             if (is_nodata(hd, e.elev[1])) {
                 /* record this cell as being NODATA. ; this is necessary so
-                   that we can distingush invisible events, from nodata
+                   that we can distinguish invisible events, from nodata
                    events in the output */
                 VisCell visCell = {i, j, hd->nodata_value};
                 add_result_to_io_visibilitygrid(visgrid, &visCell);
@@ -971,18 +972,19 @@ void save_io_vis_and_elev_to_GRASS(IOVisibilityGrid *visgrid, char *elevfname,
         for (j = 0; j < Rast_window_cols(); j++) {
 
             /* read the current elevation value */
+            // int isNull = 0;
 
             switch (elev_data_type) {
             case CELL_TYPE:
-                Rast_is_c_null_value(&((CELL *)elevrast)[j]);
+                // isNull = Rast_is_c_null_value(&((CELL *)elevrast)[j]);
                 elev = (double)(((CELL *)elevrast)[j]);
                 break;
             case FCELL_TYPE:
-                Rast_is_f_null_value(&((FCELL *)elevrast)[j]);
+                // isNull = Rast_is_f_null_value(&((FCELL *)elevrast)[j]);
                 elev = (double)(((FCELL *)elevrast)[j]);
                 break;
             case DCELL_TYPE:
-                Rast_is_d_null_value(&((DCELL *)elevrast)[j]);
+                // isNull = Rast_is_d_null_value(&((DCELL *)elevrast)[j]);
                 elev = (double)(((DCELL *)elevrast)[j]);
                 break;
             }

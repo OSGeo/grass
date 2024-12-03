@@ -53,14 +53,13 @@ for details.
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 """
 
-
 # import similar to what is in visvis
 try:
     import PIL
     from PIL import Image
 
     try:
-        import PIL.ImageOps as ImageOps
+        from PIL import ImageOps
     except ImportError:
         ImageOps = None
 except ImportError:

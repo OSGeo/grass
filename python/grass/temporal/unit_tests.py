@@ -1,5 +1,5 @@
 """
-Depricazed unittests
+Deprecated unittests
 
 (C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -8,17 +8,20 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 
 import copy
+from ctypes import byref
 from datetime import datetime
-import grass.script.core as core
+
+from grass.lib import gis, rtree, vector
+from grass.script import core
+
 from .abstract_dataset import (
-    AbstractDatasetComparisonKeyStartTime,
     AbstractDatasetComparisonKeyEndTime,
+    AbstractDatasetComparisonKeyStartTime,
 )
 from .core import init
-from .datetime_math import increment_datetime_by_string, compute_datetime_delta
+from .datetime_math import compute_datetime_delta, increment_datetime_by_string
 from .space_time_datasets import RasterDataset
 from .spatial_extent import SpatialExtent
 from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
@@ -27,19 +30,13 @@ from .temporal_granularity import (
     compute_absolute_time_granularity,
 )
 
-import grass.lib.vector as vector
-import grass.lib.rtree as rtree
-import grass.lib.gis as gis
-from ctypes import byref
-
 # Uncomment this to detect the error
 core.set_raise_on_error(True)
 
 ###############################################################################
 
 
-def test_increment_datetime_by_string():
-
+def test_increment_datetime_by_string() -> None:
     # First test
     print("# Test 1")
     dt = datetime(2001, 9, 1, 0, 0, 0)
@@ -108,8 +105,7 @@ def test_increment_datetime_by_string():
 ###############################################################################
 
 
-def test_adjust_datetime_to_granularity():
-
+def test_adjust_datetime_to_granularity() -> None:
     # First test
     print("Test 1")
     dt = datetime(2001, 8, 8, 12, 30, 30)
@@ -227,8 +223,7 @@ def test_adjust_datetime_to_granularity():
 ###############################################################################
 
 
-def test_compute_datetime_delta():
-
+def test_compute_datetime_delta() -> None:
     print("Test 1")
     start = datetime(2001, 1, 1, 0, 0, 0)
     end = datetime(2001, 1, 1, 0, 0, 0)
@@ -571,8 +566,7 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
 
-def test_compute_absolute_time_granularity():
-
+def test_compute_absolute_time_granularity() -> None:
     # First we test intervals
     print("Test 1")
     maps = []
@@ -892,7 +886,7 @@ def test_compute_absolute_time_granularity():
 ###############################################################################
 
 
-def test_spatial_extent_intersection():
+def test_spatial_extent_intersection() -> None:
     # Generate the extents
 
     A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
@@ -976,7 +970,7 @@ def test_spatial_extent_intersection():
 ###############################################################################
 
 
-def test_spatial_relations():
+def test_spatial_relations() -> None:
     # Generate the extents
 
     A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
@@ -1358,7 +1352,7 @@ def test_spatial_relations():
 ###############################################################################
 
 
-def test_temporal_topology_builder():
+def test_temporal_topology_builder() -> None:
     map_listA = []
 
     _map = RasterDataset(ident="1@a")
@@ -1471,8 +1465,7 @@ def test_temporal_topology_builder():
 ###############################################################################
 
 
-def test_map_list_sorting():
-
+def test_map_list_sorting() -> None:
     map_list = []
 
     _map = RasterDataset(ident="1@a")
@@ -1525,13 +1518,12 @@ def test_map_list_sorting():
 ###############################################################################
 
 
-def test_1d_rtree():
+def test_1d_rtree() -> None:
     """Testing the rtree ctypes wrapper"""
 
     tree = rtree.RTreeCreateTree(-1, 0, 1)
 
     for i in range(10):
-
         rect = rtree.RTreeAllocRect(tree)
         rtree.RTreeSetRect1D(rect, tree, float(i - 2), float(i + 2))
         rtree.RTreeInsertRect(rect, i + 1, tree)
@@ -1556,13 +1548,12 @@ def test_1d_rtree():
 ###############################################################################
 
 
-def test_2d_rtree():
+def test_2d_rtree() -> None:
     """Testing the rtree ctypes wrapper"""
 
     tree = rtree.RTreeCreateTree(-1, 0, 2)
 
     for i in range(10):
-
         rect = rtree.RTreeAllocRect(tree)
 
         rtree.RTreeSetRect2D(
@@ -1589,13 +1580,12 @@ def test_2d_rtree():
 ###############################################################################
 
 
-def test_3d_rtree():
+def test_3d_rtree() -> None:
     """Testing the rtree ctypes wrapper"""
 
     tree = rtree.RTreeCreateTree(-1, 0, 3)
 
     for i in range(10):
-
         rect = rtree.RTreeAllocRect(tree)
         rtree.RTreeSetRect3D(
             rect,
@@ -1632,13 +1622,12 @@ def test_3d_rtree():
 ###############################################################################
 
 
-def test_4d_rtree():
+def test_4d_rtree() -> None:
     """Testing the rtree ctypes wrapper"""
 
     tree = rtree.RTreeCreateTree(-1, 0, 4)
 
     for i in range(10):
-
         # Allocate the boundary
         rect = rtree.RTreeAllocRect(tree)
         rtree.RTreeSetRect4D(

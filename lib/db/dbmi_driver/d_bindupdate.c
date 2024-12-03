@@ -22,7 +22,7 @@
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_d_bind_update()
+int db_d_bind_update(void)
 {
     dbToken token;
     dbCursor *cursor;

@@ -76,7 +76,7 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-#define DATA(map, r, c) (map)[(r)*ncols + (c)]
+#define DATA(map, r, c) (map)[(r) * ncols + (c)]
 
 /*measurements of the 13 fuel models, input of Rothermel equation (1972) */
 float WO[4][14] = {{0, 0.034, 0.092, 0.138, 0.230, 0.046, 0.069, 0.052, 0.069,
@@ -98,7 +98,7 @@ float SIGMA[4][14] = {
     {0, 0, 30, 0, 30, 0, 30, 30, 30, 30, 30, 30, 30, 30},
     {0, 0, 1500, 0, 1500, 1500, 0, 1500, 0, 0, 1500, 0, 0, 0}};
 
-/*fuel particale surface-area-to-volume ratio, 1/ft. */
+/*fuel particle surface-area-to-volume ratio, 1/ft. */
 float MX[] = {
     0,    0.12, 0.15, 0.25, 0.20, 0.20, 0.25, 0.40,
     0.30, 0.25, 0.25, 0.15, 0.20, 0.25}; /*moisture content of extinction */

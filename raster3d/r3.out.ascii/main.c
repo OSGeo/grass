@@ -137,7 +137,7 @@ void writeHeaderString(FILE *fp, char *valueString, double value)
 {
     static char format[100];
 
-    G_snprintf(format, 100, "%s %%lf\n", valueString);
+    snprintf(format, 100, "%s %%lf\n", valueString);
     if (fprintf(fp, format, value) < 0)
         fatalError("writeHeaderString: header value invalid");
 }
@@ -147,7 +147,7 @@ void writeHeaderString2(FILE *fp, char *valueString, int value)
 {
     static char format[100];
 
-    G_snprintf(format, 100, "%s %%d\n", valueString);
+    snprintf(format, 100, "%s %%d\n", valueString);
     if (fprintf(fp, format, value) < 0)
         fatalError("writeHeaderString: header value invalid");
 }
@@ -157,7 +157,7 @@ void writeHeaderString3(FILE *fp, char *valueString, const char *value)
 {
     static char format[100];
 
-    G_snprintf(format, 100, "%s %%s\n", valueString);
+    snprintf(format, 100, "%s %%s\n", valueString);
     if (fprintf(fp, format, value) < 0)
         fatalError("writeHeaderString: header value invalid");
 }
@@ -254,7 +254,7 @@ void G3dToascii(FILE *fp, RASTER3D_Region region, int decim)
                 if (param.depth->answer)
                     depth = depths - z - 1;
 
-                /* Get the data and resample if nessessary */
+                /* Get the data and resample if necessary */
 
                 if (typeIntern == FCELL_TYPE) {
 

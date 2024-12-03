@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     int i = 0, polytype = 0;
     char *null_value;
     int out_type;
-    int fd; /*Normale maps ;) */
+    int fd; /*Normal maps ;) */
     int rgbfd[3];
     int vectfd[3];
     int celltype[3] = {0, 0, 0};
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 
     /*Correct the coordinates, so the precision of VTK is not hurt :( */
     if (param.coorcorr->answer) {
-        /*Get the default region for coordiante correction */
+        /*Get the default region for coordinate correction */
         G_get_default_window(&default_region);
 
         /*Use the center of the current region as extent */

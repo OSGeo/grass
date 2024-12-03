@@ -2,7 +2,7 @@
 
 Author: [GRASS PSC](https://trac.osgeo.org/grass/wiki/PSC)
 
-Contact: [grass-psc AT lists.osgeo.org](http://lists.osgeo.org/mailman/listinfo/grass-psc)
+Contact: [grass-psc AT lists.osgeo.org](https://lists.osgeo.org/mailman/listinfo/grass-psc)
 
 Status: Adopted (6 April 2007)
 
@@ -96,7 +96,7 @@ exists for the purpose of PSC discussions. When a
 decision is required of the PSC, it will be presented by any member to the
 mailing list in the form of a proposal. A decision will then be achieved
 by discussion of the proposal on the mailing list until a consensus is
-reached. Voting on issues is also permissable and may be used as a means
+reached. Voting on issues is also permissible and may be used as a means
 to reach a consensus or, only in case of extreme cases of disagreement, to
 force a decision. Any member may call a vote on any proposal. The voting
 procedure is outlined in a separate document:

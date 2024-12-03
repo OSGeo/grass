@@ -37,9 +37,9 @@ public: /* struct, so members public */
 public:
     plateauType(dimension_type gi, dimension_type gj, direction_type gdir,
                 cclabel_type gcclabel = LABEL_UNDEF)
-        : ijBaseType(gi, gj), cclabel(gcclabel), dir(gdir), valid(true){};
+        : ijBaseType(gi, gj), cclabel(gcclabel), dir(gdir), valid(true) {};
 
-    plateauType() : valid(false){};
+    plateauType() : valid(false) {};
 
     ~plateauType() {}
 
@@ -97,7 +97,7 @@ public:
 
     plateauStats(cclabel_type l)
         : iMin(dimension_type_max), iMax(0), jMin(dimension_type_max), jMax(0),
-          size(0), label(l), hasSpill(false){};
+          size(0), label(l), hasSpill(false) {};
 
     void add(plateauType &pt)
     {

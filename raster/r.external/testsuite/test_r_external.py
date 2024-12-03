@@ -2,6 +2,7 @@
 
 @author Markus Neteler
 """
+
 from grass.gunittest.case import TestCase
 
 
@@ -22,7 +23,6 @@ class TestGdalImport(TestCase):
         )
 
     def test_1(self):
-
         self.assertModule(
             "r.external",
             "Register GTiff Format",
@@ -51,7 +51,6 @@ class TestGdalImport(TestCase):
         )
 
     def test_2(self):
-
         self.assertModule(
             "r.external",
             "Register GTiff Format",
@@ -80,7 +79,6 @@ class TestGdalImport(TestCase):
         )
 
     def test_3(self):
-
         self.assertModule(
             "r.external",
             "Register AAIGrid Format",
@@ -109,7 +107,6 @@ class TestGdalImport(TestCase):
         )
 
     def test_4(self):
-
         self.assertModule(
             "r.external",
             "Register netCDF Format",
@@ -138,7 +135,6 @@ class TestGdalImport(TestCase):
         )
 
     def test_netCDF_3d_1(self):
-
         self.assertModule(
             "r.external",
             "Register netCDF Format",
@@ -177,7 +173,6 @@ class TestGdalImport(TestCase):
         )
 
     def test_netCDF_3d_2(self):
-
         self.assertModule(
             "r.external",
             "Register netCDF Format",
@@ -216,7 +211,6 @@ class TestGdalImport(TestCase):
         )
 
     def test_netCDF_3d_3(self):
-
         self.assertModule(
             "r.external",
             "Register netCDF Format",

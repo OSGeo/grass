@@ -24,7 +24,7 @@ def docstring_property(class_doc):
     return wrapper
 
 
-class DocstringProperty(object):
+class DocstringProperty:
     """Property for the `__doc__` attribute.
 
     Different than `property` in the following two ways:
@@ -44,8 +44,7 @@ class DocstringProperty(object):
     def __get__(self, obj, type=None):
         if obj is None:
             return self.class_doc
-        else:
-            return self.fget(obj)
+        return self.fget(obj)
 
     def __set__(self, obj, value):
         raise AttributeError("can't set attribute")

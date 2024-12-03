@@ -3,12 +3,12 @@ import ctypes
 import numpy as np
 
 
-_CELL = ("int", "int0", "int8", "int16", "int32", "int64")
-CELL = tuple([getattr(np, attr) for attr in _CELL if hasattr(np, attr)])
+_CELL = ("int", "intp", "int8", "int16", "int32", "int64")
+CELL = tuple(getattr(np, attr) for attr in _CELL if hasattr(np, attr))
 _FCELL = "float", "float16", "float32"
-FCELL = tuple([getattr(np, attr) for attr in _FCELL if hasattr(np, attr)])
+FCELL = tuple(getattr(np, attr) for attr in _FCELL if hasattr(np, attr))
 _DCELL = "float64", "float128"
-DCELL = tuple([getattr(np, attr) for attr in _DCELL if hasattr(np, attr)])
+DCELL = tuple(getattr(np, attr) for attr in _DCELL if hasattr(np, attr))
 
 
 class Buffer(np.ndarray):
@@ -20,13 +20,12 @@ class Buffer(np.ndarray):
     def mtype(self):
         if self.dtype in CELL:
             return "CELL"
-        elif self.dtype in FCELL:
+        if self.dtype in FCELL:
             return "FCELL"
-        elif self.dtype in DCELL:
+        if self.dtype in DCELL:
             return DCELL
-        else:
-            err = "Raster type: %r not supported by GRASS."
-            raise TypeError(err % self.dtype)
+        err = "Raster type: %r not supported by GRASS."
+        raise TypeError(err % self.dtype)
 
     def __new__(
         cls, shape, mtype="FCELL", buffer=None, offset=0, strides=None, order=None
@@ -48,7 +47,7 @@ class Buffer(np.ndarray):
         """See:
         http://docs.scipy.org/doc/numpy/user/
         basics.subclassing.html#array-wrap-for-ufuncs"""
-        if out_arr.dtype == np.bool:
+        if out_arr.dtype == bool:
             # there is not support for boolean maps, so convert into integer
             out_arr = out_arr.astype(np.int32)
         out_arr.p = out_arr.ctypes.data_as(out_arr.pointer_type)

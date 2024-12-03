@@ -42,7 +42,7 @@ struct line_pnts *Vect__new_line_struct(void);
 
    \return pointer to line_pnts
  */
-struct line_pnts *Vect_new_line_struct()
+struct line_pnts *Vect_new_line_struct(void)
 {
     struct line_pnts *p;
 
@@ -52,7 +52,7 @@ struct line_pnts *Vect_new_line_struct()
     return p;
 }
 
-struct line_pnts *Vect__new_line_struct()
+struct line_pnts *Vect__new_line_struct(void)
 {
     struct line_pnts *p;
 
@@ -171,7 +171,7 @@ int Vect_append_point(struct line_pnts *Points, double x, double y, double z)
    \param x,y,z point coordinates
 
    \return number of points
-   \return -1 on error (alocation)
+   \return -1 on error (allocation)
  */
 int Vect_line_insert_point(struct line_pnts *Points, int index, double x,
                            double y, double z)
@@ -926,7 +926,7 @@ void Vect_line_reverse(struct line_pnts *Points)
    \return -1 no category
    \return category number (>=0)
  */
-int Vect_get_line_cat(const struct Map_info *Map, int line, int field)
+int Vect_get_line_cat(struct Map_info *Map, int line, int field)
 {
 
     static struct line_cats *cats = NULL;

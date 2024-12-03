@@ -56,7 +56,7 @@ static void find_nearest_voxels(RASTER3D_Region *region, const double north,
    weighted by the relative distance of a point
    to the center of the nearest voxels.
 
-   \param array_values pointer to values of 8 (neigboring) voxels
+   \param array_values pointer to values of 8 (neighboring) voxels
    \param x,y,z relative coordinates (0 - 1)
    \param[out] interpolated pointer to the array (of size 3) of interpolated
    values

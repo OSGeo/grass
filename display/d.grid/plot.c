@@ -563,7 +563,7 @@ int plot_geogrid(double size, struct pj_info *info_in, struct pj_info *info_out,
 }
 
 /******************************************************
- * initialze projection stuff and return proj structures
+ * initialize projection stuff and return proj structures
  ********************************************************/
 void init_proj(struct pj_info *info_in, struct pj_info *info_out,
                struct pj_info *info_trans, int wgs84)

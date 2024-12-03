@@ -518,12 +518,12 @@ void assignFinalDirections(AMI_STREAM<plateauStats> *statstr,
             continue;
         }
     }
-};
+}
 
 /* ********************************************************************** */
 class directionElevationMerger {
 public:
-    waterGridType operator()(elevation_type el, direction_type dir,
+    waterGridType operator()(elevation_type el, direction_type dir UNUSED,
                              const waterType &p)
     {
         /* check that no (boundary) nodata values got in here */

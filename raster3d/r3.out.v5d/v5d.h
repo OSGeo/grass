@@ -43,8 +43,8 @@
  * Define our own 1 and 2-byte data types.  We use these names to avoid
  * collisions with types defined by the OS include files.
  */
-typedef unsigned char V5Dubyte;   /* Must be 1 byte, except for cray */
-typedef unsigned short V5Dushort; /* Must be 2 byte, except for cray */
+typedef unsigned char V5Dubyte;   /* Must be 1 byte */
+typedef unsigned short V5Dushort; /* Must be 2 byte */
 
 #define MISSING       1.0e35
 #define IS_MISSING(X) ((X) >= 1.0e30)
@@ -159,7 +159,7 @@ typedef struct {
        IF Projection==0 THEN
        -- Rectilinear grid, generic units
        ProjArgs[0] = North bound, Y coordinate of grid row 0
-       ProjArgs[1] = West bound, X coordiante of grid column 0
+       ProjArgs[1] = West bound, X coordinate of grid column 0
        ProjArgs[2] = Increment between rows
        ProjArgs[3] = Increment between columns
        NOTES: X coordinates increase to the right, Y increase upward.

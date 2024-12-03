@@ -86,8 +86,8 @@ detectPlateaus::~detectPlateaus()
    structs. */
 plateauType *detectPlateaus::getPlateauForward(dimension_type i,
                                                dimension_type j,
-                                               dimension_type nr,
-                                               dimension_type nc)
+                                               dimension_type nr UNUSED,
+                                               dimension_type nc UNUSED)
 {
     bool ok;
     static plateauType ptarr[3]; /* return value */
@@ -247,7 +247,7 @@ void detectPlateaus::processWindow(dimension_type row, dimension_type col,
         crtlabel = labelFactory::getNewLabel();
     }
 
-    /* check boundaries that are also part of plateau (but didnt know it) */
+    /* check boundaries that are also part of plateau (but didn't know it) */
     for (int i = 0; i < 4; i++) {
         direction_type ndir(0);
         if (win.get(i) != win.get())
@@ -311,7 +311,7 @@ class duplicateFixer {
     ccforest<cclabel_type> *colTree;
 
 public:
-    duplicateFixer(ccforest<cclabel_type> *p) : colTree(p){};
+    duplicateFixer(ccforest<cclabel_type> *p) : colTree(p) {};
     int compare(const plateauType &a, const plateauType &b)
     {
         int c = ijCmpPlateauType::compare(a, b);

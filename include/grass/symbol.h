@@ -62,7 +62,7 @@ typedef struct {
                       this scale */
     double yscale; /* scale in x dimension */
     double xscale; /* scale in y dimension */
-    int count, alloc; /* numer of parts */
+    int count, alloc; /* number of parts */
     SYMBPART **part;  /* objects ( parts ) */
 } SYMBOL;
 

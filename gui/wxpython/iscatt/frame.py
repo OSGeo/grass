@@ -18,10 +18,7 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 
-from __future__ import print_function
-
 import os
-import six
 
 import wx
 import wx.lib.scrolledpanel as scrolled
@@ -42,12 +39,11 @@ from iclass.dialogs import ContrastColor
 try:
     from agw import aui
 except ImportError:
-    import wx.lib.agw.aui as aui
+    from wx.lib.agw import aui
 
 
 class IClassIScattPanel(wx.Panel, ManageBusyCursorMixin):
     def __init__(self, parent, giface, iclass_mapwin=None, id=wx.ID_ANY):
-
         # wx.SplitterWindow.__init__(self, parent = parent, id = id,
         #                           style = wx.SP_LIVE_UPDATE)
         wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY)
@@ -205,7 +201,6 @@ class MapDispIScattPanel(IClassIScattPanel):
 
 class ScatterPlotsPanel(scrolled.ScrolledPanel):
     def __init__(self, parent, scatt_mgr, id=wx.ID_ANY):
-
         scrolled.ScrolledPanel.__init__(self, parent)
         self.SetupScrolling(scroll_x=False, scroll_y=True, scrollToTop=False)
 
@@ -226,9 +221,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
 
         self.Bind(aui.EVT_AUI_PANE_CLOSE, self.OnPlotPaneClosed)
 
-        dlgSize = (-1, 400)
-        # self.SetBestSize(dlgSize)
-        # self.SetInitialSize(dlgSize)
         self.SetAutoLayout(1)
         # fix goutput's pane size (required for Mac OSX)
         # if self.gwindow:
@@ -246,16 +238,15 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         self.scatt_mgr.cursorPlotMove.connect(self.CursorPlotMove)
 
     def SetBusy(self, busy):
-        for scatt in six.itervalues(self.scatts):
+        for scatt in self.scatts.values():
             scatt.UpdateCur(busy)
 
     def CursorPlotMove(self, x, y, scatt_id):
-
         try:
             x = int(round(x))
             y = int(round(y))
             coords = True
-        except:
+        except TypeError:
             coords = False
 
         pane = self._getPane(scatt_id)
@@ -272,7 +263,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         return self._mgr.GetPane(name)
 
     def ScatterPlotClosed(self, scatt_id):
-
         scatt_i = self.scatt_id_scatt_i[scatt_id]
 
         name = self._getScatterPlotName(scatt_i)
@@ -282,6 +272,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         del self.scatts[scatt_id]
 
         if pane.IsOk():
+            pane.DestroyOnClose()
             self._mgr.ClosePane(pane)
         self._mgr.Update()
 
@@ -312,7 +303,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         # wx.CallAfter(self.Layout)
 
     def _doLayout(self):
-
         mainsizer = wx.BoxSizer(wx.VERTICAL)
         mainsizer.Add(self.mainPanel, proportion=1, flag=wx.EXPAND)
         self.SetSizer(mainsizer)
@@ -337,8 +327,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         return name
 
     def _getScatterPlotName(self, i):
-        name = "scatter plot %d" % i
-        return name
+        return "scatter plot %d" % i
 
     def NewScatterPlot(self, scatt_id, transpose):
         # TODO needs to be resolved (should be in this class)
@@ -380,7 +369,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         return scatt
 
     def _creteCaption(self, scatt_id):
-
         transpose = self.transpose[scatt_id]
         bands = self.scatt_mgr.GetBands()
 
@@ -403,7 +391,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
 
 class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __init__(self, parent, cats_mgr, sel_cats_in_iscatt, id=wx.ID_ANY):
-
         ListCtrl.__init__(
             self,
             parent,
@@ -471,7 +458,6 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         # self.SetColumnWidth(1, 100)
 
     def AddCategory(self):
-
         self.cats_mgr.addedCategory.disconnect(self.Update)
         cat_id = self.cats_mgr.AddCategory()
         self.cats_mgr.addedCategory.connect(self.Update)
@@ -515,9 +501,8 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
             index = self.GetNextItem(lastFound, wx.LIST_NEXT_ALL, state)
             if index == -1:
                 break
-            else:
-                lastFound = index
-                indices.append(index)
+            lastFound = index
+            indices.append(index)
         return indices
 
     def DeselectAll(self):
@@ -553,10 +538,10 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
             text_c = wx.SystemSettings.GetColour(wx.SYS_COLOUR_INACTIVECAPTIONTEXT)
 
         # if it is in scope of the method, gui falls, using self solved it
-        self.l = wx.ListItemAttr()
-        self.l.SetBackgroundColour(back_c)
-        self.l.SetTextColour(text_c)
-        return self.l
+        self.item_attr = wx.ItemAttr()
+        self.item_attr.SetBackgroundColour(back_c)
+        self.item_attr.SetTextColour(text_c)
+        return self.item_attr
 
     def OnCategoryRightUp(self, event):
         """Show context menu on right click"""
@@ -582,11 +567,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         item = menu.Append(wx.ID_ANY, _("Change opacity level"))
         self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, item)
 
-        if showed:
-            text = _("Hide")
-        else:
-            text = _("Show")
-
+        text = _("Hide") if showed else _("Show")
         item = menu.Append(wx.ID_ANY, text)
         self.Bind(
             wx.EVT_MENU,
@@ -692,7 +673,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         name = cat_attrs["name"]
 
         dlg = SetOpacityDialog(
-            self, opacity=value, title=_("Change opacity of class <%s>" % name)
+            self, opacity=value, title=_("Change opacity of class <%s>") % name
         )
 
         dlg.applyOpacity.connect(

@@ -164,7 +164,7 @@ size_t dig_fwrite(const void *ptr, size_t size, size_t nmemb,
 }
 
 /*!
-   \brief Initialize gvfile strcuture
+   \brief Initialize gvfile structure
 
    \param[in,out] file pointer to gvfile structure
  */

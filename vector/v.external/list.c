@@ -64,7 +64,8 @@ char **format_list(int *count, size_t *len)
     }
 
     /* order formats by name */
-    qsort(list, *count, sizeof(char *), cmp);
+    if (list)
+        qsort(list, *count, sizeof(char *), cmp);
 #endif
 #if defined HAVE_POSTGRES && !defined HAVE_OGR
     list = G_realloc(list, ((*count) + 1) * sizeof(char *));
@@ -293,9 +294,6 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
     for (i = 0; i < nlayers; i++) {
         Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
         Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-#if GDAL_VERSION_NUM < 1110000
-        Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
-#endif
         layer_name = (char *)OGR_FD_GetName(Ogr_featuredefn);
 
         if (fd) {
@@ -303,9 +301,7 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
                 int proj_same, igeom;
                 OGRSpatialReferenceH Ogr_projection;
 
-#if GDAL_VERSION_NUM >= 1110000
                 OGRGeomFieldDefnH Ogr_geomdefn;
-#endif
                 /* projection check */
                 Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);
                 proj_same = 0;
@@ -327,7 +323,6 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
                         proj_same = 0;
                 }
                 G_suppress_warnings(FALSE);
-#if GDAL_VERSION_NUM >= 1110000
                 for (igeom = 0;
                      igeom < OGR_FD_GetGeomFieldCount(Ogr_featuredefn);
                      igeom++) {
@@ -343,11 +338,6 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
                             feature_type(OGRGeometryTypeToName(Ogr_geom_type)),
                             proj_same, OGR_GFld_GetNameRef(Ogr_geomdefn));
                 }
-#else
-                fprintf(fd, "%s,%s,%d,\n", layer_name,
-                        feature_type(OGRGeometryTypeToName(Ogr_geom_type)),
-                        proj_same);
-#endif
             }
             else {
                 fprintf(fd, "%s\n", layer_name);

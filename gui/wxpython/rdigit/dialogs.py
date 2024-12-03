@@ -1,7 +1,7 @@
 """
 @package rdigit.dialogs
 
-@brief rdigit dialog for craeting new map.
+@brief rdigit dialog for creating new map.
 
 Classes:
  - rdigit:NewRasterDialog
@@ -114,12 +114,11 @@ class NewRasterDialog(wx.Dialog):
                     caption=_("Overwrite?"),
                     style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
                 )
-                if not dlgOverwrite.ShowModal() == wx.ID_YES:
+                if dlgOverwrite.ShowModal() != wx.ID_YES:
                     dlgOverwrite.Destroy()
                     return
-                else:
-                    dlgOverwrite.Destroy()
-                    self.EndModal(wx.ID_OK)
+                dlgOverwrite.Destroy()
+                self.EndModal(wx.ID_OK)
             else:
                 self.EndModal(wx.ID_OK)
 

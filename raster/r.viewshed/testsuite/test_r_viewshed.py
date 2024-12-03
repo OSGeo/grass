@@ -1,10 +1,8 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.gunittest.gmodules import call_module
 
 
 class TestViewshed(TestCase):
-
     viewshed = "test_viewshed_from_elevation"
 
     @classmethod
@@ -16,10 +14,10 @@ class TestViewshed(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
 
-    def tearDown(cls):
+    def tearDown(self):
         """Remove viewshed map after each test method"""
-        # TODO: eventually, removing maps should be handled through testing framework fucntions
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.viewshed)
+        # TODO: eventually, removing maps should be handled through testing framework functions
+        self.runModule("g.remove", flags="f", type="raster", name=self.viewshed)
 
     def test_limits(self):
         """Test if results is in expected limits"""
@@ -73,7 +71,7 @@ class TestViewshed(TestCase):
     def test_limits_extreme_value(self):
         """Test extremely high observer elevation
 
-        Unfortunatelly, this takes very long time to compute
+        Unfortunately, this takes very long time to compute
         (something like ten times more).
         """
         obs_elev = "500000"

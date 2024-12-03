@@ -32,7 +32,7 @@
 int Vect_legal_filename(const char *s)
 {
     /* full list of SQL keywords available at
-       http://www.postgresql.org/docs/8.2/static/sql-keywords-appendix.html
+       https://www.postgresql.org/docs/8.2/static/sql-keywords-appendix.html
      */
     static const char *keywords[] = {"and", "or", "not", NULL};
     char buf[GNAME_MAX];

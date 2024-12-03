@@ -222,11 +222,11 @@ int line2line(struct line_pnts *FPoints, int ftype, struct line_pnts *TPoints,
  * return 1 inside area
  * return 2 inside isle of area
  * return 3 outside area */
-int line2area(const struct Map_info *To, struct line_pnts *Points, int type,
-              int area, const struct bound_box *abox, double *fx, double *fy,
-              double *fz, double *falong, double *fangle, double *tx,
-              double *ty, double *tz, double *talong, double *tangle,
-              double *dist, int with_z)
+int line2area(struct Map_info *To, struct line_pnts *Points, int type, int area,
+              const struct bound_box *abox, double *fx, double *fy, double *fz,
+              double *falong, double *fangle, double *tx, double *ty,
+              double *tz, double *talong, double *tangle, double *dist,
+              int with_z)
 {
     int i, j;
     double tmp_dist;

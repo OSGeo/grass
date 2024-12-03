@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
     double zrange_min, zrange_max, vrange_min, vrange_max, d_tmp;
     char *fs; /* field delim */
     off_t filesize;
-    int linesize;
+    int linesize = 0;
     unsigned long estimated_lines, line;
     int from_stdin;
     int can_seek;
@@ -109,10 +109,10 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE rtype;
     struct History history;
     char title[64];
-    void *n_array, *min_array, *max_array, *sum_array, *sumsq_array,
+    char *n_array, *min_array, *max_array, *sum_array, *sumsq_array,
         *index_array;
     void *raster_row, *ptr;
-    struct Cell_head region;
+    struct Cell_head region = {0};
     int rows, last_rows, row0, cols; /* scan box size */
     int row, col;                    /* counters */
 
@@ -726,7 +726,7 @@ int main(int argc, char *argv[])
             }
 
             G_chop(buff); /* remove leading and trailing whitespace from the
-                             string.  unneded?? */
+                             string.  unneeded?? */
             tokens = G_tokenize(buff, fs);
             ntokens = G_number_of_tokens(tokens);
 
@@ -1213,7 +1213,14 @@ int scan_bounds(FILE *fp, int xcol, int ycol, int zcol, int vcol, char *fs,
     unsigned long line;
     int first, max_col;
     char buff[BUFFSIZE];
-    double min_x, max_x, min_y, max_y, min_z, max_z, min_v, max_v;
+    double min_x = 0.0;
+    double max_x = 0.0;
+    double min_y = 0.0;
+    double max_y = 0.0;
+    double min_z = 0.0;
+    double max_z = 0.0;
+    double min_v = 0.0;
+    double max_v = 0.0;
     char **tokens;
     int ntokens; /* number of tokens */
     double x, y, z, v;
@@ -1235,7 +1242,7 @@ int scan_bounds(FILE *fp, int xcol, int ycol, int zcol, int vcol, char *fs,
             continue; /* line is a comment or blank */
         }
 
-        G_chop(buff); /* remove leading and trailing whitespace. unneded?? */
+        G_chop(buff); /* remove leading and trailing whitespace. unneeded?? */
         tokens = G_tokenize(buff, fs);
         ntokens = G_number_of_tokens(tokens);
 

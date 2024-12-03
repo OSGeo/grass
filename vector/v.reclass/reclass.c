@@ -23,7 +23,7 @@
 #include <grass/vector.h>
 
 int reclass(struct Map_info *In, struct Map_info *Out, int type, int field,
-            dbCatValArray *cvarr, int dissolve)
+            dbCatValArray *cvarr, int dissolve UNUSED)
 {
     int i, nlines, line, ltype, old_cat, new_cat;
     int nocat = 0, rclelem = 0, negative = 0;
@@ -79,6 +79,9 @@ int reclass(struct Map_info *In, struct Map_info *Out, int type, int field,
         G_warning("For %d elements requested negative category (ignored, no "
                   "category in output)",
                   negative);
+    Vect_destroy_cats_struct(Cats);
+    Vect_destroy_cats_struct(NewCats);
+    Vect_destroy_line_struct(Points);
 
     return (rclelem);
 }

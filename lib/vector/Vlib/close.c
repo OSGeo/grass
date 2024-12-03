@@ -27,13 +27,13 @@
 
 #include "local_proto.h"
 
-static int clo_dummy(struct Map_info *map)
+static int clo_dummy(struct Map_info *map UNUSED)
 {
     return -1;
 }
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format(struct Map_info *map)
+static int format(struct Map_info *map UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
@@ -59,7 +59,7 @@ static int (*Close_array[][2])(struct Map_info *) = {{clo_dummy, V1_close_nat}
 #endif
 };
 
-static void unlink_file(const struct Map_info *, const char *);
+static void unlink_file(struct Map_info *, const char *);
 
 /*!
    \brief Close vector map
@@ -98,7 +98,7 @@ int Vect_close(struct Map_info *Map)
         Vect_copy_map_dblinks(Map, &Out, TRUE);
         /* afterwords, dblinks must be removed from temporary map
            otherwise when deleting temporary map also original
-           attribute tables would be deteled */
+           attribute tables would be deleted */
         Vect_map_del_dblink(Map, -1); /* delete db links for all layers */
 
         if (0 != Vect_copy_map_lines_field(
@@ -317,7 +317,7 @@ void Vect__free_offset(struct Format_info_offset *offset)
     G_zero(offset, sizeof(struct Format_info_offset));
 }
 
-void unlink_file(const struct Map_info *Map, const char *name)
+void unlink_file(struct Map_info *Map, const char *name)
 {
     char path[GPATH_MAX];
 
