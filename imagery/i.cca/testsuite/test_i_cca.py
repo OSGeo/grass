@@ -26,14 +26,14 @@ class OutputMatchTest(TestCase):
     def setUpClass(cls):
         """Ensures expected computational region and generated data"""
         cls.use_temp_region()
-        cls.runModule("g.region", raster="lsat7_2000_20")
+        cls.runModule("g.region", raster="lsat7_2002_20")
         cls.group_name = tempname(10)
         cls.subgroup_name = "vis"
         cls.runModule(
             "i.group",
             group=cls.group_name,
             subgroup=cls.subgroup_name,
-            input="lsat7_2000_20,lsat7_2000_30,lsat7_2000_40",
+            input="lsat7_2002_20,lsat7_2002_30,lsat7_2002_40",
         )
         cls.rasters = []
         cls.signatures = []
