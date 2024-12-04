@@ -120,6 +120,70 @@ class RegionManagerForInteractiveMap:
         self._bbox[1][1] = max(self._bbox[1][1], east)
 
 
+class RegionManagerForDirectRenderer:
+
+    def __init__(self, use_region, saved_region, src_env):
+        self._use_region = use_region
+        self._saved_region = saved_region
+        self._src_env = src_env
+        # Store bounding box
+        self._bbox = [[90, 180], [-90, -180]]
+        self._resolution = None
+        self._origin = None
+
+        if self._use_region:
+            self._set_bbox_and_resolution(self._src_env)
+
+        if self._saved_region:
+            self._src_env["GRASS_REGION"] = gs.region_env(
+                region=self._saved_region, env=self._src_env
+            )
+            self._set_bbox_and_resolution(self._src_env)
+
+    @property
+    def bbox(self):
+        return self._bbox
+
+    @property
+    def resolution(self):
+        return self._resolution
+
+    @property
+    def origin(self):
+        return self._origin
+
+    def set_region_from_raster(self, raster):
+        if not (self._use_region or self._saved_region):
+            self._src_env["GRASS_REGION"] = gs.region_env(
+                raster=raster, env=self._src_env
+            )
+        self._set_bbox_and_resolution(self._src_env)
+
+    def set_bbox_vector(self, vector):
+        if not (self._saved_region or self._use_region):
+            env = self._src_env.copy()
+            env["GRASS_REGION"] = gs.region_env(vector=vector, env=env)
+            self._set_bbox_and_resolution(env)
+
+    def _set_bbox_and_resolution(self, env):
+        bbox = gs.parse_command("g.region", flags="bgp", env=env)
+        south = float(bbox["ll_s"])
+        west = float(bbox["ll_w"])
+        north = float(bbox["ll_n"])
+        east = float(bbox["ll_e"])
+        self._bbox[0][0] = min(self._bbox[0][0], south)
+        self._bbox[0][1] = min(self._bbox[0][1], west)
+        self._bbox[1][0] = max(self._bbox[1][0], north)
+        self._bbox[1][1] = max(self._bbox[1][1], east)
+
+        nsres = float(bbox["nsres"])
+        ewres = float(bbox["ewres"])
+        self._resolution = [ewres, nsres]
+
+        # Set origin (west, north)
+        self._origin = [west, north]
+
+
 class RegionManagerFor2D:
     """Region manager for 2D displays (gets region from display commands)"""
 
