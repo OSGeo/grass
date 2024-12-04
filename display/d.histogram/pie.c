@@ -29,10 +29,11 @@
  */
 
 #include <string.h>
-#include <grass/gis.h>
-#include <grass/raster.h>
+
 #include <grass/display.h>
+#include <grass/gis.h>
 #include <grass/glocale.h>
+#include <grass/raster.h>
 
 #include "pie.h"
 
