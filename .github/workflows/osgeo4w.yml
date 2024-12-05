@@ -38,12 +38,32 @@ jobs:
           location: D:\
           update: true
           msystem: MINGW64
-          install: tar libintl make bison flex diffutils git dos2unix zip mingw-w64-x86_64-toolchain
-            mingw-w64-x86_64-fftw mingw-w64-x86_64-openblas mingw-w64-x86_64-pkgconf
-            mingw-w64-x86_64-gcc mingw-w64-x86_64-ccache mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv
-            mingw-w64-x86_64-bzip2 mingw-w64-x86_64-gettext mingw-w64-x86_64-libsystre
-            mingw-w64-x86_64-libtre-git mingw-w64-x86_64-libwinpthread-git mingw-w64-x86_64-libpng
-            mingw-w64-x86_64-pcre
+          install: >-
+            bison
+            diffutils
+            dos2unix
+            flex
+            git
+            libintl
+            make
+            tar
+            zip
+          pacboy: >-
+            bzip2
+            ccache
+            fftw
+            gcc
+            gettext
+            libiconv
+            libpng
+            libsystre
+            libtre-git
+            libwinpthread-git
+            openblas
+            pcre
+            pkgconf
+            toolchain
+            zlib
 
       - name: Setup OSGeo4W environment
         uses: echoix/setup-OSGeo4W@f4311523e39f2c8b10e34ebbc3f2ff437ecfb9ed # v0.2.0
