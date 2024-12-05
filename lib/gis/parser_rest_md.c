@@ -537,7 +537,7 @@ void print_escaped_for_md_keywords(FILE *f, const char *str)
         else {
             /* keyword index */
             char *str_link;
-            str_link = G_str_replace(str_s, " ", "%20");
+            str_link = G_str_replace(str_s, " ", "-");
             G_str_to_lower(str_link);
             fprintf(f, "[%s](keywords.md#%s)", str_s, str_link);
             G_free(str_link);
