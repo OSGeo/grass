@@ -389,7 +389,14 @@ build_program_in_subdir(
 
 build_program_in_subdir(v.proj DEPENDS grass_gis grass_gproj grass_vector GDAL ${LIBM})
 
-build_program_in_subdir(v.profile DEPENDS grass_gis grass_vector GDAL)
+build_program_in_subdir(
+  v.profile 
+  DEPENDS
+  grass_dbmibase
+  grass_dbmiclient
+  grass_gis
+  grass_vector
+  GDAL)
 
 add_subdirectory(v.lrs)
 
