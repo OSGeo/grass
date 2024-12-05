@@ -49,12 +49,12 @@ for f in $(find . -name *.html); do
 
     # HTML: Process the tmp file to selectively replace .html with .md only in relative URLs
     sed -E '
-  # Step 1: Preserve https or http URLs with .html
-  s|(<a href="https?://[^"]+\.html)">|\1_KEEPHTML">|g;
-  # Step 2: Replace .html with .md for other links
-  s|(<a href=")([^"]+)\.html">|\1\2.md">|g;
-  # Step 3: Restore preserved https or http URLs
-  s|_KEEPHTML">|">|g;
+  # Step 1: Preserve http/https links with .html (and optional anchors)
+  s|(<a href="https?://[^"]+\.html)(#[^"]*)?">|\1_KEEPHTML\2">|g;
+  # Step 2: Replace .html with .md for local links (with or without anchors)
+  s|(<a href=")([^"]+)\.html(#[^"]*)?">|\1\2.md\3">|g;
+  # Step 3: Restore preserved http/https links with .html
+  s|_KEEPHTML||g;
 ' "${f%%.html}.html" > "${f%%.html}_tmp.html"
 
     cat "${f%%.html}_tmp.html" | \
@@ -62,7 +62,7 @@ for f in $(find . -name *.html); do
         sed 's#</pre></div>#</code></pre>#g' | \
         pandoc --from=html --to=markdown -t gfm \
                --lua-filter "${UTILSPATH}/pandoc_codeblock.lua" | \
-        sed 's+ \\\$+ \$+g' > "${f%%.html}.md"
+        sed 's+ \\\$+ \$+g' | sed 's+%20+-+g' > "${f%%.html}.md"
 
     rm -f "${f%%.html}_tmp.html"
 
