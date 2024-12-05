@@ -10,7 +10,7 @@ from grass.script.task import grassTask
 def xy_session_patched_env(tmp_path, monkeypatch):
     """Active session in an XY location (scope: function), patching env vars directly.
 
-    This allows functions not accepting an env dictionnary argument to work in tests"""
+    This allows functions not accepting an env dictionary argument to work in tests"""
     location = "xy_test"
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
     with gs.setup.init(tmp_path / location, env=os.environ.copy()) as session:
