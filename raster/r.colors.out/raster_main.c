@@ -22,8 +22,6 @@
 #include <grass/glocale.h>
 #include <grass/parson.h>
 
-#include "local_proto.h"
-
 /* Run in raster mode */
 int main(int argc, char **argv)
 {
@@ -40,7 +38,7 @@ int main(int argc, char **argv)
     struct Colors colors;
     struct FPRange range;
 
-    enum ColorFormat clr_frmt;
+    ColorFormat clr_frmt;
 
     G_gisinit(argv[0]);
 
@@ -101,8 +99,8 @@ int main(int argc, char **argv)
         else {
             clr_frmt = HEX;
         }
-        print_json_colors(&colors, range.min, range.max, fp,
-                          flag.p->answer ? 1 : 0, clr_frmt);
+        Rast_print_json_colors(&colors, range.min, range.max, fp,
+                               flag.p->answer ? 1 : 0, clr_frmt);
     }
     else {
         Rast_print_colors(&colors, range.min, range.max, fp,
