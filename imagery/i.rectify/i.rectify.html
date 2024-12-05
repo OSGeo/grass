@@ -144,9 +144,9 @@ with categorical data, since the cell values will be altered.
 <p>In the bilinear, cubic and lanczos methods, if any of the surrounding cells used to
 interpolate the new cell value are NULL, the resulting cell will be NULL, even if
 the nearest cell is not NULL. This will cause some thinning along NULL borders,
-such as the coasts of land areas in a DEM. The bilinear_f, cubic_f and lanczos_f
-interpolation methods can be used if thinning along NULL edges is not desired.
-These methods "fall back" to simpler interpolation methods along NULL borders.
+such as the coasts of land areas in a DEM. The <em>bilinear_f</em>, <em>cubic_f</em>
+and <em>lanczos_f</em> interpolation methods can be used if thinning along NULL edges is
+not desired. These methods "fall back" to simpler interpolation methods along NULL borders.
 That is, from lanczos to cubic to bilinear to nearest.
 <p>If nearest neighbor assignment is used, the output map has the same raster
 format as the input map. If any of the other interpolations is used, the
