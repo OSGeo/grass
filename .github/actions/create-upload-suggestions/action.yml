@@ -225,7 +225,7 @@ runs:
       env:
         FORMATTED_URL: >-
           [`formatted-${{ steps.tool-name-safe.outputs.tool-name }}`](${{
-             steps.upload-changes.outputs.artifact-url }})
+            steps.upload-changes.outputs.artifact-url }})
     - name: Fail action if some files were changed
       if: >-
         ${{ (steps.files_changed.outputs.files_changed == 'true') &&
