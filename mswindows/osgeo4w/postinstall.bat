@@ -5,8 +5,8 @@ textreplace -std -t "%OSGEO4W_ROOT%\apps\grass\grass@POSTFIX@\etc\fontcap"
 
 for /F "tokens=* USEBACKQ" %%F IN (`getspecialfolder Documents`) do set DOCUMENTS=%%F
 
-if not %OSGEO4W_MENU_LINKS%==0 xxmklink "%OSGEO4W_STARTMENU%\GRASS GIS @VERSION@.lnk" "%BATCH%"  "--gui" "%DOCUMENTS%" "Launch GRASS GIS @VERSION@" 1 "%ICON%" 
-if not %OSGEO4W_DESKTOP_LINKS%==0 xxmklink "%OSGEO4W_DESKTOP%\GRASS GIS @VERSION@.lnk" "%BATCH%"  "--gui" "%DOCUMENTS%" "Launch GRASS GIS @VERSION@" 1 "%ICON%" 
+if not %OSGEO4W_MENU_LINKS%==0 xxmklink "%OSGEO4W_STARTMENU%\GRASS GIS @VERSION@.lnk" "%BATCH%"  "--gui" "%DOCUMENTS%" "Launch GRASS GIS @VERSION@" 1 "%ICON%"
+if not %OSGEO4W_DESKTOP_LINKS%==0 xxmklink "%OSGEO4W_DESKTOP%\GRASS GIS @VERSION@.lnk" "%BATCH%"  "--gui" "%DOCUMENTS%" "Launch GRASS GIS @VERSION@" 1 "%ICON%"
 
 rem run g.mkfontcap outside a GRASS session during
 rem an OSGeo4W installation for updating paths to fonts

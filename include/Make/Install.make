@@ -123,9 +123,9 @@ $(DESTDIR)$(INST_DIR) $(DESTDIR)$(UNIX_BIN):
 
 $(STARTUP): $(ARCH_DISTDIR)/$(GRASS_NAME).tmp
 	sed -e 's#'@GISBASE@'#'$(INST_DIR)'#g' \
-	    -e 's#'@LD_LIBRARY_PATH_VAR@'#'$(LD_LIBRARY_PATH_VAR)'#g' \
-	    -e 's#'@CONFIG_PROJSHARE@'#'$(PROJSHARE)'#g' \
-	    $< > $@
+		-e 's#'@LD_LIBRARY_PATH_VAR@'#'$(LD_LIBRARY_PATH_VAR)'#g' \
+		-e 's#'@CONFIG_PROJSHARE@'#'$(PROJSHARE)'#g' \
+		$< > $@
 	-$(CHMOD) a+x $@
 
 define fix_gisbase
@@ -173,16 +173,16 @@ BINDISTNAME = grass-$(GRASS_VERSION_NUMBER)-$(ARCH)-$(DATE)
 real-bindist:
 	-tar cCBf $(ARCH_DISTDIR) - $(BIN_DIST_FILES) | gzip -fc > $(BINDISTNAME).tar.gz
 	-size=`ls -l $(BINDISTNAME).tar.gz | awk '{print $$5}'`; \
-	    sed -e "s/BIN_DIST_VERSION/$(GRASS_VERSION_NUMBER)-$(ARCH)-$(DATE)/" \
-	    -e "s/GRASSPRG_NAME/$(GRASS_NAME)/" \
-	    -e "s/SIZE_TAR_FILE/$$size/" -e "s#BIN_DIST_DIR#'$(INST_DIR)'#" \
-	    -e "s/ARCHITECTURE/$(ARCH)/" \
-	    -e "s/LD_LIBRARY_PATH_VAR/$(LD_LIBRARY_PATH_VAR)/" \
-	    -e "s/TEST_STR=/TEST_STR=executable/" \
-	    -e "s#IMPORTANT.*#Generated from the binaryInstall.src file using the command make bindist#" \
-	    -e "s/# executable shell.*//" -e "s/# make bindist.*//" \
-	    binaryInstall.src > $(BINDISTNAME)-install.sh ; \
-	    chmod a+x $(BINDISTNAME)-install.sh 2>/dev/null
+		sed -e "s/BIN_DIST_VERSION/$(GRASS_VERSION_NUMBER)-$(ARCH)-$(DATE)/" \
+		-e "s/GRASSPRG_NAME/$(GRASS_NAME)/" \
+		-e "s/SIZE_TAR_FILE/$$size/" -e "s#BIN_DIST_DIR#'$(INST_DIR)'#" \
+		-e "s/ARCHITECTURE/$(ARCH)/" \
+		-e "s/LD_LIBRARY_PATH_VAR/$(LD_LIBRARY_PATH_VAR)/" \
+		-e "s/TEST_STR=/TEST_STR=executable/" \
+		-e "s#IMPORTANT.*#Generated from the binaryInstall.src file using the command make bindist#" \
+		-e "s/# executable shell.*//" -e "s/# make bindist.*//" \
+		binaryInstall.src > $(BINDISTNAME)-install.sh ; \
+		chmod a+x $(BINDISTNAME)-install.sh 2>/dev/null
 
 bindist-macosx:
 	$(MAKE) -C macosx bindist-macosx
