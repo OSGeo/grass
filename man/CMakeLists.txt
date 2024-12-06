@@ -55,7 +55,7 @@ add_custom_target(
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_standard_options.py -t
     "${CMAKE_SOURCE_DIR}/lib/gis/parser_standard_options.c" -f "grass" -o
     "${OUTDIR}/${GRASS_INSTALL_DOCDIR}/parser_standard_options.html" -p
-    'id="opts_table" class="scroolTable"'
+    "id='opts_table' class='scroolTable'"
   DEPENDS ${target_names}
   COMMENT "man generation: parser standard options")
 
