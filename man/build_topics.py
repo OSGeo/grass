@@ -127,7 +127,7 @@ def build_topics(ext):
                         "*See also the corresponding keyword"
                         " [{key}](keywords.md#{key})"
                         " for additional references.*\n".format(
-                            key=key.replace("_", "-").lower()
+                            key=key.replace(" ", "-").replace("_", "-").lower()
                         )
                     )
 
