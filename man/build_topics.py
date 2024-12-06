@@ -78,7 +78,9 @@ def build_topics(ext):
         topicsfile.write(headertopics_tmpl)
 
         for key, values in sorted(keywords.items(), key=lambda s: s[0].lower()):
-            with Path(man_dir, f"topic_%s.{ext}" % key).open("w") as keyfile:
+            with Path(man_dir, f"topic_%s.{ext}" % key.replace(" ", "_")).open(
+                "w"
+            ) as keyfile:
                 if ext == "html":
                     keyfile.write(
                         header1_tmpl.substitute(
@@ -125,7 +127,7 @@ def build_topics(ext):
                         "*See also the corresponding keyword"
                         " [{key}](keywords.md#{key})"
                         " for additional references.*\n".format(
-                            key=key.replace("_", " ")
+                            key=key.replace(" ", "-").replace("_", "-").lower()
                         )
                     )
 
