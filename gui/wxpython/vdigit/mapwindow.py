@@ -690,7 +690,7 @@ class VDigitWindow(BufferedMapWindow):
     def _onLeftDown(self, event):
         """Left mouse button donw - vector digitizer various actions"""
         try:
-            mapLayer = self.toolbar.GetLayer().GetName()
+            self.toolbar.GetLayer().GetName()
         except:
             GMessage(parent=self, message=_("No vector map selected for editing."))
             event.Skip()
