@@ -3,7 +3,7 @@
  * MODULE:       Grass json output interface
  *
  * PURPOSE:      parson library function wrapper
- *               part of the gparson library
+ *               part of the gjson library
  *
  * COPYRIGHT:    (C) 2010 by the GRASS Development Team
  *
@@ -13,11 +13,7 @@
  *
  *****************************************************************************/
 
-#if defined(HAVE_PARSON)
-#include <parson.h>
-#else
-#include <grass/parson.h>
-#endif
+#include "gjson.h"
 
 /* *************************************************************** */
 /* ***** WRAPPER FOR PARSON FUNCTIONS USED IN GRASS ************** */

@@ -1,7 +1,7 @@
-#ifndef GRASS_GPARSONDEFS_H
-#define GRASS_GPARSONDEFS_H
+#ifndef GRASS_GJSON_H
+#define GRASS_GJSON_H
 
-#include <grass/parson.h>
+#include "parson.h"
 
 /* *************************************************************** */
 /* ***** WRAPPER FOR PARSON FUNCTIONS USED IN GRASS ************** */
@@ -45,4 +45,4 @@ extern char *G_json_serialize_to_string_pretty(const JSON_Value *);
 extern void G_json_free_serialized_string(char *);
 extern void G_json_value_free(JSON_Value *);
 
-#endif /* GRASS_GPARSONDEFS_H */
+#endif /* GRASS_GJSON_H */

@@ -16,10 +16,10 @@
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include <grass/gparson.h>
 #include <grass/parson.h>
+#include <grass/gjson.h>
 
-#include "test_gparson_lib.h"
+#include "test_gjson_lib.h"
 
 static int test_parson_wrapper(void);
 
@@ -30,15 +30,14 @@ int unit_test_parson_wrapper(void)
 {
     int sum = 0;
 
-    G_message(_("\n++ Running gparson wrapper unit tests ++"));
+    G_message(_("\n++ Running gjson wrapper unit tests ++"));
 
     sum += test_parson_wrapper();
 
     if (sum > 0)
-        G_warning(_("\n-- gparson wrapper unit tests failure --"));
+        G_warning(_("\n-- gjson wrapper unit tests failure --"));
     else
-        G_message(
-            _("\n-- gparson wrapper unit tests finished successfully --"));
+        G_message(_("\n-- gjson wrapper unit tests finished successfully --"));
 
     return sum;
 }

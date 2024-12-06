@@ -19,7 +19,6 @@ docs_dirs = \
 	lib/raster3d \
 	lib/gis \
 	lib/gmath \
-	lib/gparson \
 	lib/gpde \
 	lib/proj \
 	lib/ogsf \

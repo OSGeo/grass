@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * MODULE:       Grass gparson Library
+ * MODULE:       Grass gjson Library
  *
  * PURPOSE:      Unit tests
  *
@@ -12,10 +12,10 @@
  *
  *****************************************************************************/
 
-#ifndef _TEST_GPARSON_LIB_H_
-#define _TEST_GPARSON_LIB_H_
+#ifndef _TEST_GJSON_LIB_H_
+#define _TEST_GJSON_LIB_H_
 
-#include <grass/gparson.h>
+#include <grass/gjson.h>
 
 #define TEST_OBJECT_KEY   "key"
 #define TEST_OBJECT_VALUE "value"

@@ -10,7 +10,6 @@ SUBDIRS = \
 	proj \
 	raster \
 	gmath \
-	gparson \
 	linkm \
 	driver \
 	pngdriver \
