@@ -13,7 +13,7 @@
 #            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
-"""The *grass.jupyter* is a convenient GRASS GIS interface for Jupyter notebooks.
+"""A convenient GRASS GIS interface for Jupyter notebooks.
 
 Python is a great tool for data science and scientific computing. Jupyter_ is an
 environment with computational notebooks which makes it even better tool for
