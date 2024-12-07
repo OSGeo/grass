@@ -104,6 +104,7 @@ int iterout, mx2o, my2o;
 int miter, nwalka;
 double timec;
 int ts, timesec;
+double mintimestep;
 
 double rain_val;
 double manin_val;
@@ -155,6 +156,8 @@ void main_loop(void)
 
     for (iblock = 1; iblock <= nblock; iblock++) {
         /* ++icoub; */
+
+        G_message(_("Processing block %d of %d"), iblock, nblock);
 
         lw = 0;
         walkwe = 0.;
