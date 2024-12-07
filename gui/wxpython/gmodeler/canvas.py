@@ -443,6 +443,8 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
 
             if not append:
                 toUnselect = [s for s in shapeList if s.Selected()]
+            else:
+                toUnselect = []
 
             shape.Select(True, dc)
 
