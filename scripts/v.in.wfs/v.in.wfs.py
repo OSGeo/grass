@@ -229,7 +229,14 @@ def main():
             grass.run_command("v.in.ogr", flags="o", input=tmpxml, output=out)
         grass.message(_("Vector map <%s> imported from WFS.") % out)
     except Exception:
+        import xml.etree.ElementTree as ET
+
         grass.message(_("WFS import failed"))
+
+        root = ET.parse(tmpxml).getroot()
+        if "ServiceExceptionReport" in root.tag:
+            se = root.find(root.tag[:-6])  # strip "Report" from the tag
+            grass.message(se.text.strip())
     finally:
         try_remove(tmpxml)
 
