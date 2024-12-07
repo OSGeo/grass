@@ -229,7 +229,7 @@ def main():
             grass.run_command("v.in.ogr", flags="o", input=tmpxml, output=out)
         grass.message(_("Vector map <%s> imported from WFS.") % out)
     except Exception:
-        import xml.etree.ElementTree as ET
+        import defusedxml.ElementTree as ET
 
         grass.message(_("WFS import failed"))
 
