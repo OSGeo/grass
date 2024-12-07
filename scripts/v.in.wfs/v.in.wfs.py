@@ -2,17 +2,18 @@
 
 ############################################################################
 #
-# MODULE:	v.in.wfs
-# AUTHOR(S):	Markus Neteler. neteler itc it
+# MODULE:    v.in.wfs
+# AUTHOR(S):    Markus Neteler. neteler itc it
 #               Hamish Bowman
 #               Converted to Python by Glynn Clements
 #               German ALKIS support added by Veronica Köß
-# PURPOSE:	WFS support
-# COPYRIGHT:	(C) 2006-2024 Markus Neteler and the GRASS Development Team
+#               V1 migration to OWSLib by Karunakar Kintada
+# PURPOSE:    WFS support
+# COPYRIGHT:    (C) 2006-2024 Markus Neteler and the GRASS Development Team
 #
-# 		This program is free software under the GNU General
-# 		Public License (>=v2). Read the file COPYING that
-# 		comes with GRASS for details.
+#         This program is free software under the GNU General
+#         Public License (>=v2). Read the file COPYING that
+#         comes with GRASS for details.
 #
 # GetFeature example:
 # http://mapserver.gdf-hannover.de/cgi-bin/grassuserwfs?REQUEST=GetFeature&SERVICE=WFS&VERSION=1.0.0
@@ -111,56 +112,52 @@ import sys
 from grass.script.utils import try_remove
 from grass.script import core as grass
 
-from urllib.request import urlopen
-from urllib.request import build_opener, install_opener
-from urllib.request import HTTPPasswordMgrWithDefaultRealm
-from urllib.request import HTTPBasicAuthHandler
-from urllib.error import URLError, HTTPError
-
+from owslib.wfs import WebFeatureService
 
 def main():
     out = options["output"]
     wfs_url = options["url"]
     version_num = options["version"]
-
-    request_base = "REQUEST=GetFeature&SERVICE=WFS&VERSION=" + version_num
-    wfs_url += request_base
-
     if options["name"]:
-        if tuple(int(x) for x in version_num.split(".")) >= (2, 0, 0):
-            wfs_url += "&TYPENAMES=" + options["name"]
+        if ',' in options["name"]: #multiple layers separated by ,
+            bulk_download = True
+            this_layer_name = options["name"].split(',') #an array here
         else:
-            wfs_url += "&TYPENAME=" + options["name"]
+            this_layer_name = options["name"]
 
+    this_srs = None
     if options["srs"]:
-        wfs_url += "&SRS=" + options["srs"]
+        srs_check = tuple(int(x) for x in version_num.split("."))
+        if srs_check == (1, 1, 0) or srs_check == (2, 0, 0):
+            if 'urn:x-ogc:def:crs:EPSG:' in options["srs"] :
+                this_srs = options["srs"] #check the SRS by version
+        elif srs_check == (1, 0, 0):
+            if 'www.opengis.net/gml/srs/epsg.xml#' in options["srs"] :
+                this_srs = options["srs"]
+        else:
+            grass.message(_("Specified SRS couldnot be set."))
 
+    this_max_features = None    
     if options["maximum_features"]:
-        wfs_url += "&MAXFEATURES=" + options["maximum_features"]
+        this_max_features = options["maximum_features"]
         if int(options["maximum_features"]) < 1:
             # GTC Invalid WFS maximum features parameter
             grass.fatal(_("Invalid maximum number of features"))
-
+        
+    this_start_index = None
     if options["start_index"]:
-        wfs_url += "&STARTINDEX=" + options["start_index"]
+        this_start_index = options["start_index"]
         if int(options["start_index"]) < 1:
             # GTC Invalid WFS start index parameter
             grass.fatal(_('Features begin with index "1"'))
-
+        
+    this_bbox = None
     if flags["r"]:
-        bbox = grass.read_command("g.region", flags="w").split("=")[1]
-        wfs_url += "&BBOX=" + bbox
+        this_bbox = grass.read_command("g.region", flags="w").split("=")[1]                                                    
+                                  
 
-    if flags["l"]:
-        wfs_url = options["url"] + "REQUEST=GetCapabilities&SERVICE=WFS"
-
-    print(wfs_url)
-
-    tmp = grass.tempfile()
-    tmpxml = tmp + ".xml"
-
-    grass.debug(wfs_url)
-
+    user = None
+    pw = None
     # Set user and password if given
     if options["username"] and options["password"]:
         grass.message(_("Setting username and password..."))
@@ -177,25 +174,29 @@ def main():
         elif options["password"] in os.environ:
             pw = os.environ[options["password"]]
         else:
-            pw = options["password"]
-
-        passmgr = HTTPPasswordMgrWithDefaultRealm()
-        passmgr.add_password(None, wfs_url, user, pw)
-        authhandler = HTTPBasicAuthHandler(passmgr)
-        opener = build_opener(authhandler)
-        install_opener(opener)
-
-    # GTC Downloading WFS features
-    grass.message(_("Retrieving data..."))
-    try:
-        inf = urlopen(wfs_url)
-    except HTTPError as e:
-        # GTC WFS request HTTP failure
-        grass.fatal(_("Server couldn't fulfill the request.\nError code: %s") % e.code)
-    except URLError as e:
-        # GTC WFS request network failure
-        grass.fatal(_("Failed to reach the server.\nReason: %s") % e.reason)
-
+            pw = options["password"]                            
+    
+    this_wfs = WebFeatureService(url=wfs_url, version=version_num, username=user, password=pw)
+    print(f'Connected to {this_wfs.identification.title}.')
+    if 'GetCapabilities' in list(this_wfs.operations):
+        if flags["l"]:
+            wfs_url = wfs.getcapabilities().geturl()
+            print(wfs_url)        
+            grass.debug(wfs_url)                                           
+        
+        # GTC Downloading WFS features
+        grass.message(_("Retrieving data..."))
+        try:
+            inf = wfs.getcapabilities() #get capabilities at this stage
+        except HTTPError as e:
+            # GTC WFS request HTTP failure
+            grass.fatal(_("Server couldn't fulfill the request.\nError code: %s") % e.code)
+        except URLError as e:
+            # GTC WFS request network failure
+            grass.fatal(_("Failed to reach the server.\nReason: %s") % e.reason)
+        
+    tmp = grass.tempfile()
+    tmpxml = tmp + ".xml"
     outf = open(tmpxml, "wb")
     while True:
         s = inf.read()
@@ -208,31 +209,60 @@ def main():
     if flags["l"]:
         import shutil
 
-        if os.path.exists("wms_capabilities.xml"):
+        if os.path.exists("wms_capabilities.xml"): #wfs_capabilities?
             grass.fatal(_('A file called "wms_capabilities.xml" already exists here'))
         # os.move() might fail if the temp file is on another volume, so we copy instead
         shutil.copy(tmpxml, "wms_capabilities.xml")
         try_remove(tmpxml)
         sys.exit(0)
+    else:
+        grass.message(_("Get capabilities not supported by server..."))
 
-    grass.message(_("Importing data..."))
-    try:
-        if options["layer"]:
-            grass.run_command(
-                "v.in.ogr",
-                flags="o",
-                input=tmpxml,
-                output=out,
-                layer=options["layer"],
-            )
-        else:
-            grass.run_command("v.in.ogr", flags="o", input=tmpxml, output=out)
-        grass.message(_("Vector map <%s> imported from WFS.") % out)
-    except Exception:
-        grass.message(_("WFS import failed"))
-    finally:
-        try_remove(tmpxml)
 
+    
+
+    if 'GetFeature' in this_wfs.operations :
+        grass.message(_("Importing data..."))
+        try:
+            if options["layer"]:
+                if options["layer"] in list(this_wfs.contents):
+                    response = this_wfs.getfeature(typename=options["layer"],
+                        bbox=this_bbox,
+                        srsname=this_srs,
+                        maxfeatures=this_max_features,
+                        startindex=this_start_index)
+                    if response:
+                        tmp = grass.tempfile()
+                        tmpxml = tmp + ".xml"
+                        outf = open(tmpxml, "wb")
+                        while True:
+                            s = response.read()
+                            if not s:
+                                break
+                            outf.write(s)
+                        inf.close()
+                        outf.close()
+            else:
+                """
+                Let grass ogr handle the bulk download
+                """
+                grass.run_command(
+                    "v.in.ogr",
+                    flags="o",
+                    input=tmpxml,
+                    output=out)
+                print('bulk download')
+
+            grass.message(_("Vector map <%s> imported from WFS.") % out)
+        except Exception:
+            grass.message(_("WFS import failed"))
+        finally:
+            try_remove(tmpxml)
+        """
+        use v.in.ogr for file format conversion than fetching the data
+        """
+    else:
+        grass.message(_("Get features not supported by server..."))
 
 if __name__ == "__main__":
     options, flags = grass.parser()
