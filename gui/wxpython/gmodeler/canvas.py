@@ -441,10 +441,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         else:
             shapeList = canvas.GetDiagram().GetShapeList()
 
-            if not append:
-                toUnselect = [s for s in shapeList if s.Selected()]
-            else:
-                toUnselect = []
+            toUnselect = [s for s in shapeList if s.Selected()] if not append else []
 
             shape.Select(True, dc)
 
