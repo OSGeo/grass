@@ -334,35 +334,39 @@ int draw_line(int type, int ltype, int line, const struct line_pnts *Points,
         /* use random or RGB column color if given, otherwise reset */
         /* centroids always use default color to stand out from underlying area
          */
-        if (custom_rgb && (ltype != GV_CENTROID)) {
-            primary_color->r = (unsigned char)red;
-            primary_color->g = (unsigned char)grn;
-            primary_color->b = (unsigned char)blu;
-            D_symbol2(Symb, x0, y0, primary_color, line_color);
+        if (Symb) {
+            if (custom_rgb && (ltype != GV_CENTROID)) {
+                primary_color->r = (unsigned char)red;
+                primary_color->g = (unsigned char)grn;
+                primary_color->b = (unsigned char)blu;
+                D_symbol2(Symb, x0, y0, primary_color, line_color);
+            }
+            else {
+                D_symbol(Symb, x0, y0, line_color, fill_color);
+            }
         }
-        else
-            D_symbol(Symb, x0, y0, line_color, fill_color);
-
         /* reset to defaults */
         var_size = size;
         rotation = 0.0;
     }
     else if (color || custom_rgb || zcolors) {
-        if (!cvarr_rgb && !cats_color_flag && !zcolors && !colors)
-            D_RGB_color(color->r, color->g, color->b);
-        else {
-            if (custom_rgb)
-                D_RGB_color((unsigned char)red, (unsigned char)grn,
-                            (unsigned char)blu);
-            else
+        if (color) {
+            if (!cvarr_rgb && !cats_color_flag && !zcolors && !colors)
                 D_RGB_color(color->r, color->g, color->b);
-        }
+            else {
+                if (custom_rgb)
+                    D_RGB_color((unsigned char)red, (unsigned char)grn,
+                                (unsigned char)blu);
+                else
+                    D_RGB_color(color->r, color->g, color->b);
+            }
 
-        /* Plot the lines */
-        if (Points->n_points == 1) /* line with one coor */
-            D_polydots_abs(x, y, Points->n_points);
-        else /* use different user defined render methods */
-            D_polyline_abs(x, y, Points->n_points);
+            /* Plot the lines */
+            if (Points->n_points == 1) /* line with one coor */
+                D_polydots_abs(x, y, Points->n_points);
+            else /* use different user defined render methods */
+                D_polyline_abs(x, y, Points->n_points);
+        }
     }
 
     switch (ltype) {
@@ -385,5 +389,6 @@ int draw_line(int type, int ltype, int line, const struct line_pnts *Points,
         break;
     }
 
+    G_free(Symb);
     return 1;
 }
