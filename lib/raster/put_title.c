@@ -70,6 +70,7 @@ int Rast_put_cell_title(const char *name, const char *title)
         fclose(in);
         G_warning(_("can't write category information for [%s] in [%s]"), name,
                   mapset);
+        remove(tempfile);
         G_free(tempfile);
         return -1;
     }
