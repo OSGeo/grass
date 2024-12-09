@@ -61,6 +61,7 @@ int Rast_put_cell_title(const char *name, const char *title)
     in = fopen(tempfile, "r");
     if (!in) {
         G_warning(_("G_put_title - can't reopen temp file"));
+        G_free(tempfile);
         return -1;
     }
 
@@ -69,6 +70,7 @@ int Rast_put_cell_title(const char *name, const char *title)
         fclose(in);
         G_warning(_("can't write category information for [%s] in [%s]"), name,
                   mapset);
+        G_free(tempfile);
         return -1;
     }
 
