@@ -18,7 +18,7 @@
  *               for details.
  *
  *****************************************************************************/
-#define NFILES 400
+#define NFILES 1000
 
 #include <stdio.h>
 #include <stdlib.h>
