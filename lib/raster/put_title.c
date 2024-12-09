@@ -35,6 +35,7 @@ int Rast_put_cell_title(const char *name, const char *title)
     if (!out) {
         fclose(in);
         G_warning(_("G_put_title - can't create a temp file"));
+        remove(tempfile);
         return -1;
     }
 
@@ -52,6 +53,7 @@ int Rast_put_cell_title(const char *name, const char *title)
     if (line < 3) {
         G_warning(_("category information for [%s] in [%s] invalid"), name,
                   mapset);
+        remove(tempfile);
         return -1;
     }
 
