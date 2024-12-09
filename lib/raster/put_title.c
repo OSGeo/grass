@@ -35,7 +35,6 @@ int Rast_put_cell_title(const char *name, const char *title)
     if (!out) {
         fclose(in);
         G_warning(_("G_put_title - can't create a temp file"));
-        remove(tempfile);
         G_free(tempfile);
         return -1;
     }
