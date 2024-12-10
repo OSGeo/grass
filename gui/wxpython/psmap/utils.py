@@ -434,6 +434,6 @@ def BBoxAfterRotation(w, h, angle):
         x_min = x
         x_max = x + wct - hst
 
-    width = int(ceil(abs(x_max) + abs(x_min)))
-    height = int(ceil(abs(y_max) + abs(y_min)))
+    width = ceil(abs(x_max) + abs(x_min))
+    height = ceil(abs(y_max) + abs(y_min))
     return width, height

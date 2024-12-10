@@ -1,11 +1,10 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.kernel</em> generates a raster density map from vector points
-data using a moving
-kernel. Available <a href="https://en.wikipedia.org/wiki/Kernel_(statistics)#Kernel_functions_in_common_use">kernel
+data using a moving kernel. Available <a href="https://en.wikipedia.org/wiki/Kernel_(statistics)#Kernel_functions_in_common_use">kernel
 density functions</a> are <em>uniform, triangular, epanechnikov,
-quartic, triweight, gaussian, cosine</em>, default
-is <em>gaussian</em>.
+quartic, triweight, gaussian, cosine</em>. The default function is <em>gaussian</em>.
+
 <p>The module can also generate a vector density map on a vector network.
 Conventional kernel functions produce biased estimates by overestimating
 the densities around network nodes, whereas the equal split method of
@@ -38,7 +37,7 @@ r.colors map=schools_density color=bcyr
 </pre></div>
 
 <center>
-<img src="v_kernel.png" alt="Density of schools" border=0><br>
+<img src="v_kernel.png" alt="Density of schools" border="0"><br>
 School density
 </center>
 
@@ -54,7 +53,7 @@ The module only considers the presence of points, but not
 method for networks, its computational method and a GIS-based tool</i>.
 <b>International Journal of Geographical Information Science</b>, Vol 23(1),
 pp. 7-32.<br>
-DOI: <a href="https://doi.org/10.1080/13658810802475491">10.1080/13658810802475491</a>
+DOI: <a href="https://doi.org/10.1080/13658810802475491">10.1080/13658810802475491</a></li>
 </ul>
 
 <h2>SEE ALSO</h2>

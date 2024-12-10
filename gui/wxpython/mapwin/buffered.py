@@ -2102,7 +2102,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         self.UpdateMap(render=False)
 
     def SetRegion(self, zoomOnly=True):
-        """Set display extents/compulational region from named region
+        """Set display extents/computational region from named region
         file.
 
         :param zoomOnly: zoom to named region only (computational region is not saved)
@@ -2110,7 +2110,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         if zoomOnly:
             label = _("Zoom to saved region extents")
         else:
-            label = _("Set compulational region from named region")
+            label = _("Set computational region from named region")
         dlg = SavedRegion(parent=self, title=label, loadsave="load")
 
         if dlg.ShowModal() == wx.ID_CANCEL or not dlg.GetName():
@@ -2144,7 +2144,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         self.UpdateMap()
 
     def SaveRegion(self, display=True):
-        """Save display extents/compulational region to named region
+        """Save display extents/computational region to named region
         file.
 
         :param display: True for display extends otherwise computational region
