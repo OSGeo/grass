@@ -16,3 +16,4 @@ dist.*
 !.git/refs/heads
 !.git/objects
 .git/objects/*
+!.git/objects/pack
