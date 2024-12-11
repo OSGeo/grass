@@ -172,14 +172,14 @@ def main():
         dest="location_type",
         action="store",
         default="nc",
-        help="Type of tests which should be run" " (tag corresponding to location)",
+        help="Type of tests which should be run (tag corresponding to location)",
     )
     parser.add_argument(
         "--grassdata",
         dest="gisdbase",
         action="store",
         default=None,
-        help="GRASS data(base) (GISDBASE) directory" " (current GISDBASE by default)",
+        help="GRASS data(base) (GISDBASE) directory (current GISDBASE by default)",
     )
     parser.add_argument(
         "--output",

@@ -129,17 +129,17 @@ CFLAGS="-g -O2 -Wall" \
 CXXFLAGS="-g -O2 -Wall" \
 LDFLAGS="-lcurses" \
 ./configure \
---with-nls \
---with-readline \
---with-freetype-includes=$freetype_include \
+--with-blas \
 --with-bzlib \
+--with-freetype-includes=$freetype_include \
+--with-geos \
+--with-lapack \
+--with-netcdf \
+--with-nls \
+--with-openmp \
 --with-postgres \
 --with-pthread \
---with-openmp \
---with-blas \
---with-lapack \
---with-geos \
---with-netcdf \
+--with-readline \
 >> /dev/stdout
 
 make clean default
@@ -159,10 +159,10 @@ fi
 build_arch=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
 for i in \
 	config.log \
-	include/Make/Platform.make \
+	error.log \
 	include/Make/Doxyfile_arch_html \
 	include/Make/Doxyfile_arch_latex \
-	error.log \
+	include/Make/Platform.make \
 ; do
 	cp -a $i $i.$build_arch
 done
@@ -186,19 +186,19 @@ PKG_CONFIG=$mxe_bin-pkg-config \
 ./configure \
 --build=$build_arch \
 --host=$arch \
---with-nls \
---with-readline \
---with-freetype-includes=$mxe_shared/include/freetype2 \
+--with-blas \
 --with-bzlib \
+--with-freetype-includes=$mxe_shared/include/freetype2 \
+--with-gdal=$mxe_shared/bin/gdal-config \
+--with-geos=$mxe_shared/bin/geos-config \
+--with-lapack \
+--with-netcdf=$mxe_shared/bin/nc-config \
+--with-nls \
+--with-opengl=windows \
+--with-openmp \
 --with-postgres \
 --with-pthread \
---with-openmp \
---with-blas \
---with-lapack \
---with-geos=$mxe_shared/bin/geos-config \
---with-netcdf=$mxe_shared/bin/nc-config \
---with-gdal=$mxe_shared/bin/gdal-config \
---with-opengl=windows \
+--with-readline \
 >> /dev/stdout
 
 make clean default
@@ -217,10 +217,10 @@ fi
 arch=`sed -n '/^ARCH[ \t]*=/{s/^.*=[ \t]*//; p}' include/Make/Platform.make`
 for i in \
 	config.log \
-	include/Make/Platform.make \
+	error.log \
 	include/Make/Doxyfile_arch_html \
 	include/Make/Doxyfile_arch_latex \
-	error.log \
+	include/Make/Platform.make \
 ; do
 	cp -a $i $i.$arch
 done
@@ -307,8 +307,8 @@ for i in \
 done
 
 for i in \
-	proj \
 	gdal \
+	proj \
 ; do
 	rm -rf $dist/share/$i
 	cp -a $mxe_shared/share/$i $dist/share/$i

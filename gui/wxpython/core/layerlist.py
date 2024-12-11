@@ -125,7 +125,7 @@ class LayerList:
         .. warning::
             Avoid using this method, it might be removed in the future.
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def GetLayerIndex(self, layer):
         """Get index of layer."""

@@ -42,7 +42,7 @@
 #include <grass/glocale.h>
 #include "cost.h"
 
-#define GET_PARENT(c) (((c)-2) / 3 + 1)
+#define GET_PARENT(c) (((c) - 2) / 3 + 1)
 #define GET_CHILD(p)  (((p) * 3) - 1)
 
 static long next_point = 0;

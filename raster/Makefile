@@ -45,6 +45,7 @@ SUBDIRS = \
 	r.lake \
 	r.li \
 	r.mapcalc \
+	r.mask.status \
 	r.mfilter \
 	r.mode \
 	r.neighbors \
@@ -146,6 +147,10 @@ htmldir: parsubdirs
 
 $(HTMLDIR)/r.in.png:
 	# no-op - override Html.make rule for .png image files
+$(MDDIR)/source/r.in.png:
+	# no-op - override Html.make rule for .png image files
 
 $(HTMLDIR)/r.out.png:
+	# no-op - override Html.make rule for .png image files
+$(MDDIR)/source/r.out.png:
 	# no-op - override Html.make rule for .png image files

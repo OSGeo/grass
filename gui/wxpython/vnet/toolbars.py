@@ -235,6 +235,5 @@ class AnalysisToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        icons = {}
 
         return self._getToolbarData(())

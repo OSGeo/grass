@@ -176,7 +176,7 @@ int do_astar(void)
                     }
                 }
             } /* end if in region */
-        }     /* end sides */
+        } /* end sides */
         FLAG_SET(worked, r, c);
     }
     G_percent(count, do_points, 1); /* finish it */

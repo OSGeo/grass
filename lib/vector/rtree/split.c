@@ -583,9 +583,9 @@ static void RTreeMethodOne(struct RTree_PartitionVars *p, int minfill,
                         best_side[i] = s;
                     }
                 }
-            }          /* end of distribution check */
+            } /* end of distribution check */
         } while (s--); /* end of side check */
-    }                  /* end of axis check */
+    } /* end of axis check */
 
     /* Use best distribution to classify branches */
     if (best_axis != axis || best_side[best_axis] != side)

@@ -61,13 +61,13 @@
 
 import sys
 import os
-import grass.script as gscript
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 
 def main():
     global tmp
-    tmp = gscript.tempfile()
+    tmp = gs.tempfile()
 
     vector = options["map"]
     layer = options["layer"]
@@ -75,13 +75,13 @@ def main():
     where = options["where"]
     perc = options["percentile"]
 
-    if not gscript.find_file(vector, element="vector")["file"]:
-        gscript.fatal(_("Vector map <%s> not found") % vector)
+    if not gs.find_file(vector, element="vector")["file"]:
+        gs.fatal(_("Vector map <%s> not found") % vector)
 
     try:
-        fi = gscript.vector_db(vector, stderr=nuldev)[int(layer)]
+        fi = gs.vector_db(vector, stderr=nuldev)[int(layer)]
     except KeyError:
-        gscript.fatal(_("No attribute table linked to layer <%s>") % layer)
+        gs.fatal(_("No attribute table linked to layer <%s>") % layer)
 
     table = fi["table"]
     database = fi["database"]
@@ -94,11 +94,11 @@ def main():
         if not passflags:
             passflags = "g"
         else:
-            passflags = passflags + "g"
+            passflags += "g"
     output_format = options["format"]
 
     try:
-        gscript.run_command(
+        gs.run_command(
             "db.univar",
             table=table,
             column=column,
@@ -114,6 +114,6 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     nuldev = open(os.devnull, "w")
     main()

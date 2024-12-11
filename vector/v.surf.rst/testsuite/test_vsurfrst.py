@@ -177,10 +177,10 @@ class TestVsurfrst(TestCase):
             map=self.deviations, column="flt1", reference=values, precision=1e-8
         )
         # treeseg
-        topology = dict(primitives=256)
+        topology = {"primitives": 256}
         self.assertVectorFitsTopoInfo(vector=self.treeseg, reference=topology)
         # overwin
-        topology = dict(primitives=256)
+        topology = {"primitives": 256}
         self.assertVectorFitsTopoInfo(vector=self.overwin, reference=topology)
 
         # test 3D versus attribute

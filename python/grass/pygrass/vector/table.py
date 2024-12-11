@@ -65,14 +65,13 @@ def get_path(path, vect_name=None):
     """
     if "$" not in path:
         return path
-    else:
-        mapset = Mapset()
-        path = path.replace("$GISDBASE", mapset.gisdbase)
-        path = path.replace("$LOCATION_NAME", mapset.location)
-        path = path.replace("$MAPSET", mapset.name)
-        if vect_name is not None:
-            path = path.replace("$MAP", vect_name)
-        return path
+    mapset = Mapset()
+    path = path.replace("$GISDBASE", mapset.gisdbase)
+    path = path.replace("$LOCATION_NAME", mapset.location)
+    path = path.replace("$MAPSET", mapset.name)
+    if vect_name is not None:
+        path = path.replace("$MAP", vect_name)
+    return path
 
 
 class Filters:
@@ -135,8 +134,7 @@ class Filters:
         """
         if not isinstance(number, int):
             raise ValueError("Must be an integer.")
-        else:
-            self._limit = "LIMIT {number}".format(number=number)
+        self._limit = "LIMIT {number}".format(number=number)
         return self
 
     def group_by(self, *groupby):
@@ -150,7 +148,7 @@ class Filters:
 
     def get_sql(self):
         """Return the SQL query"""
-        sql_list = list()
+        sql_list = []
         if self._select is None:
             self.select()
         sql_list.append(self._select)
@@ -297,7 +295,7 @@ class Columns:
             [
                 "?",
             ]
-            * self.__len__()
+            * (len(self))
         )
         kv = ",".join(["%s=?" % k for k in self.odict.keys() if k != self.key])
         where = "%s=?" % self.key
@@ -326,8 +324,7 @@ class Columns:
             return ", ".join(
                 ["%s %s" % (key, val) for key, val in self.items() if key != remove]
             )
-        else:
-            return ", ".join(["%s %s" % (key, val) for key, val in self.items()])
+        return ", ".join(["%s %s" % (key, val) for key, val in self.items()])
 
     def types(self):
         """Return a list with the column types.
@@ -372,8 +369,7 @@ class Columns:
             nams = list(self.odict.keys())
         if unicod:
             return nams
-        else:
-            return [str(name) for name in nams]
+        return [str(name) for name in nams]
 
     def items(self):
         """Return a list of tuple with column name and column type.
@@ -437,7 +433,7 @@ class Columns:
             col = col_type.upper()
             valid = [col.startswith(tp) for tp in valid_type]
             if not any(valid):
-                str_err = "Type: %r is not supported." "\nSupported types are: %s"
+                str_err = "Type: %r is not supported.\nSupported types are: %s"
                 raise TypeError(str_err % (col_type, ", ".join(valid_type)))
             return col_type
 
@@ -740,7 +736,7 @@ class Link:
         name=None,
         table=None,
         key="cat",
-        database="$GISDBASE/$LOCATION_NAME/" "$MAPSET/sqlite/sqlite.db",
+        database="$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db",
         driver="sqlite",
         c_fieldinfo=None,
     ):
@@ -791,10 +787,7 @@ class Link:
         False
         """
         attrs = ["layer", "name", "table_name", "key", "driver"]
-        for attr in attrs:
-            if getattr(self, attr) != getattr(link, attr):
-                return False
-        return True
+        return all(getattr(self, attr) == getattr(link, attr) for attr in attrs)
 
     def __ne__(self, other):
         return not self == other
@@ -850,7 +843,7 @@ class Link:
             if not os.path.exists(dbdirpath):
                 os.mkdir(dbdirpath)
             return sqlite3.connect(dbpath)
-        elif driver == "pg":
+        if driver == "pg":
             try:
                 import psycopg2
 
@@ -943,11 +936,10 @@ class DBlinks:
     def __getitem__(self, item):
         if isinstance(item, int):
             return self.by_index(item)
-        else:
-            return self.by_name(item)
+        return self.by_name(item)
 
     def __repr__(self):
-        return "DBlinks(%r)" % [link for link in self.__iter__()]
+        return "DBlinks(%r)" % list(self.__iter__())
 
     def by_index(self, indx):
         """Return a Link object by index
@@ -1135,19 +1127,17 @@ class Table:
         :type force: bool
         """
 
-        cur = cursor if cursor else self.conn.cursor()
+        cur = cursor or self.conn.cursor()
         if self.exist(cursor=cur):
             used = db_table_in_vector(self.name)
             if used is not None and len(used) > 0 and not force:
                 print(
-                    _("Deleting table <%s> which is attached" " to following map(s):")
+                    _("Deleting table <%s> which is attached to following map(s):")
                     % self.name
                 )
                 for vect in used:
                     warning("%s" % vect)
-                print(
-                    _("You must use the force flag to actually" " remove it. Exiting.")
-                )
+                print(_("You must use the force flag to actually remove it. Exiting."))
             else:
                 cur.execute(sql.DROP_TAB.format(tname=self.name))
 
@@ -1196,8 +1186,8 @@ class Table:
 
         """
         try:
-            sqlc = sql_code if sql_code else self.filters.get_sql()
-            cur = cursor if cursor else self.conn.cursor()
+            sqlc = sql_code or self.filters.get_sql()
+            cur = cursor or self.conn.cursor()
             if many and values:
                 return cur.executemany(sqlc, values)
             return cur.execute(sqlc, values) if values else cur.execute(sqlc)
@@ -1214,7 +1204,7 @@ class Table:
         :param cursor: the cursor to connect, if None it use the cursor
                        of connection table object
         """
-        cur = cursor if cursor else self.conn.cursor()
+        cur = cursor or self.conn.cursor()
         return table_exist(cur, self.name)
 
     def insert(self, values, cursor=None, many=False):
@@ -1229,7 +1219,7 @@ class Table:
         :param many: True to run executemany function
         :type many: bool
         """
-        cur = cursor if cursor else self.conn.cursor()
+        cur = cursor or self.conn.cursor()
         if many:
             return cur.executemany(self.columns.insert_str, values)
         return cur.execute(self.columns.insert_str, values)
@@ -1248,7 +1238,7 @@ class Table:
                        of connection table object
         :type cursor: Cursor object
         """
-        cur = cursor if cursor else self.conn.cursor()
+        cur = cursor or self.conn.cursor()
         vals = list(values) + [
             key,
         ]
@@ -1268,12 +1258,9 @@ class Table:
         :type cursor: Cursor object
 
         """
-        cur = cursor if cursor else self.conn.cursor()
+        cur = cursor or self.conn.cursor()
         coldef = ",\n".join(["%s %s" % col for col in cols])
-        if name:
-            newname = name
-        else:
-            newname = self.name
+        newname = name or self.name
         try:
             cur.execute(sql.CREATE_TAB.format(tname=newname, coldef=coldef))
             self.conn.commit()

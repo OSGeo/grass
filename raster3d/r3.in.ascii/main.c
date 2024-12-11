@@ -142,7 +142,7 @@ void readHeaderString(FILE *fp, char *valueString, double *value)
     char line_buff[1024];
 
     /* to avoid buffer overflows we use G_snprintf */
-    G_snprintf(format, 100, "%s %%lf", valueString);
+    snprintf(format, 100, "%s %%lf", valueString);
     G_getl2(line_buff, 1024, fp);
     if (sscanf(line_buff, format, value) != 1) {
         /* this would be ideal to merge if Rast3d_close could be solved */

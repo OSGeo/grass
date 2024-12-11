@@ -1,7 +1,6 @@
 """Fixture for t.rast.list test"""
 
 import os
-
 from datetime import datetime
 from types import SimpleNamespace
 

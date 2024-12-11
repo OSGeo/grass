@@ -59,3 +59,11 @@ html/
 latex/
 lib/*/html/
 lib/*/latex/
+
+# Ignore code coverage files
+*.gcov
+*.gcno
+*.gcda
+.coverage
+.coverage.*
+coverage.xml

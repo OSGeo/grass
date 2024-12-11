@@ -10,6 +10,7 @@ for details.
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.utils import xfail_windows
 
 
 class TestRasterWhat(TestCase):
@@ -218,6 +219,7 @@ class TestRasterWhat(TestCase):
             "out_timerow_coords.txt", "ca4ee0e7e4aaca170d6034e0d57d292d", text=True
         )
 
+    @xfail_windows
     def test_row_stdout_where_parallel(self):
         t_rast_what = SimpleModule(
             "t.rast.what",
@@ -245,6 +247,7 @@ class TestRasterWhat(TestCase):
 """
         self.assertLooksLike(text, str(t_rast_what.outputs.stdout))
 
+    @xfail_windows
     def test_row_stdout_where_parallel_cat(self):
         t_rast_what = SimpleModule(
             "t.rast.what",
@@ -272,6 +275,7 @@ class TestRasterWhat(TestCase):
 """
         self.assertLooksLike(text, str(t_rast_what.outputs.stdout))
 
+    @xfail_windows
     def test_row_stdout_where_parallel2(self):
         """Here without output definition, the default is used then"""
 
@@ -385,6 +389,7 @@ class TestRasterWhatNull(TestCase):
         cls.runModule("t.remove", flags="df", type="strds", inputs="A")
         cls.del_temp_region()
 
+    @xfail_windows
     def test_null_value(self):
         """Test setting the null value"""
 

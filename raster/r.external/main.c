@@ -16,6 +16,7 @@
  *
  *****************************************************************************/
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <math.h>
@@ -189,7 +190,7 @@ int main(int argc, char *argv[])
         if (!cwd)
             G_fatal_error(_("Unable to get current working directory"));
 
-        G_snprintf(path, GPATH_MAX, "%s%c%s", cwd, HOST_DIRSEP, input);
+        snprintf(path, GPATH_MAX, "%s%c%s", cwd, HOST_DIRSEP, input);
         input = G_store(path);
         CPLFree(cwd);
     }

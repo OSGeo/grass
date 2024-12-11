@@ -130,7 +130,7 @@ class MapPanelBase(wx.Panel):
         """Initialize map display, set dimensions and map region"""
         if not grass.find_program("g.region", "--help"):
             sys.exit(
-                _("GRASS module '%s' not found. Unable to start map " "display window.")
+                _("GRASS module '%s' not found. Unable to start map display window.")
                 % "g.region"
             )
 
@@ -176,8 +176,7 @@ class MapPanelBase(wx.Panel):
         """Returns property"""
         if hasattr(self.mapWindowProperties, name):
             return getattr(self.mapWindowProperties, name)
-        else:
-            return self.statusbarManager.GetProperty(name)
+        return self.statusbarManager.GetProperty(name)
 
     def HasProperty(self, name):
         """Checks whether object has property"""
@@ -381,10 +380,7 @@ class MapPanelBase(wx.Panel):
                 toolbar.EnableLongHelp(enable)
 
     def ShowAllToolbars(self, show=True):
-        if not show:  # hide
-            action = self.RemoveToolbar
-        else:
-            action = self.AddToolbar
+        action = self.RemoveToolbar if not show else self.AddToolbar
         for toolbar in self.GetToolbarNames():
             action(toolbar)
 
@@ -584,7 +580,7 @@ class DoubleMapPanel(MapPanelBase):
     It is expected that derived class will call _bindWindowsActivation()
     when both map windows will be initialized.
 
-    Drived class should have method GetMapToolbar() returns toolbar
+    Derived classes should have method GetMapToolbar() returns toolbar
     which has methods SetActiveMap() and Enable().
 
     @note To access maps use getters only
@@ -609,7 +605,7 @@ class DoubleMapPanel(MapPanelBase):
         r"""
 
         \a firstMap is set as active (by assign it to \c self.Map).
-        Derived class should assging to \c self.MapWindow to make one
+        Derived class should assigning to \c self.MapWindow to make one
         map window current by default.
 
         :param parent: gui parent
@@ -720,7 +716,7 @@ class DoubleMapPanel(MapPanelBase):
                 self.firstMapWindow.zoomChanged.connect(self.OnZoomChangedFirstMap)
             else:
                 self.secondMapWindow.zoomChanged.connect(self.OnZoomChangedSecondMap)
-        else:
+        else:  # noqa: PLR5501
             if self.MapWindow == self.firstMapWindow:
                 self.firstMapWindow.zoomChanged.disconnect(self.OnZoomChangedFirstMap)
             else:
