@@ -70,7 +70,8 @@ int fill_array_2d(N_array_2d *a)
     cols = a->cols;
     type = N_get_array_2d_type(a);
 
-#pragma omp parallel for private (i, j) shared (cols, rows, type, a) reduction(+:res)
+#pragma omp parallel for private(i, j) shared(cols, rows, type, a) \
+    reduction(+ : res)
     for (j = 0; j < rows; j++) {
         for (i = 0; i < cols; i++) {
             if (type == CELL_TYPE) {
@@ -129,7 +130,8 @@ int compare_array_2d(N_array_2d *a, N_array_2d *b)
     rows = a->rows;
     type = N_get_array_2d_type(a);
 
-#pragma omp parallel for private (i, j) shared (cols, rows, type, a, b) reduction(+:res)
+#pragma omp parallel for private(i, j) shared(cols, rows, type, a, b) \
+    reduction(+ : res)
     for (j = 0; j < rows; j++) {
         for (i = 0; i < cols; i++) {
             if (type == CELL_TYPE) {
@@ -166,7 +168,8 @@ int fill_array_3d(N_array_3d *a)
     depths = a->depths;
     type = N_get_array_3d_type(a);
 
-#pragma omp parallel for private (i, j, k) shared (depths, rows, cols, type, a) reduction(+:res)
+#pragma omp parallel for private(i, j, k) shared(depths, rows, cols, type, a) \
+    reduction(+ : res)
     for (k = 0; k < depths; k++) {
         for (j = 0; j < rows; j++) {
             for (i = 0; i < cols; i++) {
@@ -204,7 +207,8 @@ int fill_array_3d_null(N_array_3d *a)
     depths = a->depths;
     type = N_get_array_3d_type(a);
 
-#pragma omp parallel for private (i, j, k) shared (cols, rows, depths, type, a) reduction(+:res)
+#pragma omp parallel for private(i, j, k) shared(cols, rows, depths, type, a) \
+    reduction(+ : res)
     for (k = 0; k < depths; k++) {
         for (j = 0; j < rows; j++) {
             for (i = 0; i < cols; i++) {
@@ -231,7 +235,8 @@ int compare_array_3d(N_array_3d *a, N_array_3d *b)
     depths = a->depths;
     type = N_get_array_3d_type(a);
 
-#pragma omp parallel for private (i, j, k) shared (depths, rows, cols, type, a, b) reduction(+:res)
+#pragma omp parallel for private(i, j, k) \
+    shared(depths, rows, cols, type, a, b) reduction(+ : res)
     for (k = 0; k < depths; k++) {
         for (i = 0; i < rows; i++) {
             for (j = 0; j < cols; j++) {

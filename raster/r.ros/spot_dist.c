@@ -34,7 +34,7 @@
 #include <math.h>
 #include <grass/raster.h>
 
-#define DATA(map, r, c) (map)[(r)*ncols + (c)]
+#define DATA(map, r, c) (map)[(r) * ncols + (c)]
 #define DEG2RAD         M_D2R
 /*#define DEBUG */
 

@@ -65,7 +65,7 @@ class MinMaxTestCase(TestCase):
         )
         self.assertRasterFitsInfo(
             raster=self.output,
-            reference=dict(min=-3.20423, max=5.68621),
+            reference={"min": -3.20423, "max": 5.68621},
             precision=precision,
             msg="Output min and max too far from parameters",
         )
@@ -94,7 +94,7 @@ class MinMaxTestCase(TestCase):
         )
         self.assertRasterFitsInfo(
             raster=self.output,
-            reference=dict(min=min_value, max=max_value),
+            reference={"min": min_value, "max": max_value},
             precision=precision,
             msg="Output min and max too far from parameters",
         )

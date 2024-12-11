@@ -8,7 +8,20 @@
 
 import os
 
-from build_rest import *
+from build_rest import (
+    rest_dir,
+    rest_files,
+    write_rest_header,
+    grass_version,
+    full_index_header,
+    sections,
+    cmd2_tmpl,
+    check_for_desc_override,
+    get_desc,
+    desc1_tmpl,
+    write_rest_footer,
+    replace_file,
+)
 
 os.chdir(rest_dir)
 
@@ -21,34 +34,32 @@ classes.sort()
 
 # begin full index:
 filename = "full_index.txt"
-f = open(filename + ".tmp", "wb")
+with open(filename + ".tmp", "wb") as f:
+    write_rest_header(f, "GRASS GIS %s Reference Manual: Full index" % grass_version)
 
-write_rest_header(f, "GRASS GIS %s Reference Manual: Full index" % grass_version)
+    # generate main index of all modules:
+    f.write(full_index_header)
+    # "
 
-# generate main index of all modules:
-f.write(full_index_header)
-# "
+    # for cls in classes:
+    # f.write(cmd1_tmpl.substitute(cmd = cls))
+    # if cls != classes[-1]:
+    # f.write(" | ")
 
-# for cls in classes:
-# f.write(cmd1_tmpl.substitute(cmd = cls))
-# if cls != classes[-1]:
-# f.write(" | ")
+    f.write(sections)
 
-f.write(sections)
+    # for all module groups:
+    for cls in classes:
+        f.write(cmd2_tmpl.substitute(cmd=cls))
+        # for all modules:
+        for cmd in rest_files(cls):
+            basename = os.path.splitext(cmd)[0]
+            desc = check_for_desc_override(basename)
+            if desc is None:
+                desc = get_desc(cmd)
+            f.write(desc1_tmpl.substitute(basename=basename, desc=desc))
+        f.write("\n")
 
-# for all module groups:
-for cls in classes:
-    f.write(cmd2_tmpl.substitute(cmd=cls))
-    # for all modules:
-    for cmd in rest_files(cls):
-        basename = os.path.splitext(cmd)[0]
-        desc = check_for_desc_override(basename)
-        if desc is None:
-            desc = get_desc(cmd)
-        f.write(desc1_tmpl.substitute(basename=basename, desc=desc))
-    f.write("\n")
+    write_rest_footer(f, "index.txt")
 
-write_rest_footer(f, "index.txt")
-
-f.close()
 replace_file(filename)

@@ -47,8 +47,7 @@
 # % key: s
 # % description: Print spatio-temporal topological relationships and exit
 # %end
-import grass.script as grass
-
+import grass.script as gs
 
 ############################################################################
 
@@ -75,10 +74,7 @@ def main():
     spatial = None
 
     if spatio_temporal_relations:
-        if sp.get_type() == "strds":
-            spatial = "2D"
-        else:
-            spatial = "3D"
+        spatial = "2D" if sp.get_type() == "strds" else "3D"
 
     if temporal_relations or spatio_temporal_relations:
         sp.print_spatio_temporal_relationships(maps=maps, spatial=spatial)
@@ -163,5 +159,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

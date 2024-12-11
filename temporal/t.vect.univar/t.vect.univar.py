@@ -73,8 +73,7 @@
 # % guisection: Formatting
 # %end
 
-import grass.script as grass
-
+import grass.script as gs
 
 ############################################################################
 
@@ -93,7 +92,7 @@ def main():
     where = options["where"]
     extended = flags["e"]
     header = flags["u"]
-    separator = grass.separator(options["separator"])
+    separator = gs.separator(options["separator"])
 
     # Make sure the temporal database exists
     tgis.init()
@@ -109,5 +108,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

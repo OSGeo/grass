@@ -1,5 +1,6 @@
 #include <grass/config.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <signal.h>
 #include <unistd.h>
 #include <time.h>
@@ -57,8 +58,8 @@ void clean_dir(const char *pathname, uid_t uid, pid_t pid, time_t now,
             (G_strcasecmp(cur_entry->d_name, "..") == 0))
             continue; /* Skip dir and parent dir entries */
 
-        if ((pathlen = G_snprintf(buf, BUF_MAX, "%s/%s", pathname,
-                                  cur_entry->d_name)) >= BUF_MAX)
+        if ((pathlen = snprintf(buf, BUF_MAX, "%s/%s", pathname,
+                                cur_entry->d_name)) >= BUF_MAX)
             G_fatal_error("clean_temp: exceeded maximum pathname length %d, "
                           "got %d, shouldn't happen",
                           BUF_MAX, pathlen);

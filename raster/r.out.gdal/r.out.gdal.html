@@ -9,7 +9,7 @@ applications (see also <b>NOTES</b> on GeoTIFF below).
 (<em>createopt="TFW=YES,COMPRESS=DEFLATE"</em>).
 <p>For possible <em>createopt</em> and <em>metaopt</em> parameters please
 consult the individual
-<a href="http://www.gdal.org/formats_list.html">supported formats</a>
+<a href="https://gdal.org/formats_list.html">supported formats</a>
 pages on the GDAL website.
 The <em>createopt</em> parameter may be used to create TFW or World files
 ("TFW=YES","WORLDFILE=ON").
@@ -25,7 +25,7 @@ map's before export.
 
 <h2>SUPPORTED RASTER FORMATS</h2>
 
-The set of <a href="http://www.gdal.org/formats_list.html">supported
+The set of <a href="https://gdal.org/formats_list.html">supported
 raster formats</a> written by <em>r.out.gdal</em> depends on the local
 GDAL installation, printed with the <em>-l</em> flag. Available may be
 (incomplete list):<p>
@@ -66,9 +66,9 @@ Please keep in mind that not all CELL rasters will require Int32 - e.g.,
 Moreover, some GDAL-supported formats do not support all the data types
 possible in GDAL and GRASS. Use <em><a href="r.info.html">r.info</a></em> to
 check the data type and range for your GRASS raster, refer to specific
-format documentation (on the <a href="http://www.gdal.org/">GDAL website</a>),
+format documentation (on the <a href="https://gdal.org/">GDAL website</a>),
 format vendor's documentation, and e.g. the Wikipedia article
-<em><a href="http://en.wikipedia.org/wiki/C_syntax#Typical_boundaries_of_primitive_integral_types">
+<em><a href="https://en.wikipedia.org/wiki/C_syntax#Typical_boundaries_of_primitive_integral_types">
 Typical boundaries of primitive integral types</a></em>
 for details.
 
@@ -151,23 +151,23 @@ self-documenting (and useful) the dataset will be.
 Here are some things to try:
 
 <ul>
-<li>Create a World file with <tt>createopt="TFW=YES"</tt>.
+<li>Create a World file with <tt>createopt="TFW=YES"</tt>.</li>
 
 <li>Do not use GeoTIFF internal compression. Other GIS software often
 supports only a subset of the available compression methods with the
 supported methods differing between GIS software packages. Unfortunately
 this means the output image can be rather huge, but the file can be
-compressed with software like <tt>zip</tt>, <tt>gnuzip</tt>, or <tt>bzip2</tt>.
+compressed with software like <tt>zip</tt>, <tt>gnuzip</tt>, or <tt>bzip2</tt>.</li>
 
 <li>Skip exporting the color table. Color tables are not always properly
 rendered, particularly for type UInt16, and the GeoTIFF file can appear
 completely black. If you are lucky the problematic software package has
 a method to reset the color table and assign a new color table
-(sometimes called symbology).
+(sometimes called symbology).</li>
 
 <li>Keep metadata simple with <tt>createopt="PROFILE=GeoTIFF"</tt> or
 <tt>createopt="PROFILE=BASELINE"</tt>. With BASELINE no GDAL or GeoTIFF
-tags will be written and a World file is required (<em>createopt="TFW=YES"</em>).
+tags will be written and a World file is required (<em>createopt="TFW=YES"</em>).</li>
 </ul>
 
 <!-- outdated?
@@ -368,7 +368,7 @@ Band 1 Block=100x40 Type=UInt16, ColorInterp=Palette
 
 <h2>REFERENCES</h2>
 
-GDAL Pages: <a href="http://gdal.org">https://gdal.org</a>
+GDAL Pages: <a href="https://gdal.org">https://gdal.org</a>
 
 <h2>SEE ALSO</h2>
 

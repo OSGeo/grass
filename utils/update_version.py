@@ -5,14 +5,14 @@
 import sys
 import datetime
 from types import SimpleNamespace
+from pathlib import Path
 
 import argparse
 
 
 def read_version_file():
     """Return version file content as object instance with attributes"""
-    with open("include/VERSION", encoding="utf-8") as file:
-        lines = file.read().splitlines()
+    lines = Path("include/VERSION").read_text(encoding="utf-8").splitlines()
     return SimpleNamespace(
         major=lines[0], minor=lines[1], micro=lines[2], year=lines[3]
     )
@@ -226,10 +226,7 @@ def status(args):
     version_info = read_version_file()
     today = datetime.date.today().isoformat()
     version = construct_version(version_info)
-    if not version_info.micro.endswith("dev"):
-        tag = version
-    else:
-        tag = None
+    tag = version if not version_info.micro.endswith("dev") else None
     if args.bash:
         status_as_bash(version_info=version_info, today=today, version=version, tag=tag)
     else:
