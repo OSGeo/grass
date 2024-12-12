@@ -55,7 +55,7 @@ def db_describe(table, env=None, **args):
         args.pop("driver")
     s = read_command("db.describe", flags="c", table=table, env=env, **args)
     if not s:
-        fatal(_("Unable to describe table <%s>") % table)
+        fatal(_("Unable to describe table <%s>") % table, env=env)
 
     cols = []
     result = {}
@@ -179,7 +179,8 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
                 "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be \
                     provided"
             )
-            % {"sql": "sql", "filename": "filename", "table": "table"}
+            % {"sql": "sql", "filename": "filename", "table": "table"},
+            env=env,
         )
 
     if "sep" not in args:
@@ -188,7 +189,7 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
     try:
         run_command("db.select", quiet=True, flags="c", output=fname, env=env, **args)
     except CalledModuleError:
-        fatal(_("Fetching data failed"))
+        fatal(_("Fetching data failed"), env=env)
 
     ofile = open(fname)
     result = [tuple(x.rstrip(os.linesep).split(args["sep"])) for x in ofile]

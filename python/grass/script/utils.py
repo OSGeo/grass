@@ -190,10 +190,7 @@ def decode(bytes_, encoding=None):
     if isinstance(bytes_, str):
         return bytes_
     if isinstance(bytes_, bytes):
-        if encoding is None:
-            enc = _get_encoding()
-        else:
-            enc = encoding
+        enc = _get_encoding() if encoding is None else encoding
         return bytes_.decode(enc)
     # only text should be used
     raise TypeError("can only accept types str and bytes")
@@ -221,10 +218,7 @@ def encode(string, encoding=None):
     if isinstance(string, bytes):
         return string
     if isinstance(string, str):
-        if encoding is None:
-            enc = _get_encoding()
-        else:
-            enc = encoding
+        enc = _get_encoding() if encoding is None else encoding
         return string.encode(enc)
     # if something else than text
     raise TypeError("can only accept types str and bytes")
@@ -276,10 +270,7 @@ def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None):
     for line in lines:
         kv = line.split(sep, 1)
         k = decode(kv[0].strip())
-        if len(kv) > 1:
-            v = decode(kv[1].strip())
-        else:
-            v = dflt
+        v = decode(kv[1].strip()) if len(kv) > 1 else dflt
 
         if val_type:
             result[k] = val_type(v)
@@ -330,7 +321,7 @@ def split(s):
 
 
 # source:
-#    http://stackoverflow.com/questions/4836710/
+#    https://stackoverflow.com/questions/4836710/
 #    does-python-have-a-built-in-function-for-string-natural-sort/4836734#4836734
 def natural_sort(items):
     """Returns sorted list using natural sort
@@ -353,11 +344,8 @@ def naturally_sort(items, key=None):
         return int(text) if text.isdigit() else text.lower()
 
     def alphanum_key(actual_key):
-        if key:
-            sort_key = key(actual_key)
-        else:
-            sort_key = actual_key
-        return [convert(c) for c in re.split("([0-9]+)", sort_key)]
+        sort_key = key(actual_key) if key else actual_key
+        return [convert(c) for c in re.split(r"([0-9]+)", sort_key)]
 
     items.sort(key=alphanum_key)
 
@@ -464,10 +452,10 @@ def set_path(modulename, dirname=None, path="."):
     import sys
 
     # TODO: why dirname is checked first - the logic should be revised
-    _pathlib = None
+    pathlib_ = None
     if dirname:
-        _pathlib = os.path.join(path, dirname)
-    if _pathlib and os.path.exists(_pathlib):
+        pathlib_ = os.path.join(path, dirname)
+    if pathlib_ and os.path.exists(pathlib_):
         # we are running the script from the script directory, therefore
         # we add the path to sys.path to reach the directory (dirname)
         sys.path.append(os.path.abspath(path))
@@ -513,15 +501,15 @@ def legalize_vector_name(name, fallback_prefix="x"):
     # The implementation is based on Vect_legal_filename().
     if not name:
         raise ValueError("name cannot be empty")
-    if fallback_prefix and re.match("[^A-Za-z]", fallback_prefix[0]):
+    if fallback_prefix and re.match(r"[^A-Za-z]", fallback_prefix[0]):
         raise ValueError("fallback_prefix must start with an ASCII letter")
-    if fallback_prefix and re.match("[^A-Za-z]", name[0], flags=re.ASCII):
+    if fallback_prefix and re.match(r"[^A-Za-z]", name[0], flags=re.ASCII):
         # We prefix here rather than just replace, because in cases of unique
         # identifiers, e.g., columns or node names, replacing the first
         # character by the same replacement character increases chances of
         # conflict (e.g. column names 10, 20, 30).
         name = "{fallback_prefix}{name}".format(**locals())
-    name = re.sub("[^A-Za-z0-9_]", "_", name, flags=re.ASCII)
+    name = re.sub(r"[^A-Za-z0-9_]", "_", name, flags=re.ASCII)
     keywords = ["and", "or", "not"]
     if name in keywords:
         name = "{name}_".format(**locals())

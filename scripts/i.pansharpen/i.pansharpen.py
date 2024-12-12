@@ -93,6 +93,7 @@
 # %end
 
 import os
+from grass.exceptions import CalledModuleError
 
 try:
     import numpy as np
@@ -526,7 +527,7 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
         pb.wait(), pg.wait(), pr.wait()
         try:
             pb.terminate(), pg.terminate(), pr.terminate()
-        except Exception:
+        except OSError:
             pass
 
     # Cleanup
@@ -583,7 +584,7 @@ def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
             name=panmatch,
             errors="ignore",
         )
-    except:
+    except CalledModuleError:
         pass
 
 
@@ -709,7 +710,7 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
         pb.wait(), pg.wait(), pr.wait()
         try:
             pb.terminate(), pg.terminate(), pr.terminate()
-        except Exception:
+        except OSError:
             pass
 
     # Cleanup
@@ -758,10 +759,7 @@ def matchhist(original, target, matched):
         )
 
         for n in range(256):
-            if str(n) in stats_dict:
-                num_cells = stats_dict[str(n)]
-            else:
-                num_cells = 0
+            num_cells = stats_dict.get(str(n), 0)
 
             cum_cells += num_cells
 

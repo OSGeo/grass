@@ -93,10 +93,7 @@ def main():
         return 0
 
     # set the output name
-    if options["output"]:
-        map_name = options["output"]
-    else:
-        map_name = data_name
+    map_name = options["output"] or data_name
 
     # grass env
     gisenv = grass.gisenv()
@@ -233,19 +230,13 @@ def main():
         # for each old connection
         for t in dbnlist:
             # it split the line of each connection, to found layer number and key
-            if len(t.split("|")) != 1:
-                values = t.split("|")
-            else:
-                values = t.split(" ")
+            values = t.split("|") if len(t.split("|")) != 1 else t.split(" ")
 
             from_table = values[1]
             layer = values[0].split("/")[0]
             # we need to take care about the table name in case of several layer
             if options["output"]:
-                if len(dbnlist) > 1:
-                    to_table = "%s_%s" % (map_name, layer)
-                else:
-                    to_table = map_name
+                to_table = "%s_%s" % (map_name, layer) if len(dbnlist) > 1 else map_name
             else:
                 to_table = from_table
 

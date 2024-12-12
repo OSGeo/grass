@@ -66,7 +66,8 @@ def raster_history(map, overwrite=False, env=None):
             "Unable to write history for <%(map)s>. "
             "Raster map <%(map)s> not found in current mapset."
         )
-        % {"map": map, "map": map}
+        % {"map": map},
+        env=env,
     )
     return False
 
@@ -143,7 +144,10 @@ def mapcalc(
             overwrite=overwrite,
         )
     except CalledModuleError:
-        fatal(_("An error occurred while running r.mapcalc with expression: %s") % e)
+        fatal(
+            _("An error occurred while running r.mapcalc with expression: %s") % e,
+            env=env,
+        )
 
 
 def mapcalc_start(
@@ -218,10 +222,7 @@ def raster_what(map, coord, env=None, localized=False):
                        query
     :param env:
     """
-    if isinstance(map, (bytes, str)):
-        map_list = [map]
-    else:
-        map_list = map
+    map_list = [map] if isinstance(map, (bytes, str)) else map
 
     coord_list = []
     if isinstance(coord, tuple):

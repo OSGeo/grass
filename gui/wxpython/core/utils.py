@@ -20,6 +20,7 @@ import shlex
 import re
 import inspect
 import operator
+from string import digits
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -437,7 +438,7 @@ def __ll_parts(value, reverse=False, precision=3):
         if value == 0.0:
             return "%s%.*f" % ("00:00:0", precision, 0.0)
 
-        d = int(int(value))
+        d = int(value)
         m = int((value - d) * 60)
         s = ((value - d) * 60 - m) * 60
         if m < 0:
@@ -864,10 +865,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
             )
         )
         return
-    if windows:
-        expCmd = "set"
-    else:
-        expCmd = "export"
+    expCmd = "set" if windows else "export"
 
     for key, value in environ.items():
         fd.write("%s %s=%s\n" % (expCmd, key, value))
@@ -937,7 +935,7 @@ rgb2str[str2rgb["violet"]] = "violet"
 
 
 def color_resolve(color):
-    if len(color) > 0 and color[0] in "0123456789":
+    if len(color) > 0 and color[0] in digits:
         rgb = tuple(map(int, color.split(":")))
         label = color
     else:

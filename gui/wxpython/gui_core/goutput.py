@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 """
 
 import textwrap
+from string import digits
 
 import wx
 from wx import stc
@@ -624,7 +625,7 @@ class GStc(stc.StyledTextCtrl):
                     self.linePos = self.GetCurrentPos()
                     if c != " ":
                         last_c = c
-            if last_c not in ("0123456789"):
+            if last_c not in (digits):
                 self.AddTextWrapped("\n", wrap=None)
                 self.linePos = -1
         else:
