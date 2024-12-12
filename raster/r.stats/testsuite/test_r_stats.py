@@ -29,7 +29,7 @@ class TestRasterreport(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """!Remove the temporary region"""
+        """Remove the temporary region"""
         cls.del_temp_region()
         if os.path.isfile(cls.outfile):
             os.remove(cls.outfile)
