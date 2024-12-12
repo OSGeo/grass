@@ -122,26 +122,67 @@ class GMApp(wx.App):
         return super().OnExit()
 
 
+def get_wxgui_components_app_names():
+    """Get wxGUI components app names
+
+    :return list: wxGUI components app names
+    """
+    return [x["name"] for x in globalvar.RECENT_FILES_WXGUI_APP_NAMES.values()]
+
+
 def printHelp():
     """Print program help"""
     print("Usage:", file=sys.stderr)
     print(" python wxgui.py [options]", file=sys.stderr)
     print("%sOptions:" % os.linesep, file=sys.stderr)
     print(" -w\t--workspace file\tWorkspace file to load", file=sys.stderr)
+    print(
+        " -r\t--recent_files wxGUI component name"
+        f" ({'|'.join(get_wxgui_components_app_names())})"
+        " Print wxGUI component recent files",
+        file=sys.stderr,
+    )
     sys.exit(1)
 
 
 def process_opt(opts, args):
-    """Process command-line arguments"""
-    workspaceFile = None
+    """Process command-line arguments
+
+    :param opts list: list of (option, value) pairs
+    :param args list: list of trailing slice of args
+
+    :return dict parsed_args: parsed command-line args
+    """
+    parsed_args = {}
     for o, a in opts:
         if o in {"-h", "--help"}:
             printHelp()
 
         elif o in {"-w", "--workspace"}:
-            workspaceFile = str(a) if a != "" else args.pop(0)
+            if a != "":
+                parsed_args.update({"w": str(a)})
+            else:
+                parsed_args.update({"w": args.pop(0)})
+        elif o in ("-r", "--recent_files"):
+            if a != "":
+                parsed_args.update({"r": str(a)})
+            else:
+                parsed_args.update({"r": args.pop(0)})
+    return parsed_args
 
-    return workspaceFile
+
+def print_wxgui_component_recent_files(recent_files):
+    """Print wxGUI component recent files
+
+    :param str recent_files: app recent files name
+    """
+    from gui_core.menu import RecentFilesConfig
+
+    app = wx.App()
+    config = RecentFilesConfig(appName=recent_files)
+    for i in config.GetRecentFiles():
+        print(i, file=sys.stderr)
+    sys.exit(1)
 
 
 def main(argv=None):
@@ -149,7 +190,11 @@ def main(argv=None):
         argv = sys.argv
     try:
         try:
-            opts, args = getopt.getopt(argv[1:], "hw:", ["help", "workspace"])
+            opts, args = getopt.getopt(
+                argv[1:],
+                "hwr:",
+                ["help", "workspace", "recent_files"],
+            )
         except getopt.error as msg:
             raise Usage(msg)
     except Usage as err:
@@ -157,8 +202,13 @@ def main(argv=None):
         print(sys.stderr, "for help use --help", file=sys.stderr)
         printHelp()
 
-    workspaceFile = process_opt(opts, args)
-    app = GMApp(workspaceFile)
+    parsed_args = process_opt(opts, args)
+
+    recent_files = parsed_args.get("r")
+    if recent_files:
+        print_wxgui_component_recent_files(recent_files)
+
+    app = GMApp(workspace=parsed_args.get("w"))
 
     # suppress wxPython logs
     q = wx.LogNull()  # noqa: F841
