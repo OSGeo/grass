@@ -39,7 +39,7 @@ def remove_mapfile(mapfile):
 # read environment variables from file
 def read_env_file(env_file):
     width = height = legfile = None
-    fd = open(env_file, "r")
+    fd = open(env_file)
     if fd is None:
         grass.fatal("Unable to open file '{0}'".format(env_file))
     lines = fd.readlines()
@@ -111,8 +111,8 @@ def adjust_region(width, height):
 
     region["nsres"] = mapheight / height
     region["ewres"] = mapwidth / width
-    region["rows"] = int(round(mapheight / region["nsres"]))
-    region["cols"] = int(round(mapwidth / region["ewres"]))
+    region["rows"] = round(mapheight / region["nsres"])
+    region["cols"] = round(mapwidth / region["ewres"])
     region["cells"] = region["rows"] * region["cols"]
 
     kwdata = [

@@ -550,7 +550,7 @@ class RegionDef(BaseClass, wx.Dialog):
 
         except ValueError as e:
             if len(event.GetString()) > 0 and event.GetString() != "-":
-                dlg = wx.MessageBox(
+                wx.MessageBox(
                     parent=self,
                     message=_("Invalid value: %s") % e,
                     caption=_("Error"),
@@ -594,8 +594,8 @@ class RegionDef(BaseClass, wx.Dialog):
         self.lcols.SetLabel(_("Cols: %d") % self.cols)
         self.lcells.SetLabel(_("Cells: %d") % self.cells)
         # 3D
-        self.ldepth.SetLabel(_("Depth: %d" % self.depth))
-        self.lcells3.SetLabel(_("3D Cells: %d" % self.cells3))
+        self.ldepth.SetLabel(_("Depth: %d") % self.depth)
+        self.lcells3.SetLabel(_("3D Cells: %d") % self.cells3)
 
     def OnSetButton(self, event=None):
         """Set default region"""

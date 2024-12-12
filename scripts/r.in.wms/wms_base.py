@@ -78,10 +78,8 @@ class WMSBase:
             self.params["password"] == "" and self.params["username"]
         ):
             gs.fatal(
-                _(
-                    "Please insert both %s and %s parameters or none of them."
-                    % ("password", "username")
-                )
+                _("Please insert both %s and %s parameters or none of them.")
+                % ("password", "username")
             )
 
         self.params["bgcolor"] = options["bgcolor"].strip()
@@ -202,8 +200,8 @@ class WMSBase:
                 _(
                     "These parameter are ignored: %s\n\
                              %s driver does not support the parameters."
-                    % (",".join(not_relevant_params), options["driver"])
                 )
+                % (",".join(not_relevant_params), options["driver"])
             )
 
         not_relevant_flags = []
@@ -216,8 +214,8 @@ class WMSBase:
                 _(
                     "These flags are ignored: %s\n\
                              %s driver does not support the flags."
-                    % (",".join(not_relevant_flags), options["driver"])
                 )
+                % (",".join(not_relevant_flags), options["driver"])
             )
 
     def GetMap(self, options, flags):
@@ -308,7 +306,7 @@ class WMSBase:
                 Path(capfile_output).write_text(cap)
                 return
             except OSError as error:
-                gs.fatal(_("Unable to open file '%s'.\n%s\n" % (capfile_output, error)))
+                gs.fatal(_("Unable to open file '%s'.\n%s\n") % (capfile_output, error))
 
         # print to output
         print(cap)
@@ -784,8 +782,7 @@ def GetSRSParamVal(srs):
 
     if srs in {84, 83, 27}:
         return "OGC:CRS{}".format(srs)
-    else:
-        return "EPSG:{}".format(srs)
+    return "EPSG:{}".format(srs)
 
 
 def GetEpsg(srs):

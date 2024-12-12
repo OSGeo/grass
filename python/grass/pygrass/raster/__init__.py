@@ -13,6 +13,7 @@ import grass.lib.rowio as librowio
 
 libgis.G_gisinit("")
 
+# flake8: noqa: E402
 # import pygrass modules
 from grass.pygrass.errors import must_be_open
 from grass.pygrass.gis.region import Region
@@ -24,6 +25,8 @@ from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.buffer import Buffer
 from grass.pygrass.raster.segment import Segment
 from grass.pygrass.raster.rowio import RowIO
+
+# flake8: qa
 
 WARN_OVERWRITE = "Raster map <{0}> already exists and will be overwritten"
 
@@ -327,17 +330,16 @@ class RasterSegment(RasterAbstractBase):
         if isinstance(key, slice):
             # Get the start, stop, and step from the slice
             return [self.put_row(ii, row) for ii in range(*key.indices(len(self)))]
-        elif isinstance(key, tuple):
+        if isinstance(key, tuple):
             x, y = key
             return self.put(x, y, row)
-        elif isinstance(key, int):
+        if isinstance(key, int):
             if key < 0:  # Handle negative indices
                 key += self._rows
             if key >= self._rows:
                 raise IndexError(_("Index out of range: %r.") % key)
             return self.put_row(key, row)
-        else:
-            raise TypeError("Invalid argument type.")
+        raise TypeError("Invalid argument type.")
 
     @must_be_open
     def map2segment(self):

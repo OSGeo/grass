@@ -1,8 +1,8 @@
-blas
 cairo
 clangxx_osx-arm64
 clang_osx-arm64
 cmake
+expat
 fftw
 flex
 freetype
@@ -13,7 +13,6 @@ giflib
 git
 ipython
 krb5
-lapack
 lastools
 libgdal-arrow-parquet
 libgdal-core
@@ -32,6 +31,7 @@ libtiff
 llvm-openmp
 matplotlib
 numpy<2
+openblas
 pandoc
 pdal
 pillow

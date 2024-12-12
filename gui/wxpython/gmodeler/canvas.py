@@ -320,19 +320,19 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         popupMenu = Menu()
         popupMenu.Append(self.popupID["remove"], _("Remove"))
         self.frame.Bind(wx.EVT_MENU, self.OnRemove, id=self.popupID["remove"])
-        if isinstance(shape, ModelAction) or isinstance(shape, ModelLoop):
+        if isinstance(shape, (ModelAction, ModelLoop)):
             if shape.IsEnabled():
                 popupMenu.Append(self.popupID["enable"], _("Disable"))
                 self.frame.Bind(wx.EVT_MENU, self.OnDisable, id=self.popupID["enable"])
             else:
                 popupMenu.Append(self.popupID["enable"], _("Enable"))
                 self.frame.Bind(wx.EVT_MENU, self.OnEnable, id=self.popupID["enable"])
-        if isinstance(shape, ModelAction) or isinstance(shape, ModelComment):
+        if isinstance(shape, (ModelAction, ModelComment)):
             popupMenu.AppendSeparator()
-        if isinstance(shape, ModelAction):
-            popupMenu.Append(self.popupID["label"], _("Set label"))
-            self.frame.Bind(wx.EVT_MENU, self.OnSetLabel, id=self.popupID["label"])
-        if isinstance(shape, ModelAction) or isinstance(shape, ModelComment):
+            if isinstance(shape, ModelAction):
+                popupMenu.Append(self.popupID["label"], _("Set label"))
+                self.frame.Bind(wx.EVT_MENU, self.OnSetLabel, id=self.popupID["label"])
+
             popupMenu.Append(self.popupID["comment"], _("Set comment"))
             self.frame.Bind(wx.EVT_MENU, self.OnSetComment, id=self.popupID["comment"])
 
@@ -377,11 +377,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 if self.GetShape().IsIntermediate():
                     popupMenu.Enable(self.popupID["display"], False)
 
-        if (
-            isinstance(shape, ModelData)
-            or isinstance(shape, ModelAction)
-            or isinstance(shape, ModelLoop)
-        ):
+        if isinstance(shape, (ModelData, ModelAction, ModelLoop)):
             popupMenu.AppendSeparator()
             popupMenu.Append(self.popupID["props"], _("Properties"))
             self.frame.Bind(wx.EVT_MENU, self.OnProperties, id=self.popupID["props"])
@@ -444,12 +440,8 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             shape.Select(False, dc)
         else:
             shapeList = canvas.GetDiagram().GetShapeList()
-            toUnselect = []
 
-            if not append:
-                for s in shapeList:
-                    if s.Selected():
-                        toUnselect.append(s)
+            toUnselect = [s for s in shapeList if s.Selected()] if not append else []
 
             shape.Select(True, dc)
 

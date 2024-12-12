@@ -69,7 +69,7 @@ class Formatter:
             "index": [],
         }
         self.stack = []
-        self.strip_re = re.compile("^[ \t]+")
+        self.strip_re = re.compile(r"^[ \t]+")
         self.filename = filename
         self.at_bol = True
 
@@ -119,10 +119,7 @@ class Formatter:
             self.show(pre)
         if sep != "":
             if var:
-                if var == "index":
-                    val = self.get("index") + [0]
-                else:
-                    val = True
+                val = self.get("index") + [0] if var == "index" else True
                 self.pp_with(content, var, val)
             else:
                 self.pp(content)
@@ -253,8 +250,7 @@ class Formatter:
             for line in lines:
                 self.pp_text(line)
             return
-        else:
-            content = lines[0]
+        content = lines[0]
         if self.at_bol and not self.get("preformat"):
             content = self.strip_re.sub("", content)
         self.pp_string(content)

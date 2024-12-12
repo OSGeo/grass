@@ -4,7 +4,6 @@
 """
 
 from grass.gunittest.case import TestCase
-from grass.gunittest.gmodules import SimpleModule
 
 
 class TestOgrImport(TestCase):

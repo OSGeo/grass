@@ -59,10 +59,7 @@ class History:
         """Rast_free_history"""
 
     def __eq__(self, hist):
-        for attr in self.attrs:
-            if getattr(self, attr) != getattr(hist, attr):
-                return False
-        return True
+        return all(getattr(self, attr) == getattr(hist, attr) for attr in self.attrs)
 
     def __len__(self):
         return self.length()

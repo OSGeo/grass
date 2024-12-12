@@ -470,9 +470,10 @@ def replace_shebang_win(python_file):
     cur_dir = os.path.dirname(python_file)
     tmp_name = os.path.join(cur_dir, gs.tempname(12))
 
-    with codecs.open(python_file, "r", encoding="utf8") as in_file, codecs.open(
-        tmp_name, "w", encoding="utf8"
-    ) as out_file:
+    with (
+        codecs.open(python_file, "r", encoding="utf8") as in_file,
+        codecs.open(tmp_name, "w", encoding="utf8") as out_file,
+    ):
         for line in in_file:
             new_line = line.replace(
                 "#!/usr/bin/env python\n", "#!/usr/bin/env python3\n"
@@ -507,24 +508,23 @@ def get_version_branch(major_version):
     version_branch = f"grass{major_version}"
     if sys.platform == "win32":
         return version_branch
-    else:
-        branch = gs.Popen(
-            ["git", "ls-remote", "--heads", GIT_URL, f"refs/heads/{version_branch}"],
-            stdout=PIPE,
-            stderr=PIPE,
-        )
-        branch, stderr = branch.communicate()
-        if stderr:
-            gs.fatal(
-                _(
-                    "Failed to get branch from the Git repository <{repo_path}>.\n"
-                    "{error}"
-                ).format(
-                    repo_path=GIT_URL,
-                    error=gs.decode(stderr),
-                )
+    branch = gs.Popen(
+        ["git", "ls-remote", "--heads", GIT_URL, f"refs/heads/{version_branch}"],
+        stdout=PIPE,
+        stderr=PIPE,
+    )
+    branch, stderr = branch.communicate()
+    if stderr:
+        gs.fatal(
+            _(
+                "Failed to get branch from the Git repository <{repo_path}>.\n"
+                "{error}"
+            ).format(
+                repo_path=GIT_URL,
+                error=gs.decode(stderr),
             )
-        branch = gs.decode(branch)
+        )
+    branch = gs.decode(branch)
     if version_branch not in branch:
         version_branch = "grass{}".format(int(major_version) - 1)
     return version_branch
@@ -541,10 +541,8 @@ def get_default_branch(full_url):
         organization, repository = url_parts.path.split("/")[1:3]
     except URLError:
         gs.fatal(
-            _(
-                "Cannot retrieve organization and repository from URL: <{}>.".format(
-                    full_url
-                )
+            _("Cannot retrieve organization and repository from URL: <{}>.").format(
+                full_url
             )
         )
     # Construct API call and retrieve default branch
@@ -583,10 +581,8 @@ def etree_fromurl(url):
             _(
                 "Download file from <{url}>,"
                 " failed. File is not on the server or"
-                " check your internet connection.".format(
-                    url=url,
-                ),
-            ),
+                " check your internet connection."
+            ).format(url=url),
         )
     return ET.fromstring(file_.read())
 
@@ -1612,10 +1608,7 @@ def install_extension_win(name):
     source, url = resolve_source_code(url="{0}/{1}.zip".format(base_url, name))
 
     # to hide non-error messages from subprocesses
-    if gs.verbosity() <= 2:
-        outdev = open(os.devnull, "w")
-    else:
-        outdev = sys.stdout
+    outdev = open(os.devnull, "w") if gs.verbosity() <= 2 else sys.stdout
 
     # download Addons ZIP file
     os.chdir(TMPDIR)  # this is just to not leave something behind
@@ -1965,10 +1958,7 @@ def install_extension_std_platforms(name, source, url, branch):
     path_to_src_code_message = _("Path to the source code:")
 
     # to hide non-error messages from subprocesses
-    if gs.verbosity() <= 2:
-        outdev = open(os.devnull, "w")
-    else:
-        outdev = sys.stdout
+    outdev = open(os.devnull, "w") if gs.verbosity() <= 2 else sys.stdout
 
     os.chdir(TMPDIR)  # this is just to not leave something behind
     srcdir = os.path.join(TMPDIR, name)
@@ -2582,10 +2572,7 @@ def resolve_known_host_service(url, name, branch):
                         )
                         return None, None
     if match:
-        if not actual_start:
-            actual_start = match["url_start"]
-        else:
-            actual_start = ""
+        actual_start = match["url_start"] if not actual_start else ""
         if "branch" in match["url_end"]:
             suffix = match["url_end"].format(
                 name=name,
@@ -2598,8 +2585,7 @@ def resolve_known_host_service(url, name, branch):
         )
         gs.verbose(_("Will use the following URL for download: {0}").format(url))
         return "remote_zip", url
-    else:
-        return None, None
+    return None, None
 
 
 def validate_url(url):
@@ -2723,7 +2709,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     # Handle local URLs
     if os.path.isdir(url):
         return "dir", os.path.abspath(url)
-    elif os.path.exists(url):
+    if os.path.exists(url):
         if url.endswith(".zip"):
             return "zip", os.path.abspath(url)
         for suffix in extract_tar.supported_formats:
@@ -2826,7 +2812,7 @@ def main():
         xmlurl = resolve_xmlurl_prefix(original_url, source=source)
         list_available_extensions(xmlurl)
         return 0
-    elif flags["a"]:
+    if flags["a"]:
         list_installed_extensions(toolboxes=flags["t"])
         return 0
 

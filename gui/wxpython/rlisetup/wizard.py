@@ -360,7 +360,7 @@ class RLIWizard:
             fil.write("SAMPLEAREA -1|-1|%r|%r" % (rl, cl))
             fil.write("|%s" % self.msAreaList[0].raster)
             fil.write("\nMOVINGWINDOW\n")
-        # KUNITSC = samplingtype=units, regionbox=keyboard, shape=cirlce
+        # KUNITSC = samplingtype=units, regionbox=keyboard, shape=circle
         # KUNITSR = samplingtype=units, regionbox=keyboard, shape=rectangle
         elif samtype in {SamplingType.KUNITSC, SamplingType.KUNITSR}:
             if samtype == SamplingType.KUNITSC:
@@ -374,13 +374,13 @@ class RLIWizard:
             fil.write("SAMPLEAREA -1|-1|%r|%r\n" % (rl, cl))
             if self.units.distrtype == "non_overlapping":
                 fil.write("RANDOMNONOVERLAPPING %s\n" % self.units.distr1)
-            elif self.units.distrtype == "systematic_contiguos":
+            elif self.units.distrtype == "systematic_contiguous":
                 fil.write("SYSTEMATICCONTIGUOUS\n")
             elif self.units.distrtype == "stratified_random":
                 fil.write(
                     "STRATIFIEDRANDOM %s|%s\n" % (self.units.distr1, self.units.distr2)
                 )
-            elif self.units.distrtype == "systematic_noncontiguos":
+            elif self.units.distrtype == "systematic_noncontiguous":
                 fil.write("SYSTEMATICNONCONTIGUOUS %s\n" % self.units.distr1)
             elif self.units.distrtype == "centered_oversites":
                 fil.write("")
@@ -388,7 +388,7 @@ class RLIWizard:
         # elif self.samplingareapage.samplingtype == SamplingType.UNITS and
         # self.samplingareapage.regionbox=='mouse':
 
-        # MUNITSC = samplingtype=units, regionbox=mouse, shape=cirlce
+        # MUNITSC = samplingtype=units, regionbox=mouse, shape=circle
         # MUNITSR = samplingtype=units, regionbox=mouse, shape=rectangle
         elif self.samplingareapage.samplingtype in {
             SamplingType.MUNITSR,
@@ -687,7 +687,7 @@ class FirstPage(TitledPage):
     def OnLayer(self, event):
         try:
             self.vectorlayer = self.vectlayer.GetValue()
-        except:
+        except AttributeError:
             self.vectorlayer = None
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
@@ -720,13 +720,12 @@ class FirstPage(TitledPage):
                 % vector
             )
             return False, []
-        elif links > 0:
+        if links > 0:
             layers = []
             for i in range(1, links + 1):
                 layers.append(str(i))
             return True, layers
-        else:
-            return False, []
+        return False, []
 
     def CheckInput(self):
         """Check input fields.
@@ -1435,7 +1434,7 @@ class SampleUnitsKeyPage(TitledPage):
             self.panelSizer.Hide(self.distr2Txt)
             self.panelSizer.Layout()
         elif chosen == 1:
-            self.distrtype = "systematic_contiguos"
+            self.distrtype = "systematic_contiguous"
             self.distr1Label.SetLabel("")
             self.distr2Label.SetLabel("")
             self.panelSizer.Hide(self.distr1Txt)
@@ -1449,7 +1448,7 @@ class SampleUnitsKeyPage(TitledPage):
             self.panelSizer.Show(self.distr2Txt)
             self.panelSizer.Layout()
         elif chosen == 3:
-            self.distrtype = "systematic_noncontiguos"
+            self.distrtype = "systematic_noncontiguous"
             self.distr1Label.SetLabel(_("Insert distance between units"))
             self.panelSizer.Show(self.distr1Txt)
             self.distr2Label.SetLabel("")
@@ -1819,14 +1818,13 @@ class VectorAreasPage(TitledPage):
             self.areaOK.Enable(False)
             self.areaNO.Enable(False)
             return True
-        else:
-            self.title.SetLabel(
-                _("Select sample area {areas_count} of {area_num}").format(
-                    areas_count=self.areascount + 1, area_num=self.areanum
-                )
+        self.title.SetLabel(
+            _("Select sample area {areas_count} of {area_num}").format(
+                areas_count=self.areascount + 1, area_num=self.areanum
             )
-            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
-            return False
+        )
+        wx.FindWindowById(wx.ID_FORWARD).Enable(False)
+        return False
 
     def OnYes(self, event):
         """Function to create the string for the conf file if the area
@@ -1859,8 +1857,8 @@ class VectorAreasPage(TitledPage):
                     "The raster map <%s> already exists."
                     " Please remove or rename the maps "
                     "with the prefix '%s' or select the "
-                    "option to overwrite existing maps" % (self.outname, self.outpref)
-                ),
+                    "option to overwrite existing maps"
+                ).format(self.outname, self.outpref),
             )
             self.parent.wizard.ShowPage(self.parent.samplingareapage)
             return
@@ -2184,7 +2182,7 @@ class SummaryPage(TitledPage):
             if self.parent.units.distrtype == "non_overlapping":
                 self.unitsmorelabel.SetLabel(_("Number sampling units:"))
                 self.unitsmoretxt.SetLabel(self.parent.units.distr1)
-            elif self.parent.units.distrtype == "systematic_noncontiguos":
+            elif self.parent.units.distrtype == "systematic_noncontiguous":
                 self.unitsmorelabel.SetLabel(_("Distance between units:"))
                 self.unitsmoretxt.SetLabel(self.parent.units.distr1)
             elif self.parent.units.distrtype == "stratified_random":

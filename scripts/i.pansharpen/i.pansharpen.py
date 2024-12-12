@@ -93,6 +93,7 @@
 # %end
 
 import os
+from grass.exceptions import CalledModuleError
 
 try:
     import numpy as np
@@ -402,7 +403,7 @@ def main():
     gs.run_command("g.region", res=panres, align=pan)
 
     # Select sharpening method
-    gs.message(_("Performing pan sharpening with hi res pan image: %f" % panres))
+    gs.message(_("Performing pan sharpening with hi res pan image: %f") % panres)
     if sharpen == "brovey":
         brovey(pan, ms1, ms2, ms3, out, pid, sproc)
     elif sharpen == "ihs":
@@ -437,8 +438,8 @@ def main():
     for ch in ["red", "green", "blue"]:
         gs.verbose(_("%s_%s") % (out, ch))
 
-    gs.verbose(_("To visualize output, run: g.region -p raster=%s_red" % out))
-    gs.verbose(_("d.rgb r=%s_red g=%s_green b=%s_blue" % (out, out, out)))
+    gs.verbose(_("To visualize output, run: g.region -p raster=%s_red") % out)
+    gs.verbose(_("d.rgb r=%s_red g=%s_green b=%s_blue") % (out, out, out))
     gs.verbose(
         _("If desired, combine channels into a single RGB map with 'r.composite'.")
     )
@@ -458,7 +459,7 @@ def main():
         gs.run_command(
             "g.remove", flags="f", type="raster", pattern="tmp%s*" % pid, quiet=True
         )
-    except:
+    except CalledModuleError:
         pass
 
 
@@ -523,7 +524,7 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
         pb.wait(), pg.wait(), pr.wait()
         try:
             pb.terminate(), pg.terminate(), pr.terminate()
-        except:
+        except OSError:
             pass
 
     # Cleanup
@@ -535,7 +536,7 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
             type="raster",
             name="%s,%s,%s" % (panmatch1, panmatch2, panmatch3),
         )
-    except:
+    except CalledModuleError:
         pass
 
 
@@ -575,7 +576,7 @@ def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
     # Cleanup
     try:
         gs.run_command("g.remove", flags="f", quiet=True, type="raster", name=panmatch)
-    except:
+    except CalledModuleError:
         pass
 
 
@@ -701,7 +702,7 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
         pb.wait(), pg.wait(), pr.wait()
         try:
             pb.terminate(), pg.terminate(), pr.terminate()
-        except:
+        except OSError:
             pass
 
     # Cleanup
@@ -749,11 +750,8 @@ def matchhist(original, target, matched):
             0  # cumulative total of cells for sum of current and all lower grey values
         )
 
-        for n in range(0, 256):
-            if str(n) in stats_dict:
-                num_cells = stats_dict[str(n)]
-            else:
-                num_cells = 0
+        for n in range(256):
+            num_cells = stats_dict.get(str(n), 0)
 
             cum_cells += num_cells
 

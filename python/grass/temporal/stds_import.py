@@ -54,8 +54,15 @@ imported_maps = {}
 
 
 def _import_raster_maps_from_gdal(
-    maplist, overr, exp, location, link, format_, set_current_region=False, memory=300
-):
+    maplist,
+    overr,
+    exp,
+    location,
+    link,
+    format_,
+    set_current_region: bool = False,
+    memory=300,
+) -> None:
     impflags = ""
     if overr:
         impflags += "o"
@@ -113,7 +120,7 @@ def _import_raster_maps_from_gdal(
 ############################################################################
 
 
-def _import_raster_maps(maplist, set_current_region=False):
+def _import_raster_maps(maplist, set_current_region: bool = False) -> None:
     # We need to disable the projection check because of its
     # simple implementation
     impflags = "o"
@@ -143,7 +150,7 @@ def _import_raster_maps(maplist, set_current_region=False):
 ############################################################################
 
 
-def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
+def _import_vector_maps_from_gml(maplist, overr, exp, location, link) -> None:
     impflags = "o"
     if exp or location:
         impflags += "e"
@@ -169,7 +176,7 @@ def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
 ############################################################################
 
 
-def _import_vector_maps(maplist):
+def _import_vector_maps(maplist) -> None:
     # We need to disable the projection check because of its
     # simple implementation
     impflags = "o"
@@ -208,15 +215,15 @@ def import_stds(
     title=None,
     descr=None,
     location=None,
-    link=False,
-    exp=False,
-    overr=False,
-    create=False,
+    link: bool = False,
+    exp: bool = False,
+    overr: bool = False,
+    create: bool = False,
     stds_type="strds",
     base=None,
-    set_current_region=False,
+    set_current_region: bool = False,
     memory=300,
-):
+) -> None:
     """Import space time datasets of type raster and vector
 
     :param input: Name of the input archive file
@@ -240,7 +247,7 @@ def import_stds(
     :param memory: Cache size for raster rows, used in r.in.gdal
     """
 
-    old_state = gs.raise_on_error
+    old_state = gs.get_raise_on_error()
     gs.set_raise_on_error(True)
 
     # Check if input file and extraction directory exits
@@ -254,10 +261,8 @@ def import_stds(
     # Check for important files
     msgr = get_tgis_message_interface()
     msgr.message(
-        _(
-            "Checking validity of input file (size: %0.1f MB). Make take a while..."
-            % (os.path.getsize(input) / (1024 * 1024.0))
-        )
+        _("Checking validity of input file (size: %0.1f MB). Make take a while...")
+        % (os.path.getsize(input) / (1024 * 1024.0))
     )
     members = tar.getnames()
     # Make sure that the basenames of the files are used for comparison
@@ -288,7 +293,7 @@ def import_stds(
     # We use a new list file name for map registration
     new_list_file_name = list_file_name + "_new"
     # Save current working directory path
-    old_cwd = os.getcwd()
+    old_cwd = Path.cwd()
 
     # Switch into the data directory
     os.chdir(directory)
@@ -374,7 +379,7 @@ def import_stds(
         fs = "|"
         maplist = []
         mapset = get_current_mapset()
-        list_file = open(list_file_name, "r")
+        list_file = open(list_file_name)
         new_list_file = open(new_list_file_name, "w")
 
         # get number of lines to correctly form the suffix
@@ -428,7 +433,7 @@ def import_stds(
         # Read the init file
         fs = "="
         init = {}
-        init_file = open(init_file_name, "r")
+        init_file = open(init_file_name)
         while True:
             line = init_file.readline()
             if not line:

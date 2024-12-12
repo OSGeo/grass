@@ -20,6 +20,8 @@ import sys
 import math
 import numpy as np
 
+from pathlib import Path
+
 import wx
 
 from wx.lib import plot
@@ -191,7 +193,7 @@ class ProfileFrame(BasePlotFrame):
         # title of window
         self.ptitle = _("Profile of")
 
-        # Initialize lattitude-longitude geodesic distance calculation
+        # Initialize latitude-longitude geodesic distance calculation
         if self._is_lat_lon_proj and haveCtypes:
             gislib.G_begin_distance_calculations()
 
@@ -248,7 +250,7 @@ class ProfileFrame(BasePlotFrame):
             # delete extra first segment point
             try:
                 self.seglist.pop(0)
-            except:
+            except IndexError:
                 pass
 
         #
@@ -289,7 +291,6 @@ class ProfileFrame(BasePlotFrame):
         # freezing with large, high resolution maps
         region = gs.region()
         curr_res = min(float(region["nsres"]), float(region["ewres"]))
-        transect_rec = 0
         if self.transect_length / curr_res > 500:
             transect_res = self.transect_length / 500
         else:
@@ -396,8 +397,7 @@ class ProfileFrame(BasePlotFrame):
 
         if len(self.plotlist) > 0:
             return self.plotlist
-        else:
-            return None
+        return None
 
     def Update(self):
         """Update profile after changing options"""
@@ -410,7 +410,7 @@ class ProfileFrame(BasePlotFrame):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Choose prefix for file(s) where to save profile values..."),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("Comma separated value (*.csv)|*.csv"),
             style=wx.FD_SAVE,
         )
@@ -485,7 +485,7 @@ class ProfileFrame(BasePlotFrame):
                 statstr += "median: %f\n" % np.median(a)
                 statstr += "distance along transect: %f\n\n" % self.transect_length
                 message.append(statstr)
-            except:
+            except (ValueError, TypeError, KeyError, IndexError):
                 pass
 
         stats = PlotStatsFrame(self, id=wx.ID_ANY, message=message, title=title)

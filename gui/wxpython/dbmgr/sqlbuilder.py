@@ -49,7 +49,7 @@ import grass.script as gs
 
 
 class SQLBuilder(wx.Frame):
-    """SQLBuider class
+    """SQLBuilder class
     Base class for classes, which builds SQL statements.
     """
 
@@ -314,8 +314,8 @@ class SQLBuilder(wx.Frame):
             flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
             border=5,
         )
-        # self.pagesizer.Add(self.btn_uniqe,0,wx.ALIGN_LEFT|wx.TOP,border=5)
-        # self.pagesizer.Add(self.btn_uniqesample,0,wx.ALIGN_LEFT|wx.TOP,border=5)
+        # self.pagesizer.Add(self.btn_unique,0,wx.ALIGN_LEFT|wx.TOP,border=5)
+        # self.pagesizer.Add(self.btn_uniquesample,0,wx.ALIGN_LEFT|wx.TOP,border=5)
         self.pagesizer.Add(
             self.btn_logicpanel, proportion=0, flag=wx.ALIGN_CENTER_HORIZONTAL
         )
@@ -359,7 +359,7 @@ class SQLBuilder(wx.Frame):
         try:
             idx = self.list_columns.GetSelections()[0]
             column = self.list_columns.GetString(idx)
-        except:
+        except IndexError:
             self.list_values.Clear()
             return
 
@@ -574,10 +574,7 @@ class SQLBuilderSelect(SQLBuilder):
                 idx1 = len("select")
                 idx2 = sqlstr.lower().find("from")
                 colstr = sqlstr[idx1:idx2].strip()
-                if colstr == "*":
-                    cols = []
-                else:
-                    cols = colstr.split(",")
+                cols = [] if colstr == "*" else colstr.split(",")
                 if value in cols:
                     cols.remove(value)
                 else:
@@ -922,10 +919,7 @@ if __name__ == "__main__":
         print(__doc__, file=sys.stderr)
         sys.exit()
 
-    if len(sys.argv) == 3:
-        layer = 1
-    else:
-        layer = int(sys.argv[3])
+    layer = 1 if len(sys.argv) == 3 else int(sys.argv[3])
 
     if sys.argv[1] == "select":
         sqlBuilder = SQLBuilderSelect

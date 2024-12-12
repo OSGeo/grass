@@ -152,6 +152,9 @@ int G_vfaprintf(FILE *, const char *, va_list);
 int G_vsaprintf(char *, const char *, va_list);
 int G_vsnaprintf(char *, size_t, const char *, va_list);
 
+/* strlcat.c */
+size_t G_strlcat(char *, const char *, size_t);
+
 /* strlcpy.c */
 size_t G_strlcpy(char *, const char *, size_t);
 
