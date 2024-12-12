@@ -92,13 +92,13 @@ def build_keywords(ext):
             # TODO maybe move to Python re (regex)
             try:
                 index_keys = lines.index("<h2>KEYWORDS</h2>\n") + 1
-            except Exception:
+            except ValueError:
                 continue
             try:
                 keys = []
                 for k in lines[index_keys].split(","):
                     keys.append(k.strip().split(">")[1].split("<")[0])
-            except Exception:
+            except (IndexError, TypeError):
                 continue
         else:
             keys = []
@@ -117,10 +117,10 @@ def build_keywords(ext):
     for black in blacklist:
         try:
             del keywords[black]
-        except Exception:
+        except KeyError:
             try:
                 del keywords[black.lower()]
-            except Exception:
+            except (KeyError, TypeError):
                 continue
 
     for key in sorted(keywords.keys()):

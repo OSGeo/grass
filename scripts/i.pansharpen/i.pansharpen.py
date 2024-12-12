@@ -455,12 +455,15 @@ def main():
 
     # Cleanup
     gs.message(_("cleaning up temp files"))
-    try:
-        gs.run_command(
-            "g.remove", flags="f", type="raster", pattern="tmp%s*" % pid, quiet=True
-        )
-    except CalledModuleError:
-        pass
+
+    gs.run_command(
+        "g.remove",
+        flags="f",
+        type="raster",
+        pattern="tmp%s*" % pid,
+        quiet=True,
+        errors="ignore",
+    )
 
 
 def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
@@ -528,16 +531,14 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
             pass
 
     # Cleanup
-    try:
-        gs.run_command(
-            "g.remove",
-            flags="f",
-            quiet=True,
-            type="raster",
-            name="%s,%s,%s" % (panmatch1, panmatch2, panmatch3),
-        )
-    except CalledModuleError:
-        pass
+    gs.run_command(
+        "g.remove",
+        flags="f",
+        quiet=True,
+        type="raster",
+        name="%s,%s,%s" % (panmatch1, panmatch2, panmatch3),
+        errors="ignore",
+    )
 
 
 def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
@@ -575,7 +576,14 @@ def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
 
     # Cleanup
     try:
-        gs.run_command("g.remove", flags="f", quiet=True, type="raster", name=panmatch)
+        gs.run_command(
+            "g.remove",
+            flags="f",
+            quiet=True,
+            type="raster",
+            name=panmatch,
+            errors="ignore",
+        )
     except CalledModuleError:
         pass
 

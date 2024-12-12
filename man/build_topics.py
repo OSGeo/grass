@@ -47,7 +47,7 @@ def build_topics(ext):
                 # expecting markdown
                 index_keys = lines.index("### KEYWORDS\n") + 3
                 index_desc = lines.index("## NAME\n") + 2
-        except Exception:
+        except ValueError:
             continue
         try:
             if ext == "html":
@@ -56,11 +56,11 @@ def build_topics(ext):
             else:
                 # expecting markdown
                 key = lines[index_keys].split("]")[0].lstrip("[")
-        except Exception:
+        except IndexError:
             continue
         try:
             desc = lines[index_desc].split("-", 1)[1].strip()
-        except Exception:
+        except IndexError:
             desc.strip()
 
         if key not in keywords.keys():

@@ -246,7 +246,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
             x = round(x)
             y = round(y)
             coords = True
-        except TypeError:
+        except (TypeError, ValueError):
             coords = False
 
         pane = self._getPane(scatt_id)
