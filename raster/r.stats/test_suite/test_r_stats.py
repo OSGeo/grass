@@ -160,7 +160,7 @@ class TestRasterreport(TestCase):
         reference_file = os.path.normpath(
             os.path.join(__file__, "..", "test_json2.json")
         )
-        with open(reference_file, "r") as f:
+        with open(reference_file) as f:
             reference = json.load(f)
         module = SimpleModule(
             "r.stats",
