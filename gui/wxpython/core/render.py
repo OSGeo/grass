@@ -1409,9 +1409,9 @@ class Map:
         """
         Debug.msg(3, "Map.DeleteLayer(): name=%s" % layer.name)
 
-        _list = self.overlays if overlay else self.layers
+        list_ = self.overlays if overlay else self.layers
 
-        if layer in _list:
+        if layer in list_:
             if layer.mapfile:
                 base, mapfile = os.path.split(layer.mapfile)
                 tempbase = mapfile.split(".")[0]
@@ -1428,7 +1428,7 @@ class Map:
                 if os.path.isfile(layer._legrow):
                     os.remove(layer._legrow)
 
-            _list.remove(layer)
+            list_.remove(layer)
 
             self.layerRemoved.emit(layer=layer)
             return layer
@@ -1563,10 +1563,10 @@ class Map:
         :return: layer index
         :return: -1 if layer not found
         """
-        _list = self.overlays if overlay else self.layers
+        list_ = self.overlays if overlay else self.layers
 
-        if layer in _list:
-            return _list.index(layer)
+        if layer in list_:
+            return list_.index(layer)
 
         return -1
 

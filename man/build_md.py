@@ -193,7 +193,7 @@ desc1_tmpl = string.Template(
 )
 
 modclass_intro_tmpl = string.Template(
-    r"""Go to [${modclass} introduction](${modclass_lower}intro.html) | [topics](topics.html)
+    r"""Go to [${modclass} introduction](${modclass_lower}intro.md) | [topics](topics.md)
 """
 )
 # "
@@ -201,7 +201,7 @@ modclass_intro_tmpl = string.Template(
 
 modclass_tmpl = string.Template(
     r"""Go [back to help overview](index.md)
-### ${modclass} commands:
+### ${modclass} commands
 | Module | Description |
 |--------|-------------|
 """
@@ -217,7 +217,7 @@ full_index_header = r"""Go [back to help overview](index.md)
 
 moduletopics_tmpl = string.Template(
     r"""
-- [${name}](topic_${key}.html)
+- [${name}](topic_${key}.md)
 """
 )
 

@@ -1,6 +1,6 @@
-@Echo OFF 
+@Echo OFF
 
-:: Software and documentation is (c) 2013 GKX Associates Inc. and 
+:: Software and documentation is (c) 2013 GKX Associates Inc. and
 :: licensed under [GPL 2.0](https://www.gnu.org/licenses/gpl-2.0.html).
 
 :: Help is at bottom of script or just run script with single argument: help
@@ -19,7 +19,7 @@
 if not defined R_REGISTRY set R_REGISTRY=1
 set CYGWIN=nodosfilewarning
 
-SetLocal EnableExtensions EnableDelayedExpansion 
+SetLocal EnableExtensions EnableDelayedExpansion
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: R_CMD
@@ -62,11 +62,11 @@ rem echo R_CMD:%R_CMD% args=[%args%]
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: 1. If .\Rgui.exe exist use implied R_PATH and skip remaining points.
 :: 2. If .\{x64,i386}\Rgui.exe or .\bin\{x64,i386}\Rgui.exe exists use implied R_HOME.
-:: 3. if R_HOME defined then derive any of R_ROOT and R_VER that 
+:: 3. if R_HOME defined then derive any of R_ROOT and R_VER that
 ::    are not already defined.
 :: 4. if R_PATH defined then derive any of R_ROOT, R_HOME, R_VER and R_ARCH that
 ::    are not already defined.
-:: 4a. If R_REGISTRY=1 and R found in registry derive any of R_HOME, R_ROOT and 
+:: 4a. If R_REGISTRY=1 and R found in registry derive any of R_HOME, R_ROOT and
 ::     R_VER that are not already defined.
 :: 5. If R_ROOT not defined try %ProgramFiles%\R\*, %ProgramFiles(x86)%\R\*
 ::    and then %SystemRoot%\R else error
@@ -149,7 +149,7 @@ if defined R_HOME (
     )
 )
 
-	
+
 :: 5
 
 if defined R_ROOT goto:R_ROOT_end
@@ -385,10 +385,10 @@ goto:eof
 ver | findstr XP >NUL
 if not errorlevel 1 goto:Rtouch_next
 if not exist "%ProgramFiles%\R" goto:Rtouch_next
-reg query "HKU\S-1-5-19" >NUL 2>&1 && ( goto Rtouch_next ) || ( 
+reg query "HKU\S-1-5-19" >NUL 2>&1 && ( goto Rtouch_next ) || (
         echo Please run this as Administator.
         goto :eof
-) 
+)
 :Rtouch_next
 
 if not defined R_HOME set R_HOME=%R_ROOT%\%R_VER%
@@ -401,7 +401,7 @@ goto:eof
 
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: set path 
+:: set path
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :Rpath
 endlocal & PATH %PATH%;%R_PATH%
@@ -450,15 +450,15 @@ goto:eof
 :: Extract text from file:
 ::   %1 = input string that starts text
 ::   %2 = input file
-::   final = output variable holding text from and including %1 until 
+::   final = output variable holding text from and including %1 until
 ::    binary data encountered
 ::
-:: Needs: SetLocal EnableExtensions EnableDelayedExpansion 
+:: Needs: SetLocal EnableExtensions EnableDelayedExpansion
 ::
-:: Example:  
+:: Example:
 ::      call :extract_string {app} C:\Rtools\unins000.dat
 ::      echo %final%
-::   where {app} is the string that starts extraction and 
+::   where {app} is the string that starts extraction and
 ::         C:\Rtoolsiunins000.dat is the file
 ::
 :: Based on code by Frank Westlake, https://github.com/FrankWestlake
@@ -467,61 +467,61 @@ goto:eof
 
    :extract_string
 
-   SetLocal EnableExtensions EnableDelayedExpansion 
+   SetLocal EnableExtensions EnableDelayedExpansion
 
-   Set "string=%1" 
+   Set "string=%1"
    Set "file=%2"
 
-   For /F "delims=" %%a in ( 
-       'findstr /C:"%string%" "%file%"^|MORE' 
-     ) Do ( 
-     Set "$=%%~a" 
-     If /I "!$:~0,5!" EQU "%string%" ( 
-       Set $=!$:;=" "! 
-       For %%b in ("!$!") Do ( 
-         Set "#=%%~b" 
-         If "!#:~0,5!" EQU "%string%" ( 
+   For /F "delims=" %%a in (
+       'findstr /C:"%string%" "%file%"^|MORE'
+     ) Do (
+     Set "$=%%~a"
+     If /I "!$:~0,5!" EQU "%string%" (
+       Set $=!$:;=" "!
+       For %%b in ("!$!") Do (
+         Set "#=%%~b"
+         If "!#:~0,5!" EQU "%string%" (
            CALL :work "!#!"
-         ) 
-       ) 
-     ) 
-   ) 
+         )
+       )
+     )
+   )
    endlocal & set final=%final%
-   Goto :EOF 
-   :work 
+   Goto :EOF
+   :work
    set final=%final%!#!;
-   Goto :EOF 
+   Goto :EOF
 
- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: 
-  :trimPath:<variable to trim> [segment to add] 
-  :: Eliminates redundant path segments from the variable and 
-  :: optionally adds new segmants. 
-  :: Example: CALL :trimPath:PATH 
-  :: Example: CALL :trimPath:PATH "C:\A & B" C:\a\b\c 
-  :: 
-  :: Note that only a colon separates the subroutine name and 
-  :: the name of the variable to be edited. 
+ ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+  :trimPath:<variable to trim> [segment to add]
+  :: Eliminates redundant path segments from the variable and
+  :: optionally adds new segmants.
+  :: Example: CALL :trimPath:PATH
+  :: Example: CALL :trimPath:PATH "C:\A & B" C:\a\b\c
+  ::
+  :: Note that only a colon separates the subroutine name and
+  :: the name of the variable to be edited.
   :: - Frank Westlake, https://github.com/FrankWestlake
-  SetLocal EnableExtensions EnableDelayedExpansion 
-  For /F "tokens=2 delims=:" %%a in ("%0") Do ( 
-    For %%a in (%* !%%a!) Do ( 
-      Set "#=%%~a" 
-      For %%b in (!new!) Do If /I "!#!" EQU "%%~b" Set "#=" 
-      If DEFINED # ( 
-        If DEFINED new (Set "new=!new!;!#!") Else ( Set "new=!#!") 
-      ) 
-    ) 
-  ) 
-  EndLocal & For /F "tokens=2 delims=:" %%a in ("%0") Do Set "%%a=%new%" 
-  Goto :EOF 
+  SetLocal EnableExtensions EnableDelayedExpansion
+  For /F "tokens=2 delims=:" %%a in ("%0") Do (
+    For %%a in (%* !%%a!) Do (
+      Set "#=%%~a"
+      For %%b in (!new!) Do If /I "!#!" EQU "%%~b" Set "#="
+      If DEFINED # (
+        If DEFINED new (Set "new=!new!;!#!") Else ( Set "new=!#!")
+      )
+    )
+  )
+  EndLocal & For /F "tokens=2 delims=:" %%a in ("%0") Do Set "%%a=%new%"
+  Goto :EOF
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: 
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :Rhelp
 
-echo (c) 2013 G. Grothendieck 
+echo (c) 2013 G. Grothendieck
 echo License: GPL 2.0 ( https://www.gnu.org/licenses/gpl-2.0.html )
-echo Launch script for R and associated functions.  
+echo Launch script for R and associated functions.
 echo Usage:  R.bat [subcommand] [arguments]
 echo Subcommands where (0) means takes no arguments; (A) means may need Admin priv
 echo   cd - cd to R_ROOT, typically to C:\Program Files\R (0)
@@ -555,35 +555,35 @@ echo   start set R_HOME=%ProgramFiles%\R\R-2.14.0 ^& R gui
 echo
 echo ==Customization by renaming==
 echo.
-echo If the optional first argument is missing then it uses the value of 
-echo the environment variable R_CMD or if that is not set it uses the name of 
-echo the script file as the default first argument.  The idea is one could have 
+echo If the optional first argument is missing then it uses the value of
+echo the environment variable R_CMD or if that is not set it uses the name of
+echo the script file as the default first argument.  The idea is one could have
 echo multiple versions of the script called R.bat, Rgui.bat, etc. which invoke
 echo the corresponding functionality without having to specify first argument.
 echo.
 echo ==Customization by setting environment variables at top of script==
 echo.
-echo It can be customized by setting any of R_CMD, R_HOME, R_ARCH, 
-echo R_MIKTEX_PATH, R_TOOLS after the @echo off command at the top of the 
-echo script.  R_CMD will be used as the default first argument (instead of the 
-echo script name).  
+echo It can be customized by setting any of R_CMD, R_HOME, R_ARCH,
+echo R_MIKTEX_PATH, R_TOOLS after the @echo off command at the top of the
+echo script.  R_CMD will be used as the default first argument (instead of the
+echo script name).
 echo.
 echo e.g. use the following after @echo off to force 32-bit
 echo set R_ARCH=32
 echo.
-echo e.g.  use the following after @echo off to force a particular version of 
+echo e.g.  use the following after @echo off to force a particular version of
 echo R to be used
 echo set R_HOME=%ProgramFiles%\R\R-2.14.0
 echo.
-echo e.g. use the following after @echo off to change the default command to 
+echo e.g. use the following after @echo off to change the default command to
 echo Rgui even if the script is called myRgui.bat, say:
 echo set R_CMD=Rgui
 echo.
 echo ==Installation==
-echo. 
+echo.
 echo The script is self contained so just place it anywhere on your Windows
 echo PATH.  (From the Windows cmd line the command PATH shows your current
-echo Windows path.)  You may optionally make copies of this script with names 
+echo Windows path.)  You may optionally make copies of this script with names
 echo like R.bat, Rscript.bat, Rcmd.bat so that each has a different default.
 echo.
 
