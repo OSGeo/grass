@@ -5,7 +5,6 @@
 
 import ctypes
 import pathlib
-import platform
 import unittest
 
 import grass.lib.gis as libgis

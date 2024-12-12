@@ -810,10 +810,7 @@ class Line(Geo):
 
         """
         # set direction
-        if forward:
-            direction = libvect.GV_FORWARD
-        else:
-            direction = libvect.GV_BACKWARD
+        direction = libvect.GV_FORWARD if forward else libvect.GV_BACKWARD
         # check if is a Line object
         if isinstance(line, Line):
             c_points = line.c_points

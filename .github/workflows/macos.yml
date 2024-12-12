@@ -44,13 +44,13 @@ jobs:
             -mindepth 1 -maxdepth 1 -type f -print -delete
           # Rehash to forget about the deleted files
           hash -r
-      - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Get current date cache key segment
         id: date
         # Year and week of year so cache key changes weekly
         run: echo "date=$(date +%Y-%U)" >> "${GITHUB_OUTPUT}"
       - name: Setup Mamba
-        uses: mamba-org/setup-micromamba@617811f69075e3fd3ae68ca64220ad065877f246 # v2.0.0
+        uses: mamba-org/setup-micromamba@06375d89d211a1232ef63355742e9e2e564bc7f7 # v2.0.2
         with:
           init-shell: bash
           environment-file: .github/workflows/macos_dependencies.txt
@@ -104,7 +104,7 @@ jobs:
               --min-success 100 --config .github/workflows/macos_gunittest.cfg
         env:
           SampleData: "https://grass.osgeo.org/sampledata/north_carolina/\
-                       nc_spm_full_v2alpha2.tar.gz"
+            nc_spm_full_v2alpha2.tar.gz"
       - name: Make HTML test report available
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3

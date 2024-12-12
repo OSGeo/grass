@@ -154,12 +154,10 @@ def main():
     if flags["l"]:
         wfs_url = options["url"] + "REQUEST=GetCapabilities&SERVICE=WFS"
 
-    print(wfs_url)
-
     tmp = grass.tempfile()
     tmpxml = tmp + ".xml"
 
-    grass.debug(wfs_url)
+    grass.debug("The request URL: {wfs_url}")
 
     # Set user and password if given
     if options["username"] and options["password"]:
