@@ -70,7 +70,7 @@ as <i>PROJ</i>'s <em><a href="https://proj.org/apps/cs2cs.html">cs2cs</a></em>
 [1]. This is an easy method for converting an ASCII file containing a list
 of coordinate points, since there is no topology to be preserved and
 <i>cs2cs</i> can be used to process simple lists using a one-line command.
-The <em>m.proj</em> module provides a handy front end to <tt>cs2cs</tt>.
+The <em>m.proj</em> module provides a handy front end to <code>cs2cs</code>.
 
 <p>Vector maps is generally more complex, as parts of the data stored in
 the files will describe topology, and not just coordinates. In GRASS
@@ -173,7 +173,7 @@ the region in that way you might check the cell resolution with
 "<em>g.region -p</em>" then snap it to a regular grid
 with <em><a href="g.region.html">g.region</a></em>'s <b>-a</b>
 flag. E.g.
-<tt>g.region -a res=5 -p</tt>. Note that this is just a rough guide.
+<code>g.region -a res=5 -p</code>. Note that this is just a rough guide.
 
 <p>
 A more involved, but more accurate, way to do this is to generate a

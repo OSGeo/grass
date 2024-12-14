@@ -125,7 +125,7 @@ Variance and derivatives use the biased estimator (n)
 <dt>coeff_var</dt>
 <dd>This computes the coefficient of variance of point values for each
 cell. Coefficient of variance is given in percentage and defined as
-<tt>(stddev/mean)*100</tt>.</dd>
+<code>(stddev/mean)*100</code>.</dd>
 <dt>median</dt>
 <dd>This computes the median of point values for each cell</dd>
 <dt>percentile</dt>
@@ -210,7 +210,7 @@ environment if the cells are oversampled.
 The user can use a combination of <em>r.in.lidar</em> <b>output</b> maps
 to create custom raster-based filters, for example, use
 <em><a href="r.mapcalc.html">r.mapcalc</a></em> to create
-a <tt>mean-(2*stddev)</tt> map. (In this example the user may want to
+a <code>mean-(2*stddev)</code> map. (In this example the user may want to
 include a lower bound filter in <em>r.mapcalc</em> to remove highly
 variable points (small <em>n</em>) or run <em>r.neighbors</em> to
 smooth the stddev map before further use.)
@@ -332,10 +332,10 @@ will use a large amount of system memory (RAM) for large raster regions
 (&gt; 10000x10000 pixels).
 If the module refuses to start complaining that there isn't enough memory,
 use the <b>percent</b> parameter to run the module in several passes.
-In addition using a less precise map format (<tt>CELL</tt> [integer] or
-<tt>FCELL</tt> [floating point]) will use less memory than a <tt>DCELL</tt>
+In addition using a less precise map format (<code>CELL</code> [integer] or
+<code>FCELL</code> [floating point]) will use less memory than a <code>DCELL</code>
 [double precision floating point] <b>output</b> map.
-For <b>method</b>=<em>n</em>, the <tt>CELL</tt> format is used
+For <b>method</b>=<em>n</em>, the <code>CELL</code> format is used
 automatically.
 
 <p>
@@ -356,7 +356,7 @@ the other statistics memory use for these also depends on
 the number of data points.
 
 <p>
-The default map <b>type</b>=<tt>FCELL</tt> is intended as compromise between
+The default map <b>type</b>=<code>FCELL</code> is intended as compromise between
 preserving data precision and limiting system resource consumption.
 
 <h3>Trim option</h3>
@@ -488,7 +488,7 @@ r.in.lidar input="Serpent Mound Model LAS Data.laz" \
 
 The mean height above ground of the points can be computed for each
 raster cell (the ground elevation is given by the raster map
-<tt>elevation</tt>):
+<code>elevation</code>):
 
 <div class="code"><pre>
 g.region raster=elevation -p
@@ -551,14 +551,14 @@ gs.run_command('r.in.lidar', file=file_list_name,
 <h2>KNOWN ISSUES</h2>
 
 <ul>
-<li>The "<tt>nan</tt>" value (as defined in C language) can leak into
+<li>The "<code>nan</code>" value (as defined in C language) can leak into
     <em>coeff_var</em> raster maps. Cause is unknown. Possible
-    work-around is: <tt>r.null setnull=nan</tt> or
-    <tt>r.mapcalc 'no_nan = if(map == map, map, null())'</tt>.</li>
+    work-around is: <code>r.null setnull=nan</code> or
+    <code>r.mapcalc 'no_nan = if(map == map, map, null())'</code>.</li>
 <li>Only one method can be applied for a single run and multiple map
     output from a single run
-    (e.g. <tt>method=string[,string,...] output=name[,name,...]</tt>
-    or <tt>n=string mean=string</tt>) is no supported.</li>
+    (e.g. <code>method=string[,string,...] output=name[,name,...]</code>
+    or <code>n=string mean=string</code>) is no supported.</li>
 <!-- not really:
 <li> Merge with r.in.xyz.
 -->

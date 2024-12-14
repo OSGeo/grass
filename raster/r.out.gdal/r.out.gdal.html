@@ -110,7 +110,7 @@ symbology).
 
 <h3>Adding overviews to speed up map display in other software</h3>
 
-Adding overviews with <tt><a href="https://www.gdal.org/gdaladdo.html">gdaladdo</a></tt>
+Adding overviews with <code><a href="https://www.gdal.org/gdaladdo.html">gdaladdo</a></code>
 after exporting can speed up display. The overviews are created internally
 within the exported file. The amount of levels (power-of-two factors) are
 controlled with the <b>overviews</b> parameter. The higher the overview level
@@ -151,13 +151,13 @@ self-documenting (and useful) the dataset will be.
 Here are some things to try:
 
 <ul>
-<li>Create a World file with <tt>createopt="TFW=YES"</tt>.</li>
+<li>Create a World file with <code>createopt="TFW=YES"</code>.</li>
 
 <li>Do not use GeoTIFF internal compression. Other GIS software often
 supports only a subset of the available compression methods with the
 supported methods differing between GIS software packages. Unfortunately
 this means the output image can be rather huge, but the file can be
-compressed with software like <tt>zip</tt>, <tt>gnuzip</tt>, or <tt>bzip2</tt>.</li>
+compressed with software like <code>zip</code>, <code>gnuzip</code>, or <code>bzip2</code>.</li>
 
 <li>Skip exporting the color table. Color tables are not always properly
 rendered, particularly for type UInt16, and the GeoTIFF file can appear
@@ -165,8 +165,8 @@ completely black. If you are lucky the problematic software package has
 a method to reset the color table and assign a new color table
 (sometimes called symbology).</li>
 
-<li>Keep metadata simple with <tt>createopt="PROFILE=GeoTIFF"</tt> or
-<tt>createopt="PROFILE=BASELINE"</tt>. With BASELINE no GDAL or GeoTIFF
+<li>Keep metadata simple with <code>createopt="PROFILE=GeoTIFF"</code> or
+<code>createopt="PROFILE=BASELINE"</code>. With BASELINE no GDAL or GeoTIFF
 tags will be written and a World file is required (<em>createopt="TFW=YES"</em>).</li>
 </ul>
 

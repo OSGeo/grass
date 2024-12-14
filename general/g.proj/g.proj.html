@@ -50,7 +50,7 @@ than as a directly-supplied command-line parameter.</dd>
 co-ordinate system in the <a href="https://epsg.org/search/by-name">EPSG
 database</a>. EPSG code support is based upon a local copy of the GDAL CSV
 co-ordinate system and datum information files, stored in the directory
-<tt>$GISBASE/etc/proj/ogr_csv</tt>. These can be updated if necessary
+<code>$GISBASE/etc/proj/ogr_csv</code>. These can be updated if necessary
 to support future revisions of the EPSG database.</dd>
 </dl>
 
@@ -88,7 +88,7 @@ this.
 <p>If the input co-ordinate system contains a datum name but no
 transformation parameters, and there is more than one suitable parameter set
 available (according to the files datum.table and datumtransform.table in
-<tt>$GISBASE/etc/proj</tt>), <em>g.proj</em> will check the value of
+<code>$GISBASE/etc/proj</code>), <em>g.proj</em> will check the value of
 the <em>datumtrans</em> option and act according to the following:
 
 <ul>

@@ -849,14 +849,14 @@ following information:
 
 <ol>
 <li><em>Geometrical conditions</em>
-<p>For Sentinel-2A, the geometrical conditions take the value <tt>25</tt> and for
-Sentinel-2B, the geometrical conditions value is <tt>26</tt> (See table A).
+<p>For Sentinel-2A, the geometrical conditions take the value <code>25</code> and for
+Sentinel-2B, the geometrical conditions value is <code>26</code> (See table A).
 Our scene comes from the Sentinel-2A mission (the file name begins with
 S2A_...).
 <br><br>
 <li><em>Day, time, longitude and latitude of measurement</em>
 <p>Day and time of the measurement are hidden in the filename (i.e., the
-second datum in the file name with format <tt>YYYYMMDDTHHMMSS</tt>),
+second datum in the file name with format <code>YYYYMMDDTHHMMSS</code>),
 and are also noted in the metadata file, which is included in the
 downloaded scene (file with .xml extension). Our sample scene was taken on
 October 28th (20161028) at 15:54:02 (155402). Note
@@ -873,20 +873,20 @@ g.region -bg
 </pre></div>
 
 <p>The longitude and latitude of the centre are stored in <em>ll_clon</em>
-and <em>ll_clat</em>. In our case, <tt>ll_clon=-78.691</tt> and
-<tt>ll_clat=35.749</tt>.
+and <em>ll_clat</em>. In our case, <code>ll_clon=-78.691</code> and
+<code>ll_clat=35.749</code>.
 
 <br><br>
 <li><em>Atmospheric model</em>
 <p>We can choose between various atmospheric models as defined at the
-beginning of this manual. For North Carolina, we can choose <tt>2 -
-midlatitude summer</tt>.
+beginning of this manual. For North Carolina, we can choose <code>2 -
+midlatitude summer</code>.
 
 <br><br>
 <li><em>Aerosol model</em>
 <p>We can also choose between various aerosol models as defined at the
-beginning of this manual. For North Carolina, we can choose <tt>1 -
-continental model</tt>.
+beginning of this manual. For North Carolina, we can choose <code>1 -
+continental model</code>.
 
 <br><br>
 <li><em>Visibility or Aerosol Optical Depth</em>
@@ -909,13 +909,13 @@ r.univar -g elevation
 </pre></div>
 
 <p>The mean elevation is stored in <em>mean</em>. In our case,
-<tt>mean=110</tt>. In the 6S file it will be displayed in [-km],
-i.e., <tt>-0.110</tt>.
+<code>mean=110</code>. In the 6S file it will be displayed in [-km],
+i.e., <code>-0.110</code>.
 
 <br><br>
 <li><em>Sensor height</em>
 <p>Since the sensor is on board a satellite, the sensor height will be
-set to <tt>-1000</tt>.
+set to <code>-1000</code>.
 
 <br><br>
 <li><em>Sensor band</em>
@@ -926,7 +926,7 @@ Sentinel-2B, from 179 to 191.
 
 <p>Finally, here is what the 6S file would look like for Band 02 of our
 scene. In order to use it in the <em>i.atcorr</em> module, we can save
-it in a text file, for example <tt>params_B02.txt</tt>.
+it in a text file, for example <code>params_B02.txt</code>.
 <div class="code"><pre>
 25
 10 28 15.901 -78.691 35.749
@@ -947,7 +947,7 @@ parameters:
     <li><b>input</b> = raster band to be processed,</li>
     <li><b>parameters</b> = path to 6S file created in the previous step (we could also enter the values directly),</li>
     <li><b>output</b> = name for the output corrected raster band,</li>
-    <li><b>range</b> = from 1 to the <tt>QUANTIFICATION_VALUE</tt> stored in the metadata file. It is <tt>10000</tt> for both Sentinel-2A and Sentinel-2B.</li>
+    <li><b>range</b> = from 1 to the <code>QUANTIFICATION_VALUE</code> stored in the metadata file. It is <code>10000</code> for both Sentinel-2A and Sentinel-2B.</li>
     <li><b>rescale</b> = the output range of values for the corrected bands. This is up to the user to choose, for example: 0-255, 0-1, 1-10000.</li>
 </ul>
 <p>If the data is available, the following parameters can be specified
@@ -1072,7 +1072,7 @@ indicated with the <b>parameters</b> option. This is a text file
 defining geometrical and atmospherical conditions of the satellite
 overpass.
 
-Here we create a control file <tt>icnd_lsat4.txt</tt> for band 4 (NIR),
+Here we create a control file <code>icnd_lsat4.txt</code> for band 4 (NIR),
 based on metadata. For the overpass time, we need to define decimal
 hours: 10:42:07 NC local time = 10.70 decimal hours (decimal minutes:
 42 * 100 / 60) which is 15.70 GMT.
@@ -1098,7 +1098,7 @@ i.atcorr -r -a lsat7_2002_40_rad elevation=elevation parameters=icnd_lsat4.txt o
 Note that the altitude value from 'icnd_lsat4.txt' file is read at the
 beginning to compute the initial transform. Therefore, it is necessary
 to provide a value that might be the mean value of the elevation model
-(<tt>r.univar elevation</tt>). For the atmospheric correction per se, the
+(<code>r.univar elevation</code>). For the atmospheric correction per se, the
 elevation values from the raster map are used.
 <p>Note that the process is computationally intensive. Note also, that
 <em>i.atcorr</em> reports solar elevation angle above horizon rather
