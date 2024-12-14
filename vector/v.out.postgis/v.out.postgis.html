@@ -6,10 +6,10 @@ PostGIS feature table. Features without category are skipped.
 <p>
 By default GRASS GIS topological features are converted into simple
 features
-(see <a href="http://www.opengeospatial.org/standards/sfa">OGC Simple
+(see <a href="https://www.ogc.org/publications/standard/sfa/">OGC Simple
 Feature Access</a> specification for details). Flag <b>-l</b> allows
 to export vector features as topological elements stored
-in <a href="http://postgis.refractions.net/docs/Topology.html">PostGIS
+in <a href="https://postgis.net/docs/Topology.html">PostGIS
 Topology</a> schema. Note that topological export requires PostGIS
 version 2 or later.
 
@@ -38,7 +38,7 @@ PostGIS Topology related options (relevant only for <b>-l</b> flag):
   default: <tt>topo</tt></li>
   <li><tt>TOPO_TOLERANCE=&lt;value&gt;</tt> - tolerance for PostGIS
   Topology schema,
-  see <a href="http://www.postgis.net/docs/manual-2.0/CreateTopology.html">CreateTopology</a>
+  see <a href="https://postgis.net/docs/manual-2.0/CreateTopology.html">CreateTopology</a>
   function for details, default: <tt>0</tt></li>
   <li><tt>TOPO_GEO_ONLY=YES|NO</tt> - store in PostGIS Topology schema
   only data relevant to Topo-Geo data model,
@@ -95,7 +95,7 @@ category are exported as multiple single features.
 <p>
 <em>v.out.postgis</em> also allows exporting vector features as
 <em>topological elements</em>
-in <a href="http://postgis.refractions.net/docs/Topology.html">PostGIS
+in <a href="https://postgis.net/docs/Topology.html">PostGIS
 Topology</a> schema. PostGIS Topology extension uses three tables to
 store basic topological elements which forms topological objects like
 areas or isles in GRASS terminology. <em>Nodes</em> (0-dimensional
@@ -233,7 +233,7 @@ v.out.postgis -t input=railroads output="PG:dbname=grass"
 By default <em>v.out.postgis</em> exports data as simple
 features. Flag <b>-l</b> allows exporting data as topological elements
 instead of simple features. Export topological elements is stored in
-<a href="http://postgis.refractions.net/docs/Topology.html">PostGIS
+<a href="https://postgis.net/docs/Topology.html">PostGIS
 Topology</a> schema.
 
 <div class="code"><pre>
@@ -264,8 +264,8 @@ page</a>.
 <h2>REFERENCES</h2>
 
 <ul>
-  <li><a href="http://www.opengeospatial.org/standards/sfa">OGC Simple Feature Access</a> specification</li>
-  <li><a href="http://postgis.net/docs/Topology.html">PostGIS Topology</a> documentation</li>
+  <li><a href="https://www.ogc.org/publications/standard/sfa/">OGC Simple Feature Access</a> specification</li>
+  <li><a href="https://postgis.net/docs/Topology.html">PostGIS Topology</a> documentation</li>
   <li><a href="https://grass.osgeo.org/programming8/vlibPg.html">GRASS-PostGIS data provider</a></li>
 </ul>
 

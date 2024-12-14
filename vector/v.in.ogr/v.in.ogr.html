@@ -23,11 +23,11 @@ region settings as the spatial bounds
 
 <em>v.in.ogr</em> uses the OGR library which supports various vector
 data formats including
-<a href="https://gdal.org/drivers/vector/shapefile.html">ESRI Shapefile</a>,
-<a href="https://gdal.org/drivers/vector/mitab.html">Mapinfo File</a>, UK .NTF,
+<a href="https://gdal.org/en/stable/drivers/vector/shapefile.html">ESRI Shapefile</a>,
+<a href="https://gdal.org/en/stable/drivers/vector/mitab.html">Mapinfo File</a>, UK .NTF,
 SDTS, TIGER, IHO S-57 (ENC), DGN, GML, GPX, AVCBin, REC, Memory, OGDI,
 and PostgreSQL, depending on the local OGR installation. For details
-see the <a href="https://gdal.org/drivers/vector/">OGR format overview</a>.
+see the <a href="https://gdal.org/en/stable/drivers/vector/">OGR format overview</a>.
 The <b>-f</b> prints a list of the vector formats supported
 by the system's OGR (Simple Features Library). The OGR (Simple Features
 Library) is part of the <a href="https://gdal.org">GDAL</a> library,
@@ -257,7 +257,7 @@ output=polygons type=boundary,centroid
 </pre></div>
 
 Generally, <em>v.in.ogr</em> just follows the
-<a href="https://gdal.org/drivers/vector/">format-specific</a>
+<a href="https://gdal.org/en/stable/drivers/vector/">format-specific</a>
 syntax defined by the OGR library.
 
 
@@ -301,7 +301,7 @@ db.select table=river
 
 <h3>OpenStreetMap (OSM)</h3>
 
-<a href="https://gdal.org/drivers/vector/osm.html">OSM data</a> are available in
+<a href="https://gdal.org/en/stable/drivers/vector/osm.html">OSM data</a> are available in
 .osm (XML based) and .pbf (optimized binary) formats. The .pbf format
 is recommended because file sizes are smaller. The OSM driver will
 categorize features into 5 layers :
