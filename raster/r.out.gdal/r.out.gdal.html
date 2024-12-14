@@ -9,7 +9,7 @@ applications (see also <b>NOTES</b> on GeoTIFF below).
 (<em>createopt="TFW=YES,COMPRESS=DEFLATE"</em>).
 <p>For possible <em>createopt</em> and <em>metaopt</em> parameters please
 consult the individual
-<a href="https://gdal.org/formats_list.html">supported formats</a>
+<a href="https://gdal.org/en/stable/drivers/raster/">supported formats</a>
 pages on the GDAL website.
 The <em>createopt</em> parameter may be used to create TFW or World files
 ("TFW=YES","WORLDFILE=ON").
@@ -25,7 +25,7 @@ map's before export.
 
 <h2>SUPPORTED RASTER FORMATS</h2>
 
-The set of <a href="https://gdal.org/formats_list.html">supported
+The set of <a href="https://gdal.org/en/stable/drivers/raster/">supported
 raster formats</a> written by <em>r.out.gdal</em> depends on the local
 GDAL installation, printed with the <em>-l</em> flag. Available may be
 (incomplete list):<p>
@@ -185,7 +185,7 @@ Offset is only relevant if not zero. Scale is only relevant if not 1.
 
 <h3>Export the integer raster basin_50K map to GeoTIFF format</h3>
 
-See also <a href="https://gdal.org/drivers/raster/gtiff.html">GeoTIFF format description</a> (GDAL):
+See also <a href="https://gdal.org/en/stable/drivers/raster/gtiff.html">GeoTIFF format description</a> (GDAL):
 
 <div class="code"><pre>
 g.region raster=basin_50K -p
@@ -194,7 +194,7 @@ r.out.gdal input=basin_50K output=basin_50K.tif
 
 <h3>Export the integer raster landclass96 map to Cloud Optimized GeoTIFF format</h3>
 
-See also <a href="https://gdal.org/drivers/raster/cog.html">Cloud Optimized GeoTIFF (COG) format description</a> (GDAL):
+See also <a href="https://gdal.org/en/stable/drivers/raster/cog.html">Cloud Optimized GeoTIFF (COG) format description</a> (GDAL):
 
 <div class="code"><pre>
 g.region -p raster=landclass96
@@ -313,7 +313,7 @@ The resulting GeoTIFF file can be used e.g. for Web server applications.
 
 <h3>Export the floating point raster elevation map to ERDAS/IMG format</h3>
 
-See also <a href="https://gdal.org/drivers/raster/hfa.html">Erdas Imagine .img format description</a> (GDAL):
+See also <a href="https://gdal.org/en/stable/drivers/raster/hfa.html">Erdas Imagine .img format description</a> (GDAL):
 
 <div class="code"><pre>
 g.region raster=elevation -p
@@ -372,8 +372,8 @@ GDAL Pages: <a href="https://gdal.org">https://gdal.org</a>
 
 <h2>SEE ALSO</h2>
 
-<a href="https://gdal.org/drivers/raster/index.html">GDAL supported raster formats</a> and
-<a href="https://gdal.org/drivers/vector/index.html">GDAL supported vector formats</a>
+<a href="https://gdal.org/en/stable/drivers/raster/index.html">GDAL supported raster formats</a> and
+<a href="https://gdal.org/en/stable/drivers/vector/index.html">GDAL supported vector formats</a>
 
 <p>
 <em>
