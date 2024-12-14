@@ -40,7 +40,7 @@ distance between points is a good starting point). Separate east-west
 and north-south spline step length arguments allows the user to
 account for some degree of anisotropy in the distribution of
 observation points. Short spline step lengths, especially spline step
-lengths that are less than the distance between observation points, 
+lengths that are less than the distance between observation points,
 can greatly increase the processing time.
 
 <p>The maximum number of splines for each direction at each
@@ -64,15 +64,15 @@ vector layer.
 
 <p><em>v.surf.bspline</em> can produce raster (<b>raster_output</b>) OR
 vector <b>output</b> but NOT simultaneously. Note that topology is not
-built for output point vector layer. If required, the topology can be built 
+built for output point vector layer. If required, the topology can be built
 using <em><a href="v.build.html">v.build</a></em>.
 
-<p>If output is a point vector layer and <b>sparse</b> is not specified, 
+<p>If output is a point vector layer and <b>sparse</b> is not specified,
 the output vector layer will contain points at the
 same locations as observation points in the input layer but the values
-of the output points will be interpolated values. If a <b>sparse</b> 
-point vector layer is specified, the output vector layer will contain points 
-at the same locations as the sparse vector layer points. The values will be 
+of the output points will be interpolated values. If a <b>sparse</b>
+point vector layer is specified, the output vector layer will contain points
+at the same locations as the sparse vector layer points. The values will be
 those of the interpolated raster surface at those points.
 
 <p>A cross validation "leave-one-out" analysis is available to help to
@@ -146,7 +146,7 @@ v.surf.bspline input=elev_lid792_bepts raster=elev_lid792_rast \
 <p>
 In order to avoid RAM memory problems, an auxiliary table is needed
 for recording some intermediate calculations. This requires
-the <i>GROUP BY</i> SQL function is used. This function is not 
+the <i>GROUP BY</i> SQL function is used. This function is not
 supported by the DBF driver. For this reason, vector output
 (<b>output</b>) is not permitted with the DBF driver. There are
 no problems with the raster map output from the DBF driver.

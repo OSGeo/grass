@@ -1355,53 +1355,53 @@ def test_spatial_relations() -> None:
 def test_temporal_topology_builder() -> None:
     map_listA = []
 
-    _map = RasterDataset(ident="1@a")
-    _map.set_absolute_time(datetime(2001, 1, 1), datetime(2001, 2, 1))
-    map_listA.append(copy.copy(_map))
-    _map = RasterDataset(ident="2@a")
-    _map.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 3, 1))
-    map_listA.append(copy.copy(_map))
-    _map = RasterDataset(ident="3@a")
-    _map.set_absolute_time(datetime(2001, 3, 1), datetime(2001, 4, 1))
-    map_listA.append(copy.copy(_map))
-    _map = RasterDataset(ident="4@a")
-    _map.set_absolute_time(datetime(2001, 4, 1), datetime(2001, 5, 1))
-    map_listA.append(copy.copy(_map))
-    _map = RasterDataset(ident="5@a")
-    _map.set_absolute_time(datetime(2001, 5, 1), datetime(2001, 6, 1))
-    map_listA.append(copy.copy(_map))
+    map_ = RasterDataset(ident="1@a")
+    map_.set_absolute_time(datetime(2001, 1, 1), datetime(2001, 2, 1))
+    map_listA.append(copy.copy(map_))
+    map_ = RasterDataset(ident="2@a")
+    map_.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 3, 1))
+    map_listA.append(copy.copy(map_))
+    map_ = RasterDataset(ident="3@a")
+    map_.set_absolute_time(datetime(2001, 3, 1), datetime(2001, 4, 1))
+    map_listA.append(copy.copy(map_))
+    map_ = RasterDataset(ident="4@a")
+    map_.set_absolute_time(datetime(2001, 4, 1), datetime(2001, 5, 1))
+    map_listA.append(copy.copy(map_))
+    map_ = RasterDataset(ident="5@a")
+    map_.set_absolute_time(datetime(2001, 5, 1), datetime(2001, 6, 1))
+    map_listA.append(copy.copy(map_))
 
     tb = SpatioTemporalTopologyBuilder()
     tb.build(map_listA)
 
     count = 0
-    for _map in tb:
-        print("[%s]" % (_map.get_name()))
-        _map.print_topology_info()
-        if _map.get_id() != map_listA[count].get_id():
+    for map_ in tb:
+        print("[%s]" % (map_.get_name()))
+        map_.print_topology_info()
+        if map_.get_id() != map_listA[count].get_id():
             core.fatal(
                 "Error building temporal topology <%s> != <%s>"
-                % (_map.get_id(), map_listA[count].get_id())
+                % (map_.get_id(), map_listA[count].get_id())
             )
         count += 1
 
     map_listB = []
 
-    _map = RasterDataset(ident="1@b")
-    _map.set_absolute_time(datetime(2001, 1, 14), datetime(2001, 3, 14))
-    map_listB.append(copy.copy(_map))
-    _map = RasterDataset(ident="2@b")
-    _map.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 4, 1))
-    map_listB.append(copy.copy(_map))
-    _map = RasterDataset(ident="3@b")
-    _map.set_absolute_time(datetime(2001, 2, 14), datetime(2001, 4, 30))
-    map_listB.append(copy.copy(_map))
-    _map = RasterDataset(ident="4@b")
-    _map.set_absolute_time(datetime(2001, 4, 2), datetime(2001, 4, 30))
-    map_listB.append(copy.copy(_map))
-    _map = RasterDataset(ident="5@b")
-    _map.set_absolute_time(datetime(2001, 5, 1), datetime(2001, 5, 14))
-    map_listB.append(copy.copy(_map))
+    map_ = RasterDataset(ident="1@b")
+    map_.set_absolute_time(datetime(2001, 1, 14), datetime(2001, 3, 14))
+    map_listB.append(copy.copy(map_))
+    map_ = RasterDataset(ident="2@b")
+    map_.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 4, 1))
+    map_listB.append(copy.copy(map_))
+    map_ = RasterDataset(ident="3@b")
+    map_.set_absolute_time(datetime(2001, 2, 14), datetime(2001, 4, 30))
+    map_listB.append(copy.copy(map_))
+    map_ = RasterDataset(ident="4@b")
+    map_.set_absolute_time(datetime(2001, 4, 2), datetime(2001, 4, 30))
+    map_listB.append(copy.copy(map_))
+    map_ = RasterDataset(ident="5@b")
+    map_.set_absolute_time(datetime(2001, 5, 1), datetime(2001, 5, 14))
+    map_listB.append(copy.copy(map_))
 
     tb = SpatioTemporalTopologyBuilder()
     tb.build(map_listB)
@@ -1417,13 +1417,13 @@ def test_temporal_topology_builder() -> None:
         core.fatal("Error building temporal topology")
 
     count = 0
-    for _map in tb:
-        print("[%s]" % (_map.get_map_id()))
-        _map.print_topology_shell_info()
-        if _map.get_id() != map_listB[count].get_id():
+    for map_ in tb:
+        print("[%s]" % (map_.get_map_id()))
+        map_.print_topology_shell_info()
+        if map_.get_id() != map_listB[count].get_id():
             core.fatal(
                 "Error building temporal topology <%s> != <%s>"
-                % (_map.get_id(), map_listB[count].get_id())
+                % (map_.get_id(), map_listB[count].get_id())
             )
         count += 1
 
@@ -1431,20 +1431,20 @@ def test_temporal_topology_builder() -> None:
     tb.build(map_listA, map_listB)
 
     count = 0
-    for _map in tb:
-        print("[%s]" % (_map.get_map_id()))
-        _map.print_topology_shell_info()
-        if _map.get_id() != map_listA[count].get_id():
+    for map_ in tb:
+        print("[%s]" % (map_.get_map_id()))
+        map_.print_topology_shell_info()
+        if map_.get_id() != map_listA[count].get_id():
             core.fatal(
                 "Error building temporal topology <%s> != <%s>"
-                % (_map.get_id(), map_listA[count].get_id())
+                % (map_.get_id(), map_listA[count].get_id())
             )
         count += 1
 
     count = 0
-    for _map in map_listB:
-        print("[%s]" % (_map.get_map_id()))
-        _map.print_topology_shell_info()
+    for map_ in map_listB:
+        print("[%s]" % (map_.get_map_id()))
+        map_.print_topology_shell_info()
 
     # Probing some relations
     if map_listA[3].get_follows()[0] != map_listB[1]:
@@ -1468,28 +1468,28 @@ def test_temporal_topology_builder() -> None:
 def test_map_list_sorting() -> None:
     map_list = []
 
-    _map = RasterDataset(ident="1@a")
-    _map.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 3, 1))
-    map_list.append(copy.copy(_map))
-    _map = RasterDataset(ident="2@a")
-    _map.set_absolute_time(datetime(2001, 1, 1), datetime(2001, 2, 1))
-    map_list.append(copy.copy(_map))
-    _map = RasterDataset(ident="3@a")
-    _map.set_absolute_time(datetime(2001, 3, 1), datetime(2001, 4, 1))
-    map_list.append(copy.copy(_map))
+    map_ = RasterDataset(ident="1@a")
+    map_.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 3, 1))
+    map_list.append(copy.copy(map_))
+    map_ = RasterDataset(ident="2@a")
+    map_.set_absolute_time(datetime(2001, 1, 1), datetime(2001, 2, 1))
+    map_list.append(copy.copy(map_))
+    map_ = RasterDataset(ident="3@a")
+    map_.set_absolute_time(datetime(2001, 3, 1), datetime(2001, 4, 1))
+    map_list.append(copy.copy(map_))
 
     print("Original")
-    for _map in map_list:
+    for map_ in map_list:
         print(
-            _map.get_temporal_extent_as_tuple()[0],
-            _map.get_temporal_extent_as_tuple()[1],
+            map_.get_temporal_extent_as_tuple()[0],
+            map_.get_temporal_extent_as_tuple()[1],
         )
     print("Sorted by start time")
     new_list = sorted(map_list, key=AbstractDatasetComparisonKeyStartTime)
-    for _map in new_list:
+    for map_ in new_list:
         print(
-            _map.get_temporal_extent_as_tuple()[0],
-            _map.get_temporal_extent_as_tuple()[1],
+            map_.get_temporal_extent_as_tuple()[0],
+            map_.get_temporal_extent_as_tuple()[1],
         )
 
     if new_list[0] != map_list[1]:
@@ -1501,10 +1501,10 @@ def test_map_list_sorting() -> None:
 
     print("Sorted by end time")
     new_list = sorted(map_list, key=AbstractDatasetComparisonKeyEndTime)
-    for _map in new_list:
+    for map_ in new_list:
         print(
-            _map.get_temporal_extent_as_tuple()[0],
-            _map.get_temporal_extent_as_tuple()[1],
+            map_.get_temporal_extent_as_tuple()[0],
+            map_.get_temporal_extent_as_tuple()[1],
         )
 
     if new_list[0] != map_list[1]:

@@ -452,10 +452,10 @@ def set_path(modulename, dirname=None, path="."):
     import sys
 
     # TODO: why dirname is checked first - the logic should be revised
-    _pathlib = None
+    pathlib_ = None
     if dirname:
-        _pathlib = os.path.join(path, dirname)
-    if _pathlib and os.path.exists(_pathlib):
+        pathlib_ = os.path.join(path, dirname)
+    if pathlib_ and os.path.exists(pathlib_):
         # we are running the script from the script directory, therefore
         # we add the path to sys.path to reach the directory (dirname)
         sys.path.append(os.path.abspath(path))
