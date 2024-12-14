@@ -37,10 +37,9 @@ def test_d_vect_from_bin(xy_session_patched_env):
     task.get_param("layer")["value"] = 1
     task.get_param("label_bcolor")["value"] = "red"
     # the default parameter display is added automatically
-    assert (
-        " ".join(task.get_cmd())
-        == "d.vect -i map=map_name layer=1 display=shape label_bcolor=red"
-    )
+    actual = " ".join(task.get_cmd())
+    expected = "d.vect -i map=map_name layer=1 display=shape label_bcolor=red"
+    assert actual == expected
 
 
 def test_v_clip_from_scripts(xy_session_patched_env):
@@ -50,7 +49,6 @@ def test_v_clip_from_scripts(xy_session_patched_env):
     task.get_flag("r")["value"] = True
     task.get_param("clip")["value"] = "clip_map_name"
     task.get_param("output")["value"] = "output_map_name"
-    assert (
-        " ".join(task.get_cmd())
-        == "v.clip -r input=map_name clip=clip_map_name output=output_map_name"
-    )
+    actual = " ".join(task.get_cmd())
+    expected = "v.clip -r input=map_name clip=clip_map_name output=output_map_name"
+    assert actual == expected
