@@ -8108,7 +8108,7 @@ msgstr "Fusionner des contours"
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 #, fuzzy
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr ""
 "Fusionne des contours entre surfaces adjacentes partageant un attribut ou "
@@ -11908,8 +11908,8 @@ msgstr "Niveau de verbosité :"
 #: ../gui/wxpython/gui_core/preferences.py:1294
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""
-"Nombre de threads pour le calcul parallèle (outils pris en charge uniquement)"
-" :"
+"Nombre de threads pour le calcul parallèle (outils pris en charge "
+"uniquement) :"
 
 #: ../gui/wxpython/gui_core/preferences.py:1319
 msgid "Maximum memory in MB to be used (supported tools only):"
@@ -16053,10 +16053,6 @@ msgstr "Définir la région calculée à partir de celle de l'écran"
 #: ../gui/wxpython/mapdisp/frame.py:1528
 msgid "Set computational region extent interactively"
 msgstr "Définir l'emprise de la région de calcul de manière interactive"
-
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
-msgstr "Définir la région calculée depuis un nom de région"
 
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
@@ -21053,6 +21049,9 @@ msgstr "Cliquez-déposez pour redimensionner l'objet"
 msgid "labels: "
 msgstr "étiquettes :"
 
+msgid "supported tools only"
+msgstr "outils pris en charge uniquement"
+
 #~ msgid "Location Name:"
 #~ msgstr "Nom du secteur : "
 
@@ -22505,7 +22504,6 @@ msgstr "étiquettes :"
 #~ msgid "Deactive overwrite"
 #~ msgstr "Désactiver l'écrasement"
 
-
 #, python-format
 #~ msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
 #~ msgstr ""
@@ -22517,6 +22515,3 @@ msgstr "étiquettes :"
 #~ msgstr ""
 #~ "Impossible d'obtenir l’extension géographique courante. Sortie forcée de "
 #~ "wxGUI. Merci d'exécuter manuellement g.region pour résoudre ce problème."
-
-msgid "supported tools only"
-msgstr "outils pris en charge uniquement"

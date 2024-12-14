@@ -7715,7 +7715,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr ""
 
@@ -15219,10 +15219,6 @@ msgstr ""
 #: ../gui/wxpython/mapdisp/frame.py:1528
 msgid "Set computational region extent interactively"
 msgstr "Számítási régió interaktív beállítása"
-
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
-msgstr "Számítási régió beállítása névvel bíró régióval"
 
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"

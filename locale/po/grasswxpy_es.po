@@ -8127,7 +8127,7 @@ msgstr "Disolver contornos"
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 #, fuzzy
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr ""
 "Disuelve contornos entre áreas adyacentes que comparten un número de "
@@ -16108,10 +16108,6 @@ msgstr "Definir región computacional a partir de la visualización"
 msgid "Set computational region extent interactively"
 msgstr "Definir extensión de la región computacional de manera interactiva"
 
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
-msgstr "Establecer región computacional desde región nombrada"
-
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
 msgstr "Guardar región computacional con nombre"
@@ -22327,7 +22323,6 @@ msgstr "etiquetas:"
 
 #~ msgid "Deactive overwrite"
 #~ msgstr "Desactivar sobreescribir"
-
 
 #, python-format
 #~ msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."

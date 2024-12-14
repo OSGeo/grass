@@ -1,18 +1,20 @@
-import itertools
 import fnmatch
+import itertools
 import os
 from sqlite3 import OperationalError
 
 import grass.lib.gis as libgis
+from grass.script import core as grasscore
+from grass.script import utils as grassutils
 
+# flake8: noqa: E402
 libgis.G_gisinit("")
 
 import grass.lib.raster as libraster
 from grass.lib.ctypes_preamble import String
-from grass.script import core as grasscore
-from grass.script import utils as grassutils
-
 from grass.pygrass.errors import GrassError
+
+# flake8: qa
 
 
 test_vector_name = "Utils_test_vector"
@@ -461,7 +463,7 @@ def create_test_vector_map(map_name="test_vector"):
     """
 
     from grass.pygrass.vector import VectorTopo
-    from grass.pygrass.vector.geometry import Point, Line, Centroid, Boundary
+    from grass.pygrass.vector.geometry import Boundary, Centroid, Line, Point
 
     cols = [
         ("cat", "INTEGER PRIMARY KEY"),
@@ -589,6 +591,7 @@ def create_test_stream_network_map(map_name="streams"):
 
 if __name__ == "__main__":
     import doctest
+
     from grass.script.core import run_command
 
     create_test_vector_map(test_vector_name)

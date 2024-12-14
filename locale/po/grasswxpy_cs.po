@@ -7757,7 +7757,7 @@ msgstr "Rozloží společné hranice "
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 #, fuzzy
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr ""
 "Rozloží hranice mezi sousedícími plochami, sdílejícími společné číslo "
@@ -15315,10 +15315,6 @@ msgstr "Nastavit výpočetní region podle aktuálního okna"
 #: ../gui/wxpython/mapdisp/frame.py:1528
 msgid "Set computational region extent interactively"
 msgstr "Nastavit výpočetní region interaktivně"
-
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
-msgstr "Nastavit výpočetní region podle pojmenovaného regionu"
 
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
