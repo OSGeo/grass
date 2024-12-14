@@ -4,7 +4,7 @@ The <em>g.region</em> module allows the user to manage the
 settings of the current geographic region.  These regional
 boundaries can be set by the user directly and/or set from
 a region definition file (stored under the
-<kbd>windows</kbd> directory in the user's current
+<tt>windows</tt> directory in the user's current
 mapset).  The user can create, modify, and store as many
 geographic region definitions as desired for any given
 mapset.  However, only one of these geographic region
@@ -50,8 +50,8 @@ modules and <em>v.in.region</em>.
 
 <dd>Each GRASS project (previously called location) has a fixed
 geographic region, called the default geographic region
-(stored in the region file <kbd>DEFAULT_WIND</kbd> under
-the special mapset <kbd>PERMANENT</kbd>), that defines the
+(stored in the region file <tt>DEFAULT_WIND</tt> under
+the special mapset <tt>PERMANENT</tt>), that defines the
 extent of the data base.  While this provides a starting
 point for defining new geographic regions, user-defined
 geographic regions need not fall within this geographic
@@ -73,7 +73,7 @@ the current geographic region setting.
 <dd>Each GRASS MAPSET may contain any number of
 pre-defined, and named, geographic regions.  These region
 definitions are stored in the user's current mapset
-location under the <kbd>windows</kbd> directory (also
+location under the <tt>windows</tt> directory (also
 referred to as the user's saved region definitions).
 Any of these pre-defined geographic regions
 may be selected, by name, to become the current geographic
@@ -373,7 +373,6 @@ exactly the same as those given in the cell header file for
 the raster map layer <em>soils</em>.
 
 <p>
-
 <dt><span class="code"><tt>
 g.region raster=soils zoom=soils
 </tt></span>
@@ -385,11 +384,10 @@ the smallest region which still encompasses all non-NULL
 data in the map layer <em>soils</em>.  Note that if the
 parameter <em>raster=soils</em> were not specified, the
 zoom would shrink to encompass all non-NULL data values in
-the soils map that were located within the <i>current region</i>
+the soils map that were located within the <em>current region</em>
 settings.
 
 <p>
-
 <dt><span class="code"><tt>
 g.region -up raster=soils
 </tt></span>
@@ -408,7 +406,7 @@ g.region -up zoom=soils save=soils
 <dd> This will zoom into the smallest region which
 encompasses all non-NULL soils data values, and save the
 new region settings in a file to be called <em>soils</em>
-and stored under the <kbd>windows</kbd> directory in the
+and stored under the <tt>windows</tt> directory in the
 user's current mapset.  The current region settings are not
 changed.
 </dl>
