@@ -1,8 +1,8 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.in.wms</em> handles all of downloading and importing raster data
-from <a href="http://www.opengeospatial.org/standards/wms">OGC
-WMS</a> and <a href="http://www.opengeospatial.org/standards/wmts">OGC
+from <a href="https://www.ogc.org/publications/standard/wms/">OGC
+WMS</a> and <a href="https://www.ogc.org/publications/standard/wmts/">OGC
 WMTS</a> web mapping servers. It only needs be told the
 desired data to collect (bounds and resolution) via a region, the
 server to get the data from, and the layer or layers to get. It
@@ -38,11 +38,11 @@ e.g: <tt>urlparams='time=2012-1-1'</tt>.
 
 <div class="code"><pre>
 # Topographic WMS with OpenStreetMap by mundialis
-r.in.wms -c url="http://ows.mundialis.de/services/service?"
-r.in.wms -c url="http://ows.mundialis.de/services/service?" | grep Name
+r.in.wms -c url="https://ows.mundialis.de/services/service?"
+r.in.wms -c url="https://ows.mundialis.de/services/service?" | grep Name
 
 # Czech WMS
-r.in.wms -c url="http://wms.cuzk.cz/wms.asp"
+r.in.wms -c url="https://wms.cuzk.cz/wms.asp"
 </pre></div>
 
 <h3>Download raster data from WMS server (GetMap request)</h3>
@@ -70,8 +70,8 @@ r.info topo
 </pre></div>
 <p>
 More OSM WMS servers can be found online, e.g. on the OSM wiki in a
-<a href="http://wiki.openstreetmap.org/wiki/WMS#Public_WMS_Servers">OSM WMS Servers list</a>
-and on the <a href="http://wiki.openstreetmap.org/wiki/OSM-WMS-EUROPE">OSM-WMS-EUROPE</a> page.
+<a href="https://wiki.openstreetmap.org/wiki/WMS#Public_WMS_Servers">OSM WMS Servers list</a>
+and on the <a href="https://wiki.openstreetmap.org/wiki/OSM-WMS-EUROPE">OSM-WMS-EUROPE</a> page.
 
 <h4>Countries and coastlines</h4>
 
@@ -160,8 +160,8 @@ utility from the GDAL/OGR library.
 <h2>REFERENCES</h2>
 
 <ul>
-  <li><a href="http://www.opengeospatial.org/standards/wms">OGC WMS</a></li>
-  <li><a href="http://www.opengeospatial.org/standards/wmts">OGC WMTS</a></li>
+  <li><a href="https://www.ogc.org/publications/standard/wms/">OGC WMS</a></li>
+  <li><a href="https://www.ogc.org/publications/standard/wmts/">OGC WMTS</a></li>
 </ul>
 
 <h2>SEE ALSO</h2>
