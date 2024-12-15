@@ -205,7 +205,7 @@ implemented in all drivers.
 SQLite driver
 -------------
 Current implementation is very slow with large updates/inserts. I
-think that it is because all statemets are parsed and it should be
+think that it is because all statements are parsed and it should be
 possible to improve by insert/update cursors (see above).
 
 DBF driver

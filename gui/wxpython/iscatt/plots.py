@@ -235,7 +235,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         img = imshow(
             self.axes,
             merged_img,
-            extent=[int(ceil(x)) for x in self.full_extend],
+            extent=[ceil(x) for x in self.full_extend],
             origin="lower",
             interpolation="nearest",
             aspect="equal",

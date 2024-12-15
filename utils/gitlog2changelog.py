@@ -61,7 +61,7 @@ for line in fin:
     # Match the author line and extract the part we want
     # (Don't use startswith to allow Author override inside commit message.)
     elif "Author:" in line:
-        authorList = re.split(": ", line, 1)
+        authorList = re.split(r": ", line, 1)
         try:
             author = authorList[1]
             author = author[0 : len(author) - 1]
@@ -71,7 +71,7 @@ for line in fin:
 
     # Match the date line
     elif line.startswith("Date:"):
-        dateList = re.split(":   ", line, 1)
+        dateList = re.split(r":   ", line, 1)
         try:
             date = dateList[1]
             date = date[0 : len(date) - 1]
@@ -100,7 +100,7 @@ for line in fin:
         else:
             message = message + " " + line.strip()
     # If this line is hit all of the files have been stored for this commit
-    elif re.search("files? changed", line):
+    elif re.search(r"files? changed", line):
         filesFound = True
         continue
     # Collect the files for this commit. FIXME: Still need to add +/- to files
