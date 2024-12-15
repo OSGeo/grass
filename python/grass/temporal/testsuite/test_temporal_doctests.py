@@ -8,6 +8,7 @@ import sys
 import grass.gunittest.case
 import grass.gunittest.main
 import grass.gunittest.utils
+
 import grass.temporal
 
 doctest.DocFileCase = type(

@@ -107,7 +107,7 @@ class Category(list):
         return "[{0}]".format(",\n ".join(cats))
 
     def _chk_index(self, index):
-        if type(index) == str:
+        if isinstance(index, str):
             try:
                 index = self.labels().index(index)
             except ValueError:
@@ -115,7 +115,7 @@ class Category(list):
         return index
 
     def _chk_value(self, value):
-        if type(value) == tuple:
+        if isinstance(value, tuple):
             length = len(value)
             if length == 2:
                 label, min_cat = value

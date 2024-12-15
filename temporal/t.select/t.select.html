@@ -218,11 +218,11 @@ Symbol  description
 
   ==    equal
   !=    not equal
-  >     greater than
-  >=    greater than or equal
-  <     less than
-  <=    less than or equal
-  &&    and
+  &gt;     greater than
+  &gt;=    greater than or equal
+  &lt;     less than
+  &lt;=    less than or equal
+  &amp;&amp;    and
   ||    or
 </pre></div>
 
@@ -272,23 +272,23 @@ For complex relations the comparison operator can be used to combine conditions:
 The structure is similar to the select operator with the extension of an aggregation operator:
 {"comparison operator", "topological relations", aggregation operator, "temporal operator"}
 <br>
-This aggregation operator (| or &) define the behaviour if a map is related the more
+This aggregation operator (| or &amp;) define the behaviour if a map is related the more
 than one map, e.g for the topological relations 'contains'.
-Should all (&) conditions for the related maps be true or is it sufficient to
+Should all (&amp;) conditions for the related maps be true or is it sufficient to
 have any (|) condition that is true. The resulting boolean value is then compared
-to the first condition by the comparison operator (|| or &&).
+to the first condition by the comparison operator (|| or &amp;&amp;).
 As default the aggregation operator is related to the comparison operator: <br>
-Comparison operator -> aggregation operator:
+Comparison operator -&gt; aggregation operator:
 <div class="code"><pre>
-|| -> | and && -> &
+|| -&gt; | and &amp;&amp; -&gt; &amp;
 </pre></div>
 Examples:
 <div class="code"><pre>
 Condition 1 {||, equal, r} Condition 2
-Condition 1 {&&, equal|during, l} Condition 2
-Condition 1 {&&, equal|contains, |, l} Condition 2
-Condition 1 {&&, equal|during, l} Condition 2 && Condition 3
-Condition 1 {&&, equal|during, l} Condition 2 {&&,contains, |, r} Condition 3
+Condition 1 {&amp;&amp;, equal|during, l} Condition 2
+Condition 1 {&amp;&amp;, equal|contains, |, l} Condition 2
+Condition 1 {&amp;&amp;, equal|during, l} Condition 2 &amp;&amp; Condition 3
+Condition 1 {&amp;&amp;, equal|during, l} Condition 2 {&amp;&amp;,contains, |, r} Condition 3
 </pre></div>
 
 <h4>Hash operator</h4>
@@ -303,7 +303,7 @@ space time dataset A.<br>
 A list of integers (scalars) corresponding to the maps of A
 that contain maps from B will be returned. <p>
 <div class="code"><pre>
-C = if({equal}, A {#, contains} B > 2, A {:, contains} B)
+C = if({equal}, A {#, contains} B &gt; 2, A {:, contains} B)
 </pre></div>
 This expression selects all maps from A that temporally contains at least 2
 maps from B and stores them in space time dataset C. The leading equal statement
@@ -340,14 +340,14 @@ Select all maps from space time dataset A which have equal time stamps
 with space time dataset B and C and are earlier that Jan. 1. 2005 and
 store them in space time dataset D.
 <div class="code"><pre>
-D = if(start_date(A) < "2005-01-01", A : B : C)
+D = if(start_date(A) &lt; "2005-01-01", A : B : C)
 </pre></div>
 
 Select all maps from space time dataset A which contains more than three
 maps of space time dataset B, else select maps from C with time
 stamps that are not equal to A and store them in space time dataset D.
 <div class="code"><pre>
-D = if(A {#, contains} B > 3, A {:, contains} B, C)
+D = if(A {#, contains} B &gt; 3, A {:, contains} B, C)
 </pre></div>
 
 Select all maps from space time dataset B which are during the temporal
