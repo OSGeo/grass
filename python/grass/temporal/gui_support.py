@@ -11,6 +11,7 @@ for details.
 """
 
 import grass.script as gs
+from grass.exceptions import ScriptError
 
 from .core import get_available_temporal_mapsets, init_dbif
 from .factory import dataset_factory
@@ -45,7 +46,7 @@ def tlist_grouped(type, group_type: bool = False, dbif=None):
     for type_ in types:
         try:
             tlist_result = tlist(type=type_, dbif=dbif)
-        except gs.ScriptError as e:
+        except ScriptError as e:
             gs.warning(e)
             continue
 
