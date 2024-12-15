@@ -10,7 +10,7 @@ Changes in version 0.7-1
 
 Changes in version 0.7-0
 
-  o R.bat reworked. It now has a  with different interface and many prior 
+  o R.bat reworked. It now has a  with different interface and many prior
     batch files have been incorporated into it and removed
 
   o new Rpathset.bat
@@ -33,7 +33,7 @@ Changes in version 0.6-5
 
 		%ProgramFiles%\MySQL\*
 
-    This allows one to install and run RMySQL without setting any environment 
+    This allows one to install and run RMySQL without setting any environment
     variables.  (Note that MySQL should be installed from the mysql site.
     xampp and wamp do not include the header files needed by RMySQL.)
 
@@ -71,7 +71,7 @@ Changes in version 0.5-0
     or higher.
 
   o new command find-miktex.hta can be run without arguments from the
-    Windows command line or double clicked from Windows Explorer 
+    Windows command line or double clicked from Windows Explorer
     to show path to the MiKTeX bin directory.
 
   o Rversions.hta now also changes the .RData association and has
@@ -90,14 +90,14 @@ Changes in version 0.5-0
 
 Changes in version 0.4-3
 
-  o Sweave.bat and Stangle.bat were not automatically finding MiKTeX.  
+  o Sweave.bat and Stangle.bat were not automatically finding MiKTeX.
     Fixed.
 
 Changes in version 0.4-2
 
   o can optionally work off initialization files in place of registry.
-    Place rbatchfilesrc.bat in current directory or %userprofile% (so 
-    different directories can work off different versions of R, say) 
+    Place rbatchfilesrc.bat in current directory or %userprofile% (so
+    different directories can work off different versions of R, say)
     or same directory as the other batchfiles and it will run it first.
     Typically rbatchfiles.bat would constain these two lines or similar:
 		set R_HOME=C:\Program Files\R\R-2.7.0
@@ -110,13 +110,13 @@ Changes in version 0.4-1
   o it is no longer necessary to set any paths to build R packages
     provided Rtools 2.7 or later is used.  Rcmd.bat and the other
     scripts automatically find Rtools from the registry (including perl)
-    and if MikTeX is at %ProgramFiles%\MiKTeX* or %SystemDrive%:\MiKTex  
-    then it will find MiKTeX too.  New optional environment variables 
+    and if MikTeX is at %ProgramFiles%\MiKTeX* or %SystemDrive%:\MiKTex
+    then it will find MiKTeX too.  New optional environment variables
     R_TOOLS and R_MIKTEX are available to force specified paths to be used.
 
   o new Rtools.bat command that sets the path for the current cmd instance
     to the one that R*.bat files use internally.  That is, rtools/bin,
-    rtools/perl/bin, rtools/MinGW/bin and MiKTeX .../miktex/bin are added 
+    rtools/perl/bin, rtools/MinGW/bin and MiKTeX .../miktex/bin are added
     to the path.  This is not needed to run or install R programs but only
     if you want to access the rtools for other purposes.
 
@@ -162,7 +162,7 @@ Changes in version 0.4-0
     by Dieter Menne.
 
 Changes in version 0.3-2
- 
+
   o sweave.bat now uses Rterm.bat rather than Rcmd.bat which makes it usable
     with a basic R installation (i.e. sh.exe not needed).  Previously it
     required Rcmd.bat but now it requires Rterm.bat instead.
@@ -173,7 +173,7 @@ Changes in Version 0.3-1
 
   o new find-miktex.bat which lists the mixktex folders from the registry
 
-  o new Rscript.bat which allows one to use the Rscript facility in 
+  o new Rscript.bat which allows one to use the Rscript facility in
     R 2.5.0 and later without changing pathnames.  Just place Rscript.bat
     in any existing path and it will automatically find the
     current version of R from the registry and run the Rscript.exe that
@@ -182,24 +182,24 @@ Changes in Version 0.3-1
   o runR.bat.  If you have an R script such as myfile.R then you can create
     a batch script for it by copying runR.bat to myfile.bat.  Then when you
     issue the command myfile or myfile.bat it will run the R script in
-    myfile.R .  Just place myfile.bat and myfile.R anywhere in your path.  
+    myfile.R .  Just place myfile.bat and myfile.R anywhere in your path.
     This uses Rscript.bat .
 
   o #Rscript.  If you have an Rscript called myfile.R, say, then if you
-    copy the script to myfile.bat and place 
-       #Rscript %0 %*  
+    copy the script to myfile.bat and place
+       #Rscript %0 %*
     as the first line with the remainder being the R commands then issuing
     the command myfile or myfile.bat will run the R script.  The advantage
     over the runR.bat method is that there is only one file, myfile.bat.
-    You don't need myfile.R anymore.  The disadvantage is that it will 
-    echo the #Rscript line to stdout.  This will be fixed if and when 
-    Rscript ever gets the perl/python/ruby -x flag.  (The runR approach will 
-    not echo additional lines but does require two files.)  
+    You don't need myfile.R anymore.  The disadvantage is that it will
+    echo the #Rscript line to stdout.  This will be fixed if and when
+    Rscript ever gets the perl/python/ruby -x flag.  (The runR approach will
+    not echo additional lines but does require two files.)
 
   o new Rtidy.bat is a sample Rscript that uses the #Rscript facility
     based on George Georgalis' UNIX code
 
-  o withgs.bat now checks for latest ghostscript version.  (Previously 
+  o withgs.bat now checks for latest ghostscript version.  (Previously
     version was hard coded and it only worked for that version.)
 
 Changes in Version 0.3-0
@@ -211,13 +211,13 @@ Changes in Version 0.3-0
 
   o new --tex, --pdf, --nobck.pdf switches are available on sweave.  Also
     expanded help when entering sweave without args.
-    
+
 Changes in Version 0.2-9
 
   o updated README and other documentation files and inline documentation
 
   o added sweave.bat
- 
+
   o new google code home page and svn repository
     http://code.google.com/p/batchfiles/
 
@@ -244,7 +244,7 @@ Changes in Version 0.2-6
   o Rrefresh.bat has been removed (after having been deprecated in
     in previous versions of batchfiles).
 
-  o tested movedir.bat by using it to upgrade R-2.2.0pat to R-2.2.1.  
+  o tested movedir.bat by using it to upgrade R-2.2.0pat to R-2.2.1.
     See instructions in README.
 
 Changes in Version 0.2-5
@@ -261,27 +261,27 @@ Changes in Version 0.2-3
     R to another.  (This is a temporary solution until R provides
     facilities for upgrading the libraries, expected in R 2.3.0 .)
     See README for usage.
-    
+
   o eliminated all code associated with reading and manipulation of
     R_ENVIRON, R_PROFILE and R_LIBS simplifying the batch files.  Use
     copydir.bat instead.
 
-  o Rversions.hta is a javascript GUI version of Rversions.bat 
+  o Rversions.hta is a javascript GUI version of Rversions.bat
 
 Changes in Version 0.2-2
 
   o added jgr.bat which starts up the JGR GUI.
 
-  o added Rversions.bat which can list the directories of all R versions 
+  o added Rversions.bat which can list the directories of all R versions
     available and can set one to become the current R version.
 
-  o all batch scripts which used the environment variable name Rrw now 
+  o all batch scripts which used the environment variable name Rrw now
     use the environment variable name R_HOME instead.
 
-  o Rcmd.bat, Rgui.bat, R.bat, jgr.bat files will now read R_ENVIRON, 
+  o Rcmd.bat, Rgui.bat, R.bat, jgr.bat files will now read R_ENVIRON,
     if present, and set the R_LIBS definition in it, if present (unless
     R_LIBS is already defined as an environment variable).  All R_ENVIRON
-    file syntax accepted by R is supported including comments (#), 
+    file syntax accepted by R is supported including comments (#),
     var=value, var=${foo-bar} and recursions, var=${A-${B-C}}.
 
   o makepkg.bat internals were simplified due to previous point.
@@ -290,7 +290,7 @@ Changes in Version 0.2-2
 
   o updated THANKS.
 
-  o updated README.  More introductory information.  Also instructions 
+  o updated README.  More introductory information.  Also instructions
     for Rgui shortcut will disable screen flash on startup. Corrections.
 
 Changes in Version 0.2-1
@@ -300,18 +300,18 @@ Changes in Version 0.2-1
 Changes in Version 0.2-0
 
   o can now support configurations without *.site files (as well as
-    configurations with *.site files) thereby reducing the minimum 
-    configuration even further.  
+    configurations with *.site files) thereby reducing the minimum
+    configuration even further.
 
   o Rcmd.bat, Rgui.bat and R.bat now temporarily set R_ENVIRON,
-    R_PROFILE and R_LIBS as needed so that it is no longer necessary to 
+    R_PROFILE and R_LIBS as needed so that it is no longer necessary to
     copy the *.site files into the etc directory eliminating all
     reconfiguration when upgrading to a new version of R (except for
     refreshing MiKTeX).
 
   o new command miktex-refresh.bat is used to refresh MiKTeX after a
     new version of R is installed. Previously this was done in
-    Rrefresh.bat which is now deprecated.  Rrefresh.bat is no longer 
+    Rrefresh.bat which is now deprecated.  Rrefresh.bat is no longer
     needed (unless you want each R version to have its own *.site files).
 
   o new NEWS, WISHLIST and RESOURCES files.

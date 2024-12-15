@@ -15,31 +15,45 @@ Raster semantic label is suggested to work with imagery classification tools.
 
 <h2>EXAMPLES</h2>
 
-These examples are based on the North Carolina dataset, more specifically the <em>landuse</em> raster map.
+These examples are based on the North Carolina dataset, more specifically
+the <em>landuse</em> raster map.
 
 Copy the landuse map to the current mapset
-<div class="code"><pre>g.copy raster=landuse,my_landuse
+
+<div class="code"><pre>
+g.copy raster=landuse,my_landuse
 </pre></div>
 
 <h3>Update statistics</h3>
-<div class="code"><pre>r.support -s map=my_landuse
+
+<div class="code"><pre>
+r.support -s map=my_landuse
 </pre></div>
 
 <h3>Update Title</h3>
-<div class="code"><pre>r.support map=my_landuse title="Landuse copied"
+
+<div class="code"><pre>
+r.support map=my_landuse title="Landuse copied"
 </pre></div>
 
 <h3>Append to History Metadata</h3>
-<div class="code"><pre>r.support map=my_landuse history="Copied from PERMANENT mapset"
+
+<div class="code"><pre>
+r.support map=my_landuse history="Copied from PERMANENT mapset"
 </pre></div>
 
 <h3>Update Units Display</h3>
-<div class="code"><pre>r.support map=my_landuse units=meter
+
+<div class="code"><pre>
+r.support map=my_landuse units=meter
 </pre></div>
 
 <h3>Set semantic label</h3>
+
 Note: landuse map doesn't confirm to CORINE specification. This is an example only.
-<div class="code"><pre>r.support map=my_landuse semantic_label=CORINE_LULC
+
+<div class="code"><pre>
+r.support map=my_landuse semantic_label=CORINE_LULC
 </pre></div>
 
 <h2>NOTES</h2>
