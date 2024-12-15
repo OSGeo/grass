@@ -324,7 +324,6 @@ int main(int argc, char *argv[])
                             inwkt = NULL;
                         }
                         proj_destroy(source_crs);
-                        Ogr_projection = NULL;
                         if (inwkt) {
                             char *inwkttmp = inwkt;
 
