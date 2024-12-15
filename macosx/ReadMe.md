@@ -700,4 +700,4 @@ This program is free software under the GNU General Public License (>=v2).
 
 <kyngchaos@kyngchaos.com>
 
-<http://www.kyngchaos.com/>
+<https://www.kyngchaos.com/>
