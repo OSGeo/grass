@@ -374,7 +374,7 @@ sudo ln -sf /Library/Frameworks/Tk.framework/Versions/8.5/libtkstub8.5.a \
 ### Universal GPSBabel
 
 A universal GPSBabel CLI executable is now included in the OSX binary
-from [www.gpsbabel.org](http://www.gpsbabel.org/). This does not need to
+from [www.gpsbabel.org](https://www.gpsbabel.org/). This does not need to
 be 64bit.
 
 ### Universal NetPBM
