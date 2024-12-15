@@ -185,8 +185,7 @@ def main():
                     if name is None:
                         isvalid = False
                         break
-                    else:
-                        mapname_list.append(name)
+                    mapname_list.append(name)
 
             if isvalid:
                 entry = mapmatrizes[0][i]

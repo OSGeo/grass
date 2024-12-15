@@ -667,7 +667,7 @@ class IVDigit:
         ltype = Vect_read_line(self.poMapInfo, None, None, ln_id)
 
         if ltype == GV_CENTROID:
-            # TODO centroid opttimization, can be edited also its area -> it
+            # TODO centroid optimization, can be edited also its area -> it
             # will appear two times in new_ lists
             return self._getCentroidAreaBboxCats(ln_id)
         return [self._getBbox(ln_id)], [self._getLineAreasCategories(ln_id)]
@@ -1896,10 +1896,7 @@ class IVDigit:
                 modeSnap,
             )
 
-        if ftype == GV_AREA:
-            ltype = GV_BOUNDARY
-        else:
-            ltype = ftype
+        ltype = GV_BOUNDARY if ftype == GV_AREA else ftype
         newline = Vect_write_line(self.poMapInfo, ltype, self.poPoints, self.poCats)
         if newline < 0:
             self._error.WriteLine()

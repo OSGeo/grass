@@ -1619,10 +1619,7 @@ class AnimSimpleLayerManager(SimpleLayerManager):
         dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             layer = dlg.GetLayer()
-            if hidden:
-                signal = self.layerAdded
-            else:
-                signal = self.cmdChanged
+            signal = self.layerAdded if hidden else self.cmdChanged
             signal.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
         elif hidden:
             self._layerList.RemoveLayer(layer)
@@ -2023,7 +2020,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             panel,
             id=wx.ID_ANY,
             label=_("Learn more about formatting options"),
-            url="http://docs.python.org/2/library/datetime.html#"
+            url="https://docs.python.org/2/library/datetime.html#"
             "strftime-and-strptime-behavior",
         )
         link.SetNormalColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))

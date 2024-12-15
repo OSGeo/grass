@@ -235,7 +235,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         img = imshow(
             self.axes,
             merged_img,
-            extent=[int(ceil(x)) for x in self.full_extend],
+            extent=[ceil(x) for x in self.full_extend],
             origin="lower",
             interpolation="nearest",
             aspect="equal",
@@ -321,7 +321,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         if not event.inaxes:
             return
         # tcaswell
-        # http://stackoverflow.com/questions/11551049/matplotlib-plot-zooming-with-scroll-wheel
+        # https://stackoverflow.com/questions/11551049/matplotlib-plot-zooming-with-scroll-wheel
         cur_xlim = self.axes.get_xlim()
         cur_ylim = self.axes.get_ylim()
 

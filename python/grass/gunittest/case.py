@@ -1320,10 +1320,10 @@ class TestCase(unittest.TestCase):
             # TODO: standardized error code would be handy here
             import re
 
-            if re.search("Raster map.*not found", errors, flags=re.DOTALL):
+            if re.search(r"Raster map.*not found", errors, flags=re.DOTALL):
                 errors += "\nSee available raster maps:\n"
                 errors += call_module("g.list", type="raster")
-            if re.search("Vector map.*not found", errors, flags=re.DOTALL):
+            if re.search(r"Vector map.*not found", errors, flags=re.DOTALL):
                 errors += "\nSee available vector maps:\n"
                 errors += call_module("g.list", type="vector")
             # TODO: message format, parameters

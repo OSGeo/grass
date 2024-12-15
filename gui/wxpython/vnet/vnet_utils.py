@@ -34,10 +34,7 @@ except ImportError:
 def ParseMapStr(mapStr):
     """Create full map name (add current mapset if it is not present in name)"""
     mapValSpl = mapStr.strip().split("@")
-    if len(mapValSpl) > 1:
-        mapSet = mapValSpl[1]
-    else:
-        mapSet = grass.gisenv()["MAPSET"]
+    mapSet = mapValSpl[1] if len(mapValSpl) > 1 else grass.gisenv()["MAPSET"]
     mapName = mapValSpl[0]
 
     return mapName, mapSet

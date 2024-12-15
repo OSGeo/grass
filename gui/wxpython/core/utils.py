@@ -437,7 +437,7 @@ def __ll_parts(value, reverse=False, precision=3):
         if value == 0.0:
             return "%s%.*f" % ("00:00:0", precision, 0.0)
 
-        d = int(int(value))
+        d = int(value)
         m = int((value - d) * 60)
         s = ((value - d) * 60 - m) * 60
         if m < 0:
@@ -849,8 +849,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
 
     # update environmental variables
     if value is None:
-        if key in environ:
-            del environ[key]
+        environ.pop(key, None)
     else:
         environ[key] = value
 
@@ -864,10 +863,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
             )
         )
         return
-    if windows:
-        expCmd = "set"
-    else:
-        expCmd = "export"
+    expCmd = "set" if windows else "export"
 
     for key, value in environ.items():
         fd.write("%s %s=%s\n" % (expCmd, key, value))
