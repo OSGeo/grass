@@ -403,11 +403,10 @@ class RasterAbstractBase:
             if key < 0:  # Handle negative indices
                 key += self._rows
             if key >= self._rows:
-                raise IndexError(
-                    "The row index {0} is out of range [0, {1}).".format(
-                        key, self._rows
-                    )
+                msg = "The row index {0} is out of range [0, {1}).".format(
+                    key, self._rows
                 )
+                raise IndexError(msg)
             return self.get_row(key)
         fatal("Invalid argument type.")
 

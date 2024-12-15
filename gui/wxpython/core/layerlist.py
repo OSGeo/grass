@@ -229,7 +229,8 @@ class Layer:
                     name=fullName, element=self._internalTypes[self._mapType]
                 )
                 if not res["mapset"]:
-                    raise ValueError("Map <{name}> not found.".format(name=name))
+                    msg = "Map <{name}> not found.".format(name=name)
+                    raise ValueError(msg)
                 self._name = name + "@" + res["mapset"]
             else:
                 self._name = name
@@ -262,7 +263,8 @@ class Layer:
         :param mapType: can be 'raster', 'vector', 'raster_3d'
         """
         if mapType not in self._mapTypes:
-            raise ValueError("Wrong map type used: {mtype}".format(mtype=mapType))
+            msg = "Wrong map type used: {mtype}".format(mtype=mapType)
+            raise ValueError(msg)
 
         self._mapType = mapType
 
@@ -281,9 +283,8 @@ class Layer:
         :param float opacity: value between 0 and 1
         """
         if not (0 <= opacity <= 1):
-            raise ValueError(
-                "Opacity value must be between 0 and 1, not {op}.".format(op=opacity)
-            )
+            msg = "Opacity value must be between 0 and 1, not {op}.".format(op=opacity)
+            raise ValueError(msg)
         self._opacity = opacity
 
     opacity = property(fget=GetOpacity, fset=SetOpacity)

@@ -601,11 +601,12 @@ def append_random(name, suffix_length=None, total_length=None):
         name_length = len(name)
         suffix_length = total_length - name_length - 1
         if suffix_length <= 0:
-            raise ValueError(
+            msg = (
                 "No characters left for the suffix:"
                 " total_length <{total_length}> is too small"
                 " or name <{name}> ({name_length}) is too long".format(**locals())
             )
+            raise ValueError(msg)
     # We don't do lower and upper case because that could cause conflicts in
     # contexts which are case-insensitive.
     # We use lowercase because that's what is in UUID4 hex string.
