@@ -149,7 +149,7 @@ class Parameter:
         >>> param.value = 3
         Traceback (most recent call last):
            ...
-        ValueError: The Parameter <int_number>, must be one of the following values: [2, 4, 6, 8] not '3'
+        ValueError: The parameter <int_number>, must be one of the following values: [2, 4, 6, 8] not '3'
 
     ...
     """  # noqa: E501
