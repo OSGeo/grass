@@ -1015,7 +1015,7 @@ def load_env(grass_env_file):
     # Regular expression for lines starting with "export var=val" (^export
     # lines below). Environment variables should start with a-zA-Z or _.
     # \1 and \2 are a variable name and its value, respectively.
-    export_re = re.compile("^export[ \t]+([a-zA-Z_]+[a-zA-Z0-9_]*)=(.*?)[ \t]*$")
+    export_re = re.compile(r"^export[ \t]+([a-zA-Z_]+[a-zA-Z0-9_]*)=(.*?)[ \t]*$")
 
     for line in readfile(grass_env_file).splitlines():
         # match ^export lines

@@ -178,7 +178,7 @@ class WSDialogBase(wx.Dialog):
             border=5,
         )
 
-        # connectin settings
+        # connection settings
         settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.VERTICAL)
 
         serverSizer = wx.FlexGridSizer(cols=3, vgap=5, hgap=5)
@@ -748,7 +748,7 @@ class WSPropertiesDialog(WSDialogBase):
             )
 
     def _getServerConnFromCmd(self, cmd):
-        """Get url/server/passwod from cmd tuple"""
+        """Get url/server/password from cmd tuple"""
         conn = {"url": "", "username": "", "password": ""}
 
         for k in conn.keys():

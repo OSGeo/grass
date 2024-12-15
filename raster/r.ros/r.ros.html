@@ -39,12 +39,12 @@ The <b>output</b> parameter is a basename (prefix) for all generated
 raster maps and each map gets a unique suffix:
 
 <ul>
-  <li><tt>.base</tt> for the base (perpendicular) ROS (cm/minute)
-  <li><tt>.max</tt> for the maximum (forward) ROS (cm/minute),
+  <li><tt>.base</tt> for the base (perpendicular) ROS (cm/minute)</li>
+  <li><tt>.max</tt> for the maximum (forward) ROS (cm/minute),</li>
   <li><tt>.maxdir</tt> for the direction of the maximum
-    ROS, clockwise from north (degree), and optionally
+    ROS, clockwise from north (degree), and optionally</li>
   <li><tt>.spotdist</tt> for the maximum potential
-    spotting distance (meters).
+    spotting distance (meters).</li>
 </ul>
 
 <p>
@@ -91,9 +91,9 @@ r.ros -s model=fire_model moisture_1h=1hour_moisture moisture_live=live_moisture
   <li><em>r.ros</em> is supposed to be run before running
     <em><a href="r.spread.html">r.spread</a></em> module.
     The combination of these two modules forms
-    a simulation of the spread of wildfires.
+    a simulation of the spread of wildfires.</li>
   <li>The user should be sure that the inputs to
-    <em>r.ros</em> are in proper units.
+    <em>r.ros</em> are in proper units.</li>
   <li>The output units for the base and maximum ROSes are in cm/minute
     rather than ft/minute, which is due to that a possible zero ft/minute base
     ROS value and a positive integer ft/minute maximum ROS would result in
@@ -102,7 +102,7 @@ r.ros -s model=fire_model moisture_1h=1hour_moisture moisture_live=live_moisture
     <!-- This is caused by usage of CELL instead of FCELL/DCELL. ? -->
     As far as the user just use <em>r.ros</em> together with
     <em><a href="r.spread.html">r.spread</a></em>, there is no need to
-    concern about these output units.
+    concern about these output units.</li>
 </ol>
 
 <h2>REFERENCES</h2>

@@ -24,35 +24,35 @@ explained in the source code (doxygen) documentation.
 <p>
 To write a new index only two steps are needed:
 <ol>
-	<li>
-	Define a function and insert its declaration on file <b>index.h</b> in <em>r.li.daemon</em>
-	folder, which contains all index declarations. This function must be of this kind:
-	<div class="code"><pre>
+    <li>
+    Define a function and insert its declaration on file <b>index.h</b> in <em>r.li.daemon</em>
+    folder, which contains all index declarations. This function must be of this kind:
+    <div class="code"><pre>
         int index(int fd, char ** par, area_des ad, double * result)
-	</pre></div>
-	where: <ul>
-			<li><i>fd</i> is the raster map descriptor
-			<li><i>par</i> is a matrix for special parameter (like argv in main)
-			<li><i>ad</i> is the area descriptor
-			<li><i>result</i> is where to put the index calculation result
-		</ul>
-	This function has to return 1 on success and 0 otherwise.
-    This function type is defined using typedef named <code>rli_func</code>.
-	<li>
-	Create a main for command line arguments parsing, and call the function
-	<div class="code"><pre>
+    </pre></div>
+    where: <ul>
+            <li><i>fd</i> is the raster map descriptor</li>
+            <li><i>par</i> is a matrix for special parameter (like argv in main)</li>
+            <li><i>ad</i> is the area descriptor</li>
+            <li><i>result</i> is where to put the index calculation result</li>
+        </ul>
+    This function has to return 1 on success and 0 otherwise.
+    This function type is defined using typedef named <code>rli_func</code>.</li>
+    <li>
+    Create a main for command line arguments parsing, and call the function
+    <div class="code"><pre>
         int calculateIndex(char *file, rli_func *f,
                            char **parameters, char *raster, char *output);
-	</pre></div>
-	from the <i>r.li</i> library, for starting raster analysis.<br>
-	It follows the meaning of parameters:
-	<ul>
-	<li><i>file</i> name of configuration file created using <a href="g.gui.rlisetup.html">g.gui.rlisetup</a>
-	<li><i>f</i> pointer to index function defined above
-	<li><i>parameters</i> pointer to index special parameters
-	<li><i>raster</i> name of raster to use
-	<li><i>output</i> output file name
-	</ul>
+    </pre></div>
+    from the <i>r.li</i> library, for starting raster analysis.<br>
+    It follows the meaning of parameters:
+    <ul>
+     <li><i>file</i> name of configuration file created using <a href="g.gui.rlisetup.html">g.gui.rlisetup</a></li>
+     <li><i>f</i> pointer to index function defined above</li>
+     <li><i>parameters</i> pointer to index special parameters</li>
+     <li><i>raster</i> name of raster to use</li>
+     <li><i>output</i> output file name</li>
+    </ul></li>
 </ol>
 Compile it using a changed Makefile based on the file for <em>r.li.patchdensity</em>.
 
