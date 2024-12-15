@@ -2,6 +2,7 @@ cairo
 clangxx_osx-arm64
 clang_osx-arm64
 cmake
+expat
 fftw
 flex
 freetype

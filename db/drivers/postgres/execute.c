@@ -1,7 +1,7 @@
 /*!
    \file db/driver/postgres/execute.c
 
-   \brief DBMI - Low Level PostgreSQL database driver - execute statemets
+   \brief DBMI - Low Level PostgreSQL database driver - execute statements
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.

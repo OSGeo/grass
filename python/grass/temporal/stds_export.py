@@ -53,7 +53,7 @@ exported_maps = {}
 
 def _export_raster_maps_as_gdal(
     rows, tar, list_file, new_cwd, fs, format_, type_, **kwargs
-):
+) -> None:
     kwargs = {key: value for key, value in kwargs.items() if value is not None}
     for row in rows:
         name = row["name"]
@@ -148,7 +148,7 @@ def _export_raster_maps_as_gdal(
 ############################################################################
 
 
-def _export_raster_maps(rows, tar, list_file, new_cwd, fs):
+def _export_raster_maps(rows, tar, list_file, new_cwd, fs) -> None:
     for row in rows:
         name = row["name"]
         start = row["start_time"]
@@ -173,7 +173,7 @@ def _export_raster_maps(rows, tar, list_file, new_cwd, fs):
 ############################################################################
 
 
-def _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs):
+def _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs) -> None:
     for row in rows:
         name = row["name"]
         start = row["start_time"]
@@ -207,7 +207,7 @@ def _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs):
 ############################################################################
 
 
-def _export_vector_maps_as_gpkg(rows, tar, list_file, new_cwd, fs):
+def _export_vector_maps_as_gpkg(rows, tar, list_file, new_cwd, fs) -> None:
     for row in rows:
         name = row["name"]
         start = row["start_time"]
@@ -242,7 +242,7 @@ def _export_vector_maps_as_gpkg(rows, tar, list_file, new_cwd, fs):
 ############################################################################
 
 
-def _export_vector_maps(rows, tar, list_file, new_cwd, fs):
+def _export_vector_maps(rows, tar, list_file, new_cwd, fs) -> None:
     for row in rows:
         name = row["name"]
         start = row["start_time"]
@@ -276,7 +276,7 @@ def _export_vector_maps(rows, tar, list_file, new_cwd, fs):
 ############################################################################
 
 
-def _export_raster3d_maps(rows, tar, list_file, new_cwd, fs):
+def _export_raster3d_maps(rows, tar, list_file, new_cwd, fs) -> None:
     for row in rows:
         name = row["name"]
         start = row["start_time"]
@@ -310,7 +310,7 @@ def export_stds(
     type_="strds",
     datatype=None,
     **kwargs,
-):
+) -> None:
     """Export space time datasets as tar archive with optional compression
 
     This method should be used to export space time datasets

@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.11@sha256:1f2be5a2aa052cbd9aedf893d17c63277c3d1c51b3fb0f3b029c6b34f658d057
+# syntax=docker/dockerfile:1.12@sha256:db1ff77fb637a5955317c7a3a62540196396d565f3dd5742e76dddbb6d75c4c5
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
 #       Changes to this file must be copied over to the other file.
@@ -131,9 +131,9 @@ ARG GRASS_CONFIG="\
   "
 
 ARG GRASS_PYTHON_PACKAGES="\
-    Pillow \
     matplotlib \
     numpy \
+    Pillow \
     pip \
     ply \
     psycopg2 \
