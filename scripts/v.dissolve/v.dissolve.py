@@ -399,9 +399,8 @@ def aggregate_attributes_sql(
     if not methods:
         for result_column in result_columns:
             if " " not in result_column:
-                raise ValueError(
-                    f"Column {result_column} from result_columns without type"
-                )
+                msg = f"Column {result_column} from result_columns without type"
+                raise ValueError(msg)
     if methods:
         select_columns = [
             f"{method}({agg_column})"

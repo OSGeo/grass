@@ -112,10 +112,11 @@ def _check_value(param, value):
                         good = True
                         break
             if not good:
-                raise ValueError(
-                    f"The Parameter <{param.name}>, must be one of the following "
+                msg = (
+                    f"The parameter <{param.name}>, must be one of the following "
                     f"values: {param.values!r} not '{newvalue}'"
                 )
+                raise ValueError(msg)
     return (
         (
             [
