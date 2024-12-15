@@ -51,13 +51,13 @@ Python Scripting Library</a> defines special wrappers
 for <em>g.message</em>.
 
 <ul>
-  <li><tt>debug()</tt> for <tt>g.message -d</tt>
-  <li><tt>error()</tt> for <tt>g.message -e</tt>
-  <li><tt>fatal()</tt> for <tt>g.message -e</tt> + <tt>exit()</tt>
-  <li><tt>info()</tt> for <tt>g.message -i</tt>
-  <li><tt>message()</tt> for <tt>g.message</tt>
-  <li><tt>verbose()</tt> for <tt>g.message -v</tt>
-  <li><tt>warning()</tt> for <tt>g.message -w</tt>
+  <li><tt>debug()</tt> for <tt>g.message -d</tt></li>
+  <li><tt>error()</tt> for <tt>g.message -e</tt></li>
+  <li><tt>fatal()</tt> for <tt>g.message -e</tt> + <tt>exit()</tt></li>
+  <li><tt>info()</tt> for <tt>g.message -i</tt></li>
+  <li><tt>message()</tt> for <tt>g.message</tt></li>
+  <li><tt>verbose()</tt> for <tt>g.message -v</tt></li>
+  <li><tt>warning()</tt> for <tt>g.message -w</tt></li>
 </ul>
 
 <p>
@@ -81,10 +81,10 @@ g.message -w message="This is a warning"
 Controlled by the "<tt>GRASS_VERBOSE</tt>" environment variable. Typically this
 is set using the <b>--quiet</b> or <b>--verbose</b> command line options.
 <ul>
-<li>0 - only errors and warnings are printed
-<li>1 - progress messages are printed
-<li>2 - all module messages are printed
-<li>3 - additional verbose messages are printed
+<li>0 - only errors and warnings are printed</li>
+<li>1 - progress messages are printed</li>
+<li>2 - all module messages are printed</li>
+<li>3 - additional verbose messages are printed</li>
 </ul>
 
 <h3>DEBUG LEVELS</h3>
@@ -93,9 +93,9 @@ Controlled by the "<tt>DEBUG</tt>" GRASS <i>gisenv</i> variable (set with
 <br>
 Recommended levels:
 <ul>
-<li>1 - message is printed once or few times per module
-<li>3 - each row (raster) or line (vector)
-<li>5 - each cell (raster) or point (vector)
+<li>1 - message is printed once or few times per module</li>
+<li>3 - each row (raster) or line (vector)</li>
+<li>5 - each cell (raster) or point (vector)</li>
 </ul>
 
 <h2>EXAMPLES</h2>
@@ -138,7 +138,10 @@ g.message -w message="my warning"
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="variables.html">GRASS variables and environment variables</a><br>
+<a href="variables.html">GRASS variables and environment variables</a>
+</em>
+<br>
+<em>
 <a href="g.gisenv.html">g.gisenv</a>,
 <a href="g.parser.html">g.parser</a>
 </em>

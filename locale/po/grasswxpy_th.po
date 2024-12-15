@@ -7598,7 +7598,7 @@ msgstr "ละลาย ขอบเขต"
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 #, fuzzy
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr "Dissolves เขต ระหว่าง พื้นที่ที่อยู่ติดกันและมี ข้อมูลเหมือนกัน"
 
