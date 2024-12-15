@@ -107,27 +107,6 @@ fi
 
 exec 3>&1 > >(tee mswindows/osgeo4w/package.log) 2>&1
 
-DLLS="
-	/mingw64/bin/libbz2-1.dll
-	/mingw64/bin/libfftw3-3.dll
-	/mingw64/bin/libgcc_s_seh-1.dll
-	/mingw64/bin/libgfortran-5.dll
-	/mingw64/bin/libgomp-1.dll
-	/mingw64/bin/libiconv-2.dll
-	/mingw64/bin/libintl-8.dll
-	/mingw64/bin/libopenblas.dll
-	/mingw64/bin/libpcre-1.dll
-	/mingw64/bin/libpixman-1-0.dll
-	/mingw64/bin/libpng16-16.dll
-	/mingw64/bin/libquadmath-0.dll
-	/mingw64/bin/libreadline8.dll
-	/mingw64/bin/libstdc++-6.dll
-	/mingw64/bin/libsystre-0.dll
-	/mingw64/bin/libtre-5.dll
-	/mingw64/bin/libwinpthread-1.dll
-	/mingw64/bin/zlib1.dll
-"
-
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	if [ -e include/Make/Platform.make ] ; then
 	    log make distclean
