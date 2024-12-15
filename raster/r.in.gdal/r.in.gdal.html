@@ -252,7 +252,7 @@ reporting everything known about a dataset if the <b>output</b> parameter is not
 <i>"ERROR: Input map is rotated - cannot import."</i><br>
 In this case the image must be first externally rotated, applying the rotation info stored in
 the metadata field of the raster image file. For example, the
-<a href="https://gdal.org/programs/gdalwarp.html#gdalwarp">gdalwarp</a>  software can be used
+<a href="https://gdal.org/en/stable/programs/gdalwarp.html">gdalwarp</a> software can be used
 to transform the map to North-up (note, there are several gdalwarp parameters to select the
 resampling algorithm):
 
@@ -362,7 +362,7 @@ See also their <a href="http://www.ngdc.noaa.gov/mgg/dem/demportal.html">DEM por
 <h3>Raster file import over network</h3>
 
 Since GDAL 2.x it is possible to import raster data over the network <!-- mention WMS, WMTS can do that too-->
-(see <a href="https://gdal.org/gdal_virtual_file_systems.html">GDAL Virtual File Systems</a>)
+(see <a href="https://gdal.org/en/stable/user/virtual_file_systems.html">GDAL Virtual File Systems</a>)
 including <a href="http://www.cogeo.org/">Cloud Optimized GeoTIFF</a>,
 i.e. access uncompressed and compressed raster data via a http(s) or ftp connection.
 As an example the import of the global SRTMGL1 V003 tiles at 1 arc second (about 30 meters)
@@ -397,7 +397,7 @@ r.in.gdal HDF4_EOS:EOS_GRID:"MOD15A2.A2003153.h18v04.004.2003171141042.hdf":MOD_
 
 <h2>REFERENCES</h2>
 
-GDAL Pages: <a href="https://gdal.org">https://gdal.org/</a>
+GDAL Pages: <a href="https://gdal.org">https://gdal.org</a>
 
 <h2>SEE ALSO</h2>
 
