@@ -105,22 +105,20 @@ needed to test for matching CRSs.
 
 <h2>EXAMPLE</h2>
 
-This example is analogous to the example used in the GRASS wiki page for
-<a href="https://grasswiki.osgeo.org/wiki/LIDAR#Import_LAS_as_vector_points">importing LAS as vector points</a>.
-<p>The sample LAS data are in the file "Serpent Mound Model LAS Data.laz",
+The sample LAS data are in the file "Serpent Mound Model LAS Data.laz",
 available at
-<a href="https://github.com/PDAL/data/raw/refs/heads/master/liblas/Serpent%20Mound%20Model%20LAS%20Data.laz">Serpent Mound Model LAS Data.laz</a>
+<a href="https://github.com/PDAL/data/raw/4ee9ee43b195268a59113555908c1c0cdf955bd4/liblas/Serpent%20Mound%20Model%20LAS%20Data.laz">Serpent Mound Model LAS Data.laz</a>
 
 <div class="code"><pre>
-  # print LAS file info
-  v.in.lidar -p input="Serpent Mound Model LAS Data.laz"
+# print LAS file info
+v.in.lidar -p input="Serpent Mound Model LAS Data.laz"
 
-  # create a project with CRS information of the LAS data
-  v.in.lidar -i input="Serpent Mound Model LAS Data.laz" project=Serpent_Mound
+# create a project with CRS information of the LAS data
+v.in.lidar -i input="Serpent Mound Model LAS Data.laz" project=Serpent_Mound
 
-  # quit and restart GRASS in the newly created project "Serpent_Mound"
-  # real import of LiDAR LAS data, without topology and without attribute table
-  v.in.lidar -tb input="Serpent Mound Model LAS Data.laz" output=Serpent_Mound_Model_pts
+# quit and restart GRASS in the newly created project "Serpent_Mound"
+# real import of LiDAR LAS data, without topology and without attribute table
+v.in.lidar -tb input="Serpent Mound Model LAS Data.laz" output=Serpent_Mound_Model_pts
 </pre></div>
 
 <h2>REFERENCES</h2>
