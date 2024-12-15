@@ -27,7 +27,7 @@
 #   DERIVATION OF A TASSELED CAP TRANSFORMATION BASED ON LANDSAT 7 AT-SATELLITE REFLECTANCE
 #   Chengquan Huang, Bruce Wylie, Limin Yang, Collin Homer and Gregory Zylstra Raytheon ITSS,
 #   USGS EROS Data Center Sioux Falls, SD 57198, USA
-#   https://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=1630&context=usgsstaffpub
+#   https://digitalcommons.unl.edu/usgsstaffpub/621/
 #
 #  This is published as well in INT. J. OF RS, 2002, VOL 23, NO. 8, 1741-1748.
 #  Compare discussion:
