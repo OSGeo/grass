@@ -313,7 +313,8 @@ def add_entry(history_path, entry):
     if get_history_file_extension(history_path) == ".json":
         _add_entry_to_JSON(history_path, entry)
     else:
-        raise ValueError("Adding entries is supported only for JSON format.")
+        msg = "Adding entries is supported only for JSON format."
+        raise ValueError(msg)
 
 
 def _update_entry_in_JSON(history_path, command_info, index=None):
@@ -360,7 +361,8 @@ def update_entry(history_path, command_info, index=None):
     if get_history_file_extension(history_path) == ".json":
         _update_entry_in_JSON(history_path, command_info, index)
     else:
-        raise ValueError("Updating entries is supported only for JSON format.")
+        msg = "Updating entries is supported only for JSON format."
+        raise ValueError(msg)
 
 
 def copy(history_path, target_path):

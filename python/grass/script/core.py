@@ -270,7 +270,8 @@ def make_command(
     if flags:
         flags = _make_val(flags)
         if "-" in flags:
-            raise ScriptError("'-' is not a valid flag")
+            msg = "'-' is not a valid flag"
+            raise ScriptError(msg)
         args.append("-" + flags)
     for opt, val in options.items():
         if opt in _popen_args:
@@ -866,16 +867,16 @@ def _parse_opts(lines: list) -> tuple[dict[str, str], dict[str, bool]]:
         try:
             var, val = line.split(b"=", 1)
         except ValueError:
-            raise SyntaxError("invalid output from g.parser: {}".format(line))
+            msg = "invalid output from g.parser: {}".format(line)
+            raise SyntaxError(msg)
         try:
             var = decode(var)
             val = decode(val)
         except UnicodeError as error:
-            raise SyntaxError(
-                "invalid output from g.parser ({error}): {line}".format(
-                    error=error, line=line
-                )
+            msg = "invalid output from g.parser ({error}): {line}".format(
+                error=error, line=line
             )
+            raise SyntaxError(msg)
         if var.startswith("flag_"):
             flags[var[5:]] = bool(int(val))
         elif var.startswith("opt_"):
@@ -883,9 +884,8 @@ def _parse_opts(lines: list) -> tuple[dict[str, str], dict[str, bool]]:
         elif var in {"GRASS_OVERWRITE", "GRASS_VERBOSE"}:
             os.environ[var] = val
         else:
-            raise SyntaxError(
-                "unexpected output variable from g.parser: {}".format(line)
-            )
+            msg = "unexpected output variable from g.parser: {}".format(line)
+            raise SyntaxError(msg)
     return (options, flags)
 
 

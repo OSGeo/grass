@@ -92,7 +92,8 @@ class MapsetSession:
         the environment obtained from this object.
         """
         if not self.active:
-            raise ValueError("Attempt to finish an already finished session")
+            msg = "Attempt to finish an already finished session"
+            raise ValueError(msg)
         os.remove(self._session_file)
         self._active = False
 
@@ -104,9 +105,8 @@ class MapsetSession:
         :returns: reference to the object (self)
         """
         if not self.active:
-            raise ValueError(
-                "Attempt to use inactive (finished) session as a context manager"
-            )
+            msg = "Attempt to use inactive (finished) session as a context manager"
+            raise ValueError(msg)
         return self
 
     def __exit__(self, type, value, traceback):  # pylint: disable=redefined-builtin
@@ -211,7 +211,8 @@ class TemporaryMapsetSession:
         the environment obtained from this object.
         """
         if not self.active:
-            raise ValueError("Attempt to finish an already finished session")
+            msg = "Attempt to finish an already finished session"
+            raise ValueError(msg)
         self._active = False
         os.remove(self._session_file)
         shutil.rmtree(self._path.path, ignore_errors=True)
@@ -224,9 +225,8 @@ class TemporaryMapsetSession:
         :returns: reference to the object (self)
         """
         if not self.active:
-            raise ValueError(
-                "Attempt to use inactive (finished) session as a context manager"
-            )
+            msg = "Attempt to use inactive (finished) session as a context manager"
+            raise ValueError(msg)
         return self
 
     def __exit__(self, type, value, traceback):  # pylint: disable=redefined-builtin

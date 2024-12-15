@@ -121,9 +121,11 @@ class Category(list):
                 label, min_cat = value
                 value = (label, min_cat, None)
             elif length < 2 or length > 3:
-                raise TypeError("Tuple with a length that is not supported.")
+                msg = "Tuple with a length that is not supported."
+                raise TypeError(msg)
         else:
-            raise TypeError("Only Tuple are supported.")
+            msg = "Only tuples are supported."
+            raise TypeError(msg)
         return value
 
     def __getitem__(self, index):
@@ -204,7 +206,8 @@ class Category(list):
         elif index < (len(self)):
             self[index] = value
         else:
-            raise TypeError("Index outside range.")
+            msg = "Index outside range."
+            raise TypeError(msg)
 
     def reset(self):
         for i in range(len(self) - 1, -1, -1):
@@ -244,7 +247,8 @@ class Category(list):
             self.name, self.mapset, ctypes.byref(self.c_cats)
         )
         if err == -1:
-            raise GrassError("Can not read the categories.")
+            msg = "Can not read the categories."
+            raise GrassError(msg)
         # copy from C struct to list
         self._read_cats()
 
@@ -280,7 +284,8 @@ class Category(list):
         void Rast_set_cats_fmt()
         """
         # TODO: add
-        raise ImplementationError("set_cats_fmt() is not implemented yet.")
+        msg = f"{self.set_cats_fmt.__name__}() is not implemented yet."
+        raise ImplementationError(msg)
 
     def read_rules(self, filename, sep=":"):
         """Copy categories from a rules file, default separator is ':', the
@@ -308,7 +313,8 @@ class Category(list):
                 elif len(cat) == 3:
                     label, min_cat, max_cat = cat
                 else:
-                    raise TypeError("Row length is greater than 3")
+                    msg = "Row length is greater than 3"
+                    raise TypeError(msg)
                 self.append((label, min_cat, max_cat))
 
     def write_rules(self, filename, sep=":"):

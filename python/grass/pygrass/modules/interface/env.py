@@ -12,7 +12,8 @@ def get_env():
     """Parse the GISRC file and return the GRASS variales"""
     gisrc = os.environ.get("GISRC")
     if gisrc is None:
-        raise RuntimeError("You are not in a GRASS session, GISRC not found.")
+        msg = "You are not in a GRASS session, GISRC not found."
+        raise RuntimeError(msg)
     with open(gisrc) as grc:
         return {
             k.strip(): v.strip() for k, v in [row.split(":", 1) for row in grc if row]

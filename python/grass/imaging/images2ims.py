@@ -81,9 +81,11 @@ def checkImages(images):
                 pass  # ok
             elif im.ndim == 3:
                 if im.shape[2] not in [3, 4]:
-                    raise ValueError("This array can not represent an image.")
+                    msg = "This array can not represent an image."
+                    raise ValueError(msg)
             else:
-                raise ValueError("This array can not represent an image.")
+                msg = "This array can not represent an image."
+                raise ValueError(msg)
         else:
             raise ValueError("Invalid image type: " + str(type(im)))
 
@@ -145,7 +147,8 @@ def writeIms(filename, images):
 
     # Check PIL
     if PIL is None:
-        raise RuntimeError("Need PIL to write series of image files.")
+        msg = "Need PIL to write series of image files."
+        raise RuntimeError(msg)
 
     # Check images
     images = checkImages(images)
@@ -185,11 +188,13 @@ def readIms(filename, asNumpy=True):
 
     # Check PIL
     if PIL is None:
-        raise RuntimeError("Need PIL to read a series of image files.")
+        msg = "Need PIL to read a series of image files."
+        raise RuntimeError(msg)
 
-    # Check Numpy
+    # Check NumPy
     if asNumpy and np is None:
-        raise RuntimeError("Need Numpy to return numpy arrays.")
+        msg = "Need NumPy to return numpy arrays."
+        raise RuntimeError(msg)
 
     # Get dirname and filename
     filename = os.path.abspath(filename)
@@ -229,7 +234,8 @@ def readIms(filename, asNumpy=True):
             # Make numpy array
             a = np.asarray(im)
             if len(a.shape) == 0:
-                raise MemoryError("Too little memory to convert PIL image to array")
+                msg = "Too little memory to convert PIL image to array"
+                raise MemoryError(msg)
             # Add
             images.append(a)
 

@@ -275,7 +275,8 @@ def _write_table(rows, column_names, output_format, separator, file):
             separator = ","
         _write_csv(rows=rows, column_names=column_names, separator=separator, file=file)
     else:
-        raise ValueError(f"Unknown value '{output_format}' for output_format")
+        msg = f"Unknown value '{output_format}' for output_format"
+        raise ValueError(msg)
 
 
 def _get_get_registered_maps_as_objects_with_method(dataset, where, method, gran, dbif):
@@ -287,15 +288,15 @@ def _get_get_registered_maps_as_objects_with_method(dataset, where, method, gran
         )
     if method == "gran":
         if where:
-            raise ValueError(
-                f"The where parameter is not supported with method={method}"
-            )
+            msg = f"The where parameter is not supported with method={method}"
+            raise ValueError(msg)
         if gran is not None and gran != "":
             return dataset.get_registered_maps_as_objects_by_granularity(
                 gran=gran, dbif=dbif
             )
         return dataset.get_registered_maps_as_objects_by_granularity(dbif=dbif)
-    raise ValueError(f"Invalid method '{method}'")
+    msg = f"Invalid method '{method}'"
+    raise ValueError(msg)
 
 
 def _get_get_registered_maps_as_objects_delta_gran(
@@ -363,7 +364,8 @@ def _get_list_of_maps_delta_gran(dataset, columns, where, method, gran, dbif, ms
             elif column == "distance_from_begin":
                 row.append(delta_first)
             else:
-                raise ValueError(f"Unsupported column '{column}'")
+                msg = f"Unsupported column '{column}'"
+                raise ValueError(msg)
         rows.append(row)
     return rows
 
@@ -386,14 +388,14 @@ def _get_list_of_maps_stds(
 
     def check_columns(column_names, output_format, element_type):
         if element_type != "stvds" and "layer" in columns:
-            raise ValueError(
-                f"Column 'layer' is not allowed with temporal type '{element_type}'"
-            )
+            msg = f"Column 'layer' is not allowed with temporal type '{element_type}'"
+            raise ValueError(msg)
         if output_format == "line" and len(column_names) > 1:
-            raise ValueError(
+            msg = (
                 f"'{output_format}' output_format can have only 1 column, "
                 f"not {len(column_names)}"
             )
+            raise ValueError(msg)
 
     # This method expects a list of objects for gap detection
     if method in {"delta", "deltagaps", "gran"}:

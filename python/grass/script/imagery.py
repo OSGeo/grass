@@ -93,10 +93,12 @@ def group_to_dict(
     )
 
     if dict_keys not in {"indices", "map_names", "semantic_labels"}:
-        raise ValueError(f"Invalid dictionary keys <{dict_keys}> requested")
+        msg = f"Invalid dictionary keys <{dict_keys}> requested"
+        raise ValueError(msg)
 
     if dict_values not in {"indices", "map_names", "semantic_labels", "metadata"}:
-        raise ValueError(f"Invalid dictionary values <{dict_values}> requested")
+        msg = f"Invalid dictionary values <{dict_values}> requested"
+        raise ValueError(msg)
 
     if subgroup and not maps_in_group:
         warning(
