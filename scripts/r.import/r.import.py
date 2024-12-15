@@ -138,8 +138,6 @@ TMP_REG_NAME = None
 
 
 def cleanup():
-    if TGTGISRC:
-        os.environ["GISRC"] = str(TGTGISRC)
     # remove temp location
     if TMPLOC:
         gs.try_rmdir(os.path.join(GISDBASE, TMPLOC))
