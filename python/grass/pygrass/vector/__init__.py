@@ -113,7 +113,8 @@ class Vector(Info):
     def rewind(self):
         """Rewind vector map to cause reads to start at beginning."""
         if libvect.Vect_rewind(self.c_mapinfo) == -1:
-            raise GrassError("Vect_rewind raise an error.")
+            msg = "Vect_rewind raise an error."
+            raise GrassError(msg)
 
     @must_be_open
     def write(self, geo_obj, cat=None, attrs=None):
@@ -224,7 +225,8 @@ class Vector(Info):
             self.c_mapinfo, geo_obj.gtype, geo_obj.c_points, geo_obj.c_cats
         )
         if result == -1:
-            raise GrassError("Not able to write the vector feature.")
+            msg = "Not able to write the vector feature."
+            raise GrassError(msg)
         if self._topo_level == 2:
             # return new feature id (on level 2)
             geo_obj.id = result
@@ -641,7 +643,8 @@ class VectorTopo(Vector):
             self.c_mapinfo, cat, geo_obj.gtype, geo_obj.c_points, geo_obj.c_cats
         )
         if result == -1:
-            raise GrassError("Not able to write the vector feature.")
+            msg = "Not able to write the vector feature."
+            raise GrassError(msg)
 
         # return offset into file where the feature starts
         geo_obj.offset = result
@@ -654,7 +657,8 @@ class VectorTopo(Vector):
         :type feature_id: int
         """
         if libvect.Vect_rewrite_line(self.c_mapinfo, feature_id) == -1:
-            raise GrassError("C function: Vect_rewrite_line.")
+            msg = "C function: Vect_rewrite_line."
+            raise GrassError(msg)
 
     @must_be_open
     def restore(self, geo_obj):
@@ -663,16 +667,19 @@ class VectorTopo(Vector):
                 libvect.Vect_restore_line(self.c_mapinfo, geo_obj.offset, geo_obj.id)
                 == -1
             ):
-                raise GrassError("C function: Vect_restore_line.")
+                msg = "C function: Vect_restore_line."
+                raise GrassError(msg)
         else:
-            raise ValueError("The value have not an offset attribute.")
+            msg = "The value have not an offset attribute."
+            raise ValueError(msg)
 
     @must_be_open
     def bbox(self):
-        """Return the BBox of the vecor map"""
+        """Return the BBox of the vector map"""
         bbox = Bbox()
         if libvect.Vect_get_map_box(self.c_mapinfo, bbox.c_bbox) == 0:
-            raise GrassError("I can not find the Bbox.")
+            msg = "I can not find the Bbox."
+            raise GrassError(msg)
         return bbox
 
     def close(self, build=True, release=True):

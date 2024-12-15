@@ -160,7 +160,8 @@ class Parameter:
         self.max = None
         diz = element2dict(xparameter) if xparameter is not None else diz
         if diz is None:
-            raise TypeError("Xparameter or diz are required")
+            msg = "xparameter or diz are required"
+            raise TypeError(msg)
         self.name = diz["name"]
         self.required = diz["required"] == "yes"
         self.multiple = diz["multiple"] == "yes"

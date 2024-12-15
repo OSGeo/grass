@@ -398,7 +398,8 @@ class RasterAbstractBase:
             return self.get(x, y)
         if isinstance(key, int):
             if not self.is_open():
-                raise IndexError("Can not operate on a closed map. Call open() first.")
+                msg = "Can not operate on a closed map. Call open() first."
+                raise IndexError(msg)
             if key < 0:  # Handle negative indices
                 key += self._rows
             if key >= self._rows:

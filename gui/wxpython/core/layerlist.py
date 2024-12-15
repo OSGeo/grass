@@ -222,9 +222,8 @@ class Layer:
                 len(fullName) == 1 and self._mapType != "rgb"
             ):  # skip checking rgb maps for now
                 if self._mapType is None:
-                    raise ValueError(
-                        "To set layer name, the type of layer must be specified."
-                    )
+                    msg = "To set layer name, the type of layer must be specified."
+                    raise ValueError(msg)
 
                 res = gcore.find_file(
                     name=fullName, element=self._internalTypes[self._mapType]

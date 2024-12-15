@@ -26,7 +26,8 @@ class SemanticLabelReader:
             os.path.join(os.environ["GISBASE"], "etc", "i.band.library", "*.json")
         )
         if not self._json_files:
-            raise SemanticLabelReaderError("No semantic label definitions found")
+            msg = "No semantic label definitions found"
+            raise SemanticLabelReaderError(msg)
 
         self._read_config()
 
@@ -62,9 +63,8 @@ class SemanticLabelReader:
                         "Invalid band definition: <{}> is missing".format(item)
                     )
             if len(items["bands"]) < 1:
-                raise SemanticLabelReaderError(
-                    "Invalid band definition: no bands defined"
-                )
+                msg = "Invalid band definition: no bands defined"
+                raise SemanticLabelReaderError(msg)
 
     @staticmethod
     def _print_label_extended(label, item):

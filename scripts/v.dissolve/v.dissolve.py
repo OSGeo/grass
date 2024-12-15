@@ -391,11 +391,11 @@ def aggregate_attributes_sql(
 ):
     """Aggregate values in selected columns grouped by column using SQL backend"""
     if methods and len(columns_to_aggregate) != len(result_columns):
-        raise ValueError(
-            "Number of columns_to_aggregate and result_columns must be the same"
-        )
+        msg = "Number of columns_to_aggregate and result_columns must be the same"
+        raise ValueError(msg)
     if methods and len(columns_to_aggregate) != len(methods):
-        raise ValueError("Number of columns_to_aggregate and methods must be the same")
+        msg = "Number of columns_to_aggregate and methods must be the same"
+        raise ValueError(msg)
     if not methods:
         for result_column in result_columns:
             if " " not in result_column:
@@ -470,10 +470,11 @@ def aggregate_attributes_univar(
 ):
     """Aggregate values in selected columns grouped by column using v.db.univar"""
     if len(columns_to_aggregate) != len(methods) != len(result_columns):
-        raise ValueError(
+        msg = (
             "Number of columns_to_aggregate, methods, and result_columns "
             "must be the same"
         )
+        raise ValueError(msg)
     records = json.loads(
         gs.read_command(
             "v.db.select",

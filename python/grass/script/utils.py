@@ -193,7 +193,8 @@ def decode(bytes_, encoding=None):
         enc = _get_encoding() if encoding is None else encoding
         return bytes_.decode(enc)
     # only text should be used
-    raise TypeError("can only accept types str and bytes")
+    msg = "can only accept types str and bytes"
+    raise TypeError(msg)
 
 
 def encode(string, encoding=None):
@@ -221,7 +222,8 @@ def encode(string, encoding=None):
         enc = _get_encoding() if encoding is None else encoding
         return string.encode(enc)
     # if something else than text
-    raise TypeError("can only accept types str and bytes")
+    msg = "can only accept types str and bytes"
+    raise TypeError(msg)
 
 
 def text_to_string(text, encoding=None):
@@ -500,9 +502,11 @@ def legalize_vector_name(name, fallback_prefix="x"):
     """
     # The implementation is based on Vect_legal_filename().
     if not name:
-        raise ValueError("name cannot be empty")
+        msg = "name cannot be empty"
+        raise ValueError(msg)
     if fallback_prefix and re.match(r"[^A-Za-z]", fallback_prefix[0]):
-        raise ValueError("fallback_prefix must start with an ASCII letter")
+        msg = "fallback_prefix must start with an ASCII letter"
+        raise ValueError(msg)
     if fallback_prefix and re.match(r"[^A-Za-z]", name[0], flags=re.ASCII):
         # We prefix here rather than just replace, because in cases of unique
         # identifiers, e.g., columns or node names, replacing the first
@@ -587,11 +591,11 @@ def append_random(name, suffix_length=None, total_length=None):
         :func:`append_node_pid()` description.
     """
     if suffix_length and total_length:
-        raise ValueError(
-            "Either suffix_length or total_length can be provided, not both"
-        )
+        msg = "Either suffix_length or total_length can be provided, not both"
+        raise ValueError(msg)
     if not suffix_length and not total_length:
-        raise ValueError("suffix_length or total_length has to be provided")
+        msg = "suffix_length or total_length has to be provided"
+        raise ValueError(msg)
     if total_length:
         # remove len of name and one underscore
         name_length = len(name)
