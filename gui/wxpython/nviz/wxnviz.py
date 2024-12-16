@@ -34,7 +34,7 @@ except ImportError:
         "This module requires the NumPy module, which could not be "
         "imported. It probably is not installed (it's not part of the "
         "standard Python distribution). See the Numeric Python site "
-        "(http://numpy.scipy.org) for information on downloading source or "
+        "(https://numpy.org) for information on downloading source or "
         "binaries."
     )
     print("wxnviz.py: " + msg, file=sys.stderr)
