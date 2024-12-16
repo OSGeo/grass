@@ -68931,7 +68931,7 @@ msgstr ""
 #~ msgstr "レイヤー数 (from)"
 
 #, fuzzy
-#~ msgid "Numpy array with columns names."
+#~ msgid "NumPy array with columns names."
 #~ msgstr "列名が多すぎます "
 
 #, fuzzy
