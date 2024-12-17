@@ -239,6 +239,18 @@ int main(int argc, char *argv[])
     parm.niter->description = _("Time used for iterations [minutes]");
     parm.niter->guisection = _("Parameters");
 
+    parm.mintimestep = G_define_option();
+    parm.mintimestep->key = "mintimestep";
+    parm.mintimestep->type = TYPE_DOUBLE;
+    parm.mintimestep->answer = "0.0";
+    parm.mintimestep->required = NO;
+    parm.mintimestep->label =
+        _("Minimum tine step for the simulation [seconds]");
+    parm.mintimestep->description =
+        _("A larger minimum tine step substancially reduces processing time, "
+          "but at the cost of accuracy");
+    parm.mintimestep->guisection = _("Parameters");
+
     parm.outiter = G_define_option();
     parm.outiter->key = "output_step";
     parm.outiter->type = TYPE_INTEGER;
@@ -319,8 +331,9 @@ int main(int argc, char *argv[])
     parm.threads->type = TYPE_INTEGER;
     parm.threads->answer = NUM_THREADS;
     parm.threads->required = NO;
-    parm.threads->description =
-        _("Number of threads which will be used for parallel compute");
+    parm.threads->description = _(
+        "Number of threads which will be used for parallel compute. Increasing "
+        "the number of threads does not really speed up the simulation.");
     parm.threads->guisection = _("Parameters");
 
     if (G_parser(argc, argv))
@@ -388,6 +401,7 @@ int main(int argc, char *argv[])
     G_debug(3, "Parsing numeric parameters");
 
     sscanf(parm.niter->answer, "%d", &wp.timesec);
+    sscanf(parm.mintimestep->answer, "%lf", &wp.mintimestep);
     sscanf(parm.outiter->answer, "%d", &wp.iterout);
     sscanf(parm.diffc->answer, "%lf", &wp.frac);
     sscanf(parm.hmax->answer, "%lf", &wp.hhmax);

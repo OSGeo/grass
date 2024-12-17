@@ -95,6 +95,7 @@ void WaterParams_init(struct WaterParams *wp)
     wp->timec = 0;
     wp->ts = 0;
     wp->timesec = 0;
+    wp->mintimestep = 0;
 
     wp->rain_val = 0;
     wp->manin_val = 0;
@@ -201,6 +202,7 @@ void init_library_globals(struct WaterParams *wp)
     timec = wp->timec;
     ts = wp->ts;
     timesec = wp->timesec;
+    mintimestep = wp->mintimestep;
 
     rain_val = wp->rain_val;
     manin_val = wp->manin_val;
@@ -507,6 +509,9 @@ int grad_check(void)
     if (wdepth)
         deltaw = 0.8 / (sigmax * vmax);          /*time step for sediment */
     deltap = 0.25 * sqrt(stepx * stepy) / vmean; /*time step for water */
+
+    if (deltap < mintimestep)
+        deltap = mintimestep;
 
     if (deltaw > deltap)
         timec = 4.;
