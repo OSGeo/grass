@@ -11,8 +11,8 @@ system than before it was rectified). Supported transformation methods
 are first, second, and third order polynomial and thin plate spline.
 Thin plate spline is recommended for ungeoreferenced satellite imagery
 where ground control points (GCPs) are included. Examples are
-<a href="https://gdal.org/frmt_l1b.html">NOAA/AVHRR</a>
-and <a href="https://gdal.org/frmt_various.html#Envisat">ENVISAT</a>
+<a href="https://gdal.org/en/stable/drivers/raster/l1b.html">NOAA/AVHRR</a>
+and <a href="https://gdal.org/en/stable/drivers/raster/esat.html#raster-esat">ENVISAT</a>
 imagery which include throusands of GCPs.
 
 <p>
@@ -161,9 +161,9 @@ mode.
 <h2>NOTES</h2>
 
 If <em>i.rectify</em> starts normally but after some time the following text is seen:
-<br><tt>
+<br><code>
 ERROR: Error writing segment file
-</tt><br>
+</code><br>
 the user may try the <b>-c</b> flag or the module needs more free space
 on the hard drive.
 

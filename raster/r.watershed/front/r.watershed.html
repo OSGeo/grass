@@ -121,23 +121,23 @@ yields calculated accurately.
 <p>
 Output <b>tci</b> raster map contains topographic index TCI,
 computed as
-<tt>ln(&alpha; / tan(&beta;))</tt> where &alpha; is the cumulative
+<code>ln(&alpha; / tan(&beta;))</code> where &alpha; is the cumulative
 upslope area draining through a point per unit contour length and
-<tt>tan(&beta;)</tt> is the local slope angle. The TCI reflects the
+<code>tan(&beta;)</code> is the local slope angle. The TCI reflects the
 tendency of water to accumulate at any point in the catchment and the
 tendency for gravitational forces to move that water downslope (Quinn
-et al. 1991).  This value will be negative if <tt>&alpha; /
-tan(&beta;) &lt; 1</tt>.
+et al. 1991).  This value will be negative if <code>&alpha; /
+tan(&beta;) &lt; 1</code>.
 
 <p>
 Output <b>spi</b> raster map contains stream power index SPI,
 computed as
-<tt>&alpha; * tan(&beta;)</tt> where &alpha; is the cumulative
+<code>&alpha; * tan(&beta;)</code> where &alpha; is the cumulative
 upslope area draining through a point per unit contour length and
-<tt>tan(&beta;)</tt> is the local slope angle. The SPI reflects the
+<code>tan(&beta;)</code> is the local slope angle. The SPI reflects the
 power of water flow at any point in the catchment and the
 tendency for gravitational forces to move that water downslope (Moore
-et al. 1991).  This value will be negative if <tt>&alpha; &lt; 0</tt>,
+et al. 1991).  This value will be negative if <code>&alpha; &lt; 0</code>,
 i.e. for cells with possible surface runoff from outside of the current
 geographic region.
 
@@ -323,7 +323,7 @@ The <em>r.watershed</em> program does not require the user to have the
 current geographic region filled with elevation values.  Areas without
 elevation data (masked or NULL cells) are ignored. It is NOT necessary
 to create a raster map (or raster reclassification)
-named <tt>MASK</tt> for NULL cells.  Areas without elevation data will
+named <code>MASK</code> for NULL cells.  Areas without elevation data will
 be treated as if they are off the edge of the region. Such areas will
 reduce the memory necessary to run the program.  Masking out
 unimportant areas can significantly reduce processing time if the
@@ -398,12 +398,12 @@ stream network and subbasins within the larger basin.
 Given that the <b>drainage</b> is 8 directions numbered
 counter-clockwise starting from 1 in north-east direction,
 multiplying the output
-by 45 (by <tt>45.</tt> to get a double precision floating point raster
+by 45 (by <code>45.</code> to get a double precision floating point raster
 map in <em><a href="r.mapcalc.html">r.mapcalc</a></em>) gives
 the directions in degrees. For most applications, zeros
 which indicate depressions specified by <b>depression</b>
 and negative values which indicate runoff leaving the region
-should be replaced by NULL (<tt>null()</tt> in
+should be replaced by NULL (<code>null()</code> in
 <em><a href="r.mapcalc.html">r.mapcalc</a></em>).
 The following command performs these replacements:
 
@@ -412,7 +412,7 @@ r.mapcalc "drainage_degrees = if(drainage &gt; 0, 45. * drainage, null())"
 </pre></div>
 
 Alternatively, the user can use the <b>-a</b> flag or later the
-<tt>abs()</tt> function in
+<code>abs()</code> function in
 <em><a href="r.mapcalc.html">r.mapcalc</a></em> if the runoff is leaving
 the region.
 
@@ -424,7 +424,7 @@ These examples use the Spearfish sample dataset.
 
 If you want a detailed stream network, set the threshold option small
 to create lots of catchment basins, as only one stream is presented
-per catchment. The <tt>r.to.vect -v</tt> flag preserves the catchment
+per catchment. The <code>r.to.vect -v</code> flag preserves the catchment
 ID as the vector category number.
 
 <div class="code"><pre>
