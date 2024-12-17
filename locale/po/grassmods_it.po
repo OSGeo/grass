@@ -69850,7 +69850,7 @@ msgstr ""
 #~ msgstr "Numero o nome del layer 'to'"
 
 #, fuzzy
-#~ msgid "Numpy array with columns names."
+#~ msgid "NumPy array with columns names."
 #~ msgstr "Troppi nomi di colonna"
 
 #, fuzzy
