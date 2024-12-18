@@ -57136,7 +57136,7 @@ msgstr "categoría del elemento más cercano"
 
 #: ../vector/v.distance/main.c:202
 msgid "minimum distance to nearest feature"
-msgstr "distancia máxima al punto más cercano"
+msgstr "distancia mínima al punto más cercano"
 
 #: ../vector/v.distance/main.c:203
 msgid "x coordinate of the nearest point on the 'to' feature"
