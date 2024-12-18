@@ -283,8 +283,10 @@ int IL_interp_segments_2d(
             }
             else if (segtest == 1) {
                 if (params->matrix_create(params, data->points,
-                                          data->n_points - 1, matrix, indx) < 0)
+                                          data->n_points - 1, matrix, indx) < 0) {
+                    G_free(point);
                     return -1;
+                }
             }
             if (!params->cv) {
                 for (i = 0; i < data->n_points; i++)
@@ -332,6 +334,7 @@ int IL_interp_segments_2d(
         G_free(data->points);
         G_free(data);
     }
+    G_free(point);
     return 1;
 }
 
