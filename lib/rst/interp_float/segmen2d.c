@@ -70,7 +70,7 @@ int IL_interp_segments_2d(
     static double smseg;
     int MINPTS;
     double pr;
-    struct triple *point;
+    struct triple *point = NULL;
     struct triple skip_point;
     int m_skip, skip_index, j, k, segtest;
     double xx, yy /*, zz */;
