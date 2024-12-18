@@ -856,7 +856,7 @@ class DisplayDriver:
 
         if not self._validLine(line):
             return -1
-        Vect_read_line(poMapInfo, self.poPoints, self.poCats, line)
+        Vect_read_line(self.poMapInfo, self.poPoints, self.poCats, line)
 
         minDist = 0.0
         Gid = -1
