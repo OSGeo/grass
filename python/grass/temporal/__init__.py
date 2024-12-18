@@ -130,7 +130,7 @@ from .spatio_temporal_relationships import (
     print_spatio_temporal_topology_relationships,
     print_temporal_topology_relationships,
     set_spatial_relationship,
-    set_temoral_relationship,
+    set_temporal_relationship,
 )
 from .stds_export import export_stds
 from .stds_import import import_stds
@@ -349,7 +349,6 @@ __all__ = [
     "sample_stds_by_stds_topology",
     "set_raise_on_error",
     "set_spatial_relationship",
-    "set_temoral_relationship",
     "set_temporal_relationship",
     "stop_subprocesses",
     "string_to_datetime",
