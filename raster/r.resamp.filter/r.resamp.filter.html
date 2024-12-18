@@ -50,19 +50,22 @@ window or an infinite kernel along with a finite window.
 <p>
 To smooth a map, keeping its resolution, a good starting point is to
 use the filters <b>gauss,box</b> with the radii <em>0.5 * input
-resolution</em>, <em>2 * input resolution</em>.
+resolution</em>, <em>2 * input resolution</em>. See also <a
+href="r.neighbors.html">r.neighbors</a>
 
 <p>
 When resampling a map to a higher resolution (alternative to
-interpolation), a good starting point is to use the filters
-<b>gauss,box</b> with the radii <em>1.5 * input resolution</em>, <em>3
-* input resolution</em>.
+interpolation, e.g. <a
+href="r.resamp.interp.html">r.resamp.interp</a>), a good starting point
+is to use the filters <b>gauss,box</b> with the radii <em>1.5 * input
+resolution</em>, <em>3 * input resolution</em>.
 
 <p>
 When resampling a map to a lower resolution (alternative to
-aggregation), a good starting point is to use the filters
-<b>gauss,box</b> with the radii <em>0.25 * output resolution</em>,
-<em>1 * output resolution</em>.
+aggregation, e.g. <a href="r.resamp.stats.html">r.resamp.stats</a>), a
+good starting point is to use the filters <b>gauss,box</b> with the
+radii <em>0.25 * output resolution</em>, <em>1 * output
+resolution</em>.
 
 <p>
 These are recommendations for initial settings, filters and radii might
