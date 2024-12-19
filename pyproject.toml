@@ -394,6 +394,7 @@ ignore = [
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
 # Declare a custom aliases, checked with rule ICN001
 "grass.script" = "gs"
+"grass.temporal" = "tgis"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
