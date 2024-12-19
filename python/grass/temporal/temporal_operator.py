@@ -228,7 +228,7 @@ class TemporalOperatorLexer:
     t_ignore = " \t\n"
 
     # Track line numbers.
-    def t_newline(self, t):
+    def t_newline(self, t) -> None:
         r"\n+"
         t.lineno += len(t.value)
 
@@ -268,13 +268,13 @@ class TemporalOperatorLexer:
         )
 
     # Build the lexer
-    def build(self, **kwargs):
+    def build(self, **kwargs) -> None:
         self.lexer = lex.lex(
             module=self, optimize=False, nowarn=True, debug=0, **kwargs
         )
 
     # Just for testing
-    def test(self, data):
+    def test(self, data) -> None:
         self.name_list = {}
         print(data)
         self.lexer.input(data)
@@ -291,7 +291,7 @@ class TemporalOperatorLexer:
 class TemporalOperatorParser:
     """The temporal operator class"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.lexer = TemporalOperatorLexer()
         self.lexer.build()
         self.parser = yacc.yacc(module=self, debug=0)
@@ -611,7 +611,7 @@ class TemporalOperatorParser:
 
         t[0] = t[2]
 
-    def p_relation(self, t):
+    def p_relation(self, t) -> None:
         # The list of relations. Temporal and spatial relations are supported
         """
         relation : EQUAL
@@ -634,7 +634,7 @@ class TemporalOperatorParser:
         """
         t[0] = t[1]
 
-    def p_over(self, t):
+    def p_over(self, t) -> None:
         # The the over keyword
         """
         relation : OVER
@@ -642,7 +642,7 @@ class TemporalOperatorParser:
         over_list = ["overlaps", "overlapped"]
         t[0] = over_list
 
-    def p_relationlist(self, t):
+    def p_relationlist(self, t) -> None:
         # The list of relations.
         """
         relationlist : relation OR relation
@@ -656,7 +656,7 @@ class TemporalOperatorParser:
             rel_list.append(t[3])
         t[0] = rel_list
 
-    def p_temporal_operator(self, t):
+    def p_temporal_operator(self, t) -> None:
         # The list of relations.
         """
         temporal : LEFTREF
@@ -667,7 +667,7 @@ class TemporalOperatorParser:
         """
         t[0] = t[1]
 
-    def p_select_operator(self, t):
+    def p_select_operator(self, t) -> None:
         # The list of relations.
         """
         select : T_SELECT
@@ -675,7 +675,7 @@ class TemporalOperatorParser:
         """
         t[0] = t[1]
 
-    def p_arithmetic_operator(self, t):
+    def p_arithmetic_operator(self, t) -> None:
         # The list of relations.
         """
         arithmetic : MOD
@@ -686,7 +686,7 @@ class TemporalOperatorParser:
         """
         t[0] = t[1]
 
-    def p_overlay_operator(self, t):
+    def p_overlay_operator(self, t) -> None:
         # The list of relations.
         """
         overlay : AND

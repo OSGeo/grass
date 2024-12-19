@@ -87,7 +87,7 @@ def vector_layer_db(map, layer, env=None):
     try:
         f = vector_db(map, env=env)[int(layer)]
     except KeyError:
-        fatal(_("Database connection not defined for layer %s") % layer)
+        fatal(_("Database connection not defined for layer %s") % layer, env=env)
 
     return f
 
@@ -250,7 +250,8 @@ def vector_db_select(map, layer=1, env=None, **kwargs):
     except KeyError:
         error(
             _("Missing layer %(layer)d in vector map <%(map)s>")
-            % {"layer": layer, "map": map}
+            % {"layer": layer, "map": map},
+            env=env,
         )
         return {"columns": [], "values": {}}
 
@@ -259,13 +260,13 @@ def vector_db_select(map, layer=1, env=None, **kwargs):
         if key not in kwargs["columns"].split(","):
             # add key column if missing
             include_key = False
-            debug("Adding key column to the output")
+            debug("Adding key column to the output", env=env)
             kwargs["columns"] += "," + key
 
     ret = read_command("v.db.select", map=map, layer=layer, env=env, **kwargs)
 
     if not ret:
-        error(_("vector_db_select() failed"))
+        error(_("vector_db_select() failed"), env=env)
         return {"columns": [], "values": {}}
 
     columns = []

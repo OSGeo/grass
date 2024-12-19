@@ -8,10 +8,10 @@ pressure (ea[KPa]) and the (x,y) pairs for wet and dry pixels.
 
 Full process will need those:
 <ul>
-  <li><em>i.vi</em>, <em>i.albedo</em>, <em>r.latlong</em>, <em>i.emissivity</em>
-  <li><em>i.evapo.potrad</em> (GRASS Addon)
-  <li><em>i.eb.netrad</em>, <em>i.eb.soilheatflux</em>, <em>i.eb.hsebal01</em>
-  <li><em>i.eb.evapfr</em>, <em>i.eb.eta</em>
+  <li><em>i.vi</em>, <em>i.albedo</em>, <em>r.latlong</em>, <em>i.emissivity</em></li>
+  <li><em>i.evapo.potrad</em> (GRASS Addon)</li>
+  <li><em>i.eb.netrad</em>, <em>i.eb.soilheatflux</em>, <em>i.eb.hsebal01</em></li>
+  <li><em>i.eb.evapfr</em>, <em>i.eb.eta</em></li>
 </ul>
 
 (for time integration: <em>i.evapo.time_integration</em>) <!-- TODO unknown module -->
@@ -24,12 +24,12 @@ in this code in [3].
 <h2>NOTES</h2>
 
 <ul>
-<li> z0m can be alculated by <em>i.eb.z0m</em> or <em>i.eb.z0m0</em> (GRASS Addons).
+<li> z0m can be alculated by <em>i.eb.z0m</em> or <em>i.eb.z0m0</em> (GRASS Addons).</li>
 <li> ea can be calculated with standard meteorological data.<br>
-	eoTmin=0.6108*EXP(17.27*Tmin/(Tmin+237.3))<br>
-	eoTmax=0.6108*EXP(17.27*Tmax/(Tmax+237.3))<br>
-	ea=(RH/100)/((eoTmin+eoTmax)/2)
-<li> t0dem = surface temperature + (altitude * 0.627 / 100)
+      eoTmin=0.6108*EXP(17.27*Tmin/(Tmin+237.3))<br>
+      eoTmax=0.6108*EXP(17.27*Tmax/(Tmax+237.3))<br>
+      ea=(RH/100)/((eoTmin+eoTmax)/2)</li>
+<li> t0dem = surface temperature + (altitude * 0.627 / 100)</li>
 </ul>
 
 <h2>REFERENCES</h2>
