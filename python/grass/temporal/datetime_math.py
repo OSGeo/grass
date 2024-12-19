@@ -836,7 +836,7 @@ def string_to_datetime(time_string: str) -> datetime | None:
     return time_object
 
 
-def datetime_to_grass_datetime_string(dt: datetime) -> str:
+def datetime_to_grass_datetime_string(dt: datetime | None) -> str:
     """Convert a python datetime object into a GRASS datetime string
 
     .. code-block:: python
