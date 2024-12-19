@@ -47,7 +47,9 @@ class DocstringProperty:
         return self.fget(obj)
 
     def __set__(self, obj, value):
-        raise AttributeError("can't set attribute")
+        msg = "Can't set attribute"
+        raise AttributeError(msg)
 
     def __delete__(self, obj):
-        raise AttributeError("can't delete attribute")
+        msg = "Can't delete attribute"
+        raise AttributeError(msg)

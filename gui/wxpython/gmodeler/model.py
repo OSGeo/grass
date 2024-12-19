@@ -325,7 +325,8 @@ class Model:
         try:
             gxmXml = ProcessModelFile(ET.parse(filename))
         except Exception as e:
-            raise GException("{}".format(e))
+            msg = "{}".format(e)
+            raise GException(msg)
 
         if self.canvas:
             win = self.canvas.parent
@@ -1550,7 +1551,8 @@ class ModelData(ModelObject):
         elif self.prompt == "vector":
             cmd.append("d.vect")
         else:
-            raise GException("Unsupported display prompt: {}".format(self.prompt))
+            msg = "Unsupported display prompt: {}".format(self.prompt)
+            raise GException(msg)
 
         cmd.append("map=" + self.value)
 

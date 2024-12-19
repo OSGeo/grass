@@ -875,7 +875,8 @@ def datetime_to_grass_datetime_string(dt: datetime | None) -> str:
     ]
 
     if dt is None:
-        raise Exception("Empty datetime object in datetime_to_grass_datetime_string")
+        msg = "Empty datetime object in datetime_to_grass_datetime_string"
+        raise Exception(msg)
 
     # Check for time zone info in the datetime object
     if dt.tzinfo is not None:

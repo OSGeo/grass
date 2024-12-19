@@ -548,7 +548,8 @@ class Module:
         if isinstance(cmd, str):
             self.name = cmd
         else:
-            raise GrassError("Problem initializing the module {s}".format(s=cmd))
+            msg = "Problem initializing the module {s}".format(s=cmd)
+            raise GrassError(msg)
         try:
             # call the command with --interface-description
             get_cmd_xml = Popen([cmd, "--interface-description"], stdout=PIPE)

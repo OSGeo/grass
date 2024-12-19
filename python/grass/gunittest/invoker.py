@@ -286,10 +286,11 @@ class GrassTestFilesInvoker:
         not to one file as these will simply contain the last executed file.
         """
         if os.path.abspath(results_dir) == os.path.abspath(self.start_dir):
-            raise RuntimeError(
+            msg = (
                 "Results root directory should not be the same"
                 " as discovery start directory"
             )
+            raise RuntimeError(msg)
         self.reporter = GrassTestFilesMultiReporter(
             reporters=[
                 GrassTestFilesTextReporter(stream=sys.stderr),

@@ -217,7 +217,8 @@ class RasterRow(RasterAbstractBase):
                 raise OpenError(_("Raster type not defined"))
             self._fd = libraster.Rast_open_new(self.name, self._gtype)
         else:
-            raise OpenError("Open mode: %r not supported, valid mode are: r, w")
+            msg = "Open mode: %r not supported, valid mode are: r, w"
+            raise OpenError(msg)
         # read rows and cols from the active region
         self._rows = libraster.Rast_window_rows()
         self._cols = libraster.Rast_window_cols()
@@ -339,7 +340,8 @@ class RasterSegment(RasterAbstractBase):
             if key >= self._rows:
                 raise IndexError(_("Index out of range: %r.") % key)
             return self.put_row(key, row)
-        raise TypeError("Invalid argument type.")
+        msg = "Invalid argument type."
+        raise TypeError(msg)
 
     @must_be_open
     def map2segment(self):

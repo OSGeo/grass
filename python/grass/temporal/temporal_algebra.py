@@ -3398,7 +3398,8 @@ class TemporalAlgebraParser:
                 "syntax error on line %d, position %i token %s near '%s' expression "
                 "'%s'" % (t.lineno, t.lexpos, t.type, t.value, self.expression)
             )
-        raise SyntaxError("Unexpected syntax error")
+        msg = "Unexpected syntax error"
+        raise SyntaxError(msg)
 
 
 if __name__ == "__main__":

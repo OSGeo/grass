@@ -226,11 +226,10 @@ def text_to_keyvalue(
                 # line contains something but not separator
                 if not skip_invalid:
                     # TODO: here should go _ for translation
-                    raise ValueError(
-                        ("Line <{l}> does not contain separator <{s}>.").format(
-                            l=line, s=sep
-                        )
+                    msg = ("Line <{l}> does not contain separator <{s}>.").format(
+                        l=line, s=sep
                     )
+                    raise ValueError(msg)
             # if we get here we are silently ignoring the line
             # because it is invalid (does not contain key-value separator) or
             # because it is empty
@@ -277,9 +276,8 @@ def values_equal(value_a, value_b, precision=0.000001):
         # in Python 3 None < 3 raises TypeError
         precision = float(precision)
         if precision < 0:
-            raise ValueError(
-                "precision needs to be greater than or equal to zero: {precision} < 0"
-            )
+            msg = "precision needs to be greater than or equal to zero: {precision} < 0"
+            raise ValueError(msg)
         if abs(value_a - value_b) > precision:
             return False
 

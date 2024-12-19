@@ -49,7 +49,8 @@ def dummy_server(lock: _LockLike, conn: Connection) -> NoReturn:
                 conn.close()
                 sys.exit()
             if data[0] == 1:
-                raise Exception("Server process intentionally killed by exception")
+                msg = "Server process intentionally killed by exception"
+                raise Exception(msg)
 
 
 class RPCServerBase:

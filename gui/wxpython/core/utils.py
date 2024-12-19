@@ -311,7 +311,8 @@ def ListOfMapsets(get="ordered"):
                 mapsets_ordered.append(mapset)
         return mapsets_ordered
 
-    raise ValueError("Invalid value for 'get' parameter of ListOfMapsets()")
+    msg = "Invalid value for 'get' parameter of ListOfMapsets()"
+    raise ValueError(msg)
 
 
 def ListSortLower(list):

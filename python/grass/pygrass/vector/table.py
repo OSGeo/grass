@@ -133,7 +133,8 @@ class Filters:
         :type number: int
         """
         if not isinstance(number, int):
-            raise ValueError("Must be an integer.")
+            msg = "Must be an integer."
+            raise ValueError(msg)
         self._limit = "LIMIT {number}".format(number=number)
         return self
 
@@ -561,7 +562,8 @@ class Columns:
             self.update_odict()
         else:
             # sqlite does not support rename columns:
-            raise DBError("SQLite does not support to cast columns.")
+            msg = "SQLite does not support to cast columns."
+            raise DBError(msg)
 
     def drop(self, col_name):
         """Drop a column from the table.
@@ -663,7 +665,8 @@ class Link:
 
     def _set_layer(self, number):
         if number <= 0:
-            raise TypeError("Number must be positive and greater than 0.")
+            msg = "Number must be positive and greater than 0."
+            raise TypeError(msg)
         self.c_fieldinfo.contents.number = number
 
     layer = property(

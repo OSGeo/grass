@@ -84,7 +84,8 @@ class AbstractMapDataset(AbstractDataset):
 
         :return: "finer" or "coarser"
         """
-        raise ImplementationError("This method must be implemented in the subclasses")
+        msg = "This method must be implemented in the subclasses"
+        raise ImplementationError(msg)
 
     @abstractmethod
     def has_grass_timestamp(self):

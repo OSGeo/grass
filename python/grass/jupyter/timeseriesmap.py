@@ -170,7 +170,8 @@ class TimeSeriesMap(BaseSeriesMap):
         :param bool fill_gaps: fill empty time steps with data from previous step
         """
         if self._baseseries_added and self.baseseries != baseseries:
-            raise AttributeError("Cannot add more than one space time dataset")
+            msg = "Cannot add more than one space time dataset"
+            raise AttributeError(msg)
         self._element_type = "strds"
         check_timeseries_exists(baseseries, self._element_type)
         self.baseseries = baseseries
@@ -193,7 +194,8 @@ class TimeSeriesMap(BaseSeriesMap):
         :param bool fill_gaps: fill empty time steps with data from previous step
         """
         if self._baseseries_added and self.baseseries != baseseries:
-            raise AttributeError("Cannot add more than one space time dataset")
+            msg = "Cannot add more than one space time dataset"
+            raise AttributeError(msg)
         self._element_type = "stvds"
         check_timeseries_exists(baseseries, self._element_type)
         self.baseseries = baseseries
@@ -293,11 +295,12 @@ class TimeSeriesMap(BaseSeriesMap):
     def render(self):
         """Renders image for each time-step in space-time dataset."""
         if not self._baseseries_added:
-            raise RuntimeError(
+            msg = (
                 "Cannot render space time dataset since none has been added."
                 " Use TimeSeriesMap.add_raster_series() or "
                 "TimeSeriesMap.add_vector_series() to add dataset"
             )
+            raise RuntimeError(msg)
 
         # Create name for empty layers
         random_name_none = gs.append_random("none", 8) + ".png"
