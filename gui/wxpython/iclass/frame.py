@@ -18,17 +18,38 @@ for details.
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-import os
 import copy
+import os
 import tempfile
+from ctypes import byref, pointer
 
 import wx
 
-from ctypes import *
-
 try:
-    from grass.lib.imagery import *
-    from grass.lib.vector import *
+    from grass.lib.imagery import (
+        I_free_group_ref,
+        I_free_signatures,
+        I_iclass_add_signature,
+        I_iclass_analysis,
+        I_iclass_create_raster,
+        I_iclass_free_statistics,
+        I_iclass_init_group,
+        I_iclass_init_signatures,
+        I_iclass_init_statistics,
+        I_iclass_statistics_set_nstd,
+        I_iclass_write_signatures,
+        I_init_group_ref,
+        I_init_signatures,
+        IClass_statistics,
+        Ref,
+        Signature,
+    )
+    from grass.lib.vector import (
+        Vect_area_alive,
+        Vect_get_map_box,
+        Vect_get_num_areas,
+        bound_box,
+    )
 
     haveIClass = True
     errMsg = ""
@@ -37,37 +58,35 @@ except ImportError as e:
     errMsg = _("Loading imagery lib failed.\n%s") % e
 
 import grass.script as gs
-
+from core import globalvar
+from core.gcmd import GError, GMessage, RunCommand
+from core.render import Map
+from dbmgr.vinfo import VectorDBInfo
+from grass.pydispatch.signal import Signal
+from gui_core.dialogs import SetOpacityDialog
+from gui_core.mapdisp import DoubleMapPanel, FrameMixin
+from gui_core.wrap import Menu
 from mapdisp import statusbar as sb
 from mapdisp.main import StandaloneMapDisplayGrassInterface
 from mapwin.buffered import BufferedMapWindow
 from vdigit.toolbars import VDigitToolbar
-from gui_core.mapdisp import DoubleMapPanel, FrameMixin
-from core import globalvar
-from core.render import Map
-from core.gcmd import RunCommand, GMessage, GError
-from gui_core.dialogs import SetOpacityDialog
-from gui_core.wrap import Menu
-from dbmgr.vinfo import VectorDBInfo
 
-from iclass.digit import IClassVDigitWindow, IClassVDigit
+from iclass.dialogs import (
+    IClassCategoryManagerDialog,
+    IClassExportAreasDialog,
+    IClassGroupDialog,
+    IClassMapDialog,
+    IClassSignatureFileDialog,
+)
+from iclass.digit import IClassVDigit, IClassVDigitWindow
+from iclass.plots import PlotPanel
+from iclass.statistics import StatisticsData
 from iclass.toolbars import (
+    IClassMapManagerToolbar,
     IClassMapToolbar,
     IClassMiscToolbar,
     IClassToolbar,
-    IClassMapManagerToolbar,
 )
-from iclass.statistics import StatisticsData
-from iclass.dialogs import (
-    IClassCategoryManagerDialog,
-    IClassGroupDialog,
-    IClassSignatureFileDialog,
-    IClassExportAreasDialog,
-    IClassMapDialog,
-)
-from iclass.plots import PlotPanel
-
-from grass.pydispatch.signal import Signal
 
 
 class IClassMapPanel(DoubleMapPanel):
