@@ -36,7 +36,7 @@ jobs:
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.8.0"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.8.3"
+      RUFF_VERSION: "0.8.4"
 
     runs-on: ${{ matrix.os }}
     permissions:
