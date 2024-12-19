@@ -46,7 +46,6 @@ per-file-ignores =
     # C wrappers call libgis.G_gisinit before importing other modules.
     # TODO: Is this really needed?
     python/grass/pygrass/vector/__init__.py: E402
-    python/grass/pygrass/vector/__init__.py: E402
     python/grass/temporal/datetime_math.py: E722
     python/grass/temporal/spatial_topology_dataset_connector.py: E722
     python/grass/temporal/temporal_algebra.py: E722
