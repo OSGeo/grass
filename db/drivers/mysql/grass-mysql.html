@@ -1,7 +1,7 @@
 <!-- meta page description: MySQL DATABASE DRIVER -->
 
-MySQL database driver enables GRASS to store vector attributes in
-MySQL server.
+MySQL database driver enables GRASS to store vector attributes
+in MySQL server.
 
 <p>
 Because vector attribute tables
@@ -14,7 +14,7 @@ good practice to create a new database for each GRASS mapset.
 A new database is created within MySQL:
 
 <div class="code"><pre>
-mysql> CREATE DATABASE mydb;
+mysql&gt; CREATE DATABASE mydb;
 </pre></div>
 
 See the MySQL manual for details.
@@ -27,39 +27,41 @@ the parameter 'driver' should be set to value 'mysql'.
 The parameter 'database' can be given in two formats:
 
 <ul>
-    <li> Database name - in case of connection from localhost
-    <li> String of comma separated list of kye=value options.
+    <li> Database name - in case of connection from localhost</li>
+    <li> String of comma separated list of key=value options.
          Supported options are:
-	 <ul>
-	     <li> dbname - database name
-	     <li> host - host name or IP address
-	     <li> port - server port number
-	 </ul>
+        <ul>
+            <li> dbname - database name</li>
+            <li> host - host name or IP address</li>
+            <li> port - server port number</li>
+        </ul>
+    </li>
 </ul>
+<p>
 Examples of connection parameters:
-<pre>
-  db.connect driver=mysql database=mytest
-  db.connect driver=mysql database='dbname=mytest,host=test.grass.org'
-</pre>
+<div class="code"><pre>
+db.connect driver=mysql database=mytest
+db.connect driver=mysql database='dbname=mytest,host=test.grass.org'
+</pre></div>
 
 <h2>Data types</h2>
 
 GRASS supports almost all MySQL data types with following limitations:
 <ul>
-    <li> Binary columns (BINARY, VARBINARY, TINYBLOB, MEDIUMBLOB,
-    BLOB, LONGBLOB) are not not supported.
-    If a table with binary column(s) is used in GRASS
-    a warning is printed and only the supported columns are
-    returned in query results.
+<li> Binary columns (BINARY, VARBINARY, TINYBLOB, MEDIUMBLOB,
+BLOB, LONGBLOB) are not not supported.
+If a table with binary column(s) is used in GRASS
+a warning is printed and only the supported columns are
+returned in query results.</li>
 
-    <li> Columns of type SET and ENUM are represented as string (VARCHAR).
+<li> Columns of type SET and ENUM are represented as string (VARCHAR).</li>
 
-    <li> Very large integers in columns of type BIGINT can be lost
-    or corrupted because GRASS does not support 64 bin integeres
-    on most platforms.
+<li> Very large integers in columns of type BIGINT can be lost
+or corrupted because GRASS does not support 64 bin integeres
+on most platforms.</li>
 
-    <li> GRASS does not currently distinguish types TIMESTAMP and
-    DATETIME. Both types are in GRASS interpreted as TIMESTAMP.
+<li> GRASS does not currently distinguish types TIMESTAMP and
+DATETIME. Both types are in GRASS interpreted as TIMESTAMP.</li>
 </ul>
 
 <h2>Indexes</h2>
@@ -80,11 +82,12 @@ If you want to give privilege to read data from your mapset
 to other users you have to ask your MySQL server administrator
 to grant select privilege to them on the MySQL database used
 for that mapset. For example, to allow  everybody to read data
-in from your database 'mydb':<br>
-<pre>
+in from your database 'mydb':
+<br>
+<div class="code"><pre>
 shell&gt; mysql --user=root mysql
 mysql&gt; GRANT SELECT ON mydb.* TO ''@'%';
-</pre>
+</pre></div>
 
 <h2>Schemas</h2>
 
@@ -104,7 +107,16 @@ GRASS for MySQL driver.
 
 Attempting to use a reserved SQL word as column or table name will result
 in a "SQL syntax" error. The list of reserved words for MySQL can be
-found in the <a href="http://dev.mysql.com/doc/refman/5.7/en/reserved-words.html#table-reserved-words-5.7.4">MySQL manual</a>.
+found in the <a href="https://dev.mysql.com/doc/refman/8.4/en/keywords.html#keywords-in-current-series">MySQL manual</a>.
+
+<h2>AUTHOR</h2>
+
+Radim Blazek
+
+<p>
+Credits: Development of the driver was sponsored by
+<a href="https://www.faunalia.it">Faunalia</a> (Italy)
+as part of a project for <a href="https://www.atac.roma.it/">ATAC</a>.
 
 <h2>SEE ALSO</h2>
 
@@ -112,13 +124,3 @@ found in the <a href="http://dev.mysql.com/doc/refman/5.7/en/reserved-words.html
 <a href="db.connect.html">db.connect</a>,
 <a href="sql.html">SQL support in GRASS GIS</a>
 </em>
-
-<h2>Credits</h2>
-
-Development of the driver was sponsored by
-<a href="https://www.faunalia.it">Faunalia</a> (Italy)
-as part of a project for <a href="http://www.atac.roma.it/">ATAC</a>.
-
-<h2>AUTHOR</h2>
-
-Radim Blazek

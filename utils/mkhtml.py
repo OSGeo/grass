@@ -234,7 +234,7 @@ def create_toc(src_data):
 
 def escape_href(label):
     # remove html tags
-    label = re.sub("<[^<]+?>", "", label)
+    label = re.sub(r"<[^<]+?>", "", label)
     # fix &nbsp;
     label = label.replace("&nbsp;", "")
     # fix "
@@ -351,16 +351,16 @@ def update_toc(data):
 
 # process header
 src_data = read_file(src_file)
-name = re.search("(<!-- meta page name:)(.*)(-->)", src_data, re.IGNORECASE)
+name = re.search(r"(<!-- meta page name:)(.*)(-->)", src_data, re.IGNORECASE)
 pgm_desc = "GRASS GIS Reference Manual"
 if name:
     pgm = name.group(2).strip().split("-", 1)[0].strip()
     name_desc = re.search(
-        "(<!-- meta page name description:)(.*)(-->)", src_data, re.IGNORECASE
+        r"(<!-- meta page name description:)(.*)(-->)", src_data, re.IGNORECASE
     )
     if name_desc:
         pgm_desc = name_desc.group(2).strip()
-desc = re.search("(<!-- meta page description:)(.*)(-->)", src_data, re.IGNORECASE)
+desc = re.search(r"(<!-- meta page description:)(.*)(-->)", src_data, re.IGNORECASE)
 if desc:
     pgm = desc.group(2).strip()
     header_tmpl = string.Template(header_base + header_nopgm)
@@ -369,7 +369,7 @@ elif not pgm_desc:
 else:
     header_tmpl = string.Template(header_base + header_pgm_desc)
 
-if not re.search("<html>", src_data, re.IGNORECASE):
+if not re.search(r"<html>", src_data, re.IGNORECASE):
     tmp_data = read_file(tmp_file)
     """
     Adjusting keywords html pages paths if add-on html man page
@@ -395,7 +395,7 @@ if not re.search("<html>", src_data, re.IGNORECASE):
                 orig_keywords_paths.group(1),
                 ",".join(new_keywords_paths),
             )
-    if not re.search("<html>", tmp_data, re.IGNORECASE):
+    if not re.search(r"<html>", tmp_data, re.IGNORECASE):
         sys.stdout.write(header_tmpl.substitute(PGM=pgm, PGM_DESC=pgm_desc))
 
     if tmp_data:
@@ -403,7 +403,7 @@ if not re.search("<html>", src_data, re.IGNORECASE):
         for line in tmp_data.splitlines(True):
             # The cleanup happens on Makefile level too.
             if not re.search(
-                "</body>|</html>|</div> <!-- end container -->", line, re.IGNORECASE
+                r"</body>|</html>|</div> <!-- end container -->", line, re.IGNORECASE
             ):
                 if header_logo_img_el in line:
                     sys.stdout.write(line)
@@ -420,7 +420,7 @@ sys.stdout.write(update_toc(src_data))
 
 # if </html> is found, suppose a complete html is provided.
 # otherwise, generate module class reference:
-if re.search("</html>", src_data, re.IGNORECASE):
+if re.search(r"</html>", src_data, re.IGNORECASE):
     sys.exit()
 
 index_names = {
@@ -453,7 +453,7 @@ for key, name in index_names.items():
     index_titles[key] = to_title(name)
 
 # process footer
-index = re.search("(<!-- meta page index:)(.*)(-->)", src_data, re.IGNORECASE)
+index = re.search(r"(<!-- meta page index:)(.*)(-->)", src_data, re.IGNORECASE)
 if index:
     index_name = index.group(2).strip()
     if "|" in index_name:

@@ -6,7 +6,7 @@ Up to 6 maps can be combined using simple expressions.
 <p>
 The general syntax for the <b>expression</b> follows
 <em><a href="r.mapcalc.html">r.mapcalc</a></em> expression format,
-for example, <tt>A + B</tt> or <tt>exp(A + B)</tt> are valid.
+for example, <code>A + B</code> or <code>exp(A + B)</code> are valid.
 The variables A, B, ..., F represent raster maps which are provided
 as options <b>a</b>, <b>b</b>, ..., <b>f</b>.
 
@@ -27,10 +27,10 @@ Differences to <em>r.mapcalc</em> module:
 <ul>
     <li>The input raster map names and the output map raster name are
         separate from the expression (formula) which uses generic
-        variable names (A, B, C, ...).
-    <li>The output raster name is not included in the expression.
+        variable names (A, B, C, ...).</li>
+    <li>The output raster name is not included in the expression.</li>
     <li>The expression is expected to be a single short one liner
-        without the function <tt>eval()</tt>.
+        without the function <code>eval()</code>.</li>
 </ul>
 
 Differences to <em>r.mapcalc.simple</em> module in GRASS GIS 5 and 6:
@@ -38,23 +38,23 @@ Differences to <em>r.mapcalc.simple</em> module in GRASS GIS 5 and 6:
 <ul>
     <li>The primary purpose is not being a GUI front end to
         <em>r.mapcalc</em>, but a wrapper which allows easy building of
-        interfaces to <em>r.mapcalc</em> (including GUIs).
+        interfaces to <em>r.mapcalc</em> (including GUIs).</li>
     <li>Whitespace (most notably spaces) are allowed
-        (in the same way as for <em>r.mapcalc</em>).
+        (in the same way as for <em>r.mapcalc</em>).</li>
     <li>The variable names are case-insensitive to allow the original
         uppercase as well as lowercase as in option names
-        (unless the <b>-c</b> flag is used).
+        (unless the <b>-c</b> flag is used).</li>
     <li>Option names for each map are just one letter (not amap, etc.).
     <li>Output option name is <b>output</b> as for other modules
-        (not outfile).
-    <li>Raster map names can be optionally quoted (the <b>-q</b> flag).
+        (not outfile).</li>
+    <li>Raster map names can be optionally quoted (the <b>-q</b> flag).</li>
     <li>There is no expert mode
-        (which was just running <em>r.mapcalc</em>).
+        (which was just running <em>r.mapcalc</em>).</li>
     <li>The <b>expression</b> option is first, so it is possible to
         omit its name in the command line
-        (just like with <em>r.mapcalc</em>).
+        (just like with <em>r.mapcalc</em>).</li>
     <li>Overwriting of outputs is done in the same way as with other
-        modules, so there is no flag to not overwrite outputs.
+        modules, so there is no flag to not overwrite outputs.</li>
 </ul>
 
 <h2>EXAMPLES</h2>

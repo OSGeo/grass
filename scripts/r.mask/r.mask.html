@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em><b>r.mask</b></em> - Facilitates creation of a raster "MASK" map to
+<em>r.mask</em> facilitates the creation of a raster "MASK" map to
 control raster operations.
 
 <p>
@@ -23,7 +23,7 @@ like other GRASS raster map layers.
 The user should be aware that a MASK remains in place until a user renames it
 to something other than "MASK", or removes it. To remove a mask and restore
 raster operations to normal (i.e., all cells of the current region), remove the
-MASK by setting the <b>-r</b> remove MASK flag (<tt>r.mask -r</tt>).
+MASK by setting the <b>-r</b> remove MASK flag (<code>r.mask -r</code>).
 Alternatively, a mask can be removed using <em>g.remove</em> or by renaming it
 to any other name with <em>g.rename</em>.
 
@@ -34,7 +34,7 @@ inside the MASK are not hidden; areas outside the MASK will be ignored until
 the MASK file is removed.
 <p>
 <em>r.mask</em> uses <em>r.reclass</em> to create a reclassification of an
-existing raster map and name it <tt>MASK</tt>. A reclass map takes up less
+existing raster map and name it <code>MASK</code>. A reclass map takes up less
 space, but is affected by any changes to the underlying map from which it was
 created. The user can select category values from the input raster to use in the
 MASK with the <em>maskcats</em> parameter; if <em>r.mask</em> is run from the
@@ -48,7 +48,7 @@ The <em>r.mask</em> function creates a MASK with values 1 and NULL. But note
 that a MASK can also be created using other functions that have a raster as
 output, by naming the output raster 'MASK'. Such layers could have other
 values than 1 and NULL. The user should therefore be aware that grid cells
-in the MASK map containing <tt>NULL</tt> or <tt>0</tt> will replace data with
+in the MASK map containing <code>NULL</code> or <code>0</code> will replace data with
 NULL, while cells containing other values will allow data to pass through
 unaltered. This means that:
 <p>
@@ -136,7 +136,7 @@ d.rast geology_30m
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.reclass.html">r.reclass</a>,
 <a href="g.remove.html">g.remove</a>,
-<a href="g.rename.html">g.rename</a>
+<a href="g.rename.html">g.rename</a>,
 <a href="r.quant.html">r.quant</a>
 </em>
 
