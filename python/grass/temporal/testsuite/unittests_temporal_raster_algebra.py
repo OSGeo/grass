@@ -677,8 +677,8 @@ class TestTemporalRasterAlgebra(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
 
-    def test_temporal_select(self) -> None:
-        """Testing the temporal select operator."""
+    def test_temporal_select_same_left_right(self) -> None:
+        """Testing the temporal select operator with the same map for left and right."""
         tra = tgis.TemporalRasterAlgebraParser(run=True, debug=True)
         tra.parse(expression="R = A : A", basename="r", overwrite=True)
 
