@@ -70489,11 +70489,11 @@ msgstr ""
 #~ msgstr "Layer-Nummer für Flächen-Karte"
 
 #, fuzzy
-#~ msgid "Numpy array with vector cats."
+#~ msgid "NumPy array with vector cats."
 #~ msgstr "Keine Flächen in Vektorkarte <%s>"
 
 #, fuzzy
-#~ msgid "Numpy array with columns names."
+#~ msgid "NumPy array with columns names."
 #~ msgstr "Zu viele Spaltennamen."
 
 #, fuzzy

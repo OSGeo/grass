@@ -776,7 +776,7 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
     if np is None:
         raise RuntimeError("Need Numpy to write an SWF file.")
 
-    # Check images (make all Numpy)
+    # Check images (make all NumPy)
     images2 = []
     images = checkImages(images)
     if not images:

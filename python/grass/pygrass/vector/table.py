@@ -824,7 +824,7 @@ class Link:
         if driver == "sqlite":
             import sqlite3
 
-            # Numpy is using some custom integer data types to efficiently
+            # NumPy is using some custom integer data types to efficiently
             # pack data into memory. Since these types aren't familiar to
             # sqlite, you'll have to tell it about how to handle them.
             for t in (

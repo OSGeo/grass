@@ -37,7 +37,6 @@ per-file-ignores =
     gui/wxpython/mapswipe/g.gui.mapswipe.py: E501
     gui/wxpython/mapwin/base.py: E722
     gui/wxpython/mapwin/buffered.py: E722
-    gui/wxpython/mapwin/graphics.py: E722
     gui/wxpython/timeline/g.gui.timeline.py: E501
     # Generated file
     gui/wxpython/menustrings.py: E501
@@ -58,9 +57,6 @@ per-file-ignores =
     # Configuration file for Sphinx:
     # Ignoring import/code mix and line length.
     # Files not managed by Black
-    # Unused imports in init files
-    # F403 star import used; unable to detect undefined names
-    python/grass/temporal/__init__.py: F401, F403
     # E402 module level import not at top of file
     scripts/r.semantic.label/r.semantic.label.py: E501
     scripts/g.extension/g.extension.py: E501

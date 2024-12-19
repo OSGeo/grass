@@ -1118,14 +1118,14 @@ msgstr "Параметры трёхмерного вида сохранены в
 msgid ""
 "This module requires the NumPy module, which could not be imported. It "
 "probably is not installed (it's not part of the standard Python "
-"distribution). See the Numeric Python site (http://numpy.scipy.org) for "
+"distribution). See the Numeric Python site (https://numpy.org) for "
 "information on downloading source or binaries."
 msgstr ""
 "Для работы данного модуля необходимо наличие модуля NumPy, который не "
 "удалось импортировать. Вероятно, он не установлен (не является частью "
 "стандартного дистрибутива Python). Для получения информации о загрузке "
-"исходного кода или двоичных файлы посетите сайт «Числовой Python» (http://"
-"numpy.scipy.org)."
+"исходного кода или двоичных файлы посетите сайт «Числовой Python» (https://"
+"numpy.org)."
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
 #: ../gui/wxpython/iclass/g.gui.iclass.py:88
