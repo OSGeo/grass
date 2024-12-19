@@ -68905,7 +68905,7 @@ msgstr "Izejas rastra kartes nosaukums"
 #~ msgstr "Slāņa numurs vai nosaukums"
 
 #, fuzzy
-#~ msgid "Numpy array with columns names."
+#~ msgid "NumPy array with columns names."
 #~ msgstr "Atslēga (id) kolonas nosaukums"
 
 #, fuzzy

@@ -57136,7 +57136,7 @@ msgstr "categoría del elemento más cercano"
 
 #: ../vector/v.distance/main.c:202
 msgid "minimum distance to nearest feature"
-msgstr "distancia máxima al punto más cercano"
+msgstr "distancia mínima al punto más cercano"
 
 #: ../vector/v.distance/main.c:203
 msgid "x coordinate of the nearest point on the 'to' feature"
@@ -72203,11 +72203,11 @@ msgstr ""
 #~ msgstr "Número o nombre de capa (write to)"
 
 #, fuzzy
-#~ msgid "Numpy array with vector cats."
+#~ msgid "NumPy array with vector cats."
 #~ msgstr "No hay áreas en mapa vectorial <%s>"
 
 #, fuzzy
-#~ msgid "Numpy array with columns names."
+#~ msgid "NumPy array with columns names."
 #~ msgstr "Demasiados nombres de columna"
 
 #, fuzzy

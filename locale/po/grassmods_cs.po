@@ -69845,7 +69845,7 @@ msgstr ""
 #~ msgstr "Číslo vrstvy (to)"
 
 #, fuzzy
-#~ msgid "Numpy array with columns names."
+#~ msgid "NumPy array with columns names."
 #~ msgstr "Příliš mnoho názvů sloupců"
 
 #, fuzzy

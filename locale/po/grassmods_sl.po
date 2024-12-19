@@ -73421,11 +73421,11 @@ msgstr "Ime izhodnega rastrskega sloja"
 #~ msgstr "Vhodni sloj"
 
 #, fuzzy
-#~ msgid "Numpy array with vector cats."
+#~ msgid "NumPy array with vector cats."
 #~ msgstr "%d točk je bilo zapisanih na izhodno datoteko\n"
 
 #, fuzzy
-#~ msgid "Numpy array with columns names."
+#~ msgid "NumPy array with columns names."
 #~ msgstr "Ime rastrskega sloja"
 
 #, fuzzy

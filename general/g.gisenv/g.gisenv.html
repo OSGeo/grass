@@ -1,5 +1,8 @@
 <h2>DESCRIPTION</h2>
 
+<em>g.gisenv</em> outputs and modifies the user's current GRASS GIS
+variable settings.
+
 When a user runs GRASS, certain variables are set specifying the GRASS
 data base, project, mapset, peripheral device drivers, etc., being
 used in the current GRASS session. These variable name settings are
@@ -46,7 +49,7 @@ coordinate system used and the geographic extent of the data.  Each
 &quot;project&quot; directory itself contains subdirectories called
 &quot;mapsets&quot;; each &quot;mapset&quot; stores &quot;data base
 elements&quot; - the directories (e.g.,
-the <tt>cell</tt>, <tt>cellhd</tt>, <tt>vector</tt>, etc., directories)
+the <code>cell</code>, <code>cellhd</code>, <code>vector</code>, etc., directories)
 in which GRASS data files are actually stored.
 
 <dt><em>LOCATION_NAME</em>
@@ -118,7 +121,7 @@ used in place of a blank for multiple-word names.
 The full path to the current mapset is determined
 from <em>GISDBASE</em>, <em>LOCATION_NAME</em>, <em>MAPSET</em>
 variables, in the example
-above: <tt>/opt/grassdata/spearfish/PERMANENT</tt>. The full path can
+above: <code>/opt/grassdata/spearfish/PERMANENT</code>. The full path can
 be printed using <em>g.gisenv</em> by providing multiple variables:
 
 <div class="code"><pre>
@@ -146,7 +149,7 @@ compatible with some other UNIX shells.
 By default the GRASS variables are stored in <em>gisrc</em> file
 (defined by environmental
 variable <em>GISRC</em>). If <b>store=mapset</b> is given then the
-variables are stored in <tt>&lt;gisdbase&gt;/&lt;project&gt;/&lt;mapset&gt;/VAR</tt>
+variables are stored in <code>&lt;gisdbase&gt;/&lt;project&gt;/&lt;mapset&gt;/VAR</code>
 after the current GRASS session is closed.
 
 <h2>EXAMPLES</h2>

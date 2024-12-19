@@ -30,9 +30,9 @@ are called "at-satellite", for example the amount of energy sensed
 by the sensor of the satellite platform is encoded in 8 or more
 bits. This energy is called radiance-at-sensor. To obtain physical
 values from DNs, satellite image providers use a linear transform
-equation <tt>(y = a * x + b)</tt> to encode the radiance-at-sensor
+equation <code>(y = a * x + b)</code> to encode the radiance-at-sensor
 in 8 to 16 bits. DNs can be turned back into physical values by
-applying the reverse formula <tt>(x = (y - b) / a)</tt>.
+applying the reverse formula <code>(x = (y - b) / a)</code>.
 <p>
 The GRASS GIS module <a href="i.landsat.toar.html">i.landsat.toar</a>
 easily transforms Landsat DN to radiance-at-sensor (top of atmosphere,
@@ -171,7 +171,7 @@ An example for indices derived from multispectral data is the NDVI
 status with NDVI, the Red and the Near Infrared channels (NIR) are
 taken as used as input for simple map algebra in the GRASS command
 <a href="r.mapcalc.html">r.mapcalc</a>
-(<tt>ndvi = 1.0 * (nir - red)/(nir + red)</tt>). With
+(<code>ndvi = 1.0 * (nir - red)/(nir + red)</code>). With
 <a href="r.colors.html">r.colors</a> an optimized "ndvi" color table
 can be assigned afterward. Also other vegetation indices can be
 generated likewise.

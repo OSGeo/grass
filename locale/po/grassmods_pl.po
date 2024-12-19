@@ -69282,7 +69282,7 @@ msgstr ""
 #~ msgstr "Liczba warstw (na)"
 
 #, fuzzy
-#~ msgid "Numpy array with columns names."
+#~ msgid "NumPy array with columns names."
 #~ msgstr "Zbyt dużo nazw kolmun"
 
 #, fuzzy

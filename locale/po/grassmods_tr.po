@@ -68743,7 +68743,7 @@ msgstr ""
 #~ msgstr "Katman numarası"
 
 #, fuzzy
-#~ msgid "Numpy array with columns names."
+#~ msgid "NumPy array with columns names."
 #~ msgstr "Çok fazla sütun adı"
 
 #, fuzzy

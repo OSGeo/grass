@@ -849,8 +849,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
 
     # update environmental variables
     if value is None:
-        if key in environ:
-            del environ[key]
+        environ.pop(key, None)
     else:
         environ[key] = value
 

@@ -397,7 +397,7 @@ ignore = [
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-python_files = "*/tests/*_test.py"
+python_files = "*/tests/*_test.py */tests/test_*.py"
 addopts = """
     --ignore-glob='dist.*'
     --ignore-glob='bin.*'

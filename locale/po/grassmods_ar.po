@@ -73052,11 +73052,11 @@ msgstr "اسم خريطة الراستر المخرجة"
 #~ msgstr "ملف المدخل"
 
 #, fuzzy
-#~ msgid "Numpy array with vector cats."
+#~ msgid "NumPy array with vector cats."
 #~ msgstr "%d نقطة كتبت للمخرج\n"
 
 #, fuzzy
-#~ msgid "Numpy array with columns names."
+#~ msgid "NumPy array with columns names."
 #~ msgstr "لاتشمل اسماء الأعمدة في المخرج"
 
 #, fuzzy

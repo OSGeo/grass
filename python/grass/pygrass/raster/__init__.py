@@ -13,6 +13,7 @@ import grass.lib.rowio as librowio
 
 libgis.G_gisinit("")
 
+# flake8: noqa: E402
 # import pygrass modules
 from grass.pygrass.errors import must_be_open
 from grass.pygrass.gis.region import Region
@@ -24,6 +25,8 @@ from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.buffer import Buffer
 from grass.pygrass.raster.segment import Segment
 from grass.pygrass.raster.rowio import RowIO
+
+# flake8: qa
 
 WARN_OVERWRITE = "Raster map <{0}> already exists and will be overwritten"
 
