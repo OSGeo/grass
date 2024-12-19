@@ -20,7 +20,7 @@ or it can be launched from the console.
 
 1. Go to GRASS root directory
 
-2. Copy directory ./doc/gui/wxpython/example to ./gui/wxpython/example
+2. Copy directory ./doc/examples/gui/wxpython to ./gui/wxpython
 
 3. Edit ./gui/wxpython/Makefile:
 

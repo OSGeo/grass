@@ -41,8 +41,8 @@ from example.toolbars import ExampleMapToolbar, ExampleMiscToolbar, ExampleMainT
 from example.dialogs import ExampleMapDialog
 
 # It is possible to call grass library functions (in C) directly via ctypes
-# however this is less stable. Example is available in trunk/doc/python/, ctypes
-# are used in nviz, vdigit, iclass gui modules.
+# however this is less stable. Example is available in trunk/doc/examples/python/,
+# ctypes are used in nviz, vdigit, iclass gui modules.
 
 # from ctypes import *
 # try:
