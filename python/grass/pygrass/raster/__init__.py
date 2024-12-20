@@ -13,6 +13,7 @@ import grass.lib.rowio as librowio
 
 libgis.G_gisinit("")
 
+# flake8: noqa: E402
 # import pygrass modules
 from grass.pygrass.errors import must_be_open
 from grass.pygrass.gis.region import Region
@@ -24,6 +25,8 @@ from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.buffer import Buffer
 from grass.pygrass.raster.segment import Segment
 from grass.pygrass.raster.rowio import RowIO
+
+# flake8: qa
 
 WARN_OVERWRITE = "Raster map <{0}> already exists and will be overwritten"
 
@@ -214,7 +217,8 @@ class RasterRow(RasterAbstractBase):
                 raise OpenError(_("Raster type not defined"))
             self._fd = libraster.Rast_open_new(self.name, self._gtype)
         else:
-            raise OpenError("Open mode: %r not supported, valid mode are: r, w")
+            msg = "Open mode: %r not supported, valid mode are: r, w"
+            raise OpenError(msg)
         # read rows and cols from the active region
         self._rows = libraster.Rast_window_rows()
         self._cols = libraster.Rast_window_cols()
@@ -336,7 +340,8 @@ class RasterSegment(RasterAbstractBase):
             if key >= self._rows:
                 raise IndexError(_("Index out of range: %r.") % key)
             return self.put_row(key, row)
-        raise TypeError("Invalid argument type.")
+        msg = "Invalid argument type."
+        raise TypeError(msg)
 
     @must_be_open
     def map2segment(self):

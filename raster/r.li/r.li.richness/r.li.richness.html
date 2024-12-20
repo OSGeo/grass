@@ -16,8 +16,8 @@ file/map parameters.
 
 If the "moving window" method was selected in <b>g.gui.rlisetup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
-the folder <tt>C:\Users\userxy\AppData\Roaming\GRASS8\r.li\output\</tt>
-(MS-Windows) or <tt>$HOME/.grass8/r.li/output/</tt> (GNU/Linux).
+the folder <code>C:\Users\userxy\AppData\Roaming\GRASS8\r.li\output\</code>
+(MS-Windows) or <code>$HOME/.grass8/r.li/output/</code> (GNU/Linux).
 <p>
 <!-- TODO: verify next: -->
 If the input raster map contains only NULL values then <em>r.li.richness</em>
@@ -36,7 +36,7 @@ r.li.richness input=my_map conf=my_conf output=my_out
 Forest map (Spearfish sample dataset) example:
 <div class="code"><pre>
 g.region raster=landcover.30m -p
-r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
+r.mapcalc "forests = if(landcover.30m &gt;= 41 &amp;&amp; landcover.30m &lt;= 43,1,null())"
 r.li.richness input=forests conf=movwindow7 out=forests_richness_mov7
 r.univar forests_richness_mov7
 </pre></div>
@@ -59,7 +59,7 @@ d.vect forests type=boundary
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.li.html">r.li</a> - package overview<br>
+<a href="r.li.html">r.li</a> (package overview),
 <a href="g.gui.rlisetup.html">g.gui.rlisetup</a>
 </em>
 
@@ -67,9 +67,9 @@ d.vect forests type=boundary
 
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
-Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
+Gen. Tech. Rep. PNW-351. (<a href="https://doi.org/10.2737/PNW-GTR-351">PDF</a>)
 
 <h2>AUTHORS</h2>
 
-Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
+Serena Pallecchi, student of Computer Science University of Pisa (Italy).<br>
 Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)

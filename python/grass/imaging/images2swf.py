@@ -126,9 +126,11 @@ def checkImages(images):
                 pass  # ok
             elif im.ndim == 3:
                 if im.shape[2] not in [3, 4]:
-                    raise ValueError("This array can not represent an image.")
+                    msg = "This array can not represent an image."
+                    raise ValueError(msg)
             else:
-                raise ValueError("This array can not represent an image.")
+                msg = "This array can not represent an image."
+                raise ValueError(msg)
         else:
             raise ValueError("Invalid image type: " + str(type(im)))
 
@@ -177,7 +179,8 @@ class BitArray:
         if isinstance(bits, int):
             bits = str(bits)
         if not isinstance(bits, string_types):
-            raise ValueError("Append bits as strings or integers!")
+            msg = "Append bits as strings or integers!"
+            raise ValueError(msg)
 
         # add bits
         for bit in bits:
@@ -240,7 +243,8 @@ def intToBits(i: int, n: int | None = None) -> BitArray:
     # justify
     if n is not None:
         if len(bb) > n:
-            raise ValueError("intToBits fail: len larger than padlength.")
+            msg = f"{intToBits.__name__} fail: len larger than padlength."
+            raise ValueError(msg)
         bb = str(bb).rjust(n, "0")
 
     # done
@@ -319,7 +323,8 @@ def signedIntToBits(i: int, n: int | None = None) -> BitArray:
     bb = "0" + str(bb)  # always need the sign bit in front
     if n is not None:
         if len(bb) > n:
-            raise ValueError("signedIntToBits fail: len larger than padlength.")
+            msg = f"{signedIntToBits.__name__} fail: len larger than padlength."
+            raise ValueError(msg)
         bb = bb.rjust(n, "0")
 
     # was it negative? (then opposite bits)
@@ -361,7 +366,8 @@ def floatsToBits(arr):
     bits = intToBits(31, 5)  # 32 does not fit in 5 bits!
     for i in arr:
         if i < 0:
-            raise ValueError("Dit not implement negative floats!")
+            msg = "Dit not implement negative floats!"
+            raise ValueError(msg)
         i1 = int(i)
         i2 = i - i1
         bits += intToBits(i1, 15)
@@ -551,14 +557,16 @@ class BitmapTag(DefinitionTag):
                 if im.shape[2] == 4:
                     tmp[:, :, 0] = im[:, :, 3]  # swap channel where alpha is in
             else:
-                raise ValueError("Invalid shape to be an image.")
+                msg = "Invalid shape to be an image."
+                raise ValueError(msg)
 
         elif len(im.shape) == 2:
             tmp = np.ones((im.shape[0], im.shape[1], 4), dtype=np.uint8) * 255
             for i in range(3):
                 tmp[:, :, i + 1] = im[:, :]
         else:
-            raise ValueError("Invalid shape to be an image.")
+            msg = "Invalid shape to be an image."
+            raise ValueError(msg)
 
         # we changed the image to uint8 4 channels.
         # now compress!
@@ -772,22 +780,25 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
 
     """
 
-    # Check Numpy
+    # Check NumPy
     if np is None:
-        raise RuntimeError("Need Numpy to write an SWF file.")
+        msg = "Need NumPy to write an SWF file."
+        raise RuntimeError(msg)
 
-    # Check images (make all Numpy)
+    # Check images (make all NumPy)
     images2 = []
     images = checkImages(images)
     if not images:
-        raise ValueError("Image list is empty!")
+        msg = "Image list is empty!"
+        raise ValueError(msg)
     for im in images:
         if PIL and isinstance(im, PIL.Image.Image):
             if im.mode == "P":
                 im = im.convert()
             im = np.asarray(im)
             if len(im.shape) == 0:
-                raise MemoryError("Too little memory to convert PIL image to array")
+                msg = "Too little memory to convert PIL image to array"
+                raise MemoryError(msg)
         images2.append(im)
 
     # Init
@@ -798,7 +809,8 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
         if len(duration) == len(images2):
             duration = list(duration)
         else:
-            raise ValueError("len(duration) doesn't match amount of images.")
+            msg = "len(duration) doesn't match amount of images."
+            raise ValueError(msg)
     else:
         duration = [duration for im in images2]
 
@@ -836,9 +848,10 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
 def _readPixels(bb, i, tagType, L1):
     """With pf's seed after the recordheader, reads the pixeldata."""
 
-    # Check Numpy
+    # Check NumPy
     if np is None:
-        raise RuntimeError("Need Numpy to read an SWF file.")
+        msg = "Need NumPy to read an SWF file."
+        raise RuntimeError(msg)
 
     # Get info
     # charId = bb[i : i + 2]  # unused
@@ -898,11 +911,13 @@ def readSwf(filename, asNumpy=True):
 
     # Check PIL
     if (not asNumpy) and (PIL is None):
-        raise RuntimeError("Need PIL to return as PIL images.")
+        msg = "Need PIL to return as PIL images."
+        raise RuntimeError(msg)
 
-    # Check Numpy
+    # Check NumPy
     if np is None:
-        raise RuntimeError("Need Numpy to read SWF files.")
+        msg = "Need NumPy to read SWF files."
+        raise RuntimeError(msg)
 
     # Init images
     images = []

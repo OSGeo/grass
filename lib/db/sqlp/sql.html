@@ -9,9 +9,9 @@ category numbers are stored both in the vector geometry and the
 attribute table.
 <p>
 GRASS GIS supports various RDBMS
-(<a href="http://en.wikipedia.org/wiki/Relational_database_management_system">Relational
+(<a href="https://en.wikipedia.org/wiki/Relational_database_management_system">Relational
 database management system</a>) and embedded databases. SQL
-(<a href="http://en.wikipedia.org/wiki/Sql">Structured Query
+(<a href="https://en.wikipedia.org/wiki/Sql">Structured Query
 Language</a>) queries are directly passed to the underlying database
 system. The set of supported SQL commands depends on the RDMBS and
 database driver selected.
@@ -29,25 +29,25 @@ distributions of GRASS GIS:
 <p>
 <table class="border">
 <tr><td><a href="grass-sqlite.html">sqlite</a></td><td>Data storage in SQLite database files (default DB backend)</td>
-<td><a href="http://sqlite.org/">http://sqlite.org/</a></td></tr>
+<td><a href="https://sqlite.org/">https://sqlite.org/</a></td></tr>
 
 <tr><td><a href="grass-dbf.html">dbf</a></td><td>Data storage in DBF files</td>
 <td><a href="http://shapelib.maptools.org/dbf_api.html">http://shapelib.maptools.org/dbf_api.html</a></td></tr>
 
 <tr><td><a href="grass-pg.html">pg</a></td><td>Data storage in PostgreSQL RDBMS</td>
-<td><a href="http://postgresql.org/">http://postgresql.org/</a></td></tr>
+<td><a href="https://postgresql.org/">https://postgresql.org/</a></td></tr>
 
 <tr><td><a href="grass-mysql.html">mysql</a></td><td>Data storage in MySQL RDBMS</td>
-<td><a href="http://mysql.org/">http://mysql.org/</a></td></tr>
+<td><a href="https://www.mysql.com/">https://www.mysql.com/</a></td></tr>
 <!--
 <tr><td><a href="grass-mesql.html">mesql</a></td><td>Data are stored in MySQL embedded database</td>
-<td><a href="http://mysql.org/">http://mysql.org/</a></td></tr>
+<td><a href="https://www.mysql.com/">https://www.mysql.com/</a></td></tr>
 -->
 <tr><td><a href="grass-odbc.html">odbc</a></td><td>Data storage via UnixODBC (PostgreSQL, Oracle, etc.)</td>
-<td><a href="http://www.unixodbc.org/">http://www.unixodbc.org/</a></td></tr>
+<td><a href="https://www.unixodbc.org/">https://www.unixodbc.org/</a></td></tr>
 
 <tr><td><a href="grass-ogr.html">ogr</a></td><td>Data storage in OGR files</td>
-<td><a href="http://gdal.org">http://gdal.org/</a></td></tr>
+<td><a href="https://gdal.org">https://gdal.org/</a></td></tr>
 </table>
 
 <h2>NOTES</h2>
@@ -69,8 +69,8 @@ d.vect map where="individual='juvenile' and area='beach'"
 </pre></div></li>
 <li> Attempts to use a reserved SQL word (depends on database backend) as
      column or table name will cause a "SQL syntax error".</li>
-<li> An error message such as &quot;<tt>dbmi: Protocol
-     error</tt>&quot; either indicates an invalid column name or an
+<li> An error message such as &quot;<code>dbmi: Protocol
+     error</code>&quot; either indicates an invalid column name or an
      unsupported column type (then the GRASS SQL parser needs to be
      extended).</li>
 <li> DBF column names are limited to 10 characters (DBF API definition).</li>
@@ -151,7 +151,7 @@ v.db.update map=roads col=nulltest value=2 where="cat &lt;= 2"
 
 <h3>Update of attributes</h3>
 
-Examples of complex expressions in updates (using <tt>v.db.*</tt>
+Examples of complex expressions in updates (using <code>v.db.*</code>
 modules):
 
 <div class="code"><pre>
@@ -164,7 +164,7 @@ v.db.update map=roads column=exprtest qcolumn="(cat*100.)/SHAPE_LEN."
 </pre></div>
 
 <p>
-Examples of more complex expressions in updates (using <tt>db.*</tt>
+Examples of more complex expressions in updates (using <code>db.*</code>
 modules):
 
 <div class="code"><pre>
@@ -237,4 +237,4 @@ v.db.update vectormap column=species qcolumn="CASE WHEN col1 &gt;= 1 THEN cat WH
 
 <h2>AUTHOR</h2>
 
-Radmin Blazek
+Radim Blazek
