@@ -9,6 +9,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/raster.h>
+
 #include "driver.h"
 
 static struct color_rgb *colors;
