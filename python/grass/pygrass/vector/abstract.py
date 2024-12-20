@@ -284,7 +284,8 @@ class Info:
             if not self.is_open():
                 utils.rename(self.name, newname, "vect")
             else:
-                raise GrassError("The map is open, not able to renamed it.")
+                msg = "The map is open, not able to rename it."
+                raise GrassError(msg)
         self._name = newname
 
     def is_3D(self):
@@ -360,12 +361,14 @@ class Info:
         if not self.exist() and self.mode != "w":
             raise OpenError("Map <%s> not found." % self._name)
         if libvect.Vect_set_open_level(self._topo_level) != 0:
-            raise OpenError("Invalid access level.")
+            msg = "Invalid access level."
+            raise OpenError(msg)
         # update the overwrite attribute
         self.overwrite = overwrite if overwrite is not None else self.overwrite
         # check if the mode is valid
         if self.mode not in {"r", "rw", "w"}:
-            raise ValueError("Mode not supported. Use one of: 'r', 'rw', 'w'.")
+            msg = "Mode not supported. Use one of: 'r', 'rw', 'w'."
+            raise ValueError(msg)
 
         # check if the map exist
         if self.exist() and self.mode in {"r", "rw"}:
