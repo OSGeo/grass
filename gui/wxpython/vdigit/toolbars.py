@@ -17,7 +17,7 @@ This program is free software under the GNU General Public License
 
 import wx
 
-from grass import script as grass
+from grass import script as gs
 from grass.pydispatch.signal import Signal
 
 from gui_core.toolbars import BaseToolbar, BaseIcons
@@ -241,7 +241,7 @@ class VDigitToolbar(BaseToolbar):
             ),
             "additionalTools": MetaIcon(
                 img="tools",
-                label=_("Additional tools " "(copy, flip, connect, etc.)"),
+                label=_("Additional tools (copy, flip, connect, etc.)"),
                 desc=_("Left: Select; Ctrl+Left: Unselect; Right: Confirm"),
             ),
             "undo": MetaIcon(
@@ -446,7 +446,7 @@ class VDigitToolbar(BaseToolbar):
             return True
 
     def OnTool(self, event):
-        """Tool selected -> untoggles previusly selected tool in
+        """Tool selected -> untoggles previously selected tool in
         toolbar"""
         Debug.msg(
             3,
@@ -478,7 +478,7 @@ class VDigitToolbar(BaseToolbar):
             event.Skip()
 
     def OnAddPoint(self, event):
-        """Add point to the vector map Laier"""
+        """Add point to the vector map layer"""
         Debug.msg(2, "VDigitToolbar.OnAddPoint()")
         self.action = {"desc": "addLine", "type": "point", "id": self.addPoint}
         self.MapWindow.mouse["box"] = "point"
@@ -565,9 +565,9 @@ class VDigitToolbar(BaseToolbar):
         menuItems = []
         if not self.tools or "addArea" in self.tools:
             menuItems.append((self.icons["addArea"], self.OnAddArea))
-        if not self.fType and not self.tools or "addBoundary" in self.tools:
+        if (not self.fType and not self.tools) or "addBoundary" in self.tools:
             menuItems.append((self.icons["addBoundary"], self.OnAddBoundary))
-        if not self.fType and not self.tools or "addCentroid" in self.tools:
+        if (not self.fType and not self.tools) or "addCentroid" in self.tools:
             menuItems.append((self.icons["addCentroid"], self.OnAddCentroid))
 
         self._onMenu(menuItems)
@@ -672,16 +672,12 @@ class VDigitToolbar(BaseToolbar):
         """
         self._enableTool(self.redo, enable)
 
-    def _enableTool(self, tool, enable):
+    def _enableTool(self, tool, enable: bool):
         if not self.FindById(tool):
             return
 
-        if enable:
-            if self.GetToolEnabled(tool) is False:
-                self.EnableTool(tool, True)
-        else:
-            if self.GetToolEnabled(tool) is True:
-                self.EnableTool(tool, False)
+        if self.GetToolEnabled(tool) is not bool(enable):
+            self.EnableTool(tool, bool(enable))
 
     def GetAction(self, type="desc"):
         """Get current action info"""
@@ -709,7 +705,6 @@ class VDigitToolbar(BaseToolbar):
 
     def OnAdditionalToolMenu(self, event):
         """Menu for additional tools"""
-        point = wx.GetMousePosition()
         toolMenu = Menu()
 
         for label, itype, handler, desc in (
@@ -1002,7 +997,7 @@ class VDigitToolbar(BaseToolbar):
 
             if dlg and dlg.GetName():
                 # add layer to map layer tree/map display
-                mapName = dlg.GetName() + "@" + grass.gisenv()["MAPSET"]
+                mapName = dlg.GetName() + "@" + gs.gisenv()["MAPSET"]
                 self._giface.GetLayerList().AddLayer(
                     ltype="vector",
                     name=mapName,
@@ -1039,6 +1034,8 @@ class VDigitToolbar(BaseToolbar):
         # select the given map layer for editing
         self.StartEditing(self.layers[selection])
 
+        wx.CallLater(100, self.MapWindow.SetFocus)
+
         event.Skip()
 
     def StartEditing(self, mapLayer):
@@ -1048,10 +1045,7 @@ class VDigitToolbar(BaseToolbar):
         """
         # check if topology is available (skip for hidden - temporary
         # maps, see iclass for details)
-        if (
-            not mapLayer.IsHidden()
-            and grass.vector_info(mapLayer.GetName())["level"] != 2
-        ):
+        if not mapLayer.IsHidden() and gs.vector_info(mapLayer.GetName())["level"] != 2:
             dlg = wx.MessageDialog(
                 parent=self.MapWindow,
                 message=_(
@@ -1095,7 +1089,7 @@ class VDigitToolbar(BaseToolbar):
                 )
 
             self.parent.SetStatusText(
-                _("Please wait, " "opening vector map <%s> for editing...")
+                _("Please wait, opening vector map <%s> for editing...")
                 % mapLayer.GetName(),
                 0,
             )
@@ -1210,7 +1204,7 @@ class VDigitToolbar(BaseToolbar):
                 if self.digit.GetUndoLevel() > -1:
                     dlg = wx.MessageDialog(
                         parent=self.parent,
-                        message=_("Do you want to save changes " "in vector map <%s>?")
+                        message=_("Do you want to save changes in vector map <%s>?")
                         % self.mapLayer.GetName(),
                         caption=_("Save changes?"),
                         style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
@@ -1290,7 +1284,7 @@ class VDigitToolbar(BaseToolbar):
         # select vector map layer in the current mapset
         layerNameList = []
         self.layers = self.Map.GetListOfLayers(
-            ltype="vector", mapset=grass.gisenv()["MAPSET"]
+            ltype="vector", mapset=gs.gisenv()["MAPSET"]
         )
 
         for layer in self.layers:
@@ -1298,10 +1292,7 @@ class VDigitToolbar(BaseToolbar):
                 layerNameList.append(layer.GetName())
 
         if updateTool:  # update toolbar
-            if not self.mapLayer:
-                value = _("Select vector map")
-            else:
-                value = layerNameSelected
+            value = _("Select vector map") if not self.mapLayer else layerNameSelected
 
             if not self.comboid:
                 if not self.tools or "selector" in self.tools:

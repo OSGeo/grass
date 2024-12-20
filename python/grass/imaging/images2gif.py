@@ -58,7 +58,7 @@ distribution of PIL)
 Useful links:
 
   * http://tronche.com/computer-graphics/gif/
-  * http://en.wikipedia.org/wiki/Graphics_Interchange_Format
+  * https://en.wikipedia.org/wiki/Graphics_Interchange_Format
   * http://www.w3.org/Graphics/GIF/spec-gif89a.txt
 
 """
@@ -72,7 +72,7 @@ try:
 
     pillow = True
     try:
-        PIL.__version__  # test if user has Pillow or PIL
+        PIL_version = PIL.__version__  # test if user has Pillow or PIL
     except AttributeError:
         pillow = False
     from PIL.GifImagePlugin import getheader, getdata
@@ -133,9 +133,11 @@ def checkImages(images):
                 pass  # ok
             elif im.ndim == 3:
                 if im.shape[2] not in [3, 4]:
-                    raise ValueError("This array can not represent an image.")
+                    msg = "This array can not represent an image."
+                    raise ValueError(msg)
             else:
-                raise ValueError("This array can not represent an image.")
+                msg = "This array can not represent an image."
+                raise ValueError(msg)
         else:
             raise ValueError("Invalid image type: " + str(type(im)))
 
@@ -265,9 +267,10 @@ class GifWriter:
                 xy = (0, 0)
             if hasattr(xy, "__len__"):
                 if len(xy) == len(images):
-                    xy = [xxyy for xxyy in xy]
+                    xy = list(xy)
                 else:
-                    raise ValueError("len(xy) doesn't match amount of images.")
+                    msg = "len(xy) doesn't match amount of images."
+                    raise ValueError(msg)
             else:
                 xy = [xy for im in images]
             xy[0] = (0, 0)
@@ -275,9 +278,10 @@ class GifWriter:
         else:
             # Calculate xy using some basic image processing
 
-            # Check Numpy
+            # Check NumPy
             if np is None:
-                raise RuntimeError("Need Numpy to use auto-subRectangles.")
+                msg = "Need NumPy to use auto-subRectangles."
+                raise RuntimeError(msg)
 
             # First make numpy arrays if required
             for i in range(len(images)):
@@ -286,9 +290,8 @@ class GifWriter:
                     tmp = im.convert()  # Make without palette
                     a = np.asarray(tmp)
                     if len(a.shape) == 0:
-                        raise MemoryError(
-                            "Too little memory to convert PIL image to array"
-                        )
+                        msg = "Too little memory to convert PIL image to array"
+                        raise MemoryError(msg)
                     images[i] = a
 
             # Determine the sub rectangles
@@ -314,9 +317,10 @@ class GifWriter:
         if len(ims) < 2:
             return ims, [(0, 0) for i in ims]
 
-        # We need numpy
+        # We need NumPy
         if np is None:
-            raise RuntimeError("Need Numpy to calculate sub-rectangles. ")
+            msg = "Need NumPy to calculate sub-rectangles."
+            raise RuntimeError(msg)
 
         # Prepare
         ims2 = [ims[0]]
@@ -471,7 +475,7 @@ class GifWriter:
                     fp.write(d)
 
             # Prepare for next round
-            frames = frames + 1
+            frames += 1
 
         fp.write(";")  # end gif
         return frames
@@ -575,7 +579,8 @@ def writeGifVisvis(
 
     # Check PIL
     if PIL is None:
-        raise RuntimeError("Need PIL to write animated gif files.")
+        msg = "Need PIL to write animated gif files."
+        raise RuntimeError(msg)
 
     # Check images
     images = checkImages(images)
@@ -594,9 +599,10 @@ def writeGifVisvis(
     # Check duration
     if hasattr(duration, "__len__"):
         if len(duration) == len(images):
-            duration = [d for d in duration]
+            duration = list(duration)
         else:
-            raise ValueError("len(duration) doesn't match amount of images.")
+            msg = "len(duration) doesn't match amount of images."
+            raise ValueError(msg)
     else:
         duration = [duration for im in images]
 
@@ -614,7 +620,8 @@ def writeGifVisvis(
         dispose = defaultDispose
     if hasattr(dispose, "__len__"):
         if len(dispose) != len(images):
-            raise ValueError("len(xy) doesn't match amount of images.")
+            msg = "len(xy) doesn't match amount of images."
+            raise ValueError(msg)
     else:
         dispose = [dispose for im in images]
 
@@ -637,11 +644,13 @@ def readGif(filename, asNumpy=True):
 
     # Check PIL
     if PIL is None:
-        raise RuntimeError("Need PIL to read animated gif files.")
+        msg = "Need PIL to read animated gif files."
+        raise RuntimeError(msg)
 
-    # Check Numpy
+    # Check NumPy
     if np is None:
-        raise RuntimeError("Need Numpy to read animated gif files.")
+        msg = "Need NumPy to read animated gif files."
+        raise RuntimeError(msg)
 
     # Check whether it exists
     if not os.path.isfile(filename):
@@ -659,7 +668,8 @@ def readGif(filename, asNumpy=True):
             tmp = pilIm.convert()  # Make without palette
             a = np.asarray(tmp)
             if len(a.shape) == 0:
-                raise MemoryError("Too little memory to convert PIL image to array")
+                msg = "Too little memory to convert PIL image to array"
+                raise MemoryError(msg)
             # Store, and next
             images.append(a)
             pilIm.seek(pilIm.tell() + 1)
@@ -795,15 +805,18 @@ class NeuQuant:
         self.a_s = {}
 
     def __init__(self, image, samplefac=10, colors=256):
-        # Check Numpy
+        # Check NumPy
         if np is None:
-            raise RuntimeError("Need Numpy for the NeuQuant algorithm.")
+            msg = "Need NumPy for the NeuQuant algorithm."
+            raise RuntimeError(msg)
 
         # Check image
         if image.size[0] * image.size[1] < NeuQuant.MAXPRIME:
-            raise OSError("Image is too small")
+            msg = "Image is too small"
+            raise OSError(msg)
         if image.mode != "RGBA":
-            raise OSError("Image mode should be RGBA.")
+            msg = "Image mode should be RGBA."
+            raise OSError(msg)
 
         # Initialize
         self.setconstants(samplefac, colors)
@@ -857,14 +870,14 @@ class NeuQuant:
 
     def geta(self, alpha, rad):
         try:
-            return self.a_s[(alpha, rad)]
+            return self.a_s[alpha, rad]
         except KeyError:
             length = rad * 2 - 1
             mid = length / 2
             q = np.array(list(range(mid - 1, -1, -1)) + list(range(-1, mid)))
             a = alpha * (rad * rad - q * q) / (rad * rad)
             a[mid] = 0
-            self.a_s[(alpha, rad)] = a
+            self.a_s[alpha, rad] = a
             return a
 
     def alterneigh(self, alpha, rad, i, b, g, r):
@@ -1060,9 +1073,8 @@ class NeuQuant:
         """
         if get_cKDTree():
             return self.quantize_with_scipy(image)
-        else:
-            print("Scipy not available, falling back to slower version.")
-            return self.quantize_without_scipy(image)
+        print("Scipy not available, falling back to slower version.")
+        return self.quantize_without_scipy(image)
 
     def quantize_with_scipy(self, image):
         w, h = image.size
@@ -1105,8 +1117,7 @@ class NeuQuant:
     def inxsearch(self, r, g, b):
         """Search for BGR values 0..255 and return colour index"""
         dists = self.colormap[:, :3] - np.array([r, g, b])
-        a = np.argmin((dists * dists).sum(1))
-        return a
+        return np.argmin((dists * dists).sum(1))
 
 
 if __name__ == "__main__":

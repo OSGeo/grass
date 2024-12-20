@@ -75,7 +75,7 @@
 import sys
 import os
 import atexit
-import grass.script as grass
+import grass.script as gs
 from grass.script.utils import decode, encode
 
 TMPRAST = []
@@ -89,19 +89,19 @@ def reclass(inf, outf, lim, clump, diag, les):
     clumped = clump
     diagonal = diag
 
-    s = grass.read_command("g.region", flags="p")
+    s = gs.read_command("g.region", flags="p")
     s = decode(s)
-    kv = grass.parse_key_val(s, sep=":")
+    kv = gs.parse_key_val(s, sep=":")
     s = kv["projection"].strip().split()
     if s == "0":
-        grass.fatal(_("xy-locations are not supported"))
-        grass.fatal(_("Need projected data with grids in meters"))
+        gs.fatal(_("xy-locations are not supported"))
+        gs.fatal(_("Need projected data with grids in meters"))
 
-    if not grass.find_file(infile)["name"]:
-        grass.fatal(_("Raster map <%s> not found") % infile)
+    if not gs.find_file(infile)["name"]:
+        gs.fatal(_("Raster map <%s> not found") % infile)
 
     if clumped and diagonal:
-        grass.fatal(_("flags c and d are mutually exclusive"))
+        gs.fatal(_("flags c and d are mutually exclusive"))
 
     if clumped:
         clumpfile = infile
@@ -109,20 +109,20 @@ def reclass(inf, outf, lim, clump, diag, les):
         clumpfile = "%s.clump.%s" % (infile.split("@")[0], outfile)
         TMPRAST.append(clumpfile)
 
-        if not grass.overwrite():
-            if grass.find_file(clumpfile)["name"]:
-                grass.fatal(_("Temporary raster map <%s> exists") % clumpfile)
+        if not gs.overwrite():
+            if gs.find_file(clumpfile)["name"]:
+                gs.fatal(_("Temporary raster map <%s> exists") % clumpfile)
         if diagonal:
-            grass.message(
-                _("Generating a clumped raster file including " "diagonal neighbors...")
+            gs.message(
+                _("Generating a clumped raster file including diagonal neighbors...")
             )
-            grass.run_command("r.clump", flags="d", input=infile, output=clumpfile)
+            gs.run_command("r.clump", flags="d", input=infile, output=clumpfile)
         else:
-            grass.message(_("Generating a clumped raster file ..."))
-            grass.run_command("r.clump", input=infile, output=clumpfile)
+            gs.message(_("Generating a clumped raster file ..."))
+            gs.run_command("r.clump", input=infile, output=clumpfile)
 
     if lesser:
-        grass.message(
+        gs.message(
             _(
                 "Generating a reclass map with area size less than "
                 "or equal to %f hectares..."
@@ -130,7 +130,7 @@ def reclass(inf, outf, lim, clump, diag, les):
             % limit
         )
     else:
-        grass.message(
+        gs.message(
             _(
                 "Generating a reclass map with area size greater "
                 "than or equal to %f hectares..."
@@ -142,20 +142,17 @@ def reclass(inf, outf, lim, clump, diag, les):
     TMPRAST.append(recfile)
 
     sflags = "aln"
-    if grass.raster_info(infile)["datatype"] in ("FCELL", "DCELL"):
+    if gs.raster_info(infile)["datatype"] in {"FCELL", "DCELL"}:
         sflags += "i"
-    p1 = grass.pipe_command("r.stats", flags=sflags, input=(clumpfile, infile), sep=";")
-    p2 = grass.feed_command("r.reclass", input=clumpfile, output=recfile, rules="-")
+    p1 = gs.pipe_command("r.stats", flags=sflags, input=(clumpfile, infile), sep=";")
+    p2 = gs.feed_command("r.reclass", input=clumpfile, output=recfile, rules="-")
     rules = ""
     for line in p1.stdout:
         f = decode(line).rstrip(os.linesep).split(";")
         if len(f) < 5:
             continue
         hectares = float(f[4]) * 0.0001
-        if lesser:
-            test = hectares <= limit
-        else:
-            test = hectares >= limit
+        test = hectares <= limit if lesser else hectares >= limit
         if test:
             rules += "%s = %s %s\n" % (f[0], f[2], f[3])
     if rules:
@@ -165,16 +162,15 @@ def reclass(inf, outf, lim, clump, diag, les):
     p2.wait()
     if p2.returncode != 0:
         if lesser:
-            grass.fatal(
-                _("No areas of size less than or equal to %f " "hectares found.")
-                % limit
+            gs.fatal(
+                _("No areas of size less than or equal to %f hectares found.") % limit
             )
         else:
-            grass.fatal(
-                _("No areas of size greater than or equal to %f " "hectares found.")
+            gs.fatal(
+                _("No areas of size greater than or equal to %f hectares found.")
                 % limit
             )
-    grass.mapcalc("$outfile = $recfile", outfile=outfile, recfile=recfile)
+    gs.mapcalc("$outfile = $recfile", outfile=outfile, recfile=recfile)
 
 
 def rmarea(infile, outfile, thresh, coef):
@@ -185,17 +181,17 @@ def rmarea(infile, outfile, thresh, coef):
 
     # transform user input from hectares to meters because currently v.clean
     # rmarea accept only meters as threshold
-    thresh = thresh * 10000.0
+    thresh *= 10000.0
     vectfile = "%s_vect_%s" % (infile.split("@")[0], outfile)
     TMPRAST.append(vectfile)
-    grass.run_command("r.to.vect", input=infile, output=vectfile, type="area")
+    gs.run_command("r.to.vect", input=infile, output=vectfile, type="area")
     cleanfile = "%s_clean_%s" % (infile.split("@")[0], outfile)
     TMPRAST.append(cleanfile)
-    grass.run_command(
+    gs.run_command(
         "v.clean", input=vectfile, output=cleanfile, tool="rmarea", threshold=thresh
     )
 
-    grass.run_command(
+    gs.run_command(
         "v.to.rast", input=cleanfile, output=outfile, use="attr", attrcolumn="value"
     )
 
@@ -211,26 +207,26 @@ def main():
     diagonal = flags["d"]
 
     # check for unsupported locations
-    in_proj = grass.parse_command("g.proj", flags="g")
+    in_proj = gs.parse_command("g.proj", flags="g")
     if in_proj["unit"].lower() == "degree":
-        grass.fatal(_("Latitude-longitude locations are not supported"))
+        gs.fatal(_("Latitude-longitude locations are not supported"))
     if in_proj["name"].lower() == "xy_location_unprojected":
-        grass.fatal(_("xy-locations are not supported"))
+        gs.fatal(_("xy-locations are not supported"))
 
     # check lesser and greater parameters
     limit = float(value)
     if mode == "greater" and method == "rmarea":
-        grass.fatal(_("You have to specify mode='lesser' with method='rmarea'"))
+        gs.fatal(_("You have to specify mode='lesser' with method='rmarea'"))
 
-    if not grass.find_file(infile)["name"]:
-        grass.fatal(_("Raster map <%s> not found") % infile)
+    if not gs.find_file(infile)["name"]:
+        gs.fatal(_("Raster map <%s> not found") % infile)
 
     if method == "reclass":
         reclass(infile, outfile, limit, clumped, diagonal, mode == "lesser")
     elif method == "rmarea":
         rmarea(infile, outfile, limit, in_proj["meters"])
 
-    grass.message(_("Generating output raster map <%s>...") % outfile)
+    gs.message(_("Generating output raster map <%s>...") % outfile)
 
 
 def cleanup():
@@ -238,16 +234,12 @@ def cleanup():
     TMPRAST.reverse()  # reclassed map first
     for mapp in TMPRAST:
         if method == "rmarea":
-            grass.run_command(
-                "g.remove", flags="f", type="vector", name=mapp, quiet=True
-            )
+            gs.run_command("g.remove", flags="f", type="vector", name=mapp, quiet=True)
         else:
-            grass.run_command(
-                "g.remove", flags="f", type="raster", name=mapp, quiet=True
-            )
+            gs.run_command("g.remove", flags="f", type="raster", name=mapp, quiet=True)
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     atexit.register(cleanup)
     sys.exit(main())

@@ -79,7 +79,7 @@ short color[3];
 {
     int curr;
     float cat1, cat2;
-    short *color1, *color2;
+    short *color1 = NULL, *color2 = NULL;
     float delta;
 
     /*DEBUG
@@ -123,9 +123,11 @@ short color[3];
     }
     /* for any thresholds greater than last color table entry, use last entry *
      */
-    color[0] = color2[0];
-    color[1] = color2[1];
-    color[2] = color2[2];
+    if (color2) {
+        color[0] = color2[0];
+        color[1] = color2[1];
+        color[2] = color2[2];
+    }
 }
 
 /******************************************************************************

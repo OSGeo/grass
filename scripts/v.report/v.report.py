@@ -55,7 +55,9 @@
 
 import sys
 import os
-import grass.script as grass
+from operator import itemgetter
+
+import grass.script as gs
 from grass.script.utils import separator, decode
 
 
@@ -79,20 +81,17 @@ def main():
 
     nuldev = open(os.devnull, "w")
 
-    if not grass.find_file(mapname, "vector")["file"]:
-        grass.fatal(_("Vector map <%s> not found") % mapname)
+    if not gs.find_file(mapname, "vector")["file"]:
+        gs.fatal(_("Vector map <%s> not found") % mapname)
 
-    if int(layer) in grass.vector_db(mapname):
-        colnames = grass.vector_columns(mapname, layer, getDict=False, stderr=nuldev)
+    if int(layer) in gs.vector_db(mapname):
+        colnames = gs.vector_columns(mapname, layer, getDict=False, stderr=nuldev)
         isConnection = True
     else:
         isConnection = False
         colnames = ["cat"]
 
-    if option == "coor":
-        extracolnames = ["x", "y", "z"]
-    else:
-        extracolnames = [option]
+    extracolnames = ["x", "y", "z"] if option == "coor" else [option]
 
     if units == "percent":
         unitsp = "meters"
@@ -103,8 +102,8 @@ def main():
 
     # NOTE: we suppress -1 cat and 0 cat
     if isConnection:
-        f = grass.vector_db(map=mapname)[int(layer)]
-        p = grass.pipe_command(
+        f = gs.vector_db(map=mapname)[int(layer)]
+        p = gs.pipe_command(
             "v.db.select", flags="e", quiet=True, map=mapname, layer=layer
         )
         records1 = []
@@ -114,12 +113,12 @@ def main():
             cols = decode(line).rstrip("\r\n").split("|")
             if catcol == -1:
                 ncols = len(cols)
-                for i in range(0, ncols):
+                for i in range(ncols):
                     if cols[i] == f["key"]:
                         catcol = i
                         break
                 if catcol == -1:
-                    grass.fatal(
+                    gs.fatal(
                         _(
                             "There is a table connected to input vector map '%s', but "
                             "there is no key column '%s'."
@@ -134,11 +133,11 @@ def main():
         if p.returncode != 0:
             sys.exit(1)
 
-        records1.sort(key=lambda r: r[catcol])
+        records1.sort(key=itemgetter(catcol))
 
         if len(records1) == 0:
             try:
-                grass.fatal(
+                gs.fatal(
                     _(
                         "There is a table connected to input vector map '%s', but "
                         "there are no categories present in the key column '%s'. "
@@ -150,7 +149,7 @@ def main():
                 pass
 
         # fetch the requested attribute sorted by cat:
-        p = grass.pipe_command(
+        p = gs.pipe_command(
             "v.to.db",
             flags="p",
             quiet=True,
@@ -162,7 +161,7 @@ def main():
         records2 = []
         for line in p.stdout:
             fields = decode(line).rstrip("\r\n").split("|")
-            if fields[0] in ["cat", "-1", "0"]:
+            if fields[0] in {"cat", "-1", "0"}:
                 continue
             records2.append([int(fields[0])] + fields[1:])
         p.wait()
@@ -184,7 +183,7 @@ def main():
     else:
         catcol = 0
         records1 = []
-        p = grass.pipe_command("v.category", inp=mapname, layer=layer, option="print")
+        p = gs.pipe_command("v.category", inp=mapname, layer=layer, option="print")
         for line in p.stdout:
             field = int(decode(line).rstrip())
             if field > 0:
@@ -194,7 +193,7 @@ def main():
         records1 = uniq(records1)
 
         # make pre-table
-        p = grass.pipe_command(
+        p = gs.pipe_command(
             "v.to.db",
             flags="p",
             quiet=True,
@@ -206,7 +205,7 @@ def main():
         records3 = []
         for line in p.stdout:
             fields = decode(line).rstrip("\r\n").split("|")
-            if fields[0] in ["cat", "-1", "0"]:
+            if fields[0] in {"cat", "-1", "0"}:
                 continue
             records3.append([int(fields[0])] + fields[1:])
         p.wait()
@@ -215,9 +214,6 @@ def main():
     # print table header
     if not flags["c"]:
         sys.stdout.write(fs.join(colnames + extracolnames) + "\n")
-
-    # make and print the table:
-    numcols = len(colnames) + len(extracolnames)
 
     # calculate percents if requested
     if units == "percent" and option != "coor":
@@ -228,31 +224,25 @@ def main():
 
         # calculate percentages
         records4 = [float(r[-1]) * 100 / total for r in records3]
-        if type(records1[0]) == int:
+        if isinstance(records1[0], int):
             records3 = [[r1] + [r4] for r1, r4 in zip(records1, records4)]
         else:
             records3 = [r1 + [r4] for r1, r4 in zip(records1, records4)]
 
     # sort results
     if sort:
-        if sort == "asc":
-            if option == "coor":
-                records3.sort(key=lambda r: (float(r[-3]), float(r[-2]), float(r[-1])))
-            else:
-                records3.sort(key=lambda r: float(r[-1]))
+        if option == "coor":
+            records3.sort(
+                key=lambda r: (float(r[-3]), float(r[-2]), float(r[-1])),
+                reverse=(sort != "asc"),
+            )
         else:
-            if option == "coor":
-                records3.sort(
-                    key=lambda r: (float(r[-3]), float(r[-2]), float(r[-1])),
-                    reverse=True,
-                )
-            else:
-                records3.sort(key=lambda r: float(r[-1]), reverse=True)
+            records3.sort(key=lambda r: float(r[-1]), reverse=(sort != "asc"))
 
     for r in records3:
         sys.stdout.write(fs.join(map(str, r)) + "\n")
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

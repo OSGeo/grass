@@ -18,35 +18,30 @@ This program is free software under the GNU General Public License
 """
 
 import socket
-import grass.script as grass
-
 from time import sleep
+
+import grass.script as gs
 
 try:
     from osgeo import gdal
-except:
-    grass.fatal(
+except ImportError:
+    gs.fatal(
         _(
             "Unable to load GDAL Python bindings (requires package 'python-gdal' "
             "being installed)"
         )
     )
 
-import numpy as Numeric
-
-Numeric.arrayrange = Numeric.arange
-
-from math import pi, floor
-
-from urllib.error import HTTPError
 from http.client import HTTPException
-
+from math import floor, pi
+from urllib.error import HTTPError
 from xml.etree.ElementTree import ParseError
 
-from wms_base import GetEpsg, GetSRSParamVal, WMSBase
+import numpy as np
 
-from wms_cap_parsers import WMTSCapabilitiesTree, OnEarthCapabilitiesTree
 from srs import Srs
+from wms_base import GetEpsg, GetSRSParamVal, WMSBase
+from wms_cap_parsers import OnEarthCapabilitiesTree, WMTSCapabilitiesTree
 
 
 class WMSDrv(WMSBase):
@@ -55,7 +50,7 @@ class WMSDrv(WMSBase):
 
         @return temp_map with downloaded data
         """
-        grass.message(_("Downloading data from WMS server..."))
+        gs.message(_("Downloading data from WMS server..."))
         server_url = self.params["url"]
 
         if "?" in self.params["url"]:
@@ -108,19 +103,19 @@ class WMSDrv(WMSBase):
             # the tile size and offset in pixels for placing it into raster where tiles
             # are joined
             tile_ref = tile[1]
-            grass.debug(query_url, 2)
+            gs.debug(query_url, 2)
             try:
                 wms_data = self._fetchDataFromServer(
                     query_url, self.params["username"], self.params["password"]
                 )
             except (OSError, HTTPException) as e:
                 if isinstance(e, HTTPError) and e.code == 401:
-                    grass.fatal(
+                    gs.fatal(
                         _("Authorization failed to '%s' when fetching data.\n%s")
                         % (self.params["url"], str(e))
                     )
                 else:
-                    grass.fatal(
+                    gs.fatal(
                         _("Unable to fetch data from: '%s'\n%s")
                         % (self.params["url"], str(e))
                     )
@@ -145,7 +140,7 @@ class WMSDrv(WMSBase):
                     elif fetch_try == 2:
                         sleep_time = 30
 
-                    grass.warning(
+                    gs.warning(
                         _(
                             "Server refused to send data for a tile.\nRequest will be "
                             "repeated after %d s."
@@ -155,8 +150,7 @@ class WMSDrv(WMSBase):
 
                     sleep(sleep_time)
                     continue
-                else:
-                    grass.fatal(_("Unable to write data into tempfile.\n%s") % str(e))
+                gs.fatal(_("Unable to write data into tempfile.\n%s") % str(e))
             finally:
                 temp_tile_opened.close()
 
@@ -169,18 +163,18 @@ class WMSDrv(WMSBase):
                     error_xml_opened = open(temp_tile, "rb")
                     err_str = error_xml_opened.read()
                 except OSError as e:
-                    grass.fatal(_("Unable to read data from tempfile.\n%s") % str(e))
+                    gs.fatal(_("Unable to read data from tempfile.\n%s") % str(e))
                 finally:
                     error_xml_opened.close()
 
                 if err_str is not None:
-                    grass.fatal(_("WMS server error: %s") % err_str)
+                    gs.fatal(_("WMS server error: %s") % err_str)
                 else:
-                    grass.fatal(_("WMS server unknown error"))
+                    gs.fatal(_("WMS server unknown error"))
 
             temp_tile_pct2rgb = None
             if tile_dataset_info.RasterCount < 1:
-                grass.fatal(
+                gs.fatal(
                     _(
                         "WMS server error: no band(s) received. Is server URL correct? "
                         "<%s>"
@@ -207,7 +201,7 @@ class WMSDrv(WMSBase):
                     gdal.DCAP_CREATE not in metadata
                     or metadata[gdal.DCAP_CREATE] == "NO"
                 ):
-                    grass.fatal(
+                    gs.fatal(
                         _("Driver %s does not supports Create() method")
                         % self.gdal_drv_format
                     )
@@ -241,13 +235,13 @@ class WMSDrv(WMSBase):
 
             tile_dataset = None
             tile_dataset_info = None
-            grass.try_remove(temp_tile)
-            grass.try_remove(temp_tile_pct2rgb)
+            gs.try_remove(temp_tile)
+            gs.try_remove(temp_tile_pct2rgb)
 
         if not temp_map:
             return temp_map
         # georeferencing and setting projection of temp_map
-        projection = grass.read_command(
+        projection = gs.read_command(
             "g.proj", flags="wf", epsg=GetEpsg(self.params["srs"])
         )
         projection = projection.rstrip("\n")
@@ -286,16 +280,16 @@ class WMSDrv(WMSBase):
         # open source file
         src_ds = gdal.Open(src_filename)
         if src_ds is None:
-            grass.fatal(_("Unable to open %s " % src_filename))
+            gs.fatal(_("Unable to open %s ") % src_filename)
 
         src_band = src_ds.GetRasterBand(band_number)
 
         # Build color table
         lookup = [
-            Numeric.arrayrange(256),
-            Numeric.arrayrange(256),
-            Numeric.arrayrange(256),
-            Numeric.ones(256) * 255,
+            np.arange(256),
+            np.arange(256),
+            np.arange(256),
+            np.ones(256) * 255,
         ]
 
         ct = src_band.GetRasterColorTable()
@@ -318,7 +312,7 @@ class WMSDrv(WMSBase):
             for iBand in range(out_bands):
                 band_lookup = lookup[iBand]
 
-                dst_data = Numeric.take(band_lookup, src_data)
+                dst_data = np.take(band_lookup, src_data)
                 tif_ds.GetRasterBand(iBand + 1).WriteArray(dst_data, 0, iY)
 
         return tif_ds
@@ -335,18 +329,18 @@ class BaseRequestMgr:
         # request data bbox specified in row and col number
         self.t_num_bbox = {}
 
-        self.t_num_bbox["min_col"] = int(
-            floor((bbox["minx"] - tl_corner["minx"]) / tile_span["x"] + epsilon)
+        self.t_num_bbox["min_col"] = floor(
+            (bbox["minx"] - tl_corner["minx"]) / tile_span["x"] + epsilon
         )
-        self.t_num_bbox["max_col"] = int(
-            floor((bbox["maxx"] - tl_corner["minx"]) / tile_span["x"] - epsilon)
+        self.t_num_bbox["max_col"] = floor(
+            (bbox["maxx"] - tl_corner["minx"]) / tile_span["x"] - epsilon
         )
 
-        self.t_num_bbox["min_row"] = int(
-            floor((tl_corner["maxy"] - bbox["maxy"]) / tile_span["y"] + epsilon)
+        self.t_num_bbox["min_row"] = floor(
+            (tl_corner["maxy"] - bbox["maxy"]) / tile_span["y"] + epsilon
         )
-        self.t_num_bbox["max_row"] = int(
-            floor((tl_corner["maxy"] - bbox["miny"]) / tile_span["y"] - epsilon)
+        self.t_num_bbox["max_row"] = floor(
+            (tl_corner["maxy"] - bbox["miny"]) / tile_span["y"] - epsilon
         )
 
         # Does required bbox intersects bbox of data available on server?
@@ -363,7 +357,7 @@ class BaseRequestMgr:
                     self.intersects = True
 
         if not self.intersects:
-            grass.warning(_("Region is out of server data extend."))
+            gs.warning(_("Region is out of server data extend."))
             self.map_region = None
             return
 
@@ -380,7 +374,7 @@ class BaseRequestMgr:
         if self.t_num_bbox["max_row"] > (mat_num_bbox["max_row"]):
             self.t_num_bbox["max_row"] = int(mat_num_bbox["max_row"])
 
-        grass.debug(
+        gs.debug(
             "t_num_bbox: min_col:%d max_col:%d min_row:%d max_row:%d"
             % (
                 self.t_num_bbox["min_col"],
@@ -394,7 +388,7 @@ class BaseRequestMgr:
         num_tiles = (self.t_num_bbox["max_col"] - self.t_num_bbox["min_col"] + 1) * (
             self.t_num_bbox["max_row"] - self.t_num_bbox["min_row"] + 1
         )
-        grass.message(
+        gs.message(
             _("Fetching %d tiles with %d x %d pixel size per tile...")
             % (num_tiles, tile_size["x"], tile_size["y"])
         )
@@ -439,11 +433,11 @@ class BaseRequestMgr:
 
         self.tile_ref = {"sizeX": tile_size["x"], "sizeY": tile_size["y"]}
 
-    def _isGeoProj(self, proj):
+    def _isGeoProj(self, proj) -> bool:
         """!Is it geographic projection?"""
-        if proj.find("+proj=latlong") != -1 or proj.find("+proj=longlat") != -1:
-            return True
-        return False
+        return bool(
+            proj.find("+proj=latlong") != -1 or proj.find("+proj=longlat") != -1
+        )
 
 
 class WMSRequestMgr(BaseRequestMgr):
@@ -494,7 +488,7 @@ class WMSRequestMgr(BaseRequestMgr):
         self.last_tile_x = False
         if self.last_tile_x_size != 0:
             self.last_tile_x = True
-            self.num_tiles_x = self.num_tiles_x + 1
+            self.num_tiles_x += 1
 
         self.num_tiles_y = rows // self.tile_rows
         self.last_tile_y_size = rows % self.tile_rows
@@ -507,7 +501,7 @@ class WMSRequestMgr(BaseRequestMgr):
         self.last_tile_y = False
         if self.last_tile_y_size != 0:
             self.last_tile_y = True
-            self.num_tiles_y = self.num_tiles_y + 1
+            self.num_tiles_y += 1
 
         self.tile_bbox = dict(self.bbox)
         self.tile_bbox["maxx"] = self.bbox["minx"] + self.tile_length_x
@@ -585,9 +579,9 @@ class WMSRequestMgr(BaseRequestMgr):
         projection is geographic, the bbox x and y are in most cases flipped.
         """
         # CRS:84 and CRS:83 are exception (CRS:83 and CRS:27 need to be tested)
-        if srs_param in [84, 83] or version != "1.3.0":
+        if srs_param in {84, 83} or version != "1.3.0":
             return bbox
-        elif Srs(GetSRSParamVal(srs_param)).axisorder == "yx":
+        if Srs(GetSRSParamVal(srs_param)).axisorder == "yx":
             return self._flipBbox(bbox)
 
         return bbox
@@ -628,7 +622,7 @@ class WMTSRequestMgr(BaseRequestMgr):
             # invalid elements are removed
             cap_tree = WMTSCapabilitiesTree(cap_file)
         except ParseError as error:
-            grass.fatal(_("Unable to parse tile service file.\n%s\n") % str(error))
+            gs.fatal(_("Unable to parse tile service file.\n%s\n") % str(error))
         self.xml_ns = cap_tree.getxmlnshandler()
 
         root = cap_tree.getroot()
@@ -676,7 +670,7 @@ class WMTSRequestMgr(BaseRequestMgr):
                 break
 
         if ch_layer is None:
-            grass.fatal(_("Layer '%s' was not found in capabilities file") % layer_name)
+            gs.fatal(_("Layer '%s' was not found in capabilities file") % layer_name)
 
         mat_set_links = ch_layer.findall(self.xml_ns.NsWmts("TileMatrixSetLink"))
 
@@ -694,7 +688,7 @@ class WMTSRequestMgr(BaseRequestMgr):
                     suitable_mat_sets.append([mat_set, link])
 
         if not suitable_mat_sets:
-            grass.fatal(
+            gs.fatal(
                 _("Layer '%s' is not available with %s code.")
                 % (layer_name, "EPSG:" + str(srs))
             )
@@ -708,17 +702,17 @@ class WMTSRequestMgr(BaseRequestMgr):
         """!Find best tile matrix set for requested resolution."""
         scale_dens = []
 
-        scale_dens.append(
-            (bbox["maxy"] - bbox["miny"])
-            / region["rows"]
-            * self._getMetersPerUnit()
-            / self.pixel_size
-        )
-        scale_dens.append(
-            (bbox["maxx"] - bbox["minx"])
-            / region["cols"]
-            * self._getMetersPerUnit()
-            / self.pixel_size
+        scale_dens.extend(
+            (
+                (bbox["maxy"] - bbox["miny"])
+                / region["rows"]
+                * self._getMetersPerUnit()
+                / self.pixel_size,
+                (bbox["maxx"] - bbox["minx"])
+                / region["cols"]
+                * self._getMetersPerUnit()
+                / self.pixel_size,
+            )
         )
 
         scale_den = min(scale_dens)
@@ -736,9 +730,7 @@ class WMTSRequestMgr(BaseRequestMgr):
 
             best_diff = best_scale_den - scale_den
             mat_diff = mat_scale_den - scale_den
-            if (best_diff < mat_diff and mat_diff < 0) or (
-                best_diff > mat_diff and best_diff > 0
-            ):
+            if (best_diff < mat_diff < 0) or (best_diff > mat_diff and best_diff > 0):
                 best_t_mat = t_mat
                 best_scale_den = mat_scale_den
 
@@ -815,8 +807,8 @@ class WMTSRequestMgr(BaseRequestMgr):
 
                     mat_num_bbox[i[0]] = int(i_tag.text)
 
-                    if i[0] in ("max_row", "max_col"):
-                        mat_num_bbox[i[0]] = mat_num_bbox[i[0]] - 1
+                    if i[0] in {"max_row", "max_col"}:
+                        mat_num_bbox[i[0]] -= 1
 
                 break
         return mat_num_bbox
@@ -840,14 +832,14 @@ class WMTSRequestMgr(BaseRequestMgr):
         )  # NOTE not used params['srs'], it is just number, encoding needed
         # TODO needs to be tested, tried only on
         # http://www.landesvermessung.sachsen.de/geoserver/gwc/service/wmts?:
-        if s.getcode() == "EPSG:4326" and s.encoding in ("uri", "urn"):
-            grass.warning("switch")
+        if s.getcode() == "EPSG:4326" and s.encoding in {"uri", "urn"}:
+            gs.warning("switch")
             (tl_corner["minx"], tl_corner["maxy"]) = (
                 tl_corner["maxy"],
                 tl_corner["minx"],
             )
         else:
-            grass.warning("no switch")
+            gs.warning("no switch")
 
         tile_span = {}
         self.tile_size = {}
@@ -909,7 +901,7 @@ class OnEarthRequestMgr(BaseRequestMgr):
             # invalid elements are removed
             self.cap_tree = OnEarthCapabilitiesTree(tile_service)
         except ParseError as error:
-            grass.fatal(_("Unable to parse tile service file.\n%s\n") % str(error))
+            gs.fatal(_("Unable to parse tile service file.\n%s\n") % str(error))
 
         root = self.cap_tree.getroot()
 
@@ -932,7 +924,7 @@ class OnEarthRequestMgr(BaseRequestMgr):
         tiled_patterns = root.find("TiledPatterns")
         tile_groups = self._getAllTiledGroup(tiled_patterns)
         if not tile_groups:
-            grass.fatal(
+            gs.fatal(
                 _("Unable to parse tile service file. \n No tag '%s' was found.")
                 % "TiledGroup"
             )
@@ -945,7 +937,7 @@ class OnEarthRequestMgr(BaseRequestMgr):
                 break
 
         if req_group is None:
-            grass.fatal(
+            gs.fatal(
                 _("Tiled group '%s' was not found in tile service file")
                 % params["layers"]
             )
@@ -997,10 +989,7 @@ class OnEarthRequestMgr(BaseRequestMgr):
         res["y"] = (bbox["maxy"] - bbox["miny"]) / region["rows"]
         res["x"] = (bbox["maxx"] - bbox["minx"]) / region["cols"]
 
-        if res["x"] < res["y"]:
-            comp_res = "x"
-        else:
-            comp_res = "y"
+        comp_res = "x" if res["x"] < res["y"] else "y"
 
         t_res = {}
         best_patt = None
@@ -1020,9 +1009,7 @@ class OnEarthRequestMgr(BaseRequestMgr):
             best_diff = best_res - res[comp_res]
             tile_diff = t_res[comp_res] - res[comp_res]
 
-            if (best_diff < tile_diff and tile_diff < 0) or (
-                best_diff > tile_diff and best_diff > 0
-            ):
+            if (best_diff < tile_diff < 0) or (best_diff > tile_diff and best_diff > 0):
                 best_res = t_res[comp_res]
                 best_patt = pattern
 
@@ -1041,7 +1028,7 @@ class OnEarthRequestMgr(BaseRequestMgr):
             try:
                 k, v = param.split("=")
             except ValueError:
-                grass.warning(
+                gs.warning(
                     _(
                         "Wrong form of parameter '%s' in '%s'. \n \
                                  The parameter was ignored."
@@ -1067,13 +1054,13 @@ class OnEarthRequestMgr(BaseRequestMgr):
                     break
 
             if not has_time_var:
-                grass.warning(
+                gs.warning(
                     _("Parameter '%s' in '%s' is not variable in tile pattern url.")
                     % (k, "urlparams")
                 )
 
         if not_sup_params:
-            grass.warning(
+            gs.warning(
                 _(
                     "%s driver supports only '%s' parameter in '%s'. Other parameters "
                     "are ignored."

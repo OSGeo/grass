@@ -133,13 +133,11 @@ class Bbox:
 
         """
         return bool(
-            libvect.Vect_point_in_box(
-                point.x, point.y, point.z if point.z else 0, self.c_bbox
-            )
+            libvect.Vect_point_in_box(point.x, point.y, point.z or 0, self.c_bbox)
         )
 
     def items(self):
-        return [(k, self.__getattribute__(k)) for k in self.keys()]
+        return [(k, getattr(self, k)) for k in self.keys()]
 
     def nsewtb(self, tb=True):
         """Return a list of values from bounding box
@@ -151,8 +149,7 @@ class Bbox:
         """
         if tb:
             return (self.north, self.south, self.east, self.west, self.top, self.bottom)
-        else:
-            return (self.north, self.south, self.east, self.west)
+        return (self.north, self.south, self.east, self.west)
 
 
 class BoxList:
@@ -217,7 +214,7 @@ class BoxList:
         3
 
         """
-        indx = self.__len__()
+        indx = len(self)
         libvect.Vect_boxlist_append(self.c_boxlist, indx, box.c_bbox)
 
     #    def extend(self, boxlist):
@@ -310,18 +307,19 @@ class Ilist:
                 self.c_ilist.contents.value[indx]
                 for indx in range(*key.indices(len(self)))
             ]
-        elif isinstance(key, int):
+        if isinstance(key, int):
             if key < 0:  # Handle negative indices
                 key += self.c_ilist.contents.n_values
             if key >= self.c_ilist.contents.n_values:
-                raise IndexError("Index out of range")
+                msg = "Index out of range"
+                raise IndexError(msg)
             return self.c_ilist.contents.value[key]
-        else:
-            raise ValueError("Invalid argument type: %r." % key)
+        raise ValueError("Invalid argument type: %r." % key)
 
     def __setitem__(self, key, value):
         if self.contains(value):
-            raise ValueError("Integer already in the list")
+            msg = "Integer already in the list"
+            raise ValueError(msg)
         self.c_ilist.contents.value[key] = int(value)
 
     def __len__(self):
@@ -331,7 +329,7 @@ class Ilist:
         return (self.c_ilist.contents.value[i] for i in range(self.__len__()))
 
     def __repr__(self):
-        return "Ilist(%r)" % [i for i in self.__iter__()]
+        return "Ilist(%r)" % list(self.__iter__())
 
     def __contains__(self, item):
         return item in self.__iter__()
@@ -424,7 +422,7 @@ class Cats:
         return self.c_cats.contents.n_cats
 
     def __init__(self, c_cats=None):
-        self.c_cats = c_cats if c_cats else ctypes.pointer(libvect.line_cats())
+        self.c_cats = c_cats or ctypes.pointer(libvect.line_cats())
 
     def reset(self):
         """Reset the C cats struct from previous values."""
@@ -463,8 +461,7 @@ class Cats:
         """
         if cat:
             self.n_del = libvect.Vect_field_cat_del(self.c_cats, layer, cat)
-            err_msg = "Layer(%d)/category(%d) number does not exist"
-            err_msg = err_msg % (layer, cat)
+            err_msg = "Layer(%d)/category(%d) number does not exist" % (layer, cat)
         else:
             self.n_del = libvect.Vect_cat_del(self.c_cats, layer)
             err_msg = "Layer: %r does not exist" % layer
@@ -541,9 +538,7 @@ class CatsList:
         return [max_values[i] for i in range(self.n_ranges)]
 
     def __init__(self, c_cat_list=None):
-        self.c_cat_list = (
-            c_cat_list if c_cat_list else ctypes.pointer(libvect.cat_list())
-        )
+        self.c_cat_list = c_cat_list or ctypes.pointer(libvect.cat_list())
 
     def from_string(self, string):
         """Converts string of categories and cat ranges separated by commas

@@ -47,7 +47,7 @@ class MeanSigmaTestCase(TestCase):
         self.assertModule("r.surf.gauss", output=self.output)
         self.assertRasterFitsUnivar(
             self.output,
-            reference=dict(mean=-0.044860, stddev=1.019485),
+            reference={"mean": -0.044860, "stddev": 1.019485},
             precision=1e-6,
         )
 
@@ -64,7 +64,7 @@ class MeanSigmaTestCase(TestCase):
         self.assertRasterExists(self.output, msg="Output was not created")
         self.assertRasterFitsUnivar(
             self.output,
-            reference=dict(mean=2.739812, stddev=5.913014),
+            reference={"mean": 2.739812, "stddev": 5.913014},
             precision=1e-6,
         )
 
@@ -82,7 +82,7 @@ class MeanSigmaTestCase(TestCase):
         self.assertRasterExists(self.output, msg="Output was not created")
         self.assertRasterFitsUnivar(
             self.output,
-            reference=dict(mean=3.183532, stddev=6.050756),
+            reference={"mean": 3.183532, "stddev": 6.050756},
             precision=1e-6,
         )
 

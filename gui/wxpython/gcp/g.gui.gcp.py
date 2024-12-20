@@ -29,14 +29,14 @@
 # %end
 
 """
-Module to run GCP management tool as stadalone application.
+Module to run GCP management tool as standalone application.
 
 @author Vaclav Petras  <wenzeslaus gmail.com> (standalone module)
 """
 
 import os
 
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
@@ -45,7 +45,7 @@ def main():
     .. todo::
         use command line options as an alternative to wizard
     """
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
 
     import wx
 
@@ -65,7 +65,7 @@ def main():
 
     app = wx.App()
 
-    wizard = GCPWizard(parent=None, giface=StandaloneGrassInterface())
+    GCPWizard(parent=None, giface=StandaloneGrassInterface())
 
     app.MainLoop()
 

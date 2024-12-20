@@ -1,28 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-<title>GRASS-MySQL embedded driver - GRASS GIS manual</title>
- <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
- <link rel="stylesheet" href="grassdocs.css" type="text/css">
- <meta http-equiv="content-language" content="en-us">
- <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body bgcolor="white">
-
-<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
-
 <!-- meta page description: MySQL embedded driver -->
-<h1>MySQL embedded driver in GRASS</h1>
 
-<h2>KEYWORDS</h2>
-
-database, attribute table, driver
-
-<h2>DESCRIPTION</h2>
-
-MySQL database driver in GRASS enables GRASS to store vector
-attributes in MySQL embedded database without necessity
-to run MySQL server.
+MySQL database driver enables GRASS to store vector attributes
+in MySQL embedded database without necessity to run MySQL server.
 
 <h2>Driver and database name</h2>
 
@@ -35,9 +14,9 @@ a directory in the mapset. The directory must be created
 before use of the driver. In the name of database
 it is possible to use 3 variables:
 <ul>
-  <li> $GISDBASE - path to current GISBASE
-  <li> $LOCATION_NAME - name of current location
-  <li> $MAPSET - name of current mapset
+  <li> $GISDBASE - path to current GISBASE</li>
+  <li> $LOCATION_NAME - name of current location</li>
+  <li> $MAPSET - name of current mapset</li>
 </ul>
 
 <p>
@@ -68,14 +47,7 @@ option to avoid warning about missing
 
 Attempting to use a reserved SQL word as column or table name will result
 in a "SQL syntax" error. The list of reserved words for MySQL can be
-found in the <a href="http://dev.mysql.com/doc/refman/5.7/en/reserved-words.html#table-reserved-words-5.7.4">MySQL manual</a>.
-
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="db.connect.html">db.connect</a>,
-<a href="sql.html">SQL support in GRASS GIS</a>
-</em>
+found in the <a href="https://dev.mysql.com/doc/refman/8.4/en/keywords.html#keywords-in-current-series">MySQL manual</a>.
 
 <h2>AUTHOR</h2>
 
@@ -83,12 +55,12 @@ Radim Blazek
 
 <p>
 Credits: Development of the driver was sponsored by
-<a href="http://www.faunalia.it">Faunalia</a> (Italy)
-as part of a project for <a href="http://www.atac.roma.it/">ATAC</a>.
+<a href="https://www.faunalia.it">Faunalia</a> (Italy)
+as part of a project for <a href="https://www.atac.roma.it/">ATAC</a>.
 
+<h2>SEE ALSO</h2>
 
-<hr class="header">
-<p><a href="index.html">Main index</a> - <a href="database.html">Database index</a> - <a href="topics.html">Topics index</a> - <a href="keywords.html">Keywords Index</a> - <a href="full_index.html">Full index</a></p>
-<p>&copy; 2003-2022 <a href="https://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS 8 Reference Manual</p>
-</body>
-</html>
+<em>
+<a href="db.connect.html">db.connect</a>,
+<a href="sql.html">SQL support in GRASS GIS</a>
+</em>

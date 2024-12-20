@@ -42,6 +42,8 @@ int scan_attr(struct Map_info *Map, int layer, const char *column_name,
                                  &cvarr);
     if (nrec < 1) {
         G_important_message(_("No data selected"));
+        Vect_destroy_field_info(fi);
+        db_close_database(driver);
         return 0;
     }
 
@@ -100,6 +102,7 @@ int scan_attr(struct Map_info *Map, int layer, const char *column_name,
     }
 
     db_close_database(driver);
+    Vect_destroy_field_info(fi);
 
     return is_fp;
 }

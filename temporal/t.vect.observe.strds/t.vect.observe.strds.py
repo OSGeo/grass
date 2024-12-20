@@ -54,7 +54,7 @@
 # %option G_OPT_DB_WHERE
 # %end
 
-import grass.script as grass
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 ############################################################################
@@ -92,17 +92,17 @@ def main():
     where = options["where"]
     columns = options["columns"]
 
-    if where == "" or where == " " or where == "\n":
+    if where in {"", " ", "\n"}:
         where = None
 
-    overwrite = grass.overwrite()
+    overwrite = gs.overwrite()
 
     # Check the number of sample strds and the number of columns
     strds_names = strds.split(",")
     column_names = columns.split(",")
 
     if len(strds_names) != len(column_names):
-        grass.fatal(
+        gs.fatal(
             _(
                 "The number of columns must be equal to the number of space time "
                 "raster datasets"
@@ -115,7 +115,7 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    mapset = grass.gisenv()["MAPSET"]
+    mapset = gs.gisenv()["MAPSET"]
 
     out_sp = tgis.check_new_stds(output, "stvds", dbif, overwrite)
 
@@ -131,7 +131,7 @@ def main():
 
         if not rows:
             dbif.close()
-            grass.fatal(_("Space time raster dataset <%s> is empty") % out_sp.get_id())
+            gs.fatal(_("Space time raster dataset <%s> is empty") % out_sp.get_id())
 
         for row in rows:
             start = row["start_time"]
@@ -147,18 +147,18 @@ def main():
         for name in strds_names[1:]:
             dataset = tgis.open_old_stds(name, "strds", dbif)
             if dataset.get_temporal_type() != first_strds.get_temporal_type():
-                grass.fatal(
+                gs.fatal(
                     _(
                         "Temporal type of space time raster datasets must be equal\n"
                         "<%(a)s> of type %(type_a)s do not match <%(b)s> of type "
                         "%(type_b)s"
-                        % {
-                            "a": first_strds.get_id(),
-                            "type_a": first_strds.get_temporal_type(),
-                            "b": dataset.get_id(),
-                            "type_b": dataset.get_temporal_type(),
-                        }
                     )
+                    % {
+                        "a": first_strds.get_id(),
+                        "type_a": first_strds.get_temporal_type(),
+                        "b": dataset.get_id(),
+                        "type_b": dataset.get_temporal_type(),
+                    }
                 )
 
         mapmatrizes = tgis.sample_stds_by_stds_topology(
@@ -185,8 +185,7 @@ def main():
                     if name is None:
                         isvalid = False
                         break
-                    else:
-                        mapname_list.append(name)
+                    mapname_list.append(name)
 
             if isvalid:
                 entry = mapmatrizes[0][i]
@@ -199,14 +198,11 @@ def main():
     num_samples = len(samples)
 
     # Get the layer and database connections of the input vector
-    vector_db = grass.vector.vector_db(input)
+    vector_db = gs.vector.vector_db(input)
 
     # We copy the vector table and create the new layers
-    if vector_db:
-        # Use the first layer to copy the categories from
-        layers = "1,"
-    else:
-        layers = ""
+    # If vector_db, use the first layer to copy the categories from
+    layers = "1," if vector_db else ""
     first = True
     for layer in range(num_samples):
         layer += 1
@@ -223,7 +219,7 @@ def main():
 
     # We create a new vector map using the categories of the original map
     try:
-        grass.run_command(
+        gs.run_command(
             "v.category",
             input=input,
             layer=layers,
@@ -232,11 +228,11 @@ def main():
             overwrite=overwrite,
         )
     except CalledModuleError:
-        grass.fatal(_("Unable to create new layers for vector map <%s>") % (vectmap))
+        gs.fatal(_("Unable to create new layers for vector map <%s>") % (vectmap))
 
     title = _("Observaion of space time raster dataset(s) <%s>") % (strds)
     description = _(
-        "Observation of space time raster dataset(s) <%s>" " with vector map <%s>"
+        "Observation of space time raster dataset(s) <%s> with vector map <%s>"
     ) % (strds, input)
 
     # Create the output space time vector dataset
@@ -260,7 +256,7 @@ def main():
         raster_names = sample.raster_names
 
         if len(raster_names) != len(column_names):
-            grass.fatal(
+            gs.fatal(
                 _(
                     "The number of raster maps in a granule must "
                     "be equal to the number of column names"
@@ -287,7 +283,7 @@ def main():
         # Try to add a column
         if vector_db and count in vector_db and vector_db[count]["table"]:
             try:
-                grass.run_command(
+                gs.run_command(
                     "v.db.addcolumn",
                     map=vectmap,
                     layer=count,
@@ -296,15 +292,15 @@ def main():
                 )
             except CalledModuleError:
                 dbif.close()
-                grass.fatal(
-                    _("Unable to add column %s to vector map <%s> " "with layer %i")
+                gs.fatal(
+                    _("Unable to add column %s to vector map <%s> with layer %i")
                     % (columns_string, vectmap, count)
                 )
         else:
             # Try to add a new table
-            grass.message("Add table to layer %i" % (count))
+            gs.message("Add table to layer %i" % (count))
             try:
-                grass.run_command(
+                gs.run_command(
                     "v.db.addtable",
                     map=vectmap,
                     layer=count,
@@ -313,15 +309,15 @@ def main():
                 )
             except CalledModuleError:
                 dbif.close()
-                grass.fatal(
-                    _("Unable to add table to vector map " "<%s> with layer %i")
+                gs.fatal(
+                    _("Unable to add table to vector map <%s> with layer %i")
                     % (vectmap, count)
                 )
 
         # Call v.what.rast for each raster map
         for name, column in zip(raster_names, column_names):
             try:
-                grass.run_command(
+                gs.run_command(
                     "v.what.rast",
                     map=vectmap,
                     layer=count,
@@ -331,7 +327,7 @@ def main():
                 )
             except CalledModuleError:
                 dbif.close()
-                grass.fatal(
+                gs.fatal(
                     _(
                         "Unable to run v.what.rast for vector map <%s> "
                         "with layer %i and raster map <%s>"
@@ -363,5 +359,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

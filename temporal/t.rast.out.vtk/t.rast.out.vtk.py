@@ -73,7 +73,8 @@
 # %end
 
 import os
-import grass.script as grass
+
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 ############################################################################
@@ -97,7 +98,7 @@ def main():
     tgis.init()
 
     if not os.path.exists(expdir):
-        grass.fatal(_("Export directory <%s> not found.") % expdir)
+        gs.fatal(_("Export directory <%s> not found.") % expdir)
 
     os.chdir(expdir)
 
@@ -108,7 +109,7 @@ def main():
         maps = sp.get_registered_maps_as_objects_by_granularity()
         # Create a NULL map in case of granularity support
         null_map = "temporary_null_map_%i" % os.getpid()
-        grass.mapcalc("%s = null()" % (null_map))
+        gs.mapcalc("%s = null()" % (null_map))
     else:
         maps = sp.get_registered_maps_as_objects(where, "start_time", None)
 
@@ -128,7 +129,7 @@ def main():
             if id is None:
                 id = null_map
 
-            grass.run_command("g.copy", raster="%s,%s" % (id, map_name), overwrite=True)
+            gs.run_command("g.copy", raster="%s,%s" % (id, map_name), overwrite=True)
             out_name = "%6.6i_%s.vtk" % (count, sp.base.get_name())
 
             mflags = ""
@@ -140,34 +141,34 @@ def main():
             # Export the raster map with r.out.vtk
             try:
                 if elevation:
-                    grass.run_command(
+                    gs.run_command(
                         "r.out.vtk",
                         flags=mflags,
                         null=null,
                         input=map_name,
                         elevation=elevation,
                         output=out_name,
-                        overwrite=grass.overwrite(),
+                        overwrite=gs.overwrite(),
                     )
                 else:
-                    grass.run_command(
+                    gs.run_command(
                         "r.out.vtk",
                         flags=mflags,
                         null=null,
                         input=map_name,
                         output=out_name,
-                        overwrite=grass.overwrite(),
+                        overwrite=gs.overwrite(),
                     )
             except CalledModuleError:
-                grass.fatal(_("Unable to export raster map <%s>" % map_name))
+                gs.fatal(_("Unable to export raster map <%s>") % map_name)
 
             count += 1
 
     if use_granularity:
-        grass.run_command("g.remove", flags="f", type="raster", name=null_map)
-    grass.run_command("g.remove", flags="f", type="raster", name=map_name)
+        gs.run_command("g.remove", flags="f", type="raster", name=null_map)
+    gs.run_command("g.remove", flags="f", type="raster", name=map_name)
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

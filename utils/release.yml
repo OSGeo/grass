@@ -34,7 +34,7 @@ notes:
       example: 'win:'
 
     - title: Packaging, Configuration, Portability, and Compilation
-      regexp: '(packaging|pkg|rpm|deb|pkg-config|configure|config|[Mm]ake|build): '
+      regexp: '(packaging|pkg|rpm|deb|nix|pkg-config|configure|config|[Mm]ake|build): '
       example: 'build:'
 
     - title: Docker
