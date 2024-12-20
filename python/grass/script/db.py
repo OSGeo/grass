@@ -18,7 +18,6 @@ for details.
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
-from __future__ import absolute_import
 
 import os
 from .core import (
@@ -37,11 +36,11 @@ def db_describe(table, env=None, **args):
     """Return the list of columns for a database table
     (interface to `db.describe -c`). Example:
 
-    >>> run_command('g.copy', vector='firestations,myfirestations')
+    >>> run_command("g.copy", vector="firestations,myfirestations")
     0
-    >>> db_describe('myfirestations') # doctest: +ELLIPSIS
+    >>> db_describe("myfirestations")  # doctest: +ELLIPSIS
     {'nrows': 71, 'cols': [['cat', 'INTEGER', '20'], ... 'ncols': 22}
-    >>> run_command('g.remove', flags='f', type='vector', name='myfirestations')
+    >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
     0
 
     :param str table: table name
@@ -56,7 +55,7 @@ def db_describe(table, env=None, **args):
         args.pop("driver")
     s = read_command("db.describe", flags="c", table=table, env=env, **args)
     if not s:
-        fatal(_("Unable to describe table <%s>") % table)
+        fatal(_("Unable to describe table <%s>") % table, env=env)
 
     cols = []
     result = {}
@@ -67,7 +66,7 @@ def db_describe(table, env=None, **args):
         if key.startswith("Column "):
             n = int(key.split(" ")[1])
             cols.insert(n, f[1:])
-        elif key in ["ncols", "nrows"]:
+        elif key in {"ncols", "nrows"}:
             result[key] = int(f[1])
         else:
             result[key] = f[1:]
@@ -82,11 +81,11 @@ def db_table_exist(table, env=None, **args):
     If no driver or database are given, then default settings is used
     (check db_connection()).
 
-    >>> run_command('g.copy', vector='firestations,myfirestations')
+    >>> run_command("g.copy", vector="firestations,myfirestations")
     0
-    >>> db_table_exist('myfirestations')
+    >>> db_table_exist("myfirestations")
     True
-    >>> run_command('g.remove', flags='f', type='vector', name='myfirestations')
+    >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
     0
 
     :param str table: table name
@@ -126,7 +125,7 @@ def db_connection(force=False, env=None):
     :param env: environment
 
     :return: parsed output of db.connect
-    """
+    """  # noqa: E501
     try:
         nuldev = open(os.devnull, "w")
         conn = parse_command("db.connect", flags="g", stderr=nuldev, env=env)
@@ -149,16 +148,16 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
 
     Examples:
 
-    >>> run_command('g.copy', vector='firestations,myfirestations')
+    >>> run_command("g.copy", vector="firestations,myfirestations")
     0
-    >>> db_select(sql = 'SELECT cat,CITY FROM myfirestations WHERE cat < 4')
+    >>> db_select(sql="SELECT cat,CITY FROM myfirestations WHERE cat < 4")
     (('1', 'Morrisville'), ('2', 'Morrisville'), ('3', 'Apex'))
 
     Simplyfied usage (it performs <tt>SELECT * FROM myfirestations</tt>.)
 
-    >>> db_select(table = 'myfirestations') # doctest: +ELLIPSIS
+    >>> db_select(table="myfirestations")  # doctest: +ELLIPSIS
     (('1', '24', 'Morrisville #3', ... 'HS2A', '1.37'))
-    >>> run_command('g.remove', flags='f', type='vector', name='myfirestations')
+    >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
     0
 
     :param str sql: SQL statement to perform (or None)
@@ -177,9 +176,11 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
     else:
         fatal(
             _(
-                "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
+                "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be \
+                    provided"
             )
-            % {"sql": "sql", "filename": "filename", "table": "table"}
+            % {"sql": "sql", "filename": "filename", "table": "table"},
+            env=env,
         )
 
     if "sep" not in args:
@@ -188,10 +189,10 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
     try:
         run_command("db.select", quiet=True, flags="c", output=fname, env=env, **args)
     except CalledModuleError:
-        fatal(_("Fetching data failed"))
+        fatal(_("Fetching data failed"), env=env)
 
     ofile = open(fname)
-    result = [tuple(x.rstrip(os.linesep).split(args["sep"])) for x in ofile.readlines()]
+    result = [tuple(x.rstrip(os.linesep).split(args["sep"])) for x in ofile]
     ofile.close()
     try_remove(fname)
 
@@ -204,12 +205,12 @@ def db_table_in_vector(table, mapset=".", env=None):
     name could be used also in other mapset by other vector.
     It returns None if no vectors are connected to the table.
 
-    >>> run_command('g.copy', vector='firestations,myfirestations')
+    >>> run_command("g.copy", vector="firestations,myfirestations")
     0
-    >>> db_table_in_vector('myfirestations')
+    >>> db_table_in_vector("myfirestations")
     ['myfirestations@user1']
-    >>> db_table_in_vector('mfirestations')
-    >>> run_command('g.remove', flags='f', type='vector', name='myfirestations')
+    >>> db_table_in_vector("mfirestations")
+    >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
     0
 
     :param str table: name of table to query
@@ -229,8 +230,7 @@ def db_table_in_vector(table, mapset=".", env=None):
                 break
     if len(used) > 0:
         return used
-    else:
-        return None
+    return None
 
 
 def db_begin_transaction(driver):
@@ -238,7 +238,7 @@ def db_begin_transaction(driver):
 
     :return: SQL command as string
     """
-    if driver in ("sqlite", "pg"):
+    if driver in {"sqlite", "pg"}:
         return "BEGIN"
     if driver == "mysql":
         return "START TRANSACTION"
@@ -250,6 +250,6 @@ def db_commit_transaction(driver):
 
     :return: SQL command as string
     """
-    if driver in ("sqlite", "pg", "mysql"):
+    if driver in {"sqlite", "pg", "mysql"}:
         return "COMMIT"
     return ""

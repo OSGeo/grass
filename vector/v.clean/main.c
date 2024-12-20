@@ -127,7 +127,8 @@ int main(int argc, char *argv[])
     opt.thresh->type = TYPE_DOUBLE;
     opt.thresh->required = NO;
     opt.thresh->multiple = YES;
-    opt.thresh->label = _("Threshold in map units, one value for each tool");
+    opt.thresh->label =
+        _("One value for each tool; for threshold units, see each tool");
     opt.thresh->description = _("Default: 0.0[,0.0,...])");
 
     flag.no_build = G_define_flag();

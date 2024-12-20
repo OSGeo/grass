@@ -25,13 +25,9 @@ Internal attributes:
         deletion, (considerably speeds up the cleanup process
         vs. the original code.)
 """
-from __future__ import generators
-import weakref
-from grass.pydispatch import saferef, robustapply, errors
 
-__author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
-__cvsid__ = "Id: dispatcher.py,v 1.1 2010/03/30 15:45:55 mcfletch Exp"
-__version__ = "Revision: 1.1"
+import weakref
+from grass.pydispatch import errors, saferef, robustapply
 
 
 class _Parameter:
@@ -443,8 +439,7 @@ def _removeBackrefs(senderkey):
 
         def allReceivers():
             for signal, set in items:
-                for item in set:
-                    yield item
+                yield from set
 
         for receiver in allReceivers():
             _killBackref(receiver, senderkey)
@@ -470,7 +465,7 @@ def _removeOldBackRefs(senderkey, signal, receiver, receivers):
         found = 0
         signals = connections.get(signal)
         if signals is not None:
-            for sig, recs in connections.get(signal, {}).iteritems():
+            for sig, recs in connections.get(signal, {}).items():
                 if sig != signal:
                     for rec in recs:
                         if rec is oldReceiver:

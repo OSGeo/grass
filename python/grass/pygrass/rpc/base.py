@@ -2,7 +2,7 @@
 Fast and exit-safe interface to PyGRASS Raster and Vector layer
 using multiprocessing
 
-(C) 2015 by the GRASS Development Team
+(C) 2015-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -10,38 +10,50 @@ for details.
 :authors: Soeren Gebbert
 """
 
-from grass.exceptions import FatalError
-import time
-import threading
-import sys
-from multiprocessing import Process, Lock, Pipe
+from __future__ import annotations
+
 import logging
+import sys
+import threading
+import time
+from multiprocessing import Lock, Pipe, Process
+from typing import TYPE_CHECKING, NoReturn
+
+from grass.exceptions import FatalError
+
+if TYPE_CHECKING:
+    from multiprocessing.connection import Connection
+    from multiprocessing.synchronize import _LockLike
+
+
+logger: logging.Logger = logging.getLogger(__name__)
+
 
 ###############################################################################
 
 
-def dummy_server(lock, conn):
+def dummy_server(lock: _LockLike, conn: Connection) -> NoReturn:
     """Dummy server process
 
     :param lock: A multiprocessing.Lock
-    :param conn: A multiprocessing.Pipe
+    :param conn: A multiprocessing.connection.Connection object obtained from
+                 multiprocessing.Pipe
     """
 
     while True:
         # Avoid busy waiting
         conn.poll(None)
         data = conn.recv()
-        lock.acquire()
-        if data[0] == 0:
-            conn.close()
-            lock.release()
-            sys.exit()
-        if data[0] == 1:
-            raise Exception("Server process intentionally killed by exception")
-        lock.release()
+        with lock:
+            if data[0] == 0:
+                conn.close()
+                sys.exit()
+            if data[0] == 1:
+                msg = "Server process intentionally killed by exception"
+                raise Exception(msg)
 
 
-class RPCServerBase(object):
+class RPCServerBase:
     """This is the base class for send and receive RPC server
     It uses a Pipe for IPC.
 
@@ -82,12 +94,12 @@ class RPCServerBase(object):
 
     """
 
-    def __init__(self):
-        self.client_conn = None
-        self.server_conn = None
+    def __init__(self) -> None:
+        self.client_conn: Connection | None = None
+        self.server_conn: Connection | None = None
         self.queue = None
         self.server = None
-        self.checkThread = None
+        self.checkThread: threading.Thread | None = None
         self.threadLock = threading.Lock()
         self.start_server()
         self.start_checker_thread()
@@ -96,10 +108,10 @@ class RPCServerBase(object):
         # logging.basicConfig(level=logging.DEBUG)
 
     def is_server_alive(self):
-        return self.server.is_alive()
+        return self.server.is_alive() if self.server is not None else False
 
     def is_check_thread_alive(self):
-        return self.checkThread.is_alive()
+        return self.checkThread.is_alive() if self.checkThread is not None else False
 
     def start_checker_thread(self):
         if self.checkThread is not None and self.checkThread.is_alive():
@@ -111,25 +123,23 @@ class RPCServerBase(object):
         self.checkThread.start()
 
     def stop_checker_thread(self):
-        self.threadLock.acquire()
-        self.stopThread = True
-        self.threadLock.release()
-        self.checkThread.join(None)
+        with self.threadLock:
+            self.stopThread = True
+        if self.checkThread is not None:
+            self.checkThread.join(None)
 
     def thread_checker(self):
         """Check every 200 micro seconds if the server process is alive"""
         while True:
             time.sleep(0.2)
             self._check_restart_server(caller="Server check thread")
-            self.threadLock.acquire()
-            if self.stopThread is True:
-                self.threadLock.release()
-                return
-            self.threadLock.release()
+            with self.threadLock:
+                if self.stopThread is True:
+                    return
 
     def start_server(self):
         """This function must be re-implemented in the subclasses"""
-        logging.debug("Start the libgis server")
+        logger.debug("Start the libgis server")
 
         self.client_conn, self.server_conn = Pipe(True)
         self.lock = Lock()
@@ -140,37 +150,39 @@ class RPCServerBase(object):
     def check_server(self):
         self._check_restart_server()
 
-    def _check_restart_server(self, caller="main thread"):
+    def _check_restart_server(self, caller="main thread") -> None:
         """Restart the server if it was terminated"""
-        logging.debug("Check libgis server restart")
+        logger.debug("Check libgis server restart")
 
-        self.threadLock.acquire()
-        if self.server.is_alive() is True:
-            self.threadLock.release()
-            return
-        self.client_conn.close()
-        self.server_conn.close()
-        self.start_server()
+        with self.threadLock:
+            if self.server is not None and self.server.is_alive() is True:
+                return
+            if self.client_conn is not None:
+                self.client_conn.close()
+            if self.server_conn is not None:
+                self.server_conn.close()
+            self.start_server()
 
-        if self.stopped is not True:
-            logging.warning(
-                "Needed to restart the libgis server, caller: %s" % (caller)
-            )
+            if self.stopped is not True:
+                logger.warning(
+                    "Needed to restart the libgis server, caller: %(caller)s",
+                    {"caller": caller},
+                )
 
-        self.threadLock.release()
         self.stopped = False
 
     def safe_receive(self, message):
         """Receive the data and throw a FatalError exception in case the server
         process was killed and the pipe was closed by the checker thread"""
-        logging.debug("Receive message: {message}")
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug("Receive message: %s", message)
 
         try:
             ret = self.client_conn.recv()
             if isinstance(ret, FatalError):
                 raise ret
             return ret
-        except (EOFError, IOError, FatalError) as e:
+        except (EOFError, OSError, FatalError) as e:
             # The pipe was closed by the checker thread because
             # the server process was killed
             raise FatalError("Exception raised: " + str(e) + " Message: " + message)
@@ -180,15 +192,16 @@ class RPCServerBase(object):
 
         This method should be called at exit using the package atexit
         """
-        logging.debug("Stop libgis server")
+        logger.debug("Stop libgis server")
 
         self.stop_checker_thread()
         if self.server is not None and self.server.is_alive():
-            self.client_conn.send(
-                [
-                    0,
-                ]
-            )
+            if self.client_conn is not None:
+                self.client_conn.send(
+                    [
+                        0,
+                    ]
+                )
             self.server.terminate()
         if self.client_conn is not None:
             self.client_conn.close()

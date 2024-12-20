@@ -1,5 +1,4 @@
 """Refactored "safe reference" from dispatcher.py"""
-from __future__ import print_function
 
 import weakref
 import traceback
@@ -33,15 +32,13 @@ def safeRef(target, onDelete=None):
                 """but no %s, don't know how """
                 """to create reference""" % (target, im_self, im_func)
             )
-            reference = BoundMethodWeakref(target=target, onDelete=onDelete)
-            return reference
+            return BoundMethodWeakref(target=target, onDelete=onDelete)
     if onDelete is not None:
         return weakref.ref(target, onDelete)
-    else:
-        return weakref.ref(target)
+    return weakref.ref(target)
 
 
-class BoundMethodWeakref(object):
+class BoundMethodWeakref:
     """'Safe' and reusable weak references to instance methods
 
     BoundMethodWeakref objects provide a mechanism for
@@ -94,11 +91,10 @@ class BoundMethodWeakref(object):
         if current is not None:
             current.deletionMethods.append(onDelete)
             return current
-        else:
-            base = super(BoundMethodWeakref, cls).__new__(cls)
-            cls._allInstances[key] = base
-            base.__init__(target, onDelete, *arguments, **named)
-            return base
+        base = super().__new__(cls)
+        cls._allInstances[key] = base
+        base.__init__(target, onDelete, *arguments, **named)
+        return base
 
     def __init__(self, target, onDelete=None):
         """Return a weak-reference-like instance for a bound method
@@ -132,9 +128,8 @@ class BoundMethodWeakref(object):
                         traceback.print_exc()
                     except AttributeError:
                         print(
-                            """Exception during saferef %s cleanup """
-                            """function %s: %s""" % (self, function, e),
-                            file=sys.stderr,
+                            """Exception during saferef %s cleanup function %s: %s"""
+                            % (self, function, e)
                         )
 
         self.deletionMethods = [onDelete]
@@ -144,6 +139,7 @@ class BoundMethodWeakref(object):
         self.selfName = getattr(target, im_self).__class__.__name__
         self.funcName = str(getattr(target, im_func).__name__)
 
+    @classmethod
     def calculateKey(cls, target):
         """Calculate the reference key for this reference
 
@@ -151,8 +147,6 @@ class BoundMethodWeakref(object):
         target object and the target function respectively.
         """
         return (id(getattr(target, im_self)), id(getattr(target, im_func)))
-
-    calculateKey = classmethod(calculateKey)
 
     def __str__(self):
         """Give a friendly representation of the object"""
@@ -167,6 +161,8 @@ class BoundMethodWeakref(object):
     def __nonzero__(self):
         """Whether we are still a valid reference"""
         return self() is not None
+
+    __bool__ = __nonzero__
 
     def __cmp__(self, other):
         """Compare with another reference"""

@@ -87,7 +87,7 @@ int Vect_hist_write(struct Map_info *Map, const char *str)
    \return NULL on error
    \return EOF end of file
  */
-char *Vect_hist_read(char *s, int size, const struct Map_info *Map)
+char *Vect_hist_read(char *s, int size, struct Map_info *Map)
 {
     int ret;
 
@@ -128,7 +128,7 @@ void Vect_hist_rewind(struct Map_info *Map)
    \return 0 on success
    \return -1 on error
  */
-int Vect_hist_copy(const struct Map_info *In, struct Map_info *Out)
+int Vect_hist_copy(struct Map_info *In, struct Map_info *Out)
 {
     size_t red, ret;
     char buf[1000];

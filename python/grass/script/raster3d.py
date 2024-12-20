@@ -18,7 +18,6 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 .. sectionauthor:: Soeren Gebbert <soeren.gebbert gmail.com>
 """
-from __future__ import absolute_import
 
 import os
 import time
@@ -48,8 +47,7 @@ def raster3d_info(map, env=None):
     def float_or_null(s):
         if s == "NULL":
             return None
-        else:
-            return float(s)
+        return float(s)
 
     s = read_command("r3.info", flags="rg", map=map, env=env)
     kv = parse_key_val(s)
@@ -111,5 +109,6 @@ def mapcalc3d(
         )
     except CalledModuleError:
         fatal(
-            _("An error occurred while running r3.mapcalc" " with expression: %s") % e
+            _("An error occurred while running r3.mapcalc with expression: %s") % e,
+            env=env,
         )

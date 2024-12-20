@@ -34,6 +34,9 @@ void I_get_signatures_dir(char *dir, I_SIGFILE_TYPE type)
     else if (type == I_SIGFILE_TYPE_SIGSET) {
         sprintf(dir, "signatures%csigset", HOST_DIRSEP);
     }
+    else if (type == I_SIGFILE_TYPE_LIBSVM) {
+        sprintf(dir, "signatures%clibsvm", HOST_DIRSEP);
+    }
     else {
         G_fatal_error("Programming error: unknown signature file type");
     }
@@ -294,7 +297,9 @@ static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
         (*out_list)[base + i] = (char *)G_malloc(
             (strlen(dirlist[i]) + 1 + mapset_len + 1) * sizeof(char));
         sprintf((*out_list)[base + i], "%s@%s", dirlist[i], mapset);
+        G_free(dirlist[i]);
     }
+    G_free(dirlist);
 
     return count;
 }

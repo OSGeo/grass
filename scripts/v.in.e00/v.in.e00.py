@@ -71,7 +71,7 @@ def main():
         )
 
     # check that the user didn't use all three, which gets past the parser.
-    if type not in ["point", "line", "area"]:
+    if type not in {"point", "line", "area"}:
         gcore.fatal(_('Must specify one of "point", "line", or "area".'))
 
     e00name = basename(filename, "e00")
@@ -82,14 +82,11 @@ def main():
     merging = False
     if os.path.exists(e00name + ".e01") or os.path.exists(e00name + ".E01"):
         gcore.message(
-            _("Found that E00 file is split into pieces (.e01, ...)." " Merging...")
+            _("Found that E00 file is split into pieces (.e01, ...). Merging...")
         )
         merging = True
 
-    if vect:
-        name = vect
-    else:
-        name = e00name
+    name = vect or e00name
 
     # do import
 
@@ -126,7 +123,7 @@ def main():
         == 1
     ):
         gcore.message(
-            _("E00 ASCII found and converted to Arc Coverage in " "current directory")
+            _("E00 ASCII found and converted to Arc Coverage in current directory")
         )
     else:
         gcore.message(_("E00 Compressed ASCII found. Will uncompress first..."))
@@ -141,8 +138,8 @@ def main():
     # let's import...
     gcore.message(_("Importing %ss...") % type)
 
-    layer = dict(point="LAB", line="ARC", area=["LAB", "ARC"])
-    itype = dict(point="point", line="line", area="centroid")
+    layer = {"point": "LAB", "line": "ARC", "area": ["LAB", "ARC"]}
+    itype = {"point": "point", "line": "line", "area": "centroid"}
 
     try:
         gcore.run_command(

@@ -4,15 +4,6 @@ Created on Thu Aug 23 11:07:38 2012
 @author: pietro
 
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 
 import os
 import subprocess
@@ -22,7 +13,7 @@ from grass.script import core as grasscore
 
 
 def read_gisrc(gisrcpath):
-    gisrc = open(gisrcpath, "r")
+    gisrc = open(gisrcpath)
     diz = {}
     for row in gisrc:
         key, val = row.split(":")

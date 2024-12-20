@@ -101,7 +101,8 @@ Topographic parameters are computed directly from the approximation
 function so that the important relationships between these parameters
 are preserved. The equations for computation of these parameters and
 their interpretation is described in
-<a href="http://www4.ncsu.edu/~hmitaso/gmslab/papers/hmg.rev1.ps">Mitasova and Hofierka, 1993</a>
+<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/hmg.rev1.ps">
+ Mitasova and Hofierka, 1993</a>
 or Neteler and Mitasova, 2004).
 Slopes and aspect are computed in degrees (0-90 and 1-360 respectively).
 The aspect raster map has value 0 assigned to flat areas (with slope less
@@ -293,6 +294,27 @@ for for poorly sampled phenomena (result could be strongly smoothed
 with lost details and fluctuations) or when significant noise is
 present that needs to be smoothed out.
 
+<h3>Performance</h3>
+To enable parallel processing, the user can specify the number of threads
+to be used with the <b>nprocs</b> parameter (default 1).
+Figures 1 and 2 show benchmark results running on
+Intel® Core™ i5-10210U CPU @ 1.60GHz × 8. See benchmark scripts
+in the source code for more details.
+
+<div align="center" style="margin: 10px">
+  <img src="vsurfrst_benchmark.png" alt="benchmark for v.surf.rst" border="0">
+  <br>
+  <i>Figure 1: Benchmark shows execution time for different
+    number of cells (1M, 2M, 4M, and 8M).</i>
+</div>
+<div align="center" style="margin: 10px">
+    <img src="vsurfrst_cv_benchmark.png" alt="benchmark for cross-validation of
+     v.surf.rst" border="0">
+    <br>
+    <i>Figure 2: Benchmark shows execution time for running cross-validation on
+     different number of cells (100k, 200k, 400k, and 800k).</i>
+</div>
+
 <h2>EXAMPLE</h2>
 
 <h3>Setting for lidar point cloud</h3>
@@ -318,7 +340,7 @@ measures which we interpolate to a gap-free elevation surface):
 <div class="code"><pre>
 g.region raster=elevation -p
 # random elevation extraction of 500 samplings
-r.random elevation vector_output=elevrand n=500
+r.random -s elevation vector=elevrand n=500
 v.info -c elevrand
 v.db.select elevrand
 
@@ -329,22 +351,26 @@ r.colors elev_full raster=elevation
 d.rast elev_full
 d.vect elevrand
 
-# interpolation based on subset of points (only those over 1300m/asl)
-v.surf.rst elevrand zcol=value elevation=elev_partial where="value > 1300"
-r.colors elev_partial raster=elevation
+# compute univariate statistics with 1st/3rd quartiles
+v.db.univar -e elevrand column=value
+
+# interpolation based on subset of points (only those over 1st quartile)
+v.surf.rst input=elevrand zcolumn=value elevation=elev_partial npmin=100 where="value &gt; 94.9"
+r.colors map=elev_partial raster=elevation
 d.rast elev_partial
-d.vect elevrand where="value > 1300"
+d.vect elevrand where="value &gt; 94.9"
 </pre></div>
 
 <h2>REFERENCES</h2>
 
 <ul>
-  <li><a href="http://www4.ncsu.edu/~hmitaso/gmslab/papers/IEEEGRSL2005.pdf">
+  <li><a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/IEEEGRSL2005.pdf">
       Mitasova, H., Mitas, L. and Harmon, R.S., 2005,</a>
     Simultaneous spline approximation and topographic analysis for
     lidar elevation data in open source GIS, IEEE GRSL 2 (4), 375- 379.</li>
-  <li>Hofierka, J., 2005, Interpolation of Radioactivity Data Using Regularized Spline with Tension. Applied GIS, Vol. 1, No. 2, pp. 16-01 to 16-13. DOI: 10.2104/ag050016</li>
-  <li><a href="http://www4.ncsu.edu/~hmitaso/gmslab/papers/TGIS2002_Hofierka_et_al.pdf">
+  <li>Hofierka, J., 2005, Interpolation of Radioactivity Data Using Regularized Spline with Tension.
+    Applied GIS, Vol. 1, No. 2, pp. 16-01 to 16-13. DOI: 10.2104/ag050016</li>
+  <li><a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/TGIS2002_Hofierka_et_al.pdf">
       Hofierka J., Parajka J., Mitasova H., Mitas L., 2002,</a> Multivariate
     Interpolation of Precipitation Using Regularized Spline with Tension.
     Transactions in GIS 6(2), pp. 135-150.</li>
@@ -352,18 +378,18 @@ d.vect elevrand where="value > 1300"
     spatially and temporally distributed phenomena: New methods and tools for
     GRASS GIS. International Journal of GIS, 9 (4), special issue on Integrating
     GIS and Environmental modeling, 433-446.</li>
-  <li><a href="http://www4.ncsu.edu/~hmitaso/gmslab/papers/MG-I-93.pdf">
+  <li><a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/MG-I-93.pdf">
       Mitasova, H. and Mitas, L., 1993</a>:
     Interpolation by Regularized Spline with Tension:
     I. Theory and Implementation, Mathematical Geology ,25, 641-655.</li>
-  <li><a href="http://www4.ncsu.edu/~hmitaso/gmslab/papers/MG-II-93.pdf">
+  <li><a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/MG-II-93.pdf">
       Mitasova, H. and Hofierka, J., 1993</a>: Interpolation
     by Regularized Spline with Tension: II. Application to Terrain Modeling
     and Surface Geometry Analysis, Mathematical Geology 25, 657-667.</li>
-  <li><a href="http://www4.ncsu.edu/~hmitaso/gmslab/papers/CMA1988.pdf">
+  <li><a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/CMA1988.pdf">
       Mitas, L., and Mitasova H., 1988, </a> General variational approach to the approximation
     problem, Computers and Mathematics with Applications, v.16, p. 983-992.</li>
-  <li><a href="http://www.grassbook.org">
+  <li><a href="https://grassbook.org">
       Neteler, M. and Mitasova, H., 2008, Open Source GIS: A GRASS GIS Approach, 3rd Edition, </a>
     Springer, New York, 406 pages.</li>
   <li>Talmi, A. and Gilat, G., 1977 : Method for Smooth Approximation of Data,
@@ -383,12 +409,13 @@ d.vect elevrand where="value > 1300"
 </em>
 
 <p>
-Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation and Resampling</a> in GRASS GIS
+Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">
+ Interpolation and Resampling</a> in GRASS GIS
 
 <p>
 For examples of applications see
-<a href="http://www4.ncsu.edu/~hmitaso/gmslab/">GRASS4 implementation</a> and
-<a href="http://www4.ncsu.edu/~hmitaso/">GRASS5 and GRASS6 implementation</a>.
+<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/">GRASS4 implementation</a> and
+<a href="http://fatra.cnr.ncsu.edu/~hmitaso/">GRASS5 and GRASS6 implementation</a>.
 
 <h2>AUTHORS</h2>
 
@@ -415,3 +442,7 @@ procedure):</em>
 <em>Parallelization using OpenMP:</em>
 <br>Stanislav Zubal, Czech Technical University in Prague
 <br>Michal Lacko, Pavol Jozef Safarik University in Kosice
+
+<p>
+<em>Parallelization of cross-validation using OpenMP:</em>
+<br>Chung-Yuan Liang, Purdue University, West Lafayette, Indiana, USA

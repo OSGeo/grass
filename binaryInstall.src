@@ -109,7 +109,7 @@ if [ $? -eq 0 ] ; then
     IFS="$IFSSAVE"
     if [ ! "$GUNZIP" ] ; then
         echo "No gunzip installed. Please get from:"
-        echo "   http://www.gnu.org/software/gzip/gzip.html"
+        echo "   https://www.gnu.org/software/gzip/gzip.html"
         exit
     fi
 else
@@ -319,7 +319,7 @@ echo""
 
 echo "Generating display font configuration file..."
 
-GISBASE="$DESTDIR" GISRC=junk LD_LIBRARY_PATH_VAR="${DESTDIR}/lib:$LD_LIBRARY_PATH_VAR" "${DESTDIR}/bin/g.mkfontcap" -o
+GISBASE="$DESTDIR" GISRC=junk LD_LIBRARY_PATH_VAR="${DESTDIR}/lib:$LD_LIBRARY_PATH_VAR" "${DESTDIR}/bin/g.mkfontcap" --overwrite
 
 echo""
 

@@ -8,14 +8,16 @@ for details.
 """
 
 import datetime
-import grass.temporal as tgis
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+
+import grass.temporal as tgis
 
 
 class TestTemporalVectorAlgebra(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         """Initiate the temporal GIS and set the region"""
         tgis.init(True)  # Raise on error instead of exit(1)
         cls.use_temp_region()
@@ -145,18 +147,18 @@ class TestTemporalVectorAlgebra(TestCase):
             end="2001-01-04",
         )
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self.runModule("t.remove", type="stvds", inputs="R", quiet=True)
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         """Remove the temporary region"""
         cls.runModule(
             "t.remove", flags="rf", inputs="A,B,C,D", type="stvds", quiet=True
         )
         cls.del_temp_region()
 
-    def test_temporal_select(self):
+    def test_temporal_select(self) -> None:
         """Testing the temporal select operator."""
         tva = tgis.TemporalVectorAlgebraParser(run=True, debug=True)
         tva.parse(expression="R = A : A", basename="r", overwrite=True)
@@ -174,7 +176,7 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
 
-    def test_temporal_extent1(self):
+    def test_temporal_extent1(self) -> None:
         """Testing the temporal extent operators."""
         ta = tgis.TemporalVectorAlgebraParser(run=True, debug=True)
         ta.parse(expression="R = A {:,during,r} C", basename="r", overwrite=True)
@@ -191,7 +193,7 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertEqual(D.check_temporal_topology(), False)
         self.assertEqual(D.get_granularity(), "2 days")
 
-    def test_temporal_select_operators(self):
+    def test_temporal_select_operators(self) -> None:
         """Testing the temporal select operator. Including temporal relations."""
         tva = tgis.TemporalVectorAlgebraParser(run=True, debug=True)
         tva.parse(expression="R = A {:,during} C", basename="r", overwrite=True)
@@ -209,7 +211,7 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
 
-    def test_temporal_buff_operators_1(self):
+    def test_temporal_buff_operators_1(self) -> None:
         """Testing the bufferoperator."""
         tva = tgis.TemporalVectorAlgebraParser(run=True, debug=True)
         tva.parse(expression="R = buff_p(A,0.5)", basename="r", overwrite=True)
@@ -227,7 +229,7 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
 
-    def test_temporal_buff_operators_2(self):
+    def test_temporal_buff_operators_2(self) -> None:
         """Testing the bufferoperator."""
         tva = tgis.TemporalVectorAlgebraParser(run=True, debug=True)
         tva.parse(expression="R = buff_a(buff_p(A,1),10)", basename="r", overwrite=True)
@@ -245,7 +247,7 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
 
-    def test_temporal_overlay_operators_1(self):
+    def test_temporal_overlay_operators_1(self) -> None:
         """Testing the spatial overlay operator."""
         tva = tgis.TemporalVectorAlgebraParser(run=True, debug=True)
         tva.parse(
@@ -265,7 +267,7 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), "1 day")
 
-    def test_temporal_overlay_operators_2(self):
+    def test_temporal_overlay_operators_2(self) -> None:
         """Testing the spatial overlay operator."""
         tva = tgis.TemporalVectorAlgebraParser(run=True, debug=True)
         tva.parse(
@@ -287,7 +289,7 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertEqual(D.check_temporal_topology(), False)
         self.assertEqual(D.get_granularity(), "2 days")
 
-    def test_temporal_overlay_operators_3(self):
+    def test_temporal_overlay_operators_3(self) -> None:
         """Testing the spatial overlay operator."""
         tva = tgis.TemporalVectorAlgebraParser(run=True, debug=True)
         tva.parse(

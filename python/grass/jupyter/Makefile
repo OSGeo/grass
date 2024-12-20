@@ -11,9 +11,11 @@ MODULES = \
 	interactivemap \
 	region \
 	map3d \
+	seriesmap \
 	reprojection_renderer \
 	utils \
-	timeseriesmap
+	timeseriesmap \
+	baseseriesmap
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)

@@ -10,11 +10,7 @@ char *OGR_list_write_drivers(void)
     int i, count;
     size_t len;
 
-#if GDAL_VERSION_NUM >= 2000000
     GDALDriverH hDriver;
-#else
-    OGRSFDriverH Ogr_driver;
-#endif
     char buf[2000];
 
     char **list, *ret;
@@ -22,7 +18,6 @@ char *OGR_list_write_drivers(void)
     list = NULL;
     count = len = 0;
 
-#if GDAL_VERSION_NUM >= 2000000
     /* get GDAL driver names */
     GDALAllRegister();
     G_debug(2, "driver count = %d", GDALGetDriverCount());
@@ -47,30 +42,9 @@ char *OGR_list_write_drivers(void)
         list[count++] = G_store(buf);
         len += strlen(buf) + 1; /* + ',' */
     }
-#else
-    /* get OGR driver names */
-    OGRRegisterAll();
-    G_debug(2, "driver count = %d", OGRGetDriverCount());
-    for (i = 0; i < OGRGetDriverCount(); i++) {
-        /* only fetch read/write drivers */
-        if (!OGR_Dr_TestCapability(OGRGetDriver(i), ODrCCreateDataSource))
-            continue;
 
-        Ogr_driver = OGRGetDriver(i);
-        G_debug(2, "driver %d/%d : %s", i, OGRGetDriverCount(),
-                OGR_Dr_GetName(Ogr_driver));
-
-        list = G_realloc(list, (count + 1) * sizeof(char *));
-
-        /* chg white space to underscore in OGR driver names */
-        sprintf(buf, "%s", OGR_Dr_GetName(Ogr_driver));
-        G_strchg(buf, ' ', '_');
-        list[count++] = G_store(buf);
-        len += strlen(buf) + 1; /* + ',' */
-    }
-#endif
-
-    qsort(list, count, sizeof(char *), cmp);
+    if (list)
+        qsort(list, count, sizeof(char *), cmp);
 
     if (len > 0) {
         ret = G_malloc((len + 1) * sizeof(char)); /* \0 */
@@ -99,11 +73,7 @@ int cmp(const void *a, const void *b)
 
 char *default_driver(void)
 {
-#if GDAL_VERSION_NUM >= 2000000
     if (GDALGetDriverByName("GPKG")) {
-#else
-    if (OGRGetDriverByName("GPKG")) {
-#endif
         return G_store("GPKG");
     }
 
@@ -116,7 +86,6 @@ void list_formats(void)
 
     G_message(_("Supported formats:"));
 
-#if GDAL_VERSION_NUM >= 2000000
     for (iDriver = 0; iDriver < GDALGetDriverCount(); iDriver++) {
         GDALDriverH hDriver = GDALGetDriver(iDriver);
         const char *pszRWFlag;
@@ -134,19 +103,4 @@ void list_formats(void)
         fprintf(stdout, " %s (%s): %s\n", GDALGetDriverShortName(hDriver),
                 pszRWFlag, GDALGetDriverLongName(hDriver));
     }
-
-#else
-    for (iDriver = 0; iDriver < OGRGetDriverCount(); iDriver++) {
-        OGRSFDriverH poDriver = OGRGetDriver(iDriver);
-        const char *pszRWFlag;
-
-        if (OGR_Dr_TestCapability(poDriver, ODrCCreateDataSource))
-            pszRWFlag = "rw";
-        else
-            continue;
-
-        fprintf(stdout, " %s (%s): %s\n", OGR_Dr_GetName(poDriver), pszRWFlag,
-                OGR_Dr_GetName(poDriver));
-    }
-#endif
 }

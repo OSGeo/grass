@@ -3,6 +3,7 @@ Test of r3.gradient
 
 @author Anna Petrasova
 """
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 

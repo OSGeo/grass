@@ -3,7 +3,7 @@
 This numerical program calculates numerical implicit transient and steady state
 solute transport in porous media in the saturated zone of an aquifer. The computation is based on
 raster maps and the current region settings. All initial- and boundary-conditions must be provided as
-raster maps. The unit in the location must be meters.
+raster maps. The unit of the coordinate reference system must be meters.
 <br>
 <p>This module is sensitive to mask settings. All cells which are outside the mask
 are ignored and handled as no flow boundaries.
@@ -108,7 +108,7 @@ gs.run_command("g.region", res=1, res3=1, t=10, b=0, n=100, s=0, w=0, e=200)
 gs.run_command("r.mapcalc", expression="phead = if(col() == 1 , 50, 40)")
 gs.run_command("r.mapcalc", expression="phead = if(col() ==200  , 45 + row()/40, phead)")
 gs.run_command("r.mapcalc", expression="status = if(col() == 1 || col() == 200 , 2, 1)")
-gs.run_command("r.mapcalc", expression="well = if((row() == 50 && col() == 175) || (row() == 10 && col() == 135) , -0.001, 0)")
+gs.run_command("r.mapcalc", expression="well = if((row() == 50 &amp;&amp; col() == 175) || (row() == 10 &amp;&amp; col() == 135) , -0.001, 0)")
 gs.run_command("r.mapcalc", expression="hydcond = 0.00005")
 gs.run_command("r.mapcalc", expression="recharge = 0")
 gs.run_command("r.mapcalc", expression="top_conf = 20")

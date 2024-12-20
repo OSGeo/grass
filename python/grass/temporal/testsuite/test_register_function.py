@@ -9,31 +9,33 @@ for details.
 :authors: Soeren Gebbert
 """
 
-import grass.temporal as tgis
-from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
-import grass.script as gscript
 import datetime
 import os
+
+import grass.script as gs
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
+
+import grass.temporal as tgis
 
 
 class TestRasterRegisterFunctions(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         """Initiate the temporal GIS and set the region"""
         os.putenv("GRASS_OVERWRITE", "1")
         # Use always the current mapset as temporal database
         cls.runModule("g.gisenv", set="TGIS_USE_CURRENT_MAPSET=1")
-        tgis.init()
+        cls.dbif = tgis.init()
         cls.use_temp_region()
         cls.runModule("g.region", n=80.0, s=0.0, e=120.0, w=0.0, t=1.0, b=0.0, res=10.0)
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         """Remove the temporary region"""
         cls.del_temp_region()
 
-    def setUp(self):
+    def setUp(self) -> None:
         """Create the test maps and the space time raster datasets"""
         self.runModule(
             "r.mapcalc", overwrite=True, quiet=True, expression="register_map_1 = 1"
@@ -67,12 +69,12 @@ class TestRasterRegisterFunctions(TestCase):
             overwrite=True,
         )
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         """Remove maps from temporal database"""
         self.runModule(
             "t.unregister",
             type="raster",
-            maps="register_map_1,register_map_2",
+            maps="register_map_1,register_map_2,elevation",
             quiet=True,
         )
         self.runModule(
@@ -85,7 +87,7 @@ class TestRasterRegisterFunctions(TestCase):
         self.strds_abs.delete()
         self.strds_rel.delete()
 
-    def test_absolute_time_strds_1(self):
+    def test_absolute_time_strds_1(self) -> None:
         """Test the registration of maps with absolute time in a
         space time raster dataset
         """
@@ -115,10 +117,11 @@ class TestRasterRegisterFunctions(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
-    def test_absolute_time_strds_2(self):
+    def test_absolute_time_strds_2(self) -> None:
         """Test the registration of maps with absolute time in a
         space time raster dataset.
-        The timestamps are set using the C-Interface beforehand, so that the register function needs
+        The timestamps are set using the C-Interface beforehand,
+        so that the register function needs
         to read the timetsamp from the map metadata.
         """
 
@@ -153,11 +156,12 @@ class TestRasterRegisterFunctions(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
-    def test_absolute_time_strds_3(self):
+    def test_absolute_time_strds_3(self) -> None:
         """Test the registration of maps with absolute time in a
-        space time raster dataset. The timestamps are set via method arguments and with the
-        c-interface. The timestamps of the method arguments should overwrite the
-        time stamps set via the C-interface.
+        space time raster dataset. The timestamps are set via method
+        arguments and with the c-interface. The timestamps of the
+        method arguments should overwrite the time stamps set via the
+        C-interface.
         """
 
         ciface = tgis.get_tgis_c_library_interface()
@@ -185,11 +189,12 @@ class TestRasterRegisterFunctions(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 2, 1))
         self.assertEqual(end, datetime.datetime(2001, 2, 2))
 
-    def test_absolute_time_strds_4(self):
+    def test_absolute_time_strds_4(self) -> None:
         """Test the registration of maps with absolute time in a
-        space time raster dataset. The timestamps are set via method arguments and with the
-        c-interface. The timestamps of the method arguments should overwrite the
-        time stamps set via the C-interface. The C-interface sets relative time stamps.
+        space time raster dataset. The timestamps are set via method
+        arguments and with the c-interface. The timestamps of the method
+        arguments should overwrite the time stamps set via the C-interface.
+        The C-interface sets relative time stamps.
         """
 
         ciface = tgis.get_tgis_c_library_interface()
@@ -218,7 +223,7 @@ class TestRasterRegisterFunctions(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 2, 1))
         self.assertEqual(end, datetime.datetime(2001, 2, 2))
 
-    def test_absolute_time_1(self):
+    def test_absolute_time_1(self) -> None:
         """Test the registration of maps with absolute time
         using register_maps_in_space_time_dataset() and register_map_object_list()
         """
@@ -256,9 +261,10 @@ class TestRasterRegisterFunctions(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
-    def test_absolute_time_2(self):
+    def test_absolute_time_2(self) -> None:
         """Test the registration of maps with absolute time
-        using register_maps_in_space_time_dataset() and register_map_object_list() with empty map deletion
+        using register_maps_in_space_time_dataset() and
+        register_map_object_list() with empty map deletion
         """
         tgis.register_maps_in_space_time_dataset(
             type="raster",
@@ -300,9 +306,58 @@ class TestRasterRegisterFunctions(TestCase):
         map_3 = tgis.VectorDataset("register_map_null@" + tgis.get_current_mapset())
         self.assertEqual(map_3.map_exists(), False)
 
-    def test_absolute_time_3(self):
+    def test_history_raster(self) -> None:
+        """Test that raster maps are registered with the history
+        (creator and creation time) of the raster map itself (and from a
+        different mapset (PERMANENT)
+        """
+        tgis.register_maps_in_space_time_dataset(
+            type="raster",
+            name=None,
+            maps="elevation@PERMANENT",
+            start="2001-01-01 10:30:01",
+            increment="1 year",
+            interval=True,
+            dbif=self.dbif,
+        )
+
+        map_1 = tgis.RasterDataset("elevation@PERMANENT")
+        map_1.select(self.dbif, tgis.get_current_mapset())
+        # Test that creation time of the map is used
+        self.assertEqual(
+            map_1.base.get_ctime(), datetime.datetime(2006, 11, 7, 1, 9, 51)
+        )
+        # Test that registered creator of the map is not the current user
+        self.assertEqual(map_1.base.get_creator(), "helena")
+
+    def test_history_vector(self) -> None:
+        """Test that vector maps are registered with the history (creator
+        and creation time) of the vector map itself (and from a
+        different mapset (PERMANENT)
+        """
+        tgis.register_maps_in_space_time_dataset(
+            type="vector",
+            name=None,
+            maps="lakes@PERMANENT",
+            start="2001-01-01 10:30:01",
+            increment="1 year",
+            interval=True,
+            dbif=self.dbif,
+        )
+
+        map_1 = tgis.VectorDataset("lakes@PERMANENT")
+        map_1.select(self.dbif, tgis.get_current_mapset())
+        # Test that creation time of the map is used
+        self.assertEqual(
+            map_1.base.get_ctime(), datetime.datetime(2006, 11, 7, 19, 48, 8)
+        )
+        # Test that registered creator of the map is not the current user
+        self.assertTrue(map_1.base.get_creator(), "helena")
+
+    def test_absolute_time_3(self) -> None:
         """Test the registration of maps with absolute time.
-        The timestamps are set using the C-Interface beforehand, so that the register function needs
+        The timestamps are set using the C-Interface beforehand,
+        so that the register function needs
         to read the timetsamp from the map metadata.
         """
 
@@ -328,7 +383,7 @@ class TestRasterRegisterFunctions(TestCase):
         start, end = map.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1, 18, 30, 1))
 
-    def test_relative_time_strds_1(self):
+    def test_relative_time_strds_1(self) -> None:
         """Test the registration of maps with relative time in a
         space time raster dataset
         """
@@ -363,10 +418,10 @@ class TestRasterRegisterFunctions(TestCase):
         self.assertEqual(end, 2)
         self.assertEqual(unit, "day")
 
-    def test_relative_time_strds_2(self):
+    def test_relative_time_strds_2(self) -> None:
         """Test the registration of maps with relative time in a
-        space time raster dataset. The timetsamps are set for the maps using the
-        C-interface before registration.
+        space time raster dataset. The timestamps are set for the maps
+        using the C-interface before registration.
         """
         ciface = tgis.get_tgis_c_library_interface()
         ciface.write_raster_timestamp(
@@ -406,7 +461,7 @@ class TestRasterRegisterFunctions(TestCase):
         self.assertEqual(end, 2000000)
         self.assertEqual(unit, "seconds")
 
-    def test_relative_time_1(self):
+    def test_relative_time_1(self) -> None:
         """Test the registration of maps with relative time"""
         tgis.register_maps_in_space_time_dataset(
             type="raster",
@@ -432,7 +487,7 @@ class TestRasterRegisterFunctions(TestCase):
         self.assertEqual(end, 2)
         self.assertEqual(unit, "day")
 
-    def test_relative_time_2(self):
+    def test_relative_time_2(self) -> None:
         """Test the registration of maps with relative time"""
         tgis.register_maps_in_space_time_dataset(
             type="raster",
@@ -458,9 +513,9 @@ class TestRasterRegisterFunctions(TestCase):
         self.assertEqual(end, 2000000)
         self.assertEqual(unit, "seconds")
 
-    def test_relative_time_3(self):
-        """Test the registration of maps with relative time. The timetsamps are set beforehand using
-        the C-interface.
+    def test_relative_time_3(self) -> None:
+        """Test the registration of maps with relative time. The
+        timestamps are set beforehand using the C-interface.
         """
         ciface = tgis.get_tgis_c_library_interface()
         ciface.write_raster_timestamp(
@@ -495,7 +550,7 @@ class TestRasterRegisterFunctions(TestCase):
 
 class TestVectorRegisterFunctions(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         """Initiate the temporal GIS and set the region"""
         os.putenv("GRASS_OVERWRITE", "1")
         # Use always the current mapset as temporal database
@@ -505,11 +560,11 @@ class TestVectorRegisterFunctions(TestCase):
         cls.runModule("g.region", n=80.0, s=0.0, e=120.0, w=0.0, t=1.0, b=0.0, res=10.0)
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         """Remove the temporary region"""
         cls.del_temp_region()
 
-    def setUp(self):
+    def setUp(self) -> None:
         """Create the test maps and the space time raster datasets"""
         self.runModule(
             "v.random",
@@ -561,7 +616,7 @@ class TestVectorRegisterFunctions(TestCase):
             overwrite=True,
         )
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         """Remove maps from temporal database"""
         self.runModule(
             "t.unregister",
@@ -586,7 +641,7 @@ class TestVectorRegisterFunctions(TestCase):
         self.stvds_abs.delete()
         self.stvds_rel.delete()
 
-    def test_absolute_time_stvds_1(self):
+    def test_absolute_time_stvds_1(self) -> None:
         """Test the registration of maps with absolute time in a
         space time raster dataset
         """
@@ -616,10 +671,11 @@ class TestVectorRegisterFunctions(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
-    def test_absolute_time_stvds_2(self):
+    def test_absolute_time_stvds_2(self) -> None:
         """Test the registration of maps with absolute time in a
         space time raster dataset.
-        The timestamps are set using the C-Interface beforehand, so that the register function needs
+        The timestamps are set using the C-Interface beforehand,
+        so that the register function needs
         to read the timetsamp from the map metadata.
         """
 
@@ -654,11 +710,11 @@ class TestVectorRegisterFunctions(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
-    def test_absolute_time_stvds_3(self):
+    def test_absolute_time_stvds_3(self) -> None:
         """Test the registration of maps with absolute time in a
-        space time raster dataset. The timestamps are set via method arguments and with the
-        c-interface. The timestamps of the method arguments should overwrite the
-        time stamps set via the C-interface.
+        space time raster dataset. The timestamps are set via method
+        arguments and with the C-interface. The timestamps of the method
+        arguments should overwrite the time stamps set via the C-interface.
         """
 
         ciface = tgis.get_tgis_c_library_interface()
@@ -686,8 +742,9 @@ class TestVectorRegisterFunctions(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 2, 1))
         self.assertEqual(end, datetime.datetime(2001, 2, 2))
 
-    def test_absolute_time_1(self):
-        """Register vector maps in the temporal database and in addition in a stvds using the object method
+    def test_absolute_time_1(self) -> None:
+        """Register vector maps in the temporal database and in addition
+        in a stvds using the object method
 
         :return:
         """
@@ -725,7 +782,7 @@ class TestVectorRegisterFunctions(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
-    def test_absolute_time_2(self):
+    def test_absolute_time_2(self) -> None:
         """Register vector maps in the temporal database and in addition
         in a stvds using the object method deleting empty maps
 
@@ -776,17 +833,17 @@ class TestVectorRegisterFunctions(TestCase):
 
 
 class TestRegisterFails(TestCase):
-    def test_error_handling_1(self):
+    def test_error_handling_1(self) -> None:
         # start option is missing
         self.assertModuleFail(
             "t.register", input="test", end="2001-01-01", maps=("a", "b")
         )
 
-    def test_error_handling_2(self):
+    def test_error_handling_2(self) -> None:
         # No input definition
         self.assertModuleFail("t.register", input="test", start="2001-01-01")
 
-    def test_error_handling_3(self):
+    def test_error_handling_3(self) -> None:
         # File and maps are mutually exclusive
         self.assertModuleFail(
             "t.register",
@@ -796,17 +853,17 @@ class TestRegisterFails(TestCase):
             file="maps.txt",
         )
 
-    def test_error_handling_4(self):
+    def test_error_handling_4(self) -> None:
         # Increment needs start
         self.assertModuleFail(
             "t.register", input="test", increment="1 day", maps=("a", "b")
         )
 
-    def test_error_handling_5(self):
+    def test_error_handling_5(self) -> None:
         # Interval needs start
         self.assertModuleFail("t.register", flags="i", input="test", maps=("a", "b"))
 
-    def test_error_handling_6(self):
+    def test_error_handling_6(self) -> None:
         # Increment and end are mutually exclusive
         self.assertModuleFail(
             "t.register",
@@ -817,7 +874,7 @@ class TestRegisterFails(TestCase):
             maps=("a", "b"),
         )
 
-    def test_error_handling_7(self):
+    def test_error_handling_7(self) -> None:
         # Interval and end are mutually exclusive
         self.assertModuleFail(
             "t.register",
@@ -831,7 +888,7 @@ class TestRegisterFails(TestCase):
 
 class TestRegisterMapsetAccess(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         """Initiate the temporal GIS and set the region"""
         os.putenv("GRASS_OVERWRITE", "1")
         tgis.init()
@@ -854,7 +911,7 @@ class TestRegisterMapsetAccess(TestCase):
 
         cls.del_temp_region()
 
-    def setUp(self):
+    def setUp(self) -> None:
         """Create the space time raster dataset"""
         self.strds_abs = tgis.open_new_stds(
             name="register_test_abs",
@@ -902,7 +959,7 @@ class TestRegisterMapsetAccess(TestCase):
         tgis.init()
         self.assertNotEqual(self.currmapset, tgis.get_current_mapset())
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         """Remove raster maps from current mapset"""
 
         # switch to old mapset
@@ -924,13 +981,13 @@ class TestRegisterMapsetAccess(TestCase):
             name="register_map_1,register_map_2",
             quiet=True,
         )
-        grassenv = gscript.gisenv()
+        grassenv = gs.gisenv()
         mapset_path = os.path.join(
             grassenv["GISDBASE"], grassenv["LOCATION_NAME"], self.newmapset
         )
-        gscript.try_rmdir(mapset_path)
+        gs.try_rmdir(mapset_path)
 
-    def test_mapset_access_1(self):
+    def test_mapset_access_1(self) -> None:
         """Test the registration of maps from a different mapset."""
 
         self.strds_abs_2 = tgis.open_new_stds(

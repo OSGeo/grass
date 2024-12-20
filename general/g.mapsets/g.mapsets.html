@@ -1,6 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-For basic information about GRASS <em>mapset</em>, <em>location</em>
+<em>g.mapsets</em> modifies/prints the user's current mapset search
+path.
+
+For basic information about GRASS <em>mapset</em>, <em>project</em>
 and <em>data base</em> refer to <a href="helptext.html">GRASS
 Quickstart</a>.
 
@@ -8,9 +11,10 @@ Quickstart</a>.
 A <em>mapset</em> holds a distinct set of data layers, each relevant
 to the same (or a subset of the same) geographic region, and each
 drawn in the same map coordinate system.  At the outset of every GRASS
-session, the user identifies a GRASS data base, location, and mapset
+session, the user identifies a GRASS data base, project (previosuly
+called location), and mapset
 that are to be the user's <em>current data base</em>, <em>current
-location</em>, and <em>current mapset</em> for the duration of the
+project</em>, and <em>current mapset</em> for the duration of the
 session; any maps created by the user during the session will be
 stored under the <em>current mapset</em> set at the session's outset
 (see <em><a href="g.mapset.html">g.mapset</a></em> [without an "s"]
@@ -21,25 +25,25 @@ mapset with a session).
 The user can add, modify, and delete data layers that exist under
 their <em>current mapset</em>. Although the user can
 also <em>access</em> (i.e., use) data that are stored under
-<em>other</em> mapsets in the same GRASS location using the
-<tt>mapname@mapsetname</tt> notation or mapset search path, the user
+<em>other</em> mapsets in the same GRASS project using the
+<code>mapname@mapsetname</code> notation or mapset search path, the user
 can only make permanent changes (create or modify data)
 located in the <em>current mapset</em>.  The user's
 <em>mapset search path</em> lists the order in which other mapsets in
-the same GRASS location can be searched and their data accessed by the
+the same GRASS project can be searched and their data accessed by the
 user. The user can modify the listing and order in which these mapsets
 are accessed by modifying the mapset search path; this can be done
 using the <em>g.mapsets</em> command. This program allows the user to
 use other's relevant map data without altering the original data
 layer, and without taking up disk space with a copy of the original
-map. The <tt>mapname@mapsetname</tt> notation may be used irrespective
+map. The <code>mapname@mapsetname</code> notation may be used irrespective
 of the mapset search path, i.e., any map found in another mapset with
 sufficient <em><a href="g.access.html">g.access</a></em> privileges
 may be called in such a manner.
 
 <p>
 <em>g.mapsets</em> shows the user available mapsets under the current
-GRASS location, lists mapsets to which the user currently has access,
+GRASS project, lists mapsets to which the user currently has access,
 and lists the order in which accessible mapsets will be accessed by
 GRASS programs searching for data files.  The user is then given the
 opportunity to add or delete mapset names from the search path, or
@@ -59,11 +63,11 @@ command:
 g.copy raster=soils@PERMANENT,my_soils
 </pre></div>
 
-ensures that a new file named <tt>my_soils</tt> is to be a copy of
-the file <tt>soils</tt> from the mapset PERMANENT.
+ensures that a new file named <code>my_soils</code> is to be a copy of
+the file <code>soils</code> from the mapset PERMANENT.
 
 <p>
-In each location there is the special mapset <b>PERMANENT</b> included
+In each project there is the special mapset <b>PERMANENT</b> included
 in the mapset search path, as this mapset typically contains base maps
 relevant to many applications. Often, other mapsets which contain sets
 of interpreted maps will be likewise included in the user's mapset search path.
@@ -109,7 +113,7 @@ g.mapsets -s
 </center>
 
 <h3>Print available mapsets</h3>
-All available mapsets in the current location can be printed out by
+All available mapsets in the current project can be printed out by
 
 <div class="code"><pre>
 g.mapsets -l
@@ -117,6 +121,22 @@ g.mapsets -l
 Available mapsets:
 PERMANENT user1 user2
 </pre></div>
+
+Mapsets can be also printed out as json by setting the format option to "json" (<b>format="json"</b>).
+
+<div class="code">
+  <pre>
+    g.mapsets format="json" -l
+
+    {
+      "mapsets": [
+        "PERMANENT",
+        "user1",
+        "user2"
+      ]
+    }
+  </pre>
+</div>
 
 <h3>Add new mapset</h3>
 

@@ -272,7 +272,7 @@ void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname UNUSED,
     }
 
     if (polytype == TRIANGLE_STRIPS) {
-        /*TriangleStrips, take a look ate www.vtk.org for the definition of
+        /*TriangleStrips, take a look at https://vtk.org/ for the definition of
          * triangle_strips in vtk */
         /*If we use triangelestrips, the number of points per strip is equal to
          * the double number of cols we have */

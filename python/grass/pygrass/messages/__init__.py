@@ -6,33 +6,45 @@
 Fast and exit-safe interface to GRASS C-library message functions
 
 
-(C) 2013 by the GRASS Development Team
+(C) 2013-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+@author Soeren Gebbert, Edouard Choinière
 """
+
+from __future__ import annotations
+
 import sys
-from multiprocessing import Process, Lock, Pipe
+from multiprocessing import Lock, Pipe, Process
+from typing import TYPE_CHECKING, Literal, NoReturn
 
 import grass.lib.gis as libgis
-
 from grass.exceptions import FatalError
 
+if TYPE_CHECKING:
+    from multiprocessing.connection import Connection
+    from multiprocessing.context import _LockLike
 
-def message_server(lock, conn):
+    _MessagesLiteral = Literal[
+        "INFO", "IMPORTANT", "VERBOSE", "WARNING", "ERROR", "FATAL"
+    ]
+
+
+def message_server(lock: _LockLike, conn: Connection) -> NoReturn:
     """The GRASS message server function designed to be a target for
     multiprocessing.Process
 
 
     :param lock: A multiprocessing.Lock
-    :param conn: A multiprocessing.Pipe
+    :param conn: A multiprocessing.connection.Connection object obtained from
+                 multiprocessing.Pipe
 
     This function will use the G_* message C-functions from grass.lib.gis
     to provide an interface to the GRASS C-library messaging system.
 
-    The data that is send through the pipe must provide an
+    The data that is sent through the pipe must provide an
     identifier string to specify which C-function should be called.
 
     The following identifiers are supported:
@@ -51,9 +63,9 @@ def message_server(lock, conn):
     - "FATAL"      Calls G_fatal_error(), this functions is only for
                    testing purpose
 
-    The that is end through the pipe must be a list of values:
+    The data that is sent through the pipe must be a list of values:
 
-    - Messages: ["INFO|VERBOSE|WARNING|ERROR|FATAL", "MESSAGE"]
+    - Messages: ["INFO|IMPORTANT|VERBOSE|WARNING|ERROR|FATAL", "MESSAGE"]
     - Debug:    ["DEBUG", level, "MESSAGE"]
     - Percent:  ["PERCENT", n, d, s]
 
@@ -64,51 +76,45 @@ def message_server(lock, conn):
         # Avoid busy waiting
         conn.poll(None)
         data = conn.recv()
-        message_type = data[0]
+        message_type: Literal[_MessagesLiteral, "DEBUG", "PERCENT", "STOP"] = data[0]
 
         # Only one process is allowed to write to stderr
-        lock.acquire()
+        with lock:
+            # Stop the pipe and the infinite loop
+            if message_type == "STOP":
+                conn.close()
+                libgis.G_debug(1, "Stop messenger server")
+                sys.exit()
 
-        # Stop the pipe and the infinite loop
-        if message_type == "STOP":
-            conn.close()
-            lock.release()
-            libgis.G_debug(1, "Stop messenger server")
-            sys.exit()
+            if message_type == "PERCENT":
+                n = int(data[1])
+                d = int(data[2])
+                s = int(data[3])
+                libgis.G_percent(n, d, s)
+                continue
+            if message_type == "DEBUG":
+                level = int(data[1])
+                message_debug = data[2]
+                libgis.G_debug(level, message_debug)
+                continue
 
-        message = data[1]
-        # libgis limitation
-        if isinstance(message, type(" ")):
-            if len(message) >= 2000:
-                message = message[:1999]
-
-        if message_type == "PERCENT":
-            n = int(data[1])
-            d = int(data[2])
-            s = int(data[3])
-            libgis.G_percent(n, d, s)
-        elif message_type == "DEBUG":
-            level = data[1]
-            message = data[2]
-            libgis.G_debug(level, message)
-        elif message_type == "VERBOSE":
-            libgis.G_verbose_message(message)
-        elif message_type == "INFO":
-            libgis.G_message(message)
-        elif message_type == "IMPORTANT":
-            libgis.G_important_message(message)
-        elif message_type == "WARNING":
-            libgis.G_warning(message)
-        elif message_type == "ERROR":
-            libgis.G_important_message("ERROR: %s" % message)
-        # This is for testing only
-        elif message_type == "FATAL":
-            libgis.G_fatal_error(message)
-
-        lock.release()
+            message: str = data[1]
+            if message_type == "VERBOSE":
+                libgis.G_verbose_message(message)
+            elif message_type == "INFO":
+                libgis.G_message(message)
+            elif message_type == "IMPORTANT":
+                libgis.G_important_message(message)
+            elif message_type == "WARNING":
+                libgis.G_warning(message)
+            elif message_type == "ERROR":
+                libgis.G_important_message("ERROR: %s" % message)
+            # This is for testing only
+            elif message_type == "FATAL":
+                libgis.G_fatal_error(message)
 
 
-class Messenger(object):
+class Messenger:
     """Fast and exit-safe interface to GRASS C-library message functions
 
     This class implements a fast and exit-safe interface to the GRASS
@@ -168,14 +174,19 @@ class Messenger(object):
 
     """
 
-    def __init__(self, raise_on_error=False):
-        self.client_conn = None
-        self.server_conn = None
-        self.server = None
-        self.raise_on_error = raise_on_error
-        self.start_server()
+    client_conn: Connection
+    server_conn: Connection
+    server: Process
 
-    def start_server(self):
+    def __init__(self, raise_on_error: bool = False) -> None:
+        self.raise_on_error = raise_on_error
+        self.client_conn, self.server_conn = Pipe()
+        self.lock = Lock()
+        self.server = Process(target=message_server, args=(self.lock, self.server_conn))
+        self.server.daemon = True
+        self.server.start()
+
+    def start_server(self) -> None:
         """Start the messenger server and open the pipe"""
         self.client_conn, self.server_conn = Pipe()
         self.lock = Lock()
@@ -183,7 +194,7 @@ class Messenger(object):
         self.server.daemon = True
         self.server.start()
 
-    def _check_restart_server(self):
+    def _check_restart_server(self) -> None:
         """Restart the server if it was terminated"""
         if self.server.is_alive() is True:
             return
@@ -192,55 +203,50 @@ class Messenger(object):
         self.start_server()
         self.warning("Needed to restart the messenger server")
 
-    def message(self, message):
+    def message(self, message: str) -> None:
         """Send a message to stderr
 
         :param message: the text of message
-        :type message: str
 
            G_message() will be called in the messenger server process
         """
         self._check_restart_server()
         self.client_conn.send(["INFO", message])
 
-    def verbose(self, message):
+    def verbose(self, message: str) -> None:
         """Send a verbose message to stderr
 
         :param message: the text of message
-        :type message: str
 
            G_verbose_message() will be called in the messenger server process
         """
         self._check_restart_server()
         self.client_conn.send(["VERBOSE", message])
 
-    def important(self, message):
+    def important(self, message: str) -> None:
         """Send an important message to stderr
 
         :param message: the text of message
-        :type message: str
 
            G_important_message() will be called in the messenger server process
         """
         self._check_restart_server()
         self.client_conn.send(["IMPORTANT", message])
 
-    def warning(self, message):
+    def warning(self, message: str) -> None:
         """Send a warning message to stderr
 
         :param message: the text of message
-        :type message: str
 
            G_warning() will be called in the messenger server process
         """
         self._check_restart_server()
         self.client_conn.send(["WARNING", message])
 
-    def error(self, message):
+    def error(self, message: str) -> None:
         """Send an error message to stderr
 
         :param message: the text of message
-        :type message: str
 
            G_important_message() with an additional "ERROR:" string at
            the start will be called in the messenger server process
@@ -248,11 +254,10 @@ class Messenger(object):
         self._check_restart_server()
         self.client_conn.send(["ERROR", message])
 
-    def fatal(self, message):
+    def fatal(self, message: str) -> NoReturn:
         """Send an error message to stderr, call sys.exit(1) or raise FatalError
 
         :param message: the text of message
-        :type message: str
 
            This function emulates the behavior of G_fatal_error(). It prints
            an error message to stderr and calls sys.exit(1). If raise_on_error
@@ -265,33 +270,31 @@ class Messenger(object):
 
         if self.raise_on_error is True:
             raise FatalError(message)
-        else:
-            sys.exit(1)
+        sys.exit(1)
 
-    def debug(self, level, message):
+    def debug(self, level: int, message: str) -> None:
         """Send a debug message to stderr
 
         :param message: the text of message
-        :type message: str
 
            G_debug() will be called in the messenger server process
         """
         self._check_restart_server()
         self.client_conn.send(["DEBUG", level, message])
 
-    def percent(self, n, d, s):
+    def percent(self, n: int, d: int, s: int) -> None:
         """Send a percentage to stderr
 
-        :param message: the text of message
-        :type message: str
-
+        :param n: The current element
+        :param d: Total number of elements
+        :param s: Increment size
 
            G_percent() will be called in the messenger server process
         """
         self._check_restart_server()
         self.client_conn.send(["PERCENT", n, d, s])
 
-    def stop(self):
+    def stop(self) -> None:
         """Stop the messenger server and close the pipe"""
         if self.server is not None and self.server.is_alive():
             self.client_conn.send(
@@ -304,12 +307,11 @@ class Messenger(object):
         if self.client_conn is not None:
             self.client_conn.close()
 
-    def set_raise_on_error(self, raise_on_error=True):
+    def set_raise_on_error(self, raise_on_error: bool = True) -> None:
         """Set the fatal error behavior
 
         :param raise_on_error: if True a FatalError exception will be
                                raised instead of calling sys.exit(1)
-        :type raise_on_error: bool
 
         - If raise_on_error == True, a FatalError exception will be raised
           if fatal() is called
@@ -319,7 +321,7 @@ class Messenger(object):
         """
         self.raise_on_error = raise_on_error
 
-    def get_raise_on_error(self):
+    def get_raise_on_error(self) -> bool:
         """Get the fatal error behavior
 
         :returns: True if a FatalError exception will be raised or False if
@@ -327,7 +329,7 @@ class Messenger(object):
         """
         return self.raise_on_error
 
-    def test_fatal_error(self, message):
+    def test_fatal_error(self, message: str) -> None:
         """Force the messenger server to call G_fatal_error()"""
         import time
 
@@ -337,12 +339,12 @@ class Messenger(object):
 
 
 def get_msgr(
-    _instance=[
+    instance=[
         None,
     ],
     *args,
     **kwargs,
-):
+) -> Messenger:
     """Return a Messenger instance.
 
        :returns: the Messenger instance.
@@ -355,9 +357,9 @@ def get_msgr(
     >>> msgr0 is msgr2
     False
     """
-    if not _instance[0]:
-        _instance[0] = Messenger(*args, **kwargs)
-    return _instance[0]
+    if not instance[0]:
+        instance[0] = Messenger(*args, **kwargs)
+    return instance[0]
 
 
 if __name__ == "__main__":
