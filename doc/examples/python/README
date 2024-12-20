@@ -7,7 +7,7 @@ There are two ways of using Python to run GRASS commands:
 
 
 - Module creation using hooks into the C library functions using ctypes.
-  The scripts in the doc/python/examples/ directory will describe this.
+  The scripts in the doc/examples/python/ directory will describe this.
   (Ctypes is standard in Python 2.5 and newer; replaces the SWIG
   implementation in GRASS)
 
