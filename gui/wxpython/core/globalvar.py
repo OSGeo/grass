@@ -95,7 +95,8 @@ def CheckForWx():
 
         version = parse_version_string(wx.__version__)
         if version < WXPY3_MIN_VERSION:
-            raise ValueError("Your wxPython version is {}".format(wx.__version__))
+            msg = "Your wxPython version is {}".format(wx.__version__)
+            raise ValueError(msg)
         return
     except ImportError as e:
         print("ERROR: wxGUI requires wxPython. {}".format(e), file=sys.stderr)
@@ -233,7 +234,7 @@ def UpdateGRASSAddOnCommands(eList=None):
     Debug.msg(1, "Number of GRASS AddOn commands: %d", nCmd)
 
 
-"""@brief Collected GRASS-relared binaries/scripts"""
+"""@brief Collected GRASS-related binaries/scripts"""
 grassCmd, grassScripts = get_commands()
 Debug.msg(1, "Number of core GRASS commands: %d", len(grassCmd))
 UpdateGRASSAddOnCommands()

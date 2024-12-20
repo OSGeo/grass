@@ -133,9 +133,9 @@ class Filters:
         :type number: int
         """
         if not isinstance(number, int):
-            raise ValueError("Must be an integer.")
-        else:
-            self._limit = "LIMIT {number}".format(number=number)
+            msg = "Must be an integer."
+            raise ValueError(msg)
+        self._limit = "LIMIT {number}".format(number=number)
         return self
 
     def group_by(self, *groupby):
@@ -562,7 +562,8 @@ class Columns:
             self.update_odict()
         else:
             # sqlite does not support rename columns:
-            raise DBError("SQLite does not support to cast columns.")
+            msg = "SQLite does not support to cast columns."
+            raise DBError(msg)
 
     def drop(self, col_name):
         """Drop a column from the table.
@@ -664,7 +665,8 @@ class Link:
 
     def _set_layer(self, number):
         if number <= 0:
-            raise TypeError("Number must be positive and greater than 0.")
+            msg = "Number must be positive and greater than 0."
+            raise TypeError(msg)
         self.c_fieldinfo.contents.number = number
 
     layer = property(
@@ -825,7 +827,7 @@ class Link:
         if driver == "sqlite":
             import sqlite3
 
-            # Numpy is using some custom integer data types to efficiently
+            # NumPy is using some custom integer data types to efficiently
             # pack data into memory. Since these types aren't familiar to
             # sqlite, you'll have to tell it about how to handle them.
             for t in (
@@ -1261,10 +1263,7 @@ class Table:
         """
         cur = cursor or self.conn.cursor()
         coldef = ",\n".join(["%s %s" % col for col in cols])
-        if name:
-            newname = name
-        else:
-            newname = self.name
+        newname = name or self.name
         try:
             cur.execute(sql.CREATE_TAB.format(tname=newname, coldef=coldef))
             self.conn.commit()
