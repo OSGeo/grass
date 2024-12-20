@@ -35,6 +35,7 @@ select = [
     "D",      # pydocstyle (D)
     "DTZ",    # flake8-datetimez (DTZ)
     "E",      # pycodestyle (E, W)
+    "EM",     # flake8-errmsg (EM)
     "F",      # Pyflakes (F)
     "FA",     # flake8-future-annotations (FA)
     "FBT",    # flake8-boolean-trap (FBT)
@@ -394,6 +395,7 @@ ignore = [
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
 # Declare a custom aliases, checked with rule ICN001
 "grass.script" = "gs"
+"grass.temporal" = "tgis"
 
 [tool.pytest.ini_options]
 minversion = "6.0"

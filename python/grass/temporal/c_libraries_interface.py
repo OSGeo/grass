@@ -17,7 +17,7 @@ import sys
 from ctypes import CFUNCTYPE, POINTER, byref, c_int, c_void_p, cast
 from datetime import datetime
 from multiprocessing import Lock, Pipe, Process
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Literal
 
 import grass.lib.date as libdate
 import grass.lib.gis as libgis
@@ -33,6 +33,7 @@ from grass.pygrass.vector import VectorTopo
 from grass.script.utils import encode
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
     from multiprocessing.connection import Connection
     from multiprocessing.synchronize import _LockLike
 
@@ -1239,8 +1240,10 @@ def c_library_server(lock: _LockLike, conn: Connection) -> None:
 
     libgis.G_add_error_handler(cerror_handler, None)
 
-    # Crerate the function array
-    functions = [0] * 50
+    # Create the function array
+    functions: list[
+        Callable[[_LockLike, Connection, Any], Literal[-1, -2] | None] | int
+    ] = [0] * 50
     functions[RPCDefs.STOP] = _stop
     functions[RPCDefs.HAS_TIMESTAMP] = _has_timestamp
     functions[RPCDefs.WRITE_TIMESTAMP] = _write_timestamp

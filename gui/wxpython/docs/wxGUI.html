@@ -441,7 +441,7 @@ the computational region extents.
       <li><em>Zoom to saved region</em>. Zooms to previously
       saved named region.</li>
       <li><em>Set computational region extent from display.</em>
-      The computational region (the mapset's <tt>WIND</tt> file)
+      The computational region (the mapset's <code>WIND</code> file)
       is set to match the current display extent (does not change
       the resolution), see <em><a href="g.region.html">g.region</a></em>.</li>
       <li><em>Set computational region extent interactively.</em>
@@ -657,9 +657,9 @@ g.gui -d wxpython
 </pre></div>
 
 Alternatively, it may be defined in the main configuration file
-(<tt>$HOME/.grass8/rc</tt> on GNU/Linux and macOS, <tt>%APPDATA%\Roaming\GRASS8\rc</tt>
-on MS Windows) using the <tt>GUI</tt> variable set to <tt>wxpython</tt>
-(<tt>GUI: wxpython</tt>) or by the environmental variable <tt>GRASS_GUI</tt>.
+(<code>$HOME/.grass8/rc</code> on GNU/Linux and macOS, <code>%APPDATA%\Roaming\GRASS8\rc</code>
+on MS Windows) using the <code>GUI</code> variable set to <code>wxpython</code>
+(<code>GUI: wxpython</code>) or by the environmental variable <code>GRASS_GUI</code>.
 
 
 To start with a previously saved workspace file:
@@ -670,7 +670,7 @@ g.gui workspace=file.gxw
 
 <p>
 The user can also start GRASS from the shell command line with the wxGUI
-specifying the <tt>--gui</tt> switch:
+specifying the <code>--gui</code> switch:
 
 <div class="code"><pre>
 grass --gui
@@ -680,14 +680,14 @@ grass --gui
 The GUI can be quit by selecting the 'File &gt; Quit GRASS GIS' menu item
 which gives options to close only GUI or to quit GRASS GIS entirely
 if GRASS GIS is running with a command line (a shell in a terminal application).
-Exiting the shell (typically by the <tt>exit</tt> command) ends the GRASS session
+Exiting the shell (typically by the <code>exit</code> command) ends the GRASS session
 including any running GUIs.
 
 <h3>Background information</h3>
 
 <b>wxGUI</b> is a native <em>Graphical User Interface</em> (GUI) for
 GRASS GIS written in <a href="https://www.python.org">Python</a>
-using <a href="http://www.wxpython.org">wxPython</a> library.
+using <a href="https://www.wxpython.org">wxPython</a> library.
 
 <h2>SEE ALSO</h2>
 

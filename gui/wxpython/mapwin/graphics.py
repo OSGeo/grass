@@ -388,7 +388,7 @@ class GraphicsSet:
         """Clears old object before drawing new object."""
         try:
             self.pdc.ClearId(drawid)
-        except:
+        except (wx.PyDeadObjectError, KeyError):
             pass
 
 

@@ -339,9 +339,6 @@ class IVDigit:
             if Vect_read_line(self.poMapInfo, self.poPoints, None, line) < 0:
                 self._error.ReadLine(line)
                 return -1
-            points = self.poPoints
-        else:
-            points = pointsLine
 
         listLine = Vect_new_boxlist(0)
         listRef = Vect_new_list()
@@ -1095,7 +1092,6 @@ class IVDigit:
             self.poMapInfo, line, ltype, self.poPoints, self.poCats
         )
         if newline > 0 and self.emit_signals:
-            new_geom = [self._getBbox(newline)]
             new_areas_cats = [self._getLineAreasCategories(newline)]
 
         if newline > 0 and self._settings["breakLines"]:
@@ -1123,8 +1119,6 @@ class IVDigit:
         """
         if not self._checkMap():
             return -1
-
-        nlines = Vect_get_num_lines(self.poMapInfo)
 
         poList = self._display.GetSelectedIList()
         ret = Vedit_flip_lines(self.poMapInfo, poList)

@@ -46,7 +46,7 @@ as a <em>r.reclass</em> of a <em>r.reclass</em>.
 
 <p>To convert a reclass map to a regular raster map layer, set your
 geographic region settings to match the settings in the header for the
-reclass map (with "<tt>g.region&nbsp;raster=reclass_map</tt>", or
+reclass map (with "<code>g.region&nbsp;raster=reclass_map</code>", or
 viewable by running <em><a href="r.info.html">r.info</a></em>)
 and then run <em><a href="r.resample.html">r.resample</a></em>.
 
@@ -101,11 +101,11 @@ values in the format "<em>low</em> thru <em>high</em>." The
 word "thru" must be present.
 <p>To include all (remaining) values the asterix "*" can be used. This
 rule has to be set as last rule. No further rules are accepted after
-setting this rule. The special rule "<tt>* = *</tt>" specifies
+setting this rule. The special rule "<code>* = *</code>" specifies
 that all categories not explicitly set by one of the above rules
 should be passed through unaltered instead of being set to NULL.
 <p>Categories to become no data are specified by setting the output
-category value to "<tt>NULL</tt>".
+category value to "<code>NULL</code>".
 <p>
 A line containing only the word <b>end</b> terminates the
 input.

@@ -158,9 +158,10 @@ class SeriesMap(BaseSeriesMap):
         (i.e. show or save).
         """
         if not self._baseseries_added:
-            raise RuntimeError(
+            msg = (
                 "Cannot render series since none has been added."
                 "Use SeriesMap.add_rasters() or SeriesMap.add_vectors()"
             )
+            raise RuntimeError(msg)
         tasks = [(i,) for i in range(self.baseseries)]
         self._render(tasks)
