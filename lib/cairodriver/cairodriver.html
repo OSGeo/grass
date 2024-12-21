@@ -7,7 +7,7 @@ Cairo graphics library.
 
 The Cairo driver generates PNG, BMP, PPM, PS, PDF or SVG images by
 GRASS display commands, using the
-<a href="http://www.cairographics.org/">Cairo graphics library</a>.
+<a href="https://www.cairographics.org/">Cairo graphics library</a>.
 The image format is selected from the extension of the output file.
 
 The Cairo driver is used for GRASS display commands by default if
@@ -44,11 +44,11 @@ Several environment variables affect the operation of the Cairo driver:
   </li>
   <li><b>GRASS_RENDER_ANTIALIAS</b><br> can be <em>default</em>,
     <em>none</em>, <em>gray</em>, or <em>subpixel</em>, corresponding to
-    <a href="http://www.cairographics.org/manual/cairo-cairo-t.html#cairo-antialias-t">cairo_antialias_t</a>
+    <a href="https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-antialias-t">cairo_antialias_t</a>
   </li>
   <li><b>GRASS_RENDER_FILE=filename</b><br>
      the name and format of the resulting image file, default is
-     <tt>map.png</tt>.<br>
+     <code>map.png</code>.<br>
      The image format is determined from the file extension.<br>
      Supported bitmap formats:
      <ul>
@@ -67,12 +67,12 @@ Several environment variables affect the operation of the Cairo driver:
      the Cairo library that GRASS was built with.)
   </li>
   <li><b>GRASS_RENDER_FILE_READ</b><br>
-     if <tt>TRUE</tt>, the Cairo driver will initialize the image from
+     if <code>TRUE</code>, the Cairo driver will initialize the image from
     the contents of GRASS_RENDER_FILE.<br>
     (<em>Note: This is only supported for bitmap formats</em>)
   </li>
   <li><b>GRASS_RENDER_FILE_MAPPED</b><br>
-    if <tt>TRUE</tt>, the Cairo driver will map GRASS_RENDER_FILE as its framebuffer,
+    if <code>TRUE</code>, the Cairo driver will map GRASS_RENDER_FILE as its framebuffer,
     rather than using memory.<br>
     (<em>Note: This only works with BMP files.</em>)
   </li>
@@ -152,13 +152,13 @@ d.vect map=roadsmajor -c
 The driver is still in development. Enable it by specifying
 <code>--with-cairo</code> when configuring GRASS. This
 requires a reasonably recent version of the Cairo libraries
-and a working <tt>pkg-config</tt>.
+and a working <code>pkg-config</code>.
 
 <p>Antialiasing is enabled by default for bitmap formats. There is
 currently no way of disabling this.
 
 <p>The resolution of the output images is defined by current region
-extents. Use <tt>g.region -p</tt> to get the number of rows and cols
+extents. Use <code>g.region -p</code> to get the number of rows and cols
 and use the environment variables to set the image size. If you would
 like a larger image, multiply both rows and cols by the same whole
 number to preserve the aspect ratio.

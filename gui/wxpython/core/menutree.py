@@ -136,7 +136,7 @@ class MenuTreeModelBuilder:
         elif item.tag == "menu":
             self._createMenu(item, node)
         else:
-            raise ValueError(_("Unknow tag %s") % item.tag)
+            raise ValueError(_("Unknown tag %s") % item.tag)
 
     def GetModel(self, separators=False):
         """Returns copy of model with or without separators

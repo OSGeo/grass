@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
-This numerical program calculates implicit transient, confined and
-unconfined groundwater flow in two dimensions based on
+<em>r.gwflow</em> is a numerical program which calculates implicit transient,
+confined and unconfined groundwater flow in two dimensions based on
 raster maps and the current region settings.
 All initial and boundary conditions must be provided as
 raster maps. The unit of the current project's coordinate reference system must be meters.
@@ -95,7 +95,7 @@ g.region res=25 res3=25 t=100 b=0 n=1000 s=0 w=0 e=1000 -p3
 #now create the input raster maps for confined and unconfined aquifers
 r.mapcalc expression="phead = if(row() == 1 , 50, 40)"
 r.mapcalc expression="status = if(row() == 1 , 2, 1)"
-r.mapcalc expression="well = if(row() == 20 && col() == 20 , -0.01, 0)"
+r.mapcalc expression="well = if(row() == 20 &amp;&amp; col() == 20 , -0.01, 0)"
 r.mapcalc expression="hydcond = 0.00025"
 r.mapcalc expression="recharge = 0"
 r.mapcalc expression="top_conf = 20.0"

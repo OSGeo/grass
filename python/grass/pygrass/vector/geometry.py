@@ -611,7 +611,8 @@ class Point(Geo):
             dist_x = dist
             dist_y = dist
         elif not dist_x or not dist_y:
-            raise TypeError("TypeError: buffer expected 1 arguments, got 0")
+            msg = "buffer expected 1 arguments, got 0"
+            raise TypeError(msg)
         bound = Line()
         p_points = ctypes.pointer(bound.c_points)
         libvect.Vect_point_buffer2(
@@ -675,7 +676,8 @@ class Line(Geo):
             if key < 0:  # Handle negative indices
                 key += self.c_points.contents.n_points
             if key >= self.c_points.contents.n_points:
-                raise IndexError("Index out of range")
+                msg = "Index out of range"
+                raise IndexError(msg)
             return Point(
                 self.c_points.contents.x[key],
                 self.c_points.contents.y[key],
@@ -743,7 +745,8 @@ class Line(Geo):
             ctypes.pointer(ctypes.c_double(angle)),
             ctypes.pointer(ctypes.c_double(slope)),
         ):
-            raise ValueError("Vect_point_on_line give an error.")
+            msg = "Vect_point_on_line gave an error."
+            raise ValueError(msg)
         pnt.is2D = self.is2D
         return pnt
 
@@ -845,7 +848,8 @@ class Line(Geo):
         if indx < 0:  # Handle negative indices
             indx += self.c_points.contents.n_points
         if indx >= self.c_points.contents.n_points:
-            raise IndexError("Index out of range")
+            msg = "Index out of range"
+            raise IndexError(msg)
         x, y, z = get_xyz(pnt)
         libvect.Vect_line_insert_point(self.c_points, indx, x, y, z)
 
@@ -949,7 +953,8 @@ class Line(Geo):
         if indx < 0:  # Handle negative indices
             indx += self.c_points.contents.n_points
         if indx >= self.c_points.contents.n_points:
-            raise IndexError("Index out of range")
+            msg = "Index out of range"
+            raise IndexError(msg)
         pnt = self[indx]
         libvect.Vect_line_delete_point(self.c_points, indx)
         return pnt
@@ -968,7 +973,8 @@ class Line(Geo):
         if indx < 0:  # Handle negative indices
             indx += self.c_points.contents.n_points
         if indx >= self.c_points.contents.n_points:
-            raise IndexError("Index out of range")
+            msg = "Index out of range"
+            raise IndexError(msg)
         libvect.Vect_line_delete_point(self.c_points, indx)
 
     def prune(self):
@@ -1024,7 +1030,8 @@ class Line(Geo):
             if pnt == point:
                 libvect.Vect_line_delete_point(self.c_points, indx)
                 return
-        raise ValueError("list.remove(x): x not in list")
+        msg = "list.remove(x): x not in list"
+        raise ValueError(msg)
 
     def reverse(self):
         """Reverse the order of vertices, using `Vect_line_reverse`
@@ -1173,7 +1180,8 @@ class Line(Geo):
             dist_x = dist
             dist_y = dist
         elif not dist_x or not dist_y:
-            raise TypeError("TypeError: buffer expected 1 arguments, got 0")
+            msg = "buffer expected 1 arguments, got 0"
+            raise TypeError(msg)
         p_bound = ctypes.pointer(ctypes.pointer(libvect.line_pnts()))
         pp_isle = ctypes.pointer(ctypes.pointer(ctypes.pointer(libvect.line_pnts())))
         n_isles = ctypes.pointer(ctypes.c_int())
@@ -1296,7 +1304,8 @@ class Node:
 
         TODO: Must be implemented
         """
-        raise Exception("Not implemented")
+        msg = "Not implemented"
+        raise Exception(msg)
 
     def ilines(self, only_in=False, only_out=False):
         """Return a generator with all lines id connected to a node.
@@ -1507,7 +1516,8 @@ class Isle(Geo):
 
     def to_wkb(self):
         """Return a "well know text" (WKB) geometry array. ::"""
-        raise Exception("Not implemented")
+        msg = "Not implemented"
+        raise Exception(msg)
 
     @mapinfo_must_be_set
     def points_geos(self):
@@ -1723,7 +1733,8 @@ class Area(Geo):
             dist_x = dist
             dist_y = dist
         elif not dist_x or not dist_y:
-            raise TypeError("TypeError: buffer expected 1 arguments, got 0")
+            msg = "buffer expected 1 arguments, got 0"
+            raise TypeError(msg)
         p_bound = ctypes.pointer(ctypes.pointer(libvect.line_pnts()))
         pp_isle = ctypes.pointer(ctypes.pointer(ctypes.pointer(libvect.line_pnts())))
         n_isles = ctypes.pointer(ctypes.c_int())
@@ -1901,7 +1912,8 @@ def c_read_line(feature_id, c_mapinfo, c_points, c_cats):
     if feature_id < 0:  # Handle negative indices
         feature_id += nmax + 1
     if feature_id > nmax:
-        raise IndexError("Index out of range")
+        msg = "Index out of range"
+        raise IndexError(msg)
     if feature_id > 0:
         ftype = libvect.Vect_read_line(c_mapinfo, c_points, c_cats, feature_id)
         return feature_id, ftype, c_points, c_cats
