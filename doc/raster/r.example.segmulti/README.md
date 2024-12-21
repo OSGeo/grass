@@ -7,7 +7,7 @@ make
 To run (the asterisks will match your operating system and version
 specific directory and file):
 
-```
+```shell
 ../../../bin.*/grass* --tmp-location XY --exec bash <<EOF
 g.region res=0.1
 r.mapcalc -s expression='raster_1 = rand(0., 15)'
@@ -29,6 +29,6 @@ Both assumes you have GRASS GIS locally compiled.
 
 To precisely time the execution, you can use *perf*:
 
-```
+```shell
 perf stat -r 100 r.example.segmulti ... --overwrite
 ```
