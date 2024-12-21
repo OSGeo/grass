@@ -193,7 +193,8 @@ def readAvi(filename, asNumpy=True):
         print(S.stderr.read())
         # Clean up
         _cleanDir(tempDir)
-        raise RuntimeError("Could not read avi.")
+        msg = "Could not read avi."
+        raise RuntimeError(msg)
 
     # Read images
     images = images2ims.readIms(os.path.join(tempDir, "im*.jpg"), asNumpy)

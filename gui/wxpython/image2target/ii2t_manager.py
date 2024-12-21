@@ -23,7 +23,7 @@ This program is free software under the GNU General Public License
 
 @author Original author Michael Barton
 @author Original version improved by Martin Landa <landa.martin gmail.com>
-@author Rewritten by Markus Metz redesign georectfier -> GCP Manage
+@author Rewritten by Markus Metz redesign georectifier -> GCP Manage
 @author Support for GraphicsSet added by Stepan Turek <stepan.turek seznam.cz> (2012)
 @author port i.image.2target (v6) to version 7 in 2017 by Yann
 """
@@ -1030,10 +1030,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         # register data structures for drawing GCP's
         #
         self.pointsToDrawTgt = self.TgtMapWindow.RegisterGraphicsToDraw(
-            graphicsType="point", setStatusFunc=self.SetGCPSatus
+            graphicsType="point", setStatusFunc=self.SetGCPStatus
         )
         self.pointsToDrawSrc = self.SrcMapWindow.RegisterGraphicsToDraw(
-            graphicsType="point", setStatusFunc=self.SetGCPSatus
+            graphicsType="point", setStatusFunc=self.SetGCPStatus
         )
 
         # connect to the map windows signals
@@ -1393,7 +1393,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         self.pointsToDrawSrc.SetPropertyVal("text", textProp)
         self.pointsToDrawTgt.SetPropertyVal("text", copy(textProp))
 
-    def SetGCPSatus(self, item, itemIndex):
+    def SetGCPStatus(self, item, itemIndex):
         """Before GCP is drawn, decides it's colour and whether it
         will be drawn.
         """

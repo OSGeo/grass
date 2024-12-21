@@ -44,10 +44,10 @@ def register_maps_in_space_time_dataset(
     unit=None,
     increment=None,
     dbif=None,
-    interval=False,
-    fs="|",
-    update_cmd_list=True,
-):
+    interval: bool = False,
+    fs: str = "|",
+    update_cmd_list: bool = True,
+) -> None:
     """Use this method to register maps in space time datasets.
 
     Additionally a start time string and an increment string can be
@@ -464,8 +464,8 @@ def register_maps_in_space_time_dataset(
 
 
 def assign_valid_time_to_map(
-    ttype, map_object, start, end, unit, increment=None, mult=1, interval=False
-):
+    ttype, map_object, start, end, unit, increment=None, mult=1, interval: bool = False
+) -> None:
     """Assign the valid time to a map dataset
 
     :param ttype: The temporal type which should be assigned
@@ -590,8 +590,8 @@ def assign_valid_time_to_map(
 
 
 def register_map_object_list(
-    type, map_list, output_stds, delete_empty=False, unit=None, dbif=None
-):
+    type, map_list, output_stds, delete_empty: bool = False, unit=None, dbif=None
+) -> None:
     """Register a list of AbstractMapDataset objects in the temporal database
     and optional in a space time dataset.
 

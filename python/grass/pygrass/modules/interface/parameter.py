@@ -112,10 +112,11 @@ def _check_value(param, value):
                         good = True
                         break
             if not good:
-                raise ValueError(
-                    f"The Parameter <{param.name}>, must be one of the following "
+                msg = (
+                    f"The parameter <{param.name}>, must be one of the following "
                     f"values: {param.values!r} not '{newvalue}'"
                 )
+                raise ValueError(msg)
     return (
         (
             [
@@ -148,7 +149,7 @@ class Parameter:
         >>> param.value = 3
         Traceback (most recent call last):
            ...
-        ValueError: The Parameter <int_number>, must be one of the following values: [2, 4, 6, 8] not '3'
+        ValueError: The parameter <int_number>, must be one of the following values: [2, 4, 6, 8] not '3'
 
     ...
     """  # noqa: E501
@@ -160,7 +161,8 @@ class Parameter:
         self.max = None
         diz = element2dict(xparameter) if xparameter is not None else diz
         if diz is None:
-            raise TypeError("Xparameter or diz are required")
+            msg = "xparameter or diz are required"
+            raise TypeError(msg)
         self.name = diz["name"]
         self.required = diz["required"] == "yes"
         self.multiple = diz["multiple"] == "yes"

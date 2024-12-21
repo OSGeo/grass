@@ -3,7 +3,7 @@
 <em>v.net.salesman</em> calculates the optimal route to visit nodes on a
 vector network.
 
-<p>Costs may be either line lengths, or attributes saved in a database
+<p>Costs may be either line lengths or attributes saved in a database
 table. These attribute values are taken as costs of whole segments, not
 as costs to traverse a length unit (e.g. meter) of the segment.
 For example, if the speed limit is 100 km / h, the cost to traverse a
@@ -14,16 +14,16 @@ length / speed = 10 km / (100 km/h) = 0.1 h.
 Supported are cost assignments for arcs,
 and also different costs for both directions of a vector line.
 For areas, costs will be calculated along boundary lines.
+
 <p>The input vector needs to be prepared with <em>v.net operation=connect</em>
 in order to connect points representing center nodes to the network.
 
 <p>Points specified by category must be exactly on network nodes, and the
 input vector map needs to be prepared with <em>v.net operation=connect</em>.
 
-<p>Application of flag <b>-t</b> enables a turntable support.
-This flag requires additional parameters <b>turn_layer</b> and <b>turn_cat_layer</b>
-that are otherwise ignored.
- The turntable allows
+<p>The flag <b>-t</b> enables turntable support.
+This flag requires additional parameters, <b>turn_layer</b> and <b>turn_cat_layer</b>,
+that are otherwise ignored. The turntable allows
 to model e.g. traffic code, where some turns may be prohibited.
 This means that the input layer is expanded by
 turntable with costs of every possible turn on any possible node
@@ -161,7 +161,7 @@ Documentation: Markus Neteler, Markus Metz
 
 <h3>TURNS SUPPORT</h3>
 
-The turns support was implemnented as part of GRASS GIS turns cost project
+The turns support was implemented as part of GRASS GIS turns cost project
 at Czech Technical University in Prague, Czech Republic.<br>
 Eliska Kyzlikova, Stepan Turek, Lukas Bocan and Viera Bejdova participated
 in the project.

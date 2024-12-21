@@ -64,7 +64,8 @@ class RowIO:
             )
             == -1
         ):
-            raise GrassError("Fatal error, Rowio not setup correctly.")
+            msg = f"Fatal error, {RowIO.__name__} not setup correctly."
+            raise GrassError(msg)
 
     def release(self):
         librowio.Rowio_release(ctypes.byref(self.c_rowio))

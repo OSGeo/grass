@@ -27,7 +27,7 @@ v.edit map=roads tool=select \
 selects all features (and prints their id's to standard output)
 covered by two bounding boxes (center at 599505,4921010 and
 603389.0625,4918292.1875, size 2*10000) with attribute
-<tt>label='interstate'</tt>.
+<code>label='interstate'</code>.
 
 <h2>NOTES</h2>
 
@@ -46,8 +46,8 @@ Vector features can be selected in several ways:
     box, size defined by <b>threshold</b>)</li>
     <li><b>bbox</b> - using bounding box</li>
     <li><b>polygon</b> - using polygon (at least 3 coordinate pairs have to be set)</li>
-    <li><b>where</b> - using where statement (attribute data)
-    <li><b>query</b> - special query (e.g. minimal vector line length)
+    <li><b>where</b> - using where statement (attribute data)</li>
+    <li><b>query</b> - special query (e.g. minimal vector line length)</li>
 </ul>
 
 Additional parameters for vector feature specification are:
@@ -108,7 +108,7 @@ Additional parameters for vector feature specification are:
     <li><b>break</b> - Split given vector line or boundary into two
     lines on location given by <b>coords</b>. If <b>coords</b> not
     given, breaks all selected lines at each intersection (based
-    on <em><a href="v.clean.html">v.clean</a></em>, <tt>tool=break</tt>).</li>
+    on <em><a href="v.clean.html">v.clean</a></em>, <code>tool=break</code>).</li>
 
     <li><b>snap</b> - Snap vector features in given threshold. See
     also module <em><a href="v.clean.html">v.clean</a></em>. Note that this
@@ -165,7 +165,7 @@ Additional parameters for vector feature specification are:
     and <b>zbulk</b> parameter. Also input vector map must be 3D.</li>
 
     <li><b>select</b> - Print comma separated list of selected line
-      id's. No editing is done.
+      id's. No editing is done.</li>
 </ul>
 
 <h2>EXAMPLES</h2>
@@ -181,7 +181,7 @@ v.edit tool=create map=vectmap
 Create new vector map and read data from file 'roads.txt':
 
 <div class="code"><pre>
-v.out.ascii in=roads format=standard > roads.txt;
+v.out.ascii in=roads format=standard &gt; roads.txt;
 v.edit tool=create map=vectmap input=roads.txt
 </pre></div>
 

@@ -228,7 +228,7 @@ build)*:
 
 `--x-includes=/usr/X11R6/include --x-libraries=/usr/X11R6/lib`
 
-To install the new Python GUI (see [REQUIREMENTS.html](../REQUIREMENTS.html)
+To install the new Python GUI (see [REQUIREMENTS.md](../REQUIREMENTS.md)
 and [gui/wxpython/README](../gui/wxpython/README), wxpython installer
 available at [wxpython.org](https://wxpython.org/)), add this to configure (fill
 in the correct version at x.x.x.x for the wxpython you have installed):
@@ -374,7 +374,7 @@ sudo ln -sf /Library/Frameworks/Tk.framework/Versions/8.5/libtkstub8.5.a \
 ### Universal GPSBabel
 
 A universal GPSBabel CLI executable is now included in the OSX binary
-from [www.gpsbabel.org](http://www.gpsbabel.org/). This does not need to
+from [www.gpsbabel.org](https://www.gpsbabel.org/). This does not need to
 be 64bit.
 
 ### Universal NetPBM
@@ -700,4 +700,4 @@ This program is free software under the GNU General Public License (>=v2).
 
 <kyngchaos@kyngchaos.com>
 
-<http://www.kyngchaos.com/>
+<https://www.kyngchaos.com/>

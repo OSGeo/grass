@@ -294,7 +294,7 @@ class VDigitWindow(BufferedMapWindow):
             return
 
         if self.toolbar.GetAction("type") in {"point", "centroid"}:
-            # add new point / centroiud
+            # add new point / centroid
             east, north = self.Pixel2Cell(self.mouse["begin"])
             nfeat, fids = self.digit.AddFeature(
                 self.toolbar.GetAction("type"), [(east, north)]
@@ -690,7 +690,7 @@ class VDigitWindow(BufferedMapWindow):
     def _onLeftDown(self, event):
         """Left mouse button donw - vector digitizer various actions"""
         try:
-            mapLayer = self.toolbar.GetLayer().GetName()
+            self.toolbar.GetLayer().GetName()
         except:
             GMessage(parent=self, message=_("No vector map selected for editing."))
             event.Skip()

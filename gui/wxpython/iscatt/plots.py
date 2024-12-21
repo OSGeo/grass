@@ -235,7 +235,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         img = imshow(
             self.axes,
             merged_img,
-            extent=[int(ceil(x)) for x in self.full_extend],
+            extent=[ceil(x) for x in self.full_extend],
             origin="lower",
             interpolation="nearest",
             aspect="equal",
@@ -633,10 +633,11 @@ class PolygonDrawer:
 
     def __init__(self, ax, pol, empty_pol):
         if pol.figure is None:
-            raise RuntimeError(
+            msg = (
                 "You must first add the polygon to a figure or canvas before defining "
                 "the interactor"
             )
+            raise RuntimeError(msg)
         self.ax = ax
         self.canvas = pol.figure.canvas
 
@@ -912,7 +913,8 @@ class ModestImage(mi.AxesImage):
 
     def __init__(self, minx=0.0, miny=0.0, *args, **kwargs):
         if "extent" in kwargs and kwargs["extent"] is not None:
-            raise NotImplementedError("ModestImage does not support extents")
+            msg = f"{ModestImage.__name__} does not support extents"
+            raise NotImplementedError(msg)
 
         self._full_res = None
         self._sx, self._sy = None, None
@@ -932,12 +934,14 @@ class ModestImage(mi.AxesImage):
         self._A = A
 
         if self._A.dtype != np.uint8 and not np.can_cast(self._A.dtype, float):
-            raise TypeError("Image data can not convert to float")
+            msg = "Image data can not convert to float"
+            raise TypeError(msg)
 
         if self._A.ndim not in (2, 3) or (
             self._A.ndim == 3 and self._A.shape[-1] not in (3, 4)
         ):
-            raise TypeError("Invalid dimensions for image data")
+            msg = "Invalid dimensions for image data"
+            raise TypeError(msg)
 
         self._imcache = None
         self._rgbacache = None

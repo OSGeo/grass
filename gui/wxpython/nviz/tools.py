@@ -3791,7 +3791,7 @@ class NvizToolWindow(GNotebook):
         for name in self.mapWindow.GetLayerNames(type="raster"):
             data = self._getLayerPropertiesByName(name, mapType="raster")
             if not data:
-                continue  # shouldy no happen
+                continue  # should not happen
 
             data["surface"]["draw"]["all"] = True
             data["surface"]["draw"]["mode"] = {

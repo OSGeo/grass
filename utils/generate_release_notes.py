@@ -263,7 +263,8 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
     ).stdout
     commits = yaml.safe_load(text)
     if not commits:
-        raise RuntimeError("No commits retrieved from git log (try different tags)")
+        msg = "No commits retrieved from git log (try different tags)"
+        raise RuntimeError(msg)
 
     svn_name_by_git_author = csv_to_dict(
         CONFIG_DIRECTORY / "svn_name_git_author.csv",
