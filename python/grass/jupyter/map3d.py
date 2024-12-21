@@ -233,4 +233,5 @@ class Map3D:
             Image,
             display,
         )  # pylint: disable=import-outside-toplevel
+
         display(Image(self._filename))
