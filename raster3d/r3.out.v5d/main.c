@@ -257,11 +257,14 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
         G_fatal_error(_("Unable to create V5D file <%s>"), fileout);
 
     /* Write the v5d file */
-    if (!v5dWrite(1, 1, g))
+    if (!v5dWrite(1, 1, g)) {
+        G_free(g);
         G_fatal_error(_("Failed writing V5D file"));
+    }        
 
     /* Close the v5d file */
     v5dClose();
+    G_free(g);
 }
 
 /*---------------------------------------------------------------------------*/
