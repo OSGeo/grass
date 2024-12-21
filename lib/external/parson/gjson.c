@@ -1,11 +1,13 @@
 /*****************************************************************************
  *
- * MODULE:       Grass json output interface
+ * MODULE:       GRASS json output interface
+ *
+ * AUTHOR:       Nishant Bansal (nishant.bansal.282003@gmail.com)
  *
  * PURPOSE:      parson library function wrapper
  *               part of the gjson library
  *
- * COPYRIGHT:    (C) 2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2024 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
