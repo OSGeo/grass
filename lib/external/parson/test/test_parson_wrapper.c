@@ -47,7 +47,7 @@ int unit_test_parson_wrapper(void)
 /* *************************************************************** */
 /* Test all implemented parson wrapper **************** */
 /* *************************************************************** */
-int test_parson_wrapper()
+int test_parson_wrapper(void)
 {
     int sum = 0;
     JSON_Value *value = NULL;
