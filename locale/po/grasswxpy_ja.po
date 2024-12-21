@@ -1102,13 +1102,13 @@ msgstr "3D表示設定がファイルに保存されました <%s>."
 msgid ""
 "This module requires the NumPy module, which could not be imported. It "
 "probably is not installed (it's not part of the standard Python "
-"distribution). See the Numeric Python site (http://numpy.scipy.org) for "
+"distribution). See the Numeric Python site (https://numpy.org) for "
 "information on downloading source or binaries."
 msgstr ""
-"このモジュールはインポートされないNumpyモジュールを必要とします. おそらくイン"
+"このモジュールはインポートされないNumPyモジュールを必要とします. おそらくイン"
 "ストールされていません（標準的なPython分布の一環ではありません）. ソースまた"
-"はバイナリのダウンロードに関する情報は数値Pythonのサイト（http://numpy.scipy."
-"org）を参照してください"
+"はバイナリのダウンロードに関する情報は数値Pythonのサイト（https://numpy.org"
+"）を参照してください"
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
 #: ../gui/wxpython/iclass/g.gui.iclass.py:88
@@ -7723,7 +7723,7 @@ msgstr "境界の融合"
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 #, fuzzy
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr "共通のカテゴリー番号や属性を共有するエリアを融合させる"
 
@@ -13140,7 +13140,7 @@ msgid "Zoom to saved region extents"
 msgstr "保存領域をズーム"
 
 #: ../gui/wxpython/mapwin/buffered.py:2103
-msgid "Set compulational region from named region"
+msgid "Set computational region from named region"
 msgstr ""
 
 #: ../gui/wxpython/mapwin/buffered.py:2114
@@ -14518,7 +14518,7 @@ msgstr "エラー："
 
 #: ../gui/wxpython/core/gcmd.py:504
 #, python-format
-msgid "Unable to exectute command: '%s'"
+msgid "Unable to execute command: '%s'"
 msgstr "コマンドが実行できません： '%s'"
 
 #: ../gui/wxpython/core/utils.py:50
@@ -14596,7 +14596,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/menutree.py:155
 #, python-format
-msgid "Unknow tag %s"
+msgid "Unknown tag %s"
 msgstr "不明なタグ %s"
 
 #: ../gui/wxpython/core/debug.py:46
@@ -15240,10 +15240,6 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:1528
 msgid "Set computational region extent interactively"
-msgstr ""
-
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:1534
@@ -18294,17 +18290,17 @@ msgid "Statistics is not support for DBF tables."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:4062
-msgid "Unable to calculte statistics."
+msgid "Unable to calculate statistics."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:4071
 #, python-format
 msgid ""
-"Unable to calculte statistics. Invalid number of lines %d (should be %d)."
+"Unable to calculate statistics. Invalid number of lines %d (should be %d)."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:4098
-msgid "Unable to calculte standard deviation."
+msgid "Unable to calculate standard deviation."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:4106

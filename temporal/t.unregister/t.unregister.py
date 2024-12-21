@@ -93,12 +93,7 @@ def main():
 
     # Map names as comma separated string
     if maps is not None and maps != "":
-        if maps.find(",") == -1:
-            maplist = [
-                maps,
-            ]
-        else:
-            maplist = maps.split(",")
+        maplist = [maps] if maps.find(",") == -1 else maps.split(",")
 
         # Build the maplist
         for count in range(len(maplist)):

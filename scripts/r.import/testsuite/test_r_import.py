@@ -13,9 +13,9 @@ class TestRImportRegion(TestCase):
     def setUpClass(cls):
         cls.runModule("g.region", raster="elevation")
 
-    def tearDown(cls):
+    def tearDown(self):
         """Remove imported map after each test method"""
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.imported)
+        self.runModule("g.remove", flags="f", type="raster", name=self.imported)
 
     def test_import_estimate(self):
         """Test e flag"""

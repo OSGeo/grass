@@ -163,7 +163,8 @@ class Map:
             self._region_manager.adjust_rendering_size_from_region()
             gs.run_command(module, env=self._env, **kwargs)
         else:
-            raise ValueError("Module must begin with letter 'd'.")
+            msg = "Module must begin with letter 'd'."
+            raise ValueError(msg)
 
     def __getattr__(self, name):
         """Parse attribute to GRASS display module. Attribute should be in
