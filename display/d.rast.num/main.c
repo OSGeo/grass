@@ -139,6 +139,7 @@ int main(int argc, char **argv)
 
     /* Setup driver and check important information */
     D_open_driver();
+    D_setup(0);
 
     map_name = opt.map->answer;
 
@@ -232,7 +233,8 @@ int main(int argc, char **argv)
     if (opt.charset->answer)
         D_encoding(opt.charset->answer);
 
-    D_setup2(0, 0, t, b, l, r);
+    D_set_src(t, b, l, r);
+    D_update_conversions();
 
     D_ns = fabs(D_get_u_to_d_yconv());
     D_ew = fabs(D_get_u_to_d_xconv());
