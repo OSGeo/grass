@@ -260,7 +260,7 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
     if (!v5dWrite(1, 1, g)) {
         G_free(g);
         G_fatal_error(_("Failed writing V5D file"));
-    }        
+    }
 
     /* Close the v5d file */
     v5dClose();
