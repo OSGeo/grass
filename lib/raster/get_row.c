@@ -11,6 +11,7 @@
    \author Original author CERL
  */
 
+#include <stdint.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -368,6 +369,12 @@ static void gdal_values_int(int fd, const unsigned char *data,
         case GDT_Byte:
             c[i] = *(GByte *)d;
             break;
+/* GDT_Int8 was introduced in GDAL 3.7 */
+#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 7, 0)
+        case GDT_Int8:
+            c[i] = *(int8_t *)d;
+            break;
+#endif
         case GDT_Int16:
             c[i] = *(GInt16 *)d;
             break;
@@ -917,7 +924,7 @@ int Rast__read_null_bits(int fd, int row, unsigned char *flags)
 }
 
 #define check_null_bit(flags, bit_num) \
-    ((flags)[(bit_num) >> 3] & ((unsigned char)0x80 >> ((bit_num)&7)) ? 1 : 0)
+    ((flags)[(bit_num) >> 3] & ((unsigned char)0x80 >> ((bit_num) & 7)) ? 1 : 0)
 
 static void get_null_value_row_nomask(int fd, char *flags, int row)
 {

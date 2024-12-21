@@ -68,15 +68,16 @@ class SpatialTopologyDatasetConnector:
          meet=a@P
          >>> rlist = tmr.get_spatial_relations()
          >>> if "COVER" in rlist.keys():
-         ...    print(rlist["COVER"][0].get_id())
+         ...     print(rlist["COVER"][0].get_id())
+         ...
          a@P
 
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.reset_spatial_topology()
 
-    def reset_spatial_topology(self):
+    def reset_spatial_topology(self) -> None:
         """Reset any information about temporal topology"""
         self._spatial_topology = {}
         self._has_spatial_topology = False
@@ -146,11 +147,11 @@ class SpatialTopologyDatasetConnector:
 
         return relations
 
-    def set_spatial_topology_build_true(self):
+    def set_spatial_topology_build_true(self) -> None:
         """Same as name"""
         self._has_spatial_topology = True
 
-    def set_spatial_topology_build_false(self):
+    def set_spatial_topology_build_false(self) -> None:
         """Same as name"""
         self._has_spatial_topology = False
 
@@ -158,7 +159,7 @@ class SpatialTopologyDatasetConnector:
         """Check if the temporal topology was build"""
         return self._has_spatial_topology
 
-    def append_equivalent(self, map):
+    def append_equivalent(self, map) -> None:
         """Append a map with equivalent spatial extent as this map
 
         :param map: This object should be of type AbstractMapDataset
@@ -177,7 +178,7 @@ class SpatialTopologyDatasetConnector:
             return None
         return self._spatial_topology["EQUIVALENT"]
 
-    def append_overlap(self, map):
+    def append_overlap(self, map) -> None:
         """Append a map that this spatial overlap with this map
 
         :param map: This object should be of type AbstractMapDataset
@@ -196,7 +197,7 @@ class SpatialTopologyDatasetConnector:
             return None
         return self._spatial_topology["OVERLAP"]
 
-    def append_in(self, map):
+    def append_in(self, map) -> None:
         """Append a map that this is spatial in this map
 
         :param map: This object should be of type AbstractMapDataset
@@ -215,7 +216,7 @@ class SpatialTopologyDatasetConnector:
             return None
         return self._spatial_topology["IN"]
 
-    def append_contain(self, map):
+    def append_contain(self, map) -> None:
         """Append a map that this map spatially contains
 
         :param map: This object should be of type AbstractMapDataset
@@ -234,7 +235,7 @@ class SpatialTopologyDatasetConnector:
             return None
         return self._spatial_topology["CONTAIN"]
 
-    def append_meet(self, map):
+    def append_meet(self, map) -> None:
         """Append a map that spatially meet with this map
 
         :param map: This object should be of type AbstractMapDataset
@@ -253,7 +254,7 @@ class SpatialTopologyDatasetConnector:
             return None
         return self._spatial_topology["MEET"]
 
-    def append_cover(self, map):
+    def append_cover(self, map) -> None:
         """Append a map that spatially cover this map
 
         :param map: This object should be of type AbstractMapDataset
@@ -272,7 +273,7 @@ class SpatialTopologyDatasetConnector:
             return None
         return self._spatial_topology["COVER"]
 
-    def append_covered(self, map):
+    def append_covered(self, map) -> None:
         """Append a map that is spatially covered by this map
 
         :param map: This object should be of type AbstractMapDataset
@@ -291,7 +292,7 @@ class SpatialTopologyDatasetConnector:
             return None
         return self._spatial_topology["COVERED"]
 
-    def _generate_map_list_string(self, map_list, line_wrap=True):
+    def _generate_map_list_string(self, map_list, line_wrap: bool = True):
         count = 0
         string = ""
         for map_ in map_list:
@@ -315,11 +316,11 @@ class SpatialTopologyDatasetConnector:
     contain = property(fget=get_contain, fset=append_contain)
     meet = property(fget=get_meet, fset=append_meet)
 
-    def print_spatial_topology_info(self):
+    def print_spatial_topology_info(self) -> None:
         """Print information about this class in human readable style"""
 
         print(
-            " +-------------------- Spatial Topology --------------------------------------+"
+            " +-------------------- Spatial Topology --------------------------------------+"  # noqa: E501
         )
         #          0123456789012345678901234567890
         if self.equivalent is not None:
@@ -358,7 +359,7 @@ class SpatialTopologyDatasetConnector:
                 + self._generate_map_list_string(self.meet)
             )
 
-    def print_spatial_topology_shell_info(self):
+    def print_spatial_topology_shell_info(self) -> None:
         """Print information about this class in shell style"""
 
         if self.equivalent is not None:

@@ -88,7 +88,8 @@
 # %end
 
 import sys
-import grass.script as gscript
+
+import grass.script as gs
 
 ############################################################################
 
@@ -103,7 +104,7 @@ def main():
     columns = options["columns"]
     order = options["order"]
     where = options["where"]
-    separator = gscript.separator(options["separator"])
+    separator = gs.separator(options["separator"])
     outpath = options["output"]
     colhead = flags["c"]
 
@@ -115,17 +116,14 @@ def main():
     dbif.connect()
     first = True
 
-    if gscript.verbosity() > 0 and not outpath:
+    if gs.verbosity() > 0 and not outpath:
         sys.stderr.write("----------------------------------------------\n")
 
     if outpath:
         outfile = open(outpath, "w")
 
     for ttype in temporal_type.split(","):
-        if ttype == "absolute":
-            time = "absolute time"
-        else:
-            time = "relative time"
+        time = "absolute time" if ttype == "absolute" else "relative time"
 
         stds_list = tgis.get_dataset_list(type, ttype, columns, where, order, dbif=dbif)
 
@@ -139,18 +137,20 @@ def main():
                 rows = stds_list[key]
 
                 if rows:
-                    if gscript.verbosity() > 0 and not outpath:
+                    if gs.verbosity() > 0 and not outpath:
                         if issubclass(sp.__class__, tgis.AbstractMapDataset):
                             sys.stderr.write(
                                 _(
-                                    "Time stamped %s maps with %s available in mapset <%s>:\n"
+                                    "Time stamped %s maps with %s available in mapset "
+                                    "<%s>:\n"
                                 )
                                 % (sp.get_type(), time, key)
                             )
                         else:
                             sys.stderr.write(
                                 _(
-                                    "Space time %s datasets with %s available in mapset <%s>:\n"
+                                    "Space time %s datasets with %s available in "
+                                    "mapset <%s>:\n"
                                 )
                                 % (sp.get_new_map_instance(None).get_type(), time, key)
                             )
@@ -190,5 +190,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     main()

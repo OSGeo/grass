@@ -1122,12 +1122,12 @@ msgstr "Einstellungen für 3D-Ansicht gespeichert in Datei <%s>."
 msgid ""
 "This module requires the NumPy module, which could not be imported. It "
 "probably is not installed (it's not part of the standard Python "
-"distribution). See the Numeric Python site (http://numpy.scipy.org) for "
+"distribution). See the Numeric Python site (https://numpy.org) for "
 "information on downloading source or binaries."
 msgstr ""
 "Dieses erfordert NumPy, das nicht importiert werden konnte. Es ist eventuell "
 "nicht installiert (es ist nicht Bestandteil der Standard-Python-"
-"Distribution). Gehe zur Numeric Python Website (http://numpy.scipy.org), um "
+"Distribution). Gehe zur Numeric Python Website (https://numpy.org), um "
 "den Quellcode oder Binaries zu erhalten."
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
@@ -6948,8 +6948,8 @@ msgstr "SIMWE Oberflächenabflussmodellierung"
 #: ../gui/wxpython/menustrings.py:428 ../gui/wxpython/menustrings.py:1391
 msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
 msgstr ""
-"Hydrologische Simulation des Oberflächenabfluss mittels \"path sampling"
-"\" (SIMWE)."
+"Hydrologische Simulation des Oberflächenabfluss mittels \"path sampling\" "
+"(SIMWE)."
 
 #: ../gui/wxpython/menustrings.py:429 ../gui/wxpython/menustrings.py:1392
 msgid "SIMWE Sediment flux modeling"
@@ -6960,8 +6960,8 @@ msgid ""
 "Sediment transport and erosion/deposition simulation using path sampling "
 "method (SIMWE)."
 msgstr ""
-"Sedimenttransport und Erosions-/Deposition-Simulation mittels \"path sampling"
-"\" (SIMWE)."
+"Sedimenttransport und Erosions-/Deposition-Simulation mittels \"path "
+"sampling\" (SIMWE)."
 
 #: ../gui/wxpython/menustrings.py:431 ../gui/wxpython/menustrings.py:1394
 msgid "Topographic index map"
@@ -13102,7 +13102,7 @@ msgid "Zoom to saved region extents"
 msgstr "Auf die Ausdehnung der gespeicherten Region vergrößern"
 
 #: ../gui/wxpython/mapwin/buffered.py:2102
-msgid "Set compulational region from named region"
+msgid "Set computational region from named region"
 msgstr ""
 
 #: ../gui/wxpython/mapwin/buffered.py:2113
@@ -13705,13 +13705,13 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:811
 #, python-format
 msgid ""
-"Do you want to continue with deleting mapset <%(mapset)s> from location <"
-"%(location)s>?\n"
+"Do you want to continue with deleting mapset <%(mapset)s> from location "
+"<%(location)s>?\n"
 "\n"
 "ALL MAPS included in this mapset will be PERMANENTLY DELETED!"
 msgstr ""
-"Wollen Sie mit dem Löschen des Mapsets <%(mapset)s> der Location <"
-"%(location)s> fortfahren?\n"
+"Wollen Sie mit dem Löschen des Mapsets <%(mapset)s> der Location "
+"<%(location)s> fortfahren?\n"
 "\n"
 "ALLE KARTEN in diesem Mapset werden UNWIDERRUFLICH GELÖSCHT!"
 
@@ -14486,7 +14486,7 @@ msgstr "Fehler: "
 
 #: ../gui/wxpython/core/gcmd.py:504
 #, python-format
-msgid "Unable to exectute command: '%s'"
+msgid "Unable to execute command: '%s'"
 msgstr "Kann den Befehl '%s' nicht ausführen."
 
 #: ../gui/wxpython/core/utils.py:50
@@ -14565,7 +14565,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/menutree.py:155
 #, python-format
-msgid "Unknow tag %s"
+msgid "Unknown tag %s"
 msgstr ""
 
 #: ../gui/wxpython/core/debug.py:46
@@ -15225,10 +15225,6 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:1560
 msgid "Set computational region extent interactively"
-msgstr ""
-
-#: ../gui/wxpython/mapdisp/frame.py:1563
-msgid "Set computational region from named region"
 msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:1566
@@ -15989,8 +15985,8 @@ msgstr ""
 #, python-format
 msgid ""
 "Scatter plot cannot be added.\n"
-"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit <"
-"%d>.\n"
+"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit "
+"<%d>.\n"
 msgstr ""
 
 #: ../gui/wxpython/iscatt/controllers.py:351
@@ -18133,8 +18129,8 @@ msgstr ""
 #: ../gui/wxpython/dbmgr/base.py:2629
 #, python-format
 msgid ""
-"Unable to rename column. Column <%(column)s> doesn't exist in the table <"
-"%(table)s>."
+"Unable to rename column. Column <%(column)s> doesn't exist in the table "
+"<%(table)s>."
 msgstr ""
 "Kann die Spalte nicht umbenennen. Die Spalte <%(column)s> existiert nicht in "
 "der Tabelle <%(table)s>."
@@ -18297,17 +18293,17 @@ msgid "Statistics is not support for DBF tables."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:4047
-msgid "Unable to calculte statistics."
+msgid "Unable to calculate statistics."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:4056
 #, python-format
 msgid ""
-"Unable to calculte statistics. Invalid number of lines %d (should be %d)."
+"Unable to calculate statistics. Invalid number of lines %d (should be %d)."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:4083
-msgid "Unable to calculte standard deviation."
+msgid "Unable to calculate standard deviation."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:4091
@@ -20652,17 +20648,6 @@ msgstr "Beschriftungen:"
 
 #~ msgid "GRASS GIS Raster Map Calculator"
 #~ msgstr "GRASS GIS Rasterkartenrechner"
-
-#: ../gui/wxpython/gmodeler/dialogs.py:318
-#, fuzzy, python-format
-msgid ""
-"'%s' is not a GRASS tool.\n"
-"\n"
-"Unable to add new action to the model."
-msgstr ""
-"'%s' ist kein GRASS Werkzeug.\n"
-"\n"
-"Kann keine neue Aktion zum Modell hinzufügen."
 
 #~ msgid "GRASS GIS 3D Raster Map Calculator"
 #~ msgstr "GRASS GIS 3D Raster Map Calculator"

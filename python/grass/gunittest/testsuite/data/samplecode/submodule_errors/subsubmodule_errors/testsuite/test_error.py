@@ -6,7 +6,8 @@ class TestError(TestCase):
     # pylint: disable=R0904
 
     def test_something(self):
-        raise RuntimeError("Error in test function")
+        msg = "Error in test function"
+        raise RuntimeError(msg)
         self.assertTrue(True)
 
 
@@ -14,7 +15,8 @@ class TestErrorSetUp(TestCase):
     # pylint: disable=R0904
 
     def setUp(self):
-        raise RuntimeError("Error in setUp")
+        msg = "Error in setUp"
+        raise RuntimeError(msg)
 
     def test_something(self):
         self.assertTrue(True)
@@ -24,7 +26,8 @@ class TestErrorTearDown(TestCase):
     # pylint: disable=R0904
 
     def tearDown(self):
-        raise RuntimeError("Error in tearDown")
+        msg = "Error in tearDown"
+        raise RuntimeError(msg)
 
     def test_something(self):
         self.assertTrue(True)
@@ -35,7 +38,8 @@ class TestErrorClassSetUp(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        raise RuntimeError("Error in setUpClass")
+        msg = "Error in setUpClass"
+        raise RuntimeError(msg)
 
     def test_something(self):
         self.assertTrue(True)
@@ -46,7 +50,8 @@ class TestErrorClassTearDown(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        raise RuntimeError("Error in tearDownClass")
+        msg = "Error in tearDownClass"
+        raise RuntimeError(msg)
 
     def test_something(self):
         self.assertTrue(True)

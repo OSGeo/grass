@@ -17,12 +17,12 @@ Library</a> can be printed by <b>-r</b> flag.
 
 <p>
 Version numbers of additional libraries
-like <a href="https://proj.org/">PROJ</a>, <a href="http://gdal.org/">GDAL/OGR</a>
-or <a href="http://trac.osgeo.org/geos">GEOS</a> are printed
+like <a href="https://proj.org/">PROJ</a>, <a href="https://gdal.org/">GDAL/OGR</a>
+or <a href="https://trac.osgeo.org/geos">GEOS</a> are printed
 by <b>-e</b> flag.
 
 <p>
-See also function <tt>version()</tt>
+See also function <code>version()</code>
 from <a href="https://grasswiki.osgeo.org/wiki/GRASS_Python_Scripting_Library">Python
 Scripting Library</a>.
 
@@ -38,7 +38,7 @@ print gcore.version()
 <div class="code"><pre>
 g.version
 
-GRASS 8.2.0dev (2022)
+GRASS 8.4.0 (2024)
 </pre></div>
 
 <h3>GIS Library info</h3>
@@ -46,33 +46,33 @@ GRASS 8.2.0dev (2022)
 <div class="code"><pre>
 g.version -r
 
-GRASS 8.2.0dev (2022)
+GRASS 8.4.0 (2024)
 libgis revision: c9e8576cf
-libgis date: 2022-04-27T09:38:49+00:00
+libgis date: 2024-04-27T09:38:49+00:00
 </pre></div>
 
 <h3>Full info in shell script style</h3>
 <div class="code"><pre>
 g.version -rge
 
-version=8.2.0dev
-date=2022
+version=8.4.0
+date=2024
 revision=d57f40906
-build_date=2021-05-23
+build_date=2024-05-23
 build_platform=x86_64-pc-linux-gnu
 build_off_t_size=8
 libgis_revision=c9e8576cf
-libgis_date=2022-04-27T09:38:49+00:00
+libgis_date=2024-04-27T09:38:49+00:00
 proj=8.2.1
 gdal=3.4.3
 geos=3.9.2
 sqlite=3.36.0
 </pre></div>
 
-Note: if <tt>revision=exported</tt> is reported instead of the git hash then the
-<tt>git</tt> program was not available during compilation of GRASS GIS and the
-source code did not contain the <tt>.git/</tt> subdirectory (requires e.g. to
-<tt>git clone</tt> the GRASS GIS <a href="https://github.com/OSGeo/grass/">software repository</a>.)
+Note: if <code>revision=exported</code> is reported instead of the git hash then the
+<code>git</code> program was not available during compilation of GRASS GIS and the
+source code did not contain the <code>.git/</code> subdirectory (requires e.g. to
+<code>git clone</code> the GRASS GIS <a href="https://github.com/OSGeo/grass/">software repository</a>.)
 
 <h2>Citing GRASS GIS</h2>
 

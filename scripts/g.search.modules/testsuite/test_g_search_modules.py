@@ -15,6 +15,7 @@ COPYRIGHT: (C) 2015 Jachym Cepicky, and by the GRASS Development Team
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.utils import xfail_windows
 from grass.script.utils import decode
 
 import unittest
@@ -65,6 +66,7 @@ class TestSearchModule(TestCase):
         stdout = decode(module.outputs.stdout).split()
         self.assertEqual(stdout[0], termcolor.colored("r.basins.fill", attrs=["bold"]))
 
+    @xfail_windows
     def test_manual_pages(self):
         module = SimpleModule("g.search.modules", keyword="kapri", flags="gm")
         self.assertModule(module)

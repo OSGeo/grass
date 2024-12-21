@@ -110,27 +110,18 @@ void D_show_conversions(void)
             D.east, D.south, D.north);
     fprintf(stderr, " A_w %10.1f  A_e %10.1f  A_s %10.1f  A_n %10.1f\n", A.west,
             A.east, A.south, A.north);
-    fprintf(stderr, " U_w %10.1f  U_e %10.1f  U_s %10.1f  U_n %10.1f\n", U.west,
-            U.east, U.south, U.north);
+    fprintf(stderr, " U_w %10.1f  U_e %10.1f  U_s %10.1f  U_n %10.1f\n\n",
+            U.west, U.east, U.south, U.north);
 
-    fprintf(stderr,
-            " D_x %10.1f  D_y %10.1f\n"
-            "\n",
-            D.size.x, D.size.y);
-    fprintf(stderr,
-            " A_x %10.1f  A_y %10.1f\n"
-            "\n",
-            A.size.x, A.size.y);
-    fprintf(stderr,
-            " U_x %10.1f  U_y %10.1f\n"
-            "\n",
-            U.size.x, U.size.y);
+    fprintf(stderr, " D_x %10.1f  D_y %10.1f\n", D.size.x, D.size.y);
+    fprintf(stderr, " A_x %10.1f  A_y %10.1f\n", A.size.x, A.size.y);
+    fprintf(stderr, " U_x %10.1f  U_y %10.1f\n\n", U.size.x, U.size.y);
 
-    fprintf(stderr, " D_to_A_conv.x %10.1f D_to_A_conv.y %10.1f \n",
+    fprintf(stderr, " D_to_A_conv.x %10.1f D_to_A_conv.y %10.1f\n",
             D_to_A_conv.x, D_to_A_conv.y);
-    fprintf(stderr, " A_to_U_conv.x %10.1f A_to_U_conv.y %10.1f \n",
+    fprintf(stderr, " A_to_U_conv.x %10.1f A_to_U_conv.y %10.1f\n",
             A_to_U_conv.x, A_to_U_conv.y);
-    fprintf(stderr, " U_to_D_conv.x %10.1f U_to_D_conv.y %10.1f \n",
+    fprintf(stderr, " U_to_D_conv.x %10.1g U_to_D_conv.y %10.1g\n",
             U_to_D_conv.x, U_to_D_conv.y);
 }
 

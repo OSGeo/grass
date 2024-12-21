@@ -108,6 +108,27 @@ ref5 = """azimuth,horizon_height,horizon_distance
 340.000000,0.196863,5004.018385
 """
 
+ref6 = """azimuth,horizon_height,horizon_distance
+180.000000,0.023101,420.000000
+200.000000,0.034850,436.577599
+220.000000,0.050549,184.390889
+240.000000,0.048211,197.230829
+260.000000,0.053101,162.788206
+280.000000,0.039774,253.179778
+300.000000,0.032360,277.848880
+320.000000,0.014804,262.488095
+340.000000,0.000000,0.000000
+360.000000,0.004724,2780.017986
+20.000000,0.012612,1148.259553
+40.000000,0.015207,1334.166406
+60.000000,0.014344,1867.966809
+80.000000,0.011044,2964.203097
+100.000000,0.012192,1828.223181
+120.000000,0.007462,4270.667395
+140.000000,0.004071,5659.231397
+160.000000,0.015356,1666.883319
+"""
+
 
 class TestHorizon(TestCase):
     circle = "circle"
@@ -204,17 +225,20 @@ class TestHorizon(TestCase):
         )
         self.assertModule(module)
         stdout = json.loads(module.outputs.stdout)
-        azimuths = []
         horizons = []
         reference = {}
-        for line in ref2.splitlines()[1:]:
-            azimuth, horizon = line.split(",")
-            azimuths.append(float(azimuth))
-            horizons.append(float(horizon))
+        for line in ref6.splitlines()[1:]:
+            azimuth, horizon, distance = line.split(",")
+            horizons.append(
+                {
+                    "azimuth": float(azimuth),
+                    "angle": float(horizon),
+                    "distance": float(distance),
+                }
+            )
         reference["x"] = 634720.0
         reference["y"] = 216180.0
-        reference["azimuth"] = azimuths
-        reference["horizon_height"] = horizons
+        reference["horizons"] = horizons
 
         self.assertListEqual([reference], stdout)
 
@@ -231,17 +255,20 @@ class TestHorizon(TestCase):
         )
         self.assertModule(module)
         stdout = json.loads(module.outputs.stdout)
-        azimuths = []
         horizons = []
         reference = {}
-        for line in ref2.splitlines()[1:]:
-            azimuth, horizon = line.split(",")
-            azimuths.append(float(azimuth))
-            horizons.append(float(horizon))
+        for line in ref6.splitlines()[1:]:
+            azimuth, horizon, distance = line.split(",")
+            horizons.append(
+                {
+                    "azimuth": float(azimuth),
+                    "angle": float(horizon),
+                    "distance": float(distance),
+                }
+            )
         reference["x"] = 634720.0
         reference["y"] = 216180.0
-        reference["azimuth"] = azimuths
-        reference["horizon_height"] = horizons
+        reference["horizons"] = horizons
 
         self.assertListEqual([reference, reference], stdout)
 
@@ -286,20 +313,20 @@ class TestHorizon(TestCase):
         )
         self.assertModule(module)
         stdout = json.loads(module.outputs.stdout)
-        azimuths = []
         horizons = []
-        distances = []
         reference = {}
         for line in ref5.splitlines()[1:]:
             azimuth, horizon, distance = line.split(",")
-            azimuths.append(float(azimuth))
-            horizons.append(float(horizon))
-            distances.append(float(distance))
+            horizons.append(
+                {
+                    "azimuth": float(azimuth),
+                    "angle": float(horizon),
+                    "distance": float(distance),
+                }
+            )
         reference["x"] = 637505.0
         reference["y"] = 221755.0
-        reference["azimuth"] = azimuths
-        reference["horizon_height"] = horizons
-        reference["horizon_distance"] = distances
+        reference["horizons"] = horizons
 
         self.assertListEqual([reference], stdout)
 

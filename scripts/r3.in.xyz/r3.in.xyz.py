@@ -226,10 +226,7 @@ def main():
         addl_opts["flags"] = "i"
 
     if scan_only or shell_style:
-        if shell_style:
-            doShell = "g"
-        else:
-            doShell = ""
+        doShell = "g" if shell_style else ""
         grass.run_command(
             "r.in.xyz",
             flags="s" + doShell,
@@ -243,10 +240,7 @@ def main():
         )
         sys.exit()
 
-    if dtype == "float":
-        data_type = "FCELL"
-    else:
-        data_type = "DCELL"
+    data_type = "FCELL" if dtype == "float" else "DCELL"
 
     region = grass.region(region3d=True)
 
