@@ -520,12 +520,12 @@ class GMFrame(wx.Frame):
         """
         for toolbar in mapdisplay.toolbars.keys():
             pane = mapdisplay._mgr.GetPane(mapdisplay.toolbars[toolbar])
-            pane.Show(False if pane.IsShown() else True)
+            pane.Show(not pane.IsShown())
         if self.statusbar:
             pane = mapdisplay._mgr.GetPane("statusbar")
-            pane.Show(False if pane.IsShown() else True)
+            pane.Show(not pane.IsShown())
         mapdisplay._mgr.Update()
-        return False if pane.IsShown() else True
+        return not pane.IsShown()
 
     def ShowPanes(self, minimize):
         """Minimize/restore docked datacatalog, layers, tools, console,
