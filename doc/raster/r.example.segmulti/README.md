@@ -1,6 +1,6 @@
 To compile the example simply use `make` (in this directory):
 
-```
+```shell
 make
 ```
 
