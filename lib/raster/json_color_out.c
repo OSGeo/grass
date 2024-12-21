@@ -1,3 +1,16 @@
+/*!
+   \file lib/raster/json_color_out.c
+
+   \brief Raster Library - Print color table in json format
+
+   (C) 2010-2024 by the GRASS Development Team
+
+   This program is free software under the GNU General Public
+   License (>=v2). Read the file COPYING that comes with GRASS
+   for details.
+
+ */
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,8 +20,6 @@
 #include <grass/glocale.h>
 #include <grass/parson.h>
 #include <grass/raster.h>
-
-#include "local_proto.h"
 
 #define COLOR_STRING_LENGTH 30
 
@@ -77,7 +88,7 @@ static void rgb_to_hsv(int r, int g, int b, float *h, float *s, float *v)
    \param clr_frmt color format to be used (RGB, HEX, HSV, TRIPLET).
    \param color_object pointer to the JSON object
  */
-static void set_color(int r, int g, int b, enum ColorFormat clr_frmt,
+static void set_color(int r, int g, int b, ColorFormat clr_frmt,
                       JSON_Object *color_object)
 {
     char color_string[COLOR_STRING_LENGTH];
@@ -87,24 +98,24 @@ static void set_color(int r, int g, int b, enum ColorFormat clr_frmt,
     case RGB:
         snprintf(color_string, sizeof(color_string), "rgb(%d, %d, %d)", r, g,
                  b);
-        json_object_set_string(color_object, "rgb", color_string);
+        json_object_set_string_parson(color_object, "rgb", color_string);
         break;
 
     case HEX:
         snprintf(color_string, sizeof(color_string), "#%02X%02X%02X", r, g, b);
-        json_object_set_string(color_object, "hex", color_string);
+        json_object_set_string_parson(color_object, "hex", color_string);
         break;
 
     case HSV:
         rgb_to_hsv(r, g, b, &h, &s, &v);
         snprintf(color_string, sizeof(color_string), "hsv(%d, %d, %d)", (int)h,
                  (int)s, (int)v);
-        json_object_set_string(color_object, "hsv", color_string);
+        json_object_set_string_parson(color_object, "hsv", color_string);
         break;
 
     case TRIPLET:
         snprintf(color_string, sizeof(color_string), "%d:%d:%d", r, g, b);
-        json_object_set_string(color_object, "triplet", color_string);
+        json_object_set_string_parson(color_object, "triplet", color_string);
         break;
     }
 }
@@ -126,7 +137,7 @@ static void set_color(int r, int g, int b, enum ColorFormat clr_frmt,
  */
 static void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g,
                             int b, JSON_Array *root_array, int perc,
-                            enum ColorFormat clr_frmt, FILE *fp,
+                            ColorFormat clr_frmt, FILE *fp,
                             JSON_Value *root_value)
 {
     static DCELL v0;
@@ -168,8 +179,8 @@ static void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g,
    \param perc TRUE for percentage output
    \param clr_frmt color format to be used (RBG, HEX, HSV, TRIPLET).
  */
-void print_json_colors(struct Colors *colors, DCELL min, DCELL max, FILE *fp,
-                       int perc, enum ColorFormat clr_frmt)
+void Rast_print_json_colors(struct Colors *colors, DCELL min, DCELL max,
+                            FILE *fp, int perc, ColorFormat clr_frmt)
 {
     JSON_Value *root_value = json_value_init_array();
     if (root_value == NULL) {
@@ -229,7 +240,7 @@ void print_json_colors(struct Colors *colors, DCELL min, DCELL max, FILE *fp,
                 _("Failed to initialize JSON object. Out of memory?"));
         }
         JSON_Object *nv_object = json_object(nv_value);
-        json_object_set_string(nv_object, "value", "nv");
+        json_object_set_string_parson(nv_object, "value", "nv");
         set_color(r, g, b, clr_frmt, nv_object);
         json_array_append_value(root_array, nv_value);
 
@@ -243,7 +254,7 @@ void print_json_colors(struct Colors *colors, DCELL min, DCELL max, FILE *fp,
                 _("Failed to initialize JSON object. Out of memory?"));
         }
         JSON_Object *default_object = json_object(default_value);
-        json_object_set_string(default_object, "value", "default");
+        json_object_set_string_parson(default_object, "value", "default");
         set_color(r, g, b, clr_frmt, default_object);
         json_array_append_value(root_array, default_value);
     }
