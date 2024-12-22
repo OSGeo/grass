@@ -4,5 +4,5 @@
 
 -- Function to convert code blocks to markdown
 function CodeBlock (cb)
-    return pandoc.RawBlock('markdown', '```bash\n' .. cb.text .. '\n```\n')
+    return pandoc.RawBlock('markdown', '```shell\n' .. cb.text .. '\n```\n')
 end
