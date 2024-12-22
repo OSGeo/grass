@@ -6,7 +6,7 @@
 
 ## EXAMPLES
 
-```bash
+```shell
 r.plus.example
 ```
 

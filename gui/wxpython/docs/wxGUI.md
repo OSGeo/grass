@@ -164,14 +164,14 @@ Adds a layer in which a GRASS GIS command or command list can be
 entered. For a command list use the semi-colon (";") symbol as a
 separator. For example:
 
-```bash
+```shell
 d.rast soils;d.rast -o roads;d.vect streams col=blue
 ```
 
 Note that when an option of the command contains spaces, you need to
 "escape" them with the backslash ('\\) character, for example:
 
-```bash
+```shell
 d.text text=Population\ density
 ```
 
@@ -523,14 +523,14 @@ Enable/disable auto-rendering map (re-renders map)
 By default, the GUI is always started, but if only the command line
 (shell) is running, the GUI can be also started manually using:
 
-```bash
+```shell
 g.gui
 ```
 
 If the wxGUI is not the default user interface, it can defined as
 default by typing at the GRASS GIS command line:
 
-```bash
+```shell
 g.gui -d wxpython
 ```
 
@@ -540,14 +540,14 @@ Alternatively, it may be defined in the main configuration file
 set to `wxpython` (`GUI: wxpython`) or by the environmental variable
 `GRASS_GUI`. To start with a previously saved workspace file:
 
-```bash
+```shell
 g.gui workspace=file.gxw
 ```
 
 The user can also start GRASS from the shell command line with the wxGUI
 specifying the `--gui` switch:
 
-```bash
+```shell
 grass --gui
 ```
 

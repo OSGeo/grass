@@ -31,7 +31,7 @@ programs or saved to a file for later use. Output with geographic
 coordinates (*-g*) is compatible with *[v.in.ascii](v.in.ascii.md)* and
 can be piped directly into this program.
 
-```bash
+```shell
 r.profile -g input=elevation coordinates=... | v.in.ascii output=elevation_profile separator=space
 ```
 
@@ -55,7 +55,7 @@ always match the end point coordinates entered for the segmanet.
 
 To extract the numbers in scripts, following parameters can be used:
 
-```bash
+```shell
 r.profile input=dgm12.5 coordinates=3570631,5763556 2>/dev/null
 ```
 
@@ -68,7 +68,7 @@ This filters out everything except the numbers.
 Extract a profile with coordinates (wayoints) provided on the command
 line (North Carolina data set):
 
-```bash
+```shell
 g.region raster=elevation -p
 r.profile -g input=elevation output=profile_points.csv \
           coordinates=641712,226095,641546,224138,641546,222048,641049,221186
@@ -82,7 +82,7 @@ east,north,distance,value (here: elevation).
 
 Coordinate pairs can also be "piped" into *r.profile* (variant 2a):
 
-```bash
+```shell
 r.profile elevation resolution=1000 file=- << EOF
 641712,226095
 641546,224138
@@ -93,7 +93,7 @@ EOF
 
 Coordinate pairs can also be "piped" into *r.profile* (variant 2b):
 
-```bash
+```shell
 echo "641712,226095
 641546,224138
 641546,222048
@@ -104,7 +104,7 @@ cat coors.txt | r.profile elevation resolution=1000 file=-
 The output is printed into the terminal (unless the *output* parameter
 is used) and looks as follows:
 
-```bash
+```shell
 Using resolution: 1000 [meters]
 Output columns:
 Along track dist. [meters], Elevation
@@ -121,13 +121,13 @@ Approx. transect length: 995.014070 [meters]
 
 ### JSON Output
 
-```bash
+```shell
 r.profile -g input=elevation coordinates=641712,226095,641546,224138,641546,222048,641049,221186 -c format=json resolution=1000
 ```
 
 The output looks as follows:
 
-```bash
+```shell
 [
     {
         "easting": 641712,
@@ -192,7 +192,7 @@ The JSON output makes for ease of integration with popular python data
 science libraries. For instance, here is an example of creating a
 scatterplot of distance vs elevation with color coding.
 
-```bash
+```shell
 import grass.script as gs
 import pandas as pd
 import matplotlib.pyplot as plt

@@ -35,7 +35,7 @@ following suffix can be used:
 In this example, all the raster maps of 2012 of "tempmean_monthly" will
 be exported:
 
-```bash
+```shell
 t.rast.export input=tempmean_monthly output=tempmean_monthly.tar.bzip2 \
               where="start_time >= '2012-01-01' and start_time < '2013-01-01'"
 

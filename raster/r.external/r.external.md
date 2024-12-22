@@ -28,7 +28,7 @@ to NULL (`if()` condition).
 
 ### RGB Orthophoto from GeoTIFF
 
-```bash
+```shell
 # import of all channels (each channel will become a GRASS raster map):
 r.external input=/home/user/data/maps/059100.tif output=ortho
 g.region raster=ortho.3 -p
@@ -42,7 +42,7 @@ External raster maps to be processed can be directly linked using
 *r.external*; likewise, results can be written out to standard raster
 formats with *r.external.out* (GDAL supported formats):
 
-```bash
+```shell
 # register GeoTIFF file to be used in current mapset:
 r.external input=terra_lst1km20030314.LST_Day.tif output=modis_celsius
 

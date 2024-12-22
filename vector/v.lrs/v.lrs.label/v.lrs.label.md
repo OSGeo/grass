@@ -4,7 +4,7 @@
 example is written for the Spearfish dataset (it continues the example
 from *v.lrs.create*).
 
-```bash
+```shell
 v.lrs.label route_lrs rstable=route_lrs output=route_lrs_labels \
             labels=labels col=red size=50 xoffset=100
 

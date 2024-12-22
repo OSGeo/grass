@@ -17,7 +17,7 @@ high byte, GREEN = low byte, BLUE = empty.
 
 An example Povray script file may look like this:
 
-```bash
+```shell
 #include "shapes.inc"
 #include "colors.inc"
 #include "textures.inc"

@@ -44,7 +44,7 @@ If **atype**=auto is given than *v.overlay* determines feature type for
 
 Preparation of example data (North Carolina sample dataset):
 
-```bash
+```shell
 # Create an empty box for overlaying to ZIP code vector map
 v.mkgrid map=box grid=1,1 position=coor coordinates=584037,201970 box=50000,50000
 
@@ -59,7 +59,7 @@ d.mon wx0
 
 Clipping example (no attribute table is generated here):
 
-```bash
+```shell
 d.vect map=zipcodes_wake fill_color=0:128:0
 d.vect map=box fill_color=85:130:176
 v.overlay -t ainput=box binput=zipcodes_wake operator=and output=v_overlay_AND
@@ -74,7 +74,7 @@ color)*
 
 Union example of areas:
 
-```bash
+```shell
 d.vect map=zipcodes_wake fill_color=0:128:0
 d.vect map=box fill_color=85:130:176
 v.overlay -t ainput=box binput=zipcodes_wake operator=or output=v_overlay_OR
@@ -88,7 +88,7 @@ d.vect map=v_overlay_OR
 
 Symmetrical difference example:
 
-```bash
+```shell
 d.vect map=zipcodes_wake fill_color=0:128:0
 d.vect map=box fill_color=85:130:176
 v.overlay -t ainput=box binput=zipcodes_wake operator=xor output=v_overlay_XOR
@@ -103,7 +103,7 @@ color)*
 
 Difference example:
 
-```bash
+```shell
 d.vect map=zipcodes_wake fill_color=0:128:0
 d.vect map=box fill_color=85:130:176
 v.overlay -t ainput=box binput=zipcodes_wake operator=not output=v_overlay_NOT
@@ -117,7 +117,7 @@ d.vect map=v_overlay_NOT
 
 ZIP code examples, based on North Carolina sample dataset:
 
-```bash
+```shell
 # creation of simple dataset
 v.extract input=zipcodes_wake output=poly1 where="cat = 42"
 v.extract input=urbanarea output=poly2 where="cat = 55"
@@ -138,14 +138,14 @@ alt="GRASS v.overlay results: AND, OR, NOT, XOR operations" />
 
 ### Polygons overlaid with polygons
 
-```bash
+```shell
 v.overlay ainput=lake binput=province output=lakeXprovince operator=or
 ```
 
 Polygon union of urban area and Census 2000 areas (North Carolina
 dataset):
 
-```bash
+```shell
 # input maps
 d.vect urbanarea
 d.vect census_wake2000
@@ -199,7 +199,7 @@ a clean result can be obtained by snapping with a threshold of 0.1 m.
 Using the North Carolina sample dataset, we clip the roads map to the
 area of city of Raleigh, preserving road attributes in layer 1:
 
-```bash
+```shell
 g.region vector=zipcodes_wake
 
 # extract Raleigh city:

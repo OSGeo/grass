@@ -94,13 +94,13 @@ value of **threshold**.
 *Douglas-Peucker* and *Douglas-Peucker Reduction Algorithm* use the same
 method to simplify the lines. Note that
 
-```bash
+```shell
 v.generalize input=boundary_county output=boundary_county_dp20 method=douglas threshold=20
 ```
 
 is equivalent to
 
-```bash
+```shell
 v.generalize input=boundary_county output=boundary_county_dp_red20_100 \
              method=douglas_reduction threshold=20 reduction=100
 ```
@@ -110,7 +110,7 @@ However, in this case, the first method is faster. Also observe that
 that, in general, *douglas* is more efficient than *douglas_reduction*.
 More importantly, the effect of
 
-```bash
+```shell
 v.generalize input=boundary_county output=boundary_county_dp_red0_30 \
              method=douglas_reduction threshold=0 reduction=30
 ```
@@ -257,7 +257,7 @@ Also, the outputted network may not be connected if the value of
 Simplification of county boundaries with DP method (North Carolina
 sample dataset), threshold given in mapset units (here: meters):
 
-```bash
+```shell
 v.generalize input=boundary_county output=boundary_county_dp20 \
   method=douglas threshold=20 error=boundary_county_dp20_leftover
 ```
@@ -277,7 +277,7 @@ red)*
 Smoothing of road network with Chaiken method (North Carolina sample
 dataset), threshold given in mapset units (here: meters):
 
-```bash
+```shell
 v.generalize input=roads output=roads_chaiken method=chaiken \
   threshold=1 error=roads_chaiken_leftover
 ```

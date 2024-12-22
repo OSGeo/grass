@@ -83,7 +83,7 @@ The steps to follow are described below:
     *mapset/group/name_of_group/**REF*** is created that contatins the
     names of all images in a group.
 
-    ```bash
+    ```shell
     IMG_0020 source_mapset
     IMG_0021 source_mapset
     IMG_0022 source_mapset
@@ -102,7 +102,7 @@ The steps to follow are described below:
     *mapset/group/name_of_group/**TARGET*** is created contatining the
     names of target project and mapset.
 
-    ```bash
+    ```shell
     ETRS_33N
     target_mapset
     ```
@@ -125,7 +125,7 @@ The steps to follow are described below:
     *mapset/group/name_of_group/**ELEVATION*** is created contatining
     the name and mapset of the chosen DEM.
 
-    ```bash
+    ```shell
     elevation layer :ELEVATION
     mapset elevation:target_mapset
     location        :ETRS_33N
@@ -151,7 +151,7 @@ The steps to follow are described below:
     reference camera and a file *mapset/camera/**name_of_reference***,
     contatining the camera parameters.
 
-    ```bash
+    ```shell
     CAMERA NAME   sony
     CAMERA ID     123
     CAMERA XP     0
@@ -178,7 +178,7 @@ The steps to follow are described below:
     a list of pairs of coordinates in image and photo coordinate
     systems.
 
-    ```bash
+    ```shell
     # Ground Control Points File
     #
     # target location: XY
@@ -229,7 +229,7 @@ The steps to follow are described below:
     In Step 6, a new file *mapset/group/name_of_group/**INIT_EXP*** is
     created, contatining camera parameters.
 
-    ```bash
+    ```shell
     INITIAL XC    215258.345387
     INITIAL YC    6911444.022270
     INITIAL ZC    1101.991120
@@ -261,7 +261,7 @@ The steps to follow are described below:
     containing a list of pairs of coordinates of ground control points
     in photo and target coordinate systems.
 
-    ```bash
+    ```shell
     # Ground Control Points File
     #
     # target location: ETRS_33N

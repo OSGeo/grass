@@ -158,7 +158,7 @@ raster data (CELL maps).
 Example for small area in North Carolina sample dataset to calculate
 flow accumulation:
 
-```bash
+```shell
 g.region raster=elev_lid792_1m
 r.terraflow elevation=elev_lid792_1m accumulation=elev_lid792_1m_accumulation
 ```
@@ -172,14 +172,14 @@ r.terraflow elevation=elev_lid792_1m accumulation=elev_lid792_1m_accumulation
 
 Spearfish sample data set:
 
-```bash
+```shell
 g.region raster=elevation.10m -p
 r.terraflow elev=elevation.10m filled=elevation10m.filled \
     dir=elevation10m.mfdir swatershed=elevation10m.watershed \
     accumulation=elevation10m.accu tci=elevation10m.tci
 ```
 
-```bash
+```shell
 g.region raster=elevation.10m -p
 r.terraflow elev=elevation.10m filled=elevation10m.filled \
     dir=elevation10m.mfdir swatershed=elevation10m.watershed \

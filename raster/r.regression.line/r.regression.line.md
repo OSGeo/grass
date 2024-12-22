@@ -3,13 +3,13 @@
 *r.regression.line* calculates a linear regression from two raster maps,
 according to the formula
 
-```bash
+```shell
 y = a + b*x
 ```
 
 where
 
-```bash
+```shell
 x
 y
 ```
@@ -32,7 +32,7 @@ that obtained from R-stats's lm() function.
 Comparison of two DEMs (SRTM and NED, both at 30m resolution), provided
 in the North Carolina sample dataset:
 
-```bash
+```shell
 g.region raster=elev_srtm_30m -p
 r.regression.line mapx=elev_ned_30m mapy=elev_srtm_30m
  y = a + b*x
@@ -50,7 +50,7 @@ r.regression.line mapx=elev_ned_30m mapy=elev_srtm_30m
 Using the script style flag AND *eval* to make results available in the
 shell:
 
-```bash
+```shell
 g.region raster=elev_srtm_30m -p
 eval `r.regression.line -g mapx=elev_ned_30m mapy=elev_srtm_30m`
 

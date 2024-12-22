@@ -13,7 +13,7 @@ Full details on all GDAL supported formats are available at:
 
 Selected formats out of the more than 140 supported formats:
 
-```bash
+```shell
 Long Format Name                              Code           Creation  Georeferencing Maximum file size
 ---------------------------------------------+-------------+----------+--------------+-----------------
 ADRG/ARC Digitilized Raster Graphics          ADRG              Yes      Yes          --
@@ -239,7 +239,7 @@ example, the
 can be used to transform the map to North-up (note, there are several
 gdalwarp parameters to select the resampling algorithm):
 
-```bash
+```shell
 gdalwarp rotated.tif northup.tif
 ```
 
@@ -289,7 +289,7 @@ raster map layers, so that *g.list* lists them in the correct order.
 Here, use *num_digits=5* to have a 5 digit suffix with leading zeros
 (00001 - 99999).
 
-```bash
+```shell
 # Import of ECAD data split into chunks
 # Import precipitation data
 r.in.gdal -o input=rr_0.25deg_reg_1950-1964_v12.0.nc output=precipitation num_digits=5 offset=0
@@ -350,7 +350,7 @@ uncompressed and compressed raster data via a http(s) or ftp connection.
 As an example the import of the global SRTMGL1 V003 tiles at 1 arc
 second (about 30 meters) resolution, void-filled:
 
-```bash
+```shell
 r.in.gdal /vsicurl/https://www.datenatlas.de/geodata/public/srtmgl1/srtmgl1.003.tif output=srtmgl1_v003_30m memory=2000
 g.region raster=srtmgl1_v003_30m -p
 r.colors srtmgl1_v003_30m color=srtm_plus
@@ -361,7 +361,7 @@ r.colors srtmgl1_v003_30m color=srtm_plus
 The import of HDF bands requires the specification of the individual
 bands as seen by GDAL:
 
-```bash
+```shell
 # Example MODIS FPAR
 gdalinfo MOD15A2.A2003153.h18v04.004.2003171141042.hdf
 ...

@@ -65,7 +65,7 @@ associated with it.
 
 The name is misleading. The actual conversion used is
 
-```bash
+```shell
   H.i.s + G.(1-s)
 
 where
@@ -86,7 +86,7 @@ displaying it on the monitor should use the command *[r.his](r.his.md)*.
 
 ## EXAMPLE
 
-```bash
+```shell
 g.region raster=elevation
 r.relief input=elevation output=elevation_shaded_relief
 

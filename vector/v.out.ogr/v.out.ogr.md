@@ -62,20 +62,20 @@ ConfigOptions](https://trac.osgeo.org/gdal/wiki/ConfigOptions#OGR_SQLITE_CACHE))
 
 Export lines from a GRASS vector map to OGC GeoPackage format:
 
-```bash
+```shell
 v.out.ogr input=roadsmajor type=line output=roadsmajor.gpkg
 ```
 
 Export areas from GRASS vector map to OGC GeoPackage format, converting
 islands (holes) to filled polygons:
 
-```bash
+```shell
 v.out.ogr -c input=areas_islands type=area output=areas_islands.gpkg
 ```
 
 Export mixed geometry type GRASS vector map to OGC GeoPackage format:
 
-```bash
+```shell
 v.out.ogr input=generic_vector output=mixed_geometry.gpkg
 ```
 
@@ -83,40 +83,40 @@ v.out.ogr input=generic_vector output=mixed_geometry.gpkg
 
 Export lines from GRASS vector map to Shapefile format:
 
-```bash
+```shell
 v.out.ogr input=roadsmajor type=line format=ESRI_Shapefile output=lines.shp
 ```
 
 Export areas from GRASS vector map to Shapefile format, converting
 islands (holes) to filled polygons:
 
-```bash
+```shell
 v.out.ogr -c input=areas_islands type=area format=ESRI_Shapefile output=areas_islands.shp
 ```
 
 Export 3D lines from GRASS vector map to Shapefile format:
 
-```bash
+```shell
 v.out.ogr input=lines_3d type=line format=ESRI_Shapefile output=lines_3d.shp lco="SHPT=ARCZ"
 ```
 
 Export 3D points (e.g., Lidar points) from GRASS vector map to Shapefile
 format
 
-```bash
+```shell
 v.out.ogr points_3d type=point format=ESRI_Shapefile output=points_3d.shp lco="SHPT=POINTZ"
 ```
 
 Export 3D faces from GRASS vector map to Shapefile format:
 
-```bash
+```shell
 v.out.ogr input=objects_3d type=face format=ESRI_Shapefile output=faces_3d.shp lco="SHPT=POLYGONZ"
 ```
 
 Export 3D faces from GRASS vector map to Shapefile format, automatic 3D
 setting:
 
-```bash
+```shell
 v.out.ogr input=objects_3d type=face format=ESRI_Shapefile output=faces_3d.shp"
 ```
 
@@ -125,7 +125,7 @@ v.out.ogr input=objects_3d type=face format=ESRI_Shapefile output=faces_3d.shp"
 Export lines from GRASS vector map to GML format (generates
 '/tmp/testogr.gml' file with layer 'testogr'):
 
-```bash
+```shell
 v.out.ogr input=multi type=line output=/tmp/testogr.gml output_layer=testogr format=GML
 ```
 
@@ -133,7 +133,7 @@ v.out.ogr input=multi type=line output=/tmp/testogr.gml output_layer=testogr for
 
 Export areas from GRASS vector map to PostGIS database:
 
-```bash
+```shell
 v.out.ogr input=polygons type=area output="PG:host=localhost dbname=postgis user=postgres" output_layer=polymap format=PostgreSQL
 ```
 
@@ -147,14 +147,14 @@ topological format (PostGIS Topology).
 Export faces (3D vectors) from GRASS vector map to KML format for Google
 Earth:
 
-```bash
+```shell
 v.out.ogr input=buildings_3d output=buildings_3d.kml output_layer=buildings_3d format=KML type=face
 ```
 
 Generate and export GRASS vector "asteroid" map (faces, 3D vectors) to
 KML format for Google Earth:
 
-```bash
+```shell
 # near Raleigh (NC, USA)
 g.region n=35.73952587 s=35.73279182 w=-78.68263928 e=-78.67499517
 

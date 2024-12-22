@@ -37,7 +37,7 @@ delimiter and three numbers after decimal separator for distance. Output
 file will contain data for all points, that are within 500 m range to
 profiling line.
 
-```bash
+```shell
 v.profile input=geonames@PERMANENT output=/home/user/NC_96_geonames.csv\
   separator=comma dp=3 buffer=500 profile_map=roadsmajor@PERMANENT profile_where=cat=56
 
@@ -55,7 +55,7 @@ Number,Distance,cat,GEONAMEID,NAME,ASCIINAME,ALTERNATEN,FEATURECLA,FEATURECOD,CO
 Create river valley crossection and provide river marker (Spearfish
 dataset):
 
-```bash
+```shell
 # Take elevation samples
 r.profile input=elevation.dem@PERMANENT output=/home/user/elevation.profile \
   profile=600570.27364,4920613.41838,600348.034348,4920840.38617

@@ -57,21 +57,21 @@ printed.
 
 Classify column pop of map communes into 5 classes using quantiles:
 
-```bash
+```shell
 v.class map=communes column=pop algo=qua nbclasses=5
 ```
 
 This example uses population and area to calculate a population density
 and to determine the density classes:
 
-```bash
+```shell
 v.class map=communes column=pop/area algo=std nbclasses=5
 ```
 
 The following example uses the output of d.class and feeds it directly
 into *d.vect.thematic*:
 
-```bash
+```shell
 d.vect.thematic -l map=communes2 column=pop/area \
     breaks=`v.class -g map=communes2 column=pop/area algo=std nbcla=5` \
     colors=0:0:255,50:100:255,255:100:50,255:0:0,156:0:0

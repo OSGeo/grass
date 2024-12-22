@@ -32,7 +32,7 @@ are:
 The HTML driver can be enabled by setting **GRASS_RENDER_IMMEDIATE**
 variable, eg.
 
-```bash
+```shell
 export GRASS_RENDER_IMMEDIATE=html
 ```
 
@@ -76,14 +76,14 @@ Several environment variables affect the operation of the HTML driver:
 
 Start up the driver
 
-```bash
+```shell
 g.region vector=zipcodes_wake
 d.mon start=html
 ```
 
 Display text strings (HREF's) and polygons
 
-```bash
+```shell
 echo "https://en.wikipedia.org/wiki/Raleigh,_North_Carolina" | d.text
 d.vect map=zipcodes_wake where="ZIPNAME = 'RALEIGH'"
 echo "https://en.wikipedia.org/wiki/Cary,_North_Carolina" | d.text
@@ -93,7 +93,7 @@ d.vect map=zipcodes_wake where="ZIPNAME = 'CARY'" fill_color=180:200:210
 Stop the driver once all polygon have been displayed. This will create a
 file named 'htmlmap' in your current directory:
 
-```bash
+```shell
 d.mon stop=html
 ```
 
@@ -102,7 +102,7 @@ driver and other utilities to create .gif or .jpg files. *The following
 example is somewhat out of date and refers to options available in GRASS
 5.*
 
-```bash
+```shell
 # using previous GRASS_RENDER_WIDTH & GRASS_RENDER_HEIGHT
 d.mon start=png
 d.rast map=terrain
@@ -145,7 +145,7 @@ If you create an HTML file with two or more images and image maps, you
 will need to edit the map names. The HTML driver creates its map with
 the name `map`. A small sed script can easily change the map name:
 
-```bash
+```shell
 sed -e 's/NAME="map"/NAME="foomap"/' < htmlmap > foomap.html
 ```
 

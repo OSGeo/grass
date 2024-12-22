@@ -8,7 +8,7 @@ generator instead.
 
 ## EXAMPLE
 
-```bash
+```shell
 g.region -p n=228500 s=215000 w=630000 e=645000 res=10
 r.surf.gauss out=gauss mean=0 sigma=10
 

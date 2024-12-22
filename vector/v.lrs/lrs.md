@@ -23,21 +23,21 @@ This feature gives a possibility to continue to use most of old
 mileposts if only small part of linear object in real world has changed.
 Example:
 
-```bash
+```shell
 --- road (linear feature)
  +   MP (milepost, point, distance from the beginning in km)
 ```
 
 Old situation:
 
-```bash
+```shell
 +----+----+----+----+----+
 0    2    3    4    5    6
 ```
 
 New situation (for example a new bypass around the village)
 
-```bash
+```shell
           ?    ?
           +----+
           |    |
@@ -52,7 +52,7 @@ we cannot use km 4 twice. It is possible to use another notation for the
 new segment, we reference the segment from the kilometer 3, using only
 offset.
 
-```bash
+```shell
       3+1000  3+2000
           +----+
           |    |
@@ -72,7 +72,7 @@ optional MP attributes:
 
 In this case original MP on km 4 will have these attributes:
 
-```bash
+```shell
 start_mp:  4
 start_off: 0
 end_mp:    3
@@ -133,7 +133,7 @@ by line_cat and map_offset, not by coordinates in map.
 
 It can happen that one offset appears on 2 different lines:
 
-```bash
+```shell
 ------1-------     --------2------
 +0.0            +1.0              +2.0
 ```
@@ -144,7 +144,7 @@ points.
 It can be also intended, for example a part of the road is shared with
 another one, but MP are used only for one:
 
-```bash
+```shell
  + road1/km15         + road1/km22
   \                  /
    \ road1/km17     / road1/km20

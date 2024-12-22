@@ -11,13 +11,13 @@ internals. Optionally the name can be given by **output** parameter.
 
 Pack up vector map *random_point* into *random_point.pack* file.
 
-```bash
+```shell
 v.pack input=random_point
 ```
 
 the vector map can be afterwards unpacked by
 
-```bash
+```shell
 v.unpack input=random_point.pack
 ```
 

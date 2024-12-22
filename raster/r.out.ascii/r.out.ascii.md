@@ -11,7 +11,7 @@ GRASS raster map format.
 To write a SURFER .grd ASCII GRID file (with reverted row order and
 different header) use the *-s* flag:
 
-```bash
+```shell
 r.out.ascii -s input=inname output=outname.grd [dp=value]
 ```
 
@@ -23,7 +23,7 @@ NULL data are coded to "1.70141e+038" for SURFER ASCII GRID files
 The output from *r.out.ascii* may be placed into a file by using the
 UNIX redirection mechanism; e.g.:
 
-```bash
+```shell
 r.out.ascii input=soils output=- > out.file
 ```
 

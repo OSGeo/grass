@@ -25,13 +25,13 @@ To obtain the length of each segment, the user will have to attribute
 different category values to each of them. The best way to do this on a
 separate layer, using *v.category*
 
-```bash
+```shell
 v.category v_split op=add layer=2 output=v_split_2
 ```
 
 and then run the following commands on the new layer 2:
 
-```bash
+```shell
 v.db.addtable v_split_2 layer=2
 v.db.addcolumn map=v_split_2 column="length double precision" layer=2
 v.to.db map=v_split_2 type=line option=length columns=length units=meters layer=2
@@ -39,7 +39,7 @@ v.to.db map=v_split_2 type=line option=length columns=length units=meters layer=
 
 To link the new segments in the new layer to the original segments, use:
 
-```bash
+```shell
 v.db.addcolumn map=v_split_2 layer=2 column="cat_1 int"
 v.to.db map=v_split_2 layer=2 option=query query_layer=1 query_column=cat columns=cat_1
 ```
@@ -50,7 +50,7 @@ The examples are based on the North Carolina sample data.
 
 ### Example 1: Inserting nodes to railroad lines map
 
-```bash
+```shell
 # extract one railroad line for this example
 v.extract input=railroads output=myrr cats=1
 
@@ -68,7 +68,7 @@ d.vect myrr_split_1km display=shape,topo
 Note: In case that the vector line data are not polylines, generate
 first polylines as the second step, eg.:
 
-```bash
+```shell
 # join segments into polyline
 v.build.polylines input=myrr output=myrr_polylines
 # regenerate categories
@@ -79,7 +79,7 @@ v.category input=myrr_polylines output=myrailroads option=add
 
 Note: first run the two steps from example 1.
 
-```bash
+```shell
 # insert vertices at a distance not longer than 1000m
 v.split -n input=myrr output=myrr_split length=1000
 d.vect myrr_split display=shape,topo

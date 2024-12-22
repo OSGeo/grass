@@ -9,7 +9,7 @@ distance. The cell centers are considered for the distance calculation
 The output is an ascii list, one line per pair of objects, in the
 following form:
 
-```bash
+```shell
 cat1:cat2:distance:east1:north1:east2:north2
 ```
 
@@ -42,7 +42,7 @@ The output format lends itself to filtering. For example, to "see" lines
 connecting each of the category pairs in two maps, filter the output
 using awk and then into *d.graph*:
 
-```bash
+```shell
 r.distance map=map1,map2 | \
   awk -F: '{print "move",$4,$5,"\ndraw",$6,$7}' | d.graph -m
 ```
@@ -50,7 +50,7 @@ r.distance map=map1,map2 | \
 To create a vector map of all the "map1" coordinates, filter the output
 into awk and then into *v.in.ascii*:
 
-```bash
+```shell
 r.distance map=map1,map2 | \
   awk -F: '{print $4,$5}' | v.in.ascii format=point output=name separator=space
 ```

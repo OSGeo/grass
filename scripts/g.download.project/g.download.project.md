@@ -15,7 +15,7 @@ projects or any other files are ignored.
 Download and unpack the full North Carolina sample project into the
 user's HOME directory:
 
-```bash
+```shell
 g.download.project url=https://grass.osgeo.org/sampledata/north_carolina/nc_spm_full_v2alpha2.tar.gz path=$HOME
 ```
 
@@ -24,7 +24,7 @@ g.download.project url=https://grass.osgeo.org/sampledata/north_carolina/nc_spm_
 In a temporary session, download and unpack the full North Carolina
 sample project into the user's HOME directory:
 
-```bash
+```shell
 grass --tmp-project XY --exec g.download.project url=https://grass.osgeo.org/sampledata/north_carolina/nc_spm_full_v2alpha2.tar.gz path=$HOME
 ```
 

@@ -27,7 +27,7 @@ With a *Brovey pan sharpening*, each of the 3 lower resolution bands and
 panchromatic band are combined using the following algorithm to
 calculate 3 new bands at the higher resolution (example for band 1):
 
-```bash
+```shell
                          band1
     new band1 = ----------------------- * panband
                  band1 + band2 + band3
@@ -38,7 +38,7 @@ the original 3 lower resolution bands to create 3 principal component
 images (PC1, PC2, and PC3) and their associated eigenvectors (EV), such
 that:
 
-```bash
+```shell
      band1  band2  band3
 PC1: EV1-1  EV1-2  EV1-3
 PC2: EV2-1  EV2-2  EV2-3
@@ -47,7 +47,7 @@ PC3: EV3-1  EV3-2  EV3-3
 
 and
 
-```bash
+```shell
 PC1 = EV1-1 * band1 + EV1-2 * band2 + EV1-3 * band3 - mean(bands 1,2,3)
 ```
 
@@ -58,7 +58,7 @@ panchromatic band substituted for PC1, and mean of each band is added to
 each transformed image band using the following algorithm (example for
 band 1):
 
-```bash
+```shell
 band1 = pan * EV1-1 + PC2 * EV1-2 + PC3 * EV1-3 + mean(band1)
 ```
 
@@ -105,7 +105,7 @@ in terms of spectral response.
 
 LANDSAT ETM+ (Landsat 7), North Carolina sample dataset, PCA method:
 
-```bash
+```shell
 # original at 28m
 g.region raster=lsat7_2002_10 -p
 
@@ -130,7 +130,7 @@ d.rgb b=lsat7_2002_15m_pca_blue g=lsat7_2002_15m_pca_green r=lsat7_2002_15m_pca_
 
 LANDSAT ETM+ (Landsat 7), North Carolina sample dataset, IHS method:
 
-```bash
+```shell
 # original at 28m
 g.region raster=lsat7_2002_10 -p
 
@@ -161,7 +161,7 @@ g.gui.mapswipe
 Pan sharpening of a Landsat image from Boulder, Colorado, USA (LANDSAT
 ETM+ \[Landsat 7\] spectral bands 5,4,2, and pan band 8):
 
-```bash
+```shell
 # R, G, B composite at 30m
 g.region raster=p034r032_7dt20010924_z13_20 -p
 d.rgb b=p034r032_7dt20010924_z13_20 g=lp034r032_7dt20010924_z13_40

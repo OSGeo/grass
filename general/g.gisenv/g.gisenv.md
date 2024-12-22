@@ -14,7 +14,7 @@ If run without arguments, *g.gisenv* lists all of the user's current
 GRASS variable settings. Results are sent to standard output, and may
 look like this:
 
-```bash
+```shell
 GISDBASE=/opt/grassdata/
 LOCATION_NAME=nc_spm_08_grass7
 MAPSET=/user1
@@ -23,7 +23,7 @@ GUI=gui
 
 If the user specifies a **get=***variable_name* on the command line
 
-```bash
+```shell
 g.gisenv MAPSET
 ```
 
@@ -98,7 +98,7 @@ The full path to the current mapset is determined from *GISDBASE*,
 `/opt/grassdata/spearfish/PERMANENT`. The full path can be printed using
 *g.gisenv* by providing multiple variables:
 
-```bash
+```shell
 g.gisenv get=GISDBASE,LOCATION_NAME,MAPSET sep='/'
 /opt/grassdata/nc_spm_08_grass7/user1
 ```
@@ -109,7 +109,7 @@ The output from *g.gisenv* when invoked without arguments is directly
 usable by Bash. The following command will cast each variable into the
 UNIX environment:
 
-```bash
+```shell
 eval `g.gisenv`
 ```
 
@@ -132,7 +132,7 @@ available. It is important to note that parallel processes will each
 consume this amount of RAM. Set the maximum memory to be used (in MB),
 i.e. the cache size for raster rows:
 
-```bash
+```shell
 # set to 6 GB (default: 300 MB)
 g.gisenv set="MEMORYMB=6000"
 ```
@@ -141,7 +141,7 @@ g.gisenv set="MEMORYMB=6000"
 
 Set the number of threads for parallel computing:
 
-```bash
+```shell
 # set to use 12 threads (default: 1)
 g.gisenv set="NPROCS=12"
 ```
@@ -151,7 +151,7 @@ g.gisenv set="NPROCS=12"
 To print debugging messages, the variable *DEBUG* must be set to level
 equal or greater than 0:
 
-```bash
+```shell
 g.gisenv set="DEBUG=3"
 ```
 
@@ -164,7 +164,7 @@ Levels: (recommended levels)
 
 To disable debugging messages:
 
-```bash
+```shell
 g.gisenv unset="DEBUG"
 ```
 

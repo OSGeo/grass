@@ -283,7 +283,7 @@ no_data).
 Problem areas, i.e. those parts of a basin with a likely underestimate
 of flow accumulation, can be easily identified with e.g.
 
-```bash
+```shell
   r.mapcalc "problems = if(flow_acc < 0, basin, null())"
 ```
 
@@ -332,7 +332,7 @@ region should be replaced by NULL (`null()` in
 *[r.mapcalc](r.mapcalc.md)*). The following command performs these
 replacements:
 
-```bash
+```shell
 r.mapcalc "drainage_degrees = if(drainage > 0, 45. * drainage, null())"
 ```
 
@@ -351,14 +351,14 @@ create lots of catchment basins, as only one stream is presented per
 catchment. The `r.to.vect -v` flag preserves the catchment ID as the
 vector category number.
 
-```bash
+```shell
   r.watershed elev=elevation.dem stream=rwater.stream
   r.to.vect -v in=rwater.stream out=rwater_stream
 ```
 
 Set a different color table for the accumulation map:
 
-```bash
+```shell
   MAP=rwater.accum
   r.watershed elev=elevation.dem accum=$MAP
 
@@ -388,7 +388,7 @@ number of upstream catchment cells (calculated in the above example by
 *[r.univar](r.univar.md)*) as the cut-off value. This only works with
 SFD, not with MFD.
 
-```bash
+```shell
   r.watershed elev=elevation.dem accum=rwater.accum
 
   r.mapcalc 'MASK = if(!isnull(elevation.dem))'
@@ -408,7 +408,7 @@ SFD, not with MFD.
 
 ### Create watershed basins map and convert to a vector polygon map
 
-```bash
+```shell
   r.watershed elev=elevation.dem basin=rwater.basin thresh=15000
   r.to.vect -s in=rwater.basin out=rwater_basins type=area
   v.db.dropcolumn map=rwater_basins column=label
@@ -417,7 +417,7 @@ SFD, not with MFD.
 
 Display output in a nice way
 
-```bash
+```shell
   r.relief map=elevation.dem
   d.shade shade=elevation.dem.shade color=rwater.basin bright=40
   d.vect rwater_course color=orange

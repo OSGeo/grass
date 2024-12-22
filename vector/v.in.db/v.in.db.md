@@ -20,7 +20,7 @@ the user. Default DB driver is defined by *[db.connect](db.connect.md)*.
 
 ### Creating a map from PostgreSQL table
 
-```bash
+```shell
 v.in.db driver=pg database="host=myserver.itc.it,dbname=mydb" \
         table=pat_stazioni x=east y=north z=quota key=id output=pat_stazioni
 ```
@@ -33,7 +33,7 @@ details.
 
 To extract coordinate values from PostGIS, functions have to be used:
 
-```bash
+```shell
 v.in.db driver=pg database="host=myserver.itc.it,dbname=mydb" \
         table=station x="x(geom)" y="y(geom)" z="z(geom)" key=id out=meteostations
 ```
@@ -52,7 +52,7 @@ A new vector point map is created from given sheet in ODS file. The
 of selected spreadsheet list, the **key** option is the identifier
 column:
 
-```bash
+```shell
 # preview table structure with OGR tool (table name is "Layer name" here):
 ogrinfo -al -so meteodata.ods
 
@@ -67,7 +67,7 @@ A new vector point map is created from given sheet in MS Excel file. The
 **database** option points to the file in MS Excel format. Option
 **table** is name of the selected spreadsheet "List1":
 
-```bash
+```shell
 v.in.db table=List1 x=long y=lat z=height output=meteodata \
          driver=ogr database=meteodata.xls
 ```
@@ -82,14 +82,14 @@ A new 3D point vector map is created from DBF table. Column 'idcol'
 contains unique row IDs. The **database** option is the directory where
 the DBF file is stored.
 
-```bash
+```shell
 v.in.db driver=dbf database=/home/user/tables/ table=pointsfile x=x y=y z=z \
         key=idcol out=dtmpoints
 ```
 
 To check result:
 
-```bash
+```shell
 v.info dtmpoints
 v.info -c dtmpoints
 ```
@@ -106,7 +106,7 @@ column).
 The user can import only selected vector points from a table using the
 **where** parameter (see above for general DBF handling):
 
-```bash
+```shell
 v.in.db driver=dbf  database=/home/user/tables/ table=pointsfile x=x y=y z=z \
         key=idcol out=dtmpoints where="x NOT NULL and z > 100"
 ```
@@ -117,7 +117,7 @@ A new vector point map is created from table in SQLite database file.
 Column 'idcol' contains unique row IDs. The **database** option is the
 the SQLite database file.
 
-```bash
+```shell
 v.in.db driver=sqlite database=/home/user/tables/mysqlite.db table=pointsfile x=x y=y z=z \
         key=idcol out=dtmpoints
 ```

@@ -35,7 +35,7 @@ The examples are based on the North Carolina sample dataset.
 
 ### Example dataset preparation
 
-```bash
+```shell
 g.region raster=elevation -p
 v.random output=samples npoints=100
 v.db.addtable map=samples columns="heights double precision"
@@ -45,7 +45,7 @@ v.db.select map=samples
 
 ### Calculate height attribute statistics
 
-```bash
+```shell
 v.univar -e samples column=heights type=point
 
 number of features with non NULL attribute: 100
@@ -72,7 +72,7 @@ median (even number of cells): 106.518
 
 ### Compare to statistics of original raster map
 
-```bash
+```shell
 r.univar -e elevation
 
 total null and non-null cells: 2025000
@@ -98,7 +98,7 @@ median (even number of cells): 108.88
 
 ### Calculate statistic of distance between sampling points
 
-```bash
+```shell
 v.univar -d samples type=point
 
 number of primitives: 100
@@ -121,13 +121,13 @@ skewness: 0.238688
 
 ### Output in JSON format
 
-```bash
+```shell
 v.univar -e samples column=heights type=point format=json
 ```
 
 will output the results in JSON format:
 
-```bash
+```shell
 {
     "n": 1832,
     "missing": 0,

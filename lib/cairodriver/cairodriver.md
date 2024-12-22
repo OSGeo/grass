@@ -17,7 +17,7 @@ driver](pngdriver.md)* is used.
 The Cairo driver can be enabled by setting **GRASS_RENDER_IMMEDIATE**
 variable, eg.
 
-```bash
+```shell
 export GRASS_RENDER_IMMEDIATE=cairo
 ```
 
@@ -72,7 +72,7 @@ Several environment variables affect the operation of the Cairo driver:
 
 Example: using the driver to generate a PNG file (bash-syntax):
 
-```bash
+```shell
 export GRASS_RENDER_IMMEDIATE=cairo
 export GRASS_RENDER_FILE=nc_spm.png
 export GRASS_RENDER_WIDTH=800
@@ -90,7 +90,7 @@ d.vect map=roadsmajor width=2
 Example: using the driver to generate a PDF vector file with a vector
 map (bash-syntax):
 
-```bash
+```shell
 export GRASS_RENDER_IMMEDIATE=cairo
 export GRASS_RENDER_FILE=nc_spm.pdf
 export GRASS_RENDER_WIDTH=800
@@ -105,7 +105,7 @@ d.vect map=roadsmajor layer=1 display=shape attrcolumn=ROAD_NAME lcolor=0:90:255
 Example: using the driver to generate a PDF raster file with a raster
 map (bash-syntax):
 
-```bash
+```shell
 export GRASS_RENDER_IMMEDIATE=cairo
 export GRASS_RENDER_FILE=nc_spm.pdf
 export GRASS_RENDER_WIDTH=800
@@ -120,7 +120,7 @@ d.rast map=elevation
 Example: using the driver to generate a SVG vector file with a vector
 map (bash-syntax):
 
-```bash
+```shell
 export GRASS_RENDER_IMMEDIATE=cairo
 export GRASS_RENDER_FILE=vectormap.svg
 

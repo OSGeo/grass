@@ -20,7 +20,7 @@ A raster space time dataset will be create using precipitation maps for
 increment of one month. At the end we snap the created time instances
 resulting in time intervals.
 
-```bash
+```shell
 # Generate data
 
 t.create type=strds temporaltype=absolute \

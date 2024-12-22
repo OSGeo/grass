@@ -44,7 +44,7 @@ All examples are based on the North Carolina sample dataset.
 
 Generate 20 random points with binary attributes (only 0 or 1):
 
-```bash
+```shell
 v.random output=binary_random npoints=20 zmin=0 zmax=1 column='binary'
 v.db.select binary_random
 cat|binary
@@ -68,7 +68,7 @@ maximum: 16572.8
 
 Generate 20 random points with binary attributes (only 0 or 1):
 
-```bash
+```shell
 v.random output=binary_random npoints=20 zmin=0 zmax=1 column='binary' column_type=integer
 v.db.select binary_random
 cat|binary
@@ -85,7 +85,7 @@ cat|binary
 
 Generate 20 random 3D points using a specific random seed:
 
-```bash
+```shell
 v.random seed=52 output=height_random npoints=40 zmin=110 zmax=170 -z
 v.univar -d height_random
 Calculating geometric distances between 40 primitives...
@@ -109,7 +109,7 @@ Random points with different X, Y, and Z coordinates
 Generate 3 random points only in selected areas ("RALEIGH" related ZIP
 code areas):
 
-```bash
+```shell
 v.random restrict=zipcodes_wake output=zipcodes_local_random_n3 npoints=3 where="ZIPNAME = 'RALEIGH'" -a
 
 # visualization
@@ -132,7 +132,7 @@ height="368" alt="v.random example" />](v_random_points_in_polygon.png)
 To generate random adjacent areas, first the centroids are generated as
 points, then a triangulation is run (North Carolina sample dataset:
 
-```bash
+```shell
 g.region vector=nc_state
 v.random output=randpoints6k npoints=6000
 v.voronoi input=randpoints6k output=randareas6k
@@ -152,7 +152,7 @@ with *[v.extract](v.extract.md)*.
 
 These vector areas can also be rasterized:
 
-```bash
+```shell
 # rasterize areas
 # note: rastermaps must result in at least 6k pixel in this example
 g.region vector=nc_state res=500 -p -a
@@ -165,7 +165,7 @@ d.rast randareas6k
 
 Generate 20 random samples from a raster map:
 
-```bash
+```shell
 g.region -p raster=elevation
 v.random output=random_samples npoints=20
 v.db.addtable map=random_samples columns='cat INTEGER, sample DOUBLE PRECISION'
@@ -183,7 +183,7 @@ cat|sample
 Generate 20 random points and sample attribute data from geology
 (vector) map:
 
-```bash
+```shell
 g.region -p vector=geology
 v.random output=random_samples npoints=20
 v.db.addtable map=random_samples columns='cat integer, geology varchar(100)'
@@ -200,7 +200,7 @@ cat|geology
 
 Generate 20 random points restricted to forested areas:
 
-```bash
+```shell
 g.region -p raster=landclass96
 r.to.vect -v input=landclass96 output=landclass96 type=area
 v.random restrict=landclass96 output=random_samples npoints=20 where="label = 'forest'" layer=1
@@ -221,7 +221,7 @@ sampling)
 Generating n points for each individual area: in this example two random
 points in each water body:
 
-```bash
+```shell
 g.region -p raster=landclass96
 r.to.vect -v input=landclass96 output=landclass96 type=area
 v.random restrict=landclass96 output=random_samples npoints=2 where="label = 'water'" layer=1 -a

@@ -33,7 +33,7 @@ be applied to the *input* data.
 The *filter* file is a normal UNIX ASCII file designed by the user. It
 has the following format:
 
-```bash
+```shell
      TITLE      TITLE
      MATRIX     n
                   .
@@ -78,7 +78,7 @@ describes two filters:
 
 ### EXAMPLE FILTER FILE
 
-```bash
+```shell
       TITLE     3x3 average, non-null data only, followed by 5x5 average
      MATRIX    3
      1 1 1

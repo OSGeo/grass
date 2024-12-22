@@ -47,7 +47,7 @@ Note that the aspect map is calculated differently from
 The next commands will create a geomorphological map of the Spearfish
 sample dataset region:
 
-```bash
+```shell
 g.region raster=elevation.10m -p
 r.param.scale in=elevation.10m output=morphology method=feature size=9
 ```

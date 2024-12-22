@@ -22,19 +22,19 @@ Setting shell environment variables depends on the shell being used:
 
 Bash:
 
-```bash
+```shell
 export VARIABLE=value
 ```
 
 Csh:
 
-```bash
+```shell
 setenv VARIABLE value
 ```
 
 Cmd.exe (Windows):
 
-```bash
+```shell
 set VARIABLE=value
 ```
 
@@ -56,7 +56,7 @@ GRASS session is closed.
 
 Usage:
 
-```bash
+```shell
 g.gisenv set="VARIABLE=VALUE"
 ```
 
@@ -66,7 +66,7 @@ for getting and setting GRASS variables.
 If the user just specifies a variable name, it defaults to **get** mode.
 For example:
 
-```bash
+```shell
 g.gisenv MAPSET
 PERMANENT
 ```
@@ -484,7 +484,7 @@ DEBUG
 \[entire GRASS\]
 sets level of debug message output (0: no debug messages)
 
-```bash
+```shell
 g.gisenv set=DEBUG=0
 ```
 
@@ -517,7 +517,7 @@ MEMORYMB
 sets the maximum memory to be used (in MB), i.e. the cache size for
 raster rows
 
-```bash
+```shell
 # set to 6 GB (default: 300 MB)
 g.gisenv set="MEMORYMB=6000"
 ```
@@ -525,7 +525,7 @@ g.gisenv set="MEMORYMB=6000"
 NPROCS
 sets the number of threads for parallel computing
 
-```bash
+```shell
 # set to use 12 threads (default: 1)
 g.gisenv set="NPROCS=12"
 ```

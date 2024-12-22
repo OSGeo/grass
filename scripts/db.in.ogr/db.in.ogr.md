@@ -14,7 +14,7 @@ Time and DateTime columns through a descriptive file with same name as
 the CSV file, but .csvt extension (see details
 [here](https://gdal.org/en/stable/drivers/vector/csv.html)).
 
-```bash
+```shell
 # NOTE: create koeppen_gridcode.csvt first for automated type recognition
 db.in.ogr input=koeppen_gridcode.csv output=koeppen_gridcode
 db.select table=koeppen_gridcode
@@ -25,20 +25,20 @@ db.select table=koeppen_gridcode
 Import of a DBF table with additional unique key column (e.g., needed
 for *[v.in.db](v.in.db.md)*).
 
-```bash
+```shell
 db.in.ogr input=/path/to/mydata.dbf output=census_raleigh key=myid
 db.describe -c census_raleigh
 ```
 
 ### Import of a SQLite table
 
-```bash
+```shell
 db.in.ogr input=/path/to/sqlite.db db_table=census_raleigh output=census_raleigh
 ```
 
 ### Import of a PostgreSQL table
 
-```bash
+```shell
 # HINT: if the database contains spatial tables, but you want to import a non-spatial
 table, set the environmental variable PG_LIST_ALL_TABLES to YES before importing
 
@@ -54,7 +54,7 @@ To force reading headers, define environmental variable
 `OGR_XLS_HEADERS='FORCE'`. Parameter **db_table** refers to the list
 within XLS file.
 
-```bash
+```shell
 export OGR_XLS_HEADERS='FORCE'
 db.in.ogr input=address.xls db_table=address_data
 ```

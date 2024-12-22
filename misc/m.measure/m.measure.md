@@ -9,7 +9,7 @@ square miles, square feet, square meters and square kilometers.
 Distance example in a latitude-longitude coordinate reference system (on
 great circle, i.e. an orthodrome):
 
-```bash
+```shell
 Bonn_DE="7.09549,50.73438"
 Philadelphia_US="-75.16379,39.95233"
 
@@ -30,7 +30,7 @@ distance example*
 As an example for the North Carolina sample dataset, here four points
 describing a square of 1000m side length:
 
-```bash
+```shell
 m.measure units=meters \
   coordinates=922000,2106000,923000,2106000,923000,2107000,922000,2107000
 Length:  3000.000000 meters

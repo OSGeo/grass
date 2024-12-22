@@ -23,7 +23,7 @@ category information.
 
 Create an area from a closed line using North Carolina sample dataset:
 
-```bash
+```shell
 v.type input=busroute11 output=busroute11_boundary from_type=line to_type=boundary
 v.centroids input=busroute11_boundary output=busroute11_area
 ```

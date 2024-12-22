@@ -65,7 +65,7 @@ rough idea of the applicability of a colour table by reading the
 corresponding rules file (`$GISBASE/etc/colors/<name>`). For example the
 *slope* rule is defined as:
 
-```bash
+```shell
 0  255:255:255
 2  255:255:0
 5  0:255:0
@@ -82,7 +82,7 @@ between 0 and 90 degrees.
 
 Similarly, the *aspectcolr* rule:
 
-```bash
+```shell
 0 white
 1 yellow
 90 green
@@ -110,7 +110,7 @@ assigned for every valid category value because *r.colors* will
 interpolate a color ramp to fill in where color specification rules have
 been left out. The format of such a specification is as follows:
 
-```bash
+```shell
 category_value color_name
 category_value color_name
 .. ..
@@ -128,7 +128,7 @@ Colors can also be specified by color numbers each in the range 0-255.
 The format of a category value color table specification using color
 numbers instead of color names is as follows:
 
-```bash
+```shell
 category_value red_number:green_number:blue_number
 category_value red_number:green_number:blue_number
 .. .. .. ..
@@ -144,7 +144,7 @@ color specification, except that the category values are replaced by
 "percent" values, each from 0-100, in ascending order. The format is as
 follows:
 
-```bash
+```shell
 percent_value% color_name
 percent_value% color_name
 .. ..
@@ -158,7 +158,7 @@ be specified by color numbers each in the range 0-255. The format of a
 percent value color table specification using color numbers instead of
 color names is as follows:
 
-```bash
+```shell
 percent_value% red_number:green_number:blue_number
 percent_value% red_number:green_number:blue_number
 .. .. .. ..
@@ -170,7 +170,7 @@ end
 Note that you can also mix these two methods of color table
 specification; for example:
 
-```bash
+```shell
 0 black
 10% yellow
 78 blue
@@ -180,7 +180,7 @@ end
 
 To set the NULL (no data) color, use the "nv" (null values) parameter:
 
-```bash
+```shell
 0 black
 10% yellow
 nv white
@@ -190,7 +190,7 @@ end
 To set the color to used for undefined values (beyond the range of the
 color rules) use the "default" parameter:
 
-```bash
+```shell
 0 red
 1 blue
 default grey
@@ -214,7 +214,7 @@ map, assigning red to category 1, green to category 2, and blue to
 category 3. Start by using a text editor to create the following rules
 specification file (save it with the name *rules.file*):
 
-```bash
+```shell
 1 red
 2 green
 3 blue
@@ -224,7 +224,7 @@ end
 The color table can then by assigned to map *threecats* by the following
 GRASS commands (two ways are available):
 
-```bash
+```shell
 # read input from stdin
 cat rules.file | r.colors map=threecats rules=-
 
@@ -239,7 +239,7 @@ then darker greens (next 15%, and next 20%) and light browns (next 20%)
 for middle elevations, and darker browns (next 15%) for higher
 elevations, and finally yellow for the highest peaks (last 10% of LUT).
 
-```bash
+```shell
 0% 0:230:0
 20% 0:160:0
 35% 50:130:0
@@ -251,7 +251,7 @@ elevations, and finally yellow for the highest peaks (last 10% of LUT).
 
 To invert the current rules:
 
-```bash
+```shell
 r.colors map=current_raster -n rast=current_raster
 ```
 

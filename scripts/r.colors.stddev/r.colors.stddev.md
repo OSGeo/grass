@@ -18,7 +18,7 @@ red at +2 S.D.
 
 North Carolina sample dataset:
 
-```bash
+```shell
 g.region raster=elevation -p
 r.colors.stddev elevation
 ```

@@ -16,7 +16,7 @@ easier usage. The existing database connection(s) can be verified with
 Dropping all vector points without elevation attribute (North Carolina
 data set):
 
-```bash
+```shell
 g.region raster=elevation -p
 v.random output=rand5k_elev n=5000
 

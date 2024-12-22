@@ -36,7 +36,7 @@ will be used in the sampling process.
 We use *t.sample* to inspect the topological relations between the time
 stamped map layers in *A* and *P*.
 
-```bash
+```shell
 # Set an appropriate region
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 

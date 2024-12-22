@@ -22,7 +22,7 @@ In this example, the raster polygon map `zipcodes` in the North Carolina
 sample dataset is used to calculate zonal raster statistics using the
 `elevation` raster map:
 
-```bash
+```shell
 g.region raster=zipcodes -p
 
 # pixel count in zipcode areas

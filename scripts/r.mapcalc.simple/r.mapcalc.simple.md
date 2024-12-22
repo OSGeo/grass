@@ -50,17 +50,17 @@ Differences to *r.mapcalc.simple* module in GRASS GIS 5 and 6:
 
 ### Basic examples
 
-```bash
+```shell
 r.mapcalc.simple expression="0" output=zeros
 r.mapcalc.simple expression="1" output=ones
 r.mapcalc.simple expression="2" output=twos
 ```
 
-```bash
+```shell
 r.mapcalc.simple expression="A + B + C" a=zeros b=ones c=twos output=result1
 ```
 
-```bash
+```shell
 r.mapcalc.simple expression="(A * B) / 2 + 3 * C" a=zeros b=ones c=twos output=result2
 ```
 
@@ -75,20 +75,20 @@ r.mapcalc.simple expression="(A * B) / 2 + 3 * C" a=zeros b=ones c=twos output=r
 
 Addition:
 
-```bash
+```shell
 A + B
 ```
 
 No spaces around operators are not recommended for readability, but
 allowed in the expression:
 
-```bash
+```shell
 A+B
 ```
 
 More complex expression with a function:
 
-```bash
+```shell
 exp(A+C)+(B-2)*7
 ```
 

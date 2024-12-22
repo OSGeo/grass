@@ -5,7 +5,7 @@ and its associated color table (grey255).
 
 ## EXAMPLE
 
-```bash
+```shell
 g.region raster=elevation -p
 r.rgb input=elevation red=elevation.r green=elevation.g blue=elevation.b
 ```

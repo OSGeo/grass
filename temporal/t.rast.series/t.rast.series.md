@@ -38,7 +38,7 @@ GRASS GIS needs to be compiled with OpenMP enabled.
 
 Here the entire stack of input maps is considered:
 
-```bash
+```shell
 t.rast.series input=tempmean_monthly output=tempmean_average method=average
 ```
 
@@ -46,7 +46,7 @@ t.rast.series input=tempmean_monthly output=tempmean_average method=average
 
 Here the stack of input maps is limited to a certain period of time:
 
-```bash
+```shell
 t.rast.series input=tempmean_daily output=tempmean_season method=average \
   where="start_time >= '2012-06' and start_time <= '2012-08'"
 ```
@@ -57,7 +57,7 @@ By considering only a single month in a multi-annual time series the
 so-called climatology can be computed. Estimate average temperature for
 all January maps in the time series:
 
-```bash
+```shell
 t.rast.series input=tempmean_monthly \
     method=average output=tempmean_january \
     where="strftime('%m', start_time)='01'"
@@ -81,7 +81,7 @@ t.rast.series input=tempmean_monthly \
 Generalizing a bit, we can estimate monthly climatologies for all months
 by means of different methods
 
-```bash
+```shell
 for i in `seq -w 1 12` ; do
   for m in average stddev minimum maximum ; do
     t.rast.series input=tempmean_monthly method=${m} output=tempmean_${m}_${i} \

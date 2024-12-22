@@ -51,7 +51,7 @@ meters which results in the building having 50 m in diameter. When we
 are done with digitizing, we save the result and explore cast shadows of
 the buildings with [r.sun](r.sun.md) module:
 
-```bash
+```shell
 g.region raster=elev_lid792_1m
 # now create elev_edited raster by digitizing and save
 r.slope.aspect elevation=elev_edited slope=elev_slope aspect=elev_aspect

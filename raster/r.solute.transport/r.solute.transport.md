@@ -83,7 +83,7 @@ Use this small python script to create a working groundwater flow /
 solute transport area and data. Make sure you are not in a lat/lon
 projection.
 
-```bash
+```shell
 #!/usr/bin/env python3
 # This is an example script how groundwater flow and solute transport are
 # computed within GRASS GIS

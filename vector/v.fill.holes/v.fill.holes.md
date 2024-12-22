@@ -70,13 +70,13 @@ holes created in the lakes to get the whole perimeter of the lakes
 including islands. Remove the islands by extracting everything else
 (results in holes):
 
-```bash
+```shell
 v.extract input=lakes where="FTYPE != 'ROCK/ISLAND'" output=lakes_only
 ```
 
 Remove the holes:
 
-```bash
+```shell
 v.fill.holes input=lakes_only output=lakes_filled
 ```
 

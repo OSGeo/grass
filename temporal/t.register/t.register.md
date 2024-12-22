@@ -79,7 +79,7 @@ are no longer supported.
 Specification of map names only (*increment* option and **-i** flag
 supported):
 
-```bash
+```shell
 terra_lst_day20020113
 terra_lst_day20020114
 terra_lst_day20020115
@@ -90,7 +90,7 @@ terra_lst_day20020117
 Specification of map names and absolute start time (date) of the time
 instances (no support for *increment* option nor **-i** flag):
 
-```bash
+```shell
 terra_lst_day20020113|2002-01-13
 terra_lst_day20020114|2002-01-14
 terra_lst_day20020115|2002-01-15
@@ -101,7 +101,7 @@ terra_lst_day20020117|2002-01-17
 Specification of map names and absolute start time (datetime) of the
 time instances (no support for *increment* option nor **-i** flag):
 
-```bash
+```shell
 terra_lst_day20020113|2002-01-13 10:30
 terra_lst_day20020114|2002-01-14 10:30
 terra_lst_day20020115|2002-01-15 10:30
@@ -112,7 +112,7 @@ terra_lst_day20020117|2002-01-17 10:30
 Specification of map names and absolute time interval with start and end
 time (no support for *increment* option nor **-i** flag):
 
-```bash
+```shell
 prec_1|2001-01-01|2001-04-01
 prec_2|2001-04-01|2001-07-01
 prec_3|2001-07-01|2001-10-01
@@ -124,7 +124,7 @@ prec_6|2002-04-01|2002-07-01
 Same as above but with fully qualified map names (no support for
 *increment* option nor **-i** flag):
 
-```bash
+```shell
 prec_1@PERMANENT|2001-01-01|2001-04-01
 prec_2@PERMANENT|2001-04-01|2001-07-01
 prec_3@PERMANENT|2001-07-01|2001-10-01
@@ -141,7 +141,7 @@ For more information about semantic labels and image collections see
 Specification of map names and absolute start time (datetime) of the
 time instances. The last column indicates related semantic label.
 
-```bash
+```shell
 T33UYP_20190331T094039_B01|2019-03-31 09:40:39|S2_1
 T33UYP_20190331T094039_B10|2019-03-31 09:40:39|S2_10
 T33UYP_20190331T094039_B02|2019-03-31 09:40:39|S2_2
@@ -175,7 +175,7 @@ versions of TGIS DB are not supported.* TGIS DB version can be checked
 Register maps in an absolute space time dataset, creating a time
 interval
 
-```bash
+```shell
 # first:  prepare a text file with a list of input maps (see above)
 # second: register maps
 t.register -i type=raster input=precipitation_monthly \
@@ -188,7 +188,7 @@ t.register -i type=raster input=precipitation_monthly \
 Register maps in an absolute space time dataset, creating a time
 interval
 
-```bash
+```shell
 t.register -i type=raster input=precipitation_monthly \
     maps=`g.list raster pattern="*precip*" sep=comma` start="2009-01-01" \
     increment="1 months"
@@ -200,7 +200,7 @@ Assume a vector map of points that represent meteorological stations and
 it is connected to different layers depicting daily time steps. In this
 example, only the fifth layer of the vector map will be registered.
 
-```bash
+```shell
 # the layer is specified behind the colon
 t.register type=vector input=meteo_stations_nc_daily \
     maps=meteo_stations_nc:5 start="2009-01-05"
@@ -215,7 +215,7 @@ provided *increment*. The generated timestamps will be inspected using
 *r.timestamp* and *t.rast.list*. We will register an additional map with
 a timestamp that was set with *r.timestamp*.
 
-```bash
+```shell
 r.mapcalc expression="prec_1 = 100"
 r.mapcalc expression="prec_2 = 200"
 r.mapcalc expression="prec_3 = 300"
@@ -272,7 +272,7 @@ precipitation, temperature and sea level pressure in Europe based on
 ECA&D information. Download and decompress mean temperature data from:
 [here](https://surfobs.climate.copernicus.eu/dataaccess/access_eobs.php#datafiles).
 
-```bash
+```shell
 # import E-OBS V12 into a lat-long project (alternatively, use r.external)
 r.in.gdal -oe input=tg_0.25deg_reg_1950-1964_v12.0.nc \
   output=temperature_mean offset=0

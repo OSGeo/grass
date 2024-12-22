@@ -16,7 +16,7 @@ follows:
 For Landsat, the overpass map can be computed by using a two-step
 method:
 
-```bash
+```shell
 # 1) extract the overpass time in GMT from metadata file
 
 i.landsat.toar -p input=dummy output=dummy2 \

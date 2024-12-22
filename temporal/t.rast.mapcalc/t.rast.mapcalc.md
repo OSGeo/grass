@@ -87,7 +87,7 @@ used to sample dataset *B* to create a dataset *C*. We want to add all
 maps with equal time stamps if the month of the start time is May or
 June, otherwise we multiply the maps. The command will look as follows:
 
-```bash
+```shell
 t.rast.mapcalc input=A,B output=C basename=c method=equal \
     expression="if(start_month() == 5 || start_month() == 6, (A + B), (A * B))"
 ```
@@ -95,7 +95,7 @@ t.rast.mapcalc input=A,B output=C basename=c method=equal \
 The resulting raster maps in dataset C can be listed with
 *[t.rast.list](t.rast.list.md)*:
 
-```bash
+```shell
 name    start_time              min     max
 c_1     2001-03-01 00:00:00     9.0     9.0
 c_2     2001-04-01 00:00:00     16.0    16.0
@@ -112,7 +112,7 @@ datasets will be replaced by the corresponding raster maps. The final
 expression will be passed to *[r.mapcalc](r.mapcalc.md)*, resulting in 6
 runs:
 
-```bash
+```shell
 r.mapcalc expression="c_1 = if(3 == 5 || 3 == 6, (a3 + b3), (a3 * b3))"
 r.mapcalc expression="c_2 = if(4 == 5 || 4 == 6, (a4 + b4), (a4 * b4))"
 r.mapcalc expression="c_3 = if(5 == 5 || 5 == 6, (a5 + b5), (a5 * b5))"
@@ -132,7 +132,7 @@ zero in the January maps while keeping all the rest as in the original
 time series. This will change the maximum values of all January maps in
 the new STRDS as compared to the original one, `tempmean_monthly`.
 
-```bash
+```shell
 t.rast.mapcalc input=tempmean_monthly output=january_under_0 basename=january_under_0 \
     expression="if(start_month() == 1 && tempmean_monthly > 0, null(), tempmean_monthly)"
 
@@ -160,7 +160,7 @@ t.rast.list tempmean_monthly columns=name,start_time,min,max | grep 01-01
 In example below a new STRDS will be created and filled by NDVI
 products.
 
-```bash
+```shell
 t.rast.mapcalc inputs=test.S2_8,test.S2_4 output=ndvi basename=ndvi \
      expression="float(test.S2_8 - test.S2_4) / (test.S2_8 + test.S2_4)"
 ```

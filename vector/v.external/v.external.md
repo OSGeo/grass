@@ -38,7 +38,7 @@ attributes in external DBMS in also writable mode.
 
 To list supported OGR formats, type
 
-```bash
+```shell
 v.external -f
 ```
 
@@ -52,7 +52,7 @@ site](https://gdal.org/en/stable/drivers/vector/).
 Assuming that 'test_shape.shp' is located in directory
 '/home/user/shape_data'.
 
-```bash
+```shell
 v.external input=/home/user/shape_data layer=test_shape output=grass_map
 ```
 
@@ -65,7 +65,7 @@ support then GRASS will use OGR-PostgreSQL driver for creating a link.
 
 List of layers for given data source can be printed by **-l** flag.
 
-```bash
+```shell
 v.external input="PG:host=localhost user=postgres dbname=postgis" -l
 
 ...
@@ -73,7 +73,7 @@ polymap
 ...
 ```
 
-```bash
+```shell
 v.external input="PG:host=localhost user=postgres dbname=postgis" layer=polymap
 ```
 
@@ -85,7 +85,7 @@ by *[db.login](db.login.md)*.
 Assuming that 'mapinfo_test' MapInfo file is located in the current
 directory (".").
 
-```bash
+```shell
 v.external input=./ layer=mapinfo_test output=grass_map
 ```
 
@@ -93,13 +93,13 @@ v.external input=./ layer=mapinfo_test output=grass_map
 
 Note: you have to select the CATD file
 
-```bash
+```shell
 v.external input=CITXCATD.DDF output=cities
 ```
 
 ### TIGER files
 
-```bash
+```shell
 v.external input=input/2000/56015/ layer=CompleteChain,PIP output=t56015_all
 ```
 
@@ -109,7 +109,7 @@ By **where** option only subset of features can be linked. In the
 example below only one feature (in this case a vector tile) will be
 linked as a new GRASS vector map.
 
-```bash
+```shell
 v.external in="PG:dbname=tiles" layer=wrs2_descending where="pr=191026"
 ...
 Number of areas: 1

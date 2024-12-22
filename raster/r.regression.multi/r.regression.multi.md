@@ -3,13 +3,13 @@
 *r.regression.multi* calculates a multiple linear regression from raster
 maps, according to the formula
 
-```bash
+```shell
 Y = b0 + sum(bi*Xi) + E
 ```
 
 where
 
-```bash
+```shell
 X = {X1, X2, ..., Xm}
 m = number of explaining variables
 Y = {y1, y2, ..., yn}
@@ -20,7 +20,7 @@ n = number of observations (cases)
 
 In R notation:
 
-```bash
+```shell
 Y ~ sum(bi*Xi)
 b0 is the intercept, X0 is set to 1
 ```
@@ -77,7 +77,7 @@ available through the R-function stepAIC.
 Multiple regression with soil K-factor and elevation, aspect, and slope
 (North Carolina dataset). Output maps are the residuals and estimates:
 
-```bash
+```shell
 g.region raster=soils_Kfactor -p
 r.regression.multi mapx=elevation,aspect,slope mapy=soils_Kfactor \
   residuals=soils_Kfactor.resid estimates=soils_Kfactor.estim

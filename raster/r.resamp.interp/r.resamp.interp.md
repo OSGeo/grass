@@ -55,7 +55,7 @@ compiled with OpenMP enabled.
 Resample elevation raster map to a higher resolution (from 500m to 250m;
 North Carolina sample dataset):
 
-```bash
+```shell
 g.region raster=elev_state_500m -p
 g.region res=250 -ap
 r.resamp.interp input=elev_state_500m output=elev_state_250m \

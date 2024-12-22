@@ -70,7 +70,7 @@ here for explanation only*:
 
 SIG file "lsat7_2000_gensig":
 
-```bash
+```shell
  1 1
  2 #
  3 Semantic_label1

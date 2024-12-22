@@ -6,7 +6,7 @@ standard input and writes output to the standard output as well as to
 the **output** map and to tables linked to layers 1 and 2. Each line of
 input must follow one of the following formats:
 
-```bash
+```shell
 PATH_ID FROM_X FROM_Y TO_X TO_Y START_TIME MIN_CHANGE MAX_CHANGES WALK_CHANGE
 PATH_ID FROM_STOP TO_STOP START_TIME MIN_CHANGE MAX_CHANGES WALK_CHANGE
 ```
@@ -24,13 +24,13 @@ For each input query, module outputs a description of the shortest path
 to the standard output. For example, using the tables given below, for
 the following input:
 
-```bash
+```shell
 47 130 300 0 1 5 0
 ```
 
 the following output is produced:
 
-```bash
+```shell
 Route 15, from 130 leaving at 15 arriving to 250 at 22
 Walk from 250 leaving at 22 arriving to 300 at 24
 ```
@@ -40,7 +40,7 @@ all the information necessary to reconstruct the path to the tables.
 Table corresponding to stops/points is linked to layer 1 and looks,
 after the query, as follows:
 
-```bash
+```shell
 cat|path_id|stop_id|index|arr_time|dep_time
 1|47|130|1|0|15
 2|47|250|2|22|22
@@ -57,7 +57,7 @@ stop is always equal to the arrival time.
 The table linked to the second layer corresponds to subroutes taken
 between stops. The following table is obtained for the above query:
 
-```bash
+```shell
 cat|path_id|from_id|to_id|route_id|index|from_time|to_time
 1|47|130|250|15|1|15|22
 2|47|250|300|-1|2|22|24
@@ -94,7 +94,7 @@ columns: stop - which is the key of the table, **route_id** and
 stop and a certain time. For example, a valid table might look as
 follows:
 
-```bash
+```shell
 cat|route_id|stop_time
 100|5|0
 130|5|10
@@ -119,7 +119,7 @@ columns: stop - which is the key of the table, **to_stop** and
 **length**. A record in the table says that it takes **length** units of
 time to walk from stop to **to_stop**. The following is a valid table:
 
-```bash
+```shell
 cat|length|to_stop
 250|2|300
 ```
@@ -134,7 +134,7 @@ starting at time 0, with one time unit for change, maximum of 5 changes
 and with walking not considered a change of route, we use the following
 command:
 
-```bash
+```shell
 echo "47 130 300 0 1 5 0" | v.net.timetable \
      input=buses output=path layer=5 walking=6 path=7
 ```
@@ -142,7 +142,7 @@ echo "47 130 300 0 1 5 0" | v.net.timetable \
 If, on the other hand, we know the coordinates of the places then the
 following command might be used:
 
-```bash
+```shell
 echo "47 10.31 54.31 90.21 28.21 0 1 5 0" | v.net.timetable \
      input=buses output=path layer=5 walking=6 path=7
 ```

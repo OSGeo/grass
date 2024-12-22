@@ -38,7 +38,7 @@ To calculate the edge density index on map *my_map*, using *my_conf*
 configuration file (previously defined with *g.gui.rlisetup*) and saving
 results in *my_out*, run:
 
-```bash
+```shell
 r.li.edgedensity input=my_map conf=my_conf output=my_out
 ```
 
@@ -46,13 +46,13 @@ To calculate edge density index of patch_type 34, using "my_conf"
 configuration file and on map "my_map", saving results in "my_out" file
 run:
 
-```bash
+```shell
 r.li.edgedensity input=my_map conf=my_conf output=my_out patch_type=34
 ```
 
 Forest map (Spearfish sample dataset) example:
 
-```bash
+```shell
 g.region raster=landcover.30m -p
 r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
 r.li.edgedensity input=forests conf=movwindow7 out=forests_edgedens_mov7
@@ -61,7 +61,7 @@ r.univar forests_edgedens_mov7
 
 Forest map (North Carolina sample dataset) example:
 
-```bash
+```shell
 g.region raster=landclass96 -p
 r.mapcalc "forests = if(landclass96 == 5, 1, null() )"
 r.li.edgedensity input=forests conf=movwindow7 out=forests_edgedensity_mov7

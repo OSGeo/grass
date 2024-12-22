@@ -29,7 +29,7 @@ vector dataset to stdout.
 The example shows how to create a space time vector dataset and a vector
 layer starting from a point vector and a space time raster dataset:
 
-```bash
+```shell
 t.vect.observe.strds input=precip_30ynormals_3d strds=tempmean_monthly \
                      output=precip_stations vect=precip_stations_monthly \
                      columns=month

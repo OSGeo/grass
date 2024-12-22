@@ -19,7 +19,7 @@ this variable. Currently only Python scrips are supported.
 
 Lets start with simple example of Python script called *render.py*:
 
-```bash
+```shell
 #!/usr/bin/env python3
 
 import os
@@ -41,7 +41,7 @@ gs.run_command(cmd, **dcmd)
 
 After defining GRASS_RENDER_COMMAND variable (example for Bash):
 
-```bash
+```shell
 export GRASS_RENDER_COMMAND=render.py
 ```
 
@@ -49,7 +49,7 @@ Display GRASS modules like *[d.rast](d.rast.md)* or
 *[d.vect](d.vect.md)* will be executed by *render.py* program. For
 example the command
 
-```bash
+```shell
 d.vect roadsmajor
 ```
 

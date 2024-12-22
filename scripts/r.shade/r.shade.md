@@ -35,7 +35,7 @@ using method described in *[r.his](r.his.md)* manual page.
 In this example, the `aspect` map in the North Carolina sample dataset
 is used to hillshade the `elevation` map:
 
-```bash
+```shell
 g.region raster=aspect -p
 r.shade shade=aspect color=elevation output=elevation_aspect_shaded
 
@@ -46,7 +46,7 @@ d.rast elevation_aspect_shaded
 In this next example, a shaded relief raster map is created and used to
 create a colorized hillshade raster map for later use:
 
-```bash
+```shell
 g.region raster=elevation
 r.relief input=elevation output=elevation_shaded_relief
 

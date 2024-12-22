@@ -41,7 +41,7 @@ Fastest path, along highways:
 <img src="vnetsteinertime.png" data-border="1"
 alt="v.net.steiner example using time" />
 
-```bash
+```shell
 # Spearfish
 
 g.copy vect=roads,myroads
@@ -97,7 +97,7 @@ v.net.steiner myroads_net_time arc_layer=3 node_layer=2 acol=cost terminal_cats=
 
 To display the result, run for example:
 
-```bash
+```shell
 # display the results
 g.region vector=myroads_net
 

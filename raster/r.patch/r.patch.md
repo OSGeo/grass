@@ -68,7 +68,7 @@ middle (*patching*) raster map layer, to produce the *composite* raster
 map layer on the right. The example assumes zero values to be treated as
 NULLs (**-z** flag).
 
-```bash
+```shell
   1 1 1 0 2 2 0 0    0 0 1 1 0 0 0 0    1 1 1 1 2 2 0 0
   1 1 0 2 2 2 0 0    0 0 1 1 0 0 0 0    1 1 1 2 2 2 0 0
   3 3 3 3 2 2 0 0    0 0 0 0 0 0 0 0    3 3 3 3 2 2 0 0
@@ -80,7 +80,7 @@ NULLs (**-z** flag).
 Switching the *patched* and the *patching* raster map layers produces
 the following results:
 
-```bash
+```shell
   0 0 1 1 0 0 0 0    1 1 1 0 2 2 0 0    1 1 1 1 2 2 0 0
   0 0 1 1 0 0 0 0    1 1 0 2 2 2 0 0    1 1 1 1 2 2 0 0
   0 0 0 0 0 0 0 0    3 3 3 3 2 2 0 0    3 3 3 3 2 2 0 0
@@ -103,7 +103,7 @@ the region resolution is the resolution of the desired data. To set the
 geographic region settings to one or several raster maps, the *g.region*
 program can be used:
 
-```bash
+```shell
 g.region raster=map1[,map2[,...]]
 ```
 
@@ -127,7 +127,7 @@ typically 1024. The soft limit can be changed with e.g. `ulimit -n 1500`
 (UNIX-based operating systems) but not higher than the hard limit. If it
 is too low, you can as superuser add an entry in
 
-```bash
+```shell
 /etc/security/limits.conf
 # <domain>      <type>  <item>         <value>
 your_username  hard    nofile          1500
@@ -175,7 +175,7 @@ region assuming that the all three maps fully overlap and have the same
 resolution (so we can safely use the just the one without further
 modifications of the region). Then we perform the patching.
 
-```bash
+```shell
 g.region raster=roads
 r.patch input=roads,water,forest output=result
 ```
@@ -186,7 +186,7 @@ Create a list of maps matching a pattern, extend the region to include
 them all, and patch them together to create a mosaic. Overlapping maps
 will be used in the order listed.
 
-```bash
+```shell
 MAPS=`g.list type=raster separator=comma pat="map_*"`
 g.region raster=$MAPS -p
 r.patch input=$MAPS output=maps_mosaic

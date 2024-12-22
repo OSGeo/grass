@@ -30,7 +30,7 @@ To remove all frames when clearing the display, use `d.erase -f`.
 In this example, the polar diagram of the 'aspect' angle map in the
 North Carolina sample dataset is generated:
 
-```bash
+```shell
 g.region raster=landclass96 -p
 d.rast.leg landclass96
 ```

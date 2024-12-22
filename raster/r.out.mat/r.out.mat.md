@@ -33,7 +33,7 @@ As there is no IEEE value for `NaN` for integer maps, GRASS's null value
 is used to represent it within these maps. You'll have to do something
 like this to clean them once the map is loaded into Matlab:
 
-```bash
+```shell
     map_data(find(map_data < -1e9)) = NaN;
 ```
 
@@ -48,7 +48,7 @@ GRASS defines its map bounds at the outer-edge of the bounding cells,
 not at the coordinates of their centroids. Thus, the following Matlab
 commands may be used to determine the map's resolution information:
 
-```bash
+```shell
     [rows cols] = size(map_data)
     x_range = map_eastern_edge - map_western_edge
     y_range = map_northern_edge - map_southern_edge
@@ -60,13 +60,13 @@ commands may be used to determine the map's resolution information:
 
 In Matlab, plot with either:
 
-```bash
+```shell
 imagesc(map_data), axis equal, axis tight, colorbar
 ```
 
 or
 
-```bash
+```shell
 contourf(map_data, 24), axis ij, axis equal, axis tight, colorbar
 ```
 

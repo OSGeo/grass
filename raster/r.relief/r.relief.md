@@ -47,7 +47,7 @@ The current mask is ignored.
 In this example, the aspect map in the North Carolina sample dataset is
 used to hillshade the elevation map:
 
-```bash
+```shell
 g.region raster=elevation -p
 r.relief input=elevation output=elevation_shade
 ```
@@ -61,7 +61,7 @@ alt="GRASS r.relief result (subset)" />
 Color can be added later using *[r.shade](r.shade.md)* or
 *[d.shade](d.shade.md)*:
 
-```bash
+```shell
 r.shade shade=elevation_shade color=elevation output=elevation_shaded
 ```
 
@@ -70,7 +70,7 @@ r.shade shade=elevation_shade color=elevation output=elevation_shaded
 In Latitude-Longitude coordinate reference systems (or other non-metric
 systems), the *scale* factor has to be used:
 
-```bash
+```shell
 # Latitude-Longitude example
 g.region raster=srtm -p
 r.relief input=srtm output=srtm_shaded scale=111120
@@ -87,7 +87,7 @@ export as palette byte map. This requires a conversion done in
 *[r.mapcalc](r.mapcalc.md)*, using the \# operator to convert map
 category values to their grey scale equivalents:
 
-```bash
+```shell
 # using the map created above
 
 # create new map from map category values

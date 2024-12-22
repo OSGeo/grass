@@ -9,7 +9,7 @@ servers.
 
 Import of Copernicus Sentinel-2 satellite scene footprints:
 
-```bash
+```shell
 # run in Latitude-Longitude project (EPGS code 4326):
 # download "sentinel:mgrs" layer:
 v.in.wfs url="https://geoserver.mundialis.de/geoserver/sentinel/wfs?" name="sentinel:mgrs" output=sentinel2_mgrs
@@ -25,7 +25,7 @@ Download 25 ship wrecks from LINZ data service:
 (first create yourself a free API key at
 <http://data.linz.govt.nz/p/web-services/>)
 
-```bash
+```shell
 # run in LatLong project:
 URL='http://wfs.data.linz.govt.nz/<PUT YOUR API KEY HERE>/wfs?'
 
@@ -37,7 +37,7 @@ From that file we learn that the shipwreck layer is called "`v:x633`"
 and that EPSG code 4326 (LatLong WGS84) is a supported SRS for this data
 layer.
 
-```bash
+```shell
 v.in.wfs url="$URL" output=linz_hydro_25_wrecks name="v:x633" srs="EPSG:4326" max=25
 ```
 

@@ -13,7 +13,7 @@ all of them.
 
 Search all modules, where keywords *buffer* OR *clip* can be found:
 
-```bash
+```shell
 g.search.modules keyword=buffer,clip
 
 r.circle
@@ -36,7 +36,7 @@ r.buffer
 Search all modules, where keywords *overlay* AND *clip* can be found
 with some fancy terminal output (not shown here):
 
-```bash
+```shell
 g.search.modules keyword=clip,overlay -a -c
 
 v.clip
@@ -53,7 +53,7 @@ v.overlay
 
 Search in manual pages as well:
 
-```bash
+```shell
 g.search.modules -m keyword=kapri
 
 db.execute

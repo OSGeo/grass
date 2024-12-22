@@ -15,7 +15,7 @@ The existing database connection(s) can be verified with *v.db.connect*.
 
 Dropping a column:
 
-```bash
+```shell
 g.copy vect=roadsmajor,myroads
 v.info -c myroads
 v.db.dropcolumn myroads column=SHAPE_LEN

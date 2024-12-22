@@ -26,7 +26,7 @@ convenient when it comes to e.g. produce ASCII point cloud files.
 In this example, a LiDAR elevation map in the North Carolina sample
 dataset is exported to CSV format.
 
-```bash
+```shell
 g.region raster=elev_lid792_1m -p
 r.out.xyz input=elev_lid792_1m output=elev_lid792_1m.csv separator=","
 ```
@@ -38,7 +38,7 @@ combined file (requires the import of the supplementary high-resolution
 orthophoto](https://grass.osgeo.org/sampledata/north_carolina/ortho2010_t792_subset_20cm.tif),
 here called "ortho2010_t792"):
 
-```bash
+```shell
 g.region raster=elev_lid792_1m res=1 -a -p
 r.out.xyz input=elev_lid792_1m,ortho2010_t792.red,ortho2010_t792.green,ortho2010_t792.blue \
         separator=space output=pointcloud.asc

@@ -19,7 +19,7 @@ are in flat areas and not in the streams.
 
 North Carolina sample dataset:
 
-```bash
+```shell
 # set computational region
 g.region raster=elev_lid792_1m -p
 

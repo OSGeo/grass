@@ -5,7 +5,7 @@ monitors are maintained by *[d.mon](d.mon.md)*.
 
 ## EXAMPLES
 
-```bash
+```shell
 d.mon start=cairo
 
 d.info -r

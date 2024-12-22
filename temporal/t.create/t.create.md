@@ -21,7 +21,7 @@ dependent from the dataset type (raster, 3D raster, vector).
 
 Create a raster space time datasets
 
-```bash
+```shell
 t.create type=strds temporaltype=absolute \
          output=precipitation_monthly \
          title="Monthly precipitation" \
@@ -32,7 +32,7 @@ t.create type=strds temporaltype=absolute \
 
 Create a vector space time datasets
 
-```bash
+```shell
 t.create type=stvds temporaltype=relative \
          output=precipitation_monthly_30y \
          title="Monthly precipitation 30 years" \

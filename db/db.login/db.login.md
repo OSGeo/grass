@@ -24,20 +24,20 @@ Only the file owner can access this file.
 Only username specified (assuming locally accessible PostgreSQL DB
 without password):
 
-```bash
+```shell
 db.login driver=pg database=mydb
 ```
 
 Username, password and hostname specified (note that the command lines
 history will store the password in this way):
 
-```bash
+```shell
 db.login driver=pg database=mydb user=bacava password=secret host=db.example.com
 ```
 
 Username and empty password specified:
 
-```bash
+```shell
 db.login driver=pg database=mydb user=bacava password=""
 ```
 

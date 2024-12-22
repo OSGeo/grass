@@ -41,7 +41,7 @@ category, range of categories, floating point value, or a range of
 floating point values. The format is given as follows (when separator is
 set to colon; no white space must be used after the separator):
 
-```bash
+```shell
 cat:Label
 val1:val2:Label
 ```
@@ -55,7 +55,7 @@ Default and dynamic category labels can be created for categories that
 are not explicitly labeled. The coefficient line can be followed by
 explicit category labels which override the format label generation.
 
-```bash
+```shell
    0:no data
    2:   .
    5:   .             ## explicit category labels
@@ -64,7 +64,7 @@ explicit category labels which override the format label generation.
 
 explicit labels can be also of the form:
 
-```bash
+```shell
    5.5:5:9 label description
    or
    15:30  label description
@@ -113,7 +113,7 @@ North Carolina sample dataset:
 
 ### Printing categories
 
-```bash
+```shell
 r.category map=landclass96
 1   developed
 2   agriculture
@@ -127,7 +127,7 @@ r.category map=landclass96
 prints the values and labels associated with all of the categories in
 the *landclass96* raster map layer.
 
-```bash
+```shell
 r.category map=landclass96 cats=2,5-7
 2   agriculture
 5   forest
@@ -138,7 +138,7 @@ r.category map=landclass96 cats=2,5-7
 prints only the category values and labels for *landclass96* map layer
 categories `2` and `5` through `7`.
 
-```bash
+```shell
 r.category map=landclass96 cats=3,4 separator=comma
 3,herbaceous
 4,shrubland
@@ -148,13 +148,13 @@ prints the values and labels for *landclass96* map layer categories `3`
 and `4`, but uses "`,`" (instead of a tab) as the character separating
 the category values from the category values in the output.
 
-```bash
+```shell
 r.category map=landclass96 cats=3,4 output_format=json
 ```
 
 generates the following JSON output:
 
-```bash
+```shell
 [
     {
         "category": 3,
@@ -171,7 +171,7 @@ generates the following JSON output:
 
 Example for defining new category labels, using a colon as separator:
 
-```bash
+```shell
 r.category diseasemap separator=":" rules=- << EOF
 1:potential absence
 2:potential presence

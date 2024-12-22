@@ -118,7 +118,7 @@ maximization (EM) algorithm \[[2](#dempster77),[3](#redner84)\].
 
 If warnings like this occur, reducing the remaining classes to 0:
 
-```bash
+```shell
 ...
 WARNING: Removed a singular subsignature number 1 (4 remain)
 WARNING: Removed a singular subsignature number 1 (3 remain)

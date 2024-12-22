@@ -20,7 +20,7 @@ The transformations are:
 
 order=1:
 
-```bash
+```shell
     e = [E0 E1][1]·[1]
         [E2  0][e] [n]
 
@@ -30,7 +30,7 @@ order=1:
 
 order=2:
 
-```bash
+```shell
     e = [E0 E1 E3][1 ] [1 ]
         [E2 E4  0][e ]·[n ]
         [E5  0  0][e²] [n²]
@@ -42,7 +42,7 @@ order=2:
 
 order=3:
 
-```bash
+```shell
     e = [E0 E1 E3 E6][1 ] [1 ]
         [E2 E4 E7  0][e ]·[n ]
         [E5 E8  0  0][e²] [n²]

@@ -7,7 +7,7 @@ on the graphics monitor.
 
 Display raster map "elevation":
 
-```bash
+```shell
 d.rast map=elevation
 ```
 
@@ -22,7 +22,7 @@ alt="d.rast elevation" />
 Display raster map "elevation" but only the raster cells with values
 between 75 and 80 meters:
 
-```bash
+```shell
 d.rast map=elevation values=75-80
 ```
 
@@ -36,7 +36,7 @@ alt="d.rast elevation with values" />
 
 Display raster map "landuse96_28m" but only categories 1 and 2:
 
-```bash
+```shell
 d.rast landuse96_28m values=1,2
 ```
 

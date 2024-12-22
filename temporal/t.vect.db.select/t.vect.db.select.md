@@ -7,7 +7,7 @@ registered in a space time vector dataset.
 
 The example is querying the *shoreline* space time dataset:
 
-```bash
+```shell
 t.vect.db.select input=shoreline
 start_time|end_time|cat|DESCR|SOURCE|DATE
 1849|1873|1|T-736|NOAA/USGS|01/01/1858
@@ -25,7 +25,7 @@ start_time|end_time|cat|DESCR|SOURCE|DATE
 In the following example it print only DATE and SOURCE columns for data
 before 1900-01-01.
 
-```bash
+```shell
 t.vect.db.select input=shoreline column=DATE,SOURCE t_where="start_time < 1900"
 start_time|end_time|DATE|SOURCE
 1849|1873|01/01/1858|NOAA/USGS

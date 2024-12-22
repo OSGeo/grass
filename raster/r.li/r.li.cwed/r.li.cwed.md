@@ -35,7 +35,7 @@ possible if the map is masked.
 If you want to change these -1 values to NULL, run subsequently on the
 resulting map:
 
-```bash
+```shell
 r.null setnull=-1 input=my_map
 ```
 
@@ -47,14 +47,14 @@ To calculate the contrast weighted edge density index on map *my_map*,
 using *my_conf* configuration file (previously defined with
 *g.gui.rlisetup*) and saving results in *my_out*, run:
 
-```bash
+```shell
 r.li.cwed input=my_map conf=my_conf output=my_out \
           path=/path/to/weights.csv
 ```
 
 Example for input "weights.csv" file:
 
-```bash
+```shell
 12,16,0.65
 44,123,0.32
 56,12,0.54

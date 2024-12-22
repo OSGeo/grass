@@ -5,7 +5,7 @@ map to a file which is suitable as input to *[v.colors](v.colors.md)*.
 
 ## EXAMPLES
 
-```bash
+```shell
 v.colors.out map=soils_general rules=rules.txt
 v.colors map=soils_wake rules=rules.txt
 ```

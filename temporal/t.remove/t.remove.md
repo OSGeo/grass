@@ -20,7 +20,7 @@ deleting the original sample data, we generate new data by means of
 computing yearly precipitation sums. Eventually, all newly produced data
 (STRDS and raster maps) are removed:
 
-```bash
+```shell
 # Create new and empty STRDS
 t.create output=precip_months_sum semantictype=mean \
   title="Monthly sum of precipitation" \

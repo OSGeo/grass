@@ -55,7 +55,7 @@ processes (*nprocs*) and the number of intervals to aggregate.
 In this example the user is going to aggregate monthly data into yearly
 data, running:
 
-```bash
+```shell
 t.rast.aggregate input=tempmean_monthly output=tempmean_yearly \
                  basename=tempmean_year \
                  granularity="1 years" method=average
@@ -125,7 +125,7 @@ using the **suffix** option:
 
 #### Weekly aggregation
 
-```bash
+```shell
 t.rast.aggregate input=daily_temp output=weekly_avg_temp \
   basename=weekly_avg_temp method=average granularity="1 weeks"
 
@@ -142,7 +142,7 @@ weekly_avg_temp_2003_07|climate|2003-02-14 00:00:00|2003-02-21 00:00:00
 
 Variant with **suffix** set to granularity:
 
-```bash
+```shell
 t.rast.aggregate input=daily_temp output=weekly_avg_temp \
   basename=weekly_avg_temp suffix=gran method=average \
   granularity="1 weeks"
@@ -160,7 +160,7 @@ weekly_avg_temp_2003_02_14|climate|2003-02-14 00:00:00|2003-02-21 00:00:00
 
 #### Monthly aggregation
 
-```bash
+```shell
 t.rast.aggregate input=daily_temp output=monthly_avg_temp \
   basename=monthly_avg_temp suffix=gran method=average \
   granularity="1 months"
@@ -177,7 +177,7 @@ monthly_avg_temp_2003_06|climate|2003-06-01 00:00:00|2003-07-01 00:00:00
 
 #### Yearly aggregation
 
-```bash
+```shell
 t.rast.aggregate input=daily_temp output=yearly_avg_temp \
   basename=yearly_avg_temp suffix=gran method=average \
   granularity="1 years"

@@ -31,7 +31,7 @@ Results are affected by the current region settings and mask.
 
 Mode of K-factor (erosion) for Spearfish fields:
 
-```bash
+```shell
 g.region raster=fields -p
 r.mode base=fields cover=soils.Kfactor output=K.by.farm.mode
 r.univar K.by.farm.mode

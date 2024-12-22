@@ -41,7 +41,7 @@ for the next module of the procedure of LiDAR data filtering. In this
 table the interpolated height values of each point will be recorded.
 Also points in the output vector map will be classified as:
 
-```bash
+```shell
 TERRAIN (cat = 1, layer = 1)
 EDGE (cat = 2, layer = 1)
 UNKNOWN (cat = 3, layer = 1)
@@ -52,7 +52,7 @@ The final result of the whole procedure (*v.lidar.edgedetection*,
 *[v.lidar.correction](v.lidar.correction.md)*) will be a point
 classification in four categories:
 
-```bash
+```shell
 TERRAIN SINGLE PULSE (cat = 1, layer = 2)
 TERRAIN DOUBLE PULSE (cat = 2, layer = 2)
 OBJECT SINGLE PULSE (cat = 3, layer = 2)
@@ -63,14 +63,14 @@ OBJECT DOUBLE PULSE (cat = 4, layer = 2)
 
 ### Basic edge detection
 
-```bash
+```shell
 # last return points
 v.lidar.edgedetection input=vector_last output=edge ew_step=8 ns_step=8 lambda_g=0.5
 ```
 
 ### Complete workflow
 
-```bash
+```shell
 # region settings (using an existing raster)
 g.region raster=elev_lid792_1m
 

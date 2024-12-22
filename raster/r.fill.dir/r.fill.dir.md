@@ -88,7 +88,7 @@ Generic example: create a depressionless (sinkless) elevation map
 *ansi.fill.elev* and a flow direction map *ansi.asp* for the type
 "grass":
 
-```bash
+```shell
 r.fill.dir input=ansi.elev output=ansi.fill.elev direction=ansi.asp
 ```
 
@@ -96,7 +96,7 @@ North Carolina sample dataset example: The LiDAR derived 1m elevation
 map is sink-filled. The outcome are a depressionless elevation map, the
 flow direction map and an error map.
 
-```bash
+```shell
 # set computational region to elevation map
 g.region raster=elev_lid792_1m -p
 # generate depressionless DEM and related maps

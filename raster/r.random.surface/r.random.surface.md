@@ -110,7 +110,7 @@ with those maps.
 Generate a random surface (using extent of North Carolina sample
 dataset):
 
-```bash
+```shell
 g.region raster=elevation res=100 -p
 r.surf.random output=randomsurf min=10 max=100
 

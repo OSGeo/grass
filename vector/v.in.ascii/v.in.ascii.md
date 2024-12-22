@@ -89,7 +89,7 @@ Although *v.in.ascii* doesn't have an option to specify which columns
 should be imported, you can use a shell filter to achieve the same
 effect, e.g.:
 
-```bash
+```shell
 # Print out the column number for each field, supposing the file has a header
 head -1 input_file | tr '<the_field_separator_character>' '\n' | cat -n
 # From the listing, select the columns you want and feed them to v.in.ascii
@@ -106,7 +106,7 @@ areas will be assigned categories 20 and 21. For details on the
 structure of standard format data files see the second reference at the
 bottom of this page.
 
-```bash
+```shell
 echo "ORGANIZATION: GRASS Development Team
 DIGIT DATE:   1/9/2005
 DIGIT NAME:   -
@@ -146,7 +146,7 @@ header should be expected from the input file. The first line in this
 example specifies that the line (L) has 5 vertices and 1 category. The
 last line specifies the layer (1) and the category value (321).
 
-```bash
+```shell
 echo "L 5 1
 591336 4927369 1224
 594317 4925341 1292
@@ -164,7 +164,7 @@ points (per line).
 
 Generate a 2D points vector map 'coords.txt' as ASCII file:
 
-```bash
+```shell
 1664619|5103481
 1664473|5095782
 1664273|5101919
@@ -174,7 +174,7 @@ Generate a 2D points vector map 'coords.txt' as ASCII file:
 
 Import into GRASS:
 
-```bash
+```shell
 v.in.ascii input=coords.txt output=mymap
 ```
 
@@ -185,7 +185,7 @@ containing the category numbers will be auto-generated.
 
 Generate a 2D points vector map 'points.dat' as ASCII file:
 
-```bash
+```shell
 1|1664619|5103481|studna
 2|1664473|5095782|kadibudka
 3|1664273|5101919|hruska
@@ -195,7 +195,7 @@ Generate a 2D points vector map 'points.dat' as ASCII file:
 
 Import into GRASS:
 
-```bash
+```shell
 cat points.dat | v.in.ascii in=- out=mypoints x=2 y=3 cat=1 \
     columns='cat int, x double precision, y double precision, label varchar(20)'
 ```
@@ -207,7 +207,7 @@ delimiter.
 
 Import of a 3D points CSV table ('points3d.csv') with attributes:
 
-```bash
+```shell
 "num","X","Y","Z","T"
 1,2487491.643,5112118.33,120.5,18.62
 2,2481985.459,5109162.78,123.9,18.46
@@ -216,7 +216,7 @@ Import of a 3D points CSV table ('points3d.csv') with attributes:
 
 Import into GRASS:
 
-```bash
+```shell
 # import: skipping the header line, categories generated automatically,
 # column names defined with type:
 v.in.ascii -z in=points3d.csv out=mypoints3D separator=comma \
@@ -233,7 +233,7 @@ v.db.select mypoints3D
 Generating a 3D points vector map from DBMS (idcol must be an integer
 column):
 
-```bash
+```shell
 echo "select east,north,elev,idcol from mytable" | db.select -c | v.in.ascii in=- -z out=mymap
 ```
 
@@ -246,7 +246,7 @@ The import works for 2D maps as well (no elev column and no '-z' flag).
 Generate a 3D points vector map 'points3d.dat' with attributes as ASCII
 file:
 
-```bash
+```shell
 593493.1|4914730.2|123.1|studna|well
 591950.2|4923000.5|222.3|kadibudka|outhouse
 589860.5|4922000.0|232.3|hruska|pear
@@ -257,7 +257,7 @@ file:
 
 Import into GRASS:
 
-```bash
+```shell
 #As the 'cat' option is set to 0 by default, an extra column 'cat'
 #containing the IDs will be auto-generated (no need to define that):
 cat points3d.dat | v.in.ascii in=- -z z=3 cat=0 out=mypoints3D \
@@ -271,7 +271,7 @@ v.info mypoints3D
 
 Generate points file by clicking onto the map:
 
-```bash
+```shell
 #For LatLong projects:
 d.where -d -l | awk '{printf "%f|%f|point\n", $1, $2}' | v.in.ascii in=- out=points \
     columns='x double precision, y double precision, label varchar(20)'
@@ -290,7 +290,7 @@ map geometry will be generated.
 
 Convert ground control points into vector points:
 
-```bash
+```shell
 cat $MAPSET/group/$GROUP/POINTS | v.in.ascii in=- out=$GROUP_gcp separator=space skip=3 \
     col='x double precision, y double precision, x_target double precision, \
     y_target double precision, ok int'

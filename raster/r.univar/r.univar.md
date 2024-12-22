@@ -72,7 +72,7 @@ and cores. See benchmark scripts in source code.*
 In this example, the raster map `elevation` in the North Carolina sample
 dataset is used to calculate univariate statistics:
 
-```bash
+```shell
 g.region raster=elevation -p
 
 # standard output, along with extended statistics
@@ -124,13 +124,13 @@ In this example, the raster polygon map `basins` in the North Carolina
 sample dataset is used to calculate raster statistics for zones for
 `elevation` raster map:
 
-```bash
+```shell
 g.region raster=basins -p
 ```
 
 This will set and print computational region in the format:
 
-```bash
+```shell
 projection: 99 (Lambert Conformal Conic)
 zone:       0
 datum:      nad83
@@ -148,13 +148,13 @@ cells:      2025000
 
 Check basin's IDs using:
 
-```bash
+```shell
 r.category basins
 ```
 
 This will print them in the format:
 
-```bash
+```shell
 2
 4
 6
@@ -174,7 +174,7 @@ This will print them in the format:
 
 Visualization of them underlying elevation map can be created as:
 
-```bash
+```shell
 d.mon wx0
 d.rast map=elevation
 r.colors map=elevation color=grey
@@ -196,14 +196,14 @@ underlying elevation map for North Carolina sample dataset.*
 Then statistics for elevation can be calculated separately for every
 zone, i.e. basin found in the **zones** parameter:
 
-```bash
+```shell
 r.univar -t map=elevation zones=basins separator=comma \
          output=basin_elev_zonal.csv
 ```
 
 This will print information in the format:
 
-```bash
+```shell
 zone,label,non_null_cells,null_cells,min,max,range,mean,mean_of_abs,
 stddev,variance,coeff_var,sum,sum_abs2,,116975,0,55.5787925720215,
 133.147018432617,77.5682258605957,92.1196971445722,92.1196971445722,
@@ -232,13 +232,13 @@ Calc.*
 
 ### JSON Output
 
-```bash
+```shell
 r.univar -e elevation percentile=98 format=json
 ```
 
 will output the results in JSON format:
 
-```bash
+```shell
 [
     {
         "n": 2025000,

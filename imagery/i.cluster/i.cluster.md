@@ -189,7 +189,7 @@ specified is over, whichever comes first.
 Preparing the statistics for unsupervised classification of a LANDSAT
 scene within North Carolina project:
 
-```bash
+```shell
 # Set computational region to match the scene
 g.region raster=lsat7_2002_10 -p
 
@@ -213,7 +213,7 @@ group(s), they can set semantic labels for each group member beforehand,
 i.e., before generating the signature files. Semantic labels are set by
 means of *r.support* as shown below:
 
-```bash
+```shell
 # Define semantic labels for all LANDSAT bands
 r.support map=lsat7_2002_10 semantic_label=TM7_1
 r.support map=lsat7_2002_20 semantic_label=TM7_2

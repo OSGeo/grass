@@ -49,7 +49,7 @@ in this encoding. If you normally work in a different encoding
 environment (such as `UTF-8`), you have to transform your file to the
 `ISO-8859-1` encoding, for example by using the `iconv` utility:
 
-```bash
+```shell
 iconv -f UTF-8 -t ISO_8859-1 utf_file > iso_file
 ```
 
@@ -120,7 +120,7 @@ and you only need to specify one if you wish to override it.
 
 Controls the border which is drawn around the map area.
 
-```bash
+```shell
 USAGE:  border [y|n]
     color color
     width #
@@ -138,7 +138,7 @@ main command will be treated as a single line instruction.
 
 This example would create a grey border 0.1" wide.
 
-```bash
+```shell
 EXAMPLE:
     border
     color grey
@@ -153,7 +153,7 @@ EXAMPLE:
 Prints the color table legend for the raster map layer anywhere on the
 page.
 
-```bash
+```shell
 USAGE:    colortable [y|n]
     where x y
     raster raster map
@@ -225,7 +225,7 @@ range bands instead of a continuous gradient. You must use the
 This example would print a color table immediately below any other map
 legend information, starting at the left margin, with 4 columns:
 
-```bash
+```shell
 EXAMPLE:
     colortable y
         cols 4
@@ -239,7 +239,7 @@ EXAMPLE:
 
 Prints comments anywhere on the page.
 
-```bash
+```shell
 USAGE:    comments commentfile
     where x y
     font font name
@@ -259,7 +259,7 @@ This example prints in blue whatever is in the file *veg.comments*
 starting at 1.5 inches from the left edge of the page and 7.25 inches
 from the top of the page, using a 15/72 inch Helvetica Bold font.
 
-```bash
+```shell
 EXAMPLE:
     raster vegetation
     comments veg.comments
@@ -280,7 +280,7 @@ classifying a LANDSAT TM image".
 
 Specifies the number of copies to be printed.
 
-```bash
+```shell
 USAGE:    copies n
 ```
 
@@ -294,7 +294,7 @@ This instruction is identical to the *copies* command line parameter.
 
 Places EPS (Encapsulated PostScript) pictures on the output map.
 
-```bash
+```shell
 USAGE:    eps east north
     eps x% y%
     epsfile EPS file
@@ -318,7 +318,7 @@ This example would place a EPS file ./epsf/logo.eps at the point
 3 times bigger than in original file and would not be masked by the
 current mask.
 
-```bash
+```shell
 EXAMPLE:
     eps 456000 7890000
     epsfile ./epsf/logo.eps
@@ -337,7 +337,7 @@ instructions.
 
 Overlays a geographic grid onto the output map.
 
-```bash
+```shell
 USAGE:    geogrid spacing unit
     color color
     numbers # [color]
@@ -365,7 +365,7 @@ This example would overlay a blue geographic grid with a spacing of 30
 minutes onto the output map. Alternate grid lines would be numbered with
 yellow numbers.
 
-```bash
+```shell
 EXAMPLE:
     geogrid 30 m
     color blue
@@ -379,7 +379,7 @@ EXAMPLE:
 
 Selects a raster map layer for output in shades of grey.
 
-```bash
+```shell
 USAGE:    greyrast mapname
 ```
 
@@ -392,7 +392,7 @@ either the *greyrast* or the *raster* instruction).
 
 Overlays a coordinate grid onto the output map.
 
-```bash
+```shell
 USAGE:    grid spacing
     color color
     numbers # [color]
@@ -417,7 +417,7 @@ This example would overlay a green grid with a spacing of 10000 meters
 (for a metered database, like UTM) onto the output map. Alternate grid
 lines would be numbered with red numbers.
 
-```bash
+```shell
 EXAMPLE:
     grid 10000
     color green
@@ -431,7 +431,7 @@ EXAMPLE:
 
 Selects an RGB imagery group for output.
 
-```bash
+```shell
 USAGE:    group groupname
 ```
 
@@ -445,7 +445,7 @@ layers, comprising the red, green and blue bands of the image.
 
 Prints the map header above the map.
 
-```bash
+```shell
 USAGE:    header
     file header file
     font font name
@@ -475,7 +475,7 @@ text in the text file specified, with some special formatting keys:
 
 Example header file:
 
-```bash
+```shell
 %_
 LOCATION: %-27l  DATE: %d
 MAPSET:   %-27m  USER: %u
@@ -491,7 +491,7 @@ Software:    GRASS
 This example prints (in red) whatever is in the file *soils.hdr* above
 the map, using a 20/72 inch `Courier` font.
 
-```bash
+```shell
 EXAMPLE:
     header
     file soils.hdr
@@ -508,7 +508,7 @@ EXAMPLE:
 Selects a labels file for output (see manual entry for
 *[v.label](v.label.md) ).*
 
-```bash
+```shell
 USAGE:    labels  labelfile
     font font name
     end
@@ -521,7 +521,7 @@ This example would paint labels from the labels file called
 *town.names*. Presumably, these labels would indicate the names of towns
 on the map.
 
-```bash
+```shell
 EXAMPLE:
     labels town.names
     end
@@ -533,7 +533,7 @@ EXAMPLE:
 
 Draws lines on the output map.
 
-```bash
+```shell
 USAGE:    line east north east north
     line x% y% x% y%
     color color
@@ -556,7 +556,7 @@ This example would draw a yellow line from the point x=10% y=80% to the
 point x=30% y=70%. This line would be 2 points wide (2/72") and would
 appear even if there is a mask.
 
-```bash
+```shell
 EXAMPLE:
     line 10% 80% 30% 70%
     color yellow
@@ -575,7 +575,7 @@ instructions.
 Prints the portion of the map legend containing the scale, grid and
 region information, on or below the map.
 
-```bash
+```shell
 USAGE:    mapinfo
     where x y
     font font name
@@ -597,7 +597,7 @@ This example prints (in brown) the scale, grid and region information
 immediately below the map and starting 1.5 inches from the left edge of
 the page, using a 12/72 inch `Courier` font.
 
-```bash
+```shell
 EXAMPLE:
     mapinfo
     where 1.5 0
@@ -613,7 +613,7 @@ EXAMPLE:
 
 Positions the map on the page.
 
-```bash
+```shell
 USAGE:    maploc  x y [width height]
 ```
 
@@ -625,7 +625,7 @@ if necessary, to fit.
 This example positions the upper left corner of the map 2.0 inches from
 the left edge and 3.5 inches from the top edge of the map.
 
-```bash
+```shell
 EXAMPLE:
     maploc 2.0 3.5
 ```
@@ -636,7 +636,7 @@ EXAMPLE:
 
 Color to be used for mask.
 
-```bash
+```shell
 USAGE:    maskcolor  color
 ```
 
@@ -646,7 +646,7 @@ USAGE:    maskcolor  color
 
 Outlines the areas of a raster map layer with a specified color.
 
-```bash
+```shell
 USAGE:    outline
     color  color
     width  width of line in points
@@ -664,7 +664,7 @@ other than the one currently being painted may be placed on the map.)
 This example would outline the category areas of the *soils* raster map
 layer in grey.
 
-```bash
+```shell
 EXAMPLE:
     raster soils
     outline
@@ -679,7 +679,7 @@ EXAMPLE:
 
 Specifies paper size and margins.
 
-```bash
+```shell
 USAGE:    paper paper name
     height #
     width #
@@ -697,13 +697,13 @@ a4. The measures are defined in *inches*. **left**, **right**,
 the **-r** command line flag, measures are applied to the *rotated*
 page.
 
-```bash
+```shell
 EXAMPLE:
     paper a3
     end
 ```
 
-```bash
+```shell
 EXAMPLE:
     paper
     width 10
@@ -721,7 +721,7 @@ EXAMPLE:
 
 Places additional points or icons on the output map.
 
-```bash
+```shell
 USAGE:    point east north
     point x% y%
     color color
@@ -748,7 +748,7 @@ This example would place a purple diamond (from icon file *diamond*) at
 the point (E456000 N7890000). This diamond would be the the size of a 15
 points and would not be masked by the current mask.
 
-```bash
+```shell
 EXAMPLE:
     point 456000 7890000
     fcolor purple
@@ -773,13 +773,13 @@ the correct directory or specify the full path on the **psfile**
 instruction. (Note to /bin/csh users: ~ won't work with this
 instruction).
 
-```bash
+```shell
 USAGE:    psfile filename
 ```
 
 This example copies the file "logo.ps" into the output file.
 
-```bash
+```shell
 EXAMPLE:
     psfile logo.ps
 ```
@@ -790,7 +790,7 @@ EXAMPLE:
 
 Selects a raster map layer for output.
 
-```bash
+```shell
 USAGE:    raster mapname
 ```
 
@@ -809,7 +809,7 @@ title, which in turn may be set with the *r.support* module.
 
 This example would paint a map of the raster map layer *soils*.
 
-```bash
+```shell
 EXAMPLE:
     raster soils
 ```
@@ -820,7 +820,7 @@ EXAMPLE:
 
 Provides *ps.map* with a previously prepared input stream.
 
-```bash
+```shell
 USAGE:    read previously prepared UNIX file
 ```
 
@@ -835,7 +835,7 @@ This example reads the UNIX file *pmap.roads* into *ps.map*. This file
 may contain all the *ps.map* instructions for placing the vector map
 layer *roads* onto the output map.
 
-```bash
+```shell
 EXAMPLE:
     read pmap.roads
 ```
@@ -852,7 +852,7 @@ correct instructions.
 
 Draws rectangle on the output map.
 
-```bash
+```shell
 USAGE:    rectangle east north east north
     rectangle x% y% x% y%
     color color
@@ -878,7 +878,7 @@ This example would draw a yellow rectangle filled by green from the
 point x=10% y=80% to the point x=30% y=70%. The border line would be
 1/16" wide and would appear even if there is a mask.
 
-```bash
+```shell
 EXAMPLE:
     rectangle 10% 80% 30% 70%
     color yellow
@@ -894,7 +894,7 @@ EXAMPLE:
 
 Places the outline of a smaller geographic region on the output.
 
-```bash
+```shell
 USAGE:    region regionfile
     color color
     width #
@@ -915,7 +915,7 @@ geographic region called *fire.zones* onto the output map. This
 geographic region would have been created and saved using
 *[g.region](g.region.md)*.
 
-```bash
+```shell
 EXAMPLE:
     region fire.zones
     color white
@@ -929,7 +929,7 @@ EXAMPLE:
 
 Selects three raster map layers for output as an RGB color image.
 
-```bash
+```shell
 USAGE:    rgb red green blue
 ```
 
@@ -948,7 +948,7 @@ each layer's color table uses the hue appropriate to the layer.
 
 Selects a scale for the output map.
 
-```bash
+```shell
 USAGE:    scale scale
 ```
 
@@ -965,7 +965,7 @@ the number of miles per inch, e.g. 1 inch equals 4 miles.
 
 This example would set the scale of the map to 1 unit = 25000 units.
 
-```bash
+```shell
 EXAMPLE:
     scale 1:25000
 ```
@@ -976,7 +976,7 @@ EXAMPLE:
 
 Draws a scalebar on the map.
 
-```bash
+```shell
 USAGE:    scalebar [f|s]
     where x y
     length overall distance in map units
@@ -1011,7 +1011,7 @@ database, like UTM) long, with tics every 200 meters, labeled every
 second tic. The scalebar is drawn 5 inches from the top and 4 inches
 from the left and is 0.25 inches high.
 
-```bash
+```shell
 EXAMPLE:
     scalebar s
     where 4 5
@@ -1029,7 +1029,7 @@ EXAMPLE:
 Overrides the color assigned to one or more categories of the raster map
 layer.
 
-```bash
+```shell
 USAGE:    setcolor cat(s) color
 ```
 
@@ -1037,7 +1037,7 @@ This example would set the color for categories 2,5 and 8 of the raster
 map layer *watersheds* to white and category 10 to green. (**NOTE**: no
 spaces are inserted between the category values.)
 
-```bash
+```shell
 EXAMPLE:
     raster watersheds
     setcolor 2,5,8 white
@@ -1057,7 +1057,7 @@ out-of-range) color may also be reassigned.
 
 Places text on the map.
 
-```bash
+```shell
 USAGE:    text  east north text
     text  x% y% text
     font fontname
@@ -1135,7 +1135,7 @@ background enclosed in a red box, and be 500 meters in size. The lower
 right corner of the text would be centered over the coordinates
 provided. All vectors on the map would stop at the border of this text.
 
-```bash
+```shell
 EXAMPLE:
     text 650000 7365000 SPEARFISH LAND COVER
     font romand
@@ -1157,7 +1157,7 @@ EXAMPLE:
 
 Selects a vector map layer for output and plots areas.
 
-```bash
+```shell
 USAGE:    vareas vectormap
     layer # (layer number used with cats/where option)
     cats list of categories (e.g. 1,3,5-7)
@@ -1216,7 +1216,7 @@ standard hatching patterns are provided in
 You can also create your own custom pattern files in a text editor.
 Example of pattern file:
 
-```bash
+```shell
 %!PS-Adobe-2.0 EPSF-1.2
 %%BoundingBox: 0 0 10 10
 newpath
@@ -1230,7 +1230,7 @@ stroke
 **pwidth** - pattern line width, width is used by pattern until the
 width is overwritten in pattern file.
 
-```bash
+```shell
 EXAMPLE:
     vareas forest
     color blue
@@ -1246,7 +1246,7 @@ EXAMPLE:
 
 Selects a vector map layer for output and plots lines.
 
-```bash
+```shell
 USAGE:    vlines vectormap
     type line and/or boundary
     layer # (layer number used with cats/where option)
@@ -1328,7 +1328,7 @@ map(mapset);
 vector is omitted in legend. If more vectors used the same lpos then
 their symbols in legend are merged and label for first vector is used.
 
-```bash
+```shell
 EXAMPLE:
     vlines streams
     color blue
@@ -1347,7 +1347,7 @@ EXAMPLE:
 
 Selects vector point data to be placed on the output map
 
-```bash
+```shell
 USAGE:    vpoints vectormap
     type point and/or centroid
     layer # (layer number used with cats/where/sizecol options)
@@ -1384,7 +1384,7 @@ may be scaled by using the **scale** factor setting (default scaling is
 1.0). In a similar manner symbol color can be read from **rgbcolumn**
 and the rotation angle read from **rotatecolumn**.
 
-```bash
+```shell
 EXAMPLE:
     vpoints windmills
     color blue
@@ -1400,7 +1400,7 @@ EXAMPLE:
 Prints the portion of the map legend containing the vector information,
 on or below the map.
 
-```bash
+```shell
 USAGE:    vlegend
     where x y
     font font name
@@ -1444,7 +1444,7 @@ This example prints the vector legend immediately below the map and
 starting 4.5 inches from the left edge of the page, using a 12/72 inch
 Helvetica font.
 
-```bash
+```shell
 EXAMPLE:
     vlegend
     where 4.5 0
@@ -1459,7 +1459,7 @@ EXAMPLE:
 
 Terminates input and begin painting the map.
 
-```bash
+```shell
 USAGE:    end
 ```
 
@@ -1471,7 +1471,7 @@ The following are examples of *ps.map* script files.
 
 The file has been named *simple_map.txt*:
 
-```bash
+```shell
 # this ps.map example draws a map of Wake county, NC
 raster elevation
 vlines roadsmajor
@@ -1486,7 +1486,7 @@ end
 
 Generate map as Postsript file:
 
-```bash
+```shell
 ps.map input=simple_map.txt output=simple_map.ps
 ```
 
@@ -1499,7 +1499,7 @@ example*
 
 The following is content of a file named *elevation_map.txt*:
 
-```bash
+```shell
 # this ps.map example draws a map of Wake county, NC
 raster elevation
 colortable y
@@ -1561,7 +1561,7 @@ end
 
 This script file can be entered at the command line:
 
-```bash
+```shell
 # First set the region
 g.region raster=elevation
 

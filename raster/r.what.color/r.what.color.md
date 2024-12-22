@@ -10,7 +10,7 @@ line.
 For each value which is specified, a line of output will be generated
 consisting of the category value followed by the color, e.g.:
 
-```bash
+```shell
 r.what.color input=elevation.dem value=1500
 1500: 223:127:31
 ```
@@ -22,7 +22,7 @@ floating point format (*printf("%.15g")* format).
 If the lookup fails for a value, the color will be output as an
 asterisk, e.g.:
 
-```bash
+```shell
 r.what.color input=elevation.dem value=9999
 9999: *
 ```
@@ -30,7 +30,7 @@ r.what.color input=elevation.dem value=9999
 If a value cannot be parsed, both the value and the color will be output
 as an asterisk, e.g.:
 
-```bash
+```shell
 r.what.color input=elevation.dem value=bogus
 *: *
 ```
@@ -39,7 +39,7 @@ The format can be changed using the **format=** option. The value should
 be a *printf()*-style format string containing three conversion
 specifiers for the red, green and blue values respectively, e.g.:
 
-```bash
+```shell
 r.what.color input=elevation.dem value=1500 format='%02x:%02x:%02x'
 1500: df:7f:1f
 ```
@@ -47,7 +47,7 @@ r.what.color input=elevation.dem value=1500 format='%02x:%02x:%02x'
 If your system supports the *%m\$* syntax, you can change the ordering
 of the components, e.g.:
 
-```bash
+```shell
 r.what.color input=elevation.dem value=1500 format='%3$02x:%2$02x:%1$02x'
 1500: 1f:7f:df
 ```

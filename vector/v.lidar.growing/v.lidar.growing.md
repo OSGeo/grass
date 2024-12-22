@@ -38,7 +38,7 @@ in the same categories as above.
 
 ### Basic region growing procedure
 
-```bash
+```shell
 v.lidar.growing input=edge output=growing first=firstpulse
 ```
 

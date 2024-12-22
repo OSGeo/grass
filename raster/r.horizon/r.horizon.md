@@ -168,7 +168,7 @@ The examples are intended for the North Carolina sample dataset.
 **Example 1**: determine horizon angle in 225 degree direction (output
 of horizon angles CCW from East):
 
-```bash
+```shell
 g.region raster=elevation -p
 r.horizon elevation=elevation direction=215 step=0 bufferzone=200 \
     coordinates=638871.6,223384.4 maxdistance=5000
@@ -177,7 +177,7 @@ r.horizon elevation=elevation direction=215 step=0 bufferzone=200 \
 **Example 2**: determine horizon values starting at 90 deg (North), step
 size of 5 deg, saving result as CSV file:
 
-```bash
+```shell
 r.horizon elevation=elevation direction=90 step=5 bufferzone=200 \
     coordinates=638871.6,223384.4 maxdistance=5000 file=horizon.csv
 ```
@@ -185,7 +185,7 @@ r.horizon elevation=elevation direction=90 step=5 bufferzone=200 \
 **Example 3**: test point near highway intersection, saving result as
 CSV file for plotting the horizon around the highway intersection:
 
-```bash
+```shell
 g.region n=223540 s=220820 w=634650 e=638780 res=10 -p
 r.horizon elevation=elevation direction=0 step=5 bufferzone=200 \
     coordinates=636483.54,222176.25 maxdistance=5000 -d file=horizon.csv
@@ -199,7 +199,7 @@ Horizon angles for test point (CCW from East)
 
 We can plot horizon in polar coordinates using Matplotlib in Python:
 
-```bash
+```shell
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -222,7 +222,7 @@ Horizon plot in polar coordinates.
 
 Raster map mode (output maps "horangle\*" become input for *r.sun*):
 
-```bash
+```shell
 g.region raster=elevation -p
 
 # we put a bufferzone of 10% of maxdistance around the study area

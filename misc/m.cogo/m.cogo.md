@@ -13,7 +13,7 @@ character label is allowed but not required (see **-l** flag).
 
 **Example COGO input:**
 
-```bash
+```shell
    P23 N 23:14:12 W 340
    P24 S 04:18:56 E 230
    ...
@@ -31,7 +31,7 @@ bearing from the distance (which should be in appropriate linear units).
 
 **Output of the above input:**
 
-```bash
+```shell
    -134.140211 312.420236 P23
    -116.832837 83.072345 P24
    ...
@@ -67,13 +67,13 @@ boundaries may be converted to areas with *v.centroids*.
 
 ## EXAMPLES
 
-```bash
+```shell
    m.cogo -l in=cogo.dat
 ```
 
 Where the `cogo.dat` input file looks like:
 
-```bash
+```shell
 # Sample COGO input file -- This defines an area.
 # <label> <bearing> <distance>
 P001 S 88:44:56 W 6.7195
@@ -96,19 +96,19 @@ P016 S 88:44:56 W 18.7164
 
 Round trip:
 
-```bash
+```shell
    m.cogo -l input=cogo.dat | m.cogo -rl in="-"
 ```
 
 Import as a vector points map:
 
-```bash
+```shell
    m.cogo -l input=cogo.dat | v.in.ascii output=cogo_points x=1 y=2 separator=space
 ```
 
 Shell script to import as a vector line map:
 
-```bash
+```shell
    m.cogo -l input=cogo.dat | tac | awk '
        BEGIN { FS=" " ; R=0 }
        $1~/\d*\.\d*/ { printf(" %.8f %.8f\n", $1, $2) ; ++R }
@@ -118,7 +118,7 @@ Shell script to import as a vector line map:
 
 Convert that lines map into an area:
 
-```bash
+```shell
    # Add the -c flag to the above example to close the loop:
    m.cogo -l -c input=cogo.dat | ...
        ...

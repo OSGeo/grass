@@ -62,7 +62,7 @@ the flag is ignored.
 The following is a sample call of *r.in.bin* to import [GTOPO30
 DEM](http://edcdaac.usgs.gov/gtopo30/gtopo30.asp) data:
 
-```bash
+```shell
 r.in.bin -sb input=E020N90.DEM output=gtopo30 bytes=2 north=90 south=40
 east=60 west=20 r=6000 c=4800
 ```
@@ -74,7 +74,7 @@ east=60 west=20 r=6000 c=4800
 The following is a sample call of *r.in.bin* to import a GMT type 1
 (float) binary array:
 
-```bash
+```shell
 r.in.bin -hf input=sample.grd output=sample.grass
 ```
 
@@ -84,7 +84,7 @@ r.in.bin -hf input=sample.grd output=sample.grass
 
 The following is a sample call of *r.in.bin* to import an AVHRR image:
 
-```bash
+```shell
 r.in.bin in=p07_b6.dat out=avhrr c=128 r=128
 ```
 
@@ -94,7 +94,7 @@ The following is a sample call of *r.in.bin* to import [ETOPO2
 DEM](http://www.ngdc.noaa.gov/mgg/image/2minrelief.html) data (here full
 data set):
 
-```bash
+```shell
 r.in.bin ETOPO2.dos.bin out=ETOPO2min r=5400 c=10800 n=90 s=-90 w=-180 e=180 bytes=2
 r.colors ETOPO2min rules=terrain
 ```
@@ -104,7 +104,7 @@ r.colors ETOPO2min rules=terrain
 The following is a sample call of *r.in.bin* to import [SRTM30
 PLUS](http://topex.ucsd.edu/WWW_html/srtm30_plus.html) data:
 
-```bash
+```shell
 r.in.bin -sb input=e020n40.Bathymetry.srtm output=e020n40_topex \
          bytes=2 north=40 south=-10 east=60 west=20 r=6000 c=4800
 r.colors e020n40_topex rules=etopo2
@@ -115,7 +115,7 @@ r.colors e020n40_topex rules=etopo2
 The following is a sample call of *r.in.bin* to import GPCP 1DD v1.2
 data:
 
-```bash
+```shell
 YEAR="2000"
 MONTH="01"
 # number of days of this month
@@ -127,7 +127,7 @@ r.in.bin in=gpcp_1dd_v1.2_p1d.${YEAR}${MONTH} out=gpcp_${YEAR}.${MONTH}. \
 
 The following is a sample call of *r.in.bin* to import GPCP v2.2 data:
 
-```bash
+```shell
 r.in.bin in=gpcp_v2.2_psg.1979 out=gpcp_1979. \
          order=big bytes=4 -f header=576 anull=-99999 \
          n=90 s=-90 w=0 e=360 rows=72 cols=144 bands=12

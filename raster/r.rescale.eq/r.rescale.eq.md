@@ -18,7 +18,7 @@ from 1090 meters to 1800 meters into the range 0-255, the following
 command line could be used (without the *from* parameter, the full value
 range will be used):
 
-```bash
+```shell
 r.rescale.eq input=elevation from=1090,1800 output=elevation.255 to=0,255
 ```
 

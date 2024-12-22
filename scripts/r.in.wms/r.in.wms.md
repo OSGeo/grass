@@ -32,7 +32,7 @@ inserted from Tile Service file. Time variable can be specified in
 
 ### General Get Capabilities Request
 
-```bash
+```shell
 # Topographic WMS with OpenStreetMap by mundialis
 r.in.wms -c url="https://ows.mundialis.de/services/service?"
 r.in.wms -c url="https://ows.mundialis.de/services/service?" | grep Name
@@ -45,14 +45,14 @@ r.in.wms -c url="https://wms.cuzk.cz/wms.asp"
 
 #### Open Street Map
 
-```bash
+```shell
 # OSM, using WMS_GRASS driver
 g.region n=90 s=-90 w=-180 e=180 res=0:10:00 -p
 r.in.wms url="http://watzmann-geog.urz.uni-heidelberg.de/cached/osm" layers=osm_auto:all output=osm format=png
 r.info osm
 ```
 
-```bash
+```shell
 # OSM Overlay WMS (can be used as an overlay for other maps)
 r.in.wms url="http://ows.mundialis.de/services/service?" layer=OSM-Overlay-WMS output=osm_overlay format=png
 
@@ -73,7 +73,7 @@ page.
 
 #### Countries and coastlines
 
-```bash
+```shell
 # using WMS_GRASS driver
 r.in.wms url="http://www2.demis.nl/WMS/wms.asp" layers=Countries,Borders,Coastline output=countries srs=4326 format=png
 r.info countries
@@ -81,7 +81,7 @@ r.info countries
 
 #### Sentinel-2 satellite cloud free global coverage
 
-```bash
+```shell
 # North Carolina sample data
 g.region raster=elevation -p
 # using WMS_GRASS driver
@@ -99,7 +99,7 @@ courtesy: EOX)*
 
 #### OGC WMTS Example
 
-```bash
+```shell
 # using WMTS_GRASS driver
 r.in.wms url="http://gpp3-wxs.ign.fr/yourAPIkey/geoportail/wmts" layers=ORTHOIMAGERY.ORTHOPHOTOS \
          output=orthophoto srs=3857 format=jpeg driver=WMTS_GRASS style=normal password="*" username="*"
@@ -111,12 +111,12 @@ API](http://api.ign.fr/) website
 
 #### Data covering the Czech Republic
 
-```bash
+```shell
 # using WMS_GRASS driver
 r.in.wms url="http://wms.cuzk.cz/wms.asp" layers=prehledka_kraju-linie srs=4326 output=kn format=png
 ```
 
-```bash
+```shell
 # using WMTS_GRASS driver
 r.in.wms url="http://geoportal.cuzk.cz/WMTS_ORTOFOTO/WMTService.aspx" layers=orto output=orthophoto \
          srs=3857 format=jpeg driver=WMTS_GRASS style=default
@@ -132,7 +132,7 @@ Copernicus Core003 View Services - Optical VHR2 coverage over EU
 2011-2013 (provided by JRC; usage is restricted to non-commercial
 activities):
 
-```bash
+```shell
 # get WMS layer list
 r.in.wms -c url="http://cidportal.jrc.ec.europa.eu/copernicus/services/ows/wms/public/core003?"
 r.in.wms -c url="http://cidportal.jrc.ec.europa.eu/copernicus/services/ows/wms/public/core003?" | grep Name

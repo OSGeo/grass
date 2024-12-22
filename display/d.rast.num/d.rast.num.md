@@ -25,7 +25,7 @@ with each will be difficult to see. No data cells are indicated with
 
 Distance from the streams network (North Carolina sample dataset):
 
-```bash
+```shell
 g.region raster=streams_derived -p
 r.grow.distance input=streams_derived distance=dist_from_streams
 d.rast.num dist_from_streams -a

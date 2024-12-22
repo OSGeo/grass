@@ -20,7 +20,7 @@ create an index on key column (usually "cat" column).
 The value of the **old_database** option needs to be the exact string
 which appears as the fourth field printed by `v.db.connect -g`.
 
-```bash
+```shell
 v.db.connect -g map=census
 1/census|census|cat|/home/user/grassdata/nc_spm_base/PERMANENT/dbf/|dbf
 ```
@@ -49,7 +49,7 @@ the vector maps through [DBF](grass-dbf.md) database driver.
 Reconnect [DBF](grass-dbf.md) attribute tables linked to the vector maps
 in the current mapset to [SQLite](grass-sqlite.md) database:
 
-```bash
+```shell
 v.db.reconnect.all old_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/' \
  new_driver=sqlite new_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 ```
@@ -62,14 +62,14 @@ If attribute table doesn't exist in the target database
 For coping DBF tables to SQLite database and reconnecting them for all
 vector maps in the current mapset must be defined also **-c** flag.
 
-```bash
+```shell
 v.db.reconnect.all -c old_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/' \
  new_driver=sqlite new_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 ```
 
 or alternatively
 
-```bash
+```shell
 # set default connection (sqlite)
 db.connect -d
 # verify default connection
@@ -88,7 +88,7 @@ used very carefully!
 To become usable in GRASS 7, all vector maps in a mapset need to be
 updated:
 
-```bash
+```shell
 # first rebuild topology for all vector maps
 v.build.all
 

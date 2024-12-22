@@ -63,7 +63,7 @@ alt="v.net.iso example with traveling time" />
 
 #### Subdivision of a network using distance
 
-```bash
+```shell
 # Spearfish
 
 # start node:
@@ -79,7 +79,7 @@ v.net.iso input=myroads_net output=myroads_net_iso center_cats=1-100000 costs=10
 
 The network is divided into 4 categories:
 
-```bash
+```shell
 v.category myroads_net_iso option=report
 # ... reports 4 categories:
 #cat | distance from point in meters
@@ -91,7 +91,7 @@ v.category myroads_net_iso option=report
 
 To display the result, run for example:
 
-```bash
+```shell
 g.region n=4928200 s=4922300 w=589200 e=596500
 d.mon x0
 d.vect myroads_net_iso col=blue   cats=1
@@ -105,7 +105,7 @@ d.vect myroads_net col=red icon=basic/triangle fcol=green size=12 layer=2
 
 Prepare the network as above:
 
-```bash
+```shell
 # Spearfish
 
 # start node:
@@ -118,7 +118,7 @@ v.net myroads points=startnode out=myroads_net op=connect thresh=200
 
 Define costs as traveling time dependent on speed limits:
 
-```bash
+```shell
 # set up costs
 
 # create unique categories for each road in layer 3
@@ -154,7 +154,7 @@ v.net.iso input=myroads_net_time output=myroads_net_iso_time arc_layer=3 node_la
 
 To display the result, run for example:
 
-```bash
+```shell
 # add table with labels and coloring
 v.db.addtable myroads_net_iso_time columns="cat integer,trav_time varchar(20),GRASSRGB varchar(11)"
 # labels

@@ -143,7 +143,7 @@ cutting-edge applications using high performance computing.
 
 Using the North Carolina full sample dataset:
 
-```bash
+```shell
 # set computational region
 g.region raster=elev_lid792_1m -p
 
@@ -158,7 +158,7 @@ Now, let's visualize the result using rendering to a file (note the
 further management of computational region and usage of
 [d.mon](d.mon.md) module which are not needed when working in GUI):
 
-```bash
+```shell
 # increase the computational region by 350 meters
 g.region e=e+350
 # initiate the rendering
@@ -185,7 +185,7 @@ Carolina sample dataset.*
 
 If the module fails with
 
-```bash
+```shell
 ERROR: nwalk (7000001) > maxw (7000000)!
 ```
 

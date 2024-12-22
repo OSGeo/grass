@@ -14,7 +14,7 @@ also for SQLite tables.
 
 Dropping a column (North Carolina sample dataset):
 
-```bash
+```shell
 # work on own copy
 g.copy vect=roadsmajor,myroads
 db.describe -c myroads

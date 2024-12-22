@@ -8,7 +8,7 @@ manual](https://www.postgresql.org/docs/manuals/) for details.
 
 ## Connecting GRASS to PostgreSQL
 
-```bash
+```shell
 # example for connecting to a PostgreSQL server:
 db.connect driver=pg database=mydb
 db.login user=myname password=secret host=myserver.osgeo.org  # port=5432
@@ -30,7 +30,7 @@ password file can be specified using the connection parameter passfile
 or the environment variable PGPASSFILE. This file should contain lines
 of the following format:
 
-```bash
+```shell
 hostname:port:database:username:password
 ```
 
@@ -48,7 +48,7 @@ All SQL operators supported by PostgreSQL.
 Import vector module require an unique ID column which can be generated
 as follows in a PostgreSQL table:
 
-```bash
+```shell
 db.execute sql="ALTER TABLE mytable ADD ID integer"
 db.execute sql="CREATE SEQUENCE mytable_seq"
 db.execute sql="UPDATE mytable SET ID = nextval('mytable_seq')"
@@ -59,7 +59,7 @@ db.execute sql="DROP SEQUENCE mytable_seq"
 
 CSV import into PostgreSQL:
 
-```bash
+```shell
 \h copy
 COPY t1 FROM 'filename' USING DELIMITERS ',';
 ```
@@ -79,7 +79,7 @@ PostgreSQL.
 
 In an existing PostGIS database, create the following table:
 
-```bash
+```shell
 CREATE TABLE test
 (
  id serial NOT NULL,
@@ -100,7 +100,7 @@ select AddGeometryColumn ('postgis', 'test', 'geometry', -1, 'GEOMETRY', 2);
 
 GRASS can import this PostGIS polygon map as follows:
 
-```bash
+```shell
 v.in.ogr input="PG:host=localhost dbname=postgis user=neteler" layer=test \
          output=test type=boundary,centroid
 v.db.select test

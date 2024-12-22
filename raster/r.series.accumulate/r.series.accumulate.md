@@ -10,19 +10,19 @@ degree-days to growing degree days (GDDs) can be done by providing a
 The flag **-a** determines the average computation of the input raster
 maps. In case the flag is not set, the average calculation is:
 
-```bash
+```shell
     average = (min + max) / 2
 ```
 
 In case the flag was set, the calculation changes to arithmetic mean
 
-```bash
+```shell
     average = sum(input maps) / (number of input maps)
 ```
 
 **GDD** Growing Degree Days are calculated as
 
-```bash
+```shell
     gdd = average - lower
 ```
 
@@ -33,7 +33,7 @@ GDD, usually accumulated for the period April 1<sup>st</sup> to October
 
 **BEDDs** Biologically Effective Degree Days are calculated as
 
-```bash
+```shell
     bedd = average - lower
 ```
 
@@ -42,7 +42,7 @@ temperature values.
 
 The **Huglin heliothermal index** is calculated as
 
-```bash
+```shell
     huglin = (average + max) / 2 - lower
 ```
 
@@ -52,7 +52,7 @@ usually accumulated for the period April 1<sup>st</sup> to September
 
 **Mean** raster values are calculated as
 
-```bash
+```shell
     mean = average
 ```
 
@@ -73,7 +73,7 @@ this map are added to the output.
 The *scale* and *shift* parameters are used to transform input values
 with
 
-```bash
+```shell
     new = old * scale + shift
 ```
 
@@ -102,7 +102,7 @@ with e.g. `ulimit -n 4096` (UNIX-based operating systems) but it cannot
 be higher than the hard limit. If the latter is too low, you can as
 superuser add an entry in:
 
-```bash
+```shell
 /etc/security/limits.conf
 # <domain>      <type>  <item>         <value>
 your_username  hard    nofile          4096
@@ -111,7 +111,7 @@ your_username  hard    nofile          4096
 This will raise the hard limit to 4096 files. Also have a look at the
 overall limit of the operating system
 
-```bash
+```shell
 cat /proc/sys/fs/file-max
 ```
 
@@ -132,7 +132,7 @@ file with a new line separated list of raster map names.
 Example with MODIS Land Surface Temperature, transforming values from
 Kelvin \* 50 to degrees Celsius:
 
-```bash
+```shell
 r.series.accumulate in=MOD11A1.Day,MOD11A1.Night,MYD11A1.Day,MYD11A1.Night out=MCD11A1.GDD \
       scale=0.02 shift=-273.15 limits=10,30
 ```

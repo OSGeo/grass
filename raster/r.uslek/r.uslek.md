@@ -19,7 +19,7 @@ factor.
 Calculate the USLE K factor (synthetic values, North Carolina sample
 dataset):
 
-```bash
+```shell
 # NC data: simulation
 g.region rural_1m -p
 
@@ -36,7 +36,7 @@ r.univar usle_k
 Example with small variations (condition: d_sand + d_clay + d_silt =\>
 1.0)
 
-```bash
+```shell
 # NC data: simulation
 r.mapcalc -s "sand_r = rand(0.09,0.13)"
 r.mapcalc -s "clay_r = rand(0.45,0.49)"

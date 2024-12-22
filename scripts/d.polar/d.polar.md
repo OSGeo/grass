@@ -39,7 +39,7 @@ areas from areas where aspect is undefined (i.e. flat areas).
 In this example, the polar diagram of the 'aspect' angle map in the
 North Carolina sample dataset is generated:
 
-```bash
+```shell
 g.region raster=aspect -p
 d.polar aspect
 ```

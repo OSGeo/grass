@@ -19,7 +19,7 @@ The North Carolina space time dataset contains a data package called
 *lst_daily.tar.bzip2* with daily data from MODIS LST. Import it by
 running:
 
-```bash
+```shell
 t.rast.import input=lst_daily.tar.bzip2 output=lst_daily \
               basename=lst directory=/tmp
 ```

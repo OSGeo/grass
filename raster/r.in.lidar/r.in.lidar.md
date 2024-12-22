@@ -137,7 +137,7 @@ Points falling outside the current computational region will be skipped.
 This includes points falling *exactly* on the southern region bound. To
 capture those adjust the region with:
 
-```bash
+```shell
 g.region s=s-0.000001
 ```
 
@@ -324,7 +324,7 @@ error.
 Simple example of binning of point from a LAS file into a newly created
 raster map in an existing project/mapset (using metric units):
 
-```bash
+```shell
 # set the computational region automatically, resol. for binning is 5m
 r.in.lidar -e -o input=points.las resolution=5 output=lidar_dem_mean
 g.region raster=lidar_dem_mean -p
@@ -348,7 +348,7 @@ For the output raster map, a **suitable resolution** can be found by
 dividing the number of input points by the area covered (this requires
 an iterative approach as outlined here):
 
-```bash
+```shell
 # print LAS metadata (Number of Points)
 r.in.lidar -p input=points.las
 #   Number of Point Records: 1287775
@@ -390,7 +390,7 @@ r.in.lidar input=points.las output=lidar_dem_percentile_95 \
 
 Further hints: how to calculate number of LiDAR points/square meter:
 
-```bash
+```shell
 g.region -e
   # Metric project:
   # points_per_sq_m = n_points / (ns_extent * ew_extent)
@@ -409,7 +409,7 @@ The sample LAS data are in the file "Serpent Mound Model LAS Data.laz",
 available at [Serpent Mound Model LAS
 Data.laz](https://github.com/PDAL/data/raw/4ee9ee43b195268a59113555908c1c0cdf955bd4/liblas/Serpent-Mound-Model-LAS-Data.laz):
 
-```bash
+```shell
 # print LAS file info
 r.in.lidar -p input="Serpent Mound Model LAS Data.laz"
 
@@ -440,7 +440,7 @@ The mean height above ground of the points can be computed for each
 raster cell (the ground elevation is given by the raster map
 `elevation`):
 
-```bash
+```shell
 g.region raster=elevation -p
 r.in.lidar input=points.las output=mean_height_above_ground base_raster=elevation method=mean
 ```
@@ -455,7 +455,7 @@ The file option requires a file that contains a list of file names with
 the full path. For example, a list of files in the directory
 /home/user/data:
 
-```bash
+```shell
 points1.laz
 points2.laz
 points3.laz
@@ -463,7 +463,7 @@ points3.laz
 
 would be lised in the file as:
 
-```bash
+```shell
 /home/user/data/points1.laz
 /home/user/data/points2.laz
 /home/user/data/points3.laz
@@ -472,19 +472,19 @@ would be lised in the file as:
 On Linux and OSX, this file can be automatically generated with the
 command:
 
-```bash
+```shell
 ls /home/user/data/*.laz > /home/user/data/filelist.txt
 ```
 
 On Windows:
 
-```bash
+```shell
 dir /b c:\users\user\data\*.laz > c:\users\user\data\filelist.txt
 ```
 
 The mean height above ground example above would then be:
 
-```bash
+```shell
 g.region raster=elevation -p
 r.in.lidar file=/home/user/data/filelist.txt output=mean_height_above_ground base_raster=elevation method=mean
 ```
@@ -492,7 +492,7 @@ r.in.lidar file=/home/user/data/filelist.txt output=mean_height_above_ground bas
 In Python, the list of files can be created using the *glob* Python
 module:
 
-```bash
+```shell
 import glob
 import grass.script as gs
 

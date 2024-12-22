@@ -27,7 +27,7 @@ manually. For example when all files are stored in the directory
 `/home/john/data`, the user can provide the following in the command
 line:
 
-```bash
+```shell
 d.linegraph directory=/home/john/data x_file=x.txt y_file=y1.txt,y2.txt
 ```
 
@@ -103,7 +103,7 @@ The following can be executed in Bash to create the input data for this
 example. The user can just create these files in a text editor, save
 them and specify path to them.
 
-```bash
+```shell
 cat > x.txt <<EOF
 1
 3
@@ -130,7 +130,7 @@ EOF
 The next command sequence creates a file `plot.png` in the current
 directory which is the drawing made by *d.linegraph*.
 
-```bash
+```shell
 d.mon start=cairo output=plot.png width=400 height=400
 d.linegraph x_file=x.txt y_file=y1.txt,y2.txt
 d.mon stop=cairo

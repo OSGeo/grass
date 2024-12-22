@@ -60,7 +60,7 @@ control output size etc.
 To start the interactive *[wxGUI map
 display](wxGUI.md#map-display-window)*, run
 
-```bash
+```shell
 d.mon start=wx0
 ```
 
@@ -73,7 +73,7 @@ d.mon start=wx0
 
 All subsequently displayed data will be rendered on monitor `wx0`.
 
-```bash
+```shell
 g.region raster=elevation -p
 d.rast map=elevation
 ```
@@ -90,7 +90,7 @@ alt="Display wx0 with raster map" />
 
 A CAIRO monitor can be started (and selected) by
 
-```bash
+```shell
 d.mon start=cairo output=out.pdf
 ```
 
@@ -101,7 +101,7 @@ From this moment on all displayed data will be rendered into file
 
 To list the currently running monitors, use
 
-```bash
+```shell
 d.mon -l
 
 List of running monitors:
@@ -113,7 +113,7 @@ cairo
 
 To identify the currently selected monitor, use
 
-```bash
+```shell
 d.mon -p
 
 cairo
@@ -124,7 +124,7 @@ cairo
 To switch back to interactive display mode, here to an earlier started
 and still running wxGUI monitor, use
 
-```bash
+```shell
 d.mon select=wx0
 ```
 
@@ -132,7 +132,7 @@ d.mon select=wx0
 
 To close the wxGUI monitor, run
 
-```bash
+```shell
 d.mon stop=wx0
 ```
 

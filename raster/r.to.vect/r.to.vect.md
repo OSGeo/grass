@@ -59,7 +59,7 @@ The examples are based on the North Carolina sample dataset:
 
 Random sampling of points:
 
-```bash
+```shell
 g.region raster=elevation -p
 # random sampling of points (note that r.random also writes vector points)
 r.random elevation raster_output=elevrand1000 n=1000
@@ -74,7 +74,7 @@ r.univar elevation
 
 Vectorization of streams in watershed basins map:
 
-```bash
+```shell
 g.region raster=elevation -p
 r.watershed elev=elevation stream=elev.streams thresh=50000
 r.to.vect -s input=elev.streams output=elev_streams type=line
@@ -89,7 +89,7 @@ v.report map=elev_streams option=length units=meters sort=asc
 
 Vectorization of simplified landuse class map:
 
-```bash
+```shell
 g.region raster=landclass96 -p
 # we smooth corners of area features
 r.to.vect -s input=landclass96 output=my_landclass96 type=area

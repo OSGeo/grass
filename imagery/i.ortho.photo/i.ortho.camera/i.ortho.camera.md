@@ -17,7 +17,7 @@ After entering the camera file name, following menu is displayed:
 
 Please provide the following information
 
-```bash
+```shell
 
     CAMERA NAME:               camera name______
     CAMERA IDENTIFICATION:     identification___
@@ -66,7 +66,7 @@ in milli-meters from the principle point.
 
 Please provide the following information
 
-```bash
+```shell
     Fid#    FID ID          X          Y
 
     1__    _____        0.0___    0.0___

@@ -64,7 +64,7 @@ Note that Lat/long output can be converted to GRASS's DMS convention
 (`DDD:MM:SSS.SSSH`) by piping the results of *m.proj* through the *sed*
 stream editor as follows.
 
-```bash
+```shell
 m.proj -o ... | sed -e 's/d/:/g' -e "s/'/:/g"  -e 's/"//g'
 ```
 
@@ -79,7 +79,7 @@ The *m.proj* module is designed to work seamlessly with point data
 exported from the GIS with *[v.out.ascii](v.out.ascii.md)*, as the
 following example shows.
 
-```bash
+```shell
 # Long/Lat WGS84 output in DMS
 v.out.ascii bridges | m.proj -o input=-
 
@@ -93,7 +93,7 @@ To convert a Long/Lat WGS84 coordinate pair to the current map CRS using
 the **-i** flag which sets the target projection parameters
 automatically from the current project definition:
 
-```bash
+```shell
 echo "-78.61168178 33.92225767" | m.proj -i input=-
 645513.47|19180.31|0.00
 ```
@@ -102,7 +102,7 @@ The same, but load points from a file named `waypoints.txt` and continue
 on to import the results into a GRASS vector points map in the current
 map projection:
 
-```bash
+```shell
 # check file content
 cat waypoints.txt
 -78.43977824 33.89587173
@@ -127,7 +127,7 @@ To transform points from a UTM projection (here specified with detailed
 projection definition rather than using an EPSG code) into the
 Gauss-Krüger Grid System, importing from and exporting to files:
 
-```bash
+```shell
 m.proj proj_in="+proj=utm +name=utm +a=6378137.0 +es=0.006694380 \
     +zone=32 +unfact=1.0" proj_out="+proj=tmerc +name=tmerc \
     +a=6377397.155 +es=0.0066743720 +lat_0=0.0 +lon_0=9.0 +k=1.0 \
@@ -156,14 +156,14 @@ parameters, `+a=`, `+es=`, etc.
 
 Another custom parameter usage example:
 
-```bash
+```shell
 m.proj proj_in="+proj=tmerc +datum=ire65 +lat_0=53.5 +lon_0=-8 +x_0=200000 \
     +y_0=250000 +k=1.000035" proj_out="+proj=ll +datum=wgs84" input=wpt.txt
 ```
 
 or without datum transformation:
 
-```bash
+```shell
 m.proj proj_in="+proj=tmerc +ellps=modif_airy +lat_0=53.5 +lon_0=-8 +x_0=200000 \
     +y_0=250000 +k=1.000035" proj_out="+proj=ll +datum=wgs84" input=wpt.txt
 ```

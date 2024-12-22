@@ -10,13 +10,13 @@ Supported features:
 
 - show simple linear regression model line with calculated formula
 
-  ```bash
+  ```shell
   y = a + b*x (y is dependent variable, a is intercept, b is slope, x is explanatory variable)
   ```
 
   and
 
-  ```bash
+  ```shell
   r-squared (parameter of goodness-of-fit measure for linear regression model)
   ```
 
@@ -36,7 +36,7 @@ Supported features:
   [LibreOffice](https://www.libreoffice.org/) etc., you will obtain a
   different calculated formula
 
-  ```bash
+  ```shell
   y = a + b*x
   ```
 

@@ -8,7 +8,7 @@ user's platform.
 
 ## EXAMPLE
 
-```bash
+```shell
 g.region -p n=228500 s=215000 w=630000 e=645000 res=10
 r.surf.random out=random min=0 max=100
 

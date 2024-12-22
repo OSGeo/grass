@@ -19,7 +19,7 @@ distance between two points that one would measure with a ruler, which
 can be proven by repeated application of the Pythagorean theorem. The
 formula is given by:
 
-```bash
+```shell
 d(dx,dy) = sqrt(dx^2 + dy^2)
 ```
 
@@ -38,7 +38,7 @@ most streets on the island of Manhattan, which causes the shortest path
 a car could take between two points in the city to have length equal to
 the points' distance in taxicab geometry. The formula is given by:
 
-```bash
+```shell
 d(dx,dy) = abs(dx) + abs(dy)
 ```
 
@@ -47,7 +47,7 @@ are rhombus-shaped from a given point.
 
 The *Maximum metric* is given by the formula
 
-```bash
+```shell
 d(dx,dy) = max(abs(dx),abs(dy))
 ```
 
@@ -76,7 +76,7 @@ NULL.
 
 North Carolina sample dataset:
 
-```bash
+```shell
 g.region raster=streams_derived -p
 r.grow.distance input=streams_derived distance=dist_from_streams
 r.colors map=dist_from_streams color=rainbow
@@ -99,7 +99,7 @@ shown with d.rast.num)*
 
 ### Distance from sea in meters in latitude-longitude CRS
 
-```bash
+```shell
 g.region raster=sea -p
 r.grow.distance -m input=sea distance=dist_from_sea_geodetic metric=geodesic
 r.colors map=dist_from_sea_geodetic color=rainbow

@@ -142,7 +142,7 @@ possibilities of process automation.
 
 In the command console the procedure looks as follows:
 
-```bash
+```shell
 # input data import
 r.import input=elev_state_500m.tif output=elevation
 v.import input=zipcodes_wake.shp output=zipcodes_wake
@@ -355,7 +355,7 @@ usage.*
 The steps to enter in the command console of the Graphical Modeler would
 be as follows:
 
-```bash
+```shell
 # note that the white space usage differs from the standard command line usage
 
 # rename original image with preselected suffix

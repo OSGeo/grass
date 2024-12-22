@@ -29,12 +29,12 @@ This program may not work properly with Lat-long data.
 
 All examples are based on the North Carolina sample dataset.
 
-```bash
+```shell
 g.copy vect=geonames_wake,my_geonames_wake
 v.kcv map=my_geonames_wake column=part npartitions=10
 ```
 
-```bash
+```shell
 g.copy vect=geodetic_pts,my_geodetic_pts
 v.kcv map=my_geodetic_pts column=part npartitions=10
 ```

@@ -35,7 +35,7 @@ intervals of the space time vector dataset are considered for
 computation. Hence the option is set to contains (time stamped vector
 map layers temporally **contain** the raster map layers):
 
-```bash
+```shell
 MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
 
 for map in ${MAPS} ; do
@@ -246,7 +246,7 @@ t.info type=strds input=precipitation_agg
 In this example the aggregation from daily data to eight days is shown.
 This "eight-day week" is used in some MODIS satellite sensor products.
 
-```bash
+```shell
 # NOTE: the example is written in shell language
 
 # create maps every 8 days as seed maps

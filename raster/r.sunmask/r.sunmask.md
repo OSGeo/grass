@@ -53,7 +53,7 @@ displays the map center's coordinates in latitude/longitude (or
 Note for module usage with the *-g* flag, when performing calculations
 close to sunset/sunrise:
 
-```bash
+```shell
  [...]
  sunangleabovehorizont=0.434240
  sunrise=07:59:19
@@ -75,7 +75,7 @@ refraction. The output without *-g* flag contains related indications.
 Example for North Carolina sample data set for the calculation of sun
 position angles and more:
 
-```bash
+```shell
 # set the region to a place near Raleigh (NC)
 g.region raster=elev_lid792_1m -p
 

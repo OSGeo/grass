@@ -23,39 +23,39 @@ that passing an expression on the command line is possible as long as
 the expression is quoted and a space is included before the first *=*
 sign. Example ('foo' is the resulting map):
 
-```bash
+```shell
 r.mapcalc "foo = 1"
 ```
 
 or:
 
-```bash
+```shell
 r.mapcalc 'foo = 1'
 ```
 
 An unquoted expression (i.e. split over multiple arguments) won't work,
 nor will omitting the space before the = sign:
 
-```bash
+```shell
 r.mapcalc 'foo=1'
 Sorry, <foo> is not a valid parameter
 ```
 
 To read command from the file, use file= explicitly, e.g.:
 
-```bash
+```shell
 r.mapcalc file=file
 ```
 
 or:
 
-```bash
+```shell
 r.mapcalc file=- < file
 ```
 
 or:
 
-```bash
+```shell
 r.mapcalc file=- <<EOF
 foo = 1
 EOF
@@ -101,7 +101,7 @@ maps in an expression. Three modes are supported:
 
 The following operators are supported:
 
-```bash
+```shell
      Operator   Meaning                    Type        Precedence
      --------------------------------------------------------------
      -          negation                   Arithmetic  12
@@ -147,7 +147,7 @@ operators give a 1 result if the comparison is true, 0 otherwise.
 Anything in the expression which is not a number, operator, or function
 name is taken to be a raster map layer name. Examples:
 
-```bash
+```shell
 elevation
 x3
 3d.his
@@ -157,13 +157,13 @@ Most GRASS raster map layers meet this naming convention. However, if a
 raster map layer has a name which conflicts with the above rule, it
 should be quoted. For example, the expression
 
-```bash
+```shell
 x = a-b
 ```
 
 would be interpreted as: x equals a minus b, whereas
 
-```bash
+```shell
 x = "a-b"
 ```
 
@@ -171,13 +171,13 @@ would be interpreted as: x equals the raster map layer named *a-b*
 
 Also
 
-```bash
+```shell
 x = 3107
 ```
 
 would create *x* filled with the number 3107, while
 
-```bash
+```shell
 x = "3107"
 ```
 
@@ -193,13 +193,13 @@ current mapset search path. It is possible to override the search path
 and specify the mapset from which to select the raster map layer. This
 is done by specifying the raster map layer name in the form:
 
-```bash
+```shell
 name@mapset
 ```
 
 For example, the following is a legal expression:
 
-```bash
+```shell
 result = x@PERMANENT / y@SOILS
 ```
 
@@ -235,7 +235,7 @@ category value.
 For example, suppose that the raster map layer *soil.ph* (representing
 soil pH values) has a category file with labels as follows:
 
-```bash
+```shell
 cat     label
 ------------------
 0       no data
@@ -250,7 +250,7 @@ cat     label
 
 Then the expression:
 
-```bash
+```shell
 result = @soils.ph
 ```
 
@@ -277,7 +277,7 @@ The \# operator can be used to either convert map category values to
 their grey scale equivalents or to extract the red, green, or blue
 components of a raster map layer into separate raster map layers.
 
-```bash
+```shell
 result = #map
 ```
 
@@ -286,31 +286,31 @@ which represents the grey scale level implied by the color for the
 category. If the map has a grey scale color table, then the grey level
 is what \#map evaluates to. Otherwise, it is computed as:
 
-```bash
+```shell
  0.10 * red + 0.81 * green + 0.01 * blue
 ```
 
 Alternatively, you can use:
 
-```bash
+```shell
 result = y#map
 ```
 
 to use the NTSC weightings:
 
-```bash
+```shell
  0.30 * red + 0.59 * green + 0.11 * blue
 ```
 
 Or, you can use:
 
-```bash
+```shell
 result = i#map
 ```
 
 to use equal weightings:
 
-```bash
+```shell
  0.33 * red + 0.33 * green + 0.33 * blue
 ```
 
@@ -322,13 +322,13 @@ by a user-specified percentage. These forms allow color separates to be
 made. For example, to extract the red component from *map* and store it
 in the new 0-255 map layer *red*, the user could type:
 
-```bash
+```shell
 red = r#map
 ```
 
 To assign this map grey colors type:
 
-```bash
+```shell
 r.colors map=red color=rules
 black
 white
@@ -336,7 +336,7 @@ white
 
 To assign this map red colors type:
 
-```bash
+```shell
 r.colors map=red color=rules
 black
 red
@@ -351,7 +351,7 @@ function gives an integer result, and *\** indicates that the result is
 float if any of the arguments to the function are floating point values
 and integer if all arguments are integer.
 
-```bash
+```shell
 function                description                                     type
 ---------------------------------------------------------------------------
 abs(x)                  return absolute value of x                      *
@@ -400,7 +400,7 @@ tan(x)                  tangent of x (x is in degrees)                  F
 xor(x,y)                exclusive-or (XOR) of x and y                   I
 ```
 
-```bash
+```shell
 Internal variables:
  row()                  current row of moving window                    I
  col()                  current col of moving window                    I
@@ -425,7 +425,7 @@ on AMD64 (x86-64) architectures compiled with GCC/CLANG. Note that
 although this setting is the most frequent one, the ranges could differ
 for different architectures.
 
-```bash
+```shell
 data type               precision and value range info
 -------------------------------------------------------------------------------
  int                    a 32-bit integer with a range from -2,147,483,647 to
@@ -451,7 +451,7 @@ lowest value possible instead, i.e. -2147483647.
 Floating point numbers are allowed in the expression. A floating point
 number is a number which contains a decimal point:
 
-```bash
+```shell
     2.3   12.0   12.   .81
 ```
 
@@ -471,7 +471,7 @@ If you want floating point division, at least one of the arguments has
 to be a floating point value. Multiplying one of them by 1.0 will
 produce a floating-point result, as will using float():
 
-```bash
+```shell
       r.mapcalc "ndvi = float(lsat.4 - lsat.3) / (lsat.4 + lsat.3)"
 ```
 
@@ -488,7 +488,7 @@ produce a floating-point result, as will using float():
 - The &&& and \|\|\| operators observe the following axioms even when x
   is NULL:
 
-  ```bash
+  ```shell
       x &&& false == false
       false &&& x == false
       x ||| true == true
@@ -502,7 +502,7 @@ produce a floating-point result, as will using float():
 
 - The situation for if() is:
 
-  ```bash
+  ```shell
   if(x)
       NULL if x is NULL; 0 if x is zero; 1 otherwise
   if(x,a)
@@ -520,7 +520,7 @@ produce a floating-point result, as will using float():
 
 - Non-NULL, but invalid, arguments to functions should result in NULL.
 
-  ```bash
+  ```shell
   Examples:
   log(-2)
   sqrt(-2)
@@ -535,7 +535,7 @@ Example: The users wants the NULL-valued cells to be treated like zeros.
 To add maps A and B (where B contains NULLs) to get a map C the user can
 use a construction like:
 
-```bash
+```shell
 C = A + if(isnull(B),0,B)
 ```
 
@@ -543,7 +543,7 @@ C = A + if(isnull(B),0,B)
 
 For the one argument form:
 
-```bash
+```shell
 if(x) = NULL        if x is NULL
 if(x) = 0        if x = 0
 if(x) = 1        otherwise (i.e. x is neither NULL nor 0).
@@ -551,7 +551,7 @@ if(x) = 1        otherwise (i.e. x is neither NULL nor 0).
 
 For the two argument form:
 
-```bash
+```shell
 if(x,a) = NULL        if x is NULL
 if(x,a) = 0        if x = 0
 if(x,a) = a        otherwise (i.e. x is neither NULL nor 0).
@@ -559,7 +559,7 @@ if(x,a) = a        otherwise (i.e. x is neither NULL nor 0).
 
 For the three argument form:
 
-```bash
+```shell
 if(x,a,b) = NULL    if x is NULL
 if(x,a,b) = b        if x = 0
 if(x,a,b) = a        otherwise (i.e. x is neither NULL nor 0).
@@ -567,7 +567,7 @@ if(x,a,b) = a        otherwise (i.e. x is neither NULL nor 0).
 
 For the four argument form:
 
-```bash
+```shell
 if(x,a,b,c) = NULL    if x is NULL
 if(x,a,b,c) = a        if x > 0
 if(x,a,b,c) = b        if x = 0
@@ -585,7 +585,7 @@ All forms of if() return NULL if the first argument is NULL. The 2, 3
 and 4 argument forms of if() return NULL if the "selected" argument is
 NULL, e.g.:
 
-```bash
+```shell
 if(0,a,b) = b    regardless of whether a is NULL
 if(1,a,b) = a    regardless of whether b is NULL
 ```
@@ -611,13 +611,13 @@ Extra care must be taken if the expression is given on the command line.
 Some characters have special meaning to the UNIX shell. These include,
 among others:
 
-```bash
+```shell
 * ( ) > & |
 ```
 
 It is advisable to put single quotes around the expression; e.g.:
 
-```bash
+```shell
 'result = elevation * 2'
 ```
 
@@ -630,7 +630,7 @@ the `*`.
 In general, it's preferable to do as much as possible in each r.mapcalc
 command. E.g. rather than:
 
-```bash
+```shell
         r.mapcalc "$GIS_OPT_OUTPUT.r = r#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * r#$GIS_OPT_SECOND"
         r.mapcalc "$GIS_OPT_OUTPUT.g = g#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * g#$GIS_OPT_SECOND"
         r.mapcalc "$GIS_OPT_OUTPUT.b = b#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * b#$GIS_OPT_SECOND"
@@ -638,7 +638,7 @@ command. E.g. rather than:
 
 use:
 
-```bash
+```shell
     r.mapcalc <<EOF
         $GIS_OPT_OUTPUT.r = r#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * r#$GIS_OPT_SECOND
         $GIS_OPT_OUTPUT.g = g#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * g#$GIS_OPT_SECOND
@@ -654,13 +654,13 @@ For the backwards compatibility with GRASS 6, if no options are given,
 it manufactures `file=-` (which reads from stdin), so you can continue
 to use e.g.:
 
-```bash
+```shell
 r.mapcalc < file
 ```
 
 or:
 
-```bash
+```shell
 r.mapcalc <<EOF
 foo = 1
 EOF
@@ -673,7 +673,7 @@ When the map name contains uppercase letter(s) or a dot which are not
 allowed to be in module option names, the *r.mapcalc* command will be
 valid also without quotes:
 
-```bash
+```shell
 r.mapcalc elevation_A=1
 r.mapcalc elevation.1=1
 ```
@@ -700,7 +700,7 @@ will be placed into the history file for the *result* map.
 so the MASK is only applied when reading an existing GRASS raster map.
 This implies that, for example, the command:
 
-```bash
+```shell
 r.mapcalc "elevation_exaggerated = elevation * 3"
 ```
 
@@ -709,7 +709,7 @@ create a map respecting the masked pixels if MASK is active.
 However, when creating a map which is not based on any map, e.g. a map
 from a constant:
 
-```bash
+```shell
 r.mapcalc "base_height = 200.0"
 ```
 
@@ -720,7 +720,7 @@ above, MASK is only applied when reading, not when writing a raster map.
 If also in this case the MASK should be applied, an if() statement
 including the MASK should be used, e.g.:
 
-```bash
+```shell
 r.mapcalc "base_height = if(MASK, 200.0, null())"
 ```
 
@@ -734,7 +734,7 @@ If the output of the computation should be only one map but the
 expression is so complex that it is better to split it to several
 expressions, the `eval` function can be used:
 
-```bash
+```shell
 r.mapcalc << EOF
 eval(elev_200 = elevation - 200, \
      elev_5 = 5 * elevation, \
@@ -762,7 +762,7 @@ A map cannot be used both as an input and as an output as in this
 invalid expression `oldmap = oldmap + 1`, instead a subsequent rename
 using *[g.rename](g.rename.md)* is needed when the same name is desired:
 
-```bash
+```shell
 r.mapcalc "newmap = oldmap + 1"
 g.rename raster=newmap,oldmap
 ```
@@ -792,38 +792,38 @@ Note that the rand() function will generate a fatal error if neither the
 
 To compute the average of two raster map layers *a* and *b*:
 
-```bash
+```shell
 ave = (a + b)/2
 ```
 
 To form a weighted average:
 
-```bash
+```shell
 ave = (5*a + 3*b)/8.0
 ```
 
 To produce a binary representation of the raster map layer *a* so that
 category 0 remains 0 and all other categories become 1:
 
-```bash
+```shell
 mapmask = a != 0
 ```
 
 This could also be accomplished by:
 
-```bash
+```shell
 mapmask = if(a)
 ```
 
 To mask raster map layer *b* by raster map layer *a*:
 
-```bash
+```shell
 result = if(a,b)
 ```
 
 To change all values below 5 to NULL, keep 5 otherwise:
 
-```bash
+```shell
 newmap = if(map<5, null(), 5)
 ```
 
@@ -832,7 +832,7 @@ usage of **-s** flag or the *seed* parameter). The precision of the
 input values determines the output precision (the resulting [raster map
 type](rasterintro.md#raster-format)):
 
-```bash
+```shell
 # write result as integer map (CELL)
 random_int   = rand(-100,100)
 
@@ -856,13 +856,13 @@ lowest x value (i.e. first) will have the associated y value returned.
 Any x value higher than the last will similarly have the associated y
 value returned. Consider the request:
 
-```bash
+```shell
 newmap = graph(map, 1,10, 2,25, 3,50)
 ```
 
 X (map) values supplied and y (newmap) values returned:
 
-```bash
+```shell
 0, 10
 1, 10
 1.5, 17.5
@@ -876,7 +876,7 @@ X (map) values supplied and y (newmap) values returned:
 The *result* variable on the left hand side of the equation should not
 appear in the *expression* on the right hand side.
 
-```bash
+```shell
 mymap = if( mymap > 0, mymap, 0)
 ```
 
@@ -887,7 +887,7 @@ expression). Thus the `#`, `@`, and `[ ]` operators cannot be used on a
 map generated within same *r.mapcalc* command run. Consequently, the
 following (strikethrough code) does not work:
 
-```bash
+```shell
 newmap = oldmap * 3.14
 othermap = newmap[-1, 0] / newmap[1, 0]
 ```

@@ -203,7 +203,7 @@ alt="efficiency benchmark for r.texture with different window sizes" />
 Calculation of Angular Second Moment of B/W orthophoto (North Carolina
 data set):
 
-```bash
+```shell
 g.region raster=ortho_2001_t792_1m -p
 # set grey level color table 0% black 100% white
 r.colors ortho_2001_t792_1m color=grey
@@ -221,7 +221,7 @@ ortho_texture_ASM_0, ortho_texture_ASM_45, ortho_texture_ASM_90,
 ortho_texture_ASM_135. Reducing the number of gray levels
 (equal-probability quantizing):
 
-```bash
+```shell
 g.region -p raster=ortho_2001_t792_1m
 
 # enter as one line or with \
@@ -235,7 +235,7 @@ before.
 Second example: analysis of IDM (homogeneity) on a simple raster with
 North-South line pattern.
 
-```bash
+```shell
 # import raster
 r.in.ascii in=- output=lines << EOF
 north: 9

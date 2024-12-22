@@ -36,7 +36,7 @@ In the following examples we sample a space time raster dataset that
 contains 4 raster map layers. First we create the STRDS that will be
 sampled with *t.rast.what*.
 
-```bash
+```shell
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10
 
 # Generate data
@@ -56,7 +56,7 @@ t.register -i type=raster input=A maps=a_1,a_2,a_3,a_4 \
 The first approach uses text coordinates as input and stdout as output,
 the layout is one coordinate(point per column:
 
-```bash
+```shell
 t.rast.what strds=A coordinates="115,36,79,45" layout=col -n
 
 start|end|115.0000000000;36.0000000000|79.0000000000;45.0000000000
@@ -71,7 +71,7 @@ start|end|115.0000000000;36.0000000000|79.0000000000;45.0000000000
 A vector map layer can be used as input to sample the STRDS. All three
 available layouts are demonstrated using the vector map for sampling.
 
-```bash
+```shell
 # First create the vector map layer based on random points
 v.random output=points n=3 seed=1
 

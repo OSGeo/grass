@@ -18,7 +18,7 @@ combination of two data layers is displayed.
 
 Scatterplot of two LANDSAT TM7 channels (North Carolina sample dataset):
 
-```bash
+```shell
 g.region raster=lsat7_2002_30 -p
 d.correlate map=lsat7_2002_30,lsat7_2002_40
 ```

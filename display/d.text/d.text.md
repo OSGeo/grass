@@ -49,7 +49,7 @@ The following command will print the short phrase "This is a test of
 d.text" in the active display frame using the color yellow, in bold, and
 using 4/100'ths (4%) of the active frame's vertical space per line:
 
-```bash
+```shell
 d.text text="This is a test of d.text" color=yellow bgcolor=gray size=4
 ```
 

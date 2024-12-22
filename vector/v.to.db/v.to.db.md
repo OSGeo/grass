@@ -55,40 +55,40 @@ created in the table if it doesn't already exist, except when using the
 
 Upload category numbers to attribute table (used for new map):
 
-```bash
+```shell
 v.to.db map=soils type=centroid option=cat
 ```
 
 Upload polygon areas to corresponding centroid record in the attribute
 table:
 
-```bash
+```shell
 v.to.db map=soils type=centroid option=area columns=area_size unit=h
 ```
 
 Upload line lengths (in meters) of each vector line to attribute table
 (use *v.category* in case of missing categories):
 
-```bash
+```shell
 v.to.db map=roads option=length type=line columns=linelength units=me
 ```
 
 Upload x and y coordinates from vector geometry to attribute table:
 
-```bash
+```shell
 v.to.db map=pointsmap option=coor columns=x,y
 ```
 
 Upload x, y and z coordinates from vector geometry to attribute table:
 
-```bash
+```shell
 v.to.db map=pointsmap option=coor columns=x,y,z
 ```
 
 Transfer attributes from a character column (with numeric contents) to a
 new integer column:
 
-```bash
+```shell
 v.db.addcolumn usa_income_employment2002 col="FIPS_NUM integer"
 v.to.db usa_income_employment2002 option=query columns=FIPS_NUM query_column=STATE_FIPS
 ```
@@ -96,7 +96,7 @@ v.to.db usa_income_employment2002 option=query columns=FIPS_NUM query_column=STA
 Upload category numbers of left and right area, to an attribute table of
 boundaries common for the areas:
 
-```bash
+```shell
 # add categories for boundaries of the input vector map, in layer 2:
 v.category soils out=mysoils layer=2 type=boundary option=add
 # add a table with columns named "left" and "right" to layer 2 of the input
@@ -112,7 +112,7 @@ Compute D<sub>L</sub>, the Fractal Dimension (Mandelbrot, 1982), of the
 boundary defining a polygon based on the formula:
 `D = 2 * (log perimeter) / (log area):`
 
-```bash
+```shell
 g.copy vect=soils,mysoils
 v.db.addcolumn mysoils col="d double precision"
 v.to.db mysoils option=fd column="d"
@@ -130,32 +130,32 @@ d.vect mysoils type=boundary
 
 Report x,y,z coordinates of points in the input vector map:
 
-```bash
+```shell
 v.to.db -p bugsites option=coor type=point
 ```
 
 Report all area sizes of the input vector map:
 
-```bash
+```shell
 v.to.db -p soils option=area type=boundary units=h
 ```
 
 Report all area sizes of the input vector map, in hectares, sorted by
 category number (requires GNU *sort* utility installed):
 
-```bash
+```shell
 v.to.db -p soils option=area type=boundary units=h | sort -n
 ```
 
 Report all line lengths of the input vector map, in kilometers:
 
-```bash
+```shell
 v.to.db -p roads option=length type=line units=k
 ```
 
 Report number of features for each category in the input vector map:
 
-```bash
+```shell
 v.to.db -p roads option=count type=line
 ```
 

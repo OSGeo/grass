@@ -19,13 +19,13 @@ For more info see manual of *[r.buffer](r.buffer.md)*.
 In the following example, the buffer zones would be (in the default
 units of meters): 0-100, 101-200, 201-300, 301-400 and 401-500.
 
-```bash
+```shell
 r.buffer.lowmem input=roads output=roads.buf distances=100,200,300,400,500
 ```
 
 Result:
 
-```bash
+```shell
 r.category input=roads.buf
 
       1       distances calculated from these locations

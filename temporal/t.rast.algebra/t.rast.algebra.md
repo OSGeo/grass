@@ -37,7 +37,7 @@ the spatial extent of maps.
 The expression option must be passed as **quoted** expression, for
 example:
 
-```bash
+```shell
 t.rast.algebra expression="C = A + B" basename=result
 ```
 
@@ -59,7 +59,7 @@ functions that will be presented in the following section.
 Several temporal topology relations are supported between maps
 registered in space time datasets:
 
-```bash
+```shell
 equals            A ------
                   B ------
 
@@ -109,7 +109,7 @@ operators process the time instances and intervals of two temporally
 related maps and calculate the resulting temporal extent in five
 possible different ways.
 
-```bash
+```shell
 LEFT REFERENCE     l       Use the time stamp of the left space time dataset
 INTERSECTION       i       Intersection
 DISJOINT UNION     d       Disjoint union
@@ -125,7 +125,7 @@ selection operator **:** that by default selects parts of a space time
 dataset that are temporally equal to parts of a second space time
 dataset. The following expression
 
-```bash
+```shell
 C = A : B
 ```
 
@@ -135,7 +135,7 @@ store them in space time dataset C. These parts are time stamped maps.
 In addition, the inverse selection operator **!:** is defined as the
 complement of the selection operator, hence the following expression
 
-```bash
+```shell
 C = A !: B
 ```
 
@@ -152,7 +152,7 @@ selection operator", "topological relations", "temporal operator"}.
 
 **Examples:**
 
-```bash
+```shell
 C = A {:,equals} B
 C = A {!:,equals} B
 ```
@@ -160,7 +160,7 @@ C = A {!:,equals} B
 We can now define arbitrary topological relations using the OR operator
 "\|" to connect them:
 
-```bash
+```shell
 C = A {:,equals|during|overlaps} B
 ```
 
@@ -168,7 +168,7 @@ Select all parts of A that are equal to B, during B or overlaps B.
 In addition, we can define the temporal extent of the resulting STRDS by
 adding the temporal operator.
 
-```bash
+```shell
 C = A {:,during,r} B
 ```
 
@@ -179,7 +179,7 @@ The selection operator is implicitly contained in the temporal topology
 selection operator, so that the following statements are exactly the
 same:
 
-```bash
+```shell
 C = A : B
 C = A {:} B
 C = A {:,equal} B
@@ -188,7 +188,7 @@ C = A {:,equal,l} B
 
 Same for the complementary selection:
 
-```bash
+```shell
 C = A !: B
 C = A {!:} B
 C = A {!:,equal} B
@@ -204,7 +204,7 @@ conclusions can be defined at the beginning of the if statement (third
 and fourth examples below). The relationship between then and else
 conclusion must be always equal.
 
-```bash
+```shell
 if statement                        decision option                        temporal relations
   if(if, then, else)
   if(conditions, A)                   A if conditions are True;              temporal topological relation between if and then is equal.
@@ -220,7 +220,7 @@ by logical operators and evaluated for each map of the STRDS.
 
 #### Logical operators
 
-```bash
+```shell
 Symbol  description
 
   ==    equal
@@ -238,7 +238,7 @@ Symbol  description
 The following temporal functions are evaluated only for the STDS that
 must be given in parenthesis.
 
-```bash
+```shell
 td(A)                    Returns a list of time intervals of STDS A
 
 start_time(A)            Start time as HH::MM:SS
@@ -292,13 +292,13 @@ operator (\|\| or &&). By default, the aggregation operator is related
 to the comparison operator:
 comparison operator -\> aggregation operator:
 
-```bash
+```shell
 || -> | and && -> &
 ```
 
 **Examples:**
 
-```bash
+```shell
 Condition 1 {||, equal, r} Condition 2
 Condition 1 {&&, equal|during, l} Condition 2
 Condition 1 {&&, equal|contains, |, l} Condition 2
@@ -311,7 +311,7 @@ Condition 1 {&&, equal|during, l} Condition 2 {&&,contains, |, r} Condition 3
 Additionally, the number of maps in intervals can be computed and used
 in conditional statements with the hash (#) operator.
 
-```bash
+```shell
 A {#, contains} B
 ```
 
@@ -320,7 +320,7 @@ which are during the time intervals of maps from space time dataset A.
 A list of integers (scalars) corresponding to the maps of A that contain
 maps from B will be returned.
 
-```bash
+```shell
 C = if({equal}, A {#, contains} B > 2, A {:, contains} B)
 ```
 
@@ -335,7 +335,7 @@ Furthermore, the temporal algebra allows temporal buffering, shifting
 and snapping with the functions buff_t(), tshift() and tsnap(),
 respectively.
 
-```bash
+```shell
 buff_t(A, size)         Buffer STDS A with granule ("1 month" or 5)
 tshift(A, size)         Shift STDS A with granule ("1 month" or 5)
 tsnap(A)                Snap time instances and intervals of STDS A
@@ -346,13 +346,13 @@ tsnap(A)                Snap time instances and intervals of STDS A
 The temporal algebra can also handle single maps with time stamps in the
 tmap() function.
 
-```bash
+```shell
 tmap()
 ```
 
 For example:
 
-```bash
+```shell
 C = A {:, during} tmap(event)
 ```
 
@@ -363,7 +363,7 @@ during the temporal extent of the single map 'event'
 
 The module supports the following raster operations:
 
-```bash
+```shell
 Symbol  description     precedence
 
   %     modulus         1
@@ -375,7 +375,7 @@ Symbol  description     precedence
 
 And raster functions:
 
-```bash
+```shell
 abs(x)                  return absolute value of x
 float(x)                convert x to foating point
 int(x)                  convert x to integer [ truncates ]
@@ -395,13 +395,13 @@ exist(x)                Check if x is in the current mapset
 The temporal raster algebra features also a function to integrate single
 raster maps without time stamps into the expressions.
 
-```bash
+```shell
 map()
 ```
 
 For example:
 
-```bash
+```shell
 C = A * map(constant_value)
 ```
 
@@ -414,7 +414,7 @@ The user can combine the temporal topology relations, the temporal
 operators and the spatial/select operators to create spatio-temporal
 operators as follows:
 
-```bash
+```shell
 {"spatial or select operator", "list of temporal relations", "temporal operator"}
 ```
 
@@ -427,13 +427,13 @@ temporal extent of the single map a1 of A, then the following arithmetic
 calculations would implicitly aggregate all maps of B into one result
 map for a1 of A:
 
-```bash
+```shell
  C = A {+, contains} B --> c1 = a1 + b1 + b2 + b3
 ```
 
 **Important**: the aggregation behaviour is not symmetric
 
-```bash
+```shell
  C = B {+, during} A --> c1 = b1 + a1
                          c2 = b2 + a1
                          c3 = b3 + a1
@@ -448,27 +448,27 @@ c is the column offset. A single neighborhood modifier is interpreted as
 temporal offset \[t\], while two neighborhood modifiers are interpreted
 as row and column offsets \[r,c\].
 
-```bash
+```shell
 strds[2]
 ```
 
 refers to the second successor of the current map.
 
-```bash
+```shell
 strds[1,2]
 ```
 
 refers to the cell one row below and two columns to the right of the
 current cell in the current map.
 
-```bash
+```shell
 strds[1,-2,-1]
 ```
 
 refers to the cell two rows above and one column to the left of the
 current cell of the first successor map.
 
-```bash
+```shell
 strds[-2,0,1]
 ```
 
@@ -479,7 +479,7 @@ second predecessor map.
 
 ### Computation of NDVI
 
-```bash
+```shell
 # Sentinel-2 bands are stored separately in two STDRS "S2_b4" and "S2_b8"
 g.region raster=sentinel2_B04_10m -p
 t.rast.list S2_b4
@@ -493,14 +493,14 @@ t.rast.colors input=ndvi color=ndvi
 Sum maps from STRDS A with maps from STRDS B which have equal time
 stamps and are temporally before Jan. 1. 2005 and store them in STRDS D:
 
-```bash
+```shell
 D = if(start_date(A) < "2005-01-01", A + B)
 ```
 
 Create the sum of all maps from STRDS A and B that have equal time
 stamps and store the new maps in STRDS C:
 
-```bash
+```shell
 C = A + B
 ```
 
@@ -509,7 +509,7 @@ C = A + B
 Same expression with explicit definition of the temporal topology
 relation and temporal operators:
 
-```bash
+```shell
 C = A {+,equal,l} B
 ```
 
@@ -519,7 +519,7 @@ Select all cells from STRDS B with equal temporal relations to STRDS A,
 if the cells of A are in the range \[100.0, 1600\] of time intervals
 that have more than 30 days (Jan, Mar, May, Jul, Aug, Oct, Dec):
 
-```bash
+```shell
 C = if(A > 100 && A < 1600 && td(A) > 30, B)
 ```
 
@@ -528,7 +528,7 @@ C = if(A > 100 && A < 1600 && td(A) > 30, B)
 Same expression with explicit definition of the temporal topology
 relation and temporal operators:
 
-```bash
+```shell
 C = if({equal}, A > 100 && A < 1600 {&&,equal} td(A) > 30, B)
 ```
 
@@ -541,7 +541,7 @@ have equal time stamps. The number of days or fraction of days per
 interval is computed using the td() function that has as argument the
 STRDS "Prec":
 
-```bash
+```shell
 C = if(Temp > 10.0, Prec / 3600.0 / 24.0 / td(Prec))
 ```
 
@@ -550,7 +550,7 @@ C = if(Temp > 10.0, Prec / 3600.0 / 24.0 / td(Prec))
 Same expression with explicit definition of the temporal topology
 relation and temporal operators:
 
-```bash
+```shell
 C = if({equal}, Temp > 10.0, Prec / 3600.0 / 24.0 {/,equal,l} td(Prec))
 ```
 
@@ -561,7 +561,7 @@ time intervals of STRDS B if more than one map of A is contained in an
 interval of B, use A otherwise. The resulting time intervals are either
 from B or A:
 
-```bash
+```shell
 C = if(B {#,contain} A > 1, (B {+,contain,l} A - B) / (B {#,contain} A), A)
 ```
 
@@ -570,7 +570,7 @@ C = if(B {#,contain} A > 1, (B {+,contain,l} A - B) / (B {#,contain} A), A)
 Same expression with explicit definition of the temporal topology
 relation and temporal operators:
 
-```bash
+```shell
 C = if({equal}, B {#,contain} A > 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/} (B {#,contain} A), A)
 ```
 
@@ -579,7 +579,7 @@ C = if({equal}, B {#,contain} A > 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/
 Compute the DOY for all maps from STRDS A where conditions are met at
 three consecutive time intervals (e.g. temperature \> 0):
 
-```bash
+```shell
 B = if(A > 0.0 && A[-1] > 0.0 && A[-2] > 0.0, start_doy(A, -1), 0)"
 ```
 
@@ -598,7 +598,7 @@ Wiki](https://grasswiki.osgeo.org/wiki/Temporal_data_processing)
 The use of this module requires the following software to be installed:
 [PLY(Python-Lex-Yacc)](https://www.dabeaz.com/ply/)
 
-```bash
+```shell
 # Ubuntu/Debian
 sudo apt-get install python3-ply
 

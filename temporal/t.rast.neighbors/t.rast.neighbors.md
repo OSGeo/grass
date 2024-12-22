@@ -30,7 +30,7 @@ map corresponds to which input map.
 
 To smooth the maps contained in a space time dataset run:
 
-```bash
+```shell
 t.rast.neighbors input=tempmean_monthly output=smooth_tempmean_monthly \
                  basename=tmean_smooth size=5 method=average nprocs=4
 

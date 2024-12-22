@@ -25,7 +25,7 @@ vector map, use the *v.net.path* module.
 Interactive shortest path routing on road network (North Carolina sample
 dataset):
 
-```bash
+```shell
 g.region vector=roadsmajor -p
 d.vect roadsmajor
 d.path roadsmajor coordinates=668646.15,224447.16,668348.83,235894.02
@@ -34,7 +34,7 @@ d.path roadsmajor coordinates=668646.15,224447.16,668348.83,235894.02
 Non-interactive shortest path routing on road network (North Carolina
 sample dataset):
 
-```bash
+```shell
 d.path -b roadsmajor coordinates=668646.15,224447.16,668348.83,235894.02
 ```
 

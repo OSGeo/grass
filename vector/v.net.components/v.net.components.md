@@ -32,7 +32,7 @@ connected components.
 Any road network should form a single strongly connected component.
 Otherwise, it is impossible to travel between some places.
 
-```bash
+```shell
 v.net.components input=roads output=roads_components method=strong
 ```
 

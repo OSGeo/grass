@@ -11,7 +11,7 @@ We combine different raster and vector map layers to create a composite
 layer which can be draped over elevation in 3D view. First, we add a
 couple of maps to layer manager:
 
-```bash
+```shell
 g.region raster=elevation
 d.rast map=elevation
 d.rast map=lakes

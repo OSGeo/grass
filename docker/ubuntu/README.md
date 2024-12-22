@@ -7,7 +7,7 @@ Download size of this image is of approximately 2.6 GB.
 
 Clone this repository and change directory:
 
-```bash
+```shell
 git clone https://github.com/OSGeo/grass.git
 cd grass
 ```
@@ -16,7 +16,7 @@ cd grass
 
 __Build the docker with__:
 
-```bash
+```shell
 docker build \
          --file docker/ubuntu/Dockerfile \
          --tag grass-py3-pdal:stable-ubuntu .
@@ -25,7 +25,7 @@ docker build \
 View the images available using `sudo docker images` and open a bash terminal
 with:
 
-```bash
+```shell
 $ docker run -it grass-py3-pdal:stable-ubuntu /bin/bash
 bash-5.0#
 ```
@@ -34,13 +34,13 @@ __To build a stable version__:
 
 change to the releasebranch or tag you want to build:
 
-```bash
+```shell
 git checkout remotes/origin/releasebranch_8_2
 ```
 
 and build and enter with:
 
-```bash
+```shell
 $ docker build \
          -f docker/ubuntu/Dockerfile \
          -t grass-py3-pdal:stable-ubuntu .
@@ -53,7 +53,7 @@ bash-5.0#
 
 __Build the docker with__:
 
-```bash
+```shell
 $ docker build \
          --file docker/ubuntu/Dockerfile_ubuntu_latest_pdal \
          --tag grass-py3-pdal:latest-ubuntu .
@@ -62,7 +62,7 @@ $ docker build \
 View the images available using `sudo docker images` and open a bash terminal
 with:
 
-```bash
+```shell
 $ docker run -it grass-py3-pdal:latest-ubuntu /bin/bash
 bash-5.0#
 ```
@@ -71,13 +71,13 @@ __To build a latest version__:
 
 change to the releasebranch or tag you want to build:
 
-```bash
+```shell
 git checkout remotes/origin/releasebranch_8_2
 ```
 
 and build and enter with:
 
-```bash
+```shell
 $ docker build \
          -f docker/ubuntu/Dockerfile_ubuntu_latest_pdal \
          -t grass-py3-pdal:latest-ubuntu .
@@ -91,7 +91,7 @@ __To build a latest version with wxgui__:
 The `GUI` build argument allows choosing if the GUI should
 be included in the build (`GUI=with`) or not (`GUI=without`).
 
-```bash
+```shell
 $ DOCKER_BUILDKIT=1 docker build  \
     --file docker/ubuntu/Dockerfile \
     --tag grass-main-ubuntu-wxgui:latest \
@@ -102,7 +102,7 @@ $ DOCKER_BUILDKIT=1 docker build  \
 
 Note: Adjust the volume mount to the path of the GRASS GIS source code directory.
 
-```bash
+```shell
 # Test basic functionality
 $ docker run -ti \
          -v /opt/src/grass:/grassdb \

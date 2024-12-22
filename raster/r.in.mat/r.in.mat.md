@@ -46,7 +46,7 @@ floating point array, so this usually isn't an issue. To save space,
 once the map is loaded into GRASS you can convert it back to an integer
 map with the following command:
 
-```bash
+```shell
 r.mapcalc "int_map = int(MATFile_map)"
 ```
 
@@ -62,7 +62,7 @@ not at the coordinates of their centroids. Thus, the following Matlab
 commands may be used to determine and check the map's resolution
 information will be correct:
 
-```bash
+```shell
     [rows cols] = size(map_data)
     x_range = map_eastern_edge - map_western_edge
     y_range = map_northern_edge - map_southern_edge
@@ -80,13 +80,13 @@ Matlab or Octave.
 
 In Matlab, save with:
 
-```bash
+```shell
 save filename.mat map_* -v4
 ```
 
 In Octave, save with:
 
-```bash
+```shell
 save -mat4-binary filename.mat map_*
 ```
 

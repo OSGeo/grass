@@ -26,7 +26,7 @@ This example is written for the Spearfish dataset.
 
 As first step, bus route data are prepared.
 
-```bash
+```shell
 # break into segments for correct route selection
 v.clean roads_net out=busroute_tmp tool=break
 
@@ -48,7 +48,7 @@ g.remove -f type=vector name=busroute_tmp,busroute_tmp2,busroute_tmp3
 
 The result can be visualized:
 
-```bash
+```shell
 g.region vector=busroute n=n+100 s=s-100 w=w-100 e=e+100
 d.mon x0
 d.vect roads_net
@@ -58,7 +58,7 @@ d.vect busroute col=red width=2
 The vector map 'busroute' needs have an attribute table which contain an
 integer column *lidcol* with value be '22' for this example (bus route):
 
-```bash
+```shell
 v.db.addtable busroute col="lid integer"
 v.db.update busroute col=lid value=22
 v.db.select busroute
@@ -70,7 +70,7 @@ A new point map 'busstops' shall contain mileposts (bus stops) along
 this line (use *thresh* to define maximal accepted deviation from this
 line):
 
-```bash
+```shell
 # generate points map
 echo "590263|4927361
 590432|4927120
@@ -86,7 +86,7 @@ d.vect busstops disp=cat lcol=blue
 
 The milepost attributes table needs to be created with specific columns:
 
-```bash
+```shell
 v.db.addtable busstops col="lid integer, start_mp double precision, \
             start_off double precision, end_mp double precision, \
             end_off double precision"
@@ -97,7 +97,7 @@ Since the digitizing order of v.in.ascii above reflects the bus stop
 order along the route, we can simply copy the category number as
 milepost order number in column *start_mp*:
 
-```bash
+```shell
 v.db.update busstops col=start_mp qcol=cat
 # verify table
 v.db.select busstops
@@ -123,7 +123,7 @@ mileposts get modified.
 
 As second step, the linear reference network is created:
 
-```bash
+```shell
 v.lrs.create busroute points=busstops out=route_lrs err=lrs_error \
              lidcol=lid pidcol=lid rstable=route_lrs threshold=50
 ```
@@ -132,7 +132,7 @@ This creates the maps 'route_lrs' containing the LRS and 'lrs_error'
 containing the errors if any. The resulting LRS table and map can be
 shown:
 
-```bash
+```shell
 # show LRS table
 db.select table=route_lrs
 

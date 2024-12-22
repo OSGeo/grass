@@ -6,7 +6,7 @@ allows users to manually edit them when necessary.
 
 ## EXAMPLE
 
-```bash
+```shell
 # update scale to 1:24000
 v.support myvectmap scale=24000
 

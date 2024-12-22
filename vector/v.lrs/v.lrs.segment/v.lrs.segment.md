@@ -5,7 +5,7 @@ reference system and positions read from `standard in` or a file.
 
 The format is as follows:
 
-```bash
+```shell
 P <point_id> <line_id> <milepost>+<offset> [<side offset>]
 L <segment_id> <line_id> <milepost>+<offset> <milepost>+<offset> [<side offset>]
 ```
@@ -23,7 +23,7 @@ example from *v.lrs.create*).
 In this example, the 'route_lrs' shall be extended for a new position
 (point) along the LRS after bus stop 4:
 
-```bash
+```shell
 # new point on LRS
 echo "P 7 22 4+180" | v.lrs.segment route_lrs out=route_lrs_new rstable=route_lrs
 

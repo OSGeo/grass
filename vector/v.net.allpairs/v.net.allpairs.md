@@ -20,7 +20,7 @@ used for forward and backward arcs.
 Find shortest path along roads from selected archsites (Spearfish sample
 dataset):
 
-```bash
+```shell
 # prepare network: connect archsites to roads with threshold 200
 v.net input=roads@PERMANENT points=archsites@PERMANENT \
 output=roads_net operation=connect thresh=200
@@ -38,7 +38,7 @@ v.db.select roads_net_all
 
 Result in matrix form:
 
-```bash
+```shell
 from\to 1       3       4       5
 1   0       18820.386   17206.651   17373.274
 3   18820.386   0       1739.079    9040.575

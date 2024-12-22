@@ -127,7 +127,7 @@ edges. To perform the latter function, use the **raster=***name* option.
 <span class="code">` g.region -p `</span>
 This will print the current region in the format:
 
-```bash
+```shell
 projection: 1 (UTM)
 zone:       13
 datum:      nad27
@@ -146,7 +146,7 @@ cols:       950
 This will print the current region and the 3D region (used for voxels)
 in the format:
 
-```bash
+```shell
 projection: 1 (UTM)
 zone:       13
 datum:      nad27
@@ -173,7 +173,7 @@ depths:     1
 The **-g** option prints the region in the following script style
 (key=value) format:
 
-```bash
+```shell
 n=4928000
 s=4914000
 w=590000
@@ -188,7 +188,7 @@ cols=950
 The **-bg** option prints the region in the following script style
 (key=value) format plus the boundary box in latitude-longitude/WGS84:
 
-```bash
+```shell
 n=4928000
 s=4914000
 w=590000
@@ -206,7 +206,7 @@ LL_S=44.37302019
 <span class="code">` g.region -l `</span>
 The **-l** option prints the region in the following format:
 
-```bash
+```shell
 long: -103.86789484 lat: 44.50165890 (north/west corner)
 long: -103.62895703 lat: 44.49904013 (north/east corner)
 long: -103.63190061 lat: 44.37303558 (south/east corner)
@@ -221,7 +221,7 @@ Center latitude:  44:26:14.439781N [44.43734]
 This will print the current region in the format (latitude-longitude
 project):
 
-```bash
+```shell
 projection: 3 (Latitude-Longitude)
 zone:       0
 ellipsoid:  wgs84
@@ -311,7 +311,7 @@ and vertical resolution (200m) is defined.
 Extracting a spatial subset of the external vector map `soils.shp` into
 new external vector map `soils_cut.shp` using the OGR *ogr2ogr* tool:
 
-```bash
+```shell
 eval `g.region -g`
 ogr2ogr -spat $w $s $e $n soils_cut.shp soils.shp
 ```
@@ -325,7 +325,7 @@ Extracting a spatial subset of the external raster map
 `p016r035_7t20020524_nc_spm_wake_nn30.tif` using the GDAL *gdalwarp*
 tool:
 
-```bash
+```shell
 eval `g.region -g`
 gdalwarp -t_srs "`g.proj -wf`" -te $w $s $e $n \
          p016r035_7t20020524_z17_nn30.tif \
@@ -337,11 +337,11 @@ coordinate reference system since it is reprojected on the fly.
 
 ### JSON Output
 
-```bash
+```shell
 g.region -p format=json
 ```
 
-```bash
+```shell
 {
     "projection": "99 (Lambert Conformal Conic)",
     "zone": 0,
@@ -370,11 +370,11 @@ g.region -p format=json
 }
 ```
 
-```bash
+```shell
 g.region -l format=json
 ```
 
-```bash
+```shell
 {
     "nw_long": -78.688888505507336,
     "nw_lat": 35.743893244701788,

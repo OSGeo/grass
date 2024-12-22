@@ -271,7 +271,7 @@ to be dense in relation to the desired raster resolution and thus a
 different set of parameters is more advantageous, e.g. in comparison to
 a typical temperature data interpolation.
 
-```bash
+```shell
 v.surf.rst input=points elevation=elevation npmin=100
 ```
 
@@ -283,7 +283,7 @@ only a subset of the input vectors.
 North Carolina example (we simulate randomly distributed elevation
 measures which we interpolate to a gap-free elevation surface):
 
-```bash
+```shell
 g.region raster=elevation -p
 # random elevation extraction of 500 samplings
 r.random -s elevation vector=elevrand n=500

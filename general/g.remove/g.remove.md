@@ -9,14 +9,14 @@ is printed to `stdout` as a preview of the files to be deleted.
 
 Delete `map1` and `map2` raster maps in the current mapset:
 
-```bash
+```shell
 g.remove -f type=raster name=tmp1,tmp2
 ```
 
 Delete all raster and vector maps starting with "`tmp_`" in the current
 mapset:
 
-```bash
+```shell
 # show matching raster and vector maps but do not delete yet (as verification)
 g.remove type=raster,vector pattern="tmp_*"
 
@@ -27,7 +27,7 @@ g.remove -f type=raster,vector pattern="tmp_*"
 Delete all vector maps starting with "`stream_`" in the current mapset,
 but exclude those ending with "`_final`":
 
-```bash
+```shell
 g.remove -f type=vector pattern="stream_*" exclude="*_final"
 ```
 

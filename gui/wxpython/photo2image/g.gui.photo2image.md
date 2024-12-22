@@ -21,7 +21,7 @@ an extension file (if not given, defaults to \\filename_ip2i_out)
 
 An example for project **imagery60**:
 
-```bash
+```shell
 g.gui.photo2image group=aerial@PERMANENT raster=gs13.1@PERMANENT camera=gscamera order=2 extension=try --o
 ```
 

@@ -53,7 +53,7 @@ flags are separated by null characters.
 
 Typical header definitions are as follows:
 
-```bash
+```shell
 # %module
 # % description: g.parser test script
 # %end
@@ -80,7 +80,7 @@ and
 [flags](https://grass.osgeo.org/programming8/parser__standard__options_8c.html#ad081e95e5d4dc3daab9c820d962e6902)
 in the programmer manual. Eg. the option
 
-```bash
+```shell
 # %option
 # % key: raster
 # % type: string
@@ -92,7 +92,7 @@ in the programmer manual. Eg. the option
 
 can be easily defined as
 
-```bash
+```shell
 # %option G_OPT_R_MAP
 # % key: raster
 # %end
@@ -101,7 +101,7 @@ can be easily defined as
 The parser allows defining predefined *rules* for used options. The
 syntax of the rules section is following:
 
-```bash
+```shell
 # %rules
 # % exclusive: capfile_output, capfile
 # %end
@@ -110,7 +110,7 @@ syntax of the rules section is following:
 The parser also allows defining "OR" conditions, e.g. requiring raster
 OR vector (for details, see below), e.g.for options:
 
-```bash
+```shell
 # %rules
 # % required: raster, vector
 # %end
@@ -118,7 +118,7 @@ OR vector (for details, see below), e.g.for options:
 
 and e.g., for flags:
 
-```bash
+```shell
 # %rules
 # % required: -i,-d,-c
 # %end
@@ -129,7 +129,7 @@ and e.g., for flags:
 An option can be instructed to allow multiple inputs by adding the
 following line:
 
-```bash
+```shell
 # % multiple: yes
 ```
 
@@ -139,7 +139,7 @@ within a script. For example, individual comma separated identities for
 an option named "input" can be parsed with the following Bash shell
 code:
 
-```bash
+```shell
 IFS=,
 for opt in $GIS_OPT_INPUT ; do
     ... "$opt"
@@ -151,7 +151,7 @@ that the options should appear in multiple tabs in the auto-generated
 GUI. Any options without a `guisection` field go into the "Required" or
 "Options" tab. For example:
 
-```bash
+```shell
 # % guisection: tabname
 ```
 
@@ -160,7 +160,7 @@ would put that option in a tab named *tabname*.
 A "`key_desc`" field may be added to each option to specify the text
 that appears in the module's usage help section. For example:
 
-```bash
+```shell
 # % key_desc: filename
 ```
 
@@ -199,7 +199,7 @@ For C, the relevant functions are those in
 
 For scripts, relationships are specified using a "rules" section, e.g.
 
-```bash
+```shell
 # %rules
 # % required: altitude,elevation
 # %end
@@ -227,7 +227,7 @@ To write out a *g.parser* boilerplate for easy prototyping of Python
 scripts, the flag **--script** can be added to any GRASS command.
 Example:
 
-```bash
+```shell
 v.in.db --script
 ```
 
@@ -236,7 +236,7 @@ v.in.db --script
 The flag **--html-description** added to a GRASS command generates a
 related help page template in HTML. Example:
 
-```bash
+```shell
 v.in.db --html-description
 ```
 
@@ -245,7 +245,7 @@ v.in.db --html-description
 The flag **--interface-description** added to a GRASS command generates
 a related help page template in XML. Example:
 
-```bash
+```shell
 v.in.db --interface-description
 ```
 
@@ -255,7 +255,7 @@ The flag **--json** added to a GRASS command with parameters mandatorily
 to be specified generates a module interface description in JSON.
 Example:
 
-```bash
+```shell
 v.in.db driver=sqlite database=mysqlite.db table=pointsfile x=x y=y z=z key=idcol out=dtmpoints --json
 {
   "module": "v.in.db",
@@ -280,7 +280,7 @@ v.in.db driver=sqlite database=mysqlite.db table=pointsfile x=x y=y z=z key=idco
 The flag **--wps-process-description** added to a GRASS command
 generates a Web Processing Service process description. Example:
 
-```bash
+```shell
 v.in.db --wps-process-description
 ```
 
@@ -290,7 +290,7 @@ The flag **--rst-description** added to a GRASS command generates module
 interface description in reStructuredText, a lightweight markup
 language. Example:
 
-```bash
+```shell
 v.in.db --rst-description
 ```
 
@@ -303,7 +303,7 @@ Representational State Transfer (REST) technology.
 *g.parser* provides some support for translating the options of scripts.
 If called with the -t switch before the script filename like this
 
-```bash
+```shell
 g.parser -t somescriptfile
 ```
 
@@ -325,7 +325,7 @@ being set.
 The script will provide a GUI (as above) and the following usage help
 text:
 
-```bash
+```shell
 test.py|sh|pl --help
 
 Description:
@@ -348,7 +348,7 @@ Parameters:
 
 ### Example code for Python
 
-```bash
+```shell
 #!/usr/bin/env python3
 
 # g.parser demo script for python programming
@@ -412,7 +412,7 @@ if __name__ == "__main__":
 
 ### Example code for SHELL
 
-```bash
+```shell
 #!/bin/sh
 
 # g.parser demo script for shell programming
@@ -471,7 +471,7 @@ g.message message="Value of GIS_OPT_vect: '$GIS_OPT_vector'"
 
 ### Example code for Perl
 
-```bash
+```shell
 #!/usr/bin/perl -w
 use strict;
 
@@ -541,7 +541,7 @@ programming.
 In this example, the module *v.what.rast* is used as an example. The
 output is shown below:
 
-```bash
+```shell
 v.what.rast --script
 
 #!/usr/bin/env python3

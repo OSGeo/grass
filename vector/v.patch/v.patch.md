@@ -38,13 +38,13 @@ values of some of the maps before patching.
 
 Patch together two maps with mixed feature types:
 
-```bash
+```shell
    v.patch input=geology,streams out=geol_streams
 ```
 
 Append one map to another:
 
-```bash
+```shell
    g.copy vect=roads,transport
    v.patch -a input=railroads output=transport --overwrite
 ```

@@ -50,7 +50,7 @@ encoding.
 GRASS aspect maps are measured using Cartesian conventions, i.e. in
 degrees counterclockwise from east. e.g.:
 
-```bash
+```shell
 90  North
 180 West
 270 South
@@ -71,7 +71,7 @@ or direction "to", as opposed to atmospheric conventions (direction
 Convert U,V velocity component maps into magnitude,direction maps for
 use with *d.rast.arrow*:
 
-```bash
+```shell
 r.mapcalc "magnitude = sqrt(U_map^2 + V_map^2)"
 r.mapcalc "direction = atan(U_map, V_map)"
 d.rast.arrow map=direction type=grass magnitude_map=magnitude skip=3 grid=none

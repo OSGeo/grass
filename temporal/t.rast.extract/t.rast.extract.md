@@ -23,13 +23,13 @@ data duplication.
 The *r.mapcalc* sub-expression should not contain the left side
 `"map ="` of a full *r.mapcalc* expression, only the right side, eg.:
 
-```bash
+```shell
 t.rast.extract input=tempmean_monthly where="start_time > '2010-01-05'" output=selected_tempmean_monthly basename=new_tmean_month expression="if(tempmean_monthly < 0, null(), tempmean_monthly)"
 ```
 
 ## EXAMPLE
 
-```bash
+```shell
 t.rast.extract input=tempmean_monthly output=tempmean_monthly_later_2012 where="start_time >= '2012-01-01'"
 
 t.rast.list tempmean_monthly_later_2012

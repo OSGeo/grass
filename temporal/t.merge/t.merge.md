@@ -25,7 +25,7 @@ In this example we will create two space time raster datasets and
 register two unique maps in each of it. Then we merge the two space time
 raster datasets together.
 
-```bash
+```shell
 r.mapcalc expression="map1 = rand(0, 10)"  -s
 r.mapcalc expression="map2 = rand(10, 20)" -s
 

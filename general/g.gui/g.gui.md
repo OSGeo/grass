@@ -27,21 +27,21 @@ just contains persistent GRASS variables.
 
 Set default user interface setting to command line, text-based UI:
 
-```bash
+```shell
 g.gui -d ui=text
 ```
 
 Set default user interface setting to the graphical user interface (GUI)
 and *launch* the GUI:
 
-```bash
+```shell
 g.gui -d ui=wxpython
 ```
 
 Set default user interface setting to the graphical user interface (GUI)
 but *do not launch* the GUI:
 
-```bash
+```shell
 g.gui -dn ui=wxpython
 ```
 
@@ -49,7 +49,7 @@ g.gui -dn ui=wxpython
 
 Start the GUI from command line with an existing workspace:
 
-```bash
+```shell
 g.gui workspace=myproject.gxw
 ```
 

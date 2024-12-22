@@ -27,7 +27,7 @@ overland slope uphill of the point.
 A watershed in the [North Carolina sample
 dataset](https://grass.osgeo.org/download/data/) region:
 
-```bash
+```shell
 g.region raster=elev_lid792_1m -p
 # the watershed outlet position should be placed on a stream (from
 # accumulation map):

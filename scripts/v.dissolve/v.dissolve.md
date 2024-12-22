@@ -67,7 +67,7 @@ syntax. This provides the highest flexibility, and it is suitable for
 scripting. The SQL statement should specify both the column and the
 functions applied, e.g.,
 
-```bash
+```shell
 aggregate_columns="sum(cows) / sum(animals)".
 ```
 
@@ -87,7 +87,7 @@ for each of the combinations. These result columns have auto-generated
 names based on the aggregate column and method. For example, setting the
 following parameters:
 
-```bash
+```shell
 aggregate_columns=A,B
 aggregate_methods=sum,n
 ```
@@ -100,7 +100,7 @@ to the matching column in the aggregate column list, and the result will
 be available under the name of the matching result column. For example,
 setting the following parameter:
 
-```bash
+```shell
 aggregate_columns=A,B
 aggregate_methods=sum,max
 result_column=sum_a, n_b
@@ -145,7 +145,7 @@ to *v.reclass* before.
 
 ### Basic use
 
-```bash
+```shell
 v.dissolve input=undissolved output=dissolved
 ```
 
@@ -153,7 +153,7 @@ v.dissolve input=undissolved output=dissolved
 
 North Carolina data set:
 
-```bash
+```shell
 g.copy vect=soils_general,mysoils_general
 v.dissolve mysoils_general output=mysoils_general_families column=GSL_NAME
 ```
@@ -164,7 +164,7 @@ If tile boundaries of adjacent maps (e.g. CORINE Landcover SHAPE files)
 have to be removed, an extra step is required to remove duplicated
 boundaries:
 
-```bash
+```shell
 # patch tiles after import:
 v.patch -e `g.list type=vector pat="clc2000_*" separator=","` out=clc2000_patched
 
@@ -183,7 +183,7 @@ boundaries (boundary_municp) in the full NC dataset while dissolving
 common boundaries based on the name in the DOTURBAN_N column (long lines
 are split with backslash marking continued line as in Bash):
 
-```bash
+```shell
 v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities \
     aggregate_columns=ACRES
 ```
@@ -191,13 +191,13 @@ v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities \
 To inspect the result, we will use *v.db.select* retrieving only one row
 for `DOTURBAN_N == 'Wadesboro'`:
 
-```bash
+```shell
 v.db.select municipalities where="DOTURBAN_N == 'Wadesboro'" separator=tab
 ```
 
 The resulting table may look like this:
 
-```bash
+```shell
 cat  DOTURBAN_N    ACRES_n    ACRES_min    ACRES_max    ACRES_mean    ACRES_sum
 66   Wadesboro     2          634.987      3935.325     2285.156      4570.312
 ```
@@ -206,7 +206,7 @@ The above created multiple columns for each of the statistics computed
 by default. We can limit the number of statistics computed by specifying
 the method which should be used:
 
-```bash
+```shell
 v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_2 \
     aggregate_columns=ACRES aggregate_methods=sum
 ```
@@ -221,7 +221,7 @@ Expanding on the previous example, we can compute values for multiple
 columns at once by adding more columns to the **aggregate_columns**
 option. We will compute average of values in the NEW_PERC_G column:
 
-```bash
+```shell
 v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_3 \
     aggregate_columns=ACRES,NEW_PERC_G aggregate_methods=sum,avg
 ```
@@ -237,7 +237,7 @@ The *v.dissolve* module will apply each aggregate method only to the
 corresponding column when column names for the results are specified
 manually with the **result_columns** option:
 
-```bash
+```shell
 v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_4 \
     aggregate_columns=ACRES,NEW_PERC_G aggregate_methods=sum,avg \
     result_columns=acres,new_perc_g
@@ -247,7 +247,7 @@ Now we have full control over what columns are created, but we also need
 to specify an aggregate method for each column even when the aggregate
 methods are the same:
 
-```bash
+```shell
 v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_5 \
     aggregate_columns=ACRES,DOTURBAN_N,TEXT_NAME aggregate_methods=sum,count,count \
     result_columns=acres,number_of_parts,named_parts
@@ -276,7 +276,7 @@ unique names of parts as distinguished by the MB_NAME column using
 `count(distinct MB_NAME)`. Finally, we will collect all these names into
 a comma-separated list using `group_concat(MB_NAME)`:
 
-```bash
+```shell
 v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_6 \
     aggregate_columns="total(ACRES),count(*),count(distinct MB_NAME),group_concat(MB_NAME)" \
     result_columns="acres REAL,named_parts INTEGER,unique_names INTEGER,names TEXT"
@@ -291,7 +291,7 @@ to be used for aggregate columns. This allows us to use also functions
 with multiple parameters, for example specify separator to be used with
 *group_concat*:
 
-```bash
+```shell
 v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_7 \
     aggregate_columns="group_concat(MB_NAME, ';')" \
     result_columns="names TEXT"
@@ -300,13 +300,13 @@ v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_7 \
 To inspect the result, we will use *v.db.select* retrieving only one row
 for `DOTURBAN_N == 'Wadesboro'`:
 
-```bash
+```shell
 v.db.select municipalities_7 where="DOTURBAN_N == 'Wadesboro'" separator=tab
 ```
 
 The resulting table may look like this:
 
-```bash
+```shell
 cat DOTURBAN_N  names
 66  Wadesboro   Wadesboro;Lilesville
 ```

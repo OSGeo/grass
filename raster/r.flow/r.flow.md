@@ -107,14 +107,14 @@ single cell downslope.
 
 ### Diagnostics
 
-```bash
+```shell
 Elevation raster map resolution differs from current region resolution
 ```
 
 The resolutions of all input raster maps and the current region must
 match (see *[g.region](g.region.md)*).
 
-```bash
+```shell
 Resolution too unbalanced
 ```
 
@@ -128,7 +128,7 @@ In this example a flow line vector map, a flow path length raster map
 and a flow accumulation raster map are computed from an elevation raster
 map (North Carolina sample dataset):
 
-```bash
+```shell
 g.region raster=elevation -p
 r.flow elevation=elevation skip=3 flowline=flowline flowlength=flowlength \
        flowaccumulation=flowaccumulation

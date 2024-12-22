@@ -15,19 +15,19 @@ mapset. For PostgreSQL driver it's empty connection string.
 
 List SQLite databases in the current mapset:
 
-```bash
+```shell
 db.databases driver=sqlite
 ```
 
 List SQLite databases in a given directory:
 
-```bash
+```shell
 db.databases driver=sqlite location=/opt/sqlite
 ```
 
 List PostgreSQL databases from database server running on given port:
 
-```bash
+```shell
 db.databases driver=pg location="host=server_name port=5333"
 ```
 

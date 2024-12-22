@@ -68,7 +68,7 @@ Find *nearest lines* in vector map "ln" for points from vector map "pnt"
 within the given threshold and write related line categories to column
 "linecat" in an attribute table attached to vector map "pnt":
 
-```bash
+```shell
 v.distance from=pnt to=ln upload=cat column=linecat
 ```
 
@@ -79,7 +79,7 @@ For each point from vector map "pnt", find the *nearest area* from map
 column "areacat" in an attribute table attached to vector map "pnt" (in
 the case that a point falls into an area, the distance is zero):
 
-```bash
+```shell
 v.distance from=pnt to=ar upload=cat column=areacat
 ```
 
@@ -90,7 +90,7 @@ features* of maps "pnt" and map "ln". The resulting vector map can be
 used for example to connect points to a network as needed for network
 analysis:
 
-```bash
+```shell
 v.distance from=pnt to=ln out=connections upload=dist column=dist
 ```
 
@@ -100,7 +100,7 @@ Create a new vector map that contains *lines connecting nearest
 features* of maps "pnt" and map "ln", and a new attribute table that
 contains distances, from and to categories from the input maps:
 
-```bash
+```shell
 v.distance from=pnt to=ln out=connections upload=cat,dist column=to_cat,dist table=connections
 ```
 
@@ -112,13 +112,13 @@ points has to be created before the map can be analysed.
 
 Create query map (if not present):
 
-```bash
+```shell
 echo "123456|654321|1" | v.in.ascii output=pnt
 ```
 
 Find nearest features:
 
-```bash
+```shell
 v.distance -p from=pnt to=map_to_query upload=cat
 ```
 
@@ -131,7 +131,7 @@ For each point from vector map "pnt", find the *area* from vector map
 categories to column "areacat" into the attribute table attached to
 vector map "pnt":
 
-```bash
+```shell
 v.distance from=pnt to=ar dmax=0 upload=cat column=areacat
 ```
 
@@ -144,7 +144,7 @@ vector directly, then run v.univar on that. Also note you can upload two
 columns at a time, e.g.
 `v.distance upload=cat,dist column=nearest_id,dist_to_nr`.
 
-```bash
+```shell
 # create working copy
 g.copy vect=bugsites,bugs
 
@@ -170,7 +170,7 @@ v.univar vdistance_vectors column=length
 
 Example for a Latitude-longitude project (EPSG 4326):
 
-```bash
+```shell
 # points along the equator
 echo "0|-61|1" | v.in.ascii output=pnt1 input=-
 echo "0|-58|1" | v.in.ascii output=pnt2 input=-
@@ -187,7 +187,7 @@ North Carolina sample data
 
 As linear matrix:
 
-```bash
+```shell
 v.distance -pa from=hospitals to=hospitals upload=dist,to_attr to_column=NAME separator=tab
 from_cat    to_cat  dist    to_attr
 1   1   0   Cherry Hospital
@@ -199,7 +199,7 @@ from_cat    to_cat  dist    to_attr
 
 As square matrix (only possible with single upload option):
 
-```bash
+```shell
 v.distance -pas from=hospitals to=hospitals upload=dist separator=tab
 from_cat to_cat       dist
               1          2          3          4          5 ...

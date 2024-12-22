@@ -27,7 +27,7 @@ constraints on cell aspect ratio.
 Each tile is listed on a separate line in the output. The lines are
 formatted as follows:
 
-```bash
+```shell
 5|125|45|175|80|100
 ```
 
@@ -37,14 +37,14 @@ coordinate, width in cells, and height in cells separated by the "\|"
 character. The fields can be separated by a different character by
 changing the fs option.
 
-```bash
+```shell
 w=5;s=125;e=45;n=175;cols=80;rows=100;
 ```
 
 This is output in a format convenient for setting variables in a shell
 script.
 
-```bash
+```shell
 bbox=5,125,45,175&width=80&height=100
 ```
 
@@ -57,7 +57,7 @@ Generates tiles in latitude longitude that cover the current region,
 each tile will be less than 1024 cells high and 2048 cells across. The
 bounds and sizes of tiles in the output are separated by \| (pipe):
 
-```bash
+```shell
 r.tileset sourceproj=+init=epsg:4326 maxrows=1024 maxcols=2048
 ```
 
@@ -65,7 +65,7 @@ Generates tiles in latitude longitude projection that cover the named
 region "ne-rio". The tiles will have 2 cells of overlap. The output
 format will be strings like the bbox requests for WMS servers:
 
-```bash
+```shell
 r.tileset sourceproj=+init=epsg:4326 overlap=2 -w region=ne-rio
 ```
 
@@ -76,7 +76,7 @@ in a format where each line is in shell script style. The substitution
 `` `g.proj -j project=IrishGrid` `` will only work in a unix style
 shell:
 
-```bash
+```shell
 r.tileset sourceproj="`g.proj -j project=IrishGrid`" maxrows=400 maxcols=300 overlap=3 -g
 ```
 

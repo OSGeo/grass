@@ -60,7 +60,7 @@ editing session).
 
 Editing raster values in a LiDAR DEM, North Carolina sample data:
 
-```bash
+```shell
 g.region raster=elev_lid792_1m -p
 
 # pan to area of interest and edit raster cells (I used "102" as value to modify cells

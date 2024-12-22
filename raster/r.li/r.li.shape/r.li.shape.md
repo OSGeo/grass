@@ -2,7 +2,7 @@
 
 *r.li.shape* calculates the landscape shape index as:
 
-```bash
+```shell
 LSI = 0.25 * E / sqrt(A)
 ```
 
@@ -29,13 +29,13 @@ To calculate the shape index on map *my_map*, using *my_conf*
 configuration file (previously defined with *g.gui.rlisetup*) and saving
 results in *my_out*, run:
 
-```bash
+```shell
 r.li.shape input=my_map conf=my_conf output=my_out
 ```
 
 Forest map (Spearfish sample dataset) example:
 
-```bash
+```shell
 g.region raster=landcover.30m -p
 r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
 r.li.shape input=forests conf=movwindow7 out=forests_shape_mov7
@@ -44,7 +44,7 @@ r.univar forests_shape_mov7
 
 Forest map (North Carolina sample dataset) example:
 
-```bash
+```shell
 g.region raster=landclass96 -p
 r.mapcalc "forests = if(landclass96 == 5, 1, null() )"
 r.li.shape input=forests conf=movwindow7 out=forests_shape_mov7

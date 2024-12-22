@@ -29,7 +29,7 @@ quadrangles, because USGS quads are not exact rectangles.
 
 To be run in a latitude-longitude project (WGS84)
 
-```bash
+```shell
 # set the region:
 g.region n=90 s=-90 w=-180 e=180 res=10 -p
 projection: 3 (Latitude-Longitude)
@@ -58,7 +58,7 @@ v.mkgrid map=grid_20deg box=20,20
 Creating a 4x3 grid, cells 20km a side, with lower left corner at
 2716500,6447000:
 
-```bash
+```shell
 v.mkgrid map=coro_grid grid=4,3 position=coor coordinates=2716500,6447000 box=20000,20000
 ```
 
@@ -71,7 +71,7 @@ reference system (CRS) using *v.proj* before exporting as a vector file
 with *v.out.ogr* (within GRASS GIS you could just use *d.grid -w* from
 the project with projected CRS for the same effect):
 
-```bash
+```shell
 v.mkgrid map=p2min_grid grid=10,12 position=coor coordinates=167:52E,47:06S box=0:02,0:02
 ```
 
@@ -80,7 +80,7 @@ v.mkgrid map=p2min_grid grid=10,12 position=coor coordinates=167:52E,47:06S box=
 North Carolina sample dataset example, creating a 1km spaced point grid
 based on the current region extent defined by the "elevation" map:
 
-```bash
+```shell
 g.region raster=elevation res=1000 -pa
 v.mkgrid type=point map=pointpattern
 ```
@@ -91,7 +91,7 @@ North Carolina sample dataset example, creating a regular spaced point
 grid based on the current region extent defined by the "elevation" map,
 using a two-step approach:
 
-```bash
+```shell
 # create first set of points, covering extent of "elevation" raster map
 g.region raster=elevation res=1000 -pa
 v.mkgrid type=point map=pointpattern1
@@ -115,7 +115,7 @@ North Carolina sample dataset example, creating regular hexagons based
 on the current region extent defined by the "elevation" map and raster
 resolution for the hexagon size:
 
-```bash
+```shell
 g.region raster=elevation res=5000 -pa
 v.mkgrid map=hexagons -h
 
@@ -132,21 +132,21 @@ To compute point density in a hexagonal grid for the vector map
 vector map itself is used to set extent of the computational region. The
 resolution is based on the desired size of hexagons.
 
-```bash
+```shell
 g.region vector=points_of_interest res=2000 -pa
 ```
 
 The hexagonal grid is created as a vector map based on the previously
 selected extent and size of the grid.
 
-```bash
+```shell
 v.mkgrid map=hexagons -h
 ```
 
 The following counts the number of points per hexagon using the
 *[v.vect.stats](v.vect.stats.md)* module.
 
-```bash
+```shell
 v.vect.stats points=points_of_interest areas=hexagons count_column=count
 ```
 
@@ -156,7 +156,7 @@ computational region extent needs to be enlarged if all points should be
 considered). The last command sets the vector map color table to
 `viridis` based on the `count` column.
 
-```bash
+```shell
 v.colors map=hexagons use=attr column=count color=viridis
 ```
 

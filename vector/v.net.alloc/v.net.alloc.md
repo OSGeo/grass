@@ -61,7 +61,7 @@ alt="v.net.alloc example using time" />
 
 Example 1: *Calculating subnets for 3 center nodes using distances*
 
-```bash
+```shell
 # Spearfish
 
 # center nodes:
@@ -83,7 +83,7 @@ v.category myroads_net_alloc option=report
 
 To display the result, run for example:
 
-```bash
+```shell
 # show result
 g.region vector=myroads_net
 d.mon x0
@@ -101,7 +101,7 @@ d.vect myroads_net col=red icon=basic/triangle fcol=green size=12 layer=2
 Example 2: *Calculating subnets for 3 center nodes using traveling
 time*
 
-```bash
+```shell
 # Spearfish
 
 # center nodes:
@@ -149,7 +149,7 @@ v.net.alloc in=myroads_net_time arc_layer=3 node_layer=2 arc_column=cost arc_bac
 
 To display the result, run for example:
 
-```bash
+```shell
 # show result
 g.region vector=myroads_net
 d.mon x0
@@ -183,7 +183,7 @@ Any node reaches reaches the nearest center following the one-way lanes.
 In case of an accident, the ambulance should come from the nearest
 'from' hospital and go to the nearest 'to' hospital.
 
-```bash
+```shell
 # North Carolina
 
 # center nodes are hospitals:

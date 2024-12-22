@@ -10,7 +10,7 @@ command line.
 
 Render elevation map in a 3D space.
 
-```bash
+```shell
 g.region raster=elevation
 m.nviz.image elevation_map=elevation output=elev perspective=15
 ```

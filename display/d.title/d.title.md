@@ -23,7 +23,7 @@ For example, a user wishing to create a suitable TITLE for the
 Spearfish, SD *soils* map layer and to display this TITLE in the active
 display frame on the graphics monitor might type the following:
 
-```bash
+```shell
 d.title map=soils color=red size=5 > TITLE.file
 d.text < TITLE.file
 ```
@@ -31,7 +31,7 @@ d.text < TITLE.file
 Alternately, the user might pipe *d.title* output directly into
 *[d.text](d.text.md):*
 
-```bash
+```shell
 d.title map=soils color=red size=5 | d.text
 ```
 

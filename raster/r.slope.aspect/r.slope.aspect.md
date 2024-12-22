@@ -24,7 +24,7 @@ map.
 Note: These values can be transformed to azimuth values (90 is East, 180
 is South, 270 is West, 360 is North) using [r.mapcalc](r.mapcalc.md):
 
-```bash
+```shell
 # convert angles from CCW from East to CW from North
 # modulus (%) can not be used with floating point aspect values
 r.mapcalc "azimuth_aspect = if(ccw_aspect == 0, 0, \
@@ -103,7 +103,7 @@ map of slope that groups slope values into ranges of slope. This can be
 done using *[r.reclass](r.reclass.md)*. An example of a useful
 reclassification is given below:
 
-```bash
+```shell
           category      range   category labels
                      (in degrees)    (in percent)
 
@@ -191,7 +191,7 @@ In this example a slope, aspect, profile and tangential curvature map
 are computed from an elevation raster map (North Carolina sample
 dataset):
 
-```bash
+```shell
 g.region raster=elevation
 r.slope.aspect elevation=elevation slope=slope aspect=aspect pcurvature=pcurv tcurvature=tcurv
 
@@ -217,7 +217,7 @@ first generate the standard aspect map (oriented CCW from East), then
 convert it to compass orientation, and finally classify four major
 aspect directions (N, E, S, W):
 
-```bash
+```shell
 g.region raster=elevation -p
 
 # generate integer aspect map with degrees CCW from East

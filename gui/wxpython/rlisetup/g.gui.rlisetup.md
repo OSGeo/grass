@@ -200,7 +200,7 @@ Select type of shape:
 Now an anaysis can be performed using one of the analytical modules,
 e.g.
 
-```bash
+```shell
 g.region raster=forests -p
 r.li.patchdensity input=forests conf=movwindow7 output=forests_p_dens7
 r.univar forests_p_dens7
@@ -233,7 +233,7 @@ Example for a whole region analysis, the output is a text file: Click on
 Now an anaysis can be performed using one of the analytical modules,
 e.g.
 
-```bash
+```shell
 g.region raster=lsat7_2002_40 -p
 r.li.shannon input=lsat7_2000_40 conf=whole_region output=lsat7_2000_40_shannon
 ```

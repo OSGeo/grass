@@ -4,7 +4,7 @@
 resolution of the CURRENTLY DEFINED REGION. To get the resolution and
 region settings of the raster map, run:
 
-```bash
+```shell
 g.region -p raster=[mapname]
 ```
 
@@ -14,7 +14,7 @@ By default the PPM file created is 24-bit color, rawbits storage. You
 can use the **-g** flag to force *r.out.ppm* to output an 8-bit
 greyscale instead. The greyscale conversion uses the NTSC conversion:
 
-```bash
+```shell
 Y = .30*Red + .59*Green + .11*Blue
 ```
 
@@ -37,7 +37,7 @@ background by using the [PNG driver](pngdriver.md) with
 can use the *pnmtopng* program from
 [netpbm](https://netpbm.sourceforge.net) to do this:
 
-```bash
+```shell
 r.out.ppm raster
 pnmtopng -transparent white raster.ppm > raster.png
 ```

@@ -40,7 +40,7 @@ with *[v.to.points](v.to.points.md)* and then exporting with
 
 See [ASCII format](vectorascii.md) specification.
 
-```bash
+```shell
 v.out.ascii input=quads format=standard
 
 ORGANIZATION: US Army Const. Eng. Rsch. Lab
@@ -76,7 +76,7 @@ C  1 1
 
 ### Point mode
 
-```bash
+```shell
 v.out.ascii input=quads format=point
 
 594125.63|4921115.58|1
@@ -85,7 +85,7 @@ v.out.ascii input=quads format=point
 
 Print also selected attributes:
 
-```bash
+```shell
 v.out.ascii input=geodetic_pts format=point where="cat > 5 and cat <= 8" columns=GEOD_NAME
 
 573638.06289275|271623.25042595|6|27 WC 6
@@ -95,7 +95,7 @@ v.out.ascii input=geodetic_pts format=point where="cat > 5 and cat <= 8" columns
 
 To print all attributes type **columns=\***:
 
-```bash
+```shell
 v.out.ascii input=geodetic_pts format=point where="cat > 5 and cat <= 8" columns=*
 573638.06289275|271623.25042595|6|6|0.00000000|0.00000000|6|6|27 WC 6|573638.09200000|271623.24100000|0.00|0|1.00000000|1.00000000
 574416.81289275|274116.65542595|7|7|0.00000000|0.00000000|7|7|27 WC 7|574416.84100000|274116.64900000|0.00|0|1.00000000|1.00000000
@@ -107,7 +107,7 @@ v.out.ascii input=geodetic_pts format=point where="cat > 5 and cat <= 8" columns
 WKT is abbreviation for [Well-known
 text](https://en.wikipedia.org/wiki/Well-known_text).
 
-```bash
+```shell
 v.out.ascii input=quads format=wkt
 
 POLYGON((599587.18209620 4914067.53414294, 589639.15126831 4913922.56873010,

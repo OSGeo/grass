@@ -51,7 +51,7 @@ the Spearfish sample dataset, using a 5x5 moving window:
 1. CREATE A NEW CONFIGURATION FILE
     1. run
 
-        ```bash
+        ```shell
         g.gui.rlisetup
         ```
 
@@ -84,20 +84,20 @@ the Spearfish sample dataset, using a 5x5 moving window:
 2. CALCULATE PATCHDENSITY INDEX
     1. set the region settings to the "`geology`" raster map:
 
-        ```bash
+        ```shell
         g.region raster=geology -p
         ```
 
     2. run *r.li.patchdensity*:
 
-        ```bash
+        ```shell
         r.li.patchdensity input=geology conf=my_conf out=patchdens
         ```
 
 The resulting patch density is stored in "`patchdens`" raster map. You
 can verify the result for example with contour lines:
 
-```bash
+```shell
 r.contour in=patchdens out=patchdens step=5
 d.rast patchdens
 d.vect -c patchdens

@@ -29,7 +29,7 @@ output map. This may useful to smooth only parts of an elevation map
 *Example how to use a selection map with method=average:*
 input map:
 
-```bash
+```shell
 1 1  1 1 1
 1 1  1 1 1
 1 1 10 1 1
@@ -39,7 +39,7 @@ input map:
 
 selection map, NULL values are marked as \*:
 
-```bash
+```shell
 * * * * *
 * * 1 * *
 * 1 1 1 *
@@ -49,7 +49,7 @@ selection map, NULL values are marked as \*:
 
 The output map:
 
-```bash
+```shell
 1 1 1 1 1
 1 1 2 1 1
 1 2 2 2 1
@@ -59,7 +59,7 @@ The output map:
 
 Without using the selection map, the output map would look like this:
 
-```bash
+```shell
 1 1 1 1 1
 1 2 2 2 1
 1 2 2 2 1
@@ -119,7 +119,7 @@ result would be:
 (7\*4 + 6 + 5 + 4\*3)/9 = 5.6667
 The result is rounded to the nearest integer (in this case 6).
 
-```bash
+```shell
    Raw Data     Operation     New Data
    +---+---+---+          +---+---+---+
    | 7 | 7 | 5 |          |   |   |   |
@@ -187,7 +187,7 @@ surrounding any given cell fall into the neighborhood for that cell. The
 moving window edges in cells. For example, a size value of 3 will result
 in
 
-```bash
+```shell
                               _ _ _
                              |_|_|_|
     3 x 3 neighborhood --->  |_|_|_|
@@ -203,14 +203,14 @@ specify the matrix size and *file* needs to be specified as
 text file. For example, to calculate the focal mean with a matrix
 **size** of 3,
 
-```bash
+```shell
 r.neigbors in=input.map out=output.map size=3 weighting_function=file \
 weight=weights.txt
 ```
 
 The contents of the weight.txt file:
 
-```bash
+```shell
 3 3 3
 1 4 8
 9 5 3
@@ -218,7 +218,7 @@ The contents of the weight.txt file:
 
 This corresponds to the following 3x3 matrix:
 
-```bash
+```shell
 +-+-+-+
 |3|3|3|
 +-+-+-+
@@ -231,7 +231,7 @@ This corresponds to the following 3x3 matrix:
 To calculate an annulus shaped neighborhood the contents of weight.txt
 file may be e.g. for size=5:
 
-```bash
+```shell
  0 1 1 1 0
  1 0 0 0 1
  1 0 0 0 1
@@ -248,7 +248,7 @@ equivalent to N occurrences of the cell value, and having all weights
 equal to one produces the same result as when weights are not used. When
 weights are used, the calculation for **method=average** is:
 
-```bash
+```shell
   sum(w[i]*x[i]) / sum(w[i])
 ```
 
@@ -271,7 +271,7 @@ window, centered on the current cell.
 
 The exact masks for the first few neighborhood sizes are as follows:
 
-```bash
+```shell
 3x3     . X .        5x5    . . X . .    7x7    . . . X . . .
         X O X               . X X X .           . X X X X X .
         . X .               X X O X X           . X X X X X .
@@ -410,26 +410,26 @@ compiled with OpenMP enabled.
 
 Set up 10x10 computational region to aid visual inspection of results
 
-```bash
+```shell
 g.region rows=10 cols=10
 ```
 
 Fill 50% of computational region with randomly located cells.
 "distance=0" will allow filling adjacent cells.
 
-```bash
+```shell
 r.random.cells output=random_cells distance=0 ncells=50
 ```
 
 Count non-empty (not NULL) cells in 3x3 neighborhood
 
-```bash
+```shell
 r.neighbors input=random_cells output=counts method=count
 ```
 
 Optionally - exclude centre cell from the count (= only look around)
 
-```bash
+```shell
 r.mapcalc "count_around = if( isnull(random_cells), counts, counts - 1)"
 ```
 

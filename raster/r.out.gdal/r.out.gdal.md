@@ -32,7 +32,7 @@ formats](https://gdal.org/en/stable/drivers/raster/) written by
 *r.out.gdal* depends on the local GDAL installation, printed with the
 *-l* flag. Available may be (incomplete list):
 
-```bash
+```shell
   AAIGrid: Arc/Info ASCII Grid
   BMP: MS Windows Device Independent Bitmap
   BSB: Maptech BSB Nautical Charts
@@ -77,7 +77,7 @@ for details.
 
 ### Ranges of GDAL data types
 
-```bash
+```shell
   GDAL data type           minimum      maximum
 
   Byte                   0          255
@@ -181,7 +181,7 @@ See also [GeoTIFF format
 description](https://gdal.org/en/stable/drivers/raster/gtiff.html)
 (GDAL):
 
-```bash
+```shell
 g.region raster=basin_50K -p
 r.out.gdal input=basin_50K output=basin_50K.tif
 ```
@@ -191,28 +191,28 @@ r.out.gdal input=basin_50K output=basin_50K.tif
 See also [Cloud Optimized GeoTIFF (COG) format
 description](https://gdal.org/en/stable/drivers/raster/cog.html) (GDAL):
 
-```bash
+```shell
 g.region -p raster=landclass96
 r.out.gdal -fmt input=landclass96 output=landclass96.tif format=COG overviews=4
 ```
 
 ### Export a DCELL raster map in GeoTIFF format suitable for ESRI software
 
-```bash
+```shell
 g.region raster=elevation -p
 r.out.gdal in=elevation output=elevation.tif createopt="PROFILE=GeoTIFF,TFW=YES"
 ```
 
 ### Export a raster map in "Deflate" compressed GeoTIFF format
 
-```bash
+```shell
 g.region raster=elevation -p
 r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE"
 ```
 
 ### Export a large raster map in LZW compressed (Big) GeoTIFF format
 
-```bash
+```shell
 # integer map export
 g.region raster=zipcodes -p
 # Using PREDICTOR 2 for integer maps can further reduce file size
@@ -226,7 +226,7 @@ r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=LZW,PREDICTOR=3
 
 ### Export a raster map with internal overview in "Deflate" compressed GeoTIFF format
 
-```bash
+```shell
 g.region raster=elevation -p
 # overviews=5 corresponds to 'gdaladdo ... 2 4 8 16 32'
 r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE" overviews=5
@@ -234,7 +234,7 @@ r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE" overvi
 
 ### Export R,G,B imagery bands in GeoTIFF format suitable for ESRI software
 
-```bash
+```shell
 i.group group=nc_landsat_rgb input=lsat7_2002_30,lsat7_2002_20,lsat7_2002_10
 g.region raster=lsat7_2002_30 -p
 r.out.gdal in=nc_landsat_rgb output=nc_landsat_rgb.tif type=Byte \
@@ -243,7 +243,7 @@ r.out.gdal in=nc_landsat_rgb output=nc_landsat_rgb.tif type=Byte \
 
 ### Export group of image maps as multi-band file
 
-```bash
+```shell
 g.list group
 i.group group=tm7 subgroup=tm7 input=tm7_10,tm7_20,tm7_30,tm7_40,tm7_50,tm7_60,tm7_70
 i.group -l tm7
@@ -274,7 +274,7 @@ additional alpha channel that encodes all NULL cells and in the RGB
 bands to be exported replace NULL cells with some value in the range
 0-255. For example:
 
-```bash
+```shell
 # for simplicity variables are used
 RMAP="lsat7_2000_30"
 GMAP="lsat7_2000_20"
@@ -313,7 +313,7 @@ The resulting GeoTIFF file can be used e.g. for Web server applications.
 See also [Erdas Imagine .img format
 description](https://gdal.org/en/stable/drivers/raster/hfa.html) (GDAL):
 
-```bash
+```shell
 g.region raster=elevation -p
 r.out.gdal input=elevation output=elelevation.img format=HFA type=Float32
 ```
@@ -324,7 +324,7 @@ An offset value can be assigned to output raster data by **offset**
 parameter. Similarly a scale value can be assigned by **scale**
 parameter.
 
-```bash
+```shell
 # produce raster map
 g.region n=100 s=0 e=100 w=0 res=1
 r.random.cells output=random distance=1.0
@@ -336,7 +336,7 @@ r.out.gdal input=random output=random.tif offset=100 scale=0.01
 
 Check result by *gdalinfo* command line tool:
 
-```bash
+```shell
 gdalinfo random.tif
 ...
 Band 1 Block=100x40 Type=UInt16, ColorInterp=Palette

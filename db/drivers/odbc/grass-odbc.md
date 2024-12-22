@@ -36,7 +36,7 @@ Configure ODBC driver for selected database (manually or with
 'ODBCConfig'). ODBC drivers are defined in /etc/odbcinst.ini. Here an
 example:
 
-```bash
+```shell
  [PostgreSQL]
  Description     = ODBC for PostgreSQL
  Driver          = /usr/lib/libodbcpsql.so
@@ -50,7 +50,7 @@ only) or in /etc/odbc.ini for (for all users) \[watch out for the
 database name which appears twice and also for the PostgreSQL protocol
 version\]. Omit blanks at the beginning of lines:
 
-```bash
+```shell
  [grass6test]
  Description             = PostgreSQL
  Driver                  = PostgreSQL
@@ -80,7 +80,7 @@ structure by 'DataManager'. Configuration with GUI is described on
 
 To find out about your PostgreSQL protocol, run:
 
-```bash
+```shell
 psql -V
 ```
 
@@ -88,14 +88,14 @@ psql -V
 
 Now create a new database if not yet existing:
 
-```bash
+```shell
 db.createdb driver=odbc database=grass6test
 ```
 
 To store a table 'mytable.dbf' (here: in current directory) into
 PostgreSQL through ODBC, run:
 
-```bash
+```shell
 db.connect driver=odbc database=grass6test
 db.copy from_driver=dbf from_database=./ from_table=mytable \
         to_driver=odbc to_database=grass6test to_table=mytable
@@ -104,7 +104,7 @@ db.copy from_driver=dbf from_database=./ from_table=mytable \
 Next link the map to the attribute table (now the ODBC table is used,
 not the dbf file):
 
-```bash
+```shell
 v.db.connect map=mytable.shp table=mytable key=ID \
              database=grass6test driver=odbc
 v.db.connect -p
@@ -113,7 +113,7 @@ v.db.connect -p
 Finally a test: Here we should see the table columns (if the ODBC
 connection works):
 
-```bash
+```shell
 db.tables -p
 db.columns table=mytable
 ```
@@ -127,7 +127,7 @@ Note that you can also connect mySQL, Oracle etc. through ODBC to GRASS.
 You can also check the vector map itself concerning a current link to a
 table:
 
-```bash
+```shell
 v.db.connect -p mytable.shp
 ```
 

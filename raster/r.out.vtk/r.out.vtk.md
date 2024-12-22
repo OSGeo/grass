@@ -72,7 +72,7 @@ r.out.vtk can export raster cells with different representations.
 
 ### Simple Spearfish example
 
-```bash
+```shell
 # set region
 g.region n=4926970 s=4914857 w=591583 e=607793 res=50 -p
 
@@ -85,7 +85,7 @@ paraview --data=/tmp/out.vtk
 
 ### Spearfish example with RGB data
 
-```bash
+```shell
 #set the region
 g.region n=4926990 s=4914840 w=591570 e=607800 res=30 -p
 

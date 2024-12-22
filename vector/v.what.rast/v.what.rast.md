@@ -53,7 +53,7 @@ Reading values from raster map at position of vector points, writing
 these values into a column of the attribute table connected to the
 vector map:
 
-```bash
+```shell
 # work on copy of original geodetic points map
 g.copy vector=geodetic_pts,mygeodetic_pts
 
@@ -73,7 +73,7 @@ In case of a vector map without attached attribute table, first add a
 new attribute table. This table is then populated with values queried
 from the raster map:
 
-```bash
+```shell
 # create new random vector points map
 v.random pnts n=100
 

@@ -51,7 +51,7 @@ Train a SVM to identify land use classes according to the 1996 land use
 map *landuse96_28m* and then classify a LANDSAT scene from October of
 2002. Example requires the nc_spm_08 dataset.
 
-```bash
+```shell
 # Align computation region to the scene
 g.region raster=lsat7_2002_10 -p
 

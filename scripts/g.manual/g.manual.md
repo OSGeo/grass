@@ -13,19 +13,19 @@ your PATH, or the full path to an executable. See
 
 Show index page in the browser.
 
-```bash
+```shell
 g.manual -i
 ```
 
 Show manual page of *[d.vect](d.vect.md)* module in the browser.
 
-```bash
+```shell
 g.manual d.vect
 ```
 
 Show module manual page in terminal.
 
-```bash
+```shell
 g.manual -m d.vect
 ```
 

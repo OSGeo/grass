@@ -13,7 +13,7 @@ all neighbours with their bit set. This means a path can split and
 merge. Such bitmasked directions can be created with the **-b** flag of
 *[r.cost](r.cost.md)* and *[r.walk](r.walk.md)*.
 
-```bash
+```shell
 Direction encoding for neighbors of x
 
   135  90  45          7 8 1
@@ -53,7 +53,7 @@ can take multiple vector maps containing additional starting points.
 The directions are recorded as degrees CCW from East, the Knight's move
 of r.cost and r.walk is considered:
 
-```bash
+```shell
        112.5     67.5
 157.5  135   90  45   22.5
        180   x   0
@@ -74,7 +74,7 @@ two points from a text file using *[v.in.ascii](v.in.ascii.md)* module
 (here the text file is CSV and we are using unix here-file syntax with
 EOF, in GUI just enter the values directly for the parameter input):
 
-```bash
+```shell
 v.in.ascii input=- output=start format=point separator=comma <<EOF
 638667.15686275,220610.29411765
 638610.78431373,220223.03921569
@@ -84,35 +84,35 @@ EOF
 We need to supply a direction raster map to the *r.path* module. To get
 these directions, we use the *[r.watershed](r.watershed.md)* module:
 
-```bash
+```shell
 r.watershed elevation=elev_lid792_1m accumulation=accum drainage=drain_dir
 ```
 
 The directions are categorical and we convert them to degrees using
 raster algebra:
 
-```bash
+```shell
 r.mapcalc "drain_deg = if(drain_dir != 0, 45. * abs(drain_dir), null())"
 ```
 
 Now we are ready to extract the drainage paths starting at the two
 points.
 
-```bash
+```shell
 r.path input=drain_deg raster_path=drain_path vector_path=drain_path start_points=start
 ```
 
 Before we visualize the result, we set a color table for the elevation
 we are using and create a shaded relief map:
 
-```bash
+```shell
 r.colors map=elev_lid792_1m color=elevation
 r.relief input=elev_lid792_1m output=relief
 ```
 
 We visualize the input and output data:
 
-```bash
+```shell
 d.shade shade=relief color=elev_lid792_1m
 d.vect map=drain_path color=0:0:61 width=4 legend_label="drainage paths"
 d.vect map=start color=none fill_color=224:0:0 icon=basic/circle size=15 legend_label=origins
@@ -132,7 +132,7 @@ r.watershed were used*
 
 We compute bitmask encoded movement directions using *r.walk:*
 
-```bash
+```shell
 g.region swwake_30m -p
 
 # create friction map based on land cover
@@ -169,7 +169,7 @@ The extracted least-cost path splits and merges on the way from the
 start point to the stop point (start point for r.walk). Note the gaps in
 the raster path when using the Knight's move.
 
-```bash
+```shell
 
 ```
 

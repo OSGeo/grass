@@ -39,7 +39,7 @@ Determines which part of the label to which the location refers. If
 placement is unspecified, the label is centered (*center*), by default.
 Label placement may be specified as:
 
-```bash
+```shell
     lower left    (lower left corner of the text)
     lower right    (lower right corner of the text)
     lower center    (bottom center of the text)
@@ -58,7 +58,7 @@ This specifies the font to use.
 The following fonts are available for use with
 [*d.labels*](d.labels.md):
 
-```bash
+```shell
   cyrilc gothgbt gothgrt gothitt greekc greekcs greekp greeks
   italicc italiccs italict romanc romancs romand romans romant
   scriptc scripts
@@ -129,7 +129,7 @@ setting, if unspecified by the user, is *yes*.
 
 Spearfish example with TrueType font (path may differ):
 
-```bash
+```shell
 v.label -a map=roads column=label labels=lroads \
         font=/usr/X11R6/lib/X11/fonts/TTF/luximri.ttf
 d.vect roads
@@ -141,7 +141,7 @@ if you like. For example if you set the label colors based on database
 attributes using multiple runs with the **where** option. This example
 uses the standard UNIX `cat` program.
 
-```bash
+```shell
 cd $MAPSET/paint/labels/
 cat file1 file2 file3 file4 > file_all
 ```

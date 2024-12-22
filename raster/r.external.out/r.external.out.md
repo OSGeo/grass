@@ -22,7 +22,7 @@ mapset directory.
 The module *r.external.out* is used to write out processing results
 directly in GeoTIFF format (any GDAL supported format can be used here):
 
-```bash
+```shell
 # define output directory for files resulting from GRASS calculation(s)
 # and target format:
 mkdir $HOME/gisoutput/
@@ -50,7 +50,7 @@ The module *r.external.out* can be used along with *r.external* to
 process external geodata in GRASS while writing out the results directly
 in GeoTIFF:
 
-```bash
+```shell
 # register GeoTIFF file to be used in current mapset:
 r.external input=terra_lst1km20030314.LST_Day.tif output=modis_celsius
 

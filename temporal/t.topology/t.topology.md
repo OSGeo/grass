@@ -7,7 +7,7 @@ time dataset.
 
 In order to obtain information about space time dataset topology, run:
 
-```bash
+```shell
 t.topology tempmean_monthly@climate_2009_2012
  +-------------------- Basic information -------------------------------------+
  | Id: ........................ tempmean_monthly@climate_2009_2012

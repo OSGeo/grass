@@ -47,7 +47,7 @@ Naturally, this also checks that the version if is accessible and fails otherwis
 
 The _status_ command prints input for Bash _eval_ with `--bash`:
 
-```bash
+```shell
 eval `./utils/update_version.py status --bash`
 echo $VERSION
 ```

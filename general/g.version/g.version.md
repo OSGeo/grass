@@ -21,7 +21,7 @@ printed by **-e** flag.
 See also function `version()` from [Python Scripting
 Library](https://grasswiki.osgeo.org/wiki/GRASS_Python_Scripting_Library).
 
-```bash
+```shell
 import grass.script as gcore
 
 print gcore.version()
@@ -31,7 +31,7 @@ print gcore.version()
 
 ### Basic info
 
-```bash
+```shell
 g.version
 
 GRASS 8.4.0 (2024)
@@ -39,7 +39,7 @@ GRASS 8.4.0 (2024)
 
 ### GIS Library info
 
-```bash
+```shell
 g.version -r
 
 GRASS 8.4.0 (2024)
@@ -49,7 +49,7 @@ libgis date: 2024-04-27T09:38:49+00:00
 
 ### Full info in shell script style
 
-```bash
+```shell
 g.version -rge
 
 version=8.4.0

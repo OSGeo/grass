@@ -62,7 +62,7 @@ efficiency of the algorithm.
 Using the **where** parameter, the interpolation can be limited to use
 only a subset of the input vectors.
 
-```bash
+```shell
 # preparation as in above example
 v.vol.rst elevrand_3d wcol=soilrange elevation=soilrange zscale=100 where="soilrange > 3"
 ```
@@ -82,7 +82,7 @@ worth to use just a sample data representing the whole dataset.
 *Example (based on [Slovakia3d
 dataset](https://grassbook.org/data_menu2nd.php)):*
 
-```bash
+```shell
 v.info -c precip3d
 g.region n=5530000 s=5275000 w=4186000 e=4631000 res=500 -p
 v.vol.rst -c input=precip3d wcolumn=precip zscale=50 segmax=700 cvdev=cvdevmap tension=10
@@ -161,7 +161,7 @@ interpolation.
 
 Spearfish example (we first simulate 3D soil range data):
 
-```bash
+```shell
 g.region -dp
 # define volume
 g.region res=100 tbres=100 res3=100 b=0 t=1500 -ap3

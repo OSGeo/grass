@@ -20,7 +20,7 @@ represents random locations within the boundary of the state taken at 1
 month intervals. The space time dataset is then exported and
 re-imported.
 
-```bash
+```shell
 db.connect -d
 
 for i in `seq 1 5` ; do

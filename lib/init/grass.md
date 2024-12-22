@@ -82,7 +82,7 @@ Initial mapset directory which is a subdirectory of PROJECT
 
 *Note*: These parameters must be specified in one of the following ways:
 
-```bash
+```shell
     MAPSET
     PROJECT/MAPSET
     GISDBASE/PROJECT/MAPSET
@@ -191,7 +191,7 @@ a personal version of the Python 3.8 binaries under `$HOME/bin`. You can
 use the above variables to have GRASS use the Python 3.8 binaries
 instead.
 
-```bash
+```shell
    GRASS_PYTHON=python3.8
 ```
 
@@ -201,7 +201,7 @@ This environment variable allows the user to extend the GRASS program
 search paths to include locally developed/installed GRASS modules or
 user scripts.
 
-```bash
+```shell
    GRASS_ADDON_PATH=/usr/mytools
    GRASS_ADDON_PATH=/usr/mytools:/usr/local/othertools
 ```
@@ -217,7 +217,7 @@ search paths to include locally installed (see
 Addon](https://grasswiki.osgeo.org/wiki/GRASS_AddOns) modules which are
 not distributed with the standard GRASS release.
 
-```bash
+```shell
    GRASS_ADDON_BASE=/usr/grass-addons
 ```
 
@@ -287,26 +287,26 @@ Creates a new GRASS project based on georeferenced GeoTIFF file
 Creating a new project based on a geodata file's projection (**-c**) and
 exit (**-e**) immediately:
 
-```bash
+```shell
 grass -c elevation.tiff -e /path/to/grassdata/test1/
 ```
 
 Linking external raster data to PERMANENT Mapset:
 
-```bash
+```shell
 grass /path/to/grassdata/test1/PERMANENT/ --exec r.external input=basins.tiff output=basins
 grass /path/to/grassdata/test1/PERMANENT/ --exec r.external input=elevation.tiff output=elevation
 ```
 
 Get statistics for one raster map:
 
-```bash
+```shell
 grass /path/to/grassdata/test1/PERMANENT/ --exec r.univar map=elevation
 ```
 
 Compare the rasters visually:
 
-```bash
+```shell
 grass /path/to/grassdata/test1/PERMANENT/ --exec g.gui.mapswipe first=elevation second=basins
 ```
 
@@ -318,13 +318,13 @@ exec interface.
 **Shell script example:** the command to execute a shell script might
 be:
 
-```bash
+```shell
 grass /path/to/grassdata/test1/PERMANENT/ --exec sh test.sh
 ```
 
 A very simple bash script ("test.sh") may look like this:
 
-```bash
+```shell
 #!/bin/bash
 
 g.region -p
@@ -335,13 +335,13 @@ r.info elevation
 **Python script example:** the command to execute a Python script might
 be:
 
-```bash
+```shell
 grass /path/to/grassdata/test1/PERMANENT/ --exec python test.py
 ```
 
 A very simple Python script ("test.py") may look like this:
 
-```bash
+```shell
 #!/usr/bin/env python3
 
 # import GRASS Python bindings (see also pygrass)
@@ -365,19 +365,19 @@ Creating a new temporary project based on a georeferenced file's
 coordinate reference system (CRS) and simultaneously starting
 computation in a shell script:
 
-```bash
+```shell
 grass --tmp-project elevation.tiff --exec test.sh
 ```
 
 The same, but using an EPSG code and a Python script:
 
-```bash
+```shell
 grass --tmp-project EPSG:3358 --exec test.py
 ```
 
 Finally, for special cases, we can create an XY project without any CRS:
 
-```bash
+```shell
 grass --tmp-project XY --exec test.py
 ```
 
@@ -388,14 +388,14 @@ before ending.
 A single command can be also executed, e.g. to examine properties of the
 temporary project:
 
-```bash
+```shell
 grass --tmp-project EPSG:3358 --exec g.proj -p
 ```
 
 A temporary XY project with single command is useful, e.g. to show help
 text of a module:
 
-```bash
+```shell
 grass --tmp-project XY --exec r.neighbors --help
 ```
 
@@ -404,13 +404,13 @@ grass --tmp-project XY --exec r.neighbors --help
 A single command can be executed, e.g., to examine properties of a
 project (here using the NC SPM sample dataset):
 
-```bash
+```shell
 grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec g.proj -p
 ```
 
 Computation in a Python script can be executed in the same way:
 
-```bash
+```shell
 grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py
 ```
 
@@ -418,7 +418,7 @@ Additional parameters are just passed to the script, so we can run the
 script with different sets of parameters (here 5, 8 and 3, 9) in
 different temporary mapsets which is good for parallel processing.
 
-```bash
+```shell
 grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py 5 8
 grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py 3 9
 ```
@@ -426,7 +426,7 @@ grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.py 3 9
 The same applies to Bash scripts (and other scripts supported on you
 platform):
 
-```bash
+```shell
 grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec processing.sh 5 8
 ```
 

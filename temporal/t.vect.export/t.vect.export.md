@@ -36,7 +36,7 @@ space time vector dataset named *random_locations*. Each vector map
 represents random locations within the boundary of the state taken at 1
 month intervals.
 
-```bash
+```shell
 t.vect.export input=shoreline output=shoreline_nc.tar.bzip2
 
 tar xvfj shoreline_nc.tar.bzip2

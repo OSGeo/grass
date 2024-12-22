@@ -15,7 +15,7 @@ further information.
 
 Set Celsius color table to monthly dataset
 
-```bash
+```shell
 t.rast.colors input=tempmean_monthly color=celsius
 
 r.colors.out map=2009_01_tempmean

@@ -168,14 +168,14 @@ Transform digital numbers of Landsat-7 ETM+ in band rasters 203_30.1,
 203_30.1_toar, 203_30.2_toar \[...\] and at-sensor temperature in output
 files 293_39.61_toar and 293_39.62_toar:
 
-```bash
+```shell
 i.landsat.toar input=203_30. output=_toar \
   metfile=p203r030_7x20010620.met
 ```
 
 or
 
-```bash
+```shell
 i.landsat.toar input=L5121060_06020060714. \
   output=L5121060_06020060714_toar \
   metfile=L5121060_06020060714_MTL.txt
@@ -183,7 +183,7 @@ i.landsat.toar input=L5121060_06020060714. \
 
 or
 
-```bash
+```shell
 i.landsat.toar input=LC80160352013134LGN03_B output=toar \
   metfile=LC80160352013134LGN03_MTL.txt sensor=oli8 date=2013-05-14
 ```
@@ -192,7 +192,7 @@ i.landsat.toar input=LC80160352013134LGN03_B output=toar \
 
 DN to reflectance using DOS1:
 
-```bash
+```shell
 # rename channels or make a copy to match i.landsat.toar's input scheme:
 g.copy raster=lsat7_2002_10,lsat7_2002.1
 g.copy raster=lsat7_2002_20,lsat7_2002.2
@@ -209,7 +209,7 @@ Calculation of reflectance values from DN using DOS1 (metadata obtained
 from
 [p016r035_7x20020524.met.gz](https://grassbook.org/wp-content/uploads/ncexternal/landsat/2002/p016r035_7x20020524.met.gz)):
 
-```bash
+```shell
 i.landsat.toar input=lsat7_2002. output=lsat7_2002_toar. sensor=tm7 \
   method=dos1 date=2002-05-24 sun_elevation=64.7730999 \
   product_date=2004-02-12 gain=HHHLHLHHL

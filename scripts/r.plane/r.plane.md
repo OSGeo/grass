@@ -24,7 +24,7 @@ floating point).
 
 A tilted plane in the North Carolina sample dataset region:
 
-```bash
+```shell
 # set computational region
 g.region raster=elev_lid792_1m -p
 

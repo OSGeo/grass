@@ -50,7 +50,7 @@ The following command is the default one, returning standard information
 like name, mapset, start_time, end_time of each map in the space time
 dataset
 
-```bash
+```shell
 t.rast.list tempmean_monthly
 name|mapset|start_time|end_time
 2009_01_tempmean|climate_2000_2012|2009-01-01 00:00:00|2009-02-01 00:00:00
@@ -64,7 +64,7 @@ name|mapset|start_time|end_time
 
 The following command let the user to choose the columns to show
 
-```bash
+```shell
 t.rast.list tempmean_monthly columns=name,start_time,min,max
 name|start_time|min|max
 2009_01_tempmean|2009-01-01 00:00:00|-3.380823|7.426054
@@ -79,7 +79,7 @@ name|start_time|min|max
 In this example the result is filtered showing only the maps with max
 value major than 24
 
-```bash
+```shell
 t.rast.list tempmean_monthly columns=name,start_time,min,max where="max > 24"
 name|start_time|min|max
 2009_06_tempmean|2009-06-01 00:00:00|15.962669|25.819681
@@ -96,7 +96,7 @@ name|start_time|min|max
 In this example the result is filtered showing only the maps which fall
 into a specified time range (from .. to):
 
-```bash
+```shell
 t.rast.list tempmean_monthly columns=name,start_time,min,max \
   where="start_time > '2009-06-01 00:00:00' and start_time < '2012-08-01 00:00:00'"
 name|start_time|min|max
@@ -114,7 +114,7 @@ name|start_time|min|max
 In this example the result is filtered showing only the maps which fall
 into a specified recurring time range (here one month per year):
 
-```bash
+```shell
 t.rast.list Tseasonal_fieldata_garda where="strftime('%m', start_time)='06'"
 ```
 
@@ -124,7 +124,7 @@ Method option is able to show raster in different way. By default *cols*
 value is used, the value *comma* will print only the list of maps inside
 the space time dataset:
 
-```bash
+```shell
 t.rast.list method=comma input=tempmean_monthly
 2009_01_tempmean@climate_2009_2012,2009_02_tempmean@climate_2009_2012,2009_03_tempmean@climate_2009_2012, \
 2009_04_tempmean@climate_2009_2012,2009_05_tempmean@climate_2009_2012,2009_06_tempmean@climate_2009_2012, \
@@ -147,7 +147,7 @@ t.rast.list method=comma input=tempmean_monthly
 The *delta* value calculate the interval between maps and the distance
 from the first map:
 
-```bash
+```shell
 t.rast.list method=delta input=tempmean_monthly
 id|name|mapset|start_time|end_time|interval_length|distance_from_begin
 2009_01_tempmean@climate_2000_2012|2009_01_tempmean|climate_2000_2012|2009-01-01 00:00:00|2009-02-01 00:00:00|31.0|0.0
@@ -163,7 +163,7 @@ The *gran* value it is used to return data sampled by a user defined
 granule. As default the granularity of the space time raster dataset is
 used for sampling.
 
-```bash
+```shell
 t.rast.list  method=gran input=tempmean_monthly
 id|name|mapset|start_time|end_time|interval_length|distance_from_begin
 2009_01_tempmean@climate_2009_2012|2009_01_tempmean|climate_2009_2012|2009-01-01 00:00:00|2009-02-01 00:00:00|31.0|0.0
@@ -177,7 +177,7 @@ id|name|mapset|start_time|end_time|interval_length|distance_from_begin
 2012_12_tempmean@climate_2009_2012|2012_12_tempmean|climate_2009_2012|2012-12-01 00:00:00|2013-01-01 00:00:00|31.0|1430.0
 ```
 
-```bash
+```shell
 t.rast.list  method=gran input=tempmean_monthly gran="2 months"
 id|name|mapset|start_time|end_time|interval_length|distance_from_begin
 2009_01_tempmean@climate_2009_2012|2009_01_tempmean|climate_2009_2012|2009-01-01 00:00:00|2009-03-01 00:00:00|59.0|0.0
@@ -194,7 +194,7 @@ dataset [t.vect.list](t.vect.list.md#using-method-option)
 
 ### Reading raster names in Python
 
-```bash
+```shell
 result = json.loads(
     gs.read_command(
         "t.rast.list", input="tempmean_monthly", format="json"
@@ -214,7 +214,7 @@ registrating raster maps into STRDS by
 Name of STRDS can be extended by semantic label used for filtering. Name
 of STRDS and semantic label is split by a *single dot*.
 
-```bash
+```shell
 t.rast.list input=test.S2_1
 ```
 

@@ -22,7 +22,7 @@ driver](grass-sqlite.md)).
 
 The main 'geoname' table has the following fields
 
-```bash
+```shell
 geonameid         : integer id of record in geonames database
 name              : name of geographical point (utf8) varchar(200)
 asciiname         : name of geographical point in plain ascii characters, varchar(200)
@@ -48,7 +48,7 @@ modification date : date of last modification in yyyy-MM-dd format
 
 Download and import geonames for Czech Republic.
 
-```bash
+```shell
 wget https://download.geonames.org/export/dump/CZ.zip
 unzip CZ.zip
 

@@ -74,7 +74,7 @@ Note that topological output requires **PostGIS version 2 or later**.
 process external geodata in GRASS while writing out the results directly
 eg. in ESRI Shapefile format:
 
-```bash
+```shell
 # register Shapefile in GRASS mapset:
 v.external input=/path/to/shapefiles layer=cities
 
@@ -87,7 +87,7 @@ v.select ainput=cities atype=point binput=forests btype=area operator=within out
 
 Current settings can be printed using **-p** or **-g** flag.
 
-```bash
+```shell
 v.external.out -p
 
 output: /path/to/home/gisoutput
@@ -99,7 +99,7 @@ format: ESRI Shapefile
 PostGIS data can be accessed directly using *GRASS-PostGIS data
 provider* (GRASS must be compiled with PostgreSQL support).
 
-```bash
+```shell
 # register PostGIS table in GRASS mapset:
 v.external output=PG:dbname=gisdb layer=cities
 
@@ -115,7 +115,7 @@ PostgreSQL driver from OGR library for reading and writing PostGIS data.
 
 ### PostGIS Topology
 
-```bash
+```shell
 # define output PostGIS database for GRASS calculation results stored as topological elements:
 v.external.out output=PG:dbname=gisdb format=PostgreSQL options=topology=YES
 
@@ -129,7 +129,7 @@ v.external.out output=PG:dbname=gisdb format=PostgreSQL options=topology=YES
 
 To restore original settings, ie. use the GRASS native format, type:
 
-```bash
+```shell
 v.external.out -r
 ```
 
@@ -137,7 +137,7 @@ v.external.out -r
 
 Current settings can be stored to file by specifying **output** option.
 
-```bash
+```shell
 # define output PostGIS database for GRASS calculation with
 # results stored as topological elements:
 v.external.out output=PG:dbname=gisdb format=PostgreSQL \
@@ -148,7 +148,7 @@ v.external.out output=PG:dbname=gisdb format=PostgreSQL \
 
 Back to native format:
 
-```bash
+```shell
 v.external.out -r
 
 # do some processing in native format
@@ -157,7 +157,7 @@ v.external.out -r
 Restore previous settings from "gisdb_topo.txt" file by specifying
 **loadsettings** option.
 
-```bash
+```shell
 v.external.out loadsettings=gisdb_topo.txt
 
 # ... and do some processing in PostGIS Topology

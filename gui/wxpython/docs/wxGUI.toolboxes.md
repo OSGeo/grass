@@ -33,7 +33,7 @@ Following lines can be copied to `.grass8/toolboxes/main_menu.xml` and
 by removing, adding or reordering lines users can change the main menu
 items. See further examples.
 
-```bash
+```shell
 <?xml version="1.0" encoding="UTF-8"?>
 <toolbox name="MyMainMenu">
   <label>Default GRASS GIS main menu bar</label>
@@ -62,7 +62,7 @@ toolboxes are linked through `name` attribute.
 Apart from `subtoolbox` tag, tag `toolbox` can contain individual items
 (modules) and separators (for visual separation in the menu tree).
 
-```bash
+```shell
 <?xml version="1.0" encoding="UTF-8"?>
 <toolboxes>
   <toolbox name="Raster">
@@ -104,7 +104,7 @@ If we are for example working only with raster data, we can hide menu
 items *Vector* and *Database*. The file `main_menu.xml` then contains
 the following lines where we omitted the two toolboxes:
 
-```bash
+```shell
 <?xml version="1.0" encoding="UTF-8"?>
 <toolbox name="CustomizedMainMenu">
   <label>Default GRASS GIS main menu bar</label>
@@ -126,7 +126,7 @@ In this example we create a new toolbox *Favorites* containing existing
 GRASS module and toolbox, custom module created by the user and addon
 module. The `toolboxes.xml` file contains following lines:
 
-```bash
+```shell
 <?xml version="1.0" encoding="UTF-8"?>
 <toolboxes>
   <toolbox name="MyFavorites">
@@ -154,7 +154,7 @@ module. The `toolboxes.xml` file contains following lines:
 Optionally, we can add this toolbox to the main menu items. The
 `main_menu.xml` file contains following lines:
 
-```bash
+```shell
 <?xml version="1.0" encoding="UTF-8"?>
 <toolbox name="CustomizedMainMenu">
   <label>Default GRASS GIS main menu bar</label>

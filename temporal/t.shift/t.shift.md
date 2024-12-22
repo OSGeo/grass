@@ -31,7 +31,7 @@ We create 6 raster maps and register them in a space time raster dataset
 using an increment of one day. Then we shift the time intervals with a
 granularity of 12 hours.
 
-```bash
+```shell
 r.mapcalc expression="prec_1 = rand(0, 550)" -s
 r.mapcalc expression="prec_2 = rand(0, 450)" -s
 r.mapcalc expression="prec_3 = rand(0, 320)" -s

@@ -24,7 +24,7 @@ those portions of the underlying frame where these frames overlap.
 
 ## EXAMPLE
 
-```bash
+```shell
 # start a new graphics monitor, the data will be rendered to
 # /tmp/map.png image output file of size 600x540px
 d.mon cairo out=/tmp/map.png width=600 height=540 --o

@@ -29,13 +29,13 @@ interval **size**.
 To draw a red geographic grid with 30 minute grid spacing, run one of
 the following commands:
 
-```bash
+```shell
 d.grid -g size=00:30:00 color=red
 ```
 
 or
 
-```bash
+```shell
 d.grid -g size=0.5 color=255:0:0
 ```
 
@@ -50,7 +50,7 @@ alt="d.grid red grid example" />
 To draw a blue standard rectangular grid at a 500 (meter) spacing run
 the following:
 
-```bash
+```shell
 d.grid size=500 color=blue
 ```
 

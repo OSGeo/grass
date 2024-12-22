@@ -25,7 +25,7 @@ is simply a frontend to that module.
 In this example, the `aspect` map in the North Carolina sample dataset
 is used to hillshade the `elevation` map:
 
-```bash
+```shell
 g.region raster=aspect -p
 d.mon wx0
 d.shade shade=aspect color=elevation
@@ -39,7 +39,7 @@ to elevation raster map from North Carolina dataset elevation map
 In this next example, a shaded relief raster map is created and used to
 create a colorized hillshade:
 
-```bash
+```shell
 g.region raster=elevation
 r.relief input=elevation output=elevation_shaded_relief
 

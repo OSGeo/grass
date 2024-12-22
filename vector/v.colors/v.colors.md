@@ -41,7 +41,7 @@ rather then in a color table file. Reading color tables with more then
 
 Define color table `wave` based on categories from layer 1
 
-```bash
+```shell
 v.colors map=soils_general layer=1 color=wave
 ```
 
@@ -50,7 +50,7 @@ v.colors map=soils_general layer=1 color=wave
 Define color table `ryg` based on values from attribute column `AREA`.
 Attribute table is linked to layer 1.
 
-```bash
+```shell
 v.to.db map=soils_general layer=1 option=area column=AREA
 v.colors map=soils_general layer=1 color=wave use=attr column=AREA
 ```
@@ -60,7 +60,7 @@ v.colors map=soils_general layer=1 color=wave use=attr column=AREA
 Write color values to the attribute table (column `GRASSRGB`) instead of
 creating color table.
 
-```bash
+```shell
 v.colors map=soils_general layer=1 color=wave use=attr column=AREA rgb_column=GRASSRGB
 
 # See some GRASSRGB values:
@@ -75,7 +75,7 @@ cat|OBJECTID|AREA|PERIMETER|GSLNC250_|GSLNC250_I|GSL_NAME|GRASSRGB
 
 Convert existing RGB values to color table rules.
 
-```bash
+```shell
 v.colors -c map=soils_general rgb_column=GRASSRGB
 ```
 
@@ -86,7 +86,7 @@ values stored in attribute table.
 
 ### Transfer raster colors to vector
 
-```bash
+```shell
 # create an example raster from census blocks (10m pixel resolution)
 g.region vector=censusblk_swwake res=10 -ap
 v.to.rast input=censusblk_swwake use=attr attribute_column=TOTAL_POP output=censusblk_swwake_total_pop
@@ -105,7 +105,7 @@ v.colors map=censusblk_swwake raster=censusblk_swwake_total_pop
 
 Existing color table can be removed by **-r** flag.
 
-```bash
+```shell
 v.colors -r map=soils_general
 ```
 
@@ -113,14 +113,14 @@ Before removing color table you can store color rules to the file by
 *[v.colors.out](v.colors.out.md)* and later to assign by **rules**
 option.
 
-```bash
+```shell
 v.colors.out map=soils_general rules=soils.colr
 v.colors map=soils_general rules=soils.colr
 ```
 
 To drop RGB column use *[v.db.dropcolumn](v.db.dropcolumn.md)*.
 
-```bash
+```shell
 v.db.dropcolumn map=soils_general column=GRASSRGB
 ```
 

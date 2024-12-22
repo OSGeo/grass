@@ -23,7 +23,7 @@ The following tasseled cap components are generated:
 
 Calculation of TC maps from North Carolina Landsat 7 ETM scene:
 
-```bash
+```shell
 # See manual page of i.landsat.toar for pre-processing
 
 g.region raster=lsat7_2002_toar.1 -p

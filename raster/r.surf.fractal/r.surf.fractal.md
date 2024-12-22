@@ -18,7 +18,7 @@ Discrete Fourier Transforms.
 Generate surface using fractals in selected region, set color table and
 display with shade.
 
-```bash
+```shell
 g.region -p raster=elevation
 
 r.surf.fractal output=fractals
@@ -35,7 +35,7 @@ Artificial surface created with fractals
 
 Compare results when using different fractal dimensions:
 
-```bash
+```shell
 # D=2.0005
 g.region -dp
 r.surf.fractal out=dem_d2_0005 dim=2.0005
