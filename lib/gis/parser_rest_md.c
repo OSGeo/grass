@@ -503,7 +503,7 @@ void print_escaped_for_md_keywords(FILE *f, const char *str)
     str_s = G_store(str);
     G_strip(str_s);
 
-    /* HTML link only for second keyword */
+    /* HTML link only for second keyword = topic */
     if (st->n_keys > 1 && strcmp(st->module_info.keywords[1], str) == 0) {
 
         const char *s;
@@ -517,7 +517,7 @@ void print_escaped_for_md_keywords(FILE *f, const char *str)
                 fputc(*s, f);
             }
         }
-        fprintf(f, ".html)");
+        fprintf(f, ".md)");
     }
     else { /* first and other than second keyword */
         if (st->n_keys > 0 && strcmp(st->module_info.keywords[0], str) == 0) {
@@ -532,13 +532,14 @@ void print_escaped_for_md_keywords(FILE *f, const char *str)
                     fputc(*s, f);
                 }
             }
-            fprintf(f, ".html)");
+            fprintf(f, ".md)");
         }
         else {
-            /* keyword index */
+            /* keyword index, mkdocs expects dash */
             char *str_link;
-            str_link = G_str_replace(str_s, " ", "%20");
-            fprintf(f, "[%s](keywords.html#%s)", str_s, str_link);
+            str_link = G_str_replace(str_s, " ", "-");
+            G_str_to_lower(str_link);
+            fprintf(f, "[%s](keywords.md#%s)", str_s, str_link);
             G_free(str_link);
         }
     }

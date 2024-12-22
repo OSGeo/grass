@@ -1105,7 +1105,7 @@ msgstr "Ustawienia widoku 3D zapisano w pliku <%s>."
 msgid ""
 "This module requires the NumPy module, which could not be imported. It "
 "probably is not installed (it's not part of the standard Python "
-"distribution). See the Numeric Python site (http://numpy.scipy.org) for "
+"distribution). See the Numeric Python site (https://numpy.org) for "
 "information on downloading source or binaries."
 msgstr ""
 
@@ -7768,7 +7768,7 @@ msgstr "Granice regionu"
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 #, fuzzy
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr ""
 "Usuwa granice pomiędzy sąsiadującymi obszarami o tej samej kategorii lub "

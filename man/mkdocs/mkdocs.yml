@@ -22,19 +22,22 @@ plugins:
   - glightbox
 use_directory_urls: false
 nav:
+  - GUI: wxGUI.md
   - Startup: grass.md
   - Databases: database.md
   - Display: display.md
   - General: general.md
   - Imagery: imagery.md
-  - Keywords: keywords.md
   - Misc: miscellaneous.md
+  - Postscript: postscript.md
   - Raster: raster.md
   - Raster 3D: raster3d.md
   - SQL: sql.md
   - Temporal: temporal.md
   - Variables: variables.md
   - Vector: vector.md
+  - Keywords: keywords.md
+  - Topics: topics.md
 markdown_extensions:
   - admonition
   - pymdownx.details

@@ -1118,12 +1118,12 @@ msgstr "Setările de vizualizare 3D salvate ca fișier <%s>."
 msgid ""
 "This module requires the NumPy module, which could not be imported. It "
 "probably is not installed (it's not part of the standard Python "
-"distribution). See the Numeric Python site (http://numpy.scipy.org) for "
+"distribution). See the Numeric Python site (https://numpy.org) for "
 "information on downloading source or binaries."
 msgstr ""
 "Acest modul necesită modulul NumPy, care nu a putut fi importat. Probabil nu "
 "este instalat (nu este parte a distribuției standard de Python). Vezi site-"
-"ul Numeric Python (http://numpy.scipy.org) pentru informații despre "
+"ul Numeric Python (https://numpy.org) pentru informații despre "
 "descărcarea codului sursă."
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
@@ -7799,7 +7799,7 @@ msgstr "Dizolvă limitele"
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 #, fuzzy
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr ""
 "Se dizolvă limitele dintre arealele adiacente un număr comun de categorii "

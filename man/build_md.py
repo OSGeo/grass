@@ -66,6 +66,7 @@ overview_tmpl = string.Template(
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Graphical User Interface</h3>
        <ul>
+        <li class="box"><a href="wxguiintro.html">Intro: Graphical User Interface</a></li>
         <li class="box"><span><a href="wxGUI.html">wxGUI</a></span></li>
         <li class="box"><a href="wxGUI.components.html">wxGUI components</a></li>
         <li class="box"><a href="wxGUI.toolboxes.html">wxGUI toolboxes</a></li>
@@ -192,7 +193,7 @@ desc1_tmpl = string.Template(
 )
 
 modclass_intro_tmpl = string.Template(
-    r"""Go to [${modclass} introduction](${modclass_lower}intro.html) | [topics](topics.html)
+    r"""Go to [${modclass} introduction](${modclass_lower}intro.md) | [topics](topics.md)
 """
 )
 # "
@@ -200,7 +201,7 @@ modclass_intro_tmpl = string.Template(
 
 modclass_tmpl = string.Template(
     r"""Go [back to help overview](index.md)
-### ${modclass} commands:
+### ${modclass} commands
 | Module | Description |
 |--------|-------------|
 """
@@ -216,7 +217,7 @@ full_index_header = r"""Go [back to help overview](index.md)
 
 moduletopics_tmpl = string.Template(
     r"""
-- [${name}](topic_${key}.html)
+- [${name}](topic_${key}.md)
 """
 )
 

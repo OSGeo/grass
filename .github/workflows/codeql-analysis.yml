@@ -52,11 +52,11 @@ jobs:
           sudo apt-get install -y wget git gawk findutils
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
-      - uses: rui314/setup-mold@b015f7e3f2938ad3a5ed6e5111a8c6c7c1d6db6e # v1
+      - uses: rui314/setup-mold@bac87d5a5820d626ba77131fbbfbce77faf03b6e # v1
         if: ${{ matrix.language == 'c-cpp' }}
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@f09c1c0a94de965c15400f5634aa42fac8fb8f88 # v3.27.5
+        uses: github/codeql-action/init@48ab28a6f5dbc2a99bf1e0131198dd8f1df78169 # v3.28.0
         with:
           languages: ${{ matrix.language }}
           config-file: ./.github/codeql/codeql-config.yml
@@ -81,6 +81,6 @@ jobs:
         run: .github/workflows/build_ubuntu-22.04.sh "${HOME}/install"
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@f09c1c0a94de965c15400f5634aa42fac8fb8f88 # v3.27.5
+        uses: github/codeql-action/analyze@48ab28a6f5dbc2a99bf1e0131198dd8f1df78169 # v3.28.0
         with:
           category: "/language:${{matrix.language}}"

@@ -1089,11 +1089,11 @@ msgstr ""
 msgid ""
 "This module requires the NumPy module, which could not be imported. It "
 "probably is not installed (it's not part of the standard Python "
-"distribution). See the Numeric Python site (http://numpy.scipy.org) for "
+"distribution). See the Numeric Python site (https://numpy.org) for "
 "information on downloading source or binaries."
 msgstr ""
 "该模块需要使用的NumPy模块无法导入。可能没有安装该模块（非Python标准模块）。参"
-"见Numeric Python网站（http://numpy.scipy.org）查看下载源码或安装文件信息。"
+"见Numeric Python网站（https://numpy.org）查看下载源码或安装文件信息。"
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
 #: ../gui/wxpython/iclass/g.gui.iclass.py:88
@@ -7684,7 +7684,7 @@ msgstr "边界融合"
 
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr ""
 

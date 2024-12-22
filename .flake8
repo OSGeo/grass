@@ -25,22 +25,17 @@ per-file-ignores =
     gui/wxpython/image2target/g.gui.image2target.py: E501
     gui/wxpython/photo2image/g.gui.photo2image.py: E501
     gui/wxpython/psmap/*: E501
-    gui/wxpython/vdigit/*: F841, E722, F405, F403
+    gui/wxpython/vdigit/*: E722, F405, F403
     gui/wxpython/animation/g.gui.animation.py: E501
     gui/wxpython/tplot/g.gui.tplot.py: E501
-    gui/wxpython/iclass/frame.py: F405, F403
     gui/wxpython/iclass/g.gui.iclass.py: E501
     gui/wxpython/iclass/statistics.py: F841, F405, F403
-    gui/wxpython/location_wizard/dialogs.py: F841
     gui/wxpython/location_wizard/wizard.py: E722
     gui/wxpython/mapdisp/main.py: E722
     gui/wxpython/mapdisp/test_mapdisp.py: E501
-    gui/wxpython/mapdisp/statusbar.py: F841
     gui/wxpython/mapswipe/g.gui.mapswipe.py: E501
     gui/wxpython/mapwin/base.py: E722
     gui/wxpython/mapwin/buffered.py: E722
-    gui/wxpython/mapwin/graphics.py: E722
-    gui/wxpython/startup/locdownload.py: E722, E402
     gui/wxpython/timeline/g.gui.timeline.py: E501
     # Generated file
     gui/wxpython/menustrings.py: E501
@@ -50,13 +45,6 @@ per-file-ignores =
     # C wrappers call libgis.G_gisinit before importing other modules.
     # TODO: Is this really needed?
     python/grass/pygrass/vector/__init__.py: E402
-    python/grass/pygrass/raster/__init__.py: E402
-    python/grass/pygrass/vector/__init__.py: E402
-    python/grass/pygrass/raster/category.py: E721
-    python/grass/pygrass/utils.py: E402
-    python/grass/temporal/abstract_space_time_dataset.py: E722
-    python/grass/temporal/c_libraries_interface.py: E722
-    python/grass/temporal/core.py: E722
     python/grass/temporal/datetime_math.py: E722
     python/grass/temporal/spatial_topology_dataset_connector.py: E722
     python/grass/temporal/temporal_algebra.py: E722
@@ -67,9 +55,6 @@ per-file-ignores =
     # Configuration file for Sphinx:
     # Ignoring import/code mix and line length.
     # Files not managed by Black
-    # Unused imports in init files
-    # F403 star import used; unable to detect undefined names
-    python/grass/temporal/__init__.py: F401, F403
     # E402 module level import not at top of file
     scripts/r.semantic.label/r.semantic.label.py: E501
     scripts/g.extension/g.extension.py: E501

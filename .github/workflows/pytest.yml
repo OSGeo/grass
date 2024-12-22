@@ -48,7 +48,7 @@ jobs:
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
-      - uses: rui314/setup-mold@b015f7e3f2938ad3a5ed6e5111a8c6c7c1d6db6e # v1
+      - uses: rui314/setup-mold@bac87d5a5820d626ba77131fbbfbce77faf03b6e # v1
 
       - name: Install Python dependencies
         run: |
@@ -115,7 +115,7 @@ jobs:
           coverage html
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@015f24e6818733317a2da2edd6290ab26238649a # v5.0.7
+        uses: codecov/codecov-action@1e68e06f1dbfde0e4cefc87efeba9e4643565303 # v5.1.2
         with:
           verbose: true
           flags: pytest-python-${{ matrix.python-version }}
@@ -123,7 +123,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Make python-only code coverage test report available
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         with:
           name: python-codecoverage-report-${{ matrix.os }}-${{ matrix.python-version }}
           path: coverage_html_report

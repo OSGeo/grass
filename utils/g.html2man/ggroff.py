@@ -69,7 +69,7 @@ class Formatter:
             "index": [],
         }
         self.stack = []
-        self.strip_re = re.compile("^[ \t]+")
+        self.strip_re = re.compile(r"^[ \t]+")
         self.filename = filename
         self.at_bol = True
 
