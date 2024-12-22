@@ -113,9 +113,11 @@ def make_mapset(mapset, location=None, gisdbase=None):
     :type gisdbase: str"""
     res = libgis.G_make_mapset(gisdbase, location, mapset)
     if res == -1:
-        raise GrassError("Cannot create new mapset")
+        msg = "Cannot create new mapset"
+        raise GrassError(msg)
     if res == -2:
-        raise GrassError("Illegal name")
+        msg = "Illegal name"
+        raise GrassError(msg)
 
 
 class Gisdbase:
@@ -171,7 +173,8 @@ class Gisdbase:
     # TODO remove or complete this function
     def new_location(self):
         if libgis.G_make_location() != 0:
-            raise GrassError("Cannot create new location")
+            msg = "Cannot create new location"
+            raise GrassError(msg)
 
     def locations(self):
         """Return a list of locations that are available in the gisdbase: ::
@@ -402,7 +405,8 @@ class Mapset:
     def delete(self):
         """Delete the mapset"""
         if self.is_current():
-            raise GrassError("The mapset is in use.")
+            msg = "The mapset is in use."
+            raise GrassError(msg)
         shutil.rmtree(self.path())
 
     def path(self):
@@ -459,7 +463,8 @@ class VisibleMapset:
             with open(self.spath, "a+") as f:
                 f.write("%s\n" % mapset)
         else:
-            raise TypeError("Mapset not found")
+            msg = "Mapset not found"
+            raise TypeError(msg)
 
     def remove(self, mapset):
         """Remove mapset to the search path

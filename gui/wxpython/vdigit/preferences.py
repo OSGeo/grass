@@ -525,7 +525,6 @@ class VDigitSettingsDialog(wx.Dialog):
         # settings
         flexSizer = wx.FlexGridSizer(cols=2, hgap=3, vgap=3)
         flexSizer.AddGrowableCol(0)
-        settings = ((_("Layer"), 1), (_("Category"), 1), (_("Mode"), _("Next to use")))
         # layer
         text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Layer"))
         self.layer = SpinCtrl(parent=panel, id=wx.ID_ANY, min=1, max=1e3)
