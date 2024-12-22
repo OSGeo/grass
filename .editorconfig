@@ -79,9 +79,7 @@ indent_style = space
 
 # TODO: Remove R batch files exclusions once fixed
 [mswindows/external/rbatch/*]
-trim_trailing_whitespace = unset
 end_of_line = unset
-charset = unset
 insert_final_newline = unset
 
 # Exclude some files from rules
