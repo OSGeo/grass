@@ -77,11 +77,6 @@ indent_style = space
 # TODO: To enable when files are fixed:
 # indent_size = 2
 
-# TODO: Remove R batch files exclusions once fixed
-[mswindows/external/rbatch/*]
-end_of_line = unset
-insert_final_newline = unset
-
 # Exclude some files from rules
 [*.{ascii,asc,ref,po,ps,svg}]
 trim_trailing_whitespace = unset
