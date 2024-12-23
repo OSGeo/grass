@@ -2886,11 +2886,11 @@ class GrSettingsDialog(wx.Dialog):
         size=wx.DefaultSize,
         style=wx.DEFAULT_DIALOG_STYLE,
     ):
-        wx.Dialog.__init__(self, parent, id, title, pos, size, style)
         """
         Dialog to set profile text options: font, title
         and font size, axis labels and font size
         """
+        wx.Dialog.__init__(self, parent, id, title, pos, size, style)
         #
         # initialize variables
         #

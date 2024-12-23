@@ -674,7 +674,7 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
+    # Remove the generated vector map, if exists
     mset = utils.get_mapset_vector(test_vector_name, mapset="")
     if mset:
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)
