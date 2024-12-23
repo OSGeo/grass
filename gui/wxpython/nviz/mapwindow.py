@@ -68,21 +68,22 @@ class RenderTypedDict(TypedDict):
 
 
 class NvizThread(Thread):
-    def __init__(self, log, progressbar, window):
+
+    def __init__(self, log, progressbar, window) -> None:
         Thread.__init__(self)
         Debug.msg(5, "NvizThread.__init__():")
         self.log = log
         self.progressbar = progressbar
         self.window = window
 
-        self._display = None
+        self._display: wxnviz.Nviz | None = None
 
         self.daemon = True
 
-    def run(self):
+    def run(self) -> None:
         self._display = wxnviz.Nviz(self.log, self.progressbar)
 
-    def GetDisplay(self):
+    def GetDisplay(self) -> wxnviz.Nviz | None:
         """Get display instance"""
         return self._display
 
@@ -144,7 +145,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         self.init = False
         self.initView = False
-        self.context = None
+        self.context: glcanvas.GLContext | None = None
         if CheckWxVersion(version=[2, 9]):
             self.context = glcanvas.GLContext(self)
 
@@ -197,7 +198,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.nvizThread = NvizThread(logerr, self.parent.GetProgressBar(), logmsg)
         self.nvizThread.start()
         time.sleep(0.1)
-        self._display = self.nvizThread.GetDisplay()
+        # self.nvizThread.start() invokes NvizThread.run() in a separate thread,
+        # which sets the _display attribute returned by GetDisplay(),
+        # so GetDisplay() shouldn't return None after calling self.nvizThread.start().
+        self._display: wxnviz.Nviz | None = self.nvizThread.GetDisplay()
 
         # GRASS_REGION needed only for initialization
         del os.environ["GRASS_REGION"]
@@ -780,7 +784,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         return (x, y)
 
-    def DoZoom(self, zoomtype, pos):
+    def DoZoom(self, zoomtype, pos) -> None:
         """Change perspective and focus"""
 
         prev_value = self.view["persp"]["value"]
@@ -1195,16 +1199,15 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         if event.refresh:
             self.Refresh(False)
 
-    def UpdateMap(self, render=True, reRenderTool=False):
+    def UpdateMap(self, render: bool = True, reRenderTool: bool = False) -> None:
         """Updates the canvas anytime there is a change to the
         underlying images or to the geometry of the canvas.
 
         :param render: re-render map composition
-        :type render: bool
-        :param reRenderTool bool: enable re-render map if True, when
-                                  auto re-render map is disabled and
-                                  Render map tool is activated from the
-                                  Map Display toolbar
+        :param reRenderTool: enable re-render map if True, when
+                             auto re-render map is disabled and
+                             Render map tool is activated from the
+                             Map Display toolbar
         """
         if not self.parent.mapWindowProperties.autoRender and not reRenderTool:
             return
@@ -1264,7 +1267,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         Debug.msg(
             3,
             "GLWindow.UpdateMap(): quick = %d, -> time = %g"
-            % (self.render["quick"], (stop - start)),
+            % (int(self.render["quick"]), (stop - start)),
         )
 
     def EraseMap(self):
