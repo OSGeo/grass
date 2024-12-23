@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 from __future__ import annotations
 
 from math import ceil, cos, floor, fmod, radians, sin
+from typing import overload
 
 import wx
 from core.gcmd import GError, RunCommand
@@ -148,7 +149,17 @@ class UnitConversion:
         return float(value) / self._units[fromUnit]["val"] * self._units[toUnit]["val"]
 
 
-def convertRGB(rgb):
+@overload
+def convertRGB(rgb: wx.Colour) -> str:
+    pass
+
+
+@overload
+def convertRGB(rgb: str) -> wx.Colour | None:
+    pass
+
+
+def convertRGB(rgb: wx.Colour | str) -> str | wx.Colour | None:
     """Converts wx.Colour(r,g,b,a) to string 'r:g:b' or named color,
     or named color/r:g:b string to wx.Colour, depending on input"""
     # transform a wx.Colour tuple into an r:g:b string
@@ -162,12 +173,10 @@ def convertRGB(rgb):
                 return name
         return str(rgb.Red()) + ":" + str(rgb.Green()) + ":" + str(rgb.Blue())
     # transform a GRASS named color or an r:g:b string into a wx.Colour tuple
-    color = (
-        int(gs.parse_color(rgb)[0] * 255),
-        int(gs.parse_color(rgb)[1] * 255),
-        int(gs.parse_color(rgb)[2] * 255),
-    )
-    color = wx.Colour(*color)
+    parsed_color = gs.parse_color(rgb)
+    if parsed_color is None:
+        return None
+    color = wx.Colour(*tuple(int(x * 255) for x in parsed_color))
     if color.IsOk():
         return color
     return None
