@@ -27,18 +27,6 @@ import struct
 import sys
 from math import sqrt
 
-try:
-    from numpy import matrix
-except ImportError:
-    msg = _(
-        "This module requires the NumPy module, which could not be "
-        "imported. It probably is not installed (it's not part of the "
-        "standard Python distribution). See the Numeric Python site "
-        "(https://numpy.org) for information on downloading source or "
-        "binaries."
-    )
-    print("wxnviz.py: " + msg, file=sys.stderr)
-
 import wx
 
 try:
@@ -249,6 +237,19 @@ from core.gcmd import DecodeString
 from core.globalvar import wxPythonPhoenix
 from core.utils import autoCropImageFromFile
 from gui_core.wrap import Rect
+
+
+try:
+    from numpy import matrix
+except ImportError:
+    msg = _(
+        "This module requires the NumPy module, which could not be "
+        "imported. It probably is not installed (it's not part of the "
+        "standard Python distribution). See the Numeric Python site "
+        "(https://numpy.org) for information on downloading source or "
+        "binaries."
+    )
+    print("wxnviz.py: " + msg, file=sys.stderr)
 
 log = None
 progress = None
