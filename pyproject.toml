@@ -3,8 +3,8 @@ name = "grass"
 requires-python = ">=3.9"
 
 [tool.black]
-required-version = '24'
 line-length = 88
+required-version = '24'
 target-version = ['py39', 'py310', 'py311', 'py312', 'py313']
 # 'extend-exclude' excludes files or directories in addition to the defaults
 extend-exclude = '''
@@ -277,8 +277,7 @@ ignore = [
 "gui/wxpython/gmodeler/*.py" = ["SIM115"]
 "gui/wxpython/gui_core/*.py" = ["SIM115"]
 "gui/wxpython/gui_core/dialogs.py" = ["PTH208"]
-"gui/wxpython/iclass/frame*.py" = ["SIM115"]
-"gui/wxpython/iclass/frame.py" = ["FLY002"]
+"gui/wxpython/iclass/frame.py" = ["FLY002", "SIM115"]
 "gui/wxpython/iclass/statistics.py" = ["A005"]
 "gui/wxpython/icons/grass_icons.py" = ["PTH208"]
 "gui/wxpython/image2target/*.py" = ["SIM115"]
@@ -302,8 +301,7 @@ ignore = [
 "gui/wxpython/vdigit/mapwindow.py" = ["SIM115"]
 "gui/wxpython/vnet/*.py" = ["SIM115"]
 "gui/wxpython/web_services/dialogs.py" = ["SIM115"]
-"gui/wxpython/wxplot/profile*.py" = ["SIM115"]
-"gui/wxpython/wxplot/profile.py" = ["A005"]
+"gui/wxpython/wxplot/profile.py" = ["A005", "SIM115"]
 "imagery/i.atcorr/create_iwave.py" = ["SIM115"]
 "lib/imagery/testsuite/test_imagery_signature_management.py" = ["SIM115"]
 "lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
@@ -398,8 +396,6 @@ ignore = [
 "grass.temporal" = "tgis"
 
 [tool.pytest.ini_options]
-minversion = "6.0"
-python_files = "*/tests/*_test.py */tests/test_*.py"
 addopts = """
     --ignore-glob='dist.*'
     --ignore-glob='bin.*'
@@ -408,11 +404,13 @@ addopts = """
     --doctest-glob='*doctest*.txt'
     --ignore='raster/r.category/test_rcategory_doctest.txt'
 """
-timeout = 300
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "needs_solo_run: marks tests that must be run without any other tests running in parallel",
 ]
+minversion = "6.0"
+python_files = "*/tests/*_test.py */tests/test_*.py"
+timeout = 300
 
 
 [tool.bandit]
