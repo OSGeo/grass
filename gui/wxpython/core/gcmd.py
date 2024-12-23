@@ -36,7 +36,7 @@ import sys
 import time
 import traceback
 from threading import Thread
-from typing import TYPE_CHECKING, LiteralString, TextIO
+from typing import TYPE_CHECKING, TextIO
 
 import wx
 from core.debug import Debug
@@ -313,7 +313,7 @@ class Popen(subprocess.Popen):
 message = "Other end disconnected!"
 
 
-def recv_some(p, t=0.1, e=1, tr=5, stderr=0) -> LiteralString:
+def recv_some(p, t=0.1, e=1, tr=5, stderr=0) -> str:  # TODO: use LiteralString on 3.11+
     tr = max(tr, 1)
     x = time.time() + t
     y = []
