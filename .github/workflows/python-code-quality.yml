@@ -183,6 +183,12 @@ jobs:
             temporal/t.rast.accdetect/t.rast.accdetect.py,temporal/t.rast.accumulate/t.rast.accumulate.py,\
             scripts/d.rast.edit/d.rast.edit.py"
 
+      - name: Run Pylint all in one pass
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) .
+
       - name: Test compiling example modules
         run: |
           ( cd doc/raster/r.example/ && make )
