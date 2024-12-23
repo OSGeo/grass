@@ -26,7 +26,7 @@ import os
 import sys
 import time
 from threading import Thread
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypedDict
 
 import wx
 from wx.lib.newevent import NewEvent
@@ -55,6 +55,16 @@ wxUpdateProperties, EVT_UPDATE_PROP = NewEvent()
 wxUpdateView, EVT_UPDATE_VIEW = NewEvent()
 wxUpdateLight, EVT_UPDATE_LIGHT = NewEvent()
 wxUpdateCPlane, EVT_UPDATE_CPLANE = NewEvent()
+
+
+class RenderTypedDict(TypedDict):
+    """Typed dictionary to store the render flags for GLWindow.
+    At runtime, it is a plain dict."""
+
+    quick: bool
+    vlines: bool
+    vpoints: bool
+    overlays: bool
 
 
 class NvizThread(Thread):
@@ -139,7 +149,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.context = glcanvas.GLContext(self)
 
         # render mode
-        self.render = {
+        self.render: RenderTypedDict = {
             "quick": False,
             # do not render vector lines in quick mode
             "vlines": False,
