@@ -482,7 +482,7 @@ class Command:
                     type = "WARNING"
                 elif "GRASS_INFO_ERROR" in line:  # error
                     type = "ERROR"
-                elif "GRASS_INFO_END":  # end of message
+                elif "GRASS_INFO_END" in line:  # end of message
                     msg.append((type, content))
                     type = None
                     content = ""
