@@ -16,8 +16,14 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
+from __future__ import annotations
+
+from math import ceil, cos, floor, fmod, radians, sin
+
 import wx
-from math import ceil, floor, sin, cos, pi
+from core.gcmd import GError, RunCommand
+
+import grass.script as gs
 
 try:
     from PIL import Image as PILImage  # noqa
@@ -25,9 +31,6 @@ try:
     havePILImage = True
 except ImportError:
     havePILImage = False
-
-import grass.script as gs
-from core.gcmd import RunCommand, GError
 
 
 class Rect2D(wx.Rect2D):
@@ -396,23 +399,27 @@ def getRasterType(map):
     return None
 
 
-def BBoxAfterRotation(w, h, angle):
-    """Compute bounding box or rotated rectangle
+def BBoxAfterRotation(w: float, h: float, angle: float) -> tuple[int, int]:
+    """Compute the bounding box of a rotated rectangle
 
     :param w: rectangle width
     :param h: rectangle height
     :param angle: angle (0, 360) in degrees
     """
-    angleRad = angle / 180.0 * pi
-    ct = cos(angleRad)
-    st = sin(angleRad)
 
-    hct = h * ct
-    wct = w * ct
-    hst = h * st
-    wst = w * st
+    angle = fmod(angle, 360)
+    angleRad: float = radians(angle)
+    ct: float = cos(angleRad)
+    st: float = sin(angleRad)
+
+    hct: float = h * ct
+    wct: float = w * ct
+    hst: float = h * st
+    wst: float = w * st
     y = x = 0
 
+    if angle == 0:
+        return (ceil(w), ceil(h))
     if 0 < angle <= 90:
         y_min = y
         y_max = y + hct + wst
@@ -433,7 +440,10 @@ def BBoxAfterRotation(w, h, angle):
         y_max = y + hct
         x_min = x
         x_max = x + wct - hst
+    else:
+        msg = "The angle argument should be between 0 and 360 degrees"
+        raise ValueError(msg)
 
-    width = ceil(abs(x_max) + abs(x_min))
-    height = ceil(abs(y_max) + abs(y_min))
-    return width, height
+    width: int = ceil(abs(x_max) + abs(x_min))
+    height: int = ceil(abs(y_max) + abs(y_min))
+    return (width, height)
