@@ -37,7 +37,7 @@ class TestRDistance(TestCase):
         module = SimpleModule("r.distance", map=("map1", "map2"))
         self.assertModule(module)
 
-        result = module.outputs.stdout.strip().split("\n")
+        result = module.outputs.stdout.strip().splitlines()
 
         expected_results = ["1:1:2.8284271247:1.5:8.5:3.5:6.5"]
 
@@ -51,7 +51,7 @@ class TestRDistance(TestCase):
         module = SimpleModule("r.distance", map=("map1", "map1"), flags="o")
         self.assertModule(module)
 
-        result = module.outputs.stdout.strip().split("\n")
+        result = module.outputs.stdout.strip().splitlines()
 
         expected_results = ["1:1:0:0.5:9.5:0.5:9.5"]
 
@@ -62,11 +62,11 @@ class TestRDistance(TestCase):
         )
 
     def test_null_distance(self):
-        """Test r.distance when comparing a map to itself with overlapping features."""
+        """Test r.distance when reporting null values with -n flag."""
         module = SimpleModule("r.distance", map=("map3", "map2"), flags="n")
         self.assertModule(module)
 
-        result = module.outputs.stdout.strip().split("\n")
+        result = module.outputs.stdout.strip().splitlines()
 
         expected_results = ["*:*:0:0.5:9.5:0.5:9.5", "*:1:2:3.5:8.5:3.5:6.5"]
 
