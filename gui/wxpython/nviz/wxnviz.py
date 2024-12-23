@@ -28,6 +28,14 @@ import sys
 from math import sqrt
 
 import wx
+import grass.script as gs
+
+from core.debug import Debug
+from core.gcmd import DecodeString
+from core.globalvar import wxPythonPhoenix
+from core.utils import autoCropImageFromFile
+from gui_core.wrap import Rect
+
 
 try:
     from ctypes import (
@@ -229,16 +237,6 @@ try:
     from grass.lib.vector import Vect_read_colors
 except (ImportError, OSError, TypeError) as e:
     print("wxnviz.py: {}".format(e), file=sys.stderr)
-
-import grass.script as gs
-
-from core.debug import Debug
-from core.gcmd import DecodeString
-from core.globalvar import wxPythonPhoenix
-from core.utils import autoCropImageFromFile
-from gui_core.wrap import Rect
-
-
 try:
     from numpy import matrix
 except ImportError:
