@@ -631,7 +631,7 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
     mset = utils.get_mapset_raster(test_raster_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         Module("g.remove", flags="f", type="raster", name=test_raster_name)

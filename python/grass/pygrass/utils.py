@@ -601,10 +601,11 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    # Remove the generated vector map, if exist
     mset = get_mapset_vector(test_vector_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)
     mset = get_mapset_raster(test_raster_name, mapset="")
     if mset:
+        # Remove the generated raster map, if exists
         run_command("g.remove", flags="f", type="raster", name=test_raster_name)
