@@ -265,7 +265,15 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             )
             GMessage(message)
 
-    def GetContentScaleFactor(self):
+    def GetContentScaleFactor(self) -> float:
+        """See note that wx.glcanvas.GLContext always uses physical pixels, even on the
+        platforms where wx.Window uses logical pixels, in wx.glcanvas.GLCanvas docs
+        https://docs.wxpython.org/wx.glcanvas.GLCanvas.html
+
+        Docs for wx.glcanvas.GLCanvas.GetContentScaleFactor() point to
+        wx.Window.GetContentScaleFactor() at
+        https://docs.wxpython.org/wx.Window.html#wx.Window.GetContentScaleFactor
+        """
         if sys.platform == "darwin" and not CheckWxVersion(version=[4, 1, 0]):
             return 1
         return super().GetContentScaleFactor()
