@@ -516,7 +516,7 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
             # # c_img_a = np.memmap(
             # #     grass.tempfile(), dtype="uint16", mode="w+", shape=shape
             # # )
-            # c_img_a = colored_cat.astype("uint16")[:, :, 3] * styles[cat_id]["opacity"]
+            # c_img_a = colored_cat.astype("uint16")[:,:, 3] * styles[cat_id]["opacity"]
             #
             # # TODO apply strides and there will be no need for loop
             # # b = as_strided(
