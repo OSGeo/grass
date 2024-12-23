@@ -28,14 +28,13 @@ import sys
 from math import sqrt
 
 import wx
-import grass.script as gs
-
 from core.debug import Debug
 from core.gcmd import DecodeString
 from core.globalvar import wxPythonPhoenix
 from core.utils import autoCropImageFromFile
 from gui_core.wrap import Rect
 
+import grass.script as gs
 
 try:
     from ctypes import (
