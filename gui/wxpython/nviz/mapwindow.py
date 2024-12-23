@@ -18,6 +18,8 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
 """
 
+from __future__ import annotations
+
 import os
 import sys
 import time
@@ -25,6 +27,7 @@ import copy
 import math
 
 from threading import Thread
+from typing import TYPE_CHECKING
 
 import wx
 from wx.lib.newevent import NewEvent
@@ -44,6 +47,9 @@ from nviz import wxnviz
 from core.globalvar import CheckWxVersion
 from core.utils import str2rgb
 from core.giface import Notification
+
+if TYPE_CHECKING:
+    from main_window.frame import GMFrame
 
 wxUpdateProperties, EVT_UPDATE_PROP = NewEvent()
 wxUpdateView, EVT_UPDATE_VIEW = NewEvent()
@@ -74,7 +80,9 @@ class NvizThread(Thread):
 class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     """OpenGL canvas for Map Display Window"""
 
-    def __init__(self, parent, giface, frame, Map, tree, lmgr, id=wx.ID_ANY):
+    def __init__(
+        self, parent, giface, frame, Map, tree, lmgr: GMFrame, id=wx.ID_ANY
+    ) -> None:
         """All parameters except for id are mandatory. The todo is to remove
         them completely."""
         self.parent = parent

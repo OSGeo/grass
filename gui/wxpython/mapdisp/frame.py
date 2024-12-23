@@ -22,8 +22,12 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
 
+from __future__ import annotations
+
+
 import os
 import copy
+from typing import TYPE_CHECKING
 
 from core import globalvar
 import wx
@@ -62,6 +66,9 @@ import grass.script as gs
 
 from grass.pydispatch.signal import Signal
 
+if TYPE_CHECKING:
+    from main_window.frame import GMFrame
+
 
 class MapPanel(SingleMapPanel, MainPageBase):
     """Main panel for map display window. Drawing takes place in
@@ -76,7 +83,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         toolbars=["map"],
         statusbar=True,
         tree=None,
-        lmgr=None,
+        lmgr: GMFrame | None = None,
         Map=None,
         auimgr=None,
         dockable=False,
