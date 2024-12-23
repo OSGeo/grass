@@ -20,19 +20,18 @@ This program is free software under the GNU General Public License
 
 from __future__ import annotations
 
+import copy
+import math
 import os
 import sys
 import time
-import copy
-import math
-
 from threading import Thread
 from typing import TYPE_CHECKING
 
 import wx
 from wx.lib.newevent import NewEvent
 from wx import glcanvas
-from wx.glcanvas import WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE
+from wx.glcanvas import WX_GL_DEPTH_SIZE, WX_GL_DOUBLEBUFFER, WX_GL_RGBA
 
 import grass.script as gs
 from grass.pydispatch.signal import Signal
@@ -49,8 +48,8 @@ from core.utils import str2rgb
 from core.giface import Notification
 
 if TYPE_CHECKING:
-    import main_window.frame
     import lmgr.frame
+    import main_window.frame
 
 wxUpdateProperties, EVT_UPDATE_PROP = NewEvent()
 wxUpdateView, EVT_UPDATE_VIEW = NewEvent()
