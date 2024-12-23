@@ -1575,7 +1575,7 @@ def list_grouped(
 
 # color parsing
 
-named_colors = {
+named_colors: dict[str, tuple[float, float, float]] = {
     "white": (1.00, 1.00, 1.00),
     "black": (0.00, 0.00, 0.00),
     "red": (1.00, 0.00, 0.00),
@@ -1595,7 +1595,9 @@ named_colors = {
 }
 
 
-def parse_color(val, dflt=None):
+def parse_color(
+    val: str, dflt: tuple[float, float, float] | None = None
+) -> tuple[float, float, float] | None:
     """Parses the string "val" as a GRASS colour, which can be either one of
     the named colours or an R:G:B tuple e.g. 255:255:255. Returns an
     (r,g,b) triple whose components are floating point values between 0
@@ -1614,9 +1616,9 @@ def parse_color(val, dflt=None):
     if val in named_colors:
         return named_colors[val]
 
-    vals = val.split(":")
+    vals: list[str] = val.split(":")
     if len(vals) == 3:
-        return tuple(float(v) / 255 for v in vals)
+        return (float(vals[0]) / 255, float(vals[1]) / 255, float(vals[2]) / 255)
 
     return dflt
 
