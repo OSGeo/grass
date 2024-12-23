@@ -67,7 +67,8 @@ import grass.script as gs
 from grass.pydispatch.signal import Signal
 
 if TYPE_CHECKING:
-    from main_window.frame import GMFrame
+    import main_window.frame
+    import lmgr.frame
 
 
 class MapPanel(SingleMapPanel, MainPageBase):
@@ -83,7 +84,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         toolbars=["map"],
         statusbar=True,
         tree=None,
-        lmgr: GMFrame | None = None,
+        lmgr: main_window.frame.GMFrame | lmgr.frame.GMFrame | None = None,
         Map=None,
         auimgr=None,
         dockable=False,

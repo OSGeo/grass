@@ -49,7 +49,8 @@ from core.utils import str2rgb
 from core.giface import Notification
 
 if TYPE_CHECKING:
-    from main_window.frame import GMFrame
+    import main_window.frame
+    import lmgr.frame
 
 wxUpdateProperties, EVT_UPDATE_PROP = NewEvent()
 wxUpdateView, EVT_UPDATE_VIEW = NewEvent()
@@ -81,7 +82,14 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     """OpenGL canvas for Map Display Window"""
 
     def __init__(
-        self, parent, giface, frame, Map, tree, lmgr: GMFrame, id=wx.ID_ANY
+        self,
+        parent,
+        giface,
+        frame,
+        Map,
+        tree,
+        lmgr: main_window.frame.GMFrame | lmgr.frame.GMFrame,
+        id=wx.ID_ANY,
     ) -> None:
         """All parameters except for id are mandatory. The todo is to remove
         them completely."""
