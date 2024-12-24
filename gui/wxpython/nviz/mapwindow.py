@@ -2775,7 +2775,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """Get display instance"""
         return self._display
 
-    def ZoomToMap(self, layers):
+    def ZoomToMap(self, layers: list | None = None) -> None:
         """Reset view
 
         :param layers: so far unused
