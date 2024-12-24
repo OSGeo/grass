@@ -82,7 +82,7 @@ def convertToInt(argsOrKwargs, roundVal=False):
     return result
 
 
-def IsDark():
+def IsDark() -> bool:
     """Detects if used theme is dark.
     Wraps wx method for different versions."""
 
@@ -682,17 +682,17 @@ class Rect(wx.Rect):
         kwargs = convertToInt(argsOrKwargs=kwargs)
         wx.Rect.__init__(self, *args, **kwargs)
 
-    def ContainsXY(self, x, y):
+    def ContainsXY(self, x: float, y: float) -> bool:
         if wxPythonPhoenix:
             return wx.Rect.Contains(self, x=int(x), y=int(y))
         return wx.Rect.ContainsXY(self, int(x), int(y))
 
-    def ContainsRect(self, rect):
+    def ContainsRect(self, rect: wx.Rect) -> bool:
         if wxPythonPhoenix:
             return wx.Rect.Contains(self, rect=rect)
         return wx.Rect.ContainsRect(self, rect)
 
-    def OffsetXY(self, dx, dy):
+    def OffsetXY(self, dx: float, dy: float) -> wx.Rect:
         if wxPythonPhoenix:
             return wx.Rect.Offset(self, int(dx), int(dy))
         return wx.Rect.OffsetXY(self, int(dx), int(dy))
