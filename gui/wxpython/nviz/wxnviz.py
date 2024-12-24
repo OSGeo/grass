@@ -2074,7 +2074,7 @@ class Nviz:
 
         :param type: type of fence - from 0 (off) to 4
         """
-        Nviz_set_fence_color(self.data, index)
+        Nviz_set_fence_color(self.data, type)
 
     def GetXYRange(self) -> float:
         """Get xy range"""
