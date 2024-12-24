@@ -289,7 +289,8 @@ except NameError:
 
 
 class Nviz:
-    def __init__(self, glog, gprogress):
+
+    def __init__(self, glog, gprogress) -> None:
         """Initialize Nviz class instance
 
         :param glog: logging area
@@ -310,7 +311,8 @@ class Nviz:
         self.data = pointer(self.data_obj)
         self.color_obj = Colors()
         self.color = pointer(self.color_obj)
-
+        self.width: int
+        self.height: int
         self.width = self.height = -1
         self.showLight = False
 
@@ -355,13 +357,13 @@ class Nviz:
         """Get longest dimension, used for initial size of north arrow"""
         return Nviz_get_longdim(self.data)
 
-    def SetViewDefault(self):
+    def SetViewDefault(self) -> tuple[float, float, float, float]:
         """Set default view (based on loaded data)
 
         :return: z-exag value, default, min and max height
         """
         # determine z-exag
-        z_exag = Nviz_get_exag()
+        z_exag: float = Nviz_get_exag()
         Nviz_change_exag(self.data, z_exag)
 
         # determine height
@@ -402,7 +404,7 @@ class Nviz:
             twist,
         )
 
-    def GetViewpointPosition(self):
+    def GetViewpointPosition(self) -> tuple[float, float, float]:
         x = c_double()
         y = c_double()
         h = c_double()
@@ -411,7 +413,7 @@ class Nviz:
 
         return (x.value, y.value, h.value)
 
-    def LookHere(self, x, y, scale=1):
+    def LookHere(self, x, y, scale: float = 1) -> None:
         """Look here feature
         :param x,y: screen coordinates
         """
@@ -435,12 +437,12 @@ class Nviz:
             return x.value, y.value, z.value
         return -1, -1, -1
 
-    def SetFocus(self, x, y, z):
+    def SetFocus(self, x: float, y: float, z: float) -> None:
         """Set focus"""
         Debug.msg(3, "Nviz::SetFocus()")
         Nviz_set_focus(self.data, x, y, z)
 
-    def GetViewdir(self):
+    def GetViewdir(self) -> tuple[float, float, float]:
         """Get viewdir"""
         Debug.msg(3, "Nviz::GetViewdir()")
         dir = (c_float * 3)()
@@ -448,7 +450,7 @@ class Nviz:
 
         return dir[0], dir[1], dir[2]
 
-    def SetViewdir(self, x, y, z):
+    def SetViewdir(self, x: float, y: float, z: float) -> None:
         """Set viewdir"""
         Debug.msg(3, "Nviz::SetViewdir(): x=%f, y=%f, z=%f" % (x, y, z))
         dir = (c_float * 3)()
@@ -466,7 +468,7 @@ class Nviz:
         Debug.msg(3, "Nviz::SetZExag(): z_exag=%f", z_exag)
         return Nviz_change_exag(self.data, z_exag)
 
-    def Draw(self, quick, quick_mode):
+    def Draw(self, quick: bool, quick_mode: int) -> None:
         """Draw canvas
 
         Draw quick mode:
@@ -487,12 +489,12 @@ class Nviz:
         else:
             Nviz_draw_all(self.data)
 
-    def EraseMap(self):
+    def EraseMap(self) -> None:
         """Erase map display (with background color)"""
         Debug.msg(1, "Nviz::EraseMap()")
         GS_clear(Nviz_get_bgcolor(self.data))
 
-    def InitView(self):
+    def InitView(self) -> None:
         """Initialize view"""
         # initialize nviz data
         Nviz_init_data(self.data)
@@ -508,14 +510,14 @@ class Nviz:
 
         Debug.msg(1, "Nviz::InitView()")
 
-    def SetBgColor(self, color_str):
+    def SetBgColor(self, color_str: str) -> None:
         """Set background color
 
         :param str color_str: color string
         """
         Nviz_set_bgcolor(self.data, Nviz_color_from_str(color_str))
 
-    def SetLight(self, x, y, z, color, bright, ambient, w=0, lid=1):
+    def SetLight(self, x, y, z, color, bright, ambient, w=0, lid=1) -> None:
         """Change lighting settings
 
         :param x,y,z: position
@@ -1048,7 +1050,7 @@ class Nviz:
         """
         Debug.msg(3, "Nviz::SetWireColor(): id=%d, color=%s", id, color_str)
 
-        color = Nviz_color_from_str(color_str)
+        color: int = Nviz_color_from_str(color_str)
 
         if id > 0:
             if not GS_surf_exists(id):
@@ -2001,11 +2003,11 @@ class Nviz:
     def GetCPlaneCurrent(self):
         return Nviz_get_current_cplane(self.data)
 
-    def GetCPlanesCount(self):
+    def GetCPlanesCount(self) -> int:
         """Returns number of cutting planes"""
         return Nviz_num_cplanes(self.data)
 
-    def GetCPlaneRotation(self):
+    def GetCPlaneRotation(self) -> tuple[float, float, float]:
         """Returns rotation parameters of current cutting plane"""
         x, y, z = c_float(), c_float(), c_float()
 
@@ -2014,7 +2016,7 @@ class Nviz:
 
         return x.value, y.value, z.value
 
-    def GetCPlaneTranslation(self):
+    def GetCPlaneTranslation(self) -> tuple[float, float, float]:
         """Returns translation parameters of current cutting plane"""
         x, y, z = c_float(), c_float(), c_float()
 
@@ -2023,7 +2025,7 @@ class Nviz:
 
         return x.value, y.value, z.value
 
-    def SetCPlaneRotation(self, x, y, z):
+    def SetCPlaneRotation(self, x: float, y: float, z: float) -> None:
         """Set current clip plane rotation
 
         :param x,y,z: rotation parameters
@@ -2032,7 +2034,7 @@ class Nviz:
         Nviz_set_cplane_rotation(self.data, current, x, y, z)
         Nviz_draw_cplane(self.data, -1, -1)
 
-    def SetCPlaneTranslation(self, x, y, z):
+    def SetCPlaneTranslation(self, x: float, y: float, z: float) -> None:
         """Set current clip plane translation
 
         :param x,y,z: translation parameters
@@ -2067,18 +2069,18 @@ class Nviz:
         """
         Nviz_off_cplane(self.data, index)
 
-    def SetFenceColor(self, index):
-        """Select current cutting plane
+    def SetFenceColor(self, type: int) -> None:
+        """Set appropriate fence color
 
-        :param index: type of fence - from 0 (off) to 4
+        :param type: type of fence - from 0 (off) to 4
         """
         Nviz_set_fence_color(self.data, index)
 
-    def GetXYRange(self):
+    def GetXYRange(self) -> float:
         """Get xy range"""
         return Nviz_get_xyrange(self.data)
 
-    def GetZRange(self):
+    def GetZRange(self) -> tuple[float, float]:
         """Get z range"""
         min, max = c_float(), c_float()
         Nviz_get_zrange(self.data, byref(min), byref(max))
@@ -2105,12 +2107,12 @@ class Nviz:
 
         self.ResizeWindow(widthOrig, heightOrig)
 
-    def DrawLightingModel(self):
+    def DrawLightingModel(self) -> None:
         """Draw lighting model"""
         if self.showLight:
             Nviz_draw_model(self.data)
 
-    def DrawFringe(self):
+    def DrawFringe(self) -> None:
         """Draw fringe"""
         Nviz_draw_fringe(self.data)
 
@@ -2147,11 +2149,13 @@ class Nviz:
         """
         return Nviz_set_arrow(self.data, sx, sy, size, Nviz_color_from_str(color))
 
-    def DeleteArrow(self):
+    def DeleteArrow(self) -> None:
         """Delete north arrow"""
         Nviz_delete_arrow(self.data)
 
-    def SetScalebar(self, id, sx, sy, size, color):
+    def SetScalebar(
+        self, id: int, sx: int, sy: int, size: float, color: str
+    ):  # -> struct_scalebar_data | None:
         """Set scale bar from canvas coordinates
 
         :param sx,sy: canvas coordinates
@@ -2163,11 +2167,11 @@ class Nviz:
             self.data, id, sx, sy, size, Nviz_color_from_str(color)
         )
 
-    def DrawScalebar(self):
+    def DrawScalebar(self) -> None:
         """Draw scale bar"""
-        return Nviz_draw_scalebar(self.data)
+        Nviz_draw_scalebar(self.data)
 
-    def DeleteScalebar(self, id):
+    def DeleteScalebar(self, id: int) -> None:
         """Delete scalebar"""
         Nviz_delete_scalebar(self.data, id)
 
@@ -2224,7 +2228,9 @@ class Nviz:
 
         return d.value
 
-    def GetRotationParameters(self, dx, dy):
+    def GetRotationParameters(
+        self, dx: float, dy: float
+    ) -> tuple[float, float, float, float]:
         """Get rotation parameters (angle, x, y, z axes)
 
         :param dx,dy: difference from previous mouse drag event
@@ -2248,7 +2254,7 @@ class Nviz:
 
         return angle, x, y, z
 
-    def Rotate(self, angle, x, y, z):
+    def Rotate(self, angle: float, x: float, y: float, z: float) -> None:
         """Set rotation parameters
         Rotate scene (difference from current state).
 
@@ -2257,11 +2263,11 @@ class Nviz:
         """
         Nviz_set_rotation(angle, x, y, z)
 
-    def UnsetRotation(self):
+    def UnsetRotation(self) -> None:
         """Stop rotating the scene"""
         Nviz_unset_rotation()
 
-    def ResetRotation(self):
+    def ResetRotation(self) -> None:
         """Reset scene rotation"""
         Nviz_init_rotation()
 
@@ -2335,13 +2341,13 @@ class Texture:
         else:
             self.textureId = self.Load()
 
-    def __del__(self):
+    def __del__(self) -> None:
         """Delete texture"""
         if self.textureId:
             Nviz_del_texture(self.textureId)
         gs.try_remove(self.path)
 
-    def Resize(self):
+    def Resize(self) -> None:
         """Resize image to match 2^n"""
         n = m = 1
         while self.width > pow(2, n):
@@ -2349,11 +2355,14 @@ class Texture:
         while self.height > pow(2, m):
             m += 1
         self.image.Resize(size=(pow(2, n), pow(2, m)), pos=(0, 0))
-        self.width = self.image.GetWidth()
-        self.height = self.image.GetHeight()
+        self.width: int = self.image.GetWidth()
+        self.height: int = self.image.GetHeight()
 
-    def Load(self):
-        """Load image to texture"""
+    def Load(self) -> int:
+        """Load image to texture
+
+        :return: The texture id
+        """
         bytesPerPixel = 4 if self.image.HasAlpha() else 3
         bytes = bytesPerPixel * self.width * self.height
         rev_val = self.height - 1
@@ -2388,36 +2397,36 @@ class Texture:
 
         return Nviz_load_image(im, self.width, self.height, self.image.HasAlpha())
 
-    def Draw(self):
+    def Draw(self) -> None:
         """Draw texture as an image"""
         Nviz_draw_image(
             self.coords[0], self.coords[1], self.width, self.height, self.textureId
         )
 
-    def HitTest(self, x, y, radius):
+    def HitTest(self, x: int, y: int, radius) -> bool:
         copy = Rect(self.coords[0], self.coords[1], self.orig_width, self.orig_height)
         copy.Inflate(radius, radius)
         return copy.ContainsXY(x, y)
 
-    def MoveTexture(self, dx, dy):
+    def MoveTexture(self, dx: int, dy: int) -> None:
         """Move texture on the screen"""
         self.coords[0] += dx
         self.coords[1] += dy
 
-    def SetCoords(self, coords):
+    def SetCoords(self, coords: tuple[int, int]) -> None:
         """Set coordinates"""
         dx = coords[0] - self.coords[0]
         dy = coords[1] - self.coords[1]
         self.MoveTexture(dx, dy)
 
-    def GetId(self):
+    def GetId(self) -> int:
         """Returns image id."""
         return self.id
 
-    def SetActive(self, active=True):
-        self.active = active
+    def SetActive(self, active: bool = True) -> None:
+        self.active: bool = active
 
-    def IsActive(self):
+    def IsActive(self) -> bool:
         return self.active
 
 
@@ -2440,11 +2449,11 @@ class ImageTexture(Texture):
         """Returns overlay command."""
         return self.cmd
 
-    def Corresponds(self, item):
+    def Corresponds(self, item) -> bool:
         return sorted(self.GetCmd()) == sorted(item.GetCmd())
 
 
-__all__ = [
+__all__: list[str] = [
     "DM_FLAT",
     "DM_GOURAUD",
     "DM_GRID_SURF",
