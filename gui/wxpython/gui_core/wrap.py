@@ -15,6 +15,8 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
+from __future__ import annotations
+
 import sys
 import wx
 import wx.lib.agw.floatspin as fs
@@ -96,25 +98,25 @@ def IsDark():
     return luminance(fg) - luminance(bg) > 0.2
 
 
-def BitmapFromImage(image, depth=-1):
+def BitmapFromImage(image: wx.Image, depth=-1) -> wx.Bitmap:
     if wxPythonPhoenix:
         return wx.Bitmap(img=image, depth=depth)
     return wx.BitmapFromImage(image, depth=depth)
 
 
-def ImageFromBitmap(bitmap):
+def ImageFromBitmap(bitmap: wx.Bitmap) -> wx.Image:
     if wxPythonPhoenix:
         return bitmap.ConvertToImage()
     return wx.ImageFromBitmap(bitmap)
 
 
-def EmptyBitmap(width, height, depth=-1):
+def EmptyBitmap(width, height, depth=-1) -> wx.Bitmap:
     if wxPythonPhoenix:
         return wx.Bitmap(width=width, height=height, depth=depth)
     return wx.EmptyBitmap(width=width, height=height, depth=depth)
 
 
-def EmptyImage(width, height, clear=True):
+def EmptyImage(width, height, clear=True) -> wx.Image:
     if wxPythonPhoenix:
         return wx.Image(width=width, height=height, clear=clear)
     return wx.EmptyImage(width=width, height=height, clear=clear)
