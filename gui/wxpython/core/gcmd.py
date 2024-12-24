@@ -56,15 +56,7 @@ else:
     import select
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
     from io import TextIOWrapper
-
-    StrOrBytesPath = str | bytes | os.PathLike[str] | os.PathLike[bytes]
-
-    if sys.platform == "win32":
-        _ENV = Mapping[str, str]
-    else:
-        _ENV = Mapping[bytes, StrOrBytesPath] | Mapping[str, StrOrBytesPath]
 
 
 def DecodeString(string):
