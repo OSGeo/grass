@@ -258,7 +258,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
 
         notebook.AddPage(page=panel, text=" %s " % _("Fly-through"))
         pageSizer = wx.BoxSizer(wx.VERTICAL)
-        # fly throuhg mode
+        # fly through mode
         box = StaticBox(
             parent=panel, id=wx.ID_ANY, label=" %s " % (_("Fly-through mode"))
         )

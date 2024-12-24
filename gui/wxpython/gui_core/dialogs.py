@@ -1467,7 +1467,7 @@ class MapLayersDialogBase(wx.Dialog):
         """
 
     def _fullyQualifiedNames(self):
-        """Adds CheckBox which determines is fully qualified names are retuned."""
+        """Adds CheckBox which determines if fully qualified names are returned."""
         self.fullyQualified = wx.CheckBox(
             parent=self, id=wx.ID_ANY, label=_("Use fully-qualified map names")
         )
