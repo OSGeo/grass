@@ -17,6 +17,8 @@ for details.
 .. sectionauthor:: Anna Petrasova <kratochanna gmail.com>
 """
 
+from __future__ import annotations
+
 import os
 import shutil
 import locale
@@ -29,9 +31,13 @@ import random
 import string
 
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from _typeshed import FileDescriptorOrPath, StrPath, StrOrBytesPath
 
 
-def float_or_dms(s):
+def float_or_dms(s) -> float:
     """Convert DMS to float.
 
     >>> round(float_or_dms('26:45:30'), 5)
@@ -48,7 +54,7 @@ def float_or_dms(s):
     return sum(float(x) / 60**n for (n, x) in enumerate(s.split(":")))
 
 
-def separator(sep):
+def separator(sep: str) -> str:
     """Returns separator from G_OPT_F_SEP appropriately converted
     to character.
 
@@ -80,7 +86,9 @@ def separator(sep):
     return sep
 
 
-def diff_files(filename_a, filename_b):
+def diff_files(
+    filename_a: FileDescriptorOrPath, filename_b: FileDescriptorOrPath
+) -> list[str]:
     """Diffs two text files and returns difference.
 
     :param str filename_a: first file path
@@ -96,7 +104,7 @@ def diff_files(filename_a, filename_b):
     return list(differ.compare(fh_a.readlines(), fh_b.readlines()))
 
 
-def try_remove(path):
+def try_remove(path: StrOrBytesPath) -> None:
     """Attempt to remove a file; no exception is generated if the
     attempt fails.
 
@@ -108,7 +116,7 @@ def try_remove(path):
         pass
 
 
-def try_rmdir(path):
+def try_rmdir(path: StrOrBytesPath) -> None:
     """Attempt to remove a directory; no exception is generated if the
     attempt fails.
 
@@ -120,17 +128,17 @@ def try_rmdir(path):
         shutil.rmtree(path, ignore_errors=True)
 
 
-def basename(path, ext=None):
+def basename(path: StrPath, ext: str | None = None) -> str:
     """Remove leading directory components and an optional extension
     from the specified path
 
     :param str path: path
     :param str ext: extension
     """
-    name = os.path.basename(path)
+    name: str = os.path.basename(path)
     if not ext:
         return name
-    fs = name.rsplit(".", 1)
+    fs: list[str] = name.rsplit(".", 1)
     if len(fs) > 1 and fs[1].lower() == ext:
         name = fs[0]
     return name
@@ -354,8 +362,8 @@ def naturally_sort(items, key=None):
 
 def get_lib_path(modname, libname=None):
     """Return the path of the libname contained in the module."""
-    from os.path import isdir, join, sep
     from os import getenv
+    from os.path import isdir, join, sep
 
     if isdir(join(getenv("GISBASE"), "etc", modname)):
         path = join(os.getenv("GISBASE"), "etc", modname)
