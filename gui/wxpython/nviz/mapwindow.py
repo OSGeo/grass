@@ -28,24 +28,25 @@ import time
 from threading import Thread
 from typing import TYPE_CHECKING, TypedDict
 
-import wx
-from wx.lib.newevent import NewEvent
-from wx import glcanvas
-from wx.glcanvas import WX_GL_DEPTH_SIZE, WX_GL_DOUBLEBUFFER, WX_GL_RGBA
-
 import grass.script as gs
 from grass.pydispatch.signal import Signal
 
-from core.gcmd import GMessage, GException, GError
+# isort: split
+
+import wx
 from core.debug import Debug
-from mapwin.base import MapWindowBase
-from core.settings import UserSettings
-from nviz.workspace import NvizSettings
-from nviz.animation import Animation
-from nviz import wxnviz
-from core.globalvar import CheckWxVersion
-from core.utils import str2rgb
+from core.gcmd import GError, GException, GMessage
 from core.giface import Notification
+from core.globalvar import CheckWxVersion
+from core.settings import UserSettings
+from core.utils import str2rgb
+from mapwin.base import MapWindowBase
+from nviz import wxnviz
+from nviz.animation import Animation
+from nviz.workspace import NvizSettings
+from wx import glcanvas
+from wx.glcanvas import WX_GL_DEPTH_SIZE, WX_GL_DOUBLEBUFFER, WX_GL_RGBA
+from wx.lib.newevent import NewEvent
 
 if TYPE_CHECKING:
     import lmgr.frame
