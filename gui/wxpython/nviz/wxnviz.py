@@ -2550,9 +2550,8 @@ class Nviz:
         :param sx,sy: canvas coordinates (LL)
         """
         sid, x, y, z = self.GetPointOnSurface(sx, sy, scale)
-        if not sid:
+        if not sid or (x is None or y is None or z is None):
             return None
-
         catstr = create_string_buffer(256)
         valstr = create_string_buffer(256)
         GS_get_cat_at_xy(sid, ATT_TOPO, catstr, x, y)
