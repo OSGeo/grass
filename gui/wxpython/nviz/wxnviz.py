@@ -253,7 +253,6 @@ except ImportError:
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Mapping
-    from os import PathLike
 
     from _typeshed import StrPath
 
