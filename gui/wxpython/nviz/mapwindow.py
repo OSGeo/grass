@@ -795,7 +795,9 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def DoZoom(self, zoomtype, pos) -> None:
         """Change perspective and focus"""
-
+        if self.view is None:
+            # Cannot do any useful actions here if self.view is None
+            return
         prev_value = self.view["persp"]["value"]
         if zoomtype > 0:
             value = -1 * self.view["persp"]["step"]
@@ -808,7 +810,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.view["persp"]["value"] = 180
 
         if prev_value != self.view["persp"]["value"]:
-            if hasattr(self.lmgr, "nviz"):
+            if hasattr(self.lmgr, "nviz") and self._display is not None:
                 self.lmgr.nviz.UpdateSettings()
                 x, y = pos[0], self.GetClientSize()[1] - pos[1]
                 result = self._display.GetPointOnSurface(
@@ -818,14 +820,16 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     self._display.LookHere(x, y, self.GetContentScaleFactor())
                     focus = self._display.GetFocus()
                     for i, coord in enumerate(("x", "y", "z")):
-                        self.iview["focus"][coord] = focus[i]
-                self._display.SetView(
-                    self.view["position"]["x"],
-                    self.view["position"]["y"],
-                    self.iview["height"]["value"],
-                    self.view["persp"]["value"],
-                    self.view["twist"]["value"],
-                )
+                        if self.iview is not None:
+                            self.iview["focus"][coord] = focus[i]
+                if self.iview is not None:
+                    self._display.SetView(
+                        self.view["position"]["x"],
+                        self.view["position"]["y"],
+                        self.iview["height"]["value"],
+                        self.view["persp"]["value"],
+                        self.view["twist"]["value"],
+                    )
                 self.saveHistory = True
             # redraw map
             self.DoPaint()
@@ -901,6 +905,9 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     def FocusPanning(self, event):
         """Simulation of panning using focus"""
         size = self.GetClientSize()
+        if self._display is None:
+            msg = "self._display should not be None after starting NvizThread"
+            raise GException(msg)
         id1, x1, y1, z1 = self._display.GetPointOnSurface(
             self.mouse["tmp"][0],
             size[1] - self.mouse["tmp"][1],
@@ -909,6 +916,18 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         id2, x2, y2, z2 = self._display.GetPointOnSurface(
             event.GetX(), size[1] - event.GetY(), self.GetContentScaleFactor()
         )
+        if (
+            id1 is None
+            or id2 is None
+            or x1 is None
+            or x2 is None
+            or y1 is None
+            or y2 is None
+            or z1 is None
+            or z2 is None
+            or self.iview is None
+        ):
+            return
         if id1 and id1 == id2:
             dx, dy, dz = x2 - x1, y2 - y1, z2 - z1
             focus = self.iview["focus"]
@@ -929,6 +948,9 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         Currently not used.
         """
         size: wx.Size | tuple[int, int] = self.GetClientSize()
+        if self._display is None:
+            msg = "self._display should not be None after starting NvizThread"
+            raise GException(msg)
         id1, x1, y1, z1 = self._display.GetPointOnSurface(
             self.mouse["tmp"][0],
             size[1] - self.mouse["tmp"][1],
@@ -1065,7 +1087,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     def QuerySurface(self, x, y):
         """Query surface on given position"""
         size = self.GetClientSize()
-        result = self._display.QueryMap(x, size[1] - y, self.GetContentScaleFactor())
+        result = None
+        if self._display is not None:
+            result = self._display.QueryMap(
+                x, size[1] - y, self.GetContentScaleFactor()
+            )
         if result:
             self.qpoints.append((result["x"], result["y"], result["z"]))
             self.log.WriteLog("%-30s: %.3f" % (_("Easting"), result["x"]))
@@ -2280,6 +2306,9 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def UpdateVectorPointsProperties(self, id: wxnviz.PointId, data) -> None:
         """Update vector point map object properties"""
+        if self._display is None:
+            msg = "self._display should not be None after starting NvizThread"
+            raise GException(msg)
         if (
             "update" in data["size"]
             or "update" in data["width"]
