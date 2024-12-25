@@ -1802,6 +1802,7 @@ def create_project(
     if datum_trans:
         kwargs["datum_trans"] = datum_trans
 
+    ps = None
     if epsg:
         ps = pipe_command(
             "g.proj",
@@ -1857,7 +1858,7 @@ def create_project(
     else:
         _create_location_xy(mapset_path.directory, mapset_path.location)
 
-    if epsg or proj4 or filename or wkt:
+    if ps is not None and (epsg or proj4 or filename or wkt):
         error = ps.communicate(stdin)[1]
         try_remove(tmp_gisrc)
 
