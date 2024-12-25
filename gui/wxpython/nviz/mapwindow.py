@@ -26,7 +26,7 @@ import os
 import sys
 import time
 from threading import Thread
-from typing import TYPE_CHECKING, TypedDict
+from typing import TYPE_CHECKING, Literal, TypedDict
 
 import grass.script as gs
 from grass.pydispatch.signal import Signal
@@ -773,7 +773,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         event.Skip()
 
-    def Pixel2Cell(self, xyCoords):
+    def Pixel2Cell(self, xyCoords) -> tuple[float, float] | None:
         """Convert image coordinates to real word coordinates
 
         :param xyCoords: image coordinates
@@ -924,11 +924,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.render["quick"] = True
             self.Refresh(False)
 
-    def HorizontalPanning(self, event):
+    def HorizontalPanning(self, event) -> None:
         """Move all layers in horizontal (x, y) direction.
         Currently not used.
         """
-        size = self.GetClientSize()
+        size: wx.Size | tuple[int, int] = self.GetClientSize()
         id1, x1, y1, z1 = self._display.GetPointOnSurface(
             self.mouse["tmp"][0],
             size[1] - self.mouse["tmp"][1],
@@ -2086,7 +2086,9 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             data["position"].pop("update")
         data["draw"]["all"] = False
 
-    def UpdateVolumeProperties(self, id, data, isosurfId=None):
+    def UpdateVolumeProperties(
+        self, id: wxnviz.VolumeId, data, isosurfId: wxnviz.IsosurfaceId | None = None
+    ) -> None:
         """Update volume (isosurface/slice) map object properties"""
         if "update" in data["draw"]["resolution"]:
             if data["draw"]["mode"]["value"] == 0:
@@ -2122,7 +2124,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         #
         # isosurface attributes
         #
-        isosurfId = 0
+        isosurfId: wxnviz.IsosurfaceId = 0
         for isosurf in data["isosurface"]:
             self._display.AddIsosurface(id, 0, isosurf_id=isosurfId)
             for attrb in ("topo", "color", "mask", "transp", "shine"):
@@ -2209,7 +2211,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         else:
             self.UpdateVectorLinesProperties(id, data[type])
 
-    def UpdateVectorLinesProperties(self, id, data):
+    def UpdateVectorLinesProperties(self, id: wxnviz.VectorId, data) -> None:
         """Update vector line map object properties"""
         # mode
         if (
@@ -2276,7 +2278,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         if "update" in data["mode"]:
             data["mode"].pop("update")
 
-    def UpdateVectorPointsProperties(self, id, data):
+    def UpdateVectorPointsProperties(self, id: wxnviz.PointId, data) -> None:
         """Update vector point map object properties"""
         if (
             "update" in data["size"]
@@ -2751,7 +2753,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """Generate and write command to command output"""
         self.log.WriteLog(self.NvizCmdCommand(), notification=Notification.RAISE_WINDOW)
 
-    def SaveToFile(self, FileName, FileType, width, height):
+    def SaveToFile(self, FileName, FileType: Literal["ppm", "tif"], width, height):
         """This draws the DC to a buffer that can be saved to a file.
 
         .. todo::
