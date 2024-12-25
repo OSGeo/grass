@@ -28,7 +28,7 @@ import locale
 import struct
 import sys
 from math import sqrt
-from typing import Literal, overload
+from typing import TYPE_CHECKING, Literal, TypedDict, overload
 
 import wx
 from core.debug import Debug
@@ -251,6 +251,13 @@ except ImportError:
     )
     print("wxnviz.py: " + msg, file=sys.stderr)
 
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Mapping
+    from os import PathLike
+
+    from _typeshed import StrPath
+
+
 log = None
 progress = None
 
@@ -275,6 +282,14 @@ SliceId = int
 ClipPlaneId = int
 """Clip plane id (cplane), as returned by Nviz_get_current_cplane()"""
 
+
+class QueryMapResult(TypedDict):
+    id: SurfaceId
+    x: int
+    y: int
+    z: int
+    elevation: str
+    color: str
 
 
 def print_error(msg, type):
@@ -2525,7 +2540,7 @@ class Nviz:
 
         return (sid.value, x.value, y.value, z.value)
 
-    def QueryMap(self, sx, sy, scale=1):
+    def QueryMap(self, sx, sy, scale: float = 1) -> QueryMapResult | None:
         """Query surface map
 
         :param sx,sy: canvas coordinates (LL)
@@ -2626,7 +2641,9 @@ class Nviz:
     def Start2D(self):
         Nviz_set_2D(self.width, self.height)
 
-    def FlyThrough(self, flyInfo, mode, exagInfo):
+    def FlyThrough(
+        self, flyInfo: Iterable[float], mode: int, exagInfo: Mapping[str, float | int]
+    ):
         """Fly through the scene
 
         :param flyInfo: fly parameters
@@ -2645,7 +2662,9 @@ class Nviz:
 class Texture:
     """Class representing OpenGL texture"""
 
-    def __init__(self, filepath, overlayId, coords):
+    def __init__(
+        self, filepath: StrPath, overlayId: int, coords: tuple[int, int]
+    ) -> None:
         """Load image to texture
 
         :param filepath: path to image file
@@ -2773,7 +2792,9 @@ class Texture:
 class ImageTexture(Texture):
     """Class representing OpenGL texture as an overlay image"""
 
-    def __init__(self, filepath, overlayId, coords, cmd):
+    def __init__(
+        self, filepath: StrPath, overlayId, coords: tuple[int, int], cmd
+    ) -> None:
         """Load image to texture
 
         :param filepath: path to image file
