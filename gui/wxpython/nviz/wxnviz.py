@@ -464,7 +464,9 @@ class Nviz:
         Nviz_set_focus_map(MAP_OBJ_UNDEFINED, -1)
         Debug.msg(3, "Nviz::LookAtCenter()")
 
-    def GetFocus(self):
+    def GetFocus(
+        self,
+    ) -> tuple[float, float, float] | tuple[Literal[-1], Literal[-1], Literal[-1]]:
         """Get focus"""
         Debug.msg(3, "Nviz::GetFocus()")
         if Nviz_has_focus(self.data):
@@ -473,7 +475,7 @@ class Nviz:
             z = c_float()
             Nviz_get_focus(self.data, byref(x), byref(y), byref(z))
             return x.value, y.value, z.value
-        return -1, -1, -1
+        return (-1, -1, -1)
 
     def SetFocus(self, x: float, y: float, z: float) -> None:
         """Set focus"""
@@ -1226,7 +1228,9 @@ class Nviz:
 
         return 1
 
-    def GetSurfacePosition(self, id):
+    def GetSurfacePosition(
+        self, id: SurfaceId
+    ) -> tuple[()] | tuple[float, float, float]:
         """Get surface position
 
         :param id: surface id
@@ -1235,7 +1239,7 @@ class Nviz:
         :return: zero-length vector on error
         """
         if not GS_surf_exists(id):
-            return []
+            return ()
 
         x, y, z = c_float(), c_float(), c_float()
         GS_get_trans(id, byref(x), byref(y), byref(z))
@@ -1249,7 +1253,7 @@ class Nviz:
             z.value,
         )
 
-        return [x.value, y.value, z.value]
+        return (x.value, y.value, z.value)
 
     def SetSurfacePosition(
         self, id: SurfaceId, x: float, y: float, z: float
@@ -2262,7 +2266,7 @@ class Nviz:
 
         return 1
 
-    def GetVolumePosition(self, id):
+    def GetVolumePosition(self, id: VolumeId) -> tuple[()] | tuple[float, float, float]:
         """Get volume position
 
         :param id: volume id
@@ -2271,7 +2275,7 @@ class Nviz:
         :return: zero-length vector on error
         """
         if not GVL_vol_exists(id):
-            return []
+            return ()
 
         x, y, z = c_float(), c_float(), c_float()
         GVL_get_trans(id, byref(x), byref(y), byref(z))
@@ -2285,7 +2289,7 @@ class Nviz:
             z.value,
         )
 
-        return [x.value, y.value, z.value]
+        return (x.value, y.value, z.value)
 
     def SetVolumePosition(
         self, id: VolumeId, x: float, y: float, z: float
