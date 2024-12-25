@@ -14,7 +14,7 @@ notes:
       example: 'grass.script:'
 
     - title: Documentation and Messages
-      regexp: '(docs?|man|manual|manual pages|[Ss]phinx|mkhtml|messages?): '
+      regexp: '(docs?|man|manual|manual pages|[Ss]phinx|mkhtml|MkDocs|mkdocs|messages?): '
       example: 'doc:'
 
     - title: Libraries and General Functionality
