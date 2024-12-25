@@ -22,10 +22,13 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
+from __future__ import annotations
+
 import locale
 import struct
 import sys
 from math import sqrt
+from typing import Literal, overload
 
 import wx
 from core.debug import Debug
@@ -251,6 +254,28 @@ except ImportError:
 log = None
 progress = None
 
+PointId = int
+"""Point set id, as used with GP_site_exists(id)"""
+
+VectorId = int
+"""Vector set id, as used with GV_vect_exists(id)"""
+
+VolumeId = int
+"""Volume set id, as used with GVL_vol_exists(id)"""
+
+SurfaceId = int
+"""Surface id, as used with GS_surf_exists(id)"""
+
+IsosurfaceId = int
+"""Isosurface id (0 - MAX_ISOSURFS), as used with GVL_isosurf_get_att, for isosurf_id"""
+
+SliceId = int
+"""Slice id, as used with volume sets in GVL_slice_del(id, slice_id)"""
+
+ClipPlaneId = int
+"""Clip plane id (cplane), as returned by Nviz_get_current_cplane()"""
+
+
 
 def print_error(msg, type):
     """Redirect stderr"""
@@ -335,7 +360,7 @@ class Nviz:
         GVL_libinit()
         GVL_init_region()
 
-    def ResizeWindow(self, width, height, scale=1):
+    def ResizeWindow(self, width: int, height: int, scale: float = 1) -> Literal[1, 0]:
         """GL canvas resized
 
         :param width: window width
@@ -456,7 +481,7 @@ class Nviz:
             dir[i] = coord
         GS_set_viewdir(byref(dir))
 
-    def SetZExag(self, z_exag):
+    def SetZExag(self, z_exag: float) -> Literal[1]:
         """Set z-exag value
 
         :param z_exag: value
@@ -629,7 +654,7 @@ class Nviz:
         Debug.msg(1, "Nviz::AddConstant(): id=%d", id)
         return id
 
-    def UnloadSurface(self, id):
+    def UnloadSurface(self, id: SurfaceId) -> Literal[1, 0]:
         """Unload surface
 
         :param id: surface id
@@ -681,7 +706,15 @@ class Nviz:
 
         return id, baseId
 
-    def UnloadVector(self, id, points):
+    @overload
+    def UnloadVector(self, id: PointId, points: Literal[True]) -> Literal[1, 0]:
+        pass
+
+    @overload
+    def UnloadVector(self, id: VectorId, points: Literal[False]) -> Literal[1, 0]:
+        pass
+
+    def UnloadVector(self, id: PointId | VectorId, points: bool) -> Literal[1, 0]:
         """Unload vector set
 
         :param id: vector set id
@@ -785,7 +818,7 @@ class Nviz:
 
         return id
 
-    def UnloadVolume(self, id):
+    def UnloadVolume(self, id: VolumeId) -> Literal[0, 1]:
         """Unload volume
 
         :param id: volume id
@@ -803,7 +836,21 @@ class Nviz:
 
         return 1
 
-    def SetSurfaceTopo(self, id, map, value):
+    @overload
+    def SetSurfaceTopo(
+        self, id: SurfaceId, map: Literal[True], value: str
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    @overload
+    def SetSurfaceTopo(
+        self, id: SurfaceId, map: Literal[False], value: float
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    def SetSurfaceTopo(
+        self, id: SurfaceId, map: bool, value: str | float
+    ) -> Literal[1, -1, -2]:
         """Set surface topography
 
         :param id: surface id
@@ -816,7 +863,21 @@ class Nviz:
         """
         return self.SetSurfaceAttr(id, ATT_TOPO, map, value)
 
-    def SetSurfaceColor(self, id, map, value):
+    @overload
+    def SetSurfaceColor(
+        self, id: SurfaceId, map: Literal[True], value: str
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    @overload
+    def SetSurfaceColor(
+        self, id: SurfaceId, map: Literal[False], value: float
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    def SetSurfaceColor(
+        self, id: SurfaceId, map: bool, value: str | float
+    ) -> Literal[1, -1, -2]:
         """Set surface color
 
         :param id: surface id
@@ -829,14 +890,16 @@ class Nviz:
         """
         return self.SetSurfaceAttr(id, ATT_COLOR, map, value)
 
-    def SetSurfaceMask(self, id, invert, value):
+    def SetSurfaceMask(
+        self, id: SurfaceId, invert: bool, value: str
+    ) -> Literal[1, -1, -2]:
         """Set surface mask
 
         .. todo::
             invert
 
         :param id: surface id
-        :param invert: if true invert mask
+        :param invert: if true invert mask (unimplemented, always true)
         :param value: map name of value
 
         :return: 1 on success
@@ -845,7 +908,21 @@ class Nviz:
         """
         return self.SetSurfaceAttr(id, ATT_MASK, True, value)
 
-    def SetSurfaceTransp(self, id, map, value):
+    @overload
+    def SetSurfaceTransp(
+        self, id: SurfaceId, map: Literal[True], value: str
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    @overload
+    def SetSurfaceTransp(
+        self, id: SurfaceId, map: Literal[False], value: float
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    def SetSurfaceTransp(
+        self, id: SurfaceId, map: bool, value: str | float
+    ) -> Literal[1, -1, -2]:
         """Set surface mask
 
         ..todo::
@@ -861,7 +938,21 @@ class Nviz:
         """
         return self.SetSurfaceAttr(id, ATT_TRANSP, map, value)
 
-    def SetSurfaceShine(self, id, map, value):
+    @overload
+    def SetSurfaceShine(
+        self, id: SurfaceId, map: Literal[True], value: str
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    @overload
+    def SetSurfaceShine(
+        self, id: SurfaceId, map: Literal[False], value: float
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    def SetSurfaceShine(
+        self, id: SurfaceId, map: bool, value: str | float
+    ) -> Literal[1, -1, -2]:
         """Set surface shininess
 
         :param id: surface id
@@ -874,7 +965,21 @@ class Nviz:
         """
         return self.SetSurfaceAttr(id, ATT_SHINE, map, value)
 
-    def SetSurfaceEmit(self, id, map, value):
+    @overload
+    def SetSurfaceEmit(
+        self, id: SurfaceId, map: Literal[True], value: str
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    @overload
+    def SetSurfaceEmit(
+        self, id: SurfaceId, map: Literal[False], value: float
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    def SetSurfaceEmit(
+        self, id: SurfaceId, map: bool, value: str | float
+    ) -> Literal[1, -1, -2]:
         """Set surface emission (currently unused)
 
         :param id: surface id
@@ -887,7 +992,33 @@ class Nviz:
         """
         return self.SetSurfaceAttr(id, ATT_EMIT, map, value)
 
-    def SetSurfaceAttr(self, id, attr, map, value):
+    @overload
+    def SetSurfaceAttr(
+        self, id: SurfaceId, attr: int, map: Literal[True], value: str
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    @overload
+    def SetSurfaceAttr(
+        self, id: SurfaceId, attr: int, map: Literal[False], value: float
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    @overload
+    def SetSurfaceAttr(
+        self, id: SurfaceId, attr: Literal[2], map: Literal[False], value: str
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    @overload
+    def SetSurfaceAttr(
+        self, id: SurfaceId, attr: int, map: bool, value: str | float
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    def SetSurfaceAttr(
+        self, id: SurfaceId, attr: int, map: bool, value: str | float
+    ) -> Literal[1, -1, -2]:
         """Set surface attribute
 
         :param id: surface id
@@ -905,7 +1036,9 @@ class Nviz:
         if map:
             ret = Nviz_set_attr(id, MAP_OBJ_SURF, attr, MAP_ATT, value, -1.0, self.data)
         else:
-            val = Nviz_color_from_str(value) if attr == ATT_COLOR else float(value)
+            val: int | float = (
+                Nviz_color_from_str(value) if attr == ATT_COLOR else float(value)
+            )
             ret = Nviz_set_attr(id, MAP_OBJ_SURF, attr, CONST_ATT, None, val, self.data)
 
         Debug.msg(
@@ -922,7 +1055,7 @@ class Nviz:
 
         return 1
 
-    def UnsetSurfaceMask(self, id):
+    def UnsetSurfaceMask(self, id: SurfaceId) -> Literal[1, -1, -2]:
         """Unset surface mask
 
         :param id: surface id
@@ -934,7 +1067,7 @@ class Nviz:
         """
         return self.UnsetSurfaceAttr(id, ATT_MASK)
 
-    def UnsetSurfaceTransp(self, id):
+    def UnsetSurfaceTransp(self, id: SurfaceId) -> Literal[1, -1, -2]:
         """Unset surface transparency
 
         :param id: surface id
@@ -945,7 +1078,7 @@ class Nviz:
         """
         return self.UnsetSurfaceAttr(id, ATT_TRANSP)
 
-    def UnsetSurfaceEmit(self, id):
+    def UnsetSurfaceEmit(self, id: SurfaceId) -> Literal[1, -1, -2]:
         """Unset surface emission (currently unused)
 
         :param id: surface id
@@ -956,7 +1089,7 @@ class Nviz:
         """
         return self.UnsetSurfaceAttr(id, ATT_EMIT)
 
-    def UnsetSurfaceAttr(self, id, attr):
+    def UnsetSurfaceAttr(self, id: SurfaceId, attr: int) -> Literal[1, -1, -2]:
         """Unset surface attribute
 
         :param id: surface id
@@ -978,7 +1111,9 @@ class Nviz:
 
         return 1
 
-    def SetSurfaceRes(self, id, fine, coarse):
+    def SetSurfaceRes(
+        self, id: SurfaceId, fine: int, coarse: int
+    ) -> Literal[1, -1, -2]:
         """Set surface resolution
 
         :param id: surface id
@@ -1004,7 +1139,7 @@ class Nviz:
 
         return 1
 
-    def SetSurfaceStyle(self, id, style):
+    def SetSurfaceStyle(self, id: SurfaceId, style: int) -> Literal[1, -1, -2]:
         """Set draw style
 
         Draw styles:
@@ -1041,7 +1176,7 @@ class Nviz:
 
         return 1
 
-    def SetWireColor(self, id, color_str):
+    def SetWireColor(self, id: SurfaceId, color_str: str) -> Literal[1, -1]:
         """Set color of wire
 
         .. todo::
@@ -1053,7 +1188,6 @@ class Nviz:
         :return: 1 on success
         :return: -1 surface not found
         :return: -2 setting attributes failed
-        :return: 1 on success
         :return: 0 on failure
         """
         Debug.msg(3, "Nviz::SetWireColor(): id=%d, color=%s", id, color_str)
@@ -1102,7 +1236,9 @@ class Nviz:
 
         return [x.value, y.value, z.value]
 
-    def SetSurfacePosition(self, id, x, y, z):
+    def SetSurfacePosition(
+        self, id: SurfaceId, x: float, y: float, z: float
+    ) -> Literal[1, -1]:
         """Set surface position
 
         :param id: surface id
@@ -1121,13 +1257,15 @@ class Nviz:
 
         return 1
 
-    def SetVectorLineMode(self, id, color_str, width, use_z):
+    def SetVectorLineMode(
+        self, id: VectorId, color_str: str, width: int, use_z: bool | int
+    ) -> Literal[1, -1, -2]:
         """Set mode of vector line overlay
 
         :param id: vector id
         :param color_str: color string
         :param width: line width
-        :param use_z: display 3d or on surface
+        :param use_z: display 3d or on surface, true or non-zero to use z
 
         :return: -1 vector set not found
         :return: -2 on failure
@@ -1145,7 +1283,7 @@ class Nviz:
             use_z,
         )
 
-        color = Nviz_color_from_str(color_str)
+        color: int = Nviz_color_from_str(color_str)
 
         # use memory by default
         if GV_set_style(id, 1, color, width, use_z) < 0:
@@ -1153,7 +1291,7 @@ class Nviz:
 
         return 1
 
-    def SetVectorLineHeight(self, id, height):
+    def SetVectorLineHeight(self, id: VectorId, height: float) -> Literal[1, -1]:
         """Set vector height above surface (lines)
 
         :param id: vector set id
@@ -1171,7 +1309,9 @@ class Nviz:
 
         return 1
 
-    def SetVectorLineSurface(self, id, surf_id):
+    def SetVectorLineSurface(
+        self, id: VectorId, surf_id: SurfaceId
+    ) -> Literal[1, -1, -2, -3]:
         """Set reference surface of vector set (lines)
 
         :param id: vector set id
@@ -1193,7 +1333,9 @@ class Nviz:
 
         return 1
 
-    def UnsetVectorLineSurface(self, id, surf_id):
+    def UnsetVectorLineSurface(
+        self, id: VectorId, surf_id: SurfaceId
+    ) -> Literal[1, -1, -2, -3]:
         """Unset reference surface of vector set (lines)
 
         :param id: vector set id
@@ -1215,7 +1357,9 @@ class Nviz:
 
         return 1
 
-    def SetVectorPointMode(self, id, color_str, width, size, marker):
+    def SetVectorPointMode(
+        self, id: PointId, color_str: str, width: int, size: float, marker: int
+    ) -> Literal[1, -1, -2]:
         """Set mode of vector point overlay
 
         :param id: vector id
@@ -1244,17 +1388,17 @@ class Nviz:
             marker,
         )
 
-        color = Nviz_color_from_str(color_str)
+        color: int = Nviz_color_from_str(color_str)
 
         if GP_set_style(id, color, width, size, marker) < 0:
             return -2
 
         return 1
 
-    def SetVectorPointHeight(self, id, height):
+    def SetVectorPointHeight(self, id: PointId, height: float) -> Literal[1, -1]:
         """Set vector height above surface (points)
 
-        :param id: vector set id
+        :param id: point set id
         :param height:
 
         :return: -1 vector set not found
@@ -1269,7 +1413,9 @@ class Nviz:
 
         return 1
 
-    def SetVectorPointSurface(self, id, surf_id):
+    def SetVectorPointSurface(
+        self, id: PointId, surf_id: SurfaceId
+    ) -> Literal[1, -1, -2, -3]:
         """Set reference surface of vector set (points)
 
         :param id: vector set id
@@ -1291,7 +1437,7 @@ class Nviz:
 
         return 1
 
-    def ReadVectorColors(self, name, mapset):
+    def ReadVectorColors(self, name: str, mapset: str) -> Literal[1, 0, -1]:
         r"""Read vector colors
 
         :param name: vector map name
@@ -1303,7 +1449,9 @@ class Nviz:
         """
         return Vect_read_colors(name, mapset, self.color)
 
-    def CheckColorTable(self, id, type):
+    def CheckColorTable(
+        self, id: PointId | VectorId, type: Literal["points", "lines"]
+    ) -> Literal[1, 0, -1, -2]:
         """Check if color table exists.
 
         :param id: vector set id
@@ -1328,14 +1476,14 @@ class Nviz:
 
     def SetPointsStyleThematic(
         self,
-        id,
-        layer,
-        color=None,
-        colorTable=False,
-        width=None,
-        size=None,
-        symbol=None,
-    ):
+        id: PointId,
+        layer: int,
+        color: str | None = None,
+        colorTable: bool = False,
+        width: str | None = None,
+        size: str | None = None,
+        symbol: str | None = None,
+    ) -> Literal[-1] | None:
         """Set thematic style for vector points
 
         :param id: vector set id
@@ -1361,8 +1509,13 @@ class Nviz:
             GP_set_style_thematic(id, layer, color, width, size, symbol, None)
 
     def SetLinesStyleThematic(
-        self, id, layer, color=None, colorTable=False, width=None
-    ):
+        self,
+        id: VectorId,
+        layer: int,
+        color: str | None = None,
+        colorTable: bool = False,
+        width: str | None = None,
+    ) -> Literal[-1] | None:
         """Set thematic style for vector lines
 
         :param id: vector set id
@@ -1385,18 +1538,20 @@ class Nviz:
         else:
             GV_set_style_thematic(id, layer, color, width, None)
 
-    def UnsetLinesStyleThematic(self, id):
-        """Unset thematic style for vector points"""
+    def UnsetLinesStyleThematic(self, id: VectorId) -> None:
+        """Unset thematic style for vector lines"""
         GV_unset_style_thematic(id)
 
-    def UnsetPointsStyleThematic(self, id):
-        """Unset thematic style for vector lines"""
+    def UnsetPointsStyleThematic(self, id: PointId) -> None:
+        """Unset thematic style for vector points"""
         GP_unset_style_thematic(id)
 
-    def UnsetVectorPointSurface(self, id, surf_id):
+    def UnsetVectorPointSurface(
+        self, id: PointId, surf_id: SurfaceId
+    ) -> Literal[1, -1, -2, -3]:
         """Unset reference surface of vector set (points)
 
-        :param id: vector set id
+        :param id: vector point set id
         :param surf_id: surface id
 
         :return: 1 on success
@@ -1415,10 +1570,10 @@ class Nviz:
 
         return 1
 
-    def SetVectorPointZMode(self, id, zMode):
+    def SetVectorPointZMode(self, id: PointId, zMode: bool) -> Literal[1, 0, -1]:
         """Set z mode (use z coordinate or not)
 
-        :param id: volume id
+        :param id: vector point set id
         :param zMode: bool
 
         :return: -1 on failure
@@ -1430,7 +1585,9 @@ class Nviz:
 
         return GP_set_zmode(id, int(zMode))
 
-    def AddIsosurface(self, id, level, isosurf_id=None):
+    def AddIsosurface(
+        self, id: VolumeId, level: float, isosurf_id: IsosurfaceId | None = None
+    ) -> Literal[1, -1]:
         """Add new isosurface
 
         :param id: volume id
@@ -1456,7 +1613,9 @@ class Nviz:
 
         return GVL_isosurf_set_att_const(id, nisosurfs - 1, ATT_TOPO, level)
 
-    def AddSlice(self, id, slice_id=None):
+    def AddSlice(
+        self, id: VolumeId, slice_id: SliceId | None = None
+    ) -> int | Literal[-1]:
         """Add new slice
 
         :param id: volume id
@@ -1478,7 +1637,9 @@ class Nviz:
 
         return GVL_slice_num_slices(id)
 
-    def DeleteIsosurface(self, id, isosurf_id):
+    def DeleteIsosurface(
+        self, id: VolumeId, isosurf_id: IsosurfaceId
+    ) -> Literal[1, -1, -2, -3]:
         """Delete isosurface
 
         :param id: volume id
@@ -1502,7 +1663,7 @@ class Nviz:
 
         return 1
 
-    def DeleteSlice(self, id, slice_id):
+    def DeleteSlice(self, id: VolumeId, slice_id: SliceId) -> Literal[1, -1, -2, -3]:
         """Delete slice
 
         :param id: volume id
@@ -1526,7 +1687,9 @@ class Nviz:
 
         return 1
 
-    def MoveIsosurface(self, id, isosurf_id, up):
+    def MoveIsosurface(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, up: bool
+    ) -> Literal[1, -1, -2, -3]:
         """Move isosurface up/down in the list
 
         :param id: volume id
@@ -1554,7 +1717,9 @@ class Nviz:
 
         return 1
 
-    def MoveSlice(self, id, slice_id, up):
+    def MoveSlice(
+        self, id: VolumeId, slice_id: SliceId, up: bool
+    ) -> Literal[1, -1, -2, -3]:
         """Move slice up/down in the list
 
         :param id: volume id
@@ -1582,7 +1747,21 @@ class Nviz:
 
         return 1
 
-    def SetIsosurfaceTopo(self, id, isosurf_id, map, value):
+    @overload
+    def SetIsosurfaceTopo(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, map: Literal[True], value: str
+    ) -> Literal[1, -1, -2, -3]:
+        pass
+
+    @overload
+    def SetIsosurfaceTopo(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, map: Literal[False], value: float
+    ) -> Literal[1, -1, -2, -3]:
+        pass
+
+    def SetIsosurfaceTopo(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, map: bool, value: str | float
+    ) -> Literal[1, -1, -2, -3]:
         """Set isosurface level
 
         :param id: volume id
@@ -1597,7 +1776,9 @@ class Nviz:
         """
         return self.SetIsosurfaceAttr(id, isosurf_id, ATT_TOPO, map, value)
 
-    def SetIsosurfaceColor(self, id, isosurf_id, map, value):
+    def SetIsosurfaceColor(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, map: bool, value: str
+    ) -> Literal[1, -1, -2, -3]:
         """Set isosurface color
 
         :param id: volume id
@@ -1612,7 +1793,9 @@ class Nviz:
         """
         return self.SetIsosurfaceAttr(id, isosurf_id, ATT_COLOR, map, value)
 
-    def SetIsosurfaceMask(self, id, isosurf_id, invert, value):
+    def SetIsosurfaceMask(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, invert: bool, value: str
+    ) -> Literal[1, -1, -2, -3]:
         """Set isosurface mask
 
         .. todo::
@@ -1630,7 +1813,21 @@ class Nviz:
         """
         return self.SetIsosurfaceAttr(id, isosurf_id, ATT_MASK, True, value)
 
-    def SetIsosurfaceTransp(self, id, isosurf_id, map, value):
+    @overload
+    def SetIsosurfaceTransp(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, map: Literal[True], value: str
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    @overload
+    def SetIsosurfaceTransp(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, map: Literal[False], value: float
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    def SetIsosurfaceTransp(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, map: bool, value: str | float
+    ) -> Literal[1, -1, -2]:
         """Set isosurface transparency
 
         :param id: volume id
@@ -1645,7 +1842,21 @@ class Nviz:
         """
         return self.SetIsosurfaceAttr(id, isosurf_id, ATT_TRANSP, map, value)
 
-    def SetIsosurfaceShine(self, id, isosurf_id, map, value):
+    @overload
+    def SetIsosurfaceShine(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, map: Literal[True], value: str
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    @overload
+    def SetIsosurfaceShine(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, map: Literal[False], value: float
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    def SetIsosurfaceShine(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, map: bool, value: str | float
+    ) -> Literal[1, -1, -2]:
         """Set isosurface shininess
 
         :param id: volume id
@@ -1660,7 +1871,21 @@ class Nviz:
         """
         return self.SetIsosurfaceAttr(id, isosurf_id, ATT_SHINE, map, value)
 
-    def SetIsosurfaceEmit(self, id, isosurf_id, map, value):
+    @overload
+    def SetIsosurfaceEmit(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, map: Literal[True], value: str
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    @overload
+    def SetIsosurfaceEmit(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, map: Literal[False], value: float
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    def SetIsosurfaceEmit(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, map: bool, value: str | float
+    ) -> Literal[1, -1, -2]:
         """Set isosurface emission (currently unused)
 
         :param id: volume id
@@ -1675,7 +1900,58 @@ class Nviz:
         """
         return self.SetIsosurfaceAttr(id, isosurf_id, ATT_EMIT, map, value)
 
-    def SetIsosurfaceAttr(self, id, isosurf_id, attr, map, value):
+    @overload
+    def SetIsosurfaceAttr(
+        self,
+        id: VolumeId,
+        isosurf_id: IsosurfaceId,
+        attr: int,
+        map: Literal[True],
+        value: str,
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    @overload
+    def SetIsosurfaceAttr(
+        self,
+        id: VolumeId,
+        isosurf_id: IsosurfaceId,
+        attr: int,
+        map: Literal[False],
+        value: float,
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    @overload
+    def SetIsosurfaceAttr(
+        self,
+        id: VolumeId,
+        isosurf_id: IsosurfaceId,
+        attr: Literal[2],
+        map: Literal[False],
+        value: str,
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    @overload
+    def SetIsosurfaceAttr(
+        self,
+        id: VolumeId,
+        isosurf_id: IsosurfaceId,
+        attr: int,
+        map: bool,
+        value: str | float,
+    ) -> Literal[1, -1, -2]:
+        pass
+
+    def SetIsosurfaceAttr(
+        self,
+        id: VolumeId,
+        isosurf_id: IsosurfaceId,
+        attr: int,
+        map: bool,
+        value: str | float,
+    ) -> Literal[1, -1, -2]:
         """Set isosurface attribute
 
         :param id: volume id
@@ -1698,8 +1974,10 @@ class Nviz:
         if map:
             ret = GVL_isosurf_set_att_map(id, isosurf_id, attr, value)
         else:
-            val = Nviz_color_from_str(value) if attr == ATT_COLOR else float(value)
-            ret = GVL_isosurf_set_att_const(id, isosurf_id, attr, val)
+            val: int | float = (
+                Nviz_color_from_str(value) if attr == ATT_COLOR else float(value)
+            )
+            ret: int = GVL_isosurf_set_att_const(id, isosurf_id, attr, val)
 
         Debug.msg(
             3,
@@ -1717,7 +1995,9 @@ class Nviz:
 
         return 1
 
-    def UnsetIsosurfaceMask(self, id, isosurf_id):
+    def UnsetIsosurfaceMask(
+        self, id: VolumeId, isosurf_id: IsosurfaceId
+    ) -> Literal[1, -1, -2]:
         """Unset isosurface mask
 
         :param id: volume id
@@ -1730,7 +2010,9 @@ class Nviz:
         """
         return self.UnsetIsosurfaceAttr(id, isosurf_id, ATT_MASK)
 
-    def UnsetIsosurfaceTransp(self, id, isosurf_id):
+    def UnsetIsosurfaceTransp(
+        self, id: VolumeId, isosurf_id: IsosurfaceId
+    ) -> Literal[1, -1, -2]:
         """Unset isosurface transparency
 
         :param id: volume id
@@ -1743,7 +2025,9 @@ class Nviz:
         """
         return self.UnsetIsosurfaceAttr(id, isosurf_id, ATT_TRANSP)
 
-    def UnsetIsosurfaceEmit(self, id, isosurf_id):
+    def UnsetIsosurfaceEmit(
+        self, id: VolumeId, isosurf_id: IsosurfaceId
+    ) -> Literal[1, -1, -2]:
         """Unset isosurface emission (currently unused)
 
         :param id: volume id
@@ -1756,10 +2040,12 @@ class Nviz:
         """
         return self.UnsetIsosurfaceAttr(id, isosurf_id, ATT_EMIT)
 
-    def UnsetIsosurfaceAttr(self, id, isosurf_id, attr):
+    def UnsetIsosurfaceAttr(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, attr: int
+    ) -> Literal[1, -1, -2]:
         """Unset surface attribute
 
-        :param id: surface id
+        :param id: volume id
         :param isosurf_id: isosurface id (0 - MAX_ISOSURFS)
         :param attr: attribute descriptor
 
@@ -1789,10 +2075,10 @@ class Nviz:
 
         return 1
 
-    def SetIsosurfaceMode(self, id, mode):
+    def SetIsosurfaceMode(self, id: VolumeId, mode: int) -> Literal[1, -1, -2]:
         """Set draw mode for isosurfaces
 
-        :param id: isosurface id
+        :param id: volume set id
         :param mode: isosurface draw mode
 
         :return: 1 on success
@@ -1809,10 +2095,10 @@ class Nviz:
 
         return 1
 
-    def SetSliceMode(self, id, mode):
+    def SetSliceMode(self, id: VolumeId, mode: int) -> Literal[1, -1, -2]:
         """Set draw mode for slices
 
-        :param id: slice id
+        :param id: volume set id
         :param mode: slice draw mode
 
         :return: 1 on success
@@ -1829,10 +2115,10 @@ class Nviz:
 
         return 1
 
-    def SetIsosurfaceRes(self, id, res):
+    def SetIsosurfaceRes(self, id: VolumeId, res: int) -> Literal[1, -1, -2]:
         """Set draw resolution for isosurfaces
 
-        :param id: isosurface id
+        :param id: volume set id
         :param res: resolution value
 
         :return: 1 on success
@@ -1849,10 +2135,10 @@ class Nviz:
 
         return 1
 
-    def SetSliceRes(self, id, res):
+    def SetSliceRes(self, id: VolumeId, res: int) -> Literal[1, -1, -2]:
         """Set draw resolution for slices
 
-        :param id: slice id
+        :param id: volume set id
         :param res: resolution value
 
         :return: 1 on success
@@ -1869,7 +2155,18 @@ class Nviz:
 
         return 1
 
-    def SetSlicePosition(self, id, slice_id, x1, x2, y1, y2, z1, z2, dir):
+    def SetSlicePosition(
+        self,
+        id: VolumeId,
+        slice_id: SliceId,
+        x1: float,
+        x2: float,
+        y1: float,
+        y2: float,
+        z1: float,
+        z2: float,
+        dir: int,
+    ) -> Literal[1, -1, -2, -3]:
         """Set slice position
 
         :param id: volume id
@@ -1891,11 +2188,13 @@ class Nviz:
         ret = GVL_slice_set_pos(id, slice_id, x1, x2, y1, y2, z1, z2, dir)
 
         if ret < 0:
-            return -2
+            return -3
 
         return 1
 
-    def SetSliceTransp(self, id, slice_id, value):
+    def SetSliceTransp(
+        self, id: VolumeId, slice_id: SliceId, value: int
+    ) -> Literal[1, -1, -2, -3]:
         """Set slice transparency
 
         :param id: volume id
@@ -1917,11 +2216,13 @@ class Nviz:
         ret = GVL_slice_set_transp(id, slice_id, value)
 
         if ret < 0:
-            return -2
+            return -3
 
         return 1
 
-    def SetIsosurfaceInOut(self, id, isosurf_id, inout):
+    def SetIsosurfaceInOut(
+        self, id: VolumeId, isosurf_id: IsosurfaceId, inout: bool
+    ) -> Literal[1, -1, -2, -3]:
         """Set inout mode
 
         :param id: volume id
@@ -1939,7 +2240,7 @@ class Nviz:
         if isosurf_id > GVL_isosurf_num_isosurfs(id) - 1:
             return -2
 
-        ret = GVL_isosurf_set_flags(id, isosurf_id, inout)
+        ret: int = GVL_isosurf_set_flags(id, isosurf_id, int(inout))
 
         if ret < 0:
             return -3
@@ -1971,7 +2272,9 @@ class Nviz:
 
         return [x.value, y.value, z.value]
 
-    def SetVolumePosition(self, id, x, y, z):
+    def SetVolumePosition(
+        self, id: VolumeId, x: float, y: float, z: float
+    ) -> Literal[1, -1]:
         """Set volume position
 
         :param id: volume id
@@ -1979,7 +2282,6 @@ class Nviz:
 
         :return: 1 on success
         :return: -1 volume not found
-        :return: -2 setting position failed
         """
         if not GVL_vol_exists(id):
             return -1
@@ -1990,25 +2292,24 @@ class Nviz:
 
         return 1
 
-    def SetVolumeDrawBox(self, id, ifBox):
+    def SetVolumeDrawBox(self, id: VolumeId, ifBox: bool) -> Literal[1, -1]:
         """Display volume wire box
 
         :param id: volume id
         :param ifBox: True to draw wire box, False otherwise
-        :type ifBox: bool
         :return: 1 on success
         :return: -1 volume not found
         """
         if not GVL_vol_exists(id):
             return -1
 
-        Debug.msg(3, "Nviz::SetVolumeDrawBox(): id=%d, ifBox=%d", id, ifBox)
+        Debug.msg(3, "Nviz::SetVolumeDrawBox(): id=%d, ifBox=%d", id, int(ifBox))
 
         GVL_set_draw_wire(id, int(ifBox))
 
         return 1
 
-    def GetCPlaneCurrent(self):
+    def GetCPlaneCurrent(self) -> ClipPlaneId:
         return Nviz_get_current_cplane(self.data)
 
     def GetCPlanesCount(self) -> int:
@@ -2019,7 +2320,7 @@ class Nviz:
         """Returns rotation parameters of current cutting plane"""
         x, y, z = c_float(), c_float(), c_float()
 
-        current = Nviz_get_current_cplane(self.data)
+        current: ClipPlaneId = Nviz_get_current_cplane(self.data)
         Nviz_get_cplane_rotation(self.data, current, byref(x), byref(y), byref(z))
 
         return x.value, y.value, z.value
@@ -2028,7 +2329,7 @@ class Nviz:
         """Returns translation parameters of current cutting plane"""
         x, y, z = c_float(), c_float(), c_float()
 
-        current = Nviz_get_current_cplane(self.data)
+        current: ClipPlaneId = Nviz_get_current_cplane(self.data)
         Nviz_get_cplane_translation(self.data, current, byref(x), byref(y), byref(z))
 
         return x.value, y.value, z.value
@@ -2038,7 +2339,7 @@ class Nviz:
 
         :param x,y,z: rotation parameters
         """
-        current = Nviz_get_current_cplane(self.data)
+        current: ClipPlaneId = Nviz_get_current_cplane(self.data)
         Nviz_set_cplane_rotation(self.data, current, x, y, z)
         Nviz_draw_cplane(self.data, -1, -1)
 
@@ -2047,15 +2348,17 @@ class Nviz:
 
         :param x,y,z: translation parameters
         """
-        current = Nviz_get_current_cplane(self.data)
+        current: ClipPlaneId = Nviz_get_current_cplane(self.data)
         Nviz_set_cplane_translation(self.data, current, x, y, z)
         Nviz_draw_cplane(self.data, -1, -1)
         Debug.msg(
             3, "Nviz::SetCPlaneTranslation(): id=%d, x=%f, y=%f, z=%f", current, x, y, z
         )
 
-    def SetCPlaneInteractively(self, x, y):
-        current = Nviz_get_current_cplane(self.data)
+    def SetCPlaneInteractively(
+        self, x: float, y: float
+    ) -> tuple[float, float, float] | tuple[None, None, None]:
+        current: ClipPlaneId = Nviz_get_current_cplane(self.data)
         ret = Nviz_set_cplane_here(self.data, current, x, y)
         if ret:
             Nviz_draw_cplane(self.data, -1, -1)
@@ -2063,14 +2366,14 @@ class Nviz:
             return x, y, z
         return None, None, None
 
-    def SelectCPlane(self, index):
+    def SelectCPlane(self, index: ClipPlaneId) -> None:
         """Select cutting plane
 
         :param index: index of cutting plane
         """
         Nviz_on_cplane(self.data, index)
 
-    def UnselectCPlane(self, index):
+    def UnselectCPlane(self, index: ClipPlaneId) -> None:
         """Unselect cutting plane
 
         :param index: index of cutting plane
@@ -2094,7 +2397,13 @@ class Nviz:
         Nviz_get_zrange(self.data, byref(min), byref(max))
         return min.value, max.value
 
-    def SaveToFile(self, filename, width=20, height=20, itype="ppm"):
+    def SaveToFile(
+        self,
+        filename: str,
+        width: int = 20,
+        height: int = 20,
+        itype: Literal["ppm", "tif"] = "ppm",
+    ) -> None:
         """Save current GL screen to ppm/tif file
 
         :param filename: file name
@@ -2124,7 +2433,16 @@ class Nviz:
         """Draw fringe"""
         Nviz_draw_fringe(self.data)
 
-    def SetFringe(self, sid, color, elev, nw=False, ne=False, sw=False, se=False):
+    def SetFringe(
+        self,
+        sid: SurfaceId,
+        color: tuple[int, int, int] | tuple[int, int, int, int],
+        elev: float,
+        nw: bool = False,
+        ne: bool = False,
+        sw: bool = False,
+        se: bool = False,
+    ) -> None:
         """Set fringe
 
         :param sid: surface id
@@ -2144,16 +2462,18 @@ class Nviz:
             int(se),
         )
 
-    def DrawArrow(self):
+    def DrawArrow(self) -> Literal[1]:
         """Draw north arrow"""
         return Nviz_draw_arrow(self.data)
 
-    def SetArrow(self, sx, sy, size, color):
+    def SetArrow(self, sx: int, sy: int, size: float, color: str) -> Literal[1, 0]:
         """Set north arrow from canvas coordinates
 
         :param sx,sy: canvas coordinates
         :param size: arrow length
         :param color: arrow color
+        :return: 1 on success
+        :return: 0 on failure (no surfaces found)
         """
         return Nviz_set_arrow(self.data, sx, sy, size, Nviz_color_from_str(color))
 
@@ -2183,7 +2503,9 @@ class Nviz:
         """Delete scalebar"""
         Nviz_delete_scalebar(self.data, id)
 
-    def GetPointOnSurface(self, sx, sy, scale=1):
+    def GetPointOnSurface(
+        self, sx, sy, scale: float = 1
+    ) -> tuple[SurfaceId, float, float, float] | tuple[None, None, None, None]:
         """Get point on surface
 
         :param sx,sy: canvas coordinates (LL)
@@ -2226,7 +2548,13 @@ class Nviz:
             "color": DecodeString(valstr.value),
         }
 
-    def GetDistanceAlongSurface(self, sid, p1, p2, useExag=True):
+    def GetDistanceAlongSurface(
+        self,
+        sid: SurfaceId,
+        p1: tuple[float, float],
+        p2: tuple[float, float],
+        useExag: bool = True,
+    ) -> float:
         """Get distance measured along surface"""
         d = c_float()
 
@@ -2325,11 +2653,15 @@ class Texture:
         :param coords: image coordinates
         """
         self.path = filepath
-        self.image = autoCropImageFromFile(filepath)
+        self.image: wx.Image = autoCropImageFromFile(filepath)
+        self.width: int
+        self.orig_width: int
+        self.height: int
+        self.orig_height: int
         self.width = self.orig_width = self.image.GetWidth()
         self.height = self.orig_height = self.image.GetHeight()
-        self.id = overlayId
-        self.coords = coords
+        self.id: int = overlayId
+        self.coords: tuple[int, int] = coords
         self.active = True
 
         # alpha needs to be initialized
