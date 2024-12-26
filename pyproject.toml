@@ -461,25 +461,24 @@ skips = ["B324", "B110", "B101", "B112", "B311", "B404", "B603"]
 # # the module_or_package argument.
 # # from-stdin =
 
-# # Files or directories to be skipped. They should be base names, not paths.
-# ignore = ["CVS"]
+# Files or directories to be skipped. They should be base names, not paths.
+ignore = ["CVS", ".git", ".ruff_cache", ".pytest_cache"]
 
 # Add files or directories matching the regular expressions patterns to the
 # ignore-list. The regex matches against paths and can be in Posix or Windows
 # format. Because '\\' represents the directory delimiter on Windows systems, it
 # can't be used as an escape character.
 ignore-paths = [
-    ".*/python/libgrass_interface_generator/.*",
-    ".*/Makefile$",
-    ".*/OBJ[.].*",
     "dist[.].*",
     "bin[.].*",
+    "python/libgrass_interface_generator",
+    # "Makefile$",
 ]
 
-# # Files or directories matching the regular expression patterns are skipped. The
-# # regex matches against base names, not paths. The default value ignores Emacs
-# # file locks
-# ignore-patterns = ["^\\.#"]
+# Files or directories matching the regular expression patterns are skipped. The
+# regex matches against base names, not paths. The default value ignores Emacs
+# file locks
+ignore-patterns = ["^\\.#", "OBJ[.].*", "Makefile"]
 
 # # List of module names for which member attributes should not be checked and will
 # # not be imported (useful for modules/projects where namespaces are manipulated
