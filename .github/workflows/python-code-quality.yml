@@ -161,12 +161,6 @@ jobs:
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) grass
 
-      - name: Run Pylint on wxGUI
-        run: |
-          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) gui/wxpython
-
       - name: Run Pylint on other files using pytest
         run: |
           pipx inject --include-apps pylint pytest
@@ -177,6 +171,12 @@ jobs:
             --pylint-ignore-patterns="${{ env.PylintIgnore }}"
         env:
           PylintIgnore: "python/.*,gui/.*"
+
+      - name: Run Pylint on wxGUI
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) gui
 
       - name: Run Pylint all in one pass
         run: |
