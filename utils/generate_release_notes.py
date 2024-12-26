@@ -131,7 +131,7 @@ def binder_badge(tag):
 
 def print_support(file=None):
     url = "https://opencollective.com/grass/tiers/supporter/all.json"
-    response = requests.get(url=url)
+    response = requests.get(url=url, timeout=7)
     data = response.json()
     if data:
         print_section_heading_3("Monthly Financial Supporters", file=file)
