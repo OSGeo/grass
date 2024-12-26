@@ -156,12 +156,16 @@ jobs:
           echo "$HOME/install/bin" >> $GITHUB_PATH
 
       - name: Run Pylint on grass package
+        # Until slower checks (like similarity) are reenabled, running in one step is faster
+        if: false
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
           pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) grass
 
       - name: Run Pylint on other files using pytest
+        # Until slower checks (like similarity) are reenabled, running in one step is faster
+        if: false
         run: |
           pipx inject --include-apps pylint pytest
           pipx inject pylint pytest-pylint pytest-github-actions-annotate-failures pytest-timeout
@@ -173,6 +177,8 @@ jobs:
           PylintIgnore: "python/.*,gui/.*"
 
       - name: Run Pylint on wxGUI
+        # Until slower checks (like similarity) are reenabled, running in one step is faster
+        if: false
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
