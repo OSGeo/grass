@@ -187,7 +187,6 @@ class TestIFFT(TestCase):
             np.allclose(original_values, reconstructed_values, atol=1e-5),
             "Reconstructed raster does not match the original",
         )
-
-
+        
 if __name__ == "__main__":
     test()
