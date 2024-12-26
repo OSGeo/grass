@@ -175,13 +175,10 @@ jobs:
           pipx inject pylint pytest-pylint pytest-github-actions-annotate-failures pytest-timeout
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          pytest --pylint -m pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) \
+          pytest --pylint -m pylint --pylint-jobs=$(nproc) \
             --pylint-ignore-patterns="${{ env.PylintIgnore }}"
         env:
-          PylintIgnore: "python/.*,gui/wxpython/.*,doc/.*,man/.*,utils/.*,locale/.*,raster/.*,\
-            imagery/.*,scripts/r.in.wms/wms_drv.py,scripts/g.extension/g.extension.py,\
-            temporal/t.rast.accdetect/t.rast.accdetect.py,temporal/t.rast.accumulate/t.rast.accumulate.py,\
-            scripts/d.rast.edit/d.rast.edit.py"
+          PylintIgnore: "python/.*,gui/.*"
 
       - name: Run Pylint all in one pass
         run: |
