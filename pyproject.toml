@@ -434,10 +434,10 @@ ignore = ["CVS", ".git", ".ruff_cache", ".pytest_cache"]
 # format. Because '\\' represents the directory delimiter on Windows systems, it
 # can't be used as an escape character.
 ignore-paths = [
-    "dist[.].*",
     "bin[.].*",
+    "dist[.].*",
+    "gui/wxpython/menustrings.py",
     "python/libgrass_interface_generator",
-    # "Makefile$",
 ]
 
 # Files or directories matching the regular expression patterns are skipped. The
