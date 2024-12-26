@@ -496,10 +496,11 @@ ignore-patterns = ["^\\.#", "OBJ[.].*", "Makefile"]
 # avoid hangs.
 jobs = 0
 
-# # Control the amount of potential inferred values when inferring a single object.
-# # This can help the performance when dealing with large functions or complex,
-# # nested conditions.
-# limit-inference-results = 100
+# Control the amount of potential inferred values when inferring a single object.
+# This can help the performance when dealing with large functions or complex,
+# nested conditions.
+# *GRASS modified: default 'limit-inference-results = 100'*
+limit-inference-results = 10
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
@@ -729,6 +730,11 @@ max-locals = 50
 # # Maximum number of parents for a class (see R0901).
 # max-parents = 7
 
+# Maximum number of positional arguments for function / method.
+# *GRASS modified: default 5, (see R0917)*
+# *GRASS TODO: Try to reduce this value*
+max-positional-arguments = 7
+
 # # Maximum number of public methods for a class (see R0904).
 # max-public-methods = 20
 
@@ -858,77 +864,149 @@ disable = [
     "useless-suppression",
     # *GRASS modified: The following rules are added to the disabled list*
     # *GRASS TODO: Try to ignore less rules*
-    "anomalous-backslash-in-string",
-    "attribute-defined-outside-init",
-    "bare-except",
-    "broad-exception-caught",
-    "cell-var-from-loop",
-    "chained-comparison",
-    "consider-iterating-dictionary",
-    "consider-using-dict-items",
-    "consider-using-enumerate",
-    "consider-using-f-string",
-    "consider-using-from-import",
-    "consider-using-generator",
-    "consider-using-get",
-    "consider-using-in",
-    "consider-using-max-builtin",
-    "consider-using-min-builtin",
-    "consider-using-with",
-    "deprecated-argument",
-    "deprecated-method",
-    "eval-used",
-    "expression-not-assigned",
-    "fixme",
-    "global-statement",
-    "global-variable-not-assigned",
-    "global-variable-undefined",
-    "import-error",
-    "import-outside-toplevel",
-    "inconsistent-return-statements",
-    "invalid-name",
-    "line-too-long",
-    "missing-class-docstring",
-    "missing-function-docstring",
-    "missing-module-docstring",
-    "no-else-break",
-    "no-else-raise",
-    "no-else-return",
-    "no-member",
-    "no-name-in-module",
-    "no-value-for-parameter",
-    "not-callable",
-    "raise-missing-from",
-    "redefined-builtin",
-    "redefined-outer-name",
-    "self-assigning-variable",
-    "simplifiable-if-statement",
-    "super-with-arguments",
-    "undefined-loop-variable",
-    "undefined-variable",
-    "unidiomatic-typecheck",
-    "unnecessary-comprehension",
-    "unnecessary-pass",
-    "unnecessary-negation",
-    "unspecified-encoding",
-    "unused-argument",
-    "unused-import",
-    "unused-variable",
-    "use-a-generator",
-    "use-list-literal",
-    "use-maxsplit-arg",
-    "useless-import-alias",
-    "useless-object-inheritance",
-    "useless-return",
-    "wrong-import-order",
-    "wrong-import-position",
+    "C0103",  # Constant name "%s" doesn't conform to UPPER_CASE naming style (invalid-name)
+    "C0104",  # Disallowed name "foo" (disallowed-name)
+    "C0112",  # Empty %s docstring (empty-docstring)
+    "C0114",  # Missing module docstring (missing-module-docstring)
+    "C0115",  # Missing class docstring (missing-class-docstring)
+    "C0116",  # Missing function or method docstring (missing-function-docstring)
+    "C0117",  # Consider changing "not self.optype == 'boolean'" to "self.optype != 'boolean'" (unnecessary-negation)
+    "C0123",  # Use isinstance() rather than type() for a typecheck. (unidiomatic-typecheck)
+    "C0200",  # Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+    "C0201",  # Consider iterating the dictionary directly instead of calling .keys() (consider-iterating-dictionary)
+    "C0204",  # Metaclass class method %s should have %s as first argument (bad-mcs-classmethod-argument)
+    "C0206",  # Consider iterating with .items() (consider-using-dict-items)
+    "C0207",  # Use str(self.start).split(' ', maxsplit=1)[0] instead (use-maxsplit-arg)
+    "C0209",  # Formatting a regular string which could be an f-string (consider-using-f-string)
+    "C0301",  # Line too long (line-too-long)
+    "C0302",  # Too many lines in module (%s/%s) (too-many-lines)
+    "C0325",  # Unnecessary parens after %r keyword (superfluous-parens)
+    "C0411",  # Standard library/third-party library import should be placed before local imports (wrong-import-order)
+    "C0412",  # Imports from package %s are not grouped (ungrouped-imports)
+    "C0413",  # Import "%s" should be placed at the top of the module (wrong-import-position)
+    "C0415",  # (import-outside-toplevel)
+    "C1802",  # Do not use `len(SEQUENCE)` without comparison to determine if a sequence is empty (use-implicit-booleaness-not-len)
+    "C1803",  # "%s" can be simplified to "%s", if it is strictly a sequence, as an empty %s is falsey (use-implicit-booleaness-not-comparison)
+    "C2801",  # Unnecessarily calls dunder method %s. %s. (unnecessary-dunder-call)
+    "E0102",  # %s already defined line %s (function-redefined)
+    "E0203",  # Access to member %r before its definition line %s (access-member-before-definition)
+    "E0213",  # Method %r should have "self" as first argument (no-self-argument)
+    "E0401",  # Unable to import %r (import-error)
+    "E0601",  # Using variable %r before assignment (used-before-assignment)
+    "E0602",  # Undefined variable %r (undefined-variable)
+    "E0606",  # Possibly using variable %r before assignment (possibly-used-before-assignment)
+    "E0611",  # No name %r in module %r (no-name-in-module)
+    "E0633",  # Attempting to unpack a non-sequence%s (unpacking-non-sequence)
+    "E0704",  # The raise statement is not inside an except clause (misplaced-bare-raise)
+    "E1003",  # Bad first argument %r given to super() (bad-super-call)
+    "E1101",  # Instance of %r has no %r member (no-member)
+    "E1102",  # %s is not callable (not-callable)
+    "E1111",  # Assigning result of a function call, where the function has no return (assignment-from-no-return)
+    "E1120",  # No value for argument %r in constructor call (no-value-for-parameter)
+    "E1121",  # (too-many-function-args)
+    "E1123",  # Unexpected keyword argument %r in %s call (unexpected-keyword-arg)
+    "E1124",  # Argument %r passed by position and keyword in %s call (redundant-keyword-arg)
+    "E1126",  # Sequence index is not an int, slice, or instance with __index__ (invalid-sequence-index)
+    "E1128",  # Assigning result of a function call, where the function returns None (assignment-from-none)
+    "E1133",  # Non-iterable value %s is used in an iterating context (not-an-iterable)
+    "E1135",  # Value '%s' doesn't support membership test (unsupported-membership-test)
+    "E1136",  # Value '%s' is unsubscriptable (unsubscriptable-object)
+    "E1137",  # %r does not support item assignment (unsupported-assignment-operation)
+    "E1307",  # Argument %r does not match format type %r (bad-string-format-type)
+    "R0204",  # Redefinition of %s type from %s to %s (redefined-variable-type)
+    "R0401",  # Cyclic import (%s) (cyclic-import)
+    "R0801",  # Similar lines in %s files %s (duplicate-code)
+    "R0901",  # (too-many-ancestors)
+    "R0902",  # (too-many-instance-attributes)
+    "R0903",  # (too-few-public-methods)
+    "R0904",  # (too-many-public-methods)
+    "R0911",  # (too-many-return-statements)
+    "R0912",  # (too-many-branches)
+    "R0913",  # (too-many-arguments)
+    "R0914",  # (too-many-locals)
+    "R0915",  # (too-many-statements)
+    "R0916",  # (too-many-boolean-expressions)
+    "R0917",  # (too-many-positional-arguments)
+    "R1702",  # (too-many-nested-blocks)
+    "R1703",  # The if statement can be replaced with %s (simplifiable-if-statement)
+    "R1704",  # Redefining argument with the local name %r (redefined-argument-from-local)
+    "R1705",  # Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+    "R1710",  # Either all return statements in a function should return an expression, or none of them should. (inconsistent-return-statements)
+    "R1711",  # Useless return at end of function or method (useless-return)
+    "R1712",  # Consider using tuple unpacking for swapping variables (consider-swap-variables)
+    "R1713",  # Consider using str.join(sequence) for concatenating strings from an iterable (consider-using-join)
+    "R1714",  # Consider merging these comparisons with 'in' by using '%s %sin (%s)'. Use a set instead if elements are hashable. (consider-using-in)
+    "R1715",  # Consider using dict.get for getting values from a dict if a key is present or a default if not (consider-using-get)
+    "R1716",  # Simplify chained comparison between the operands (chained-comparison)
+    "R1721",  # Unnecessary use of a comprehension, use %s instead. (unnecessary-comprehension)
+    "R1724",  # Unnecessary "%s" after "continue", %s (no-else-continue)
+    "R1727",  # Boolean condition '%s' will always evaluate to '%s' (condition-evals-to-constant)
+    "R1732",  # Consider using 'with' for resource-allocating operations (consider-using-with)
+    "R1733",  # Unnecessary dictionary index lookup, use '%s' instead (unnecessary-dict-index-lookup)
+    "R1735",  # Consider using '{**item}' instead of a call to 'dict'. (use-dict-literal)
+    "R6301",  # Method could be a function (no-self-use)
+    "RP0401", # Report: Imports checker: External dependencies
+    "RP0801", # Report: Similarities: Duplication
+    "W0101",  # Unreachable code (unreachable)
+    "W0102",  # Dangerous default value %s as argument (dangerous-default-value)
+    "W0104",  # Statement seems to have no effect (pointless-statement)
+    "W0106",  # Expression "%s" is assigned to nothing (expression-not-assigned)
+    "W0108",  # Lambda may not be necessary (unnecessary-lambda)
+    "W0123",  # Use of eval (eval-used)
+    "W0125",  # Using a conditional statement with a constant value (using-constant-test)
+    "W0133",  # Exception statement has no effect (pointless-exception-statement)
+    "W0141",  # Used builtin function %s (bad-builtin)
+    "W0201",  # Attribute %r defined outside __init__(attribute-defined-outside-init)
+    "W0212",  # Access to a protected member %s of a client class (protected-access)
+    "W0221",  # (arguments-differ)
+    "W0222",  # Signature differs from %s %r method (signature-differs)
+    "W0223",  # Method %r is abstract in class %r but is not overridden in child class %r (abstract-method)
+    "W0231",  # __init__ method from base class %r is not called (super-init-not-called)
+    "W0237",  # (arguments-renamed)
+    "W0246",  # Useless parent or super() delegation in method %r (useless-parent-delegation)
+    "W0401",  # Wildcard import %s (wildcard-import)
+    "W0404",  # Reimport %r (imported line %s) (reimported)
+    "W0511",  # (fixme)
+    "W0601",  # Global variable %r undefined at the module level (global-variable-undefined)
+    "W0602",  # Using global for %r but no assignment is done (global-variable-not-assigned)
+    "W0603",  # Using the global statement (global-statement)
+    "W0604",  # Using the global statement at the module level (global-at-module-level)
+    "W0611",  # (unused-import)
+    "W0612",  # Unused variable %r (unused-variable)
+    "W0613",  # Unused argument %r (unused-argument)
+    "W0614",  # Unused import(s) %s from wildcard import of %s (unused-wildcard-import)
+    "W0621",  # Redefining name %r from outer scope (line %s) (redefined-outer-name)
+    "W0621",  # Redefining name %r from outer scope (line %s) (redefined-outer-name)
+    "W0622",  # Redefining built-in %r (redefined-builtin)
+    "W0631",  # Using possibly undefined loop variable %r (undefined-loop-variable)
+    "W0632",  # Possible unbalanced tuple unpacking with sequence %s: left side has %d label%s, right side has %d value%s (unbalanced-tuple-unpacking)
+    "W0640",  # Cell variable %s defined in loop (cell-var-from-loop)
+    "W0641",  # Possibly unused variable %r (possibly-unused-variable)
+    "W0702",  # No exception type(s) specified (bare-except)
+    "W0707",  # Consider explicitly re-raising using %s'%s from %s' (raise-missing-from)
+    "W0716",  # Invalid exception operation. %s (wrong-exception-operation)
+    "W0718",  # Catching too general exception Exception (broad-exception-caught)
+    "W0719",  # Raising too general exception: %s (broad-exception-raised)
+    "W1113",  # Keyword argument before variable positional arguments list in the definition of %s function (keyword-arg-before-vararg)
+    "W1114",  # Positional arguments appear to be out of order (arguments-out-of-order)
+    "W1308",  # Duplicate string formatting argument %r, consider passing as named argument (duplicate-string-formatting-argument)
+    "W1503",  # Redundant use of %s with constant value %r (redundant-unittest-assert)
+    "W1508",  # %s default type is %s. Expected str or None. (invalid-envvar-default)
+    "W1510",  # 'subprocess.run' used without explicitly defining the value for 'check'. (subprocess-run-check)
+    "W1514",  # Using open without explicitly specifying an encoding (unspecified-encoding)
+    "W4701",  # Iterated list '%s' is being modified inside for loop body, consider iterating through a copy of it instead. (modified-iterating-list)
+    "W4901",  # Deprecated module %r (deprecated-module)
+    "W4902",  # Using deprecated method %s (deprecated-method)
+    # "RP0402", # Report: Imports checker: Modules dependencies graph
+
+    "similarities", # too long to run
 ]
 
-# # Enable the message, report, category or checker with the given id(s). You can
-# # either give multiple identifier separated by comma (,) or put this option
-# # multiple time (only on the command line, not in the configuration file where it
-# # should appear only once). See also the "--disable" option for examples.
-# # enable =
+# Enable the message, report, category or checker with the given id(s). You can
+# either give multiple identifier separated by comma (,) or put this option
+# multiple time (only on the command line, not in the configuration file where it
+# should appear only once). See also the "--disable" option for examples.
+enable = ["deprecated-pragma"]
 
 # [tool.pylint.method_args]
 # # List of qualified names (i.e., library.method) which require a timeout
@@ -966,7 +1044,7 @@ max-nested-blocks = 7
 # # empty (resulting in expected fixes of the type: ``"- " + " - ".join(items)``)
 # suggest-join-with-non-empty-separator = true
 
-# [tool.pylint.reports]
+[tool.pylint.reports]
 # # Python expression which should return a score less than or equal to 10. You
 # # have access to the variables 'fatal', 'error', 'warning', 'refactor',
 # # 'convention', and 'info' which contain the number of messages in each category,
@@ -983,8 +1061,8 @@ max-nested-blocks = 7
 # can also give a reporter class, e.g. mypackage.mymodule.MyReporterClass.
 output-format = "colorized"
 
-# # Tells whether to display a full report or only the messages.
-# # reports =
+# Tells whether to display a full report or only the messages.
+reports = true
 
 # # Activate the evaluation score.
 # score = true
