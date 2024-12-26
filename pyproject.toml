@@ -1,6 +1,7 @@
 [project]
 name = "grass"
 requires-python = ">=3.9"
+# *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
 
 [tool.black]
 line-length = 88
