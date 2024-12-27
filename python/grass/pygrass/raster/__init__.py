@@ -133,9 +133,6 @@ class RasterRow(RasterAbstractBase):
 
     """
 
-    def __init__(self, name, mapset="", *args, **kargs):
-        super().__init__(name, mapset, *args, **kargs)
-
     # mode = "r", method = "row",
     @must_be_open
     def get_row(self, row, row_buffer=None):

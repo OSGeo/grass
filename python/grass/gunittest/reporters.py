@@ -959,9 +959,6 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
         super().__init__()
         self._stream = stream
 
-    def start(self, results_dir):
-        super().start(results_dir)
-
     def finish(self):
         super().finish()
 
