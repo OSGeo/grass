@@ -20,28 +20,33 @@ This program is free software under the GNU General Public License
 @author Luca Delucchi <lucadeluge gmail com>
 """
 
+from __future__ import annotations
+
 import os
+from typing import TYPE_CHECKING
 
 import wx
 from core.globalvar import wxPythonPhoenix
 
-if wxPythonPhoenix:
+if wxPythonPhoenix or TYPE_CHECKING:
     from wx import adv as wiz
     from wx.adv import Wizard
 else:
     from wx import wizard as wiz
     from wx.wizard import Wizard
-import wx.lib.scrolledpanel as scrolled
 
+import wx.lib.scrolledpanel as scrolled
+from core.gcmd import GError, GMessage, RunCommand
 from gui_core import gselect
 from gui_core.wrap import Button, StaticText, TextCtrl
 from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
 from rlisetup.functions import checkValue, retRLiPath
 from rlisetup.sampling_frame import RLiSetupMapPanel
+
+from grass.exceptions import CalledModuleError
 from grass.script import core as grass
 from grass.script import raster as grast
 from grass.script import vector as gvect
-from grass.exceptions import CalledModuleError
 
 from .functions import (
     SamplingType,
@@ -50,7 +55,9 @@ from .functions import (
     obtainCategories,
     sampleAreaVector,
 )
-from core.gcmd import GError, GMessage, RunCommand
+
+if TYPE_CHECKING:
+    from wx.adv import WizardEvent
 
 
 class RLIWizard:
@@ -692,7 +699,7 @@ class FirstPage(TitledPage):
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Sets the default values, for the entire map"""
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
@@ -735,7 +742,7 @@ class FirstPage(TitledPage):
         """
         return bool(self.conf_name and bool(self.rast and bool(self.VectorEnabled)))
 
-    def OnExitPage(self, event=None):
+    def OnExitPage(self, event: WizardEvent | None = None) -> None:
         """Function during exiting"""
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
@@ -891,7 +898,7 @@ class KeyboardPage(TitledPage):
         self.ColLentxt.SetValue(self.col_len)
         self.RowLentxt.SetValue(self.row_len)
 
-    def OnExitPage(self, event=None):
+    def OnExitPage(self, event: WizardEvent | None = None) -> None:
         """Function during exiting"""
         if (
             self.row_len == ""
@@ -923,7 +930,7 @@ class DrawSampleFramePage(TitledPage):
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Function during entering"""
         if self.mapPanel is None:
             self.mapPanel = RLiSetupMapPanel(self, samplingType="drawFrame")
@@ -951,7 +958,7 @@ class DrawSampleFramePage(TitledPage):
                 render=True,
             )
 
-    def OnExitPage(self, event=None):
+    def OnExitPage(self, event: WizardEvent | None = None) -> None:
         """Function during exiting"""
         if event.GetDirection():
             self.SetNext(self.parent.samplingareapage)
@@ -1071,7 +1078,7 @@ class SamplingAreasPage(TitledPage):
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Insert values into text controls for summary of location
         creation options
         """
@@ -1230,7 +1237,7 @@ class DrawRegionsPage(TitledPage):
             )
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Function during entering"""
         if self.parent.samplingareapage.samplingtype == SamplingType.WHOLE:
             self.title.SetLabel(_("Draw moving windows region"))
@@ -1265,12 +1272,12 @@ class DrawRegionsPage(TitledPage):
                 render=True,
             )
 
-    # def OnExitPage(self, event=None):
-    # Function during exiting
-    # print event.GetDirection()
-    # if event.GetDirection():
-    #    self.SetNext(self.parent.samplingareapage)
-    #    self.parent.samplingareapage.SetPrev(self)
+    # def OnExitPage(self, event: WizardEvent | None = None) -> None:
+    #     """Function during exiting"""
+    #     print(event.GetDirection())
+    #     if event.GetDirection():
+    #         self.SetNext(self.parent.samplingareapage)
+    #         self.parent.samplingareapage.SetPrev(self)
 
 
 class SampleUnitsKeyPage(TitledPage):
@@ -1400,14 +1407,14 @@ class SampleUnitsKeyPage(TitledPage):
         # self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
         self.OnType(None)
 
-    def OnEnterPage(self, event=None):
+    def OnEnterPage(self, event: WizardEvent | None = None) -> None:
         """Function during entering"""
         # This is an hack to force the user to choose Rectangle or Circle
         self.typeBox.SetSelection(2),
         self.typeBox.ShowItem(2, False)
         self.panelSizer.Layout()
 
-    def OnExitPage(self, event=None):
+    def OnExitPage(self, event: WizardEvent | None = None) -> None:
         """Function during exiting"""
         if event.GetDirection():
             self.SetNext(self.parent.summarypage)
@@ -1545,7 +1552,7 @@ class MovingKeyPage(TitledPage):
         self.heightTxt.Bind(wx.EVT_TEXT, self.OnHeight)
         wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         # This is an hack to force the user to choose Rectangle or Circle
         #        self.typeBox.SetSelection(2),
         #        self.typeBox.ShowItem(2, False)
@@ -1634,7 +1641,7 @@ class UnitsMousePage(TitledPage):
         self.OnType(None)
         self.regionNumTxt.SetValue("")
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Function during entering"""
         if self.numregions:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
@@ -1693,7 +1700,7 @@ class UnitsMousePage(TitledPage):
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
-    def OnExitPage(self, event=None):
+    def OnExitPage(self, event: WizardEvent | None = None) -> None:
         """Function during exiting"""
         if event.GetDirection():
             self.SetNext(self.drawsampleunitspage)
@@ -1730,7 +1737,7 @@ class DrawSampleUnitsPage(TitledPage):
             )
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Function during entering"""
 
         if self.parent.samplingareapage.samplingtype in {
@@ -1777,9 +1784,8 @@ class DrawSampleUnitsPage(TitledPage):
                 render=True,
             )
 
-    def OnExitPage(self, event=None):
+    def OnExitPage(self, event: WizardEvent | None = None) -> None:
         """Function during exiting"""
-
         # if event.GetDirection():
         #    self.SetNext(self.parent.samplingareapage)
         #    self.parent.samplingareapage.SetPrev(self)
@@ -1889,7 +1895,7 @@ class VectorAreasPage(TitledPage):
                 self.map_.DeleteLayer(layer)
         self.areaText.SetLabel("Is this area (cat={n}) ok?".format(n=cat))
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Function during entering: draw the raster map and the first vector
         feature"""
         if self.mapPanel is None:
@@ -1929,7 +1935,7 @@ class VectorAreasPage(TitledPage):
             )
         self.newCat()
 
-    def OnExitPage(self, event=None):
+    def OnExitPage(self, event: WizardEvent | None = None) -> None:
         """Function during exiting"""
         grass.del_temp_region()
 
@@ -2136,7 +2142,7 @@ class SummaryPage(TitledPage):
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
         )
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Insert values into text controls for summary of location
         creation options
         """
