@@ -188,6 +188,67 @@ class TestIFFT(TestCase):
             "Reconstructed raster does not match the original",
         )
 
+    def test_all_zero_raster(self):
+        """Test FFT behavior with an all-zero raster."""
+        self.runModule(
+            "r.mapcalc", expression=f"{self.input_raster} = 0", overwrite=True
+        )
+        self.assertModule(
+            "i.fft",
+            input=self.input_raster,
+            real=self.real_output,
+            imaginary=self.imag_output,
+            overwrite=True,
+        )
+        real_values = self._parse_raster_values(self.real_output)
+        imag_values = self._parse_raster_values(self.imag_output)
+        self.assertTrue(
+            np.allclose(real_values, 0), "Real component should be all zeros"
+        )
+        self.assertTrue(
+            np.allclose(imag_values, 0), "Imaginary component should be all zeros"
+        )
+
+    def test_all_one_raster(self):
+        """Test FFT behavior with an all-one raster."""
+        self.runModule(
+            "r.mapcalc", expression=f"{self.input_raster} = 1", overwrite=True
+        )
+        self.assertModule(
+            "i.fft",
+            input=self.input_raster,
+            real=self.real_output,
+            imaginary=self.imag_output,
+            overwrite=True,
+        )
+        real_values = self._parse_raster_values(self.real_output)
+        imag_values = self._parse_raster_values(self.imag_output)
+        self.assertTrue(
+            np.all(np.isfinite(real_values)), "Real component should have valid values"
+        )
+        self.assertTrue(
+            np.all(np.isfinite(imag_values)),
+            "Imaginary component should have valid values",
+        )
+
+    def test_large_raster_performance(self):
+        """Assess performance with a larger raster."""
+        self.runModule("g.region", n=90, s=-90, e=180, w=-180, rows=1000, cols=1000)
+        self.runModule(
+            "r.mapcalc", expression=f"{self.input_raster} = col()", overwrite=True
+        )
+
+        self.assertModule(
+            "i.fft",
+            input=self.input_raster,
+            real=self.real_output,
+            imaginary=self.imag_output,
+            overwrite=True,
+        )
+
+        self.assertRasterExists(self.real_output)
+        self.assertRasterExists(self.imag_output)
+
 
 if __name__ == "__main__":
     test()
