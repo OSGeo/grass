@@ -34,16 +34,15 @@ This program is free software under the GNU General Public License
 from __future__ import annotations
 
 import os
-import sys
 import shutil
+import sys
 from copy import copy
 from typing import TYPE_CHECKING
 
 import wx
-from wx.lib.mixins.listctrl import ColumnSorterMixin, ListCtrlAutoWidthMixin
 import wx.lib.colourselect as csel
-
 from core import globalvar
+from wx.lib.mixins.listctrl import ColumnSorterMixin, ListCtrlAutoWidthMixin
 
 if globalvar.wxPythonPhoenix or TYPE_CHECKING:
     from wx import adv as wiz
@@ -52,29 +51,29 @@ else:
 
 import grass.script as gs
 
+# isort: split
 
 from core import utils
+from core.gcmd import GError, GMessage, GWarning, RunCommand
+from core.giface import Notification
 from core.render import Map
-from gui_core.gselect import Select, LocationSelect, MapsetSelect
-from gui_core.dialogs import GroupDialog
-from gui_core.mapdisp import FrameMixin
-from core.gcmd import RunCommand, GMessage, GError, GWarning
 from core.settings import UserSettings
 from gcp.mapdisplay import MapPanel
-from core.giface import Notification
+from gui_core.dialogs import GroupDialog
+from gui_core.gselect import LocationSelect, MapsetSelect, Select
+from gui_core.mapdisp import FrameMixin
 from gui_core.wrap import (
-    SpinCtrl,
-    Button,
-    StaticText,
-    StaticBox,
-    CheckListBox,
-    TextCtrl,
-    Menu,
-    ListCtrl,
     BitmapFromImage,
+    Button,
+    CheckListBox,
     CheckListCtrlMixin,
+    ListCtrl,
+    Menu,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
 )
-
 from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
 
 if TYPE_CHECKING:
@@ -1501,6 +1500,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 )
                 # Get the elevation height from the map given by i.ortho.elev
                 from subprocess import PIPE
+
                 from grass.pygrass.modules import Module
 
                 rwhat = Module(

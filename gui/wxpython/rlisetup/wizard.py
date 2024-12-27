@@ -34,17 +34,19 @@ if wxPythonPhoenix or TYPE_CHECKING:
 else:
     from wx import wizard as wiz
     from wx.wizard import Wizard
-import wx.lib.scrolledpanel as scrolled
 
+import wx.lib.scrolledpanel as scrolled
+from core.gcmd import GError, GMessage, RunCommand
 from gui_core import gselect
 from gui_core.wrap import Button, StaticText, TextCtrl
 from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
 from rlisetup.functions import checkValue, retRLiPath
 from rlisetup.sampling_frame import RLiSetupMapPanel
+
+from grass.exceptions import CalledModuleError
 from grass.script import core as grass
 from grass.script import raster as grast
 from grass.script import vector as gvect
-from grass.exceptions import CalledModuleError
 
 from .functions import (
     SamplingType,
@@ -53,7 +55,6 @@ from .functions import (
     obtainCategories,
     sampleAreaVector,
 )
-from core.gcmd import GError, GMessage, RunCommand
 
 if TYPE_CHECKING:
     from wx.adv import WizardEvent
