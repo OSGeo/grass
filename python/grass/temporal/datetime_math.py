@@ -634,90 +634,87 @@ def compute_datetime_delta(start: datetime, end: datetime) -> datetime_delta:
 
     :return: A dictionary with year, month, day, hour, minute, second and max_days as keys()
     """  # noqa: E501
-    _year: int = 0
-    _month: int = 110
-    _day: int = 0
-    _hour: int = 0
-    _minute: int = 0
-    _second: int = 0
+    # TODO: set default values here, and ensure processing below covers all situations,
+    # not leaking these default values
+    comp = datetime_delta(
+        year=0,
+        month=110,
+        day=0,
+        hour=0,
+        minute=0,
+        second=0,
+        max_days=(end - start).days,
+    )
 
-    day_diff: int = (end - start).days
+    day_diff = comp["max_days"]
 
     # Date
     # Count full years
-    _year: int = end.year - start.year
+    comp["year"] = end.year - start.year
 
     # Count full months
     if start.month == 1 and end.month == 1:
-        _month = 0
+        comp["month"] = 0
     elif start.day == 1 and end.day == 1:
         d = end.month - start.month
         if d < 0:
-            d += 12 * _year
+            d += 12 * comp["year"]
         elif d == 0:
-            d = 12 * _year
-        _month = d
+            d = 12 * comp["year"]
+        comp["month"] = d
 
     # Count full days
-    _day = 0 if start.day == 1 and end.day == 1 else day_diff
+    comp["day"] = 0 if start.day == 1 and end.day == 1 else day_diff
 
     # Time
     # Hours
     if start.hour == 0 and end.hour == 0:
-        _hour = 0
+        comp["hour"] = 0
     else:
         d = end.hour - start.hour
         if d < 0:
             d += 24 + 24 * day_diff
         else:
             d += 24 * day_diff
-        _hour = d
+        comp["hour"] = d
 
     # Minutes
     if start.minute == 0 and end.minute == 0:
-        _minute = 0
+        comp["minute"] = 0
     else:
         d = end.minute - start.minute
         if d != 0:
-            if _hour:
-                d += 60 * _hour
+            if comp["hour"]:
+                d += 60 * comp["hour"]
             else:
                 d += 24 * 60 * day_diff
         elif d == 0:
-            d = 60 * _hour if _hour else 24 * 60 * day_diff
+            d = 60 * comp["hour"] if comp["hour"] else 24 * 60 * day_diff
 
-        _minute = d
+        comp["minute"] = d
 
     # Seconds
     if start.second == 0 and end.second == 0:
-        _second = 0
+        comp["second"] = 0
     else:
         d = end.second - start.second
         if d != 0:
-            if _minute:
-                d += 60 * _minute
-            elif _hour:
-                d += 3600 * _hour
+            if comp["minute"]:
+                d += 60 * comp["minute"]
+            elif comp["hour"]:
+                d += 3600 * comp["hour"]
             else:
                 d += 24 * 60 * 60 * day_diff
         elif d == 0:
-            if _minute:
-                d = 60 * _minute
-            elif _hour:
-                d = 3600 * _hour
+            if comp["minute"]:
+                d = 60 * comp["minute"]
+            elif comp["hour"]:
+                d = 3600 * comp["hour"]
             else:
                 d = 24 * 60 * 60 * day_diff
-        _second = d
+        comp["second"] = d
 
-    return datetime_delta(
-        year=_year,
-        month=_month,
-        day=_day,
-        hour=_hour,
-        minute=_minute,
-        second=_second,
-        max_days=day_diff,
-    )
+    return comp
 
 
 def check_datetime_string(time_string: str, use_dateutil: bool = True):
