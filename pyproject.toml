@@ -641,7 +641,6 @@ disable = [
     "R1714",  # Consider merging these comparisons with 'in' by using '%s %sin (%s)'. Use a set instead if elements are hashable. (consider-using-in)
     "R1715",  # Consider using dict.get for getting values from a dict if a key is present or a default if not (consider-using-get)
     "R1716",  # Simplify chained comparison between the operands (chained-comparison)
-    "R1721",  # Unnecessary use of a comprehension, use %s instead. (unnecessary-comprehension)
     "R1724",  # Unnecessary "%s" after "continue", %s (no-else-continue)
     "R1727",  # Boolean condition '%s' will always evaluate to '%s' (condition-evals-to-constant)
     "R1732",  # Consider using 'with' for resource-allocating operations (consider-using-with)
