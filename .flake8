@@ -39,9 +39,6 @@ per-file-ignores =
     gui/wxpython/timeline/g.gui.timeline.py: E501
     # Generated file
     gui/wxpython/menustrings.py: E501
-    # F821 undefined name 'cmp'
-    # https://github.com/OSGeo/grass/issues/1809
-    python/grass/pydispatch/saferef.py: F821
     # C wrappers call libgis.G_gisinit before importing other modules.
     # TODO: Is this really needed?
     python/grass/pygrass/vector/__init__.py: E402
