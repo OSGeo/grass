@@ -760,7 +760,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             # TODO: replace by better handling of potential lists when parsing
             # TODO: create link to module if running in grass or in addons
             # alternatively a link to module test summary
-            if type(modules) is not list:
+            if not isinstance(modules, list):
                 modules = [modules]
 
         # here we would have also links to coverage, profiling, ...
@@ -1129,7 +1129,7 @@ class TestsuiteDirReporter:
                 test_file_authors = summary.get("test_file_authors")
                 if not test_file_authors:
                     test_file_authors = []
-                if type(test_file_authors) is not list:
+                if not isinstance(test_file_authors, list):
                     test_file_authors = [test_file_authors]
                 test_files_authors.extend(test_file_authors)
 

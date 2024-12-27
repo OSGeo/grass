@@ -578,7 +578,6 @@ disable = [
     "C0115",  # Missing class docstring (missing-class-docstring)
     "C0116",  # Missing function or method docstring (missing-function-docstring)
     "C0117",  # Consider changing "not self.optype == 'boolean'" to "self.optype != 'boolean'" (unnecessary-negation)
-    "C0123",  # Use isinstance() rather than type() for a typecheck. (unidiomatic-typecheck)
     "C0200",  # Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
     "C0201",  # Consider iterating the dictionary directly instead of calling .keys() (consider-iterating-dictionary)
     "C0204",  # Metaclass class method %s should have %s as first argument (bad-mcs-classmethod-argument)
