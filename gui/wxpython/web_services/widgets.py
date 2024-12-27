@@ -1,7 +1,7 @@
 """
 @package web_services.widgets
 
-@brief Widgets for web services (WMS, WMTS, NasaOnEarh)
+@brief Widgets for web services (WMS, WMTS, NasaOnEarth)
 
 List of classes:
  - widgets::WSPanel
@@ -16,27 +16,20 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz>
 """
 
-import re
 import os
-import wx
-import sys
+import re
 import shutil
-import grass.script as grass
-import wx.lib.colourselect as csel
-
+import sys
 from copy import deepcopy
-from core import globalvar
 from xml.etree.ElementTree import ParseError
+
+import wx
+import wx.lib.colourselect as csel
+from core import globalvar
 from core.debug import Debug
 from core.gcmd import GMessage
-from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
-from web_services.cap_interface import (
-    WMSCapabilities,
-    WMTSCapabilities,
-    OnEarthCapabilities,
-)
-from gui_core.widgets import GNotebook
-from gui_core.widgets import ManageSettingsWidget
+from core.gconsole import EVT_CMD_DONE, EVT_CMD_OUTPUT, CmdThread, GStderr
+from gui_core.widgets import GNotebook, ManageSettingsWidget
 from gui_core.wrap import (
     Button,
     ScrolledPanel,
@@ -46,23 +39,21 @@ from gui_core.wrap import (
     TextCtrl,
     TreeCtrl,
 )
+from web_services.cap_interface import (
+    OnEarthCapabilities,
+    WMSCapabilities,
+    WMTSCapabilities,
+)
 
-if globalvar.wxPythonPhoenix:
-    try:
-        import agw.flatnotebook as FN
-    except ImportError:  # if it's not there locally, try the wxPython lib.
-        import wx.lib.agw.flatnotebook as FN
-else:
-    import wx.lib.flatnotebook as FN
+import grass.script as gs
+from grass.pydispatch.signal import Signal
 
 rinwms_path = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
 if rinwms_path not in sys.path:
     sys.path.append(rinwms_path)
 
-from wms_base import WMSDriversInfo
-from srs import Srs
-
-from grass.pydispatch.signal import Signal
+from srs import Srs  # noqa:E402
+from wms_base import WMSDriversInfo  # noqa:E402
 
 
 class WSPanel(wx.Panel):
@@ -125,7 +116,7 @@ class WSPanel(wx.Panel):
 
         self.cmdStdErr = GStderr(self)
         self.cmd_thread = CmdThread(self)
-        self.cap_file = grass.tempfile()
+        self.cap_file = gs.tempfile()
 
         reqDataBox = StaticBox(parent=self, label=_(" Requested data settings "))
         self._nb_sizer = wx.StaticBoxSizer(reqDataBox, wx.VERTICAL)
@@ -145,7 +136,7 @@ class WSPanel(wx.Panel):
 
     def __del__(self):
         self.cmd_thread.abort(abortall=True)
-        grass.try_remove(self.cap_file)
+        gs.try_remove(self.cap_file)
 
     def _layout(self):
         self._nb_sizer.Add(self.notebook, proportion=1, flag=wx.EXPAND)
@@ -165,9 +156,9 @@ class WSPanel(wx.Panel):
 
         style = wx.TR_DEFAULT_STYLE | wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT
         if self.drv_props["req_multiple_layers"]:
-            style = style | wx.TR_MULTIPLE
+            style |= wx.TR_MULTIPLE
         if "WMS" not in self.ws:
-            style = style | wx.TR_HIDE_ROOT
+            style |= wx.TR_HIDE_ROOT
 
         self.list = LayersList(
             parent=self.req_page_panel, web_service=self.ws, style=style
@@ -245,14 +236,14 @@ class WSPanel(wx.Panel):
         )
 
         labels = {}
-        self.l_odrder_list = None
+        self.l_order_list = None
         if "WMS" in self.ws:
             labels["l_order"] = StaticBox(
                 parent=adv_setts_panel,
                 id=wx.ID_ANY,
                 label=_("Order of layers in raster"),
             )
-            self.l_odrder_list = wx.ListBox(
+            self.l_order_list = wx.ListBox(
                 adv_setts_panel,
                 id=wx.ID_ANY,
                 choices=[],
@@ -345,7 +336,7 @@ class WSPanel(wx.Panel):
             gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
             gridSizer.Add(
-                self.l_odrder_list,
+                self.l_order_list,
                 pos=(0, 0),
                 span=(4, 1),
                 flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
@@ -378,10 +369,7 @@ class WSPanel(wx.Panel):
                 continue
 
             if k in labels or k == "o":
-                if k != "o":
-                    label = labels[k]
-                else:
-                    label = param
+                label = labels[k] if k != "o" else param
 
                 gridSizer.Add(
                     label, flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0)
@@ -424,8 +412,8 @@ class WSPanel(wx.Panel):
 
     def OnUp(self, event):
         """Move selected layer up"""
-        if self.l_odrder_list.GetSelections():
-            pos = self.l_odrder_list.GetSelection()
+        if self.l_order_list.GetSelections():
+            pos = self.l_order_list.GetSelection()
             if pos:
                 self.sel_layers.insert(pos - 1, self.sel_layers.pop(pos))
             if pos > 0:
@@ -435,8 +423,8 @@ class WSPanel(wx.Panel):
 
     def OnDown(self, event):
         """Move selected to down"""
-        if self.l_odrder_list.GetSelections():
-            pos = self.l_odrder_list.GetSelection()
+        if self.l_order_list.GetSelections():
+            pos = self.l_order_list.GetSelection()
             if pos != len(self.sel_layers) - 1:
                 self.sel_layers.insert(pos + 1, self.sel_layers.pop(pos))
             if pos < len(self.sel_layers) - 1:
@@ -447,28 +435,25 @@ class WSPanel(wx.Panel):
     def _updateLayerOrderList(self, selected=None):
         """Update order in list."""
 
-        def getlayercaption(l):
-            if l["title"]:
-                cap = l["title"]
-            else:
-                cap = l["name"]
+        def getlayercaption(layer):
+            cap = layer["title"] or layer["name"]
 
-            if l["style"]:
-                if l["style"]["title"]:
-                    cap += " / " + l["style"]["title"]
+            if layer["style"]:
+                if layer["style"]["title"]:
+                    cap += " / " + layer["style"]["title"]
                 else:
-                    cap += " / " + l["style"]["name"]
+                    cap += " / " + layer["style"]["name"]
             return cap
 
-        layer_capts = [getlayercaption(l) for l in self.sel_layers]
-        self.l_odrder_list.Set(layer_capts)
-        if self.l_odrder_list.IsEmpty():
+        layer_capts = [getlayercaption(sel_layer) for sel_layer in self.sel_layers]
+        self.l_order_list.Set(layer_capts)
+        if self.l_order_list.IsEmpty():
             self.enableButtons(False)
         else:
             self.enableButtons(True)
             if selected is not None:
-                self.l_odrder_list.SetSelection(selected)
-                self.l_odrder_list.EnsureVisible(selected)
+                self.l_order_list.SetSelection(selected)
+                self.l_order_list.EnsureVisible(selected)
 
     def OnTransparent(self, event):
         checked = event.IsChecked()
@@ -502,7 +487,7 @@ class WSPanel(wx.Panel):
         """Manage cmd output."""
         if Debug.GetLevel() != 0:
             Debug.msg(1, event.text)
-        elif event.type != "message" and event.type != "warning":
+        elif event.type not in {"message", "warning"}:
             self.cmd_err_str += event.text + os.linesep
 
     def _prepareForNewConn(self, url, username, password):
@@ -532,10 +517,8 @@ class WSPanel(wx.Panel):
         if event.returncode != 0:
             if self.cmd_err_str:
                 self.cmd_err_str = (
-                    _(
-                        "Unable to download %s capabilities file\nfrom <%s>:\n"
-                        % (self.ws.replace("_", " "), self.conn["url"])
-                    )
+                    _("Unable to download %s capabilities file\nfrom <%s>:\n")
+                    % (self.ws.replace("_", " "), self.conn["url"])
                     + self.cmd_err_str
                 )
             self._postCapParsedEvt(error_msg=self.cmd_err_str)
@@ -552,9 +535,10 @@ class WSPanel(wx.Panel):
             self.cap = self.ws_drvs[self.ws]["cap_parser"](cap_file)
         except (OSError, ParseError) as error:
             error_msg = _(
-                "%s web service was not found in fetched capabilities file from <%s>:\n%s\n"
-                % (self.ws, self.conn["url"], str(error))
-            )
+                "%s web service was not found in fetched capabilities file from "
+                "<%s>:\n%s\n"
+            ) % (self.ws, self.conn["url"], str(error))
+
             if Debug.GetLevel() != 0:
                 Debug.msg(1, error_msg)
                 self._postCapParsedEvt(None)
@@ -628,7 +612,7 @@ class WSPanel(wx.Panel):
 
         # WMS standard - first layer in params is most bottom...
         # therefore layers order need to be reversed
-        l_st_list = [l for l in reversed(l_st_list)]
+        l_st_list.reverse()
         self.list.SelectLayers(l_st_list)
 
         params = {}
@@ -656,7 +640,7 @@ class WSPanel(wx.Panel):
 
         if "bgcolor" in dcmd and self.params["bgcolor"]:
             bgcolor = dcmd["bgcolor"].strip().lower()
-            if len(bgcolor) == 8 and "0x" == bgcolor[:2]:
+            if len(bgcolor) == 8 and bgcolor[:2] == "0x":
                 colour = "#" + bgcolor[2:]
                 self.params["bgcolor"].SetColour(colour)
 
@@ -738,9 +722,9 @@ class WSPanel(wx.Panel):
                 if sel_l not in curr_sel_ls:
                     self.sel_layers.remove(sel_l)
 
-            for l in curr_sel_ls:
-                if l not in self.sel_layers:
-                    self.sel_layers.append(l)
+            for curr in curr_sel_ls:
+                if curr not in self.sel_layers:
+                    self.sel_layers.append(curr)
 
             self._updateLayerOrderList()
         else:
@@ -751,10 +735,9 @@ class WSPanel(wx.Panel):
         self.projs_list = []
         projs_list = []
 
-        intersect_proj = []
         first = True
-        for l in curr_sel_ls:
-            layer_projs = l["cap_intf_l"].GetLayerData("srs")
+        for curr in curr_sel_ls:
+            layer_projs = curr["cap_intf_l"].GetLayerData("srs")
             if first:
                 projs_list = layer_projs
                 first = False
@@ -842,7 +825,7 @@ class WSPanel(wx.Panel):
         """Get formats
 
         WMS has formats defined generally for whole cap.
-        In WMTS and NASA OnEarh formats are defined for layer.
+        In WMTS and NASA OnEarth formats are defined for layer.
         """
         formats_label = []
         if layer is None:
@@ -921,7 +904,7 @@ class LayersList(TreeCtrl):
 
     def LoadData(self, cap=None):
         """Load data into list"""
-        # detete first all items
+        # delete first all items
         self.DeleteAllItems()
 
         if not cap:
@@ -974,7 +957,8 @@ class LayersList(TreeCtrl):
                     item,
                     {
                         "type": "layer",  # is it layer or style?
-                        "layer": layer,  # Layer instance from web_services.cap_interface
+                        # Layer instance from web_services.cap_interface
+                        "layer": layer,
                         "style": def_st,
                     },
                 )  # layer can have assigned default style
@@ -994,7 +978,7 @@ class LayersList(TreeCtrl):
         # self.ExpandAll(self.GetRootItem())
 
     def GetSelectedLayers(self):
-        """Get selected layers/styles in LayersList
+        r"""Get selected layers/styles in LayersList
 
         :return: dict with these items:
                  * 'name'  : layer name used for request
@@ -1081,18 +1065,18 @@ class LayersList(TreeCtrl):
         """
 
         def checknext(root_item, l_st_list, items_to_sel):
-            def compare(item, l_name, st_name):
+            def compare(item, l_name, st_name) -> bool:
                 it_l_name = self.GetItemData(item)["layer"].GetLayerData("name")
                 it_st = self.GetItemData(item)["style"]
                 it_type = self.GetItemData(item)["type"]
 
-                if it_l_name == l_name and (
-                    (not it_st and not st_name)
-                    or (it_st and it_st["name"] == st_name and it_type == "style")
-                ):
-                    return True
-
-                return False
+                return bool(
+                    it_l_name == l_name
+                    and (
+                        (not it_st and not st_name)
+                        or (it_st and it_st["name"] == st_name and it_type == "style")
+                    )
+                )
 
             (child, cookie) = self.GetFirstChild(root_item)
             while child.IsOk():

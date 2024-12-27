@@ -4,7 +4,7 @@
 map using the 6S algorithm (<em>Second Simulation of Satellite Signal
 in the Solar Spectrum</em>). A detailed algorithm description is
 available at the
-<a href="http://modis-sr.ltdri.org/">Land Surface
+<a href="https://salsa.umd.edu/">Land Surface
 Reflectance Science Computing Facility website</a>.
 
 <p><em>Important: Current region settings are ignored!</em> The
@@ -507,6 +507,16 @@ pre-defined satellites.
 
 <p>Define your own spectral conditions:
 
+Note that "wlinf" and "wlsup" refer to the limits of the wavelength range
+defined by the user for a given simulation. Specifically:
+
+<ul>
+<li> wlinf: This represents the lower wavelength limit (or minimum wavelength)
+     of the spectral band for which the simulation is being performed.</li>
+<li> wlsup: This represents the upper wavelength limit (or maximum wavelength)
+     of the spectral band for the simulation.</li>
+</ul>
+
 <table border="1">
 
 <tr>
@@ -786,13 +796,13 @@ but step by step output will be printed.</td>
 <tr><td>207</td><td>Worldview4 Red band (639nm - 711nm)</td></tr>
 <tr><td>208</td><td>Worldview4 NIR1 band (732nm - 962nm)</td></tr>
 
-<tr><td>208</td><td>AVIRIS b1 band (365nm)</td></tr>
-<tr><td>209</td><td>AVIRIS b2 band (375nm)</td></tr>
+<tr><td>209</td><td><b>AVIRIS</b> b1 band (365nm)</td></tr>
+<tr><td>210</td><td>AVIRIS b2 band (375nm)</td></tr>
 <tr><td>.</td><td>AVIRIS b. band (+10nm)</td></tr>
 <tr><td>431</td><td>AVIRIS b223 band (2486nm)</td></tr>
 <tr><td>432</td><td>AVIRIS b224 band (2496nm)</td></tr>
 
-<tr><td>433</td><td>Hyperion VNIR b8 band (427nm)</td></tr>
+<tr><td>433</td><td><b>Hyperion</b> VNIR b8 band (427nm)</td></tr>
 <tr><td>434</td><td>Hyperion VNIR b9 band (437.16326nm)</td></tr>
 <tr><td>.</td><td>Hyperion VNIR b. band (+10.16326nm)</td></tr>
 <tr><td>480</td><td>Hyperion VNIR b56 band (914.83648nm)</td></tr>
@@ -810,13 +820,13 @@ but step by step output will be printed.</td>
 
 <h3>Atmospheric correction of a Sentinel-2 band</h3>
 <p>This example illustrates how to perform atmospheric correction of a
-Sentinel-2 scene in the North Carolina location.
+Sentinel-2 scene in the North Carolina project.
 
 <p>Let's assume that the Sentinel-2 L1C scene
 <em>S2A_OPER_PRD_MSIL1C_PDMC_20161029T092602_R054_V20161028T155402_20161028T155402</em>
 was downloaded and imported with region cropping
 (see <a href="r.import.html">r.import</a>)
-into the <em>PERMANENT</em> mapset of the North Carolina location. The
+into the <em>PERMANENT</em> mapset of the North Carolina project. The
 computational region was set to the extent of the <em>elevation</em>
 map in the North Carolina dataset. Now, we have 13 individual bands
 (<em>B01-B12</em>) that we want to apply the atmospheric correction to.
@@ -827,26 +837,26 @@ The following steps are applied to each band separately.
 particular scene and band. To create a 6S file, we need to obtain the
 following information:
 <ul>
-    <li> geometrical conditions,
-    <li> moth, day, decimal hours in GMT, decimal longitude and latitude of measurement,
-    <li> atmospheric model,
-	<li> aerosol model,
-    <li> visibility or aerosol optical depth,
-	<li> mean target elevation above sea level,
-    <li> sensor height and,
-    <li> sensor band.
+    <li> geometrical conditions,</li>
+    <li> moth, day, decimal hours in GMT, decimal longitude and latitude of measurement,</li>
+    <li> atmospheric model,</li>
+    <li> aerosol model,</li>
+    <li> visibility or aerosol optical depth,</li>
+    <li> mean target elevation above sea level,</li>
+    <li> sensor height and,</li>
+    <li> sensor band.</li>
 </ul>
 
 <ol>
 <li><em>Geometrical conditions</em>
-<p>For Sentinel-2A, the geometrical conditions take the value <tt>25</tt> and for
-Sentinel-2B, the geometrical conditions value is <tt>26</tt> (See table A).
+<p>For Sentinel-2A, the geometrical conditions take the value <code>25</code> and for
+Sentinel-2B, the geometrical conditions value is <code>26</code> (See table A).
 Our scene comes from the Sentinel-2A mission (the file name begins with
 S2A_...).
 <br><br>
 <li><em>Day, time, longitude and latitude of measurement</em>
 <p>Day and time of the measurement are hidden in the filename (i.e., the
-second datum in the file name with format <tt>YYYYMMDDTHHMMSS</tt>),
+second datum in the file name with format <code>YYYYMMDDTHHMMSS</code>),
 and are also noted in the metadata file, which is included in the
 downloaded scene (file with .xml extension). Our sample scene was taken on
 October 28th (20161028) at 15:54:02 (155402). Note
@@ -863,20 +873,20 @@ g.region -bg
 </pre></div>
 
 <p>The longitude and latitude of the centre are stored in <em>ll_clon</em>
-and <em>ll_clat</em>. In our case, <tt>ll_clon=-78.691</tt> and
-<tt>ll_clat=35.749</tt>.
+and <em>ll_clat</em>. In our case, <code>ll_clon=-78.691</code> and
+<code>ll_clat=35.749</code>.
 
 <br><br>
 <li><em>Atmospheric model</em>
 <p>We can choose between various atmospheric models as defined at the
-beginning of this manual. For North Carolina, we can choose <tt>2 -
-midlatitude summer</tt>.
+beginning of this manual. For North Carolina, we can choose <code>2 -
+midlatitude summer</code>.
 
 <br><br>
 <li><em>Aerosol model</em>
 <p>We can also choose between various aerosol models as defined at the
-beginning of this manual. For North Carolina, we can choose <tt>1 -
-continental model</tt>.
+beginning of this manual. For North Carolina, we can choose <code>1 -
+continental model</code>.
 
 <br><br>
 <li><em>Visibility or Aerosol Optical Depth</em>
@@ -899,13 +909,13 @@ r.univar -g elevation
 </pre></div>
 
 <p>The mean elevation is stored in <em>mean</em>. In our case,
-<tt>mean=110</tt>. In the 6S file it will be displayed in [-km],
-i.e., <tt>-0.110</tt>.
+<code>mean=110</code>. In the 6S file it will be displayed in [-km],
+i.e., <code>-0.110</code>.
 
 <br><br>
 <li><em>Sensor height</em>
 <p>Since the sensor is on board a satellite, the sensor height will be
-set to <tt>-1000</tt>.
+set to <code>-1000</code>.
 
 <br><br>
 <li><em>Sensor band</em>
@@ -916,7 +926,7 @@ Sentinel-2B, from 179 to 191.
 
 <p>Finally, here is what the 6S file would look like for Band 02 of our
 scene. In order to use it in the <em>i.atcorr</em> module, we can save
-it in a text file, for example <tt>params_B02.txt</tt>.
+it in a text file, for example <code>params_B02.txt</code>.
 <div class="code"><pre>
 25
 10 28 15.901 -78.691 35.749
@@ -934,17 +944,17 @@ it in a text file, for example <tt>params_B02.txt</tt>.
 <em>B02</em> of our Sentinel 2 scene. We have to specify the following
 parameters:
 <ul>
-    <li><b>input</b> = raster band to be processed,
-    <li><b>parameters</b> = path to 6S file created in the previous step (we could also enter the values directly),
-    <li><b>output</b> = name for the output corrected raster band,
-	<li><b>range</b> = from 1 to the <tt>QUANTIFICATION_VALUE</tt> stored in the metadata file. It is <tt>10000</tt> for both Sentinel-2A and Sentinel-2B.
-	<li><b>rescale</b> = the output range of values for the corrected bands. This is up to the user to choose, for example: 0-255, 0-1, 1-10000.
+    <li><b>input</b> = raster band to be processed,</li>
+    <li><b>parameters</b> = path to 6S file created in the previous step (we could also enter the values directly),</li>
+    <li><b>output</b> = name for the output corrected raster band,</li>
+    <li><b>range</b> = from 1 to the <code>QUANTIFICATION_VALUE</code> stored in the metadata file. It is <code>10000</code> for both Sentinel-2A and Sentinel-2B.</li>
+    <li><b>rescale</b> = the output range of values for the corrected bands. This is up to the user to choose, for example: 0-255, 0-1, 1-10000.</li>
 </ul>
 <p>If the data is available, the following parameters can be specified
 as well:
 <ul>
-    <li><b>elevation</b> = raster of digital elevation model,
-    <li><b>visibility</b> = raster of visibility model.
+    <li><b>elevation</b> = raster of digital elevation model,</li>
+    <li><b>visibility</b> = raster of visibility model.</li>
 </ul>
 
 <p>Finally, this is how the command would look like to apply atmospheric
@@ -977,7 +987,7 @@ g.region raster=lsat7_2002_40 -p
 which has to be defined for the atmospheric correction. An option is to
 check the satellite overpass time with sun position as reported in the
 <a href="ftp://ftp.glcf.umd.edu/glcf/Landsat/WRS2/p016/r035/p016r035_7x20020524.ETM-EarthSat-Orthorectified/p016r035_7x20020524.met">metadata</a>
-file (<a href="http://www.grassbook.org/wp-content/uploads/ncexternal/landsat/2002/p016r035_7x20020524.met">file copy</a>; North Carolina
+file (<a href="https://grassbook.org/wp-content/uploads/ncexternal/landsat/2002/p016r035_7x20020524.met">file copy</a>; North Carolina
 sample dataset). In the case of the North Carolina sample dataset, these
 values have been stored for each channel and can be retrieved with:
 
@@ -989,7 +999,7 @@ In this case, we have: SUN_AZIMUTH = 120.8810347, SUN_ELEVATION = 64.7730999.
 <p>If the sun position metadata are unavailable, we can also calculate
 them from the overpass time as follows
 (<em><a href="r.sunmask.html">r.sunmask</a></em>
-uses <a href="http://www.nrel.gov/midc/solpos/solpos.html">SOLPOS</a>):
+uses <a href="https://www.nrel.gov/grid/solar-resource/solpos.html">SOLPOS</a>):
 
 <div class="code"><pre>
 r.sunmask -s elev=elevation out=dummy year=2002 month=5 day=24 hour=10 min=42 sec=7 timezone=-5
@@ -997,7 +1007,7 @@ r.sunmask -s elev=elevation out=dummy year=2002 month=5 day=24 hour=10 min=42 se
 </pre></div>
 
 If the overpass time is unknown, use the
-<a href="http://cloudsgate2.larc.nasa.gov/cgi-bin/predict/predict.cgi">NASA LaRC Satellite Overpass Predictor</a>.
+<a href="https://cloudsgate2.larc.nasa.gov/cgi-bin/predict/predict.cgi">NASA LaRC Satellite Overpass Predictor</a>.
 
 <h4>Convert digital numbers (DN) to radiance at top-of-atmosphere (TOA)</h4>
 
@@ -1029,7 +1039,7 @@ LMIN&lambda; and LMAX&lambda; are the radiances related to the minimal
 and maximal DN value, and they are reported in the metadata file of each
 image. High gain or low gain is also reported in the metadata file of each
 satellite image. For Landsat ETM+, the minimal DN value (QCALMIN) is 1
-(see <a href="http://landsathandbook.gsfc.nasa.gov/pdfs/Landsat7_Handbook.pdf">Landsat handbook</a>, chapter 11),
+(see <a href="https://landsat.gsfc.nasa.gov/wp-content/uploads/2016/08/Landsat7_Handbook.pdf">Landsat handbook</a>, chapter 11),
 and the maximal DN value (QCALMAX) is 255. QCAL is the DN value for every
 separate pixel in the Landsat image.
 <p>We extract the coefficients and apply them in order to obtain the
@@ -1062,7 +1072,7 @@ indicated with the <b>parameters</b> option. This is a text file
 defining geometrical and atmospherical conditions of the satellite
 overpass.
 
-Here we create a control file <tt>icnd_lsat4.txt</tt> for band 4 (NIR),
+Here we create a control file <code>icnd_lsat4.txt</code> for band 4 (NIR),
 based on metadata. For the overpass time, we need to define decimal
 hours: 10:42:07 NC local time = 10.70 decimal hours (decimal minutes:
 42 * 100 / 60) which is 15.70 GMT.
@@ -1088,7 +1098,7 @@ i.atcorr -r -a lsat7_2002_40_rad elevation=elevation parameters=icnd_lsat4.txt o
 Note that the altitude value from 'icnd_lsat4.txt' file is read at the
 beginning to compute the initial transform. Therefore, it is necessary
 to provide a value that might be the mean value of the elevation model
-(<tt>r.univar elevation</tt>). For the atmospheric correction per se, the
+(<code>r.univar elevation</code>). For the atmospheric correction per se, the
 elevation values from the raster map are used.
 <p>Note that the process is computationally intensive. Note also, that
 <em>i.atcorr</em> reports solar elevation angle above horizon rather
@@ -1105,20 +1115,20 @@ optical depth at 550nm.
 <ul>
 <li>Vermote, E.F., Tanre, D., Deuze, J.L., Herman, M., and Morcrette, J.J., 1997,
 Second simulation of the satellite signal in the solar spectrum, 6S: An
-overview., IEEE Trans. Geosc. and Remote Sens. 35(3):675-686.
+overview., IEEE Trans. Geosc. and Remote Sens. 35(3):675-686.</li>
 <!-- too new:
 <li> <a href="http://6s.ltdri.org/6S_code2_thinner_stuff/6S_ltdri_org_manual.htm">6S manual
    (new vector version; i.atcorr is based on the older scalar version)</a>
    at the <a href="http://6s.ltdri.org">6S homepage</a> of the Land Surface Reflectance
-   Science Computing Facility
+   Science Computing Facility</li>
 -->
 <li>6S Manual: <a href="http://www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P1.pdf">PDF1</a>,
     <a href="http://www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P2.pdf">PDF2</a>,
-    and <a href="http://www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P3.pdf">PDF3</a>
-<li>RapidEye sensors have been provided by <a href="http://www.rapideye.com/">RapidEye AG, Germany</a>
+    and <a href="http://www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P3.pdf">PDF3</a></li>
+<li>RapidEye sensors have been provided by <a href="https://www.planet.com/products/rapideye/">RapidEye AG, Germany</a></li>
 <li>Barsi, J.A., Markham, B.L. and Pedelty, J.A., 2011, The operational
 land imager: spectral response and spectral uniformity., Proc. SPIE 8153,
-81530G; doi:10.1117/12.895438
+81530G; doi:10.1117/12.895438</li>
 </ul>
 
 <h2>SEE ALSO</h2>
@@ -1154,10 +1164,10 @@ GRASS Wiki page about <a href="https://grasswiki.osgeo.org/wiki/Atmospheric_corr
 <p><em>RapidEye sensors addition 11/2010:</em>
 <br>Peter L&ouml;we, Anne Ghisla
 
-<p><em>VGT1 and VGT2 sensors addition from <a href="http://6s.ltdri.org/">6SV-1.1 sources</a>, addition 07/2011:</em>
+<p><em>VGT1 and VGT2 sensors addition from <a href="https://web.archive.org/web/20120207042414/http://6s.ltdri.org/">6SV-1.1 sources</a>, addition 07/2011:</em>
 <br>Alfredo Alessandrini, Anne Ghisla
 
-<p><em>Added Landsat 8 from <a href="http://landsat.gsfc.nasa.gov/?p=5779">NASA sources</a>, addition 05/2014:</em>
+<p><em>Added Landsat 8 from <a href="https://web.archive.org/web/20200616045331/https://landsat.gsfc.nasa.gov/preliminary-spectral-response-of-the-operational-land-imager-in-band-band-average-relative-spectral-response/">NASA sources</a>, addition 05/2014:</em>
 <br>Nikolaos Ves
 
 <p><em>Geoeye1 addition 7/2015:</em>

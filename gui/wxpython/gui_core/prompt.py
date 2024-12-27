@@ -27,11 +27,13 @@ import wx.stc
 from grass.script import core as grass
 from grass.script import task as gtask
 
+from grass.grassdb import history
+
 from grass.pydispatch.signal import Signal
 
 from core import globalvar
 from core import utils
-from core.gcmd import EncodeString, DecodeString
+from core.gcmd import EncodeString, DecodeString, GError
 
 
 class GPrompt:
@@ -56,14 +58,14 @@ class GPrompt:
         self.mapsetList = utils.ListOfMapsets()
 
         # auto complete items
-        self.autoCompList = list()
+        self.autoCompList = []
         self.autoCompFilter = None
 
         # command description (gtask.grassTask)
         self.cmdDesc = None
 
         # list of traced commands
-        self.commands = list()
+        self.commands = []
 
         # reload map lists when needed
         if giface:
@@ -72,7 +74,7 @@ class GPrompt:
 
     def _getListOfMaps(self):
         """Get list of maps"""
-        result = dict()
+        result = {}
         result["raster"] = grass.list_strings("raster")
         result["vector"] = grass.list_strings("vector")
 
@@ -161,6 +163,16 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         # show hint
         self._showHint()
 
+        # read history file
+        self._loadHistory()
+        if giface:
+            giface.currentMapsetChanged.connect(self._loadHistory)
+            giface.entryToHistoryAdded.connect(
+                lambda entry: self._addEntryToCmdHistoryBuffer(entry)
+            )
+            giface.entryFromHistoryRemoved.connect(
+                lambda index: self._removeEntryFromCmdHistoryBuffer(index)
+            )
         #
         # bindings
         #
@@ -304,26 +316,52 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetCurrentPos(pos)
         self.SetFocus()
 
-    def UpdateCmdHistory(self, cmd):
-        """Update command history
+    def _loadHistory(self):
+        """Load history from a history file to data structures"""
+        try:
+            history_path = history.get_current_mapset_gui_history_path()
+            history.ensure_history_file(history_path)
+            self.cmdbuffer = [
+                entry["command"] for entry in history.read(history_path)
+            ] or []
+            self.cmdindex = len(self.cmdbuffer)
+        except (OSError, ValueError) as e:
+            GError(str(e))
 
-        :param cmd: command given as a string
+    def _addEntryToCmdHistoryBuffer(self, entry):
+        """Add entry to command history buffer.
+
+        :param entry dict: entry with 'command' and 'command_info' keys
+        command value is a string.
         """
+        # create command string
+        entry = entry["command"]
         # add command to history
-        self.cmdbuffer.append(cmd)
+        self.cmdbuffer.append(entry)
         # update also traced commands
-        self.commands.append(cmd)
+        self.commands.append(entry)
 
         # keep command history to a manageable size
         if len(self.cmdbuffer) > 200:
             del self.cmdbuffer[0]
         self.cmdindex = len(self.cmdbuffer)
 
+    def _removeEntryFromCmdHistoryBuffer(self, index):
+        """Remove entry from command history buffer.
+        :param index: index of deleted command
+        """
+        # remove command at the given index from history buffer
+        if index < len(self.cmdbuffer):
+            self.cmdbuffer.pop(index)
+
+        # update cmd index size
+        self.cmdindex = len(self.cmdbuffer)
+
     def EntityToComplete(self):
         """Determines which part of command (flags, parameters) should
         be completed at current cursor position"""
         entry = self.GetTextLeft()
-        toComplete = dict(cmd=None, entity=None)
+        toComplete = {"cmd": None, "entity": None}
         try:
             cmd = entry.split()[0].strip()
         except IndexError:
@@ -385,15 +423,12 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         """
         textLeft = self.GetTextLeft()
 
-        parts = list()
+        parts = []
         if ignoredDelimiter is None:
             ignoredDelimiter = ""
 
         for char in set(" .,-=") - set(ignoredDelimiter):
-            if not withDelimiter:
-                delimiter = ""
-            else:
-                delimiter = char
+            delimiter = "" if not withDelimiter else char
             parts.append(delimiter + textLeft.rpartition(char)[2])
         return min(parts, key=lambda x: len(x))
 
@@ -439,13 +474,11 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
             # move through command history list index values
             if event.GetKeyCode() == wx.WXK_UP:
-                self.cmdindex = self.cmdindex - 1
+                self.cmdindex -= 1
             if event.GetKeyCode() == wx.WXK_DOWN:
-                self.cmdindex = self.cmdindex + 1
-            if self.cmdindex < 0:
-                self.cmdindex = 0
-            if self.cmdindex > len(self.cmdbuffer) - 1:
-                self.cmdindex = len(self.cmdbuffer) - 1
+                self.cmdindex += 1
+            self.cmdindex = max(self.cmdindex, 0)
+            self.cmdindex = min(self.cmdindex, len(self.cmdbuffer) - 1)
 
             try:
                 # without strip causes problem on windows
@@ -474,8 +507,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         pos = self.GetCurrentPos()
         # complete command after pressing '.'
         if event.GetKeyCode() == 46:
-            self.autoCompList = list()
-            entry = self.GetTextLeft()
+            self.autoCompList = []
             self.InsertText(pos, ".")
             self.CharRight()
             self.toComplete = self.EntityToComplete()
@@ -501,8 +533,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             or event.GetKeyCode() == wx.WXK_NUMPAD_SUBTRACT
             or event.GetKeyCode() == wx.WXK_SUBTRACT
         ):
-            self.autoCompList = list()
-            entry = self.GetTextLeft()
+            self.autoCompList = []
             self.InsertText(pos, "-")
             self.CharRight()
             self.toComplete = self.EntityToComplete()
@@ -519,7 +550,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
         # complete map or values after parameter
         elif event.GetKeyCode() == 61:
-            self.autoCompList = list()
+            self.autoCompList = []
             self.InsertText(pos, "=")
             self.CharRight()
             self.toComplete = self.EntityToComplete()
@@ -536,7 +567,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
         # complete mapset ('@')
         elif event.GetKeyCode() == 64:
-            self.autoCompList = list()
+            self.autoCompList = []
             self.InsertText(pos, "@")
             self.CharRight()
             self.toComplete = self.EntityToComplete()
@@ -547,7 +578,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
         # complete after pressing CTRL + Space
         elif event.GetKeyCode() == wx.WXK_SPACE and event.ControlDown():
-            self.autoCompList = list()
+            self.autoCompList = []
             self.toComplete = self.EntityToComplete()
 
             # complete command
@@ -577,7 +608,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             # r.colors | ...-w, -q, -l, color, map, rast, rules
             # r.colors color=grey | ...-w, -q, -l, color, map, rast, rules
             elif self.toComplete["entity"] == "params+flags" and self.cmdDesc:
-                self.autoCompList = list()
+                self.autoCompList = []
 
                 for param in self.cmdDesc.get_options()["params"]:
                     self.autoCompList.append(param["name"])
@@ -593,13 +624,13 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             # r.buffer input=| ...list of raster maps
             # r.buffer units=| ... feet, kilometers, ...
             elif self.toComplete["entity"] == "raster map":
-                self.autoCompList = list()
+                self.autoCompList = []
                 self.autoCompList = self.mapList["raster"]
             elif self.toComplete["entity"] == "vector map":
-                self.autoCompList = list()
+                self.autoCompList = []
                 self.autoCompList = self.mapList["vector"]
             elif self.toComplete["entity"] == "param values":
-                self.autoCompList = list()
+                self.autoCompList = []
                 param = self.GetWordLeft(
                     withDelimiter=False, ignoredDelimiter="="
                 ).strip(" =")

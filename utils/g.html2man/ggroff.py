@@ -60,16 +60,16 @@ def clean(content):
 class Formatter:
     def __init__(self, filename, stream=sys.stdout):
         self.stream = stream
-        self.style = dict(
-            preformat=False,
-            in_ul=False,
-            no_nl=False,
-            in_table=False,
-            in_tr=False,
-            index=[],
-        )
+        self.style = {
+            "preformat": False,
+            "in_ul": False,
+            "no_nl": False,
+            "in_table": False,
+            "in_tr": False,
+            "index": [],
+        }
         self.stack = []
-        self.strip_re = re.compile("^[ \t]+")
+        self.strip_re = re.compile(r"^[ \t]+")
         self.filename = filename
         self.at_bol = True
 
@@ -119,10 +119,7 @@ class Formatter:
             self.show(pre)
         if sep != "":
             if var:
-                if var == "index":
-                    val = self.get("index") + [0]
-                else:
-                    val = True
+                val = self.get("index") + [0] if var == "index" else True
                 self.pp_with(content, var, val)
             else:
                 self.pp(content)
@@ -131,7 +128,7 @@ class Formatter:
 
     def pp_li(self, content):
         if self.get("in_ul"):
-            self.fmt("\n.IP \(bu 4n\n@", content)
+            self.fmt("\n.IP \\(bu 4n\n@", content)
         else:
             idx = self.get("index")
             idx[-1] += 1
@@ -158,7 +155,7 @@ class Formatter:
                 self.warning("invalid item in table row: %s" % str(item))
                 continue
             (tag, attrs, body) = item
-            if tag not in ["td", "th"]:
+            if tag not in {"td", "th"}:
                 self.warning("invalid tag in table row: %s" % tag)
                 continue
             if col > 0:
@@ -174,7 +171,7 @@ class Formatter:
         for item in content:
             if is_tuple(item):
                 (tag, attrs, body) = item
-                if tag in ["thead", "tbody", "tfoot"]:
+                if tag in {"thead", "tbody", "tfoot"}:
                     self.pp_tbody(body)
                 elif tag == "tr":
                     self.pp_tr(body)
@@ -188,7 +185,7 @@ class Formatter:
                 pass
             elif is_tuple(item):
                 (tag, attrs, body) = item
-                if tag in ["thead", "tbody", "tfoot"]:
+                if tag in {"thead", "tbody", "tfoot"}:
                     n = self.count_cols(body)
                 elif tag == "tr":
                     n = len(clean(body))
@@ -241,7 +238,7 @@ class Formatter:
         s = s.replace('"', "\\(dq")
         s = s.replace("`", "\\(ga")
         s = s.replace("-", "\\-")
-        if self.at_bol and s[0] in [".", "'"]:
+        if self.at_bol and s[0] in {".", "'"}:
             s = "\\&" + s
         self.show(s)
 
@@ -253,8 +250,7 @@ class Formatter:
             for line in lines:
                 self.pp_text(line)
             return
-        else:
-            content = lines[0]
+        content = lines[0]
         if self.at_bol and not self.get("preformat"):
             content = self.strip_re.sub("", content)
         self.pp_string(content)

@@ -66,7 +66,7 @@
 # %option G_OPT_T_WHERE
 # %end
 
-import grass.script as grass
+import grass.script as gs
 
 
 ############################################################################
@@ -75,20 +75,20 @@ def main():
     import grass.temporal as tgis
 
     # Get the options
-    _input = options["input"]
+    input_ = options["input"]
     output = options["output"]
     compression = options["compression"]
     directory = options["directory"]
     where = options["where"]
-    _format = options["format"]
+    format_ = options["format"]
 
     # Make sure the temporal database exists
     tgis.init()
     # Export the space time vector dataset
-    tgis.export_stds(_input, output, compression, directory, where, _format, "stvds")
+    tgis.export_stds(input_, output, compression, directory, where, format_, "stvds")
 
 
 ############################################################################
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

@@ -101,7 +101,7 @@ Linux:
   - changed-files:
       - any-glob-to-any-file:
           - singularity/**
-          - rpm/** 
+          - rpm/**
 docker:
   - changed-files:
       - any-glob-to-any-file:
@@ -111,27 +111,25 @@ docker:
           - .dockerignore
 
 docs:
-- all:
-  - changed-files:
-      - any-glob-to-any-file:
-          - doc/**
-          - man/**
-          - '**/*.md'
-          - '**/*.rst'
-          - '**/*.html'
-          - '**/*.dox'
-          - '**/*.png'
-          - '**.cff'
-          - CITING
-          - CHANGES
-          - AUTHORS
-          - NEWS
-          - TODO
-      - all-globs-to-all-files:
-          - '!doc/development/rfc/**'
+  - all:
+      - changed-files:
+          - any-glob-to-any-file:
+              - doc/**
+              - man/**
+              - '**/*.md'
+              - '**/*.rst'
+              - '**/*.html'
+              - '**/*.dox'
+              - '**/*.png'
+              - '**.cff'
+              - CITING
+              - AUTHORS
+              - TODO
+          - all-globs-to-all-files:
+              - '!doc/development/rfc/**'
 RFC:
   - changed-files:
-      - any-glob-to-any-file: 
+      - any-glob-to-any-file:
           - doc/development/rfc/**
 translation:
   - changed-files:
@@ -140,9 +138,15 @@ translation:
 # based on file types
 Python:
   - changed-files:
-      - any-glob-to-any-file: 
-        - '**/*.py'
-        - '**/pyproject.toml'
+      - any-glob-to-any-file:
+          - '**/*.py'
+          - '**/pyproject.toml'
+notebook:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.ipynb'
+          - doc/notebooks/**
+          - python/grass/jupyter/**
 C:
   - changed-files:
       - any-glob-to-any-file: '**/*.c'
@@ -158,3 +162,9 @@ HTML:
 JavaScript:
   - changed-files:
       - any-glob-to-any-file: '**/*.js'
+
+# test suite
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/testsuite/**'

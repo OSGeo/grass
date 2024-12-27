@@ -54,7 +54,7 @@
 
 import sys
 import os
-import grass.script as grass
+import grass.script as gs
 
 
 def main():
@@ -66,16 +66,16 @@ def main():
     where = options["where"]
     sqlitefile = options["sqliteextra"]
 
-    mapset = grass.gisenv()["MAPSET"]
+    mapset = gs.gisenv()["MAPSET"]
 
     # does map exist in CURRENT mapset?
-    if not grass.find_file(vector, element="vector", mapset=mapset)["file"]:
-        grass.fatal(_("Vector map <%s> not found in current mapset") % vector)
+    if not gs.find_file(vector, element="vector", mapset=mapset)["file"]:
+        gs.fatal(_("Vector map <%s> not found in current mapset") % vector)
 
     try:
-        f = grass.vector_db(vector)[int(layer)]
+        f = gs.vector_db(vector)[int(layer)]
     except KeyError:
-        grass.fatal(
+        gs.fatal(
             _(
                 "There is no table connected to this map. Run v.db.connect or v.db.addtable first."
             )
@@ -87,31 +87,31 @@ def main():
 
     # check for SQLite backend for extra functions
     if sqlitefile and driver != "sqlite":
-        grass.fatal(_("Use of libsqlitefunctions only with SQLite backend"))
+        gs.fatal(_("Use of libsqlitefunctions only with SQLite backend"))
     if driver == "sqlite" and sqlitefile:
         if not os.access(sqlitefile, os.R_OK):
-            grass.fatal(_("File <%s> not found") % sqlitefile)
+            gs.fatal(_("File <%s> not found") % sqlitefile)
 
     # Check column existence and get its type.
-    all_columns = grass.vector_columns(vector, layer)
+    all_columns = gs.vector_columns(vector, layer)
     coltype = None
     for column_name, column_record in all_columns.items():
         if column.lower() == column_name.lower():
             coltype = column_record["type"]
             break
     if not coltype:
-        grass.fatal(_("Column <%s> not found") % column)
+        gs.fatal(_("Column <%s> not found") % column)
 
     if qcolumn:
         if value:
-            grass.fatal(_("<value> and <qcolumn> are mutually exclusive"))
+            gs.fatal(_("<value> and <qcolumn> are mutually exclusive"))
         # special case: we copy from another column
         value = qcolumn
     else:
         if not value:
-            grass.fatal(_("Either <value> or <qcolumn> must be given"))
+            gs.fatal(_("Either <value> or <qcolumn> must be given"))
         # we insert a value
-        if coltype.upper() not in ["INTEGER", "DOUBLE PRECISION"]:
+        if coltype.upper() not in {"INTEGER", "DOUBLE PRECISION"}:
             value = "'%s'" % value
 
     cmd = "UPDATE %s SET %s=%s" % (table, column, value)
@@ -123,17 +123,17 @@ def main():
         sqliteload = "SELECT load_extension('%s');\n" % sqlitefile
         cmd = sqliteload + cmd
 
-    grass.verbose('SQL: "%s"' % cmd)
-    grass.write_command(
+    gs.verbose('SQL: "%s"' % cmd)
+    gs.write_command(
         "db.execute", input="-", database=database, driver=driver, stdin=cmd
     )
 
     # write cmd history:
-    grass.vector_history(vector)
+    gs.vector_history(vector)
 
     return 0
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     sys.exit(main())

@@ -2,6 +2,12 @@
 
 @author Soeren Gebbert
 """
+
+import unittest
+import sys
+
+from subprocess import check_output
+
 from grass.gunittest.case import TestCase
 
 
@@ -301,9 +307,48 @@ test_gdal_import_map.0000000104
 test_gdal_import_map.0000000105
 """
 
-        text_from_file = open("map_names_file.txt", "r").read()
+        text_from_file = open("map_names_file.txt").read()
 
         self.assertLooksLike(map_list, text_from_file)
+
+    @unittest.skipIf(
+        not sys.platform.startswith("win")
+        and tuple(
+            map(
+                int,
+                check_output(["gdal-config", "--version"])
+                .decode("UTF8")
+                .split(".")[0:2],
+            )
+        )
+        < (3, 7),
+        "GDAL version too old. Int8 support was introduced in GDAL 3.7",
+    )
+    def test_int8_data(self):
+        """Test that Int8 VRTs are imported"""
+
+        self.assertModule(
+            "r.in.gdal",
+            input="data/int8.vrt",
+            output="test_gdal_import_map",
+        )
+
+        # Output of r.info
+        info_string = """north=24
+                       south=0
+                       east=24
+                       west=0
+                       nsres=1
+                       ewres=1
+                       rows=24
+                       cols=24
+                       cells=576
+                       datatype=CELL
+                       ncats=0"""
+
+        self.assertRasterFitsInfo(
+            raster="test_gdal_import_map", reference=info_string, precision=3
+        )
 
 
 class TestGdalImportFails(TestCase):

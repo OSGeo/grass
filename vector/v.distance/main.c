@@ -989,7 +989,7 @@ int main(int argc, char *argv[])
                     near->count++;
                 }
             } /* done searching 'to' */
-        }     /* next from feature */
+        } /* next from feature */
     }
 
     /* Find nearest features for 'from' areas */
@@ -1353,7 +1353,7 @@ int main(int argc, char *argv[])
                     near->count++;
                 }
             } /* done */
-        }     /* next feature */
+        } /* next feature */
     }
 
     G_debug(3, "count = %d", count);

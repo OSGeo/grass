@@ -6,17 +6,17 @@ from grass.script.core import read_command
 class TestVNet(TestCase):
     network = "test_vnet"
 
-    def tearDown(cls):
+    def tearDown(self):
         """Remove viewshed map after each test method"""
         # TODO: eventually, removing maps should be handled through testing framework functions
-        cls.runModule("g.remove", flags="f", type="vector", name=cls.network)
+        self.runModule("g.remove", flags="f", type="vector", name=self.network)
 
     def test_nodes(self):
         """Test"""
         self.assertModule(
             "v.net", input="streets", output=self.network, operation="nodes"
         )
-        topology = dict(points=41813, nodes=41813, lines=49746)
+        topology = {"points": 41813, "nodes": 41813, "lines": 49746}
         self.assertVectorFitsTopoInfo(vector=self.network, reference=topology)
         layers = read_command("v.category", input=self.network, option="layers").strip()
         self.assertEqual(first="1", second=layers, msg="Layers do not match")
@@ -26,7 +26,7 @@ class TestVNet(TestCase):
         self.assertModule(
             "v.net", input="streets", output=self.network, operation="nodes", flags="c"
         )
-        topology = dict(points=41813, nodes=41813, lines=49746)
+        topology = {"points": 41813, "nodes": 41813, "lines": 49746}
         self.assertVectorFitsTopoInfo(vector=self.network, reference=topology)
         layers = read_command("v.category", input=self.network, option="layers").strip()
         self.assertEqual(first="1\n2", second=layers, msg="Layers do not match")
@@ -41,7 +41,7 @@ class TestVNet(TestCase):
             operation="connect",
             threshold=1000,
         )
-        topology = dict(points=167, nodes=42136, lines=50069)
+        topology = {"points": 167, "nodes": 42136, "lines": 50069}
         self.assertVectorFitsTopoInfo(vector=self.network, reference=topology)
         layers = read_command("v.category", input=self.network, option="layers").strip()
         self.assertEqual(first="1\n2", second=layers, msg="Layers do not match")
@@ -57,7 +57,7 @@ class TestVNet(TestCase):
             operation="connect",
             threshold=1000,
         )
-        topology = dict(points=167, nodes=41969, lines=49902)
+        topology = {"points": 167, "nodes": 41969, "lines": 49902}
         self.assertVectorFitsTopoInfo(vector=self.network, reference=topology)
 
 

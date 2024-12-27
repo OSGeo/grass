@@ -49,7 +49,7 @@ the (combined) length is shorter than <em>thresh</em> or <em>thresh</em>
 is deleted.
 <p>
 Threshold has to be given as maximum line/boundary length in map units;
-for latitude-longitude locations in degree. Dangles shorter than
+for latitude-longitude projects in degrees. Dangles shorter than
 <em>thresh</em> are removed sequentially. All dangles will be removed if
 <em>thresh</em> &lt; 0.
 <p>
@@ -107,7 +107,7 @@ influence on the result. A too large threshold and <em>type=boundary</em>
 can severely damage area topology, beyond repair.
 <p>
 Threshold gives maximum distance to another vertex in map units,
-for latitude-longitude locations in degree.
+for latitude-longitude projects in degrees.
 <p>
 Snapped boundaries may need to be cleaned with <em>break,rmdupl,rmsa</em>.
 If the <em>-c</em> flag is used with <em>v.clean tool=snap</em>, the
@@ -161,7 +161,7 @@ there is no adjacent area. Area categories are not combined when a small
 area is merged with a larger area.
 <p>
 Threshold must always be in square meters, also for latitude-longitude
-locations or locations with units other than meters.
+projects or projects with units other than meters.
 
 <h3>Remove all lines or boundaries of zero length</h3>
 <em>tool=rmline</em>
@@ -184,10 +184,10 @@ Threshold does not apply, use dummy value if <em>v.clean</em> is
 run with several tools.
 <p>
 <table><tr><td>
-<img src="v_clean_rmsa.png" border=1>
+<img src="v_clean_rmsa.png" border="1">
 </td></tr>
-<tr><td align=center>
-<font size=-1><em>tool=rmsa</em></font>
+<tr><td align="center">
+<font size="-1"><em>tool=rmsa</em></font>
 </td></tr>
 </table>
 <p>

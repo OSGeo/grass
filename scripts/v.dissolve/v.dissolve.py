@@ -6,9 +6,9 @@
 #               Markus Neteler for column support
 #               Converted to Python by Glynn Clements
 #               Vaclav Petras <wenzeslaus gmail com> (aggregate statistics)
-# PURPOSE:      Dissolve common boundaries between areas with common cat
-#                 (frontend to v.extract -d)
-# COPYRIGHT:    (c) 2006-2023 Hamish Bowman, and the GRASS Development Team
+# PURPOSE:      Dissolve adjacent or overlapping features
+#               with common cat (frontend to v.extract -d)
+# COPYRIGHT:    (c) 2006-2024 Hamish Bowman, and the GRASS Development Team
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
 #               for details.
@@ -16,7 +16,7 @@
 #############################################################################
 
 # %module
-# % description: Dissolves boundaries between adjacent areas sharing a common category number or attribute.
+# % description: Dissolves adjacent or overlapping features sharing a common category number or attribute.
 # % keyword: vector
 # % keyword: dissolve
 # % keyword: area
@@ -31,7 +31,7 @@
 # % guisection: Dissolving
 # %end
 # %option G_OPT_DB_COLUMN
-# % description: Name of attribute column used to dissolve common boundaries
+# % description: Name of attribute column used to dissolve features
 # % guisection: Dissolving
 # %end
 # %option G_OPT_V_OUTPUT
@@ -169,14 +169,14 @@ def quote_from_type(column_type):
     information is assumed to be associated with numbers which don't need quoting.
     """
     # Needs a general solution, e.g., https://github.com/OSGeo/grass/pull/1110
-    if not column_type or column_type.upper() in [
+    if not column_type or column_type.upper() in {
         "INT",
         "INTEGER",
         "SMALLINT",
         "REAL",
         "DOUBLE",
         "DOUBLE PRECISION",
-    ]:
+    }:
         return ""
     return "'"
 
@@ -362,7 +362,8 @@ def create_or_check_result_columns_or_fatal(
                             "Result column '{column}' needs a type "
                             "specified (using the syntax: 'name type') "
                             "when no methods are provided with the "
-                            "{option_name} option and aggregation backend is '{backend}'"
+                            "{option_name} option and aggregation backend is "
+                            "'{backend}'"
                         ).format(
                             column=column,
                             option_name="aggregate_methods",
@@ -390,17 +391,16 @@ def aggregate_attributes_sql(
 ):
     """Aggregate values in selected columns grouped by column using SQL backend"""
     if methods and len(columns_to_aggregate) != len(result_columns):
-        raise ValueError(
-            "Number of columns_to_aggregate and result_columns must be the same"
-        )
+        msg = "Number of columns_to_aggregate and result_columns must be the same"
+        raise ValueError(msg)
     if methods and len(columns_to_aggregate) != len(methods):
-        raise ValueError("Number of columns_to_aggregate and methods must be the same")
+        msg = "Number of columns_to_aggregate and methods must be the same"
+        raise ValueError(msg)
     if not methods:
         for result_column in result_columns:
             if " " not in result_column:
-                raise ValueError(
-                    f"Column {result_column} from result_columns without type"
-                )
+                msg = f"Column {result_column} from result_columns without type"
+                raise ValueError(msg)
     if methods:
         select_columns = [
             f"{method}({agg_column})"
@@ -469,10 +469,11 @@ def aggregate_attributes_univar(
 ):
     """Aggregate values in selected columns grouped by column using v.db.univar"""
     if len(columns_to_aggregate) != len(methods) != len(result_columns):
-        raise ValueError(
+        msg = (
             "Number of columns_to_aggregate, methods, and result_columns "
             "must be the same"
         )
+        raise ValueError(msg)
     records = json.loads(
         gs.read_command(
             "v.db.select",
@@ -563,7 +564,8 @@ def main():
         user_aggregate_methods, aggregate_backend, provide_defaults=not result_columns
     )
     if not result_columns:
-        aggregate_columns_exist_or_fatal(input_vector, layer, columns_to_aggregate)
+        if columns_to_aggregate:
+            aggregate_columns_exist_or_fatal(input_vector, layer, columns_to_aggregate)
         columns_to_aggregate, user_aggregate_methods = match_columns_and_methods(
             columns_to_aggregate, user_aggregate_methods
         )
@@ -585,7 +587,8 @@ def main():
     if not column:
         gs.warning(
             _(
-                "No '%s' option specified. Dissolving based on category values from layer <%s>."
+                "No '%s' option specified. Dissolving based on category values from "
+                "layer <%s>."
             )
             % ("column", layer)
         )
@@ -594,7 +597,6 @@ def main():
             flags="d",
             input=input_vector,
             output=output,
-            type="area",
             layer=layer,
         )
     else:
@@ -612,9 +614,9 @@ def main():
         except KeyError:
             gs.fatal(_("Column <%s> not found") % column)
 
-        if coltype["type"] not in ("INTEGER", "SMALLINT", "CHARACTER", "TEXT"):
+        if coltype["type"] not in {"INTEGER", "SMALLINT", "CHARACTER", "TEXT"}:
             gs.fatal(_("Key column must be of type integer or string"))
-        column_is_str = coltype["type"] in ("CHARACTER", "TEXT")
+        column_is_str = coltype["type"] in {"CHARACTER", "TEXT"}
         if columns_to_aggregate and not column_is_str:
             gs.fatal(
                 _(
@@ -639,7 +641,6 @@ def main():
                 flags="d",
                 input=tmpfile,
                 output=output,
-                type="area",
                 layer=layer,
             )
             if columns_to_aggregate:

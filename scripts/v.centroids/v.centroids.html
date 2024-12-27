@@ -1,11 +1,13 @@
 <h2>DESCRIPTION</h2>
 
-GRASS defines vector areas as composite entities consisting of a set of
+In GRASS GIS, a centroid is a point within a closed ring of boundaries.
+A vector area is defined as composite entity consisting of a set of
 closed boundaries and a centroid. The attribute information associated
-with that area is linked to the centroid. The <em>v.centroids</em> module
-adds centroids to closed boundaries in the <b>input</b> file and assigns a
-category number to them. The starting value as well as the increment size
-may be set using optional parameters.
+with this area is linked to the centroid.
+
+The <em>v.centroids</em> module adds centroids to closed boundaries in
+the <b>input</b> file and assigns a category number to them. The starting
+value as well as the increment size may be set using optional parameters.
 <p>Multiple attributes may be linked to a single vector entity through
 numbered fields referred to as layers. Refer to <em>v.category</em>
 for more details, as <em>v.centroids</em> is simply a frontend to that

@@ -1,5 +1,5 @@
 """
-Depricazed unittests
+Deprecated unittests
 
 (C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -8,15 +8,20 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import copy
+from ctypes import byref
 from datetime import datetime
-import grass.script.core as core
+
+from grass.lib import gis, rtree, vector
+from grass.script import core
+
 from .abstract_dataset import (
-    AbstractDatasetComparisonKeyStartTime,
     AbstractDatasetComparisonKeyEndTime,
+    AbstractDatasetComparisonKeyStartTime,
 )
 from .core import init
-from .datetime_math import increment_datetime_by_string, compute_datetime_delta
+from .datetime_math import compute_datetime_delta, increment_datetime_by_string
 from .space_time_datasets import RasterDataset
 from .spatial_extent import SpatialExtent
 from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
@@ -25,18 +30,13 @@ from .temporal_granularity import (
     compute_absolute_time_granularity,
 )
 
-import grass.lib.vector as vector
-import grass.lib.rtree as rtree
-import grass.lib.gis as gis
-from ctypes import byref
-
 # Uncomment this to detect the error
 core.set_raise_on_error(True)
 
 ###############################################################################
 
 
-def test_increment_datetime_by_string():
+def test_increment_datetime_by_string() -> None:
     # First test
     print("# Test 1")
     dt = datetime(2001, 9, 1, 0, 0, 0)
@@ -105,7 +105,7 @@ def test_increment_datetime_by_string():
 ###############################################################################
 
 
-def test_adjust_datetime_to_granularity():
+def test_adjust_datetime_to_granularity() -> None:
     # First test
     print("Test 1")
     dt = datetime(2001, 8, 8, 12, 30, 30)
@@ -223,7 +223,7 @@ def test_adjust_datetime_to_granularity():
 ###############################################################################
 
 
-def test_compute_datetime_delta():
+def test_compute_datetime_delta() -> None:
     print("Test 1")
     start = datetime(2001, 1, 1, 0, 0, 0)
     end = datetime(2001, 1, 1, 0, 0, 0)
@@ -566,7 +566,7 @@ def test_compute_datetime_delta():
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
 
-def test_compute_absolute_time_granularity():
+def test_compute_absolute_time_granularity() -> None:
     # First we test intervals
     print("Test 1")
     maps = []
@@ -886,7 +886,7 @@ def test_compute_absolute_time_granularity():
 ###############################################################################
 
 
-def test_spatial_extent_intersection():
+def test_spatial_extent_intersection() -> None:
     # Generate the extents
 
     A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
@@ -970,7 +970,7 @@ def test_spatial_extent_intersection():
 ###############################################################################
 
 
-def test_spatial_relations():
+def test_spatial_relations() -> None:
     # Generate the extents
 
     A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
@@ -1352,56 +1352,56 @@ def test_spatial_relations():
 ###############################################################################
 
 
-def test_temporal_topology_builder():
+def test_temporal_topology_builder() -> None:
     map_listA = []
 
-    _map = RasterDataset(ident="1@a")
-    _map.set_absolute_time(datetime(2001, 1, 1), datetime(2001, 2, 1))
-    map_listA.append(copy.copy(_map))
-    _map = RasterDataset(ident="2@a")
-    _map.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 3, 1))
-    map_listA.append(copy.copy(_map))
-    _map = RasterDataset(ident="3@a")
-    _map.set_absolute_time(datetime(2001, 3, 1), datetime(2001, 4, 1))
-    map_listA.append(copy.copy(_map))
-    _map = RasterDataset(ident="4@a")
-    _map.set_absolute_time(datetime(2001, 4, 1), datetime(2001, 5, 1))
-    map_listA.append(copy.copy(_map))
-    _map = RasterDataset(ident="5@a")
-    _map.set_absolute_time(datetime(2001, 5, 1), datetime(2001, 6, 1))
-    map_listA.append(copy.copy(_map))
+    map_ = RasterDataset(ident="1@a")
+    map_.set_absolute_time(datetime(2001, 1, 1), datetime(2001, 2, 1))
+    map_listA.append(copy.copy(map_))
+    map_ = RasterDataset(ident="2@a")
+    map_.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 3, 1))
+    map_listA.append(copy.copy(map_))
+    map_ = RasterDataset(ident="3@a")
+    map_.set_absolute_time(datetime(2001, 3, 1), datetime(2001, 4, 1))
+    map_listA.append(copy.copy(map_))
+    map_ = RasterDataset(ident="4@a")
+    map_.set_absolute_time(datetime(2001, 4, 1), datetime(2001, 5, 1))
+    map_listA.append(copy.copy(map_))
+    map_ = RasterDataset(ident="5@a")
+    map_.set_absolute_time(datetime(2001, 5, 1), datetime(2001, 6, 1))
+    map_listA.append(copy.copy(map_))
 
     tb = SpatioTemporalTopologyBuilder()
     tb.build(map_listA)
 
     count = 0
-    for _map in tb:
-        print("[%s]" % (_map.get_name()))
-        _map.print_topology_info()
-        if _map.get_id() != map_listA[count].get_id():
+    for map_ in tb:
+        print("[%s]" % (map_.get_name()))
+        map_.print_topology_info()
+        if map_.get_id() != map_listA[count].get_id():
             core.fatal(
                 "Error building temporal topology <%s> != <%s>"
-                % (_map.get_id(), map_listA[count].get_id())
+                % (map_.get_id(), map_listA[count].get_id())
             )
         count += 1
 
     map_listB = []
 
-    _map = RasterDataset(ident="1@b")
-    _map.set_absolute_time(datetime(2001, 1, 14), datetime(2001, 3, 14))
-    map_listB.append(copy.copy(_map))
-    _map = RasterDataset(ident="2@b")
-    _map.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 4, 1))
-    map_listB.append(copy.copy(_map))
-    _map = RasterDataset(ident="3@b")
-    _map.set_absolute_time(datetime(2001, 2, 14), datetime(2001, 4, 30))
-    map_listB.append(copy.copy(_map))
-    _map = RasterDataset(ident="4@b")
-    _map.set_absolute_time(datetime(2001, 4, 2), datetime(2001, 4, 30))
-    map_listB.append(copy.copy(_map))
-    _map = RasterDataset(ident="5@b")
-    _map.set_absolute_time(datetime(2001, 5, 1), datetime(2001, 5, 14))
-    map_listB.append(copy.copy(_map))
+    map_ = RasterDataset(ident="1@b")
+    map_.set_absolute_time(datetime(2001, 1, 14), datetime(2001, 3, 14))
+    map_listB.append(copy.copy(map_))
+    map_ = RasterDataset(ident="2@b")
+    map_.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 4, 1))
+    map_listB.append(copy.copy(map_))
+    map_ = RasterDataset(ident="3@b")
+    map_.set_absolute_time(datetime(2001, 2, 14), datetime(2001, 4, 30))
+    map_listB.append(copy.copy(map_))
+    map_ = RasterDataset(ident="4@b")
+    map_.set_absolute_time(datetime(2001, 4, 2), datetime(2001, 4, 30))
+    map_listB.append(copy.copy(map_))
+    map_ = RasterDataset(ident="5@b")
+    map_.set_absolute_time(datetime(2001, 5, 1), datetime(2001, 5, 14))
+    map_listB.append(copy.copy(map_))
 
     tb = SpatioTemporalTopologyBuilder()
     tb.build(map_listB)
@@ -1417,13 +1417,13 @@ def test_temporal_topology_builder():
         core.fatal("Error building temporal topology")
 
     count = 0
-    for _map in tb:
-        print("[%s]" % (_map.get_map_id()))
-        _map.print_topology_shell_info()
-        if _map.get_id() != map_listB[count].get_id():
+    for map_ in tb:
+        print("[%s]" % (map_.get_map_id()))
+        map_.print_topology_shell_info()
+        if map_.get_id() != map_listB[count].get_id():
             core.fatal(
                 "Error building temporal topology <%s> != <%s>"
-                % (_map.get_id(), map_listB[count].get_id())
+                % (map_.get_id(), map_listB[count].get_id())
             )
         count += 1
 
@@ -1431,20 +1431,20 @@ def test_temporal_topology_builder():
     tb.build(map_listA, map_listB)
 
     count = 0
-    for _map in tb:
-        print("[%s]" % (_map.get_map_id()))
-        _map.print_topology_shell_info()
-        if _map.get_id() != map_listA[count].get_id():
+    for map_ in tb:
+        print("[%s]" % (map_.get_map_id()))
+        map_.print_topology_shell_info()
+        if map_.get_id() != map_listA[count].get_id():
             core.fatal(
                 "Error building temporal topology <%s> != <%s>"
-                % (_map.get_id(), map_listA[count].get_id())
+                % (map_.get_id(), map_listA[count].get_id())
             )
         count += 1
 
     count = 0
-    for _map in map_listB:
-        print("[%s]" % (_map.get_map_id()))
-        _map.print_topology_shell_info()
+    for map_ in map_listB:
+        print("[%s]" % (map_.get_map_id()))
+        map_.print_topology_shell_info()
 
     # Probing some relations
     if map_listA[3].get_follows()[0] != map_listB[1]:
@@ -1465,31 +1465,31 @@ def test_temporal_topology_builder():
 ###############################################################################
 
 
-def test_map_list_sorting():
+def test_map_list_sorting() -> None:
     map_list = []
 
-    _map = RasterDataset(ident="1@a")
-    _map.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 3, 1))
-    map_list.append(copy.copy(_map))
-    _map = RasterDataset(ident="2@a")
-    _map.set_absolute_time(datetime(2001, 1, 1), datetime(2001, 2, 1))
-    map_list.append(copy.copy(_map))
-    _map = RasterDataset(ident="3@a")
-    _map.set_absolute_time(datetime(2001, 3, 1), datetime(2001, 4, 1))
-    map_list.append(copy.copy(_map))
+    map_ = RasterDataset(ident="1@a")
+    map_.set_absolute_time(datetime(2001, 2, 1), datetime(2001, 3, 1))
+    map_list.append(copy.copy(map_))
+    map_ = RasterDataset(ident="2@a")
+    map_.set_absolute_time(datetime(2001, 1, 1), datetime(2001, 2, 1))
+    map_list.append(copy.copy(map_))
+    map_ = RasterDataset(ident="3@a")
+    map_.set_absolute_time(datetime(2001, 3, 1), datetime(2001, 4, 1))
+    map_list.append(copy.copy(map_))
 
     print("Original")
-    for _map in map_list:
+    for map_ in map_list:
         print(
-            _map.get_temporal_extent_as_tuple()[0],
-            _map.get_temporal_extent_as_tuple()[1],
+            map_.get_temporal_extent_as_tuple()[0],
+            map_.get_temporal_extent_as_tuple()[1],
         )
     print("Sorted by start time")
     new_list = sorted(map_list, key=AbstractDatasetComparisonKeyStartTime)
-    for _map in new_list:
+    for map_ in new_list:
         print(
-            _map.get_temporal_extent_as_tuple()[0],
-            _map.get_temporal_extent_as_tuple()[1],
+            map_.get_temporal_extent_as_tuple()[0],
+            map_.get_temporal_extent_as_tuple()[1],
         )
 
     if new_list[0] != map_list[1]:
@@ -1501,10 +1501,10 @@ def test_map_list_sorting():
 
     print("Sorted by end time")
     new_list = sorted(map_list, key=AbstractDatasetComparisonKeyEndTime)
-    for _map in new_list:
+    for map_ in new_list:
         print(
-            _map.get_temporal_extent_as_tuple()[0],
-            _map.get_temporal_extent_as_tuple()[1],
+            map_.get_temporal_extent_as_tuple()[0],
+            map_.get_temporal_extent_as_tuple()[1],
         )
 
     if new_list[0] != map_list[1]:
@@ -1518,7 +1518,7 @@ def test_map_list_sorting():
 ###############################################################################
 
 
-def test_1d_rtree():
+def test_1d_rtree() -> None:
     """Testing the rtree ctypes wrapper"""
 
     tree = rtree.RTreeCreateTree(-1, 0, 1)
@@ -1548,7 +1548,7 @@ def test_1d_rtree():
 ###############################################################################
 
 
-def test_2d_rtree():
+def test_2d_rtree() -> None:
     """Testing the rtree ctypes wrapper"""
 
     tree = rtree.RTreeCreateTree(-1, 0, 2)
@@ -1580,7 +1580,7 @@ def test_2d_rtree():
 ###############################################################################
 
 
-def test_3d_rtree():
+def test_3d_rtree() -> None:
     """Testing the rtree ctypes wrapper"""
 
     tree = rtree.RTreeCreateTree(-1, 0, 3)
@@ -1622,7 +1622,7 @@ def test_3d_rtree():
 ###############################################################################
 
 
-def test_4d_rtree():
+def test_4d_rtree() -> None:
     """Testing the rtree ctypes wrapper"""
 
     tree = rtree.RTreeCreateTree(-1, 0, 4)

@@ -54,13 +54,17 @@ extern void read_image(void);
 extern void read_ppm(void);
 extern void read_pgm(void);
 extern void read_bmp(void);
+#ifdef HAVE_PNG_H
 extern void read_png(void);
+#endif
 
 extern void write_image(void);
 extern void write_ppm(void);
 extern void write_pgm(void);
 extern void write_bmp(void);
+#ifdef HAVE_PNG_H
 extern void write_png(void);
+#endif
 
 extern void png_init_color_table(void);
 extern unsigned int png_get_color(int, int, int, int);

@@ -3,7 +3,7 @@
 
    \brief GIS library - environment routines
 
-   (C) 2001-2023 by the GRASS Development Team
+   (C) 2001-2024 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -326,7 +326,7 @@ static void write_env(int loc)
 
 static FILE *open_env(const char *mode, int loc)
 {
-    char buf[GPATH_MAX];
+    char buf[GPATH_MAX] = {0}; // initialized
 
     if (loc == G_VAR_GISRC) {
         if (!st->gisrc)

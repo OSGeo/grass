@@ -42,6 +42,12 @@ from core.globalvar import SCT_EXT
 from grass.script import core as grass
 from grass.script.utils import decode, encode
 
+from core.debug import Debug
+from core.globalvar import SCT_EXT
+
+from grass.script import core as grass
+from grass.script.utils import decode, encode
+
 is_mswindows = sys.platform == "win32"
 
 if is_mswindows:
@@ -202,12 +208,11 @@ class Popen(subprocess.Popen):
             import win32api
 
             handle = win32api.OpenProcess(1, 0, self.pid)
-            return 0 != win32api.TerminateProcess(handle, 0)
-        else:
-            try:
-                os.kill(-self.pid, signal.SIGTERM)  # kill whole group
-            except OSError:
-                pass
+            return win32api.TerminateProcess(handle, 0) != 0
+        try:
+            os.kill(-self.pid, signal.SIGTERM)  # kill whole group
+        except OSError:
+            pass
 
     if sys.platform == "win32":
 
@@ -223,7 +228,7 @@ class Popen(subprocess.Popen):
             except ValueError:
                 return self._close("stdin")
             except (pywintypes.error, Exception) as why:
-                if why.winerror in (109, errno.ESHUTDOWN):
+                if why.winerror in {109, errno.ESHUTDOWN}:
                     return self._close("stdin")
                 raise
 
@@ -239,14 +244,13 @@ class Popen(subprocess.Popen):
             try:
                 x = msvcrt.get_osfhandle(conn.fileno())
                 (read, nAvail, nMessage) = PeekNamedPipe(x, 0)
-                if maxsize < nAvail:
-                    nAvail = maxsize
+                nAvail = min(maxsize, nAvail)
                 if nAvail > 0:
                     (errCode, read) = ReadFile(x, nAvail, None)
             except ValueError:
                 return self._close(which)
             except (pywintypes.error, Exception) as why:
-                if why.winerror in (109, errno.ESHUTDOWN):
+                if why.winerror in {109, errno.ESHUTDOWN}:
                     return self._close(which)
                 raise
 
@@ -302,8 +306,7 @@ message = "Other end disconnected!"
 
 
 def recv_some(p, t=0.1, e=1, tr=5, stderr=0):
-    if tr < 1:
-        tr = 1
+    tr = max(tr, 1)
     x = time.time() + t
     y = []
     r = ""
@@ -315,9 +318,8 @@ def recv_some(p, t=0.1, e=1, tr=5, stderr=0):
         if r is None:
             if e:
                 raise Exception(message)
-            else:
-                break
-        elif r:
+            break
+        if r:
             y.append(decode(r))
         else:
             time.sleep(max((x - time.time()) / tr, 0))
@@ -419,7 +421,7 @@ class Command:
                             _("Error: ") + self.__GetError(),
                         )
                     )
-                elif rerr == sys.stderr:  # redirect message to sys
+                if rerr == sys.stderr:  # redirect message to sys
                     stderr.write("Execution failed: '%s'" % (" ".join(self.cmd)))
                     stderr.write(
                         "%sDetails:%s%s"
@@ -502,7 +504,7 @@ class Command:
     def __GetError(self):
         """Get error message or ''"""
         if not self.cmdThread.module:
-            return _("Unable to exectute command: '%s'") % " ".join(self.cmd)
+            return _("Unable to execute command: '%s'") % " ".join(self.cmd)
 
         for type, msg in self.__ProcessStdErr():
             if type == "ERROR":
@@ -648,11 +650,11 @@ def _formatMsg(text):
     for line in text.splitlines():
         if len(line) == 0:
             continue
-        elif "GRASS_INFO_MESSAGE" in line:
-            message += line.split(":", 1)[1].strip() + "\n"
-        elif "GRASS_INFO_WARNING" in line:
-            message += line.split(":", 1)[1].strip() + "\n"
-        elif "GRASS_INFO_ERROR" in line:
+        if (
+            "GRASS_INFO_MESSAGE" in line
+            or "GRASS_INFO_WARNING" in line
+            or "GRASS_INFO_ERROR" in line
+        ):
             message += line.split(":", 1)[1].strip() + "\n"
         elif "GRASS_INFO_END" in line:
             return message
@@ -689,7 +691,8 @@ def RunCommand(
     :param env: environment (optional, uses os.environ if not provided)
     :param kwargs: program parameters
 
-    The environment passed to the function (env or os.environ) is not modified (a copy is used internally).
+    The environment passed to the function (env or os.environ) is not modified
+    (a copy is used internally).
 
     :return: returncode (read == False and getErrorMsg == False)
     :return: returncode, messages (read == False and getErrorMsg == True)
@@ -712,10 +715,7 @@ def RunCommand(
         kwargs["stdin"] = subprocess.PIPE
 
     # Do not change the environment, only a local copy.
-    if env:
-        env = env.copy()
-    else:
-        env = os.environ.copy()
+    env = env.copy() if env else os.environ.copy()
 
     if parent:
         env["GRASS_MESSAGE_FORMAT"] = "standard"
@@ -752,8 +752,7 @@ def RunCommand(
     if not read:
         if not getErrorMsg:
             return ret
-        else:
-            return ret, _formatMsg(stderr)
+        return ret, _formatMsg(stderr)
 
     if stdout:
         Debug.msg(3, "gcmd.RunCommand(): return stdout\n'%s'" % stdout)

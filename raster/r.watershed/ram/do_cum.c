@@ -105,10 +105,11 @@ int do_cum(void)
     int r_nbr, c_nbr, ct_dir, np_side, edge;
     CELL is_swale, aspect, ele_nbr;
     DCELL value, valued;
-    int killer, threshold;
+    size_t killer;
+    int threshold;
     int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
     int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
-    int this_index, down_index, nbr_index;
+    size_t this_index, down_index, nbr_index;
     double *dist_to_nbr, *contour;
     double cell_size;
 
@@ -217,6 +218,8 @@ int do_cum(void)
         }
     }
     G_free(astar_pts);
+    G_free(contour);
+    G_free(dist_to_nbr);
 
     return 0;
 }
@@ -262,9 +265,10 @@ int do_cum(void)
 int do_cum_mfd(void)
 {
     int r, c, dr, dc;
-    CELL is_swale;
+    CELL is_swale = 0;
     DCELL value, valued, tci_div, sum_contour, cell_size;
-    int killer, threshold;
+    size_t killer;
+    int threshold;
 
     /* MFD */
     int mfd_cells, stream_cells, swale_cells, astar_not_set, is_null;
@@ -275,7 +279,7 @@ int do_cum_mfd(void)
     int workedon, edge, flat;
     int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
     int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
-    int this_index, down_index, nbr_index;
+    size_t this_index, down_index, nbr_index;
 
     /* drainage directions bitmask encoded CW from North
      * drainage directions are set for each current cell
@@ -499,9 +503,9 @@ int do_cum_mfd(void)
     }
     if (workedon)
         G_warning(n_("MFD: A * path already processed when distributing flow: "
-                     "%d of %d cell",
+                     "%d of %zu cell",
                      "MFD: A * path already processed when distributing flow: "
-                     "%d of %d cells",
+                     "%d of %zu cells",
                      do_points),
                   workedon, do_points);
 
@@ -630,6 +634,7 @@ int do_cum_mfd(void)
 
     G_free(dist_to_nbr);
     G_free(weight);
+    G_free(contour);
 
     return 0;
 }

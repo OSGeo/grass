@@ -116,12 +116,12 @@ class RLiSetupMapPanel(wx.Panel):
             self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(
                 graphicsType="line"
             )
-        elif self.samplingtype in [SamplingType.MUNITSR, SamplingType.MMVWINR]:
+        elif self.samplingtype in {SamplingType.MUNITSR, SamplingType.MMVWINR}:
             self.sampleFrameChanged = Signal("RLiSetupMapPanel.sampleFrameChanged")
             self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(
                 graphicsType="rectangle"
             )
-        elif self.samplingtype in [SamplingType.MUNITSC, SamplingType.MMVWINC]:
+        elif self.samplingtype in {SamplingType.MUNITSC, SamplingType.MMVWINC}:
             self.afterCircleDrawn = Signal("RLiSetupMapPanel.afterCircleDrawn")
             self._registeredGraphics = self.mapWindow.RegisterGraphicsToDraw(
                 graphicsType="line"
@@ -222,7 +222,7 @@ class RLiSetupMapPanel(wx.Panel):
                     GMessage(
                         parent=self,
                         message=_(
-                            "The raster file %s already" " exists, please change name"
+                            "The raster file %s already exists, please change name"
                         )
                         % raster,
                     )
@@ -264,7 +264,7 @@ class RLiSetupMapPanel(wx.Panel):
 
         catbuf = "=%d a\n" % self.catId
         polyfile.write(catbuf)
-        self.catId = self.catId + 1
+        self.catId += 1
 
         polyfile.close()
         region_settings = grass.parse_command("g.region", flags="p", delimiter=":")
@@ -315,7 +315,6 @@ class RLiSetupMapPanel(wx.Panel):
     def _radiusDrawn(self, x, y):
         """When drawing finished, get region values"""
         mouse = self.mapWindow.mouse
-        item = self._registeredGraphics.GetItem(0)
         p1 = mouse["begin"]
         p2 = mouse["end"]
         dist, (north, east) = self.mapWindow.Distance(p1, p2, False)
@@ -328,9 +327,9 @@ class RLiSetupMapPanel(wx.Panel):
             circle.point[0], circle.point[1], circle.radius
         )
         self._registeredGraphics.Draw()
-        self.createCricle(circle)
+        self.createCircle(circle)
 
-    def createCricle(self, c):
+    def createCircle(self, c):
         dlg = wx.TextEntryDialog(
             None,
             "Name of sample circle region",
@@ -345,7 +344,7 @@ class RLiSetupMapPanel(wx.Panel):
                     GMessage(
                         parent=self,
                         message=_(
-                            "The raster file %s already" " exists, please change name"
+                            "The raster file %s already exists, please change name"
                         )
                         % raster,
                     )
@@ -385,8 +384,7 @@ class RLiSetupMapPanel(wx.Panel):
         grass.use_temp_region()
         grass.run_command("g.region", zoom=rasterName)
         region = grass.region()
-        marea = MaskedArea(region, rasterName, circle.radius)
-        return marea
+        return MaskedArea(region, rasterName, circle.radius)
 
     def _rectangleDrawn(self):
         """When drawing finished, get region values"""
@@ -404,7 +402,7 @@ class RLiSetupMapPanel(wx.Panel):
         item.SetPropertyVal("hide", False)
         self.mapWindow.ClearLines()
         self._registeredGraphics.Draw()
-        if self.samplingtype in [SamplingType.MUNITSR, SamplingType.MMVWINR]:
+        if self.samplingtype in {SamplingType.MUNITSR, SamplingType.MMVWINR}:
             dlg = wx.MessageDialog(
                 self,
                 "Is this area ok?",
@@ -433,7 +431,7 @@ class RLiSetupMapPanel(wx.Panel):
             dlg.Destroy()
 
         elif self.samplingtype != SamplingType.WHOLE:
-            """When drawing finished, get region values"""
+            # When drawing finished, get region values
             self.sampleFrameChanged.emit(region=region)
 
 
@@ -475,9 +473,9 @@ class RLiSetupToolbar(BaseToolbar):
 
         if self.parent.samplingtype == SamplingType.REGIONS:
             self._default = self.digitizeregion
-        elif self.parent.samplingtype in [SamplingType.MUNITSR, SamplingType.MMVWINR]:
+        elif self.parent.samplingtype in {SamplingType.MUNITSR, SamplingType.MMVWINR}:
             self._default = self.digitizeunit
-        elif self.parent.samplingtype in [SamplingType.MUNITSC, SamplingType.MMVWINC]:
+        elif self.parent.samplingtype in {SamplingType.MUNITSC, SamplingType.MMVWINC}:
             self._default = self.digitizeunitc
         elif self.parent.samplingtype == SamplingType.VECT:
             self._default = None
@@ -502,14 +500,14 @@ class RLiSetupToolbar(BaseToolbar):
                 self.parent.OnDigitizeRegion,
                 wx.ITEM_CHECK,
             )
-        elif self.parent.samplingtype in [SamplingType.MUNITSR, SamplingType.MMVWINR]:
+        elif self.parent.samplingtype in {SamplingType.MUNITSR, SamplingType.MMVWINR}:
             drawTool = (
                 ("digitizeunit", icons["digitizeunit"].label),
                 icons["digitizeunit"],
                 self.parent.OnDraw,
                 wx.ITEM_CHECK,
             )
-        elif self.parent.samplingtype in [SamplingType.MUNITSC, SamplingType.MMVWINC]:
+        elif self.parent.samplingtype in {SamplingType.MUNITSC, SamplingType.MMVWINC}:
             drawTool = (
                 ("digitizeunitc", icons["digitizeunitc"].label),
                 icons["digitizeunitc"],
@@ -551,33 +549,32 @@ class RLiSetupToolbar(BaseToolbar):
                     ),
                 )
             )
-        else:
-            return self._getToolbarData(
+        return self._getToolbarData(
+            (
+                drawTool,
+                (None,),
                 (
-                    drawTool,
-                    (None,),
-                    (
-                        ("pan", BaseIcons["pan"].label),
-                        BaseIcons["pan"],
-                        self.parent.OnPan,
-                        wx.ITEM_CHECK,
-                    ),
-                    (
-                        ("zoomIn", BaseIcons["zoomIn"].label),
-                        BaseIcons["zoomIn"],
-                        self.parent.OnZoomIn,
-                        wx.ITEM_CHECK,
-                    ),
-                    (
-                        ("zoomOut", BaseIcons["zoomOut"].label),
-                        BaseIcons["zoomOut"],
-                        self.parent.OnZoomOut,
-                        wx.ITEM_CHECK,
-                    ),
-                    (
-                        ("zoomExtent", BaseIcons["zoomExtent"].label),
-                        BaseIcons["zoomExtent"],
-                        self.parent.OnZoomToMap,
-                    ),
-                )
+                    ("pan", BaseIcons["pan"].label),
+                    BaseIcons["pan"],
+                    self.parent.OnPan,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomIn", BaseIcons["zoomIn"].label),
+                    BaseIcons["zoomIn"],
+                    self.parent.OnZoomIn,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomOut", BaseIcons["zoomOut"].label),
+                    BaseIcons["zoomOut"],
+                    self.parent.OnZoomOut,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomExtent", BaseIcons["zoomExtent"].label),
+                    BaseIcons["zoomExtent"],
+                    self.parent.OnZoomToMap,
+                ),
             )
+        )

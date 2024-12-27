@@ -224,6 +224,22 @@ Some of these commands should not work and return 1.
 <BLANKLINE>
 
 
+JSON Output
+===========
+>>> print(read_command('r.category', map='test', output_format='json'))
+[
+    {
+        "category": 1,
+        "description": "trees, very green"
+    },
+    {
+        "category": 2,
+        "description": "water, very deep"
+    }
+]
+<BLANKLINE>
+
+
 Clean the results
 =================
 

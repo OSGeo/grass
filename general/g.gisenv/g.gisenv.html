@@ -1,7 +1,10 @@
 <h2>DESCRIPTION</h2>
 
+<em>g.gisenv</em> outputs and modifies the user's current GRASS GIS
+variable settings.
+
 When a user runs GRASS, certain variables are set specifying the GRASS
-data base, location, mapset, peripheral device drivers, etc., being
+data base, project, mapset, peripheral device drivers, etc., being
 used in the current GRASS session. These variable name settings are
 recognized as long as the user is running a GRASS session.
 
@@ -41,28 +44,29 @@ are essential.
 <dt><em>GISDBASE</em>
 <dd>The <em>GISDBASE</em> is a directory in which all users' GRASS
 data are stored. Within the <em>GISDBASE</em>, data are segregated
-into subdirectories (called &quot;locations&quot;) based on the map
+into subdirectories (called &quot;projects&quot;) based on the map
 coordinate system used and the geographic extent of the data.  Each
-&quot;location&quot; directory itself contains subdirectories called
+&quot;project&quot; directory itself contains subdirectories called
 &quot;mapsets&quot;; each &quot;mapset&quot; stores &quot;data base
 elements&quot; - the directories (e.g.,
-the <tt>cell</tt>, <tt>cellhd</tt>, <tt>vector</tt>, etc., directories)
+the <code>cell</code>, <code>cellhd</code>, <code>vector</code>, etc., directories)
 in which GRASS data files are actually stored.
 
 <dt><em>LOCATION_NAME</em>
 
 <dd>The user must choose to work with the data under a single GRASS
-location within any given GRASS session; this location is then called
-the <em>current GRASS location</em>, and is specified by the variable
+project (previously called &quot;location&quot;) within any given
+GRASS session; this project is then called
+the <em>current GRASS project</em>, and is specified by the variable
 <em>LOCATION_NAME</em>. The <em>LOCATION_NAME</em> is the GRASS data
 base location whose data will be affected by any GRASS commands issued
 during the user's current GRASS session, and is a subdirectory of the
-current <em>GISDBASE</em>. Each &quot;location&quot; directory can
+current <em>GISDBASE</em>. Each &quot;project&quot; directory can
 contain multiple &quot;mapset&quot; directories (including the special
 mapset <em>PERMANENT</em>).  Maps stored under the same
 GRASS <em>LOCATION_NAME</em> (and/or within the same <em>MAPSET</em>)
 must use the same coordinate system and typically fall within the
-boundaries of the same geographic region (aka, &quot;location&quot;).
+boundaries of the same geographic region.
 
 <dt><em>MAPSET</em>
 
@@ -98,7 +102,7 @@ working under each <em>LOCATION_NAME</em>.
 Once within a GRASS session, GRASS users have access only to the data
 under a single GRASS data base directory (the <em>current GRASS data
 base</em>, specified by the variable <em>GISDBASE</em>), and to a
-single GRASS location directory (the <em>current location</em>,
+single GRASS project directory (the <em>current project</em>,
 specified by the variable <em>LOCATION_NAME</em>).  Within a single
 session, the user may only <em>modify</em> the data in the
 <em>current mapset</em> (specified by the variable
@@ -117,7 +121,7 @@ used in place of a blank for multiple-word names.
 The full path to the current mapset is determined
 from <em>GISDBASE</em>, <em>LOCATION_NAME</em>, <em>MAPSET</em>
 variables, in the example
-above: <tt>/opt/grassdata/spearfish/PERMANENT</tt>. The full path can
+above: <code>/opt/grassdata/spearfish/PERMANENT</code>. The full path can
 be printed using <em>g.gisenv</em> by providing multiple variables:
 
 <div class="code"><pre>
@@ -145,8 +149,34 @@ compatible with some other UNIX shells.
 By default the GRASS variables are stored in <em>gisrc</em> file
 (defined by environmental
 variable <em>GISRC</em>). If <b>store=mapset</b> is given then the
-variables are stored in <tt>&lt;gisdbase&gt;/&lt;location&gt;/&lt;mapset&gt;/VAR</tt>
+variables are stored in <code>&lt;gisdbase&gt;/&lt;project&gt;/&lt;mapset&gt;/VAR</code>
 after the current GRASS session is closed.
+
+<h2>EXAMPLES</h2>
+
+<h3>Cache for raster operations</h3>
+
+The maximum memory to be used, i.e. the cache size for raster rows, is set
+to 300 MB by default (GRASS variable <em>MEMORYMB</em>). To speed up
+raster operations, it is recommended to increase this setting if enough RAM
+is available. It is important to note that parallel processes will each
+consume this amount of RAM.
+
+Set the maximum memory to be used (in MB), i.e. the cache size for raster rows:
+
+<div class="code"><pre>
+# set to 6 GB (default: 300 MB)
+g.gisenv set="MEMORYMB=6000"
+</pre></div>
+
+<h3>Number of threads for parallel computing</h3>
+
+Set the number of threads for parallel computing:
+
+<div class="code"><pre>
+# set to use 12 threads (default: 1)
+g.gisenv set="NPROCS=12"
+</pre></div>
 
 <h3>GRASS Debugging</h3>
 
@@ -159,10 +189,10 @@ g.gisenv set="DEBUG=3"
 
 Levels: (recommended levels)
 <ul>
-  <li> 0 - silence
-  <li> 1 - message is printed once or few times per module
-  <li> 3 - each row (raster) or line (vector)
-  <li> 5 - each cell (raster) or point (vector)
+  <li> 0 - silence</li>
+  <li> 1 - message is printed once or few times per module</li>
+  <li> 3 - each row (raster) or line (vector)</li>
+  <li> 5 - each cell (raster) or point (vector)</li>
 </ul>
 
 To disable debugging messages:
@@ -188,7 +218,8 @@ from <a href="wxGUI.html">wxGUI</a>.
 </em>
 
 <p>
-See also <a href="variables.html">variables list</a>
+See also <a href="variables.html#list-of-selected-grass-gisenv-variables">
+list of selected GRASS gisenv variables</a>
 
 <h2>AUTHOR</h2>
 

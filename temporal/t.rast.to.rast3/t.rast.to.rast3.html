@@ -54,7 +54,7 @@ space time dataset, run:
 <div class="code"><pre>
 # create the subset for 2012 data
 t.rast.extract input=tempmean_monthly output=tempmean_monthly_later_2012 \
-               where="start_time >= '2012-01-01'"
+               where="start_time &gt;= '2012-01-01'"
 
 # set the right 3D region
 g.region -p3 res3=500
@@ -101,7 +101,7 @@ r3.info tempmean_monthly_2012
  +----------------------------------------------------------------------------+
  | Layer:    tempmean_monthly_2012          Date: Fri Nov 28 11:10:50 2014    |
  | Mapset:   climate_2009_2012              Login of Creator: lucadelu        |
- | Location: nc_spm_temporal_workshop                                         |
+ | Project: nc_spm_temporal_workshop                                         |
  | DataBase: /grassdata                                                       |
  | Title:    Space time voxel cube                                            |
  | Units:    none                                                             |
