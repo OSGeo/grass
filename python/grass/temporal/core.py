@@ -1501,7 +1501,7 @@ class DBConnection:
                 self.cursor.execute(statement, args)
             else:
                 self.cursor.execute(statement)
-        except Exception:
+        except (sqlite3.Error, psycopg2.Error):
             if connected:
                 self.close()
             self.msgr.error(_("Unable to execute :\n %(sql)s") % {"sql": statement})
@@ -1544,7 +1544,7 @@ class DBConnection:
             else:
                 self.cursor.execute(statement)
             self.connection.commit()
-        except Exception:
+        except (sqlite3.Error, psycopg2.Error):
             if connected:
                 self.close()
             self.msgr.error(

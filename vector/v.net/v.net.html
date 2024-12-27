@@ -39,9 +39,9 @@ the <em>connect</em> operation, some lines will share the same
 category. In order to assign unique costs to each line, a new layer
 needs to be created with<br>
 <!-- like this it is rather useless, still to be improved (eg as a full example below!) -->
-<tt>v.category input=yourmap option=add cat=1 step=1 layer=3 output=newmap</tt><br>
+<code>v.category input=yourmap option=add cat=1 step=1 layer=3 output=newmap</code><br>
 followed by<br>
-<tt>v.db.addtable map=newmap layer=3 table=tablename</tt>.</li>
+<code>v.db.addtable map=newmap layer=3 table=tablename</code>.</li>
 
 <li>Create nodes and arcs from a vector line/boundary file using the
 <em>node</em> operation. This is useful if you are mostly interested
@@ -173,7 +173,7 @@ v.net input=streets_wake points=firestations out=streets_net \
 v.category streets_net option=report
 </pre></div>
 
-The nodes are stored in layer 2 unless <tt>node_layer=1</tt> is used.
+The nodes are stored in layer 2 unless <code>node_layer=1</code> is used.
 
 <h3>Generating network for vector point map</h3>
 

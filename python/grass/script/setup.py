@@ -404,9 +404,8 @@ class SessionHandle:
         :returns: reference to the object (self)
         """
         if not self.active:
-            raise ValueError(
-                "Attempt to use inactive (finished) session as a context manager"
-            )
+            msg = "Attempt to use inactive (finished) session as a context manager"
+            raise ValueError(msg)
         return self
 
     def __exit__(self, type, value, traceback):
@@ -423,7 +422,8 @@ class SessionHandle:
         and finish the session. No GRASS modules can be called afterwards.
         """
         if not self.active:
-            raise ValueError("Attempt to finish an already finished session")
+            msg = "Attempt to finish an already finished session"
+            raise ValueError(msg)
         self._active = False
         finish(env=self._env, start_time=self._start_time)
 

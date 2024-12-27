@@ -312,7 +312,8 @@ def ListOfMapsets(get="ordered"):
                 mapsets_ordered.append(mapset)
         return mapsets_ordered
 
-    raise ValueError("Invalid value for 'get' parameter of ListOfMapsets()")
+    msg = "Invalid value for 'get' parameter of ListOfMapsets()"
+    raise ValueError(msg)
 
 
 def ListSortLower(list):
@@ -850,8 +851,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
 
     # update environmental variables
     if value is None:
-        if key in environ:
-            del environ[key]
+        environ.pop(key, None)
     else:
         environ[key] = value
 

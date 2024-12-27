@@ -256,7 +256,7 @@ if __name__ == "__main__":
     else:
         import grass.script.core as gscore
 
-        gscore.fatal("Unknown value for parameter menu: " % menu)
+        gscore.fatal("Unknown value for parameter menu: %s" % menu)
 
     if action == "strings":
         menudata.PrintStrings(sys.stdout)
@@ -269,6 +269,6 @@ if __name__ == "__main__":
     else:
         import grass.script.core as gscore
 
-        gscore.fatal("Unknown value for parameter action: " % action)
+        gscore.fatal("Unknown value for parameter action: %s" % action)
 
     sys.exit(0)

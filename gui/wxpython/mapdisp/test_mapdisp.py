@@ -44,7 +44,7 @@
 # %end
 
 """
-Module to run test map window (BufferedWidnow) and map display (MapFrame).
+Module to run test map window (BufferedMapWindow) and map display (MapFrame).
 
 @author Vaclav Petras  <wenzeslaus gmail.com>
 """

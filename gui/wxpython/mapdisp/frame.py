@@ -1158,7 +1158,9 @@ class MapPanel(SingleMapPanel, MainPageBase):
         # change the cursor
         self.MapWindow.SetNamedCursor("cross")
 
-    def AddTmpVectorMapLayer(self, name, cats, useId=False, addLayer=True):
+    def AddTmpVectorMapLayer(
+        self, name, cats, useId: bool = False, addLayer: bool = True
+    ):
         """Add temporal vector map layer to map composition
 
         :param name: name of map layer

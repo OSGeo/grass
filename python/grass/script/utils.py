@@ -17,6 +17,8 @@ for details.
 .. sectionauthor:: Anna Petrasova <kratochanna gmail.com>
 """
 
+from __future__ import annotations
+
 import os
 import shutil
 import locale
@@ -29,9 +31,13 @@ import random
 import string
 
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from _typeshed import FileDescriptorOrPath, StrPath, StrOrBytesPath
 
 
-def float_or_dms(s):
+def float_or_dms(s) -> float:
     """Convert DMS to float.
 
     >>> round(float_or_dms('26:45:30'), 5)
@@ -48,7 +54,7 @@ def float_or_dms(s):
     return sum(float(x) / 60**n for (n, x) in enumerate(s.split(":")))
 
 
-def separator(sep):
+def separator(sep: str) -> str:
     """Returns separator from G_OPT_F_SEP appropriately converted
     to character.
 
@@ -80,7 +86,9 @@ def separator(sep):
     return sep
 
 
-def diff_files(filename_a, filename_b):
+def diff_files(
+    filename_a: FileDescriptorOrPath, filename_b: FileDescriptorOrPath
+) -> list[str]:
     """Diffs two text files and returns difference.
 
     :param str filename_a: first file path
@@ -96,7 +104,7 @@ def diff_files(filename_a, filename_b):
     return list(differ.compare(fh_a.readlines(), fh_b.readlines()))
 
 
-def try_remove(path):
+def try_remove(path: StrOrBytesPath) -> None:
     """Attempt to remove a file; no exception is generated if the
     attempt fails.
 
@@ -108,7 +116,7 @@ def try_remove(path):
         pass
 
 
-def try_rmdir(path):
+def try_rmdir(path: StrOrBytesPath) -> None:
     """Attempt to remove a directory; no exception is generated if the
     attempt fails.
 
@@ -120,17 +128,17 @@ def try_rmdir(path):
         shutil.rmtree(path, ignore_errors=True)
 
 
-def basename(path, ext=None):
+def basename(path: StrPath, ext: str | None = None) -> str:
     """Remove leading directory components and an optional extension
     from the specified path
 
     :param str path: path
     :param str ext: extension
     """
-    name = os.path.basename(path)
+    name: str = os.path.basename(path)
     if not ext:
         return name
-    fs = name.rsplit(".", 1)
+    fs: list[str] = name.rsplit(".", 1)
     if len(fs) > 1 and fs[1].lower() == ext:
         name = fs[0]
     return name
@@ -193,7 +201,8 @@ def decode(bytes_, encoding=None):
         enc = _get_encoding() if encoding is None else encoding
         return bytes_.decode(enc)
     # only text should be used
-    raise TypeError("can only accept types str and bytes")
+    msg = "can only accept types str and bytes"
+    raise TypeError(msg)
 
 
 def encode(string, encoding=None):
@@ -221,7 +230,8 @@ def encode(string, encoding=None):
         enc = _get_encoding() if encoding is None else encoding
         return string.encode(enc)
     # if something else than text
-    raise TypeError("can only accept types str and bytes")
+    msg = "can only accept types str and bytes"
+    raise TypeError(msg)
 
 
 def text_to_string(text, encoding=None):
@@ -231,7 +241,7 @@ def text_to_string(text, encoding=None):
     return decode(text, encoding=encoding)
 
 
-def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None):
+def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None) -> KeyValue:
     """Parse a string into a dictionary, where entries are separated
     by newlines and the key and value are separated by `sep` (default: `=`)
 
@@ -352,8 +362,8 @@ def naturally_sort(items, key=None):
 
 def get_lib_path(modname, libname=None):
     """Return the path of the libname contained in the module."""
-    from os.path import isdir, join, sep
     from os import getenv
+    from os.path import isdir, join, sep
 
     if isdir(join(getenv("GISBASE"), "etc", modname)):
         path = join(os.getenv("GISBASE"), "etc", modname)
@@ -500,9 +510,11 @@ def legalize_vector_name(name, fallback_prefix="x"):
     """
     # The implementation is based on Vect_legal_filename().
     if not name:
-        raise ValueError("name cannot be empty")
+        msg = "name cannot be empty"
+        raise ValueError(msg)
     if fallback_prefix and re.match(r"[^A-Za-z]", fallback_prefix[0]):
-        raise ValueError("fallback_prefix must start with an ASCII letter")
+        msg = "fallback_prefix must start with an ASCII letter"
+        raise ValueError(msg)
     if fallback_prefix and re.match(r"[^A-Za-z]", name[0], flags=re.ASCII):
         # We prefix here rather than just replace, because in cases of unique
         # identifiers, e.g., columns or node names, replacing the first
@@ -587,21 +599,22 @@ def append_random(name, suffix_length=None, total_length=None):
         :func:`append_node_pid()` description.
     """
     if suffix_length and total_length:
-        raise ValueError(
-            "Either suffix_length or total_length can be provided, not both"
-        )
+        msg = "Either suffix_length or total_length can be provided, not both"
+        raise ValueError(msg)
     if not suffix_length and not total_length:
-        raise ValueError("suffix_length or total_length has to be provided")
+        msg = "suffix_length or total_length has to be provided"
+        raise ValueError(msg)
     if total_length:
         # remove len of name and one underscore
         name_length = len(name)
         suffix_length = total_length - name_length - 1
         if suffix_length <= 0:
-            raise ValueError(
+            msg = (
                 "No characters left for the suffix:"
                 " total_length <{total_length}> is too small"
                 " or name <{name}> ({name_length}) is too long".format(**locals())
             )
+            raise ValueError(msg)
     # We don't do lower and upper case because that could cause conflicts in
     # contexts which are case-insensitive.
     # We use lowercase because that's what is in UUID4 hex string.

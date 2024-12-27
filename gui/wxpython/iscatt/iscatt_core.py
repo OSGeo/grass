@@ -727,35 +727,36 @@ class ScattPlotsData(ScattPlotsCondsData):
         return cats_rasts
 
 
-# not used,  using iclass_perimeter algorithm instead of scipy convolve2d
-"""
-def RasterizePolygon(pol, height, min_h, width, min_w):
+# not used, using iclass_perimeter algorithm instead of scipy convolve2d
 
-    # Joe Kington
-    # https://stackoverflow.com/questions/3654289/scipy-create-2d-polygon-mask
-
-    #poly_verts = [(1,1), (1,4), (4,4),(4,1), (1,1)]
-
-    nx = width
-    ny = height
-
-    x, y =  np.meshgrid(np.arange(-0.5 + min_w, nx + 0.5 + min_w, dtype=float),
-                        np.arange(-0.5 + min_h, ny + 0.5 + min_h, dtype=float))
-    x, y = x.flatten(), y.flatten()
-
-    points = np.vstack((x,y)).T
-
-    p = Path(pol)
-    grid = p.contains_points(points)
-    grid = grid.reshape((ny + 1, nx + 1))
-    raster = np.zeros((height, width), dtype=np.uint8)#TODO bool
-
-    #TODO shift by 0.5
-    B = np.ones((2,2))/4
-    raster = convolve2d(grid, B, 'valid')
-
-    return raster
-"""
+# def RasterizePolygon(pol, height, min_h, width, min_w):
+#
+#     # Joe Kington
+#     # https://stackoverflow.com/questions/3654289/scipy-create-2d-polygon-mask
+#
+#     # poly_verts = [(1,1), (1,4), (4,4),(4,1), (1,1)]
+#
+#     nx = width
+#     ny = height
+#
+#     x, y = np.meshgrid(
+#         np.arange(-0.5 + min_w, nx + 0.5 + min_w, dtype=float),
+#         np.arange(-0.5 + min_h, ny + 0.5 + min_h, dtype=float),
+#     )
+#     x, y = x.flatten(), y.flatten()
+#
+#     points = np.vstack((x, y)).T
+#
+#     p = Path(pol)
+#     grid = p.contains_points(points)
+#     grid = grid.reshape((ny + 1, nx + 1))
+#     raster = np.zeros((height, width), dtype=np.uint8)  # TODO bool
+#
+#     # TODO shift by 0.5
+#     B = np.ones((2, 2)) / 4
+#     raster = convolve2d(grid, B, "valid")
+#
+#     return raster
 
 
 def idScattToidBands(scatt_id, n_bands):

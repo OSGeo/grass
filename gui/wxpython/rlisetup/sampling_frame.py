@@ -431,7 +431,7 @@ class RLiSetupMapPanel(wx.Panel):
             dlg.Destroy()
 
         elif self.samplingtype != SamplingType.WHOLE:
-            """When drawing finished, get region values"""
+            # When drawing finished, get region values
             self.sampleFrameChanged.emit(region=region)
 
 

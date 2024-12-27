@@ -36,19 +36,19 @@ GRASS GIS extensions are installed by <em>g.extension</em> into a dedicated
 directory.
 The default is a directory for application data and settings inside
 the user's home directory.
-On GNU/Linux it is <tt>$HOME/.grass8/addons</tt>,
-on MS-Windows it is <tt>%APPDATA%\Roaming\GRASS8\addons</tt>.
-The name of the directory is stored in the <tt>GRASS_ADDON_BASE</tt>
+On GNU/Linux it is <code>$HOME/.grass8/addons</code>,
+on MS-Windows it is <code>%APPDATA%\Roaming\GRASS8\addons</code>.
+The name of the directory is stored in the <code>GRASS_ADDON_BASE</code>
 environmental variable.
 
 <p>
 The flag <b>-s</b> changes this install target directory to the GRASS GIS
 installation directory
-(determined by <tt>GISBASE</tt> environmental variable, e.g. <tt>/usr/</tt>)
-rather than the default directory defined as per  <tt>GRASS_ADDON_BASE</tt>
+(determined by <code>GISBASE</code> environmental variable, e.g. <code>/usr/</code>)
+rather than the default directory defined as per  <code>GRASS_ADDON_BASE</code>
 (see also documentation for <a href="variables.html">variables</a>).
 <em>g.extension</em> checks if the user has permission to write to
-<tt>GISBASE</tt> or <tt>GRASS_ADDON_BASE</tt>.
+<code>GISBASE</code> or <code>GRASS_ADDON_BASE</code>.
 
 <p>
 The place where the extensions are installed can be customized by
@@ -77,7 +77,7 @@ to a temporary directory and the compilation happens there.
 
 <h4>Source code in a ZIP or TAR archive</h4>
 In addition, new extension can be also installed from a ZIP file
-or an archive file from the TAR family (e.g., <tt>.tar.gz</tt> or <tt>.bz2</tt>).
+or an archive file from the TAR family (e.g., <code>.tar.gz</code> or <code>.bz2</code>).
 The file can be on disk (specified with a path), or on the web (specified by
 an URL).
 
@@ -85,7 +85,7 @@ an URL).
 For well known general hosting services, namely GitHub, GitLab and Bitbucket,
 <em>g.extension</em> supports the download of a repository.
 Here the user only needs to provide a base URL to the repository web page
-(with or without the <tt>https://</tt> part).
+(with or without the <code>https://</code> part).
 For GitHub, GitLab and Bitbucket, the latest source code in the default
 branch is downloaded, unless a specific branch is requested in the
 <em>branch</em> option.
@@ -276,4 +276,4 @@ with the version number) must be installed.
 
 Markus Neteler (original shell script)<br>
 Martin Landa, Czech Technical University in Prague, Czech Republic (Python rewrite)<br>
-Vaclav Petras, <a href="http://gis.ncsu.edu/osgeorel/">NCSU OSGeoREL</a> (support for general sources, partial refactoring)
+Vaclav Petras, <a href="https://geospatial.ncsu.edu/geoforall/">NCSU GeoForAll Lab</a> (support for general sources, partial refactoring)
