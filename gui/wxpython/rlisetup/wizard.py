@@ -756,7 +756,6 @@ class FirstPage(TitledPage):
             elif self.region == "draw":
                 self.SetNext(self.parent.drawsampleframepage)
                 self.parent.samplingareapage.SetPrev(self.parent.drawsampleframepage)
-                return
 
 
 class KeyboardPage(TitledPage):

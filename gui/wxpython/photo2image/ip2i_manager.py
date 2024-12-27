@@ -1145,7 +1145,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         """Print final message"""
         global maptype
         if maptype == "raster":
-            return
+            pass
 
     def OnSettings(self, event):
         """GCP Manager settings"""

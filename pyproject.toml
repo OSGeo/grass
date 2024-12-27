@@ -635,7 +635,6 @@ disable = [
     "R1704",  # Redefining argument with the local name %r (redefined-argument-from-local)
     "R1705",  # Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
     "R1710",  # Either all return statements in a function should return an expression, or none of them should. (inconsistent-return-statements)
-    "R1711",  # Useless return at end of function or method (useless-return)
     "R1712",  # Consider using tuple unpacking for swapping variables (consider-swap-variables)
     "R1713",  # Consider using str.join(sequence) for concatenating strings from an iterable (consider-using-join)
     "R1714",  # Consider merging these comparisons with 'in' by using '%s %sin (%s)'. Use a set instead if elements are hashable. (consider-using-in)

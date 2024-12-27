@@ -1134,8 +1134,6 @@ class Line(Geo):
             self.reset()
             for coord in match.groups()[0].strip().split(","):
                 self.append(tuple(float(e) for e in coord.split(" ")))
-        else:
-            return None
 
     def buffer(
         self,
