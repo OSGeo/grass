@@ -664,7 +664,6 @@ disable = [
     "W0221",  # (arguments-differ)
     "W0222",  # Signature differs from %s %r method (signature-differs)
     "W0223",  # Method %r is abstract in class %r but is not overridden in child class %r (abstract-method)
-    "W0231",  # __init__ method from base class %r is not called (super-init-not-called)
     "W0237",  # (arguments-renamed)
     "W0401",  # Wildcard import %s (wildcard-import)
     "W0404",  # Reimport %r (imported line %s) (reimported)

@@ -308,6 +308,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         lmgr=None,
         camera=None,
     ):
+        # pylint: disable=super-init-not-called; See InitMapDisplay()
         self.grwiz = grwiz  # GR Wizard
         self._giface = giface
 
