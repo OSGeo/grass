@@ -25,14 +25,14 @@ jobs:
 
     env:
       # renovate: datasource=python-version depName=python
-      PYTHON_VERSION: "3.10"
-      MIN_PYTHON_VERSION: "3.8"
+      PYTHON_VERSION: "3.12"
+      MIN_PYTHON_VERSION: "3.9"
       # renovate: datasource=pypi depName=black
       BLACK_VERSION: "24.10.0"
       # renovate: datasource=pypi depName=flake8
       FLAKE8_VERSION: "7.1.1"
       # renovate: datasource=pypi depName=pylint
-      PYLINT_VERSION: "2.12.2"
+      PYLINT_VERSION: "3.3.2"
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.8.0"
       # renovate: datasource=pypi depName=ruff
@@ -156,37 +156,39 @@ jobs:
           echo "$HOME/install/bin" >> $GITHUB_PATH
 
       - name: Run Pylint on grass package
+        # Until slower checks (like similarity) are reenabled, running in one step is faster
+        if: false
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          cd python
           pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) grass
 
-      - name: Run Pylint on wxGUI
-        run: |
-          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          cd gui/wxpython
-          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) *
-
       - name: Run Pylint on other files using pytest
+        # Until slower checks (like similarity) are reenabled, running in one step is faster
+        if: false
         run: |
-          pipx inject --include-apps pylint pytest==7.4.4
-          pipx inject pylint pytest-pylint==0.19 pytest-github-actions-annotate-failures
-          echo "::warning file=.github/workflows/python-code-quality.yml,line=149,col=42,endColumn=48::\
-            Temporarily downgraded pytest-pylint and pytest to allow merging other PRs.\
-            The errors reported with a newer version seem legitimite and should be fixed \
-            (2023-10-18, see https://github.com/OSGeo/grass/pull/3205)\
-            (2024-01-28, see https://github.com/OSGeo/grass/issues/3380)"
+          pipx inject --include-apps pylint pytest
+          pipx inject pylint pytest-pylint pytest-github-actions-annotate-failures pytest-timeout
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          pytest --pylint -m pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) \
+          pytest --pylint -m pylint --pylint-jobs=$(nproc) \
             --pylint-ignore-patterns="${{ env.PylintIgnore }}"
         env:
-          PylintIgnore: "python/.*,gui/wxpython/.*,doc/.*,man/.*,utils/.*,locale/.*,raster/.*,\
-            imagery/.*,scripts/r.in.wms/wms_drv.py,scripts/g.extension/g.extension.py,\
-            temporal/t.rast.accdetect/t.rast.accdetect.py,temporal/t.rast.accumulate/t.rast.accumulate.py,\
-            scripts/d.rast.edit/d.rast.edit.py"
+          PylintIgnore: "python/.*,gui/.*"
+
+      - name: Run Pylint on wxGUI
+        # Until slower checks (like similarity) are reenabled, running in one step is faster
+        if: false
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) gui
+
+      - name: Run Pylint all in one pass
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) .
 
       - name: Test compiling example modules
         run: |
