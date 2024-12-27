@@ -17,19 +17,12 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
 import shutil
+import sys
 import textwrap
 import time
 
 import wx
-from wx.lib.newevent import NewEvent
-
-from grass.script.utils import try_rmdir, legalize_vector_name
-from grass.utils.download import download_and_extract, name_from_url, DownloadError
-from grass.grassdb.checks import is_location_valid
-from grass.script.setup import set_gui_path
-
 
 # flake8: noqa: E402
 from core.debug import Debug
@@ -37,7 +30,12 @@ from core.gthread import gThread
 from gui_core.wrap import Button, StaticText
 
 # flakes8: qa
+from wx.lib.newevent import NewEvent
 
+from grass.grassdb.checks import is_location_valid
+from grass.script.setup import set_gui_path
+from grass.script.utils import legalize_vector_name, try_rmdir
+from grass.utils.download import DownloadError, download_and_extract, name_from_url
 
 set_gui_path()
 

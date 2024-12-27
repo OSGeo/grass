@@ -27,7 +27,7 @@ from xml.etree.ElementTree import ParseError
 import numpy as np
 from srs import Srs
 from wms_base import GetEpsg, GetSRSParamVal, WMSBase
-from wms_cap_parsers import WMTSCapabilitiesTree, OnEarthCapabilitiesTree
+from wms_cap_parsers import OnEarthCapabilitiesTree, WMTSCapabilitiesTree
 
 import grass.script as gs
 

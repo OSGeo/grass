@@ -19,10 +19,6 @@ This program is free software under the GNU General Public License
 
 import os
 import time
-import wx
-from wx.lib.newevent import NewEvent
-from grass.script import core as grass
-
 from pathlib import Path
 
 import wx
@@ -32,11 +28,8 @@ from grass.script import core as grass
 
 watchdog_used = True
 try:
+    from watchdog.events import FileSystemEventHandler, PatternMatchingEventHandler
     from watchdog.observers import Observer
-    from watchdog.events import (
-        PatternMatchingEventHandler,
-        FileSystemEventHandler,
-    )
 except ImportError:
     watchdog_used = False
     PatternMatchingEventHandler = object
