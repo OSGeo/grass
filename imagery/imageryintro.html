@@ -48,7 +48,7 @@ influences the signal as recorded at the sensor. This atmospheric
 interaction with the sun energy reflected back into space by
 ground/vegetation/soil needs to be corrected. The need of
 removing atmospheric artifacts stems from the fact that the
-atmosphericic conditions are changing over time. Hence, to gain
+atmospheric conditions are changing over time. Hence, to gain
 comparability between Earth surface images taken at different
 times, atmospheric need to be removed converting at-sensor values
 which are top of atmosphere to surface reflectance values.
@@ -114,7 +114,7 @@ signature files of one imagery or raster group can be used to classify
 a different group with identical semantic labels.
 
 <div align="center" style="margin: 10px">
-<img src="band_references_scheme.png" width="600" height="435" border="0"><br>
+<img src="band_references_scheme.png" alt="GRASS GIS band references scheme" width="600" height="435" border="0"><br>
 <i>
     New enhanced classification workflow involving semantic labels.
 </i>
@@ -204,16 +204,19 @@ GRASS supports the following methods:
     or <a href="g.gui.iclass.html">g.gui.iclass</a>, <a href="i.maxlik.html">i.maxlik</a>)
    using the Maximum Likelihood classification method</li>
   </ul>
+  </li>
 <li> Combined radiometric/geometric (segmentation based) classification:
   <ul>
   <li> Supervised classification (<a href="i.gensigset.html">i.gensigset</a>,
    <a href="i.smap.html">i.smap</a>)</li>
   </ul>
+  </li>
 <li> Object-oriented classification:
   <ul>
   <li> Unsupervised classification (segmentation based:
        <a href="i.segment.html">i.segment</a>)</li>
   </ul>
+  </li>
 </ul>
 
 Kappa statistic can be calculated to validate the results
