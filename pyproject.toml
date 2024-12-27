@@ -616,7 +616,6 @@ disable = [
     "E1126",  # Sequence index is not an int, slice, or instance with __index__ (invalid-sequence-index)
     "E1128",  # Assigning result of a function call, where the function returns None (assignment-from-none)
     "E1133",  # Non-iterable value %s is used in an iterating context (not-an-iterable)
-    "E1135",  # Value '%s' doesn't support membership test (unsupported-membership-test)
     "E1136",  # Value '%s' is unsubscriptable (unsubscriptable-object)
     "E1137",  # %r does not support item assignment (unsupported-assignment-operation)
     "E1307",  # Argument %r does not match format type %r (bad-string-format-type)
