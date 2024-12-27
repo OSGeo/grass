@@ -633,7 +633,6 @@ disable = [
     "R0916",  # (too-many-boolean-expressions)
     "R0917",  # (too-many-positional-arguments)
     "R1702",  # (too-many-nested-blocks)
-    "R1703",  # The if statement can be replaced with %s (simplifiable-if-statement)
     "R1704",  # Redefining argument with the local name %r (redefined-argument-from-local)
     "R1705",  # Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
     "R1710",  # Either all return statements in a function should return an expression, or none of them should. (inconsistent-return-statements)
