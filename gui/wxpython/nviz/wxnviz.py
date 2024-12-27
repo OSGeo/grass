@@ -517,7 +517,17 @@ class Nviz:
         """
         Nviz_set_bgcolor(self.data, Nviz_color_from_str(color_str))
 
-    def SetLight(self, x, y, z, color, bright, ambient, w=0, lid=1) -> None:
+    def SetLight(
+        self,
+        x: float,
+        y: float,
+        z: float,
+        color,
+        bright: float,
+        ambient: float,
+        w: float = 0,
+        lid: int = 1,
+    ) -> None:
         """Change lighting settings
 
         :param x,y,z: position
@@ -2403,7 +2413,7 @@ class Texture:
             self.coords[0], self.coords[1], self.width, self.height, self.textureId
         )
 
-    def HitTest(self, x: int, y: int, radius) -> bool:
+    def HitTest(self, x: int, y: int, radius: int) -> bool:
         copy = Rect(self.coords[0], self.coords[1], self.orig_width, self.orig_height)
         copy.Inflate(radius, radius)
         return copy.ContainsXY(x, y)
