@@ -164,21 +164,6 @@ class BoundMethodWeakref:
 
     __bool__ = __nonzero__
 
-    def __eq__(self, other):
-        if not isinstance(other, self.__class__):
-            return False
-        return self.key == other.key
-
-    def __lt__(self, other):
-        if not isinstance(other, self.__class__):
-            return self.__class__.__name__ < other.__class__.__name__
-        return self.key < other.key
-
-    def __gt__(self, other):
-        if not isinstance(other, self.__class__):
-            return self.__class__.__name__ > other.__class__.__name__
-        return self.key > other.key
-
     def __call__(self):
         """Return a strong reference to the bound method
 
