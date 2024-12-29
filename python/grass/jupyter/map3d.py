@@ -229,6 +229,15 @@ class Map3D:
     def show(self):
         """Displays a PNG image of map"""
         # Lazy import to avoid an import-time dependency on IPython.
+<<<<<<< Updated upstream
         from IPython.display import Image  # pylint: disable=import-outside-toplevel
 
         return Image(self._filename)
+=======
+        from IPython.display import (
+            
+            Image,
+            display,
+        )  # pylint: disable=import-outside-toplevel
+        display(Image(self._filename))
+>>>>>>> Stashed changes
