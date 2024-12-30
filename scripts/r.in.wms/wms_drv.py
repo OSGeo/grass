@@ -18,7 +18,16 @@ This program is free software under the GNU General Public License
 """
 
 import socket
+from http.client import HTTPException
+from math import floor, pi
 from time import sleep
+from urllib.error import HTTPError
+from xml.etree.ElementTree import ParseError
+
+import numpy as np
+from srs import Srs
+from wms_base import GetEpsg, GetSRSParamVal, WMSBase
+from wms_cap_parsers import OnEarthCapabilitiesTree, WMTSCapabilitiesTree
 
 import grass.script as gs
 
@@ -31,17 +40,6 @@ except ImportError:
             "being installed)"
         )
     )
-
-from http.client import HTTPException
-from math import floor, pi
-from urllib.error import HTTPError
-from xml.etree.ElementTree import ParseError
-
-import numpy as np
-
-from srs import Srs
-from wms_base import GetEpsg, GetSRSParamVal, WMSBase
-from wms_cap_parsers import OnEarthCapabilitiesTree, WMTSCapabilitiesTree
 
 
 class WMSDrv(WMSBase):

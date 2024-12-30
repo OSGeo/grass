@@ -25,17 +25,17 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+import errno
+import locale
 import os
+import signal
+import subprocess
 import sys
 import time
-import errno
-import signal
 import traceback
-import locale
-import subprocess
 from threading import Thread
-import wx
 
+import wx
 from core.debug import Debug
 from core.globalvar import SCT_EXT
 
@@ -43,13 +43,15 @@ from grass.script import core as grass
 from grass.script.utils import decode, encode
 
 is_mswindows = sys.platform == "win32"
+
 if is_mswindows:
+    import msvcrt
+
     from win32file import ReadFile, WriteFile
     from win32pipe import PeekNamedPipe
-    import msvcrt
 else:
-    import select
     import fcntl
+    import select
 
 
 def DecodeString(string):

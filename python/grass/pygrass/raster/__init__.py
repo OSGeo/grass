@@ -6,7 +6,6 @@ import numpy as np
 #
 from grass.script import fatal
 from grass.exceptions import OpenError
-
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 import grass.lib.rowio as librowio

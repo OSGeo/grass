@@ -16,39 +16,20 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz>
 """
 
-import re
 import os
-import sys
+import re
 import shutil
-
+import sys
 from copy import deepcopy
-from core import globalvar
-
 from xml.etree.ElementTree import ParseError
 
 import wx
-
-if globalvar.wxPythonPhoenix:
-    try:
-        import agw.flatnotebook as FN
-    except ImportError:  # if it's not there locally, try the wxPython lib.
-        import wx.lib.agw.flatnotebook as FN
-else:
-    import wx.lib.flatnotebook as FN
 import wx.lib.colourselect as csel
-
+from core import globalvar
 from core.debug import Debug
 from core.gcmd import GMessage
-from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
-
-from web_services.cap_interface import (
-    WMSCapabilities,
-    WMTSCapabilities,
-    OnEarthCapabilities,
-)
-
-from gui_core.widgets import GNotebook
-from gui_core.widgets import ManageSettingsWidget
+from core.gconsole import EVT_CMD_DONE, EVT_CMD_OUTPUT, CmdThread, GStderr
+from gui_core.widgets import GNotebook, ManageSettingsWidget
 from gui_core.wrap import (
     Button,
     ScrolledPanel,
@@ -58,6 +39,11 @@ from gui_core.wrap import (
     TextCtrl,
     TreeCtrl,
 )
+from web_services.cap_interface import (
+    OnEarthCapabilities,
+    WMSCapabilities,
+    WMTSCapabilities,
+)
 
 import grass.script as gs
 from grass.pydispatch.signal import Signal
@@ -66,8 +52,8 @@ rinwms_path = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
 if rinwms_path not in sys.path:
     sys.path.append(rinwms_path)
 
-from wms_base import WMSDriversInfo  # noqa:E402
 from srs import Srs  # noqa:E402
+from wms_base import WMSDriversInfo  # noqa:E402
 
 
 class WSPanel(wx.Panel):

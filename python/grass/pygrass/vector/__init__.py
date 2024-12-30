@@ -1,23 +1,20 @@
-from os.path import join, exists
-import grass.lib.gis as libgis
 import ctypes
+from os.path import exists, join
 
+import grass.lib.gis as libgis
 
 # flake8: noqa: E402
 libgis.G_gisinit("")
 
 import grass.lib.vector as libvect
-from grass.pygrass.vector.vector_type import VTYPE
 from grass.pygrass.errors import GrassError, must_be_open
 from grass.pygrass.gis import Location
-from grass.pygrass.vector.geometry import (
-    GEOOBJ as _GEOOBJ,
-    read_line,
-    read_next_line,
-    Area as _Area,
-)
 from grass.pygrass.vector.abstract import Info
 from grass.pygrass.vector.basic import Bbox, Cats, Ilist
+from grass.pygrass.vector.geometry import GEOOBJ as _GEOOBJ
+from grass.pygrass.vector.geometry import Area as _Area
+from grass.pygrass.vector.geometry import read_line, read_next_line
+from grass.pygrass.vector.vector_type import VTYPE
 
 # flake8: qa
 
@@ -972,6 +969,7 @@ class VectorTopo(Vector):
 
 if __name__ == "__main__":
     import doctest
+
     from grass.pygrass import utils
 
     utils.create_test_vector_map(test_vector_name)
