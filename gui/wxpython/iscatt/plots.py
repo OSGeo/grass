@@ -235,7 +235,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         img = imshow(
             self.axes,
             merged_img,
-            extent=[int(ceil(x)) for x in self.full_extend],
+            extent=[ceil(x) for x in self.full_extend],
             origin="lower",
             interpolation="nearest",
             aspect="equal",
@@ -321,7 +321,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         if not event.inaxes:
             return
         # tcaswell
-        # http://stackoverflow.com/questions/11551049/matplotlib-plot-zooming-with-scroll-wheel
+        # https://stackoverflow.com/questions/11551049/matplotlib-plot-zooming-with-scroll-wheel
         cur_xlim = self.axes.get_xlim()
         cur_ylim = self.axes.get_ylim()
 
@@ -513,30 +513,29 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
         else:
             MergeArrays(merged_img, rend_dt[cat_id]["dt"], styles[cat_id]["opacity"])
 
-        """
-            # c_img_a = np.memmap(
-            #     grass.tempfile(), dtype="uint16", mode="w+", shape=shape
-            # )
-            c_img_a = colored_cat.astype("uint16")[:, :, 3] * styles[cat_id]["opacity"]
+            # # c_img_a = np.memmap(
+            # #     grass.tempfile(), dtype="uint16", mode="w+", shape=shape
+            # # )
+            # c_img_a = colored_cat.astype("uint16")[:,:, 3] * styles[cat_id]["opacity"]
+            #
+            # # TODO apply strides and there will be no need for loop
+            # # b = as_strided(
+            # #     a,
+            # #     strides=(0, a.strides[3], a.strides[3], a.strides[3]),
+            # #     shape=(3, a.shape[0], a.shape[1]),
+            # # )
+            #
+            # for i in range(3):
+            #     merged_img[:, :, i] = (
+            #         merged_img[:, :, i] * (255 - c_img_a)
+            #         + colored_cat[:, :, i] * c_img_a
+            #     ) / 255
+            # merged_img[:, :, 3] = (
+            #     merged_img[:, :, 3] * (255 - c_img_a) + 255 * c_img_a
+            # ) / 255
+            #
+            # del c_img_a
 
-            # TODO apply strides and there will be no need for loop
-            # b = as_strided(
-            #     a,
-            #     strides=(0, a.strides[3], a.strides[3], a.strides[3]),
-            #     shape=(3, a.shape[0], a.shape[1]),
-            # )
-
-            for i in range(3):
-                merged_img[:, :, i] = (
-                    merged_img[:, :, i] * (255 - c_img_a)
-                    + colored_cat[:, :, i] * c_img_a
-                ) / 255
-            merged_img[:, :, 3] = (
-                merged_img[:, :, 3] * (255 - c_img_a) + 255 * c_img_a
-            ) / 255
-
-            del c_img_a
-        """
     _rendDtMemmapsToFiles(rend_dt)
 
     merged_img = {"dt": merged_img.filename, "sh": merged_img.shape}
@@ -633,10 +632,11 @@ class PolygonDrawer:
 
     def __init__(self, ax, pol, empty_pol):
         if pol.figure is None:
-            raise RuntimeError(
+            msg = (
                 "You must first add the polygon to a figure or canvas before defining "
                 "the interactor"
             )
+            raise RuntimeError(msg)
         self.ax = ax
         self.canvas = pol.figure.canvas
 
@@ -912,7 +912,8 @@ class ModestImage(mi.AxesImage):
 
     def __init__(self, minx=0.0, miny=0.0, *args, **kwargs):
         if "extent" in kwargs and kwargs["extent"] is not None:
-            raise NotImplementedError("ModestImage does not support extents")
+            msg = f"{ModestImage.__name__} does not support extents"
+            raise NotImplementedError(msg)
 
         self._full_res = None
         self._sx, self._sy = None, None
@@ -932,12 +933,14 @@ class ModestImage(mi.AxesImage):
         self._A = A
 
         if self._A.dtype != np.uint8 and not np.can_cast(self._A.dtype, float):
-            raise TypeError("Image data can not convert to float")
+            msg = "Image data can not convert to float"
+            raise TypeError(msg)
 
         if self._A.ndim not in (2, 3) or (
             self._A.ndim == 3 and self._A.shape[-1] not in (3, 4)
         ):
-            raise TypeError("Invalid dimensions for image data")
+            msg = "Invalid dimensions for image data"
+            raise TypeError(msg)
 
         self._imcache = None
         self._rgbacache = None

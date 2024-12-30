@@ -393,10 +393,7 @@ class DisplayAttributesDialog(wx.Dialog):
         """
         if action:
             self.action = action
-            if action == "display":
-                enabled = False
-            else:
-                enabled = True
+            enabled = action != "display"
             self.closeDialog.Enable(enabled)
             self.FindWindowById(wx.ID_OK).Enable(enabled)
 
@@ -420,10 +417,7 @@ class DisplayAttributesDialog(wx.Dialog):
                 idx = 0
                 for layer in data["Layer"]:
                     layer = int(layer)
-                    if data["Id"][idx] is not None:
-                        tfid = int(data["Id"][idx])
-                    else:
-                        tfid = 0  # Area / Volume
+                    tfid = int(data["Id"][idx]) if data["Id"][idx] is not None else 0
                     if tfid not in self.cats:
                         self.cats[tfid] = {}
                     if layer not in self.cats[tfid]:
@@ -654,15 +648,14 @@ class ModifyTableRecord(wx.Dialog):
                     self.boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
                     cId += 1
                     continue
-                else:
-                    valueWin = SpinCtrl(
-                        parent=self.dataPanel,
-                        id=wx.ID_ANY,
-                        value=value,
-                        min=-1e9,
-                        max=1e9,
-                        size=(250, -1),
-                    )
+                valueWin = SpinCtrl(
+                    parent=self.dataPanel,
+                    id=wx.ID_ANY,
+                    value=value,
+                    min=-1e9,
+                    max=1e9,
+                    size=(250, -1),
+                )
             else:
                 valueWin = TextCtrl(
                     parent=self.dataPanel, id=wx.ID_ANY, value=value, size=(250, -1)

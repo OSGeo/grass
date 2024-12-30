@@ -548,7 +548,8 @@ class Module:
         if isinstance(cmd, str):
             self.name = cmd
         else:
-            raise GrassError("Problem initializing the module {s}".format(s=cmd))
+            msg = "Problem initializing the module {s}".format(s=cmd)
+            raise GrassError(msg)
         try:
             # call the command with --interface-description
             get_cmd_xml = Popen([cmd, "--interface-description"], stdout=PIPE)
@@ -559,7 +560,7 @@ class Module:
         # get the xml of the module
         self.xml = get_cmd_xml.communicate()[0]
         # transform and parse the xml into an Element class:
-        # http://docs.python.org/library/xml.etree.elementtree.html
+        # https://docs.python.org/library/xml.etree.elementtree.html
         tree = fromstring(self.xml)
 
         for e in tree:

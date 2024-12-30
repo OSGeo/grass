@@ -132,10 +132,7 @@ def main():
     elif flags["t"]:
         special = "topics"
 
-    if flags["m"]:
-        start = start_man
-    else:
-        start = start_browser
+    start = start_man if flags["m"] else start_browser
 
     entry = options["entry"]
     gisbase = os.environ["GISBASE"]

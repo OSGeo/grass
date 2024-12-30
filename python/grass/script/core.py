@@ -18,6 +18,8 @@ for details.
 .. sectionauthor:: Michael Barton <michael.barton asu.edu>
 """
 
+from __future__ import annotations
+
 import os
 import sys
 import atexit
@@ -268,7 +270,8 @@ def make_command(
     if flags:
         flags = _make_val(flags)
         if "-" in flags:
-            raise ScriptError("'-' is not a valid flag")
+            msg = "'-' is not a valid flag"
+            raise ScriptError(msg)
         args.append("-" + flags)
     for opt, val in options.items():
         if opt in _popen_args:
@@ -334,10 +337,7 @@ def handle_errors(returncode, result, args, kwargs):
         args = make_command(*args, **kwargs)
         # Since we are in error handler, let's be extra cautious
         # about an empty command.
-        if args:
-            module = args[0]
-        else:
-            module = None
+        module = args[0] if args else None
         code = " ".join(args)
         return module, code
 
@@ -858,25 +858,25 @@ def get_capture_stderr():
 # interface to g.parser
 
 
-def _parse_opts(lines):
-    options = {}
-    flags = {}
+def _parse_opts(lines: list) -> tuple[dict[str, str], dict[str, bool]]:
+    options: dict[str, str] = {}
+    flags: dict[str, bool] = {}
     for line in lines:
         if not line:
             break
         try:
             var, val = line.split(b"=", 1)
         except ValueError:
-            raise SyntaxError("invalid output from g.parser: {}".format(line))
+            msg = "invalid output from g.parser: {}".format(line)
+            raise SyntaxError(msg)
         try:
             var = decode(var)
             val = decode(val)
         except UnicodeError as error:
-            raise SyntaxError(
-                "invalid output from g.parser ({error}): {line}".format(
-                    error=error, line=line
-                )
+            msg = "invalid output from g.parser ({error}): {line}".format(
+                error=error, line=line
             )
+            raise SyntaxError(msg)
         if var.startswith("flag_"):
             flags[var[5:]] = bool(int(val))
         elif var.startswith("opt_"):
@@ -884,13 +884,12 @@ def _parse_opts(lines):
         elif var in {"GRASS_OVERWRITE", "GRASS_VERBOSE"}:
             os.environ[var] = val
         else:
-            raise SyntaxError(
-                "unexpected output variable from g.parser: {}".format(line)
-            )
+            msg = "unexpected output variable from g.parser: {}".format(line)
+            raise SyntaxError(msg)
     return (options, flags)
 
 
-def parser():
+def parser() -> tuple[dict[str, str], dict[str, bool]]:
     """Interface to g.parser, intended to be run from the top-level, e.g.:
 
     ::
@@ -1065,7 +1064,8 @@ def _text_to_key_value_dict(
         {'a': ['Hello'], 'c': [1, 2, 3, 4, 5], 'b': [1.0], 'd': ['hello', 8, 0.1]}
 
     """
-    text = open(filename).readlines()
+    with Path(filename).open() as f:
+        text = f.readlines()
     kvdict = KeyValue()
 
     for line in text:
@@ -1448,7 +1448,7 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag="", env=Non
     :return: list of elements
     """
     if type == "cell":
-        verbose(_('Element type should be "raster" and not "%s"') % type)
+        verbose(_('Element type should be "raster" and not "%s"') % type, env=env)
 
     result = []
     for line in read_command(
@@ -1521,7 +1521,9 @@ def list_grouped(
         flag += "t"
     for i in range(len(types)):
         if types[i] == "cell":
-            verbose(_('Element type should be "raster" and not "%s"') % types[i])
+            verbose(
+                _('Element type should be "raster" and not "%s"') % types[i], env=env
+            )
             types[i] = "raster"
     result = {}
     if check_search_path:
@@ -1544,7 +1546,7 @@ def list_grouped(
         try:
             name, mapset = line.split("@")
         except ValueError:
-            warning(_("Invalid element '%s'") % line)
+            warning(_("Invalid element '%s'") % line, env=env)
             continue
 
         if store_types:
@@ -1574,7 +1576,7 @@ def list_grouped(
 
 # color parsing
 
-named_colors = {
+named_colors: dict[str, tuple[float, float, float]] = {
     "white": (1.00, 1.00, 1.00),
     "black": (0.00, 0.00, 0.00),
     "red": (1.00, 0.00, 0.00),
@@ -1594,7 +1596,9 @@ named_colors = {
 }
 
 
-def parse_color(val, dflt=None):
+def parse_color(
+    val: str, dflt: tuple[float, float, float] | None = None
+) -> tuple[float, float, float] | None:
     """Parses the string "val" as a GRASS colour, which can be either one of
     the named colours or an R:G:B tuple e.g. 255:255:255. Returns an
     (r,g,b) triple whose components are floating point values between 0
@@ -1613,9 +1617,9 @@ def parse_color(val, dflt=None):
     if val in named_colors:
         return named_colors[val]
 
-    vals = val.split(":")
+    vals: list[str] = val.split(":")
     if len(vals) == 3:
-        return tuple(float(v) / 255 for v in vals)
+        return (float(vals[0]) / 255, float(vals[1]) / 255, float(vals[2]) / 255)
 
     return dflt
 
@@ -1677,14 +1681,13 @@ def find_program(pgm, *args):
             or non-zero return code
     :return: True otherwise
     """
-    nuldev = open(os.devnull, "w+")
-    try:
-        # TODO: the doc or impl is not correct, any return code is accepted
-        call([pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev)
-        found = True
-    except Exception:
-        found = False
-    nuldev.close()
+    with open(os.devnull, "w+") as nuldev:
+        try:
+            # TODO: the doc or impl is not correct, any return code is accepted
+            call([pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev)
+            found = True
+        except Exception:
+            found = False
 
     return found
 
@@ -1699,13 +1702,10 @@ def mapsets(search_path=False, env=None):
 
     :return: list of mapsets
     """
-    if search_path:
-        flags = "p"
-    else:
-        flags = "l"
+    flags = "p" if search_path else "l"
     mapsets = read_command("g.mapsets", flags=flags, sep="newline", quiet=True, env=env)
     if not mapsets:
-        fatal(_("Unable to list mapsets"))
+        fatal(_("Unable to list mapsets"), env=env)
 
     return mapsets.splitlines()
 
@@ -1802,6 +1802,7 @@ def create_project(
     if datum_trans:
         kwargs["datum_trans"] = datum_trans
 
+    ps = None
     if epsg:
         ps = pipe_command(
             "g.proj",
@@ -1857,7 +1858,7 @@ def create_project(
     else:
         _create_location_xy(mapset_path.directory, mapset_path.location)
 
-    if epsg or proj4 or filename or wkt:
+    if ps is not None and (epsg or proj4 or filename or wkt):
         error = ps.communicate(stdin)[1]
         try_remove(tmp_gisrc)
 
@@ -1870,16 +1871,15 @@ def create_project(
 def _set_location_description(path, location, text):
     """Set description (aka title aka MYNAME) for a location"""
     try:
-        fd = codecs.open(
+        with codecs.open(
             os.path.join(path, location, "PERMANENT", "MYNAME"),
             encoding="utf-8",
             mode="w",
-        )
-        if text:
-            fd.write(text + os.linesep)
-        else:
-            fd.write(os.linesep)
-        fd.close()
+        ) as fd:
+            if text:
+                fd.write(text + os.linesep)
+            else:
+                fd.write(os.linesep)
     except OSError as e:
         raise ScriptError(repr(e))
 
@@ -1895,8 +1895,11 @@ def _create_location_xy(database, location):
     cur_dir = Path.cwd()
     try:
         os.chdir(database)
+        permanent_dir = Path(location, "PERMANENT")
+        default_wind_path = permanent_dir / "DEFAULT_WIND"
+        wind_path = permanent_dir / "WIND"
         os.mkdir(location)
-        os.mkdir(os.path.join(location, "PERMANENT"))
+        permanent_dir.mkdir()
 
         # create DEFAULT_WIND and WIND files
         regioninfo = [
@@ -1920,16 +1923,8 @@ def _create_location_xy(database, location):
             "t-b resol:  1",
         ]
 
-        defwind = open(os.path.join(location, "PERMANENT", "DEFAULT_WIND"), "w")
-        for param in regioninfo:
-            defwind.write(param + "%s" % os.linesep)
-        defwind.close()
-
-        shutil.copy(
-            os.path.join(location, "PERMANENT", "DEFAULT_WIND"),
-            os.path.join(location, "PERMANENT", "WIND"),
-        )
-
+        default_wind_path.write_text("\n".join(regioninfo))
+        shutil.copy(default_wind_path, wind_path)
         os.chdir(cur_dir)
     except OSError as e:
         raise ScriptError(repr(e))
@@ -2033,10 +2028,7 @@ def create_environment(gisdbase, location, mapset, env=None):
         f.write("GISDBASE: {g}\n".format(g=gisdbase))
         f.write("LOCATION_NAME: {l}\n".format(l=location))
         f.write("GUI: text\n")
-    if env:
-        env = env.copy()
-    else:
-        env = os.environ.copy()
+    env = env.copy() if env else os.environ.copy()
     env["GISRC"] = f.name
     # remove mapset-specific env vars
     env = sanitize_mapset_environment(env)

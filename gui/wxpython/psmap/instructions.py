@@ -35,17 +35,27 @@ This program is free software under the GNU General Public License
 import os
 import string
 from math import ceil
-from time import strftime, localtime
+from time import localtime, strftime
 
-import wx
 import grass.script as gs
-from grass.script.task import cmdlist_to_tuple
-
+import wx
 from core.gcmd import GError, GMessage, GWarning
 from core.utils import GetCmdString
 from dbmgr.vinfo import VectorDBInfo
+from grass.script.task import cmdlist_to_tuple
 from gui_core.wrap import NewId as wxNewId
-from psmap.utils import *
+
+from psmap.utils import (  # Add any additional required names from psmap.utils here
+    BBoxAfterRotation,
+    GetMapBounds,
+    PaperMapCoordinates,
+    Rect2D,
+    Rect2DPP,
+    SetResolution,
+    UnitConversion,
+    getRasterType,
+    projInfo,
+)
 
 
 def NewId():
@@ -213,7 +223,7 @@ class Instruction:
                     buffer = []
                 continue
 
-            elif line.startswith("paper"):
+            if line.startswith("paper"):
                 instruction = "paper"
                 isBuffer = True
                 buffer.append(line)
@@ -688,7 +698,7 @@ class MapFrame(InstructionObject):
                     if line.split()[1].lower() in {"n", "no", "none"}:
                         instr["border"] = "n"
                         break
-                    elif line.split()[1].lower() in {"y", "yes"}:
+                    if line.split()[1].lower() in {"y", "yes"}:
                         instr["border"] = "y"
                     elif line.startswith("width"):
                         instr["width"] = line.split()[1]
@@ -1741,7 +1751,7 @@ class RasterLegend(InstructionObject):
 
             rinfo = gs.raster_info(raster)
             if rinfo["datatype"] in {"DCELL", "FCELL"}:
-                minim, maxim = rinfo["min"], rinfo["max"]
+                maxim = rinfo["max"]
                 rows = ceil(maxim / cols)
             else:
                 cat = (

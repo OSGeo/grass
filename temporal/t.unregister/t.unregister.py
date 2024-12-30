@@ -93,12 +93,7 @@ def main():
 
     # Map names as comma separated string
     if maps is not None and maps != "":
-        if maps.find(",") == -1:
-            maplist = [
-                maps,
-            ]
-        else:
-            maplist = maps.split(",")
+        maplist = [maps] if maps.find(",") == -1 else maps.split(",")
 
         # Build the maplist
         for count in range(len(maplist)):
@@ -108,17 +103,16 @@ def main():
 
     # Read the map list from file
     if file:
-        fd = open(file)
+        with open(file) as fd:
+            line = True
+            while True:
+                line = fd.readline()
+                if not line:
+                    break
 
-        line = True
-        while True:
-            line = fd.readline()
-            if not line:
-                break
-
-            mapname = line.strip()
-            mapid = dummy.build_id(mapname, mapset)
-            maplist.append(mapid)
+                mapname = line.strip()
+                mapid = dummy.build_id(mapname, mapset)
+                maplist.append(mapid)
 
     num_maps = len(maplist)
     update_dict = {}

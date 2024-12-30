@@ -54,8 +54,15 @@ imported_maps = {}
 
 
 def _import_raster_maps_from_gdal(
-    maplist, overr, exp, location, link, format_, set_current_region=False, memory=300
-):
+    maplist,
+    overr,
+    exp,
+    location,
+    link,
+    format_,
+    set_current_region: bool = False,
+    memory=300,
+) -> None:
     impflags = ""
     if overr:
         impflags += "o"
@@ -113,7 +120,7 @@ def _import_raster_maps_from_gdal(
 ############################################################################
 
 
-def _import_raster_maps(maplist, set_current_region=False):
+def _import_raster_maps(maplist, set_current_region: bool = False) -> None:
     # We need to disable the projection check because of its
     # simple implementation
     impflags = "o"
@@ -143,7 +150,7 @@ def _import_raster_maps(maplist, set_current_region=False):
 ############################################################################
 
 
-def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
+def _import_vector_maps_from_gml(maplist, overr, exp, location, link) -> None:
     impflags = "o"
     if exp or location:
         impflags += "e"
@@ -169,7 +176,7 @@ def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
 ############################################################################
 
 
-def _import_vector_maps(maplist):
+def _import_vector_maps(maplist) -> None:
     # We need to disable the projection check because of its
     # simple implementation
     impflags = "o"
@@ -208,15 +215,15 @@ def import_stds(
     title=None,
     descr=None,
     location=None,
-    link=False,
-    exp=False,
-    overr=False,
-    create=False,
+    link: bool = False,
+    exp: bool = False,
+    overr: bool = False,
+    create: bool = False,
     stds_type="strds",
     base=None,
-    set_current_region=False,
+    set_current_region: bool = False,
     memory=300,
-):
+) -> None:
     """Import space time datasets of type raster and vector
 
     :param input: Name of the input archive file
@@ -240,7 +247,7 @@ def import_stds(
     :param memory: Cache size for raster rows, used in r.in.gdal
     """
 
-    old_state = gs.raise_on_error
+    old_state = gs.get_raise_on_error()
     gs.set_raise_on_error(True)
 
     # Check if input file and extraction directory exits

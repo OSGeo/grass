@@ -20,7 +20,7 @@
 ############################################################################
 #
 # Requires GRASS Python Ctypes interface
-# Requires Numeric module (NumPy) from  http://numpy.scipy.org/
+# Requires Numeric module (NumPy) from https://numpy.org
 #
 
 # %module
@@ -82,8 +82,7 @@ def main():
             line = sys.stdin.readline().strip()
             if not line:  # EOF
                 break
-            else:
-                coords.append(line.split(","))
+            coords.append(line.split(","))
     else:
         # read from coord= command line option
         p = None

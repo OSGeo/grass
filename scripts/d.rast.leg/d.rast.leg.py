@@ -132,16 +132,10 @@ def main():
     if not nlines:
         nlines = None
 
-    if rast:
-        lmap = rast
-    else:
-        lmap = map
+    lmap = rast or map
 
     kv = gs.raster_info(map=lmap)
-    if kv["datatype"] == "CELL":
-        leg_at = None
-    else:
-        leg_at = "%f,95,5,10" % VSpacing
+    leg_at = None if kv["datatype"] == "CELL" else "%f,95,5,10" % VSpacing
 
     # checking for histogram causes more problems than it solves
     #    histfiledir = grass.find_file(lmap, 'cell_misc')['file']

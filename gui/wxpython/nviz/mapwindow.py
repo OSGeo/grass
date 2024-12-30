@@ -18,18 +18,20 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
 """
 
+from __future__ import annotations
+
+import copy
+import math
 import os
 import sys
 import time
-import copy
-import math
-
 from threading import Thread
+from typing import TYPE_CHECKING
 
 import wx
 from wx.lib.newevent import NewEvent
 from wx import glcanvas
-from wx.glcanvas import WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE
+from wx.glcanvas import WX_GL_DEPTH_SIZE, WX_GL_DOUBLEBUFFER, WX_GL_RGBA
 
 import grass.script as gs
 from grass.pydispatch.signal import Signal
@@ -44,6 +46,10 @@ from nviz import wxnviz
 from core.globalvar import CheckWxVersion
 from core.utils import str2rgb
 from core.giface import Notification
+
+if TYPE_CHECKING:
+    import lmgr.frame
+    import main_window.frame
 
 wxUpdateProperties, EVT_UPDATE_PROP = NewEvent()
 wxUpdateView, EVT_UPDATE_VIEW = NewEvent()
@@ -74,7 +80,16 @@ class NvizThread(Thread):
 class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     """OpenGL canvas for Map Display Window"""
 
-    def __init__(self, parent, giface, frame, Map, tree, lmgr, id=wx.ID_ANY):
+    def __init__(
+        self,
+        parent,
+        giface,
+        frame,
+        Map,
+        tree,
+        lmgr: main_window.frame.GMFrame | lmgr.frame.GMFrame,
+        id=wx.ID_ANY,
+    ) -> None:
         """All parameters except for id are mandatory. The todo is to remove
         them completely."""
         self.parent = parent
@@ -335,7 +350,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.fly["value"][2] = -my * 100.0 * self.fly["interval"] / 1000.0
 
     def ChangeFlySpeed(self, increase):
-        """Increase/decrease flight spped"""
+        """Increase/decrease flight speed"""
         if increase:
             self.fly["flySpeed"] += self.fly["flySpeedStep"]
         else:
@@ -382,10 +397,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def OnSize(self, event):
         size = self.GetClientSize()
-        if CheckWxVersion(version=[2, 9]):
-            context = self.context
-        else:
-            context = self.GetContext()
+        context = self.context if CheckWxVersion(version=[2, 9]) else self.GetContext()
         if self.size != size and context:
             Debug.msg(
                 3, "GLCanvas.OnSize(): w = %d, h = %d" % (size.width, size.height)
@@ -412,7 +424,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         Debug.msg(1, "GLCanvas.OnPaint()")
 
         self.render["overlays"] = True
-        dc = wx.PaintDC(self)
+        wx.PaintDC(self)
         self.DoPaint()
 
     def DoPaint(self):
@@ -1393,7 +1405,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 GError(parent=self, message=e.value)
             # when nviz.tools is not yet ready
             # during opening 3D view 2nd time
-            except:
+            except Exception:
                 pass
 
         stop = gs.clock()
@@ -1438,7 +1450,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 GError(parent=self, message=e.value)
 
         if force and self.baseId > 0:  # unload base surface when quitting
-            ret = self._display.UnloadSurface(self.baseId)
+            self._display.UnloadSurface(self.baseId)
             self.baseId = -1
         if update:
             self.lmgr.nviz.UpdateSettings()
@@ -2134,10 +2146,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         #
         sliceId = 0
         for slice in data["slice"]:
-            ret = self._display.AddSlice(id, slice_id=sliceId)
+            self._display.AddSlice(id, slice_id=sliceId)
             if "update" in slice["position"]:
                 pos = slice["position"]
-                ret = self._display.SetSlicePosition(
+                self._display.SetSlicePosition(
                     id,
                     sliceId,
                     pos["x1"],
