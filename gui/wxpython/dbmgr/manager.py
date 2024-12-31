@@ -65,7 +65,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
         :param item: item from Layer Tree
         :param log: log window
         :param selection: name of page to be selected
-        :param kwagrs: other wx.Frame's arguments
+        :param kwargs: other wx.Frame's arguments
         """
         self.parent = parent
         try:

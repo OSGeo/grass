@@ -37,8 +37,8 @@ position is undefined and set to 180.
 If the <b>-b</b> flag is set, the output is in boolean-mode, and each point
 in the output map is marked as:
 <ul>
-  <li> 0 if the point is no-data/null or not visible
-  <li> 1 if the point is visible.
+  <li> 0 if the point is no-data/null or not visible</li>
+  <li> 1 if the point is visible.</li>
 </ul>
 
 
@@ -47,9 +47,9 @@ If the <b>-e</b> flag is set, the output is in elevation-mode, and each point
 in the output map is marked as:
 <!-- Check & FIXME -->
 <ul>
-  <li> no-data (null), if the respective point in the elevation map is no-data (null)
-  <li> -1, if the point is not visible
-  <li> the difference in elevation between the point and the viewpoint, if the point is visible.
+  <li> no-data (null), if the respective point in the elevation map is no-data (null)</li>
+  <li> -1, if the point is not visible</li>
+  <li> the difference in elevation between the point and the viewpoint, if the point is visible.</li>
 </ul>
 
 <p>
@@ -57,8 +57,6 @@ If you wish to identify the area of the map which is within the search
 radius but not visible, a combination of <em><a href="r.buffer.html">r.buffer</a></em> and
 <em><a href="r.mapcalc.html">r.mapcalc</a></em> can be used to create
 a negative of the viewshed map.
-
-
 
 <p>
 By default the elevations are not adjusted for the curvature of the
@@ -163,10 +161,10 @@ REFERENCES below.
 
 
 <p>
-<table width=50% align=center>
+<table width="50%" align="center">
   <tr>
-      <th><img src="sweep1.png" width=200 alt="[SDF]" border=0></th>
-      <th><img src="sweep2.png" width=200 alt="[SDF]" border=0></th>
+      <th><img src="sweep1.png" width="200" alt="[SDF]" border="0"></th>
+      <th><img src="sweep2.png" width="200" alt="[SDF]" border="0"></th>
   </tr>
   <tr>
     <th>The sweep-line.</th>
@@ -187,7 +185,7 @@ r.viewshed input=elev_lid792_1m output=elev_lid792_1m_viewshed coordinates=63872
 
 <div align="center" style="margin: 10px">
 <a href="r.viewshed.png">
-<img src="r.viewshed.png" width="600" height="570" alt="r.viewshed example" border=0><br>
+<img src="r.viewshed.png" width="600" height="570" alt="r.viewshed example" border="0"><br>
 </a>
 <i>Viewshed shown on shaded terrain (observer position in the north-east quadrant with white dot; 5m above ground)</i>
 </div>
@@ -217,11 +215,11 @@ r.viewshed input=elevation.10m output=viewshed coordinates=598869,4916642 memory
 
 <ul>
 
-<li>Computing Visibility on Terrains in External Memory. Herman
-Haverkort, Laura Toma and Yi Zhuang. In <em>ACM Journal on Experimental
+<li><a href="https://pure.tue.nl/ws/portalfiles/portal/2158947/Metis201668.pdf">Computing Visibility on Terrains in External Memory</a>.
+Herman Haverkort, Laura Toma and Yi Zhuang. In <em>ACM Journal on Experimental
 Algorithmics (JEA)</em> 13 (2009).</li>
 
-<li><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.76.4282&rep=rep1&type=pdf">Computing
+<li><a href="https://web.archive.org/web/20230417154048/https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.76.4282&rep=rep1&type=pdf">Computing
 Visibility on Terrains in External Memory</a>. Herman Haverkort, Laura
 Toma and Yi Zhuang. In the <em>Proceedings of the 9th Workshop on
 Algorithm Engineering and Experiments / Workshop on Analytic Algorithms
@@ -236,7 +234,7 @@ and Combinatorics (ALENEX/ANALCO 2007)</em>.</li>
 
 <h2>AUTHORS</h2>
 
-<p>Laura Toma (Bowdoin College): <tt>ltoma@bowdoin.edu</tt>
-<p> Yi Zhuang (Carnegie-Mellon University): <tt>yzhuang@andrew.cmu.edu</tt>
-<p>William Richard (Bowdoin College): <tt>willster3021@gmail.com </tt>
+<p>Laura Toma (Bowdoin College): <code>ltoma@bowdoin.edu</code>
+<p> Yi Zhuang (Carnegie-Mellon University): <code>yzhuang@andrew.cmu.edu</code>
+<p>William Richard (Bowdoin College): <code>willster3021@gmail.com </code>
 <p>Markus Metz

@@ -270,7 +270,8 @@ def make_command(
     if flags:
         flags = _make_val(flags)
         if "-" in flags:
-            raise ScriptError("'-' is not a valid flag")
+            msg = "'-' is not a valid flag"
+            raise ScriptError(msg)
         args.append("-" + flags)
     for opt, val in options.items():
         if opt in _popen_args:
@@ -866,16 +867,16 @@ def _parse_opts(lines: list) -> tuple[dict[str, str], dict[str, bool]]:
         try:
             var, val = line.split(b"=", 1)
         except ValueError:
-            raise SyntaxError("invalid output from g.parser: {}".format(line))
+            msg = "invalid output from g.parser: {}".format(line)
+            raise SyntaxError(msg)
         try:
             var = decode(var)
             val = decode(val)
         except UnicodeError as error:
-            raise SyntaxError(
-                "invalid output from g.parser ({error}): {line}".format(
-                    error=error, line=line
-                )
+            msg = "invalid output from g.parser ({error}): {line}".format(
+                error=error, line=line
             )
+            raise SyntaxError(msg)
         if var.startswith("flag_"):
             flags[var[5:]] = bool(int(val))
         elif var.startswith("opt_"):
@@ -883,9 +884,8 @@ def _parse_opts(lines: list) -> tuple[dict[str, str], dict[str, bool]]:
         elif var in {"GRASS_OVERWRITE", "GRASS_VERBOSE"}:
             os.environ[var] = val
         else:
-            raise SyntaxError(
-                "unexpected output variable from g.parser: {}".format(line)
-            )
+            msg = "unexpected output variable from g.parser: {}".format(line)
+            raise SyntaxError(msg)
     return (options, flags)
 
 
@@ -1064,7 +1064,8 @@ def _text_to_key_value_dict(
         {'a': ['Hello'], 'c': [1, 2, 3, 4, 5], 'b': [1.0], 'd': ['hello', 8, 0.1]}
 
     """
-    text = open(filename).readlines()
+    with Path(filename).open() as f:
+        text = f.readlines()
     kvdict = KeyValue()
 
     for line in text:
@@ -1575,7 +1576,7 @@ def list_grouped(
 
 # color parsing
 
-named_colors = {
+named_colors: dict[str, tuple[float, float, float]] = {
     "white": (1.00, 1.00, 1.00),
     "black": (0.00, 0.00, 0.00),
     "red": (1.00, 0.00, 0.00),
@@ -1595,7 +1596,9 @@ named_colors = {
 }
 
 
-def parse_color(val, dflt=None):
+def parse_color(
+    val: str, dflt: tuple[float, float, float] | None = None
+) -> tuple[float, float, float] | None:
     """Parses the string "val" as a GRASS colour, which can be either one of
     the named colours or an R:G:B tuple e.g. 255:255:255. Returns an
     (r,g,b) triple whose components are floating point values between 0
@@ -1614,9 +1617,9 @@ def parse_color(val, dflt=None):
     if val in named_colors:
         return named_colors[val]
 
-    vals = val.split(":")
+    vals: list[str] = val.split(":")
     if len(vals) == 3:
-        return tuple(float(v) / 255 for v in vals)
+        return (float(vals[0]) / 255, float(vals[1]) / 255, float(vals[2]) / 255)
 
     return dflt
 
@@ -1678,14 +1681,13 @@ def find_program(pgm, *args):
             or non-zero return code
     :return: True otherwise
     """
-    nuldev = open(os.devnull, "w+")
-    try:
-        # TODO: the doc or impl is not correct, any return code is accepted
-        call([pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev)
-        found = True
-    except Exception:
-        found = False
-    nuldev.close()
+    with open(os.devnull, "w+") as nuldev:
+        try:
+            # TODO: the doc or impl is not correct, any return code is accepted
+            call([pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev)
+            found = True
+        except Exception:
+            found = False
 
     return found
 
@@ -1800,6 +1802,7 @@ def create_project(
     if datum_trans:
         kwargs["datum_trans"] = datum_trans
 
+    ps = None
     if epsg:
         ps = pipe_command(
             "g.proj",
@@ -1855,7 +1858,7 @@ def create_project(
     else:
         _create_location_xy(mapset_path.directory, mapset_path.location)
 
-    if epsg or proj4 or filename or wkt:
+    if ps is not None and (epsg or proj4 or filename or wkt):
         error = ps.communicate(stdin)[1]
         try_remove(tmp_gisrc)
 
@@ -1868,16 +1871,15 @@ def create_project(
 def _set_location_description(path, location, text):
     """Set description (aka title aka MYNAME) for a location"""
     try:
-        fd = codecs.open(
+        with codecs.open(
             os.path.join(path, location, "PERMANENT", "MYNAME"),
             encoding="utf-8",
             mode="w",
-        )
-        if text:
-            fd.write(text + os.linesep)
-        else:
-            fd.write(os.linesep)
-        fd.close()
+        ) as fd:
+            if text:
+                fd.write(text + os.linesep)
+            else:
+                fd.write(os.linesep)
     except OSError as e:
         raise ScriptError(repr(e))
 
@@ -1893,8 +1895,11 @@ def _create_location_xy(database, location):
     cur_dir = Path.cwd()
     try:
         os.chdir(database)
+        permanent_dir = Path(location, "PERMANENT")
+        default_wind_path = permanent_dir / "DEFAULT_WIND"
+        wind_path = permanent_dir / "WIND"
         os.mkdir(location)
-        os.mkdir(os.path.join(location, "PERMANENT"))
+        permanent_dir.mkdir()
 
         # create DEFAULT_WIND and WIND files
         regioninfo = [
@@ -1918,16 +1923,8 @@ def _create_location_xy(database, location):
             "t-b resol:  1",
         ]
 
-        defwind = open(os.path.join(location, "PERMANENT", "DEFAULT_WIND"), "w")
-        for param in regioninfo:
-            defwind.write(param + "%s" % os.linesep)
-        defwind.close()
-
-        shutil.copy(
-            os.path.join(location, "PERMANENT", "DEFAULT_WIND"),
-            os.path.join(location, "PERMANENT", "WIND"),
-        )
-
+        default_wind_path.write_text("\n".join(regioninfo))
+        shutil.copy(default_wind_path, wind_path)
         os.chdir(cur_dir)
     except OSError as e:
         raise ScriptError(repr(e))

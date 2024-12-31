@@ -1120,7 +1120,7 @@ class GMFrame(wx.Frame):
         """Handles display commands.
 
         :param command: command in a list
-        :return int: False if failed, True if succcess
+        :return int: False if failed, True if success
         """
         if not self.currentPage:
             self.NewDisplay(show=True)
@@ -1548,10 +1548,11 @@ class GMFrame(wx.Frame):
             # this is programmer's error
             # can be relaxed in future
             # but keep it strict unless needed otherwise
-            raise ValueError(
-                "OnChangeCWD cmd parameter must be list of"
+            msg = (
+                f"{self.OnChangeCWD.__name__} cmd parameter must be a list of"
                 " length 1 or 2 and 'cd' as a first item"
             )
+            raise ValueError(msg)
         if cmd and len(cmd) > 2:
             # this might be a user error
             write_beginning(command=cmd)

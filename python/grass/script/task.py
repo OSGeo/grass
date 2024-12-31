@@ -313,7 +313,7 @@ class processTask:
         self.task.label = self._get_node_text(self.root, "label")
         self.task.description = self._get_node_text(self.root, "description")
 
-    def _process_params(self):
+    def _process_params(self) -> None:
         """Process parameters"""
         for p in self.root.findall("parameter"):
             # gisprompt
@@ -347,15 +347,12 @@ class processTask:
             multiple = p.get("multiple", "no") == "yes"
             required = p.get("required", "no") == "yes"
 
-            if (
+            hidden: bool = bool(
                 self.task.blackList["enabled"]
                 and self.task.name in self.task.blackList["items"]
                 and p.get("name")
                 in self.task.blackList["items"][self.task.name].get("params", [])
-            ):
-                hidden = True
-            else:
-                hidden = False
+            )
 
             self.task.params.append(
                 {
@@ -380,23 +377,17 @@ class processTask:
                 }
             )
 
-    def _process_flags(self):
+    def _process_flags(self) -> None:
         """Process flags"""
         for p in self.root.findall("flag"):
-            if (
+            hidden: bool = bool(
                 self.task.blackList["enabled"]
                 and self.task.name in self.task.blackList["items"]
                 and p.get("name")
                 in self.task.blackList["items"][self.task.name].get("flags", [])
-            ):
-                hidden = True
-            else:
-                hidden = False
+            )
 
-            if p.find("suppress_required") is not None:
-                suppress_required = True
-            else:
-                suppress_required = False
+            suppress_required: bool = bool(p.find("suppress_required") is not None)
 
             self.task.flags.append(
                 {

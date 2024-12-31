@@ -133,9 +133,11 @@ def checkImages(images):
                 pass  # ok
             elif im.ndim == 3:
                 if im.shape[2] not in [3, 4]:
-                    raise ValueError("This array can not represent an image.")
+                    msg = "This array can not represent an image."
+                    raise ValueError(msg)
             else:
-                raise ValueError("This array can not represent an image.")
+                msg = "This array can not represent an image."
+                raise ValueError(msg)
         else:
             raise ValueError("Invalid image type: " + str(type(im)))
 
@@ -213,12 +215,11 @@ class GifWriter:
             # (the extension interprets zero loops
             # to mean an infinite number of loops)
             # Mmm, does not seem to work
-        if True:
-            bb = "\x21\xFF\x0B"  # application extension
-            bb += "NETSCAPE2.0"
-            bb += "\x03\x01"
-            bb += intToBin(loops)
-            bb += "\x00"  # end
+        bb = "\x21\xFF\x0B"  # application extension
+        bb += "NETSCAPE2.0"
+        bb += "\x03\x01"
+        bb += intToBin(loops)
+        bb += "\x00"  # end
         return bb
 
     def getGraphicsControlExt(self, duration=0.1, dispose=2):
@@ -267,7 +268,8 @@ class GifWriter:
                 if len(xy) == len(images):
                     xy = list(xy)
                 else:
-                    raise ValueError("len(xy) doesn't match amount of images.")
+                    msg = "len(xy) doesn't match amount of images."
+                    raise ValueError(msg)
             else:
                 xy = [xy for im in images]
             xy[0] = (0, 0)
@@ -275,9 +277,10 @@ class GifWriter:
         else:
             # Calculate xy using some basic image processing
 
-            # Check Numpy
+            # Check NumPy
             if np is None:
-                raise RuntimeError("Need Numpy to use auto-subRectangles.")
+                msg = "Need NumPy to use auto-subRectangles."
+                raise RuntimeError(msg)
 
             # First make numpy arrays if required
             for i in range(len(images)):
@@ -286,9 +289,8 @@ class GifWriter:
                     tmp = im.convert()  # Make without palette
                     a = np.asarray(tmp)
                     if len(a.shape) == 0:
-                        raise MemoryError(
-                            "Too little memory to convert PIL image to array"
-                        )
+                        msg = "Too little memory to convert PIL image to array"
+                        raise MemoryError(msg)
                     images[i] = a
 
             # Determine the sub rectangles
@@ -314,9 +316,10 @@ class GifWriter:
         if len(ims) < 2:
             return ims, [(0, 0) for i in ims]
 
-        # We need numpy
+        # We need NumPy
         if np is None:
-            raise RuntimeError("Need Numpy to calculate sub-rectangles. ")
+            msg = "Need NumPy to calculate sub-rectangles."
+            raise RuntimeError(msg)
 
         # Prepare
         ims2 = [ims[0]]
@@ -442,33 +445,29 @@ class GifWriter:
                 # Next frame is not the first
                 firstFrame = False
 
-            if True:
-                # Write palette and image data
+            # Write palette and image data
+            # Gather info
+            data = getdata(im)
+            imdes, data = data[0], data[1:]
+            graphext = self.getGraphicsControlExt(durations[frames], disposes[frames])
+            # Make image descriptor suitable for using 256 local color palette
+            lid = self.getImageDescriptor(im, xys[frames])
 
-                # Gather info
-                data = getdata(im)
-                imdes, data = data[0], data[1:]
-                graphext = self.getGraphicsControlExt(
-                    durations[frames], disposes[frames]
-                )
-                # Make image descriptor suitable for using 256 local color palette
-                lid = self.getImageDescriptor(im, xys[frames])
+            # Write local header
+            if (palette != globalPalette) or (disposes[frames] != 2):
+                # Use local color palette
+                fp.write(graphext)
+                fp.write(lid)  # write suitable image descriptor
+                fp.write(palette)  # write local color table
+                fp.write("\x08")  # LZW minimum size code
+            else:
+                # Use global color palette
+                fp.write(graphext)
+                fp.write(imdes)  # write suitable image descriptor
 
-                # Write local header
-                if (palette != globalPalette) or (disposes[frames] != 2):
-                    # Use local color palette
-                    fp.write(graphext)
-                    fp.write(lid)  # write suitable image descriptor
-                    fp.write(palette)  # write local color table
-                    fp.write("\x08")  # LZW minimum size code
-                else:
-                    # Use global color palette
-                    fp.write(graphext)
-                    fp.write(imdes)  # write suitable image descriptor
-
-                # Write image data
-                for d in data:
-                    fp.write(d)
+            # Write image data
+            for d in data:
+                fp.write(d)
 
             # Prepare for next round
             frames += 1
@@ -575,7 +574,8 @@ def writeGifVisvis(
 
     # Check PIL
     if PIL is None:
-        raise RuntimeError("Need PIL to write animated gif files.")
+        msg = "Need PIL to write animated gif files."
+        raise RuntimeError(msg)
 
     # Check images
     images = checkImages(images)
@@ -596,7 +596,8 @@ def writeGifVisvis(
         if len(duration) == len(images):
             duration = list(duration)
         else:
-            raise ValueError("len(duration) doesn't match amount of images.")
+            msg = "len(duration) doesn't match amount of images."
+            raise ValueError(msg)
     else:
         duration = [duration for im in images]
 
@@ -614,7 +615,8 @@ def writeGifVisvis(
         dispose = defaultDispose
     if hasattr(dispose, "__len__"):
         if len(dispose) != len(images):
-            raise ValueError("len(xy) doesn't match amount of images.")
+            msg = "len(xy) doesn't match amount of images."
+            raise ValueError(msg)
     else:
         dispose = [dispose for im in images]
 
@@ -637,11 +639,13 @@ def readGif(filename, asNumpy=True):
 
     # Check PIL
     if PIL is None:
-        raise RuntimeError("Need PIL to read animated gif files.")
+        msg = "Need PIL to read animated gif files."
+        raise RuntimeError(msg)
 
-    # Check Numpy
+    # Check NumPy
     if np is None:
-        raise RuntimeError("Need Numpy to read animated gif files.")
+        msg = "Need NumPy to read animated gif files."
+        raise RuntimeError(msg)
 
     # Check whether it exists
     if not os.path.isfile(filename):
@@ -659,7 +663,8 @@ def readGif(filename, asNumpy=True):
             tmp = pilIm.convert()  # Make without palette
             a = np.asarray(tmp)
             if len(a.shape) == 0:
-                raise MemoryError("Too little memory to convert PIL image to array")
+                msg = "Too little memory to convert PIL image to array"
+                raise MemoryError(msg)
             # Store, and next
             images.append(a)
             pilIm.seek(pilIm.tell() + 1)
@@ -795,15 +800,18 @@ class NeuQuant:
         self.a_s = {}
 
     def __init__(self, image, samplefac=10, colors=256):
-        # Check Numpy
+        # Check NumPy
         if np is None:
-            raise RuntimeError("Need Numpy for the NeuQuant algorithm.")
+            msg = "Need NumPy for the NeuQuant algorithm."
+            raise RuntimeError(msg)
 
         # Check image
         if image.size[0] * image.size[1] < NeuQuant.MAXPRIME:
-            raise OSError("Image is too small")
+            msg = "Image is too small"
+            raise OSError(msg)
         if image.mode != "RGBA":
-            raise OSError("Image mode should be RGBA.")
+            msg = "Image mode should be RGBA."
+            raise OSError(msg)
 
         # Initialize
         self.setconstants(samplefac, colors)

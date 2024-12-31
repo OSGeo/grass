@@ -1364,7 +1364,7 @@ class VNETGlobalTurnsData:
         self.turn_data[line][col] = value
 
     def SetUTurns(self, value):
-        """Checked if checeBox is checed"""
+        """Checked if checkBox is checked"""
         self.useUTurns = value
 
     def AppendRow(self, values):

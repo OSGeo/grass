@@ -1802,10 +1802,7 @@ class CmdPanel(wx.Panel):
                         value = self._getValue(p)
 
                         if prompt == "layer":
-                            if p.get("element", "layer") == "layer_all":
-                                all = True
-                            else:
-                                all = False
+                            all = bool(p.get("element", "layer") == "layer_all")
                             if p.get("age", "old") == "old":
                                 win = gselect.LayerSelect(
                                     parent=which_panel, all=all, default=p["default"]
