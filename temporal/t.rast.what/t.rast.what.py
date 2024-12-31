@@ -105,6 +105,7 @@
 
 import copy
 import sys
+from contextlib import nullcontext
 
 import grass.script as gs
 
@@ -357,7 +358,7 @@ def one_point_per_row_output(
     output is of type: x,y,start,end,value
     """
     # open the output file for writing
-    with open(output, "w") if output != "-" else sys.stdout as out_file:
+    with open(output, "w") if output != "-" else nullcontext(sys.stdout) as out_file:
         if write_header is True:
             out_str = ""
             if vcat:
@@ -439,7 +440,7 @@ def one_point_per_col_output(
     # open the output file for writing
 
     first = True
-    with open(output, "w") if output != "-" else sys.stdout as out_file:
+    with open(output, "w") if output != "-" else nullcontext(sys.stdout) as out_file:
         for count in range(len(output_files)):
             file_name = output_files[count]
             gs.verbose(_("Transforming r.what output file %s") % (file_name))
@@ -566,7 +567,7 @@ def one_point_per_timerow_output(
 
         first = False
 
-    with open(output, "w") if output != "-" else sys.stdout as out_file:
+    with open(output, "w") if output != "-" else nullcontext(sys.stdout) as out_file:
         if write_header:
             out_file.write(header + "\n")
 
