@@ -84,7 +84,7 @@ def main():
             )
             self._initShortcuts()
 
-            # this giface issue not solved yet, we must set mapframe aferwards
+            # this giface issue not solved yet, we must set mapframe afterwards
             self._giface._mapframe = self
             # load vector map
             mapLayer = self.GetMap().AddLayer(

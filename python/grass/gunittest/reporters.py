@@ -107,7 +107,7 @@ def get_source_url(path, revision, line=None):
     :param revision: SVN revision (should be a number)
     :param line: line in the file (should be None for directories)
     """
-    tracurl = "http://trac.osgeo.org/grass/browser/"
+    tracurl = "https://trac.osgeo.org/grass/browser/"
     if line:
         return "{tracurl}{path}?rev={revision}#L{line}".format(**locals())
     return "{tracurl}{path}?rev={revision}".format(**locals())
@@ -234,11 +234,8 @@ def get_svn_path_authors(path, from_date=None):
 
     :returns: a set of authors
     """
-    if from_date is None:
-        # this is the SVN default for local copies
-        revision_range = "BASE:1"
-    else:
-        revision_range = "BASE:{%s}" % from_date
+    # "BASE:1" is the SVN default for local copies
+    revision_range = "BASE:1" if from_date is None else "BASE:{%s}" % from_date
     try:
         # TODO: allow also usage of --limit
         p = subprocess.Popen(
@@ -487,10 +484,7 @@ def html_file_preview(filename):
 
 def returncode_to_html_text(returncode, timed_out=None):
     if returncode:
-        if timed_out is not None:
-            extra = f" (timeout >{timed_out}s)"
-        else:
-            extra = ""
+        extra = f" (timeout >{timed_out}s)" if timed_out is not None else ""
         return f'<span style="color: red">FAILED{extra}</span>'
     # alternatives: SUCCEEDED, passed, OK
     return '<span style="color: green">succeeded</span>'
@@ -766,7 +760,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             # TODO: replace by better handling of potential lists when parsing
             # TODO: create link to module if running in grass or in addons
             # alternatively a link to module test summary
-            if type(modules) is not list:
+            if not isinstance(modules, list):
                 modules = [modules]
 
         # here we would have also links to coverage, profiling, ...
@@ -857,10 +851,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
 
         # this shoul be moved to some additional meta passed in constructor
         svn_info = get_svn_info()
-        if not svn_info:
-            svn_revision = ""
-        else:
-            svn_revision = svn_info["revision"]
+        svn_revision = "" if not svn_info else svn_info["revision"]
 
         summary = {}
         summary["files_total"] = self.test_files
@@ -968,9 +959,6 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
         super().__init__()
         self._stream = stream
 
-    def start(self, results_dir):
-        super().start(results_dir)
-
     def finish(self):
         super().finish()
 
@@ -1025,10 +1013,7 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
             num_failed = test_summary.get("failures", 0)
             num_failed += test_summary.get("errors", 0)
             if num_failed:
-                if num_failed > 1:
-                    text = " ({f} tests failed)"
-                else:
-                    text = " ({f} test failed)"
+                text = " ({f} tests failed)" if num_failed > 1 else " ({f} test failed)"
                 self._stream.write(text.format(f=num_failed))
             self._stream.write("\n")
             # TODO: here we lost the possibility to include also file name
@@ -1141,7 +1126,7 @@ class TestsuiteDirReporter:
                 test_file_authors = summary.get("test_file_authors")
                 if not test_file_authors:
                     test_file_authors = []
-                if type(test_file_authors) is not list:
+                if not isinstance(test_file_authors, list):
                     test_file_authors = [test_file_authors]
                 test_files_authors.extend(test_file_authors)
 

@@ -73,10 +73,7 @@ def main():
         infile = infile.split("@")[0]
 
     # output name
-    if options["output"]:
-        outfile = options["output"]
-    else:
-        outfile = infile + ".pack"
+    outfile = options["output"] or infile + ".pack"
 
     # check if exists the output file
     if os.path.exists(outfile):

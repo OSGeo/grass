@@ -125,7 +125,7 @@ def clean_env():
     write_gisrc(env_new, gisrc)
 
 
-def is_debug():
+def is_debug() -> bool:
     """Returns True if we are in debug mode
 
     For debug messages use ``debug()``.
@@ -133,13 +133,8 @@ def is_debug():
     global _DEBUG
     if _DEBUG is not None:
         return _DEBUG
-    _DEBUG = os.getenv("GRASS_DEBUG")
     # translate to bool (no or empty variable means false)
-    if _DEBUG:
-        _DEBUG = True
-    else:
-        _DEBUG = False
-    return _DEBUG
+    return bool(os.getenv("GRASS_DEBUG"))
 
 
 def debug(msg):
@@ -236,7 +231,8 @@ def f(fmt, *args):
         matches.append(m)
 
     if len(matches) != len(args):
-        raise Exception("The numbers of format specifiers and arguments do not match")
+        msg = "The numbers of format specifiers and arguments do not match"
+        raise Exception(msg)
 
     i = len(args) - 1
     for m in reversed(matches):
@@ -553,10 +549,7 @@ def write_gisrc(kv, filename, append=False):
 
 
 def add_mapset_to_gisrc(gisrc, grassdb, location, mapset):
-    if os.access(gisrc, os.R_OK):
-        kv = read_gisrc(gisrc)
-    else:
-        kv = {}
+    kv = read_gisrc(gisrc) if os.access(gisrc, os.R_OK) else {}
     kv["GISDBASE"] = grassdb
     kv["LOCATION_NAME"] = location
     kv["MAPSET"] = mapset
@@ -564,10 +557,7 @@ def add_mapset_to_gisrc(gisrc, grassdb, location, mapset):
 
 
 def add_last_mapset_to_gisrc(gisrc, last_mapset_path):
-    if os.access(gisrc, os.R_OK):
-        kv = read_gisrc(gisrc)
-    else:
-        kv = {}
+    kv = read_gisrc(gisrc) if os.access(gisrc, os.R_OK) else {}
     kv["LAST_MAPSET_PATH"] = last_mapset_path
     write_gisrc(kv, gisrc)
 
@@ -1026,7 +1016,7 @@ def load_env(grass_env_file):
     # Regular expression for lines starting with "export var=val" (^export
     # lines below). Environment variables should start with a-zA-Z or _.
     # \1 and \2 are a variable name and its value, respectively.
-    export_re = re.compile("^export[ \t]+([a-zA-Z_]+[a-zA-Z0-9_]*)=(.*?)[ \t]*$")
+    export_re = re.compile(r"^export[ \t]+([a-zA-Z_]+[a-zA-Z0-9_]*)=(.*?)[ \t]*$")
 
     for line in readfile(grass_env_file).splitlines():
         # match ^export lines
@@ -1333,11 +1323,8 @@ def get_shell():
             sh = os.path.basename(sh)
         else:
             # If SHELL is not set, see if there is Bash and use it.
-            if shutil.which("bash"):
-                sh = "bash"
-            else:
-                # Fallback to sh if there is no Bash on path.
-                sh = "sh"
+            # Fallback to sh if there is no Bash on path.
+            sh = "bash" if shutil.which("bash") else "sh"
             # Ensure the variable is set.
             os.environ["SHELL"] = sh
 
@@ -1624,9 +1611,8 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         shrc = ".zshrc"
         grass_shrc = ".grass.zshrc"
     else:
-        raise ValueError(
-            "Only bash-like and zsh shells are supported by sh_like_startup()"
-        )
+        msg = "Only bash-like and zsh shells are supported by sh_like_startup()"
+        raise ValueError(msg)
 
     # save command history in mapset dir and remember more
     # bash history file handled in specific_addition
@@ -1651,11 +1637,8 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     else:
         f.write("test -r ~/.alias && . ~/.alias\n")
 
-    if os.getenv("ISISROOT"):
-        # GRASS GIS and ISIS blend
-        grass_name = "ISIS-GRASS"
-    else:
-        grass_name = "GRASS"
+    # GRASS GIS and ISIS blend
+    grass_name = "GRASS" if not os.getenv("ISISROOT") else "ISIS-GRASS"
 
     if sh == "zsh":
         f.write("setopt PROMPT_SUBST\n")
@@ -2123,10 +2106,11 @@ def find_grass_python_package():
         # now we can import stuff from grass package
     else:
         # Not translatable because we don't have translations loaded.
-        raise RuntimeError(
+        msg = (
             "The grass Python package is missing. "
             "Is the installation of GRASS GIS complete?"
         )
+        raise RuntimeError(msg)
 
 
 def main():

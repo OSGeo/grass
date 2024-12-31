@@ -339,9 +339,6 @@ class IVDigit:
             if Vect_read_line(self.poMapInfo, self.poPoints, None, line) < 0:
                 self._error.ReadLine(line)
                 return -1
-            points = self.poPoints
-        else:
-            points = pointsLine
 
         listLine = Vect_new_boxlist(0)
         listRef = Vect_new_list()
@@ -667,7 +664,7 @@ class IVDigit:
         ltype = Vect_read_line(self.poMapInfo, None, None, ln_id)
 
         if ltype == GV_CENTROID:
-            # TODO centroid opttimization, can be edited also its area -> it
+            # TODO centroid optimization, can be edited also its area -> it
             # will appear two times in new_ lists
             return self._getCentroidAreaBboxCats(ln_id)
         return [self._getBbox(ln_id)], [self._getLineAreasCategories(ln_id)]
@@ -1095,7 +1092,6 @@ class IVDigit:
             self.poMapInfo, line, ltype, self.poPoints, self.poCats
         )
         if newline > 0 and self.emit_signals:
-            new_geom = [self._getBbox(newline)]
             new_areas_cats = [self._getLineAreasCategories(newline)]
 
         if newline > 0 and self._settings["breakLines"]:
@@ -1123,8 +1119,6 @@ class IVDigit:
         """
         if not self._checkMap():
             return -1
-
-        nlines = Vect_get_num_lines(self.poMapInfo)
 
         poList = self._display.GetSelectedIList()
         ret = Vedit_flip_lines(self.poMapInfo, poList)
@@ -1896,10 +1890,7 @@ class IVDigit:
                 modeSnap,
             )
 
-        if ftype == GV_AREA:
-            ltype = GV_BOUNDARY
-        else:
-            ltype = ftype
+        ltype = GV_BOUNDARY if ftype == GV_AREA else ftype
         newline = Vect_write_line(self.poMapInfo, ltype, self.poPoints, self.poCats)
         if newline < 0:
             self._error.WriteLine()

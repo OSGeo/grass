@@ -118,10 +118,7 @@ def main():
     perc = [float(p) for p in perc.split(",")]
 
     if not output_format:
-        if shellstyle:
-            output_format = "shell"
-        else:
-            output_format = "plain"
+        output_format = "shell" if shellstyle else "plain"
     elif shellstyle:
         # This can be a message or warning in future versions.
         # In version 9, -g may be removed.
@@ -280,7 +277,8 @@ def main():
             sys.stdout.write("coeff_var=0\n")
         sys.stdout.write("sum=%.15g\n" % sum)
     else:
-        raise ValueError(f"Unknown output format {output_format}")
+        msg = f"Unknown output format {output_format}"
+        raise ValueError(msg)
 
     if not extend:
         return

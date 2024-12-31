@@ -1,4 +1,4 @@
 folium
+ipyleaflet
 jupyter
 PyVirtualDisplay
-ipyleaflet

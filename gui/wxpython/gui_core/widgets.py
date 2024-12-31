@@ -1052,7 +1052,7 @@ class PlacementValidator(BaseValidator):
         super().__init__()
 
     def _enableDisableBtn(self, enable):
-        """Enable/Disable buttomn
+        """Enable/Disable button
 
         :param bool enable: Enable/Disable btn
         """
@@ -1603,7 +1603,7 @@ class ManageSettingsWidget(wx.Panel):
                     idx = line.find(";", i_last)
                     if idx < 0:
                         break
-                    elif idx != 0:
+                    if idx != 0:
                         # find out whether it is separator
                         # $$$$; - it is separator
                         # $$$$$; - it is not separator
