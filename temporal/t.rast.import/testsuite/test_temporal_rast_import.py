@@ -1,10 +1,4 @@
 """
-Created on Fri Feb 26 14:46:06 2016
-
-@author: lucadelu
-"""
-
-"""
 Test t.rast.import
 
 (C) 2014 by the GRASS Development Team

@@ -433,7 +433,7 @@ static int close_new(int fd, int ok)
         else {
             remove(fcb->null_temp_name);
             remove(path); /* again ? */
-        }                 /* null_cur_row > 0 */
+        } /* null_cur_row > 0 */
 
         if (fcb->open_mode == OPEN_NEW_COMPRESSED) { /* auto compression */
             fcb->row_ptr[fcb->cellhd.rows] = lseek(fcb->data_fd, 0L, SEEK_CUR);

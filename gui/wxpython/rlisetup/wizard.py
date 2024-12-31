@@ -20,28 +20,33 @@ This program is free software under the GNU General Public License
 @author Luca Delucchi <lucadeluge gmail com>
 """
 
+from __future__ import annotations
+
 import os
+from typing import TYPE_CHECKING
 
 import wx
 from core.globalvar import wxPythonPhoenix
 
-if wxPythonPhoenix:
+if wxPythonPhoenix or TYPE_CHECKING:
     from wx import adv as wiz
     from wx.adv import Wizard
 else:
     from wx import wizard as wiz
     from wx.wizard import Wizard
-import wx.lib.scrolledpanel as scrolled
 
+import wx.lib.scrolledpanel as scrolled
+from core.gcmd import GError, GMessage, RunCommand
 from gui_core import gselect
 from gui_core.wrap import Button, StaticText, TextCtrl
 from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
 from rlisetup.functions import checkValue, retRLiPath
 from rlisetup.sampling_frame import RLiSetupMapPanel
+
+from grass.exceptions import CalledModuleError
 from grass.script import core as grass
 from grass.script import raster as grast
 from grass.script import vector as gvect
-from grass.exceptions import CalledModuleError
 
 from .functions import (
     SamplingType,
@@ -50,7 +55,9 @@ from .functions import (
     obtainCategories,
     sampleAreaVector,
 )
-from core.gcmd import GError, GMessage, RunCommand
+
+if TYPE_CHECKING:
+    from wx.adv import WizardEvent
 
 
 class RLIWizard:
@@ -360,9 +367,9 @@ class RLIWizard:
             fil.write("SAMPLEAREA -1|-1|%r|%r" % (rl, cl))
             fil.write("|%s" % self.msAreaList[0].raster)
             fil.write("\nMOVINGWINDOW\n")
-        # KUNITSC = samplingtype=units, regionbox=keyboard, shape=cirlce
+        # KUNITSC = samplingtype=units, regionbox=keyboard, shape=circle
         # KUNITSR = samplingtype=units, regionbox=keyboard, shape=rectangle
-        elif samtype == SamplingType.KUNITSC or samtype == SamplingType.KUNITSR:
+        elif samtype in {SamplingType.KUNITSC, SamplingType.KUNITSR}:
             if samtype == SamplingType.KUNITSC:
                 self._circle(self.units.width, self.units.height)
                 cl = float(self.CIR_CL) / float(self.rasterinfo["cols"])
@@ -374,13 +381,13 @@ class RLIWizard:
             fil.write("SAMPLEAREA -1|-1|%r|%r\n" % (rl, cl))
             if self.units.distrtype == "non_overlapping":
                 fil.write("RANDOMNONOVERLAPPING %s\n" % self.units.distr1)
-            elif self.units.distrtype == "systematic_contiguos":
+            elif self.units.distrtype == "systematic_contiguous":
                 fil.write("SYSTEMATICCONTIGUOUS\n")
             elif self.units.distrtype == "stratified_random":
                 fil.write(
                     "STRATIFIEDRANDOM %s|%s\n" % (self.units.distr1, self.units.distr2)
                 )
-            elif self.units.distrtype == "systematic_noncontiguos":
+            elif self.units.distrtype == "systematic_noncontiguous":
                 fil.write("SYSTEMATICNONCONTIGUOUS %s\n" % self.units.distr1)
             elif self.units.distrtype == "centered_oversites":
                 fil.write("")
@@ -388,7 +395,7 @@ class RLIWizard:
         # elif self.samplingareapage.samplingtype == SamplingType.UNITS and
         # self.samplingareapage.regionbox=='mouse':
 
-        # MUNITSC = samplingtype=units, regionbox=mouse, shape=cirlce
+        # MUNITSC = samplingtype=units, regionbox=mouse, shape=circle
         # MUNITSR = samplingtype=units, regionbox=mouse, shape=rectangle
         elif self.samplingareapage.samplingtype in {
             SamplingType.MUNITSR,
@@ -687,12 +694,12 @@ class FirstPage(TitledPage):
     def OnLayer(self, event):
         try:
             self.vectorlayer = self.vectlayer.GetValue()
-        except:
+        except AttributeError:
             self.vectorlayer = None
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Sets the default values, for the entire map"""
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
@@ -720,13 +727,12 @@ class FirstPage(TitledPage):
                 % vector
             )
             return False, []
-        elif links > 0:
+        if links > 0:
             layers = []
             for i in range(1, links + 1):
                 layers.append(str(i))
             return True, layers
-        else:
-            return False, []
+        return False, []
 
     def CheckInput(self):
         """Check input fields.
@@ -736,7 +742,7 @@ class FirstPage(TitledPage):
         """
         return bool(self.conf_name and bool(self.rast and bool(self.VectorEnabled)))
 
-    def OnExitPage(self, event=None):
+    def OnExitPage(self, event: WizardEvent | None = None) -> None:
         """Function during exiting"""
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
@@ -750,7 +756,6 @@ class FirstPage(TitledPage):
             elif self.region == "draw":
                 self.SetNext(self.parent.drawsampleframepage)
                 self.parent.samplingareapage.SetPrev(self.parent.drawsampleframepage)
-                return
 
 
 class KeyboardPage(TitledPage):
@@ -892,7 +897,7 @@ class KeyboardPage(TitledPage):
         self.ColLentxt.SetValue(self.col_len)
         self.RowLentxt.SetValue(self.row_len)
 
-    def OnExitPage(self, event=None):
+    def OnExitPage(self, event: WizardEvent | None = None) -> None:
         """Function during exiting"""
         if (
             self.row_len == ""
@@ -924,7 +929,7 @@ class DrawSampleFramePage(TitledPage):
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Function during entering"""
         if self.mapPanel is None:
             self.mapPanel = RLiSetupMapPanel(self, samplingType="drawFrame")
@@ -952,7 +957,7 @@ class DrawSampleFramePage(TitledPage):
                 render=True,
             )
 
-    def OnExitPage(self, event=None):
+    def OnExitPage(self, event: WizardEvent | None = None) -> None:
         """Function during exiting"""
         if event.GetDirection():
             self.SetNext(self.parent.samplingareapage)
@@ -1072,7 +1077,7 @@ class SamplingAreasPage(TitledPage):
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Insert values into text controls for summary of location
         creation options
         """
@@ -1115,7 +1120,7 @@ class SamplingAreasPage(TitledPage):
             self.sizer.Hide(self.areaPanel)
             self.sizer.Hide(self.calculatingAreas)
             self.sizer.Show(self.regionNumPanel)
-        elif samtype == SamplingType.UNITS or samtype == SamplingType.MVWIN:
+        elif samtype in {SamplingType.UNITS, SamplingType.MVWIN}:
             self.sizer.Hide(self.regionNumPanel)
             self.sizer.Hide(self.areaPanel)
             self.sizer.Hide(self.calculatingAreas)
@@ -1217,7 +1222,7 @@ class DrawRegionsPage(TitledPage):
         if marea:
             self.parent.msAreaList.append(marea)
 
-        self.regioncount = self.regioncount + 1
+        self.regioncount += 1
         numregions = int(self.parent.samplingareapage.numregions)
 
         if self.regioncount > numregions:
@@ -1231,7 +1236,7 @@ class DrawRegionsPage(TitledPage):
             )
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Function during entering"""
         if self.parent.samplingareapage.samplingtype == SamplingType.WHOLE:
             self.title.SetLabel(_("Draw moving windows region"))
@@ -1266,12 +1271,12 @@ class DrawRegionsPage(TitledPage):
                 render=True,
             )
 
-    # def OnExitPage(self, event=None):
-    # Function during exiting
-    # print event.GetDirection()
-    # if event.GetDirection():
-    #    self.SetNext(self.parent.samplingareapage)
-    #    self.parent.samplingareapage.SetPrev(self)
+    # def OnExitPage(self, event: WizardEvent | None = None) -> None:
+    #     """Function during exiting"""
+    #     print(event.GetDirection())
+    #     if event.GetDirection():
+    #         self.SetNext(self.parent.samplingareapage)
+    #         self.parent.samplingareapage.SetPrev(self)
 
 
 class SampleUnitsKeyPage(TitledPage):
@@ -1401,14 +1406,14 @@ class SampleUnitsKeyPage(TitledPage):
         # self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
         self.OnType(None)
 
-    def OnEnterPage(self, event=None):
+    def OnEnterPage(self, event: WizardEvent | None = None) -> None:
         """Function during entering"""
         # This is an hack to force the user to choose Rectangle or Circle
         self.typeBox.SetSelection(2),
         self.typeBox.ShowItem(2, False)
         self.panelSizer.Layout()
 
-    def OnExitPage(self, event=None):
+    def OnExitPage(self, event: WizardEvent | None = None) -> None:
         """Function during exiting"""
         if event.GetDirection():
             self.SetNext(self.parent.summarypage)
@@ -1435,7 +1440,7 @@ class SampleUnitsKeyPage(TitledPage):
             self.panelSizer.Hide(self.distr2Txt)
             self.panelSizer.Layout()
         elif chosen == 1:
-            self.distrtype = "systematic_contiguos"
+            self.distrtype = "systematic_contiguous"
             self.distr1Label.SetLabel("")
             self.distr2Label.SetLabel("")
             self.panelSizer.Hide(self.distr1Txt)
@@ -1449,7 +1454,7 @@ class SampleUnitsKeyPage(TitledPage):
             self.panelSizer.Show(self.distr2Txt)
             self.panelSizer.Layout()
         elif chosen == 3:
-            self.distrtype = "systematic_noncontiguos"
+            self.distrtype = "systematic_noncontiguous"
             self.distr1Label.SetLabel(_("Insert distance between units"))
             self.panelSizer.Show(self.distr1Txt)
             self.distr2Label.SetLabel("")
@@ -1546,7 +1551,7 @@ class MovingKeyPage(TitledPage):
         self.heightTxt.Bind(wx.EVT_TEXT, self.OnHeight)
         wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         # This is an hack to force the user to choose Rectangle or Circle
         #        self.typeBox.SetSelection(2),
         #        self.typeBox.ShowItem(2, False)
@@ -1635,7 +1640,7 @@ class UnitsMousePage(TitledPage):
         self.OnType(None)
         self.regionNumTxt.SetValue("")
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Function during entering"""
         if self.numregions:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
@@ -1694,7 +1699,7 @@ class UnitsMousePage(TitledPage):
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
-    def OnExitPage(self, event=None):
+    def OnExitPage(self, event: WizardEvent | None = None) -> None:
         """Function during exiting"""
         if event.GetDirection():
             self.SetNext(self.drawsampleunitspage)
@@ -1715,7 +1720,7 @@ class DrawSampleUnitsPage(TitledPage):
         # region = self.GetSampleUnitRegion()
         if region:
             self.parent.msAreaList.append(region)
-        self.regioncount = self.regioncount + 1
+        self.regioncount += 1
 
         drawtype = self.parent.drawunits.drawtype
         if self.regioncount > self.numregions:
@@ -1731,7 +1736,7 @@ class DrawSampleUnitsPage(TitledPage):
             )
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Function during entering"""
 
         if self.parent.samplingareapage.samplingtype in {
@@ -1778,10 +1783,8 @@ class DrawSampleUnitsPage(TitledPage):
                 render=True,
             )
 
-    def OnExitPage(self, event=None):
+    def OnExitPage(self, event: WizardEvent | None = None) -> None:
         """Function during exiting"""
-        pass
-
         # if event.GetDirection():
         #    self.SetNext(self.parent.samplingareapage)
         #    self.parent.samplingareapage.SetPrev(self)
@@ -1814,20 +1817,19 @@ class VectorAreasPage(TitledPage):
 
     def afterRegionDrawn(self):
         """Function to update the title and the number of selected area"""
-        self.areascount = self.areascount + 1
+        self.areascount += 1
         if self.areascount == self.areanum:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
             self.areaOK.Enable(False)
             self.areaNO.Enable(False)
             return True
-        else:
-            self.title.SetLabel(
-                _("Select sample area {areas_count} of {area_num}").format(
-                    areas_count=self.areascount + 1, area_num=self.areanum
-                )
+        self.title.SetLabel(
+            _("Select sample area {areas_count} of {area_num}").format(
+                areas_count=self.areascount + 1, area_num=self.areanum
             )
-            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
-            return False
+        )
+        wx.FindWindowById(wx.ID_FORWARD).Enable(False)
+        return False
 
     def OnYes(self, event):
         """Function to create the string for the conf file if the area
@@ -1860,8 +1862,8 @@ class VectorAreasPage(TitledPage):
                     "The raster map <%s> already exists."
                     " Please remove or rename the maps "
                     "with the prefix '%s' or select the "
-                    "option to overwrite existing maps" % (self.outname, self.outpref)
-                ),
+                    "option to overwrite existing maps"
+                ).format(self.outname, self.outpref),
             )
             self.parent.wizard.ShowPage(self.parent.samplingareapage)
             return
@@ -1892,7 +1894,7 @@ class VectorAreasPage(TitledPage):
                 self.map_.DeleteLayer(layer)
         self.areaText.SetLabel("Is this area (cat={n}) ok?".format(n=cat))
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Function during entering: draw the raster map and the first vector
         feature"""
         if self.mapPanel is None:
@@ -1932,7 +1934,7 @@ class VectorAreasPage(TitledPage):
             )
         self.newCat()
 
-    def OnExitPage(self, event=None):
+    def OnExitPage(self, event: WizardEvent | None = None) -> None:
         """Function during exiting"""
         grass.del_temp_region()
 
@@ -2139,7 +2141,7 @@ class SummaryPage(TitledPage):
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
         )
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Insert values into text controls for summary of location
         creation options
         """
@@ -2185,7 +2187,7 @@ class SummaryPage(TitledPage):
             if self.parent.units.distrtype == "non_overlapping":
                 self.unitsmorelabel.SetLabel(_("Number sampling units:"))
                 self.unitsmoretxt.SetLabel(self.parent.units.distr1)
-            elif self.parent.units.distrtype == "systematic_noncontiguos":
+            elif self.parent.units.distrtype == "systematic_noncontiguous":
                 self.unitsmorelabel.SetLabel(_("Distance between units:"))
                 self.unitsmoretxt.SetLabel(self.parent.units.distr1)
             elif self.parent.units.distrtype == "stratified_random":

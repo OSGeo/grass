@@ -27,7 +27,7 @@ vector map containing the erroneous vectors for later inspection.
 If <b>error</b> vector map is specified, <em>v.build</em> checks:
 
 <ul>
-  <li>isolated bondaries (which are not forming any areas),</li>
+  <li>isolated boundaries (which are not forming any areas),</li>
   <li>centroids outside of area,</li>
   <li>duplicated centroids.</li>
 </ul>
@@ -38,7 +38,7 @@ includes:
 
 <ul>
   <li>lines or boundaries of zero length,</li>
-  <li>intersecting boundaries, ie. overlapping areas,</li>
+  <li>intersecting boundaries, i.e. overlapping areas,</li>
   <li>areas without centroids that are not isles.</li>
 </ul>
 
@@ -46,7 +46,7 @@ includes:
 
 <h3>Build topology</h3>
 
-Note that <b>option=build</b> recreates also spatial and category
+Note that <b>option=build</b> also recreates spatial and category
 indices, not only topology. For linked OGR layers
 (see <em><a href="v.external.html">v.external</a></em>) also feature
 index is created.
@@ -61,7 +61,7 @@ current mapset.
 <h3>Dump topology or indices</h3>
 
 Dump options print topology, spatial, category or feature index to
-standard output. Such information can be printed also for vector maps
+standard output. Such information can also be printed for vector maps
 from other mapsets. A description of the vector topology is available in
 the <a href="https://grass.osgeo.org/programming8/vlibTopology.html">GRASS GIS 8 Programmer's Manual</a>,
 section "Vector library topology management".
@@ -76,7 +76,8 @@ v.build map=urbanarea option=dump
 <a href="v.build.all.html">v.build.all</a>,
 <a href="v.build.polylines.html">v.build.polylines</a>,
 <a href="v.edit.html">v.edit</a>,
-<a href="v.split.html">v.split</a>
+<a href="v.split.html">v.split</a>,
+<a href="v.support.html">v.support</a>
 </em>
 
 <p>See also <em><a href="wxGUI.vdigit.html">wxGUI vector digitizer</a></em>.

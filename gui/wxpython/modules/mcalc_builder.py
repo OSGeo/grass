@@ -20,7 +20,7 @@ import os
 import re
 
 import wx
-import grass.script as grass
+import grass.script as gs
 
 from core import globalvar
 from core.gcmd import GError, RunCommand
@@ -608,7 +608,7 @@ class MapCalcFrame(wx.Frame):
             if newmcalcstr[-1] != " ":
                 newmcalcstr += " "
                 position_offset += 1
-        except:
+        except IndexError:
             pass
 
         newmcalcstr += what
@@ -617,7 +617,7 @@ class MapCalcFrame(wx.Frame):
         try:
             if newmcalcstr[-1] != " " and mcalcstr[position] != " ":
                 newmcalcstr += " "
-        except:
+        except IndexError:
             newmcalcstr += " "
 
         newmcalcstr += mcalcstr[position:]
@@ -632,7 +632,7 @@ class MapCalcFrame(wx.Frame):
                 try:
                     if newmcalcstr[position + position_offset] == " ":
                         position_offset += 1
-                except:
+                except IndexError:
                     pass
 
         self.text_mcalc.SetInsertionPoint(position + position_offset)
@@ -681,10 +681,7 @@ class MapCalcFrame(wx.Frame):
             self.log.RunCmd(cmd, onDone=self.OnDone)
             self.parent.Raise()
         else:
-            if self.overwrite.IsChecked():
-                overwrite = True
-            else:
-                overwrite = False
+            overwrite = bool(self.overwrite.IsChecked())
             params = {"expression": "%s=%s" % (name, expr), "overwrite": overwrite}
             if seed_flag:
                 params["flags"] = "s"
@@ -700,14 +697,14 @@ class MapCalcFrame(wx.Frame):
         """
         if event.returncode != 0:
             return
-        name = self.newmaptxt.GetValue().strip(' "') + "@" + grass.gisenv()["MAPSET"]
+        name = self.newmaptxt.GetValue().strip(' "') + "@" + gs.gisenv()["MAPSET"]
         ltype = "raster"
         if self.rast3d:
             ltype = "raster_3d"
         self._giface.mapCreated.emit(
             name=name, ltype=ltype, add=self.addbox.IsChecked()
         )
-        gisenv = grass.gisenv()
+        gisenv = gs.gisenv()
         self._giface.grassdbChanged.emit(
             grassdb=gisenv["GISDBASE"],
             location=gisenv["LOCATION_NAME"],
@@ -759,7 +756,7 @@ class MapCalcFrame(wx.Frame):
                 return
 
             try:
-                fobj = open(path, "r")
+                fobj = open(path)
                 mctxt = fobj.read()
             finally:
                 fobj.close()

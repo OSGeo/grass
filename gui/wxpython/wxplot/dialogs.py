@@ -464,9 +464,8 @@ class HistRasterDialog(wx.Dialog):
         )
         if self.rasterRadio.GetValue():
             self.gselection.Disable()
-        else:
-            if self.group is not None:
-                self.gselection.SetValue(self.group)
+        elif self.group is not None:
+            self.gselection.SetValue(self.group)
         box.Add(self.gselection, pos=(2, 1))
 
         #

@@ -110,7 +110,7 @@ def ConvertValue(value, type, units):
             f = 6.21371192237334e-4
         elif units == "ft":
             f = 3.28083989501312
-    else:  # -> area
+    else:  # -> area  # noqa: PLR5501
         if units == "me":
             f = 1.0
         elif units == "km":
@@ -195,7 +195,7 @@ def formatDist(distance, mapunits):
         outdistance = round(distance / divisor, 1)
     elif (distance / divisor) > 0.0:
         outdistance = round(
-            distance / divisor, int(math.ceil(3 - math.log10(distance / divisor)))
+            distance / divisor, math.ceil(3 - math.log10(distance / divisor))
         )
     else:
         outdistance = float(distance / divisor)

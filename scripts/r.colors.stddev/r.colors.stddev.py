@@ -33,7 +33,7 @@
 import os
 import atexit
 
-import grass.script as gscript
+import grass.script as gs
 from grass.script.utils import decode
 
 
@@ -43,9 +43,7 @@ def z(n):
 
 def cleanup():
     if tmpmap:
-        gscript.run_command(
-            "g.remove", flags="f", type="raster", name=tmpmap, quiet=True
-        )
+        gs.run_command("g.remove", flags="f", type="raster", name=tmpmap, quiet=True)
 
 
 def main():
@@ -57,8 +55,8 @@ def main():
     bands = flags["b"]
 
     if not zero:
-        s = gscript.read_command("r.univar", flags="g", map=map)
-        kv = gscript.parse_key_val(decode(s))
+        s = gs.read_command("r.univar", flags="g", map=map)
+        kv = gs.parse_key_val(decode(s))
         global mean, stddev
         mean = float(kv["mean"])
         stddev = float(kv["stddev"])
@@ -103,17 +101,17 @@ def main():
             )
     else:
         tmpmap = "r_col_stdev_abs_%d" % os.getpid()
-        gscript.mapcalc("$tmp = abs($map)", tmp=tmpmap, map=map)
+        gs.mapcalc("$tmp = abs($map)", tmp=tmpmap, map=map)
 
         # data centered on 0  (e.g. map of deviations)
-        info = gscript.raster_info(tmpmap)
+        info = gs.raster_info(tmpmap)
         maxv = info["max"]
 
         # current r.univar truncates percentage to the base integer
-        s = gscript.read_command(
+        s = gs.read_command(
             "r.univar", flags="eg", map=map, percentile=[95.45, 68.2689, 99.7300]
         )
-        kv = gscript.parse_key_val(decode(s))
+        kv = gs.parse_key_val(decode(s))
 
         stddev1 = float(kv["percentile_68_2689"])
         stddev2 = float(kv["percentile_95_45"])
@@ -154,10 +152,10 @@ def main():
                 ]
             )
 
-    gscript.write_command("r.colors", map=map, rules="-", stdin=rules)
+    gs.write_command("r.colors", map=map, rules="-", stdin=rules)
 
 
 if __name__ == "__main__":
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     atexit.register(cleanup)
     main()

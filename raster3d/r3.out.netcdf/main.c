@@ -17,7 +17,7 @@
  *       here:
  *       http://cf-pcmdi.llnl.gov/documents/cf-conventions/1.6/cf-conventions.html#coordinate-system
  *       https://cf-pcmdi.llnl.gov/trac/wiki/Cf2CrsWkt
- *       http://trac.osgeo.org/gdal/wiki/NetCDF_ProjectionTestingStatus
+ *       https://trac.osgeo.org/gdal/wiki/NetCDF_ProjectionTestingStatus
  *
  *****************************************************************************/
 
@@ -292,8 +292,8 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
             char long_name[1024];
             char time_unit[1024];
 
-            G_snprintf(long_name, 1024, "Time in %s",
-                       Rast3d_get_vertical_unit(map));
+            snprintf(long_name, 1024, "Time in %s",
+                     Rast3d_get_vertical_unit(map));
 
             if ((retval =
                      nc_def_dim(ncid, TIME_NAME, region->depths, &time_dimid)))
@@ -311,21 +311,20 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
                 /* Days since datum in ISO norm */
                 if (datetime_is_absolute(&ts.dt[0])) {
                     is_absolute_time = 1;
-                    G_snprintf(time_unit, 1024,
-                               "%s since %d-%02d-%02d %02d:%02d:%02.0f",
-                               Rast3d_get_vertical_unit(map), ts.dt[0].year,
-                               ts.dt[0].month, ts.dt[0].day, ts.dt[0].hour,
-                               ts.dt[0].minute, ts.dt[0].second);
+                    snprintf(time_unit, 1024,
+                             "%s since %d-%02d-%02d %02d:%02d:%02.0f",
+                             Rast3d_get_vertical_unit(map), ts.dt[0].year,
+                             ts.dt[0].month, ts.dt[0].day, ts.dt[0].hour,
+                             ts.dt[0].minute, ts.dt[0].second);
                 }
                 else {
-                    G_snprintf(time_unit, 1024, "%s",
-                               Rast3d_get_vertical_unit(map));
+                    snprintf(time_unit, 1024, "%s",
+                             Rast3d_get_vertical_unit(map));
                 }
             }
             else {
-                G_snprintf(time_unit, 1024, "%s since %s",
-                           Rast3d_get_vertical_unit(map),
-                           "1900-01-01 00:00:00");
+                snprintf(time_unit, 1024, "%s since %s",
+                         Rast3d_get_vertical_unit(map), "1900-01-01 00:00:00");
             }
 
             if ((retval = nc_put_att_text(ncid, time_varid, UNITS,

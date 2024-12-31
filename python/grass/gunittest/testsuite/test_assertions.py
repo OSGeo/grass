@@ -3,6 +3,7 @@ Tests assertion methods.
 """
 
 import os
+from pathlib import Path
 
 import grass.script.core as gcore
 from grass.pygrass.modules import Module
@@ -10,6 +11,7 @@ from grass.pygrass.modules import Module
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.utils import xfail_windows
 
 
 class TestTextAssertions(TestCase):
@@ -33,6 +35,7 @@ class TestTextAssertions(TestCase):
     def test_assertLooksLike_multiline(self):
         self.assertLooksLike("a=123\nb=456\nc=789", "a=...\nb=...\nc=...")
 
+    @xfail_windows
     def test_assertLooksLike_multiline_platform_dependent(self):
         self.assertLooksLike(
             "a=123\nb=456\nc=789", "a=...{nl}b=...{nl}c=...".format(nl=os.linesep)
@@ -348,20 +351,19 @@ class TestFileAssertions(TestCase):
         open(cls.emtpy_file, "w").close()
         cls.file_with_md5 = cls.__name__ + "_this_is_a_file_with_known_md5"
         file_content = "Content of the file with known MD5.\n"
-        with open(cls.file_with_md5, "w") as f:
-            f.write(file_content)
+        Path(cls.file_with_md5).write_text(file_content)
         # MD5 sum created using:
         # echo 'Content of the file with known MD5.' > some_file.txt
         # md5sum some_file.txt
         cls.file_md5 = "807bba4ffac4bb351bc3f27853009949"
 
         cls.file_with_same_content = cls.__name__ + "_file_with_same_content"
-        with open(cls.file_with_same_content, "w") as f:
-            f.write(file_content)
+        Path(cls.file_with_same_content).write_text(file_content)
 
         cls.file_with_different_content = cls.__name__ + "_file_with_different_content"
-        with open(cls.file_with_different_content, "w") as f:
-            f.write(file_content + " Something else here.")
+        Path(cls.file_with_different_content).write_text(
+            file_content + " Something else here."
+        )
 
     @classmethod
     def tearDownClass(cls):
@@ -384,6 +386,7 @@ class TestFileAssertions(TestCase):
             self.failureException, self.assertFileExists, filename=self.emtpy_file
         )
 
+    @xfail_windows
     def test_assertFileMd5(self):
         self.assertFileMd5(filename=self.file_with_md5, md5=self.file_md5)
         self.assertRaises(

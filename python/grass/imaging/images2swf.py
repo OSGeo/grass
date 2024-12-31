@@ -65,6 +65,7 @@ sources and tools:
   of a watermark in the upper left corner.
 
 """
+from __future__ import annotations
 
 import os
 import zlib
@@ -125,9 +126,11 @@ def checkImages(images):
                 pass  # ok
             elif im.ndim == 3:
                 if im.shape[2] not in [3, 4]:
-                    raise ValueError("This array can not represent an image.")
+                    msg = "This array can not represent an image."
+                    raise ValueError(msg)
             else:
-                raise ValueError("This array can not represent an image.")
+                msg = "This array can not represent an image."
+                raise ValueError(msg)
         else:
             raise ValueError("Invalid image type: " + str(type(im)))
 
@@ -176,7 +179,8 @@ class BitArray:
         if isinstance(bits, int):
             bits = str(bits)
         if not isinstance(bits, string_types):
-            raise ValueError("Append bits as strings or integers!")
+            msg = "Append bits as strings or integers!"
+            raise ValueError(msg)
 
         # add bits
         for bit in bits:
@@ -224,7 +228,7 @@ def intToUint8(i):
     return int(i).to_bytes(1, "little")
 
 
-def intToBits(i, n=None):
+def intToBits(i: int, n: int | None = None) -> BitArray:
     """convert int to a string of bits (0's and 1's in a string),
     pad to n elements. Convert back using int(ss,2)."""
     ii = i
@@ -233,13 +237,14 @@ def intToBits(i, n=None):
     bb = BitArray()
     while ii > 0:
         bb += str(ii % 2)
-        ii = ii >> 1
+        ii >>= 1
     bb.Reverse()
 
     # justify
     if n is not None:
         if len(bb) > n:
-            raise ValueError("intToBits fail: len larger than padlength.")
+            msg = f"{intToBits.__name__} fail: len larger than padlength."
+            raise ValueError(msg)
         bb = str(bb).rjust(n, "0")
 
     # done
@@ -253,7 +258,7 @@ def bitsToInt(bb, n=8):
     # Get value in bits
     for i in range(len(bb)):
         b = bb[i : i + 1]
-        tmp = bin(ord(b))[2:]
+        tmp = f"{ord(b):b}"
         # value += tmp.rjust(8,'0')
         value = tmp.rjust(8, "0") + value
 
@@ -271,7 +276,7 @@ def getTypeAndLen(bb):
     # Get first 16 bits
     for i in range(2):
         b = bb[i : i + 1]
-        tmp = bin(ord(b))[2:]
+        tmp = f"{ord(b):b}"
         # value += tmp.rjust(8,'0')
         value = tmp.rjust(8, "0") + value
 
@@ -285,7 +290,7 @@ def getTypeAndLen(bb):
         value = ""
         for i in range(2, 6):
             b = bb[i : i + 1]  # becomes a single-byte bytes() on both PY3 and PY2
-            tmp = bin(ord(b))[2:]
+            tmp = f"{ord(b):b}"
             # value += tmp.rjust(8,'0')
             value = tmp.rjust(8, "0") + value
         L = int(value, 2)
@@ -295,7 +300,7 @@ def getTypeAndLen(bb):
     return type, L, L2
 
 
-def signedIntToBits(i, n=None):
+def signedIntToBits(i: int, n: int | None = None) -> BitArray:
     """convert signed int to a string of bits (0's and 1's in a string),
     pad to n elements. Negative numbers are stored in 2's complement bit
     patterns, thus positive numbers always start with a 0.
@@ -311,14 +316,15 @@ def signedIntToBits(i, n=None):
     bb = BitArray()
     while ii > 0:
         bb += str(ii % 2)
-        ii = ii >> 1
+        ii >>= 1
     bb.Reverse()
 
     # justify
     bb = "0" + str(bb)  # always need the sign bit in front
     if n is not None:
         if len(bb) > n:
-            raise ValueError("signedIntToBits fail: len larger than padlength.")
+            msg = f"{signedIntToBits.__name__} fail: len larger than padlength."
+            raise ValueError(msg)
         bb = bb.rjust(n, "0")
 
     # was it negative? (then opposite bits)
@@ -360,7 +366,8 @@ def floatsToBits(arr):
     bits = intToBits(31, 5)  # 32 does not fit in 5 bits!
     for i in arr:
         if i < 0:
-            raise ValueError("Dit not implement negative floats!")
+            msg = "Dit not implement negative floats!"
+            raise ValueError(msg)
         i1 = int(i)
         i2 = i - i1
         bits += intToBits(i1, 15)
@@ -391,7 +398,7 @@ class Tag:
 
     def ProcessTag(self):
         """Implement this to create the tag."""
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def GetTag(self):
         """Calls processTag and attaches the header."""
@@ -479,6 +486,7 @@ class SetBackgroundTag(ControlTag):
     """Set the color in 0-255, or 0-1 (if floats given)."""
 
     def __init__(self, *rgb):
+        super().__init__()
         self.tagtype = 9
         if len(rgb) == 1:
             rgb = rgb[0]
@@ -489,7 +497,7 @@ class SetBackgroundTag(ControlTag):
         for i in range(3):
             clr = self.rgb[i]
             if isinstance(clr, float):
-                clr = clr * 255
+                clr *= 255
             bb += intToUint8(clr)
         self.bytes = bb
 
@@ -550,14 +558,16 @@ class BitmapTag(DefinitionTag):
                 if im.shape[2] == 4:
                     tmp[:, :, 0] = im[:, :, 3]  # swap channel where alpha is in
             else:
-                raise ValueError("Invalid shape to be an image.")
+                msg = "Invalid shape to be an image."
+                raise ValueError(msg)
 
         elif len(im.shape) == 2:
             tmp = np.ones((im.shape[0], im.shape[1], 4), dtype=np.uint8) * 255
             for i in range(3):
                 tmp[:, :, i + 1] = im[:, :]
         else:
-            raise ValueError("Invalid shape to be an image.")
+            msg = "Invalid shape to be an image."
+            raise ValueError(msg)
 
         # we changed the image to uint8 4 channels.
         # now compress!
@@ -771,22 +781,25 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
 
     """
 
-    # Check Numpy
+    # Check NumPy
     if np is None:
-        raise RuntimeError("Need Numpy to write an SWF file.")
+        msg = "Need NumPy to write an SWF file."
+        raise RuntimeError(msg)
 
-    # Check images (make all Numpy)
+    # Check images (make all NumPy)
     images2 = []
     images = checkImages(images)
     if not images:
-        raise ValueError("Image list is empty!")
+        msg = "Image list is empty!"
+        raise ValueError(msg)
     for im in images:
         if PIL and isinstance(im, PIL.Image.Image):
             if im.mode == "P":
                 im = im.convert()
             im = np.asarray(im)
             if len(im.shape) == 0:
-                raise MemoryError("Too little memory to convert PIL image to array")
+                msg = "Too little memory to convert PIL image to array"
+                raise MemoryError(msg)
         images2.append(im)
 
     # Init
@@ -795,9 +808,10 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
     # Check duration
     if hasattr(duration, "__len__"):
         if len(duration) == len(images2):
-            duration = [d for d in duration]
+            duration = list(duration)
         else:
-            raise ValueError("len(duration) doesn't match amount of images.")
+            msg = "len(duration) doesn't match amount of images."
+            raise ValueError(msg)
     else:
         duration = [duration for im in images2]
 
@@ -828,8 +842,6 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
     fp = open(filename, "wb")
     try:
         buildFile(fp, taglist, nframes=nframes, framesize=wh, fps=fps)
-    except Exception:
-        raise
     finally:
         fp.close()
 
@@ -837,9 +849,10 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
 def _readPixels(bb, i, tagType, L1):
     """With pf's seed after the recordheader, reads the pixeldata."""
 
-    # Check Numpy
+    # Check NumPy
     if np is None:
-        raise RuntimeError("Need Numpy to read an SWF file.")
+        msg = "Need NumPy to read an SWF file."
+        raise RuntimeError(msg)
 
     # Get info
     # charId = bb[i : i + 2]  # unused
@@ -899,11 +912,13 @@ def readSwf(filename, asNumpy=True):
 
     # Check PIL
     if (not asNumpy) and (PIL is None):
-        raise RuntimeError("Need PIL to return as PIL images.")
+        msg = "Need PIL to return as PIL images."
+        raise RuntimeError(msg)
 
-    # Check Numpy
+    # Check NumPy
     if np is None:
-        raise RuntimeError("Need Numpy to read SWF files.")
+        msg = "Need NumPy to read SWF files."
+        raise RuntimeError(msg)
 
     # Init images
     images = []

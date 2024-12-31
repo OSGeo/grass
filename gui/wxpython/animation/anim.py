@@ -93,11 +93,11 @@ class Animation(wx.EvtHandler):
 
     def Start(self):
         if not self.IsActive():
-            return
+            pass
 
     def Pause(self, paused):
         if not self.IsActive():
-            return
+            pass
 
     def Stop(self):
         if not self.IsActive():
@@ -119,7 +119,7 @@ class Animation(wx.EvtHandler):
                 self.orientation = Orientation.BACKWARD
                 self.currentIndex = self.count - 2  # -1
                 self.callbackOrientationChanged(Orientation.BACKWARD)
-        else:
+        else:  # noqa: PLR5501
             if self.replayMode == ReplayMode.REPEAT:
                 self.currentIndex = self.count - 1
             elif self.replayMode == ReplayMode.REVERSE:

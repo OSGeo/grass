@@ -55,7 +55,7 @@ def db_describe(table, env=None, **args):
         args.pop("driver")
     s = read_command("db.describe", flags="c", table=table, env=env, **args)
     if not s:
-        fatal(_("Unable to describe table <%s>") % table)
+        fatal(_("Unable to describe table <%s>") % table, env=env)
 
     cols = []
     result = {}
@@ -127,9 +127,8 @@ def db_connection(force=False, env=None):
     :return: parsed output of db.connect
     """  # noqa: E501
     try:
-        nuldev = open(os.devnull, "w")
-        conn = parse_command("db.connect", flags="g", stderr=nuldev, env=env)
-        nuldev.close()
+        with open(os.devnull, "w") as nuldev:
+            conn = parse_command("db.connect", flags="g", stderr=nuldev, env=env)
     except CalledModuleError:
         conn = None
 
@@ -179,7 +178,8 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
                 "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be \
                     provided"
             )
-            % {"sql": "sql", "filename": "filename", "table": "table"}
+            % {"sql": "sql", "filename": "filename", "table": "table"},
+            env=env,
         )
 
     if "sep" not in args:
@@ -188,10 +188,10 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
     try:
         run_command("db.select", quiet=True, flags="c", output=fname, env=env, **args)
     except CalledModuleError:
-        fatal(_("Fetching data failed"))
+        fatal(_("Fetching data failed"), env=env)
 
     ofile = open(fname)
-    result = [tuple(x.rstrip(os.linesep).split(args["sep"])) for x in ofile.readlines()]
+    result = [tuple(x.rstrip(os.linesep).split(args["sep"])) for x in ofile]
     ofile.close()
     try_remove(fname)
 
@@ -229,8 +229,7 @@ def db_table_in_vector(table, mapset=".", env=None):
                 break
     if len(used) > 0:
         return used
-    else:
-        return None
+    return None
 
 
 def db_begin_transaction(driver):

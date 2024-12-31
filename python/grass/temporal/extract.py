@@ -12,7 +12,7 @@ for details.
 import sys
 from multiprocessing import Process
 
-import grass.script as gscript
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 from .abstract_map_dataset import AbstractMapDataset
@@ -39,11 +39,11 @@ def extract_dataset(
     expression,
     base,
     time_suffix,
-    nprocs=1,
-    register_null=False,
-    layer=1,
+    nprocs: int = 1,
+    register_null: bool = False,
+    layer: int = 1,
     vtype="point,line,boundary,centroid,area,face",
-):
+) -> None:
     """Extract a subset of a space time raster, raster3d or vector dataset
 
     A mapcalc expression can be provided to process the temporal extracted
@@ -84,7 +84,7 @@ def extract_dataset(
 
     sp = open_old_stds(input, type, dbif)
     # Check the new stds
-    new_sp = check_new_stds(output, type, dbif, gscript.overwrite())
+    new_sp = check_new_stds(output, type, dbif, gs.overwrite())
     if type == "vector":
         rows = sp.get_registered_maps("id,name,mapset,layer", where, "start_time", dbif)
     else:
@@ -140,7 +140,7 @@ def extract_dataset(
 
                 # Check if new map is in the temporal database
                 if new_map.is_in_db(dbif):
-                    if gscript.overwrite():
+                    if gs.overwrite():
                         # Remove the existing temporal database entry
                         new_map.delete(dbif)
                         new_map = sp.get_new_map_instance(map_id)
@@ -224,7 +224,7 @@ def extract_dataset(
             description,
             semantic_type,
             dbif,
-            gscript.overwrite(),
+            gs.overwrite(),
         )
 
         # collect empty maps to remove them
@@ -251,7 +251,7 @@ def extract_dataset(
 
                     # In case of a empty map continue, do not register empty
                     # maps
-                    if type == "raster" or type == "raster3d":
+                    if type in {"raster", "raster3d"}:
                         if (
                             new_map.metadata.get_min() is None
                             and new_map.metadata.get_max() is None
@@ -300,15 +300,15 @@ def extract_dataset(
                     names += ",%s" % (map.get_name())
                 count += 1
             if type == "raster":
-                gscript.run_command(
+                gs.run_command(
                     "g.remove", flags="f", type="raster", name=names, quiet=True
                 )
             elif type == "raster3d":
-                gscript.run_command(
+                gs.run_command(
                     "g.remove", flags="f", type="raster_3d", name=names, quiet=True
                 )
             elif type == "vector":
-                gscript.run_command(
+                gs.run_command(
                     "g.remove", flags="f", type="vector", name=names, quiet=True
                 )
 
@@ -318,37 +318,37 @@ def extract_dataset(
 ###############################################################################
 
 
-def run_mapcalc2d(expr):
+def run_mapcalc2d(expr) -> None:
     """Helper function to run r.mapcalc in parallel"""
     try:
-        gscript.run_command(
-            "r.mapcalc", expression=expr, overwrite=gscript.overwrite(), quiet=True
+        gs.run_command(
+            "r.mapcalc", expression=expr, overwrite=gs.overwrite(), quiet=True
         )
     except CalledModuleError:
         sys.exit(1)
 
 
-def run_mapcalc3d(expr):
+def run_mapcalc3d(expr) -> None:
     """Helper function to run r3.mapcalc in parallel"""
     try:
-        gscript.run_command(
-            "r3.mapcalc", expression=expr, overwrite=gscript.overwrite(), quiet=True
+        gs.run_command(
+            "r3.mapcalc", expression=expr, overwrite=gs.overwrite(), quiet=True
         )
     except CalledModuleError:
         sys.exit(1)
 
 
-def run_vector_extraction(input, output, layer, type, where):
+def run_vector_extraction(input, output, layer, type, where) -> None:
     """Helper function to run r.mapcalc in parallel"""
     try:
-        gscript.run_command(
+        gs.run_command(
             "v.extract",
             input=input,
             output=output,
             layer=layer,
             type=type,
             where=where,
-            overwrite=gscript.overwrite(),
+            overwrite=gs.overwrite(),
             quiet=True,
         )
     except CalledModuleError:

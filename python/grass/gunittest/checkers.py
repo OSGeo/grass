@@ -9,13 +9,19 @@ for details.
 :authors: Vaclav Petras, Soeren Gebbert
 """
 
-import os
-import sys
-import re
+from __future__ import annotations
+
 import doctest
 import hashlib
+import os
+import re
+import sys
+from typing import TYPE_CHECKING, Any, Callable
 
 from grass.script.utils import encode
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 try:
     from grass.script.core import KeyValue
@@ -93,14 +99,14 @@ def unify_units(dic):
             for n in range(len(dic["unit"])):
                 if dic["unit"][n] in item:
                     dic["unit"][n] = item[0]
-        else:
+        else:  # noqa: PLR5501
             if dic["unit"] in item:
                 dic["unit"] = item[0]
         if not isinstance(dic["units"], str):
             for n in range(len(dic["units"])):
                 if dic["units"][n] in item:
                     dic["units"][n] = item[0]
-        else:
+        else:  # noqa: PLR5501
             if dic["units"] in item:
                 dic["units"] = item[0]
     return dic
@@ -222,15 +228,14 @@ def text_to_keyvalue(
                             " Previous line's key is <%s>"
                         ) % key
                     raise ValueError(msg)
-            else:
+            else:  # noqa: PLR5501
                 # line contains something but not separator
                 if not skip_invalid:
                     # TODO: here should go _ for translation
-                    raise ValueError(
-                        ("Line <{l}> does not contain separator <{s}>.").format(
-                            l=line, s=sep
-                        )
+                    msg = ("Line <{l}> does not contain separator <{s}>.").format(
+                        l=line, s=sep
                     )
+                    raise ValueError(msg)
             # if we get here we are silently ignoring the line
             # because it is invalid (does not contain key-value separator) or
             # because it is empty
@@ -255,7 +260,7 @@ def text_to_keyvalue(
 # TODO: define standard precisions for DCELL, FCELL, CELL, mm, ft, cm, ...
 # TODO: decide if None is valid, and use some default or no compare
 # TODO: is None a valid value for precision?
-def values_equal(value_a, value_b, precision=0.000001):
+def values_equal(value_a, value_b, precision: float = 0.000001) -> bool:
     """
     >>> values_equal(1.022, 1.02, precision=0.01)
     True
@@ -277,9 +282,8 @@ def values_equal(value_a, value_b, precision=0.000001):
         # in Python 3 None < 3 raises TypeError
         precision = float(precision)
         if precision < 0:
-            raise ValueError(
-                "precision needs to be greater than or equal to zero: {precision} < 0"
-            )
+            msg = "precision needs to be greater than or equal to zero: {precision} < 0"
+            raise ValueError(msg)
         if abs(value_a - value_b) > precision:
             return False
 
@@ -312,15 +316,19 @@ def values_equal(value_a, value_b, precision=0.000001):
             # apply this function for comparison of items in the list
             if not values_equal(value_a[i], value_b[i], precision):
                 return False
-    else:
-        if value_a != value_b:
-            return False
+    elif value_a != value_b:
+        return False
     return True
 
 
 def keyvalue_equals(
-    dict_a, dict_b, precision, def_equal=values_equal, key_equal=None, a_is_subset=False
-):
+    dict_a: Mapping,
+    dict_b: Mapping,
+    precision: float,
+    def_equal: Callable = values_equal,
+    key_equal: Mapping[Any, Callable] | None = None,
+    a_is_subset: bool = False,
+) -> bool:
     """Compare two dictionaries.
 
     .. note::
@@ -370,7 +378,7 @@ def keyvalue_equals(
 
     if not a_is_subset and sorted(dict_a.keys()) != sorted(dict_b.keys()):
         return False
-    b_keys = dict_b.keys() if a_is_subset else None
+    b_keys = dict_b.keys() if a_is_subset else set()
 
     # iterate over subset or just any if not a_is_subset
     # check for missing keys in superset
@@ -496,7 +504,7 @@ def proj_units_equals(text_a, text_b):
 # TODO: change checking over lines?
 # TODO: change parameter order?
 # TODO: the behavior with last \n is strange but now using DOTALL and $
-def check_text_ellipsis(reference, actual):
+def check_text_ellipsis(reference, actual) -> bool:
     r"""
     >>> check_text_ellipsis(
     ...     "Vector map <...> contains ... points.",
@@ -538,10 +546,7 @@ def check_text_ellipsis(reference, actual):
     ref_escaped = re.escape(reference)
     exp = re.compile(r"\\\.\\\.\\\.")  # matching escaped ...
     ref_regexp = exp.sub(".+", ref_escaped) + "$"
-    if re.match(ref_regexp, actual, re.DOTALL):
-        return True
-    else:
-        return False
+    return bool(re.match(ref_regexp, actual, re.DOTALL))
 
 
 def check_text_ellipsis_doctest(reference, actual):
@@ -642,7 +647,7 @@ def text_file_md5(
     if prepend_lines:
         for line in prepend_lines:
             hasher.update(encode(line))
-    with open(filename, "r") as f:
+    with open(filename) as f:
         for line in f:
             # replace platform newlines by standard newline
             if os.linesep != "\n":

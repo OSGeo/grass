@@ -43,7 +43,7 @@
 
 import os
 import atexit
-import grass.script as grass
+import grass.script as gs
 from grass.script.utils import encode
 
 
@@ -59,12 +59,10 @@ scales = {
 
 
 def cleanup():
-    if grass.find_file(temp_src)["file"]:
-        grass.run_command(
-            "g.remove", quiet=True, flags="fb", type="raster", name=temp_src
-        )
-    if grass.find_file(temp_dist)["file"]:
-        grass.run_command(
+    if gs.find_file(temp_src)["file"]:
+        gs.run_command("g.remove", quiet=True, flags="fb", type="raster", name=temp_src)
+    if gs.find_file(temp_dist)["file"]:
+        gs.run_command(
             "g.remove", quiet=True, flags="fb", type="raster", name=temp_dist
         )
 
@@ -83,8 +81,8 @@ def main():
     temp_src = "r.buffer.tmp.%s.src" % tmp
 
     # check if input file exists
-    if not grass.find_file(input)["file"]:
-        grass.fatal(_("Raster map <%s> not found") % input)
+    if not gs.find_file(input)["file"]:
+        gs.fatal(_("Raster map <%s> not found") % input)
 
     scale = scales[units]
 
@@ -92,14 +90,11 @@ def main():
     distances1 = [scale * float(d) for d in distances]
     distances2 = [d * d for d in distances1]
 
-    s = grass.read_command("g.proj", flags="j")
-    kv = grass.parse_key_val(s)
-    if kv["+proj"] == "longlat":
-        metric = "geodesic"
-    else:
-        metric = "squared"
+    s = gs.read_command("g.proj", flags="j")
+    kv = gs.parse_key_val(s)
+    metric = "geodesic" if kv["+proj"] == "longlat" else "squared"
 
-    grass.run_command(
+    gs.run_command(
         "r.grow.distance", input=input, metric=metric, distance=temp_dist, flags="m"
     )
 
@@ -108,8 +103,8 @@ def main():
     else:
         exp = "$temp_src = if(isnull($input),null(),1)"
 
-    grass.message(_("Extracting buffers (1/2)..."))
-    grass.mapcalc(exp, temp_src=temp_src, input=input)
+    gs.message(_("Extracting buffers (1/2)..."))
+    gs.mapcalc(exp, temp_src=temp_src, input=input)
 
     exp = "$output = if(!isnull($input),$input,%s)"
     if metric == "squared":
@@ -120,10 +115,10 @@ def main():
             exp %= "if($dist <= %f,%d,%%s)" % (dist2, n + 2)
     exp %= "null()"
 
-    grass.message(_("Extracting buffers (2/2)..."))
-    grass.mapcalc(exp, output=output, input=temp_src, dist=temp_dist)
+    gs.message(_("Extracting buffers (2/2)..."))
+    gs.mapcalc(exp, output=output, input=temp_src, dist=temp_dist)
 
-    p = grass.feed_command("r.category", map=output, separator=":", rules="-")
+    p = gs.feed_command("r.category", map=output, separator=":", rules="-")
     msg = "1:distances calculated from these locations\n"
     p.stdin.write(encode(msg))
     d0 = "0"
@@ -134,13 +129,13 @@ def main():
     p.stdin.close()
     p.wait()
 
-    grass.run_command("r.colors", map=output, color="rainbow")
+    gs.run_command("r.colors", map=output, color="rainbow")
 
     # write cmd history:
-    grass.raster_history(output)
+    gs.raster_history(output)
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     atexit.register(cleanup)
     main()

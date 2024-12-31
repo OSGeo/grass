@@ -40,9 +40,8 @@ class ViewFrame(wx.Frame):
         self.confilesBox = StaticBox(
             parent=self.panel,
             id=wx.ID_ANY,
-            label=_(
-                "View and modify the "
-                "configuration file '{name}'".format(name=self.confile)
+            label=_("View and modify the configuration file '{name}'").format(
+                name=self.confile
             ),
         )
         self.textCtrl = TextCtrl(
