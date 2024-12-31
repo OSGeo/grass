@@ -49,12 +49,11 @@ class TestModuleDownloadFromDifferentSources(TestCase):
     def setUp(self):
         """Make sure we are not dealing with some old files"""
         if self.install_prefix.exists():
-            files = list(path.name for path in self.install_prefix.iterdir())
+            files = [path.name for path in self.install_prefix.iterdir()]
             if files:
-                raise RuntimeError(
-                    f"Install prefix path '{self.install_prefix}' \
+                msg = f"Install prefix path '{self.install_prefix}' \
                     contains files {','.join(files)}"
-                )
+                raise RuntimeError(msg)
 
     def tearDown(self):
         """Remove created files"""

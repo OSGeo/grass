@@ -61,31 +61,29 @@ for line in fin:
     # Match the author line and extract the part we want
     # (Don't use startswith to allow Author override inside commit message.)
     elif "Author:" in line:
-        authorList = re.split(": ", line, 1)
+        authorList = re.split(r": ", line, 1)
         try:
             author = authorList[1]
             author = author[0 : len(author) - 1]
             authorFound = True
-        except:
-            print("Could not parse authorList = '%s'" % (line))
+        except Exception as e:
+            print(f"Could not parse authorList = '{line}'. Error: {e!s}")
 
     # Match the date line
     elif line.startswith("Date:"):
-        dateList = re.split(":   ", line, 1)
+        dateList = re.split(r":   ", line, 1)
         try:
             date = dateList[1]
             date = date[0 : len(date) - 1]
             dateFound = True
-        except:
-            print("Could not parse dateList = '%s'" % (line))
-    # The Fossil-IDs are ignored:
-    elif line.startswith("    Fossil-ID:") or line.startswith("    [[SVN:"):
-        continue
-    # The svn-id lines are ignored
-    elif "    git-svn-id:" in line:
-        continue
-    # The sign off line is ignored too
-    elif "Signed-off-by" in line:
+        except Exception as e:
+            print(f"Could not parse dateList = '{line}'. Error: {e!s}")
+    # The Fossil-IDs, svn-id, ad sign off lines are ignored:
+    elif (
+        line.startswith(("    Fossil-ID:", "    [[SVN:"))
+        or "    git-svn-id:" in line
+        or "Signed-off-by" in line
+    ):
         continue
     # Extract the actual commit message for this commit
     elif authorFound & dateFound & messageFound is False:
@@ -98,11 +96,11 @@ for line in fin:
         elif len(line) == 4:
             messageFound = True
         elif len(message) == 0:
-            message = message + line.strip()
+            message += line.strip()
         else:
             message = message + " " + line.strip()
     # If this line is hit all of the files have been stored for this commit
-    elif re.search("files? changed", line):
+    elif re.search(r"files? changed", line):
         filesFound = True
         continue
     # Collect the files for this commit. FIXME: Still need to add +/- to files

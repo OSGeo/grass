@@ -44,7 +44,7 @@
 # %end
 
 """
-Module to run test map window (BufferedWidnow) and map display (MapFrame).
+Module to run test map window (BufferedMapWindow) and map display (MapFrame).
 
 @author Vaclav Petras  <wenzeslaus gmail.com>
 """
@@ -356,7 +356,7 @@ def main():
         tester.testMapWindowRlisetup(map_)
     else:
         # TODO: this should not happen but happens
-        gs.fatal(_("Unknown value %s of test parameter." % test))
+        gs.fatal(_("Unknown value %s of test parameter.") % test)
 
     app.MainLoop()
 

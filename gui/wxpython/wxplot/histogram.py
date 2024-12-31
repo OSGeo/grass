@@ -97,10 +97,7 @@ class HistogramPlotFrame(BasePlotFrame):
         create a list of cell value and count/percent/area pairs. This is passed to
         plot to create a line graph of the histogram.
         """
-        try:
-            self.SetCursor(StockCursor(wx.CURSOR_ARROW))
-        except:
-            pass
+        self.SetCursor(StockCursor(wx.CURSOR_ARROW))
 
         self.SetGraphStyle()
         wx.BeginBusyCursor()
@@ -243,8 +240,7 @@ class HistogramPlotFrame(BasePlotFrame):
 
         if len(self.plotlist) > 0:
             return self.plotlist
-        else:
-            return None
+        return None
 
     def Update(self):
         """Update histogram after changing options"""

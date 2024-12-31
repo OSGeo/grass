@@ -216,7 +216,7 @@ def import_data(path, areas_name, areas_with_space_in_between, env):
         "v.db.connect",
         map=areas_with_space_in_between,
         table=areas_with_space_in_between,
-        flags="o",
+        overwrite=True,
         env=env,
     )
 

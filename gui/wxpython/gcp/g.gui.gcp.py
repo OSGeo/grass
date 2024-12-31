@@ -29,7 +29,7 @@
 # %end
 
 """
-Module to run GCP management tool as stadalone application.
+Module to run GCP management tool as standalone application.
 
 @author Vaclav Petras  <wenzeslaus gmail.com> (standalone module)
 """
@@ -65,7 +65,7 @@ def main():
 
     app = wx.App()
 
-    wizard = GCPWizard(parent=None, giface=StandaloneGrassInterface())
+    GCPWizard(parent=None, giface=StandaloneGrassInterface())
 
     app.MainLoop()
 

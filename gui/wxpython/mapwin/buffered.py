@@ -28,6 +28,8 @@ import sys
 
 import wx
 
+from operator import itemgetter
+
 from grass.pydispatch.signal import Signal
 
 from core.globalvar import wxPythonPhoenix
@@ -342,10 +344,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         # TODO: find better solution
         if not pen:
-            if pdctype == "polyline":
-                pen = self.polypen
-            else:
-                pen = self.pen
+            pen = self.polypen if pdctype == "polyline" else self.pen
 
         if img and pdctype == "image":
             # self.imagedict[img]['coords'] = coords
@@ -462,10 +461,10 @@ class BufferedMapWindow(MapWindowBase, Window):
                     brush = wx.TRANSPARENT_BRUSH
                 pdc.SetBrush(brush)
                 pdc.DrawPolygon(points=coords)
-                x = min(coords, key=lambda x: x[0])[0]
-                y = min(coords, key=lambda x: x[1])[1]
-                w = max(coords, key=lambda x: x[0])[0] - x
-                h = max(coords, key=lambda x: x[1])[1] - y
+                x = min(coords, key=itemgetter(0))[0]
+                y = min(coords, key=itemgetter(1))[1]
+                w = max(coords, key=itemgetter(0))[0] - x
+                h = max(coords, key=itemgetter(1))[1] - y
                 pdc.SetIdBounds(drawid, Rect(x, y, w, h))
 
         elif pdctype == "circle":  # draw circle
@@ -499,10 +498,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         elif pdctype == "text":  # draw text on top of map
             if not img["active"]:
                 return  # only draw active text
-            if "rotation" in img:
-                rotation = float(img["rotation"])
-            else:
-                rotation = 0.0
+            rotation = float(img["rotation"]) if "rotation" in img else 0.0
             w, h = self.GetFullTextExtent(img["text"])[0:2]
             pdc.SetFont(img["font"])
             pdc.SetTextForeground(img["color"])
@@ -534,10 +530,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         :return: bbox of rotated text bbox (wx.Rect)
         :return: relCoords are text coord inside bbox
         """
-        if "rotation" in textinfo:
-            rotation = float(textinfo["rotation"])
-        else:
-            rotation = 0.0
+        rotation = float(textinfo["rotation"]) if "rotation" in textinfo else 0.0
 
         coords = textinfo["coords"]
         bbox = Rect(coords[0], coords[1], 0, 0)
@@ -558,8 +551,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             bbox[2], bbox[3] = w, h
             if relcoords:
                 return coords, bbox, relCoords
-            else:
-                return coords, bbox
+            return coords, bbox
 
         boxh = math.fabs(math.sin(math.radians(rotation)) * w) + h
         boxw = math.fabs(math.cos(math.radians(rotation)) * w) + h
@@ -578,8 +570,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         bbox.Inflate(h, h)
         if relcoords:
             return coords, bbox, relCoords
-        else:
-            return coords, bbox
+        return coords, bbox
 
     def OnPaint(self, event):
         """Draw PseudoDC's to buffered paint DC
@@ -1469,10 +1460,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         wheel = event.GetWheelRotation()
         Debug.msg(5, "BufferedWindow.MouseAction(): wheel=%d" % wheel)
 
-        if wheel > 0:
-            zoomtype = 1
-        else:
-            zoomtype = -1
+        zoomtype = 1 if wheel > 0 else -1
         if UserSettings.Get(group="display", key="scrollDirection", subkey="selection"):
             zoomtype *= -1
         # zoom 1/2 of the screen (TODO: settings)
@@ -1504,10 +1492,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         previous = self.mouse["begin"]
         move = (current[0] - previous[0], current[1] - previous[1])
 
-        if self.digit:
-            digitToolbar = self.toolbar
-        else:
-            digitToolbar = None
+        digitToolbar = self.toolbar if self.digit else None
 
         # dragging or drawing box with left button
         if self.mouse["use"] == "pan" or event.MiddleIsDown():
@@ -2117,7 +2102,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         self.UpdateMap(render=False)
 
     def SetRegion(self, zoomOnly=True):
-        """Set display extents/compulational region from named region
+        """Set display extents/computational region from named region
         file.
 
         :param zoomOnly: zoom to named region only (computational region is not saved)
@@ -2125,7 +2110,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         if zoomOnly:
             label = _("Zoom to saved region extents")
         else:
-            label = _("Set compulational region from named region")
+            label = _("Set computational region from named region")
         dlg = SavedRegion(parent=self, title=label, loadsave="load")
 
         if dlg.ShowModal() == wx.ID_CANCEL or not dlg.GetName():
@@ -2159,7 +2144,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         self.UpdateMap()
 
     def SaveRegion(self, display=True):
-        """Save display extents/compulational region to named region
+        """Save display extents/computational region to named region
         file.
 
         :param display: True for display extends otherwise computational region

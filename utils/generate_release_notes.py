@@ -97,9 +97,7 @@ def print_category(category, changes, file=None):
         # Relies on author being specified as username.
         if " " in author:
             author = author.split(" ", maxsplit=1)[0]
-        if author.startswith("@"):
-            # We expect that to be always the case, but we test anyway.
-            author = author[1:]
+        author = author.removeprefix("@")
         if author in known_bot_names or author.endswith("[bot]"):
             hidden.append(item)
         elif len(visible) > max_section_length:
@@ -133,7 +131,7 @@ def binder_badge(tag):
 
 def print_support(file=None):
     url = "https://opencollective.com/grass/tiers/supporter/all.json"
-    response = requests.get(url=url)
+    response = requests.get(url=url, timeout=7)
     data = response.json()
     if data:
         print_section_heading_3("Monthly Financial Supporters", file=file)
@@ -229,7 +227,7 @@ def notes_from_gh_api(start_tag, end_tag, branch, categories, exclude):
     raw_changes = lines[start_whats_changed + 1 : end_whats_changed]
     changes = []
     for change in raw_changes:
-        if change.startswith("* ") or change.startswith("- "):
+        if change.startswith(("* ", "- ")):
             changes.append(change[2:])
         else:
             changes.append(change)
@@ -265,7 +263,8 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
     ).stdout
     commits = yaml.safe_load(text)
     if not commits:
-        raise RuntimeError("No commits retrieved from git log (try different tags)")
+        msg = "No commits retrieved from git log (try different tags)"
+        raise RuntimeError(msg)
 
     svn_name_by_git_author = csv_to_dict(
         CONFIG_DIRECTORY / "svn_name_git_author.csv",

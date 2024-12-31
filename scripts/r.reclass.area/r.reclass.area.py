@@ -152,10 +152,7 @@ def reclass(inf, outf, lim, clump, diag, les):
         if len(f) < 5:
             continue
         hectares = float(f[4]) * 0.0001
-        if lesser:
-            test = hectares <= limit
-        else:
-            test = hectares >= limit
+        test = hectares <= limit if lesser else hectares >= limit
         if test:
             rules += "%s = %s %s\n" % (f[0], f[2], f[3])
     if rules:
@@ -184,7 +181,7 @@ def rmarea(infile, outfile, thresh, coef):
 
     # transform user input from hectares to meters because currently v.clean
     # rmarea accept only meters as threshold
-    thresh = thresh * 10000.0
+    thresh *= 10000.0
     vectfile = "%s_vect_%s" % (infile.split("@")[0], outfile)
     TMPRAST.append(vectfile)
     gs.run_command("r.to.vect", input=infile, output=vectfile, type="area")

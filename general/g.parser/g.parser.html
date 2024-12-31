@@ -75,8 +75,8 @@ Typical header definitions are as follows:
 # %end
 </pre></div>
 
-With <tt>{NULL}</tt> it is possible to suppress a predefined <tt>description</tt>
-or <tt>label</tt>.
+With <code>{NULL}</code> it is possible to suppress a predefined <code>description</code>
+or <code>label</code>.
 
 <p>
 The parsers allows using predefined <em>standardized options and
@@ -150,9 +150,9 @@ done
 </pre></div>
 
 <p>
-A "<tt>guisection</tt>" field may be added to each option and flag to
+A "<code>guisection</code>" field may be added to each option and flag to
 specify that the options should appear in multiple tabs in the
-auto-generated GUI.  Any options without a <tt>guisection</tt> field
+auto-generated GUI.  Any options without a <code>guisection</code> field
 go into the "Required" or "Options" tab.  For example:
 <div class="code"><pre>
 # % guisection: tabname
@@ -160,23 +160,23 @@ go into the "Required" or "Options" tab.  For example:
 would put that option in a tab named <i>tabname</i>.
 
 <p>
-A "<tt>key_desc</tt>" field may be added to each option to specify the text that
+A "<code>key_desc</code>" field may be added to each option to specify the text that
 appears in the module's usage help section. For example:
 <div class="code"><pre>
 # % key_desc: filename
 </pre></div>
 added to an <b>input</b> option would create the usage summary
-<tt>[input=filename]</tt>.
+<code>[input=filename]</code>.
 
 <p>
 If a script is run with <b>--o</b>, the parser will
-set <tt>GRASS_OVERWRITE=1</tt>, which has the same effect as passing
+set <code>GRASS_OVERWRITE=1</code>, which has the same effect as passing
 <b>--o</b> to every module which is run from the script. Similarly, passing
-<b>--q</b> or <b>--v</b> will set <tt>GRASS_VERBOSE</tt> to 0 or 3 respectively,
+<b>--q</b> or <b>--v</b> will set <code>GRASS_VERBOSE</code> to 0 or 3 respectively,
 which has the same effect as passing <b>--q</b> or <b>--v</b> to every module which
 is run from the script.  Rather than checking whether <b>--o</b>, <b>--q</b> or <b>--v</b>
-were used, you should be checking <tt>GRASS_OVERWRITE</tt> and/or
-<tt>GRASS_VERBOSE</tt> instead. If those variables are set, the script
+were used, you should be checking <code>GRASS_OVERWRITE</code> and/or
+<code>GRASS_VERBOSE</code> instead. If those variables are set, the script
 should behave the same way regardless of whether they were set
 by <b>--o</b>, <b>--q</b> or <b>--v</b> being passed to the script or
 set by other means.
@@ -191,13 +191,13 @@ For backwards compatibility reasons, the header definitions can use
 
 Marking an option as "required" will result in the parser raising a
 fatal error if the option is not given, with one exception: if a flag
-has the <tt>suppress_required</tt> option, and that flag is given, all
+has the <code>suppress_required</code> option, and that flag is given, all
 requirements are ignored. This feature is intended for flags which
 abandon "normal operation" for the module; e.g. <em>r.in.gdal</em>'s
 <b>-f</b> flag (list supported formats) uses it.
 <br>
 But in general, an option cannot be marked as required if it is
-optional except for the special case of a <tt>suppress_required</tt> flag.
+optional except for the special case of a <code>suppress_required</code> flag.
 The parser has the ability to specify option relationships.
 
 <p>
@@ -219,15 +219,15 @@ options and flags can be specified (a leading "<b>-</b>" denotes a flag).
 The available rule types are:
 
 <ul>
-<li> <tt>exclusive</tt>: at most one of the options may be given</li>
-<li> <tt>required</tt>: at least one of the options must be given</li>
-<li> <tt>requires</tt>: if the first option is given, at least one of the
+<li> <code>exclusive</code>: at most one of the options may be given</li>
+<li> <code>required</code>: at least one of the options must be given</li>
+<li> <code>requires</code>: if the first option is given, at least one of the
       subsequent options must also be given</li>
-<li> <tt>requires_all</tt>: if the first option is given, all of the
+<li> <code>requires_all</code>: if the first option is given, all of the
       subsequent options must also be given</li>
-<li> <tt>excludes</tt>: if the first option is given, none of the
+<li> <code>excludes</code>: if the first option is given, none of the
       subsequent options may be given</li>
-<li> <tt>collective</tt>: all or nothing; if any option is given, all
+<li> <code>collective</code>: all or nothing; if any option is given, all
       must be given</li>
 </ul>
 
@@ -305,7 +305,7 @@ v.in.db --rst-description
 </pre></div>
 
 reStructuredText is sometimes abbreviated as reST, ReST, or RST.
-The commonly used file extension is <tt>.rst</tt>.
+The commonly used file extension is <code>.rst</code>.
 Don't be confused with Representational State Transfer (REST) technology.
 
 <h2>TRANSLATION</h2>
@@ -334,7 +334,7 @@ without parameters of flags:
 
 <p>
 To run properly, the script needs to be copied into a directory listed
-in <tt>$GRASS_ADDON_PATH</tt> environmental variable with the
+in <code>$GRASS_ADDON_PATH</code> environmental variable with the
 executable flag being set.
 
 <p>
@@ -523,7 +523,7 @@ if ( !$ENV{'GISBASE'} ) {
 
 if( $ARGV[0] ne '@ARGS_PARSED@' ){
     my $arg = "";
-    for (my $i=0; $i < @ARGV;$i++) {
+    for (my $i=0; $i &lt; @ARGV;$i++) {
         $arg .= " $ARGV[$i] ";
     }
     system("$ENV{GISBASE}/bin/g.parser $0 $arg");
@@ -645,7 +645,7 @@ v.what.rast --script
 # % multiple: no
 # % key_desc: sql_query
 # % label: WHERE conditions of SQL statement without 'where' keyword
-# % description: Example: income < 1000 and population >= 10000
+# % description: Example: income &lt; 1000 and population &gt;= 10000
 # %end
 
 import sys
@@ -673,7 +673,7 @@ if __name__ == "__main__":
 <p>
 Overview table: <a href="parser_standard_options.html">Parser standard options</a>
 <p>
-<a href="http://trac.osgeo.org/grass/wiki/Submitting/Python">Submitting rules for Python</a>
+<a href="https://github.com/OSGeo/grass/blob/main/doc/development/style_guide.md#developing-python-scripts">Style Guide: Developing Python scripts</a>
 
 <p>
 Related Wiki pages:

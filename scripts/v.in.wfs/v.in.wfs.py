@@ -127,7 +127,7 @@ def main():
     wfs_url += request_base
 
     if options["name"]:
-        if tuple([int(x) for x in version_num.split(".")]) >= (2, 0, 0):
+        if tuple(int(x) for x in version_num.split(".")) >= (2, 0, 0):
             wfs_url += "&TYPENAMES=" + options["name"]
         else:
             wfs_url += "&TYPENAME=" + options["name"]
@@ -154,12 +154,10 @@ def main():
     if flags["l"]:
         wfs_url = options["url"] + "REQUEST=GetCapabilities&SERVICE=WFS"
 
-    print(wfs_url)
-
     tmp = grass.tempfile()
     tmpxml = tmp + ".xml"
 
-    grass.debug(wfs_url)
+    grass.debug("The request URL: {wfs_url}")
 
     # Set user and password if given
     if options["username"] and options["password"]:
@@ -229,7 +227,14 @@ def main():
             grass.run_command("v.in.ogr", flags="o", input=tmpxml, output=out)
         grass.message(_("Vector map <%s> imported from WFS.") % out)
     except Exception:
+        import xml.etree.ElementTree as ET
+
         grass.message(_("WFS import failed"))
+
+        root = ET.parse(tmpxml).getroot()
+        if "ServiceExceptionReport" in root.tag:
+            se = root.find(root.tag[:-6])  # strip "Report" from the tag
+            grass.message(se.text.strip())
     finally:
         try_remove(tmpxml)
 

@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 import shutil
 import sys
+from unittest import expectedFailure
+import warnings
 
 
 def ensure_dir(directory):
@@ -76,7 +78,21 @@ def safe_repr(obj, short=False):
     try:
         result = repr(obj)
     except Exception:
-        result = object.__repr__(obj)
+        result = object.__repr__(obj)  # noqa: PLC2801
     if not short or len(result) < _MAX_LENGTH:
         return result
     return result[:_MAX_LENGTH] + " [truncated]..."
+
+
+def xfail_windows(test_item):
+    """Marks a test as an expected failure or error only on Windows
+    Equivalent to applying @unittest.expectedFailure only when running
+    on Windows.
+    """
+    if not sys.platform.startswith("win"):
+        return lambda func: func
+    warnings.warn(
+        "Once the test is fixed and passing, remove the @xfail_windows decorator",
+        stacklevel=2,
+    )
+    return expectedFailure(test_item)

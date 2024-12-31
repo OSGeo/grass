@@ -123,7 +123,6 @@ class SwipeMapToolbar(BaseToolbar):
         """Set currently selected map.
         Unused, needed because of DoubleMapPanel API.
         """
-        pass
 
 
 class SwipeMainToolbar(BaseToolbar):

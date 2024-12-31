@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 """
 
 import datetime
+from operator import itemgetter
 
 import grass.script as gs
 import grass.temporal as tgis
@@ -195,9 +196,9 @@ class TemporalManager:
         # by a temporary dataset, I don't know how it would work with point
         # data
         if self.temporalType == TemporalType.ABSOLUTE:
-            timestamps = sorted(list(labelListSet), key=lambda x: x[0])
+            timestamps = sorted(list(labelListSet), key=itemgetter(0))
         else:
-            timestamps = sorted(list(labelListSet), key=lambda x: x[0])
+            timestamps = sorted(list(labelListSet), key=itemgetter(0))
 
         newMapLists = []
         for mapList, labelList in zip(mapLists, labelLists):
@@ -258,10 +259,8 @@ class TemporalManager:
 
         elif self.temporalType == TemporalType.RELATIVE:
             unit = self.timeseriesInfo[timeseries]["unit"]
-            if self.granularityMode == GranularityMode.ONE_UNIT:
-                gran = 1
-            else:
-                gran = granNum
+            gran = 1 if self.granularityMode == GranularityMode.ONE_UNIT else granNum
+
         # start sampling - now it can be used for both interval and point data
         # after instance, there can be a gap or an interval
         # if it is a gap we remove it and put there the previous instance instead
@@ -288,26 +287,22 @@ class TemporalManager:
                     followsPoint = True
                     lastTimeseries = series
                     end = None
+                elif series:
+                    # map exists, stop point mode
+                    listOfMaps.append(series)
+                    afterPoint = False
+                elif afterPoint:
+                    # check point mode
+                    if followsPoint:
+                        # skip this one, already there
+                        followsPoint = False
+                        continue
+                    # append the last one (of point time)
+                    listOfMaps.append(lastTimeseries)
+                    end = None
                 else:
-                    end = end
-                    # interval data
-                    if series:
-                        # map exists, stop point mode
-                        listOfMaps.append(series)
-                        afterPoint = False
-                    elif afterPoint:
-                        # check point mode
-                        if followsPoint:
-                            # skip this one, already there
-                            followsPoint = False
-                            continue
-                        else:
-                            # append the last one (of point time)
-                            listOfMaps.append(lastTimeseries)
-                            end = None
-                    else:
-                        # append series which is None
-                        listOfMaps.append(series)
+                    # append series which is None
+                    listOfMaps.append(series)
                 timeLabels.append((start, end, unit))
 
         return timeLabels, listOfMaps
@@ -345,7 +340,7 @@ class TemporalManager:
         maps = sp.get_registered_maps_as_objects()
 
         if not sp.check_temporal_topology(maps):
-            raise GException(_("Topology of Space time dataset %s is invalid." % id))
+            raise GException(_("Topology of Space time dataset %s is invalid.") % id)
 
         timeseriesList.append(id)
         infoDict[id] = {}

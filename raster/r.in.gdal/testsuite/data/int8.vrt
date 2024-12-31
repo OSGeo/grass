@@ -1,0 +1,20 @@
+<VRTDataset rasterXSize="24" rasterYSize="24">
+  <SRS dataAxisToSRSAxisMapping="1,2">PROJCS["NAD83(HARN) / North Carolina",GEOGCS["NAD83(HARN)",DATUM["NAD83_High_Accuracy_Reference_Network",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6152"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4152"]],PROJECTION["Lambert_Conformal_Conic_2SP"],PARAMETER["latitude_of_origin",33.75],PARAMETER["central_meridian",-79],PARAMETER["standard_parallel_1",36.1666666666667],PARAMETER["standard_parallel_2",34.3333333333333],PARAMETER["false_easting",609601.22],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","3358"]]</SRS>
+  <GeoTransform>  0.0000000000000000e+00,  1.0000000000000000e+00,  0.0000000000000000e+00,  2.4000000000000000e+01,  0.0000000000000000e+00, -1.0000000000000000e+00</GeoTransform>
+  <Metadata>
+    <MDI key="AREA_OR_POINT">Area</MDI>
+  </Metadata>
+  <Metadata domain="IMAGE_STRUCTURE">
+    <MDI key="INTERLEAVE">BAND</MDI>
+  </Metadata>
+  <VRTRasterBand dataType="Int8" band="1">
+    <ColorInterp>Gray</ColorInterp>
+    <SimpleSource>
+      <SourceFilename relativeToVRT="1">./int8.tif</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="24" RasterYSize="24" DataType="Int8" BlockXSize="24" BlockYSize="24" />
+      <SrcRect xOff="0" yOff="0" xSize="24" ySize="24" />
+      <DstRect xOff="0" yOff="0" xSize="24" ySize="24" />
+    </SimpleSource>
+  </VRTRasterBand>
+</VRTDataset>

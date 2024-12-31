@@ -305,8 +305,8 @@ int main(int argc, char *argv[])
                     "threads setting."));
     nprocs = 1;
 #endif
-    if (nprocs > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
-        G_warning(_("Parallel processing disabled due to active MASK."));
+    if (nprocs > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
         nprocs = 1;
     }
     radians_to_degrees = 180.0 / M_PI;
@@ -1042,7 +1042,7 @@ int main(int argc, char *argv[])
 #pragma omp atomic update
                 computed++;
             } /* end row loop */
-        }     /* end parallel region */
+        } /* end parallel region */
 
         /* write the computed buffer chunk to disk */
         written = end;

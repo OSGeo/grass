@@ -95,6 +95,7 @@ int main(int argc, char **argv)
     struct Flag *conv;
     int i;
     int *sdimp, longdim, r_out;
+    size_t len;
 
     G_gisinit(argv[0]);
 
@@ -144,7 +145,10 @@ int main(int argc, char **argv)
     parse_command(viewopts, vfiles, &numviews, &frames);
 
     /* output file */
-    strcpy(outfile, out->answer);
+    len = G_strlcpy(outfile, out->answer, sizeof(outfile));
+    if (len >= sizeof(outfile)) {
+        G_fatal_error(_("Name <%s> is too long"), out->answer);
+    }
 
     r_out = 0;
     if (conv->answer)

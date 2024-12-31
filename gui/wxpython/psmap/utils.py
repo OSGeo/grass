@@ -16,8 +16,15 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
+from __future__ import annotations
+
+from math import ceil, cos, floor, fmod, radians, sin
+from typing import overload
+
 import wx
-from math import ceil, floor, sin, cos, pi
+from core.gcmd import GError, RunCommand
+
+import grass.script as gs
 
 try:
     from PIL import Image as PILImage  # noqa
@@ -25,9 +32,6 @@ try:
     havePILImage = True
 except ImportError:
     havePILImage = False
-
-import grass.script as gs
-from core.gcmd import RunCommand, GError
 
 
 class Rect2D(wx.Rect2D):
@@ -93,10 +97,7 @@ class UnitConversion:
 
     def __init__(self, parent=None):
         self.parent = parent
-        if self.parent:
-            ppi = wx.ClientDC(self.parent).GetPPI()
-        else:
-            ppi = (72, 72)
+        ppi = wx.ClientDC(self.parent).GetPPI() if self.parent else (72, 72)
         self._unitsPage = {
             "inch": {"val": 1.0, "tr": _("inch")},
             "point": {"val": 72.0, "tr": _("point")},
@@ -148,7 +149,17 @@ class UnitConversion:
         return float(value) / self._units[fromUnit]["val"] * self._units[toUnit]["val"]
 
 
-def convertRGB(rgb):
+@overload
+def convertRGB(rgb: wx.Colour) -> str:
+    pass
+
+
+@overload
+def convertRGB(rgb: str) -> wx.Colour | None:
+    pass
+
+
+def convertRGB(rgb: wx.Colour | str) -> str | wx.Colour | None:
     """Converts wx.Colour(r,g,b,a) to string 'r:g:b' or named color,
     or named color/r:g:b string to wx.Colour, depending on input"""
     # transform a wx.Colour tuple into an r:g:b string
@@ -162,17 +173,13 @@ def convertRGB(rgb):
                 return name
         return str(rgb.Red()) + ":" + str(rgb.Green()) + ":" + str(rgb.Blue())
     # transform a GRASS named color or an r:g:b string into a wx.Colour tuple
-    else:
-        color = (
-            int(gs.parse_color(rgb)[0] * 255),
-            int(gs.parse_color(rgb)[1] * 255),
-            int(gs.parse_color(rgb)[2] * 255),
-        )
-        color = wx.Colour(*color)
-        if color.IsOk():
-            return color
-        else:
-            return None
+    parsed_color = gs.parse_color(rgb)
+    if parsed_color is None:
+        return None
+    color = wx.Colour(*tuple(int(x * 255) for x in parsed_color))
+    if color.IsOk():
+        return color
+    return None
 
 
 def PaperMapCoordinates(mapInstr, x, y, paperToMap=True, env=None):
@@ -198,18 +205,16 @@ def PaperMapCoordinates(mapInstr, x, y, paperToMap=True, env=None):
 
         if projInfo()["proj"] == "ll":
             return e, n
-        else:
-            return int(e), int(n)
+        return int(e), int(n)
 
-    else:
-        diffEW = x - region["w"]
-        diffNS = region["n"] - y
-        diffX = mapWidthPaper * diffEW / mapWidthEN
-        diffY = mapHeightPaper * diffNS / mapHeightEN
-        xPaper = mapInstr["rect"].GetX() + diffX
-        yPaper = mapInstr["rect"].GetY() + diffY
+    diffEW = x - region["w"]
+    diffNS = region["n"] - y
+    diffX = mapWidthPaper * diffEW / mapWidthEN
+    diffY = mapHeightPaper * diffNS / mapHeightEN
+    xPaper = mapInstr["rect"].GetX() + diffX
+    yPaper = mapInstr["rect"].GetY() + diffY
 
-        return xPaper, yPaper
+    return xPaper, yPaper
 
 
 def AutoAdjust(self, scaleType, rect, env, map=None, mapType=None, region=None):
@@ -327,10 +332,7 @@ def ComputeSetRegion(self, mapDict, env):
         centerN = mapDict["center"][1]
 
         raster = self.instruction.FindInstructionByType("raster")
-        if raster:
-            rasterId = raster.id
-        else:
-            rasterId = None
+        rasterId = raster.id if raster else None
 
         if rasterId:
             env["GRASS_REGION"] = gs.region_env(
@@ -403,27 +405,30 @@ def getRasterType(map):
     file = gs.find_file(name=map, element="cell")
     if file.get("file"):
         return gs.raster_info(map)["datatype"]
-    else:
-        return None
+    return None
 
 
-def BBoxAfterRotation(w, h, angle):
-    """Compute bounding box or rotated rectangle
+def BBoxAfterRotation(w: float, h: float, angle: float) -> tuple[int, int]:
+    """Compute the bounding box of a rotated rectangle
 
     :param w: rectangle width
     :param h: rectangle height
     :param angle: angle (0, 360) in degrees
     """
-    angleRad = angle / 180.0 * pi
-    ct = cos(angleRad)
-    st = sin(angleRad)
 
-    hct = h * ct
-    wct = w * ct
-    hst = h * st
-    wst = w * st
+    angle = fmod(angle, 360)
+    angleRad: float = radians(angle)
+    ct: float = cos(angleRad)
+    st: float = sin(angleRad)
+
+    hct: float = h * ct
+    wct: float = w * ct
+    hst: float = h * st
+    wst: float = w * st
     y = x = 0
 
+    if angle == 0:
+        return (ceil(w), ceil(h))
     if 0 < angle <= 90:
         y_min = y
         y_max = y + hct + wst
@@ -444,7 +449,10 @@ def BBoxAfterRotation(w, h, angle):
         y_max = y + hct
         x_min = x
         x_max = x + wct - hst
+    else:
+        msg = "The angle argument should be between 0 and 360 degrees"
+        raise ValueError(msg)
 
-    width = int(ceil(abs(x_max) + abs(x_min)))
-    height = int(ceil(abs(y_max) + abs(y_min)))
-    return width, height
+    width: int = ceil(abs(x_max) + abs(x_min))
+    height: int = ceil(abs(y_max) + abs(y_min))
+    return (width, height)

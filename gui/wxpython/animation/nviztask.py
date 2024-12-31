@@ -14,7 +14,7 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 from core.workspace import ProcessWorkspaceFile
 from core.gcmd import RunCommand, GException
@@ -33,7 +33,7 @@ class NvizTask:
         self.task = gtask.grassTask("m.nviz.image")
         self.filename = filename
         try:
-            gxwXml = ProcessWorkspaceFile(etree.parse(self.filename))
+            gxwXml = ProcessWorkspaceFile(ET.parse(self.filename))
         except Exception:
             raise GException(
                 _(

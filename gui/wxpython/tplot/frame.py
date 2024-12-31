@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 """
 import os
 from itertools import cycle
+from pathlib import Path
 import numpy as np
 
 import wx
@@ -68,6 +69,7 @@ import wx.lib.filebrowsebutton as filebrowse
 
 from gui_core.widgets import GNotebook
 from gui_core.wrap import CheckBox, TextCtrl, Button, StaticText
+from operator import add
 
 ALPHA = 0.5
 COLORS = ["b", "g", "r", "c", "m", "y", "k"]
@@ -83,7 +85,7 @@ def check_version(*version) -> bool:
             versionInstalled.append(v)
         except ValueError:
             versionInstalled.append(0)
-    return not versionInstalled < list(version)
+    return versionInstalled >= list(version)
 
 
 def findBetween(s, first, last):
@@ -140,7 +142,10 @@ class TplotFrame(wx.Frame):
         if self._giface.GetMapDisplay():
             self.coorval.OnClose()
             self.cats.OnClose()
-        self.__del__()
+
+        # __del__() and del keyword seem to have differences,
+        # how can self.Destroy(), called after del, work otherwise
+        self.__del__()  # noqa: PLC2801, C2801
         self.Destroy()
 
     def _layout(self):
@@ -207,7 +212,7 @@ class TplotFrame(wx.Frame):
             self.coorval = gselect.CoordinatesSelect(
                 parent=self.controlPanelRaster, giface=self._giface
             )
-        except:
+        except NotImplementedError:
             self.coorval = TextCtrl(
                 parent=self.controlPanelRaster,
                 id=wx.ID_ANY,
@@ -276,7 +281,7 @@ class TplotFrame(wx.Frame):
             self.cats = gselect.VectorCategorySelect(
                 parent=self.controlPanelVector, giface=self._giface
             )
-        except:
+        except NotImplementedError:
             self.cats = TextCtrl(
                 parent=self.controlPanelVector,
                 id=wx.ID_ANY,
@@ -368,7 +373,7 @@ class TplotFrame(wx.Frame):
             labelText="",
             dialogTitle=_("CVS path"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_SAVE,
         )
         self.headerLabel = StaticText(
@@ -666,8 +671,8 @@ class TplotFrame(wx.Frame):
                             showTraceback=False,
                             message=_(
                                 "No connection between vector map {vmap} "
-                                "and layer {la}".format(vmap=row["name"], la=lay)
-                            ),
+                                "and layer {la}"
+                            ).format(vmap=row["name"], la=lay),
                         )
                         return
                     vals = gs.vector_db_select(
@@ -737,7 +742,7 @@ class TplotFrame(wx.Frame):
         if self.drawX != "":
             self.axes2d.set_xlabel(self.drawX)
         elif self.temporalType == "absolute":
-            self.axes2d.set_xlabel(_("Temporal resolution: %s" % x))
+            self.axes2d.set_xlabel(_("Temporal resolution: %s") % x)
         else:
             self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
         if self.drawY != "":
@@ -751,10 +756,7 @@ class TplotFrame(wx.Frame):
         """Used to write CSV file of plotted data"""
         import csv
 
-        if isinstance(y[0], list):
-            zipped = list(zip(x, *y))
-        else:
-            zipped = list(zip(x, y))
+        zipped = list(zip(x, *y)) if isinstance(y[0], list) else list(zip(x, y))
         with open(self.csvpath, "w", newline="") as fi:
             writer = csv.writer(fi)
             if self.header:
@@ -914,8 +916,8 @@ class TplotFrame(wx.Frame):
                     message=_(
                         "Problem getting data from vector temporal"
                         " dataset. Empty list of values for cat "
-                        "{ca}.".format(ca=name_cat[1].replace("cat", ""))
-                    ),
+                        "{ca}."
+                    ).format(ca=name_cat[1].replace("cat", "")),
                 )
                 continue
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata, datasetName=name)
@@ -1004,9 +1006,8 @@ class TplotFrame(wx.Frame):
         if os.path.exists(self.csvpath) and not self.overwrite:
             dlg = wx.MessageDialog(
                 self,
-                _(
-                    "{pa} already exists, do you want "
-                    "to overwrite?".format(pa=self.csvpath)
+                _("{pa} already exists, do you want to overwrite?").format(
+                    pa=self.csvpath
                 ),
                 _("File exists"),
                 wx.OK | wx.CANCEL | wx.ICON_QUESTION,
@@ -1028,10 +1029,10 @@ class TplotFrame(wx.Frame):
 
         try:
             getcoors = self.coorval.coordsField.GetValue()
-        except:
+        except AttributeError:
             try:
                 getcoors = self.coorval.GetValue()
-            except:
+            except AttributeError:
                 getcoors = None
         if getcoors and getcoors != "":
             try:
@@ -1150,16 +1151,11 @@ class TplotFrame(wx.Frame):
         ]
         # flatten this list
         if allDatasets:
-            allDatasets = reduce(
-                lambda x, y: x + y, reduce(lambda x, y: x + y, allDatasets)
-            )
+            allDatasets = reduce(add, reduce(add, allDatasets))
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
-            allDatasets = [
-                i
-                for i in sorted(
-                    allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
-                )
-            ]
+            allDatasets = sorted(
+                allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
+            )
 
         for dataset in datasets:
             errorMsg = _("Space time dataset <%s> not found.") % dataset
@@ -1179,10 +1175,10 @@ class TplotFrame(wx.Frame):
 
             if len(indices) == 0:
                 raise GException(errorMsg)
-            elif len(indices) >= 2:
+            if len(indices) >= 2:
                 dlg = wx.SingleChoiceDialog(
                     self,
-                    message=_("Please specify the space time dataset <%s>." % dataset),
+                    message=_("Please specify the space time dataset <%s>.") % dataset,
                     caption=_("Ambiguous dataset name"),
                     choices=[
                         (
@@ -1261,7 +1257,7 @@ class TplotFrame(wx.Frame):
                 return
             try:
                 self.coorval.coordsField.SetValue(",".join(coors))
-            except:
+            except AttributeError:
                 self.coorval.SetValue(",".join(coors))
         if self.datasetsV:
             vdatas = ",".join(f"{x[0]}@{x[1]}" for x in self.datasetsV)
@@ -1365,7 +1361,7 @@ def InfoFormat(timeData, values):
             text.append(_("Space time 3D raster dataset: %s") % key)
 
         text.extend(
-            (_("Value for {date} is {val}".format(date=val[0], val=val[1])), "\n")
+            (_("Value for {date} is {val}").format(date=val[0], val=val[1]), "\n")
         )
     text.append(_("Press Del to dismiss."))
 
@@ -1377,7 +1373,7 @@ class DataCursor:
     matplotlib artist when it is selected.
 
 
-    Source: http://stackoverflow.com/questions/4652439/
+    Source: https://stackoverflow.com/questions/4652439/
             is-there-a-matplotlib-equivalent-of-matlabs-datacursormode/4674445
     """
 
@@ -1410,8 +1406,8 @@ class DataCursor:
             artists = [artists]
         self.artists = artists
         self.convert = convert
-        self.axes = tuple(set(art.axes for art in self.artists))
-        self.figures = tuple(set(ax.figure for ax in self.axes))
+        self.axes = tuple({art.axes for art in self.artists})
+        self.figures = tuple({ax.figure for ax in self.axes})
 
         self.annotations = {}
         for ax in self.axes:
@@ -1452,7 +1448,7 @@ class DataCursor:
         """Intended to be called through "mpl_connect"."""
         # Rather than trying to interpolate, just display the clicked coords
         # This will only be called if it's within "tolerance", anyway.
-        x, y = event.mouseevent.xdata, event.mouseevent.ydata
+        x = event.mouseevent.xdata
         annotation = self.annotations[event.artist.axes]
         if x is not None:
             if not self.display_all:
@@ -1464,7 +1460,7 @@ class DataCursor:
                 for a in event.artist.get_xdata():
                     try:
                         d = self.convert(a)
-                    except:
+                    except (IndexError, ValueError):
                         d = a
                     xData.append(d)
                 x = xData[np.argmin(abs(xData - x))]

@@ -26,7 +26,8 @@ class SemanticLabelReader:
             os.path.join(os.environ["GISBASE"], "etc", "i.band.library", "*.json")
         )
         if not self._json_files:
-            raise SemanticLabelReaderError("No semantic label definitions found")
+            msg = "No semantic label definitions found"
+            raise SemanticLabelReaderError(msg)
 
         self._read_config()
 
@@ -38,9 +39,8 @@ class SemanticLabelReader:
                 with open(json_file) as fd:
                     config = json.load(fd, object_pairs_hook=OrderedDict)
             except json.decoder.JSONDecodeError as e:
-                raise SemanticLabelReaderError(
-                    "Unable to parse '{}': {}".format(json_file, e)
-                )
+                msg = "Unable to parse '{}': {}".format(json_file, e)
+                raise SemanticLabelReaderError(msg)
 
             # check if configuration is valid
             self._check_config(config)
@@ -58,13 +58,11 @@ class SemanticLabelReader:
         for items in config.values():
             for item in ("shortcut", "bands"):
                 if item not in items.keys():
-                    raise SemanticLabelReaderError(
-                        "Invalid band definition: <{}> is missing".format(item)
-                    )
+                    msg = "Invalid band definition: <{}> is missing".format(item)
+                    raise SemanticLabelReaderError(msg)
             if len(items["bands"]) < 1:
-                raise SemanticLabelReaderError(
-                    "Invalid band definition: no bands defined"
-                )
+                msg = "Invalid band definition: no bands defined"
+                raise SemanticLabelReaderError(msg)
 
     @staticmethod
     def _print_label_extended(label, item):
@@ -116,13 +114,13 @@ class SemanticLabelReader:
                     if shortcut and re.match(shortcut, item["shortcut"]) is None:
                         continue
                 except re.error as e:
-                    raise SemanticLabelReaderError("Invalid pattern: {}".format(e))
+                    msg = "Invalid pattern: {}".format(e)
+                    raise SemanticLabelReaderError(msg)
 
                 found = True
                 if band and band not in item["bands"]:
-                    raise SemanticLabelReaderError(
-                        "Band <{}> not found in <{}>".format(band, shortcut)
-                    )
+                    msg = "Band <{}> not found in <{}>".format(band, shortcut)
+                    raise SemanticLabelReaderError(msg)
 
                 # print generic information
                 if extended:

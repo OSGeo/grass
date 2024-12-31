@@ -125,7 +125,7 @@ int Vedit_split_lines(struct Map_info *Map, struct ilist *List,
 
             nlines_modified++;
         } /* for each bounding box */
-    }     /* for each selected line */
+    } /* for each selected line */
 
 free_exit:
     Vect_destroy_line_struct(Points);
