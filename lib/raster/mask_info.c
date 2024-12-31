@@ -14,6 +14,7 @@
  */
 
 #include <string.h>
+#include <stdlib.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -27,6 +28,8 @@
  * Caller is responsible for freeing the memory of the returned string.
  *
  * @return New string with textual information
+ *
+ * @see Rast_mask_status()
  */
 char *Rast_mask_info(void)
 {
@@ -53,10 +56,12 @@ char *Rast_mask_info(void)
  * @brief Retrieves the name of the raster mask to use.
  *
  * The returned raster map name is fully qualified, i.e., in the form
- % "name@mapset".
+ * "name@mapset". The mask name is returned whether the mask is present or not.
  *
- * The mask name is "MASK@<mapset>", where <mapset> is the current
- * mapset.
+ * This function checks if an environment variable "GRASS_MASK" is set.
+ * If it is set, the value of the environment variable is returned
+ * as the mask name. If it is not set, the function will default to the
+ * mask name "MASK@<mapset>", where <mapset> is the current mapset.
  *
  * The memory for the returned mask name is dynamically allocated using
  * G_store(). It is the caller's responsibility to free the memory with
@@ -66,8 +71,42 @@ char *Rast_mask_info(void)
  */
 char *Rast_mask_name(void)
 {
-    // Mask name is always "MASK@<current mapset>".
+    // First, see if the environment variable is defined.
+    const char *env_variable = getenv("GRASS_MASK");
+    if (env_variable != NULL && strcmp(env_variable, "") != 0) {
+        // Variable exists and is not empty.
+        // While the function does not document that, the provided mapset
+        // is a fallback, so we don't have to parse the name to find out
+        // ourselves what to do.
+        return G_fully_qualified_name(env_variable, G_mapset());
+    }
+
+    // Mask name defaults to "MASK@<current mapset>".
     return G_fully_qualified_name("MASK", G_mapset());
+}
+
+/**
+ * @brief Get name of a mask if it is present
+ *
+ * Unlike, Rast__mask_info() this always returns name of the mask
+ * if it is present regardless of the mask being a reclass or not.
+ *
+ * @param[out] name Name of the raster map used as mask
+ * @param[out] mapset Name of the map's mapset
+ *
+ * @return true if mask is present, false otherwise
+ */
+static bool Rast__get_present_mask(char *name, char *mapset)
+{
+    char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
+    char *full_name = Rast_mask_name();
+    if (!G_find_raster2(full_name, ""))
+        return false;
+    G_unqualified_name(full_name, "", rname, rmapset);
+    strncpy(name, rname, GMAPSET_MAX);
+    strncpy(mapset, rmapset, GMAPSET_MAX);
+    G_free(full_name);
+    return true;
 }
 
 /**
@@ -94,29 +133,18 @@ char *Rast_mask_name(void)
 bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
                       char *reclass_name, char *reclass_mapset)
 {
-    int present = Rast__mask_info(name, mapset);
+    bool present = Rast__get_present_mask(name, mapset);
 
     if (is_mask_reclass && reclass_name && reclass_mapset) {
         if (present) {
-            *is_mask_reclass = Rast_is_reclass("MASK", G_mapset(), reclass_name,
-                                               reclass_mapset) > 0;
-            if (*is_mask_reclass) {
-                // The original mask values were overwritten in the initial
-                // info call. Put back the original values, so that we can
-                // report them to the caller.
-                strcpy(name, "MASK");
-                strcpy(mapset, G_mapset());
-            }
+            *is_mask_reclass =
+                Rast_is_reclass(name, mapset, reclass_name, reclass_mapset) > 0;
         }
         else {
             *is_mask_reclass = false;
         }
     }
-
-    if (present == 1)
-        return true;
-    else
-        return false;
+    return present;
 }
 
 /**
@@ -125,7 +153,7 @@ bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
  * Determines the status of the automatic masking and the name of the 2D
  * raster which forms the mask. Typically, mask is raster called MASK in the
  * current mapset, but when used with r.mask, it is usually a reclassed
- * raster, and so when a MASK raster is present and it is a reclass raster,
+ * raster, and so when a mask raster is present and it is a reclass raster,
  * the name and mapset of the underlying reclassed raster are returned.
  *
  * The name and mapset is written to the parameter which need to be defined
@@ -139,24 +167,20 @@ bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
  * @param[out] mapset Name of the map's mapset
  *
  * @return 1 if mask is present, -1 otherwise
+ *
+ * @see Rast_mask_status(), Rast_mask_name()
  */
 int Rast__mask_info(char *name, char *mapset)
 {
     char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
-
-    strcpy(rname, "MASK");
-    (void)G_strlcpy(rmapset, G_mapset(), GMAPSET_MAX);
-
-    if (!G_find_raster(rname, rmapset))
+    bool present = Rast__get_present_mask(name, mapset);
+    if (!present)
         return -1;
 
-    strcpy(name, rname);
-    strcpy(mapset, rmapset);
     if (Rast_is_reclass(name, mapset, rname, rmapset) > 0) {
         strcpy(name, rname);
         strcpy(mapset, rmapset);
     }
-
     return 1;
 }
 
@@ -167,5 +191,7 @@ int Rast__mask_info(char *name, char *mapset)
  */
 bool Rast_mask_is_present(void)
 {
-    return G_find_raster("MASK", G_mapset()) != NULL;
+    char *name = Rast_mask_name();
+    bool present = G_find_raster2(name, "") != NULL;
+    return present;
 }
