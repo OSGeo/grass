@@ -22,8 +22,11 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
 
-import os
+from __future__ import annotations
+
 import copy
+import os
+from typing import TYPE_CHECKING
 
 from core import globalvar
 import wx
@@ -40,16 +43,16 @@ from gui_core.mapdisp import SingleMapPanel, FrameMixin
 from gui_core.query import QueryDialog, PrepareQueryResults
 from mapwin.buffered import BufferedMapWindow
 from mapwin.decorations import (
-    LegendController,
-    BarscaleController,
     ArrowController,
+    BarscaleController,
     DtextController,
+    LegendController,
     LegendVectController,
 )
 from mapwin.analysis import (
-    ProfileController,
-    MeasureDistanceController,
     MeasureAreaController,
+    MeasureDistanceController,
+    ProfileController,
 )
 from gui_core.forms import GUI
 from core.giface import Notification
@@ -59,8 +62,11 @@ from mapdisp import statusbar as sb
 from main_window.page import MainPageBase
 
 import grass.script as gs
-
 from grass.pydispatch.signal import Signal
+
+if TYPE_CHECKING:
+    import lmgr.frame
+    import main_window.frame
 
 
 class MapPanel(SingleMapPanel, MainPageBase):
@@ -76,7 +82,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         toolbars=["map"],
         statusbar=True,
         tree=None,
-        lmgr=None,
+        lmgr: main_window.frame.GMFrame | lmgr.frame.GMFrame | None = None,
         Map=None,
         auimgr=None,
         dockable=False,
@@ -296,7 +302,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
     def _addToolbarVDigit(self):
         """Add vector digitizer toolbar"""
-        from vdigit.main import haveVDigit, VDigit
+        from vdigit.main import VDigit, haveVDigit
         from vdigit.toolbars import VDigitToolbar
 
         if not haveVDigit:
@@ -401,7 +407,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
     def AddNviz(self):
         """Add 3D view mode window"""
-        from nviz.main import haveNviz, GLWindow, errorMsg
+        from nviz.main import GLWindow, errorMsg, haveNviz
 
         # check for GLCanvas and OpenGL
         if not haveNviz:
@@ -1603,7 +1609,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
     def AddRDigit(self):
         """Adds raster digitizer: creates toolbar and digitizer controller,
         binds events and signals."""
-        from rdigit.controller import RDigitController, EVT_UPDATE_PROGRESS
+        from rdigit.controller import EVT_UPDATE_PROGRESS, RDigitController
         from rdigit.toolbars import RDigitToolbar
 
         self.rdigit = RDigitController(self._giface, mapWindow=self.GetMapWindow())

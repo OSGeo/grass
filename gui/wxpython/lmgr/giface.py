@@ -56,7 +56,7 @@ class LayerList:
     def __len__(self):
         # The list constructor calls __len__ as an optimization if available,
         # causing a RecursionError
-        return len([layer for layer in self])  # noqa: C416
+        return len([layer for layer in self])  # noqa: C416 # pylint: disable=R1721
 
     def __iter__(self):
         """Iterates over the contents of the list."""

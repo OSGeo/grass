@@ -9,13 +9,19 @@ for details.
 :authors: Vaclav Petras, Soeren Gebbert
 """
 
-import os
-import sys
-import re
+from __future__ import annotations
+
 import doctest
 import hashlib
+import os
+import re
+import sys
+from typing import TYPE_CHECKING, Any, Callable
 
 from grass.script.utils import encode
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 try:
     from grass.script.core import KeyValue
@@ -254,7 +260,7 @@ def text_to_keyvalue(
 # TODO: define standard precisions for DCELL, FCELL, CELL, mm, ft, cm, ...
 # TODO: decide if None is valid, and use some default or no compare
 # TODO: is None a valid value for precision?
-def values_equal(value_a, value_b, precision=0.000001):
+def values_equal(value_a, value_b, precision: float = 0.000001) -> bool:
     """
     >>> values_equal(1.022, 1.02, precision=0.01)
     True
@@ -316,8 +322,13 @@ def values_equal(value_a, value_b, precision=0.000001):
 
 
 def keyvalue_equals(
-    dict_a, dict_b, precision, def_equal=values_equal, key_equal=None, a_is_subset=False
-):
+    dict_a: Mapping,
+    dict_b: Mapping,
+    precision: float,
+    def_equal: Callable = values_equal,
+    key_equal: Mapping[Any, Callable] | None = None,
+    a_is_subset: bool = False,
+) -> bool:
     """Compare two dictionaries.
 
     .. note::
@@ -367,7 +378,7 @@ def keyvalue_equals(
 
     if not a_is_subset and sorted(dict_a.keys()) != sorted(dict_b.keys()):
         return False
-    b_keys = dict_b.keys() if a_is_subset else None
+    b_keys = dict_b.keys() if a_is_subset else set()
 
     # iterate over subset or just any if not a_is_subset
     # check for missing keys in superset

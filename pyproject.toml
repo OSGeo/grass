@@ -339,7 +339,7 @@ ignore = [
 "python/grass/pygrass/vector/sql.py" = ["FLY002"]
 "python/grass/pygrass/vector/testsuite/test_table.py" = ["PLW0108"]
 "python/grass/script/array.py" = ["A005"]
-"python/grass/script/core.py" = ["PTH208", "SIM115"]
+"python/grass/script/core.py" = ["PTH208"]
 "python/grass/script/db.py" = ["SIM115"]
 "python/grass/script/raster.py" = ["SIM115"]
 "python/grass/script/utils.py" = ["FURB189", "SIM115"]
@@ -577,8 +577,6 @@ disable = [
     "C0114",  # Missing module docstring (missing-module-docstring)
     "C0115",  # Missing class docstring (missing-class-docstring)
     "C0116",  # Missing function or method docstring (missing-function-docstring)
-    "C0117",  # Consider changing "not self.optype == 'boolean'" to "self.optype != 'boolean'" (unnecessary-negation)
-    "C0123",  # Use isinstance() rather than type() for a typecheck. (unidiomatic-typecheck)
     "C0200",  # Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
     "C0201",  # Consider iterating the dictionary directly instead of calling .keys() (consider-iterating-dictionary)
     "C0204",  # Metaclass class method %s should have %s as first argument (bad-mcs-classmethod-argument)
@@ -616,7 +614,6 @@ disable = [
     "E1126",  # Sequence index is not an int, slice, or instance with __index__ (invalid-sequence-index)
     "E1128",  # Assigning result of a function call, where the function returns None (assignment-from-none)
     "E1133",  # Non-iterable value %s is used in an iterating context (not-an-iterable)
-    "E1135",  # Value '%s' doesn't support membership test (unsupported-membership-test)
     "E1136",  # Value '%s' is unsubscriptable (unsubscriptable-object)
     "E1137",  # %r does not support item assignment (unsupported-assignment-operation)
     "E1307",  # Argument %r does not match format type %r (bad-string-format-type)
@@ -635,17 +632,14 @@ disable = [
     "R0916",  # (too-many-boolean-expressions)
     "R0917",  # (too-many-positional-arguments)
     "R1702",  # (too-many-nested-blocks)
-    "R1703",  # The if statement can be replaced with %s (simplifiable-if-statement)
     "R1704",  # Redefining argument with the local name %r (redefined-argument-from-local)
     "R1705",  # Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
     "R1710",  # Either all return statements in a function should return an expression, or none of them should. (inconsistent-return-statements)
-    "R1711",  # Useless return at end of function or method (useless-return)
     "R1712",  # Consider using tuple unpacking for swapping variables (consider-swap-variables)
     "R1713",  # Consider using str.join(sequence) for concatenating strings from an iterable (consider-using-join)
     "R1714",  # Consider merging these comparisons with 'in' by using '%s %sin (%s)'. Use a set instead if elements are hashable. (consider-using-in)
     "R1715",  # Consider using dict.get for getting values from a dict if a key is present or a default if not (consider-using-get)
     "R1716",  # Simplify chained comparison between the operands (chained-comparison)
-    "R1721",  # Unnecessary use of a comprehension, use %s instead. (unnecessary-comprehension)
     "R1724",  # Unnecessary "%s" after "continue", %s (no-else-continue)
     "R1727",  # Boolean condition '%s' will always evaluate to '%s' (condition-evals-to-constant)
     "R1732",  # Consider using 'with' for resource-allocating operations (consider-using-with)
@@ -668,9 +662,7 @@ disable = [
     "W0221",  # (arguments-differ)
     "W0222",  # Signature differs from %s %r method (signature-differs)
     "W0223",  # Method %r is abstract in class %r but is not overridden in child class %r (abstract-method)
-    "W0231",  # __init__ method from base class %r is not called (super-init-not-called)
     "W0237",  # (arguments-renamed)
-    "W0246",  # Useless parent or super() delegation in method %r (useless-parent-delegation)
     "W0401",  # Wildcard import %s (wildcard-import)
     "W0404",  # Reimport %r (imported line %s) (reimported)
     "W0511",  # (fixme)

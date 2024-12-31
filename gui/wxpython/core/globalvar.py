@@ -242,7 +242,7 @@ toolbarSize = (24, 24)
 
 # Check version of wxPython, use agwStyle for 2.8.11+
 hasAgw = CheckWxVersion([2, 8, 11, 0])
-wxPythonPhoenix = CheckWxPhoenix()
+wxPythonPhoenix: bool = CheckWxPhoenix()
 
 gtk3 = "gtk3" in wx.PlatformInfo
 

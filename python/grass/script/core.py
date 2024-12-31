@@ -1064,7 +1064,8 @@ def _text_to_key_value_dict(
         {'a': ['Hello'], 'c': [1, 2, 3, 4, 5], 'b': [1.0], 'd': ['hello', 8, 0.1]}
 
     """
-    text = open(filename).readlines()
+    with Path(filename).open() as f:
+        text = f.readlines()
     kvdict = KeyValue()
 
     for line in text:
@@ -1680,14 +1681,13 @@ def find_program(pgm, *args):
             or non-zero return code
     :return: True otherwise
     """
-    nuldev = open(os.devnull, "w+")
-    try:
-        # TODO: the doc or impl is not correct, any return code is accepted
-        call([pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev)
-        found = True
-    except Exception:
-        found = False
-    nuldev.close()
+    with open(os.devnull, "w+") as nuldev:
+        try:
+            # TODO: the doc or impl is not correct, any return code is accepted
+            call([pgm] + list(args), stdin=nuldev, stdout=nuldev, stderr=nuldev)
+            found = True
+        except Exception:
+            found = False
 
     return found
 
@@ -1871,16 +1871,15 @@ def create_project(
 def _set_location_description(path, location, text):
     """Set description (aka title aka MYNAME) for a location"""
     try:
-        fd = codecs.open(
+        with codecs.open(
             os.path.join(path, location, "PERMANENT", "MYNAME"),
             encoding="utf-8",
             mode="w",
-        )
-        if text:
-            fd.write(text + os.linesep)
-        else:
-            fd.write(os.linesep)
-        fd.close()
+        ) as fd:
+            if text:
+                fd.write(text + os.linesep)
+            else:
+                fd.write(os.linesep)
     except OSError as e:
         raise ScriptError(repr(e))
 
@@ -1896,8 +1895,11 @@ def _create_location_xy(database, location):
     cur_dir = Path.cwd()
     try:
         os.chdir(database)
+        permanent_dir = Path(location, "PERMANENT")
+        default_wind_path = permanent_dir / "DEFAULT_WIND"
+        wind_path = permanent_dir / "WIND"
         os.mkdir(location)
-        os.mkdir(os.path.join(location, "PERMANENT"))
+        permanent_dir.mkdir()
 
         # create DEFAULT_WIND and WIND files
         regioninfo = [
@@ -1921,16 +1923,8 @@ def _create_location_xy(database, location):
             "t-b resol:  1",
         ]
 
-        defwind = open(os.path.join(location, "PERMANENT", "DEFAULT_WIND"), "w")
-        for param in regioninfo:
-            defwind.write(param + "%s" % os.linesep)
-        defwind.close()
-
-        shutil.copy(
-            os.path.join(location, "PERMANENT", "DEFAULT_WIND"),
-            os.path.join(location, "PERMANENT", "WIND"),
-        )
-
+        default_wind_path.write_text("\n".join(regioninfo))
+        shutil.copy(default_wind_path, wind_path)
         os.chdir(cur_dir)
     except OSError as e:
         raise ScriptError(repr(e))

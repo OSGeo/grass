@@ -627,7 +627,6 @@ class AnimationController(wx.EvtHandler):
                 del self.busy
                 if error:
                     GError(parent=self.frame, message=error)
-                    return
 
             if exportInfo["method"] == "sequence":
                 filename = os.path.join(
