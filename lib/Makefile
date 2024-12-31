@@ -4,11 +4,11 @@ include $(MODULE_TOPDIR)/include/Make/Vars.make
 
 #order is relevant:
 SUBDIRS = \
+	external \
 	datetime \
 	gis \
 	proj \
 	raster \
-	external \
 	gmath \
 	linkm \
 	driver \

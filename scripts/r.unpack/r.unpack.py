@@ -41,6 +41,7 @@
 # %end
 
 import os
+from pathlib import Path
 import sys
 import shutil
 import tarfile
@@ -62,7 +63,7 @@ def main():
     grass.debug("tmp_dir = {tmpdir}".format(tmpdir=tmp_dir))
 
     if not os.path.exists(infile):
-        grass.fatal(_("File {name} not found.".format(name=infile)))
+        grass.fatal(_("File {name} not found.").format(name=infile))
 
     gisenv = grass.gisenv()
     mset_dir = os.path.join(
@@ -86,26 +87,21 @@ def main():
                 f = tar.extractfile("{}/{}".format(data_names[0], fname))
                 sys.stdout.write(f.read().decode())
         except KeyError:
-            grass.fatal(_("Pack file unreadable: file '{}' missing".format(fname)))
+            grass.fatal(_("Pack file unreadable: file '{}' missing").format(fname))
         tar.close()
 
         return 0
 
-    if options["output"]:
-        map_name = options["output"]
-    else:
-        map_name = data_names[0].split("@")[0]
+    map_name = options["output"] or data_names[0].split("@")[0]
 
     gfile = grass.find_file(name=map_name, element="cell", mapset=".")
     if gfile["file"]:
         if os.environ.get("GRASS_OVERWRITE", "0") != "1":
-            grass.fatal(_("Raster map <{name}> already exists".format(name=map_name)))
+            grass.fatal(_("Raster map <{name}> already exists").format(name=map_name))
         else:
             grass.warning(
-                _(
-                    "Raster map <{name}> already exists and will be overwritten".format(
-                        name=map_name
-                    )
+                _("Raster map <{name}> already exists and will be overwritten").format(
+                    name=map_name
                 )
             )
 
@@ -131,9 +127,10 @@ def main():
         grass.fatal(
             _(
                 "This GRASS GIS pack file contains vector data. Use "
-                "v.unpack to unpack <{name}>".format(name=map_name)
-            )
+                "v.unpack to unpack <{name}>"
+            ).format(name=map_name)
         )
+
     else:
         grass.fatal(_("Pack file unreadable"))
 
@@ -243,10 +240,9 @@ def main():
     if maps:
         if vrt_file and os.path.exists(vrt_file):
             files = "\n".join(maps)
-            with open(vrt_file, "w") as f:
-                f.write(files)
+            Path(vrt_file).write_text(files)
 
-    grass.message(_("Raster map <{name}> unpacked".format(name=map_name)))
+    grass.message(_("Raster map <{name}> unpacked").format(name=map_name))
 
 
 if __name__ == "__main__":

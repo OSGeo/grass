@@ -6,7 +6,7 @@ values into an ASCII text file.
 <h2>NOTES</h2>
 
 This module will by default not export x,y coordinates for raster cells
-containing a NULL value. This includes cells masked by a raster MASK.
+containing a NULL value. This includes cells masked by a raster mask.
 Using the flag <b>-i</b> also these raster cells will be included in the
 exported data.
 <p>
@@ -19,7 +19,7 @@ size row x column) containing z values.
 <em>r.out.xyz</em> can combine several input raster maps, which can be
 convenient when it comes to e.g. produce ASCII point cloud files.
 <p>
-<em>r.out.xyz</em> is simply a front-end to "<tt>r.stats -1g[n]</tt>".
+<em>r.out.xyz</em> is simply a front-end to "<code>r.stats -1g[n]</code>".
 
 <h2>EXAMPLES</h2>
 

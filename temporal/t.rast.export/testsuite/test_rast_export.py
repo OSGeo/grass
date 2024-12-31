@@ -11,12 +11,12 @@ for details.
 
 import os
 
-import grass.script as gscript
+import grass.script as gs
 from grass.gunittest.case import TestCase
 
 
 class TestRasterExport(TestCase):
-    tmp = gscript.tempdir()
+    tmp = gs.tempdir()
     float_ = os.path.join(tmp, "geotiffloat")
     int_ = os.path.join(tmp, "geotifint")
     grid = os.path.join(tmp, "grid")

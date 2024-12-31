@@ -150,7 +150,7 @@ def _open_output_file(file, encoding="utf-8", **kwargs):
             yield stream
 
 
-def _write_line(items, separator, file):
+def _write_line(items, separator, file) -> None:
     if not separator:
         separator = ","
     output = separator.join([f"{item}" for item in items])
@@ -158,8 +158,8 @@ def _write_line(items, separator, file):
         print(f"{output}", file=stream)
 
 
-def _write_plain(rows, header, separator, file):
-    def write_plain_row(items, separator, file):
+def _write_plain(rows, header, separator, file) -> None:
+    def write_plain_row(items, separator, file) -> None:
         output = separator.join([f"{item}" for item in items])
         print(f"{output}", file=file)
 
@@ -171,7 +171,7 @@ def _write_plain(rows, header, separator, file):
             write_plain_row(items=row, separator=separator, file=stream)
 
 
-def _write_json(rows, column_names, file):
+def _write_json(rows, column_names, file) -> None:
     # Lazy import output format-specific dependencies.
     # pylint: disable=import-outside-toplevel
     import datetime
@@ -197,7 +197,7 @@ def _write_json(rows, column_names, file):
         json.dump({"data": dict_rows, "metadata": meta}, stream, cls=ResultsEncoder)
 
 
-def _write_yaml(rows, column_names, file=sys.stdout):
+def _write_yaml(rows, column_names, file=sys.stdout) -> None:
     # Lazy import output format-specific dependencies.
     # pylint: disable=import-outside-toplevel
     import yaml
@@ -213,10 +213,10 @@ def _write_yaml(rows, column_names, file=sys.stdout):
         when https://github.com/yaml/pyyaml/issues/234 is resolved.
         """
 
-        def ignore_aliases(self, data):
+        def ignore_aliases(self, data) -> bool:
             return True
 
-        def increase_indent(self, flow=False, indentless=False):
+        def increase_indent(self, flow: bool = False, indentless: bool = False):
             return super().increase_indent(flow=flow, indentless=False)
 
     dict_rows = []
@@ -238,7 +238,7 @@ def _write_yaml(rows, column_names, file=sys.stdout):
         )
 
 
-def _write_csv(rows, column_names, separator, file=sys.stdout):
+def _write_csv(rows, column_names, separator, file=sys.stdout) -> None:
     # Lazy import output format-specific dependencies.
     # pylint: disable=import-outside-toplevel
     import csv
@@ -275,7 +275,8 @@ def _write_table(rows, column_names, output_format, separator, file):
             separator = ","
         _write_csv(rows=rows, column_names=column_names, separator=separator, file=file)
     else:
-        raise ValueError(f"Unknown value '{output_format}' for output_format")
+        msg = f"Unknown value '{output_format}' for output_format"
+        raise ValueError(msg)
 
 
 def _get_get_registered_maps_as_objects_with_method(dataset, where, method, gran, dbif):
@@ -287,15 +288,15 @@ def _get_get_registered_maps_as_objects_with_method(dataset, where, method, gran
         )
     if method == "gran":
         if where:
-            raise ValueError(
-                f"The where parameter is not supported with method={method}"
-            )
+            msg = f"The where parameter is not supported with method={method}"
+            raise ValueError(msg)
         if gran is not None and gran != "":
             return dataset.get_registered_maps_as_objects_by_granularity(
                 gran=gran, dbif=dbif
             )
         return dataset.get_registered_maps_as_objects_by_granularity(dbif=dbif)
-    raise ValueError(f"Invalid method '{method}'")
+    msg = f"Invalid method '{method}'"
+    raise ValueError(msg)
 
 
 def _get_get_registered_maps_as_objects_delta_gran(
@@ -325,10 +326,7 @@ def _get_get_registered_maps_as_objects_delta_gran(
                 msgr.fatal(_("Empty entry in map list, this should not happen"))
 
         start, end = map_object.get_temporal_extent_as_tuple()
-        if end:
-            delta = end - start
-        else:
-            delta = None
+        delta = end - start if end else None
         delta_first = start - first_time
 
         if map_object.is_time_absolute():
@@ -366,7 +364,8 @@ def _get_list_of_maps_delta_gran(dataset, columns, where, method, gran, dbif, ms
             elif column == "distance_from_begin":
                 row.append(delta_first)
             else:
-                raise ValueError(f"Unsupported column '{column}'")
+                msg = f"Unsupported column '{column}'"
+                raise ValueError(msg)
         rows.append(row)
     return rows
 
@@ -389,14 +388,14 @@ def _get_list_of_maps_stds(
 
     def check_columns(column_names, output_format, element_type):
         if element_type != "stvds" and "layer" in columns:
-            raise ValueError(
-                f"Column 'layer' is not allowed with temporal type '{element_type}'"
-            )
+            msg = f"Column 'layer' is not allowed with temporal type '{element_type}'"
+            raise ValueError(msg)
         if output_format == "line" and len(column_names) > 1:
-            raise ValueError(
+            msg = (
                 f"'{output_format}' output_format can have only 1 column, "
                 f"not {len(column_names)}"
             )
+            raise ValueError(msg)
 
     # This method expects a list of objects for gap detection
     if method in {"delta", "deltagaps", "gran"}:
@@ -438,12 +437,11 @@ def _get_list_of_maps_stds(
                 output_format=output_format,
                 element_type=element_type,
             )
+        elif output_format == "line":
+            # For list of values, only one column is needed.
+            columns = ["id"]
         else:
-            if output_format == "line":
-                # For list of values, only one column is needed.
-                columns = ["id"]
-            else:
-                columns = ["name", "mapset", "start_time", "end_time"]
+            columns = ["name", "mapset", "start_time", "end_time"]
         if not order:
             order = "start_time"
 
@@ -485,12 +483,12 @@ def list_maps_of_stds(
     where,
     separator,
     method,
-    no_header=False,
+    no_header: bool = False,
     gran=None,
     dbif=None,
     outpath=None,
     output_format=None,
-):
+) -> None:
     """List the maps of a space time dataset using different methods
 
     :param type: The type of the maps raster, raster3d or vector

@@ -89,7 +89,7 @@ class AnimationData:
                     timeseriesList.append((layer.name, layer.mapType))
                     self._firstStdsNameType = layer.name, layer.mapType
                 else:
-                    mapSeriesList.append((layer.maps))
+                    mapSeriesList.append(layer.maps)
         if not timeseriesList:
             self._firstStdsNameType = None, None
         # this throws GException
@@ -295,9 +295,8 @@ class AnimLayer(Layer):
     def SetName(self, name):
         if not self.hidden:
             if self._mapType is None:
-                raise ValueError(
-                    "To set layer name, the type of layer must be specified."
-                )
+                msg = "To set layer name, the type of layer must be specified."
+                raise ValueError(msg)
             if self._mapType in {"strds", "stvds", "str3ds"}:
                 try:
                     name = validateTimeseriesName(name, self._mapType)
