@@ -25,7 +25,7 @@ jobs:
 
     env:
       # renovate: datasource=python-version depName=python
-      PYTHON_VERSION: "3.12"
+      PYTHON_VERSION: "3.13"
       MIN_PYTHON_VERSION: "3.9"
       # renovate: datasource=pypi depName=black
       BLACK_VERSION: "24.10.0"
