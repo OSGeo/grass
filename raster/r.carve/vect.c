@@ -4,6 +4,8 @@
  *
  * AUTHOR(S):    Original author Bill Brown, UIUC GIS Laboratory
  *               Brad Douglas <rez touchofmadness com>
+ *               Tomas Zigo <tomas zigo slovanet sk> (adding the option
+ *               to read width, depth values from vector map table columns)
  *
  * PURPOSE:      Takes vector stream data, converts it to 3D raster and
  *               subtracts a specified depth
