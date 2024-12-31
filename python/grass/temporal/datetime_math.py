@@ -638,7 +638,7 @@ def compute_datetime_delta(start: datetime, end: datetime) -> datetime_delta:
     # not leaking these default values
     comp = datetime_delta(
         year=0,
-        month=110,
+        month=0,
         day=0,
         hour=0,
         minute=0,
