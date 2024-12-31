@@ -79,7 +79,7 @@ class Srs:
             # code is always the last value
             try:
                 self.code = int(values[-1])
-            except:
+            except (IndexError, ValueError):
                 self.code = values[-1]
 
         elif len(values) == 2:  # it's an authority:code code

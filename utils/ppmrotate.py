@@ -53,7 +53,8 @@ def read_ppm(src):
     j = text.find("\n", i)
     maxval = text[i:j]
     if int(maxval) != 255:
-        raise OSError("Max value in image != 255")
+        msg = "Max value in image != 255"
+        raise OSError(msg)
     i = j + 1
     return array.array("B", text[i:])
 
@@ -110,11 +111,8 @@ def convert_and_rotate(src, dst, flip=False):
     to_png = False
     if dst.lower().endswith(".png"):
         to_png = True
-    if to_png:
-        tmp_img = gs.tempfile() + ".ppm"
-        # TODO: clean up the file
-    else:
-        tmp_img = dst
+    # TODO: clean up the file
+    tmp_img = gs.tempfile() + ".ppm" if to_png else dst
     write_ppm(tmp_img, ppm)
     if to_png:
         ppmtopng(dst, tmp_img)

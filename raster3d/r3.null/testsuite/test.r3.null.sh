@@ -56,14 +56,7 @@ diff data/test_volume_double_null_1.ref test_volume_double_null_1.txt
 diff data/test_volume_double_null_2.ref test_volume_double_null_2.txt
 
 # Cleanup
-g.remove -f type=raster_3d name=test_volume_float_1
-g.remove -f type=raster_3d name=test_volume_float_2
-g.remove -f type=raster_3d name=test_volume_float_null_1
-g.remove -f type=raster_3d name=test_volume_float_null_2
-g.remove -f type=raster_3d name=test_volume_double_1
-g.remove -f type=raster_3d name=test_volume_double_2
-g.remove -f type=raster_3d name=test_volume_double_null_1
-g.remove -f type=raster_3d name=test_volume_double_null_2
+g.remove -f type=raster_3d name=test_volume_float_1,test_volume_float_2,test_volume_float_null_1,test_volume_float_null_2,test_volume_double_1,test_volume_double_2,test_volume_double_null_1,test_volume_double_null_2
 rm test_volume_float_1.txt
 rm test_volume_float_2.txt
 rm test_volume_float_null_1.txt

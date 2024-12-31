@@ -1,11 +1,21 @@
 <h2>DESCRIPTION</h2>
 
 The <em>r.mask.status</em> reports information about the 2D raster mask and its
-status. If the mask is present, the tool reports a full name of the raster (name
-including the mapset) which represents the mask. It can also report full name of
-the underlying raster if the mask is reclassified from another raster.
+status. The tool reports whether the mask is present or not. For both active
+and inactive mask, the tool reports a full name of the raster (name including
+the mapset) which represents or would represent the mask.
+It can also report full name of the underlying raster if the mask is
+reclassified from another raster.
 
-<p></p>
+The tool can be used to check if the mask is currently set
+(<code>present</code> boolean in JSON), what is raster name used to represent
+the mask (<code>name</code> string in JSON), and whether the raster is
+reclassifed from another (<code>is_reclass_of</code> string or null in JSON).
+YAML and shell script style outputs are following the JSON output if possible.
+The plain text format outputs multi-line human-readable information in natural
+language.
+
+<p>
 With the <b>-t</b> flag, no output is printed, instead a return code is used to
 indicate presence or absence. The convention is the same same the POSIX
 <em>test</em> utility, so <em>r.mask.status</em> returns 0 when the mask is

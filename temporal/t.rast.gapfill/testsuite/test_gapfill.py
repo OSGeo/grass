@@ -8,8 +8,6 @@ for details.
 @author Soeren Gebbert
 """
 
-import subprocess
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.utils import xfail_windows

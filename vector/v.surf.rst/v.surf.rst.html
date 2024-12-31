@@ -305,14 +305,14 @@ in the source code for more details.
   <img src="vsurfrst_benchmark.png" alt="benchmark for v.surf.rst" border="0">
   <br>
   <i>Figure 1: Benchmark shows execution time for different
-    number of cells (1M, 2M, 4M, and 8M).
+    number of cells (1M, 2M, 4M, and 8M).</i>
 </div>
 <div align="center" style="margin: 10px">
     <img src="vsurfrst_cv_benchmark.png" alt="benchmark for cross-validation of
      v.surf.rst" border="0">
     <br>
     <i>Figure 2: Benchmark shows execution time for running cross-validation on
-     different number of cells (100k, 200k, 400k, and 800k).
+     different number of cells (100k, 200k, 400k, and 800k).</i>
 </div>
 
 <h2>EXAMPLE</h2>
@@ -355,10 +355,10 @@ d.vect elevrand
 v.db.univar -e elevrand column=value
 
 # interpolation based on subset of points (only those over 1st quartile)
-v.surf.rst input=elevrand zcolumn=value elevation=elev_partial npmin=100 where="value > 94.9"
+v.surf.rst input=elevrand zcolumn=value elevation=elev_partial npmin=100 where="value &gt; 94.9"
 r.colors map=elev_partial raster=elevation
 d.rast elev_partial
-d.vect elevrand where="value > 94.9"
+d.vect elevrand where="value &gt; 94.9"
 </pre></div>
 
 <h2>REFERENCES</h2>
@@ -389,7 +389,7 @@ d.vect elevrand where="value > 94.9"
   <li><a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/CMA1988.pdf">
       Mitas, L., and Mitasova H., 1988, </a> General variational approach to the approximation
     problem, Computers and Mathematics with Applications, v.16, p. 983-992.</li>
-  <li><a href="http://www.grassbook.org">
+  <li><a href="https://grassbook.org">
       Neteler, M. and Mitasova, H., 2008, Open Source GIS: A GRASS GIS Approach, 3rd Edition, </a>
     Springer, New York, 406 pages.</li>
   <li>Talmi, A. and Gilat, G., 1977 : Method for Smooth Approximation of Data,

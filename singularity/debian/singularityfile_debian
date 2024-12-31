@@ -17,8 +17,8 @@ Singularity container for GRASS GIS to be run into GRASS main directory
     # Install useful libraries
     apt-get -y update
     apt-get -y install \
-        build-essential \
         bison \
+        build-essential \
         bzip2 \
         cmake \
         curl \
@@ -40,10 +40,10 @@ Singularity container for GRASS GIS to be run into GRASS main directory
         libgsl-dev \
         libjpeg-dev \
         libjsoncpp-dev \
+        libncurses5-dev \
+        libnetcdf-dev \
         libopenblas-base \
         libopenblas-dev \
-        libnetcdf-dev \
-        libncurses5-dev \
         libopenjp2-7 \
         libopenjp2-7-dev \
         libpdal-dev \
@@ -94,29 +94,29 @@ Singularity container for GRASS GIS to be run into GRASS main directory
     GRASS_PYTHON=/usr/bin/python3
     ./configure \
         --enable-largefile \
-        --with-cxx \
-        --with-nls \
-        --with-readline \
-        --with-sqlite \
         --with-bzlib \
-        --with-zstd \
         --with-cairo \
         --with-cairo-ldflags=-lfontconfig \
+        --with-cxx \
+        --with-fftw \
         --with-freetype \
         --with-freetype-includes="/usr/include/freetype2/" \
-        --with-fftw \
-        --with-netcdf \
-        --with-pdal \
-        --with-proj \
-        --with-proj-share=/usr/share/proj \
         --with-geos=/usr/bin/geos-config \
+        --with-netcdf \
+        --with-nls \
+        --with-pdal \
         --with-postgres \
         --with-postgres-includes="/usr/include/postgresql" \
+        --with-proj \
+        --with-proj-share=/usr/share/proj \
+        --with-readline \
+        --with-sqlite \
+        --with-zstd \
+        --without-ffmpeg \
         --without-mysql \
         --without-odbc \
-        --without-openmp \
-        --without-ffmpeg \
-        --without-opengl
+        --without-opengl \
+        --without-openmp
 	make -j 2 && make install && ldconfig
     # Create generic GRASS GIS binary name regardless of version number
     ln -sf `find /usr/local/bin -name "grass??" | sort | tail -n 1` /usr/local/bin/grass

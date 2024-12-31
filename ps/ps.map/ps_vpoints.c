@@ -269,5 +269,7 @@ int PS_vpoints_plot(struct Map_info *P_map, int vec)
 
     fprintf(PS.fp, "\n");
     Vect_destroy_cats_struct(Cats);
+    Vect_destroy_line_struct(Points);
+    G_free(Symb);
     return 0;
 }

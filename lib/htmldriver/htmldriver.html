@@ -53,20 +53,20 @@ Several environment variables affect the operation of the HTML driver:
   <li><b>GRASS_RENDER_HTMLTYPE=type</b><br> type of image map to create
     (default is CLIENT):
     <dl>
-      <dd><tt><b>CLIENT</b></tt> &nbsp;&nbsp; Netscape/IE client-side
-	image map (NAME="map").</dd>
-      <dd><tt><b>APACHE</b></tt> &nbsp;&nbsp; Apache/NCSA server-side image
-	map.</dd>
-      <dd><tt><b>RAW</b></tt>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Raw url and polygon
-	vertices (<i>url&nbsp; x1&nbsp; y1&nbsp; x2&nbsp; y2&nbsp;
-	.....</i>), suitable for conversion to CERN server format, or
-	any other format with user supplied conversion program.</dd>
+      <dd><code><b>CLIENT</b></code> &nbsp;&nbsp; Netscape/IE client-side
+        image map (NAME="map").</dd>
+      <dd><code><b>APACHE</b></code> &nbsp;&nbsp; Apache/NCSA server-side image
+        map.</dd>
+      <dd><code><b>RAW</b></code>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Raw url and polygon
+        vertices (<i>url&nbsp; x1&nbsp; y1&nbsp; x2&nbsp; y2&nbsp;
+        .....</i>), suitable for conversion to CERN server format, or
+        any other format with user supplied conversion program.</dd>
     </dl>
   </li>
   <li><b>GRASS_RENDER_FILE=filename</b><br>
     specifies the resulting file to store the html image map, default
-    is <tt>htmlmap</tt>. Files without absolute path names are written
+    is <code>htmlmap</code>. Files without absolute path names are written
     in the current directory where the driver was started.
     <br>
     <em>Any existing file of the same name is overwritten without
@@ -75,21 +75,21 @@ Several environment variables affect the operation of the HTML driver:
   <li><b>GRASS_RENDER_HTMLMINDIST=n</b><br>
     specifies the minimum distance in pixels that a point must change
     from the previous point to keep in the list of vertices for a
-    polygon.  The default is <tt>2</tt>, which means that a point's x
+    polygon.  The default is <code>2</code>, which means that a point's x
     and y difference from the previous point must change by a number
     of pixels greater than this value.  This parameter helps to
     eliminate closely spaced points.
   </li>
   <li><b>GRASS_RENDER_HTMLMINBBOX=n</b><br>
     specifies the minimum bounding box dimensions to record a polygon
-    as a clickable area.  The default is <tt>2</tt>, which means that a
+    as a clickable area.  The default is <code>2</code>, which means that a
     polygon with a bounding box of less than this value is not
     included. This parameter helps to eliminate polygons than are a
     point or line.
   </li>
   <li><b>GRASS_RENDER_HTMLMAXPOINTS=n</b><br>
     specifies the maximum number of vertices included in a polygon's
-    clickable area.  The default is <tt>99</tt>. Some browsers can only
+    clickable area.  The default is <code>99</code>. Some browsers can only
     accommodate polygons of 100 vertices or less. The HTMLMAP driver
     automatically ensures that a polygon is closed by making the last
     point the same as the first point.</li>
@@ -172,7 +172,7 @@ page, see
 <p>If you create an HTML file with two or more images and image maps, you
 will need to edit the map names. The HTML driver creates its map
 with the name
-<tt>map</tt>. A small sed script can easily change the map name:
+<code>map</code>. A small sed script can easily change the map name:
 
 <div class="code"><pre>
 sed -e 's/NAME="map"/NAME="foomap"/' &lt; htmlmap &gt; foomap.html
@@ -185,7 +185,9 @@ sed -e 's/NAME="map"/NAME="foomap"/' &lt; htmlmap &gt; foomap.html
   <a href="pngdriver.html">PNG driver</a>,
   <a href="htmldriver.html">HTML driver</a>,
   <a href="variables.html">variables</a>
-  <br><br>
+</em>
+<br><br>
+<em>
   <a href="d.rast.html">d.rast</a>,
   <a href="d.vect.html">d.vect</a>,
   <a href="d.mon.html">d.mon</a>,

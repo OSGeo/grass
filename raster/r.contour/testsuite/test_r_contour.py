@@ -32,10 +32,11 @@ class TestRasterWhat(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
 
-        cls.runModule("g.remove", type="vector", flags="f", name=cls.output)
-        cls.runModule("g.remove", type="vector", flags="f", name=cls.output + "_cut")
         cls.runModule(
-            "g.remove", type="vector", flags="f", name=cls.output + "_cut_flag_t"
+            "g.remove",
+            type="vector",
+            flags="f",
+            name=(cls.output, cls.output + "_cut", cls.output + "_cut_flag_t"),
         )
 
         if os.path.isfile("testReport"):
