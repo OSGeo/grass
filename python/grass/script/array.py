@@ -131,6 +131,7 @@ class _tempfile:
 
 
 class array(np.memmap):
+    # pylint: disable-next=signature-differs; W0222
     def __new__(cls, mapname=None, null=None, dtype=np.double, env=None):
         """Define new numpy array
 
@@ -242,6 +243,7 @@ class array(np.memmap):
 
 
 class array3d(np.memmap):
+    # pylint: disable-next=signature-differs; W0222
     def __new__(cls, mapname=None, null=None, dtype=np.double, env=None):
         """Define new 3d numpy array
 

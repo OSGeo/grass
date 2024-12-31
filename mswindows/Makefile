@@ -11,7 +11,7 @@ ifneq ($(MINGW),)
 default: GRASS-Packager.bat GRASS-Installer.nsi parsubdirs
 else
 default:
-endif	
+endif
 
 GRASS-Packager.bat: GRASS-Packager.bat.tmpl
 	sed \

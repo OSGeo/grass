@@ -35,9 +35,9 @@ def dataset_mapcalculator(
     expression,
     base,
     method,
-    nprocs=1,
-    register_null=False,
-    spatial=False,
+    nprocs: int = 1,
+    register_null: bool = False,
+    spatial: bool = False,
 ):
     """Perform map-calculations of maps from different space time
     raster/raster3d datasets, using a specific sampling method
@@ -408,7 +408,7 @@ def dataset_mapcalculator(
 ###############################################################################
 
 
-def _run_mapcalc2d(expr):
+def _run_mapcalc2d(expr) -> None:
     """Helper function to run r.mapcalc in parallel"""
     try:
         gs.run_command(
@@ -421,7 +421,7 @@ def _run_mapcalc2d(expr):
 ###############################################################################
 
 
-def _run_mapcalc3d(expr):
+def _run_mapcalc3d(expr) -> None:
     """Helper function to run r3.mapcalc in parallel"""
     try:
         gs.run_command(
@@ -487,7 +487,7 @@ def _operator_parser(expr, first, current):
 ###############################################################################
 
 
-def _parse_start_operators(expr, is_time_absolute, current):
+def _parse_start_operators(expr, is_time_absolute: bool, current):
     """
     Supported operators for absolute time:
     - start_doy() - Day of year (doy) from the start time [1 - 366]
@@ -586,7 +586,7 @@ def _parse_start_operators(expr, is_time_absolute, current):
 ###############################################################################
 
 
-def _parse_end_operators(expr, is_time_absolute, current):
+def _parse_end_operators(expr, is_time_absolute: bool, current):
     """
     Supported operators for absolute time:
     - end_doy() - Day of year (doy) from the end time [1 - 366]
@@ -706,7 +706,7 @@ def _parse_end_operators(expr, is_time_absolute, current):
 ###############################################################################
 
 
-def _parse_td_operator(expr, is_time_absolute, first, current):
+def _parse_td_operator(expr, is_time_absolute: bool, first, current):
     """Parse the time delta operator td(). This operator
     represents the size of the current sample time interval
     in days and fraction of days for absolute time,
@@ -732,7 +732,7 @@ def _parse_td_operator(expr, is_time_absolute, first, current):
 ###############################################################################
 
 
-def _parse_start_time_operator(expr, is_time_absolute, first, current):
+def _parse_start_time_operator(expr, is_time_absolute: bool, first, current):
     """Parse the start_time() operator. This operator represent
     the time difference between the start time of the sample space time
     raster dataset and the start time of the current sample interval or
@@ -755,7 +755,7 @@ def _parse_start_time_operator(expr, is_time_absolute, first, current):
 ###############################################################################
 
 
-def _parse_end_time_operator(expr, is_time_absolute, first, current):
+def _parse_end_time_operator(expr, is_time_absolute: bool, first, current):
     """Parse the end_time() operator. This operator represent
     the time difference between the start time of the sample space time
     raster dataset and the end time of the current sample interval. The time

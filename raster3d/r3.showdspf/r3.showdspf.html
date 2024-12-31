@@ -42,7 +42,7 @@ THE INTERACTIVE OPTIONS ARE:
  <b>E(x,y,z)int#</b>  end display along (x,y,z)axis #
  <b>S int#</b>        specular highlight control
  <b>R</b>   resets display along axis to show all data
- <b>F <I>grid3name colortablename</I></b> load new color file
+ <b>F <em>grid3name colortablename</em></b> load new color file
 
  <b>C</b>   toggles the clear flag
  <b>c</b>   clears the display (no thresholds)
@@ -72,14 +72,14 @@ THE INTERACTIVE OPTIONS ARE:
 the mouse pointer in the graphics window and drag with the left mouse
 to rotate the bounding box.  To zoom in and out, drag right or left
 with the middle mouse. When satisfied with the new viewing
-position, click with the right mouse.
+position, click with the right mouse.</li>
 
 <li>To quickly view a series of isosurfaces, enter a series of <em>+</em> or <em>-</em>
-characters, i.e. <em>+++++++</em>
+characters, i.e. <em>+++++++</em></li>
 
 <li>Scripts using above commands on separate lines may be
 directed to <em>r3.showdspf</em> as standard input.
-Use the <em>#</em> sign as the first character on a line to indicate a comment.
+Use the <em>#</em> sign as the first character on a line to indicate a comment.</li>
 </ul>
 
 <h2>EXAMPLES</h2>
@@ -90,23 +90,23 @@ After generating a "dspf" control file with <em>r3.mkdspf</em> start
 <p>List available thresholds with <em>?</em>. Use <em>l</em> to select isosurfaces (available
 number can be adjusted with <em>r3.mkdspf</em>) and <em>L</em> to display:
 <br>
-<tt>l 1 2 3 4 5<br> L </tt>
+<code>l 1 2 3 4 5<br> L </code>
 
 <p>To select and display a single threshold (here: 2), use:<br>
-<tt>t 2</tt>
+<code>t 2</code>
 
 <p>To select and display a range of thresholds (here: 3-5), use:<br>
-<tt>T 3 5<br>
-D</tt>
+<code>T 3 5<br>
+D</code>
 
 <p>To draw a box, enter<br>
-<tt>p</tt><br>
+<code>p</code><br>
 the p# to plot a selected wall (here top wall):<br>
-<tt>p1</tt>
+<code>p1</code>
 
 <p>Tp draw a cut-off box, define it's position<br>
-<tt>Ex20</tt><br>
-<tt>p</tt><br>
+<code>Ex20</code><br>
+<code>p</code><br>
 Here Ex20 defines the x coordinate of the end of the box.
 
 <p>In general - <em>p</em> draws a side of a box, <em>E</em>, <em>B</em>, define where that box starts or
@@ -118,7 +118,7 @@ perpendicular fences, by using Ey or By). It is sufficient to use only <em>E</em
 box).
 
 <p>To draw a fence, a sequence like this would be needed<br>
-<tt>Ex10<br>
+<code>Ex10<br>
 p5<br>
 Ex15<br>
 p5<br>
@@ -126,15 +126,15 @@ Ex20<br>
 p5<br>
 Ex25<br>
 p5<br>
-</tt>
+</code>
 
 or the same would be<br>
-<tt>Bx10<br>
+<code>Bx10<br>
 p6<br>
 Bx15<br>
 p6<br>
 Bx20<br>
-p6</tt>
+p6</code>
 
 <p>The <em>p</em> is needed for the fence diagram, solids and boxes.
 

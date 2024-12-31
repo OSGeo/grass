@@ -33833,7 +33833,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.what.spoly_to_translate.c:1
 msgid ""
-"Queries vector map with overlaping \"spaghetti\" polygons (e.g. Landsat "
+"Queries vector map with overlapping \"spaghetti\" polygons (e.g. Landsat "
 "footprints) at given location. Polygons must have not intersected boundaries."
 msgstr ""
 
@@ -39230,7 +39230,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.dissolve_to_translate.c:1
 #, fuzzy
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr ""
 "Löst Grenzen zwischen benachbarten Flächen mit gleicher Kategorienummer oder "
@@ -50003,7 +50003,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.scatterplot_to_translate.c:85
 msgid ""
-"Colum with categories. If selected, a separate ellipse will be drawn for "
+"Column with categories. If selected, a separate ellipse will be drawn for "
 "each group/category"
 msgstr ""
 
@@ -70489,11 +70489,11 @@ msgstr ""
 #~ msgstr "Layer-Nummer für Flächen-Karte"
 
 #, fuzzy
-#~ msgid "Numpy array with vector cats."
+#~ msgid "NumPy array with vector cats."
 #~ msgstr "Keine Flächen in Vektorkarte <%s>"
 
 #, fuzzy
-#~ msgid "Numpy array with columns names."
+#~ msgid "NumPy array with columns names."
 #~ msgstr "Zu viele Spaltennamen."
 
 #, fuzzy

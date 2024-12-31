@@ -161,7 +161,7 @@ class Model:
                     self.canvas.parent.DefineCondition(mo)
 
     def Normalize(self):
-        # check for inconsistecies
+        # check for inconsistencies
         for idx in range(1, len(self.items)):
             if not self.items[idx].GetBlock() and isinstance(
                 self.items[idx - 1], ModelLoop
@@ -325,7 +325,8 @@ class Model:
         try:
             gxmXml = ProcessModelFile(ET.parse(filename))
         except Exception as e:
-            raise GException("{}".format(e))
+            msg = "{}".format(e)
+            raise GException(msg)
 
         if self.canvas:
             win = self.canvas.parent
@@ -525,7 +526,7 @@ class Model:
     def _substituteFile(self, item, params=None, checkOnly=False):
         """Substitute variables in command file inputs
 
-        :param bool checkOnly: tuble - True to check variable, don't touch files
+        :param bool checkOnly: True to check variable, don't touch files
 
         :return: list of undefined variables
         """
@@ -770,7 +771,7 @@ class Model:
                     p["value"] = ""
 
     def DeleteIntermediateData(self, log):
-        """Detele intermediate data"""
+        """Delete intermediate data"""
         rast, vect, rast3d, msg = self.GetIntermediateData()
 
         if rast:
@@ -1550,7 +1551,8 @@ class ModelData(ModelObject):
         elif self.prompt == "vector":
             cmd.append("d.vect")
         else:
-            raise GException("Unsupported display prompt: {}".format(self.prompt))
+            msg = "Unsupported display prompt: {}".format(self.prompt)
+            raise GException(msg)
 
         cmd.append("map=" + self.value)
 
@@ -2672,7 +2674,7 @@ class WriteScriptFile(ABC):
     @staticmethod
     def _getModuleNickname(item):
         return "{module_name}{module_id}".format(
-            module_name=re.sub("[^a-zA-Z]+", "", item.GetLabel()),
+            module_name=re.sub(r"[^a-zA-Z]+", "", item.GetLabel()),
             module_id=item.GetId(),
         )
 
@@ -3736,5 +3738,5 @@ class ModelParamDialog(wx.Dialog):
         return errList
 
     def DeleteIntermediateData(self) -> bool:
-        """Check if to detele intermediate data"""
+        """Check if to delete intermediate data"""
         return bool(self.interData.IsShown() and self.interData.IsChecked())

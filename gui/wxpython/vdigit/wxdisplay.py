@@ -373,6 +373,8 @@ class DisplayDriver:
 
         :return: pen, brush
         """
+
+        key = None
         if rtype == TYPE_POINT:
             key = "point"
         elif rtype == TYPE_LINE:
@@ -712,7 +714,7 @@ class DisplayDriver:
         pz = c_double()
         if not self._validLine(lineNearest):
             return {"line": -1, "point": None}
-        ftype = Vect_read_line(poMapInfo, self.poPoints, self.poCats, lineNearest)
+        Vect_read_line(poMapInfo, self.poPoints, self.poCats, lineNearest)
         Vect_line_distance(
             self.poPoints,
             point[0],
@@ -856,7 +858,7 @@ class DisplayDriver:
 
         if not self._validLine(line):
             return -1
-        ftype = Vect_read_line(self.poMapInfo, self.poPoints, self.poCats, line)
+        Vect_read_line(self.poMapInfo, self.poPoints, self.poCats, line)
 
         minDist = 0.0
         Gid = -1
