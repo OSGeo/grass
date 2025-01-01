@@ -1450,4 +1450,4 @@ class VNETGlobalTurnsData:
         if angle < from_angle:
             angle = math.pi * 2 + angle
 
-        return bool(angle > from_angle and angle < to_angle)
+        return bool(from_angle < angle < to_angle)
