@@ -170,7 +170,7 @@ As an example, to build GRASS using my frameworks and Tcl/Tk as built in
 the build notes below, this should work *(for a standard unix build,
 just remove the `--prefix` and `--enable-macosx-app` flags)*:
 
-```bash
+```shell
 ./configure \
     --enable-macosx-app \
     --prefix=/Applications \
@@ -233,7 +233,7 @@ and [gui/wxpython/README](../gui/wxpython/README), wxpython installer
 available at [wxpython.org](https://wxpython.org/)), add this to configure (fill
 in the correct version at x.x.x.x for the wxpython you have installed):
 
-```bash
+```shell
 --with-python
 --with-wxwidgets=/usr/local/lib/wxPython-unicode-x.x.x.x/bin/wx-config
 ```
@@ -243,7 +243,7 @@ system Python on Leopard.
 
 If you want ffmpeg support (see build instructions below), add this:
 
-```bash
+```shell
 --with-ffmpeg \
 --with-ffmpeg-includes="/usr/local/include \
     /usr/local/include/libavcodec /usr/local/include/libavdevice \
@@ -257,7 +257,7 @@ instructions at
 [kyngchaos.com](https://web.archive.org/web/20161112052733/http://www.kyngchaos.com/macosx/build/cairo/)),
 add this:
 
-```bash
+```shell
 --with-cairo \
 --with-cairo-includes=/usr/local/include/cairo \
 --with-cairo-libs=/usr/local/lib \

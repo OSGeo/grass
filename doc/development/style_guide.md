@@ -40,7 +40,7 @@ simplify performing of these checks.
 
 Use Black to format files:
 
-```bash
+```shell
 black {source_file_or_directory}
 ```
 
@@ -51,7 +51,7 @@ length is set to 88 characters.
 
 Use Flake8 to check formatting and basic issues in all files:
 
-```bash
+```shell
 flake8 python_file.py
 ```
 
@@ -60,14 +60,14 @@ contains a less strict configuration for legacy code. It will be used by default
 when running Flake8 within GRASS source code. For new files, you can use the
 default configuration:
 
-```bash
+```shell
 flake8 --isolated --max-line-length=88 {path_to_python_file}
 ```
 
 For specific, temporary issues, you can explicitly specify which errors or
 warnings to ignore:
 
-```bash
+```shell
 flake8 --ignore=E203,E266,E501 --max-line-length=88 python_file.py
 ```
 
@@ -81,7 +81,7 @@ most convenient method to install clang-format and format files is
 
 Alternatively, using separately installed clang-format on modified files:
 
-```bash
+```shell
 clang-format -i <new_or_modified_file.c>
 ```
 
@@ -135,14 +135,14 @@ all necessary tools in a virtual environment upon first use.
 If you never used pre-commit before, you must start by installing it on your
 system. You only do it once:
 
-```bash
+```shell
 python -m pip install pre-commit
 ```
 
 Pre-commit must then be activated in the code repository. Change the directory
 to the root folder and use the `install` command:
 
-```bash
+```shell
 cd <grass_source_dir>
 
 # once per repo
@@ -156,14 +156,14 @@ In that case review the changes and run again `git add` and
 
 It is also possible to run pre-commit manually, e.g:
 
-```bash
+```shell
 pre-commit run clang-format --all-files
 pre-commit run black --all-files
 ```
 
 Or to target a specific set of files:
 
-```bash
+```shell
 pre-commit run --files raster/r.sometool/*
 ```
 
@@ -173,14 +173,14 @@ The pre-commit hooks set is defined in
 It is possible to temporally disable the pre-commit hooks in the repo, e.g. while
 working on older branches:
 
-```bash
+```shell
 # backporting...
 pre-commit uninstall
 ```
 
 And to reactivate pre-commit again:
 
-```bash
+```shell
 git switch main
 pre-commit install
 ```
@@ -347,7 +347,7 @@ Examples:
 **Image size:** ideally **600 pixel width** (height depends on that), use e.g.
 ImageMagic:
 
-```bash
+```shell
 mogrify -resize 600x file.png
 ```
 
@@ -358,7 +358,7 @@ into the HTML page.
 
 Please **compress** PNG images with:
 
-```bash
+```shell
 # color quantization
 # optional, but usually worth it
 # note: may change colors

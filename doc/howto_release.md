@@ -18,14 +18,14 @@ _Note: Some later steps in this text are to be done by the development coordinat
 
 Update your remotes and switch to branch:
 
-```bash
+```shell
 git fetch --prune upstream && git checkout releasebranch_8_4
 ```
 
 Confirm that you are on the right branch and have no local changes
 and that you have no local unpushed commits:
 
-```bash
+```shell
 # Should show no changes:
 git status
 # Should give no output at all:
@@ -41,13 +41,13 @@ Now you can rebase updates from the remote your local branch.
 Above, you confirmed you have no local commits, so this should happen
 without rebasing any local commits, i.e., it should just add the new commits:
 
-```bash
+```shell
 git rebase upstream/releasebranch_8_4
 ```
 
 Verify the result:
 
-```bash
+```shell
 # Should give no output:
 git log upstream/releasebranch_8_4..HEAD
 git log HEAD..upstream/releasebranch_8_4
@@ -58,7 +58,7 @@ git log --max-count=5
 Now or any time later, you can use `git status`, `git log`, and `git show`
 to see a branch, latest commits and a last commit including the changes.
 
-```bash
+```shell
 git status
 git log --max-count=5
 git show
@@ -68,14 +68,14 @@ git show
 
 For RCs, modify the VERSION file use the dedicated script. E.g., for RC1:
 
-```bash
+```shell
 ./utils/update_version.py status
 ./utils/update_version.py rc 1
 ```
 
 For a release, change the version after the RC cycle to an official release:
 
-```bash
+```shell
 ./utils/update_version.py release
 ```
 
@@ -84,7 +84,7 @@ containing it into the terminal (e.g., "version: GRASS GIS 3.5.0RC1").
 
 Commit with a commit message suggested by the script, e.g.:
 
-```bash
+```shell
 git diff
 git commit include/VERSION -m "..."
 ```
@@ -95,14 +95,14 @@ If you lost the script output with the suggested message use
 Check that there is exactly one commit on your local branch and that it is the
 version change:
 
-```bash
+```shell
 git status
 git show
 ```
 
 Push the commit to the upstream repo:
 
-```bash
+```shell
 git push upstream
 ```
 
@@ -110,14 +110,14 @@ git push upstream
 
 For convenience, create Bash variables with the version update script:
 
-```bash
+```shell
 # Get VERSION and TAG as variables.
 eval $(./utils/update_version.py status --bash)
 ```
 
 Version and tag are the same for all releases:
 
-```bash
+```shell
 echo "$VERSION"
 echo "$TAG"
 ```
@@ -135,14 +135,14 @@ see: <https://help.github.com/en/articles/creating-releases>.
 Before creating the tag, it is a good idea to see if the CI jobs are not failing.
 Check on [GitHub Actions](https://github.com/OSGeo/grass/actions) or use GitHub CLI:
 
-```bash
+```shell
 gh run list --branch releasebranch_8_4
 ```
 
 Some time was needed to run the checks, so before getting back to creating the tag,
 confirm that you are on the right branch which is up to date:
 
-```bash
+```shell
 git status
 git log --max-count=5
 ```
@@ -151,13 +151,13 @@ Create an annotated tag (a lightweight tag is okay too, but there is more metada
 stored for annotated tags including a date; message is suggested by the
 `./utils/update_version.py` script):
 
-```bash
+```shell
 git tag $TAG -a -m "GRASS GIS $VERSION"
 ```
 
 List all tags (annotated will be at the top of both lists):
 
-```bash
+```shell
 git tag -n --sort=-creatordate
 git tag -n --sort=-taggerdate
 ```
@@ -165,7 +165,7 @@ git tag -n --sort=-taggerdate
 Now push the tag upstream - this will trigger the
 [automated workflows](https://github.com/OSGeo/grass/actions) linked to tags:
 
-```bash
+```shell
 git push upstream $TAG
 ```
 
@@ -184,7 +184,7 @@ For a first RC of a major (X.y.z) and minor (x.Y.z) release, the GitHub API give
 good results for the first release candidate because it contains contributor handles
 and can identify new contributors, so use with the _api_ backend, e.g.:
 
-```bash
+```shell
 python ./utils/generate_release_notes.py api releasebranch_8_4 8.3.0 $VERSION
 ```
 
@@ -194,7 +194,7 @@ For micro releases (x.y.Z), GitHub API does not give good results because it use
 PRs while the backports are usually direct commits without PRs.
 The _git log_ command operates on commits, so use use the _log_ backend:
 
-```bash
+```shell
 python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0 $VERSION
 ```
 
@@ -203,7 +203,7 @@ python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0 $VERSION
 In between RCs and between last RC and final release, the _log_ backend is useful
 for showing updates since the last RC:
 
-```bash
+```shell
 python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0RC1 $VERSION
 ```
 
@@ -242,14 +242,14 @@ Use the dedicated `update_version.py` script to edit the VERSION file.
 
 After a RC, update to development version:
 
-```bash
+```shell
 ./utils/update_version.py dev
 ```
 
 After a final release, update to the next micro (x.y.Z), minor (x.Y.z),
 or major (X.y.y) version. E.g., for micro version, use:
 
-```bash
+```shell
 ./utils/update_version.py micro
 ```
 
@@ -258,7 +258,7 @@ Use `--help` for details about the options.
 
 Eventually, commit with the suggested commit message and push, e.g.:
 
-```bash
+```shell
 git show
 eval $(./utils/update_version.py status --bash)
 git commit include/VERSION -m "version: Back to $VERSION"
@@ -269,7 +269,7 @@ The message was suggested by the script, but if you lost that output,
 you can get the same or similar message again using the script
 (the message provided this way is not precise after RCs):
 
-```bash
+```shell
 ./utils/update_version.py suggest
 ```
 
@@ -294,25 +294,25 @@ development coordinators.
 For the automation, the tagged version of the source code is needed.
 First, update the repo to get the tag locally:
 
-```bash
+```shell
 git fetch upstream
 ```
 
 Get the tagged source code, e.g. (modify the tag as needed):
 
-```bash
+```shell
 git checkout 8.4.0RC1
 ```
 
 Create the Bash variables for version numbers:
 
-```bash
+```shell
 eval $(./utils/update_version.py status --bash)
 ```
 
 Confirm the version (it should match exactly the tag specified above):
 
-```bash
+```shell
 echo "$VERSION"
 ```
 
@@ -322,7 +322,7 @@ There is also a large changelog file we produce and publish,
 fetch the file from the release which was generated by a workflow
 linked to the tag:
 
-```bash
+```shell
 wget https://github.com/OSGeo/grass/releases/download/${VERSION}/ChangeLog.gz \
     -O ChangeLog_${VERSION}.gz
 ```
@@ -331,7 +331,7 @@ wget https://github.com/OSGeo/grass/releases/download/${VERSION}/ChangeLog.gz \
 
 Fetch a tarball from GitHub we also publish on OSGeo servers:
 
-```bash
+```shell
 wget https://github.com/OSGeo/grass/archive/${VERSION}.tar.gz -O grass-${VERSION}.tar.gz
 md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ```
@@ -341,7 +341,7 @@ md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 Note: servers 'osgeo8-grass' and 'osgeo7-download' only reachable via
 jumphost (managed by OSGeo-SAC) - see <https://wiki.osgeo.org/wiki/SAC_Service_Status#grass>
 
-```bash
+```shell
 # Store the source tarball (twice) in (use scp -p FILES grass:):
 USER=neteler
 SERVER1=osgeo8-grass
@@ -377,13 +377,13 @@ echo "https://grass.osgeo.org/grass$MAJOR$MINOR/source/"
 For final minor and major releases (not release candidates and micro releases),
 update `grass-stable` redirect at `osgeo7-grass`:
 
-```bash
+```shell
 sudo vim /etc/apache2/sites-enabled/000-default.conf
 ```
 
 Load the new configuration:
 
-```bash
+```shell
 sudo systemctl reload apache2
 ```
 
@@ -490,7 +490,7 @@ For new branches and final releases (see additional instructions in the repo):
 - Go to <https://github.com/landam/wingrass-maintenance-scripts/>
 - Update grass_packager_release.bat, eg.
 
-```bash
+```shell
      set MAJOR=8
      set MINOR=4
      set PATCH=0RC1
@@ -498,13 +498,13 @@ For new branches and final releases (see additional instructions in the repo):
 
 - Update addons (grass_addons.sh) rules, eg.
 
-```bash
+```shell
      compile $GIT_PATH/grass8 $GISBASE_PATH/grass840RC1  $ADDON_PATH/grass840RC1/addons
 ```
 
 - Modify grass_copy_wwwroot.sh accordingly, eg.
 
-```bash
+```shell
      copy_addon 840RC1 8.4.0RC1
 ```
 
