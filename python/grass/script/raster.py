@@ -49,27 +49,26 @@ def raster_history(map, overwrite=False, env=None):
 
     """
     current_mapset = gisenv(env)["MAPSET"]
-    if find_file(name=map, env=env)["mapset"] == current_mapset:
-        if overwrite is True:
-            historyfile = tempfile(env=env)
-            f = open(historyfile, "w")
-            f.write(os.environ["CMDLINE"])
-            f.close()
-            run_command("r.support", map=map, loadhistory=historyfile, env=env)
-            try_remove(historyfile)
-        else:
-            run_command("r.support", map=map, history=os.environ["CMDLINE"], env=env)
-        return True
-
-    warning(
-        _(
-            "Unable to write history for <%(map)s>. "
-            "Raster map <%(map)s> not found in current mapset."
+    if find_file(name=map, env=env)["mapset"] != current_mapset:
+        warning(
+            _(
+                "Unable to write history for <%(map)s>. "
+                "Raster map <%(map)s> not found in current mapset."
+            )
+            % {"map": map},
+            env=env,
         )
-        % {"map": map},
-        env=env,
-    )
-    return False
+        return False
+
+    if overwrite is True:
+        historyfile = tempfile(env=env)
+        with open(historyfile, "w") as f:
+            f.write(os.environ["CMDLINE"])
+        run_command("r.support", map=map, loadhistory=historyfile, env=env)
+        try_remove(historyfile)
+    else:
+        run_command("r.support", map=map, history=os.environ["CMDLINE"], env=env)
+    return True
 
 
 def raster_info(map, env=None):

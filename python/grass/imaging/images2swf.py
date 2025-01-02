@@ -839,11 +839,8 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
         taglist.append(DoActionTag("stop"))
 
     # Build file
-    fp = open(filename, "wb")
-    try:
+    with open(filename, "wb") as fp:
         buildFile(fp, taglist, nframes=nframes, framesize=wh, fps=fps)
-    finally:
-        fp.close()
 
 
 def _readPixels(bb, i, tagType, L1):
@@ -924,10 +921,9 @@ def readSwf(filename, asNumpy=True):
     images = []
 
     # Open file and read all
-    fp = open(filename, "rb")
-    bb = fp.read()
+    with open(filename, "rb") as fp:
+        bb = fp.read()
 
-    try:
         # Check opening tag
         tmp = bb[0:3].decode("ascii", "ignore")
         if tmp.upper() == "FWS":
@@ -981,10 +977,6 @@ def readSwf(filename, asNumpy=True):
 
             # Next tag!
             i += L2
-
-    finally:
-        fp.close()
-
     # Convert to normal PIL images if needed
     if not asNumpy:
         images2 = images

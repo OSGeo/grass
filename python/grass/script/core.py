@@ -923,15 +923,14 @@ def parser() -> tuple[dict[str, str], dict[str, bool]]:
             argv[0] = os.path.join(sys.path[0], name)
 
     prog = "g.parser.exe" if sys.platform == "win32" else "g.parser"
-    p = subprocess.Popen([prog, "-n"] + argv, stdout=subprocess.PIPE)
-    s = p.communicate()[0]
-    lines = s.split(b"\0")
-
-    if not lines or lines[0] != b"@ARGS_PARSED@":
-        stdout = os.fdopen(sys.stdout.fileno(), "wb")
-        stdout.write(s)
-        sys.exit(p.returncode)
-    return _parse_opts(lines[1:])
+    with subprocess.Popen([prog, "-n"] + argv, stdout=subprocess.PIPE) as p:
+        s = p.communicate()[0]
+        lines = s.split(b"\0")
+        if not lines or lines[0] != b"@ARGS_PARSED@":
+            stdout = os.fdopen(sys.stdout.fileno(), "wb")
+            stdout.write(s)
+            sys.exit(p.returncode)
+        return _parse_opts(lines[1:])
 
 
 # interface to g.tempfile
