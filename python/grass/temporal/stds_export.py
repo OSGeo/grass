@@ -418,8 +418,7 @@ def export_stds(
     string += "%s=%s\n" % ("south", south)
     string += "%s=%s\n" % ("east", east)
     string += "%s=%s\n" % ("west", west)
-    with open(init_file_name, "w") as init_file:
-        init_file.write(string)
+    Path(init_file_name).write_text(string)
 
     metadata = gs.read_command("t.info", type=type_, input=sp.get_id())
     Path(metadata_file_name).write_text(metadata)

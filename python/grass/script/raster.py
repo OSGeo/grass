@@ -21,6 +21,8 @@ for details.
 import os
 import string
 import time
+from pathlib import Path
+
 
 from .core import (
     gisenv,
@@ -62,8 +64,7 @@ def raster_history(map, overwrite=False, env=None):
 
     if overwrite is True:
         historyfile = tempfile(env=env)
-        with open(historyfile, "w") as f:
-            f.write(os.environ["CMDLINE"])
+        Path(historyfile).write_text(os.environ["CMDLINE"])
         run_command("r.support", map=map, loadhistory=historyfile, env=env)
         try_remove(historyfile)
     else:
