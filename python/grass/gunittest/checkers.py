@@ -16,12 +16,12 @@ import hashlib
 import os
 import re
 import sys
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Any
 
 from grass.script.utils import encode
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Callable, Mapping
 
 try:
     from grass.script.core import KeyValue
