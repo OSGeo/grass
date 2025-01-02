@@ -627,11 +627,6 @@ def compute_datetime_delta(start: datetime, end: datetime) -> datetime_delta:
          >>> compute_datetime_delta(start, end)
          {'hour': 0, 'month': 12, 'second': 0, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 527070}
 
-         >>> start = datetime(2011, 12, 1, 0, 0, 0)
-         >>> end = datetime(2012, 6, 1, 0, 0, 0)
-         >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 12, 'second': 31622405, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 0}
-
     :return: A dictionary with year, month, day, hour, minute, second and max_days as keys()
     """  # noqa: E501
     # TODO: set default values here, and ensure processing below covers all situations,
