@@ -32,12 +32,22 @@ import shlex
 import json
 import csv
 import io
+from collections.abc import Mapping
 from tempfile import NamedTemporaryFile
 from pathlib import Path
+from typing import TYPE_CHECKING, Literal, TypeVar
 
 from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
 from grass.exceptions import ScriptError, CalledModuleError
 from grass.grassdb.manage import resolve_mapset_path
+
+
+if TYPE_CHECKING:
+    from _typeshed import StrPath
+
+
+T = TypeVar("T")
+_Env = Mapping[str, str]
 
 
 # subprocess wrapper that uses shell on Windows
@@ -1032,20 +1042,22 @@ def _compare_units(dic):
 
 
 def _text_to_key_value_dict(
-    filename, sep=":", val_sep=",", checkproj=False, checkunits=False
-):
+    filename: StrPath,
+    sep: str = ":",
+    val_sep: str = ",",
+    checkproj: bool = False,
+    checkunits: bool = False,
+) -> KeyValue[list[int | float | str]]:
     """Convert a key-value text file, where entries are separated by newlines
     and the key and value are separated by `sep', into a key-value dictionary
     and discover/use the correct data types (float, int or string) for values.
 
-    :param str filename: The name or name and path of the text file to convert
-    :param str sep: The character that separates the keys and values, default
-                    is ":"
-    :param str val_sep: The character that separates the values of a single
+    :param filename: The name or name and path of the text file to convert
+    :param sep: The character that separates the keys and values, default is ":"
+    :param val_sep: The character that separates the values of a single
                         key, default is ","
-    :param bool checkproj: True if it has to check some information about
-                           projection system
-    :param bool checkproj: True if it has to check some information about units
+    :param checkproj: True if it has to check some information about projection system
+    :param checkunits: True if it has to check some information about units
 
     :return: The dictionary
 
@@ -1066,7 +1078,7 @@ def _text_to_key_value_dict(
     """
     with Path(filename).open() as f:
         text = f.readlines()
-    kvdict = KeyValue()
+    kvdict: KeyValue[list[int | float | str]] = KeyValue()
 
     for line in text:
         if line.find(sep) >= 0:
@@ -1077,7 +1089,7 @@ def _text_to_key_value_dict(
             # Jump over empty values
             continue
         values = value.split(val_sep)
-        value_list = []
+        value_list: list[int | float | str] = []
 
         for value in values:
             not_float = False
@@ -1173,7 +1185,7 @@ def compare_key_value_text_files(
 # interface to g.gisenv
 
 
-def gisenv(env=None):
+def gisenv(env: _Env | None = None) -> KeyValue[str | None]:
     """Returns the output from running g.gisenv (with no arguments), as a
     dictionary. Example:
 
@@ -1191,14 +1203,14 @@ def gisenv(env=None):
 # interface to g.region
 
 
-def locn_is_latlong(env=None) -> bool:
+def locn_is_latlong(env: _Env | None = None) -> bool:
     """Tests if location is lat/long. Value is obtained
     by checking the "g.region -pu" projection code.
 
     :return: True for a lat/long region, False otherwise
     """
     s = read_command("g.region", flags="pu", env=env)
-    kv = parse_key_val(s, ":")
+    kv: KeyValue[str | None] = parse_key_val(s, ":")
     return kv["projection"].split(" ")[0] == "3"
 
 
@@ -1246,7 +1258,9 @@ def region(region3d=False, complete=False, env=None):
     return reg
 
 
-def region_env(region3d=False, flags=None, env=None, **kwargs):
+def region_env(
+    region3d: bool = False, flags: str | None = None, env: _Env | None = None, **kwargs
+) -> str:
     """Returns region settings as a string which can used as
     GRASS_REGION environmental variable.
 
@@ -1256,8 +1270,8 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
     See also :func:`use_temp_region()` for alternative method how to define
     temporary region used for raster-based computation.
 
-    :param bool region3d: True to get 3D region
-    :param string flags: for example 'a'
+    :param region3d: True to get 3D region
+    :param flags: for example 'a'
     :param env: dictionary with system environment variables (`os.environ` by default)
     :param kwargs: g.region's parameters like 'raster', 'vector' or 'region'
 
@@ -1271,7 +1285,7 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
     :return: empty string on error
     """
     # read proj/zone from WIND file
-    gis_env = gisenv(env)
+    gis_env: KeyValue[str | None] = gisenv(env)
     windfile = os.path.join(
         gis_env["GISDBASE"], gis_env["LOCATION_NAME"], gis_env["MAPSET"], "WIND"
     )
