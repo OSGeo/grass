@@ -35,9 +35,8 @@ def cleanup():
 
 
 def make_gradient(path):
-    fh = open(path)
-    text = fh.read()
-    fh.close()
+    with open(path) as fh:
+        text = fh.read()
 
     lines = text.splitlines()
     records = []

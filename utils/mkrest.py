@@ -79,8 +79,9 @@ if tmp_data:
     sys.stdout.write(tmp_data)
 
 arguments = ["pandoc", "-s", "-r", "html", src_file, "-w", "rst"]
-process = subprocess.Popen(arguments, stdout=subprocess.PIPE)
-html_text = process.communicate()[0]
+with subprocess.Popen(arguments, stdout=subprocess.PIPE) as process:
+    html_text = process.communicate()[0]
+
 if html_text:
     for k, v in replacement.iteritems():
         html_text = html_text.replace(k, v)
