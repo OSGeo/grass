@@ -555,14 +555,14 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         boxh = math.fabs(math.sin(math.radians(rotation)) * w) + h
         boxw = math.fabs(math.cos(math.radians(rotation)) * w) + h
-        if rotation > 0 and rotation < 90:
+        if 0 < rotation < 90:
             bbox[1] -= boxh
             relCoords = (0, boxh)
-        elif rotation >= 90 and rotation < 180:
+        elif 90 <= rotation < 180:
             bbox[0] -= boxw
             bbox[1] -= boxh
             relCoords = (boxw, boxh)
-        elif rotation >= 180 and rotation < 270:
+        elif 180 <= rotation < 270:
             bbox[0] -= boxw
             relCoords = (boxw, 0)
         bbox[2] = boxw

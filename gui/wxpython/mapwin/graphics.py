@@ -363,7 +363,7 @@ class GraphicsSet:
         :return: True if order was changed
         :return: False if drawNum is out of range or item was not found
         """
-        if drawNum < len(self.itemsList) and drawNum >= 0 and item in self.itemsList:
+        if 0 <= drawNum < len(self.itemsList) and item in self.itemsList:
             self.itemsList.insert(
                 drawNum, self.itemsList.pop(self.itemsList.index(item))
             )

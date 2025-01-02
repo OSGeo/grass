@@ -217,11 +217,7 @@ def GetValidLayerName(name):
     cIdx = 0
     retNameList = list(retName)
     for c in retNameList:
-        if (
-            not (c >= "A" and c <= "Z")
-            and not (c >= "a" and c <= "z")
-            and not (c >= "0" and c <= "9")
-        ):
+        if not ("A" <= c <= "Z") and not ("a" <= c <= "z") and not ("0" <= c <= "9"):
             retNameList[cIdx] = "_"
         cIdx += 1
     retName = "".join(retNameList)
