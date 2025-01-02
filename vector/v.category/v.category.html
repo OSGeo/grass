@@ -80,6 +80,30 @@ area           0          0          0
 all         1379          1       1379
 </pre></div>
 
+<h3>Report in JSON format</h3>
+<div class="code"><pre>
+v.category input=testmap option=report format=json
+</pre></div>
+
+<div class="code"><pre>
+[
+    {
+        "type": "line",
+        "field": 1,
+        "count": 1379,
+        "min": 1,
+        "max": 1379
+    },
+    {
+        "type": "all",
+        "field": 1,
+        "count": 1379,
+        "min": 1,
+        "max": 1379
+    }
+]
+</pre></div>
+
 <h3>Delete all vector categories in layer 1</h3>
 
 <div class="code"><pre>
