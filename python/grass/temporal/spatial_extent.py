@@ -868,13 +868,13 @@ class SpatialExtent(SQLDatabaseInterface):
 
         # We check that at least one edge of extent is located in self
         edge_count = 0
-        if eW > W and eW < E:
+        if W < eW < E:
             edge_count += 1
-        if eE < E and eE > W:
+        if W < eE < E:
             edge_count += 1
-        if eN < N and eN > S:
+        if S < eN < N:
             edge_count += 1
-        if eS > S and eS < N:
+        if S < eS < N:
             edge_count += 1
 
         return edge_count != 0
@@ -941,21 +941,21 @@ class SpatialExtent(SQLDatabaseInterface):
 
         # We check that at least one edge of extent is located in self
         edge_count = 0
-        if eW > W and eW < E:
+        if W < eW < E:
             edge_count += 1
-        if eE < E and eE > W:
+        if W < eE < E:
             edge_count += 1
-        if eN < N and eN > S:
+        if S < eN < N:
             edge_count += 1
-        if eS > S and eS < N:
+        if S < eS < N:
             edge_count += 1
-        if eN < N and eN > S:
+        if S < eN < N:
             edge_count += 1
-        if eS > S and eS < N:
+        if S < eS < N:
             edge_count += 1
-        if eT < T and eT > B:
+        if B < eT < T:
             edge_count += 1
-        if eB > B and eB < T:
+        if B < eB < T:
             edge_count += 1
 
         return edge_count != 0
