@@ -230,9 +230,9 @@ class GifWriter:
 
           * 0 - No disposal specified.
           * 1 - Do not dispose. The graphic is to be left in place.
-          * 2 -	Restore to background color. The area used by the graphic
+          * 2 - Restore to background color. The area used by the graphic
             must be restored to the background color.
-          * 3 -	Restore to previous. The decoder is required to restore the
+          * 3 - Restore to previous. The decoder is required to restore the
             area overwritten by the graphic with what was there prior to
             rendering the graphic.
           * 4-7 -To be defined.
@@ -254,7 +254,6 @@ class GifWriter:
         """Handle the sub-rectangle stuff. If the rectangles are given by the
         user, the values are checked. Otherwise the subrectangles are
         calculated automatically.
-
         """
 
         if isinstance(subRectangles, (tuple, list)):
@@ -406,9 +405,7 @@ class GifWriter:
         Requires different handling of palette for PIL and Pillow:
         based on https://github.com/rec/echomesh/blob/master/
         code/python/external/images2gif.py
-
         """
-
         # Obtain palette for all images and count each occurrence
         palettes, occur = [], []
         for im in images:
@@ -547,7 +544,7 @@ def writeGifVisvis(
                         integer types, and between 0 and 1 for float types.
     :param duration: scalar or list of scalars The duration for all frames, or
                      (if a list) for each frame.
-    :param repeat: bool or integer The amount of loops. If True, loops infinitetely.
+    :param repeat: bool or integer The amount of loops. If True, loops infinitely.
     :param bool dither: whether to apply dithering
     :param int nq: If nonzero, applies the NeuQuant quantization algorithm to
                    create the color palette. This algorithm is superior, but

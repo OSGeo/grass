@@ -227,9 +227,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         :param count_map: Boolean if the number of topological related maps
                        should be returned.
         :param compare_bool: Boolean for comparing boolean map values based on
-                        related map list and compariosn operator.
+                        related map list and comparison operator.
         :param compare_cmd: Boolean for comparing command list values based on
-                        related map list and compariosn operator.
+                        related map list and comparison operator.
         :param compop: Comparison operator, && or ||.
         :param aggregate: Aggregation operator for relation map list, & or |.
         :param new: Boolean if new temporary maps should be created.

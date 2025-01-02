@@ -87,7 +87,7 @@ def dataset_mapcalculator(
     :param type: The type of the dataset: "raster" or "raster3d"
     :param expression: The r(3).mapcalc expression
     :param base: The base name of the new created maps in case a
-           mapclac expression is provided
+           mapcalc expression is provided
     :param method: The method to be used for temporal sampling
     :param nprocs: The number of parallel processes to be used for
            mapcalc processing

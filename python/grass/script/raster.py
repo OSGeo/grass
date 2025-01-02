@@ -218,8 +218,7 @@ def raster_what(map, coord, env=None, localized=False):
     [{'elevation': {'color': '255:214:000', 'label': '', 'value': '102.479'}}]
 
     :param str map: the map name
-    :param list coord: a list of list containing all the point that you want
-                       query
+    :param list coord: a list of list containing all the point that you want to query
     :param env:
     """
     map_list = [map] if isinstance(map, (bytes, str)) else map
