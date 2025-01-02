@@ -13,7 +13,7 @@
 #            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
-"""The *grass.jupyter* is a convenient GRASS GIS interface for Jupyter notebooks.
+"""A convenient GRASS GIS interface for Jupyter notebooks.
 
 Python is a great tool for data science and scientific computing. Jupyter_ is an
 environment with computational notebooks which makes it even better tool for
@@ -72,7 +72,7 @@ and interactive ones with live code are available on Binder:
 
 .. image:: https://mybinder.org/badge_logo.svg
     :target:
-        https://mybinder.org/v2/gh/OSGeo/grass/main?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fjupyter_example.ipynb
+        https://mybinder.org/v2/gh/OSGeo/grass/main?urlpath=lab%2Ftree%2Fdoc%2Fexamples%2Fnotebooks%2Fjupyter_example.ipynb
 
 There are also internal classes and functions which are not guaranteed to have
 as stable API, although they are available through their specific submodules.
@@ -103,7 +103,7 @@ mentored by Vaclav Petras, Stephan Blumentrath, and Helena Mitasova.
 
 .. _Jupyter: https://jupyter.org/
 .. _wiki: https://grasswiki.osgeo.org/wiki/GRASS_GIS_Jupyter_notebooks
-.. _GitHub: https://github.com/OSGeo/grass/blob/main/doc/notebooks/jupyter_example.ipynb
+.. _GitHub: https://github.com/OSGeo/grass/blob/main/doc/examples/notebooks/jupyter_example.ipynb
 """
 
 from .interactivemap import InteractiveMap, Raster, Vector
