@@ -15,6 +15,8 @@
 
 import os
 import atexit
+from pathlib import Path
+
 import grass.script as gs
 
 
@@ -35,9 +37,7 @@ def cleanup():
 
 
 def make_gradient(path):
-    with open(path) as fh:
-        text = fh.read()
-
+    text = Path(path).read_text()
     lines = text.splitlines()
     records = []
     for line in lines:

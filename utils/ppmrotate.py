@@ -17,6 +17,8 @@ import sys
 import os
 import atexit
 import array
+from pathlib import Path
+
 import grass.script as gs
 
 tmp_img = None
@@ -36,9 +38,7 @@ def cleanup():
 
 def read_ppm(src):
     global width, height
-
-    with open(src, "rb") as fh:
-        text = fh.read()
+    text = Path(src).read_bytes()
 
     i = 0
     j = text.find("\n", i)
