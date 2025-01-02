@@ -149,6 +149,27 @@ int vect_to_rast(const char *vector_map, const char *raster_map,
         dense = 0;
     }
 
+    if (ftype & GV_POINT) {
+        G_verbose_message(
+            _("Number of points selected from vector map <%s>: %d"), vector_map,
+            Vect_get_num_primitives(&Map, GV_POINT));
+    }
+    if (ftype & GV_LINE) {
+        G_verbose_message(
+            _("Number of lines selected from vector map <%s>: %d"), vector_map,
+            Vect_get_num_primitives(&Map, GV_LINE));
+    }
+    if (ftype & GV_BOUNDARY) {
+        G_verbose_message(
+            _("Number of boundaries selected from vector map <%s>: %d"),
+            vector_map, Vect_get_num_primitives(&Map, GV_BOUNDARY));
+    }
+    if (ftype & GV_CENTROID) {
+        G_verbose_message(
+            _("Number of centroids selected from vector map <%s>: %d"),
+            vector_map, Vect_get_num_primitives(&Map, GV_CENTROID));
+    }
+
     nlines = Vect_get_num_primitives(&Map, ftype);
     nplines_all = nlines;
     npasses = begin_rasterization(cache_mb, format, dense);

@@ -12,7 +12,7 @@
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *               Markus Metz (labelcol, cats, where options)
  * PURPOSE:      Converts vector map to raster map
- * COPYRIGHT:    (C) 2003-2018 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2024 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
