@@ -210,10 +210,7 @@ class Vector(Info):
         if cat is not None and cat not in self._cats:
             self._cats.append(cat)
             if self.table is not None and attrs is not None:
-                attr = [
-                    cat,
-                ]
-                attr.extend(attrs)
+                attr = [cat, *attrs]
                 cur = self.table.conn.cursor()
                 cur.execute(self.table.columns.insert_str, attr)
                 cur.close()
@@ -403,10 +400,7 @@ class VectorTopo(Vector):
     @must_be_open
     def num_primitives(self):
         """Return dictionary with the number of all primitives"""
-        output = {}
-        for prim in VTYPE.keys():
-            output[prim] = self.num_primitive_of(prim)
-        return output
+        return {prim: self.num_primitive_of(prim) for prim in VTYPE.keys()}
 
     @must_be_open
     def viter(self, vtype, idonly=False):

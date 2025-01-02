@@ -116,9 +116,8 @@ def _get_vector_table_as_dict(lock, conn, data):
                 table = layer.table_to_dict(where=where)
             layer.close()
 
-            ret = {}
-            ret["table"] = table
-            ret["columns"] = columns
+            ret = {"table": table, "columns": columns}
+
     finally:
         # Send even if an exception was raised.
         conn.send(ret)

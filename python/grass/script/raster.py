@@ -255,8 +255,7 @@ def raster_what(map, coord, env=None, localized=False):
     for item in ret.splitlines():
         line = item.split(sep)[3:]
         for i, map_name in enumerate(map_list):
-            tmp_dict = {}
-            tmp_dict[map_name] = {}
+            tmp_dict = {map_name: {}}
             for j in range(len(labels)):
                 tmp_dict[map_name][labels[j]] = line[i * len(labels) + j]
 
