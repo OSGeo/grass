@@ -1450,7 +1450,7 @@ def get_multi_addon_addons_which_install_only_html_man_page():
     """Get multi-addon addons which install only manual html page
 
     :return list addon_dirs: list of addon directories which does
-                             not contains any Python, C source code
+                             not contain any Python or C source code
                              files
     """
     addon_dirs = []
@@ -1475,8 +1475,8 @@ def get_multi_addon_addons_which_install_only_html_man_page():
                     addon_paths.index(addon_src_file.group(0).replace("\n", ""))
                 )
     gs.debug(
-        f"Addon dicrectories names <{', '.join(addon_dirs)}> which "
-        " does not contains any Python, C source code files."
+        f"Addon dicrectory names <{', '.join(addon_dirs)}> which "
+        " does not contain any Python or C source code files."
     )
     return addon_dirs
 
@@ -1502,7 +1502,7 @@ def filter_multi_addon_addons(mlist):
     # to check if metadata is available if there is no executable module.
     for addon in get_multi_addon_addons_which_install_only_html_man_page():
         if addon in mlist:
-            gs.debug(f"Addon name <{addon}> which install only HTML man page.")
+            gs.debug(f"Addon name <{addon}> which installs only HTML man page.")
             mlist.pop(mlist.index(addon))
     return mlist
 
