@@ -750,7 +750,7 @@ class TimeISOValidator(BaseValidator):
         if text:
             try:
                 datetime.strptime(text, "%Y-%m-%d")
-            except ValueError:
+            except (TypeError, ValueError):
                 self._notvalid()
                 return False
 
