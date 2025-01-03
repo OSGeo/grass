@@ -20,6 +20,7 @@ from pathlib import Path
 import grass.grassdb.config as cfg
 import grass.script as gs
 from grass.script import gisenv
+from itertools import starmap
 
 
 def mapset_exists(path: str | os.PathLike[str], location=None, mapset=None) -> bool:
@@ -536,10 +537,7 @@ def get_reasons_locations_not_removable(locations):
 
     Returns messages as list if there were any failed checks, otherwise empty list.
     """
-    messages = []
-    for grassdb, location in locations:
-        messages += get_reasons_location_not_removable(grassdb, location)
-    return messages
+    return list(starmap(get_reasons_location_not_removable, locations))
 
 
 def get_reasons_location_not_removable(grassdb, location):
@@ -570,9 +568,7 @@ def get_reasons_location_not_removable(grassdb, location):
     )
 
     # Append to the list of tuples
-    mapsets = []
-    for g_mapset in g_mapsets:
-        mapsets.append((grassdb, location, g_mapset))
+    mapsets = [(grassdb, location, g_mapset) for g_mapset in g_mapsets]
 
     # Concentenate both checks
     messages += get_reasons_mapsets_not_removable(mapsets, check_permanent=False)
@@ -601,9 +597,7 @@ def get_reasons_grassdb_not_removable(grassdb):
     g_locations = get_list_of_locations(grassdb)
 
     # Append to the list of tuples
-    locations = []
-    for g_location in g_locations:
-        locations.append((grassdb, g_location))
+    locations = [(grassdb, g_location) for g_location in g_locations]
     return get_reasons_locations_not_removable(locations)
 
 
@@ -614,12 +608,11 @@ def get_list_of_locations(dbase):
 
     :return: list of locations (sorted)
     """
-    locations = []
-    for location in glob.glob(os.path.join(dbase, "*")):
-        if os.path.join(location, "PERMANENT") in glob.glob(
-            os.path.join(location, "*")
-        ):
-            locations.append(os.path.basename(location))
+    locations = [
+        os.path.basename(location)
+        for location in glob.glob(os.path.join(dbase, "*"))
+        if os.path.join(location, "PERMANENT") in glob.glob(os.path.join(location, "*"))
+    ]
 
     locations.sort(key=lambda x: x.lower())
 

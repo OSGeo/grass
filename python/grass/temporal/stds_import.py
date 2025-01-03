@@ -411,13 +411,14 @@ def import_stds(
                 mapname = filename
                 mapid = mapname + "@" + mapset
 
-            row = {}
-            row["filename"] = filename
-            row["name"] = mapname
-            row["id"] = mapid
-            row["start"] = line_list[1].strip()
-            row["end"] = line_list[2].strip()
-            row["semantic_label"] = line_list[3].strip() if len(line_list) == 4 else ""
+            row = {
+                "filename": filename,
+                "name": mapname,
+                "id": mapid,
+                "start": line_list[1].strip(),
+                "end": line_list[2].strip(),
+                "semantic_label": line_list[3].strip() if len(line_list) == 4 else "",
+            }
 
             new_list_file.write(
                 f"{mapname}{fs}{row['start']}{fs}{row['end']}"

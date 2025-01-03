@@ -190,9 +190,9 @@ class SemanticLabelReader:
 
         :return list: list of valid band identifiers
         """
-        bands = []
-        for root in self.config.values():
-            for item in root.values():
-                for band in item["bands"]:
-                    bands.append("{}_{}".format(item["shortcut"], band))
-        return bands
+        return [
+            "{}_{}".format(item["shortcut"], band)
+            for root in self.config.values()
+            for item in root.values()
+            for band in item["bands"]
+        ]

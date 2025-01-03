@@ -1450,20 +1450,19 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag="", env=Non
     if type == "cell":
         verbose(_('Element type should be "raster" and not "%s"') % type, env=env)
 
-    result = []
-    for line in read_command(
-        "g.list",
-        quiet=True,
-        flags="m" + flag,
-        type=type,
-        pattern=pattern,
-        exclude=exclude,
-        mapset=mapset,
-        env=env,
-    ).splitlines():
-        result.append(line.strip())
-
-    return result
+    return [
+        line.strip()
+        for line in read_command(
+            "g.list",
+            quiet=True,
+            flags="m" + flag,
+            type=type,
+            pattern=pattern,
+            exclude=exclude,
+            mapset=mapset,
+            env=env,
+        ).splitlines()
+    ]
 
 
 def list_pairs(type, pattern=None, mapset=None, exclude=None, flag="", env=None):

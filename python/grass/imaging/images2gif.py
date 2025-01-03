@@ -515,9 +515,7 @@ def writeGifPillow(filename, images, duration=0.1, repeat=True):
 
     """
     loop = 0 if repeat else 1
-    quantized = []
-    for im in images:
-        quantized.append(im.quantize())
+    quantized = [im.quantize() for im in images]
     quantized[0].save(
         filename,
         save_all=True,
@@ -674,9 +672,7 @@ def readGif(filename, asNumpy=True):
     # Convert to normal PIL images if needed
     if not asNumpy:
         images2 = images
-        images = []
-        for im in images2:
-            images.append(PIL.Image.fromarray(im))
+        images = [PIL.Image.fromarray(im) for im in images2]
 
     # Done
     return images

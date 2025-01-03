@@ -774,12 +774,12 @@ class Module:
         """Return a dictionary that includes the name, all valid
         inputs, outputs and flags
         """
-        dic = {}
-        dic["name"] = self.name
-        dic["inputs"] = [(k, v.value) for k, v in self.inputs.items() if v.value]
-        dic["outputs"] = [(k, v.value) for k, v in self.outputs.items() if v.value]
-        dic["flags"] = [flg for flg in self.flags if self.flags[flg].value]
-        return dic
+        return {
+            "name": self.name,
+            "inputs": [(k, v.value) for k, v in self.inputs.items() if v.value],
+            "outputs": [(k, v.value) for k, v in self.outputs.items() if v.value],
+            "flags": [flg for flg in self.flags if self.flags[flg].value],
+        }
 
     def make_cmd(self):
         """Create the command string that can be executed in a shell

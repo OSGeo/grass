@@ -104,11 +104,10 @@ class AbstractDataset(
         :return: A dictionary with "spatial" and "temporal" as keys that
                  have boolean values
         """
-        d = {}
-        d["spatial"] = self.is_spatial_topology_build()
-        d["temporal"] = self.is_temporal_topology_build()
-
-        return d
+        return {
+            "spatial": self.is_spatial_topology_build(),
+            "temporal": self.is_temporal_topology_build(),
+        }
 
     def print_topology_info(self) -> None:
         if self.is_temporal_topology_build():

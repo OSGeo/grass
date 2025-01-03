@@ -126,8 +126,7 @@ def register_maps_in_space_time_dataset(
     # create new stds only in the current mapset
     # remove all connections to any other mapsets
     # ugly hack !
-    currcon = {}
-    currcon[mapset] = dbif.connections[mapset]
+    currcon = {mapset: dbif.connections[mapset]}
     dbif.connections = currcon
 
     # The name of the space time dataset is optional

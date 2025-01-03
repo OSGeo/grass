@@ -188,9 +188,7 @@ def _write_json(rows, column_names, file) -> None:
 
     dict_rows = []
     for row in rows:
-        new_row = {}
-        for key, value in zip(column_names, row):
-            new_row[key] = value
+        new_row = dict(zip(column_names, row))
         dict_rows.append(new_row)
     meta = {"column_names": column_names}
     with _open_output_file(file) as stream:
@@ -221,9 +219,7 @@ def _write_yaml(rows, column_names, file=sys.stdout) -> None:
 
     dict_rows = []
     for row in rows:
-        new_row = {}
-        for key, value in zip(column_names, row):
-            new_row[key] = value
+        new_row = dict(zip(column_names, row))
         dict_rows.append(new_row)
     meta = {"column_names": column_names}
     with _open_output_file(file) as stream:
