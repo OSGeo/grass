@@ -140,10 +140,7 @@ class Instruction:
 
     def FindInstructionByType(self, type, list=False):
         """Find instruction(s) with the given type"""
-        inst = []
-        for each in self.instruction:
-            if each.type == type:
-                inst.append(each)
+        inst = [each for each in self.instruction if each.type == type]
         if len(inst) == 1 and not list:
             return inst[0]
         return inst

@@ -1396,9 +1396,7 @@ class FormatSelect(wx.Choice):
 
         ftype = "ogr" if ogr else "gdal"
 
-        formats = []
-        for f in GetFormats()[ftype][srcType].items():
-            formats += f
+        formats = list(GetFormats()[ftype][srcType].items())
         self.SetItems(formats)
 
     def GetExtension(self, name):

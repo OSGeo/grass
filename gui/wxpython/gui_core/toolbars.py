@@ -243,10 +243,7 @@ class ToolbarController:
 
     def _getToolbarData(self, data):
         """Define tool"""
-        retData = []
-        for args in data:
-            retData.append(self._defineTool(*args))
-        return retData
+        return [self._defineTool(*args) for args in data]
 
     def _defineTool(
         self, name=None, icon=None, handler=None, item=wx.ITEM_NORMAL, pos=-1

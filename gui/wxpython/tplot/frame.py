@@ -760,8 +760,7 @@ class TplotFrame(wx.Frame):
         with open(self.csvpath, "w", newline="") as fi:
             writer = csv.writer(fi)
             if self.header:
-                head = ["Time"]
-                head.extend(self.yticksNames)
+                head = ["Time", *self.yticksNames]
                 writer.writerow(head)
             writer.writerows(zipped)
 

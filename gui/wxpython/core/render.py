@@ -116,9 +116,7 @@ class Layer:
         self.name = name
 
         if self.type == "command":
-            self.cmd = []
-            for c in cmd:
-                self.cmd.append(cmdlist_to_tuple(c))
+            self.cmd = [] + [cmdlist_to_tuple(c) for c in cmd]
         else:
             self.cmd = cmdlist_to_tuple(cmd)
 
@@ -326,9 +324,7 @@ class Layer:
     def SetCmd(self, cmd):
         """Set new command for layer"""
         if self.type == "command":
-            self.cmd = []
-            for c in cmd:
-                self.cmd.append(cmdlist_to_tuple(c))
+            self.cmd = [] + [cmdlist_to_tuple(c) for c in cmd]
         else:
             self.cmd = cmdlist_to_tuple(cmd)
         Debug.msg(3, "Layer.SetCmd(): cmd='%s'" % self.GetCmd(string=True))
@@ -1655,10 +1651,7 @@ class Map:
         :return: overlay (list=False)
         :return: None (list=False) if no overlay or more overlays found
         """
-        ovl = []
-        for overlay in self.overlays:
-            if overlay.id == id:
-                ovl.append(overlay)
+        ovl = [overlay for overlay in self.overlays if overlay.id == id]
 
         if not list:
             if len(ovl) != 1:

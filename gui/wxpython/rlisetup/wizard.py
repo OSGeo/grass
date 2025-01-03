@@ -728,9 +728,7 @@ class FirstPage(TitledPage):
             )
             return False, []
         if links > 0:
-            layers = []
-            for i in range(1, links + 1):
-                layers.append(str(i))
+            layers = [str(i) for i in range(1, links + 1)]
             return True, layers
         return False, []
 

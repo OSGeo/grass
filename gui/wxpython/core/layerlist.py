@@ -63,11 +63,7 @@ class LayerList:
 
         :param mapTypes: list of types
         """
-        layers = []
-        for layer in self._list:
-            if layer.mapType in mapTypes:
-                layers.append(layer)
-        return layers
+        return [layer for layer in self._list if layer.mapType in mapTypes]
 
     def AddNewLayer(
         self,

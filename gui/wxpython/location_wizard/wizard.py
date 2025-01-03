@@ -1753,10 +1753,11 @@ class EPSGPage(TitledPage):
             self.epsglist.Populate([], update=True)
             return
 
-        data = []
-        for code, val in self.epsgCodeDict.items():
-            if code is not None:
-                data.append((code, val[0], val[1]))
+        data = [
+            (code, val[0], val[1])
+            for code, val in self.epsgCodeDict.items()
+            if code is not None
+        ]
 
         self.epsglist.Populate(data, update=True)
 
@@ -2025,10 +2026,11 @@ class IAUPage(TitledPage):
             self.epsglist.Populate([], update=True)
             return
 
-        data = []
-        for code, val in self.epsgCodeDict.items():
-            if code is not None:
-                data.append((code, val[0], val[1]))
+        data = [
+            (code, val[0], val[1])
+            for code, val in self.epsgCodeDict.items()
+            if code is not None
+        ]
 
         self.epsglist.Populate(data, update=True)
 

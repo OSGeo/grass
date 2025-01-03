@@ -75,9 +75,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                 for layer in cats[line].keys():
                     self.cats[line][layer] = list(cats[line][layer])
 
-            layers = []
-            for layer in self.digit.GetLayers():
-                layers.append(str(layer))
+            layers = [str(layer) for layer in self.digit.GetLayers()]
 
         # make copy of cats (used for 'reload')
         self.cats_orig = copy.deepcopy(self.cats)
@@ -114,9 +112,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             self.fidText.SetLabel(str(self.fid))
         else:
             self.fidText.Show(False)
-            choices = []
-            for fid in self.cats.keys():
-                choices.append(str(fid))
+            choices = [str(fid) for fid in self.cats.keys()]
             self.fidMulti.SetItems(choices)
             self.fidMulti.SetSelection(0)
 
@@ -546,9 +542,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         else:
             self.fidText.Show(False)
             self.fidMulti.Show(True)
-            choices = []
-            for fid in self.cats.keys():
-                choices.append(str(fid))
+            choices = [str(fid) for fid in self.cats.keys()]
             self.fidMulti.SetItems(choices)
             self.fidMulti.SetSelection(0)
 

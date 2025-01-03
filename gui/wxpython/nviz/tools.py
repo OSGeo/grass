@@ -1938,9 +1938,10 @@ class NvizToolWindow(GNotebook):
 
     def GselectOnPopup(self, ltype, exclude=False):
         """Update gselect.Select() items"""
-        maps = []
-        for layer in self.mapWindow.Map.GetListOfLayers(ltype=ltype, active=True):
-            maps.append(layer.GetName())
+        maps = [
+            layer.GetName()
+            for layer in self.mapWindow.Map.GetListOfLayers(ltype=ltype, active=True)
+        ]
         return maps, exclude
 
     def _createVolumePage(self, parent):

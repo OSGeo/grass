@@ -5471,10 +5471,11 @@ class TextDialog(PsmapDialog):
         )
         sizerR = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexSizer = wx.FlexGridSizer(rows=3, cols=3, hgap=5, vgap=5)
-        ref = []
-        for row in ["upper", "center", "lower"]:
-            for col in ["left", "center", "right"]:
-                ref.append(row + " " + col)
+        ref = [
+            row + " " + col
+            for row in ["upper", "center", "lower"]
+            for col in ["left", "center", "right"]
+        ]
         self.radio = [
             RadioButton(panel, id=wx.ID_ANY, label="", style=wx.RB_GROUP, name=ref[0])
         ]

@@ -582,8 +582,10 @@ class TaskFrame(wx.Frame):
         self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         # bind closing to ESC and CTRL+Q
         self.Bind(wx.EVT_MENU, self.OnCancel, id=wx.ID_CANCEL)
-        accelTableList = [(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CANCEL)]
-        accelTableList.append((wx.ACCEL_CTRL, ord("Q"), wx.ID_CANCEL))
+        accelTableList = [
+            (wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CANCEL),
+            (wx.ACCEL_CTRL, ord("Q"), wx.ID_CANCEL),
+        ]
         # TODO: bind Ctrl-t for tile windows here (trac #2004)
 
         if self.get_dcmd is not None:  # A callback has been set up
@@ -2407,15 +2409,9 @@ class CmdPanel(wx.Panel):
                 pSqlWhere.append(p)
 
         # collect ids
-        pColumnIds = []
-        for p in pColumn:
-            pColumnIds += p["wxId"]
-        pLayerIds = []
-        for p in pLayer:
-            pLayerIds += p["wxId"]
-        pSqlWhereIds = []
-        for p in pSqlWhere:
-            pSqlWhereIds += p["wxId"]
+        pColumnIds = [p["wxId"] for p in pColumn]
+        pLayerIds = [p["wxId"] for p in pLayer]
+        pSqlWhereIds = [p["wxId"] for p in pSqlWhere]
 
         # set wxId-bindings
         if pMap:
@@ -2842,10 +2838,7 @@ class CmdPanel(wx.Panel):
             del currentValues[theValue]
 
         # Keep the original order, so that some defaults may be recovered
-        currentValueList = []
-        for v in theParam["values"]:
-            if v in currentValues:
-                currentValueList.append(v)
+        currentValueList = [v for v in theParam["values"] if v in currentValues]
 
         # Pack it back
         theParam["value"] = ",".join(currentValueList)
