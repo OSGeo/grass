@@ -285,13 +285,14 @@ class GifWriter:
             # First make numpy arrays if required
             for i in range(len(images)):
                 im = images[i]
-                if isinstance(im, Image.Image):
-                    tmp = im.convert()  # Make without palette
-                    a = np.asarray(tmp)
-                    if len(a.shape) == 0:
-                        msg = "Too little memory to convert PIL image to array"
-                        raise MemoryError(msg)
-                    images[i] = a
+                if not isinstance(im, Image.Image):
+                    continue
+                tmp = im.convert()  # Make without palette
+                a = np.asarray(tmp)
+                if len(a.shape) == 0:
+                    msg = "Too little memory to convert PIL image to array"
+                    raise MemoryError(msg)
+                images[i] = a
 
             # Determine the sub rectangles
             images, xy = self.getSubRectangles(images)

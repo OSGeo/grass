@@ -715,27 +715,26 @@ class VectorTopo(Vector):
 
         """
 
-        if self.table is not None:
-            table_dict = {}
-            # Get the category index
-            cat_index = self.table.columns.names().index("cat")
-            # Prepare a filter
-            if where is not None:
-                self.table.filters.where(where)
+        if self.table is None:
+            return None
+        table_dict = {}
+        # Get the category index
+        cat_index = self.table.columns.names().index("cat")
+        # Prepare a filter
+        if where is not None:
+            self.table.filters.where(where)
 
-            self.table.filters.order_by("cat")
+        self.table.filters.order_by("cat")
 
-            self.table.filters.select(",".join(self.table.columns.names()))
-            # Execute the query and fetch the result
-            cur = self.table.execute()
-            entries = cur.fetchall()
-            # Generate the dictionary
-            for entry in entries:
-                table_dict[entry[cat_index]] = list(entry)
+        self.table.filters.select(",".join(self.table.columns.names()))
+        # Execute the query and fetch the result
+        cur = self.table.execute()
+        entries = cur.fetchall()
+        # Generate the dictionary
+        for entry in entries:
+            table_dict[entry[cat_index]] = list(entry)
 
-            return table_dict
-
-        return None
+        return table_dict
 
     @must_be_open
     def features_to_wkb_list(self, bbox=None, feature_type="point", field=1):
@@ -836,42 +835,38 @@ class VectorTopo(Vector):
             bbox, type=feature_type.lower(), bboxlist_only=True
         )
 
-        if bboxlist is not None and len(bboxlist) > 0:
-            wkb_list = []
-            line_p = libvect.line_pnts()
-            line_c = libvect.line_cats()
-            size = ctypes.c_size_t()
-            cat = ctypes.c_int()
-            error = ctypes.c_int()
+        if bboxlist is None or len(bboxlist) <= 0:
+            return None
 
-            for f_id in bboxlist.ids:
-                barray = libvect.Vect_read_line_to_wkb(
-                    self.c_mapinfo,
-                    ctypes.byref(line_p),
-                    ctypes.byref(line_c),
-                    f_id,
-                    ctypes.byref(size),
-                    ctypes.byref(error),
-                )
-                if not barray:
-                    if error == -1:
-                        raise GrassError(
-                            _("Unable to read line of feature %i") % (f_id)
-                        )
-                    if error == -2:
-                        print("Empty feature %i" % (f_id))
-                    continue
+        wkb_list = []
+        line_p = libvect.line_pnts()
+        line_c = libvect.line_cats()
+        size = ctypes.c_size_t()
+        cat = ctypes.c_int()
+        error = ctypes.c_int()
 
-                ok = libvect.Vect_cat_get(
-                    ctypes.byref(line_c), field, ctypes.byref(cat)
-                )
-                pcat = None if ok < 1 else cat.value
+        for f_id in bboxlist.ids:
+            barray = libvect.Vect_read_line_to_wkb(
+                self.c_mapinfo,
+                ctypes.byref(line_p),
+                ctypes.byref(line_c),
+                f_id,
+                ctypes.byref(size),
+                ctypes.byref(error),
+            )
+            if not barray:
+                if error == -1:
+                    raise GrassError(_("Unable to read line of feature %i") % f_id)
+                if error == -2:
+                    print("Empty feature %i" % f_id)
+                continue
+            ok = libvect.Vect_cat_get(ctypes.byref(line_c), field, ctypes.byref(cat))
+            pcat = None if ok < 1 else cat.value
 
-                wkb_list.append((f_id, pcat, ctypes.string_at(barray, size.value)))
-                libgis.G_free(barray)
+            wkb_list.append((f_id, pcat, ctypes.string_at(barray, size.value)))
+            libgis.G_free(barray)
 
-            return wkb_list
-        return None
+        return wkb_list
 
     @must_be_open
     def areas_to_wkb_list(self, bbox=None, field=1):
@@ -934,35 +929,36 @@ class VectorTopo(Vector):
 
         bboxlist = self.find_by_bbox.areas(bbox, bboxlist_only=True)
 
-        if bboxlist is not None and len(bboxlist) > 0:
-            wkb_list = []
-            line_c = libvect.line_cats()
-            size = ctypes.c_size_t()
-            cat = ctypes.c_int()
+        if bboxlist is None or len(bboxlist) <= 0:
+            return None
 
-            for a_id in bboxlist.ids:
-                barray = libvect.Vect_read_area_to_wkb(
-                    self.c_mapinfo, a_id, ctypes.byref(size)
+        wkb_list = []
+        line_c = libvect.line_cats()
+        size = ctypes.c_size_t()
+        cat = ctypes.c_int()
+
+        for a_id in bboxlist.ids:
+            barray = libvect.Vect_read_area_to_wkb(
+                self.c_mapinfo, a_id, ctypes.byref(size)
+            )
+            if not barray:
+                raise GrassError(_("Unable to read area with id %i") % a_id)
+
+            pcat = None
+            c_ok = libvect.Vect_get_area_cats(
+                self.c_mapinfo, a_id, ctypes.byref(line_c)
+            )
+            if c_ok == 0:  # Centroid found
+                ok = libvect.Vect_cat_get(
+                    ctypes.byref(line_c), field, ctypes.byref(cat)
                 )
-                if not barray:
-                    raise GrassError(_("Unable to read area with id %i") % (a_id))
+                if ok > 0:
+                    pcat = cat.value
 
-                pcat = None
-                c_ok = libvect.Vect_get_area_cats(
-                    self.c_mapinfo, a_id, ctypes.byref(line_c)
-                )
-                if c_ok == 0:  # Centroid found
-                    ok = libvect.Vect_cat_get(
-                        ctypes.byref(line_c), field, ctypes.byref(cat)
-                    )
-                    if ok > 0:
-                        pcat = cat.value
+            wkb_list.append((a_id, pcat, ctypes.string_at(barray, size.value)))
+            libgis.G_free(barray)
 
-                wkb_list.append((a_id, pcat, ctypes.string_at(barray, size.value)))
-                libgis.G_free(barray)
-
-            return wkb_list
-        return None
+        return wkb_list
 
 
 if __name__ == "__main__":
