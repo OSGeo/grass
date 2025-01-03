@@ -515,117 +515,117 @@ def compute_datetime_delta(start: datetime, end: datetime) -> datetime_delta:
          >>> start = datetime(2001, 1, 1, 0, 0, 0)
          >>> end = datetime(2001, 1, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 0, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 0}
 
          >>> start = datetime(2001, 1, 1, 0, 0, 14)
          >>> end = datetime(2001, 1, 1, 0, 0, 44)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 0, 'second': 30, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 0, 'minute': 0, 'second': 30, 'max_days': 0}
 
          >>> start = datetime(2001, 1, 1, 0, 0, 44)
          >>> end = datetime(2001, 1, 1, 0, 1, 14)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 0, 'second': 30, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 1}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 0, 'minute': 1, 'second': 30, 'max_days': 0}
 
          >>> start = datetime(2001, 1, 1, 0, 0, 30)
          >>> end = datetime(2001, 1, 1, 0, 5, 30)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 0, 'second': 300, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 5}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 0, 'minute': 5, 'second': 300, 'max_days': 0}
 
          >>> start = datetime(2001, 1, 1, 0, 0, 0)
          >>> end = datetime(2001, 1, 1, 0, 1, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 0, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 1}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 0, 'minute': 1, 'second': 0, 'max_days': 0}
 
          >>> start = datetime(2011, 10, 31, 0, 45, 0)
          >>> end = datetime(2011, 10, 31, 1, 45, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 1, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 60}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 1, 'minute': 60, 'second': 0, 'max_days': 0}
 
          >>> start = datetime(2011, 10, 31, 0, 45, 0)
          >>> end = datetime(2011, 10, 31, 1, 15, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 1, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 30}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 1, 'minute': 30, 'second': 0, 'max_days': 0}
 
          >>> start = datetime(2011, 10, 31, 0, 45, 0)
          >>> end = datetime(2011, 10, 31, 12, 15, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 12, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 690}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 12, 'minute': 690, 'second': 0, 'max_days': 0}
 
          >>> start = datetime(2011, 10, 31, 0, 0, 0)
          >>> end = datetime(2011, 10, 31, 1, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 1, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 1, 'minute': 0, 'second': 0, 'max_days': 0}
 
          >>> start = datetime(2011, 10, 31, 0, 0, 0)
          >>> end = datetime(2011, 11, 1, 1, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 25, 'second': 0, 'max_days': 1, 'year': 0, 'day': 1, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 1, 'hour': 25, 'minute': 0, 'second': 0, 'max_days': 1}
 
          >>> start = datetime(2011, 10, 31, 12, 0, 0)
          >>> end = datetime(2011, 11, 1, 6, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 18, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 18, 'minute': 0, 'second': 0, 'max_days': 0}
 
          >>> start = datetime(2011, 11, 1, 0, 0, 0)
          >>> end = datetime(2011, 12, 1, 1, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 721, 'month': 1, 'second': 0, 'max_days': 30, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 1, 'day': 0, 'hour': 721, 'minute': 0, 'second': 0, 'max_days': 30}
 
          >>> start = datetime(2011, 11, 1, 0, 0, 0)
          >>> end = datetime(2011, 11, 5, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'second': 0, 'max_days': 4, 'year': 0, 'day': 4, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 4, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 4}
 
          >>> start = datetime(2011, 10, 6, 0, 0, 0)
          >>> end = datetime(2011, 11, 5, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'second': 0, 'max_days': 30, 'year': 0, 'day': 30, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 30, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 30}
 
          >>> start = datetime(2011, 12, 2, 0, 0, 0)
          >>> end = datetime(2012, 1, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'second': 0, 'max_days': 30, 'year': 1, 'day': 30, 'minute': 0}
+         {'year': 1, 'month': 0, 'day': 30, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 30}
 
          >>> start = datetime(2011, 1, 1, 0, 0, 0)
          >>> end = datetime(2011, 2, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 1, 'second': 0, 'max_days': 31, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 1, 'day': 0, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 31}
 
          >>> start = datetime(2011, 12, 1, 0, 0, 0)
          >>> end = datetime(2012, 1, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 1, 'second': 0, 'max_days': 31, 'year': 1, 'day': 0, 'minute': 0}
+         {'year': 1, 'month': 1, 'day': 0, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 31}
 
          >>> start = datetime(2011, 12, 1, 0, 0, 0)
          >>> end = datetime(2012, 6, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 6, 'second': 0, 'max_days': 183, 'year': 1, 'day': 0, 'minute': 0}
+         {'year': 1, 'month': 6, 'day': 0, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 183}
 
          >>> start = datetime(2011, 6, 1, 0, 0, 0)
          >>> end = datetime(2021, 6, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 120, 'second': 0, 'max_days': 3653, 'year': 10, 'day': 0, 'minute': 0}
+         {'year': 10, 'month': 120, 'day': 0, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 3653}
 
          >>> start = datetime(2011, 6, 1, 0, 0, 0)
          >>> end = datetime(2012, 6, 1, 12, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 8796, 'month': 12, 'second': 0, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 0}
+         {'year': 1, 'month': 12, 'day': 0, 'hour': 8796, 'minute': 0, 'second': 0, 'max_days': 366}
 
          >>> start = datetime(2011, 6, 1, 0, 0, 0)
          >>> end = datetime(2012, 6, 1, 12, 30, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 8796, 'month': 12, 'second': 0, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 527790}
+         {'year': 1, 'month': 12, 'day': 0, 'hour': 8796, 'minute': 527790, 'second': 0, 'max_days': 366}
 
          >>> start = datetime(2011, 6, 1, 0, 0, 0)
          >>> end = datetime(2012, 6, 1, 12, 0, 5)
          >>> compute_datetime_delta(start, end)
-         {'hour': 8796, 'month': 12, 'second': 31665605, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 0}
+         {'year': 1, 'month': 12, 'day': 0, 'hour': 8796, 'minute': 0, 'second': 31665605, 'max_days': 366}
 
          >>> start = datetime(2011, 6, 1, 0, 0, 0)
          >>> end = datetime(2012, 6, 1, 0, 30, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 12, 'second': 0, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 527070}
+         {'year': 1, 'month': 12, 'day': 0, 'hour': 0, 'minute': 527070, 'second': 0, 'max_days': 366}
 
     :return: A dictionary with year, month, day, hour, minute, second and max_days as keys()
     """  # noqa: E501
