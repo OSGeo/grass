@@ -205,8 +205,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
 
             try:
                 xml = _getXMLString(tree.getroot())
-                with open(menudataFile, "w") as fh:
-                    fh.write(xml)
+                Path(menudataFile).write_text(xml)
                 return menudataFile
             except Exception:
                 _debug(

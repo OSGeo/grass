@@ -401,8 +401,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
                 if not data:
                     continue
 
-                with open(finput, "w") as fd:
-                    fd.write(data)
+                Path(finput).write_text(data)
             del self.model.fileInput
 
         # delete intermediate data

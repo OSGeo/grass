@@ -577,8 +577,7 @@ class Model:
 
             if not checkOnly:
                 if write:
-                    with open(finput, "w") as fd:
-                        fd.write(data)
+                    Path(finput).write_text(data)
                 else:
                     self.fileInput[finput] = None
 

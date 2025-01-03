@@ -19,6 +19,7 @@ import os
 import queue as Queue
 import sys
 from math import cos, pi, sin, sqrt
+from pathlib import Path
 
 import wx
 
@@ -597,11 +598,10 @@ class PsMapFrame(wx.Frame):
             wildcard="*.psmap|*.psmap|Text file(*.txt)|*.txt|All files(*.*)|*.*"
         )
         if filename:
-            with open(filename, "wb") as instrFile:
-                content = self.InstructionFile()
-                if not content:
-                    return
-                instrFile.write(content)
+            content = self.InstructionFile()
+            if not content:
+                return
+            Path(filename).write_bytes(content)
 
     def OnLoadFile(self, event):
         """Launch file dialog and load selected file"""

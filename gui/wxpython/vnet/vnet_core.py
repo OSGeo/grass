@@ -20,6 +20,8 @@ This program is free software under the GNU General Public License
 """
 
 import math
+from pathlib import Path
+
 from grass.script.utils import try_remove
 from grass.script import core as grass
 from grass.script.task import cmdlist_to_tuple
@@ -449,8 +451,7 @@ class VNETAnalyses:
         )
 
         self.coordsTmpFile = grass.tempfile()
-        with open(self.coordsTmpFile, "w") as coordsTmpFileOpened:
-            coordsTmpFileOpened.write(inpPoints)
+        Path(self.coordsTmpFile).write_text(inpPoints)
 
         if flags["t"]:
             cmdParams.append("-t")
@@ -668,8 +669,7 @@ class VNETAnalyses:
 
         # TODO better tmp files cleanup (make class for managing tmp files)
         self.tmpPtsAsciiFile = grass.tempfile()
-        with open(self.tmpPtsAsciiFile, "w") as tmpPtsAsciiFileOpened:
-            tmpPtsAsciiFileOpened.write(pt_ascii)
+        Path(self.tmpPtsAsciiFile).write_text(pt_ascii)
 
         self.tmpInPts = AddTmpMapAnalysisMsg("vnet_tmp_in_pts", self.tmp_maps)
         if not self.tmpInPts:
