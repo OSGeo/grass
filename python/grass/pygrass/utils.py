@@ -187,7 +187,7 @@ def is_clean_name(name) -> bool:
     False
 
     """
-    return not libgis.G_legal_filename(name) < 0
+    return libgis.G_legal_filename(name) >= 0
 
 
 def coor2pixel(coord, region):
