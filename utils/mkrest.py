@@ -19,6 +19,7 @@ import string
 import re
 import subprocess
 from datetime import datetime
+from pathlib import Path
 
 pgm = sys.argv[1]
 year = sys.argv[2] if len(sys.argv) > 1 else str(datetime.now().year)
@@ -47,10 +48,7 @@ footer_noindex = string.Template(
 
 def read_file(name):
     try:
-        f = open(name, "rb")
-        s = f.read()
-        f.close()
-        return s
+        return Path(name).read_bytes()
     except OSError:
         return ""
 
