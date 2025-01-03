@@ -163,8 +163,7 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
     :param gisrc_dst: path of the GISRC file where the groups will be created
     :type gisrc_dst: str
     :param region: a region like object or a dictionary with the region
-                   parameters that will be used to crop the rasters of the
-                   groups
+                   parameters that will be used to crop the rasters of the groups
     :type region: Region object or dictionary
     :returns: None
 
@@ -204,8 +203,7 @@ def set_region(region, gisrc_src, gisrc_dst, env):
     """Set a region into two different mapsets.
 
     :param region: a region like object or a dictionary with the region
-                   parameters that will be used to crop the rasters of the
-                   groups
+                   parameters that will be used to crop the rasters of the groups
     :type region: Region object or dictionary
     :param gisrc_src: path of the GISRC file from where we want to copy the groups
     :type gisrc_src: str
@@ -238,8 +236,7 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
     :param gisrc_dst: path of the GISRC file where the groups will be created
     :type gisrc_dst: str
     :param region: a region like object or a dictionary with the region
-                   parameters that will be used to crop the rasters of the
-                   groups
+                   parameters that will be used to crop the rasters of the groups
     :type region: Region object or dictionary
     :returns: None
     """
@@ -411,7 +408,7 @@ class GridModule:
     :param overlap: overlap between tiles, in pixel.
     :type overlap: int
     :param processes: number of threads, default value is equal to the number
-                      of processor available.
+                      of processors available.
     :param split: if True use r.tile to split all the inputs.
     :type split: bool
     :param mapset_prefix: if specified created mapsets start with this prefix
