@@ -633,68 +633,64 @@ class TplotFrame(wx.Frame):
                 for i in range(len(rows)):
                     row = rows[i]
                     values = out[i]
-                    if str(row["layer"]) == str(values["Layer"]):
-                        lay = "{map}_{layer}".format(
-                            map=row["name"], layer=values["Layer"]
-                        )
-                        self.timeDataV[name][lay] = {}
-                        self.timeDataV[name][lay]["start_datetime"] = row["start_time"]
-                        self.timeDataV[name][lay]["end_datetime"] = row["start_time"]
-                        self.timeDataV[name][lay]["value"] = values["Attributes"][
-                            attribute
-                        ]
-            else:
-                wherequery = ""
-                cats = self._getExistingCategories(rows[0]["name"], cats)
-                totcat = len(cats)
-                ncat = 1
-                for cat in cats:
-                    if ncat == 1 and totcat != 1:
-                        wherequery += "{k}={c} or".format(c=cat, k="{key}")
-                    elif ncat == 1 and totcat == 1:
-                        wherequery += "{k}={c}".format(c=cat, k="{key}")
-                    elif ncat == totcat:
-                        wherequery += " {k}={c}".format(c=cat, k="{key}")
-                    else:
-                        wherequery += " {k}={c} or".format(c=cat, k="{key}")
+                    if str(row["layer"]) != str(values["Layer"]):
+                        continue
+                    lay = "{map}_{layer}".format(map=row["name"], layer=values["Layer"])
+                    self.timeDataV[name][lay] = {}
+                    self.timeDataV[name][lay]["start_datetime"] = row["start_time"]
+                    self.timeDataV[name][lay]["end_datetime"] = row["start_time"]
+                    self.timeDataV[name][lay]["value"] = values["Attributes"][attribute]
 
-                    catn = "cat{num}".format(num=cat)
-                    self.plotNameListV.append("{na}+{cat}".format(na=name, cat=catn))
-                    self.timeDataV[name][catn] = OrderedDict()
-                    ncat += 1
-                for row in rows:
-                    lay = int(row["layer"])
-                    catkey = self._parseVDbConn(row["name"], lay)
-                    if not catkey:
-                        GError(
-                            parent=self,
-                            showTraceback=False,
-                            message=_(
-                                "No connection between vector map {vmap} "
-                                "and layer {la}"
-                            ).format(vmap=row["name"], la=lay),
-                        )
-                        return
-                    vals = gs.vector_db_select(
-                        map=row["name"],
-                        layer=lay,
-                        where=wherequery.format(key=catkey),
-                        columns=attribute,
+                continue
+
+            wherequery = ""
+            cats = self._getExistingCategories(rows[0]["name"], cats)
+            totcat = len(cats)
+            ncat = 1
+            for cat in cats:
+                if ncat == 1 and totcat != 1:
+                    wherequery += "{k}={c} or".format(c=cat, k="{key}")
+                elif ncat == 1 and totcat == 1:
+                    wherequery += "{k}={c}".format(c=cat, k="{key}")
+                elif ncat == totcat:
+                    wherequery += " {k}={c}".format(c=cat, k="{key}")
+                else:
+                    wherequery += " {k}={c} or".format(c=cat, k="{key}")
+
+                catn = "cat{num}".format(num=cat)
+                self.plotNameListV.append("{na}+{cat}".format(na=name, cat=catn))
+                self.timeDataV[name][catn] = OrderedDict()
+                ncat += 1
+            for row in rows:
+                lay = int(row["layer"])
+                catkey = self._parseVDbConn(row["name"], lay)
+                if not catkey:
+                    GError(
+                        parent=self,
+                        showTraceback=False,
+                        message=_(
+                            "No connection between vector map {vmap} and layer {la}"
+                        ).format(vmap=row["name"], la=lay),
                     )
-                    layn = "lay{num}".format(num=lay)
-                    for cat in cats:
-                        catn = "cat{num}".format(num=cat)
-                        if layn not in self.timeDataV[name][catn].keys():
-                            self.timeDataV[name][catn][layn] = {}
-                        self.timeDataV[name][catn][layn]["start_datetime"] = row[
-                            "start_time"
-                        ]
-                        self.timeDataV[name][catn][layn]["end_datetime"] = row[
-                            "end_time"
-                        ]
-                        self.timeDataV[name][catn][layn]["value"] = vals["values"][
-                            int(cat)
-                        ][0]
+                    return
+                vals = gs.vector_db_select(
+                    map=row["name"],
+                    layer=lay,
+                    where=wherequery.format(key=catkey),
+                    columns=attribute,
+                )
+                layn = "lay{num}".format(num=lay)
+                for cat in cats:
+                    catn = "cat{num}".format(num=cat)
+                    if layn not in self.timeDataV[name][catn].keys():
+                        self.timeDataV[name][catn][layn] = {}
+                    self.timeDataV[name][catn][layn]["start_datetime"] = row[
+                        "start_time"
+                    ]
+                    self.timeDataV[name][catn][layn]["end_datetime"] = row["end_time"]
+                    self.timeDataV[name][catn][layn]["value"] = vals["values"][
+                        int(cat)
+                    ][0]
         self.unit = unit
         self.temporalType = mode
         return

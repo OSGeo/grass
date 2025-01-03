@@ -258,10 +258,9 @@ def ListOfCatsToRange(cats):
         next = 0
         j = i + 1
         while j < len(cats):
-            if cats[i + next] == cats[j] - 1:
-                next += 1
-            else:
+            if cats[i + next] != cats[j] - 1:
                 break
+            next += 1
             j += 1
 
         if next > 1:

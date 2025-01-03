@@ -101,21 +101,22 @@ class Instruction:
     def __delitem__(self, id):
         """Delete instruction"""
         for each in self.instruction:
-            if each.id == id:
-                if each.type == "map":
-                    # must remove raster, vector layers, labels too
-                    vektor = self.FindInstructionByType("vector", list=True)
-                    vProperties = self.FindInstructionByType("vProperties", list=True)
-                    raster = self.FindInstructionByType("raster", list=True)
-                    labels = self.FindInstructionByType("labels", list=True)
-                    for item in vektor + vProperties + raster + labels:
-                        if item in self.instruction:
-                            self.instruction.remove(item)
+            if each.id != id:
+                continue
+            if each.type == "map":
+                # must remove raster, vector layers, labels too
+                vektor = self.FindInstructionByType("vector", list=True)
+                vProperties = self.FindInstructionByType("vProperties", list=True)
+                raster = self.FindInstructionByType("raster", list=True)
+                labels = self.FindInstructionByType("labels", list=True)
+                for item in vektor + vProperties + raster + labels:
+                    if item in self.instruction:
+                        self.instruction.remove(item)
 
-                self.instruction.remove(each)
-                if id in self.objectsToDraw:
-                    self.objectsToDraw.remove(id)
-                return
+            self.instruction.remove(each)
+            if id in self.objectsToDraw:
+                self.objectsToDraw.remove(id)
+            return
 
     def AddInstruction(self, instruction):
         """Add instruction"""
@@ -1943,29 +1944,30 @@ class Vector(InstructionObject):
         instr = {}
 
         for line in text:
-            if line.startswith(("vpoints", "vlines", "vareas")):
-                # subtype
-                if line.startswith("vpoints"):
-                    subType = "points"
-                elif line.startswith("vlines"):
-                    subType = "lines"
-                elif line.startswith("vareas"):
-                    subType = "areas"
-                # name of vector map
-                vmap = line.split()[1]
-                try:
-                    info = gs.find_file(vmap, element="vector")
-                except gs.ScriptError as e:
-                    GError(message=e.value)
-                    return False
-                vmap = info["fullname"]
-                # id
-                id = kwargs["id"]
-                # lpos
-                lpos = kwargs["vectorMapNumber"]
-                # label
-                label = "(".join(vmap.split("@")) + ")"
-                break
+            if not line.startswith(("vpoints", "vlines", "vareas")):
+                continue
+            # subtype
+            if line.startswith("vpoints"):
+                subType = "points"
+            elif line.startswith("vlines"):
+                subType = "lines"
+            elif line.startswith("vareas"):
+                subType = "areas"
+            # name of vector map
+            vmap = line.split()[1]
+            try:
+                info = gs.find_file(vmap, element="vector")
+            except gs.ScriptError as e:
+                GError(message=e.value)
+                return False
+            vmap = info["fullname"]
+            # id
+            id = kwargs["id"]
+            # lpos
+            lpos = kwargs["vectorMapNumber"]
+            # label
+            label = "(".join(vmap.split("@")) + ")"
+            break
         instr = [vmap, subType, id, lpos, label]
         if not self.instruction["list"]:
             self.instruction["list"] = []

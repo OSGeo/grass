@@ -596,30 +596,32 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 sys.stderr.write(_("GSelect: invalid item: %s") % e)
                 continue
 
-            if self.seltree.ItemHasChildren(mapset_node):
-                sel = UserSettings.Get(
-                    group="appearance", key="elementListExpand", subkey="selection"
-                )
-                collapse = True
+            if not self.seltree.ItemHasChildren(mapset_node):
+                continue
 
-                if sel == 0:  # collapse all except PERMANENT and current
-                    if mapset in {"PERMANENT", curr_mapset}:
-                        collapse = False
-                elif sel == 1:  # collapse all except PERMANENT
-                    if mapset == "PERMANENT":
-                        collapse = False
-                elif sel == 2:  # collapse all except current
-                    if mapset == curr_mapset:
-                        collapse = False
-                elif sel == 3:  # collapse all
-                    pass
-                elif sel == 4:  # expand all
+            sel = UserSettings.Get(
+                group="appearance", key="elementListExpand", subkey="selection"
+            )
+            collapse = True
+
+            if sel == 0:  # collapse all except PERMANENT and current
+                if mapset in {"PERMANENT", curr_mapset}:
                     collapse = False
+            elif sel == 1:  # collapse all except PERMANENT
+                if mapset == "PERMANENT":
+                    collapse = False
+            elif sel == 2:  # collapse all except current
+                if mapset == curr_mapset:
+                    collapse = False
+            elif sel == 3:  # collapse all
+                pass
+            elif sel == 4:  # expand all
+                collapse = False
 
-                if collapse:
-                    self.seltree.CollapseAllChildren(mapset_node)
-                else:
-                    self.seltree.ExpandAllChildren(mapset_node)
+            if collapse:
+                self.seltree.CollapseAllChildren(mapset_node)
+            else:
+                self.seltree.ExpandAllChildren(mapset_node)
 
         if first_mapset:
             # select first mapset (MSW hack)
@@ -637,22 +639,24 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         """
         elist = gs.naturally_sorted(elist)
         for elem in elist:
-            if elem != "":
-                fullqElem = elem + "@" + mapset
-                if self.filterItems and fullqElem not in self.filterItems:
-                    continue  # skip items missed in self.filterItems
+            if elem == "":
+                continue
 
-                if elements is not None:
-                    if (exclude and fullqElem in elements) or (
-                        not exclude and fullqElem not in elements
-                    ):
-                        continue
+            fullqElem = elem + "@" + mapset
+            if self.filterItems and fullqElem not in self.filterItems:
+                continue  # skip items missed in self.filterItems
 
-                if self.filterElements:
-                    if self.filterElements(fullqElem):
-                        self.AddItem(elem, mapset=mapset, node=False, parent=node)
-                else:
+            if elements is not None:
+                if (exclude and fullqElem in elements) or (
+                    not exclude and fullqElem not in elements
+                ):
+                    continue
+
+            if self.filterElements:
+                if self.filterElements(fullqElem):
                     self.AddItem(elem, mapset=mapset, node=False, parent=node)
+            else:
+                self.AddItem(elem, mapset=mapset, node=False, parent=node)
 
     def AddItem(self, value, mapset=None, node=True, parent=None):
         if not parent:
@@ -2099,20 +2103,21 @@ class GdalSelect(wx.Panel):
                 connection_string = None
                 for conn in ret.splitlines():
                     db_login = conn.split("|")
-                    if db_login[0] == "pg":
-                        user, password, host, port = db_login[2:]
-                        connection_string = (
-                            f"PG:dbname={self.dbWidgets['choice'].GetStringSelection()}"
-                        )
-                        if user:
-                            connection_string += f" user={user}"
-                        if password:
-                            connection_string += f" password={password}"
-                        if host:
-                            connection_string += f" host={host}"
-                        if port:
-                            connection_string += f" port={port}"
-                        return connection_string
+                    if db_login[0] != "pg":
+                        continue
+                    user, password, host, port = db_login[2:]
+                    connection_string = (
+                        f"PG:dbname={self.dbWidgets['choice'].GetStringSelection()}"
+                    )
+                    if user:
+                        connection_string += f" user={user}"
+                    if password:
+                        connection_string += f" password={password}"
+                    if host:
+                        connection_string += f" host={host}"
+                    if port:
+                        connection_string += f" port={port}"
+                    return connection_string
                 if not connection_string:
                     GError(parent=self, message=message)
                     return

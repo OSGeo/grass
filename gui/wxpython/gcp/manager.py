@@ -2078,12 +2078,13 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 sumsq_bkw_err += float(bkw_err) ** 2
                 sum_fwd_err += float(fwd_err)
                 GCPcount += 1
-            else:
-                self.list.SetItem(index, 5, "")
-                self.list.SetItem(index, 6, "")
-                self.mapcoordlist[key][5] = 0.0
-                self.mapcoordlist[key][6] = 0.0
-                self.list.SetItemTextColour(index, wx.BLACK)
+                continue
+
+            self.list.SetItem(index, 5, "")
+            self.list.SetItem(index, 6, "")
+            self.mapcoordlist[key][5] = 0.0
+            self.mapcoordlist[key][6] = 0.0
+            self.list.SetItemTextColour(index, wx.BLACK)
 
         # SD
         if GCPcount > 0:

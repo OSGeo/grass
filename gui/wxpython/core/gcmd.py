@@ -160,25 +160,25 @@ class Popen(subprocess.Popen):
                 # "^" must be the first character in the list to avoid double
                 # escaping.
                 for c in ("^", "|", "&", "<", ">"):
-                    if c in args[i]:
-                        if "=" in args[i]:
-                            a = args[i].split("=")
-                            k = a[0] + "="
-                            v = "=".join(a[1 : len(a)])
-                        else:
-                            k = ""
-                            v = args[i]
+                    if c not in args[i]:
+                        continue
+                    if "=" in args[i]:
+                        a = args[i].split("=")
+                        k = a[0] + "="
+                        v = "=".join(a[1 : len(a)])
+                    else:
+                        k = ""
+                        v = args[i]
 
-                        # If there are spaces, the argument was already
-                        # esscaped with double quotes, so don't escape it
-                        # again.
-                        if c in v and " " not in v:
-                            # Here, we escape each ^ in ^^^ with ^^ and a
-                            # <special character> with ^ + <special character>,
-                            # so we need 7 carets.
-
-                            v = v.replace(c, "^^^^^^^" + c)
-                            args[i] = k + v
+                    # If there are spaces, the argument was already
+                    # escaped with double quotes, so don't escape it
+                    # again.
+                    if c in v and " " not in v:
+                        # Here, we escape each ^ in ^^^ with ^^ and a
+                        # <special character> with ^ + <special character>,
+                        # so we need 7 carets.
+                        v = v.replace(c, "^^^^^^^" + c)
+                        args[i] = k + v
 
         subprocess.Popen.__init__(self, args, **kwargs)
 

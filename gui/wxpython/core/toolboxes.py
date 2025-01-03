@@ -616,21 +616,23 @@ def _expandRuntimeModules(node, loadMetadata=True):
             n = ET.SubElement(module, "module")
             n.text = name
 
-        if module.find("description") is None:
-            if loadMetadata:
-                # not all modules are always compiled (e.g., r.in.lidar)
-                if shutil.which(name):
-                    desc, keywords = _loadMetadata(name)
-                    if not desc:
-                        hasErrors = True
-                else:
-                    desc, keywords = _("Module not installed"), ""
+        if module.find("description") is not None:
+            continue
+
+        if loadMetadata:
+            # not all modules are always compiled (e.g., r.in.lidar)
+            if shutil.which(name):
+                desc, keywords = _loadMetadata(name)
+                if not desc:
+                    hasErrors = True
             else:
-                desc, keywords = "", ""
-            n = ET.SubElement(module, "description")
-            n.text = _escapeXML(desc)
-            n = ET.SubElement(module, "keywords")
-            n.text = _escapeXML(",".join(keywords))
+                desc, keywords = (_("Module not installed"), "")
+        else:
+            desc, keywords = ("", "")
+        n = ET.SubElement(module, "description")
+        n.text = _escapeXML(desc)
+        n = ET.SubElement(module, "keywords")
+        n.text = _escapeXML(",".join(keywords))
 
     if hasErrors:
         # not translatable until toolboxes compilation on Mac is fixed
