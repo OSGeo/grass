@@ -1447,7 +1447,7 @@ def install_extension_xml(edict):
 
 
 def get_multi_addon_addons_which_install_only_html_man_page():
-    """Get multi-addon addons which install only manual html page
+    """Get multi-addon addons which installs only manual HTML page
 
     :return list addon_dirs: list of addon directories which does
                              not contain any Python or C source code
@@ -1475,7 +1475,7 @@ def get_multi_addon_addons_which_install_only_html_man_page():
                     addon_paths.index(addon_src_file.group(0).replace("\n", ""))
                 )
     gs.debug(
-        f"Addon dicrectory names <{', '.join(addon_dirs)}> which "
+        f"Addon directory names <{', '.join(addon_dirs)}> which "
         " does not contain any Python or C source code files."
     )
     return addon_dirs
@@ -2432,7 +2432,7 @@ def update_manual_page(module):
         # Multi-addon
         if len(addons) > 1:
             for a in get_multi_addon_addons_which_install_only_html_man_page():
-                # Add multi-addon addons which install only manual html page
+                # Add multi-addon addons which installs only manual HTML page
                 addons.append(a)
 
     for match in re.finditer(pattern, shtml):

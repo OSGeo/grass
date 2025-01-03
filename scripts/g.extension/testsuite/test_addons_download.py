@@ -237,7 +237,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             gextension.outputs.stderr,
         )
         self.assertIn(
-            f"Addon name <{extension}> which install only HTML man page.",
+            f"Addon name <{extension}> which installs only HTML man page.",
             gextension.outputs.stderr,
         )
 
