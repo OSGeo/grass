@@ -454,15 +454,14 @@ class GifWriter:
             lid = self.getImageDescriptor(im, xys[frames])
 
             # Write local header
+            fp.write(graphext)
             if (palette != globalPalette) or (disposes[frames] != 2):
                 # Use local color palette
-                fp.write(graphext)
                 fp.write(lid)  # write suitable image descriptor
                 fp.write(palette)  # write local color table
                 fp.write("\x08")  # LZW minimum size code
             else:
                 # Use global color palette
-                fp.write(graphext)
                 fp.write(imdes)  # write suitable image descriptor
 
             # Write image data
