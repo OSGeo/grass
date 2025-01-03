@@ -38,8 +38,9 @@ class LayerList:
         layers = []
         for layer in self._list:
             if layer.IsSelected():
-                if activeOnly and layer.IsActive():
-                    layers.append(layer)
+                if activeOnly:
+                    if layer.IsActive():
+                        layers.append(layer)
                 else:
                     layers.append(layer)
         return layers
