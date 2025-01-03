@@ -115,16 +115,15 @@ class Category(list):
         return index
 
     def _chk_value(self, value):
-        if isinstance(value, tuple):
-            length = len(value)
-            if length == 2:
-                label, min_cat = value
-                value = (label, min_cat, None)
-            elif length < 2 or length > 3:
-                msg = "Tuple with a length that is not supported."
-                raise TypeError(msg)
-        else:
+        if not isinstance(value, tuple):
             msg = "Only tuples are supported."
+            raise TypeError(msg)
+        length = len(value)
+        if length == 2:
+            label, min_cat = value
+            value = (label, min_cat, None)
+        elif length < 2 or length > 3:
+            msg = "Tuple with a length that is not supported."
             raise TypeError(msg)
         return value
 

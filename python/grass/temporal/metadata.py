@@ -1430,20 +1430,20 @@ class STRDSMetadata(STDSRasterMetadataBase):
         rows = dbif.fetchall(mapset=self.mapset)
         dbif.close()
 
-        if rows:
-            string = ""
-            count = 0
-            for row in rows:
-                if row["semantic_label"]:
-                    if count == 0:
-                        string += row["semantic_label"]
-                    else:
-                        string += ",%s" % row["semantic_label"]
-                    count += 1
-
-            if count > 0:
-                return string
+        if not rows:
             return None
+        string = ""
+        count = 0
+        for row in rows:
+            if row["semantic_label"]:
+                if count == 0:
+                    string += row["semantic_label"]
+                else:
+                    string += ",%s" % row["semantic_label"]
+                count += 1
+
+        if count > 0:
+            return string
         return None
 
     raster_register = property(fget=get_raster_register, fset=set_raster_register)

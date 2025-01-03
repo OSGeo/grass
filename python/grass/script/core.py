@@ -1069,13 +1069,12 @@ def _text_to_key_value_dict(
     kvdict = KeyValue()
 
     for line in text:
-        if line.find(sep) >= 0:
-            key, value = line.split(sep)
-            key = key.strip()
-            value = value.strip()
-        else:
+        if line.find(sep) < 0:
             # Jump over empty values
             continue
+        key, value = line.split(sep)
+        key = key.strip()
+        value = value.strip()
         values = value.split(val_sep)
         value_list = []
 
