@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # This script tests v.what.rast3d
 
 # We specific a small region in the
@@ -24,14 +25,13 @@ v.db.select map=random_points > data/random_points_db.txt
 #r3.out.vtk --o input=plume output=plume.vtk null=0
 #v.out.vtk --o -n input=random_points output=random_points.vtk
 
+cd data || exit
 
-cd data
-
-for i in `ls *.txt` ; do
-    diff $i "`basename $i .txt`.ref" >> out.diff
+for i in $(ls -- *.txt); do
+    diff "$i" "$(basename "$i" .txt).ref" >> out.diff
 done
 
-CHAR_NUM=`cat out.diff | wc -c`
+CHAR_NUM=$(cat out.diff | wc -c)
 
 # Return as exit status 0 in case no diffs are found
-exit $CHAR_NUM
+exit "$CHAR_NUM"

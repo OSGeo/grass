@@ -25,13 +25,13 @@
 # For html files, when using app path method, open still wants to open the
 # file in the system default browser, so we're left with signatures-only.
 
-if [ ! "$GRASS_HTML_BROWSER_MACOSX" ] ; then
-	# default to Help Viewer
-	GRASS_HTML_BROWSER_MACOSX="-b com.apple.helpviewer"
+if [ ! "$GRASS_HTML_BROWSER_MACOSX" ]; then
+    # default to Help Viewer
+    GRASS_HTML_BROWSER_MACOSX="-b com.apple.helpviewer"
 fi
 
-if [ "`echo \"$1\" | grep 'https\?://'`" ] && [ "$GRASS_HTML_BROWSER_MACOSX" = "-b com.apple.helpviewer" ] ; then
-	open "$1"
+if [ "$(echo \""$1"\" | grep 'https\?://')" ] && [ "$GRASS_HTML_BROWSER_MACOSX" = "-b com.apple.helpviewer" ]; then
+    open "$1"
 else
-	open $GRASS_HTML_BROWSER_MACOSX "$1"
+    open "$GRASS_HTML_BROWSER_MACOSX" "$1"
 fi

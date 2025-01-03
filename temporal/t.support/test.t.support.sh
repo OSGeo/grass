@@ -29,12 +29,10 @@ t.info type=strds input=precip_rel1
 t.support --v type=strds input=precip_rel1 title="Test support" descr="This is the support test strds" semantictype=max
 t.info type=strds input=precip_rel1
 
-
 # Check metadata update
 t.info type=strds input=precip_abs1
 t.support --v type=strds input=precip_abs1 title="Test support" descr="This is the support test strds" semantictype=mean
 t.info type=strds input=precip_abs1
-
 
 # @test the map update function
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=20 res3=20
