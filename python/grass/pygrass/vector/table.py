@@ -265,9 +265,9 @@ class Columns:
         """Read columns name and types from table and update the odict
         attribute.
         """
+        cur = self.conn.cursor()
         if self.is_pg():
             # is a postgres connection
-            cur = self.conn.cursor()
             cur.execute("SELECT oid,typname FROM pg_type")
             diz = dict(cur.fetchall())
             odict = OrderedDict()
@@ -281,17 +281,15 @@ class Columns:
                     odict[name] = diz[ctype]
             except pg.ProgrammingError:
                 pass
-            self.odict = odict
         else:
             # is a sqlite connection
-            cur = self.conn.cursor()
             cur.execute(sql.PRAGMA.format(tname=self.tname))
             descr = cur.fetchall()
             odict = OrderedDict()
             for column in descr:
                 name, ctype = column[1:3]
                 odict[name] = ctype
-            self.odict = odict
+        self.odict = odict
         values = ",".join(
             [
                 "?",
@@ -363,11 +361,9 @@ class Columns:
         ['cat', 'name', 'value']
 
         """
+        nams = list(self.odict.keys())
         if remove:
-            nams = list(self.odict.keys())
             nams.remove(remove)
-        else:
-            nams = list(self.odict.keys())
         if unicod:
             return nams
         return [str(name) for name in nams]
