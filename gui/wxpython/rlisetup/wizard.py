@@ -4,8 +4,7 @@
 @brief   GUI per r.li.setup module
 
 Classes:
- - RLiSetupFrame (first frame to show existing conf file and choose some
-                 operation)
+ - RLiSetupFrame (first frame to show existing conf file and choose some operation)
  - RLIWizard (the main wizard)
  - FirstPage (first page of wizard, choose name of conf file, raster, vector,
               sampling region)

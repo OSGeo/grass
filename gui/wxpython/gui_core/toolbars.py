@@ -328,7 +328,6 @@ class BaseToolbar(ToolBar):
 
     Following code shows how to create new basic toolbar:
 
-
         class MyToolbar(BaseToolbar):
             def __init__(self, parent):
                 BaseToolbar.__init__(self, parent)

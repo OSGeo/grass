@@ -211,8 +211,7 @@ class GraphicsSet:
                       relevant just for 'point' type.
         :type label: str
         :param hide: if it is True, the item is not drawn when self.Draw
-                     is called. Hidden items are also counted in drawing
-                     order.
+                     is called. Hidden items are also counted in drawing order.
         :type hide: bool
         :return: (GraphicsSetItem) - added item reference
         """

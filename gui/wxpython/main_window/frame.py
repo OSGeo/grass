@@ -790,8 +790,7 @@ class GMFrame(wx.Frame):
     def AddNvizTools(self, firstTime):
         """Add nviz notebook page
 
-        :param firstTime: if a mapdisplay is starting 3D mode for the
-                          first time
+        :param firstTime: if a mapdisplay is starting 3D mode for the first time
         """
         Debug.msg(5, "GMFrame.AddNvizTools()")
         from nviz.main import haveNviz
@@ -1051,7 +1050,7 @@ class GMFrame(wx.Frame):
                                 notebook layers tree page index and
                                 "mainnotebook" key represent map display
                                 notebook page index (single window mode)
-              boolean is_docked: "True" means that map display is docked in map
+        :param boolean is_docked: "True" means that map display is docked in map
                                display notebook, "False" means that map display
                                is undocked to independent frame
         """

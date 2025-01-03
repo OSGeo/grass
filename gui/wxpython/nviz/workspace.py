@@ -321,8 +321,7 @@ class NvizSettings:
         :param mode:
         :param style:
         :param shade:
-        :param string: if True input parameters are strings otherwise
-                       selections
+        :param string: if True input parameters are strings otherwise selections
         """
         if not wxnviz:
             return None
