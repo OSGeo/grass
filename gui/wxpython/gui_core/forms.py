@@ -2829,7 +2829,7 @@ class CmdPanel(wx.Panel):
                 myIndex = p["wxId"].index(me)
 
         # Unpack current value list
-        currentValues = {isThere: 1 for isThere in theParam.get("value", "").split(",")}
+        currentValues = dict.fromkeys(theParam.get("value", "").split(","), 1)
         theValue = theParam["values"][myIndex]
 
         if event.IsChecked():
