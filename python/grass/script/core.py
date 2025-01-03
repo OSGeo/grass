@@ -53,7 +53,7 @@ class Popen(subprocess.Popen):
         if (
             sys.platform == "win32"
             and isinstance(args, list)
-            and not kwargs.get("shell", False)
+            and not kwargs.get("shell")
             and kwargs.get("executable") is None
         ):
             cmd = shutil.which(args[0])
