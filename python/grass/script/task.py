@@ -86,12 +86,12 @@ class grassTask:
 
     def get_name(self):
         """Get task name"""
-        if sys.platform == "win32":
-            name, ext = os.path.splitext(self.name)
-            if ext in {".py", ".sh"}:
-                return name
+        if sys.platform != "win32":
             return self.name
 
+        name, ext = os.path.splitext(self.name)
+        if ext in {".py", ".sh"}:
+            return name
         return self.name
 
     def get_description(self, full=True):
@@ -99,11 +99,11 @@ class grassTask:
 
         :param bool full: True for label + desc
         """
-        if self.label:
-            if full:
-                return self.label + " " + self.description
-            return self.label
-        return self.description
+        if not self.label:
+            return self.description
+        if full:
+            return self.label + " " + self.description
+        return self.label
 
     def get_keywords(self):
         """Get module's keywords"""

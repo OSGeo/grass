@@ -392,13 +392,13 @@ class VectorTopo(Vector):
 
         ..
         """
-        if vtype in _NUMOF.keys():
-            if isinstance(_NUMOF[vtype], tuple):
-                fn, ptype = _NUMOF[vtype]
-                return fn(self.c_mapinfo, ptype)
-            return _NUMOF[vtype](self.c_mapinfo)
-        keys = "', '".join(sorted(_NUMOF.keys()))
-        raise ValueError("vtype not supported, use one of: '%s'" % keys)
+        if vtype not in _NUMOF.keys():
+            keys = "', '".join(sorted(_NUMOF.keys()))
+            raise ValueError("vtype not supported, use one of: '%s'" % keys)
+        if isinstance(_NUMOF[vtype], tuple):
+            fn, ptype = _NUMOF[vtype]
+            return fn(self.c_mapinfo, ptype)
+        return _NUMOF[vtype](self.c_mapinfo)
 
     @must_be_open
     def num_primitives(self):
@@ -450,24 +450,23 @@ class VectorTopo(Vector):
             >>> test_vect.close()
         """
         is2D = not self.is_3D()
-        if vtype in _GEOOBJ.keys():
-            if _GEOOBJ[vtype] is not None:
-                ids = (indx for indx in range(1, self.number_of(vtype) + 1))
-                if idonly:
-                    return ids
-                return (
-                    _GEOOBJ[vtype](
-                        v_id=indx,
-                        c_mapinfo=self.c_mapinfo,
-                        table=self.table,
-                        writeable=self.writeable,
-                        is2D=is2D,
-                    )
-                    for indx in ids
-                )
-        else:
+        if vtype not in _GEOOBJ.keys():
             keys = "', '".join(sorted(_GEOOBJ.keys()))
             raise ValueError("vtype not supported, use one of: '%s'" % keys)
+        if _GEOOBJ[vtype] is not None:
+            ids = (indx for indx in range(1, self.number_of(vtype) + 1))
+            if idonly:
+                return ids
+            return (
+                _GEOOBJ[vtype](
+                    v_id=indx,
+                    c_mapinfo=self.c_mapinfo,
+                    table=self.table,
+                    writeable=self.writeable,
+                    is2D=is2D,
+                )
+                for indx in ids
+            )
 
     @must_be_open
     def rewind(self):
@@ -666,16 +665,12 @@ class VectorTopo(Vector):
 
     @must_be_open
     def restore(self, geo_obj):
-        if hasattr(geo_obj, "offset"):
-            if (
-                libvect.Vect_restore_line(self.c_mapinfo, geo_obj.offset, geo_obj.id)
-                == -1
-            ):
-                msg = "C function: Vect_restore_line."
-                raise GrassError(msg)
-        else:
+        if not hasattr(geo_obj, "offset"):
             msg = "The value have not an offset attribute."
             raise ValueError(msg)
+        if libvect.Vect_restore_line(self.c_mapinfo, geo_obj.offset, geo_obj.id) == -1:
+            msg = "C function: Vect_restore_line."
+            raise GrassError(msg)
 
     @must_be_open
     def bbox(self):

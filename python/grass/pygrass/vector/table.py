@@ -552,18 +552,15 @@ class Columns:
            It is not possible to cast a column with sqlite
 
         """
-        if self.is_pg():
-            cur = self.conn.cursor()
-            cur.execute(
-                sql.CAST_COL.format(tname=self.tname, col=col_name, ctype=new_type)
-            )
-            self.conn.commit()
-            cur.close()
-            self.update_odict()
-        else:
+        if not self.is_pg():
             # sqlite does not support rename columns:
             msg = "SQLite does not support to cast columns."
             raise DBError(msg)
+        cur = self.conn.cursor()
+        cur.execute(sql.CAST_COL.format(tname=self.tname, col=col_name, ctype=new_type))
+        self.conn.commit()
+        cur.close()
+        self.update_odict()
 
     def drop(self, col_name):
         """Drop a column from the table.
@@ -713,18 +710,17 @@ class Link:
         return decode(self.c_fieldinfo.contents.driver)
 
     def _set_driver(self, driver):
-        if driver in DRIVERS:
-            self.c_fieldinfo.contents.driver = ReturnString(driver)
-        elif driver in UNSUPPORTED_DRIVERS:
-            raise NotImplementedError(
-                "The database driver %s is not supported by PyGRASS, "
-                "use: %s." % (driver, ", ".join(DRIVERS))
-            )
-        else:
+        if driver not in DRIVERS:
+            if driver in UNSUPPORTED_DRIVERS:
+                raise NotImplementedError(
+                    "The database driver %s is not supported by PyGRASS, use: %s."
+                    % (driver, ", ".join(DRIVERS))
+                )
             raise ValueError(
-                "The database driver %s is not known to PyGRASS, "
-                "use: %s." % (driver, ", ".join(DRIVERS))
+                "The database driver %s is not known to PyGRASS, use: %s."
+                % (driver, ", ".join(DRIVERS))
             )
+        self.c_fieldinfo.contents.driver = ReturnString(driver)
 
     driver = property(
         fget=_get_driver,
@@ -856,9 +852,9 @@ class Link:
             except ImportError:
                 er = "You need to install psycopg2 to connect with this table."
                 raise ImportError(er)
-        else:
-            str_err = "Driver is not supported yet, pleas use: sqlite or pg"
-            raise TypeError(str_err)
+
+        str_err = "Driver is not supported yet, pleas use: sqlite or pg"
+        raise TypeError(str_err)
 
     def table(self):
         """Return a Table object.

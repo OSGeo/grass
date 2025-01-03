@@ -527,10 +527,8 @@ UNKNOWN_NUMBER_HTML = '<span style="font-size: 60%">unknown</span>'
 def success_to_html_percent(total, successes):
     if total:
         pass_per = 100 * (float(successes) / total)
-        pass_per = percent_to_html(pass_per)
-    else:
-        pass_per = UNKNOWN_NUMBER_HTML
-    return pass_per
+        return percent_to_html(pass_per)
+    return UNKNOWN_NUMBER_HTML
 
 
 class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):

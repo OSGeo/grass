@@ -545,11 +545,10 @@ class Module:
     """  # noqa: E501
 
     def __init__(self, cmd, *args, **kargs):
-        if isinstance(cmd, str):
-            self.name = cmd
-        else:
+        if not isinstance(cmd, str):
             msg = "Problem initializing the module {s}".format(s=cmd)
             raise GrassError(msg)
+        self.name = cmd
         try:
             # call the command with --interface-description
             get_cmd_xml = Popen([cmd, "--interface-description"], stdout=PIPE)
@@ -638,17 +637,13 @@ class Module:
 
         self.update(*args, **kargs)
 
-        #
         # check if execute
-        #
-        if self.run_:
-            #
-            # check reqire parameters
-            #
-            if self.check_:
-                self.check()
-            return self.run()
-        return self
+        if not self.run_:
+            return self
+        # check required parameters
+        if self.check_:
+            self.check()
+        return self.run()
 
     def update(self, *args, **kargs):
         """Update module parameters and selected object attributes.

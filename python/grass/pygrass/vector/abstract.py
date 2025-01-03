@@ -281,11 +281,11 @@ class Info:
         :type newname: str
         """
         if self.exist():
-            if not self.is_open():
-                utils.rename(self.name, newname, "vect")
-            else:
+            if self.is_open():
                 msg = "The map is open, not able to rename it."
                 raise GrassError(msg)
+            utils.rename(self.name, newname, "vect")
+
         self._name = newname
 
     def is_3D(self):
@@ -294,13 +294,13 @@ class Info:
 
     def exist(self):
         """Return if the Vector exists or not"""
-        if self.name:
-            if self.mapset == "":
-                mapset = utils.get_mapset_vector(self.name, self.mapset)
-                self.mapset = mapset or ""
-                return bool(mapset)
-            return bool(utils.get_mapset_vector(self.name, self.mapset))
-        return False
+        if not self.name:
+            return False
+        if self.mapset == "":
+            mapset = utils.get_mapset_vector(self.name, self.mapset)
+            self.mapset = mapset or ""
+            return bool(mapset)
+        return bool(utils.get_mapset_vector(self.name, self.mapset))
 
     def is_open(self):
         """Return if the Vector is open"""
