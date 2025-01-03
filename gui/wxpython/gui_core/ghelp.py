@@ -274,9 +274,8 @@ class AboutWindow(wx.Frame):
         """Copyright information"""
         copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
         if os.path.exists(copyfile):
-            copyrightFile = open(copyfile)
-            copytext = copyrightFile.read()
-            copyrightFile.close()
+            with open(copyfile) as copyrightFile:
+                copytext = copyrightFile.read()
         else:
             copytext = _("%s file missing") % "COPYING"
 
@@ -303,9 +302,8 @@ class AboutWindow(wx.Frame):
         """Licence about"""
         licfile = os.path.join(os.getenv("GISBASE"), "GPL.TXT")
         if os.path.exists(licfile):
-            licenceFile = open(licfile)
-            license = "".join(licenceFile.readlines())
-            licenceFile.close()
+            with open(licfile) as licenceFile:
+                license = "".join(licenceFile.readlines())
         else:
             license = _("%s file missing") % "GPL.TXT"
         # put text into a scrolling panel
@@ -650,10 +648,10 @@ class AboutWindow(wx.Frame):
         fname = "translation_status.json"
         statsfile = os.path.join(os.getenv("GISBASE"), fname)
         if os.path.exists(statsfile):
-            statsFile = open(statsfile)
             import json
 
-            jsStats = json.load(statsFile)
+            with open(statsfile) as statsFile:
+                jsStats = json.load(statsFile)
         else:
             jsStats = None
         self.statswin = ScrolledPanel(self.aboutNotebook)

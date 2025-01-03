@@ -358,13 +358,12 @@ class PsMapFrame(wx.Frame):
     def PSFile(self, filename=None, pdf=False):
         """Create temporary instructions file and run ps.map with output = filename"""
         instrFile = gs.tempfile()
-        instrFileFd = open(instrFile, mode="wb")
-        content = self.InstructionFile()
-        if not content:
-            return
-        instrFileFd.write(content)
-        instrFileFd.flush()
-        instrFileFd.close()
+        with open(instrFile, mode="wb") as instrFileFd:
+            content = self.InstructionFile()
+            if not content:
+                return
+            instrFileFd.write(content)
+            instrFileFd.flush()
 
         temp = False
         regOld = gs.region(env=self.env)
@@ -598,12 +597,11 @@ class PsMapFrame(wx.Frame):
             wildcard="*.psmap|*.psmap|Text file(*.txt)|*.txt|All files(*.*)|*.*"
         )
         if filename:
-            instrFile = open(filename, "wb")
-            content = self.InstructionFile()
-            if not content:
-                return
-            instrFile.write(content)
-            instrFile.close()
+            with open(filename, "wb") as instrFile:
+                content = self.InstructionFile()
+                if not content:
+                    return
+                instrFile.write(content)
 
     def OnLoadFile(self, event):
         """Launch file dialog and load selected file"""
@@ -1068,13 +1066,12 @@ class PsMapFrame(wx.Frame):
         """Create default map frame when no map is selected, needed for coordinates in
         map units"""
         instrFile = gs.tempfile()
-        instrFileFd = open(instrFile, mode="wb")
-        content = self.InstructionFile()
-        if not content:
-            return
-        instrFileFd.write(content)
-        instrFileFd.flush()
-        instrFileFd.close()
+        with open(instrFile, mode="wb") as instrFileFd:
+            content = self.InstructionFile()
+            if not content:
+                return
+            instrFileFd.write(content)
+            instrFileFd.flush()
 
         page = self.instruction.FindInstructionByType("page")
         mapInitRect = GetMapBounds(

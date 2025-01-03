@@ -140,31 +140,30 @@ def main(argv=None):
         print(sys.stderr, __doc__, file=sys.stderr)
         return 1
 
-    nuldev = open(os.devnull, "w+")
     grass.info("Step 1: running make...")
-    grass.call(["make"], stderr=nuldev)
-    grass.info("Step 2: parsing modules...")
-    modules = {}
-    modules = parseModules()
-    grass.info("Step 3: reading menu data...")
-    data = LayerManagerMenuData()
-    grass.info("Step 4: updating menu data...")
-    updateData(data, modules)
+    with open(os.devnull, "w+") as nuldev:
+        grass.call(["make"], stderr=nuldev)
+        grass.info("Step 2: parsing modules...")
+        modules = {}
+        modules = parseModules()
+        grass.info("Step 3: reading menu data...")
+        data = LayerManagerMenuData()
+        grass.info("Step 4: updating menu data...")
+        updateData(data, modules)
 
-    if printDiff:
-        tempFile = tempfile.NamedTemporaryFile()
-        grass.info("Step 5: diff menu data...")
-        writeData(data, tempFile.name)
+        if printDiff:
+            with tempfile.NamedTemporaryFile() as tempFile:
+                grass.info("Step 5: diff menu data...")
+                writeData(data, tempFile.name)
+                grass.call(
+                    ["diff", "-u", os.path.join("xml", "menudata.xml"), tempFile.name],
+                    stderr=nuldev,
+                )
+        else:
+            grass.info("Step 5: writing menu data (menudata.xml)...")
+            writeData(data)
 
-        grass.call(
-            ["diff", "-u", os.path.join("xml", "menudata.xml"), tempFile.name],
-            stderr=nuldev,
-        )
-    else:
-        grass.info("Step 5: writing menu data (menudata.xml)...")
-        writeData(data)
-
-    return 0
+        return 0
 
 
 if __name__ == "__main__":

@@ -104,9 +104,8 @@ class GRASSStartup(wx.Frame):
         # labels
         # crashes when LOCATION doesn't exist
         # get version & revision
-        versionFile = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
-        versionLine = versionFile.readline().rstrip("\n")
-        versionFile.close()
+        with open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER")) as versionFile:
+            versionLine = versionFile.readline().rstrip("\n")
         try:
             grassVersion, grassRevision = versionLine.split(" ", 1)
             if grassVersion.endswith("dev"):

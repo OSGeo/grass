@@ -687,9 +687,8 @@ class ColorTable(wx.Frame):
             GMessage(message=_("Nothing to save."), parent=self)
             return
 
-        fd = open(path, "w")
-        fd.write(rulestxt)
-        fd.close()
+        with open(path, "w") as fd:
+            fd.write(rulestxt)
 
     def OnLoadRulesFile(self, event):
         """Load color table from file"""
@@ -699,9 +698,8 @@ class ColorTable(wx.Frame):
 
         self.rulesPanel.Clear()
 
-        fd = open(path)
-        self.ReadColorTable(ctable=fd.read())
-        fd.close()
+        with open(path) as fd:
+            self.ReadColorTable(ctable=fd.read())
 
     def ReadColorTable(self, ctable):
         """Read color table
@@ -801,11 +799,8 @@ class ColorTable(wx.Frame):
             return False
 
         gtemp = utils.GetTempfile()
-        output = open(gtemp, "w")
-        try:
+        with open(gtemp, "w") as output:
             output.write(rulestxt)
-        finally:
-            output.close()
 
         cmd = [
             "%s.colors" % self.mapType[0],  # r.colors/v.colors
@@ -1826,11 +1821,8 @@ class VectorColorTable(ColorTable):
             return False
 
         gtemp = utils.GetTempfile()
-        output = open(gtemp, "w")
-        try:
+        with open(gtemp, "w") as output:
             output.write(rulestxt)
-        finally:
-            output.close()
 
         RunCommand("db.execute", parent=self, input=gtemp)
         return True
