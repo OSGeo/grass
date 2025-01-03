@@ -624,11 +624,8 @@ def writeGifVisvis(
     images = gifWriter.convertImagesToPIL(images, dither, nq)
 
     # Write
-    fp = open(filename, "wb")
-    try:
+    with open(filename, "wb") as fp:
         gifWriter.writeGifToFile(fp, images, duration, loops, xy, dispose)
-    finally:
-        fp.close()
 
 
 def readGif(filename, asNumpy=True):
