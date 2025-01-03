@@ -20,6 +20,7 @@ from pathlib import Path
 import grass.grassdb.config as cfg
 import grass.script as gs
 from grass.script import gisenv
+from itertools import starmap
 
 
 def mapset_exists(path: str | os.PathLike[str], location=None, mapset=None) -> bool:
@@ -536,10 +537,7 @@ def get_reasons_locations_not_removable(locations):
 
     Returns messages as list if there were any failed checks, otherwise empty list.
     """
-    return [
-        get_reasons_location_not_removable(grassdb, location)
-        for grassdb, location in locations
-    ]
+    return list(starmap(get_reasons_location_not_removable, locations))
 
 
 def get_reasons_location_not_removable(grassdb, location):
