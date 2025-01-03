@@ -182,7 +182,6 @@ def readAvi(filename, asNumpy=True):
     command = "ffmpeg -i input.avi im%d.jpg"
     with subprocess.Popen(
         command,
-        shell=True,
         cwd=tempDir,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
