@@ -553,8 +553,7 @@ class VNETPointsData:
     def GetColumns(self, only_relevant=True):
         cols_data = deepcopy(self.cols)
 
-        hidden_cols = []
-        hidden_cols.extend((self.cols["name"].index("e"), self.cols["name"].index("n")))
+        hidden_cols = [self.cols["name"].index("e"), self.cols["name"].index("n")]
 
         analysis, valid = self.an_params.GetParam("analysis")
         if only_relevant and len(self.an_data[analysis]["cmdParams"]["cats"]) <= 1:
@@ -1343,11 +1342,7 @@ class VNETGlobalTurnsData:
         ]
 
     def GetData(self):
-        data = []
-        for ival in self.turn_data:
-            data.append(ival[1:])
-
-        return data
+        return [ival[1:] for ival in self.turn_data]
 
     def GetValue(self, line, col):
         return self.turn_data[line][col]

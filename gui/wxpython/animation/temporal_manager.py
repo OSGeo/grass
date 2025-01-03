@@ -161,10 +161,11 @@ class TemporalManager:
             return self._getCommonGranularity()
 
     def _getCommonGranularity(self):
-        allMaps = []
-        for dataset in self.timeseriesList:
-            maps = self.timeseriesInfo[dataset]["maps"]
-            allMaps.extend(maps)
+        allMaps = [
+            a
+            for dataset in self.timeseriesList
+            for a in self.timeseriesInfo[dataset]["maps"]
+        ]
 
         if self.temporalType == TemporalType.ABSOLUTE:
             gran = tgis.compute_absolute_time_granularity(allMaps)

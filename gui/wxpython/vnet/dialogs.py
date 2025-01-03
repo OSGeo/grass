@@ -581,13 +581,10 @@ class VNETDialog(wx.Dialog):
     def OnPageChanged(self, event):
         """Tab switched"""
         if event.GetEventObject() == self.notebook:
-            dbMgrIndxs = []
-            dbMgrIndxs.extend(
-                (
-                    self.notebook.GetPageIndexByName("inputDbMgr"),
-                    self.notebook.GetPageIndexByName("resultDbMgr"),
-                )
-            )
+            dbMgrIndxs = [
+                self.notebook.GetPageIndexByName("inputDbMgr"),
+                self.notebook.GetPageIndexByName("resultDbMgr"),
+            ]
             if self.notebook.GetSelection() in dbMgrIndxs:
                 self.stBar.AddStatusItem(
                     text=_("Loading tables..."),

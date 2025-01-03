@@ -1063,9 +1063,9 @@ class DatumPage(TitledPage):
         self.searchb.ShowCancelButton(True)
 
         # create list control for datum/elipsoid list
-        data = []
-        for key in self.parent.datums.keys():
-            data.append([key, self.parent.datums[key][0], self.parent.datums[key][1]])
+        data = [
+            [key, datum[0], datum[1]] for (key, datum) in self.parent.datums.items()
+        ]
         self.datumlist = ItemList(
             self, data=data, columns=[_("Code"), _("Ellipsoid"), _("Description")]
         )
@@ -1262,10 +1262,10 @@ class EllipsePage(TitledPage):
         )
 
         # create list control for ellipse list
-        data = []
         # extract code, desc
-        for key in self.parent.ellipsoids.keys():
-            data.append([key, self.parent.ellipsoids[key][0]])
+        data = [
+            [key, ellipsoid[0]] for (key, ellipsoid) in self.parent.ellipsoids.items()
+        ]
 
         self.ellipselist = ItemList(
             self, data=data, columns=[_("Code"), _("Description")]

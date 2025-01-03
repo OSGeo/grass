@@ -419,9 +419,11 @@ class VNETAnalyses:
         cats = self.data.GetAnalysisProperties()["cmdParams"]["cats"]
 
         # Creates part of cmd fro analysis
-        cmdParams = [analysis]
-        cmdParams.extend(self._setInputParams(analysis, params, flags))
-        cmdParams.append("output=" + output)
+        cmdParams = [
+            analysis,
+            *self._setInputParams(analysis, params, flags),
+            "output=" + output,
+        ]
 
         cmdPts = []
         for cat in cats:
@@ -513,9 +515,11 @@ class VNETAnalyses:
 
     def _runTurnsAn(self, analysis, output, params, flags, catPts):
         # Creates part of cmd fro analysis
-        cmdParams = [analysis]
-        cmdParams.extend(self._setInputParams(analysis, params, flags))
-        cmdParams.append("output=" + output)
+        cmdParams = [
+            analysis,
+            *self._setInputParams(analysis, params, flags),
+            "output=" + output,
+        ]
 
         cats = {}
         for cat_name, pts_coor in catPts.items():
@@ -622,9 +626,11 @@ class VNETAnalyses:
         """Called for all v.net.* analysis (except v.net.path)"""
 
         # Creates part of cmd fro analysis
-        cmdParams = [analysis]
-        cmdParams.extend(self._setInputParams(analysis, params, flags))
-        cmdParams.append("output=" + output)
+        cmdParams = [
+            analysis,
+            *self._setInputParams(analysis, params, flags),
+            "output=" + output,
+        ]
 
         cats = self.data.GetAnalysisProperties()["cmdParams"]["cats"]
 
