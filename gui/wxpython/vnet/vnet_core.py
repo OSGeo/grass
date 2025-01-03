@@ -765,9 +765,7 @@ class VNETAnalyses:
         anProps = self.data.GetAnalysisProperties()
         cats = anProps["cmdParams"]["cats"]
 
-        ptByCats = {}
-        for cat in anProps["cmdParams"]["cats"]:
-            ptByCats[cat[0]] = []
+        ptByCats = {cat[0]: [] for cat in anProps["cmdParams"]["cats"]}
 
         for i in range(self.pts_data.GetPointsCount()):
             pt_data = self.pts_data.GetPointData(i)
@@ -893,13 +891,13 @@ class VNETHistory:
             ptDataHist = histStepData["points"]["pt" + str(iPt)]
 
             e, n = ptDataHist["coords"]
-            pt_data = {"e": e, "n": n}
-
-            pt_data["type"] = int(ptDataHist["catIdx"])
-
-            pt_data["topology"] = ptDataHist["topology"]
-
-            pt_data["use"] = ptDataHist["checked"]
+            pt_data = {
+                "e": e,
+                "n": n,
+                "type": int(ptDataHist["catIdx"]),
+                "topology": ptDataHist["topology"],
+                "use": ptDataHist["checked"],
+            }
 
             pts.append(pt_data)
 

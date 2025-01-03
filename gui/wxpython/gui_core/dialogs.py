@@ -1342,8 +1342,7 @@ class GroupDialog(wx.Dialog):
 
     def GetGroupLayers(self, group, subgroup=None):
         """Get layers in group"""
-        kwargs = {}
-        kwargs["group"] = group
+        kwargs = {"group": group}
         if subgroup:
             kwargs["subgroup"] = subgroup
 

@@ -196,11 +196,7 @@ class UpdateThread(Thread):
         map = pMap.get("value", "") if pMap else None
 
         # avoid running db.describe several times
-        cparams = {}
-        cparams[map] = {
-            "dbInfo": None,
-            "layers": None,
-        }
+        cparams = {map: {"dbInfo": None, "layers": None}}
 
         # update reference widgets
         for uid in p["wxId-bind"]:
@@ -2837,9 +2833,7 @@ class CmdPanel(wx.Panel):
                 myIndex = p["wxId"].index(me)
 
         # Unpack current value list
-        currentValues = {}
-        for isThere in theParam.get("value", "").split(","):
-            currentValues[isThere] = 1
+        currentValues = {isThere: 1 for isThere in theParam.get("value", "").split(",")}
         theValue = theParam["values"][myIndex]
 
         if event.IsChecked():

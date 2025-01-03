@@ -2287,10 +2287,7 @@ class SummaryPage(TitledPage):
 
         # print coordsys,proj4string
         if coordsys in {"proj", "epsg", "iau", "wkt", "file"}:
-            extra_opts = {}
-            extra_opts["project"] = "project"
-            extra_opts["getErrorMsg"] = True
-            extra_opts["read"] = True
+            extra_opts = {"project": "project", "getErrorMsg": True, "read": True}
 
             if coordsys == "proj":
                 if len(datum) > 0:

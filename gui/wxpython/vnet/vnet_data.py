@@ -427,11 +427,7 @@ class VNETPointsData:
         return pt_list_data
 
     def _ptListDataToPtData(self, pt_list_data):
-        pt_data = {}
-        for i, val in enumerate(pt_list_data):
-            pt_data[self.cols["name"][i]] = val
-
-        return pt_data
+        return {self.cols["name"][i]: val for i, val in enumerate(pt_list_data)}
 
     def _usePoint(self, pt_id, use):
         """Item is checked/unchecked"""

@@ -521,9 +521,11 @@ class GMFrame(wx.Frame):
                                                map display notebook page
                                                index (single window mode)
             """
-            pgnum_dict = {}
-            pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
-            pgnum_dict["mainnotebook"] = self.mainnotebook.GetPageIndex(mapdisplay)
+            pgnum_dict = {
+                "layers": self.notebookLayers.GetPageIndex(page),
+                "mainnotebook": self.mainnotebook.GetPageIndex(mapdisplay),
+            }
+
             name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (

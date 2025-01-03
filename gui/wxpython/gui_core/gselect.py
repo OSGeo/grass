@@ -1403,9 +1403,7 @@ class FormatSelect(wx.Choice):
 
     def GetExtension(self, name):
         """Get file extension by format name"""
-        formatToExt = {}
-        formatToExt.update(rasterFormatExtension)
-        formatToExt.update(vectorFormatExtension)
+        formatToExt = {**rasterFormatExtension, **vectorFormatExtension}
 
         return formatToExt.get(name, "")
 
@@ -1950,9 +1948,7 @@ class GdalSelect(wx.Panel):
 
     def _getExtension(self, name):
         """Get file extension by format name"""
-        formatToExt = {}
-        formatToExt.update(rasterFormatExtension)
-        formatToExt.update(vectorFormatExtension)
+        formatToExt = {**rasterFormatExtension, **vectorFormatExtension}
 
         return formatToExt.get(name, "")
 

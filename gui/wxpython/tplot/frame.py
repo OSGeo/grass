@@ -1337,10 +1337,11 @@ class LookUp:
             self.data[datasetName][xranges[i]] = yranges[i]
 
     def GetInformation(self, x):
-        values = {}
-        for key, value in self.data.items():
-            if value[x]:
-                values[key] = [self.convert(x), value[x]]
+        values = {
+            key: [self.convert(x), value[x]]
+            for key, value in self.data.items()
+            if value[x]
+        }
 
         if len(values) == 0:
             return None

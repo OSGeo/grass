@@ -578,8 +578,7 @@ class GMFrame(wx.Frame):
                                                map display notebook layers
                                                tree page index
             """
-            pgnum_dict = {}
-            pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
+            pgnum_dict = {"layers": self.notebookLayers.GetPageIndex(page)}
             name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (

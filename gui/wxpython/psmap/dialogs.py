@@ -792,11 +792,12 @@ class PageSetupDialog(PsmapDialog):
         currPaper = self.paperTable[self.getCtrl("Format").GetSelection()]
         currUnit = self.unitConv.findUnit(self.getCtrl("Units").GetStringSelection())
         currOrientIdx = self.getCtrl("Orientation").GetSelection()
-        newSize = {}
-        for item in self.cat[3:]:
-            newSize[item] = self.unitConv.convert(
+        newSize = {
+            item: self.unitConv.convert(
                 float(currPaper[item]), fromUnit="inch", toUnit=currUnit
             )
+            for item in self.cat[3:]
+        }
 
         enable = True
         if currPaper["Format"] != _("custom"):

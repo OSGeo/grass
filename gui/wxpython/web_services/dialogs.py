@@ -336,11 +336,10 @@ class WSDialogBase(wx.Dialog):
         event.Skip()
 
     def _getCapFiles(self):
-        ws_cap_files = {}
-        for v in self.ws_panels.values():
-            ws_cap_files[v["panel"].GetWebService()] = v["panel"].GetCapFile()
-
-        return ws_cap_files
+        return {
+            v["panel"].GetWebService(): v["panel"].GetCapFile()
+            for v in self.ws_panels.values()
+        }
 
     def OnServer(self, event):
         """Server settings edited"""
@@ -750,10 +749,7 @@ class WSPropertiesDialog(WSDialogBase):
     def _getServerConnFromCmd(self, cmd):
         """Get url/server/password from cmd tuple"""
         conn = {"url": "", "username": "", "password": ""}
-
-        for k in conn.keys():
-            if k in cmd[1]:
-                conn[k] = cmd[1][k]
+        conn |= {k: cmd[1][k] for k in conn.keys() if k in cmd[1]}
         return conn
 
     def _apply(self):
