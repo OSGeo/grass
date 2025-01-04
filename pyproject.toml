@@ -263,10 +263,12 @@ ignore = [
 # "A005", # builtin-module-shadowing
 # "PLW0108", # unnecessary-lambda
 # "SIM115", # open-file-with-context-handler
+# Ignored after reverting:
+"gui/**" = ["PLW0108"] # See https://github.com/OSGeo/grass/issues/4124
+# Other ignores:
 "**.py" = ["PYI066"]
 "*/testsuite/**.py" = ["PT009", "PT027"]
 "display/d.mon/render_cmd.py" = ["SIM115"]
-"gui/**" = ["PLW0108"] # See https://github.com/OSGeo/grass/issues/4124
 "gui/wxpython/animation/temporal_manager.py" = ["SIM115"]
 "gui/wxpython/core/*.py" = ["SIM115"]
 "gui/wxpython/core/globalvar.py" = ["PTH208"]
@@ -386,7 +388,6 @@ ignore = [
 "temporal/t.register/testsuite/test_t_register_raster.py" = ["FLY002"]
 "temporal/t.register/testsuite/test_t_register_raster_file.py" = ["FLY002"]
 "temporal/t.remove/t.remove.py" = ["SIM115"]
-"temporal/t.unregister/t.unregister.py" = ["SIM115"]
 "utils/**.py" = ["SIM115"]
 "utils/generate_release_notes.py" = ["PGH004"]
 "utils/thumbnails.py" = ["PTH208"]
