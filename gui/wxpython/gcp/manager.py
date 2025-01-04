@@ -87,14 +87,12 @@ maptype = "raster"
 
 def getSmallUpArrowImage():
     with open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb") as stream:
-        img = wx.Image(stream)
-        return img
+        return wx.Image(stream)
 
 
 def getSmallDnArrowImage():
     with open(os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb") as stream:
-        img = wx.Image(stream)
-    return img
+        return wx.Image(stream)
 
 
 class GCPWizard:
