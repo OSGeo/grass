@@ -24,7 +24,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-""" Module images2gif
+"""Module images2gif
 
 Provides functionality for reading and writing animated GIF images.
 Use writeGif to write a series of numpy arrays or PIL images as an
@@ -1086,7 +1086,7 @@ class NeuQuant:
         return Image.fromarray(px).convert("RGB").quantize(palette=self.paletteImage())
 
     def quantize_without_scipy(self, image):
-        """ " This function can be used if no scipy is available.
+        """This function can be used if no scipy is available.
         It's 7 times slower though.
 
         :param image:
