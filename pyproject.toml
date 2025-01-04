@@ -750,3 +750,11 @@ include = ["python"]
 # *GRASS modified*
 # *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
 pythonVersion = "3.9"
+
+[tool.pyrefact]
+line_length = 88
+
+[tool.isort]
+profile = "black"
+# *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
+py_version = 39
