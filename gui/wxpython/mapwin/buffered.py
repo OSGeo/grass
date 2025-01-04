@@ -1214,8 +1214,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         Set self.pline to wx.NEW_ID + 1
 
         :param polycoords: list of polyline vertices, geographical
-                           coordinates (if not given, self.polycoords
-                           is used)
+                           coordinates (if not given, self.polycoords is used)
         """
         if not pdc:
             pdc = self.pdcTmp

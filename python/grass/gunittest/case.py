@@ -48,6 +48,7 @@ class TestCase(unittest.TestCase):
     Be especially careful and always use keyword argument syntax for *msg*
     parameter.
     """
+
     longMessage = True  # to get both standard and custom message
     maxDiff = None  # we can afford long diffs
     _temp_region = None  # to control the temporary region

@@ -551,8 +551,7 @@ class ScattPlotsCondsData:
 
 
 class ScattPlotsData(ScattPlotsCondsData):
-    """Data structure for computed points (classes) in scatter plots.\
-    """
+    """Data structure for computed points (classes) in scatter plots."""
 
     def __init__(self, an_data):
         self.cats_rasts = {}

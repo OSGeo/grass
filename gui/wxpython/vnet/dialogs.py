@@ -1218,7 +1218,7 @@ class PtsList(PointsList):
             self.pts_data.SetSelected(self.selectedkey)
 
     def OnCheckItem(self, index, flag):
-        "flag is True if the item was checked, False if unchecked"
+        """flag is True if the item was checked, False if unchecked"""
         key = self.GetItemData(index)
         if self.pts_data.GetPointData(key)["use"] != flag:
             self.pts_data.SetPointData(key, {"use": flag})

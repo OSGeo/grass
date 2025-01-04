@@ -24,7 +24,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-""" Module images2ims
+"""Module images2ims
 
 Use PIL to create a series of images.
 
@@ -177,9 +177,7 @@ def writeIms(filename, images):
 
 
 def readIms(filename, asNumpy=True):
-    """readIms(filename, asNumpy=True)
-
-    Read images from a series of images in a single directory. Returns a
+    """Read images from a series of images in a single directory. Returns a
     list of numpy arrays, or, if asNumpy is false, a list if PIL images.
 
     :param filename:

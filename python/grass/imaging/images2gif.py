@@ -24,7 +24,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-""" Module images2gif
+"""Module images2gif
 
 Provides functionality for reading and writing animated GIF images.
 Use writeGif to write a series of numpy arrays or PIL images as an
@@ -101,8 +101,7 @@ def get_cKDTree():
 
 
 def checkImages(images):
-    """checkImages(images)
-    Check numpy images and correct intensity range etc.
+    """Check numpy images and correct intensity range etc.
     The same for all movie formats.
 
     :param images:
@@ -300,9 +299,7 @@ class GifWriter:
         return (images, xy)
 
     def getSubRectangles(self, ims):
-        """getSubRectangles(ims)
-
-        Calculate the minimal rectangles that need updating each frame.
+        """Calculate the minimal rectangles that need updating each frame.
         Returns a two-element tuple containing the cropped images and a
         list of x-y positions.
 
@@ -355,11 +352,10 @@ class GifWriter:
         return (ims2, xy)
 
     def convertImagesToPIL(self, images, dither, nq=0):
-        """convertImagesToPIL(images, nq=0)
-
-        Convert images to Paletted PIL images, which can then be
+        """Convert images to Paletted PIL images, which can then be
         written to a single animaged GIF.
 
+        convertImagesToPIL(images, nq=0)
         """
 
         # Convert to PIL images
@@ -400,9 +396,7 @@ class GifWriter:
         return images2
 
     def writeGifToFile(self, fp, images, durations, loops, xys, disposes):
-        """writeGifToFile(fp, images, durations, loops, xys, disposes)
-
-        Given a set of images writes the bytes to the specified stream.
+        """Given a set of images writes the bytes to the specified stream.
         Requires different handling of palette for PIL and Pillow:
         based on https://github.com/rec/echomesh/blob/master/
         code/python/external/images2gif.py
@@ -1085,7 +1079,7 @@ class NeuQuant:
         return Image.fromarray(px).convert("RGB").quantize(palette=self.paletteImage())
 
     def quantize_without_scipy(self, image):
-        """ " This function can be used if no scipy is available.
+        """This function can be used if no scipy is available.
         It's 7 times slower though.
 
         :param image:
