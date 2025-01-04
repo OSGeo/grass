@@ -581,13 +581,10 @@ class VNETDialog(wx.Dialog):
     def OnPageChanged(self, event):
         """Tab switched"""
         if event.GetEventObject() == self.notebook:
-            dbMgrIndxs = []
-            dbMgrIndxs.extend(
-                (
-                    self.notebook.GetPageIndexByName("inputDbMgr"),
-                    self.notebook.GetPageIndexByName("resultDbMgr"),
-                )
-            )
+            dbMgrIndxs = [
+                self.notebook.GetPageIndexByName("inputDbMgr"),
+                self.notebook.GetPageIndexByName("resultDbMgr"),
+            ]
             if self.notebook.GetSelection() in dbMgrIndxs:
                 self.stBar.AddStatusItem(
                     text=_("Loading tables..."),
@@ -834,9 +831,7 @@ class VNETDialog(wx.Dialog):
         self._setInputData()
 
     def _setInputData(self):
-        params = {}
-        for k, v in self.inputData.items():
-            params[k] = v.GetValue()
+        params = {k: v.GetValue() for k, v in self.inputData.items()}
         flags = {}
         self.vnet_mgr.SetParams(params, flags)
 
@@ -1258,11 +1253,13 @@ class SettingsDialog(wx.Dialog):
 
         rules = RunCommand("v.colors", read=True, flags="l")
 
-        settsLabels = {}
-
-        settsLabels["color_table"] = StaticText(
-            parent=self, id=wx.ID_ANY, label=_("Color table style %s:") % "(v.net.flow)"
-        )
+        settsLabels = {
+            "color_table": StaticText(
+                parent=self,
+                id=wx.ID_ANY,
+                label=_("Color table style %s:") % "(v.net.flow)",
+            )
+        }
         self.settings["color_table"] = ComboBox(
             parent=self,
             id=wx.ID_ANY,
@@ -1651,11 +1648,7 @@ class CreateTtbDialog(wx.Dialog):
             self._updateInputDbMgrPage(show=True)
 
     def GetData(self):
-        params = {}
-        for param, sel in self.inputData.items():
-            params[param] = sel.GetValue()
-
-        return params
+        return {param: sel.GetValue() for param, sel in self.inputData.items()}
 
 
 class OutputVectorDialog(wx.Dialog):

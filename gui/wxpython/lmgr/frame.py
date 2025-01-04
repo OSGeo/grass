@@ -578,8 +578,7 @@ class GMFrame(wx.Frame):
                                                map display notebook layers
                                                tree page index
             """
-            pgnum_dict = {}
-            pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
+            pgnum_dict = {"layers": self.notebookLayers.GetPageIndex(page)}
             name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (
@@ -1086,11 +1085,10 @@ class GMFrame(wx.Frame):
                 return self.GetLayerTree().GetMapDisplay()
             return None
         # -> return list of all mapdisplays
-        mlist = []
-        for idx in range(self.notebookLayers.GetPageCount()):
-            mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
-
-        return mlist
+        return [
+            self.notebookLayers.GetPage(idx).maptree.GetMapDisplay()
+            for idx in range(self.notebookLayers.GetPageCount())
+        ]
 
     def GetAllMapDisplays(self):
         """Get all (open) map displays"""
@@ -1705,10 +1703,11 @@ class GMFrame(wx.Frame):
 
         tree = self.GetLayerTree()
         if tree:
-            rasters = []
-            for layer in tree.GetSelectedLayers(checkedOnly=False):
-                if tree.GetLayerInfo(layer, key="type") == "raster":
-                    rasters.append(tree.GetLayerInfo(layer, key="maplayer").GetName())
+            rasters = [
+                tree.GetLayerInfo(layer, key="maplayer").GetName()
+                for layer in tree.GetSelectedLayers(checkedOnly=False)
+                if tree.GetLayerInfo(layer, key="type") == "raster"
+            ]
             if len(rasters) >= 2:
                 from core.layerlist import LayerList
                 from animation.data import AnimLayer

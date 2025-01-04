@@ -1133,11 +1133,9 @@ class IClassConnection:
 
     def SetCategory(self, cat, stats):
         self.cats_mgr.setCategoryAttrs.disconnect(self.SetStatistics)
-        cats_attr = {}
-
-        for attr in ["name", "color", "nstd"]:
-            if attr in stats:
-                cats_attr[attr] = stats[attr]
+        cats_attr = {
+            attr: stats[attr] for attr in ["name", "color", "nstd"] if attr in stats
+        }
 
         if cats_attr:
             self.cats_mgr.SetCategoryAttrs(cat, cats_attr)
