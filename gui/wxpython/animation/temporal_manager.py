@@ -411,28 +411,26 @@ def createAbsoluteInterval():
     gs.mapcalc(exp="temp_6 = rand(0, 650)", overwrite=True)
 
     n1 = gs.read_command("g.tempfile", pid=1, flags="d").strip()
-    fd = open(n1, "w")
-    fd.write(
-        "prec_1|2001-01-01|2001-02-01\n"
-        "prec_2|2001-04-01|2001-05-01\n"
-        "prec_3|2001-05-01|2001-09-01\n"
-        "prec_4|2001-09-01|2002-01-01\n"
-        "prec_5|2002-01-01|2002-05-01\n"
-        "prec_6|2002-05-01|2002-07-01\n"
-    )
-    fd.close()
+    with open(n1, "w") as fd:
+        fd.write(
+            "prec_1|2001-01-01|2001-02-01\n"
+            "prec_2|2001-04-01|2001-05-01\n"
+            "prec_3|2001-05-01|2001-09-01\n"
+            "prec_4|2001-09-01|2002-01-01\n"
+            "prec_5|2002-01-01|2002-05-01\n"
+            "prec_6|2002-05-01|2002-07-01\n"
+        )
 
     n2 = gs.read_command("g.tempfile", pid=2, flags="d").strip()
-    fd = open(n2, "w")
-    fd.write(
-        "temp_1|2000-10-01|2001-01-01\n"
-        "temp_2|2001-04-01|2001-05-01\n"
-        "temp_3|2001-05-01|2001-09-01\n"
-        "temp_4|2001-09-01|2002-01-01\n"
-        "temp_5|2002-01-01|2002-05-01\n"
-        "temp_6|2002-05-01|2002-07-01\n"
-    )
-    fd.close()
+    with open(n2, "w") as fd:
+        fd.write(
+            "temp_1|2000-10-01|2001-01-01\n"
+            "temp_2|2001-04-01|2001-05-01\n"
+            "temp_3|2001-05-01|2001-09-01\n"
+            "temp_4|2001-09-01|2002-01-01\n"
+            "temp_5|2002-01-01|2002-05-01\n"
+            "temp_6|2002-05-01|2002-07-01\n"
+        )
     name1 = "absinterval1"
     name2 = "absinterval2"
     gs.run_command(
@@ -486,28 +484,26 @@ def createRelativeInterval():
     gs.mapcalc(exp="temp_6 = rand(0, 650)", overwrite=True)
 
     n1 = gs.read_command("g.tempfile", pid=1, flags="d").strip()
-    fd = open(n1, "w")
-    fd.write(
-        "prec_1|1|4\n"
-        "prec_2|6|7\n"
-        "prec_3|7|10\n"
-        "prec_4|10|11\n"
-        "prec_5|11|14\n"
-        "prec_6|14|17\n"
-    )
-    fd.close()
+    with open(n1, "w") as fd:
+        fd.write(
+            "prec_1|1|4\n"
+            "prec_2|6|7\n"
+            "prec_3|7|10\n"
+            "prec_4|10|11\n"
+            "prec_5|11|14\n"
+            "prec_6|14|17\n"
+        )
 
     n2 = gs.read_command("g.tempfile", pid=2, flags="d").strip()
-    fd = open(n2, "w")
-    fd.write(
-        "temp_1|5|6\n"
-        "temp_2|6|7\n"
-        "temp_3|7|10\n"
-        "temp_4|10|11\n"
-        "temp_5|11|18\n"
-        "temp_6|19|22\n"
-    )
-    fd.close()
+    with open(n2, "w") as fd:
+        fd.write(
+            "temp_1|5|6\n"
+            "temp_2|6|7\n"
+            "temp_3|7|10\n"
+            "temp_4|10|11\n"
+            "temp_5|11|18\n"
+            "temp_6|19|22\n"
+        )
     name1 = "relinterval1"
     name2 = "relinterval2"
     gs.run_command(
@@ -560,16 +556,15 @@ def createAbsolutePoint():
     gs.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
 
     n1 = gs.read_command("g.tempfile", pid=1, flags="d").strip()
-    fd = open(n1, "w")
-    fd.write(
-        "prec_1|2001-01-01\n"
-        "prec_2|2001-03-01\n"
-        "prec_3|2001-04-01\n"
-        "prec_4|2001-05-01\n"
-        "prec_5|2001-08-01\n"
-        "prec_6|2001-09-01\n"
-    )
-    fd.close()
+    with open(n1, "w") as fd:
+        fd.write(
+            "prec_1|2001-01-01\n"
+            "prec_2|2001-03-01\n"
+            "prec_3|2001-04-01\n"
+            "prec_4|2001-05-01\n"
+            "prec_5|2001-08-01\n"
+            "prec_6|2001-09-01\n"
+        )
     name = "abspoint"
     gs.run_command(
         "t.create",
@@ -608,9 +603,8 @@ def createRelativePoint():
     gs.mapcalc(exp="prec_6 = rand(0, 650)", overwrite=True)
 
     n1 = gs.read_command("g.tempfile", pid=1, flags="d").strip()
-    fd = open(n1, "w")
-    fd.write("prec_1|1\nprec_2|3\nprec_3|5\nprec_4|7\nprec_5|11\nprec_6|13\n")
-    fd.close()
+    with open(n1, "w") as fd:
+        fd.write("prec_1|1\nprec_2|3\nprec_3|5\nprec_4|7\nprec_5|11\nprec_6|13\n")
     name = "relpoint"
     gs.run_command(
         "t.create",

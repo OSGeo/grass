@@ -48,9 +48,8 @@ class ViewFrame(wx.Frame):
             parent=self.panel, id=wx.ID_ANY, style=wx.TE_MULTILINE, size=(-1, 75)
         )
         self.textCtrl.Bind(wx.EVT_TEXT, self.OnFileText)
-        f = open(self.pathfile)
-        self.textCtrl.SetValue("".join(f.readlines()))
-        f.close()
+        with open(self.pathfile) as f:
+            self.textCtrl.SetValue("".join(f.readlines()))
         # BUTTONS      #definition
         self.btn_close = Button(parent=self, id=wx.ID_EXIT)
         self.btn_ok = Button(parent=self, id=wx.ID_SAVE)
@@ -107,11 +106,10 @@ class ViewFrame(wx.Frame):
         )
 
         if dlg.ShowModal() == wx.ID_YES:
-            f = codecs.open(
+            with codecs.open(
                 self.pathfile, encoding=self.enc, mode="w", errors="replace"
-            )
-            f.write(self.text + os.linesep)
-            f.close()
+            ) as f:
+                f.write(self.text + os.linesep)
         dlg.Destroy()
         self.Destroy()
 

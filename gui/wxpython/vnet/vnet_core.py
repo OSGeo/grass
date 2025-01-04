@@ -449,9 +449,8 @@ class VNETAnalyses:
         )
 
         self.coordsTmpFile = grass.tempfile()
-        coordsTmpFileOpened = open(self.coordsTmpFile, "w")
-        coordsTmpFileOpened.write(inpPoints)
-        coordsTmpFileOpened.close()
+        with open(self.coordsTmpFile, "w") as coordsTmpFileOpened:
+            coordsTmpFileOpened.write(inpPoints)
 
         if flags["t"]:
             cmdParams.append("-t")
@@ -579,28 +578,26 @@ class VNETAnalyses:
         driver, database = dbInfo.GetDbSettings(tlayer)
 
         sqlFile = grass.tempfile()
-        sqlFile_f = open(sqlFile, "w")
+        with open(sqlFile, "w") as sqlFile_f:
+            for ival in intervals:
+                from_angle = ival[0]
+                to_angle = ival[1]
+                cost = ival[2]
 
-        for ival in intervals:
-            from_angle = ival[0]
-            to_angle = ival[1]
-            cost = ival[2]
+                if to_angle < from_angle:
+                    to_angle = math.pi * 2 + to_angle
+                # if angle < from_angle:
+                #    angle = math.pi * 2  + angle
 
-            if to_angle < from_angle:
-                to_angle = math.pi * 2 + to_angle
-            # if angle < from_angle:
-            #    angle = math.pi * 2  + angle
+                where = (
+                    " WHERE"
+                    " (((angle < {0}) AND ({2} + angle >= {0} AND {2} + angle < {1}))"
+                    " OR ((angle >= {0}) AND (angle >= {0} AND angle < {1})))"
+                    " AND cost==0.0 "
+                ).format(str(from_angle), str(to_angle), str(math.pi * 2))
 
-            where = (
-                " WHERE (((angle < {0}) AND ({2} + angle >= {0} AND {2} + angle < {1}))"
-                " OR ((angle >= {0}) AND (angle >= {0} AND angle < {1})))"
-                " AND cost==0.0 "
-            ).format(str(from_angle), str(to_angle), str(math.pi * 2))
-
-            stm = ("UPDATE %s SET cost=%f " % (table, cost)) + where + ";\n"
-            sqlFile_f.write(stm)
-
-        sqlFile_f.close()
+                stm = ("UPDATE %s SET cost=%f " % (table, cost)) + where + ";\n"
+                sqlFile_f.write(stm)
 
         # TODO improve parser and run in thread
 
@@ -671,9 +668,8 @@ class VNETAnalyses:
 
         # TODO better tmp files cleanup (make class for managing tmp files)
         self.tmpPtsAsciiFile = grass.tempfile()
-        tmpPtsAsciiFileOpened = open(self.tmpPtsAsciiFile, "w")
-        tmpPtsAsciiFileOpened.write(pt_ascii)
-        tmpPtsAsciiFileOpened.close()
+        with open(self.tmpPtsAsciiFile, "w") as tmpPtsAsciiFileOpened:
+            tmpPtsAsciiFileOpened.write(pt_ascii)
 
         self.tmpInPts = AddTmpMapAnalysisMsg("vnet_tmp_in_pts", self.tmp_maps)
         if not self.tmpInPts:

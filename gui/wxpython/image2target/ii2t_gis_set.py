@@ -541,8 +541,7 @@ class GRASSStartup(wx.Frame):
         gisrc = os.getenv("GISRC")
 
         if gisrc and os.path.isfile(gisrc):
-            try:
-                rc = open(gisrc)
+            with open(gisrc) as rc:
                 for line in rc:
                     try:
                         key, val = line.split(":", 1)
@@ -551,8 +550,6 @@ class GRASSStartup(wx.Frame):
                             _("Invalid line in GISRC file (%s):%s\n") % (e, line)
                         )
                     grassrc[key.strip()] = DecodeString(val.strip())
-            finally:
-                rc.close()
 
         return grassrc
 

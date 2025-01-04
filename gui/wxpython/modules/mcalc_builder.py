@@ -733,11 +733,8 @@ class MapCalcFrame(wx.Frame):
                 dlg.Destroy()
                 return
 
-            try:
-                fobj = open(path, "w")
+            with open(path, "w") as fobj:
                 fobj.write(mctxt)
-            finally:
-                fobj.close()
 
         dlg.Destroy()
 
@@ -755,11 +752,8 @@ class MapCalcFrame(wx.Frame):
                 dlg.Destroy()
                 return
 
-            try:
-                fobj = open(path)
+            with open(path) as fobj:
                 mctxt = fobj.read()
-            finally:
-                fobj.close()
 
             try:
                 result, exp = mctxt.split("=", 1)

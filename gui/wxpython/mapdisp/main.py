@@ -123,9 +123,8 @@ class DMonMap(Map):
 
         nlayers = 0
         try:
-            fd = open(self.cmdfile)
-            lines = fd.readlines()
-            fd.close()
+            with open(self.cmdfile) as fd:
+                lines = fd.readlines()
             # detect d.out.file, delete the line from the cmd file and export
             # graphics
             if len(lines) > 0:

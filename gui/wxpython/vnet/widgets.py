@@ -439,20 +439,16 @@ class PointsList(
 
     def getSmallUpArrowImage(self):
         """Get arrow up symbol for indication of sorting"""
-        stream = open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb")
-        try:
+        with open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb") as stream:
             img = wx.Image(stream)
-        finally:
-            stream.close()
         return img
 
     def getSmallDnArrowImage(self):
         """Get arrow down symbol for indication of sorting"""
-        stream = open(os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb")
-        try:
+        with open(
+            os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb"
+        ) as stream:
             img = wx.Image(stream)
-        finally:
-            stream.close()
         return img
 
     def _getColumnNum(self, colName):
