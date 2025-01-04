@@ -34,6 +34,10 @@ select = [
     "C4",     # flake8-comprehensions (C4)
     "COM",    # flake8-commas (COM)
     "D",      # pydocstyle (D)
+    "D202",   # pydocstyle (D) blank-line-after-function
+    "D209",   # pydocstyle (D) new-line-after-last-paragraph
+    "D211",   # pydocstyle (D) blank-line-before-class
+    "D212",   # pydocstyle (D) multi-line-summary-first-line
     "DTZ",    # flake8-datetimez (DTZ)
     "E",      # pycodestyle (E, W)
     "EM",     # flake8-errmsg (EM)
@@ -103,14 +107,20 @@ ignore = [
     "COM812",  # missing-trailing-comma
     "COM818",  # trailing-comma-on-bare-tuple
     "D1",
-    "D2",
+    "D200",    # unnecessary-multiline-docstring
+    "D202",    # blank-line-after-function (selected)
+    "D203",    # incorrect-blank-line-before-class (ignored, use D211)
+    "D205",    # missing-blank-line-after-summary
+    "D209",    # new-line-after-last-paragraph (selected)
+    "D212",    # multi-line-summary-first-line (selected)
+    "D213",    # multi-line-summary-second-line (ignored, use D212)
+    "D214",    # overindented-section
     "D301",    # escape-sequence-in-docstring
     "D400",    # ends-in-period
     "D401",    # non-imperative-mood
     "D403",    # first-line-capitalized
     "D404",    # docstring-starts-with-this
     "D405",    # capitalize-section-name
-    "D406",    # new-line-after-section-name
     "D407",    # dashed-underline-after-section
     "D409",    # section-underline-matches-section-length
     "D412",    # blank-lines-between-header-and-content
