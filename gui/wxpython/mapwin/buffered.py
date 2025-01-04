@@ -1062,16 +1062,13 @@ class BufferedMapWindow(MapWindowBase, Window):
             dispReg = self.Map.GetCurrentRegion()
             reg = dispReg if utils.isInRegion(dispReg, compReg) else compReg
 
-            regionCoords = []
-            regionCoords.extend(
-                (
-                    (reg["w"], reg["n"]),
-                    (reg["e"], reg["n"]),
-                    (reg["e"], reg["s"]),
-                    (reg["w"], reg["s"]),
-                    (reg["w"], reg["n"]),
-                )
-            )
+            regionCoords = [
+                (reg["w"], reg["n"]),
+                (reg["e"], reg["n"]),
+                (reg["e"], reg["s"]),
+                (reg["w"], reg["s"]),
+                (reg["w"], reg["n"]),
+            ]
 
             # draw region extent
             self.polypen = wx.Pen(
@@ -1214,8 +1211,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         Set self.pline to wx.NEW_ID + 1
 
         :param polycoords: list of polyline vertices, geographical
-                           coordinates (if not given, self.polycoords
-                           is used)
+                           coordinates (if not given, self.polycoords is used)
         """
         if not pdc:
             pdc = self.pdcTmp

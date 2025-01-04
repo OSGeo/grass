@@ -1774,8 +1774,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """Load 2D or 3D vector map overlay
 
         :param item: layer item
-        :param points: True to load points, False to load lines, None
-                       to load both
+        :param points: True to load points, False to load lines, None to load both
         :param bool append: append vector to layer list
         """
         layer = self.tree.GetLayerInfo(item, key="maplayer")

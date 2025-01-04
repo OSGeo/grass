@@ -396,7 +396,7 @@ class MultiTestResult(TestResult):
                     raise
 
     def printErrors(self):
-        "Called by TestRunner after test run"
+        """Called by TestRunner after test run"""
         super().printErrors()
         for result in self._results:
             try:
@@ -470,7 +470,7 @@ class GrassTestRunner:
         self._result = result
 
     def run(self, test):
-        "Run the given test case or test suite."
+        """Run the given test case or test suite."""
         result = self._result
         unittest.registerResult(result)
         result.failfast = self.failfast

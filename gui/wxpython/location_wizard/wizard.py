@@ -1063,9 +1063,9 @@ class DatumPage(TitledPage):
         self.searchb.ShowCancelButton(True)
 
         # create list control for datum/elipsoid list
-        data = []
-        for key in self.parent.datums.keys():
-            data.append([key, self.parent.datums[key][0], self.parent.datums[key][1]])
+        data = [
+            [key, datum[0], datum[1]] for (key, datum) in self.parent.datums.items()
+        ]
         self.datumlist = ItemList(
             self, data=data, columns=[_("Code"), _("Ellipsoid"), _("Description")]
         )
@@ -1262,10 +1262,10 @@ class EllipsePage(TitledPage):
         )
 
         # create list control for ellipse list
-        data = []
         # extract code, desc
-        for key in self.parent.ellipsoids.keys():
-            data.append([key, self.parent.ellipsoids[key][0]])
+        data = [
+            [key, ellipsoid[0]] for (key, ellipsoid) in self.parent.ellipsoids.items()
+        ]
 
         self.ellipselist = ItemList(
             self, data=data, columns=[_("Code"), _("Description")]
@@ -1753,10 +1753,11 @@ class EPSGPage(TitledPage):
             self.epsglist.Populate([], update=True)
             return
 
-        data = []
-        for code, val in self.epsgCodeDict.items():
-            if code is not None:
-                data.append((code, val[0], val[1]))
+        data = [
+            (code, val[0], val[1])
+            for code, val in self.epsgCodeDict.items()
+            if code is not None
+        ]
 
         self.epsglist.Populate(data, update=True)
 
@@ -2025,10 +2026,11 @@ class IAUPage(TitledPage):
             self.epsglist.Populate([], update=True)
             return
 
-        data = []
-        for code, val in self.epsgCodeDict.items():
-            if code is not None:
-                data.append((code, val[0], val[1]))
+        data = [
+            (code, val[0], val[1])
+            for code, val in self.epsgCodeDict.items()
+            if code is not None
+        ]
 
         self.epsglist.Populate(data, update=True)
 
@@ -2287,10 +2289,7 @@ class SummaryPage(TitledPage):
 
         # print coordsys,proj4string
         if coordsys in {"proj", "epsg", "iau", "wkt", "file"}:
-            extra_opts = {}
-            extra_opts["project"] = "project"
-            extra_opts["getErrorMsg"] = True
-            extra_opts["read"] = True
+            extra_opts = {"project": "project", "getErrorMsg": True, "read": True}
 
             if coordsys == "proj":
                 if len(datum) > 0:

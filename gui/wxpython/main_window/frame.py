@@ -521,9 +521,11 @@ class GMFrame(wx.Frame):
                                                map display notebook page
                                                index (single window mode)
             """
-            pgnum_dict = {}
-            pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
-            pgnum_dict["mainnotebook"] = self.mainnotebook.GetPageIndex(mapdisplay)
+            pgnum_dict = {
+                "layers": self.notebookLayers.GetPageIndex(page),
+                "mainnotebook": self.mainnotebook.GetPageIndex(mapdisplay),
+            }
+
             name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (
@@ -790,8 +792,7 @@ class GMFrame(wx.Frame):
     def AddNvizTools(self, firstTime):
         """Add nviz notebook page
 
-        :param firstTime: if a mapdisplay is starting 3D mode for the
-                          first time
+        :param firstTime: if a mapdisplay is starting 3D mode for the first time
         """
         Debug.msg(5, "GMFrame.AddNvizTools()")
         from nviz.main import haveNviz
@@ -1051,7 +1052,7 @@ class GMFrame(wx.Frame):
                                 notebook layers tree page index and
                                 "mainnotebook" key represent map display
                                 notebook page index (single window mode)
-              boolean is_docked: "True" means that map display is docked in map
+        :param boolean is_docked: "True" means that map display is docked in map
                                display notebook, "False" means that map display
                                is undocked to independent frame
         """
@@ -1239,11 +1240,10 @@ class GMFrame(wx.Frame):
                 return self.GetLayerTree().GetMapDisplay()
             return None
         # -> return list of all mapdisplays
-        mlist = []
-        for idx in range(self.notebookLayers.GetPageCount()):
-            mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
-
-        return mlist
+        return [
+            self.notebookLayers.GetPage(idx).maptree.GetMapDisplay()
+            for idx in range(self.notebookLayers.GetPageCount())
+        ]
 
     def GetAllMapDisplays(self):
         """Get all (open) map displays"""
@@ -1857,10 +1857,11 @@ class GMFrame(wx.Frame):
 
         tree = self.GetLayerTree()
         if tree:
-            rasters = []
-            for layer in tree.GetSelectedLayers(checkedOnly=False):
-                if tree.GetLayerInfo(layer, key="type") == "raster":
-                    rasters.append(tree.GetLayerInfo(layer, key="maplayer").GetName())
+            rasters = [
+                tree.GetLayerInfo(layer, key="maplayer").GetName()
+                for layer in tree.GetSelectedLayers(checkedOnly=False)
+                if tree.GetLayerInfo(layer, key="type") == "raster"
+            ]
             if len(rasters) >= 2:
                 from core.layerlist import LayerList
                 from animation.data import AnimLayer
