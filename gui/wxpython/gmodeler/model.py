@@ -39,6 +39,7 @@ import mimetypes
 import time
 
 import xml.etree.ElementTree as ET
+from pathlib import Path
 from xml.sax import saxutils
 
 import wx
@@ -542,9 +543,8 @@ class Model:
 
         for finput in self.fileInput:
             # read lines
-            with open(finput) as fd:
-                data = fd.read()
-                self.fileInput[finput] = data
+            data = Path(finput).read_text()
+            self.fileInput[finput] = data
 
             # substitute variables
             write = False

@@ -23,6 +23,9 @@ import platform
 import re
 import textwrap
 import sys
+
+from pathlib import Path
+
 import wx
 from wx.html import HtmlWindow
 from operator import itemgetter
@@ -274,8 +277,7 @@ class AboutWindow(wx.Frame):
         """Copyright information"""
         copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
         if os.path.exists(copyfile):
-            with open(copyfile) as copyrightFile:
-                copytext = copyrightFile.read()
+            copytext = Path(copyfile).read_text()
         else:
             copytext = _("%s file missing") % "COPYING"
 

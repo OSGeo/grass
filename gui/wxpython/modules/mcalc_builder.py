@@ -752,8 +752,7 @@ class MapCalcFrame(wx.Frame):
                 dlg.Destroy()
                 return
 
-            with open(path) as fobj:
-                mctxt = fobj.read()
+            mctxt = Path(path).read_text()
 
             try:
                 result, exp = mctxt.split("=", 1)
