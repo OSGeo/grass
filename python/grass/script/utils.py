@@ -31,10 +31,16 @@ import random
 import string
 
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, AnyStr, Callable, TypeVar, cast, overload
+
 
 if TYPE_CHECKING:
-    from _typeshed import FileDescriptorOrPath, StrPath, StrOrBytesPath
+    from _typeshed import FileDescriptorOrPath, StrOrBytesPath, StrPath
+
+
+# Type variables
+T = TypeVar("T")
+VT = TypeVar("VT")  # Value type
 
 
 def float_or_dms(s) -> float:
@@ -144,7 +150,7 @@ def basename(path: StrPath, ext: str | None = None) -> str:
     return name
 
 
-class KeyValue(dict):
+class KeyValue(dict[str, VT]):
     """A general-purpose key-value store.
 
     KeyValue is a subclass of dict, but also allows entries to be read and
@@ -157,16 +163,19 @@ class KeyValue(dict):
     >>> reg.south = 205
     >>> reg['south']
     205
+
+    The keys of KeyValue are strings. To use other key types, use other mapping types.
+    To use the attribute syntax, the keys must be valid Python attribute names.
     """
 
-    def __getattr__(self, key):
+    def __getattr__(self, key: str) -> VT:
         return self[key]
 
-    def __setattr__(self, key, value):
+    def __setattr__(self, key: str, value: VT) -> None:
         self[key] = value
 
 
-def _get_encoding():
+def _get_encoding() -> str:
     try:
         # Python >= 3.11
         encoding = locale.getencoding()
@@ -177,7 +186,7 @@ def _get_encoding():
     return encoding
 
 
-def decode(bytes_, encoding=None):
+def decode(bytes_: AnyStr, encoding: str | None = None) -> str:
     """Decode bytes with default locale and return (unicode) string
 
     No-op if parameter is not bytes (assumed unicode string).
@@ -205,13 +214,13 @@ def decode(bytes_, encoding=None):
     raise TypeError(msg)
 
 
-def encode(string, encoding=None):
+def encode(string: AnyStr, encoding: str | None = None) -> bytes:
     """Encode string with default locale and return bytes with that encoding
 
     No-op if parameter is bytes (assumed already encoded).
     This ensures garbage in, garbage out.
 
-    :param str string: the string to encode
+    :param string: the string to encode
     :param encoding: encoding to be used, default value is None
 
     Example
@@ -230,36 +239,77 @@ def encode(string, encoding=None):
         enc = _get_encoding() if encoding is None else encoding
         return string.encode(enc)
     # if something else than text
-    msg = "can only accept types str and bytes"
+    msg = "Can only accept types str and bytes"
     raise TypeError(msg)
 
 
-def text_to_string(text, encoding=None):
+def text_to_string(text: AnyStr, encoding: str | None = None) -> str:
     """Convert text to str. Useful when passing text into environments,
     in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
     """
     return decode(text, encoding=encoding)
 
 
-def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None) -> KeyValue:
+@overload
+def parse_key_val(
+    s: AnyStr,
+    sep: str = "=",
+    dflt: T | None = None,
+    val_type: None = ...,
+    vsep: str | None = None,
+) -> KeyValue[str | T | None]:
+    pass
+
+
+@overload
+def parse_key_val(
+    s: AnyStr,
+    sep: str = "=",
+    dflt: T | None = None,
+    val_type: Callable[[str], T] = ...,
+    vsep: str | None = None,
+) -> KeyValue[T | None]:
+    pass
+
+
+@overload
+def parse_key_val(
+    s: AnyStr,
+    sep: str = "=",
+    dflt: T | None = None,
+    val_type: Callable[[str], T] | None = None,
+    vsep: str | None = None,
+) -> KeyValue[str | T] | KeyValue[T | None] | KeyValue[T] | KeyValue[str | T | None]:
+    pass
+
+
+def parse_key_val(
+    s: AnyStr,
+    sep: str = "=",
+    dflt: T | None = None,
+    val_type: Callable[[str], T] | None = None,
+    vsep: str | None = None,
+) -> KeyValue[str | T] | KeyValue[T | None] | KeyValue[T] | KeyValue[str | T | None]:
     """Parse a string into a dictionary, where entries are separated
     by newlines and the key and value are separated by `sep` (default: `=`)
 
     >>> parse_key_val('min=20\\nmax=50') == {'min': '20', 'max': '50'}
     True
-    >>> parse_key_val('min=20\\nmax=50',
-    ...     val_type=float) == {'min': 20, 'max': 50}
+    >>> parse_key_val('min=20\\nmax=50', val_type=float) == {'min': 20, 'max': 50}
     True
 
-    :param str s: string to be parsed
-    :param str sep: key/value separator
+    :param s: string to be parsed
+    :param sep: key/value separator
     :param dflt: default value to be used
     :param val_type: value type (None for no cast)
     :param vsep: vertical separator (default is Python 'universal newlines' approach)
 
     :return: parsed input (dictionary of keys/values)
     """
-    result = KeyValue()
+
+    result: (
+        KeyValue[str | T] | KeyValue[T | None] | KeyValue[T] | KeyValue[str | T | None]
+    ) = KeyValue()
 
     if not s:
         return result
@@ -269,7 +319,7 @@ def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None) -> KeyValue:
         vsep = encode(vsep) if vsep else vsep
 
     if vsep:
-        lines = s.split(vsep)
+        lines: list[bytes] | list[str] = s.split(vsep)
         try:
             lines.remove("\n")
         except ValueError:
@@ -277,15 +327,25 @@ def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None) -> KeyValue:
     else:
         lines = s.splitlines()
 
+    if callable(val_type):
+        result = cast("KeyValue[T | None]", result)
+        for line in lines:
+            kv: list[bytes] | list[str] = line.split(sep, 1)
+            k: str = decode(kv[0].strip())
+            result[k] = val_type(decode(kv[1].strip())) if len(kv) > 1 else dflt
+
+        if dflt is not None:
+            result = cast("KeyValue[T]", result)
+        return result
+
+    result = cast("KeyValue[str | T | None]", result)
     for line in lines:
         kv = line.split(sep, 1)
         k = decode(kv[0].strip())
-        v = decode(kv[1].strip()) if len(kv) > 1 else dflt
+        result[k] = decode(kv[1].strip()) if len(kv) > 1 else dflt
 
-        if val_type:
-            result[k] = val_type(v)
-        else:
-            result[k] = v
+    if dflt is not None:
+        result = cast("KeyValue[str | T]", result)
 
     return result
 
