@@ -115,7 +115,6 @@ ignore = [
     "D406",    # new-line-after-section-name
     "D407",    # dashed-underline-after-section
     "D409",    # section-underline-matches-section-length
-    "D411",    # no-blank-line-before-section
     "D412",    # blank-lines-between-header-and-content
     "D413",    # blank-line-after-last-section
     "D415",    # ends-in-punctuation
