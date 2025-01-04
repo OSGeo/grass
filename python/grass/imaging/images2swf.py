@@ -24,7 +24,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-""" Module images2swf
+"""Module images2swf
 
 Provides a function (writeSwf) to store a series of PIL images or numpy
 arrays in an SWF movie, that can be played on a wide range of OS's.
@@ -92,8 +92,7 @@ binary_type = bytes
 
 
 def checkImages(images):
-    """checkImages(images)
-    Check numpy images and correct intensity range etc.
+    """Check numpy images and correct intensity range etc.
     The same for all movie formats.
     """
     # Init results

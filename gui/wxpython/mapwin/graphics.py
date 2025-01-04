@@ -200,6 +200,7 @@ class GraphicsSet:
         Could be 'point' or 'line' according to graphicsType.
 
         :param coords: list of east, north coordinates (double) of item.
+
                        Example:
 
                            * point: [1023, 122]

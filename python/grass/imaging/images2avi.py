@@ -28,7 +28,7 @@
 #
 # changes of this file GRASS (PNG instead of JPG) by Anna Petrasova 2013
 
-""" Module images2avi
+"""Module images2avi
 
 Uses ffmpeg to read and write AVI files. Requires PIL
 

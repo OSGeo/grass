@@ -3354,7 +3354,6 @@ class TemporalAlgebraParser:
         # start_doy(A, -1)  # Get the start DOY from the preceding map
         #                     of the time series as a numerical constant
         #                     for the mapcalculator expression
-
         """
         expr : t_var LPAREN NAME COMMA INT RPAREN
         """
