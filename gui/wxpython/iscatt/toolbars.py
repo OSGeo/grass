@@ -26,8 +26,7 @@ def get_tool_name(tool_name, tool_name_type=tuple):
     """Get tool name
 
     :param str|tuple tool_name: tool name
-    :param type tool_name_type: tool name type with default
-                                tuple type
+    :param type tool_name_type: tool name type with default tuple type
 
     :return str: tool name
     """

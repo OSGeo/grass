@@ -689,8 +689,7 @@ class IVDigit:
 
         :param area: area id
         :return: list of categories :func:`_getLineAreasCategories` and
-                 list of bboxes :func:`_getBbox` of area boundary
-                 features
+                 list of bboxes :func:`_getBbox` of area boundary features
         """
         po_b_list = Vect_new_list()
         Vect_get_area_boundaries(self.poMapInfo, area, po_b_list)
@@ -823,8 +822,7 @@ class IVDigit:
         return bbox
 
     def _convertGeom(self, poPoints):
-        """Helper function convert geom from ctypes line_pts to python
-        list
+        """Helper function convert geom from ctypes line_pts to Python list
 
         :return: coords in python list [(x, y),...]
         """

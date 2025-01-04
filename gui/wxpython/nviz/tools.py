@@ -296,10 +296,8 @@ class NvizToolWindow(GNotebook):
 
         :param obj foldPanelBar: FolPanelBar widget obj instance
         :param obj scrolledPanel: ScrolledPanel widget obj instance
-        :param int collapsed: number of collapsed panels of FoldPanelBar
-                              widget
-        :param int expanded: number of expanded panels of FoldPanelBar
-                             widget
+        :param int collapsed: number of collapsed panels of FoldPanelBar widget
+        :param int expanded: number of expanded panels of FoldPanelBar widget
         """
         if expanded > 0:
             foldPanelBar.Expand(foldPanelBar.GetFoldPanel(0))

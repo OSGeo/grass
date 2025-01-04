@@ -1328,8 +1328,7 @@ class MapsetSelect(wx.ComboBox):
     def UpdateItems(self, location, dbase=None):
         """Update list of mapsets for given location
 
-        :param str dbase: path to GIS database (None to use currently
-                          selected)
+        :param str dbase: path to GIS database (None to use currently selected)
         :param str location: name of location
         """
         if dbase:
@@ -2222,8 +2221,7 @@ class GdalSelect(wx.Panel):
             :param str dsn: data source name
             :param str table: PG DB table name, default value is None
 
-            :return str: 1 if raster projection match location
-                         projection else 0
+            :return str: 1 if raster projection matches location projection, else 0
             """
             projectionMatch = "0"
 
@@ -2521,10 +2519,8 @@ class GdalSelect(wx.Panel):
     def _getPGDBTablesColumnsTypesSql(self, tables):
         """Get PostGIS DB tables columns data type SQL command
 
-        :param list tables: list of PG DB tables with
-                            simple quotes ["'table'", ...]
-        :return str: SQL string for query all PG DB tables with
-                     columns data types
+        :param list tables: list of PG DB tables with simple quotes ["'table'", ...]
+        :return str: SQL string for query all PG DB tables with columns data types
         """
         return f"""
             SELECT
