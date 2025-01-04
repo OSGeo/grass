@@ -199,11 +199,9 @@ def create_location_interactively(guiparent, grassdb):
         )
         # Returns database and location created by user
         # and a mapset user may want to switch to
-        gWizard_output = (gWizard.grassdatabase, gWizard.location, mapset)
-    else:
-        # Returns PERMANENT mapset when user mapset not defined
-        gWizard_output = (gWizard.grassdatabase, gWizard.location, "PERMANENT")
-    return gWizard_output
+        return (gWizard.grassdatabase, gWizard.location, mapset)
+    # Returns PERMANENT mapset when user mapset not defined
+    return (gWizard.grassdatabase, gWizard.location, "PERMANENT")
 
 
 def rename_mapset_interactively(guiparent, grassdb, location, mapset):

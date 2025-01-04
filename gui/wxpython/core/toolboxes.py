@@ -124,105 +124,101 @@ def getMenudataFile(userRootFile, newFile, fallback):
     # always create toolboxes directory if does not exist yet
     tbDir = _setupToolboxes()
 
-    if tbDir:
-        menudataFile = os.path.join(tbDir, newFile)
-        generateNew = False
-        # when any of main_menu.xml or toolboxes.xml are changed,
-        # generate new menudata.xml
-
-        if os.path.exists(menudataFile):
-            # remove menu file when there is no main_menu and toolboxes
-            if not _getUserToolboxesFile() and not userRootFile:
-                os.remove(menudataFile)
-                _debug(
-                    2,
-                    (
-                        "toolboxes.getMenudataFile: no user defined files, "
-                        "menudata deleted"
-                    ),
-                )
-                return fallback
-
-            if bool(_getUserToolboxesFile()) != bool(userRootFile):
-                # always generate new because we don't know if there has been
-                # any change
-                generateNew = True
-                _debug(
-                    2,
-                    (
-                        "toolboxes.getMenudataFile: only one of the user "
-                        "defined files"
-                    ),
-                )
-            else:
-                # if newer files -> generate new
-                menudataTime = os.path.getmtime(menudataFile)
-                if _getUserToolboxesFile():
-                    if os.path.getmtime(_getUserToolboxesFile()) > menudataTime:
-                        _debug(
-                            2,
-                            (
-                                "toolboxes.getMenudataFile: user toolboxes is newer "
-                                "than menudata"
-                            ),
-                        )
-                        generateNew = True
-                if userRootFile:
-                    if os.path.getmtime(userRootFile) > menudataTime:
-                        _debug(
-                            2,
-                            (
-                                "toolboxes.getMenudataFile: user root file is "
-                                "newer than menudata"
-                            ),
-                        )
-                        generateNew = True
-        elif _getUserToolboxesFile() or userRootFile:
-            _debug(2, "toolboxes.getMenudataFile: no menudata")
-            generateNew = True
-        else:
-            _debug(2, "toolboxes.getMenudataFile: no user defined files")
-            return fallback
-
-        if generateNew:
-            try:
-                # The case when user does not have custom root
-                # file but has toolboxes requires regeneration.
-                # Unfortunately, this is the case can be often: defined
-                # toolboxes but undefined module tree file.
-                _debug(2, "toolboxes.getMenudataFile: creating a tree")
-                tree = createTree(
-                    distributionRootFile=distributionRootFile, userRootFile=userRootFile
-                )
-            except ETREE_EXCEPTIONS:
-                _warning(
-                    _(
-                        "Unable to parse user toolboxes XML files. "
-                        "Default files will be loaded."
-                    )
-                )
-                return fallback
-
-            try:
-                xml = _getXMLString(tree.getroot())
-                fh = open(menudataFile, "w")
-                fh.write(xml)
-                fh.close()
-                return menudataFile
-            except Exception:
-                _debug(
-                    2,
-                    (
-                        "toolboxes.getMenudataFile: writing menudata failed, "
-                        "returning fallback file"
-                    ),
-                )
-                return fallback
-        else:
-            return menudataFile
-    else:
+    if not tbDir:
         _debug(2, "toolboxes.getMenudataFile: returning menudata fallback file")
         return fallback
+
+    menudataFile = os.path.join(tbDir, newFile)
+    generateNew = False
+    # when any of main_menu.xml or toolboxes.xml are changed,
+    # generate new menudata.xml
+
+    if os.path.exists(menudataFile):
+        # remove menu file when there is no main_menu and toolboxes
+        if not _getUserToolboxesFile() and (not userRootFile):
+            os.remove(menudataFile)
+            _debug(
+                2,
+                (
+                    "toolboxes.getMenudataFile: no user defined files, "
+                    "menudata deleted"
+                ),
+            )
+            return fallback
+
+        if bool(_getUserToolboxesFile()) != bool(userRootFile):
+            # always generate new because we don't know if there has been
+            # any change
+            generateNew = True
+            _debug(
+                2,
+                ("toolboxes.getMenudataFile: only one of the user defined files"),
+            )
+        else:
+            # if newer files -> generate new
+            menudataTime = os.path.getmtime(menudataFile)
+            if _getUserToolboxesFile():
+                if os.path.getmtime(_getUserToolboxesFile()) > menudataTime:
+                    _debug(
+                        2,
+                        (
+                            "toolboxes.getMenudataFile: user toolboxes is newer "
+                            "than menudata"
+                        ),
+                    )
+                    generateNew = True
+            if userRootFile:
+                if os.path.getmtime(userRootFile) > menudataTime:
+                    _debug(
+                        2,
+                        (
+                            "toolboxes.getMenudataFile: user root file is "
+                            "newer than menudata"
+                        ),
+                    )
+                    generateNew = True
+    elif _getUserToolboxesFile() or userRootFile:
+        _debug(2, "toolboxes.getMenudataFile: no menudata")
+        generateNew = True
+    else:
+        _debug(2, "toolboxes.getMenudataFile: no user defined files")
+        return fallback
+
+    if not generateNew:
+        return menudataFile
+    try:
+        # The case when user does not have custom root
+        # file but has toolboxes requires regeneration.
+        # Unfortunately, this is the case can be often: defined
+        # toolboxes but undefined module tree file.
+        _debug(2, "toolboxes.getMenudataFile: creating a tree")
+        tree = createTree(
+            distributionRootFile=distributionRootFile, userRootFile=userRootFile
+        )
+    except ETREE_EXCEPTIONS:
+        _warning(
+            _(
+                "Unable to parse user toolboxes XML files. "
+                "Default files will be loaded."
+            )
+        )
+        return fallback
+
+    try:
+        xml = _getXMLString(tree.getroot())
+        fh = open(menudataFile, "w")
+        fh.write(xml)
+        fh.close()
+        return menudataFile
+    except Exception:
+        _debug(
+            2,
+            (
+                "toolboxes.getMenudataFile: writing menudata failed, "
+                "returning fallback file"
+            ),
+        )
+    return fallback
 
 
 def _setupToolboxes():

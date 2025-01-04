@@ -1092,42 +1092,40 @@ class SnappingNodes(wx.EvtHandler):
         inpName, mapSet = inpFullName.split("@")
         computeNodes = True
 
-        if "inputMap" not in self.snapData:
-            pass
-        elif inpFullName != self.snapData["inputMap"].GetVectMapName():
-            self.snapData["inputMap"] = VectMap(None, inpFullName)
-        elif self.snapData["inputMap"].VectMapState() == 1:
-            computeNodes = False
+        if "inputMap" in self.snapData:
+            if inpFullName != self.snapData["inputMap"].GetVectMapName():
+                self.snapData["inputMap"] = VectMap(None, inpFullName)
+            elif self.snapData["inputMap"].VectMapState() == 1:
+                computeNodes = False
+
+        if not computeNodes:
+            # map is already created and up to date for input data
+            self.snapPts.AddRenderLayer()
+            self.giface.updateMap.emit(render=True, renderVector=True)
+            self.snapping.emit(evt="computing_points_done")
+            return 1
 
         # new map needed
-        if computeNodes:
-            if "cmdThread" not in self.snapData:
-                self.snapData["cmdThread"] = CmdThread(self)
-            else:
-                self.snapData["cmdThread"].abort()
+        if "cmdThread" not in self.snapData:
+            self.snapData["cmdThread"] = CmdThread(self)
+        else:
+            self.snapData["cmdThread"].abort()
+        cmd = [
+            "v.to.points",
+            "input=" + params["input"],
+            "output=" + self.snapPts.GetVectMapName(),
+            "use=node",
+            "--overwrite",
+        ]
+        # process GRASS command with argument
+        self.snapData["inputMap"] = VectMap(None, inpFullName)
+        self.snapData["inputMap"].SaveVectMapState()
 
-            cmd = [
-                "v.to.points",
-                "input=" + params["input"],
-                "output=" + self.snapPts.GetVectMapName(),
-                "use=node",
-                "--overwrite",
-            ]
-            # process GRASS command with argument
-            self.snapData["inputMap"] = VectMap(None, inpFullName)
-            self.snapData["inputMap"].SaveVectMapState()
+        self.Bind(EVT_CMD_DONE, self._onNodesDone)
+        self.snapData["cmdThread"].RunCmd(cmd)
+        self.snapping.emit(evt="computing_points")
 
-            self.Bind(EVT_CMD_DONE, self._onNodesDone)
-            self.snapData["cmdThread"].RunCmd(cmd)
-
-            self.snapping.emit(evt="computing_points")
-
-            return 0
-        # map is already created and up to date for input data
-        self.snapPts.AddRenderLayer()
-        self.giface.updateMap.emit(render=True, renderVector=True)
-        self.snapping.emit(evt="computing_points_done")
-        return 1
+        return 0
 
     def _onNodesDone(self, event):
         """Update map window, when map with nodes to snap is created"""

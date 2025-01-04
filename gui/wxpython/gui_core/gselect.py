@@ -2982,26 +2982,26 @@ class VectorCategorySelect(wx.Panel):
     def _chckMap(self):
         """Check if selected map in 'input' widget is the same as selected map in
         lmgr"""
-        if self._isMapSelected():
-            layerList = self.giface.GetLayerList()
-            layerSelected = layerList.GetSelectedLayer()
-            # d.vect module
-            inputName = self.task.get_param(value="map", raiseError=False)
-            if not inputName:
-                inputName = self.task.get_param("input")
-            if inputName["value"] != str(layerSelected):
-                if inputName["value"] == "" or inputName["value"] is None:
-                    GWarning(_("Input vector map is not selected"))
-                    return False
-                GWarning(
-                    _(
-                        "Input vector map <%s> and selected map <%s> in layer manager "
-                        "are different. Operation canceled."
-                    )
-                    % (inputName["value"], str(layerSelected))
-                )
-                return False
+        if not self._isMapSelected():
+            return False
+        layerList = self.giface.GetLayerList()
+        layerSelected = layerList.GetSelectedLayer()
+        # d.vect module
+        inputName = self.task.get_param(value="map", raiseError=False)
+        if not inputName:
+            inputName = self.task.get_param("input")
+        if inputName["value"] == str(layerSelected):
             return True
+        if inputName["value"] == "" or inputName["value"] is None:
+            GWarning(_("Input vector map is not selected"))
+            return False
+        GWarning(
+            _(
+                "Input vector map <%s> and selected map <%s> in layer manager "
+                "are different. Operation canceled."
+            )
+            % (inputName["value"], str(layerSelected))
+        )
         return False
 
     def _onClick(self, evt=None):

@@ -1225,12 +1225,11 @@ class ModelAction(ModelObject, ogl.DividedShape):
                         cmd[idx] = pattern.sub(value, cmd[idx])
                     idx += 1
 
-        if string:
-            if cmd is None:
-                return ""
-            return " ".join(cmd)
-
-        return cmd
+        if not string:
+            return cmd
+        if cmd is None:
+            return ""
+        return " ".join(cmd)
 
     def GetLabel(self):
         """Get name"""
@@ -2002,12 +2001,11 @@ class ProcessModelFile:
     def _getNodeText(self, node, tag, default=""):
         """Get node text"""
         p = node.find(tag)
-        if p is not None:
-            if p.text:
-                return utils.normalize_whitespace(p.text)
-            return ""
-
-        return default
+        if p is None:
+            return default
+        if p.text:
+            return utils.normalize_whitespace(p.text)
+        return ""
 
     def _processWindow(self):
         """Process window properties"""

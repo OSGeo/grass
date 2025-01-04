@@ -1216,21 +1216,21 @@ class Image(InstructionObject):
         If eps, size is read from image header.
         """
         fileName = os.path.split(imagePath)[1]
+        if os.path.splitext(fileName)[1].lower() != ".eps":
+            # we can use wx.Image
+            img = wx.Image(fileName, type=wx.BITMAP_TYPE_ANY)
+            return (img.GetWidth(), img.GetHeight())
+
         # if eps, read info from header
-        if os.path.splitext(fileName)[1].lower() == ".eps":
-            bbInfo = "%%BoundingBox"
-            file = open(imagePath)
-            w = h = 0
+        bbInfo = "%%BoundingBox"
+        w = h = 0
+        with open(imagePath) as file:
             while file:
                 line = file.readline()
                 if line.find(bbInfo) == 0:
                     w, h = line.split()[3:5]
                     break
-            file.close()
-            return float(w), float(h)
-        # we can use wx.Image
-        img = wx.Image(fileName, type=wx.BITMAP_TYPE_ANY)
-        return img.GetWidth(), img.GetHeight()
+        return (float(w), float(h))
 
 
 class NorthArrow(Image):

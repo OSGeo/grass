@@ -183,12 +183,12 @@ class NotebookController:
         :return bool: True if page was deleted, False if not exists
         """
         delPageIndex = self.GetPageIndexByName(page)
-        if delPageIndex != -1:
-            ret = self.classObject.DeletePage(self.widget, delPageIndex)
-            if ret:
-                del self.notebookPages[page]
-            return ret
-        return False
+        if delPageIndex == -1:
+            return False
+        ret = self.classObject.DeletePage(self.widget, delPageIndex)
+        if ret:
+            del self.notebookPages[page]
+        return ret
 
     def RemovePage(self, page):
         """Delete page without deleting the associated window.
@@ -197,12 +197,12 @@ class NotebookController:
         :return: True if page was deleted, False if not exists
         """
         delPageIndex = self.GetPageIndexByName(page)
-        if delPageIndex != -1:
-            ret = self.classObject.RemovePage(self.widget, delPageIndex)
-            if ret:
-                del self.notebookPages[page]
-            return ret
-        return False
+        if delPageIndex == -1:
+            return False
+        ret = self.classObject.RemovePage(self.widget, delPageIndex)
+        if ret:
+            del self.notebookPages[page]
+        return ret
 
     def SetSelectionByName(self, page):
         """Set active notebook page.

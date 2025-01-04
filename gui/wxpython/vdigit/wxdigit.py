@@ -291,11 +291,11 @@ class IVDigit:
         :return: snap mode
         """
         threshold = self._display.GetThreshold()
-        if threshold > 0.0:
-            if UserSettings.Get(group="vdigit", key="snapToVertex", subkey="enabled"):
-                return SNAPVERTEX
-            return SNAP
-        return NO_SNAP
+        if threshold <= 0.0:
+            return NO_SNAP
+        if UserSettings.Get(group="vdigit", key="snapToVertex", subkey="enabled"):
+            return SNAPVERTEX
+        return SNAP
 
     def _getNewFeaturesLayer(self):
         """Returns layer of new feature (from settings)"""

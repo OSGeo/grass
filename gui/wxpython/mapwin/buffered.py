@@ -1223,23 +1223,17 @@ class BufferedMapWindow(MapWindowBase, Window):
         if not polycoords:
             polycoords = self.polycoords
 
-        if len(polycoords) > 0:
-            self.plineid = wx.ID_NEW + 1
-            # convert from EN to XY
-            coords = []
-            for p in polycoords:
-                coords.append(self.Cell2Pixel(p))
-
-            self.Draw(pdc, drawid=self.plineid, pdctype="polyline", coords=coords)
-
-            Debug.msg(
-                4,
-                "BufferedWindow.DrawLines(): coords=%s, id=%s" % (coords, self.plineid),
-            )
-
-            return self.plineid
-
-        return -1
+        if len(polycoords) <= 0:
+            return -1
+        self.plineid = wx.ID_NEW + 1
+        # convert from EN to XY
+        coords = [self.Cell2Pixel(p) for p in polycoords]
+        self.Draw(pdc, drawid=self.plineid, pdctype="polyline", coords=coords)
+        Debug.msg(
+            4,
+            "BufferedWindow.DrawLines(): coords=%s, id=%s" % (coords, self.plineid),
+        )
+        return self.plineid
 
     def DrawPolylines(self, pdc, coords, pen, drawid=None):
         """Draw polyline in PseudoDC.
