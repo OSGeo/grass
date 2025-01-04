@@ -134,7 +134,6 @@ ignore = [
     "DTZ006",  # call-datetime-fromtimestamp
     "DTZ007",  # call-datetime-strptime-without-zone
     "DTZ011",  # call-date-today
-    "E402",    # module-import-not-at-top-of-file
     "E501",    # line-too-long
     "E721",    # type-comparison
     "E722",    # bare-except
@@ -264,10 +263,8 @@ ignore = [
 # "A005", # builtin-module-shadowing
 # "PLW0108", # unnecessary-lambda
 # "SIM115", # open-file-with-context-handler
-# Ignore `E402` (import violations) in all `__init__.py` files
 "**.py" = ["PYI066"]
 "*/testsuite/**.py" = ["PT009", "PT027"]
-"__init__.py" = ["E402"]
 "display/d.mon/render_cmd.py" = ["SIM115"]
 "gui/**" = ["PLW0108"] # See https://github.com/OSGeo/grass/issues/4124
 "gui/wxpython/animation/temporal_manager.py" = ["SIM115"]
