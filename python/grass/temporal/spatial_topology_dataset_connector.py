@@ -296,7 +296,7 @@ class SpatialTopologyDatasetConnector:
         count = 0
         string = ""
         for map_ in map_list:
-            if line_wrap and count > 0 and count % 3 == 0:
+            if line_wrap and count > 0 and (count % 3 == 0):
                 string += "\n | ............................ "
                 count = 0
             if count == 0:

@@ -118,7 +118,7 @@ def checkImages(images):
             # Check and convert dtype
             if im.dtype == np.uint8:
                 images2.append(im)  # Ok
-            elif im.dtype in [np.float32, np.float64]:
+            elif im.dtype in (np.float32, np.float64):
                 im = im.copy()
                 im[im < 0] = 0
                 im[im > 1] = 1
@@ -296,7 +296,7 @@ class GifWriter:
             images, xy = self.getSubRectangles(images)
 
         # Done
-        return images, xy
+        return (images, xy)
 
     def getSubRectangles(self, ims):
         """Calculate the minimal rectangles that need updating each frame.
@@ -311,7 +311,7 @@ class GifWriter:
 
         # Check image count
         if len(ims) < 2:
-            return ims, [(0, 0) for i in ims]
+            return (ims, [(0, 0) for i in ims])
 
         # We need NumPy
         if np is None:
@@ -334,11 +334,11 @@ class GifWriter:
             Y = np.argwhere(diff.sum(1))
             # Get rect coordinates
             if X.size and Y.size:
-                x0, x1 = int(X[0]), int(X[-1] + 1)
-                y0, y1 = int(Y[0]), int(Y[-1] + 1)
+                x0, x1 = (int(X[0]), int(X[-1] + 1))
+                y0, y1 = (int(Y[0]), int(Y[-1] + 1))
             else:  # No change ... make it minimal
-                x0, x1 = 0, 2
-                y0, y1 = 0, 2
+                x0, x1 = (0, 2)
+                y0, y1 = (0, 2)
 
             # Cut out and store
             im2 = im[y0:y1, x0:x1]
@@ -349,7 +349,7 @@ class GifWriter:
         # Done
         # print('%1.2f seconds to determine subrectangles of  %i images' %
         #    (time.time()-t0, len(ims2)))
-        return ims2, xy
+        return (ims2, xy)
 
     def convertImagesToPIL(self, images, dither, nq=0):
         """Convert images to Paletted PIL images, which can then be
@@ -373,7 +373,7 @@ class GifWriter:
                 images2.append(im)
 
         # Convert to paletted PIL images
-        images, images2 = images2, []
+        images, images2 = (images2, [])
         if nq >= 1:
             # NeuQuant algorithm
             for im in images:
@@ -404,7 +404,7 @@ class GifWriter:
         """
 
         # Obtain palette for all images and count each occurrence
-        palettes, occur = [], []
+        palettes, occur = ([], [])
         for im in images:
             if not pillow:
                 palette = getheader(im)[1]
@@ -442,21 +442,20 @@ class GifWriter:
             # Write palette and image data
             # Gather info
             data = getdata(im)
-            imdes, data = data[0], data[1:]
+            imdes, data = (data[0], data[1:])
             graphext = self.getGraphicsControlExt(durations[frames], disposes[frames])
             # Make image descriptor suitable for using 256 local color palette
             lid = self.getImageDescriptor(im, xys[frames])
 
             # Write local header
+            fp.write(graphext)
             if (palette != globalPalette) or (disposes[frames] != 2):
                 # Use local color palette
-                fp.write(graphext)
                 fp.write(lid)  # write suitable image descriptor
                 fp.write(palette)  # write local color table
                 fp.write("\x08")  # LZW minimum size code
             else:
                 # Use global color palette
-                fp.write(graphext)
                 fp.write(imdes)  # write suitable image descriptor
 
             # Write image data
