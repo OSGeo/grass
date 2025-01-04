@@ -177,9 +177,7 @@ def writeIms(filename, images):
 
 
 def readIms(filename, asNumpy=True):
-    """readIms(filename, asNumpy=True)
-
-    Read images from a series of images in a single directory. Returns a
+    """Read images from a series of images in a single directory. Returns a
     list of numpy arrays, or, if asNumpy is false, a list if PIL images.
 
     :param filename:

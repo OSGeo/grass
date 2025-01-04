@@ -92,8 +92,7 @@ binary_type = bytes
 
 
 def checkImages(images):
-    """checkImages(images)
-    Check numpy images and correct intensity range etc.
+    """Check numpy images and correct intensity range etc.
     The same for all movie formats.
     """
     # Init results

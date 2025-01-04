@@ -107,7 +107,6 @@ ignore = [
     "D301",    # escape-sequence-in-docstring
     "D400",    # ends-in-period
     "D401",    # non-imperative-mood
-    "D402",    # no-signature
     "D403",    # first-line-capitalized
     "D404",    # docstring-starts-with-this
     "D405",    # capitalize-section-name
