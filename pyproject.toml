@@ -104,7 +104,6 @@ ignore = [
     "COM818",  # trailing-comma-on-bare-tuple
     "D1",
     "D2",
-    "D300",    # triple-single-quotes
     "D301",    # escape-sequence-in-docstring
     "D400",    # ends-in-period
     "D401",    # non-imperative-mood
@@ -346,6 +345,8 @@ ignore = [
 "python/grass/temporal/register.py" = ["SIM115"]
 "python/grass/temporal/stds_export.py" = ["SIM115"]
 "python/grass/temporal/stds_import.py" = ["SIM115"]
+"python/grass/temporal/temporal_algebra.py" = ["D300"]
+"python/grass/temporal/temporal_operator.py" = ["D300"]
 "python/grass/temporal/univar_statistics.py" = ["SIM115"]
 "python/grass/utils/download.py" = ["PTH208", "SIM115"]
 "raster/r.*/testsuite/*.py" = ["SIM115"]
