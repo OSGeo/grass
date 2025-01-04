@@ -228,9 +228,7 @@ class GrassTestLoader(unittest.TestLoader):
             universal_location_value=self.universal_tests_value,
             import_modules=True,
         )
-        tests = []
-        for module in modules:
-            tests.append(self.loadTestsFromModule(module.module))
+        tests = [self.loadTestsFromModule(module.module) for module in modules]
         return self.suiteClass(tests)
 
 

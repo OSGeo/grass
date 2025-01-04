@@ -319,12 +319,10 @@ def get_cmd(cmdd):
     >>> get_cmd(slp.get_dict())  # doctest: +ELLIPSIS
     ['r.slope.aspect', 'elevation=ele', 'format=degrees', ..., '--o']
     """
-    cmd = [
+    return [
         cmdd["name"],
-    ]
-    cmd.extend(("%s=%s" % (k, v) for k, v in cmdd["inputs"] if not isinstance(v, list)))
-    cmd.extend(
-        (
+        *("%s=%s" % (k, v) for k, v in cmdd["inputs"] if not isinstance(v, list)),
+        *(
             "%s=%s"
             % (
                 k,
@@ -332,21 +330,16 @@ def get_cmd(cmdd):
             )
             for k, vals in cmdd["inputs"]
             if isinstance(vals, list)
-        )
-    )
-    cmd.extend(
-        ("%s=%s" % (k, v) for k, v in cmdd["outputs"] if not isinstance(v, list))
-    )
-    cmd.extend(
-        (
+        ),
+        *("%s=%s" % (k, v) for k, v in cmdd["outputs"] if not isinstance(v, list)),
+        *(
             "%s=%s" % (k, ",".join([repr(v) for v in vals]))
             for k, vals in cmdd["outputs"]
             if isinstance(vals, list)
-        )
-    )
-    cmd.extend(f"-{flg}" for flg in cmdd["flags"] if len(flg) == 1)
-    cmd.extend(f"--{flg[0]}" for flg in cmdd["flags"] if len(flg) > 1)
-    return cmd
+        ),
+        *(f"-{flg}" for flg in cmdd["flags"] if len(flg) == 1),
+        *(f"--{flg[0]}" for flg in cmdd["flags"] if len(flg) > 1),
+    ]
 
 
 def cmd_exe(args):
@@ -385,10 +378,7 @@ def cmd_exe(args):
         sub.Popen(["g.region", "raster=%s" % key], shell=shell, env=env).wait()
     else:
         # set the computational region
-        lcmd = [
-            "g.region",
-        ]
-        lcmd.extend(["%s=%s" % (k, v) for k, v in bbox.items()])
+        lcmd = ["g.region", *["%s=%s" % (k, v) for k, v in bbox.items()]]
         sub.Popen(lcmd, shell=shell, env=env).wait()
     if groups:
         copy_groups(groups, gisrc_src, gisrc_dst)
@@ -602,9 +592,12 @@ class GridModule:
                     for key in self.inlist:
                         inms[key] = "%s@%s" % (self.inlist[key][indx], self.mset.name)
                 # set the computational region, prepare the region parameters
-                bbox = {k[0]: str(v) for k, v in box.items()[:-2]}
-                bbox["nsres"] = "%f" % reg.nsres
-                bbox["ewres"] = "%f" % reg.ewres
+                bbox = {
+                    **{k[0]: str(v) for k, v in box.items()[:-2]},
+                    "nsres": "%f" % reg.nsres,
+                    "ewres": "%f" % reg.ewres,
+                }
+
                 new_mset = (
                     self.msetstr % (self.start_row + row, self.start_col + col),
                 )

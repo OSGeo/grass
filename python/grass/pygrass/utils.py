@@ -74,10 +74,11 @@ def findmaps(type, pattern=None, mapset="", location="", gisdbase=""):
         return res
 
     def find_in_gisdbase(type, pattern, gisdbase):
-        res = []
-        for loc in gisdbase.locations():
-            res.extend(find_in_location(type, pattern, Location(loc, gisdbase.name)))
-        return res
+        return [
+            a
+            for loc in gisdbase.locations()
+            for a in find_in_location(type, pattern, Location(loc, gisdbase.name))
+        ]
 
     if gisdbase and location and mapset:
         mset = Mapset(mapset, location, gisdbase)

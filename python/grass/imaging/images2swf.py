@@ -987,9 +987,7 @@ def readSwf(filename, asNumpy=True):
     # Convert to normal PIL images if needed
     if not asNumpy:
         images2 = images
-        images = []
-        for im in images2:
-            images.append(PIL.Image.fromarray(im))
+        images = [PIL.Image.fromarray(im) for im in images2]
 
     # Done
     return images
