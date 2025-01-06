@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
     parm.mintimestep->label =
         _("Minimum time step for the simulation [seconds]");
     parm.mintimestep->description =
-        _("A larger minimum time step substancially reduces processing time, "
+        _("A larger minimum time step substantially reduces processing time, "
           "but at the cost of accuracy");
     parm.mintimestep->guisection = _("Parameters");
 
@@ -332,7 +332,7 @@ int main(int argc, char *argv[])
     parm.threads->answer = NUM_THREADS;
     parm.threads->required = NO;
     parm.threads->description = _(
-        "Number of threads which will be used for parallel compute. Increasing "
+        "Number of threads which will be used for parallel computation. Increasing "
         "the number of threads does not really speed up the simulation.");
     parm.threads->guisection = _("Parameters");
 
