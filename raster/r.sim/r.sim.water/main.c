@@ -245,9 +245,9 @@ int main(int argc, char *argv[])
     parm.mintimestep->answer = "0.0";
     parm.mintimestep->required = NO;
     parm.mintimestep->label =
-        _("Minimum tine step for the simulation [seconds]");
+        _("Minimum time step for the simulation [seconds]");
     parm.mintimestep->description =
-        _("A larger minimum tine step substancially reduces processing time, "
+        _("A larger minimum time step substancially reduces processing time, "
           "but at the cost of accuracy");
     parm.mintimestep->guisection = _("Parameters");
 
