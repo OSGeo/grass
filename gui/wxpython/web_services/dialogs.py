@@ -178,7 +178,7 @@ class WSDialogBase(wx.Dialog):
             border=5,
         )
 
-        # connectin settings
+        # connection settings
         settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.VERTICAL)
 
         serverSizer = wx.FlexGridSizer(cols=3, vgap=5, hgap=5)
@@ -336,11 +336,10 @@ class WSDialogBase(wx.Dialog):
         event.Skip()
 
     def _getCapFiles(self):
-        ws_cap_files = {}
-        for v in self.ws_panels.values():
-            ws_cap_files[v["panel"].GetWebService()] = v["panel"].GetCapFile()
-
-        return ws_cap_files
+        return {
+            v["panel"].GetWebService(): v["panel"].GetCapFile()
+            for v in self.ws_panels.values()
+        }
 
     def OnServer(self, event):
         """Server settings edited"""
@@ -416,12 +415,9 @@ class WSDialogBase(wx.Dialog):
         :return: list of found web services on server (identified as keys in
                  self.ws_panels)
         """
-        conn_ws = []
-        for ws, data in self.ws_panels.items():
-            if data["panel"].IsConnected():
-                conn_ws.append(ws)
-
-        return conn_ws
+        return [
+            ws for ws, data in self.ws_panels.items() if data["panel"].IsConnected()
+        ]
 
     def UpdateDialogAfterConnection(self):
         """Update dialog after all web service panels downloaded and parsed
@@ -748,12 +744,9 @@ class WSPropertiesDialog(WSDialogBase):
             )
 
     def _getServerConnFromCmd(self, cmd):
-        """Get url/server/passwod from cmd tuple"""
+        """Get url/server/password from cmd tuple"""
         conn = {"url": "", "username": "", "password": ""}
-
-        for k in conn.keys():
-            if k in cmd[1]:
-                conn[k] = cmd[1][k]
+        conn |= {k: cmd[1][k] for k in conn.keys() if k in cmd[1]}
         return conn
 
     def _apply(self):

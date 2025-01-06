@@ -2,8 +2,8 @@
 
 <em>r.surf.area</em> calculates area of regular 3D triangulated points
 (centers of cells) in current region by adding areas of triangles.
-Therefore, area of a flat surface will be reported as (<tt>rows + cols
--1) * (area of cell)</tt> less than area of flat region due to a half
+Therefore, area of a flat surface will be reported as (<code>rows + cols
+-1) * (area of cell)</code> less than area of flat region due to a half
 row and half column missing around the perimeter.
 
 <h2>NOTES</h2>
@@ -12,7 +12,7 @@ This calculation is heavily dependent on data resolution (think of it
 as a fractal shoreline problem, the more resolution the more detail,
 the more area, etc). This module uses the <b>current region
 settings</b>, not the resolution of the raster map. This is especially
-important for surfaces with <tt>NULL</tt> values and highly irregular
+important for surfaces with <code>NULL</code> values and highly irregular
 edges. The module does not [currently] attempt to correct for the
 error introduced by this <em>edge effect</em>.
 
@@ -22,14 +22,14 @@ of the diagonal used.
 
 <p>Reported totals are:
 <ol>
-<li>"Plan" area of <tt>NULL</tt> values within the current GRASS
+<li>"Plan" area of <code>NULL</code> values within the current GRASS
 region</li>
-<li>"Plan" area within calculation region (<tt>rows-1 * cols-1 *
-cellarea</tt>)</li>
+<li>"Plan" area within calculation region (<code>rows-1 * cols-1 *
+cellarea</code>)</li>
 <li>Average of the minimum and maximum calculated 3d triangle area
 within this region</li>
-<li>"Plan" area within current computational region (<tt>rows * cols *
-cellarea</tt>)</li>
+<li>"Plan" area within current computational region (<code>rows * cols *
+cellarea</code>)</li>
 <li>Scaling of calculated area to current region</li>
 </ol>
 
@@ -70,7 +70,7 @@ Estimated region Surface Area: 20336.234719
 
 Bill Brown, USACERL December 21, 1994
 <br>
-Modified for floating point rasters and <tt>NULL</tt> values by Eric
+Modified for floating point rasters and <code>NULL</code> values by Eric
 G. Miller (October 17, 2000)
 <br>
 Updated for GRASS 7, and units option by Martin Landa, Czech Technical

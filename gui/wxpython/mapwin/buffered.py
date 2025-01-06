@@ -555,14 +555,14 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         boxh = math.fabs(math.sin(math.radians(rotation)) * w) + h
         boxw = math.fabs(math.cos(math.radians(rotation)) * w) + h
-        if rotation > 0 and rotation < 90:
+        if 0 < rotation < 90:
             bbox[1] -= boxh
             relCoords = (0, boxh)
-        elif rotation >= 90 and rotation < 180:
+        elif 90 <= rotation < 180:
             bbox[0] -= boxw
             bbox[1] -= boxh
             relCoords = (boxw, boxh)
-        elif rotation >= 180 and rotation < 270:
+        elif 180 <= rotation < 270:
             bbox[0] -= boxw
             relCoords = (boxw, 0)
         bbox[2] = boxw
@@ -1062,16 +1062,13 @@ class BufferedMapWindow(MapWindowBase, Window):
             dispReg = self.Map.GetCurrentRegion()
             reg = dispReg if utils.isInRegion(dispReg, compReg) else compReg
 
-            regionCoords = []
-            regionCoords.extend(
-                (
-                    (reg["w"], reg["n"]),
-                    (reg["e"], reg["n"]),
-                    (reg["e"], reg["s"]),
-                    (reg["w"], reg["s"]),
-                    (reg["w"], reg["n"]),
-                )
-            )
+            regionCoords = [
+                (reg["w"], reg["n"]),
+                (reg["e"], reg["n"]),
+                (reg["e"], reg["s"]),
+                (reg["w"], reg["s"]),
+                (reg["w"], reg["n"]),
+            ]
 
             # draw region extent
             self.polypen = wx.Pen(
@@ -1214,8 +1211,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         Set self.pline to wx.NEW_ID + 1
 
         :param polycoords: list of polyline vertices, geographical
-                           coordinates (if not given, self.polycoords
-                           is used)
+                           coordinates (if not given, self.polycoords is used)
         """
         if not pdc:
             pdc = self.pdcTmp
@@ -2102,7 +2098,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         self.UpdateMap(render=False)
 
     def SetRegion(self, zoomOnly=True):
-        """Set display extents/compulational region from named region
+        """Set display extents/computational region from named region
         file.
 
         :param zoomOnly: zoom to named region only (computational region is not saved)
@@ -2110,7 +2106,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         if zoomOnly:
             label = _("Zoom to saved region extents")
         else:
-            label = _("Set compulational region from named region")
+            label = _("Set computational region from named region")
         dlg = SavedRegion(parent=self, title=label, loadsave="load")
 
         if dlg.ShowModal() == wx.ID_CANCEL or not dlg.GetName():
@@ -2144,7 +2140,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         self.UpdateMap()
 
     def SaveRegion(self, display=True):
-        """Save display extents/compulational region to named region
+        """Save display extents/computational region to named region
         file.
 
         :param display: True for display extends otherwise computational region
