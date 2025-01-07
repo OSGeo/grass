@@ -6,7 +6,7 @@
  * PURPOSE:     This file contains definitions of variables and data types
  *              for use with most, if not all, Grass programs. This file is
  *              usually included in every Grass program.
- * COPYRIGHT:   (C) 2000-2024 by the GRASS Development Team
+ * COPYRIGHT:   (C) 2000-2025 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
