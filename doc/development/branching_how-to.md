@@ -36,7 +36,7 @@ Remove the bypass in _Settings_.
 
 ## Check the Version
 
-```bash
+```shell
 git fetch upstream
 git switch releasebranch_8_4
 ```
@@ -45,7 +45,7 @@ git switch releasebranch_8_4
 
 The version number needs to be increased on the main branch.
 
-```bash
+```shell
 git switch main
 git fetch upstream
 git rebase upstream/main
@@ -53,7 +53,7 @@ git rebase upstream/main
 
 Update the version in the source code (use `minor` or `major`):
 
-```bash
+```shell
 ./utils/update_version.py minor
 ```
 
@@ -65,14 +65,14 @@ the now outdated generated version numbers.
 Search for all other mentions of the last few versions to see
 if they need to be updated, for example:
 
-```bash
+```shell
 grep --exclude-dir=.git -IrnE "[^0-9^a-z]8[\._][0-9][^0-9]"
 grep --exclude-dir=.git -IrnE "grass8.?[0-9]"
 ```
 
 After the check and update, commit
 
-```bash
+```shell
 git switch -c update-version
 git add -p
 ./utils/update_version.py suggest
@@ -87,7 +87,7 @@ the wrong version on the branch in case other PRs need to be merged.
 
 On grass.osgeo.org (grasslxd), new version directories need to be created:
 
-```bash
+```shell
 cd /var/www/code_and_data/
 VER=grass85
 mkdir -p ${VER}/manuals \
@@ -113,7 +113,7 @@ Add the branch creation to the release history (use the commit hash you saved ea
 
 If you make changes, commit them:
 
-```bash
+```shell
 git commit -m "version: ..."
 git push
 ```
@@ -124,7 +124,7 @@ git push
 
 Get the latest main branch:
 
-```bash
+```shell
 git switch main
 git fetch upstream
 git rebase upstream/main
@@ -132,11 +132,11 @@ git rebase upstream/main
 
 Create the branch:
 
-```bash
+```shell
 git switch -c releasebranch_8_4
 ```
 
 Push the version to the upstream repo:
 
-```bash
+```shell
 git push upstream

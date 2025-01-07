@@ -10,7 +10,7 @@ tool that aims to make software deployment fully reproducible.
 - Install Nix
   [(learn more about this installer)](https://zero-to-nix.com/start/install)
 
-  ```bash
+  ```shell
   curl --proto '=https' --tlsv1.2 -sSf \
      -L https://install.determinate.systems/nix \
      | sh -s -- install
@@ -22,14 +22,14 @@ Nix provides a development environment containing all required dependencies.
 
 - Launch development environment
 
-  ```bash
+  ```shell
   nix develop
   ```
 
 - Optionally, use [direnv](https://direnv.net) to activate environment
   automatically when entering the source code directory
 
-  ```bash
+  ```shell
   echo "use flake" > .envrc
   direnv allow
   ```
@@ -39,26 +39,26 @@ Nix provides a development environment containing all required dependencies.
 Nix allows to run a program directly from git source code repository using
 following command:
 
-```bash
+```shell
 nix run \
   github:<OWNER>/<REPO>/<REVISION|BRANCH|TAG>#<PACKAGE-NAME> -- <PROGRAM-ARGUMENTS>
 ```
 
 - Launch latest version of GRASS from `main` branch
 
-  ```bash
+  ```shell
   nix run github:OSGeo/grass#grass
   ```
 
 - Launch GRASS from specific Git revision, branch or tag
 
-  ```bash
+  ```shell
   nix run github:OSGeo/grass/<REVISION|BRANCH|TAG>#grass
   ```
 
 - Launch GRASS from pull request
 
-  ```bash
+  ```shell
   nix run github:<PR-OWNER>/grass/<PR-BRANCH>#grass
   ```
 
@@ -66,20 +66,20 @@ nix run \
 
 To install a program permanently, use following command:
 
-```bash
+```shell
 nix profile install \
   github:<OWNER>/<REPO>/<REVISION|TAG|BRANCH>#<PACKAGE-NAME> -- <PROGRAM-ARGUMENTS>
 ```
 
 - Install latest version of GRASS from `main` branch
 
-  ```bash
+  ```shell
   nix profile install github:OSGeo/grass#grass
   ```
 
 - Install GRASS from specific Git revision, branch or tag
 
-  ```bash
+  ```shell
   nix profile install github:OSGeo/grass/<REVISION|BRANCH|TAG>#grass
   ```
 
@@ -87,13 +87,13 @@ nix profile install \
 
 - List installed programs
 
-  ```bash
+  ```shell
   nix profile list
   ```
 
 - Uninstall a program
 
-  ```bash
+  ```shell
   nix profile remove <INDEX-NUMBER>
   ```
 

@@ -6,7 +6,7 @@
 
 Find out included version of GDAL, GEOS, PROJ, PDAL, Python and GRASS GIS using
 
-```bash
+```shell
 grass --tmp-project XY --exec g.version -rge \
     && pdal --version \
     && python3 --version
@@ -21,7 +21,7 @@ grass --tmp-project XY --exec g.version -rge \
 To install a docker image, run (replace `<tag>` with the desired Docker tag from
 the table above):
 
-```bash
+```shell
 docker pull osgeo/grass-gis:<tag>
 ```
 

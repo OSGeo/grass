@@ -68,7 +68,7 @@ Typical usage of `R.bat` to launch R gui is the following ^[
 If `R.exe` were on the Windows path and before `R.bat` then it would
 have to be written as follows: `R.bat gui`]:
 
-```bash
+```shell
 R gui
 ```
 
@@ -96,7 +96,7 @@ remainder becomes the default subcommand.  For example, if `R.bat` were renamed
 Other executable files that come with R (`R.exe`, `Rcmd.exe`, `Rscript.exe`)
 can be run in a similar way:
 
-```bash
+```shell
 R --help
 R cmd --help
 R script --help
@@ -109,7 +109,7 @@ discussed later.)
 
 There are also some support commands:
 
-```bash
+```shell
 R cd
 R dir
 R ls
@@ -161,7 +161,7 @@ values for these variables.
 
 The command
 
-```bash
+```shell
 R path
 ```
 
@@ -178,7 +178,7 @@ since  `R.bat` will not have to run each time that `R` is started. ^[On a
 Note that if both `R.bat` and `R.exe` exist on the Windows path then the first
 on the path will be called if one uses:
 
-```bash
+```shell
 R ...arguments...
 ```
 
@@ -192,7 +192,7 @@ described later.)
 
 The command
 
-```bash
+```shell
 R tools
 ```
 
@@ -210,7 +210,7 @@ installation in `R_ROOT` which has the most recent date will be used.
 
 If we enter this at the `cmd` line:
 
-```bash
+```shell
 set R_VER=R-2.14.0
 ```
 
@@ -218,7 +218,7 @@ then for the remainder of this `cmd` line session that version will be used.
 If one wishes to use two different R versions at once we could spawn a new `cmd`
 line session:
 
-```bash
+```shell
 start
 ```
 
@@ -229,7 +229,7 @@ window it will use the specified version.
 One can change the registry entry permanently to refer to a particlar version
 like this:
 
-```bash
+```shell
 cmd /c set R_VER=R-2.14.0 ^& R SetReg
 ```
 
@@ -242,7 +242,7 @@ determined by which R install directory is the most recent.  To make a
 particular R install directory the most recent run the following in a `cmd`
 line session with Administrator privileges:
 
-```bash
+```shell
 R dir
 el cmd /c set R_VER=R-2.14.0 ^& R touch
 ```
@@ -314,7 +314,7 @@ print(pi)
 
 then we can invoke it from the Windows cmd line like this:
 
-```bash
+```shell
 test
 ```
 
@@ -338,7 +338,7 @@ There is more information on this in the comments at the top of the script.
 
 The command
 
-```bash
+```shell
 Rpathset
 ```
 
@@ -350,7 +350,7 @@ the R binaries will be on the path so they can be accessed directly without
 
 `Rpathset` is an alternative to
 
-```bash
+```shell
 R path
 ```
 
@@ -366,7 +366,7 @@ work on untested Windows configurations.
 
 `Rpathset.bat` might be used like this:
 
-```bash
+```shell
 Rpathset
 Rgui
 ```
@@ -384,7 +384,7 @@ another.  If used to transfer packages from one version of R to another it is
 recommended that the user run `upgrade.packages()` in the target.  For example,
 assuming the default location for the user libraries:
 
-```bash
+```shell
 cd %userprofile%\Documents\win-library
 copydir 2.15\library 3.0\library
 
@@ -405,7 +405,7 @@ overwrite such packages delete them from the target first using the Windows
 
 `el.js` runs its arguments elevated (i.e. with Administrator privileges).  For example,
 
-```bash
+```shell
 el R touch
 ```
 
@@ -430,6 +430,6 @@ This batch file creates a pdf of this documentation from the markdown file
 found [here](https://code.google.com/p/pandoc/downloads/list).  It is run
 without arguments:
 
-```bash
+```shell
 make-batchfiles-pdf
 ```

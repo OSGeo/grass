@@ -17,13 +17,13 @@ in most OO languages, e.g. "objectA.objectB.value")
 
 Run:
 
-```bash
+```shell
 git clone https://github.com/kgabis/parson.git
 ```
 
 and copy parson.h and parson.c to you source code tree.
 
-Run ```bash make test``` to compile and run tests.
+Run ```shell make test``` to compile and run tests.
 
 ## Examples
 

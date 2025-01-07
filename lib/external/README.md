@@ -109,7 +109,7 @@ LIBDIRS = \
 
 To test run the `make` command.
 
-```bash
+```shell
 make
 ```
 

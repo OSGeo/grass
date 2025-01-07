@@ -18,7 +18,7 @@ _grass.gunittest_ documentation:
 
 Tests can be executed using _pytest_:
 
-```bash
+```shell
 # Setup the Python environment (if not set up already).
 # Replace grass by path to the executable if not installed on path.
 export PYTHONPATH=\$(grass --config python_path):\$PYTHONPATH

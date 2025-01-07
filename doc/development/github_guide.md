@@ -13,32 +13,32 @@ It assumes that you have some very basic knowledge of Git and GitHub.
   of the GitHub interface).
 1. Clone your fork (use HTTPS or SSH URL, here we will use HTTPS):
 
-```bash
+```shell
 git clone https://github.com/your_GH_account/grass.git
 ```
 
 1. Enter the directory:
 
-```bash
+```shell
 cd grass/
 ```
 
 1. Add the main GRASS GIS repository as "upstream" (use HTTPS URL):
 
-```bash
+```shell
 git remote add upstream https://github.com/OSGeo/grass
 ```
 
 1. Your remotes now should be "origin" which is your fork and "upstream" which
   is this main GRASS GIS repository. You can confirm that using:
 
-```bash
+```shell
 git remote -v
 ```
 
 1. You should see something like:
 
-```bash
+```shell
 origin  https://github.com/your_GH_account/grass.git (fetch)
 origin  https://github.com/your_GH_account/grass.git (push)
 upstream  https://github.com/OSGeo/grass (fetch)
@@ -55,20 +55,20 @@ and "origin" to your fork
 
 Make sure your are using the _main_ branch to create the new branch:
 
-```bash
+```shell
 git checkout main
 ```
 
 Download updates from all branches from the _upstream_ remote:
 
-```bash
+```shell
 git fetch upstream
 ```
 
 Update your local _main_ branch to match the _main_ branch
   in the _upstream_ repository:
 
-```bash
+```shell
 git rebase upstream/main
 ```
 
@@ -83,7 +83,7 @@ based on it.
 
 Create a new feature branch and switch to it:
 
-```bash
+```shell
 git switch -c new-feature
 ```
 
@@ -91,7 +91,7 @@ git switch -c new-feature
 
 Add files to the commit (changed ones or new ones):
 
-```bash
+```shell
 git add file1
 git add file2
 ```
@@ -99,7 +99,7 @@ git add file2
 Commit the change. Write a meaningful commit message (first word is for example
 the tool name):
 
-```bash
+```shell
 git commit -m "tool: added a new feature doing X"
 ```
 
@@ -107,7 +107,7 @@ git commit -m "tool: added a new feature doing X"
 
 Push your local feature branch to your fork:
 
-```bash
+```shell
 git push origin new-feature
 ```
 
@@ -164,19 +164,19 @@ Assumption is you are on the main branch and you are trying to update it.
 If `git rebase` fails with `error: cannot rebase: You have unstaged changes...`,
 then move your uncommitted local changes to "stash" using:
 
-```bash
+```shell
 git stash
 ```
 
 Now you can rebase:
 
-```bash
+```shell
 git rebase upstream/main
 ```
 
 Get the changes back from stash:
 
-```bash
+```shell
 git stash pop
 ```
 
@@ -187,7 +187,7 @@ It comes into play in case there are changes in the main branch you need to
 incorporate into your (feature or fix) branch before the PR can be merged,
 you need to merge the upstream main into your branch:
 
-```bash
+```shell
 git fetch upstream
 git merge upstream/main
 ```
@@ -201,6 +201,6 @@ in that case you need to resolve it.
 For testing other contributors' PRs, we recommend using
 [GitHub CLI](https://cli.github.com/). To checkout a specific PR, run:
 
-```bash
+```shell
 gh pr checkout <PR number>
 ```
