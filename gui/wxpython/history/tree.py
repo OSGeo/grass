@@ -683,6 +683,4 @@ class HistoryBrowserTree(CTreeView):
                 finally:
                     wx.TheClipboard.Close()
         except wx.PyWidgetError:
-            self.showNotification.emit(
-                message=_("Failed to copy command to clipboard")
-            )
+            self.showNotification.emit(message=_("Failed to copy command to clipboard"))
