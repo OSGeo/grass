@@ -192,8 +192,8 @@ jobs:
 
       - name: Test compiling example modules
         run: |
-          ( cd doc/raster/r.example/ && make )
-          ( cd doc/vector/v.example/ && make )
+          ( cd doc/examples/raster/r.example/ && make )
+          ( cd doc/examples/vector/v.example/ && make )
 
       - name: Run Sphinx to check API documentation build
         run: |
