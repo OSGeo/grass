@@ -154,7 +154,7 @@ def main():
             :param str name: map name
             :param str ltype: layer type
             """
-            mapLayer = self._mapObj.AddLayer(
+            self._mapObj.AddLayer(
                 ltype=ltype,
                 name=name,
                 command=["d.rast", "map={}".format(name)],

@@ -25,18 +25,18 @@ jobs:
 
     env:
       # renovate: datasource=python-version depName=python
-      PYTHON_VERSION: "3.10"
-      MIN_PYTHON_VERSION: "3.8"
+      PYTHON_VERSION: "3.13"
+      MIN_PYTHON_VERSION: "3.9"
       # renovate: datasource=pypi depName=black
       BLACK_VERSION: "24.10.0"
       # renovate: datasource=pypi depName=flake8
       FLAKE8_VERSION: "7.1.1"
       # renovate: datasource=pypi depName=pylint
-      PYLINT_VERSION: "2.12.2"
+      PYLINT_VERSION: "3.3.3"
       # renovate: datasource=pypi depName=bandit
-      BANDIT_VERSION: "1.7.10"
+      BANDIT_VERSION: "1.8.0"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.7.2"
+      RUFF_VERSION: "0.8.6"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -129,13 +129,13 @@ jobs:
           bandit -c pyproject.toml -iii -r . -f sarif -o bandit.sarif --exit-zero
 
       - name: Upload Bandit Scan Results
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         with:
           name: bandit.sarif
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@4f3212b61783c3c68e8309a0f18a699764811cda # v3.27.1
+        uses: github/codeql-action/upload-sarif@48ab28a6f5dbc2a99bf1e0131198dd8f1df78169 # v3.28.0
         with:
           sarif_file: bandit.sarif
 
@@ -147,7 +147,7 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
 
-      - uses: rui314/setup-mold@b015f7e3f2938ad3a5ed6e5111a8c6c7c1d6db6e # v1
+      - uses: rui314/setup-mold@8ec40be1d14871f7ce8fbf273c4b33f3ff75f1d1 # v1
       - name: Build
         run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
 
@@ -156,42 +156,44 @@ jobs:
           echo "$HOME/install/bin" >> $GITHUB_PATH
 
       - name: Run Pylint on grass package
+        # Until slower checks (like similarity) are reenabled, running in one step is faster
+        if: false
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          cd python
           pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) grass
 
-      - name: Run Pylint on wxGUI
-        run: |
-          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          cd gui/wxpython
-          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) *
-
       - name: Run Pylint on other files using pytest
+        # Until slower checks (like similarity) are reenabled, running in one step is faster
+        if: false
         run: |
-          pipx inject --include-apps pylint pytest==7.4.4
-          pipx inject pylint pytest-pylint==0.19 pytest-github-actions-annotate-failures
-          echo "::warning file=.github/workflows/python-code-quality.yml,line=149,col=42,endColumn=48::\
-            Temporarily downgraded pytest-pylint and pytest to allow merging other PRs.\
-            The errors reported with a newer version seem legitimite and should be fixed \
-            (2023-10-18, see https://github.com/OSGeo/grass/pull/3205)\
-            (2024-01-28, see https://github.com/OSGeo/grass/issues/3380)"
+          pipx inject --include-apps pylint pytest
+          pipx inject pylint pytest-pylint pytest-github-actions-annotate-failures pytest-timeout
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          pytest --pylint -m pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) \
+          pytest --pylint -m pylint --pylint-jobs=$(nproc) \
             --pylint-ignore-patterns="${{ env.PylintIgnore }}"
         env:
-          PylintIgnore: "python/.*,gui/wxpython/.*,doc/.*,man/.*,utils/.*,locale/.*,raster/.*,\
-            imagery/.*,scripts/r.in.wms/wms_drv.py,scripts/g.extension/g.extension.py,\
-            temporal/t.rast.accdetect/t.rast.accdetect.py,temporal/t.rast.accumulate/t.rast.accumulate.py,\
-            scripts/d.rast.edit/d.rast.edit.py"
+          PylintIgnore: "python/.*,gui/.*"
+
+      - name: Run Pylint on wxGUI
+        # Until slower checks (like similarity) are reenabled, running in one step is faster
+        if: false
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) gui
+
+      - name: Run Pylint all in one pass
+        run: |
+          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
+          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs=$(nproc) .
 
       - name: Test compiling example modules
         run: |
-          ( cd doc/raster/r.example/ && make )
-          ( cd doc/vector/v.example/ && make )
+          ( cd doc/examples/raster/r.example/ && make )
+          ( cd doc/examples/vector/v.example/ && make )
 
       - name: Run Sphinx to check API documentation build
         run: |
@@ -201,7 +203,7 @@ jobs:
           cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
 
       - name: Make Sphinx documentation available
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         with:
           name: sphinx-grass
           path: sphinx-grass
