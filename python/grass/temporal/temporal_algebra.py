@@ -3354,7 +3354,6 @@ class TemporalAlgebraParser:
         # start_doy(A, -1)  # Get the start DOY from the preceding map
         #                     of the time series as a numerical constant
         #                     for the mapcalculator expression
-
         """
         expr : t_var LPAREN NAME COMMA INT RPAREN
         """
@@ -3371,7 +3370,7 @@ class TemporalAlgebraParser:
                 # Get map index and temporal extent.
                 map_index = map_list.index(map_i)
                 new_index = map_index + t_neighbour
-                if new_index < max_index and new_index >= 0:
+                if 0 <= new_index < max_index:
                     # Get neighbouring map and set temporal extent.
                     map_n = map_list[new_index]
                     map_i_t_extent = map_i.get_temporal_extent()
@@ -3398,7 +3397,8 @@ class TemporalAlgebraParser:
                 "syntax error on line %d, position %i token %s near '%s' expression "
                 "'%s'" % (t.lineno, t.lexpos, t.type, t.value, self.expression)
             )
-        raise SyntaxError("Unexpected syntax error")
+        msg = "Unexpected syntax error"
+        raise SyntaxError(msg)
 
 
 if __name__ == "__main__":

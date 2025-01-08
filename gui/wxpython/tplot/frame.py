@@ -85,7 +85,7 @@ def check_version(*version) -> bool:
             versionInstalled.append(v)
         except ValueError:
             versionInstalled.append(0)
-    return not versionInstalled < list(version)
+    return versionInstalled >= list(version)
 
 
 def findBetween(s, first, last):
@@ -760,8 +760,7 @@ class TplotFrame(wx.Frame):
         with open(self.csvpath, "w", newline="") as fi:
             writer = csv.writer(fi)
             if self.header:
-                head = ["Time"]
-                head.extend(self.yticksNames)
+                head = ["Time", *self.yticksNames]
                 writer.writerow(head)
             writer.writerows(zipped)
 
@@ -1337,10 +1336,11 @@ class LookUp:
             self.data[datasetName][xranges[i]] = yranges[i]
 
     def GetInformation(self, x):
-        values = {}
-        for key, value in self.data.items():
-            if value[x]:
-                values[key] = [self.convert(x), value[x]]
+        values = {
+            key: [self.convert(x), value[x]]
+            for key, value in self.data.items()
+            if value[x]
+        }
 
         if len(values) == 0:
             return None
@@ -1371,7 +1371,6 @@ def InfoFormat(timeData, values):
 class DataCursor:
     """A simple data cursor widget that displays the x,y location of a
     matplotlib artist when it is selected.
-
 
     Source: https://stackoverflow.com/questions/4652439/
             is-there-a-matplotlib-equivalent-of-matlabs-datacursormode/4674445

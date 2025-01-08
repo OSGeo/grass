@@ -34,48 +34,49 @@ This program is free software under the GNU General Public License
 @author Hamish Bowman (planetary ellipsoids)
 """
 
-import os
-import locale
-import functools
+from __future__ import annotations
 
+import functools
+import locale
+import os
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import wx
 import wx.lib.mixins.listctrl as listmix
 from core import globalvar
 
-if globalvar.wxPythonPhoenix:
+if globalvar.wxPythonPhoenix or TYPE_CHECKING:
     from wx import adv as wiz
-    from wx.adv import Wizard
-    from wx.adv import WizardPageSimple
+    from wx.adv import Wizard, WizardPageSimple
 else:
     from wx import wizard as wiz
     from wx.wizard import Wizard
     from wx.wizard import WizardPageSimple
-import wx.lib.scrolledpanel as scrolled
 
+import wx.lib.scrolledpanel as scrolled
 from core import utils
+from core.gcmd import GError, GWarning, RunCommand
 from core.utils import cmp
-from core.gcmd import RunCommand, GError, GWarning
 from gui_core.widgets import GenericMultiValidator
 from gui_core.wrap import (
-    SpinCtrl,
-    SearchCtrl,
-    StaticText,
-    TextCtrl,
     Button,
     CheckBox,
-    StaticBox,
-    NewId,
-    ListCtrl,
     HyperlinkCtrl,
+    ListCtrl,
+    NewId,
+    SearchCtrl,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
 )
 from location_wizard.dialogs import SelectTransformDialog
 
-from grass.grassdb.checks import location_exists
-from grass.script import decode
-from grass.script import core as grass
 from grass.exceptions import OpenError
+from grass.grassdb.checks import location_exists
+from grass.script import core as grass
+from grass.script import decode
 
 global coordsys, north, south, east, west, resolution, wizerror, translist
 
@@ -83,6 +84,9 @@ if globalvar.CheckWxVersion(version=[4, 1, 0]):
     search_cancel_evt = wx.EVT_SEARCH_CANCEL
 else:
     search_cancel_evt = wx.EVT_SEARCHCTRL_CANCEL_BTN
+
+if TYPE_CHECKING:
+    from wx.adv import WizardEvent
 
 
 class TitledPage(WizardPageSimple):
@@ -331,7 +335,7 @@ class DatabasePage(TitledPage):
 
         dlg.Destroy()
 
-    def OnPageChanging(self, event=None):
+    def OnPageChanging(self, event: WizardEvent | None = None) -> None:
         self.location = self.tlocation.GetValue()
         self.grassdatabase = self.tgisdbase.GetLabel()
         self.locTitle = self.tlocTitle.GetValue()
@@ -416,7 +420,7 @@ class CoordinateSystemPage(TitledPage):
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioXy.GetId())
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         global coordsys
 
         if not coordsys:
@@ -566,7 +570,7 @@ class ProjectionsPage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
-    def OnPageChanging(self, event):
+    def OnPageChanging(self, event: WizardEvent) -> None:
         if event.GetDirection() and self.proj not in self.parent.projections.keys():
             event.Veto()
 
@@ -598,7 +602,7 @@ class ProjectionsPage(TitledPage):
             self.projdesc = self.parent.projections[self.proj][0]
             nextButton.Enable()
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         if len(self.proj) == 0:
             # disable 'next' button by default
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
@@ -892,7 +896,7 @@ class ProjParamsPage(TitledPage):
 
         event.Skip()
 
-    def OnPageChange(self, event=None):
+    def OnPageChange(self, event: WizardEvent | None = None) -> None:
         """Go to next page"""
         if event.GetDirection():
             self.p4projparams = ""
@@ -914,7 +918,7 @@ class ProjParamsPage(TitledPage):
                         " +" + param["proj4"] + "=" + str(param["value"])
                     )
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Page entered"""
         self.projdesc = self.parent.projections[self.parent.projpage.proj][0]
         if self.prjParamSizer is None:
@@ -1059,9 +1063,9 @@ class DatumPage(TitledPage):
         self.searchb.ShowCancelButton(True)
 
         # create list control for datum/elipsoid list
-        data = []
-        for key in self.parent.datums.keys():
-            data.append([key, self.parent.datums[key][0], self.parent.datums[key][1]])
+        data = [
+            [key, datum[0], datum[1]] for (key, datum) in self.parent.datums.items()
+        ]
         self.datumlist = ItemList(
             self, data=data, columns=[_("Code"), _("Ellipsoid"), _("Description")]
         )
@@ -1115,7 +1119,7 @@ class DatumPage(TitledPage):
         # do page layout
         # self.DoLayout()
 
-    def OnPageChanging(self, event):
+    def OnPageChanging(self, event: WizardEvent):
         self.proj4params = ""
         proj = self.parent.projpage.p4proj
 
@@ -1159,7 +1163,7 @@ class DatumPage(TitledPage):
                 self.ellipse
             ][1]
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         self.parent.datum_trans = None
         if event.GetDirection():
             if len(self.datum) == 0:
@@ -1258,10 +1262,10 @@ class EllipsePage(TitledPage):
         )
 
         # create list control for ellipse list
-        data = []
         # extract code, desc
-        for key in self.parent.ellipsoids.keys():
-            data.append([key, self.parent.ellipsoids[key][0]])
+        data = [
+            [key, ellipsoid[0]] for (key, ellipsoid) in self.parent.ellipsoids.items()
+        ]
 
         self.ellipselist = ItemList(
             self, data=data, columns=[_("Code"), _("Description")]
@@ -1330,7 +1334,7 @@ class EllipsePage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         if len(self.ellipse) == 0:
             # disable 'next' button by default
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
@@ -1339,7 +1343,7 @@ class EllipsePage(TitledPage):
         self.scope = "earth"
         event.Skip()
 
-    def OnPageChanging(self, event):
+    def OnPageChanging(self, event: WizardEvent) -> None:
         if (
             event.GetDirection()
             and self.ellipse not in self.parent.ellipsoids
@@ -1465,7 +1469,7 @@ class GeoreferencedFilePage(TitledPage):
         # do page layout
         # self.DoLayout()
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         if len(self.georeffile) == 0:
             # disable 'next' button by default
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
@@ -1474,7 +1478,7 @@ class GeoreferencedFilePage(TitledPage):
 
         event.Skip()
 
-    def OnPageChanging(self, event):
+    def OnPageChanging(self, event: WizardEvent) -> None:
         if event.GetDirection() and not os.path.isfile(self.georeffile):
             event.Veto()
         self.GetNext().SetPrev(self)
@@ -1540,7 +1544,7 @@ class WKTPage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         if len(self.wktstring) == 0:
             # disable 'next' button by default
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
@@ -1549,7 +1553,7 @@ class WKTPage(TitledPage):
 
         event.Skip()
 
-    def OnPageChanging(self, event):
+    def OnPageChanging(self, event: WizardEvent) -> None:
         if event.GetDirection() and not self.wktstring.strip():
             event.Veto()
         self.GetNext().SetPrev(self)
@@ -1641,7 +1645,7 @@ class EPSGPage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         self.parent.datum_trans = None
         if event.GetDirection():
             if not self.epsgcode:
@@ -1654,7 +1658,7 @@ class EPSGPage(TitledPage):
 
         event.Skip()
 
-    def OnPageChanging(self, event):
+    def OnPageChanging(self, event: WizardEvent):
         if event.GetDirection():
             if not self.epsgcode:
                 event.Veto()
@@ -1749,10 +1753,11 @@ class EPSGPage(TitledPage):
             self.epsglist.Populate([], update=True)
             return
 
-        data = []
-        for code, val in self.epsgCodeDict.items():
-            if code is not None:
-                data.append((code, val[0], val[1]))
+        data = [
+            (code, val[0], val[1])
+            for code, val in self.epsgCodeDict.items()
+            if code is not None
+        ]
 
         self.epsglist.Populate(data, update=True)
 
@@ -1859,7 +1864,7 @@ class IAUPage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         self.parent.datum_trans = None
         if event.GetDirection():
             if not self.epsgcode:
@@ -1873,7 +1878,7 @@ class IAUPage(TitledPage):
 
         event.Skip()
 
-    def OnPageChanging(self, event):
+    def OnPageChanging(self, event: WizardEvent):
         if event.GetDirection():
             if not self.epsgcode:
                 event.Veto()
@@ -2021,10 +2026,11 @@ class IAUPage(TitledPage):
             self.epsglist.Populate([], update=True)
             return
 
-        data = []
-        for code, val in self.epsgCodeDict.items():
-            if code is not None:
-                data.append((code, val[0], val[1]))
+        data = [
+            (code, val[0], val[1])
+            for code, val in self.epsgCodeDict.items()
+            if code is not None
+        ]
 
         self.epsglist.Populate(data, update=True)
 
@@ -2070,14 +2076,14 @@ class CustomPage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         if len(self.customstring) == 0:
             # disable 'next' button by default
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
-    def OnPageChanging(self, event):
+    def OnPageChanging(self, event: WizardEvent):
         if event.GetDirection():
             self.custom_dtrans_string = ""
 
@@ -2268,7 +2274,7 @@ class SummaryPage(TitledPage):
         self.sizer.AddGrowableRow(4, 1)
         self.sizer.AddGrowableRow(5, 5)
 
-    def OnEnterPage(self, event):
+    def OnEnterPage(self, event: WizardEvent) -> None:
         """Insert values into text controls for summary of location
         creation options
         """
@@ -2283,10 +2289,7 @@ class SummaryPage(TitledPage):
 
         # print coordsys,proj4string
         if coordsys in {"proj", "epsg", "iau", "wkt", "file"}:
-            extra_opts = {}
-            extra_opts["project"] = "project"
-            extra_opts["getErrorMsg"] = True
-            extra_opts["read"] = True
+            extra_opts = {"project": "project", "getErrorMsg": True, "read": True}
 
             if coordsys == "proj":
                 if len(datum) > 0:
@@ -2769,7 +2772,7 @@ class LocationWizard(wx.Object):
 
         return "%s +no_defs" % proj4string
 
-    def OnHelp(self, event):
+    def OnHelp(self, event: WizardEvent) -> None:
         """'Help' button clicked"""
 
         # help text in lib/init/helptext.html

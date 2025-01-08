@@ -148,9 +148,8 @@ class TestTemporalRasterAlgebra(TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
+        """Remove the temporary region"""
         return
-        """Remove the temporary region
-        """
         cls.runModule("t.remove", flags="rf", inputs="A,B,C,D", quiet=True)
         cls.runModule("t.unregister", maps="singletmap", quiet=True)
         cls.del_temp_region()

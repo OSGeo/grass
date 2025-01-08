@@ -1076,12 +1076,16 @@ def write_xml_extensions(name, tree=None):
             # extension name
             file_.write('%s<task name="%s">\n' % (" " * indent, tnode.get("name")))
             indent += 4
-            """
-            file_.write('%s<description>%s</description>\n' %
-                        (' ' * indent, tnode.find('description').text))
-            file_.write('%s<keywords>%s</keywords>\n' %
-                        (' ' * indent, tnode.find('keywords').text))
-            """
+
+            # file_.write(
+            #     "%s<description>%s</description>\n"
+            #     % (" " * indent, tnode.find("description").text)
+            # )
+            # file_.write(
+            #     "%s<keywords>%s</keywords>\n"
+            #     % (" " * indent, tnode.find("keywords").text)
+            # )
+
             # extension files
             bnode = tnode.find("binary")
             if bnode is not None:
@@ -1392,16 +1396,16 @@ def install_extension_xml(edict):
     for name in edict:
         # so far extensions do not have description or keywords
         # only modules have
-        """
-        try:
-            desc = gtask.parse_interface(name).description
-            # mname = gtask.parse_interface(name).name
-            keywords = gtask.parse_interface(name).keywords
-        except Exception as e:
-            gs.warning(_("No addons metadata available."
-                            " Addons metadata file not updated."))
-            return []
-        """
+
+        # try:
+        #     desc = gtask.parse_interface(name).description
+        #     # mname = gtask.parse_interface(name).name
+        #     keywords = gtask.parse_interface(name).keywords
+        # except Exception as e:
+        #     gs.warning(
+        #         _("No addons metadata available. Addons metadata file not updated.")
+        #     )
+        #     return []
 
         tnode = None
         for node in tree.findall("task"):
@@ -1412,14 +1416,13 @@ def install_extension_xml(edict):
         if tnode is None:
             # create new node for task
             tnode = ET.Element("task", attrib={"name": name})
-            """
-            dnode = etree.Element('description')
-            dnode.text = desc
-            tnode.append(dnode)
-            knode = etree.Element('keywords')
-            knode.text = (',').join(keywords)
-            tnode.append(knode)
-            """
+
+            # dnode = ET.Element("description")
+            # dnode.text = desc
+            # tnode.append(dnode)
+            # knode = ET.Element("keywords")
+            # knode.text = (",").join(keywords)
+            # tnode.append(knode)
 
             # create binary
             bnode = ET.Element("binary")
@@ -1549,37 +1552,36 @@ def install_module_xml(mlist):
             # binary files installed with an extension are now
             # listed in extensions.xml
 
-            """
-            # create binary
-            bnode = etree.Element('binary')
-            list_of_binary_files = []
-            for file_name in os.listdir(url):
-                file_type = os.path.splitext(file_name)[-1]
-                file_n = os.path.splitext(file_name)[0]
-                html_path = os.path.join(options['prefix'], 'docs', 'html')
-                c_path = os.path.join(options['prefix'], 'bin')
-                py_path = os.path.join(options['prefix'], 'scripts')
-                # html or image file
-                if file_type in ['.html', '.jpg', '.png'] \
-                        and file_n in os.listdir(html_path):
-                    list_of_binary_files.append(os.path.join(html_path, file_name))
-                # c file
-                elif file_type in ['.c'] and file_name in os.listdir(c_path):
-                    list_of_binary_files.append(os.path.join(c_path, file_n))
-                # python file
-                elif file_type in ['.py'] and file_name in os.listdir(py_path):
-                    list_of_binary_files.append(os.path.join(py_path, file_n))
-            # man file
-            man_path = os.path.join(options['prefix'], 'docs', 'man', 'man1')
-            if name + '.1' in os.listdir(man_path):
-                list_of_binary_files.append(os.path.join(man_path, name + '.1'))
-            # add binaries to xml file
-            for binary_file_name in list_of_binary_files:
-                fnode = etree.Element('file')
-                fnode.text = binary_file_name
-                bnode.append(fnode)
-            tnode.append(bnode)
-            """
+            # # create binary
+            # bnode = etree.Element("binary")
+            # list_of_binary_files = []
+            # for file_name in os.listdir(url):
+            #     file_type = os.path.splitext(file_name)[-1]
+            #     file_n = os.path.splitext(file_name)[0]
+            #     html_path = os.path.join(options["prefix"], "docs", "html")
+            #     c_path = os.path.join(options["prefix"], "bin")
+            #     py_path = os.path.join(options["prefix"], "scripts")
+            #     # html or image file
+            #     if file_type in [".html", ".jpg", ".png"] and file_n in os.listdir(
+            #         html_path
+            #     ):
+            #         list_of_binary_files.append(os.path.join(html_path, file_name))
+            #     # c file
+            #     elif file_type in [".c"] and file_name in os.listdir(c_path):
+            #         list_of_binary_files.append(os.path.join(c_path, file_n))
+            #     # python file
+            #     elif file_type in [".py"] and file_name in os.listdir(py_path):
+            #         list_of_binary_files.append(os.path.join(py_path, file_n))
+            # # man file
+            # man_path = os.path.join(options["prefix"], "docs", "man", "man1")
+            # if name + ".1" in os.listdir(man_path):
+            #     list_of_binary_files.append(os.path.join(man_path, name + ".1"))
+            # # add binaries to xml file
+            # for binary_file_name in list_of_binary_files:
+            #     fnode = etree.Element("file")
+            #     fnode.text = binary_file_name
+            #     bnode.append(fnode)
+            # tnode.append(bnode)
             tree.append(tnode)
         else:
             gs.verbose(
@@ -2589,7 +2591,6 @@ def resolve_known_host_service(url, name, branch):
 
 
 def validate_url(url):
-    """"""
     if not os.path.exists(url):
         url_validated = False
         message = None
@@ -2835,10 +2836,8 @@ def main():
             install_extension()
         else:
             if original_url == "" or flags["o"]:
-                """
-                Query GitHub API only if extension will be downloaded
-                from official GRASS GIS addon repository
-                """
+                # Query GitHub API only if extension will be downloaded
+                # from official GRASS GIS addons repository
                 get_addons_paths(gg_addons_base_dir=options["prefix"])
             source, url = resolve_source_code(
                 name=options["extension"],
