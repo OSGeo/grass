@@ -20,6 +20,7 @@
 #include <grass/glocale.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
+#include <grass/parson.h>
 
 #define O_ADD       1
 #define O_DEL       2
@@ -50,6 +51,25 @@ typedef struct {
     int min[FRTYPES], max[FRTYPES];
 } FREPORT;
 
+enum OutputFormat { PLAIN, SHELL, JSON };
+
+void format_json_fr(FREPORT *freport, int fr_type, char *name,
+                    JSON_Array *array)
+{
+    JSON_Object *object;
+    JSON_Value *value;
+    if (freport->count[fr_type] > 0) {
+        value = json_value_init_object();
+        object = json_object(value);
+        json_object_set_string(object, "type", name);
+        json_object_set_number(object, "field", freport->field);
+        json_object_set_number(object, "count", freport->count[fr_type]);
+        json_object_set_number(object, "min", freport->min[fr_type]);
+        json_object_set_number(object, "max", freport->max[fr_type]);
+        json_array_append_value(array, value);
+    }
+}
+
 int main(int argc, char *argv[])
 {
     struct Map_info In, Out;
@@ -64,11 +84,15 @@ int main(int argc, char *argv[])
     int cat, ocat, scat, *fields, nfields, field;
     struct GModule *module;
     struct Option *in_opt, *out_opt, *option_opt, *type_opt;
-    struct Option *cat_opt, *field_opt, *step_opt, *id_opt;
+    struct Option *cat_opt, *field_opt, *step_opt, *id_opt, *format_opt;
     struct Flag *shell, *notab;
     FREPORT **freps;
     int nfreps, rtype, fld;
     char *desc;
+
+    enum OutputFormat format;
+    JSON_Array *root_array;
+    JSON_Value *root_value;
 
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -136,6 +160,13 @@ int main(int argc, char *argv[])
     step_opt->multiple = NO;
     step_opt->answer = "1";
     step_opt->description = _("Category increment");
+
+    format_opt = G_define_standard_option(G_OPT_F_FORMAT);
+    format_opt->options = "plain,shell,json";
+    format_opt->descriptions = _("plain;Human readable text output;"
+                                 "shell;shell script style text output;"
+                                 "json;JSON (JavaScript Object Notation);");
+    format_opt->guisection = _("Print");
 
     shell = G_define_flag();
     shell->key = 'g';
@@ -229,6 +260,21 @@ int main(int argc, char *argv[])
     }
     else {
         Clist = NULL;
+    }
+
+    if (strcmp(format_opt->answer, "json") == 0) {
+        format = JSON;
+        root_value = json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_array = json_array(root_value);
+    }
+    else if ((strcmp(format_opt->answer, "shell") == 0) || shell->answer) {
+        format = SHELL;
+    }
+    else {
+        format = PLAIN;
     }
 
     if ((option != O_REP) && (option != O_PRN) && (option != O_LYR)) {
@@ -627,7 +673,8 @@ int main(int argc, char *argv[])
             }
         }
         for (i = 0; i < nfreps; i++) {
-            if (shell->answer) {
+            switch (format) {
+            case SHELL:
                 if (freps[i]->count[FR_POINT] > 0)
                     fprintf(stdout, "%d point %d %d %d\n", freps[i]->field,
                             freps[i]->count[FR_POINT],
@@ -690,8 +737,8 @@ int main(int argc, char *argv[])
                         freps[i]->count[FR_ALL],
                         (freps[i]->min[FR_ALL] < 0 ? 0 : freps[i]->min[FR_ALL]),
                         freps[i]->max[FR_ALL]);
-            }
-            else {
+                break;
+            case PLAIN:
                 if (freps[i]->table != NULL) {
                     fprintf(stdout, "%s: %d/%s\n", _("Layer/table"),
                             freps[i]->field, freps[i]->table);
@@ -742,7 +789,27 @@ int main(int argc, char *argv[])
                         freps[i]->count[FR_ALL],
                         (freps[i]->min[FR_ALL] < 0) ? 0 : freps[i]->min[FR_ALL],
                         freps[i]->max[FR_ALL]);
+                break;
+            case JSON:
+                format_json_fr(freps[i], FR_POINT, "point", root_array);
+                format_json_fr(freps[i], FR_LINE, "line", root_array);
+                format_json_fr(freps[i], FR_BOUNDARY, "boundary", root_array);
+                format_json_fr(freps[i], FR_CENTROID, "centroid", root_array);
+                format_json_fr(freps[i], FR_AREA, "area", root_array);
+                format_json_fr(freps[i], FR_FACE, "face", root_array);
+                format_json_fr(freps[i], FR_ALL, "all", root_array);
+                break;
             }
+        }
+        if (format == JSON) {
+            char *serialized_string = NULL;
+            serialized_string = json_serialize_to_string_pretty(root_value);
+            if (serialized_string == NULL) {
+                G_fatal_error(_("Failed to initialize pretty JSON string."));
+            }
+            puts(serialized_string);
+            json_free_serialized_string(serialized_string);
+            json_value_free(root_value);
         }
         break;
 
