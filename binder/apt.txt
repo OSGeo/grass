@@ -19,7 +19,6 @@ liblapack-dev
 libncurses5-dev
 libnetcdf-dev
 libpdal-dev
-libgeos-dev
 libpng-dev
 libpq-dev
 libproj-dev

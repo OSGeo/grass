@@ -35,17 +35,27 @@ This program is free software under the GNU General Public License
 import os
 import string
 from math import ceil
-from time import strftime, localtime
+from time import localtime, strftime
 
-import wx
 import grass.script as gs
-from grass.script.task import cmdlist_to_tuple
-
+import wx
 from core.gcmd import GError, GMessage, GWarning
 from core.utils import GetCmdString
 from dbmgr.vinfo import VectorDBInfo
+from grass.script.task import cmdlist_to_tuple
 from gui_core.wrap import NewId as wxNewId
-from psmap.utils import *
+
+from psmap.utils import (  # Add any additional required names from psmap.utils here
+    BBoxAfterRotation,
+    GetMapBounds,
+    PaperMapCoordinates,
+    Rect2D,
+    Rect2DPP,
+    SetResolution,
+    UnitConversion,
+    getRasterType,
+    projInfo,
+)
 
 
 def NewId():
@@ -86,10 +96,7 @@ class Instruction:
 
     def __contains__(self, id):
         """Test if instruction is included"""
-        for each in self.instruction:
-            if each.id == id:
-                return True
-        return False
+        return any(each.id == id for each in self.instruction)
 
     def __delitem__(self, id):
         """Delete instruction"""
@@ -133,10 +140,7 @@ class Instruction:
 
     def FindInstructionByType(self, type, list=False):
         """Find instruction(s) with the given type"""
-        inst = []
-        for each in self.instruction:
-            if each.type == type:
-                inst.append(each)
+        inst = [each for each in self.instruction if each.type == type]
         if len(inst) == 1 and not list:
             return inst[0]
         return inst
@@ -216,7 +220,7 @@ class Instruction:
                     buffer = []
                 continue
 
-            elif line.startswith("paper"):
+            if line.startswith("paper"):
                 instruction = "paper"
                 isBuffer = True
                 buffer.append(line)
@@ -691,7 +695,7 @@ class MapFrame(InstructionObject):
                     if line.split()[1].lower() in {"n", "no", "none"}:
                         instr["border"] = "n"
                         break
-                    elif line.split()[1].lower() in {"y", "yes"}:
+                    if line.split()[1].lower() in {"y", "yes"}:
                         instr["border"] = "y"
                     elif line.startswith("width"):
                         instr["width"] = line.split()[1]
@@ -1211,7 +1215,7 @@ class Image(InstructionObject):
         # if eps, read info from header
         if os.path.splitext(fileName)[1].lower() == ".eps":
             bbInfo = "%%BoundingBox"
-            file = open(imagePath, "r")
+            file = open(imagePath)
             w = h = 0
             while file:
                 line = file.readline()
@@ -1220,9 +1224,9 @@ class Image(InstructionObject):
                     break
             file.close()
             return float(w), float(h)
-        else:  # we can use wx.Image
-            img = wx.Image(fileName, type=wx.BITMAP_TYPE_ANY)
-            return img.GetWidth(), img.GetHeight()
+        # we can use wx.Image
+        img = wx.Image(fileName, type=wx.BITMAP_TYPE_ANY)
+        return img.GetWidth(), img.GetHeight()
 
 
 class NorthArrow(Image):
@@ -1669,8 +1673,7 @@ class RasterLegend(InstructionObject):
 
     def Read(self, instruction, text, **kwargs):
         """Read instruction and save information"""
-        instr = {}
-        instr["rLegend"] = True
+        instr = {"rLegend": True}
         for line in text:
             try:
                 if line.startswith("where"):
@@ -1744,7 +1747,7 @@ class RasterLegend(InstructionObject):
 
             rinfo = gs.raster_info(raster)
             if rinfo["datatype"] in {"DCELL", "FCELL"}:
-                minim, maxim = rinfo["min"], rinfo["max"]
+                maxim = rinfo["max"]
                 rows = ceil(maxim / cols)
             else:
                 cat = (
@@ -1833,8 +1836,7 @@ class VectorLegend(InstructionObject):
 
     def Read(self, instruction, text, **kwargs):
         """Read instruction and save information"""
-        instr = {}
-        instr["vLegend"] = True
+        instr = {"vLegend": True}
         for line in text:
             try:
                 if line.startswith("where"):
@@ -1899,8 +1901,7 @@ class Raster(InstructionObject):
 
     def Read(self, instruction, text):
         """Read instruction and save information"""
-        instr = {}
-        instr["isRaster"] = True
+        instr = {"isRaster": True}
         try:
             map = text.split()[1]
         except IndexError:
@@ -1936,11 +1937,7 @@ class Vector(InstructionObject):
         instr = {}
 
         for line in text:
-            if (
-                line.startswith("vpoints")
-                or line.startswith("vlines")
-                or line.startswith("vareas")
-            ):
+            if line.startswith(("vpoints", "vlines", "vareas")):
                 # subtype
                 if line.startswith("vpoints"):
                     subType = "points"

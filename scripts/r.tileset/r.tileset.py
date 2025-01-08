@@ -246,16 +246,16 @@ def main():
             _(
                 "It is not possible to set 'maxcols=%s' and "
                 "'overlap=%s'. Please set maxcols>overlap"
-                % (options["maxcols"], options["overlap"])
             )
+            % (options["maxcols"], options["overlap"])
         )
     elif max_rows == 0:
         gcore.fatal(
             _(
                 "It is not possible to set 'maxrows=%s' and "
                 "'overlap=%s'. Please set maxrows>overlap"
-                % (options["maxrows"], options["overlap"])
             )
+            % (options["maxrows"], options["overlap"])
         )
     # destination projection
     if not options["destproj"]:
@@ -397,7 +397,7 @@ def main():
 
     if errors_dest > 0:
         gcore.warning(
-            _("During computation %i tiles could not be created" % errors_dest)
+            _("During computation %i tiles could not be created") % errors_dest
         )
 
     while xi < ximax:

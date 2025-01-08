@@ -180,7 +180,6 @@ class LocationDialog(SimpleDialog):
             dbase = grass.gisenv()["GISDBASE"]
             self.element2.UpdateItems(dbase=dbase, location=location)
             self.element2.SetSelection(0)
-            mapset = self.element2.GetStringSelection()
 
     def GetValues(self):
         """Get location, mapset"""
@@ -284,8 +283,7 @@ class VectorDialog(SimpleDialog):
         if full:
             if "@" in name:
                 return name
-            else:
-                return name + "@" + grass.gisenv()["MAPSET"]
+            return name + "@" + grass.gisenv()["MAPSET"]
 
         return name.split("@", 1)[0]
 
@@ -428,7 +426,7 @@ class NewVectorDialog(VectorDialog):
         """
         if key == "add":
             return self.addbox.IsChecked()
-        elif key == "table":
+        if key == "table":
             return self.table.IsChecked()
 
         return None
@@ -468,10 +466,7 @@ def CreateNewVector(
     """
     vExternalOut = grass.parse_command("v.external.out", flags="g")
     isNative = vExternalOut["format"] == "native"
-    if cmd[0] == "v.edit" and not isNative:
-        showType = True
-    else:
-        showType = False
+    showType = bool(cmd[0] == "v.edit" and not isNative)
     dlg = NewVectorDialog(
         parent,
         title=title,
@@ -1119,10 +1114,7 @@ class GroupDialog(wx.Dialog):
     def GetLayers(self):
         """Get layers"""
         if self.edit_subg:
-            layers = []
-            for maps, sel in self.subgmaps.items():
-                if sel:
-                    layers.append(maps)
+            layers = [maps for maps, sel in self.subgmaps.items() if sel]
         else:
             layers = self.gmaps[:]
 
@@ -1214,7 +1206,7 @@ class GroupDialog(wx.Dialog):
             try:
                 if re.compile(self.flt_pattern).search(dt):
                     flt_data.append(dt)
-            except:
+            except re.error:
                 pass
 
         return flt_data
@@ -1342,16 +1334,12 @@ class GroupDialog(wx.Dialog):
     def GetSelectedGroup(self):
         """Return currently selected group (without mapset)"""
         g = self.groupSelect.GetValue().split("@")[0]
-        if self.edit_subg:
-            s = self.subGroupSelect.GetValue()
-        else:
-            s = None
+        s = self.subGroupSelect.GetValue() if self.edit_subg else None
         return g, s
 
     def GetGroupLayers(self, group, subgroup=None):
         """Get layers in group"""
-        kwargs = {}
-        kwargs["group"] = group
+        kwargs = {"group": group}
         if subgroup:
             kwargs["subgroup"] = subgroup
 
@@ -1376,10 +1364,7 @@ class GroupDialog(wx.Dialog):
             GMessage(parent=self, message=_("No subgroup selected."))
             return 0
 
-        if self.edit_subg:
-            subgroup = self.currentSubgroup
-        else:
-            subgroup = None
+        subgroup = self.currentSubgroup if self.edit_subg else None
 
         groups = self.GetExistGroups()
         if group in groups:
@@ -1478,7 +1463,7 @@ class MapLayersDialogBase(wx.Dialog):
         """
 
     def _fullyQualifiedNames(self):
-        """Adds CheckBox which determines is fully qualified names are retuned."""
+        """Adds CheckBox which determines if fully qualified names are returned."""
         self.fullyQualified = wx.CheckBox(
             parent=self, id=wx.ID_ANY, label=_("Use fully-qualified map names")
         )
@@ -1657,7 +1642,7 @@ class MapLayersDialogBase(wx.Dialog):
             try:
                 if re.compile(event.GetString()).search(layer):
                     list.append(layer)
-            except:
+            except re.error:
                 pass
         list = naturally_sorted(list)
 
@@ -2150,9 +2135,10 @@ class SymbolDialog(wx.Dialog):
         mainSizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         # show panel with the largest number of images and fit size
-        count = []
-        for folder in os.listdir(self.symbolPath):
-            count.append(len(os.listdir(os.path.join(self.symbolPath, folder))))
+        count = [
+            len(os.listdir(os.path.join(self.symbolPath, folder)))
+            for folder in os.listdir(self.symbolPath)
+        ]
 
         index = count.index(max(count))
         self.folderChoice.SetSelection(index)
@@ -2207,9 +2193,7 @@ class SymbolDialog(wx.Dialog):
 
     def _getSymbols(self, path):
         # we assume that images are in subfolders (1 level only)
-        imageList = []
-        for image in os.listdir(path):
-            imageList.append(os.path.join(path, image))
+        imageList = [os.path.join(path, image) for image in os.listdir(path)]
 
         return sorted(imageList)
 

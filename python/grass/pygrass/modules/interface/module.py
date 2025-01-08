@@ -548,7 +548,8 @@ class Module:
         if isinstance(cmd, str):
             self.name = cmd
         else:
-            raise GrassError("Problem initializing the module {s}".format(s=cmd))
+            msg = "Problem initializing the module {s}".format(s=cmd)
+            raise GrassError(msg)
         try:
             # call the command with --interface-description
             get_cmd_xml = Popen([cmd, "--interface-description"], stdout=PIPE)
@@ -559,7 +560,7 @@ class Module:
         # get the xml of the module
         self.xml = get_cmd_xml.communicate()[0]
         # transform and parse the xml into an Element class:
-        # http://docs.python.org/library/xml.etree.elementtree.html
+        # https://docs.python.org/library/xml.etree.elementtree.html
         tree = fromstring(self.xml)
 
         for e in tree:
@@ -720,12 +721,11 @@ class Module:
         #     pre name par flg special
         if flags and special:
             return "%s.%s(%s, flags=%r, %s)" % (prefix, name, params, flags, special)
-        elif flags:
+        if flags:
             return "%s.%s(%s, flags=%r)" % (prefix, name, params, flags)
-        elif special:
+        if special:
             return "%s.%s(%s, %s)" % (prefix, name, params, special)
-        else:
-            return "%s.%s(%s)" % (prefix, name, params)
+        return "%s.%s(%s)" % (prefix, name, params)
 
     def __str__(self):
         """Return the command string that can be executed in a shell"""
@@ -774,12 +774,12 @@ class Module:
         """Return a dictionary that includes the name, all valid
         inputs, outputs and flags
         """
-        dic = {}
-        dic["name"] = self.name
-        dic["inputs"] = [(k, v.value) for k, v in self.inputs.items() if v.value]
-        dic["outputs"] = [(k, v.value) for k, v in self.outputs.items() if v.value]
-        dic["flags"] = [flg for flg in self.flags if self.flags[flg].value]
-        return dic
+        return {
+            "name": self.name,
+            "inputs": [(k, v.value) for k, v in self.inputs.items() if v.value],
+            "outputs": [(k, v.value) for k, v in self.outputs.items() if v.value],
+            "flags": [flg for flg in self.flags if self.flags[flg].value],
+        }
 
     def make_cmd(self):
         """Create the command string that can be executed in a shell
@@ -1026,16 +1026,15 @@ g.region format=plain -p ; g.region format=plain -p'
                 module.finish_ = True
                 module.run()
             return None
+        if self.set_temp_region is True:
+            self.p = Process(
+                target=run_modules_in_temp_region, args=[self.module_list, self.q]
+            )
         else:
-            if self.set_temp_region is True:
-                self.p = Process(
-                    target=run_modules_in_temp_region, args=[self.module_list, self.q]
-                )
-            else:
-                self.p = Process(target=run_modules, args=[self.module_list, self.q])
-            self.p.start()
+            self.p = Process(target=run_modules, args=[self.module_list, self.q])
+        self.p.start()
 
-            return self.p
+        return self.p
 
     def wait(self):
         """Wait for all processes to finish. Call this method

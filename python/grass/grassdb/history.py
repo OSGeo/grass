@@ -81,9 +81,7 @@ def _read_from_plain_text(history_path):
     stores only executed commands."""
     content_list = []
     try:
-        with open(
-            history_path, encoding="utf-8", mode="r", errors="replace"
-        ) as file_history:
+        with open(history_path, encoding="utf-8", errors="replace") as file_history:
             content_list = [
                 {"command": line.strip(), "command_info": None} for line in file_history
             ]
@@ -287,7 +285,7 @@ def _add_entry_to_JSON(history_path, entry):
     :param dict entry: entry consisting of 'command' and 'command_info' keys
     """
     try:
-        with open(history_path, encoding="utf-8", mode="r") as file_history:
+        with open(history_path, encoding="utf-8") as file_history:
             existing_data = json.load(file_history)
     except (OSError, ValueError):
         existing_data = []
@@ -315,7 +313,8 @@ def add_entry(history_path, entry):
     if get_history_file_extension(history_path) == ".json":
         _add_entry_to_JSON(history_path, entry)
     else:
-        raise ValueError("Adding entries is supported only for JSON format.")
+        msg = "Adding entries is supported only for JSON format."
+        raise ValueError(msg)
 
 
 def _update_entry_in_JSON(history_path, command_info, index=None):
@@ -362,7 +361,8 @@ def update_entry(history_path, command_info, index=None):
     if get_history_file_extension(history_path) == ".json":
         _update_entry_in_JSON(history_path, command_info, index)
     else:
-        raise ValueError("Updating entries is supported only for JSON format.")
+        msg = "Updating entries is supported only for JSON format."
+        raise ValueError(msg)
 
 
 def copy(history_path, target_path):

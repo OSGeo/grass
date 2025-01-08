@@ -34,3 +34,17 @@ from .results import (
     save_results_to_file,
 )
 from .runners import benchmark_nprocs, benchmark_resolutions, benchmark_single
+
+__all__ = [
+    "benchmark_nprocs",
+    "benchmark_resolutions",
+    "benchmark_single",
+    "join_results",
+    "join_results_from_files",
+    "load_results",
+    "load_results_from_file",
+    "nprocs_plot",
+    "num_cells_plot",
+    "save_results",
+    "save_results_to_file",
+]

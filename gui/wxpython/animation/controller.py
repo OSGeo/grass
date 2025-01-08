@@ -465,9 +465,7 @@ class AnimationController(wx.EvtHandler):
                     mapCount.add(len(layer.maps))
             windowIndex.append(anim.windowIndex)
 
-        if maps and stds:
-            temporalMode = TemporalMode.NONTEMPORAL
-        elif maps:
+        if (maps and stds) or maps:
             temporalMode = TemporalMode.NONTEMPORAL
         elif stds:
             temporalMode = TemporalMode.TEMPORAL
@@ -629,7 +627,6 @@ class AnimationController(wx.EvtHandler):
                 del self.busy
                 if error:
                     GError(parent=self.frame, message=error)
-                    return
 
             if exportInfo["method"] == "sequence":
                 filename = os.path.join(

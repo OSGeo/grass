@@ -153,7 +153,7 @@ import shutil
 import zipfile
 import tempfile
 import json
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 if sys.version_info < (3, 8):
     from distutils.dir_util import copy_tree
@@ -172,8 +172,8 @@ from urllib.parse import urljoin, urlparse
 # and ElementTree 1.3.
 from xml.parsers import expat  # TODO: works for any Python?
 
-if hasattr(etree, "ParseError"):
-    ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
+if hasattr(ET, "ParseError"):
+    ETREE_EXCEPTIONS = (ET.ParseError, expat.ExpatError)
 else:
     ETREE_EXCEPTIONS = expat.ExpatError
 
@@ -470,9 +470,10 @@ def replace_shebang_win(python_file):
     cur_dir = os.path.dirname(python_file)
     tmp_name = os.path.join(cur_dir, gs.tempname(12))
 
-    with codecs.open(python_file, "r", encoding="utf8") as in_file, codecs.open(
-        tmp_name, "w", encoding="utf8"
-    ) as out_file:
+    with (
+        codecs.open(python_file, "r", encoding="utf8") as in_file,
+        codecs.open(tmp_name, "w", encoding="utf8") as out_file,
+    ):
         for line in in_file:
             new_line = line.replace(
                 "#!/usr/bin/env python\n", "#!/usr/bin/env python3\n"
@@ -507,24 +508,23 @@ def get_version_branch(major_version):
     version_branch = f"grass{major_version}"
     if sys.platform == "win32":
         return version_branch
-    else:
-        branch = gs.Popen(
-            ["git", "ls-remote", "--heads", GIT_URL, f"refs/heads/{version_branch}"],
-            stdout=PIPE,
-            stderr=PIPE,
-        )
-        branch, stderr = branch.communicate()
-        if stderr:
-            gs.fatal(
-                _(
-                    "Failed to get branch from the Git repository <{repo_path}>.\n"
-                    "{error}"
-                ).format(
-                    repo_path=GIT_URL,
-                    error=gs.decode(stderr),
-                )
+    branch = gs.Popen(
+        ["git", "ls-remote", "--heads", GIT_URL, f"refs/heads/{version_branch}"],
+        stdout=PIPE,
+        stderr=PIPE,
+    )
+    branch, stderr = branch.communicate()
+    if stderr:
+        gs.fatal(
+            _(
+                "Failed to get branch from the Git repository <{repo_path}>.\n"
+                "{error}"
+            ).format(
+                repo_path=GIT_URL,
+                error=gs.decode(stderr),
             )
-        branch = gs.decode(branch)
+        )
+    branch = gs.decode(branch)
     if version_branch not in branch:
         version_branch = "grass{}".format(int(major_version) - 1)
     return version_branch
@@ -541,10 +541,8 @@ def get_default_branch(full_url):
         organization, repository = url_parts.path.split("/")[1:3]
     except URLError:
         gs.fatal(
-            _(
-                "Cannot retrieve organization and repository from URL: <{}>.".format(
-                    full_url
-                )
+            _("Cannot retrieve organization and repository from URL: <{}>.").format(
+                full_url
             )
         )
     # Construct API call and retrieve default branch
@@ -571,7 +569,7 @@ def get_default_branch(full_url):
 
 def etree_fromfile(filename):
     """Create XML element tree from a given file name"""
-    return etree.fromstring(Path(filename).read_text())
+    return ET.fromstring(Path(filename).read_text())
 
 
 def etree_fromurl(url):
@@ -583,12 +581,10 @@ def etree_fromurl(url):
             _(
                 "Download file from <{url}>,"
                 " failed. File is not on the server or"
-                " check your internet connection.".format(
-                    url=url,
-                ),
-            ),
+                " check your internet connection."
+            ).format(url=url),
         )
-    return etree.fromstring(file_.read())
+    return ET.fromstring(file_.read())
 
 
 def check_progs():
@@ -1080,12 +1076,16 @@ def write_xml_extensions(name, tree=None):
             # extension name
             file_.write('%s<task name="%s">\n' % (" " * indent, tnode.get("name")))
             indent += 4
-            """
-            file_.write('%s<description>%s</description>\n' %
-                        (' ' * indent, tnode.find('description').text))
-            file_.write('%s<keywords>%s</keywords>\n' %
-                        (' ' * indent, tnode.find('keywords').text))
-            """
+
+            # file_.write(
+            #     "%s<description>%s</description>\n"
+            #     % (" " * indent, tnode.find("description").text)
+            # )
+            # file_.write(
+            #     "%s<keywords>%s</keywords>\n"
+            #     % (" " * indent, tnode.find("keywords").text)
+            # )
+
             # extension files
             bnode = tnode.find("binary")
             if bnode is not None:
@@ -1290,7 +1290,7 @@ def install_toolbox_xml(url, name):
         write_xml_modules(xml_file)
 
     # read XML file
-    tree = etree.fromstring(Path(xml_file).read_text())
+    tree = ET.fromstring(Path(xml_file).read_text())
 
     # update tree
     tnode = None
@@ -1308,14 +1308,14 @@ def install_toolbox_xml(url, name):
             tnode.remove(mnode)
     else:
         # create new node for task
-        tnode = etree.Element("toolbox", attrib={"name": tdata["name"], "code": name})
+        tnode = ET.Element("toolbox", attrib={"name": tdata["name"], "code": name})
         tree.append(tnode)
 
     for cname in tdata["correlate"]:
-        cnode = etree.Element("correlate", attrib={"code": cname})
+        cnode = ET.Element("correlate", attrib={"code": cname})
         tnode.append(cnode)
     for tname in tdata["modules"]:
-        mnode = etree.Element("task", attrib={"name": tname})
+        mnode = ET.Element("task", attrib={"name": tname})
         tnode.append(mnode)
 
     write_xml_toolboxes(xml_file, tree)
@@ -1396,16 +1396,16 @@ def install_extension_xml(edict):
     for name in edict:
         # so far extensions do not have description or keywords
         # only modules have
-        """
-        try:
-            desc = gtask.parse_interface(name).description
-            # mname = gtask.parse_interface(name).name
-            keywords = gtask.parse_interface(name).keywords
-        except Exception as e:
-            gs.warning(_("No addons metadata available."
-                            " Addons metadata file not updated."))
-            return []
-        """
+
+        # try:
+        #     desc = gtask.parse_interface(name).description
+        #     # mname = gtask.parse_interface(name).name
+        #     keywords = gtask.parse_interface(name).keywords
+        # except Exception as e:
+        #     gs.warning(
+        #         _("No addons metadata available. Addons metadata file not updated.")
+        #     )
+        #     return []
 
         tnode = None
         for node in tree.findall("task"):
@@ -1415,30 +1415,29 @@ def install_extension_xml(edict):
 
         if tnode is None:
             # create new node for task
-            tnode = etree.Element("task", attrib={"name": name})
-            """
-            dnode = etree.Element('description')
-            dnode.text = desc
-            tnode.append(dnode)
-            knode = etree.Element('keywords')
-            knode.text = (',').join(keywords)
-            tnode.append(knode)
-            """
+            tnode = ET.Element("task", attrib={"name": name})
+
+            # dnode = ET.Element("description")
+            # dnode.text = desc
+            # tnode.append(dnode)
+            # knode = ET.Element("keywords")
+            # knode.text = (",").join(keywords)
+            # tnode.append(knode)
 
             # create binary
-            bnode = etree.Element("binary")
+            bnode = ET.Element("binary")
             # list of all installed files for this extension
             for file_name in edict[name]["flist"]:
-                fnode = etree.Element("file")
+                fnode = ET.Element("file")
                 fnode.text = file_name
                 bnode.append(fnode)
             tnode.append(bnode)
 
             # create modules
-            msnode = etree.Element("modules")
+            msnode = ET.Element("modules")
             # list of all installed modules for this extension
             for module_name in edict[name]["mlist"]:
-                mnode = etree.Element("module")
+                mnode = ET.Element("module")
                 mnode.text = module_name
                 msnode.append(mnode)
             tnode.append(msnode)
@@ -1542,48 +1541,47 @@ def install_module_xml(mlist):
 
         if tnode is None:
             # create new node for task
-            tnode = etree.Element("task", attrib={"name": name})
-            dnode = etree.Element("description")
+            tnode = ET.Element("task", attrib={"name": name})
+            dnode = ET.Element("description")
             dnode.text = desc
             tnode.append(dnode)
-            knode = etree.Element("keywords")
+            knode = ET.Element("keywords")
             knode.text = (",").join(keywords)
             tnode.append(knode)
 
             # binary files installed with an extension are now
             # listed in extensions.xml
 
-            """
-            # create binary
-            bnode = etree.Element('binary')
-            list_of_binary_files = []
-            for file_name in os.listdir(url):
-                file_type = os.path.splitext(file_name)[-1]
-                file_n = os.path.splitext(file_name)[0]
-                html_path = os.path.join(options['prefix'], 'docs', 'html')
-                c_path = os.path.join(options['prefix'], 'bin')
-                py_path = os.path.join(options['prefix'], 'scripts')
-                # html or image file
-                if file_type in ['.html', '.jpg', '.png'] \
-                        and file_n in os.listdir(html_path):
-                    list_of_binary_files.append(os.path.join(html_path, file_name))
-                # c file
-                elif file_type in ['.c'] and file_name in os.listdir(c_path):
-                    list_of_binary_files.append(os.path.join(c_path, file_n))
-                # python file
-                elif file_type in ['.py'] and file_name in os.listdir(py_path):
-                    list_of_binary_files.append(os.path.join(py_path, file_n))
-            # man file
-            man_path = os.path.join(options['prefix'], 'docs', 'man', 'man1')
-            if name + '.1' in os.listdir(man_path):
-                list_of_binary_files.append(os.path.join(man_path, name + '.1'))
-            # add binaries to xml file
-            for binary_file_name in list_of_binary_files:
-                fnode = etree.Element('file')
-                fnode.text = binary_file_name
-                bnode.append(fnode)
-            tnode.append(bnode)
-            """
+            # # create binary
+            # bnode = etree.Element("binary")
+            # list_of_binary_files = []
+            # for file_name in os.listdir(url):
+            #     file_type = os.path.splitext(file_name)[-1]
+            #     file_n = os.path.splitext(file_name)[0]
+            #     html_path = os.path.join(options["prefix"], "docs", "html")
+            #     c_path = os.path.join(options["prefix"], "bin")
+            #     py_path = os.path.join(options["prefix"], "scripts")
+            #     # html or image file
+            #     if file_type in [".html", ".jpg", ".png"] and file_n in os.listdir(
+            #         html_path
+            #     ):
+            #         list_of_binary_files.append(os.path.join(html_path, file_name))
+            #     # c file
+            #     elif file_type in [".c"] and file_name in os.listdir(c_path):
+            #         list_of_binary_files.append(os.path.join(c_path, file_n))
+            #     # python file
+            #     elif file_type in [".py"] and file_name in os.listdir(py_path):
+            #         list_of_binary_files.append(os.path.join(py_path, file_n))
+            # # man file
+            # man_path = os.path.join(options["prefix"], "docs", "man", "man1")
+            # if name + ".1" in os.listdir(man_path):
+            #     list_of_binary_files.append(os.path.join(man_path, name + ".1"))
+            # # add binaries to xml file
+            # for binary_file_name in list_of_binary_files:
+            #     fnode = etree.Element("file")
+            #     fnode.text = binary_file_name
+            #     bnode.append(fnode)
+            # tnode.append(bnode)
             tree.append(tnode)
         else:
             gs.verbose(
@@ -1612,10 +1610,7 @@ def install_extension_win(name):
     source, url = resolve_source_code(url="{0}/{1}.zip".format(base_url, name))
 
     # to hide non-error messages from subprocesses
-    if gs.verbosity() <= 2:
-        outdev = open(os.devnull, "w")
-    else:
-        outdev = sys.stdout
+    outdev = open(os.devnull, "w") if gs.verbosity() <= 2 else sys.stdout
 
     # download Addons ZIP file
     os.chdir(TMPDIR)  # this is just to not leave something behind
@@ -1965,10 +1960,7 @@ def install_extension_std_platforms(name, source, url, branch):
     path_to_src_code_message = _("Path to the source code:")
 
     # to hide non-error messages from subprocesses
-    if gs.verbosity() <= 2:
-        outdev = open(os.devnull, "w")
-    else:
-        outdev = sys.stdout
+    outdev = open(os.devnull, "w") if gs.verbosity() <= 2 else sys.stdout
 
     os.chdir(TMPDIR)  # this is just to not leave something behind
     srcdir = os.path.join(TMPDIR, name)
@@ -2582,10 +2574,7 @@ def resolve_known_host_service(url, name, branch):
                         )
                         return None, None
     if match:
-        if not actual_start:
-            actual_start = match["url_start"]
-        else:
-            actual_start = ""
+        actual_start = match["url_start"] if not actual_start else ""
         if "branch" in match["url_end"]:
             suffix = match["url_end"].format(
                 name=name,
@@ -2598,12 +2587,10 @@ def resolve_known_host_service(url, name, branch):
         )
         gs.verbose(_("Will use the following URL for download: {0}").format(url))
         return "remote_zip", url
-    else:
-        return None, None
+    return None, None
 
 
 def validate_url(url):
-    """"""
     if not os.path.exists(url):
         url_validated = False
         message = None
@@ -2723,7 +2710,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     # Handle local URLs
     if os.path.isdir(url):
         return "dir", os.path.abspath(url)
-    elif os.path.exists(url):
+    if os.path.exists(url):
         if url.endswith(".zip"):
             return "zip", os.path.abspath(url)
         for suffix in extract_tar.supported_formats:
@@ -2826,7 +2813,7 @@ def main():
         xmlurl = resolve_xmlurl_prefix(original_url, source=source)
         list_available_extensions(xmlurl)
         return 0
-    elif flags["a"]:
+    if flags["a"]:
         list_installed_extensions(toolboxes=flags["t"])
         return 0
 
@@ -2849,10 +2836,8 @@ def main():
             install_extension()
         else:
             if original_url == "" or flags["o"]:
-                """
-                Query GitHub API only if extension will be downloaded
-                from official GRASS GIS addon repository
-                """
+                # Query GitHub API only if extension will be downloaded
+                # from official GRASS GIS addons repository
                 get_addons_paths(gg_addons_base_dir=options["prefix"])
             source, url = resolve_source_code(
                 name=options["extension"],

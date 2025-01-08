@@ -1,21 +1,25 @@
 from os.path import join, exists
 import grass.lib.gis as libgis
+import ctypes
 
+
+# flake8: noqa: E402
 libgis.G_gisinit("")
 
 import grass.lib.vector as libvect
-import ctypes
-
-# import pygrass modules
 from grass.pygrass.vector.vector_type import VTYPE
 from grass.pygrass.errors import GrassError, must_be_open
 from grass.pygrass.gis import Location
-
-from grass.pygrass.vector.geometry import GEOOBJ as _GEOOBJ
-from grass.pygrass.vector.geometry import read_line, read_next_line
-from grass.pygrass.vector.geometry import Area as _Area
+from grass.pygrass.vector.geometry import (
+    GEOOBJ as _GEOOBJ,
+    read_line,
+    read_next_line,
+    Area as _Area,
+)
 from grass.pygrass.vector.abstract import Info
 from grass.pygrass.vector.basic import Bbox, Cats, Ilist
+
+# flake8: qa
 
 
 _NUMOF = {
@@ -70,8 +74,7 @@ class Vector(Info):
     def __repr__(self):
         if self.exist():
             return "%s(%r, %r)" % (self._class_name, self.name, self.mapset)
-        else:
-            return "%s(%r)" % (self._class_name, self.name)
+        return "%s(%r)" % (self._class_name, self.name)
 
     def __iter__(self):
         """::
@@ -108,13 +111,14 @@ class Vector(Info):
 
     @must_be_open
     def next(self):
-        return self.__next__()
+        return next(self)
 
     @must_be_open
     def rewind(self):
         """Rewind vector map to cause reads to start at beginning."""
         if libvect.Vect_rewind(self.c_mapinfo) == -1:
-            raise GrassError("Vect_rewind raise an error.")
+            msg = "Vect_rewind raise an error."
+            raise GrassError(msg)
 
     @must_be_open
     def write(self, geo_obj, cat=None, attrs=None):
@@ -206,10 +210,7 @@ class Vector(Info):
         if cat is not None and cat not in self._cats:
             self._cats.append(cat)
             if self.table is not None and attrs is not None:
-                attr = [
-                    cat,
-                ]
-                attr.extend(attrs)
+                attr = [cat, *attrs]
                 cur = self.table.conn.cursor()
                 cur.execute(self.table.columns.insert_str, attr)
                 cur.close()
@@ -225,7 +226,8 @@ class Vector(Info):
             self.c_mapinfo, geo_obj.gtype, geo_obj.c_points, geo_obj.c_cats
         )
         if result == -1:
-            raise GrassError("Not able to write the vector feature.")
+            msg = "Not able to write the vector feature."
+            raise GrassError(msg)
         if self._topo_level == 2:
             # return new feature id (on level 2)
             geo_obj.id = result
@@ -315,10 +317,9 @@ class VectorTopo(Vector):
                     key.step or 1,
                 )
             ]
-        elif isinstance(key, int):
+        if isinstance(key, int):
             return self.read(key)
-        else:
-            raise ValueError("Invalid argument type: %r." % key)
+        raise ValueError("Invalid argument type: %r." % key)
 
     @must_be_open
     def num_primitive_of(self, primitive):
@@ -392,19 +393,14 @@ class VectorTopo(Vector):
             if isinstance(_NUMOF[vtype], tuple):
                 fn, ptype = _NUMOF[vtype]
                 return fn(self.c_mapinfo, ptype)
-            else:
-                return _NUMOF[vtype](self.c_mapinfo)
-        else:
-            keys = "', '".join(sorted(_NUMOF.keys()))
-            raise ValueError("vtype not supported, use one of: '%s'" % keys)
+            return _NUMOF[vtype](self.c_mapinfo)
+        keys = "', '".join(sorted(_NUMOF.keys()))
+        raise ValueError("vtype not supported, use one of: '%s'" % keys)
 
     @must_be_open
     def num_primitives(self):
         """Return dictionary with the number of all primitives"""
-        output = {}
-        for prim in VTYPE.keys():
-            output[prim] = self.num_primitive_of(prim)
-        return output
+        return {prim: self.num_primitive_of(prim) for prim in VTYPE.keys()}
 
     @must_be_open
     def viter(self, vtype, idonly=False):
@@ -526,17 +522,16 @@ class VectorTopo(Vector):
                 )
                 for v_id in ilist
             )
-        else:
-            return [
-                read_line(
-                    feature_id=v_id,
-                    c_mapinfo=self.c_mapinfo,
-                    table=self.table,
-                    writeable=self.writeable,
-                    is2D=is2D,
-                )
-                for v_id in ilist
-            ]
+        return [
+            read_line(
+                feature_id=v_id,
+                c_mapinfo=self.c_mapinfo,
+                table=self.table,
+                writeable=self.writeable,
+                is2D=is2D,
+            )
+            for v_id in ilist
+        ]
 
     @must_be_open
     def read(self, feature_id):
@@ -646,7 +641,8 @@ class VectorTopo(Vector):
             self.c_mapinfo, cat, geo_obj.gtype, geo_obj.c_points, geo_obj.c_cats
         )
         if result == -1:
-            raise GrassError("Not able to write the vector feature.")
+            msg = "Not able to write the vector feature."
+            raise GrassError(msg)
 
         # return offset into file where the feature starts
         geo_obj.offset = result
@@ -659,7 +655,8 @@ class VectorTopo(Vector):
         :type feature_id: int
         """
         if libvect.Vect_rewrite_line(self.c_mapinfo, feature_id) == -1:
-            raise GrassError("C function: Vect_rewrite_line.")
+            msg = "C function: Vect_rewrite_line."
+            raise GrassError(msg)
 
     @must_be_open
     def restore(self, geo_obj):
@@ -668,16 +665,19 @@ class VectorTopo(Vector):
                 libvect.Vect_restore_line(self.c_mapinfo, geo_obj.offset, geo_obj.id)
                 == -1
             ):
-                raise GrassError("C function: Vect_restore_line.")
+                msg = "C function: Vect_restore_line."
+                raise GrassError(msg)
         else:
-            raise ValueError("The value have not an offset attribute.")
+            msg = "The value have not an offset attribute."
+            raise ValueError(msg)
 
     @must_be_open
     def bbox(self):
-        """Return the BBox of the vecor map"""
+        """Return the BBox of the vector map"""
         bbox = Bbox()
         if libvect.Vect_get_map_box(self.c_mapinfo, bbox.c_bbox) == 0:
-            raise GrassError("I can not find the Bbox.")
+            msg = "I can not find the Bbox."
+            raise GrassError(msg)
         return bbox
 
     def close(self, build=True, release=True):
@@ -855,7 +855,7 @@ class VectorTopo(Vector):
                 if not barray:
                     if error == -1:
                         raise GrassError(
-                            _("Unable to read line of feature %i" % (f_id))
+                            _("Unable to read line of feature %i") % (f_id)
                         )
                     if error == -2:
                         print("Empty feature %i" % (f_id))
@@ -864,10 +864,7 @@ class VectorTopo(Vector):
                 ok = libvect.Vect_cat_get(
                     ctypes.byref(line_c), field, ctypes.byref(cat)
                 )
-                if ok < 1:
-                    pcat = None
-                else:
-                    pcat = cat.value
+                pcat = None if ok < 1 else cat.value
 
                 wkb_list.append((f_id, pcat, ctypes.string_at(barray, size.value)))
                 libgis.G_free(barray)
@@ -947,7 +944,7 @@ class VectorTopo(Vector):
                     self.c_mapinfo, a_id, ctypes.byref(size)
                 )
                 if not barray:
-                    raise GrassError(_("Unable to read area with id %i" % (a_id)))
+                    raise GrassError(_("Unable to read area with id %i") % (a_id))
 
                 pcat = None
                 c_ok = libvect.Vect_get_area_cats(
@@ -974,10 +971,10 @@ if __name__ == "__main__":
     utils.create_test_vector_map(test_vector_name)
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
     from grass.pygrass.utils import get_mapset_vector
     from grass.script.core import run_command
 
     mset = get_mapset_vector(test_vector_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)

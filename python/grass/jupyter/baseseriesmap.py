@@ -25,7 +25,7 @@ import multiprocessing
 import grass.script as gs
 
 from .map import Map
-from .utils import get_number_of_cores
+from .utils import get_number_of_cores, save_gif
 
 
 class BaseSeriesMap:
@@ -210,3 +210,47 @@ class BaseSeriesMap:
             width="100%", display="inline-flex", flex_flow="row wrap"
         )
         return widgets.HBox([play, slider, out_img], layout=layout)
+
+    def save(
+        self,
+        filename,
+        duration=500,
+        label=True,
+        font=None,
+        text_size=12,
+        text_color="gray",
+    ):
+        """
+        Creates a GIF animation of rendered layers.
+
+        Text color must be in a format accepted by PIL ImageColor module. For supported
+        formats, visit:
+        https://pillow.readthedocs.io/en/stable/reference/ImageColor.html#color-names
+
+        param str filename: name of output GIF file
+        param int duration: time to display each frame; milliseconds
+        param bool label: include label on each frame
+        param str font: font file
+        param int text_size: size of label text
+        param str text_color: color to use for the text.
+        """
+
+        # Render images if they have not been already
+        if not self._layers_rendered:
+            self.render()
+
+        input_files = [self._base_filename_dict[index] for index in self._indices]
+
+        save_gif(
+            input_files,
+            filename,
+            duration=duration,
+            label=label,
+            labels=self._labels,
+            font=font,
+            text_size=text_size,
+            text_color=text_color,
+        )
+
+        # Display the GIF
+        return filename

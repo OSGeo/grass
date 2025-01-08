@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libsvm
     libtiff
-    libxml2
+    (libxml2.override { enableHttp = true; })
     netcdf
     pdal
     postgresql
@@ -100,8 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-cxx"
     "--with-fftw"
     "--with-freetype"
-    "--with-geos"
     "--with-gdal"
+    "--with-geos"
     "--with-lapack"
     "--with-libsvm"
     "--with-nls"

@@ -20,13 +20,12 @@ class Buffer(np.ndarray):
     def mtype(self):
         if self.dtype in CELL:
             return "CELL"
-        elif self.dtype in FCELL:
+        if self.dtype in FCELL:
             return "FCELL"
-        elif self.dtype in DCELL:
+        if self.dtype in DCELL:
             return DCELL
-        else:
-            err = "Raster type: %r not supported by GRASS."
-            raise TypeError(err % self.dtype)
+        err = "Raster type: %r not supported by GRASS."
+        raise TypeError(err % self.dtype)
 
     def __new__(
         cls, shape, mtype="FCELL", buffer=None, offset=0, strides=None, order=None
@@ -46,8 +45,8 @@ class Buffer(np.ndarray):
 
     def __array_wrap__(self, out_arr, context=None):
         """See:
-        http://docs.scipy.org/doc/numpy/user/
-        basics.subclassing.html#array-wrap-for-ufuncs"""
+        https://numpy.org/doc/stable/user/basics.subclassing.html#array-wrap-for-ufuncs-and-other-functions
+        """
         if out_arr.dtype == bool:
             # there is not support for boolean maps, so convert into integer
             out_arr = out_arr.astype(np.int32)

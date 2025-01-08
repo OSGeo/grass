@@ -44,10 +44,10 @@ def register_maps_in_space_time_dataset(
     unit=None,
     increment=None,
     dbif=None,
-    interval=False,
-    fs="|",
-    update_cmd_list=True,
-):
+    interval: bool = False,
+    fs: str = "|",
+    update_cmd_list: bool = True,
+) -> None:
     """Use this method to register maps in space time datasets.
 
     Additionally a start time string and an increment string can be
@@ -126,8 +126,7 @@ def register_maps_in_space_time_dataset(
     # create new stds only in the current mapset
     # remove all connections to any other mapsets
     # ugly hack !
-    currcon = {}
-    currcon[mapset] = dbif.connections[mapset]
+    currcon = {mapset: dbif.connections[mapset]}
     dbif.connections = currcon
 
     # The name of the space time dataset is optional
@@ -158,10 +157,7 @@ def register_maps_in_space_time_dataset(
 
     # Read the map list from file
     if file:
-        if hasattr(file, "readline"):
-            fd = file
-        else:
-            fd = open(file, "r")
+        fd = file if hasattr(file, "readline") else open(file)
 
         line = True
         while True:
@@ -264,10 +260,7 @@ def register_maps_in_space_time_dataset(
             end = row["end"]
 
         # Use the semantic label from file
-        if "semantic_label" in row:
-            semantic_label = row["semantic_label"]
-        else:
-            semantic_label = None
+        semantic_label = row.get("semantic_label", None)
 
         is_in_db = map_object.is_in_db(dbif, mapset)
 
@@ -470,8 +463,8 @@ def register_maps_in_space_time_dataset(
 
 
 def assign_valid_time_to_map(
-    ttype, map_object, start, end, unit, increment=None, mult=1, interval=False
-):
+    ttype, map_object, start, end, unit, increment=None, mult=1, interval: bool = False
+) -> None:
     """Assign the valid time to a map dataset
 
     :param ttype: The temporal type which should be assigned
@@ -596,8 +589,8 @@ def assign_valid_time_to_map(
 
 
 def register_map_object_list(
-    type, map_list, output_stds, delete_empty=False, unit=None, dbif=None
-):
+    type, map_list, output_stds, delete_empty: bool = False, unit=None, dbif=None
+) -> None:
     """Register a list of AbstractMapDataset objects in the temporal database
     and optional in a space time dataset.
 
@@ -642,10 +635,7 @@ def register_map_object_list(
             string = f"{id}|{start}|{end}\n"
             register_file.write(string)
 
-    if output_stds:
-        output_stds_id = output_stds.get_id()
-    else:
-        output_stds_id = None
+    output_stds_id = output_stds.get_id() if output_stds else None
 
     register_maps_in_space_time_dataset(
         type, output_stds_id, unit=unit, file=filename, dbif=dbif

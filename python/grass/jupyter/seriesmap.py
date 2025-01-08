@@ -20,7 +20,6 @@ from grass.grassdb.data import map_exists
 
 from .map import Map
 from .region import RegionManagerForSeries
-from .utils import save_gif
 from .baseseriesmap import BaseSeriesMap
 
 
@@ -159,55 +158,10 @@ class SeriesMap(BaseSeriesMap):
         (i.e. show or save).
         """
         if not self._baseseries_added:
-            raise RuntimeError(
+            msg = (
                 "Cannot render series since none has been added."
                 "Use SeriesMap.add_rasters() or SeriesMap.add_vectors()"
             )
+            raise RuntimeError(msg)
         tasks = [(i,) for i in range(self.baseseries)]
         self._render(tasks)
-
-    def save(
-        self,
-        filename,
-        duration=500,
-        label=True,
-        font=None,
-        text_size=12,
-        text_color="gray",
-    ):
-        """
-        Creates a GIF animation of rendered layers.
-
-        Text color must be in a format accepted by PIL ImageColor module. For supported
-        formats, visit:
-        https://pillow.readthedocs.io/en/stable/reference/ImageColor.html#color-names
-
-        param str filename: name of output GIF file
-        param int duration: time to display each frame; milliseconds
-        param bool label: include label on each frame
-        param str font: font file
-        param int text_size: size of label text
-        param str text_color: color to use for the text
-        """
-
-        # Render images if they have not been already
-        if not self._layers_rendered:
-            self.render()
-
-        tmp_files = []
-        for file in self._base_filename_dict.values():
-            tmp_files.append(file)
-
-        save_gif(
-            tmp_files,
-            filename,
-            duration=duration,
-            label=label,
-            labels=self._labels,
-            font=font,
-            text_size=text_size,
-            text_color=text_color,
-        )
-
-        # Display the GIF
-        return filename

@@ -241,8 +241,7 @@ class SwipeMapDialog(wx.Dialog):
         """Get raster maps"""
         if self.IsSimpleMode():
             return (self._firstRaster.GetValue(), self._secondRaster.GetValue())
-        else:
-            return (self._firstLayerList, self._secondLayerList)
+        return (self._firstLayerList, self._secondLayerList)
 
     def IsSimpleMode(self) -> bool:
         return bool(self._switchSizer.IsShown(self._firstPanel))

@@ -87,7 +87,7 @@ def vector_layer_db(map, layer, env=None):
     try:
         f = vector_db(map, env=env)[int(layer)]
     except KeyError:
-        fatal(_("Database connection not defined for layer %s") % layer)
+        fatal(_("Database connection not defined for layer %s") % layer, env=env)
 
     return f
 
@@ -129,10 +129,7 @@ def vector_columns(map, layer=None, getDict=True, env=None, **kwargs):
     s = read_command(
         "v.info", flags="c", map=map, layer=layer, quiet=True, env=env, **kwargs
     )
-    if getDict:
-        result = {}
-    else:
-        result = []
+    result = {} if getDict else []
     i = 0
     for line in s.splitlines():
         ctype, cname = line.split("|")
@@ -166,6 +163,7 @@ def vector_history(map, replace=False, env=None):
 
 def vector_info_topo(map, layer=1, env=None):
     """Return information about a vector map (interface to `v.info -t`).
+
     Example:
 
     >>> vector_info_topo("geology")  # doctest: +NORMALIZE_WHITESPACE
@@ -253,7 +251,8 @@ def vector_db_select(map, layer=1, env=None, **kwargs):
     except KeyError:
         error(
             _("Missing layer %(layer)d in vector map <%(map)s>")
-            % {"layer": layer, "map": map}
+            % {"layer": layer, "map": map},
+            env=env,
         )
         return {"columns": [], "values": {}}
 
@@ -262,13 +261,13 @@ def vector_db_select(map, layer=1, env=None, **kwargs):
         if key not in kwargs["columns"].split(","):
             # add key column if missing
             include_key = False
-            debug("Adding key column to the output")
+            debug("Adding key column to the output", env=env)
             kwargs["columns"] += "," + key
 
     ret = read_command("v.db.select", map=map, layer=layer, env=env, **kwargs)
 
     if not ret:
-        error(_("vector_db_select() failed"))
+        error(_("vector_db_select() failed"), env=env)
         return {"columns": [], "values": {}}
 
     columns = []
@@ -377,10 +376,7 @@ def vector_what(
     if "LC_ALL" in env:
         env["LC_ALL"] = "C"
 
-    if isinstance(map, (bytes, str)):
-        map_list = [map]
-    else:
-        map_list = map
+    map_list = [map] if isinstance(map, (bytes, str)) else map
 
     if layer:
         if isinstance(layer, (tuple, list)):

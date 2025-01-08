@@ -37,8 +37,7 @@ def GetUnicodeValue(value):
     if isinstance(value, bytes):
         enc = GetDbEncoding()
         return str(value, enc, errors="replace")
-    else:
-        return str(value)
+    return str(value)
 
 
 def GetDbEncoding():
@@ -102,9 +101,6 @@ class VectorDBInfo(VectorDBInfoBase):
         """Get attributes by coordinates (all available layers)
 
         Return line id or None if no line is found"""
-        line = None
-        nselected = 0
-
         try:
             data = gs.vector_what(
                 map=self.map,
@@ -124,9 +120,7 @@ class VectorDBInfo(VectorDBInfoBase):
             return None
 
         # process attributes
-        ret = {}
-        for key in ["Category", "Layer", "Table", "Id"]:
-            ret[key] = []
+        ret = {key: [] for key in ["Category", "Layer", "Table", "Id"]}
 
         for record in data:
             if "Table" not in record:

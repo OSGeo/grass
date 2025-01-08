@@ -1,7 +1,7 @@
 """
 @package web_services.widgets
 
-@brief Widgets for web services (WMS, WMTS, NasaOnEarh)
+@brief Widgets for web services (WMS, WMTS, NasaOnEarth)
 
 List of classes:
  - widgets::WSPanel
@@ -60,15 +60,14 @@ from gui_core.wrap import (
 )
 
 import grass.script as gs
+from grass.pydispatch.signal import Signal
 
 rinwms_path = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
 if rinwms_path not in sys.path:
     sys.path.append(rinwms_path)
 
-from wms_base import WMSDriversInfo
-from srs import Srs
-
-from grass.pydispatch.signal import Signal
+from wms_base import WMSDriversInfo  # noqa:E402
+from srs import Srs  # noqa:E402
 
 
 class WSPanel(wx.Panel):
@@ -251,14 +250,14 @@ class WSPanel(wx.Panel):
         )
 
         labels = {}
-        self.l_odrder_list = None
+        self.l_order_list = None
         if "WMS" in self.ws:
             labels["l_order"] = StaticBox(
                 parent=adv_setts_panel,
                 id=wx.ID_ANY,
                 label=_("Order of layers in raster"),
             )
-            self.l_odrder_list = wx.ListBox(
+            self.l_order_list = wx.ListBox(
                 adv_setts_panel,
                 id=wx.ID_ANY,
                 choices=[],
@@ -351,7 +350,7 @@ class WSPanel(wx.Panel):
             gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
             gridSizer.Add(
-                self.l_odrder_list,
+                self.l_order_list,
                 pos=(0, 0),
                 span=(4, 1),
                 flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
@@ -384,10 +383,7 @@ class WSPanel(wx.Panel):
                 continue
 
             if k in labels or k == "o":
-                if k != "o":
-                    label = labels[k]
-                else:
-                    label = param
+                label = labels[k] if k != "o" else param
 
                 gridSizer.Add(
                     label, flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0)
@@ -430,8 +426,8 @@ class WSPanel(wx.Panel):
 
     def OnUp(self, event):
         """Move selected layer up"""
-        if self.l_odrder_list.GetSelections():
-            pos = self.l_odrder_list.GetSelection()
+        if self.l_order_list.GetSelections():
+            pos = self.l_order_list.GetSelection()
             if pos:
                 self.sel_layers.insert(pos - 1, self.sel_layers.pop(pos))
             if pos > 0:
@@ -441,8 +437,8 @@ class WSPanel(wx.Panel):
 
     def OnDown(self, event):
         """Move selected to down"""
-        if self.l_odrder_list.GetSelections():
-            pos = self.l_odrder_list.GetSelection()
+        if self.l_order_list.GetSelections():
+            pos = self.l_order_list.GetSelection()
             if pos != len(self.sel_layers) - 1:
                 self.sel_layers.insert(pos + 1, self.sel_layers.pop(pos))
             if pos < len(self.sel_layers) - 1:
@@ -454,10 +450,7 @@ class WSPanel(wx.Panel):
         """Update order in list."""
 
         def getlayercaption(layer):
-            if layer["title"]:
-                cap = layer["title"]
-            else:
-                cap = layer["name"]
+            cap = layer["title"] or layer["name"]
 
             if layer["style"]:
                 if layer["style"]["title"]:
@@ -467,14 +460,14 @@ class WSPanel(wx.Panel):
             return cap
 
         layer_capts = [getlayercaption(sel_layer) for sel_layer in self.sel_layers]
-        self.l_odrder_list.Set(layer_capts)
-        if self.l_odrder_list.IsEmpty():
+        self.l_order_list.Set(layer_capts)
+        if self.l_order_list.IsEmpty():
             self.enableButtons(False)
         else:
             self.enableButtons(True)
             if selected is not None:
-                self.l_odrder_list.SetSelection(selected)
-                self.l_odrder_list.EnsureVisible(selected)
+                self.l_order_list.SetSelection(selected)
+                self.l_order_list.EnsureVisible(selected)
 
     def OnTransparent(self, event):
         checked = event.IsChecked()
@@ -521,10 +514,7 @@ class WSPanel(wx.Panel):
 
         self.conn = {"url": url, "password": password, "username": username}
 
-        conn_cmd = []
-        for k, v in self.conn.items():
-            if v:
-                conn_cmd.append("%s=%s" % (k, v))
+        conn_cmd = ["%s=%s" % (k, v) for k, v in self.conn.items() if v]
 
         self.ws_cmdl = self.ws_drvs[self.ws]["cmd"] + conn_cmd
 
@@ -538,10 +528,8 @@ class WSPanel(wx.Panel):
         if event.returncode != 0:
             if self.cmd_err_str:
                 self.cmd_err_str = (
-                    _(
-                        "Unable to download %s capabilities file\nfrom <%s>:\n"
-                        % (self.ws.replace("_", " "), self.conn["url"])
-                    )
+                    _("Unable to download %s capabilities file\nfrom <%s>:\n")
+                    % (self.ws.replace("_", " "), self.conn["url"])
                     + self.cmd_err_str
                 )
             self._postCapParsedEvt(error_msg=self.cmd_err_str)
@@ -559,8 +547,9 @@ class WSPanel(wx.Panel):
         except (OSError, ParseError) as error:
             error_msg = _(
                 "%s web service was not found in fetched capabilities file from "
-                "<%s>:\n%s\n" % (self.ws, self.conn["url"], str(error))
-            )
+                "<%s>:\n%s\n"
+            ) % (self.ws, self.conn["url"], str(error))
+
             if Debug.GetLevel() != 0:
                 Debug.msg(1, error_msg)
                 self._postCapParsedEvt(None)
@@ -634,7 +623,7 @@ class WSPanel(wx.Panel):
 
         # WMS standard - first layer in params is most bottom...
         # therefore layers order need to be reversed
-        l_st_list = [layer for layer in reversed(l_st_list)]
+        l_st_list.reverse()
         self.list.SelectLayers(l_st_list)
 
         params = {}
@@ -757,7 +746,6 @@ class WSPanel(wx.Panel):
         self.projs_list = []
         projs_list = []
 
-        intersect_proj = []
         first = True
         for curr in curr_sel_ls:
             layer_projs = curr["cap_intf_l"].GetLayerData("srs")
@@ -848,7 +836,7 @@ class WSPanel(wx.Panel):
         """Get formats
 
         WMS has formats defined generally for whole cap.
-        In WMTS and NASA OnEarh formats are defined for layer.
+        In WMTS and NASA OnEarth formats are defined for layer.
         """
         formats_label = []
         if layer is None:
@@ -927,7 +915,7 @@ class LayersList(TreeCtrl):
 
     def LoadData(self, cap=None):
         """Load data into list"""
-        # detete first all items
+        # delete first all items
         self.DeleteAllItems()
 
         if not cap:

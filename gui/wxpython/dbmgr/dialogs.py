@@ -222,10 +222,11 @@ class DisplayAttributesDialog(wx.Dialog):
                     ctype = columns[name]["ctype"]
                     value = columns[name]["values"][idx]
                     id = columns[name]["ids"][idx]
+                    widget = self.FindWindowById(id)
                     try:
-                        newvalue = self.FindWindowById(id).GetValue()
-                    except:
-                        newvalue = self.FindWindowById(id).GetLabel()
+                        newvalue = widget.GetValue()
+                    except AttributeError:
+                        newvalue = widget.GetLabel()
 
                     if newvalue:
                         try:
@@ -305,7 +306,6 @@ class DisplayAttributesDialog(wx.Dialog):
             columns = self.mapDBInfo.tables[table]
             for idx in range(len(columns[key]["values"])):
                 for name in columns.keys():
-                    type = columns[name]["type"]
                     value = columns[name]["values"][idx]
                     if value is None:
                         value = ""
@@ -393,10 +393,7 @@ class DisplayAttributesDialog(wx.Dialog):
         """
         if action:
             self.action = action
-            if action == "display":
-                enabled = False
-            else:
-                enabled = True
+            enabled = action != "display"
             self.closeDialog.Enable(enabled)
             self.FindWindowById(wx.ID_OK).Enable(enabled)
 
@@ -420,10 +417,7 @@ class DisplayAttributesDialog(wx.Dialog):
                 idx = 0
                 for layer in data["Layer"]:
                     layer = int(layer)
-                    if data["Id"][idx] is not None:
-                        tfid = int(data["Id"][idx])
-                    else:
-                        tfid = 0  # Area / Volume
+                    tfid = int(data["Id"][idx]) if data["Id"][idx] is not None else 0
                     if tfid not in self.cats:
                         self.cats[tfid] = {}
                     if layer not in self.cats[tfid]:
@@ -654,15 +648,14 @@ class ModifyTableRecord(wx.Dialog):
                     self.boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
                     cId += 1
                     continue
-                else:
-                    valueWin = SpinCtrl(
-                        parent=self.dataPanel,
-                        id=wx.ID_ANY,
-                        value=value,
-                        min=-1e9,
-                        max=1e9,
-                        size=(250, -1),
-                    )
+                valueWin = SpinCtrl(
+                    parent=self.dataPanel,
+                    id=wx.ID_ANY,
+                    value=value,
+                    min=-1e9,
+                    max=1e9,
+                    size=(250, -1),
+                )
             else:
                 valueWin = TextCtrl(
                     parent=self.dataPanel, id=wx.ID_ANY, value=value, size=(250, -1)

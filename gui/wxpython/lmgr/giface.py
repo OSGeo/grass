@@ -54,7 +54,9 @@ class LayerList:
         self._tree = tree
 
     def __len__(self):
-        return len([layer for layer in self])
+        # The list constructor calls __len__ as an optimization if available,
+        # causing a RecursionError
+        return len([layer for layer in self])  # noqa: C416 # pylint: disable=R1721
 
     def __iter__(self):
         """Iterates over the contents of the list."""
@@ -66,11 +68,11 @@ class LayerList:
 
     def __getitem__(self, index):
         """Select a layer from the LayerList using the index."""
-        return [layer for layer in self][index]
+        return list(self)[index]
 
     def __repr__(self):
         """Return a representation of the object."""
-        return "LayerList(%r)" % [layer for layer in self]
+        return "LayerList(%r)" % list(self)
 
     def GetSelectedLayers(self, checkedOnly=True):
         items = self._tree.GetSelectedLayer(multi=True, checkedOnly=checkedOnly)
@@ -86,9 +88,8 @@ class LayerList:
         item = self._tree.GetSelectedLayer(multi=False, checkedOnly=checkedOnly)
         if item is None:
             return None
-        else:
-            data = self._tree.GetPyData(item)
-            return Layer(item, data)
+        data = self._tree.GetPyData(item)
+        return Layer(item, data)
 
     def GetLayerInfo(self, layer):
         """For compatibility only, will be removed."""
@@ -120,11 +121,11 @@ class LayerList:
         self._tree.CheckItem(layer._layer, checked=checked)
 
     def SelectLayer(self, layer, select=True):
-        "Select or unselect layer"
+        """Select or unselect layer"""
         self._tree.SelectItem(layer._layer, select)
 
     def ChangeLayer(self, layer, **kwargs):
-        "Change layer (cmd, ltype, opacity)"
+        """Change layer (cmd, ltype, opacity)"""
         if "cmd" in kwargs:
             layer._pydata[0]["cmd"] = kwargs["cmd"]
             layerName, found = GetLayerNameFromCmd(kwargs["cmd"], fullyQualified=True)
@@ -147,12 +148,11 @@ class LayerList:
         items = self._tree.FindItemByData(key="name", value=name)
         if items is None:
             return []
-        else:
-            layers = []
-            for item in items:
-                layer = Layer(item, self._tree.GetPyData(item))
-                layers.append(layer)
-            return layers
+        layers = []
+        for item in items:
+            layer = Layer(item, self._tree.GetPyData(item))
+            layers.append(layer)
+        return layers
 
     def GetLayerByData(self, key, value):
         """Returns layer with specified.
@@ -168,8 +168,7 @@ class LayerList:
         item = self._tree.FindItemByData(key=key, value=value)
         if item is None:
             return None
-        else:
-            return Layer(item, self._tree.GetPyData(item))
+        return Layer(item, self._tree.GetPyData(item))
 
 
 class LayerManagerGrassInterface:
@@ -268,8 +267,7 @@ class LayerManagerGrassInterface:
     def GetMapWindow(self):
         if self.lmgr.GetMapDisplay(onlyCurrent=True):
             return self.lmgr.GetMapDisplay(onlyCurrent=True).GetMapWindow()
-        else:
-            return None
+        return None
 
     def GetProgress(self):
         return self.lmgr.goutput.GetProgressBar()

@@ -33,6 +33,7 @@
 
 #include <grass/gis.h>
 #include <grass/vector.h>
+#include <grass/raster.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include <grass/linkm.h>
@@ -419,8 +420,8 @@ int main(int argc, char *argv[])
         G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel "
                     "computation is disabled."));
 #endif
-    if (threads > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
-        G_warning(_("Parallel processing disabled due to active MASK."));
+    if (threads > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
         threads = 1;
     }
     if (devi) {

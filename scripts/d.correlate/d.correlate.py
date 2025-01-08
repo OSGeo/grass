@@ -54,7 +54,7 @@ def main():
 
     os.environ["GRASS_RENDER_FILE_READ"] = "TRUE"
 
-    colors = "red black blue green gray violet".split()
+    colors = ["red", "black", "blue", "green", "gray", "violet"]
     line = 2
     iloop = 0
     jloop = 0
@@ -73,7 +73,7 @@ def main():
                 gcore.run_command("r.stats", flags="cnA", input=(i, j), stdout=ofile)
                 ofile.close()
 
-                ifile = open(tmpfile, "r")
+                ifile = open(tmpfile)
                 first = True
                 for line in ifile:
                     f = line.rstrip("\r\n").split(" ")
@@ -95,7 +95,7 @@ def main():
                 p = gcore.feed_command("d.graph", color=color)
                 ofile = p.stdin
 
-                ifile = open(tmpfile, "r")
+                ifile = open(tmpfile)
                 for line in ifile:
                     f = line.rstrip("\r\n").split(" ")
                     x = float(f[0])

@@ -123,9 +123,7 @@ docs:
               - '**/*.png'
               - '**.cff'
               - CITING
-              - CHANGES
               - AUTHORS
-              - NEWS
               - TODO
           - all-globs-to-all-files:
               - '!doc/development/rfc/**'
@@ -147,7 +145,7 @@ notebook:
   - changed-files:
       - any-glob-to-any-file:
           - '**/*.ipynb'
-          - doc/notebooks/**
+          - doc/examples/notebooks/**
           - python/grass/jupyter/**
 C:
   - changed-files:

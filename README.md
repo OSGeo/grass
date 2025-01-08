@@ -23,18 +23,13 @@ visualization.
 Launch this repository in Binder and experiment with GRASS's Python API in
 Jupyter Notebooks by clicking the button below:
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OSGeo/grass/main?labpath=doc%2Fnotebooks%2Fjupyter_example.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OSGeo/grass/main?labpath=doc%2Fexamples%2Fnotebooks%2Fjupyter_example.ipynb)
 
 ## Contributing
 
 In general: you don't really need write access as you can simply open
 a [pull request](https://github.com/OSGeo/grass/pulls) to contribute to
 GRASS GIS. See [CONTRIBUTING file](CONTRIBUTING.md) for more details.
-
-How to get write access here
-
-Want to become a core developer? See
-[Procedure for gaining Git write access](https://trac.osgeo.org/grass/wiki/HowToContribute#WriteaccesstotheGRASScorerepository)
 
 ## How to compile GRASS
 
@@ -110,6 +105,11 @@ this issue, clean all the compiled files from the source code:
 ```bash
 make distclean
 ```
+
+## Further documents
+
+- [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md)
+- [Roadmap](https://grass.osgeo.org/about/roadmap/)
 
 ## Thanks to all contributors ❤
 

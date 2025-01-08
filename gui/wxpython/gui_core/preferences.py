@@ -28,6 +28,8 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
+from pathlib import Path
+
 try:
     import pwd
 
@@ -2021,8 +2023,6 @@ class PreferencesDialog(PreferencesBaseDialog):
 
     def OnLoadEpsgCodes(self, event):
         """Load EPSG codes from the file"""
-        win = self.FindWindowById(self.winId["projection:statusbar:projFile"])
-        path = win.GetValue()
         epsgCombo = self.FindWindowById(self.winId["projection:statusbar:epsg"])
         wx.BeginBusyCursor()
         try:
@@ -2186,8 +2186,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         dlg = wx.FontDialog(self, fontdata)
 
-        "FIXME: native font dialog does not initialize with current font"
-
+        # FIXME: native font dialog does not initialize with current font
         if dlg.ShowModal() == wx.ID_OK:
             outdata = dlg.GetFontData()
             font = outdata.GetChosenFont()
@@ -2268,10 +2267,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         """Enable/disable wheel zoom mode control"""
         choiceId = self.winId["display:mouseWheelZoom:selection"]
         choice = self.FindWindowById(choiceId)
-        if choice.GetSelection() == 2:
-            enable = False
-        else:
-            enable = True
+        enable = choice.GetSelection() != 2
         scrollId = self.winId["display:scrollDirection:selection"]
         self.FindWindowById(scrollId).Enable(enable)
 
@@ -2421,28 +2417,27 @@ class CheckListMapset(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMix
         """Load data into list"""
         self.InsertColumn(0, _("Mapset"))
         self.InsertColumn(1, _("Owner"))
-        ### self.InsertColumn(2, _('Group'))
+        # self.InsertColumn(2, _('Group'))
         gisenv = gs.gisenv()
         locationPath = os.path.join(gisenv["GISDBASE"], gisenv["LOCATION_NAME"])
 
         for mapset in self.parent.all_mapsets_ordered:
             index = self.InsertItem(self.GetItemCount(), mapset)
-            mapsetPath = os.path.join(locationPath, mapset)
-            stat_info = os.stat(mapsetPath)
+            stat_info = Path(locationPath, mapset).stat()
             if havePwd:
                 try:
                     self.SetItem(index, 1, "%s" % pwd.getpwuid(stat_info.st_uid)[0])
                 except KeyError:
                     self.SetItem(index, 1, "nobody")
                 # FIXME: get group name
-                ### self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
+                # self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
             else:
                 # FIXME: no pwd under MS Windows (owner: 0, group: 0)
                 self.SetItem(index, 1, "%-8s" % stat_info.st_uid)
-                ### self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
+                # self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid)
 
         self.SetColumnWidth(col=0, width=wx.LIST_AUTOSIZE)
-        ### self.SetColumnWidth(col = 1, width = wx.LIST_AUTOSIZE)
+        # self.SetColumnWidth(col = 1, width = wx.LIST_AUTOSIZE)
 
     def OnCheckItem(self, index, flag):
         """Mapset checked/unchecked"""

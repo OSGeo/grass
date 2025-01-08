@@ -27,6 +27,8 @@ import shutil
 import copy
 import tempfile
 
+from pathlib import Path
+
 import wx
 import wx.lib.colourselect as csel
 import wx.lib.scrolledpanel as scrolled
@@ -201,8 +203,7 @@ class RulesPanel:
             self.mainPanel.FindWindowById(id + 1000).Enable()
             self.mainPanel.FindWindowById(id + 2000).Enable()
             if self.mapType == "vector" and not self.parent.GetParent().colorTable:
-                vals = []
-                vals.append(self.mainPanel.FindWindowById(id + 1000).GetValue())
+                vals = [self.mainPanel.FindWindowById(id + 1000).GetValue()]
                 try:
                     vals.append(self.mainPanel.FindWindowById(id + 1 + 1000).GetValue())
                 except AttributeError:
@@ -271,8 +272,7 @@ class RulesPanel:
 
     def SetVectorRule(self, num, val):
         """Set vector rule"""
-        vals = []
-        vals.append(val)
+        vals = [val]
         try:
             vals.append(self.mainPanel.FindWindowById(num + 1).GetValue())
         except AttributeError:
@@ -316,12 +316,14 @@ class RulesPanel:
                             int, self.ruleslines[item][self.attributeType].split(":")
                         )
                     except ValueError as e:
-                        message = _("Bad color format. Use color format '0:0:0'")
+                        message = (
+                            _("Bad color format '%s'. Use color format '0:0:0'") % e
+                        )
                     self.mainPanel.FindWindowById(item + 2000).SetValue((r, g, b))
                 else:
                     value = float(self.ruleslines[item][self.attributeType])
                     self.mainPanel.FindWindowById(item + 2000).SetValue(value)
-            except:
+            except Exception:
                 continue
 
         if message:
@@ -403,12 +405,11 @@ class ColorTable(wx.Frame):
                 layer = sel
             else:
                 layer = self.layerTree.FindItemByData(key="type", value=self.mapType)
-        except:
+        except (AttributeError, TypeError):
             layer = None
         if layer:
             mapLayer = self.layerTree.GetLayerInfo(layer, key="maplayer")
             name = mapLayer.GetName()
-            type = mapLayer.GetType()
             self.selectionInput.SetValue(name)
             self.inmap = name
 
@@ -448,7 +449,7 @@ class ColorTable(wx.Frame):
             dialogTitle=_("Choose file to load color table"),
             buttonText=_("Load"),
             toolTip=_("Type filename or click to choose file and load color table"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_OPEN,
             changeCallback=self.OnLoadRulesFile,
         )
@@ -460,7 +461,7 @@ class ColorTable(wx.Frame):
             dialogTitle=_("Choose file to save color table"),
             toolTip=_("Type filename or click to choose file and save color table"),
             buttonText=_("Save"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             fileMode=wx.FD_SAVE,
             changeCallback=self.OnSaveRulesFile,
         )
@@ -698,7 +699,7 @@ class ColorTable(wx.Frame):
 
         self.rulesPanel.Clear()
 
-        fd = open(path, "r")
+        fd = open(path)
         self.ReadColorTable(ctable=fd.read())
         fd.close()
 
@@ -722,9 +723,7 @@ class ColorTable(wx.Frame):
             self.rulesPanel.ruleslines[count]["value"] = value
             self.rulesPanel.ruleslines[count]["color"] = color
             self.rulesPanel.mainPanel.FindWindowById(count + 1000).SetValue(value)
-            rgb = []
-            for c in color.split(":"):
-                rgb.append(int(c))
+            rgb = [int(c) for c in color.split(":")]
             self.rulesPanel.mainPanel.FindWindowById(count + 2000).SetColour(rgb)
             # range
             try:
@@ -974,10 +973,7 @@ class RasterColorTable(ColorTable):
             self.cr_label.SetLabel(_("Enter raster category values or percents"))
             return
 
-        if info["datatype"] == "CELL":
-            mapRange = _("range")
-        else:
-            mapRange = _("fp range")
+        mapRange = _("range") if info["datatype"] == "CELL" else _("fp range")
         self.cr_label.SetLabel(
             _("Enter raster category values or percents (%(range)s = %(min)d-%(max)d)")
             % {
@@ -1406,11 +1402,8 @@ class VectorColorTable(ColorTable):
             idx += 1
             self.properties["tmpColumn"] = name + "_" + str(idx)
 
-        if self.version7:
-            modul = "v.db.addcolumn"
-        else:
-            modul = "v.db.addcol"
-        ret = RunCommand(
+        modul = "v.db.addcolumn" if self.version7 else "v.db.addcol"
+        RunCommand(
             modul,
             parent=self,
             map=self.inmap,
@@ -1424,11 +1417,8 @@ class VectorColorTable(ColorTable):
             return
 
         if self.inmap:
-            if self.version7:
-                modul = "v.db.dropcolumn"
-            else:
-                modul = "v.db.dropcol"
-            ret = RunCommand(
+            modul = "v.db.dropcolumn" if self.version7 else "v.db.dropcol"
+            RunCommand(
                 modul,
                 map=self.inmap,
                 layer=self.properties["layer"],
@@ -1449,10 +1439,7 @@ class VectorColorTable(ColorTable):
         self.sourceColumn.SetValue("cat")
         self.properties["sourceColumn"] = self.sourceColumn.GetValue()
 
-        if self.attributeType == "color":
-            type = ["character"]
-        else:
-            type = ["integer"]
+        type = ["character"] if self.attributeType == "color" else ["integer"]
         self.fromColumn.InsertColumns(
             vector=self.inmap,
             layer=vlayer,
@@ -1499,11 +1486,8 @@ class VectorColorTable(ColorTable):
             self.columnsProp[self.attributeType]["name"]
             not in self.fromColumn.GetColumns()
         ):
-            if self.version7:
-                modul = "v.db.addcolumn"
-            else:
-                modul = "v.db.addcol"
-            ret = RunCommand(
+            modul = "v.db.addcolumn" if self.version7 else "v.db.addcol"
+            RunCommand(
                 modul,
                 map=self.inmap,
                 layer=self.properties["layer"],
