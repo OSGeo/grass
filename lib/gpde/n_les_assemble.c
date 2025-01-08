@@ -875,6 +875,8 @@ int N_les_integrate_dirichlet_2d(N_les *les, N_geom_data *geom,
                 count++;
         }
     }
+    G_free(dvect1);
+    G_free(dvect2);
 
     return 0;
 }

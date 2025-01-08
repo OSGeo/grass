@@ -26,7 +26,7 @@ In the following example it print only DATE and SOURCE columns for data
 before 1900-01-01.
 
 <div class="code"><pre>
-t.vect.db.select input=shoreline column=DATE,SOURCE t_where="start_time < 1900"
+t.vect.db.select input=shoreline column=DATE,SOURCE t_where="start_time &lt; 1900"
 start_time|end_time|DATE|SOURCE
 1849|1873|01/01/1858|NOAA/USGS
 1849|1873|01/01/1857|NOAA/USGS

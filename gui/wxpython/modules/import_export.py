@@ -337,11 +337,9 @@ class ImportDialog(wx.Dialog):
         if self.importType == "gdal":
             nBands = int(userData.get("nbands", 1)) if userData else 1
 
-            if UserSettings.Get(group="rasterLayer", key="opaque", subkey="enabled"):
-                nFlag = True
-            else:
-                nFlag = False
-
+            nFlag = bool(
+                UserSettings.Get(group="rasterLayer", key="opaque", subkey="enabled")
+            )
             for i in range(1, nBands + 1):
                 nameOrig = name
                 if nBands > 1:

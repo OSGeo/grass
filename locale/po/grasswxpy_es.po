@@ -1130,12 +1130,12 @@ msgstr "Las configuraciones de la vista 3D se han guardado en el archivo <%s>."
 msgid ""
 "This module requires the NumPy module, which could not be imported. It "
 "probably is not installed (it's not part of the standard Python "
-"distribution). See the Numeric Python site (http://numpy.scipy.org) for "
+"distribution). See the Numeric Python site (https://numpy.org) for "
 "information on downloading source or binaries."
 msgstr ""
-"Este módulo requiere el módulo NumP, que no pudo ser importado. "
+"Este módulo requiere el módulo NumPy, que no pudo ser importado. "
 "Probablemente no está instalado (no es parte de la distibución estándar de "
-"Python). Ver el site Numérico de Python (http://numpy.scipy.org) para más "
+"Python). Ver el site Numérico de Python (https://numpy.org) para más "
 "información sobre la fuente de descarga o binarios."
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
@@ -8127,7 +8127,7 @@ msgstr "Disolver contornos"
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 #, fuzzy
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr ""
 "Disuelve contornos entre áreas adyacentes que comparten un número de "
@@ -13890,7 +13890,7 @@ msgid "Zoom to saved region extents"
 msgstr "Acercamiento a la extensión de la región guardada (zoom to saved...)"
 
 #: ../gui/wxpython/mapwin/buffered.py:2103
-msgid "Set compulational region from named region"
+msgid "Set computational region from named region"
 msgstr "Definir región computacional desde la región nombrada"
 
 #: ../gui/wxpython/mapwin/buffered.py:2114
@@ -15348,7 +15348,7 @@ msgstr "Error:"
 
 #: ../gui/wxpython/core/gcmd.py:504
 #, python-format
-msgid "Unable to exectute command: '%s'"
+msgid "Unable to execute command: '%s'"
 msgstr "No se puede ejecutar el comando: '%s'"
 
 #: ../gui/wxpython/core/utils.py:50
@@ -15428,7 +15428,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/menutree.py:155
 #, python-format
-msgid "Unknow tag %s"
+msgid "Unknown tag %s"
 msgstr "Etiqueta desconocida %s"
 
 #: ../gui/wxpython/core/debug.py:46
@@ -16107,10 +16107,6 @@ msgstr "Definir región computacional a partir de la visualización"
 #: ../gui/wxpython/mapdisp/frame.py:1528
 msgid "Set computational region extent interactively"
 msgstr "Definir extensión de la región computacional de manera interactiva"
-
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
-msgstr "Establecer región computacional desde región nombrada"
 
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
@@ -19292,19 +19288,19 @@ msgid "Statistics is not support for DBF tables."
 msgstr "Las estadísticas no están soportadas para tablas DBF."
 
 #: ../gui/wxpython/dbmgr/base.py:4062
-msgid "Unable to calculte statistics."
+msgid "Unable to calculate statistics."
 msgstr "No es posible calcular estadísticas."
 
 #: ../gui/wxpython/dbmgr/base.py:4071
 #, python-format
 msgid ""
-"Unable to calculte statistics. Invalid number of lines %d (should be %d)."
+"Unable to calculate statistics. Invalid number of lines %d (should be %d)."
 msgstr ""
 "No se pueden calcular las estadísticas. Número de líneas %d inválido (debe "
 "ser %d)."
 
 #: ../gui/wxpython/dbmgr/base.py:4098
-msgid "Unable to calculte standard deviation."
+msgid "Unable to calculate standard deviation."
 msgstr "No es posible calcular desviación estándar."
 
 #: ../gui/wxpython/dbmgr/base.py:4106
@@ -22327,12 +22323,6 @@ msgstr "etiquetas:"
 
 #~ msgid "Deactive overwrite"
 #~ msgstr "Desactivar sobreescribir"
-
-#~ msgid "Systematic contiguos"
-#~ msgstr "Sistemático continuo"
-
-#~ msgid "Systematic non contiguos"
-#~ msgstr "Sistemático no continuo"
 
 #, python-format
 #~ msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."

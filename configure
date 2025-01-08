@@ -10411,38 +10411,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
 printf "%s\n" "#define HAVE_PDAL 1" >>confdefs.h
 
 
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether to use PDAL NoFilenameWriter" >&5
-printf %s "checking whether to use PDAL NoFilenameWriter... " >&6; }
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <pdal/Writer.hpp>
-  class St:public pdal::NoFilenameWriter {};
-int
-main (void)
-{
-
-  class NFWTest : public pdal::NoFilenameWriter {};
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"
-then :
-
-
-printf "%s\n" "#define HAVE_PDAL_NOFILENAMEWRITER 1" >>confdefs.h
-
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-printf "%s\n" "yes" >&6; }
-
-else $as_nop
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam \
-    conftest$ac_exeext conftest.$ac_ext
-
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 fi

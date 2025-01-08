@@ -71,9 +71,7 @@ def updateData(data, modules):
         if node.tag != "menuitem":
             continue
 
-        item = {}
-        for child in node:
-            item[child.tag] = child.text
+        item = {child.tag: child.text for child in node}
 
         if "command" not in item:
             continue

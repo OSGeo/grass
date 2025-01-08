@@ -53,7 +53,8 @@ def read_ppm(src):
     j = text.find("\n", i)
     maxval = text[i:j]
     if int(maxval) != 255:
-        raise OSError("Max value in image != 255")
+        msg = "Max value in image != 255"
+        raise OSError(msg)
     i = j + 1
     return array.array("B", text[i:])
 

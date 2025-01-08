@@ -8,7 +8,7 @@ a link does not match the <b>old_database</b> it is left untouched.
 
 <p>
 If no new database is given, the default datase of the mapset is used as
-printed by <tt>db.connect -g</tt>. If no old database is given, all
+printed by <code>db.connect -g</code>. If no old database is given, all
 layers without a link in the new database will be liniked to the new
 database. If an old database is given, only links in the old database
 will be changed.
@@ -24,7 +24,7 @@ column).
 
 The value of the <b>old_database</b> option needs to be the exact
 string which appears as the fourth field printed by
-<tt>v.db.connect -g</tt>.
+<code>v.db.connect -g</code>.
 
 <div class="code"><pre>
 v.db.connect -g map=census
@@ -33,8 +33,8 @@ v.db.connect -g map=census
 
 <em>v.db.reconnect.all</em> respect also variables to be
 substituted. In the example above,
-database <tt>/home/user/grassdata/nc_spm_base/PERMANENT/dbf/</tt> can
-be also defined as <tt>'$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'</tt>
+database <code>/home/user/grassdata/nc_spm_base/PERMANENT/dbf/</code> can
+be also defined as <code>'$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'</code>
 (see examples).
 
 <p>
@@ -44,7 +44,7 @@ automatically only when <b>-d</b> flag is given.
 
 <p>
 Also note that <em>v.db.reconnect.all</em> doesn't change default
-database driver or database (<tt>db.connect -p</tt>). Default database
+database driver or database (<code>db.connect -p</code>). Default database
 connection settings for newly created attribute data can be defined
 by <em><a href="db.connect.html">db.connect</a></em>.
 

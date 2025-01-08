@@ -31,7 +31,7 @@ r.external.out directory=$HOME/gisoutput/ format="GTiff" option="BIGTIFF=YES,COM
 # prepare sample analysis
 g.region raster=elevation -p
 
-# perform GRASS calculation (here: filter by height, write > 120m, NULL otherwise)
+# perform GRASS calculation (here: filter by height, write &gt; 120m, NULL otherwise)
 # this will store the output map directly as GeoTIFF, so we use .tif extension:
 r.mapcalc "elev_filt.tif = if(elevation &gt; 120.0, elevation, null() )"
 

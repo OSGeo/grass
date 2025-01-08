@@ -89,7 +89,7 @@ v.category myroads_net_iso option=report
 #1          0 - &lt; 1000
 #2       1000 - &lt; 2000
 #3       2000 - &lt; 5000
-#4             >= 5000
+#4             &gt;= 5000
 </pre></div>
 
 To display the result, run for example:
@@ -162,7 +162,7 @@ v.db.addtable myroads_net_iso_time columns="cat integer,trav_time varchar(20),GR
 v.db.update map=myroads_net_iso_time layer=1 column=trav_time value="0 - 1" where="cat = 1"
 v.db.update map=myroads_net_iso_time layer=1 column=trav_time value="1 - 2" where="cat = 2"
 v.db.update map=myroads_net_iso_time layer=1 column=trav_time value="2 - 5" where="cat = 3"
-v.db.update map=myroads_net_iso_time layer=1 column=trav_time value="> 5" where="cat = 4"
+v.db.update map=myroads_net_iso_time layer=1 column=trav_time value="&gt; 5" where="cat = 4"
 # colors
 # cats=1: blue
 v.db.update map=myroads_net_iso_time layer=1 column=GRASSRGB value="000:000:255" where="cat = 1"

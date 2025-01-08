@@ -158,5 +158,6 @@ FILTER *get_filter(char *name, int *nfilters, char *title)
     }
 
     *nfilters = count;
+    fclose(fd);
     return filter;
 }

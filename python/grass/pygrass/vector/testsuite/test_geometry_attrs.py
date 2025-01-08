@@ -32,7 +32,7 @@ class GeometryAttrsTestCase(TestCase):
             cls.vect.close()
             cls.c_mapinfo = None
 
-        """Remove the generated vector map, if exist"""
+        # Remove the generated vector map, if exists
         cls.runModule("g.remove", flags="f", type="vector", name=cls.tmpname)
 
     def test_getitem(self):

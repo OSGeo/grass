@@ -2,7 +2,7 @@
 <html>
 <head>
  <meta http-equiv="content-type" content="text/html;charset=utf-8">
- <title>modifications made to <em>r3.showdspf</em></title>
+ <title>modifications made to r3.showdspf</title>
  <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
 
@@ -12,7 +12,7 @@
 IrisGL (running only on SGI workstations) to OpenGL (running on any OpenGL-capable UNIX workstation)</b>
 
 <p>The following files were changed (and perhaps renamed during conversion)<br>
-</font><tt>do_color.c -&gt; do_color_ogl.c<br>
+</font><code>do_color.c -&gt; do_color_ogl.c<br>
 draw_cap.c -&gt; draw_cap_ogl.c<br>
 draw_polys.c -&gt; draw_polys_ogl.c<br>
 draw_cappolys.c -&gt; draw_cappolys_ogl.c<br>
@@ -20,27 +20,27 @@ main.c -&gt; main_ogl.c<br>
 init_caps.c -&gt; init_caps.c<br>
 vizual.h -&gt; vizual.h<br>
 Gmakefile -&gt; Gmakefile<br>
-</tt><br>
+</code><br>
 <font size="4">The following files are new files<br>
-</font><tt>new_init_graphics.c<br>
+</font><code>new_init_graphics.c<br>
 kns_defines.h<br>
 kns_globals.h<br>
 togif.c<br>
 togif.h<br>
-</tt><br>
+</code><br>
 <font size="4">The following files are unchanged:<br>
-</font><tt>cap_data.c<br>
+</font><code>cap_data.c<br>
 init_caps.c<br>
 debugf.c<br>
 thresh_array.c<br>
 make_header.c<br>
 r3_data.c<br>
 r3_find.c<br>
-</tt><br>
+</code><br>
 <font size="4">The following files removed since they were made unnecessary<br>
-</font><tt>init_graphics.c<br>
+</font><code>init_graphics.c<br>
 dump_rect.c -&gt; functions moved to new_init_graphics.c<br>
-</tt>axes2.c<br>
+</code>axes2.c<br>
 <br>
 <font size="4" color="#ff0000"><b>*** Disclaimer ***</b></font><font size="4"><br>
 </font>The porting effort from IrisGL to OpenGL was performed with the goal of just getting things to run with

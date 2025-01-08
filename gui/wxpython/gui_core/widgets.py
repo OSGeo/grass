@@ -1052,7 +1052,7 @@ class PlacementValidator(BaseValidator):
         super().__init__()
 
     def _enableDisableBtn(self, enable):
-        """Enable/Disable buttomn
+        """Enable/Disable button
 
         :param bool enable: Enable/Disable btn
         """

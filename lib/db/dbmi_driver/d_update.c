@@ -1,7 +1,7 @@
 /*!
  * \file db/dbmi_driver/d_update.c
  *
- * \brief DBMI Library (driver) - update statemets
+ * \brief DBMI Library (driver) - update statements
  *
  * (C) 1999-2008 by the GRASS Development Team
  *

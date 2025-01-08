@@ -30,7 +30,7 @@ db.out.ogr input=precip_30ynormals output=precip_30ynormals.dbf format=DBF
 
 <div class="code"><pre>
 db.out.ogr input=precip_30ynormals \
-	   output="PG:host=localhost dbname=meteo user=neteler" \
+           output="PG:host=localhost dbname=meteo user=neteler" \
            format=PostgreSQL
 # verify
 echo "SELECT * FROM precip_30ynormals" | psql meteo

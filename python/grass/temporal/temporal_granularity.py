@@ -37,7 +37,7 @@ CONVERT_GRAN["minute"] = "60 second"
 ###############################################################################
 
 
-def check_granularity_string(granularity, temporal_type):
+def check_granularity_string(granularity, temporal_type) -> bool:
     """Check if the granularity string is valid
 
     :param granularity: The granularity string
@@ -1176,7 +1176,7 @@ def gran_plural_unit(gran):
 ########################################################################
 
 
-def gran_to_gran(from_gran, to_gran="days", shell=False):
+def gran_to_gran(from_gran, to_gran="days", shell: bool = False):
     """Converts the computed absolute granularity of a STDS to a smaller
     granularity based on the Gregorian calendar hierarchy that 1 year
     equals 12 months or 365.2425 days or 24 * 365.2425 hours or 86400 *

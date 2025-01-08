@@ -114,7 +114,10 @@ int main(int argc, char *argv[])
         Rast_get_window(&window);
         azimuth = atof(azim->answer);
         /* Warning: make buffers and output after set window */
-        strcpy(dem.name, base->answer);
+        if (G_strlcpy(dem.name, base->answer, sizeof(dem.name)) >=
+            sizeof(dem.name)) {
+            G_fatal_error(_("DEM name <%s> is too long"), base->answer);
+        }
         /* Set window to DEM file */
         Rast_get_window(&window);
         Rast_get_cellhd(dem.name, "", &hd_dem);
@@ -122,7 +125,10 @@ int main(int argc, char *argv[])
         dem.fd = Rast_open_old(dem.name, "");
         dem.type = Rast_get_map_type(dem.fd);
         /* Open and buffer of the output file */
-        strcpy(out.name, output->answer);
+        if (G_strlcpy(out.name, output->answer, sizeof(out.name)) >=
+            sizeof(out.name)) {
+            G_fatal_error(_("Output name <%s> is too long"), output->answer);
+        }
         out.fd = Rast_open_new(output->answer, DCELL_TYPE);
         out.rast = Rast_allocate_buf(out.type);
         /* Open and buffer of the elevation file */
@@ -169,7 +175,11 @@ int main(int argc, char *argv[])
         for (i = 0; input->answers[i] != NULL; i++) {
             G_message(_("Band %s: "), input->answers[i]);
             /* Abre fichero de bandas y el de salida */
-            strcpy(band.name, input->answers[i]);
+            if (G_strlcpy(band.name, input->answers[i], sizeof(band.name)) >=
+                sizeof(band.name)) {
+                G_fatal_error(_("Band name <%s> is too long"),
+                              input->answers[i]);
+            }
             Rast_get_cellhd(band.name, "", &hd_band);
             Rast_set_window(
                 &hd_band); /* Antes de out_open y allocate para mismo size */

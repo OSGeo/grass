@@ -9,7 +9,7 @@ Each line of input must follow one of the following formats:
 PATH_ID FROM_X FROM_Y TO_X TO_Y START_TIME MIN_CHANGE MAX_CHANGES WALK_CHANGE
 PATH_ID FROM_STOP TO_STOP START_TIME MIN_CHANGE MAX_CHANGES WALK_CHANGE
 </pre></div>
-where PATH_ID is the identificator of a query that is used in the
+where PATH_ID is the identifier of a query that is used in the
 output map to differentiate between queries. Search begins at
 START_TIME. MIN_CHANGE gives the minimum number of time
 (inclusively) for a change from one route to another. MAX_CHANGES
@@ -42,7 +42,7 @@ cat|path_id|stop_id|index|arr_time|dep_time
 3|47|300|3|24|24
 </pre></div>
 where CAT is the category of a point in the map, PATH_ID is the path
-identificator, STOP_ID is the identificator of the stop as used in
+identifier, STOP_ID is the identifier of the stop as used in
 the input map, INDEX is the index of the stop on the path (i.e,
 index=1 is the first stop visited, ...) and ARR_TIME and DEP_TIME
 denote the arrival time and departure time respectively. Arrival
@@ -51,14 +51,14 @@ and departure time for the last stop is always equal to the arrival
 time.
 <br>
 The table linked to the second layer corresponds to subroutes taken
-between stops. The following table is obtainedd for the above query:
+between stops. The following table is obtained for the above query:
 <div class="code"><pre>
 cat|path_id|from_id|to_id|route_id|index|from_time|to_time
 1|47|130|250|15|1|15|22
 2|47|250|300|-1|2|22|24
 </pre></div>
 where CAT is the category of lines of subroute between stops FROM_ID
-to TO_ID, ROUTE_ID is the identificator of the route taken or -1 if
+to TO_ID, ROUTE_ID is the identifier of the route taken or -1 if
 walking, INDEX and PATH_ID are as above and FROM_TIME and TO_TIME
 denote the times between which the route is taken.
 <br>
@@ -67,7 +67,7 @@ stops. If a subroute is taken between two stops then a line segment
 is added between two corresponding points. Finally, instead of
 straight line segment, the actual paths of routes can be given in <b>
 paths</b> layer. If this parameter is used then each line in the
-input map must contain identificators as category numbers of all
+input map must contain identifiers as category numbers of all
 routes passing through the line. The module then finds the path
 between two stops and writes this path instead. In case of walking
 from one stop to another, straight line between the stops is used.
@@ -83,7 +83,7 @@ to two routes. For example, if there is a bus line that leaves every
 still needs to be a separate route for every time. For each stop
 (given by the category number of the point) the table storing
 information about the routes must contain the list of all routes
-stopping at the stop(given by route identificators) together with
+stopping at the stop(given by route identifiers) together with
 arrival times. That is, the table must contain three columns: stop -
 which is the key of the table, <b>route_id</b> and <b>stop_time</b>
 where each triple corresponds to a route arriving to a stop and a
@@ -122,7 +122,7 @@ Beware that this only means that it is possible to walk from stop
 
 <h2>EXAMPLES</h2>
 
-To find a path from stop with identificator 130 to stop with
+To find a path from stop with identifier 130 to stop with
 category 300, starting at time 0, with one time unit for change,
 maximum of 5 changes and with walking not considered a change of
 route, we use the following command:

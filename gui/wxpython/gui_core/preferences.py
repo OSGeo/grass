@@ -2186,8 +2186,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         dlg = wx.FontDialog(self, fontdata)
 
-        "FIXME: native font dialog does not initialize with current font"
-
+        # FIXME: native font dialog does not initialize with current font
         if dlg.ShowModal() == wx.ID_OK:
             outdata = dlg.GetFontData()
             font = outdata.GetChosenFont()

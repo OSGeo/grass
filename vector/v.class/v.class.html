@@ -35,19 +35,20 @@ a warning and reduces the number of breaks, but the probabilities used
 are those of the number of breaks asked for.
 
 <p>The <em>discont</em> algorithm systematically searches discontinuities
-in the slope of the cumulated frequencies curve, by approximating this
+in the slope of the cumulative frequencies curve, by approximating this
 curve through straight line segments whose vertices define the class
 breaks. The first approximation is a straight line which links the two
 end nodes of the curve. This line is then replaced by a two-segmented
 polyline whose central node is the point on the curve which is farthest
 from the preceding straight line. The point on the curve furthest from
 this new polyline is then chosen as a new node to create break up one of
-the two preceding segments, and so forth. The problem of the difference
-in terms of units between the two axes is solved by rescaling both
-amplitudes to an interval between 0 and 1. In the original algorithm,
-the process is stopped when the difference between the slopes of the two
-new segments is no longer significant (alpha = 0.05). As the slope is
-the ratio between the frequency and the amplitude of the corresponding
+the two preceding segments, and so forth.
+
+<p>The problem of the difference in terms of units between the two axes
+is solved by rescaling both amplitudes to an interval between 0 and 1.
+In the original algorithm, the process is stopped when the difference between
+the slopes of the two new segments is no longer significant (alpha = 0.05). As
+the slope is the ratio between the frequency and the amplitude of the corresponding
 interval, i.e. its density, this effectively tests whether the frequencies
 of the two newly proposed classes are different from those obtained by
 simply distributing the sum of their frequencies amongst them in proportion

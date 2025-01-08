@@ -111,8 +111,8 @@ def adjust_region(width, height):
 
     region["nsres"] = mapheight / height
     region["ewres"] = mapwidth / width
-    region["rows"] = int(round(mapheight / region["nsres"]))
-    region["cols"] = int(round(mapwidth / region["ewres"]))
+    region["rows"] = round(mapheight / region["nsres"])
+    region["cols"] = round(mapwidth / region["ewres"])
     region["cells"] = region["rows"] * region["cols"]
 
     kwdata = [

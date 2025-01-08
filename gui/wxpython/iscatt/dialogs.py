@@ -425,9 +425,7 @@ class SettingsDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
 
         row = 0
-        setts = {}
-        setts.update(self.colorsSetts)
-        setts.update(self.sizeSetts)
+        setts = {**self.colorsSetts, **self.sizeSetts}
 
         settsOrder = [
             "sel_pol",

@@ -119,17 +119,17 @@ def main():
 
     # Identify all gaps and create new names
     count = 0
-    for _map in maps:
-        if _map.get_id() is None:
+    for map_ in maps:
+        if map_.get_id() is None:
             count += 1
             if sp.get_temporal_type() == "absolute" and tsuffix in {"gran", "time"}:
-                _id = "{ba}@{ma}".format(ba=base, ma=mapset)
+                id_ = "{ba}@{ma}".format(ba=base, ma=mapset)
             else:
                 map_name = tgis.create_numeric_suffix(base, num + count, tsuffix)
-                _id = "{name}@{ma}".format(name=map_name, ma=mapset)
-            _map.set_id(_id)
+                id_ = "{name}@{ma}".format(name=map_name, ma=mapset)
+            map_.set_id(id_)
 
-            gap_list.append(_map)
+            gap_list.append(map_)
 
     if len(gap_list) == 0:
         gs.message(_("No gaps found"))
@@ -140,16 +140,16 @@ def main():
     tb.build(maps)
 
     # Do some checks before computation
-    for _map in gap_list:
-        if not _map.get_precedes() or not _map.get_follows():
+    for map_ in gap_list:
+        if not map_.get_precedes() or not map_.get_follows():
             gs.fatal(_("Unable to determine successor and predecessor of a gap."))
 
-        if len(_map.get_precedes()) > 1:
+        if len(map_.get_precedes()) > 1:
             gs.warning(
                 _("More than one successor of the gap found. Using the first found.")
             )
 
-        if len(_map.get_follows()) > 1:
+        if len(map_.get_follows()) > 1:
             gs.warning(
                 _(
                     "More than one predecessor of the gap found. "
@@ -160,9 +160,9 @@ def main():
     # Interpolate the maps using parallel processing
     result_list = []
 
-    for _map in gap_list:
-        predecessor = _map.get_follows()[0]
-        successor = _map.get_precedes()[0]
+    for map_ in gap_list:
+        predecessor = map_.get_follows()[0]
+        successor = map_.get_precedes()[0]
 
         gran = sp.get_granularity()
         tmpval, start = predecessor.get_temporal_extent_as_tuple()
@@ -170,7 +170,7 @@ def main():
 
         # Now resample the gap
         map_matrix = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
-            (_map,), start, end, gran
+            (map_,), start, end, gran
         )
 
         map_names = []
@@ -210,7 +210,7 @@ def main():
                             "Map with name <%s> already exists. "
                             "Please use another base name."
                         )
-                        % (_id)
+                        % (id_)
                     )
                 elif new_map.is_in_db(dbif):
                     overwrite_flags[new_id] = True
@@ -235,24 +235,24 @@ def main():
     process_queue.wait()
 
     # Insert new interpolated maps in temporal database and dataset
-    for _map in result_list:
-        id = _map.get_id()
+    for map_ in result_list:
+        id = map_.get_id()
         if overwrite_flags[id]:
-            if _map.is_time_absolute():
-                start, end = _map.get_absolute_time()
-                if _map.is_in_db():
-                    _map.delete(dbif)
-                _map = sp.get_new_map_instance(id)
-                _map.set_absolute_time(start, end)
+            if map_.is_time_absolute():
+                start, end = map_.get_absolute_time()
+                if map_.is_in_db():
+                    map_.delete(dbif)
+                map_ = sp.get_new_map_instance(id)
+                map_.set_absolute_time(start, end)
             else:
-                start, end, unit = _map.get_relative_time()
-                if _map.is_in_db():
-                    _map.delete(dbif)
-                _map = sp.get_new_map_instance(id)
-                _map.set_relative_time(start, end, unit)
-        _map.load()
-        _map.insert(dbif)
-        sp.register_map(_map, dbif)
+                start, end, unit = map_.get_relative_time()
+                if map_.is_in_db():
+                    map_.delete(dbif)
+                map_ = sp.get_new_map_instance(id)
+                map_.set_relative_time(start, end, unit)
+        map_.load()
+        map_.insert(dbif)
+        sp.register_map(map_, dbif)
 
     sp.update_from_registered_maps(dbif)
     sp.update_command_string(dbif=dbif)

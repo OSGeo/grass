@@ -36,7 +36,8 @@ class TestNewlinesWithGetlFunctions(TestCase):
 
         file_ptr = self.libc.fopen(str(self.file_path).encode("utf-8"), b"r")
         if not file_ptr:
-            raise FileNotFoundError(f"Could not open file: {self.file_path}")
+            msg = f"Could not open file: {self.file_path}"
+            raise FileNotFoundError(msg)
 
         try:
             buffer_size = 50

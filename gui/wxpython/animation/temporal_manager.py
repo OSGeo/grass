@@ -116,8 +116,7 @@ class TemporalManager:
 
         # check for units for relative type
         if relative:
-            units = set()
-            units.update(infoDict["unit"] for infoDict in self.timeseriesInfo.values())
+            units = {infoDict["unit"] for infoDict in self.timeseriesInfo.values()}
             if len(units) > 1:
                 message = _(
                     "It is not allowed to display data with different units (%s)."
@@ -162,10 +161,11 @@ class TemporalManager:
             return self._getCommonGranularity()
 
     def _getCommonGranularity(self):
-        allMaps = []
-        for dataset in self.timeseriesList:
-            maps = self.timeseriesInfo[dataset]["maps"]
-            allMaps.extend(maps)
+        allMaps = [
+            a
+            for dataset in self.timeseriesList
+            for a in self.timeseriesInfo[dataset]["maps"]
+        ]
 
         if self.temporalType == TemporalType.ABSOLUTE:
             gran = tgis.compute_absolute_time_granularity(allMaps)
@@ -210,9 +210,9 @@ class TemporalManager:
             newMapList[i : i + len(mapList)] = mapList
             newMapLists.append(newMapList)
 
-        mapDict = {}
-        for i, dataset in enumerate(self.timeseriesList):
-            mapDict[dataset] = newMapLists[i]
+        mapDict = {
+            dataset: newMapLists[i] for i, dataset in enumerate(self.timeseriesList)
+        }
 
         if self.temporalType == TemporalType.ABSOLUTE:
             # ('1996-01-01 00:00:00', '1997-01-01 00:00:00', 'year'),

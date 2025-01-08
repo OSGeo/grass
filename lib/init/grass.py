@@ -18,7 +18,7 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2024 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2025 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -231,7 +231,8 @@ def f(fmt, *args):
         matches.append(m)
 
     if len(matches) != len(args):
-        raise Exception("The numbers of format specifiers and arguments do not match")
+        msg = "The numbers of format specifiers and arguments do not match"
+        raise Exception(msg)
 
     i = len(args) - 1
     for m in reversed(matches):
@@ -1015,7 +1016,7 @@ def load_env(grass_env_file):
     # Regular expression for lines starting with "export var=val" (^export
     # lines below). Environment variables should start with a-zA-Z or _.
     # \1 and \2 are a variable name and its value, respectively.
-    export_re = re.compile("^export[ \t]+([a-zA-Z_]+[a-zA-Z0-9_]*)=(.*?)[ \t]*$")
+    export_re = re.compile(r"^export[ \t]+([a-zA-Z_]+[a-zA-Z0-9_]*)=(.*?)[ \t]*$")
 
     for line in readfile(grass_env_file).splitlines():
         # match ^export lines
@@ -1610,9 +1611,8 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         shrc = ".zshrc"
         grass_shrc = ".grass.zshrc"
     else:
-        raise ValueError(
-            "Only bash-like and zsh shells are supported by sh_like_startup()"
-        )
+        msg = "Only bash-like and zsh shells are supported by sh_like_startup()"
+        raise ValueError(msg)
 
     # save command history in mapset dir and remember more
     # bash history file handled in specific_addition
@@ -2106,10 +2106,11 @@ def find_grass_python_package():
         # now we can import stuff from grass package
     else:
         # Not translatable because we don't have translations loaded.
-        raise RuntimeError(
+        msg = (
             "The grass Python package is missing. "
             "Is the installation of GRASS GIS complete?"
         )
+        raise RuntimeError(msg)
 
 
 def main():

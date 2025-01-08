@@ -195,7 +195,7 @@ def formatDist(distance, mapunits):
         outdistance = round(distance / divisor, 1)
     elif (distance / divisor) > 0.0:
         outdistance = round(
-            distance / divisor, int(math.ceil(3 - math.log10(distance / divisor)))
+            distance / divisor, math.ceil(3 - math.log10(distance / divisor))
         )
     else:
         outdistance = float(distance / divisor)

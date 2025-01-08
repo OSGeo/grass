@@ -9,6 +9,11 @@ Licence:   This program is free software under the GNU General Public
            for details.
 """
 
+import os
+
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
+
 POINTS = """\
 17.46938776,18.67346939,1
 20.93877551,17.44897959,2
@@ -75,11 +80,6 @@ C  1 1
  21.41013052  11.05432488
  1     19
 """
-
-
-import os
-from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 
 
 class VectorMaskTest(TestCase):

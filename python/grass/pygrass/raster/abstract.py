@@ -398,15 +398,15 @@ class RasterAbstractBase:
             return self.get(x, y)
         if isinstance(key, int):
             if not self.is_open():
-                raise IndexError("Can not operate on a closed map. Call open() first.")
+                msg = "Can not operate on a closed map. Call open() first."
+                raise IndexError(msg)
             if key < 0:  # Handle negative indices
                 key += self._rows
             if key >= self._rows:
-                raise IndexError(
-                    "The row index {0} is out of range [0, {1}).".format(
-                        key, self._rows
-                    )
+                msg = "The row index {0} is out of range [0, {1}).".format(
+                    key, self._rows
                 )
+                raise IndexError(msg)
             return self.get_row(key)
         fatal("Invalid argument type.")
 
@@ -631,7 +631,7 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
     mset = utils.get_mapset_raster(test_raster_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         Module("g.remove", flags="f", type="raster", name=test_raster_name)

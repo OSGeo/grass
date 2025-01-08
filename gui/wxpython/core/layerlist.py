@@ -38,8 +38,9 @@ class LayerList:
         layers = []
         for layer in self._list:
             if layer.IsSelected():
-                if activeOnly and layer.IsActive():
-                    layers.append(layer)
+                if activeOnly:
+                    if layer.IsActive():
+                        layers.append(layer)
                 else:
                     layers.append(layer)
         return layers
@@ -63,11 +64,7 @@ class LayerList:
 
         :param mapTypes: list of types
         """
-        layers = []
-        for layer in self._list:
-            if layer.mapType in mapTypes:
-                layers.append(layer)
-        return layers
+        return [layer for layer in self._list if layer.mapType in mapTypes]
 
     def AddNewLayer(
         self,
@@ -222,15 +219,15 @@ class Layer:
                 len(fullName) == 1 and self._mapType != "rgb"
             ):  # skip checking rgb maps for now
                 if self._mapType is None:
-                    raise ValueError(
-                        "To set layer name, the type of layer must be specified."
-                    )
+                    msg = "To set layer name, the type of layer must be specified."
+                    raise ValueError(msg)
 
                 res = gcore.find_file(
                     name=fullName, element=self._internalTypes[self._mapType]
                 )
                 if not res["mapset"]:
-                    raise ValueError("Map <{name}> not found.".format(name=name))
+                    msg = "Map <{name}> not found.".format(name=name)
+                    raise ValueError(msg)
                 self._name = name + "@" + res["mapset"]
             else:
                 self._name = name
@@ -263,7 +260,8 @@ class Layer:
         :param mapType: can be 'raster', 'vector', 'raster_3d'
         """
         if mapType not in self._mapTypes:
-            raise ValueError("Wrong map type used: {mtype}".format(mtype=mapType))
+            msg = "Wrong map type used: {mtype}".format(mtype=mapType)
+            raise ValueError(msg)
 
         self._mapType = mapType
 
@@ -282,9 +280,8 @@ class Layer:
         :param float opacity: value between 0 and 1
         """
         if not (0 <= opacity <= 1):
-            raise ValueError(
-                "Opacity value must be between 0 and 1, not {op}.".format(op=opacity)
-            )
+            msg = "Opacity value must be between 0 and 1, not {op}.".format(op=opacity)
+            raise ValueError(msg)
         self._opacity = opacity
 
     opacity = property(fget=GetOpacity, fset=SetOpacity)

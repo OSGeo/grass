@@ -136,9 +136,7 @@ class NvizTask:
             self._setMultiTaskParam(mode2, value)
 
         # position
-        pos = []
-        for coor in ("x", "y", "z"):
-            pos.append(str(surface["position"][coor]))
+        pos = [str(surface["position"][coor]) for coor in ("x", "y", "z")]
         value = ",".join(pos)
         self._setMultiTaskParam("surface_position", value)
 

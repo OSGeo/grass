@@ -329,10 +329,10 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 self.frame.Bind(wx.EVT_MENU, self.OnEnable, id=self.popupID["enable"])
         if isinstance(shape, (ModelAction, ModelComment)):
             popupMenu.AppendSeparator()
-        if isinstance(shape, ModelAction):
-            popupMenu.Append(self.popupID["label"], _("Set label"))
-            self.frame.Bind(wx.EVT_MENU, self.OnSetLabel, id=self.popupID["label"])
-        if isinstance(shape, (ModelAction, ModelComment)):
+            if isinstance(shape, ModelAction):
+                popupMenu.Append(self.popupID["label"], _("Set label"))
+                self.frame.Bind(wx.EVT_MENU, self.OnSetLabel, id=self.popupID["label"])
+
             popupMenu.Append(self.popupID["comment"], _("Set comment"))
             self.frame.Bind(wx.EVT_MENU, self.OnSetComment, id=self.popupID["comment"])
 
@@ -440,12 +440,8 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             shape.Select(False, dc)
         else:
             shapeList = canvas.GetDiagram().GetShapeList()
-            toUnselect = []
 
-            if not append:
-                for s in shapeList:
-                    if s.Selected():
-                        toUnselect.append(s)
+            toUnselect = [s for s in shapeList if s.Selected()] if not append else []
 
             shape.Select(True, dc)
 

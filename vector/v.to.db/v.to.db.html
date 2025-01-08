@@ -95,9 +95,9 @@ v.db.select mysoils layer=2
 
 <p>Compute D<sub>L</sub>, the Fractal Dimension (Mandelbrot, 1982), of the
 boundary defining a polygon based on the formula:
-<br><tt>
+<br><code>
 D = 2 * (log perimeter) / (log area):<br>
-</tt>
+</code>
 <div class="code"><pre>
 g.copy vect=soils,mysoils
 v.db.addcolumn mysoils col="d double precision"

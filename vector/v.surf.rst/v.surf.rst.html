@@ -305,14 +305,14 @@ in the source code for more details.
   <img src="vsurfrst_benchmark.png" alt="benchmark for v.surf.rst" border="0">
   <br>
   <i>Figure 1: Benchmark shows execution time for different
-    number of cells (1M, 2M, 4M, and 8M).
+    number of cells (1M, 2M, 4M, and 8M).</i>
 </div>
 <div align="center" style="margin: 10px">
     <img src="vsurfrst_cv_benchmark.png" alt="benchmark for cross-validation of
      v.surf.rst" border="0">
     <br>
     <i>Figure 2: Benchmark shows execution time for running cross-validation on
-     different number of cells (100k, 200k, 400k, and 800k).
+     different number of cells (100k, 200k, 400k, and 800k).</i>
 </div>
 
 <h2>EXAMPLE</h2>
@@ -355,10 +355,10 @@ d.vect elevrand
 v.db.univar -e elevrand column=value
 
 # interpolation based on subset of points (only those over 1st quartile)
-v.surf.rst input=elevrand zcolumn=value elevation=elev_partial npmin=100 where="value > 94.9"
+v.surf.rst input=elevrand zcolumn=value elevation=elev_partial npmin=100 where="value &gt; 94.9"
 r.colors map=elev_partial raster=elevation
 d.rast elev_partial
-d.vect elevrand where="value > 94.9"
+d.vect elevrand where="value &gt; 94.9"
 </pre></div>
 
 <h2>REFERENCES</h2>

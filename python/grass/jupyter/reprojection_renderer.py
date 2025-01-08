@@ -12,7 +12,7 @@
 #            for details.
 
 """Reprojects rasters to Pseudo-Mercator and vectors to WGS84. Exports reprojected
- rasters and vectors to PNGs and geoJSONs, respectively."""
+rasters and vectors to PNGs and geoJSONs, respectively."""
 
 import os
 import tempfile

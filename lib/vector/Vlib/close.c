@@ -98,7 +98,7 @@ int Vect_close(struct Map_info *Map)
         Vect_copy_map_dblinks(Map, &Out, TRUE);
         /* afterwords, dblinks must be removed from temporary map
            otherwise when deleting temporary map also original
-           attribute tables would be deteled */
+           attribute tables would be deleted */
         Vect_map_del_dblink(Map, -1); /* delete db links for all layers */
 
         if (0 != Vect_copy_map_lines_field(

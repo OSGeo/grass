@@ -223,11 +223,13 @@ class SbManager:
         It should not be necessary to call it manually.
         """
 
-        widgets = []
-        for item in self.statusbarItems.values():
-            widgets.append((item.GetPosition(), item.GetWidget()))
-
-        widgets.append((1, self.progressbar.GetWidget()))
+        widgets = [
+            *[
+                (item.GetPosition(), item.GetWidget())
+                for item in self.statusbarItems.values()
+            ],
+            (1, self.progressbar.GetWidget()),
+        ]
 
         for idx, win in widgets:
             if not win:
@@ -756,7 +758,7 @@ class SbCoordinates(SbTextItem):
             self.SetValue(e.message)
         # TODO: remove these excepts, they just hide errors, solve problems
         # differently
-        except TypeError as e:
+        except TypeError:
             self.SetValue("")
         except AttributeError:
             # during initialization MapFrame has no MapWindow

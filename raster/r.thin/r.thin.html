@@ -71,7 +71,7 @@ g.region raster=elevation -p
 # create flow accumulation map
 r.watershed elevation=elevation accumulation=accum_50K thresh=50000
 # extract streams from flow accumulation map
-r.mapcalc "streams_from_flow = if(abs(accum_50K) > 1000, 1, null())"
+r.mapcalc "streams_from_flow = if(abs(accum_50K) &gt; 1000, 1, null())"
 
 # skeletonize map
 r.thin streams_from_flow out=streams_thin

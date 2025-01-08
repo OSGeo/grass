@@ -387,7 +387,7 @@ in different locations.
 .. todo::
     Add example of assertions of key-value results.
 
-Especially if a module module has a lot of different parameters allowed
+Especially if a module has a lot of different parameters allowed
 in different combinations, you should test the if the wrong ones are really
 disallowed and proper error messages are provided (in addition, you can
 test things such as creation and removal of maps in error states).

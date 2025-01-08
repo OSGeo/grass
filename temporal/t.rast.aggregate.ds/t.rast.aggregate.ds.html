@@ -42,7 +42,7 @@ MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
 
 for map in ${MAPS} ; do
     r.mapcalc expression="${map} = 1"
-    echo ${map} >> map_list.txt
+    echo ${map} &gt;&gt; map_list.txt
 done
 
 t.create type=strds temporaltype=absolute \
@@ -262,7 +262,7 @@ done
 # to a YYYY-MM-DD date for start and end, and create a file with
 # mapnames, start date and end date
 
-g.list type=raster pattern=8day_20??_* > names_list
+g.list type=raster pattern=8day_20??_* &gt; names_list
 
 for NAME in `cat names_list` ; do
 
@@ -277,10 +277,10 @@ for NAME in `cat names_list` ; do
    if [ $DOY -le "353" ] ; then
       doy_end=$(( $DOY + 8 ))
    elif [ $DOY -eq "361" ] ; then
-      if [ $[$YEAR % 4] -eq 0 ] && [ $[$YEAR % 100] -ne 0 ] || [ $[$YEAR % 400] -eq 0 ] ; then
+      if [ $[$YEAR % 4] -eq 0 ] &amp;&amp; [ $[$YEAR % 100] -ne 0 ] || [ $[$YEAR % 400] -eq 0 ] ; then
          doy_end=$(( $DOY + 6 ))
       else
-	     doy_end=$(( $DOY + 5 ))
+            doy_end=$(( $DOY + 5 ))
       fi
    fi
 
@@ -288,7 +288,7 @@ for NAME in `cat names_list` ; do
    DATE_END=`date -d "${YEAR}-01-01 +$(( ${doy_end} -1 ))days" +%Y-%m-%d`
 
    # text file with mapnames, start date and end date
-   echo "$NAME|$DATE_START|$DATE_END" >> list_map_start_end_time.txt
+   echo "$NAME|$DATE_START|$DATE_END" &gt;&gt; list_map_start_end_time.txt
 
 done
 

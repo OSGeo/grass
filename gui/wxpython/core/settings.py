@@ -1230,12 +1230,13 @@ def GetDisplayVectSettings():
             % UserSettings.Get(group="vectorLayer", key="point", subkey="size"),
         )
     )
-    types = []
-    for ftype in ["point", "line", "boundary", "centroid", "area", "face"]:
+    types = [
+        ftype
+        for ftype in ["point", "line", "boundary", "centroid", "area", "face"]
         if UserSettings.Get(
             group="vectorLayer", key="showType", subkey=[ftype, "enabled"]
-        ):
-            types.append(ftype)
+        )
+    ]
     settings.append("type=%s" % ",".join(types))
 
     if UserSettings.Get(group="vectorLayer", key="randomColors", subkey="enabled"):

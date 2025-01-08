@@ -427,11 +427,7 @@ class VNETPointsData:
         return pt_list_data
 
     def _ptListDataToPtData(self, pt_list_data):
-        pt_data = {}
-        for i, val in enumerate(pt_list_data):
-            pt_data[self.cols["name"][i]] = val
-
-        return pt_data
+        return {self.cols["name"][i]: val for i, val in enumerate(pt_list_data)}
 
     def _usePoint(self, pt_id, use):
         """Item is checked/unchecked"""
@@ -557,8 +553,7 @@ class VNETPointsData:
     def GetColumns(self, only_relevant=True):
         cols_data = deepcopy(self.cols)
 
-        hidden_cols = []
-        hidden_cols.extend((self.cols["name"].index("e"), self.cols["name"].index("n")))
+        hidden_cols = [self.cols["name"].index("e"), self.cols["name"].index("n")]
 
         analysis, valid = self.an_params.GetParam("analysis")
         if only_relevant and len(self.an_data[analysis]["cmdParams"]["cats"]) <= 1:
@@ -1347,11 +1342,7 @@ class VNETGlobalTurnsData:
         ]
 
     def GetData(self):
-        data = []
-        for ival in self.turn_data:
-            data.append(ival[1:])
-
-        return data
+        return [ival[1:] for ival in self.turn_data]
 
     def GetValue(self, line, col):
         return self.turn_data[line][col]
@@ -1364,7 +1355,7 @@ class VNETGlobalTurnsData:
         self.turn_data[line][col] = value
 
     def SetUTurns(self, value):
-        """Checked if checeBox is checed"""
+        """Checked if checkBox is checked"""
         self.useUTurns = value
 
     def AppendRow(self, values):
@@ -1450,4 +1441,4 @@ class VNETGlobalTurnsData:
         if angle < from_angle:
             angle = math.pi * 2 + angle
 
-        return bool(angle > from_angle and angle < to_angle)
+        return bool(from_angle < angle < to_angle)

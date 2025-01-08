@@ -17,16 +17,29 @@ for details.
 """
 
 import wx
-
+from core.gcmd import GWarning
 from vdigit.mapwindow import VDigitWindow
 from vdigit.wxdigit import IVDigit
-from vdigit.wxdisplay import DisplayDriver, TYPE_AREA
-from core.gcmd import GWarning
+from vdigit.wxdisplay import TYPE_AREA, DisplayDriver
 
 try:
-    from grass.lib.gis import G_verbose, G_set_verbose
-    from grass.lib.vector import *
-    from grass.lib.vedit import *
+    from ctypes import pointer
+
+    from grass.lib.gis import G_set_verbose, G_verbose
+    from grass.lib.vector import (
+        Map_info,
+        Vect_build,
+        Vect_close,
+        Vect_copy_map_lines,
+        Vect_get_area_cat,
+        Vect_get_num_lines,
+        Vect_is_3d,
+        Vect_open_new,
+        Vect_open_tmp_new,
+        Vect_open_tmp_update,
+        Vect_open_update,
+    )
+    from grass.lib.vedit import TYPE_CENTROIDIN, Vedit_delete_areas_cat
 except ImportError:
     pass
 

@@ -53,10 +53,10 @@ As <em>r.cost</em> can run for a very long time, it can be useful to
 use the <b>--v</b> verbose flag to track progress.
 <p>
 The Knight's move (<b>-k</b> flag) may be used to improve the accuracy of
-the output. In the diagram below, the center location (<tt>O</tt>) represents a
+the output. In the diagram below, the center location (<code>O</code>) represents a
 grid cell from which cumulative distances are calculated. Those
-neighbors marked with an <tt>X</tt> are always considered for cumulative cost
-updates. With the <b>-k</b> option, the neighbors marked with a <tt>K</tt> are
+neighbors marked with an <code>X</code> are always considered for cumulative cost
+updates. With the <b>-k</b> option, the neighbors marked with a <code>K</code> are
 also considered.
 
 <div class="code"><pre>
@@ -135,7 +135,7 @@ By default null cells in the input raster map are excluded from
 the algorithm, and thus retained in the output map.
 <p>
 If one wants <b>r.cost</b> to transparently cross any region of null cells,
-the <b>null_cost</b>=<tt>0.0</tt> option should be used. Then null cells just
+the <b>null_cost</b>=<code>0.0</code> option should be used. Then null cells just
 propagate the adjacent costs. These cells can be retained as null cells in the
 output map by using the <b>-n</b> flag.
 

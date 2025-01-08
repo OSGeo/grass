@@ -27,33 +27,30 @@ constraints on cell aspect ratio.
 Each tile is listed on a separate line in the output. The lines are
 formatted as follows:
 
-<dl>
-<dt>
-<span class="code"><tt>
+<div class="code"><pre>
 5|125|45|175|80|100
-</tt></span>
+</pre></div>
 
-<dd>This is the default output format. It is the tile's minimum x
+This is the default output format. It is the tile's minimum x
 coordinate, minimum y coordinate, maximum x coordinate, maximum y
 coordinate, width in cells, and height in cells separated by the "|"
 character. The fields can be separated by a different character by
 changing the fs option.
 
-<dt>
-<span class="code"><tt>
+<div class="code"><pre>
 w=5;s=125;e=45;n=175;cols=80;rows=100;
-</tt></span>
+</pre></div>
 
-<dd>This is output in a format convenient for setting variables in a shell
+This is output in a format convenient for setting variables in a shell
 script.
-<dt>
-<span class="code"><tt>
-bbox=5,125,45,175&amp;width=80&amp;height=100
-</tt></span>
 
-<dd>This is output in a format convenient for requesting data from some
+<div class="code"><pre>
+bbox=5,125,45,175&amp;width=80&amp;height=100
+</pre></div>
+
+This is output in a format convenient for requesting data from some
 http services.
-</dl>
+
 
 <h2>EXAMPLES</h2>
 

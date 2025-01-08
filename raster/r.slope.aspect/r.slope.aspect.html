@@ -30,7 +30,7 @@ using <a href="r.mapcalc.html">r.mapcalc</a>:
 # convert angles from CCW from East to CW from North
 # modulus (%) can not be used with floating point aspect values
 r.mapcalc "azimuth_aspect = if(ccw_aspect == 0, 0, \
-                            if(ccw_aspect < 90, 90 - ccw_aspect, \
+                            if(ccw_aspect &lt; 90, 90 - ccw_aspect, \
                             450 - ccw_aspect)))"
 </pre></div>
 
@@ -240,15 +240,15 @@ r.slope.aspect elevation=elevation aspect=myaspect precision=CELL
 # generate compass orientation and classify four major directions (N, E, S, W)
 r.mapcalc "aspect_4_directions = eval( \\
    compass=(450 - myaspect ) % 360, \\
-     if(compass >=0. && compass < 45., 1)  \\
-   + if(compass >=45. && compass < 135., 2) \\
-   + if(compass >=135. && compass < 225., 3) \\
-   + if(compass >=225. && compass < 315., 4) \\
-   + if(compass >=315., 1) \\
+     if(compass &gt;=0. &amp;&amp; compass &lt; 45., 1)  \\
+   + if(compass &gt;=45. &amp;&amp; compass &lt; 135., 2) \\
+   + if(compass &gt;=135. &amp;&amp; compass &lt; 225., 3) \\
+   + if(compass &gt;=225. &amp;&amp; compass &lt; 315., 4) \\
+   + if(compass &gt;=315., 1) \\
 )"
 
 # assign text labels
-r.category aspect_4_directions separator=comma rules=- << EOF
+r.category aspect_4_directions separator=comma rules=- &lt;&lt; EOF
 1,north
 2,east
 3,south
@@ -256,7 +256,7 @@ r.category aspect_4_directions separator=comma rules=- << EOF
 EOF
 
 # assign color table
-r.colors aspect_4_directions rules=- << EOF
+r.colors aspect_4_directions rules=- &lt;&lt; EOF
 1 253,184,99
 2 178,171,210
 3 230,97,1
@@ -273,13 +273,14 @@ Aspect map classified to four major compass directions (zoomed subset shown)
 
 <ul>
 <li> Horn, B. K. P. (1981). <i>Hill Shading and the Reflectance Map</i>, Proceedings
-of the IEEE, 69(1):14-47.
+of the IEEE, 69(1):14-47.</li>
 <li> Mitasova, H. (1985). <i>Cartographic aspects of computer surface modeling. PhD thesis.</i>
-Slovak Technical University , Bratislava
+Slovak Technical University , Bratislava</li>
 <li> Hofierka, J., Mitasova, H., Neteler, M., 2009. <i>Geomorphometry in GRASS GIS.</i>
 In: Hengl, T. and Reuter, H.I. (Eds), <i>Geomorphometry: Concepts, Software, Applications. </i>
 Developments in Soil Science, vol. 33, Elsevier, 387-410 pp,
-<a href="http://www.geomorphometry.org">http://www.geomorphometry.org</a>
+<a href="https://doi.org/10.1016/S0166-2481(08)00017-2">doi:10.1016/S0166-2481(08)00017-2</a>,
+<a href="https://www.geomorphometry.org">https://www.geomorphometry.org</a></li>
 </ul>
 
 <h2>SEE ALSO</h2>

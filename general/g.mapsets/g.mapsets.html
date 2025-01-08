@@ -1,5 +1,8 @@
 <h2>DESCRIPTION</h2>
 
+<em>g.mapsets</em> modifies/prints the user's current mapset search
+path.
+
 For basic information about GRASS <em>mapset</em>, <em>project</em>
 and <em>data base</em> refer to <a href="helptext.html">GRASS
 Quickstart</a>.
@@ -23,7 +26,7 @@ The user can add, modify, and delete data layers that exist under
 their <em>current mapset</em>. Although the user can
 also <em>access</em> (i.e., use) data that are stored under
 <em>other</em> mapsets in the same GRASS project using the
-<tt>mapname@mapsetname</tt> notation or mapset search path, the user
+<code>mapname@mapsetname</code> notation or mapset search path, the user
 can only make permanent changes (create or modify data)
 located in the <em>current mapset</em>.  The user's
 <em>mapset search path</em> lists the order in which other mapsets in
@@ -33,7 +36,7 @@ are accessed by modifying the mapset search path; this can be done
 using the <em>g.mapsets</em> command. This program allows the user to
 use other's relevant map data without altering the original data
 layer, and without taking up disk space with a copy of the original
-map. The <tt>mapname@mapsetname</tt> notation may be used irrespective
+map. The <code>mapname@mapsetname</code> notation may be used irrespective
 of the mapset search path, i.e., any map found in another mapset with
 sufficient <em><a href="g.access.html">g.access</a></em> privileges
 may be called in such a manner.
@@ -60,8 +63,8 @@ command:
 g.copy raster=soils@PERMANENT,my_soils
 </pre></div>
 
-ensures that a new file named <tt>my_soils</tt> is to be a copy of
-the file <tt>soils</tt> from the mapset PERMANENT.
+ensures that a new file named <code>my_soils</code> is to be a copy of
+the file <code>soils</code> from the mapset PERMANENT.
 
 <p>
 In each project there is the special mapset <b>PERMANENT</b> included

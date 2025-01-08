@@ -618,16 +618,10 @@ class DragImage(wx.GenericDragImage if wxPythonPhoenix else wx.DragImage):
     """Wrapper around wx.DragImage to have more control
     over the widget on different platforms/wxpython versions"""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
 
 class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
     """Wrapper around wx.PseudoDC to have more control
     over the widget on different platforms/wxpython versions"""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
     def DrawLinePoint(self, *args, **kwargs):
         args = convertToInt(argsOrKwargs=args, roundVal=True)
@@ -670,9 +664,6 @@ class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
 class ClientDC(wx.ClientDC):
     """Wrapper around wx.ClientDC to have more control
     over the widget on different platforms/wxpython versions"""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
     def GetFullMultiLineTextExtent(self, string, font=None):
         if wxPythonPhoenix:

@@ -28,7 +28,7 @@
 #
 # changes of this file GRASS (PNG instead of JPG) by Anna Petrasova 2013
 
-""" Module images2avi
+"""Module images2avi
 
 Uses ffmpeg to read and write AVI files. Requires PIL
 
@@ -193,7 +193,8 @@ def readAvi(filename, asNumpy=True):
         print(S.stderr.read())
         # Clean up
         _cleanDir(tempDir)
-        raise RuntimeError("Could not read avi.")
+        msg = "Could not read avi."
+        raise RuntimeError(msg)
 
     # Read images
     images = images2ims.readIms(os.path.join(tempDir, "im*.jpg"), asNumpy)

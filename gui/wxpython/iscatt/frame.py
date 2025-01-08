@@ -243,8 +243,8 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
 
     def CursorPlotMove(self, x, y, scatt_id):
         try:
-            x = int(round(x))
-            y = int(round(y))
+            x = round(x)
+            y = round(y)
             coords = True
         except TypeError:
             coords = False

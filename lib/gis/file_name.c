@@ -161,13 +161,13 @@ char *file_name(char *path, const char *dir, const char *element,
                 const char *name, const char *mapset, const char *base)
 {
     const char *pname = name;
+    char xname[GNAME_MAX] = {'\0'};
 
     if (base && *base) {
         sprintf(path, "%s", base);
     }
     else {
-        char xname[GNAME_MAX];
-        char xmapset[GMAPSET_MAX];
+        char xmapset[GMAPSET_MAX] = {'\0'};
         char *location = G__location_path();
 
         /*

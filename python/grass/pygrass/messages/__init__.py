@@ -339,7 +339,7 @@ class Messenger:
 
 
 def get_msgr(
-    _instance=[
+    instance=[
         None,
     ],
     *args,
@@ -357,9 +357,9 @@ def get_msgr(
     >>> msgr0 is msgr2
     False
     """
-    if not _instance[0]:
-        _instance[0] = Messenger(*args, **kwargs)
-    return _instance[0]
+    if not instance[0]:
+        instance[0] = Messenger(*args, **kwargs)
+    return instance[0]
 
 
 if __name__ == "__main__":

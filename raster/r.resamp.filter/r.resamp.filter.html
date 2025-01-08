@@ -7,12 +7,18 @@ based upon a small subset of the input cells, not the entire input.
 calculated for every raster cell).
 
 <p>
+The radii must be given in map units. In order to consider more than
+one input cell, at least one finite radius must be larger than half the
+resolution of the input map, otherwise the selected kernels will have
+no effect.
+
+<p>
 The module maps the input range to the width of the window function, so
 wider windows will be "sharper" (have a higher cut-off frequency), e.g.
 lanczos3 will be sharper than lanczos2.
 
 <p>
-r.resamp.filter implements FIR (finite impulse response) filtering. All
+<em>r.resamp.filter</em> implements FIR (finite impulse response) filtering. All
 of the functions are low-pass filters, as they are symmetric. See
 <a href="https://en.wikipedia.org/wiki/Window_function">Wikipedia: Window function</a>
 for examples of common window functions and their frequency responses.
@@ -37,8 +43,34 @@ the same. Effectively, the radius is "normalised".
 
 <p>
 All of the kernels specified by the <b>filter</b> parameter are
-multiplied together. Typical usage will use either a single kernel or an
-infinite kernel along with a finite window.
+multiplied together. Typical usage will use either a single finitie
+window or an infinite kernel along with a finite window.
+
+<h3>Usage hints</h3>
+<p>
+To smooth a map, keeping its resolution, a good starting point is to
+use the filters <b>gauss,box</b> with the radii <em>0.5 * input
+resolution</em>, <em>2 * input resolution</em>. See also <a
+href="r.neighbors.html">r.neighbors</a>
+
+<p>
+When resampling a map to a higher resolution (alternative to
+interpolation, e.g. <a
+href="r.resamp.interp.html">r.resamp.interp</a>), a good starting point
+is to use the filters <b>gauss,box</b> with the radii <em>1.5 * input
+resolution</em>, <em>3 * input resolution</em>.
+
+<p>
+When resampling a map to a lower resolution (alternative to
+aggregation, e.g. <a href="r.resamp.stats.html">r.resamp.stats</a>), a
+good starting point is to use the filters <b>gauss,box</b> with the
+radii <em>0.25 * output resolution</em>, <em>1 * output
+resolution</em>.
+
+<p>
+These are recommendations for initial settings. The selection of
+filters and radii might need adjustment according to the actual
+purpose.
 
 <h2>NOTES</h2>
 

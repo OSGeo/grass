@@ -42,7 +42,7 @@ items is slow.
 
 <h3>Define color table based on categories</h3>
 
-Define color table <tt>wave</tt> based on categories from layer 1
+Define color table <code>wave</code> based on categories from layer 1
 
 <div class="code"><pre>
 v.colors map=soils_general layer=1 color=wave
@@ -50,8 +50,8 @@ v.colors map=soils_general layer=1 color=wave
 
 <h3>Define color table based on attribute values</h3>
 
-Define color table <tt>ryg</tt> based on values from attribute
-column <tt>AREA</tt>. Attribute table is linked to layer 1.
+Define color table <code>ryg</code> based on values from attribute
+column <code>AREA</code>. Attribute table is linked to layer 1.
 
 <div class="code"><pre>
 v.to.db map=soils_general layer=1 option=area column=AREA
@@ -60,7 +60,7 @@ v.colors map=soils_general layer=1 color=wave use=attr column=AREA
 
 <h3>Define color table stored as RGB values in attribute table</h3>
 
-Write color values to the attribute table (column <tt>GRASSRGB</tt>)
+Write color values to the attribute table (column <code>GRASSRGB</code>)
 instead of creating color table.
 
 <div class="code"><pre>
@@ -145,7 +145,7 @@ v.db.dropcolumn map=soils_general column=GRASSRGB
 page <a href="https://grasswiki.osgeo.org/wiki/Color_tables">Color
 tables</a> (from GRASS User Wiki)
 
-<p><a href="http://colorbrewer.org">ColorBrewer</a> is an online tool designed to
+<p><a href="https://colorbrewer2.org">ColorBrewer</a> is an online tool designed to
 help people select good color schemes for maps and other graphics.
 
 <h2>AUTHORS</h2>

@@ -22,7 +22,7 @@ class RasterRowRegionTestCase(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the generated vector map, if exist"""
+        """Remove the generated vector map, if exists"""
         cls.runModule("g.remove", flags="f", type="raster", name=cls.name)
         cls.del_temp_region()
 
@@ -65,16 +65,14 @@ class RasterRowRegionTestCase(TestCase):
         rast.set_region(region)
         rast.open(mode="r")
 
-        """
-        [nan, nan, nan, nan, nan, nan, nan, nan]
-        [nan, nan, nan, nan, nan, nan, nan, nan]
-        [nan, nan, 11.0, 21.0, 31.0, 41.0, nan, nan]
-        [nan, nan, 12.0, 22.0, 32.0, 42.0, nan, nan]
-        [nan, nan, 13.0, 23.0, 33.0, 43.0, nan, nan]
-        [nan, nan, 14.0, 24.0, 34.0, 44.0, nan, nan]
-        [nan, nan, nan, nan, nan, nan, nan, nan]
-        [nan, nan, nan, nan, nan, nan, nan, nan]
-        """
+        # [nan, nan, nan, nan, nan, nan, nan, nan]
+        # [nan, nan, nan, nan, nan, nan, nan, nan]
+        # [nan, nan, 11.0, 21.0, 31.0, 41.0, nan, nan]
+        # [nan, nan, 12.0, 22.0, 32.0, 42.0, nan, nan]
+        # [nan, nan, 13.0, 23.0, 33.0, 43.0, nan, nan]
+        # [nan, nan, 14.0, 24.0, 34.0, 44.0, nan, nan]
+        # [nan, nan, nan, nan, nan, nan, nan, nan]
+        # [nan, nan, nan, nan, nan, nan, nan, nan]
 
         self.assertCountEqual(rast[2].tolist()[2:6], [11.0, 21.0, 31.0, 41.0])
         self.assertCountEqual(rast[5].tolist()[2:6], [14.0, 24.0, 34.0, 44.0])

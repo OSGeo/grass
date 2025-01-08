@@ -26,8 +26,8 @@ class _WritelnDecorator:
     def __init__(self, stream):
         self.stream = stream
 
-    def __getattr__(self, attr):
-        if attr in ("stream", "__getstate__"):
+    def __getattr__(self, attr: str):
+        if attr in {"stream", "__getstate__"}:
             raise AttributeError(attr)
         return getattr(self.stream, attr)
 
@@ -396,7 +396,7 @@ class MultiTestResult(TestResult):
                     raise
 
     def printErrors(self):
-        "Called by TestRunner after test run"
+        """Called by TestRunner after test run"""
         super().printErrors()
         for result in self._results:
             try:
@@ -470,7 +470,7 @@ class GrassTestRunner:
         self._result = result
 
     def run(self, test):
-        "Run the given test case or test suite."
+        """Run the given test case or test suite."""
         result = self._result
         unittest.registerResult(result)
         result.failfast = self.failfast

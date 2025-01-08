@@ -6,17 +6,19 @@ by <b>height</b> parameter as fixed value or by <b>column</b>
 parameter.
 
 <p>
-Flag <b>-r</b> enables to perform reverse transformation, i.e.,
-transform 3D vector to 2D by omitting z-coordinate. Height of input 3D
+The flag <b>-r</b> enables to perform reverse transformation, i.e.,
+transform 3D vector to 2D by omitting z-coordinate. The height of input 3D
 features can be optionally stored in <b>column</b>.
 
 <h2>NOTES</h2>
 
+<p>
 When transforming 2D vector features to 3D based on attribute, all
 NULL values are silently converted to height 0.0.
+
 <p>
-Reverse transformation is possible for points and lines.
-In case of lines, the reverse transformation should be used
+The reverse transformation, 2D to 3D, is possible for points and lines.
+In the case of lines, the reverse transformation should be used
 only when all vertices of a line have the same z-coordinate
 (for example contours).
 

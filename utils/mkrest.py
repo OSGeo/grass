@@ -66,7 +66,7 @@ replacement = {
 
 src_data = read_file(src_file)
 
-title = re.search("(<!-- meta page description:)(.*)(-->)", src_data, re.IGNORECASE)
+title = re.search(r"(<!-- meta page description:)(.*)(-->)", src_data, re.IGNORECASE)
 
 if title:
     title_name = title.group(2).strip()
@@ -108,7 +108,7 @@ index_names = {
     "v": "vector",
 }
 
-index = re.search("(<!-- meta page index:)(.*)(-->)", src_data, re.IGNORECASE)
+index = re.search(r"(<!-- meta page index:)(.*)(-->)", src_data, re.IGNORECASE)
 
 if index:
     index_name = index.group(2).strip()

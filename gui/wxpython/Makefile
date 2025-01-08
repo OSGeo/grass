@@ -49,7 +49,7 @@ xml/module_tree_menudata.xml: core/toolboxes.py
 	$(call run_grass,$(PYTHON) $< "validate" $@)
 
 menustrings.py: core/menutree.py $(DSTDIR)/xml/menudata.xml $(DSTDIR)/xml/module_tree_menudata.xml $(DSTDIR)/xml/menudata_modeler.xml $(DSTDIR)/xml/menudata_psmap.xml
-	@echo "# This is a generated file.\n" > $@
+	@echo "# This is a generated file.\n# pylint: skip-file\n" > $@
 	$(call run_grass,$(PYTHON) $< "manager" >> $@)
 	$(call run_grass,$(PYTHON) $< "module_tree" >> $@)
 	$(call run_grass,$(PYTHON) $< "modeler" >> $@)

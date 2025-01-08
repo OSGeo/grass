@@ -4,10 +4,12 @@
 
 #include <string.h>
 
-#include <grass/display.h>
 #include <grass/colors.h>
-#include <grass/raster.h>
+#include <grass/display.h>
+#include <grass/gis.h>
 #include <grass/glocale.h>
+#include <grass/raster.h>
+
 #include "driver.h"
 
 static struct color_rgb *colors;
@@ -38,7 +40,9 @@ static int translate_or_add_color(const char *str)
     char lowerstr[MAX_COLOR_LEN];
 
     /* Make the color string lowercase for display colors */
-    strcpy(lowerstr, str);
+    if (G_strlcpy(lowerstr, str, sizeof(lowerstr)) >= sizeof(lowerstr)) {
+        G_fatal_error(_("String <%s> is too long"), str);
+    }
     G_chop(lowerstr);
     G_tolcase(lowerstr);
 

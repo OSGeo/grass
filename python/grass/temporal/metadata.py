@@ -97,7 +97,7 @@ class RasterMetadataBase(SQLDatabaseInterface):
         ewres=None,
         min=None,
         max=None,
-    ):
+    ) -> None:
         SQLDatabaseInterface.__init__(self, table, ident)
 
         self.set_id(ident)
@@ -110,58 +110,58 @@ class RasterMetadataBase(SQLDatabaseInterface):
         self.set_min(min)
         self.set_max(max)
 
-    def set_id(self, ident):
+    def set_id(self, ident) -> None:
         """Convenient method to set the unique identifier (primary key)"""
         self.ident = ident
         self.D["id"] = ident
 
-    def set_datatype(self, datatype):
+    def set_datatype(self, datatype) -> None:
         """Set the datatype"""
         self.D["datatype"] = datatype
 
-    def set_cols(self, cols):
+    def set_cols(self, cols) -> None:
         """Set the number of cols"""
         if cols is not None:
             self.D["cols"] = int(cols)
         else:
             self.D["cols"] = None
 
-    def set_rows(self, rows):
+    def set_rows(self, rows) -> None:
         """Set the number of rows"""
         if rows is not None:
             self.D["rows"] = int(rows)
         else:
             self.D["rows"] = None
 
-    def set_number_of_cells(self, number_of_cells):
+    def set_number_of_cells(self, number_of_cells) -> None:
         """Set the number of cells"""
         if number_of_cells is not None:
             self.D["number_of_cells"] = int(number_of_cells)
         else:
             self.D["number_of_cells"] = None
 
-    def set_nsres(self, nsres):
+    def set_nsres(self, nsres) -> None:
         """Set the north-south resolution"""
         if nsres is not None:
             self.D["nsres"] = float(nsres)
         else:
             self.D["nsres"] = None
 
-    def set_ewres(self, ewres):
+    def set_ewres(self, ewres) -> None:
         """Set the east-west resolution"""
         if ewres is not None:
             self.D["ewres"] = float(ewres)
         else:
             self.D["ewres"] = None
 
-    def set_min(self, min):
+    def set_min(self, min) -> None:
         """Set the minimum raster value"""
         if min is not None:
             self.D["min"] = float(min)
         else:
             self.D["min"] = None
 
-    def set_max(self, max):
+    def set_max(self, max) -> None:
         """Set the maximum raster value"""
         if max is not None:
             self.D["max"] = float(max)
@@ -242,15 +242,15 @@ class RasterMetadataBase(SQLDatabaseInterface):
     min = property(fget=get_min, fset=set_min)
     max = property(fget=get_max, fset=set_max)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         self._print_info_body(shell=False)
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         self._print_info_body(shell=True)
 
-    def _print_info_head(self, shell=False):
+    def _print_info_head(self, shell: bool = False) -> None:
         """Print information about this class (head part).
 
         No header printed in shell style mode.
@@ -262,7 +262,7 @@ class RasterMetadataBase(SQLDatabaseInterface):
                 " +-------------------- Metadata information ----------------------------------+"  # noqa: E501
             )
 
-    def _print_info_body(self, shell=False):
+    def _print_info_body(self, shell: bool = False) -> None:
         """Print information about this class (body part).
 
         :param bool shell: True for human readable style otherwise shell style
@@ -298,7 +298,7 @@ class RasterMetadata(RasterMetadataBase):
 
     The metadata includes the datatype, number of cols, rows and cells and
     the north-south and east west resolution of the map. Additionally the
-    minimum and maximum valuesare stored.
+    minimum and maximum values are stored.
 
     Usage:
 
@@ -368,7 +368,7 @@ class RasterMetadata(RasterMetadataBase):
         min=None,
         max=None,
         semantic_label=None,
-    ):
+    ) -> None:
         RasterMetadataBase.__init__(
             self,
             "raster_metadata",
@@ -383,7 +383,7 @@ class RasterMetadata(RasterMetadataBase):
             max,
         )
 
-    def set_semantic_label(self, semantic_label):
+    def set_semantic_label(self, semantic_label) -> None:
         """Set the semantic label identifier"""
         self.D["semantic_label"] = semantic_label
 
@@ -396,14 +396,14 @@ class RasterMetadata(RasterMetadataBase):
 
     semantic_label = property(fget=get_semantic_label, fset=set_semantic_label)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class."""
         self._print_info_head(shell=False)
         self._print_info_body(shell=False)
         # semantic label section (raster specific only)
         print(" | Semantic label:............. " + str(self.get_semantic_label()))
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         self._print_info_head(shell=True)
         self._print_info_body(shell=True)
@@ -502,7 +502,7 @@ class Raster3DMetadata(RasterMetadataBase):
         tbres=None,
         min=None,
         max=None,
-    ):
+    ) -> None:
         RasterMetadataBase.__init__(
             self,
             "raster3d_metadata",
@@ -520,14 +520,14 @@ class Raster3DMetadata(RasterMetadataBase):
         self.set_tbres(tbres)
         self.set_depths(depths)
 
-    def set_depths(self, depths):
+    def set_depths(self, depths) -> None:
         """Set the number of depths"""
         if depths is not None:
             self.D["depths"] = int(depths)
         else:
             self.D["depths"] = None
 
-    def set_tbres(self, tbres):
+    def set_tbres(self, tbres) -> None:
         """Set the top-bottom resolution"""
         if tbres is not None:
             self.D["tbres"] = float(tbres)
@@ -551,14 +551,14 @@ class Raster3DMetadata(RasterMetadataBase):
     depths = property(fget=get_depths, fset=set_depths)
     tbres = property(fget=get_tbres, fset=set_tbres)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class."""
         self._print_info_head(shell=False)
         self._print_info_body(shell=False)
         print(" | Number of depths:........... " + str(self.get_depths()))
         print(" | Top-Bottom resolution:...... " + str(self.get_tbres()))
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         self._print_info_head(shell=True)
         self._print_info_body(shell=True)
@@ -660,7 +660,7 @@ class VectorMetadata(SQLDatabaseInterface):
     def __init__(
         self,
         ident=None,
-        is_3d=False,
+        is_3d: bool = False,
         number_of_points=None,
         number_of_lines=None,
         number_of_boundaries=None,
@@ -673,7 +673,7 @@ class VectorMetadata(SQLDatabaseInterface):
         number_of_islands=None,
         number_of_holes=None,
         number_of_volumes=None,
-    ):
+    ) -> None:
         SQLDatabaseInterface.__init__(self, "vector_metadata", ident)
 
         self.set_id(ident)
@@ -691,60 +691,60 @@ class VectorMetadata(SQLDatabaseInterface):
         self.set_number_of_holes(number_of_holes)
         self.set_number_of_volumes(number_of_volumes)
 
-    def set_id(self, ident):
+    def set_id(self, ident) -> None:
         """Convenient method to set the unique identifier (primary key)"""
         self.ident = ident
         self.D["id"] = ident
 
-    def set_3d_info(self, is_3d):
+    def set_3d_info(self, is_3d) -> None:
         """Set True if the vector map is three dimensional"""
         self.D["is_3d"] = is_3d
 
-    def set_number_of_points(self, number_of_points):
+    def set_number_of_points(self, number_of_points) -> None:
         """Set the number of points of the vector map"""
         self.D["points"] = number_of_points
 
-    def set_number_of_lines(self, number_of_lines):
+    def set_number_of_lines(self, number_of_lines) -> None:
         """Set the number of lines of the vector map"""
         self.D["lines"] = number_of_lines
 
-    def set_number_of_boundaries(self, number_of_boundaries):
+    def set_number_of_boundaries(self, number_of_boundaries) -> None:
         """Set the number of boundaries of the vector map"""
         self.D["boundaries"] = number_of_boundaries
 
-    def set_number_of_centroids(self, number_of_centroids):
+    def set_number_of_centroids(self, number_of_centroids) -> None:
         """Set the number of centroids of the vector map"""
         self.D["centroids"] = number_of_centroids
 
-    def set_number_of_faces(self, number_of_faces):
+    def set_number_of_faces(self, number_of_faces) -> None:
         """Set the number of faces of the vector map"""
         self.D["faces"] = number_of_faces
 
-    def set_number_of_kernels(self, number_of_kernels):
+    def set_number_of_kernels(self, number_of_kernels) -> None:
         """Set the number of kernels of the vector map"""
         self.D["kernels"] = number_of_kernels
 
-    def set_number_of_primitives(self, number_of_primitives):
+    def set_number_of_primitives(self, number_of_primitives) -> None:
         """Set the number of primitives of the vector map"""
         self.D["primitives"] = number_of_primitives
 
-    def set_number_of_nodes(self, number_of_nodes):
+    def set_number_of_nodes(self, number_of_nodes) -> None:
         """Set the number of nodes of the vector map"""
         self.D["nodes"] = number_of_nodes
 
-    def set_number_of_areas(self, number_of_areas):
+    def set_number_of_areas(self, number_of_areas) -> None:
         """Set the number of areas of the vector map"""
         self.D["areas"] = number_of_areas
 
-    def set_number_of_islands(self, number_of_islands):
+    def set_number_of_islands(self, number_of_islands) -> None:
         """Set the number of islands of the vector map"""
         self.D["islands"] = number_of_islands
 
-    def set_number_of_holes(self, number_of_holes):
+    def set_number_of_holes(self, number_of_holes) -> None:
         """Set the number of holes of the vector map"""
         self.D["holes"] = number_of_holes
 
-    def set_number_of_volumes(self, number_of_volumes):
+    def set_number_of_volumes(self, number_of_volumes) -> None:
         """Set the number of volumes of the vector map"""
         self.D["volumes"] = number_of_volumes
 
@@ -869,7 +869,7 @@ class VectorMetadata(SQLDatabaseInterface):
     number_of_holes = property(fget=get_number_of_holes, fset=set_number_of_holes)
     number_of_volumes = property(fget=get_number_of_volumes, fset=set_number_of_volumes)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         print(
             " +-------------------- Metadata information ----------------------------------+"  # noqa: E501
@@ -888,7 +888,7 @@ class VectorMetadata(SQLDatabaseInterface):
         print(" | Number of holes ............ " + str(self.get_number_of_holes()))
         print(" | Number of volumes .......... " + str(self.get_number_of_volumes()))
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         print("is_3d=" + str(self.get_3d_info()))
         print("points=" + str(self.get_number_of_points()))
@@ -943,7 +943,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
 
     def __init__(
         self, table=None, ident=None, title=None, description=None, command=None
-    ):
+    ) -> None:
         SQLDatabaseInterface.__init__(self, table, ident)
 
         self.set_id(ident)
@@ -953,20 +953,20 @@ class STDSMetadataBase(SQLDatabaseInterface):
         # No setter for this
         self.D["number_of_maps"] = None
 
-    def set_id(self, ident):
+    def set_id(self, ident) -> None:
         """Convenient method to set the unique identifier (primary key)"""
         self.ident = ident
         self.D["id"] = ident
 
-    def set_title(self, title):
+    def set_title(self, title) -> None:
         """Set the title"""
         self.D["title"] = title
 
-    def set_description(self, description):
+    def set_description(self, description) -> None:
         """Set the number of cols"""
         self.D["description"] = description
 
-    def set_command(self, command):
+    def set_command(self, command) -> None:
         """Set the number of cols"""
         self.D["command"] = command
 
@@ -1013,17 +1013,17 @@ class STDSMetadataBase(SQLDatabaseInterface):
     description = property(fget=get_description, fset=set_description)
     number_of_maps = property(fget=get_number_of_maps)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         self._print_info_body(shell=False)
         self._print_info_tail(shell=False)
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         self._print_info_body(shell=True)
         self._print_info_tail(shell=True)
 
-    def _print_info_head(self, shell=False):
+    def _print_info_head(self, shell: bool = False) -> None:
         """Print information about this class (head part).
 
         No header printed in shell style mode.
@@ -1035,13 +1035,13 @@ class STDSMetadataBase(SQLDatabaseInterface):
                 " +-------------------- Metadata information ----------------------------------+"  # noqa: E501
             )
 
-    def _print_info_body(self, shell=False):
+    def _print_info_body(self, shell: bool = False) -> None:
         """Print information about this class (body part).
 
         :param bool shell: True for human readable style otherwise shell style
         """
 
-    def _print_info_tail(self, shell=False):
+    def _print_info_tail(self, shell: bool = False) -> None:
         """Print information about this class (tail part).
 
         :param bool shell: True for human readable style otherwise shell style
@@ -1061,7 +1061,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
                 for token in command.split("\n"):
                     print(" | " + str(token))
 
-    def print_history(self):
+    def print_history(self) -> None:
         """Print history information about this class in human readable
         shell style
         """
@@ -1165,7 +1165,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         title=None,
         description=None,
         aggregation_type=None,
-    ):
+    ) -> None:
         STDSMetadataBase.__init__(self, table, ident, title, description)
 
         # Initialize the dict to select all values from the db
@@ -1179,7 +1179,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         self.D["ewres_max"] = None
         self.D["aggregation_type"] = aggregation_type
 
-    def set_aggregation_type(self, aggregation_type):
+    def set_aggregation_type(self, aggregation_type) -> None:
         """Set the aggregation type of the dataset (mean, min, max, ...)"""
         self.D["aggregation_type"] = aggregation_type
 
@@ -1273,7 +1273,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
     max_max = property(fget=get_max_max)
     aggregation_type = property(fset=set_aggregation_type, fget=get_aggregation_type)
 
-    def _print_info_body(self, shell=False):
+    def _print_info_body(self, shell: bool = False) -> None:
         """Print information about this class (body part).
 
         :param bool shell: True for human readable style otherwise shell style
@@ -1376,7 +1376,9 @@ class STRDSMetadata(STDSRasterMetadataBase):
 
     """
 
-    def __init__(self, ident=None, raster_register=None, title=None, description=None):
+    def __init__(
+        self, ident=None, raster_register=None, title=None, description=None
+    ) -> None:
         STDSRasterMetadataBase.__init__(
             self, "strds_metadata", ident, title, description
         )
@@ -1386,7 +1388,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
 
         self.set_raster_register(raster_register)
 
-    def set_raster_register(self, raster_register):
+    def set_raster_register(self, raster_register) -> None:
         """Set the raster map register table name"""
         self.D["raster_register"] = raster_register
 
@@ -1448,17 +1450,17 @@ class STRDSMetadata(STDSRasterMetadataBase):
     number_of_semantic_labels = property(fget=get_number_of_semantic_labels)
     semantic_labels = property(fget=get_semantic_labels)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         self._print_info_head(shell=False)
         super().print_info()
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         self._print_info_head(shell=True)
         super().print_shell_info()
 
-    def _print_info_body(self, shell=False):
+    def _print_info_body(self, shell: bool = False) -> None:
         """Print information about this class (body part).
 
         :param bool shell: True for human readable style otherwise shell style
@@ -1561,7 +1563,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
 
     def __init__(
         self, ident=None, raster3d_register=None, title=None, description=None
-    ):
+    ) -> None:
         STDSRasterMetadataBase.__init__(
             self, "str3ds_metadata", ident, title, description
         )
@@ -1570,7 +1572,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
         self.D["tbres_min"] = None
         self.D["tbres_max"] = None
 
-    def set_raster3d_register(self, raster3d_register):
+    def set_raster3d_register(self, raster3d_register) -> None:
         """Set the raster map register table name"""
         self.D["raster3d_register"] = raster3d_register
 
@@ -1603,17 +1605,17 @@ class STR3DSMetadata(STDSRasterMetadataBase):
     tbres_min = property(fget=get_tbres_min)
     tbres_max = property(fget=get_tbres_max)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         self._print_info_head(shell=False)
         super().print_info()
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         self._print_info_head(shell=True)
         super().print_shell_info()
 
-    def _print_info_body(self, shell=False):
+    def _print_info_body(self, shell: bool = False) -> None:
         """Print information about this class (body part).
 
         :param bool shell: True for human readable style otherwise shell style
@@ -1714,7 +1716,9 @@ class STVDSMetadata(STDSMetadataBase):
 
     """
 
-    def __init__(self, ident=None, vector_register=None, title=None, description=None):
+    def __init__(
+        self, ident=None, vector_register=None, title=None, description=None
+    ) -> None:
         STDSMetadataBase.__init__(self, "stvds_metadata", ident, title, description)
 
         self.set_vector_register(vector_register)
@@ -1731,7 +1735,7 @@ class STVDSMetadata(STDSMetadataBase):
         self.D["holes"] = None
         self.D["volumes"] = None
 
-    def set_vector_register(self, vector_register):
+    def set_vector_register(self, vector_register) -> None:
         """Set the vector map register table name"""
         self.D["vector_register"] = vector_register
 
@@ -1865,17 +1869,17 @@ class STVDSMetadata(STDSMetadataBase):
     number_of_holes = property(fget=get_number_of_holes)
     number_of_volumes = property(fget=get_number_of_volumes)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         self._print_info_head(shell=False)
         super().print_info()
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         self._print_info_head(shell=True)
         super().print_shell_info()
 
-    def _print_info_body(self, shell=False):
+    def _print_info_body(self, shell: bool = False) -> None:
         """Print information about this class (body part).
 
         :param bool shell: True for human readable style otherwise shell style

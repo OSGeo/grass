@@ -54,11 +54,6 @@ int main(int argc, char *argv[])
     parse_args(argc, argv, &input_opt, &field_opt, &hist_flag, &col_flag,
                &shell_flag, &format);
 
-    if (format == JSON) {
-        root_value = json_value_init_object();
-        root_object = json_value_get_object(root_value);
-    }
-
     /* try to open head-only on level 2 */
     if (Vect_open_old_head2(&Map, input_opt, "", field_opt) < 2) {
         /* force level 1, open fully
@@ -85,11 +80,16 @@ int main(int argc, char *argv[])
             }
         }
         else if (col_flag) {
-            print_columns(&Map, input_opt, field_opt);
+            print_columns(&Map, input_opt, field_opt, format);
         }
         Vect_close(&Map);
 
         return (EXIT_SUCCESS);
+    }
+
+    if (format == JSON) {
+        root_value = json_value_init_object();
+        root_object = json_value_get_object(root_value);
     }
 
     if ((shell_flag & SHELL_BASIC) || format == JSON) {

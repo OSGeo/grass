@@ -1,18 +1,20 @@
-import itertools
 import fnmatch
+import itertools
 import os
 from sqlite3 import OperationalError
 
 import grass.lib.gis as libgis
+from grass.script import core as grasscore
+from grass.script import utils as grassutils
 
+# flake8: noqa: E402
 libgis.G_gisinit("")
 
 import grass.lib.raster as libraster
 from grass.lib.ctypes_preamble import String
-from grass.script import core as grasscore
-from grass.script import utils as grassutils
-
 from grass.pygrass.errors import GrassError
+
+# flake8: qa
 
 
 test_vector_name = "Utils_test_vector"
@@ -72,10 +74,11 @@ def findmaps(type, pattern=None, mapset="", location="", gisdbase=""):
         return res
 
     def find_in_gisdbase(type, pattern, gisdbase):
-        res = []
-        for loc in gisdbase.locations():
-            res.extend(find_in_location(type, pattern, Location(loc, gisdbase.name)))
-        return res
+        return [
+            a
+            for loc in gisdbase.locations()
+            for a in find_in_location(type, pattern, Location(loc, gisdbase.name))
+        ]
 
     if gisdbase and location and mapset:
         mset = Mapset(mapset, location, gisdbase)
@@ -185,7 +188,7 @@ def is_clean_name(name) -> bool:
     False
 
     """
-    return not libgis.G_legal_filename(name) < 0
+    return libgis.G_legal_filename(name) >= 0
 
 
 def coor2pixel(coord, region):
@@ -352,7 +355,8 @@ def r_export(rast, output="", fmt="png", **kargs):
             **kargs,
         )
         return output
-    raise ValueError("Raster map does not exist.")
+    msg = "Raster map does not exist."
+    raise ValueError(msg)
 
 
 def get_lib_path(modname, libname=None):
@@ -461,7 +465,7 @@ def create_test_vector_map(map_name="test_vector"):
     """
 
     from grass.pygrass.vector import VectorTopo
-    from grass.pygrass.vector.geometry import Point, Line, Centroid, Boundary
+    from grass.pygrass.vector.geometry import Boundary, Centroid, Line, Point
 
     cols = [
         ("cat", "INTEGER PRIMARY KEY"),
@@ -589,6 +593,7 @@ def create_test_stream_network_map(map_name="streams"):
 
 if __name__ == "__main__":
     import doctest
+
     from grass.script.core import run_command
 
     create_test_vector_map(test_vector_name)
@@ -597,10 +602,11 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    # Remove the generated vector map, if exist
     mset = get_mapset_vector(test_vector_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)
     mset = get_mapset_raster(test_raster_name, mapset="")
     if mset:
+        # Remove the generated raster map, if exists
         run_command("g.remove", flags="f", type="raster", name=test_raster_name)

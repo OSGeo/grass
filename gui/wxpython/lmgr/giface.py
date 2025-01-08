@@ -56,7 +56,7 @@ class LayerList:
     def __len__(self):
         # The list constructor calls __len__ as an optimization if available,
         # causing a RecursionError
-        return len([layer for layer in self])  # noqa: C416
+        return len([layer for layer in self])  # noqa: C416 # pylint: disable=R1721
 
     def __iter__(self):
         """Iterates over the contents of the list."""
@@ -121,11 +121,11 @@ class LayerList:
         self._tree.CheckItem(layer._layer, checked=checked)
 
     def SelectLayer(self, layer, select=True):
-        "Select or unselect layer"
+        """Select or unselect layer"""
         self._tree.SelectItem(layer._layer, select)
 
     def ChangeLayer(self, layer, **kwargs):
-        "Change layer (cmd, ltype, opacity)"
+        """Change layer (cmd, ltype, opacity)"""
         if "cmd" in kwargs:
             layer._pydata[0]["cmd"] = kwargs["cmd"]
             layerName, found = GetLayerNameFromCmd(kwargs["cmd"], fullyQualified=True)

@@ -250,6 +250,27 @@ class TestVInfo(TestCase):
             result.pop(field)
         self.assertDictEqual(expected, result)
 
+    def test_json_column(self):
+        module = SimpleModule(
+            "v.info", map=self.test_vinfo_with_db_3d, format="json", flags="c"
+        )
+        self.runModule(module)
+
+        expected_json = {
+            "columns": [
+                {"is_number": True, "name": "cat", "sql_type": "INTEGER"},
+                {
+                    "is_number": True,
+                    "name": "elevation",
+                    "sql_type": "DOUBLE PRECISION",
+                },
+            ]
+        }
+
+        result = json.loads(module.outputs.stdout)
+
+        self.assertDictEqual(expected_json, result)
+
     def test_database_table(self):
         """Test the database table column and type of the two vector maps with attribute data"""
         self.assertModuleKeyValue(

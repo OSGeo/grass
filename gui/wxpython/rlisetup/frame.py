@@ -213,12 +213,13 @@ class RLiSetupFrame(wx.Frame):
     def ListFiles(self):
         """Check the configuration files inside the path"""
         # list of configuration file
-        listfiles = []
         # return all the configuration files in self.rlipath, check if there are
         # link or directory and doesn't add them
-        for rli_conf in os.listdir(self.rlipath):
-            if os.path.isfile(os.path.join(self.rlipath, rli_conf)):
-                listfiles.append(rli_conf)
+        listfiles = [
+            rli_conf
+            for rli_conf in os.listdir(self.rlipath)
+            if os.path.isfile(os.path.join(self.rlipath, rli_conf))
+        ]
         return sorted(listfiles)
 
     def OnClose(self, event):

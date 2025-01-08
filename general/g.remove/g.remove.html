@@ -3,16 +3,16 @@
 <em>g.remove</em> removes data files matching a pattern given by wildcards or
 POSIX Extended Regular Expressions. If the <b>-f</b> force flag is not given
 then nothing is removed, instead the list of selected file names is printed to
-<tt>stdout</tt> as a preview of the files to be deleted.
+<code>stdout</code> as a preview of the files to be deleted.
 
 <h2>EXAMPLES</h2>
 
-Delete <tt>map1</tt> and <tt>map2</tt> raster maps in the current mapset:
+Delete <code>map1</code> and <code>map2</code> raster maps in the current mapset:
 <div class="code"><pre>
 g.remove -f type=raster name=tmp1,tmp2
 </pre></div>
 
-Delete all raster and vector maps starting with "<tt>tmp_</tt>" in the current
+Delete all raster and vector maps starting with "<code>tmp_</code>" in the current
 mapset:
 <div class="code"><pre>
 # show matching raster and vector maps but do not delete yet (as verification)
@@ -22,8 +22,8 @@ g.remove type=raster,vector pattern="tmp_*"
 g.remove -f type=raster,vector pattern="tmp_*"
 </pre></div>
 
-Delete all vector maps starting with "<tt>stream_</tt>" in the current mapset,
-but exclude those ending with "<tt>_final</tt>":
+Delete all vector maps starting with "<code>stream_</code>" in the current mapset,
+but exclude those ending with "<code>_final</code>":
 <div class="code"><pre>
 g.remove -f type=vector pattern="stream_*" exclude="*_final"
 </pre></div>

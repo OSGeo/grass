@@ -23,8 +23,8 @@ file/map parameters.
 
 If the "moving window" method was selected in <b>g.gui.rlisetup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
-the folder <tt>C:\Users\userxy\AppData\Roaming\GRASS8\r.li\output\</tt>
-(MS-Windows) or <tt>$HOME/.grass8/r.li/output/</tt> (GNU/Linux).
+the folder <code>C:\Users\userxy\AppData\Roaming\GRASS8\r.li\output\</code>
+(MS-Windows) or <code>$HOME/.grass8/r.li/output/</code> (GNU/Linux).
 <p>
 A sample area of only NULL values is considered to have zero patches,
 that is, the result is always &ge; 0.
@@ -44,7 +44,7 @@ Example for Spearfish forest areas:
 g.region raster=landcover.30m -p
 # extract forested areas:
 r.category landcover.30m
-r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43, 1, null())"
+r.mapcalc "forests = if(landcover.30m &gt;= 41 &amp;&amp; landcover.30m &lt;= 43, 1, null())"
 
 # patch density (7x7 moving window defined in g.gui.rlisetup):
 r.li.patchdensity forests conf=movwindow7 out=forests_p_dens7
@@ -73,7 +73,7 @@ d.vect forests type=boundary
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.li.html">r.li</a> - package overview<br>
+<a href="r.li.html">r.li</a> (package overview),
 <a href="g.gui.rlisetup.html">g.gui.rlisetup</a>
 </em>
 
@@ -81,7 +81,7 @@ d.vect forests type=boundary
 
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
-Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
+Gen. Tech. Rep. PNW-351. (<a href="https://doi.org/10.2737/PNW-GTR-351">PDF</a>)
 
 <h2>AUTHORS</h2>
 

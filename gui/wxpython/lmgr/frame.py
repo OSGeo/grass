@@ -578,8 +578,7 @@ class GMFrame(wx.Frame):
                                                map display notebook layers
                                                tree page index
             """
-            pgnum_dict = {}
-            pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
+            pgnum_dict = {"layers": self.notebookLayers.GetPageIndex(page)}
             name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (
@@ -687,8 +686,7 @@ class GMFrame(wx.Frame):
     def AddNvizTools(self, firstTime):
         """Add nviz notebook page
 
-        :param firstTime: if a mapdisplay is starting 3D mode for the
-                          first time
+        :param firstTime: if a mapdisplay is starting 3D mode for the first time
         """
         Debug.msg(5, "GMFrame.AddNvizTools()")
         from nviz.main import haveNviz
@@ -982,7 +980,7 @@ class GMFrame(wx.Frame):
         """Handles display commands.
 
         :param command: command in a list
-        :return int: False if failed, True if succcess
+        :return int: False if failed, True if success
         """
         if not self.currentPage:
             self.NewDisplay(show=True)
@@ -1087,11 +1085,10 @@ class GMFrame(wx.Frame):
                 return self.GetLayerTree().GetMapDisplay()
             return None
         # -> return list of all mapdisplays
-        mlist = []
-        for idx in range(self.notebookLayers.GetPageCount()):
-            mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
-
-        return mlist
+        return [
+            self.notebookLayers.GetPage(idx).maptree.GetMapDisplay()
+            for idx in range(self.notebookLayers.GetPageCount())
+        ]
 
     def GetAllMapDisplays(self):
         """Get all (open) map displays"""
@@ -1396,10 +1393,11 @@ class GMFrame(wx.Frame):
             # this is programmer's error
             # can be relaxed in future
             # but keep it strict unless needed otherwise
-            raise ValueError(
-                "OnChangeCWD cmd parameter must be list of"
+            msg = (
+                f"{self.OnChangeCWD.__name__} cmd parameter must be list of"
                 " length 1 or 2 and 'cd' as a first item"
             )
+            raise ValueError(msg)
         if cmd and len(cmd) > 2:
             # this might be a user error
             write_beginning(command=cmd)
@@ -1705,10 +1703,11 @@ class GMFrame(wx.Frame):
 
         tree = self.GetLayerTree()
         if tree:
-            rasters = []
-            for layer in tree.GetSelectedLayers(checkedOnly=False):
-                if tree.GetLayerInfo(layer, key="type") == "raster":
-                    rasters.append(tree.GetLayerInfo(layer, key="maplayer").GetName())
+            rasters = [
+                tree.GetLayerInfo(layer, key="maplayer").GetName()
+                for layer in tree.GetSelectedLayers(checkedOnly=False)
+                if tree.GetLayerInfo(layer, key="type") == "raster"
+            ]
             if len(rasters) >= 2:
                 from core.layerlist import LayerList
                 from animation.data import AnimLayer

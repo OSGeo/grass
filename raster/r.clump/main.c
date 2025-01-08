@@ -131,7 +131,9 @@ int main(int argc, char *argv[])
     }
 
     INPUT = opt_in->answers[0];
-    strcpy(name, INPUT);
+    if (G_strlcpy(name, INPUT, sizeof(name)) >= sizeof(name)) {
+        G_fatal_error(_("Input raster name <%s> is too long"), INPUT);
+    }
 
     OUTPUT = NULL;
     out_fd = -1;
@@ -155,8 +157,12 @@ int main(int argc, char *argv[])
         G_debug(1, "Creating support files...");
 
         /* build title */
-        if (opt_title->answer != NULL)
-            strcpy(title, opt_title->answer);
+        if (opt_title->answer != NULL) {
+            if (G_strlcpy(title, opt_title->answer, sizeof(title)) >=
+                sizeof(title)) {
+                G_fatal_error(_("Title <%s> is too long"), opt_title->answer);
+            }
+        }
         else
             sprintf(title, "clump of <%s@%s>", name, G_mapset());
         Rast_put_cell_title(OUTPUT, title);
