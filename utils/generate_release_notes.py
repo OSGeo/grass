@@ -125,13 +125,13 @@ def print_by_category(changes, categories, file=None):
 def binder_badge(tag):
     """Get mybinder Binder badge from a given tag, hash, or branch"""
     binder_image_url = "https://mybinder.org/badge_logo.svg"
-    binder_url = f"https://mybinder.org/v2/gh/OSGeo/grass/{tag}?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fjupyter_example.ipynb"  # noqa
+    binder_url = f"https://mybinder.org/v2/gh/OSGeo/grass/{tag}?urlpath=lab%2Ftree%2Fdoc%2Fexamples%2Fnotebooks%2Fjupyter_example.ipynb"  # noqa
     return f"[![Binder]({binder_image_url})]({binder_url})"
 
 
 def print_support(file=None):
     url = "https://opencollective.com/grass/tiers/supporter/all.json"
-    response = requests.get(url=url)
+    response = requests.get(url=url, timeout=7)
     data = response.json()
     if data:
         print_section_heading_3("Monthly Financial Supporters", file=file)

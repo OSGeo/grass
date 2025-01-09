@@ -563,7 +563,7 @@ class DisplayDriver:
         :return: True valid feature id
         :return: False invalid
         """
-        return bool(line > 0 and line <= Vect_get_num_lines(self.poMapInfo))
+        return bool(0 < line <= Vect_get_num_lines(self.poMapInfo))
 
     def SelectLinesByBox(self, bbox, ltype=None, drawSeg=False, poMapInfo=None):
         """Select vector objects by given bounding box
@@ -913,7 +913,7 @@ class DisplayDriver:
         for line in self.selected["ids"]:
             area = Vect_get_centroid_area(self.poMapInfo, line)
 
-            if area > 0 and area <= nareas:
+            if 0 < area <= nareas:
                 if not Vect_get_area_box(self.poMapInfo, area, byref(lineBox)):
                     continue
             else:  # noqa: PLR5501

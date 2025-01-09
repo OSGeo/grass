@@ -1461,7 +1461,7 @@ class WriteWorkspaceFile:
         self.indent -= 4
 
     def __writeNvizState(self, view, iview, light, constants):
-        """ "Save Nviz properties (view, light) to workspace
+        """Save Nviz properties (view, light) to workspace
 
         :param view: Nviz view properties
         :param iview: Nviz internal view properties

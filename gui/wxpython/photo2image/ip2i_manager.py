@@ -308,6 +308,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         lmgr=None,
         camera=None,
     ):
+        # pylint: disable=super-init-not-called; See InitMapDisplay()
         self.grwiz = grwiz  # GR Wizard
         self._giface = giface
 
@@ -771,9 +772,8 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         font = self.GetFont()
         font.SetPointSize(int(spx) + 2)
 
-        textProp = {}
-        textProp["active"] = True
-        textProp["font"] = font
+        textProp = {"active": True, "font": font}
+
         self.pointsToDrawSrc.SetPropertyVal("text", textProp)
         self.pointsToDrawTgt.SetPropertyVal("text", copy(textProp))
 
@@ -1144,7 +1144,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         """Print final message"""
         global maptype
         if maptype == "raster":
-            return
+            pass
 
     def OnSettings(self, event):
         """GCP Manager settings"""

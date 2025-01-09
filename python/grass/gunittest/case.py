@@ -48,6 +48,7 @@ class TestCase(unittest.TestCase):
     Be especially careful and always use keyword argument syntax for *msg*
     parameter.
     """
+
     longMessage = True  # to get both standard and custom message
     maxDiff = None  # we can afford long diffs
     _temp_region = None  # to control the temporary region
@@ -1335,7 +1336,7 @@ class TestCase(unittest.TestCase):
                 module.name, module.get_python(), module.returncode, errors=errors
             )
         # TODO: use this also in assert and apply when appropriate
-        if expecting_stdout and not module.outputs.stdout.strip():
+        if expecting_stdout and (not module.outputs.stdout.strip()):
             if module.outputs.stderr:
                 errors = " The errors are:\n" + module.outputs.stderr
             else:

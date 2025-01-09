@@ -511,7 +511,7 @@ class PointsList(
         :return: True if column was shown
         :return: False if position is not valid or column is not hidden
         """
-        if pos < 0 and pos >= self.self.GetColumnCount():
+        if pos < 0 or pos >= self.GetColumnCount():
             return False
         if colName in self.hiddenCols:
             col = self.hiddenCols[colName]

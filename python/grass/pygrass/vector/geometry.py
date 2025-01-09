@@ -221,10 +221,7 @@ class Attrs:
 
     def __dict__(self):
         """Return a dict of the attribute table row."""
-        dic = {}
-        for key, val in zip(self.keys(), self.values()):
-            dic[key] = val
-        return dic
+        return dict(zip(self.keys(), self.values()))
 
     def values(self):
         """Return the values of the attribute table row.
@@ -594,8 +591,7 @@ class Point(Geo):
         :type angle: num
         :param round_: to make corners round
         :type round_: bool
-        :param tol: fix the maximum distance between theoretical arc and
-                    output segments
+        :param tol: fix the maximum distance between theoretical arc and output segments
         :type tol: float
         :returns: the buffer as Area object
 
@@ -1051,11 +1047,9 @@ class Line(Geo):
     def segment(self, start, end):
         """Create line segment. using the ``Vect_line_segment`` C function.
 
-        :param start: distance from the beginning of the line where
-                      the segment start
+        :param start: distance from the beginning of the line where the segment starts
         :type start: float
-        :param end: distance from the beginning of the line where
-                    the segment end
+        :param end: distance from the beginning of the line where the segment ends
         :type end: float
 
         ::
@@ -1134,8 +1128,6 @@ class Line(Geo):
             self.reset()
             for coord in match.groups()[0].strip().split(","):
                 self.append(tuple(float(e) for e in coord.split(" ")))
-        else:
-            return None
 
     def buffer(
         self,
@@ -1160,8 +1152,7 @@ class Line(Geo):
         :type angle: num
         :param round_: to make corners round
         :type round_: bool
-        :param tol: fix the maximum distance between theoretical arc and
-                    output segments
+        :param tol: fix the maximum distance between theoretical arc and output segments
         :type tol: float
         :returns: the buffer as Area object
 
@@ -1722,8 +1713,7 @@ class Area(Geo):
         :type angle: num
         :param round_: to make corners round
         :type round_: bool
-        :param tol: fix the maximum distance between theoretical arc and
-                    output segments
+        :param tol: fix the maximum distance between theoretical arc and output segments
         :type tol: float
         :returns: the buffer as line, centroid, isles object tuple
 

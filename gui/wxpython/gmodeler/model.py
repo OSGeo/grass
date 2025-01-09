@@ -100,12 +100,7 @@ class Model:
         if not objType:
             return self.items
 
-        result = []
-        for item in self.items:
-            if isinstance(item, objType):
-                result.append(item)
-
-        return result
+        return [item for item in self.items if isinstance(item, objType)]
 
     def GetItem(self, aId, objType=None):
         """Get item of given id
@@ -683,11 +678,12 @@ class Model:
                 GError(parent=parent, message="\n".join(err))
                 return
 
-            err = []
-            for key, item in params.items():
-                for p in item["params"]:
-                    if p.get("value", "") == "":
-                        err.append((key, p.get("name", ""), p.get("description", "")))
+            err = [
+                (key, p.get("name", ""), p.get("description", ""))
+                for key, item in params.items()
+                for p in item["params"]
+                if p.get("value", "") == ""
+            ]
             if err:
                 GError(
                     parent=parent,
@@ -990,11 +986,7 @@ class ModelObject:
 
         :return: list of ids
         """
-        ret = []
-        for mo in self.inBlock:
-            ret.append(mo.GetId())
-
-        return ret
+        return [mo.GetId() for mo in self.inBlock]
 
 
 class ModelAction(ModelObject, ogl.DividedShape):
@@ -1409,20 +1401,14 @@ class ModelData(ModelObject):
 
     def GetLog(self, string=True):
         """Get logging info"""
-        name = []
-        for rel in self.GetRelations():
-            name.append(rel.GetLabel())
+        name = [rel.GetLabel() for rel in self.GetRelations()]
         if name:
             return "/".join(name) + "=" + self.value + " (" + self.prompt + ")"
         return self.value + " (" + self.prompt + ")"
 
     def GetLabel(self):
         """Get list of names"""
-        name = []
-        for rel in self.GetRelations():
-            name.append(rel.GetLabel())
-
-        return name
+        return [rel.GetLabel() for rel in self.GetRelations()]
 
     def GetPrompt(self):
         """Get prompt"""
@@ -1528,9 +1514,7 @@ class ModelData(ModelObject):
     def SetLabel(self):
         """Update text"""
         self.ClearText()
-        name = []
-        for rel in self.GetRelations():
-            name.append(rel.GetLabel())
+        name = [rel.GetLabel() for rel in self.GetRelations()]
         self.AddText("/".join(name))
         if self.value:
             self.AddText(self.value)
@@ -1795,12 +1779,7 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
 
     def GetItems(self, items):
         """Get sorted items by id"""
-        result = []
-        for item in items:
-            if item.GetId() in self.itemIds:
-                result.append(item)
-
-        return result
+        return [item for item in items if item.GetId() in self.itemIds]
 
     def SetItems(self, items):
         """Set items (id)"""
@@ -3731,11 +3710,7 @@ class ModelParamDialog(wx.Dialog):
 
     def GetErrors(self):
         """Check for errors, get list of messages"""
-        errList = []
-        for task in self.tasks:
-            errList += task.get_cmd_error()
-
-        return errList
+        return [task.get_cmd_error() for task in self.tasks]
 
     def DeleteIntermediateData(self) -> bool:
         """Check if to delete intermediate data"""

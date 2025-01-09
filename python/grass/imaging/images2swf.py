@@ -24,7 +24,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-""" Module images2swf
+"""Module images2swf
 
 Provides a function (writeSwf) to store a series of PIL images or numpy
 arrays in an SWF movie, that can be played on a wide range of OS's.
@@ -92,8 +92,7 @@ binary_type = bytes
 
 
 def checkImages(images):
-    """checkImages(images)
-    Check numpy images and correct intensity range etc.
+    """Check numpy images and correct intensity range etc.
     The same for all movie formats.
     """
     # Init results
@@ -110,7 +109,7 @@ def checkImages(images):
                 images2.append(im)  # Ok
             elif im.dtype in [np.float32, np.float64]:
                 theMax = im.max()
-                if theMax > 128 and theMax < 300:
+                if 128 < theMax < 300:
                     pass  # assume 0:255
                 else:
                     im = im.copy()
@@ -486,6 +485,7 @@ class SetBackgroundTag(ControlTag):
     """Set the color in 0-255, or 0-1 (if floats given)."""
 
     def __init__(self, *rgb):
+        super().__init__()
         self.tagtype = 9
         if len(rgb) == 1:
             rgb = rgb[0]
@@ -987,9 +987,7 @@ def readSwf(filename, asNumpy=True):
     # Convert to normal PIL images if needed
     if not asNumpy:
         images2 = images
-        images = []
-        for im in images2:
-            images.append(PIL.Image.fromarray(im))
+        images = [PIL.Image.fromarray(im) for im in images2]
 
     # Done
     return images

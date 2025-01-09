@@ -16,7 +16,8 @@ columns through a descriptive file with same name as the CSV file, but .csvt ext
 
 <div class="code"><pre>
 # NOTE: create koeppen_gridcode.csvt first for automated type recognition
-db.in.ogr input=koeppen_gridcode.csv output=koeppen_gridcode
+db.in.ogr input=koeppen_gridcode.csv output=koeppen_gridcode gdal_doo="AUTODETECT_TYPE=YES"
+db.describe koeppen_gridcode -c
 db.select table=koeppen_gridcode
 </pre></div>
 

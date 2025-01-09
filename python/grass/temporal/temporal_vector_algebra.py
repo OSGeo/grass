@@ -297,7 +297,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         :param function: Overlay operator, &|+^~.
 
         :return: Map object with command list with  operators that has been
-                      evaluated by implicit aggregration.
+                      evaluated by implicit aggregation.
         """
         # Build comandlist list with elements from related maps and given relation
         # operator.
@@ -547,9 +547,9 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     )
                     for map_i in register_list:
                         # Check if modules should be executed from command list.
+                        map_i.load()
                         if hasattr(map_i, "cmd_list") or hasattr(map_i, "is_new"):
                             # Get meta data from grass database.
-                            map_i.load()
                             if map_i.is_in_db(dbif=dbif) and self.overwrite:
                                 # Update map in temporal database.
                                 map_i.update_all(dbif=dbif)
@@ -568,7 +568,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                                 map_i.insert(dbif=dbif)
                         else:
                             # Map is original from an input STVDS
-                            map_i.load()
+                            pass
                         # Register map in result space time dataset.
                         if self.debug:
                             print(map_i.get_temporal_extent_as_tuple())

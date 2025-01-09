@@ -272,7 +272,7 @@ class Location:
             [...]
 
         """
-        mapsets = [mapset for mapset in self]  # noqa: C416
+        mapsets = [mapset for mapset in self]  # noqa: C416 # pylint: disable=R1721
         if permissions:
             mapsets = [
                 mapset
