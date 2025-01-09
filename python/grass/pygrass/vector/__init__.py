@@ -127,7 +127,7 @@ class Vector(Info):
         :param geo_obj: a geometry grass object define in
                         grass.pygrass.vector.geometry
         :type geo_obj: geometry GRASS object
-        :param attrs: a list with the values that will be insert in the
+        :param attrs: a list with the values that will be inserted in the
                       attribute table.
         :type attrs: list
         :param cat: The category of the geometry feature, otherwise the

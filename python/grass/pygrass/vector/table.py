@@ -1121,8 +1121,7 @@ class Table:
         :param cursor: the cursor to connect, if None it use the cursor
                        of connection table object
         :type cursor: Cursor object
-        :param force: True to remove the table, by default False to print
-                      advice
+        :param force: True to remove the table, by default False to print advice
         :type force: bool
         """
 
@@ -1161,8 +1160,7 @@ class Table:
         """Execute SQL code from a given string or build with filters and
         return a cursor object.
 
-        :param sql_code: the SQL code to execute, if not pass it use filters
-                         variable
+        :param sql_code: the SQL code to execute, if not pass it use filters variable
         :type sql_code: str
         :param cursor: the cursor to connect, if None it use the cursor
                      of connection table object
