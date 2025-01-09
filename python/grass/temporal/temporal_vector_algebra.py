@@ -297,7 +297,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         :param function: Overlay operator, &|+^~.
 
         :return: Map object with command list with  operators that has been
-                      evaluated by implicit aggregration.
+                      evaluated by implicit aggregation.
         """
         # Build comandlist list with elements from related maps and given relation
         # operator.

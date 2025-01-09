@@ -230,8 +230,7 @@ def import_stds(
     :param output: The name of the output space time dataset
     :param directory: The extraction directory
     :param title: The title of the new created space time dataset
-    :param descr: The description of the new created
-                 space time dataset
+    :param descr: The description of the new created space time dataset
     :param location: The name of the location that should be created,
                     maps are imported into this location
     :param link: Switch to link raster maps instead importing them
@@ -240,8 +239,7 @@ def import_stds(
     :param create: Create the location specified by the "location"
                   parameter and exit.
                   Do not import the space time datasets.
-    :param stds_type: The type of the space time dataset that
-                     should be imported
+    :param stds_type: The type of the space time dataset that should be imported
     :param base: The base name of the new imported maps, it will be
                  extended using a numerical index.
     :param memory: Cache size for raster rows, used in r.in.gdal
