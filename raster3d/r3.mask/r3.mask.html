@@ -1,9 +1,16 @@
 <h2>DESCRIPTION</h2>
 
-File <em>map</em> is used as reference file.
+<em>r3.mask</em> facilitates the creation of a raster3d
+"MASK" map to control raster3d operations.
+
+The raster3d <em>map</em> is used as the reference map.
+
 Cells in the mask are marked as "mask out" if the corresponding cell in
 <em>map</em> contains a value in the range specified with <em>maskvalues</em>.
-<p>Before a new 3D-mask can be created the existing mask has to be removed
+
+<h2>NOTES</h2>
+
+Before a new 3D-mask can be created the existing mask has to be removed
 with <em>g.remove</em>.
 
 <h2>SEE ALSO</h2>

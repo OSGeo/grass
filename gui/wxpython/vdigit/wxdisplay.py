@@ -373,6 +373,8 @@ class DisplayDriver:
 
         :return: pen, brush
         """
+
+        key = None
         if rtype == TYPE_POINT:
             key = "point"
         elif rtype == TYPE_LINE:
@@ -561,7 +563,7 @@ class DisplayDriver:
         :return: True valid feature id
         :return: False invalid
         """
-        return bool(line > 0 and line <= Vect_get_num_lines(self.poMapInfo))
+        return bool(0 < line <= Vect_get_num_lines(self.poMapInfo))
 
     def SelectLinesByBox(self, bbox, ltype=None, drawSeg=False, poMapInfo=None):
         """Select vector objects by given bounding box
@@ -712,7 +714,7 @@ class DisplayDriver:
         pz = c_double()
         if not self._validLine(lineNearest):
             return {"line": -1, "point": None}
-        ftype = Vect_read_line(poMapInfo, self.poPoints, self.poCats, lineNearest)
+        Vect_read_line(poMapInfo, self.poPoints, self.poCats, lineNearest)
         Vect_line_distance(
             self.poPoints,
             point[0],
@@ -856,7 +858,7 @@ class DisplayDriver:
 
         if not self._validLine(line):
             return -1
-        ftype = Vect_read_line(self.poMapInfo, self.poPoints, self.poCats, line)
+        Vect_read_line(self.poMapInfo, self.poPoints, self.poCats, line)
 
         minDist = 0.0
         Gid = -1
@@ -911,7 +913,7 @@ class DisplayDriver:
         for line in self.selected["ids"]:
             area = Vect_get_centroid_area(self.poMapInfo, line)
 
-            if area > 0 and area <= nareas:
+            if 0 < area <= nareas:
                 if not Vect_get_area_box(self.poMapInfo, area, byref(lineBox)):
                     continue
             else:  # noqa: PLR5501

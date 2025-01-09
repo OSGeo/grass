@@ -1,4 +1,4 @@
-FROM alpine:3.20@sha256:beefdbd8a1da6d2915566fde36db9db0b524eb737fc57cd1367effd16dc0d06d as common
+FROM alpine:3.21@sha256:b97e2a89d0b9e4011bb88c02ddf01c544b8c781acf1f4d559e7c8f12f1047ac3 as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -29,11 +29,11 @@ ENV GRASS_RUN_PACKAGES="\
       gdal-driver-JP2OpenJPEG \
       gdal-driver-LIBKML \
       gdal-driver-MSSQLSpatial \
+      gdal-driver-netCDF \
       gdal-driver-ODBC \
       gdal-driver-PG \
       gdal-driver-PNG \
       gdal-driver-WMS \
-      gdal-driver-netCDF \
       gdal-tools \
       geos \
       geos-dev \

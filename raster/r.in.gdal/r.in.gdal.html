@@ -20,7 +20,7 @@ PERMANENT mapset.
 
 Full details on all GDAL supported formats are available at:
 <p>
-<a href="https://gdal.org/formats_list.html">https://gdal.org/formats_list.html</a>
+<a href="https://gdal.org/en/stable/drivers/raster/">https://gdal.org/en/stable/drivers/raster/</a>
 <p>
 Selected formats out of the more than 140 supported formats:
 
@@ -132,8 +132,8 @@ WMO GRIB1/GRIB2 (.grb)                        GRIB              No       Yes    
 information when importing datasets if the source format includes CRS information,
 and if the GDAL driver supports it. If the CRS of the source dataset does
 not match the CRS of the current project <em>r.in.gdal</em> will
-report an error message (<tt>Coordinate reference system of dataset does not appear to
-match current project</tt>) and then report the PROJ_INFO parameters of
+report an error message (<code>Coordinate reference system of dataset does not appear to
+match current project</code>) and then report the PROJ_INFO parameters of
 the source dataset.
 
 <p>
@@ -162,7 +162,7 @@ PROJ_INFO file of the project name <b>target</b>.
 If the <b>target</b> project does not exist, a new project will be
 created matching the CRS definition of the GCPs. The target of
 the output group will be set to the new project, and
-<a href=i.rectify.html>i.rectify</a> can now be used without any further
+<a href="i.rectify.html">i.rectify</a> can now be used without any further
 preparation.
 <p>
 Some satellite images (e.g. NOAA/AVHRR, ENVISAT) can contain hundreds
@@ -177,8 +177,8 @@ is convenient in case of the import of e.g. a continuous time series split
 across different input files.
 <p>
 The <b>num_digits</b> parameter allows defining the number of  leading zeros
-(zero padding) in case of band numbers (e.g., to turn <tt>band.1</tt> into
-<tt>band.001</tt>).
+(zero padding) in case of band numbers (e.g., to turn <code>band.1</code> into
+<code>band.001</code>).
 
 <h2>NOTES</h2>
 
@@ -252,7 +252,7 @@ reporting everything known about a dataset if the <b>output</b> parameter is not
 <i>"ERROR: Input map is rotated - cannot import."</i><br>
 In this case the image must be first externally rotated, applying the rotation info stored in
 the metadata field of the raster image file. For example, the
-<a href="https://gdal.org/programs/gdalwarp.html#gdalwarp">gdalwarp</a>  software can be used
+<a href="https://gdal.org/en/stable/programs/gdalwarp.html">gdalwarp</a> software can be used
 to transform the map to North-up (note, there are several gdalwarp parameters to select the
 resampling algorithm):
 
@@ -296,9 +296,8 @@ the what the map's bounds and resolution should be beforehand.
 
 <h3>ECAD Data</h3>
 
-The <a href="http://eca.knmi.nl/">European Climate Assessment and Dataset (ECAD) project</a>
-provides climate data for Europe ranging from 1950 - 2015 or later
-(<a href="http://eca.knmi.nl/download/ensembles/ensembles.php">Terms of use</a>).
+The <a href="https://www.ecad.eu/">European Climate Assessment and Dataset (ECAD) project</a>
+provides climate data for Europe ranging from 1950 - 2015 or later.
 To import the different chunks of data provided by the project as netCDF files,
 the offset parameter can be used to properly assign numbers to the series
 of daily raster maps from 1st Jan 1950 (in case of importing the ECAD data
@@ -363,8 +362,8 @@ See also their <a href="http://www.ngdc.noaa.gov/mgg/dem/demportal.html">DEM por
 <h3>Raster file import over network</h3>
 
 Since GDAL 2.x it is possible to import raster data over the network <!-- mention WMS, WMTS can do that too-->
-(see <a href="https://gdal.org/gdal_virtual_file_systems.html">GDAL Virtual File Systems</a>)
-including <a href="http://www.cogeo.org/">Cloud Optimized GeoTIFF</a>,
+(see <a href="https://gdal.org/en/stable/user/virtual_file_systems.html">GDAL Virtual File Systems</a>)
+including <a href="https://cogeo.org/">Cloud Optimized GeoTIFF</a>,
 i.e. access uncompressed and compressed raster data via a http(s) or ftp connection.
 As an example the import of the global SRTMGL1 V003 tiles at 1 arc second (about 30 meters)
 resolution, void-filled:
@@ -398,7 +397,7 @@ r.in.gdal HDF4_EOS:EOS_GRID:"MOD15A2.A2003153.h18v04.004.2003171141042.hdf":MOD_
 
 <h2>REFERENCES</h2>
 
-GDAL Pages: <a href="https://gdal.org">https://gdal.org/</a>
+GDAL Pages: <a href="https://gdal.org">https://gdal.org</a>
 
 <h2>SEE ALSO</h2>
 
@@ -416,5 +415,5 @@ GRASS GIS Wiki page: Import of <a href="https://grasswiki.osgeo.org/wiki/Global_
 
 <h2>AUTHOR</h2>
 
-<a href="http://home.gdal.org/warmerda/">Frank Warmerdam</a>
+<a href="https://wiki.osgeo.org/wiki/User:Warmerda">Frank Warmerdam</a>
  (<a href="mailto:warmerdam AT pobox dot com">email</a>).

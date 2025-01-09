@@ -448,7 +448,8 @@ class Region:
         ..
         """
         if not raster_name:
-            raise ValueError("Raster name or mapset are invalid")
+            msg = "Raster name or mapset are invalid"
+            raise ValueError(msg)
 
         mapset = get_mapset_raster(raster_name)
 
@@ -602,7 +603,8 @@ class Region:
         """
         self.adjust()
         if libgis.G_put_window(self.byref()) < 0:
-            raise GrassError("Cannot change region (WIND file).")
+            msg = "Cannot change region (WIND file)."
+            raise GrassError(msg)
 
     def read_default(self):
         """
@@ -672,7 +674,7 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
+    # Remove the generated vector map, if exists
     mset = utils.get_mapset_vector(test_vector_name, mapset="")
     if mset:
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)

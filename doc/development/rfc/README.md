@@ -16,6 +16,8 @@ A list of all GRASS GIS RFC documents, with status:
 - [RFC 7: Language Standards Support](language_standards_support.md) (Adopted)
 - [RFC 8: Python Language Support](python_language_support.md) (Adopted)
 - [RFC 9: Version Numbering](version_numbering.md) (Adopted)
+- [RFC 10: C++17 Language Standard Support](RFC10_cpp17_language_standards_support.md)
+  (Adopted)
 - [RFC X: Release Policy](https://github.com/OSGeo/grass/pull/3673) (Draft)
 
 Status values:

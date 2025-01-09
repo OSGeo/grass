@@ -1,5 +1,8 @@
 <h2>DESCRIPTION</h2>
 
+<em>i.segment</em> identifies segments (objects) from
+imagery data.
+<p>
 Image segmentation or object recognition is the process of grouping
 similar pixels into unique segments, also referred to as objects.
 Boundary and region based algorithms are described in the literature,
@@ -64,10 +67,10 @@ considering each raster in the image group as a dimension.
 In future, the distance calculation will also take into account the
 shape characteristics of the segments. The normal distances are then
 multiplied by the input radiometric weight. Next an additional
-contribution is added: <tt>(1-radioweight) * {smoothness * smoothness
-weight + compactness * (1-smoothness weight)}</tt>,
-where <tt>compactness = Perimeter Length / sqrt( Area )</tt>
-and <tt>smoothness = Perimeter Length / Bounding Box</tt>. The
+contribution is added: <code>(1-radioweight) * {smoothness * smoothness
+weight + compactness * (1-smoothness weight)}</code>,
+where <code>compactness = Perimeter Length / sqrt( Area )</code>
+and <code>smoothness = Perimeter Length / Bounding Box</code>. The
 perimeter length is estimated as the number of pixel sides the segment
 has.
 
@@ -175,7 +178,7 @@ i.segment group=ortho_group output=ortho_segs_l5 threshold=0.3 seeds=ortho_segs_
 </center>
 
 <p>
-The output <tt>ortho_segs_l4</tt> with <b>threshold</b>=0.2 still has
+The output <code>ortho_segs_l4</code> with <b>threshold</b>=0.2 still has
 too many segments, but the output with <b>threshold</b>=0.3 has too few
 segments. A threshold value of 0.25 seems to be a good choice. There
 is also some noise in the image, lets next force all segments smaller
