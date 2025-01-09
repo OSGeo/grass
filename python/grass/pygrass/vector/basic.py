@@ -149,8 +149,7 @@ class Bbox:
         """
         if tb:
             return (self.north, self.south, self.east, self.west, self.top, self.bottom)
-        else:
-            return (self.north, self.south, self.east, self.west)
+        return (self.north, self.south, self.east, self.west)
 
 
 class BoxList:
@@ -308,18 +307,19 @@ class Ilist:
                 self.c_ilist.contents.value[indx]
                 for indx in range(*key.indices(len(self)))
             ]
-        elif isinstance(key, int):
+        if isinstance(key, int):
             if key < 0:  # Handle negative indices
                 key += self.c_ilist.contents.n_values
             if key >= self.c_ilist.contents.n_values:
-                raise IndexError("Index out of range")
+                msg = "Index out of range"
+                raise IndexError(msg)
             return self.c_ilist.contents.value[key]
-        else:
-            raise ValueError("Invalid argument type: %r." % key)
+        raise ValueError("Invalid argument type: %r." % key)
 
     def __setitem__(self, key, value):
         if self.contains(value):
-            raise ValueError("Integer already in the list")
+            msg = "Integer already in the list"
+            raise ValueError(msg)
         self.c_ilist.contents.value[key] = int(value)
 
     def __len__(self):
@@ -329,7 +329,7 @@ class Ilist:
         return (self.c_ilist.contents.value[i] for i in range(self.__len__()))
 
     def __repr__(self):
-        return "Ilist(%r)" % [i for i in self.__iter__()]
+        return "Ilist(%r)" % list(self.__iter__())
 
     def __contains__(self, item):
         return item in self.__iter__()

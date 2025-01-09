@@ -90,8 +90,6 @@ class AddScattPlotDialog(wx.Dialog):
         border = wx.BoxSizer(wx.VERTICAL)
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
 
-        regionSizer = wx.BoxSizer(wx.HORIZONTAL)
-
         dialogSizer.Add(
             self._addSelectSizer(title=self.band_1_label, sel=self.band_1_ch)
         )
@@ -356,7 +354,6 @@ class SettingsDialog(wx.Dialog):
 
         self.scatt_mgr = scatt_mgr
 
-        maxValue = 1e8
         self.parent = parent
         self.settings = {}
 
@@ -428,9 +425,7 @@ class SettingsDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
 
         row = 0
-        setts = {}
-        setts.update(self.colorsSetts)
-        setts.update(self.sizeSetts)
+        setts = {**self.colorsSetts, **self.sizeSetts}
 
         settsOrder = [
             "sel_pol",

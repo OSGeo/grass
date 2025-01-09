@@ -128,7 +128,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "Python library documentation"
-copyright = "2024, GRASS Development Team"
+copyright = "2025, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

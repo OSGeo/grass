@@ -30,6 +30,7 @@ from grass.exceptions import CalledModuleError
 
 def raster3d_info(map, env=None):
     """Return information about a raster3d map (interface to `r3.info`).
+
     Example:
 
     >>> mapcalc3d('volume = row() + col() + depth()')
@@ -47,8 +48,7 @@ def raster3d_info(map, env=None):
     def float_or_null(s):
         if s == "NULL":
             return None
-        else:
-            return float(s)
+        return float(s)
 
     s = read_command("r3.info", flags="rg", map=map, env=env)
     kv = parse_key_val(s)
@@ -109,4 +109,7 @@ def mapcalc3d(
             overwrite=overwrite,
         )
     except CalledModuleError:
-        fatal(_("An error occurred while running r3.mapcalc with expression: %s") % e)
+        fatal(
+            _("An error occurred while running r3.mapcalc with expression: %s") % e,
+            env=env,
+        )

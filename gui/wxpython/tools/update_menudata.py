@@ -71,9 +71,7 @@ def updateData(data, modules):
         if node.tag != "menuitem":
             continue
 
-        item = {}
-        for child in node:
-            item[child.tag] = child.text
+        item = {child.tag: child.text for child in node}
 
         if "command" not in item:
             continue
@@ -136,10 +134,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
 
-    if len(argv) > 1 and argv[1] == "-d":
-        printDiff = True
-    else:
-        printDiff = False
+    printDiff = bool(len(argv) > 1 and argv[1] == "-d")
 
     if len(argv) > 1 and argv[1] == "-h":
         print(sys.stderr, __doc__, file=sys.stderr)

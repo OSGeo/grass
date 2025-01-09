@@ -184,13 +184,13 @@ class DataCatalogNode(DictFilterNode):
             owner = data["owner"] or _("name unknown")
             if data["current"]:
                 return _("{name}  (current)").format(**data)
-            elif data["is_different_owner"] and data["lock"]:
+            if data["is_different_owner"] and data["lock"]:
                 return _("{name}  (in use, owner: {owner})").format(
                     name=data["name"], owner=owner
                 )
-            elif data["lock"]:
+            if data["lock"]:
                 return _("{name}  (in use)").format(**data)
-            elif data["is_different_owner"]:
+            if data["is_different_owner"]:
                 return _("{name}  (owner: {owner})").format(
                     name=data["name"], owner=owner
                 )
@@ -957,7 +957,7 @@ class DataCatalogTree(TreeView):
         if node.data["type"] == "mapset":
             if node.data["current"]:
                 return wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
-            elif node.data["lock"] or node.data["is_different_owner"]:
+            if node.data["lock"] or node.data["is_different_owner"]:
                 return wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT)
         return wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
 
@@ -1378,15 +1378,20 @@ class DataCatalogTree(TreeView):
                     )
                     if not new_name:
                         continue
-                callback = lambda gisrc2=gisrc2, gisrc=gisrc, cLayer=self.copy_layer[
-                    i
-                ], cMapset=self.copy_mapset[
-                    i
-                ], cMode=self.copy_mode, sMapset=self.selected_mapset[
-                    0
-                ], name=new_name: self._onDoneReprojection(
-                    env2, gisrc2, gisrc, cLayer, cMapset, cMode, sMapset, name
-                )
+
+                def callback(
+                    gisrc2=gisrc2,
+                    gisrc=gisrc,
+                    cLayer=self.copy_layer[i],
+                    cMapset=self.copy_mapset[i],
+                    cMode=self.copy_mode,
+                    sMapset=self.selected_mapset[0],
+                    name=new_name,
+                ):
+                    self._onDoneReprojection(
+                        env2, gisrc2, gisrc, cLayer, cMapset, cMode, sMapset, name
+                    )
+
                 dlg = CatalogReprojectionDialog(
                     self,
                     self._giface,
@@ -1887,6 +1892,7 @@ class DataCatalogTree(TreeView):
             gs.try_remove(event.userData)
 
         for i in range(len(self.selected_layer)):
+            cmd: list[str] = []
             if self.selected_layer[i].data["type"] == "raster":
                 cmd = ["r.info"]
             elif self.selected_layer[i].data["type"] == "vector":
@@ -2011,10 +2017,7 @@ class DataCatalogTree(TreeView):
             mapset=mapset,
         )
         dlg.SetValue(value)
-        if dlg.ShowModal() == wx.ID_OK:
-            name = dlg.GetValue()
-        else:
-            name = None
+        name = dlg.GetValue() if dlg.ShowModal() == wx.ID_OK else None
         dlg.Destroy()
 
         return name
@@ -2047,8 +2050,7 @@ class DataCatalogTree(TreeView):
                         currentMapset = False
                         break
             return currentGrassDb, currentLocation, currentMapset
-        else:
-            return True, True, True
+        return True, True, True
 
     def _popupMenuLayer(self):
         """Create popup menu for layers"""

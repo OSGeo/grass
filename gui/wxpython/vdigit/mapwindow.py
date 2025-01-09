@@ -294,7 +294,7 @@ class VDigitWindow(BufferedMapWindow):
             return
 
         if self.toolbar.GetAction("type") in {"point", "centroid"}:
-            # add new point / centroiud
+            # add new point / centroid
             east, north = self.Pixel2Cell(self.mouse["begin"])
             nfeat, fids = self.digit.AddFeature(
                 self.toolbar.GetAction("type"), [(east, north)]
@@ -690,7 +690,7 @@ class VDigitWindow(BufferedMapWindow):
     def _onLeftDown(self, event):
         """Left mouse button donw - vector digitizer various actions"""
         try:
-            mapLayer = self.toolbar.GetLayer().GetName()
+            self.toolbar.GetLayer().GetName()
         except:
             GMessage(parent=self, message=_("No vector map selected for editing."))
             event.Skip()
@@ -834,10 +834,7 @@ class VDigitWindow(BufferedMapWindow):
                 self.digit.GetDisplay().SelectAreaByPoint(pos1)["area"] != -1
             )
         else:
-            if action == "moveLine":
-                drawSeg = True
-            else:
-                drawSeg = False
+            drawSeg = action == "moveLine"
 
             nselected = self.digit.GetDisplay().SelectLinesByBox(
                 bbox=(pos1, pos2), drawSeg=drawSeg
@@ -1103,10 +1100,7 @@ class VDigitWindow(BufferedMapWindow):
                 GError(parent=self, message=_("No vector map selected for editing."))
 
             if mapName:
-                if self.toolbar.GetAction("type") == "line":
-                    line = True
-                else:
-                    line = False
+                line = self.toolbar.GetAction("type") == "line"
 
                 if len(self.polycoords) < 2:  # ignore 'one-point' lines
                     return

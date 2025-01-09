@@ -9,13 +9,13 @@
 # PURPOSE:	This configure runs all the tests to determine what components
 #		are installed on the current system. It also defines certain
 #		configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2024 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2025 by the GRASS Development Team
 #
 #		This program is free software under the GNU General
 #		Public License (>=v2). Read the file COPYING that
 #		comes with GRASS for details.
 #
-# MANUAL:       http://www.gnu.org/software/autoconf/manual/autoconf.html
+# MANUAL:       https://www.gnu.org/software/autoconf/manual/autoconf.html
 #               http://savannah.gnu.org/projects/autoconf/
 # Website for   config.guess, config.sub:
 #               wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
@@ -1091,16 +1091,6 @@ else
   ])
 
   AC_DEFINE(HAVE_PDAL, 1, [Define to 1 if PDAL exists.])
-
-  AC_MSG_CHECKING(whether to use PDAL NoFilenameWriter)
-  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/Writer.hpp>
-  class St:public pdal::NoFilenameWriter {};]], [[
-  class NFWTest : public pdal::NoFilenameWriter {};
-  ]])],
-  [
-    AC_DEFINE(HAVE_PDAL_NOFILENAMEWRITER, 1, [Define to 1 if PDAL NoFilenameWriter is present.])
-    AC_MSG_RESULT(yes)
-  ],[AC_MSG_RESULT(no)])
 
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}

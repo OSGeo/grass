@@ -12,6 +12,8 @@ located in different mapsets. The output is a read-only link to
 the original raster maps which is only valid if the original raster
 maps remain in the originally indicated mapset. A VRT can also be built
 from raster maps registered with <em><a href="r.external.html">r.external</a></em>.
+However, GRASS VRTs built from external registered data (see below)
+are known to have performance issues.
 
 <p>
 Reading the whole VRT is slower than reading the equivalent single
@@ -20,7 +22,7 @@ benefit.
 
 <p>
 A GRASS virtual raster can be regarded as a simplified version of GDAL's
-<a href="http://gdal.org/gdal_vrttut.html">virtual raster format</a>.
+<a href="https://gdal.org/en/stable/drivers/raster/vrt.html">virtual raster format</a>.
 The GRASS equivalent is simpler because issues like nodata, projection,
 resolution, resampling, masking are already handled by native GRASS
 raster routines.
@@ -48,18 +50,29 @@ g.list type=raster pattern=elev_state_50m_tile_* output=tilelist.csv
 r.buildvrt file=tilelist.csv output=elev_state_50m_vrt
 </pre></div>
 
+<h2>KNOWN ISSUES</h2>
+
+Users may experience significant performance degradation with virtual rasters built
+with <em>r.buildvrt</em> over GDAL-linked (<em>r.external</em>) raster maps,
+especially on slower file systems with latency like NFS. Performance degradation
+may also occur on local file systems, but is usually less severe. For such use cases
+consider using the GRASS GIS addon
+<a href="https://grass.osgeo.org/grass-stable/manuals/addons/r.buildvrt.gdal.html">r.buildvrt.gdal</a>
+or building GDAL VRTs, e.g. with <em>gdalbuildvrt</em>.
+
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="r.tile.html">r.tile</a>,
 <a href="r.patch.html">r.patch</a>,
 <a href="r.external.html">r.external</a>
+<a href="https://grass.osgeo.org/grass-stable/manuals/addons/r.buildvrt.gdal.html">r.buildvrt.gdal</a>
 </em>
 
 <p>
 The equivalent GDAL utility
 <em>
-<a href="http://gdal.org/gdalbuildvrt.html">gdalbuildvrt</a>
+<a href="https://gdal.org/en/stable/programs/gdalbuildvrt.html">gdalbuildvrt</a>
 </em>
 
 <h2>AUTHOR</h2>

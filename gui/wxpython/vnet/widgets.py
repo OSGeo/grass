@@ -14,7 +14,7 @@ This program is free software under the GNU General Public License
 
 @author Original author Michael Barton
 @author Original version improved by Martin Landa <landa.martin gmail.com>
-@author Rewritten by Markus Metz redesign georectfier -> GCP Manage
+@author Rewritten by Markus Metz redesign georectifier -> GCP Manage
 @author Stepan Turek <stepan.turek seznam.cz> (Created PointsList from GCPList)
         (GSoC 2012, mentor: Martin Landa)
 """
@@ -217,7 +217,6 @@ class PointsList(
         if colNum < 0:
             return None
 
-        iColEd = self.dataTypes["colEditable"]
         if self.selIdxs[key][colNum] != -1:
             return self.selIdxs[key][colNum]
 
@@ -230,7 +229,6 @@ class PointsList(
         :return: -1 if column does not has values to choose
         """
         colNum = self._getColumnNum(colName)
-        iColEd = self.dataTypes["colEditable"]
         return self.selIdxs[key][colNum]
 
     def EditCellIndex(self, index, colName, cellData):
@@ -513,7 +511,7 @@ class PointsList(
         :return: True if column was shown
         :return: False if position is not valid or column is not hidden
         """
-        if pos < 0 and pos >= self.self.GetColumnCount():
+        if pos < 0 or pos >= self.GetColumnCount():
             return False
         if colName in self.hiddenCols:
             col = self.hiddenCols[colName]
@@ -542,7 +540,7 @@ class PointsList(
         :return: False - if is not shown
         """
 
-        return not self._getColumnNum(colName) == -1
+        return self._getColumnNum(colName) != -1
 
 
 class EditItem(wx.Dialog):

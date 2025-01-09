@@ -66,7 +66,8 @@ def raster_history(map, overwrite=False, env=None):
             "Unable to write history for <%(map)s>. "
             "Raster map <%(map)s> not found in current mapset."
         )
-        % {"map": map, "map": map}
+        % {"map": map},
+        env=env,
     )
     return False
 
@@ -88,8 +89,7 @@ def raster_info(map, env=None):
     def float_or_null(s):
         if s == "NULL":
             return None
-        else:
-            return float(s)
+        return float(s)
 
     s = read_command("r.info", flags="gre", map=map, env=env)
     kv = parse_key_val(s)
@@ -144,7 +144,10 @@ def mapcalc(
             overwrite=overwrite,
         )
     except CalledModuleError:
-        fatal(_("An error occurred while running r.mapcalc with expression: %s") % e)
+        fatal(
+            _("An error occurred while running r.mapcalc with expression: %s") % e,
+            env=env,
+        )
 
 
 def mapcalc_start(
@@ -215,14 +218,10 @@ def raster_what(map, coord, env=None, localized=False):
     [{'elevation': {'color': '255:214:000', 'label': '', 'value': '102.479'}}]
 
     :param str map: the map name
-    :param list coord: a list of list containing all the point that you want
-                       query
+    :param list coord: a list of list containing all the point that you want to query
     :param env:
     """
-    if isinstance(map, (bytes, str)):
-        map_list = [map]
-    else:
-        map_list = map
+    map_list = [map] if isinstance(map, (bytes, str)) else map
 
     coord_list = []
     if isinstance(coord, tuple):
@@ -255,8 +254,7 @@ def raster_what(map, coord, env=None, localized=False):
     for item in ret.splitlines():
         line = item.split(sep)[3:]
         for i, map_name in enumerate(map_list):
-            tmp_dict = {}
-            tmp_dict[map_name] = {}
+            tmp_dict = {map_name: {}}
             for j in range(len(labels)):
                 tmp_dict[map_name][labels[j]] = line[i * len(labels) + j]
 

@@ -62,8 +62,4 @@ class TypeDict(OrderedDict):
         )
 
     def used(self):
-        key_dict = {}
-        for key in self:
-            if getattr(self, key):
-                key_dict[key] = getattr(self, key)
-        return key_dict
+        return {key: getattr(self, key) for key in self if getattr(self, key)}

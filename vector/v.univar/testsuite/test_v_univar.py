@@ -15,9 +15,11 @@ from itertools import zip_longest
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.utils import xfail_windows
 
 
 class TestProfiling(TestCase):
+    @xfail_windows
     def test_flagg(self):
         """Testing flag g with map lakes"""
         output_str = """n=15279
@@ -40,6 +42,7 @@ skewness=-2.41826e-14"""
         v_univar.run()
         self.assertLooksLike(actual=v_univar.outputs.stdout, reference=output_str)
 
+    @xfail_windows
     def test_flage(self):
         """Testing flag e with map geology"""
         output_str = """number of features with non NULL attribute: 1832
@@ -68,6 +71,7 @@ median (even number of cells): 10308.4
         v_univar.run()
         self.assertLooksLike(actual=v_univar.outputs.stdout, reference=output_str)
 
+    @xfail_windows
     def test_flagw(self):
         """Testing flag w with map lakes"""
         output_str = """number of features with non NULL attribute: 15279
@@ -83,6 +87,7 @@ mean of absolute values: 6190.76"""
         v_univar.run()
         self.assertLooksLike(actual=v_univar.outputs.stdout, reference=output_str)
 
+    @xfail_windows
     def test_flagd(self):
         """Testing flag d with map hospitals"""
         univar_string = """number of primitives: 160

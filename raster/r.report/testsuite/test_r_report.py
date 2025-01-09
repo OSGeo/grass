@@ -17,6 +17,7 @@ from datetime import datetime
 from grass.gunittest.case import TestCase
 
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.utils import xfail_windows
 
 
 class TestRasterreport(TestCase):
@@ -294,6 +295,7 @@ class TestRasterreport(TestCase):
         data = json.loads(module.outputs.stdout)
         self._assert_report_equal(reference, data)
 
+    @xfail_windows
     def test_json2(self):
         """Test JSON format with more options"""
         reference = {

@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-22.04
     if: github.repository == 'OSGeo/grass'
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Get dependencies
         run: |
@@ -58,25 +58,26 @@ jobs:
           echo "CFLAGS=${{ env.CFLAGS }}" >> $GITHUB_ENV
           echo "CXXFLAGS=${{ env.CXXFLAGS }}" >> $GITHUB_ENV
           ./configure \
-              --prefix="$HOME/install/" \
               --enable-largefile \
-              --with-cxx \
-              --with-zstd \
-              --with-bzlib \
+              --prefix="$HOME/install/" \
               --with-blas \
-              --with-lapack \
-              --with-readline \
-              --without-openmp \
-              --with-pdal \
-              --without-pthread \
-              --with-tiff \
+              --with-bzlib \
+              --with-cxx \
+              --with-fftw \
               --with-freetype \
               --with-freetype-includes="/usr/include/freetype2/" \
-              --with-proj-share=/usr/share/proj \
               --with-geos \
+              --with-lapack \
+              --with-netcdf \
+              --with-pdal \
+              --with-proj-share=/usr/share/proj \
+              --with-readline \
               --with-sqlite \
-              --with-fftw \
-              --with-netcdf
+              --with-tiff \
+              --with-zstd \
+              --without-openmp \
+              --without-pthread
+
         env:
           CFLAGS: -fPIC -g
           CXXFLAGS: -fPIC -g

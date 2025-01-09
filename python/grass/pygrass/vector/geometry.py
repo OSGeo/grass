@@ -94,8 +94,7 @@ def intersects(lineA, lineB, with_z=False):
         lineA.c_points, lineB.c_points, line.c_points, int(with_z)
     ):
         return line
-    else:
-        return []
+    return []
 
 
 # =============================================
@@ -222,10 +221,7 @@ class Attrs:
 
     def __dict__(self):
         """Return a dict of the attribute table row."""
-        dic = {}
-        for key, val in zip(self.keys(), self.values()):
-            dic[key] = val
-        return dic
+        return dict(zip(self.keys(), self.values()))
 
     def values(self):
         """Return the values of the attribute table row.
@@ -370,8 +366,7 @@ class Geo:
     def has_topology(self):
         if self.c_mapinfo is not None:
             return self.c_mapinfo.contents.level == 2
-        else:
-            return False
+        return False
 
     @mapinfo_must_be_set
     def read(self):
@@ -539,8 +534,7 @@ class Point(Geo):
         """
         if self.is2D:
             return self.x, self.y
-        else:
-            return self.x, self.y, self.z
+        return self.x, self.y, self.z
 
     def to_wkt_p(self):
         """Return a "well know text" (WKT) geometry string Python implementation. ::
@@ -577,10 +571,9 @@ class Point(Geo):
         """
         if self.is2D or pnt.is2D:
             return libvect.Vect_points_distance(self.x, self.y, 0, pnt.x, pnt.y, 0, 0)
-        else:
-            return libvect.Vect_points_distance(
-                self.x, self.y, self.z, pnt.x, pnt.y, pnt.z, 1
-            )
+        return libvect.Vect_points_distance(
+            self.x, self.y, self.z, pnt.x, pnt.y, pnt.z, 1
+        )
 
     def buffer(
         self, dist=None, dist_x=None, dist_y=None, angle=0, round_=True, tol=0.1
@@ -598,8 +591,7 @@ class Point(Geo):
         :type angle: num
         :param round_: to make corners round
         :type round_: bool
-        :param tol: fix the maximum distance between theoretical arc and
-                    output segments
+        :param tol: fix the maximum distance between theoretical arc and output segments
         :type tol: float
         :returns: the buffer as Area object
 
@@ -615,7 +607,8 @@ class Point(Geo):
             dist_x = dist
             dist_y = dist
         elif not dist_x or not dist_y:
-            raise TypeError("TypeError: buffer expected 1 arguments, got 0")
+            msg = "buffer expected 1 arguments, got 0"
+            raise TypeError(msg)
         bound = Line()
         p_points = ctypes.pointer(bound.c_points)
         libvect.Vect_point_buffer2(
@@ -675,18 +668,18 @@ class Line(Geo):
                 )
                 for indx in range(*key.indices(len(self)))
             ]
-        elif isinstance(key, int):
+        if isinstance(key, int):
             if key < 0:  # Handle negative indices
                 key += self.c_points.contents.n_points
             if key >= self.c_points.contents.n_points:
-                raise IndexError("Index out of range")
+                msg = "Index out of range"
+                raise IndexError(msg)
             return Point(
                 self.c_points.contents.x[key],
                 self.c_points.contents.y[key],
                 None if self.is2D else self.c_points.contents.z[key],
             )
-        else:
-            raise ValueError("Invalid argument type: %r." % key)
+        raise ValueError("Invalid argument type: %r." % key)
 
     def __setitem__(self, indx, pnt):
         """Change the coordinate of point. ::
@@ -748,7 +741,8 @@ class Line(Geo):
             ctypes.pointer(ctypes.c_double(angle)),
             ctypes.pointer(ctypes.c_double(slope)),
         ):
-            raise ValueError("Vect_point_on_line give an error.")
+            msg = "Vect_point_on_line gave an error."
+            raise ValueError(msg)
         pnt.is2D = self.is2D
         return pnt
 
@@ -815,10 +809,7 @@ class Line(Geo):
 
         """
         # set direction
-        if forward:
-            direction = libvect.GV_FORWARD
-        else:
-            direction = libvect.GV_BACKWARD
+        direction = libvect.GV_FORWARD if forward else libvect.GV_BACKWARD
         # check if is a Line object
         if isinstance(line, Line):
             c_points = line.c_points
@@ -853,7 +844,8 @@ class Line(Geo):
         if indx < 0:  # Handle negative indices
             indx += self.c_points.contents.n_points
         if indx >= self.c_points.contents.n_points:
-            raise IndexError("Index out of range")
+            msg = "Index out of range"
+            raise IndexError(msg)
         x, y, z = get_xyz(pnt)
         libvect.Vect_line_insert_point(self.c_points, indx, x, y, z)
 
@@ -957,7 +949,8 @@ class Line(Geo):
         if indx < 0:  # Handle negative indices
             indx += self.c_points.contents.n_points
         if indx >= self.c_points.contents.n_points:
-            raise IndexError("Index out of range")
+            msg = "Index out of range"
+            raise IndexError(msg)
         pnt = self[indx]
         libvect.Vect_line_delete_point(self.c_points, indx)
         return pnt
@@ -976,7 +969,8 @@ class Line(Geo):
         if indx < 0:  # Handle negative indices
             indx += self.c_points.contents.n_points
         if indx >= self.c_points.contents.n_points:
-            raise IndexError("Index out of range")
+            msg = "Index out of range"
+            raise IndexError(msg)
         libvect.Vect_line_delete_point(self.c_points, indx)
 
     def prune(self):
@@ -1032,7 +1026,8 @@ class Line(Geo):
             if pnt == point:
                 libvect.Vect_line_delete_point(self.c_points, indx)
                 return
-        raise ValueError("list.remove(x): x not in list")
+        msg = "list.remove(x): x not in list"
+        raise ValueError(msg)
 
     def reverse(self):
         """Reverse the order of vertices, using `Vect_line_reverse`
@@ -1052,11 +1047,9 @@ class Line(Geo):
     def segment(self, start, end):
         """Create line segment. using the ``Vect_line_segment`` C function.
 
-        :param start: distance from the beginning of the line where
-                      the segment start
+        :param start: distance from the beginning of the line where the segment starts
         :type start: float
-        :param end: distance from the beginning of the line where
-                    the segment end
+        :param end: distance from the beginning of the line where the segment ends
         :type end: float
 
         ::
@@ -1135,8 +1128,6 @@ class Line(Geo):
             self.reset()
             for coord in match.groups()[0].strip().split(","):
                 self.append(tuple(float(e) for e in coord.split(" ")))
-        else:
-            return None
 
     def buffer(
         self,
@@ -1161,8 +1152,7 @@ class Line(Geo):
         :type angle: num
         :param round_: to make corners round
         :type round_: bool
-        :param tol: fix the maximum distance between theoretical arc and
-                    output segments
+        :param tol: fix the maximum distance between theoretical arc and output segments
         :type tol: float
         :returns: the buffer as Area object
 
@@ -1181,7 +1171,8 @@ class Line(Geo):
             dist_x = dist
             dist_y = dist
         elif not dist_x or not dist_y:
-            raise TypeError("TypeError: buffer expected 1 arguments, got 0")
+            msg = "buffer expected 1 arguments, got 0"
+            raise TypeError(msg)
         p_bound = ctypes.pointer(ctypes.pointer(libvect.line_pnts()))
         pp_isle = ctypes.pointer(ctypes.pointer(ctypes.pointer(libvect.line_pnts())))
         n_isles = ctypes.pointer(ctypes.c_int())
@@ -1304,7 +1295,8 @@ class Node:
 
         TODO: Must be implemented
         """
-        raise Exception("Not implemented")
+        msg = "Not implemented"
+        raise Exception(msg)
 
     def ilines(self, only_in=False, only_out=False):
         """Return a generator with all lines id connected to a node.
@@ -1373,8 +1365,7 @@ class Boundary(Line):
             v_id = v_id or None
             if idonly:
                 return v_id
-            else:
-                return Centroid(v_id=v_id, c_mapinfo=self.c_mapinfo)
+            return Centroid(v_id=v_id, c_mapinfo=self.c_mapinfo)
 
     def left_centroid(self, idonly=False):
         """Return left centroid
@@ -1516,7 +1507,8 @@ class Isle(Geo):
 
     def to_wkb(self):
         """Return a "well know text" (WKB) geometry array. ::"""
-        raise Exception("Not implemented")
+        msg = "Not implemented"
+        raise Exception(msg)
 
     @mapinfo_must_be_set
     def points_geos(self):
@@ -1721,8 +1713,7 @@ class Area(Geo):
         :type angle: num
         :param round_: to make corners round
         :type round_: bool
-        :param tol: fix the maximum distance between theoretical arc and
-                    output segments
+        :param tol: fix the maximum distance between theoretical arc and output segments
         :type tol: float
         :returns: the buffer as line, centroid, isles object tuple
 
@@ -1732,7 +1723,8 @@ class Area(Geo):
             dist_x = dist
             dist_y = dist
         elif not dist_x or not dist_y:
-            raise TypeError("TypeError: buffer expected 1 arguments, got 0")
+            msg = "buffer expected 1 arguments, got 0"
+            raise TypeError(msg)
         p_bound = ctypes.pointer(ctypes.pointer(libvect.line_pnts()))
         pp_isle = ctypes.pointer(ctypes.pointer(ctypes.pointer(libvect.line_pnts())))
         n_isles = ctypes.pointer(ctypes.c_int())
@@ -1869,7 +1861,7 @@ def c_read_next_line(c_mapinfo, c_points, c_cats):
     v_id = v_id if v_id != 0 else None
     ftype = libvect.Vect_read_next_line(c_mapinfo, c_points, c_cats)
     if ftype == -2:
-        raise StopIteration()
+        raise StopIteration
     if ftype == -1:
         raise
     return ftype, v_id, c_points, c_cats
@@ -1910,12 +1902,12 @@ def c_read_line(feature_id, c_mapinfo, c_points, c_cats):
     if feature_id < 0:  # Handle negative indices
         feature_id += nmax + 1
     if feature_id > nmax:
-        raise IndexError("Index out of range")
+        msg = "Index out of range"
+        raise IndexError(msg)
     if feature_id > 0:
         ftype = libvect.Vect_read_line(c_mapinfo, c_points, c_cats, feature_id)
         return feature_id, ftype, c_points, c_cats
-    else:
-        raise ValueError("The index must be >0, %r given." % feature_id)
+    raise ValueError("The index must be >0, %r given." % feature_id)
 
 
 def read_line(
@@ -1963,10 +1955,10 @@ if __name__ == "__main__":
     utils.create_test_vector_map(test_vector_name)
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
     from grass.pygrass.utils import get_mapset_vector
     from grass.script.core import run_command
 
     mset = get_mapset_vector(test_vector_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)

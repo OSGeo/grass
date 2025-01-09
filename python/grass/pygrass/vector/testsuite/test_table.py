@@ -7,15 +7,14 @@ Created on Wed Jun 25 11:08:22 2014
 import os
 import sqlite3
 import tempfile as tmp
-from string import ascii_letters, digits
 from random import choice
+from string import ascii_letters, digits
+
 import numpy as np
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
 from grass.pygrass.vector.table import Table, get_path
-
 
 # dictionary that generate random data
 RNG = np.random.default_rng()
@@ -65,7 +64,7 @@ def get_table_random_values(nrows, columns):
             raise TypeError("Unknown column type %s for: %s" % (ctype, cname))
         vals.append(COL2VALS[ctype](nrows))
         dtype.append((cname, vals[-1].dtype.str))
-    return np.array([v for v in zip(*vals)], dtype=dtype)
+    return np.array(list(zip(*vals)), dtype=dtype)
 
 
 class DBconnection:
@@ -155,7 +154,6 @@ class DBconnection:
         self.cols = self.table.columns
 
     def tearDown(self):
-        """Remove the generated vector map, if exist"""
         self.table.drop(force=True)
         self.table = None
         self.cols = None
@@ -177,7 +175,6 @@ class TableInsertTestCase(DBconnection, TestCase):
         self.cols = self.table.columns
 
     def tearDown(self):
-        """Remove the generated vector map, if exist"""
         self.table.drop(force=True)
         self.table = None
         self.cols = None

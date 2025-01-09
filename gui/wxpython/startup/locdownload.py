@@ -32,9 +32,12 @@ from grass.script.setup import set_gui_path
 
 set_gui_path()
 
+# flake8: noqa: E402
 from core.debug import Debug
 from core.gthread import gThread
 from gui_core.wrap import Button, StaticText
+
+# flakes8: qa
 
 
 # TODO: labels (and descriptions) translatable?
@@ -93,7 +96,7 @@ class RedirectText:
                 heigth = self._get_heigth(string)
                 wx.CallAfter(self.out.SetLabel, string)
                 self._resize(heigth)
-        except:
+        except wx.PyDeadObjectError:
             # window closed -> PyDeadObjectError
             pass
 
@@ -228,9 +231,7 @@ class LocationDownloadPanel(wx.Panel):
             parent=self, label=_("Select sample project to download:")
         )
 
-        choices = []
-        for item in self.locations:
-            choices.append(item["label"])
+        choices = [item["label"] for item in self.locations]
         self.choice = wx.Choice(parent=self, choices=choices)
 
         self.choice.Bind(wx.EVT_CHOICE, self.OnChangeChoice)
@@ -386,8 +387,7 @@ class LocationDownloadPanel(wx.Panel):
             )
             self.parent.download_button.SetLabel(label=_("Download"))
             return
-        else:
-            self._clearMessage()
+        self._clearMessage()
 
     def GetLocation(self):
         """Get the name of the last location downloaded by the user"""
@@ -496,9 +496,8 @@ class LocationDownloadDialog(wx.Dialog):
 
             if ret == wx.ID_NO:
                 return
-            else:
-                self.panel.thread.Terminate()
-                self.panel._change_download_btn_label()
+            self.panel.thread.Terminate()
+            self.panel._change_download_btn_label()
 
         if event:
             self.EndModal(wx.ID_CANCEL)

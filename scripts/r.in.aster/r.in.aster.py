@@ -152,10 +152,7 @@ def main():
     # Band 3b is not included ASTER L1T
     if proctype == "L1T":
         allbands.remove("3b")
-    if band == "all":
-        bandlist = allbands
-    else:
-        bandlist = band.split(",")
+    bandlist = allbands if band == "all" else band.split(",")
 
     # initialize datasets for L1A, L1B, L1T
     if proctype in {"L1A", "L1B", "L1T"}:

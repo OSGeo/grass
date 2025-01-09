@@ -22,6 +22,7 @@ import numpy as np
 
 import wx
 from functools import reduce
+from operator import add
 
 try:
     import matplotlib as mpl
@@ -263,7 +264,6 @@ class TimelineFrame(wx.Frame):
     def _draw3dFigure(self):
         """Draws 3d view (spatio-temporal extents).
 
-
         Only for matplotlib versions >= 1.0.0.
         Earlier versions cannot draw time ticks and alpha
         and it has a slightly different API.
@@ -271,10 +271,9 @@ class TimelineFrame(wx.Frame):
         self.axes3d.clear()
         self.axes3d.grid(False)
         # self.axes3d.grid(True)
-        if self.temporalType == "absolute":
-            convert = mdates.date2num
-        else:
-            convert = lambda x: x  # noqa: E731
+        convert = (
+            mdates.date2num if self.temporalType == "absolute" else lambda x: x
+        )  # noqa: E731
 
         colors = cycle(COLORS)
         plots = []
@@ -320,10 +319,9 @@ class TimelineFrame(wx.Frame):
         """Draws 2D plot (temporal extents)"""
         self.axes2d.clear()
         self.axes2d.grid(True)
-        if self.temporalType == "absolute":
-            convert = mdates.date2num
-        else:
-            convert = lambda x: x  # noqa: E731
+        convert = (
+            mdates.date2num if self.temporalType == "absolute" else lambda x: x
+        )  # noqa: E731
 
         colors = cycle(COLORS)
 
@@ -495,16 +493,11 @@ class TimelineFrame(wx.Frame):
         ]
         # flatten this list
         if allDatasets:
-            allDatasets = reduce(
-                lambda x, y: x + y, reduce(lambda x, y: x + y, allDatasets)
-            )
+            allDatasets = reduce(add, reduce(add, allDatasets))
             mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
-            allDatasets = [
-                i
-                for i in sorted(
-                    allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
-                )
-            ]
+            allDatasets = sorted(
+                allDatasets, key=lambda dataset_info: mapsets.index(dataset_info[1])
+            )
 
         for dataset in datasets:
             errorMsg = _("Space time dataset <%s> not found.") % dataset
@@ -524,7 +517,7 @@ class TimelineFrame(wx.Frame):
 
             if len(indices) == 0:
                 raise GException(errorMsg)
-            elif len(indices) >= 2:
+            if len(indices) >= 2:
                 dlg = wx.SingleChoiceDialog(
                     self,
                     message=_("Please specify the space time dataset <%s>.") % dataset,
@@ -646,8 +639,7 @@ class DataCursor:
     """A simple data cursor widget that displays the x,y location of a
     matplotlib artist when it is selected.
 
-
-    Source: http://stackoverflow.com/questions/4652439/
+    Source: https://stackoverflow.com/questions/4652439/
             is-there-a-matplotlib-equivalent-of-matlabs-datacursormode/4674445
     """
 

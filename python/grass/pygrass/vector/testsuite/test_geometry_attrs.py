@@ -4,16 +4,8 @@ Created on Thu Jun 19 14:13:53 2014
 @author: pietro
 """
 
-import sys
-import unittest
-import numpy as np
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-import grass.lib.vector as libvect
-from grass.script.core import run_command
-
 from grass.pygrass.vector import VectorTopo
 
 
@@ -40,7 +32,7 @@ class GeometryAttrsTestCase(TestCase):
             cls.vect.close()
             cls.c_mapinfo = None
 
-        """Remove the generated vector map, if exist"""
+        # Remove the generated vector map, if exists
         cls.runModule("g.remove", flags="f", type="vector", name=cls.tmpname)
 
     def test_getitem(self):
