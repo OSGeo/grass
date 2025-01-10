@@ -56,7 +56,7 @@ jobs:
         if: ${{ matrix.language == 'c-cpp' }}
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@48ab28a6f5dbc2a99bf1e0131198dd8f1df78169 # v3.28.0
+        uses: github/codeql-action/init@b6a472f63d85b9c78a3ac5e89422239fc15e9b3c # v3.28.1
         with:
           languages: ${{ matrix.language }}
           config-file: ./.github/codeql/codeql-config.yml
@@ -81,6 +81,6 @@ jobs:
         run: .github/workflows/build_ubuntu-22.04.sh "${HOME}/install"
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@48ab28a6f5dbc2a99bf1e0131198dd8f1df78169 # v3.28.0
+        uses: github/codeql-action/analyze@b6a472f63d85b9c78a3ac5e89422239fc15e9b3c # v3.28.1
         with:
           category: "/language:${{matrix.language}}"
