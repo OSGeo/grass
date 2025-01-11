@@ -5,12 +5,17 @@ on:
   pull_request_target:
     types: [closed]
 
+permissions: {}
+
 jobs:
   assign-milestone:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
-      # Retreiving the current milestoone from API instead of github context,
+      # Retrieving the current milestone from API instead of github context,
       # so up-to-date information is used when running after being queued or for reruns
       # Otherwise, the information should be available using
       # ${{ github.event.pull_request.milestone.title }}
