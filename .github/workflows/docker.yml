@@ -22,8 +22,9 @@ on:
   release:
     types: [published]
 
-jobs:
+permissions: {}
 
+jobs:
   # Run for push to configured branches and all published releases.
   # Take care of different os.
   # For main branch, created tags are:
@@ -46,6 +47,10 @@ jobs:
           - ubuntu
           - ubuntu_wxgui
       fail-fast: false
+
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout

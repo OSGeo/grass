@@ -10,6 +10,8 @@ on:
       - releasebranch_*
   pull_request:
 
+permissions: {}
+
 jobs:
   ubuntu:
     concurrency:

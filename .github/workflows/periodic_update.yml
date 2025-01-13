@@ -10,11 +10,17 @@ on:
     # See https://crontab.guru/#32_10_*/100,1-7_*_WED
     - cron: "32 10 */100,1-7 * WED"
 
+permissions: {}
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   update-configure:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
