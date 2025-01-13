@@ -12,6 +12,7 @@ config.status*
 error.log
 grass.pc
 autom4te.cache/
+macos/cache/*
 
 # ignore specific file generated during make
 gui/wxpython/menustrings.py
