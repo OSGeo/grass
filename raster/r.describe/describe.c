@@ -18,10 +18,12 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
+
 #include "local_proto.h"
 
 int describe(const char *name, int compact, char *no_data_str, int range,
-             int windowed, int nsteps, int as_int, int skip_nulls)
+             int windowed, int nsteps, int as_int, int skip_nulls,
+             enum OutputFormat format)
 {
     int fd;
     struct Cell_stats statf;
@@ -127,20 +129,20 @@ int describe(const char *name, int compact, char *no_data_str, int range,
     if (range) {
         if (compact)
             compact_range_list(negmin, negmax, zero, posmin, posmax, null,
-                               no_data_str, skip_nulls);
+                               no_data_str, skip_nulls, format);
         else
             range_list(negmin, negmax, zero, posmin, posmax, null, no_data_str,
-                       skip_nulls);
+                       skip_nulls, format);
     }
     else {
         Rast_rewind_cell_stats(&statf);
 
         if (compact)
             compact_list(&statf, dmin, dmax, no_data_str, skip_nulls, map_type,
-                         nsteps);
+                         nsteps, format);
         else
             long_list(&statf, dmin, dmax, no_data_str, skip_nulls, map_type,
-                      nsteps);
+                      nsteps, format);
 
         Rast_free_cell_stats(&statf);
     }
