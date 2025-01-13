@@ -299,7 +299,6 @@ def import_stds(
     # Check projection information
     if not location:
         temp_name = gs.tempfile()
-        temp_file = open(temp_name, "w")
         proj_name = os.path.abspath(proj_file_name)
 
         # We need to convert projection strings generated
@@ -313,9 +312,9 @@ def import_stds(
         proj_name_tmp = f"{temp_name}_in_projection"
         Path(proj_name_tmp).write_text(proj_content)
 
-        p = gs.start_command("g.proj", flags="j", stdout=temp_file)
-        p.communicate()
-        temp_file.close()
+        with open(temp_name, "w") as temp_file:
+            p = gs.start_command("g.proj", flags="j", stdout=temp_file)
+            p.communicate()
 
         if not gs.compare_key_value_text_files(temp_name, proj_name_tmp, sep="="):
             if overr:

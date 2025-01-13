@@ -160,19 +160,19 @@ def get_svn_revision():
     """
     # TODO: here should be starting directory
     # but now we are using current as starting
-    p = subprocess.Popen(
+    with subprocess.Popen(
         ["svnversion", "."], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    stdout, stderr = p.communicate()
-    rc = p.poll()
-    if not rc:
+    ) as p:
+        stdout, stderr = p.communicate()
+        rc = p.poll()
+        if rc:
+            return None
         stdout = stdout.strip()
         stdout = stdout.removesuffix("M")
         if ":" in stdout:
             # the first one is the one of source code
             stdout = stdout.split(":")[0]
         return stdout
-    return None
 
 
 def get_svn_info():

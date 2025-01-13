@@ -180,22 +180,22 @@ def readAvi(filename, asNumpy=True):
 
     # Run ffmpeg
     command = "ffmpeg -i input.avi im%d.jpg"
-    S = subprocess.Popen(
-        command, shell=True, cwd=tempDir, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-
-    # Show what mencodec has to say
-    outPut = S.stdout.read()
-
-    if S.wait():
-        # An error occurred, show
-        print(outPut)
-        print(S.stderr.read())
-        # Clean up
-        _cleanDir(tempDir)
-        msg = "Could not read avi."
-        raise RuntimeError(msg)
-
+    with subprocess.Popen(
+        command,
+        cwd=tempDir,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ) as S:
+        # Show what mencodec has to say
+        outPut = S.stdout.read()
+        if S.wait():
+            # An error occurred, show
+            print(outPut)
+            print(S.stderr.read())
+            # Clean up
+            _cleanDir(tempDir)
+            msg = "Could not read avi."
+            raise RuntimeError(msg)
     # Read images
     images = images2ims.readIms(os.path.join(tempDir, "im*.jpg"), asNumpy)
     # Clean up
