@@ -111,6 +111,7 @@ extern int iterout, mx2o, my2o;
 extern int miter, nwalka;
 extern double timec;
 extern int ts, timesec;
+extern double mintimestep;
 
 extern double rain_val;
 extern double manin_val;
