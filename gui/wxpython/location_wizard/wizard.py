@@ -2540,89 +2540,86 @@ class LocationWizard(wx.Object):
         """Get georeferencing information from tables in $GISBASE/etc/proj"""
 
         # read projection and parameters
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "parms.table"))
         self.projections = {}
         self.projdesc = {}
-        for line in f:
-            line = line.strip()
-            try:
-                proj, projdesc, params = line.split(":")
-                paramslist = params.split(";")
-                plist = []
-                for p in paramslist:
-                    if p == "":
-                        continue
-                    p1, pdefault = p.split(",")
-                    pterm, pask = p1.split("=")
-                    p = [pterm.strip(), pask.strip(), pdefault.strip()]
-                    plist.append(p)
-                self.projections[proj.lower().strip()] = (projdesc.strip(), plist)
-                self.projdesc[proj.lower().strip()] = projdesc.strip()
-            except:
-                continue
-        f.close()
+        with open(os.path.join(globalvar.ETCDIR, "proj", "parms.table")) as f:
+            for line in f:
+                line = line.strip()
+                try:
+                    proj, projdesc, params = line.split(":")
+                    paramslist = params.split(";")
+                    plist = []
+                    for p in paramslist:
+                        if p == "":
+                            continue
+                        p1, pdefault = p.split(",")
+                        pterm, pask = p1.split("=")
+                        p = [pterm.strip(), pask.strip(), pdefault.strip()]
+                        plist.append(p)
+                    self.projections[proj.lower().strip()] = (projdesc.strip(), plist)
+                    self.projdesc[proj.lower().strip()] = projdesc.strip()
+                except:
+                    continue
 
         # read datum definitions
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "datum.table"))
         self.datums = {}
         paramslist = []
-        for line in f:
-            line = line.expandtabs(1)
-            line = line.strip()
-            if line == "" or line[0] == "#":
-                continue
-            datum, info = line.split(" ", 1)
-            info = info.strip()
-            datumdesc, params = info.split(" ", 1)
-            datumdesc = datumdesc.strip('"')
-            paramlist = params.split()
-            ellipsoid = paramlist.pop(0)
-            self.datums[datum] = (ellipsoid, datumdesc.replace("_", " "), paramlist)
-        f.close()
+        with open(os.path.join(globalvar.ETCDIR, "proj", "datum.table")) as f:
+            for line in f:
+                line = line.expandtabs(1)
+                line = line.strip()
+                if line == "" or line[0] == "#":
+                    continue
+                datum, info = line.split(" ", 1)
+                info = info.strip()
+                datumdesc, params = info.split(" ", 1)
+                datumdesc = datumdesc.strip('"')
+                paramlist = params.split()
+                ellipsoid = paramlist.pop(0)
+                self.datums[datum] = (ellipsoid, datumdesc.replace("_", " "), paramlist)
 
         # read Earth-based ellipsiod definitions
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table"))
         self.ellipsoids = {}
-        for line in f:
-            line = line.expandtabs(1)
-            line = line.strip()
-            if line == "" or line[0] == "#":
-                continue
-            ellipse, rest = line.split(" ", 1)
-            rest = rest.strip('" ')
-            desc, params = rest.split('"', 1)
-            desc = desc.strip('" ')
-            paramslist = params.split()
-            self.ellipsoids[ellipse] = (desc, paramslist)
-        f.close()
+        with open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table")) as f:
+            for line in f:
+                line = line.expandtabs(1)
+                line = line.strip()
+                if line == "" or line[0] == "#":
+                    continue
+                ellipse, rest = line.split(" ", 1)
+                rest = rest.strip('" ')
+                desc, params = rest.split('"', 1)
+                desc = desc.strip('" ')
+                paramslist = params.split()
+                self.ellipsoids[ellipse] = (desc, paramslist)
 
         # read Planetary ellipsiod definitions
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table.solar.system"))
         self.planetary_ellipsoids = {}
-        for line in f:
-            line = line.expandtabs(1)
-            line = line.strip()
-            if line == "" or line[0] == "#":
-                continue
-            ellipse, rest = line.split(" ", 1)
-            rest = rest.strip('" ')
-            desc, params = rest.split('"', 1)
-            desc = desc.strip('" ')
-            paramslist = params.split()
-            self.planetary_ellipsoids[ellipse] = (desc, paramslist)
-        f.close()
+        with open(
+            os.path.join(globalvar.ETCDIR, "proj", "ellipse.table.solar.system")
+        ) as f:
+            for line in f:
+                line = line.expandtabs(1)
+                line = line.strip()
+                if line == "" or line[0] == "#":
+                    continue
+                ellipse, rest = line.split(" ", 1)
+                rest = rest.strip('" ')
+                desc, params = rest.split('"', 1)
+                desc = desc.strip('" ')
+                paramslist = params.split()
+                self.planetary_ellipsoids[ellipse] = (desc, paramslist)
 
         # read projection parameter description and parsing table
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "desc.table"))
         self.paramdesc = {}
-        for line in f:
-            line = line.strip()
-            try:
-                pparam, datatype, proj4term, desc = line.split(":")
-                self.paramdesc[pparam] = (datatype, proj4term, desc)
-            except:
-                continue
-        f.close()
+        with open(os.path.join(globalvar.ETCDIR, "proj", "desc.table")) as f:
+            for line in f:
+                line = line.strip()
+                try:
+                    pparam, datatype, proj4term, desc = line.split(":")
+                    self.paramdesc[pparam] = (datatype, proj4term, desc)
+                except:
+                    continue
 
     def OnWizFinished(self):
         """Wizard finished, create new location

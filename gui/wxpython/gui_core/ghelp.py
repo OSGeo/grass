@@ -23,6 +23,9 @@ import platform
 import re
 import textwrap
 import sys
+
+from pathlib import Path
+
 import wx
 from wx.html import HtmlWindow
 from operator import itemgetter
@@ -274,9 +277,7 @@ class AboutWindow(wx.Frame):
         """Copyright information"""
         copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
         if os.path.exists(copyfile):
-            copyrightFile = open(copyfile)
-            copytext = copyrightFile.read()
-            copyrightFile.close()
+            copytext = Path(copyfile).read_text()
         else:
             copytext = _("%s file missing") % "COPYING"
 
@@ -303,9 +304,8 @@ class AboutWindow(wx.Frame):
         """Licence about"""
         licfile = os.path.join(os.getenv("GISBASE"), "GPL.TXT")
         if os.path.exists(licfile):
-            licenceFile = open(licfile)
-            license = "".join(licenceFile.readlines())
-            licenceFile.close()
+            with open(licfile) as licenceFile:
+                license = "".join(licenceFile.readlines())
         else:
             license = _("%s file missing") % "GPL.TXT"
         # put text into a scrolling panel
@@ -384,33 +384,31 @@ class AboutWindow(wx.Frame):
         else:
             contribfile = os.path.join(os.getenv("GISBASE"), "contributors.csv")
         if os.path.exists(contribfile):
-            contribFile = codecs.open(contribfile, encoding="utf-8", mode="r")
             contribs = []
             errLines = []
-            for line in contribFile.readlines()[1:]:
-                line = line.rstrip("\n")
-                try:
+            with codecs.open(contribfile, encoding="utf-8", mode="r") as contribFile:
+                for line in contribFile.readlines()[1:]:
+                    line = line.rstrip("\n")
+                    try:
+                        if extra:
+                            name, email, country, rfc2_agreed = line.split(",")
+                        else:
+                            (
+                                cvs_id,
+                                name,
+                                email,
+                                country,
+                                osgeo_id,
+                                rfc2_agreed,
+                                orcid,
+                            ) = line.split(",")
+                    except ValueError:
+                        errLines.append(line)
+                        continue
                     if extra:
-                        name, email, country, rfc2_agreed = line.split(",")
+                        contribs.append((name, email, country))
                     else:
-                        (
-                            cvs_id,
-                            name,
-                            email,
-                            country,
-                            osgeo_id,
-                            rfc2_agreed,
-                            orcid,
-                        ) = line.split(",")
-                except ValueError:
-                    errLines.append(line)
-                    continue
-                if extra:
-                    contribs.append((name, email, country))
-                else:
-                    contribs.append((name, email, country, osgeo_id, orcid))
-
-            contribFile.close()
+                        contribs.append((name, email, country, osgeo_id, orcid))
 
             if errLines:
                 GError(
@@ -469,21 +467,20 @@ class AboutWindow(wx.Frame):
         """Translators info"""
         translatorsfile = os.path.join(os.getenv("GISBASE"), "translators.csv")
         if os.path.exists(translatorsfile):
-            translatorsFile = codecs.open(translatorsfile, encoding="utf-8", mode="r")
             translators = {}
             errLines = []
-            for line in translatorsFile.readlines()[1:]:
-                line = line.rstrip("\n")
-                try:
-                    name, email, languages = line.split(",")
-                except ValueError:
-                    errLines.append(line)
-                    continue
-                for language in languages.split(" "):
-                    if language not in translators:
-                        translators[language] = []
-                    translators[language].append((name, email))
-            translatorsFile.close()
+            with codecs.open(translatorsfile, encoding="utf-8", mode="r") as fd:
+                for line in fd.readlines()[1:]:
+                    line = line.rstrip("\n")
+                    try:
+                        name, email, languages = line.split(",")
+                    except ValueError:
+                        errLines.append(line)
+                        continue
+                    for language in languages.split(" "):
+                        if language not in translators:
+                            translators[language] = []
+                        translators[language].append((name, email))
 
             if errLines:
                 GError(
@@ -650,10 +647,10 @@ class AboutWindow(wx.Frame):
         fname = "translation_status.json"
         statsfile = os.path.join(os.getenv("GISBASE"), fname)
         if os.path.exists(statsfile):
-            statsFile = open(statsfile)
             import json
 
-            jsStats = json.load(statsFile)
+            with open(statsfile) as statsFile:
+                jsStats = json.load(statsFile)
         else:
             jsStats = None
         self.statswin = ScrolledPanel(self.aboutNotebook)
@@ -810,38 +807,39 @@ class HelpWindow(HtmlWindow):
         try:
             contents = []
             skip = False
-            for line in open(htmlFile, "rb"):
-                if "DESCRIPTION" in line:
-                    skip = False
-                if not skip:
-                    # do skip the options description if requested
-                    if "SYNOPSIS" in line:
-                        skip = skipDescription
-                    else:
-                        # FIXME: find only first item
-                        findALink = aLink.search(line)
-                        if findALink is not None:
-                            contents.append(
-                                aLink.sub(
-                                    findALink.group(1)
-                                    + self.fspath
-                                    + findALink.group(2),
-                                    line,
+            with open(htmlFile, "rb") as fd:
+                for line in fd:
+                    if "DESCRIPTION" in line:
+                        skip = False
+                    if not skip:
+                        # do skip the options description if requested
+                        if "SYNOPSIS" in line:
+                            skip = skipDescription
+                        else:
+                            # FIXME: find only first item
+                            findALink = aLink.search(line)
+                            if findALink is not None:
+                                contents.append(
+                                    aLink.sub(
+                                        findALink.group(1)
+                                        + self.fspath
+                                        + findALink.group(2),
+                                        line,
+                                    )
                                 )
-                            )
-                        findImgLink = imgLink.search(line)
-                        if findImgLink is not None:
-                            contents.append(
-                                imgLink.sub(
-                                    findImgLink.group(1)
-                                    + self.fspath
-                                    + findImgLink.group(2),
-                                    line,
+                            findImgLink = imgLink.search(line)
+                            if findImgLink is not None:
+                                contents.append(
+                                    imgLink.sub(
+                                        findImgLink.group(1)
+                                        + self.fspath
+                                        + findImgLink.group(2),
+                                        line,
+                                    )
                                 )
-                            )
 
-                        if findALink is None and findImgLink is None:
-                            contents.append(line)
+                            if findALink is None and findImgLink is None:
+                                contents.append(line)
             self.SetPage("".join(contents))
             self.loaded = True
         except Exception:  # The Manual file was not found

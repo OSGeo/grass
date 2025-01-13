@@ -158,11 +158,10 @@ class RLIWizard:
 
     def _write_confile(self):
         """Write the configuration file"""
-        f = open(os.path.join(self.rlipath, self.startpage.conf_name), "w")
-        self.rasterinfo = grast.raster_info(self.startpage.rast)
-        self._write_region(f)
-        self._write_area(f)
-        f.close()
+        with open(os.path.join(self.rlipath, self.startpage.conf_name), "w") as f:
+            self.rasterinfo = grast.raster_info(self.startpage.rast)
+            self._write_region(f)
+            self._write_area(f)
 
     def _temp_region(self):
         # save current settings:

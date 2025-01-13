@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 
 import os
 import re
+from pathlib import Path
 
 import wx
 import grass.script as gs
@@ -733,11 +734,7 @@ class MapCalcFrame(wx.Frame):
                 dlg.Destroy()
                 return
 
-            try:
-                fobj = open(path, "w")
-                fobj.write(mctxt)
-            finally:
-                fobj.close()
+            Path(path).write_text(mctxt)
 
         dlg.Destroy()
 
@@ -755,11 +752,7 @@ class MapCalcFrame(wx.Frame):
                 dlg.Destroy()
                 return
 
-            try:
-                fobj = open(path)
-                mctxt = fobj.read()
-            finally:
-                fobj.close()
+            mctxt = Path(path).read_text()
 
             try:
                 result, exp = mctxt.split("=", 1)

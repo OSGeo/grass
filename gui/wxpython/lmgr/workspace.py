@@ -431,36 +431,31 @@ class WorkspaceManager:
         """Save layer tree layout to workspace file
         :return: True on success, False on error
         """
-        tmpfile = tempfile.TemporaryFile(mode="w+b")
-        try:
-            WriteWorkspaceFile(lmgr=self.lmgr, file=tmpfile)
-        except Exception as e:
-            GError(
-                parent=self.lmgr,
-                message=_(
-                    "Writing current settings to workspace file <%s> failed.\n"
-                    "Error details: %s"
+        with tempfile.TemporaryFile(mode="w+b") as tmpfile:
+            try:
+                WriteWorkspaceFile(lmgr=self.lmgr, file=tmpfile)
+            except Exception as e:
+                GError(
+                    parent=self.lmgr,
+                    message=_(
+                        "Writing current settings to workspace file <%s> failed.\n"
+                        "Error details: %s"
+                    )
+                    % (tmpfile, str(e)),
                 )
-                % (tmpfile, str(e)),
-            )
-            return False
-
-        try:
-            mfile = open(filename, "wb")
-            tmpfile.seek(0)
-            for line in tmpfile.readlines():
-                mfile.write(line)
-        except OSError:
-            GError(
-                parent=self.lmgr,
-                message=_("Unable to open file <%s> for writing.") % filename,
-            )
-            return False
-
-        mfile.close()
-
+                return False
+            try:
+                with open(filename, "wb") as mfile:
+                    tmpfile.seek(0)
+                    for line in tmpfile.readlines():
+                        mfile.write(line)
+            except OSError:
+                GError(
+                    parent=self.lmgr,
+                    message=_("Unable to open file <%s> for writing.") % filename,
+                )
+                return False
         self.AddFileToHistory(file_path=filename)
-
         return True
 
     def CanClosePage(self, caption):
