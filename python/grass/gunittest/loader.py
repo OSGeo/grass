@@ -113,87 +113,88 @@ def discover_modules(
             for skip in to_skip:
                 dirs.remove(skip)
 
-        if testsuite_dir in dirs:
-            dirs.remove(testsuite_dir)  # do not recurse to testsuite
-            full = os.path.join(root, testsuite_dir)
+        if testsuite_dir not in dirs:
+            continue
+        dirs.remove(testsuite_dir)  # do not recurse to testsuite
+        full = os.path.join(root, testsuite_dir)
 
-            files = os.listdir(full)
-            if file_pattern:
-                files = fnmatch.filter(files, file_pattern)
-            if file_regexp:
-                files = [f for f in files if re.match(file_regexp, f)]
-            if exclude:
-                files = fnmatch_exclude_with_base(files, full, exclude)
-            files = sorted(files)
-            # get test/module name without .py
-            # expecting all files to end with .py
-            # this will not work for invoking bat files but it works fine
-            # as long as we handle only Python files (and using Python
-            # interpreter for invoking)
+        files = os.listdir(full)
+        if file_pattern:
+            files = fnmatch.filter(files, file_pattern)
+        if file_regexp:
+            files = [f for f in files if re.match(file_regexp, f)]
+        if exclude:
+            files = fnmatch_exclude_with_base(files, full, exclude)
+        files = sorted(files)
+        # get test/module name without .py
+        # expecting all files to end with .py
+        # this will not work for invoking bat files but it works fine
+        # as long as we handle only Python files (and using Python
+        # interpreter for invoking)
 
-            # TODO: warning about no tests in a testsuite
-            # (in what way?)
-            for file_name in files:
-                # TODO: add also import if requested
-                # (see older versions of this file)
-                # TODO: check if there is some main in .py
-                # otherwise we can have successful test just because
-                # everything was loaded into Python
-                # TODO: check if there is set -e or exit !0 or ?
-                # otherwise we can have successful because nothing was reported
-                abspath = os.path.abspath(full)
-                abs_file_path = os.path.join(abspath, file_name)
-                if file_name.endswith(".py"):
-                    if file_name == "__init__.py":
-                        # we always ignore __init__.py
-                        continue
-                    file_type = "py"
-                    name = file_name[:-3]
-                elif file_name.endswith(".sh"):
-                    file_type = "sh"
-                    name = file_name[:-3]
+        # TODO: warning about no tests in a testsuite
+        # (in what way?)
+        for file_name in files:
+            # TODO: add also import if requested
+            # (see older versions of this file)
+            # TODO: check if there is some main in .py
+            # otherwise we can have successful test just because
+            # everything was loaded into Python
+            # TODO: check if there is set -e or exit !0 or ?
+            # otherwise we can have successful because nothing was reported
+            abspath = os.path.abspath(full)
+            abs_file_path = os.path.join(abspath, file_name)
+            if file_name.endswith(".py"):
+                if file_name == "__init__.py":
+                    # we always ignore __init__.py
+                    continue
+                file_type = "py"
+                name = file_name[:-3]
+            elif file_name.endswith(".sh"):
+                file_type = "sh"
+                name = file_name[:-3]
+            else:
+                file_type = None  # alternative would be '', now equivalent
+                name = file_name
+
+            add = False
+            try:
+                if grass_location == all_locations_value:
+                    add = True
                 else:
-                    file_type = None  # alternative would be '', now equivalent
-                    name = file_name
-
-                add = False
-                try:
-                    if grass_location == all_locations_value:
-                        add = True
+                    try:
+                        locations = ["nc", "stdmaps", "all"]
+                    except AttributeError:
+                        add = True  # test is universal
                     else:
-                        try:
-                            locations = ["nc", "stdmaps", "all"]
-                        except AttributeError:
-                            add = True  # test is universal
-                        else:
-                            if universal_location_value in locations:
-                                add = True  # cases when it is explicit
-                            if grass_location in locations:
-                                add = True  # standard case with given location
-                            if not locations:
-                                add = True  # count not specified as universal
-                except ImportError as e:
-                    if add_failed_imports:
-                        add = True
-                    else:
-                        raise ImportError(
-                            "Cannot import module named"
-                            " %s in %s (%s)" % (name, full, e.message)
-                        )
-                        # alternative is to create TestClass which will raise
-                        # see unittest.loader
-                if add:
-                    modules.append(
-                        GrassTestPythonModule(
-                            name=name,
-                            module=None,
-                            tested_dir=root,
-                            file_dir=full,
-                            abs_file_path=abs_file_path,
-                            file_path=os.path.join(full, file_name),
-                            file_type=file_type,
-                        )
+                        if universal_location_value in locations:
+                            add = True  # cases when it is explicit
+                        if grass_location in locations:
+                            add = True  # standard case with given location
+                        if not locations:
+                            add = True  # count not specified as universal
+            except ImportError as e:
+                if add_failed_imports:
+                    add = True
+                else:
+                    raise ImportError(
+                        "Cannot import module named %s in %s (%s)"
+                        % (name, full, e.message)
                     )
+                    # alternative is to create TestClass which will raise
+                    # see unittest.loader
+            if add:
+                modules.append(
+                    GrassTestPythonModule(
+                        name=name,
+                        module=None,
+                        tested_dir=root,
+                        file_dir=full,
+                        abs_file_path=abs_file_path,
+                        file_path=os.path.join(full, file_name),
+                        file_type=file_type,
+                    )
+                )
                 # in else with some verbose we could tell about skipped test
     return modules
 

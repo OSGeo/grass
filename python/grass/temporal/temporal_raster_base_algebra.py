@@ -332,26 +332,26 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             spatial_relations = map_i.get_spatial_relations()
 
             for temporal_topology in temporal_topo_list:
-                if temporal_topology.upper() in temporal_relations.keys():
-                    if (
-                        self._check_spatial_topology_entries(
-                            spatial_topo_list, spatial_relations
-                        )
-                        is True
-                    ):
-                        if count_map:
-                            relationmaplist = temporal_relations[
-                                temporal_topology.upper()
-                            ]
-                            gvar = GlobalTemporalVar()
-                            gvar.td = len(relationmaplist)
-                            if "map_value" in dir(map_i):
-                                map_i.map_value.append(gvar)
-                            else:
-                                map_i.map_value = gvar
-                        # Use unique identifier, since map names may be equal
-                        resultdict[map_i.uid] = map_i
-                        # map_i.print_info()
+                if temporal_topology.upper() not in temporal_relations.keys():
+                    continue
+                if (
+                    self._check_spatial_topology_entries(
+                        spatial_topo_list, spatial_relations
+                    )
+                    is not True
+                ):
+                    continue
+                if count_map:
+                    relationmaplist = temporal_relations[temporal_topology.upper()]
+                    gvar = GlobalTemporalVar()
+                    gvar.td = len(relationmaplist)
+                    if "map_value" in dir(map_i):
+                        map_i.map_value.append(gvar)
+                    else:
+                        map_i.map_value = gvar
+                # Use unique identifier, since map names may be equal
+                resultdict[map_i.uid] = map_i
+                # map_i.print_info()
 
         resultlist = resultdict.values()
 
@@ -461,33 +461,36 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         temporal_relations = map_i.get_temporal_relations()
 
         for topo in temporal_topo_list:
-            if topo.upper() in temporal_relations.keys():
-                relationmaplist = temporal_relations[topo.upper()]
-                if count == 0 and "cmd_list" in dir(map_i):
-                    cmd_value_list.extend((compop, "("))
-                for relationmap in relationmaplist:
-                    if (
-                        self._check_spatial_topology_relation(
-                            spatial_topo_list, map_i, relationmap
-                        )
-                        is True
-                    ):
-                        if convert and "condition_value" in dir(relationmap):
-                            if relationmap.condition_value != []:
-                                cmdstring = str(int(relationmap.condition_value[0]))
-                                relationmap.cmd_list = cmdstring
-                        if "cmd_list" in dir(relationmap):
-                            if count > 0:
-                                cmd_value_list.append(aggregate + aggregate)
-                            cmd_value_list.append(relationmap.cmd_list)
-                            count += 1
-                        if self.debug:
-                            print(
-                                "compare_cmd_value",
-                                map_i.get_id(),
-                                relationmap.get_id(),
-                                relationmap.cmd_list,
-                            )
+            if topo.upper() not in temporal_relations.keys():
+                continue
+            relationmaplist = temporal_relations[topo.upper()]
+            if count == 0 and "cmd_list" in dir(map_i):
+                cmd_value_list.extend((compop, "("))
+            for relationmap in relationmaplist:
+                if (
+                    self._check_spatial_topology_relation(
+                        spatial_topo_list, map_i, relationmap
+                    )
+                    is not True
+                ):
+                    continue
+                if convert and "condition_value" in dir(relationmap):
+                    if relationmap.condition_value != []:
+                        cmdstring = str(int(relationmap.condition_value[0]))
+                        relationmap.cmd_list = cmdstring
+                if "cmd_list" in dir(relationmap):
+                    if count > 0:
+                        cmd_value_list.append(aggregate + aggregate)
+                    cmd_value_list.append(relationmap.cmd_list)
+                    count += 1
+                if self.debug:
+                    print(
+                        "compare_cmd_value",
+                        map_i.get_id(),
+                        relationmap.get_id(),
+                        relationmap.cmd_list,
+                    )
+
         if count > 0:
             cmd_value_list.append(")")
             cmd_value_str = "".join(map(str, cmd_value_list))
@@ -519,28 +522,30 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         leftcmd = map_i
         cmdstring = ""
         for topo in temporal_topo_list:
-            if topo.upper() in temporal_relations.keys():
-                relationmaplist = temporal_relations[topo.upper()]
-                for relationmap in relationmaplist:
-                    if (
-                        self._check_spatial_topology_relation(
-                            spatial_topo_list, map_i, relationmap
-                        )
-                        is True
-                    ):
-                        # Create r.mapcalc expression string for the operation.
-                        cmdstring = self.build_command_string(
-                            leftcmd, relationmap, operator=operator, cmd_type="operator"
-                        )
-                        leftcmd = cmdstring
+            if topo.upper() not in temporal_relations.keys():
+                continue
+            relationmaplist = temporal_relations[topo.upper()]
+            for relationmap in relationmaplist:
+                if (
+                    self._check_spatial_topology_relation(
+                        spatial_topo_list, map_i, relationmap
+                    )
+                    is True
+                ):
+                    # Create r.mapcalc expression string for the operation.
+                    cmdstring = self.build_command_string(
+                        leftcmd, relationmap, operator=operator, cmd_type="operator"
+                    )
+                    leftcmd = cmdstring
 
-                        if self.debug:
-                            print(
-                                "operator_cmd_value",
-                                map_i.get_id(),
-                                operator,
-                                relationmap.get_id(),
-                            )
+                    if self.debug:
+                        print(
+                            "operator_cmd_value",
+                            map_i.get_id(),
+                            operator,
+                            relationmap.get_id(),
+                        )
+
         # Add command list to result map.
         map_i.cmd_list = cmdstring
         if self.debug:
@@ -583,56 +588,54 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 base_map=map_i, bool_op="and", copy=True, rename=True
             )
 
-            # Combine temporal and spatial extents of intermediate map with related
-            # maps.
+            # Combine temporal and spatial extents of intermediate map with related maps
             for topo in topolist:
-                if topo in tbrelations.keys():
-                    for map_j in tbrelations[topo]:
-                        if (
-                            self._check_spatial_topology_relation(
-                                spatial_topo_list, map_i, map_j
-                            )
-                            is True
-                        ):
-                            if temporal == "r":
-                                # Generate an intermediate map for the result map list.
-                                map_new = self.generate_new_map(
-                                    base_map=map_i,
-                                    bool_op="and",
-                                    copy=True,
-                                    rename=True,
-                                )
-                            # Create overlaid map extent.
-                            returncode = self.overlay_map_extent(
-                                map_new, map_j, "and", temp_op=temporal
-                            )
+                if topo not in tbrelations.keys():
+                    continue
+                for map_j in tbrelations[topo]:
+                    if (
+                        self._check_spatial_topology_relation(
+                            spatial_topo_list, map_i, map_j
+                        )
+                        is not True
+                    ):
+                        continue
+                    if temporal == "r":
+                        # Generate an intermediate map for the result map list.
+                        map_new = self.generate_new_map(
+                            base_map=map_i,
+                            bool_op="and",
+                            copy=True,
+                            rename=True,
+                        )
+                    # Create overlaid map extent.
+                    returncode = self.overlay_map_extent(
+                        map_new, map_j, "and", temp_op=temporal
+                    )
 
-                            # Stop the loop if no temporal or spatial relationship
-                            # exist.
-                            if returncode == 0:
-                                break
-                            # Append map to result map list.
-                            if returncode == 1:
-                                # print(map_new.cmd_list)
-                                # resultlist.append(map_new)
-                                if cmd_bool:
-                                    # Create r.mapcalc expression string for the
-                                    # operation.
-                                    cmdstring = self.build_command_string(
-                                        map_i,
-                                        map_j,
-                                        operator=operator,
-                                        cmd_type=cmd_type,
-                                    )
-                                    # Conditional append of module command.
-                                    map_new.cmd_list = cmdstring
-                                # Write map object to result dictionary.
-                                resultdict[map_new.uid] = map_new
+                    # Stop the loop if no temporal or spatial relationship
+                    # exist.
                     if returncode == 0:
                         break
-            # Append map to result map list.
-            # if returncode == 1:
-            #    resultlist.append(map_new)
+                    # Append map to result map list.
+                    if returncode == 1:
+                        # print(map_new.cmd_list)
+                        # resultlist.append(map_new)
+                        if cmd_bool:
+                            # Create r.mapcalc expression string for the
+                            # operation.
+                            cmdstring = self.build_command_string(
+                                map_i,
+                                map_j,
+                                operator=operator,
+                                cmd_type=cmd_type,
+                            )
+                            # Conditional append of module command.
+                            map_new.cmd_list = cmdstring
+                        # Write map object to result dictionary.
+                        resultdict[map_new.uid] = map_new
+                if returncode == 0:
+                    break
         # Get sorted map objects as values from result dictionary.
         resultlist = resultdict.values()
         return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)

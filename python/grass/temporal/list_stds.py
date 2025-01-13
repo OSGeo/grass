@@ -282,17 +282,17 @@ def _get_get_registered_maps_as_objects_with_method(dataset, where, method, gran
         return dataset.get_registered_maps_as_objects(
             where=where, order="start_time", dbif=dbif
         )
-    if method == "gran":
-        if where:
-            msg = f"The where parameter is not supported with method={method}"
-            raise ValueError(msg)
-        if gran is not None and gran != "":
-            return dataset.get_registered_maps_as_objects_by_granularity(
-                gran=gran, dbif=dbif
-            )
-        return dataset.get_registered_maps_as_objects_by_granularity(dbif=dbif)
-    msg = f"Invalid method '{method}'"
-    raise ValueError(msg)
+    if method != "gran":
+        msg = f"Invalid method '{method}'"
+        raise ValueError(msg)
+    if where:
+        msg = f"The where parameter is not supported with method={method}"
+        raise ValueError(msg)
+    if gran is not None and gran != "":
+        return dataset.get_registered_maps_as_objects_by_granularity(
+            gran=gran, dbif=dbif
+        )
+    return dataset.get_registered_maps_as_objects_by_granularity(dbif=dbif)
 
 
 def _get_get_registered_maps_as_objects_delta_gran(
@@ -305,11 +305,10 @@ def _get_get_registered_maps_as_objects_delta_gran(
         return []
 
     if isinstance(maps[0], list):
-        if len(maps[0]) > 0:
-            first_time, unused = maps[0][0].get_temporal_extent_as_tuple()
-        else:
+        if len(maps[0]) <= 0:
             msgr.warning(_("Empty map list"))
             return []
+        first_time, unused = maps[0][0].get_temporal_extent_as_tuple()
     else:
         first_time, unused = maps[0].get_temporal_extent_as_tuple()
 

@@ -936,33 +936,30 @@ class AbstractMapDataset(AbstractDataset):
         else:
             start, end, unit = self.get_relative_time()
 
-        if start is not None:
-            if end is not None:
-                if start >= end:
-                    if self.get_layer() is not None:
-                        self.msgr.error(
-                            _(
-                                "Map <%(id)s> with layer %(layer)s "
-                                "has incorrect time interval, start "
-                                "time is greater than end time"
-                            )
-                            % {"id": self.get_map_id(), "layer": self.get_layer()}
-                        )
-                    else:
-                        self.msgr.error(
-                            _(
-                                "Map <%s> has incorrect time "
-                                "interval, start time is greater "
-                                "than end time"
-                            )
-                            % (self.get_map_id())
-                        )
-                    return False
-        else:
-            self.msgr.error(
-                _("Map <%s> has incorrect start time") % (self.get_map_id())
-            )
+        if start is None:
+            self.msgr.error(_("Map <%s> has incorrect start time") % self.get_map_id())
             return False
+        if end is not None:
+            if start >= end:
+                if self.get_layer() is not None:
+                    self.msgr.error(
+                        _(
+                            "Map <%(id)s> with layer %(layer)s "
+                            "has incorrect time interval, start "
+                            "time is greater than end time"
+                        )
+                        % {"id": self.get_map_id(), "layer": self.get_layer()}
+                    )
+                else:
+                    self.msgr.error(
+                        _(
+                            "Map <%s> has incorrect time "
+                            "interval, start time is greater "
+                            "than end time"
+                        )
+                        % (self.get_map_id())
+                    )
+                return False
 
         return True
 

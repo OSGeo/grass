@@ -120,10 +120,9 @@ def _getSequenceNumber(filename, part1, part2):
     # Get all numeric chars
     seq2 = ""
     for c in seq:
-        if c in digits:
-            seq2 += c
-        else:
+        if c not in digits:
             break
+        seq2 += c
     # Make int and return
     return int(seq2)
 

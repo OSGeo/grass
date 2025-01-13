@@ -383,12 +383,11 @@ class Mapset:
         elist = []
         for el in clist:
             el_name = ct.cast(el, ct.c_char_p).value
-            if el_name:
-                elist.append(decode(el_name))
-            else:
+            if not el_name:
                 if pattern:
                     return fnmatch.filter(elist, pattern)
                 return elist
+            elist.append(decode(el_name))
 
     def is_current(self):
         """Check if the MAPSET is the working MAPSET"""
@@ -459,12 +458,11 @@ class VisibleMapset:
         :param mapset: a mapset's name
         :type mapset: str
         """
-        if mapset not in self.read() and mapset in self.location:
-            with open(self.spath, "a+") as f:
-                f.write("%s\n" % mapset)
-        else:
+        if mapset in self.read() or mapset not in self.location:
             msg = "Mapset not found"
             raise TypeError(msg)
+        with open(self.spath, "a+") as f:
+            f.write("%s\n" % mapset)
 
     def remove(self, mapset):
         """Remove mapset to the search path
