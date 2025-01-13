@@ -36,7 +36,7 @@ import sys
 import time
 import traceback
 from threading import Thread
-from typing import TYPE_CHECKING, TextIO
+from typing import TYPE_CHECKING, AnyStr, TextIO, overload
 
 import wx
 from core.debug import Debug
@@ -59,7 +59,17 @@ if TYPE_CHECKING:
     from io import TextIOWrapper
 
 
-def DecodeString(string):
+@overload
+def DecodeString(string: AnyStr) -> AnyStr | str:
+    pass
+
+
+@overload
+def DecodeString(string: None) -> None:
+    pass
+
+
+def DecodeString(string: AnyStr | None) -> AnyStr | str | None:
     """Decode string using system encoding
 
     :param string: string to be decoded
@@ -75,7 +85,17 @@ def DecodeString(string):
     return string
 
 
-def EncodeString(string):
+@overload
+def EncodeString(string: str) -> bytes | str:
+    pass
+
+
+@overload
+def EncodeString(string: None) -> None:
+    pass
+
+
+def EncodeString(string: str | None) -> bytes | str | None:
     """Return encoded string using system locales
 
     :param string: string to be encoded
