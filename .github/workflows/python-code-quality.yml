@@ -34,7 +34,7 @@ jobs:
       # renovate: datasource=pypi depName=pylint
       PYLINT_VERSION: "3.3.3"
       # renovate: datasource=pypi depName=bandit
-      BANDIT_VERSION: "1.8.0"
+      BANDIT_VERSION: "1.8.2"
       # renovate: datasource=pypi depName=ruff
       RUFF_VERSION: "0.9.1"
 
