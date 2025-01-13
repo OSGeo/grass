@@ -217,15 +217,12 @@ class Layer:
 
         :return: command list/string
         """
-        if string:
-            if self.type == "command":
-                scmd = []
-                for c in self.cmd:
-                    scmd.append(utils.GetCmdString(c))
-
-                return ";".join(scmd)
-            return utils.GetCmdString(self.cmd)
-        return self.cmd
+        if not string:
+            return self.cmd
+        if self.type == "command":
+            scmd = [utils.GetCmdString(c) for c in self.cmd]
+            return ";".join(scmd)
+        return utils.GetCmdString(self.cmd)
 
     def GetType(self):
         """Get map layer type"""
@@ -1406,29 +1403,28 @@ class Map:
 
         list_ = self.overlays if overlay else self.layers
 
-        if layer in list_:
-            if layer.mapfile:
-                base, mapfile = os.path.split(layer.mapfile)
-                tempbase = mapfile.split(".")[0]
-                if base == "" or tempbase == "":
-                    return None
-                basefile = os.path.join(base, tempbase) + r".*"
-                # this comes all the way from r28605, so leaving
-                # it as it is, although it does not really fit with the
-                # new system (but probably works well enough)
-                for f in glob.glob(basefile):
-                    os.remove(f)
+        if layer not in list_:
+            return None
+        if layer.mapfile:
+            base, mapfile = os.path.split(layer.mapfile)
+            tempbase = mapfile.split(".")[0]
+            if base == "" or tempbase == "":
+                return None
+            basefile = os.path.join(base, tempbase) + r".*"
+            # this comes all the way from r28605, so leaving
+            # it as it is, although it does not really fit with the
+            # new system (but probably works well enough)
+            for f in glob.glob(basefile):
+                os.remove(f)
 
-            if layer.GetType() in {"vector", "thememap"}:
-                if os.path.isfile(layer._legrow):
-                    os.remove(layer._legrow)
+        if layer.GetType() in {"vector", "thememap"}:
+            if os.path.isfile(layer._legrow):
+                os.remove(layer._legrow)
 
-            list_.remove(layer)
+        list_.remove(layer)
 
-            self.layerRemoved.emit(layer=layer)
-            return layer
-
-        return None
+        self.layerRemoved.emit(layer=layer)
+        return layer
 
     def SetLayers(self, layers):
         self.layers = layers
@@ -1653,12 +1649,11 @@ class Map:
         """
         ovl = [overlay for overlay in self.overlays if overlay.id == id]
 
-        if not list:
-            if len(ovl) != 1:
-                return None
-            return ovl[0]
-
-        return ovl
+        if list:
+            return ovl
+        if len(ovl) != 1:
+            return None
+        return ovl[0]
 
     def DeleteOverlay(self, overlay):
         """Delete overlay

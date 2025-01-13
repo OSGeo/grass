@@ -262,16 +262,18 @@ class ProfileFrame(BasePlotFrame):
         for r in self.raster.keys():
             self.raster[r]["datalist"] = []
             datalist = self.CreateDatalist(r, self.coordstr)
-            if len(datalist) > 0:
-                self.raster[r]["datalist"] = datalist
+            if len(datalist) <= 0:
+                continue
 
-                # update ylabel to match units if they exist
-                if self.raster[r]["units"] != "":
-                    self.ylabel += "%s (%d)," % (self.raster[r]["units"], i)
-                i += 1
+            self.raster[r]["datalist"] = datalist
 
-                # update title
-                self.ptitle += " %s ," % r.split("@")[0]
+            # update ylabel to match units if they exist
+            if self.raster[r]["units"] != "":
+                self.ylabel += "%s (%d)," % (self.raster[r]["units"], i)
+            i += 1
+
+            # update title
+            self.ptitle += " %s ," % r.split("@")[0]
 
         self.ptitle = self.ptitle.rstrip(",")
 

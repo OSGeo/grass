@@ -426,29 +426,31 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                 for cat in catsCurr[0][layer]:
                     if layer not in catsCurr[1].keys() or cat not in catsCurr[1][layer]:
                         catList.append(cat)
-                if catList != []:
-                    add = action == "catadd"
 
-                    newfid = self.digit.SetLineCats(fid, layer, catList, add)
-                    if len(self.cats.keys()) == 1:
-                        self.fidText.SetLabel("%d" % newfid)
-                    else:
-                        choices = self.fidMulti.GetItems()
-                        choices[choices.index(str(fid))] = str(newfid)
-                        self.fidMulti.SetItems(choices)
-                        self.fidMulti.SetStringSelection(str(newfid))
+                if catList == []:
+                    continue
 
-                    self.cats[newfid] = self.cats[fid]
-                    del self.cats[fid]
+                add = action == "catadd"
+                newfid = self.digit.SetLineCats(fid, layer, catList, add)
+                if len(self.cats.keys()) == 1:
+                    self.fidText.SetLabel("%d" % newfid)
+                else:
+                    choices = self.fidMulti.GetItems()
+                    choices[choices.index(str(fid))] = str(newfid)
+                    self.fidMulti.SetItems(choices)
+                    self.fidMulti.SetStringSelection(str(newfid))
 
-                    fid = newfid
-                    if self.fid < 0:
-                        wx.MessageBox(
-                            parent=self,
-                            message=_("Unable to update vector map."),
-                            caption=_("Error"),
-                            style=wx.OK | wx.ICON_ERROR,
-                        )
+                self.cats[newfid] = self.cats[fid]
+                del self.cats[fid]
+
+                fid = newfid
+                if self.fid < 0:
+                    wx.MessageBox(
+                        parent=self,
+                        message=_("Unable to update vector map."),
+                        caption=_("Error"),
+                        style=wx.OK | wx.ICON_ERROR,
+                    )
 
         self.cats_orig[fid] = copy.deepcopy(cats)
 

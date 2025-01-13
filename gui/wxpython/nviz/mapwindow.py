@@ -2543,16 +2543,18 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     cmdLColor += "%s," % nvizData["lines"]["color"]["value"]
                     cmdLMode += "%s," % nvizData["lines"]["mode"]["type"]
                     cmdLPos += "0,0,%d," % nvizData["lines"]["height"]["value"]
-                if (vInfo["points"] + vInfo["centroids"]) > 0:
-                    cmdPoints += (
-                        "%s," % self.tree.GetLayerInfo(vector, key="maplayer").GetName()
-                    )
-                    cmdPWidth += "%d," % nvizData["points"]["width"]["value"]
-                    cmdPSize += "%d," % nvizData["points"]["size"]["value"]
-                    cmdPColor += "%s," % nvizData["points"]["color"]["value"]
-                    cmdPMarker += "%s," % markers[nvizData["points"]["marker"]["value"]]
-                    cmdPPos += "0,0,%d," % nvizData["points"]["height"]["value"]
-                    cmdPLayer += "1,1,"
+                if vInfo["points"] + vInfo["centroids"] <= 0:
+                    continue
+                cmdPoints += (
+                    "%s," % self.tree.GetLayerInfo(vector, key="maplayer").GetName()
+                )
+                cmdPWidth += "%d," % nvizData["points"]["width"]["value"]
+                cmdPSize += "%d," % nvizData["points"]["size"]["value"]
+                cmdPColor += "%s," % nvizData["points"]["color"]["value"]
+                cmdPMarker += "%s," % markers[nvizData["points"]["marker"]["value"]]
+                cmdPPos += "0,0,%d," % nvizData["points"]["height"]["value"]
+                cmdPLayer += "1,1,"
+
             if cmdLines:
                 cmd += "vline=" + cmdLines.strip(",") + " "
                 cmd += "vline_width=" + cmdLWidth.strip(",") + " "

@@ -398,13 +398,12 @@ class ImportDialog(wx.Dialog):
 
             ret = dlg.ShowModal()
 
-            if ret == wx.ID_OK:
-                # do not import unchecked layers
-                for itm in reversed(list(dlg.GetData(checked=False))):
-                    idx = itm[-1]
-                    layers.pop(idx)
-            else:
+            if ret != wx.ID_OK:
                 return None
+            # do not import unchecked layers
+            for itm in reversed(list(dlg.GetData(checked=False))):
+                idx = itm[-1]
+                layers.pop(idx)
 
         return layers
 

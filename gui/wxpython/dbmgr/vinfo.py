@@ -45,10 +45,9 @@ def GetDbEncoding():
     then env variable), if not assumes unicode."""
     enc = UserSettings.Get(group="atm", key="encoding", subkey="value")
     if not enc and "GRASS_DB_ENCODING" in os.environ:
-        enc = os.environ["GRASS_DB_ENCODING"]
-    else:
-        enc = "utf-8"  # assuming UTF-8
-    return enc
+        return os.environ["GRASS_DB_ENCODING"]
+    # assuming UTF-8
+    return "utf-8"
 
 
 def CreateDbInfoDesc(panel, mapDBInfo, layer):

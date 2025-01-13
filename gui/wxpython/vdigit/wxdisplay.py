@@ -1141,14 +1141,15 @@ class DisplayDriver:
 
                 Vect_read_line(self.poMapInfo, BPoints, None, line2)
 
-                if Vect_line_check_duplicate(APoints, BPoints, WITHOUT_Z):
-                    if i not in ids:
-                        ids[i] = []
-                        ids[i].append((line1, self._getCatString(line1)))
-                        self.selected["idsDupl"].append(line1)
+                if not Vect_line_check_duplicate(APoints, BPoints, WITHOUT_Z):
+                    continue
+                if i not in ids:
+                    ids[i] = []
+                    ids[i].append((line1, self._getCatString(line1)))
+                    self.selected["idsDupl"].append(line1)
 
-                    ids[i].append((line2, self._getCatString(line2)))
-                    self.selected["idsDupl"].append(line2)
+                ids[i].append((line2, self._getCatString(line2)))
+                self.selected["idsDupl"].append(line2)
 
         Vect_destroy_line_struct(APoints)
         Vect_destroy_line_struct(BPoints)

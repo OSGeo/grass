@@ -346,12 +346,11 @@ class GRASSStartup(wx.Frame):
             sys.stderr.write(
                 _("ERROR: Location <%s> not found\n") % self.GetRCValue("LOCATION_NAME")
             )
-            if len(self.listOfLocations) > 0:
-                self.lblocations.SetSelection(0, force=True)
-                self.lblocations.EnsureVisible(0)
-                location = self.listOfLocations[0]
-            else:
+            if len(self.listOfLocations) <= 0:
                 return
+            self.lblocations.SetSelection(0, force=True)
+            self.lblocations.EnsureVisible(0)
+            location = self.listOfLocations[0]
 
         # list of mapsets
         self.UpdateMapsets(os.path.join(self.gisdbase, location))
@@ -1116,34 +1115,32 @@ class GRASSStartup(wx.Frame):
 
             ret = dlg.ShowModal()
             dlg.Destroy()
-            if ret == wx.ID_YES:
-                dlg1 = wx.MessageDialog(
-                    parent=self,
-                    message=_(
-                        "ARE YOU REALLY SURE?\n\n"
-                        "If you really are running another GRASS session doing this "
-                        "could corrupt your data. Have another look in the processor "
-                        "manager just to be sure..."
-                    ),
-                    caption=_("Lock file found"),
-                    style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
-                )
-
-                ret = dlg1.ShowModal()
-                dlg1.Destroy()
-
-                if ret == wx.ID_YES:
-                    try:
-                        os.remove(lockfile)
-                    except OSError as e:
-                        GError(
-                            _("Unable to remove '%(lock)s'.\n\nDetails: %(reason)s")
-                            % {"lock": lockfile, "reason": e}
-                        )
-                else:
-                    return
-            else:
+            if ret != wx.ID_YES:
                 return
+
+            dlg1 = wx.MessageDialog(
+                parent=self,
+                message=_(
+                    "ARE YOU REALLY SURE?\n\n"
+                    "If you really are running another GRASS session doing this "
+                    "could corrupt your data. Have another look in the processor "
+                    "manager just to be sure..."
+                ),
+                caption=_("Lock file found"),
+                style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
+            )
+            ret = dlg1.ShowModal()
+            dlg1.Destroy()
+
+            if ret != wx.ID_YES:
+                return
+            try:
+                os.remove(lockfile)
+            except OSError as e:
+                GError(
+                    _("Unable to remove '%(lock)s'.\n\nDetails: %(reason)s")
+                    % {"lock": lockfile, "reason": e}
+                )
         self.SetLocation(dbase, location, mapset)
         self.ExitSuccessfully()
 

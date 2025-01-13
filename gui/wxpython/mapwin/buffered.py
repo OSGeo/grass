@@ -796,18 +796,19 @@ class BufferedMapWindow(MapWindowBase, Window):
         imgs = []
         for overlay in self.Map.GetListOfLayers(ltype="overlay", active=True):
             if (
-                overlay.mapfile is not None
-                and os.path.isfile(overlay.mapfile)
-                and os.path.getsize(overlay.mapfile)
+                overlay.mapfile is None
+                or not os.path.isfile(overlay.mapfile)
+                or (not os.path.getsize(overlay.mapfile))
             ):
-                img = utils.autoCropImageFromFile(overlay.mapfile)
+                continue
+            img = utils.autoCropImageFromFile(overlay.mapfile)
 
-                for key in list(self.imagedict.keys()):
-                    if self.imagedict[key]["id"] == overlay.id:
-                        del self.imagedict[key]
+            for key in list(self.imagedict.keys()):
+                if self.imagedict[key]["id"] == overlay.id:
+                    del self.imagedict[key]
 
-                self.imagedict[img] = {"id": overlay.id, "layer": overlay}
-                imgs.append(img)
+            self.imagedict[img] = {"id": overlay.id, "layer": overlay}
+            imgs.append(img)
 
         return imgs
 
@@ -1219,23 +1220,17 @@ class BufferedMapWindow(MapWindowBase, Window):
         if not polycoords:
             polycoords = self.polycoords
 
-        if len(polycoords) > 0:
-            self.plineid = wx.ID_NEW + 1
-            # convert from EN to XY
-            coords = []
-            for p in polycoords:
-                coords.append(self.Cell2Pixel(p))
-
-            self.Draw(pdc, drawid=self.plineid, pdctype="polyline", coords=coords)
-
-            Debug.msg(
-                4,
-                "BufferedWindow.DrawLines(): coords=%s, id=%s" % (coords, self.plineid),
-            )
-
-            return self.plineid
-
-        return -1
+        if len(polycoords) <= 0:
+            return -1
+        self.plineid = wx.ID_NEW + 1
+        # convert from EN to XY
+        coords = [self.Cell2Pixel(p) for p in polycoords]
+        self.Draw(pdc, drawid=self.plineid, pdctype="polyline", coords=coords)
+        Debug.msg(
+            4,
+            "BufferedWindow.DrawLines(): coords=%s, id=%s" % (coords, self.plineid),
+        )
+        return self.plineid
 
     def DrawPolylines(self, pdc, coords, pen, drawid=None):
         """Draw polyline in PseudoDC.

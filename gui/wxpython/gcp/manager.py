@@ -919,9 +919,7 @@ class DispMapPage(TitledPage):
                 flags="g",
             )
 
-            if ret:
-                self.parent.src_maps = ret.splitlines()
-            else:
+            if not ret:
                 GError(
                     parent=self,
                     message=_(
@@ -931,6 +929,7 @@ class DispMapPage(TitledPage):
                     % self.parent.grouppage.xygroup,
                 )
                 return
+            self.parent.src_maps = ret.splitlines()
 
         elif maptype == "vector":
             grassdatabase = self.parent.grassdatabase
@@ -1699,25 +1698,24 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         are active for the selected transformation order
         """
         if (
-            (self.GCPcount < 3 and self.gr_order == 1)
-            or (self.GCPcount < 6 and self.gr_order == 2)
-            or (self.GCPcount < 10 and self.gr_order == 3)
+            (self.GCPcount >= 3 or self.gr_order != 1)
+            and (self.GCPcount >= 6 or self.gr_order != 2)
+            and (self.GCPcount >= 10 or self.gr_order != 3)
         ):
-            if msg:
-                GWarning(
-                    parent=self,
-                    message=_(
-                        "Insufficient points defined and active (checked) "
-                        "for selected rectification method (order: %d).\n"
-                        "3+ points needed for 1st order,\n"
-                        "6+ points for 2nd order, and\n"
-                        "10+ points for 3rd order."
-                    )
-                    % self.gr_order,
-                )
-                return False
-        else:
             return True
+        if msg:
+            GWarning(
+                parent=self,
+                message=_(
+                    "Insufficient points defined and active (checked) "
+                    "for selected rectification method (order: %d).\n"
+                    "3+ points needed for 1st order,\n"
+                    "6+ points for 2nd order, and\n"
+                    "10+ points for 3rd order."
+                )
+                % self.gr_order,
+            )
+            return False
 
     def _getOverWriteDialog(self, maptype, overwrite):
         """Get overwrite confirm dialog
@@ -2037,9 +2035,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         self.grwiz.SwitchEnv("target")
 
-        if ret:
-            errlist = ret.splitlines()
-        else:
+        if not ret:
             GError(
                 parent=self,
                 message=_(
@@ -2048,6 +2044,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 ),
             )
             return
+        errlist = ret.splitlines()
 
         # insert error values into GCP list for checked items
         sdfactor = float(UserSettings.Get(group="gcpman", key="rms", subkey="sdfactor"))
@@ -2078,12 +2075,13 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 sumsq_bkw_err += float(bkw_err) ** 2
                 sum_fwd_err += float(fwd_err)
                 GCPcount += 1
-            else:
-                self.list.SetItem(index, 5, "")
-                self.list.SetItem(index, 6, "")
-                self.mapcoordlist[key][5] = 0.0
-                self.mapcoordlist[key][6] = 0.0
-                self.list.SetItemTextColour(index, wx.BLACK)
+                continue
+
+            self.list.SetItem(index, 5, "")
+            self.list.SetItem(index, 6, "")
+            self.mapcoordlist[key][5] = 0.0
+            self.mapcoordlist[key][6] = 0.0
+            self.list.SetItemTextColour(index, wx.BLACK)
 
         # SD
         if GCPcount > 0:
@@ -2173,9 +2171,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         self.grwiz.SwitchEnv("target")
 
-        if ret:
-            errlist = ret.splitlines()
-        else:
+        if not ret:
             GError(
                 parent=self,
                 message=_(
@@ -2184,6 +2180,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 ),
             )
             return
+        errlist = ret.splitlines()
 
         # fist corner
         e, n = errlist[0].split()

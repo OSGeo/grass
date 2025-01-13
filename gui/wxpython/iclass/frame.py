@@ -792,25 +792,25 @@ class IClassMapPanel(DoubleMapPanel):
 
             for cat in cats:
                 listCtrl.AddCategory(cat=cat, name="class_%d" % cat, color="0:0:0")
+
+            return
+
         # connection, table and columns exists
-        else:
-            columns = ["cat", "class", "color"]
-            ret = RunCommand(
-                "v.db.select",
-                quiet=True,
-                parent=self,
-                flags="c",
-                map=vector,
-                layer=1,
-                columns=",".join(columns),
-                read=True,
-            )
-            records = ret.strip().splitlines()
-            for record in records:
-                record = record.split("|")
-                listCtrl.AddCategory(
-                    cat=int(record[0]), name=record[1], color=record[2]
-                )
+        columns = ["cat", "class", "color"]
+        ret = RunCommand(
+            "v.db.select",
+            quiet=True,
+            parent=self,
+            flags="c",
+            map=vector,
+            layer=1,
+            columns=",".join(columns),
+            read=True,
+        )
+        records = ret.strip().splitlines()
+        for record in records:
+            record = record.split("|")
+            listCtrl.AddCategory(cat=int(record[0]), name=record[1], color=record[2])
 
     def OnExportAreas(self, event):
         """Export training areas"""

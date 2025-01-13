@@ -291,11 +291,11 @@ class IVDigit:
         :return: snap mode
         """
         threshold = self._display.GetThreshold()
-        if threshold > 0.0:
-            if UserSettings.Get(group="vdigit", key="snapToVertex", subkey="enabled"):
-                return SNAPVERTEX
-            return SNAP
-        return NO_SNAP
+        if threshold <= 0.0:
+            return NO_SNAP
+        if UserSettings.Get(group="vdigit", key="snapToVertex", subkey="enabled"):
+            return SNAPVERTEX
+        return SNAP
 
     def _getNewFeaturesLayer(self):
         """Returns layer of new feature (from settings)"""
@@ -738,13 +738,14 @@ class IVDigit:
             areas = [left.value, right.value]
 
             for i, a in enumerate(areas):
-                if a > 0:
-                    centroid = Vect_get_area_centroid(self.poMapInfo, a)
-                    if centroid <= 0:
-                        continue
-                    c = self._getCategories(centroid)
-                    if c:
-                        cats[i] = c
+                if a <= 0:
+                    continue
+                centroid = Vect_get_area_centroid(self.poMapInfo, a)
+                if centroid <= 0:
+                    continue
+                c = self._getCategories(centroid)
+                if c:
+                    cats[i] = c
 
         return cats
 
@@ -1268,95 +1269,94 @@ class IVDigit:
                     if not copyAttrb:
                         # duplicate category
                         cat = catsFrom.cat[i]
-                    else:
-                        # duplicate attributes
-                        cat = self.cats[catsFrom.field[i]] + 1
-                        self.cats[catsFrom.field[i]] = cat
-                        poFi = Vect_get_field(self.poMapInfo, catsFrom.field[i])
-                        if not poFi:
-                            self._error.DbLink(i)
-                            return -1
+                        continue
 
-                        fi = poFi.contents
-                        driver = db_start_driver(fi.driver)
-                        if not driver:
-                            self._error.Driver(fi.driver)
-                            return -1
+                    # duplicate attributes
+                    cat = self.cats[catsFrom.field[i]] + 1
+                    self.cats[catsFrom.field[i]] = cat
+                    poFi = Vect_get_field(self.poMapInfo, catsFrom.field[i])
+                    if not poFi:
+                        self._error.DbLink(i)
+                        return -1
 
-                        handle = dbHandle()
-                        db_init_handle(byref(handle))
-                        db_set_handle(byref(handle), fi.database, None)
-                        if db_open_database(driver, byref(handle)) != DB_OK:
-                            db_shutdown_driver(driver)
-                            self._error.Database(fi.driver, fi.database)
-                            return -1
+                    fi = poFi.contents
+                    driver = db_start_driver(fi.driver)
+                    if not driver:
+                        self._error.Driver(fi.driver)
+                        return -1
 
-                        stmt = dbString()
-                        db_init_string(byref(stmt))
-                        db_set_string(
-                            byref(stmt),
-                            "SELECT * FROM %s WHERE %s=%d"
-                            % (fi.table, fi.key, catsFrom.cat[i]),
+                    handle = dbHandle()
+                    db_init_handle(byref(handle))
+                    db_set_handle(byref(handle), fi.database, None)
+                    if db_open_database(driver, byref(handle)) != DB_OK:
+                        db_shutdown_driver(driver)
+                        self._error.Database(fi.driver, fi.database)
+                        return -1
+
+                    stmt = dbString()
+                    db_init_string(byref(stmt))
+                    db_set_string(
+                        byref(stmt),
+                        "SELECT * FROM %s WHERE %s=%d"
+                        % (fi.table, fi.key, catsFrom.cat[i]),
+                    )
+
+                    cursor = dbCursor()
+                    if (
+                        db_open_select_cursor(
+                            driver, byref(stmt), byref(cursor), DB_SEQUENTIAL
                         )
-
-                        cursor = dbCursor()
-                        if (
-                            db_open_select_cursor(
-                                driver, byref(stmt), byref(cursor), DB_SEQUENTIAL
-                            )
-                            != DB_OK
-                        ):
-                            db_close_database_shutdown_driver(driver)
-                            return -1
-
-                        table = db_get_cursor_table(byref(cursor))
-                        ncols = db_get_table_number_of_columns(table)
-
-                        sql = "INSERT INTO %s VALUES (" % fi.table
-                        # fetch the data
-                        more = c_int()
-                        while True:
-                            if db_fetch(byref(cursor), DB_NEXT, byref(more)) != DB_OK:
-                                db_close_database_shutdown_driver(driver)
-                                return -1
-                            if not more.value:
-                                break
-
-                            value_string = dbString()
-                            for col in range(ncols):
-                                if col > 0:
-                                    sql += ","
-
-                                column = db_get_table_column(table, col)
-                                if db_get_column_name(column) == fi.key:
-                                    sql += "%d" % cat
-                                    continue
-
-                                value = db_get_column_value(column)
-                                db_convert_column_value_to_string(
-                                    column, byref(value_string)
-                                )
-                                if db_test_value_isnull(value):
-                                    sql += "NULL"
-                                else:
-                                    ctype = db_sqltype_to_Ctype(
-                                        db_get_column_sqltype(column)
-                                    )
-                                    if ctype != DB_C_TYPE_STRING:
-                                        sql += db_get_string(byref(value_string))
-                                    else:
-                                        sql += "'%s'" % db_get_string(
-                                            byref(value_string)
-                                        )
-
-                        sql += ")"
-                        db_set_string(byref(stmt), sql)
-                        if db_execute_immediate(driver, byref(stmt)) != DB_OK:
-                            db_close_database_shutdown_driver(driver)
-                            return -1
-
+                        != DB_OK
+                    ):
                         db_close_database_shutdown_driver(driver)
-                        G_free(poFi)
+                        return -1
+
+                    table = db_get_cursor_table(byref(cursor))
+                    ncols = db_get_table_number_of_columns(table)
+
+                    sql = "INSERT INTO %s VALUES (" % fi.table
+                    # fetch the data
+                    more = c_int()
+                    while True:
+                        if db_fetch(byref(cursor), DB_NEXT, byref(more)) != DB_OK:
+                            db_close_database_shutdown_driver(driver)
+                            return -1
+                        if not more.value:
+                            break
+
+                        value_string = dbString()
+                        for col in range(ncols):
+                            if col > 0:
+                                sql += ","
+
+                            column = db_get_table_column(table, col)
+                            if db_get_column_name(column) == fi.key:
+                                sql += "%d" % cat
+                                continue
+
+                            value = db_get_column_value(column)
+                            db_convert_column_value_to_string(
+                                column, byref(value_string)
+                            )
+                            if db_test_value_isnull(value):
+                                sql += "NULL"
+                            else:
+                                ctype = db_sqltype_to_Ctype(
+                                    db_get_column_sqltype(column)
+                                )
+                                if ctype != DB_C_TYPE_STRING:
+                                    sql += db_get_string(byref(value_string))
+                                else:
+                                    sql += "'%s'" % db_get_string(byref(value_string))
+
+                    sql += ")"
+                    db_set_string(byref(stmt), sql)
+                    if db_execute_immediate(driver, byref(stmt)) != DB_OK:
+                        db_close_database_shutdown_driver(driver)
+                        return -1
+
+                    db_close_database_shutdown_driver(driver)
+                    G_free(poFi)
 
                 if Vect_cat_set(poCatsTo, catsFrom.field[i], cat) < 1:
                     continue

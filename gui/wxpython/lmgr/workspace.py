@@ -317,35 +317,37 @@ class WorkspaceManager:
             for overlay in gxwXml.overlays:
                 # overlay["cmd"][0] name of command e.g. d.barscale, d.legend
                 # overlay["cmd"][1:] parameters and flags
-                if overlay["display"] == i:
-                    if overlay["cmd"][0] == "d.legend.vect":
-                        mapdisplay[i].AddLegendVect(overlay["cmd"])
-                    if overlay["cmd"][0] == "d.legend":
-                        mapdisplay[i].AddLegendRast(overlay["cmd"])
-                    if overlay["cmd"][0] == "d.barscale":
-                        mapdisplay[i].AddBarscale(overlay["cmd"])
-                    if overlay["cmd"][0] == "d.northarrow":
-                        mapdisplay[i].AddArrow(overlay["cmd"])
-                    if overlay["cmd"][0] == "d.text":
-                        mapdisplay[i].AddDtext(overlay["cmd"])
+                if overlay["display"] != i:
+                    continue
+                if overlay["cmd"][0] == "d.legend.vect":
+                    mapdisplay[i].AddLegendVect(overlay["cmd"])
+                if overlay["cmd"][0] == "d.legend":
+                    mapdisplay[i].AddLegendRast(overlay["cmd"])
+                if overlay["cmd"][0] == "d.barscale":
+                    mapdisplay[i].AddBarscale(overlay["cmd"])
+                if overlay["cmd"][0] == "d.northarrow":
+                    mapdisplay[i].AddArrow(overlay["cmd"])
+                if overlay["cmd"][0] == "d.text":
+                    mapdisplay[i].AddDtext(overlay["cmd"])
 
             # avoid double-rendering when loading workspace
             # mdisp.MapWindow2D.UpdateMap()
             # nviz
-            if gxwXml.displays[i]["viewMode"] == "3d":
-                mapdisplay[i].AddNviz()
-                self.lmgr.nvizUpdateState(
-                    view=gxwXml.nviz_state["view"],
-                    iview=gxwXml.nviz_state["iview"],
-                    light=gxwXml.nviz_state["light"],
-                )
-                mapdisplay[i].MapWindow3D.constants = gxwXml.nviz_state["constants"]
-                for idx, constant in enumerate(mapdisplay[i].MapWindow3D.constants):
-                    mapdisplay[i].MapWindow3D.AddConstant(constant, i + 1)
-                for page in ("view", "light", "fringe", "constant", "cplane"):
-                    self.lmgr.nvizUpdatePage(page)
-                self.lmgr.nvizUpdateSettings()
-                mapdisplay[i].toolbars["map"].combo.SetSelection(1)
+            if gxwXml.displays[i]["viewMode"] != "3d":
+                continue
+            mapdisplay[i].AddNviz()
+            self.lmgr.nvizUpdateState(
+                view=gxwXml.nviz_state["view"],
+                iview=gxwXml.nviz_state["iview"],
+                light=gxwXml.nviz_state["light"],
+            )
+            mapdisplay[i].MapWindow3D.constants = gxwXml.nviz_state["constants"]
+            for idx, constant in enumerate(mapdisplay[i].MapWindow3D.constants):
+                mapdisplay[i].MapWindow3D.AddConstant(constant, i + 1)
+            for page in ("view", "light", "fringe", "constant", "cplane"):
+                self.lmgr.nvizUpdatePage(page)
+            self.lmgr.nvizUpdateSettings()
+            mapdisplay[i].toolbars["map"].combo.SetSelection(1)
 
         #
         # load layout
