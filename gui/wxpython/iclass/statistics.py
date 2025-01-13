@@ -19,25 +19,25 @@ for details.
 
 import os
 import sys
-from ctypes import c_int, c_char_p, c_float, byref
+from ctypes import byref, c_char_p, c_float, c_int
 
 import grass.script as gs
 
 try:
     from grass.lib.imagery import (
         I_iclass_statistics_get_cat,
-        I_iclass_statistics_get_name,
         I_iclass_statistics_get_color,
+        I_iclass_statistics_get_histo,
+        I_iclass_statistics_get_max,
+        I_iclass_statistics_get_mean,
+        I_iclass_statistics_get_min,
+        I_iclass_statistics_get_name,
         I_iclass_statistics_get_nbands,
         I_iclass_statistics_get_ncells,
         I_iclass_statistics_get_nstd,
-        I_iclass_statistics_get_min,
-        I_iclass_statistics_get_max,
-        I_iclass_statistics_get_range_min,
         I_iclass_statistics_get_range_max,
-        I_iclass_statistics_get_mean,
+        I_iclass_statistics_get_range_min,
         I_iclass_statistics_get_stddev,
-        I_iclass_statistics_get_histo,
     )
 except ImportError:
     sys.stderr.write(_("Loading imagery lib failed"))
