@@ -445,7 +445,7 @@ from typing import Literal
 
 try:
     from ply import lex, yacc
-except:
+except ImportError:
     pass
 
 import copy
@@ -2857,7 +2857,7 @@ class TemporalAlgebraParser:
                         map_i.condition_value.append(boolname)
                     else:
                         map_i.condition_value = boolname
-                except:
+                except (IndexError, AttributeError):
                     self.msgr.fatal(
                         "Error: the given expression does not contain a correct time "
                         "difference object."
