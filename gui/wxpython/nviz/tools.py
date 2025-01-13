@@ -4912,7 +4912,7 @@ class NvizToolWindow(GNotebook):
         plane = self.FindWindowById(self.win["cplane"]["planes"]).GetStringSelection()
         try:
             planeIndex = int(plane.split()[-1]) - 1
-        except (ValueError, IndexError):  # TODO disabled page
+        except (ValueError, IndexError, TypeError):  # TODO disabled page
             planeIndex = -1
 
         if event.GetId() in (
@@ -4954,7 +4954,7 @@ class NvizToolWindow(GNotebook):
         plane = self.FindWindowById(self.win["cplane"]["planes"]).GetStringSelection()
         try:
             planeIndex = int(plane.split()[-1]) - 1
-        except (ValueError, IndexError):  # TODO disabled page
+        except (ValueError, IndexError, TypeError):  # TODO disabled page
             planeIndex = -1
 
         self.mapWindow.cplanes[planeIndex]["shading"] = shading
@@ -4969,7 +4969,7 @@ class NvizToolWindow(GNotebook):
         plane = self.FindWindowById(self.win["cplane"]["planes"]).GetStringSelection()
         try:
             planeIndex = int(plane.split()[-1]) - 1
-        except (ValueError, IndexError):  # TODO disabled page
+        except (ValueError, IndexError, TypeError):  # TODO disabled page
             planeIndex = -1
 
         self.mapWindow.cplanes[planeIndex] = copy.deepcopy(

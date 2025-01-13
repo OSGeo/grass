@@ -2007,7 +2007,7 @@ class ProcessGrcFile:
         """Get value of element"""
         try:
             return line.strip(" ").split(" ")[1].strip(" ")
-        except IndexError:
+        except (IndexError, AttributeError):
             return ""
 
     def _get_element(self, line):

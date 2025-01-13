@@ -110,7 +110,7 @@ MACOS = sys.platform.startswith("darwin")
 def try_remove(path):
     try:
         os.remove(path)
-    except:  # noqa: E722
+    except (FileNotFoundError, PermissionError, IsADirectoryError, OSError):
         pass
 
 
@@ -425,7 +425,7 @@ def create_tmp(user, gis_lock):
         tmpdir = os.path.join(tmp, tmpdir_name)
         try:
             os.mkdir(tmpdir, 0o700)
-        except:  # noqa: E722
+        except (FileExistsError, FileNotFoundError, PermissionError, OSError):
             tmp = None
 
     if not tmp:
@@ -434,7 +434,7 @@ def create_tmp(user, gis_lock):
             tmpdir = os.path.join(tmp, tmpdir_name)
             try:
                 os.mkdir(tmpdir, 0o700)
-            except:  # noqa: E722
+            except (FileExistsError, FileNotFoundError, PermissionError, OSError):
                 tmp = None
             if tmp:
                 break
@@ -480,7 +480,7 @@ def create_gisrc(tmpdir, gisrcrc):
         if "UNKNOWN" in s:
             try_remove(gisrcrc)
             s = None
-    except Exception:
+    except (FileNotFoundError, PermissionError, IsADirectoryError, OSError):
         s = None
 
     # Copy the global grassrc file to the session grassrc file
@@ -1497,7 +1497,7 @@ def say_hello():
 
             revision = linerev.split(" ")[1]
             sys.stderr.write(" (" + revision + ")")
-        except Exception:
+        except (OSError, FileNotFoundError, PermissionError, IndexError):
             pass
 
 
@@ -1859,7 +1859,7 @@ def print_params(params):
             try:
                 revision = linerev.split(" ")[1]
                 sys.stdout.write("%s\n" % revision[1:])
-            except Exception:
+            except IndexError:
                 sys.stdout.write("No SVN revision defined\n")
         elif arg == "version":
             sys.stdout.write("%s\n" % GRASS_VERSION)

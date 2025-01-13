@@ -519,7 +519,7 @@ class GdalImportDialog(ImportDialog):
             if nBandsStr:
                 try:
                     nBands = int(nBandsStr.rstrip("\n"))
-                except ValueError:
+                except (TypeError, ValueError):
                     pass
             if nBands < 0:
                 GWarning(_("Unable to determine number of raster bands"), parent=self)

@@ -66,7 +66,7 @@ for line in fin:
             author = authorList[1]
             author = author[0 : len(author) - 1]
             authorFound = True
-        except Exception as e:
+        except IndexError as e:
             print(f"Could not parse authorList = '{line}'. Error: {e!s}")
 
     # Match the date line
@@ -76,7 +76,7 @@ for line in fin:
             date = dateList[1]
             date = date[0 : len(date) - 1]
             dateFound = True
-        except Exception as e:
+        except IndexError as e:
             print(f"Could not parse dateList = '{line}'. Error: {e!s}")
     # The Fossil-IDs, svn-id, ad sign off lines are ignored:
     elif (

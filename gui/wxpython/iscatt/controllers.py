@@ -592,7 +592,7 @@ class PlotsRenderingManager:
                 try:
                     self.cat_ids.remove(c)
                     scatt_dt[c]["render"] = True
-                except ValueError:
+                except (ValueError, KeyError):
                     scatt_dt[c]["render"] = False
 
             if self.scatt_mgr.pol_sel_mode[0]:

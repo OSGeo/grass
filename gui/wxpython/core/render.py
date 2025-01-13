@@ -1223,7 +1223,7 @@ class Map:
 
             return grass_region
 
-        except Exception:
+        except (KeyError, TypeError):
             return None
 
     def GetListOfLayers(

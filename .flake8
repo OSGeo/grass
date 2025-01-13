@@ -13,7 +13,6 @@ per-file-ignores =
     # F405 variable may be undefined, or defined from star imports
     # E402 module level import not at top of file
     # E501 line too long
-    # E722 do not use bare 'except'
     # W605 invalid escape sequence
     # F821 undefined name 'unicode'
     # F841 local variable assigned to but never used
