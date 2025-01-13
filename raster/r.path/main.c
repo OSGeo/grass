@@ -122,6 +122,8 @@ int main(int argc, char **argv)
         struct Option *vect;
     } opt;
     struct {
+        struct Flag *east;
+        struct Flag *brk;
         struct Flag *copy;
         struct Flag *accum;
         struct Flag *count;
@@ -196,6 +198,18 @@ int main(int argc, char **argv)
     opt.vpoint->label = _("Name of starting vector points map(s)");
     opt.vpoint->guisection = _("Start");
 
+    flag.east = G_define_flag();
+    flag.east->key = 'e';
+    flag.east->description =
+        _("Start bitmask encoded directions from East (e.g., r.terraflow)");
+    flag.east->guisection = _("Direction settings");
+
+    flag.brk = G_define_flag();
+    flag.brk->key = 'b';
+    flag.brk->description =
+        _("Do not break lines (faster for single-direction bitmask encoding)");
+    flag.brk->guisection = _("Direction settings");
+
     flag.copy = G_define_flag();
     flag.copy->key = 'c';
     flag.copy->description = _("Copy input cell values on output");
@@ -216,6 +230,7 @@ int main(int argc, char **argv)
     G_option_requires_all(flag.copy, opt.rast, opt.val, NULL);
     G_option_requires_all(flag.accum, opt.rast, opt.val, NULL);
     G_option_requires_all(flag.count, opt.rast, NULL);
+    G_option_requires(flag.brk, opt.vect, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -457,6 +472,13 @@ int main(int argc, char **argv)
         dir_buf = Rast_allocate_c_buf();
         for (i = 0; i < nrows; i++) {
             Rast_get_c_row(dir_id, dir_buf, i);
+            if (flag.east->answer) {
+                CELL *p;
+
+                p = (CELL *)dir_buf;
+                for (j = 0; j < ncols; j++, p++)
+                    *p = pow(2, ((int)log2(*p) + 1) % 8);
+            }
             if (write(dir_fd, dir_buf, ncols * sizeof(CELL)) !=
                 ncols * (int)sizeof(CELL)) {
                 G_fatal_error(_("Unable to write to tempfile"));
@@ -503,7 +525,7 @@ int main(int argc, char **argv)
         if (dir_format == DIR_BIT) {
             struct Map_info Tmp;
 
-            if (pvout) {
+            if (!flag.brk->answer && pvout) {
                 if (Vect_open_tmp_new(&Tmp, NULL, 0) < 0)
                     G_fatal_error(_("Unable to create temporary vector map"));
                 pvout = &Tmp;
@@ -514,7 +536,7 @@ int main(int argc, char **argv)
                 G_warning(_("No path at row %d, col %d"), next_start_pt->row,
                           next_start_pt->col);
             }
-            if (pvout) {
+            if (!flag.brk->answer && pvout) {
                 Vect_build_partial(&Tmp, GV_BUILD_BASE);
                 G_message(_("Breaking lines..."));
                 Vect_break_lines(&Tmp, GV_LINE, NULL);
@@ -711,8 +733,8 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
     struct ppoint pp;
     int is_stack;
     int cur_dir, i, npaths;
-    struct line_pnts *Points;
-    struct line_cats *Cats;
+    struct line_pnts *Points = NULL;
+    struct line_cats *Cats = NULL;
     double x, y;
     double value;
 
