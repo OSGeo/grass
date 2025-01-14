@@ -84,7 +84,8 @@ class AbstractMapDataset(AbstractDataset):
 
         :return: "finer" or "coarser"
         """
-        raise ImplementationError("This method must be implemented in the subclasses")
+        msg = "This method must be implemented in the subclasses"
+        raise ImplementationError(msg)
 
     @abstractmethod
     def has_grass_timestamp(self):
@@ -175,8 +176,7 @@ class AbstractMapDataset(AbstractDataset):
         the keyword arguments.
 
         :param name: The name of the map
-        :param layer: The layer of the vector map, use None in case no
-                      layer exists
+        :param layer: The layer of the vector map, use None in case no layer exists
         :param mapset: The mapset in which the map is located
 
         :return: tuple of three elements name, layer, mapset e(:layer)@mapset" while
@@ -243,11 +243,9 @@ class AbstractMapDataset(AbstractDataset):
 
         :param name: The name of the map
         :param mapset: The mapset in which the map is located
-        :param layer: The layer of the vector map, use None in case no
-                      layer exists
+        :param layer: The layer of the vector map, use None in case no layer exists
 
-        :return: the id of the map as "name(:layer)@mapset" where layer is
-                 optional
+        :return: the id of the map as "name(:layer)@mapset" where layer is optional
         """
 
         # Split given name into relevant parts
@@ -420,8 +418,7 @@ class AbstractMapDataset(AbstractDataset):
          This method only modifies this object and does not commit
          the modifications to the temporal database.
 
-        :param start_time: A datetime object specifying the start time of
-                           the map
+        :param start_time: A datetime object specifying the start time of the map
         :param end_time: A datetime object specifying the end time of the
                          map, None in case or time instance
 
@@ -511,8 +508,7 @@ class AbstractMapDataset(AbstractDataset):
         grass file system based database in addition to the temporal
         database entry.
 
-        :param start_time: A datetime object specifying the start time of
-                                      the map
+        :param start_time: A datetime object specifying the start time of the map
         :param end_time: A datetime object specifying the end time of the
                                      map, None in case or time instance
         :param dbif: The database interface to be used
@@ -668,8 +664,7 @@ class AbstractMapDataset(AbstractDataset):
         """Convenient method to set the temporal extent from a temporal extent
         object
 
-        :param extent: The temporal extent that should be set for
-                                this object
+        :param extent: The temporal extent that should be set for this object
 
         .. code-block: : python
 
@@ -852,8 +847,7 @@ class AbstractMapDataset(AbstractDataset):
          This method only modifies this object and does not commit
          the modifications to the temporal database.
 
-         :param spatial_extent: An object of type SpatialExtent or its
-                                subclasses
+         :param spatial_extent: An object of type SpatialExtent or its subclasses
 
         .. code-block: : python
 

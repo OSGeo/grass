@@ -25,17 +25,20 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import annotations
+
+import errno
+import locale
 import os
+import signal
+import subprocess
 import sys
 import time
-import errno
-import signal
 import traceback
-import locale
-import subprocess
 from threading import Thread
-import wx
+from typing import TYPE_CHECKING, TextIO
 
+import wx
 from core.debug import Debug
 from core.globalvar import SCT_EXT
 
@@ -44,12 +47,16 @@ from grass.script.utils import decode, encode
 
 is_mswindows = sys.platform == "win32"
 if is_mswindows:
+    import msvcrt
+
     from win32file import ReadFile, WriteFile
     from win32pipe import PeekNamedPipe
-    import msvcrt
 else:
-    import select
     import fcntl
+    import select
+
+if TYPE_CHECKING:
+    from io import TextIOWrapper
 
 
 def DecodeString(string):
@@ -298,7 +305,7 @@ class Popen(subprocess.Popen):
 message = "Other end disconnected!"
 
 
-def recv_some(p, t=0.1, e=1, tr=5, stderr=0):
+def recv_some(p, t=0.1, e=1, tr=5, stderr=0) -> str:  # TODO: use LiteralString on 3.11+
     tr = max(tr, 1)
     x = time.time() + t
     y = []
@@ -342,7 +349,7 @@ class Command:
         stdin=None,
         verbose=None,
         wait=True,
-        rerr=False,
+        rerr: bool | None = False,
         stdout=None,
         stderr=None,
     ):
@@ -482,7 +489,7 @@ class Command:
                     type = "WARNING"
                 elif "GRASS_INFO_ERROR" in line:  # error
                     type = "ERROR"
-                elif "GRASS_INFO_END":  # end of message
+                elif "GRASS_INFO_END" in line:  # end of message
                     msg.append((type, content))
                     type = None
                     content = ""
@@ -510,7 +517,14 @@ class CommandThread(Thread):
     """Create separate thread for command. Used for commands launched
     on the background."""
 
-    def __init__(self, cmd, env=None, stdin=None, stdout=sys.stdout, stderr=sys.stderr):
+    def __init__(
+        self,
+        cmd,
+        env=None,
+        stdin: TextIOWrapper | None = None,
+        stdout: TextIO = sys.stdout,
+        stderr: TextIO = sys.stderr,
+    ) -> None:
         """
         :param cmd: command (given as list)
         :param env: environmental variables
@@ -522,11 +536,11 @@ class CommandThread(Thread):
 
         self.cmd = cmd
         self.stdin = stdin
-        self.stdout = stdout
-        self.stderr = stderr
+        self.stdout: TextIO = stdout
+        self.stderr: TextIO = stderr
         self.env = env
 
-        self.module = None
+        self.module: Popen | None = None
         self.error = ""
 
         self._want_abort = False
@@ -584,7 +598,7 @@ class CommandThread(Thread):
             print(e, file=sys.stderr)
             return 1
 
-        if self.stdin:  # read stdin if requested ...
+        if self.stdin and self.module.stdin is not None:  # read stdin if requested...
             self.module.stdin.write(self.stdin)
             self.module.stdin.close()
 
@@ -593,14 +607,14 @@ class CommandThread(Thread):
 
     def _redirect_stream(self):
         """Redirect stream"""
-        if self.stdout:
+        if self.stdout and self.module is not None and self.module.stdout is not None:
             # make module stdout/stderr non-blocking
             out_fileno = self.module.stdout.fileno()
             if not is_mswindows:
                 flags = fcntl.fcntl(out_fileno, fcntl.F_GETFL)
                 fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags | os.O_NONBLOCK)
 
-        if self.stderr:
+        if self.stderr and self.module is not None and self.module.stderr is not None:
             # make module stdout/stderr non-blocking
             out_fileno = self.module.stderr.fileno()
             if not is_mswindows:
@@ -608,19 +622,20 @@ class CommandThread(Thread):
                 fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags | os.O_NONBLOCK)
 
         # wait for the process to end, sucking in stuff until it does end
-        while self.module.poll() is None:
-            if self._want_abort:  # abort running process
-                self.module.terminate()
-                self.aborted = True
-                return
-            if self.stdout:
-                line = recv_some(self.module, e=0, stderr=0)
-                self.stdout.write(line)
-            if self.stderr:
-                line = recv_some(self.module, e=0, stderr=1)
-                self.stderr.write(line)
-                if len(line) > 0:
-                    self.error = line
+        if self.module is not None:
+            while self.module.poll() is None:
+                if self._want_abort:  # abort running process
+                    self.module.terminate()
+                    self.aborted = True
+                    return
+                if self.stdout:
+                    line = recv_some(self.module, e=0, stderr=0)
+                    self.stdout.write(line)
+                if self.stderr:
+                    line = recv_some(self.module, e=0, stderr=1)
+                    self.stderr.write(line)
+                    if len(line) > 0:
+                        self.error = line
 
         # get the last output
         if self.stdout:
@@ -632,12 +647,12 @@ class CommandThread(Thread):
             if len(line) > 0:
                 self.error = line
 
-    def abort(self):
+    def abort(self) -> None:
         """Abort running process, used by main thread to signal an abort"""
         self._want_abort = True
 
 
-def _formatMsg(text):
+def _formatMsg(text: str) -> str:
     """Format error messages for dialogs"""
     message = ""
     for line in text.splitlines():
@@ -660,14 +675,14 @@ def _formatMsg(text):
 def RunCommand(
     prog,
     flags="",
-    overwrite=False,
-    quiet=False,
-    verbose=False,
+    overwrite: bool = False,
+    quiet: bool = False,
+    verbose: bool = False,
     parent=None,
-    read=False,
+    read: bool = False,
     parse=None,
-    stdin=None,
-    getErrorMsg=False,
+    stdin: TextIO | None = None,
+    getErrorMsg: bool = False,
     env=None,
     **kwargs,
 ):
@@ -717,7 +732,7 @@ def RunCommand(
 
     ps = grass.start_command(prog, flags, overwrite, quiet, verbose, env=env, **kwargs)
 
-    if stdin:
+    if stdin and ps.stdin:
         ps.stdin.write(encode(stdin))
         ps.stdin.close()
         ps.stdin = None
@@ -764,7 +779,7 @@ def RunCommand(
     return stdout, _formatMsg(stderr)
 
 
-def GetDefaultEncoding(forceUTF8=False):
+def GetDefaultEncoding(forceUTF8: bool = False) -> str:
     """Get default system encoding
 
     :param bool forceUTF8: force 'UTF-8' if encoding is not defined
@@ -786,4 +801,4 @@ def GetDefaultEncoding(forceUTF8=False):
     return enc
 
 
-_enc = GetDefaultEncoding()  # define as global variable
+_enc: str = GetDefaultEncoding()  # define as global variable

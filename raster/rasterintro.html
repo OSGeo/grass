@@ -28,7 +28,7 @@ of the current computational region.</li>
 
 There are a few exceptions to this:
 
-<tt>r.in.*</tt> programs read the data cell-for-cell, with no resampling. When
+<code>r.in.*</code> programs read the data cell-for-cell, with no resampling. When
 reading non-georeferenced data, the imported map will usually have its
 lower-left corner at (0,0) in the project's coordinate system; the user
 needs to use <a href="r.region.html">r.region</a> to "place" the imported map.
@@ -198,8 +198,8 @@ Profiles and transects can be generated
 (<a href="d.polar.html">d.polar</a>).
 
 Univariate statistics (<a href="r.univar.html">r.univar</a>) and
-reports are also available (<a href="r.report.html">r.report</a>,<a
-href="r.stats.html">r.stats</a>, <a href="r.volume.html">r.volume</a>).
+reports are also available (<a href="r.report.html">r.report</a>,
+<a href="r.stats.html">r.stats</a>, <a href="r.volume.html">r.volume</a>).
 
 Since <a href="r.univar.html">r.univar</a> may be slow for extended
 statistics these can be calculated using
@@ -295,16 +295,16 @@ The GRASS GIS raster format is architecture independent and portable between
 
 All GRASS GIS raster map types are by default ZSTD compressed if
 available, otherwise ZLIB compressed. Through the environment variable
-<tt>GRASS_COMPRESSOR</tt> the compression method can be set to RLE,
+<code>GRASS_COMPRESSOR</code> the compression method can be set to RLE,
 ZLIB, LZ4, BZIP2, or ZSTD.
 <p>
 Important: the NULL file compression can be turned off with
-<tt>export GRASS_COMPRESS_NULLS=0</tt>. Raster maps with NULL file
+<code>export GRASS_COMPRESS_NULLS=0</code>. Raster maps with NULL file
 compression can only be opened with GRASS GIS 7.2.0 or later. NULL file
 compression for a particular raster map can be managed with <b>r.null -z</b>.
 <p>
 Integer (CELL type) raster maps can be compressed with RLE if
-the environment variable <tt>GRASS_COMPRESSOR</tt> exists and is set to
+the environment variable <code>GRASS_COMPRESSOR</code> exists and is set to
 RLE. However, this is not recommended.
 <p>
 Floating point (FCELL, DCELL) raster maps never use RLE compression;
@@ -323,7 +323,7 @@ maps, if ZSTD is not available. GRASS GIS 8 uses by default 1 as ZLIB
 compression level which is the best compromise between speed and
 compression ratio, also when compared to other available compression
 methods. Valid levels are in the range [1, 9] and can be set with the
-environment variable <tt>GRASS_ZLIB_LEVEL</tt>.</dd>
+environment variable <code>GRASS_ZLIB_LEVEL</code>.</dd>
 <dt><strong>LZ4</strong></dt>
 <dd>LZ4 is a very fast compression method, about as fast as no
 compression. Decompression is also very fast. The compression ratio is

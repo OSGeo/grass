@@ -133,7 +133,8 @@ class Filters:
         :type number: int
         """
         if not isinstance(number, int):
-            raise ValueError("Must be an integer.")
+            msg = "Must be an integer."
+            raise ValueError(msg)
         self._limit = "LIMIT {number}".format(number=number)
         return self
 
@@ -264,9 +265,9 @@ class Columns:
         """Read columns name and types from table and update the odict
         attribute.
         """
+        cur = self.conn.cursor()
         if self.is_pg():
             # is a postgres connection
-            cur = self.conn.cursor()
             cur.execute("SELECT oid,typname FROM pg_type")
             diz = dict(cur.fetchall())
             odict = OrderedDict()
@@ -280,17 +281,15 @@ class Columns:
                     odict[name] = diz[ctype]
             except pg.ProgrammingError:
                 pass
-            self.odict = odict
         else:
             # is a sqlite connection
-            cur = self.conn.cursor()
             cur.execute(sql.PRAGMA.format(tname=self.tname))
             descr = cur.fetchall()
             odict = OrderedDict()
             for column in descr:
                 name, ctype = column[1:3]
                 odict[name] = ctype
-            self.odict = odict
+        self.odict = odict
         values = ",".join(
             [
                 "?",
@@ -362,11 +361,9 @@ class Columns:
         ['cat', 'name', 'value']
 
         """
+        nams = list(self.odict.keys())
         if remove:
-            nams = list(self.odict.keys())
             nams.remove(remove)
-        else:
-            nams = list(self.odict.keys())
         if unicod:
             return nams
         return [str(name) for name in nams]
@@ -561,7 +558,8 @@ class Columns:
             self.update_odict()
         else:
             # sqlite does not support rename columns:
-            raise DBError("SQLite does not support to cast columns.")
+            msg = "SQLite does not support to cast columns."
+            raise DBError(msg)
 
     def drop(self, col_name):
         """Drop a column from the table.
@@ -663,7 +661,8 @@ class Link:
 
     def _set_layer(self, number):
         if number <= 0:
-            raise TypeError("Number must be positive and greater than 0.")
+            msg = "Number must be positive and greater than 0."
+            raise TypeError(msg)
         self.c_fieldinfo.contents.number = number
 
     layer = property(
@@ -824,7 +823,7 @@ class Link:
         if driver == "sqlite":
             import sqlite3
 
-            # Numpy is using some custom integer data types to efficiently
+            # NumPy is using some custom integer data types to efficiently
             # pack data into memory. Since these types aren't familiar to
             # sqlite, you'll have to tell it about how to handle them.
             for t in (
@@ -1122,8 +1121,7 @@ class Table:
         :param cursor: the cursor to connect, if None it use the cursor
                        of connection table object
         :type cursor: Cursor object
-        :param force: True to remove the table, by default False to print
-                      advice
+        :param force: True to remove the table, by default False to print advice
         :type force: bool
         """
 
@@ -1162,8 +1160,7 @@ class Table:
         """Execute SQL code from a given string or build with filters and
         return a cursor object.
 
-        :param sql_code: the SQL code to execute, if not pass it use filters
-                         variable
+        :param sql_code: the SQL code to execute, if not pass it use filters variable
         :type sql_code: str
         :param cursor: the cursor to connect, if None it use the cursor
                      of connection table object
@@ -1282,10 +1279,10 @@ if __name__ == "__main__":
     utils.create_test_vector_map(test_vector_name)
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
     from grass.pygrass.utils import get_mapset_vector
     from grass.script.core import run_command
 
     mset = get_mapset_vector(test_vector_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)

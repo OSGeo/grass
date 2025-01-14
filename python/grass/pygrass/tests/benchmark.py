@@ -385,7 +385,7 @@ class OptionWithDefault(optparse.Option):
     ATTRS = optparse.Option.ATTRS + [strREQUIRED]
 
     def __init__(self, *opts, **attrs):
-        if attrs.get(strREQUIRED, False):
+        if attrs.get(strREQUIRED):
             attrs["help"] = "(Required) " + attrs.get("help", "")
         optparse.Option.__init__(self, *opts, **attrs)
 

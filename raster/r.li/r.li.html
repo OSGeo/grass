@@ -38,8 +38,8 @@ The general procedure to calculate an index from a raster map is two-fold:
 <ol>
 <li>run <em>g.gui.rlisetup</em>: create a configuration file selecting
     the parts of raster map to be analyzed. This file allows re-running
-    an analysis easily. It is stored on Windows in the directory <tt>C:\Users\userxy\AppData\Roaming\GRASS8\r.li\</tt>, on GNU/Linux in
-    <tt>$HOME/.grass8/r.li/</tt>.</li> <!-- TODO: and Mac OSX? -->
+    an analysis easily. It is stored on Windows in the directory <code>C:\Users\userxy\AppData\Roaming\GRASS8\r.li\</code>, on GNU/Linux in
+    <code>$HOME/.grass8/r.li/</code>.</li> <!-- TODO: and Mac OSX? -->
 
 <li>run one or more of the <em>r.li.<b>[index]</b></em> modules (e.g.,
     <em>r.li.<b>patchdensity</b></em>) to calculate the selected index
@@ -85,7 +85,7 @@ The other fields are not needed for this configuration.</li>
 
 <li> CALCULATE PATCHDENSITY INDEX
 <ol>
-<li> set the region settings to the "<tt>geology</tt>" raster map:
+<li> set the region settings to the "<code>geology</code>" raster map:
 <div class="code"><pre>
 g.region raster=geology -p
 </pre></div>
@@ -98,7 +98,7 @@ r.li.patchdensity input=geology conf=my_conf out=patchdens
 </ol></li>
 </ol>
 
-The resulting patch density is stored in "<tt>patchdens</tt>" raster map.
+The resulting patch density is stored in "<code>patchdens</code>" raster map.
 
 You can verify the result for example with contour lines:
 <div class="code"><pre>
@@ -120,7 +120,7 @@ configuration file on a 200x200 raster map, then the sample area is
 
 <b>GUI tools</b>:
 <ul>
-  <li> <a href="g.gui.rlisetup.html">g.gui.rlisetup</a>: Configuration editor for the <tt>r.li.*</tt> module where <tt>*</tt> is name of the index</li>
+  <li> <a href="g.gui.rlisetup.html">g.gui.rlisetup</a>: Configuration editor for the <code>r.li.*</code> module where <code>*</code> is name of the index</li>
 </ul>
 
 <b>Patch indices</b>:
@@ -190,7 +190,7 @@ for more information about development.
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351
- (<a href="https://research.fs.usda.gov/treesearch/3064">PDF</a>).</li>
+ (<a href="https://doi.org/10.2737/PNW-GTR-351">PDF</a>).</li>
 
 <li>
 Baker, W.L. and Y. Cai. 1992. The r.le programs for multiscale analysis of

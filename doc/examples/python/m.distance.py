@@ -20,7 +20,7 @@
 ############################################################################
 #
 # Requires GRASS Python Ctypes interface
-# Requires Numeric module (NumPy) from  http://numpy.scipy.org/
+# Requires Numeric module (NumPy) from https://numpy.org
 #
 
 # %module

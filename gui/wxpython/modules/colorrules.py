@@ -203,8 +203,7 @@ class RulesPanel:
             self.mainPanel.FindWindowById(id + 1000).Enable()
             self.mainPanel.FindWindowById(id + 2000).Enable()
             if self.mapType == "vector" and not self.parent.GetParent().colorTable:
-                vals = []
-                vals.append(self.mainPanel.FindWindowById(id + 1000).GetValue())
+                vals = [self.mainPanel.FindWindowById(id + 1000).GetValue()]
                 try:
                     vals.append(self.mainPanel.FindWindowById(id + 1 + 1000).GetValue())
                 except AttributeError:
@@ -273,8 +272,7 @@ class RulesPanel:
 
     def SetVectorRule(self, num, val):
         """Set vector rule"""
-        vals = []
-        vals.append(val)
+        vals = [val]
         try:
             vals.append(self.mainPanel.FindWindowById(num + 1).GetValue())
         except AttributeError:
@@ -725,9 +723,7 @@ class ColorTable(wx.Frame):
             self.rulesPanel.ruleslines[count]["value"] = value
             self.rulesPanel.ruleslines[count]["color"] = color
             self.rulesPanel.mainPanel.FindWindowById(count + 1000).SetValue(value)
-            rgb = []
-            for c in color.split(":"):
-                rgb.append(int(c))
+            rgb = [int(c) for c in color.split(":")]
             self.rulesPanel.mainPanel.FindWindowById(count + 2000).SetColour(rgb)
             # range
             try:

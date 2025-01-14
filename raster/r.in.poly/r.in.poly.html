@@ -8,7 +8,7 @@ containing polygon, linear, and point features.
 The <b>input</b> file is an ASCII text file containing the
 polygon, linear, and point feature definitions.
 The format of this file is described in the
-<a href="#format"><i>INPUT FORMAT</i></a> section below.
+<em>INPUT FORMAT</em> section below.
 
 <p>
 The number of raster <b>rows</b> to hold in memory is per default 4096.
@@ -31,7 +31,7 @@ format used by <em>v.in.ascii</em>.
 <p>
 Polygons are filled, i.e. they define an area.
 
-<h3 id="format">Input Format</h3>
+<h3>Input Format</h3>
 
 The input format for the <b>input</b> file consists of
 sections describing either polygonal areas, linear features, or
@@ -56,20 +56,20 @@ P                      &lt;for single cell point features&gt;
 </pre></div>
 
 
-The <tt>A</tt> signals the beginning of a filled polygon.
+The <code>A</code> signals the beginning of a filled polygon.
 It must appear in the first column.
 
-The <tt>L</tt> signals the beginning of a linear feature.
+The <code>L</code> signals the beginning of a linear feature.
 It also must appear in the first column.
 
-The <tt>P</tt> signals the beginning of a single cell point feature.
+The <code>P</code> signals the beginning of a single cell point feature.
 Again, it must appear in the first column.
 
 The coordinates of the vertices of the polygon, or the coordinates defining
 the linear or point feature follow and must have a space in the first
 column and at least one space between the <em>easting</em> and the
 <em>northing.</em> To give meaning to the features, the
-"<tt>=</tt>" indicates that the feature currently being
+"<code>=</code>" indicates that the feature currently being
 processed has category value <em>cat#</em> (which must be
 an integer) and a <em>label</em> (which may be more than
 one word, or which may be omitted).

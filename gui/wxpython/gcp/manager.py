@@ -27,48 +27,53 @@ This program is free software under the GNU General Public License
 @author Support for GraphicsSet added by Stepan Turek <stepan.turek seznam.cz> (2012)
 """
 
+from __future__ import annotations
+
 import os
-import sys
 import shutil
+import sys
 from copy import copy
+from typing import TYPE_CHECKING
 
 import wx
-from wx.lib.mixins.listctrl import ColumnSorterMixin, ListCtrlAutoWidthMixin
 import wx.lib.colourselect as csel
-
 from core import globalvar
+from wx.lib.mixins.listctrl import ColumnSorterMixin, ListCtrlAutoWidthMixin
 
-if globalvar.wxPythonPhoenix:
+if globalvar.wxPythonPhoenix or TYPE_CHECKING:
     from wx import adv as wiz
 else:
     from wx import wizard as wiz
 
 import grass.script as gs
 
+# isort: split
 
 from core import utils
+from core.gcmd import GError, GMessage, GWarning, RunCommand
+from core.giface import Notification
 from core.render import Map
-from gui_core.gselect import Select, LocationSelect, MapsetSelect
-from gui_core.dialogs import GroupDialog
-from gui_core.mapdisp import FrameMixin
-from core.gcmd import RunCommand, GMessage, GError, GWarning
 from core.settings import UserSettings
 from gcp.mapdisplay import MapPanel
-from core.giface import Notification
+from gui_core.dialogs import GroupDialog
+from gui_core.gselect import LocationSelect, MapsetSelect, Select
+from gui_core.mapdisp import FrameMixin
 from gui_core.wrap import (
-    SpinCtrl,
-    Button,
-    StaticText,
-    StaticBox,
-    CheckListBox,
-    TextCtrl,
-    Menu,
-    ListCtrl,
     BitmapFromImage,
+    Button,
+    CheckListBox,
     CheckListCtrlMixin,
+    ListCtrl,
+    Menu,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
 )
-
 from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
+
+if TYPE_CHECKING:
+    from wx.adv import WizardEvent
 
 #
 # global variables
@@ -510,7 +515,7 @@ class LocationPage(TitledPage):
         if not wx.FindWindowById(wx.ID_FORWARD).IsEnabled():
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
-    def OnPageChanging(self, event=None):
+    def OnPageChanging(self, event: WizardEvent | None = None) -> None:
         if event.GetDirection() and (self.xylocation == "" or self.xymapset == ""):
             GMessage(
                 _(
@@ -524,7 +529,7 @@ class LocationPage(TitledPage):
 
         self.parent.SetSrcEnv(self.xylocation, self.xymapset)
 
-    def OnEnterPage(self, event=None):
+    def OnEnterPage(self, event: WizardEvent | None = None) -> None:
         if self.xylocation == "" or self.xymapset == "":
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
@@ -684,7 +689,7 @@ class GroupPage(TitledPage):
     def OnExtension(self, event):
         self.extension = self.ext_txt.GetValue()
 
-    def OnPageChanging(self, event=None):
+    def OnPageChanging(self, event: WizardEvent | None = None) -> None:
         if event.GetDirection() and self.xygroup == "":
             GMessage(
                 _("You must select a valid image/map group in order to continue"),
@@ -701,7 +706,7 @@ class GroupPage(TitledPage):
             event.Veto()
             return
 
-    def OnEnterPage(self, event=None):
+    def OnEnterPage(self, event: WizardEvent | None = None) -> None:
         global maptype
 
         self.groupList = []
@@ -888,7 +893,7 @@ class DispMapPage(TitledPage):
 
         tgt_map["vector"] = self.tgtvectselection.GetValue()
 
-    def OnPageChanging(self, event=None):
+    def OnPageChanging(self, event: WizardEvent | None = None) -> None:
         global src_map, tgt_map
 
         if event.GetDirection() and (src_map == ""):
@@ -900,7 +905,7 @@ class DispMapPage(TitledPage):
 
         self.parent.SwitchEnv("target")
 
-    def OnEnterPage(self, event=None):
+    def OnEnterPage(self, event: WizardEvent | None = None) -> None:
         global maptype, src_map, tgt_map
 
         self.srcselection.SetElementList(maptype)
@@ -995,10 +1000,11 @@ class DispMapPage(TitledPage):
         }
         :return: None when web service map layer name doesn't exist
         """
-        layers = {}
-        for layer in self.parent._giface.GetLayerList():
-            if layer.type in ltype:
-                layers[str(layer)] = {"type": layer.type, "cmd": layer.cmd}
+        layers = {
+            str(layer): {"type": layer.type, "cmd": layer.cmd}
+            for layer in self.parent._giface.GetLayerList()
+            if layer.type in ltype
+        }
         if name:
             return layers.get(name)
         return layers
@@ -1026,6 +1032,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         Map=None,
         lmgr=None,
     ):
+        # pylint: disable=super-init-not-called; See InitMapDisplay()
         self.grwiz = grwiz  # GR Wizard
         self._giface = giface
 
@@ -1401,9 +1408,8 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         font = self.GetFont()
         font.SetPointSize(int(spx) + 2)
 
-        textProp = {}
-        textProp["active"] = True
-        textProp["font"] = font
+        textProp = {"active": True, "font": font}
+
         self.pointsToDrawSrc.SetPropertyVal("text", textProp)
         self.pointsToDrawTgt.SetPropertyVal("text", copy(textProp))
 
@@ -2886,11 +2892,11 @@ class GrSettingsDialog(wx.Dialog):
         size=wx.DefaultSize,
         style=wx.DEFAULT_DIALOG_STYLE,
     ):
-        wx.Dialog.__init__(self, parent, id, title, pos, size, style)
         """
         Dialog to set profile text options: font, title
         and font size, axis labels and font size
         """
+        wx.Dialog.__init__(self, parent, id, title, pos, size, style)
         #
         # initialize variables
         #

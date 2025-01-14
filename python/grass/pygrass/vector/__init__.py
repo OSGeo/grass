@@ -1,21 +1,25 @@
 from os.path import join, exists
 import grass.lib.gis as libgis
+import ctypes
 
+
+# flake8: noqa: E402
 libgis.G_gisinit("")
 
 import grass.lib.vector as libvect
-import ctypes
-
-# import pygrass modules
 from grass.pygrass.vector.vector_type import VTYPE
 from grass.pygrass.errors import GrassError, must_be_open
 from grass.pygrass.gis import Location
-
-from grass.pygrass.vector.geometry import GEOOBJ as _GEOOBJ
-from grass.pygrass.vector.geometry import read_line, read_next_line
-from grass.pygrass.vector.geometry import Area as _Area
+from grass.pygrass.vector.geometry import (
+    GEOOBJ as _GEOOBJ,
+    read_line,
+    read_next_line,
+    Area as _Area,
+)
 from grass.pygrass.vector.abstract import Info
 from grass.pygrass.vector.basic import Bbox, Cats, Ilist
+
+# flake8: qa
 
 
 _NUMOF = {
@@ -113,7 +117,8 @@ class Vector(Info):
     def rewind(self):
         """Rewind vector map to cause reads to start at beginning."""
         if libvect.Vect_rewind(self.c_mapinfo) == -1:
-            raise GrassError("Vect_rewind raise an error.")
+            msg = "Vect_rewind raise an error."
+            raise GrassError(msg)
 
     @must_be_open
     def write(self, geo_obj, cat=None, attrs=None):
@@ -122,7 +127,7 @@ class Vector(Info):
         :param geo_obj: a geometry grass object define in
                         grass.pygrass.vector.geometry
         :type geo_obj: geometry GRASS object
-        :param attrs: a list with the values that will be insert in the
+        :param attrs: a list with the values that will be inserted in the
                       attribute table.
         :type attrs: list
         :param cat: The category of the geometry feature, otherwise the
@@ -205,10 +210,7 @@ class Vector(Info):
         if cat is not None and cat not in self._cats:
             self._cats.append(cat)
             if self.table is not None and attrs is not None:
-                attr = [
-                    cat,
-                ]
-                attr.extend(attrs)
+                attr = [cat, *attrs]
                 cur = self.table.conn.cursor()
                 cur.execute(self.table.columns.insert_str, attr)
                 cur.close()
@@ -224,7 +226,8 @@ class Vector(Info):
             self.c_mapinfo, geo_obj.gtype, geo_obj.c_points, geo_obj.c_cats
         )
         if result == -1:
-            raise GrassError("Not able to write the vector feature.")
+            msg = "Not able to write the vector feature."
+            raise GrassError(msg)
         if self._topo_level == 2:
             # return new feature id (on level 2)
             geo_obj.id = result
@@ -397,10 +400,7 @@ class VectorTopo(Vector):
     @must_be_open
     def num_primitives(self):
         """Return dictionary with the number of all primitives"""
-        output = {}
-        for prim in VTYPE.keys():
-            output[prim] = self.num_primitive_of(prim)
-        return output
+        return {prim: self.num_primitive_of(prim) for prim in VTYPE.keys()}
 
     @must_be_open
     def viter(self, vtype, idonly=False):
@@ -641,7 +641,8 @@ class VectorTopo(Vector):
             self.c_mapinfo, cat, geo_obj.gtype, geo_obj.c_points, geo_obj.c_cats
         )
         if result == -1:
-            raise GrassError("Not able to write the vector feature.")
+            msg = "Not able to write the vector feature."
+            raise GrassError(msg)
 
         # return offset into file where the feature starts
         geo_obj.offset = result
@@ -654,7 +655,8 @@ class VectorTopo(Vector):
         :type feature_id: int
         """
         if libvect.Vect_rewrite_line(self.c_mapinfo, feature_id) == -1:
-            raise GrassError("C function: Vect_rewrite_line.")
+            msg = "C function: Vect_rewrite_line."
+            raise GrassError(msg)
 
     @must_be_open
     def restore(self, geo_obj):
@@ -663,16 +665,19 @@ class VectorTopo(Vector):
                 libvect.Vect_restore_line(self.c_mapinfo, geo_obj.offset, geo_obj.id)
                 == -1
             ):
-                raise GrassError("C function: Vect_restore_line.")
+                msg = "C function: Vect_restore_line."
+                raise GrassError(msg)
         else:
-            raise ValueError("The value have not an offset attribute.")
+            msg = "The value have not an offset attribute."
+            raise ValueError(msg)
 
     @must_be_open
     def bbox(self):
-        """Return the BBox of the vecor map"""
+        """Return the BBox of the vector map"""
         bbox = Bbox()
         if libvect.Vect_get_map_box(self.c_mapinfo, bbox.c_bbox) == 0:
-            raise GrassError("I can not find the Bbox.")
+            msg = "I can not find the Bbox."
+            raise GrassError(msg)
         return bbox
 
     def close(self, build=True, release=True):
@@ -966,10 +971,10 @@ if __name__ == "__main__":
     utils.create_test_vector_map(test_vector_name)
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
     from grass.pygrass.utils import get_mapset_vector
     from grass.script.core import run_command
 
     mset = get_mapset_vector(test_vector_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)
