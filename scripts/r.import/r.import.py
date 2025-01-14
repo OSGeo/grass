@@ -178,7 +178,7 @@ def main():
     title = options["title"]
     if flags["e"] and not output:
         output = "rimport_tmp"  # will be removed with the entire tmp location
-        TMP_EST_FILE = gs.append_node_pid(output)
+        TMP_EST_FILE = output
     if options["resolution_value"]:
         if tgtres != "value":
             gs.fatal(
