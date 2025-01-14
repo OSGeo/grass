@@ -46,7 +46,6 @@ DIRS = \
 	visualization \
 	locale \
 	man \
-	macosx \
 	mswindows
 
 SUBDIRS = $(DIRS)
