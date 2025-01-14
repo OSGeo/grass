@@ -2857,7 +2857,7 @@ class TemporalAlgebraParser:
                         map_i.condition_value.append(boolname)
                     else:
                         map_i.condition_value = boolname
-                except (IndexError, AttributeError):
+                except (IndexError, AttributeError, SyntaxError):
                     self.msgr.fatal(
                         "Error: the given expression does not contain a correct time "
                         "difference object."
