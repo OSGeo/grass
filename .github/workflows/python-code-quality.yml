@@ -8,6 +8,8 @@ on:
       - releasebranch_*
   pull_request:
 
+permissions: {}
+
 jobs:
   python-checks:
     name: Python Code Quality Checks
@@ -34,9 +36,9 @@ jobs:
       # renovate: datasource=pypi depName=pylint
       PYLINT_VERSION: "3.3.3"
       # renovate: datasource=pypi depName=bandit
-      BANDIT_VERSION: "1.8.0"
+      BANDIT_VERSION: "1.8.2"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.9.0"
+      RUFF_VERSION: "0.9.1"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -129,13 +131,13 @@ jobs:
           bandit -c pyproject.toml -iii -r . -f sarif -o bandit.sarif --exit-zero
 
       - name: Upload Bandit Scan Results
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: bandit.sarif
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@48ab28a6f5dbc2a99bf1e0131198dd8f1df78169 # v3.28.0
+        uses: github/codeql-action/upload-sarif@b6a472f63d85b9c78a3ac5e89422239fc15e9b3c # v3.28.1
         with:
           sarif_file: bandit.sarif
 
@@ -203,7 +205,7 @@ jobs:
           cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
 
       - name: Make Sphinx documentation available
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: sphinx-grass
           path: sphinx-grass
