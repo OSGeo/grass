@@ -1,5 +1,5 @@
 import numpy as np
-from grass.script import raster_info, core
+from grass.script import array
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -11,20 +11,22 @@ class TestIFFT(TestCase):
     real_output = "fft_real"
     imag_output = "fft_imag"
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         """Set up an input raster and configure test environment."""
-        self.use_temp_region()
-        self.runModule("g.region", n=10, s=0, e=10, w=0, rows=10, cols=10)
-        self.runModule(
-            "r.mapcalc", expression=f"{self.input_raster} = col()", overwrite=True
+        cls.use_temp_region()
+        cls.runModule("g.region", n=10, s=0, e=10, w=0, rows=10, cols=10)
+        cls.runModule(
+            "r.mapcalc", expression=f"{cls.input_raster} = col()", overwrite=True
         )
 
-    def tearDown(self):
+    @classmethod
+    def tearDownClass(cls):
         """Clean up generated data and reset the region."""
         rasters_to_remove = [
-            self.input_raster,
-            self.real_output,
-            self.imag_output,
+            cls.input_raster,
+            cls.real_output,
+            cls.imag_output,
             "reconstructed",
             "input_2",
             "combined",
@@ -35,69 +37,14 @@ class TestIFFT(TestCase):
             "combined_real",
             "combined_imag",
         ]
-        self.runModule(
+        cls.runModule(
             "g.remove",
             type="raster",
             name=",".join(rasters_to_remove),
             flags="f",
             quiet=True,
         )
-        self.del_temp_region()
-
-    def test_fft_output_exists(self):
-        """Check that i.fft produces real and imaginary output rasters."""
-        self.assertModule(
-            "i.fft",
-            input=self.input_raster,
-            real=self.real_output,
-            imaginary=self.imag_output,
-            overwrite=True,
-        )
-        self.assertRasterExists(self.real_output)
-        self.assertRasterExists(self.imag_output)
-
-    def test_fft_output_dimensions(self):
-        """Verify that FFT output dimensions match the input raster."""
-        self.assertModule(
-            "i.fft",
-            input=self.input_raster,
-            real=self.real_output,
-            imaginary=self.imag_output,
-            overwrite=True,
-        )
-        input_info = raster_info(self.input_raster)
-        real_info = raster_info(self.real_output)
-        imag_info = raster_info(self.imag_output)
-
-        self.assertEqual(
-            input_info["rows"],
-            real_info["rows"],
-            "Mismatch in row count for real raster",
-        )
-        self.assertEqual(
-            input_info["cols"],
-            real_info["cols"],
-            "Mismatch in column count for real raster",
-        )
-        self.assertEqual(
-            input_info["rows"],
-            imag_info["rows"],
-            "Mismatch in row count for imaginary raster",
-        )
-        self.assertEqual(
-            input_info["cols"],
-            imag_info["cols"],
-            "Mismatch in column count for imaginary raster",
-        )
-
-    def _parse_raster_values(self, raster):
-        """Helper function to parse raster values into a numpy array."""
-        output = core.read_command(
-            "r.stats", input=raster, flags="n", separator="space"
-        ).splitlines()
-        return np.array(
-            [float(line.split()[1]) for line in output if len(line.split()) == 2]
-        )
+        cls.del_temp_region()
 
     def test_linearity_property(self):
         """Test linearity of the FFT by combining two rasters."""
@@ -113,9 +60,15 @@ class TestIFFT(TestCase):
             imaginary="imag_1",
             overwrite=True,
         )
+        self.assertRasterExists("real_1")
+        self.assertRasterExists("imag_1")
+
         self.assertModule(
             "i.fft", input="input_2", real="real_2", imaginary="imag_2", overwrite=True
         )
+        self.assertRasterExists("real_2")
+        self.assertRasterExists("imag_2")
+
         self.assertModule(
             "i.fft",
             input="combined",
@@ -124,14 +77,13 @@ class TestIFFT(TestCase):
             overwrite=True,
         )
 
-        real_combined = self._parse_raster_values("combined_real")
-        imag_combined = self._parse_raster_values("combined_imag")
-        real_sum = self._parse_raster_values("real_1") + self._parse_raster_values(
-            "real_2"
-        )
-        imag_sum = self._parse_raster_values("imag_1") + self._parse_raster_values(
-            "imag_2"
-        )
+        self.assertRasterExists("combined_real")
+        self.assertRasterExists("combined_imag")
+
+        real_combined = array.array("combined_real")
+        imag_combined = array.array("combined_imag")
+        real_sum = array.array("real_1") + array.array("real_2")
+        imag_sum = array.array("imag_1") + array.array("imag_2")
 
         self.assertTrue(
             np.allclose(real_combined, real_sum, atol=1e-5),
@@ -151,13 +103,13 @@ class TestIFFT(TestCase):
             imaginary=self.imag_output,
             overwrite=True,
         )
-        spatial_energy = sum(v**2 for v in self._parse_raster_values(self.input_raster))
-        freq_energy = sum(
-            rv**2 + iv**2
-            for rv, iv in zip(
-                self._parse_raster_values(self.real_output),
-                self._parse_raster_values(self.imag_output),
-            )
+
+        self.assertRasterExists(self.real_output)
+        self.assertRasterExists(self.imag_output)
+
+        spatial_energy = np.sum(array.array(self.input_raster) ** 2)
+        freq_energy = np.sum(
+            array.array(self.real_output) ** 2 + array.array(self.imag_output) ** 2
         )
         self.assertAlmostEqual(
             spatial_energy, freq_energy, places=5, msg="Energy conservation failed"
@@ -172,6 +124,10 @@ class TestIFFT(TestCase):
             imaginary=self.imag_output,
             overwrite=True,
         )
+
+        self.assertRasterExists(self.real_output)
+        self.assertRasterExists(self.imag_output)
+
         self.assertModule(
             "i.ifft",
             real=self.real_output,
@@ -180,8 +136,8 @@ class TestIFFT(TestCase):
             overwrite=True,
         )
 
-        original_values = self._parse_raster_values(self.input_raster)
-        reconstructed_values = self._parse_raster_values("reconstructed")
+        original_values = array.array(self.input_raster)
+        reconstructed_values = array.array("reconstructed")
 
         self.assertTrue(
             np.allclose(original_values, reconstructed_values, atol=1e-5),
@@ -200,8 +156,11 @@ class TestIFFT(TestCase):
             imaginary=self.imag_output,
             overwrite=True,
         )
-        real_values = self._parse_raster_values(self.real_output)
-        imag_values = self._parse_raster_values(self.imag_output)
+        self.assertRasterExists(self.real_output)
+        self.assertRasterExists(self.imag_output)
+
+        real_values = array.array(self.real_output)
+        imag_values = array.array(self.imag_output)
         self.assertTrue(
             np.allclose(real_values, 0), "Real component should be all zeros"
         )
@@ -221,8 +180,11 @@ class TestIFFT(TestCase):
             imaginary=self.imag_output,
             overwrite=True,
         )
-        real_values = self._parse_raster_values(self.real_output)
-        imag_values = self._parse_raster_values(self.imag_output)
+        self.assertRasterExists(self.real_output)
+        self.assertRasterExists(self.imag_output)
+
+        real_values = array.array(self.real_output)
+        imag_values = array.array(self.imag_output)
         self.assertTrue(
             np.all(np.isfinite(real_values)), "Real component should have valid values"
         )
