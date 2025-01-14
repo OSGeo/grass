@@ -42,7 +42,6 @@ per-file-ignores =
     # TODO: Is this really needed?
     python/grass/jupyter/__init__.py: E501
     python/grass/pygrass/vector/__init__.py: E402
-    python/grass/temporal/datetime_math.py: E722
     python/grass/temporal/spatial_topology_dataset_connector.py: E722
     python/grass/temporal/temporal_algebra.py: E722
     # Current benchmarks/tests are changing sys.path before import.
