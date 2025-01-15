@@ -21,7 +21,7 @@ try:
     from dateutil import parser
 
     has_dateutil = True
-except:
+except (ImportError, ModuleNotFoundError):
     has_dateutil = False
 
 
@@ -811,7 +811,7 @@ def check_datetime_string(time_string: str, use_dateutil: bool = True):
 
     try:
         return datetime.strptime(time_string, time_format)
-    except:
+    except (ValueError, TypeError):
         return _("Unable to parse time string: %s") % time_string
 
 
