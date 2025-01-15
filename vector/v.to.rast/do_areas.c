@@ -98,8 +98,10 @@ int sort_areas(struct Map_info *Map, struct line_pnts *Points, int field,
 
     /* first count valid areas */
     nareas = Vect_get_num_areas(Map);
-    if (nareas == 0)
+    if (nareas == 0) {
+        Vect_destroy_cats_struct(Cats);
         return 0;
+    }
 
     /* allocate list to hold valid area info */
     list = (struct list *)G_calloc(nareas * sizeof(char), sizeof(struct list));
@@ -155,6 +157,7 @@ int sort_areas(struct Map_info *Map, struct line_pnts *Points, int field,
         /* sort the list by size */
         qsort(list, nareas * sizeof(char), sizeof(struct list), compare);
     }
+    Vect_destroy_cats_struct(Cats);
 
     return nareas_selected;
 }
