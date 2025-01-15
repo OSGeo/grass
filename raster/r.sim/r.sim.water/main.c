@@ -332,9 +332,7 @@ int main(int argc, char *argv[])
     parm.threads->answer = NUM_THREADS;
     parm.threads->required = NO;
     parm.threads->description =
-        _("Number of threads which will be used for parallel computation. "
-          "Increasing the number of threads does not really speed up "
-          "the simulation.");
+        _("Number of threads which will be used for parallel computation.");
     parm.threads->guisection = _("Parameters");
 
     if (G_parser(argc, argv))
