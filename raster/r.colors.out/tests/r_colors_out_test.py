@@ -1,6 +1,5 @@
 """Tests of r.colors.out"""
 
-import pytest
 import grass.script as gs
 
 
@@ -23,7 +22,6 @@ def validate_plain_text_output(data):
     ), f"test failed: expected {expected} but got {data.keys()}"
 
 
-@pytest.mark.needs_solo_run
 def test_r_colors_out_plain_output(raster_color_dataset):
     """Test r.colors.out command for plain output format."""
     session = raster_color_dataset
@@ -31,7 +29,6 @@ def test_r_colors_out_plain_output(raster_color_dataset):
     validate_plain_text_output(data)
 
 
-@pytest.mark.needs_solo_run
 def test_r_colors_out_without_format_option(raster_color_dataset):
     """Test r.colors.out command without any format option."""
     session = raster_color_dataset
@@ -39,7 +36,6 @@ def test_r_colors_out_without_format_option(raster_color_dataset):
     validate_plain_text_output(data)
 
 
-@pytest.mark.needs_solo_run
 def test_r_colors_out_with_p_flag(raster_color_dataset):
     """Test r.colors.out command with percentage values."""
     session = raster_color_dataset
@@ -69,7 +65,6 @@ def validate_common_json_structure(data):
     ), "The length of the output JSON does not match the expected value of 8."
 
 
-@pytest.mark.needs_solo_run
 def test_r_colors_out_json_with_default_option(raster_color_dataset):
     """Test r.colors.out command for JSON output format for default color option."""
     session = raster_color_dataset
@@ -88,7 +83,6 @@ def test_r_colors_out_json_with_default_option(raster_color_dataset):
     assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
-@pytest.mark.needs_solo_run
 def test_r_colors_out_json_with_triplet_option(raster_color_dataset):
     """Test r.colors.out command for JSON output format for triplet color option."""
     session = raster_color_dataset
@@ -109,7 +103,6 @@ def test_r_colors_out_json_with_triplet_option(raster_color_dataset):
     assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
-@pytest.mark.needs_solo_run
 def test_r_colors_out_json_with_rgb_option(raster_color_dataset):
     """Test r.colors.out command for JSON output format for rgb color option."""
     session = raster_color_dataset
@@ -134,7 +127,6 @@ def test_r_colors_out_json_with_rgb_option(raster_color_dataset):
     assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
-@pytest.mark.needs_solo_run
 def test_r_colors_out_json_with_hex_option(raster_color_dataset):
     """Test r.colors.out command for JSON output format for hex color option."""
     session = raster_color_dataset
@@ -159,7 +151,6 @@ def test_r_colors_out_json_with_hex_option(raster_color_dataset):
     assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
-@pytest.mark.needs_solo_run
 def test_r_colors_out_json_with_hsv_option(raster_color_dataset):
     """Test r.colors.out command for JSON output format for hsv color option."""
     session = raster_color_dataset
