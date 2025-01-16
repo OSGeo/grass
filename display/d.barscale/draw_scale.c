@@ -639,7 +639,7 @@ int draw_scale(double east, double north, int length, int seg, int units,
             G_free(label);
         }
         return 0;
-    }    
+    }
 
     /* draw the distance + units text */
 
