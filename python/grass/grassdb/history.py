@@ -310,11 +310,10 @@ def add_entry(history_path, entry):
     :param str history_path: path to the history log file
     :param dict entry: entry consisting of 'command' and 'command_info' keys
     """
-    if get_history_file_extension(history_path) == ".json":
-        _add_entry_to_JSON(history_path, entry)
-    else:
+    if get_history_file_extension(history_path) != ".json":
         msg = "Adding entries is supported only for JSON format."
         raise ValueError(msg)
+    _add_entry_to_JSON(history_path, entry)
 
 
 def _update_entry_in_JSON(history_path, command_info, index=None):
@@ -358,11 +357,10 @@ def update_entry(history_path, command_info, index=None):
     :param dict command_info: command info entry for update
     :param int|None index: index of the command to be updated
     """
-    if get_history_file_extension(history_path) == ".json":
-        _update_entry_in_JSON(history_path, command_info, index)
-    else:
+    if get_history_file_extension(history_path) != ".json":
         msg = "Updating entries is supported only for JSON format."
         raise ValueError(msg)
+    _update_entry_in_JSON(history_path, command_info, index)
 
 
 def copy(history_path, target_path):

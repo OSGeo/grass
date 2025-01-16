@@ -200,24 +200,23 @@ class Attrs:
         >>> test_vect.close()
 
         """
-        if self.writeable:
-            if np.isscalar(keys):
-                keys, values = (keys,), (values,)
-            # check if key is a column of the table or not
-            for key in keys:
-                if key not in self.table.columns:
-                    raise KeyError("Column: %s not in table" % key)
-            # prepare the string using as paramstyle: qmark
-            vals = ",".join(["%s=?" % k for k in keys])
-            # "UPDATE {tname} SET {values} WHERE {condition};"
-            sqlcode = sql.UPDATE_WHERE.format(
-                tname=self.table.name, values=vals, condition=self.cond
-            )
-            self.table.execute(sqlcode, values=values)
-            # self.table.conn.commit()
-        else:
+        if not self.writeable:
             str_err = "You can only read the attributes if the map is in another mapset"
             raise GrassError(str_err)
+        if np.isscalar(keys):
+            keys, values = ((keys,), (values,))
+        # check if key is a column of the table or not
+        for key in keys:
+            if key not in self.table.columns:
+                raise KeyError("Column: %s not in table" % key)
+        # prepare the string using as paramstyle: qmark
+        vals = ",".join(["%s=?" % k for k in keys])
+        # "UPDATE {tname} SET {values} WHERE {condition};"
+        sqlcode = sql.UPDATE_WHERE.format(
+            tname=self.table.name, values=vals, condition=self.cond
+        )
+        self.table.execute(sqlcode, values=values)
+        # self.table.conn.commit()
 
     def __dict__(self):
         """Return a dict of the attribute table row."""

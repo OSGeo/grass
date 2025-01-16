@@ -429,41 +429,37 @@ class RasterDataset(AbstractMapDataset):
 
         kvp = self.ciface.read_raster_info(self.get_name(), self.get_mapset())
 
-        if kvp:
-            # Fill spatial extent
-            self.set_spatial_extent_from_values(
-                north=kvp["north"],
-                south=kvp["south"],
-                east=kvp["east"],
-                west=kvp["west"],
-            )
+        if not kvp:
+            return False
+        # Fill spatial extent
+        self.set_spatial_extent_from_values(
+            north=kvp["north"], south=kvp["south"], east=kvp["east"], west=kvp["west"]
+        )
 
-            # Fill metadata
-            self.metadata.set_nsres(kvp["nsres"])
-            self.metadata.set_ewres(kvp["ewres"])
-            self.metadata.set_datatype(kvp["datatype"])
-            self.metadata.set_min(kvp["min"])
-            self.metadata.set_max(kvp["max"])
+        # Fill metadata
+        self.metadata.set_nsres(kvp["nsres"])
+        self.metadata.set_ewres(kvp["ewres"])
+        self.metadata.set_datatype(kvp["datatype"])
+        self.metadata.set_min(kvp["min"])
+        self.metadata.set_max(kvp["max"])
 
-            rows = int(kvp["rows"])
-            cols = int(kvp["cols"])
+        rows = int(kvp["rows"])
+        cols = int(kvp["cols"])
 
-            ncells = cols * rows
+        ncells = cols * rows
 
-            self.metadata.set_cols(cols)
-            self.metadata.set_rows(rows)
-            self.metadata.set_number_of_cells(ncells)
+        self.metadata.set_cols(cols)
+        self.metadata.set_rows(rows)
+        self.metadata.set_number_of_cells(ncells)
 
-            # Fill semantic label if defined
-            semantic_label = self.ciface.read_raster_semantic_label(
-                self.get_name(), self.get_mapset()
-            )
-            if semantic_label:
-                self.metadata.set_semantic_label(semantic_label)
+        # Fill semantic label if defined
+        semantic_label = self.ciface.read_raster_semantic_label(
+            self.get_name(), self.get_mapset()
+        )
+        if semantic_label:
+            self.metadata.set_semantic_label(semantic_label)
 
-            return True
-
-        return False
+        return True
 
     def set_semantic_label(self, semantic_label) -> None:
         """Set semantic label identifier
@@ -828,38 +824,37 @@ class Raster3DDataset(AbstractMapDataset):
         # Fill spatial extent
         kvp = self.ciface.read_raster3d_info(self.get_name(), self.get_mapset())
 
-        if kvp:
-            self.set_spatial_extent_from_values(
-                north=kvp["north"],
-                south=kvp["south"],
-                east=kvp["east"],
-                west=kvp["west"],
-                top=kvp["top"],
-                bottom=kvp["bottom"],
-            )
+        if not kvp:
+            return False
+        self.set_spatial_extent_from_values(
+            north=kvp["north"],
+            south=kvp["south"],
+            east=kvp["east"],
+            west=kvp["west"],
+            top=kvp["top"],
+            bottom=kvp["bottom"],
+        )
 
-            # Fill metadata
-            self.metadata.set_nsres(kvp["nsres"])
-            self.metadata.set_ewres(kvp["ewres"])
-            self.metadata.set_tbres(kvp["tbres"])
-            self.metadata.set_datatype(kvp["datatype"])
-            self.metadata.set_min(kvp["min"])
-            self.metadata.set_max(kvp["max"])
+        # Fill metadata
+        self.metadata.set_nsres(kvp["nsres"])
+        self.metadata.set_ewres(kvp["ewres"])
+        self.metadata.set_tbres(kvp["tbres"])
+        self.metadata.set_datatype(kvp["datatype"])
+        self.metadata.set_min(kvp["min"])
+        self.metadata.set_max(kvp["max"])
 
-            rows = int(kvp["rows"])
-            cols = int(kvp["cols"])
-            depths = int(kvp["depths"])
+        rows = int(kvp["rows"])
+        cols = int(kvp["cols"])
+        depths = int(kvp["depths"])
 
-            ncells = cols * rows * depths
+        ncells = cols * rows * depths
 
-            self.metadata.set_cols(cols)
-            self.metadata.set_rows(rows)
-            self.metadata.set_depths(depths)
-            self.metadata.set_number_of_cells(ncells)
+        self.metadata.set_cols(cols)
+        self.metadata.set_rows(rows)
+        self.metadata.set_depths(depths)
+        self.metadata.set_number_of_cells(ncells)
 
-            return True
-
-        return False
+        return True
 
 
 ###############################################################################
@@ -1167,35 +1162,34 @@ class VectorDataset(AbstractMapDataset):
         # Get the data from an existing vector map
         kvp = self.ciface.read_vector_info(self.get_name(), self.get_mapset())
 
-        if kvp:
-            # Fill spatial extent
-            self.set_spatial_extent_from_values(
-                north=kvp["north"],
-                south=kvp["south"],
-                east=kvp["east"],
-                west=kvp["west"],
-                top=kvp["top"],
-                bottom=kvp["bottom"],
-            )
+        if not kvp:
+            return False
+        # Fill spatial extent
+        self.set_spatial_extent_from_values(
+            north=kvp["north"],
+            south=kvp["south"],
+            east=kvp["east"],
+            west=kvp["west"],
+            top=kvp["top"],
+            bottom=kvp["bottom"],
+        )
 
-            # Fill metadata
-            self.metadata.set_3d_info(kvp["map3d"])
-            self.metadata.set_number_of_points(kvp["points"])
-            self.metadata.set_number_of_lines(kvp["lines"])
-            self.metadata.set_number_of_boundaries(kvp["boundaries"])
-            self.metadata.set_number_of_centroids(kvp["centroids"])
-            self.metadata.set_number_of_faces(kvp["faces"])
-            self.metadata.set_number_of_kernels(kvp["kernels"])
-            self.metadata.set_number_of_primitives(kvp["primitives"])
-            self.metadata.set_number_of_nodes(kvp["nodes"])
-            self.metadata.set_number_of_areas(kvp["areas"])
-            self.metadata.set_number_of_islands(kvp["islands"])
-            self.metadata.set_number_of_holes(kvp["holes"])
-            self.metadata.set_number_of_volumes(kvp["volumes"])
+        # Fill metadata
+        self.metadata.set_3d_info(kvp["map3d"])
+        self.metadata.set_number_of_points(kvp["points"])
+        self.metadata.set_number_of_lines(kvp["lines"])
+        self.metadata.set_number_of_boundaries(kvp["boundaries"])
+        self.metadata.set_number_of_centroids(kvp["centroids"])
+        self.metadata.set_number_of_faces(kvp["faces"])
+        self.metadata.set_number_of_kernels(kvp["kernels"])
+        self.metadata.set_number_of_primitives(kvp["primitives"])
+        self.metadata.set_number_of_nodes(kvp["nodes"])
+        self.metadata.set_number_of_areas(kvp["areas"])
+        self.metadata.set_number_of_islands(kvp["islands"])
+        self.metadata.set_number_of_holes(kvp["holes"])
+        self.metadata.set_number_of_volumes(kvp["volumes"])
 
-            return True
-
-        return False
+        return True
 
 
 ###############################################################################
