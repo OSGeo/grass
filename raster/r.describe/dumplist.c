@@ -207,7 +207,7 @@ static int show(CELL low, CELL high, int *len, DCELL dmin, DCELL dmax,
                 RASTER_MAP_TYPE map_type, int nsteps, enum OutputFormat format,
                 JSON_Array *root_array)
 {
-    char text[MAX_STR_LEN];
+    char text[100];
     char xlen;
     JSON_Object *cat_object;
     JSON_Value *cat_value;
