@@ -635,7 +635,9 @@ int draw_scale(double east, double north, int length, int seg, int units,
     D_stroke();
 
     if (fontsize < 0) {
-        G_free(label);
+        if (length != 0) {
+            G_free(label);
+        }
         return 0;
     }    
 
