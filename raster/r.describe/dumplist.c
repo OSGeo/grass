@@ -78,7 +78,6 @@ int long_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
 {
     CELL cat;
     long count; /* not used, but required by cell stats call */
-    char cat_str[MAX_STR_LEN];
     JSON_Value *root_value, *range_value;
     JSON_Object *root_object;
     JSON_Array *range_array;
@@ -277,7 +276,6 @@ int compact_range_list(CELL negmin, CELL negmax, CELL zero, CELL posmin,
                        CELL posmax, CELL null, char *no_data_str,
                        int skip_nulls, enum OutputFormat format)
 {
-    char cat_str[MAX_STR_LEN];
     JSON_Value *root_value, *range_value;
     JSON_Object *root_object;
     JSON_Array *range_array;
@@ -347,7 +345,6 @@ int range_list(CELL negmin, CELL negmax, CELL zero, CELL posmin, CELL posmax,
                CELL null, char *no_data_str, int skip_nulls,
                enum OutputFormat format)
 {
-    char cat_str[MAX_STR_LEN];
     JSON_Value *root_value, *range_value;
     JSON_Object *root_object;
     JSON_Array *range_array;

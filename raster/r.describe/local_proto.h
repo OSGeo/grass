@@ -21,8 +21,6 @@
 #include <grass/raster.h>
 #include <grass/parson.h>
 
-#define MAX_STR_LEN 100
-
 enum OutputFormat { PLAIN, JSON };
 
 /* describe.c */
