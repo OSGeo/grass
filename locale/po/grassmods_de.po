@@ -259,7 +259,7 @@ msgstr ""
 "Treiber: %s\n"
 "Datenbank: %s"
 
-#: ../doc/raster/r.example/main.c:83 ../raster/r.external/main.c:57
+#: ../doc/examples/raster/r.example/main.c:83 ../raster/r.external/main.c:57
 #: ../raster/r.quantile/main.c:297 ../raster/r.terraflow/main.cpp:457
 #: ../raster/r.info/main.c:71 ../raster/r.patch/main.c:68
 #: ../raster/r.support.stats/main.c:35 ../raster/r.what.color/main.c:88
@@ -551,19 +551,19 @@ msgstr ""
 msgid "raster"
 msgstr "Raster"
 
-#: ../doc/raster/r.example/main.c:84 ../doc/vector/v.example/main.c:50
+#: ../doc/examples/raster/r.example/main.c:84 ../doc/examples/vector/v.example/main.c:50
 msgid "keyword2"
 msgstr "Schlagwort2"
 
-#: ../doc/raster/r.example/main.c:85 ../doc/vector/v.example/main.c:51
+#: ../doc/examples/raster/r.example/main.c:85 ../doc/examples/vector/v.example/main.c:51
 msgid "keyword3"
 msgstr "Schlagwort3"
 
-#: ../doc/raster/r.example/main.c:86
+#: ../doc/examples/raster/r.example/main.c:86
 msgid "My first raster module"
 msgstr "Mein erstes Rastermodul."
 
-#: ../doc/raster/r.example/main.c:105 ../raster/r.terraflow/main.cpp:207
+#: ../doc/examples/raster/r.example/main.c:105 ../raster/r.terraflow/main.cpp:207
 #: ../raster/r.terraflow/main.cpp:354 ../raster/r.terraflow/main.cpp:390
 #: ../raster/r.info/main.c:111 ../raster/r.cost/main.c:364
 #: ../raster/r.cost/main.c:391 ../raster/r.cost/main.c:711
@@ -617,7 +617,7 @@ msgstr "Mein erstes Rastermodul."
 msgid "Raster map <%s> not found"
 msgstr "Rasterkarte <%s> konnte nicht gefunden werden."
 
-#: ../doc/vector/v.example/main.c:49 ../raster/r.contour/main.c:90
+#: ../doc/examples/vector/v.example/main.c:49 ../raster/r.contour/main.c:90
 #: ../raster/r.random/main.c:55 ../misc/m.nviz.script/main.c:71
 #: ../misc/m.nviz.image/main.c:52
 #: ../locale/scriptstrings/v.clip_to_translate.c:2
@@ -802,11 +802,11 @@ msgstr "Rasterkarte <%s> konnte nicht gefunden werden."
 msgid "vector"
 msgstr "Vektor"
 
-#: ../doc/vector/v.example/main.c:52
+#: ../doc/examples/vector/v.example/main.c:52
 msgid "My first vector module"
 msgstr "Mein erstes Vektormodul."
 
-#: ../doc/vector/v.example/main.c:76 ../raster/r.cost/main.c:357
+#: ../doc/examples/vector/v.example/main.c:76 ../raster/r.cost/main.c:357
 #: ../raster/r.walk/main.c:460 ../raster/r.carve/main.c:153
 #: ../misc/m.nviz.image/vector.c:82 ../general/g.region/main.c:505
 #: ../vector/v.lidar.edgedetection/main.c:181 ../vector/v.profile/main.c:371
@@ -828,12 +828,12 @@ msgstr "Mein erstes Vektormodul."
 msgid "Vector map <%s> not found"
 msgstr "Vektorkarte <%s> nicht gefunden."
 
-#: ../doc/vector/v.example/main.c:82 ../vector/v.profile/main.c:378
+#: ../doc/examples/vector/v.example/main.c:82 ../vector/v.profile/main.c:378
 #: ../vector/v.cluster/main.c:137
 msgid "Unable to set predetermined vector open level"
 msgstr "Kann das vorherbestimmte Vektoröffnungslevel nicht setzen."
 
-#: ../doc/vector/v.example/main.c:88 ../raster/r.cost/main.c:599
+#: ../doc/examples/vector/v.example/main.c:88 ../raster/r.cost/main.c:599
 #: ../raster/r.cost/main.c:666 ../raster/r.drain/main.c:277
 #: ../raster/r.walk/main.c:760 ../raster/r.walk/main.c:827
 #: ../raster/r.region/main.c:172 ../raster/r.sim/simlib/observation_points.c:40
@@ -905,7 +905,7 @@ msgstr "Kann das vorherbestimmte Vektoröffnungslevel nicht setzen."
 msgid "Unable to open vector map <%s>"
 msgstr "Kann die Vektorkarte <%s> nicht öffnen."
 
-#: ../doc/vector/v.example/main.c:101 ../raster/r.to.vect/main.c:159
+#: ../doc/examples/vector/v.example/main.c:101 ../raster/r.to.vect/main.c:159
 #: ../raster/r.drain/main.c:204 ../raster/r.resamp.bspline/main.c:484
 #: ../raster/r.sim/simlib/output.c:49 ../raster/r.sim/simlib/output.c:56
 #: ../raster/r.flow/flow_io.c:181 ../raster/r.contour/main.c:155
@@ -960,7 +960,7 @@ msgstr "Kann die Vektorkarte <%s> nicht öffnen."
 msgid "Unable to create vector map <%s>"
 msgstr "Kann die Vektorkarte <%s> nicht erzeugen."
 
-#: ../doc/vector/v.example/main.c:110 ../vector/v.generalize/misc.c:167
+#: ../doc/examples/vector/v.example/main.c:110 ../vector/v.generalize/misc.c:167
 #: ../vector/v.to.rast/support.c:101 ../vector/v.to.rast/support.c:271
 #: ../vector/v.to.rast/support.c:499 ../vector/v.distance/main.c:563
 #: ../vector/v.buffer/main.c:422 ../vector/v.univar/main.c:236
@@ -976,7 +976,7 @@ msgstr "Kann die Vektorkarte <%s> nicht erzeugen."
 msgid "Database connection not defined for layer %d"
 msgstr "Die Datenbankverbindung für den Layer<%d> ist nicht definiert."
 
-#: ../doc/vector/v.example/main.c:130 ../raster/r.stream.extract/close.c:176
+#: ../doc/examples/vector/v.example/main.c:130 ../raster/r.stream.extract/close.c:176
 #: ../db/db.execute/main.c:68 ../db/db.createdb/main.c:38
 #: ../db/db.columns/main.c:47 ../db/db.dropdb/main.c:39
 #: ../db/db.databases/main.c:47 ../db/db.describe/main.c:51
@@ -990,7 +990,7 @@ msgstr "Die Datenbankverbindung für den Layer<%d> ist nicht definiert."
 msgid "Unable to start driver <%s>"
 msgstr "Kann den Treiber <%s> nicht starten."
 
-#: ../doc/vector/v.example/main.c:138 ../raster/r.to.vect/main.c:189
+#: ../doc/examples/vector/v.example/main.c:138 ../raster/r.to.vect/main.c:189
 #: ../raster/r.contour/main.c:170 ../raster/r.volume/main.c:248
 #: ../raster/r.random/random.c:67 ../misc/m.nviz.image/vector.c:301
 #: ../raster3d/r3.flow/main.c:46 ../ps/ps.map/catval.c:53
@@ -1041,7 +1041,7 @@ msgstr "Kann den Treiber <%s> nicht starten."
 msgid "Unable to open database <%s> by driver <%s>"
 msgstr "Kann Datenbank <%s> nicht mit dem Treiber <%s> öffnen."
 
-#: ../doc/vector/v.example/main.c:143 ../db/db.columns/main.c:58
+#: ../doc/examples/vector/v.example/main.c:143 ../db/db.columns/main.c:58
 #: ../db/db.describe/main.c:62 ../vector/v.db.connect/main.c:229
 #: ../vector/v.out.vtk/writeVTK.c:651 ../vector/v.out.postgis/table.c:41
 #: ../vector/v.reclass/main.c:189 ../vector/v.in.ascii/main.c:446
@@ -1056,17 +1056,17 @@ msgstr "Kann Datenbank <%s> nicht mit dem Treiber <%s> öffnen."
 msgid "Unable to describe table <%s>"
 msgstr "Kann Tabelle <%s> nicht beschreiben."
 
-#: ../doc/vector/v.example/main.c:176 ../vector/v.profile/main.c:708
+#: ../doc/examples/vector/v.example/main.c:176 ../vector/v.profile/main.c:708
 #, c-format
 msgid "Unable to get attribute data for cat %d"
 msgstr "Kann die Attribute für cat %d nicht bekommen."
 
-#: ../doc/vector/v.example/main.c:185 ../vector/v.profile/main.c:717
+#: ../doc/examples/vector/v.example/main.c:185 ../vector/v.profile/main.c:717
 #, c-format
 msgid "Error while retrieving database record for cat %d"
 msgstr "Fehler beim Abfragen des Datenbankeintrags für cat %d"
 
-#: ../doc/vector/v.example/main.c:220 ../vector/v.fill.holes/main.c:196
+#: ../doc/examples/vector/v.example/main.c:220 ../vector/v.fill.holes/main.c:196
 #, c-format
 msgid "Unable to copy attribute table to vector map <%s>"
 msgstr "Kann die Attributtabelle nicht in die Vektorkarte <%s> kopieren."

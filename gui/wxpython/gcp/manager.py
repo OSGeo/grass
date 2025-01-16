@@ -999,10 +999,11 @@ class DispMapPage(TitledPage):
         }
         :return: None when web service map layer name doesn't exist
         """
-        layers = {}
-        for layer in self.parent._giface.GetLayerList():
-            if layer.type in ltype:
-                layers[str(layer)] = {"type": layer.type, "cmd": layer.cmd}
+        layers = {
+            str(layer): {"type": layer.type, "cmd": layer.cmd}
+            for layer in self.parent._giface.GetLayerList()
+            if layer.type in ltype
+        }
         if name:
             return layers.get(name)
         return layers
@@ -1406,9 +1407,8 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         font = self.GetFont()
         font.SetPointSize(int(spx) + 2)
 
-        textProp = {}
-        textProp["active"] = True
-        textProp["font"] = font
+        textProp = {"active": True, "font": font}
+
         self.pointsToDrawSrc.SetPropertyVal("text", textProp)
         self.pointsToDrawTgt.SetPropertyVal("text", copy(textProp))
 

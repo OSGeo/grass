@@ -240,9 +240,7 @@ class AnimationData:
             del region["projection"]
         if "zone" in region:
             del region["zone"]
-        regions = []
-        for i in range(self._mapCount):
-            regions.append(copy.copy(region))
+        regions = [copy.copy(region) for i in range(self._mapCount)]
         self._regions = regions
         if not (endRegion or zoomValue):
             return

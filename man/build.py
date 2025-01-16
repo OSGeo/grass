@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # utilities for generating HTML indices
-# (C) 2003-2024 Markus Neteler and the GRASS Development Team
+# (C) 2003-2025 Markus Neteler and the GRASS Development Team
 # Authors:
 #   Markus Neteler
 #   Glynn Clements

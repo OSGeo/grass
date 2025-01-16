@@ -141,10 +141,7 @@ class Instruction:
 
     def FindInstructionByType(self, type, list=False):
         """Find instruction(s) with the given type"""
-        inst = []
-        for each in self.instruction:
-            if each.type == type:
-                inst.append(each)
+        inst = [each for each in self.instruction if each.type == type]
         if len(inst) == 1 and not list:
             return inst[0]
         return inst
@@ -1677,8 +1674,7 @@ class RasterLegend(InstructionObject):
 
     def Read(self, instruction, text, **kwargs):
         """Read instruction and save information"""
-        instr = {}
-        instr["rLegend"] = True
+        instr = {"rLegend": True}
         for line in text:
             try:
                 if line.startswith("where"):
@@ -1841,8 +1837,7 @@ class VectorLegend(InstructionObject):
 
     def Read(self, instruction, text, **kwargs):
         """Read instruction and save information"""
-        instr = {}
-        instr["vLegend"] = True
+        instr = {"vLegend": True}
         for line in text:
             try:
                 if line.startswith("where"):
@@ -1907,8 +1902,7 @@ class Raster(InstructionObject):
 
     def Read(self, instruction, text):
         """Read instruction and save information"""
-        instr = {}
-        instr["isRaster"] = True
+        instr = {"isRaster": True}
         try:
             map = text.split()[1]
         except IndexError:

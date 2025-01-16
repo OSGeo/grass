@@ -1502,10 +1502,7 @@ class MapManager:
 
         :param cmd: d.rgb command as a list
         """
-        name = []
-        for param in cmd:
-            if "=" in param:
-                name.append(param.split("=")[1])
+        name = [param.split("=")[1] for param in cmd if "=" in param]
         name = ",".join(name)
         self.map.AddLayer(
             ltype="rgb",

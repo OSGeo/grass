@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 
 import platform
 import os
+from itertools import starmap
 
 import wx
 from wx.lib.agw import aui
@@ -243,10 +244,7 @@ class ToolbarController:
 
     def _getToolbarData(self, data):
         """Define tool"""
-        retData = []
-        for args in data:
-            retData.append(self._defineTool(*args))
-        return retData
+        return list(starmap(self._defineTool, data))
 
     def _defineTool(
         self, name=None, icon=None, handler=None, item=wx.ITEM_NORMAL, pos=-1

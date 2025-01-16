@@ -34,6 +34,10 @@ select = [
     "C4",     # flake8-comprehensions (C4)
     "COM",    # flake8-commas (COM)
     "D",      # pydocstyle (D)
+    "D202",   # pydocstyle (D) blank-line-after-function
+    "D209",   # pydocstyle (D) new-line-after-last-paragraph
+    "D211",   # pydocstyle (D) blank-line-before-class
+    "D212",   # pydocstyle (D) multi-line-summary-first-line
     "DTZ",    # flake8-datetimez (DTZ)
     "E",      # pycodestyle (E, W)
     "EM",     # flake8-errmsg (EM)
@@ -103,19 +107,22 @@ ignore = [
     "COM812",  # missing-trailing-comma
     "COM818",  # trailing-comma-on-bare-tuple
     "D1",
-    "D2",
-    "D300",    # triple-single-quotes
+    "D200",    # unnecessary-multiline-docstring
+    "D202",    # blank-line-after-function (selected)
+    "D203",    # incorrect-blank-line-before-class (ignored, use D211)
+    "D205",    # missing-blank-line-after-summary
+    "D209",    # new-line-after-last-paragraph (selected)
+    "D212",    # multi-line-summary-first-line (selected)
+    "D213",    # multi-line-summary-second-line (ignored, use D212)
+    "D214",    # overindented-section
     "D301",    # escape-sequence-in-docstring
     "D400",    # ends-in-period
     "D401",    # non-imperative-mood
-    "D402",    # no-signature
     "D403",    # first-line-capitalized
     "D404",    # docstring-starts-with-this
     "D405",    # capitalize-section-name
-    "D406",    # new-line-after-section-name
     "D407",    # dashed-underline-after-section
     "D409",    # section-underline-matches-section-length
-    "D411",    # no-blank-line-before-section
     "D412",    # blank-lines-between-header-and-content
     "D413",    # blank-line-after-last-section
     "D415",    # ends-in-punctuation
@@ -127,11 +134,9 @@ ignore = [
     "DTZ006",  # call-datetime-fromtimestamp
     "DTZ007",  # call-datetime-strptime-without-zone
     "DTZ011",  # call-date-today
-    "E402",    # module-import-not-at-top-of-file
     "E501",    # line-too-long
     "E721",    # type-comparison
     "E722",    # bare-except
-    "E731",    # lambda-assignment
     "E741",    # ambiguous-variable-name
     "F403",    # undefined-local-with-import-star
     "F405",    # undefined-local-with-import-star-usage
@@ -149,7 +154,6 @@ ignore = [
     "N803",    # invalid-argument-name
     "N806",    # non-lowercase-variable-in-function
     "N812",    # lowercase-imported-as-non-lowercase
-    "N814",    # camelcase-imported-as-constant
     "N815",    # mixed-case-variable-in-class-scope
     "N816",    # mixed-case-variable-in-global-scope
     "N818",    # error-suffix-on-exception-name
@@ -220,7 +224,6 @@ ignore = [
     "S108",    # hardcoded-temp-file
     "S110",    # try-except-pass
     "S112",    # try-except-continue
-    "S113",    # request-without-timeout
     "S202",    # tarfile-unsafe-members
     "S307",    # suspicious-eval-usage
     "S310",    # suspicious-url-open-usage
@@ -240,12 +243,10 @@ ignore = [
     "SIM102",  # collapsible-if
     "SIM105",  # suppressible-exception
     "SIM113",  # enumerate-for-loop
-    "SIM116",  # if-else-block-instead-of-dict-lookup
     "SIM118",  # in-dict-keys
     "SIM223",  # expr-and-false
     "SLF001",  # private-member-access
     "TRY002",  # raise-vanilla-class
-    "TRY003",  # raise-vanilla-args
     "TRY004",  # type-check-without-type-error
     "TRY201",  # verbose-raise
     "TRY300",  # try-consider-else
@@ -262,12 +263,12 @@ ignore = [
 # "A005", # builtin-module-shadowing
 # "PLW0108", # unnecessary-lambda
 # "SIM115", # open-file-with-context-handler
-# Ignore `E402` (import violations) in all `__init__.py` files
+# Ignored after reverting:
+"gui/**" = ["PLW0108"] # See https://github.com/OSGeo/grass/issues/4124
+# Other ignores:
 "**.py" = ["PYI066"]
 "*/testsuite/**.py" = ["PT009", "PT027"]
-"__init__.py" = ["E402"]
 "display/d.mon/render_cmd.py" = ["SIM115"]
-"gui/**" = ["PLW0108"] # See https://github.com/OSGeo/grass/issues/4124
 "gui/wxpython/animation/temporal_manager.py" = ["SIM115"]
 "gui/wxpython/core/*.py" = ["SIM115"]
 "gui/wxpython/core/globalvar.py" = ["PTH208"]
@@ -283,15 +284,15 @@ ignore = [
 "gui/wxpython/icons/grass_icons.py" = ["PTH208"]
 "gui/wxpython/image2target/*.py" = ["SIM115"]
 "gui/wxpython/image2target/ii2t_manager.py" = ["PTH208"]
-"gui/wxpython/iscatt/plots.py" = ["PLW0108"]
 "gui/wxpython/lmgr/workspace.py" = ["SIM115"]
 "gui/wxpython/location_wizard/wizard.py" = ["SIM115"]
 "gui/wxpython/mapdisp/main.py" = ["SIM115"]
 "gui/wxpython/modules/colorrules.py" = ["SIM115"]
 "gui/wxpython/modules/mcalc_builder.py" = ["SIM115"]
-"gui/wxpython/photo2image/*.py" = ["SIM115"]
-"gui/wxpython/psmap/*.py" = ["SIM115"]
+"gui/wxpython/photo2image/ip2i_manager.py" = ["SIM115"]
 "gui/wxpython/psmap/dialogs.py" = ["PTH208"]
+"gui/wxpython/psmap/frame.py" = ["SIM115"]
+"gui/wxpython/psmap/instructions.py" = ["SIM115"]
 "gui/wxpython/psmap/utils.py" = ["PGH004"]
 "gui/wxpython/rdigit/controller.py" = ["SIM115"]
 "gui/wxpython/rlisetup/*.py" = ["SIM115"]
@@ -300,7 +301,9 @@ ignore = [
 "gui/wxpython/tools/update_menudata.py" = ["SIM115"]
 "gui/wxpython/tplot/frame.py" = ["FLY002"]
 "gui/wxpython/vdigit/mapwindow.py" = ["SIM115"]
-"gui/wxpython/vnet/*.py" = ["SIM115"]
+"gui/wxpython/vnet/vnet_core.py" = ["SIM115"]
+"gui/wxpython/vnet/vnet_data.py" = ["SIM115"]
+"gui/wxpython/vnet/widgets.py" = ["SIM115"]
 "gui/wxpython/web_services/dialogs.py" = ["SIM115"]
 "gui/wxpython/wxplot/profile.py" = ["A005", "SIM115"]
 "imagery/i.atcorr/create_iwave.py" = ["SIM115"]
@@ -321,7 +324,6 @@ ignore = [
 "python/grass/gunittest/multireport.py" = ["PYI024"]
 "python/grass/gunittest/testsu*/d*/s*/s*/subsub*/t*/test_segfaut.py" = ["B018"]
 "python/grass/gunittest/testsuite/test_assertions_rast3d.py" = ["FLY002"]
-"python/grass/imaging/images2*.py" = ["SIM115"]
 "python/grass/imaging/images2ims.py" = ["PTH208"]
 "python/grass/jupyter/testsuite/interactivemap_test.py" = ["PGH004"]
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
@@ -340,13 +342,13 @@ ignore = [
 "python/grass/pygrass/vector/testsuite/test_table.py" = ["PLW0108"]
 "python/grass/script/array.py" = ["A005"]
 "python/grass/script/core.py" = ["PTH208"]
-"python/grass/script/db.py" = ["SIM115"]
-"python/grass/script/raster.py" = ["SIM115"]
-"python/grass/script/utils.py" = ["FURB189", "SIM115"]
+"python/grass/script/utils.py" = ["FURB189"]
 "python/grass/temporal/aggregation.py" = ["SIM115"]
 "python/grass/temporal/register.py" = ["SIM115"]
 "python/grass/temporal/stds_export.py" = ["SIM115"]
 "python/grass/temporal/stds_import.py" = ["SIM115"]
+"python/grass/temporal/temporal_algebra.py" = ["D300"]
+"python/grass/temporal/temporal_operator.py" = ["D300"]
 "python/grass/temporal/univar_statistics.py" = ["SIM115"]
 "python/grass/utils/download.py" = ["PTH208", "SIM115"]
 "raster/r.*/testsuite/*.py" = ["SIM115"]
@@ -385,9 +387,8 @@ ignore = [
 "temporal/t.register/testsuite/test_t_register_raster.py" = ["FLY002"]
 "temporal/t.register/testsuite/test_t_register_raster_file.py" = ["FLY002"]
 "temporal/t.remove/t.remove.py" = ["SIM115"]
-"temporal/t.unregister/t.unregister.py" = ["SIM115"]
-"utils/**.py" = ["SIM115"]
 "utils/generate_release_notes.py" = ["PGH004"]
+"utils/gitlog2changelog.py" = ["SIM115"]
 "utils/thumbnails.py" = ["PTH208"]
 "vector/v.fill.holes/examples.ipynb" = ["PTH201"]
 
@@ -748,3 +749,11 @@ include = ["python"]
 # *GRASS modified*
 # *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
 pythonVersion = "3.9"
+
+[tool.pyrefact]
+line_length = 88
+
+[tool.isort]
+profile = "black"
+# *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
+py_version = 39

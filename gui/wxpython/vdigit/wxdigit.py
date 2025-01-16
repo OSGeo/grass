@@ -829,11 +829,7 @@ class IVDigit:
         """
         Points = poPoints.contents
 
-        pts_geom = []
-        for j in range(Points.n_points):
-            pts_geom.append((Points.x[j], Points.y[j]))
-
-        return pts_geom
+        return [(Points.x[j], Points.y[j]) for j in range(Points.n_points)]
 
     def MoveSelectedLines(self, move):
         """Move selected features

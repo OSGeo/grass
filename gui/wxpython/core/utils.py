@@ -916,9 +916,8 @@ str2rgb = {
     "white": (255, 255, 255),
     "yellow": (255, 255, 0),
 }
-rgb2str = {}
-for s, r in str2rgb.items():
-    rgb2str[r] = s
+
+rgb2str = {r: s for s, r in str2rgb.items()}
 # ensure that gray value has 'gray' string and not 'grey'
 rgb2str[str2rgb["gray"]] = "gray"
 # purple is defined as nickname for violet in lib/gis
@@ -972,9 +971,7 @@ command2ltype = {
     "d.polar": "polar",
     "d.legend.vect": "vectleg",
 }
-ltype2command = {}
-for cmd, ltype in command2ltype.items():
-    ltype2command[ltype] = cmd
+ltype2command = {ltype: cmd for cmd, ltype in command2ltype.items()}
 
 
 def GetGEventAttribsForHandler(method, event):

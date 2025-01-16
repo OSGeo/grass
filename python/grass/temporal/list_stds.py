@@ -188,9 +188,7 @@ def _write_json(rows, column_names, file) -> None:
 
     dict_rows = []
     for row in rows:
-        new_row = {}
-        for key, value in zip(column_names, row):
-            new_row[key] = value
+        new_row = dict(zip(column_names, row))
         dict_rows.append(new_row)
     meta = {"column_names": column_names}
     with _open_output_file(file) as stream:
@@ -221,9 +219,7 @@ def _write_yaml(rows, column_names, file=sys.stdout) -> None:
 
     dict_rows = []
     for row in rows:
-        new_row = {}
-        for key, value in zip(column_names, row):
-            new_row[key] = value
+        new_row = dict(zip(column_names, row))
         dict_rows.append(new_row)
     meta = {"column_names": column_names}
     with _open_output_file(file) as stream:
@@ -500,7 +496,7 @@ def list_maps_of_stds(
                   e.g: start_time < "2001-01-01" and end_time > "2001-01-01"
     :param separator: The field separator character between the columns
     :param method: String identifier to select a method out of cols,
-                   comma,delta or deltagaps
+                   comma, delta or deltagaps
     :param dbif: The database interface to be used
 
         - "cols" Print preselected columns specified by columns

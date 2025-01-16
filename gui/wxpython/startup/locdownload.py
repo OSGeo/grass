@@ -231,9 +231,7 @@ class LocationDownloadPanel(wx.Panel):
             parent=self, label=_("Select sample project to download:")
         )
 
-        choices = []
-        for item in self.locations:
-            choices.append(item["label"])
+        choices = [item["label"] for item in self.locations]
         self.choice = wx.Choice(parent=self, choices=choices)
 
         self.choice.Bind(wx.EVT_CHOICE, self.OnChangeChoice)

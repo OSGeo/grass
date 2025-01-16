@@ -309,14 +309,13 @@ def estimate_resolution(
 ) -> float:
     """Estimates resolution of reprojected raster.
 
-    :param str raster: name of raster
-    :param str mapset: mapset of raster
-    :param str location: name of source location
-    :param str dbase: path to source database
+    :param raster: name of raster
+    :param mapset: mapset of raster
+    :param location: name of source location
+    :param dbase: path to source database
     :param dict env: target environment
 
-    :return float estimate: estimated resolution of raster in destination
-                            environment
+    :return estimate: estimated resolution of raster in destination environment
     """
     output = gs.read_command(
         "r.proj",
