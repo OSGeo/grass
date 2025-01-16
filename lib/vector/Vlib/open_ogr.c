@@ -274,8 +274,10 @@ int Vect_open_fidx(struct Map_info *Map, struct Format_info_offset *offset)
     }
 
     /* Header */
-    if (0 >= dig__fread_port_C(buf, 5, &fp))
+    if (0 >= dig__fread_port_C(buf, 5, &fp)) {
+        fclose(fp.file);
         return -1;
+    }
     Version_Major = buf[0];
     Version_Minor = buf[1];
     Back_Major = buf[2];
@@ -302,23 +304,29 @@ int Vect_open_fidx(struct Map_info *Map, struct Format_info_offset *offset)
 
     /* Body */
     /* bytes 6 - 9 : header size */
-    if (0 >= dig__fread_port_L(&length, 1, &fp))
+    if (0 >= dig__fread_port_L(&length, 1, &fp)) {
+        fclose(fp.file);
         return -1;
+    }
     G_debug(4, "  header size %ld", length);
 
     G_fseek(fp.file, length, SEEK_SET);
 
     /* number of records  */
-    if (0 >= dig__fread_port_I(&(offset->array_num), 1, &fp))
+    if (0 >= dig__fread_port_I(&(offset->array_num), 1, &fp)) {
+        fclose(fp.file);
         return -1;
+    }
 
     /* alloc space */
     offset->array = (int *)G_malloc(offset->array_num * sizeof(int));
     offset->array_alloc = offset->array_num;
 
     /* offsets */
-    if (0 >= dig__fread_port_I(offset->array, offset->array_num, &fp))
+    if (0 >= dig__fread_port_I(offset->array, offset->array_num, &fp)) {
+        fclose(fp.file);
         return -1;
+    }
 
     fclose(fp.file);
 
