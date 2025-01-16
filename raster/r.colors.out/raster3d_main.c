@@ -21,7 +21,6 @@
 #include <grass/raster.h>
 #include <grass/raster3d.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
 
 /* Run in raster3d mode */
 int main(int argc, char **argv)

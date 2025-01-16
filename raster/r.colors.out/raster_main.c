@@ -20,7 +20,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
 
 /* Run in raster mode */
 int main(int argc, char **argv)

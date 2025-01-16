@@ -20,7 +20,6 @@
 #include <grass/gis.h>
 #include <grass/gjson.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
 #include <grass/raster.h>
 
 #define COLOR_STRING_LENGTH 30
