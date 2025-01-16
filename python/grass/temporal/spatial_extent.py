@@ -1712,8 +1712,7 @@ class SpatialExtent(SQLDatabaseInterface):
     def set_spatial_extent(self, spatial_extent) -> None:
         """Set the three dimensional spatial extent
 
-        :param spatial_extent: An object of type SpatialExtent or its
-                               subclasses
+        :param spatial_extent: An object of type SpatialExtent or its subclasses
         """
 
         self.set_north(spatial_extent.get_north())
@@ -1749,8 +1748,7 @@ class SpatialExtent(SQLDatabaseInterface):
     def set_spatial_extent_2d(self, spatial_extent) -> None:
         """Set the three dimensional spatial extent
 
-        :param spatial_extent: An object of type SpatialExtent or its
-                               subclasses
+        :param spatial_extent: An object of type SpatialExtent or its subclasses
         """
 
         self.set_north(spatial_extent.north)

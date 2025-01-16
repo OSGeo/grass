@@ -290,7 +290,7 @@ class VDigitWindow(BufferedMapWindow):
         """Left mouse button pressed - add new feature"""
         try:
             mapLayer = self.toolbar.GetLayer().GetName()
-        except:
+        except AttributeError:
             return
 
         if self.toolbar.GetAction("type") in {"point", "centroid"}:
@@ -479,7 +479,7 @@ class VDigitWindow(BufferedMapWindow):
         """
         try:
             mapLayer = self.toolbar.GetLayer().GetName()
-        except:
+        except AttributeError:
             return
 
         coords = self.Pixel2Cell(self.mouse["begin"])
@@ -621,8 +621,7 @@ class VDigitWindow(BufferedMapWindow):
                         removed,
                     ],
                 )
-                # self.mouse['begin'] = self.Cell2Pixel(self.polycoords[-1])
-            except:
+            except IndexError:
                 pass
 
         if action == "editLine":
@@ -688,7 +687,7 @@ class VDigitWindow(BufferedMapWindow):
         """Left mouse button donw - vector digitizer various actions"""
         try:
             self.toolbar.GetLayer().GetName()
-        except:
+        except AttributeError:
             GMessage(parent=self, message=_("No vector map selected for editing."))
             event.Skip()
             return
@@ -1092,7 +1091,7 @@ class VDigitWindow(BufferedMapWindow):
             # -> add new line / boundary
             try:
                 mapName = self.toolbar.GetLayer().GetName()
-            except:
+            except AttributeError:
                 mapName = None
                 GError(parent=self, message=_("No vector map selected for editing."))
 
