@@ -1966,7 +1966,7 @@ class IAUPage(TitledPage):
                 self.epsgcode, self.epsgdesc, self.epsgparams = self.epsglist.Search(
                     index=[0, 1, 2], pattern=value
                 )
-            except (IndexError, ValueError):
+            except (IndexError, ValueError):  # -> no item found
                 self.epsgcode = None
                 self.epsgdesc = self.epsgparams = ""
                 self.tcode.SetValue("")
