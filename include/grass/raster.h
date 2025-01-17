@@ -172,7 +172,7 @@ enum History_field {
    \typedef ColorFormat
    \brief  Color format identifiers (enum)
 
-   Identifies of all recognized color format.
+   Identifiers of all recognized color formats.
 
  */
 typedef enum { RGB, HEX, HSV, TRIPLET } ColorFormat;
