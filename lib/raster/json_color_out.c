@@ -1,14 +1,26 @@
+/*!
+ * \file lib/raster/json_color_out.c
+ *
+ * \brief Raster Library - Print color table in json format
+ *
+ * (C) 2010-2024 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Nishant Bansal
+ */
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <grass/gis.h>
+#include <grass/gjson.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
 #include <grass/raster.h>
-
-#include "local_proto.h"
 
 #define COLOR_STRING_LENGTH 30
 
@@ -77,7 +89,7 @@ static void rgb_to_hsv(int r, int g, int b, float *h, float *s, float *v)
    \param clr_frmt color format to be used (RGB, HEX, HSV, TRIPLET).
    \param color_object pointer to the JSON object
  */
-static void set_color(int r, int g, int b, enum ColorFormat clr_frmt,
+static void set_color(int r, int g, int b, ColorFormat clr_frmt,
                       JSON_Object *color_object)
 {
     char color_string[COLOR_STRING_LENGTH];
@@ -87,24 +99,24 @@ static void set_color(int r, int g, int b, enum ColorFormat clr_frmt,
     case RGB:
         snprintf(color_string, sizeof(color_string), "rgb(%d, %d, %d)", r, g,
                  b);
-        json_object_set_string(color_object, "rgb", color_string);
+        G_json_object_set_string(color_object, "rgb", color_string);
         break;
 
     case HEX:
         snprintf(color_string, sizeof(color_string), "#%02X%02X%02X", r, g, b);
-        json_object_set_string(color_object, "hex", color_string);
+        G_json_object_set_string(color_object, "hex", color_string);
         break;
 
     case HSV:
         rgb_to_hsv(r, g, b, &h, &s, &v);
         snprintf(color_string, sizeof(color_string), "hsv(%d, %d, %d)", (int)h,
                  (int)s, (int)v);
-        json_object_set_string(color_object, "hsv", color_string);
+        G_json_object_set_string(color_object, "hsv", color_string);
         break;
 
     case TRIPLET:
         snprintf(color_string, sizeof(color_string), "%d:%d:%d", r, g, b);
-        json_object_set_string(color_object, "triplet", color_string);
+        G_json_object_set_string(color_object, "triplet", color_string);
         break;
     }
 }
@@ -126,7 +138,7 @@ static void set_color(int r, int g, int b, enum ColorFormat clr_frmt,
  */
 static void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g,
                             int b, JSON_Array *root_array, int perc,
-                            enum ColorFormat clr_frmt, FILE *fp,
+                            ColorFormat clr_frmt, FILE *fp,
                             JSON_Value *root_value)
 {
     static DCELL v0;
@@ -138,24 +150,24 @@ static void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g,
     // Update last processed values
     v0 = *val, r0 = r, g0 = g, b0 = b;
 
-    JSON_Value *color_value = json_value_init_object();
+    JSON_Value *color_value = G_json_value_init_object();
     if (color_value == NULL) {
-        json_value_free(root_value);
+        G_json_value_free(root_value);
         close_file(fp);
         G_fatal_error(_("Failed to initialize JSON object. Out of memory?"));
     }
-    JSON_Object *color_object = json_object(color_value);
+    JSON_Object *color_object = G_json_object(color_value);
 
     // Set the value as a percentage if requested, otherwise set it as-is
     if (perc)
-        json_object_set_number(color_object, "value",
-                               100 * (*val - *min) / (*max - *min));
+        G_json_object_set_number(color_object, "value",
+                                 100 * (*val - *min) / (*max - *min));
     else
-        json_object_set_number(color_object, "value", *val);
+        G_json_object_set_number(color_object, "value", *val);
 
     set_color(r, g, b, clr_frmt, color_object);
 
-    json_array_append_value(root_array, color_value);
+    G_json_array_append_value(root_array, color_value);
 }
 
 /*!
@@ -168,15 +180,15 @@ static void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g,
    \param perc TRUE for percentage output
    \param clr_frmt color format to be used (RBG, HEX, HSV, TRIPLET).
  */
-void print_json_colors(struct Colors *colors, DCELL min, DCELL max, FILE *fp,
-                       int perc, enum ColorFormat clr_frmt)
+void Rast_print_json_colors(struct Colors *colors, DCELL min, DCELL max,
+                            FILE *fp, int perc, ColorFormat clr_frmt)
 {
-    JSON_Value *root_value = json_value_init_array();
+    JSON_Value *root_value = G_json_value_init_array();
     if (root_value == NULL) {
         close_file(fp);
         G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
     }
-    JSON_Array *root_array = json_array(root_value);
+    JSON_Array *root_array = G_json_array(root_value);
 
     if (colors->version < 0) {
         /* 3.0 format */
@@ -221,45 +233,45 @@ void print_json_colors(struct Colors *colors, DCELL min, DCELL max, FILE *fp,
 
         // Get RGB color for null values and create JSON entry
         Rast_get_null_value_color(&r, &g, &b, colors);
-        JSON_Value *nv_value = json_value_init_object();
+        JSON_Value *nv_value = G_json_value_init_object();
         if (nv_value == NULL) {
-            json_value_free(root_value);
+            G_json_value_free(root_value);
             close_file(fp);
             G_fatal_error(
                 _("Failed to initialize JSON object. Out of memory?"));
         }
-        JSON_Object *nv_object = json_object(nv_value);
-        json_object_set_string(nv_object, "value", "nv");
+        JSON_Object *nv_object = G_json_object(nv_value);
+        G_json_object_set_string(nv_object, "value", "nv");
         set_color(r, g, b, clr_frmt, nv_object);
-        json_array_append_value(root_array, nv_value);
+        G_json_array_append_value(root_array, nv_value);
 
         // Get RGB color for default values and create JSON entry
         Rast_get_default_color(&r, &g, &b, colors);
-        JSON_Value *default_value = json_value_init_object();
+        JSON_Value *default_value = G_json_value_init_object();
         if (default_value == NULL) {
-            json_value_free(root_value);
+            G_json_value_free(root_value);
             close_file(fp);
             G_fatal_error(
                 _("Failed to initialize JSON object. Out of memory?"));
         }
-        JSON_Object *default_object = json_object(default_value);
-        json_object_set_string(default_object, "value", "default");
+        JSON_Object *default_object = G_json_object(default_value);
+        G_json_object_set_string(default_object, "value", "default");
         set_color(r, g, b, clr_frmt, default_object);
-        json_array_append_value(root_array, default_value);
+        G_json_array_append_value(root_array, default_value);
     }
 
     // Serialize JSON array to a string and print to the file
-    char *json_string = json_serialize_to_string_pretty(root_value);
+    char *json_string = G_json_serialize_to_string_pretty(root_value);
     if (!json_string) {
-        json_value_free(root_value);
+        G_json_value_free(root_value);
         close_file(fp);
         G_fatal_error(_("Failed to serialize JSON to pretty format."));
     }
 
     fputs(json_string, fp);
 
-    json_free_serialized_string(json_string);
-    json_value_free(root_value);
+    G_json_free_serialized_string(json_string);
+    G_json_value_free(root_value);
 
     close_file(fp);
 }
