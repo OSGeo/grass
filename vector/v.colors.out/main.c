@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 {
     struct GModule *module;
     struct {
-        struct Option *map, *field, *file, *col;
+        struct Option *map, *field, *file, *col, *format, *color_format;
     } opt;
     struct {
         struct Flag *p;
@@ -39,6 +39,8 @@ int main(int argc, char **argv)
     int min, max;
     const char *file, *name, *layer, *column;
     FILE *fp;
+
+    ColorFormat clr_frmt;
 
     G_gisinit(argv[0]);
 
@@ -64,6 +66,12 @@ int main(int argc, char **argv)
         _("Name of attribute (numeric) column to which refer color rules");
     opt.col->description = _("If not given, color rules refer to categories");
     opt.col->guisection = _("Settings");
+
+    opt.format = G_define_standard_option(G_OPT_F_FORMAT);
+    opt.format->guisection = _("Print");
+
+    opt.color_format = G_define_standard_option(G_OPT_C_FORMAT);
+    opt.color_format->guisection = _("Color");
 
     flag.p = G_define_flag();
     flag.p->key = 'p';
@@ -106,8 +114,26 @@ int main(int argc, char **argv)
     else
         colors = &cat_colors;
 
-    Rast_print_colors(colors, (DCELL)min, (DCELL)max, fp,
-                      flag.p->answer ? 1 : 0);
+    if (strcmp(opt.format->answer, "json") == 0) {
+        if (strcmp(opt.color_format->answer, "rgb") == 0) {
+            clr_frmt = RGB;
+        }
+        else if (strcmp(opt.color_format->answer, "triplet") == 0) {
+            clr_frmt = TRIPLET;
+        }
+        else if (strcmp(opt.color_format->answer, "hsv") == 0) {
+            clr_frmt = HSV;
+        }
+        else {
+            clr_frmt = HEX;
+        }
+        Rast_print_json_colors(colors, (DCELL)min, (DCELL)max, fp,
+                               flag.p->answer ? 1 : 0, clr_frmt);
+    }
+    else {
+        Rast_print_colors(colors, (DCELL)min, (DCELL)max, fp,
+                          flag.p->answer ? 1 : 0);
+    }
 
     exit(EXIT_SUCCESS);
 }
