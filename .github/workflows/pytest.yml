@@ -50,7 +50,7 @@ jobs:
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
-      - uses: rui314/setup-mold@8ec40be1d14871f7ce8fbf273c4b33f3ff75f1d1 # v1
+      - uses: rui314/setup-mold@f80524ca6eeaa76759b57fb78ddce5d87a20c720 # v1
 
       - name: Install Python dependencies
         run: |
