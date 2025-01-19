@@ -23,6 +23,7 @@
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
+#include <grass/vector.h>
 
 static char *parse_variable(const char *, char **);
 
@@ -224,6 +225,7 @@ char *parse_variable(const char *v_name, char **value)
         G_verbose_message(_("GRASS variable must be uppercase. Using '%s'."),
                           u_name);
     }
+    Vect_delete(name);
     G_free(name);
 
     return u_name;
