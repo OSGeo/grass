@@ -198,6 +198,7 @@ char *parse_variable(const char *v_name, char **value)
 {
     char *u_name; /* uppercase variable name */
     char *name, *ptr;
+    name = NULL;
 
     name = G_store(v_name);
     if (value)
