@@ -271,7 +271,6 @@ class MapWindowBase:
                 )
                 event.Skip()
 
-
         Emits mouseHandlerRegistered signal before handler is registered.
 
         :param event: one of mouse events

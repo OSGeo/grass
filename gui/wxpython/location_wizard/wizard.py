@@ -618,7 +618,7 @@ class ProjectionsPage(TitledPage):
             self.proj, self.projdesc = self.projlist.Search(
                 index=[0, 1], pattern=search_str
             )
-        except:
+        except (IndexError, ValueError):
             self.proj = self.projdesc = ""
 
         event.Skip()
@@ -1063,9 +1063,9 @@ class DatumPage(TitledPage):
         self.searchb.ShowCancelButton(True)
 
         # create list control for datum/elipsoid list
-        data = []
-        for key in self.parent.datums.keys():
-            data.append([key, self.parent.datums[key][0], self.parent.datums[key][1]])
+        data = [
+            [key, datum[0], datum[1]] for (key, datum) in self.parent.datums.items()
+        ]
         self.datumlist = ItemList(
             self, data=data, columns=[_("Code"), _("Ellipsoid"), _("Description")]
         )
@@ -1188,15 +1188,15 @@ class DatumPage(TitledPage):
             self.datumparams = self.parent.datums[self.datum][2]
             try:
                 self.datumparams.remove("dx=0.0")
-            except:
+            except ValueError:
                 pass
             try:
                 self.datumparams.remove("dy=0.0")
-            except:
+            except ValueError:
                 pass
             try:
                 self.datumparams.remove("dz=0.0")
-            except:
+            except ValueError:
                 pass
 
             nextButton.Enable(True)
@@ -1211,7 +1211,7 @@ class DatumPage(TitledPage):
             self.datum, self.ellipsoid, self.datumdesc = self.datumlist.Search(
                 index=[0, 1, 2], pattern=search_str
             )
-        except:
+        except (IndexError, ValueError):
             self.datum = self.datumdesc = self.ellipsoid = ""
 
         event.Skip()
@@ -1262,10 +1262,10 @@ class EllipsePage(TitledPage):
         )
 
         # create list control for ellipse list
-        data = []
         # extract code, desc
-        for key in self.parent.ellipsoids.keys():
-            data.append([key, self.parent.ellipsoids[key][0]])
+        data = [
+            [key, ellipsoid[0]] for (key, ellipsoid) in self.parent.ellipsoids.items()
+        ]
 
         self.ellipselist = ItemList(
             self, data=data, columns=[_("Code"), _("Description")]
@@ -1392,7 +1392,7 @@ class EllipsePage(TitledPage):
                 self.ellipseparams = self.parent.ellipsoids[self.ellipse][1]
             else:
                 self.ellipseparams = self.parent.planetary_ellipsoids[self.ellipse][1]
-        except:
+        except (IndexError, ValueError, KeyError):
             self.ellipse = self.ellipsedesc = self.ellipseparams = ""
 
         event.Skip()
@@ -1753,10 +1753,11 @@ class EPSGPage(TitledPage):
             self.epsglist.Populate([], update=True)
             return
 
-        data = []
-        for code, val in self.epsgCodeDict.items():
-            if code is not None:
-                data.append((code, val[0], val[1]))
+        data = [
+            (code, val[0], val[1])
+            for code, val in self.epsgCodeDict.items()
+            if code is not None
+        ]
 
         self.epsglist.Populate(data, update=True)
 
@@ -1934,7 +1935,7 @@ class IAUPage(TitledPage):
         self.epsgcode = event.GetString()
         try:
             self.epsgcode = int(self.epsgcode)
-        except:
+        except ValueError:
             self.epsgcode = None
 
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
@@ -2025,10 +2026,11 @@ class IAUPage(TitledPage):
             self.epsglist.Populate([], update=True)
             return
 
-        data = []
-        for code, val in self.epsgCodeDict.items():
-            if code is not None:
-                data.append((code, val[0], val[1]))
+        data = [
+            (code, val[0], val[1])
+            for code, val in self.epsgCodeDict.items()
+            if code is not None
+        ]
 
         self.epsglist.Populate(data, update=True)
 
@@ -2287,10 +2289,7 @@ class SummaryPage(TitledPage):
 
         # print coordsys,proj4string
         if coordsys in {"proj", "epsg", "iau", "wkt", "file"}:
-            extra_opts = {}
-            extra_opts["project"] = "project"
-            extra_opts["getErrorMsg"] = True
-            extra_opts["read"] = True
+            extra_opts = {"project": "project", "getErrorMsg": True, "read": True}
 
             if coordsys == "proj":
                 if len(datum) > 0:
@@ -2559,7 +2558,7 @@ class LocationWizard(wx.Object):
                     plist.append(p)
                 self.projections[proj.lower().strip()] = (projdesc.strip(), plist)
                 self.projdesc[proj.lower().strip()] = projdesc.strip()
-            except:
+            except (ValueError, IndexError):
                 continue
         f.close()
 
@@ -2621,7 +2620,7 @@ class LocationWizard(wx.Object):
             try:
                 pparam, datatype, proj4term, desc = line.split(":")
                 self.paramdesc[pparam] = (datatype, proj4term, desc)
-            except:
+            except ValueError:
                 continue
         f.close()
 

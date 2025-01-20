@@ -978,9 +978,7 @@ class ItemListCtrl(ModelListCtrl):
                 bId = action.GetBlockId()
                 bId = _("No") if not bId else _("Yes")
                 options = action.GetParameterizedParams()
-                params = []
-                for f in options["flags"]:
-                    params.append("-{0}".format(f["name"]))
+                params = ["-{0}".format(f["name"]) for f in options["flags"]]
                 for p in options["params"]:
                     params.append(p["name"])
 

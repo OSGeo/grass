@@ -1,4 +1,4 @@
-"Session or subsession for mapsets (subprojects)"
+"""Session or subsession for mapsets (subprojects)"""
 
 import shutil
 import os
