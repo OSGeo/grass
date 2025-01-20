@@ -480,18 +480,26 @@ function notarize_app () {
     local zip_tmpfile
 
     begingroup "Notarize app"
-    tmpdir=$(mktemp -d /tmp/org.osgeo.grass.XXXXXX)
+    if [[ "$CI" == "true" ]]; then
+        tmpdir="$RUNNER_TEMP"
+    else
+        tmpdir=$(mktemp -d /tmp/org.osgeo.grass.XXXXXX)
+    fi
     zip_tmpfile="${tmpdir}/${grass_app_name}.zip"
 
     "$ditto" -c -k --keepParent "$grass_app_bundle" "$zip_tmpfile"
 
     "$xcrun" notarytool submit "$zip_tmpfile" \
-        --keychain-profile "$cs_keychain_profile" --wait
+        --keychain-profile "$cs_keychain_profile" --wait || exit 1
 
     "$xcrun" stapler staple "$grass_app_bundle"
-    "$xcrun" stapler  validate "$grass_app_bundle"
+    "$xcrun" stapler validate "$grass_app_bundle"
 
-    rm -rf "$tmpdir"
+    if [[ "$CI" == "true" ]]; then
+        rm -rf "$zip_tmpfile"
+    else
+        rm -rf "$tmpdir"
+    fi
     endgroup
 }
 
@@ -725,6 +733,13 @@ fi
 echo
 echo "================================================================="
 endgroup
+
+if [[ "$CI" == "true" ]]; then
+    begingroup "Move app to RUNNER_TEMP"
+    ditto "$grass_app_bundle" "${RUNNER_TEMP}${grass_app_bundle}"
+    grass_app_bundle="${RUNNER_TEMP}${grass_app_bundle}"
+    endgroup
+fi
 
 if [[ "$notarize" -eq 1 ]]; then
     codesign_app
