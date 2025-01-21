@@ -208,12 +208,14 @@ char *parse_variable(const char *v_name, char **value)
     if (ptr != NULL) {
         *ptr = '\0';
         if (value)
-            *value = ptr + 1;
+            *value = G_store(ptr + 1);
     }
     /* Allow unset without '=' sign */
     if (value) {
-        if (*value != NULL && **value == '\0')
+        if (*value != NULL && **value == '\0') {
+            G_free(*value);
             *value = NULL;
+        }
     }
     if (strlen(name) < 1)
         G_fatal_error(_("GRASS variable not defined"));
