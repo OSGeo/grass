@@ -31,7 +31,7 @@ libtiff
 lld
 llvm-openmp
 matplotlib
-numpy
+numpy<2
 openblas
 pandoc
 pdal
