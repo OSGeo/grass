@@ -27,7 +27,6 @@ from core.debug import Debug
 from core.gcmd import DecodeString
 from core.settings import UserSettings
 from grass.lib.gis import (
-    PORT_DOUBLE_MAX,
     G_gisinit,
     G_set_error_routine,
     G_set_percent_routine,
@@ -81,6 +80,7 @@ from grass.lib.vector import (  # Types; Functions; Classes
     Vect_select_lines_by_polygon,
     Vect_set_updated,
     bound_box,
+    PORT_DOUBLE_MAX,
 )
 from grass.lib.vedit import (  # Types; Draw flags; Functions
     DRAW_AREA,
