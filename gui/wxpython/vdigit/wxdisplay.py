@@ -34,7 +34,7 @@ from grass.lib.gis import (
     G_unset_error_routine,
     G_unset_percent_routine,
 )
-from grass.lib.vector import (
+from grass.lib.vector import (  # Types; Functions; Classes
     GV_BOUNDARY,
     GV_BUILD_NONE,
     GV_CENTROID,
@@ -82,7 +82,7 @@ from grass.lib.vector import (
     Vect_set_updated,
     bound_box,
 )
-from grass.lib.vedit import (
+from grass.lib.vedit import (  # Types; Draw flags; Functions
     DRAW_AREA,
     DRAW_BOUNDARYNO,
     DRAW_BOUNDARYONE,
