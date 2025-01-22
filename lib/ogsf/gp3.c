@@ -179,6 +179,7 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
     int red, blu, grn;
     const char *str;
     const char *mapset;
+    char *fname;
 
     dbDriver *driver;
     dbValue value;
@@ -208,8 +209,9 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Fi->database, Fi->driver);
     }
-    G_message(_("Loading thematic points layer <%s>..."),
-              G_fully_qualified_name(gp->filename, mapset));
+    fname = G_fully_qualified_name(gp->filename, mapset);
+    G_message(_("Loading thematic points layer <%s>..."), fname);
+    G_free(fname);
     npts = nskipped = 0;
     for (gpt = gp->points; gpt; gpt = gpt->next) {
         gpt->style = (gvstyle *)G_malloc(sizeof(gvstyle));
@@ -295,5 +297,7 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
             _("%d points without category. "
               "Unable to determine color rules for features without category."),
             nskipped);
+    db_close_database_shutdown_driver(driver);
+    Vect_destroy_field_info(Fi);
     return npts;
 }
