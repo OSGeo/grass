@@ -272,8 +272,7 @@ int Vect_open_fidx(struct Map_info *Map, struct Format_info_offset *offset)
     fp.file = G_fopen_old(elem, GV_FIDX_ELEMENT, Map->mapset);
     if (fp.file == NULL) {
         const char *map_name = Vect_get_full_name(Map);
-        G_debug(1, "unable to open fidx file for vector map <%s>",
-                map_name);
+        G_debug(1, "unable to open fidx file for vector map <%s>", map_name);
         G_free((void *)map_name);
         return -1;
     }
