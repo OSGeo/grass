@@ -88,14 +88,21 @@ int long_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
     }
 
     Rast_get_stats_for_null_value(&count, statf);
-    if (count != 0 && !skip_nulls) {
-        switch (format) {
-        case PLAIN:
-            fprintf(stdout, "%s\n", no_data_str);
-            break;
-        case JSON:
-            json_object_set_string(root_object, "null_value", no_data_str);
-            break;
+    if (!skip_nulls) {
+        if (count != 0) {
+            switch (format) {
+            case PLAIN:
+                fprintf(stdout, "%s\n", no_data_str);
+                break;
+            case JSON:
+                json_object_set_boolean(root_object, "has_nulls", true);
+                break;
+            }
+        }
+        else {
+            if (format == JSON) {
+                json_object_set_boolean(root_object, "has_nulls", false);
+            }
         }
     }
 
@@ -164,14 +171,21 @@ int compact_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
 
     len = 0;
     Rast_get_stats_for_null_value(&count, statf);
-    if (count != 0 && !skip_nulls) {
-        switch (format) {
-        case PLAIN:
-            fprintf(stdout, "%s ", no_data_str);
-            break;
-        case JSON:
-            json_object_set_string(root_object, "null_value", no_data_str);
-            break;
+    if (!skip_nulls) {
+        if (count != 0) {
+            switch (format) {
+            case PLAIN:
+                fprintf(stdout, "%s ", no_data_str);
+                break;
+            case JSON:
+                json_object_set_boolean(root_object, "has_nulls", true);
+                break;
+            }
+        }
+        else {
+            if (format == JSON) {
+                json_object_set_boolean(root_object, "has_nulls", false);
+            }
         }
     }
 
@@ -322,14 +336,21 @@ int compact_range_list(CELL negmin, CELL negmax, CELL zero, CELL posmin,
         }
     }
 
-    if (null && !skip_nulls) {
-        switch (format) {
-        case PLAIN:
-            fprintf(stdout, "%s\n", no_data_str);
-            break;
-        case JSON:
-            json_object_set_string(root_object, "null_value", no_data_str);
-            break;
+    if (!skip_nulls) {
+        if (null) {
+            switch (format) {
+            case PLAIN:
+                fprintf(stdout, "%s\n", no_data_str);
+                break;
+            case JSON:
+                json_object_set_boolean(root_object, "has_nulls", true);
+                break;
+            }
+        }
+        else {
+            if (format == JSON) {
+                json_object_set_boolean(root_object, "has_nulls", false);
+            }
         }
     }
 
@@ -391,14 +412,21 @@ int range_list(CELL negmin, CELL negmax, CELL zero, CELL posmin, CELL posmax,
         }
     }
 
-    if (null && !skip_nulls) {
-        switch (format) {
-        case PLAIN:
-            fprintf(stdout, "%s\n", no_data_str);
-            break;
-        case JSON:
-            json_object_set_string(root_object, "null_value", no_data_str);
-            break;
+    if (!skip_nulls) {
+        if (null) {
+            switch (format) {
+            case PLAIN:
+                fprintf(stdout, "%s\n", no_data_str);
+                break;
+            case JSON:
+                json_object_set_boolean(root_object, "has_nulls", true);
+                break;
+            }
+        }
+        else {
+            if (format == JSON) {
+                json_object_set_boolean(root_object, "has_nulls", false);
+            }
         }
     }
 

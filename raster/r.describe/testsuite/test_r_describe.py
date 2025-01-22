@@ -15,7 +15,7 @@ class TestRDescribe(TestCase):
 
         cls.runModule(
             "r.mapcalc",
-            expression="int_map = if(row() == 5 && col() == 5, null(), if(row() % 2 == 0, col(), -col()))",
+            expression="int_map = if(row() % 2 == 0, col(), -col())",
             overwrite=True,
         )
         cls.runModule(
@@ -148,7 +148,7 @@ class TestRDescribe(TestCase):
         result = json.loads(module.outputs.stdout)
 
         expected_results = {
-            "null_value": "*",
+            "has_nulls": True,
             "ranges": [
                 {"min": -5, "max": -4.96078431372549},
                 {"min": -4.529411764705882, "max": -4.490196078431373},
@@ -183,7 +183,7 @@ class TestRDescribe(TestCase):
         result = json.loads(module.outputs.stdout)
 
         expected_results = {
-            "null_value": "*",
+            "has_nulls": True,
             "ranges": [
                 {"min": -5, "max": -4.96078431372549},
                 {"min": -4.529411764705882, "max": -4.490196078431373},
@@ -217,7 +217,7 @@ class TestRDescribe(TestCase):
 
         result = json.loads(module.outputs.stdout)
 
-        expected_results = {"null_value": "*", "ranges": [{"min": -5, "max": 5}]}
+        expected_results = {"has_nulls": True, "ranges": [{"min": -5, "max": 5}]}
 
         self.assertDictEqual(expected_results, result)
 
@@ -229,7 +229,7 @@ class TestRDescribe(TestCase):
         result = json.loads(module.outputs.stdout)
 
         expected_results = {
-            "null_value": "*",
+            "has_nulls": True,
             "ranges": [{"min": -5, "max": -1}, {"min": 1, "max": 5}],
         }
 
@@ -277,7 +277,7 @@ class TestRDescribe(TestCase):
         result = module.outputs.stdout.strip().splitlines()
 
         expected_results = [
-            "* -10 thru -1 1-10",
+            "-10 thru -1 1-10",
         ]
 
         for i, component in enumerate(result):
@@ -293,7 +293,6 @@ class TestRDescribe(TestCase):
         result = module.outputs.stdout.strip().splitlines()
 
         expected_results = [
-            "*",
             "-10",
             "-9",
             "-8",
@@ -328,7 +327,7 @@ class TestRDescribe(TestCase):
 
         result = module.outputs.stdout.strip().splitlines()
 
-        expected_results = ["-10 thru -1", "1 thru 10", "*"]
+        expected_results = ["-10 thru -1", "1 thru 10"]
 
         for i, component in enumerate(result):
             self.assertEqual(
@@ -342,7 +341,7 @@ class TestRDescribe(TestCase):
 
         result = module.outputs.stdout.strip().splitlines()
 
-        expected_results = ["* -10 thru -1 1-10"]
+        expected_results = ["-10 thru -1 1-10"]
 
         for i, component in enumerate(result):
             self.assertEqual(
@@ -371,7 +370,7 @@ class TestRDescribe(TestCase):
         result = json.loads(module.outputs.stdout)
 
         expected_results = {
-            "null_value": "*",
+            "has_nulls": False,
             "ranges": [{"min": -10, "max": -1}, {"min": 1, "max": 10}],
         }
 
@@ -385,7 +384,7 @@ class TestRDescribe(TestCase):
         result = json.loads(module.outputs.stdout)
 
         expected_results = {
-            "null_value": "*",
+            "has_nulls": False,
             "values": [
                 -10,
                 -9,
@@ -420,7 +419,7 @@ class TestRDescribe(TestCase):
         result = json.loads(module.outputs.stdout)
 
         expected_results = {
-            "null_value": "*",
+            "has_nulls": False,
             "ranges": [{"min": -10, "max": -1}, {"min": 1, "max": 10}],
         }
 
@@ -434,7 +433,7 @@ class TestRDescribe(TestCase):
         result = json.loads(module.outputs.stdout)
 
         expected_results = {
-            "null_value": "*",
+            "has_nulls": False,
             "ranges": [{"min": -10, "max": -1}, {"min": 1, "max": 10}],
         }
 
