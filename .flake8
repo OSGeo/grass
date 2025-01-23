@@ -32,7 +32,6 @@ per-file-ignores =
     gui/wxpython/mapdisp/main.py: E722
     gui/wxpython/mapdisp/test_mapdisp.py: E501
     gui/wxpython/mapswipe/g.gui.mapswipe.py: E501
-    gui/wxpython/mapwin/base.py: E722
     gui/wxpython/mapwin/buffered.py: E722
     gui/wxpython/timeline/g.gui.timeline.py: E501
     # Generated file
