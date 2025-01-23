@@ -36,28 +36,15 @@ void WaterParams_init(struct WaterParams *wp)
     wp->ymin = 0;
     wp->xmax = 0;
     wp->ymax = 0;
-    wp->mayy = 0;
     wp->miyy = 0;
-    wp->maxx = 0;
     wp->mixx = 0;
     wp->mx = 0;
     wp->my = 0;
-    wp->mx2 = 0;
-    wp->my2 = 0;
 
-    wp->bxmi = 0;
-    wp->bymi = 0;
-    wp->bxma = 0;
-    wp->byma = 0;
-    wp->bresx = 0;
-    wp->bresy = 0;
-    wp->maxwab = 0;
     wp->step = 0;
     wp->conv = 0;
 
     wp->frac = 0;
-    wp->bxmi = 0;
-    wp->bymi = 0;
 
     wp->hbeta = 0;
     wp->hhmax = 0;
@@ -69,8 +56,6 @@ void WaterParams_init(struct WaterParams *wp)
     wp->maxwa = 0;
     wp->nwalk = 0;
     wp->rwalk = 0;
-    wp->bresx = 0;
-    wp->bresy = 0;
     wp->xrand = 0;
     wp->yrand = 0;
     wp->stepx = 0;
@@ -85,11 +70,8 @@ void WaterParams_init(struct WaterParams *wp)
     wp->hhc = 0;
     wp->halpha = 0;
     wp->eps = 0;
-    wp->maxwab = 0;
     wp->nstack = 0;
     wp->iterout = 0;
-    wp->mx2o = 0;
-    wp->my2o = 0;
     wp->miter = 0;
     wp->nwalka = 0;
     wp->timec = 0;
@@ -114,7 +96,6 @@ void WaterParams_init(struct WaterParams *wp)
     wp->observation = NULL;
     wp->logfile = NULL;
     wp->mapset = NULL;
-    wp->mscale = NULL;
     wp->tserie = NULL;
 
     wp->wdepth = NULL;
@@ -142,28 +123,15 @@ void init_library_globals(struct WaterParams *wp)
     ymin = wp->ymin;
     xmax = wp->xmax;
     ymax = wp->ymax;
-    mayy = wp->mayy;
     miyy = wp->miyy;
-    maxx = wp->maxx;
     mixx = wp->mixx;
     mx = wp->mx;
     my = wp->my;
-    mx2 = wp->mx2;
-    my2 = wp->my2;
 
-    bxmi = wp->bxmi;
-    bymi = wp->bymi;
-    bxma = wp->bxma;
-    byma = wp->byma;
-    bresx = wp->bresx;
-    bresy = wp->bresy;
-    maxwab = wp->maxwab;
     step = wp->step;
     conv = wp->conv;
 
     frac = wp->frac;
-    bxmi = wp->bxmi;
-    bymi = wp->bymi;
 
     hbeta = wp->hbeta;
     hhmax = wp->hhmax;
@@ -175,8 +143,6 @@ void init_library_globals(struct WaterParams *wp)
     maxwa = wp->maxwa;
     nwalk = wp->nwalk;
     rwalk = wp->rwalk;
-    bresx = wp->bresx;
-    bresy = wp->bresy;
     xrand = wp->xrand;
     yrand = wp->yrand;
     stepx = wp->stepx;
@@ -191,11 +157,8 @@ void init_library_globals(struct WaterParams *wp)
     hhc = wp->hhc;
     halpha = wp->halpha;
     eps = wp->eps;
-    maxwab = wp->maxwab;
     nstack = wp->nstack;
     iterout = wp->iterout;
-    mx2o = wp->mx2o;
-    my2o = wp->my2o;
     miter = wp->miter;
     nwalka = wp->nwalka;
     timec = wp->timec;
@@ -220,7 +183,6 @@ void init_library_globals(struct WaterParams *wp)
     observation = wp->observation;
     logfile = wp->logfile;
     mapset = wp->mapset;
-    mscale = wp->mscale;
     tserie = wp->tserie;
 
     wdepth = wp->wdepth;

@@ -21,7 +21,6 @@ extern char *outwalk;
 extern char *observation;
 extern char *logfile;
 extern char *mapset;
-extern char *mscale;
 extern char *tserie;
 
 extern char *wdepth;
@@ -77,16 +76,12 @@ extern int max(int, int);
 extern void create_observation_points(void);
 
 extern double xmin, ymin, xmax, ymax;
-extern double mayy, miyy, maxx, mixx;
+extern double miyy, mixx;
 extern int mx, my;
-extern int mx2, my2;
 
-extern double bxmi, bymi, bxma, byma, bresx, bresy;
-extern int maxwab;
 extern double step, conv;
 
 extern double frac;
-extern double bxmi, bymi;
 
 extern float **zz, **cchez;
 extern double **v1, **v2, **slope;
@@ -102,12 +97,12 @@ extern double hbeta;
 extern double hhmax, sisum, vmean;
 extern double infsum, infmean;
 extern int maxw, maxwa, nwalk;
-extern double rwalk, bresx, bresy, xrand, yrand;
+extern double rwalk, xrand, yrand;
 extern double stepx, stepy, xp0, yp0;
 extern double chmean, si0, deltap, deldif, cch, hhc, halpha;
 extern double eps;
-extern int maxwab, nstack;
-extern int iterout, mx2o, my2o;
+extern int nstack;
+extern int iterout;
 extern int miter, nwalka;
 extern double timec;
 extern int ts, timesec;

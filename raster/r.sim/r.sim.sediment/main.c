@@ -314,9 +314,7 @@ int main(int argc, char *argv[])
     wp.conv = G_database_units_to_meters_factor();
 
     wp.mixx = cellhd.west * wp.conv;
-    wp.maxx = cellhd.east * wp.conv;
     wp.miyy = cellhd.south * wp.conv;
-    wp.mayy = cellhd.north * wp.conv;
 
     wp.stepx = cellhd.ew_res * wp.conv;
     wp.stepy = cellhd.ns_res * wp.conv;
@@ -331,28 +329,6 @@ int main(int argc, char *argv[])
     wp.xmax = wp.xmin + wp.stepx * (float)wp.mx;
     wp.ymax = wp.ymin + wp.stepy * (float)wp.my;
     wp.hhc = wp.hhmax = 0.;
-
-#if 0
-    wp.bxmi = 2093113. * wp.conv;
-    wp.bymi = 731331. * wp.conv;
-    wp.bxma = 2093461. * wp.conv;
-    wp.byma = 731529. * wp.conv;
-    wp.bresx = 2. * wp.conv;
-    wp.bresy = 2. * wp.conv;
-    wp.maxwab = 100000;
-
-    wp.mx2o = (int)((wp.bxma - wp.bxmi) / wp.bresx);
-    wp.my2o = (int)((wp.byma - wp.bymi) / wp.bresy);
-
-    /* relative small box coordinates: leave 1 grid layer for overlap */
-
-    wp.bxmi = wp.bxmi - wp.mixx + wp.stepx;
-    wp.bymi = wp.bymi - wp.miyy + wp.stepy;
-    wp.bxma = wp.bxma - wp.mixx - wp.stepx;
-    wp.byma = wp.byma - wp.miyy - wp.stepy;
-    wp.mx2 = wp.mx2o - 2 * ((int)(wp.stepx / wp.bresx));
-    wp.my2 = wp.my2o - 2 * ((int)(wp.stepy / wp.bresy));
-#endif
 
     wp.elevin = parm.elevin->answer;
     wp.wdepth = parm.wdepth->answer;

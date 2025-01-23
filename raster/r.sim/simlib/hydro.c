@@ -49,7 +49,6 @@ char *outwalk;
 char *observation;
 char *logfile;
 char *mapset;
-char *mscale;
 char *tserie;
 
 char *wdepth;
@@ -69,16 +68,12 @@ char *infilval;
 struct seed seed;
 
 double xmin, ymin, xmax, ymax;
-double mayy, miyy, maxx, mixx;
+double miyy, mixx;
 int mx, my;
-int mx2, my2;
 
-double bxmi, bymi, bxma, byma, bresx, bresy;
-int maxwab;
 double step, conv;
 
 double frac;
-double bxmi, bymi;
 
 float **zz, **cchez;
 double **v1, **v2, **slope;
@@ -95,12 +90,12 @@ double hbeta;
 double hhmax, sisum, vmean;
 double infsum, infmean;
 int maxw, maxwa, nwalk;
-double rwalk, bresx, bresy, xrand, yrand;
+double rwalk, xrand, yrand;
 double stepx, stepy, xp0, yp0;
 double chmean, si0, deltap, deldif, cch, hhc, halpha;
 double eps;
-int maxwab, nstack;
-int iterout, mx2o, my2o;
+int nstack;
+int iterout;
 int miter, nwalka;
 double timec;
 int ts, timesec;
@@ -118,50 +113,33 @@ struct History history; /* holds meta-data (title, comments,..) */
 
 void main_loop(void)
 {
-
     int i, ii, l, k;
-    /* int icoub, nmult */;
     int iw, iblock, lw;
     int itime, iter1;
-
-    /* int nfiterh, nfiterw; */
-    int mgen /* , mgen2, mgen3 */;
+    int mgen;
     int nblock;
-
-    /* int icfl; */
-    int mitfac;
-
-    /*  int mitfac, p; */
     double x, y;
     double velx, vely, stxm, stym;
     double factor, conn, gaux, gauy;
     double d1, addac, decr;
-    double barea, sarea, walkwe;
-    double gen, gen2, /* wei2, wei3, */ wei /* , weifac */;
+    double walkwe;
+    double gen, wei;
     float eff;
 
     nblock = 1;
-    /* icoub = 0; */
-    /* icfl = 0; */
     nstack = 0;
 
     if (maxwa > (MAXW - mx * my)) {
-        mitfac = maxwa / (MAXW - mx * my);
-        nblock = mitfac + 1;
+        nblock = 1 + maxwa / (MAXW - mx * my);
         maxwa = maxwa / nblock;
     }
 
     G_debug(2, " maxwa, nblock %d %d", maxwa, nblock);
 
     for (iblock = 1; iblock <= nblock; iblock++) {
-        /* ++icoub; */
-
         lw = 0;
         walkwe = 0.;
-        barea = stepx * stepy;
-        sarea = bresx * bresy;
-        G_debug(2, " barea,sarea,rwalk,sisum: %f %f %f %f", barea, sarea, rwalk,
-                sisum);
+        G_debug(2, "rwalk,sisum: %f %f", rwalk, sisum);
         /* write hh.walkers0 */
 
         for (k = 0; k < my; k++) {
@@ -175,28 +153,6 @@ void main_loop(void)
                     mgen = (int)gen;
                     wei = gen / (double)(mgen + 1);
 
-                    /*if (si[k][l] != 0.) { */
-                    /* this stuff later for multiscale */
-
-                    gen2 = (double)maxwab * si[k][l] /
-                           (si0 * (double)(mx2o * my2o));
-                    gen2 = gen2 * (barea / sarea);
-                    /* mgen2 = (int)gen2;
-                       wei2 = gen2 / (double)(mgen2 + 1);
-                       mgen3 =
-                       (int)((double)mgen2 * wei2 / ((double)mgen * wei)); */
-                    /* nmult = mgen3 + 1;
-                       wei3 = gen2 / (double)((mgen + 1) * (mgen2 + 1)); */
-                    /* weifac = wei3 / wei; */
-                    /*              } else {
-                       nmult = 1;
-                       weifac = 1.;
-                       fprintf(stderr, "\n zero rainfall excess in cell");
-                       } */
-
-                    /*G_debug(2, " gen,gen2,wei,wei2,mgen3,nmult: %f %f %f %f %d
-                     * %d",gen,gen2,wei,wei2,mgen3,nmult);
-                     */
                     for (iw = 1; iw <= mgen + 1; iw++) { /* assign walkers */
                         w[lw].x = x + stepx * (simwe_rand() - 0.5);
                         w[lw].y = y + stepy * (simwe_rand() - 0.5);
@@ -205,18 +161,9 @@ void main_loop(void)
                         walkwe += w[lw].m;
                         vavg[lw].x = v1[k][l];
                         vavg[lw].y = v2[k][l];
-                        /* deactivated as unused, what was iflag for?
-                           if (w[lw].x >= xmin && w[lw].y >= ymin &&
-                           w[lw].x <= xmax && w[lw].y <= ymax) {
-                           iflag[lw] = 0;
-                           }
-                           else {
-                           iflag[lw] = 1;
-                           }
-                         */
                         lw++;
                     }
-                } /*DEFined area */
+                } /* defined area */
             }
         }
         nwalk = lw;

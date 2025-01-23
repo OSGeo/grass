@@ -350,9 +350,7 @@ int main(int argc, char *argv[])
     G_debug(3, "Conversion factor is set to: %f", wp.conv);
 
     wp.mixx = wp.conv * cellhd.west;
-    wp.maxx = wp.conv * cellhd.east;
     wp.miyy = wp.conv * cellhd.south;
-    wp.mayy = wp.conv * cellhd.north;
 
     wp.stepx = cellhd.ew_res * wp.conv;
     wp.stepy = cellhd.ns_res * wp.conv;

@@ -12,12 +12,9 @@
 
 struct WaterParams {
     double xmin, ymin, xmax, ymax;
-    double mayy, miyy, maxx, mixx;
+    double miyy, mixx;
     int mx, my;
-    int mx2, my2;
 
-    double bxmi, bymi, bxma, byma, bresx, bresy;
-    int maxwab;
     double step, conv;
 
     double frac;
@@ -31,7 +28,7 @@ struct WaterParams {
     double chmean, si0, deltap, deldif, cch, hhc, halpha;
     double eps;
     int nstack;
-    int iterout, mx2o, my2o;
+    int iterout;
     int miter, nwalka;
     double timec;
     int ts, timesec;
@@ -54,7 +51,6 @@ struct WaterParams {
     char *observation;
     char *logfile;
     char *mapset;
-    char *mscale;
     char *tserie;
 
     char *wdepth;
@@ -93,7 +89,7 @@ struct options {
 };
 
 struct flags {
-    struct Flag *mscale, *tserie, *generateSeed;
+    struct Flag *tserie, *generateSeed;
 };
 
 #endif /* __SIMLIB_H__ */
