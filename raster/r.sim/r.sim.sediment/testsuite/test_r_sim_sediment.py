@@ -1,5 +1,3 @@
-import unittest
-
 from grass.gunittest.case import TestCase
 
 
