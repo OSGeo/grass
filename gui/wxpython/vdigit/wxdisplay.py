@@ -20,7 +20,8 @@ This program is free software under the GNU General Public License
 import locale
 import os
 import sys
-from ctypes import CFUNCTYPE, UNCHECKED, String, byref, c_double, c_int, pointer
+from ctypes import CFUNCTYPE, byref, c_double, c_int, pointer
+from grass.lib.ctypes_preamble import UNCHECKED, String
 
 import wx
 from core.debug import Debug
