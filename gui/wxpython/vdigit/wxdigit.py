@@ -87,7 +87,7 @@ try:
         Map_info,
         Vect_append_point,
         Vect_area_alive,
-        Vect_area_perimeter,
+        Vect_get_area_perimeter,
         Vect_break_lines_list,
         Vect_cat_set,
         Vect_cidx_get_cat_by_index,
@@ -1680,7 +1680,7 @@ class IVDigit:
                 return -1
 
             Vect_get_area_points(self.poMapInfo, area, self.poPoints)
-            perimeter = Vect_area_perimeter(self.poPoints)
+            perimeter = Vect_get_area_perimeter(self.poPoints)
 
         return perimeter
 
