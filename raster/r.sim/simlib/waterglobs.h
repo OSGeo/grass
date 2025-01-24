@@ -64,8 +64,6 @@ struct point3D {
 };
 
 extern struct _points points;
-extern void erod(double **);
-extern int output_et(void);
 extern double simwe_rand(void);
 extern double gasdev(void);
 extern void gasdev_for_paralel(double *, double *);
@@ -74,12 +72,6 @@ extern double amin1(double, double);
 extern int min(int, int);
 extern int max(int, int);
 extern void create_observation_points(void);
-
-extern double xmin, ymin, xmax, ymax;
-extern double miyy, mixx;
-extern int mx, my;
-
-extern double step, conv;
 
 extern double frac;
 
@@ -98,7 +90,6 @@ extern double hhmax, sisum, vmean;
 extern double infsum, infmean;
 extern int maxw, maxwa, nwalk;
 extern double rwalk, xrand, yrand;
-extern double stepx, stepy, xp0, yp0;
 extern double chmean, si0, deltap, deldif, cch, hhc, halpha;
 extern double eps;
 extern int nstack;

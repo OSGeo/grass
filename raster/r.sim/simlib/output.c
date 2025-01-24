@@ -11,6 +11,7 @@
 #include <grass/glocale.h>
 
 #include <grass/waterglobs.h>
+#include <grass/simlib.h>
 
 void free_walkers(void)
 {
@@ -88,7 +89,7 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
 
 /* Soeren 8. Mar 2011 TODO:
  * This function needs to be refractured and splittet into smaller parts */
-int output_data(int tt, double ft UNUSED)
+int output_data(int tt, double ft UNUSED, Geometry *geometry)
 {
 
     FCELL *depth_cell, *disch_cell, *err_cell;
@@ -136,11 +137,11 @@ int output_data(int tt, double ft UNUSED)
 
     /* we write in the same region as we used for reading */
 
-    if (my != Rast_window_rows())
-        G_fatal_error("OOPS: rows changed from %d to %d", mx,
+    if (geometry->my != Rast_window_rows())
+        G_fatal_error("OOPS: rows changed from %d to %d", geometry->mx,
                       Rast_window_rows());
-    if (mx != Rast_window_cols())
-        G_fatal_error("OOPS: cols changed from %d to %d", my,
+    if (geometry->mx != Rast_window_cols())
+        G_fatal_error("OOPS: cols changed from %d to %d", geometry->my,
                       Rast_window_cols());
 
     if (depth) {
@@ -209,10 +210,10 @@ int output_data(int tt, double ft UNUSED)
             erdep_fd = Rast_open_fp_new(erdep);
     }
 
-    for (iarc = 0; iarc < my; iarc++) {
-        i = my - iarc - 1;
+    for (iarc = 0; iarc < geometry->my; iarc++) {
+        i = geometry->my - iarc - 1;
         if (depth) {
-            for (j = 0; j < mx; j++) {
+            for (j = 0; j < geometry->mx; j++) {
                 if (zz[i][j] == UNDEF || gama[i][j] == UNDEF)
                     Rast_set_f_null_value(depth_cell + j, 1);
                 else {
@@ -225,12 +226,12 @@ int output_data(int tt, double ft UNUSED)
         }
 
         if (disch) {
-            for (j = 0; j < mx; j++) {
+            for (j = 0; j < geometry->mx; j++) {
                 if (zz[i][j] == UNDEF || gama[i][j] == UNDEF ||
                     cchez[i][j] == UNDEF)
                     Rast_set_f_null_value(disch_cell + j, 1);
                 else {
-                    a2 = step * gama[i][j] *
+                    a2 = geometry->step * gama[i][j] *
                          cchez[i][j];          /* cchez incl. sqrt(sinsl) */
                     disch_cell[j] = (FCELL)a2; /* add conv? */
                     dismax = amax1(dismax, a2);
@@ -240,7 +241,7 @@ int output_data(int tt, double ft UNUSED)
         }
 
         if (err) {
-            for (j = 0; j < mx; j++) {
+            for (j = 0; j < geometry->mx; j++) {
                 if (zz[i][j] == UNDEF || gammas[i][j] == UNDEF)
                     Rast_set_f_null_value(err_cell + j, 1);
                 else {
@@ -252,7 +253,7 @@ int output_data(int tt, double ft UNUSED)
         }
 
         if (conc) {
-            for (j = 0; j < mx; j++) {
+            for (j = 0; j < geometry->mx; j++) {
                 if (zz[i][j] == UNDEF || gama[i][j] == UNDEF)
                     Rast_set_f_null_value(conc_cell + j, 1);
                 else {
@@ -264,7 +265,7 @@ int output_data(int tt, double ft UNUSED)
         }
 
         if (flux) {
-            for (j = 0; j < mx; j++) {
+            for (j = 0; j < geometry->mx; j++) {
                 if (zz[i][j] == UNDEF || gama[i][j] == UNDEF ||
                     slope[i][j] == UNDEF)
                     Rast_set_f_null_value(flux_cell + j, 1);
@@ -278,7 +279,7 @@ int output_data(int tt, double ft UNUSED)
         }
 
         if (erdep) {
-            for (j = 0; j < mx; j++) {
+            for (j = 0; j < geometry->mx; j++) {
                 if (zz[i][j] == UNDEF || er[i][j] == UNDEF)
                     Rast_set_f_null_value(erdep_cell + j, 1);
                 else {
@@ -607,7 +608,7 @@ int output_data(int tt, double ft UNUSED)
     return 1;
 }
 
-int output_et(void)
+int output_et(Geometry *geometry)
 {
 
     FCELL *tc_cell, *et_cell;
@@ -647,17 +648,17 @@ int output_et(void)
         tc_fd = Rast_open_fp_new(tc);
     }
 
-    if (my != Rast_window_rows())
-        G_fatal_error("OOPS: rows changed from %d to %d", mx,
+    if (geometry->my != Rast_window_rows())
+        G_fatal_error("OOPS: rows changed from %d to %d", geometry->mx,
                       Rast_window_rows());
-    if (mx != Rast_window_cols())
-        G_fatal_error("OOPS: cols changed from %d to %d", my,
+    if (geometry->mx != Rast_window_cols())
+        G_fatal_error("OOPS: cols changed from %d to %d", geometry->my,
                       Rast_window_cols());
 
-    for (iarc = 0; iarc < my; iarc++) {
-        i = my - iarc - 1;
+    for (iarc = 0; iarc < geometry->my; iarc++) {
+        i = geometry->my - iarc - 1;
         if (et) {
-            for (j = 0; j < mx; j++) {
+            for (j = 0; j < geometry->mx; j++) {
                 if (zz[i][j] == UNDEF || er[i][j] == UNDEF)
                     Rast_set_f_null_value(et_cell + j, 1);
                 else {
@@ -670,7 +671,7 @@ int output_et(void)
         }
 
         if (tc) {
-            for (j = 0; j < mx; j++) {
+            for (j = 0; j < geometry->mx; j++) {
                 if (zz[i][j] == UNDEF || sigma[i][j] == UNDEF ||
                     si[i][j] == UNDEF)
                     Rast_set_f_null_value(tc_cell + j, 1);

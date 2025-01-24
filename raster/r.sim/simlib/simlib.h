@@ -10,13 +10,16 @@
 #include <omp.h>
 #endif
 
-struct WaterParams {
-    double xmin, ymin, xmax, ymax;
-    double miyy, mixx;
+typedef struct {
     int mx, my;
+    double xmin, xmax, ymin, ymax;
+    double miyy, mixx;
+    double step, stepx, stepy;
+    double conv;
+    double xp0, yp0;
+} Geometry;
 
-    double step, conv;
-
+struct WaterParams {
     double frac;
 
     double hbeta;
@@ -24,7 +27,6 @@ struct WaterParams {
     double infsum, infmean;
     int maxw, maxwa, nwalk;
     double rwalk, xrand, yrand;
-    double stepx, stepy, xp0, yp0;
     double chmean, si0, deltap, deldif, cch, hhc, halpha;
     double eps;
     int nstack;
@@ -70,15 +72,17 @@ struct WaterParams {
 
 void WaterParams_init(struct WaterParams *wp);
 void init_library_globals(struct WaterParams *wp);
-void alloc_grids_water(void);
-void alloc_grids_sediment(void);
-void init_grids_sediment(void);
+void alloc_grids_water(Geometry *geometry);
+void alloc_grids_sediment(Geometry *geometry);
+void init_grids_sediment(Geometry *geometry);
 
-int input_data(void);
-int grad_check(void);
-void main_loop(void);
-int output_data(int, double);
+int input_data(int rows, int cols);
+int grad_check(Geometry *geometry);
+void main_loop(Geometry *geometry);
+int output_data(int, double, Geometry *geometry);
+int output_et(Geometry *geometry);
 void free_walkers(void);
+void erod(double **, Geometry *geometry);
 
 struct options {
     struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,

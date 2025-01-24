@@ -309,25 +309,27 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&cellhd);
 
+    Geometry geometry;
+
     WaterParams_init(&wp);
 
-    wp.conv = G_database_units_to_meters_factor();
+    geometry.conv = G_database_units_to_meters_factor();
 
-    wp.mixx = cellhd.west * wp.conv;
-    wp.miyy = cellhd.south * wp.conv;
+    geometry.mixx = cellhd.west * geometry.conv;
+    geometry.miyy = cellhd.south * geometry.conv;
 
-    wp.stepx = cellhd.ew_res * wp.conv;
-    wp.stepy = cellhd.ns_res * wp.conv;
-    /*  wp.step = amin1(wp.stepx,wp.stepy); */
-    wp.step = (wp.stepx + wp.stepy) / 2.;
-    wp.mx = cellhd.cols;
-    wp.my = cellhd.rows;
-    wp.xmin = 0.;
-    wp.ymin = 0.;
-    wp.xp0 = wp.xmin + wp.stepx / 2.;
-    wp.yp0 = wp.ymin + wp.stepy / 2.;
-    wp.xmax = wp.xmin + wp.stepx * (float)wp.mx;
-    wp.ymax = wp.ymin + wp.stepy * (float)wp.my;
+    geometry.stepx = cellhd.ew_res * geometry.conv;
+    geometry.stepy = cellhd.ns_res * geometry.conv;
+    /*  geometry.step = amin1(geometry.stepx,geometry.stepy); */
+    geometry.step = (geometry.stepx + geometry.stepy) / 2.;
+    geometry.mx = cellhd.cols;
+    geometry.my = cellhd.rows;
+    geometry.xmin = 0.;
+    geometry.ymin = 0.;
+    geometry.xp0 = geometry.xmin + geometry.stepx / 2.;
+    geometry.yp0 = geometry.ymin + geometry.stepy / 2.;
+    geometry.xmax = geometry.xmin + geometry.stepx * (float)geometry.mx;
+    geometry.ymax = geometry.ymin + geometry.stepy * (float)geometry.my;
     wp.hhc = wp.hhmax = 0.;
 
     wp.elevin = parm.elevin->answer;
@@ -379,8 +381,8 @@ int main(int argc, char *argv[])
 
     /* compute how big the raster is and set this to appr 2 walkers per cell */
     if (parm.nwalk->answer == NULL) {
-        wp.maxwa = wp.mx * wp.my * 2;
-        wp.rwalk = (double)(wp.mx * wp.my * 2.);
+        wp.maxwa = geometry.mx * geometry.my * 2;
+        wp.rwalk = (double)(geometry.mx * geometry.my * 2.);
         G_message(_("default nwalk=%d, rwalk=%f"), wp.maxwa, wp.rwalk);
     }
     else {
@@ -389,9 +391,9 @@ int main(int argc, char *argv[])
     }
     /*rwalk = (double) maxwa; */
 
-    if (wp.conv != 1.0)
-        G_message(_("Using metric conversion factor %f, step=%f"), wp.conv,
-                  wp.step);
+    if (geometry.conv != 1.0)
+        G_message(_("Using metric conversion factor %f, step=%f"),
+                  geometry.conv, geometry.step);
 
     wp.observation = parm.observation->answer;
     wp.logfile = parm.logfile->answer;
@@ -400,20 +402,20 @@ int main(int argc, char *argv[])
     if ((wp.tc == NULL) && (wp.et == NULL) && (wp.conc == NULL) &&
         (wp.flux == NULL) && (wp.erdep == NULL))
         G_warning(_("You are not outputting any raster or site files"));
-    ret_val = input_data();
+    ret_val = input_data(geometry.my, geometry.mx);
     if (ret_val != 1)
         G_fatal_error(_("Input failed"));
 
-    alloc_grids_sediment();
+    alloc_grids_sediment(&geometry);
 
-    grad_check();
-    init_grids_sediment();
+    grad_check(&geometry);
+    init_grids_sediment(&geometry);
     /* treba dat output pre topoerdep */
-    main_loop();
+    main_loop(&geometry);
 
     /* always true for sediment? */
     if (wp.tserie == NULL) {
-        ii = output_data(0, 1.);
+        ii = output_data(0, 1., &geometry);
         if (ii != 1)
             G_fatal_error(_("Cannot write raster maps"));
     }

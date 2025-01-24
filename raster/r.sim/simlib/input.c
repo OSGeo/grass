@@ -33,16 +33,6 @@ void WaterParams_init(struct WaterParams *wp)
      * difference in between initialization in water and sediment
      * for the variables which are not used and would have been
      * initialized if they were just global variables */
-    wp->ymin = 0;
-    wp->xmax = 0;
-    wp->ymax = 0;
-    wp->miyy = 0;
-    wp->mixx = 0;
-    wp->mx = 0;
-    wp->my = 0;
-
-    wp->step = 0;
-    wp->conv = 0;
 
     wp->frac = 0;
 
@@ -58,10 +48,6 @@ void WaterParams_init(struct WaterParams *wp)
     wp->rwalk = 0;
     wp->xrand = 0;
     wp->yrand = 0;
-    wp->stepx = 0;
-    wp->stepy = 0;
-    wp->xp0 = 0;
-    wp->yp0 = 0;
     wp->chmean = 0;
     wp->si0 = 0;
     wp->deltap = 0;
@@ -120,17 +106,6 @@ void init_library_globals(struct WaterParams *wp)
 {
     /* this is little bit lengthy and perhaps error-prone
      * but it separates library from its interface */
-    ymin = wp->ymin;
-    xmax = wp->xmax;
-    ymax = wp->ymax;
-    miyy = wp->miyy;
-    mixx = wp->mixx;
-    mx = wp->mx;
-    my = wp->my;
-
-    step = wp->step;
-    conv = wp->conv;
-
     frac = wp->frac;
 
     hbeta = wp->hbeta;
@@ -145,10 +120,6 @@ void init_library_globals(struct WaterParams *wp)
     rwalk = wp->rwalk;
     xrand = wp->xrand;
     yrand = wp->yrand;
-    stepx = wp->stepx;
-    stepy = wp->stepy;
-    xp0 = wp->xp0;
-    yp0 = wp->yp0;
     chmean = wp->chmean;
     si0 = wp->si0;
     deltap = wp->deltap;
@@ -202,36 +173,36 @@ void init_library_globals(struct WaterParams *wp)
 
 /* we do the allocation inside because we anyway need to set the variables */
 
-void alloc_grids_water(void)
+void alloc_grids_water(Geometry *geometry)
 {
     /* memory allocation for output grids */
     G_debug(1, "beginning memory allocation for output grids");
 
-    gama = G_alloc_matrix(my, mx);
+    gama = G_alloc_matrix(geometry->my, geometry->mx);
     if (err != NULL)
-        gammas = G_alloc_matrix(my, mx);
-    dif = G_alloc_fmatrix(my, mx);
+        gammas = G_alloc_matrix(geometry->my, geometry->mx);
+    dif = G_alloc_fmatrix(geometry->my, geometry->mx);
 }
 
-void alloc_grids_sediment(void)
+void alloc_grids_sediment(Geometry *geometry)
 {
     /* mandatory for si,sigma */
 
-    si = G_alloc_matrix(my, mx);
-    sigma = G_alloc_matrix(my, mx);
+    si = G_alloc_matrix(geometry->my, geometry->mx);
+    sigma = G_alloc_matrix(geometry->my, geometry->mx);
 
     /* memory allocation for output grids */
 
-    dif = G_alloc_fmatrix(my, mx);
+    dif = G_alloc_fmatrix(geometry->my, geometry->mx);
     if (erdep != NULL || et != NULL)
-        er = G_alloc_fmatrix(my, mx);
+        er = G_alloc_fmatrix(geometry->my, geometry->mx);
 }
 
-void init_grids_sediment(void)
+void init_grids_sediment(Geometry *geometry)
 {
     /* this should be fulfilled for sediment but not water */
     if (et != NULL)
-        erod(si);
+        erod(si, geometry);
 }
 
 void alloc_walkers(int max_walkers)
@@ -256,9 +227,8 @@ void alloc_walkers(int max_walkers)
 
 /* ************************************************************************* */
 /* Read all input maps and input values into memory ************************ */
-int input_data(void)
+int input_data(int rows, int cols)
 {
-    int rows = my, cols = mx; /* my and mx are global variables */
     int max_walkers;
     double unitconv = 0.000000278; /* mm/hr to m/s */
 
@@ -337,7 +307,7 @@ int input_data(void)
         copy_matrix_undef_double_to_float_values(rows, cols, gama, zz);
     }
     /* allocate walkers */
-    max_walkers = maxwa + mx * my;
+    max_walkers = maxwa + cols * rows;
     alloc_walkers(max_walkers);
 
     /* Array for gradient checking */
@@ -352,7 +322,7 @@ int input_data(void)
 /* ************************************************************************* */
 
 /* data preparations, sigma, shear, etc. */
-int grad_check(void)
+int grad_check(Geometry *geometry)
 {
     int k, l;
     double zx, zy, zd2, zd4, sinsl;
@@ -380,8 +350,8 @@ int grad_check(void)
     infsum = 0.;
     cmul2 = rhow * gacc;
 
-    for (k = 0; k < my; k++) {
-        for (l = 0; l < mx; l++) {
+    for (k = 0; k < geometry->my; k++) {
+        for (l = 0; l < geometry->mx; l++) {
             if (zz[k][l] != UNDEF) {
                 zx = v1[k][l];
                 zy = v2[k][l];
@@ -457,7 +427,7 @@ int grad_check(void)
         G_warning(_("Infiltration exceeds the rainfall rate everywhere! No "
                     "overland flow."));
 
-    cc = (double)mx * my;
+    cc = (double)geometry->mx * geometry->my;
 
     si0 = sisum / cc;
     vmean = vsum / cc;
@@ -467,8 +437,9 @@ int grad_check(void)
         infmean = infsum / cc;
 
     if (wdepth)
-        deltaw = 0.8 / (sigmax * vmax);          /*time step for sediment */
-    deltap = 0.25 * sqrt(stepx * stepy) / vmean; /*time step for water */
+        deltaw = 0.8 / (sigmax * vmax); /*time step for sediment */
+    deltap = 0.25 * sqrt(geometry->stepx * geometry->stepy) /
+             vmean; /*time step for water */
 
     if (deltaw > deltap)
         timec = 4.;
@@ -518,8 +489,8 @@ int grad_check(void)
      * r}) \bigl[\rho_w\, g h({\bf r}) \sin \beta ({\bf r}) \bigr]^p \f$
      * [kg/ms]=...
      */
-    for (k = 0; k < my; k++) {
-        for (l = 0; l < mx; l++) {
+    for (k = 0; k < geometry->my; k++) {
+        for (l = 0; l < geometry->mx; l++) {
             if (zz[k][l] != UNDEF) {
                 v1[k][l] *= deltap;
                 v2[k][l] *= deltap;
@@ -548,8 +519,8 @@ int grad_check(void)
      *   \f$
      */
     if (et) {
-        erod(si); /* compute divergence of t.capc */
-        if (output_et() != 1)
+        erod(si, geometry); /* compute divergence of t.capc */
+        if (output_et(geometry) != 1)
             G_fatal_error(_("Unable to write et file"));
     }
 
@@ -558,8 +529,8 @@ int grad_check(void)
      * operator WRITE the equation here
      */
     if (wdepth) {
-        for (k = 0; k < my; k++) {
-            for (l = 0; l < mx; l++) {
+        for (k = 0; k < geometry->my; k++) {
+            for (l = 0; l < geometry->mx; l++) {
                 if (zz[k][l] != UNDEF) {
                     /* get back from temp */
                     if (et)
