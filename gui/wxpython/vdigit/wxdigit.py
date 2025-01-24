@@ -162,20 +162,14 @@ from grass.lib.vedit import (
     Vedit_select_by_query,
     Vedit_snap_line,
     Vedit_split_lines,
+    QUERY_UNKNOWN,
+    QUERY_LENGTH,
+    QUERY_DANGLE,
 )
 from grass.pydispatch.signal import Signal
 from vdigit.wxdisplay import DisplayDriver, GetLastError
 
-# Define missing constants
-QUERY_UNKNOWN = 0
-QUERY_LENGTH = 1
-QUERY_DANGLE = 2
-
 none = None  # Python's None for C compatibility
-ret = 0  # Initialize return value
-line = Vect_new_line_struct()  # Create new line structure
-changeset = []  # Initialize changeset list
-new_bboxs = []  # Initialize new bboxes list
 
 
 class VDigitError:
@@ -1020,7 +1014,7 @@ class IVDigit:
 
         if nlines > 0 and self._settings["breakLines"]:
             for i in range(1, nlines):
-                self._breakLineAtIntersection(nlines + i, None, changeset)
+                self._breakLineAtIntersection(nlines + i, None)
 
         if nlines > 0:
             self._addChangeset()
@@ -1220,6 +1214,7 @@ class IVDigit:
             self.poMapInfo, line, ltype, self.poPoints, self.poCats
         )
         if newline > 0 and self.emit_signals:
+            new_bboxs = [self._getBbox(newline)]
             new_areas_cats = [self._getLineAreasCategories(newline)]
 
         if newline > 0 and self._settings["breakLines"]:
@@ -1620,7 +1615,7 @@ class IVDigit:
         ltype = Vect_read_line(self.poMapInfo, self.poPoints, None, line)
         if ltype < 0:
             self._error.ReadLine(line)
-            return ret
+            return -1
 
         length = -1
         if ltype & GV_LINES:  # lines & boundaries
@@ -1641,8 +1636,8 @@ class IVDigit:
 
         ltype = Vect_read_line(self.poMapInfo, None, None, centroid)
         if ltype < 0:
-            self._error.ReadLine(line)
-            return ret
+            self._error.ReadLine(centroid)
+            return -1
 
         if ltype != GV_CENTROID:
             return -1
@@ -1670,8 +1665,8 @@ class IVDigit:
 
         ltype = Vect_read_line(self.poMapInfo, None, None, centroid)
         if ltype < 0:
-            self._error.ReadLine(line)
-            return ret
+            self._error.ReadLine(centroid)
+            return -1
 
         if ltype != GV_CENTROID:
             return -1
