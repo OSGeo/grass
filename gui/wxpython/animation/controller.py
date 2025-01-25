@@ -36,7 +36,6 @@ from animation.utils import (
     HashCmds,
 )
 from animation.data import AnimationData
-from itertools import starmap
 
 
 class AnimationController(wx.EvtHandler):
