@@ -43,7 +43,7 @@ repos:
       - id: ruff
         args: [--fix, --preview]
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.43.0
+    rev: v0.44.0
     hooks:
       - id: markdownlint-fix
   # Using this mirror lets us use mypyc-compiled black, which is about 2x faster
