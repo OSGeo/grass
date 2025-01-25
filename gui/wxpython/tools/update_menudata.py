@@ -22,8 +22,8 @@ Usage: python support/update_menudata.py [-d]
 import os
 import sys
 import tempfile
-
 import xml.etree.ElementTree as ET
+from subprocess import DEVNULL
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -141,29 +141,28 @@ def main(argv=None):
         return 1
 
     grass.info("Step 1: running make...")
-    with open(os.devnull, "w+") as nuldev:
-        grass.call(["make"], stderr=nuldev)
-        grass.info("Step 2: parsing modules...")
-        modules = {}
-        modules = parseModules()
-        grass.info("Step 3: reading menu data...")
-        data = LayerManagerMenuData()
-        grass.info("Step 4: updating menu data...")
-        updateData(data, modules)
+    grass.call(["make"], stderr=DEVNULL)
+    grass.info("Step 2: parsing modules...")
+    modules = {}
+    modules = parseModules()
+    grass.info("Step 3: reading menu data...")
+    data = LayerManagerMenuData()
+    grass.info("Step 4: updating menu data...")
+    updateData(data, modules)
 
-        if printDiff:
-            with tempfile.NamedTemporaryFile() as tempFile:
-                grass.info("Step 5: diff menu data...")
-                writeData(data, tempFile.name)
-                grass.call(
-                    ["diff", "-u", os.path.join("xml", "menudata.xml"), tempFile.name],
-                    stderr=nuldev,
-                )
-        else:
-            grass.info("Step 5: writing menu data (menudata.xml)...")
-            writeData(data)
+    if printDiff:
+        with tempfile.NamedTemporaryFile() as tempFile:
+            grass.info("Step 5: diff menu data...")
+            writeData(data, tempFile.name)
+            grass.call(
+                ["diff", "-u", os.path.join("xml", "menudata.xml"), tempFile.name],
+                stderr=DEVNULL,
+            )
+    else:
+        grass.info("Step 5: writing menu data (menudata.xml)...")
+        writeData(data)
 
-        return 0
+    return 0
 
 
 if __name__ == "__main__":
