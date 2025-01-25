@@ -271,6 +271,34 @@ class TestVInfo(TestCase):
 
         self.assertDictEqual(expected_json, result)
 
+    def test_json_histroy(self):
+        """Test the v.info JSON output format with the history flag."""
+        module = SimpleModule(
+            "v.info", map=self.test_vinfo_with_db_3d, format="json", flags="h"
+        )
+        self.runModule(module)
+        result = json.loads(module.outputs.stdout)
+
+        print(result)
+        expected_json = {
+            "records": [
+                {
+                    "command": 'v.random -z output="test_vinfo_with_db_3d" npoints=5 layer="-1" zmin=0 zmax=100 column="elevation" column_type="double precision"'
+                }
+            ]
+        }
+
+        # The following fields vary depending on the Grass sample data's path,
+        # date, and user. Therefore, only check for their presence in the JSON output
+        # and not for their exact values.
+        remove_fields = ["mapset_path", "date", "user"]
+        for record in result["records"]:
+            for field in remove_fields:
+                self.assertIn(field, record)
+                record.pop(field)
+
+        self.assertDictEqual(expected_json, result)
+
     def test_database_table(self):
         """Test the database table column and type of the two vector maps with attribute data"""
         self.assertModuleKeyValue(

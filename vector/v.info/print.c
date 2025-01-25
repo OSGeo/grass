@@ -771,3 +771,84 @@ void print_info(struct Map_info *Map)
     divider('+');
     fprintf(stdout, "\n");
 }
+
+void print_history(struct Map_info Map, enum OutputFormat format)
+{
+    char buf[MAX_STR_LEN];
+    char command[MAX_STR_LEN] = {0}, gisdbase[MAX_STR_LEN] = {0};
+    char location[MAX_STR_LEN] = {0}, mapset[MAX_STR_LEN] = {0};
+    char user[MAX_STR_LEN] = {0}, date[MAX_STR_LEN] = {0};
+    char mapset_path[3 * MAX_STR_LEN] = {0};
+
+    JSON_Value *root_value = NULL, *record_value = NULL;
+    JSON_Object *root_object = NULL;
+    JSON_Array *record_array = NULL;
+
+    if (format == JSON) {
+        root_value = json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        root_object = json_object(root_value);
+
+        record_value = json_value_init_array();
+        if (record_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        record_array = json_array(record_value);
+    }
+
+    Vect_hist_rewind(&Map);
+    while (Vect_hist_read(buf, 1000, &Map) != NULL) {
+        switch (format) {
+        case PLAIN:
+        case SHELL:
+            fprintf(stdout, "%s\n", buf);
+            break;
+        case JSON:
+            // Parse each line based on its prefix
+            if (strncmp(buf, "COMMAND:", 8) == 0) {
+                sscanf(buf, "COMMAND: %[^\n]", command);
+            }
+            else if (strncmp(buf, "GISDBASE:", 9) == 0) {
+                sscanf(buf, "GISDBASE: %[^\n]", gisdbase);
+            }
+            else if (strncmp(buf, "LOCATION:", 9) == 0) {
+                sscanf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %[^\n]",
+                       location, mapset, user, date);
+
+                JSON_Value *info_value = json_value_init_object();
+                if (info_value == NULL) {
+                    G_fatal_error(
+                        _("Failed to initialize JSON object. Out of memory?"));
+                }
+                JSON_Object *info_object = json_object(info_value);
+
+                json_object_set_string(info_object, "command", command);
+                snprintf(mapset_path, sizeof(mapset_path), "%s/%s/%s", gisdbase,
+                         location, mapset);
+                json_object_set_string(info_object, "mapset_path", mapset_path);
+                json_object_set_string(info_object, "user", user);
+                json_object_set_string(info_object, "date", date);
+
+                json_array_append_value(record_array, info_value);
+            }
+            break;
+        }
+    }
+
+    if (format == JSON) {
+        json_object_set_value(root_object, "records", record_value);
+
+        char *serialized_string = json_serialize_to_string_pretty(root_value);
+        if (!serialized_string) {
+            json_value_free(root_value);
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+
+        json_free_serialized_string(serialized_string);
+        json_value_free(root_value);
+    }
+}

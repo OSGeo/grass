@@ -5,6 +5,7 @@
 #define SHELL_BASIC  0x02
 #define SHELL_REGION 0x04
 #define SHELL_TOPO   0x08
+#define MAX_STR_LEN  1001
 
 enum OutputFormat { PLAIN, SHELL, JSON };
 
@@ -24,3 +25,4 @@ void print_columns(struct Map_info *, const char *, const char *,
 void print_info(struct Map_info *);
 void print_shell(struct Map_info *, const char *, enum OutputFormat,
                  JSON_Object *);
+void print_history(struct Map_info, enum OutputFormat);
