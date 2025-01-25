@@ -1041,11 +1041,11 @@ def write_xml_modules(name, tree=None):
             if bnode is not None:
                 file_.write("%s<binary>\n" % (" " * indent))
                 indent += 4
-                for fnode in bnode.findall("file"):
-                    file_.write(
-                        "%s<file>%s</file>\n"
-                        % (" " * indent, os.path.join(options["prefix"], fnode.text))
-                    )
+                file_.writelines(
+                    "%s<file>%s</file>\n"
+                    % (" " * indent, os.path.join(options["prefix"], fnode.text))
+                    for fnode in bnode.findall("file")
+                )
                 indent -= 4
                 file_.write("%s</binary>\n" % (" " * indent))
             file_.write('%s<libgis revision="%s" />\n' % (" " * indent, libgis_revison))
@@ -1091,11 +1091,11 @@ def write_xml_extensions(name, tree=None):
             if bnode is not None:
                 file_.write("%s<binary>\n" % (" " * indent))
                 indent += 4
-                for fnode in bnode.findall("file"):
-                    file_.write(
-                        "%s<file>%s</file>\n"
-                        % (" " * indent, os.path.join(options["prefix"], fnode.text))
-                    )
+                file_.writelines(
+                    "%s<file>%s</file>\n"
+                    % (" " * indent, os.path.join(options["prefix"], fnode.text))
+                    for fnode in bnode.findall("file")
+                )
                 indent -= 4
                 file_.write("%s</binary>\n" % (" " * indent))
             # extension modules
@@ -1103,8 +1103,10 @@ def write_xml_extensions(name, tree=None):
             if mnode is not None:
                 file_.write("%s<modules>\n" % (" " * indent))
                 indent += 4
-                for fnode in mnode.findall("module"):
-                    file_.write("%s<module>%s</module>\n" % (" " * indent, fnode.text))
+                file_.writelines(
+                    "%s<module>%s</module>\n" % (" " * indent, fnode.text)
+                    for fnode in mnode.findall("module")
+                )
                 indent -= 4
                 file_.write("%s</modules>\n" % (" " * indent))
 
@@ -1136,14 +1138,14 @@ def write_xml_toolboxes(name, tree=None):
                 % (" " * indent, tnode.get("name"), tnode.get("code"))
             )
             indent += 4
-            for cnode in tnode.findall("correlate"):
-                file_.write(
-                    '%s<correlate code="%s" />\n' % (" " * indent, tnode.get("code"))
-                )
-            for mnode in tnode.findall("task"):
-                file_.write(
-                    '%s<task name="%s" />\n' % (" " * indent, mnode.get("name"))
-                )
+            file_.writelines(
+                '%s<correlate code="%s" />\n' % (" " * indent, tnode.get("code"))
+                for cnode in tnode.findall("correlate")
+            )
+            file_.writelines(
+                '%s<task name="%s" />\n' % (" " * indent, mnode.get("name"))
+                for mnode in tnode.findall("task")
+            )
             indent -= 4
             file_.write("%s</toolbox>\n" % (" " * indent))
 
