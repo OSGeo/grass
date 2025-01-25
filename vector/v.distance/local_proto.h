@@ -1,5 +1,6 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
+#include <grass/parson.h>
 
 #ifndef _LOCAL_PROTO_
 #define _LOCAL_PROTO_
@@ -22,6 +23,8 @@
 #define TO_ANGLE   9  /* angle of linear feature in nearest point */
 #define TO_ATTR    10 /* attribute of nearest feature */
 #define END        11 /* end of list */
+
+enum OutputFormat { PLAIN, JSON };
 
 /* Structure to store info about nearest feature for each category */
 typedef struct {
@@ -66,6 +69,7 @@ int line2area(struct Map_info *To, struct line_pnts *Points, int type, int area,
               int with_z);
 
 /* print.c */
-int print_upload(NEAR *, UPLOAD *, int, dbCatValArray *, dbCatVal *, char *);
+int print_upload(NEAR *, UPLOAD *, int, dbCatValArray *, dbCatVal *, char *,
+                 enum OutputFormat, JSON_Object *);
 
 #endif

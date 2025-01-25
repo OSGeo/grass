@@ -618,7 +618,7 @@ class ProjectionsPage(TitledPage):
             self.proj, self.projdesc = self.projlist.Search(
                 index=[0, 1], pattern=search_str
             )
-        except:
+        except (IndexError, ValueError):
             self.proj = self.projdesc = ""
 
         event.Skip()
@@ -1188,15 +1188,15 @@ class DatumPage(TitledPage):
             self.datumparams = self.parent.datums[self.datum][2]
             try:
                 self.datumparams.remove("dx=0.0")
-            except:
+            except ValueError:
                 pass
             try:
                 self.datumparams.remove("dy=0.0")
-            except:
+            except ValueError:
                 pass
             try:
                 self.datumparams.remove("dz=0.0")
-            except:
+            except ValueError:
                 pass
 
             nextButton.Enable(True)
@@ -1211,7 +1211,7 @@ class DatumPage(TitledPage):
             self.datum, self.ellipsoid, self.datumdesc = self.datumlist.Search(
                 index=[0, 1, 2], pattern=search_str
             )
-        except:
+        except (IndexError, ValueError):
             self.datum = self.datumdesc = self.ellipsoid = ""
 
         event.Skip()
@@ -1392,7 +1392,7 @@ class EllipsePage(TitledPage):
                 self.ellipseparams = self.parent.ellipsoids[self.ellipse][1]
             else:
                 self.ellipseparams = self.parent.planetary_ellipsoids[self.ellipse][1]
-        except:
+        except (IndexError, ValueError, KeyError):
             self.ellipse = self.ellipsedesc = self.ellipseparams = ""
 
         event.Skip()
@@ -1935,7 +1935,7 @@ class IAUPage(TitledPage):
         self.epsgcode = event.GetString()
         try:
             self.epsgcode = int(self.epsgcode)
-        except:
+        except ValueError:
             self.epsgcode = None
 
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
@@ -2558,7 +2558,7 @@ class LocationWizard(wx.Object):
                         plist.append(p)
                     self.projections[proj.lower().strip()] = (projdesc.strip(), plist)
                     self.projdesc[proj.lower().strip()] = projdesc.strip()
-                except:
+                except (ValueError, IndexError):
                     continue
 
         # read datum definitions
@@ -2618,7 +2618,7 @@ class LocationWizard(wx.Object):
                 try:
                     pparam, datatype, proj4term, desc = line.split(":")
                     self.paramdesc[pparam] = (datatype, proj4term, desc)
-                except:
+                except ValueError:
                     continue
 
     def OnWizFinished(self):

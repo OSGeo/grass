@@ -192,17 +192,16 @@ class RasterRow(RasterAbstractBase):
         self.overwrite = overwrite if overwrite is not None else self.overwrite
 
         if self.mode == "r":
-            if self.exist():
-                self.info.read()
-                self.cats.mtype = self.mtype
-                self.cats.read()
-                self.hist.read()
-                self._fd = libraster.Rast_open_old(self.name, self.mapset)
-                self._gtype = libraster.Rast_get_map_type(self._fd)
-                self.mtype = RTYPE_STR[self._gtype]
-            else:
+            if not self.exist():
                 str_err = _("The map does not exist, I can't open in 'r' mode")
                 raise OpenError(str_err)
+            self.info.read()
+            self.cats.mtype = self.mtype
+            self.cats.read()
+            self.hist.read()
+            self._fd = libraster.Rast_open_old(self.name, self.mapset)
+            self._gtype = libraster.Rast_get_map_type(self._fd)
+            self.mtype = RTYPE_STR[self._gtype]
         elif self.mode == "w":
             if self.exist():
                 if not self.overwrite:
