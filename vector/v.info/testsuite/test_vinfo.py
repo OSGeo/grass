@@ -279,7 +279,6 @@ class TestVInfo(TestCase):
         self.runModule(module)
         result = json.loads(module.outputs.stdout)
 
-        print(result)
         expected_json = {
             "records": [
                 {
