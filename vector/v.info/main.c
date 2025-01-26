@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 
     if (hist_flag || col_flag) {
         if (hist_flag) {
-            print_history(Map, format);
+            print_history(&Map, format);
         }
         else if (col_flag) {
             print_columns(&Map, input_opt, field_opt, format);

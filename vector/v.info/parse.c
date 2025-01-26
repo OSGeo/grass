@@ -87,3 +87,38 @@ void parse_args(int argc, char **argv, char **input, char **field, int *history,
         }
     }
 }
+
+void parse_history_json(char *buf, char *command, char *gisdbase,
+                        char *location, char *mapset, char *user, char *date,
+                        char *mapset_path, JSON_Array *record_array)
+{
+    JSON_Value *info_value = NULL;
+    JSON_Object *info_object = NULL;
+
+    if (strncmp(buf, "COMMAND:", 8) == 0) {
+        sscanf(buf, "COMMAND: %[^\n]", command);
+    }
+    else if (strncmp(buf, "GISDBASE:", 9) == 0) {
+        sscanf(buf, "GISDBASE: %[^\n]", gisdbase);
+    }
+    else if (strncmp(buf, "LOCATION:", 9) == 0) {
+        sscanf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %[^\n]", location,
+               mapset, user, date);
+
+        info_value = json_value_init_object();
+        if (info_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        info_object = json_object(info_value);
+
+        json_object_set_string(info_object, "command", command);
+        snprintf(mapset_path, sizeof(mapset_path), "%s/%s/%s", gisdbase,
+                 location, mapset);
+        json_object_set_string(info_object, "mapset_path", mapset_path);
+        json_object_set_string(info_object, "user", user);
+        json_object_set_string(info_object, "date", date);
+
+        json_array_append_value(record_array, info_value);
+    }
+}
