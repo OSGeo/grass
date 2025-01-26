@@ -113,8 +113,8 @@ void parse_history_json(char *buf, char *command, char *gisdbase,
         info_object = json_object(info_value);
 
         json_object_set_string(info_object, "command", command);
-        snprintf(mapset_path, sizeof(mapset_path), "%s/%s/%s", gisdbase,
-                 location, mapset);
+        snprintf(mapset_path, MAX_STR_LEN, "%s/%s/%s", gisdbase, location,
+                 mapset);
         json_object_set_string(info_object, "mapset_path", mapset_path);
         json_object_set_string(info_object, "user", user);
         json_object_set_string(info_object, "date", date);

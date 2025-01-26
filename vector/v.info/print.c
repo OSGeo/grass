@@ -774,11 +774,11 @@ void print_info(struct Map_info *Map)
 
 void print_history(struct Map_info *Map, enum OutputFormat format)
 {
-    char buf[MAX_STR_LEN];
-    char command[MAX_STR_LEN], gisdbase[MAX_STR_LEN];
-    char location[MAX_STR_LEN], mapset[MAX_STR_LEN];
-    char user[MAX_STR_LEN], date[MAX_STR_LEN];
-    char mapset_path[3 * MAX_STR_LEN];
+    char buf[STR_LEN];
+    char command[STR_LEN], gisdbase[STR_LEN];
+    char location[STR_LEN], mapset[STR_LEN];
+    char user[STR_LEN], date[STR_LEN];
+    char mapset_path[MAX_STR_LEN];
 
     JSON_Value *root_value = NULL, *record_value = NULL;
     JSON_Object *root_object = NULL;
