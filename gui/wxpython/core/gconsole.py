@@ -865,7 +865,7 @@ class GConsole(wx.EvtHandler):
                 location=gisenv["LOCATION_NAME"],
                 mapset=mask_mapset,
                 action=action,
-                map=name,
+                map=mask_name,
                 element="raster",
             )
 

@@ -96,6 +96,8 @@ class SbMask:
         mask_layer = gs.parse_command("r.mask.status", format="json")["name"].split(
             "@", maxsplit=1
         )[0]
+        # This assumes mask is always in the current mapset (or the event is triggered
+        # only for the current mapset).
         if mask_layer in {map, newname}:
             self.Refresh()
             self.giface.updateMap.emit()
