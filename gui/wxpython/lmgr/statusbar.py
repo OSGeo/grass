@@ -93,10 +93,9 @@ class SbMask:
         :param str map: map that is changed
         :param str newname: new map
         """
-        # TODO: Use giface here.
-        mask_layer = gs.parse_command("r.mask.status", format="json", env=env_run)[
-            "configured_name"
-        ].split("@", maxsplit=1)[0]
+        mask_layer = gs.parse_command("r.mask.status", format="json")["name"].split(
+            "@", maxsplit=1
+        )[0]
         if mask_layer in {map, newname}:
             self.Refresh()
             self.giface.updateMap.emit()
@@ -127,7 +126,7 @@ class SbMask:
 
     def Refresh(self):
         """Show mask in the statusbar if mask file found"""
-        if gs.parse_command("r.mask.status", format="json", env=env_run)["present"]:
+        if gs.parse_command("r.mask.status", format="json")["present"]:
             self.Show()
         else:
             self.Hide()
@@ -143,8 +142,7 @@ class SbMask:
             dlg.Destroy()
             return
         RunCommand("r.mask", flags="r")
-        # TODO: Use giface here.
-        mask_full_name = gs.parse_command("r.mask.status", format="json", env=env_run)[
+        mask_full_name = gs.parse_command("r.mask.status", format="json")[
             "configured_name"
         ]
         mask_name, mask_mapset = mask_full_name.split("@", maxsplit=1)

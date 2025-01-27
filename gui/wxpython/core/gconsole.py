@@ -857,15 +857,13 @@ class GConsole(wx.EvtHandler):
                 if p.get("name") == "r" and p.get("value"):
                     action = "delete"
             # TODO: Use giface here.
-            mask_full_name = gs.parse_command(
-                "r.mask.status", format="json", env=env_run
-            )["configured_name"]
+            mask_full_name = gs.parse_command("r.mask.status", format="json")["name"]
             mask_name, mask_mapset = mask_full_name.split("@", maxsplit=1)
             gisenv = gs.gisenv()
             self._giface.grassdbChanged.emit(
                 grassdb=gisenv["GISDBASE"],
                 location=gisenv["LOCATION_NAME"],
-                mapset=mapset,
+                mapset=mask_mapset,
                 action=action,
                 map=name,
                 element="raster",
