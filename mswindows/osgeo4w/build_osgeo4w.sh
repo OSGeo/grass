@@ -55,7 +55,7 @@ CXXFLAGS="$CXXFLAGS -pipe" \
     --with-openmp \
     --with-postgres \
     --with-postgres-includes=${OSGEO4W_ROOT_MSYS}/include \
-    --with-postgres-libs=${OSGEO4W_ROOT_MSYS}/lib \
+    --with-postgres-libs=${SRC}/mswindows/osgeo4w/lib \
     --with-proj-includes=${OSGEO4W_ROOT_MSYS}/include \
     --with-proj-libs=${OSGEO4W_ROOT_MSYS}/lib \
     --with-proj-share=${OSGEO4W_ROOT_MSYS}/share/proj \
