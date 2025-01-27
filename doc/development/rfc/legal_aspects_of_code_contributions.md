@@ -66,4 +66,4 @@ source repository:
 Questions regarding GRASS GIS should be directed to the
 GRASS Development Team at the following address:
 
-Internet: <http://grass.osgeo.org/home/contact-us/>
+Internet: <https://grass.osgeo.org/support/community/>

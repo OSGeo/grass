@@ -377,28 +377,28 @@ class SpatioTemporalTopologyBuilder:
 
     """  # noqa: E501
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._reset()
         # 0001-01-01 00:00:00
         self._timeref = datetime(1, 1, 1)
 
-    def _reset(self):
+    def _reset(self) -> None:
         self._store = {}
         self._first = None
         self._iteratable = False
 
-    def _set_first(self, first):
+    def _set_first(self, first) -> None:
         self._first = first
         self._insert(first)
 
-    def _detect_first(self):
+    def _detect_first(self) -> None:
         if len(self) > 0:
             prev_ = list(self._store.values())[0]
             while prev_ is not None:
                 self._first = prev_
                 prev_ = prev_.prev()
 
-    def _insert(self, t):
+    def _insert(self, t) -> None:
         self._store[t.get_id()] = t
 
     def get_first(self):
@@ -408,7 +408,7 @@ class SpatioTemporalTopologyBuilder:
         """
         return self._first
 
-    def _build_internal_iteratable(self, maps, spatial):
+    def _build_internal_iteratable(self, maps, spatial) -> None:
         """Build an iteratable temporal topology structure for all maps in
         the list and store the maps internally
 
@@ -417,7 +417,7 @@ class SpatioTemporalTopologyBuilder:
         The maps will be added to the object, so they can be
         accessed using the iterator of this class
 
-        :param maps: A sorted (by start_time)list of abstract_dataset
+        :param maps: A sorted (by start_time) list of abstract_dataset
                      objects with initiated temporal extent
         """
         self._build_iteratable(maps, spatial)
@@ -428,7 +428,7 @@ class SpatioTemporalTopologyBuilder:
         # Detect the first map
         self._detect_first()
 
-    def _build_iteratable(self, maps, spatial):
+    def _build_iteratable(self, maps, spatial) -> None:
         """Build an iteratable temporal topology structure for
         all maps in the list
 
@@ -529,7 +529,7 @@ class SpatioTemporalTopologyBuilder:
 
         return tree
 
-    def build(self, mapsA, mapsB=None, spatial=None):
+    def build(self, mapsA, mapsB=None, spatial=None) -> None:
         """Build the spatio-temporal topology structure between
         one or two unordered lists of abstract dataset objects
 
@@ -586,7 +586,7 @@ class SpatioTemporalTopologyBuilder:
 
                 A = mapsA[i]
                 B = mapsB[j]
-                set_temoral_relationship(A, B, relation)
+                set_temporal_relationship(A, B, relation)
 
                 if spatial is not None:
                     relation = mapsB[j].spatial_relation(mapsA[i])
@@ -609,17 +609,17 @@ class SpatioTemporalTopologyBuilder:
     def __getitem__(self, index):
         return self._store[index.get_id()]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._store)
 
-    def __contains__(self, _map):
-        return _map in self._store.values()
+    def __contains__(self, map_) -> bool:
+        return map_ in self._store.values()
 
 
 ###############################################################################
 
 
-def set_temoral_relationship(A, B, relation):
+def set_temporal_relationship(A, B, relation) -> None:
     if relation in {"equal", "equals"}:
         if A != B:
             if not B.get_equal() or (B.get_equal() and A not in B.get_equal()):
@@ -685,7 +685,7 @@ def set_temoral_relationship(A, B, relation):
 ###############################################################################
 
 
-def set_spatial_relationship(A, B, relation):
+def set_spatial_relationship(A, B, relation) -> None:
     if relation == "equivalent":
         if A != B:
             if not B.get_equivalent() or (
@@ -731,7 +731,7 @@ def set_spatial_relationship(A, B, relation):
 ###############################################################################
 
 
-def print_temporal_topology_relationships(maps1, maps2=None, dbif=None):
+def print_temporal_topology_relationships(maps1, maps2=None, dbif=None) -> None:
     """Print the temporal relationships of the
     map lists maps1 and maps2 to stdout.
 
@@ -761,7 +761,7 @@ def print_temporal_topology_relationships(maps1, maps2=None, dbif=None):
 
 def print_spatio_temporal_topology_relationships(
     maps1, maps2=None, spatial="2D", dbif=None
-):
+) -> None:
     """Print the temporal relationships of the
     map lists maps1 and maps2 to stdout.
 
@@ -832,13 +832,13 @@ def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
 def create_temporal_relation_sql_where_statement(
     start,
     end,
-    use_start=True,
-    use_during=False,
-    use_overlap=False,
-    use_contain=False,
-    use_equal=False,
-    use_follows=False,
-    use_precedes=False,
+    use_start: bool = True,
+    use_during: bool = False,
+    use_overlap: bool = False,
+    use_contain: bool = False,
+    use_equal: bool = False,
+    use_follows: bool = False,
+    use_precedes: bool = False,
 ):
     """Create a SQL WHERE statement for temporal relation selection of maps in
     space time datasets

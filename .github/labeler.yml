@@ -96,7 +96,7 @@ Windows:
 macOS:
   - changed-files:
       - any-glob-to-any-file:
-          - macosx/**
+          - macos/**
 Linux:
   - changed-files:
       - any-glob-to-any-file:
@@ -145,7 +145,7 @@ notebook:
   - changed-files:
       - any-glob-to-any-file:
           - '**/*.ipynb'
-          - doc/notebooks/**
+          - doc/examples/notebooks/**
           - python/grass/jupyter/**
 C:
   - changed-files:

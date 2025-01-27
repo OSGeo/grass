@@ -419,9 +419,11 @@ class VNETAnalyses:
         cats = self.data.GetAnalysisProperties()["cmdParams"]["cats"]
 
         # Creates part of cmd fro analysis
-        cmdParams = [analysis]
-        cmdParams.extend(self._setInputParams(analysis, params, flags))
-        cmdParams.append("output=" + output)
+        cmdParams = [
+            analysis,
+            *self._setInputParams(analysis, params, flags),
+            "output=" + output,
+        ]
 
         cmdPts = []
         for cat in cats:
@@ -513,9 +515,11 @@ class VNETAnalyses:
 
     def _runTurnsAn(self, analysis, output, params, flags, catPts):
         # Creates part of cmd fro analysis
-        cmdParams = [analysis]
-        cmdParams.extend(self._setInputParams(analysis, params, flags))
-        cmdParams.append("output=" + output)
+        cmdParams = [
+            analysis,
+            *self._setInputParams(analysis, params, flags),
+            "output=" + output,
+        ]
 
         cats = {}
         for cat_name, pts_coor in catPts.items():
@@ -622,9 +626,11 @@ class VNETAnalyses:
         """Called for all v.net.* analysis (except v.net.path)"""
 
         # Creates part of cmd fro analysis
-        cmdParams = [analysis]
-        cmdParams.extend(self._setInputParams(analysis, params, flags))
-        cmdParams.append("output=" + output)
+        cmdParams = [
+            analysis,
+            *self._setInputParams(analysis, params, flags),
+            "output=" + output,
+        ]
 
         cats = self.data.GetAnalysisProperties()["cmdParams"]["cats"]
 
@@ -765,9 +771,7 @@ class VNETAnalyses:
         anProps = self.data.GetAnalysisProperties()
         cats = anProps["cmdParams"]["cats"]
 
-        ptByCats = {}
-        for cat in anProps["cmdParams"]["cats"]:
-            ptByCats[cat[0]] = []
+        ptByCats = {cat[0]: [] for cat in anProps["cmdParams"]["cats"]}
 
         for i in range(self.pts_data.GetPointsCount()):
             pt_data = self.pts_data.GetPointData(i)
@@ -893,13 +897,13 @@ class VNETHistory:
             ptDataHist = histStepData["points"]["pt" + str(iPt)]
 
             e, n = ptDataHist["coords"]
-            pt_data = {"e": e, "n": n}
-
-            pt_data["type"] = int(ptDataHist["catIdx"])
-
-            pt_data["topology"] = ptDataHist["topology"]
-
-            pt_data["use"] = ptDataHist["checked"]
+            pt_data = {
+                "e": e,
+                "n": n,
+                "type": int(ptDataHist["catIdx"]),
+                "topology": ptDataHist["topology"],
+                "use": ptDataHist["checked"],
+            }
 
             pts.append(pt_data)
 
@@ -1000,7 +1004,7 @@ class VNETHistory:
 
 
 def AddTmpMapAnalysisMsg(mapName, tmp_maps):  # TODO
-    """Wraped AddTmpVectMap"""
+    """Wraps AddTmpVectMap"""
     msg = _(
         "Temporary map %s  already exists.\n"
         + "Do you want to continue in analysis and overwrite it?"

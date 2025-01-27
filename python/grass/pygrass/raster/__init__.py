@@ -13,6 +13,7 @@ import grass.lib.rowio as librowio
 
 libgis.G_gisinit("")
 
+# flake8: noqa: E402
 # import pygrass modules
 from grass.pygrass.errors import must_be_open
 from grass.pygrass.gis.region import Region
@@ -24,6 +25,8 @@ from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.buffer import Buffer
 from grass.pygrass.raster.segment import Segment
 from grass.pygrass.raster.rowio import RowIO
+
+# flake8: qa
 
 WARN_OVERWRITE = "Raster map <{0}> already exists and will be overwritten"
 
@@ -130,9 +133,6 @@ class RasterRow(RasterAbstractBase):
 
     """
 
-    def __init__(self, name, mapset="", *args, **kargs):
-        super().__init__(name, mapset, *args, **kargs)
-
     # mode = "r", method = "row",
     @must_be_open
     def get_row(self, row, row_buffer=None):
@@ -192,17 +192,16 @@ class RasterRow(RasterAbstractBase):
         self.overwrite = overwrite if overwrite is not None else self.overwrite
 
         if self.mode == "r":
-            if self.exist():
-                self.info.read()
-                self.cats.mtype = self.mtype
-                self.cats.read()
-                self.hist.read()
-                self._fd = libraster.Rast_open_old(self.name, self.mapset)
-                self._gtype = libraster.Rast_get_map_type(self._fd)
-                self.mtype = RTYPE_STR[self._gtype]
-            else:
+            if not self.exist():
                 str_err = _("The map does not exist, I can't open in 'r' mode")
                 raise OpenError(str_err)
+            self.info.read()
+            self.cats.mtype = self.mtype
+            self.cats.read()
+            self.hist.read()
+            self._fd = libraster.Rast_open_old(self.name, self.mapset)
+            self._gtype = libraster.Rast_get_map_type(self._fd)
+            self.mtype = RTYPE_STR[self._gtype]
         elif self.mode == "w":
             if self.exist():
                 if not self.overwrite:
@@ -214,7 +213,8 @@ class RasterRow(RasterAbstractBase):
                 raise OpenError(_("Raster type not defined"))
             self._fd = libraster.Rast_open_new(self.name, self._gtype)
         else:
-            raise OpenError("Open mode: %r not supported, valid mode are: r, w")
+            msg = "Open mode: %r not supported, valid mode are: r, w"
+            raise OpenError(msg)
         # read rows and cols from the active region
         self._rows = libraster.Rast_window_rows()
         self._cols = libraster.Rast_window_cols()
@@ -336,7 +336,8 @@ class RasterSegment(RasterAbstractBase):
             if key >= self._rows:
                 raise IndexError(_("Index out of range: %r.") % key)
             return self.put_row(key, row)
-        raise TypeError("Invalid argument type.")
+        msg = "Invalid argument type."
+        raise TypeError(msg)
 
     @must_be_open
     def map2segment(self):
@@ -743,10 +744,11 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
     mset = utils.get_mapset_raster(test_raster_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         Module("g.remove", flags="f", type="raster", name=test_raster_name)
     mset = utils.get_mapset_raster(test_raster_name + "_segment", mapset="")
     if mset:
+        # Remove the generated raster map, if exists
         Module("g.remove", flags="f", type="raster", name=test_raster_name + "_segment")
