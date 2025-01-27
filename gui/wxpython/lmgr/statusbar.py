@@ -142,9 +142,7 @@ class SbMask:
             dlg.Destroy()
             return
         RunCommand("r.mask", flags="r")
-        mask_full_name = gs.parse_command("r.mask.status", format="json")[
-            "configured_name"
-        ]
+        mask_full_name = gs.parse_command("r.mask.status", format="json")["name"]
         mask_name, mask_mapset = mask_full_name.split("@", maxsplit=1)
         gisenv = gs.gisenv()
         self.giface.grassdbChanged.emit(
