@@ -97,7 +97,8 @@ compare_result()
  fi
 }
 
-#check if a MASK is already present:
+# Deactive the current mask, by using our own mask name,
+# but not creating any mask.
 MASKTMP=mask.$TMPNAME
 export GRASS_MASK=$MASKTMP
 

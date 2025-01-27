@@ -7,7 +7,7 @@
 #               Markus Neteler
 #               Converted to Python by Glynn Clements
 #               Markus Metz
-# PURPOSE:      Facilitates creation of raster MASK
+# PURPOSE:      Facilitates creation of 2D raster mask
 # COPYRIGHT:    (C) 2005-2013 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
@@ -17,7 +17,7 @@
 #############################################################################
 
 # %module
-# % description: Creates a MASK for limiting raster operation.
+# % description: Creates a raster mask for limiting raster operation.
 # % keyword: raster
 # % keyword: mask
 # % keyword: null data
