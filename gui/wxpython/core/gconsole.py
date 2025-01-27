@@ -856,7 +856,6 @@ class GConsole(wx.EvtHandler):
             for p in task.get_options()["flags"]:
                 if p.get("name") == "r" and p.get("value"):
                     action = "delete"
-            # TODO: Use giface here.
             mask_full_name = gs.parse_command("r.mask.status", format="json")["name"]
             mask_name, mask_mapset = mask_full_name.split("@", maxsplit=1)
             gisenv = gs.gisenv()
