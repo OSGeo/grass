@@ -117,6 +117,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	rm -f mswindows/osgeo4w/package.log.*
 
 	mkdir -p mswindows/osgeo4w/lib
+	rm -f $OSGEO4W_ROOT_MSYS/lib/libpq.a
+	cp -uv $OSGEO4W_ROOT_MSYS/lib/libpq.lib mswindows/osgeo4w/lib/libpq.lib
 	cp -uv $OSGEO4W_ROOT_MSYS/lib/sqlite3_i.lib mswindows/osgeo4w/lib/sqlite3.lib
 
 
