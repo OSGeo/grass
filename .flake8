@@ -25,7 +25,7 @@ per-file-ignores =
     gui/wxpython/image2target/g.gui.image2target.py: E501
     gui/wxpython/photo2image/g.gui.photo2image.py: E501
     gui/wxpython/psmap/*: E501
-    gui/wxpython/vdigit/*: E722, F405, F403
+    gui/wxpython/vdigit/*: F405, F403
     gui/wxpython/animation/g.gui.animation.py: E501
     gui/wxpython/tplot/g.gui.tplot.py: E501
     gui/wxpython/iclass/g.gui.iclass.py: E501
