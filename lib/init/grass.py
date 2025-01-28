@@ -525,8 +525,7 @@ def write_gisrcrc(gisrcrc, gisrc, skip_variable=None):
                 del lines[number]
             number += 1
     with open(gisrcrc, "w") as f:
-        for line in lines:
-            f.write(line)
+        f.writelines(lines)
 
 
 def read_env_file(path):
@@ -543,8 +542,7 @@ def write_gisrc(kv, filename, append=False):
     # use append=True to avoid a race condition between write_gisrc() and
     # grass_prompt() on startup (PR #548)
     f = open(filename, "a" if append else "w")
-    for k, v in kv.items():
-        f.write("%s: %s\n" % (k, v))
+    f.writelines("%s: %s\n" % (k, v) for k, v in kv.items())
     f.close()
 
 

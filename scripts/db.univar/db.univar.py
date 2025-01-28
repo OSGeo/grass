@@ -89,8 +89,7 @@ def sortfile(infile, outfile):
         for i in range(len(lines)):
             lines[i] = float(lines[i].rstrip("\r\n"))
         lines.sort()
-        for line in lines:
-            outf.write(str(line) + "\n")
+        outf.writelines(str(line) + "\n" for line in lines)
 
     inf.close()
     outf.close()
