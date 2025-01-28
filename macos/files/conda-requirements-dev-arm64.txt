@@ -1,3 +1,4 @@
+boost
 cairo
 clangxx_osx-arm64
 clang_osx-arm64
@@ -11,7 +12,6 @@ gettext
 ghostscript
 giflib
 git
-ipython
 krb5
 lastools
 libgdal-arrow-parquet
@@ -28,6 +28,7 @@ libjpeg-turbo
 libpng
 libsvm
 libtiff
+lld
 llvm-openmp
 matplotlib
 numpy<2
@@ -39,15 +40,10 @@ pkg-config
 ply
 postgresql
 proj
-pytest
-pytest-github-actions-annotate-failures
-pytest-timeout
-pytest-xdist
-python
 python.app
-pyyaml
+python<3.13
 setuptools
 six
 sqlite
-wxpython
+wxpython=4.2.2
 zstd

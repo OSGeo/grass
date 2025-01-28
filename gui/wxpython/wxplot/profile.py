@@ -446,8 +446,10 @@ class ProfileFrame(BasePlotFrame):
                     dlg.Destroy()
                     return
 
-                for datapair in self.raster[r]["datalist"]:
-                    fd.write("%.6f,%.6f\n" % (float(datapair[0]), float(datapair[1])))
+                fd.writelines(
+                    "%.6f,%.6f\n" % (float(datapair[0]), float(datapair[1]))
+                    for datapair in self.raster[r]["datalist"]
+                )
 
                 fd.close()
 

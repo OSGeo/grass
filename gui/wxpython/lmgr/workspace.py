@@ -448,8 +448,7 @@ class WorkspaceManager:
         try:
             mfile = open(filename, "wb")
             tmpfile.seek(0)
-            for line in tmpfile.readlines():
-                mfile.write(line)
+            mfile.writelines(tmpfile.readlines())
         except OSError:
             GError(
                 parent=self.lmgr,
