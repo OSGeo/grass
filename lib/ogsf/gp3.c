@@ -243,13 +243,15 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
                                 ((int)((blu) << 16) & BLU_MASK);
         }
         if (gp->tstyle->color_column) {
-            nvals = db_select_value(driver, Fi->table, Fi->key, cat,
+            if (driver) {
+                nvals = db_select_value(driver, Fi->table, Fi->key, cat,
                                     gp->tstyle->color_column, &value);
-            if (nvals < 1)
-                continue;
-            str = db_get_value_string(&value);
-            if (!str)
-                continue;
+                if (nvals < 1)
+                    continue;
+                str = db_get_value_string(&value);
+                if (!str)
+                    continue;
+            }
             if (G_str_to_color(str, &red, &grn, &blu) != 1) {
                 G_warning(_("Invalid color definition (%s)"), str);
                 gpt->style->color = gp->style->color;
@@ -297,7 +299,10 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
             _("%d points without category. "
               "Unable to determine color rules for features without category."),
             nskipped);
-    db_close_database_shutdown_driver(driver);
-    Vect_destroy_field_info(Fi);
+    if (driver) {
+        db_close_database_shutdown_driver(driver);
+        Vect_destroy_field_info(Fi);
+    }
+    
     return npts;
 }
