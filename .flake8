@@ -39,7 +39,6 @@ per-file-ignores =
     # TODO: Is this really needed?
     python/grass/jupyter/__init__.py: E501
     python/grass/pygrass/vector/__init__.py: E402
-    # Current benchmarks/tests are changing sys.path before import.
     # Configuration file for Sphinx:
     # Ignoring import/code mix and line length.
     # Files not managed by Black
