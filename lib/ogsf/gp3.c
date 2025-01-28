@@ -181,7 +181,7 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
     const char *mapset;
     char *fname;
 
-    dbDriver *driver;
+    dbDriver *driver = NULL;
     dbValue value;
 
     if (!gp || !gp->tstyle || !gp->filename)
