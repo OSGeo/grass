@@ -1715,9 +1715,9 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     fi
 }}
 PROMPT_COMMAND=grass_prompt\n""".format(
-            both_masks=_("2D and 3D raster MASKs present"),
-            mask2d=_("Raster MASK present"),
-            mask3d=_("3D raster MASK present"),
+            both_masks=_("2D and 3D raster masks present"),
+            mask2d=_("Raster mask present"),
+            mask3d=_("3D raster mask present"),
             mask2d_test=mask2d_test,
             mask3d_test=mask3d_test,
             specific_addition=specific_addition,
