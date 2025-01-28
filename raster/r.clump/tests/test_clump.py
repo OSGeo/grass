@@ -1,44 +1,58 @@
-import pytest
-from grass.script import run_command, read_command, parse_command
+import grass.script as gs
 
 
-@pytest.fixture(scope="module")
-def setup_map():
-    """Set up a temporary region and generate a clumped map."""
-    # Set the region
-    run_command("g.region", n=3, s=0, e=3, w=0, res=1)
+def results_check(actual_categories, expected_categories):
+    # Test if keys match
+    assert set(actual_categories.keys()) == set(expected_categories.keys())
 
-    # Create the custom map
-    #  5   null null
-    # null  5   null
-    # null  6    6
-    run_command(
-        "r.mapcalc",
-        expression=(
-            "custom_map = "
-            "if(row() == 1 && col() == 1, 5, "
-            "if(row() == 2 && col() == 2, 5, "
-            "if(row() == 3 && col() >= 2, 6, null())))"
-        ),
-        overwrite=True,
-    )
-    yield
-
-    # Teardown: Remove maps
-    run_command(
-        "g.remove", flags="f", type="raster", name=["custom_map", "clumped_map"]
-    )
+    # Test to check if labels are empty
+    for key in expected_categories.keys():
+        assert actual_categories[key] == expected_categories[key]
 
 
-def test_clump_basic(setup_map):
+def test_clump_basic(setup_maps):
     """Test basic clumped map."""
+    session = setup_maps
+    gs.run_command(
+        "r.clump",
+        input="custom_map",
+        output="clumped_map",
+        overwrite=True,
+        env=session.env,
+    )
 
-    run_command("r.clump", input="custom_map", output="clumped_map", overwrite=True)
-
-    output_maps = parse_command("g.list", type="raster")
+    output_maps = gs.parse_command("g.list", type="raster", env=session.env)
     assert "clumped_map" in output_maps, "Output raster map 'clumped_map' should exist"
 
-    category_output = read_command("r.category", map="clumped_map").strip().split("\n")
+    category_output = gs.parse_command("r.category", map="clumped_map", env=session.env)
+
+    actual_categories = {
+        int(line.split("\t")[0]): line.split("\t")[1].strip() if "\t" in line else ""
+        for line in category_output
+    }
+
+    expected_categories = {1: "", 2: "", 3: "", 4: ""}
+
+    results_check(actual_categories, expected_categories)
+
+
+def test_clump_diagonal(setup_maps):
+    """Test clumped map with diagonal connectivity."""
+    session = setup_maps
+    gs.run_command(
+        "r.clump",
+        input="custom_map",
+        output="clumped_map",
+        flags="d",
+        overwrite=True,
+        env=session.env,
+    )
+
+    output_maps = gs.parse_command("g.list", type="raster", env=session.env)
+    assert "clumped_map" in output_maps, "Output raster map 'clumped_map' should exist"
+
+    category_output = gs.parse_command("r.category", map="clumped_map", env=session.env)
+
     actual_categories = {
         int(line.split("\t")[0]): line.split("\t")[1].strip() if "\t" in line else ""
         for line in category_output
@@ -46,20 +60,26 @@ def test_clump_basic(setup_map):
 
     expected_categories = {1: "", 2: "", 3: ""}
 
-    assert set(actual_categories.keys()) == set(expected_categories.keys())
+    results_check(actual_categories, expected_categories)
 
 
-def test_clump_diagonal(setup_map):
-    """Test clumped map with diagonal connectivity."""
-
-    run_command(
-        "r.clump", input="custom_map", output="clumped_map", flags="d", overwrite=True
+def test_clump_minsize(setup_maps):
+    """Test clumped map with minimum size parameter."""
+    session = setup_maps
+    gs.run_command(
+        "r.clump",
+        input="custom_map",
+        output="clumped_map",
+        minsize=2,
+        overwrite=True,
+        env=session.env,
     )
 
-    output_maps = parse_command("g.list", type="raster")
+    output_maps = gs.parse_command("g.list", type="raster", env=session.env)
     assert "clumped_map" in output_maps, "Output raster map 'clumped_map' should exist"
 
-    category_output = read_command("r.category", map="clumped_map").strip().split("\n")
+    category_output = gs.parse_command("r.category", map="clumped_map", env=session.env)
+
     actual_categories = {
         int(line.split("\t")[0]): line.split("\t")[1].strip() if "\t" in line else ""
         for line in category_output
@@ -67,4 +87,31 @@ def test_clump_diagonal(setup_map):
 
     expected_categories = {1: "", 2: ""}
 
-    assert set(actual_categories.keys()) == set(expected_categories.keys())
+    results_check(actual_categories, expected_categories)
+
+
+def test_clump_threshold(setup_maps):
+    """Test clumped map with threshold parameter."""
+    session = setup_maps
+    gs.run_command(
+        "r.clump",
+        input="custom_map1",
+        output="clumped_map",
+        threshold=0.2,
+        overwrite=True,
+        env=session.env,
+    )
+
+    output_maps = gs.parse_command("g.list", type="raster", env=session.env)
+    assert "clumped_map" in output_maps, "Output raster map 'clumped_map' should exist"
+
+    category_output = gs.parse_command("r.category", map="clumped_map", env=session.env)
+
+    actual_categories = {
+        int(line.split("\t")[0]): line.split("\t")[1].strip() if "\t" in line else ""
+        for line in category_output
+    }
+
+    expected_categories = {1: "", 2: "", 3: ""}
+
+    results_check(actual_categories, expected_categories)
