@@ -73,8 +73,6 @@ extern int min(int, int);
 extern int max(int, int);
 extern void create_observation_points(void);
 
-extern double frac;
-
 extern float **zz, **cchez;
 extern double **v1, **v2, **slope;
 extern double **gama, **gammas, **si, **inf, **sigma;
@@ -85,18 +83,14 @@ extern struct point3D *w;
 extern struct point3D *stack;
 extern struct point2D *vavg;
 
-extern double hbeta;
-extern double hhmax, sisum, vmean;
+extern double sisum, vmean;
 extern double infsum, infmean;
 extern int maxw, maxwa, nwalk;
 extern double rwalk, xrand, yrand;
-extern double chmean, si0, deltap, deldif, cch, hhc, halpha;
-extern double eps;
+extern double chmean, si0, deltap, deldif, cch, hhc;
 extern int nstack;
-extern int iterout;
 extern int miter, nwalka;
 extern double timec;
-extern int ts, timesec;
 
 extern double rain_val;
 extern double manin_val;

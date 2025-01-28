@@ -310,6 +310,9 @@ int main(int argc, char *argv[])
     G_get_set_window(&cellhd);
 
     Geometry geometry;
+    Settings settings;
+    settings.hhmax = settings.halpha = settings.hbeta = 0;
+    settings.ts = false;
 
     WaterParams_init(&wp);
 
@@ -330,7 +333,7 @@ int main(int argc, char *argv[])
     geometry.yp0 = geometry.ymin + geometry.stepy / 2.;
     geometry.xmax = geometry.xmin + geometry.stepx * (float)geometry.mx;
     geometry.ymax = geometry.ymin + geometry.stepy * (float)geometry.my;
-    wp.hhc = wp.hhmax = 0.;
+    wp.hhc = 0.;
 
     wp.elevin = parm.elevin->answer;
     wp.wdepth = parm.wdepth->answer;
@@ -366,17 +369,17 @@ int main(int argc, char *argv[])
     G_message(_("Number of threads: %d"), threads);
 
     /*      sscanf(parm.nwalk->answer, "%d", &wp.maxwa); */
-    sscanf(parm.niter->answer, "%d", &wp.timesec);
-    sscanf(parm.outiter->answer, "%d", &wp.iterout);
+    sscanf(parm.niter->answer, "%d", &settings.timesec);
+    sscanf(parm.outiter->answer, "%d", &settings.iterout);
     /*    sscanf(parm.density->answer, "%d", &wp.ldemo); */
-    sscanf(parm.diffc->answer, "%lf", &wp.frac);
+    sscanf(parm.diffc->answer, "%lf", &settings.frac);
     sscanf(parm.maninval->answer, "%lf", &wp.manin_val);
 
     /* Recompute timesec from user input in minutes
      * to real timesec in seconds */
-    wp.timesec = wp.timesec * 60;
-    wp.iterout = wp.iterout * 60;
-    if ((wp.timesec / wp.iterout) > 100)
+    settings.timesec = settings.timesec * 60;
+    settings.iterout = settings.iterout * 60;
+    if ((settings.timesec / settings.iterout) > 100)
         G_message(_("More than 100 files are going to be created !!!!!"));
 
     /* compute how big the raster is and set this to appr 2 walkers per cell */
@@ -408,14 +411,14 @@ int main(int argc, char *argv[])
 
     alloc_grids_sediment(&geometry);
 
-    grad_check(&geometry);
+    grad_check(&geometry, &settings);
     init_grids_sediment(&geometry);
     /* treba dat output pre topoerdep */
-    main_loop(&geometry);
+    main_loop(&geometry, &settings);
 
     /* always true for sediment? */
     if (wp.tserie == NULL) {
-        ii = output_data(0, 1., &geometry);
+        ii = output_data(0, 1., &geometry, &settings);
         if (ii != 1)
             G_fatal_error(_("Cannot write raster maps"));
     }

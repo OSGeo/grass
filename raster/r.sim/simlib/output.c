@@ -22,13 +22,14 @@ void free_walkers(void)
 }
 
 static void output_walker_as_vector(int tt_minutes, int ndigit,
-                                    struct TimeStamp *timestamp);
+                                    struct TimeStamp *timestamp,
+                                    Settings *settings);
 
 /* This function was added by Soeren 8. Mar 2011     */
 /* It replaces the site walker output implementation */
 /* Only the 3d coordinates of the walker are stored. */
 void output_walker_as_vector(int tt_minutes, int ndigit,
-                             struct TimeStamp *timestamp)
+                             struct TimeStamp *timestamp, Settings *settings)
 {
     char buf[GNAME_MAX + 10];
     char *outwalk_time = NULL;
@@ -42,7 +43,7 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
 
         /* In case of time series we extent the output name with the time value
          */
-        if (ts == 1) {
+        if (settings->ts) {
             snprintf(buf, sizeof(buf), "%s_%.*d", outwalk, ndigit, tt_minutes);
             outwalk_time = G_store(buf);
             if (Vect_open_new(&Out, outwalk_time, WITH_Z) < 0)
@@ -78,7 +79,7 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
 
         Vect_destroy_line_struct(Points);
         Vect_destroy_cats_struct(Cats);
-        if (ts == 1)
+        if (settings->ts)
             G_write_vector_timestamp(outwalk_time, "1", timestamp);
         else
             G_write_vector_timestamp(outwalk, "1", timestamp);
@@ -89,7 +90,8 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
 
 /* Soeren 8. Mar 2011 TODO:
  * This function needs to be refractured and splittet into smaller parts */
-int output_data(int tt, double ft UNUSED, Geometry *geometry)
+int output_data(int tt, double ft UNUSED, Geometry *geometry,
+                Settings *settings)
 {
 
     FCELL *depth_cell, *disch_cell, *err_cell;
@@ -114,7 +116,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
     FCELL dat1, dat2;
     float a1, a2;
 
-    timemin = (int)(timesec / 60. + 0.5);
+    timemin = (int)(settings->timesec / 60. + 0.5);
     ndigit = 2;
     /* more compact but harder to read:
        ndigit = (int)floor(log10(timesec)) + 2 */
@@ -133,7 +135,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
     G_scan_timestamp(&timestamp, timestamp_buf);
 
     /* Write the output walkers */
-    output_walker_as_vector(tt_minutes, ndigit, &timestamp);
+    output_walker_as_vector(tt_minutes, ndigit, &timestamp, settings);
 
     /* we write in the same region as we used for reading */
 
@@ -146,7 +148,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
 
     if (depth) {
         depth_cell = Rast_allocate_f_buf();
-        if (ts == 1) {
+        if (settings->ts) {
             snprintf(buf, sizeof(buf), "%s.%.*d", depth, ndigit, tt_minutes);
             depth0 = G_store(buf);
             depth_fd = Rast_open_fp_new(depth0);
@@ -157,7 +159,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
 
     if (disch) {
         disch_cell = Rast_allocate_f_buf();
-        if (ts == 1) {
+        if (settings->ts) {
             snprintf(buf, sizeof(buf), "%s.%.*d", disch, ndigit, tt_minutes);
             disch0 = G_store(buf);
             disch_fd = Rast_open_fp_new(disch0);
@@ -168,7 +170,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
 
     if (err) {
         err_cell = Rast_allocate_f_buf();
-        if (ts == 1) {
+        if (settings->ts) {
             snprintf(buf, sizeof(buf), "%s.%.*d", err, ndigit, tt_minutes);
             err0 = G_store(buf);
             err_fd = Rast_open_fp_new(err0);
@@ -179,7 +181,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
 
     if (conc) {
         conc_cell = Rast_allocate_f_buf();
-        if (ts == 1) {
+        if (settings->ts) {
             snprintf(buf, sizeof(buf), "%s.%.*d", conc, ndigit, tt_minutes);
             conc0 = G_store(buf);
             conc_fd = Rast_open_fp_new(conc0);
@@ -190,7 +192,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
 
     if (flux) {
         flux_cell = Rast_allocate_f_buf();
-        if (ts == 1) {
+        if (settings->ts) {
             snprintf(buf, sizeof(buf), "%s.%.*d", flux, ndigit, tt_minutes);
             flux0 = G_store(buf);
             flux_fd = Rast_open_fp_new(flux0);
@@ -201,7 +203,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
 
     if (erdep) {
         erdep_cell = Rast_allocate_f_buf();
-        if (ts == 1) {
+        if (settings->ts) {
             snprintf(buf, sizeof(buf), "%s.%.*d", erdep, ndigit, tt_minutes);
             erdep0 = G_store(buf);
             erdep_fd = Rast_open_fp_new(erdep0);
@@ -326,7 +328,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
         dat2 = (FCELL)gmax;
         Rast_add_f_color_rule(&dat1, 0, 0, 255, &dat2, 0, 0, 0, &colors);
 
-        if (ts == 1) {
+        if (settings->ts) {
             if ((mapst = G_find_file("fcell", depth0, "")) == NULL)
                 G_fatal_error(_("FP raster map <%s> not found"), depth0);
             Rast_write_colors(depth0, mapst, &colors);
@@ -365,7 +367,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
         dat2 = (FCELL)dismax;
         Rast_add_f_color_rule(&dat1, 0, 0, 255, &dat2, 0, 0, 0, &colors);
 
-        if (ts == 1) {
+        if (settings->ts) {
             if ((mapst = G_find_file("cell", disch0, "")) == NULL)
                 G_fatal_error(_("Raster map <%s> not found"), disch0);
             Rast_write_colors(disch0, mapst, &colors);
@@ -402,7 +404,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
         dat2 = (FCELL)dismax;
         Rast_add_f_color_rule(&dat1, 191, 127, 63, &dat2, 0, 0, 0, &colors);
 
-        if (ts == 1) {
+        if (settings->ts) {
             if ((mapst = G_find_file("cell", flux0, "")) == NULL)
                 G_fatal_error(_("Raster map <%s> not found"), flux0);
             Rast_write_colors(flux0, mapst, &colors);
@@ -453,7 +455,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
         dat2 = (FCELL)ermin;
         Rast_add_f_color_rule(&dat1, 255, 0, 0, &dat2, 255, 0, 255, &colors);
 
-        if (ts == 1) {
+        if (settings->ts) {
             if ((mapst = G_find_file("cell", erdep0, "")) == NULL)
                 G_fatal_error(_("Raster map <%s> not found"), erdep0);
             Rast_write_colors(erdep0, mapst, &colors);
@@ -489,7 +491,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
     /* history section */
     if (depth) {
         type = "raster";
-        if (ts == 0) {
+        if (!settings->ts) {
             mapst = G_find_file("cell", depth, "");
             if (mapst == NULL) {
                 G_warning(_("Raster map <%s> not found"), depth);
@@ -504,7 +506,8 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
             &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d", nwalk,
             maxwa, nwalka);
         Rast_append_format_history(
-            &hist, "duration (sec.)=%d, time-serie iteration=%d", timesec, tt);
+            &hist, "duration (sec.)=%d, time-serie iteration=%d",
+            settings->timesec, tt);
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
                                    deltap, vmean);
         Rast_append_format_history(&hist, "mean source (si)=%e, mean infil=%e",
@@ -517,12 +520,12 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
 
         Rast_command_history(&hist);
 
-        if (ts == 1)
+        if (settings->ts)
             Rast_write_history(depth0, &hist);
         else
             Rast_write_history(depth, &hist);
 
-        if (ts == 1)
+        if (settings->ts)
             G_write_raster_timestamp(depth0, &timestamp);
         else
             G_write_raster_timestamp(depth, &timestamp);
@@ -530,7 +533,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
 
     if (disch) {
         type = "raster";
-        if (ts == 0) {
+        if (!settings->ts) {
             mapst = G_find_file("cell", disch, "");
             if (mapst == NULL)
                 G_fatal_error(_("Raster map <%s> not found"), disch);
@@ -543,7 +546,8 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
             &hist, "init.walkers=%d, maxwalk=%d, rem. walkers=%d", nwalk, maxwa,
             nwalka);
         Rast_append_format_history(
-            &hist, "duration (sec.)=%d, time-serie iteration=%d", timesec, tt);
+            &hist, "duration (sec.)=%d, time-serie iteration=%d",
+            settings->timesec, tt);
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
                                    deltap, vmean);
         Rast_append_format_history(&hist, "mean source (si)=%e, mean infil=%e",
@@ -556,12 +560,12 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
 
         Rast_command_history(&hist);
 
-        if (ts == 1)
+        if (settings->ts)
             Rast_write_history(disch0, &hist);
         else
             Rast_write_history(disch, &hist);
 
-        if (ts == 1)
+        if (settings->ts)
             G_write_raster_timestamp(disch0, &timestamp);
         else
             G_write_raster_timestamp(disch, &timestamp);
@@ -569,7 +573,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
 
     if (flux) {
         type = "raster";
-        if (ts == 0) {
+        if (!settings->ts) {
             mapst = G_find_file("cell", flux, "");
             if (mapst == NULL)
                 G_fatal_error(_("Raster map <%s> not found"), flux);
@@ -582,7 +586,8 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
             &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d", nwalk,
             maxwa, nwalka);
         Rast_append_format_history(
-            &hist, "duration (sec.)=%d, time-serie iteration=%d", timesec, tt);
+            &hist, "duration (sec.)=%d, time-serie iteration=%d",
+            settings->timesec, tt);
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
                                    deltap, vmean);
         Rast_append_format_history(&hist, "mean source (si)=%f", si0);
@@ -594,12 +599,12 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry)
 
         Rast_command_history(&hist);
 
-        if (ts == 1)
+        if (settings->ts)
             Rast_write_history(flux0, &hist);
         else
             Rast_write_history(flux, &hist);
 
-        if (ts == 1)
+        if (settings->ts)
             G_write_raster_timestamp(flux0, &timestamp);
         else
             G_write_raster_timestamp(flux, &timestamp);

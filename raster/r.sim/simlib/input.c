@@ -33,11 +33,6 @@ void WaterParams_init(struct WaterParams *wp)
      * difference in between initialization in water and sediment
      * for the variables which are not used and would have been
      * initialized if they were just global variables */
-
-    wp->frac = 0;
-
-    wp->hbeta = 0;
-    wp->hhmax = 0;
     wp->sisum = 0;
     wp->vmean = 0;
     wp->infsum = 0;
@@ -54,15 +49,10 @@ void WaterParams_init(struct WaterParams *wp)
     wp->deldif = 0;
     wp->cch = 0;
     wp->hhc = 0;
-    wp->halpha = 0;
-    wp->eps = 0;
     wp->nstack = 0;
-    wp->iterout = 0;
     wp->miter = 0;
     wp->nwalka = 0;
     wp->timec = 0;
-    wp->ts = 0;
-    wp->timesec = 0;
 
     wp->rain_val = 0;
     wp->manin_val = 0;
@@ -106,10 +96,7 @@ void init_library_globals(struct WaterParams *wp)
 {
     /* this is little bit lengthy and perhaps error-prone
      * but it separates library from its interface */
-    frac = wp->frac;
 
-    hbeta = wp->hbeta;
-    hhmax = wp->hhmax;
     sisum = wp->sisum;
     vmean = wp->vmean;
     infsum = wp->infsum;
@@ -126,15 +113,10 @@ void init_library_globals(struct WaterParams *wp)
     deldif = wp->deldif;
     cch = wp->cch;
     hhc = wp->hhc;
-    halpha = wp->halpha;
-    eps = wp->eps;
     nstack = wp->nstack;
-    iterout = wp->iterout;
     miter = wp->miter;
     nwalka = wp->nwalka;
     timec = wp->timec;
-    ts = wp->ts;
-    timesec = wp->timesec;
 
     rain_val = wp->rain_val;
     manin_val = wp->manin_val;
@@ -322,7 +304,7 @@ int input_data(int rows, int cols)
 /* ************************************************************************* */
 
 /* data preparations, sigma, shear, etc. */
-int grad_check(Geometry *geometry)
+int grad_check(Geometry *geometry, Settings *settings)
 {
     int k, l;
     double zx, zy, zd2, zd4, sinsl;
@@ -446,11 +428,11 @@ int grad_check(Geometry *geometry)
     else
         timec = 1.25;
 
-    miter = (int)(timesec /
+    miter = (int)(settings->timesec /
                   (deltap *
                    timec)); /* number of iterations = number of cells to pass */
-    iterout =
-        (int)(iterout /
+    settings->iterout =
+        (int)(settings->iterout /
               (deltap *
                timec)); /* number of cells to pass for time series output */
 
@@ -498,7 +480,7 @@ int grad_check(Geometry *geometry)
                  *napocitaj ak viac ako 10%a*/
                 /* THIS IS CORRECT SOLUTION currently commented out */
                 if (inf)
-                    inf[k][l] *= timesec;
+                    inf[k][l] *= settings->timesec;
                 if (wdepth)
                     gama[k][l] = 0.;
                 if (et) {

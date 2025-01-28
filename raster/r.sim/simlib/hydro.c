@@ -67,8 +67,6 @@ char *infilval;
 
 struct seed seed;
 
-double frac;
-
 float **zz, **cchez;
 double **v1, **v2, **slope;
 double **gama, **gammas, **si, **inf, **sigma;
@@ -80,18 +78,14 @@ struct point3D *w;
 struct point3D *stack;
 struct point2D *vavg;
 
-double hbeta;
-double hhmax, sisum, vmean;
+double sisum, vmean;
 double infsum, infmean;
 int maxw, maxwa, nwalk;
 double rwalk, xrand, yrand;
-double chmean, si0, deltap, deldif, cch, hhc, halpha;
-double eps;
+double chmean, si0, deltap, deldif, cch, hhc;
 int nstack;
-int iterout;
 int miter, nwalka;
 double timec;
-int ts, timesec;
 
 double rain_val;
 double manin_val;
@@ -104,7 +98,7 @@ struct History history; /* holds meta-data (title, comments,..) */
 /* ******************************************************** */
 /*                       .......... iblock loop */
 
-void main_loop(Geometry *geometry)
+void main_loop(Geometry *geometry, Settings *settings)
 {
     int i, ii, l, k;
     int iw, iblock, lw;
@@ -161,12 +155,12 @@ void main_loop(Geometry *geometry)
         }
         nwalk = lw;
         G_debug(2, " nwalk, maxw %d %d", nwalk, MAXW);
-        G_debug(2, " walkwe (walk weight),frac %f %f", walkwe, frac);
+        G_debug(2, " walkwe (walk weight),frac %f %f", walkwe, settings->frac);
 
         stxm = geometry->stepx * (double)(geometry->mx + 1) - geometry->xmin;
         stym = geometry->stepy * (double)(geometry->my + 1) - geometry->ymin;
         nwalka = 0;
-        deldif = sqrt(deltap) * frac; /* diffuse factor */
+        deldif = sqrt(deltap) * settings->frac; /* diffuse factor */
 
         factor = deltap * sisum / (rwalk * (double)nblock);
 
@@ -181,8 +175,8 @@ void main_loop(Geometry *geometry)
         for (i = 1; i <= miter;
              i++) { /* iteration loop depending on simulation time and deltap */
             G_percent(i, miter, 1);
-            iter1 = i / iterout;
-            iter1 *= iterout;
+            iter1 = i / settings->iterout;
+            iter1 *= settings->iterout;
             if (iter1 == i) {
                 /* nfiterw = i / iterout + 10;
                    nfiterh = i / iterout + 40; */
@@ -282,10 +276,10 @@ void main_loop(Geometry *geometry)
 #endif
                             hhc = pow(d1, 3. / 5.);
 
-                            if (hhc > hhmax &&
+                            if (hhc > settings->hhmax &&
                                 wdepth == NULL) { /* increased diffusion if
                                                      w.depth > hhmax */
-                                dif[k][l] = (halpha + 1) * deldif;
+                                dif[k][l] = (settings->halpha + 1) * deldif;
                                 velx = vavg[lw].x;
                                 vely = vavg[lw].y;
                             }
@@ -310,9 +304,11 @@ void main_loop(Geometry *geometry)
                                 (velx + dif[k][l] * gaux); /* move the walker */
                             w[lw].y += (vely + dif[k][l] * gauy);
 
-                            if (hhc > hhmax && wdepth == NULL) {
-                                vavg[lw].x = hbeta * (vavg[lw].x + v1[k][l]);
-                                vavg[lw].y = hbeta * (vavg[lw].y + v2[k][l]);
+                            if (hhc > settings->hhmax && wdepth == NULL) {
+                                vavg[lw].x =
+                                    settings->hbeta * (vavg[lw].x + v1[k][l]);
+                                vavg[lw].y =
+                                    settings->hbeta * (vavg[lw].y + v2[k][l]);
                             }
 
                             if (w[lw].x <= geometry->xmin ||
@@ -375,14 +371,14 @@ void main_loop(Geometry *geometry)
                 } /* lw loop */
             }
 
-            if (i == iter1 && ts == 1) {
+            if (i == iter1 && settings->ts) {
                 /* call output for iteration output */
                 if (erdep != NULL)
                     erod(gama, geometry); /* divergence of gama field */
 
                 conn = (double)nblock / (double)iblock;
                 itime = (int)(i * deltap * timec);
-                ii = output_data(itime, conn, geometry);
+                ii = output_data(itime, conn, geometry, settings);
                 if (ii != 1)
                     G_fatal_error(_("Unable to write raster maps"));
             }
@@ -449,10 +445,10 @@ void main_loop(Geometry *geometry)
     /*                       ........ end of iblock loop */
 
     /* Write final maps here because we know the last time stamp here */
-    if (ts == 0) {
+    if (!settings->ts) {
         conn = (double)nblock / (double)iblock;
         itime = (int)(i * deltap * timec);
-        ii = output_data(itime, conn, geometry);
+        ii = output_data(itime, conn, geometry, settings);
         if (ii != 1)
             G_fatal_error(_("Cannot write raster maps"));
     }

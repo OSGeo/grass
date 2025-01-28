@@ -19,21 +19,25 @@ typedef struct {
     double xp0, yp0;
 } Geometry;
 
-struct WaterParams {
-    double frac;
-
+typedef struct {
+    double halpha;
     double hbeta;
-    double hhmax, sisum, vmean;
+    double hhmax;
+    double frac; /* Water diffusion constant */
+    int iterout; /* Time interval for creating output maps [minutes] */
+    int timesec; /* Time used for iterations [minutes] */
+    bool ts;     /* Time series output */
+} Settings;
+
+struct WaterParams {
+    double sisum, vmean;
     double infsum, infmean;
     int maxw, maxwa, nwalk;
     double rwalk, xrand, yrand;
-    double chmean, si0, deltap, deldif, cch, hhc, halpha;
-    double eps;
+    double chmean, si0, deltap, deldif, cch, hhc;
     int nstack;
-    int iterout;
     int miter, nwalka;
     double timec;
-    int ts, timesec;
 
     double rain_val;
     double manin_val;
@@ -77,9 +81,9 @@ void alloc_grids_sediment(Geometry *geometry);
 void init_grids_sediment(Geometry *geometry);
 
 int input_data(int rows, int cols);
-int grad_check(Geometry *geometry);
-void main_loop(Geometry *geometry);
-int output_data(int, double, Geometry *geometry);
+int grad_check(Geometry *geometry, Settings *settings);
+void main_loop(Geometry *geometry, Settings *settings);
+int output_data(int, double, Geometry *geometry, Settings *settings);
 int output_et(Geometry *geometry);
 void free_walkers(void);
 void erod(double **, Geometry *geometry);

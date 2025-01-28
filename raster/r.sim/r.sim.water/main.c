@@ -344,6 +344,7 @@ int main(int argc, char *argv[])
     G_get_set_window(&cellhd);
 
     Geometry geometry;
+    Settings settings;
 
     WaterParams_init(&wp);
 
@@ -371,7 +372,7 @@ int main(int argc, char *argv[])
 
     G_debug(3, "xmax: %f, ymax: %f", geometry.xmax, geometry.ymax);
 
-    wp.ts = flag.tserie->answer;
+    settings.ts = flag.tserie->answer;
 
     wp.elevin = parm.elevin->answer;
     wp.dxin = parm.dxin->answer;
@@ -387,12 +388,12 @@ int main(int argc, char *argv[])
 
     G_debug(3, "Parsing numeric parameters");
 
-    sscanf(parm.niter->answer, "%d", &wp.timesec);
-    sscanf(parm.outiter->answer, "%d", &wp.iterout);
-    sscanf(parm.diffc->answer, "%lf", &wp.frac);
-    sscanf(parm.hmax->answer, "%lf", &wp.hhmax);
-    sscanf(parm.halpha->answer, "%lf", &wp.halpha);
-    sscanf(parm.hbeta->answer, "%lf", &wp.hbeta);
+    sscanf(parm.niter->answer, "%d", &settings.timesec);
+    sscanf(parm.outiter->answer, "%d", &settings.iterout);
+    sscanf(parm.diffc->answer, "%lf", &settings.frac);
+    sscanf(parm.hmax->answer, "%lf", &settings.hhmax);
+    sscanf(parm.halpha->answer, "%lf", &settings.halpha);
+    sscanf(parm.hbeta->answer, "%lf", &settings.hbeta);
 
     G_debug(3, "Parsing rain parameters");
 
@@ -503,9 +504,9 @@ int main(int argc, char *argv[])
 
     /* Recompute timesec from user input in minutes
      * to real timesec in seconds */
-    wp.timesec = wp.timesec * 60.0;
-    wp.iterout = wp.iterout * 60.0;
-    if ((wp.timesec / wp.iterout) > 100.0 && wp.ts == 1)
+    settings.timesec = settings.timesec * 60.0;
+    settings.iterout = settings.iterout * 60.0;
+    if ((settings.timesec / settings.iterout) > 100.0 && settings.ts)
         G_message(_("More than 100 files are going to be created !!!!!"));
 
     /* compute how big the raster is and set this to appr 2 walkers per cell */
@@ -537,8 +538,8 @@ int main(int argc, char *argv[])
 
     alloc_grids_water(&geometry);
 
-    grad_check(&geometry);
-    main_loop(&geometry);
+    grad_check(&geometry, &settings);
+    main_loop(&geometry, &settings);
     free_walkers();
 
     /* Exit with Success */
