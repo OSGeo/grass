@@ -29,10 +29,9 @@ class TestNewlinesWithGetlFunctions(TestCase):
         """Write and read lines and then assert they are as expected"""
         lines = ["Line 1", "Line 2", "Line 3"]
         with open(self.file_path, mode="w", newline=newline) as stream:
-            for line in lines:
-                # Python text newline here.
-                # The specific newline is added by the stream.
-                stream.write(f"{line}\n")
+            # Python text newline here.
+            # The specific newline is added by the stream.
+            stream.writelines(f"{line}\n" for line in lines)
 
         file_ptr = self.libc.fopen(str(self.file_path).encode("utf-8"), b"r")
         if not file_ptr:
