@@ -1542,8 +1542,6 @@ class BufferedMapWindow(MapWindowBase, Window):
             if idlist != []:
                 self.dragid = idlist[0]  # drag whatever is on top
 
-        else:
-            pass
         coords = self.Pixel2Cell(self.mouse["begin"])
         self.mouseLeftDown.emit(x=coords[0], y=coords[1])
 
@@ -1592,8 +1590,6 @@ class BufferedMapWindow(MapWindowBase, Window):
                     self.textdict[self.dragid]["bbox"] = self.pdc.GetIdBounds(
                         self.dragid
                     )
-                else:
-                    pass
                 self.dragid = None
 
             self.mouseLeftUpPointer.emit(x=coordinates[0], y=coordinates[1])
