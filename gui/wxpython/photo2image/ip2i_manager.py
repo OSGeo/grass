@@ -255,8 +255,9 @@ class GCPWizard:
 
         try:
             f = open(self.source_gisrc, mode="w")
-            for line in self.gisrc_dict.items():
-                f.write(line[0] + ": " + line[1] + "\n")
+            f.writelines(
+                line[0] + ": " + line[1] + "\n" for line in self.gisrc_dict.items()
+            )
         finally:
             f.close()
 
