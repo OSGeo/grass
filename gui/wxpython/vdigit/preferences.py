@@ -990,8 +990,8 @@ class VDigitSettingsDialog(wx.Dialog):
                 tree.SetLayerInfo(item, key="vdigit", value={"geomAttr": {}})
 
             if checked:  # enable
-                _type = key if key == "area" else "length"
-                unitsKey = Units.GetUnitsKey(_type, unitsIdx)
+                type_ = key if key == "area" else "length"
+                unitsKey = Units.GetUnitsKey(type_, unitsIdx)
                 tree.GetLayerInfo(item, key="vdigit")["geomAttr"][key] = {
                     "column": column,
                     "units": unitsKey,

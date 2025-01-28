@@ -54,9 +54,9 @@ First we create input data using
 g.region res=25 res3=25 t=100 b=0 n=1000 s=0 w=0 e=1000 -p3
 
 # now create the input raster maps for a confined aquifer
-r3.mapcalc expression="phead = if(row() == 1 && depth() == 4, 50, 40)"
-r3.mapcalc expression="status = if(row() == 1 && depth() == 4, 2, 1)"
-r3.mapcalc expression="well = if(row() == 20 && col() == 20 && depth() == 2, -0.25, 0)"
+r3.mapcalc expression="phead = if(row() == 1 &amp;&amp; depth() == 4, 50, 40)"
+r3.mapcalc expression="status = if(row() == 1 &amp;&amp; depth() == 4, 2, 1)"
+r3.mapcalc expression="well = if(row() == 20 &amp;&amp; col() == 20 &amp;&amp; depth() == 2, -0.25, 0)"
 r3.mapcalc expression="hydcond = 0.00025"
 r3.mapcalc expression="syield = 0.0001"
 r.mapcalc  expression="recharge = 0.0"

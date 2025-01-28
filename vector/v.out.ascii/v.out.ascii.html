@@ -90,7 +90,7 @@ v.out.ascii input=quads format=point
 Print also selected attributes:
 
 <div class="code"><pre>
-v.out.ascii input=geodetic_pts format=point where="cat > 5 and cat <= 8" columns=GEOD_NAME
+v.out.ascii input=geodetic_pts format=point where="cat &gt; 5 and cat &lt;= 8" columns=GEOD_NAME
 
 573638.06289275|271623.25042595|6|27 WC 6
 574416.81289275|274116.65542595|7|27 WC 7
@@ -100,7 +100,7 @@ v.out.ascii input=geodetic_pts format=point where="cat > 5 and cat <= 8" columns
 To print all attributes type <b>columns=*</b>:
 
 <div class="code"><pre>
-v.out.ascii input=geodetic_pts format=point where="cat > 5 and cat <= 8" columns=*
+v.out.ascii input=geodetic_pts format=point where="cat &gt; 5 and cat &lt;= 8" columns=*
 573638.06289275|271623.25042595|6|6|0.00000000|0.00000000|6|6|27 WC 6|573638.09200000|271623.24100000|0.00|0|1.00000000|1.00000000
 574416.81289275|274116.65542595|7|7|0.00000000|0.00000000|7|7|27 WC 7|574416.84100000|274116.64900000|0.00|0|1.00000000|1.00000000
 575301.31189275|275303.81342595|8|8|0.00000000|0.00000000|8|8|27 WC 8|575301.30600000|275303.82600000|0.00|0|1.00000000|1.00000000

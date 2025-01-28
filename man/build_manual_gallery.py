@@ -12,11 +12,16 @@
 #        for details.
 #
 #############################################################################
+from __future__ import annotations
 
 import os
 from pathlib import Path
 import fnmatch
 import re
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 img_extensions = ["png", "jpg", "gif"]
 img_patterns = ["*." + extension for extension in img_extensions]
@@ -88,7 +93,7 @@ header_graphical_index_tmpl = """\
 """
 
 
-def img_in_file(filename, imagename, ext) -> bool:
+def img_in_file(filename: str | os.PathLike[str], imagename: str, ext: str) -> bool:
     # for some reason, calling search just once is much faster
     # than calling it on every line (time is spent in _compile)
     if ext == "html":
@@ -99,7 +104,7 @@ def img_in_file(filename, imagename, ext) -> bool:
     return bool(re.search(pattern, Path(filename).read_text()))
 
 
-def file_matches(filename, patterns):
+def file_matches(filename: str, patterns: Iterable[str]):
     return any(fnmatch.fnmatch(filename, pattern) for pattern in patterns)
 
 
@@ -163,11 +168,11 @@ def main(ext):
             continue
         if file_matches(filename, img_patterns):
             for man_filename in man_files:
-                if img_in_file(os.path.join(man_dir, man_filename), filename, ext):
+                if img_in_file(Path(man_dir, man_filename), filename, ext):
                     img_files[filename] = man_filename
                     # for now suppose one image per manual filename
 
-    with open(os.path.join(man_dir, output_name), "w") as output:
+    with open(Path(man_dir, output_name), "w") as output:
         output.write(
             header1_tmpl.substitute(
                 title="GRASS GIS %s Reference Manual: Manual gallery" % grass_version
