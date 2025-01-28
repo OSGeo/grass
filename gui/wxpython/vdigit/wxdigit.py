@@ -26,22 +26,152 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+import os
+import sys
+from ctypes import byref, c_double, c_int, create_string_buffer, pointer
+
 import grass.script.core as grass
-
-from grass.pydispatch.signal import Signal
-
-from core.gcmd import GError
 from core.debug import Debug
+from core.gcmd import GError
 from core.settings import UserSettings
-from vdigit.wxdisplay import DisplayDriver, GetLastError
 
 try:
-    from grass.lib.gis import *
-    from grass.lib.vector import *
-    from grass.lib.vedit import *
-    from grass.lib.dbmi import *
+    from grass.lib.dbmi import (
+        DB_C_TYPE_STRING,
+        DB_NEXT,
+        DB_OK,
+        DB_SEQUENTIAL,
+        db_append_string,
+        db_close_database_shutdown_driver,
+        db_convert_column_value_to_string,
+        db_execute_immediate,
+        db_fetch,
+        db_get_column_name,
+        db_get_column_sqltype,
+        db_get_column_value,
+        db_get_cursor_table,
+        db_get_string,
+        db_get_table_column,
+        db_get_table_number_of_columns,
+        db_init_handle,
+        db_init_string,
+        db_open_database,
+        db_open_select_cursor,
+        db_set_handle,
+        db_set_string,
+        db_shutdown_driver,
+        db_sqltype_to_Ctype,
+        db_start_driver,
+        db_test_value_isnull,
+        dbCursor,
+        dbHandle,
+        dbString,
+    )
+    from grass.lib.gis import (
+        GMAPSET_MAX,
+        GNAME_MAX,
+        G_find_vector2,
+        G_free,
+        G_name_is_fully_qualified,
+    )
+    from grass.lib.vector import (
+        GV_AREA,
+        GV_BOUNDARY,
+        GV_CENTROID,
+        GV_LINE,
+        GV_LINES,
+        GV_POINT,
+        GV_POINTS,
+        GV_TOPO_PSEUDO,
+        WITHOUT_Z,
+        Map_info,
+        Vect_append_point,
+        Vect_area_alive,
+        Vect_get_area_perimeter,
+        Vect_break_lines_list,
+        Vect_cat_set,
+        Vect_cidx_get_cat_by_index,
+        Vect_cidx_get_field_number,
+        Vect_cidx_get_num_cats_by_index,
+        Vect_cidx_get_num_fields,
+        Vect_close,
+        Vect_delete_line,
+        Vect_destroy_boxlist,
+        Vect_destroy_cats_struct,
+        Vect_destroy_line_struct,
+        Vect_destroy_list,
+        Vect_field_cat_del,
+        Vect_get_area_area,
+        Vect_get_area_boundaries,
+        Vect_get_area_centroid,
+        Vect_get_area_points,
+        Vect_get_centroid_area,
+        Vect_get_dblink,
+        Vect_get_field,
+        Vect_get_finfo_geometry_type,
+        Vect_get_finfo_topology_info,
+        Vect_get_line_areas,
+        Vect_get_line_box,
+        Vect_get_line_type,
+        Vect_get_mapset,
+        Vect_get_name,
+        Vect_get_num_dblinks,
+        Vect_get_num_lines,
+        Vect_get_num_updated_lines,
+        Vect_get_point_in_area,
+        Vect_get_updated_line,
+        Vect_get_updated_line_offset,
+        Vect_is_3d,
+        Vect_line_alive,
+        Vect_line_check_intersection,
+        Vect_line_length,
+        Vect_list_append,
+        Vect_new_boxlist,
+        Vect_new_cats_struct,
+        Vect_new_line_struct,
+        Vect_new_list,
+        Vect_open_old,
+        Vect_points_distance,
+        Vect_read_line,
+        Vect_reset_cats,
+        Vect_reset_line,
+        Vect_reset_updated,
+        Vect_restore_line,
+        Vect_rewrite_line,
+        Vect_select_lines_by_box,
+        Vect_select_lines_by_polygon,
+        Vect_set_updated,
+        Vect_snap_lines_list,
+        Vect_write_line,
+        bound_box,
+    )
+    from grass.lib.vedit import (
+        NO_SNAP,
+        SNAP,
+        SNAPVERTEX,
+        Vedit_add_vertex,
+        Vedit_bulk_labeling,
+        Vedit_chtype_lines,
+        Vedit_connect_lines,
+        Vedit_copy_lines,
+        Vedit_delete_area_centroid,
+        Vedit_delete_lines,
+        Vedit_flip_lines,
+        Vedit_merge_lines,
+        Vedit_move_lines,
+        Vedit_move_vertex,
+        Vedit_remove_vertex,
+        Vedit_select_by_query,
+        Vedit_snap_line,
+        Vedit_split_lines,
+        QUERY_UNKNOWN,
+        QUERY_LENGTH,
+        QUERY_DANGLE,
+    )
 except (ImportError, OSError, TypeError) as e:
     print("wxdigit.py: {}".format(e), file=sys.stderr)
+from grass.pydispatch.signal import Signal
+from vdigit.wxdisplay import DisplayDriver, GetLastError
 
 
 class VDigitError:
@@ -756,7 +886,7 @@ class IVDigit:
         :return: None feature does not exist
         """
         if not Vect_line_alive(self.poMapInfo, ln_id):
-            return none
+            return None
 
         poCats = Vect_new_cats_struct()
         if Vect_read_line(self.poMapInfo, None, poCats, ln_id) < 0:
@@ -886,7 +1016,7 @@ class IVDigit:
 
         if nlines > 0 and self._settings["breakLines"]:
             for i in range(1, nlines):
-                self._breakLineAtIntersection(nlines + i, None, changeset)
+                self._breakLineAtIntersection(nlines + i, None)
 
         if nlines > 0:
             self._addChangeset()
@@ -1086,6 +1216,7 @@ class IVDigit:
             self.poMapInfo, line, ltype, self.poPoints, self.poCats
         )
         if newline > 0 and self.emit_signals:
+            new_bboxs = [self._getBbox(newline)]
             new_areas_cats = [self._getLineAreasCategories(newline)]
 
         if newline > 0 and self._settings["breakLines"]:
@@ -1486,7 +1617,7 @@ class IVDigit:
         ltype = Vect_read_line(self.poMapInfo, self.poPoints, None, line)
         if ltype < 0:
             self._error.ReadLine(line)
-            return ret
+            return -1
 
         length = -1
         if ltype & GV_LINES:  # lines & boundaries
@@ -1507,8 +1638,8 @@ class IVDigit:
 
         ltype = Vect_read_line(self.poMapInfo, None, None, centroid)
         if ltype < 0:
-            self._error.ReadLine(line)
-            return ret
+            self._error.ReadLine(centroid)
+            return -1
 
         if ltype != GV_CENTROID:
             return -1
@@ -1536,8 +1667,8 @@ class IVDigit:
 
         ltype = Vect_read_line(self.poMapInfo, None, None, centroid)
         if ltype < 0:
-            self._error.ReadLine(line)
-            return ret
+            self._error.ReadLine(centroid)
+            return -1
 
         if ltype != GV_CENTROID:
             return -1
@@ -1549,7 +1680,7 @@ class IVDigit:
                 return -1
 
             Vect_get_area_points(self.poMapInfo, area, self.poPoints)
-            perimeter = Vect_area_perimeter(self.poPoints)
+            perimeter = Vect_get_area_perimeter(self.poPoints)
 
         return perimeter
 
@@ -1943,7 +2074,7 @@ class IVDigit:
                     )
                     if newc < 0:
                         self._error.WriteLine()
-                        return len(fids, fids)
+                        return len(fids), fids
                     fids.append(newc)
 
             Vect_destroy_line_struct(bpoints)
