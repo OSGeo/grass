@@ -21,6 +21,11 @@ export C_INCLUDE_PATH=".:${OSGEO4W_ROOT_MSYS}/include:${SRC}/dist.${ARCH}/includ
 export PYTHONHOME=${OSGEO4W_ROOT_MSYS}/apps/Python312
 export ARCH=x86_64-w64-mingw32
 
+
+mkdir -p mswindows/osgeo4w/lib
+rm -f $OSGEO4W_ROOT_MSYS/lib/libpq.a
+cp -uv $OSGEO4W_ROOT_MSYS/lib/libpq.lib mswindows/osgeo4w/lib/libpq.lib
+
 CFLAGS="$CFLAGS -pipe" \
 CXXFLAGS="$CXXFLAGS -pipe" \
 ./configure \
