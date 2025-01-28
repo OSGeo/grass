@@ -86,7 +86,7 @@ extern struct point2D *vavg;
 extern double sisum, vmean;
 extern double infsum, infmean;
 extern int maxw, maxwa, nwalk;
-extern double rwalk, xrand, yrand;
+extern double rwalk;
 extern double chmean, si0, deltap, deldif, cch, hhc;
 extern int nstack;
 extern int miter, nwalka;

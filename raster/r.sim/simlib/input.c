@@ -41,8 +41,6 @@ void WaterParams_init(struct WaterParams *wp)
     wp->maxwa = 0;
     wp->nwalk = 0;
     wp->rwalk = 0;
-    wp->xrand = 0;
-    wp->yrand = 0;
     wp->chmean = 0;
     wp->si0 = 0;
     wp->deltap = 0;
@@ -105,8 +103,6 @@ void init_library_globals(struct WaterParams *wp)
     maxwa = wp->maxwa;
     nwalk = wp->nwalk;
     rwalk = wp->rwalk;
-    xrand = wp->xrand;
-    yrand = wp->yrand;
     chmean = wp->chmean;
     si0 = wp->si0;
     deltap = wp->deltap;

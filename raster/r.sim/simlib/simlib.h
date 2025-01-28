@@ -33,7 +33,7 @@ struct WaterParams {
     double sisum, vmean;
     double infsum, infmean;
     int maxw, maxwa, nwalk;
-    double rwalk, xrand, yrand;
+    double rwalk;
     double chmean, si0, deltap, deldif, cch, hhc;
     int nstack;
     int miter, nwalka;
