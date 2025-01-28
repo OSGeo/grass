@@ -333,7 +333,6 @@ int main(int argc, char *argv[])
     geometry.yp0 = geometry.ymin + geometry.stepy / 2.;
     geometry.xmax = geometry.xmin + geometry.stepx * (float)geometry.mx;
     geometry.ymax = geometry.ymin + geometry.stepy * (float)geometry.my;
-    wp.hhc = 0.;
 
     wp.elevin = parm.elevin->answer;
     wp.wdepth = parm.wdepth->answer;

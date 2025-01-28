@@ -35,18 +35,12 @@ void WaterParams_init(struct WaterParams *wp)
      * initialized if they were just global variables */
     wp->sisum = 0;
     wp->vmean = 0;
-    wp->infsum = 0;
     wp->infmean = 0;
-    wp->maxw = 0;
     wp->maxwa = 0;
     wp->nwalk = 0;
     wp->rwalk = 0;
-    wp->chmean = 0;
     wp->si0 = 0;
     wp->deltap = 0;
-    wp->deldif = 0;
-    wp->cch = 0;
-    wp->hhc = 0;
     wp->nstack = 0;
     wp->miter = 0;
     wp->nwalka = 0;
@@ -97,18 +91,12 @@ void init_library_globals(struct WaterParams *wp)
 
     sisum = wp->sisum;
     vmean = wp->vmean;
-    infsum = wp->infsum;
     infmean = wp->infmean;
-    maxw = wp->maxw;
     maxwa = wp->maxwa;
     nwalk = wp->nwalk;
     rwalk = wp->rwalk;
-    chmean = wp->chmean;
     si0 = wp->si0;
     deltap = wp->deltap;
-    deldif = wp->deldif;
-    cch = wp->cch;
-    hhc = wp->hhc;
     nstack = wp->nstack;
     miter = wp->miter;
     nwalka = wp->nwalka;
@@ -325,7 +313,7 @@ int grad_check(Geometry *geometry, Settings *settings)
     double deltaw = 1.e12;
 
     sisum = 0.;
-    infsum = 0.;
+    double infsum = 0.;
     cmul2 = rhow * gacc;
 
     for (k = 0; k < geometry->my; k++) {
@@ -409,7 +397,7 @@ int grad_check(Geometry *geometry, Settings *settings)
 
     si0 = sisum / cc;
     vmean = vsum / cc;
-    chmean = chsum / cc;
+    double chmean = chsum / cc;
 
     if (inf)
         infmean = infsum / cc;

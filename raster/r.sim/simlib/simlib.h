@@ -31,10 +31,10 @@ typedef struct {
 
 struct WaterParams {
     double sisum, vmean;
-    double infsum, infmean;
-    int maxw, maxwa, nwalk;
+    double infmean;
+    int maxwa, nwalk;
     double rwalk;
-    double chmean, si0, deltap, deldif, cch, hhc;
+    double si0, deltap;
     int nstack;
     int miter, nwalka;
     double timec;

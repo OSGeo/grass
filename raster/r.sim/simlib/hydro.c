@@ -79,10 +79,10 @@ struct point3D *stack;
 struct point2D *vavg;
 
 double sisum, vmean;
-double infsum, infmean;
-int maxw, maxwa, nwalk;
+double infmean;
+int maxwa, nwalk;
 double rwalk;
-double chmean, si0, deltap, deldif, cch, hhc;
+double si0, deltap;
 int nstack;
 int miter, nwalka;
 double timec;
@@ -160,7 +160,7 @@ void main_loop(Geometry *geometry, Settings *settings)
         stxm = geometry->stepx * (double)(geometry->mx + 1) - geometry->xmin;
         stym = geometry->stepy * (double)(geometry->my + 1) - geometry->ymin;
         nwalka = 0;
-        deldif = sqrt(deltap) * settings->frac; /* diffuse factor */
+        double deldif = sqrt(deltap) * settings->frac; /* diffuse factor */
 
         factor = deltap * sisum / (rwalk * (double)nblock);
 
@@ -203,8 +203,8 @@ void main_loop(Geometry *geometry, Settings *settings)
             vely = 0.0;
             eff = 0.0;
 
-#pragma omp parallel firstprivate(l, lw, k, decr, d1, hhc, velx, vely, eff, \
-                                      gaux, gauy) // nwalka
+#pragma omp parallel firstprivate(l, lw, k, decr, d1, velx, vely, eff, gaux, \
+                                      gauy) // nwalka
             {
 #if defined(_OPENMP)
                 int steps =
@@ -274,7 +274,7 @@ void main_loop(Geometry *geometry, Settings *settings)
                             gaux = gasdev();
                             gauy = gasdev();
 #endif
-                            hhc = pow(d1, 3. / 5.);
+                            double hhc = pow(d1, 3. / 5.);
 
                             if (hhc > settings->hhmax &&
                                 wdepth == NULL) { /* increased diffusion if
