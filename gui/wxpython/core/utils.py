@@ -871,12 +871,10 @@ def StoreEnvVariable(key, value=None, envFile=None):
         return
     expCmd = "set" if windows else "export"
 
-    for key, value in environ.items():
-        fd.write("%s %s=%s\n" % (expCmd, key, value))
+    fd.writelines("%s %s=%s\n" % (expCmd, key, value) for key, value in environ.items())
 
     # write also skipped lines
-    for line in lineSkipped:
-        fd.write(line + os.linesep)
+    fd.writelines(line + os.linesep for line in lineSkipped)
 
     fd.close()
 

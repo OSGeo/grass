@@ -28,8 +28,6 @@ def fill_none_values(names):
     for i, name in enumerate(names):
         if name == "None":
             names[i] = names[i - 1]
-        else:
-            pass
     return names
 
 
