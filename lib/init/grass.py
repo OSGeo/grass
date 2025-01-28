@@ -525,8 +525,7 @@ def write_gisrcrc(gisrcrc, gisrc, skip_variable=None):
                 del lines[number]
             number += 1
     with open(gisrcrc, "w") as f:
-        for line in lines:
-            f.write(line)
+        f.writelines(lines)
 
 
 def read_env_file(path):
@@ -543,8 +542,7 @@ def write_gisrc(kv, filename, append=False):
     # use append=True to avoid a race condition between write_gisrc() and
     # grass_prompt() on startup (PR #548)
     f = open(filename, "a" if append else "w")
-    for k, v in kv.items():
-        f.write("%s: %s\n" % (k, v))
+    f.writelines("%s: %s\n" % (k, v) for k, v in kv.items())
     f.close()
 
 
@@ -1717,9 +1715,9 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     fi
 }}
 PROMPT_COMMAND=grass_prompt\n""".format(
-            both_masks=_("2D and 3D raster MASKs present"),
-            mask2d=_("Raster MASK present"),
-            mask3d=_("3D raster MASK present"),
+            both_masks=_("2D and 3D raster masks present"),
+            mask2d=_("Raster mask present"),
+            mask3d=_("3D raster mask present"),
             mask2d_test=mask2d_test,
             mask3d_test=mask3d_test,
             specific_addition=specific_addition,

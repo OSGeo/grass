@@ -124,12 +124,23 @@ of fit output map. Lower values indicate a better fit. The largest 5 to
 15% of the goodness values may need some closer inspection.
 
 <p>
-The module <em>i.smap</em> does not support MASKed or NULL cells. Therefore
-it might be necessary to create a copy of the classification results
-using e.g. <em>r.mapcalc</em>:
-<p>
+The module <em>i.smap</em> does not support NULL cells (in the
+raster image or from raster mask). Therefore, if the input image has NULL
+cells, it might be necessary to create a masked classification results
+as part of post-processing using e.g. <em>r.mapcalc</em>:
+
 <div class="code"><pre>
-r.mapcalc "MASKed_map = classification_results"
+r.mapcalc "masked_results = if(isnull(input_image), null(), classification_results)"
+</pre></div>
+
+<p>
+Similarly, if the raster mask is active,
+it might be necessary to post-process the classification results
+using <em>r.mapcalc</em> which will automatically mask the classification
+results:
+
+<div class="code"><pre>
+r.mapcalc "masked_results = classification_results"
 </pre></div>
 
 <h2>EXAMPLE</h2>
