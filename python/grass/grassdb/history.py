@@ -272,9 +272,9 @@ def get_initial_command_info(env_run):
     # Finalize the command info dictionary
     return {
         "timestamp": exec_time,
-        "mask2dx": mask2d_status["present"],
+        "mask2d": mask2d_status["present"],
         "mask2d_name": mask2d_status["name"],
-        "mask3dx": mask3d_present,
+        "mask3d": mask3d_present,
         "mask3d_name": mask3d_name,
         "region": region_settings,
         "status": Status.RUNNING.value,
