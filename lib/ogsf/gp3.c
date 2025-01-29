@@ -303,6 +303,5 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
         db_close_database_shutdown_driver(driver);
         Vect_destroy_field_info(Fi);
     }
-    
     return npts;
 }
