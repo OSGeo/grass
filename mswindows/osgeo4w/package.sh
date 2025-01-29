@@ -148,7 +148,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	cp -uv $DLLS dist.x86_64-w64-mingw32/bin
 
 	mkdir -p mswindows/osgeo4w/lib
-	cp -uv $OSGEO4W_ROOT_MSYS/lib/libpq.lib mswindows/osgeo4w/lib/pq.lib
+	rm -f $OSGEO4W_ROOT_MSYS/lib/libpq.a
+	cp -uv $OSGEO4W_ROOT_MSYS/lib/libpq.lib mswindows/osgeo4w/lib/libpq.lib
 	cp -uv $OSGEO4W_ROOT_MSYS/lib/sqlite3_i.lib mswindows/osgeo4w/lib/sqlite3.lib
 
 	log configure
@@ -173,7 +174,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-proj-libs=$OSGEO4W_ROOT_MSYS/lib \
 		--with-postgres \
 		--with-postgres-includes=$OSGEO4W_ROOT_MSYS/include \
-		--with-postgres-libs=$PWD/mswindows/osgeo4w/lib \
+		--with-postgres-libs=${SRC}/mswindows/osgeo4w/lib \
 		--with-gdal=$PWD/mswindows/osgeo4w/gdal-config \
 		--with-geos=$PWD/mswindows/osgeo4w/geos-config \
 		--with-sqlite \

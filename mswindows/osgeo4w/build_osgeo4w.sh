@@ -21,6 +21,10 @@ export C_INCLUDE_PATH=".:${OSGEO4W_ROOT_MSYS}/include:${SRC}/dist.${ARCH}/includ
 export PYTHONHOME=${OSGEO4W_ROOT_MSYS}/apps/Python312
 export ARCH=x86_64-w64-mingw32
 
+mkdir -p mswindows/osgeo4w/lib
+rm -f $OSGEO4W_ROOT_MSYS/lib/libpq.a
+cp -uv $OSGEO4W_ROOT_MSYS/lib/libpq.lib mswindows/osgeo4w/lib/libpq.lib
+
 ./configure \
     --host=${ARCH} \
     --with-libs="${OSGEO4W_ROOT_MSYS}/lib ${OSGEO4W_ROOT_MSYS}/bin" \
@@ -46,7 +50,7 @@ export ARCH=x86_64-w64-mingw32
     --with-proj-libs=${OSGEO4W_ROOT_MSYS}/lib \
     --with-postgres \
     --with-postgres-includes=${OSGEO4W_ROOT_MSYS}/include \
-    --with-postgres-libs=${OSGEO4W_ROOT_MSYS}/lib \
+    --with-postgres-libs=${SRC}/mswindows/osgeo4w/lib \
     --with-gdal=${SRC}/mswindows/osgeo4w/gdal-config \
     --with-geos=${SRC}/mswindows/osgeo4w/geos-config \
     --with-sqlite \
