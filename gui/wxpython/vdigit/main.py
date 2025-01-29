@@ -15,7 +15,7 @@ This program is free software under the GNU General Public License
 """
 
 try:
-    from vdigit.wxdigit import IVDigit, GV_LINES, CFUNCTYPE  # noqa: F401
+    from vdigit.wxdigit import IVDigit, GV_LINES  # noqa: F401
 
     haveVDigit = True
     errorMsg = ""
