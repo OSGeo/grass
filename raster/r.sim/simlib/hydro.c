@@ -99,20 +99,13 @@ struct History history; /* holds meta-data (title, comments,..) */
 void main_loop(const Simulation *simulation, const Geometry *geometry,
                const Settings *settings)
 {
-    int i, ii, l, k;
-    int iw, iblock, lw;
-    int itime, iter1;
-    int mgen;
-    int nblock;
-    double x, y;
-    double velx, vely, stxm, stym;
+    int i, l, k;
+    int iblock;
+    int iter1;
     double factor, conn, gaux, gauy;
-    double d1, addac, decr;
-    double walkwe;
-    double gen, wei;
-    float eff;
+    double addac;
 
-    nblock = 1;
+    int nblock = 1;
     nstack = 0;
 
     if (maxwa > (MAXW - geometry->mx * geometry->my)) {
@@ -123,8 +116,8 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
     G_debug(2, " maxwa, nblock %d %d", maxwa, nblock);
 
     for (iblock = 1; iblock <= nblock; iblock++) {
-        lw = 0;
-        walkwe = 0.;
+        int lw = 0;
+        double walkwe = 0.;
         G_debug(2, "rwalk,sisum: %f %f", simulation->rwalk, simulation->sisum);
         /* write hh.walkers0 */
 
@@ -132,14 +125,16 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
             for (l = 0; l < geometry->mx; l++) { /* run thru the whole area */
                 if (zz[k][l] != UNDEF) {
 
-                    x = geometry->xp0 + geometry->stepx * (double)(l);
-                    y = geometry->yp0 + geometry->stepy * (double)(k);
+                    double x = geometry->xp0 + geometry->stepx * (double)(l);
+                    double y = geometry->yp0 + geometry->stepy * (double)(k);
 
-                    gen = simulation->rwalk * si[k][l] / simulation->sisum;
-                    mgen = (int)gen;
-                    wei = gen / (double)(mgen + 1);
+                    double gen =
+                        simulation->rwalk * si[k][l] / simulation->sisum;
+                    int mgen = (int)gen;
+                    double wei = gen / (double)(mgen + 1);
 
-                    for (iw = 1; iw <= mgen + 1; iw++) { /* assign walkers */
+                    for (int iw = 1; iw <= mgen + 1;
+                         iw++) { /* assign walkers */
                         w[lw].x = x + geometry->stepx * (simwe_rand() - 0.5);
                         w[lw].y = y + geometry->stepy * (simwe_rand() - 0.5);
                         w[lw].m = wei;
@@ -156,8 +151,10 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
         G_debug(2, " nwalk, maxw %d %d", nwalk, MAXW);
         G_debug(2, " walkwe (walk weight),frac %f %f", walkwe, settings->frac);
 
-        stxm = geometry->stepx * (double)(geometry->mx + 1) - geometry->xmin;
-        stym = geometry->stepy * (double)(geometry->my + 1) - geometry->ymin;
+        double stxm =
+            geometry->stepx * (double)(geometry->mx + 1) - geometry->xmin;
+        double stym =
+            geometry->stepy * (double)(geometry->my + 1) - geometry->ymin;
         nwalka = 0;
         double deldif =
             sqrt(simulation->deltap) * settings->frac; /* diffuse factor */
@@ -199,13 +196,8 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
             }
             nwalka = 0;
             nstack = 0;
-            decr = 0.0;
-            velx = 0.0;
-            vely = 0.0;
-            eff = 0.0;
 
-#pragma omp parallel firstprivate(l, lw, k, decr, d1, velx, vely, eff, gaux, \
-                                      gauy) // nwalka
+#pragma omp parallel firstprivate(l, lw, k, gaux, gauy) // nwalka
             {
 #if defined(_OPENMP)
                 int steps =
@@ -245,7 +237,7 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
                             if (inf[k][l] != UNDEF) { /* infiltration part */
                                 if (inf[k][l] - si[k][l] > 0.) {
 
-                                    decr = pow(
+                                    double decr = pow(
                                         addac * w[lw].m,
                                         3. / 5.); /* decreasing factor in m */
                                     if (inf[k][l] > decr) {
@@ -268,7 +260,7 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
                                 (addac * w[lw].m); /* add walker weigh to water
                                                       depth or conc. */
 
-                            d1 = gama[k][l] * conn;
+                            double d1 = gama[k][l] * conn;
 #if defined(_OPENMP)
                             gasdev_for_paralel(&gaux, &gauy);
 #else
@@ -276,7 +268,7 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
                             gauy = gasdev();
 #endif
                             double hhc = pow(d1, 3. / 5.);
-
+                            double velx, vely;
                             if (hhc > settings->hhmax &&
                                 wdepth == NULL) { /* increased diffusion if
                                                      w.depth > hhmax */
@@ -292,7 +284,7 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
 
                             if (traps != NULL && trap[k][l] != 0.) { /* traps */
 
-                                eff = simwe_rand(); /* random generator */
+                                float eff = simwe_rand(); /* random generator */
 
                                 if (eff <= trap[k][l]) {
                                     velx = -0.1 *
@@ -379,8 +371,9 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
                          geometry); /* divergence of gama field */
 
                 conn = (double)nblock / (double)iblock;
-                itime = (int)(i * simulation->deltap * simulation->timec);
-                ii = output_data(itime, conn, simulation, geometry, settings);
+                int itime = (int)(i * simulation->deltap * simulation->timec);
+                int ii =
+                    output_data(itime, conn, simulation, geometry, settings);
                 if (ii != 1)
                     G_fatal_error(_("Unable to write raster maps"));
             }
@@ -435,7 +428,7 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
             for (k = 0; k < geometry->my; k++) {
                 for (l = 0; l < geometry->mx; l++) {
                     if (zz[k][l] != UNDEF) {
-                        d1 = gama[k][l] * (double)conn;
+                        double d1 = gama[k][l] * (double)conn;
                         gammas[k][l] += pow(d1, 3. / 5.);
                     } /* DEFined area */
                 }
@@ -449,8 +442,8 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
     /* Write final maps here because we know the last time stamp here */
     if (!settings->ts) {
         conn = (double)nblock / (double)iblock;
-        itime = (int)(i * simulation->deltap * simulation->timec);
-        ii = output_data(itime, conn, simulation, geometry, settings);
+        int itime = (int)(i * simulation->deltap * simulation->timec);
+        int ii = output_data(itime, conn, simulation, geometry, settings);
         if (ii != 1)
             G_fatal_error(_("Cannot write raster maps"));
     }
