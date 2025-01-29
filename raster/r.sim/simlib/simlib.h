@@ -4,6 +4,7 @@
 /*! \file simlib.h
  * \brief This is the interface for the simlib (SIMWE) library.
  */
+#include <stdbool.h>
 
 #define NUM_THREADS "1"
 #if defined(_OPENMP)
@@ -25,19 +26,27 @@ typedef struct {
     double hhmax;
     double frac; /* Water diffusion constant */
     int iterout; /* Time interval for creating output maps [minutes] */
-    int timesec; /* Time used for iterations [minutes] */
+    int timesec; /* Time how long the simulation runs [minutes] */
     bool ts;     /* Time series output */
 } Settings;
 
-struct WaterParams {
-    double sisum, vmean;
-    double infmean;
-    int maxwa, nwalk;
-    double rwalk;
-    double si0, deltap;
-    int nstack;
-    int miter, nwalka;
+typedef struct {
+    int iterout;    /* Number of iterations for creating output maps */
+    int miter;      /* Total number of iterations */
+    double si0;     /* Mean rainfall excess (or sediment concentration?) */
+    double sisum;   /* Sum of rainfall excess (or sediment concentration?) */
+    double vmean;   /* Mean velocity */
+    double infmean; /* Mean infiltration */
     double timec;
+    double deltap;
+    double rwalk;
+} Simulation;
+
+struct WaterParams {
+    int maxwa, nwalk;
+
+    int nstack;
+    int nwalka;
 
     double rain_val;
     double manin_val;
@@ -76,17 +85,21 @@ struct WaterParams {
 
 void WaterParams_init(struct WaterParams *wp);
 void init_library_globals(struct WaterParams *wp);
-void alloc_grids_water(Geometry *geometry);
-void alloc_grids_sediment(Geometry *geometry);
-void init_grids_sediment(Geometry *geometry);
+void alloc_grids_water(const Geometry *geometry);
+void alloc_grids_sediment(const Geometry *geometry);
+void init_grids_sediment(const Simulation *simulation,
+                         const Geometry *geometry);
 
 int input_data(int rows, int cols);
-int grad_check(Geometry *geometry, Settings *settings);
-void main_loop(Geometry *geometry, Settings *settings);
-int output_data(int, double, Geometry *geometry, Settings *settings);
-int output_et(Geometry *geometry);
+int grad_check(Simulation *simulation, const Geometry *geometry,
+               const Settings *settings);
+void main_loop(const Simulation *simulation, const Geometry *geometry,
+               const Settings *settings);
+int output_data(int, double, const Simulation *simulation,
+                const Geometry *geometry, const Settings *settings);
+int output_et(const Geometry *geometry);
 void free_walkers(void);
-void erod(double **, Geometry *geometry);
+void erod(double **, const Simulation *simulation, const Geometry *geometry);
 
 struct options {
     struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,

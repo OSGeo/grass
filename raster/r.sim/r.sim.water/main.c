@@ -345,6 +345,7 @@ int main(int argc, char *argv[])
 
     Geometry geometry;
     Settings settings;
+    Simulation simulation;
 
     WaterParams_init(&wp);
 
@@ -512,12 +513,12 @@ int main(int argc, char *argv[])
     /* compute how big the raster is and set this to appr 2 walkers per cell */
     if (parm.nwalk->answer == NULL) {
         wp.maxwa = geometry.mx * geometry.my * 2;
-        wp.rwalk = (double)(geometry.mx * geometry.my * 2.);
-        G_message(_("default nwalk=%d, rwalk=%f"), wp.maxwa, wp.rwalk);
+        simulation.rwalk = (double)(geometry.mx * geometry.my * 2.);
+        G_message(_("default nwalk=%d, rwalk=%f"), wp.maxwa, simulation.rwalk);
     }
     else {
         sscanf(parm.nwalk->answer, "%d", &wp.maxwa);
-        wp.rwalk = (double)wp.maxwa;
+        simulation.rwalk = (double)wp.maxwa;
     }
 
     /*      rwalk = (double) maxwa; */
@@ -538,8 +539,8 @@ int main(int argc, char *argv[])
 
     alloc_grids_water(&geometry);
 
-    grad_check(&geometry, &settings);
-    main_loop(&geometry, &settings);
+    grad_check(&simulation, &geometry, &settings);
+    main_loop(&simulation, &geometry, &settings);
     free_walkers();
 
     /* Exit with Success */

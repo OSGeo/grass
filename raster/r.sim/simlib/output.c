@@ -23,13 +23,14 @@ void free_walkers(void)
 
 static void output_walker_as_vector(int tt_minutes, int ndigit,
                                     struct TimeStamp *timestamp,
-                                    Settings *settings);
+                                    const Settings *settings);
 
 /* This function was added by Soeren 8. Mar 2011     */
 /* It replaces the site walker output implementation */
 /* Only the 3d coordinates of the walker are stored. */
 void output_walker_as_vector(int tt_minutes, int ndigit,
-                             struct TimeStamp *timestamp, Settings *settings)
+                             struct TimeStamp *timestamp,
+                             const Settings *settings)
 {
     char buf[GNAME_MAX + 10];
     char *outwalk_time = NULL;
@@ -90,8 +91,8 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
 
 /* Soeren 8. Mar 2011 TODO:
  * This function needs to be refractured and splittet into smaller parts */
-int output_data(int tt, double ft UNUSED, Geometry *geometry,
-                Settings *settings)
+int output_data(int tt, double ft UNUSED, const Simulation *simulation,
+                const Geometry *geometry, const Settings *settings)
 {
 
     FCELL *depth_cell, *disch_cell, *err_cell;
@@ -509,9 +510,9 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry,
             &hist, "duration (sec.)=%d, time-serie iteration=%d",
             settings->timesec, tt);
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
-                                   deltap, vmean);
+                                   simulation->deltap, simulation->vmean);
         Rast_append_format_history(&hist, "mean source (si)=%e, mean infil=%e",
-                                   si0, infmean);
+                                   simulation->si0, simulation->infmean);
 
         Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
                             elevin, dxin, dyin);
@@ -549,9 +550,9 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry,
             &hist, "duration (sec.)=%d, time-serie iteration=%d",
             settings->timesec, tt);
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
-                                   deltap, vmean);
+                                   simulation->deltap, simulation->vmean);
         Rast_append_format_history(&hist, "mean source (si)=%e, mean infil=%e",
-                                   si0, infmean);
+                                   simulation->si0, simulation->infmean);
 
         Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
                             elevin, dxin, dyin);
@@ -589,8 +590,9 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry,
             &hist, "duration (sec.)=%d, time-serie iteration=%d",
             settings->timesec, tt);
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
-                                   deltap, vmean);
-        Rast_append_format_history(&hist, "mean source (si)=%f", si0);
+                                   simulation->deltap, simulation->vmean);
+        Rast_append_format_history(&hist, "mean source (si)=%f",
+                                   simulation->si0);
 
         Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
                             wdepth, dxin, dyin);
@@ -613,7 +615,7 @@ int output_data(int tt, double ft UNUSED, Geometry *geometry,
     return 1;
 }
 
-int output_et(Geometry *geometry)
+int output_et(const Geometry *geometry)
 {
 
     FCELL *tc_cell, *et_cell;

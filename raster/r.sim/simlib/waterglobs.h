@@ -83,14 +83,9 @@ extern struct point3D *w;
 extern struct point3D *stack;
 extern struct point2D *vavg;
 
-extern double sisum, vmean;
-extern double infmean;
 extern int maxwa, nwalk;
-extern double rwalk;
-extern double si0, deltap;
 extern int nstack;
-extern int miter, nwalka;
-extern double timec;
+extern int nwalka;
 
 extern double rain_val;
 extern double manin_val;
