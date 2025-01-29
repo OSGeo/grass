@@ -463,15 +463,15 @@ The `--overwrite` flag can be globally enabled by setting the environment variab
 #### Mask
 
 GRASS GIS has a global mask managed by the _r.mask_ tool and represented by a
-raster called MASK. Raster tools called as a subprocess will automatically
+raster called MASK by default. Raster tools called as a subprocess will automatically
 respect the globally set mask when reading the data. For outputs, respecting of
 the mask is optional.
 
-Tools **should not set or remove the global mask**. If the tool cannot avoid
-setting the mask internally, it should check for presence of the mask and fail
-if the mask is present. The tools should not remove and later restore the
-original mask because that creates confusing behavior for interactive use and
-breaks parallel processing.
+Tools **should not set or remove the global mask** to prevent unintended
+behavior during interactive sessions and to maintain parallel processing
+integrity. If a tool requires a mask for its operation, it should implement
+a temporary mask using _MaskManager_ in Python or by setting the `GRASS_MASK`
+environment variable.
 
 Generally, any mask behavior should be documented unless it is the standard case
 where masked cells do not participate in the computation and are represented as
