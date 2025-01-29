@@ -340,5 +340,10 @@ class MaskManager:
 
         if self._remove:
             run_command(
-                "g.remove", type="raster", name=self.mask_name, flags="f", env=self.env
+                "g.remove",
+                type="raster",
+                name=self.mask_name,
+                flags="f",
+                env=self.env,
+                quiet=True,
             )
