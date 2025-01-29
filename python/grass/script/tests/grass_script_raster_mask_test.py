@@ -1,5 +1,7 @@
 import grass.script as gs
 
+DEFAULT_MASK_NAME = "MASK"
+
 
 def raster_exists(name, env=None):
     return bool(gs.find_file(name, element="raster", env=env)["name"])
@@ -26,7 +28,7 @@ def test_mask_manager_no_operation(session_2x2):
     assert "GRASS_MASK" not in session_2x2.env
     assert not raster_exists(manager.mask_name, env=session_2x2.env)
     status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
-    assert status["name"].startswith("MASK")
+    assert status["name"].startswith(DEFAULT_MASK_NAME)
     assert not status["present"]
     assert raster_sum("ones", env=session_2x2.env) == 4
 
@@ -50,7 +52,7 @@ def test_mask_manager_generated_name_remove_default_r_mask(session_2x2):
     assert "GRASS_MASK" not in session_2x2.env
     assert not raster_exists(manager.mask_name, env=session_2x2.env)
     status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
-    assert status["name"].startswith("MASK")
+    assert status["name"].startswith(DEFAULT_MASK_NAME)
     assert not status["present"]
     assert raster_sum("ones", env=session_2x2.env) == 4
 
@@ -74,7 +76,7 @@ def test_mask_manager_generated_name_remove_true_r_mask(session_2x2):
     assert "GRASS_MASK" not in session_2x2.env
     assert not raster_exists(manager.mask_name, env=session_2x2.env)
     status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
-    assert status["name"].startswith("MASK")
+    assert status["name"].startswith(DEFAULT_MASK_NAME)
     assert not status["present"]
     assert raster_sum("ones", env=session_2x2.env) == 4
 
@@ -97,7 +99,7 @@ def test_mask_manager_generated_name_remove_false_r_mask(session_2x2):
     assert "GRASS_MASK" not in session_2x2.env
     assert raster_exists(manager.mask_name, env=session_2x2.env)
     status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
-    assert status["name"].startswith("MASK")
+    assert status["name"].startswith(DEFAULT_MASK_NAME)
     assert not status["present"]
     assert raster_sum("ones", env=session_2x2.env) == 4
 
@@ -125,7 +127,7 @@ def test_mask_manager_generated_name_remove_true_g_copy(session_2x2):
     assert "GRASS_MASK" not in session_2x2.env
     assert not raster_exists(manager.mask_name, env=session_2x2.env)
     status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
-    assert status["name"].startswith("MASK")
+    assert status["name"].startswith(DEFAULT_MASK_NAME)
     assert not status["present"]
     assert raster_sum("ones", env=session_2x2.env) == 4
 
@@ -147,14 +149,14 @@ def test_mask_manager_provided_name_remove_default(session_2x2):
     assert "GRASS_MASK" not in session_2x2.env
     assert raster_exists(mask_name, env=session_2x2.env)
     status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
-    assert status["name"].startswith("MASK")
+    assert status["name"].startswith(DEFAULT_MASK_NAME)
     assert not status["present"]
     assert raster_sum("ones", env=session_2x2.env) == 4
 
 
 def test_mask_manager_provided_classic_name_remove_true(session_2x2):
     """Test MaskManager with provided name and remove=True."""
-    mask_name = "MASK"
+    mask_name = DEFAULT_MASK_NAME
 
     with gs.MaskManager(mask_name=mask_name, env=session_2x2.env, remove=True):
         assert "GRASS_MASK" in session_2x2.env
@@ -170,7 +172,7 @@ def test_mask_manager_provided_classic_name_remove_true(session_2x2):
     assert "GRASS_MASK" not in session_2x2.env
     assert not raster_exists(mask_name, env=session_2x2.env)
     status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
-    assert status["name"].startswith("MASK")
+    assert status["name"].startswith(DEFAULT_MASK_NAME)
     assert not status["present"]
     assert raster_sum("ones", env=session_2x2.env) == 4
 
@@ -194,7 +196,7 @@ def test_mask_manager_provided_name_remove_true(session_2x2):
     assert "GRASS_MASK" not in session_2x2.env
     assert not raster_exists(mask_name, env=session_2x2.env)
     status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
-    assert status["name"].startswith("MASK")
+    assert status["name"].startswith(DEFAULT_MASK_NAME)
     assert not status["present"]
     assert raster_sum("ones", env=session_2x2.env) == 4
 
@@ -218,6 +220,6 @@ def test_mask_manager_provided_name_remove_false(session_2x2):
     assert "GRASS_MASK" not in session_2x2.env
     assert raster_exists(mask_name, env=session_2x2.env)
     status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
-    assert status["name"].startswith("MASK")
+    assert status["name"].startswith(DEFAULT_MASK_NAME)
     assert not status["present"]
     assert raster_sum("ones", env=session_2x2.env) == 4
