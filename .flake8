@@ -37,7 +37,6 @@ per-file-ignores =
     # C wrappers call libgis.G_gisinit before importing other modules.
     # TODO: Is this really needed?
     python/grass/jupyter/__init__.py: E501
-    python/grass/pygrass/vector/__init__.py: E402
     # Current benchmarks/tests are changing sys.path before import.
     # Possibly, a different approach should be taken there anyway.
     python/grass/pygrass/tests/benchmark.py: F821
