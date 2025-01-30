@@ -1097,14 +1097,14 @@ msgstr "Οι επιλογες της 3D προβολής αποθηκεύτηκ�
 msgid ""
 "This module requires the NumPy module, which could not be imported. It "
 "probably is not installed (it's not part of the standard Python "
-"distribution). See the Numeric Python site (http://numpy.scipy.org) for "
+"distribution). See the Numeric Python site (https://numpy.org) for "
 "information on downloading source or binaries."
 msgstr ""
 "Αυτό το πρόσθετο απαιτεί το πρόσθετο NumPy, το οποίο δεν μπόρεσε να "
 "εισαχθεί. Πιθανότατα να μην είναι εγκατεστημένο (δεν είναι μέρος της γενικής "
 "διανομής της Python). Για περισσότερες πληροφορίες και για λήψη αρχείων προς "
 "εγκατάσταση καθώς και του πηγαίου κώδικα, απευθυνθήτε στην ιστοσελίδα της "
-"Numpy (http://numpy.scipy.org)."
+"NumPy (https://numpy.org)."
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
 #: ../gui/wxpython/iclass/g.gui.iclass.py:88

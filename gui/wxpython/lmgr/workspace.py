@@ -46,7 +46,7 @@ class WorkspaceManager:
         self._giface.workspaceChanged.connect(self.WorkspaceChanged)
 
     def WorkspaceChanged(self):
-        "Update window title"
+        """Update window title"""
         self.workspaceChanged = True
 
     def New(self):
@@ -448,8 +448,7 @@ class WorkspaceManager:
         try:
             mfile = open(filename, "wb")
             tmpfile.seek(0)
-            for line in tmpfile.readlines():
-                mfile.write(line)
+            mfile.writelines(tmpfile.readlines())
         except OSError:
             GError(
                 parent=self.lmgr,

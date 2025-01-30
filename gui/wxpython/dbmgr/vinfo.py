@@ -120,9 +120,7 @@ class VectorDBInfo(VectorDBInfoBase):
             return None
 
         # process attributes
-        ret = {}
-        for key in ["Category", "Layer", "Table", "Id"]:
-            ret[key] = []
+        ret = {key: [] for key in ["Category", "Layer", "Table", "Id"]}
 
         for record in data:
             if "Table" not in record:

@@ -196,11 +196,7 @@ class UpdateThread(Thread):
         map = pMap.get("value", "") if pMap else None
 
         # avoid running db.describe several times
-        cparams = {}
-        cparams[map] = {
-            "dbInfo": None,
-            "layers": None,
-        }
+        cparams = {map: {"dbInfo": None, "layers": None}}
 
         # update reference widgets
         for uid in p["wxId-bind"]:
@@ -586,8 +582,10 @@ class TaskFrame(wx.Frame):
         self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         # bind closing to ESC and CTRL+Q
         self.Bind(wx.EVT_MENU, self.OnCancel, id=wx.ID_CANCEL)
-        accelTableList = [(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CANCEL)]
-        accelTableList.append((wx.ACCEL_CTRL, ord("Q"), wx.ID_CANCEL))
+        accelTableList = [
+            (wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CANCEL),
+            (wx.ACCEL_CTRL, ord("Q"), wx.ID_CANCEL),
+        ]
         # TODO: bind Ctrl-t for tile windows here (trac #2004)
 
         if self.get_dcmd is not None:  # A callback has been set up
@@ -1802,10 +1800,7 @@ class CmdPanel(wx.Panel):
                         value = self._getValue(p)
 
                         if prompt == "layer":
-                            if p.get("element", "layer") == "layer_all":
-                                all = True
-                            else:
-                                all = False
+                            all = bool(p.get("element", "layer") == "layer_all")
                             if p.get("age", "old") == "old":
                                 win = gselect.LayerSelect(
                                     parent=which_panel, all=all, default=p["default"]
@@ -2414,15 +2409,9 @@ class CmdPanel(wx.Panel):
                 pSqlWhere.append(p)
 
         # collect ids
-        pColumnIds = []
-        for p in pColumn:
-            pColumnIds += p["wxId"]
-        pLayerIds = []
-        for p in pLayer:
-            pLayerIds += p["wxId"]
-        pSqlWhereIds = []
-        for p in pSqlWhere:
-            pSqlWhereIds += p["wxId"]
+        pColumnIds = [p["wxId"] for p in pColumn]
+        pLayerIds = [p["wxId"] for p in pLayer]
+        pSqlWhereIds = [p["wxId"] for p in pSqlWhere]
 
         # set wxId-bindings
         if pMap:
@@ -2840,9 +2829,7 @@ class CmdPanel(wx.Panel):
                 myIndex = p["wxId"].index(me)
 
         # Unpack current value list
-        currentValues = {}
-        for isThere in theParam.get("value", "").split(","):
-            currentValues[isThere] = 1
+        currentValues = dict.fromkeys(theParam.get("value", "").split(","), 1)
         theValue = theParam["values"][myIndex]
 
         if event.IsChecked():
@@ -2851,10 +2838,7 @@ class CmdPanel(wx.Panel):
             del currentValues[theValue]
 
         # Keep the original order, so that some defaults may be recovered
-        currentValueList = []
-        for v in theParam["values"]:
-            if v in currentValues:
-                currentValueList.append(v)
+        currentValueList = [v for v in theParam["values"] if v in currentValues]
 
         # Pack it back
         theParam["value"] = ",".join(currentValueList)
