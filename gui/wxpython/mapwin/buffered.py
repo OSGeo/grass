@@ -1180,10 +1180,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             if isinstance(r, list):
                 r = Rect(r[0], r[1], r[2], r[3])
             r.Inflate(4, 4)
-            try:
-                pdc.ClearId(boxid)
-            except (KeyError, ValueError, AttributeError):
-                pass
+            pdc.ClearId(boxid)
             self.RefreshRect(r, False)
             pdc.SetId(boxid)
             self.Draw(pdc, drawid=boxid, pdctype="box", coords=mousecoords)
@@ -1197,10 +1194,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             y2 = max(begin[1], end[1])
             r = Rect(x1, y1, x2 - x1, y2 - y1)
             r.Inflate(4, 4)
-            try:
-                pdc.ClearId(self.lineid)
-            except (KeyError, ValueError, AttributeError):
-                pass
+            pdc.ClearId(self.lineid)
             self.RefreshRect(r, False)
             pdc.SetId(self.lineid)
             self.Draw(pdc, drawid=self.lineid, pdctype="line", coords=mousecoords)
@@ -1736,13 +1730,13 @@ class BufferedMapWindow(MapWindowBase, Window):
         try:
             pdc.ClearId(self.lineid)
             pdc.RemoveId(self.lineid)
-        except (KeyError, ValueError):
+        except (KeyError, TypeError):
             pass
 
         try:
             pdc.ClearId(self.plineid)
             pdc.RemoveId(self.plineid)
-        except (KeyError, ValueError):
+        except (KeyError, TypeError):
             pass
 
         Debug.msg(
