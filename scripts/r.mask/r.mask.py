@@ -103,7 +103,7 @@ def main():
     mask_full_name = mask_status["name"]
 
     # Does the name point to the current mapset?
-    name, mask_mapset = mask_full_name.split("@", maxsplit=2)
+    name, mask_mapset = mask_full_name.split("@", maxsplit=1)
     if mask_mapset != mapset:
         gs.fatal(
             _(
