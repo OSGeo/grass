@@ -334,8 +334,9 @@ class GCPWizard:
         self.source_gisrc = utils.GetTempfile()
 
         with open(self.source_gisrc, mode="w") as f:
-            for line in self.gisrc_dict.items():
-                f.write(line[0] + ": " + line[1] + "\n")
+            f.writelines(
+                line[0] + ": " + line[1] + "\n" for line in self.gisrc_dict.items()
+            )
         return True
 
     def SwitchEnv(self, grc):
@@ -2738,8 +2739,7 @@ class VectGroup(wx.Dialog):
             os.makedirs(dirname)
 
         with open(self.vgrpfile, mode="w") as f:
-            for vect in vgrouplist:
-                f.write(vect + "\n")
+            f.writelines(vect + "\n" for vect in vgrouplist)
 
 
 class EditGCP(wx.Dialog):

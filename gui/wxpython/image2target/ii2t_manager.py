@@ -355,8 +355,9 @@ class GCPWizard:
 
         try:
             f = open(self.source_gisrc, mode="w")
-            for line in self.gisrc_dict.items():
-                f.write(line[0] + ": " + line[1] + "\n")
+            f.writelines(
+                line[0] + ": " + line[1] + "\n" for line in self.gisrc_dict.items()
+            )
         finally:
             f.close()
 
@@ -2690,8 +2691,7 @@ class VectGroup(wx.Dialog):
             vgrouplist.append(self.listMap.GetString(item) + "@" + self.xymapset)
 
         with open(self.vgrpfile, mode="w") as f:
-            for vect in vgrouplist:
-                f.write(vect + "\n")
+            f.writelines(vect + "\n" for vect in vgrouplist)
 
 
 class EditGCP(wx.Dialog):

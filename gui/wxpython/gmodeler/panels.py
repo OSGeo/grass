@@ -679,8 +679,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
             try:
                 with open(filename, "w") as mfile:
                     tmpfile.seek(0)
-                    for line in tmpfile.readlines():
-                        mfile.write(line)
+                    mfile.writelines(tmpfile.readlines())
             except OSError:
                 wx.MessageBox(
                     parent=self,
