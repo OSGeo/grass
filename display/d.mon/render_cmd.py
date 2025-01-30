@@ -42,12 +42,18 @@ def read_env_file(env_file):
     try:
         with open(env_file) as fd:
             for line in fd:
-                if line.startswith("width:"):
-                    width = int(line.split(":")[1])
-                elif line.startswith("height:"):
-                    height = int(line.split(":")[1])
-                elif line.startswith("legfile:"):
-                    legfile = line.split(":")[1].strip()
+                line = line.strip()
+                if line.startswith("#") or not line:
+                    continue
+                # Split on comment and parse key=value
+                k, v = line.split("#", 1)[0].strip().split("=", 1)
+                os.environ[k] = v
+                if width is None and k == "GRASS_RENDER_WIDTH":
+                    width = int(v)
+                if height is None and k == "GRASS_RENDER_HEIGHT":
+                    height = int(v)
+                if legfile is None and k == "GRASS_LEGEND_FILE":
+                    legfile = v
     except OSError:
         grass.fatal(f"Unable to open file '{env_file}'")
 
