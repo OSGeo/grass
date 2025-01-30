@@ -401,11 +401,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
                 if not data:
                     continue
 
-                fd = open(finput, "w")
-                try:
-                    fd.write(data)
-                finally:
-                    fd.close()
+                Path(finput).write_text(data)
             del self.model.fileInput
 
         # delete intermediate data
@@ -671,30 +667,27 @@ class ModelerPanel(wx.Panel, MainPageBase):
         :return: False on failure
         """
         self.ModelChanged(False)
-        tmpfile = tempfile.TemporaryFile(mode="w+")
-        try:
-            WriteModelFile(fd=tmpfile, model=self.model)
-        except Exception:
-            GError(
-                parent=self, message=_("Writing current settings to model file failed.")
-            )
-            return False
-
-        try:
-            mfile = open(filename, "w")
-            tmpfile.seek(0)
-            mfile.writelines(tmpfile.readlines())
-        except OSError:
-            wx.MessageBox(
-                parent=self,
-                message=_("Unable to open file <%s> for writing.") % filename,
-                caption=_("Error"),
-                style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
-            )
-            return False
-
-        mfile.close()
-
+        with tempfile.TemporaryFile(mode="w+") as tmpfile:
+            try:
+                WriteModelFile(fd=tmpfile, model=self.model)
+            except Exception:
+                GError(
+                    parent=self,
+                    message=_("Writing current settings to model file failed."),
+                )
+                return False
+            try:
+                with open(filename, "w") as mfile:
+                    tmpfile.seek(0)
+                    mfile.writelines(tmpfile.readlines())
+            except OSError:
+                wx.MessageBox(
+                    parent=self,
+                    message=_("Unable to open file <%s> for writing.") % filename,
+                    caption=_("Error"),
+                    style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
+                )
+                return False
         return True
 
     def DefineLoop(self, loop):
@@ -1701,17 +1694,15 @@ class PythonPanel(wx.Panel):
             if ret == wx.ID_NO:
                 return False
 
-        fd = tempfile.TemporaryFile(mode="r+")
         grassAPI = UserSettings.Get(group="modeler", key="grassAPI", subkey="selection")
-        self.write_object(
-            fd,
-            self.parent.GetModel(),
-            grassAPI="script" if grassAPI == 0 else "pygrass",
-        )
-
-        fd.seek(0)
-        self.body.SetText(fd.read())
-        fd.close()
+        with tempfile.TemporaryFile(mode="r+") as fd:
+            self.write_object(
+                fd,
+                self.parent.GetModel(),
+                grassAPI="script" if grassAPI == 0 else "pygrass",
+            )
+            fd.seek(0)
+            self.body.SetText(fd.read())
 
         self.body.modified = False
 
@@ -1764,18 +1755,13 @@ class PythonPanel(wx.Panel):
 
             dlg.Destroy()
 
-        fd = open(filename, "w")
-        try:
+        with open(filename, "w") as fd:
             if force:
                 self.write_object(fd, self.parent.GetModel())
             else:
                 fd.write(self.body.GetText())
-        finally:
-            fd.close()
-
         # executable file
         os.chmod(filename, stat.S_IRWXU | stat.S_IWUSR)
-
         return filename
 
     def OnRun(self, event):
