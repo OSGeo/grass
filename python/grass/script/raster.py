@@ -18,11 +18,12 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import annotations
+
 import os
 import string
 import time
 from pathlib import Path
-
 
 from .core import (
     gisenv,
@@ -291,7 +292,12 @@ class MaskManager:
     mask is available as the _mask_name_ attribute.
     """
 
-    def __init__(self, mask_name=None, env=None, remove=None):
+    def __init__(
+        self,
+        mask_name: str | None = None,
+        env: dict[str, str] | None = None,
+        remove: bool | None = None,
+    ):
         """
         Initializes the MaskManager.
 
