@@ -4,7 +4,7 @@
  *
  * AUTHOR(S):    Original author Center for Space Research (Uni. of TX)
  *               Rewritten by Brad Douglas <rez touchofmadness com>
- *               NULL value/MASK handling and speed up by Markus Metz
+ *               NULL value/mask handling and speed up by Markus Metz
  *
  * PURPOSE:      Principal Component Analysis transform of raster data.
  *

@@ -18,7 +18,7 @@ a group, when the imagery group's name is entered as input.
 (created imagery groups with the <em><a href="i.group.html">i.group</a></em>
 module)
 <p>As with most GRASS raster modules, the current region extents and region
-resolution are used, and a MASK is respected if present.
+resolution are used, and a raster mask is respected if present.
 Use <em><a href="g.region.html">g.region</a></em>'s "align=", or "raster="
 options if you need to realign the region settings to match the original
 map's before export.
@@ -267,7 +267,8 @@ value (specific parameter of the module) means that any band values
 equal to this nodata value will be interpreted as nodata. Using an additional
 alpha channel means that all pixels with an alpha value of 0 are
 transparent. The alpha channel thus represents per-pixel encoding of
-nodata, just like the GRASS MASK (null file). That means when using an alpha
+nodata, just like the GRASS raster mask or per-raster null file.
+That means when using an alpha
 channel, you do not need to "free up" any particular value, but you can
 use any value you like to replace NULL cells, as long as the value can be
 represented by the Byte data type. It does not matter if that value is
@@ -298,7 +299,7 @@ r.mapcalc "out_b = if(isnull($BMAP), 0, #$BMAP)"
 # create group for export
 i.group group=out_rgba input=out_r,out_g,out_b,out_a
 
-# remove any MASK because this works only if there are
+# remove any mask because this works only if there are
 # no NULL cells in the bands to be exported
 r.mask -r
 
