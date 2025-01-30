@@ -1114,10 +1114,7 @@ class GroupDialog(wx.Dialog):
     def GetLayers(self):
         """Get layers"""
         if self.edit_subg:
-            layers = []
-            for maps, sel in self.subgmaps.items():
-                if sel:
-                    layers.append(maps)
+            layers = [maps for maps, sel in self.subgmaps.items() if sel]
         else:
             layers = self.gmaps[:]
 
@@ -1342,8 +1339,7 @@ class GroupDialog(wx.Dialog):
 
     def GetGroupLayers(self, group, subgroup=None):
         """Get layers in group"""
-        kwargs = {}
-        kwargs["group"] = group
+        kwargs = {"group": group}
         if subgroup:
             kwargs["subgroup"] = subgroup
 
@@ -2139,9 +2135,10 @@ class SymbolDialog(wx.Dialog):
         mainSizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         # show panel with the largest number of images and fit size
-        count = []
-        for folder in os.listdir(self.symbolPath):
-            count.append(len(os.listdir(os.path.join(self.symbolPath, folder))))
+        count = [
+            len(os.listdir(os.path.join(self.symbolPath, folder)))
+            for folder in os.listdir(self.symbolPath)
+        ]
 
         index = count.index(max(count))
         self.folderChoice.SetSelection(index)
@@ -2196,9 +2193,7 @@ class SymbolDialog(wx.Dialog):
 
     def _getSymbols(self, path):
         # we assume that images are in subfolders (1 level only)
-        imageList = []
-        for image in os.listdir(path):
-            imageList.append(os.path.join(path, image))
+        imageList = [os.path.join(path, image) for image in os.listdir(path)]
 
         return sorted(imageList)
 

@@ -439,21 +439,15 @@ class PointsList(
 
     def getSmallUpArrowImage(self):
         """Get arrow up symbol for indication of sorting"""
-        stream = open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb")
-        try:
-            img = wx.Image(stream)
-        finally:
-            stream.close()
-        return img
+        with open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb") as stream:
+            return wx.Image(stream)
 
     def getSmallDnArrowImage(self):
         """Get arrow down symbol for indication of sorting"""
-        stream = open(os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb")
-        try:
-            img = wx.Image(stream)
-        finally:
-            stream.close()
-        return img
+        with open(
+            os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb"
+        ) as stream:
+            return wx.Image(stream)
 
     def _getColumnNum(self, colName):
         """Get position of column among showed columns
@@ -511,7 +505,7 @@ class PointsList(
         :return: True if column was shown
         :return: False if position is not valid or column is not hidden
         """
-        if pos < 0 and pos >= self.self.GetColumnCount():
+        if pos < 0 or pos >= self.GetColumnCount():
             return False
         if colName in self.hiddenCols:
             col = self.hiddenCols[colName]

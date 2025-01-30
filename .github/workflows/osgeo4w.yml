@@ -8,6 +8,8 @@ on:
       - releasebranch_*
   pull_request:
 
+permissions: {}
+
 jobs:
   build:
     name: ${{ matrix.os }} build and tests
@@ -55,7 +57,6 @@ jobs:
             gcc
             gettext
             libiconv
-            libpng
             libsystre
             libtre-git
             libwinpthread-git
@@ -72,20 +73,15 @@ jobs:
           package-dir: "D:/OSGeo4W_pkg"
           packages: |
             cairo-devel
-            fftw
             freetype-devel
             gdal-devel
-            gdal-ecw
-            gdal-mrsid
             geos-devel
+            libjpeg-turbo-devel
             liblas-devel
             libpng-devel
             libpq-devel
             libtiff-devel
-            libxdr
             netcdf-devel
-            pdal-devel
-            pdcurses
             proj-devel
             python3-core
             python3-jupyter
@@ -95,8 +91,9 @@ jobs:
             python3-ply
             python3-pytest
             python3-pywin32
+            python3-six
             python3-wxpython
-            regex-devel
+            sqlite3-devel
             zstd-devel
 
       - name: Set number of cores for compilation
@@ -107,8 +104,6 @@ jobs:
       - name: Compile GRASS GIS
         shell: msys2 {0}
         run: |
-          export CFLAGS="${CFLAGS} -pipe"
-          export CXXFLAGS="${CXXFLAGS} -pipe"
           .github/workflows/build_osgeo4w.sh
 
       - name: Print installed versions
@@ -145,7 +140,7 @@ jobs:
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: testreport-${{ matrix.os }}
           path: testreport

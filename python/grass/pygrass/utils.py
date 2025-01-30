@@ -74,10 +74,11 @@ def findmaps(type, pattern=None, mapset="", location="", gisdbase=""):
         return res
 
     def find_in_gisdbase(type, pattern, gisdbase):
-        res = []
-        for loc in gisdbase.locations():
-            res.extend(find_in_location(type, pattern, Location(loc, gisdbase.name)))
-        return res
+        return [
+            a
+            for loc in gisdbase.locations()
+            for a in find_in_location(type, pattern, Location(loc, gisdbase.name))
+        ]
 
     if gisdbase and location and mapset:
         mset = Mapset(mapset, location, gisdbase)
@@ -187,7 +188,7 @@ def is_clean_name(name) -> bool:
     False
 
     """
-    return not libgis.G_legal_filename(name) < 0
+    return libgis.G_legal_filename(name) >= 0
 
 
 def coor2pixel(coord, region):
@@ -354,7 +355,8 @@ def r_export(rast, output="", fmt="png", **kargs):
             **kargs,
         )
         return output
-    raise ValueError("Raster map does not exist.")
+    msg = "Raster map does not exist."
+    raise ValueError(msg)
 
 
 def get_lib_path(modname, libname=None):
@@ -600,10 +602,11 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    # Remove the generated vector map, if exist
     mset = get_mapset_vector(test_vector_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)
     mset = get_mapset_raster(test_raster_name, mapset="")
     if mset:
+        # Remove the generated raster map, if exists
         run_command("g.remove", flags="f", type="raster", name=test_raster_name)

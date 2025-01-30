@@ -1041,11 +1041,11 @@ def write_xml_modules(name, tree=None):
             if bnode is not None:
                 file_.write("%s<binary>\n" % (" " * indent))
                 indent += 4
-                for fnode in bnode.findall("file"):
-                    file_.write(
-                        "%s<file>%s</file>\n"
-                        % (" " * indent, os.path.join(options["prefix"], fnode.text))
-                    )
+                file_.writelines(
+                    "%s<file>%s</file>\n"
+                    % (" " * indent, os.path.join(options["prefix"], fnode.text))
+                    for fnode in bnode.findall("file")
+                )
                 indent -= 4
                 file_.write("%s</binary>\n" % (" " * indent))
             file_.write('%s<libgis revision="%s" />\n' % (" " * indent, libgis_revison))
@@ -1076,22 +1076,26 @@ def write_xml_extensions(name, tree=None):
             # extension name
             file_.write('%s<task name="%s">\n' % (" " * indent, tnode.get("name")))
             indent += 4
-            """
-            file_.write('%s<description>%s</description>\n' %
-                        (' ' * indent, tnode.find('description').text))
-            file_.write('%s<keywords>%s</keywords>\n' %
-                        (' ' * indent, tnode.find('keywords').text))
-            """
+
+            # file_.write(
+            #     "%s<description>%s</description>\n"
+            #     % (" " * indent, tnode.find("description").text)
+            # )
+            # file_.write(
+            #     "%s<keywords>%s</keywords>\n"
+            #     % (" " * indent, tnode.find("keywords").text)
+            # )
+
             # extension files
             bnode = tnode.find("binary")
             if bnode is not None:
                 file_.write("%s<binary>\n" % (" " * indent))
                 indent += 4
-                for fnode in bnode.findall("file"):
-                    file_.write(
-                        "%s<file>%s</file>\n"
-                        % (" " * indent, os.path.join(options["prefix"], fnode.text))
-                    )
+                file_.writelines(
+                    "%s<file>%s</file>\n"
+                    % (" " * indent, os.path.join(options["prefix"], fnode.text))
+                    for fnode in bnode.findall("file")
+                )
                 indent -= 4
                 file_.write("%s</binary>\n" % (" " * indent))
             # extension modules
@@ -1099,8 +1103,10 @@ def write_xml_extensions(name, tree=None):
             if mnode is not None:
                 file_.write("%s<modules>\n" % (" " * indent))
                 indent += 4
-                for fnode in mnode.findall("module"):
-                    file_.write("%s<module>%s</module>\n" % (" " * indent, fnode.text))
+                file_.writelines(
+                    "%s<module>%s</module>\n" % (" " * indent, fnode.text)
+                    for fnode in mnode.findall("module")
+                )
                 indent -= 4
                 file_.write("%s</modules>\n" % (" " * indent))
 
@@ -1132,14 +1138,14 @@ def write_xml_toolboxes(name, tree=None):
                 % (" " * indent, tnode.get("name"), tnode.get("code"))
             )
             indent += 4
-            for cnode in tnode.findall("correlate"):
-                file_.write(
-                    '%s<correlate code="%s" />\n' % (" " * indent, tnode.get("code"))
-                )
-            for mnode in tnode.findall("task"):
-                file_.write(
-                    '%s<task name="%s" />\n' % (" " * indent, mnode.get("name"))
-                )
+            file_.writelines(
+                '%s<correlate code="%s" />\n' % (" " * indent, tnode.get("code"))
+                for cnode in tnode.findall("correlate")
+            )
+            file_.writelines(
+                '%s<task name="%s" />\n' % (" " * indent, mnode.get("name"))
+                for mnode in tnode.findall("task")
+            )
             indent -= 4
             file_.write("%s</toolbox>\n" % (" " * indent))
 
@@ -1392,16 +1398,16 @@ def install_extension_xml(edict):
     for name in edict:
         # so far extensions do not have description or keywords
         # only modules have
-        """
-        try:
-            desc = gtask.parse_interface(name).description
-            # mname = gtask.parse_interface(name).name
-            keywords = gtask.parse_interface(name).keywords
-        except Exception as e:
-            gs.warning(_("No addons metadata available."
-                            " Addons metadata file not updated."))
-            return []
-        """
+
+        # try:
+        #     desc = gtask.parse_interface(name).description
+        #     # mname = gtask.parse_interface(name).name
+        #     keywords = gtask.parse_interface(name).keywords
+        # except Exception as e:
+        #     gs.warning(
+        #         _("No addons metadata available. Addons metadata file not updated.")
+        #     )
+        #     return []
 
         tnode = None
         for node in tree.findall("task"):
@@ -1412,14 +1418,13 @@ def install_extension_xml(edict):
         if tnode is None:
             # create new node for task
             tnode = ET.Element("task", attrib={"name": name})
-            """
-            dnode = etree.Element('description')
-            dnode.text = desc
-            tnode.append(dnode)
-            knode = etree.Element('keywords')
-            knode.text = (',').join(keywords)
-            tnode.append(knode)
-            """
+
+            # dnode = ET.Element("description")
+            # dnode.text = desc
+            # tnode.append(dnode)
+            # knode = ET.Element("keywords")
+            # knode.text = (",").join(keywords)
+            # tnode.append(knode)
 
             # create binary
             bnode = ET.Element("binary")
@@ -1561,37 +1566,36 @@ def install_module_xml(mlist):
             # binary files installed with an extension are now
             # listed in extensions.xml
 
-            """
-            # create binary
-            bnode = etree.Element('binary')
-            list_of_binary_files = []
-            for file_name in os.listdir(url):
-                file_type = os.path.splitext(file_name)[-1]
-                file_n = os.path.splitext(file_name)[0]
-                html_path = os.path.join(options['prefix'], 'docs', 'html')
-                c_path = os.path.join(options['prefix'], 'bin')
-                py_path = os.path.join(options['prefix'], 'scripts')
-                # html or image file
-                if file_type in ['.html', '.jpg', '.png'] \
-                        and file_n in os.listdir(html_path):
-                    list_of_binary_files.append(os.path.join(html_path, file_name))
-                # c file
-                elif file_type in ['.c'] and file_name in os.listdir(c_path):
-                    list_of_binary_files.append(os.path.join(c_path, file_n))
-                # python file
-                elif file_type in ['.py'] and file_name in os.listdir(py_path):
-                    list_of_binary_files.append(os.path.join(py_path, file_n))
-            # man file
-            man_path = os.path.join(options['prefix'], 'docs', 'man', 'man1')
-            if name + '.1' in os.listdir(man_path):
-                list_of_binary_files.append(os.path.join(man_path, name + '.1'))
-            # add binaries to xml file
-            for binary_file_name in list_of_binary_files:
-                fnode = etree.Element('file')
-                fnode.text = binary_file_name
-                bnode.append(fnode)
-            tnode.append(bnode)
-            """
+            # # create binary
+            # bnode = etree.Element("binary")
+            # list_of_binary_files = []
+            # for file_name in os.listdir(url):
+            #     file_type = os.path.splitext(file_name)[-1]
+            #     file_n = os.path.splitext(file_name)[0]
+            #     html_path = os.path.join(options["prefix"], "docs", "html")
+            #     c_path = os.path.join(options["prefix"], "bin")
+            #     py_path = os.path.join(options["prefix"], "scripts")
+            #     # html or image file
+            #     if file_type in [".html", ".jpg", ".png"] and file_n in os.listdir(
+            #         html_path
+            #     ):
+            #         list_of_binary_files.append(os.path.join(html_path, file_name))
+            #     # c file
+            #     elif file_type in [".c"] and file_name in os.listdir(c_path):
+            #         list_of_binary_files.append(os.path.join(c_path, file_n))
+            #     # python file
+            #     elif file_type in [".py"] and file_name in os.listdir(py_path):
+            #         list_of_binary_files.append(os.path.join(py_path, file_n))
+            # # man file
+            # man_path = os.path.join(options["prefix"], "docs", "man", "man1")
+            # if name + ".1" in os.listdir(man_path):
+            #     list_of_binary_files.append(os.path.join(man_path, name + ".1"))
+            # # add binaries to xml file
+            # for binary_file_name in list_of_binary_files:
+            #     fnode = etree.Element("file")
+            #     fnode.text = binary_file_name
+            #     bnode.append(fnode)
+            # tnode.append(bnode)
             tree.append(tnode)
         else:
             gs.verbose(
@@ -2601,7 +2605,6 @@ def resolve_known_host_service(url, name, branch):
 
 
 def validate_url(url):
-    """"""
     if not os.path.exists(url):
         url_validated = False
         message = None
@@ -2847,10 +2850,8 @@ def main():
             install_extension()
         else:
             if original_url == "" or flags["o"]:
-                """
-                Query GitHub API only if extension will be downloaded
-                from official GRASS GIS addon repository
-                """
+                # Query GitHub API only if extension will be downloaded
+                # from official GRASS GIS addons repository
                 get_addons_paths(gg_addons_base_dir=options["prefix"])
             source, url = resolve_source_code(
                 name=options["extension"],

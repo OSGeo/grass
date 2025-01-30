@@ -230,8 +230,7 @@ def import_stds(
     :param output: The name of the output space time dataset
     :param directory: The extraction directory
     :param title: The title of the new created space time dataset
-    :param descr: The description of the new created
-                 space time dataset
+    :param descr: The description of the new created space time dataset
     :param location: The name of the location that should be created,
                     maps are imported into this location
     :param link: Switch to link raster maps instead importing them
@@ -240,8 +239,7 @@ def import_stds(
     :param create: Create the location specified by the "location"
                   parameter and exit.
                   Do not import the space time datasets.
-    :param stds_type: The type of the space time dataset that
-                     should be imported
+    :param stds_type: The type of the space time dataset that should be imported
     :param base: The base name of the new imported maps, it will be
                  extended using a numerical index.
     :param memory: Cache size for raster rows, used in r.in.gdal
@@ -301,7 +299,6 @@ def import_stds(
     # Check projection information
     if not location:
         temp_name = gs.tempfile()
-        temp_file = open(temp_name, "w")
         proj_name = os.path.abspath(proj_file_name)
 
         # We need to convert projection strings generated
@@ -315,9 +312,9 @@ def import_stds(
         proj_name_tmp = f"{temp_name}_in_projection"
         Path(proj_name_tmp).write_text(proj_content)
 
-        p = gs.start_command("g.proj", flags="j", stdout=temp_file)
-        p.communicate()
-        temp_file.close()
+        with open(temp_name, "w") as temp_file:
+            p = gs.start_command("g.proj", flags="j", stdout=temp_file)
+            p.communicate()
 
         if not gs.compare_key_value_text_files(temp_name, proj_name_tmp, sep="="):
             if overr:
@@ -411,13 +408,14 @@ def import_stds(
                 mapname = filename
                 mapid = mapname + "@" + mapset
 
-            row = {}
-            row["filename"] = filename
-            row["name"] = mapname
-            row["id"] = mapid
-            row["start"] = line_list[1].strip()
-            row["end"] = line_list[2].strip()
-            row["semantic_label"] = line_list[3].strip() if len(line_list) == 4 else ""
+            row = {
+                "filename": filename,
+                "name": mapname,
+                "id": mapid,
+                "start": line_list[1].strip(),
+                "end": line_list[2].strip(),
+                "semantic_label": line_list[3].strip() if len(line_list) == 4 else "",
+            }
 
             new_list_file.write(
                 f"{mapname}{fs}{row['start']}{fs}{row['end']}"

@@ -311,13 +311,15 @@ class Ilist:
             if key < 0:  # Handle negative indices
                 key += self.c_ilist.contents.n_values
             if key >= self.c_ilist.contents.n_values:
-                raise IndexError("Index out of range")
+                msg = "Index out of range"
+                raise IndexError(msg)
             return self.c_ilist.contents.value[key]
         raise ValueError("Invalid argument type: %r." % key)
 
     def __setitem__(self, key, value):
         if self.contains(value):
-            raise ValueError("Integer already in the list")
+            msg = "Integer already in the list"
+            raise ValueError(msg)
         self.c_ilist.contents.value[key] = int(value)
 
     def __len__(self):

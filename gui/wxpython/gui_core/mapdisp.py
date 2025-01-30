@@ -285,19 +285,23 @@ class MapPanelBase(wx.Panel):
 
     def GetMap(self):
         """Returns current map (renderer) instance"""
-        raise NotImplementedError("GetMap")
+        msg = self.GetMap.__name__
+        raise NotImplementedError(msg)
 
     def GetWindow(self):
         """Returns current map window"""
-        raise NotImplementedError("GetWindow")
+        msg = self.GetWindow.__name__
+        raise NotImplementedError(msg)
 
     def GetWindows(self):
         """Returns list of map windows"""
-        raise NotImplementedError("GetWindows")
+        msg = self.GetWindows.__name__
+        raise NotImplementedError(msg)
 
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
-        raise NotImplementedError("GetMapToolbar")
+        msg = self.GetMapToolbar.__name__
+        raise NotImplementedError(msg)
 
     def GetToolbar(self, name):
         """Returns toolbar if exists and is active, else None."""
@@ -393,7 +397,8 @@ class MapPanelBase(wx.Panel):
 
     def AddToolbar(self):
         """Add defined toolbar to the window"""
-        raise NotImplementedError("AddToolbar")
+        msg = self.AddToolbar.__name__
+        raise NotImplementedError(msg)
 
     def RemoveToolbar(self, name, destroy=False):
         """Removes defined toolbar from the window
@@ -419,7 +424,8 @@ class MapPanelBase(wx.Panel):
 
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
-        raise NotImplementedError("OnRender")
+        msg = self.OnRender.__name__
+        raise NotImplementedError(msg)
 
     def OnEnableDisableRender(self, event):
         """Enable/disable auto-rendering map composition (each map layer)"""

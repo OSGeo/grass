@@ -21,6 +21,8 @@ for details.
 import os
 import string
 import time
+from pathlib import Path
+
 
 from .core import (
     gisenv,
@@ -49,27 +51,25 @@ def raster_history(map, overwrite=False, env=None):
 
     """
     current_mapset = gisenv(env)["MAPSET"]
-    if find_file(name=map, env=env)["mapset"] == current_mapset:
-        if overwrite is True:
-            historyfile = tempfile(env=env)
-            f = open(historyfile, "w")
-            f.write(os.environ["CMDLINE"])
-            f.close()
-            run_command("r.support", map=map, loadhistory=historyfile, env=env)
-            try_remove(historyfile)
-        else:
-            run_command("r.support", map=map, history=os.environ["CMDLINE"], env=env)
-        return True
-
-    warning(
-        _(
-            "Unable to write history for <%(map)s>. "
-            "Raster map <%(map)s> not found in current mapset."
+    if find_file(name=map, env=env)["mapset"] != current_mapset:
+        warning(
+            _(
+                "Unable to write history for <%(map)s>. "
+                "Raster map <%(map)s> not found in current mapset."
+            )
+            % {"map": map},
+            env=env,
         )
-        % {"map": map},
-        env=env,
-    )
-    return False
+        return False
+
+    if overwrite is True:
+        historyfile = tempfile(env=env)
+        Path(historyfile).write_text(os.environ["CMDLINE"])
+        run_command("r.support", map=map, loadhistory=historyfile, env=env)
+        try_remove(historyfile)
+    else:
+        run_command("r.support", map=map, history=os.environ["CMDLINE"], env=env)
+    return True
 
 
 def raster_info(map, env=None):
@@ -218,8 +218,7 @@ def raster_what(map, coord, env=None, localized=False):
     [{'elevation': {'color': '255:214:000', 'label': '', 'value': '102.479'}}]
 
     :param str map: the map name
-    :param list coord: a list of list containing all the point that you want
-                       query
+    :param list coord: a list of list containing all the point that you want to query
     :param env:
     """
     map_list = [map] if isinstance(map, (bytes, str)) else map
@@ -255,8 +254,7 @@ def raster_what(map, coord, env=None, localized=False):
     for item in ret.splitlines():
         line = item.split(sep)[3:]
         for i, map_name in enumerate(map_list):
-            tmp_dict = {}
-            tmp_dict[map_name] = {}
+            tmp_dict = {map_name: {}}
             for j in range(len(labels)):
                 tmp_dict[map_name][labels[j]] = line[i * len(labels) + j]
 
