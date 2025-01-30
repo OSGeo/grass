@@ -10,7 +10,7 @@ struct dxf_file *dxf_open(char *file)
     struct dxf_file *dxf;
 
     dxf = (struct dxf_file *)G_malloc(sizeof(struct dxf_file));
-    if (!dxf) 
+    if (!dxf)
         return NULL;
 
     dxf->name = G_store(file);
