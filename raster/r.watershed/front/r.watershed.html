@@ -467,13 +467,13 @@ cut-off value. This only works with SFD, not with MFD.
 <div class="code"><pre>
   r.watershed elev=elevation.dem accum=rwater.accum
 
-  r.mapcalc 'MASK = if(!isnull(elevation.dem))'
+  r.mask raster=elevation.dem
   r.mapcalc "rwater.course = \
    if( abs(rwater.accum) &gt; $mean_of_abs, \
        abs(rwater.accum), \
        null() )"
   r.colors -g rwater.course col=bcyr
-  g.remove -f type=raster name=MASK
+  r.mask -r
 
   # <i>Thinning is required before converting raster lines to vector</i>
   r.thin in=rwater.course out=rwater.course.Thin
