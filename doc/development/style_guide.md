@@ -577,6 +577,43 @@ gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope, env=env)
 This approach makes the computational region completely safe for parallel
 processes as no region-related files are modified.
 
+#### Changing raster mask
+
+The MaskManager in Python API is provides a way for tools to change, or possibly
+to ignore, a raster mask for part of the computation.
+
+Without parameters, MaskManager modifies the global system environment for the
+tool
+
+```python
+with gs.MaskManager():
+    gs.run_command("r.mask", raster=mask_raster)
+    gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope)
+```
+
+Note that with this implementation, the mask set by the user may not be
+respected depending on how the mask raster was created. Use mask should
+generally be respected. If mask set by the user is not respected by the tool,
+this behavior would need to be described in the documentation.
+On the other hand, note also that ignoring mask is usually the desired behavior
+for import tools. This can be achieved by simply not setting the mask in the
+context when additional processing is done after the import.
+
+If needed, tools can implement optional support of a raster mask set by user by
+passing or not passing the current name of a mask obtained from _r.mask.status_
+and by preparing the internal mask raster beforehand with the user mask active.
+
+If different subprocesses, running in parallel, use different masks,
+it is best to create mask rasters beforehand (to avoid limitations of _r.mask_ and
+the underlying _r.reclass_ tool). The name of mask raster can then be passed to
+the manager:
+
+```python
+env = os.environ.copy()
+with gs.MaskManager(mask_name=mask_raster, env=env):
+    gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope, env=env)
+```
+
 #### Temporary Maps
 
 Using temporary maps is preferred over using temporary mapsets. This follows the
