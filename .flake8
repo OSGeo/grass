@@ -28,7 +28,6 @@ per-file-ignores =
     gui/wxpython/animation/g.gui.animation.py: E501
     gui/wxpython/tplot/g.gui.tplot.py: E501
     gui/wxpython/iclass/g.gui.iclass.py: E501
-    gui/wxpython/mapdisp/main.py: E722
     gui/wxpython/mapdisp/test_mapdisp.py: E501
     gui/wxpython/mapswipe/g.gui.mapswipe.py: E501
     gui/wxpython/timeline/g.gui.timeline.py: E501
@@ -37,9 +36,7 @@ per-file-ignores =
     # C wrappers call libgis.G_gisinit before importing other modules.
     # TODO: Is this really needed?
     python/grass/jupyter/__init__.py: E501
-    # Current benchmarks/tests are changing sys.path before import.
-    # Possibly, a different approach should be taken there anyway.
-    python/grass/pygrass/tests/benchmark.py: F821
+    python/grass/pygrass/vector/__init__.py: E402
     # Configuration file for Sphinx:
     # Ignoring import/code mix and line length.
     # Files not managed by Black

@@ -257,10 +257,10 @@ def get_initial_command_info(env_run):
     # Execution timestamp in ISO 8601 format
     exec_time = datetime.now().isoformat()
 
-    # 2D raster MASK presence
+    # 2D raster mask presence
     mask2d_status = gs.parse_command("r.mask.status", format="json", env=env_run)
 
-    # 3D raster MASK presence
+    # 3D raster mask presence
     env = gs.gisenv(env_run)
     mapset_path = Path(env["GISDBASE"]) / env["LOCATION_NAME"] / env["MAPSET"]
     mask3d_present = (mapset_path / "grid3" / "RASTER3D_MASK").exists()
