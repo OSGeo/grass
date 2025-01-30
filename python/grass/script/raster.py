@@ -274,9 +274,31 @@ def raster_what(map, coord, env=None, localized=False):
 class MaskManager:
     """Context manager for setting and managing 2D raster mask.
 
+    The context manager makes it possible to have custom mask for the current process.
+    In the following example, we set the mask using _r.mask_ which creates a new
+    raster which represents the mask. The mask is deactivated at the end of the
+    context by the context manager and the raster is removed.
+
+    >>> with gs.MaskManager():
+    ...     gs.run_command("r.mask", raster="state_boundary")
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
     The _mask_name_ can be a name of an existing raster map and in that case,
     that raster map is used as mask right away. If the raster map does not exist,
-    the name will be used for the mask once it is created (with `r.mask`).
+    the name will be used for the mask once it is created (with _r.mask_).
+
+    The following example uses an existing raster map directly as the mask.
+    The mask is disabled at the end of the context, but the raster map is not
+    removed.
+
+    >>> with gs.MaskManager(mask_name="state_boundary"):
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    Note the difference between using the name of an existing raster map directly
+    and using *r.mask* to create a new mask. Both zeros and NULL values are used
+    to represent mask away the input data resulting in NULL cells, while *r.mask*
+    by default sets the mask in the way that only NULL values in the original raster
+    result in NULL cells.
 
     If _mask_name_ is not provided, it generates a unique name using node (computer)
     name, PID (current process ID), and unique ID (UUID).
@@ -284,12 +306,42 @@ class MaskManager:
     end of the context.
     Optionally, the context manager can remove the raster map at the end of the context
     when _remove_ is set to `True`.
+    The defaults for the removal of a mask raster are set to align with the two main use
+    cases which is creating the mask within the context and using an existing raster as
+    a mask.
 
-    In the background, this class manages the `GRASS_MASK` environment variable and
-    possibly removal of a specified mask.
+    Name of the raster mask is available as the _mask_name_ attribute and can be used to
+    directly create a mask (without the need to use *r.mask*). The following example
+    uses the attribute to create a mask directly by name. This is equivalent to the
+    basic case where a raster named `MASK` is created directly by the user in an
+    interactive session.
 
-    The modified environment is available as the _env_ attribute. Name of the raster
-    mask is available as the _mask_name_ attribute.
+    >>> with gs.MaskManager() as manager:
+    ...     gs.run_command(
+                "r.mapcalc", expression=f"{manager.mask_name} = row() < col()"
+            )
+    ...     gs.run_command(
+                "r.mapcalc", expression=f"masked_elevation = elevation"
+            )
+
+    In the background, this class manages the `GRASS_MASK` environment variable.
+    It modifies the current system environment or the one provided. It does not
+    create a copy internally. However, the modified environment is available as
+    the _env_ attribute for convenience and consistency with other managers
+    which provide this attribute.
+
+    The following code creates a copy of the global environment and lets the manager
+    modify it. The copy is then available as the _env_ attribute.
+
+    >>> with gs.MaskManager(env=os.environ.copy()) as manager:
+    ...     gs.run_command(
+    ...         "r.mapcalc",
+    ...         expression=f"{manager.mask_name} = row() < col()",
+    ...         env=manager.env
+    ...     )
+    ...     gs.run_command(
+    ...         "r.mapcalc", expression=f"masked_elevation = elevation", env=manager.env
+    ...     )
     """
 
     def __init__(
