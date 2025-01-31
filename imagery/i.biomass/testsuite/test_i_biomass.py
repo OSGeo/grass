@@ -23,7 +23,6 @@ class TestIBiomass(TestCase):
         cls.use_temp_region()
         cls.runModule("g.region", n=10, s=0, e=10, w=0, rows=10, cols=10)
         cls._create_input_rasters()
-        cls._create_reference_raster()
 
     @classmethod
     def _create_input_rasters(cls):
@@ -72,6 +71,7 @@ class TestIBiomass(TestCase):
 
     def test_biomass_regression(self):
         """Regression test to ensure i.biomass output remains consistent."""
+        self._create_reference_raster()
         reference_raster = "biomass_reference"
 
         self.assertModule(
