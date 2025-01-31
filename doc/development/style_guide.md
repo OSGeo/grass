@@ -467,6 +467,12 @@ raster called MASK by default. Raster tools called as a subprocess will automati
 respect the globally set mask when reading the data. For outputs, respecting of
 the mask is optional.
 
+Tools should generally respect the global mask set by a user. If mask set by the
+user is not respected by a tool, the exact behavior should be described in the
+documentation. On the other hand, ignoring mask is usually the desired behavior
+for import tools which corresponds with the mask being applied only when reading
+existing raster data in a project.
+
 Tools **should not set or remove the global mask** to prevent unintended
 behavior during interactive sessions and to maintain parallel processing
 integrity. If a tool requires a mask for its operation, it should implement
@@ -579,27 +585,60 @@ processes as no region-related files are modified.
 
 #### Changing raster mask
 
-The MaskManager in Python API is provides a way for tools to change, or possibly
+The _MaskManager_ in Python API is provides a way for tools to change, or possibly
 to ignore, a raster mask for part of the computation.
 
-Without parameters, MaskManager modifies the global system environment for the
-tool
+In the following example, _MaskManager_ modifies the global system environment
+for the tool (aka _os.environ_) so that custom mask can be applied:
 
 ```python
+# Previously user-set mask applies here (if any).
+gs.run_command("r.slope.aspect", elevation=input_raster, aspect=aspect)
+
+with gs.MaskManager():
+    # Only the mask we set here will apply.
+    gs.run_command("r.mask", raster=mask_raster)
+    gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope)
+# Mask is disabled and the mask raster is removed at the end of the with block.
+
+# Previously user-set mask applies here again.
+```
+
+Because tools should generally respect the provided mask, the mask in a tool
+should act as an additional mask. This can be achieved when preparing the new
+mask raster using an tool which reads an existing raster:
+
+```python
+# Here we create an initial mask by creating a raster from vector,
+# but that does not use mask.
+gs.run_command(
+    "v.to.rast", input=input_vector, where="name == 'Town'", output=town_boundary
+)
+# So, we use a raster algebra expression. Mask will be applied if set
+# because in the expression, we are reading an existing raster.
+gs.mapcalc(f"{raster_mask} = {town_boundary}")
+
 with gs.MaskManager():
     gs.run_command("r.mask", raster=mask_raster)
+    # Both user mask and the town_boundary are used here.
     gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope)
 ```
 
-Note that with this implementation, the mask set by the user may not be
-respected depending on how the mask raster was created. Use mask should
-generally be respected. If mask set by the user is not respected by the tool,
-this behavior would need to be described in the documentation.
-On the other hand, note also that ignoring mask is usually the desired behavior
-for import tools. This can be achieved by simply not setting the mask in the
-context when additional processing is done after the import.
+To disable the mask, which may be needed in processing steps of import tool,
+we can do:
 
-If needed, tools can implement optional support of a raster mask set by user by
+```python
+# Mask applies here if set.
+gs.run_command("r.slope.aspect", elevation=input_raster, aspect=aspect)
+
+with gs.MaskManager():
+    # No mask was set in this context, so the tool runs without a mask.
+    gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope)
+
+# Mask applies again.
+```
+
+If needed, tools can implement optional support of a user-set raster mask by
 passing or not passing the current name of a mask obtained from _r.mask.status_
 and by preparing the internal mask raster beforehand with the user mask active.
 

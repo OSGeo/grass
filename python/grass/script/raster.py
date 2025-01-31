@@ -284,7 +284,7 @@ class MaskManager:
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
     The _mask_name_ can be a name of an existing raster map and in that case,
-    that raster map is used as mask right away. If the raster map does not exist,
+    that raster map is used directly as is. If the raster map does not exist,
     the name will be used for the mask once it is created (with _r.mask_).
 
     The following example uses an existing raster map directly as the mask.
@@ -296,7 +296,7 @@ class MaskManager:
 
     Note the difference between using the name of an existing raster map directly
     and using *r.mask* to create a new mask. Both zeros and NULL values are used
-    to represent mask away the input data resulting in NULL cells, while *r.mask*
+    to represent mask resulting in NULL cells, while *r.mask*
     by default sets the mask in the way that only NULL values in the original raster
     result in NULL cells.
 
