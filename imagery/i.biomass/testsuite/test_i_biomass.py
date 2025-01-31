@@ -23,6 +23,7 @@ class TestIBiomass(TestCase):
         cls.use_temp_region()
         cls.runModule("g.region", n=10, s=0, e=10, w=0, rows=10, cols=10)
         cls._create_input_rasters()
+        cls._create_reference_raster()
 
     @classmethod
     def _create_input_rasters(cls):
@@ -40,6 +41,21 @@ class TestIBiomass(TestCase):
             cls.runModule(
                 "r.mapcalc", expression=f"{raster_name} = {expr}", overwrite=True
             )
+
+    @classmethod
+    def _create_reference_raster(cls):
+        """Create the reference raster for regression testing."""
+        cls.runModule(
+            "i.biomass",
+            fpar=cls.input_rasters["fpar"],
+            lightuse_efficiency=cls.input_rasters["lightuse_eff"],
+            latitude=cls.input_rasters["latitude"],
+            dayofyear=cls.input_rasters["dayofyear"],
+            transmissivity_singleway=cls.input_rasters["transmissivity"],
+            water_availability=cls.input_rasters["water"],
+            output="biomass_reference",
+            overwrite=True,
+        )
 
     @classmethod
     def tearDownClass(cls):
