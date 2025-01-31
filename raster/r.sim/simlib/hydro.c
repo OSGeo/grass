@@ -102,23 +102,31 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
     int i, l, k;
     int iblock;
     int iter1;
-    double factor, conn, gaux, gauy;
+    double conn, gaux, gauy;
     double addac;
 
     int nblock = 1;
     nstack = 0;
 
+    double stxm = geometry->stepx * (double)(geometry->mx + 1) - geometry->xmin;
+    double stym = geometry->stepy * (double)(geometry->my + 1) - geometry->ymin;
+    double deldif =
+        sqrt(simulation->deltap) * settings->frac; /* diffuse factor */
+
     if (maxwa > (MAXW - geometry->mx * geometry->my)) {
         nblock = 1 + maxwa / (MAXW - geometry->mx * geometry->my);
         maxwa = maxwa / nblock;
     }
+    double factor = simulation->deltap * simulation->sisum /
+                    (simulation->rwalk * (double)nblock);
 
+    G_debug(2, " deldif, factor %f %e", deldif, factor);
     G_debug(2, " maxwa, nblock %d %d", maxwa, nblock);
+    G_debug(2, "rwalk,sisum: %f %f", simulation->rwalk, simulation->sisum);
 
     for (iblock = 1; iblock <= nblock; iblock++) {
         int lw = 0;
         double walkwe = 0.;
-        G_debug(2, "rwalk,sisum: %f %f", simulation->rwalk, simulation->sisum);
         /* write hh.walkers0 */
 
         for (k = 0; k < geometry->my; k++) {
@@ -151,18 +159,7 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
         G_debug(2, " nwalk, maxw %d %d", nwalk, MAXW);
         G_debug(2, " walkwe (walk weight),frac %f %f", walkwe, settings->frac);
 
-        double stxm =
-            geometry->stepx * (double)(geometry->mx + 1) - geometry->xmin;
-        double stym =
-            geometry->stepy * (double)(geometry->my + 1) - geometry->ymin;
         nwalka = 0;
-        double deldif =
-            sqrt(simulation->deltap) * settings->frac; /* diffuse factor */
-
-        factor = simulation->deltap * simulation->sisum /
-                 (simulation->rwalk * (double)nblock);
-
-        G_debug(2, " deldif,factor %f %e", deldif, factor);
 
         /* ********************************************************** */
         /*       main loop over the projection time */

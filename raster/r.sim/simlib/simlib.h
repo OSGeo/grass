@@ -38,7 +38,7 @@ typedef struct {
     double vmean;   /* Mean velocity */
     double infmean; /* Mean infiltration */
     double timec;
-    double deltap;
+    double deltap; /* Time step for water */
     double rwalk;
 } Simulation;
 
