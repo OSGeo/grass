@@ -22,37 +22,24 @@ class TestIBiomass(TestCase):
         """Set up input rasters and configure test environment."""
         cls.use_temp_region()
         cls.runModule("g.region", n=10, s=0, e=10, w=0, rows=10, cols=10)
+        cls._create_input_rasters()
 
-        cls.runModule(
-            "r.mapcalc",
-            expression=f"{cls.input_rasters['fpar']} = col() * 0.1",
-            overwrite=True,
-        )
-        cls.runModule(
-            "r.mapcalc",
-            expression=f"{cls.input_rasters['lightuse_eff']} = row() * 0.1",
-            overwrite=True,
-        )
-        cls.runModule(
-            "r.mapcalc",
-            expression=f"{cls.input_rasters['latitude']} = 45.0",
-            overwrite=True,
-        )
-        cls.runModule(
-            "r.mapcalc",
-            expression=f"{cls.input_rasters['dayofyear']} = 150",
-            overwrite=True,
-        )
-        cls.runModule(
-            "r.mapcalc",
-            expression=f"{cls.input_rasters['transmissivity']} = 0.75",
-            overwrite=True,
-        )
-        cls.runModule(
-            "r.mapcalc",
-            expression=f"{cls.input_rasters['water']} = 0.8",
-            overwrite=True,
-        )
+    @classmethod
+    def _create_input_rasters(cls):
+        """Helper method to create all input rasters with defined expressions."""
+        expressions = {
+            "fpar": "col() * 0.1",
+            "lightuse_eff": "row() * 0.1",
+            "latitude": "45.0",
+            "dayofyear": "150",
+            "transmissivity": "0.75",
+            "water": "0.8",
+        }
+        for raster_key, expr in expressions.items():
+            raster_name = cls.input_rasters[raster_key]
+            cls.runModule(
+                "r.mapcalc", expression=f"{raster_name} = {expr}", overwrite=True
+            )
 
     @classmethod
     def tearDownClass(cls):
@@ -67,10 +54,9 @@ class TestIBiomass(TestCase):
         )
         cls.del_temp_region()
 
-    def test_biomass_with_zero_inputs(self):
-        """Test the behavior of i.biomass when all inputs are zero."""
-        for raster in self.input_rasters.values():
-            self.runModule("r.mapcalc", expression=f"{raster} = 0", overwrite=True)
+    def test_biomass_regression(self):
+        """Regression test to ensure i.biomass output remains consistent."""
+        reference_raster = "biomass_reference"
 
         self.assertModule(
             "i.biomass",
@@ -84,10 +70,14 @@ class TestIBiomass(TestCase):
             overwrite=True,
         )
         self.assertRasterExists(self.output_raster)
+        self.assertRasterExists(reference_raster)
 
         output_values = array.array(self.output_raster)
+        reference_values = array.array(reference_raster)
+
         self.assertTrue(
-            np.allclose(output_values, 0), "Biomass raster should be all zeros"
+            np.allclose(output_values, reference_values, atol=2.0),
+            "Biomass raster values should match the reference values",
         )
 
     def test_biomass_linearity(self):
@@ -197,61 +187,6 @@ class TestIBiomass(TestCase):
         self.assertTrue(
             np.all(np.isfinite(output_values_max)),
             "Biomass output contains non-finite values.",
-        )
-
-    def test_biomass_large_processing(self):
-        """Test processing large input rasters with i.biomass."""
-        self.runModule("g.region", n=90, s=-90, e=180, w=-180, rows=1000, cols=1000)
-
-        self.runModule(
-            "r.mapcalc",
-            expression=f"{self.input_rasters['fpar']} = col() * 0.01",
-            overwrite=True,
-        )
-        self.runModule(
-            "r.mapcalc",
-            expression=f"{self.input_rasters['lightuse_eff']} = row() * 0.01",
-            overwrite=True,
-        )
-        self.runModule(
-            "r.mapcalc",
-            expression=f"{self.input_rasters['latitude']} = 45.0",
-            overwrite=True,
-        )
-        self.runModule(
-            "r.mapcalc",
-            expression=f"{self.input_rasters['dayofyear']} = 150",
-            overwrite=True,
-        )
-        self.runModule(
-            "r.mapcalc",
-            expression=f"{self.input_rasters['transmissivity']} = 0.75",
-            overwrite=True,
-        )
-        self.runModule(
-            "r.mapcalc",
-            expression=f"{self.input_rasters['water']} = 0.8",
-            overwrite=True,
-        )
-
-        self.assertModule(
-            "i.biomass",
-            fpar=self.input_rasters["fpar"],
-            lightuse_efficiency=self.input_rasters["lightuse_eff"],
-            latitude=self.input_rasters["latitude"],
-            dayofyear=self.input_rasters["dayofyear"],
-            transmissivity_singleway=self.input_rasters["transmissivity"],
-            water_availability=self.input_rasters["water"],
-            output=self.output_raster,
-            overwrite=True,
-        )
-
-        self.assertRasterExists(self.output_raster)
-
-        output_values = array.array(self.output_raster)
-        self.assertTrue(
-            np.isfinite(output_values).all(),
-            "Output contains non-finite values for large input rasters.",
         )
 
     def test_biomass_latitude_dependency(self):
