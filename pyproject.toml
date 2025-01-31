@@ -268,11 +268,6 @@ ignore = [
 # Other ignores:
 "**.py" = ["PYI066"]
 "*/testsuite/**.py" = ["PT009", "PT027"]
-"gui/wxpython/core/globalvar.py" = ["PTH208"]
-"gui/wxpython/core/render.py" = ["SIM115"]
-"gui/wxpython/core/settings.py" = ["PTH208", "SIM115"]
-"gui/wxpython/core/utils.py" = ["SIM115"]
-"gui/wxpython/core/workspace.py" = ["SIM115"]
 "gui/wxpython/datacatalog/catalog.py" = ["PTH208"]
 "gui/wxpython/dbmgr/base.py" = ["SIM115"]
 "gui/wxpython/gcp/manager.py" = ["PTH208"]
