@@ -1405,7 +1405,7 @@ class SampleUnitsKeyPage(TitledPage):
     def OnEnterPage(self, event: WizardEvent | None = None) -> None:
         """Function during entering"""
         # This is an hack to force the user to choose Rectangle or Circle
-        self.typeBox.SetSelection(2),
+        (self.typeBox.SetSelection(2),)
         self.typeBox.ShowItem(2, False)
         self.panelSizer.Layout()
 
@@ -1608,7 +1608,7 @@ class UnitsMousePage(TitledPage):
             choices=[_("Rectangle"), _("Circle"), ("")],
         )
         # This is an hack to force the user to choose Rectangle or Circle
-        self.typeBox.SetSelection(2),
+        (self.typeBox.SetSelection(2),)
         self.typeBox.ShowItem(2, False)
         self.sizer.Add(self.typeBox, flag=wx.ALIGN_LEFT, pos=(0, 0), span=(1, 2))
 
