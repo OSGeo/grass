@@ -1716,30 +1716,32 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             targetMapWin = self.TgtMapWindow
             targetMapWin.UpdateMap(render=False, renderVector=False)
 
-    def CheckGCPcount(self, msg=False):
+    def CheckGCPcount(self, msg: bool = False) -> bool:
         """
         Checks to make sure that the minimum number of GCPs have been defined and
         are active for the selected transformation order
         """
         if (
-            (self.GCPcount >= 3 or self.gr_order != 1)
-            and (self.GCPcount >= 6 or self.gr_order != 2)
-            and (self.GCPcount >= 10 or self.gr_order != 3)
+            (self.GCPcount < 3 and self.gr_order == 1)
+            or (self.GCPcount < 6 and self.gr_order == 2)
+            or (self.GCPcount < 10 and self.gr_order == 3)
         ):
-            return True
-        if msg:
-            GWarning(
-                parent=self,
-                message=_(
-                    "Insufficient points defined and active (checked) "
-                    "for selected rectification method (order: %d).\n"
-                    "3+ points needed for 1st order,\n"
-                    "6+ points for 2nd order, and\n"
-                    "10+ points for 3rd order."
+            if msg:
+                GWarning(
+                    parent=self,
+                    message=_(
+                        "Insufficient points defined and active (checked) "
+                        "for selected rectification method (order: %d).\n"
+                        "3+ points needed for 1st order,\n"
+                        "6+ points for 2nd order, and\n"
+                        "10+ points for 3rd order."
+                    )
+                    % self.gr_order,
                 )
-                % self.gr_order,
-            )
+
             return False
+
+        return True
 
     def OnGeorect(self, event):
         """
