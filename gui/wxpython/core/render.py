@@ -51,10 +51,10 @@ def get_tempfile_name(suffix, create=False):
     # which may mitigate problems (like not cleaning files) in case we
     # go little beyond what is in the documentation in terms of opening
     # closing and removing the tmp file
-    tmp = tempfile.NamedTemporaryFile(suffix=suffix, delete=False)
-    # we don't want it open, we just need the name
-    name = tmp.name
-    tmp.close()
+    with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tmp:
+        # we don't want it open, we just need the name
+        name = tmp.name
+
     if not create:
         # remove empty file to have a clean state later
         os.remove(name)

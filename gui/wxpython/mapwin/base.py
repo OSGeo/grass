@@ -220,7 +220,7 @@ class MapWindowBase:
         for handler in handlers:
             try:
                 handler(event)
-            except:
+            except Exception:
                 handlers.remove(handler)
                 GError(
                     parent=self,
@@ -308,7 +308,7 @@ class MapWindowBase:
                 try:
                     handler("unregistered")
                     handlers.remove(handler)
-                except:
+                except Exception:
                     GError(
                         parent=self,
                         message=_(
@@ -347,7 +347,7 @@ class MapWindowBase:
                     grass.warning(
                         _("Handler: %s was not registered") % handler.__name__
                     )
-            except:
+            except Exception:
                 GError(
                     parent=self,
                     message=_(

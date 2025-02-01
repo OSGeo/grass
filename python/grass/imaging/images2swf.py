@@ -551,15 +551,14 @@ class BitmapTag(DefinitionTag):
         # when storing RGB as ARGB).
 
         if len(im.shape) == 3:
-            if im.shape[2] in [3, 4]:
-                tmp = np.ones((im.shape[0], im.shape[1], 4), dtype=np.uint8) * 255
-                for i in range(3):
-                    tmp[:, :, i + 1] = im[:, :, i]
-                if im.shape[2] == 4:
-                    tmp[:, :, 0] = im[:, :, 3]  # swap channel where alpha is in
-            else:
+            if im.shape[2] not in {3, 4}:
                 msg = "Invalid shape to be an image."
                 raise ValueError(msg)
+            tmp = np.ones((im.shape[0], im.shape[1], 4), dtype=np.uint8) * 255
+            for i in range(3):
+                tmp[:, :, i + 1] = im[:, :, i]
+            if im.shape[2] == 4:
+                tmp[:, :, 0] = im[:, :, 3]  # swap channel where alpha is in
 
         elif len(im.shape) == 2:
             tmp = np.ones((im.shape[0], im.shape[1], 4), dtype=np.uint8) * 255
@@ -807,11 +806,11 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
 
     # Check duration
     if hasattr(duration, "__len__"):
-        if len(duration) == len(images2):
-            duration = list(duration)
-        else:
+        if len(duration) != len(images2):
             msg = "len(duration) doesn't match amount of images."
             raise ValueError(msg)
+        duration = list(duration)
+
     else:
         duration = [duration for im in images2]
 

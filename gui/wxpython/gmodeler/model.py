@@ -39,6 +39,7 @@ import mimetypes
 import time
 
 import xml.etree.ElementTree as ET
+from pathlib import Path
 from xml.sax import saxutils
 
 import wx
@@ -542,11 +543,8 @@ class Model:
 
         for finput in self.fileInput:
             # read lines
-            fd = open(finput)
-            try:
-                data = self.fileInput[finput] = fd.read()
-            finally:
-                fd.close()
+            data = Path(finput).read_text()
+            self.fileInput[finput] = data
 
             # substitute variables
             write = False
@@ -579,11 +577,7 @@ class Model:
 
             if not checkOnly:
                 if write:
-                    fd = open(finput, "w")
-                    try:
-                        fd.write(data)
-                    finally:
-                        fd.close()
+                    Path(finput).write_text(data)
                 else:
                     self.fileInput[finput] = None
 

@@ -52,8 +52,9 @@ def replace_in_file(file_path, pattern, repl):
     # using tmp file to store the replaced content
     tmp_file_path = file_path + ".tmp"
     with open(file_path) as old_file, open(tmp_file_path, "w") as new_file:
-        for line in old_file:
-            new_file.write(re.sub(pattern=pattern, string=line, repl=repl))
+        new_file.writelines(
+            re.sub(pattern=pattern, string=line, repl=repl) for line in old_file
+        )
     # remove old file since it must not exist for rename/move
     os.remove(file_path)
     # replace old file by new file
@@ -448,8 +449,7 @@ def wrap_stdstream_to_html(infile, outfile, module, stream):
     after = "</pre></body></html>"
     with open(outfile, "w") as html, open(infile) as text:
         html.write(before)
-        for line in text:
-            html.write(color_error_line(html_escape(line)))
+        html.writelines(color_error_line(html_escape(line)) for line in text)
         html.write(after)
 
 
@@ -527,10 +527,8 @@ UNKNOWN_NUMBER_HTML = '<span style="font-size: 60%">unknown</span>'
 def success_to_html_percent(total, successes):
     if total:
         pass_per = 100 * (float(successes) / total)
-        pass_per = percent_to_html(pass_per)
-    else:
-        pass_per = UNKNOWN_NUMBER_HTML
-    return pass_per
+        return percent_to_html(pass_per)
+    return UNKNOWN_NUMBER_HTML
 
 
 class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
@@ -797,8 +795,10 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             file_index.write(files_section)
 
             if supplementary_files:
-                for f in supplementary_files:
-                    file_index.write('<li><a href="{f}">{f}</a></li>'.format(f=f))
+                file_index.writelines(
+                    '<li><a href="{f}">{f}</a></li>'.format(f=f)
+                    for f in supplementary_files
+                )
 
             file_index.write("</ul>")
 

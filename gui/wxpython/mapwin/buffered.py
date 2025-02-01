@@ -1034,7 +1034,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             for item in self.graphicsSetList:
                 try:
                     item.Draw()
-                except:
+                except Exception:
                     GError(
                         parent=self,
                         message=_(
@@ -1181,10 +1181,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             if isinstance(r, list):
                 r = Rect(r[0], r[1], r[2], r[3])
             r.Inflate(4, 4)
-            try:
-                pdc.ClearId(boxid)
-            except:
-                pass
+            pdc.ClearId(boxid)
             self.RefreshRect(r, False)
             pdc.SetId(boxid)
             self.Draw(pdc, drawid=boxid, pdctype="box", coords=mousecoords)
@@ -1198,10 +1195,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             y2 = max(begin[1], end[1])
             r = Rect(x1, y1, x2 - x1, y2 - y1)
             r.Inflate(4, 4)
-            try:
-                pdc.ClearId(self.lineid)
-            except:
-                pass
+            pdc.ClearId(self.lineid)
             self.RefreshRect(r, False)
             pdc.SetId(self.lineid)
             self.Draw(pdc, drawid=self.lineid, pdctype="line", coords=mousecoords)
@@ -1537,8 +1531,6 @@ class BufferedMapWindow(MapWindowBase, Window):
             if idlist != []:
                 self.dragid = idlist[0]  # drag whatever is on top
 
-        else:
-            pass
         coords = self.Pixel2Cell(self.mouse["begin"])
         self.mouseLeftDown.emit(x=coords[0], y=coords[1])
 
@@ -1587,8 +1579,6 @@ class BufferedMapWindow(MapWindowBase, Window):
                     self.textdict[self.dragid]["bbox"] = self.pdc.GetIdBounds(
                         self.dragid
                     )
-                else:
-                    pass
                 self.dragid = None
 
             self.mouseLeftUpPointer.emit(x=coordinates[0], y=coordinates[1])
@@ -1735,13 +1725,13 @@ class BufferedMapWindow(MapWindowBase, Window):
         try:
             pdc.ClearId(self.lineid)
             pdc.RemoveId(self.lineid)
-        except:
+        except (KeyError, TypeError):
             pass
 
         try:
             pdc.ClearId(self.plineid)
             pdc.RemoveId(self.plineid)
-        except:
+        except (KeyError, TypeError):
             pass
 
         Debug.msg(
@@ -1763,7 +1753,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         try:
             x = int(xyCoords[0])
             y = int(xyCoords[1])
-        except:
+        except (TypeError, ValueError, IndexError):
             return None
 
         if self.Map.region["ewres"] > self.Map.region["nsres"]:
@@ -1784,7 +1774,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         try:
             east = float(enCoords[0])
             north = float(enCoords[1])
-        except:
+        except (TypeError, ValueError, IndexError):
             return None
 
         if self.Map.region["ewres"] > self.Map.region["nsres"]:

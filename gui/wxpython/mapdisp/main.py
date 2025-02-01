@@ -123,9 +123,8 @@ class DMonMap(Map):
 
         nlayers = 0
         try:
-            fd = open(self.cmdfile)
-            lines = fd.readlines()
-            fd.close()
+            with open(self.cmdfile) as fd:
+                lines = fd.readlines()
             # detect d.out.file, delete the line from the cmd file and export
             # graphics
             if len(lines) > 0:
@@ -133,9 +132,8 @@ class DMonMap(Map):
                     "d.to.rast"
                 ):
                     dCmd = lines[-1].strip()
-                    fd = open(self.cmdfile, "w")
-                    fd.writelines(lines[:-1])
-                    fd.close()
+                    with open(self.cmdfile, "w") as fd:
+                        fd.writelines(lines[:-1])
                     if lines[-1].startswith("d.out.file"):
                         self.saveToFile.emit(cmd=utils.split(dCmd))
                     else:
@@ -143,9 +141,8 @@ class DMonMap(Map):
                     return
                 if lines[-1].startswith("d.what"):
                     dWhatCmd = lines[-1].strip()
-                    fd = open(self.cmdfile, "w")
-                    fd.writelines(lines[:-1])
-                    fd.close()
+                    with open(self.cmdfile, "w") as fd:
+                        fd.writelines(lines[:-1])
                     if "=" in utils.split(dWhatCmd)[1]:
                         maps = utils.split(dWhatCmd)[1].split("=")[1].split(",")
                     else:
@@ -176,7 +173,7 @@ class DMonMap(Map):
                         mapFile = line.split("=", 1)[1].strip()
                     try:
                         k, v = line[2:].strip().split("=", 1)
-                    except:
+                    except (ValueError, IndexError):
                         pass
                     render_env[k] = v
                     continue
@@ -657,11 +654,10 @@ if __name__ == "__main__":
 
     # create pid file
     pidFile = os.path.join(monPath, "pid")
-    fd = open(pidFile, "w")
-    if not fd:
-        grass.fatal(_("Unable to create file <%s>") % pidFile)
-    fd.write("%s\n" % os.getpid())
-    fd.close()
+    with open(pidFile, "w") as fd:
+        if not fd:
+            grass.fatal(_("Unable to create file <%s>") % pidFile)
+        fd.write("%s\n" % os.getpid())
 
     RunCommand("g.gisenv", set="MONITOR_%s_PID=%d" % (monName.upper(), os.getpid()))
 

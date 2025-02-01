@@ -12,6 +12,8 @@ This program is free software under the GNU General Public License
 @author Jachym Cepicky
 """
 
+from __future__ import annotations
+
 import os
 import sys
 import platform
@@ -21,6 +23,8 @@ import re
 import inspect
 import operator
 from string import digits
+from typing import TYPE_CHECKING
+
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -29,6 +33,11 @@ from grass.app.runtime import get_grass_config_dir
 from core.gcmd import RunCommand
 from core.debug import Debug
 from core.globalvar import wxPythonPhoenix
+
+
+if TYPE_CHECKING:
+    import wx
+    import PIL.Image
 
 
 def cmp(a, b):
@@ -860,12 +869,10 @@ def StoreEnvVariable(key, value=None, envFile=None):
         return
     expCmd = "set" if windows else "export"
 
-    for key, value in environ.items():
-        fd.write("%s %s=%s\n" % (expCmd, key, value))
+    fd.writelines("%s %s=%s\n" % (expCmd, key, value) for key, value in environ.items())
 
     # write also skipped lines
-    for line in lineSkipped:
-        fd.write(line + os.linesep)
+    fd.writelines(line + os.linesep for line in lineSkipped)
 
     fd.close()
 
@@ -1009,7 +1016,7 @@ def GetGEventAttribsForHandler(method, event):
     return kwargs, missing_args
 
 
-def PilImageToWxImage(pilImage, copyAlpha=True):
+def PilImageToWxImage(pilImage: PIL.Image.Image, copyAlpha: bool = True) -> wx.Image:
     """Convert PIL image to wx.Image
 
     Based on http://wiki.wxpython.org/WorkingWithImages
@@ -1038,7 +1045,7 @@ def PilImageToWxImage(pilImage, copyAlpha=True):
     return wxImage
 
 
-def autoCropImageFromFile(filename):
+def autoCropImageFromFile(filename) -> wx.Image:
     """Loads image from file and crops it automatically.
 
     If PIL is not installed, it does not crop it.
