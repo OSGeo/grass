@@ -26,6 +26,7 @@ Bug fix (9/12/2010) by Daniel:
       filter function short.
 
 """
+
 import os
 import sys
 import numpy as np

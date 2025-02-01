@@ -998,10 +998,7 @@ class Settings:
             raise GException(e)
         except Exception as e:
             raise GException(
-                _(
-                    "Writing settings to file <%(file)s> failed."
-                    "\n\nDetails: %(detail)s"
-                )
+                _("Writing settings to file <%(file)s> failed.\n\nDetails: %(detail)s")
                 % {"file": self.filePath, "detail": e}
             )
         return self.filePath

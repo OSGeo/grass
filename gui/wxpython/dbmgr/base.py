@@ -198,8 +198,7 @@ class VirtualAttributeList(
                     GError(
                         parent=self,
                         message=_(
-                            "Column <%(column)s> not found in "
-                            "in the table <%(table)s>."
+                            "Column <%(column)s> not found in in the table <%(table)s>."
                         )
                         % {"column": col, "table": tableName},
                     )
@@ -1642,10 +1641,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             try:
                 if cat in tlist.itemCatsMap.values():
                     raise ValueError(
-                        _(
-                            "Record with category number %d "
-                            "already exists in the table."
-                        )
+                        _("Record with category number %d already exists in the table.")
                         % cat
                     )
 

@@ -11,6 +11,7 @@
 #            for details.
 
 """Utility functions warpping existing processes in a suitable way"""
+
 from collections.abc import Mapping
 import tempfile
 import json

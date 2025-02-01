@@ -5,7 +5,7 @@ requires-python = ">=3.9"
 
 [tool.black]
 line-length = 88
-required-version = '24'
+required-version = '25'
 target-version = ['py39', 'py310', 'py311', 'py312', 'py313']
 # 'extend-exclude' excludes files or directories in addition to the defaults
 extend-exclude = '''

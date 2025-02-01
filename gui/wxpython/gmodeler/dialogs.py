@@ -469,8 +469,7 @@ class ModelRelationDialog(wx.Dialog):
             GError(
                 parent=self.parent,
                 message=_(
-                    "Relation doesn't point to GRASS command.\n"
-                    "Unable to add relation."
+                    "Relation doesn't point to GRASS command.\nUnable to add relation."
                 ),
             )
             return items

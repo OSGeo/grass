@@ -2532,8 +2532,7 @@ class TemporalAlgebraParser:
                             success = resultstds.register_map(map_i, dbif)
                             if not success:
                                 self.msgr.warning(
-                                    "Unabe to register map layers "
-                                    "in STDS %s" % (t[1])
+                                    "Unabe to register map layers in STDS %s" % (t[1])
                                 )
 
                     if self.dry_run is False:

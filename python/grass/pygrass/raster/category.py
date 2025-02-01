@@ -271,7 +271,8 @@ class Category(list):
         :type category: Category object
         """
         libraster.Rast_copy_cats(
-            ctypes.byref(self.c_cats), ctypes.byref(category.c_cats)  # to
+            ctypes.byref(self.c_cats),
+            ctypes.byref(category.c_cats),  # to
         )  # from
         self._read_cats()
 

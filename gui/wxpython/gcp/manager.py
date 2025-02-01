@@ -503,10 +503,7 @@ class LocationPage(TitledPage):
     def OnPageChanging(self, event: WizardEvent | None = None) -> None:
         if event.GetDirection() and (self.xylocation == "" or self.xymapset == ""):
             GMessage(
-                _(
-                    "You must select a valid location "
-                    "and mapset in order to continue"
-                ),
+                _("You must select a valid location and mapset in order to continue"),
                 parent=self,
             )
             event.Veto()
@@ -2020,8 +2017,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(
                 parent=self,
                 message=_(
-                    "Could not calculate RMS Error.\n"
-                    "Possible error with m.transform."
+                    "Could not calculate RMS Error.\nPossible error with m.transform."
                 ),
             )
             return
@@ -2153,8 +2149,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(
                 parent=self,
                 message=_(
-                    "Could not calculate new extends.\n"
-                    "Possible error with m.transform."
+                    "Could not calculate new extends.\nPossible error with m.transform."
                 ),
             )
             return
@@ -3258,8 +3253,7 @@ class GrSettingsDialog(wx.Dialog):
             GError(
                 parent=self,
                 message=_(
-                    "RMS threshold factor is < 1\n"
-                    "Too many points might be highlighted"
+                    "RMS threshold factor is < 1\nToo many points might be highlighted"
                 ),
             )
 
