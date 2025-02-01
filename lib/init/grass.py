@@ -603,13 +603,10 @@ def read_gui(gisrc, default_gui):
 
 def create_initial_gisrc(filename):
     # for convenience, define GISDBASE as pwd:
-    s = (
-        r"""GISDBASE: %s
+    s = r"""GISDBASE: %s
 LOCATION_NAME: <UNKNOWN>
 MAPSET: <UNKNOWN>
-"""
-        % Path.cwd()
-    )
+""" % Path.cwd()
     writefile(filename, s)
 
 
@@ -1662,9 +1659,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         fc -R
         _grass_old_mapset="$MAPSET_PATH"
     fi
-    """.format(
-            sh_history=sh_history
-        )
+    """.format(sh_history=sh_history)
     elif sh == "bash":
         # Append existing history to file ("flush").
         # Clear the (in-memory) history.
@@ -1678,9 +1673,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         history -r
         _grass_old_mapset="$MAPSET_PATH"
     fi
-    """.format(
-            sh_history=sh_history
-        )
+    """.format(sh_history=sh_history)
         # Ubuntu sudo creates a file .sudo_as_admin_successful and bash checks
         # for this file in the home directory from /etc/bash.bashrc and prints a
         # message if it's not detected. This can be suppressed with either

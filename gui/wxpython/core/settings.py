@@ -816,9 +816,9 @@ class Settings:
         )
 
         self.internalSettings["display"]["driver"]["choices"] = ["cairo", "png"]
-        self.internalSettings["display"]["statusbarMode"][
-            "choices"
-        ] = None  # set during MapFrame init
+        self.internalSettings["display"]["statusbarMode"]["choices"] = (
+            None  # set during MapFrame init
+        )
         self.internalSettings["display"]["mouseWheelZoom"]["choices"] = (
             _("Zoom and recenter"),
             _("Zoom to mouse cursor"),
