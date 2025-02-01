@@ -13,6 +13,7 @@
 #            for details.
 
 """Interactive visualizations map with folium or ipyleaflet"""
+
 import os
 import base64
 import json

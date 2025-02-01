@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 @author Luca Delucchi
 @author start stvds support Matej Krejci
 """
+
 import os
 from itertools import cycle
 from pathlib import Path
@@ -474,9 +475,7 @@ class TplotFrame(wx.Frame):
                     GError(
                         parent=self,
                         message=_(
-                            "Datasets have different "
-                            "time unit which is not "
-                            "allowed."
+                            "Datasets have different time unit which is not allowed."
                         ),
                     )
                     return
@@ -670,8 +669,7 @@ class TplotFrame(wx.Frame):
                             parent=self,
                             showTraceback=False,
                             message=_(
-                                "No connection between vector map {vmap} "
-                                "and layer {la}"
+                                "No connection between vector map {vmap} and layer {la}"
                             ).format(vmap=row["name"], la=lay),
                         )
                         return

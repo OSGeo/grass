@@ -736,9 +736,7 @@ def cannot_create_location_reason(gisdbase, location):
             " already exists."
         ).format(**locals())
     return _(
-        "Unable to create new project in"
-        " the directory <{path}>"
-        " for an unknown reason."
+        "Unable to create new project in the directory <{path}> for an unknown reason."
     ).format(**locals())
 
 

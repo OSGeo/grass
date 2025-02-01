@@ -229,10 +229,7 @@ def main():
             )
         except CalledModuleError:
             gs.fatal(
-                _(
-                    "abandoned. Removing temporary map, restoring "
-                    "user mask if needed:"
-                )
+                _("abandoned. Removing temporary map, restoring user mask if needed:")
             )
 
         # assign unique IDs to each hole or hole system (holes closer than edge
@@ -248,10 +245,7 @@ def main():
             )
         except CalledModuleError:
             gs.fatal(
-                _(
-                    "abandoned. Removing temporary map, restoring "
-                    "user mask if needed:"
-                )
+                _("abandoned. Removing temporary map, restoring user mask if needed:")
             )
 
         # get a list of unique hole cat's
@@ -275,10 +269,7 @@ def main():
             )
         except CalledModuleError:
             gs.fatal(
-                _(
-                    "abandoned. Removing temporary maps, restoring "
-                    "user mask if needed:"
-                )
+                _("abandoned. Removing temporary maps, restoring user mask if needed:")
             )
         tmp_vmaps.append(prefix + "holes")
 

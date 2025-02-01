@@ -2704,9 +2704,9 @@ class WriteActiniaFile(WriteScriptFile):
 
         self.fd.write(
             f"""{{
-{' ' * self.indent * 1}"id": "model",
-{' ' * self.indent * 1}"description": "{'""'.join(description.splitlines())}",
-{' ' * self.indent * 1}"version": "1",
+{" " * self.indent * 1}"id": "model",
+{" " * self.indent * 1}"description": "{'""'.join(description.splitlines())}",
+{" " * self.indent * 1}"version": "1",
 """
         )
 
@@ -2723,12 +2723,12 @@ class WriteActiniaFile(WriteScriptFile):
         if parameterized is True:
             self.fd.write(f'{" " * self.indent * 1}"template": {{\n')
             self.fd.write(
-                f"""{' ' * self.indent * 2}"list": [
+                f"""{" " * self.indent * 2}"list": [
     """
             )
         else:
             self.fd.write(
-                f"""{' ' * self.indent}"list": [
+                f"""{" " * self.indent}"list": [
     """
             )
 
@@ -2781,7 +2781,6 @@ class WriteActiniaFile(WriteScriptFile):
             value = p.get("value", None)
 
             if (name and value) or (name in parameterizedParams):
-
                 if name in parameterizedParams:
                     parameterizedParam = self._getParamName(name, item)
                     default_val = p.get("value", "")

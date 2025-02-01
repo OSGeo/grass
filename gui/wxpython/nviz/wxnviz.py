@@ -326,7 +326,6 @@ except NameError:
 
 
 class Nviz:
-
     def __init__(self, glog, gprogress) -> None:
         """Initialize Nviz class instance
 
@@ -1397,8 +1396,7 @@ class Nviz:
 
         Debug.msg(
             3,
-            "Nviz::SetVectorPointMode(): id=%d, color=%s, "
-            "width=%d, size=%f, marker=%d",
+            "Nviz::SetVectorPointMode(): id=%d, color=%s, width=%d, size=%f, marker=%d",
             id,
             color_str,
             width,
@@ -1999,8 +1997,7 @@ class Nviz:
 
         Debug.msg(
             3,
-            "Nviz::SetIsosurfaceAttr(): id=%d, isosurf=%d, "
-            "attr=%d, map=%s, value=%s",
+            "Nviz::SetIsosurfaceAttr(): id=%d, isosurf=%d, attr=%d, map=%s, value=%s",
             id,
             isosurf_id,
             attr,
