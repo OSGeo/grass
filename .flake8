@@ -2,7 +2,8 @@
 ignore =
     # whitespace before ':' (Black)
     E203,
-    E501, # E501 line too long
+    # E501 line too long
+    E501,
     # line break before binary operator (Black)
     W503,
 
