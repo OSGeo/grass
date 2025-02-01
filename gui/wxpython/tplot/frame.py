@@ -806,7 +806,7 @@ class TplotFrame(wx.Frame):
             x=np.array(xdata), y=np.array(ydata), returnFormula=True
         )
 
-        r2 = "r\u00B2 = {:.5f}".format(
+        r2 = "r\u00b2 = {:.5f}".format(
             np.corrcoef(np.array(xdata), np.array(ydata))[0, 1] ** 2
         )
         self.plots.append(
