@@ -148,10 +148,9 @@ int V2_open_old_ogr(struct Map_info *Map)
 
     G_debug(3, "V2_open_old_ogr(): name = %s mapset = %s", Map->name,
             Map->mapset);
-    const char *map_name = NULL;
 
     if (Vect_open_fidx(Map, &(Map->fInfo.ogr.offset)) != 0) {
-        map_name = Vect_get_full_name(Map);
+        const char *map_name = Vect_get_full_name(Map);
         G_warning(_("Unable to open feature index file for vector map <%s>"),
                   map_name);
         G_free((void *)map_name);
