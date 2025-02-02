@@ -466,8 +466,7 @@ def one_point_per_col_output(
                             x = row[1]
                             y = row[2]
                             out_str += (
-                                "{sep}{cat}{csep}{x:10.10f}{csep}"
-                                "{y:10.10f}".format(
+                                "{sep}{cat}{csep}{x:10.10f}{csep}{y:10.10f}".format(
                                     cat=cat,
                                     x=float(x),
                                     y=float(y),

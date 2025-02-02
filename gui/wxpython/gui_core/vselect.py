@@ -332,9 +332,7 @@ class VectorSelectBase:
             GMessage(_("No features selected"))
             return
         lst = ""
-        for (
-            cat
-        ) in (
+        for cat in (
             self.selectedFeatures
         ):  # build text string of categories for v.extract input
             lst += str(cat["Category"]) + ","

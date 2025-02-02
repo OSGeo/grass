@@ -632,8 +632,9 @@ class VectorTopo(Vector):
             self.table.update(key=cat, values=attrs)
         elif self.table is None and attrs:
             print(
-                "Table for vector {name} does not exist, attributes not"
-                " loaded".format(name=self.name)
+                "Table for vector {name} does not exist, attributes not loaded".format(
+                    name=self.name
+                )
             )
         libvect.Vect_cat_set(geo_obj.c_cats, self.layer, cat)
         result = libvect.Vect_rewrite_line(

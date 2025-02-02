@@ -527,10 +527,7 @@ class LocationPage(TitledPage):
     def OnPageChanging(self, event: WizardEvent | None = None) -> None:
         if event.GetDirection() and (self.xylocation == "" or self.xymapset == ""):
             GMessage(
-                _(
-                    "You must select a valid location "
-                    "and mapset in order to continue"
-                ),
+                _("You must select a valid location and mapset in order to continue"),
                 parent=self,
             )
             event.Veto()
@@ -3220,8 +3217,7 @@ class GrSettingsDialog(wx.Dialog):
             GError(
                 parent=self,
                 message=_(
-                    "RMS threshold factor is < 1\n"
-                    "Too many points might be highlighted"
+                    "RMS threshold factor is < 1\nToo many points might be highlighted"
                 ),
             )
 

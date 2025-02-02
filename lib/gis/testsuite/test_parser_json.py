@@ -16,7 +16,6 @@ import json
 
 
 class TestParserJson(TestCase):
-
     @xfail_windows
     def test_r_slope_aspect_json(self):
         args = [
