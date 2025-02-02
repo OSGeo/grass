@@ -468,8 +468,7 @@ class PsMapFrame(wx.Frame):
                     event.userData["pdfname"],
                 ]
                 message = _(
-                    "Program {} is not available."
-                    " Please install it to create PDF.\n\n "
+                    "Program {} is not available. Please install it to create PDF.\n\n "
                 ).format(pdf_rendering_prog)
             try:
                 proc = gs.Popen(command)

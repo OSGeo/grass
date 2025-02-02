@@ -44,7 +44,6 @@ def build_index(ext):
 
 
 if __name__ == "__main__":
-
     build_index("html")
 
     build_index("md")

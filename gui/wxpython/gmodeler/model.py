@@ -2702,9 +2702,9 @@ class WriteActiniaFile(WriteScriptFile):
 
         self.fd.write(
             f"""{{
-{' ' * self.indent * 1}"id": "model",
-{' ' * self.indent * 1}"description": "{'""'.join(description.splitlines())}",
-{' ' * self.indent * 1}"version": "1",
+{" " * self.indent * 1}"id": "model",
+{" " * self.indent * 1}"description": "{'""'.join(description.splitlines())}",
+{" " * self.indent * 1}"version": "1",
 """
         )
 
@@ -2721,12 +2721,12 @@ class WriteActiniaFile(WriteScriptFile):
         if parameterized is True:
             self.fd.write(f'{" " * self.indent * 1}"template": {{\n')
             self.fd.write(
-                f"""{' ' * self.indent * 2}"list": [
+                f"""{" " * self.indent * 2}"list": [
     """
             )
         else:
             self.fd.write(
-                f"""{' ' * self.indent}"list": [
+                f"""{" " * self.indent}"list": [
     """
             )
 
@@ -3310,9 +3310,7 @@ class WritePythonFile(WriteScriptFile):
 # %module
 # % description: {description}
 # %end
-""".format(
-                description=" ".join(properties["description"].splitlines())
-            )
+""".format(description=" ".join(properties["description"].splitlines()))
         )
 
         modelItems = self.model.GetItems(ModelAction)

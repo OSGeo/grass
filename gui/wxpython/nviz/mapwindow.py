@@ -69,7 +69,6 @@ class RenderTypedDict(TypedDict):
 
 
 class NvizThread(Thread):
-
     def __init__(self, log, progressbar, window) -> None:
         Thread.__init__(self)
         Debug.msg(5, "NvizThread.__init__():")

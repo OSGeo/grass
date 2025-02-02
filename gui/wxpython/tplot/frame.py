@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 @author Luca Delucchi
 @author start stvds support Matej Krejci
 """
+
 import os
 from itertools import cycle
 from pathlib import Path
@@ -474,9 +475,7 @@ class TplotFrame(wx.Frame):
                     GError(
                         parent=self,
                         message=_(
-                            "Datasets have different "
-                            "time unit which is not "
-                            "allowed."
+                            "Datasets have different time unit which is not allowed."
                         ),
                     )
                     return
@@ -802,7 +801,7 @@ class TplotFrame(wx.Frame):
             x=np.array(xdata), y=np.array(ydata), returnFormula=True
         )
 
-        r2 = "r\u00B2 = {:.5f}".format(
+        r2 = "r\u00b2 = {:.5f}".format(
             np.corrcoef(np.array(xdata), np.array(ydata))[0, 1] ** 2
         )
         self.plots.append(

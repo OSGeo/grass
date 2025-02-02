@@ -139,10 +139,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
             os.remove(menudataFile)
             _debug(
                 2,
-                (
-                    "toolboxes.getMenudataFile: no user defined files, "
-                    "menudata deleted"
-                ),
+                ("toolboxes.getMenudataFile: no user defined files, menudata deleted"),
             )
             return fallback
 
@@ -197,10 +194,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
         )
     except ETREE_EXCEPTIONS:
         _warning(
-            _(
-                "Unable to parse user toolboxes XML files. "
-                "Default files will be loaded."
-            )
+            _("Unable to parse user toolboxes XML files. Default files will be loaded.")
         )
         return fallback
 

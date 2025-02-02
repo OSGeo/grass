@@ -278,9 +278,7 @@ def get_html_test_authors_table(directory, tests_authors):
         not_testing_authors = tested_dir_authors - tests_authors
     else:
         no_svn_text = (
-            '<span style="font-size: 60%">'
-            "Authors cannot be obtained using SVN."
-            "</span>"
+            '<span style="font-size: 60%">Authors cannot be obtained using SVN.</span>'
         )
         not_testing_authors = tested_dir_authors = [no_svn_text]
     if not not_testing_authors:
@@ -516,8 +514,7 @@ def success_to_html_text(total, successes):
         # alternatives: SUCCEEDED, passed, OK
         return '<span style="color: green">succeeded</span>'
     return (
-        '<span style="color: red; font-size: 60%">'
-        "? more successes than total ?</span>"
+        '<span style="color: red; font-size: 60%">? more successes than total ?</span>'
     )
 
 
@@ -559,9 +556,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         svn_info = get_svn_info()
         if not svn_info:
             svn_text = (
-                '<span style="font-size: 60%">'
-                "SVN revision cannot be obtained"
-                "</span>"
+                '<span style="font-size: 60%">SVN revision cannot be obtained</span>'
             )
         else:
             url = get_source_url(
@@ -629,9 +624,9 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         )
 
         self.main_index.write(
-            "<tbody>{tfoot}</table>"
-            "<p>{summary}</p>"
-            "</body></html>".format(tfoot=tfoot, summary=summary_sentence)
+            "<tbody>{tfoot}</table><p>{summary}</p></body></html>".format(
+                tfoot=tfoot, summary=summary_sentence
+            )
         )
         self.main_index.close()
 

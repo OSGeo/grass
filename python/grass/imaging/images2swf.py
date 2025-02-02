@@ -65,6 +65,7 @@ sources and tools:
   of a watermark in the upper left corner.
 
 """
+
 from __future__ import annotations
 
 import os

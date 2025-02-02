@@ -517,8 +517,7 @@ def get_version_branch(major_version):
     if stderr:
         gs.fatal(
             _(
-                "Failed to get branch from the Git repository <{repo_path}>.\n"
-                "{error}"
+                "Failed to get branch from the Git repository <{repo_path}>.\n{error}"
             ).format(
                 repo_path=GIT_URL,
                 error=gs.decode(stderr),
@@ -1803,8 +1802,9 @@ def fix_newlines(directory):
 def extract_zip(name, directory, tmpdir):
     """Extract a ZIP file into a directory"""
     gs.debug(
-        "extract_zip(name={name}, directory={directory},"
-        " tmpdir={tmpdir})".format(name=name, directory=directory, tmpdir=tmpdir),
+        "extract_zip(name={name}, directory={directory}, tmpdir={tmpdir})".format(
+            name=name, directory=directory, tmpdir=tmpdir
+        ),
         3,
     )
     try:
@@ -1828,8 +1828,9 @@ def extract_zip(name, directory, tmpdir):
 def extract_tar(name, directory, tmpdir):
     """Extract a TAR or a similar file into a directory"""
     gs.debug(
-        "extract_tar(name={name}, directory={directory},"
-        " tmpdir={tmpdir})".format(name=name, directory=directory, tmpdir=tmpdir),
+        "extract_tar(name={name}, directory={directory}, tmpdir={tmpdir})".format(
+            name=name, directory=directory, tmpdir=tmpdir
+        ),
         3,
     )
     import tarfile
@@ -2186,18 +2187,12 @@ def remove_extension(force=False):
                     gs.message(_("Extension <%s> successfully uninstalled.") % ename)
     elif flags["t"]:
         gs.warning(
-            _(
-                "Toolbox <%s> not removed. "
-                "Re-run '%s' with '-f' flag to force removal"
-            )
+            _("Toolbox <%s> not removed. Re-run '%s' with '-f' flag to force removal")
             % (options["extension"], "g.extension")
         )
     else:
         gs.warning(
-            _(
-                "Extension <%s> not removed. "
-                "Re-run '%s' with '-f' flag to force removal"
-            )
+            _("Extension <%s> not removed. Re-run '%s' with '-f' flag to force removal")
             % (options["extension"], "g.extension")
         )
 
@@ -2824,8 +2819,7 @@ def main():
         if options["operation"] != "add":
             gs.warning(
                 _(
-                    "Flag '{}' is relevant only to"
-                    " 'operation=add'. Ignoring this flag."
+                    "Flag '{}' is relevant only to 'operation=add'. Ignoring this flag."
                 ).format(flag)
             )
         else:

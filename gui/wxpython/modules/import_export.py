@@ -501,8 +501,7 @@ class GdalImportDialog(ImportDialog):
                         GError(
                             parent=self,
                             message=_(
-                                "The Python GDAL package is missing."
-                                " Please install it."
+                                "The Python GDAL package is missing. Please install it."
                             ),
                         )
                         return

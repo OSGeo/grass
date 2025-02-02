@@ -1215,11 +1215,7 @@ class VDigitToolbar(BaseToolbar):
                     dlg.Destroy()
 
             self.parent.SetStatusText(
-                _(
-                    "Please wait, "
-                    "closing and rebuilding topology of "
-                    "vector map <%s>..."
-                )
+                _("Please wait, closing and rebuilding topology of vector map <%s>...")
                 % self.mapLayer.GetName(),
                 0,
             )

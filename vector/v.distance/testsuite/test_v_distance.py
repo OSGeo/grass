@@ -7,7 +7,6 @@ from grass.gunittest.gmodules import SimpleModule
 
 
 class TestVDistance(TestCase):
-
     def test_json(self):
         """Test json format"""
         reference = [
