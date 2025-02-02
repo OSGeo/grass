@@ -1520,30 +1520,29 @@ class ManageSettingsWidget(wx.Panel):
         :return: -1 on failure
         """
         try:
-            fd = open(self.settingsFile, "w")
-            fd.write("format_version=2.0\n")
-            for key, values in self._settings.items():
-                first = True
-                for v in values:
-                    # escaping characters
-                    for e_ch in self.esc_chars:
-                        v = v.replace(e_ch, self.esc_chars[self.e_char_i] + e_ch)
-                    if first:
+            with open(self.settingsFile, "w") as fd:
+                fd.write("format_version=2.0\n")
+                for key, values in self._settings.items():
+                    first = True
+                    for v in values:
                         # escaping characters
                         for e_ch in self.esc_chars:
-                            key = key.replace(
-                                e_ch, self.esc_chars[self.e_char_i] + e_ch
-                            )
-                        fd.write("%s;%s;" % (key, v))
-                        first = False
-                    else:
-                        fd.write("%s;" % (v))
-                fd.write("\n")
+                            v = v.replace(e_ch, self.esc_chars[self.e_char_i] + e_ch)
+                        if first:
+                            # escaping characters
+                            for e_ch in self.esc_chars:
+                                key = key.replace(
+                                    e_ch, self.esc_chars[self.e_char_i] + e_ch
+                                )
+                            fd.write("%s;%s;" % (key, v))
+                            first = False
+                        else:
+                            fd.write("%s;" % (v))
+                    fd.write("\n")
 
         except OSError:
             GError(parent=self, message=_("Unable to save settings"))
             return -1
-        fd.close()
 
         return 0
 

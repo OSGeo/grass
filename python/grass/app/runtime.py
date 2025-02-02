@@ -37,8 +37,7 @@ def get_grass_config_dir(major_version, minor_version, env):
     config_dir = env.get(env_dirname)
     if config_dir is None:
         msg = (
-            f"The {env_dirname} variable is not set, ask your operating"
-            " system support"
+            f"The {env_dirname} variable is not set, ask your operating system support"
         )
         raise RuntimeError(msg)
 

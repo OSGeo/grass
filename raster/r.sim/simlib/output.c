@@ -71,6 +71,7 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
             Vect_append_point(Points, x, y, z);
             Vect_write_line(&Out, GV_POINT, Points, Cats);
         }
+        Vect_build(&Out);
         /* Close vector file */
         Vect_close(&Out);
 

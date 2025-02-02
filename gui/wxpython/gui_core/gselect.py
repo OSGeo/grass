@@ -832,17 +832,15 @@ class VectorDBInfo:
 
     def _CheckDBConnection(self):
         """Check DB connection"""
-        nuldev = open(os.devnull, "w+")
-        # if map is not defined (happens with vnet initialization) or it
-        # doesn't exist
-        try:
-            self.layers = gs.vector_db(map=self.map, stderr=nuldev)
-        except CalledModuleError:
-            return False
-        finally:  # always close nuldev
-            nuldev.close()
+        with open(os.devnull, "w+") as nuldev:
+            # if map is not defined (happens with vnet initialization) or it
+            # doesn't exist
+            try:
+                self.layers = gs.vector_db(map=self.map, stderr=nuldev)
+            except CalledModuleError:
+                return False
 
-        return bool(len(self.layers.keys()) > 0)
+            return bool(len(self.layers.keys()) > 0)
 
     def _DescribeTables(self):
         """Describe linked tables"""
@@ -2534,7 +2532,7 @@ class GdalSelect(wx.Panel):
                   pg_catalog.pg_table_is_visible(c.oid)
               ) AS o ON a.attrelid = o.oid
             WHERE
-              relname IN ({', '.join(tables)})
+              relname IN ({", ".join(tables)})
               AND NOT a.attisdropped;
         """
 
@@ -2610,8 +2608,7 @@ class GdalSelect(wx.Panel):
             GError(
                 parent=self,
                 message=_(
-                    "PostgreSQL DB <{psql}> program was not found."
-                    " Please, install it."
+                    "PostgreSQL DB <{psql}> program was not found. Please, install it."
                 ).format(psql=self._psql),
             )
         Debug.msg(3, f"GdalSelect._getPGDBRasters(): return {rasters}")

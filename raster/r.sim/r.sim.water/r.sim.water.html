@@ -26,6 +26,19 @@ can be used to compute partial derivates of the predefined flow using its direct
 by aspect and slope.
 
 <p>
+The equations are
+
+<div class="code"><pre>
+dx = tan(slope) * cos(aspect)
+</pre></div>
+
+and
+
+<div class="code"><pre>
+dy = tan(slope) * sin(aspect)
+</pre></div>
+
+<p>
 <div align="center" style="margin: 10px;">
 <img style="margin: 0.5em;" src="r_sim_water.png" alt="r.sim.water generated depth map"><br>
 <i >
@@ -99,6 +112,13 @@ a threshold water depth value (<b>hmax)</b>, given in [m]. When it is reached,
 diffusion term increases as given by <b>halpha</b> and advection term
 (direction of flow) is given as "prevailing" direction of flow computed
 as average of flow directions from the previous <b>hbeta</b> number of grid cells.
+The model tries to keep water "shallow" with maximum shallow water
+depth defined by <b>hmax</b> default 0.3 meters. However, water depths
+much higher than <b>hmax</b> can be observed if water accumulates in
+natural sinks or river beds. Depending on the area of interest and the
+used digital elevation model, <b>hmax</b>, <b>halpha</b> and
+<b>hbeta</b> might need to be adjusted in order to deal realistically
+with elevation depressions or obstacles.
 
 <h2>NOTES</h2>
 
@@ -145,6 +165,37 @@ as they provide scalability from a single workstation to large parallel
 machines due to the independence of sampling points. Therefore, the methods
 are useful both for everyday exploratory work using a desktop computer and
 for large, cutting-edge applications using high performance computing.
+
+<p>
+<b>Suggested Manning's n for surface roughness</b><br>
+from <a href="https://baharmon.github.io/hydrology-in-grass">https://baharmon.github.io/hydrology-in-grass</a>
+<p>
+<table border="1">
+ <tr><th>NLCD Landcover Category</th><th>Manning’s n value</th></tr>
+ <tr><td>Open Water</td><td>0.001</td></tr>
+ <tr><td>Developed, Open Space</td><td>0.0404</td></tr>
+ <tr><td>Developed, Low Intensity</td><td>0.0678</td></tr>
+ <tr><td>Developed, Medium Intensity</td><td>0.0678</td></tr>
+ <tr><td>Developed, High Intensity</td><td>0.0404</td></tr>
+ <tr><td>Barren Land</td><td>0.0113</td></tr>
+ <tr><td>Deciduous Forest</td><td>0.36</td></tr>
+ <tr><td>Evergreen Forest</td><td>0.32</td></tr>
+ <tr><td>Mixed Forest</td><td>0.4</td></tr>
+ <tr><td>Shrub/Scrub</td><td>0.4</td></tr>
+ <tr><td>Grassland/Herbaceuous</td><td>0.368</td></tr>
+ <tr><td>Pasture/Hay</td><td>0.325</td></tr>
+ <tr><td>Cultivated Crops</td><td>0.325</td></tr>
+ <tr><td>Woody Wetlands</td><td>0.086</td></tr>
+ <tr><td>Emergent Herbaceuous Wetlands</td><td>0.1825</td></tr>
+</table>
+
+<p>
+The <a href="https://www.usgs.gov/centers/eros/science/annual-nlcd-science-product-user-guide">NLCD user guide</a>
+provides more information about the different NLCD classes.
+
+<p>
+Increasing the number of threads with <b>nprocs</b> does not really
+speed up the simulation.
 
 <h2>EXAMPLE</h2>
 
