@@ -83,13 +83,16 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
         *has_z = 1;
         ndim = 3;
     }
+    char *mname = G_fully_qualified_name(name, mapset)
 
     while (eof == 0) {
         ltype = Vect_read_next_line(&map, Points, Cats);
         switch (ltype) {
         case -1: {
-            G_warning(_("Unable to read vector map <%s>"),
-                      G_fully_qualified_name(name, mapset));
+            G_warning(_("Unable to read vector map <%s>"), mname);
+            G_free(mname);
+            G_free(top);
+            G_free(gpt);
             return NULL;
         }
         case -2: /* EOF */
@@ -146,12 +149,14 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
     if (!np) {
         G_warning(
             _("No points from vector map <%s> fall within current region"),
-            G_fully_qualified_name(name, mapset));
+            mname);
+        G_free(mname);
+        G_free(top);
         return (NULL);
     }
     else {
-        G_message(_("Vector map <%s> loaded (%d points)"),
-                  G_fully_qualified_name(name, mapset), np);
+        G_message(_("Vector map <%s> loaded (%d points)"), mname, np);
+        G_free(mname);
     }
 
     *nsites = np;
