@@ -25,27 +25,24 @@ with PEP8, consistent formatting, and readable and error-free code:
 
 - [Flake8](https://flake8.pycqa.org/en/latest/) tool to ensure compliance with
   PEP8
-- [Black](https://black.readthedocs.io/en/stable/) code formatter to ensure
-  consistent code formatting
+- [ruff](https://docs.astral.sh/ruff/) linter and code formatter to ensure
+  code quality and consistent code formatting
 - [Pylint](https://pylint.readthedocs.io/en/latest/) static code analyser to
   find bad code practices or errors
 
-Note that while the entire GRASS code base is Black formatted, full compliance
-with PEP8, Flake8, and Pylint practices is still work in progress.
+Note that while the entire GRASS code base is formatted with `ruff format`,
+full compliance with PEP8, Flake8, and Pylint practices is still work in progress.
 
 See [using pre-commit](#using-pre-commit) for pre-commit setup and usage to
 simplify performing of these checks.
 
-#### Black
+#### Formatting
 
-Use Black to format files:
+Use ruff's formatter to format files:
 
 ```bash
-black {source_file_or_directory}
+ruff format
 ```
-
-Black is configured via [pyproject.toml](../../pyproject.toml). The line
-length is set to 88 characters.
 
 #### Flake8
 
@@ -157,8 +154,9 @@ In that case review the changes and run again `git add` and
 It is also possible to run pre-commit manually, e.g:
 
 ```bash
+pre-commit run --all-files
 pre-commit run clang-format --all-files
-pre-commit run black --all-files
+pre-commit run ruff-format --all-files
 ```
 
 Or to target a specific set of files:
