@@ -299,7 +299,7 @@ class NvizTask:
 
         if len(layerList) > 1:
             raise GException(_("Please add only one layer in the list."))
-            return
+            return None
         layer = layerList[0]
         if hasattr(layer, "maps"):
             series = layer.maps

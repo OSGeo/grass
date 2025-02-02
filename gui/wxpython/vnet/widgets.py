@@ -388,7 +388,7 @@ class PointsList(
                 )  # convert function for type check
 
         if not data:
-            return
+            return None
         dlg = self.CreateEditDialog(data=data, pointNo=key)
 
         if dlg.ShowModal() == wx.ID_OK:

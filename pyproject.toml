@@ -211,7 +211,6 @@ ignore = [
     "PTH204",  # os-path-getmtime
     "PTH207",  # glob
     "RET501",  # unnecessary-return-none
-    "RET502",  # implicit-return-value
     "RET503",  # implicit-return
     "RUF003",  # ambiguous-unicode-character-comment
     "RUF005",  # collection-literal-concatenation

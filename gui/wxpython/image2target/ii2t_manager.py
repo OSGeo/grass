@@ -2061,7 +2061,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         if not self.CheckGCPcount(msg=True):
             self.gr_order = order
-            return
+            return None
 
         self.gr_order = order
 
@@ -2103,7 +2103,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     "Possible error with i.ortho.transform."
                 ),
             )
-            return
+            return None
 
         # fist corner
         e, n = errlist[0].split()
@@ -2449,7 +2449,7 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
     def DeleteGCPItem(self):
         """Deletes selected item in GCP list."""
         if self.selected == wx.NOT_FOUND:
-            return
+            return None
 
         key = self.GetItemData(self.selected)
         self.DeleteItem(self.selected)

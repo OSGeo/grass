@@ -261,7 +261,7 @@ class BasePlotFrame(wx.Frame):
         """
 
         if len(rasterList) == 0:
-            return
+            return None
 
         rdict = {}  # initialize a dictionary
         for rpair in rasterList:

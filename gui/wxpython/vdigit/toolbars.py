@@ -1061,7 +1061,7 @@ class VDigitToolbar(BaseToolbar):
             if dlg.ShowModal() == wx.ID_YES:
                 RunCommand("v.build", map=mapLayer.GetName())
             else:
-                return
+                return None
 
         # deactivate layer
         self.Map.ChangeLayerActive(mapLayer, False)

@@ -687,7 +687,7 @@ class IClassMapPanel(DoubleMapPanel):
         warning = self._checkImportedTopo(vector)
         if warning:
             GMessage(parent=self, message=warning)
-            return
+            return None
 
         wx.BeginBusyCursor()
         wx.GetApp().Yield()
@@ -698,7 +698,7 @@ class IClassMapPanel(DoubleMapPanel):
         # open vector map to be imported
         if digitClass.OpenMap(vector, update=False) is None:
             GError(parent=self, message=_("Unable to open vector map <%s>") % vector)
-            return
+            return None
 
         # copy features to the temporary map
         vname = self._getTempVectorName()
@@ -709,7 +709,7 @@ class IClassMapPanel(DoubleMapPanel):
                 parent=self,
                 message=_("Unable to copy vector features from <%s>") % vector,
             )
-            return
+            return None
         del os.environ["GRASS_VECTOR_TEMPORARY"]
 
         # close map
@@ -719,7 +719,7 @@ class IClassMapPanel(DoubleMapPanel):
         self.poMapInfo = digitClass.OpenMap(vname, tmp=True)
         if self.poMapInfo is None:
             GError(parent=self, message=_("Unable to open temporary vector map"))
-            return
+            return None
 
         # remove temporary rasters
         for cat in self.stats_data.GetCategories():
@@ -1119,7 +1119,7 @@ class IClassMapPanel(DoubleMapPanel):
         Signatures are created but signature file is not.
         """
         if not self.CheckInput(group=self.g["group"], vector=self.trainingAreaVector):
-            return
+            return None
 
         for statistic in self.cStatisticsDict.values():
             I_iclass_free_statistics(statistic)

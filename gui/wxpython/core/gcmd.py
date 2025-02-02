@@ -581,7 +581,7 @@ class CommandThread(Thread):
     def run(self):
         """Run command"""
         if len(self.cmd) == 0:
-            return
+            return None
 
         Debug.msg(1, "gcmd.CommandThread(): %s" % " ".join(self.cmd))
 
