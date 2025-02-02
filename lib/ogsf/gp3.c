@@ -250,7 +250,7 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
         if (gp->tstyle->color_column) {
             if (driver) {
                 nvals = db_select_value(driver, Fi->table, Fi->key, cat,
-                                    gp->tstyle->color_column, &value);
+                                        gp->tstyle->color_column, &value);
                 if (nvals < 1)
                     continue;
                 str = db_get_value_string(&value);
@@ -308,6 +308,5 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
         db_close_database_shutdown_driver(driver);
         Vect_destroy_field_info(Fi);
     }
-    
     return npts;
 }
