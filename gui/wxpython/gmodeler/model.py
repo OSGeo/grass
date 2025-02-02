@@ -39,6 +39,7 @@ import mimetypes
 import time
 
 import xml.etree.ElementTree as ET
+from pathlib import Path
 from xml.sax import saxutils
 
 import wx
@@ -542,11 +543,8 @@ class Model:
 
         for finput in self.fileInput:
             # read lines
-            fd = open(finput)
-            try:
-                data = self.fileInput[finput] = fd.read()
-            finally:
-                fd.close()
+            data = Path(finput).read_text()
+            self.fileInput[finput] = data
 
             # substitute variables
             write = False
@@ -579,11 +577,7 @@ class Model:
 
             if not checkOnly:
                 if write:
-                    fd = open(finput, "w")
-                    try:
-                        fd.write(data)
-                    finally:
-                        fd.close()
+                    Path(finput).write_text(data)
                 else:
                     self.fileInput[finput] = None
 
@@ -2710,9 +2704,9 @@ class WriteActiniaFile(WriteScriptFile):
 
         self.fd.write(
             f"""{{
-{' ' * self.indent * 1}"id": "model",
-{' ' * self.indent * 1}"description": "{'""'.join(description.splitlines())}",
-{' ' * self.indent * 1}"version": "1",
+{" " * self.indent * 1}"id": "model",
+{" " * self.indent * 1}"description": "{'""'.join(description.splitlines())}",
+{" " * self.indent * 1}"version": "1",
 """
         )
 
@@ -2729,12 +2723,12 @@ class WriteActiniaFile(WriteScriptFile):
         if parameterized is True:
             self.fd.write(f'{" " * self.indent * 1}"template": {{\n')
             self.fd.write(
-                f"""{' ' * self.indent * 2}"list": [
+                f"""{" " * self.indent * 2}"list": [
     """
             )
         else:
             self.fd.write(
-                f"""{' ' * self.indent}"list": [
+                f"""{" " * self.indent}"list": [
     """
             )
 
@@ -2787,7 +2781,6 @@ class WriteActiniaFile(WriteScriptFile):
             value = p.get("value", None)
 
             if (name and value) or (name in parameterizedParams):
-
                 if name in parameterizedParams:
                     parameterizedParam = self._getParamName(name, item)
                     default_val = p.get("value", "")
@@ -3314,9 +3307,7 @@ class WritePythonFile(WriteScriptFile):
 # %module
 # % description: {description}
 # %end
-""".format(
-                description=" ".join(properties["description"].splitlines())
-            )
+""".format(description=" ".join(properties["description"].splitlines()))
         )
 
         modelItems = self.model.GetItems(ModelAction)

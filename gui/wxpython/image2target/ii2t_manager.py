@@ -90,22 +90,13 @@ maptype = "raster"
 
 
 def getSmallUpArrowImage():
-    stream = open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb")
-    try:
-        img = wx.Image(stream)
-    finally:
-        stream.close()
-    return img
+    with open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb") as stream:
+        return wx.Image(stream)
 
 
 def getSmallDnArrowImage():
-    stream = open(os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb")
-    try:
-        img = wx.Image(stream)
-    finally:
-        stream.close()
-    stream.close()
-    return img
+    with open(os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb") as stream:
+        return wx.Image(stream)
 
 
 class GCPWizard:
@@ -536,10 +527,7 @@ class LocationPage(TitledPage):
     def OnPageChanging(self, event: WizardEvent | None = None) -> None:
         if event.GetDirection() and (self.xylocation == "" or self.xymapset == ""):
             GMessage(
-                _(
-                    "You must select a valid location "
-                    "and mapset in order to continue"
-                ),
+                _("You must select a valid location and mapset in order to continue"),
                 parent=self,
             )
             event.Veto()
@@ -950,15 +938,12 @@ class DispMapPage(TitledPage):
                 "VREF",
             )
 
-            f = open(vgrpfile)
-            try:
+            with open(vgrpfile) as f:
                 for vect in f:
                     vect = vect.strip("\n")
                     if len(vect) < 1:
                         continue
                     self.parent.src_maps.append(vect)
-            finally:
-                f.close()
 
             if len(self.parent.src_maps) < 1:
                 GError(
@@ -1783,16 +1768,13 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             self.grwiz.SwitchEnv("source")
 
             # make list of vectors to georectify from VREF
-            f = open(self.file["vgrp"])
             vectlist = []
-            try:
+            with open(self.file["vgrp"]) as f:
                 for vect in f:
                     vect = vect.strip("\n")
                     if len(vect) < 1:
                         continue
                     vectlist.append(vect)
-            finally:
-                f.close()
 
             # georectify each vector in VREF using v.rectify
             for vect in vectlist:
@@ -2639,8 +2621,7 @@ class VectGroup(wx.Dialog):
         self.listMap = CheckListBox(parent=self, id=wx.ID_ANY, choices=vectlist)
 
         if os.path.isfile(self.vgrpfile):
-            f = open(self.vgrpfile)
-            try:
+            with open(self.vgrpfile) as f:
                 checked = []
                 for line in f:
                     line = line.replace("\n", "")
@@ -2648,8 +2629,6 @@ class VectGroup(wx.Dialog):
                         continue
                     checked.append(line)
                 self.listMap.SetCheckedStrings(checked)
-            finally:
-                f.close()
 
         line = wx.StaticLine(
             parent=self, id=wx.ID_ANY, size=(20, -1), style=wx.LI_HORIZONTAL
@@ -2708,11 +2687,8 @@ class VectGroup(wx.Dialog):
                 continue
             vgrouplist.append(self.listMap.GetString(item) + "@" + self.xymapset)
 
-        f = open(self.vgrpfile, mode="w")
-        try:
+        with open(self.vgrpfile, mode="w") as f:
             f.writelines(vect + "\n" for vect in vgrouplist)
-        finally:
-            f.close()
 
 
 class EditGCP(wx.Dialog):
@@ -3241,8 +3217,7 @@ class GrSettingsDialog(wx.Dialog):
             GError(
                 parent=self,
                 message=_(
-                    "RMS threshold factor is < 1\n"
-                    "Too many points might be highlighted"
+                    "RMS threshold factor is < 1\nToo many points might be highlighted"
                 ),
             )
 

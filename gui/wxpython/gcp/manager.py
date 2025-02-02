@@ -86,22 +86,13 @@ maptype = "raster"
 
 
 def getSmallUpArrowImage():
-    stream = open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb")
-    try:
-        img = wx.Image(stream)
-    finally:
-        stream.close()
-    return img
+    with open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb") as stream:
+        return wx.Image(stream)
 
 
 def getSmallDnArrowImage():
-    stream = open(os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb")
-    try:
-        img = wx.Image(stream)
-    finally:
-        stream.close()
-    stream.close()
-    return img
+    with open(os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb") as stream:
+        return wx.Image(stream)
 
 
 class GCPWizard:
@@ -123,16 +114,13 @@ class GCPWizard:
         #
         self.target_gisrc = os.environ["GISRC"]
         self.gisrc_dict = {}
-        try:
-            f = open(self.target_gisrc)
+        with open(self.target_gisrc) as f:
             for line in f:
                 line = line.replace("\n", "").strip()
                 if len(line) < 1:
                     continue
                 key, value = line.split(":", 1)
                 self.gisrc_dict[key.strip()] = value.strip()
-        finally:
-            f.close()
 
         self.currentlocation = self.gisrc_dict["LOCATION_NAME"]
         self.currentmapset = self.gisrc_dict["MAPSET"]
@@ -345,14 +333,10 @@ class GCPWizard:
 
         self.source_gisrc = utils.GetTempfile()
 
-        try:
-            f = open(self.source_gisrc, mode="w")
+        with open(self.source_gisrc, mode="w") as f:
             f.writelines(
                 line[0] + ": " + line[1] + "\n" for line in self.gisrc_dict.items()
             )
-        finally:
-            f.close()
-
         return True
 
     def SwitchEnv(self, grc):
@@ -519,10 +503,7 @@ class LocationPage(TitledPage):
     def OnPageChanging(self, event: WizardEvent | None = None) -> None:
         if event.GetDirection() and (self.xylocation == "" or self.xymapset == ""):
             GMessage(
-                _(
-                    "You must select a valid location "
-                    "and mapset in order to continue"
-                ),
+                _("You must select a valid location and mapset in order to continue"),
                 parent=self,
             )
             event.Veto()
@@ -1516,40 +1497,40 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         """
         self.GCPcount = 0
         try:
-            f = open(self.file["points"], mode="w")
-            # use os.linesep or '\n' here ???
-            f.write("# Ground Control Points File\n")
-            f.write("# \n")
-            f.write("# target location: " + self.currentlocation + "\n")
-            f.write("# target mapset: " + self.currentmapset + "\n")
-            f.write("#\tsource\t\ttarget\t\tstatus\n")
-            f.write("#\teast\tnorth\teast\tnorth\t(1=ok, 0=ignore)\n")
-            f.write(
-                "#-----------------------     -----------------------     ---------------\n"  # noqa: E501
-            )
-
-            for index in range(self.list.GetItemCount()):
-                if self.list.IsItemChecked(index):
-                    check = "1"
-                    self.GCPcount += 1
-                else:
-                    check = "0"
-                coord0 = self.list.GetItem(index, 1).GetText()
-                coord1 = self.list.GetItem(index, 2).GetText()
-                coord2 = self.list.GetItem(index, 3).GetText()
-                coord3 = self.list.GetItem(index, 4).GetText()
+            with open(self.file["points"], mode="w") as f:
+                # use os.linesep or '\n' here ???
+                f.write("# Ground Control Points File\n")
+                f.write("# \n")
+                f.write("# target location: " + self.currentlocation + "\n")
+                f.write("# target mapset: " + self.currentmapset + "\n")
+                f.write("#\tsource\t\ttarget\t\tstatus\n")
+                f.write("#\teast\tnorth\teast\tnorth\t(1=ok, 0=ignore)\n")
                 f.write(
-                    coord0
-                    + " "
-                    + coord1
-                    + "     "
-                    + coord2
-                    + " "
-                    + coord3
-                    + "     "
-                    + check
-                    + "\n"
+                    "#-----------------------     -----------------------     ---------------\n"  # noqa: E501
                 )
+
+                for index in range(self.list.GetItemCount()):
+                    if self.list.IsItemChecked(index):
+                        check = "1"
+                        self.GCPcount += 1
+                    else:
+                        check = "0"
+                    coord0 = self.list.GetItem(index, 1).GetText()
+                    coord1 = self.list.GetItem(index, 2).GetText()
+                    coord2 = self.list.GetItem(index, 3).GetText()
+                    coord3 = self.list.GetItem(index, 4).GetText()
+                    f.write(
+                        coord0
+                        + " "
+                        + coord1
+                        + "     "
+                        + coord2
+                        + " "
+                        + coord3
+                        + "     "
+                        + check
+                        + "\n"
+                    )
 
         except OSError as err:
             GError(
@@ -1563,8 +1544,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 ),
             )
             return
-
-        f.close()
 
         # if event != None save also to backup file
         if event:
@@ -1589,27 +1568,26 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(parent=self, message=_("target mapwin not defined"))
 
         try:
-            f = open(self.file["points"])
             GCPcnt = 0
+            with open(self.file["points"]) as f:
+                for line in f:
+                    if line[0] == "#" or line == "":
+                        continue
+                    line = line.replace("\n", "").strip()
+                    coords = list(map(float, line.split()))
+                    if coords[4] == 1:
+                        check = True
+                        self.GCPcount += 1
+                    else:
+                        check = False
 
-            for line in f:
-                if line[0] == "#" or line == "":
-                    continue
-                line = line.replace("\n", "").strip()
-                coords = list(map(float, line.split()))
-                if coords[4] == 1:
-                    check = True
-                    self.GCPcount += 1
-                else:
-                    check = False
-
-                self.AddGCP(event=None)
-                self.SetGCPData("source", (coords[0], coords[1]), sourceMapWin)
-                self.SetGCPData("target", (coords[2], coords[3]), targetMapWin)
-                index = self.list.GetSelected()
-                if index != wx.NOT_FOUND:
-                    self.list.CheckItem(index, check)
-                GCPcnt += 1
+                    self.AddGCP(event=None)
+                    self.SetGCPData("source", (coords[0], coords[1]), sourceMapWin)
+                    self.SetGCPData("target", (coords[2], coords[3]), targetMapWin)
+                    index = self.list.GetSelected()
+                    if index != wx.NOT_FOUND:
+                        self.list.CheckItem(index, check)
+                    GCPcnt += 1
 
         except OSError as err:
             GError(
@@ -1623,8 +1601,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 ),
             )
             return
-
-        f.close()
 
         if GCPcnt == 0:
             # 3 gcp is minimum
@@ -1831,16 +1807,13 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             self.grwiz.SwitchEnv("source")
 
             # make list of vectors to georectify from VREF
-            f = open(self.file["vgrp"])
             vectlist = []
-            try:
+            with open(self.file["vgrp"]) as f:
                 for vect in f:
                     vect = vect.strip("\n")
                     if len(vect) < 1:
                         continue
                     vectlist.append(vect)
-            finally:
-                f.close()
 
             # georectify each vector in VREF using v.rectify
             for vect in vectlist:
@@ -2044,8 +2017,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(
                 parent=self,
                 message=_(
-                    "Could not calculate RMS Error.\n"
-                    "Possible error with m.transform."
+                    "Could not calculate RMS Error.\nPossible error with m.transform."
                 ),
             )
             return
@@ -2119,8 +2091,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             "w": 0.0,
         }
 
-        try:
-            f = open(coord_file, mode="w")
+        with open(coord_file, mode="w") as f:
             # NW corner
             f.write(str(region["e"]) + " " + str(region["n"]) + "\n")
             # NE corner
@@ -2129,8 +2100,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             f.write(str(region["w"]) + " " + str(region["n"]) + "\n")
             # SE corner
             f.write(str(region["w"]) + " " + str(region["s"]) + "\n")
-        finally:
-            f.close()
 
         # save GCPs to points file to make sure that all checked GCPs are used
         self.SaveGCPs(None)
@@ -2180,8 +2149,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(
                 parent=self,
                 message=_(
-                    "Could not calculate new extends.\n"
-                    "Possible error with m.transform."
+                    "Could not calculate new extends.\nPossible error with m.transform."
                 ),
             )
             return
@@ -2694,8 +2662,7 @@ class VectGroup(wx.Dialog):
         self.listMap = CheckListBox(parent=self, id=wx.ID_ANY, choices=vectlist)
 
         if os.path.isfile(self.vgrpfile):
-            f = open(self.vgrpfile)
-            try:
+            with open(self.vgrpfile) as f:
                 checked = []
                 for line in f:
                     line = line.replace("\n", "")
@@ -2703,8 +2670,6 @@ class VectGroup(wx.Dialog):
                         continue
                     checked.append(line.split("@")[0])
                 self.listMap.SetCheckedStrings(checked)
-            finally:
-                f.close()
 
         line = wx.StaticLine(
             parent=self, id=wx.ID_ANY, size=(20, -1), style=wx.LI_HORIZONTAL
@@ -2768,11 +2733,8 @@ class VectGroup(wx.Dialog):
         if not os.path.exists(dirname):
             os.makedirs(dirname)
 
-        f = open(self.vgrpfile, mode="w")
-        try:
+        with open(self.vgrpfile, mode="w") as f:
             f.writelines(vect + "\n" for vect in vgrouplist)
-        finally:
-            f.close()
 
 
 class EditGCP(wx.Dialog):
@@ -3291,8 +3253,7 @@ class GrSettingsDialog(wx.Dialog):
             GError(
                 parent=self,
                 message=_(
-                    "RMS threshold factor is < 1\n"
-                    "Too many points might be highlighted"
+                    "RMS threshold factor is < 1\nToo many points might be highlighted"
                 ),
             )
 

@@ -104,9 +104,8 @@ class GRASSStartup(wx.Frame):
         # labels
         # crashes when LOCATION doesn't exist
         # get version & revision
-        versionFile = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
-        versionLine = versionFile.readline().rstrip("\n")
-        versionFile.close()
+        with open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER")) as versionFile:
+            versionLine = versionFile.readline().rstrip("\n")
         try:
             grassVersion, grassRevision = versionLine.split(" ", 1)
             if grassVersion.endswith("dev"):
@@ -542,8 +541,7 @@ class GRASSStartup(wx.Frame):
         gisrc = os.getenv("GISRC")
 
         if gisrc and os.path.isfile(gisrc):
-            try:
-                rc = open(gisrc)
+            with open(gisrc) as rc:
                 for line in rc:
                     try:
                         key, val = line.split(":", 1)
@@ -552,8 +550,6 @@ class GRASSStartup(wx.Frame):
                             _("Invalid line in GISRC file (%s):%s\n") % (e, line)
                         )
                     grassrc[key.strip()] = DecodeString(val.strip())
-            finally:
-                rc.close()
 
         return grassrc
 
@@ -868,8 +864,7 @@ class GRASSStartup(wx.Frame):
             GError(
                 parent=self,
                 message=_(
-                    "Unicode error detected. "
-                    "Check your locale settings. Details: {0}"
+                    "Unicode error detected. Check your locale settings. Details: {0}"
                 ).format(e),
                 showTraceback=False,
             )

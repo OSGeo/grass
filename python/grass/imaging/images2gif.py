@@ -185,7 +185,7 @@ class GifWriter:
             xy = (0, 0)
 
         # Image separator,
-        bb = "\x2C"
+        bb = "\x2c"
 
         # Image position and size
         bb += intToBin(xy[0])  # Left position
@@ -214,7 +214,7 @@ class GifWriter:
             # (the extension interprets zero loops
             # to mean an infinite number of loops)
             # Mmm, does not seem to work
-        bb = "\x21\xFF\x0B"  # application extension
+        bb = "\x21\xff\x0b"  # application extension
         bb += "NETSCAPE2.0"
         bb += "\x03\x01"
         bb += intToBin(loops)
@@ -240,7 +240,7 @@ class GifWriter:
         :param dispose:
         """
 
-        bb = "\x21\xF9\x04"
+        bb = "\x21\xf9\x04"
         bb += chr((dispose & 3) << 2)  # low bit 1 == transparency,
         # 2nd bit 1 == user input , next 3 bits, the low two of which are used,
         # are dispose.

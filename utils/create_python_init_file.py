@@ -14,7 +14,6 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
-
 import os
 import sys
 import glob

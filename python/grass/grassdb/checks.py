@@ -284,19 +284,13 @@ def get_mapset_invalid_reason(database, location, mapset, none_for_no_reason=Fal
         return _("<%s> is not a GRASS Mapset because it is not a directory") % mapset
     if not (mapset_path / "WIND").is_file():
         return (
-            _(
-                "<%s> is not a valid GRASS Mapset"
-                " because it does not have a WIND file"
-            )
+            _("<%s> is not a valid GRASS Mapset because it does not have a WIND file")
             % mapset
         )
     # based on the is_mapset_valid() function
     if not os.access(mapset_path / "WIND", os.R_OK):
         return (
-            _(
-                "<%s> is not a valid GRASS Mapset"
-                " because its WIND file is not readable"
-            )
+            _("<%s> is not a valid GRASS Mapset because its WIND file is not readable")
             % mapset
         )
     # no reason for invalidity found (might be valid)
@@ -336,18 +330,12 @@ def get_location_invalid_reason(
     # permanent mapset
     if not permanent_path.exists():
         return (
-            _(
-                "<%s> is not a valid GRASS Location"
-                " because PERMANENT Mapset is missing"
-            )
+            _("<%s> is not a valid GRASS Location because PERMANENT Mapset is missing")
             % location_path
         )
     if not permanent_path.is_dir():
         return (
-            _(
-                "<%s> is not a valid GRASS Location"
-                " because PERMANENT is not a directory"
-            )
+            _("<%s> is not a valid GRASS Location because PERMANENT is not a directory")
             % location_path
         )
     # partially based on the is_location_valid() function

@@ -707,8 +707,7 @@ def switch_mapset_interactively(
                 GMessage(
                     parent=guiparent,
                     message=_(
-                        "Current project is <%(loc)s>.\n"
-                        "Current mapset is <%(mapset)s>."
+                        "Current project is <%(loc)s>.\nCurrent mapset is <%(mapset)s>."
                     )
                     % {"loc": location, "mapset": mapset},
                 )

@@ -7,7 +7,6 @@ from grass.gunittest.case import TestCase
 
 
 class GjsonLibraryTest(TestCase):
-
     def test_wrapper(self):
         self.assertModule("test.gjson.lib", flags="u")
 

@@ -138,7 +138,7 @@ def print_support(file=None):
         random.shuffle(data)
         supporters = []
         for member in data:
-            supporters.append(f"""[{member['name']}]({member['profile']})""")
+            supporters.append(f"""[{member["name"]}]({member["profile"]})""")
         print(", ".join(supporters))
         print()
 

@@ -158,7 +158,7 @@ def build_keywords(ext):
                 if ext == "html":
                     keyword_line += f' <a href="{man_file_path}">{value.replace(f".{ext}", "")}</a>,'  # noqa: E501
                 else:
-                    keyword_line += f' [{value.rsplit(".", 1)[0]}]({man_file_path}),'
+                    keyword_line += f" [{value.rsplit('.', 1)[0]}]({man_file_path}),"
             keyword_line = keyword_line.rstrip(",")
             if ext == "html":
                 keyword_line += "</dd>"
