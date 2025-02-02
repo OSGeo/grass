@@ -21,7 +21,6 @@ test_vector_name = "find_doctest_map"
 
 
 class AbstractFinder:
-
     def __init__(
         self, c_mapinfo, table: Table | None = None, writeable: bool = False
     ) -> None:

@@ -2,6 +2,8 @@
 ignore =
     # whitespace before ':' (Black)
     E203,
+    # E501 line too long
+    E501,
     # line break before binary operator (Black)
     W503,
 
@@ -25,25 +27,17 @@ per-file-ignores =
     gui/wxpython/image2target/g.gui.image2target.py: E501
     gui/wxpython/photo2image/g.gui.photo2image.py: E501
     gui/wxpython/psmap/*: E501
-    gui/wxpython/vdigit/*: E722, F405, F403
     gui/wxpython/animation/g.gui.animation.py: E501
     gui/wxpython/tplot/g.gui.tplot.py: E501
     gui/wxpython/iclass/g.gui.iclass.py: E501
-    gui/wxpython/mapdisp/main.py: E722
     gui/wxpython/mapdisp/test_mapdisp.py: E501
     gui/wxpython/mapswipe/g.gui.mapswipe.py: E501
-    gui/wxpython/mapwin/base.py: E722
-    gui/wxpython/mapwin/buffered.py: E722
     gui/wxpython/timeline/g.gui.timeline.py: E501
     # Generated file
     gui/wxpython/menustrings.py: E501
     # C wrappers call libgis.G_gisinit before importing other modules.
     # TODO: Is this really needed?
     python/grass/jupyter/__init__.py: E501
-    python/grass/pygrass/vector/__init__.py: E402
-    # Current benchmarks/tests are changing sys.path before import.
-    # Possibly, a different approach should be taken there anyway.
-    python/grass/pygrass/tests/benchmark.py: F821
     # Configuration file for Sphinx:
     # Ignoring import/code mix and line length.
     # Files not managed by Black

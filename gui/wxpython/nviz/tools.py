@@ -1610,12 +1610,12 @@ class NvizToolWindow(GNotebook):
         checkThematicWidth = wx.CheckBox(
             parent=panel, id=wx.ID_ANY, label=_("use width for thematic mapping")
         )
-        self.win["vector"]["lines"]["thematic"][
-            "checkcolor"
-        ] = checkThematicColor.GetId()
-        self.win["vector"]["lines"]["thematic"][
-            "checkwidth"
-        ] = checkThematicWidth.GetId()
+        self.win["vector"]["lines"]["thematic"]["checkcolor"] = (
+            checkThematicColor.GetId()
+        )
+        self.win["vector"]["lines"]["thematic"]["checkwidth"] = (
+            checkThematicWidth.GetId()
+        )
         checkThematicColor.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
         checkThematicWidth.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
         checkThematicColor.SetValue(False)
@@ -1825,12 +1825,12 @@ class NvizToolWindow(GNotebook):
         checkThematicSize = wx.CheckBox(
             parent=panel, id=wx.ID_ANY, label=_("use size for thematic mapping")
         )
-        self.win["vector"]["points"]["thematic"][
-            "checkcolor"
-        ] = checkThematicColor.GetId()
-        self.win["vector"]["points"]["thematic"][
-            "checksize"
-        ] = checkThematicSize.GetId()
+        self.win["vector"]["points"]["thematic"]["checkcolor"] = (
+            checkThematicColor.GetId()
+        )
+        self.win["vector"]["points"]["thematic"]["checksize"] = (
+            checkThematicSize.GetId()
+        )
         checkThematicColor.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
         checkThematicSize.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
         checkThematicColor.SetValue(False)

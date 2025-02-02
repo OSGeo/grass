@@ -150,9 +150,7 @@ def main():
     mapset = gs.gisenv()["MAPSET"]
     unique = str(os.getpid())  # Shouldn't we use temp name?
     prefix = "r_fillnulls_%s_" % unique
-    failed_list = (
-        []
-    )  # a list of failed holes. Caused by issues with v.surf.rst. Connected with #1813
+    failed_list = []  # a list of failed holes. Caused by issues with v.surf.rst. Connected with #1813
 
     # check if input file exists
     if not gs.find_file(input)["file"]:
@@ -229,10 +227,7 @@ def main():
             )
         except CalledModuleError:
             gs.fatal(
-                _(
-                    "abandoned. Removing temporary map, restoring "
-                    "user mask if needed:"
-                )
+                _("abandoned. Removing temporary map, restoring user mask if needed:")
             )
 
         # assign unique IDs to each hole or hole system (holes closer than edge
@@ -248,10 +243,7 @@ def main():
             )
         except CalledModuleError:
             gs.fatal(
-                _(
-                    "abandoned. Removing temporary map, restoring "
-                    "user mask if needed:"
-                )
+                _("abandoned. Removing temporary map, restoring user mask if needed:")
             )
 
         # get a list of unique hole cat's
@@ -275,10 +267,7 @@ def main():
             )
         except CalledModuleError:
             gs.fatal(
-                _(
-                    "abandoned. Removing temporary maps, restoring "
-                    "user mask if needed:"
-                )
+                _("abandoned. Removing temporary maps, restoring user mask if needed:")
             )
         tmp_vmaps.append(prefix + "holes")
 

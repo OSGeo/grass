@@ -592,7 +592,9 @@ class TemporalAlgebraLexer:
 
     # Regular expression rules for simple tokens
     t_T_SELECT_OPERATOR = r"\{[!]?[:][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"  # noqa: E501
-    t_T_HASH_OPERATOR = r"\{[#][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"  # noqa: E501
+    t_T_HASH_OPERATOR = (
+        r"\{[#][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"  # noqa: E501
+    )
     t_T_COMP_OPERATOR = r"\{(\|\||&&)[,][a-zA-Z\| ]*[,]?[\|&]?([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"  # noqa: E501
     t_T_REL_OPERATOR = r"\{([a-zA-Z\| ])+\}"
     t_T_SELECT = r":"
@@ -2532,8 +2534,7 @@ class TemporalAlgebraParser:
                             success = resultstds.register_map(map_i, dbif)
                             if not success:
                                 self.msgr.warning(
-                                    "Unabe to register map layers "
-                                    "in STDS %s" % (t[1])
+                                    "Unabe to register map layers in STDS %s" % (t[1])
                                 )
 
                     if self.dry_run is False:
