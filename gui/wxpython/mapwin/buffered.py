@@ -743,8 +743,9 @@ class BufferedMapWindow(MapWindowBase, Window):
             # draw any active and defined overlays
             if self.imagedict[img]["layer"].IsActive():
                 id = self.imagedict[img]["id"]
-                coords = int(ratio[0] * self.overlays[id].coords[0]), int(
-                    ratio[1] * self.overlays[id].coords[1]
+                coords = (
+                    int(ratio[0] * self.overlays[id].coords[0]),
+                    int(ratio[1] * self.overlays[id].coords[1]),
                 )
                 self.Draw(
                     self.pdc,

@@ -189,8 +189,7 @@ def draw_linegraph(what):
     if not found:
         gcore.fatal(
             _(
-                "Supported monitor isn't running. Please launch one of the"
-                " monitors {}."
+                "Supported monitor isn't running. Please launch one of the monitors {}."
             ).format(", ".join(supported_monitors))
         )
     selected_monitor = gcore.read_command("d.mon", flags="p", quiet=True).replace(

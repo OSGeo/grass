@@ -864,8 +864,7 @@ class GRASSStartup(wx.Frame):
             GError(
                 parent=self,
                 message=_(
-                    "Unicode error detected. "
-                    "Check your locale settings. Details: {0}"
+                    "Unicode error detected. Check your locale settings. Details: {0}"
                 ).format(e),
                 showTraceback=False,
             )
