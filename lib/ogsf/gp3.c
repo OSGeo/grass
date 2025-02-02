@@ -85,7 +85,8 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
     }
     char *mname = G_fully_qualified_name(name, mapset)
 
-    while (eof == 0) {
+        while (eof == 0)
+    {
         ltype = Vect_read_next_line(&map, Points, Cats);
         switch (ltype) {
         case -1: {
