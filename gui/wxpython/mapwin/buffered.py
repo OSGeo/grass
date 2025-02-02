@@ -555,14 +555,14 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         boxh = math.fabs(math.sin(math.radians(rotation)) * w) + h
         boxw = math.fabs(math.cos(math.radians(rotation)) * w) + h
-        if rotation > 0 and rotation < 90:
+        if 0 < rotation < 90:
             bbox[1] -= boxh
             relCoords = (0, boxh)
-        elif rotation >= 90 and rotation < 180:
+        elif 90 <= rotation < 180:
             bbox[0] -= boxw
             bbox[1] -= boxh
             relCoords = (boxw, boxh)
-        elif rotation >= 180 and rotation < 270:
+        elif 180 <= rotation < 270:
             bbox[0] -= boxw
             relCoords = (boxw, 0)
         bbox[2] = boxw
@@ -743,8 +743,9 @@ class BufferedMapWindow(MapWindowBase, Window):
             # draw any active and defined overlays
             if self.imagedict[img]["layer"].IsActive():
                 id = self.imagedict[img]["id"]
-                coords = int(ratio[0] * self.overlays[id].coords[0]), int(
-                    ratio[1] * self.overlays[id].coords[1]
+                coords = (
+                    int(ratio[0] * self.overlays[id].coords[0]),
+                    int(ratio[1] * self.overlays[id].coords[1]),
                 )
                 self.Draw(
                     self.pdc,
@@ -1033,7 +1034,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             for item in self.graphicsSetList:
                 try:
                     item.Draw()
-                except:
+                except Exception:
                     GError(
                         parent=self,
                         message=_(
@@ -1062,16 +1063,13 @@ class BufferedMapWindow(MapWindowBase, Window):
             dispReg = self.Map.GetCurrentRegion()
             reg = dispReg if utils.isInRegion(dispReg, compReg) else compReg
 
-            regionCoords = []
-            regionCoords.extend(
-                (
-                    (reg["w"], reg["n"]),
-                    (reg["e"], reg["n"]),
-                    (reg["e"], reg["s"]),
-                    (reg["w"], reg["s"]),
-                    (reg["w"], reg["n"]),
-                )
-            )
+            regionCoords = [
+                (reg["w"], reg["n"]),
+                (reg["e"], reg["n"]),
+                (reg["e"], reg["s"]),
+                (reg["w"], reg["s"]),
+                (reg["w"], reg["n"]),
+            ]
 
             # draw region extent
             self.polypen = wx.Pen(
@@ -1183,10 +1181,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             if isinstance(r, list):
                 r = Rect(r[0], r[1], r[2], r[3])
             r.Inflate(4, 4)
-            try:
-                pdc.ClearId(boxid)
-            except:
-                pass
+            pdc.ClearId(boxid)
             self.RefreshRect(r, False)
             pdc.SetId(boxid)
             self.Draw(pdc, drawid=boxid, pdctype="box", coords=mousecoords)
@@ -1200,10 +1195,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             y2 = max(begin[1], end[1])
             r = Rect(x1, y1, x2 - x1, y2 - y1)
             r.Inflate(4, 4)
-            try:
-                pdc.ClearId(self.lineid)
-            except:
-                pass
+            pdc.ClearId(self.lineid)
             self.RefreshRect(r, False)
             pdc.SetId(self.lineid)
             self.Draw(pdc, drawid=self.lineid, pdctype="line", coords=mousecoords)
@@ -1214,8 +1206,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         Set self.pline to wx.NEW_ID + 1
 
         :param polycoords: list of polyline vertices, geographical
-                           coordinates (if not given, self.polycoords
-                           is used)
+                           coordinates (if not given, self.polycoords is used)
         """
         if not pdc:
             pdc = self.pdcTmp
@@ -1546,8 +1537,6 @@ class BufferedMapWindow(MapWindowBase, Window):
             if idlist != []:
                 self.dragid = idlist[0]  # drag whatever is on top
 
-        else:
-            pass
         coords = self.Pixel2Cell(self.mouse["begin"])
         self.mouseLeftDown.emit(x=coords[0], y=coords[1])
 
@@ -1596,8 +1585,6 @@ class BufferedMapWindow(MapWindowBase, Window):
                     self.textdict[self.dragid]["bbox"] = self.pdc.GetIdBounds(
                         self.dragid
                     )
-                else:
-                    pass
                 self.dragid = None
 
             self.mouseLeftUpPointer.emit(x=coordinates[0], y=coordinates[1])
@@ -1744,13 +1731,13 @@ class BufferedMapWindow(MapWindowBase, Window):
         try:
             pdc.ClearId(self.lineid)
             pdc.RemoveId(self.lineid)
-        except:
+        except (KeyError, TypeError):
             pass
 
         try:
             pdc.ClearId(self.plineid)
             pdc.RemoveId(self.plineid)
-        except:
+        except (KeyError, TypeError):
             pass
 
         Debug.msg(
@@ -1772,7 +1759,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         try:
             x = int(xyCoords[0])
             y = int(xyCoords[1])
-        except:
+        except (TypeError, ValueError, IndexError):
             return None
 
         if self.Map.region["ewres"] > self.Map.region["nsres"]:
@@ -1793,7 +1780,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         try:
             east = float(enCoords[0])
             north = float(enCoords[1])
-        except:
+        except (TypeError, ValueError, IndexError):
             return None
 
         if self.Map.region["ewres"] > self.Map.region["nsres"]:

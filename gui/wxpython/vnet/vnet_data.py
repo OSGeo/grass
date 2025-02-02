@@ -427,11 +427,7 @@ class VNETPointsData:
         return pt_list_data
 
     def _ptListDataToPtData(self, pt_list_data):
-        pt_data = {}
-        for i, val in enumerate(pt_list_data):
-            pt_data[self.cols["name"][i]] = val
-
-        return pt_data
+        return {self.cols["name"][i]: val for i, val in enumerate(pt_list_data)}
 
     def _usePoint(self, pt_id, use):
         """Item is checked/unchecked"""
@@ -557,8 +553,7 @@ class VNETPointsData:
     def GetColumns(self, only_relevant=True):
         cols_data = deepcopy(self.cols)
 
-        hidden_cols = []
-        hidden_cols.extend((self.cols["name"].index("e"), self.cols["name"].index("n")))
+        hidden_cols = [self.cols["name"].index("e"), self.cols["name"].index("n")]
 
         analysis, valid = self.an_params.GetParam("analysis")
         if only_relevant and len(self.an_data[analysis]["cmdParams"]["cats"]) <= 1:
@@ -1149,15 +1144,11 @@ class History:
         self.currHistStep = 0
 
         newHistFile = grass.tempfile()
-        newHist = open(newHistFile, "w")
+        with open(newHistFile, "w") as newHist:
+            self._saveNewHistStep(newHist)
+            with open(self.histFile) as oldHist:
+                removedHistData = self._savePreviousHist(newHist, oldHist)
 
-        self._saveNewHistStep(newHist)
-
-        oldHist = open(self.histFile)
-        removedHistData = self._savePreviousHist(newHist, oldHist)
-
-        oldHist.close()
-        newHist.close()
         try_remove(self.histFile)
         self.histFile = newHistFile
 
@@ -1280,27 +1271,25 @@ class History:
 
     def _getHistStepData(self, histStep):
         """Load data saved in history step"""
-        hist = open(self.histFile)
         histStepData = {}
-
         newHistStep = False
         isSearchedHistStep = False
-        for line in hist:
-            if not line.strip() and isSearchedHistStep:
-                break
-            if not line.strip():
-                newHistStep = True
-                continue
-            if isSearchedHistStep:
-                self._parseLine(line, histStepData)
+        with open(self.histFile) as hist:
+            for line in hist:
+                if not line.strip() and isSearchedHistStep:
+                    break
+                if not line.strip():
+                    newHistStep = True
+                    continue
+                if isSearchedHistStep:
+                    self._parseLine(line, histStepData)
 
-            if newHistStep:
-                line = line.split("=")
-                if int(line[1]) == histStep:
-                    isSearchedHistStep = True
-                newHistStep = False
+                if newHistStep:
+                    line = line.split("=")
+                    if int(line[1]) == histStep:
+                        isSearchedHistStep = True
+                    newHistStep = False
 
-        hist.close()
         return histStepData
 
     def _parseLine(self, line, histStepData):
@@ -1347,11 +1336,7 @@ class VNETGlobalTurnsData:
         ]
 
     def GetData(self):
-        data = []
-        for ival in self.turn_data:
-            data.append(ival[1:])
-
-        return data
+        return [ival[1:] for ival in self.turn_data]
 
     def GetValue(self, line, col):
         return self.turn_data[line][col]
@@ -1450,4 +1435,4 @@ class VNETGlobalTurnsData:
         if angle < from_angle:
             angle = math.pi * 2 + angle
 
-        return bool(angle > from_angle and angle < to_angle)
+        return bool(from_angle < angle < to_angle)

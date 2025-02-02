@@ -816,9 +816,9 @@ class Settings:
         )
 
         self.internalSettings["display"]["driver"]["choices"] = ["cairo", "png"]
-        self.internalSettings["display"]["statusbarMode"][
-            "choices"
-        ] = None  # set during MapFrame init
+        self.internalSettings["display"]["statusbarMode"]["choices"] = (
+            None  # set during MapFrame init
+        )
         self.internalSettings["display"]["mouseWheelZoom"]["choices"] = (
             _("Zoom and recenter"),
             _("Zoom to mouse cursor"),
@@ -998,10 +998,7 @@ class Settings:
             raise GException(e)
         except Exception as e:
             raise GException(
-                _(
-                    "Writing settings to file <%(file)s> failed."
-                    "\n\nDetails: %(detail)s"
-                )
+                _("Writing settings to file <%(file)s> failed.\n\nDetails: %(detail)s")
                 % {"file": self.filePath, "detail": e}
             )
         return self.filePath
@@ -1230,12 +1227,13 @@ def GetDisplayVectSettings():
             % UserSettings.Get(group="vectorLayer", key="point", subkey="size"),
         )
     )
-    types = []
-    for ftype in ["point", "line", "boundary", "centroid", "area", "face"]:
+    types = [
+        ftype
+        for ftype in ["point", "line", "boundary", "centroid", "area", "face"]
         if UserSettings.Get(
             group="vectorLayer", key="showType", subkey=[ftype, "enabled"]
-        ):
-            types.append(ftype)
+        )
+    ]
     settings.append("type=%s" % ",".join(types))
 
     if UserSettings.Get(group="vectorLayer", key="randomColors", subkey="enabled"):

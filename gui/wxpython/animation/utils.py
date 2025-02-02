@@ -212,8 +212,7 @@ def checkSeriesCompatibility(mapSeriesList=None, timeseriesList=None):
         )
 
     if mapSeriesList:
-        count = set()
-        count.update(len(mapSeries) for mapSeries in mapSeriesList)
+        count = {len(mapSeries) for mapSeries in mapSeriesList}
         if len(count) > 1:
             raise GException(
                 _(
@@ -240,10 +239,8 @@ def ComputeScaledRect(sourceSize, destSize):
     """Fits source rectangle into destination rectangle
     by scaling and centering.
 
-
         >>> ComputeScaledRect(sourceSize = (10, 40), destSize = (100, 50))
         {'height': 50, 'scale': 1.25, 'width': 13, 'x': 44, 'y': 0}
-
 
     :param sourceSize: size of source rectangle
     :param destSize: size of destination rectangle

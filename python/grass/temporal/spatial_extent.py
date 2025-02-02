@@ -868,13 +868,13 @@ class SpatialExtent(SQLDatabaseInterface):
 
         # We check that at least one edge of extent is located in self
         edge_count = 0
-        if eW > W and eW < E:
+        if W < eW < E:
             edge_count += 1
-        if eE < E and eE > W:
+        if W < eE < E:
             edge_count += 1
-        if eN < N and eN > S:
+        if S < eN < N:
             edge_count += 1
-        if eS > S and eS < N:
+        if S < eS < N:
             edge_count += 1
 
         return edge_count != 0
@@ -941,21 +941,21 @@ class SpatialExtent(SQLDatabaseInterface):
 
         # We check that at least one edge of extent is located in self
         edge_count = 0
-        if eW > W and eW < E:
+        if W < eW < E:
             edge_count += 1
-        if eE < E and eE > W:
+        if W < eE < E:
             edge_count += 1
-        if eN < N and eN > S:
+        if S < eN < N:
             edge_count += 1
-        if eS > S and eS < N:
+        if S < eS < N:
             edge_count += 1
-        if eN < N and eN > S:
+        if S < eN < N:
             edge_count += 1
-        if eS > S and eS < N:
+        if S < eS < N:
             edge_count += 1
-        if eT < T and eT > B:
+        if B < eT < T:
             edge_count += 1
-        if eB > B and eB < T:
+        if B < eB < T:
             edge_count += 1
 
         return edge_count != 0
@@ -1323,7 +1323,9 @@ class SpatialExtent(SQLDatabaseInterface):
             or self.meet(extent)
         )
 
-    def spatial_relation_2d(self, extent) -> Literal[
+    def spatial_relation_2d(
+        self, extent
+    ) -> Literal[
         "equivalent",
         "contain",
         "in",
@@ -1370,7 +1372,9 @@ class SpatialExtent(SQLDatabaseInterface):
 
         return "unknown"
 
-    def spatial_relation(self, extent) -> Literal[
+    def spatial_relation(
+        self, extent
+    ) -> Literal[
         "equivalent",
         "contain",
         "in",
@@ -1712,8 +1716,7 @@ class SpatialExtent(SQLDatabaseInterface):
     def set_spatial_extent(self, spatial_extent) -> None:
         """Set the three dimensional spatial extent
 
-        :param spatial_extent: An object of type SpatialExtent or its
-                               subclasses
+        :param spatial_extent: An object of type SpatialExtent or its subclasses
         """
 
         self.set_north(spatial_extent.get_north())
@@ -1749,8 +1752,7 @@ class SpatialExtent(SQLDatabaseInterface):
     def set_spatial_extent_2d(self, spatial_extent) -> None:
         """Set the three dimensional spatial extent
 
-        :param spatial_extent: An object of type SpatialExtent or its
-                               subclasses
+        :param spatial_extent: An object of type SpatialExtent or its subclasses
         """
 
         self.set_north(spatial_extent.north)

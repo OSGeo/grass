@@ -514,10 +514,7 @@ class WSPanel(wx.Panel):
 
         self.conn = {"url": url, "password": password, "username": username}
 
-        conn_cmd = []
-        for k, v in self.conn.items():
-            if v:
-                conn_cmd.append("%s=%s" % (k, v))
+        conn_cmd = ["%s=%s" % (k, v) for k, v in self.conn.items() if v]
 
         self.ws_cmdl = self.ws_drvs[self.ws]["cmd"] + conn_cmd
 

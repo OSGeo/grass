@@ -199,7 +199,7 @@ class VDigitSettingsDialog(wx.Dialog):
             self.snappingUnit.SetSelection(
                 UserSettings.Get(group="vdigit", key="snapping", subkey="unit")
             )
-        except:
+        except KeyError:
             self.snappingUnit.SetSelection(0)
         self.snappingUnit.Bind(wx.EVT_CHOICE, self.OnChangeSnappingUnits)
         flexSizer.Add(text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)

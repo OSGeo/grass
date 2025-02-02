@@ -43,6 +43,7 @@ int overland_cells(int row, int col)
             }
         }
     }
+    G_free(Acells);
 
     return 0;
 }

@@ -262,6 +262,7 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
 
     /* Close the v5d file */
     v5dClose();
+    G_free(g);
 }
 
 /*---------------------------------------------------------------------------*/

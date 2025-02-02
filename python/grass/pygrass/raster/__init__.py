@@ -133,9 +133,6 @@ class RasterRow(RasterAbstractBase):
 
     """
 
-    def __init__(self, name, mapset="", *args, **kargs):
-        super().__init__(name, mapset, *args, **kargs)
-
     # mode = "r", method = "row",
     @must_be_open
     def get_row(self, row, row_buffer=None):
@@ -195,17 +192,16 @@ class RasterRow(RasterAbstractBase):
         self.overwrite = overwrite if overwrite is not None else self.overwrite
 
         if self.mode == "r":
-            if self.exist():
-                self.info.read()
-                self.cats.mtype = self.mtype
-                self.cats.read()
-                self.hist.read()
-                self._fd = libraster.Rast_open_old(self.name, self.mapset)
-                self._gtype = libraster.Rast_get_map_type(self._fd)
-                self.mtype = RTYPE_STR[self._gtype]
-            else:
+            if not self.exist():
                 str_err = _("The map does not exist, I can't open in 'r' mode")
                 raise OpenError(str_err)
+            self.info.read()
+            self.cats.mtype = self.mtype
+            self.cats.read()
+            self.hist.read()
+            self._fd = libraster.Rast_open_old(self.name, self.mapset)
+            self._gtype = libraster.Rast_get_map_type(self._fd)
+            self.mtype = RTYPE_STR[self._gtype]
         elif self.mode == "w":
             if self.exist():
                 if not self.overwrite:
@@ -748,10 +744,11 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
     mset = utils.get_mapset_raster(test_raster_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         Module("g.remove", flags="f", type="raster", name=test_raster_name)
     mset = utils.get_mapset_raster(test_raster_name + "_segment", mapset="")
     if mset:
+        # Remove the generated raster map, if exists
         Module("g.remove", flags="f", type="raster", name=test_raster_name + "_segment")

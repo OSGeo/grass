@@ -91,7 +91,7 @@ class NewRasterDialog(wx.Dialog):
             ret = grast.raster_info(value)
             self._typeChoice.SetStringSelection(ret["datatype"])
         except CalledModuleError:
-            return
+            pass
 
     def OnOK(self, event):
         mapName = self.GetMapName()
