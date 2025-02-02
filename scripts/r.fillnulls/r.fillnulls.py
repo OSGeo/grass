@@ -150,9 +150,7 @@ def main():
     mapset = gs.gisenv()["MAPSET"]
     unique = str(os.getpid())  # Shouldn't we use temp name?
     prefix = "r_fillnulls_%s_" % unique
-    failed_list = (
-        []
-    )  # a list of failed holes. Caused by issues with v.surf.rst. Connected with #1813
+    failed_list = []  # a list of failed holes. Caused by issues with v.surf.rst. Connected with #1813
 
     # check if input file exists
     if not gs.find_file(input)["file"]:

@@ -2223,9 +2223,11 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         tablelen = len(self.dbMgrData["mapDBInfo"].layers[self.selLayer]["table"])
 
-        if statement[index + 1 : index + 6].lower() != "from " or statement[
-            index + 6 : index + 6 + tablelen
-        ] != "%s" % (self.dbMgrData["mapDBInfo"].layers[self.selLayer]["table"]):
+        if (
+            statement[index + 1 : index + 6].lower() != "from "
+            or statement[index + 6 : index + 6 + tablelen]
+            != "%s" % (self.dbMgrData["mapDBInfo"].layers[self.selLayer]["table"])
+        ):
             return None
 
         if len(statement[index + 7 + tablelen :]) > 0:

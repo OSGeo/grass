@@ -504,9 +504,7 @@ class InteractiveRegionController:
         changed_region (dict): The dictionary to store the changed region.
     """
 
-    def __init__(
-        self, map_object, ipyleaflet, ipywidgets, **kwargs
-    ):  # pylint: disable=unused-argument
+    def __init__(self, map_object, ipyleaflet, ipywidgets, **kwargs):  # pylint: disable=unused-argument
         """Initializes the InteractiveRegionController.
 
         :param map_object: The map object.

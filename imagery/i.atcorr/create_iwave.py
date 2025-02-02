@@ -88,9 +88,9 @@ def interpolate_band(values, step=2.5):
 
     wavelengths = values_clean[:, 0]  # 1st column of input array
     responses = values_clean[:, 1]  # 2nd column
-    assert len(wavelengths) == len(
-        responses
-    ), "Number of wavelength slots and spectral responses are not equal!"
+    assert len(wavelengths) == len(responses), (
+        "Number of wavelength slots and spectral responses are not equal!"
+    )
 
     # spectral responses are written out with .4f in pretty_print()
     # anything smaller than 0.0001 will become 0.0000 -> discard with ...

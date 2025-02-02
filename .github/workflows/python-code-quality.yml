@@ -29,8 +29,6 @@ jobs:
       # renovate: datasource=python-version depName=python
       PYTHON_VERSION: "3.13"
       MIN_PYTHON_VERSION: "3.9"
-      # renovate: datasource=pypi depName=black
-      BLACK_VERSION: "25.1.0"
       # renovate: datasource=pypi depName=flake8
       FLAKE8_VERSION: "7.1.1"
       # renovate: datasource=pypi depName=pylint
@@ -73,6 +71,14 @@ jobs:
         continue-on-error: true
       - name: Run Ruff (apply fixes for suggestions)
         run: ruff check . --preview --fix --unsafe-fixes
+      - name: Run `ruff format` showing diff without failing
+        continue-on-error: true
+        if: ${{ !cancelled() }}
+        run: ruff format --diff
+      - name: Run `ruff format` fixing files
+        # Run `ruff format` even when `ruff check` fixed files: fixes can require formatting
+        if: ${{ !cancelled() }}
+        run: ruff format --diff
       - name: Create and uploads code suggestions to apply for Ruff
         # Will fail fast here if there are changes required
         id: diff-ruff
@@ -83,21 +89,6 @@ jobs:
           tool-name: ruff
           # To keep repo's file structure in formatted changes artifact
           extra-upload-changes: pyproject.toml
-
-      - name: Install Black only
-        run: pip install black[jupyter]==${{ env.BLACK_VERSION }}
-
-      - name: Run Black
-        run: black .
-
-      - name: Create and uploads code suggestions to apply for Black
-        # Will fail fast here if there are changes required
-        id: diff-black
-        uses: ./.github/actions/create-upload-suggestions
-        with:
-          tool-name: black
-          # To keep repo's file structure in formatted changes artifact
-          extra-upload-changes: .clang-format
 
       - name: Install non-Python dependencies
         run: |
