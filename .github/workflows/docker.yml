@@ -22,8 +22,9 @@ on:
   release:
     types: [published]
 
-jobs:
+permissions: {}
 
+jobs:
   # Run for push to configured branches and all published releases.
   # Take care of different os.
   # For main branch, created tags are:
@@ -46,6 +47,10 @@ jobs:
           - ubuntu
           - ubuntu_wxgui
       fail-fast: false
+
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout
@@ -76,7 +81,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN  }}
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@b32b51a8eda65d6793cd0494a773d4f6bcef32dc # v6.11.0
+        uses: docker/build-push-action@ca877d9245402d1537745e0e356eab47c3520991 # v6.13.0
         with:
           push: true
           pull: true

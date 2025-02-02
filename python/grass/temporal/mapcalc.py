@@ -90,7 +90,7 @@ def dataset_mapcalculator(
     :param type: The type of the dataset: "raster" or "raster3d"
     :param expression: The r(3).mapcalc expression
     :param base: The base name of the new created maps in case a
-           mapclac expression is provided
+           mapcalc expression is provided
     :param method: The method to be used for temporal sampling
     :param nprocs: The number of parallel processes to be used for
            mapcalc processing
@@ -315,19 +315,20 @@ def dataset_mapcalculator(
             proc_list[proc_count].start()
             proc_count += 1
 
-            if proc_count in {nprocs, num} or count == num:
-                proc_count = 0
-                exitcodes = 0
-                for proc in proc_list:
-                    proc.join()
-                    exitcodes += proc.exitcode
+            if proc_count not in {nprocs, num} and count != num:
+                continue
+            proc_count = 0
+            exitcodes = 0
+            for proc in proc_list:
+                proc.join()
+                exitcodes += proc.exitcode
 
-                if exitcodes != 0:
-                    dbif.close()
-                    msgr.fatal(_("Error while mapcalc computation"))
+            if exitcodes != 0:
+                dbif.close()
+                msgr.fatal(_("Error while mapcalc computation"))
 
-                # Empty process list
-                proc_list = []
+            # Empty process list
+            proc_list = []
 
         # Register the new maps in the output space time dataset
         msgr.message(_("Starting map registration in temporal database..."))

@@ -198,8 +198,7 @@ class VirtualAttributeList(
                     GError(
                         parent=self,
                         message=_(
-                            "Column <%(column)s> not found in "
-                            "in the table <%(table)s>."
+                            "Column <%(column)s> not found in in the table <%(table)s>."
                         )
                         % {"column": col, "table": tableName},
                     )
@@ -1642,10 +1641,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             try:
                 if cat in tlist.itemCatsMap.values():
                     raise ValueError(
-                        _(
-                            "Record with category number %d "
-                            "already exists in the table."
-                        )
+                        _("Record with category number %d already exists in the table.")
                         % cat
                     )
 
@@ -2227,9 +2223,11 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         tablelen = len(self.dbMgrData["mapDBInfo"].layers[self.selLayer]["table"])
 
-        if statement[index + 1 : index + 6].lower() != "from " or statement[
-            index + 6 : index + 6 + tablelen
-        ] != "%s" % (self.dbMgrData["mapDBInfo"].layers[self.selLayer]["table"]):
+        if (
+            statement[index + 1 : index + 6].lower() != "from "
+            or statement[index + 6 : index + 6 + tablelen]
+            != "%s" % (self.dbMgrData["mapDBInfo"].layers[self.selLayer]["table"])
+        ):
             return None
 
         if len(statement[index + 7 + tablelen :]) > 0:
@@ -4008,17 +4006,18 @@ class FieldStatistics(wx.Frame):
             return
 
         fd, sqlFilePath = tempfile.mkstemp(text=True)
-        sqlFile = open(sqlFilePath, "w")
         stats = ["count", "min", "max", "avg", "sum", "null"]
-        for fn in stats:
-            if fn == "null":
-                sqlFile.write(
-                    "select count(*) from %s where %s is null;%s"
-                    % (table, column, "\n")
-                )
-            else:
-                sqlFile.write("select %s(%s) from %s;%s" % (fn, column, table, "\n"))
-        sqlFile.close()
+        with open(sqlFilePath, "w") as sqlFile:
+            for fn in stats:
+                if fn == "null":
+                    sqlFile.write(
+                        "select count(*) from %s where %s is null;%s"
+                        % (table, column, "\n")
+                    )
+                else:
+                    sqlFile.write(
+                        "select %s(%s) from %s;%s" % (fn, column, table, "\n")
+                    )
 
         dataStr = RunCommand(
             "db.select",

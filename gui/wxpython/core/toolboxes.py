@@ -149,10 +149,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
                 generateNew = True
                 _debug(
                     2,
-                    (
-                        "toolboxes.getMenudataFile: only one of the user "
-                        "defined files"
-                    ),
+                    ("toolboxes.getMenudataFile: only one of the user defined files"),
                 )
             else:
                 # if newer files -> generate new
@@ -205,9 +202,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
 
             try:
                 xml = _getXMLString(tree.getroot())
-                fh = open(menudataFile, "w")
-                fh.write(xml)
-                fh.close()
+                Path(menudataFile).write_text(xml)
                 return menudataFile
             except Exception:
                 _debug(

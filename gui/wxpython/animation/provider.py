@@ -217,8 +217,9 @@ class BitmapProvider:
         """
         Debug.msg(
             2,
-            "BitmapProvider.Load: "
-            "force={f}, bgcolor={b}, nprocs={n}".format(f=force, b=bgcolor, n=nprocs),
+            "BitmapProvider.Load: force={f}, bgcolor={b}, nprocs={n}".format(
+                f=force, b=bgcolor, n=nprocs
+            ),
         )
         cmds = []
         regions = []

@@ -65,10 +65,12 @@ sources and tools:
   of a watermark in the upper left corner.
 
 """
+
 from __future__ import annotations
 
 import os
 import zlib
+from pathlib import Path
 
 try:
     import numpy as np
@@ -550,15 +552,14 @@ class BitmapTag(DefinitionTag):
         # when storing RGB as ARGB).
 
         if len(im.shape) == 3:
-            if im.shape[2] in [3, 4]:
-                tmp = np.ones((im.shape[0], im.shape[1], 4), dtype=np.uint8) * 255
-                for i in range(3):
-                    tmp[:, :, i + 1] = im[:, :, i]
-                if im.shape[2] == 4:
-                    tmp[:, :, 0] = im[:, :, 3]  # swap channel where alpha is in
-            else:
+            if im.shape[2] not in {3, 4}:
                 msg = "Invalid shape to be an image."
                 raise ValueError(msg)
+            tmp = np.ones((im.shape[0], im.shape[1], 4), dtype=np.uint8) * 255
+            for i in range(3):
+                tmp[:, :, i + 1] = im[:, :, i]
+            if im.shape[2] == 4:
+                tmp[:, :, 0] = im[:, :, 3]  # swap channel where alpha is in
 
         elif len(im.shape) == 2:
             tmp = np.ones((im.shape[0], im.shape[1], 4), dtype=np.uint8) * 255
@@ -806,11 +807,11 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
 
     # Check duration
     if hasattr(duration, "__len__"):
-        if len(duration) == len(images2):
-            duration = list(duration)
-        else:
+        if len(duration) != len(images2):
             msg = "len(duration) doesn't match amount of images."
             raise ValueError(msg)
+        duration = list(duration)
+
     else:
         duration = [duration for im in images2]
 
@@ -838,11 +839,8 @@ def writeSwf(filename, images, duration=0.1, repeat=True):
         taglist.append(DoActionTag("stop"))
 
     # Build file
-    fp = open(filename, "wb")
-    try:
+    with open(filename, "wb") as fp:
         buildFile(fp, taglist, nframes=nframes, framesize=wh, fps=fps)
-    finally:
-        fp.close()
 
 
 def _readPixels(bb, i, tagType, L1):
@@ -923,67 +921,60 @@ def readSwf(filename, asNumpy=True):
     images = []
 
     # Open file and read all
-    fp = open(filename, "rb")
-    bb = fp.read()
+    bb = Path(filename).read_bytes()
+    # Check opening tag
+    tmp = bb[0:3].decode("ascii", "ignore")
+    if tmp.upper() == "FWS":
+        pass  # ok
+    elif tmp.upper() == "CWS":
+        # Decompress movie
+        bb = bb[:8] + zlib.decompress(bb[8:])
+    else:
+        raise OSError("Not a valid SWF file: " + str(filename))
 
-    try:
-        # Check opening tag
-        tmp = bb[0:3].decode("ascii", "ignore")
-        if tmp.upper() == "FWS":
-            pass  # ok
-        elif tmp.upper() == "CWS":
-            # Decompress movie
-            bb = bb[:8] + zlib.decompress(bb[8:])
+    # Set filepointer at first tag (skipping framesize RECT and two uin16's
+    i = 8
+    nbits = bitsToInt(bb[i : i + 1], 5)  # skip FrameSize
+    nbits = 5 + nbits * 4
+    Lrect = nbits / 8.0
+    if Lrect % 1:
+        Lrect += 1
+    Lrect = int(Lrect)
+    i += Lrect + 4
+
+    # Iterate over the tags
+    counter = 0
+    while True:
+        counter += 1
+
+        # Get tag header
+        head = bb[i : i + 6]
+        if not head:
+            break  # Done (we missed end tag)
+
+        # Determine type and length
+        T, L1, L2 = getTypeAndLen(head)
+        if not L2:
+            print("Invalid tag length, could not proceed")
+            break
+        # print(T, L2)
+
+        # Read image if we can
+        if T in {20, 36}:
+            im = _readPixels(bb, i + 6, T, L1)
+            if im is not None:
+                images.append(im)
+        elif T in {6, 21, 35, 90}:
+            print("Ignoring JPEG image: cannot read JPEG.")
         else:
-            raise OSError("Not a valid SWF file: " + str(filename))
+            pass  # Not an image tag
 
-        # Set filepointer at first tag (skipping framesize RECT and two uin16's
-        i = 8
-        nbits = bitsToInt(bb[i : i + 1], 5)  # skip FrameSize
-        nbits = 5 + nbits * 4
-        Lrect = nbits / 8.0
-        if Lrect % 1:
-            Lrect += 1
-        Lrect = int(Lrect)
-        i += Lrect + 4
+        # Detect end tag
+        if T == 0:
+            break
 
-        # Iterate over the tags
-        counter = 0
-        while True:
-            counter += 1
-
-            # Get tag header
-            head = bb[i : i + 6]
-            if not head:
-                break  # Done (we missed end tag)
-
-            # Determine type and length
-            T, L1, L2 = getTypeAndLen(head)
-            if not L2:
-                print("Invalid tag length, could not proceed")
-                break
-            # print(T, L2)
-
-            # Read image if we can
-            if T in [20, 36]:
-                im = _readPixels(bb, i + 6, T, L1)
-                if im is not None:
-                    images.append(im)
-            elif T in [6, 21, 35, 90]:
-                print("Ignoring JPEG image: cannot read JPEG.")
-            else:
-                pass  # Not an image tag
-
-            # Detect end tag
-            if T == 0:
-                break
-
-            # Next tag!
-            i += L2
-
-    finally:
-        fp.close()
-
+        # Next tag!
+        i += L2
     # Convert to normal PIL images if needed
     if not asNumpy:
         images2 = images

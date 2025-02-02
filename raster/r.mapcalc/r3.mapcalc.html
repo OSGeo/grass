@@ -449,15 +449,15 @@ the command line, the program will not warn the user not to overwrite
 existing map layers.  Users should therefore take care to assign program
 outputs raster map names that do not yet exist in their current mapsets.
 
-<h3>3D GRID MASK handling</h3>
+<h3>3D GRID mask handling</h3>
 <p>
-<em>r3.mapcalc</em> follows the common GRASS behavior of raster MASK handling,
-so the MASK is only applied when reading an existing GRASS raster map.
+<em>r3.mapcalc</em> follows the common GRASS behavior of raster mask handling,
+so the mask is only applied when reading an existing GRASS raster map.
 This implies that, for example, the command:
 <div class="code"><pre>
 r3.mapcalc "volume_amplified = volume * 3"
 </pre></div>
-create a map respecting the masked pixels if MASK is active.
+create a map with NULL cells for the masked-out cells if raster mask is active.
 
 <p>
 However, when creating a map which is not based on any map,
@@ -466,19 +466,21 @@ e.g. a map from a constant:
 r3.mapcalc "volume_const = 200.0"
 </pre></div>
 the created raster map is limited only by a computation region
-but it is not affected by an active MASK.
-This is expected because, as mentioned above, MASK is only applied when reading,
-not when writing a raster map.
-<p>
-If also in this case the MASK should be applied, an if() statement including the
-MASK should be used, e.g.:
+but it is not affected by an active raster mask.
+This is expected because, as mentioned above, the mask is only applied
+when reading, not when writing a raster map.
+If the raster mask should be applied in this case, an <code>if()</code>
+function including the mask raster should be used, e.g.
+(assuming the mask is called <code>MASK</code>):
 <div class="code"><pre>
 r3.mapcalc "volume_const = if(MASK, 200.0, null())"
 </pre></div>
 
-When testing MASK related expressions keep in mind that when MASK is active
+<p>
+When testing expressions related to mask handling keep in mind that
+when the raster mask is active,
 you don't see data in masked areas even if they are not NULL.
-See <em><a href="r.mask.html">r.mask</a></em> for details.
+See <em><a href="r3.mask.html">r3.mask</a></em> for details.
 
 <h3>Random number generator initialization</h3>
 <p>The pseudo-random number generator used by the rand() function can

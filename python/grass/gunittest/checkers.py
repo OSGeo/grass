@@ -224,8 +224,7 @@ def text_to_keyvalue(
                     if kvdict:
                         # key is the one from previous line
                         msg = (
-                            "Empty line in the parsed text."
-                            " Previous line's key is <%s>"
+                            "Empty line in the parsed text. Previous line's key is <%s>"
                         ) % key
                     raise ValueError(msg)
             else:  # noqa: PLR5501

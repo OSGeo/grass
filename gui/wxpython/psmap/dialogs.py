@@ -4967,8 +4967,9 @@ class ScalebarDialog(PsmapDialog):
         sbTypeText = StaticText(panel, id=wx.ID_ANY, label=_("Type:"))
         self.sbCombo = BitmapComboBox(panel, style=wx.CB_READONLY)
         # only temporary, images must be moved away
-        imagePath = os.path.join(globalvar.IMGDIR, "scalebar-fancy.png"), os.path.join(
-            globalvar.IMGDIR, "scalebar-simple.png"
+        imagePath = (
+            os.path.join(globalvar.IMGDIR, "scalebar-fancy.png"),
+            os.path.join(globalvar.IMGDIR, "scalebar-simple.png"),
         )
         for item, path in zip(["fancy", "simple"], imagePath):
             bitmap = EmptyBitmap(0, 0) if not os.path.exists(path) else wx.Bitmap(path)
