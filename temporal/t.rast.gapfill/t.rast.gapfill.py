@@ -151,10 +151,7 @@ def main():
 
         if len(map_.get_follows()) > 1:
             gs.warning(
-                _(
-                    "More than one predecessor of the gap found. "
-                    "Using the first found."
-                )
+                _("More than one predecessor of the gap found. Using the first found.")
             )
 
     # Interpolate the maps using parallel processing

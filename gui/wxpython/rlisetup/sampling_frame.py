@@ -255,18 +255,16 @@ class RLiSetupMapPanel(wx.Panel):
             )
 
     def writeArea(self, coords, rasterName):
-        polyfile = tempfile.NamedTemporaryFile(delete=False)
-        polyfile.write("AREA\n")
-        for coor in coords:
-            east, north = coor
-            point = " %s %s\n" % (east, north)
-            polyfile.write(point)
+        with tempfile.NamedTemporaryFile(delete=False) as polyfile:
+            polyfile.write("AREA\n")
+            for coor in coords:
+                east, north = coor
+                point = " %s %s\n" % (east, north)
+                polyfile.write(point)
+            catbuf = "=%d a\n" % self.catId
+            polyfile.write(catbuf)
+            self.catId += 1
 
-        catbuf = "=%d a\n" % self.catId
-        polyfile.write(catbuf)
-        self.catId += 1
-
-        polyfile.close()
         region_settings = grass.parse_command("g.region", flags="p", delimiter=":")
         pname = polyfile.name.split("/")[-1]
         tmpraster = "rast_" + pname
@@ -431,7 +429,7 @@ class RLiSetupMapPanel(wx.Panel):
             dlg.Destroy()
 
         elif self.samplingtype != SamplingType.WHOLE:
-            """When drawing finished, get region values"""
+            # When drawing finished, get region values
             self.sampleFrameChanged.emit(region=region)
 
 

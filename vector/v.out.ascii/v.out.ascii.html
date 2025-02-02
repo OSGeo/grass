@@ -19,17 +19,17 @@ between machines.
 
 <p>If old version is requested, the <b>output</b> files
 from <em>v.out.ascii</em> is placed in
-the <tt>$LOCATION/$MAPSET/dig_ascii/</tt>
-and <tt>$LOCATION/$MAPSET/dig_att</tt> directory.
+the <code>$LOCATION/$MAPSET/dig_ascii/</code>
+and <code>$LOCATION/$MAPSET/dig_att</code> directory.
 
 <p>If <b>layer &gt; 0</b> then only features with a category number
 will be exported. Use <em><a href="v.category.html">v.category</a></em> to add
 them if needed or define <b>layer=-1</b> to export also features without category.
 
 <p><em>v.out.ascii</em> in the old version mode (<b>-o</b>) does not
-copy the <tt>dig_cats</tt> file associated with the binary
+copy the <code>dig_cats</code> file associated with the binary
 vector <b>input</b> map to the new <b>output</b> file name. The user
-must copy the <tt>dig_cats</tt> file to the new <b>output</b> name if
+must copy the <code>dig_cats</code> file to the new <b>output</b> name if
 this is desired (e.g. using the UNIX <em>cp</em> command).
 
 <p>It is possible to output the coordinates of vertices in a non-points vector

@@ -1,5 +1,4 @@
-"""Python interface to launch GRASS GIS modules in scripts
-"""
+"""Python interface to launch GRASS GIS modules in scripts"""
 
 from . import setup
 from .core import (

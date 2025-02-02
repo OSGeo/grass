@@ -12,6 +12,8 @@ This program is free software under the GNU General Public License
 @author Jachym Cepicky
 """
 
+from __future__ import annotations
+
 import os
 import sys
 import platform
@@ -21,6 +23,8 @@ import re
 import inspect
 import operator
 from string import digits
+from typing import TYPE_CHECKING
+
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -29,6 +33,11 @@ from grass.app.runtime import get_grass_config_dir
 from core.gcmd import RunCommand
 from core.debug import Debug
 from core.globalvar import wxPythonPhoenix
+
+
+if TYPE_CHECKING:
+    import wx
+    import PIL.Image
 
 
 def cmp(a, b):
@@ -217,11 +226,7 @@ def GetValidLayerName(name):
     cIdx = 0
     retNameList = list(retName)
     for c in retNameList:
-        if (
-            not (c >= "A" and c <= "Z")
-            and not (c >= "a" and c <= "z")
-            and not (c >= "0" and c <= "9")
-        ):
+        if not ("A" <= c <= "Z") and not ("a" <= c <= "z") and not ("0" <= c <= "9"):
             retNameList[cIdx] = "_"
         cIdx += 1
     retName = "".join(retNameList)
@@ -311,7 +316,8 @@ def ListOfMapsets(get="ordered"):
                 mapsets_ordered.append(mapset)
         return mapsets_ordered
 
-    raise ValueError("Invalid value for 'get' parameter of ListOfMapsets()")
+    msg = "Invalid value for 'get' parameter of ListOfMapsets()"
+    raise ValueError(msg)
 
 
 def ListSortLower(list):
@@ -849,8 +855,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
 
     # update environmental variables
     if value is None:
-        if key in environ:
-            del environ[key]
+        environ.pop(key, None)
     else:
         environ[key] = value
 
@@ -866,12 +871,10 @@ def StoreEnvVariable(key, value=None, envFile=None):
         return
     expCmd = "set" if windows else "export"
 
-    for key, value in environ.items():
-        fd.write("%s %s=%s\n" % (expCmd, key, value))
+    fd.writelines("%s %s=%s\n" % (expCmd, key, value) for key, value in environ.items())
 
     # write also skipped lines
-    for line in lineSkipped:
-        fd.write(line + os.linesep)
+    fd.writelines(line + os.linesep for line in lineSkipped)
 
     fd.close()
 
@@ -922,9 +925,8 @@ str2rgb = {
     "white": (255, 255, 255),
     "yellow": (255, 255, 0),
 }
-rgb2str = {}
-for s, r in str2rgb.items():
-    rgb2str[r] = s
+
+rgb2str = {r: s for s, r in str2rgb.items()}
 # ensure that gray value has 'gray' string and not 'grey'
 rgb2str[str2rgb["gray"]] = "gray"
 # purple is defined as nickname for violet in lib/gis
@@ -978,9 +980,7 @@ command2ltype = {
     "d.polar": "polar",
     "d.legend.vect": "vectleg",
 }
-ltype2command = {}
-for cmd, ltype in command2ltype.items():
-    ltype2command[ltype] = cmd
+ltype2command = {ltype: cmd for cmd, ltype in command2ltype.items()}
 
 
 def GetGEventAttribsForHandler(method, event):
@@ -1018,7 +1018,7 @@ def GetGEventAttribsForHandler(method, event):
     return kwargs, missing_args
 
 
-def PilImageToWxImage(pilImage, copyAlpha=True):
+def PilImageToWxImage(pilImage: PIL.Image.Image, copyAlpha: bool = True) -> wx.Image:
     """Convert PIL image to wx.Image
 
     Based on http://wiki.wxpython.org/WorkingWithImages
@@ -1047,7 +1047,7 @@ def PilImageToWxImage(pilImage, copyAlpha=True):
     return wxImage
 
 
-def autoCropImageFromFile(filename):
+def autoCropImageFromFile(filename) -> wx.Image:
     """Loads image from file and crops it automatically.
 
     If PIL is not installed, it does not crop it.

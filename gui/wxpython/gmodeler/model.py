@@ -39,6 +39,7 @@ import mimetypes
 import time
 
 import xml.etree.ElementTree as ET
+from pathlib import Path
 from xml.sax import saxutils
 
 import wx
@@ -100,12 +101,7 @@ class Model:
         if not objType:
             return self.items
 
-        result = []
-        for item in self.items:
-            if isinstance(item, objType):
-                result.append(item)
-
-        return result
+        return [item for item in self.items if isinstance(item, objType)]
 
     def GetItem(self, aId, objType=None):
         """Get item of given id
@@ -325,7 +321,8 @@ class Model:
         try:
             gxmXml = ProcessModelFile(ET.parse(filename))
         except Exception as e:
-            raise GException("{}".format(e))
+            msg = "{}".format(e)
+            raise GException(msg)
 
         if self.canvas:
             win = self.canvas.parent
@@ -546,11 +543,8 @@ class Model:
 
         for finput in self.fileInput:
             # read lines
-            fd = open(finput)
-            try:
-                data = self.fileInput[finput] = fd.read()
-            finally:
-                fd.close()
+            data = Path(finput).read_text()
+            self.fileInput[finput] = data
 
             # substitute variables
             write = False
@@ -583,11 +577,7 @@ class Model:
 
             if not checkOnly:
                 if write:
-                    fd = open(finput, "w")
-                    try:
-                        fd.write(data)
-                    finally:
-                        fd.close()
+                    Path(finput).write_text(data)
                 else:
                     self.fileInput[finput] = None
 
@@ -682,11 +672,12 @@ class Model:
                 GError(parent=parent, message="\n".join(err))
                 return
 
-            err = []
-            for key, item in params.items():
-                for p in item["params"]:
-                    if p.get("value", "") == "":
-                        err.append((key, p.get("name", ""), p.get("description", "")))
+            err = [
+                (key, p.get("name", ""), p.get("description", ""))
+                for key, item in params.items()
+                for p in item["params"]
+                if p.get("value", "") == ""
+            ]
             if err:
                 GError(
                     parent=parent,
@@ -989,11 +980,7 @@ class ModelObject:
 
         :return: list of ids
         """
-        ret = []
-        for mo in self.inBlock:
-            ret.append(mo.GetId())
-
-        return ret
+        return [mo.GetId() for mo in self.inBlock]
 
 
 class ModelAction(ModelObject, ogl.DividedShape):
@@ -1408,20 +1395,14 @@ class ModelData(ModelObject):
 
     def GetLog(self, string=True):
         """Get logging info"""
-        name = []
-        for rel in self.GetRelations():
-            name.append(rel.GetLabel())
+        name = [rel.GetLabel() for rel in self.GetRelations()]
         if name:
             return "/".join(name) + "=" + self.value + " (" + self.prompt + ")"
         return self.value + " (" + self.prompt + ")"
 
     def GetLabel(self):
         """Get list of names"""
-        name = []
-        for rel in self.GetRelations():
-            name.append(rel.GetLabel())
-
-        return name
+        return [rel.GetLabel() for rel in self.GetRelations()]
 
     def GetPrompt(self):
         """Get prompt"""
@@ -1527,9 +1508,7 @@ class ModelData(ModelObject):
     def SetLabel(self):
         """Update text"""
         self.ClearText()
-        name = []
-        for rel in self.GetRelations():
-            name.append(rel.GetLabel())
+        name = [rel.GetLabel() for rel in self.GetRelations()]
         self.AddText("/".join(name))
         if self.value:
             self.AddText(self.value)
@@ -1550,7 +1529,8 @@ class ModelData(ModelObject):
         elif self.prompt == "vector":
             cmd.append("d.vect")
         else:
-            raise GException("Unsupported display prompt: {}".format(self.prompt))
+            msg = "Unsupported display prompt: {}".format(self.prompt)
+            raise GException(msg)
 
         cmd.append("map=" + self.value)
 
@@ -1793,12 +1773,7 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
 
     def GetItems(self, items):
         """Get sorted items by id"""
-        result = []
-        for item in items:
-            if item.GetId() in self.itemIds:
-                result.append(item)
-
-        return result
+        return [item for item in items if item.GetId() in self.itemIds]
 
     def SetItems(self, items):
         """Set items (id)"""
@@ -2729,9 +2704,9 @@ class WriteActiniaFile(WriteScriptFile):
 
         self.fd.write(
             f"""{{
-{' ' * self.indent * 1}"id": "model",
-{' ' * self.indent * 1}"description": "{'""'.join(description.splitlines())}",
-{' ' * self.indent * 1}"version": "1",
+{" " * self.indent * 1}"id": "model",
+{" " * self.indent * 1}"description": "{'""'.join(description.splitlines())}",
+{" " * self.indent * 1}"version": "1",
 """
         )
 
@@ -2748,12 +2723,12 @@ class WriteActiniaFile(WriteScriptFile):
         if parameterized is True:
             self.fd.write(f'{" " * self.indent * 1}"template": {{\n')
             self.fd.write(
-                f"""{' ' * self.indent * 2}"list": [
+                f"""{" " * self.indent * 2}"list": [
     """
             )
         else:
             self.fd.write(
-                f"""{' ' * self.indent}"list": [
+                f"""{" " * self.indent}"list": [
     """
             )
 
@@ -2806,7 +2781,6 @@ class WriteActiniaFile(WriteScriptFile):
             value = p.get("value", None)
 
             if (name and value) or (name in parameterizedParams):
-
                 if name in parameterizedParams:
                     parameterizedParam = self._getParamName(name, item)
                     default_val = p.get("value", "")
@@ -3333,9 +3307,7 @@ class WritePythonFile(WriteScriptFile):
 # %module
 # % description: {description}
 # %end
-""".format(
-                description=" ".join(properties["description"].splitlines())
-            )
+""".format(description=" ".join(properties["description"].splitlines()))
         )
 
         modelItems = self.model.GetItems(ModelAction)
@@ -3729,11 +3701,7 @@ class ModelParamDialog(wx.Dialog):
 
     def GetErrors(self):
         """Check for errors, get list of messages"""
-        errList = []
-        for task in self.tasks:
-            errList += task.get_cmd_error()
-
-        return errList
+        return [task.get_cmd_error() for task in self.tasks]
 
     def DeleteIntermediateData(self) -> bool:
         """Check if to delete intermediate data"""
