@@ -124,9 +124,9 @@ def test_r_category_separator_variants(simple_dataset):
         ).replace(
             "\r", ""
         )  # remove the '\r' (carriage return) to standardize line endings.
-        assert (
-            result == expected
-        ), f"Expected {expected}, but got {result} for separator '{sep}'"
+        assert result == expected, (
+            f"Expected {expected}, but got {result} for separator '{sep}'"
+        )
 
 
 def test_r_category_input_separators(simple_dataset):
@@ -162,9 +162,9 @@ def test_r_category_input_separators(simple_dataset):
         ).replace(
             "\r", ""
         )  # remove the '\r' (carriage return) to standardize line endings.
-        assert (
-            result == expected
-        ), f"Expected {expected}, but got {result} for input separator '{inp_sep}'"
+        assert result == expected, (
+            f"Expected {expected}, but got {result} for input separator '{inp_sep}'"
+        )
 
 
 def test_r_category_multiword_input(simple_dataset):
@@ -198,9 +198,9 @@ def test_r_category_multiword_input(simple_dataset):
         ).replace(
             "\r", ""
         )  # remove the '\r' (carriage return) to standardize line endings.
-        assert (
-            result == expected
-        ), f"Expected {expected}, but got {result} for input '{data}'"
+        assert result == expected, (
+            f"Expected {expected}, but got {result} for input '{data}'"
+        )
 
 
 def test_r_category_extreme_incorrect_values(simple_dataset):
