@@ -26,7 +26,7 @@
 
 /* divergence computation from a given field */
 
-void erod(double **hw, const Simulation *simulation, const Geometry *geometry)
+void erod(double **hw, const Setup *setup, const Geometry *geometry)
 {
     /* hw = sigma or gamma */
 
@@ -61,7 +61,7 @@ void erod(double **hw, const Simulation *simulation, const Geometry *geometry)
                       geometry->stepy;
                 dya = 0.5 * (dyp + dyn);
 
-                er[k][l] = (dxa + dya) / simulation->deltap;
+                er[k][l] = (dxa + dya) / setup->deltap;
             }
             else
                 er[k][l] = UNDEF;

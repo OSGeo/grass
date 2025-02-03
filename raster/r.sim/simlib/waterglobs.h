@@ -37,12 +37,6 @@ extern char *rainval;
 extern char *maninval;
 extern char *infilval;
 
-struct seed {
-    long int is1, is2;
-};
-
-extern struct seed seed;
-
 struct _points {
     double *x;         /* x coor for each point */
     double *y;         /* y coor for each point */
@@ -80,12 +74,9 @@ extern float **dc, **tau, **er, **ct, **trap;
 extern float **dif;
 
 extern struct point3D *w;
-extern struct point3D *stack;
 extern struct point2D *vavg;
 
-extern int maxwa, nwalk;
-extern int nstack;
-extern int nwalka;
+extern int nwalk;
 
 extern double rain_val;
 extern double manin_val;

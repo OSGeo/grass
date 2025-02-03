@@ -40,14 +40,18 @@ typedef struct {
     double infmean; /* Mean infiltration */
     double timec;
     double deltap; /* Time step for water */
+} Setup;
+
+typedef struct {
+    int nwalka;            /* Remaining walkers */
+    int nstack;            /* Number of output walkers */
+    struct point3D *stack; /* Output 3D walkers */
+    int maxwa;
     double rwalk;
 } Simulation;
 
 struct WaterParams {
-    int maxwa, nwalk;
-
-    int nstack;
-    int nwalka;
+    int nwalk;
 
     double rain_val;
     double manin_val;
@@ -88,19 +92,18 @@ void WaterParams_init(struct WaterParams *wp);
 void init_library_globals(struct WaterParams *wp);
 void alloc_grids_water(const Geometry *geometry);
 void alloc_grids_sediment(const Geometry *geometry);
-void init_grids_sediment(const Simulation *simulation,
-                         const Geometry *geometry);
+void init_grids_sediment(const Setup *setup, const Geometry *geometry);
 
-int input_data(int rows, int cols);
-int grad_check(Simulation *simulation, const Geometry *geometry,
+int input_data(int rows, int cols, Simulation *sim);
+int grad_check(Setup *setup, const Geometry *geometry,
                const Settings *settings);
-void main_loop(const Simulation *simulation, const Geometry *geometry,
-               const Settings *settings);
-int output_data(int, double, const Simulation *simulation,
-                const Geometry *geometry, const Settings *settings);
+void main_loop(const Setup *setup, const Geometry *geometry,
+               const Settings *settings, Simulation *sim);
+int output_data(int, double, const Setup *setup, const Geometry *geometry,
+                const Settings *settings, const Simulation *sim);
 int output_et(const Geometry *geometry);
-void free_walkers(void);
-void erod(double **, const Simulation *simulation, const Geometry *geometry);
+void free_walkers(Simulation *sim);
+void erod(double **, const Setup *setup, const Geometry *geometry);
 
 struct options {
     struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,

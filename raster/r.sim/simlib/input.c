@@ -34,10 +34,7 @@ void WaterParams_init(struct WaterParams *wp)
      * difference in between initialization in water and sediment
      * for the variables which are not used and would have been
      * initialized if they were just global variables */
-    wp->maxwa = 0;
     wp->nwalk = 0;
-    wp->nstack = 0;
-    wp->nwalka = 0;
 
     wp->rain_val = 0;
     wp->manin_val = 0;
@@ -82,10 +79,7 @@ void init_library_globals(struct WaterParams *wp)
     /* this is little bit lengthy and perhaps error-prone
      * but it separates library from its interface */
 
-    maxwa = wp->maxwa;
     nwalk = wp->nwalk;
-    nstack = wp->nstack;
-    nwalka = wp->nwalka;
 
     rain_val = wp->rain_val;
     manin_val = wp->manin_val;
@@ -149,21 +143,22 @@ void alloc_grids_sediment(const Geometry *geometry)
         er = G_alloc_fmatrix(geometry->my, geometry->mx);
 }
 
-void init_grids_sediment(const Simulation *simulation, const Geometry *geometry)
+void init_grids_sediment(const Setup *simulation, const Geometry *geometry)
 {
     /* this should be fulfilled for sediment but not water */
     if (et != NULL)
         erod(si, simulation, geometry);
 }
 
-void alloc_walkers(int max_walkers)
+void alloc_walkers(int max_walkers, Simulation *sim)
 {
     G_debug(1, "beginning memory allocation for walkers");
 
     w = (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
     vavg = (struct point2D *)G_calloc(max_walkers, sizeof(struct point2D));
     if (outwalk != NULL)
-        stack = (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
+        sim->stack =
+            (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
 }
 
 /* ************************************************************** */
@@ -178,7 +173,7 @@ void alloc_walkers(int max_walkers)
 
 /* ************************************************************************* */
 /* Read all input maps and input values into memory ************************ */
-int input_data(int rows, int cols)
+int input_data(int rows, int cols, Simulation *sim)
 {
     int max_walkers;
     double unitconv = 0.000000278; /* mm/hr to m/s */
@@ -258,8 +253,8 @@ int input_data(int rows, int cols)
         copy_matrix_undef_double_to_float_values(rows, cols, gama, zz);
     }
     /* allocate walkers */
-    max_walkers = maxwa + cols * rows;
-    alloc_walkers(max_walkers);
+    max_walkers = sim->maxwa + cols * rows;
+    alloc_walkers(max_walkers, sim);
 
     /* Array for gradient checking */
     slope = create_double_matrix(rows, cols, 0.0);
@@ -273,7 +268,7 @@ int input_data(int rows, int cols)
 /* ************************************************************************* */
 
 /* data preparations, sigma, shear, etc. */
-int grad_check(Simulation *simulation, const Geometry *geometry,
+int grad_check(Setup *simulation, const Geometry *geometry,
                const Settings *settings)
 {
     int k, l;

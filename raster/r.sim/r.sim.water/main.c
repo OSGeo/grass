@@ -357,7 +357,8 @@ int main(int argc, char *argv[])
 
     Geometry geometry;
     Settings settings;
-    Simulation simulation;
+    Setup setup;
+    Simulation sim;
 
     WaterParams_init(&wp);
 
@@ -525,13 +526,13 @@ int main(int argc, char *argv[])
 
     /* compute how big the raster is and set this to appr 2 walkers per cell */
     if (parm.nwalk->answer == NULL) {
-        wp.maxwa = geometry.mx * geometry.my * 2;
-        simulation.rwalk = (double)(geometry.mx * geometry.my * 2.);
-        G_message(_("default nwalk=%d, rwalk=%f"), wp.maxwa, simulation.rwalk);
+        sim.maxwa = geometry.mx * geometry.my * 2;
+        sim.rwalk = (double)(geometry.mx * geometry.my * 2.);
+        G_message(_("default nwalk=%d, rwalk=%f"), sim.maxwa, sim.rwalk);
     }
     else {
-        sscanf(parm.nwalk->answer, "%d", &wp.maxwa);
-        simulation.rwalk = (double)wp.maxwa;
+        sscanf(parm.nwalk->answer, "%d", &sim.maxwa);
+        sim.rwalk = (double)sim.maxwa;
     }
 
     /*      rwalk = (double) maxwa; */
@@ -546,15 +547,15 @@ int main(int argc, char *argv[])
 
     if ((wp.depth == NULL) && (wp.disch == NULL) && (wp.err == NULL))
         G_warning(_("You are not outputting any raster maps"));
-    ret_val = input_data(geometry.my, geometry.mx);
+    ret_val = input_data(geometry.my, geometry.mx, &sim);
     if (ret_val != 1)
         G_fatal_error(_("Input failed"));
 
     alloc_grids_water(&geometry);
 
-    grad_check(&simulation, &geometry, &settings);
-    main_loop(&simulation, &geometry, &settings);
-    free_walkers();
+    grad_check(&setup, &geometry, &settings);
+    main_loop(&setup, &geometry, &settings, &sim);
+    free_walkers(&sim);
 
     /* Exit with Success */
     exit(EXIT_SUCCESS);

@@ -323,7 +323,8 @@ int main(int argc, char *argv[])
 
     Geometry geometry;
     Settings settings;
-    Simulation simulation;
+    Setup setup;
+    Simulation sim;
     settings.hhmax = settings.halpha = settings.hbeta = 0;
     settings.ts = false;
 
@@ -397,13 +398,13 @@ int main(int argc, char *argv[])
 
     /* compute how big the raster is and set this to appr 2 walkers per cell */
     if (parm.nwalk->answer == NULL) {
-        wp.maxwa = geometry.mx * geometry.my * 2;
-        simulation.rwalk = (double)(geometry.mx * geometry.my * 2.);
-        G_message(_("default nwalk=%d, rwalk=%f"), wp.maxwa, simulation.rwalk);
+        sim.maxwa = geometry.mx * geometry.my * 2;
+        sim.rwalk = (double)(geometry.mx * geometry.my * 2.);
+        G_message(_("default nwalk=%d, rwalk=%f"), sim.maxwa, sim.rwalk);
     }
     else {
-        sscanf(parm.nwalk->answer, "%d", &wp.maxwa);
-        simulation.rwalk = (double)wp.maxwa;
+        sscanf(parm.nwalk->answer, "%d", &sim.maxwa);
+        sim.rwalk = (double)sim.maxwa;
     }
     /*rwalk = (double) maxwa; */
 
@@ -418,24 +419,24 @@ int main(int argc, char *argv[])
     if ((wp.tc == NULL) && (wp.et == NULL) && (wp.conc == NULL) &&
         (wp.flux == NULL) && (wp.erdep == NULL))
         G_warning(_("You are not outputting any raster or site files"));
-    ret_val = input_data(geometry.my, geometry.mx);
+    ret_val = input_data(geometry.my, geometry.mx, &sim);
     if (ret_val != 1)
         G_fatal_error(_("Input failed"));
 
     alloc_grids_sediment(&geometry);
 
-    grad_check(&simulation, &geometry, &settings);
-    init_grids_sediment(&simulation, &geometry);
+    grad_check(&setup, &geometry, &settings);
+    init_grids_sediment(&setup, &geometry);
     /* treba dat output pre topoerdep */
-    main_loop(&simulation, &geometry, &settings);
+    main_loop(&setup, &geometry, &settings, &sim);
 
     /* always true for sediment? */
     if (wp.tserie == NULL) {
-        ii = output_data(0, 1., &simulation, &geometry, &settings);
+        ii = output_data(0, 1., &setup, &geometry, &settings, &sim);
         if (ii != 1)
             G_fatal_error(_("Cannot write raster maps"));
     }
-    free_walkers();
+    free_walkers(&sim);
 
     /* Exit with Success */
     exit(EXIT_SUCCESS);

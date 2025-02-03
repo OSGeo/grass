@@ -66,8 +66,6 @@ char *rainval;
 char *maninval;
 char *infilval;
 
-struct seed seed;
-
 float **zz, **cchez;
 double **v1, **v2, **slope;
 double **gama, **gammas, **si, **inf, **sigma;
@@ -76,14 +74,11 @@ float **dif;
 
 /* int iflag[MAXW]; */
 struct point3D *w;
-struct point3D *stack;
 struct point2D *vavg;
 
 double vmean;
 double infmean;
-int maxwa, nwalk;
-int nstack;
-int nwalka;
+int nwalk;
 
 double rain_val;
 double manin_val;
@@ -96,8 +91,8 @@ struct History history; /* holds meta-data (title, comments,..) */
 /* ******************************************************** */
 /*                       .......... iblock loop */
 
-void main_loop(const Simulation *simulation, const Geometry *geometry,
-               const Settings *settings)
+void main_loop(const Setup *setup, const Geometry *geometry,
+               const Settings *settings, Simulation *sim)
 {
     int i, l, k;
     int iblock;
@@ -106,23 +101,21 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
     double addac;
 
     int nblock = 1;
-    nstack = 0;
 
     double stxm = geometry->stepx * (double)(geometry->mx + 1) - geometry->xmin;
     double stym = geometry->stepy * (double)(geometry->my + 1) - geometry->ymin;
-    double deldif =
-        sqrt(simulation->deltap) * settings->frac; /* diffuse factor */
+    double deldif = sqrt(setup->deltap) * settings->frac; /* diffuse factor */
 
-    if (maxwa > (MAXW - geometry->mx * geometry->my)) {
-        nblock = 1 + maxwa / (MAXW - geometry->mx * geometry->my);
-        maxwa = maxwa / nblock;
+    if (sim->maxwa > (MAXW - geometry->mx * geometry->my)) {
+        nblock = 1 + sim->maxwa / (MAXW - geometry->mx * geometry->my);
+        sim->maxwa = sim->maxwa / nblock;
     }
-    double factor = simulation->deltap * simulation->sisum /
-                    (simulation->rwalk * (double)nblock);
+    double factor =
+        setup->deltap * setup->sisum / (sim->rwalk * (double)nblock);
 
     G_debug(2, " deldif, factor %f %e", deldif, factor);
-    G_debug(2, " maxwa, nblock %d %d", maxwa, nblock);
-    G_debug(2, "rwalk,sisum: %f %f", simulation->rwalk, simulation->sisum);
+    G_debug(2, " maxwa, nblock %d %d", sim->maxwa, nblock);
+    G_debug(2, "rwalk,sisum: %f %f", sim->rwalk, setup->sisum);
 
     for (iblock = 1; iblock <= nblock; iblock++) {
         int lw = 0;
@@ -139,8 +132,7 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
                     double x = geometry->xp0 + geometry->stepx * (double)(l);
                     double y = geometry->yp0 + geometry->stepy * (double)(k);
 
-                    double gen =
-                        simulation->rwalk * si[k][l] / simulation->sisum;
+                    double gen = sim->rwalk * si[k][l] / setup->sisum;
                     int mgen = (int)gen;
                     double wei = gen / (double)(mgen + 1);
 
@@ -162,7 +154,7 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
         G_debug(2, " nwalk, maxw %d %d", nwalk, MAXW);
         G_debug(2, " walkwe (walk weight),frac %f %f", walkwe, settings->frac);
 
-        nwalka = 0;
+        sim->nwalka = 0;
 
         /* ********************************************************** */
         /*       main loop over the projection time */
@@ -170,19 +162,19 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
 
         G_debug(2, "main loop over the projection time... ");
 
-        for (i = 1; i <= simulation->miter;
+        for (i = 1; i <= setup->miter;
              i++) { /* iteration loop depending on simulation time and deltap */
-            G_percent(i, simulation->miter, 1);
-            iter1 = i / simulation->iterout;
-            iter1 *= simulation->iterout;
+            G_percent(i, setup->miter, 1);
+            iter1 = i / setup->iterout;
+            iter1 *= setup->iterout;
             if (iter1 == i) {
                 /* nfiterw = i / iterout + 10;
                    nfiterh = i / iterout + 40; */
                 G_debug(2, "iblock=%d i=%d miter=%d nwalk=%d nwalka=%d", iblock,
-                        i, simulation->miter, nwalk, nwalka);
+                        i, setup->miter, nwalk, sim->nwalka);
             }
 
-            if (nwalka == 0 && i > 1)
+            if (sim->nwalka == 0 && i > 1)
                 goto L_800;
 
             /* ************************************************************ */
@@ -194,8 +186,8 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
             if (i == 1) {
                 addac = factor * .5;
             }
-            nwalka = 0;
-            nstack = 0;
+            sim->nwalka = 0;
+            sim->nstack = 0;
 
 #pragma omp parallel firstprivate(l, lw, k, gaux, gauy) // nwalka
             {
@@ -213,7 +205,7 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
                 for (lw = 0; lw < nwalk; lw++) {
 #endif
                     if (w[lw].m > EPS) { /* check the walker weight */
-                        ++nwalka;
+                        ++(sim->nwalka);
                         l = (int)((w[lw].x + stxm) / geometry->stepx) -
                             geometry->mx - 1;
                         k = (int)((w[lw].y + stym) / geometry->stepy) -
@@ -229,7 +221,8 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
                                    geometry->stepy);
                             G_debug(2, "    m=%d %d", geometry->my,
                                     geometry->mx);
-                            printf("    nwalka,nwalk=%d %d", nwalka, nwalk);
+                            printf("    nwalka,nwalk=%d %d", sim->nwalka,
+                                   nwalk);
                             G_debug(2, "  ");
                         }
 
@@ -335,8 +328,8 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
              * output implementation */
             /* Save all walkers located within the computational region and with
                valid z coordinates */
-            if (outwalk != NULL && (i == simulation->miter || i == iter1)) {
-                nstack = 0;
+            if (outwalk != NULL && (i == setup->miter || i == iter1)) {
+                sim->nstack = 0;
 
                 for (lw = 0; lw < nwalk; lw++) {
                     /* Compute the  elevation raster map index */
@@ -353,13 +346,15 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
                     if (w[lw].m > EPS && zz[k][l] != UNDEF) {
 
                         /* Save the 3d position of the walker */
-                        stack[nstack].x = geometry->mixx / geometry->conv +
-                                          w[lw].x / geometry->conv;
-                        stack[nstack].y = geometry->miyy / geometry->conv +
-                                          w[lw].y / geometry->conv;
-                        stack[nstack].m = zz[k][l];
+                        sim->stack[sim->nstack].x =
+                            geometry->mixx / geometry->conv +
+                            w[lw].x / geometry->conv;
+                        sim->stack[sim->nstack].y =
+                            geometry->miyy / geometry->conv +
+                            w[lw].y / geometry->conv;
+                        sim->stack[sim->nstack].m = zz[k][l];
 
-                        nstack++;
+                        sim->nstack++;
                     }
                 } /* lw loop */
             }
@@ -367,13 +362,12 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
             if (i == iter1 && settings->ts) {
                 /* call output for iteration output */
                 if (erdep != NULL)
-                    erod(gama, simulation,
-                         geometry); /* divergence of gama field */
+                    erod(gama, setup, geometry); /* divergence of gama field */
 
                 conn = (double)nblock / (double)iblock;
-                int itime = (int)(i * simulation->deltap * simulation->timec);
+                int itime = (int)(i * setup->deltap * setup->timec);
                 int ii =
-                    output_data(itime, conn, simulation, geometry, settings);
+                    output_data(itime, conn, setup, geometry, settings, sim);
                 if (ii != 1)
                     G_fatal_error(_("Unable to write raster maps"));
             }
@@ -435,15 +429,15 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
             }
         }
         if (erdep != NULL)
-            erod(gama, simulation, geometry);
+            erod(gama, setup, geometry);
     }
     /*                       ........ end of iblock loop */
 
     /* Write final maps here because we know the last time stamp here */
     if (!settings->ts) {
         conn = (double)nblock / (double)iblock;
-        int itime = (int)(i * simulation->deltap * simulation->timec);
-        int ii = output_data(itime, conn, simulation, geometry, settings);
+        int itime = (int)(i * setup->deltap * setup->timec);
+        int ii = output_data(itime, conn, setup, geometry, settings, sim);
         if (ii != 1)
             G_fatal_error(_("Cannot write raster maps"));
     }

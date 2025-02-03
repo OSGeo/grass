@@ -1,5 +1,6 @@
 /* output.c (simlib), 20.nov.2002, JH */
 
+#include "simlib.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -13,24 +14,25 @@
 #include <grass/waterglobs.h>
 #include <grass/simlib.h>
 
-void free_walkers(void)
+void free_walkers(Simulation *sim)
 {
     G_free(w);
     G_free(vavg);
     if (outwalk != NULL)
-        G_free(stack);
+        G_free(sim->stack);
 }
 
 static void output_walker_as_vector(int tt_minutes, int ndigit,
                                     struct TimeStamp *timestamp,
-                                    const Settings *settings);
+                                    const Settings *settings,
+                                    const Simulation *sim);
 
 /* This function was added by Soeren 8. Mar 2011     */
 /* It replaces the site walker output implementation */
 /* Only the 3d coordinates of the walker are stored. */
 void output_walker_as_vector(int tt_minutes, int ndigit,
                              struct TimeStamp *timestamp,
-                             const Settings *settings)
+                             const Settings *settings, const Simulation *sim)
 {
     char buf[GNAME_MAX + 10];
     char *outwalk_time = NULL;
@@ -50,22 +52,23 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
             if (Vect_open_new(&Out, outwalk_time, WITH_Z) < 0)
                 G_fatal_error(_("Unable to create vector map <%s>"),
                               outwalk_time);
-            G_message("Writing %i walker into vector file %s", nstack,
+            G_message("Writing %i walker into vector file %s", sim->nstack,
                       outwalk_time);
         }
         else {
             if (Vect_open_new(&Out, outwalk, WITH_Z) < 0)
                 G_fatal_error(_("Unable to create vector map <%s>"), outwalk);
-            G_message("Writing %i walker into vector file %s", nstack, outwalk);
+            G_message("Writing %i walker into vector file %s", sim->nstack,
+                      outwalk);
         }
 
         Points = Vect_new_line_struct();
         Cats = Vect_new_cats_struct();
 
-        for (i = 0; i < nstack; i++) {
-            x = stack[i].x;
-            y = stack[i].y;
-            z = stack[i].m;
+        for (i = 0; i < sim->nstack; i++) {
+            x = sim->stack[i].x;
+            y = sim->stack[i].y;
+            z = sim->stack[i].m;
 
             Vect_reset_line(Points);
             Vect_reset_cats(Cats);
@@ -91,8 +94,9 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
 
 /* Soeren 8. Mar 2011 TODO:
  * This function needs to be refractured and splittet into smaller parts */
-int output_data(int tt, double ft UNUSED, const Simulation *simulation,
-                const Geometry *geometry, const Settings *settings)
+int output_data(int tt, double ft UNUSED, const Setup *setup,
+                const Geometry *geometry, const Settings *settings,
+                const Simulation *sim)
 {
 
     FCELL *depth_cell, *disch_cell, *err_cell;
@@ -136,7 +140,7 @@ int output_data(int tt, double ft UNUSED, const Simulation *simulation,
     G_scan_timestamp(&timestamp, timestamp_buf);
 
     /* Write the output walkers */
-    output_walker_as_vector(tt_minutes, ndigit, &timestamp, settings);
+    output_walker_as_vector(tt_minutes, ndigit, &timestamp, settings, sim);
 
     /* we write in the same region as we used for reading */
 
@@ -505,14 +509,14 @@ int output_data(int tt, double ft UNUSED, const Simulation *simulation,
 
         Rast_append_format_history(
             &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d", nwalk,
-            maxwa, nwalka);
+            sim->maxwa, sim->nwalka);
         Rast_append_format_history(
             &hist, "duration (sec.)=%d, time-serie iteration=%d",
             settings->timesec, tt);
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
-                                   simulation->deltap, simulation->vmean);
+                                   setup->deltap, setup->vmean);
         Rast_append_format_history(&hist, "mean source (si)=%e, mean infil=%e",
-                                   simulation->si0, simulation->infmean);
+                                   setup->si0, setup->infmean);
 
         Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
                             elevin, dxin, dyin);
@@ -544,15 +548,15 @@ int output_data(int tt, double ft UNUSED, const Simulation *simulation,
             Rast_short_history(disch0, type, &hist);
 
         Rast_append_format_history(
-            &hist, "init.walkers=%d, maxwalk=%d, rem. walkers=%d", nwalk, maxwa,
-            nwalka);
+            &hist, "init.walkers=%d, maxwalk=%d, rem. walkers=%d", nwalk,
+            sim->maxwa, sim->nwalka);
         Rast_append_format_history(
             &hist, "duration (sec.)=%d, time-serie iteration=%d",
             settings->timesec, tt);
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
-                                   simulation->deltap, simulation->vmean);
+                                   setup->deltap, setup->vmean);
         Rast_append_format_history(&hist, "mean source (si)=%e, mean infil=%e",
-                                   simulation->si0, simulation->infmean);
+                                   setup->si0, setup->infmean);
 
         Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
                             elevin, dxin, dyin);
@@ -585,14 +589,13 @@ int output_data(int tt, double ft UNUSED, const Simulation *simulation,
 
         Rast_append_format_history(
             &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d", nwalk,
-            maxwa, nwalka);
+            sim->maxwa, sim->nwalka);
         Rast_append_format_history(
             &hist, "duration (sec.)=%d, time-serie iteration=%d",
             settings->timesec, tt);
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
-                                   simulation->deltap, simulation->vmean);
-        Rast_append_format_history(&hist, "mean source (si)=%f",
-                                   simulation->si0);
+                                   setup->deltap, setup->vmean);
+        Rast_append_format_history(&hist, "mean source (si)=%f", setup->si0);
 
         Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
                             wdepth, dxin, dyin);
