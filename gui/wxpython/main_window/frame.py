@@ -1109,8 +1109,7 @@ class GMFrame(wx.Frame):
         else:
             result = False
             raise ValueError(
-                "Layer Manager special command (%s)"
-                " not supported." % " ".join(command)
+                "Layer Manager special command (%s) not supported." % " ".join(command)
             )
         if result:
             self._gconsole.UpdateHistory(status=Status.SUCCESS)
@@ -1340,8 +1339,7 @@ class GMFrame(wx.Frame):
             GMessage(
                 parent=self,
                 message=_(
-                    "Editing is allowed only for vector maps from the "
-                    "current mapset."
+                    "Editing is allowed only for vector maps from the current mapset."
                 ),
             )
             return

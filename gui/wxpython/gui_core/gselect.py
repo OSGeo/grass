@@ -2532,7 +2532,7 @@ class GdalSelect(wx.Panel):
                   pg_catalog.pg_table_is_visible(c.oid)
               ) AS o ON a.attrelid = o.oid
             WHERE
-              relname IN ({', '.join(tables)})
+              relname IN ({", ".join(tables)})
               AND NOT a.attisdropped;
         """
 
@@ -2608,8 +2608,7 @@ class GdalSelect(wx.Panel):
             GError(
                 parent=self,
                 message=_(
-                    "PostgreSQL DB <{psql}> program was not found."
-                    " Please, install it."
+                    "PostgreSQL DB <{psql}> program was not found. Please, install it."
                 ).format(psql=self._psql),
             )
         Debug.msg(3, f"GdalSelect._getPGDBRasters(): return {rasters}")

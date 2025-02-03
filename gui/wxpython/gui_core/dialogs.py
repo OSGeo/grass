@@ -2357,8 +2357,7 @@ class QuitDialog(wx.Dialog):
 
         if self._shell_running:
             text = _(
-                "Do you want to quit GRASS GIS including shell "
-                "or just close the GUI?"
+                "Do you want to quit GRASS GIS including shell or just close the GUI?"
             )
         else:
             text = _("Do you want to quit GRASS GIS?")

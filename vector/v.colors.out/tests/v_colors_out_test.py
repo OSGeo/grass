@@ -17,9 +17,9 @@ def validate_plain_text_output(data):
         "nv 255:255:255",
         "default 255:255:255",
     }
-    assert (
-        expected == data.keys()
-    ), f"test failed: expected {expected} but got {data.keys()}"
+    assert expected == data.keys(), (
+        f"test failed: expected {expected} but got {data.keys()}"
+    )
 
 
 def test_v_colors_out_plain_output(vector_color_dataset):
@@ -52,17 +52,17 @@ def test_v_colors_out_with_p_flag(vector_color_dataset):
         "nv 255:255:255",
         "default 255:255:255",
     }
-    assert (
-        expected == data.keys()
-    ), f"test failed: expected {expected} but got {data.keys()}"
+    assert expected == data.keys(), (
+        f"test failed: expected {expected} but got {data.keys()}"
+    )
 
 
 def validate_common_json_structure(data):
     """Validate the common structure and content of the JSON output."""
     assert isinstance(data, list), "Output data should be a list of entries."
-    assert (
-        len(data) == 8
-    ), "The length of the output JSON does not match the expected value of 8."
+    assert len(data) == 8, (
+        "The length of the output JSON does not match the expected value of 8."
+    )
 
 
 def test_v_colors_out_json_with_default_option(vector_color_dataset):

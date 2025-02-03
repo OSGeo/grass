@@ -1272,8 +1272,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(
                 parent=self,
                 message=_(
-                    "Could not calculate RMS Error.\n"
-                    "Possible error with m.transform."
+                    "Could not calculate RMS Error.\nPossible error with m.transform."
                 ),
             )
             return
@@ -1408,8 +1407,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(
                 parent=self,
                 message=_(
-                    "Could not calculate new extends.\n"
-                    "Possible error with m.transform."
+                    "Could not calculate new extends.\nPossible error with m.transform."
                 ),
             )
             return
@@ -2346,8 +2344,7 @@ class GrSettingsDialog(wx.Dialog):
             GError(
                 parent=self,
                 message=_(
-                    "RMS threshold factor is < 1\n"
-                    "Too many points might be highlighted"
+                    "RMS threshold factor is < 1\nToo many points might be highlighted"
                 ),
             )
 
