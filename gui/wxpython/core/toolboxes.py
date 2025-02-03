@@ -149,10 +149,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
                 generateNew = True
                 _debug(
                     2,
-                    (
-                        "toolboxes.getMenudataFile: only one of the user "
-                        "defined files"
-                    ),
+                    ("toolboxes.getMenudataFile: only one of the user defined files"),
                 )
             else:
                 # if newer files -> generate new
