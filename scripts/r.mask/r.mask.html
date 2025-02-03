@@ -2,7 +2,7 @@
 
 <em>r.mask</em> facilitates the creation and management of a raster mask to
 control raster operations.
-While computational region specifies the extent (rectangular bounding box)
+While the computational region specifies the extent (rectangular bounding box)
 and resolution, the mask specifies the area that should be considered for
 the operations and area which should be ignored.
 The mask is represented as a raster map called <code>MASK</code> by default.
@@ -20,12 +20,12 @@ including zero, to 1. All these areas will be part of the mask (see the notes
 for more details). To only convert specific values (or range of values) to 1
 and the rest to NULL, use the <em>maskcats</em> parameter.
 <p>
-Because the raster mask map created with <em>r.mask</em> is actually only
+Because the mask raster map created with <em>r.mask</em> is actually only
 a reclass map named <code>MASK</code> by default, it can be copied, renamed,
-removed, and used in analyses, just like other GRASS raster map layers.
+removed, and used in analyses, just like other GRASS raster maps.
 <p>
-The user should be aware that a mask remains in place until a user removes it
-or renames it. To remove a mask and restore
+The user should be aware that a mask remains in place until it is removed
+or renamed. To remove a mask and restore
 raster operations to normal (i.e., all cells of the current region), remove the
 mask by setting the <b>-r</b> flag (<code>r.mask -r</code>).
 Alternatively, a mask can be removed using <em>g.remove</em> or by renaming it
