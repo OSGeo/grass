@@ -76,8 +76,6 @@ extern float **dif;
 extern struct point3D *w;
 extern struct point2D *vavg;
 
-extern int nwalk;
-
 extern double rain_val;
 extern double manin_val;
 extern double infil_val;

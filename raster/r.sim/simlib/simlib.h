@@ -48,10 +48,10 @@ typedef struct {
     struct point3D *stack; /* Output 3D walkers */
     int maxwa;
     double rwalk;
+    int nwalk;
 } Simulation;
 
 struct WaterParams {
-    int nwalk;
 
     double rain_val;
     double manin_val;

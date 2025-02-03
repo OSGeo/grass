@@ -508,7 +508,7 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
             Rast_short_history(depth0, type, &hist);
 
         Rast_append_format_history(
-            &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d", nwalk,
+            &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d", sim->nwalk,
             sim->maxwa, sim->nwalka);
         Rast_append_format_history(
             &hist, "duration (sec.)=%d, time-serie iteration=%d",
@@ -548,7 +548,7 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
             Rast_short_history(disch0, type, &hist);
 
         Rast_append_format_history(
-            &hist, "init.walkers=%d, maxwalk=%d, rem. walkers=%d", nwalk,
+            &hist, "init.walkers=%d, maxwalk=%d, rem. walkers=%d", sim->nwalk,
             sim->maxwa, sim->nwalka);
         Rast_append_format_history(
             &hist, "duration (sec.)=%d, time-serie iteration=%d",
@@ -588,7 +588,7 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
             Rast_short_history(flux0, type, &hist);
 
         Rast_append_format_history(
-            &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d", nwalk,
+            &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d", sim->nwalk,
             sim->maxwa, sim->nwalka);
         Rast_append_format_history(
             &hist, "duration (sec.)=%d, time-serie iteration=%d",

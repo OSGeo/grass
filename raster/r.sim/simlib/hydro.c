@@ -76,10 +76,6 @@ float **dif;
 struct point3D *w;
 struct point2D *vavg;
 
-double vmean;
-double infmean;
-int nwalk;
-
 double rain_val;
 double manin_val;
 double infil_val;
@@ -150,8 +146,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                 } /* defined area */
             }
         }
-        nwalk = lw;
-        G_debug(2, " nwalk, maxw %d %d", nwalk, MAXW);
+        sim->nwalk = lw;
+        G_debug(2, " nwalk, maxw %d %d", sim->nwalk, MAXW);
         G_debug(2, " walkwe (walk weight),frac %f %f", walkwe, settings->frac);
 
         sim->nwalka = 0;
@@ -171,7 +167,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                 /* nfiterw = i / iterout + 10;
                    nfiterh = i / iterout + 40; */
                 G_debug(2, "iblock=%d i=%d miter=%d nwalk=%d nwalka=%d", iblock,
-                        i, setup->miter, nwalk, sim->nwalka);
+                        i, setup->miter, sim->nwalk, sim->nwalka);
             }
 
             if (sim->nwalka == 0 && i > 1)
@@ -192,17 +188,18 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 #pragma omp parallel firstprivate(l, lw, k, gaux, gauy) // nwalka
             {
 #if defined(_OPENMP)
-                int steps =
-                    (int)((((double)nwalk) / ((double)omp_get_num_threads())) +
-                          0.5);
+                int steps = (int)((((double)sim->nwalk) /
+                                   ((double)omp_get_num_threads())) +
+                                  0.5);
                 int tid = omp_get_thread_num();
                 int min_loop = tid * steps;
-                int max_loop =
-                    ((tid + 1) * steps) > nwalk ? nwalk : (tid + 1) * steps;
+                int max_loop = ((tid + 1) * steps) > sim->nwalk
+                                   ? sim->nwalk
+                                   : (tid + 1) * steps;
 
                 for (lw = min_loop; lw < max_loop; lw++) {
 #else
-                for (lw = 0; lw < nwalk; lw++) {
+                for (lw = 0; lw < sim->nwalk; lw++) {
 #endif
                     if (w[lw].m > EPS) { /* check the walker weight */
                         ++(sim->nwalka);
@@ -222,7 +219,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                             G_debug(2, "    m=%d %d", geometry->my,
                                     geometry->mx);
                             printf("    nwalka,nwalk=%d %d", sim->nwalka,
-                                   nwalk);
+                                   sim->nwalk);
                             G_debug(2, "  ");
                         }
 
@@ -331,7 +328,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             if (outwalk != NULL && (i == setup->miter || i == iter1)) {
                 sim->nstack = 0;
 
-                for (lw = 0; lw < nwalk; lw++) {
+                for (lw = 0; lw < sim->nwalk; lw++) {
                     /* Compute the  elevation raster map index */
                     l = (int)((w[lw].x + stxm) / geometry->stepx) -
                         geometry->mx - 1;
