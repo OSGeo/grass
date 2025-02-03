@@ -29,6 +29,7 @@ import collections.abc
 from core import globalvar
 from core.gcmd import GException, GError
 from core.utils import GetSettingsPath, PathJoin, rgb2str
+from pathlib import Path
 
 
 class SettingsJSONEncoder(json.JSONEncoder):
@@ -104,7 +105,8 @@ class Settings:
     def _generateLocale(self):
         """Generate locales"""
         try:
-            self.locs = os.listdir(os.path.join(os.environ["GISBASE"], "locale"))
+            locale_path = Path(os.environ["GISBASE"]) / "locale"
+            self.locs = [p.name for p in locale_path.iterdir() if p.is_dir()]
             self.locs.append("en")  # GRASS doesn't ship EN po files
             self.locs.sort()
             # Add a default choice to not override system locale
@@ -941,30 +943,28 @@ class Settings:
             settings = self.userSettings
 
         try:
-            fd = open(self.legacyFilePath)
+            with open(self.legacyFilePath) as fd:
+                line = ""
+                for line in fd:
+                    line = line.rstrip("%s" % os.linesep)
+                    group, key = line.split(self.sep)[0:2]
+                    kv = line.split(self.sep)[2:]
+                    subkeyMaster = None
+                    if len(kv) % 2 != 0:  # multiple (e.g. nviz)
+                        subkeyMaster = kv[0]
+                        del kv[0]
+                    idx = 0
+                    while idx < len(kv):
+                        subkey = [subkeyMaster, kv[idx]] if subkeyMaster else kv[idx]
+                        value = kv[idx + 1]
+                        value = self._parseValue(value, read=True)
+                        self.Append(settings, group, key, subkey, value)
+                        idx += 2
         except OSError:
             sys.stderr.write(
                 _("Unable to read settings file <%s>\n") % self.legacyFilePath
             )
             return
-
-        try:
-            line = ""
-            for line in fd:
-                line = line.rstrip("%s" % os.linesep)
-                group, key = line.split(self.sep)[0:2]
-                kv = line.split(self.sep)[2:]
-                subkeyMaster = None
-                if len(kv) % 2 != 0:  # multiple (e.g. nviz)
-                    subkeyMaster = kv[0]
-                    del kv[0]
-                idx = 0
-                while idx < len(kv):
-                    subkey = [subkeyMaster, kv[idx]] if subkeyMaster else kv[idx]
-                    value = kv[idx + 1]
-                    value = self._parseValue(value, read=True)
-                    self.Append(settings, group, key, subkey, value)
-                    idx += 2
         except ValueError as e:
             print(
                 _(
@@ -975,9 +975,6 @@ class Settings:
                 % {"file": self.legacyFilePath, "detail": e, "line": line},
                 file=sys.stderr,
             )
-            fd.close()
-
-        fd.close()
 
     def SaveToFile(self, settings=None):
         """Save settings to the file"""

@@ -883,24 +883,23 @@ class Map:
             env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], "WIND"
         )
         try:
-            windfile = open(filename)
+            with open(filename) as windfile:
+                for line in windfile:
+                    line = line.strip()
+                    try:
+                        key, value = line.split(":", 1)
+                    except ValueError as e:
+                        sys.stderr.write(
+                            _("\nERROR: Unable to read WIND file: %s\n") % e
+                        )
+                        return None
+
+                    self.wind[key.strip()] = value.strip()
         except OSError as e:
             sys.exit(
                 _("Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n")
                 % {"file": filename, "ret": e}
             )
-
-        for line in windfile:
-            line = line.strip()
-            try:
-                key, value = line.split(":", 1)
-            except ValueError as e:
-                sys.stderr.write(_("\nERROR: Unable to read WIND file: %s\n") % e)
-                return None
-
-            self.wind[key.strip()] = value.strip()
-
-        windfile.close()
 
         return self.wind
 

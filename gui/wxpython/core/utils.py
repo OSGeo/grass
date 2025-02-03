@@ -828,7 +828,21 @@ def StoreEnvVariable(key, value=None, envFile=None):
     lineSkipped = []
     if os.path.exists(envFile):
         try:
-            fd = open(envFile)
+            with open(envFile) as fd:
+                for line in fd:
+                    line = line.rstrip(os.linesep)
+                    try:
+                        k, v = (x.strip() for x in line.split(" ", 1)[1].split("=", 1))
+                    except Exception as e:
+                        sys.stderr.write(
+                            _("%s: line skipped - unable to parse '%s'\nReason: %s\n")
+                            % (envFile, line, e)
+                        )
+                        lineSkipped.append(line)
+                        continue
+                    if k in environ:
+                        sys.stderr.write(_("Duplicated key: %s\n") % k)
+                    environ[k] = v
         except OSError as error:
             sys.stderr.write(
                 _("Unable to open file '{name}': {error}\n").format(
@@ -836,22 +850,6 @@ def StoreEnvVariable(key, value=None, envFile=None):
                 )
             )
             return
-        for line in fd:
-            line = line.rstrip(os.linesep)
-            try:
-                k, v = (x.strip() for x in line.split(" ", 1)[1].split("=", 1))
-            except Exception as e:
-                sys.stderr.write(
-                    _("%s: line skipped - unable to parse '%s'\nReason: %s\n")
-                    % (envFile, line, e)
-                )
-                lineSkipped.append(line)
-                continue
-            if k in environ:
-                sys.stderr.write(_("Duplicated key: %s\n") % k)
-            environ[k] = v
-
-        fd.close()
 
     # update environmental variables
     if value is None:
@@ -861,7 +859,15 @@ def StoreEnvVariable(key, value=None, envFile=None):
 
     # write update env file
     try:
-        fd = open(envFile, "w")
+        with open(envFile, "w") as fd:
+            expCmd = "set" if windows else "export"
+
+            fd.writelines(
+                "%s %s=%s\n" % (expCmd, key, value) for key, value in environ.items()
+            )
+
+            # write also skipped lines
+            fd.writelines(line + os.linesep for line in lineSkipped)
     except OSError as error:
         sys.stderr.write(
             _("Unable to create file '{name}': {error}\n").format(
@@ -869,14 +875,6 @@ def StoreEnvVariable(key, value=None, envFile=None):
             )
         )
         return
-    expCmd = "set" if windows else "export"
-
-    fd.writelines("%s %s=%s\n" % (expCmd, key, value) for key, value in environ.items())
-
-    # write also skipped lines
-    fd.writelines(line + os.linesep for line in lineSkipped)
-
-    fd.close()
 
 
 def SetAddOnPath(addonPath=None, key="PATH"):
