@@ -1,9 +1,7 @@
-import os
-import unittest
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script import core as grass
-from grass.script import vector as gvector
+import pytest
 
 class TestVCluster(TestCase):
     """Test cases for v.cluster tool in GRASS GIS."""
@@ -22,37 +20,37 @@ class TestVCluster(TestCase):
 
     def test_dbscan_clustering(self):
         """Test DBSCAN clustering with default parameters."""
-        self.assertModule("v.cluster", input="test_points", output="clustered", method="dbscan", distance=10, min=3, overwrite = "true")
+        self.assertModule("v.cluster", input="test_points", output="clustered", method="dbscan", distance=10, min=3, overwrite="true")
         self.assertVectorExists("clustered")
     
     def test_dbscan2_clustering(self):
         """Test DBSCAN2 clustering."""
-        self.assertModule("v.cluster", input="test_points", output="clustered", method="dbscan2", distance=10, min=3, overwrite = "true")
+        self.assertModule("v.cluster", input="test_points", output="clustered", method="dbscan2", distance=10, min=3, overwrite="true")
         self.assertVectorExists("clustered")
 
     def test_optics2_clustering(self):
         """Test DBSCAN2 clustering."""
-        self.assertModule("v.cluster", input="test_points", output="clustered", method="optics2", distance=10, min=3, overwrite = "true")
+        self.assertModule("v.cluster", input="test_points", output="clustered", method="optics2", distance=10, min=3, overwrite="true")
         self.assertVectorExists("clustered")
     
     def test_density_clustering(self):
         """Test density clustering."""
-        self.assertModule("v.cluster", input="test_points", output="clustered", method="density", distance=10, min=3, overwrite = "true")
+        self.assertModule("v.cluster", input="test_points", output="clustered", method="density", distance=10, min=3, overwrite="true")
         self.assertVectorExists("clustered")
 
     def test_invalid_method(self):
         """Test invalid clustering method by ensuring only valid methods are accepted."""
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             self.assertModule("v.cluster", input="test_points", output="clustered", method="invalid")
     
     def test_optics_clustering(self):
         """Test OPTICS clustering."""
-        self.assertModule("v.cluster", input="test_points", output="clustered", method="optics", distance=10, min=3, overwrite = "true")
+        self.assertModule("v.cluster", input="test_points", output="clustered", method="optics", distance=10, min=3, overwrite="true")
         self.assertVectorExists("clustered")
         
     def test_at_least_one_cluster(self):
         """Test that there is at least one cluster in the output."""
-        self.assertModule("v.cluster", input="test_points", output="clustered", method="optics", distance=10, min=3, overwrite = "true")
+        self.assertModule("v.cluster", input="test_points", output="clustered", method="optics", distance=10, min=3, overwrite="true")
         self.assertVectorExists("clustered")
         
         # Export the clustered points to ASCII format
@@ -68,17 +66,17 @@ class TestVCluster(TestCase):
                     cluster_ids.add(cluster_id)
         
         # Assert that there is at least one cluster
-        self.assertGreater(len(cluster_ids), 0, "There should be at least one cluster in the output.")
+        assert len(cluster_ids)> 0, "There should be at least one cluster in the output."
 
     
     def test_2d_flag_effect(self):
         """Test that forcing 2D clustering with -2 flag produces different clusters from 3D clustering."""
         
-        # Run clustering in 3D 
+        # Run clustering in 3D
         self.assertModule("v.cluster", input="test_points_3d", output="clustered_3d", method="dbscan", distance=10, min=3, overwrite="true")
 
         # Run clustering in 2D (force ignoring Z)
-        self.assertModule("v.cluster", input="test_points_3d", output="clustered_2d", method="dbscan", distance=10, min=3,flags="2", overwrite="true")
+        self.assertModule("v.cluster", input="test_points_3d", output="clustered_2d", method="dbscan", distance=10, min=3, flags="2", overwrite="true")
 
         # Ensure both outputs exist
         self.assertVectorExists("clustered_3d")
@@ -108,7 +106,7 @@ class TestVCluster(TestCase):
                     cluster_ids_2d.add(cluster_id_2d)
 
         # If the flag works, the number of clusters should differ between 2D and 3D
-        self.assertNotEqual(len(cluster_ids_3d), len(cluster_ids_2d), "2D clustering should produce different clusters than 3D clustering.")
+        assert len(cluster_ids_3d) != len(cluster_ids_2d), "2D clustering should produce different clusters than 3D clustering."
 
 
 
