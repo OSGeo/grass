@@ -29,7 +29,8 @@
 int Nviz_get_exag_height(double *val, double *min, double *max)
 {
     float longdim, exag, texag, hmin, hmax, fmin, fmax;
-    int nsurfs, i, *surf_list;
+    int nsurfs, i;
+    int *surf_list = NULL;
 
     surf_list = GS_get_surf_list(&nsurfs);
     if (nsurfs) {
@@ -79,7 +80,8 @@ int Nviz_get_exag_height(double *val, double *min, double *max)
 double Nviz_get_exag(void)
 {
     float exag, texag;
-    int nsurfs, i, *surf_list;
+    int nsurfs, i;
+    int *surf_list = NULL;
 
     surf_list = GS_get_surf_list(&nsurfs);
 
