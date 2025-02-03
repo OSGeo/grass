@@ -105,7 +105,7 @@ class TestVCluster(TestCase):
                     cluster_id_2d = int(parts[2])  # Cluster ID is the 4th column
                     cluster_ids_2d.add(cluster_id_2d)
 
-        # If flag works, the number of clusters should differ between 2D and 3D
+        # If flag works, the of clusters should differ between 2D and 3D
         assert len(cluster_ids_3d) != len(cluster_ids_2d), "2D clustering should produce different clusters than 3D clustering."
 
 
