@@ -304,9 +304,8 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
             _("%d points without category. "
               "Unable to determine color rules for features without category."),
             nskipped);
-    if (driver) {
+    if (driver)
         db_close_database_shutdown_driver(driver);
-        Vect_destroy_field_info(Fi);
-    }
+    Vect_destroy_field_info(Fi);
     return npts;
 }
