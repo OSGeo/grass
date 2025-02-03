@@ -6,7 +6,7 @@ from grass.script import core as grass
 
 
 class TestVCluster(TestCase):
-    """Test cases for v.cluster tool in GRASS GIS."""
+    """Test cases for v.cluster tool in GRASS GIS"""
 
     @classmethod
     def setUpClass(cls):
