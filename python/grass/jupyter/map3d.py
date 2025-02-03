@@ -12,6 +12,7 @@
 #           for details.
 
 """Render 3D visualizations"""
+
 from __future__ import annotations
 
 import os

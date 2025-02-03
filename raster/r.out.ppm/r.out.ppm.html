@@ -18,15 +18,15 @@ The greyscale conversion uses the NTSC conversion:
 Y = .30*Red + .59*Green + .11*Blue
 </pre></div>
 
-<p>One pixel is written for each cell value, so if <tt>ew_res</tt> and
-<tt>ns_res</tt> differ, the aspect ratio of the resulting image will be off.
+<p>One pixel is written for each cell value, so if <code>ew_res</code> and
+<code>ns_res</code> differ, the aspect ratio of the resulting image will be off.
 
 <h2>NOTES</h2>
 
 A few ppm file comments are written: the name of the GRASS
 raster map, resolution, etc.  Although these are perfectly legal,
 I've found one PD image utility that chokes on them, so if you need
-a commentless PPM file, use '<tt>out=-&nbsp;&gt;&nbsp;outfile.ppm</tt>'. (When sending
+a commentless PPM file, use '<code>out=-&nbsp;&gt;&nbsp;outfile.ppm</code>'. (When sending
 output to stdout, no comments are written.)
 
 <h2>HINTS</h2>
@@ -35,11 +35,11 @@ You can create a PNG image with NULL values represented by a transparent
 background by using the <a href="pngdriver.html">PNG driver</a> with
 <a href="variables.html">GRASS_RENDER_TRANSPARENT</a> set to TRUE.
 Alternatively, you can use the <em>pnmtopng</em> program from
-<a href="http://netpbm.sourceforge.net">netpbm</a> to do this:
+<a href="https://netpbm.sourceforge.net">netpbm</a> to do this:
 
 <div class="code"><pre>
 r.out.ppm raster
-pnmtopng -transparent white raster.ppm > raster.png
+pnmtopng -transparent white raster.ppm &gt; raster.png
 </pre></div>
 
 <h2>SEE ALSO</h2>

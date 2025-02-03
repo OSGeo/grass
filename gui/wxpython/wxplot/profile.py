@@ -193,7 +193,7 @@ class ProfileFrame(BasePlotFrame):
         # title of window
         self.ptitle = _("Profile of")
 
-        # Initialize lattitude-longitude geodesic distance calculation
+        # Initialize latitude-longitude geodesic distance calculation
         if self._is_lat_lon_proj and haveCtypes:
             gislib.G_begin_distance_calculations()
 
@@ -250,7 +250,7 @@ class ProfileFrame(BasePlotFrame):
             # delete extra first segment point
             try:
                 self.seglist.pop(0)
-            except:
+            except IndexError:
                 pass
 
         #
@@ -291,7 +291,6 @@ class ProfileFrame(BasePlotFrame):
         # freezing with large, high resolution maps
         region = gs.region()
         curr_res = min(float(region["nsres"]), float(region["ewres"]))
-        transect_rec = 0
         if self.transect_length / curr_res > 500:
             transect_res = self.transect_length / 500
         else:
@@ -447,8 +446,10 @@ class ProfileFrame(BasePlotFrame):
                     dlg.Destroy()
                     return
 
-                for datapair in self.raster[r]["datalist"]:
-                    fd.write("%.6f,%.6f\n" % (float(datapair[0]), float(datapair[1])))
+                fd.writelines(
+                    "%.6f,%.6f\n" % (float(datapair[0]), float(datapair[1]))
+                    for datapair in self.raster[r]["datalist"]
+                )
 
                 fd.close()
 
@@ -486,7 +487,7 @@ class ProfileFrame(BasePlotFrame):
                 statstr += "median: %f\n" % np.median(a)
                 statstr += "distance along transect: %f\n\n" % self.transect_length
                 message.append(statstr)
-            except:
+            except (ValueError, TypeError, KeyError, IndexError):
                 pass
 
         stats = PlotStatsFrame(self, id=wx.ID_ANY, message=message, title=title)

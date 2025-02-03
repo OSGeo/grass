@@ -332,9 +332,7 @@ class VectorSelectBase:
             GMessage(_("No features selected"))
             return
         lst = ""
-        for (
-            cat
-        ) in (
+        for cat in (
             self.selectedFeatures
         ):  # build text string of categories for v.extract input
             lst += str(cat["Category"]) + ","
@@ -371,23 +369,21 @@ class VectorSelectBase:
         else:
             GError(_("Unable to create a new vector map.\n\nReason: %s") % err)
 
-    """
-    def SetSelectedCat(self, cats):
-        # allows setting selected vector categories by list of cats (per line)
-        info = self.QuerySelectedMap()
-        if 'Category' not in info:
-            return
-
-        for cat in cats.splitlines():
-            tmpDict = {}
-            tmpDict['Category'] = cat
-            tmpDict['Map'] = info['Map']
-            tmpDict['Layer'] = info['Layer']
-            tmpDict['Type'] = '-'
-            self.AddVecInfo(tmpDict)
-
-        self._draw()
-    """
+    # def SetSelectedCat(self, cats):
+    #     # allows setting selected vector categories by list of cats (per line)
+    #     info = self.QuerySelectedMap()
+    #     if "Category" not in info:
+    #         return
+    #
+    #     for cat in cats.splitlines():
+    #         tmpDict = {}
+    #         tmpDict["Category"] = cat
+    #         tmpDict["Map"] = info["Map"]
+    #         tmpDict["Layer"] = info["Layer"]
+    #         tmpDict["Type"] = "-"
+    #         self.AddVecInfo(tmpDict)
+    #
+    #     self._draw()
 
 
 class VectorSelectHighlighter:
@@ -397,6 +393,9 @@ class VectorSelectHighlighter:
     """
 
     def __init__(self, mapdisp, giface):
+        """
+        :param mapdisp: Map display frame
+        """
         self.qlayer = None
         self.mapdisp = mapdisp
         self.giface = giface

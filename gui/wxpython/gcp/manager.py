@@ -23,52 +23,57 @@ This program is free software under the GNU General Public License
 
 @author Original author Michael Barton
 @author Original version improved by Martin Landa <landa.martin gmail.com>
-@author Rewritten by Markus Metz redesign georectfier -> GCP Manage
+@author Rewritten by Markus Metz redesign georectifier -> GCP Manage
 @author Support for GraphicsSet added by Stepan Turek <stepan.turek seznam.cz> (2012)
 """
 
+from __future__ import annotations
+
 import os
-import sys
 import shutil
+import sys
 from copy import copy
+from typing import TYPE_CHECKING
 
 import wx
-from wx.lib.mixins.listctrl import ColumnSorterMixin, ListCtrlAutoWidthMixin
 import wx.lib.colourselect as csel
-
 from core import globalvar
+from wx.lib.mixins.listctrl import ColumnSorterMixin, ListCtrlAutoWidthMixin
 
-if globalvar.wxPythonPhoenix:
+if globalvar.wxPythonPhoenix or TYPE_CHECKING:
     from wx import adv as wiz
 else:
     from wx import wizard as wiz
 
 import grass.script as gs
 
+# isort: split
 
 from core import utils
+from core.gcmd import GError, GMessage, GWarning, RunCommand
+from core.giface import Notification
 from core.render import Map
-from gui_core.gselect import Select, LocationSelect, MapsetSelect
-from gui_core.dialogs import GroupDialog
-from gui_core.mapdisp import FrameMixin
-from core.gcmd import RunCommand, GMessage, GError, GWarning
 from core.settings import UserSettings
 from gcp.mapdisplay import MapPanel
-from core.giface import Notification
+from gui_core.dialogs import GroupDialog
+from gui_core.gselect import LocationSelect, MapsetSelect, Select
+from gui_core.mapdisp import FrameMixin
 from gui_core.wrap import (
-    SpinCtrl,
-    Button,
-    StaticText,
-    StaticBox,
-    CheckListBox,
-    TextCtrl,
-    Menu,
-    ListCtrl,
     BitmapFromImage,
+    Button,
+    CheckListBox,
     CheckListCtrlMixin,
+    ListCtrl,
+    Menu,
+    SpinCtrl,
+    StaticBox,
+    StaticText,
+    TextCtrl,
 )
-
 from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
+
+if TYPE_CHECKING:
+    from wx.adv import WizardEvent
 
 #
 # global variables
@@ -81,22 +86,13 @@ maptype = "raster"
 
 
 def getSmallUpArrowImage():
-    stream = open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb")
-    try:
-        img = wx.Image(stream)
-    finally:
-        stream.close()
-    return img
+    with open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb") as stream:
+        return wx.Image(stream)
 
 
 def getSmallDnArrowImage():
-    stream = open(os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb")
-    try:
-        img = wx.Image(stream)
-    finally:
-        stream.close()
-    stream.close()
-    return img
+    with open(os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb") as stream:
+        return wx.Image(stream)
 
 
 class GCPWizard:
@@ -118,16 +114,13 @@ class GCPWizard:
         #
         self.target_gisrc = os.environ["GISRC"]
         self.gisrc_dict = {}
-        try:
-            f = open(self.target_gisrc)
+        with open(self.target_gisrc) as f:
             for line in f:
                 line = line.replace("\n", "").strip()
                 if len(line) < 1:
                     continue
                 key, value = line.split(":", 1)
                 self.gisrc_dict[key.strip()] = value.strip()
-        finally:
-            f.close()
 
         self.currentlocation = self.gisrc_dict["LOCATION_NAME"]
         self.currentmapset = self.gisrc_dict["MAPSET"]
@@ -340,13 +333,10 @@ class GCPWizard:
 
         self.source_gisrc = utils.GetTempfile()
 
-        try:
-            f = open(self.source_gisrc, mode="w")
-            for line in self.gisrc_dict.items():
-                f.write(line[0] + ": " + line[1] + "\n")
-        finally:
-            f.close()
-
+        with open(self.source_gisrc, mode="w") as f:
+            f.writelines(
+                line[0] + ": " + line[1] + "\n" for line in self.gisrc_dict.items()
+            )
         return True
 
     def SwitchEnv(self, grc):
@@ -510,13 +500,10 @@ class LocationPage(TitledPage):
         if not wx.FindWindowById(wx.ID_FORWARD).IsEnabled():
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
-    def OnPageChanging(self, event=None):
+    def OnPageChanging(self, event: WizardEvent | None = None) -> None:
         if event.GetDirection() and (self.xylocation == "" or self.xymapset == ""):
             GMessage(
-                _(
-                    "You must select a valid location "
-                    "and mapset in order to continue"
-                ),
+                _("You must select a valid location and mapset in order to continue"),
                 parent=self,
             )
             event.Veto()
@@ -524,7 +511,7 @@ class LocationPage(TitledPage):
 
         self.parent.SetSrcEnv(self.xylocation, self.xymapset)
 
-    def OnEnterPage(self, event=None):
+    def OnEnterPage(self, event: WizardEvent | None = None) -> None:
         if self.xylocation == "" or self.xymapset == "":
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
         else:
@@ -684,7 +671,7 @@ class GroupPage(TitledPage):
     def OnExtension(self, event):
         self.extension = self.ext_txt.GetValue()
 
-    def OnPageChanging(self, event=None):
+    def OnPageChanging(self, event: WizardEvent | None = None) -> None:
         if event.GetDirection() and self.xygroup == "":
             GMessage(
                 _("You must select a valid image/map group in order to continue"),
@@ -701,7 +688,7 @@ class GroupPage(TitledPage):
             event.Veto()
             return
 
-    def OnEnterPage(self, event=None):
+    def OnEnterPage(self, event: WizardEvent | None = None) -> None:
         global maptype
 
         self.groupList = []
@@ -888,7 +875,7 @@ class DispMapPage(TitledPage):
 
         tgt_map["vector"] = self.tgtvectselection.GetValue()
 
-    def OnPageChanging(self, event=None):
+    def OnPageChanging(self, event: WizardEvent | None = None) -> None:
         global src_map, tgt_map
 
         if event.GetDirection() and (src_map == ""):
@@ -900,7 +887,7 @@ class DispMapPage(TitledPage):
 
         self.parent.SwitchEnv("target")
 
-    def OnEnterPage(self, event=None):
+    def OnEnterPage(self, event: WizardEvent | None = None) -> None:
         global maptype, src_map, tgt_map
 
         self.srcselection.SetElementList(maptype)
@@ -995,10 +982,11 @@ class DispMapPage(TitledPage):
         }
         :return: None when web service map layer name doesn't exist
         """
-        layers = {}
-        for layer in self.parent._giface.GetLayerList():
-            if layer.type in ltype:
-                layers[str(layer)] = {"type": layer.type, "cmd": layer.cmd}
+        layers = {
+            str(layer): {"type": layer.type, "cmd": layer.cmd}
+            for layer in self.parent._giface.GetLayerList()
+            if layer.type in ltype
+        }
         if name:
             return layers.get(name)
         return layers
@@ -1026,6 +1014,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         Map=None,
         lmgr=None,
     ):
+        # pylint: disable=super-init-not-called; See InitMapDisplay()
         self.grwiz = grwiz  # GR Wizard
         self._giface = giface
 
@@ -1053,10 +1042,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         # register data structures for drawing GCP's
         #
         self.pointsToDrawTgt = self.TgtMapWindow.RegisterGraphicsToDraw(
-            graphicsType="point", setStatusFunc=self.SetGCPSatus
+            graphicsType="point", setStatusFunc=self.SetGCPStatus
         )
         self.pointsToDrawSrc = self.SrcMapWindow.RegisterGraphicsToDraw(
-            graphicsType="point", setStatusFunc=self.SetGCPSatus
+            graphicsType="point", setStatusFunc=self.SetGCPStatus
         )
 
         # connect to the map windows signals
@@ -1401,16 +1390,15 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         font = self.GetFont()
         font.SetPointSize(int(spx) + 2)
 
-        textProp = {}
-        textProp["active"] = True
-        textProp["font"] = font
+        textProp = {"active": True, "font": font}
+
         self.pointsToDrawSrc.SetPropertyVal("text", textProp)
         self.pointsToDrawTgt.SetPropertyVal("text", copy(textProp))
 
         # overwrite result map
         self.overwrite = UserSettings.Get(group="gcpman", key="map", subkey="overwrite")
 
-    def SetGCPSatus(self, item, itemIndex):
+    def SetGCPStatus(self, item, itemIndex):
         """Before GCP is drawn, decides it's colour and whether it
         will be drawn.
         """
@@ -1509,40 +1497,40 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         """
         self.GCPcount = 0
         try:
-            f = open(self.file["points"], mode="w")
-            # use os.linesep or '\n' here ???
-            f.write("# Ground Control Points File\n")
-            f.write("# \n")
-            f.write("# target location: " + self.currentlocation + "\n")
-            f.write("# target mapset: " + self.currentmapset + "\n")
-            f.write("#\tsource\t\ttarget\t\tstatus\n")
-            f.write("#\teast\tnorth\teast\tnorth\t(1=ok, 0=ignore)\n")
-            f.write(
-                "#-----------------------     -----------------------     ---------------\n"  # noqa: E501
-            )
-
-            for index in range(self.list.GetItemCount()):
-                if self.list.IsItemChecked(index):
-                    check = "1"
-                    self.GCPcount += 1
-                else:
-                    check = "0"
-                coord0 = self.list.GetItem(index, 1).GetText()
-                coord1 = self.list.GetItem(index, 2).GetText()
-                coord2 = self.list.GetItem(index, 3).GetText()
-                coord3 = self.list.GetItem(index, 4).GetText()
+            with open(self.file["points"], mode="w") as f:
+                # use os.linesep or '\n' here ???
+                f.write("# Ground Control Points File\n")
+                f.write("# \n")
+                f.write("# target location: " + self.currentlocation + "\n")
+                f.write("# target mapset: " + self.currentmapset + "\n")
+                f.write("#\tsource\t\ttarget\t\tstatus\n")
+                f.write("#\teast\tnorth\teast\tnorth\t(1=ok, 0=ignore)\n")
                 f.write(
-                    coord0
-                    + " "
-                    + coord1
-                    + "     "
-                    + coord2
-                    + " "
-                    + coord3
-                    + "     "
-                    + check
-                    + "\n"
+                    "#-----------------------     -----------------------     ---------------\n"  # noqa: E501
                 )
+
+                for index in range(self.list.GetItemCount()):
+                    if self.list.IsItemChecked(index):
+                        check = "1"
+                        self.GCPcount += 1
+                    else:
+                        check = "0"
+                    coord0 = self.list.GetItem(index, 1).GetText()
+                    coord1 = self.list.GetItem(index, 2).GetText()
+                    coord2 = self.list.GetItem(index, 3).GetText()
+                    coord3 = self.list.GetItem(index, 4).GetText()
+                    f.write(
+                        coord0
+                        + " "
+                        + coord1
+                        + "     "
+                        + coord2
+                        + " "
+                        + coord3
+                        + "     "
+                        + check
+                        + "\n"
+                    )
 
         except OSError as err:
             GError(
@@ -1556,8 +1544,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 ),
             )
             return
-
-        f.close()
 
         # if event != None save also to backup file
         if event:
@@ -1582,27 +1568,26 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(parent=self, message=_("target mapwin not defined"))
 
         try:
-            f = open(self.file["points"])
             GCPcnt = 0
+            with open(self.file["points"]) as f:
+                for line in f:
+                    if line[0] == "#" or line == "":
+                        continue
+                    line = line.replace("\n", "").strip()
+                    coords = list(map(float, line.split()))
+                    if coords[4] == 1:
+                        check = True
+                        self.GCPcount += 1
+                    else:
+                        check = False
 
-            for line in f:
-                if line[0] == "#" or line == "":
-                    continue
-                line = line.replace("\n", "").strip()
-                coords = list(map(float, line.split()))
-                if coords[4] == 1:
-                    check = True
-                    self.GCPcount += 1
-                else:
-                    check = False
-
-                self.AddGCP(event=None)
-                self.SetGCPData("source", (coords[0], coords[1]), sourceMapWin)
-                self.SetGCPData("target", (coords[2], coords[3]), targetMapWin)
-                index = self.list.GetSelected()
-                if index != wx.NOT_FOUND:
-                    self.list.CheckItem(index, check)
-                GCPcnt += 1
+                    self.AddGCP(event=None)
+                    self.SetGCPData("source", (coords[0], coords[1]), sourceMapWin)
+                    self.SetGCPData("target", (coords[2], coords[3]), targetMapWin)
+                    index = self.list.GetSelected()
+                    if index != wx.NOT_FOUND:
+                        self.list.CheckItem(index, check)
+                    GCPcnt += 1
 
         except OSError as err:
             GError(
@@ -1616,8 +1601,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 ),
             )
             return
-
-        f.close()
 
         if GCPcnt == 0:
             # 3 gcp is minimum
@@ -1663,7 +1646,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             targetMapWin.UpdateMap(render=False, renderVector=False)
 
     def OnFocus(self, event):
-        # TODO: it is here just to remove old or obsolete beavior of base class
+        # TODO: it is here just to remove old or obsolete behavior of base class
         #       gcp/MapPanel?
         # self.grwiz.SwitchEnv('source')
         pass
@@ -1824,16 +1807,13 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             self.grwiz.SwitchEnv("source")
 
             # make list of vectors to georectify from VREF
-            f = open(self.file["vgrp"])
             vectlist = []
-            try:
+            with open(self.file["vgrp"]) as f:
                 for vect in f:
                     vect = vect.strip("\n")
                     if len(vect) < 1:
                         continue
                     vectlist.append(vect)
-            finally:
-                f.close()
 
             # georectify each vector in VREF using v.rectify
             for vect in vectlist:
@@ -2037,8 +2017,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(
                 parent=self,
                 message=_(
-                    "Could not calculate RMS Error.\n"
-                    "Possible error with m.transform."
+                    "Could not calculate RMS Error.\nPossible error with m.transform."
                 ),
             )
             return
@@ -2112,8 +2091,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             "w": 0.0,
         }
 
-        try:
-            f = open(coord_file, mode="w")
+        with open(coord_file, mode="w") as f:
             # NW corner
             f.write(str(region["e"]) + " " + str(region["n"]) + "\n")
             # NE corner
@@ -2122,8 +2100,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             f.write(str(region["w"]) + " " + str(region["n"]) + "\n")
             # SE corner
             f.write(str(region["w"]) + " " + str(region["s"]) + "\n")
-        finally:
-            f.close()
 
         # save GCPs to points file to make sure that all checked GCPs are used
         self.SaveGCPs(None)
@@ -2173,8 +2149,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(
                 parent=self,
                 message=_(
-                    "Could not calculate new extends.\n"
-                    "Possible error with m.transform."
+                    "Could not calculate new extends.\nPossible error with m.transform."
                 ),
             )
             return
@@ -2687,8 +2662,7 @@ class VectGroup(wx.Dialog):
         self.listMap = CheckListBox(parent=self, id=wx.ID_ANY, choices=vectlist)
 
         if os.path.isfile(self.vgrpfile):
-            f = open(self.vgrpfile)
-            try:
+            with open(self.vgrpfile) as f:
                 checked = []
                 for line in f:
                     line = line.replace("\n", "")
@@ -2696,8 +2670,6 @@ class VectGroup(wx.Dialog):
                         continue
                     checked.append(line.split("@")[0])
                 self.listMap.SetCheckedStrings(checked)
-            finally:
-                f.close()
 
         line = wx.StaticLine(
             parent=self, id=wx.ID_ANY, size=(20, -1), style=wx.LI_HORIZONTAL
@@ -2761,12 +2733,8 @@ class VectGroup(wx.Dialog):
         if not os.path.exists(dirname):
             os.makedirs(dirname)
 
-        f = open(self.vgrpfile, mode="w")
-        try:
-            for vect in vgrouplist:
-                f.write(vect + "\n")
-        finally:
-            f.close()
+        with open(self.vgrpfile, mode="w") as f:
+            f.writelines(vect + "\n" for vect in vgrouplist)
 
 
 class EditGCP(wx.Dialog):
@@ -2886,11 +2854,11 @@ class GrSettingsDialog(wx.Dialog):
         size=wx.DefaultSize,
         style=wx.DEFAULT_DIALOG_STYLE,
     ):
-        wx.Dialog.__init__(self, parent, id, title, pos, size, style)
         """
         Dialog to set profile text options: font, title
         and font size, axis labels and font size
         """
+        wx.Dialog.__init__(self, parent, id, title, pos, size, style)
         #
         # initialize variables
         #
@@ -3285,8 +3253,7 @@ class GrSettingsDialog(wx.Dialog):
             GError(
                 parent=self,
                 message=_(
-                    "RMS threshold factor is < 1\n"
-                    "Too many points might be highlighted"
+                    "RMS threshold factor is < 1\nToo many points might be highlighted"
                 ),
             )
 

@@ -65,7 +65,7 @@ Usage::
     session.finish()
 
 
-(C) 2010-2024 by the GRASS Development Team
+(C) 2010-2025 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -404,9 +404,8 @@ class SessionHandle:
         :returns: reference to the object (self)
         """
         if not self.active:
-            raise ValueError(
-                "Attempt to use inactive (finished) session as a context manager"
-            )
+            msg = "Attempt to use inactive (finished) session as a context manager"
+            raise ValueError(msg)
         return self
 
     def __exit__(self, type, value, traceback):
@@ -423,7 +422,8 @@ class SessionHandle:
         and finish the session. No GRASS modules can be called afterwards.
         """
         if not self.active:
-            raise ValueError("Attempt to finish an already finished session")
+            msg = "Attempt to finish an already finished session"
+            raise ValueError(msg)
         self._active = False
         finish(env=self._env, start_time=self._start_time)
 
