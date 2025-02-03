@@ -51,10 +51,10 @@ def get_tempfile_name(suffix, create=False):
     # which may mitigate problems (like not cleaning files) in case we
     # go little beyond what is in the documentation in terms of opening
     # closing and removing the tmp file
-    tmp = tempfile.NamedTemporaryFile(suffix=suffix, delete=False)
-    # we don't want it open, we just need the name
-    name = tmp.name
-    tmp.close()
+    with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tmp:
+        # we don't want it open, we just need the name
+        name = tmp.name
+
     if not create:
         # remove empty file to have a clean state later
         os.remove(name)
@@ -883,24 +883,23 @@ class Map:
             env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], "WIND"
         )
         try:
-            windfile = open(filename)
+            with open(filename) as windfile:
+                for line in windfile:
+                    line = line.strip()
+                    try:
+                        key, value = line.split(":", 1)
+                    except ValueError as e:
+                        sys.stderr.write(
+                            _("\nERROR: Unable to read WIND file: %s\n") % e
+                        )
+                        return None
+
+                    self.wind[key.strip()] = value.strip()
         except OSError as e:
             sys.exit(
                 _("Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n")
                 % {"file": filename, "ret": e}
             )
-
-        for line in windfile:
-            line = line.strip()
-            try:
-                key, value = line.split(":", 1)
-            except ValueError as e:
-                sys.stderr.write(_("\nERROR: Unable to read WIND file: %s\n") % e)
-                return None
-
-            self.wind[key.strip()] = value.strip()
-
-        windfile.close()
 
         return self.wind
 

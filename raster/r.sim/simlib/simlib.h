@@ -28,6 +28,7 @@ typedef struct {
     int iterout; /* Time interval for creating output maps [minutes] */
     int timesec; /* Time how long the simulation runs [minutes] */
     bool ts;     /* Time series output */
+    double mintimestep;
 } Settings;
 
 typedef struct {
@@ -103,10 +104,10 @@ void erod(double **, const Simulation *simulation, const Geometry *geometry);
 
 struct options {
     struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,
-        *observation, *depth, *disch, *err, *outwalk, *nwalk, *niter, *outiter,
-        *density, *diffc, *hmax, *halpha, *hbeta, *wdepth, *detin, *tranin,
-        *tauin, *tc, *et, *conc, *flux, *erdep, *rainval, *maninval, *infilval,
-        *logfile, *seed, *threads;
+        *observation, *depth, *disch, *err, *outwalk, *nwalk, *niter,
+        *mintimestep, *outiter, *density, *diffc, *hmax, *halpha, *hbeta,
+        *wdepth, *detin, *tranin, *tauin, *tc, *et, *conc, *flux, *erdep,
+        *rainval, *maninval, *infilval, *logfile, *seed, *threads;
 };
 
 struct flags {

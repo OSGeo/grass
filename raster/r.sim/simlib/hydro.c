@@ -127,6 +127,9 @@ void main_loop(const Simulation *simulation, const Geometry *geometry,
     for (iblock = 1; iblock <= nblock; iblock++) {
         int lw = 0;
         double walkwe = 0.;
+
+        G_message(_("Processing block %d of %d"), iblock, nblock);
+
         /* write hh.walkers0 */
 
         for (k = 0; k < geometry->my; k++) {

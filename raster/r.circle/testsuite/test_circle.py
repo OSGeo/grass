@@ -5,7 +5,6 @@ from grass.gunittest.gmodules import SimpleModule
 
 
 class TestRCircle(TestCase):
-
     @classmethod
     def setUpClass(cls):
         """Set up a temporary region for testing."""

@@ -49,9 +49,10 @@ counter-clockwise from east.
 There is no "undo" command nor way to exit edit mode without saving
 changes to the output map.
 <p>
-<!-- MASK behaviour to be verified -->
-Any MASK in place will be respected when writing the new raster map layer,
-including any edits to the MASKed areas.
+<!-- masking behaviour to be verified -->
+A raster mask in place will be respected both when reading the original raster
+map layer and when writing the new raster map layer,
+so any edits to the masked areas will be ignored.
 
 <h3>Geographic Region Concerns</h3>
 

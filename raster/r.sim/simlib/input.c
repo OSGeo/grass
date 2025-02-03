@@ -393,6 +393,9 @@ int grad_check(Simulation *simulation, const Geometry *geometry,
     simulation->deltap = 0.25 * sqrt(geometry->stepx * geometry->stepy) /
                          simulation->vmean; /*time step for water */
 
+    if (simulation->deltap < settings->mintimestep)
+        simulation->deltap = settings->mintimestep;
+
     if (deltaw > simulation->deltap)
         simulation->timec = 4.;
     else
