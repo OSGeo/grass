@@ -172,7 +172,7 @@ void print_proj4(int dontprettify)
         if (pj_get_kv(&pjinfo, projinfo, projunits) == -1)
             G_fatal_error(
                 _("Unable to convert projection information to PROJ format"));
-        projstr = pjinfo.def;
+        projstr = G_store(pjinfo.def);
 #if PROJ_VERSION_MAJOR >= 5
         proj_destroy(pjinfo.pj);
 #else
