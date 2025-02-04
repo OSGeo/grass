@@ -195,26 +195,24 @@ def PaperMapCoordinates(mapInstr, x, y, paperToMap=True, env=None):
     mapWidthEN = region["e"] - region["w"]
     mapHeightEN = region["n"] - region["s"]
 
-    if paperToMap:
-        diffX = x - mapInstr["rect"].GetX()
-        diffY = y - mapInstr["rect"].GetY()
-        diffEW = diffX * mapWidthEN / mapWidthPaper
-        diffNS = diffY * mapHeightEN / mapHeightPaper
-        e = region["w"] + diffEW
-        n = region["n"] - diffNS
+    if not paperToMap:
+        diffEW = x - region["w"]
+        diffNS = region["n"] - y
+        diffX = mapWidthPaper * diffEW / mapWidthEN
+        diffY = mapHeightPaper * diffNS / mapHeightEN
+        xPaper = mapInstr["rect"].GetX() + diffX
+        yPaper = mapInstr["rect"].GetY() + diffY
+        return (xPaper, yPaper)
 
-        if projInfo()["proj"] == "ll":
-            return e, n
-        return int(e), int(n)
-
-    diffEW = x - region["w"]
-    diffNS = region["n"] - y
-    diffX = mapWidthPaper * diffEW / mapWidthEN
-    diffY = mapHeightPaper * diffNS / mapHeightEN
-    xPaper = mapInstr["rect"].GetX() + diffX
-    yPaper = mapInstr["rect"].GetY() + diffY
-
-    return xPaper, yPaper
+    diffX = x - mapInstr["rect"].GetX()
+    diffY = y - mapInstr["rect"].GetY()
+    diffEW = diffX * mapWidthEN / mapWidthPaper
+    diffNS = diffY * mapHeightEN / mapHeightPaper
+    e = region["w"] + diffEW
+    n = region["n"] - diffNS
+    if projInfo()["proj"] == "ll":
+        return (e, n)
+    return (int(e), int(n))
 
 
 def AutoAdjust(self, scaleType, rect, env, map=None, mapType=None, region=None):

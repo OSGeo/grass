@@ -901,9 +901,7 @@ class DispMapPage(TitledPage):
                 flags="g",
             )
 
-            if ret:
-                self.parent.src_maps = ret.splitlines()
-            else:
+            if not ret:
                 GError(
                     parent=self,
                     message=_(
@@ -913,6 +911,7 @@ class DispMapPage(TitledPage):
                     % self.parent.grouppage.xygroup,
                 )
                 return
+            self.parent.src_maps = ret.splitlines()
 
         elif maptype == "vector":
             grassdatabase = self.parent.grassdatabase
@@ -1670,7 +1669,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             targetMapWin = self.TgtMapWindow
             targetMapWin.UpdateMap(render=False, renderVector=False)
 
-    def CheckGCPcount(self, msg=False):
+    def CheckGCPcount(self, msg: bool = False) -> bool:
         """
         Checks to make sure that the minimum number of GCPs have been defined and
         are active for the selected transformation order
@@ -1692,9 +1691,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     )
                     % self.gr_order,
                 )
-                return False
-        else:
-            return True
+
+            return False
+
+        return True
 
     def _getOverWriteDialog(self, maptype, overwrite):
         """Get overwrite confirm dialog
@@ -2011,9 +2011,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         self.grwiz.SwitchEnv("target")
 
-        if ret:
-            errlist = ret.splitlines()
-        else:
+        if not ret:
             GError(
                 parent=self,
                 message=_(
@@ -2021,6 +2019,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 ),
             )
             return
+        errlist = ret.splitlines()
 
         # insert error values into GCP list for checked items
         sdfactor = float(UserSettings.Get(group="gcpman", key="rms", subkey="sdfactor"))
@@ -2051,12 +2050,13 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 sumsq_bkw_err += float(bkw_err) ** 2
                 sum_fwd_err += float(fwd_err)
                 GCPcount += 1
-            else:
-                self.list.SetItem(index, 5, "")
-                self.list.SetItem(index, 6, "")
-                self.mapcoordlist[key][5] = 0.0
-                self.mapcoordlist[key][6] = 0.0
-                self.list.SetItemTextColour(index, wx.BLACK)
+                continue
+
+            self.list.SetItem(index, 5, "")
+            self.list.SetItem(index, 6, "")
+            self.mapcoordlist[key][5] = 0.0
+            self.mapcoordlist[key][6] = 0.0
+            self.list.SetItemTextColour(index, wx.BLACK)
 
         # SD
         if GCPcount > 0:
@@ -2143,9 +2143,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         self.grwiz.SwitchEnv("target")
 
-        if ret:
-            errlist = ret.splitlines()
-        else:
+        if not ret:
             GError(
                 parent=self,
                 message=_(
@@ -2153,6 +2151,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 ),
             )
             return
+        errlist = ret.splitlines()
 
         # fist corner
         e, n = errlist[0].split()

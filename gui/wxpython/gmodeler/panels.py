@@ -530,16 +530,18 @@ class ModelerPanel(wx.Panel, MainPageBase):
                     data.Update()
 
                 # remove dead data items
-                if not p.get("value", ""):
-                    data = layer.FindData(p.get("name", ""))
-                    if data:
-                        remList, upList = self.model.RemoveItem(data, layer)
-                        for item in remList:
-                            self.canvas.diagram.RemoveShape(item)
-                            item.__del__()  # noqa: PLC2801, C2801
+                if p.get("value", ""):
+                    continue
+                data = layer.FindData(p.get("name", ""))
+                if not data:
+                    continue
+                remList, upList = self.model.RemoveItem(data, layer)
+                for item in remList:
+                    self.canvas.diagram.RemoveShape(item)
+                    item.__del__()  # noqa: PLC2801, C2801
 
-                        for item in upList:
-                            item.Update()
+                for item in upList:
+                    item.Update()
 
             # valid / parameterized ?
             layer.SetValid(params)
