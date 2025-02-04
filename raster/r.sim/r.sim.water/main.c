@@ -415,15 +415,15 @@ int main(int argc, char *argv[])
                   threads, abs(threads));
         threads = abs(threads);
     }
+    if (threads > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
+        threads = 1;
+    }
 #if defined(_OPENMP)
     omp_set_num_threads(threads);
 #else
     threads = 1;
 #endif
-    if (threads > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
-        G_warning(_("Parallel processing disabled due to active MASK."));
-        threads = 1;
-    }
     G_message(_("Number of threads: %d"), threads);
 
     /* if no rain map input, then: */
