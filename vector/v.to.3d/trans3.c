@@ -27,7 +27,7 @@ void trans3d(struct Map_info *In, struct Map_info *Out, int type,
     struct line_pnts *Points;
     struct line_cats *Cats;
 
-    struct field_info *Fi;
+    struct field_info *Fi = NULL;
     dbDriver *driver;
     dbString stmt;
     char buf[2000];
