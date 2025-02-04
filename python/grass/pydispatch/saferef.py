@@ -164,12 +164,6 @@ class BoundMethodWeakref:
 
     __bool__ = __nonzero__
 
-    def __cmp__(self, other):
-        """Compare with another reference"""
-        if not isinstance(other, self.__class__):
-            return cmp(self.__class__, type(other))
-        return cmp(self.key, other.key)
-
     def __call__(self):
         """Return a strong reference to the bound method
 

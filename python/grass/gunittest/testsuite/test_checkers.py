@@ -369,17 +369,14 @@ class TestMd5Sums(TestCase):
     @classmethod
     def setUpClass(cls):
         with open(cls.correct_file_name_platform_nl, "w") as f:
-            for line in CORRECT_LINES:
-                # \n should be converted to platform newline
-                f.write(line + "\n")
+            # \n should be converted to platform newline
+            f.writelines(line + "\n" for line in CORRECT_LINES)
         with open(cls.correct_file_name_unix_nl, "w") as f:
-            for line in CORRECT_LINES:
-                # binary mode will write pure \n
-                f.write(line + "\n")
+            # binary mode will write pure \n
+            f.writelines(line + "\n" for line in CORRECT_LINES)
         with open(cls.wrong_file_name, "w") as f:
-            for line in INCORRECT_LINES:
-                # \n should be converted to platform newline
-                f.write(line + "\n")
+            # \n should be converted to platform newline
+            f.writelines(line + "\n" for line in INCORRECT_LINES)
 
     @classmethod
     def tearDownClass(cls):

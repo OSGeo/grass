@@ -1101,12 +1101,12 @@ msgstr "3D nézet beállításait mentettem a <%s> fájlba."
 msgid ""
 "This module requires the NumPy module, which could not be imported. It "
 "probably is not installed (it's not part of the standard Python "
-"distribution). See the Numeric Python site (http://numpy.scipy.org) for "
+"distribution). See the Numeric Python site (https://numpy.org) for "
 "information on downloading source or binaries."
 msgstr ""
 "Ez a modul a NumPy modult igényli, melyet nem tudtam importálni. Ezt "
 "valószínűleg nem telepítették (ez nem része a standard Python kiadásoknak). "
-"Lásd a Numeric Python oldalt (http://numpy.scipy.org) a forrás vagy bináris "
+"Lásd a Numeric Python oldalt (https://numpy.org) a forrás vagy bináris "
 "letöltési információkért."
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
@@ -7715,7 +7715,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr ""
 

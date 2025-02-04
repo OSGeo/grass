@@ -158,12 +158,12 @@ class Map:
         :param `**kwargs`: named arguments passed to run_command()"""
 
         # Check module is from display library then run
-        if module[0] == "d":
-            self._region_manager.set_region_from_command(module, **kwargs)
-            self._region_manager.adjust_rendering_size_from_region()
-            gs.run_command(module, env=self._env, **kwargs)
-        else:
-            raise ValueError("Module must begin with letter 'd'.")
+        if module[0] != "d":
+            msg = "Module must begin with letter 'd'."
+            raise ValueError(msg)
+        self._region_manager.set_region_from_command(module, **kwargs)
+        self._region_manager.adjust_rendering_size_from_region()
+        gs.run_command(module, env=self._env, **kwargs)
 
     def __getattr__(self, name):
         """Parse attribute to GRASS display module. Attribute should be in

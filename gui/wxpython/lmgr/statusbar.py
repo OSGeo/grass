@@ -74,15 +74,14 @@ class SbMask:
 
     def __init__(self, parent, giface):
         self.name = "mask"
-        self.mask_layer = "MASK"
         self.parent = parent
         self.giface = giface
         self.widget = Button(
-            parent=parent, id=wx.ID_ANY, label=_(self.mask_layer), style=wx.NO_BORDER
+            parent=parent, id=wx.ID_ANY, label=_("Mask"), style=wx.NO_BORDER
         )
         self.widget.Bind(wx.EVT_BUTTON, self.OnRemoveMask)
         self.widget.SetForegroundColour(wx.Colour(255, 0, 0))
-        self.widget.SetToolTip(tip=_("Left mouse click to remove the MASK"))
+        self.widget.SetToolTip(tip=_("Left mouse click to remove the raster mask"))
         self.giface.currentMapsetChanged.connect(self.Refresh)
         if not watchdog_used:
             self.giface.grassdbChanged.connect(self.dbChanged)
@@ -94,7 +93,12 @@ class SbMask:
         :param str map: map that is changed
         :param str newname: new map
         """
-        if self.mask_layer in {map, newname}:
+        mask_layer = gs.parse_command("r.mask.status", format="json")["name"].split(
+            "@", maxsplit=1
+        )[0]
+        # This assumes mask is always in the current mapset (or the event is triggered
+        # only for the current mapset).
+        if mask_layer in {map, newname}:
             self.Refresh()
             self.giface.updateMap.emit()
 
@@ -124,9 +128,7 @@ class SbMask:
 
     def Refresh(self):
         """Show mask in the statusbar if mask file found"""
-        if gs.find_file(
-            name=self.mask_layer, element="cell", mapset=gs.gisenv()["MAPSET"]
-        )["name"]:
+        if gs.parse_command("r.mask.status", format="json")["present"]:
             self.Show()
         else:
             self.Hide()
@@ -134,20 +136,22 @@ class SbMask:
     def OnRemoveMask(self, event):
         dlg = wx.MessageDialog(
             self.parent,
-            message=_("Are you sure that you want to remove the MASK?"),
-            caption=_("Remove MASK"),
+            message=_("Are you sure that you want to remove the current raster mask?"),
+            caption=_("Remove raster mask"),
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
         )
         if dlg.ShowModal() != wx.ID_YES:
             dlg.Destroy()
             return
         RunCommand("r.mask", flags="r")
+        mask_full_name = gs.parse_command("r.mask.status", format="json")["name"]
+        mask_name, mask_mapset = mask_full_name.split("@", maxsplit=1)
         gisenv = gs.gisenv()
         self.giface.grassdbChanged.emit(
             grassdb=gisenv["GISDBASE"],
             location=gisenv["LOCATION_NAME"],
-            mapset=gisenv["MAPSET"],
-            map=self.mask_layer,
+            mapset=mask_mapset,
+            map=mask_name,
             action="delete",
             element="raster",
         )

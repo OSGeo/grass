@@ -727,10 +727,9 @@ class InputDialog(wx.Dialog):
             if isStart:
                 self.animationData.startRegion = isStart
         else:
-            if isStart:
-                self.animationData.startRegion = isStart
-            else:
+            if not isStart:
                 raise GException(_("Region information is not complete"))
+            self.animationData.startRegion = isStart
             if isEnd:
                 self.animationData.endRegion = self.endRegion.GetValue()
                 self.animationData.zoomRegionValue = None

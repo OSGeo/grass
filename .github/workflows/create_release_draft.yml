@@ -35,7 +35,7 @@ jobs:
           ref: ${{ github.ref }}
           fetch-depth: 0
       - name: Set up Python
-        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
         with:
           python-version: '3.11'
       - name: Create output directory
@@ -74,7 +74,7 @@ jobs:
           sha256sum ${{ env.GRASS }}.tar.xz > ${{ env.GRASS }}.tar.xz.sha256
       - name: Publish draft distribution to GitHub (for tags only)
         if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@01570a1f39cb168c169c802c3bceb9e93fb10974 # v2.1.0
+        uses: softprops/action-gh-release@c95fe1489396fe8a9eb87c0abf8aa5b2ef267fda # v2.2.1
         with:
           name: GRASS GIS ${{ github.ref_name }}
           body: |

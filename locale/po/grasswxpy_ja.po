@@ -1102,13 +1102,13 @@ msgstr "3D表示設定がファイルに保存されました <%s>."
 msgid ""
 "This module requires the NumPy module, which could not be imported. It "
 "probably is not installed (it's not part of the standard Python "
-"distribution). See the Numeric Python site (http://numpy.scipy.org) for "
+"distribution). See the Numeric Python site (https://numpy.org) for "
 "information on downloading source or binaries."
 msgstr ""
-"このモジュールはインポートされないNumpyモジュールを必要とします. おそらくイン"
+"このモジュールはインポートされないNumPyモジュールを必要とします. おそらくイン"
 "ストールされていません（標準的なPython分布の一環ではありません）. ソースまた"
-"はバイナリのダウンロードに関する情報は数値Pythonのサイト（http://numpy.scipy."
-"org）を参照してください"
+"はバイナリのダウンロードに関する情報は数値Pythonのサイト（https://numpy.org"
+"）を参照してください"
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
 #: ../gui/wxpython/iclass/g.gui.iclass.py:88
@@ -7723,7 +7723,7 @@ msgstr "境界の融合"
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 #, fuzzy
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr "共通のカテゴリー番号や属性を共有するエリアを融合させる"
 

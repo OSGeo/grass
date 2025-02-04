@@ -12,6 +12,8 @@ This program is free software under the GNU General Public License
 @author Jachym Cepicky
 """
 
+from __future__ import annotations
+
 import os
 import sys
 import platform
@@ -21,6 +23,8 @@ import re
 import inspect
 import operator
 from string import digits
+from typing import TYPE_CHECKING
+
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -29,6 +33,11 @@ from grass.app.runtime import get_grass_config_dir
 from core.gcmd import RunCommand
 from core.debug import Debug
 from core.globalvar import wxPythonPhoenix
+
+
+if TYPE_CHECKING:
+    import wx
+    import PIL.Image
 
 
 def cmp(a, b):
@@ -137,18 +146,18 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
                 params.append((idx, p, v))
 
         if len(params) < 1:
-            if len(dcmd) > 1:
-                i = 1
-                while i < len(dcmd):
-                    if "=" not in dcmd[i] and not dcmd[i].startswith("-"):
-                        task = gtask.parse_interface(dcmd[0])
-                        # this expects the first parameter to be the right one
-                        p = task.get_options()["params"][0].get("name", "")
-                        params.append((i, p, dcmd[i]))
-                        break
-                    i += 1
-            else:
-                return mapname, False
+            if len(dcmd) <= 1:
+                return (mapname, False)
+
+            i = 1
+            while i < len(dcmd):
+                if "=" not in dcmd[i] and (not dcmd[i].startswith("-")):
+                    task = gtask.parse_interface(dcmd[0])
+                    # this expects the first parameter to be the right one
+                    p = task.get_options()["params"][0].get("name", "")
+                    params.append((i, p, dcmd[i]))
+                    break
+                i += 1
 
         if len(params) < 1:
             return mapname, False
@@ -217,11 +226,7 @@ def GetValidLayerName(name):
     cIdx = 0
     retNameList = list(retName)
     for c in retNameList:
-        if (
-            not (c >= "A" and c <= "Z")
-            and not (c >= "a" and c <= "z")
-            and not (c >= "0" and c <= "9")
-        ):
+        if not ("A" <= c <= "Z") and not ("a" <= c <= "z") and not ("0" <= c <= "9"):
             retNameList[cIdx] = "_"
         cIdx += 1
     retName = "".join(retNameList)
@@ -262,10 +267,9 @@ def ListOfCatsToRange(cats):
         next = 0
         j = i + 1
         while j < len(cats):
-            if cats[i + next] == cats[j] - 1:
-                next += 1
-            else:
+            if cats[i + next] != cats[j] - 1:
                 break
+            next += 1
             j += 1
 
         if next > 1:
@@ -297,21 +301,21 @@ def ListOfMapsets(get="ordered"):
         if get == "all":
             return mapsets_all
 
-    if get in {"accessible", "ordered"}:
-        ret = RunCommand("g.mapsets", read=True, quiet=True, flags="p", sep="newline")
-        if not ret:
-            return []
-        mapsets_accessible = ret.splitlines()
-        if get == "accessible":
-            return mapsets_accessible
+    if get not in {"accessible", "ordered"}:
+        msg = "Invalid value for 'get' parameter of ListOfMapsets()"
+        raise ValueError(msg)
+    ret = RunCommand("g.mapsets", read=True, quiet=True, flags="p", sep="newline")
+    if not ret:
+        return []
+    mapsets_accessible = ret.splitlines()
+    if get == "accessible":
+        return mapsets_accessible
 
-        mapsets_ordered = mapsets_accessible.copy()
-        for mapset in mapsets_all:
-            if mapset not in mapsets_accessible:
-                mapsets_ordered.append(mapset)
-        return mapsets_ordered
-
-    raise ValueError("Invalid value for 'get' parameter of ListOfMapsets()")
+    mapsets_ordered = mapsets_accessible.copy()
+    for mapset in mapsets_all:
+        if mapset not in mapsets_accessible:
+            mapsets_ordered.append(mapset)
+    return mapsets_ordered
 
 
 def ListSortLower(list):
@@ -437,7 +441,7 @@ def __ll_parts(value, reverse=False, precision=3):
         if value == 0.0:
             return "%s%.*f" % ("00:00:0", precision, 0.0)
 
-        d = int(int(value))
+        d = int(value)
         m = int((value - d) * 60)
         s = ((value - d) * 60 - m) * 60
         if m < 0:
@@ -822,7 +826,21 @@ def StoreEnvVariable(key, value=None, envFile=None):
     lineSkipped = []
     if os.path.exists(envFile):
         try:
-            fd = open(envFile)
+            with open(envFile) as fd:
+                for line in fd:
+                    line = line.rstrip(os.linesep)
+                    try:
+                        k, v = (x.strip() for x in line.split(" ", 1)[1].split("=", 1))
+                    except Exception as e:
+                        sys.stderr.write(
+                            _("%s: line skipped - unable to parse '%s'\nReason: %s\n")
+                            % (envFile, line, e)
+                        )
+                        lineSkipped.append(line)
+                        continue
+                    if k in environ:
+                        sys.stderr.write(_("Duplicated key: %s\n") % k)
+                    environ[k] = v
         except OSError as error:
             sys.stderr.write(
                 _("Unable to open file '{name}': {error}\n").format(
@@ -830,33 +848,24 @@ def StoreEnvVariable(key, value=None, envFile=None):
                 )
             )
             return
-        for line in fd:
-            line = line.rstrip(os.linesep)
-            try:
-                k, v = (x.strip() for x in line.split(" ", 1)[1].split("=", 1))
-            except Exception as e:
-                sys.stderr.write(
-                    _("%s: line skipped - unable to parse '%s'\nReason: %s\n")
-                    % (envFile, line, e)
-                )
-                lineSkipped.append(line)
-                continue
-            if k in environ:
-                sys.stderr.write(_("Duplicated key: %s\n") % k)
-            environ[k] = v
-
-        fd.close()
 
     # update environmental variables
     if value is None:
-        if key in environ:
-            del environ[key]
+        environ.pop(key, None)
     else:
         environ[key] = value
 
     # write update env file
     try:
-        fd = open(envFile, "w")
+        with open(envFile, "w") as fd:
+            expCmd = "set" if windows else "export"
+
+            fd.writelines(
+                "%s %s=%s\n" % (expCmd, key, value) for key, value in environ.items()
+            )
+
+            # write also skipped lines
+            fd.writelines(line + os.linesep for line in lineSkipped)
     except OSError as error:
         sys.stderr.write(
             _("Unable to create file '{name}': {error}\n").format(
@@ -864,16 +873,6 @@ def StoreEnvVariable(key, value=None, envFile=None):
             )
         )
         return
-    expCmd = "set" if windows else "export"
-
-    for key, value in environ.items():
-        fd.write("%s %s=%s\n" % (expCmd, key, value))
-
-    # write also skipped lines
-    for line in lineSkipped:
-        fd.write(line + os.linesep)
-
-    fd.close()
 
 
 def SetAddOnPath(addonPath=None, key="PATH"):
@@ -922,9 +921,8 @@ str2rgb = {
     "white": (255, 255, 255),
     "yellow": (255, 255, 0),
 }
-rgb2str = {}
-for s, r in str2rgb.items():
-    rgb2str[r] = s
+
+rgb2str = {r: s for s, r in str2rgb.items()}
 # ensure that gray value has 'gray' string and not 'grey'
 rgb2str[str2rgb["gray"]] = "gray"
 # purple is defined as nickname for violet in lib/gis
@@ -978,9 +976,7 @@ command2ltype = {
     "d.polar": "polar",
     "d.legend.vect": "vectleg",
 }
-ltype2command = {}
-for cmd, ltype in command2ltype.items():
-    ltype2command[ltype] = cmd
+ltype2command = {ltype: cmd for cmd, ltype in command2ltype.items()}
 
 
 def GetGEventAttribsForHandler(method, event):
@@ -1018,7 +1014,7 @@ def GetGEventAttribsForHandler(method, event):
     return kwargs, missing_args
 
 
-def PilImageToWxImage(pilImage, copyAlpha=True):
+def PilImageToWxImage(pilImage: PIL.Image.Image, copyAlpha: bool = True) -> wx.Image:
     """Convert PIL image to wx.Image
 
     Based on http://wiki.wxpython.org/WorkingWithImages
@@ -1047,7 +1043,7 @@ def PilImageToWxImage(pilImage, copyAlpha=True):
     return wxImage
 
 
-def autoCropImageFromFile(filename):
+def autoCropImageFromFile(filename) -> wx.Image:
     """Loads image from file and crops it automatically.
 
     If PIL is not installed, it does not crop it.

@@ -11,6 +11,7 @@ for details.
 """
 
 import grass.script as gs
+from grass.exceptions import ScriptError
 
 from .core import get_available_temporal_mapsets, init_dbif
 from .factory import dataset_factory
@@ -37,15 +38,15 @@ def tlist_grouped(type, group_type: bool = False, dbif=None):
     :return: directory of mapsets/elements
     """
     result = {}
-    _type = type
+    type_ = type
     dbif, connection_state_changed = init_dbif(dbif)
 
     mapset = None
-    types = ["strds", "str3ds", "stvds"] if _type == "stds" else [_type]
-    for _type in types:
+    types = ["strds", "str3ds", "stvds"] if type_ == "stds" else [type_]
+    for type_ in types:
         try:
-            tlist_result = tlist(type=_type, dbif=dbif)
-        except gs.ScriptError as e:
+            tlist_result = tlist(type=type_, dbif=dbif)
+        except ScriptError as e:
             gs.warning(e)
             continue
 
@@ -63,10 +64,10 @@ def tlist_grouped(type, group_type: bool = False, dbif=None):
                     result[mapset] = []
 
             if group_type:
-                if _type in result[mapset]:
-                    result[mapset][_type].append(name)
+                if type_ in result[mapset]:
+                    result[mapset][type_].append(name)
                 else:
-                    result[mapset][_type] = [
+                    result[mapset][type_] = [
                         name,
                     ]
             else:
@@ -88,20 +89,20 @@ def tlist(type, dbif=None):
 
     :return: a list of space time dataset ids
     """
-    _type = type
+    type_ = type
     id = None
-    sp = dataset_factory(_type, id)
+    sp = dataset_factory(type_, id)
     dbif, connection_state_changed = init_dbif(dbif)
 
     mapsets = get_available_temporal_mapsets()
 
     output = []
     temporal_type = ["absolute", "relative"]
-    for _type in temporal_type:
+    for type_ in temporal_type:
         # For each available mapset
         for mapset in mapsets.keys():
             # Table name
-            if _type == "absolute":
+            if type_ == "absolute":
                 table = sp.get_type() + "_view_abs_time"
             else:
                 table = sp.get_type() + "_view_rel_time"

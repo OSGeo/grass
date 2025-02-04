@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 @author Luca Delucchi
 @author start stvds support Matej Krejci
 """
+
 import os
 from itertools import cycle
 from pathlib import Path
@@ -85,7 +86,7 @@ def check_version(*version) -> bool:
             versionInstalled.append(v)
         except ValueError:
             versionInstalled.append(0)
-    return not versionInstalled < list(version)
+    return versionInstalled >= list(version)
 
 
 def findBetween(s, first, last):
@@ -474,9 +475,7 @@ class TplotFrame(wx.Frame):
                     GError(
                         parent=self,
                         message=_(
-                            "Datasets have different "
-                            "time unit which is not "
-                            "allowed."
+                            "Datasets have different time unit which is not allowed."
                         ),
                     )
                     return
@@ -633,68 +632,64 @@ class TplotFrame(wx.Frame):
                 for i in range(len(rows)):
                     row = rows[i]
                     values = out[i]
-                    if str(row["layer"]) == str(values["Layer"]):
-                        lay = "{map}_{layer}".format(
-                            map=row["name"], layer=values["Layer"]
-                        )
-                        self.timeDataV[name][lay] = {}
-                        self.timeDataV[name][lay]["start_datetime"] = row["start_time"]
-                        self.timeDataV[name][lay]["end_datetime"] = row["start_time"]
-                        self.timeDataV[name][lay]["value"] = values["Attributes"][
-                            attribute
-                        ]
-            else:
-                wherequery = ""
-                cats = self._getExistingCategories(rows[0]["name"], cats)
-                totcat = len(cats)
-                ncat = 1
-                for cat in cats:
-                    if ncat == 1 and totcat != 1:
-                        wherequery += "{k}={c} or".format(c=cat, k="{key}")
-                    elif ncat == 1 and totcat == 1:
-                        wherequery += "{k}={c}".format(c=cat, k="{key}")
-                    elif ncat == totcat:
-                        wherequery += " {k}={c}".format(c=cat, k="{key}")
-                    else:
-                        wherequery += " {k}={c} or".format(c=cat, k="{key}")
+                    if str(row["layer"]) != str(values["Layer"]):
+                        continue
+                    lay = "{map}_{layer}".format(map=row["name"], layer=values["Layer"])
+                    self.timeDataV[name][lay] = {}
+                    self.timeDataV[name][lay]["start_datetime"] = row["start_time"]
+                    self.timeDataV[name][lay]["end_datetime"] = row["start_time"]
+                    self.timeDataV[name][lay]["value"] = values["Attributes"][attribute]
 
-                    catn = "cat{num}".format(num=cat)
-                    self.plotNameListV.append("{na}+{cat}".format(na=name, cat=catn))
-                    self.timeDataV[name][catn] = OrderedDict()
-                    ncat += 1
-                for row in rows:
-                    lay = int(row["layer"])
-                    catkey = self._parseVDbConn(row["name"], lay)
-                    if not catkey:
-                        GError(
-                            parent=self,
-                            showTraceback=False,
-                            message=_(
-                                "No connection between vector map {vmap} "
-                                "and layer {la}"
-                            ).format(vmap=row["name"], la=lay),
-                        )
-                        return
-                    vals = gs.vector_db_select(
-                        map=row["name"],
-                        layer=lay,
-                        where=wherequery.format(key=catkey),
-                        columns=attribute,
+                continue
+
+            wherequery = ""
+            cats = self._getExistingCategories(rows[0]["name"], cats)
+            totcat = len(cats)
+            ncat = 1
+            for cat in cats:
+                if ncat == 1 and totcat != 1:
+                    wherequery += "{k}={c} or".format(c=cat, k="{key}")
+                elif ncat == 1 and totcat == 1:
+                    wherequery += "{k}={c}".format(c=cat, k="{key}")
+                elif ncat == totcat:
+                    wherequery += " {k}={c}".format(c=cat, k="{key}")
+                else:
+                    wherequery += " {k}={c} or".format(c=cat, k="{key}")
+
+                catn = "cat{num}".format(num=cat)
+                self.plotNameListV.append("{na}+{cat}".format(na=name, cat=catn))
+                self.timeDataV[name][catn] = OrderedDict()
+                ncat += 1
+            for row in rows:
+                lay = int(row["layer"])
+                catkey = self._parseVDbConn(row["name"], lay)
+                if not catkey:
+                    GError(
+                        parent=self,
+                        showTraceback=False,
+                        message=_(
+                            "No connection between vector map {vmap} and layer {la}"
+                        ).format(vmap=row["name"], la=lay),
                     )
-                    layn = "lay{num}".format(num=lay)
-                    for cat in cats:
-                        catn = "cat{num}".format(num=cat)
-                        if layn not in self.timeDataV[name][catn].keys():
-                            self.timeDataV[name][catn][layn] = {}
-                        self.timeDataV[name][catn][layn]["start_datetime"] = row[
-                            "start_time"
-                        ]
-                        self.timeDataV[name][catn][layn]["end_datetime"] = row[
-                            "end_time"
-                        ]
-                        self.timeDataV[name][catn][layn]["value"] = vals["values"][
-                            int(cat)
-                        ][0]
+                    return
+                vals = gs.vector_db_select(
+                    map=row["name"],
+                    layer=lay,
+                    where=wherequery.format(key=catkey),
+                    columns=attribute,
+                )
+                layn = "lay{num}".format(num=lay)
+                for cat in cats:
+                    catn = "cat{num}".format(num=cat)
+                    if layn not in self.timeDataV[name][catn].keys():
+                        self.timeDataV[name][catn][layn] = {}
+                    self.timeDataV[name][catn][layn]["start_datetime"] = row[
+                        "start_time"
+                    ]
+                    self.timeDataV[name][catn][layn]["end_datetime"] = row["end_time"]
+                    self.timeDataV[name][catn][layn]["value"] = vals["values"][
+                        int(cat)
+                    ][0]
         self.unit = unit
         self.temporalType = mode
         return
@@ -760,8 +755,7 @@ class TplotFrame(wx.Frame):
         with open(self.csvpath, "w", newline="") as fi:
             writer = csv.writer(fi)
             if self.header:
-                head = ["Time"]
-                head.extend(self.yticksNames)
+                head = ["Time", *self.yticksNames]
                 writer.writerow(head)
             writer.writerows(zipped)
 
@@ -807,7 +801,7 @@ class TplotFrame(wx.Frame):
             x=np.array(xdata), y=np.array(ydata), returnFormula=True
         )
 
-        r2 = "r\u00B2 = {:.5f}".format(
+        r2 = "r\u00b2 = {:.5f}".format(
             np.corrcoef(np.array(xdata), np.array(ydata))[0, 1] ** 2
         )
         self.plots.append(
@@ -1337,10 +1331,11 @@ class LookUp:
             self.data[datasetName][xranges[i]] = yranges[i]
 
     def GetInformation(self, x):
-        values = {}
-        for key, value in self.data.items():
-            if value[x]:
-                values[key] = [self.convert(x), value[x]]
+        values = {
+            key: [self.convert(x), value[x]]
+            for key, value in self.data.items()
+            if value[x]
+        }
 
         if len(values) == 0:
             return None
@@ -1371,7 +1366,6 @@ def InfoFormat(timeData, values):
 class DataCursor:
     """A simple data cursor widget that displays the x,y location of a
     matplotlib artist when it is selected.
-
 
     Source: https://stackoverflow.com/questions/4652439/
             is-there-a-matplotlib-equivalent-of-matlabs-datacursormode/4674445

@@ -116,9 +116,8 @@ def _get_vector_table_as_dict(lock, conn, data):
                 table = layer.table_to_dict(where=where)
             layer.close()
 
-            ret = {}
-            ret["table"] = table
-            ret["columns"] = columns
+            ret = {"table": table, "columns": columns}
+
     finally:
         # Send even if an exception was raised.
         conn.send(ret)
@@ -478,7 +477,7 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    """Remove the generated maps, if exist"""
+    # Remove the generated maps, if exist
     mset = utils.get_mapset_raster(test_raster_name, mapset="")
     if mset:
         Module("g.remove", flags="f", type="raster", name=test_raster_name)

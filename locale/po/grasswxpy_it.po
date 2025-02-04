@@ -1119,12 +1119,12 @@ msgstr "Impostazioni visualizzazione 3D salvate nel file <%s>."
 msgid ""
 "This module requires the NumPy module, which could not be imported. It "
 "probably is not installed (it's not part of the standard Python "
-"distribution). See the Numeric Python site (http://numpy.scipy.org) for "
+"distribution). See the Numeric Python site (https://numpy.org) for "
 "information on downloading source or binaries."
 msgstr ""
 "Questo modulo richiede NumPy, che non è stato possibile importare. "
 "Probabilmente non è installato (non fa parte della distribuzione standard di "
-"Python). Controlla il sito di Numeric Python (http://numpy.scipy.org) per "
+"Python). Controlla il sito di Numeric Python (https://numpy.org) per "
 "maggiori informazione sul download del sorgente o dei binari."
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
@@ -7922,7 +7922,7 @@ msgstr "Dissolvi confini"
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 #, fuzzy
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr ""
 "Dissolve i confini tra aree adiacenti che condividono categorie o attributi "

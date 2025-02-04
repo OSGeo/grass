@@ -19,6 +19,7 @@ import uuid
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
 from pathlib import Path
+from grass.exceptions import FatalError
 
 from .abstract_dataset import AbstractDataset, AbstractDatasetComparisonKeyStartTime
 from .core import (
@@ -1743,17 +1744,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             )
         elif spatial_relation == "is_contained":
             spatial_where_template = (
-                "(north <= {n}"
-                " AND south >= {s}"
-                " AND east <= {e}"
-                " AND west >= {w}"
+                "(north <= {n} AND south >= {s} AND east <= {e} AND west >= {w}"
             )
         elif spatial_relation == "contains":
             spatial_where_template = (
-                "(north >= {n}"
-                " AND south <= {s}"
-                " AND east >= {e}"
-                " AND west <= {w}"
+                "(north >= {n} AND south <= {s} AND east >= {e} AND west <= {w}"
             )
 
         if self.get_type() == "str3ds":
@@ -2463,7 +2458,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             try:
                 dbif.execute(sql, (map_id,), mapset=self.base.mapset)
                 row = dbif.fetchone(mapset=self.base.mapset)
-            except:
+            except FatalError:
+                raise
+            except Exception:
                 self.msgr.warning(_("Error in register table request"))
                 raise
 

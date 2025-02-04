@@ -417,7 +417,7 @@ class SpatioTemporalTopologyBuilder:
         The maps will be added to the object, so they can be
         accessed using the iterator of this class
 
-        :param maps: A sorted (by start_time)list of abstract_dataset
+        :param maps: A sorted (by start_time) list of abstract_dataset
                      objects with initiated temporal extent
         """
         self._build_iteratable(maps, spatial)
@@ -586,7 +586,7 @@ class SpatioTemporalTopologyBuilder:
 
                 A = mapsA[i]
                 B = mapsB[j]
-                set_temoral_relationship(A, B, relation)
+                set_temporal_relationship(A, B, relation)
 
                 if spatial is not None:
                     relation = mapsB[j].spatial_relation(mapsA[i])
@@ -612,14 +612,14 @@ class SpatioTemporalTopologyBuilder:
     def __len__(self) -> int:
         return len(self._store)
 
-    def __contains__(self, _map) -> bool:
-        return _map in self._store.values()
+    def __contains__(self, map_) -> bool:
+        return map_ in self._store.values()
 
 
 ###############################################################################
 
 
-def set_temoral_relationship(A, B, relation) -> None:
+def set_temporal_relationship(A, B, relation) -> None:
     if relation in {"equal", "equals"}:
         if A != B:
             if not B.get_equal() or (B.get_equal() and A not in B.get_equal()):

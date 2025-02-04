@@ -92,15 +92,15 @@ def compute_univar_stats(
                 eol = "\n"
             else:
                 eol = ""
-        string += f'{fs}{stats["mean"]}{fs}{stats["min"]}'
-        string += f'{fs}{stats["max"]}{fs}{stats["mean_of_abs"]}'
-        string += f'{fs}{stats["stddev"]}{fs}{stats["variance"]}'
-        string += f'{fs}{stats["coeff_var"]}{fs}{stats["sum"]}'
-        string += f'{fs}{stats["null_cells"]}{fs}{stats["n"]}'
-        string += f'{fs}{stats["n"]}'
+        string += f"{fs}{stats['mean']}{fs}{stats['min']}"
+        string += f"{fs}{stats['max']}{fs}{stats['mean_of_abs']}"
+        string += f"{fs}{stats['stddev']}{fs}{stats['variance']}"
+        string += f"{fs}{stats['coeff_var']}{fs}{stats['sum']}"
+        string += f"{fs}{stats['null_cells']}{fs}{stats['n']}"
+        string += f"{fs}{stats['n']}"
         if "median" in stats:
-            string += f'{fs}{stats["first_quartile"]}{fs}{stats["median"]}'
-            string += f'{fs}{stats["third_quartile"]}'
+            string += f"{fs}{stats['first_quartile']}{fs}{stats['median']}"
+            string += f"{fs}{stats['third_quartile']}"
             if stats_module.inputs.percentile:
                 for perc in stats_module.inputs.percentile:
                     perc_value = stats[
