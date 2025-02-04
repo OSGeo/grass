@@ -21,6 +21,7 @@ import copy
 
 from grass.script.utils import parse_key_val
 from grass.script import core as gcore
+from grass.exceptions import ScriptError
 
 from core.gcmd import GException
 from animation.nviztask import NvizTask
@@ -299,7 +300,7 @@ class AnimLayer(Layer):
                 try:
                     name = validateTimeseriesName(name, self._mapType)
                     self._maps = getRegisteredMaps(name, self._mapType)
-                except (GException, gcore.ScriptError) as e:
+                except (GException, ScriptError) as e:
                     raise ValueError(str(e))
             else:
                 self._maps = validateMapNames(name.split(","), self._mapType)
