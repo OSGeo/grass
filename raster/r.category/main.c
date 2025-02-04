@@ -323,7 +323,7 @@ int main(int argc, char *argv[])
 
     if (color_format != NONE)
         if (Rast_read_colors(name, mapset, &colors) < 0)
-            G_fatal_error("Unable to read colors for input map %s", name);
+            G_fatal_error(_("Unable to read colors for input map %s"), name);
 
     /* describe the category labels */
     /* if no cats requested, use r.describe to get the cats */
