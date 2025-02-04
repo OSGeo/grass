@@ -5457,18 +5457,19 @@ class NvizToolWindow(GNotebook):
                     display.SetSelection(1)
                 else:
                     display.SetSelection(0)
-            if data[vtype]["mode"]["type"] == "surface":
-                rasters = self.mapWindow.GetLayerNames("raster")
-                constants = self.mapWindow.GetLayerNames("constant")
-                surfaces = rasters + constants
-                surfaceWin = self.FindWindowById(self.win["vector"][vtype]["surface"])
-                surfaceWin.SetItems(surfaces)
-                for idx, surface in enumerate(surfaces):
-                    try:  # TODO fix this mess
-                        selected = data[vtype]["mode"]["surface"]["show"][idx]
-                    except (TypeError, IndexError, KeyError):
-                        selected = False
-                    surfaceWin.Check(idx, selected)
+            if data[vtype]["mode"]["type"] != "surface":
+                continue
+            rasters = self.mapWindow.GetLayerNames("raster")
+            constants = self.mapWindow.GetLayerNames("constant")
+            surfaces = rasters + constants
+            surfaceWin = self.FindWindowById(self.win["vector"][vtype]["surface"])
+            surfaceWin.SetItems(surfaces)
+            for idx, surface in enumerate(surfaces):
+                try:  # TODO fix this mess
+                    selected = data[vtype]["mode"]["surface"]["show"][idx]
+                except (TypeError, IndexError, KeyError):
+                    selected = False
+                surfaceWin.Check(idx, selected)
 
         for type in ("slider", "text"):
             win = self.FindWindowById(self.win["vector"]["lines"]["height"][type])

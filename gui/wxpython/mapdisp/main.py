@@ -216,24 +216,26 @@ class DMonMap(Map):
 
                 exists = False
                 for i, layer in enumerate(existingLayers):
-                    if layer.GetCmd(string=True) == utils.GetCmdString(
+                    if layer.GetCmd(string=True) != utils.GetCmdString(
                         cmdlist_to_tuple(cmd)
                     ):
-                        exists = True
+                        continue
 
-                        if layersOrder[i] == -1:
-                            layersOrder[i] = next_layer
-                            next_layer += 1
-                        # layer must be put higher in render order (same cmd was
-                        # insered more times)
-                        # TODO delete rendurant cmds from cmd file?
-                        else:
-                            for j, l_order in enumerate(layersOrder):
-                                if l_order > layersOrder[i]:
-                                    layersOrder[j] -= 1
-                            layersOrder[i] = next_layer - 1
+                    exists = True
 
-                        break
+                    if layersOrder[i] == -1:
+                        layersOrder[i] = next_layer
+                        next_layer += 1
+                    # layer must be put higher in render order (same cmd was
+                    # insered more times)
+                    # TODO delete rendurant cmds from cmd file?
+                    else:
+                        for j, l_order in enumerate(layersOrder):
+                            if l_order > layersOrder[i]:
+                                layersOrder[j] -= 1
+                        layersOrder[i] = next_layer - 1
+
+                    break
                 if exists:
                     continue
 

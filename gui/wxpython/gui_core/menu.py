@@ -62,11 +62,11 @@ class MenuBase:
                 label = child.label
                 subMenu = self._createMenu(child)
                 menu.AppendMenu(wx.ID_ANY, label, subMenu)
-            else:
-                data = child.data.copy()
-                data.pop("label")
+                continue
+            data = child.data.copy()
+            data.pop("label")
 
-                self._createMenuItem(menu, label=child.label, **data)
+            self._createMenuItem(menu, label=child.label, **data)
 
         return menu
 
