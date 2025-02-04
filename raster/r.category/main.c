@@ -114,12 +114,9 @@ int main(int argc, char *argv[])
     parm.format->key = "output_format";
     parm.format->guisection = _("Print");
 
-    parm.color = G_define_option();
-    parm.color->key = "color";
-    parm.color->type = TYPE_STRING;
+    parm.color = G_define_standard_option(G_OPT_C_FORMAT);
     parm.color->required = NO;
-    parm.color->multiple = NO;
-    parm.color->options = "none,rgb,hex,triplet";
+    parm.color->options = "none,rgb,hex,triplet,hsv";
     parm.color->answer = "none";
     parm.color->description = _("Color format for output values or none.");
 
@@ -146,6 +143,9 @@ int main(int argc, char *argv[])
     }
     else if (strcmp(parm.color->answer, "hex") == 0) {
         color_format = HEX_OUTPUT;
+    }
+    else if (strcmp(parm.color->answer, "hsv") == 0) {
+        color_format = HSV_OUTPUT;
     }
     else {
         color_format = NONE;
@@ -395,7 +395,7 @@ void print_json(JSON_Value *root_value)
 int print_label(long x, enum OutputFormat format, JSON_Array *root_array,
                 enum ColorOutput color_format, struct Colors *colors)
 {
-    char *label, color[30];
+    char *label, color[COLOR_STRING_LENGTH];
     JSON_Value *category_value;
     JSON_Object *category;
 
@@ -405,7 +405,7 @@ int print_label(long x, enum OutputFormat format, JSON_Array *root_array,
     case PLAIN:
         fprintf(stdout, "%ld%s%s", x, fs, label);
         if (color_format != NONE) {
-            scan_colors(x, colors, color_format, color);
+            scan_colors((CELL *)&x, colors, color_format, color, CELL_TYPE);
             fprintf(stdout, "%s%s", fs, color);
         }
         fprintf(stdout, "\n");
@@ -416,7 +416,7 @@ int print_label(long x, enum OutputFormat format, JSON_Array *root_array,
         json_object_set_number(category, "category", x);
         json_object_set_string(category, "description", label);
         if (color_format != NONE) {
-            scan_colors(x, colors, color_format, color);
+            scan_colors((CELL *)&x, colors, color_format, color, CELL_TYPE);
             json_object_set_string(category, "color", color);
         }
         json_array_append_value(root_array, category_value);
@@ -429,7 +429,7 @@ int print_label(long x, enum OutputFormat format, JSON_Array *root_array,
 int print_d_label(double x, enum OutputFormat format, JSON_Array *root_array,
                   enum ColorOutput color_format, struct Colors *colors)
 {
-    char *label, tmp[40], color[30];
+    char *label, tmp[40], color[COLOR_STRING_LENGTH];
     DCELL dtmp;
     JSON_Value *category_value;
     JSON_Object *category;
@@ -443,7 +443,7 @@ int print_d_label(double x, enum OutputFormat format, JSON_Array *root_array,
         G_trim_decimal(tmp);
         fprintf(stdout, "%s%s%s", tmp, fs, label);
         if (color_format != NONE) {
-            scan_d_colors(x, colors, color_format, color);
+            scan_colors((DCELL *)&x, colors, color_format, color, DCELL_TYPE);
             fprintf(stdout, "%s%s", fs, color);
         }
         fprintf(stdout, "\n");
@@ -454,7 +454,7 @@ int print_d_label(double x, enum OutputFormat format, JSON_Array *root_array,
         json_object_set_number(category, "category", x);
         json_object_set_string(category, "description", label);
         if (color_format != NONE) {
-            scan_d_colors(x, colors, color_format, color);
+            scan_colors((DCELL *)&x, colors, color_format, color, DCELL_TYPE);
             json_object_set_string(category, "color", color);
         }
         json_array_append_value(root_array, category_value);
@@ -489,46 +489,38 @@ int scan_vals(const char *s, double *x)
     return 0;
 }
 
-void get_color(enum ColorOutput color_format, int red, int grn, int blu,
-               char *color)
+void scan_colors(const void *x, struct Colors *colors,
+                 enum ColorOutput color_format, char *color,
+                 RASTER_MAP_TYPE map_type)
 {
+    int red, grn, blu;
+    float h, s, v;
+
+    if (!Rast_get_color(x, &red, &grn, &blu, colors, map_type)) {
+        strcpy(color, "*");
+        return;
+    }
+
     switch (color_format) {
     case RGB_OUTPUT:
-        snprintf(color, 30, "rgb(%d, %d, %d)", red, grn, blu);
+        snprintf(color, COLOR_STRING_LENGTH, "rgb(%d, %d, %d)", red, grn, blu);
         break;
 
     case HEX_OUTPUT:
-        snprintf(color, 30, "#%02X%02X%02X", red, grn, blu);
+        snprintf(color, COLOR_STRING_LENGTH, "#%02X%02X%02X", red, grn, blu);
         break;
 
     case TRIPLET_OUTPUT:
-        snprintf(color, 30, "%d:%d:%d", red, grn, blu);
+        snprintf(color, COLOR_STRING_LENGTH, "%d:%d:%d", red, grn, blu);
         break;
+
+    case HSV_OUTPUT:
+        Rast_rgb_to_hsv(red, grn, blu, &h, &s, &v);
+        snprintf(color, COLOR_STRING_LENGTH, "hsv(%d, %d, %d)", (int)h, (int)s,
+                 (int)v);
+        break;
+
     case NONE:
         break;
     }
-}
-
-void scan_colors(long x, struct Colors *colors, enum ColorOutput color_format,
-                 char *color)
-{
-    int red, grn, blu;
-
-    if (!Rast_get_c_color((CELL *)&x, &red, &grn, &blu, colors)) {
-        strcpy(color, "*");
-    }
-    else
-        get_color(color_format, red, grn, blu, color);
-}
-
-void scan_d_colors(double x, struct Colors *colors,
-                   enum ColorOutput color_format, char *color)
-{
-    int red, grn, blu;
-
-    if (!Rast_get_d_color((DCELL *)&x, &red, &grn, &blu, colors)) {
-        strcpy(color, "*");
-    }
-    else
-        get_color(color_format, red, grn, blu, color);
 }

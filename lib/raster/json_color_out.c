@@ -47,7 +47,7 @@ static void close_file(FILE *fp)
    \param[out] s pointer to store the calculated saturation
    \param[out] v pointer to store the calculated value
  */
-static void rgb_to_hsv(int r, int g, int b, float *h, float *s, float *v)
+void Rast_rgb_to_hsv(int r, int g, int b, float *h, float *s, float *v)
 {
     float r_norm = (float)r / 255.0f;
     float g_norm = (float)g / 255.0f;
@@ -108,7 +108,7 @@ static void set_color(int r, int g, int b, ColorFormat clr_frmt,
         break;
 
     case HSV:
-        rgb_to_hsv(r, g, b, &h, &s, &v);
+        Rast_rgb_to_hsv(r, g, b, &h, &s, &v);
         snprintf(color_string, sizeof(color_string), "hsv(%d, %d, %d)", (int)h,
                  (int)s, (int)v);
         G_json_object_set_string(color_object, "color", color_string);

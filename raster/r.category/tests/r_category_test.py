@@ -271,7 +271,7 @@ def test_r_category_with_json_output_color(simple_dataset):
         env=session.env,
     )
 
-    colors = ["rgb", "hex", "triplet", "none"]
+    colors = ["rgb", "hex", "triplet", "hsv", "none"]
     expected_outputs = [
         [
             {
@@ -302,6 +302,18 @@ def test_r_category_with_json_output_color(simple_dataset):
             },
         ],
         [
+            {
+                "category": 1,
+                "description": "trees, very green",
+                "color": "hsv(288, 98, 32)",
+            },
+            {
+                "category": 2,
+                "description": "water, very deep",
+                "color": "hsv(53, 85, 99)",
+            },
+        ],
+        [
             {"category": 1, "description": "trees, very green"},
             {
                 "category": 2,
@@ -316,11 +328,13 @@ def test_r_category_with_json_output_color(simple_dataset):
                 "r.category",
                 map="test",
                 output_format="json",
-                color=color,
+                color_format=color,
                 env=session.env,
             )
         )
-        assert result == expected, f"test failed: expected {expected} but got {result}"
+        assert result == expected, (
+            f"test failed: expected {expected} but got {result} for color option {color}"
+        )
 
 
 def test_r_category_with_plain_output_color(simple_dataset):
@@ -337,11 +351,12 @@ def test_r_category_with_plain_output_color(simple_dataset):
         env=session.env,
     )
 
-    colors = ["rgb", "hex", "triplet", "none"]
+    colors = ["rgb", "hex", "triplet", "hsv", "none"]
     expected_outputs = [
         "1 trees rgb(68, 1, 84)\n2 buildings rgb(253, 231, 37)\n",
         "1 trees #440154\n2 buildings #FDE725\n",
         "1 trees 68:1:84\n2 buildings 253:231:37\n",
+        "1 trees hsv(288, 98, 32)\n2 buildings hsv(53, 85, 99)\n",
         "1 trees\n2 buildings\n",
     ]
 
@@ -350,9 +365,11 @@ def test_r_category_with_plain_output_color(simple_dataset):
             "r.category",
             map="test",
             separator=" ",
-            color=color,
+            color_format=color,
             env=session.env,
         ).replace(
             "\r", ""
         )  # remove the '\r' (carriage return) to standardize line endings.
-        assert result == expected, f"test failed: expected {expected} but got {result}"
+        assert result == expected, (
+            f"test failed: expected {expected} but got {result} for color option {color}"
+        )

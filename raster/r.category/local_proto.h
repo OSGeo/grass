@@ -20,8 +20,10 @@
 
 #include <grass/parson.h>
 
+#define COLOR_STRING_LENGTH 30
+
 enum OutputFormat { PLAIN, JSON };
-enum ColorOutput { NONE, RGB_OUTPUT, HEX_OUTPUT, TRIPLET_OUTPUT };
+enum ColorOutput { NONE, RGB_OUTPUT, HEX_OUTPUT, TRIPLET_OUTPUT, HSV_OUTPUT };
 
 /* cats.c */
 int get_cats(const char *, const char *);
@@ -35,8 +37,7 @@ int print_d_label(double, enum OutputFormat, JSON_Array *, enum ColorOutput,
                   struct Colors *);
 int scan_cats(const char *, long *, long *);
 int scan_vals(const char *, double *);
-void scan_colors(long, struct Colors *, enum ColorOutput, char *);
-void scan_d_colors(double, struct Colors *, enum ColorOutput, char *);
-void get_color(enum ColorOutput, int, int, int, char *);
+void scan_colors(const void *, struct Colors *, enum ColorOutput, char *,
+                 RASTER_MAP_TYPE);
 
 #endif /* __LOCAL_PROTO_H__ */
