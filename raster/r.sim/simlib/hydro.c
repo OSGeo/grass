@@ -93,7 +93,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
     int i, l, k;
     int iblock;
     int iter1;
-    double conn, gaux, gauy;
+    double conn;
     double addac;
 
     int nblock = 1;
@@ -151,6 +151,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
         G_debug(2, " walkwe (walk weight),frac %f %f", walkwe, settings->frac);
 
         sim->nwalka = 0;
+        int nwalka = 0;
 
         /* ********************************************************** */
         /*       main loop over the projection time */
@@ -182,10 +183,10 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             if (i == 1) {
                 addac = factor * .5;
             }
-            sim->nwalka = 0;
+            nwalka = 0;
             sim->nstack = 0;
 
-#pragma omp parallel firstprivate(l, lw, k, gaux, gauy) // nwalka
+#pragma omp parallel firstprivate(l, lw, k) reduction(+ : nwalka)
             {
 #if defined(_OPENMP)
                 int steps = (int)((((double)sim->nwalk) /
@@ -202,7 +203,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                 for (lw = 0; lw < sim->nwalk; lw++) {
 #endif
                     if (w[lw].m > EPS) { /* check the walker weight */
-                        ++(sim->nwalka);
+                        ++(nwalka);
                         l = (int)((w[lw].x + stxm) / geometry->stepx) -
                             geometry->mx - 1;
                         k = (int)((w[lw].y + stym) / geometry->stepy) -
@@ -251,6 +252,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                                                       depth or conc. */
 
                             double d1 = gama[k][l] * conn;
+                            double gaux, gauy;
 #if defined(_OPENMP)
                             gasdev_for_paralel(&gaux, &gauy);
 #else
@@ -321,6 +323,9 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                     }
                 } /* lw loop */
             }
+            /* Total remaining walkers for this iteration */
+            sim->nwalka = nwalka;
+
             /* Changes made by Soeren 8. Mar 2011 to replace the site walker
              * output implementation */
             /* Save all walkers located within the computational region and with

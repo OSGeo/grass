@@ -43,12 +43,13 @@ typedef struct {
 } Setup;
 
 typedef struct {
-    int nwalka;            /* Remaining walkers */
+    int nwalk;             /* Number of initial walkers in a single block */
+    int nwalka;            /* Remaining walkers in an iteration */
     int nstack;            /* Number of output walkers */
     struct point3D *stack; /* Output 3D walkers */
-    int maxwa;
-    double rwalk;
-    int nwalk;
+    int maxwa;             /* Number of input walkers per block */
+    double rwalk; /* Number of input walkers per block as double precision */
+
 } Simulation;
 
 struct WaterParams {
