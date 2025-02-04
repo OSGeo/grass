@@ -132,7 +132,7 @@ class ModelDataDialog(SimpleDialog):
     def GetType(self):
         """Get element type"""
         if not self.etype:
-            return
+            return None
         return self.element.tcp.GetType()
 
     def OnType(self, event):

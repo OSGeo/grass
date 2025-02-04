@@ -227,7 +227,7 @@ class WMSBase:
         self.temp_map = self._download()
 
         if not self.temp_map:
-            return
+            return None
 
         self._reprojectMap()
 

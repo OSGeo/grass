@@ -1726,7 +1726,7 @@ class RasterPanel(Panel):
         mapInstr = self.instruction.FindInstructionByType("map")
         if not mapInstr:  # no map frame
             GMessage(message=_("Please, create map frame first."))
-            return
+            return None
 
         if self.rasterNoRadio.GetValue() or not self.rasterSelect.GetValue():
             self.rasterDict["isRaster"] = False

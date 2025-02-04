@@ -154,7 +154,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
     def GetCoords(self):
         coords = self.polygon_drawer.GetCoords()
         if coords is None:
-            return
+            return None
 
         if self.transpose:
             for c in coords:

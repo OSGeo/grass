@@ -1838,7 +1838,7 @@ class VectorColorTable(ColorTable):
         else:
             if not self.properties["storeColumn"]:
                 GError(_("No color column defined. Operation canceled."), parent=self)
-                return
+                return None
 
             self.UseAttrColumn(True)
 

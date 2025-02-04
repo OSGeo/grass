@@ -565,7 +565,7 @@ class AddWSDialog(WSDialogBase):
 
         lcmd = self.active_ws_panel.CreateCmd()
         if not lcmd:
-            return None
+            return
 
         # TODO: It is not clear how to do GetOptData in giface
         # knowing what GetOptData is doing might help

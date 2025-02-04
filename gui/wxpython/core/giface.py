@@ -333,7 +333,7 @@ class StandaloneGrassInterface(GrassInterface):
 
     def GetMapDisplay(self):
         """Get current map display."""
-        return None
+        return
 
     def GetAllMapDisplays(self):
         """Get list of all map displays."""

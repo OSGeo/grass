@@ -1642,7 +1642,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         layer = self.tree.GetLayerInfo(item, key="maplayer")
 
         if layer.type not in {"raster", "raster_3d"}:
-            return
+            return None
 
         if layer.type == "raster":
             id = self._display.LoadSurface(str(layer.name), None, None)
@@ -1826,7 +1826,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """
         layer = self.tree.GetLayerInfo(item, key="maplayer")
         if layer.type != "vector":
-            return
+            return None
 
         # set default properties
         if points is None:
