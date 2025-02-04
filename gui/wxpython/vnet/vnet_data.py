@@ -928,14 +928,12 @@ class VNETTmpVectMaps:
         :return: True if was removed
         :return: False if does not contain the map
         """
-        if vectMap:
-            vectMap.DeleteRenderLayer()
-            RunCommand(
-                "g.remove", flags="f", type="vector", name=vectMap.GetVectMapName()
-            )
-            self.RemoveFromTmpMaps(vectMap)
-            return True
-        return False
+        if not vectMap:
+            return False
+        vectMap.DeleteRenderLayer()
+        RunCommand("g.remove", flags="f", type="vector", name=vectMap.GetVectMapName())
+        self.RemoveFromTmpMaps(vectMap)
+        return True
 
     def DeleteAllTmpMaps(self):
         """Delete all temporary maps in the class"""

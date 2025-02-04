@@ -467,13 +467,13 @@ class Nviz:
     ) -> tuple[float, float, float] | tuple[Literal[-1], Literal[-1], Literal[-1]]:
         """Get focus"""
         Debug.msg(3, "Nviz::GetFocus()")
-        if Nviz_has_focus(self.data):
-            x = c_float()
-            y = c_float()
-            z = c_float()
-            Nviz_get_focus(self.data, byref(x), byref(y), byref(z))
-            return x.value, y.value, z.value
-        return (-1, -1, -1)
+        if not Nviz_has_focus(self.data):
+            return (-1, -1, -1)
+        x = c_float()
+        y = c_float()
+        z = c_float()
+        Nviz_get_focus(self.data, byref(x), byref(y), byref(z))
+        return (x.value, y.value, z.value)
 
     def SetFocus(self, x: float, y: float, z: float) -> None:
         """Set focus"""

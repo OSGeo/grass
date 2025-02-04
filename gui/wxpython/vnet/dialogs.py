@@ -1189,15 +1189,16 @@ class PtsList(PointsList):
                     self.CheckItem(idx, True)
                 elif not v and self.IsItemChecked(idx):
                     self.CheckItem(idx, False)
-            else:
-                found = 0
-                for col in self.colsData:
-                    if k == col[0]:
-                        found = 1
-                        break
+                continue
 
-                if found:
-                    self.EditCellKey(key, k, v)
+            found = 0
+            for col in self.colsData:
+                if k == col[0]:
+                    found = 1
+                    break
+
+            if found:
+                self.EditCellKey(key, k, v)
 
     def OnItemSelected(self, event):
         """Item selected"""

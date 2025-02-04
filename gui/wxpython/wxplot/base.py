@@ -247,11 +247,12 @@ class BasePlotFrame(wx.Frame):
                         rdict[r]["pcolor"] = self.colorDict[self.colorList[idx]]
                 else:
                     rdict[r]["pcolor"] = self.colorDict[self.colorList[idx]]
-            else:
-                r = randint(0, 255)
-                b = randint(0, 255)
-                g = randint(0, 255)
-                rdict[r]["pcolor"] = (r, g, b, 255)
+                continue
+
+            r = randint(0, 255)
+            b = randint(0, 255)
+            g = randint(0, 255)
+            rdict[r]["pcolor"] = (r, g, b, 255)
 
         return rdict
 
@@ -322,11 +323,12 @@ class BasePlotFrame(wx.Frame):
 
             if idx <= len(self.colorList):
                 rdict[rpair]["pcolor"] = self.colorDict[self.colorList[idx]]
-            else:
-                r = randint(0, 255)
-                b = randint(0, 255)
-                g = randint(0, 255)
-                rdict[rpair]["pcolor"] = (r, g, b, 255)
+                continue
+
+            r = randint(0, 255)
+            b = randint(0, 255)
+            g = randint(0, 255)
+            rdict[rpair]["pcolor"] = (r, g, b, 255)
 
         return rdict
 
