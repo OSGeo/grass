@@ -2408,9 +2408,15 @@ class CmdPanel(wx.Panel):
                 pSqlWhere.append(p)
 
         # collect ids
-        pColumnIds = [p["wxId"] for p in pColumn]
-        pLayerIds = [p["wxId"] for p in pLayer]
-        pSqlWhereIds = [p["wxId"] for p in pSqlWhere]
+        pColumnIds = []
+        for p in pColumn:
+            pColumnIds += p["wxId"]
+        pLayerIds = []
+        for p in pLayer:
+            pLayerIds += p["wxId"]
+        pSqlWhereIds = []
+        for p in pSqlWhere:
+            pSqlWhereIds += p["wxId"]
 
         # set wxId-bindings
         if pMap:
