@@ -860,7 +860,7 @@ void print_history(struct Map_info *Map, enum OutputFormat format)
     }
 
     Vect_hist_rewind(Map);
-    while (Vect_hist_read(buf, sizeof(buf), Map) != NULL) {
+    while (Vect_hist_read(buf, sizeof(buf) - 1, Map) != NULL) {
         switch (format) {
         case PLAIN:
         case SHELL:
@@ -870,8 +870,8 @@ void print_history(struct Map_info *Map, enum OutputFormat format)
             // Parse each line based on its prefix
             parse_history_line(buf, command, gisdbase, location, mapset, user,
                                date, mapset_path);
-            if (strlen(command) > 0 && strlen(mapset_path) > 0 &&
-                strlen(user) > 0 && strlen(date) > 0) {
+            if (command[0] != '\0' && mapset_path[0] != '\0' &&
+                user[0] != '\0' && date[0] != '\0') {
                 add_record_to_json(command, user, date, mapset_path,
                                    record_array);
             }
