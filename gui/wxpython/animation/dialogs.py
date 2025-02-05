@@ -37,6 +37,7 @@ except ImportError:
     from wx import HyperlinkCtrl
 
 from core.gcmd import GMessage, GError, GException
+from grass.exceptions import ScriptError
 from core import globalvar
 from gui_core.dialogs import MapLayersDialog, GetImageHandlers
 from gui_core.preferences import PreferencesBaseDialog
@@ -727,10 +728,9 @@ class InputDialog(wx.Dialog):
             if isStart:
                 self.animationData.startRegion = isStart
         else:
-            if isStart:
-                self.animationData.startRegion = isStart
-            else:
+            if not isStart:
                 raise GException(_("Region information is not complete"))
+            self.animationData.startRegion = isStart
             if isEnd:
                 self.animationData.endRegion = self.endRegion.GetValue()
                 self.animationData.zoomRegionValue = None
@@ -1785,7 +1785,7 @@ class AddTemporalLayerDialog(wx.Dialog):
                     if maps:
                         mapName, mapLayer = getNameAndLayer(maps[0])
                         cmd.append("map={name}".format(name=mapName))
-                except gcore.ScriptError as e:
+                except ScriptError as e:
                     GError(parent=self, message=str(e), showTraceback=False)
                     return None
         return cmd
@@ -1838,7 +1838,7 @@ class AddTemporalLayerDialog(wx.Dialog):
                 self.layer.name = self._name
                 self.layer.cmd = self._cmd
                 event.Skip()
-            except (GException, gcore.ScriptError) as e:
+            except (GException, ScriptError) as e:
                 GError(parent=self, message=str(e))
 
     def GetLayer(self):
