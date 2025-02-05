@@ -25,7 +25,7 @@ with PEP8, consistent formatting, and readable and error-free code:
 
 - [Flake8](https://flake8.pycqa.org/en/latest/) tool to ensure compliance with
   PEP8
-- [ruff](https://docs.astral.sh/ruff/) linter and code formatter to ensure
+- [Ruff](https://docs.astral.sh/ruff/) linter and code formatter to ensure
   code quality and consistent code formatting
 - [Pylint](https://pylint.readthedocs.io/en/latest/) static code analyser to
   find bad code practices or errors
@@ -38,7 +38,7 @@ simplify performing of these checks.
 
 #### Formatting
 
-Use ruff's formatter to format files:
+Use Ruff's formatter to format files:
 
 ```bash
 ruff format
