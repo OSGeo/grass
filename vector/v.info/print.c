@@ -791,7 +791,7 @@ void parse_history_line(const char *buf, char *command, char *gisdbase,
         sscanf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %[^\n]", location,
                mapset, user, date);
 
-        snprintf(mapset_path, MAX_STR_LEN, "%s/%s/%s", gisdbase, location,
+        snprintf(mapset_path, GPATH_MAX, "%s/%s/%s", gisdbase, location,
                  mapset);
     }
 }
@@ -819,10 +819,10 @@ void add_record_to_json(char *command, char *user, char *date,
     json_array_append_value(record_array, info_value);
 
     // Clear the input strings to process new entries in the history file
-    memset(command, 0, strlen(command));
-    memset(user, 0, strlen(user));
-    memset(date, 0, strlen(date));
-    memset(mapset_path, 0, strlen(mapset_path));
+    G_zero(command, strlen(command));
+    G_zero(user, strlen(user));
+    G_zero(date, strlen(date));
+    G_zero(mapset_path, strlen(mapset_path));
 }
 
 /*!
@@ -832,24 +832,15 @@ void add_record_to_json(char *command, char *user, char *date,
  */
 void print_history(struct Map_info *Map, enum OutputFormat format)
 {
-    char buf[STR_LEN];
-    char command[STR_LEN], gisdbase[STR_LEN];
-    char location[STR_LEN], mapset[STR_LEN];
-    char user[STR_LEN], date[STR_LEN];
-    char mapset_path[MAX_STR_LEN];
+    char buf[GPATH_MAX] = {0};
+    char command[GPATH_MAX] = {0}, gisdbase[GPATH_MAX] = {0};
+    char location[GPATH_MAX] = {0}, mapset[GPATH_MAX] = {0};
+    char user[GPATH_MAX] = {0}, date[GPATH_MAX] = {0};
+    char mapset_path[GPATH_MAX] = {0};
 
     JSON_Value *root_value = NULL, *record_value = NULL;
     JSON_Object *root_object = NULL;
     JSON_Array *record_array = NULL;
-
-    // Initialize with empty input strings
-    memset(command, 0, strlen(command));
-    memset(gisdbase, 0, strlen(mapset_path));
-    memset(location, 0, strlen(mapset_path));
-    memset(mapset, 0, strlen(mapset_path));
-    memset(user, 0, strlen(user));
-    memset(date, 0, strlen(date));
-    memset(mapset_path, 0, strlen(mapset_path));
 
     if (format == JSON) {
         root_value = json_value_init_object();

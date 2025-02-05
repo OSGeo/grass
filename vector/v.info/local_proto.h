@@ -5,8 +5,6 @@
 #define SHELL_BASIC  0x02
 #define SHELL_REGION 0x04
 #define SHELL_TOPO   0x08
-#define STR_LEN      1001
-#define MAX_STR_LEN  3003
 
 enum OutputFormat { PLAIN, SHELL, JSON };
 
