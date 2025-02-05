@@ -6,3 +6,10 @@ default: true
 fix: true
 
 MD041: false # first-line-h1
+line-length:
+  code_blocks: false
+  tables: false
+  line_length: 120
+
+no-inline-html:
+  allowed_elements: [sup]
