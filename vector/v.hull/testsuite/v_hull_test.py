@@ -96,8 +96,9 @@ class TestVHull(TestCase):
             self.skipTest("Area check skipped for geographic locations")
         else:
             univar_output = gs.read_command(
-                "v.univar", flags="g", map=self.output_hull, type="area"
+                "v.univar", flags="g", map=self.output_hull, type="area", column="area"
             )
+
             sum_area = float(
                 [
                     line.split("=")[1]
