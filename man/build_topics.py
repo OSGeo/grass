@@ -125,9 +125,10 @@ def build_topics(ext):
                     # expecting markdown
                     keyfile.write(
                         "*See also the corresponding keyword"
-                        " [{key}](keywords.md#{key})"
+                        " [{name}](keywords.md#{key})"
                         " for additional references.*\n".format(
-                            key=key.replace(" ", "-").replace("_", "-").lower()
+                            key=key.replace(" ", "-").replace("_", "-").lower(),
+                            name=key.replace("_", " "),
                         )
                     )
 
