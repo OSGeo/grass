@@ -794,11 +794,19 @@ void parse_history_line(const char *buf, char *command, char *gisdbase,
         snprintf(mapset_path, GPATH_MAX, "%s/%s/%s", gisdbase, location,
                  mapset);
     }
+    else {
+        // Clear the input strings before processing new entries in the history
+        // file
+        command[0] = '\0';
+        user[0] = '\0';
+        date[0] = '\0';
+        mapset_path[0] = '\0';
+    }
 }
 
 /*!
    \brief Creates a JSON object with fields for command, user, date, and
-   mapset_path, appends it to a JSON array, and clears the input strings.
+   mapset_path, appends it to a JSON array.
 
  */
 void add_record_to_json(char *command, char *user, char *date,
@@ -817,12 +825,6 @@ void add_record_to_json(char *command, char *user, char *date,
     json_object_set_string(info_object, "date", date);
 
     json_array_append_value(record_array, info_value);
-
-    // Clear the input strings to process new entries in the history file
-    G_zero(command, strlen(command));
-    G_zero(user, strlen(user));
-    G_zero(date, strlen(date));
-    G_zero(mapset_path, strlen(mapset_path));
 }
 
 /*!
@@ -832,10 +834,10 @@ void add_record_to_json(char *command, char *user, char *date,
  */
 void print_history(struct Map_info *Map, enum OutputFormat format)
 {
-    char buf[GPATH_MAX] = {0};
-    char command[GPATH_MAX] = {0}, gisdbase[GPATH_MAX] = {0};
-    char location[GPATH_MAX] = {0}, mapset[GPATH_MAX] = {0};
-    char user[GPATH_MAX] = {0}, date[GPATH_MAX] = {0};
+    char buf[STR_LEN] = {0};
+    char command[STR_LEN] = {0}, gisdbase[STR_LEN] = {0};
+    char location[STR_LEN] = {0}, mapset[STR_LEN] = {0};
+    char user[STR_LEN] = {0}, date[STR_LEN] = {0};
     char mapset_path[GPATH_MAX] = {0};
 
     JSON_Value *root_value = NULL, *record_value = NULL;
