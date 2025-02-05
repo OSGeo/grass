@@ -1,3 +1,4 @@
+import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 import tempfile
@@ -90,11 +91,11 @@ class TestVHull(TestCase):
             "v.hull", input=self.input_points, output=self.output_hull, overwrite=True
         )
         self.assertVectorExists(self.output_hull)
-        proj_info = gscript.parse_command("g.proj", flags="g")
+        proj_info = gs.parse_command("g.proj", flags="g")
         if proj_info["units"] == "degrees":
             self.skipTest("Area check skipped for geographic locations")
         else:
-            univar_output = gscript.read_command(
+            univar_output = gs.read_command(
                 "v.univar", flags="g", map=self.output_hull, type="area"
             )
             sum_area = float(
@@ -118,7 +119,7 @@ class TestVHull(TestCase):
         )
         self.assertVectorExists(self.output_colinear_hull)
 
-        out_ascii = gscript.read_command(
+        out_ascii = gs.read_command(
             "v.out.ascii",
             input=self.output_colinear_hull,
             layer="-1",
@@ -152,7 +153,7 @@ class TestVHull(TestCase):
         )
         self.assertVectorExists(self.output_non_colinear_hull)
 
-        out_ascii = gscript.read_command(
+        out_ascii = gs.read_command(
             "v.out.ascii",
             input=self.output_non_colinear_hull,
             layer="-1",
@@ -195,7 +196,7 @@ class TestVHull(TestCase):
         )
         self.assertVectorExists(self.output_duplicate)
 
-        out_ascii = gscript.read_command(
+        out_ascii = gs.read_command(
             "v.out.ascii", input=self.output_duplicate, layer="-1", format="standard"
         )
         lines = [
@@ -233,7 +234,7 @@ class TestVHull(TestCase):
         )
         self.assertVectorExists("test_concave_hull")
 
-        out_ascii = gscript.read_command(
+        out_ascii = gs.read_command(
             "v.out.ascii", input="test_concave_hull", layer="-1", format="standard"
         )
         lines = [
@@ -276,7 +277,7 @@ class TestVHull(TestCase):
 
         self.assertModule("v.hull", input="points_3d", output="hull_3d", overwrite=True)
 
-        info = gscript.vector_info("hull_3d")
+        info = gs.vector_info("hull_3d")
         self.assertEqual(
             info.get("nodes", 0), 4, "Tetrahedron hull should have 4 vertices"
         )
