@@ -69,11 +69,23 @@ class TestIBiomass(TestCase):
         )
         cls.del_temp_region()
 
-    def test_biomass_regression(self):
-        """Regression test to ensure i.biomass output remains consistent."""
-        self._create_reference_raster()
-        reference_raster = "biomass_reference"
-
+    def test_biomass_against_reference(self):
+        """
+        Compare output of i.biomass with precomputed reference statistics.
+        The reference raster was created using the following commands:
+        g.region n=10 s=0 e=10 w=0 rows=10 cols=10
+        r.mapcalc "test_fpar = col() * 0.1"
+        r.mapcalc "test_lightuse_eff = row() * 0.1"
+        r.mapcalc "test_latitude = 45.0"
+        r.mapcalc "test_dayofyear = 150"
+        r.mapcalc "test_transmissivity = 0.75"
+        r.mapcalc "test_water_availability = 0.8"
+        i.biomass fpar=test_fpar lightuse_efficiency=test_lightuse_eff \
+        latitude=test_latitude dayofyear=test_dayofyear \
+        transmissivity_singleway=test_transmissivity \
+        water_availability=test_water_availability output=biomass_reference
+        r.univar -g biomass_reference
+        """
         self.assertModule(
             "i.biomass",
             fpar=self.input_rasters["fpar"],
@@ -86,14 +98,16 @@ class TestIBiomass(TestCase):
             overwrite=True,
         )
         self.assertRasterExists(self.output_raster)
-        self.assertRasterExists(reference_raster)
 
-        output_values = array.array(self.output_raster)
-        reference_values = array.array(reference_raster)
+        expected_stats = (
+            "min=4.51592674628609\n"
+            "max=75.2654457714349\n"
+            "mean=33.1167961394313\n"
+            "stddev=18.5128518411928"
+        )
 
-        self.assertTrue(
-            np.allclose(output_values, reference_values, atol=2.0),
-            "Biomass raster values should match the reference values",
+        self.assertRasterFitsUnivar(
+            raster=self.output_raster, reference=expected_stats, precision=1e-8
         )
 
     def test_biomass_linearity(self):
