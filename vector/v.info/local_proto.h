@@ -16,8 +16,6 @@ int level_one_info(struct Map_info *);
 /* parse.c */
 void parse_args(int, char **, char **, char **, int *, int *, int *,
                 enum OutputFormat *);
-void parse_history_json(char *, char *, char *, char *, char *, char *, char *,
-                        char *, JSON_Array *);
 
 /* print.c */
 void format_double(double, char *);
@@ -28,4 +26,7 @@ void print_columns(struct Map_info *, const char *, const char *,
 void print_info(struct Map_info *);
 void print_shell(struct Map_info *, const char *, enum OutputFormat,
                  JSON_Object *);
+void parse_history_line(const char *, char *, char *, char *, char *, char *,
+                        char *, char *);
+void add_record_to_json(char *, char *, char *, char *, JSON_Array *);
 void print_history(struct Map_info *, enum OutputFormat);

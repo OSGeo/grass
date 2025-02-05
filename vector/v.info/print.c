@@ -772,6 +772,64 @@ void print_info(struct Map_info *Map)
     fprintf(stdout, "\n");
 }
 
+/*!
+   \brief Extracts and assigns values from a history line to command, gisdbase,
+   location, mapset, user, date, and mapset_path based on specific prefixes.
+
+ */
+void parse_history_line(const char *buf, char *command, char *gisdbase,
+                        char *location, char *mapset, char *user, char *date,
+                        char *mapset_path)
+{
+    if (strncmp(buf, "COMMAND:", 8) == 0) {
+        sscanf(buf, "COMMAND: %[^\n]", command);
+    }
+    else if (strncmp(buf, "GISDBASE:", 9) == 0) {
+        sscanf(buf, "GISDBASE: %[^\n]", gisdbase);
+    }
+    else if (strncmp(buf, "LOCATION:", 9) == 0) {
+        sscanf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %[^\n]", location,
+               mapset, user, date);
+
+        snprintf(mapset_path, MAX_STR_LEN, "%s/%s/%s", gisdbase, location,
+                 mapset);
+    }
+}
+
+/*!
+   \brief Creates a JSON object with fields for command, user, date, and
+   mapset_path, appends it to a JSON array, and clears the input strings.
+
+ */
+void add_record_to_json(char *command, char *user, char *date,
+                        char *mapset_path, JSON_Array *record_array)
+{
+
+    JSON_Value *info_value = json_value_init_object();
+    if (info_value == NULL) {
+        G_fatal_error(_("Failed to initialize JSON object. Out of memory?"));
+    }
+    JSON_Object *info_object = json_object(info_value);
+
+    json_object_set_string(info_object, "command", command);
+    json_object_set_string(info_object, "mapset_path", mapset_path);
+    json_object_set_string(info_object, "user", user);
+    json_object_set_string(info_object, "date", date);
+
+    json_array_append_value(record_array, info_value);
+
+    // Clear the input strings to process new entries in the history file
+    memset(command, 0, strlen(command));
+    memset(user, 0, strlen(user));
+    memset(date, 0, strlen(date));
+    memset(mapset_path, 0, strlen(mapset_path));
+}
+
+/*!
+   \brief Reads history entries from a map, formats them based on the specified
+   output format (PLAIN, SHELL, or JSON), and prints the results.
+
+ */
 void print_history(struct Map_info *Map, enum OutputFormat format)
 {
     char buf[STR_LEN];
@@ -783,6 +841,15 @@ void print_history(struct Map_info *Map, enum OutputFormat format)
     JSON_Value *root_value = NULL, *record_value = NULL;
     JSON_Object *root_object = NULL;
     JSON_Array *record_array = NULL;
+
+    // Initialize with empty input strings
+    memset(command, 0, strlen(command));
+    memset(gisdbase, 0, strlen(mapset_path));
+    memset(location, 0, strlen(mapset_path));
+    memset(mapset, 0, strlen(mapset_path));
+    memset(user, 0, strlen(user));
+    memset(date, 0, strlen(date));
+    memset(mapset_path, 0, strlen(mapset_path));
 
     if (format == JSON) {
         root_value = json_value_init_object();
@@ -808,8 +875,13 @@ void print_history(struct Map_info *Map, enum OutputFormat format)
             break;
         case JSON:
             // Parse each line based on its prefix
-            parse_history_json(buf, command, gisdbase, location, mapset, user,
-                               date, mapset_path, record_array);
+            parse_history_line(buf, command, gisdbase, location, mapset, user,
+                               date, mapset_path);
+            if (strlen(command) > 0 && strlen(mapset_path) > 0 &&
+                strlen(user) > 0 && strlen(date) > 0) {
+                add_record_to_json(command, user, date, mapset_path,
+                                   record_array);
+            }
             break;
         }
     }
