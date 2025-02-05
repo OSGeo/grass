@@ -64,6 +64,7 @@ from mapwin.decorations import (
 
 import grass.script as gs
 from grass.pydispatch.signal import Signal
+from grass.exceptions import ScriptError
 
 if TYPE_CHECKING:
     import lmgr.frame
@@ -1103,7 +1104,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                     encoding=encoding,
                     multiple=True,
                 )
-            except gs.ScriptError:
+            except ScriptError:
                 GError(
                     parent=self,
                     message=_(

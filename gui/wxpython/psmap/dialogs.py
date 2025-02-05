@@ -51,6 +51,7 @@ else:
     from wx import PyValidator as Validator
 
 import grass.script as gs
+from grass.exceptions import ScriptError
 from core.gcmd import GError, GMessage, RunCommand
 from core.utils import PilImageToWxImage, cmp
 from dbmgr.vinfo import VectorDBInfo
@@ -2192,7 +2193,7 @@ class VPropertiesDialog(Dialog):
         try:
             self.mapDBInfo = VectorDBInfo(self.vectorName)
             self.layers = self.mapDBInfo.layers.keys()
-        except gs.ScriptError:
+        except ScriptError:
             self.connection = False
             self.layers = []
         if not self.layers:

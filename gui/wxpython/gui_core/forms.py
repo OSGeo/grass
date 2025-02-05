@@ -83,6 +83,7 @@ from grass.pydispatch.signal import Signal
 
 from grass.script import core as grass
 from grass.script import task as gtask
+from grass.exceptions import ScriptError
 
 from core import globalvar
 from gui_core.widgets import (
@@ -3088,7 +3089,7 @@ class GUI:
         try:
             global _blackList
             self.grass_task = gtask.parse_interface(cmd[0], blackList=_blackList)
-        except (grass.ScriptError, ValueError) as e:
+        except (ScriptError, ValueError) as e:
             raise gcmd.GException(e.value)
 
         # if layer parameters previously set, re-insert them into dialog
