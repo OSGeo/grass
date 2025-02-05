@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/colors.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include <grass/parson.h>
@@ -515,7 +516,7 @@ void scan_colors(const void *x, struct Colors *colors,
         break;
 
     case HSV_OUTPUT:
-        Rast_rgb_to_hsv(red, grn, blu, &h, &s, &v);
+        G_rgb_to_hsv(red, grn, blu, &h, &s, &v);
         snprintf(color, COLOR_STRING_LENGTH, "hsv(%d, %d, %d)", (int)h, (int)s,
                  (int)v);
         break;

@@ -179,7 +179,6 @@ void Rast__organize_colors(struct Colors *);
 void Rast_print_colors(struct Colors *, DCELL, DCELL, FILE *, int);
 
 /* json_color_out.c */
-void Rast_rgb_to_hsv(int, int, int, float *, float *, float *);
 void Rast_print_json_colors(struct Colors *, DCELL, DCELL, FILE *, int,
                             ColorFormat);
 
