@@ -374,9 +374,6 @@ ignore = [
 "temporal/t.register/testsuite/test_t_register_raster.py" = ["FLY002"]
 "temporal/t.register/testsuite/test_t_register_raster_file.py" = ["FLY002"]
 "temporal/t.remove/t.remove.py" = ["SIM115"]
-"utils/generate_release_notes.py" = ["PGH004"]
-"utils/gitlog2changelog.py" = ["SIM115"]
-"utils/thumbnails.py" = ["PTH208"]
 "vector/v.fill.holes/examples.ipynb" = ["PTH201"]
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
