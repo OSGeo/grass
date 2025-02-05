@@ -102,7 +102,7 @@ def build_topics(ext):
                     topicsfile.writelines(
                         [
                             moduletopics_tmpl.substitute(
-                                key=key, name=key.replace("_", " ")
+                                key=key.replace(" ", "_"), name=key.replace("_", " ")
                             )
                         ]
                     )
