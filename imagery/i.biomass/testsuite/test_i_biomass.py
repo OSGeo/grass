@@ -42,21 +42,6 @@ class TestIBiomass(TestCase):
             )
 
     @classmethod
-    def _create_reference_raster(cls):
-        """Create the reference raster for regression testing."""
-        cls.runModule(
-            "i.biomass",
-            fpar=cls.input_rasters["fpar"],
-            lightuse_efficiency=cls.input_rasters["lightuse_eff"],
-            latitude=cls.input_rasters["latitude"],
-            dayofyear=cls.input_rasters["dayofyear"],
-            transmissivity_singleway=cls.input_rasters["transmissivity"],
-            water_availability=cls.input_rasters["water"],
-            output="biomass_reference",
-            overwrite=True,
-        )
-
-    @classmethod
     def tearDownClass(cls):
         """Clean up generated data and reset the region."""
         rasters_to_remove = list(cls.input_rasters.values()) + [cls.output_raster]
