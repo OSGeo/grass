@@ -27,5 +27,5 @@ void print_shell(struct Map_info *, const char *, enum OutputFormat,
                  JSON_Object *);
 void parse_history_line(const char *, char *, char *, char *, char *, char *,
                         char *, char *);
-void add_record_to_json(char *, char *, char *, char *, JSON_Array *);
+void add_record_to_json(char *, char *, char *, char *, JSON_Array *, int);
 void print_history(struct Map_info *, enum OutputFormat);

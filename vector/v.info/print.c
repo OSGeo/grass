@@ -810,7 +810,8 @@ void parse_history_line(const char *buf, char *command, char *gisdbase,
 
  */
 void add_record_to_json(char *command, char *user, char *date,
-                        char *mapset_path, JSON_Array *record_array)
+                        char *mapset_path, JSON_Array *record_array,
+                        int history_number)
 {
 
     JSON_Value *info_value = json_value_init_object();
@@ -819,6 +820,7 @@ void add_record_to_json(char *command, char *user, char *date,
     }
     JSON_Object *info_object = json_object(info_value);
 
+    json_object_set_number(info_object, "history_number", history_number);
     json_object_set_string(info_object, "command", command);
     json_object_set_string(info_object, "mapset_path", mapset_path);
     json_object_set_string(info_object, "user", user);
@@ -834,6 +836,8 @@ void add_record_to_json(char *command, char *user, char *date,
  */
 void print_history(struct Map_info *Map, enum OutputFormat format)
 {
+    int history_number = 0;
+
     char buf[STR_LEN] = {0};
     char command[STR_LEN] = {0}, gisdbase[STR_LEN] = {0};
     char location[STR_LEN] = {0}, mapset[STR_LEN] = {0};
@@ -872,8 +876,11 @@ void print_history(struct Map_info *Map, enum OutputFormat format)
                                date, mapset_path);
             if (command[0] != '\0' && mapset_path[0] != '\0' &&
                 user[0] != '\0' && date[0] != '\0') {
+                // Increment history counter
+                history_number++;
+
                 add_record_to_json(command, user, date, mapset_path,
-                                   record_array);
+                                   record_array, history_number);
             }
             break;
         }

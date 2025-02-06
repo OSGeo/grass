@@ -295,9 +295,11 @@ class TestVInfo(TestCase):
         expected_json = {
             "records": [
                 {
+                    "history_number": 1,
                     "command": 'v.random output="test_vinfo_with_hist" npoints=5 layer="-1" zmin=0 zmax=100 column_type="double precision"',
                 },
                 {
+                    "history_number": 2,
                     "command": 'v.mkgrid map="test_vinfo_with_hist" grid=10,10 type="point"',
                 },
             ]
