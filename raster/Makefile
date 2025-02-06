@@ -44,7 +44,6 @@ SUBDIRS = \
 	r.latlong \
 	r.lake \
 	r.li \
-	r.mapcalc \
 	r.mask.status \
 	r.mfilter \
 	r.mode \
