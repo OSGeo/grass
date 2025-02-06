@@ -268,7 +268,6 @@ ignore = [
 # Other ignores:
 "**.py" = ["PYI066"]
 "*/testsuite/**.py" = ["PT009", "PT027"]
-"gui/wxpython/datacatalog/catalog.py" = ["PTH208"]
 "gui/wxpython/dbmgr/base.py" = ["SIM115"]
 "gui/wxpython/gcp/manager.py" = ["PTH208"]
 "gui/wxpython/gmodeler/panels.py" = ["SIM115"]
@@ -374,9 +373,6 @@ ignore = [
 "temporal/t.register/testsuite/test_t_register_raster.py" = ["FLY002"]
 "temporal/t.register/testsuite/test_t_register_raster_file.py" = ["FLY002"]
 "temporal/t.remove/t.remove.py" = ["SIM115"]
-"utils/generate_release_notes.py" = ["PGH004"]
-"utils/gitlog2changelog.py" = ["SIM115"]
-"utils/thumbnails.py" = ["PTH208"]
 "vector/v.fill.holes/examples.ipynb" = ["PTH201"]
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]

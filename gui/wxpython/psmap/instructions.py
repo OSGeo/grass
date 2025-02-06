@@ -43,6 +43,7 @@ from core.gcmd import GError, GMessage, GWarning
 from core.utils import GetCmdString
 from dbmgr.vinfo import VectorDBInfo
 from grass.script.task import cmdlist_to_tuple
+from grass.exceptions import ScriptError
 from gui_core.wrap import NewId as wxNewId
 
 from psmap.utils import (  # Add any additional required names from psmap.utils here
@@ -533,7 +534,7 @@ class Instruction:
         try:
             self.env["GRASS_REGION"] = gs.region_env(env=self.env, **cmd[1])
 
-        except gs.ScriptError as e:
+        except ScriptError as e:
             GError(_("Region cannot be set\n%s") % e)
             return False
 
@@ -1910,7 +1911,7 @@ class Raster(InstructionObject):
             return False
         try:
             info = gs.find_file(map, element="cell")
-        except gs.ScriptError as e:
+        except ScriptError as e:
             GError(message=e.value)
             return False
         instr["raster"] = info["fullname"]
@@ -1951,7 +1952,7 @@ class Vector(InstructionObject):
             vmap = line.split()[1]
             try:
                 info = gs.find_file(vmap, element="vector")
-            except gs.ScriptError as e:
+            except ScriptError as e:
                 GError(message=e.value)
                 return False
             vmap = info["fullname"]
@@ -2123,7 +2124,7 @@ class VProperties(InstructionObject):
         instr = {}
         try:
             info = gs.find_file(name=text[0].split()[1], element="vector")
-        except gs.ScriptError as e:
+        except ScriptError as e:
             GError(message=e.value)
             return False
         instr["name"] = info["fullname"]

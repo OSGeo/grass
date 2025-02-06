@@ -25,6 +25,7 @@ import wx
 from core.gcmd import GError, RunCommand
 
 import grass.script as gs
+from grass.exceptions import ScriptError
 
 try:
     from PIL import Image as PILImage  # noqa
@@ -226,7 +227,7 @@ def AutoAdjust(self, scaleType, rect, env, map=None, mapType=None, region=None):
             if mapType == "raster":
                 try:
                     res = gs.read_command("g.region", flags="gu", raster=map, env=env)
-                except gs.ScriptError:
+                except ScriptError:
                     pass
             elif mapType == "vector":
                 res = gs.read_command("g.region", flags="gu", vector=map, env=env)
@@ -240,7 +241,7 @@ def AutoAdjust(self, scaleType, rect, env, map=None, mapType=None, region=None):
         else:
             return None, None, None
     # fails after switching location
-    except (gs.ScriptError, gs.CalledModuleError):
+    except (ScriptError, gs.CalledModuleError):
         pass
 
     if not currRegionDict:
@@ -390,7 +391,7 @@ def GetMapBounds(filename, env, portrait=True):
                 .split(","),
             )
         )
-    except (gs.ScriptError, IndexError):
+    except (ScriptError, IndexError):
         GError(message=_("Unable to run `ps.map -b`"))
         return None
     return Rect2D(bb[0], bb[3], bb[2] - bb[0], bb[1] - bb[3])
