@@ -1,0 +1,14 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.topo.check</em> breaks lines at intersections.
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="v.clean.html">v.clean</a>,
+<a href="v.build.html">v.build</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek

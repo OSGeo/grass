@@ -1,0 +1,36 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.example</em> does practically do nothing, except
+for illustrating GRASS GIS raster programming. It copies
+over an existing raster map to a new raster map.
+See the source code for details.
+
+<h2>NOTES</h2>
+
+Some more detailed notes go here.
+
+<h2>EXAMPLE</h2>
+
+Create a copy of the raster map "elevation"
+(North Carolina sample dataset):
+
+<div class="code"><pre>
+g.region raster=elevation -p
+r.example input=elevation output=elevation2
+r.info elevation2
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.stats.html">r.stats</a>,
+<a href="v.example.html">v.example</a>
+</em>
+
+<em>
+<a href="https://grass.osgeo.org/programming8/">GRASS Programmer's Manual</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+GRASS Development Team

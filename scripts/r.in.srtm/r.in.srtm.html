@@ -1,0 +1,48 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.in.srtm</em> imports SRTM HGT files into GRASS.
+
+SRTM Version 1 and improved Version 2 data sets can be downloaded from
+NASA at this site:<br>
+<a href="https://web.archive.org/web/20200806210105/https://dds.cr.usgs.gov/srtm/">http://dds.cr.usgs.gov/srtm/</a> (archived)<br>
+<a href="https://earthexplorer.usgs.gov/">https://earthexplorer.usgs.gov/</a>
+
+<p>
+Gap-filled SRTM Version 3 data can be downloaded from USGS at this site:<br>
+<a href="https://e4ftl01.cr.usgs.gov/MEASURES/SRTMGL3.003/2000.02.11/">https://e4ftl01.cr.usgs.gov/MEASURES/SRTMGL3.003/2000.02.11/</a>
+
+<h2>NOTES</h2>
+
+SRTM tiles are of 1 degree by 1 degree size. The SRTM filename contains the
+coordinates which refer to the <b>center</b> of the lower left pixel (e.g., N51E010:
+lower left cell center at 10E, 51N). To identify a tile name, a grid can be easily
+visualized by <em><a href="d.grid.html">d.grid</a></em>:
+
+<div class="code"><pre>
+d.grid size=1
+</pre></div>
+
+To import TOPEX/SRTM30 PLUS data, use <em><a href="r.in.bin.html">r.in.bin</a></em>.
+
+<h2>REFERENCES</h2>
+
+M. Neteler, 2005. <a href="https://grass.osgeo.org/newsletter/GRASSNews_vol3.pdf">SRTM and VMAP0 data in OGR and GRASS.</a> <i><a href="https://grass.osgeo.org/newsletter/">GRASS Newsletter</a></i>, Vol.3, pp. 2-6, June 2005. ISSN 1614-8746.
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.in.bin.html">r.in.bin</a>,
+<a href="https://grass.osgeo.org/grass8/manuals/addons/r.in.srtm.region.html">r.in.srtm.region</a> (Addon),
+<a href="https://grass.osgeo.org/grass8/manuals/addons/r.in.nasadem.html">r.in.nasadem</a> (Addon)
+</em>
+
+<p>The <a href="https://web.archive.org/web/20240204072129/https://www2.jpl.nasa.gov/srtm/">Shuttle Radar Topography Mission</a>
+homepage at NASA's JPL. (archived)
+<br>
+The <a href="https://web.archive.org/web/20071029205240/http://pub7.bravenet.com/forum/537683448/">SRTM Web Forum</a> (archived)
+
+<h2>AUTHORS</h2>
+
+Markus Neteler<br>
+Improved by W. Kyngesburye and H. Bowman<br>
+Update for SRTM V3 by Markus Metz

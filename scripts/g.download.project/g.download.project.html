@@ -1,0 +1,46 @@
+<h2>DESCRIPTION</h2>
+
+<em>g.download.project</em> downloads an archived (e.g.,
+<code>.zip</code> or <code>.tar.gz</code>) project (previously called
+location) from a given URL
+and unpacks it to a specified or current GRASS GIS Spatial Database.
+URL can be also a local file on the disk.
+
+If the archive contains a directory which contains a project, the module
+will recognize that and use the project automatically.
+The first directory which is a project is used.
+Other projects or any other files are ignored.
+
+<h2>EXAMPLES</h2>
+
+<h3>Download the full GRASS GIS sample project within a running session</h3>
+
+Download and unpack the full North Carolina sample project into the user's
+HOME directory:
+
+<div class="code"><pre>
+g.download.project url=https://grass.osgeo.org/sampledata/north_carolina/nc_spm_full_v2alpha2.tar.gz path=$HOME
+</pre></div>
+
+<h3>Download the full GRASS GIS sample project in a temporary session</h3>
+
+In a temporary session, download and unpack the full North Carolina sample project
+into the user's HOME directory:
+
+<div class="code"><pre>
+grass --tmp-project XY --exec g.download.project url=https://grass.osgeo.org/sampledata/north_carolina/nc_spm_full_v2alpha2.tar.gz path=$HOME
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="g.mapset.html">g.mapset</a>,
+  <a href="g.mapsets.html">g.mapsets</a>,
+  <a href="r.proj.html">r.proj</a>,
+  <a href="v.proj.html">v.proj</a>,
+  <a href="https://grass.osgeo.org/grass-stable/manuals/addons/g.proj.all.html">g.proj.all</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Vaclav Petras, <a href="http://geospatial.ncsu.edu/geoforall/">NCSU GeoForAll Lab</a>

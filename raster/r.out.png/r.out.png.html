@@ -1,0 +1,40 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.out.png</em> exports a GRASS GIS raster map in non-georeferenced
+Portable Network Graphics (PNG) image format, respecting the current
+region resolution and bounds.
+
+<p>
+Optionally the user can choose to export a World File (.wld) to provide basic
+georeferencing support. When used with the transparency flag this can
+create images useful for KML, TMS, or WMS overlays. (e.g. for use in
+Google Earth or as OpenLayers tiles) If output is redirected to stdout,
+the world file will be called <code>png_map.wld</code>.
+
+<h2>EXAMPLE</h2>
+
+The example is based on the North Carolina sample data.
+<p>
+Export of the soil map to PNG format with world file:
+
+<div class="code"><pre>
+g.region raster=soils_Kfactor -p
+# export PNG file with additional world file
+r.out.png input=soils_Kfactor output=soils_Kfactor -w
+# verify
+gdalinfo soils_Kfactor.png
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.out.gdal.html">r.out.gdal</a>,
+<a href="r.out.ppm.html">r.out.ppm</a>,
+<a href="r.out.ascii.html">r.out.ascii</a>,
+<a href="r.import.html">r.import</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Alex Shevlakov<br>
+Hamish Bowman

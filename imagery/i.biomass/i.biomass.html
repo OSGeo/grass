@@ -1,0 +1,46 @@
+<h2>DESCRIPTION</h2>
+
+<em>i.biomass</em> calculates the biomass growth for a day after [1][2].
+
+Input:
+<ul>
+ <li>fPAR, the modified Photosynthetic Active Radiation for crops.</li>
+ <li>Light Use Efficiency [0.0-1.0], in Uzbekistan cotton is at 1.9 most of the time.</li>
+ <li>Latitude [0.0-90.0], from <em>r.latlong</em>.</li>
+ <li>DOY [1-366].</li>
+ <li>Transmissivity of the atmosphere single-way [0.0-1.0], mostly around 0.7+ in clear sky.</li>
+ <li>Water availability [0.0-1.0], possibly using direct output from <em>i.eb.evapfr</em>.</li>
+</ul>
+
+<h2>NOTES</h2>
+
+<em>i.biomass</em> can use the output of <em>i.eb.evapfr</em> directly
+as water availability input.
+
+<h2>TODO</h2>
+
+Remove Latitude, DOY and Tsw from input and replace with a raster
+input compatible with <em>r.sun</em> output.
+
+<h2>REFERENCES</h2>
+
+<p>[1] Bastiaanssen, W.G.M., Ali, S., 2002. A new crop yield
+forecasting model based on satellite measurements applied across the
+Indus Basin, Pakistan. Agriculture, Ecosystems and Environment,
+94(3):321-340. (<a href="https://edepot.wur.nl/206553">PDF</a>)
+
+<p>[2] Chemin, Y., Platonov, A., Abdullaev, I., Ul-Hassan, M. 2005.
+Supplementing farm level water productivity assessment by remote
+sensing in transition economies. Water International. 30(4):513-521.
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="i.eb.evapfr.html">i.eb.evapfr</a>,
+<a href="r.latlong.html">r.latlong</a>,
+<a href="r.sun.html">r.sun</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Yann Chemin, Bec de Mortagne, France
