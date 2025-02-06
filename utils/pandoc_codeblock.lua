@@ -7,6 +7,11 @@ local MAX_LINE_LENGTH = 120  -- Adjust as needed for MD013
 
 local LIST_INDENT = ""
 
+function Str(el)
+    local text = el.text:gsub("%s+$", "") -- Remove trailing spaces
+    return pandoc.Str(text)
+end
+
 function RawInline(el)
     -- Convert <em> to Markdown italics, and handle special characters
     if el.format == "html" then
@@ -134,10 +139,6 @@ function Table(el)
     return el
 end
 
-function Str(el)
-    local text = el.text:gsub("%s+$", "") -- Remove trailing spaces
-    return pandoc.Str(text)
-end
 
 function Header(el)
     return pandoc.Header(el.level, el.content) -- Ensure ATX-style headers
