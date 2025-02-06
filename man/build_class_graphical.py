@@ -86,7 +86,7 @@ graphical_index_style = """\
 </style>
 """
 
-header_graphical_index_tmpl =  f"""\
+header_graphical_index_tmpl = f"""\
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 {graphical_index_style}
 </head>
