@@ -46,42 +46,17 @@ UTILSPATH="utils"
 process_file() {
     local file="$1" # temporary file
     local f="$2" # original file
-    echo "Processing $file..."
 
     cat "$file" | \
         sed 's#<div class="code"><pre>#<pre><code>#g' | \
         sed 's#</pre></div>#</code></pre>#g' | \
-        pandoc --from=html --to=markdown -t gfm \
-               --lua-filter "${UTILSPATH}/pandoc_codeblock.lua" | \
-        sed 's+ \\\$+ \$+g' | sed 's+%20+-+g' > "${f%%.html}.md"
+        pandoc -f html-native_divs-native_spans \
+            -t markdown --wrap=none --atx-headers \
+            --lua-filter "${UTILSPATH}/pandoc_codeblock.lua" | \
+        sed 's/``` {#sh}/```sh/' | sed 's+ \\\$+ \$+g' | sed 's+%20+-+g' > "${f%%.html}.md"
 
     rm -f "$file"
 
-    # Remove inline HTML
-    # sed -i 's/<\/\?span[^>]*>//g' "$file"
-    # sed -i 's/<\/\?div[^>]*>//g' "$file"
-    # sed -i 's/<\/\?sup[^>]*>//g' "$file"
-
-    # Fix spaces inside inline code
-    # sed -i 's/`  \([^`]*\)  `/`\1`/g' "$file"
-
-    # Fix line length
-    # fold -s -w 80 "$file" > temp.md && mv temp.md "$file"
-
-    # Convert fenced code blocks to indented
-    # sed -i 's/^```/\n    /g' "$file"
-
-    # Fix missing alt text in images
-    # sed -i 's/!\[\](/!\[Image description\](/g' "$file"
-
-    # # Ensure correct heading levels
-    # sed -E -i 's/^### ([^#]+)/## \1/g' "$file"
-    # sed -E -i 's/^#### ([^#]+)/### \1/g' "$file"
-
-    # Process with pandoc
-    # pandoc "$file" --to=markdown -t gfm \
-    #  --lua-filter "${UTILSPATH}/pandoc_codeblock.lua" \
-    #  --columns=80 -o "$file"
 }
 
 # run recursively: HTML to MD
@@ -98,14 +73,6 @@ for f in $(find . -name *.html); do
   s|_KEEPHTML||g;
 ' "${f%%.html}.html" > "${f%%.html}_tmp.html"
 
-    # cat "${f%%.html}_tmp.html" | \
-    #     sed 's#<div class="code"><pre>#<pre><code>#g' | \
-    #     sed 's#</pre></div>#</code></pre>#g' | \
-    #     pandoc --from=html --to=markdown -t gfm \
-    #            --lua-filter "${UTILSPATH}/pandoc_codeblock.lua" | \
-    #     sed 's+ \\\$+ \$+g' | sed 's+%20+-+g' > "${f%%.html}.md"
-
-    # rm -f "${f%%.html}_tmp.html"
     process_file "${f%%.html}_tmp.html" ${f%%.html}.html
 
 done
