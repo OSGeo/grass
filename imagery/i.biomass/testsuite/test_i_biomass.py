@@ -22,12 +22,10 @@ class TestIBiomass(TestCase):
         """Set up input rasters and configure test environment."""
         cls.use_temp_region()
         cls.runModule("g.region", n=10, s=0, e=10, w=0, rows=10, cols=10)
-        cls._create_input_rasters()
 
-    @classmethod
-    def _create_input_rasters(cls):
-        """Helper method to create all input rasters with defined expressions."""
-        expressions = {
+    def setUp(self):
+        """Reset input rasters to default state before each test."""
+        input_expressions = {
             "fpar": "col() * 0.1",
             "lightuse_eff": "row() * 0.1",
             "latitude": "45.0",
@@ -35,6 +33,11 @@ class TestIBiomass(TestCase):
             "transmissivity": "0.75",
             "water": "0.8",
         }
+        self._create_input_rasters(input_expressions)
+
+    @classmethod
+    def _create_input_rasters(cls, expressions):
+        """Helper method to create input rasters with specified expressions."""
         for raster_key, expr in expressions.items():
             raster_name = cls.input_rasters[raster_key]
             cls.runModule(
@@ -84,15 +87,10 @@ class TestIBiomass(TestCase):
         )
         self.assertRasterExists(self.output_raster)
 
-        expected_stats = (
-            "min=4.51592674628609\n"
-            "max=75.2654457714349\n"
-            "mean=33.1167961394313\n"
-            "stddev=18.5128518411928"
-        )
+        expected_stats = "min=0.752654\nmax=75.265445\nmean=22.767797\nstddev=17.924991"
 
         self.assertRasterFitsUnivar(
-            raster=self.output_raster, reference=expected_stats, precision=1e-8
+            raster=self.output_raster, reference=expected_stats, precision=1e-6
         )
 
     def test_biomass_linearity(self):
@@ -252,36 +250,15 @@ class TestIBiomass(TestCase):
     def test_biomass_ecological_range(self):
         """Test that biomass values fall within an expected ecological range."""
 
-        self.runModule(
-            "r.mapcalc",
-            expression=f"{self.input_rasters['fpar']} = col() * 0.5",
-            overwrite=True,
-        )
-        self.runModule(
-            "r.mapcalc",
-            expression=f"{self.input_rasters['lightuse_eff']} = row() * 0.1",
-            overwrite=True,
-        )
-        self.runModule(
-            "r.mapcalc",
-            expression=f"{self.input_rasters['latitude']} = 45.0",
-            overwrite=True,
-        )
-        self.runModule(
-            "r.mapcalc",
-            expression=f"{self.input_rasters['dayofyear']} = 150",
-            overwrite=True,
-        )
-        self.runModule(
-            "r.mapcalc",
-            expression=f"{self.input_rasters['transmissivity']} = 0.75",
-            overwrite=True,
-        )
-        self.runModule(
-            "r.mapcalc",
-            expression=f"{self.input_rasters['water']} = 0.8",
-            overwrite=True,
-        )
+        test_expressions = {
+            "fpar": "col() * 0.5",
+            "lightuse_eff": "row() * 0.1",
+            "latitude": "45.0",
+            "dayofyear": "150",
+            "transmissivity": "0.75",
+            "water": "0.8",
+        }
+        self._create_input_rasters(test_expressions)
 
         self.assertModule(
             "i.biomass",
