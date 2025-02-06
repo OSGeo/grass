@@ -101,38 +101,40 @@ end
 --     return pandoc.Para({pandoc.RawInline("markdown", "![" .. alt_text .. "](" .. src .. ")")})
 -- end
 
-function DefinitionList(el)
-    local new_blocks = {}
+-- function DefinitionList(el)
+--     local new_blocks = {}
 
-    for _, item in ipairs(el.content) do
-        local term = item[1]               -- Term (<dt>)
-        local definitions = item[2]        -- Definitions (<dd>)
+--     for _, item in ipairs(el.content) do
+--         local term = item[1]               -- Term (<dt>)
+--         local definitions = item[2]        -- Definitions (<dd>)
 
-        -- Split the term into separate parts: first word as header, rest as sub-item
-        if #term > 1 then
-            -- First part of the term becomes the header (###)
-            -- term[1] = term[1].src
-            table.insert(new_blocks, pandoc.Header(3, term[1], {}))
+--         -- Split the term into separate parts: first word as header, rest as sub-item
+--         if #term > 1 then
+--             -- First part of the term becomes the header (###)
+--             -- term[1] = term[1].src
+--             table.insert(new_blocks, pandoc.Header(3, term[1], {}))
 
-            -- Remaining parts are combined and formatted (e.g., italicized)
-            local sub_term = {}
-            for i = 2, #term do
-                table.insert(sub_term, term[i])
-            end
-            table.insert(new_blocks, pandoc.Para(sub_term))
-        else
-            -- If the term is simple, just use it as a header
-            table.insert(new_blocks, pandoc.Header(3, term, {}))
-        end
+--             -- Remaining parts are combined and formatted (e.g., italicized)
+--             local sub_term = {}
+--             for i = 2, #term do
+--                 table.insert(sub_term, term[i])
+--             end
+--             table.insert(new_blocks, pandoc.Para(sub_term))
+--         else
+--             -- If the term is simple, just use it as a header
+--             table.insert(new_blocks, pandoc.Header(3, term, {}))
+--         end
 
-        -- Process the definitions and convert to blockquote format
-        for _, def in ipairs(definitions) do
-            table.insert(new_blocks, pandoc.BlockQuote(def))
-        end
-    end
+--         -- table.insert(new_blocks, pandoc.HorizontalRule(definitions))
 
-    return new_blocks
-end
+--         -- Process the definitions and convert to blockquote format
+--         for _, def in ipairs(definitions) do
+--             table.insert(new_blocks, pandoc.HorizontalRule(def))
+--         end
+--     end
+
+--     return new_blocks
+-- end
 
 function TableCell(el)
     -- Remove inline styles from table cells
