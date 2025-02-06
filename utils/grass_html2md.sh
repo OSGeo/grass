@@ -50,10 +50,10 @@ process_file() {
     cat "$file" | \
         sed 's#<div class="code"><pre>#<pre><code>#g' | \
         sed 's#</pre></div>#</code></pre>#g' | \
-        pandoc -f html-native_divs-native_spans \
-            -t gfm+pipe_tables --wrap=none \
+        pandoc -f html-native_divs \
+            -t gfm+pipe_tables --wrap=auto \
             --lua-filter "${UTILSPATH}/pandoc_codeblock.lua" | \
-        sed 's/``` {#sh}/```sh/' | sed 's+ \\\$+ \$+g' | sed 's+%20+-+g' > "${f%%.html}.md"
+        sed 's+ \\\$+ \$+g' | sed 's+%20+-+g' > "${f%%.html}.md"
 
     rm -f "$file"
 
