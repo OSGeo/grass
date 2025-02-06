@@ -305,9 +305,9 @@ class TestVInfo(TestCase):
             ]
         }
 
-        # The following fields vary depending on the Grass sample data's path,
-        # date, and user. Therefore, only check for their presence in the JSON output
-        # and not for their exact values.
+        # The following fields vary depending on the test data's path,
+        # date, and user. Therefore, only check for their presence in
+        # the JSON output and not for their exact values.
         remove_fields = ["mapset_path", "date", "user"]
         for record in result["records"]:
             for field in remove_fields:
