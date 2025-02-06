@@ -1,0 +1,317 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.sim.water</em> is a landscape scale simulation model
+of overland flow designed for spatially variable terrain, soil, cover
+and rainfall excess conditions. A 2D shallow water flow is described by
+the bivariate form of Saint Venant equations. The numerical solution is based
+on the concept of duality between the field and particle representation of
+the modeled quantity. Green's function Monte Carlo method, used to solve the equation,
+provides robustness necessary for spatially variable conditions and high
+resolutions (Mitas and Mitasova 1998). The key inputs of the model include
+elevation (<b>elevation</b> raster map), flow gradient vector given by
+first-order partial derivatives of elevation field (<b>dx</b> and <b>dy</b>
+raster maps), rainfall excess rate (<b>rain</b> raster map or <b>rain_value</b> single
+value) and a surface roughness coefficient given by Manning's n
+(<b>man</b> raster map or <b>man_value</b> single value). Partial
+derivatives raster maps can be computed along with interpolation of a DEM using
+the -d option in <em><a href="v.surf.rst.html">v.surf.rst</a></em> module. If elevation raster
+map is already provided, partial derivatives can be computed using
+<em><a href="r.slope.aspect.html">r.slope.aspect</a></em> module. Partial derivatives are used
+to determine the direction and magnitude of water flow velocity. To include a
+predefined direction of flow, map algebra can be used to replace terrain-derived
+partial derivatives with pre-defined partial derivatives in selected grid cells such
+as man-made channels, ditches or culverts. Equations (2) and (3) from
+<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/reports/cerl99/rep99.html">this report</a>
+can be used to compute partial derivates of the predefined flow using its direction given
+by aspect and slope.
+
+<p>
+The equations are
+
+<div class="code"><pre>
+dx = tan(slope) * cos(aspect)
+</pre></div>
+
+and
+
+<div class="code"><pre>
+dy = tan(slope) * sin(aspect)
+</pre></div>
+
+<p>
+<div align="center" style="margin: 10px;">
+<img style="margin: 0.5em;" src="r_sim_water.png" alt="r.sim.water generated depth map"><br>
+<i >
+    Figure: Simulated water flow in a rural area
+    showing the areas with highest water depth
+    highlighting streams, pooling, and wet areas
+    during a rainfall event.
+</i>
+</div>
+
+<p>
+The module automatically converts horizontal distances from feet to metric system using
+database/projection information. Rainfall excess is defined as rainfall intensity
+- infiltration rate and should be provided in [mm/hr].
+<!-- and can be computed using several available infiltration
+ models (e.g. Green-Ampt, Holtan, etc.). (<font color="#ff0000"> find
+ infiltration module in GRASS - topmodel, casc2d</font> )
+-->
+Rainfall intensities are usually available from meteorological stations.
+Infiltration rate depends on soil properties and land cover. It varies in space and time.
+For saturated soil and steady-state water flow it can be estimated using
+saturated hydraulic conductivity rates based on field measurements or using
+reference values which can be found in literature.
+Optionally, user can provide an overland flow infiltration rate map
+<b>infil</b> or a single value <b>infil_value</b> in [mm/hr] that control the rate of
+infiltration for the already flowing water, effectively reducing the flow depth and
+discharge.
+Overland flow can be further controlled by permeable check dams or similar type of structures,
+the user can provide a map of these structures and their permeability ratio
+in the map <b>flow_control</b> that defines the probability of particles to pass
+through the structure (the values will be 0-1).
+
+<p>
+Output includes a water depth raster map <b>depth</b> in [m], and a water discharge
+raster map <b>discharge</b> in [m3/s]. Error of the numerical solution can be analyzed using
+the <b>error</b> raster map (the resulting water depth is an average, and err is its RMSE).
+The output vector points map <b>output_walkers</b> can be used to analyze and visualize
+spatial distribution of walkers at different simulation times (note that
+the resulting water depth is based on the density of these walkers).
+<!--Number of the output walkers is controlled by the <b>density</b> parameter, which controls
+how many walkers used in simulation should be written into the output. -->
+<!-- from
+http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Mitasova_Helena_2.pdf
+-->
+The spatial distribution of numerical error associated with path sampling solution can be
+analysed using the output error raster file [m]. This error is a function of the number
+of particles used in the simulation and can be reduced by increasing the number of walkers
+given by parameter <b>nwalkers</b>.
+<!--(<font color="#ff0000"> toto treba upresnit/zmenit, lebo nwalk ide prec</font>). -->
+Duration of simulation is controlled by the <b>niterations</b> parameter. The default value
+is 10 minutes, reaching the steady-state may require much longer time,
+depending on the time step, complexity of terrain, land cover and size of the area.
+Output walker, water depth and discharge maps can be saved during simulation using
+the time series flag <b>-t</b> and <b>output_step</b> parameter
+defining the time step in minutes for writing output files.
+Files are saved with a suffix representing time since the start of simulation in minutes
+(e.g. wdepth.05, wdepth.10).
+<!-- TODO add example of registering outputs into temporal framework when  #2146 is fixed -->
+Monitoring of water depth at specific points is supported. A vector map with observation points and
+a path to a logfile must be provided. For each point in the vector map which is located in
+the computational region the water depth is logged each time step in the logfile. The logfile is
+organized as a table. A single header identifies the category number of the logged vector points.
+In case of invalid water depth data the value -1 is used.
+
+<p>
+Overland flow is routed based on partial derivatives of elevation
+field or other landscape features influencing water flow. Simulation
+equations include a diffusion term (<b>diffusion_coeff</b> parameter) which enables
+water flow to overcome elevation depressions or obstacles when water depth exceeds
+a threshold water depth value (<b>hmax)</b>, given in [m]. When it is reached,
+diffusion term increases as given by <b>halpha</b> and advection term
+(direction of flow) is given as "prevailing" direction of flow computed
+as average of flow directions from the previous <b>hbeta</b> number of grid cells.
+The model tries to keep water "shallow" with maximum shallow water
+depth defined by <b>hmax</b> default 0.3 meters. However, water depths
+much higher than <b>hmax</b> can be observed if water accumulates in
+natural sinks or river beds. Depending on the area of interest and the
+used digital elevation model, <b>hmax</b>, <b>halpha</b> and
+<b>hbeta</b> might need to be adjusted in order to deal realistically
+with elevation depressions or obstacles.
+
+<h2>NOTES</h2>
+
+A 2D shallow water flow is described by the bivariate form of Saint
+Venant equations (e.g., Julien et al., 1995). The continuity of water
+flow relation is coupled with the momentum conservation equation and
+for a shallow water overland flow, the hydraulic radius is approximated
+by the normal flow depth. The system of equations is closed using the
+Manning's relation. Model assumes that the flow is close to the kinematic
+wave approximation, but we include a diffusion-like term to incorporate the
+impact of diffusive wave effects. Such an incorporation of diffusion
+in the water flow simulation is not new and a similar term has been obtained
+in derivations of diffusion-advection equations for overland flow, e.g.,
+by Lettenmeier and Wood, (1992). In our reformulation, we simplify the
+diffusion coefficient to a constant and we use a modified diffusion term.
+The diffusion constant which we have used is rather small (approximately
+one order of magnitude smaller than the reciprocal Manning's coefficient)
+and therefore the resulting flow is close to the kinematic regime. However,
+the diffusion term improves the kinematic solution, by overcoming small
+shallow pits common in digital elevation models (DEM) and by smoothing out
+the flow over slope discontinuities or abrupt changes in Manning's coefficient
+(e.g., due to a road, or other anthropogenic changes in elevations or cover).
+
+<p>
+<b>Green's function stochastic method of solution.</b><br>
+The Saint Venant equations are solved by a stochastic method called Monte Carlo
+(very similar to Monte Carlo methods in computational fluid dynamics or to
+quantum Monte Carlo approaches for solving the Schrodinger equation (Schmidt
+and Ceperley, 1992, Hammond et al., 1994; Mitas, 1996)). It is assumed
+that these equations are a representation of stochastic processes with
+diffusion and drift components (Fokker-Planck equations).
+
+<p>
+The Monte Carlo technique has several unique advantages which are
+becoming even more important due to new developments in computer technology.
+Perhaps one of the most significant Monte Carlo properties is robustness
+which enables us to solve the equations for complex cases, such as discontinuities
+in the coefficients of differential operators (in our case, abrupt slope
+or cover changes, etc). Also, rough solutions can be estimated rather
+quickly, which allows us to carry out preliminary quantitative studies
+or to rapidly extract qualitative trends by parameter scans. In addition,
+the stochastic methods are tailored to the new generation of computers
+as they provide scalability from a single workstation to large parallel
+machines due to the independence of sampling points. Therefore, the methods
+are useful both for everyday exploratory work using a desktop computer and
+for large, cutting-edge applications using high performance computing.
+
+<p>
+<b>Suggested Manning's n for surface roughness</b><br>
+from <a href="https://baharmon.github.io/hydrology-in-grass">https://baharmon.github.io/hydrology-in-grass</a>
+<p>
+<table border="1">
+ <tr><th>NLCD Landcover Category</th><th>Manning’s n value</th></tr>
+ <tr><td>Open Water</td><td>0.001</td></tr>
+ <tr><td>Developed, Open Space</td><td>0.0404</td></tr>
+ <tr><td>Developed, Low Intensity</td><td>0.0678</td></tr>
+ <tr><td>Developed, Medium Intensity</td><td>0.0678</td></tr>
+ <tr><td>Developed, High Intensity</td><td>0.0404</td></tr>
+ <tr><td>Barren Land</td><td>0.0113</td></tr>
+ <tr><td>Deciduous Forest</td><td>0.36</td></tr>
+ <tr><td>Evergreen Forest</td><td>0.32</td></tr>
+ <tr><td>Mixed Forest</td><td>0.4</td></tr>
+ <tr><td>Shrub/Scrub</td><td>0.4</td></tr>
+ <tr><td>Grassland/Herbaceuous</td><td>0.368</td></tr>
+ <tr><td>Pasture/Hay</td><td>0.325</td></tr>
+ <tr><td>Cultivated Crops</td><td>0.325</td></tr>
+ <tr><td>Woody Wetlands</td><td>0.086</td></tr>
+ <tr><td>Emergent Herbaceuous Wetlands</td><td>0.1825</td></tr>
+</table>
+
+<p>
+The <a href="https://www.usgs.gov/centers/eros/science/annual-nlcd-science-product-user-guide">NLCD user guide</a>
+provides more information about the different NLCD classes.
+
+<p>
+Increasing the number of threads with <b>nprocs</b> does not really
+speed up the simulation.
+
+<h2>EXAMPLE</h2>
+
+Using the North Carolina full sample dataset:
+
+<div class="code"><pre>
+# set computational region
+g.region raster=elev_lid792_1m -p
+
+# compute dx, dy
+r.slope.aspect elevation=elev_lid792_1m dx=elev_lid792_dx dy=elev_lid792_dy
+
+# simulate (this may take a minute or two)
+r.sim.water elevation=elev_lid792_1m dx=elev_lid792_dx dy=elev_lid792_dy depth=water_depth disch=water_discharge nwalk=10000 rain_value=100 niter=5
+</pre></div>
+
+Now, let's visualize the result using rendering to a file
+(note the further management of computational region and
+usage of <a href="d.mon.html">d.mon</a> module
+which are not needed when working in GUI):
+
+<div class="code"><pre>
+# increase the computational region by 350 meters
+g.region e=e+350
+# initiate the rendering
+d.mon start=cairo output=r_sim_water_water_depth.png
+# render raster, legend, etc.
+d.rast map=water_depth_1m
+d.legend raster=water_depth_1m title="Water depth [m]" label_step=0.10 font=sans at=20,80,70,75
+d.barscale at=67,10 length=250 segment=5 font=sans
+d.northarrow at=90,25
+# finish the rendering
+d.mon stop=cairo
+</pre></div>
+
+<p>
+<div align="center" style="margin: 10px;">
+<img style="margin: 0.5em;" src="r_sim_water_water_depth.png" alt="r.sim.water generated depth map"><br>
+<i >
+    Figure: Simulated water depth map in the rural area of
+    the North Carolina sample dataset.
+</i>
+</div>
+
+<h2>ERROR MESSAGES</h2>
+
+If the module fails with
+
+<div class="code"><pre>
+ERROR: nwalk (7000001) &gt; maxw (7000000)!
+</pre></div>
+
+then a lower <b>nwalkers</b> parameter value has to be selected.
+
+<h2>REFERENCES</h2>
+
+<ul>
+<li> Mitasova, H., Thaxton, C., Hofierka, J., McLaughlin, R., Moore, A., Mitas L., 2004,
+<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/II.6.8_Mitasova_044.pdf">
+Path sampling method for modeling overland water flow, sediment transport
+and short term terrain evolution in Open Source GIS.</a>
+In: C.T. Miller, M.W. Farthing, V.G. Gray, G.F. Pinder eds.,
+Proceedings of the XVth International Conference on Computational Methods in Water
+Resources (CMWR XV), June 13-17 2004, Chapel Hill, NC, USA, Elsevier, pp. 1479-1490.</li>
+
+<li> Mitasova H, Mitas, L., 2000,
+<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/gisc00/duality.html">Modeling spatial
+processes in multiscale framework: exploring duality between particles and fields,</a>
+plenary talk at GIScience2000 conference, Savannah, GA.</li>
+
+<li> Mitas, L., and Mitasova, H., 1998, Distributed soil erosion simulation
+for effective erosion prevention. Water Resources Research, 34(3), 505-516.</li>
+
+<li> Mitasova, H., Mitas, L., 2001,
+<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/LLEmiterev1.pdf">
+Multiscale soil erosion simulations for land use management,</a>
+In: Landscape erosion and landscape evolution modeling, Harmon R. and Doe W. eds.,
+Kluwer Academic/Plenum Publishers, pp. 321-347.</li>
+
+<li> Hofierka, J, Mitasova, H., Mitas, L., 2002. GRASS and modeling landscape processes
+using duality between particles and fields. Proceedings of the Open source GIS -
+GRASS users conference 2002 - Trento, Italy, 11-13 September 2002.
+<a href="http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Mitasova_Helena_2.pdf">PDF</a></li>
+
+<li> Hofierka, J., Knutova, M., 2015,
+Simulating aspects of a flash flood using the Monte Carlo method and
+GRASS GIS: a case study of the Mal&aacute; Svinka Basin (Slovakia),
+Open Geosciences. Volume 7, Issue 1, ISSN (Online) 2391-5447, DOI:
+<a href="https://doi.org/10.1515/geo-2015-0013">10.1515/geo-2015-0013</a>,
+April 2015</li>
+
+<li> Neteler, M. and Mitasova, H., 2008,
+<a href="https://grassbook.org">Open Source GIS: A GRASS GIS Approach. Third Edition.</a>
+The International Series in Engineering and Computer Science: Volume 773. Springer New York Inc, p. 406.</li>
+</ul>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="v.surf.rst.html">v.surf.rst</a>,
+<a href="r.slope.aspect.html">r.slope.aspect</a>,
+<a href="r.sim.sediment.html">r.sim.sediment</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Helena Mitasova, Lubos Mitas<br>
+North Carolina State University<br>
+<i><a href="mailto:hmitaso@unity.ncsu.edu">hmitaso@unity.ncsu.edu</a></i>
+
+<p>
+Jaroslav Hofierka<br>
+GeoModel, s.r.o. Bratislava, Slovakia<br>
+<i><a href="mailto:hofi@geomodel.sk">hofierka@geomodel.sk</a></i>
+
+<p>
+Chris Thaxton<br>
+North Carolina State University<br>
+<i><a href="mailto:csthaxto@unity.ncsu.edu">csthaxto@unity.ncsu.edu</a></i>

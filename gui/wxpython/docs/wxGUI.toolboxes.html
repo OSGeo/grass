@@ -1,0 +1,209 @@
+<!-- meta page description: wxGUI Toolboxes -->
+<!-- meta page index: wxGUI -->
+
+<h2>KEYWORDS</h2>
+
+<a href="general.html">general</a>, <a href="topic_GUI.html">GUI</a>
+
+<h2>DESCRIPTION</h2>
+
+The <b>Toolboxes</b> is a way to customize items in <em><a href="wxGUI.html">wxGUI</a></em>
+menu. Toolboxes enable to:
+
+
+<ul>
+  <li> hide unused menu items in menu (e.g. Imagery, Database) or submenu (e.g. Wildfire modeling)</li>
+  <li> change order of menu items and subitems</li>
+  <li> add new menu items (e.g. Temporal)</li>
+  <li> add addons modules</li>
+  <li> add your own modules</li>
+</ul>
+
+<p>
+Toolboxes are configured through two XML files (<code>main_menu.xml</code> and
+<code>toolboxes.xml</code>) located in your user home
+GRASS directory, subdirectory <code>toolboxes</code>
+ (<code>$HOME/.grass8/toolboxes/</code> on UNIX).
+Currently, there is no GUI front-end for toolboxes,
+however only simple editing of text files is needed.</p>
+
+<h3>Brief description of file <code>main_menu.xml</code></h3>
+
+<p>This file represents the main menu (File, Settings, Raster, ...).
+By modifying this file you show and hide menu items which are
+represented by <code>subtoolbox</code> tag.</p>
+
+<p>Tag <code>user-toolboxes-list</code> is interpreted as a menu containing a list of all user-defined toolboxes. If not needed it can be removed.</p>
+
+<p>Following lines can be copied to <code>.grass8/toolboxes/main_menu.xml</code>
+and by removing, adding or reordering lines users can change the main menu items. See further examples.</p>
+
+
+<div class="code"><pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;toolbox name="MyMainMenu"&gt;
+  &lt;label&gt;Default GRASS GIS main menu bar&lt;/label&gt;
+  &lt;items&gt;
+    &lt;subtoolbox name="File"/&gt;
+    &lt;subtoolbox name="Settings"/&gt;
+    &lt;subtoolbox name="Raster"/&gt;
+    &lt;subtoolbox name="Vector"/&gt;
+    &lt;subtoolbox name="Imagery"/&gt;
+    &lt;subtoolbox name="Volumes"/&gt;
+    &lt;subtoolbox name="Database"/&gt;
+    &lt;user-toolboxes-list /&gt;
+    &lt;subtoolbox name="Help"/&gt;
+  &lt;/items&gt;
+&lt;/toolbox&gt;
+</pre></div>
+
+<h3>Brief description of file <code>toolboxes.xml</code></h3>
+
+<p>This file contains structure and description of individual toolboxes.
+Note that both <em>Raster</em> and e.g. <em>Query raster maps</em>
+are individual toolboxes although one contains the other.
+Tag <code>toolbox</code> contains <code>subtoolbox</code> tags
+which are defined later in the file. These nested toolboxes are linked
+through <code>name</code> attribute.</p>
+
+<p>Apart from <code>subtoolbox</code> tag, tag <code>toolbox</code> can contain individual items (modules)
+and separators (for visual separation in the menu tree).</p>
+
+<div class="code"><pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;toolboxes&gt;
+  &lt;toolbox name="Raster"&gt;
+    &lt;label&gt;&amp;amp;Raster&lt;/label&gt;
+    &lt;items&gt;
+      &lt;subtoolbox name="DevelopRasterMap"/&gt;
+      &lt;subtoolbox name="ManageRasterColors"/&gt;
+      &lt;subtoolbox name="QueryRasterMaps"/&gt;
+      &lt;subtoolbox name="RasterMapTypeConversions"/&gt;
+      &lt;separator/&gt;
+      &lt;module-item name="r.buffer"&gt;
+        &lt;label&gt;Buffer rasters&lt;/label&gt;
+      &lt;/module-item&gt;
+      ...
+      ...
+  &lt;toolbox name="QueryRasterMaps"&gt;
+    &lt;label&gt;Query raster maps&lt;/label&gt;
+    &lt;items&gt;
+      &lt;module-item name="r.what"&gt;
+        &lt;label&gt;Query values by coordinates&lt;/label&gt;
+      &lt;/module-item&gt;
+      &lt;module-item name="r.what.color"&gt;
+        &lt;label&gt;Query colors by value&lt;/label&gt;
+      &lt;/module-item&gt;
+    &lt;/items&gt;
+  &lt;/toolbox&gt;
+</pre></div>
+
+<p>To redefine a toolbox (or use it as a template),
+copy specific part of file <code>grass7/gui/wxpython/xml/toolboxes.xml</code>
+from GRASS installation to a new file in user home
+(<code>.grass8/toolboxes/toolboxes.xml</code>) and edit it.
+Rename this new toolbox.</p>
+
+<h2>EXAMPLES</h2>
+
+<h3>Hiding menu items</h3>
+<p>If we are for example working only with raster data,
+we can hide menu items <em>Vector</em> and <em>Database</em>.
+The file <code>main_menu.xml</code> then contains the following lines
+where we omitted the two toolboxes:</p>
+
+
+<div class="code"><pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;toolbox name="CustomizedMainMenu"&gt;
+  &lt;label&gt;Default GRASS GIS main menu bar&lt;/label&gt;
+  &lt;items&gt;
+    &lt;subtoolbox name="File"/&gt;
+    &lt;subtoolbox name="Settings"/&gt;
+    &lt;subtoolbox name="Raster"/&gt;
+    &lt;subtoolbox name="Imagery"/&gt;
+    &lt;subtoolbox name="Volumes"/&gt;
+    &lt;user-toolboxes-list /&gt;
+    &lt;subtoolbox name="Help"/&gt;
+  &lt;/items&gt;
+&lt;/toolbox&gt;
+</pre></div>
+
+<h3>Creating custom toolbox</h3>
+
+<p>In this example we create a new toolbox <em>Favorites</em> containing
+existing GRASS module and toolbox, custom module
+created by the user and addon module.
+The <code>toolboxes.xml</code> file contains following lines:</p>
+
+<div class="code"><pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;toolboxes&gt;
+  &lt;toolbox name="MyFavorites"&gt;
+    &lt;label&gt;&amp;amp;Favorites&lt;/label&gt;
+    &lt;items&gt;
+      &lt;module-item name="g.region"&gt;
+        &lt;label&gt;Set region&lt;/label&gt;
+      &lt;/module-item&gt;
+      &lt;module-item name="r.mask"&gt;
+        &lt;label&gt;Mask&lt;/label&gt;
+      &lt;/module-item&gt;
+      &lt;separator/&gt;
+      &lt;module-item name="m.myown"&gt;
+        &lt;label&gt;Do my own stuff&lt;/label&gt;
+      &lt;/module-item&gt;
+      &lt;module-item name="i.histo.match"&gt;
+        &lt;label&gt;Calculate histogram matching&lt;/label&gt;
+      &lt;/module-item&gt;
+      &lt;subtoolbox name="RasterReportsAndStatistics"/&gt;
+    &lt;/items&gt;
+  &lt;/toolbox&gt;
+&lt;/toolboxes&gt;
+</pre></div>
+
+<p>Optionally, we can add this toolbox to the main menu items.
+The <code>main_menu.xml</code> file contains following lines:</p>
+
+<div class="code"><pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;toolbox name="CustomizedMainMenu"&gt;
+  &lt;label&gt;Default GRASS GIS main menu bar&lt;/label&gt;
+  &lt;items&gt;
+    &lt;subtoolbox name="File"/&gt;
+    &lt;subtoolbox name="Settings"/&gt;
+    &lt;subtoolbox name="Raster"/&gt;
+    &lt;subtoolbox name="Vector"/&gt;
+    &lt;subtoolbox name="Imagery"/&gt;
+    &lt;subtoolbox name="Volumes"/&gt;
+    &lt;subtoolbox name="Database"/&gt;
+    &lt;user-toolboxes-list /&gt;
+    &lt;subtoolbox name="Favorites"/&gt;
+    &lt;subtoolbox name="Help"/&gt;
+  &lt;/items&gt;
+&lt;/toolbox&gt;
+</pre></div>
+
+<p>If we have <code>user-toolboxes-list</code> tag in the <code>main_menu.xml</code> file,
+our custom toolbox will be listed in the automatically added <em>Toolboxes</em> main menu item. The screenshot shows the resulting menu:</p>
+
+<center>
+  <br><img src="wxGUI_toolboxes.jpg" border="0" alt="Toolboxes - menu customization"><br><br>
+</center>
+
+<h2>NOTES</h2>
+
+<p>After the first start of wxGUI with custom toolboxes,
+<code>.grass/toolboxes</code> directory will contain file
+<code>menudata.xml</code> which is auto-generated and should not be edited.</p>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="wxGUI.html">wxGUI</a>,
+  <a href="wxGUI.components.html">wxGUI components</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Anna Petrasova, OSGeoREL, Faculty of Civil Engineering, Czech Technical University in Prague<br>
+Vaclav Petras, OSGeoREL, Faculty of Civil Engineering, Czech Technical University in Prague

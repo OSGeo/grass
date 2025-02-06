@@ -1,0 +1,72 @@
+<h2>DESCRIPTION</h2>
+
+The <em>g.gui</em> module allows user to start the Graphical User
+Interface (GUI) from the command line prompt or to change the
+default User Interface (UI) settings.
+
+<p>
+GRASS GIS comes with both a wxPython-based GUI
+aka <em><a href="wxGUI.html">wxGUI</a></em> (<b>ui=wxpython</b>) and
+command line text-based UI (<b>ui=text</b>).
+
+<h2>NOTES</h2>
+
+If the <b>-d</b> update flag is given or the <code>GRASS_GUI</code>
+environmental <a href="variables.html">variable</a> is unset, then
+the GRASS internal variable <code>GUI</code> is permanently changed and
+the selected <b>ui</b> will be used as the default UI from then on.
+
+<p>
+All GRASS internal variables (see <em><a href="g.gisenv.html">g.gisenv</a></em>)
+are stored in the user's home directory in a hidden file called
+<code>$HOME/.grass8/rc</code> on Unix-based operating systems
+and <code>%APPDATA%\GRASS8\rc</code> on MS Windows. Note that these GRASS
+internal variables are not the shell environment variables and the
+<code>rc</code> file is not a classic UNIX run command file, it just
+contains persistent GRASS variables.
+
+<h2>EXAMPLES</h2>
+
+<h3>Set default user interface settings</h3>
+
+Set default user interface setting to command line, text-based UI:
+<div class="code"><pre>
+g.gui -d ui=text
+</pre></div>
+
+<p>
+Set default user interface setting to the graphical user interface
+(GUI) and <i>launch</i> the GUI:
+<div class="code"><pre>
+g.gui -d ui=wxpython
+</pre></div>
+
+<p>
+Set default user interface setting to the graphical user interface
+(GUI) but <i>do not launch</i> the GUI:
+<div class="code"><pre>
+g.gui -dn ui=wxpython
+</pre></div>
+
+<h3>Load workspace from command line</h3>
+
+Start the GUI from command line with an existing workspace:
+<div class="code"><pre>
+g.gui workspace=myproject.gxw
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="wxGUI.html">wxGUI</a>,
+<a href="g.gisenv.html">g.gisenv</a>,
+<a href="variables.html">GRASS variables</a>
+</em>
+
+<p>
+<a href="https://grasswiki.osgeo.org/wiki/WxPython-based_GUI_for_GRASS">wxGUI wiki page</a>
+
+<h2>AUTHORS</h2>
+
+Martin Landa, FBK-irst, Trento, Italy<br>
+Hamish Bowman, Otago University, Dunedin, New Zealand (fine tuning)

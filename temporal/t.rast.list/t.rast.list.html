@@ -1,0 +1,255 @@
+<h2>DESCRIPTION</h2>
+
+List time stamped raster map layers that are registered in a space time
+raster dataset. <em>t.rast.list</em> provides several options to list map layers
+and their metadata. Listing of map layer can be ordered by metadata,
+metadata columns can be specified and SQL where conditions can be
+provided to select a map layer subset of the input space time raster
+dataset. Most of the raster map  specific metadata is available for
+column selection, sorting and SQL where statements.
+
+Using the <b>method</b> option allows the specification of different
+methods to list map layers. Method <i>list</i> is the default option and
+sensitive to the <b>column</b>,<b>order</b> and <b>where</b> options.
+<p>
+To print interval length in days and distance from the begin use method
+<i>delta</i>. Method <i>deltagap</i> will additionally print temporal
+gaps between map layer. The <i>gran</i> method allows the listing of
+map layer sampled by a user defined <b>granule</b>. As default the
+granularity of the space time raster dataset is used for sampling.
+<p>
+While method <i>list</i> supports all columns except for
+interval_length and distance_from_begin,
+methods <i>delta</i>, <i>deltagap</i>, and <i>gran</i> support only the following
+columns: id, name, mapset, start_time, end_time, interval_length, and distance_from_begin.
+The option <b>order</b> is only available with method <i>list</i>.
+<p>
+Methods <i>cols</i> and <i>comma</i> are depreciated.
+The <i>cols</i> method is replaced by the <i>plain</i> format and
+the <i>comma</i> method is replaced by the <i>line</i> format.
+<p>
+The <b>format</b> option specifies the format of the output data.
+The default <i>plain</i> format will simply print user specified metadata
+columns of one map layer per line separated by a pipe by default.
+The <i>line</i> format will list fully qualified map names (name and mapset)
+as a comma-separated list of values that can be used as input for spatial modules.
+The <i>csv</i> format will print data in the CSV format using
+comma as the value separator (delimiter) and double quote for text field quoting.
+The <i>json</i> format generates JSON and, if the PyYAML package is installed,
+The <i>yaml</i> format generates YAML.
+
+The column (or item) separator can be specified with the <b>separator</b>
+option for <i>plain</i>, <i>line</i>, and <i>csv</i>.
+
+<h2>EXAMPLES</h2>
+
+This example shows several options that are available for map layers listing.
+
+<h3>Default query</h3>
+
+The following command is the default one, returning standard information
+like name, mapset, start_time, end_time of each map in the space time dataset
+<p>
+
+<div class="code"><pre>
+t.rast.list tempmean_monthly
+name|mapset|start_time|end_time
+2009_01_tempmean|climate_2000_2012|2009-01-01 00:00:00|2009-02-01 00:00:00
+2009_02_tempmean|climate_2000_2012|2009-02-01 00:00:00|2009-03-01 00:00:00
+....
+2012_11_tempmean|climate_2000_2012|2012-11-01 00:00:00|2012-12-01 00:00:00
+2012_12_tempmean|climate_2000_2012|2012-12-01 00:00:00|2013-01-01 00:00:00
+</pre></div>
+
+<h3>Add more info</h3>
+
+The following command let the user to choose the columns to show
+<p>
+
+<div class="code"><pre>
+t.rast.list tempmean_monthly columns=name,start_time,min,max
+name|start_time|min|max
+2009_01_tempmean|2009-01-01 00:00:00|-3.380823|7.426054
+2009_02_tempmean|2009-02-01 00:00:00|-1.820261|8.006386
+...
+2009_01_tempmean|2009-01-01 00:00:00|-3.380823|7.426054
+2009_02_tempmean|2009-02-01 00:00:00|-1.820261|8.006386
+</pre></div>
+
+<h3>Filtering the result by value</h3>
+
+In this example the result is filtered showing only the maps with max
+value major than 24
+<p>
+
+<div class="code"><pre>
+t.rast.list tempmean_monthly columns=name,start_time,min,max where="max &gt; 24"
+name|start_time|min|max
+2009_06_tempmean|2009-06-01 00:00:00|15.962669|25.819681
+2009_07_tempmean|2009-07-01 00:00:00|15.32852|26.103664
+2009_08_tempmean|2009-08-01 00:00:00|16.37995|27.293282
+....
+2012_06_tempmean|2012-06-01 00:00:00|14.929379|24.000651
+2012_07_tempmean|2012-07-01 00:00:00|18.455802|28.794653
+2012_08_tempmean|2012-08-01 00:00:00|15.718526|26.151115
+</pre></div>
+
+<h3>Filtering the result by time range</h3>
+
+In this example the result is filtered showing only the maps which
+fall into a specified time range (from .. to):
+<p>
+
+<div class="code"><pre>
+t.rast.list tempmean_monthly columns=name,start_time,min,max \
+  where="start_time &gt; '2009-06-01 00:00:00' and start_time &lt; '2012-08-01 00:00:00'"
+name|start_time|min|max
+2009_06_tempmean|2009-06-01 00:00:00|15.962669|25.819681
+2009_07_tempmean|2009-07-01 00:00:00|15.32852|26.103664
+2009_08_tempmean|2009-08-01 00:00:00|16.37995|27.293282
+....
+2012_06_tempmean|2012-06-01 00:00:00|14.929379|24.000651
+2012_07_tempmean|2012-07-01 00:00:00|18.455802|28.794653
+2012_08_tempmean|2012-08-01 00:00:00|15.718526|26.151115
+</pre></div>
+
+<h3>Filtering the result by selecting recurring timestamps</h3>
+
+In this example the result is filtered showing only the maps which
+fall into a specified recurring time range (here one month per year):
+
+<div class="code"><pre>
+t.rast.list Tseasonal_fieldata_garda where="strftime('%m', start_time)='06'"
+</pre></div>
+
+<h3>Using method option</h3>
+
+Method option is able to show raster in different way. By default <em>cols</em>
+value is used, the value <em>comma</em> will print only the list of maps
+inside the space time dataset:
+<p>
+
+<div class="code"><pre>
+t.rast.list method=comma input=tempmean_monthly
+2009_01_tempmean@climate_2009_2012,2009_02_tempmean@climate_2009_2012,2009_03_tempmean@climate_2009_2012, \
+2009_04_tempmean@climate_2009_2012,2009_05_tempmean@climate_2009_2012,2009_06_tempmean@climate_2009_2012, \
+2009_07_tempmean@climate_2009_2012,2009_08_tempmean@climate_2009_2012,2009_09_tempmean@climate_2009_2012, \
+2009_10_tempmean@climate_2009_2012,2009_11_tempmean@climate_2009_2012,2009_12_tempmean@climate_2009_2012, \
+2010_01_tempmean@climate_2009_2012,2010_02_tempmean@climate_2009_2012,2010_03_tempmean@climate_2009_2012, \
+2010_04_tempmean@climate_2009_2012,2010_05_tempmean@climate_2009_2012,2010_06_tempmean@climate_2009_2012, \
+2010_07_tempmean@climate_2009_2012,2010_08_tempmean@climate_2009_2012,2010_09_tempmean@climate_2009_2012, \
+2010_10_tempmean@climate_2009_2012,2010_11_tempmean@climate_2009_2012,2010_12_tempmean@climate_2009_2012, \
+2011_01_tempmean@climate_2009_2012,2011_02_tempmean@climate_2009_2012,2011_03_tempmean@climate_2009_2012, \
+2011_04_tempmean@climate_2009_2012,2011_05_tempmean@climate_2009_2012,2011_06_tempmean@climate_2009_2012, \
+2011_07_tempmean@climate_2009_2012,2011_08_tempmean@climate_2009_2012,2011_09_tempmean@climate_2009_2012, \
+2011_10_tempmean@climate_2009_2012,2011_11_tempmean@climate_2009_2012,2011_12_tempmean@climate_2009_2012, \
+2012_01_tempmean@climate_2009_2012,2012_02_tempmean@climate_2009_2012,2012_03_tempmean@climate_2009_2012, \
+2012_04_tempmean@climate_2009_2012,2012_05_tempmean@climate_2009_2012,2012_06_tempmean@climate_2009_2012, \
+2012_07_tempmean@climate_2009_2012,2012_08_tempmean@climate_2009_2012,2012_09_tempmean@climate_2009_2012, \
+2012_10_tempmean@climate_2009_2012,2012_11_tempmean@climate_2009_2012,2012_12_tempmean@climate_2009_2012
+</pre></div>
+
+The <em>delta</em> value calculate the interval between maps and the
+distance from the first map:
+<p>
+
+<div class="code"><pre>
+t.rast.list method=delta input=tempmean_monthly
+id|name|mapset|start_time|end_time|interval_length|distance_from_begin
+2009_01_tempmean@climate_2000_2012|2009_01_tempmean|climate_2000_2012|2009-01-01 00:00:00|2009-02-01 00:00:00|31.0|0.0
+2009_02_tempmean@climate_2000_2012|2009_02_tempmean|climate_2000_2012|2009-02-01 00:00:00|2009-03-01 00:00:00|28.0|31.0
+2009_03_tempmean@climate_2000_2012|2009_03_tempmean|climate_2000_2012|2009-03-01 00:00:00|2009-04-01 00:00:00|31.0|59.0
+...
+2012_10_tempmean@climate_2000_2012|2012_10_tempmean|climate_2000_2012|2012-10-01 00:00:00|2012-11-01 00:00:00|31.0|1369.0
+2012_11_tempmean@climate_2000_2012|2012_11_tempmean|climate_2000_2012|2012-11-01 00:00:00|2012-12-01 00:00:00|30.0|1400.0
+2012_12_tempmean@climate_2000_2012|2012_12_tempmean|climate_2000_2012|2012-12-01 00:00:00|2013-01-01 00:00:00|31.0|1430.0
+</pre></div>
+
+The <em>gran</em> value it is used to return data sampled by a user
+defined granule. As default the granularity of the space time raster
+dataset is used for sampling.
+<p>
+
+<div class="code"><pre>
+t.rast.list  method=gran input=tempmean_monthly
+id|name|mapset|start_time|end_time|interval_length|distance_from_begin
+2009_01_tempmean@climate_2009_2012|2009_01_tempmean|climate_2009_2012|2009-01-01 00:00:00|2009-02-01 00:00:00|31.0|0.0
+2009_02_tempmean@climate_2009_2012|2009_02_tempmean|climate_2009_2012|2009-02-01 00:00:00|2009-03-01 00:00:00|28.0|31.0
+2009_03_tempmean@climate_2009_2012|2009_03_tempmean|climate_2009_2012|2009-03-01 00:00:00|2009-04-01 00:00:00|31.0|59.0
+2009_04_tempmean@climate_2009_2012|2009_04_tempmean|climate_2009_2012|2009-04-01 00:00:00|2009-05-01 00:00:00|30.0|90.0
+....
+2012_09_tempmean@climate_2009_2012|2012_09_tempmean|climate_2009_2012|2012-09-01 00:00:00|2012-10-01 00:00:00|30.0|1339.0
+2012_10_tempmean@climate_2009_2012|2012_10_tempmean|climate_2009_2012|2012-10-01 00:00:00|2012-11-01 00:00:00|31.0|1369.0
+2012_11_tempmean@climate_2009_2012|2012_11_tempmean|climate_2009_2012|2012-11-01 00:00:00|2012-12-01 00:00:00|30.0|1400.0
+2012_12_tempmean@climate_2009_2012|2012_12_tempmean|climate_2009_2012|2012-12-01 00:00:00|2013-01-01 00:00:00|31.0|1430.0
+</pre></div>
+<p>
+
+<div class="code"><pre>
+t.rast.list  method=gran input=tempmean_monthly gran="2 months"
+id|name|mapset|start_time|end_time|interval_length|distance_from_begin
+2009_01_tempmean@climate_2009_2012|2009_01_tempmean|climate_2009_2012|2009-01-01 00:00:00|2009-03-01 00:00:00|59.0|0.0
+2009_03_tempmean@climate_2009_2012|2009_03_tempmean|climate_2009_2012|2009-03-01 00:00:00|2009-05-01 00:00:00|61.0|59.0
+2009_05_tempmean@climate_2009_2012|2009_05_tempmean|climate_2009_2012|2009-05-01 00:00:00|2009-07-01 00:00:00|61.0|120.0
+....
+2012_07_tempmean@climate_2009_2012|2012_07_tempmean|climate_2009_2012|2012-07-01 00:00:00|2012-09-01 00:00:00|62.0|1277.0
+2012_09_tempmean@climate_2009_2012|2012_09_tempmean|climate_2009_2012|2012-09-01 00:00:00|2012-11-01 00:00:00|61.0|1339.0
+2012_11_tempmean@climate_2009_2012|2012_11_tempmean|climate_2009_2012|2012-11-01 00:00:00|2013-01-01 00:00:00|61.0|1400.0
+</pre></div>
+
+For the <em>deltagaps</em> value you can see the example for space time
+vector dataset <a href="t.vect.list.html#using-method-option">t.vect.list</a>
+
+<h3>Reading raster names in Python</h3>
+
+<div class="code"><pre>
+result = json.loads(
+    gs.read_command(
+        "t.rast.list", input="tempmean_monthly", format="json"
+    )
+)
+for item in result["data"]:
+    print(item["name"])
+</pre></div>
+
+<h3>Filtering the result by semantic label</h3>
+
+Semantic label can be assigned to raster maps
+by <em><a href="r.semantic.label.html">r.semantic.label</a></em> module or even when
+registrating raster maps into STRDS
+by <em><a href="t.register.html#support-for-semantic-labels">t.register</a></em>.
+
+<p>
+Name of STRDS can be extended by semantic label used for
+filtering. Name of STRDS and semantic label is split by a <i>single
+dot</i>.
+
+<div class="code"><pre>
+t.rast.list input=test.S2_1
+</pre></div>
+
+
+Note that semantic label filtering is <i>supported by all temporal
+modules</i>.
+
+<p>
+Also note that only STRDS can be filtered by semantic label,
+see <em><a href="r.semantic.label.html#known-issues">r.semantic.label</a></em> for
+current limitations.
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="g.list.html">g.list</a>,
+<a href="t.create.html">t.create</a>,
+<a href="t.info.html">t.info</a>,
+<a href="t.list.html">t.list</a>,
+<a href="t.rast3d.list.html">t.rast3d.list</a>,
+<a href="t.vect.list.html">t.vect.list</a>
+</em>
+<p>
+<a href="https://grasswiki.osgeo.org/wiki/Temporal_data_processing">Temporal data processing Wiki</a>
+
+<h2>AUTHOR</h2>
+
+S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture

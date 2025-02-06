@@ -1,0 +1,80 @@
+<!-- meta page description: Projections and spatial transformations in GRASS GIS-->
+<h3>Projection management in general</h3>
+
+A GRASS project is referenced with a single projection and coordinate system
+(or unreferenced as XY project). When creating a new project from an existing
+raster or vector map using the tools available from the startup screen or
+the map import commands, projection and coordinate system are defined.
+To change the projection of maps, a new project has to be created and
+the desired maps have to be reprojected into it from the source project
+as explained below.
+
+<h3>Reprojecting raster maps</h3>
+
+Rasters are reprojected using the raster projection tool
+<em><a href="r.proj.html">r.proj</a></em>.
+The tool is used in the target project to "pull" a map from its source project.
+Both projects need to have a projection defined,
+i.e., they cannot be XY (unprojected).
+
+<h3>Raster map transformation</h3>
+
+To transform an unprojected map from a XY project into a projected
+project (or another XY project), a forward transformation is performed.
+The unreferenced map is geocoded within the XY project by defining
+four corner points or by seeking several ground control points
+(<a href="i.group.html">i.group</a>, <a href="i.target.html">i.target</a>,
+ <a href="g.gui.gcp.html">g.gui.gcp</a>) and then transformed into the
+target project (<a href="i.rectify.html">i.rectify</a>). Polynomial
+transformation of 1st, 2nd and 3rd order are supported.
+<p>
+A graphical user interface is provided by <a href="wxGUI.html">wxGUI</a>.
+<p>
+To simply translate a raster map (without stretching or rotation), the
+<a href="r.region.html">r.region</a> command can be used.
+
+
+<h3>Vector map projections</h3>
+
+Vectors are reprojected using the vector projection tool
+<em><a href="v.proj.html">v.proj</a></em>.
+The tool is used in the target project to "pull" a map from its source project.
+Both projects need to have a projection defined,
+i.e., they cannot be XY (unprojected).
+
+<h3>Vector map transformation</h3>
+
+To transform an unprojected map (e.g. CAD map) into projected coordinates,
+a forward transformation is performed. The unreferenced map is imported
+into the project with projection and geocoded within this project by
+defining  four corner points or by seeking several ground control points.
+These points are stored into an ASCII file and then transformed within
+the same project (<a href="v.transform.html">v.transform</a>).
+
+Alternatively, <a href="v.rectify.html">v.rectify</a> rectifies a vector
+by computing a coordinate transformation for each object in the vector
+based on the control points.
+<p>
+A graphical user interface is provided by <a href="wxGUI.html">wxGUI</a>.
+
+<h3>References</h3>
+
+<ul>
+<li> <a href="https://www.asprs.org/asprs-publications/grids-and-datums">ASPRS Grids and Datum</a></li>
+<li> <a href="http://geotiff.maptools.org/proj_list/">Projections Transform List</a> (PROJ)</li>
+<li> <a href="https://proj.org/operations/index.html">Coordinate operations</a> by PROJ (projections, conversions, transformations, pipeline operator)</li>
+<li> <a href="https://mapref.org">MapRef - The Collection of Map Projections and Reference Systems for Europe</a></li>
+<li> <a href="https://www.crs-geo.eu/">Information and Service System for European Coordinate Reference Systems - CRS</a></li>
+</ul>
+
+<h3>See also</h3>
+
+<ul>
+  <li><a href="rasterintro.html">Introduction into raster data processing</a></li>
+  <li><a href="raster3dintro.html">Introduction into 3D raster data (voxel) processing</a></li>
+  <li><a href="vectorintro.html">Introduction into vector data processing</a></li>
+  <li><a href="imageryintro.html">Introduction into image processing</a></li>
+  <li><a href="temporalintro.html">Introduction into temporal data processing</a></li>
+  <li><a href="databaseintro.html">Database management</a></li>
+  <li><a href="wxguiintro.html">Graphical User Interface</a></li>
+</ul>
