@@ -310,7 +310,8 @@ def main():
                 short_family, module_family, imgs, year=year, skip_no_image=False
             )
         else:
-            raise ValueError(f"Unknown format: {output_format}")
+            msg = f"Unknown format: {output_format}"
+            raise ValueError(msg)
 
 
 if __name__ == "__main__":
