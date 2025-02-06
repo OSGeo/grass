@@ -53,30 +53,43 @@ input map is an integer map.
 
 <h3>Different ways to create a mask</h3>
 
-The <em>r.mask</em> function creates a mask with values 1 and NULL. But note
-that a mask can also be created using other functions that have a raster as
-output, by naming the output raster <code>MASK</code> (by default).
-Such layers could have other
-values than 1 and NULL. The user should therefore be aware that grid cells
-in the mask map containing <code>NULL</code> or <code>0</code> will replace data with
-NULL, while cells containing other values will allow data to pass through
-unaltered. This means that:
+Mask can be created using <em>r.mask</em> or by creating a mask raster map
+directly.
+
 <p>
-If a binary map with [0,1] values is used as input in <em>r.mask</em>, all
-raster cells with 0 and 1 will be part of the mask. This is because
-<em>r.mask</em> converts all non-NULL cells to 1.
+The <em>r.mask</em> tool creates a mask with values 1 and NULL.
+By default, <em>r.mask</em> converts all non-NULL cells to 1.
+If a raster with ones (1) and NULLs values is used with <em>r.mask</em>, all
+raster cells with value 1 will be included in the computation,
+while those with NULL will be masked out.
 
 <div class="code"><pre>
-r.mapcalc -s "map1 = round(rand(0,1))"
+r.mapcalc -s "map1 = if(row() &lt; col(), 1, null())"
 r.mask raster=map1
 </pre></div>
 
-On the other hand, if a binary map is used as an input in <em>g.copy</em> to create a mask,
-only the raster cells with value 1 will be part of the mask.
+If a binary map with zeros and ones as values is used with <em>r.mask</em>,
+and both NULLs and zeros should be masked out, the <b>maskcats</b> parameter
+can be used to specify the values that should be masked out:
 
 <div class="code"><pre>
-r.mapcalc -s "map2 = round(rand(0,1))"
-g.copy raster=map2,MASK
+r.mapcalc -s "map2 = if(row() &lt; col(), 1, 0)"
+r.mask raster=map2 maskcats="0"
+</pre></div>
+
+<p>
+Mask can also be created directly using any tools that have a raster as
+output, by naming the output raster <code>MASK</code> (or whatever the
+<code>GRASS_MASK</code> environment variable is set to).
+Both NULLs and zeros will be masked out in the raster mask.
+This allows for creation of a simple binary raster with only ones and zeros
+where cells with zeros in the mask raster are excluded from the computation
+(behaving as if they were NULL).
+A raster with zeros and ones can be created and used directly as a mask
+by naming the output raster <code>MASK</code>, e.g., using raster algebra:
+
+<div class="code"><pre>
+r.mapcalc -s "MASK = if(row() &lt; col(), 1, 0)"
 </pre></div>
 
 <h3>Handling of floating-point maps</h3>
