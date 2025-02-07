@@ -14,13 +14,6 @@ function Image(el)
     return pandoc.Image({pandoc.Str(alt_text)}, src)
 end
 
-function Link(el)
-    -- Convert <a href> links to Markdown [text](url)
-    local link_text = pandoc.utils.stringify(el.content)
-    local link_url = el.target
-    return pandoc.RawInline("markdown", "[" .. link_text .. "](" .. link_url .. ")")
-end
-
 -- Fixes some edge cases with raw HTML elements
 function RawInline(el)
     if el.format == "html" then
