@@ -1,0 +1,70 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.topidx</em> creates topographic index (wetness index), ln(a/tan(beta)),
+map from elevation map where
+
+<ul>
+<li>a: the area of the hillslope per unit contour length that drains through any
+      point,</li>
+<li>tan(beta): the local surface topographic slope (delta vertical) / (delta
+      horizontal).</li>
+</ul>
+
+<p>Input maps may have NULL values. For example, if you have a raster mask set
+for a watershed (using basin map from <em>r.water.outlet</em>), the following
+command will create a masked elevation map (belev):
+
+<div class="code"><pre>
+r.mapcalc "belev = if(isnull(basin), basin, elev)"
+</pre></div>
+
+<p>
+<em>r.stats -Anc</em> prints out averaged statistics for topographic index.
+
+<p>Lat/long projects are not supported. If data is not projected,
+please create a new project with a projected coordinate reference
+system and reproject the data there. Please run
+<em>r.topidx</em> from that project.
+
+<h2>EXAMPLE</h2>
+
+Running the command below will generate the topographic index map shown in the
+figure:
+
+<div class="code"><pre>
+g.region raster=elevation -p
+r.topidx input=elevation output=topidx_elevation
+</pre></div>
+
+<div align="center" style="margin: 10px">
+<img src="r_topidx.png" alt="r.topidx example" border="0">
+<br>
+<i>Figure: topographic index map derived from elevation map</i>
+</div>
+
+<h2>REFERENCES</h2>
+
+Cho, H., 2000. GIS Hydrological Modeling System by Using Programming Interface
+of GRASS. Master's Thesis, Department of Civil Engineering, Kyungpook National
+University, Korea.
+<p>
+Moore, I.D., R.B. Grayson, and A.R. Ladson, 1991. Digital Terrain Modeling: A
+Review of Hydrological, Geomorphological, and Biological Applications.
+Hydrological Processes 5:3-30.
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.topmodel.html">r.topmodel</a>,
+<a href="r.water.outlet.html">r.water.outlet</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>
+</em>
+<br>
+<a href="http://idea.isnew.info/r.topidx.html">Known issues</a>
+
+<h2>AUTHORS</h2>
+
+<a href="mailto:grass4u@gmail com">Huidae Cho</a><br>
+Hydro Laboratory, Kyungpook National University, South Korea
+<p>
+Based on GRIDATB.FOR by Keith Beven.

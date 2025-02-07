@@ -1,0 +1,69 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.patch</em> allows the user to combine any number of
+vector maps together to create one composite vector
+map. If the table structures are identical, attributes are
+transferred to the new table.
+
+<h2>NOTES</h2>
+
+Any vectors that are duplicated among the maps being
+patched together (e.g., border lines) will have to be
+edited or removed after <em>v.patch</em> is run. Such
+editing can be done automatically using
+<em><a href="v.clean.html">v.clean</a></em>.
+<p>
+Lines may need to be snapped with
+<em><a href="v.clean.html">v.clean</a> tool=snap,break,rmdupl</em>.
+<p>
+Boundaries may need to be cleaned with
+<em><a href="v.clean.html">v.clean</a> tool=break,rmdupl,rmsa</em>
+repeatedly until the <em>rmsa</em> tool (Remove small angles at nodes)
+no longer modifies any boundaries. If vector topology is still not
+clean, boundaries may also need to be snapped with
+<em><a href="v.clean.html">v.clean</a> tool=snap,break,rmdupl</em>.
+<p>
+When using the <em>-e</em> flag, <em>v.patch</em> shifts category (cat)
+values in the output so that category numbers from the different input
+maps do not overlap. This shift is applied to both the category values
+of the features and the category values in the attribute tables. Hence,
+there is no need to run <em><a href="v.category.html">v.category</a></em>
+and <em><a href="v.db.update.html">v.db.update</a></em> beforehand.
+<p>
+When using the <em>-a</em> flag, the user has to make sure that the
+features in the different maps added to the output map do not have
+overlapping category numbers, unless identical category numbers
+reflect identical attributes, otherwise the attributes of the added
+maps are lost. To avoid this, the user can use <em>v.category
+option=sum</em> to change category values of some of the maps before
+patching.
+
+<h2>EXAMPLES</h2>
+
+Patch together two maps with mixed feature types:
+<div class="code"><pre>
+   v.patch input=geology,streams out=geol_streams
+</pre></div>
+
+<br>
+Append one map to another:
+<div class="code"><pre>
+   g.copy vect=roads,transport
+   v.patch -a input=railroads output=transport --overwrite
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="v.clean.html">v.clean</a>,
+<a href="v.build.html">v.build</a>,
+<a href="v.select.html">v.select</a>,
+<a href="v.overlay.html">v.overlay</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Dave Gerdes, U.S.Army Construction Engineering
+Research Laboratory
+<br>
+Radim Blazek, ITC-Irst, Trento, Italy

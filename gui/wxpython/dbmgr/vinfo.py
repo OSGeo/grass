@@ -23,6 +23,7 @@ from gui_core.wrap import StaticText
 from core.gcmd import RunCommand, GError
 from core.settings import UserSettings
 import grass.script as gs
+from grass.exceptions import ScriptError
 
 
 def GetUnicodeValue(value):
@@ -106,7 +107,7 @@ class VectorDBInfo(VectorDBInfoBase):
                 coord=(float(queryCoords[0]), float(queryCoords[1])),
                 distance=float(qdist),
             )
-        except gs.ScriptError:
+        except ScriptError:
             GError(
                 parent=None,
                 message=_(

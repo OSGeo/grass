@@ -1,0 +1,38 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.in.region</em> creates a new vector map from current region
+extent.
+
+<p>
+If the output of <em>v.in.region</em> is to be used for raster
+reprojection, the <b>-d</b> flag should be used after setting the
+region to the raster map to be reprojected with
+<em><a href="r.proj.html">r.proj</a></em>.
+
+<h2>EXAMPLE</h2>
+
+The example is based on the North Carolina sample data.
+To create a bounding box vector map based on a raster map, the
+computational region is first set to the raster map. Then a
+vector bounding box is created based on the actual computational
+region (in this case precisely reflecting the pixel geometry of
+the raster map), resulting in a new vector polygon:
+
+<div class="code"><pre>
+g.region raster=soils_Kfactor -p
+v.in.region output=soils_Kfactor_bbox
+v.info map=soils_Kfactor_bbox
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="g.region.html">g.region</a>,
+<a href="r.proj.html">r.proj</a>,
+<a href="v.info.html">v.info</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek

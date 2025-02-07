@@ -1,0 +1,103 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.split</em> splits vector lines into shorter segments using
+a maximal distance between nodes. The resulting length of all segments
+is expected to be equal and not higher than the given <b>length</b>
+parameter.
+
+<h2>NOTES</h2>
+
+<em>v.split</em> does not change the layer, nor the category information,
+nor the attribute table links of the original file. It just splits each
+line in segments and attributes the same category to all segments of the same
+original line. As the attribute table is linked to the features with
+their category as key, all segments originating from the same original
+line are linked to the same line in the original attribute table which
+is just copied to the new map.
+
+<h3>Notes on individual segment information</h3>
+
+When running <em>v.to.db</em> on a map produced by <em>v.split</em>,
+<em>v.to.db</em> will add length information for each segment in its
+respective attribute line, but since all the segments of the same
+original line share the same attribute table line, it only gets
+updated once.
+
+<p>
+To obtain the length of each segment, the user will have to attribute
+different category values to each of them. The best way to do this on
+a separate layer, using <em>v.category</em>
+
+<div class="code"><pre>
+v.category v_split op=add layer=2 output=v_split_2
+</pre></div>
+
+and then run the following commands on the new layer 2:
+
+<div class="code"><pre>
+v.db.addtable v_split_2 layer=2
+v.db.addcolumn map=v_split_2 column="length double precision" layer=2
+v.to.db map=v_split_2 type=line option=length columns=length units=meters layer=2
+</pre></div>
+
+To link the new segments in the new layer to the original segments, use:
+
+<div class="code"><pre>
+v.db.addcolumn map=v_split_2 layer=2 column="cat_1 int"
+v.to.db map=v_split_2 layer=2 option=query query_layer=1 query_column=cat columns=cat_1
+</pre></div>
+
+<h2>EXAMPLES</h2>
+
+The examples are based on the North Carolina sample data.
+
+<h3>Example 1: Inserting nodes to railroad lines map</h3>
+
+<div class="code"><pre>
+# extract one railroad line for this example
+v.extract input=railroads output=myrr cats=1
+
+# show line, category, direction (to find the beginning)
+g.region vector=myrr
+d.erase
+d.vect myrr display=shape,cat,dir
+
+# insert nodes at a distance not longer than 1000m
+v.split input=myrr output=myrr_split_1km length=1000
+
+d.vect myrr_split_1km display=shape,topo
+</pre></div>
+
+<p>
+Note: In case that the vector line data are not polylines,
+generate first polylines as the second step, eg.:
+
+<div class="code"><pre>
+# join segments into polyline
+v.build.polylines input=myrr output=myrr_polylines
+# regenerate categories
+v.category input=myrr_polylines output=myrailroads option=add
+</pre></div>
+
+<h3>Example 2: Inserting vertices to railroad lines map</h3>
+
+Note: first run the two steps from example 1.
+
+<div class="code"><pre>
+# insert vertices at a distance not longer than 1000m
+v.split -n input=myrr output=myrr_split length=1000
+d.vect myrr_split display=shape,topo
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="v.edit.html">v.edit</a>,
+<a href="v.build.polylines.html">v.build.polylines</a>,
+<a href="v.to.points.html">v.to.points</a>,
+<a href="v.segment.html">v.segment</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek
