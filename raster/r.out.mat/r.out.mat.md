@@ -15,7 +15,6 @@ Specifically, the following array variables are created:
 - **map_eastern_edge**
 - **map_western_edge**
 
-  
 In addition, *r.out.mat* makes for a nice binary container format for
 transferring georeferenced maps around, even if you don't use Matlab or
 Octave.
@@ -57,8 +56,6 @@ commands may be used to determine the map's resolution information:
     ew_res = x_range/cols
 ```
 
-  
-
 ## EXAMPLE
 
 In Matlab, plot with either:
@@ -72,8 +69,6 @@ or
 ```sh
 contourf(map_data, 24), axis ij, axis equal, axis tight, colorbar
 ```
-
-  
 
 ## TODO
 

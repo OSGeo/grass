@@ -177,11 +177,9 @@ If we have `user-toolboxes-list` tag in the `main_menu.xml` file, our
 custom toolbox will be listed in the automatically added *Toolboxes*
 main menu item. The screenshot shows the resulting menu:
 
-  
 <img src="wxGUI_toolboxes.jpg" data-border="0"
 alt="Toolboxes - menu customization" />  
   
-
 ## NOTES
 
 After the first start of wxGUI with custom toolboxes, `.grass/toolboxes`

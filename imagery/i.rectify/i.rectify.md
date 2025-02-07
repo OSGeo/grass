@@ -163,7 +163,7 @@ manual](https://grass.osgeo.org/gdp/imagery/grass4_image_processing.pdf)*
 William R. Enslin, Michigan State University, Center for Remote Sensing
 
 Modified for GRASS 5.0 by:  
-Luca Palmeri (palmeri@ux1.unipd.it)  
+Luca Palmeri (<palmeri@ux1.unipd.it>)  
 Bill Hughes  
-Pierre de Mouveaux (pmx@audiovu.com)  
+Pierre de Mouveaux (<pmx@audiovu.com>)  
 CMD mode by Bob Covill

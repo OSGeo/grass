@@ -27,10 +27,8 @@ The GCP Manager is structured into three panels:
 
 ### Components of the GCP Manager
 
-  
 <img src="wxGUI_gcp_frame.jpg" data-border="0" alt="GCP Manager" />  
   
-
 *Toolbars*
 
 Two toolbars are provided with the GCP Manager, one for managing the map
@@ -114,7 +112,6 @@ display region extents (both size and location of area displayed).
 Source and target display are adjusted by using the current GCPs for
 coordinate transformation:  
   
-
 *Adjust source display to target display*  
 The extents of the source display are adjusted to the current extents of
 the target display.
@@ -140,11 +137,9 @@ canvas (source or target).
 ![icon](icons/settings.png)  *Settings*  
 Shows a settings dialog for GCP management and display:  
   
-
 *Symbology*  
 Settings for map and GCP display:  
   
-
 *Highlight highest RMS error only*  
 Only the GCP with the highest RMS error will be displayed in a different
 colour, both in the list of GCPs and the GCP Map Display.
@@ -185,11 +180,9 @@ Select a source map for the left pane of the GCP Map Display.
 *Select target map to display*  
 Select a target map for the right pane of the GCP Map Display.
 
-  
 *Rectification*  
 Settings for georectification:  
   
-
 *Select rectification method*  
 Set the polynomial order for georectification. This order will also be
 used for RMS error calculation.
@@ -201,8 +194,6 @@ project when georectifying.
 *Extension for output maps*  
 Change the extension for output map names when doing the actual
 georectification.
-
-  
 
 ![icon](icons/help.png)  *Show Help*  
 Show help page for the GCP Manager.

@@ -1,7 +1,7 @@
 ## DESCRIPTION
 
 *v.out.pov* converts GRASS vector data to POV-Ray format
-(www.povray.com)
+(<www.povray.com>)
 
 ## EXAMPLE
 

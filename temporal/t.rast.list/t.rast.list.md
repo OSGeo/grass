@@ -176,6 +176,7 @@ id|name|mapset|start_time|end_time|interval_length|distance_from_begin
 2012_11_tempmean@climate_2009_2012|2012_11_tempmean|climate_2009_2012|2012-11-01 00:00:00|2012-12-01 00:00:00|30.0|1400.0
 2012_12_tempmean@climate_2009_2012|2012_12_tempmean|climate_2009_2012|2012-12-01 00:00:00|2013-01-01 00:00:00|31.0|1430.0
 ```
+
 ```sh
 t.rast.list  method=gran input=tempmean_monthly gran="2 months"
 id|name|mapset|start_time|end_time|interval_length|distance_from_begin

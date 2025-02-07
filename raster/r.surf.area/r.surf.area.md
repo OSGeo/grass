@@ -22,13 +22,13 @@ the diagonal used.
 
 Reported totals are:
 
-1.  "Plan" area of `NULL` values within the current GRASS region
-2.  "Plan" area within calculation region (`rows-1 * cols-1 * cellarea`)
-3.  Average of the minimum and maximum calculated 3d triangle area
+1. "Plan" area of `NULL` values within the current GRASS region
+2. "Plan" area within calculation region (`rows-1 * cols-1 * cellarea`)
+3. Average of the minimum and maximum calculated 3d triangle area
     within this region
-4.  "Plan" area within current computational region
+4. "Plan" area within current computational region
     (`rows * cols * cellarea`)
-5.  Scaling of calculated area to current region
+5. Scaling of calculated area to current region
 
 *r.surf.area* works best when the surface being evaluated extends to the
 edges of the current region and the cell resolution is small. Surfaces

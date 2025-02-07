@@ -26,11 +26,9 @@ interactivity, which allows user to:
 
 ## TOOL CONTROLS LAYOUT
 
-  
 <img src="wxGUI_iscatt.jpg" data-border="1"
 alt="Interactive Scatter Plot Tool" />  
   
-
 If editing mode is activated (the green polygon tool in toolbar), the
 areas which were selected in the scatter plots are highlighted. In the
 image you can see this area for scatter plot of bands `B_6, B_7` inside

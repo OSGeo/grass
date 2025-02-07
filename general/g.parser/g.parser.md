@@ -9,7 +9,7 @@
 **g.parser** \[-**s**\] \[-**t**\] \[-**n**\] *filename*
 \[*argument*,...\]
 
-### Flags:
+### Flags
 
 **-t**  
 Print strings for translation

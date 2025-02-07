@@ -73,8 +73,6 @@ states are supportet:
 - 2 == Dirichlet - cells of this type will have a fixed piezometric head
   value which do not change over the time
 
-  
-  
 Note that all required raster maps are read into main memory.
 Additionally the linear equation system will be allocated, so the memory
 consumption of this module rapidely grow with the size of the input

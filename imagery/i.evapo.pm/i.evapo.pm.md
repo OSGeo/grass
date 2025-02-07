@@ -75,7 +75,7 @@ science for the Southern Switzerland)
 Original version of program: The
 [HydroFOSS](http://istgis.ist.supsi.ch:8001/geomatica/index.php?id=1)
 project, 2006, IST-SUPSI.
-(http://istgis.ist.supsi.ch:8001/geomatica/index.php?id=1) *Massimiliano
+(<http://istgis.ist.supsi.ch:8001/geomatica/index.php?id=1>) *Massimiliano
 Cannata, Scuola Universitaria Professionale della Svizzera Italiana -
 Istituto Scienze della Terra*  
 *Maria A. Brovelli, Politecnico di Milano - Polo regionale di Como*

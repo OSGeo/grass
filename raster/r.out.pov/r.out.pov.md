@@ -60,4 +60,4 @@ height_field  {
 
 ## AUTHOR
 
-Klaus D. Meyer, GEUM.tec GbR, eMail: *GEUM.tec@geum.de*
+Klaus D. Meyer, GEUM.tec GbR, eMail: *<GEUM.tec@geum.de>*

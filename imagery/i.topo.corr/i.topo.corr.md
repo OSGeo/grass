@@ -59,11 +59,11 @@ be calculated as
 
 ## NOTES
 
-1.  The illumination model (cos_i) with flag -i uses the actual region
+1. The illumination model (cos_i) with flag -i uses the actual region
     as limits and the resolution of the elevation map.
-2.  The topographic correction use the full reflectance file (null
+2. The topographic correction use the full reflectance file (null
     remain null) and its resolution.
-3.  The elevation map to calculate the illumination model should be
+3. The elevation map to calculate the illumination model should be
     metric.
 
 ## EXAMPLES

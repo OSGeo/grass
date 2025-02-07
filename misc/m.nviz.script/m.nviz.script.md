@@ -13,7 +13,7 @@ line (nviz script=script_name) or after NVIZ is started by selecting
 
 ## OPTIONS
 
-### Flags:
+### Flags
 
 **-f**  
 Full render
@@ -40,7 +40,7 @@ Render the animation in an off-screen context
 **-e**  
 Enable vector and sites drawing
 
-### Parameters:
+### Parameters
 
 **input**  
 The name of the GRASS raster map with elevation data.

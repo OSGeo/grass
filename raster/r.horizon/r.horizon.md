@@ -27,7 +27,7 @@ orientation (North=0, clockwise).
 Activating the **-l** flag allows additionally printing the distance to
 each horizon angle.
 
-### Input parameters:
+### Input parameters
 
 The *elevation* parameter is an input elevation raster map. If the
 buffer options are used (see below), this raster should extend over the

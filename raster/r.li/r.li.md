@@ -34,12 +34,12 @@ saving user from the need to specify all parameters over and over again.
 The general procedure to calculate an index from a raster map is
 two-fold:
 
-1.  run *g.gui.rlisetup*: create a configuration file selecting the
+1. run *g.gui.rlisetup*: create a configuration file selecting the
     parts of raster map to be analyzed. This file allows re-running an
     analysis easily. It is stored on Windows in the directory
     `C:\Users\userxy\AppData\Roaming\GRASS8\r.li\`, on GNU/Linux in
     `$HOME/.grass8/r.li/`.
-2.  run one or more of the *r.li.**\[index\]*** modules (e.g.,
+2. run one or more of the *r.li.**\[index\]*** modules (e.g.,
     *r.li.**patchdensity***) to calculate the selected index using on
     the areas selected on configuration file.
 
@@ -48,47 +48,47 @@ two-fold:
 Calculate a patch density index on the entire 'geology' raster map in
 the Spearfish sample dataset, using a 5x5 moving window:
 
-1.  CREATE A NEW CONFIGURATION FILE
-    1.  run
+1. CREATE A NEW CONFIGURATION FILE
+    1. run
 
         ```sh
         g.gui.rlisetup
         ```
 
-    2.  The main *g.gui.rlisetup* window is displayed, click on "New"
+    2. The main *g.gui.rlisetup* window is displayed, click on "New"
 
-    3.  The new configuration window is now displayed, enter the  
+    3. The new configuration window is now displayed, enter the  
         configuration file name (e.g., "my_conf", do not use absolute
         paths)  
-          
+
         Now the new configuration window is displayed.  
         Enter the configuration file name (e.g., "my_conf", do not use
         absolute paths)  
         and the name of raster map (e.g., "geology").  
         The other fields are not needed for this configuration.
 
-    4.  Click on "Setup sampling frame", select "Whole map layer" and
+    4. Click on "Setup sampling frame", select "Whole map layer" and
         click "OK"
 
-    5.  Click on "Setup sampling areas", select "Moving window" and
+    5. Click on "Setup sampling areas", select "Moving window" and
         click "OK"
 
-    6.  Click on "Use keyboard to enter moving window dimension"
+    6. Click on "Use keyboard to enter moving window dimension"
 
-    7.  Select "Rectangle" and enter 5 in the "height" and "width"
+    7. Select "Rectangle" and enter 5 in the "height" and "width"
         fields
 
-    8.  Click on "Save settings"
+    8. Click on "Save settings"
 
-    9.  Close the *g.gui.rlisetup* window
-2.  CALCULATE PATCHDENSITY INDEX
-    1.  set the region settings to the "`geology`" raster map:
+    9. Close the *g.gui.rlisetup* window
+2. CALCULATE PATCHDENSITY INDEX
+    1. set the region settings to the "`geology`" raster map:
 
         ```sh
         g.region raster=geology -p
         ```
 
-    2.  run *r.li.patchdensity*:
+    2. run *r.li.patchdensity*:
 
         ```sh
         r.li.patchdensity input=geology conf=my_conf out=patchdens

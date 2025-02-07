@@ -84,6 +84,7 @@ use of underscores is not recommended and there is no need to use it at
 all in the GUI or when using *d.linegraph* in Python scripts.
 
 The way the program locates and labels tic marks is less than perfect:  
+
 1) although distances between Y tics are proportional to the value, they
 are not proportional on the X axis;  
 2) decimal values between -1 and 1 can be printed on the X axis, but not

@@ -77,6 +77,7 @@ Column 1: CAT
 Column 2: SPEED
 Column 3: WIDTH
 ```
+
 ```sh
 v.to.rast input=vect_map output=raster_map attribute_column=SPEED type=line
 ```

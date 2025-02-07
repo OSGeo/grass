@@ -30,7 +30,6 @@ menu bar with a set of pull-down menus for all GRASS GIS functions
 (analysis, file I/O, GIS configuration and management); on a Mac, the
 GRASS functions menu is at the top of the screen.
 
-  
 <img src="wxGUI_layer_manager.png" data-border="1" alt="screenshot" />  
   
 Figure: Layer Manager screenshot on Ubuntu
@@ -241,7 +240,6 @@ from the window, a map canvas where a map composition of one or more
 layers is displayed, and a statusbar with information about the
 geographic region of the maps displayed.
 
-  
 ![Map Display Window](wxGUI_map_display.jpg)  
   
 Figure: Map Display screenshot on Ubuntu

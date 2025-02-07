@@ -5,8 +5,6 @@ system.
 
 ![\[GRASS GIS after first startup\]](grass_start.png)
 
-  
-
 The main component of the Data tab is the *Data Catalog* which shows the
 GRASS GIS hierarchical structure consisting of database ![\[GRASS
 Database\]](grassdb.png), project ![\[project\]](location.png) and

@@ -520,7 +520,7 @@ Originally from kepler.gps.caltech.edu
 
 A FAQ on Vegetation in Remote Sensing  
 Written by Terrill W. Ray, Div. of Geological and Planetary Sciences,
-California Institute of Technology, email: terrill@mars1.gps.caltech.edu
+California Institute of Technology, email: <terrill@mars1.gps.caltech.edu>
 
 Snail Mail: Terrill Ray  
 Division of Geological and Planetary Sciences  

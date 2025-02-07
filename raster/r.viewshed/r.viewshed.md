@@ -187,6 +187,6 @@ Laura Toma (Bowdoin College): `ltoma@bowdoin.edu`
 
 Yi Zhuang (Carnegie-Mellon University): `yzhuang@andrew.cmu.edu`
 
-William Richard (Bowdoin College): `willster3021@gmail.com `
+William Richard (Bowdoin College): `willster3021@gmail.com`
 
 Markus Metz

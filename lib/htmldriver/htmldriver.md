@@ -46,7 +46,7 @@ Several environment variables affect the operation of the HTML driver:
   type of image map to create (default is CLIENT):
   **`CLIENT`**    Netscape/IE client-side image map (NAME="map").
   **`APACHE`**    Apache/NCSA server-side image map.
-  **`RAW`**         Raw url and polygon vertices (*url  x1  y1  x2  y2 
+  **`RAW`**         Raw url and polygon vertices (*url  x1  y1  x2  y2
   .....*), suitable for conversion to CERN server format, or any other
   format with user supplied conversion program.
 - **GRASS_RENDER_FILE=filename**  

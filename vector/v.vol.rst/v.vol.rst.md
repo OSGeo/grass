@@ -235,7 +235,7 @@ Mitas L., Brown W. M., Mitasova H., 1997, [Role of dynamic cartography
 in simulations of landscape processes based on multi-variate
 fields.](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/lcgfin/cg-mitas.html)
 Computers and Geosciences, Vol. 23, No. 4, pp. 437-446 (includes CDROM
-and WWW: www.elsevier.nl/locate/cgvis)
+and WWW: <www.elsevier.nl/locate/cgvis>)
 
 Mitasova H., Mitas L.,  Brown W.M.,  D.P. Gerdes, I. Kosinovsky, Baker,
 T.1995, Modeling spatially and temporally distributed phenomena: New

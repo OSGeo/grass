@@ -11,13 +11,13 @@ discussed briefly below.
 
 The procedure to find the "edges" in the image is as follows:
 
-1.  The Fourier transform of the image is taken,
-2.  The Fourier transform of the Laplacian of a two-dimensional Gaussian
+1. The Fourier transform of the image is taken,
+2. The Fourier transform of the Laplacian of a two-dimensional Gaussian
     function is used to filter the transformed image,
-3.  The result is run through an inverse Fourier transform,
-4.  The resulting image is traversed in search of places where the image
+3. The result is run through an inverse Fourier transform,
+4. The resulting image is traversed in search of places where the image
     changes from positive to negative or from negative to positive,
-5.  Each cell in the map where the value crosses zero (with a change in
+5. Each cell in the map where the value crosses zero (with a change in
     value greater than the threshold value) is marked as an edge and an
     orientation is assigned to it. The resulting raster map layer is
     output.

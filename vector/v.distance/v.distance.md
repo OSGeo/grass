@@ -216,6 +216,7 @@ from_cat to_cat       dist
 ```sh
 v.distance -p from=busroute_a to=busstopsall upload=dist,to_attr to_column=routes format=json
 ```
+
 ```sh
 [
     {

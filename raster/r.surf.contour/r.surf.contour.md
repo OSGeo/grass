@@ -19,7 +19,7 @@ rasterized contour lines, thus ensuring that an uphill and downhill
 contour value will be the two values chosen. *r.surf.contour*
 interpolates from the uphill and downhill values by the true distance.
 
-### Parameters:
+### Parameters
 
 **input=***name*  
 Name of an existing raster map that contains a set of initial category

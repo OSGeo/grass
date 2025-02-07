@@ -308,6 +308,7 @@ Check that there are more non-NULL cells than NULL ("no data") cells:
 ```sh
 r.univar map=ground_raw
 ```
+
 ```sh
 total null and non-null cells: 2340900
 total null cells: 639184

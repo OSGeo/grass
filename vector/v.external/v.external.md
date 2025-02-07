@@ -72,6 +72,7 @@ v.external input="PG:host=localhost user=postgres dbname=postgis" -l
 polymap
 ...
 ```
+
 ```sh
 v.external input="PG:host=localhost user=postgres dbname=postgis" layer=polymap
 ```

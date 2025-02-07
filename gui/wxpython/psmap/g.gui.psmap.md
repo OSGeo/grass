@@ -16,11 +16,9 @@ Possible output files:
 - PostScript/EPS file
 - PDF (using ps2pdf)
 
-  
 <img src="psmap_frame.jpg" data-border="1"
 alt="wxGUI Cartographic Composer" />  
   
-
 Cartographic Composer enables to load in saved instructions file.
 Loading instruction files created by Cartographic Composer is more
 robust, as opposed to loading files created manually.

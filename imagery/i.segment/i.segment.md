@@ -23,9 +23,9 @@ in the raster map. The similarity between the current segment and each
 of its neighbors is calculated according to the given distance formula.
 Segments will be merged if they meet a number of criteria, including:
 
-1.  The pair is mutually most similar to each other (the similarity
+1. The pair is mutually most similar to each other (the similarity
     distance will be smaller than to any other neighbor), and
-2.  The similarity must be lower than the input threshold. The process
+2. The similarity must be lower than the input threshold. The process
     is repeated until no merges are made during a complete pass.
 
 #### Similarity and Threshold

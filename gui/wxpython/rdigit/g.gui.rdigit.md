@@ -21,18 +21,18 @@ the Map Display toolbar (from the combo box on the right).
 
 The typical workflow includes these steps:
 
-1.  Set computational region as needed.
-2.  Switch to Raster Digitizer and select a map to create. Select either
+1. Set computational region as needed.
+2. Switch to Raster Digitizer and select a map to create. Select either
     a new raster or create a new raster from existing raster, also
     select raster type (CELL, FCELL, DCELL)
-3.  Specify category value and width *before* drawing a feature
-4.  Specify digitizing tool (area, line, point)
-5.  Start digitizing and when you want to finish area or line, *use
+3. Specify category value and width *before* drawing a feature
+4. Specify digitizing tool (area, line, point)
+5. Start digitizing and when you want to finish area or line, *use
     right click*
-6.  Change color of temporary overlay depending on your needs
-7.  Set different category and repeat
-8.  At any point you can use *Undo* or *Save*
-9.  If existing raster is used for the new raster, digitized areas will
+6. Change color of temporary overlay depending on your needs
+7. Set different category and repeat
+8. At any point you can use *Undo* or *Save*
+9. If existing raster is used for the new raster, digitized areas will
     respect the color table, but you can always set different color
     table.
 

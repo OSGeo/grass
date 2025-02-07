@@ -9,7 +9,7 @@ angle, and boldness can be adjusted with commands in the standard input
 and then assigns values to these options on lines within the standard
 input).
 
-### Commands:
+### Commands
 
 **.C** *color*  
 (where *color* is one of the available colors) causes text appearing on

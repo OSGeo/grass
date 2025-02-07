@@ -124,7 +124,7 @@ There are two options how **tension** can be applied in relation to
 density so that the size of segments with **segmax=**40 points is around
 1 - this ensures the numerical stability of the computation):
 
-1.  Default: the given **tension** is applied to normalized data
+1. Default: the given **tension** is applied to normalized data
     (*x/dnorm*), that means that the distances are multiplied (rescaled)
     by *tension/dnorm*. If density of points is changed, e.g., by using
     higher **dmin**, the **dnorm** changes and **tension** needs to be
@@ -133,7 +133,7 @@ density so that the size of segments with **segmax=**40 points is around
     10-100 range and does not depend on the actual scale (distances) of
     the original data (which can be km for regional applications or cm
     for field experiments).
-2.  Flag**-t**: The given **tension** is applied to un-normalized data
+2. Flag**-t**: The given **tension** is applied to un-normalized data
     (rescaled *tension = tension\*dnorm/1000* is applied to normalized
     data (*x/dnorm*) and therefore **dnorm** cancels out) so here
     **tension** truly works as a rescaling parameter. For regional

@@ -49,8 +49,6 @@ differential equation is of the following form:
 - q -- inner well sources/sinks \[m^3/s\]
 - nf -- the effective porosity \[-\]
 
-  
-  
 Three different boundary conditions are implemented, the Dirichlet,
 Transmission and Neumann conditions. The calculation and boundary status
 of single cells can be set with the status map. The following states are
@@ -65,8 +63,6 @@ supported:
 - 3 == Transmission - cells of this type should be placed on out-flow
   boundaries to assure the flow of the solute stream out
 
-  
-  
 Note that all required raster maps are read into main memory.
 Additionally the linear equation system will be allocated, so the memory
 consumption of this module rapidely grow with the size of the input

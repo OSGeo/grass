@@ -58,7 +58,7 @@ consist of same raster bands (semantic labels match). If semantic labels
 are not set, it will be possible to use obtained signature file to
 classify only the same imagery group used for generating signatures.
 
-### Parameters:
+### Parameters
 
 **group=***name*  
 The name of the group file which contains the imagery files that the

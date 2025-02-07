@@ -78,8 +78,6 @@ This will extract a profile along the track defined by the three
 coordinate pairs. The output file "profile_points.csv" contains
 east,north,distance,value (here: elevation).
 
-  
-
 ### Extraction of values along profile defined by coordinates (variant 2)
 
 Coordinate pairs can also be "piped" into *r.profile* (variant 2a):

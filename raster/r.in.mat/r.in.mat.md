@@ -70,7 +70,6 @@ information will be correct:
     ew_res = x_range/cols
 ```
 
-  
 Remember Matlab arrays are referenced as `(row,column)`, i.e. `(y,x)`.  
   
 In addition, *r.in.mat* and *r.out.mat* make for a nice binary container
@@ -90,8 +89,6 @@ In Octave, save with:
 ```sh
 save -mat4-binary filename.mat map_*
 ```
-
-  
 
 ## TODO
 

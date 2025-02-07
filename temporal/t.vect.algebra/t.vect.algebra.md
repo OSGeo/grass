@@ -274,7 +274,6 @@ aggregation operator:
 {"comparison operator", "topological relations", aggregation operator, "temporal operator"}
 ```
 
-  
 This aggregation operator (\| or &) define the behaviour if a map is
 related the more than one map, e.g for the topological relations
 'contains'. Should all (&) conditions for the related maps be true or is
@@ -402,7 +401,7 @@ C = B {&, during} A --> c1 = b1 & a1
                         c3 = b3 & a1
 ```
 
-### Examples:
+### Examples
 
 Spatio-temporal intersect all maps from space time dataset A with all
 maps from space time dataset B which have equal time stamps and are

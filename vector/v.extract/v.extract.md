@@ -22,7 +22,7 @@ or use **layer=-1**.
 
 The examples are intended for the North Carolina sample dataset:
 
-### Extract areas by category number with dissolving \#1:
+### Extract areas by category number with dissolving \#1
 
 ```sh
 v.extract -d cats=1,2,3,4 input=soils_wake output=soil_groupa type=area new=0
@@ -33,7 +33,7 @@ vector **soils** which have category numbers **1 thru 4**; any common
 boundaries are dissolved, and all areas in the new map will be assigned
 category number 0.
 
-### Extract areas by category number with dissolving \#2:
+### Extract areas by category number with dissolving \#2
 
 ```sh
 v.extract -d cats=1-4 input=soils_wake output=soil_groupa type=area new=-1
@@ -44,7 +44,7 @@ vector **soils** which have categories **1 thru 4**. Any common
 boundaries are dissolved, all areas in the new map will retain their
 original category numbers 1 thru 4, since **new** was set to -1.
 
-### Extract all areas and assign the same category to all:
+### Extract all areas and assign the same category to all
 
 ```sh
 v.extract input=soils_wake output=soil_groupa type=area new=1
@@ -54,7 +54,7 @@ produces a new vector map **soil_groupa** containing all areas from
 **soils**. No common boundaries are dissolved, all areas of the new map
 will be assigned category number 1.
 
-### Extract vectors with SQL:
+### Extract vectors with SQL
 
 ```sh
 v.extract input=markveggy.shp output=markveggy.1 new=13 \
@@ -64,19 +64,19 @@ v.extract input=markveggy.shp output=markveggy.1 new=13 \
 produces a new vector map with category number 13 if the SQL statement
 is fulfilled.
 
-### Extract vector features which have the given field empty:
+### Extract vector features which have the given field empty
 
 ```sh
 v.extract input=lakes output=lakes_gaps where="FTYPE is NULL"
 ```
 
-### Extract vector features which have the given field not empty:
+### Extract vector features which have the given field not empty
 
 ```sh
 v.extract input=lakes output=lakes_ftype where="FTYPE not NULL"
 ```
 
-### Reverse extracting (behaves like selective vector objects deleting):
+### Reverse extracting (behaves like selective vector objects deleting)
 
 Remove meteorological stations from map which are located above 1000m:
 
@@ -92,7 +92,7 @@ v.extract -r input=precip_30ynormals output=precip_30ynormals_lowland \
 v.db.select precip_30ynormals_lowland
 ```
 
-### Dissolving based on column attributes:
+### Dissolving based on column attributes
 
 ```sh
 # check column names:

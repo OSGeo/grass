@@ -19,7 +19,7 @@ members are explained in the source code (doxygen) documentation.
 
 To write a new index only two steps are needed:
 
-1.  Define a function and insert its declaration on file **index.h** in
+1. Define a function and insert its declaration on file **index.h** in
     *r.li.daemon* folder, which contains all index declarations. This
     function must be of this kind:
 
@@ -38,7 +38,7 @@ To write a new index only two steps are needed:
     This function has to return 1 on success and 0 otherwise. This
     function type is defined using typedef named `rli_func`.
 
-2.  Create a main for command line arguments parsing, and call the
+2. Create a main for command line arguments parsing, and call the
     function
 
     ```sh
@@ -74,7 +74,6 @@ RLI_get_fcell_row(int, int, area_des)
 RLI_get_dcell_row(int, int, area_des)
 ```
 
-  
 to use an ad hoc build memory management developed to speed up the
 system. The documentation is in doxygen files.
 

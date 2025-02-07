@@ -39,6 +39,7 @@ JSON:
 ```sh
 r.object.geometry input=zipcodes format=json
 ```
+
 ```sh
 [
     {

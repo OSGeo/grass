@@ -62,7 +62,7 @@ instructions while others are multiple line. Multiple line instructions
 consist of the main instruction followed by a subsection of one or more
 additional instructions and are terminated with an *end* instruction.
 
-### Instruction keywords:
+### Instruction keywords
 
 \[ [border](#border) \| [colortable](#colortable) \|
 [comments](#comments) \| [copies](#copies) \| [eps](#eps) \|
@@ -92,7 +92,7 @@ zero, the default vertical location is used.
 **font** *font name*  
 The name of the PostScript font. Fonts present in all PostScript
 implementations are:
-` Times-Roman, Times-Italic, Times-Bold, Times-BoldItalic, Helvetica, Helvetica-Oblique, Helvetica-Bold, Helvetica-BoldOblique, Courier, Courier-Oblique, Courier-Bold, and Courier-BoldOblique`.  
+`Times-Roman, Times-Italic, Times-Bold, Times-BoldItalic, Helvetica, Helvetica-Oblique, Helvetica-Bold, Helvetica-BoldOblique, Courier, Courier-Oblique, Courier-Bold, and Courier-BoldOblique`.  
 The default is Helvetica.
 
 **fontsize** *font size*  
@@ -111,8 +111,6 @@ For options that take a yes or no answer, you can simply use the letters
 "y" or "n", or type out the full words "Yes" or "No" if you prefer. It
 is not case-sensitive. Typically the option with have a default answer
 and you only need to specify one if you wish to override it.
-
-  
 
 ### Command usage
 
@@ -704,6 +702,7 @@ EXAMPLE:
     paper a3
     end
 ```
+
 ```sh
 EXAMPLE:
     paper
@@ -955,17 +954,13 @@ USAGE:    scale scale
 
 The scale can be selected either as:
 
-  
 a relative ratio, e.g. 1:25000;
 
-  
 an absolute width of the printed map, e.g. 10 inches;
 
-  
 the number of printed paper panels, e.g. 3 panels *.I* (at the present
 time, only 1 panel is supported);
 
-  
 the number of miles per inch, e.g. 1 inch equals 4 miles.
 
 This example would set the scale of the map to 1 unit = 25000 units.
@@ -1133,7 +1128,6 @@ Entering **no** to the opaque option will allow the user to see any
 vectors which go through the text's background box. Otherwise, they will
 end at the box's edge.
 
-  
 The following example would place the text *SPEARFISH LAND COVER* at the
 coordinates E650000 N7365000. The text would be a total of 3 points wide
 (2 pixels of red text and 1 pixel black highlight), have a white
@@ -1468,8 +1462,6 @@ Terminates input and begin painting the map.
 ```sh
 USAGE:    end
 ```
-
-  
 
 ## EXAMPLES
 

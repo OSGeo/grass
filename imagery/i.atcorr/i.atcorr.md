@@ -432,10 +432,9 @@ Target altitude (xps, in negative \[km\]):
 > otherwise xps expresses the altitude of the target (e.g., mean
 > elevation) in \[km\], given as negative value
 
-  
 Sensor platform (xpp, in negative \[km\] or -1000):
 
->   
+>
 > xpp = -1000 means that the sensor is on board a satellite.  
 > xpp = 0 means that the sensor is at the ground level.  
 > -100 \< xpp \< 0 defines the altitude of the sensor expressed in
@@ -764,14 +763,13 @@ following information:
 - sensor height and,
 - sensor band.
 
-1.  *Geometrical conditions*
+1. *Geometrical conditions*
     For Sentinel-2A, the geometrical conditions take the value `25` and
     for Sentinel-2B, the geometrical conditions value is `26` (See table
     A). Our scene comes from the Sentinel-2A mission (the file name
     begins with S2A\_...).  
-      
 
-2.  *Day, time, longitude and latitude of measurement*
+2. *Day, time, longitude and latitude of measurement*
 
     Day and time of the measurement are hidden in the filename (i.e.,
     the second datum in the file name with format `YYYYMMDDTHHMMSS`),
@@ -794,21 +792,18 @@ following information:
 
     The longitude and latitude of the centre are stored in *ll_clon* and
     *ll_clat*. In our case, `ll_clon=-78.691` and `ll_clat=35.749`.  
-      
 
-3.  *Atmospheric model*
+3. *Atmospheric model*
     We can choose between various atmospheric models as defined at the
     beginning of this manual. For North Carolina, we can choose
     `2 - midlatitude summer`.  
-      
 
-4.  *Aerosol model*
+4. *Aerosol model*
     We can also choose between various aerosol models as defined at the
     beginning of this manual. For North Carolina, we can choose
     `1 - continental model`.  
-      
 
-5.  *Visibility or Aerosol Optical Depth*
+5. *Visibility or Aerosol Optical Depth*
     For Sentinel-2 scenes, the visibility is not measured, and therefore
     we have to estimate the aerosol optical depth instead, e.g. from
     [AERONET](https://aeronet.gsfc.nasa.gov). With a bit of luck, you
@@ -816,9 +811,8 @@ following information:
     Optical Depth at 500 nm at the same time as the scene was taken. In
     our case, on 28th October 2016, the *EPA-Res_Triangle_Pk* station
     measured AOD = 0.07 (approximately).  
-      
 
-6.  *Mean target elevation above sea level*
+6. *Mean target elevation above sea level*
 
     Mean target elevation above sea level refers to the mean elevation
     of the computational region. You can estimate it from the digital
@@ -830,14 +824,12 @@ following information:
 
     The mean elevation is stored in *mean*. In our case, `mean=110`. In
     the 6S file it will be displayed in \[-km\], i.e., `-0.110`.  
-      
 
-7.  *Sensor height*
+7. *Sensor height*
     Since the sensor is on board a satellite, the sensor height will be
     set to `-1000`.  
-      
 
-8.  *Sensor band*
+8. *Sensor band*
 
     The overview of satellite bands can be found in table F (see above).
     For Sentinel-2A, the band numbers span from 166 to 178, and for

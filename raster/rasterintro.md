@@ -14,11 +14,11 @@ bounds of all cells within the map.
 
 As a general rule in GRASS GIS:
 
-1.  Raster output maps have their bounds and resolution equal to those
+1. Raster output maps have their bounds and resolution equal to those
     of the current computational region.
-2.  Raster input maps are automatically cropped/padded and rescaled
+2. Raster input maps are automatically cropped/padded and rescaled
     (using nearest-neighbour resampling) to match the current region.
-3.  Raster input maps are automatically masked if a raster map named
+3. Raster input maps are automatically masked if a raster map named
     MASK exists. The MASK is only applied when *reading* maps from the
     disk.
 

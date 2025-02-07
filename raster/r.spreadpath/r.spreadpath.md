@@ -19,7 +19,7 @@ The backlink inputs can be generated from another GRASS raster program
 on a raster setting. More information on *r.spread* and *r.spreadpath*
 can be found in Xu (1994).
 
-## Parameters:
+## Parameters
 
 **x_input=***name*  
 Name of input raster map layer containing backlink UTM easting

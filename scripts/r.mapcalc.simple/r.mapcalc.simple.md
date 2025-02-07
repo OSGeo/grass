@@ -55,9 +55,11 @@ r.mapcalc.simple expression="0" output=zeros
 r.mapcalc.simple expression="1" output=ones
 r.mapcalc.simple expression="2" output=twos
 ```
+
 ```sh
 r.mapcalc.simple expression="A + B + C" a=zeros b=ones c=twos output=result1
 ```
+
 ```sh
 r.mapcalc.simple expression="(A * B) / 2 + 3 * C" a=zeros b=ones c=twos output=result2
 ```

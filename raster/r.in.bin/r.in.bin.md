@@ -142,7 +142,7 @@ r.in.bin in=gpcp_v2.2_psg.1979 out=gpcp_1979. \
 
 ## AUTHORS
 
-Jacques Bouchard, France (bouchard@onera.fr)  
-Bob Covill, Canada (bcovill@tekmap.ns.ca)  
+Jacques Bouchard, France (<bouchard@onera.fr>)  
+Bob Covill, Canada (<bcovill@tekmap.ns.ca>)  
 Markus Metz  
-Man page: Zsolt Felker (felker@c160.pki.matav.hu)
+Man page: Zsolt Felker (<felker@c160.pki.matav.hu>)

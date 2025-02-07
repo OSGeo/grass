@@ -11,10 +11,10 @@ stations dataset. Inputs:
 
 Method:
 
-1.  each ETa pixel is divided by the same day ETo and become ETrF
-2.  each ETrF pixel is multiplied by the ETo sum for the representative
+1. each ETa pixel is divided by the same day ETo and become ETrF
+2. each ETrF pixel is multiplied by the ETo sum for the representative
     days
-3.  Sum all n temporal \[ETrF\*ETo_sum\] pixels to make a summed(ET) in
+3. Sum all n temporal \[ETrF\*ETo_sum\] pixels to make a summed(ET) in
     \[DOYmin;DOYmax\]
 
 representative days calculation: let assume i belongs to range

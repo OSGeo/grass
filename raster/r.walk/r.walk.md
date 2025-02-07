@@ -169,7 +169,7 @@ landcover*
 Antony Awaida, Intelligent Engineering, Systems Laboratory, M.I.T.  
 James Westervelt, U.S.Army Construction Engineering Research
 Laboratory  
-Updated for Grass 5 by Pierre de Mouveaux (pmx@audiovu.com)
+Updated for Grass 5 by Pierre de Mouveaux (<pmx@audiovu.com>)
 
 **Initial version of r.walk:**  
 Steno Fontanari, 2002

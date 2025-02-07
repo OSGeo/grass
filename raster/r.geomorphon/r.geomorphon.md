@@ -3,7 +3,7 @@
 *r.geomorphon* calculates terrain forms using machine-vison technique
 called geomorphons.
 
-### What is geomorphon:
+### What is geomorphon
 
 <img src="geomorphon.png" data-border="1" alt="What is geomorphon" />  
 
@@ -111,7 +111,7 @@ Returns geomorphic map with 10 most popular terrestrial forms. Legend
 for forms, its definition by the number of *+* and *-* and its idealized
 visualisation are presented at the image.
 
-### Forms represented by geomorphons:
+### Forms represented by geomorphons
 
 <img src="legend.png" data-border="1" alt="forms legend" />  
 

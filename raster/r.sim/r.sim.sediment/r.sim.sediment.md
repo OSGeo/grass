@@ -86,9 +86,8 @@ GeoModel, s.r.o. Bratislava, Slovakia
 
 [hofierka@geomodel.sk](mailto:hofi@geomodel.sk)
 
-  
 Chris Thaxton  
 North Carolina State University  
-csthaxto@unity.ncsu.edu  
+<csthaxto@unity.ncsu.edu>  
 
 <csthaxto@unity.ncsu.edu>

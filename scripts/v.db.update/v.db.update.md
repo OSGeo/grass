@@ -100,4 +100,4 @@ jul|logjuly
 
 ## AUTHOR
 
-Moritz Lennert (mlennert@club.worldonline.be)
+Moritz Lennert (<mlennert@club.worldonline.be>)

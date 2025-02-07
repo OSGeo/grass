@@ -132,7 +132,7 @@ A dynamic example can be found in the *d.polar* shell script.
 echo "symbol basic/star 20 2264417 5413182 black red" | d.graph -m
 ```
 
-### Split the screen into quadrants:
+### Split the screen into quadrants
 
 ```sh
 d.frame -s full_screen

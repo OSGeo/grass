@@ -21,7 +21,6 @@ Map Swipe allows you to:
 - change the appearance of cursor in 'mirror' mode (available in Map
   Swipe settings)
 
-  
 <img src="mapswipe_tsunami.jpg" data-border="1"
 alt="Map swipe screenshot" />  
 Pre and post disaster images of the tsunami in Japan in 2011. The upper

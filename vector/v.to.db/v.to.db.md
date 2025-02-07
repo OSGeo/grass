@@ -110,7 +110,7 @@ v.db.select mysoils layer=2
 
 Compute D<sub>L</sub>, the Fractal Dimension (Mandelbrot, 1982), of the
 boundary defining a polygon based on the formula:  
-` D = 2 * (log perimeter) / (log area):`  
+`D = 2 * (log perimeter) / (log area):`  
 
 ```sh
 g.copy vect=soils,mysoils

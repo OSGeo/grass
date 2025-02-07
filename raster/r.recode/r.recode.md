@@ -25,14 +25,14 @@ DCELL to FCELL, etc). Standard floating point raster precision is float
 
 There are four basic routines that it accepts:
 
-1.  old-low to old-high is reclassed to new-low to new high , where the
+1. old-low to old-high is reclassed to new-low to new high , where the
     user provides all four values. The program figures on the fly what
     type of raster should be created.
-2.  old-low to old-high is reclassed to a single new value. Anything
+2. old-low to old-high is reclassed to a single new value. Anything
     outside the range is null.
-3.  \* to old-high will reclass everything less than old-high to a
+3. \* to old-high will reclass everything less than old-high to a
     single new value.
-4.  old-low to \* will reclass everything greater than old-low to a
+4. old-low to \* will reclass everything greater than old-low to a
     single new value.
 
 These four sets of arguments can be given on the command line, or piped

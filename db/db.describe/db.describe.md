@@ -34,6 +34,7 @@ Column 2: OBJECTID:INTEGER:11
 Column 3: AREA:DOUBLE PRECISION:20
 [...]
 ```
+
 ```sh
 db.describe table=hospitals database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf/' \
             driver=dbf
@@ -66,6 +67,7 @@ type:INTEGER
 ```sh
 db.describe table=hospitals format=json
 ```
+
 ```sh
 {
     "table": "hospitals",

@@ -66,4 +66,4 @@ r.contour input=elev_lid792_1m output=elev_lid792_1m_contours \
 ## AUTHORS
 
 Terry Baker, U.S. Army Construction Engineering Research Laboratory  
-3/2001: cut parameter and fixes by Andrea Aime (aaime@libero.it)
+3/2001: cut parameter and fixes by Andrea Aime (<aaime@libero.it>)

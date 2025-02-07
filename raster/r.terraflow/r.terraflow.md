@@ -170,6 +170,7 @@ r.terraflow elev=elevation.10m filled=elevation10m.filled \
     dir=elevation10m.mfdir swatershed=elevation10m.watershed \
     accumulation=elevation10m.accu tci=elevation10m.tci
 ```
+
 ```sh
 g.region raster=elevation.10m -p
 r.terraflow elev=elevation.10m filled=elevation10m.filled \
@@ -180,21 +181,21 @@ r.terraflow elev=elevation.10m filled=elevation10m.filled \
 
 ## REFERENCES
 
-1.  The [TerraFlow](http://www.cs.duke.edu/geo*/terraflow/) project at
+1. The [TerraFlow](http://www.cs.duke.edu/geo*/terraflow/) project at
     Duke University
-2.  <a
+2. <a
     href="http://www.cs.duke.edu/geo*/terraflow/papers/alenex00_drainage.ps.gz"
     id="arge:drainage">I/O-efficient algorithms for problems on grid-based
     terrains</a>. Lars Arge, Laura Toma, and Jeffrey S. Vitter. In
     *Proc. Workshop on Algorithm Engineering and Experimentation*, 2000.
     To appear in *Journal of Experimental Algorithms*.
-3.  <a
+3. <a
     href="http://www.cs.duke.edu/geo*/terraflow/papers/acmgis01_terraflow.pdf"
     id="terraflow:acmgis01">Flow computation on massive grids</a>. Lars
     Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura Toma, Jeffrey S.
     Vitter, Dean Urban and Rajiv Wickremesinghe. In *Proc. ACM Symposium
     on Advances in Geographic Information Systems*, 2001.
-4.  <a
+4. <a
     href="http://www.cs.duke.edu/geo*/terraflow/papers/journal_terraflow.pdf"
     id="terraflow:geoinformatica">Flow computation on massive grid
     terrains</a>. Lars Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura

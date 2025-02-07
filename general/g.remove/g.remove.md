@@ -34,4 +34,4 @@ g.remove -f type=vector pattern="stream_*" exclude="*_final"
 ## AUTHOR
 
 Huidae Cho  
-grass4u@gmail.com
+<grass4u@gmail.com>

@@ -104,17 +104,17 @@ Example for solving multiple directions:
 Multiple directions can be solved as in the above example with the
 following steps:
 
-1.  Create multiple directions with **r.cost**/**r.walk** using the
+1. Create multiple directions with **r.cost**/**r.walk** using the
     **-b** flag
-2.  Extract paths using **r.path format=bitmask**
-3.  Calculate the distance from NULL cells to paths using
+2. Extract paths using **r.path format=bitmask**
+3. Calculate the distance from NULL cells to paths using
     **r.grow.distance -n input=\<paths from r.path\>**
-4.  Invert the sign of the distances with **r.mapcalc** because for the
+4. Invert the sign of the distances with **r.mapcalc** because for the
     solver smaller is better, and here we want to get the center of an
     area with multiple directions
-5.  Use these negative distances as solver for a second pass of
+5. Use these negative distances as solver for a second pass of
     **r.cost**
-6.  Extract paths again with **r.path** to get a geometrically optimized
+6. Extract paths again with **r.path** to get a geometrically optimized
     solution
 
 ## NULL CELLS
@@ -286,7 +286,7 @@ minimum cost path.
 Antony Awaida, Intelligent Engineering Systems Laboratory, M.I.T.  
 James Westervelt, U.S.Army Construction Engineering Research
 Laboratory  
-Updated for Grass 5 by Pierre de Mouveaux (pmx@audiovu.com)  
+Updated for Grass 5 by Pierre de Mouveaux (<pmx@audiovu.com>)  
 Markus Metz  
 Multiple path directions sponsored by
 [mundialis](https://www.mundialis.de)

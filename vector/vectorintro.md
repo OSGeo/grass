@@ -143,7 +143,7 @@ table linked to a vector map.
   objects can be added to the geometry file with category numbers. Using
   [v.category](v.category.md), category numbers can be printed or
   maintained.  
-    
+
 - **Layers**  
   Layers are a characteristic of the vector feature (geometries) file.
   As mentioned above, categories allow the user to give either a unique

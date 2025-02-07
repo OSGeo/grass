@@ -287,13 +287,13 @@ area for the region of interest is completely included.
 To isolate an individual river network using the output of this module,
 a number of approaches may be considered.
 
-1.  Use a resample of the basins catchment raster map as a raster
+1. Use a resample of the basins catchment raster map as a raster
     mask.  
     The equivalent vector map method is similar using
     *[v.select](v.select.md)* or *[v.overlay](v.overlay.md)*.
-2.  Use the *[r.cost](r.cost.md)* module with a point in the river as a
+2. Use the *[r.cost](r.cost.md)* module with a point in the river as a
     starting point.
-3.  Use the *[v.net.iso](v.net.iso.md)* module with a node in the river
+3. Use the *[v.net.iso](v.net.iso.md)* module with a node in the river
     as a starting point.
 
 All individual river networks in the stream segments output can be

@@ -6,22 +6,22 @@ values entered by the user.
 
 The parameters controlling the shading are:
 
-1.  An **input** raster map to provide elevation values for the shaded
+1. An **input** raster map to provide elevation values for the shaded
     relief map. Typically, this would be a map layer of elevation;
     however, any raster map layer can be named.
-2.  The **altitude** of the sun in degrees above the horizon (a value
+2. The **altitude** of the sun in degrees above the horizon (a value
     between 0 and 90 degrees).
-3.  The **azimuth** of the sun in degrees to the east of north (a value
+3. The **azimuth** of the sun in degrees to the east of north (a value
     between 0 and 360 degrees; clockwise from north)
-4.  The scaling parameter, which compensates for a different horizontal
+4. The scaling parameter, which compensates for a different horizontal
     **scale** than vertical scale. If **scale** is a number, then the
     ewres and nsres are multiplied by that scale to calculate the
     shading. (Default=1.0 for equivalent horizontal and vertical
     scales.)
-5.  The **zscale** exaggeration factor that changes the apparent relief
+5. The **zscale** exaggeration factor that changes the apparent relief
     for the shaded relief map. This can be any positive (or negative)
     floating point value. (default=1.0)
-6.  Horizontal distances are calculated in meters, using geodesic
+6. Horizontal distances are calculated in meters, using geodesic
     distances for a latitude-longitude projection. With an elevation map
     measured in feet, the **units** option can be set to automatically
     convert meters to international feet (0.3048 meters = 1 foot) or

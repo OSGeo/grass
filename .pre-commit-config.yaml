@@ -9,6 +9,7 @@ repos:
         exclude: |
           (?x)^(
                 configure$|
+                .*\.md$|
                 .*\.ascii$|
                 .*\.asc$|
                 .*\.ref$|

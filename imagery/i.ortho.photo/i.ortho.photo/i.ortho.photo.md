@@ -9,22 +9,22 @@ maps in a single imagery group. Alternatively, all the steps can be
 performed separately by running the appropriate modules.
 
 - *Initialization Options*
-  1.  Create/Modify imagery group to be orthorectified:
+  1. Create/Modify imagery group to be orthorectified:
       [i.group](i.group.md)
-  2.  Select/Modify target project (formerly known as location) and
+  2. Select/Modify target project (formerly known as location) and
       mapset for orthorectification: [i.ortho.target](i.ortho.target.md)
-  3.  Select/Modify target elevation model used for orthorectification:
+  3. Select/Modify target elevation model used for orthorectification:
       [i.ortho.elev](i.ortho.elev.md)
-  4.  Create/Modify camera file of imagery group:
+  4. Create/Modify camera file of imagery group:
       [i.ortho.camera](i.ortho.camera.md)
 - *Transformation Parameters Computation*
-  1.  Compute image-to-photo transformation:
+  1. Compute image-to-photo transformation:
       [g.gui.photo2image](g.gui.photo2image.md)
-  2.  Initialize parameters of camera: [i.ortho.init](i.ortho.init.md)
-  3.  Compute ortho-rectification parameters from ground control points:
+  2. Initialize parameters of camera: [i.ortho.init](i.ortho.init.md)
+  3. Compute ortho-rectification parameters from ground control points:
       [g.gui.image2target](g.gui.image2target.md)
 - *Ortho-rectification*
-  1.  Ortho-rectify imagery group: [i.ortho.rectify](i.ortho.rectify.md)
+  1. Ortho-rectify imagery group: [i.ortho.rectify](i.ortho.rectify.md)
 
 The ortho-rectification procedure in GRASS GIS places the image pixels
 on the surface of the earth by matching the coordinate system of the
@@ -65,7 +65,7 @@ coordinate system (e.g. ETRS33).
 
 The steps to follow are described below:
 
-1.  *Create/Modify imagery group to be orthorectified:
+1. *Create/Modify imagery group to be orthorectified:
     [i.group](i.group.md)*
 
     This step is to be run in the **source project**.
@@ -85,7 +85,7 @@ The steps to follow are described below:
     IMG_0022 source_mapset
     ```
 
-2.  *Select/Modify target project and mapset for orthorectification:
+2. *Select/Modify target project and mapset for orthorectification:
     [i.ortho.target](i.ortho.target.md)*
 
     This step is to be run in the **source project**.
@@ -103,7 +103,7 @@ The steps to follow are described below:
     target_mapset
     ```
 
-3.  *Select/Modify target elevation model used for orthorectification:
+3. *Select/Modify target elevation model used for orthorectification:
     [i.ortho.elev](i.ortho.elev.md)*
 
     This step is to be run in the **source project**.
@@ -130,7 +130,7 @@ The steps to follow are described below:
     no data values  :(null)
     ```
 
-4.  *Create/Modify camera file of imagery group:
+4. *Create/Modify camera file of imagery group:
     [i.ortho.camera](i.ortho.camera.md)*
 
     This step is to be run in the **source project**.
@@ -160,7 +160,7 @@ The steps to follow are described below:
           3 0 -7.7
     ```
 
-5.  *Compute image-to-photo transformation:
+5. *Compute image-to-photo transformation:
     [g.gui.photo2image](g.gui.photo2image.md)*
 
     This step is to be run in the **source project**.
@@ -192,7 +192,7 @@ The steps to follow are described below:
     height="636" alt="i.ortho.photo example" />](i_ortho_photo_step5.png)  
     *Step 5: Image-to-photo transformation of an oblique image*
 
-6.  *Initialize parameters of camera: [i.ortho.init](i.ortho.init.md)*
+6. *Initialize parameters of camera: [i.ortho.init](i.ortho.init.md)*
 
     This step is to be run in the **source project**.
 
@@ -233,7 +233,7 @@ The steps to follow are described below:
     STATUS (1=OK, 0=NOT OK) 0
     ```
 
-7.  *Compute ortho-rectification parameters from ground control points:
+7. *Compute ortho-rectification parameters from ground control points:
     [g.gui.image2target](g.gui.image2target.md)*
 
     This step is to be run in the **target project**.
@@ -270,7 +270,7 @@ The steps to follow are described below:
     *Step 7: Detail of ground control points matching in an oblique
     image and terrain model*
 
-8.  *Ortho-rectify imagery group: [i.ortho.rectify](i.ortho.rectify.md)*
+8. *Ortho-rectify imagery group: [i.ortho.rectify](i.ortho.rectify.md)*
 
     This step is to be run in the **source project**.
 

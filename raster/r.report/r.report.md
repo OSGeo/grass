@@ -40,6 +40,7 @@ are not reported (see **-n** flag).
 ```sh
 r.report -n map=geology_30m units=mi,a sort=desc
 ```
+
 ```sh
 +-----------------------------------------------------------------------------+
 |                         RASTER MAP CATEGORY REPORT                          |
@@ -79,6 +80,7 @@ only part of the table):
 ```sh
 r.report map=zipcodes@PERMANENT,landclass96@PERMANENT units=h,p
 ```
+
 ```sh
 +-----------------------------------------------------------------------------+
 |                         RASTER MAP CATEGORY REPORT                          |
@@ -124,6 +126,7 @@ The output from *r.report* can be output in JSON by passing the
 ```sh
 r.report -n -a map=towns,elevation units=miles,meters,kilometers,acres,hectares,cells,percent nsteps=2 format=json
 ```
+
 ```sh
 {
     "location": "nc_spm_08_grass7",

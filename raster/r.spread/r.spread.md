@@ -9,9 +9,9 @@ with *r.spreadpath*.
 Spread phenomena usually show uneven movement over space. Such
 unevenness is due to two reasons:
 
-1.  the uneven conditions from location to location, which can be called
+1. the uneven conditions from location to location, which can be called
     *spatial heterogeneity*, and
-2.  the uneven conditions in different directions, which can be called
+2. the uneven conditions in different directions, which can be called
     *anisotropy*.
 
 The anisotropy of spread occurs when any of the determining factors have

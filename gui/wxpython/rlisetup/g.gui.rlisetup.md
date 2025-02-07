@@ -38,7 +38,7 @@ The startup window shows your configuration files, you can:
 
 **TODO: description below needs further updates**
 
-1.  ***View/Edit*** (Load a file) from the shown list: the configuration
+1. ***View/Edit*** (Load a file) from the shown list: the configuration
     is shown in a small text editor window. Configuration files are
     saved in the folder `C:\Users\userxy\AppData\Roaming\GRASS8\r.li\`
     (MS-Windows) or `$HOME/.r.li/` (GNU/Linux) (the file name can be
@@ -49,16 +49,16 @@ The startup window shows your configuration files, you can:
     `C:\Users\userxy\AppData\Roaming\GRASS8\r.li\output\` (MS-Windows)
     or `$HOME/.grass8/r.li/output/` (GNU/Linux).  
     All dimensions are percentages of raster rows or columns.
-2.  ***Create*** a new configuration file: used for creating a new
+2. ***Create*** a new configuration file: used for creating a new
     configuration file in an interactive way, in three steps:
-    1.  Choose file name and maps to use for setting:
+    1. Choose file name and maps to use for setting:
         - *Name for new configuration file*(required): the name of new
           configuration file
         - *Raster map name to use to select areas* (required): the name
           of raster map used for selecting sampling areas
         - *Vector map to overlay* (optional): name of a vector map used
           for selecting sampling areas
-    2.  Set the sampling frame. The sample frame is a rectangular area
+    2. Set the sampling frame. The sample frame is a rectangular area
         which contains all the areas to analyze. It can be defined in
         three ways:
         - *Whole map layer*: the sample frame is the whole map
@@ -67,7 +67,7 @@ The startup window shows your configuration files, you can:
           and columns.
         - *Draw the sample frame*: the user draws the sample frame on
           map using mouse.
-    3.  Set the sample areas. The sample areas are simply the areas to
+    3. Set the sample areas. The sample areas are simply the areas to
         analyze. They can be defined in five ways (see the picture
         below):
         - *Whole map layer*: the sample area is the whole sample frame
@@ -107,10 +107,10 @@ The startup window shows your configuration files, you can:
           can be used only with the specified raster map, and the
           procedure can be used only if whole map layer is selected as
           sampling frame.
-3.  ***Remove a file*** the selected file is deleted from the available
+3. ***Remove a file*** the selected file is deleted from the available
     configuration files.
-4.  ***Help***: open this help text.
-5.  ***Close*** module window.
+4. ***Help***: open this help text.
+5. ***Close*** module window.
 
 ## NOTES
 

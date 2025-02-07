@@ -122,6 +122,7 @@ areas=1832
 islands=907
 primitives=5481
 ```
+
 ```sh
 v.info -g map=geology
 

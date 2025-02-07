@@ -96,8 +96,8 @@ to type in the new value).
 Perhaps method(s) for multiple or mass cell edits would be useful. This
 could be done by providing modes in which the user may:
 
-1.  edit a block of cells to a given value by drawing a box;
-2.  be able to choose a given value which is automatically used as the
+1. edit a block of cells to a given value by drawing a box;
+2. be able to choose a given value which is automatically used as the
     new value on each cell chosen until a different value is desired.
 
 There is no user-interrupt handling. This could leave files in .tmp or

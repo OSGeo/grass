@@ -208,8 +208,6 @@ alt="R, G, B composite of PCA sharpened image at 15m" /><br />
 </tbody>
 </table>
 
-  
-
 ## REFERENCES
 
 - Original Brovey formula reference unknown, probably...  

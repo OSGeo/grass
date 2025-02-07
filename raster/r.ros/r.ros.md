@@ -73,12 +73,12 @@ r.ros -s model=fire_model moisture_1h=1hour_moisture moisture_live=live_moisture
 
 ## NOTES
 
-1.  *r.ros* is supposed to be run before running
+1. *r.ros* is supposed to be run before running
     *[r.spread](r.spread.md)* module. The combination of these two
     modules forms a simulation of the spread of wildfires.
-2.  The user should be sure that the inputs to *r.ros* are in proper
+2. The user should be sure that the inputs to *r.ros* are in proper
     units.
-3.  The output units for the base and maximum ROSes are in cm/minute
+3. The output units for the base and maximum ROSes are in cm/minute
     rather than ft/minute, which is due to that a possible zero
     ft/minute base ROS value and a positive integer ft/minute maximum
     ROS would result in calculation failure in the

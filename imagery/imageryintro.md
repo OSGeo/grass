@@ -68,9 +68,9 @@ along the edge of the map itself.
 
 As a general rule in GRASS:
 
-1.  Raster/imagery output maps have their bounds and resolution equal to
+1. Raster/imagery output maps have their bounds and resolution equal to
     those of the current region.
-2.  Raster/imagery input maps are automatically cropped/padded and
+2. Raster/imagery input maps are automatically cropped/padded and
     rescaled (using nearest-neighbor resampling) to match the current
     region.
 

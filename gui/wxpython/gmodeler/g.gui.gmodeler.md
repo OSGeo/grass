@@ -197,8 +197,6 @@ window with *Save* and *Run* option are shown in the figures below.
 [<img src="g_gui_gmodeler_model_avg.png" width="600" height="272" />](g_gui_gmodeler_model_avg.png)  
 *Figure: A model to perform average statistics for zipcode zones.*
 
-  
-
 [<img src="g_gui_gmodeler_items.png" width="600" height="330" />](g_gui_gmodeler_items.png)
 
 [<img src="g_gui_gmodeler_python.png" width="600" height="330" />](g_gui_gmodeler_python.png)  
@@ -254,8 +252,6 @@ set in the module dialog as input called `%raster`.
 
 [<img src="g_gui_gmodeler_variables.png" width="600" height="330" />](g_gui_gmodeler_variables.png)  
 *Figure: Example of raster file variable settings.*
-
-  
 
 [<img src="g_gui_gmodeler_variables_raster.png" width="600"
 height="257" />](g_gui_gmodeler_variables_raster.png)  

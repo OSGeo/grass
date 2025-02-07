@@ -18,7 +18,7 @@ were used to collect the signatures.
 The output raster map names are built by appending a ".1", ".2", etc. to
 the output raster map name specified on the command line.
 
-### Parameters:
+### Parameters
 
 **group=***name*  
 Name of the [imagery](i.group.md) group to which the raster band files

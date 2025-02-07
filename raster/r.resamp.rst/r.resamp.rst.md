@@ -164,7 +164,7 @@ Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
 
 *Original version of program (in FORTRAN):*  
 Lubos Mitas, NCSA, University of Illinois at Urbana Champaign, Il  
-Helena Mitasova, US Army CERL, Champaign, Illinois 
+Helena Mitasova, US Army CERL, Champaign, Illinois
 
 *Modified program (translated to C, adapted for GRASS , segmentation
 procedure):*  

@@ -23,6 +23,7 @@ separating roads on the left bank from roads on the right bank.
 v.net.connectivity input=roads output=roads_conn set1_where="bank=left" \
       set2_where="bank=right"
 ```
+
 ```sh
 v.net.connectivity input=airtraffic output=connectivity \
       set1_where="name=JFK" set2_where="name=Heathrow" node_column=capacity

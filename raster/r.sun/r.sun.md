@@ -139,6 +139,7 @@ NULL data are considered as no barrier with shadowing effect.
 
 The maps' history files are generated containing the following listed
 parameters used in the computation:  
+
 - Solar constant used W.m-2  
 - Extraterrestrial irradiance on a plane perpendicular to the solar beam
 \[W.m-2\]  

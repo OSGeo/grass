@@ -181,7 +181,6 @@ The result will be the 90th percentile of neighborhood.
 **quantile**  
 Any quantile as specified by "quantile" input parameter.
 
-  
 *Neighborhood Size:* The neighborhood **size** specifies which cells
 surrounding any given cell fall into the neighborhood for that cell. The
 **size** must be an odd integer and represent the length of one of
@@ -336,8 +335,8 @@ dependent on the input data values.)
 The following logic has been implemented: For any aggregate, there are
 two factors affecting the output type:
 
-1.  Whether the input map is integer or floating-point.
-2.  Whether the weighted or unweighted version of the aggregate is used.
+1. Whether the input map is integer or floating-point.
+2. Whether the weighted or unweighted version of the aggregate is used.
 
 These combine to create four possibilities:
 
@@ -368,13 +367,13 @@ meaningless.
 
 With the current aggregates, there are 5 cases:
 
-1.  Output is always float: average, variance, stddev, quantiles (with
+1. Output is always float: average, variance, stddev, quantiles (with
     interpolation).
-2.  Output is always integer: diversity, interspersion.
-3.  Output is integer if unweighted, float if weighted: count.
-4.  Output matches input: minimum, maximum, range, mode (subject to note
+2. Output is always integer: diversity, interspersion.
+3. Output is integer if unweighted, float if weighted: count.
+4. Output matches input: minimum, maximum, range, mode (subject to note
     2 above), quantiles (without interpolation).
-5.  Output is integer for integer input and unweighted aggregate,
+5. Output is integer for integer input and unweighted aggregate,
     otherwise float: sum.
 
 ### Performance

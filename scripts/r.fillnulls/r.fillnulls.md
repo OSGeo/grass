@@ -18,7 +18,7 @@ The width of edge area can be adjusted by changing the edge parameter.
 During the interpolation following warning may occur when using the RST
 method:
 
-` Warning: strip exists with insufficient data`  
+`Warning: strip exists with insufficient data`  
 `Warning: taking too long to find points for interpolation--please change the region to area where your points are`
 
 This warning is generated if large data holes exist within the surface.

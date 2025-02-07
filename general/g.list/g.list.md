@@ -208,5 +208,5 @@ of their region.
 ## AUTHOR
 
 Huidae Cho  
-grass4u@gmail.com  
+<grass4u@gmail.com>  
 based on general/manage/cmd/list.c by Michael Shapiro

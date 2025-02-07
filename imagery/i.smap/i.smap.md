@@ -20,13 +20,13 @@ somewhat less computation. This mode is selected with the **-m** flag
 
 ## OPTIONS
 
-### Flags:
+### Flags
 
 **-m**  
 Use maximum likelihood estimation (instead of smap). Normal operation is
 to use SMAP estimation (see NOTES below).
 
-### Parameters:
+### Parameters
 
 **group=***name*  
 imagery group  

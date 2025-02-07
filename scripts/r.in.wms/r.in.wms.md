@@ -51,6 +51,7 @@ g.region n=90 s=-90 w=-180 e=180 res=0:10:00 -p
 r.in.wms url="http://watzmann-geog.urz.uni-heidelberg.de/cached/osm" layers=osm_auto:all output=osm format=png
 r.info osm
 ```
+
 ```sh
 # OSM Overlay WMS (can be used as an overlay for other maps)
 r.in.wms url="http://ows.mundialis.de/services/service?" layer=OSM-Overlay-WMS output=osm_overlay format=png
@@ -110,6 +111,7 @@ API](http://api.ign.fr/) website
 # using WMS_GRASS driver
 r.in.wms url="http://wms.cuzk.cz/wms.asp" layers=prehledka_kraju-linie srs=4326 output=kn format=png
 ```
+
 ```sh
 # using WMTS_GRASS driver
 r.in.wms url="http://geoportal.cuzk.cz/WMTS_ORTOFOTO/WMTService.aspx" layers=orto output=orthophoto \

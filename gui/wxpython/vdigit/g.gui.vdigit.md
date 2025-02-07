@@ -64,11 +64,9 @@ given threshold to the features from the background map.
 
 ### DIGITIZER TOOLBAR
 
-  
 <img src="vdigit_toolbar.jpg" data-border="1"
 alt="Vector Digitizer Toolbar" />  
   
-
 ![icon](icons/point-create.png)  *Digitize new point*  
 Add new point to vector map and optionally define its attributes
 (Ctrl+P).
@@ -127,6 +125,7 @@ settings) (Ctrl+K). Attributes can be also modified. Same functionality
 is accessible from Main toolbar "Query vector map (editable mode)".
 
 ![icon](icons/tools.png)  *Additional tools*  
+
 - *Break selected lines/boundaries at intersection*  
   Split given vector line or boundary into two lines on given position
   (based on *[v.clean](v.clean.md)*, `tool=break`).

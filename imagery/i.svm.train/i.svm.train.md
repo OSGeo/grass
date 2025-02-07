@@ -89,7 +89,7 @@ Please cite both - LIBSVM and i.svm.
 - For i.svm.\* modules:  
   Nartiss, M., & Melniks, R. (2023). Improving pixel-­based
   classification of GRASS GIS with support vector machine. Transactions
-  in GIS, 00, 1–16. https://doi.org/10.1111/tgis.13102
+  in GIS, 00, 1–16. <https://doi.org/10.1111/tgis.13102>
 - For LIBSVM:  
   Chang, C.-C., & Lin, C.-J. (2011). LIBSVM : a library for support
   vector machines. ACM Transactions on Intelligent Systems and

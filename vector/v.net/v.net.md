@@ -21,7 +21,7 @@ layer 1) and nodes are stored in a different data layer (normally layer
 *v.net* offers two ways to add nodes to a network of arcs and one method
 to add arcs to a set of nodes:
 
-1.  Use the *connect* operation to create nodes from a vector points
+1. Use the *connect* operation to create nodes from a vector points
     file and add these nodes to an existing vector network of arcs
     (i.e., lines/boundaries). This is useful when the goal is to analyze
     a set of places (points) in relation to a network--for example
@@ -37,14 +37,14 @@ to add arcs to a set of nodes:
     `v.category input=yourmap option=add cat=1 step=1 layer=3 output=newmap`  
     followed by  
     `v.db.addtable map=newmap layer=3 table=tablename`.
-2.  Create nodes and arcs from a vector line/boundary file using the
+2. Create nodes and arcs from a vector line/boundary file using the
     *node* operation. This is useful if you are mostly interested in the
     network itself and thus you can use intersections of the network as
     start and end points. Nodes will be created at all intersections of
     two or more lines. For an *arc* that consists of several segments
     connected by vertices (the typical case), only the starting and
     ending vertices are treated as network nodes.
-3.  Create straight-line arcs between pairs of nodes with the *arcs*
+3. Create straight-line arcs between pairs of nodes with the *arcs*
     option. This produces networks like those of airline flights between
     airports. It is also similar to the kind of network created with
     social networking software, making it possible to create

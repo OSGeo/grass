@@ -60,8 +60,6 @@ alt="&#39;Atmospheric haze&#39; Tasseled Cap component 4" /><br />
 </tbody>
 </table>
 
-  
-
 ## REFERENCES
 
 - LANDSAT-4/LANDSAT-5: TC-factor changed to CRIST et al. 1986, Proc.

@@ -336,8 +336,6 @@ tshift(A, size)         Shift STDS A with granule ("1 month" or 5)
 tsnap(A)                Snap time instances and intervals of STDS A
 ```
 
-  
-
 #### Single map with temporal extent
 
 The temporal algebra can also handle single maps with time stamps in the

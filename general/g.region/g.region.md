@@ -99,7 +99,7 @@ specified. Flag **-o** was added in GRASS GIS version 8 to simulate
 *g.region* behavior in prior versions when current region file was
 always updated unless **-u** was specified.
 
-### Additional parameter information:
+### Additional parameter information
 
 **zoom=***name*  
 Shrink current region settings to the smallest region encompassing all
@@ -340,6 +340,7 @@ coordinate reference system since it is reprojected on the fly.
 ```sh
 g.region -p format=json
 ```
+
 ```sh
 {
     "projection": "99 (Lambert Conformal Conic)",
@@ -368,9 +369,11 @@ g.region -p format=json
     "cells3": 2526500
 }
 ```
+
 ```sh
 g.region -l format=json
 ```
+
 ```sh
 {
     "nw_long": -78.688888505507336,

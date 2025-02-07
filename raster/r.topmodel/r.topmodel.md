@@ -79,7 +79,7 @@ Subcatchment 1
  5000   1.0
 ```
 
-**input**    
+**input**  
 This file contains observed weather data.
 
 ```sh

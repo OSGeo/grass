@@ -264,11 +264,11 @@ r.proj input=elevation.dem output=elevation.dem.reproj \
 
 ## REFERENCES
 
-1.  Evenden, G.I. (1990) [Cartographic projection procedures for the
+1. Evenden, G.I. (1990) [Cartographic projection procedures for the
     UNIX environment - a user's manual.](https://proj.org) USGS
     Open-File Report 90-284 (OF90-284.pdf) See also there: Interim
     Report and 2nd Interim Report on Release 4, Evenden 1994).
-2.  Richards, John A. (1993), Remote Sensing Digital Image Analysis,
+2. Richards, John A. (1993), Remote Sensing Digital Image Analysis,
     Springer-Verlag, Berlin, 2nd edition.
 
 [PROJ](https://proj.org): Projection/datum support library

@@ -11,9 +11,9 @@ redirected from a file, or piped through another program).
 
 Before using *r.reclass* the user must know the following:
 
-1.  The new categories desired; and, which old categories fit into which
+1. The new categories desired; and, which old categories fit into which
     new categories.
-2.  The names of the new categories.
+2. The names of the new categories.
 
 ## NOTES
 

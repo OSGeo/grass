@@ -7,7 +7,7 @@ EPSG:code\[:datum_trans\]**\] \| **-e** \| **-f** \| \[**--text** \|
 **--tmp-mapset**\] \[\[\[**\<GISDBASE\>/**\]**\<PROJECT\>/**\]
 **\<MAPSET\>**\] \[**--exec EXECUTABLE**\]
 
-### Flags:
+### Flags
 
 **-h** \| **-help** \| **--help**  
 Prints a brief usage message and exits
@@ -67,7 +67,7 @@ with the --exec flag). The active mapset will be the PERMANENT mapset.
 Run using a temporary mapset which is created in the specified project
 and deleted at the end of the execution (use with the --exec flag).
 
-### Parameters:
+### Parameters
 
 **GISDBASE**  
 Initial database directory which should be a fully qualified path (e.g.,
@@ -175,10 +175,10 @@ There is an order of precedence in the way *grass* determines the user
 interface to use. The following is the hierarchy from highest precedence
 to lowest.
 
-1.  Command line argument
-2.  Environment variable GRASS_GUI
-3.  Value set in `$HOME/.grass8/rc` (GUI)
-4.  Default value - `gui`
+1. Command line argument
+2. Environment variable GRASS_GUI
+3. Value set in `$HOME/.grass8/rc` (GUI)
+4. Default value - `gui`
 
 ### Python Environment Variables
 
