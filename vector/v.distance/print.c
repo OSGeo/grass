@@ -10,7 +10,7 @@ int print_upload(NEAR *Near, UPLOAD *Upload, int i, dbCatValArray *cvarr,
     JSON_Value *relations_value, *relation_value;
     JSON_Array *relations;
     JSON_Object *relation_object;
-    char *name;
+    char *name = NULL;
 
     if (format == JSON) {
         relations_value = json_value_init_array();
@@ -105,6 +105,8 @@ int print_upload(NEAR *Near, UPLOAD *Upload, int i, dbCatValArray *cvarr,
                         json_object_set_null(relation_object, "value");
                     }
                     break;
+                default:
+                    break;
                 }
                 json_object_set_string(relation_object, "name", name);
                 json_array_append_value(relations, relation_value);
@@ -166,6 +168,8 @@ int print_upload(NEAR *Near, UPLOAD *Upload, int i, dbCatValArray *cvarr,
                     else {
                         fprintf(stdout, "%snull", sep);
                     }
+                    break;
+                default:
                     break;
                 }
                 break;
