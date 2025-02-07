@@ -251,7 +251,7 @@ def generate_page_for_category_md(
                     img=img,
                     name=basename,
                     desc=desc,
-                    img_class=img_class
+                    img_class=img_class,
                 )
             )
 

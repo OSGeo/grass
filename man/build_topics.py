@@ -63,7 +63,7 @@ def build_topics(ext):
         except Exception:
             desc = desc.strip()
 
-        # Line ending can appear here.
+        # Line ending can appear here on Windows.
         key = key.strip()
         if not key:
             continue
