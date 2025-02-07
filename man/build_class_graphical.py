@@ -221,7 +221,9 @@ def generate_page_for_category_md(
         output.write('<ul class="img-list">')
 
         # for all modules:
-        for cmd in get_files(build_md.man_dir, short_family, ignore_gui=False, extension="md"):
+        for cmd in get_files(
+            build_md.man_dir, short_family, ignore_gui=False, extension="md"
+        ):
             basename = os.path.splitext(cmd)[0]
             desc = check_for_desc_override(basename)
             if desc is None:
@@ -239,13 +241,17 @@ def generate_page_for_category_md(
                 "<li>"
                 '<a href="{html}.html">'
                 '<img class="{img_class}" src="{img}">'
-                '</a>'
+                "</a>"
                 '<a href="{html}.html">'
                 '<span class="name">{name}</span> '
                 '<span class="desc">{desc}</span>'
                 "</a>"
                 "</li>".format(
-                    html=cmd.removesuffix(".md"), img=img, name=basename, desc=desc, img_class=img_class
+                    html=cmd.removesuffix(".md"),
+                    img=img,
+                    name=basename,
+                    desc=desc,
+                    img_class=img_class
                 )
             )
 
