@@ -9,14 +9,14 @@ set -eu
 #    wget
 #
 # Author(s):
-#    Martin Landa, Markus Neteler
+#    Martin Landa, Markus Neteler, Corey White
 #
 # Usage:
 #    If you have "pandoc" in PATH, execute for HTML file conversion in
 #    current directory and subdirectories:
 #      ./utils/grass_html2md.sh
 #
-# COPYRIGHT: (C) 2024 by the GRASS Development Team
+# COPYRIGHT: (C) 2024-2025 by the GRASS Development Team
 #
 #            This program is free software under the GNU General Public
 #            License (>=v2). Read the file COPYING that comes with GRASS
@@ -51,7 +51,7 @@ process_file() {
         sed 's#<div class="code"><pre>#<pre><code>#g' | \
         sed 's#</pre></div>#</code></pre>#g' | \
         pandoc -f html-native_divs \
-            -t gfm+pipe_tables --wrap=auto \
+            -t gfm+pipe_tables+gfm_auto_identifiers --wrap=auto \
             --lua-filter "${UTILSPATH}/pandoc_codeblock.lua" | \
         sed 's+ \\\$+ \$+g' | sed 's+%20+-+g' > "${f%%.html}.md"
 
