@@ -1,25 +1,25 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.carve</em> accepts vector stream data as input, transforms them to
+*r.carve* accepts vector stream data as input, transforms them to
 raster, and subtracts a default-depth + additional-depth from a DEM. If
 the given width is more than 1 cell, it will carve the stream with the
-given width. With the <b>-n</b> flag it should eliminate all flat cells within
-the stream, so when and if the water gets into the stream it will
-flow. The <em>points</em> option generates x,y,z for points which define the stream
-with the z-value of the bottom of the carved-in stream. These points
-can then be combined with contours to interpolate a new DEM with
+given width. With the **-n** flag it should eliminate all flat cells
+within the stream, so when and if the water gets into the stream it will
+flow. The *points* option generates x,y,z for points which define the
+stream with the z-value of the bottom of the carved-in stream. These
+points can then be combined with contours to interpolate a new DEM with
 better representation of valleys.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>r.carve</em> does not create a depressionless DEM because many
-depressions are in flat areas and not in the streams.
+*r.carve* does not create a depressionless DEM because many depressions
+are in flat areas and not in the streams.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 North Carolina sample dataset:
 
-<div class="code"><pre>
+```shell
 # set computational region
 g.region raster=elev_lid792_1m -p
 
@@ -60,78 +60,73 @@ r.mapcalc "accum_diff = elev_lid792_1m_accum - carved_dem_accum"
 r.colors accum_diff color=differences
 d.erase
 d.rast accum_diff
-</pre></div>
+```
 
-<center>
-<table border="1">
-<tr>
- <td align="center">
-  <a href="r_carve_dem_orig.png">
-  <img src="r_carve_dem_orig.png" width="300" height="321" alt="r.carve example: original DEM" border="0">
-  </a><br>
-  <i>Fig: Original 1m LiDAR based DEM with vector streams map on top</i>
-  </td>
- <td align="center">
-  <a href="r_carve_dem_orig_shaded.png">
-  <img src="r_carve_dem_orig_shaded.png" width="300" height="321" alt="r.carve example: original DEM shaded" border="0">
-  </a><br>
-  <i>Fig: Original 1m LiDAR based DEM shown as shaded terrain</i>
- </td>
+<table data-border="1">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><a href="r_carve_dem_orig.png"><img
+src="r_carve_dem_orig.png" data-border="0" width="300" height="321"
+alt="r.carve example: original DEM" /></a><br />
+<em>Fig: Original 1m LiDAR based DEM with vector streams map on
+top</em></td>
+<td style="text-align: center;"><a
+href="r_carve_dem_orig_shaded.png"><img
+src="r_carve_dem_orig_shaded.png" data-border="0" width="300"
+height="321" alt="r.carve example: original DEM shaded" /></a><br />
+<em>Fig: Original 1m LiDAR based DEM shown as shaded terrain</em></td>
 </tr>
-<tr>
- <td align="center">
-  <a href="r_carve_dem_carved.png">
-  <img src="r_carve_dem_carved.png" width="300" height="321" alt="r.carve example: carved DEM" border="0">
-  </a><br>
-  <i>Fig: Carved 1m LiDAR based DEM</i>
- </td>
- <td align="center">
-  <a href="r_carve_dem_carved_shaded.png">
-  <img src="r_carve_dem_carved_shaded.png" width="300" height="321" alt="r.carve example: carved DEM shaded" border="0">
-  </a><br>
-  <i>Fig: Carved 1m LiDAR based DEM shown as shaded terrain</i>
- </td>
+<tr class="even">
+<td style="text-align: center;"><a href="r_carve_dem_carved.png"><img
+src="r_carve_dem_carved.png" data-border="0" width="300" height="321"
+alt="r.carve example: carved DEM" /></a><br />
+<em>Fig: Carved 1m LiDAR based DEM</em></td>
+<td style="text-align: center;"><a
+href="r_carve_dem_carved_shaded.png"><img
+src="r_carve_dem_carved_shaded.png" data-border="0" width="300"
+height="321" alt="r.carve example: carved DEM shaded" /></a><br />
+<em>Fig: Carved 1m LiDAR based DEM shown as shaded terrain</em></td>
 </tr>
-<tr>
- <td align="center">
-  <a href="r_carve_dem_orig_accum.png">
-  <img src="r_carve_dem_orig_accum.png" width="300" height="321" alt="r.carve example: original DEM flow accumulated" border="0">
-  </a><br>
-  <i>Fig: Flow accumulation in original 1m LiDAR based DEM</i>
- </td>
- <td align="center">
-  <a href="r_carve_dem_carved_accum.png">
-  <img src="r_carve_dem_carved_accum.png" width="300" height="321" alt="r.carve example: carved DEM flow accumulation" border="0">
-  </a><br>
-  <i>Fig: Flow accumulation in carved 1m LiDAR based DEM</i>
- </td>
+<tr class="odd">
+<td style="text-align: center;"><a
+href="r_carve_dem_orig_accum.png"><img src="r_carve_dem_orig_accum.png"
+data-border="0" width="300" height="321"
+alt="r.carve example: original DEM flow accumulated" /></a><br />
+<em>Fig: Flow accumulation in original 1m LiDAR based DEM</em></td>
+<td style="text-align: center;"><a
+href="r_carve_dem_carved_accum.png"><img
+src="r_carve_dem_carved_accum.png" data-border="0" width="300"
+height="321"
+alt="r.carve example: carved DEM flow accumulation" /></a><br />
+<em>Fig: Flow accumulation in carved 1m LiDAR based DEM</em></td>
 </tr>
+</tbody>
 </table>
-</center>
 
-<h2>KNOWN ISSUES</h2>
+## KNOWN ISSUES
 
-<!-- Is this still the case as of Jan 11, 2008? - EP -->
-The module does not operate yet in latitude-longitude coordinate reference system.  It
-has not been thoroughly tested, so not all options may work properly -
-but this was the intention.
+The module does not operate yet in latitude-longitude coordinate
+reference system. It has not been thoroughly tested, so not all options
+may work properly - but this was the intention.
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<a href="https://web.archive.org/web/20240310015553/http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/reports/cerl99/rep99.html">Terrain
-modeling and Soil Erosion Simulations for Fort Hood and Fort Polk test
-areas</a>, by Helena Mitasova, Lubos Mitas, William M. Brown, Douglas
-M.  Johnston, GMSL (Report for CERL 1999)
+[Terrain modeling and Soil Erosion Simulations for Fort Hood and Fort
+Polk test
+areas](https://web.archive.org/web/20240310015553/http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/reports/cerl99/rep99.html),
+by Helena Mitasova, Lubos Mitas, William M. Brown, Douglas M. Johnston,
+GMSL (Report for CERL 1999)
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.flow.html">r.flow</a>,
-<a href="r.fill.dir.html">r.fill.dir</a>,
-<a href="r.watershed.html">r.watershed</a>
-</em>
+*[r.flow](r.flow.md), [r.fill.dir](r.fill.dir.md),
+[r.watershed](r.watershed.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Bill Brown (GMSL)<br>
+Bill Brown (GMSL)  
 GRASS 6 update: Brad Douglas

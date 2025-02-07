@@ -1,52 +1,48 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.out.lidar</em> converts GRASS vector map to a LiDAR point clouds
-in LAS format using the <a href="https://liblas.org">libLAS</a> library.
+*v.out.lidar* converts GRASS vector map to a LiDAR point clouds in LAS
+format using the [libLAS](https://liblas.org) library.
 
-<p>
-The <b>-r</b> flag limits the export to the current computational region
-extent (see <em><a href="g.region.html">g.region</a></em>).
-The <b>where</b> option limits the export by attributes (applied only
-when the columns are used for export).
+The **-r** flag limits the export to the current computational region
+extent (see *[g.region](g.region.md)*). The **where** option limits the
+export by attributes (applied only when the columns are used for
+export).
 
-<p>
-LAS format stores the coordinates as integers rounding the decimal places.
-Before that a scale is applied to preserve a certain number of decimal
-places. This scale can be set using <b>las_xyscale</b> and <b>las_xscale</b>
-options. For example, the scale value 0.01 will preserve two decimal
-places while the value 1.0 will preserve none.
+LAS format stores the coordinates as integers rounding the decimal
+places. Before that a scale is applied to preserve a certain number of
+decimal places. This scale can be set using **las_xyscale** and
+**las_xscale** options. For example, the scale value 0.01 will preserve
+two decimal places while the value 1.0 will preserve none.
 
-<h2>NOTES</h2>
+## NOTES
 
-The typical file extensions for the LAS format are .las and .laz (compressed).
-The compressed LAS (.laz) format can be exported only if libLAS has been
-compiled with <a href="https://laszip.org/">LASzip</a> support.
-It is also good when libLAS was compiled with GDAL. This is needed when
+The typical file extensions for the LAS format are .las and .laz
+(compressed). The compressed LAS (.laz) format can be exported only if
+libLAS has been compiled with [LASzip](https://laszip.org/) support. It
+is also good when libLAS was compiled with GDAL. This is needed when
 working with projections.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Generate fractal surface and export is as point in LAS format:
 
-<div class="code"><pre>
+```shell
 g.region raster=elevation res=100
 r.surf.fractal output=fractals
 r.to.vect input=fractals output=fractals type=point -z
 v.out.lidar input=fractals output=fractals.las
-</pre></div>
+```
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<a href="https://www.asprs.org/committee-general/laser-las-file-format-exchange-activities.html">
-ASPRS LAS format</a><br>
-<a href="https://liblas.org/">LAS library</a> <br>
+[ASPRS LAS
+format](https://www.asprs.org/committee-general/laser-las-file-format-exchange-activities.html)  
+[LAS library](https://liblas.org/)  
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.out.ogr.html">v.out.ogr</a>
-</em>
+*[v.out.ogr](v.out.ogr.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Vaclav Petras

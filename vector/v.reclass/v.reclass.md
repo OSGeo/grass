@@ -1,90 +1,84 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.reclass</em> allows user to create a new vector map based on
-the reclassification of an existing vector map. It also allows the user
-to change the <i>key column</i> away from the default of "<b>cat</b>" with
-the <b>column</b> option.
+*v.reclass* allows user to create a new vector map based on the
+reclassification of an existing vector map. It also allows the user to
+change the *key column* away from the default of "**cat**" with the
+**column** option.
 
-<p>Rules file may contain on each row either pair:
-<div class="code"><pre>
-keyword&nbsp;value
-</pre></div>
-(separated by space) or comment beginning with '#' (hash).
-Definition of new category begins with keyword <em>cat</em> followed
-by the new category value.
-Keyword <em>where</em> specifies SQL where condition.
+Rules file may contain on each row either pair:
 
-<h2>NOTES</h2>
+```shell
+keyword value
+```
 
-No table is created for the reclassed map if the <b>column</b> option is
-used and the column type is integer (as the result could contain ambiguities).
+(separated by space) or comment beginning with '#' (hash). Definition of
+new category begins with keyword *cat* followed by the new category
+value. Keyword *where* specifies SQL where condition.
 
-If the <b>column</b> option is used and the column type is string, a new
-table is created containing the newly generated cat numbers and a single
-column containing the unique string column values, sorted in alphabetical
-order.
+## NOTES
 
-<p>For dissolving common boundaries, see
-<em><a href="v.dissolve.html">v.dissolve</a></em>.
+No table is created for the reclassed map if the **column** option is
+used and the column type is integer (as the result could contain
+ambiguities). If the **column** option is used and the column type is
+string, a new table is created containing the newly generated cat
+numbers and a single column containing the unique string column values,
+sorted in alphabetical order.
 
-<p>Either the <b>rules</b> or <b>column</b> option must be specified.
+For dissolving common boundaries, see *[v.dissolve](v.dissolve.md)*.
 
-<h2>EXAMPLES</h2>
+Either the **rules** or **column** option must be specified.
 
-<h3>Example 1: Reclass by rules</h3>
+## EXAMPLES
 
-<div class="code"><pre>
+### Example 1: Reclass by rules
+
+```shell
 v.reclass input=land output=land_u type=boundary rules=land.rcl
-</pre></div>
+```
 
 The rules file contains:
 
-<div class="code"><pre>
+```shell
 # land reclass file
 cat 1
 where use = 'E13' and owner = 'Jara Cimrman'
 cat 2
 where use = 'E14'
-</pre></div>
+```
 
-Produces a new vector area map <em>land_u</em> containing boundaries from
-<em>land</em> with area category values selected from database by SQL
-select statement:
-<br>
-<code>select id from tland where use = 'E13' and owner = 'Jara Cimrman'</code>
-changed to category 1;
-<br>
-values selected from database by SQL select statement:
-<br>
-<code>select id from tland where use = 'E14'</code> changed to category 2.
+Produces a new vector area map *land_u* containing boundaries from
+*land* with area category values selected from database by SQL select
+statement:  
+`select id from tland where use = 'E13' and owner = 'Jara Cimrman'`
+changed to category 1;  
+values selected from database by SQL select statement:  
+`select id from tland where use = 'E14'` changed to category 2.
 
-<h3>Example 2: Reclass by attribute column</h3>
+### Example 2: Reclass by attribute column
 
-(North Carolina sample dataset)<br>
+(North Carolina sample dataset)  
 
-<div class="code"><pre>
+```shell
 v.reclass in=streams out=streams_by_type column=I_vs_P
 
 v.db.select streams_by_type
 cat|I_vs_P
 1|intermittent
 2|perennial
-</pre></div>
+```
 
-<h2>KNOWN ISSUES</h2>
+## KNOWN ISSUES
 
-No table is created for reclassed layer if the <b>rules</b> option is used.
+No table is created for reclassed layer if the **rules** option is used.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.dissolve.html">v.dissolve</a>,
-<a href="v.extract.html">v.extract</a>
-</em>
-<p><em><a href="sql.html">GRASS SQL interface</a></em>
+*[v.dissolve](v.dissolve.md), [v.extract](v.extract.md)*
 
-<h2>AUTHORS</h2>
+*[GRASS SQL interface](sql.md)*
 
-R.L. Glenn, USDA, SCS, NHQ-CGIS<br>
+## AUTHORS
+
+R.L. Glenn, USDA, SCS, NHQ-CGIS  
 from v.reclass to v.db.reclass and later to v.reclass in 5.7 rewritten
 by Radim Blazek

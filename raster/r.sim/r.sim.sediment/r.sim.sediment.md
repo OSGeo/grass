@@ -1,104 +1,94 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<i>r.sim.sediment</i> is a landscape scale, simulation
-model of soil erosion, sediment transport and deposition caused by flowing
-water designed for spatially variable terrain, soil, cover and
-rainfall excess conditions. The soil erosion model is based on the theory
-used in the USDA WEPP hillslope erosion model, but it has been generalized
-to 2D flow. The solution is based on the concept of duality between fields and
-particles and the underlying equations are solved by Green's
-function Monte  Carlo method, to provide robustness necessary for
-spatially variable conditions and high resolutions (Mitas and Mitasova
-1998).  Key inputs of the model include the following raster maps:
- elevation (<i>elevation</i> [m]), flow gradient given by the first-order partial
-derivatives of elevation field (<i> dx</i> and <i>dy</i>),
-overland flow water depth (<i>water_depth</i> [m]), detachment capacity coefficient
-(<i>detachment_coeff</i> [s/m]), transport capacity coefficient (<i>transport_coeff</i> [s]),
-critical shear stress (<i>shear_stress</i> [Pa])
-and surface  roughness coefficient called Manning's n (<i>man</i> raster map).
-Partial derivatives can be computed by <a href="v.surf.rst.html">v.surf.rst</a>
-or <a href="r.slope.aspect.html">r.slope.aspect</a>
-module. The data are automatically converted from feet to metric
-system using database/projection information, so the elevation always should be in meters.
-The water depth file can be computed using <a href="r.sim.water.html">r.sim.water</a>
-module. Other parameters must be determined using field measurements or
-reference literature (see suggested values in Notes and References). <br>
+*r.sim.sediment* is a landscape scale, simulation model of soil erosion,
+sediment transport and deposition caused by flowing water designed for
+spatially variable terrain, soil, cover and rainfall excess conditions.
+The soil erosion model is based on the theory used in the USDA WEPP
+hillslope erosion model, but it has been generalized to 2D flow. The
+solution is based on the concept of duality between fields and particles
+and the underlying equations are solved by Green's function Monte Carlo
+method, to provide robustness necessary for spatially variable
+conditions and high resolutions (Mitas and Mitasova 1998). Key inputs of
+the model include the following raster maps: elevation (*elevation*
+\[m\]), flow gradient given by the first-order partial derivatives of
+elevation field ( *dx* and *dy*), overland flow water depth
+(*water_depth* \[m\]), detachment capacity coefficient
+(*detachment_coeff* \[s/m\]), transport capacity coefficient
+(*transport_coeff* \[s\]), critical shear stress (*shear_stress* \[Pa\])
+and surface roughness coefficient called Manning's n (*man* raster map).
+Partial derivatives can be computed by [v.surf.rst](v.surf.rst.md) or
+[r.slope.aspect](r.slope.aspect.md) module. The data are automatically
+converted from feet to metric system using database/projection
+information, so the elevation always should be in meters. The water
+depth file can be computed using [r.sim.water](r.sim.water.md) module.
+Other parameters must be determined using field measurements or
+reference literature (see suggested values in Notes and References).  
 
-<p>
-Output includes transport capacity raster map <i>transport_capacity</i>  in [kg/ms],
-transport capacity limited erosion/deposition raster map
-<i>tlimit_erosion_deposition</i> [kg/m<sup>2</sup>s]i that are output almost immediately and
-can be viewed while the simulation continues. Sediment flow rate raster map
-<i>sediment_flux</i> [kg/ms], and net erosion/deposition raster map [kg/m<sup>2</sup>s]
-can take longer time depending on time step and simulation time.
-Simulation time is controlled by <i>niterations</i> [minutes] parameter.
-<!-- Output files can be saved during simulation using <i>outiter</i> parameter
-defining simulation time step for writing output files. This option requires
-time series flag <i>-t</i>. Files are saved with suffix   containing
-iteration number (e.g. name.500, name.1000, etc.) representing time in seconds.
--->
-If the resulting erosion/deposition map is noisy, higher number of walkers,
-given by <i>nwalkers</i> should be used.
-<br>
+Output includes transport capacity raster map *transport_capacity* in
+\[kg/ms\], transport capacity limited erosion/deposition raster map
+*tlimit_erosion_deposition* \[kg/m<sup>2</sup>s\]i that are output
+almost immediately and can be viewed while the simulation continues.
+Sediment flow rate raster map *sediment_flux* \[kg/ms\], and net
+erosion/deposition raster map \[kg/m<sup>2</sup>s\] can take longer time
+depending on time step and simulation time. Simulation time is
+controlled by *niterations* \[minutes\] parameter. If the resulting
+erosion/deposition map is noisy, higher number of walkers, given by
+*nwalkers* should be used.  
 
-<p>
-Increasing the number of threads with <b>nprocs</b> does not really
-speed up the simulation.
+Increasing the number of threads with **nprocs** does not really speed
+up the simulation.
 
-<!--
-<h2>NOTES</h2>
+## REFERENCES
 
-TODO: provide a table of suggested parameters for bare soil, grass, forest, pavement
-wetland or pond, provide links to movies that explain the impact of the  parameters
--->
+[Mitasova, H., Thaxton, C., Hofierka, J., McLaughlin, R., Moore, A.,
+Mitas L.,
+2004,](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/II.6.8_Mitasova_044.pdf)
+Path sampling method for modeling overland water flow, sediment
+transport and short term terrain evolution in Open Source GIS. In: C.T.
+Miller, M.W. Farthing, V.G. Gray, G.F. Pinder eds., Proceedings of the
+XVth International Conference on Computational Methods in Water
+Resources (CMWR XV), June 13-17 2004, Chapel Hill, NC, USA, Elsevier,
+pp. 1479-1490.
 
-<h2>REFERENCES</h2>
-
-<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/II.6.8_Mitasova_044.pdf">
-Mitasova, H., Thaxton, C., Hofierka, J., McLaughlin, R., Moore, A., Mitas L., 2004,</a>
-Path sampling method for modeling overland water flow, sediment transport
-and short term terrain evolution in Open Source GIS.
-In: C.T. Miller, M.W. Farthing, V.G. Gray, G.F. Pinder eds.,
-Proceedings of the XVth International Conference on Computational Methods in Water
-Resources (CMWR XV), June 13-17 2004, Chapel Hill, NC, USA, Elsevier, pp. 1479-1490.
-<p>
-<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/gisc00/duality.html">
-Mitasova H, Mitas, L., 2000, Modeling spatial processes in multiscale framework:
-exploring duality between particles and fields, </a>
+[Mitasova H, Mitas, L., 2000, Modeling spatial processes in multiscale
+framework: exploring duality between particles and
+fields,](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/gisc00/duality.html)
 plenary talk at GIScience2000 conference, Savannah, GA.
-<p>
+
 Mitas, L., and Mitasova, H., 1998, Distributed soil erosion simulation
-for effective erosion prevention. Water Resources Research, 34(3), 505-516.
-<p>
-<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/LLEmiterev1.pdf">
-Mitasova, H., Mitas, L., 2001, Multiscale soil erosion simulations for land use management, </a>
-In: Landscape erosion and landscape evolution modeling, Harmon R. and Doe W. eds.,
-Kluwer Academic/Plenum Publishers, pp. 321-347.
-<p>
-<a href="https://grassbook.org">
-Neteler, M. and Mitasova, H., 2008, Open Source GIS: A GRASS GIS Approach. Third Edition.</a>
-The International Series in Engineering and Computer Science: Volume 773. Springer New York Inc, p. 406.
+for effective erosion prevention. Water Resources Research, 34(3),
+505-516.
 
-<h2>SEE ALSO</h2>
+[Mitasova, H., Mitas, L., 2001, Multiscale soil erosion simulations for
+land use
+management,](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/LLEmiterev1.pdf)
+In: Landscape erosion and landscape evolution modeling, Harmon R. and
+Doe W. eds., Kluwer Academic/Plenum Publishers, pp. 321-347.
 
-<a href="v.surf.rst.html">v.surf.rst</a>,
-<a href="r.slope.aspect.html">r.slope.aspect</a>,
-<a href="r.sim.water.html">r.sim.water</a>
+[Neteler, M. and Mitasova, H., 2008, Open Source GIS: A GRASS GIS
+Approach. Third Edition.](https://grassbook.org) The International
+Series in Engineering and Computer Science: Volume 773. Springer New
+York Inc, p. 406.
 
-<h2>AUTHORS</h2>
+## SEE ALSO
 
-Helena Mitasova, Lubos Mitas<br>
-North Carolina State University<br>
-<a href="mailto:hmitaso@unity.ncsu.edu">hmitaso@unity.ncsu.edu</a><br>
-<br>
-Jaroslav Hofierka<br>
-GeoModel, s.r.o. Bratislava, Slovakia<br><address>
-<a href="mailto:hofi@geomodel.sk">
-hofierka@geomodel.sk</a>
-</address>
-<br>
-Chris Thaxton<br>
-North Carolina State University<br>
-csthaxto@unity.ncsu.edu<br>
-<address><a href="mailto:csthaxto@unity.ncsu.edu">
-csthaxto@unity.ncsu.edu</a></address>
+[v.surf.rst](v.surf.rst.md), [r.slope.aspect](r.slope.aspect.md),
+[r.sim.water](r.sim.water.md)
+
+## AUTHORS
+
+Helena Mitasova, Lubos Mitas  
+North Carolina State University  
+<hmitaso@unity.ncsu.edu>  
+  
+Jaroslav Hofierka  
+GeoModel, s.r.o. Bratislava, Slovakia  
+
+[hofierka@geomodel.sk](mailto:hofi@geomodel.sk)
+
+  
+Chris Thaxton  
+North Carolina State University  
+csthaxto@unity.ncsu.edu  
+
+<csthaxto@unity.ncsu.edu>

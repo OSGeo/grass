@@ -1,93 +1,58 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>g.filename</em> is designed for Bourne shell scripts that need to know
-the full file name, including it's path, for mapset elements, like raster,
+*g.filename* is designed for Bourne shell scripts that need to know the
+full file name, including it's path, for mapset elements, like raster,
 vector and site maps, region definitions and imagery groups.
-<p>The list of element names to search for is not fixed; any subdirectory of the
-mapset directory is a valid element name.
-<p>However, the user can find the list of standard GRASS GIS element names in
-the file <code>$GISBASE/etc/element_list</code>. This is the file which
+
+The list of element names to search for is not fixed; any subdirectory
+of the mapset directory is a valid element name.
+
+However, the user can find the list of standard GRASS GIS element names
+in the file `$GISBASE/etc/element_list`. This is the file which
 g.remove/g.rename/g.copy use to determine which files need to be
 deleted/renamed/copied for a given entity type.
 
-<!-- unused
-<h2>OPTIONS</h2>
+## OUTPUT
 
-<h3>Parameters:</h3>
+*g.filename* writes one line to standard output:
 
-<dl>
-<dt><b>element=</b><em>name</em>
+file='*full_file_pathname'*
 
-<dd>The name of a GRASS data base element (i.e., directory
-within the GRASS mapset location).
+The output is a */bin/sh* command to set the variable specified by the
+file *name* to the full UNIX path name for the data base file. This
+variable may be set in the */bin/sh* as follows:
 
-<dt><b>mapset=</b><em>name</em>
-
-<dd>The name of a GRASS data base mapset.  As a
-convenience, a single dot (.) can be used to designate the
-current mapset.
-
-<dt><b>file=</b><em>name</em>
-
-<dd>The name of a GRASS data base file.
-</dl>
--->
-<h2>OUTPUT</h2>
-
-<em>g.filename</em>
-writes one line to standard output:
-
-<dl>
-<dd>
-file='<em>full_file_pathname'</em>
-</dl>
-
-The output is a <em>/bin/sh</em> command to set the
-variable specified by the file <em>name</em> to the full
-UNIX path name for the data base file.  This variable may
-be set in the <em>/bin/sh</em> as follows:
-
-<dl>
-<dd>
-<div class="code"><pre>
+```shell
 eval `g.filename element=name mapset=name file=name`
-</pre></div>
-</dl>
+```
 
-<h2>NOTES</h2>
+## NOTES
 
-This module generates the filename, but does not care if the file (or mapset
-or element) exists or not. This feature allows shell scripts to create new data
-base files as well as use existing ones.
+This module generates the filename, but does not care if the file (or
+mapset or element) exists or not. This feature allows shell scripts to
+create new data base files as well as use existing ones.
 
-<p>
-If the mapset is the current mapset, <em>g.filename</em>
-can automatically create the <em>element</em> specified if it
-doesn't already exist when <b>-c</b> flag is used. This makes it easy
-to add new files to the data base without having to worry about the
-existence of the required data base directories. (This
-program will not create a new mapset, however, if that
-specified does not currently exist.)
+If the mapset is the current mapset, *g.filename* can automatically
+create the *element* specified if it doesn't already exist when **-c**
+flag is used. This makes it easy to add new files to the data base
+without having to worry about the existence of the required data base
+directories. (This program will not create a new mapset, however, if
+that specified does not currently exist.)
 
-<p>
-This module should not be used to create directories which are at the level
-of what this module refer to as files, i.e., directory which carries a name
-specified by a user (such as vector map directories) should not be created
-using this module. Standard library functions coming with any given language
-are a more appropriate tool for that.
+This module should not be used to create directories which are at the
+level of what this module refer to as files, i.e., directory which
+carries a name specified by a user (such as vector map directories)
+should not be created using this module. Standard library functions
+coming with any given language are a more appropriate tool for that.
 
-<p>The program exits with a 0 if everything is ok;  it exits
-with a non-zero value if there is an error, in which case
-file=<em>'full_file_pathname'</em> is not output.
+The program exits with a 0 if everything is ok; it exits with a non-zero
+value if there is an error, in which case file=*'full_file_pathname'* is
+not output.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.findfile.html">g.findfile</a>,
-<a href="g.gisenv.html">g.gisenv</a>
-</em>
+*[g.findfile](g.findfile.md), [g.gisenv](g.gisenv.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Michael Shapiro,
-U.S.Army Construction Engineering Research Laboratory
+Michael Shapiro, U.S.Army Construction Engineering Research Laboratory

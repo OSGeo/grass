@@ -1,40 +1,42 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The <em>t.unregister</em> module is designed to unregister raster, 3D raster
-and vector map layers from space time datasets and the temporal database.
+The *t.unregister* module is designed to unregister raster, 3D raster
+and vector map layers from space time datasets and the temporal
+database.
 
-<p>
 Map layer that should be unregistered from the temporal database can be
 specified as a list of comma separated map names or using a text file,
 that contains one map layer name per line. By default the map type that
-should be unregistered is set to raster. The option<em>type</em> must
-be used to specify 3D raster or vector map layer types.
+should be unregistered is set to raster. The option*type* must be used
+to specify 3D raster or vector map layer types.
 
-<h2>INPUT FILE FORMAT</h2>
+## INPUT FILE FORMAT
 
 Specification of map names:
-<div class="code"><pre>
+
+```shell
 a1
 a2
 a3
 a4
 a5
 a6
-</pre></div>
+```
 
-<h3>NOTE</h3>
-In case the <em>input</em> option is used to specify a space time dataset
-the maps are only unregistered from the space time dataset, but not from the
-temporal database. The reason is that maps can be registered in
-multiple space time datasets and there is a need to
-unregister them from a specific STDS without affecting other STDS.
+### NOTE
 
-<h2>EXAMPLE</h2>
+In case the *input* option is used to specify a space time dataset the
+maps are only unregistered from the space time dataset, but not from the
+temporal database. The reason is that maps can be registered in multiple
+space time datasets and there is a need to unregister them from a
+specific STDS without affecting other STDS.
+
+## EXAMPLE
 
 In this example a precipitation map it is registered into temperature
 dataset, so the wrong map will be unregister.
 
-<div class="code"><pre>
+```shell
 
 t.register -i type=raster input=tempmean_monthly@climate_2009_2012 \
     maps=2012_01_precip \
@@ -47,15 +49,12 @@ t.unregister type=raster input=tempmean_monthly@climate_2009_2012 maps=2012_01_p
 # We unregister raster map 2012_01_precip from the temporal database, hence
 # the time stamps are removed
 t.unregister type=raster maps=2012_01_precip
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
-</em>
+*[t.create](t.create.md), [t.info](t.info.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

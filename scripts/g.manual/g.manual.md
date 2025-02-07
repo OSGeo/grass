@@ -1,34 +1,34 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>g.manual</em> displays the manual pages of GRASS in HTML and MAN
-format.
+*g.manual* displays the manual pages of GRASS in HTML and MAN format.
 
-<h2>NOTES</h2>
+## NOTES
 
 The name of the browser is defined in the environment variable
-<code>GRASS_HTML_BROWSER</code>. For most platforms this should be an
-executable in your PATH, or the full path to an executable. See
-<a href="variables.html">variables</a> for details.
+`GRASS_HTML_BROWSER`. For most platforms this should be an executable in
+your PATH, or the full path to an executable. See
+[variables](variables.md) for details.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 Show index page in the browser.
 
-<div class="code"><pre>
+```shell
 g.manual -i
-</pre></div>
+```
 
-Show manual page of <em><a href="d.vect.html">d.vect</a></em> module
-in the browser.
-<div class="code"><pre>
+Show manual page of *[d.vect](d.vect.md)* module in the browser.
+
+```shell
 g.manual d.vect
-</pre></div>
+```
 
 Show module manual page in terminal.
-<div class="code"><pre>
-g.manual -m d.vect
-</pre></div>
 
-<h2>AUTHOR</h2>
+```shell
+g.manual -m d.vect
+```
+
+## AUTHOR
 
 Markus Neteler

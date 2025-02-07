@@ -1,54 +1,25 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.rgb</em> generates separate red, green and blue maps from a
-raster map and its associated color table (grey255).
+*r.rgb* generates separate red, green and blue maps from a raster map
+and its associated color table (grey255).
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-<div class="code"><pre>
+```shell
 g.region raster=elevation -p
 r.rgb input=elevation red=elevation.r green=elevation.g blue=elevation.b
-</pre></div>
+```
 
-<p>
-In this case <em>r.rgb</em> produces in the current mapset three new
-raster maps - 'elevation.r', 'elevation.g', 'elevation.b'.
-<p>
-<!--
-d.split.frame frames=4
-d.frame -s uno
-d.rast elevation
-d.font Vera
-echo " elevation" | d.text col=black
+In this case *r.rgb* produces in the current mapset three new raster
+maps - 'elevation.r', 'elevation.g', 'elevation.b'.
 
-d.frame -s dos
-d.rast elevation.r
-d.font Vera
-echo " elevation.r" | d.text col=black
+![](r_rgb_elevation.png)  
 
-d.frame -s tres
-d.rast elevation.g
-d.font Vera
-echo " elevation.g" | d.text col=black
+## SEE ALSO
 
-d.frame -s cuatro
-d.rast elevation.b
-d.font Vera
-echo " elevation.b" | d.text col=black
--->
-<center>
-<img src="r_rgb_elevation.png"><br>
-</center>
+*[r.composite](r.composite.md), [r.blend](r.blend.md),
+[r.colors](r.colors.md), [r.mapcalc](r.mapcalc.md)*
 
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="r.composite.html">r.composite</a>,
-<a href="r.blend.html">r.blend</a>,
-<a href="r.colors.html">r.colors</a>,
-<a href="r.mapcalc.html">r.mapcalc</a>
-</em>
-
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Glynn Clements

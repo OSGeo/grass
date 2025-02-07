@@ -1,62 +1,52 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.normal</em> computes tests of normality on vector points.
+*v.normal* computes tests of normality on vector points.
 
-<h2>NOTES</h2>
+## NOTES
 
-The tests that <em>v.normal</em> performs are indexed
-below.  The tests that are performed are specified by
-giving an index, ranges of indices, or multiple thereof.
+The tests that *v.normal* performs are indexed below. The tests that are
+performed are specified by giving an index, ranges of indices, or
+multiple thereof.
 
-<ol>
-<li> Sample skewness and kurtosis</li>
-<li> Geary's a-statistic and an approximate normal transformation</li>
-<li> Extreme normal deviates</li>
-<li> D'Agostino's D-statistic</li>
-<li> Modified Kuiper V-statistic</li>
-<li> Modified Watson U^2-statistic</li>
-<li> Durbin's Exact Test (modified Kolmogorov)</li>
-<li> Modified Anderson-Darling statistic</li>
-<li> Modified Cramer-Von Mises W^2-statistic</li>
-<li> Kolmogorov-Smirnov D-statistic (modified for normality testing)</li>
-<li> Chi-Square test statistic (equal probability classes) and
-     the number of degrees of freedom</li>
-<li> Shapiro-Wilk W Test</li>
-<li> Weisberg-Binghams W'' (similar to Shapiro-Francia's W')</li>
-<li> Royston's extension of W for large samples</li>
-<li> Kotz Separate-Families Test for Lognormality vs. Normality</li>
-</ol>
+1.  Sample skewness and kurtosis
+2.  Geary's a-statistic and an approximate normal transformation
+3.  Extreme normal deviates
+4.  D'Agostino's D-statistic
+5.  Modified Kuiper V-statistic
+6.  Modified Watson U^2-statistic
+7.  Durbin's Exact Test (modified Kolmogorov)
+8.  Modified Anderson-Darling statistic
+9.  Modified Cramer-Von Mises W^2-statistic
+10. Kolmogorov-Smirnov D-statistic (modified for normality testing)
+11. Chi-Square test statistic (equal probability classes) and the number
+    of degrees of freedom
+12. Shapiro-Wilk W Test
+13. Weisberg-Binghams W'' (similar to Shapiro-Francia's W')
+14. Royston's extension of W for large samples
+15. Kotz Separate-Families Test for Lognormality vs. Normality
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-<!-- do a meaningful example -->
-Compute the sample skewness and kurtosis, Geary's
-a-statistic and an approximate normal transformation,
-extreme normal deviates, and Royston's W for the
-<em>random</em> vector points:
+Compute the sample skewness and kurtosis, Geary's a-statistic and an
+approximate normal transformation, extreme normal deviates, and
+Royston's W for the *random* vector points:
 
-<div class="code"><pre>
+```shell
 g.region raster=elevation -p
 v.random random n=200
 v.db.addtable random column="elev double precision"
 v.what.rast random rast=elevation column=elev
 v.normal random tests=1-3,14 column=elev
-</pre></div>
+```
 
-<!-- TODO: find references , e.g.
-     http://www.itl.nist.gov/div898/handbook/eda/section3/eda35.htm
--->
+## SEE ALSO
 
-<h2>SEE ALSO</h2>
+*[v.univar](v.univar.md)*
 
-<em>
-<a href="v.univar.html">v.univar</a>
-</em>
+## AUTHORS
 
-<h2>AUTHORS</h2>
-
-<a href="http://mccauley-usa.com/">James Darrell McCauley</a>
-<a href="mailto:darrell@mccauley-usa.com">&lt;darrell@mccauley-usa.com&gt;</a>,
-<br>when he was at:
-<a href="https://engineering.purdue.edu/ABE/">Agricultural Engineering</a>
-<a href="http://www.purdue.edu/">Purdue University</a>
+[James Darrell McCauley](http://mccauley-usa.com/)
+[\<darrell@mccauley-usa.com\>](mailto:darrell@mccauley-usa.com),  
+when he was at: [Agricultural
+Engineering](https://engineering.purdue.edu/ABE/) [Purdue
+University](http://www.purdue.edu/)

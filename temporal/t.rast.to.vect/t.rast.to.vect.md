@@ -1,39 +1,36 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast.to.vect</em> is designed to convert a space time raster dataset
-into a space time vector dataset. This module works as a front-end to
-<a href="r.to.vect.html">r.to.vect</a> and therefore supports all parameter
-of this module. Hence, all raster map layers in a space time raster dataset
-are passed to <a href="r.to.vect.html">r.to.vect</a> that converts them into
-vector map layers (using point,line or area as conversion criteria).
-Please refer to the <a href="r.to.vect.html">r.to.vect</a> documentation
-for a detailed description of the raster to vector conversion options.
-The new generated vector map
-layers will be registered in the output space time vector dataset, using
-the same time stamps as their raster map layer origins.
-<p>
-This module supports the parallel processing of <a href="r.to.vect.html">r.to.vect</a>
-module instances. The number of parallel processes
-can be set with the <em>nprocs</em> option.
-However, this will only work in conjunction with the <em>-t</em>
-flag, that avoids the creation of attribute tables.
-The parallel creation of attribute tables is not supported.
-<p>
-The <em>where</em> option allows selecting subsets of the input space time raster
-dataset.
-<p>
-The flag <em>-n</em> can be used to force the registration of empty
-vector map layers. Empty vector maps may occur in case that empty
-raster map layers should be converted into vector map layers.
+*t.rast.to.vect* is designed to convert a space time raster dataset into
+a space time vector dataset. This module works as a front-end to
+[r.to.vect](r.to.vect.md) and therefore supports all parameter of this
+module. Hence, all raster map layers in a space time raster dataset are
+passed to [r.to.vect](r.to.vect.md) that converts them into vector map
+layers (using point,line or area as conversion criteria). Please refer
+to the [r.to.vect](r.to.vect.md) documentation for a detailed
+description of the raster to vector conversion options. The new
+generated vector map layers will be registered in the output space time
+vector dataset, using the same time stamps as their raster map layer
+origins.
 
-<h2>SEE ALSO</h2>
+This module supports the parallel processing of
+[r.to.vect](r.to.vect.md) module instances. The number of parallel
+processes can be set with the *nprocs* option. However, this will only
+work in conjunction with the *-t* flag, that avoids the creation of
+attribute tables. The parallel creation of attribute tables is not
+supported.
 
-<em>
-<a href="r.to.vect.html">r.to.vect</a>,
-<a href="t.vect.db.select.html">t.rast.db.select</a>,
-<a href="t.info.html">t.info</a>
-</em>
+The *where* option allows selecting subsets of the input space time
+raster dataset.
 
-<h2>AUTHOR</h2>
+The flag *-n* can be used to force the registration of empty vector map
+layers. Empty vector maps may occur in case that empty raster map layers
+should be converted into vector map layers.
 
-S&ouml;ren Gebbert, Geoinformatikb&uuml;ro Dassau
+## SEE ALSO
+
+*[r.to.vect](r.to.vect.md), [t.rast.db.select](t.vect.db.select.md),
+[t.info](t.info.md)*
+
+## AUTHOR
+
+Sören Gebbert, Geoinformatikbüro Dassau

@@ -1,41 +1,35 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.db.droptable</em> removes an existing attribute table from a
-given vector map linked at given layer. If the <b>-f</b> force flag is not
-given then nothing is removed.
+*v.db.droptable* removes an existing attribute table from a given vector
+map linked at given layer. If the **-f** force flag is not given then
+nothing is removed.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>v.db.droptable</em> is a front-end to <em>db.execute</em> to allow easier usage.
-<p>The existing database connection(s) can be verified with <em>v.db.connect</em>.
+*v.db.droptable* is a front-end to *db.execute* to allow easier usage.
 
-<h2>EXAMPLE</h2>
+The existing database connection(s) can be verified with *v.db.connect*.
 
-Removing attribute table connected to layer 1:<br>
-<div class="code"><pre>
+## EXAMPLE
+
+Removing attribute table connected to layer 1:  
+
+```shell
 g.copy vect=roadsmajor,myroads
 v.db.droptable myroads
 v.db.droptable myroads -f
 v.db.connect -p myroads
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.connect.html">db.connect</a>,
-<a href="db.execute.html">db.execute</a>,
-<a href="v.db.addtable.html">v.db.addtable</a>,
-<a href="v.db.connect.html">v.db.connect</a>,
-<a href="v.db.dropcolumn.html">v.db.dropcolumn</a>,
-<a href="v.db.select.html">v.db.select</a>,
-<a href="v.db.update.html">v.db.update</a>
-</em>
+*[db.connect](db.connect.md), [db.execute](db.execute.md),
+[v.db.addtable](v.db.addtable.md), [v.db.connect](v.db.connect.md),
+[v.db.dropcolumn](v.db.dropcolumn.md), [v.db.select](v.db.select.md),
+[v.db.update](v.db.update.md)*
 
-<p>
-<em>
-<a href="sql.html">GRASS SQL interface</a>
-</em>
+*[GRASS SQL interface](sql.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Markus Neteler

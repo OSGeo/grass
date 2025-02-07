@@ -1,55 +1,46 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.databases</em> lists all databases for a given <b>driver</b>
-and optionally <b>location</b>.
+*db.databases* lists all databases for a given **driver** and optionally
+**location**.
 
-<h2>NOTES</h2>
+## NOTES
 
-Currently supported database drivers are
-<em><a href="grass-sqlite.html">SQLite</a></em>, <em><a href="grass-pg.html">PostgreSQL</a></em>,
-and <em><a href="grass-odbc.html">ODBC</a></em>.
+Currently supported database drivers are *[SQLite](grass-sqlite.md)*,
+*[PostgreSQL](grass-pg.md)*, and *[ODBC](grass-odbc.md)*.
 
-<p>
-Default <b>location</b> for SQLite driver is the full path for the
-current mapset. For PostgreSQL driver it's empty connection string.
+Default **location** for SQLite driver is the full path for the current
+mapset. For PostgreSQL driver it's empty connection string.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 List SQLite databases in the current mapset:
 
-<div class="code"><pre>
+```shell
 db.databases driver=sqlite
-</pre></div>
+```
 
-<p>
 List SQLite databases in a given directory:
 
-<div class="code"><pre>
+```shell
 db.databases driver=sqlite location=/opt/sqlite
-</pre></div>
+```
 
-<p>
 List PostgreSQL databases from database server running on given port:
 
-<div class="code"><pre>
+```shell
 db.databases driver=pg location="host=server_name port=5333"
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.columns.html">db.columns</a>,
-<a href="db.describe.html">db.describe</a>,
-<a href="db.drivers.html">db.drivers</a>,
-<a href="db.execute.html">db.execute</a>,
-<a href="db.login.html">db.login</a>,
-<a href="db.tables.html">db.tables</a>
-</em>
+*[db.columns](db.columns.md), [db.describe](db.describe.md),
+[db.drivers](db.drivers.md), [db.execute](db.execute.md),
+[db.login](db.login.md), [db.tables](db.tables.md)*
 
-<p>
-<a href="sql.html">GRASS SQL interface</a>
+[GRASS SQL interface](sql.md)
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek, ITC-Irst, Trento, Italy<br>
-Updated for GRASS 7 by Martin Landa, Czech Technical University in Prague, Czech Republic
+Radim Blazek, ITC-Irst, Trento, Italy  
+Updated for GRASS 7 by Martin Landa, Czech Technical University in
+Prague, Czech Republic

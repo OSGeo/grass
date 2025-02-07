@@ -1,60 +1,56 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.vect.thematic</em> draws thematic choropleth vector maps based
-on an attribute column or an expression involving several columns.
-It takes a list of class <b>breaks</b> (excluding the minimum and maximum
-values) and a list of <b>colors</b> to apply to the classes (has to be the
-number of class breaks + 1).
-<p>
+*d.vect.thematic* draws thematic choropleth vector maps based on an
+attribute column or an expression involving several columns. It takes a
+list of class **breaks** (excluding the minimum and maximum values) and
+a list of **colors** to apply to the classes (has to be the number of
+class breaks + 1).
+
 Instead of a list of class breaks, the user can also chose a
-classification <b>algorithm</b> and a number of classes
-(<b>nbclasses</b>). See the
-<em><a href="v.class.html">v.class</a></em> for more information on
-these different algorithms.
+classification **algorithm** and a number of classes (**nbclasses**).
+See the *[v.class](v.class.md)* for more information on these different
+algorithms.
 
-<h2>NOTES</h2>
+## NOTES
 
-The <b>-l</b> flag instructs the module to print legend information
-in vector legend format as described in <em><a href="d.legend.vect.html">d.legend.vect</a></em>
- to standard output for further use in graphical software.
-When combined with the verbose flag, the legend information will
-be extended with some additional statistical information. If the
-<b>-n</b> flag is set, the module will only print the legend
-information without drawing the map.
+The **-l** flag instructs the module to print legend information in
+vector legend format as described in *[d.legend.vect](d.legend.vect.md)*
+to standard output for further use in graphical software. When combined
+with the verbose flag, the legend information will be extended with some
+additional statistical information. If the **-n** flag is set, the
+module will only print the legend information without drawing the map.
 
-<p>Option <b>legendfile</b>, is deprecated, instead
-use the GRASS_LEGEND_FILE environmental variable
-(see <em><a href="d.legend.vect.html">d.legend.vect</a></em>)
-to save legend into a file.
-Flag <b>-e</b> is deprecated, instead use verbose flag.
+Option **legendfile**, is deprecated, instead use the GRASS_LEGEND_FILE
+environmental variable (see *[d.legend.vect](d.legend.vect.md)*) to save
+legend into a file. Flag **-e** is deprecated, instead use verbose flag.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Thematic map with classes</h3>
+### Thematic map with classes
 
-<div class="code"><pre>
+```shell
 d.vect.thematic -l map=communes3 column=pop \
   breaks=111393.250000,222785.500000,334177.750000 \
   colors="255:0:0,0:255:0,0:0:255,0,0,0"
-</pre></div>
+```
 
-<h3>Thematic map with calculated class breaks</h3>
+### Thematic map with calculated class breaks
 
-The following example uses a calculated attribute (<code>density =
-pop/area</code>) and the standard deviation algorithm to calculate class
-breaks for 5 classes:
+The following example uses a calculated attribute (`density = pop/area`)
+and the standard deviation algorithm to calculate class breaks for 5
+classes:
 
-<div class="code"><pre>
+```shell
 d.vect.thematic -l map=communes2 column=pop/area algorithm=std \
   nbclasses=5 colors="0:0:255,50:100:255,255:100:50,255:0:0,156:0:0"
-</pre></div>
+```
 
-<h3>Thematic map with legend</h3>
+### Thematic map with legend
 
-Example for the North Carolina sample dataset, colorizing basin polygons by
-average elevation and displaying school capacity:
+Example for the North Carolina sample dataset, colorizing basin polygons
+by average elevation and displaying school capacity:
 
-<div class="code"><pre>
+```shell
 # create watersheds from elevation map
 g.region raster=elevation
 r.watershed elevation=elevation threshold=10000 basin=basins_10k
@@ -80,29 +76,20 @@ d.vect.thematic map=schools_wake@PERMANENT column=CORECAPACI algorithm=std \
 
 # and finally draw legend
 d.legend.vect -b at=2,80 font=Sans symbol_size=25
-</pre></div>
+```
 
-<center>
-<a href="d_vect_thematic.png">
-<img src="d_vect_thematic.png" alt="d_vect_thematic example" width="600" height="377"></a>
-<br>
-<i>Thematic map of average elevation and school capacity</i>
-</center>
+[<img src="d_vect_thematic.png" width="600" height="377"
+alt="d_vect_thematic example" />](d_vect_thematic.png)  
+*Thematic map of average elevation and school capacity*
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.class.html">v.class</a>,
-<a href="d.legend.vect.html">d.legend.vect</a>,
-<a href="d.vect.html">d.vect</a>,
-<a href="d.graph.html">d.graph</a>,
-<a href="v.univar.html">v.univar</a>
-</em>
+*[v.class](v.class.md), [d.legend.vect](d.legend.vect.md),
+[d.vect](d.vect.md), [d.graph](d.graph.md), [v.univar](v.univar.md)*
 
-<p>
-Check also Python module from
-AddOns: <em><a href="https://grass.osgeo.org/grass8/manuals/addons/d.vect.thematic2.html">d.vect.thematic2</a></em>
+Check also Python module from AddOns:
+*[d.vect.thematic2](https://grass.osgeo.org/grass8/manuals/addons/d.vect.thematic2.html)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Moritz Lennert

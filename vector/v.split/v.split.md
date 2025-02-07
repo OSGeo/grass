@@ -1,59 +1,56 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.split</em> splits vector lines into shorter segments using
-a maximal distance between nodes. The resulting length of all segments
-is expected to be equal and not higher than the given <b>length</b>
-parameter.
+*v.split* splits vector lines into shorter segments using a maximal
+distance between nodes. The resulting length of all segments is expected
+to be equal and not higher than the given **length** parameter.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>v.split</em> does not change the layer, nor the category information,
-nor the attribute table links of the original file. It just splits each
-line in segments and attributes the same category to all segments of the same
+*v.split* does not change the layer, nor the category information, nor
+the attribute table links of the original file. It just splits each line
+in segments and attributes the same category to all segments of the same
 original line. As the attribute table is linked to the features with
 their category as key, all segments originating from the same original
 line are linked to the same line in the original attribute table which
 is just copied to the new map.
 
-<h3>Notes on individual segment information</h3>
+### Notes on individual segment information
 
-When running <em>v.to.db</em> on a map produced by <em>v.split</em>,
-<em>v.to.db</em> will add length information for each segment in its
-respective attribute line, but since all the segments of the same
-original line share the same attribute table line, it only gets
-updated once.
+When running *v.to.db* on a map produced by *v.split*, *v.to.db* will
+add length information for each segment in its respective attribute
+line, but since all the segments of the same original line share the
+same attribute table line, it only gets updated once.
 
-<p>
 To obtain the length of each segment, the user will have to attribute
-different category values to each of them. The best way to do this on
-a separate layer, using <em>v.category</em>
+different category values to each of them. The best way to do this on a
+separate layer, using *v.category*
 
-<div class="code"><pre>
+```shell
 v.category v_split op=add layer=2 output=v_split_2
-</pre></div>
+```
 
 and then run the following commands on the new layer 2:
 
-<div class="code"><pre>
+```shell
 v.db.addtable v_split_2 layer=2
 v.db.addcolumn map=v_split_2 column="length double precision" layer=2
 v.to.db map=v_split_2 type=line option=length columns=length units=meters layer=2
-</pre></div>
+```
 
 To link the new segments in the new layer to the original segments, use:
 
-<div class="code"><pre>
+```shell
 v.db.addcolumn map=v_split_2 layer=2 column="cat_1 int"
 v.to.db map=v_split_2 layer=2 option=query query_layer=1 query_column=cat columns=cat_1
-</pre></div>
+```
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 The examples are based on the North Carolina sample data.
 
-<h3>Example 1: Inserting nodes to railroad lines map</h3>
+### Example 1: Inserting nodes to railroad lines map
 
-<div class="code"><pre>
+```shell
 # extract one railroad line for this example
 v.extract input=railroads output=myrr cats=1
 
@@ -66,38 +63,33 @@ d.vect myrr display=shape,cat,dir
 v.split input=myrr output=myrr_split_1km length=1000
 
 d.vect myrr_split_1km display=shape,topo
-</pre></div>
+```
 
-<p>
-Note: In case that the vector line data are not polylines,
-generate first polylines as the second step, eg.:
+Note: In case that the vector line data are not polylines, generate
+first polylines as the second step, eg.:
 
-<div class="code"><pre>
+```shell
 # join segments into polyline
 v.build.polylines input=myrr output=myrr_polylines
 # regenerate categories
 v.category input=myrr_polylines output=myrailroads option=add
-</pre></div>
+```
 
-<h3>Example 2: Inserting vertices to railroad lines map</h3>
+### Example 2: Inserting vertices to railroad lines map
 
 Note: first run the two steps from example 1.
 
-<div class="code"><pre>
+```shell
 # insert vertices at a distance not longer than 1000m
 v.split -n input=myrr output=myrr_split length=1000
 d.vect myrr_split display=shape,topo
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.edit.html">v.edit</a>,
-<a href="v.build.polylines.html">v.build.polylines</a>,
-<a href="v.to.points.html">v.to.points</a>,
-<a href="v.segment.html">v.segment</a>
-</em>
+*[v.edit](v.edit.md), [v.build.polylines](v.build.polylines.md),
+[v.to.points](v.to.points.md), [v.segment](v.segment.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Radim Blazek

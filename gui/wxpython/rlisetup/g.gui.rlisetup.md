@@ -1,347 +1,263 @@
-<!-- meta page description: wxGUI RLi Setup -->
-<!-- meta page index: topic_GUI|GUI -->
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The <b>g.gui.rlisetup</b> is a <em><a href="wxGUI.html">wxGUI</a></em>
-component which allows the user to create a configuration file
-for the analytical <em>r.li</em> modules. For a general introduction, see
-the <a href="r.li.html">r.li</a> overview.
-<br>
+The **g.gui.rlisetup** is a *[wxGUI](wxGUI.md)* component which allows
+the user to create a configuration file for the analytical *r.li*
+modules. For a general introduction, see the [r.li](r.li.md) overview.  
 The configurations are raster map independent, it means that you can use
-a file created on a raster map for analyze any other you have.
-<br>
-The program is completely interactive and uses a GUI to help you
-in your choices.
+a file created on a raster map for analyze any other you have.  
+The program is completely interactive and uses a GUI to help you in your
+choices.
 
-<h3>Analysis methods</h3>
+### Analysis methods
 
 Definition of creation of sampling area:
-<ul>
-  <li> Whole map layer: use entire area selected above,</li>
-  <li> Regions: select one to many subareas via mouse,</li>
-  <li> Sample units: automated selection of sampling area (for details see below)
-  <ul>
-    <li> Random nonoverlapping,</li>
-    <li> Systematic contiguous,</li>
-    <li> Systematic noncontiguous,</li>
-    <li> Stratified random,</li>
-    <li> Centered over sites (vector points).</li>
-  </ul>
-  </li>
-  <li> Moving window: rectangular or circular with size</li>
-<!-- only in GRASS GIS 6 version
-  <li> Select areas from the overlaid vector map (for details see below)</li>
--->
-</ul>
 
-<img src="g_gui_rlisetup_sample_areas.png" alt="Sampling area definitions">
+- Whole map layer: use entire area selected above,
+- Regions: select one to many subareas via mouse,
+- Sample units: automated selection of sampling area (for details see
+  below)
+  - Random nonoverlapping,
+  - Systematic contiguous,
+  - Systematic noncontiguous,
+  - Stratified random,
+  - Centered over sites (vector points).
+- Moving window: rectangular or circular with size
 
-<p>
+![Sampling area definitions](g_gui_rlisetup_sample_areas.png)
+
 Definition of region for analysis:
-<ul>
-  <li> Whole map layer: entire map (current region),</li>
-  <li> Keyboard setting: based on keyboard selection for region definition,</li>
-  <li> Draw the sampling frame: based on interactive region selection via mouse.</li>
-</ul>
 
-<h3>Usage details</h3>
+- Whole map layer: entire map (current region),
+- Keyboard setting: based on keyboard selection for region definition,
+- Draw the sampling frame: based on interactive region selection via
+  mouse.
+
+### Usage details
 
 The startup window shows your configuration files, you can:
-<p>
-<font color="red"><b>TODO: description below needs further updates</b></font>
-<p>
 
-<ol>
+**TODO: description below needs further updates**
 
- <li><em><b>View/Edit</b></em> (Load a file) from the shown list: the
- configuration is shown in a small text editor window.
- <!-- only in GRASS GIS 6 version
- is printed using rectangles with different colors (green for the
- raster map, red for the sample frame and blue for the sample areas),
- and other notes (disposition of sample areas etc).
--->
- Configuration files are saved in the folder
- <code>C:\Users\userxy\AppData\Roaming\GRASS8\r.li\</code> (MS-Windows) or
- <code>$HOME/.r.li/</code> (GNU/Linux) (the file name can be
- defined by the user). The output or an analysis can either be a new raster
- map (in case of using a "moving window" analysis) or be an ASCII text file
- (when not performing a "moving window" analysis) containing the result.
- Such text file will be saved in the folder
- <code>C:\Users\userxy\AppData\Roaming\GRASS8\r.li\output\</code>
- (MS-Windows) or <code>$HOME/.grass8/r.li/output/</code> (GNU/Linux).
- <br>
- <!-- TODO: applies to all output or only ASCII output?? -->
- All dimensions are percentages of raster rows or columns.</li>
+1.  ***View/Edit*** (Load a file) from the shown list: the configuration
+    is shown in a small text editor window. Configuration files are
+    saved in the folder `C:\Users\userxy\AppData\Roaming\GRASS8\r.li\`
+    (MS-Windows) or `$HOME/.r.li/` (GNU/Linux) (the file name can be
+    defined by the user). The output or an analysis can either be a new
+    raster map (in case of using a "moving window" analysis) or be an
+    ASCII text file (when not performing a "moving window" analysis)
+    containing the result. Such text file will be saved in the folder
+    `C:\Users\userxy\AppData\Roaming\GRASS8\r.li\output\` (MS-Windows)
+    or `$HOME/.grass8/r.li/output/` (GNU/Linux).  
+    All dimensions are percentages of raster rows or columns.
+2.  ***Create*** a new configuration file: used for creating a new
+    configuration file in an interactive way, in three steps:
+    1.  Choose file name and maps to use for setting:
+        - *Name for new configuration file*(required): the name of new
+          configuration file
+        - *Raster map name to use to select areas* (required): the name
+          of raster map used for selecting sampling areas
+        - *Vector map to overlay* (optional): name of a vector map used
+          for selecting sampling areas
+    2.  Set the sampling frame. The sample frame is a rectangular area
+        which contains all the areas to analyze. It can be defined in
+        three ways:
+        - *Whole map layer*: the sample frame is the whole map
+        - *Keyboard setting*: the user enters the coordinates in cells
+          of upper left corner of sampling frame and its length in rows
+          and columns.
+        - *Draw the sample frame*: the user draws the sample frame on
+          map using mouse.
+    3.  Set the sample areas. The sample areas are simply the areas to
+        analyze. They can be defined in five ways (see the picture
+        below):
+        - *Whole map layer*: the sample area is the whole sample frame
+        - *Regions*: the user enters the number of areas and then draws
+          them using mouse.
+        - *Sample units*: they are areas of rectangular or circular
+          shape. The user can define them using keyboard or mouse.
+          - keyboard: the user define the shape of sample unists and
+            their disposition:
+            - *Random non overlapping*: the user specifies the number of
+              sample units and they are placed in a random way at
+              runtime. It is guaranteed that the areas do not intersect
+              themselves.
+            - *Systematic contiguous*: the defined sample is placed
+              covering the sample frame, side by side across rows.
+            - *Systematic non contiguous*: the same as above, but here
+              ever rectangle is spaced from another by a specified
+              number of cells.
+            - *Stratified random*: the sample frame is divided in *n*
+              strats of rows and *m* strats of columns (*n* and *m* are
+              given by user), then the specified number of sample areas
+              are placed in a random way, one for every *m\*n* areas
+              defined by strats.
+            - *Centered over sites*: the sample areas are placed into
+              sample frame centering them on points in site file.
+          - mouse: the user chooses the shape and then draws the
+            specified number of sample areas on map.
+        - *Moving Window:* the user defines a rectangular or circular
+          area, it is moved over all the raster increasing only of a
+          cell for every move(in columns if possible, if not in rows).
+          It produces a new raster containing the result of all
+          analysis.
+        - *Select areas from the overlaid vector map*: the sample areas
+          are defined by the vector map selected above. For every cat in
+          vector map, the procedure prompts the user if they want to
+          include it as sample area. The resulting configuration file
+          can be used only with the specified raster map, and the
+          procedure can be used only if whole map layer is selected as
+          sampling frame.
+3.  ***Remove a file*** the selected file is deleted from the available
+    configuration files.
+4.  ***Help***: open this help text.
+5.  ***Close*** module window.
 
- <li><em><b>Create</b></em> a new configuration file: used for creating
- a new configuration file in an interactive way, in three steps:
+## NOTES
 
- <ol>
-     <li> Choose file name and maps to use for setting:
-     <ul>
-       <li> <em>Name for new configuration file</em>(required): the name
-       of new configuration file</li>
-       <li> <em>Raster map name to use to select areas</em> (required):
-          the name of raster map used for selecting sampling areas</li>
-       <li> <em>Vector map to overlay</em> (optional): name of a
-          vector map used for selecting sampling areas</li>
-     </ul>
-     </li>
-     <li> Set the sampling frame. The sample frame is a rectangular area
-     which contains all the areas to analyze. It can be defined in three
-     ways:
-     <ul>
-        <li><em>Whole map layer</em>: the sample frame is the whole map</li>
-        <li><em>Keyboard setting</em>: the user enters the coordinates in
-        cells of upper left corner of sampling frame and its length in
-        rows and columns.</li>
-        <li><em>Draw the sample frame</em>: the user draws the sample frame
-        on map using mouse.</li>
-     </ul>
-     </li>
-     <li> Set the sample areas. The sample areas are simply the areas to
-       analyze. They can be defined in five ways (see the picture below):
-     <ul>
-       <li><em>Whole map layer</em>: the sample area is the whole sample
-       frame</li>
-       <li><em>Regions</em>: the user enters the number of areas and then
-       draws them using mouse.</li>
-       <li><em>Sample units</em>: they are areas of rectangular or circular
-       shape. The user can define them using keyboard or mouse.
-        <ul>
-           <li>keyboard: the user define the shape of sample unists and
-           their disposition:
-               <ul>
-              <li><em>Random non overlapping</em>: the user specifies
-            the number of sample units and they are placed in a
-            random way at runtime. It is guaranteed that the
-            areas do not intersect themselves.</li>
-              <li><em>Systematic contiguous</em>: the defined sample
-            is placed covering the sample frame, side by side
-            across rows.</li>
-              <li><em>Systematic non contiguous</em>: the same as above,
-            but here ever rectangle is spaced from another by
-            a specified number of cells.</li>
-              <li><em>Stratified random</em>: the sample frame is
-            divided in <i>n</i> strats of rows and <i>m</i> strats of columns
-            (<i>n</i> and <i>m</i> are given by user), then the specified
-            number of sample areas are placed in a random way,
-            one for every <i>m*n</i> areas defined by strats.</li>
-              <li><em>Centered over sites</em>: the sample areas
-            are placed into sample frame centering them on points
-            in site file.</li>
-            </ul>
-            </li>
-           <li>mouse: the user chooses the shape and then draws the
-           specified number of sample areas on map.</li>
-        </ul>
-           </li>
-       <li><em>Moving Window:</em> the user defines a rectangular or
-      circular area, it is moved over all the raster increasing only
-      of a cell for every move(in columns if possible, if not in rows).
-      It produces a new raster containing the result of all analysis.</li>
-       <li><em>Select areas from the overlaid vector map</em>:
-      the sample areas are defined by the vector map selected above.
-      For every cat in vector map, the procedure prompts the
-      user if they want to include it as sample area.
-      The resulting configuration file can be used only with the
-      specified raster map, and the procedure can be used only if
-      whole map layer is selected as sampling frame.</li>
-     </ul>
-     </li>
- </ol>
+Configuration files are raster map independent because areas are saved
+using relative coordinates.
 
-  <li><em><b>Remove a file</b></em> the selected file is deleted from the
-   available configuration files.</li>
-  <li><em><b>Help</b></em>: open this help text.</li>
-  <li><em><b>Close</b></em> module window.</li>
-</ol>
-
-<h2>NOTES</h2>
-
-Configuration files are raster map independent because areas are saved using
-relative coordinates.
-<p>
 Screenshots of the wizard window frames:
 
-<center>
-  <table border="0">
-  <tr>
-    <td align=center>
-      &nbsp;<img src="g_gui_rlisetup_1.png" alt="g.gui.rlisetup: First frame of wizard for selecting existing configuration files or creating a new one">
-      <br>
-      <font size="-1">
-      <i>g.gui.rlisetup: First frame of wizard for selecting <br>
-         existing configuration files or creating a new one</i>
-      </font>
-    </td>
-    <td align=center>
-      &nbsp;<img src="g_gui_rlisetup_2.png" alt="g.gui.rlisetup: Frame for selecting maps">
-      <br>
-      <font size="-1">
-      <i>g.gui.rlisetup: Frame for selecting maps</i>
-      </font>
-    </td>
-  </tr>
-  <tr>
-    <td align=center>
-      &nbsp;<img src="g_gui_rlisetup_3.png" alt="g.gui.rlisetup: Frame for inserting sampling areas">
-      <br>
-      <font size="-1">
-      <i>g.gui.rlisetup: Frame for inserting sampling areas</i>
-      </font>
-    </td>
-    <td align=center>
-      &nbsp;<img src="g_gui_rlisetup_4.png" alt="g.gui.rlisetup: Frame for defining rectangular moving window">
-      <br>
-      <font size="-1">
-      <i>g.gui.rlisetup: Frame for defining rectangular moving window</i>
-      </font>
-    </td>
-  </tr>
-  <tr>
-    <td align=center>
-      &nbsp;<img src="g_gui_rlisetup_5.png" alt="g.gui.rlisetup: Frame for defining circular moving window">
-      <br>
-      <font size="-1">
-      <i>g.gui.rlisetup: Frame for defining circular moving window</i>
-      </font>
-    </td>
-    <td align=center>
-      &nbsp;<img src="g_gui_rlisetup_6.png" alt="g.gui.rlisetup: Frame for choosing the sampling frame with keyboard">
-      <br>
-      <font size="-1">
-      <i>g.gui.rlisetup: Frame for choosing the sampling frame with keyboard</i>
-      </font>
-    </td>
-  </tr>
-  <tr>
-    <td align=center>
-      &nbsp;<img src="g_gui_rlisetup_7.png" alt="g.gui.rlisetup: Frame for drawing the sampling frame">
-      <br>
-      <font size="-1">
-      <i>g.gui.rlisetup: Frame for drawing the sampling frame</i>
-      </font>
-    </td>
-    <td align=center>
-      &nbsp;<img src="g_gui_rlisetup_8.png" alt="g.gui.rlisetup: Summary frame before saving">
-      <br>
-      <font size="-1">
-      <i>g.gui.rlisetup: Summary frame before saving</i>
-      </font>
-    </td>
-  </tr>
-  </table>
-</center>
+<table data-border="0">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"> <img src="g_gui_rlisetup_1.png"
+alt="g.gui.rlisetup: First frame of wizard for selecting existing configuration files or creating a new one" /><br />
+<em>g.gui.rlisetup: First frame of wizard for selecting<br />
+existing configuration files or creating a new one</em></td>
+<td style="text-align: center;"> <img src="g_gui_rlisetup_2.png"
+alt="g.gui.rlisetup: Frame for selecting maps" /><br />
+<em>g.gui.rlisetup: Frame for selecting maps</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"> <img src="g_gui_rlisetup_3.png"
+alt="g.gui.rlisetup: Frame for inserting sampling areas" /><br />
+<em>g.gui.rlisetup: Frame for inserting sampling areas</em></td>
+<td style="text-align: center;"> <img src="g_gui_rlisetup_4.png"
+alt="g.gui.rlisetup: Frame for defining rectangular moving window" /><br />
+<em>g.gui.rlisetup: Frame for defining rectangular moving
+window</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"> <img src="g_gui_rlisetup_5.png"
+alt="g.gui.rlisetup: Frame for defining circular moving window" /><br />
+<em>g.gui.rlisetup: Frame for defining circular moving window</em></td>
+<td style="text-align: center;"> <img src="g_gui_rlisetup_6.png"
+alt="g.gui.rlisetup: Frame for choosing the sampling frame with keyboard" /><br />
+<em>g.gui.rlisetup: Frame for choosing the sampling frame with
+keyboard</em></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"> <img src="g_gui_rlisetup_7.png"
+alt="g.gui.rlisetup: Frame for drawing the sampling frame" /><br />
+<em>g.gui.rlisetup: Frame for drawing the sampling frame</em></td>
+<td style="text-align: center;"> <img src="g_gui_rlisetup_8.png"
+alt="g.gui.rlisetup: Summary frame before saving" /><br />
+<em>g.gui.rlisetup: Summary frame before saving</em></td>
+</tr>
+</tbody>
+</table>
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Moving window analysis on full region</h3>
+### Moving window analysis on full region
 
-<i>TODO: update examples to new g.gui.rlisetup dialog:</i>
-<p>
-Example for a 7x7 moving window analysis on full region, the output
-is a raster map:
-<p>
+*TODO: update examples to new g.gui.rlisetup dialog:*
+
+Example for a 7x7 moving window analysis on full region, the output is a
+raster map:
+
 Click on "New", then:
-<ul>
- <li> Configuration file name: "movwindow7"</li>
- <li> Raster map name to use to select areas: "forests"</li>
-</ul>
 
-1. Setup sampling frame:
-<ul>
-<li> Define a sampling frame (region for analysis): "Whole map layer", then "OK"</li>
-</ul>
+- Configuration file name: "movwindow7"
+- Raster map name to use to select areas: "forests"
 
-2. Setup sampling frame
-<ul>
-<li> Define sampling areas: "Moving window", then "OK"</li>
-<li> Then click on "Use keyboard to define moving window dimension"</li>
-</ul>
+1\. Setup sampling frame:
+
+- Define a sampling frame (region for analysis): "Whole map layer", then
+  "OK"
+
+2\. Setup sampling frame
+
+- Define sampling areas: "Moving window", then "OK"
+- Then click on "Use keyboard to define moving window dimension"
 
 Select type of shape:
-<ul>
-<li> [x] Rectangular</li>
-<li> Width size (in cells)?: "7"</li>
-<li> Height size (in cells)?: "7"</li>
-<li> Then "Save settings"</li>
-</ul>
 
-3. Save settings: click on button
-<br>
+- \[x\] Rectangular
+- Width size (in cells)?: "7"
+- Height size (in cells)?: "7"
+- Then "Save settings"
+
+3\. Save settings: click on button  
 (4.) Close
-<p>
-Now an anaysis can be performed using one of the analytical modules, e.g.
-<div class="code"><pre>
+
+Now an anaysis can be performed using one of the analytical modules,
+e.g.
+
+```shell
 g.region raster=forests -p
 r.li.patchdensity input=forests conf=movwindow7 output=forests_p_dens7
 r.univar forests_p_dens7
-</pre></div>
+```
 
-The result is the new raster map "forests_p_dens7" which shows (in this example)
-the patch density of the forest areas.
-<br>
+The result is the new raster map "forests_p_dens7" which shows (in this
+example) the patch density of the forest areas.  
 See the respective modules for further examples.
 
-<h3>Whole region analysis</h3>
+### Whole region analysis
 
-<!-- TODO: find a better example and briefly explain the meaning of result -->
-Example for a whole region analysis, the output is a text file:
+Example for a whole region analysis, the output is a text file: Click on
+"New", then:
 
-Click on "New", then:
-<ul>
- <li> Configuration file name: "whole_region"</li>
- <li> Raster map name to use to select areas: "lsat7_2000_40"</li>
-</ul>
+- Configuration file name: "whole_region"
+- Raster map name to use to select areas: "lsat7_2000_40"
 
-1. Setup sampling frame:
-<ul>
-<li> Define a sampling frame (region for analysis): "Whole map layer", then "OK"</li>
-</ul>
+1\. Setup sampling frame:
 
-2. Setup sampling frame
-<ul>
-<li> Define sampling areas: "Whole map layer", then "OK"</li>
-</ul>
+- Define a sampling frame (region for analysis): "Whole map layer", then
+  "OK"
 
-3. Save settings: click on button
-<br>
+2\. Setup sampling frame
+
+- Define sampling areas: "Whole map layer", then "OK"
+
+3\. Save settings: click on button  
 (4.) Close
-<p>
-Now an anaysis can be performed using one of the analytical modules, e.g.
-<div class="code"><pre>
+
+Now an anaysis can be performed using one of the analytical modules,
+e.g.
+
+```shell
 g.region raster=lsat7_2002_40 -p
 r.li.shannon input=lsat7_2000_40 conf=whole_region output=lsat7_2000_40_shannon
-</pre></div>
+```
 
-The result is the new text file "forests_p_dens7" (stored in folder <code>$HOME/.r.li/output/</code>.
-<br>
+The result is the new text file "forests_p_dens7" (stored in folder
+`$HOME/.r.li/output/`.  
 See the respective modules for further examples.
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
-Gen. Tech. Rep. PNW-351. (<a href="https://doi.org/10.2737/PNW-GTR-351">PDF</a>)
+Gen. Tech. Rep. PNW-351. ([PDF](https://doi.org/10.2737/PNW-GTR-351))
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.li.html">r.li</a> (package overview),
-<a href="r.li.daemon.html">r.li.daemon</a>
-</em>
-<p>
-<em>
-<a href="https://grass.osgeo.org/gdp/landscape/r_le_manual5.pdf">Old r.le suite manual</a> (1992)
-</em>
-<p>
-<em>
-<a href="wxGUI.html">wxGUI</a>,
-<a href="wxGUI.components.html">wxGUI components</a>
-</em>
+*[r.li](r.li.md) (package overview), [r.li.daemon](r.li.daemon.md)*
 
-<h2>AUTHORS</h2>
+*[Old r.le suite
+manual](https://grass.osgeo.org/gdp/landscape/r_le_manual5.pdf) (1992)*
 
-Luca Delucchi<br>
-Rewritten from <em>r.li.setup</em> by Claudio Porta and Lucio Davide Spano
+*[wxGUI](wxGUI.md), [wxGUI components](wxGUI.components.md)*
+
+## AUTHORS
+
+Luca Delucchi  
+Rewritten from *r.li.setup* by Claudio Porta and Lucio Davide Spano

@@ -1,36 +1,30 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.info</em> displays information about the active display
-monitor. Display monitors are maintained
-by <em><a href="d.mon.html">d.mon</a></em>.
+*d.info* displays information about the active display monitor. Display
+monitors are maintained by *[d.mon](d.mon.md)*.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<div class="code"><pre>
+```shell
 d.mon start=cairo
 
 d.info -r
 rectangle: 0.000000 640.000000 0.000000 480.000000
-</pre></div>
+```
 
-<h2>NOTES</h2>
+## NOTES
 
-Units are screen pixels (except for <b>-g</b> flag where map units are
-used).
-<br>Where two numbers are given the format is: width, height.
-<br>Where four numbers are given the format is: left, right, top, bottom.
+Units are screen pixels (except for **-g** flag where map units are
+used).  
+Where two numbers are given the format is: width, height.  
+Where four numbers are given the format is: left, right, top, bottom.
 
-<p>
 Note: GRASS display pixel coordinates are measured from the top left.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="d.mon.html">d.mon</a>,
-  <a href="d.vect.html">d.vect</a>,
-  <a href="d.rast.html">d.rast</a>
-</em>
+*[d.mon](d.mon.md), [d.vect](d.vect.md), [d.rast](d.rast.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Glynn Clements

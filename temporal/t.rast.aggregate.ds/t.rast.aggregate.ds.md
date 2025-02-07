@@ -1,48 +1,46 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast.aggregate.ds</em> works like
-<a href="t.rast.aggregate.html">t.rast.aggregate</a> but instead of
-defining a fixed granularity for temporal aggregation the time
-intervals of all maps registered in a second space time dataset (can be
-STRDS, STR3DS or STVDS) are used to aggregate the maps of the input
-space time raster dataset.
+*t.rast.aggregate.ds* works like [t.rast.aggregate](t.rast.aggregate.md)
+but instead of defining a fixed granularity for temporal aggregation the
+time intervals of all maps registered in a second space time dataset
+(can be STRDS, STR3DS or STVDS) are used to aggregate the maps of the
+input space time raster dataset.
 
-<h2>NOTES</h2>
+## NOTES
 
-The sampling method must be specified from the sampler dataset point of view.
-It defines the temporal relationships between intervals of the sampling
-dataset and the input space time raster dataset.
+The sampling method must be specified from the sampler dataset point of
+view. It defines the temporal relationships between intervals of the
+sampling dataset and the input space time raster dataset.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Precipitation aggregation</h3>
+### Precipitation aggregation
 
 In this example we create 7 raster maps that will be registered in a
-single space time raster dataset named <em>precipitation_daily</em>
-using a daily temporal granularity. The names of the raster maps are
-stored in a text file that is used for raster map registration.
-<p>
+single space time raster dataset named *precipitation_daily* using a
+daily temporal granularity. The names of the raster maps are stored in a
+text file that is used for raster map registration.
+
 A space time vector dataset is created out of two vector maps with
 different temporal resolution. The maps are created using v.random. The
 first map has a granule of 3 days the second a granule of 4 days.
-<p>
-The space time raster dataset <em>precipitation_daily</em> with daily
-temporal granularity will be aggregated using the space time vector
-dataset resulting in the output space time raster dataset
-<em>precipitation_agg</em>. The aggregation method is set to
-<em>sum</em> to accumulate the precipitation values of all intervals in
-the space time vector dataset. The sampling option assures that only
-raster maps that are temporally during the time intervals of the space
-time vector dataset are considered for computation. Hence the option is set
-to contains (time stamped vector map layers temporally <b>contain</b>
-the raster map layers):
 
-<div class="code"><pre>
+The space time raster dataset *precipitation_daily* with daily temporal
+granularity will be aggregated using the space time vector dataset
+resulting in the output space time raster dataset *precipitation_agg*.
+The aggregation method is set to *sum* to accumulate the precipitation
+values of all intervals in the space time vector dataset. The sampling
+option assures that only raster maps that are temporally during the time
+intervals of the space time vector dataset are considered for
+computation. Hence the option is set to contains (time stamped vector
+map layers temporally **contain** the raster map layers):
+
+```shell
 MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
 
 for map in ${MAPS} ; do
     r.mapcalc expression="${map} = 1"
-    echo ${map} &gt;&gt; map_list.txt
+    echo ${map} >> map_list.txt
 done
 
 t.create type=strds temporaltype=absolute \
@@ -241,14 +239,14 @@ t.info type=strds input=precipitation_agg
  |     description="Aggregated precipitation dataset"
  |
  +----------------------------------------------------------------------------+
-</pre></div>
+```
 
-<h3>MODIS satellite sensor daily data aggregation to 8 days</h3>
+### MODIS satellite sensor daily data aggregation to 8 days
 
 In this example the aggregation from daily data to eight days is shown.
 This "eight-day week" is used in some MODIS satellite sensor products.
 
-<div class="code"><pre>
+```shell
 # NOTE: the example is written in shell language
 
 # create maps every 8 days as seed maps
@@ -262,7 +260,7 @@ done
 # to a YYYY-MM-DD date for start and end, and create a file with
 # mapnames, start date and end date
 
-g.list type=raster pattern=8day_20??_* &gt; names_list
+g.list type=raster pattern=8day_20??_* > names_list
 
 for NAME in `cat names_list` ; do
 
@@ -277,7 +275,7 @@ for NAME in `cat names_list` ; do
    if [ $DOY -le "353" ] ; then
       doy_end=$(( $DOY + 8 ))
    elif [ $DOY -eq "361" ] ; then
-      if [ $[$YEAR % 4] -eq 0 ] &amp;&amp; [ $[$YEAR % 100] -ne 0 ] || [ $[$YEAR % 400] -eq 0 ] ; then
+      if [ $[$YEAR % 4] -eq 0 ] && [ $[$YEAR % 100] -ne 0 ] || [ $[$YEAR % 400] -eq 0 ] ; then
          doy_end=$(( $DOY + 6 ))
       else
             doy_end=$(( $DOY + 5 ))
@@ -288,7 +286,7 @@ for NAME in `cat names_list` ; do
    DATE_END=`date -d "${YEAR}-01-01 +$(( ${doy_end} -1 ))days" +%Y-%m-%d`
 
    # text file with mapnames, start date and end date
-   echo "$NAME|$DATE_START|$DATE_END" &gt;&gt; list_map_start_end_time.txt
+   echo "$NAME|$DATE_START|$DATE_END" >> list_map_start_end_time.txt
 
 done
 
@@ -347,17 +345,13 @@ name|mapset|start_time|end_time
 8day_agg_2001_12_11|modis|2001-12-11 00:00:00|2001-12-19 00:00:00
 8day_agg_2001_12_19|modis|2001-12-19 00:00:00|2001-12-27 00:00:00
 8day_agg_2001_12_27|modis|2001-12-27 00:00:00|2002-01-01 00:00:00
-</pre></div>
+```
 
+## SEE ALSO
 
-<h2>SEE ALSO</h2>
+*[t.rast.aggregate](t.rast.aggregate.md), [t.create](t.create.md),
+[t.info](t.info.md)*
 
-<em>
-<a href="t.rast.aggregate.html">t.rast.aggregate</a>,
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
-</em>
+## AUTHOR
 
-<h2>AUTHOR</h2>
-
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

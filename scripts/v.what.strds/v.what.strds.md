@@ -1,25 +1,23 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.what.strds</em> retrieves raster values from a given space-time raster datasets
-(STRDS) using a point vector map.
+*v.what.strds* retrieves raster values from a given space-time raster
+datasets (STRDS) using a point vector map.
 
-<h2>NOTES</h2>
+## NOTES
 
 TBD.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<div class="code"><pre>
+```shell
 v.what.strds input=mypoints strds=mystrds output=newvector
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.what.rast.html">v.what.rast</a>,
-<a href="t.vect.observe.strds.html">t.vect.observe.strds</a>
-</em>
+*[v.what.rast](v.what.rast.md),
+[t.vect.observe.strds](t.vect.observe.strds.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Luca Delucchi

@@ -1,28 +1,26 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.net.allpairs</em> computes the shortest path between each selected
-node and all other selected nodes. The output is a vector with the
-selected nodes and the shortest paths.
+*v.net.allpairs* computes the shortest path between each selected node
+and all other selected nodes. The output is a vector with the selected
+nodes and the shortest paths.
 
-<h2>NOTES</h2>
+## NOTES
 
-An attribute table is created and linked to layer <em>arc_layer</em>. The
-table contains four columns: <em>cat</em>, <em>from_cat</em>,
-<em>to_cat</em>, <em>cost</em>.
-Each <em>cat</em> entry denotes the category of the shortest path from
-the node with category <em>from_cat</em> to the node with category
-<em>to_cat</em>. If points are specified by <b>cats, layer</b> or
-<b>where</b> parameters then the table is filled only for the selected
-points.
-<br>
-If <b>arc_backward_column</b> is not given then then the same costs are used for
-forward and backward arcs.
+An attribute table is created and linked to layer *arc_layer*. The table
+contains four columns: *cat*, *from_cat*, *to_cat*, *cost*. Each *cat*
+entry denotes the category of the shortest path from the node with
+category *from_cat* to the node with category *to_cat*. If points are
+specified by **cats, layer** or **where** parameters then the table is
+filled only for the selected points.  
+If **arc_backward_column** is not given then then the same costs are
+used for forward and backward arcs.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Find shortest path along roads from selected archsites (Spearfish sample
 dataset):
-<div class="code"><pre>
+
+```shell
 # prepare network: connect archsites to roads with threshold 200
 v.net input=roads@PERMANENT points=archsites@PERMANENT \
 output=roads_net operation=connect thresh=200
@@ -36,26 +34,24 @@ v.category input=roads_net option=report
 # shortest path between all points with categories 1 - 5 in layer 2
 v.net.allpairs input=roads_net cats=1-5 out=roads_net_all
 v.db.select roads_net_all
-</pre></div>
+```
 
 Result in matrix form:
-<div class="code"><pre>
-from\to	1		3		4		5
-1	0		18820.386	17206.651	17373.274
-3	18820.386	0		1739.079	9040.575
-4	17206.651	1739.079	0		7426.84
-5	17373.274	9040.575	7426.84		0
-</pre></div>
 
-<h2>SEE ALSO</h2>
+```shell
+from\to 1       3       4       5
+1   0       18820.386   17206.651   17373.274
+3   18820.386   0       1739.079    9040.575
+4   17206.651   1739.079    0       7426.84
+5   17373.274   9040.575    7426.84     0
+```
 
-<em>
-<a href="v.net.path.html">v.net.path</a>,
-<a href="v.net.distance.html">v.net.distance</a>
-</em>
+## SEE ALSO
 
-<h2>AUTHORS</h2>
+*[v.net.path](v.net.path.md), [v.net.distance](v.net.distance.md)*
 
-Daniel Bundala, Google Summer of Code 2009, Student<br>
-Wolf Bergenheim, Mentor<br>
+## AUTHORS
+
+Daniel Bundala, Google Summer of Code 2009, Student  
+Wolf Bergenheim, Mentor  
 Markus Metz

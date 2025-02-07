@@ -1,25 +1,23 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.parallel</em> creates parallel lines to the input vector lines which
-can be used as half-buffers.
+*v.parallel* creates parallel lines to the input vector lines which can
+be used as half-buffers.
 
-<h2>NOTES</h2>
+## NOTES
 
-Usage of <b>-b</b> flag will overrule the <b>side</b> parameter.
+Usage of **-b** flag will overrule the **side** parameter.
 
-<h2>KNOWN ISSUES</h2>
+## KNOWN ISSUES
 
-There is a problem with side-offset parallel line generation for inside corners.
-To avoid this problem, the <b>-b</b> flag might be used.
-<!-- in Vect_line_parallel(), v.segment is also affected -->
+There is a problem with side-offset parallel line generation for inside
+corners. To avoid this problem, the **-b** flag might be used.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.buffer.html">v.buffer</a>
-</em>
+*[v.buffer](v.buffer.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek<br>
-Rewritten by Rosen Matev (with support through the Google Summer of Code program 2008)
+Radim Blazek  
+Rewritten by Rosen Matev (with support through the Google Summer of Code
+program 2008)

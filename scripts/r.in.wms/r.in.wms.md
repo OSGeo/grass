@@ -1,62 +1,58 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.in.wms</em> handles all of downloading and importing raster data
-from <a href="https://www.ogc.org/publications/standard/wms/">OGC
-WMS</a> and <a href="https://www.ogc.org/publications/standard/wmts/">OGC
-WMTS</a> web mapping servers. It only needs be told the
-desired data to collect (bounds and resolution) via a region, the
-server to get the data from, and the layer or layers to get. It
-downloads the data in tiles, reprojects it, imports it, and patches it
-back together.
+*r.in.wms* handles all of downloading and importing raster data from
+[OGC WMS](https://www.ogc.org/publications/standard/wms/) and [OGC
+WMTS](https://www.ogc.org/publications/standard/wmts/) web mapping
+servers. It only needs be told the desired data to collect (bounds and
+resolution) via a region, the server to get the data from, and the layer
+or layers to get. It downloads the data in tiles, reprojects it, imports
+it, and patches it back together.
 
-<h2>NOTES</h2>
+## NOTES
 
 To understand the data you are getting it is necessary to look at the
-capabilities of the WMS server. This should be available via a capabilities
-request (see examples)
+capabilities of the WMS server. This should be available via a
+capabilities request (see examples)
 
-<p>
-If possible, the EPSG code of the current project should be used with the
-<b>srs</b> option to avoid unnecessary reprojection.
+If possible, the EPSG code of the current project should be used with
+the **srs** option to avoid unnecessary reprojection.
 
-<p>
-When using GDAL WMS driver (<b>driver=WMS_GDAL</b>), the GDAL library
-needs to be built with WMS support,
-see <a href="https://gdal.org/en/stable/drivers/raster/wms.html">GDAL WMS</a> manual page
-for details.
+When using GDAL WMS driver (**driver=WMS_GDAL**), the GDAL library needs
+to be built with WMS support, see [GDAL
+WMS](https://gdal.org/en/stable/drivers/raster/wms.html) manual page for
+details.
 
-<h3>Tiled WMS</h3>
+### Tiled WMS
 
-Into the parameter <b>layers</b> the name of the <i>TiledGroup</i> need to
-be inserted from Tile Service file. Time variable can be specified
-in <b>urlparams</b> parameter,
-e.g: <code>urlparams='time=2012-1-1'</code>.
+Into the parameter **layers** the name of the *TiledGroup* need to be
+inserted from Tile Service file. Time variable can be specified in
+**urlparams** parameter, e.g: `urlparams='time=2012-1-1'`.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>General Get Capabilities Request</h3>
+### General Get Capabilities Request
 
-<div class="code"><pre>
+```shell
 # Topographic WMS with OpenStreetMap by mundialis
 r.in.wms -c url="https://ows.mundialis.de/services/service?"
 r.in.wms -c url="https://ows.mundialis.de/services/service?" | grep Name
 
 # Czech WMS
 r.in.wms -c url="https://wms.cuzk.cz/wms.asp"
-</pre></div>
+```
 
-<h3>Download raster data from WMS server (GetMap request)</h3>
+### Download raster data from WMS server (GetMap request)
 
-<h4>Open Street Map</h4>
+#### Open Street Map
 
-<div class="code"><pre>
+```shell
 # OSM, using WMS_GRASS driver
 g.region n=90 s=-90 w=-180 e=180 res=0:10:00 -p
 r.in.wms url="http://watzmann-geog.urz.uni-heidelberg.de/cached/osm" layers=osm_auto:all output=osm format=png
 r.info osm
-</pre></div>
+```
 
-<div class="code"><pre>
+```shell
 # OSM Overlay WMS (can be used as an overlay for other maps)
 r.in.wms url="http://ows.mundialis.de/services/service?" layer=OSM-Overlay-WMS output=osm_overlay format=png
 
@@ -67,70 +63,76 @@ r.info topo_osm
 # TOPO-WMS
 r.in.wms url="http://ows.mundialis.de/services/service?" layer=TOPO-WMS output=topo format=png
 r.info topo
-</pre></div>
-<p>
-More OSM WMS servers can be found online, e.g. on the OSM wiki in a
-<a href="https://wiki.openstreetmap.org/wiki/WMS#Public_WMS_Servers">OSM WMS Servers list</a>
-and on the <a href="https://wiki.openstreetmap.org/wiki/WORLD_OSM_WMS">WORLD_OSM_WMS</a> page.
+```
 
-<h4>Countries and coastlines</h4>
+More OSM WMS servers can be found online, e.g. on the OSM wiki in a [OSM
+WMS Servers
+list](https://wiki.openstreetmap.org/wiki/WMS#Public_WMS_Servers) and on
+the [WORLD_OSM_WMS](https://wiki.openstreetmap.org/wiki/WORLD_OSM_WMS)
+page.
 
-<div class="code"><pre>
+#### Countries and coastlines
+
+```shell
 # using WMS_GRASS driver
 r.in.wms url="http://www2.demis.nl/WMS/wms.asp" layers=Countries,Borders,Coastline output=countries srs=4326 format=png
 r.info countries
-</pre></div>
+```
 
-<h4>Sentinel-2 satellite cloud free global coverage</h4>
+#### Sentinel-2 satellite cloud free global coverage
 
-<div class="code"><pre>
+```shell
 # North Carolina sample data
 g.region raster=elevation -p
 # using WMS_GRASS driver
 r.in.wms url="https://tiles.maps.eox.at/wms?" layers=s2cloudless output=sentinel2 format=png
 r.info sentinel2
-</pre></div>
+```
 
 <div align="center" style="margin: 10px">
-<a href="r_in_wms_sentinel2.jpg"><img src="r_in_wms_sentinel2.jpg" width="600px" height="531px"></a><br>
-<i>Figure: Raleigh (NC, USA) seen by Sentinel-2 (10m resolution; image courtesy: EOX)</i>
+
+[<img src="r_in_wms_sentinel2.jpg" width="600" height="531" />](r_in_wms_sentinel2.jpg)  
+*Figure: Raleigh (NC, USA) seen by Sentinel-2 (10m resolution; image
+courtesy: EOX)*
+
 </div>
 
-<h4>OGC WMTS Example</h4>
+#### OGC WMTS Example
 
-<div class="code"><pre>
+```shell
 # using WMTS_GRASS driver
 r.in.wms url="http://gpp3-wxs.ign.fr/yourAPIkey/geoportail/wmts" layers=ORTHOIMAGERY.ORTHOPHOTOS \
          output=orthophoto srs=3857 format=jpeg driver=WMTS_GRASS style=normal password="*" username="*"
 r.info orthophoto
-</pre></div>
+```
 
-Note: username, password and API key can be obtained from <a href="http://api.ign.fr/">IGN API</a> website
+Note: username, password and API key can be obtained from [IGN
+API](http://api.ign.fr/) website
 
-<h4>Data covering the Czech Republic</h4>
+#### Data covering the Czech Republic
 
-<div class="code"><pre>
+```shell
 # using WMS_GRASS driver
 r.in.wms url="http://wms.cuzk.cz/wms.asp" layers=prehledka_kraju-linie srs=4326 output=kn format=png
-</pre></div>
+```
 
-<div class="code"><pre>
+```shell
 # using WMTS_GRASS driver
 r.in.wms url="http://geoportal.cuzk.cz/WMTS_ORTOFOTO/WMTService.aspx" layers=orto output=orthophoto \
          srs=3857 format=jpeg driver=WMTS_GRASS style=default
 r.info orthophoto
-</pre></div>
+```
 
-Note: data are provided by
-<a href="https://cuzk.cz/en">Czech office for surveying, mapping and cadastre</a>.
+Note: data are provided by [Czech office for surveying, mapping and
+cadastre](https://cuzk.cz/en).
 
+#### Satellite data covering Europe
 
-<h4>Satellite data covering Europe</h4>
+Copernicus Core003 View Services - Optical VHR2 coverage over EU
+2011-2013 (provided by JRC; usage is restricted to non-commercial
+activities):
 
-Copernicus Core003 View Services - Optical VHR2 coverage over EU 2011-2013 (provided by JRC;
-usage is restricted to non-commercial activities):
-
-<div class="code"><pre>
+```shell
 # get WMS layer list
 r.in.wms -c url="http://cidportal.jrc.ec.europa.eu/copernicus/services/ows/wms/public/core003?"
 r.in.wms -c url="http://cidportal.jrc.ec.europa.eu/copernicus/services/ows/wms/public/core003?" | grep Name
@@ -150,35 +152,29 @@ r.in.wms url="http://cidportal.jrc.ec.europa.eu/copernicus/services/ows/wms/publ
          maxcols=3400 maxrows=3400 driver=WMS_GDAL gdal_createopt="BIGTIFF=YES,COMPRESS=DEFLATE"
 r.info jrc_copernicus_core003_mosaik2
 
-</pre></div>
+```
 
-<h2>REQUIREMENTS</h2>
+## REQUIREMENTS
 
-<em>r.in.wms</em> requires the <a href="https://gdal.org/en/stable/programs/gdalwarp.html">gdalwarp</a>
-utility from the GDAL/OGR library.
+*r.in.wms* requires the
+[gdalwarp](https://gdal.org/en/stable/programs/gdalwarp.html) utility
+from the GDAL/OGR library.
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<ul>
-  <li><a href="https://www.ogc.org/publications/standard/wms/">OGC WMS</a></li>
-  <li><a href="https://www.ogc.org/publications/standard/wmts/">OGC WMTS</a></li>
-</ul>
+- [OGC WMS](https://www.ogc.org/publications/standard/wms/)
+- [OGC WMTS](https://www.ogc.org/publications/standard/wmts/)
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="r.in.gdal.html">r.in.gdal</a>,
-  <a href="r.patch.html">r.patch</a>,
-  <a href="r.colors.html">r.colors</a>,
-  <a href="r.composite.html">r.composite</a>,
-  <a href="v.in.wfs.html">v.in.wfs</a>
-</em>
+*[r.in.gdal](r.in.gdal.md), [r.patch](r.patch.md),
+[r.colors](r.colors.md), [r.composite](r.composite.md),
+[v.in.wfs](v.in.wfs.md)*
 
-<p>
-See also
-<a href="https://grasswiki.osgeo.org/wiki/WxGUI/Video_tutorials#Add_web_service_layer">WMS support in wxGUI</a>.
+See also [WMS support in
+wxGUI](https://grasswiki.osgeo.org/wiki/WxGUI/Video_tutorials#Add_web_service_layer).
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Stepan Turek, Czech Technical University in Prague, Czech Republic<br>
+Stepan Turek, Czech Technical University in Prague, Czech Republic  
 (bachelor's final project 2012, mentor: Martin Landa)

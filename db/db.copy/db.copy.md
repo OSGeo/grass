@@ -1,75 +1,72 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.copy</em> allows the user to copy a table between two databases.
-Databases can be connected through different drivers (see examples below).
+*db.copy* allows the user to copy a table between two databases.
+Databases can be connected through different drivers (see examples
+below).
 
-<h2>NOTES</h2>
+## NOTES
 
-Attribute tables can be copied using <em>db.copy</em> and, when to be
+Attribute tables can be copied using *db.copy* and, when to be
 associated to a vector map, assigned to the map with
-<em><a href="v.db.connect.html">v.db.connect</a></em>. Current connection
-settings are saved in the file <em>$LOCATION/vector_map/dbln</em>.
+*[v.db.connect](v.db.connect.md)*. Current connection settings are saved
+in the file *\$LOCATION/vector_map/dbln*.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>From DBF to PostgreSQL</h3>
+### From DBF to PostgreSQL
 
-<em>Storing table 'geonames.dbf' (in current directory) into PostgreSQL
-through ODBC:</em><br>
+*Storing table 'geonames.dbf' (in current directory) into PostgreSQL
+through ODBC:*  
 
-<div class="code"><pre>
+```shell
 db.copy from_driver=dbf from_database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf' \
   from_table=geonames to_driver=pg to_database="host=pgserver,dbname=testdb" \
   to_table=geonames
-</pre></div>
+```
 
-<h3>From PostgreSQL to DBF</h3>
+### From PostgreSQL to DBF
 
-<div class="code"><pre>
+```shell
 db.copy from_driver=pg  from_database="host=pgserver.example.org,dbname=testdb" \
   from_table=origtable to_driver=dbf \
   to_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf' to_table=origtable
-</pre></div>
+```
 
-<h3>From PostgreSQL to PostgreSQL with condition</h3>
+### From PostgreSQL to PostgreSQL with condition
 
-<div class="code"><pre>
+```shell
 db.copy from_driver=pg  from_database="host=localhost,dbname=testdb" \
   from_table=geonames to_driver=pg to_database="host=localhost,dbname=testdb" \
-  to_table=selection where="cat &lt; 500"
-</pre></div>
+  to_table=selection where="cat < 500"
+```
 
-<h3>From DBF to SQLite</h3>
+### From DBF to SQLite
 
-<div class="code"><pre>
+```shell
 db.copy from_driver=dbf from_database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf' \
    from_table=geonames_features to_driver=sqlite \
    to_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db' to_table=geonames_features
 
 # convenient viewer:
 sqlitebrowser $HOME/grassdata/nc_spm_08/user1/sqlite/sqlite.db
-</pre></div>
+```
 
-<h3>From SQLite to DBF</h3>
+### From SQLite to DBF
 
-<div class="code"><pre>
+```shell
 db.copy from_driver=sqlite from_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db' \
    from_table=ammprv to_driver=dbf to_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/' \
    to_table=ammprv
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.connect.html">db.connect</a>,
-<a href="db.drivers.html">db.drivers</a>,
-<a href="db.login.html">db.login</a>,
-<a href="v.db.connect.html">v.db.connect</a>,
-<a href="v.clean.html">v.clean</a>
-</em>
-<p>
-<a href="sql.html">GRASS SQL interface</a>
+*[db.connect](db.connect.md), [db.drivers](db.drivers.md),
+[db.login](db.login.md), [v.db.connect](v.db.connect.md),
+[v.clean](v.clean.md)*
 
-<h2>AUTHOR</h2>
+[GRASS SQL interface](sql.md)
+
+## AUTHOR
 
 Radim Blazek, ITC-irst, Trento, Italy

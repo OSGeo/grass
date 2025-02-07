@@ -1,254 +1,246 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<p><em>g.proj</em> provides a means of converting a coordinate reference
-system (CRS) description between various formats.
+*g.proj* provides a means of converting a coordinate reference system
+(CRS) description between various formats.
 
-<p>
-For an introduction to map projections (with PROJ),see the manual page of
-<a href="r.proj.html">r.proj</a>.
+For an introduction to map projections (with PROJ),see the manual page
+of [r.proj](r.proj.md).
 
-<p>
-If compiled without <a href="https://gdal.org/">OGR</a> present, the
-functionality is limited to:
-<ul>
-<li>Reporting the CRS information for the current project (previously called
-location), either in conventional GRASS (<b>-p</b> flag) or PROJ (<b>-j</b>
-flag) format</li>
-<li>Changing the datum, or reporting and modifying the datum transformation
-parameters, for the current project</li>
-</ul>
+If compiled without [OGR](https://gdal.org/) present, the functionality
+is limited to:
 
-<p>When compiled with OGR, functionality is increased and allows output of
-the CRS information in the Well-Known Text (WKT) format popularised
-by proprietary GIS. In addition, if one of the parameters <em>georef</em>,
-<em>wkt</em>, <em>proj4</em> or <em>epsg</em> is specified, rather than being
-read from the current project, the CRS information is imported from
-an external source as follows:
+- Reporting the CRS information for the current project (previously
+  called location), either in conventional GRASS (**-p** flag) or PROJ
+  (**-j** flag) format
+- Changing the datum, or reporting and modifying the datum
+  transformation parameters, for the current project
 
-<dl>
-<dt>georef=<em>filename</em></dt>
-<dd><em>g.proj</em> attempts to invoke GDAL and OGR in turn to read a
-georeferenced file <em>filename</em>. The CRS information will be
-read from this file. If the file is not georeferenced or cannot be read,
-XY (unprojected) will be used.</dd>
+When compiled with OGR, functionality is increased and allows output of
+the CRS information in the Well-Known Text (WKT) format popularised by
+proprietary GIS. In addition, if one of the parameters *georef*, *wkt*,
+*proj4* or *epsg* is specified, rather than being read from the current
+project, the CRS information is imported from an external source as
+follows:
 
-<dt>wkt=<em>filename</em> or <b>-</b></dt>
-<dd>The file <em>filename</em> should contain a CRS description in WKT
-format with or without line-breaks (e.g. a '.prj' file). If <b>-</b> is given
-for the filename, the WKT description will be read from stdin rather than a
-file.</dd>
+georef=*filename*  
+*g.proj* attempts to invoke GDAL and OGR in turn to read a georeferenced
+file *filename*. The CRS information will be read from this file. If the
+file is not georeferenced or cannot be read, XY (unprojected) will be
+used.
 
-<dt>proj4=<em>description</em> or <b>-</b></dt>
-<dd><em>description</em> should be a CRS description in
-<a href="https://proj.org/">PROJ</a> format, enclosed in
-quotation marks if there are any spaces. If <b>-</b> is given for
-<em>description</em>, the PROJ description will be read from stdin rather
-than as a directly-supplied command-line parameter.</dd>
+wkt=*filename* or **-**  
+The file *filename* should contain a CRS description in WKT format with
+or without line-breaks (e.g. a '.prj' file). If **-** is given for the
+filename, the WKT description will be read from stdin rather than a
+file.
 
-<dt>epsg=<em>number</em></dt>
-<dd><em>number</em> should correspond to the index number of a valid
-co-ordinate system in the <a href="https://epsg.org/search/by-name">EPSG
-database</a>. EPSG code support is based upon a local copy of the GDAL CSV
-co-ordinate system and datum information files, stored in the directory
-<code>$GISBASE/etc/proj/ogr_csv</code>. These can be updated if necessary
-to support future revisions of the EPSG database.</dd>
-</dl>
+proj4=*description* or **-**  
+*description* should be a CRS description in [PROJ](https://proj.org/)
+format, enclosed in quotation marks if there are any spaces. If **-** is
+given for *description*, the PROJ description will be read from stdin
+rather than as a directly-supplied command-line parameter.
 
-<p>If datum information is incorrect or missing in the input
-co-ordinate system definition (e.g. PROJ descriptions have very limited
-support for specifying datum names), a GRASS datum abbreviation can instead be
-supplied using the <em>datum</em> parameter. This will override any
-datum contained in the input co-ordinate system, and discard
-any datum transformation parameters. Enter datum=<em>list</em> to return a
-list of all the datums supported by GRASS. Since any
-existing datum transformation parameters will have been discarded, the
-<em>datumtrans</em> parameter should in general always be used in
-conjunction with <em>datum</em>.
+epsg=*number*  
+*number* should correspond to the index number of a valid co-ordinate
+system in the [EPSG database](https://epsg.org/search/by-name). EPSG
+code support is based upon a local copy of the GDAL CSV co-ordinate
+system and datum information files, stored in the directory
+`$GISBASE/etc/proj/ogr_csv`. These can be updated if necessary to
+support future revisions of the EPSG database.
 
-<p>The <b>-p</b>, <b>-j</b>, <b>-w</b>, etc. flags are all functional when
-importing CRS information from an external source, meaning that <em>g.proj</em>
-can be used to convert between representations of the information. It is
-<strong>not</strong> required that either the input or output be in GRASS
-format.
+If datum information is incorrect or missing in the input co-ordinate
+system definition (e.g. PROJ descriptions have very limited support for
+specifying datum names), a GRASS datum abbreviation can instead be
+supplied using the *datum* parameter. This will override any datum
+contained in the input co-ordinate system, and discard any datum
+transformation parameters. Enter datum=*list* to return a list of all
+the datums supported by GRASS. Since any existing datum transformation
+parameters will have been discarded, the *datumtrans* parameter should
+in general always be used in conjunction with *datum*.
 
-<p>In addition however, if the <b>-c</b> flag is specified, <em>g.proj</em> will
+The **-p**, **-j**, **-w**, etc. flags are all functional when importing
+CRS information from an external source, meaning that *g.proj* can be
+used to convert between representations of the information. It is
+**not** required that either the input or output be in GRASS format.
+
+In addition however, if the **-c** flag is specified, *g.proj* will
 create new GRASS CRS files (PROJ_INFO, PROJ_UNITS, WIND and
-DEFAULT_WIND) based on the imported information. If the <em>project</em>
-parameter is specified in addition to <b>-c</b>, then a new project will be created.
-Otherwise the CRS information files in the current project will be
-overwritten. The program will <strong>not</strong> warn before doing this.
+DEFAULT_WIND) based on the imported information. If the *project*
+parameter is specified in addition to **-c**, then a new project will be
+created. Otherwise the CRS information files in the current project will
+be overwritten. The program will **not** warn before doing this.
 
-<p>The final mode of operation of <em>g.proj</em> is to report on the datum
+The final mode of operation of *g.proj* is to report on the datum
 information and datum transformation parameters associated with the
-co-ordinate system. The <b>-d</b> flag will report a human-readable summary of
-this.
+co-ordinate system. The **-d** flag will report a human-readable summary
+of this.
 
-<h2>NOTES</h2>
+## NOTES
 
-<p>If the input co-ordinate system contains a datum name but no
-transformation parameters, and there is more than one suitable parameter set
-available (according to the files datum.table and datumtransform.table in
-<code>$GISBASE/etc/proj</code>), <em>g.proj</em> will check the value of
-the <em>datumtrans</em> option and act according to the following:
+If the input co-ordinate system contains a datum name but no
+transformation parameters, and there is more than one suitable parameter
+set available (according to the files datum.table and
+datumtransform.table in `$GISBASE/etc/proj`), *g.proj* will check the
+value of the *datumtrans* option and act according to the following:
 
-<ul>
-<li> <strong>-1:</strong> List available parameter sets in a GUI-parsable (but also
-human-readable) format and exit.</li>
-<li> <strong>0 (default):</strong> Continue without specifying parameters - if
-used when creating a project, other GRASS modules will use the "default"
-(likely non-optimum) parameters for this datum if necessary in the future.</li>
-<li> <strong>Any other number less than or equal to the number of parameter sets
-available for this datum:</strong> Choose this parameter set and add it to the
-co-ordinate system description.</li>
-</ul>
+- **-1:** List available parameter sets in a GUI-parsable (but also
+  human-readable) format and exit.
+- **0 (default):** Continue without specifying parameters - if used when
+  creating a project, other GRASS modules will use the "default" (likely
+  non-optimum) parameters for this datum if necessary in the future.
+- **Any other number less than or equal to the number of parameter sets
+  available for this datum:** Choose this parameter set and add it to
+  the co-ordinate system description.
 
-If the <b>-t</b> flag is specified, the module will attempt to change the
+If the **-t** flag is specified, the module will attempt to change the
 datum transformation parameters using one of the above two methods
-<strong>even if</strong> a valid parameter set is already specified in the
-input co-ordinate system. This can be useful to change the datum information
+**even if** a valid parameter set is already specified in the input
+co-ordinate system. This can be useful to change the datum information
 for an existing project.
 
-<p>Output is simply based on the input CRS information. g.proj does
-<strong>not</strong> attempt to verify that the co-ordinate system thus
-described matches an existing system in use in the world. In particular,
-this means there are no EPSG Authority codes in the WKT output.
+Output is simply based on the input CRS information. g.proj does **not**
+attempt to verify that the co-ordinate system thus described matches an
+existing system in use in the world. In particular, this means there are
+no EPSG Authority codes in the WKT output.
 
-<p>WKT format shows the false eastings and northings in the projected unit
-(e.g. meters, feet) but in PROJ format it should always be given in meters.
+WKT format shows the false eastings and northings in the projected unit
+(e.g. meters, feet) but in PROJ format it should always be given in
+meters.
 
-<p>The maximum size of input WKT or PROJ CRS descriptions is
-limited to 8000 bytes.
+The maximum size of input WKT or PROJ CRS descriptions is limited to
+8000 bytes.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Print information</h3>
+### Print information
 
-Print the CRS information for the current project:<br>
+Print the CRS information for the current project:  
 
-<div class="code"><pre>
+```shell
 g.proj -p
-</pre></div>
+```
 
-<p>
-List the possible datum transformation parameters for the current project:<br>
+List the possible datum transformation parameters for the current
+project:  
 
-<div class="code"><pre>
+```shell
 g.proj -t datumtrans=-1
-</pre></div>
+```
 
-<h3>Create projection (PRJ) file</h3>
+### Create projection (PRJ) file
 
-Create a '.prj' file in ESRI format corresponding to the current project:<br>
+Create a '.prj' file in ESRI format corresponding to the current
+project:  
 
-<div class="code"><pre>
-g.proj -wef &gt; irish_grid.prj
-</pre></div>
+```shell
+g.proj -wef > irish_grid.prj
+```
 
-<h3>Read CRS from file</h3>
+### Read CRS from file
 
 Read the CRS information from a GeoTIFF file and print it in PROJ
-format:<br>
+format:  
 
-<div class="code"><pre>
+```shell
 g.proj -jf georef=ASTER_DEM20020508161837.tif
-</pre></div>
+```
 
-<p>Convert the PROJ CRS description contained in a text file to WKT
-format:<br>
+Convert the PROJ CRS description contained in a text file to WKT
+format:  
 
-<div class="code"><pre>
+```shell
 cat proj4.description | g.proj -w proj4=-
-</pre></div>
+```
 
-<h3>Create new project</h3>
+### Create new project
 
-<p>Create a new project with the coordinate system referred to by EPSG code
+Create a new project with the coordinate system referred to by EPSG code
 4326 (Latitude-Longitude/WGS84), without explicitly specifying datum
-transformation parameters:<br>
+transformation parameters:  
 
-<div class="code"><pre>
+```shell
 g.proj -c epsg=4326 project=latlong
-</pre></div>
+```
 
-<p>Create a new project with the coordinate system referred to by EPSG code
-3857 (<a href="https://spatialreference.org/ref/epsg/3857/">Pseudo-Mercator Projection</a>)<br>
+Create a new project with the coordinate system referred to by EPSG code
+3857 ([Pseudo-Mercator
+Projection](https://spatialreference.org/ref/epsg/3857/))  
 
-<div class="code"><pre>
+```shell
 g.proj -c epsg=3857 project=google
-</pre></div>
+```
 
-<p>Create a new project with the coordinate system referred to by EPSG code
-29900 (Irish Grid), selecting datum transformation parameter set no. 2:<br>
+Create a new project with the coordinate system referred to by EPSG code
+29900 (Irish Grid), selecting datum transformation parameter set no.
+2:  
 
-<div class="code"><pre>
+```shell
 # list available datums for EPSG code 29900
 g.proj -t datumtrans=-1 epsg=29900
 g.proj -c epsg=29900 datumtrans=2 project=irish_grid
-</pre></div>
+```
 
-<p>Create a new project with the same coordinate system as the current
-project, but forcing a change to datum transformation parameter set no. 1:<br>
+Create a new project with the same coordinate system as the current
+project, but forcing a change to datum transformation parameter set no.
+1:  
 
-<div class="code"><pre>
+```shell
 g.proj -c project=newloc -t datumtrans=1
-</pre></div>
+```
 
-<p>Create a new project with the coordinate system from a WKT definition
-stored in a text file:<br>
+Create a new project with the coordinate system from a WKT definition
+stored in a text file:  
 
-<div class="code"><pre>
+```shell
 g.proj -c wkt=irish_grid.prj project=irish_grid
-</pre></div>
+```
 
-<p>Create a new project from a PROJ description, explicitly
-specifying a datum and using the default datum transformation
-parameters:<br>
+Create a new project from a PROJ description, explicitly specifying a
+datum and using the default datum transformation parameters:  
 
-<div class="code"><pre>
+```shell
 g.proj -c project=spain proj4="+proj=utm +zone=30 +ellps=intl" datum=eur50 datumtrans=0
-</pre></div>
+```
 
-<h3>Using g.proj output for GDAL/OGR tools</h3>
+### Using g.proj output for GDAL/OGR tools
 
-<p>Reproject external raster map to current GRASS project (does not always make sense!)
-using the GDAL 'gdalwarp' tool. We recommend to use the ERDAS/Img format and not
-to use the ESRI style of WKT:<br>
-<div class="code"><pre>
+Reproject external raster map to current GRASS project (does not always
+make sense!) using the GDAL 'gdalwarp' tool. We recommend to use the
+ERDAS/Img format and not to use the ESRI style of WKT:  
+
+```shell
 # example for 30x30 pixel resolution (enforce with -tr to avoid odd values)
 gdalwarp -of HFA -tr 30 30 -t_srs "`g.proj -wf`" aster.img aster_tmerc.img
-</pre></div>
+```
 
-<p>Reproject external vector map to current GRASS project
-using the OGR 'ogr2ogr' tool:<br>
-<div class="code"><pre>
+Reproject external vector map to current GRASS project using the OGR
+'ogr2ogr' tool:  
+
+```shell
 ogr2ogr -t_srs "`g.proj -wf`" polbnda_italy_GB_ovest.shp polbnda_italy_LL.shp
-</pre></div>
+```
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<a href="https://proj.org">PROJ</a>: Projection/datum support library<br>
-<a href="https://gdal.org">GDAL raster library and toolset</a><br>
-<a href="https://gdal.org/">OGR vector library and toolset</a>
+[PROJ](https://proj.org): Projection/datum support library  
+[GDAL raster library and toolset](https://gdal.org)  
+[OGR vector library and toolset](https://gdal.org/)
 
-<p><b>Further reading</b>
-<ul>
-<li> <a href="https://www.asprs.org/asprs-publications/grids-and-datums">ASPRS Grids and Datum</a></li>
-<li> <a href="https://mapref.org">MapRef - The Collection of Map Projections and Reference Systems for Europe</a></li>
-<li> <a href="http://geotiff.maptools.org/proj_list/">Projections Transform List</a> (PROJ)</li>
-</ul>
+**Further reading**
 
-<h2>SEE ALSO</h2>
+- [ASPRS Grids and
+  Datum](https://www.asprs.org/asprs-publications/grids-and-datums)
+- [MapRef - The Collection of Map Projections and Reference Systems for
+  Europe](https://mapref.org)
+- [Projections Transform List](http://geotiff.maptools.org/proj_list/)
+  (PROJ)
 
-<em>
-<a href="m.proj.html">m.proj</a>,
-<a href="r.proj.html">r.proj</a>,
-<a href="v.proj.html">v.proj</a>,
-<a href="r.import.html">r.import</a>,
-<a href="r.in.gdal.html">r.in.gdal</a>,
-<a href="v.import.html">v.import</a>,
-<a href="v.in.ogr.html">v.in.ogr</a>
-</em>
+## SEE ALSO
 
-<h2>AUTHOR</h2>
+*[m.proj](m.proj.md), [r.proj](r.proj.md), [v.proj](v.proj.md),
+[r.import](r.import.md), [r.in.gdal](r.in.gdal.md),
+[v.import](v.import.md), [v.in.ogr](v.in.ogr.md)*
+
+## AUTHOR
 
 Paul Kelly

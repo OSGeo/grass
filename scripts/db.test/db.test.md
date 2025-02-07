@@ -1,27 +1,22 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.test</em> tests database driver and database server running
-set of SQL queries. Database must exist and connection must be set
-by <em>db.connect</em>.
+*db.test* tests database driver and database server running set of SQL
+queries. Database must exist and connection must be set by *db.connect*.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Test current SQL backend driver:
 
-<p><div class="code"><pre>
+```shell
 db.connect -p
 db.test test=test1
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="sql.html">GRASS SQL interface</a>,
-<a href="db.connect.html">db.connect</a>,
-<a href="db.describe.html">db.describe</a>,
-<a href="db.drivers.html">db.drivers</a>
-</em>
+*[GRASS SQL interface](sql.md), [db.connect](db.connect.md),
+[db.describe](db.describe.md), [db.drivers](db.drivers.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Radim Blazek

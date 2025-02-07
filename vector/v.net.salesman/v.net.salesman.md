@@ -1,57 +1,58 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.net.salesman</em> calculates the optimal route to visit nodes on a
-vector network.
+*v.net.salesman* calculates the optimal route to visit nodes on a vector
+network.
 
-<p>Costs may be either line lengths or attributes saved in a database
+Costs may be either line lengths or attributes saved in a database
 table. These attribute values are taken as costs of whole segments, not
-as costs to traverse a length unit (e.g. meter) of the segment.
-For example, if the speed limit is 100 km / h, the cost to traverse a
-10 km long road segment must be calculated as
-<br>
-length / speed = 10 km / (100 km/h) = 0.1 h.
-<br>
-Supported are cost assignments for arcs,
-and also different costs for both directions of a vector line.
-For areas, costs will be calculated along boundary lines.
+as costs to traverse a length unit (e.g. meter) of the segment. For
+example, if the speed limit is 100 km / h, the cost to traverse a 10 km
+long road segment must be calculated as  
+length / speed = 10 km / (100 km/h) = 0.1 h.  
+Supported are cost assignments for arcs, and also different costs for
+both directions of a vector line. For areas, costs will be calculated
+along boundary lines.
 
-<p>The input vector needs to be prepared with <em>v.net operation=connect</em>
-in order to connect points representing center nodes to the network.
+The input vector needs to be prepared with *v.net operation=connect* in
+order to connect points representing center nodes to the network.
 
-<p>Points specified by category must be exactly on network nodes, and the
-input vector map needs to be prepared with <em>v.net operation=connect</em>.
+Points specified by category must be exactly on network nodes, and the
+input vector map needs to be prepared with *v.net operation=connect*.
 
-<p>The flag <b>-t</b> enables turntable support.
-This flag requires additional parameters, <b>turn_layer</b> and <b>turn_cat_layer</b>,
-that are otherwise ignored. The turntable allows
-to model e.g. traffic code, where some turns may be prohibited.
-This means that the input layer is expanded by
+The flag **-t** enables turntable support. This flag requires additional
+parameters, **turn_layer** and **turn_cat_layer**, that are otherwise
+ignored. The turntable allows to model e.g. traffic code, where some
+turns may be prohibited. This means that the input layer is expanded by
 turntable with costs of every possible turn on any possible node
-(intersection) in both directions.
- Turntable can be created by
- the <em><a href="v.net.html">v.net</a></em> module.
-For more information about turns in the vector network analyses see
-<a href="https://grasswiki.osgeo.org/wiki/Turns_in_the_vector_network_analysis">wiki page</a>.
+(intersection) in both directions. Turntable can be created by the
+*[v.net](v.net.md)* module. For more information about turns in the
+vector network analyses see [wiki
+page](https://grasswiki.osgeo.org/wiki/Turns_in_the_vector_network_analysis).
 
-<h2>NOTES</h2>
+## NOTES
 
-Arcs can be closed using cost = -1.
-Turns support: The costs of turns on visiting nodes are not taken in account.
+Arcs can be closed using cost = -1. Turns support: The costs of turns on
+visiting nodes are not taken in account.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Traveling salesman for 6 digitized nodes (Spearfish):
 
-<p>Shortest path, along unimproved roads:
-<p><img src="vnetsalesman.png" alt="v.net.salesman example using distance" border="1">
+Shortest path, along unimproved roads:
 
-<p>Fastest path, along highways:
-<p><img src="vnetsalesmantime.png" alt="v.net.salesman example using time" border="1">
+<img src="vnetsalesman.png" data-border="1"
+alt="v.net.salesman example using distance" />
 
-<p>Searching for the shortest path using distance and the fastest path using
-traveling time according to the speed limits of different road types:
+Fastest path, along highways:
 
-<div class="code"><pre>
+<img src="vnetsalesmantime.png" data-border="1"
+alt="v.net.salesman example using time" />
+
+Searching for the shortest path using distance and the fastest path
+using traveling time according to the speed limits of different road
+types:
+
+```shell
 # Spearfish
 
 g.copy vect=roads,myroads
@@ -117,11 +118,11 @@ v.db.update myroads_net_time layer=3 col=bcost val="length / speed * 60"
 
 # find the fastest path
 v.net.salesman myroads_net_time arc_layer=3 node_layer=2 arc_column=cost arc_backward_column=bcost center_cats=1-6 out=mysalesman_time
-</pre></div>
+```
 
 To display the result, run for example:
 
-<div class="code"><pre>
+```shell
 # Display the results
 g.region vector=myroads_net
 
@@ -140,32 +141,27 @@ d.vect centers -c icon=basic/triangle
 d.vect mysalesman_time col=green width=2
 d.font Vera
 d.vect centers col=red disp=attr attrcol=label lsize=12
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.path.html">d.path</a>,
-<a href="v.net.html">v.net</a>,
-<a href="v.net.alloc.html">v.net.alloc</a>,
-<a href="v.net.iso.html">v.net.iso</a>,
-<a href="v.net.path.html">v.net.path</a>,
-<a href="v.net.steiner.html">v.net.steiner</a>
-</em>
+*[d.path](d.path.md), [v.net](v.net.md), [v.net.alloc](v.net.alloc.md),
+[v.net.iso](v.net.iso.md), [v.net.path](v.net.path.md),
+[v.net.steiner](v.net.steiner.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek, ITC-Irst, Trento, Italy<br>
-Markus Metz<br>
+Radim Blazek, ITC-Irst, Trento, Italy  
+Markus Metz  
 Documentation: Markus Neteler, Markus Metz
 
-<h3>TURNS SUPPORT</h3>
+### TURNS SUPPORT
 
-The turns support was implemented as part of GRASS GIS turns cost project
-at Czech Technical University in Prague, Czech Republic.<br>
-Eliska Kyzlikova, Stepan Turek, Lukas Bocan and Viera Bejdova participated
-in the project.
-<p>
-Implementation: Stepan Turek<br>
-Documentation: Lukas Bocan<br>
+The turns support was implemented as part of GRASS GIS turns cost
+project at Czech Technical University in Prague, Czech Republic.  
+Eliska Kyzlikova, Stepan Turek, Lukas Bocan and Viera Bejdova
+participated in the project.
+
+Implementation: Stepan Turek  
+Documentation: Lukas Bocan  
 Mentor: Martin Landa

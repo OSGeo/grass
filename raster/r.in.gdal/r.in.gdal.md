@@ -1,30 +1,19 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.in.gdal</em> allows a user to create a GRASS GIS raster map layer,
-or imagery group, from any GDAL supported raster map format, with an optional
-title. The imported file may also be used to create a new project
-(previously called location).
+*r.in.gdal* allows a user to create a GRASS GIS raster map layer, or
+imagery group, from any GDAL supported raster map format, with an
+optional title. The imported file may also be used to create a new
+project (previously called location).
 
-<!--
-Extended explanations:
-
-<dt><b>-e</b>
-<dd>Extend the DEFAULT_WIND in PERMANENT mapset to include the region of
-the new map layer.  Old resolution is preserved, but the region, and rows/cols
-are updated.  This will fail if the user doesn't have write access to the
-PERMANENT mapset.
-</dl>
--->
-
-<h3>GDAL supported raster formats</h3>
+### GDAL supported raster formats
 
 Full details on all GDAL supported formats are available at:
-<p>
-<a href="https://gdal.org/en/stable/drivers/raster/">https://gdal.org/en/stable/drivers/raster/</a>
-<p>
+
+<https://gdal.org/en/stable/drivers/raster/>
+
 Selected formats out of the more than 140 supported formats:
 
-<div class="code"><pre>
+```shell
 Long Format Name                              Code           Creation  Georeferencing Maximum file size
 ---------------------------------------------+-------------+----------+--------------+-----------------
 ADRG/ARC Digitilized Raster Graphics          ADRG              Yes      Yes          --
@@ -124,193 +113,183 @@ VICAR                                         VICAR             No       Yes    
 VTP Binary Terrain Format (.bt)               BT                Yes      Yes          --
 WEBP                                          WEBP              Yes      No           --
 WMO GRIB1/GRIB2 (.grb)                        GRIB              No       Yes          2GB
-</pre></div>
+```
 
-<h3>Project Creation</h3>
+### Project Creation
 
-<em>r.in.gdal</em> attempts to preserve coordinate reference system (CRS)
-information when importing datasets if the source format includes CRS information,
-and if the GDAL driver supports it. If the CRS of the source dataset does
-not match the CRS of the current project <em>r.in.gdal</em> will
-report an error message (<code>Coordinate reference system of dataset does not appear to
-match current project</code>) and then report the PROJ_INFO parameters of
-the source dataset.
+*r.in.gdal* attempts to preserve coordinate reference system (CRS)
+information when importing datasets if the source format includes CRS
+information, and if the GDAL driver supports it. If the CRS of the
+source dataset does not match the CRS of the current project *r.in.gdal*
+will report an error message
+(`Coordinate reference system of dataset does not appear to match current project`)
+and then report the PROJ_INFO parameters of the source dataset.
 
-<p>
-If the user wishes to ignore the difference between the apparent coordinate
-system of the source data and the current project, they may pass the
-<b>-o</b> flag to override the CRS check.
+If the user wishes to ignore the difference between the apparent
+coordinate system of the source data and the current project, they may
+pass the **-o** flag to override the CRS check.
 
-<p>
-If the user wishes to import the data with the full CRS definition,
-it is possible to have r.in.gdal automatically create a new project based
-on the CRS and extents of the file being read.  This is accomplished
-by passing the name to be used for the new project via the <b>project</b>
-parameter.  Upon completion of the command, a new project will have been
+If the user wishes to import the data with the full CRS definition, it
+is possible to have r.in.gdal automatically create a new project based
+on the CRS and extents of the file being read. This is accomplished by
+passing the name to be used for the new project via the **project**
+parameter. Upon completion of the command, a new project will have been
 created (with only a PERMANENT mapset), and the raster will have been
-imported with the indicated <b>output</b> name into the PERMANENT mapset.
+imported with the indicated **output** name into the PERMANENT mapset.
 
-<h3>Support for Ground Control Points</h3>
-In case the image contains Ground Control Points (GCP) they are written to a
-POINTS file within an imagery group. They can directly be used for
-<a href="i.rectify.html">i.rectify</a>.
-<p>
-The <b>target</b> option allows you to automatically re-project the GCPs
-from their own CRS into another CRS read from the
-PROJ_INFO file of the project name <b>target</b>.
-<p>
-If the <b>target</b> project does not exist, a new project will be
-created matching the CRS definition of the GCPs. The target of
-the output group will be set to the new project, and
-<a href="i.rectify.html">i.rectify</a> can now be used without any further
-preparation.
-<p>
-Some satellite images (e.g. NOAA/AVHRR, ENVISAT) can contain hundreds
-or thousands of GCPs. In these cases thin plate spline coordinate
-transformation is recommended, either before import with
-<b>gdalwarp -tps</b> or after import with <b>i.rectify -t</b>.
+### Support for Ground Control Points
 
-<h3>Map names: Management of offset and leading zeros</h3>
+In case the image contains Ground Control Points (GCP) they are written
+to a POINTS file within an imagery group. They can directly be used for
+[i.rectify](i.rectify.md).
 
-The <b>offset</b> parameter allows adding an offset to band number(s) which
-is convenient in case of the import of e.g. a continuous time series split
-across different input files.
-<p>
-The <b>num_digits</b> parameter allows defining the number of  leading zeros
-(zero padding) in case of band numbers (e.g., to turn <code>band.1</code> into
-<code>band.001</code>).
+The **target** option allows you to automatically re-project the GCPs
+from their own CRS into another CRS read from the PROJ_INFO file of the
+project name **target**.
 
-<h2>NOTES</h2>
+If the **target** project does not exist, a new project will be created
+matching the CRS definition of the GCPs. The target of the output group
+will be set to the new project, and [i.rectify](i.rectify.md) can now be
+used without any further preparation.
 
-Import of large files can be significantly faster when setting <b>memory</b> to
-the size of the input file.
+Some satellite images (e.g. NOAA/AVHRR, ENVISAT) can contain hundreds or
+thousands of GCPs. In these cases thin plate spline coordinate
+transformation is recommended, either before import with **gdalwarp
+-tps** or after import with **i.rectify -t**.
 
-<p>
-The <em>r.in.gdal</em> command does support the following features, as long as
+### Map names: Management of offset and leading zeros
+
+The **offset** parameter allows adding an offset to band number(s) which
+is convenient in case of the import of e.g. a continuous time series
+split across different input files.
+
+The **num_digits** parameter allows defining the number of leading zeros
+(zero padding) in case of band numbers (e.g., to turn `band.1` into
+`band.001`).
+
+## NOTES
+
+Import of large files can be significantly faster when setting
+**memory** to the size of the input file.
+
+The *r.in.gdal* command does support the following features, as long as
 the underlying format driver supports it:
 
-<p>
-<dl>
+Color Table  
+Bands with associated colortables will have the color tables
+transferred. Note that if the source has no colormap, r.in.gdal in GRASS
+5.0 will emit no colormap. Use r.colors map=... color=grey to assign a
+greyscale colormap. In a future version of GRASS r.in.gdal will likely
+be upgraded to automatically emit greyscale colormaps.  
 
-<dt> Color Table
-<dd> Bands with associated colortables will have the color tables transferred.
-Note that if the source has no colormap, r.in.gdal in GRASS 5.0 will emit
-no colormap.  Use r.colors map=... color=grey to assign a greyscale colormap.
-In a future version of GRASS r.in.gdal will likely be upgraded to automatically
-emit greyscale colormaps.<br>
-
-<dt> Data Types
-<dd> Most GDAL data types are supported.  Float32 and Float64 type bands
-are translated as GRASS floating point cells (but not double precision ...
+Data Types  
+Most GDAL data types are supported. Float32 and Float64 type bands are
+translated as GRASS floating point cells (but not double precision ...
 this could be added if needed), and most other types are translated as
-GRASS integer cells.  This includes 16bit integer data sources.  Complex
+GRASS integer cells. This includes 16bit integer data sources. Complex
 (some SAR signal data formats) data bands are translated to two floating
-point cell layers (*.real and *.imaginary).<br>
+point cell layers (\*.real and \*.imaginary).  
 
-<dt> Georeferencing
-<dd> If the dataset has affine georeferencing information, this will be used
-to set the north, south, east and west edges.  Rotational coefficients will
-be ignored, resulting in incorrect positioning for rotated datasets.<br>
+Georeferencing  
+If the dataset has affine georeferencing information, this will be used
+to set the north, south, east and west edges. Rotational coefficients
+will be ignored, resulting in incorrect positioning for rotated
+datasets.  
 
-<dt> Coordinate reference system
-<dd> The dataset's CRS will be used to compare to the current project
-or to define a new project.  Internally GDAL represents CRS in
-OpenGIS Well Known Text format.  A large subset of the total set of GRASS
-CRSs are supported.<br>
+Coordinate reference system  
+The dataset's CRS will be used to compare to the current project or to
+define a new project. Internally GDAL represents CRS in OpenGIS Well
+Known Text format. A large subset of the total set of GRASS CRSs are
+supported.  
 
-<dt> Null Values
-<dd> Raster bands for which a null value is recognised by GDAL will have
-the null pixels transformed into GRASS style nulls during import.  Many
+Null Values  
+Raster bands for which a null value is recognised by GDAL will have the
+null pixels transformed into GRASS style nulls during import. Many
 generic formats (and formats poorly supported by GDAL) do not have a way
 of recognising null pixels in which case r.null should be used after the
-import.<br>
+import.  
 
-<dt> GCPs
-<dd> Datasets that have Ground Control Points will have them imported as
-a POINTS file associated with the imagery group.  Datasets with only one
+GCPs  
+Datasets that have Ground Control Points will have them imported as a
+POINTS file associated with the imagery group. Datasets with only one
 band that would otherwise have been translated as a simple raster map
-will also have an associated imagery group if there are ground control points.
-The coordinate system of the ground control points is reported by r.in.gdal
-but not preserved.  It is up to the user to ensure that the project
-established with i.target has a compatible coordinate system before using
-the points with i.rectify.<br>
+will also have an associated imagery group if there are ground control
+points. The coordinate system of the ground control points is reported
+by r.in.gdal but not preserved. It is up to the user to ensure that the
+project established with i.target has a compatible coordinate system
+before using the points with i.rectify.  
 
-<dt> Raster Attribute Tables
-<dd> <i>r.in.gdal</i> can write out raster attribute tables as CSV files.
-Moreover, information in raster attribute tables is automatically imported
-as long as the field definitions contain information about how to use a
-field, e.g. for color information or for labels.<br>
+Raster Attribute Tables  
+*r.in.gdal* can write out raster attribute tables as CSV files.
+Moreover, information in raster attribute tables is automatically
+imported as long as the field definitions contain information about how
+to use a field, e.g. for color information or for labels.  
 
-</dl>
+Planned improvements to *r.in.gdal* in the future include support for
+reporting everything known about a dataset if the **output** parameter
+is not set.
 
-<p>
-Planned improvements to <em>r.in.gdal</em> in the future include support for
-reporting everything known about a dataset if the <b>output</b> parameter is not set.
+### Error Messages
 
-<h3>Error Messages</h3>
+*"ERROR: Input map is rotated - cannot import."*  
+In this case the image must be first externally rotated, applying the
+rotation info stored in the metadata field of the raster image file. For
+example, the
+[gdalwarp](https://gdal.org/en/stable/programs/gdalwarp.html) software
+can be used to transform the map to North-up (note, there are several
+gdalwarp parameters to select the resampling algorithm):
 
-<i>"ERROR: Input map is rotated - cannot import."</i><br>
-In this case the image must be first externally rotated, applying the rotation info stored in
-the metadata field of the raster image file. For example, the
-<a href="https://gdal.org/en/stable/programs/gdalwarp.html">gdalwarp</a> software can be used
-to transform the map to North-up (note, there are several gdalwarp parameters to select the
-resampling algorithm):
-
-<div class="code"><pre>
+```shell
 gdalwarp rotated.tif northup.tif
-</pre></div>
+```
 
-<p>
-<i>"ERROR: Coordinate reference system of dataset does not appear to match the current project."</i><br>
+*"ERROR: Coordinate reference system of dataset does not appear to match
+the current project."*  
+You need to create a project whose CRS matches the data you wish to
+import. Try using **project** parameter to create a new project based
+upon the CRS information in the file. If desired, you can then reproject
+it to another project with *r.proj*. Alternatively you can override this
+error by using the **-o** flag.
 
-You need to create a project whose CRS matches the data you
-wish to import. Try using <b>project</b> parameter to create a new
-project based upon the CRS information in the file. If desired,
-you can then reproject it to another project with <em>r.proj</em>.
-Alternatively you can override this error by using the <b>-o</b> flag.
-
-<p>
-<i>"WARNING: G_set_window(): Illegal latitude for North"</i><br>
-
+*"WARNING: G_set_window(): Illegal latitude for North"*  
 Latitude/Longitude projects in GRASS can not have regions which exceed
-90&deg; North or South. Non-georeferenced imagery will have coordinates
-based on the images's number of pixels: 0,0 in the bottom left; cols,rows
-in the top right. Typically imagery will be much more than 90 pixels tall
-and so the GIS refuses to import it. If you are sure that the data is
-appropriate for your Lat/Lon project and intend to reset the map's
-bounds with the <em>r.region</em> module directly after import you may
-use the <b>-l</b> flag to constrain the map coordinates to legal values.
-
+90° North or South. Non-georeferenced imagery will have coordinates
+based on the images's number of pixels: 0,0 in the bottom left;
+cols,rows in the top right. Typically imagery will be much more than 90
+pixels tall and so the GIS refuses to import it. If you are sure that
+the data is appropriate for your Lat/Lon project and intend to reset the
+map's bounds with the *r.region* module directly after import you may
+use the **-l** flag to constrain the map coordinates to legal values.
 While the resulting bounds and resolution will likely be wrong for your
 map the map's data will be unaltered and safe. After resetting to known
-bounds with <em>r.region</em> you should double check them with
-<em>r.info</em>, paying special attention to the map resolution. In most
-cases you will want to import into the datafile's native CRS, or
-into a simple XY project and use the Georectifaction tools
-(<em>i.rectify</em> et al.) to re-project into the target project.
-The <b>-l</b> flag should <i>only</i> be used if you know the CRS
-is correct but the internal georeferencing has gotten lost, and you know
-the what the map's bounds and resolution should be beforehand.
+bounds with *r.region* you should double check them with *r.info*,
+paying special attention to the map resolution. In most cases you will
+want to import into the datafile's native CRS, or into a simple XY
+project and use the Georectifaction tools (*i.rectify* et al.) to
+re-project into the target project. The **-l** flag should *only* be
+used if you know the CRS is correct but the internal georeferencing has
+gotten lost, and you know the what the map's bounds and resolution
+should be beforehand.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>ECAD Data</h3>
+### ECAD Data
 
-The <a href="https://www.ecad.eu/">European Climate Assessment and Dataset (ECAD) project</a>
-provides climate data for Europe ranging from 1950 - 2015 or later.
-To import the different chunks of data provided by the project as netCDF files,
-the offset parameter can be used to properly assign numbers to the series
-of daily raster maps from 1st Jan 1950 (in case of importing the ECAD data
-split into multi-annual chunks). The ECAD data must be imported into a
-LatLong project.
-<p>
-By using the <em>num_digits</em> parameter leading zeros are added to the
-map name numbers, allowing for chronological numbering of the imported raster
-map layers, so that <em>g.list</em> lists them in the correct order.
-Here, use <em>num_digits=5</em> to have a 5 digit suffix with leading zeros (00001 - 99999).
-</p>
+The [European Climate Assessment and Dataset (ECAD)
+project](https://www.ecad.eu/) provides climate data for Europe ranging
+from 1950 - 2015 or later. To import the different chunks of data
+provided by the project as netCDF files, the offset parameter can be
+used to properly assign numbers to the series of daily raster maps from
+1st Jan 1950 (in case of importing the ECAD data split into multi-annual
+chunks). The ECAD data must be imported into a LatLong project.
 
-<div class="code"><pre>
+By using the *num_digits* parameter leading zeros are added to the map
+name numbers, allowing for chronological numbering of the imported
+raster map layers, so that *g.list* lists them in the correct order.
+Here, use *num_digits=5* to have a 5 digit suffix with leading zeros
+(00001 - 99999).
+
+```shell
 # Import of ECAD data split into chunks
 # Import precipitation data
 r.in.gdal -o input=rr_0.25deg_reg_1950-1964_v12.0.nc output=precipitation num_digits=5 offset=0
@@ -341,44 +320,48 @@ r.in.gdal -o input=tg_0.25deg_reg_1950-1964_v12.0.nc output=temperatur_mean num_
 r.in.gdal -o input=tg_0.25deg_reg_1965-1979_v12.0.nc output=temperatur_mean num_digits=5 offset=5479
 r.in.gdal -o input=tg_0.25deg_reg_1980-1994_v12.0.nc output=temperatur_mean num_digits=5 offset=10957
 r.in.gdal -o input=tg_0.25deg_reg_1995-2015_v12.0.nc output=temperatur_mean num_digits=5 offset=16436
-</pre></div>
+```
 
-<h3>GTOPO30 DEM</h3>
+### GTOPO30 DEM
 
 To avoid the GTOPO30 data being read incorrectly, you can add a new line
 "PIXELTYPE SIGNEDINT" in the .HDR to force interpretation of the file as
-signed rather than unsigned integers. Then the .DEM file can be imported.
-Finally, e.g. the 'terrain' color table can be assigned to the imported map
-with <em>r.colors</em>.
+signed rather than unsigned integers. Then the .DEM file can be
+imported. Finally, e.g. the 'terrain' color table can be assigned to the
+imported map with *r.colors*.
 
-<h3>GLOBE DEM</h3>
+### GLOBE DEM
 
-To import <a href="http://www.ngdc.noaa.gov/mgg/topo/elev/">GLOBE DEM tiles</a>
-(approx 1km resolution, better than GTOPO30 DEM data), the user has to download
-additionally the related <a href="http://www.ngdc.noaa.gov/mgg/topo/elev/esri/hdr/">HDR file(s)</a>.
-Finally, e.g. the 'terrain' color table can be assigned to the imported map with <em>r.colors</em>.
-See also their <a href="http://www.ngdc.noaa.gov/mgg/dem/demportal.html">DEM portal</a>.
+To import [GLOBE DEM tiles](http://www.ngdc.noaa.gov/mgg/topo/elev/)
+(approx 1km resolution, better than GTOPO30 DEM data), the user has to
+download additionally the related [HDR
+file(s)](http://www.ngdc.noaa.gov/mgg/topo/elev/esri/hdr/). Finally,
+e.g. the 'terrain' color table can be assigned to the imported map with
+*r.colors*. See also their [DEM
+portal](http://www.ngdc.noaa.gov/mgg/dem/demportal.html).
 
-<h3>Raster file import over network</h3>
+### Raster file import over network
 
-Since GDAL 2.x it is possible to import raster data over the network <!-- mention WMS, WMTS can do that too-->
-(see <a href="https://gdal.org/en/stable/user/virtual_file_systems.html">GDAL Virtual File Systems</a>)
-including <a href="https://cogeo.org/">Cloud Optimized GeoTIFF</a>,
-i.e. access uncompressed and compressed raster data via a http(s) or ftp connection.
-As an example the import of the global SRTMGL1 V003 tiles at 1 arc second (about 30 meters)
-resolution, void-filled:
+Since GDAL 2.x it is possible to import raster data over the network
+(see [GDAL Virtual File
+Systems](https://gdal.org/en/stable/user/virtual_file_systems.html))
+including [Cloud Optimized GeoTIFF](https://cogeo.org/), i.e. access
+uncompressed and compressed raster data via a http(s) or ftp connection.
+As an example the import of the global SRTMGL1 V003 tiles at 1 arc
+second (about 30 meters) resolution, void-filled:
 
-<div class="code"><pre>
+```shell
 r.in.gdal /vsicurl/https://www.datenatlas.de/geodata/public/srtmgl1/srtmgl1.003.tif output=srtmgl1_v003_30m memory=2000
 g.region raster=srtmgl1_v003_30m -p
 r.colors srtmgl1_v003_30m color=srtm_plus
-</pre></div>
+```
 
-<h3>HDF</h3>
+### HDF
 
-The import of HDF bands requires the specification of the individual bands
-as seen by GDAL:
-<div class="code"><pre>
+The import of HDF bands requires the specification of the individual
+bands as seen by GDAL:
+
+```shell
 # Example MODIS FPAR
 gdalinfo MOD15A2.A2003153.h18v04.004.2003171141042.hdf
 ...
@@ -393,27 +376,22 @@ Subdatasets:
 r.in.gdal HDF4_EOS:EOS_GRID:"MOD15A2.A2003153.h18v04.004.2003171141042.hdf":MOD_Grid_MOD15A2:Fpar_1km \
           out=fpar_1km_2003_06_02
 # ... likewise for other HDF bands in the file.
-</pre></div>
+```
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-GDAL Pages: <a href="https://gdal.org">https://gdal.org</a>
+GDAL Pages: <https://gdal.org>
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.colors.html">r.colors</a>,
-<a href="r.import.html">r.import</a>,
-<a href="r.in.ascii.html">r.in.ascii</a>,
-<a href="r.in.bin.html">r.in.bin</a>,
-<a href="r.null.html">r.null</a>,
-<a href="t.register.html">t.register</a>
-</em>
+*[r.colors](r.colors.md), [r.import](r.import.md),
+[r.in.ascii](r.in.ascii.md), [r.in.bin](r.in.bin.md),
+[r.null](r.null.md), [t.register](t.register.md)*
 
-<p>
-GRASS GIS Wiki page: Import of <a href="https://grasswiki.osgeo.org/wiki/Global_datasets">Global datasets</a>
+GRASS GIS Wiki page: Import of [Global
+datasets](https://grasswiki.osgeo.org/wiki/Global_datasets)
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-<a href="https://wiki.osgeo.org/wiki/User:Warmerda">Frank Warmerdam</a>
- (<a href="mailto:warmerdam AT pobox dot com">email</a>).
+[Frank Warmerdam](https://wiki.osgeo.org/wiki/User:Warmerda)
+([email](mailto:warmerdam-AT-pobox-dot-com)).

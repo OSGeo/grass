@@ -1,16 +1,15 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.topmodel</em> simulates TOPMODEL which is a physically based
-hydrologic model.
+*r.topmodel* simulates TOPMODEL which is a physically based hydrologic
+model.
 
-<h3>Parameters description</h3>
+### Parameters description
 
-<dl>
-<dt><b>parameters</b></dt>
-<dd>
-This file contains TOPMODEL parameters that describe the study area. Any lines
-starting with a # sign or empty lines are ignored.
-<div class="code"><pre>
+**parameters**  
+This file contains TOPMODEL parameters that describe the study area. Any
+lines starting with a \# sign or empty lines are ignored.
+
+```shell
 # Subcatchment name
 Subcatchment 1
 
@@ -20,9 +19,9 @@ Subcatchment 1
 
 ################################################################################
 # qs0 [m/h]: Initial subsurface flow per unit area
-#		"The first streamflow input is assumed to represent
-#		 only the subsurface flow contribution in the watershed."
-#								- Liaw (1988)
+#       "The first streamflow input is assumed to represent
+#        only the subsurface flow contribution in the watershed."
+#                               - Liaw (1988)
 0.000075
 
 # lnTe [ln(m^2/h)]: Areal average of the soil surface transmissivity
@@ -66,10 +65,10 @@ Subcatchment 1
 
 ################################################################################
 # d [m]: Distance from the catchment outlet
-#		The first value should be the mainstream distance from
-#		the subcatchment outlet to the catchment outlet.
+#       The first value should be the mainstream distance from
+#       the subcatchment outlet to the catchment outlet.
 # Ad_r:  Cumulative area ratio of subcatchment (0.0 to 1.0)
-#		The first and last values should be 0 and 1, respectively.
+#       The first and last values should be 0 and 1, respectively.
 
 #   d  Ad_r
     0   0.0
@@ -78,13 +77,12 @@ Subcatchment 1
  3000   0.6
  4000   0.8
  5000   1.0
-</pre></div>
-</dd>
+```
 
-<dt><b>input</b><dt>
-<dd>
+**input**    
 This file contains observed weather data.
-<div class="code"><pre>
+
+```shell
 # dt [h]: Time step
 24
 
@@ -99,75 +97,57 @@ This file contains observed weather data.
 .
 .
 .
-</pre></div>
-</dd>
+```
 
-<dt><b>timestep</b></dt>
-<dd>
-If a time step is specified, output will be generated for the specific time
-step in addition to the summary and total flows at the outlet. This parameter
-can be combined with <b>topidxclass</b> to specify a time step and topographic index
-class at the same time. If no <b>topidxclass</b> is given, output will be generated
-for all the topographic index classes.
-</dd>
+**timestep**  
+If a time step is specified, output will be generated for the specific
+time step in addition to the summary and total flows at the outlet. This
+parameter can be combined with **topidxclass** to specify a time step
+and topographic index class at the same time. If no **topidxclass** is
+given, output will be generated for all the topographic index classes.
 
-<dt><b>toptopidxclass</b></dt>
-<dd>
-If a topographic index class is specified, output will be generated for the
-given topographic index class. This parameter can be combined with <b>timestep</b>. If
-no <b>timestep</b> is given, output will be generated for all the time steps.
-</dd>
+**toptopidxclass**  
+If a topographic index class is specified, output will be generated for
+the given topographic index class. This parameter can be combined with
+**timestep**. If no **timestep** is given, output will be generated for
+all the time steps.
 
-<dt><b>topidx</b>, <b>ntoptopidxclasses</b>, <b>outtoptopidxstats</b></dt>
-<dd>
-The <b>topidx</b> map can optionally be used for creating a new topographic
-index statistics file. This map has to be already clipped to the catchment
-boundary. The entire range of topographic index values will be divided into
-<b>ntoptopidxclasses</b> and the area ratio of each class will be reported in the
-<b>outtoptopidxstats</b> file. These three parameters can be omitted unless a new
-<b>topidxstats</b> file needs to be created.
-</dd>
-</dl>
+**topidx**, **ntoptopidxclasses**, **outtoptopidxstats**  
+The **topidx** map can optionally be used for creating a new topographic
+index statistics file. This map has to be already clipped to the
+catchment boundary. The entire range of topographic index values will be
+divided into **ntoptopidxclasses** and the area ratio of each class will
+be reported in the **outtoptopidxstats** file. These three parameters
+can be omitted unless a new **topidxstats** file needs to be created.
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<ul>
-  <li>Beven, K. J., 1984. Infiltration into a class of vertically non-uniform
-  soils. Hydrological Sciences Journal 29 (4), 425-434.</li>
-
-  <li>Beven, K. J., Kirkby, M. J., 1979. A physically based, variable
-  contributing area model of basin hydrology. Hydrological Sciences Bulletin 24
-  (1), 43-69.</li>
-
-  <li>Beven K. J., R. Lamb, P. Quinn, R. Romanowicz, and J. Freer, 1995.
-  TOPMODEL, in V.P. Singh (Ed.). Computer Models of Watershed Hydrology. Water
-  Resources Publications.</li>
-
-  <li>Cho, H., 2000. GIS Hydrological Modeling System by Using Programming
+- Beven, K. J., 1984. Infiltration into a class of vertically
+  non-uniform soils. Hydrological Sciences Journal 29 (4), 425-434.
+- Beven, K. J., Kirkby, M. J., 1979. A physically based, variable
+  contributing area model of basin hydrology. Hydrological Sciences
+  Bulletin 24 (1), 43-69.
+- Beven K. J., R. Lamb, P. Quinn, R. Romanowicz, and J. Freer, 1995.
+  TOPMODEL, in V.P. Singh (Ed.). Computer Models of Watershed Hydrology.
+  Water Resources Publications.
+- Cho, H., 2000. GIS Hydrological Modeling System by Using Programming
   Interface of GRASS. Master's Thesis, Department of Civil Engineering,
-  Kyungpook National University, South Korea.</li>
+  Kyungpook National University, South Korea.
+- Liaw, S. C., 1988. Streamflow Simulation Using a Physically Based
+  Hydrologic Model in Humid Forested Watersheds. Dissertation, Colorado
+  State University, CO. p163.
+- Morel-Seytoux, H. J., Khanji, J., 1974. Derivation of an equation of
+  infiltration. Water Resources Research 10 (4), 795-800.
 
-  <li>Liaw, S. C., 1988. Streamflow Simulation Using a Physically Based
-  Hydrologic Model in Humid Forested Watersheds. Dissertation, Colorado State
-  University, CO. p163.</li>
+## SEE ALSO
 
-  <li>Morel-Seytoux, H. J., Khanji, J., 1974. Derivation of an equation of
-  infiltration. Water Resources Research 10 (4), 795-800.</li>
-</ul>
+*[r.fill.dir](r.fill.dir.md), [r.mapcalc](r.mapcalc.md),
+[r.topidx](r.topidx.md)*  
+[How to run r.topmodel](http://idea.isnew.info/r.topmodel.html)
 
-<h2>SEE ALSO</h2>
+## AUTHORS
 
-<em>
-<a href="r.fill.dir.html">r.fill.dir</a>,
-<a href="r.mapcalc.html">r.mapcalc</a>,
-<a href="r.topidx.html">r.topidx</a>
-</em>
-<br>
-<a href="http://idea.isnew.info/r.topmodel.html">How to run r.topmodel</a>
+[Huidae Cho](mailto:grass4u@gmail-com), Hydro Laboratory, Kyungpook
+National University, South Korea
 
-<h2>AUTHORS</h2>
-
-<a href="mailto:grass4u@gmail com">Huidae Cho</a>,
-Hydro Laboratory, Kyungpook National University, South Korea
-<p>
 Based on TMOD9502.FOR by Keith Beven.

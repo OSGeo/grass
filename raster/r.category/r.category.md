@@ -1,160 +1,160 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.category</em> prints the category values and labels for the raster map
-layer specified by <b>map=</b><em>name</em> to standard output. You can also
-use it to set category labels for a raster map.
+*r.category* prints the category values and labels for the raster map
+layer specified by **map=***name* to standard output. You can also use
+it to set category labels for a raster map.
 
-<p>
-The user can specify all needed parameters on the command line, and run the
-program non-interactively. If the user does not specify any categories
-(e.g., using the optional <b>cats=</b><em>range</em>[,<em>range</em>,...]
-argument), then all the category values and labels for the named raster map
-layer that occur in the map are printed.  The entire <em>map</em> is read
-using <em><a href="r.describe.html">r.describe</a></em>, to determine which
-categories occur in the <em>map</em>. If a listing of categories is
-specified, then the labels for those categories only are printed. The
-<em>cats</em> may be specified as single category values, or as ranges of
-values. The user may also (optionally) specify that a field separator other
-than a space or tab be used to separate the category value from its
-corresponding category label in the output, by using the
-<b>separator=</b><em>character</em>|<em>space</em>|<em>tab</em> option (see example
-below). If no field separator is specified by the user, a tab is used to
-separate these fields in the output, by default.
+The user can specify all needed parameters on the command line, and run
+the program non-interactively. If the user does not specify any
+categories (e.g., using the optional **cats=***range*\[,*range*,...\]
+argument), then all the category values and labels for the named raster
+map layer that occur in the map are printed. The entire *map* is read
+using *[r.describe](r.describe.md)*, to determine which categories occur
+in the *map*. If a listing of categories is specified, then the labels
+for those categories only are printed. The *cats* may be specified as
+single category values, or as ranges of values. The user may also
+(optionally) specify that a field separator other than a space or tab be
+used to separate the category value from its corresponding category
+label in the output, by using the
+**separator=***character*\|*space*\|*tab* option (see example below). If
+no field separator is specified by the user, a tab is used to separate
+these fields in the output, by default.
 
-<p>
-The output is sent to standard output in the form of one category per line,
-with the category value first on the line, then an ASCII TAB character (or
-whatever single character or space is specified using the <b>separator</b>
-parameter), then the label for the category.
+The output is sent to standard output in the form of one category per
+line, with the category value first on the line, then an ASCII TAB
+character (or whatever single character or space is specified using the
+**separator** parameter), then the label for the category.
 
-<h2>NOTES</h2>
+## NOTES
 
-Any ASCII TAB characters which may be in the label are replaced by spaces.
-<p>The output from <em>r.category</em> can be redirected into a file, or piped into
-another program.
+Any ASCII TAB characters which may be in the label are replaced by
+spaces.
 
-<h3>Input from a file</h3>
+The output from *r.category* can be redirected into a file, or piped
+into another program.
 
-The <b>rules</b> option allows the user to assign category labels from values
-found in a file (without header). The label can refer to a single category, range of
-categories, floating point value, or a range of floating point values.
-The format is given as follows (when separator is set to colon; no white space
-must be used after the separator):
-<div class="code"><pre>
+### Input from a file
+
+The **rules** option allows the user to assign category labels from
+values found in a file (without header). The label can refer to a single
+category, range of categories, floating point value, or a range of
+floating point values. The format is given as follows (when separator is
+set to colon; no white space must be used after the separator):
+
+```shell
 cat:Label
 val1:val2:Label
-</pre></div>
+```
 
-If the filename is given as "-", the category labels are read from <code>stdin</code>
+If the filename is given as "-", the category labels are read from
+`stdin`
 
-<h3>Default and dynamic category labels</h3>
+### Default and dynamic category labels
 
 Default and dynamic category labels can be created for categories that
-are not explicitly labeled.
+are not explicitly labeled. The coefficient line can be followed by
+explicit category labels which override the format label generation.
 
-The coefficient line can be followed by explicit category labels
-which override the format label generation.
-<div class="code"><pre>
+```shell
    0:no data
-   2:	.
-   5:	.		      ## explicit category labels
-   7:	.
-</pre></div>
+   2:   .
+   5:   .             ## explicit category labels
+   7:   .
+```
+
 explicit labels can be also of the form:
-<div class="code"><pre>
+
+```shell
    5.5:5:9 label description
    or
    15:30  label description
-</pre></div>
-<p>In the format line
-<ul>
-<li><code>$1</code> refers to the value <code>num*5.0+1000</code> (ie, using the first 2 coefficients)</li>
-<li><code>$2</code> refers to the value <code>num*5.0+1005</code> (ie, using the last 2 coefficients)</li>
-</ul>
-  <code>$1.2</code> will print <code>$1</code> with 2 decimal places.
-<p>Also, the form <code>$?xxx$yyy$</code> translates into <code>yyy</code> if the category is 1, xxx
-otherwise. The <code>$yyy$</code> is optional. Thus
-<p>  <code>$1 meter$?s</code>
-<p>will become: <br>
-  <code>1 meter</code> (for category 1)<br>
-  <code>2 meters</code> (for category 2), etc.
+```
 
-<p>
-<code>format='Elevation: $1.2 to $2.2 feet'   ## Format Statement</code><br>
-<code>coefficients="5.0,1000,5.0,1005"	## Coefficients</code>
+In the format line
 
-<p>The format and coefficients above would be used to generate the
+- `$1` refers to the value `num*5.0+1000` (ie, using the first 2
+  coefficients)
+- `$2` refers to the value `num*5.0+1005` (ie, using the last 2
+  coefficients)
+
+`$1.2` will print `$1` with 2 decimal places.
+
+Also, the form `$?xxx$yyy$` translates into `yyy` if the category is 1,
+xxx otherwise. The `$yyy$` is optional. Thus
+
+`$1 meter$?s`
+
+will become:  
+`1 meter` (for category 1)  
+`2 meters` (for category 2), etc.
+
+`format='Elevation: $1.2 to $2.2 feet' ## Format Statement`  
+`coefficients="5.0,1000,5.0,1005" ## Coefficients`
+
+The format and coefficients above would be used to generate the
 following statement in creation of the format appropriate category
 string for category "num":
-<p>
-<code>sprintf(buff,"Elevation: %.2f to %.2f feet", num*5.0+1000, num*5.0*1005)</code>
 
-<p>Note: while both the format and coefficient lines must be present
-      a blank line for the format string will effectively suppress
-      automatic label generation.
-<!--
-Note: quant rules of Categories structures are heavily dependent
-on the fact that rules are stored in the same order they are entered.
-since i-th rule and i-th label are entered at the same time, we
-know that i-th rule maps fp range to i, thus we know for sure
-that cats.labels[i] corresponds to i-th quant rule
--->
-<p>To use a "<code>$</code>" in the label without triggering the plural test,
-put "<code>$$</code>" in the format string.
-<p>Use 'single quotes' when using a "<code>$</code>" on the command line to
-avoid unwanted shell substitution.
+`sprintf(buff,"Elevation: %.2f to %.2f feet", num*5.0+1000, num*5.0*1005)`
 
-<h2>EXAMPLES</h2>
+Note: while both the format and coefficient lines must be present a
+blank line for the format string will effectively suppress automatic
+label generation.
+
+To use a "`$`" in the label without triggering the plural test, put
+"`$$`" in the format string.
+
+Use 'single quotes' when using a "`$`" on the command line to avoid
+unwanted shell substitution.
+
+## EXAMPLES
 
 North Carolina sample dataset:
 
-<h3>Printing categories</h3>
-<div class="code"><pre>
+### Printing categories
+
+```shell
 r.category map=landclass96
-1	developed
-2	agriculture
-3	herbaceous
-4	shrubland
-5	forest
-6	water
-7	sediment
-</pre></div>
+1   developed
+2   agriculture
+3   herbaceous
+4   shrubland
+5   forest
+6   water
+7   sediment
+```
 
-prints the values and labels associated with all of the categories in the
-<em>landclass96</em> raster map layer.
+prints the values and labels associated with all of the categories in
+the *landclass96* raster map layer.
 
-<p>
-<div class="code"><pre>
+```shell
 r.category map=landclass96 cats=2,5-7
-2	agriculture
-5	forest
-6	water
-7	sediment
-</pre></div>
+2   agriculture
+5   forest
+6   water
+7   sediment
+```
 
-prints only the category values and labels for <em>landclass96</em> map layer
-categories <code>2</code> and <code>5</code> through <code>7</code>.
+prints only the category values and labels for *landclass96* map layer
+categories `2` and `5` through `7`.
 
-<p>
-<div class="code"><pre>
+```shell
 r.category map=landclass96 cats=3,4 separator=comma
 3,herbaceous
 4,shrubland
-</pre></div>
+```
 
-prints the values and labels for <em>landclass96</em> map layer categories
-<code>3</code> and <code>4</code>, but uses "<code>,</code>" (instead of a tab)
-as the character separating the category values from the category
-values in the output.
+prints the values and labels for *landclass96* map layer categories `3`
+and `4`, but uses "`,`" (instead of a tab) as the character separating
+the category values from the category values in the output.
 
-<p>
-<div class="code"><pre>
+```shell
 r.category map=landclass96 cats=3,4 output_format=json
-</pre></div>
+```
 
 generates the following JSON output:
 
-<div class="code"><pre>
+```shell
 [
     {
         "category": 3,
@@ -165,36 +165,32 @@ generates the following JSON output:
         "description": "shrubland"
     }
 ]
-</pre></div>
+```
 
-<h3>Adding categories</h3>
+### Adding categories
 
 Example for defining new category labels, using a colon as separator:
-<div class="code"><pre>
-r.category diseasemap separator=":" rules=- &lt;&lt; EOF
+
+```shell
+r.category diseasemap separator=":" rules=- << EOF
 1:potential absence
 2:potential presence
 EOF
-</pre></div>
+```
 
 This sets the categoy values 1 and 2 to respective text labels.
-
 Alternatively, the rules can be stored in an ASCII text file and loaded
-via the <em>rules</em> parameter.
+via the *rules* parameter.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-UNIX Manual entries for <i>awk</i> and <i>sort</i>
+UNIX Manual entries for *awk* and *sort*
 
-<p>
-<em>
-<a href="d.what.rast.html">d.what.rast</a>,
-<a href="r.coin.html">r.coin</a>,
-<a href="r.describe.html">r.describe</a>,
-<a href="r.support.html">r.support</a>
-</em>
+*[d.what.rast](d.what.rast.md), [r.coin](r.coin.md),
+[r.describe](r.describe.md), [r.support](r.support.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Michael Shapiro, U.S. Army Construction Engineering Research Laboratory<br>
+Michael Shapiro, U.S. Army Construction Engineering Research
+Laboratory  
 Hamish Bowman, University of Otago, New Zealand (label creation options)

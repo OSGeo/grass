@@ -1,24 +1,20 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.in.png</em> imports a non-georeferenced Portable Network Graphics (PNG) image
-as a GRASS raster map. Georeferencing .wld files are not supported, for that
-<em>r.import</em> can be used.
+*r.in.png* imports a non-georeferenced Portable Network Graphics (PNG)
+image as a GRASS raster map. Georeferencing .wld files are not
+supported, for that *r.import* can be used.
 
-<h2>NOTES</h2>
+## NOTES
 
-In order to assign georeferencing after import use <em>r.region</em>.
+In order to assign georeferencing after import use *r.region*.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.import.html">r.import</a>,
-<a href="r.in.gdal.html">r.in.gdal</a>,
-<a href="r.out.png.html">r.out.png</a>,
-<a href="r.region.html">r.region</a>
-</em>
+*[r.import](r.import.md), [r.in.gdal](r.in.gdal.md),
+[r.out.png](r.out.png.md), [r.region](r.region.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Michael Shapiro<br>
-Alex Shevlakov<br>
+Michael Shapiro  
+Alex Shevlakov  
 Glynn Clements

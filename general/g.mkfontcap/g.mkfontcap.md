@@ -1,13 +1,14 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>g.mkfontcap</em> is a utility to generate a GRASS font configuration file
-("fontcap") containing details of the fonts available on the current system.
-If <a href="https://freetype.org/">Freetype</a> is not installed,
-the font list will be limited to the set of Hershey stroke fonts supplied
-with GRASS. With Freetype enabled however, the module will recursively scan
-all files within a predefined hierarchy to find Freetype-compatible scalable
-fonts. The list of directories scanned is currently:
-<div class="code"><pre>
+*g.mkfontcap* is a utility to generate a GRASS font configuration file
+("fontcap") containing details of the fonts available on the current
+system. If [Freetype](https://freetype.org/) is not installed, the font
+list will be limited to the set of Hershey stroke fonts supplied with
+GRASS. With Freetype enabled however, the module will recursively scan
+all files within a predefined hierarchy to find Freetype-compatible
+scalable fonts. The list of directories scanned is currently:
+
+```shell
     /usr/lib/X11/fonts
     /usr/share/X11/fonts
     /usr/share/fonts
@@ -16,40 +17,40 @@ fonts. The list of directories scanned is currently:
     /Library/Fonts
     /System/Library/Fonts
     ${WINDIR}/Fonts
-</pre></div>
-<p>These correspond to directories where fonts can be found on some common
-operating systems. Extra directories to search can easily by added using the
-<b>extradirs</b> parameter, which accepts a comma-separated list. An extra
-directory may optionally contain an environment variable <em>at the start</em>
-of the string, if enclosed in ${xxx} syntax (see examples above).
+```
 
-<p>The module will normally write to the standard fontcap file location,
-<code>$GISBASE/etc/fontcap</code>. If the environment variable
-<code>GRASS_FONT_CAP</code> is set, the output will instead be written
-to the file specified by that variable. This is useful if you don't have
-permission to modify <code>$GISBASE/etc/fontcap</code>: in this case you can
-use e.g.
+These correspond to directories where fonts can be found on some common
+operating systems. Extra directories to search can easily by added using
+the **extradirs** parameter, which accepts a comma-separated list. An
+extra directory may optionally contain an environment variable *at the
+start* of the string, if enclosed in ${xxx} syntax (see examples
+above).
 
-<div class="code"><pre>
+The module will normally write to the standard fontcap file location,
+`$GISBASE/etc/fontcap`. If the environment variable `GRASS_FONT_CAP` is
+set, the output will instead be written to the file specified by that
+variable. This is useful if you don't have permission to modify
+`$GISBASE/etc/fontcap`: in this case you can use e.g.
+
+```shell
 # use local file version instead of system copy
 GRASS_FONT_CAP=$HOME/.gfontcap
 export GRASS_FONT_CAP
 
 g.mkfontcap
-</pre></div>
-<p>to create a personal copy and then to make GRASS use that file
-instead of the system copy.
+```
 
-<p>The output list of fonts is sorted first by type (Stroke fonts first,
-followed by Freetype) and within each type by the short name of the font.
+to create a personal copy and then to make GRASS use that file instead
+of the system copy.
 
-<h2>SEE ALSO</h2>
+The output list of fonts is sorted first by type (Stroke fonts first,
+followed by Freetype) and within each type by the short name of the
+font.
 
+## SEE ALSO
 
-<em>
-<a href="d.font.html">d.font</a>
-</em>
+*[d.font](d.font.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Paul Kelly

@@ -1,44 +1,44 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.transform</em> performs an affine transformation (translate and rotate) of a
-vector map. An affine transform includes one or several linear transformations
-(scaling, rotation) and translation (shifting). Several linear transformations
-can be combined in a single operation. The command can be used to georeference
-unreferenced vector maps or to modify existing geocoded maps.
+*v.transform* performs an affine transformation (translate and rotate)
+of a vector map. An affine transform includes one or several linear
+transformations (scaling, rotation) and translation (shifting). Several
+linear transformations can be combined in a single operation. The
+command can be used to georeference unreferenced vector maps or to
+modify existing geocoded maps.
 
-<h2>NOTES</h2>
+## NOTES
 
 Coordinate transformation based on Ground Control Points (GCPs) is done
-by <em><a href="v.rectify.html">v.rectify</a></em> and not supported by
-<em>v.transform</em>.
+by *[v.rectify](v.rectify.md)* and not supported by *v.transform*.
 
-<p>Transformation parameters (i.e. <em>xshift</em>, <em>yshift</em>,
-etc.) can be fetched from attribute table connected to the vector
-map. In this case vector objects can be transformed with different
-parameters based on their category number. If the parameter cannot be
-fetched from the table, default value is used instead.
-<p>
+Transformation parameters (i.e. *xshift*, *yshift*, etc.) can be fetched
+from attribute table connected to the vector map. In this case vector
+objects can be transformed with different parameters based on their
+category number. If the parameter cannot be fetched from the table,
+default value is used instead.
+
 Note that the transformation matrix can be printed by
-<em><a href="m.transform.html">m.transform</a></em>.
+*[m.transform](m.transform.md)*.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-<h3>DXF/DWG drawings</h3>
+### DXF/DWG drawings
 
-<p>Most DXF/DWG drawings are done within XY coordinate space. To transform
-them to a national grid, we can use <em>v.transform</em> together with
-<em>v.rectify</em> and a first-order transformation.
+Most DXF/DWG drawings are done within XY coordinate space. To transform
+them to a national grid, we can use *v.transform* together with
+*v.rectify* and a first-order transformation.
 
-<div class="code"><pre>
+```shell
 v.transform -t in=watertowerXY out=watertower_z zscale=0.04 zshift=1320
 v.rectify in=watertower_z out=watertowerUTM points=wt.points order=1
-</pre></div>
+```
 
-<h3>Extrude 2D vector points to 3D based on attribute column values</h3>
+### Extrude 2D vector points to 3D based on attribute column values
 
 Spearfish example with manual table editing for vertical shift:
 
-<div class="code"><pre>
+```shell
 # work on own map copy:
 g.copy vect=archsites@PERMANENT,myarchsites
 # add new 'zs' column to later store height of each site:
@@ -49,14 +49,16 @@ v.db.update myarchsites layer=1 column=zs value="cat * 1000"
 v.transform -t input=archsites output=myarchsites3d column="zshift:zs" table="archsites_t"
 # drop table containing transformation parameters:
 echo "drop table archsites_t" | db.execute
-</pre></div>
+```
+
 The resulting map is a 3D vector map.
 
-<h3>Extrude 2D vector points to 3D based on attribute column values</h3>
+### Extrude 2D vector points to 3D based on attribute column values
 
-Spearfish example with automated elevation extraction for vertical shift:
+Spearfish example with automated elevation extraction for vertical
+shift:
 
-<div class="code"><pre>
+```shell
 # work on own map copy:
 g.copy vect=archsites@PERMANENT,myarchsites
 # add new 'zs' column to later store height of each site:
@@ -72,19 +74,17 @@ v.db.select myarchsites
 v.transform -t myarchsites output=myarchsites3d column="zshift:zs" layer=1
 # drop table containing transformation parameters
 v.db.dropcolumn myarchsites3d col=zs
-</pre></div>
+```
+
 The resulting map is a 3D vector map.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="m.transform.html">m.transform</a>,
-<a href="i.rectify.html">i.rectify</a>,
-<a href="v.rectify.html">v.rectify</a>,
-<a href="r.region.html">r.region</a>
-</em>
+*[m.transform](m.transform.md), [i.rectify](i.rectify.md),
+[v.rectify](v.rectify.md), [r.region](r.region.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek, ITC-irst, Trento, Italy,<br>
-Column support added by Martin Landa, FBK-irst (formerly ITC-irst), Trento, Italy (2007/09)
+Radim Blazek, ITC-irst, Trento, Italy,  
+Column support added by Martin Landa, FBK-irst (formerly ITC-irst),
+Trento, Italy (2007/09)

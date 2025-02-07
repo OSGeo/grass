@@ -1,67 +1,61 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast.aggregate</em> temporally aggregates space time raster
-datasets by a specific temporal granularity. This module support
-<em>absolute</em> and <em>relative time</em>. The temporal granularity
-of absolute time can be <em>seconds, minutes, hours, days, weeks,
-months</em> or <em>years</em>. Mixing of granularities eg. "1 year, 3
-months 5 days" is not supported. In case of relative time the temporal
-unit of the input space time raster dataset is used. The granularity
-must be specified with an integer value.
-<p>
-This module is sensitive to the current region and mask settings,
-hence spatial extent and spatial resolution. In case the registered
-raster maps of the input space time raster dataset have different
-spatial resolutions, the default nearest neighbor resampling method
-is used for runtime spatial aggregation.
+*t.rast.aggregate* temporally aggregates space time raster datasets by a
+specific temporal granularity. This module support *absolute* and
+*relative time*. The temporal granularity of absolute time can be
+*seconds, minutes, hours, days, weeks, months* or *years*. Mixing of
+granularities eg. "1 year, 3 months 5 days" is not supported. In case of
+relative time the temporal unit of the input space time raster dataset
+is used. The granularity must be specified with an integer value.
 
-<h2>NOTES</h2>
+This module is sensitive to the current region and mask settings, hence
+spatial extent and spatial resolution. In case the registered raster
+maps of the input space time raster dataset have different spatial
+resolutions, the default nearest neighbor resampling method is used for
+runtime spatial aggregation.
 
-The raster module <em>r.series</em> is used internally. Hence all
-aggregate methods of <em>r.series</em> are supported. See the
-<a href="r.series.html">r.series</a> manual page for details.
-<p>
+## NOTES
+
+The raster module *r.series* is used internally. Hence all aggregate
+methods of *r.series* are supported. See the [r.series](r.series.md)
+manual page for details.
+
 This module will shift the start date for each aggregation process
 depending on the provided temporal granularity. The following shifts
 will performed:
 
-<ul>
-    <li><em>granularity years</em>: will start at the first of January,
-      hence 14-08-2012 00:01:30 will be shifted to 01-01-2012 00:00:00</li>
-    <li><em>granularity months</em>: will start at the first day of a month,
-      hence 14-08-2012 will be shifted to 01-08-2012 00:00:00</li>
-    <li><em>granularity weeks</em>: will start at the first day of a week (Monday),
-      hence 14-08-2012 01:30:30 will be shifted to 13-08-2012 01:00:00</li>
-    <li><em>granularity days</em>: will start at the first hour of a day,
-      hence 14-08-2012 00:01:30 will be shifted to 14-08-2012 00:00:00</li>
-    <li><em>granularity hours</em>: will start at the first minute of a hour,
-      hence 14-08-2012 01:30:30 will be shifted to 14-08-2012 01:00:00</li>
-    <li><em>granularity minutes</em>: will start at the first second of a minute,
-      hence 14-08-2012 01:30:30 will be shifted to 14-08-2012 01:30:00</li>
-</ul>
+- *granularity years*: will start at the first of January, hence
+  14-08-2012 00:01:30 will be shifted to 01-01-2012 00:00:00
+- *granularity months*: will start at the first day of a month, hence
+  14-08-2012 will be shifted to 01-08-2012 00:00:00
+- *granularity weeks*: will start at the first day of a week (Monday),
+  hence 14-08-2012 01:30:30 will be shifted to 13-08-2012 01:00:00
+- *granularity days*: will start at the first hour of a day, hence
+  14-08-2012 00:01:30 will be shifted to 14-08-2012 00:00:00
+- *granularity hours*: will start at the first minute of a hour, hence
+  14-08-2012 01:30:30 will be shifted to 14-08-2012 01:00:00
+- *granularity minutes*: will start at the first second of a minute,
+  hence 14-08-2012 01:30:30 will be shifted to 14-08-2012 01:30:00
 
-<p>
 The specification of the temporal relation between the aggregation
 intervals and the raster map layers is always formulated from the
-aggregation interval viewpoint. Hence, the relation <em>contains</em>
-has to be specified to aggregate map layer that are temporally located
-in an aggregation interval.
-<p>
+aggregation interval viewpoint. Hence, the relation *contains* has to be
+specified to aggregate map layer that are temporally located in an
+aggregation interval.
+
 Parallel processing is supported in case that more than one interval is
-available for aggregation computation. Internally several
-<em>r.series</em> modules will be started, depending on the number of
-specified parallel processes (<em>nprocs</em>) and the number of
-intervals to aggregate.
-<p>
+available for aggregation computation. Internally several *r.series*
+modules will be started, depending on the number of specified parallel
+processes (*nprocs*) and the number of intervals to aggregate.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Aggregation of monthly data into yearly data</h3>
+### Aggregation of monthly data into yearly data
 
 In this example the user is going to aggregate monthly data into yearly
 data, running:
 
-<div class="code"><pre>
+```shell
 t.rast.aggregate input=tempmean_monthly output=tempmean_yearly \
                  basename=tempmean_year \
                  granularity="1 years" method=average
@@ -122,16 +116,16 @@ t.info tempmean_yearly
  |        title="Yearly precipitation" \
  |        description="Aggregated precipitation dataset with yearly resolution"
  +----------------------------------------------------------------------------+
-</pre></div>
+```
 
-<h3>Different aggregations and map name suffix variants</h3>
+### Different aggregations and map name suffix variants
 
 Examples of resulting naming schemes for different aggregations when
-using the <b>suffix</b> option:
+using the **suffix** option:
 
-<h4>Weekly aggregation</h4>
+#### Weekly aggregation
 
-<div class="code"><pre>
+```shell
 t.rast.aggregate input=daily_temp output=weekly_avg_temp \
   basename=weekly_avg_temp method=average granularity="1 weeks"
 
@@ -144,10 +138,11 @@ weekly_avg_temp_2003_04|climate|2003-01-24 00:00:00|2003-01-31 00:00:00
 weekly_avg_temp_2003_05|climate|2003-01-31 00:00:00|2003-02-07 00:00:00
 weekly_avg_temp_2003_06|climate|2003-02-07 00:00:00|2003-02-14 00:00:00
 weekly_avg_temp_2003_07|climate|2003-02-14 00:00:00|2003-02-21 00:00:00
-</pre></div>
+```
 
-Variant with <b>suffix</b> set to granularity:
-<div class="code"><pre>
+Variant with **suffix** set to granularity:
+
+```shell
 t.rast.aggregate input=daily_temp output=weekly_avg_temp \
   basename=weekly_avg_temp suffix=gran method=average \
   granularity="1 weeks"
@@ -161,11 +156,11 @@ weekly_avg_temp_2003_01_24|climate|2003-01-24 00:00:00|2003-01-31 00:00:00
 weekly_avg_temp_2003_01_31|climate|2003-01-31 00:00:00|2003-02-07 00:00:00
 weekly_avg_temp_2003_02_07|climate|2003-02-07 00:00:00|2003-02-14 00:00:00
 weekly_avg_temp_2003_02_14|climate|2003-02-14 00:00:00|2003-02-21 00:00:00
-</pre></div>
+```
 
-<h4>Monthly aggregation</h4>
+#### Monthly aggregation
 
-<div class="code"><pre>
+```shell
 t.rast.aggregate input=daily_temp output=monthly_avg_temp \
   basename=monthly_avg_temp suffix=gran method=average \
   granularity="1 months"
@@ -178,11 +173,11 @@ monthly_avg_temp_2003_03|climate|2003-03-01 00:00:00|2003-04-01 00:00:00
 monthly_avg_temp_2003_04|climate|2003-04-01 00:00:00|2003-05-01 00:00:00
 monthly_avg_temp_2003_05|climate|2003-05-01 00:00:00|2003-06-01 00:00:00
 monthly_avg_temp_2003_06|climate|2003-06-01 00:00:00|2003-07-01 00:00:00
-</pre></div>
+```
 
-<h4>Yearly aggregation</h4>
+#### Yearly aggregation
 
-<div class="code"><pre>
+```shell
 t.rast.aggregate input=daily_temp output=yearly_avg_temp \
   basename=yearly_avg_temp suffix=gran method=average \
   granularity="1 years"
@@ -191,21 +186,17 @@ t.rast.list yearly_avg_temp
 name|mapset|start_time|end_time
 yearly_avg_temp_2003|climate|2003-01-01 00:00:00|2004-01-01 00:00:00
 yearly_avg_temp_2004|climate|2004-01-01 00:00:00|2005-01-01 00:00:00
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.rast.aggregate.ds.html">t.rast.aggregate.ds</a>,
-<a href="t.rast.extract.html">t.rast.extract</a>,
-<a href="t.info.html">t.info</a>,
-<a href="r.series.html">r.series</a>,
-<a href="g.region.html">g.region</a>,
-<a href="r.mask.html">r.mask</a>
-</em>
-<p>
-<a href="https://grasswiki.osgeo.org/wiki/Temporal_data_processing">Temporal data processing Wiki</a>
+*[t.rast.aggregate.ds](t.rast.aggregate.ds.md),
+[t.rast.extract](t.rast.extract.md), [t.info](t.info.md),
+[r.series](r.series.md), [g.region](g.region.md), [r.mask](r.mask.md)*
 
-<h2>AUTHOR</h2>
+[Temporal data processing
+Wiki](https://grasswiki.osgeo.org/wiki/Temporal_data_processing)
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+## AUTHOR
+
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

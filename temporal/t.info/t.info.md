@@ -1,33 +1,32 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.info</em> reports information about any dataset that is
-registered in the temporal database in human readable or shell script
-style. Datasets are raster, 3D raster and vector maps as well as their
-corresponding space time datasets (STRDS, STR3DS and STVDS). This
-module reports the information that are stored in the temporal
-database. These are basic information (id, name, mapset, creator,
-creation time, temporal type), the temporal and spatial extent and
-dataset type specific metadata. The user has to utilize <em>r.info</em>,
-<em>r3.info</em>, <em>v.info</em> to report detailed information about
-raster, 3D raster and vector maps, since not all map specific
-information and metadata are stored in the temporal database.
-<p>
-In addition, information about the chosen temporal database backend
-can be reported.
+*t.info* reports information about any dataset that is registered in the
+temporal database in human readable or shell script style. Datasets are
+raster, 3D raster and vector maps as well as their corresponding space
+time datasets (STRDS, STR3DS and STVDS). This module reports the
+information that are stored in the temporal database. These are basic
+information (id, name, mapset, creator, creation time, temporal type),
+the temporal and spatial extent and dataset type specific metadata. The
+user has to utilize *r.info*, *r3.info*, *v.info* to report detailed
+information about raster, 3D raster and vector maps, since not all map
+specific information and metadata are stored in the temporal database.
 
-<h2>NOTES</h2>
+In addition, information about the chosen temporal database backend can
+be reported.
+
+## NOTES
 
 Temporal databases stored in other mapsets can be used as long as they
 are in the user's current mapset search path (managed with
-<a href="g.mapsets.html">g.mapsets</a>).
+[g.mapsets](g.mapsets.md)).
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Temporal DBMI information</h3>
+### Temporal DBMI information
 
 In order to obtain information about temporal DBMI backend, run:
 
-<div class="code"><pre>
+```shell
 t.info -d
  +------------------- Temporal DBMI backend information ----------------------+
  | DBMI Python interface:...... sqlite3
@@ -37,13 +36,13 @@ t.info -d
  | creation_time .......... 2014-11-22 20:06:46.863733
  | tgis_version .......... 2
  +----------------------------------------------------------------------------+
-</pre></div>
+```
 
-<h3>Space time dataset information</h3>
+### Space time dataset information
 
 In order to obtain information about a space time dataset, run:
 
-<div class="code"><pre>
+```shell
 t.info input=tempmean_monthly
  +-------------------- Space Time Raster Dataset -----------------------------+
  |                                                                            |
@@ -94,16 +93,17 @@ t.info input=tempmean_monthly
  | t.register -i type="rast" input="tempmean_monthly" maps="2009_01_tempmean,...,2012_12_tempmean" start="2009-01-01" increment="1 months"
  |
  +----------------------------------------------------------------------------+
-</pre></div>
+```
 
-The "granularity" is the smallest gap size between the found time instances, i.e.
-it the greatest common divisor between all gaps in the time series.
+The "granularity" is the smallest gap size between the found time
+instances, i.e. it the greatest common divisor between all gaps in the
+time series.
 
-<h3>Temporal maps information</h3>
+### Temporal maps information
 
 In order to obtain information about a map in a space time dataset, run:
 
-<div class="code"><pre>
+```shell
 t.info input=2009_01_tempmean type=raster
  +-------------------- Raster Dataset ----------------------------------------+
  |                                                                            |
@@ -135,44 +135,39 @@ t.info input=2009_01_tempmean type=raster
  | Maximum value:.............. 7.426054
  | Registered datasets ........ tempmean_monthly@climate_2000_2012
  +----------------------------------------------------------------------------+
-</pre></div>
+```
 
-<h3>Space time dataset with semantic labels assigned</h3>
+### Space time dataset with semantic labels assigned
 
 This information is printed only when semantic labels have been assigned
-to registered raster maps by <em><a href="r.semantic.label.html">r.semantic.label</a></em>
-or <em><a href="t.register.html#support-for-semantic-labels">t.register</a></em> module.
+to registered raster maps by *[r.semantic.label](r.semantic.label.md)*
+or *[t.register](t.register.md#support-for-semantic-labels)* module.
 
-<div class="code"><pre>
+```shell
 t.info input=test
 ...
 +-------------------- Metadata information ----------------------------------+
 ...
  | Number of registered bands:. 13
 ...
-</pre></div>
+```
 
 Similarly for temporal maps information:
 
-<div class="code"><pre>
+```shell
 t.info input=T33UYP_20190331T094039_B01 type=raster
 ...
  +-------------------- Metadata information ----------------------------------+
  | Semantic label:............. S2_1
 ...
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.create.html">t.create</a>,
-<a href="t.list.html">t.list</a>,
-<a href="t.register.html">t.register</a>,
-<a href="r.info.html">r.info</a>,
-<a href="r3.info.html">r3.info</a>,
-<a href="v.info.html">v.info</a>
-</em>
+*[t.create](t.create.md), [t.list](t.list.md),
+[t.register](t.register.md), [r.info](r.info.md), [r3.info](r3.info.md),
+[v.info](v.info.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

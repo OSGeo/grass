@@ -1,147 +1,147 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The module <em>t.register</em> has double functionality: it either only assigns
+The module *t.register* has double functionality: it either only assigns
 timestamps to raster, 3D raster and vector maps in the temporal database
-(if <em>input</em> option is not provided, see below) or additionally, it also registers
-them within input space time datasets (stds). The existing timestamp modules
-<a href="r.timestamp.html">r.timestamp</a>,
-<a href="r3.timestamp.html">r3.timestamp</a> and
-<a href="v.timestamp.html">v.timestamp</a> do not register the maps in the
-temporal database of GRASS GIS. However, timestamps that have been created
-with these modules can be read and used by <em>t.register</em>. This
-works only for maps that are not already registered in the temporal
-database.
-<p>
-If the <em>input</em> option is not used (i.e., no stds is provided), maps
-will be only registered in the temporal database with assigned
-timestamps. If, on the other hand, the <em>input</em> option
-is used and a stds is provided, maps will be first registered in the temporal
-database (if not registered before) and then, in the stds specified. If the
-user wants to register maps that are already registered in the temporal
-database in a different stds, there is no need to pass information regarding
-start and end time, <em>t.register</em> will read timestamps from the temporal
-database (i.e., in this case only passing map names will be enough).
-<p>
-Maps can be specified both with their fully qualified map name, meaning e.g.
-<i>map@mapset</i> and without the mapset name included. If the mapset
-name is not provided in the input, <em>t.register</em> will look for
-the given map on the current search path and assign the matching mapset.
-If the map is not found on the current search path the module will fail.
-Thus, registering maps with fully qualified map name is slightly faster.
-<p>
-The module <em>t.register</em> supports absolute and relative time. The absolute temporal type
-refers to a fixed date while the relative temporal type refers to data
-without fixed timestamps (e.g., sequential maps used to calculate
-multi-decadal averages).
-<p>
-Maps can be registered by command line argument (i.e., a list of comma separated map
-names) or using an input file. The start time, end time and a temporal
-increment can be provided through command line or in the input file. End time and
-increment are mutually exclusive. The user can register single maps or a
-list of maps at once. Maps can be registered in several space time
-datasets using the same timestamp. For the case of vector time series,
-the user can also register a single vector map connected to different
-layers representing time steps using the <b>map:layer</b> notation (See
-example below).
-<p>
-The <em>increment</em> option and the <b>-i</b> flag (to create time intervals)
-work only in conjunction with the <b>start</b> option.
-If an input file with timestamps (either start time or start time and end time)
-is used, then the <em>increment</em> option and the <b>-i</b> flag are not supported.
-<p>
-Start time and end time with absolute time must be provided using the
-format <b>yyyy-mm-dd HH:MM:SS +HHMM</b>. It is also supported to specify
-only the date <b>yyyy-mm-dd</b>. In case of relative time, the temporal
-unit (years, months, days, hours, minutes or seconds) must be provided.
-In this case, the relative start time, end time and increment are integers.
+(if *input* option is not provided, see below) or additionally, it also
+registers them within input space time datasets (stds). The existing
+timestamp modules [r.timestamp](r.timestamp.md),
+[r3.timestamp](r3.timestamp.md) and [v.timestamp](v.timestamp.md) do not
+register the maps in the temporal database of GRASS GIS. However,
+timestamps that have been created with these modules can be read and
+used by *t.register*. This works only for maps that are not already
+registered in the temporal database.
 
-<h2>NOTES</h2>
+If the *input* option is not used (i.e., no stds is provided), maps will
+be only registered in the temporal database with assigned timestamps.
+If, on the other hand, the *input* option is used and a stds is
+provided, maps will be first registered in the temporal database (if not
+registered before) and then, in the stds specified. If the user wants to
+register maps that are already registered in the temporal database in a
+different stds, there is no need to pass information regarding start and
+end time, *t.register* will read timestamps from the temporal database
+(i.e., in this case only passing map names will be enough).
+
+Maps can be specified both with their fully qualified map name, meaning
+e.g. *map@mapset* and without the mapset name included. If the mapset
+name is not provided in the input, *t.register* will look for the given
+map on the current search path and assign the matching mapset. If the
+map is not found on the current search path the module will fail. Thus,
+registering maps with fully qualified map name is slightly faster.
+
+The module *t.register* supports absolute and relative time. The
+absolute temporal type refers to a fixed date while the relative
+temporal type refers to data without fixed timestamps (e.g., sequential
+maps used to calculate multi-decadal averages).
+
+Maps can be registered by command line argument (i.e., a list of comma
+separated map names) or using an input file. The start time, end time
+and a temporal increment can be provided through command line or in the
+input file. End time and increment are mutually exclusive. The user can
+register single maps or a list of maps at once. Maps can be registered
+in several space time datasets using the same timestamp. For the case of
+vector time series, the user can also register a single vector map
+connected to different layers representing time steps using the
+**map:layer** notation (See example below).
+
+The *increment* option and the **-i** flag (to create time intervals)
+work only in conjunction with the **start** option. If an input file
+with timestamps (either start time or start time and end time) is used,
+then the *increment* option and the **-i** flag are not supported.
+
+Start time and end time with absolute time must be provided using the
+format **yyyy-mm-dd HH:MM:SS +HHMM**. It is also supported to specify
+only the date **yyyy-mm-dd**. In case of relative time, the temporal
+unit (years, months, days, hours, minutes or seconds) must be provided.
+In this case, the relative start time, end time and increment are
+integers.
+
+## NOTES
 
 The timestamps of registered maps will be stored in the temporal
 database and in the metadata of the grass maps in the spatial database.
 This assures that timestamps can always be accessed with
-<em>(r|r3|v).timestamp</em> and the temporal modules. Timestamps should
-only be modified with <em>t.register</em> because the
-<em>(r|r3|v).timestamp</em> modules have no access to the temporal
-database.
+*(r\|r3\|v).timestamp* and the temporal modules. Timestamps should only
+be modified with *t.register* because the *(r\|r3\|v).timestamp* modules
+have no access to the temporal database.
 
-<h2>INPUT FILE FORMAT</h2>
+## INPUT FILE FORMAT
 
-There are several options to register maps by means of a file. The input file
-consists of a list of map names, optionally along with timestamps. Each map
-name (and timestaps if provided) should be stored in a new line in this file.
-<p>
-When only map names are provided, the <em>increment</em> option and the <b>-i</b>
-flag are supported. However, when along with map names any kind of timestamp is
-provided, as well, the <em>increment</em> option and the <b>-i</b> are no longer
-supported.
-<p>
-Specification of map names only (<em>increment</em> option and <b>-i</b> flag
+There are several options to register maps by means of a file. The input
+file consists of a list of map names, optionally along with timestamps.
+Each map name (and timestaps if provided) should be stored in a new line
+in this file.
+
+When only map names are provided, the *increment* option and the **-i**
+flag are supported. However, when along with map names any kind of
+timestamp is provided, as well, the *increment* option and the **-i**
+are no longer supported.
+
+Specification of map names only (*increment* option and **-i** flag
 supported):
-<div class="code"><pre>
+
+```shell
 terra_lst_day20020113
 terra_lst_day20020114
 terra_lst_day20020115
 terra_lst_day20020116
 terra_lst_day20020117
-</pre></div>
+```
 
-<p>
 Specification of map names and absolute start time (date) of the time
-instances (no support for <em>increment</em> option nor <b>-i</b> flag):
-<div class="code"><pre>
+instances (no support for *increment* option nor **-i** flag):
+
+```shell
 terra_lst_day20020113|2002-01-13
 terra_lst_day20020114|2002-01-14
 terra_lst_day20020115|2002-01-15
 terra_lst_day20020116|2002-01-16
 terra_lst_day20020117|2002-01-17
-</pre></div>
+```
 
-<p>
-Specification of map names and absolute start time (datetime) of the time
-instances (no support for <em>increment</em> option nor <b>-i</b> flag):
-<div class="code"><pre>
+Specification of map names and absolute start time (datetime) of the
+time instances (no support for *increment* option nor **-i** flag):
+
+```shell
 terra_lst_day20020113|2002-01-13 10:30
 terra_lst_day20020114|2002-01-14 10:30
 terra_lst_day20020115|2002-01-15 10:30
 terra_lst_day20020116|2002-01-16 10:30
 terra_lst_day20020117|2002-01-17 10:30
-</pre></div>
+```
 
-<p>
-Specification of map names and absolute time interval with start and end time
-(no support for <em>increment</em> option nor <b>-i</b> flag):
-<div class="code"><pre>
+Specification of map names and absolute time interval with start and end
+time (no support for *increment* option nor **-i** flag):
+
+```shell
 prec_1|2001-01-01|2001-04-01
 prec_2|2001-04-01|2001-07-01
 prec_3|2001-07-01|2001-10-01
 prec_4|2001-10-01|2002-01-01
 prec_5|2002-01-01|2002-04-01
 prec_6|2002-04-01|2002-07-01
-</pre></div>
+```
 
-<p>
-Same as above but with fully qualified map names
-(no support for <em>increment</em> option nor <b>-i</b> flag):
-<div class="code"><pre>
+Same as above but with fully qualified map names (no support for
+*increment* option nor **-i** flag):
+
+```shell
 prec_1@PERMANENT|2001-01-01|2001-04-01
 prec_2@PERMANENT|2001-04-01|2001-07-01
 prec_3@PERMANENT|2001-07-01|2001-10-01
 prec_4@PERMANENT|2001-10-01|2002-01-01
 prec_5@PERMANENT|2002-01-01|2002-04-01
 prec_6@PERMANENT|2002-04-01|2002-07-01
-</pre></div>
+```
 
-<h3>Support for semantic labels</h3>
+### Support for semantic labels
 
-For more information about semantic labels and image collections
-see <em><a href="i.band.library.html">i.band.library</a></em> module.
+For more information about semantic labels and image collections see
+*[i.band.library](i.band.library.md)* module.
 
-<p>
-Specification of map names and absolute start time (datetime) of the time
-instances. The last column indicates related semantic label.
+Specification of map names and absolute start time (datetime) of the
+time instances. The last column indicates related semantic label.
 
-<div class="code"><pre>
+```shell
 T33UYP_20190331T094039_B01|2019-03-31 09:40:39|S2_1
 T33UYP_20190331T094039_B10|2019-03-31 09:40:39|S2_10
 T33UYP_20190331T094039_B02|2019-03-31 09:40:39|S2_2
@@ -154,71 +154,68 @@ T33UYP_20190331T094039_B06|2019-03-31 09:40:39|S2_6
 T33UYP_20190331T094039_B04|2019-03-31 09:40:39|S2_4
 T33UYP_20190331T094039_B03|2019-03-31 09:40:39|S2_3
 T33UYP_20190331T094039_B09|2019-03-31 09:40:39|S2_9
-</pre></div>
+```
 
-In this case <em>t.register</em> assigns to given raster maps
-a semantic label similarly as
-<em><a href="r.semantic.label.html">r.semantic.label</a></em> does.
+In this case *t.register* assigns to given raster maps a semantic label
+similarly as *[r.semantic.label](r.semantic.label.md)* does. Such
+registered raster maps is possible to [filter by a semantic
+label](t.rast.list.md#filtering-the-result-by-semantic-label).
 
-Such registered raster maps is possible
-to <a href="t.rast.list.html#filtering-the-result-by-semantic-label">filter
-by a semantic label</a>.
-
-<p>
 Please note that raster maps with semantic labels assigned can be
-registered only in STRDS created in TGIS DB version 3 or
-higher. <i>Older versions of TGIS DB are not supported.</i> TGIS DB
-version can be checked <em><a href="t.connect.html">t.connect</a></em>
-module.
+registered only in STRDS created in TGIS DB version 3 or higher. *Older
+versions of TGIS DB are not supported.* TGIS DB version can be checked
+*[t.connect](t.connect.md)* module.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-<h3>North Carolina dataset</h3>
+### North Carolina dataset
 
-<h4>Using a text file</h4>
+#### Using a text file
 
-Register maps in an absolute space time dataset, creating a time interval
+Register maps in an absolute space time dataset, creating a time
+interval
 
-<div class="code"><pre>
+```shell
 # first:  prepare a text file with a list of input maps (see above)
 # second: register maps
 t.register -i type=raster input=precipitation_monthly \
     file=list_of_input_maps.txt start="2009-01-01" \
     increment="1 months"
-</pre></div>
+```
 
-<h4>Using <em>g.list</em> to generate the input</h4>
+#### Using *g.list* to generate the input
 
-Register maps in an absolute space time dataset, creating a time interval
+Register maps in an absolute space time dataset, creating a time
+interval
 
-<div class="code"><pre>
+```shell
 t.register -i type=raster input=precipitation_monthly \
     maps=`g.list raster pattern="*precip*" sep=comma` start="2009-01-01" \
     increment="1 months"
-</pre></div>
+```
 
-<h4>Register a vector map with layers representing time steps</h4>
+#### Register a vector map with layers representing time steps
 
 Assume a vector map of points that represent meteorological stations and
 it is connected to different layers depicting daily time steps. In this
 example, only the fifth layer of the vector map will be registered.
 
-<div class="code"><pre>
+```shell
 # the layer is specified behind the colon
 t.register type=vector input=meteo_stations_nc_daily \
     maps=meteo_stations_nc:5 start="2009-01-05"
-</pre></div>
+```
 
-<h3>Synthetic maps</h3>
+### Synthetic maps
 
 In this example we create 6 raster maps that will be registered in a
 single space time raster dataset named precip_abs using a monthly
-temporal granularity. The <b>-i</b> flag generates time intervals of the
-provided <em>increment</em>. The generated timestamps will be inspected
-using <em>r.timestamp</em> and <em>t.rast.list</em>. We will register an
-additional map with a timestamp that was set with <em>r.timestamp</em>.
+temporal granularity. The **-i** flag generates time intervals of the
+provided *increment*. The generated timestamps will be inspected using
+*r.timestamp* and *t.rast.list*. We will register an additional map with
+a timestamp that was set with *r.timestamp*.
 
-<div class="code"><pre>
+```shell
 r.mapcalc expression="prec_1 = 100"
 r.mapcalc expression="prec_2 = 200"
 r.mapcalc expression="prec_3 = 300"
@@ -265,19 +262,17 @@ prec_4|PERMANENT|2001-04-01 00:00:00|2001-05-01 00:00:00
 prec_5|PERMANENT|2001-05-01 00:00:00|2001-06-01 00:00:00
 prec_6|PERMANENT|2001-06-01 00:00:00|2001-07-01 00:00:00
 prec_7|PERMANENT|2001-07-01 00:00:00|2001-08-01 00:00:00
-</pre></div>
+```
 
-<h3>Importing and registering ECA&amp;D climatic data</h3>
+### Importing and registering ECA&D climatic data
 
-The European Climate Assessment &amp; Dataset (ECA&amp;D) project
-offers the E-OBS dataset which is a daily gridded observational
-dataset for precipitation, temperature and sea level pressure in
-Europe based on ECA&amp;D information.
+The European Climate Assessment & Dataset (ECA&D) project offers the
+E-OBS dataset which is a daily gridded observational dataset for
+precipitation, temperature and sea level pressure in Europe based on
+ECA&D information. Download and decompress mean temperature data from:
+[here](https://surfobs.climate.copernicus.eu/dataaccess/access_eobs.php#datafiles).
 
-Download and decompress mean temperature data from:
-<a href="https://surfobs.climate.copernicus.eu/dataaccess/access_eobs.php#datafiles">here</a>.
-
-<div class="code"><pre>
+```shell
 # import E-OBS V12 into a lat-long project (alternatively, use r.external)
 r.in.gdal -oe input=tg_0.25deg_reg_1950-1964_v12.0.nc \
   output=temperature_mean offset=0
@@ -297,7 +292,7 @@ t.create type=strds output=temperature_mean_1950_2015_daily \
 # create text file with all temperature_mean rasters, one per line,
 # a) using a shell script
 for i in `seq 1 23922` ; do
-    echo temperature_mean.$i &gt;&gt; map_list.txt
+    echo temperature_mean.$i >> map_list.txt
 done
 
 # b) using a Python script
@@ -309,19 +304,16 @@ file.close()
 # register daily maps using the file created above
 t.register -i type=raster input=temperature_mean_1950_2015_daily \
               file=map_list.txt start="1950-01-01" increment="1 days"
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.timestamp.html">r.timestamp</a>,
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
-</em>
+*[r.timestamp](r.timestamp.md), [t.create](t.create.md),
+[t.info](t.info.md)*
 
-<p>
-<a href="https://grasswiki.osgeo.org/wiki/Temporal_data_processing/maps_registration">Maps registration examples in Temporal data processing Wiki</a>
+[Maps registration examples in Temporal data processing
+Wiki](https://grasswiki.osgeo.org/wiki/Temporal_data_processing/maps_registration)
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

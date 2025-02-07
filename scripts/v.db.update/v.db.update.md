@@ -1,28 +1,28 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.db.update</em> assigns a new value to a column in the attribute
-table connected to a given map. The <em>value</em> parameter allows
-updating with a literal value. Alternatively, with the <em>qcol</em>
-parameter values can be copied from another column in the table or be
-the result of a combination or transformation of other columns.
+*v.db.update* assigns a new value to a column in the attribute table
+connected to a given map. The *value* parameter allows updating with a
+literal value. Alternatively, with the *qcol* parameter values can be
+copied from another column in the table or be the result of a
+combination or transformation of other columns.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>v.db.update</em> is just a front-end to <em>db.execute</em> to
-allow easier usage.
-<p>For complex SQL UPDATE statements, <em>db.execute</em> should be used.
+*v.db.update* is just a front-end to *db.execute* to allow easier usage.
 
-<h2>EXAMPLES</h2>
+For complex SQL UPDATE statements, *db.execute* should be used.
 
-<h3>Replacing of NULL values</h3>
+## EXAMPLES
 
-In this example, selectively display lakes without (blue) and with
-NULL (red) are shown to find out which type is undefined. In the
-original map there are lakes missing FTYPE attribute which are
-wetlands along streams. These NULL attributes are replaced with the
-landuse type WETLAND:
+### Replacing of NULL values
 
-<div class="code"><pre>
+In this example, selectively display lakes without (blue) and with NULL
+(red) are shown to find out which type is undefined. In the original map
+there are lakes missing FTYPE attribute which are wetlands along
+streams. These NULL attributes are replaced with the landuse type
+WETLAND:
+
+```shell
 g.copy vect=lakes,mylakes
 v.db.select mylakes
 v.db.select mylakes where="FTYPE IS NULL"
@@ -37,39 +37,43 @@ d.vect mylakes where="FTYPE IS NULL" type=area col=red
 v.db.update mylakes col=FTYPE value=WETLAND \
             where="FTYPE IS NULL"
 v.db.select mylakes
-</pre></div>
+```
 
-<h3>Updating of columns with on the fly calculation</h3>
+### Updating of columns with on the fly calculation
 
 Spearfish example: adding new column, copying values from another table
 column with on the fly calculation:
-<div class="code"><pre>
+
+```shell
 g.copy vect=fields,myfields
 v.db.addcolumn myfields col="polynum integer"
 v.db.update myfields col=polynum qcol="cat*2"
 v.db.select myfields
-</pre></div>
+```
 
-<h3>Type casting</h3>
+### Type casting
 
-Type cast (type conversion) of strings to double precision
-(unsupported by DBF driver):
-<div class="code"><pre>
+Type cast (type conversion) of strings to double precision (unsupported
+by DBF driver):
+
+```shell
 g.copy vect=geodetic_pts,mygeodetic_pts
 v.db.update mygeodetic_pts col=zval qcol="CAST(z_value AS double precision)" \
-            where="z_value &lt;&gt; 'N/A'"
-</pre></div>
+            where="z_value <> 'N/A'"
+```
 
-<h3>Updating of columns with on the fly calculation (SQLite extended functions)</h3>
+### Updating of columns with on the fly calculation (SQLite extended functions)
 
-Note: this requires SQLite extended functions. For details see the GRASS GIS Wiki
-(compilation of <a href="https://grasswiki.osgeo.org/wiki/Build_SQLite_extension_on_Linux">libsqlitefunctions.so</a>
-and <a href="https://grasswiki.osgeo.org/wiki/Build_SQLite_extension_on_windows">libsqlitefunctions.dll</a>).
-<p>
+Note: this requires SQLite extended functions. For details see the GRASS
+GIS Wiki (compilation of
+[libsqlitefunctions.so](https://grasswiki.osgeo.org/wiki/Build_SQLite_extension_on_Linux)
+and
+[libsqlitefunctions.dll](https://grasswiki.osgeo.org/wiki/Build_SQLite_extension_on_windows)).
+
 North Carolina data set example: adding new column, copying values from
 another table column with on the fly calculation:
 
-<div class="code"><pre>
+```shell
 g.copy vect=precip_30ynormals,myprecip_30ynormals
 v.db.addcolumn myprecip_30ynormals column="logjuly double precision"
 v.db.update myprecip_30ynormals column="logjuly" query_column="log(jul)" \
@@ -83,25 +87,17 @@ jul|logjuly
 104.648|4.65060233738593
 98.298|4.58800368106618
 ...
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.execute.html">db.execute</a>,
-<a href="v.db.addcolumn.html">v.db.addcolumn</a>,
-<a href="v.db.addtable.html">v.db.addtable</a>,
-<a href="v.db.connect.html">v.db.connect</a>,
-<a href="v.db.droptable.html">v.db.droptable</a>,
-<a href="v.db.join.html">v.db.join</a>,
-<a href="v.db.select.html">v.db.select</a>
-</em>
+*[db.execute](db.execute.md), [v.db.addcolumn](v.db.addcolumn.md),
+[v.db.addtable](v.db.addtable.md), [v.db.connect](v.db.connect.md),
+[v.db.droptable](v.db.droptable.md), [v.db.join](v.db.join.md),
+[v.db.select](v.db.select.md)*
 
-<p>
-<em>
-<a href="sql.html">GRASS SQL interface</a>
-</em>
+*[GRASS SQL interface](sql.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Moritz Lennert (mlennert@club.worldonline.be)

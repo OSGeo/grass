@@ -1,37 +1,35 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>i.ortho.transform</em> is an utility to compute transformation
-based upon GCPs and output error measurements.
+*i.ortho.transform* is an utility to compute transformation based upon
+GCPs and output error measurements.
 
-<p>
-If coordinates are given with the <b>input</b> file option or fed from
-<code>stdin</code>, both the input and the output format is "x y z" with one
-coordinate pair per line. Reverse transform is performed with the
-<b>-r</b> flag.
+If coordinates are given with the **input** file option or fed from
+`stdin`, both the input and the output format is "x y z" with one
+coordinate pair per line. Reverse transform is performed with the **-r**
+flag.
 
-<p>
-The <b>format</b> option determines how control points are printed out.
-A summary on the control points can be printed with the <b>-s</b> flag.
-The summary includes maximum deviation observed when transforming GCPs
-and overall RMS. The <b>format</b> option is ignored when coordinates
-are given with the <b>input</b> file option.
+The **format** option determines how control points are printed out. A
+summary on the control points can be printed with the **-s** flag. The
+summary includes maximum deviation observed when transforming GCPs and
+overall RMS. The **format** option is ignored when coordinates are given
+with the **input** file option.
 
-<h2>NOTES</h2>
+## NOTES
 
 Ortho-transformation is a 2-step transformation. First, source
 coordinates are transformed to sensor coordinates, then sensor
 coordinates are transformed to target coordinates.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em><a href="i.rectify.html">i.rectify</a></em>
+*[i.rectify](i.rectify.md)*
 
-<h2>TODO</h2>
+## TODO
 
-Update this document with x,y,z&lt;-&gt;E,N,H information
+Update this document with x,y,z\<-\>E,N,H information
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Brian J. Buckley<br>
-Glynn Clements<br>
+Brian J. Buckley  
+Glynn Clements  
 Hamish Bowman

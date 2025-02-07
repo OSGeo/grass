@@ -1,131 +1,115 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>g.mapsets</em> modifies/prints the user's current mapset search
-path.
+*g.mapsets* modifies/prints the user's current mapset search path. For
+basic information about GRASS *mapset*, *project* and *data base* refer
+to [GRASS Quickstart](helptext.md).
 
-For basic information about GRASS <em>mapset</em>, <em>project</em>
-and <em>data base</em> refer to <a href="helptext.html">GRASS
-Quickstart</a>.
+A *mapset* holds a distinct set of data layers, each relevant to the
+same (or a subset of the same) geographic region, and each drawn in the
+same map coordinate system. At the outset of every GRASS session, the
+user identifies a GRASS data base, project (previosuly called location),
+and mapset that are to be the user's *current data base*, *current
+project*, and *current mapset* for the duration of the session; any maps
+created by the user during the session will be stored under the *current
+mapset* set at the session's outset (see *[g.mapset](g.mapset.md)*
+\[without an "s"\] and *[g.gisenv](g.gisenv.md)* for changing the mapset
+with a session).
 
-<p>
-A <em>mapset</em> holds a distinct set of data layers, each relevant
-to the same (or a subset of the same) geographic region, and each
-drawn in the same map coordinate system.  At the outset of every GRASS
-session, the user identifies a GRASS data base, project (previosuly
-called location), and mapset
-that are to be the user's <em>current data base</em>, <em>current
-project</em>, and <em>current mapset</em> for the duration of the
-session; any maps created by the user during the session will be
-stored under the <em>current mapset</em> set at the session's outset
-(see <em><a href="g.mapset.html">g.mapset</a></em> [without an "s"]
-and <em><a href="g.gisenv.html">g.gisenv</a></em> for changing the
-mapset with a session).
+The user can add, modify, and delete data layers that exist under their
+*current mapset*. Although the user can also *access* (i.e., use) data
+that are stored under *other* mapsets in the same GRASS project using
+the `mapname@mapsetname` notation or mapset search path, the user can
+only make permanent changes (create or modify data) located in the
+*current mapset*. The user's *mapset search path* lists the order in
+which other mapsets in the same GRASS project can be searched and their
+data accessed by the user. The user can modify the listing and order in
+which these mapsets are accessed by modifying the mapset search path;
+this can be done using the *g.mapsets* command. This program allows the
+user to use other's relevant map data without altering the original data
+layer, and without taking up disk space with a copy of the original map.
+The `mapname@mapsetname` notation may be used irrespective of the mapset
+search path, i.e., any map found in another mapset with sufficient
+*[g.access](g.access.md)* privileges may be called in such a manner.
 
-<p>
-The user can add, modify, and delete data layers that exist under
-their <em>current mapset</em>. Although the user can
-also <em>access</em> (i.e., use) data that are stored under
-<em>other</em> mapsets in the same GRASS project using the
-<code>mapname@mapsetname</code> notation or mapset search path, the user
-can only make permanent changes (create or modify data)
-located in the <em>current mapset</em>.  The user's
-<em>mapset search path</em> lists the order in which other mapsets in
-the same GRASS project can be searched and their data accessed by the
-user. The user can modify the listing and order in which these mapsets
-are accessed by modifying the mapset search path; this can be done
-using the <em>g.mapsets</em> command. This program allows the user to
-use other's relevant map data without altering the original data
-layer, and without taking up disk space with a copy of the original
-map. The <code>mapname@mapsetname</code> notation may be used irrespective
-of the mapset search path, i.e., any map found in another mapset with
-sufficient <em><a href="g.access.html">g.access</a></em> privileges
-may be called in such a manner.
+*g.mapsets* shows the user available mapsets under the current GRASS
+project, lists mapsets to which the user currently has access, and lists
+the order in which accessible mapsets will be accessed by GRASS programs
+searching for data files. The user is then given the opportunity to add
+or delete mapset names from the search path, or modify the order in
+which mapsets will be accessed.
 
-<p>
-<em>g.mapsets</em> shows the user available mapsets under the current
-GRASS project, lists mapsets to which the user currently has access,
-and lists the order in which accessible mapsets will be accessed by
-GRASS programs searching for data files.  The user is then given the
-opportunity to add or delete mapset names from the search path, or
-modify the order in which mapsets will be accessed.
-
-<p>
 When the user specifies the name of a data base element file (e.g., a
-particular vector map, raster map, <a href="i.group.html">imagery</a>
-group file, etc.) to a GRASS program, the program searches for the
-named file under each of the mapsets listed in the user's mapset
-search path in the order listed there until the program finds a file
-of the given name. Users can also specify a file by its mapset, to
-make explicit the mapset from which the file is to be drawn; e.g., the
-command:
+particular vector map, raster map, [imagery](i.group.md) group file,
+etc.) to a GRASS program, the program searches for the named file under
+each of the mapsets listed in the user's mapset search path in the order
+listed there until the program finds a file of the given name. Users can
+also specify a file by its mapset, to make explicit the mapset from
+which the file is to be drawn; e.g., the command:
 
-<div class="code"><pre>
+```shell
 g.copy raster=soils@PERMANENT,my_soils
-</pre></div>
+```
 
-ensures that a new file named <code>my_soils</code> is to be a copy of
-the file <code>soils</code> from the mapset PERMANENT.
+ensures that a new file named `my_soils` is to be a copy of the file
+`soils` from the mapset PERMANENT.
 
-<p>
-In each project there is the special mapset <b>PERMANENT</b> included
-in the mapset search path, as this mapset typically contains base maps
+In each project there is the special mapset **PERMANENT** included in
+the mapset search path, as this mapset typically contains base maps
 relevant to many applications. Often, other mapsets which contain sets
-of interpreted maps will be likewise included in the user's mapset search path.
-Suppose, for example, that the mapset <em>Soil_Maps</em> contains
-interpreted soils map layers to which the user wants access. The
-mapset <em>Soil_Maps</em> should then be included in the user's
-<em>search path</em> variable.
+of interpreted maps will be likewise included in the user's mapset
+search path. Suppose, for example, that the mapset *Soil_Maps* contains
+interpreted soils map layers to which the user wants access. The mapset
+*Soil_Maps* should then be included in the user's *search path*
+variable.
 
-<p>
-The <em>mapset search path</em> is saved as part of the current
-mapset. When the user works with that mapset in subsequent GRASS
-sessions, the previously saved mapset search path will be used (and
-will continue to be used until it is modified by the user
-with <em>g.mapsets</em>).
+The *mapset search path* is saved as part of the current mapset. When
+the user works with that mapset in subsequent GRASS sessions, the
+previously saved mapset search path will be used (and will continue to
+be used until it is modified by the user with *g.mapsets*).
 
-<h2>NOTES</h2>
+## NOTES
 
-By default <em>g.mapsets</em> adds to the current <em>mapset search
-path</em> mapsets named by <b>mapset</b> option. Alternatively mapsets
-can be removed (<b>operation=remove</b>) from the search path or
-defined by <b>operation=set</b>.
+By default *g.mapsets* adds to the current *mapset search path* mapsets
+named by **mapset** option. Alternatively mapsets can be removed
+(**operation=remove**) from the search path or defined by
+**operation=set**.
 
-<p>
-Users can restrict others' access to their mapset files through use
-of <em><a href="g.access.html">g.access</a></em>. Mapsets to which
-access is restricted can still be listed in another's mapset search
-path; however, access to these mapsets will remain restricted.
+Users can restrict others' access to their mapset files through use of
+*[g.access](g.access.md)*. Mapsets to which access is restricted can
+still be listed in another's mapset search path; however, access to
+these mapsets will remain restricted.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Selecting mapsets with the graphical mapset manager</h3>
+### Selecting mapsets with the graphical mapset manager
 
-Using the <b>-s</b> flag, a convenient graphical mapset manager can
-be opened to select and deselect other mapsets (the actual mapset and
-the PERMANENT mapset are always selected):
+Using the **-s** flag, a convenient graphical mapset manager can be
+opened to select and deselect other mapsets (the actual mapset and the
+PERMANENT mapset are always selected):
 
-<div class="code"><pre>
+```shell
 g.mapsets -s
-</pre></div>
+```
 
-<center>
-<img src="g_mapsets_gui.png"><br>
-</center>
+![](g_mapsets_gui.png)  
 
-<h3>Print available mapsets</h3>
+### Print available mapsets
+
 All available mapsets in the current project can be printed out by
 
-<div class="code"><pre>
+```shell
 g.mapsets -l
 
 Available mapsets:
 PERMANENT user1 user2
-</pre></div>
+```
 
-Mapsets can be also printed out as json by setting the format option to "json" (<b>format="json"</b>).
+Mapsets can be also printed out as json by setting the format option to
+"json" (**format="json"**).
 
 <div class="code">
-  <pre>
+
+```shell
     g.mapsets format="json" -l
 
     {
@@ -135,65 +119,63 @@ Mapsets can be also printed out as json by setting the format option to "json" (
         "user2"
       ]
     }
-  </pre>
+  
+```
+
 </div>
 
-<h3>Add new mapset</h3>
+### Add new mapset
 
 Add mapset 'user2' to the current mapset search path
 
-<div class="code"><pre>
+```shell
 g.mapsets mapset=user2 operation=add
-</pre></div>
+```
 
 The current mapset search path is changed accordingly
 
-<div class="code"><pre>
+```shell
 g.mapsets -p
 
 Accessible mapsets:
 user1 user2
-</pre></div>
+```
 
-<h3>Overwrite current search path</h3>
+### Overwrite current search path
 
 Overwrite current search path
 
-<div class="code"><pre>
+```shell
 g.mapsets mapset=user1,PERMANENT operation=set
-</pre></div>
+```
 
-<h3>Using shortcuts for search path</h3>
+### Using shortcuts for search path
 
-The current mapset can be defined by a shortcut &quot;.&quot; (dot)
+The current mapset can be defined by a shortcut "." (dot)
 
-<div class="code"><pre>
+```shell
 g.mapsets mapset=.,PERMANENT operation=set
-</pre></div>
+```
 
-<i>Note:</i> The current mapset will be always included in the search
-path on the first position even if you change its position or omit the
-current mapset from the <b>mapset</b> option.
+*Note:* The current mapset will be always included in the search path on
+the first position even if you change its position or omit the current
+mapset from the **mapset** option.
 
-<div class="code"><pre>
+```shell
 g.mapsets -p
 
 Accessible mapsets:
 user1 PERMANENT
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="g.access.html">g.access</a>,
-  <a href="g.copy.html">g.copy</a>,
-  <a href="g.gisenv.html">g.gisenv</a>,
-  <a href="g.list.html">g.list</a>,
-  <a href="g.mapset.html">g.mapset</a>
-</em>
+*[g.access](g.access.md), [g.copy](g.copy.md), [g.gisenv](g.gisenv.md),
+[g.list](g.list.md), [g.mapset](g.mapset.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Michael Shapiro, U.S.Army Construction Engineering Research Laboratory<br>
-Greg Koerper, ManTech Environmental Technology, Inc.<br>
-Updated to GRASS 7 by Martin Landa, Czech Technical University in Prague, Czech Republic
+Michael Shapiro, U.S.Army Construction Engineering Research Laboratory  
+Greg Koerper, ManTech Environmental Technology, Inc.  
+Updated to GRASS 7 by Martin Landa, Czech Technical University in
+Prague, Czech Republic

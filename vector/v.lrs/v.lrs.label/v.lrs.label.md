@@ -1,13 +1,10 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.lrs.label</em> generates LRS labels for pretty-printing of a LRS.
+*v.lrs.label* generates LRS labels for pretty-printing of a LRS. This
+example is written for the Spearfish dataset (it continues the example
+from *v.lrs.create*).
 
-This example is written for the Spearfish dataset (it continues the example
-from <em>v.lrs.create</em>).
-<p>
-
-
-<div class="code"><pre>
+```shell
 v.lrs.label route_lrs rstable=route_lrs output=route_lrs_labels \
             labels=labels col=red size=50 xoffset=100
 
@@ -18,25 +15,20 @@ d.vect route_lrs_labels col=grey type=line
 d.vect busstops disp=attr attr=cat size=10 bg=white lcol=green yref=bottom
 d.vect busstops icon=basic/circle fcol=green
 d.labels labels
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.lrs.create.html">v.lrs.create</a>,
-<a href="v.lrs.segment.html">v.lrs.segment</a>,
-<a href="v.lrs.where.html">v.lrs.where</a>,
-<a href="d.labels.html">d.labels</a>,
-<a href="v.label.html">v.label</a>
-</em>
+*[v.lrs.create](v.lrs.create.md), [v.lrs.segment](v.lrs.segment.md),
+[v.lrs.where](v.lrs.where.md), [d.labels](d.labels.md),
+[v.label](v.label.md)*
 
-<p>
-<em>
-<a href="lrs.html">LRS tutorial</a>,<br>
-<a href="https://foss4g.asia/2004/Full%20Paper_PDF/Introducing%20the%20Linear%20Reference%20System%20in%20GRASS.pdf">Introducing the Linear Reference System in GRASS</a>
-</em>
+*[LRS tutorial](lrs.md),  
+[Introducing the Linear Reference System in
+GRASS](https://foss4g.asia/2004/Full-Paper_PDF/Introducing-the-Linear-Reference-System-in-GRASS.pdf)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek, ITC-irst/MPA Solutions<br>
-Documentation update (based on above journal article and available fragments): Markus Neteler
+Radim Blazek, ITC-irst/MPA Solutions  
+Documentation update (based on above journal article and available
+fragments): Markus Neteler

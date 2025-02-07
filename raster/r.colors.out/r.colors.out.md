@@ -1,23 +1,20 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.colors.out</em> allows the user to export the color table for a
-raster map to a file which is suitable as input
-to <em><a href="r.colors.html">r.colors</a></em>.
+*r.colors.out* allows the user to export the color table for a raster
+map to a file which is suitable as input to *[r.colors](r.colors.md)*.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<div class="code"><pre>
+```shell
 r.colors.out map=el_D782_6m rules=rules.txt
 r.colors map=el_D783_6m rules=rules.txt
 r.colors.out map=el_D782_6m rules=rules.json format=json
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="r.colors.html">r.colors</a>
-</em>
+*[r.colors](r.colors.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Glynn Clements

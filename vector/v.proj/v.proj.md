@@ -1,107 +1,90 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.proj</em> allows a user to convert a vector map in a specified mapset
-of a specified project (different from current) with coordinate reference
-system (CRS) of source project to the vector map in a current mapset of current
-project with CRS of current project (both CRSs are defined in their
-corresponding projects). The CRS information can be viewed and managed with
-<em><a href="g.proj.html">g.proj</a></em>.
+*v.proj* allows a user to convert a vector map in a specified mapset of
+a specified project (different from current) with coordinate reference
+system (CRS) of source project to the vector map in a current mapset of
+current project with CRS of current project (both CRSs are defined in
+their corresponding projects). The CRS information can be viewed and
+managed with *[g.proj](g.proj.md)*.
 
-<p>
-For an introduction to map CRSs (and the PROJ library), see the manual page of
-<a href="r.proj.html">r.proj</a>.
+For an introduction to map CRSs (and the PROJ library), see the manual
+page of [r.proj](r.proj.md).
 
-<h2>NOTES</h2>
+## NOTES
 
-If <b>output</b> is not specified it is set to be the same as input map
-name.
-
-<br>
-If <b>mapset</b> is not specified, its name is assumed to be the same
-as the current mapset's name.
-
-<br>
-If <b>dbase</b> is not specified it is assumed to be the current
-database. The user only has to specify <b>dbase</b> if the source
-project is stored in another separate GRASS database.
-
-<br>
-If <b>smax</b> is set to <b>0</b> the automated vertex densification is
+If **output** is not specified it is set to be the same as input map
+name.  
+If **mapset** is not specified, its name is assumed to be the same as
+the current mapset's name.  
+If **dbase** is not specified it is assumed to be the current database.
+The user only has to specify **dbase** if the source project is stored
+in another separate GRASS database.  
+If **smax** is set to **0** the automated vertex densification is
 disabled (not recommended).
 
-<p>
-<em>v.proj</em> supports general datum transformations, making use of the
-<em>PROJ</em> co-ordinate system translation library.
+*v.proj* supports general datum transformations, making use of the
+*PROJ* co-ordinate system translation library.
 
-<p>When projecting into a latlon project, east coordinates are wrapped
-by the proj4 library to fit into the range -180,180. This is in most cases
-appropriate, but can cause errors the input vector crosses the datum line
-at 180E/W. In this case wrapping of east coordinates to -180,180 needs
-to be disabled with the <b>-w</b> flag.
+When projecting into a latlon project, east coordinates are wrapped by
+the proj4 library to fit into the range -180,180. This is in most cases
+appropriate, but can cause errors the input vector crosses the datum
+line at 180E/W. In this case wrapping of east coordinates to -180,180
+needs to be disabled with the **-w** flag.
 
-<p>When reprojecting massive point clouds for which topology is not necessary,
-the user can set the <b>-b</b> flag to suppress the building of topology of
-the output map.
+When reprojecting massive point clouds for which topology is not
+necessary, the user can set the **-b** flag to suppress the building of
+topology of the output map.
 
-<p>
-In order to preserve spatial detail, <em>v.proj</em> performs automated
-vertex densification (as an alternative, <em><a href="v.split.html">v.split</a></em>
-could be used before reprojecting. Without vertex densification, depending on
-the source and target CRS (Coordinate Reference System), geometries can be
+In order to preserve spatial detail, *v.proj* performs automated vertex
+densification (as an alternative, *[v.split](v.split.md)* could be used
+before reprojecting. Without vertex densification, depending on the
+source and target CRS (Coordinate Reference System), geometries can be
 substantially deformed (straight lines become curves, squares become
 trapezoids, etc). The densification of linear features can help to avoid
 topological errors.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-Reprojection of a vector map from another project (and mapset) into the current mapset:
+Reprojection of a vector map from another project (and mapset) into the
+current mapset:
 
-<div class="code"><pre>
+```shell
 v.proj in=mymap project=latlong mapset=user1
-</pre></div>
+```
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<ol>
-  <li> Evenden, G.I.  (1990) <a href="https://proj.org">Cartographic
-      projection procedures for the UNIX environment - a user's manual.</a>
-    USGS Open-File Report 90-284 (OF90-284.pdf)
-    See also there: Interim Report and 2nd Interim Report on Release 4, Evenden 1994).</li>
-  <li> Richards, John A. (1993), Remote Sensing Digital Image Analysis,
-    Springer-Verlag, Berlin, 2nd edition.</li>
-</ol>
+1.  Evenden, G.I. (1990) [Cartographic projection procedures for the
+    UNIX environment - a user's manual.](https://proj.org) USGS
+    Open-File Report 90-284 (OF90-284.pdf) See also there: Interim
+    Report and 2nd Interim Report on Release 4, Evenden 1994).
+2.  Richards, John A. (1993), Remote Sensing Digital Image Analysis,
+    Springer-Verlag, Berlin, 2nd edition.
 
-<a href="https://proj.org">PROJ</a>: Projection/datum support library.
+[PROJ](https://proj.org): Projection/datum support library.
 
-<p>
-<b>Further reading</b>
-<ul>
-  <li> <a href="https://www.asprs.org/asprs-publications/grids-and-datums">ASPRS Grids and Datum</a></li>
-  <li> <a href="http://geotiff.maptools.org/proj_list/">Projections Transform List</a> (PROJ)</li>
-  <li> <a href="https://proj.org/operations/index.html">Coordinate operations</a> by PROJ (projections, conversions, transformations, pipeline operator)</li>
-  <li> <a href="https://mapref.org">MapRef -
-      The Collection of Map Projections and Reference Systems for Europe</a></li>
-  <li> <a href="https://www.crs-geo.eu">Information and Service System for European Coordinate Reference Systems - CRS</a></li>
-</ul>
+**Further reading**
 
-<h2>SEE ALSO</h2>
+- [ASPRS Grids and
+  Datum](https://www.asprs.org/asprs-publications/grids-and-datums)
+- [Projections Transform List](http://geotiff.maptools.org/proj_list/)
+  (PROJ)
+- [Coordinate operations](https://proj.org/operations/index.html) by
+  PROJ (projections, conversions, transformations, pipeline operator)
+- [MapRef - The Collection of Map Projections and Reference Systems for
+  Europe](https://mapref.org)
+- [Information and Service System for European Coordinate Reference
+  Systems - CRS](https://www.crs-geo.eu)
 
-<em>
-<a href="g.proj.html">g.proj</a>,
-<a href="m.proj.html">m.proj</a>,
-<a href="r.proj.html">r.proj</a>,
-<a href="i.rectify.html">i.rectify</a>,
-<a href="r.stats.html">r.stats</a>,
-<a href="v.sample.html">v.sample</a>,
-<a href="v.split.html">v.split</a>,
-<a href="v.surf.idw.html">v.surf.idw</a>,
-<a href="v.surf.rst.html">v.surf.rst</a>
-</em>
+## SEE ALSO
 
-<h2>AUTHORS</h2>
+*[g.proj](g.proj.md), [m.proj](m.proj.md), [r.proj](r.proj.md),
+[i.rectify](i.rectify.md), [r.stats](r.stats.md),
+[v.sample](v.sample.md), [v.split](v.split.md),
+[v.surf.idw](v.surf.idw.md), [v.surf.rst](v.surf.rst.md)*
 
-Irina Kosinovsky, US ARMY CERL
-<br>
-M.L. Holko, USDA, SCS, NHQ-CGIS
-<br>
+## AUTHORS
+
+Irina Kosinovsky, US ARMY CERL  
+M.L. Holko, USDA, SCS, NHQ-CGIS  
 R.L. Glenn, USDA, SCS, NHQ-CGIS

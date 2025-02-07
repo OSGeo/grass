@@ -1,40 +1,36 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.what</em> outputs the category number value(s) associated with
-user-specified location(s) in user-specified vector map layer(s).
-This module was derived from the <em>d.what.vect</em> module by
-removing all interactive code and modification of the output for
-easy parsing. Using the <em>-g</em> flag generates script-style
-output which is easily parsable.
+*v.what* outputs the category number value(s) associated with
+user-specified location(s) in user-specified vector map layer(s). This
+module was derived from the *d.what.vect* module by removing all
+interactive code and modification of the output for easy parsing. Using
+the *-g* flag generates script-style output which is easily parsable.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 North Carolina sample dataset example:
-<p>
+
 Query polygon at given position:
-<div class="code"><pre>
+
+```shell
 v.what zipcodes_wake coordinates=637502.25,221744.25
-</pre></div>
+```
 
-<p>
-Find closest hospital to given position within given distance (search radius):
-<div class="code"><pre>
+Find closest hospital to given position within given distance (search
+radius):
+
+```shell
 v.what hospitals coordinates=542690.4,204802.7 distance=2000000
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.what.rast.html">d.what.rast</a>,
-<a href="d.what.vect.html">d.what.vect</a>,
-<a href="v.rast.stats.html">v.rast.stats</a>,
-<a href="v.vect.stats.html">v.vect.stats</a>,
-<a href="v.what.rast.html">v.what.rast</a>,
-<a href="v.what.rast3.html">v.what.rast3</a>,
-<a href="v.what.vect.html">v.what.vect</a>
-</em>
+*[d.what.rast](d.what.rast.md), [d.what.vect](d.what.vect.md),
+[v.rast.stats](v.rast.stats.md), [v.vect.stats](v.vect.stats.md),
+[v.what.rast](v.what.rast.md), [v.what.rast3](v.what.rast3.md),
+[v.what.vect](v.what.vect.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Trevor Wiens<br>
+Trevor Wiens  
 Edmonton, Alberta, Canada

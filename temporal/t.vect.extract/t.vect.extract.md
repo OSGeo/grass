@@ -1,16 +1,16 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The purpose of <b>t.vect.extract</b> is to extract a subset of a space
-time vector dataset and to store that subset in a different space time
-vector dataset.
+The purpose of **t.vect.extract** is to extract a subset of a space time
+vector dataset and to store that subset in a different space time vector
+dataset.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 In the following example a new space time vector dataset will be create
 with all the data later than the year 2000:
 
-<div class="code"><pre>
-t.vect.extract input=shoreline where="start_time &gt; 2000" \
+```shell
+t.vect.extract input=shoreline where="start_time > 2000" \
                output=shoreline_later_2000 basename=new_shoreline
 
 t.info shoreline_later_2000@shoreline type=stvds
@@ -61,7 +61,7 @@ t.info shoreline_later_2000@shoreline type=stvds
  | Command history:
  | # 2014-11-29 08:43:50
  | t.vect.extract input="shoreline"
- |     where="start_time &gt; 2000" output="shoreline_later_2000"
+ |     where="start_time > 2000" output="shoreline_later_2000"
  |     basename="new_shoreline"
  | # 2014-11-29 08:44:14
  | t.support type="stvds"
@@ -74,15 +74,12 @@ name|layer|mapset|start_time|end_time
 shoreline_2003|None|shoreline|2003|None
 shoreline_2004|None|shoreline|2004|None
 shoreline_2009|None|shoreline|2009|None
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
-</em>
+*[t.create](t.create.md), [t.info](t.info.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

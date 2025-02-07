@@ -1,119 +1,93 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.buffer</em> creates a buffer around features of
-given <b>type</b>, which have a category in the
-given <b>layer</b>. The <b>tolerance</b> controls the number of vector
-segments being generated (the smaller the value, the more vector
-segments are generated).
+*v.buffer* creates a buffer around features of given **type**, which
+have a category in the given **layer**. The **tolerance** controls the
+number of vector segments being generated (the smaller the value, the
+more vector segments are generated).
 
-<h2>NOTES</h2>
+## NOTES
 
 Internal buffers for areas can be generated with negative distance
 values ("inward buffer" or "negative buffer" or "shrinking").
 
-<p>
-<em>v.buffer</em> fusions the geometries of buffers by default.
-Categories and attribute table will not be transferred (this would
-not make sense as one buffer geometry can be the result of many
-different input geometries). To transfer the categories and
-attributes the user can set the <b>-t</b> flag. This will result in
-buffers being cut up where buffers of individual input geometries
-overlap.  Each part that is the result of overlapping buffers of
-multiple geometries will have multiple categories corresponding to
-those geometries, and multiple buffer areas can have the same
-category. The buffer for the input feature with category X can thus
-be retrieved by selecting all buffer areas with category X (see
+*v.buffer* fusions the geometries of buffers by default. Categories and
+attribute table will not be transferred (this would not make sense as
+one buffer geometry can be the result of many different input
+geometries). To transfer the categories and attributes the user can set
+the **-t** flag. This will result in buffers being cut up where buffers
+of individual input geometries overlap. Each part that is the result of
+overlapping buffers of multiple geometries will have multiple categories
+corresponding to those geometries, and multiple buffer areas can have
+the same category. The buffer for the input feature with category X can
+thus be retrieved by selecting all buffer areas with category X (see
 example below).
 
-<p>
-Buffers for lines and areas are generated using the algorithms from
-the GEOS library.
+Buffers for lines and areas are generated using the algorithms from the
+GEOS library.
 
-<p>
-<i>For advanced users:</i> the built-in buffer algorithm is no longer
-used, as we use GEOS instead. If GRASS was not compiled with GEOS support
-or the <a href="variables.html">environmental
-variable</a> <code>GRASS_VECTOR_BUFFER</code> is defined, then GRASS
-generates buffers using the built-in buffering algorithm (which is still
-buggy for some input data).
+*For advanced users:* the built-in buffer algorithm is no longer used,
+as we use GEOS instead. If GRASS was not compiled with GEOS support or
+the [environmental variable](variables.md) `GRASS_VECTOR_BUFFER` is
+defined, then GRASS generates buffers using the built-in buffering
+algorithm (which is still buggy for some input data).
 
-<p>
-The options <b>minordistance</b>, <b>angle</b>, <b>tolerance</b> are
-kept for backward compatibility and have no effect with GEOS buffering.
+The options **minordistance**, **angle**, **tolerance** are kept for
+backward compatibility and have no effect with GEOS buffering.
 
-<h3>Corner settings</h3>
+### Corner settings
 
 The following vector line related corners (also called "cap") exist:
-<ul>
-<li>no cap: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="v_buffer_no_cap.png" valign="middle" alt="line buffer: no cap"></li>
-<li>rounded cap: <img src="v_buffer_rounded_cap.png" valign="middle" alt="line buffer: rounded cap"></li>
-<li>square cap: <img src="v_buffer_square_cap.png" valign="middle" alt="line buffer: square cap"></li>
-</ul>
 
-By default <em>v.buffer</em> creates rounded buffers (blue color on
-figure below):
+- no cap:       <img src="v_buffer_no_cap.png" data-valign="middle"
+  alt="line buffer: no cap" />
+- rounded cap: <img src="v_buffer_rounded_cap.png" data-valign="middle"
+  alt="line buffer: rounded cap" />
+- square cap: <img src="v_buffer_square_cap.png" data-valign="middle"
+  alt="line buffer: square cap" />
 
-<center>
-  <img src="v_buffer_line.png">
-</center>
+By default *v.buffer* creates rounded buffers (blue color on figure
+below):
 
-Straight corners with caps are created using the <b>-s</b> flag (red color on
-the figure below), while the <b>-c</b> flag doesn't make caps at the ends of
-polylines (green color on the figure below):
+![](v_buffer_line.png)
 
-<center>
-  <img src="v_buffer_line_s.png">
-  <img src="v_buffer_line_c.png">
-</center>
+Straight corners with caps are created using the **-s** flag (red color
+on the figure below), while the **-c** flag doesn't make caps at the
+ends of polylines (green color on the figure below):
 
-With a point vector map as input data, square buffers are created instead
-of round buffers by using the <b>-s</b> flag.
+![](v_buffer_line_s.png) ![](v_buffer_line_c.png)
 
-<center>
-  <img src="v_buffer_point_s.png">
-</center>
+With a point vector map as input data, square buffers are created
+instead of round buffers by using the **-s** flag.
 
-<!-- Only support by GRASS buffer
-Flag <b>-s</b> also influences corners around polygons (see red color
-on the figure below):
+![](v_buffer_point_s.png)
 
-<center>
-  <img src="v_buffer_area.png">
-  <img src="v_buffer_area_s.png">
-</center>
--->
-
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 All examples are based on the North Carolina sample dataset.
 
-<h3>Buffer around input lines</h3>
+### Buffer around input lines
 
-<div class="code"><pre>
+```shell
 v.buffer input=roadsmajor output=roadsmajor_buffer type=line distance=100
-</pre></div>
+```
 
-<center>
-<img src="v_buffer_lines.png" border="1"><br>
-Buffer of 100m along the "roadsmajor" lines (map subset, original center line
-shown in black)
-</center>
+<img src="v_buffer_lines.png" data-border="1" />  
+Buffer of 100m along the "roadsmajor" lines (map subset, original center
+line shown in black)
 
-<h3>Circles around input points</h3>
+### Circles around input points
 
-<div class="code"><pre>
+```shell
 v.buffer input=hospitals output=hospitals_circled type=point distance=2000
-</pre></div>
+```
 
-<center>
-<img src="v_buffer_points.png" border="1"><br>
-Buffer of 2000m around the "hospitals" points (map subset, original points
-shown in black, new area centroids in red)
-</center>
+<img src="v_buffer_points.png" data-border="1" />  
+Buffer of 2000m around the "hospitals" points (map subset, original
+points shown in black, new area centroids in red)
 
-<h3>Circles around input points with attribute transfer</h3>
+### Circles around input points with attribute transfer
 
-<div class="code"><pre>
+```shell
 v.buffer input=hospitals output=hospitals_circled type=point distance=1000 -t
 
 # display buffer around hospital with category 36,
@@ -121,57 +95,46 @@ v.buffer input=hospitals output=hospitals_circled type=point distance=1000 -t
 d.vect map=hospitals_circled type=area layer=1 cats=36
 # extract this buffer, dissolving boundaries
 v.extract in=hospitals_circled output=hospital_36_circled layer=1 cats=36 -d
-</pre></div>
+```
 
-<h3>Buffer around input areas</h3>
+### Buffer around input areas
 
-<div class="code"><pre>
+```shell
 v.buffer input=lakes output=lakes_buffer type=area distance=100
-</pre></div>
+```
 
-<center>
-<img src="v_buffer_areas.png" border="1"><br>
+<img src="v_buffer_areas.png" data-border="1" />  
 Buffer of 100m around the "lakes" polygons (map subset, original areas
 shown in black)
-</center>
 
-<h3>Buffer inside input areas</h3>
+### Buffer inside input areas
 
-In this example, an internal buffer ("inward buffer" or "negative buffer")
-is generated using a negative <b>distance</b> value:
+In this example, an internal buffer ("inward buffer" or "negative
+buffer") is generated using a negative **distance** value:
 
-<div class="code"><pre>
+```shell
 v.buffer input=lakes output=lakes_buffer type=area distance=-50
-</pre></div>
+```
 
-<center>
-<img src="v_buffer_areas_int.png" border="1"><br>
-Internal buffer of 50m inside the "lakes" polygons (map subset, original areas
-shown in black) <br>
-Not all features are buffered, only the polygons that allow creation inside
-a topological cleaned polygon.
-</center>
+<img src="v_buffer_areas_int.png" data-border="1" />  
+Internal buffer of 50m inside the "lakes" polygons (map subset, original
+areas shown in black)  
+Not all features are buffered, only the polygons that allow creation
+inside a topological cleaned polygon.
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<ul>
-<li><a href="https://trac.osgeo.org/geos">GEOS Library</a></li>
-</ul>
+- [GEOS Library](https://trac.osgeo.org/geos)
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.buffer.html">r.buffer</a>,
-<a href="v.parallel.html">v.parallel</a>,
-<a href="v.extract.html">v.extract</a>,
-<a href="v.type.html">v.type</a>,
-<a href="v.patch.html">v.patch</a>,
-<a href="v.db.connect.html">v.db.connect</a>
-</em>
+*[r.buffer](r.buffer.md), [v.parallel](v.parallel.md),
+[v.extract](v.extract.md), [v.type](v.type.md), [v.patch](v.patch.md),
+[v.db.connect](v.db.connect.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek<br>
-Rewritten by Rosen Matev (with support through the
- Google Summer of Code program 2008)<br>
+Radim Blazek  
+Rewritten by Rosen Matev (with support through the Google Summer of Code
+program 2008)  
 Rewritten by Markus Metz (2011, 2012)

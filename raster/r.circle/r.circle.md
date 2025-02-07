@@ -1,50 +1,49 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.circle</em> creates an output raster map centered on the <em>x,y</em> values specified
-with the <em>coordinate</em> parameter, out to the edge of the current region.
-The output cell values increase linearly from the specified center. The <em>min</em>
-and <em>max</em> parameters control the inner and outer output raster map radii, respectively.
+*r.circle* creates an output raster map centered on the *x,y* values
+specified with the *coordinate* parameter, out to the edge of the
+current region. The output cell values increase linearly from the
+specified center. The *min* and *max* parameters control the inner and
+outer output raster map radii, respectively.
 
-<p>The <em>mult</em> parameter can be used to multiply the output raster cells by a common factor.
-Note that this parameter does not affect the output raster position or size; only the z-values
-are changed with this parameter.
-<p>Binary-output raster maps (solid circles of one value) can be created
-with the <b>-b</b> flag. Raster maps so created can be used to create
-binary filters for use in <em>i.ifft</em> (inverse Fourier transformations;
-apply filter with <em>r.mask</em>).
+The *mult* parameter can be used to multiply the output raster cells by
+a common factor. Note that this parameter does not affect the output
+raster position or size; only the z-values are changed with this
+parameter.
 
-<h2>EXAMPLES</h2>
+Binary-output raster maps (solid circles of one value) can be created
+with the **-b** flag. Raster maps so created can be used to create
+binary filters for use in *i.ifft* (inverse Fourier transformations;
+apply filter with *r.mask*).
 
-Generate a raster circle at current map center with a radius of 300m and outwardly
-increasing raster values:
+## EXAMPLES
 
-<div class="code"><pre>
+Generate a raster circle at current map center with a radius of 300m and
+outwardly increasing raster values:
+
+```shell
 EASTCENTER=`g.region -c |  awk ' /center easting:/ { print $3 }'`
 NORTHCENTER=`g.region -c | awk ' /center northing:/ { print $3 }'`
 r.circle output=circle coordinate=${EASTCENTER},${NORTHCENTER} max=300
-</pre></div>
+```
 
-Generate a binary raster ring around current map center with an inner radius
-of 500m and an outer radius of 1000m:
+Generate a binary raster ring around current map center with an inner
+radius of 500m and an outer radius of 1000m:
 
-<div class="code"><pre>
+```shell
 EASTCENTER=`g.region -c |  awk ' /center easting:/ { print $3 }'`
 NORTHCENTER=`g.region -c | awk ' /center northing:/ { print $3 }'`
 r.circle -b output=circle coordinate=${EASTCENTER},${NORTHCENTER} min=500 max=1000
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="g.remove.html">g.remove</a>,
-<a href="g.rename.html">g.rename</a>,
-<a href="i.fft.html">i.fft</a>,
-<a href="i.ifft.html">i.ifft</a>,
-<a href="r.mask.html">r.mask</a>
-</em>
+*[g.region](g.region.md), [g.remove](g.remove.md),
+[g.rename](g.rename.md), [i.fft](i.fft.md), [i.ifft](i.ifft.md),
+[r.mask](r.mask.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Bill Brown, U.S. Army Construction Engineering Research Laboratory<br>
-Additional flag/min/max parameter by Markus Neteler, University of Hannover
+Bill Brown, U.S. Army Construction Engineering Research Laboratory  
+Additional flag/min/max parameter by Markus Neteler, University of
+Hannover

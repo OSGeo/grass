@@ -1,185 +1,143 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.graph</em>
-draws graphics that are described either from standard input (default),
-or within a file (if an <b>input</b> file name is identified on the
-command line). If graphics commands are entered from standard input,
-a <em>CTRL-d</em> is used to signal the end of input to <em>d.graph</em>.
-Coordinates are given either as a percentage of frame height and width
-(default) or in geographic coordinates (with the <b>-m</b> flag).
-<p>
-The program can be run interactively or non-interactively.
-The user can run the program completely non-interactively
-by specifying the name of a graphics file containing the
-<em>d.graph</em> graphics commands. If run non-interactively the
-<em>d.graph</em> command is saved to the display's dedraw history.
+*d.graph* draws graphics that are described either from standard input
+(default), or within a file (if an **input** file name is identified on
+the command line). If graphics commands are entered from standard input,
+a *CTRL-d* is used to signal the end of input to *d.graph*. Coordinates
+are given either as a percentage of frame height and width (default) or
+in geographic coordinates (with the **-m** flag).
 
-The user can also elect to run the program partially interactively,
-by specifying any/all of the parameters <em>except</em>
-the graphics file <b>input=</b><em>name</em> parameter on the command line.
-In this case, <em>d.graph</em> will expect the user to input <em>d.graph</em>
-graphics commands from standard input (i.e., the keyboard) and
-will (silently) prompt the user for these graphics commands.
+The program can be run interactively or non-interactively. The user can
+run the program completely non-interactively by specifying the name of a
+graphics file containing the *d.graph* graphics commands. If run
+non-interactively the *d.graph* command is saved to the display's dedraw
+history. The user can also elect to run the program partially
+interactively, by specifying any/all of the parameters *except* the
+graphics file **input=***name* parameter on the command line. In this
+case, *d.graph* will expect the user to input *d.graph* graphics
+commands from standard input (i.e., the keyboard) and will (silently)
+prompt the user for these graphics commands.
 
-<p>Alternately, the user can simply type <b>d.graph</b> on the command line,
-and be prompted for the values of all parameters<!-- (the user can still
-input graphics commands from either an input file or standard input
-using this form)-->. In this case, the user is presented with the standard
-GRASS GUI interface.
+Alternately, the user can simply type **d.graph** on the command line,
+and be prompted for the values of all parameters. In this case, the user
+is presented with the standard GRASS GUI interface.
 
-<p>The default coordinate system used is 0-100 percent of the active frame
-in x and similarly 0-100 in y,
-regardless of the graphics monitor display frame size and aspect.
-The (0,0) location is the lower left corner of the active graphics
-monitor display frame. All values may be floating point.
-If the <b>-m</b> flag is given, geographic coordinates will be used instead.
+The default coordinate system used is 0-100 percent of the active frame
+in x and similarly 0-100 in y, regardless of the graphics monitor
+display frame size and aspect. The (0,0) location is the lower left
+corner of the active graphics monitor display frame. All values may be
+floating point. If the **-m** flag is given, geographic coordinates will
+be used instead.
 
-<h2>COMMANDS</h2>
+## COMMANDS
 
-<p>The graphics language is simple, and uses the following commands:
-<br>
-<dl>
-<dd>[
-<a href="#comment">#</a>&nbsp;|
-<a href="#move">move</a>&nbsp;|
-<a href="#draw">draw</a>&nbsp;|
-<a href="#polygon">polygon</a>&nbsp;|
-<a href="#polyline">polyline</a>&nbsp;|
-<a href="#color">color</a>&nbsp;|
-<a href="#text">text</a>&nbsp;|
-<a href="#size">size</a>&nbsp;|
-<a href="#symbol">symbol</a>&nbsp;|
-<a href="#rotation">rotation</a>&nbsp;|
-<a href="#icon">icon</a>&nbsp;|
-<a href="#width">width</a>
-]</dd>
-</dl>
+The graphics language is simple, and uses the following commands:  
 
+\[ [\#](#comment) \| [move](#move) \| [draw](#draw) \|
+[polygon](#polygon) \| [polyline](#polyline) \| [color](#color) \|
+[text](#text) \| [size](#size) \| [symbol](#symbol) \|
+[rotation](#rotation) \| [icon](#icon) \| [width](#width) \]
 
-<dl>
-<dt><a name="comment"></a><b>#</b> <em>comment</em></dt>
-<dd>A line of comment which is ignored in the processing.</dd>
+<span id="comment"></span>**\#** *comment*  
+A line of comment which is ignored in the processing.
 
-<dt><a name="move"></a><b>move</b> <em>xpos ypos</em></dt>
-<dd>The current location is updated to <em>xpos ypos</em>.
+<span id="move"></span>**move** *xpos ypos*  
+The current location is updated to *xpos ypos*. Unless the **-m** flag
+is used, values are stated as a percent of the active display frame's
+horizontal (*xpos*) and vertical (*ypos*) size, and may be floating
+point values. Values are between 0-100. **Note.** A space must separate
+*xpos* and *ypos*.
 
-Unless the <b>-m</b> flag is used,
-values are stated as a percent of the active display frame's
-horizontal (<em>xpos</em>) and vertical (<em>ypos</em>) size,
-and may be floating point values. Values are between 0-100.
-<b>Note.</b> A space must separate <em>xpos</em> and <em>ypos</em>.</dd>
+<span id="draw"></span>**draw** *xpos ypos*  
+A line is drawn in the current color from the current location to the
+new location *xpos ypos*, which then becomes the current location.
+Unless the **-m** flag is used, values are stated as a percent of the
+active display frame's horizontal (*xpos*) and vertical (*ypos*) size,
+and may be floating point values. Values are between 0-100. **Note.** A
+space must separate *xpos* and *ypos*.
 
-<dt><a name="draw"></a><b>draw</b> <em>xpos ypos</em></dt>
-<dd>A line is drawn in the current color from the current location to the new
-location <em>xpos ypos</em>, which then becomes the current location.
-Unless the <b>-m</b> flag is used,
-values are stated as a percent of the active display frame's
-horizontal (<em>xpos</em>) and vertical (<em>ypos</em>) size,
-and may be floating point values. Values are between 0-100.
-<b>Note.</b> A space must separate <em>xpos</em> and <em>ypos</em>.</dd>
+<span id="polygon"></span>**polygon**  
+   *xpos ypos*  
+   *xpos ypos*  
+  ...  
+The coordinates appearing beneath the word *polygon*, one pair per line,
+circumscribe a polygon that is to be filled with the current color.
 
-<dt><a name="polygon"></a><b>polygon</b>
-<br>&nbsp;&nbsp;<em> xpos ypos</em>
-<br>&nbsp;&nbsp;<em> xpos ypos</em>
-<br>&nbsp;&nbsp;...</dt>
+<span id="polyline"></span>**polyline**  
+   *xpos ypos*  
+   *xpos ypos*  
+  ...  
+The coordinates appearing beneath the word *polyline*, one pair per
+line, circumscribe a polygon that is not to be filled with color.
 
-<dd>The coordinates appearing beneath the word <em>polygon</em>,
-one pair per line,
-circumscribe a polygon that is to be filled with the current color.</dd>
+<span id="color"></span>**color** *color*  
+Sets the current color to that stated; subsequent graphics will be drawn
+in the stated color, until the current color is set to a different
+color. Options are *red*, *orange*, *yellow*, *green*, *blue*, *indigo*,
+*violet*, *brown*, *magenta*, *gray*, *white*, *black*, an R:G:B triplet
+(separated by colons), or the word "none" (draws in the default
+background color).
 
-<dt><a name="polyline"></a><b>polyline</b>
-<br>&nbsp;&nbsp;<em> xpos ypos</em>
-<br>&nbsp;&nbsp;<em> xpos ypos</em>
-<br>&nbsp;&nbsp;...</dt>
+<span id="text"></span>**text** *line-of-text*  
+The stated text is drawn at the current location using the current
+color, and the new current location is then positioned at the end of the
+text string.
 
-<dd>The coordinates appearing beneath the word <em>polyline</em>,
-one pair per line,
-circumscribe a polygon that is not to be filled with color.</dd>
+<span id="size"></span>**size** *xper yper*  
+Subsequent text will be drawn such that the text is *xper* percent of
+the graphics monitor display frame wide and *yper* percent of the frame
+high. By default, the text size is set to 5 percent of the active
+frame's width and 5 percent of the frame's height. If only one value is
+given, then that value will be used for both x and y scaling.  
+**Note.** A space must separate *xper* and *yper*.
 
-<dt><a name="color"></a><b>color</b> <em>color</em></dt>
+<span id="symbol"></span>**symbol** *type size xper yper \[line_color \[fill_color\]\]*  
+A symbol is drawn at the given size on the display monitor. The *xper*
+and *yper* options define the center of the icon and are given as a
+percentage of the display frame (`0,0` is lower left). The symbol can be
+any of those stored in `$GISBASE/etc/symbol/` (e.g. *basic/circle*) or
+stored in the user's mapset directory in the form
+`$MAPSET/symbol/`*type/name*. The colors may be either a standard color
+name, an R:G:B triplet, or "none". If using an R:G:B triplet, each color
+value can range from 0-255. If not specified the default *line_color* is
+black and the default *fill_color* is grey.
 
-<dd>Sets the current color to that stated; subsequent graphics will be drawn
-in the stated color, until the current color is set to a different color.
-Options are <em>red</em>,
-<em>orange</em>,
-<em>yellow</em>,
-<em>green</em>,
-<em>blue</em>,
-<em>indigo</em>,
-<em>violet</em>,
-<em>brown</em>,
-<em>magenta</em>,
-<em>gray</em>,
-<em>white</em>,
-<em>black</em>,
-an R:G:B triplet (separated by colons),
-or the word "none" (draws in the default background color).</dd>
+<span id="rotation"></span>**rotation** *angle*  
+Subsequent text and symbols will be drawn such that they are rotated
+*angle* degrees counter-clockwise from east.
 
-<dt><a name="text"></a><b>text</b> <em>line-of-text</em></dt>
-<dd>The stated text is drawn at the current location using the current color,
-and the new current location is then positioned at the end of the text string.</dd>
+<span id="icon"></span>**icon** *type size x y*  
+Draws an icon of types *o*, *x*, or *+* with specified *size* (in %) at
+location *x,y*. Note: type *o* designates a square.
 
-<dt><a name="size"></a><b>size</b> <em>xper yper</em></dt>
-<dd>Subsequent text will be drawn such that the text is
-<em>xper</em> percent of the graphics monitor display frame wide and
-<em>yper</em> percent of the frame high. By default, the text size is set to
-5 percent of the active frame's width and 5 percent of the frame's height.
-If only one value is given, then that value will be used for both x and y
-scaling.
-<br>
-<b>Note.</b> A space must separate <em>xper</em> and <em>yper</em>.</dd>
+<span id="width"></span>**width** *value*  
+Subsequent lines (including non-FreeType text) will be drawn with the
+given pixel thickness.  
+The default value is 0.
 
-<dt><a name="symbol"></a><b>symbol</b> <em>type size xper yper [line_color [fill_color]]</em></dt>
-<dd>A symbol is drawn at the given size on the display monitor. The
-<em>xper</em> and <em>yper</em> options define the center of the icon and
-are given as a percentage of the display frame (<code>0,0</code> is lower left).
-The symbol can be any of those stored in <code>$GISBASE/etc/symbol/</code>
-(e.g. <i>basic/circle</i>) or stored in the user's mapset directory in the
-form <code>$MAPSET/symbol/</code><em>type/name</em>.
-The colors may be either a standard color name, an R:G:B triplet,
-or "none". If using an R:G:B triplet, each color value can range from 0-255.
-If not specified the default <em>line_color</em> is black and the default
-<em>fill_color</em> is grey.</dd>
+## EXAMPLES
 
-<dt><a name="rotation"></a><b>rotation</b> <em>angle</em></dt>
-<dd>Subsequent text and symbols will be drawn such that they are rotated
-<em>angle</em> degrees counter-clockwise from east.</dd>
+For an example use of *d.graph*, examine the contents of the command
+file *[grass_logo.txt](grass_logo.txt)* located in the *d.graph* source
+code directory. It will draw the CERL GRASS logo using the *d.graph*
+graphing commands stored in the file. Note that the coordinates in the
+*[grass_logo.txt](grass_logo.txt)* file were taken directly off an image
+drawn by hand on graph paper.
 
-<dt><a name="icon"></a><b>icon</b> <em>type size x y</em></dt>
-<dd>Draws an icon of types <em>o</em>, <em>x</em>, or <em>+</em>
-with specified <em>size</em> (in %) at location <em>x,y</em>.
-Note: type <em>o</em> designates a square.</dd>
+A dynamic example can be found in the *d.polar* shell script.
 
-<dt><a name="width"></a><b>width</b> <em>value</em></dt>
-<dd>Subsequent lines (including non-FreeType text) will be drawn with
-the given pixel thickness.
-<br>The default value is 0.</dd>
+### Draw a "star" symbol at a given map coordinate
 
-</dl>
-
-<h2>EXAMPLES</h2>
-
-For an example use of <em>d.graph</em>, examine the contents of the
-command file <em><a href="grass_logo.txt">grass_logo.txt</a></em>
-located in the <em>d.graph</em> source code directory. It will draw the
-CERL GRASS logo using the <em>d.graph</em> graphing commands stored in the file.
-Note that the coordinates in the <em><a href="grass_logo.txt">grass_logo.txt</a></em> file were
-taken directly off an image drawn by hand on graph paper.
-<!-- formerly names "grass.logo.sh" in GRASS 5 code. -->
-<p>A dynamic example can be found in the <em>d.polar</em> shell script.
-
-<h3>Draw a "star" symbol at a given map coordinate</h3>
-
-<div class="code"><pre>
+```shell
 echo "symbol basic/star 20 2264417 5413182 black red" | d.graph -m
-</pre></div>
+```
 
-<h3>Split the screen into quadrants:</h3>
+### Split the screen into quadrants:
 
-<div class="code"><pre>
+```shell
 d.frame -s full_screen
 
-d.graph &lt;&lt; EOF
+d.graph << EOF
   color 80:80:120
   polygon
    0 49.75
@@ -192,34 +150,29 @@ d.graph &lt;&lt; EOF
    50.15 100
    49.85 100
 EOF
-</pre></div>
+```
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>d.graph</em> remembers the last screen location (<em>xpos ypos</em>) to which
-the user moved, even after the user erases the display frame.
-If the user runs <em>d.graph</em> repeatedly, and wishes to start anew with
-the default (xpos ypos) screen location, the user should <em>clear</em> the
-display frame between runs of <em>d.graph</em>.
+*d.graph* remembers the last screen location (*xpos ypos*) to which the
+user moved, even after the user erases the display frame. If the user
+runs *d.graph* repeatedly, and wishes to start anew with the default
+(xpos ypos) screen location, the user should *clear* the display frame
+between runs of *d.graph*.
 
-<h2>LIMITATIONS</h2>
+## LIMITATIONS
 
-There are no automated ways of generating graphic images. It is anticipated
-that GRASS user sites will write programs to convert output from a resident
-graphics editor into GRASS <em>d.graph</em> format.
-(e.g. EPS -&gt; <em>d.graph</em>, perhaps with the help of a
-<a href="http://www.pstoedit.net/">pstoedit</a> plugin)
+There are no automated ways of generating graphic images. It is
+anticipated that GRASS user sites will write programs to convert output
+from a resident graphics editor into GRASS *d.graph* format. (e.g. EPS
+-\> *d.graph*, perhaps with the help of a
+[pstoedit](http://www.pstoedit.net/) plugin)
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.font.html">d.font</a>,
-<a href="d.labels.html">d.labels</a>,
-<a href="d.polar.html">d.polar</a>,
-<a href="d.text.html">d.text</a>,
-<a href="d.where.html">d.where</a>
-</em>
+*[d.font](d.font.md), [d.labels](d.labels.md), [d.polar](d.polar.md),
+[d.text](d.text.md), [d.where](d.where.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 James Westervelt, U.S. Army Construction Engineering Research Laboratory

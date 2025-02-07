@@ -1,34 +1,33 @@
-<!-- meta page description: DBF DATABASE DRIVER -->
-
 The DBF driver is a file based attribute table driver.
 
-<h2>Defining the DBF driver</h2>
+## Defining the DBF driver
 
 The DBF driver is a file based driver, in theory no user interaction is
 required. However, if the settings should be set back from a different
 driver to the DBF driver, the following step is required:
 
-<div class="code"><pre>
+```shell
 # keep single quotes:
 db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
 db.connect -p
-</pre></div>
+```
 
-The dbf/ subdirectory in the mapset must exist or must be created by the user.
+The dbf/ subdirectory in the mapset must exist or must be created by the
+user.
 
-<h2>Creating a DBF table</h2>
+## Creating a DBF table
 
-DBF tables are created by GRASS when generating a vector map
-with attributes and having defined the DBF as attribute driver.
-<p>
-If a DBF table has to be created manually, <a href="db.execute.html">db.execute</a>
-can be used or a spreadsheet application. Also <a href="db.copy.html">db.copy</a>
-is sometimes useful as well as <a href="db.in.ogr.html">db.in.ogr</a> to import external
+DBF tables are created by GRASS when generating a vector map with
+attributes and having defined the DBF as attribute driver.
+
+If a DBF table has to be created manually, [db.execute](db.execute.md)
+can be used or a spreadsheet application. Also [db.copy](db.copy.md) is
+sometimes useful as well as [db.in.ogr](db.in.ogr.md) to import external
 tables.
 
-<h2>Supported SQL commands by DBF driver</h2>
+## Supported SQL commands by DBF driver
 
-<div class="code"><pre>
+```shell
   ALTER TABLE table ADD [COLUMN] columndef
   ALTER TABLE table DROP COLUMN colname
   CREATE TABLE table ( columndefs )
@@ -42,83 +41,76 @@ tables.
   INSERT INTO table ( column1[,column2,...] ) VALUES (value1[,value2,...])
   UPDATE table SET assignment1[,assignment2,...]
   UPDATE table SET assignment1[,assignment2,...] WHERE condition
-</pre></div>
+```
 
-<h2>Operators available in conditions</h2>
+## Operators available in conditions
 
-<div class="code"><pre>
+```shell
   "="  : equal
-  "&lt;"  : smaller than
-  "&lt;=" : smaller/equal than
-  "&gt;"  : larger than
-  "&gt;=" : larger/equal than
-  "&lt;&gt;" : not equal
+  "<"  : smaller than
+  "<=" : smaller/equal than
+  ">"  : larger than
+  ">=" : larger/equal than
+  "<>" : not equal
   "~"  : Substring matching  (non-standard SQL)
   "%"  : Substring matching  (limited functionality)
-</pre></div>
+```
 
-<p>
-Arithmetic expressions using constants and field values are allowed
-in condition clauses and in the RHS of assignments.
-<br>
-Usual precedence rules and bracketing (using '(' and ')') are supported.
-<br>
+Arithmetic expressions using constants and field values are allowed in
+condition clauses and in the RHS of assignments.  
+Usual precedence rules and bracketing (using '(' and ')') are
+supported.  
 Type conversion is performed if necessary (experimental).
 
-<p>
-Conditions allow boolean expressions using the AND, OR and NOT operators,
-with the usual precedence rules.
+Conditions allow boolean expressions using the AND, OR and NOT
+operators, with the usual precedence rules.
 
-<p>
 NULLs can be tested by 'colname IS NULL' in conditions. The negation is
 'colname NOT NULL'.
 
-<p>
 Sorting: Empty fields in a character column are sorted to the end.
 
-<h2>LIMITATIONS OF THE DBF DRIVER</h2>
+## LIMITATIONS OF THE DBF DRIVER
 
-The DBF driver supports only a <b>few SQL statements</b> since the DBF tables are
-intended for simple table storage. DBF column names are limited to 10 characters
-(as defined in the DBF specifications). For example,
+The DBF driver supports only a **few SQL statements** since the DBF
+tables are intended for simple table storage. DBF column names are
+limited to 10 characters (as defined in the DBF specifications). For
+example,
 
-<ul>
-<li> aggregate functions (sum, count, min, max,...) are <b>not</b> supported
-in SELECT clauses;</li>
-<li> mathematic functions (sin, cos, exp, log,...) are <b>not</b> supported
-in expressions;</li>
-<li> SQL query with IN are <b>not</b> supported.</li>
-</ul>
+- aggregate functions (sum, count, min, max,...) are **not** supported
+  in SELECT clauses;
+- mathematic functions (sin, cos, exp, log,...) are **not** supported in
+  expressions;
+- SQL query with IN are **not** supported.
 
-<h2>ERROR MESSAGES</h2>
+## ERROR MESSAGES
 
 An error message such as:
 
-<div class="code"><pre>
+```shell
 DBMI-DBF driver error:
 SQL parser error: syntax error, unexpected NAME processing 'IN'..
-</pre></div>
-indicates that an unsupported SQL statement (here, 'IN') was used. The only
-solution is to switch the DBMI backend to a real SQL engine (SQLite,
-PostgreSQL, MySQL etc.). See <a href="sql.html">SQL support in GRASS GIS</a>.
+```
 
-<p>
+indicates that an unsupported SQL statement (here, 'IN') was used. The
+only solution is to switch the DBMI backend to a real SQL engine
+(SQLite, PostgreSQL, MySQL etc.). See [SQL support in GRASS
+GIS](sql.md).
+
 An error message such as:
 
-<div class="code"><pre>
+```shell
 DBMI-DBF driver error:
 SQL parser error: syntax error, unexpected DESC, expecting NAME processing 'DESC'
-</pre></div>
+```
 
-indicates that a column name corresponds to a reserved SQL word (here: 'DESC').
-A different column name should be used. If this happens during import with
-<em>v.in.ogr</em>, the <em>cnames</em> parameter can be used to assign different
-column names on the fly.
+indicates that a column name corresponds to a reserved SQL word (here:
+'DESC'). A different column name should be used. If this happens during
+import with *v.in.ogr*, the *cnames* parameter can be used to assign
+different column names on the fly.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.connect.html">db.connect</a>,
-<a href="sql.html">SQL support in GRASS GIS</a><br>
-<a href="http://shapelib.maptools.org/dbf_api.html">DBF Specifications</a> (Shapelib)
-</em>
+*[db.connect](db.connect.md), [SQL support in GRASS GIS](sql.md)  
+[DBF Specifications](http://shapelib.maptools.org/dbf_api.html)
+(Shapelib)*

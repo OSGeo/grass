@@ -1,27 +1,24 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.support</em> is used to set/update vector map metadata. While GRASS
-GIS typically generates these metadata entries automatically, <em>v.support</em>
+*v.support* is used to set/update vector map metadata. While GRASS GIS
+typically generates these metadata entries automatically, *v.support*
 allows users to manually edit them when necessary.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-<div class="code"><pre>
+```shell
 # update scale to 1:24000
 v.support myvectmap scale=24000
 
 # update organization
 v.support myvectmap organization="OSGeo labs"
 v.info myvectmap
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.build.html">v.build</a>,
-<a href="v.info.html">v.info</a>
-</em>
+*[v.build](v.build.md), [v.info](v.info.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Markus Neteler, Trento

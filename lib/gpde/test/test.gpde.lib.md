@@ -1,9 +1,9 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
 Test suite.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Soeren Gebbert

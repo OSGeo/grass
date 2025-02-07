@@ -1,18 +1,20 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The <em>t.rename</em> module renames space time datasets of different
-types (STRDS, STVDS, STR3DS) and updates the space time dataset register
+The *t.rename* module renames space time datasets of different types
+(STRDS, STVDS, STR3DS) and updates the space time dataset register
 entries of the registered maps.
 
-<h2>NOTES</h2>
+## NOTES
 
-Renaming of space time datasets works only for SQLite based temporal databases.
+Renaming of space time datasets works only for SQLite based temporal
+databases.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-A new vector space time dataset will be created, renamed and in the end removed
+A new vector space time dataset will be created, renamed and in the end
+removed
 
-<div class="code"><pre>
+```shell
 # Create new and empty STVDS
 t.create type=stvds output=toberenamed semantictype=mean \
   title="Example to rename" \
@@ -21,16 +23,13 @@ t.create type=stvds output=toberenamed semantictype=mean \
 t.rename input=toberenamed output=newname type=stvds
 
 t.remove input=newname type=stvds
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.create.html">t.create</a>,
-<a href="t.support.html">t.support</a>,
-<a href="t.register.html">t.register</a>
-</em>
+*[t.create](t.create.md), [t.support](t.support.md),
+[t.register](t.register.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

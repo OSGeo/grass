@@ -1,22 +1,20 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The <em>t.upgrade</em> module upgrades the temporal database in the current
+The *t.upgrade* module upgrades the temporal database in the current
 mapset from version 2 (default in GRASS 7) to 3 (default in GRASS 8).
 The version 3 introduces a semantic label support, see
-<em><a href="i.band.library.html">i.band.library</a></em> for details.
+*[i.band.library](i.band.library.md)* for details.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-<div class="code"><pre>
+```shell
 t.upgrade
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.info.html">t.info</a>
-</em>
+*[t.info](t.info.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
 Martin Landa and Markus Neteler

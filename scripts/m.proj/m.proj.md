@@ -1,114 +1,108 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-This program allows a user to convert coordinates from one projection
-to another. Coordinates can be read from one file, converted, and
-results written to another file. Alternatively, if the <b>input=-</b>,
-eastings and northings may be passed to the program directly from
-standard input. If the <b>output</b> option is omitted, the results
-are sent directly to standard output. In this way <em>m.proj</em> can
-be used as a simple frontend to
-the <a href="https://proj.org/apps/cs2cs.html">PROJ</a>
-<em>cs2cs</em> utility. The <b>-i</b> or <b>-o</b> flags make the task
-especially easy for the common problem of converting to or from lat/long
-WGS84.
-<p>
-<i>Note</i>: This program does not transform GRASS maps, it is
-designed to determine the equivalent coordinate values of an
-individual position or list of
-positions. Use <em><a href="v.proj.html">v.proj</a></em> to reproject
-vector maps or <em><a href="r.proj.html">r.proj</a></em> for raster maps.
-<p>
-For an introduction to map projections (with PROJ),see the manual page of
-<a href="r.proj.html">r.proj</a>.
+This program allows a user to convert coordinates from one projection to
+another. Coordinates can be read from one file, converted, and results
+written to another file. Alternatively, if the **input=-**, eastings and
+northings may be passed to the program directly from standard input. If
+the **output** option is omitted, the results are sent directly to
+standard output. In this way *m.proj* can be used as a simple frontend
+to the [PROJ](https://proj.org/apps/cs2cs.html) *cs2cs* utility. The
+**-i** or **-o** flags make the task especially easy for the common
+problem of converting to or from lat/long WGS84.
 
-<h2>NOTES</h2>
+*Note*: This program does not transform GRASS maps, it is designed to
+determine the equivalent coordinate values of an individual position or
+list of positions. Use *[v.proj](v.proj.md)* to reproject vector maps or
+*[r.proj](r.proj.md)* for raster maps.
 
-<em>cs2cs</em> expects input data to formatted as <code>x y</code>, so if
-working with latitude-longitude data be sure to send the <code>x</code>
-value first, i.e., <code>longitude&nbsp;latitude</code>. Output data will
-be exported using the same convention.
-<p>
-<em>cs2cs</em> will treat a third data column as a <code>z</code> value
-(elevation) and will modify the value accordingly. This usually
-translates into small but real differences in that data column.
-<p>
-<em>cs2cs</em> does not expect the input stream to contain column
-headings, only numbers. If your data file has lines you wish to have
-passed through without being processed, they must start with the
-'<code>#</code>' character.
-<p>
-If sending <em>m.proj</em> data from standard input, be aware that the
-data is first stored to a temporary file before being processed
-with <em>cs2cs</em>.  It is therefore not advisable to
-send <em>m.proj</em> data from an open data stream. The module will
-stop listening for incoming data after 2 seconds of inactivity. You
-may use the projection parameters gleaned from <em>m.proj</em>'s
-verbose mode (<b>--verbose</b>) with <em>cs2cs</em> directly in this case.
-<p>
-Custom projection parameters can be used via the <b>proj_in</b> and
-<b>proj_out</b> options. Full documentation of the projection
-parameter format may be found on
-the <a href="https://proj.org">PROJ</a> website. Using
-these options will fully override the default parameters the module
-would normally use.
-<p>
-By using the <b>--verbose</b> verbose flag, the user can see exactly
-what projection parameters will be used in the conversion as well as
-some other informative messages.
-<p>
+For an introduction to map projections (with PROJ),see the manual page
+of [r.proj](r.proj.md).
+
+## NOTES
+
+*cs2cs* expects input data to formatted as `x y`, so if working with
+latitude-longitude data be sure to send the `x` value first, i.e.,
+`longitude latitude`. Output data will be exported using the same
+convention.
+
+*cs2cs* will treat a third data column as a `z` value (elevation) and
+will modify the value accordingly. This usually translates into small
+but real differences in that data column.
+
+*cs2cs* does not expect the input stream to contain column headings,
+only numbers. If your data file has lines you wish to have passed
+through without being processed, they must start with the '`#`'
+character.
+
+If sending *m.proj* data from standard input, be aware that the data is
+first stored to a temporary file before being processed with *cs2cs*. It
+is therefore not advisable to send *m.proj* data from an open data
+stream. The module will stop listening for incoming data after 2 seconds
+of inactivity. You may use the projection parameters gleaned from
+*m.proj*'s verbose mode (**--verbose**) with *cs2cs* directly in this
+case.
+
+Custom projection parameters can be used via the **proj_in** and
+**proj_out** options. Full documentation of the projection parameter
+format may be found on the [PROJ](https://proj.org) website. Using these
+options will fully override the default parameters the module would
+normally use.
+
+By using the **--verbose** verbose flag, the user can see exactly what
+projection parameters will be used in the conversion as well as some
+other informative messages.
+
 If output is to lat/long, it will be formatted using PROJ's
-Degree:Minute:Second (DMS) convention
-of <code>DDDdMM'SSS.SS"H</code>. This can be handy if you wish to quickly
-convert lat/long decimal degree data into its DMS equivalent.<br>
-Alternatively, to have <em>m.proj</em> output data in decimal degrees,
-use the <b>-d</b> flag. This flag can also be used with non-lat/long
-data to force a higher number of decimal places (the <em>cs2cs</em>
-default is 2).
-<p>
+Degree:Minute:Second (DMS) convention of `DDDdMM'SSS.SS"H`. This can be
+handy if you wish to quickly convert lat/long decimal degree data into
+its DMS equivalent.  
+Alternatively, to have *m.proj* output data in decimal degrees, use the
+**-d** flag. This flag can also be used with non-lat/long data to force
+a higher number of decimal places (the *cs2cs* default is 2).
+
 Note that Lat/long output can be converted to GRASS's DMS convention
-(<code>DDD:MM:SSS.SSSH</code>) by piping the results of <em>m.proj</em>
-through the <em>sed</em> stream editor as follows.
+(`DDD:MM:SSS.SSSH`) by piping the results of *m.proj* through the *sed*
+stream editor as follows.
 
-<div class="code"><pre>
+```shell
 m.proj -o ... | sed -e 's/d/:/g' -e "s/'/:/g"  -e 's/"//g'
-</pre></div>
+```
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 The examples are suitable for the North Carolina sample dataset if not
 stated otherwise:
 
-<h3>Reproject vector point coordinate pairs to Long/Lat WGS84</h3>
+### Reproject vector point coordinate pairs to Long/Lat WGS84
 
-<p>
-The <em>m.proj</em> module is designed to work seamlessly with point
-data exported from the GIS
-with <em><a href="v.out.ascii.html">v.out.ascii</a></em>, as the
+The *m.proj* module is designed to work seamlessly with point data
+exported from the GIS with *[v.out.ascii](v.out.ascii.md)*, as the
 following example shows.
 
-<div class="code"><pre>
+```shell
 # Long/Lat WGS84 output in DMS
 v.out.ascii bridges | m.proj -o input=-
 
 # Long/Lat WGS84 output in decimal degree
 v.out.ascii bridges | m.proj -o -d input=-
-</pre></div>
+```
 
-<h3>Reproject Long/Lat WGS84 coordinate pair to current map projection</h3>
+### Reproject Long/Lat WGS84 coordinate pair to current map projection
 
-To convert a Long/Lat WGS84 coordinate pair to the current map CRS
-using the <b>-i</b> flag which sets the target projection parameters
+To convert a Long/Lat WGS84 coordinate pair to the current map CRS using
+the **-i** flag which sets the target projection parameters
 automatically from the current project definition:
-<div class="code"><pre>
+
+```shell
 echo "-78.61168178 33.92225767" | m.proj -i input=-
 645513.47|19180.31|0.00
-</pre></div>
+```
 
-<p>
-The same, but load points from a file named <code>waypoints.txt</code> and
-continue on to import the results into a GRASS vector points map in
-the current map projection:
-<div class="code"><pre>
+The same, but load points from a file named `waypoints.txt` and continue
+on to import the results into a GRASS vector points map in the current
+map projection:
+
+```shell
 # check file content
 cat waypoints.txt
 -78.43977824 33.89587173
@@ -125,94 +119,81 @@ v.db.select test_pnts cat|dbl_1|dbl_2|dbl_3
 2|651285.43|15586.79|0
 3|654867.21|14690.64|0
 4|778074.58|207402.6|0
-</pre></div>
+```
 
-<h3>Custom projection parameter usage</h3>
+### Custom projection parameter usage
 
 To transform points from a UTM projection (here specified with detailed
 projection definition rather than using an EPSG code) into the
-Gauss-Kr&uuml;ger Grid System, importing from and exporting to files:
+Gauss-Krüger Grid System, importing from and exporting to files:
 
-<div class="code"><pre>
+```shell
 m.proj proj_in="+proj=utm +name=utm +a=6378137.0 +es=0.006694380 \
     +zone=32 +unfact=1.0" proj_out="+proj=tmerc +name=tmerc \
     +a=6377397.155 +es=0.0066743720 +lat_0=0.0 +lon_0=9.0 +k=1.0 \
     +x_0=3500000.0" input=utm.coord.txt output=new.gk.coord.txt
-</pre></div>
+```
 
-<p>
-Projection parameters provided in the above case: <code>+proj</code>
-(projection type), <code>+name</code> (projection name), <code>+a</code>
-(ellipsoid: equatorial radius), <code>+es</code> (ellipsoid:
-eccentricity squared), <code>+zone</code> (zone for the area),
-<code>+unfact</code> (conversion factor from meters to other units,
-e.g. feet), <code>+lat_0</code> (standard parallel), <code>+lon_0</code>
-(central meridian), <code>+k</code> (scale factor) and <code>+x_0</code>
-(false easting). Sometimes false northing is needed which is coded as
-<code>+y_0</code>.  Internally, the underlying
-<a href="https://proj.org">PROJ</a> projection library
-performs an inverse projection to latitude-longitude and then projects
-the coordinate list to the target projection.
-<p>
+Projection parameters provided in the above case: `+proj` (projection
+type), `+name` (projection name), `+a` (ellipsoid: equatorial radius),
+`+es` (ellipsoid: eccentricity squared), `+zone` (zone for the area),
+`+unfact` (conversion factor from meters to other units, e.g. feet),
+`+lat_0` (standard parallel), `+lon_0` (central meridian), `+k` (scale
+factor) and `+x_0` (false easting). Sometimes false northing is needed
+which is coded as `+y_0`. Internally, the underlying
+[PROJ](https://proj.org) projection library performs an inverse
+projection to latitude-longitude and then projects the coordinate list
+to the target projection.
+
 Datum conversions are automatically handled by the PROJ library if
-<code>+datum</code> settings are specified on <b>both</b> the input <b>and</b> output
-projections on the command line. The <code>+towgs84</code> parameter can be used to
-define either 3 or 7 term datum transform coefficients, satisfying this requirement.
-<p>If a datum is specified there is no need for the <code>+ellps=</code> or underlying
-parameters, <code>+a=</code>, <code>+es=</code>, etc.
+`+datum` settings are specified on **both** the input **and** output
+projections on the command line. The `+towgs84` parameter can be used to
+define either 3 or 7 term datum transform coefficients, satisfying this
+requirement.
 
-<p>
+If a datum is specified there is no need for the `+ellps=` or underlying
+parameters, `+a=`, `+es=`, etc.
+
 Another custom parameter usage example:
 
-<div class="code"><pre>
+```shell
 m.proj proj_in="+proj=tmerc +datum=ire65 +lat_0=53.5 +lon_0=-8 +x_0=200000 \
     +y_0=250000 +k=1.000035" proj_out="+proj=ll +datum=wgs84" input=wpt.txt
-</pre></div>
+```
 
 or without datum transformation:
 
-<div class="code"><pre>
+```shell
 m.proj proj_in="+proj=tmerc +ellps=modif_airy +lat_0=53.5 +lon_0=-8 +x_0=200000 \
     +y_0=250000 +k=1.000035" proj_out="+proj=ll +datum=wgs84" input=wpt.txt
-</pre></div>
+```
 
-<p>
 In this example no datum transformation will take place as a datum was
 not specified for the input projection. The datum specified for the
-output projection will thus be silently ignored and may be left out;
-all that is achieved a simple conversion from projected to geodetic
-co-ordinates, keeping the same datum (and thus also the same
-ellipsoid).
+output projection will thus be silently ignored and may be left out; all
+that is achieved a simple conversion from projected to geodetic
+co-ordinates, keeping the same datum (and thus also the same ellipsoid).
 
-<p>
 For more usage examples, see the documentation for the
-<a href="https://proj.org">PROJ</a> <em>cs2cs</em> program.
+[PROJ](https://proj.org) *cs2cs* program.
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<ul>
-  <li>Evenden, G.I.
-      (1990) <a href="https://pubs.usgs.gov/of/1990/of90-284/ofr90-284.pdf">Cartographic
-      projection procedures for the UNIX environment - a user's
-      manual</a>.  USGS Open-File Report 90-284 (OF90-284.pdf) See
-      also there: Interim Report and 2nd Interim Report on Release 4,
-      Evenden 1994).</li>
-  <li><a href="https://proj.org">PROJ</a> Cartographic Projection Library</li>
-</ul>
+- Evenden, G.I. (1990) [Cartographic projection procedures for the UNIX
+  environment - a user's
+  manual](https://pubs.usgs.gov/of/1990/of90-284/ofr90-284.pdf). USGS
+  Open-File Report 90-284 (OF90-284.pdf) See also there: Interim Report
+  and 2nd Interim Report on Release 4, Evenden 1994).
+- [PROJ](https://proj.org) Cartographic Projection Library
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.proj.html">g.proj</a>,
-<a href="r.proj.html">r.proj</a>,
-<a href="v.proj.html">v.proj</a>,
-<a href="i.rectify.html">i.rectify</a>,
-<a href="v.in.ascii.html">v.in.ascii</a>,
-<a href="v.out.ascii.html">v.out.ascii</a>
-</em>
+*[g.proj](g.proj.md), [r.proj](r.proj.md), [v.proj](v.proj.md),
+[i.rectify](i.rectify.md), [v.in.ascii](v.in.ascii.md),
+[v.out.ascii](v.out.ascii.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-M. Hamish Bowman, Dept. Marine Science, Otago University, New Zealand<br>
-Functionality inspired by the <em>m.proj</em> and <em>m.proj2</em> modules for
-GRASS GIS 5.
+M. Hamish Bowman, Dept. Marine Science, Otago University, New Zealand  
+Functionality inspired by the *m.proj* and *m.proj2* modules for GRASS
+GIS 5.

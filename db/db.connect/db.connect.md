@@ -1,130 +1,136 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.connect</em> allows the user to set database connection parameters.
+*db.connect* allows the user to set database connection parameters.
 These parameters are then taken as default values by modules so that the
 user does not need to enter the parameters each time.
-<p>
-The default database backend in GRASS GIS
-is <a href="grass-sqlite.html">SQLite</a> (since version 7).
 
-<h2>NOTES</h2>
+The default database backend in GRASS GIS is [SQLite](grass-sqlite.md)
+(since version 7).
 
-Values are stored in the mapset's <code>VAR</code> file;
-the connection is not tested for validity.
-<p>The <b>-p</b> flag will display the current connection parameters.
-<p>The <b>-c</b> flag will silently check if the connection parameters have
+## NOTES
+
+Values are stored in the mapset's `VAR` file; the connection is not
+tested for validity.
+
+The **-p** flag will display the current connection parameters.
+
+The **-c** flag will silently check if the connection parameters have
 been set, and if not will set them to use GRASS's default values.
 (useful in scripts before you attempt to create a new database table)
-<p>To connect a vector map to a database table,
-use <em><a href="v.db.connect.html">v.db.connect</a></em> or
-<em><a href="v.db.addtable.html">v.db.addtable</a></em>.
 
-<h2>EXAMPLES</h2>
+To connect a vector map to a database table, use
+*[v.db.connect](v.db.connect.md)* or
+*[v.db.addtable](v.db.addtable.md)*.
 
-<h3>SQLite (default backend)</h3>
+## EXAMPLES
 
-Local storage:
-<br>
-<div class="code"><pre>
+### SQLite (default backend)
+
+Local storage:  
+
+```shell
 db.connect -d
 db.connect -p
 db.tables -p
-</pre></div>
-<p>The SQLite database file is created automatically when used the first time.
-<p>See <a href="grass-sqlite.html">SQLite</a> database driver for details.
+```
 
-<h3>PostgreSQL (local connection)</h3>
+The SQLite database file is created automatically when used the first
+time.
 
-Local storage, database tables stored in database "mydb"
-(may require the use of <em><a href="db.login.html">db.login</a></em>):
-<br>
-<div class="code"><pre>
+See [SQLite](grass-sqlite.md) database driver for details.
+
+### PostgreSQL (local connection)
+
+Local storage, database tables stored in database "mydb" (may require
+the use of *[db.login](db.login.md)*):  
+
+```shell
 db.connect driver=pg database=mydb
 db.login user=myname pass=secret
 db.connect -p
 db.tables -p
-</pre></div>
-<p>See <a href="grass-pg.html">PostgreSQL</a> database driver for details.
+```
 
-<h3>PostgreSQL (network connection)</h3>
+See [PostgreSQL](grass-pg.md) database driver for details.
 
-Network storage, database tables stored in database "mydb"
-(may require the use of <em><a href="db.login.html">db.login</a></em>):
-<br>
-<div class="code"><pre>
+### PostgreSQL (network connection)
+
+Network storage, database tables stored in database "mydb" (may require
+the use of *[db.login](db.login.md)*):  
+
+```shell
 db.connect driver=pg database=mydb
 db.login user=myname pass=secret host=myserver.com port=6666
 db.connect -p
 db.tables -p
-</pre></div>
-<p>See <a href="grass-pg.html">PostgreSQL</a> database driver for details.
+```
 
-<h3>MySQL (local connection)</h3>
+See [PostgreSQL](grass-pg.md) database driver for details.
+
+### MySQL (local connection)
 
 Local storage, database tables stored in database "mydb" (may require
-the use of <em><a href="db.login.html">db.login</a></em>):
-<br>
-<div class="code"><pre>
+the use of *[db.login](db.login.md)*):  
+
+```shell
 db.connect driver=mysql database=mydb
 db.login user=myname pass=secret
 db.connect -p
 db.tables -p
-</pre></div>
-<p>See <a href="grass-mysql.html">MySQL</a> database driver for details.
+```
 
-<h3>MySQL (network connection)</h3>
+See [MySQL](grass-mysql.md) database driver for details.
 
-Network storage, database tables stored in database "mydb"
-(may require the use of <em><a href="db.login.html">db.login</a></em>):
-<br>
-<div class="code"><pre>
+### MySQL (network connection)
+
+Network storage, database tables stored in database "mydb" (may require
+the use of *[db.login](db.login.md)*):  
+
+```shell
 db.connect driver=mysql database=mydb
 db.login user=myname pass=secret host=myserver.com
 db.connect -p
 db.tables -p
-</pre></div>
-<p>See <a href="grass-mysql.html">MySQL</a> database driver for details.
+```
 
-<h3>ODBC</h3>
+See [MySQL](grass-mysql.md) database driver for details.
 
-Network storage, database tables stored in database "mydb"
-(may require the use of <em><a href="db.login.html">db.login</a></em>):
-<br>
-<div class="code"><pre>
+### ODBC
+
+Network storage, database tables stored in database "mydb" (may require
+the use of *[db.login](db.login.md)*):  
+
+```shell
 db.connect driver=odbc database=mydb
 db.login user=myname pass=secret
 db.connect -p
 db.tables -p
-</pre></div>
-<p>See <a href="grass-odbc.html">ODBC</a> database driver for details.
+```
 
-<h3>DBF (local, not recommended)</h3>
+See [ODBC](grass-odbc.md) database driver for details.
+
+### DBF (local, not recommended)
 
 Local storage (the dbf/ subdirectory in the mapset must exist or must be
-created by the user):
-<br>
-<div class="code"><pre>
+created by the user):  
+
+```shell
 db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
 db.tables -p
-</pre></div>
-<p>See <a href="grass-dbf.html">DBF</a> database driver for details.
+```
 
-<h2>SEE ALSO</h2>
+See [DBF](grass-dbf.md) database driver for details.
 
-<em>
-<a href="db.columns.html">db.columns</a>,
-<a href="db.copy.html">db.copy</a>,
-<a href="db.drivers.html">db.drivers</a>,
-<a href="db.login.html">db.login</a>,
-<a href="db.tables.html">db.tables</a>,
-<a href="v.db.addtable.html">v.db.addtable</a>,
-<a href="v.db.connect.html">v.db.connect</a>
-</em>
+## SEE ALSO
 
-<p>
-<a href="sql.html">GRASS SQL interface</a>
+*[db.columns](db.columns.md), [db.copy](db.copy.md),
+[db.drivers](db.drivers.md), [db.login](db.login.md),
+[db.tables](db.tables.md), [v.db.addtable](v.db.addtable.md),
+[v.db.connect](v.db.connect.md)*
 
-<h2>AUTHORS</h2>
+[GRASS SQL interface](sql.md)
 
-Main author: Radim Blazek, ITC-Irst, Trento, Italy<br>
+## AUTHORS
+
+Main author: Radim Blazek, ITC-Irst, Trento, Italy  
 GRASS 7 improvements: Martin Landa, Markus Metz

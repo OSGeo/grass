@@ -1,27 +1,27 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.geodesic</em> displays a geodesic line in the active frame on the user's
-graphics monitor. This is also known as the great circle line and traces the
-shortest distance between two user-specified points on the curved surface of
-a longitude/latitude data set. The two coordinate locations named must fall
-within the boundaries of the user's current geographic region.
+*d.geodesic* displays a geodesic line in the active frame on the user's
+graphics monitor. This is also known as the great circle line and traces
+the shortest distance between two user-specified points on the curved
+surface of a longitude/latitude data set. The two coordinate locations
+named must fall within the boundaries of the user's current geographic
+region.
 
-<h2>OPTIONS</h2>
+## OPTIONS
 
 By default black line color and red text color will be used.
 
-<p>
-By indicating the starting and ending coordinates
-of the geodesic, the line and its length (by default in meters) are displayed to
-the graphical output. If the text color is set to <em>none</em>,
-the great circle distance is not displayed.
+By indicating the starting and ending coordinates of the geodesic, the
+line and its length (by default in meters) are displayed to the
+graphical output. If the text color is set to *none*, the great circle
+distance is not displayed.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 A geodesic line if shown over the political map of the world
 (demolocation dataset):
 
-<div class="code"><pre>
+```shell
 g.region vector=country_boundaries -p
 d.mon wx0
 d.vect country_boundaries type=area
@@ -30,26 +30,21 @@ d.grid 20
 
 d.geodesic coordinates=55:58W,33:18S,26:43E,60:37N \
   line_color=yellow text_color=red units=kilometers
-</pre></div>
+```
 
-<p><center>
-<img src="d_geodesic.png" border="1" alt="Geodesic line (great circle line)"><br>
-<i>Geodesic line (great circle line)</i>
-</center>
+<img src="d_geodesic.png" data-border="1"
+alt="Geodesic line (great circle line)" />  
+*Geodesic line (great circle line)*
 
-<h2>NOTES</h2>
+## NOTES
 
-This program works only with longitude/latitude
-coordinate system.
+This program works only with longitude/latitude coordinate system.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.rhumbline.html">d.rhumbline</a>,
-<a href="d.grid.html">d.grid</a>,
-<a href="m.measure.html">m.measure</a>
-</em>
+*[d.rhumbline](d.rhumbline.md), [d.grid](d.grid.md),
+[m.measure](m.measure.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Michael Shapiro, U.S. Army Construction Engineering Research Laboratory

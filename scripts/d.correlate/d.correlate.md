@@ -1,45 +1,41 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.correlate</em> displays graphically the results of a
-<em>r.stats</em> analysis run on two raster map layers. This module
-highlights the correlation (or lack of it) among data
-layers (scattergram).
+*d.correlate* displays graphically the results of a *r.stats* analysis
+run on two raster map layers. This module highlights the correlation (or
+lack of it) among data layers (scattergram).
 
-<p>The results are displayed in the active display frame on
-the user's graphics monitor. <em>d.correlate</em> erases
-the active frame before displaying results. If no graphics monitor
-is open, a file <code>map.png</code> is generated in the current directory.
+The results are displayed in the active display frame on the user's
+graphics monitor. *d.correlate* erases the active frame before
+displaying results. If no graphics monitor is open, a file `map.png` is
+generated in the current directory.
 
-<h2>NOTES</h2>
+## NOTES
 
-If three or four map layers are specified, the correlation
-among each combination of two data layers is displayed.
+If three or four map layers are specified, the correlation among each
+combination of two data layers is displayed.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Scatterplot of two LANDSAT TM7 channels (North Carolina sample dataset):
-<p><div class="code"><pre>
+
+```shell
 g.region raster=lsat7_2002_30 -p
 d.correlate map=lsat7_2002_30,lsat7_2002_40
-</pre></div>
+```
 
-<center>
-<img src="d_correlate_plot.png" border="1" alt="Scatterplot of two LANDSAT TM7 channels"><br>
+<img src="d_correlate_plot.png" data-border="1"
+alt="Scatterplot of two LANDSAT TM7 channels" />  
 Scatterplot of two LANDSAT TM7 channels
-</center>
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.text.html">d.text</a>,
-<a href="d.graph.html">d.graph</a>,
-<a href="r.coin.html">r.coin</a>,
-<a href="r.regression.line.html">r.regression.line</a>,
-<a href="r.stats.html">r.stats</a>
-</em>
+*[d.text](d.text.md), [d.graph](d.graph.md), [r.coin](r.coin.md),
+[r.regression.line](r.regression.line.md), [r.stats](r.stats.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Michael Shapiro,
-<a href="http://www.cecer.army.mil/">U.S.Army Construction Engineering Research Laboratory</a>
-<p>Rewritten to GRASS 6 (from csh to sh) by Markus Neteler; from sh to Python by Glynn Clements
+Michael Shapiro, [U.S.Army Construction Engineering Research
+Laboratory](http://www.cecer.army.mil/)
+
+Rewritten to GRASS 6 (from csh to sh) by Markus Neteler; from sh to
+Python by Glynn Clements

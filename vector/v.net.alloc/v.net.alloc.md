@@ -1,66 +1,67 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.net.alloc</em> allocates subnets for nearest centers. Center
-nodes must be opened (costs &gt;= 0). Costs of center nodes are used in
-the calculation.
-<p>
-Costs may be either line lengths, or attributes saved in a
-database table. These attribute values are taken as costs of whole
-segments, not as costs to traverse a length unit (e.g. meter) of the
-segment. For example, if the speed limit is 100 km / h, the cost to
-traverse a 10 km long road segment must be calculated as
-<br>
-length / speed = 10 km / (100 km/h) = 0.1 h.
-<br>
-Supported are cost assignments for both arcs and nodes,
-and also different costs for both directions of a vector line.
-For areas, costs will be calculated along boundary lines.
-<p>
-The input vector needs to be prepared with <em>v.net operation=connect</em>
-in order to connect points representing center nodes to the network.
-<p>
-The nearest center can be determined using either costs from the
-nearest center or costs to the nearest center with option
-<b>method</b>. See example below.
-<p>
-By default, the category value of the nearest center is used as
-category value for output lines. With the <b>-u</b> flag, output lines
-become unique categories and an attribute table is created with the
-fields <em>cat, ocat, center</em>. The <em>ocat</em> field holds the
-original line category in <b>arc_layer</b> and the <em>center</em>
-field holds the center category in <b>node_layer</b>. Additionally,
-original line categories are copied from the input <b>arc_layer</b> to
-layer 2 in the output, together with any attribute table.
-<p>
-Application of flag <b>-t</b> enables a turntable support. This flag
-requires additional parameters <b>turn_layer</b> and
-<b>turn_cat_layer</b> that are otherwise ignored. The turntable allows
-to model e.g. traffic code, where some turns may be prohibited. This
-means that the input layer is expanded by turntable with costs of every
-possible turn on any possible node (intersection) in both directions.
-Turntable can be created by the <em><a href="v.net.html">v.net</a></em>
-module. For more information about turns in the vector network analyses
-see
-<a href="https://grasswiki.osgeo.org/wiki/Turns_in_the_vector_network_analysis">wiki page</a>.
+*v.net.alloc* allocates subnets for nearest centers. Center nodes must
+be opened (costs \>= 0). Costs of center nodes are used in the
+calculation.
 
-<h2>NOTES</h2>
+Costs may be either line lengths, or attributes saved in a database
+table. These attribute values are taken as costs of whole segments, not
+as costs to traverse a length unit (e.g. meter) of the segment. For
+example, if the speed limit is 100 km / h, the cost to traverse a 10 km
+long road segment must be calculated as  
+length / speed = 10 km / (100 km/h) = 0.1 h.  
+Supported are cost assignments for both arcs and nodes, and also
+different costs for both directions of a vector line. For areas, costs
+will be calculated along boundary lines.
+
+The input vector needs to be prepared with *v.net operation=connect* in
+order to connect points representing center nodes to the network.
+
+The nearest center can be determined using either costs from the nearest
+center or costs to the nearest center with option **method**. See
+example below.
+
+By default, the category value of the nearest center is used as category
+value for output lines. With the **-u** flag, output lines become unique
+categories and an attribute table is created with the fields *cat, ocat,
+center*. The *ocat* field holds the original line category in
+**arc_layer** and the *center* field holds the center category in
+**node_layer**. Additionally, original line categories are copied from
+the input **arc_layer** to layer 2 in the output, together with any
+attribute table.
+
+Application of flag **-t** enables a turntable support. This flag
+requires additional parameters **turn_layer** and **turn_cat_layer**
+that are otherwise ignored. The turntable allows to model e.g. traffic
+code, where some turns may be prohibited. This means that the input
+layer is expanded by turntable with costs of every possible turn on any
+possible node (intersection) in both directions. Turntable can be
+created by the *[v.net](v.net.md)* module. For more information about
+turns in the vector network analyses see [wiki
+page](https://grasswiki.osgeo.org/wiki/Turns_in_the_vector_network_analysis).
+
+## NOTES
 
 Nodes and arcs can be closed using cost = -1.
-<p>
-Center nodes can also be assigned to vector nodes using
-<em><a href="wxGUI.vdigit.html">wxGUI vector digitizer</a></em>.
 
-<h2>EXAMPLES</h2>
+Center nodes can also be assigned to vector nodes using *[wxGUI vector
+digitizer](wxGUI.vdigit.md)*.
 
-<p>1. Subnetwork allocation using distance:
-<p><img src="v_net_alloc.png" alt="v.net.alloc example using distance" border="1">
-<br>
-<p>2. Subnetwork allocation using traveling time:
-<p><img src="v_net_alloc_time.png" alt="v.net.alloc example using time" border="1">
-<br>
+## EXAMPLES
 
-<p>Example 1: <em>Calculating subnets for 3 center nodes using distances</em>
-<div class="code"><pre>
+1\. Subnetwork allocation using distance:
+
+<img src="v_net_alloc.png" data-border="1"
+alt="v.net.alloc example using distance" />  
+
+2\. Subnetwork allocation using traveling time:
+
+<img src="v_net_alloc_time.png" data-border="1"
+alt="v.net.alloc example using time" />  
+
+Example 1: *Calculating subnets for 3 center nodes using distances*
+
+```shell
 # Spearfish
 
 # center nodes:
@@ -78,11 +79,11 @@ v.net.alloc myroads_net out=myroads_net_alloc center_cats=1-100000 node_layer=2
 
 # report categories
 v.category myroads_net_alloc option=report
-</pre></div>
+```
 
 To display the result, run for example:
 
-<div class="code"><pre>
+```shell
 # show result
 g.region vector=myroads_net
 d.mon x0
@@ -95,11 +96,12 @@ d.vect myroads_net_alloc cat=3 col=yellow layer=1
 
 # center nodes
 d.vect myroads_net col=red icon=basic/triangle fcol=green size=12 layer=2
-</pre></div>
+```
 
-<p>Example 2: <em>Calculating subnets for 3 center nodes using traveling time</em><br>
+Example 2: *Calculating subnets for 3 center nodes using traveling
+time*  
 
-<div class="code"><pre>
+```shell
 # Spearfish
 
 # center nodes:
@@ -143,11 +145,11 @@ v.db.update myroads_net_time layer=3 col=bcost val="length / speed * 60"
 
 # subnetwork allocation with fastest paths
 v.net.alloc in=myroads_net_time arc_layer=3 node_layer=2 arc_column=cost arc_backward_column=bcost out=myroads_net_alloc_time center_cats=1-3
-</pre></div>
+```
 
 To display the result, run for example:
 
-<div class="code"><pre>
+```shell
 # show result
 g.region vector=myroads_net
 d.mon x0
@@ -160,24 +162,28 @@ d.vect myroads_net_alloc_time cat=3 col=yellow layer=1
 
 # center nodes
 d.vect myroads_net_time col=red icon=basic/triangle fcol=green size=12 type=point layer=2
-</pre></div>
+```
 
-<p>Example 3: <em>Differences between costs from centers and costs to centers</em><br>
-
+Example 3: *Differences between costs from centers and costs to
+centers*  
 Each lane of the two-lane road is a one-way road.
-<p>1. Subnetwork allocation from centers:
-<p><img src="v_net_alloc_from_centers.png" alt="v.net.alloc example from centers" border="1">
-<br>
+
+1\. Subnetwork allocation from centers:
+
+<img src="v_net_alloc_from_centers.png" data-border="1"
+alt="v.net.alloc example from centers" />  
 A center reaches any point following the one-way lanes.
-<p>2. Subnetwork allocation to centers:
-<p><img src="v_net_alloc_to_centers.png" alt="v.net.alloc example to centers" border="1">
-<br>
+
+2\. Subnetwork allocation to centers:
+
+<img src="v_net_alloc_to_centers.png" data-border="1"
+alt="v.net.alloc example to centers" />  
 Any node reaches reaches the nearest center following the one-way lanes.
-<p>
+
 In case of an accident, the ambulance should come from the nearest
 'from' hospital and go to the nearest 'to' hospital.
 
-<div class="code"><pre>
+```shell
 # North Carolina
 
 # center nodes are hospitals:
@@ -190,37 +196,31 @@ v.db.update map=streets_hospitals column=TF_COST value=-1 where="ONE_WAY = 'FT'"
 v.db.update map=streets_hospitals column=FT_COST value=-1 where="ONE_WAY = 'TF'"
 
 # add costs to newly created lines
-v.db.update map=streets_hospitals column=TF_COST value=0 where="cat &gt; 49746"
-v.db.update map=streets_hospitals column=FT_COST value=0 where="cat &gt; 49746"
+v.db.update map=streets_hospitals column=TF_COST value=0 where="cat > 49746"
+v.db.update map=streets_hospitals column=FT_COST value=0 where="cat > 49746"
 
 # from centers
 v.net.alloc in=streets_hospitals out=streets_hospitals_alloc_from center_cats=1-10000 arc_column=FT_COST arc_backward_column=TF_COST
 
 # to centers
 v.net.alloc in=streets_hospitals out=streets_hospitals_alloc_to method=to center_cats=1-10000 arc_column=FT_COST arc_backward_column=TF_COST
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.path.html">d.path</a>,
-<a href="v.net.html">v.net</a>,
-<a href="v.net.iso.html">v.net.iso</a>,
-<a href="v.net.path.html">v.net.path</a>,
-<a href="v.net.steiner.html">v.net.steiner</a>,
-<a href="v.net.salesman.html">v.net.salesman</a>
-</em>
+*[d.path](d.path.md), [v.net](v.net.md), [v.net.iso](v.net.iso.md),
+[v.net.path](v.net.path.md), [v.net.steiner](v.net.steiner.md),
+[v.net.salesman](v.net.salesman.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek, ITC-Irst, Trento, Italy<br>
+Radim Blazek, ITC-Irst, Trento, Italy  
 Documentation: Markus Neteler, Markus Metz
 
-<h3>TURNS SUPPORT</h3>
+### TURNS SUPPORT
 
-The turns support was implemnented as part of GRASS GIS turns cost project at Czech Technical University in Prague, Czech Republic.
-Eliska Kyzlikova, Stepan Turek, Lukas Bocan and Viera Bejdova participated at the project.
-
-Implementation: Stepan Turek
-Documentation: Lukas Bocan
+The turns support was implemnented as part of GRASS GIS turns cost
+project at Czech Technical University in Prague, Czech Republic. Eliska
+Kyzlikova, Stepan Turek, Lukas Bocan and Viera Bejdova participated at
+the project. Implementation: Stepan Turek Documentation: Lukas Bocan
 Mentor: Martin Landa

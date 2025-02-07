@@ -1,31 +1,31 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast.gapfill</em> fills temporal gaps in space time raster datasets
-using linear interpolation. Temporal all gaps will be detected in the input
-space time raster dataset automatically. The predecessor and successor maps
-of the gaps will be identified and used to linear interpolate the raster
-map between them.
+*t.rast.gapfill* fills temporal gaps in space time raster datasets using
+linear interpolation. Temporal all gaps will be detected in the input
+space time raster dataset automatically. The predecessor and successor
+maps of the gaps will be identified and used to linear interpolate the
+raster map between them.
 
-<h2>NOTES</h2>
+## NOTES
 
-This module uses <a href="r.series.interp.html">r.series.interp</a> to
-perform the interpolation for each gap independently. Hence several
-interpolation processes can be run in parallel.
-<p>
+This module uses [r.series.interp](r.series.interp.md) to perform the
+interpolation for each gap independently. Hence several interpolation
+processes can be run in parallel.
+
 Each gap is re-sampled by the space time raster dataset granularity.
-Therefore several time stamped raster map layers will be interpolated
-if the gap is larger than the STRDS granularity.
+Therefore several time stamped raster map layers will be interpolated if
+the gap is larger than the STRDS granularity.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 In this example we will create 3 raster maps and register them in the
-temporal database an then in the newly created space time raster dataset.
-There are gaps of one and two day size between the raster maps. The values of
-the maps are chosen so that the interpolated values can be estimated.
-We expect one map with a value of 2 for the first gap and
-two maps (values 3.666 and 4.333) for the second gap after interpolation.
+temporal database an then in the newly created space time raster
+dataset. There are gaps of one and two day size between the raster maps.
+The values of the maps are chosen so that the interpolated values can be
+estimated. We expect one map with a value of 2 for the first gap and two
+maps (values 3.666 and 4.333) for the second gap after interpolation.
 
-<div class="code"><pre>
+```shell
 r.mapcalc expression="map1 = 1"
 r.mapcalc expression="map2 = 3"
 r.mapcalc expression="map3 = 5"
@@ -71,16 +71,13 @@ gap_7_1|2012-08-23 00:00:00|3.666667|3.666667
 gap_7_2|2012-08-24 00:00:00|4.333333|4.333333
 map3|2012-08-25 00:00:00|5.0|5.0
 
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.series.interp.html">r.series.interp</a>,
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
-</em>
+*[r.series.interp](r.series.interp.md), [t.create](t.create.md),
+[t.info](t.info.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

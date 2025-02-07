@@ -1,58 +1,65 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.segment</em> generates segments or points from input lines and from
-positions read from a text file or '<code>stdin</code>'. It includes the creation
+*v.segment* generates segments or points from input lines and from
+positions read from a text file or '`stdin`'. It includes the creation
 of parallel lines or points in given destination from the line.
 
-<p>The format is:
-<div class="code"><pre>
-P &lt;point id&gt;   &lt;line cat&gt; &lt;offset&gt; [&lt;side offset&gt;]
-L &lt;segment id&gt; &lt;line cat&gt; &lt;start offset&gt; &lt;end offset&gt; [&lt;side offset&gt;]
-</pre></div>
+The format is:
+
+```shell
+P <point id>   <line cat> <offset> [<side offset>]
+L <segment id> <line cat> <start offset> <end offset> [<side offset>]
+```
 
 The offsets can be percent values of the line length. If the offsets are
-negative, they start from the end node of the line. -0 means the end of the
-line.
+negative, they start from the end node of the line. -0 means the end of
+the line.
 
-<p>
-The user could send to <code>stdin</code> something like:
-<div class="code"><pre>
+The user could send to `stdin` something like:
+
+```shell
 P 1 356 24.56
 P 2 495 12.31
 P 3 500 -12.31
 P 4 510 -20%
 ...
-</pre></div>
-(pipe or redirect from file into the command).<br>
+```
 
-<h2>NOTES</h2>
+(pipe or redirect from file into the command).  
 
-A segment is only created for the first line found of the specified category.
-<p>Points are generated along the lines at the given distance(s) or percent(s)
-of the line length from the beginning or end, if offsets are negative, of the
-vector line.
-<p>The side offset is the orthogonal distance from the line. Positive side
-offsets are to the right side of the line going forward, negative offsets
-are to the left (<em>d.vect</em> with <em>display=shape,dir</em> shows
-the direction of vector lines). As the segment distance is measured along the
-original line, side-offset lines will be longer than the start-end segment distance
-for outside corners of curving lines, and shorter for inside corners.
-<p>All offsets are measured in map units (see "<em>g.proj -p</em>") or percents
-of the line length, if followed by a % character.
-<p>To place a point in the middle of a line, 50% offset can be used or the
-<em>v.to.db</em> module may be used to find the line's length. Then half of
+## NOTES
+
+A segment is only created for the first line found of the specified
+category.
+
+Points are generated along the lines at the given distance(s) or
+percent(s) of the line length from the beginning or end, if offsets are
+negative, of the vector line.
+
+The side offset is the orthogonal distance from the line. Positive side
+offsets are to the right side of the line going forward, negative
+offsets are to the left (*d.vect* with *display=shape,dir* shows the
+direction of vector lines). As the segment distance is measured along
+the original line, side-offset lines will be longer than the start-end
+segment distance for outside corners of curving lines, and shorter for
+inside corners.
+
+All offsets are measured in map units (see "*g.proj -p*") or percents of
+the line length, if followed by a % character.
+
+To place a point in the middle of a line, 50% offset can be used or the
+*v.to.db* module may be used to find the line's length. Then half of
 that distance can be used as the along-line offset.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 The examples are based on the North Carolina sample dataset.
 
-<h3>Extraction of a line segment</h3>
+### Extraction of a line segment
 
-Extract line segment from 400m to 5000m from beginning
-of line 1:
+Extract line segment from 400m to 5000m from beginning of line 1:
 
-<div class="code"><pre>
+```shell
 # extract lines from railroad map:
 v.extract input=railroads output=myrr cats=1
 
@@ -76,20 +83,18 @@ d.vect map=myrailroads_segl col=green width=2
 # set node at 5000m from beginning of line 1
 echo "P 1 1 5000" | v.segment input=myrailroads output=myrailroads_segp
 d.vect map=myrailroads_segp icon=basic/circle color=red fcolor=red size=5
-</pre></div>
-<center>
-<img src="v_segment_subline.jpg"><br>
-Extract line segment from 400m to 5000m from beginning
-of line 1
-</center>
+```
 
-<h3>Parallel line segments</h3>
+![](v_segment_subline.jpg)  
+Extract line segment from 400m to 5000m from beginning of line 1
+
+### Parallel line segments
 
 Creation of parallel, 1km long line segments along the first 8km of
 track, offset 500m to the left of the tracks:
 
-<div class="code"><pre>
-v.segment input=myrailroads output=myrailroads_segl_side &lt;&lt; EOF
+```shell
+v.segment input=myrailroads output=myrailroads_segl_side << EOF
 L 1 1 1000 2000 -500
 L 2 1 3000 4000 -500
 L 3 1 5000 6000 -500
@@ -98,14 +103,14 @@ EOF
 d.erase
 d.vect map=myrailroads display=shape,dir
 d.vect -c map=myrailroads_segl_side width=2
-</pre></div>
+```
 
-<h3>Points equidistant along the tracks</h3>
+### Points equidistant along the tracks
 
 Creation of a series of points, spaced every 2km along the tracks:
 
-<div class="code"><pre>
-v.segment input=myrailroads output=myrailroads_pt2km &lt;&lt; EOF
+```shell
+v.segment input=myrailroads output=myrailroads_pt2km << EOF
 P 1 1 1000
 P 2 1 3000
 P 3 1 5000
@@ -114,19 +119,18 @@ EOF
 d.erase
 d.vect map=myrailroads display=shape,dir
 d.vect map=myrailroads_pt2km icon=basic/circle color=blue fcolor=blue size=5
-</pre></div>
-<center>
-<img src="v_segment_spaced_points.jpg"><br>
-A series of points, spaced every 2km along the tracks
-</center>
+```
 
-<h3>Points equidistant along and offset the tracks</h3>
+![](v_segment_spaced_points.jpg)  
+A series of points, spaced every 2km along the tracks
+
+### Points equidistant along and offset the tracks
 
 Creation of a series of points, spaced every 2km along the tracks,
 offset 500m to the right:
 
-<div class="code"><pre>
-v.segment input=myrailroads output=myrailroads_pt2kmO500m &lt;&lt; EOF
+```shell
+v.segment input=myrailroads output=myrailroads_pt2kmO500m << EOF
 P 1 1 1000 500
 P 2 1 3000 500
 P 3 1 5000 500
@@ -135,19 +139,20 @@ EOF
 d.erase
 d.vect map=myrailroads display=shape,dir
 d.vect map=myrailroads_pt2kmO500m icon=basic/circle color=aqua fcolor=aqua size=5
-</pre></div>
-<center>
-<img src="v_segment_spaced_right_points.jpg"><br>
-A series of points, spaced every 2km along the tracks, offset 500m to the right
-</center>
+```
 
-<h3>Points equidistant in percent along and offset the tracks</h3>
+![](v_segment_spaced_right_points.jpg)  
+A series of points, spaced every 2km along the tracks, offset 500m to
+the right
 
-Creation of a series of points, spaced every 10% of the line's length along the
-tracks from the end of the line up to the middle point, offset 500m to the right:
+### Points equidistant in percent along and offset the tracks
 
-<div class="code"><pre>
-v.segment input=myrailroads output=myrailroads_pt10pctO500m &lt;&lt; EOF
+Creation of a series of points, spaced every 10% of the line's length
+along the tracks from the end of the line up to the middle point, offset
+500m to the right:
+
+```shell
+v.segment input=myrailroads output=myrailroads_pt10pctO500m << EOF
 P 1 1  -0% 500
 P 2 1 -10% 500
 P 3 1 -20% 500
@@ -158,31 +163,26 @@ EOF
 d.erase
 d.vect map=myrailroads display=shape,dir
 d.vect map=myrailroads_pt10pctO500m icon=basic/circle color=red fcolor=black size=5
-</pre></div>
-<center>
-<img src="v_segment_spaced_percent_points.jpg"><br>
+```
+
+![](v_segment_spaced_percent_points.jpg)  
 A series of points, spaced every 10% of the line's length along the
-tracks from the end of the line up to the middle point, offset 500m to the right
-</center>
+tracks from the end of the line up to the middle point, offset 500m to
+the right
 
-<h2>KNOWN ISSUES</h2>
+## KNOWN ISSUES
 
-There is a problem with side-offset parallel line generation for inside corners.
-<!-- in Vect_line_parallel(), v.parallel is also affected -->
+There is a problem with side-offset parallel line generation for inside
+corners.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="lrs.html">LRS tutorial</a> (Linear Referencing System),<br>
-<a href="d.vect.html">d.vect</a>,
-<a href="v.build.polylines.html">v.build.polylines</a>,
-<a href="v.lrs.segment.html">v.lrs.segment</a>,
-<a href="v.parallel.html">v.parallel</a>,
-<a href="v.split.html">v.split</a>,
-<a href="v.to.db.html">v.to.db</a>,
-<a href="v.to.points.html">v.to.points</a>
-</em>
+*[LRS tutorial](lrs.md) (Linear Referencing System),  
+[d.vect](d.vect.md), [v.build.polylines](v.build.polylines.md),
+[v.lrs.segment](v.lrs.segment.md), [v.parallel](v.parallel.md),
+[v.split](v.split.md), [v.to.db](v.to.db.md),
+[v.to.points](v.to.points.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Radim Blazek, ITC-Irst, Trento, Italy

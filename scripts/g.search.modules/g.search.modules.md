@@ -1,19 +1,19 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>g.search.module</em> searches for given keyword in GRASS GIS modules name,
-description, keywords and optionally manpages, too. Also installed addons are
-considered in the search.
+*g.search.module* searches for given keyword in GRASS GIS modules name,
+description, keywords and optionally manpages, too. Also installed
+addons are considered in the search.
 
-<h2>NOTES</h2>
+## NOTES
 
-Multiple keywords may be specified, <em>g.search.modules</em> will search for
+Multiple keywords may be specified, *g.search.modules* will search for
 all of them.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-Search all modules, where keywords <em>buffer</em> OR <em>clip</em> can be found:
+Search all modules, where keywords *buffer* OR *clip* can be found:
 
-<div class="code"><pre>
+```shell
 g.search.modules keyword=buffer,clip
 
 r.circle
@@ -31,13 +31,12 @@ r.buffer
     keywords: raster,buffer
     description: Creates a raster map showing buffer zones surrounding cells
                  that contain non-NULL category values.
-</pre></div>
+```
 
-<p>
-Search all modules, where keywords <em>overlay</em> AND <em>clip</em> can be
-found with some fancy terminal output (not shown here):
+Search all modules, where keywords *overlay* AND *clip* can be found
+with some fancy terminal output (not shown here):
 
-<div class="code"><pre>
+```shell
 g.search.modules keyword=clip,overlay -a -c
 
 v.clip
@@ -50,12 +49,11 @@ v.overlay
               query,clip,difference,intersection,union
     description: Overlays two vector maps offering clip, intersection,
                  difference, symmetrical difference, union operators.
-</pre></div>
+```
 
-<p>
 Search in manual pages as well:
 
-<div class="code"><pre>
+```shell
 g.search.modules -m keyword=kapri
 
 db.execute
@@ -67,17 +65,13 @@ db.select
     keywords: database,attribute table,SQL
     description: Selects data from attribute table. Performs SQL query
                  statement(s).
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="g.manual.html">g.manual</a>
-  <!-- <a href="g.search.map.html">g.search.map</a>, -->
-</em>
+*[g.manual](g.manual.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Jachym Cepicky, OpenGeoLabs s.r.o., Czech Republic: original author
-<br>
+Jachym Cepicky, OpenGeoLabs s.r.o., Czech Republic: original author  
 Anika Bettge, mundialis, Germany: addon search added

@@ -1,40 +1,35 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast.import</em> imports a space time raster dataset archive that
-was exported with <a href="t.rast.export.html">t.rast.export</a>.
+*t.rast.import* imports a space time raster dataset archive that was
+exported with [t.rast.export](t.rast.export.md).
 
-<h2>NOTES</h2>
+## NOTES
 
-Optionally a base map name can be provided to avoid that existing
-raster maps are overwritten by the map names that are used in the STRDS
+Optionally a base map name can be provided to avoid that existing raster
+maps are overwritten by the map names that are used in the STRDS
 archive.
-<p>
-The <b>directory</b> is used as work directory in case of import but
-can also be used as a data directory when using GeoTIFF for the data
+
+The **directory** is used as work directory in case of import but can
+also be used as a data directory when using GeoTIFF for the data
 exchange.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 The North Carolina space time dataset contains a data package called
-<em>lst_daily.tar.bzip2</em> with daily data from MODIS LST. Import it
-by running:
+*lst_daily.tar.bzip2* with daily data from MODIS LST. Import it by
+running:
 
-<div class="code"><pre>
+```shell
 t.rast.import input=lst_daily.tar.bzip2 output=lst_daily \
               basename=lst directory=/tmp
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.rast.export.html">t.rast.export</a>,
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>,
-<a href="r.in.gdal.html">r.in.gdal</a>,
-<a href="r.unpack.html">r.unpack</a>,
-<a href="t.vect.import.html">t.vect.import</a>
-</em>
+*[t.rast.export](t.rast.export.md), [t.create](t.create.md),
+[t.info](t.info.md), [r.in.gdal](r.in.gdal.md), [r.unpack](r.unpack.md),
+[t.vect.import](t.vect.import.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

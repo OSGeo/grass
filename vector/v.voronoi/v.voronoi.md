@@ -1,102 +1,99 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.voronoi</em> creates a Voronoi diagram (Thiessen polygons) from
-points or centroids.
-<p>The bounds of the output map are limited by the current region
-(see <em><a href="g.region.html">g.region</a></em>).
+*v.voronoi* creates a Voronoi diagram (Thiessen polygons) from points or
+centroids.
 
-<p>
-The <em>-a</em> flag can be used to create a Voronoi diagram for areas.
+The bounds of the output map are limited by the current region (see
+*[g.region](g.region.md)*).
 
-<p>
-The <em>-s</em> flag can be used to extract the center line of areas or
-skeletons of areas with <em>thin</em> &gt;= 0. Smaller values for the
-<em>thin</em> option will preserve more detail, while negative values
-will extract only the center line.
+The *-a* flag can be used to create a Voronoi diagram for areas.
 
-<h2>NOTES</h2>
+The *-s* flag can be used to extract the center line of areas or
+skeletons of areas with *thin* \>= 0. Smaller values for the *thin*
+option will preserve more detail, while negative values will extract
+only the center line.
 
-<em>v.voronoi</em> suffers from numerical instability, results can
-sometimes contain many artefacts. When creating Voronoi diagrams for areas
-or skeletons for areas, it is highly recommended to simplify the areas first
-with <em><a href="v.generalize.html">v.generalize</a></em>.
+## NOTES
 
-<p>
-Voronoi diagrams may be used for nearest-neighbor flood filling.
-Give the centroids attributes (start with
-<em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em>),
-then optionally convert the result to a raster map with
-<em><a href="v.to.rast.html">v.to.rast</a></em>.
+*v.voronoi* suffers from numerical instability, results can sometimes
+contain many artefacts. When creating Voronoi diagrams for areas or
+skeletons for areas, it is highly recommended to simplify the areas
+first with *[v.generalize](v.generalize.md)*.
 
-<p>
-The extraction of skeletons and center lines with the <em>-s</em> flag
-is a brute force approach. Faster and more accurate algorithms to
-extract skeletons from areas exist but are not yet implemented. In the
-meantime, skeletons and center lines can be simplified with the
-Douglas-Peucker algorithm:
-<em><a href="v.generalize.html">v.generalize method=douglas</a></em>.
+Voronoi diagrams may be used for nearest-neighbor flood filling. Give
+the centroids attributes (start with
+*[v.db.addcolumn](v.db.addcolumn.md)*), then optionally convert the
+result to a raster map with *[v.to.rast](v.to.rast.md)*.
 
-<h2>EXAMPLE</h2>
+The extraction of skeletons and center lines with the *-s* flag is a
+brute force approach. Faster and more accurate algorithms to extract
+skeletons from areas exist but are not yet implemented. In the meantime,
+skeletons and center lines can be simplified with the Douglas-Peucker
+algorithm: *[v.generalize method=douglas](v.generalize.md)*.
 
-<h3>Voronoi diagram for points</h3>
+## EXAMPLE
+
+### Voronoi diagram for points
+
 This example uses the hospitals in the North Carolina dataset.
-<div class="code"><pre>
+
+```shell
 g.region -p raster=elev_state_500m
 v.voronoi input=hospitals output=hospitals_voronoi
-</pre></div>
+```
 
 Result:
-<center>
-<img src="v_voronoi_points.png" border="0"><br>
-<i>Voronoi diagram for hospitals in North Carolina</i>
-</center>
 
-<h3>Voronoi diagram for areas</h3>
+<img src="v_voronoi_points.png" data-border="0" />  
+*Voronoi diagram for hospitals in North Carolina*
+
+### Voronoi diagram for areas
+
 This example uses urban areas in the North Carolina dataset.
-<div class="code"><pre>
+
+```shell
 g.region -p n=162500 s=80000 w=727000 e=846000 res=500
 v.voronoi input=urbanarea output=urbanarea_voronoi -a
-</pre></div>
+```
 
 Result:
-<center>
-<img src="v_voronoi_areas.png" border="0"><br>
-<i>Voronoi diagram for urban areas in North Carolina</i>
-</center>
 
-<h3>Skeletons and center lines of areas</h3>
+<img src="v_voronoi_areas.png" data-border="0" />  
+*Voronoi diagram for urban areas in North Carolina*
+
+### Skeletons and center lines of areas
+
 This example uses urban areas in the North Carolina dataset.
-<div class="code"><pre>
+
+```shell
 g.region -p n=161000 s=135500 w=768500 e=805500 res=500
 v.voronoi input=urbanarea output=urbanarea_centerline -s
 v.voronoi input=urbanarea output=urbanarea_skeleton -s thin=2000
-</pre></div>
+```
 
 Result:
-<center>
-<img src="v_voronoi_skeleton.png" border="0"><br>
-<i>Skeleton (blue) and center line (red) for urban areas in North Carolina</i>
-</center>
 
-<h2>REFERENCES</h2>
+<img src="v_voronoi_skeleton.png" data-border="0" />  
+*Skeleton (blue) and center line (red) for urban areas in North
+Carolina*
 
-<em>Steve J. Fortune,  (1987).  A Sweepline Algorithm for
-    Voronoi Diagrams, Algorithmica 2, 153-174
-    (<a href="https://doi.org/10.1007/BF01840357">DOI</a>).</em>
+## REFERENCES
 
-<h2>SEE ALSO</h2>
+*Steve J. Fortune, (1987). A Sweepline Algorithm for Voronoi Diagrams,
+Algorithmica 2, 153-174 ([DOI](https://doi.org/10.1007/BF01840357)).*
 
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="v.delaunay.html">v.delaunay</a>,
-<a href="v.hull.html">v.hull</a>
-</em>
-<p>
-<a href="https://en.wikipedia.org/wiki/Voronoi_diagram">Voronoi diagram (Wikipedia)</a>
+## SEE ALSO
 
-<h2>AUTHORS</h2>
+*[g.region](g.region.md), [v.delaunay](v.delaunay.md),
+[v.hull](v.hull.md)*
 
-James Darrell McCauley, Purdue University<br>
-GRASS 5 update, improvements: <a href="mailto:aaime@libero.it">Andrea Aime</a>, Modena, Italy<br>
-GRASS 5.7 update: Radim Blazek<br>
+[Voronoi diagram
+(Wikipedia)](https://en.wikipedia.org/wiki/Voronoi_diagram)
+
+## AUTHORS
+
+James Darrell McCauley, Purdue University  
+GRASS 5 update, improvements: [Andrea Aime](mailto:aaime@libero.it),
+Modena, Italy  
+GRASS 5.7 update: Radim Blazek  
 Markus Metz

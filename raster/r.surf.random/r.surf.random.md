@@ -1,56 +1,50 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<b>r.surf.random</b> produces a raster map layer of uniform random deviates
+**r.surf.random** produces a raster map layer of uniform random deviates
 whose range can be expressed by the user. It is essentially the same as
-<em>r.surf.gauss</em>, but uses a linear random number generator instead.
-It uses the random number generator drand48() or rand()<!-- cite? -->,
-depending on the user's platform.
+*r.surf.gauss*, but uses a linear random number generator instead. It
+uses the random number generator drand48() or rand(), depending on the
+user's platform.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-<div class="code"><pre>
+```shell
 g.region -p n=228500 s=215000 w=630000 e=645000 res=10
 r.surf.random out=random min=0 max=100
 
 # check result
 r.univar random
-</pre></div>
-
-<!--
-d.legend -d raster=random@user1 title=random font=Vera
--->
+```
 
 <div align="center" style="margin: 10px">
-<a href="r_surf_random.jpg">
-<img src="r_surf_random.jpg" width="600" height="293" alt="r.random.surface example (min: 10; max: 100)" border="0">
-</a><br>
-<i>Figure: Random surface example (min: 10; max: 100)</i>
+
+[<img src="r_surf_random.jpg" data-border="0" width="600" height="293"
+alt="r.random.surface example (min: 10; max: 100)" />](r_surf_random.jpg)  
+*Figure: Random surface example (min: 10; max: 100)*
+
 </div>
 
-<p>
 With the histogram tool the cell values versus count can be shown.
-<p>
+
 <div align="center" style="margin: 10px">
-<a href="r_surf_random_hist.png">
-<img src="r_surf_random_hist.png" width="600" height="280" alt="r.random.surface example histogram (min: 10; max: 100)" border="0">
-</a><br>
-<i>Figure: Histogram of random surface example (min: 10; max: 100)</i>
+
+[<img src="r_surf_random_hist.png" data-border="0" width="600"
+height="280"
+alt="r.random.surface example histogram (min: 10; max: 100)" />](r_surf_random_hist.png)  
+*Figure: Histogram of random surface example (min: 10; max: 100)*
+
 </div>
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.random.surface.html">r.random.surface</a>,
-<a href="r.surf.contour.html">r.surf.contour</a>,
-<a href="r.surf.fractal.html">r.surf.fractal</a>,
-<a href="r.surf.gauss.html">r.surf.gauss</a>,
-<a href="r.surf.idw.html">r.surf.idw</a>,
-<a href="v.surf.rst.html">v.surf.rst</a>
-</em>
+*[r.random.surface](r.random.surface.md),
+[r.surf.contour](r.surf.contour.md),
+[r.surf.fractal](r.surf.fractal.md), [r.surf.gauss](r.surf.gauss.md),
+[r.surf.idw](r.surf.idw.md), [v.surf.rst](v.surf.rst.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Jo Wood<br>
-Midlands Regional Research Laboratory (ASSIST)<br>
-University of Leicester<br>
-<i>October 1991</i>
+Jo Wood  
+Midlands Regional Research Laboratory (ASSIST)  
+University of Leicester  
+*October 1991*

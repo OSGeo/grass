@@ -1,216 +1,195 @@
-<!-- meta page description: wxGUI Cartographic Composer -->
-<!-- meta page index: topic_GUI|GUI -->
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<p>
-<b>wxGUI Cartographic Composer</b> also called <em>wx.psmap</em> is
-a <em><a href="wxGUI.html">wxGUI</a></em> extension which allows the
-user to create interactively hardcopy map outputs. This tool
-generates <em><a href="ps.map.html">ps.map</a></em> configuration file
-and then runs <em><a href="ps.map.html">ps.map</a></em> to create
-PostScript output. There are two modes - <em>Draft mode</em> for map
-composing and <em>Preview mode</em>
-(requires <a href="http://www.pythonware.com/products/pil/">Python
-Imaging Library</a>) to see how the result will look like. In draft
-mode map features (like legend or scalebar) are represented by a
-colored rectangle with a label.
+**wxGUI Cartographic Composer** also called *wx.psmap* is a
+*[wxGUI](wxGUI.md)* extension which allows the user to create
+interactively hardcopy map outputs. This tool generates
+*[ps.map](ps.map.md)* configuration file and then runs
+*[ps.map](ps.map.md)* to create PostScript output. There are two modes -
+*Draft mode* for map composing and *Preview mode* (requires [Python
+Imaging Library](http://www.pythonware.com/products/pil/)) to see how
+the result will look like. In draft mode map features (like legend or
+scalebar) are represented by a colored rectangle with a label.
 
-<p>
 Possible output files:
-<ul>
-  <li> <em><a href="ps.map.html">ps.map</a></em> instructions file</li>
-  <li> PostScript/EPS file</li>
-  <li> PDF (using ps2pdf)</li>
-</ul>
 
-<center>
-<br>
-<img src="psmap_frame.jpg" border="1" alt="wxGUI Cartographic Composer">
-<br><br>
-</center>
+- *[ps.map](ps.map.md)* instructions file
+- PostScript/EPS file
+- PDF (using ps2pdf)
 
-<p>
+  
+<img src="psmap_frame.jpg" data-border="1"
+alt="wxGUI Cartographic Composer" />  
+  
+
 Cartographic Composer enables to load in saved instructions file.
-Loading instruction files created by Cartographic Composer is more robust,
-as opposed to loading files created manually.
+Loading instruction files created by Cartographic Composer is more
+robust, as opposed to loading files created manually.
 
-<p>
-Currently supported <em><a href="ps.map.html">ps.map</a></em> instructions:
+Currently supported *[ps.map](ps.map.md)* instructions:
 
-<ul>
-  <li> paper</li>
-  <li> maploc</li>
-  <li> scale</li>
-  <li> border</li>
-  <li> raster</li>
-  <li> colortable</li>
-  <li> vpoints</li>
-  <li> vlines</li>
-  <li> vareas</li>
-  <li> vlegend</li>
-  <li> text</li>
-  <li> scalebar</li>
-  <li> mapinfo</li>
-  <li> point</li>
-  <li> line</li>
-  <li> rectangle</li>
-  <li> labels</li>
-</ul>
+- paper
+- maploc
+- scale
+- border
+- raster
+- colortable
+- vpoints
+- vlines
+- vareas
+- vlegend
+- text
+- scalebar
+- mapinfo
+- point
+- line
+- rectangle
+- labels
 
-<h3>CARTOGRAPHIC COMPOSER TOOLBAR</h3>
-<dl>
-  <dt><img src="icons/script-save.png" alt="icon">&nbsp;
-    <em>Generate instructions file</em></dt>
-  <dd>Generates and saves text file with mapping instructions.</dd>
+### CARTOGRAPHIC COMPOSER TOOLBAR
 
-  <dt><img src="icons/script-load.png" alt="icon">&nbsp;
-    <em>Load instructions file</em></dt>
-  <dd>Load text file with mapping instructions.</dd>
+![icon](icons/script-save.png)  *Generate instructions file*  
+Generates and saves text file with mapping instructions.
 
-  <dt><img src="icons/page-settings.png" alt="icon">&nbsp;
-    <em>Page setup</em></dt>
-  <dd>Specify paper size, margins and orientation.</dd>
+![icon](icons/script-load.png)  *Load instructions file*  
+Load text file with mapping instructions.
 
-  <dt><img src="icons/pointer.png" alt="icon">&nbsp;
-    <em>Pointer</em></dt>
-  <dd>Select object on the paper by clicking, drag the cursor while pressing the left mouse button to move it or resize object (currently only map frame) by clicking on a small black box in its bottom right corner. Double click to show object properties dialog</dd>
+![icon](icons/page-settings.png)  *Page setup*  
+Specify paper size, margins and orientation.
 
-  <dt><img src="icons/pan.png" alt="icon">&nbsp;
-    <em>Pan</em></dt>
-  <dd>Drag the pan cursor while pressing the left mouse button to move your view. </dd>
+![icon](icons/pointer.png)  *Pointer*  
+Select object on the paper by clicking, drag the cursor while pressing
+the left mouse button to move it or resize object (currently only map
+frame) by clicking on a small black box in its bottom right corner.
+Double click to show object properties dialog
 
+![icon](icons/pan.png)  *Pan*  
+Drag the pan cursor while pressing the left mouse button to move your
+view.
 
-  <dt><img src="icons/zoom-in.png" alt="icon">&nbsp;
-    <em>Zoom in</em></dt>
-  <dd>Interactive zooming with the mouse in both draft and preview mode. Drawing a box or just a left click with the mouse and zoom-in cursor causes the display to zoom in so that the area defined by the box fills the display.</dd>
+![icon](icons/zoom-in.png)  *Zoom in*  
+Interactive zooming with the mouse in both draft and preview mode.
+Drawing a box or just a left click with the mouse and zoom-in cursor
+causes the display to zoom in so that the area defined by the box fills
+the display.
 
+![icon](icons/zoom-out.png)  *Zoom out*  
+Interactive zooming with the mouse in both draft and preview mode.
+Drawing a box or just a left click with the mouse and zoom-out cursor
+causes the display to zoom out so that the area displayed shrinks to
+fill the area defined by the box.
 
-  <dt><img src="icons/zoom-out.png" alt="icon">&nbsp;
-    <em>Zoom out</em></dt>
-  <dd>Interactive zooming with the mouse in both draft and preview mode. Drawing a box or just a left click with the mouse and zoom-out cursor causes the display to zoom out so that the area displayed shrinks to fill the area defined by the box.</dd>
+![icon](icons/zoom-extent.png)  *Zoom to page*  
+Zoom to display the entire page
 
-  <dt><img src="icons/zoom-extent.png" alt="icon">&nbsp;
-    <em>Zoom to page</em></dt>
-  <dd>Zoom to display the entire page </dd>
+![icon](icons/layer-add.png)  *Map frame*  
+Click and drag to place map frame. If map frame is already drawn, open a
+dialog to set its properties.
 
+![icon](icons/layer-raster-add.png)  *Raster map*  
+Shows a dialog to add or change the raster map.
 
-  <dt><img src="icons/layer-add.png" alt="icon">&nbsp;
-    <em>Map frame</em></dt>
-  <dd>Click and drag to place map frame. If map frame is already drawn, open a dialog to set its properties. </dd>
+![icon](icons/layer-vector-add.png)  *Vector map*  
+Shows a dialog to add or change current vector maps and their
+properties:
 
-  <dt><img src="icons/layer-raster-add.png" alt="icon">&nbsp;
-    <em>Raster map</em></dt>
-  <dd>Shows a dialog to add or change the raster map.</dd>
+*Data selection*  
+Select data to draw:
 
-  <dt><img src="icons/layer-vector-add.png" alt="icon">&nbsp;
-    <em>Vector map</em></dt>
-  <dd>Shows a dialog to add or change current vector maps and their properties:
-    <dl>
-      <dt><em>Data selection</em></dt>
-        <dd>Select data to draw:
+*Feature type*  
+Select which data type to draw. In case of point data, points or
+centroids can be drawn, in case of line data, lines or boundaries.
 
-        <dl>
-          <dt><em>Feature type</em></dt>
-            <dd> Select which data type to draw. In case of point data, points or centroids
-            can be drawn, in case of line data, lines or boundaries. </dd>
-          <dt><em>Layer selection</em></dt>
-            <dd>Select layer and limit data by a SQL query or chose only certain categories.</dd>
-          <dt><em>Mask</em></dt>
-            <dd>Whether to use mask or not.</dd>
-        </dl>
-        </dd>
+*Layer selection*  
+Select layer and limit data by a SQL query or chose only certain
+categories.
 
-      <dt><em>Colors</em></dt>
-        <dd>Color settings:
+*Mask*  
+Whether to use mask or not.
 
-        <dl>
-          <dt><em>Outline</em></dt>
-            <dd> Select outline color and width in points. In case of lines, outline means highlighting.</dd>
-          <dt><em>Fill</em></dt>
-            <dd>Select fill color, one color for all vector elements or color from rgb column.</dd>
-        </dl>
-      </dd>
-      <dt><em>Size and style</em></dt>
-        <dd>
-        Sets size, style, symbols, pattern; depends on data type:
+*Colors*  
+Color settings:
 
-        <dl>
-          <dt><em>Symbology</em></dt>
-            <dd> Available for point data. Choose symbol or EPS file to draw points with.</dd>
-          <dt><em>Line style</em></dt>
-            <dd>Available for line data. Select line style (solid, dashed, ...) and the look of the ends of the line (butt, round, ...)</dd>
-          <dt><em>Pattern</em></dt>
-          <dd> Available for areas. Choose pattern file and set the width of the pattern.</dd>
-          <dt><em>Size</em></dt>
-          <dd> Available for point data. Choose size (number of times larger than the size in the icon file) as a single value or take the size from a map table column.</dd>
-          <dt><em>Rotation</em></dt>
-          <dd> Available for point data. Rotate symbols counterclockwise with the given value or with the value from a map table column</dd>
-          <dt><em>Width</em></dt>
-          <dd> Available for line data. Set line width in points or take the value from a map table column.</dd>
-        </dl>
-      </dd>
+*Outline*  
+Select outline color and width in points. In case of lines, outline
+means highlighting.
 
+*Fill*  
+Select fill color, one color for all vector elements or color from rgb
+column.
 
-    </dl>
-    </dd>
+*Size and style*  
+Sets size, style, symbols, pattern; depends on data type:
 
-   <dt><img src="icons/layer-more.png" alt="icon">&nbsp;
-    <em>Add overlays</em></dt>
-   <dd>Add overlays: vector labels, grid (not yet implemented)
-    <dl>
-      <dt><img src="icons/layer-label-add.png" alt="icon">&nbsp;
-        <em>Add labels</em></dt>
-      <dd>Add vector labels created beforehand by v.label module.</dd>
-    </dl>
-   </dd>
+*Symbology*  
+Available for point data. Choose symbol or EPS file to draw points with.
 
-   <dt><img src="icons/overlay-add.png" alt="icon">&nbsp;
-    <em>Add map elements</em></dt>
-   <dd>Add map elements: legend, scalebar, map info, text
-    <dl>
-      <dt><img src="icons/legend-add.png" alt="icon">&nbsp;
-        <em>Add legend</em></dt>
-      <dd>Add raster or vector legend or edit their properties.</dd>
-      <dt><img src="icons/map-info.png" alt="icon">&nbsp;
-        <em>Add map info</em></dt>
-      <dd>Add information about region, grid and scale or edit map info properties.</dd>
-      <dt><img src="icons/scalebar-add.png" alt="icon">&nbsp;
-        <em>Add scalebar</em></dt>
-      <dd>Add scalebar or edit its properties.</dd>
-      <dt><img src="icons/text-add.png" alt="icon">&nbsp;
-        <em>Add text</em></dt>
-      <dd>Add text label.</dd>
-    </dl>
-    </dd>
-  <dt><img src="icons/layer-remove.png" alt="icon">&nbsp;
-    <em>Remove selected element</em></dt>
-  <dd>Select an object and remove it. Pressing Delete key does the same. </dd>
+*Line style*  
+Available for line data. Select line style (solid, dashed, ...) and the
+look of the ends of the line (butt, round, ...)
 
-  <dt><img src="icons/execute.png" alt="icon">&nbsp;
-    <em>Show preview</em></dt>
-  <dd> Generates output and switches to Preview mode to see the result. Be patient, it can take a while.</dd>
+*Pattern*  
+Available for areas. Choose pattern file and set the width of the
+pattern.
 
+*Size*  
+Available for point data. Choose size (number of times larger than the
+size in the icon file) as a single value or take the size from a map
+table column.
 
-  <dt><img src="icons/ps-export.png" alt="icon">&nbsp;
-    <em>Generate hardcopy map output in PS</em></dt>
-  <dd> Generates hardcopy map output in PostScript/EPS file.</dd>
-   <dt><img src="icons/pdf-export.png" alt="icon">&nbsp;
-    <em>Generate hardcopy map output in PDF</em></dt>
-  <dd> Generates hardcopy map output in PDF using ps2pdf or <a href="https://www.ghostscript.com/releases/gsdnld.html">Ghostscript gswin32c/gswin64c</a> (OS MS Windows platform only).</dd>
+*Rotation*  
+Available for point data. Rotate symbols counterclockwise with the given
+value or with the value from a map table column
 
-</dl>
+*Width*  
+Available for line data. Set line width in points or take the value from
+a map table column.
 
-<h2>SEE ALSO</h2>
+![icon](icons/layer-more.png)  *Add overlays*  
+Add overlays: vector labels, grid (not yet implemented)
 
-<em>
-  <a href="wxGUI.html">wxGUI</a>,
-  <a href="wxGUI.components.html">wxGUI components</a>
-</em>
+![icon](icons/layer-label-add.png)  *Add labels*  
+Add vector labels created beforehand by v.label module.
 
-<p>
-See also <a href="https://grasswiki.osgeo.org/wiki/WxGUI_Cartographic_Composer">wiki</a> page.
+![icon](icons/overlay-add.png)  *Add map elements*  
+Add map elements: legend, scalebar, map info, text
 
-<h2>AUTHOR</h2>
+![icon](icons/legend-add.png)  *Add legend*  
+Add raster or vector legend or edit their properties.
 
-Anna Kratochvilova, Czech Technical University in Prague, Czech
-Republic (bachelor's final project 2011, mentor: Martin Landa)
+![icon](icons/map-info.png)  *Add map info*  
+Add information about region, grid and scale or edit map info
+properties.
+
+![icon](icons/scalebar-add.png)  *Add scalebar*  
+Add scalebar or edit its properties.
+
+![icon](icons/text-add.png)  *Add text*  
+Add text label.
+
+![icon](icons/layer-remove.png)  *Remove selected element*  
+Select an object and remove it. Pressing Delete key does the same.
+
+![icon](icons/execute.png)  *Show preview*  
+Generates output and switches to Preview mode to see the result. Be
+patient, it can take a while.
+
+![icon](icons/ps-export.png)  *Generate hardcopy map output in PS*  
+Generates hardcopy map output in PostScript/EPS file.
+
+![icon](icons/pdf-export.png)  *Generate hardcopy map output in PDF*  
+Generates hardcopy map output in PDF using ps2pdf or [Ghostscript
+gswin32c/gswin64c](https://www.ghostscript.com/releases/gsdnld.html) (OS
+MS Windows platform only).
+
+## SEE ALSO
+
+*[wxGUI](wxGUI.md), [wxGUI components](wxGUI.components.md)*
+
+See also
+[wiki](https://grasswiki.osgeo.org/wiki/WxGUI_Cartographic_Composer)
+page.
+
+## AUTHOR
+
+Anna Kratochvilova, Czech Technical University in Prague, Czech Republic
+(bachelor's final project 2011, mentor: Martin Landa)

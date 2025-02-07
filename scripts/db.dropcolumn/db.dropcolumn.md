@@ -1,19 +1,20 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.dropcolumn</em> drops a column from an attribute table.
-If the <b>-f</b> force flag is not given then nothing is removed, instead
-a preview of the action to be taken is printed.
+*db.dropcolumn* drops a column from an attribute table. If the **-f**
+force flag is not given then nothing is removed, instead a preview of
+the action to be taken is printed.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>db.dropcolumn</em> is a front-end to <em>db.execute</em> to allow easier
-usage with a special workaround for the SQLite driver to support column
-drop also for SQLite tables.
+*db.dropcolumn* is a front-end to *db.execute* to allow easier usage
+with a special workaround for the SQLite driver to support column drop
+also for SQLite tables.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Dropping a column (North Carolina sample dataset):
-<p><div class="code"><pre>
+
+```shell
 # work on own copy
 g.copy vect=roadsmajor,myroads
 db.describe -c myroads
@@ -25,18 +26,14 @@ db.dropcolumn myroads column=SHAPE_LEN
 db.dropcolumn -f myroads column=SHAPE_LEN
 
 db.describe -c myroads
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.describe.html">db.describe</a>,
-<a href="db.droptable.html">db.droptable</a>,
-<a href="db.execute.html">db.execute</a>,
-<a href="v.db.dropcolumn.html">v.db.dropcolumn</a>,
-<a href="sql.html">GRASS SQL interface</a>
-</em>
+*[db.describe](db.describe.md), [db.droptable](db.droptable.md),
+[db.execute](db.execute.md), [v.db.dropcolumn](v.db.dropcolumn.md),
+[GRASS SQL interface](sql.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Markus Neteler

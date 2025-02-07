@@ -1,146 +1,134 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.walk</em> computes anisotropic cumulative cost of moving between
+*r.walk* computes anisotropic cumulative cost of moving between
 different geographic locations on an input elevation raster map whose
 cell category values represent elevation combined with an input raster
 map layer whose cell values represent friction cost.
 
-<p>
-<em>r.walk</em> outputs 1) a raster map showing the lowest
-cumulative cost (time) of moving between each cell and the user-specified
-starting points and 2) a second raster map showing the movement
-direction to the next cell on the path back to the start point (see
-<a href="#move">Movement Direction</a>). It uses an input elevation
-raster map whose cell category values represent elevation,
-combined with a second input raster map whose cell values
-represent friction costs.
+*r.walk* outputs 1) a raster map showing the lowest cumulative cost
+(time) of moving between each cell and the user-specified starting
+points and 2) a second raster map showing the movement direction to the
+next cell on the path back to the start point (see [Movement
+Direction](#move)). It uses an input elevation raster map whose cell
+category values represent elevation, combined with a second input raster
+map whose cell values represent friction costs.
 
-<p>
-This function is similar to <em><a href="r.cost.html">r.cost</a></em>,
-but in addition to a friction map, it considers an anisotropic travel
-time due to the different walking speed associated with downhill and
-uphill movements.
+This function is similar to *[r.cost](r.cost.md)*, but in addition to a
+friction map, it considers an anisotropic travel time due to the
+different walking speed associated with downhill and uphill movements.
 
-<h2>NOTES</h2>
+## NOTES
 
-<p>
-The formula from Aitken 1977/Langmuir 1984 (based on Naismith's rule
-for walking times) has been used to estimate the cost parameters of
-specific slope intervals:
+The formula from Aitken 1977/Langmuir 1984 (based on Naismith's rule for
+walking times) has been used to estimate the cost parameters of specific
+slope intervals:
 
-<div class="code"><pre>
+```shell
 T = a*delta_S + b*delta_H_uphill + c*delta_H_moderate_downhill + d*delta_H_steep_downhill
-</pre></div>
+```
 
 where:
-<ul>
-  <li><code>T</code> is time of movement in seconds,</li>
-  <li><code>delta S</code> is the horizontal distance covered in meters,</li>
-  <li><code>delta H</code> is the altitude difference in meters.</li>
-</ul>
 
-<p>
-The a, b, c, d <b>walk_coeff</b> parameters take in account
-movement speed in the different conditions and are linked to:
+- `T` is time of movement in seconds,
+- `delta S` is the horizontal distance covered in meters,
+- `delta H` is the altitude difference in meters.
 
-<ul>
-  <li>a: time in seconds it takes to walk for 1 meter a flat surface (1/walking speed)</li>
-  <li>b: additional walking time in seconds, per meter of elevation gain
-      on uphill slopes</li>
-  <li>c: additional walking time in seconds, per meter of elevation loss
-      on moderate downhill slopes (use positive value for decreasing cost)</li>
-  <li>d: additional walking time in seconds, per meter of elevation loss
-      on steep downhill slopes (use negative value for increasing cost)</li>
-</ul>
+The a, b, c, d **walk_coeff** parameters take in account movement speed
+in the different conditions and are linked to:
+
+- a: time in seconds it takes to walk for 1 meter a flat surface
+  (1/walking speed)
+- b: additional walking time in seconds, per meter of elevation gain on
+  uphill slopes
+- c: additional walking time in seconds, per meter of elevation loss on
+  moderate downhill slopes (use positive value for decreasing cost)
+- d: additional walking time in seconds, per meter of elevation loss on
+  steep downhill slopes (use negative value for increasing cost)
 
 It has been proved that moving downhill is favourable up to a specific
 slope value threshold, after that it becomes unfavourable. The default
-slope value threshold (<b>slope_factor</b>) is -0.2125, corresponding
-to tan(-12), calibrated on human behaviour (&gt;5 and &lt;12 degrees:
-moderate downhill; &gt;12 degrees: steep downhill). The default values
-for a, b, c, d <b>walk_coeff</b> parameters are those proposed by
-Langmuir (0.72, 6.0, 1.9998, -1.9998), based on man walking effort in
-standard conditions.
+slope value threshold (**slope_factor**) is -0.2125, corresponding to
+tan(-12), calibrated on human behaviour (\>5 and \<12 degrees: moderate
+downhill; \>12 degrees: steep downhill). The default values for a, b, c,
+d **walk_coeff** parameters are those proposed by Langmuir (0.72, 6.0,
+1.9998, -1.9998), based on man walking effort in standard conditions.
 
-<p>The <b>friction</b> cost parameter represents a time penalty in seconds
-of additional walking time to cross 1 meter distance.
-Friction cost can be any floating point value &ge; 0.
-A friction map is a required parameter; if no friction costs are desired,
-a friction map should be a raster in which all cells have a value of 0.
-<p>The <b>lambda</b> parameter is a dimensionless scaling factor of the friction cost:
+The **friction** cost parameter represents a time penalty in seconds of
+additional walking time to cross 1 meter distance. Friction cost can be
+any floating point value ≥ 0. A friction map is a required parameter; if
+no friction costs are desired, a friction map should be a raster in
+which all cells have a value of 0.
 
-<div class="code"><pre>
+The **lambda** parameter is a dimensionless scaling factor of the
+friction cost:
+
+```shell
 total cost = movement time cost + lambda * friction costs * delta_S
-</pre></div>
+```
 
-<p>
 For a more accurate result, the "knight's move" option can be used
 (although it is more time consuming). In the diagram below, the center
-location (O) represents a grid cell from which cumulative distances
-are calculated. Those neighbours marked with an x are always
-considered for cumulative cost updates. With the "knight's move"
-option, the neighbours marked with a K are also considered.
+location (O) represents a grid cell from which cumulative distances are
+calculated. Those neighbours marked with an x are always considered for
+cumulative cost updates. With the "knight's move" option, the neighbours
+marked with a K are also considered.
 
-<div class="code"><pre>
+```shell
   K   K
 K x x x K
   x O x
 K x x x K
   K   K
-</pre></div>
+```
 
-<p>The minimum cumulative costs are computed using Dijkstra's
-algorithm, that find an optimum solution (for more details see
-<em>r.cost</em>, that uses the same algorithm).
+The minimum cumulative costs are computed using Dijkstra's algorithm,
+that find an optimum solution (for more details see *r.cost*, that uses
+the same algorithm). <span id="move"></span>
 
-<a name="move"></a>
-<h2>Movement Direction</h2>
+## Movement Direction
 
-<p>
 The movement direction surface is created to record the sequence of
 movements that created the cost accumulation surface. This movement
-direction surface can be used by <em><a href="r.path.html">r.path</a></em>
-to recover a path from an end point back to the start point.
-The direction of each cell points towards the next cell.
-The directions are recorded as degrees CCW from East:
+direction surface can be used by *[r.path](r.path.md)* to recover a path
+from an end point back to the start point. The direction of each cell
+points towards the next cell. The directions are recorded as degrees CCW
+from East:
 
-<div class="code"><pre>
+```shell
        112.5      67.5         i.e. a cell with the value 135
 157.5  135   90   45   22.5    means the next cell is to the north-west
        180   x   360
 202.5  225  270  315  337.5
        247.5     292.5
-</pre></div>
+```
 
-<p>
-Once <em>r.walk</em> computes the cumulative cost map as a linear
-combination of friction cost (from friction map) and the altitude and
-distance covered (from the digital elevation model), the associated
-movement direction map can be used by <em><a href="r.path.html">r.path</a></em>
-to find the minimum cost path.
+Once *r.walk* computes the cumulative cost map as a linear combination
+of friction cost (from friction map) and the altitude and distance
+covered (from the digital elevation model), the associated movement
+direction map can be used by *[r.path](r.path.md)* to find the minimum
+cost path.
 
-<p>
-<em>r.walk</em>, like most all GRASS raster programs, is also made to
-be run on maps larger that can fit in available computer memory. As the
-algorithm works through the dynamic list of cells it can move almost
-randomly around the entire area. <em>r.walk</em> divides the entire
-area into a number of pieces and swaps these pieces in and out of
-memory (to and from disk) as needed. This provides a virtual memory
-approach optimally designed for 2-D raster maps. The amount of memory
-to be used by <em>r.walk</em> can be controlled with the <b>memory</b>
-option, default is 300 MB. For systems with less memory this value will
-have to be set to a lower value.
+*r.walk*, like most all GRASS raster programs, is also made to be run on
+maps larger that can fit in available computer memory. As the algorithm
+works through the dynamic list of cells it can move almost randomly
+around the entire area. *r.walk* divides the entire area into a number
+of pieces and swaps these pieces in and out of memory (to and from disk)
+as needed. This provides a virtual memory approach optimally designed
+for 2-D raster maps. The amount of memory to be used by *r.walk* can be
+controlled with the **memory** option, default is 300 MB. For systems
+with less memory this value will have to be set to a lower value.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-We compute a map showing how far a lost person could get from the
-point where he or she was last seen
-while taking into account the topography and landcover.
-<div class="code"><pre>
+We compute a map showing how far a lost person could get from the point
+where he or she was last seen while taking into account the topography
+and landcover.
+
+```shell
 g.region swwake_30m -p
 
 # create friction map based on land cover
-r.recode landclass96 out=friction rules=- &lt;&lt; EOF
+r.recode landclass96 out=friction rules=- << EOF
 1:3:0.1:0.1
 4:5:10.:10.
 6:6:1000.0:1000.0
@@ -153,57 +141,54 @@ r.walk -k elevation=elev_ned_30m friction=friction output=walkcost \
 # compute contours on the cost surface to better understand
 # how far the person can get in certain time (1000 is in seconds)
 r.contour walkcost output=walkcost step=1000
-</pre></div>
+```
 
 <div align="center" style="margin: 10px">
-<a href="r_walk.png">
-<img src="r_walk.png" width="600" height="600" alt="r.walk example" border="0">
-</a><br>
-<i>Figure: Walkshed over a cost surface derived from topography and landcover</i>
+
+[<img src="r_walk.png" data-border="0" width="600" height="600"
+alt="r.walk example" />](r_walk.png)  
+*Figure: Walkshed over a cost surface derived from topography and
+landcover*
+
 </div>
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<ul>
-<li>Aitken, R. 1977. Wilderness areas in Scotland. Unpublished Ph.D. thesis.
- University of Aberdeen.</li>
-<li> Steno Fontanari, University of Trento, Italy, Ingegneria per l'Ambiente e
- il Territorio, 2000-2001.</li>
- Svilluppo di metodologie GIS per la determinazione dell'accessibilit&agrave;
- territoriale come supporto alle decisioni nella gestione ambientale.
-<li>Langmuir, E. 1984. Mountaincraft and leadership. The Scottish
- Sports Council/MLTB. Cordee, Leicester.</li>
-</ul>
+- Aitken, R. 1977. Wilderness areas in Scotland. Unpublished Ph.D.
+  thesis. University of Aberdeen.
+- Steno Fontanari, University of Trento, Italy, Ingegneria per
+  l'Ambiente e il Territorio, 2000-2001.
+- Langmuir, E. 1984. Mountaincraft and leadership. The Scottish Sports
+  Council/MLTB. Cordee, Leicester.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.cost.html">r.cost</a>,
-<a href="r.path.html">r.path</a>,
-<a href="r.in.ascii.html">r.in.ascii</a>,
-<a href="r.mapcalc.html">r.mapcalc</a>,
-<a href="r.recode.html">r.recode</a>,
-<a href="r.out.ascii.html">r.out.ascii</a>
-</em>
+*[r.cost](r.cost.md), [r.path](r.path.md), [r.in.ascii](r.in.ascii.md),
+[r.mapcalc](r.mapcalc.md), [r.recode](r.recode.md),
+[r.out.ascii](r.out.ascii.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-<b>Based on r.cost written by :</b><br>
-Antony Awaida, Intelligent Engineering, Systems Laboratory, M.I.T.<br>
-James Westervelt, U.S.Army Construction Engineering Research Laboratory<br>
+**Based on r.cost written by :**  
+Antony Awaida, Intelligent Engineering, Systems Laboratory, M.I.T.  
+James Westervelt, U.S.Army Construction Engineering Research
+Laboratory  
 Updated for Grass 5 by Pierre de Mouveaux (pmx@audiovu.com)
 
-<p><b>Initial version of r.walk:</b><br>
+**Initial version of r.walk:**  
 Steno Fontanari, 2002
 
-<p><b>Current version of r.walk:</b><br>
-Franceschetti Simone, Sorrentino Diego, Mussi Fabiano and Pasolli Mattia<br>
-Correction by: Fontanari Steno, Napolitano Maurizio and  Flor Roberto<br>
-In collaboration with: Franchi Matteo, Vaglia Beatrice, Bartucca Luisa, Fava Valentina and Tolotti Mathias, 2004
+**Current version of r.walk:**  
+Franceschetti Simone, Sorrentino Diego, Mussi Fabiano and Pasolli
+Mattia  
+Correction by: Fontanari Steno, Napolitano Maurizio and Flor Roberto  
+In collaboration with: Franchi Matteo, Vaglia Beatrice, Bartucca Luisa,
+Fava Valentina and Tolotti Mathias, 2004
 
-<p><b>Updated for GRASS 6.1:</b><br>
+**Updated for GRASS 6.1:**  
 Roberto Flor and Markus Neteler
 
-<p><b>Updated for GRASS GIS 7:</b><br>
-Markus Metz<br>
-Multiple path directions sponsored by <a href="https://www.mundialis.de">mundialis</a>
+**Updated for GRASS GIS 7:**  
+Markus Metz  
+Multiple path directions sponsored by
+[mundialis](https://www.mundialis.de)

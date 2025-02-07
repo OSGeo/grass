@@ -1,52 +1,38 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.basins.fill</em>
-generates a raster map layer depicting subbasins, based
-on input raster map layers for the coded stream network
-(where each channel segment has been "coded" with a unique category value)
-and for the ridges within a given watershed.
-The raster map layer depicting ridges should include
-the ridge which defines the perimeter of the watershed.
-The coded stream network can be generated
-as part of the
-<em><a href="r.watershed.html">r.watershed</a></em> program,
-but the map layer of ridges will need to be created by hand
-(for example, through digitizing done in <em><a href="wxGUI.vdigit.html">wxGUI vector digitizer</a></em>).
+*r.basins.fill* generates a raster map layer depicting subbasins, based
+on input raster map layers for the coded stream network (where each
+channel segment has been "coded" with a unique category value) and for
+the ridges within a given watershed. The raster map layer depicting
+ridges should include the ridge which defines the perimeter of the
+watershed. The coded stream network can be generated as part of the
+*[r.watershed](r.watershed.md)* program, but the map layer of ridges
+will need to be created by hand (for example, through digitizing done in
+*[wxGUI vector digitizer](wxGUI.vdigit.md)*).
 
-<p>
-The resulting output raster map layer will
-code the subbasins with category values matching
-those of the channel segments passing through them.
-A user-supplied number of passes through the data is
-made in an attempt to fill in these subbasins.
-If the resulting map layer from this program appears to
-have holes within a subbasin, the program should be
+The resulting output raster map layer will code the subbasins with
+category values matching those of the channel segments passing through
+them. A user-supplied number of passes through the data is made in an
+attempt to fill in these subbasins. If the resulting map layer from this
+program appears to have holes within a subbasin, the program should be
 rerun with a higher number of passes.
 
-<h2>NOTES</h2>
+## NOTES
 
-The current geographic region setting is ignored.
-Instead, the geographic region for the entire input stream's
-map layer is used.
+The current geographic region setting is ignored. Instead, the
+geographic region for the entire input stream's map layer is used.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-See Appendix A of the <b>GRASS</b>
-<a href="https://grass.osgeo.org/gdp/raster/r.watershed.ps">Tutorial:
-r.watershed</a> for further details on the combined use of
-<em>r.basins.fill</em> and <em>r.watershed</em>.
+See Appendix A of the **GRASS** [Tutorial:
+r.watershed](https://grass.osgeo.org/gdp/raster/r.watershed.ps) for
+further details on the combined use of *r.basins.fill* and
+*r.watershed*.
 
-<p>
-<em>
-  <a href="r.water.outlet.html">r.water.outlet</a>,
-  <a href="r.watershed.html">r.watershed</a>,
-  <a href="wxGUI.vdigit.html">wxGUI vector digitizer</a>
-</em>
+*[r.water.outlet](r.water.outlet.md), [r.watershed](r.watershed.md),
+[wxGUI vector digitizer](wxGUI.vdigit.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Dale White,
-Dept. of Geography,
-Pennsylvania State University
-<br>
+Dale White, Dept. of Geography, Pennsylvania State University  
 Larry Band, Dept. of Geography, University of Toronto, Canada

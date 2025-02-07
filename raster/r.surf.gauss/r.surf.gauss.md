@@ -1,52 +1,48 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.surf.gauss</em> produces a raster map of Gaussian deviates whose
-mean and standard deviation can be expressed by the user. It uses a
-Gaussian random number generator. It is essentially the same
-as <em><a href="r.surf.random.html">r.surf.random</a></em>, but uses a
-Gaussian random number generator instead.
+*r.surf.gauss* produces a raster map of Gaussian deviates whose mean and
+standard deviation can be expressed by the user. It uses a Gaussian
+random number generator. It is essentially the same as
+*[r.surf.random](r.surf.random.md)*, but uses a Gaussian random number
+generator instead.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-<div class="code"><pre>
+```shell
 g.region -p n=228500 s=215000 w=630000 e=645000 res=10
 r.surf.gauss out=gauss mean=0 sigma=10
 
 # check result
 r.univar gauss
-</pre></div>
-
-<!--
-d.legend -d raster=gauss@user1 title=Gauss font=Vera
--->
+```
 
 <div align="center" style="margin: 10px">
-<a href="r_surf_gauss.jpg">
-<img src="r_surf_gauss.jpg" width="600" height="295" alt="r.surf.gauss example (mean: 0; sigma: 10)" border="0">
-</a><br>
-<i>Figure: Random Gaussian surface example (mean: 0; sigma: 10)</i>
+
+[<img src="r_surf_gauss.jpg" data-border="0" width="600" height="295"
+alt="r.surf.gauss example (mean: 0; sigma: 10)" />](r_surf_gauss.jpg)  
+*Figure: Random Gaussian surface example (mean: 0; sigma: 10)*
+
 </div>
 
-<p>
 With the histogram tool the cell values versus count can be shown.
-<p>
+
 <div align="center" style="margin: 10px">
-<a href="r_surf_gauss_hist.png">
-<img src="r_surf_gauss_hist.png" width="600" height="275" alt="r.surf.gauss example histogram (mean: 0; sigma: 10)" border="0">
-</a><br>
-<i>Figure: Histogram of random Gaussian surface example (mean: 0; sigma: 10)</i>
+
+[<img src="r_surf_gauss_hist.png" data-border="0" width="600"
+height="275"
+alt="r.surf.gauss example histogram (mean: 0; sigma: 10)" />](r_surf_gauss_hist.png)  
+*Figure: Histogram of random Gaussian surface example (mean: 0; sigma:
+10)*
+
 </div>
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.surf.contour.html">r.surf.contour</a>,
-<a href="r.surf.fractal.html">r.surf.fractal</a>,
-<a href="r.surf.idw.html">r.surf.idw</a>,
-<a href="r.surf.random.html">r.surf.random</a>,
-<a href="v.surf.rst.html">v.surf.rst</a>
-</em>
+*[r.surf.contour](r.surf.contour.md),
+[r.surf.fractal](r.surf.fractal.md), [r.surf.idw](r.surf.idw.md),
+[r.surf.random](r.surf.random.md), [v.surf.rst](v.surf.rst.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Jo Wood, <a href="https://web.archive.org/web/20070707015520/http://www.le.ac.uk/assist/index.html">ASSIST's home</a>
+Jo Wood, [ASSIST's
+home](https://web.archive.org/web/20070707015520/http://www.le.ac.uk/assist/index.html)

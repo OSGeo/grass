@@ -1,63 +1,58 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>i.albedo</em> calculates the albedo, that is the Shortwave surface
-reflectance in the range of 0.3-3 micro-meters.  It takes as input
-individual bands of surface reflectance originating from MODIS, AVHRR, Landsat
-or Aster satellite sensors and calculates the albedo for those.  This is
-a precursor to <em>r.sun</em> and any energy-balance processing.
+*i.albedo* calculates the albedo, that is the Shortwave surface
+reflectance in the range of 0.3-3 micro-meters. It takes as input
+individual bands of surface reflectance originating from MODIS, AVHRR,
+Landsat or Aster satellite sensors and calculates the albedo for those.
+This is a precursor to *r.sun* and any energy-balance processing.
 
-<h2>NOTES</h2>
+## NOTES
 
-It uses for Landsat 8 the weighted average reflectance (temporary solution
-until an algorithm is found).
-<p>
-It assumes MODIS product surface reflectance in [0;10000].
+It uses for Landsat 8 the weighted average reflectance (temporary
+solution until an algorithm is found).
 
-<h2>EXAMPLE</h2>
+It assumes MODIS product surface reflectance in \[0;10000\].
 
-The following example creates the raster map "albedo_lsat7_1987" from the
-LANDSAT-TM5 bands in the North Carolina dataset:
-<div class="code"><pre>
+## EXAMPLE
+
+The following example creates the raster map "albedo_lsat7_1987" from
+the LANDSAT-TM5 bands in the North Carolina dataset:
+
+```shell
 g.region raster=lsat5_1987_10 -p
 i.albedo -l input=lsat5_1987_10,lsat5_1987_20,lsat5_1987_30,lsat5_1987_40,lsat5_1987_50,lsat5_1987_70 output=albedo_lsat7_1987
-</pre></div>
-<p>
-<center>
-<img src="i_albedo_landsat5.png" alt="i.albedo LANDSAT-TM5 1987 example"><br>
-<i>Figure: Resulting albedo map from LANDSAT 5</i>
-</center>
-<p>
-The following example creates the raster map "albedo_lsat7_2000" from the
-LANDSAT-TM7 bands in the North Carolina dataset:
-<div class="code"><pre>
+```
+
+![i.albedo LANDSAT-TM5 1987 example](i_albedo_landsat5.png)  
+*Figure: Resulting albedo map from LANDSAT 5*
+
+The following example creates the raster map "albedo_lsat7_2000" from
+the LANDSAT-TM7 bands in the North Carolina dataset:
+
+```shell
 g.region raster=lsat7_2000_10 -p
 i.albedo -l input=lsat7_2000_10,lsat7_2000_20,lsat7_2000_30,lsat7_2000_40,lsat7_2000_50,lsat7_2000_70 output=albedo_lsat7_2000
-</pre></div>
-<p>
-<center>
-<img src="i_albedo_landsat7.png" alt="i.albedo LANDSAT-TM7 2000 example"><br>
-<i>Figure: Resulting albedo map from LANDSAT 7</i>
-</center>
+```
 
-<h2>TODO</h2>
+![i.albedo LANDSAT-TM7 2000 example](i_albedo_landsat7.png)  
+*Figure: Resulting albedo map from LANDSAT 7*
 
-Maybe change input requirement of MODIS to [0.0-1.0]?
+## TODO
 
-<h2>REFERENCES</h2>
+Maybe change input requirement of MODIS to \[0.0-1.0\]?
+
+## REFERENCES
 
 For a 2 band determination of the Aster BB Albedo see the following:
-<p>
+
 Salleh and Chan, 2014. Land Surface Albedo Determination: Remote Sensing
 and Statistical Validation. in proceedings of FIG 2014
-(<a href="https://www.fig.net/resources/proceedings/fig_proceedings/fig2014/papers/ts05g/TS05G_salleh_chan_6910.pdf">PDF</a>)
+([PDF](https://www.fig.net/resources/proceedings/fig_proceedings/fig2014/papers/ts05g/TS05G_salleh_chan_6910.pdf))
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.sun.html">r.sun</a>,
-<a href="i.vi.html">i.vi</a>
-</em>
+*[r.sun](r.sun.md), [i.vi](i.vi.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Yann Chemin

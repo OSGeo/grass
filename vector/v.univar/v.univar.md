@@ -1,53 +1,51 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.univar</em> calculates univariate statistics on (by default) an attribute
-of, or, through the <b>-d</b> flag on distance between, vector map features.
-Attributes are read per feature and per category value. This means that if the
-map contains several features with the same category value, the attribute is
-read as many times as there are features. On the other hand, if a feature has
-more than one category value, each attribute value linked to each of the
-category values of the feature is read. For statistics on one attribute
-per category value, instead of one attribute per feature and per category,
-see <a href="v.db.univar.html">v.db.univar</a>.
+*v.univar* calculates univariate statistics on (by default) an attribute
+of, or, through the **-d** flag on distance between, vector map
+features. Attributes are read per feature and per category value. This
+means that if the map contains several features with the same category
+value, the attribute is read as many times as there are features. On the
+other hand, if a feature has more than one category value, each
+attribute value linked to each of the category values of the feature is
+read. For statistics on one attribute per category value, instead of one
+attribute per feature and per category, see
+[v.db.univar](v.db.univar.md).
 
-<p>Extended statistics (<b>-e</b>) adds median, 1st and 3rd quartiles, and 90th
-percentile to the output.
+Extended statistics (**-e**) adds median, 1st and 3rd quartiles, and
+90th percentile to the output.
 
-<h2>NOTES</h2>
+## NOTES
 
-When using the <b>-d</b> flag, univariate statistics of distances
-between vector features are calculated. The distances from all features
-to all other features are used. Since the distance from feature A to
-feature B is the same like the distance from feature B to feature A,
-that distance is considered only once, i.e. all pairwise distances
-between features are used. Depending on the selected vector
-<b>type</b>, distances are calculated as follows:
+When using the **-d** flag, univariate statistics of distances between
+vector features are calculated. The distances from all features to all
+other features are used. Since the distance from feature A to feature B
+is the same like the distance from feature B to feature A, that distance
+is considered only once, i.e. all pairwise distances between features
+are used. Depending on the selected vector **type**, distances are
+calculated as follows:
 
-<ul>
-<li> <b>type=point</b>: point distances are considered;</li>
-<li> <b>type=line</b>: line to line distances are considered;</li>
-<li> <b>type=area</b>: not supported, use <b>type=centroid</b> instead (and see
-     <a href="v.distance.html">v.distance</a> for calculating distances
-     between areas)</li>
-</ul>
+- **type=point**: point distances are considered;
+- **type=line**: line to line distances are considered;
+- **type=area**: not supported, use **type=centroid** instead (and see
+  [v.distance](v.distance.md) for calculating distances between areas)
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 The examples are based on the North Carolina sample dataset.
 
-<h3>Example dataset preparation</h3>
+### Example dataset preparation
 
-<div class="code"><pre>
+```shell
 g.region raster=elevation -p
 v.random output=samples npoints=100
 v.db.addtable map=samples columns="heights double precision"
 v.what.rast map=samples rast=elevation column=heights
 v.db.select map=samples
-</pre></div>
+```
 
-<h3>Calculate height attribute statistics</h3>
+### Calculate height attribute statistics
 
-<div class="code"><pre>
+```shell
 v.univar -e samples column=heights type=point
 
 number of features with non NULL attribute: 100
@@ -70,11 +68,11 @@ skewness: 0.162093
 median (even number of cells): 106.518
 3rd quartile: 126.274
 90th percentile: 135.023
-</pre></div>
+```
 
-<h3>Compare to statistics of original raster map</h3>
+### Compare to statistics of original raster map
 
-<div class="code"><pre>
+```shell
 r.univar -e elevation
 
 total null and non-null cells: 2025000
@@ -96,11 +94,11 @@ sum: 223510266.558102
 median (even number of cells): 108.88
 3rd quartile: 126.792
 90th percentile: 138.66
-</pre></div>
+```
 
-<h3>Calculate statistic of distance between sampling points</h3>
+### Calculate statistic of distance between sampling points
 
-<div class="code"><pre>
+```shell
 v.univar -d samples type=point
 
 number of primitives: 100
@@ -119,14 +117,17 @@ sample standard deviation: 3468.89
 sample variance: 1.20332e+07
 kurtosis: -0.605406
 skewness: 0.238688
-</pre></div>
+```
 
-<h3>Output in JSON format</h3>
-<div class="code"><pre>
+### Output in JSON format
+
+```shell
 v.univar -e samples column=heights type=point format=json
-</pre></div>
+```
+
 will output the results in JSON format:
-<div class="code"><pre>
+
+```shell
 {
     "n": 1832,
     "missing": 0,
@@ -154,23 +155,18 @@ will output the results in JSON format:
         }
     ]
 }
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.univar.html">db.univar</a>,
-<a href="r.univar.html">r.univar</a>,
-<a href="v.db.univar.html">v.db.univar</a>,
-<a href="v.distance.html">v.distance</a>,
-<a href="v.neighbors.html">v.neighbors</a>,
-<a href="v.qcount.html">v.qcount</a>
-</em>
+*[db.univar](db.univar.md), [r.univar](r.univar.md),
+[v.db.univar](v.db.univar.md), [v.distance](v.distance.md),
+[v.neighbors](v.neighbors.md), [v.qcount](v.qcount.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
 Radim Blazek, ITC-irst
-<p>
-extended by:<br>
-Hamish Bowman, University of Otago, New Zealand<br>
+
+extended by:  
+Hamish Bowman, University of Otago, New Zealand  
 Martin Landa

@@ -1,27 +1,26 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The module <em>t.remove</em> removes space time datasets (STRDS, STR3DS,
-STVDS) from the temporal database. In other words, by default it deletes
-the relevant database entries. It can also unregister maps from temporal
-database using the recursive mode <b>-r</b> (recursive).
-<p>
+The module *t.remove* removes space time datasets (STRDS, STR3DS, STVDS)
+from the temporal database. In other words, by default it deletes the
+relevant database entries. It can also unregister maps from temporal
+database using the recursive mode **-r** (recursive).
+
 Optionally, also the raster, 3D raster and vector maps of the space time
-datasets can be removed from the current mapset using the <b>-d</b> (delete)
-flag.
-All removals only work if <b>-f</b> (force) flag is used.
+datasets can be removed from the current mapset using the **-d**
+(delete) flag. All removals only work if **-f** (force) flag is used.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 In this example a space time raster dataset (STRDS) named
-<b>precip_months_sum</b> will be created using a subset of the monthly
-precipitation raster maps from the North Carolina climate sample data set.
-<br>
-In order to be able to show the case of recursive removal without deleting
-the original sample data, we generate new data by means of computing
-yearly precipitation sums. Eventually, all newly produced data (STRDS and
-raster maps) are removed:
+**precip_months_sum** will be created using a subset of the monthly
+precipitation raster maps from the North Carolina climate sample data
+set.  
+In order to be able to show the case of recursive removal without
+deleting the original sample data, we generate new data by means of
+computing yearly precipitation sums. Eventually, all newly produced data
+(STRDS and raster maps) are removed:
 
-<div class="code"><pre>
+```shell
 # Create new and empty STRDS
 t.create output=precip_months_sum semantictype=mean \
   title="Monthly sum of precipitation" \
@@ -45,16 +44,13 @@ t.remove -df type=strds input=precip_years_sum
 
 # b) the STRDS with 1 months granularity, but not the original sample data
 t.remove -f type=strds input=precip_months_sum
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>,
-<a href="t.register.html">t.register</a>
-</em>
+*[t.create](t.create.md), [t.info](t.info.md),
+[t.register](t.register.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

@@ -1,101 +1,79 @@
-<!-- meta page description: wxGUI Supervised Classification Tool -->
-<!-- meta page index: topic_GUI|GUI -->
+## KEYWORDS
 
-<h2>KEYWORDS</h2>
+[display](display.md), [GUI](topic_GUI.md),
+[imagery](keywords.md#imagery),
+[classification](keywords.md#classification), [supervised
+classification](keywords.md#supervised-classification)
 
-<a href="display.html">display</a>, <a href="topic_GUI.html">GUI</a>, <a href="keywords.html#imagery">imagery</a>, <a href="keywords.html#classification">classification</a>, <a href="keywords.html#supervised classification">supervised classification</a>
+## DESCRIPTION
 
-<h2>DESCRIPTION</h2>
+**Supervised Classification Tool** (wxIClass) is a *[wxGUI](wxGUI.md)*
+component which allows the user to create training areas and generate
+spectral signatures. The resulting signature file can be used as input
+for *[i.maxlik](i.maxlik.md)* or as a seed signature file for
+*[i.cluster](i.cluster.md)*. *WxIClass* can be launched from the Layer
+Manager menu *Imagery → Classify image → Interactive input for
+supervised classification* or via command line as *g.gui.iclass*.
 
-<p>
-<b>Supervised Classification Tool</b> (wxIClass) is
-a <em><a href="wxGUI.html">wxGUI</a></em> component which allows the
-user to create training areas and generate spectral signatures.  The
-resulting signature file can be used as input for
-<em><a href="i.maxlik.html">i.maxlik</a></em>
-or as a seed signature file for
-<em><a href="i.cluster.html">i.cluster</a></em>.
-<em>WxIClass</em> can be launched from the Layer Manager
-menu <i>Imagery &rarr; Classify image &rarr; Interactive input for
-supervised classification</i> or via command line
-as <em>g.gui.iclass</em>.
+*wxIClass* currently allows you to:
 
-<p>
-<em>wxIClass</em> currently allows you to:
+- create training areas (using customized *[vector
+  digitizer](wxGUI.vdigit.md)*)
+- show histograms for each band and class (category)
+- show coincidence plots for each band
+- show raster cells that match training areas (within the number of
+  standard deviations specified)
+- specify color of class
+- write signature file
+- import vector map
+- export vector map with attribute table
 
-<ul>
-  <li>create training areas
-  (using customized <em><a href="wxGUI.vdigit.html">vector
-  digitizer</a></em>)</li>
-  <li>show histograms for each band and class (category)</li>
-  <li>show coincidence plots for each band</li>
-  <li>show raster cells that match training areas
-   (within the number of standard deviations specified)</li>
-  <li>specify color of class</li>
-  <li>write signature file</li>
-  <li>import vector map</li>
-  <li>export vector map with attribute table</li>
-</ul>
+  
+<img src="iclass_frame.jpg" data-border="1"
+alt="Supervised Classification Tool" />  
+  
 
-<center>
-<br>
-<img src="iclass_frame.jpg" border="1" alt="Supervised Classification Tool">
-<br><br>
-</center>
+*wxIClass* performs the first pass in the GRASS two-pass supervised
+image classification process; the GRASS module *[i.maxlik](i.maxlik.md)*
+executes the second pass. Both programs must be run to generate a
+classified map in GRASS raster format.
 
-<p>
-<em>wxIClass</em> performs the first pass in the GRASS two-pass supervised image
-classification process; the GRASS module
-<em><a href="i.maxlik.html">i.maxlik</a></em> executes the second pass.
-Both programs must be run to generate a classified map in GRASS
-raster format.
-
-<p>
-<em>wxIClass</em> is an interactive program that allows the user to create
+*wxIClass* is an interactive program that allows the user to create
 multiple training areas for multiple classes and calculate the spectral
-signatures based on the cells that are within the training areas.
-During this process the user will be
-shown histograms for each image band.
-The user can also display the cells of the image bands which fall within
-a user-specified number of standard deviations from the means in the spectral signature.
-By doing this, the user can see how much of the image
-is likely to be put into the class associated with the signature.
+signatures based on the cells that are within the training areas. During
+this process the user will be shown histograms for each image band. The
+user can also display the cells of the image bands which fall within a
+user-specified number of standard deviations from the means in the
+spectral signature. By doing this, the user can see how much of the
+image is likely to be put into the class associated with the signature.
 
-<p><em>wxIClass</em> can also import training areas defined in a vector layer. In that case the program expects the vector layer to have the following columns defined:
-<ul>
-    <li>cat: category value</li>
-    <li>class: a string with the class name</li>
-    <li>color: a color defined using format "RRR:GGG:BBB"</li>
-</ul>
+*wxIClass* can also import training areas defined in a vector layer. In
+that case the program expects the vector layer to have the following
+columns defined:
 
-<p>
-The spectral signatures are composed of region means and covariance matrices.
-These region means and covariance matrices are used in
-the second pass (<em><a href="i.maxlik.html">i.maxlik</a></em>)
-to classify the image.
+- cat: category value
+- class: a string with the class name
+- color: a color defined using format "RRR:GGG:BBB"
 
-<p>
-Alternatively, the spectral signatures generated by <em>wxIClass</em> can be
-used for seed means for the clusters in
-<em><a href="i.cluster.html">i.cluster</a></em>.
+The spectral signatures are composed of region means and covariance
+matrices. These region means and covariance matrices are used in the
+second pass (*[i.maxlik](i.maxlik.md)*) to classify the image.
 
-<h2>SEE ALSO</h2>
+Alternatively, the spectral signatures generated by *wxIClass* can be
+used for seed means for the clusters in *[i.cluster](i.cluster.md)*.
 
-<em>
-  <a href="wxGUI.html">wxGUI</a>,
-  <a href="wxGUI.components.html">wxGUI components</a>,
-  <a href="wxGUI.iscatt.html">Interactive Scatter Plot Tool</a>
-</em>
+## SEE ALSO
 
-<p>
-See also
-user <a href="https://grasswiki.osgeo.org/wiki/WxIClass">wiki</a> page
-and <a href="https://trac.osgeo.org/grass/wiki/wxGUIDevelopment/wxIClass">development</a> page.
+*[wxGUI](wxGUI.md), [wxGUI components](wxGUI.components.md),
+[Interactive Scatter Plot Tool](wxGUI.iscatt.md)*
 
-<h2>AUTHORS</h2>
+See also user [wiki](https://grasswiki.osgeo.org/wiki/WxIClass) page and
+[development](https://trac.osgeo.org/grass/wiki/wxGUIDevelopment/wxIClass)
+page.
 
-Anna Kratochvilova,
- <a href="https://www.cvut.cz">Czech Technical University in Prague</a>, Czech Republic<br>
+## AUTHORS
 
-Vaclav Petras,
- <a href="https://www.cvut.cz">Czech Technical University in Prague</a>, Czech Republic
+Anna Kratochvilova, [Czech Technical University in
+Prague](https://www.cvut.cz), Czech Republic  
+Vaclav Petras, [Czech Technical University in
+Prague](https://www.cvut.cz), Czech Republic

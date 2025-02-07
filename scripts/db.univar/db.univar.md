@@ -1,22 +1,18 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.univar</em> calculates basic univariate statistics for numeric
-attributes in a data table. It will calculate minimum, maximum, range, mean,
-standard deviation, variance, coefficient of variation, quartiles, median, and
-90th percentile.
-It uses <em>db.select</em> to create list values for statistical calculations.
+*db.univar* calculates basic univariate statistics for numeric
+attributes in a data table. It will calculate minimum, maximum, range,
+mean, standard deviation, variance, coefficient of variation, quartiles,
+median, and 90th percentile. It uses *db.select* to create list values
+for statistical calculations. *NOTES* If the database and driver are not
+specified, the default values set in *db.connect* will be used.
 
-<em>NOTES</em>
+## EXAMPLE
 
-If the database and driver are not specified, the default values set in
-<em>db.connect</em> will be used.
+In this example, random points are sampled from the elevation map (North
+Carolina sample dataset) and univariate statistics performed:
 
-<h2>EXAMPLE</h2>
-
-In this example, random points are sampled from the elevation map
-(North Carolina sample dataset) and univariate statistics performed:
-
-<div class="code"><pre>
+```shell
 g.region raster=elevation -p
 v.random output=samples n=100
 v.db.addtable samples column="heights double precision"
@@ -24,19 +20,16 @@ v.what.rast samples raster=elevation column=heights
 v.db.select samples
 
 db.univar samples column=heights
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.db.univar.html">v.db.univar</a>,
-<a href="r.univar.html">r.univar</a>,
-<a href="v.univar.html">v.univar</a>,
-<a href="db.select.html">db.select</a>,
-<a href="d.vect.thematic.html">d.vect.thematic</a>
-</em>
+*[v.db.univar](v.db.univar.md), [r.univar](r.univar.md),
+[v.univar](v.univar.md), [db.select](db.select.md),
+[d.vect.thematic](d.vect.thematic.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
 Michael Barton, Arizona State University
-<p>and authors of <em>r.univar.sh</em>
+
+and authors of *r.univar.sh*

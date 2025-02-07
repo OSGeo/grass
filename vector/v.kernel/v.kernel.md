@@ -1,69 +1,70 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.kernel</em> generates a raster density map from vector points
-data using a moving kernel. Available <a href="https://en.wikipedia.org/wiki/Kernel_(statistics)#Kernel_functions_in_common_use">kernel
-density functions</a> are <em>uniform, triangular, epanechnikov,
-quartic, triweight, gaussian, cosine</em>. The default function is <em>gaussian</em>.
+*v.kernel* generates a raster density map from vector points data using
+a moving kernel. Available [kernel density
+functions](https://en.wikipedia.org/wiki/Kernel_(statistics)#Kernel_functions_in_common_use)
+are *uniform, triangular, epanechnikov, quartic, triweight, gaussian,
+cosine*. The default function is *gaussian*.
 
-<p>The module can also generate a vector density map on a vector network.
+The module can also generate a vector density map on a vector network.
 Conventional kernel functions produce biased estimates by overestimating
 the densities around network nodes, whereas the equal split method of
 Okabe et al. (2009) produces unbiased density estimates. The equal split
-method uses the kernel function selected with the <b>kernel</b> option
-and can be enabled with <b>node=split</b>.
+method uses the kernel function selected with the **kernel** option and
+can be enabled with **node=split**.
 
-<h2>NOTES</h2>
+## NOTES
 
-The <b>multiplier</b> option is needed to overcome the limitation that
-the resulting density in case of a vector map output is stored as category
-(integer). The density result stored as category may be multiplied by this number.
-<p>
-For the <em>gaussian</em> kernel, standard deviation for the
-<a href="https://en.wikipedia.org/wiki/Kernel_(statistics)#Kernel_functions_in_common_use">gaussian function</a>
+The **multiplier** option is needed to overcome the limitation that the
+resulting density in case of a vector map output is stored as category
+(integer). The density result stored as category may be multiplied by
+this number.
+
+For the *gaussian* kernel, standard deviation for the [gaussian
+function](https://en.wikipedia.org/wiki/Kernel_(statistics)#Kernel_functions_in_common_use)
 is set to 1/4 of the radius.
-<p>
-With the <b>-o</b> flag (experimental) the command tries to calculate an
-optimal radius. The value of <em>radius</em> is taken
-as maximum value. The radius is calculated based on the gaussian function,
-using ALL points, not just those in the current region.
 
-<h2>EXAMPLES</h2>
+With the **-o** flag (experimental) the command tries to calculate an
+optimal radius. The value of *radius* is taken as maximum value. The
+radius is calculated based on the gaussian function, using ALL points,
+not just those in the current region.
 
-Compute density of points (using vector map of schools from North Carolina sample dataset):
-<div class="code"><pre>
+## EXAMPLES
+
+Compute density of points (using vector map of schools from North
+Carolina sample dataset):
+
+```shell
 g.region region=wake_30m
 v.kernel input=schools_wake output=schools_density radius=5000 multiplier=1000000
 r.colors map=schools_density color=bcyr
-</pre></div>
+```
 
-<center>
-<img src="v_kernel.png" alt="Density of schools" border="0"><br>
+<img src="v_kernel.png" data-border="0" alt="Density of schools" />  
 School density
-</center>
 
-<h2>KNOWN ISSUES</h2>
+## KNOWN ISSUES
 
-The module only considers the presence of points, but not
-(yet) any attribute values.
+The module only considers the presence of points, but not (yet) any
+attribute values.
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<ul>
-<li>Okabe, A., Satoh, T., Sugihara, K. (2009). <i>A kernel density estimation
-method for networks, its computational method and a GIS-based tool</i>.
-<b>International Journal of Geographical Information Science</b>, Vol 23(1),
-pp. 7-32.<br>
-DOI: <a href="https://doi.org/10.1080/13658810802475491">10.1080/13658810802475491</a></li>
-</ul>
+- Okabe, A., Satoh, T., Sugihara, K. (2009). *A kernel density
+  estimation method for networks, its computational method and a
+  GIS-based tool*. **International Journal of Geographical Information
+  Science**, Vol 23(1), pp. 7-32.  
+  DOI:
+  [10.1080/13658810802475491](https://doi.org/10.1080/13658810802475491)
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em><a href="v.surf.rst.html">v.surf.rst</a></em>
+*[v.surf.rst](v.surf.rst.md)*
 
-<p>
-Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation and Resampling</a> in GRASS GIS
+Overview: [Interpolation and
+Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Stefano Menegon, <a href="http://mpa.itc.it/">ITC-irst</a>, Trento, Italy<br>
+Stefano Menegon, [ITC-irst](http://mpa.itc.it/), Trento, Italy  
 Radim Blazek (additional kernel density functions and network part)

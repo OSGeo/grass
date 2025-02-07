@@ -1,66 +1,66 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.net.visibility</em> computes the visibility graph of a vector
-map containing lines, areas (boundaries) and points. The visibility
-graph is the graph where the nodes are the end point of the lines,
-boundaries or simply points. There is an edge between two nodes if they
-are 'visible' to each other. Two nodes are visibible if there are no segments
-in between of them, i.e. the edge does not intersect any line or boundary
+*v.net.visibility* computes the visibility graph of a vector map
+containing lines, areas (boundaries) and points. The visibility graph is
+the graph where the nodes are the end point of the lines, boundaries or
+simply points. There is an edge between two nodes if they are 'visible'
+to each other. Two nodes are visibible if there are no segments in
+between of them, i.e. the edge does not intersect any line or boundary
 in the vector map. This is useful to compute the shortest path in a
 vector map from any two points. To do this, first you need to compute
 the visibility graph and from that to compute the shortest path using
-<em><a href="v.net.path.html">v.net.path</a></em>
-or <em><a href="d.path.html">d.path</a></em>.
+*[v.net.path](v.net.path.md)* or *[d.path](d.path.md)*.
 
-<p>
-<b>IMPORTANT: the algorithm doesn't work well with intersecting lines
-(that includes overlapping)</b>
+**IMPORTANT: the algorithm doesn't work well with intersecting lines
+(that includes overlapping)**
 
-<h2>NOTES</h2>
+## NOTES
 
-If you compute a shortest path after computing the visibility graph
-you will notice that this path might go through a vertex of a line. If
-this is not what you wanted you might need to process the map
-in <em><a href="v.buffer.html">v.buffer</a></em>, initially with a
-small value. Example:
+If you compute a shortest path after computing the visibility graph you
+will notice that this path might go through a vertex of a line. If this
+is not what you wanted you might need to process the map in
+*[v.buffer](v.buffer.md)*, initially with a small value. Example:
 
-<div class="code"><pre>
+```shell
 v.buffer input=map output=bufferedmap buffer=1 type=point,line,area,boundary
-</pre></div>
+```
 
-<p>
-The first argument is the input map. It supports lines, boundaries
-(so, areas) and points. For the algorithm  was written to work with lines
-and boundaries not intersecting each other (that includes overlapping).
-<br>
-The resulting map containing the visibility graph is given in the output map.
-<p>
-If you need to add additional points to compute a shortest path
-between them afterwards you can use the <b>coordinates</b> parameter, e.g.:
-<div class="code"><pre>
+The first argument is the input map. It supports lines, boundaries (so,
+areas) and points. For the algorithm was written to work with lines and
+boundaries not intersecting each other (that includes overlapping).  
+The resulting map containing the visibility graph is given in the output
+map.
+
+If you need to add additional points to compute a shortest path between
+them afterwards you can use the **coordinates** parameter, e.g.:
+
+```shell
 coordinates=25556200,6686400,25556400,6686600
-</pre></div>
+```
+
 where 25556200,6686400 are the coordinate of the first point and
-25556400,6686600 are the coordinates of the second point. Of course
-you can give as many points as you need. They will be added to the
-visibility graph and edges from them will be computed. You can
-always add those points after computing the visibility graph. Simply
-use the <b>visibility</b> parameter. The input will be the original
-vector map, the vis will be the computed visibility graph and the
-output the new visibility graph which will be the vis + the new
-points given with coordinate (edges will be computed as well).
-<div class="code"><pre>
+25556400,6686600 are the coordinates of the second point. Of course you
+can give as many points as you need. They will be added to the
+visibility graph and edges from them will be computed. You can always
+add those points after computing the visibility graph. Simply use the
+**visibility** parameter. The input will be the original vector map, the
+vis will be the computed visibility graph and the output the new
+visibility graph which will be the vis + the new points given with
+coordinate (edges will be computed as well).
+
+```shell
 v.net.visibility input=map visibility=vis_map output=new_vis_map \
       coordinates=25556200,6686400,25556400,6686600
-</pre></div>
+```
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Example 1</h3>
+### Example 1
 
-<!-- still overly complex result, some simple geometric were better -->
-A simple example (North Carolina sample data) showing how to use the module:
-<div class="code"><pre>
+A simple example (North Carolina sample data) showing how to use the
+module:
+
+```shell
 v.extract input=zipcodes_wake output=areas_7_11_25 cats=7,11,25
 g.region vector=zipcodes_wake
 d.mon wx0
@@ -68,37 +68,39 @@ d.vect areas_7_11_25
 v.net.visibility input=areas_7_11_25 output=graph
 d.vect graph
 d.vect areas_7_11_25 color=red type=boundary
-</pre></div>
+```
 
-<h3>Example 2</h3>
+### Example 2
 
-An example on how to use <em><a href="v.buffer.html">v.buffer</a></em>
-along with the module:
-<div class="code"><pre>
+An example on how to use *[v.buffer](v.buffer.md)* along with the
+module:
+
+```shell
 v.buffer input=lines output=buffered_lines buffer=1
 v.net.visibility input=buffered_lines output=graph
 d.vect graph
 d.vect lines col=red
-</pre></div>
+```
 
-<h3>Example 3</h3>
+### Example 3
 
 An example on how to use the coordinate parameter. This will compute the
 visibility graph of the vector map lines with the point 2555678,6686343:
-<div class="code"><pre>
+
+```shell
 v.net.visibility input=lines output=graph coordinates=2555678,6686343
 d.vect graph
 d.vect lines col=red
-</pre></div>
+```
 
-<h3>Example 4</h3>
+### Example 4
 
-<!-- does not quite work yet? -->
 An example (North Carolina sample data) on how to use the coordinate
-parameter with the vis parameter.
-Here the vector map graph is computed then a new visibility graph is computed
-from it with the point 669547.97,208348.20 extra:
-<div class="code"><pre>
+parameter with the vis parameter. Here the vector map graph is computed
+then a new visibility graph is computed from it with the point
+669547.97,208348.20 extra:
+
+```shell
 v.extract input=zipcodes_wake output=areas_7_11_25 cats=7,11,25
 g.region vector=zipcodes_wake
 d.mon wx0
@@ -111,31 +113,31 @@ d.vect areas_7_11_25
 echo "symbol basic/star 20 669547.97 208348.20 black red" | d.graph -m
 d.vect new_graph
 d.vect areas_7_11_25 color=red type=boundary
-</pre></div>
+```
 
-<h3>Example 5</h3>
+### Example 5
 
 An example for connections of points (Spearfish):
-<div class="code"><pre>
+
+```shell
 v.net.visibility input=archsites output=graph
 g.region vector=archsites
 d.mon wx0
 d.vect graph
 d.vect archsites col=red
-</pre></div>
+```
 
-<h3>Example 6</h3>
+### Example 6
 
 Here is an example with artificial data.
 
-<p>
-<img src="v_net_visibility.png">
+![](v_net_visibility.png)
 
-<p>
-Load data using here document syntax (Bash and unix-like commands lines only):
+Load data using here document syntax (Bash and unix-like commands lines
+only):
 
-<div class="code"><pre>
-v.in.ascii input=- output=simple format=standard &lt;&lt;EOF
+```shell
+v.in.ascii input=- output=simple format=standard <<EOF
 VERTI:
 B  6
  82.19908257  75.21788991
@@ -184,34 +186,28 @@ B  9
  78.40917431  72.27018349
  78.73119266  71.35366972
 EOF
-</pre></div>
+```
 
 Compute the graph:
 
-<div class="code"><pre>
+```shell
 v.net.visibility input=simple output=graph
-</pre></div>
+```
 
-<h2>KNOWN ISSUES</h2>
+## KNOWN ISSUES
 
-In some cases when 3 points or nodes are collinear, some wrong edges
-are added. This happens only really rarly and shouldn't be a big
-problem. When two points have the exact same x coordinate and are
-visible, some wrong edges are added.
+In some cases when 3 points or nodes are collinear, some wrong edges are
+added. This happens only really rarly and shouldn't be a big problem.
+When two points have the exact same x coordinate and are visible, some
+wrong edges are added.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.path.html">d.path</a>,
-<a href="v.net.html">v.net</a>,
-<a href="v.net.alloc.html">v.net.alloc</a>,
-<a href="v.net.iso.html">v.net.iso</a>,
-<a href="v.net.salesman.html">v.net.salesman</a>,
-<a href="v.net.steiner.html">v.net.steiner</a>,
-<a href="v.to.db.html">v.to.db</a>
-</em>
+*[d.path](d.path.md), [v.net](v.net.md), [v.net.alloc](v.net.alloc.md),
+[v.net.iso](v.net.iso.md), [v.net.salesman](v.net.salesman.md),
+[v.net.steiner](v.net.steiner.md), [v.to.db](v.to.db.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Maximilian Maldacker<br>
+Maximilian Maldacker  
 Mentor: Wolf Bergenheim

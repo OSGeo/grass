@@ -1,67 +1,58 @@
-<!-- meta page description: wxGUI GCP Manager for photo to image registration -->
-<!-- meta page index: topic_GUI|GUI -->
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-This module is based on <b>g.gui.gcp</b>, the GCP manager of GRASS GIS.
-It is part of i.ortho.photo suite.
+This module is based on **g.gui.gcp**, the GCP manager of GRASS GIS. It
+is part of i.ortho.photo suite.
 
-<p>
-The aim of this module is to give absolute location values to the fiducial
-points present (in number of 4 or 8) in a <i>scanned</i> aerial photo.
+The aim of this module is to give absolute location values to the
+fiducial points present (in number of 4 or 8) in a *scanned* aerial
+photo.
 
-<p>
-This is necessary as (manual) scanning introduces distortions, rotations and also
-may not be limited to scan the boundary of the photo itself. It is thus necessary
-to give to each fiducial the exact coordinates in mm as given by the aerial
-photographic instrument design, which is unique per camera.
+This is necessary as (manual) scanning introduces distortions, rotations
+and also may not be limited to scan the boundary of the photo itself. It
+is thus necessary to give to each fiducial the exact coordinates in mm
+as given by the aerial photographic instrument design, which is unique
+per camera.
 
-<p>
-This module requires you to have made a group with your aerial photo <b>(i.group)</b>, a camera
-description file <b>(i.ortho.target)</b> and use them to launch the module. Additional requirements
-are the order of rectification (1 if no of Fiducials is 4, 2 if no of Fiducials is 8) and
-an extension file (if not given, defaults to \$filename_ip2i_out)
+This module requires you to have made a group with your aerial photo
+**(i.group)**, a camera description file **(i.ortho.target)** and use
+them to launch the module. Additional requirements are the order of
+rectification (1 if no of Fiducials is 4, 2 if no of Fiducials is 8) and
+an extension file (if not given, defaults to \\filename_ip2i_out)
 
-<p>
-An example for project <b>imagery60</b>:
+An example for project **imagery60**:
 
-<div class="code"><pre>
+```shell
 g.gui.photo2image group=aerial@PERMANENT raster=gs13.1@PERMANENT camera=gscamera order=2 extension=try --o
-</pre></div>
+```
 
-<h3>Screenshot of g.gui.photo2image</h3>
+### Screenshot of g.gui.photo2image
 
 <div align="center" style="margin: 10px">
-<a href="wxGUI_iphoto2image_frame.jpg">
-<img src="wxGUI_iphoto2image_frame.jpg" width="600" height="375" alt="Screenshot of g.gui.photo2image" border="0">
-</a><br>
-<i>Figure: Screenshot of g.gui.photo2image</i>
+
+[<img src="wxGUI_iphoto2image_frame.jpg" data-border="0" width="600"
+height="375" alt="Screenshot of g.gui.photo2image" />](wxGUI_iphoto2image_frame.jpg)  
+*Figure: Screenshot of g.gui.photo2image*
+
 </div>
 
-<h2>For a detailed operation manual please read</h2>
+## For a detailed operation manual please read
 
-<em>
-<a href="wxGUI.html">wxGUI</a>,
-<a href="wxGUI.components.html">wxGUI components</a>
-</em>
+*[wxGUI](wxGUI.md), [wxGUI components](wxGUI.components.md)*
 
-<p>
-See also <a href="https://grasswiki.osgeo.org/wiki/WxGUI/Video_tutorials#Georectifier">video
-tutorials</a> on GRASS Wiki.
+See also [video
+tutorials](https://grasswiki.osgeo.org/wiki/WxGUI/Video_tutorials#Georectifier)
+on GRASS Wiki.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="i.ortho.photo.html">i.ortho.photo</a>,
-<a href="i.group.html">i.group</a>,
-<a href="i.ortho.camera.html">i.ortho.camera</a>,
-<a href="i.ortho.target.html">i.ortho.target</a>,
-<a href="i.rectify.html">i.rectify</a>,
-<a href="m.transform.html">m.transform</a>,
-<a href="v.rectify.html">v.rectify</a>
-</em>
+*[i.ortho.photo](i.ortho.photo.md), [i.group](i.group.md),
+[i.ortho.camera](i.ortho.camera.md),
+[i.ortho.target](i.ortho.target.md), [i.rectify](i.rectify.md),
+[m.transform](m.transform.md), [v.rectify](v.rectify.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Markus Metz<br><br>
-<em>Based on the Georectifier (GRASS 6.4.0)</em> by Michael Barton<br>
+Markus Metz  
+  
+*Based on the Georectifier (GRASS 6.4.0)* by Michael Barton  
 Martin Landa, Czech Technical University in Prague, Czech Republic

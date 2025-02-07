@@ -1,23 +1,21 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.info</em> reports some basic information (metadata) about a
+*v.info* reports some basic information (metadata) about a
 user-specified vector map and its topology status.
 
-<p>
 If topology info is not available (i.e., vector map cannot be opened on
 level 2), vector map extends and number of features need to be counted
 on the fly which may take some time.
 
-<p>
-Note that the flag <b>-c</b> only works when the vector map is connected
-to one or several attribute table(s). This connection can be shown or set
-with <em>v.db.connect</em>.
+Note that the flag **-c** only works when the vector map is connected to
+one or several attribute table(s). This connection can be shown or set
+with *v.db.connect*.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-<h3>Basic metadata information</h3>
+### Basic metadata information
 
-<div class="code"><pre>
+```shell
 v.info map=geology
 
  +----------------------------------------------------------------------------+
@@ -50,11 +48,11 @@ v.info map=geology
  |   Comment:                                                                 |
  |                                                                            |
  +----------------------------------------------------------------------------+
-</pre></div>
+```
 
-<h3>Map history</h3>
+### Map history
 
-<div class="code"><pre>
+```shell
 v.info -h map=geology
 
 COMMAND: v.in.ogr input="geol.shp" output="geology" min_area=0.0001 snap=-1
@@ -66,18 +64,18 @@ total area: 1.276093e+11 (1832 areas)
 overlapping area: 0.000000e+00 (0 areas)
 area without category: 0.000000e+00 (0 areas)
 ---------------------------------------------------------------------------------
-</pre></div>
+```
 
-Note that while "project" is used by <em>v.info</em> elsewhere, history output
-uses the legacy term "location" because "LOCATION" is currently a part of the
-native vector format.
+Note that while "project" is used by *v.info* elsewhere, history output
+uses the legacy term "location" because "LOCATION" is currently a part
+of the native vector format.
 
-<h3>Attribute columns for given layer</h3>
+### Attribute columns for given layer
 
-<div class="code"><pre>
+```shell
 v.info -c map=geology
 
-Displaying column types/names for database connection of layer &lt;1&gt;:
+Displaying column types/names for database connection of layer <1>:
 INTEGER|cat
 DOUBLE PRECISION|onemap_pro
 DOUBLE PRECISION|PERIMETER
@@ -86,11 +84,11 @@ INTEGER|GEOL250_ID
 CHARACTER|GEO_NAME
 DOUBLE PRECISION|SHAPE_area
 DOUBLE PRECISION|SHAPE_len
-</pre></div>
+```
 
-<h3>Basic metadata information in shell script style</h3>
+### Basic metadata information in shell script style
 
-<div class="code"><pre>
+```shell
 v.info -get map=geology
 
 name=geology
@@ -123,9 +121,9 @@ centroids=1832
 areas=1832
 islands=907
 primitives=5481
-</pre></div>
+```
 
-<div class="code"><pre>
+```shell
 v.info -g map=geology
 
 north=318117.43741634
@@ -134,10 +132,11 @@ east=930172.31282271
 west=123971.19498978
 top=0.000000
 bottom=0.000000
-</pre></div>
+```
 
-<h3>Output in JSON format</h3>
-<div class="code"><pre>
+### Output in JSON format
+
+```shell
 {
     "name": "geology",
     "mapset": "PERMANENT",
@@ -177,25 +176,28 @@ bottom=0.000000
     "primitives": 5481,
     "map3d": false
 }
-</pre></div>
+```
 
-<h2>PYTHON</h2>
+## PYTHON
 
-See <em><a href="https://grass.osgeo.org/grass-stable/manuals/libpython/">Python
-Scripting Library</a></em> for more info.
-<p>
-Note: The Python tab in the <em>wxGUI</em> can be used for entering the
+See *[Python Scripting
+Library](https://grass.osgeo.org/grass-stable/manuals/libpython/)* for
+more info.
+
+Note: The Python tab in the *wxGUI* can be used for entering the
 following code:
-<p>
-<div class="code"><pre>
+
+```shell
 import grass.script as gcore
 
 gcore.vector_columns('geology')   # for `v.info -c`
 gcore.vector_info_topo('geology') # for `v.info shell=topo`
-</pre></div>
+```
 
-Here is an example of how the JSON output format can be used to integrate Grass with other python libraries easily.
-<div class="code"><pre>
+Here is an example of how the JSON output format can be used to
+integrate Grass with other python libraries easily.
+
+```shell
 import grass.script as gs
 import pandas as pd
 
@@ -207,20 +209,16 @@ df = pd.DataFrame([busstops])
 
 # Display the DataFrame
 print(df)
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.info.html">r.info</a>,
-<a href="r3.info.html">r3.info</a>,
-<a href="t.info.html">t.info</a>,
-<a href="v.db.connect.html">v.db.connect</a>
-</em>
+*[r.info](r.info.md), [r3.info](r3.info.md), [t.info](t.info.md),
+[v.db.connect](v.db.connect.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Original author CERL<br>
-Updated to GRASS 6 by Radim Blazek, ITC-Irst, Trento, Italy<br>
-Level 1 support by Markus Metz<br>
+Original author CERL  
+Updated to GRASS 6 by Radim Blazek, ITC-Irst, Trento, Italy  
+Level 1 support by Markus Metz  
 Updated to GRASS 7 by Martin Landa, CTU in Prague, Czech Republic

@@ -1,89 +1,85 @@
-<!-- meta page description: PostgreSQL DATABASE DRIVER -->
-
 PostgreSQL database driver enables GRASS to store vector attributes in
 PostgreSQL server.
 
-<h2>Creating a PostgreSQL database</h2>
+## Creating a PostgreSQL database
 
-A new database is created with <code>createdb</code>, see
-the <a href="https://www.postgresql.org/docs/manuals/">PostgreSQL
-manual</a> for details.
+A new database is created with `createdb`, see the [PostgreSQL
+manual](https://www.postgresql.org/docs/manuals/) for details.
 
-<h2>Connecting GRASS to PostgreSQL</h2>
+## Connecting GRASS to PostgreSQL
 
-<div class="code"><pre>
+```shell
 # example for connecting to a PostgreSQL server:
 db.connect driver=pg database=mydb
 db.login user=myname password=secret host=myserver.osgeo.org  # port=5432
 db.connect -p
 db.tables -p
-</pre></div>
+```
 
-<h3>Username and password</h3>
+### Username and password
 
-From the <a href="https://www.postgresql.org/docs/10/static/libpq-pgpass.html">PostgresQL manual</a>:
-<p>
-The file <em>.pgpass</em> in a user's home directory can contain
-passwords to be used if the connection requires a password (and no
-password has been specified otherwise). On Microsoft Windows the file
-is named <em>%APPDATA%\postgresql\pgpass.conf</em> (where
-<em>%APPDATA%</em> refers to the Application Data subdirectory in the
-user's profile). Alternatively, a password file can be specified using
-the connection parameter passfile or the environment variable
-PGPASSFILE.
+From the [PostgresQL
+manual](https://www.postgresql.org/docs/10/static/libpq-pgpass.html):
 
-This file should contain lines of the following format:
-<div class="code"><pre>
+The file *.pgpass* in a user's home directory can contain passwords to
+be used if the connection requires a password (and no password has been
+specified otherwise). On Microsoft Windows the file is named
+*%APPDATA%\postgresql\pgpass.conf* (where *%APPDATA%* refers to the
+Application Data subdirectory in the user's profile). Alternatively, a
+password file can be specified using the connection parameter passfile
+or the environment variable PGPASSFILE. This file should contain lines
+of the following format:
+
+```shell
 hostname:port:database:username:password
-</pre></div>
+```
 
-<h2>Supported SQL commands</h2>
+## Supported SQL commands
 
-All SQL commands supported by PostgreSQL.
+All SQL commands supported by PostgreSQL. It's not possible to use
+C-like escapes (with backslash like \n etc) within the SQL syntax.
 
-It's not possible to use C-like escapes (with backslash like \n etc)
-within the SQL syntax.
-
-<h2>Operators available in conditions</h2>
+## Operators available in conditions
 
 All SQL operators supported by PostgreSQL.
 
-<h2>Adding an unique ID column</h2>
+## Adding an unique ID column
 
-Import vector module require an unique ID column which can
-be generated as follows in a PostgreSQL table:
+Import vector module require an unique ID column which can be generated
+as follows in a PostgreSQL table:
 
-<div class="code"><pre>
+```shell
 db.execute sql="ALTER TABLE mytable ADD ID integer"
 db.execute sql="CREATE SEQUENCE mytable_seq"
 db.execute sql="UPDATE mytable SET ID = nextval('mytable_seq')"
 db.execute sql="DROP SEQUENCE mytable_seq"
-</pre></div>
+```
 
-<h2>Attribute import into PostgreSQL</h2>
+## Attribute import into PostgreSQL
 
 CSV import into PostgreSQL:
-<div class="code"><pre>
+
+```shell
 \h copy
 COPY t1 FROM 'filename' USING DELIMITERS ',';
-</pre></div>
+```
 
-<h2>Geometry import from PostgreSQL table into GRASS</h2>
+## Geometry import from PostgreSQL table into GRASS
 
-<em><a href="v.in.db.html">v.in.db</a></em> creates a new vector
-(points) map from a database table containing
-coordinates. See <a href="v.in.db.html">here</a> for examples.
+*[v.in.db](v.in.db.md)* creates a new vector (points) map from a
+database table containing coordinates. See [here](v.in.db.md) for
+examples.
 
-<h2>PostGIS: PostgreSQL with vector geometry</h2>
+## PostGIS: PostgreSQL with vector geometry
 
-<a href="https://postgis.net/">PostGIS</a>:
-adds geographic object support to PostgreSQL.
+[PostGIS](https://postgis.net/): adds geographic object support to
+PostgreSQL.
 
-<h3>Example: Import from PostGIS</h3>
+### Example: Import from PostGIS
 
 In an existing PostGIS database, create the following table:
 
-<div class="code"><pre>
+```shell
 CREATE TABLE test
 (
  id serial NOT NULL,
@@ -100,49 +96,39 @@ INSERT INTO test (text, wkb_geometry)
 
 # register geometry column
 select AddGeometryColumn ('postgis', 'test', 'geometry', -1, 'GEOMETRY', 2);
-</pre></div>
+```
 
 GRASS can import this PostGIS polygon map as follows:
 
-<div class="code"><pre>
+```shell
 v.in.ogr input="PG:host=localhost dbname=postgis user=neteler" layer=test \
          output=test type=boundary,centroid
 v.db.select test
 v.info -t test
-</pre></div>
+```
 
+#### Geometry Converters
 
-<h4>Geometry Converters</h4>
-<ul>
-<li><a href="https://postgis.net/workshops/postgis-intro/loading_data.html#loading-with-shp2pgsql">PostGIS with shp2pgsql</a>:<br>
- <code>shp2pgsql -D lakespy2 lakespy2 test &gt; lakespy2.sql</code>
-</li>
-<li><a href="https://e00pg.sourceforge.net/">e00pg</a>: E00 to PostGIS filter,
-see also <em><a href="v.in.e00.html">v.in.e00</a></em>.
-</li>
-<li>GDAL/OGR <a href="https://gdal.org/">ogrinfo and ogr2ogr</a>:
-GIS vector format converter and library, e.g. ArcInfo or SHAPE to PostGIS.<br>
-  <code>ogr2ogr -f "PostgreSQL" shapefile ??</code>
-</li>
-</ul>
+- [PostGIS with
+  shp2pgsql](https://postgis.net/workshops/postgis-intro/loading_data.html#loading-with-shp2pgsql):  
+  `shp2pgsql -D lakespy2 lakespy2 test > lakespy2.sql`
+- [e00pg](https://e00pg.sourceforge.net/): E00 to PostGIS filter, see
+  also *[v.in.e00](v.in.e00.md)*.
+- GDAL/OGR [ogrinfo and ogr2ogr](https://gdal.org/): GIS vector format
+  converter and library, e.g. ArcInfo or SHAPE to PostGIS.  
+  `ogr2ogr -f "PostgreSQL" shapefile ??`
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.connect.html">db.connect</a>,
-<a href="db.execute.html">db.execute</a>
-</em>
+*[db.connect](db.connect.md), [db.execute](db.execute.md)*
 
-<p>
-<a href="databaseintro.html">Database management in GRASS GIS</a><br>
-<a href="database.html">Help pages for database modules</a><br>
-<a href="sql.html">SQL support in GRASS GIS</a><br>
+[Database management in GRASS GIS](databaseintro.md)  
+[Help pages for database modules](database.md)  
+[SQL support in GRASS GIS](sql.md)  
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<ul>
-<li><a href="https://www.postgresql.org/">PostgreSQL web site</a></li>
-<li><a href="https://www.pgadmin.org/">pgAdmin graphical user interface</a></li>
-<li><a href="https://gdal.org/en/stable/drivers/vector/pg.html">GDAL/OGR PostgreSQL
-driver documentation</a></li>
-</ul>
+- [PostgreSQL web site](https://www.postgresql.org/)
+- [pgAdmin graphical user interface](https://www.pgadmin.org/)
+- [GDAL/OGR PostgreSQL driver
+  documentation](https://gdal.org/en/stable/drivers/vector/pg.html)

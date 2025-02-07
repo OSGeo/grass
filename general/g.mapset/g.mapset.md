@@ -1,67 +1,69 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>g.mapset</em> changes the current working mapset, project (formerly known
+*g.mapset* changes the current working mapset, project (formerly known
 as location), or GISDBASE (directory with one or more projects).
 
-<p>
-With <em>g.mapset</em>, the shell history (i.e. <code>.bash_history</code> file
-of the initial project will be used to record the command history.
+With *g.mapset*, the shell history (i.e. `.bash_history` file of the
+initial project will be used to record the command history.
 
-<h2>NOTES</h2>
+## NOTES
 
 By default, the shell continues to use the history for the old mapset.
-To change this behaviour the history can be switched to record in the new
-mapset's history file as follows:
+To change this behaviour the history can be switched to record in the
+new mapset's history file as follows:
 
-<div class="code"><pre>
+```shell
 # bash example
 history -w
 history -r /"$GISDBASE/$LOCATION/$MAPSET"/.bash_history
 HISTFILE=/"$GISDBASE/$LOCATION/$MAPSET"/.bash_history
-</pre></div>
+```
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Print the name of the current mapset</h3>
+### Print the name of the current mapset
 
-To print the name of the current mapset, use the <b>-p</b> command as
-shown below:
-<div class="code"><pre>
+To print the name of the current mapset, use the **-p** command as shown
+below:
+
+```shell
 g.mapset -p
-</pre></div>
+```
 
-<h3>List available mapsets</h3>
-To list available mapsets, use the <b>-l</b> command as shown below:
-<div class="code"><pre>
+### List available mapsets
+
+To list available mapsets, use the **-l** command as shown below:
+
+```shell
 g.mapset -l
-</pre></div>
+```
 
-This should list all the mapsets, such as: "landsat new PERMANENT user1."
+This should list all the mapsets, such as: "landsat new PERMANENT
+user1."
 
-<h3>Change the current mapset</h3>
+### Change the current mapset
+
 To change the current mapset to "user1" use the following command:
 
-<div class="code"><pre>
+```shell
 g.mapset mapset=user1 project=nc_spm_08_grass7
-</pre></div>
+```
 
 You should receive the following message: "Mapset switched. Your shell
 continues to use the history for the old mapset."
 
-<h3>Create a new mapset</h3>
+### Create a new mapset
 
-To create a new mapset, use the <b>-c</b> tag as shown below:
-<div class="code"><pre>
+To create a new mapset, use the **-c** tag as shown below:
+
+```shell
 g.mapset -c mapset=new project=nc_spm_08_grass7
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.gisenv.html">g.gisenv</a>,
-<a href="g.mapsets.html">g.mapsets</a>
-</em>
+*[g.gisenv](g.gisenv.md), [g.mapsets](g.mapsets.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Radim Blazek

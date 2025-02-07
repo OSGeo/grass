@@ -1,28 +1,28 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.external.out</em> instructs GRASS GIS to write subsequently generated
-raster maps as data files (e.g. GeoTIFF) using GDAL instead of storing them
-in GRASS raster format in the current mapset.
-<p>
+*r.external.out* instructs GRASS GIS to write subsequently generated
+raster maps as data files (e.g. GeoTIFF) using GDAL instead of storing
+them in GRASS raster format in the current mapset.
+
 Any new raster map is immediately written out through GDAL as a file.
 
-<h2>NOTES</h2>
+## NOTES
 
-A relative directory path (parameter <em>directory</em>) is interpreted
-relative to the current mapset directory, not the current directory where
-the command was launched. An unspecified or empty directory (which will
-occur if the user passes a simple filename for <em>output</em>) results
-in the output file being placed in the "gdal/" subdirectory of the
-current mapset directory.
+A relative directory path (parameter *directory*) is interpreted
+relative to the current mapset directory, not the current directory
+where the command was launched. An unspecified or empty directory (which
+will occur if the user passes a simple filename for *output*) results in
+the output file being placed in the "gdal/" subdirectory of the current
+mapset directory.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Storing results from raster data analysis directly as GeoTIFF</h3>
+### Storing results from raster data analysis directly as GeoTIFF
 
-The module <em>r.external.out</em> is used to write out processing results
+The module *r.external.out* is used to write out processing results
 directly in GeoTIFF format (any GDAL supported format can be used here):
 
-<div class="code"><pre>
+```shell
 # define output directory for files resulting from GRASS calculation(s)
 # and target format:
 mkdir $HOME/gisoutput/
@@ -31,9 +31,9 @@ r.external.out directory=$HOME/gisoutput/ format="GTiff" option="BIGTIFF=YES,COM
 # prepare sample analysis
 g.region raster=elevation -p
 
-# perform GRASS calculation (here: filter by height, write &gt; 120m, NULL otherwise)
+# perform GRASS calculation (here: filter by height, write > 120m, NULL otherwise)
 # this will store the output map directly as GeoTIFF, so we use .tif extension:
-r.mapcalc "elev_filt.tif = if(elevation &gt; 120.0, elevation, null() )"
+r.mapcalc "elev_filt.tif = if(elevation > 120.0, elevation, null() )"
 
 # ...the "elev_filt.tif" is immediately written.
 
@@ -42,44 +42,41 @@ r.external.out -r
 
 # verify resulting file
 gdalinfo $HOME/gisoutput/elev_filt.tif
-</pre></div>
+```
 
-<h3>Complete workflow using only external geodata while processing in GRASS GIS</h3>
+### Complete workflow using only external geodata while processing in GRASS GIS
 
-The module <em>r.external.out</em> can be used along with
-<em>r.external</em> to process external geodata in GRASS
-while writing out the results directly in GeoTIFF:
+The module *r.external.out* can be used along with *r.external* to
+process external geodata in GRASS while writing out the results directly
+in GeoTIFF:
 
-<div class="code"><pre>
+```shell
 # register GeoTIFF file to be used in current mapset:
 r.external input=terra_lst1km20030314.LST_Day.tif output=modis_celsius
 
 # define output directory for files resulting from GRASS calculation:
 r.external.out directory=$HOME/gisoutput/ format="GTiff"
 
-# perform GRASS calculation (here: extract pixels &gt; 20 deg C)
+# perform GRASS calculation (here: extract pixels > 20 deg C)
 # this stores the output map directly as GeoTIFF:
-r.mapcalc "warm.tif = if(modis_celsius &gt; 20.0, modis_celsius, null() )"
+r.mapcalc "warm.tif = if(modis_celsius > 20.0, modis_celsius, null() )"
 
 # cease GDAL output connection and turn back to write GRASS raster files:
 r.external.out -r
 
 # now use the resulting file elsewhere
 gdalinfo $HOME/gisoutput/warm.tif
-</pre></div>
+```
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-GDAL Pages: <a href="https://gdal.org">https://gdal.org/</a><br>
+GDAL Pages: [https://gdal.org/](https://gdal.org)  
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.in.gdal.html">r.in.gdal</a>,
-<a href="r.out.gdal.html">r.out.gdal</a>,
-<a href="r.external.html">r.external</a>
-</em>
+*[r.in.gdal](r.in.gdal.md), [r.out.gdal](r.out.gdal.md),
+[r.external](r.external.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Glynn Clements

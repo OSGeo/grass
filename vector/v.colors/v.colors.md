@@ -1,96 +1,92 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.colors</em> allows creating or modifying color table associated
-with a vector map similarly
-to <em><a href="r.colors.html">r.colors</a></em> for raster maps.
+*v.colors* allows creating or modifying color table associated with a
+vector map similarly to *[r.colors](r.colors.md)* for raster maps.
 
-<p>Color rules are built from features category values
-(<b>use=cat</b>) or numeric data column (<b>use=attr</b>) defined
-by <b>column</b> option. For 3D vector maps is allowed to define color
-rules based on points or centroids z-coordinate (<b>use=z</b>). 3D
-vector lines are not supported.
+Color rules are built from features category values (**use=cat**) or
+numeric data column (**use=attr**) defined by **column** option. For 3D
+vector maps is allowed to define color rules based on points or
+centroids z-coordinate (**use=z**). 3D vector lines are not supported.
 
-<p>The <b>raster</b> option allows user to specify a raster map from
-which to copy the color table, similarly <b>raster_3d</b> option for 3D
-raster map. Without <b>use=attr</b> and <b>column</b> options, raster values
-will be matched with categories. Use these two options to transfer raster
-colors to vector attributes.
+The **raster** option allows user to specify a raster map from which to
+copy the color table, similarly **raster_3d** option for 3D raster map.
+Without **use=attr** and **column** options, raster values will be
+matched with categories. Use these two options to transfer raster colors
+to vector attributes.
 
-<p>The <b>rules</b> color table type will cause <em>v.colors</em> to
-read color table specifications from given file and will build the
-color table accordingly. See
-<em><a href="r.colors.html">r.colors</a></em> manual page for details.
+The **rules** color table type will cause *v.colors* to read color table
+specifications from given file and will build the color table
+accordingly. See *[r.colors](r.colors.md)* manual page for details.
 
-<p>If the user specifies the <b>-w</b> flag, the current color table
-file for the input map will not be overwritten. This means that the
-color table is created only if the vector map does not already have a
-color table. If this option is not specified, the color table will be
-created if one does not exist, or modified if it does.
+If the user specifies the **-w** flag, the current color table file for
+the input map will not be overwritten. This means that the color table
+is created only if the vector map does not already have a color table.
+If this option is not specified, the color table will be created if one
+does not exist, or modified if it does.
 
-<p>Alternatively the color rules can be stored in a string column
-(<b>rgb_column</b>) by saving the RRR:GGG:BBB values suitable for use
-with <em><a href="d.vect.html">d.vect</a></em>.
+Alternatively the color rules can be stored in a string column
+(**rgb_column**) by saving the RRR:GGG:BBB values suitable for use with
+*[d.vect](d.vect.md)*.
 
-<h2>NOTES</h2>
+## NOTES
 
-For vector maps with a large number of features it's more convenient
-to store color rules in an attribute column (given by <b>rgb_column</b>)
-rather then in a color table file. Reading color tables with more then 1000
-items is slow.
+For vector maps with a large number of features it's more convenient to
+store color rules in an attribute column (given by **rgb_column**)
+rather then in a color table file. Reading color tables with more then
+1000 items is slow.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Define color table based on categories</h3>
+### Define color table based on categories
 
-Define color table <code>wave</code> based on categories from layer 1
+Define color table `wave` based on categories from layer 1
 
-<div class="code"><pre>
+```shell
 v.colors map=soils_general layer=1 color=wave
-</pre></div>
+```
 
-<h3>Define color table based on attribute values</h3>
+### Define color table based on attribute values
 
-Define color table <code>ryg</code> based on values from attribute
-column <code>AREA</code>. Attribute table is linked to layer 1.
+Define color table `ryg` based on values from attribute column `AREA`.
+Attribute table is linked to layer 1.
 
-<div class="code"><pre>
+```shell
 v.to.db map=soils_general layer=1 option=area column=AREA
 v.colors map=soils_general layer=1 color=wave use=attr column=AREA
-</pre></div>
+```
 
-<h3>Define color table stored as RGB values in attribute table</h3>
+### Define color table stored as RGB values in attribute table
 
-Write color values to the attribute table (column <code>GRASSRGB</code>)
-instead of creating color table.
+Write color values to the attribute table (column `GRASSRGB`) instead of
+creating color table.
 
-<div class="code"><pre>
+```shell
 v.colors map=soils_general layer=1 color=wave use=attr column=AREA rgb_column=GRASSRGB
 
 # See some GRASSRGB values:
-v.db.select map=soils_general where="cat &lt; 4"
+v.db.select map=soils_general where="cat < 4"
 cat|OBJECTID|AREA|PERIMETER|GSLNC250_|GSLNC250_I|GSL_NAME|GRASSRGB
 1|1|0|164616.125|2|1|NC113|212:42:127
 2|2|0|30785.529297|3|2|NC096|212:42:127
 3|3|0|87572.882812|4|3|NC097|212:42:127
-</pre></div>
+```
 
-<h3>Convert RGB attribute values into color table</h3>
+### Convert RGB attribute values into color table
 
 Convert existing RGB values to color table rules.
 
-<div class="code"><pre>
+```shell
 v.colors -c map=soils_general rgb_column=GRASSRGB
-</pre></div>
+```
 
-Note that in this case the vector map has a proper color table
-assigned (check
-by <em><a href="v.colors.out.html">v.colors.out</a></em>) together
-with GRASSRGB attribute column. Also note that color table is preferred
-over RGB values stored in attribute table.
+Note that in this case the vector map has a proper color table assigned
+(check by *[v.colors.out](v.colors.out.md)*) together with GRASSRGB
+attribute column. Also note that color table is preferred over RGB
+values stored in attribute table.
 
-<h3>Transfer raster colors to vector</h3>
+### Transfer raster colors to vector
 
-<div class="code"><pre>
+```shell
 # create an example raster from census blocks (10m pixel resolution)
 g.region vector=censusblk_swwake res=10 -ap
 v.to.rast input=censusblk_swwake use=attr attribute_column=TOTAL_POP output=censusblk_swwake_total_pop
@@ -103,52 +99,46 @@ v.colors map=censusblk_swwake use=attr column=TOTAL_POP raster=censusblk_swwake_
 
 # transfer raster colors to vector categories (raster values to categories)
 v.colors map=censusblk_swwake raster=censusblk_swwake_total_pop
-</pre></div>
+```
 
-<h3>Remove existing color table</h3>
+### Remove existing color table
 
-<p>
-Existing color table can be removed by <b>-r</b> flag.
+Existing color table can be removed by **-r** flag.
 
-<div class="code"><pre>
+```shell
 v.colors -r map=soils_general
-</pre></div>
+```
 
-Before removing color table you can store color rules to the file
-by <em><a href="v.colors.out.html">v.colors.out</a></em> and later to
-assign by <b>rules</b> option.
+Before removing color table you can store color rules to the file by
+*[v.colors.out](v.colors.out.md)* and later to assign by **rules**
+option.
 
-<div class="code"><pre>
+```shell
 v.colors.out map=soils_general rules=soils.colr
 v.colors map=soils_general rules=soils.colr
-</pre></div>
+```
 
-To drop RGB column
-use <em><a href="v.db.dropcolumn.html">v.db.dropcolumn</a></em>.
+To drop RGB column use *[v.db.dropcolumn](v.db.dropcolumn.md)*.
 
-<div class="code"><pre>
+```shell
 v.db.dropcolumn map=soils_general column=GRASSRGB
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.vect.html">d.vect</a>,
-<a href="r.colors.html">r.colors</a>,
-<a href="r.colors.out.html">r.colors.out</a>,
-<a href="r3.colors.html">r3.colors</a>,
-<a href="r3.colors.out.html">r3.colors.out</a>,
-<a href="v.colors.out.html">v.colors.out</a>
-</em>
+*[d.vect](d.vect.md), [r.colors](r.colors.md),
+[r.colors.out](r.colors.out.md), [r3.colors](r3.colors.md),
+[r3.colors.out](r3.colors.out.md), [v.colors.out](v.colors.out.md)*
 
-<p>See also wiki
-page <a href="https://grasswiki.osgeo.org/wiki/Color_tables">Color
-tables</a> (from GRASS User Wiki)
+See also wiki page [Color
+tables](https://grasswiki.osgeo.org/wiki/Color_tables) (from GRASS User
+Wiki)
 
-<p><a href="https://colorbrewer2.org">ColorBrewer</a> is an online tool designed to
+[ColorBrewer](https://colorbrewer2.org) is an online tool designed to
 help people select good color schemes for maps and other graphics.
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Martin Landa, OSGeoREL, Czech Technical University in Prague, Czech Republic<br>
+Martin Landa, OSGeoREL, Czech Technical University in Prague, Czech
+Republic  
 Huidae Cho

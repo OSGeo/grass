@@ -1,14 +1,15 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.label.sa</em> makes a label-file from a GRASS vector map
-with labels created from attributes in the attached table. The labels are
-placed in as optimal place as possible. The label file has the same syntax
-as the one created by <a href="v.label.html">v.label</a>
+*v.label.sa* makes a label-file from a GRASS vector map with labels
+created from attributes in the attached table. The labels are placed in
+as optimal place as possible. The label file has the same syntax as the
+one created by [v.label](v.label.md)
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 North Carolina example:
-<p><div class="code"><pre>
+
+```shell
 # get font names:
 d.font -L
 
@@ -22,28 +23,24 @@ g.region raster=lsat7_2002_10 -p
 d.rgb b=lsat7_2002_10 g=lsat7_2002_20 r=lsat7_2002_30
 d.vect roadsmajor col=yellow
 d.labels roads_labels
-</pre></div>
+```
 
-<p><center>
-<img src="v_label_sa.jpg" alt="Road labeling with v.label.sa"><br>
-<i>Road labeling with v.label.sa (Raleigh, North Carolina, USA, area)</i>
-</center>
+![Road labeling with v.label.sa](v_label_sa.jpg)  
+*Road labeling with v.label.sa (Raleigh, North Carolina, USA, area)*
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
 Edmondson, Christensen, Marks and Shieber: A General Cartographic
-Labeling Algorithm, Cartographica, Vol. 33, No. 4, Winter 1996, pp. 13-23
-The algorithm works by the principle of Simulated Annealing.
+Labeling Algorithm, Cartographica, Vol. 33, No. 4, Winter 1996, pp.
+13-23 The algorithm works by the principle of Simulated Annealing.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.labels.html">d.label</a><br>
-<a href="d.labels.html">d.labels</a><br>
-<a href="ps.map.html">ps.map</a>
-<a href="https://en.wikipedia.org/wiki/Simulated_Annealing">Wikipedia article on simulated annealing</a>
-</em><br>
+*[d.label](v.labels.md)  
+[d.labels](d.labels.md)  
+[ps.map](ps.map.md) [Wikipedia article on simulated
+annealing](https://en.wikipedia.org/wiki/Simulated_Annealing)*  
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Wolf Bergenheim

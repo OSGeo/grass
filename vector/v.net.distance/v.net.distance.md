@@ -1,58 +1,56 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.net.distance</em> finds the nearest element in set <em>to</em>
-for every point in set <em>from</em>.
+*v.net.distance* finds the nearest element in set *to* for every point
+in set *from*.
 
-<h2>NOTES</h2>
+## NOTES
 
-These two sets are given by the respective <b>layer</b>, <b>where</b>
-and <b>cats</b> parameters. The type of <em>to</em> features is
-specified by <b>to_type</b> parameter. All <em>from</em> features
-are <em>points</em>. A table is linked to <b>output</b> map
-containing various information about the relation. More
-specifically, the table has three columns: <em>cat</em>, <em>tcat</em>
-and <em>dist</em> storing category of each <em>from</em>
-feature, category of the nearest <em>to</em> feature and the
-distance between them respectively.
-<p>
-Furthermore, the <b>output</b> map contains the shortest path between
-each <em>cat</em>, <em>tcat</em> pair. Each path consists of several
-lines. If a line is on the shortest path from a point then the category
-of this point is assigned to the line. Note that every line may contain
-more than one category value since a single line may be on the shortest
-path for more than one <em>from</em> feature. And so the shortest paths
-can be easily obtained by querying lines with corresponding category
-number. Alternatively, unique paths can be created with the <em>-l</em>
-flag where each path will be a separate single line in the output.
-<p>
+These two sets are given by the respective **layer**, **where** and
+**cats** parameters. The type of *to* features is specified by
+**to_type** parameter. All *from* features are *points*. A table is
+linked to **output** map containing various information about the
+relation. More specifically, the table has three columns: *cat*, *tcat*
+and *dist* storing category of each *from* feature, category of the
+nearest *to* feature and the distance between them respectively.
+
+Furthermore, the **output** map contains the shortest path between each
+*cat*, *tcat* pair. Each path consists of several lines. If a line is on
+the shortest path from a point then the category of this point is
+assigned to the line. Note that every line may contain more than one
+category value since a single line may be on the shortest path for more
+than one *from* feature. And so the shortest paths can be easily
+obtained by querying lines with corresponding category number.
+Alternatively, unique paths can be created with the *-l* flag where each
+path will be a separate single line in the output.
+
 The costs of arcs in forward and backward direction are specified by
-<b>arc_column</b> and <b>arc_backward_column</b> columns respectively.
-If <b>arc_backward_column</b> is not given, the same cost is used in
-both directions.
-<p>
-<em>v.net.distance</em> will not work if you are trying to find the
-nearest neighbors within a group of nodes, i.e. where <em>to</em>
-and <em>from</em> are the same set of nodes, as the closest node
-will be the node itself and the result will be zero-length paths. In
-order to find nearest neighbors within a group of nodes, you can
-either loop through each node as <em>to</em> and all other nodes as
-<em>from</em> or create a complete distance matrix with
-<a href="v.net.allpairs.html">v.net.allpairs</a> and select the
-lowest non-zero distance for each node.
+**arc_column** and **arc_backward_column** columns respectively. If
+**arc_backward_column** is not given, the same cost is used in both
+directions.
 
-<h2>EXAMPLES</h2>
+*v.net.distance* will not work if you are trying to find the nearest
+neighbors within a group of nodes, i.e. where *to* and *from* are the
+same set of nodes, as the closest node will be the node itself and the
+result will be zero-length paths. In order to find nearest neighbors
+within a group of nodes, you can either loop through each node as *to*
+and all other nodes as *from* or create a complete distance matrix with
+[v.net.allpairs](v.net.allpairs.md) and select the lowest non-zero
+distance for each node.
 
-<h3>Shortest path and distance between school and nearest hospital</h3>
+## EXAMPLES
 
-Find shortest path and distance from every school to the nearest hospital
-and show all paths.
+### Shortest path and distance between school and nearest hospital
 
-<p>
+Find shortest path and distance from every school to the nearest
+hospital and show all paths.
+
 Streets are grey lines, schools are green circles, hospitals are red
 crosses, shortest paths are blue lines:
-<p><img src="vnetdistance.png" alt="v.net.distance example" border="1">
 
-<p><div class="code"><pre>
+<img src="vnetdistance.png" data-border="1"
+alt="v.net.distance example" />
+
+```shell
 # connect schools to streets as layer 2
 v.net input=streets_wake points=schools_wake output=streets_net1 \
       operation=connect thresh=400 arc_layer=1 node_layer=2
@@ -74,13 +72,13 @@ d.vect streets_wake color=220:220:220
 d.vect schools_wake color=green size=10
 d.vect map=hospitals icon=basic/cross3 size=15 color=black fcolor=red
 d.vect schools_to_hospitals
-</pre></div>
+```
 
-<h3>Distance between point source of pollution and sample points along streams</h3>
+### Distance between point source of pollution and sample points along streams
 
 Example with streams of the NC sample data set.
 
-<p><div class="code"><pre>
+```shell
 # add coordinates of pollution point source of pollution as vector
 pollution.txt:
 634731.563206905|216390.501834892
@@ -151,19 +149,15 @@ cat|tcat|dist|length
 1|1|100.0|100.0
 2|1|200.0|200.0
 3|1|231.446|231.446
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.net.path.html">v.net.path</a>,
-<a href="v.net.allpairs.html">v.net.allpairs</a>,
-<a href="v.distance.html">v.net.distance</a>,
-<a href="v.net.alloc.html">v.net.alloc</a>
-</em>
+*[v.net.path](v.net.path.md), [v.net.allpairs](v.net.allpairs.md),
+[v.net.distance](v.distance.md), [v.net.alloc](v.net.alloc.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Daniel Bundala, Google Summer of Code 2009, Student<br>
-Wolf Bergenheim, Mentor<br>
+Daniel Bundala, Google Summer of Code 2009, Student  
+Wolf Bergenheim, Mentor  
 Markus Metz

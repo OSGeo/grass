@@ -1,41 +1,39 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The <em>r.out.bin</em> program exports a GRASS raster map to a binary array
-file. Optionally, output can be sent to standard output (stdout) for direct
-input (pipe) into other applications. Data is exported according to the
-original GRASS raster type (e.g. float). If the "-i" flag is specified, an
-integer array is output. The region parameters are printed to stderr.
+The *r.out.bin* program exports a GRASS raster map to a binary array
+file. Optionally, output can be sent to standard output (stdout) for
+direct input (pipe) into other applications. Data is exported according
+to the original GRASS raster type (e.g. float). If the "-i" flag is
+specified, an integer array is output. The region parameters are printed
+to stderr.
 
-<h2>NOTES</h2>
+## NOTES
 
 With the -h flag, data can be directly used by
-<a href="https://www.generic-mapping-tools.org/">GMT</a> as Grid Format 1 (float) or
-2 (short). For example:
+[GMT](https://www.generic-mapping-tools.org/) as Grid Format 1 (float)
+or 2 (short). For example:
 
-<div class="code"><pre>
+```shell
 r.out.bin -h input=grass.raster output=new.grd
 grdinfo new.grd=1 (if float)
-</pre></div>
+```
 
-<p>Exported data can be piped directly into the GMT program xyz2grd.
-<div class="code"><pre>
+Exported data can be piped directly into the GMT program xyz2grd.
+
+```shell
 r.out.bin input=grass.raster output=- | xyz2grd -R....  -ZTLf -
-</pre></div>
+```
 
-The example uses the GMT program xyz2grd with the -ZTLf flag indicating that
-a float array was output.
+The example uses the GMT program xyz2grd with the -ZTLf flag indicating
+that a float array was output.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.in.bin.html">r.in.bin</a>,
-<a href="r.in.ascii.html">r.in.ascii</a>,
-<a href="r.in.gdal.html">r.in.gdal</a>,
-<a href="r.out.ascii.html">r.out.ascii</a>
-</em>
+*[r.in.bin](r.in.bin.md), [r.in.ascii](r.in.ascii.md),
+[r.in.gdal](r.in.gdal.md), [r.out.ascii](r.out.ascii.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-This program is derived from <em><a href="r.out.ascii.html">r.out.ascii</a></em>
-with a few modifications. <br>
-Author: <a href="mailto:bcovill@tekmap.ns.ca">Bob Covill</a>
+This program is derived from *[r.out.ascii](r.out.ascii.md)* with a few
+modifications.  
+Author: [Bob Covill](mailto:bcovill@tekmap.ns.ca)

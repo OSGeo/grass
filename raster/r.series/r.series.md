@@ -1,229 +1,232 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.series</em> makes each output cell value a function of the values
+*r.series* makes each output cell value a function of the values
 assigned to the corresponding cells in the input raster map layers.
 
-<center>
-<img src="r_series.png">
-<p><em>Figure: Illustration for an average of three input rasters</em></p>
-</center>
+![](r_series.png)
 
-<p>
+*Figure: Illustration for an average of three input rasters*
+
 Following methods are available:
 
-<ul>
- <li>average: average value</li>
- <li>count: count of non-NULL cells</li>
- <li>median: median value</li>
- <li>mode: most frequently occurring value</li>
- <li>minimum: lowest value</li>
- <li>min_raster: raster map number with the minimum time-series value</li>
- <li>maximum: highest value</li>
- <li>max_raster: raster map number with the maximum time-series value</li>
- <li>stddev: standard deviation</li>
- <li>range: range of values (max - min)</li>
- <li>sum: sum of values</li>
- <li>variance: statistical variance</li>
- <li>diversity: number of different values</li>
- <li>slope: linear regression slope</li>
- <li>offset: linear regression offset</li>
- <li>detcoeff: linear regression coefficient of determination</li>
- <li>tvalue: linear regression t-value</li>
- <li>quart1: first quartile</li>
- <li>quart3: third quartile</li>
- <li>perc90: ninetieth percentile</li>
- <li>quantile: arbitrary quantile</li>
- <li>skewness: skewness</li>
- <li>kurtosis: kurtosis</li>
-</ul>
+- average: average value
+- count: count of non-NULL cells
+- median: median value
+- mode: most frequently occurring value
+- minimum: lowest value
+- min_raster: raster map number with the minimum time-series value
+- maximum: highest value
+- max_raster: raster map number with the maximum time-series value
+- stddev: standard deviation
+- range: range of values (max - min)
+- sum: sum of values
+- variance: statistical variance
+- diversity: number of different values
+- slope: linear regression slope
+- offset: linear regression offset
+- detcoeff: linear regression coefficient of determination
+- tvalue: linear regression t-value
+- quart1: first quartile
+- quart3: third quartile
+- perc90: ninetieth percentile
+- quantile: arbitrary quantile
+- skewness: skewness
+- kurtosis: kurtosis
 
 Note that most parameters accept multiple answers, allowing multiple
 aggregates to be computed in a single run, e.g.:
-<p>
-<div class="code"><pre>
+
+```shell
 r.series input=map1,...,mapN \
          output=map.mean,map.stddev \
-	 method=average,stddev
-</pre></div>
+     method=average,stddev
+```
 
 or:
-<p>
-<div class="code"><pre>
+
+```shell
 r.series input=map1,...,mapN \
          output=map.p10,map.p50,map.p90 \
          method=quantile,quantile,quantile \
          quantile=0.1,0.5,0.9
-</pre></div>
+```
 
 The same number of values must be provided for all options.
 
-<h2>NOTES</h2>
+## NOTES
 
-<h3>No-data (NULL) handling</h3>
-With <em>-n</em> flag, any cell for which any of the corresponding
-input cells are NULL is automatically set to NULL (NULL propagation).
-The aggregate function is not called, so all methods behave this way
-with respect to the <em>-n</em> flag.
+### No-data (NULL) handling
 
-<p>
-Without <em>-n</em> flag, the complete list of inputs for each cell
-(including NULLs) is passed to the aggregate function. Individual
-aggregates can handle data as they choose. Mostly, they just compute
-the aggregate over the non-NULL values, producing a NULL result only if
-all inputs are NULL.
+With *-n* flag, any cell for which any of the corresponding input cells
+are NULL is automatically set to NULL (NULL propagation). The aggregate
+function is not called, so all methods behave this way with respect to
+the *-n* flag.
 
-<h3>Minimum and maximum analysis</h3>
-The <em>min_raster</em> and <em>max_raster</em> methods generate a map
-with the number of the raster map that holds the minimum/maximum value
-of the time-series. The numbering starts at <em>0</em> up to <em>n</em>
-for the first and the last raster listed in <em>input=</em>,
-respectively.
+Without *-n* flag, the complete list of inputs for each cell (including
+NULLs) is passed to the aggregate function. Individual aggregates can
+handle data as they choose. Mostly, they just compute the aggregate over
+the non-NULL values, producing a NULL result only if all inputs are
+NULL.
 
-<h3>Range analysis</h3>
-If the <em>range=</em> option is given, any values which fall outside
-that range will be treated as if they were NULL. The <em>range</em>
-parameter can be set to <em>low,high</em> thresholds: values outside of
-this range are treated as NULL (i.e., they will be ignored by most
-aggregates, or will cause the result to be NULL if -n is given). The
-<em>low,high</em> thresholds are floating point, so use <em>-inf</em>
-or <em>inf</em> for a single threshold (e.g., <em>range=0,inf</em> to
-ignore negative values, or <em>range=-inf,-200.4</em> to ignore values
-above -200.4).
+### Minimum and maximum analysis
 
-<h3>Linear regression</h3>
-Linear regression (slope, offset, coefficient of determination,
-t-value) assumes equal time intervals. If the data have irregular time
-intervals, NULL raster maps can be inserted into time series to make
-time intervals equal (see example).
+The *min_raster* and *max_raster* methods generate a map with the number
+of the raster map that holds the minimum/maximum value of the
+time-series. The numbering starts at *0* up to *n* for the first and the
+last raster listed in *input=*, respectively.
 
-<h3>Quantiles</h3>
-<em>r.series</em> can calculate arbitrary quantiles.
+### Range analysis
 
-<h3>Memory consumption</h3>
-Memory usage is not an issue, as <em>r.series</em> only needs to hold
-one row from each map at a time.
+If the *range=* option is given, any values which fall outside that
+range will be treated as if they were NULL. The *range* parameter can be
+set to *low,high* thresholds: values outside of this range are treated
+as NULL (i.e., they will be ignored by most aggregates, or will cause
+the result to be NULL if -n is given). The *low,high* thresholds are
+floating point, so use *-inf* or *inf* for a single threshold (e.g.,
+*range=0,inf* to ignore negative values, or *range=-inf,-200.4* to
+ignore values above -200.4).
 
-<h3>Management of open file limits</h3>
+### Linear regression
+
+Linear regression (slope, offset, coefficient of determination, t-value)
+assumes equal time intervals. If the data have irregular time intervals,
+NULL raster maps can be inserted into time series to make time intervals
+equal (see example).
+
+### Quantiles
+
+*r.series* can calculate arbitrary quantiles.
+
+### Memory consumption
+
+Memory usage is not an issue, as *r.series* only needs to hold one row
+from each map at a time.
+
+### Management of open file limits
+
 The maximum number of raster maps that can be processed is given by the
-user-specific limit of the operating system. For example, the soft limits
-for users are typically 1024 files. The soft limit can be changed with e.g.
-<code>ulimit -n 4096</code> (UNIX-based operating systems) but it cannot be
-higher than the hard limit. If the latter is too low, you can as superuser
-add an entry in:
+user-specific limit of the operating system. For example, the soft
+limits for users are typically 1024 files. The soft limit can be changed
+with e.g. `ulimit -n 4096` (UNIX-based operating systems) but it cannot
+be higher than the hard limit. If the latter is too low, you can as
+superuser add an entry in:
 
-<div class="code"><pre>
+```shell
 /etc/security/limits.conf
-# &lt;domain&gt;      &lt;type&gt;  &lt;item&gt;         &lt;value&gt;
+# <domain>      <type>  <item>         <value>
 your_username  hard    nofile          4096
-</pre></div>
+```
 
 This will raise the hard limit to 4096 files. Also have a look at the
 overall limit of the operating system
-<div class="code"><pre>
+
+```shell
 cat /proc/sys/fs/file-max
-</pre></div>
+```
+
 which on modern Linux systems is several 100,000 files.
 
-<p>
-For each map a weighting factor can be specified using the
-<em>weights</em> option. Using weights can be meaningful when computing
-the sum or average of maps with different temporal extent. The default
-weight is 1.0. The number of weights must be identical to the number
-of input maps and must have the same order. Weights can also be
-specified in the input file.
+For each map a weighting factor can be specified using the *weights*
+option. Using weights can be meaningful when computing the sum or
+average of maps with different temporal extent. The default weight is
+1.0. The number of weights must be identical to the number of input maps
+and must have the same order. Weights can also be specified in the input
+file.
 
-<p>
-Use the <b>-z</b> flag to analyze large amounts of raster maps without
-hitting open files limit and the <em>file</em> option to avoid hitting
-the size limit of command line arguments.
-Note that the computation using the <em>file</em> option is slower
-than with the <em>input</em> option.
-For every single row in the output map(s) all input maps are
-opened and closed. The amount of RAM will rise linearly with the number
-of specified input maps. The <em>input</em> and <em>file</em> options are
-mutually exclusive: the former is a comma separated list of raster map
-names and the latter is a text file with a new line separated list of
-raster map names and optional weights. As separator between the map name
-and the weight the character "|" must be used.
+Use the **-z** flag to analyze large amounts of raster maps without
+hitting open files limit and the *file* option to avoid hitting the size
+limit of command line arguments. Note that the computation using the
+*file* option is slower than with the *input* option. For every single
+row in the output map(s) all input maps are opened and closed. The
+amount of RAM will rise linearly with the number of specified input
+maps. The *input* and *file* options are mutually exclusive: the former
+is a comma separated list of raster map names and the latter is a text
+file with a new line separated list of raster map names and optional
+weights. As separator between the map name and the weight the character
+"\|" must be used.
 
-<h3>Performance</h3>
-To enable parallel processing, the user can specify the number of threads to be
-used with the <b>nprocs</b> parameter (default 1). The <b>memory</b> parameter
-(default 300 MB) can also be provided to determine the size of the buffer in MB for
-computation.
+### Performance
+
+To enable parallel processing, the user can specify the number of
+threads to be used with the **nprocs** parameter (default 1). The
+**memory** parameter (default 300 MB) can also be provided to determine
+the size of the buffer in MB for computation.
 
 <div align="center" style="margin: 10px">
-     <img src="r_series_benchmark_size.png" alt="benchmark for number of cells" border="0">
-     <img src="r_series_benchmark_memory.png" alt="benchmark for memory size" border="0">
-     <br>
-     <i>Figure: Benchmark on the left shows execution time for different
-     number of cells, benchmark on the right shows execution time
-     for different memory size for 10000x10000 raster. See benchmark scripts in source code.
-     (Intel Core i9-10940X CPU @ 3.30GHz x 28) </i>
-     </div>
 
-<p>To reduce the memory requirements to minimum, set option <b>memory</b> to zero.
-To take advantage of the parallelization, GRASS GIS
-needs to compiled with OpenMP enabled.
+<img src="r_series_benchmark_size.png" data-border="0"
+alt="benchmark for number of cells" />
+<img src="r_series_benchmark_memory.png" data-border="0"
+alt="benchmark for memory size" />  
+*Figure: Benchmark on the left shows execution time for different number
+of cells, benchmark on the right shows execution time for different
+memory size for 10000x10000 raster. See benchmark scripts in source
+code. (Intel Core i9-10940X CPU @ 3.30GHz x 28)*
 
-<h2>EXAMPLES</h2>
+</div>
 
-Using <em>r.series</em> with wildcards:
-<br>
-<div class="code"><pre>
+To reduce the memory requirements to minimum, set option **memory** to
+zero. To take advantage of the parallelization, GRASS GIS needs to
+compiled with OpenMP enabled.
+
+## EXAMPLES
+
+Using *r.series* with wildcards:  
+
+```shell
 r.series input="`g.list pattern='insitu_data.*' sep=,`" \
          output=insitu_data.stddev method=stddev
-</pre></div>
-<p>
-Note the <em>g.list</em> script also supports regular expressions for
-selecting map names.
+```
 
-<p>
-Using <em>r.series</em> with NULL raster maps (in order to consider a
-"complete" time series):
-<br>
-<div class="code"><pre>
+Note the *g.list* script also supports regular expressions for selecting
+map names.
+
+Using *r.series* with NULL raster maps (in order to consider a
+"complete" time series):  
+
+```shell
 r.mapcalc "dummy = null()"
 r.series in=map2001,map2002,dummy,dummy,map2005,map2006,dummy,map2008 \
          out=res_slope,res_offset,res_coeff meth=slope,offset,detcoeff
-</pre></div>
+```
 
-<p>Example for multiple aggregates to be computed in one run (3 resulting aggregates
-from two input maps):
-<div class="code"><pre>
+Example for multiple aggregates to be computed in one run (3 resulting
+aggregates from two input maps):
+
+```shell
 r.series in=one,two out=result_avg,res_slope,result_count meth=sum,slope,count
-</pre></div>
+```
 
-<p>Example to use the file option of r.series:
-<div class="code"><pre>
-cat &gt; input.txt &lt;&lt; EOF
+Example to use the file option of r.series:
+
+```shell
+cat > input.txt << EOF
 map1
 map2
 map3
 EOF
 
 r.series file=input.txt out=result_sum meth=sum
-</pre></div>
+```
 
-<p>
-Example to use the file option of r.series including weights. The
-weight 0.75 should be assigned to map2. As the other maps do not have
-weights we can leave it out:
+Example to use the file option of r.series including weights. The weight
+0.75 should be assigned to map2. As the other maps do not have weights
+we can leave it out:
 
-<div class="code"><pre>
-cat &gt; input.txt &lt;&lt; EOF
+```shell
+cat > input.txt << EOF
 map1
 map2|0.75
 map3
 EOF
 
 r.series file=input.txt out=result_sum meth=sum
-</pre></div>
+```
 
-<p>
-Example for counting the number of days above a certain temperature using
-daily average maps ('???' as DOY wildcard):
-<div class="code"><pre>
+Example for counting the number of days above a certain temperature
+using daily average maps ('???' as DOY wildcard):
+
+```shell
 # Approach for shell based systems
 r.series input=`g.list rast pattern="temp_2003_???_avg" separator=comma` \
          output=temp_2003_days_over_25deg range=25.0,100.0 method=count
@@ -232,21 +235,18 @@ r.series input=`g.list rast pattern="temp_2003_???_avg" separator=comma` \
 g.list rast pattern="temp_2003_???_avg" output=mapnames.txt
 r.series file=mapnames.txt \
          output=temp_2003_days_over_25deg range=25.0,100.0 method=count
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.list.html">g.list</a>,
-<a href="g.region.html">g.region</a>,
-<a href="r.quantile.html">r.quantile</a>,
-<a href="r.series.accumulate.html">r.series.accumulate</a>,
-<a href="r.series.interp.html">r.series.interp</a>,
-<a href="r.univar.html">r.univar</a>
-</em>
-<p>
-<a href="https://grasswiki.osgeo.org/wiki/Large_raster_data_processing">Hints for large raster data processing</a>
+*[g.list](g.list.md), [g.region](g.region.md),
+[r.quantile](r.quantile.md),
+[r.series.accumulate](r.series.accumulate.md),
+[r.series.interp](r.series.interp.md), [r.univar](r.univar.md)*
 
-<h2>AUTHOR</h2>
+[Hints for large raster data
+processing](https://grasswiki.osgeo.org/wiki/Large_raster_data_processing)
+
+## AUTHOR
 
 Glynn Clements

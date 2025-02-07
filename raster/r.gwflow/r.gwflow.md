@@ -1,101 +1,107 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.gwflow</em> is a numerical program which calculates implicit transient,
+*r.gwflow* is a numerical program which calculates implicit transient,
 confined and unconfined groundwater flow in two dimensions based on
-raster maps and the current region settings.
-All initial and boundary conditions must be provided as
-raster maps. The unit of the current project's coordinate reference system must be meters.
-<p>This module is sensitive to mask settings. All cells which are outside the mask
-are ignored and handled as no flow boundaries.
-<p><center>
-<img src="r_gwflow_concept.png" border="0"><br>
-<table border="0" width="700">
-<tr><td><center>
-<i>Workflow of r.gwflow</i>
-</center></td></tr>
-</table>
-</center>
-<p>
-<em>r.gwflow</em> calculates the piezometric head and optionally
-the water budget and the filter velocity field,
-based on the hydraulic conductivity and the piezometric head.
-The vector components can be visualized with paraview if they are exported
-with <em>r.out.vtk</em>.
-<br>
-<br>
-The groundwater flow will always be calculated transient.
-For stady state computation set the timestep
-to a large number (billions of seconds) or set the
-storativity/ effective porosity raster map to zero.
-<br>
-<br>
-The water budget is calculated for each non inactive cell. The
-sum of the budget for each non inactive cell must be near zero.
-This is an indicator of the quality of the numerical result.
+raster maps and the current region settings. All initial and boundary
+conditions must be provided as raster maps. The unit of the current
+project's coordinate reference system must be meters.
 
-<h2>NOTES</h2>
+This module is sensitive to mask settings. All cells which are outside
+the mask are ignored and handled as no flow boundaries.
 
-The groundwater flow calculation is based on Darcy's law and a numerical implicit
-finite volume discretization. The discretization results in a symmetric and positive definite
-linear equation system in form of <i>Ax = b</i>, which must be solved. The groundwater flow partial
-differential equation is of the following form:
+<img src="r_gwflow_concept.png" data-border="0" />  
 
-<p>(dh/dt)*S = div (K grad h) + q
-<p>In detail for 2 dimensions:
-<p>(dh/dt)*S = Kxx * (d^2h/dx^2) + Kyy * (d^2h/dy^2) + q
+|                        |
+|------------------------|
+| *Workflow of r.gwflow* |
 
-<ul>
-<li>h -- the piezometric head im [m]</li>
-<li>dt -- the time step for transient calculation in [s]</li>
-<li>S -- the specific storage [1/m]</li>
-<li>Kxx -- the hydraulic conductivity tensor part in x direction in [m/s]</li>
-<li>Kyy -- the hydraulic conductivity tensor part in y direction in [m/s]</li>
-<li>q - inner source/sink in meter per second [1/s]</li>
-</ul>
+*r.gwflow* calculates the piezometric head and optionally the water
+budget and the filter velocity field, based on the hydraulic
+conductivity and the piezometric head. The vector components can be
+visualized with paraview if they are exported with *r.out.vtk*.  
+  
+The groundwater flow will always be calculated transient. For stady
+state computation set the timestep to a large number (billions of
+seconds) or set the storativity/ effective porosity raster map to
+zero.  
+  
+The water budget is calculated for each non inactive cell. The sum of
+the budget for each non inactive cell must be near zero. This is an
+indicator of the quality of the numerical result.
 
-<p>Confined and unconfined groundwater flow is supported. Be aware that the storativity input parameter
-is handled differently in case of unconfined flow. Instead of the storativity, the effective porosity is expected.
-<p>To compute unconfined groundwater flow, a simple Picard based linearization scheme is used to
-solve the resulting non-linear equation system.
-<p>Two different boundary conditions are implemented,
-the Dirichlet and Neumann conditions. By default the calculation area is surrounded by homogeneous Neumann boundary conditions.
-The calculation and boundary status of single cells must be set with a status map,
-the following states are supportet:
+## NOTES
 
-<ul>
-<li>0 == inactive - the cell with status 0 will not be calculated, active cells will have a no flow boundary to this cell</li>
-<li>1 == active - this cell is used for groundwater floaw calculation, inner sources and recharge can be defined for those cells</li>
-<li>2 == Dirichlet - cells of this type will have a fixed piezometric head value which do not change over the time </li>
-</ul>
-<br>
-<br>
-Note that all required raster maps are read into main memory. Additionally the
-linear equation system will be allocated, so the memory consumption of this
-module rapidely grow with the size of the input maps.
-<br>
-<br>
-The resulting linear equation system <i>Ax = b</i> can be solved with several solvers.
-An iterative solvers with sparse and quadratic matrices support is implemented.
-The conjugate gradients method with (pcg) and without (cg) precondition.
-Additionally a direct Cholesky solver is available. This direct solver
-only work with normal quadratic matrices, so be careful using them with large maps
-(maps of size 10.000 cells will need more than one gigabyte of RAM).
-Always prefer a sparse matrix solver.
+The groundwater flow calculation is based on Darcy's law and a numerical
+implicit finite volume discretization. The discretization results in a
+symmetric and positive definite linear equation system in form of *Ax =
+b*, which must be solved. The groundwater flow partial differential
+equation is of the following form:
 
-<h2>EXAMPLE</h2>
+(dh/dt)\*S = div (K grad h) + q
 
-Use this small script to create a working
-groundwater flow area and data. Make sure you are not in a lat/lon projection.
-It includes drainage and river input as well.
+In detail for 2 dimensions:
 
-<div class="code"><pre>
+(dh/dt)\*S = Kxx \* (d^2h/dx^2) + Kyy \* (d^2h/dy^2) + q
+
+- h -- the piezometric head im \[m\]
+- dt -- the time step for transient calculation in \[s\]
+- S -- the specific storage \[1/m\]
+- Kxx -- the hydraulic conductivity tensor part in x direction in
+  \[m/s\]
+- Kyy -- the hydraulic conductivity tensor part in y direction in
+  \[m/s\]
+- q - inner source/sink in meter per second \[1/s\]
+
+Confined and unconfined groundwater flow is supported. Be aware that the
+storativity input parameter is handled differently in case of unconfined
+flow. Instead of the storativity, the effective porosity is expected.
+
+To compute unconfined groundwater flow, a simple Picard based
+linearization scheme is used to solve the resulting non-linear equation
+system.
+
+Two different boundary conditions are implemented, the Dirichlet and
+Neumann conditions. By default the calculation area is surrounded by
+homogeneous Neumann boundary conditions. The calculation and boundary
+status of single cells must be set with a status map, the following
+states are supportet:
+
+- 0 == inactive - the cell with status 0 will not be calculated, active
+  cells will have a no flow boundary to this cell
+- 1 == active - this cell is used for groundwater floaw calculation,
+  inner sources and recharge can be defined for those cells
+- 2 == Dirichlet - cells of this type will have a fixed piezometric head
+  value which do not change over the time
+
+  
+  
+Note that all required raster maps are read into main memory.
+Additionally the linear equation system will be allocated, so the memory
+consumption of this module rapidely grow with the size of the input
+maps.  
+  
+The resulting linear equation system *Ax = b* can be solved with several
+solvers. An iterative solvers with sparse and quadratic matrices support
+is implemented. The conjugate gradients method with (pcg) and without
+(cg) precondition. Additionally a direct Cholesky solver is available.
+This direct solver only work with normal quadratic matrices, so be
+careful using them with large maps (maps of size 10.000 cells will need
+more than one gigabyte of RAM). Always prefer a sparse matrix solver.
+
+## EXAMPLE
+
+Use this small script to create a working groundwater flow area and
+data. Make sure you are not in a lat/lon projection. It includes
+drainage and river input as well.
+
+```shell
 # set the region accordingly
 g.region res=25 res3=25 t=100 b=0 n=1000 s=0 w=0 e=1000 -p3
 
 #now create the input raster maps for confined and unconfined aquifers
 r.mapcalc expression="phead = if(row() == 1 , 50, 40)"
 r.mapcalc expression="status = if(row() == 1 , 2, 1)"
-r.mapcalc expression="well = if(row() == 20 &amp;&amp; col() == 20 , -0.01, 0)"
+r.mapcalc expression="well = if(row() == 20 && col() == 20 , -0.01, 0)"
 r.mapcalc expression="hydcond = 0.00025"
 r.mapcalc expression="recharge = 0"
 r.mapcalc expression="top_conf = 20.0"
@@ -136,21 +142,19 @@ r.out.vtk -p elevation=gwresult_unconf in=gwresult_unconf,status vector=gwresult
   out=/tmp/gwdata_unconf2d.vtk
 
 #now load the data into paraview
-paraview --data=/tmp/gwdata_conf2d.vtk &amp;
-paraview --data=/tmp/gwdata_unconf2d.vtk &amp;
-</pre></div>
+paraview --data=/tmp/gwdata_conf2d.vtk &
+paraview --data=/tmp/gwdata_unconf2d.vtk &
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.solute.transport.html">r.solute.transport</a>,
-<a href="r3.gwflow.html">r3.gwflow</a>,
-<a href="r.out.vtk.html">r.out.vtk</a>
-</em>
+*[r.solute.transport](r.solute.transport.md), [r3.gwflow](r3.gwflow.md),
+[r.out.vtk](r.out.vtk.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert
-<p>This work is based on the Diploma Thesis of S&ouml;ren Gebbert available
-<a href="https://grass.osgeo.org/gdp/hydrology/gebbert2007_diplom_stroemung_grass_gis.pdf">here</a>
+Sören Gebbert
+
+This work is based on the Diploma Thesis of Sören Gebbert available
+[here](https://grass.osgeo.org/gdp/hydrology/gebbert2007_diplom_stroemung_grass_gis.pdf)
 at Technical University Berlin in Germany.

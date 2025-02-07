@@ -1,59 +1,52 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.columns</em> lists all columns for a give table. Connection to
-databases are supported through dbf, shp, odbc and pg drivers.
+*db.columns* lists all columns for a give table. Connection to databases
+are supported through dbf, shp, odbc and pg drivers.
 
-<h2>NOTE</h2>
+## NOTE
 
 If parameters for database connection are already set with
-<a href="db.connect.html">db.connect</a>, they are taken as default values
-and do not need to be spcified each time.
+[db.connect](db.connect.md), they are taken as default values and do not
+need to be spcified each time.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>List columns of a PostgreSQL attribute table</h3>
+### List columns of a PostgreSQL attribute table
 
-<div class="code"><pre>
+```shell
 db.columns table=zipcodes_wake driver=pg database=grassdb
-</pre></div>
+```
 
-<p>
-<em>If the database parameters are already set, the columns can be listed
-directly</em><br>
+*If the database parameters are already set, the columns can be listed
+directly*  
 
-<div class="code"><pre>
+```shell
 db.columns table=zipcodes_wake
-</pre></div>
+```
 
-<h3>List columns from Shape file with DBF attribute table</h3>
+### List columns from Shape file with DBF attribute table
 
-<div class="code"><pre>
+```shell
 db.columns table=zipcodes_wake driver=dbf database=/grassdata/nc_spm_08/PERMANENT/dbf/
-</pre></div>
+```
 
-<h3>List columns of table in SQLite database</h3>
+### List columns of table in SQLite database
 
 Note that the SQLite backend is the default setting.
 
-<div class="code"><pre>
+```shell
 db.columns driver=sqlite table=archsites database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.connect.html">db.connect</a>,
-<a href="db.describe.html">db.describe</a>,
-<a href="db.drivers.html">db.drivers</a>,
-<a href="db.droptable.html">db.droptable</a>,
-<a href="db.execute.html">db.execute</a>,
-<a href="db.login.html">db.login</a>,
-<a href="db.tables.html">db.tables</a>,
-<a href="sql.html">GRASS SQL interface</a>
-</em>
-<p>
-<a href="sql.html">GRASS SQL interface</a>
+*[db.connect](db.connect.md), [db.describe](db.describe.md),
+[db.drivers](db.drivers.md), [db.droptable](db.droptable.md),
+[db.execute](db.execute.md), [db.login](db.login.md),
+[db.tables](db.tables.md), [GRASS SQL interface](sql.md)*
 
-<h2>AUTHOR</h2>
+[GRASS SQL interface](sql.md)
+
+## AUTHOR
 
 Radim Blazek, ITC-Irst, Trento, Italy

@@ -1,99 +1,99 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.to.rast</em> transforms GRASS vector map layers into GRASS raster map
+*v.to.rast* transforms GRASS vector map layers into GRASS raster map
 layer format. Optionally, attributes can be converted to raster category
 labels.
 
-<h2>NOTES</h2>
+## NOTES
 
-In order to avoid unexpected results, the type of vector features
-should always be specified. The default is to convert all vector
-features, but if only e.g. areas should be converted use
-<em>type=area</em> rather than <em>type=point,line,area</em>.
+In order to avoid unexpected results, the type of vector features should
+always be specified. The default is to convert all vector features, but
+if only e.g. areas should be converted use *type=area* rather than
+*type=point,line,area*.
 
-<p>
-<em>v.to.rast</em> will only affect data in areas lying
-inside the boundaries of the current geographic region.
-A grid cell belongs to the area where the grid cell center falls into.
-<p>
-Before running <em>v.to.rast</em>, the user should
-therefore ensure that the current geographic region is
-correctly set and that the region resolution is at the
-desired level.
+*v.to.rast* will only affect data in areas lying inside the boundaries
+of the current geographic region. A grid cell belongs to the area where
+the grid cell center falls into.
 
-<p>Either the <em><b>column</b></em> parameter or the <em><b>value</b></em>
-parameter must be specified.  The <em><b>use</b></em> option may be
-specified alone when using the <em>dir</em> option.
-<p><em><b>use</b></em> options are:
-<ul>
-<li>
-<em>attr</em> - read values from attribute table (default)</li>
-<li>
-<em>cat</em>  - read values from category</li>
-<li>
-<em>value</em>  - use value specified by <em><b>value</b></em> option</li>
-<li>
-<em>z</em>    - use z coordinate (points or contours only)</li>
-<li>
-<em>dir</em>  - line direction in degrees counterclockwise from east (lines only)</li>
-</ul>
-<p>The <em><b>column</b></em> parameter uses an existing column from the vector map
-database table as the category value in the output raster map. Existing table
-columns can be shown by using <em><a href="db.describe.html">db.describe</a></em>.
-<p>An empty raster map layer will be created if the vector map layer has not
-been assigned category/attribute labels (e.g., through use of
-<a href="v.category.html">v.category option=add</a>).
-<p>Otherwise:
-<ul>
-<li>
-Labeled areas and/or centroids will produce filled raster coverages with edges
-that straddle the original area boundary <b>as long as the boundary is NOT
-labeled</b>.
-<br>(Use <code>v.category option=del type=boundary</code> to remove.)</li>
-<li>
-Labeled lines and boundaries will produce lines of raster cells which touch the
-original vector line. This tends to be more aggressive than area-only conversions.</li>
-<li>
-Points and orphaned centroids will be converted into single cells on the
-resultant raster map.</li>
-</ul>
-<p><p><b>Line directions</b> are given in degrees counterclockwise from east.
-<p><p>Raster category labels are supported for all of <em>use=</em> except <em>use=z</em>.
-<p>
-The <b>-d</b> flag applies only to lines and boundaries, the default is
-to set only those cells on the render path (thin line).
-<p>
+Before running *v.to.rast*, the user should therefore ensure that the
+current geographic region is correctly set and that the region
+resolution is at the desired level.
+
+Either the ***column*** parameter or the ***value*** parameter must be
+specified. The ***use*** option may be specified alone when using the
+*dir* option.
+
+***use*** options are:
+
+- *attr* - read values from attribute table (default)
+- *cat* - read values from category
+- *value* - use value specified by ***value*** option
+- *z* - use z coordinate (points or contours only)
+- *dir* - line direction in degrees counterclockwise from east (lines
+  only)
+
+The ***column*** parameter uses an existing column from the vector map
+database table as the category value in the output raster map. Existing
+table columns can be shown by using *[db.describe](db.describe.md)*.
+
+An empty raster map layer will be created if the vector map layer has
+not been assigned category/attribute labels (e.g., through use of
+[v.category option=add](v.category.md)).
+
+Otherwise:
+
+- Labeled areas and/or centroids will produce filled raster coverages
+  with edges that straddle the original area boundary **as long as the
+  boundary is NOT labeled**.  
+  (Use `v.category option=del type=boundary` to remove.)
+- Labeled lines and boundaries will produce lines of raster cells which
+  touch the original vector line. This tends to be more aggressive than
+  area-only conversions.
+- Points and orphaned centroids will be converted into single cells on
+  the resultant raster map.
+
+**Line directions** are given in degrees counterclockwise from east.
+
+Raster category labels are supported for all of *use=* except *use=z*.
+
+The **-d** flag applies only to lines and boundaries, the default is to
+set only those cells on the render path (thin line).
+
 Boundaries (usually without categories) can be rasterized with
-<div class="code"><pre>
+
+```shell
 v.to.rast type=boundary layer=-1 use=value
-</pre></div>
+```
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Convert a vector map and use column SPEED from attribute table</h3>
+### Convert a vector map and use column SPEED from attribute table
 
-<div class="code"><pre>
+```shell
 db.describe -c table=vect_map
 
 ncols:3
 Column 1: CAT
 Column 2: SPEED
 Column 3: WIDTH
-</pre></div>
+```
 
-<div class="code"><pre>
+```shell
 v.to.rast input=vect_map output=raster_map attribute_column=SPEED type=line
-</pre></div>
+```
 
-<h3>Calculate stream directions from a river vector map (Spearfish)</h3>
+### Calculate stream directions from a river vector map (Spearfish)
 
-<div class="code"><pre>
+```shell
 v.to.rast input=streams output=streamsdir use=dir
-</pre></div>
+```
 
-<h3>Calculate slope along path</h3>
-Using slope and aspect maps, compute slope along a bus route (use full NC sample dataset):
-<div class="code"><pre>
+### Calculate slope along path
+
+Using slope and aspect maps, compute slope along a bus route (use full
+NC sample dataset):
+
+```shell
 g.region raster=elevation -p
 r.slope.aspect elevation=elevation slope=slope aspect=aspect
 
@@ -103,32 +103,30 @@ v.to.rast input=busroute11 type=line output=busroute11_dir use=dir
 # extract steepest slope values and transform them into slope along path
 r.mapcalc "route_slope = if(busroute11, slope)"
 r.mapcalc "route_slope_dir = abs(atan(tan(slope) * cos(aspect - busroute11_dir)))"
-</pre></div>
+```
 
-<center>
-<img src="v_to_rast_direction.png" alt="Slope along path" border="1"><br>
+<img src="v_to_rast_direction.png" data-border="1"
+alt="Slope along path" />  
 Slope in degrees along bus route
-</center>
 
-<h3>Convert a vector polygon map to raster including descriptive labels</h3>
+### Convert a vector polygon map to raster including descriptive labels
 
 In this example, the ZIP code vector map is rasterized (North Carolina
 sample dataset):
 
-<!-- unfortunately attribute ZIPNUM is double precision and not integer -->
-<div class="code"><pre>
+```shell
 # rasterize ZIP codes at 50m raster resolution
 g.region vector=zipcodes_wake res=50 -ap
 # vector to raster conversion, with category labels
 v.to.rast input=zipcodes_wake output=myzipcodes use=attr attribute_column="ZIPNUM" label_column="NAME"
-</pre></div>
+```
 
-<h3>Convert vector points to raster with raster cell binning</h3>
+### Convert vector points to raster with raster cell binning
 
 In this example, the number of schools per raster cell are counted
 (North Carolina sample dataset):
 
-<div class="code"><pre>
+```shell
 g.copy vector=schools_wake,myschools_wake
 
 # set computation region for raster binning
@@ -150,26 +148,20 @@ d.mon wx0
 d.rast schools_wake_aggreg
 d.vect schools_wake
 d.grid 5000
-</pre></div>
+```
 
-<center>
-<img src="v_to_rast_binning.png" alt="Number of schools per raster cell" border="1"><br>
+<img src="v_to_rast_binning.png" data-border="1"
+alt="Number of schools per raster cell" />  
 Number of schools per raster cell
-</center>
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.describe.html">db.describe</a>,
-<a href="v.category.html">v.category</a>
-</em>
+*[db.describe](db.describe.md), [v.category](v.category.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Original code: Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
-<br>
-GRASS 6.0 updates: Radim Blazek, ITC-irst, Trento, Italy
-<br>
-Stream directions: Jaro Hofierka and Helena Mitasova
-<br>
+Original code: Michael Shapiro, U.S. Army Construction Engineering
+Research Laboratory  
+GRASS 6.0 updates: Radim Blazek, ITC-irst, Trento, Italy  
+Stream directions: Jaro Hofierka and Helena Mitasova  
 GRASS 6.3 code cleanup and label support: Brad Douglas

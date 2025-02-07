@@ -1,65 +1,59 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.db.addtable</em> creates and adds a new attribute table to a given vector
-map. It links the table to the specified layer of the vector map. If the vector
-map is not yet linked to any table, new a database link is established based on
-the MAPSET database settings (see <em>db.connect</em>).
+*v.db.addtable* creates and adds a new attribute table to a given vector
+map. It links the table to the specified layer of the vector map. If the
+vector map is not yet linked to any table, new a database link is
+established based on the MAPSET database settings (see *db.connect*).
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>v.db.addtable</em> is a front-end to <em>db.execute</em> to allow easier
-usage.
-<p>
-<em>v.db.addtable</em> will only insert category values into the table for those features
-which actually have a category value in the relevant layer. The user can add
-category values automatically by using <em>v.category</em> or manually with
-<em><a href="wxGUI.vdigit.html">wxGUI vector digitizer</a></em>
-before running v.db.addtable. Or one can run v.db.addtable first
-and then use either a combinatino of <em>v.category</em> + <em>v.to.db</em> or
-<em><a href="wxGUI.vdigit.html">wxGUI vector digitizer</a></em>
+*v.db.addtable* is a front-end to *db.execute* to allow easier usage.
+
+*v.db.addtable* will only insert category values into the table for
+those features which actually have a category value in the relevant
+layer. The user can add category values automatically by using
+*v.category* or manually with *[wxGUI vector
+digitizer](wxGUI.vdigit.md)* before running v.db.addtable. Or one can
+run v.db.addtable first and then use either a combinatino of
+*v.category* + *v.to.db* or *[wxGUI vector digitizer](wxGUI.vdigit.md)*
 to add the relevant lines to the table.
-<p>
-The supported types of columns depend on the database backend. However, all
-backends should support VARCHAR, INT, DOUBLE PRECISION and DATE.
-<p>The existing database connection(s) can be verified with <em>v.db.connect</em>.
 
-<h2>EXAMPLE</h2>
+The supported types of columns depend on the database backend. However,
+all backends should support VARCHAR, INT, DOUBLE PRECISION and DATE.
 
-Adding a new attribute table with a single column to default layer 1:<br>
-<div class="code"><pre>
+The existing database connection(s) can be verified with *v.db.connect*.
+
+## EXAMPLE
+
+Adding a new attribute table with a single column to default layer 1:  
+
+```shell
 g.copy vect=roadsmajor,myroads
 v.db.addtable myroads columns="slope double precision"
 v.db.connect -p myroads
 v.info -c myroads
-</pre></div>
+```
 
-<p>Adding a new attribute table with two columns to layer 2:<br>
-<div class="code"><pre>
+Adding a new attribute table with two columns to layer 2:  
+
+```shell
 g.copy vect=roadsmajor,myroads
 v.db.addtable myroads columns="slope double precision, roadname varchar(15)" layer=2
 v.db.connect -p myroads
 v.info -c myroads
 v.info -c myroads layer=2
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.connect.html">db.connect</a>,
-<a href="db.droptable.html">db.droptable</a>,
-<a href="db.execute.html">db.execute</a>,
-<a href="v.db.connect.html">v.db.connect</a>,
-<a href="v.db.dropcolumn.html">v.db.dropcolumn</a>,
-<a href="v.db.droptable.html">v.db.droptable</a>,
-<a href="v.db.select.html">v.db.select</a>,
-<a href="v.db.update.html">v.db.update</a>
-</em>
+*[db.connect](db.connect.md), [db.droptable](db.droptable.md),
+[db.execute](db.execute.md), [v.db.connect](v.db.connect.md),
+[v.db.dropcolumn](v.db.dropcolumn.md),
+[v.db.droptable](v.db.droptable.md), [v.db.select](v.db.select.md),
+[v.db.update](v.db.update.md)*
 
-<p>
-<em>
-<a href="sql.html">GRASS SQL interface</a>
-</em>
+*[GRASS SQL interface](sql.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Markus Neteler

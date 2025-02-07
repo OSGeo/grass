@@ -1,26 +1,29 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.out.pov</em> converts GRASS vector data to POV-Ray format (www.povray.com)
+*v.out.pov* converts GRASS vector data to POV-Ray format
+(www.povray.com)
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-<div class="code"><pre>
+```shell
 v.out.pov input=vector3d output=vector3d.pov objmod="pigment { color red 0 green 1 blue 0 }"
-</pre></div>
+```
 
-The generated file can be included in an existing .pov file with the following statement:
-<div class="code"><pre>
+The generated file can be included in an existing .pov file with the
+following statement:
+
+```shell
 #include "vector3d.pov"
-</pre></div>
+```
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<a href="http://www.povray.com">POV-Ray</a>
+[POV-Ray](http://www.povray.com)
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em><a href="r.out.pov.html">r.out.pov</a></em>
+*[r.out.pov](r.out.pov.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Radim Blazek, ITC-Irst, Trento, Italy

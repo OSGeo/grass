@@ -1,100 +1,79 @@
-<!-- meta page description: PostScript DISPLAY DRIVER -->
+*PS display driver* to create PostScript files.
 
-<em>PS display driver</em> to create PostScript files.
-
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
 The PS driver generates a PostScript file from GRASS display commands.
 
-<h2>USAGE</h2>
+## USAGE
 
-<h3>Environment variables</h3>
+### Environment variables
 
-The PS driver can be enabled by setting <b>GRASS_RENDER_IMMEDIATE</b>
+The PS driver can be enabled by setting **GRASS_RENDER_IMMEDIATE**
 variable, eg.
 
-<div class="code"><pre>
+```shell
 export GRASS_RENDER_IMMEDIATE=ps
-</pre></div>
+```
 
 Several environment variables affect the operation of the PS driver:
 
-<ul>
-  <li><b>GRASS_RENDER_WIDTH=xxx</b><br>
-     the width of the image map (default is 640).
-  </li>
-  <li><b>GRASS_RENDER_HEIGHT=yyy</b><br>
-    the height of the image map (default is 480).
-  </li>
-  <li><b>GRASS_RENDER_TRUECOLOR=[TRUE|FALSE]</b><br>
-    sets true-color support. Default is FALSE.
-  </li>
-  <li><b>GRASS_RENDER_FILE</b><br>
-    name of output file. If it ends with ".eps" an EPS file
-    will be created.
-  </li>
-  <li><b>GRASS_RENDER_PS_PAPER</b><br>
-    sets the screen dimensions and margins to
-    fit a standard paper size, see also GRASS_RENDER_WIDTH, GRASS_RENDER_HEIGHT.
-  </li>
-  <li><b>GRASS_RENDER_PS_LANDSCAPE</b><br>
-    if <code>TRUE</code>, the screen is rotated 90 degrees
-    counter-clockwise so that a "landscape" screen fits better on
-    "portrait" paper.
-  </li>
-  <li><b>GRASS_RENDER_PS_HEADER</b><br>
-    if <code>FALSE</code>, the output is appended to any existing file,
-    and no prolog or setup sections are generated.
-  </li>
-  <li><b>GRASS_RENDER_PS_TRAILER</b><br>
-    if <code>FALSE</code>, no trailer section is generated.
-  </li>
-</ul>
+- **GRASS_RENDER_WIDTH=xxx**  
+  the width of the image map (default is 640).
+- **GRASS_RENDER_HEIGHT=yyy**  
+  the height of the image map (default is 480).
+- **GRASS_RENDER_TRUECOLOR=\[TRUE\|FALSE\]**  
+  sets true-color support. Default is FALSE.
+- **GRASS_RENDER_FILE**  
+  name of output file. If it ends with ".eps" an EPS file will be
+  created.
+- **GRASS_RENDER_PS_PAPER**  
+  sets the screen dimensions and margins to fit a standard paper size,
+  see also GRASS_RENDER_WIDTH, GRASS_RENDER_HEIGHT.
+- **GRASS_RENDER_PS_LANDSCAPE**  
+  if `TRUE`, the screen is rotated 90 degrees counter-clockwise so that
+  a "landscape" screen fits better on "portrait" paper.
+- **GRASS_RENDER_PS_HEADER**  
+  if `FALSE`, the output is appended to any existing file, and no prolog
+  or setup sections are generated.
+- **GRASS_RENDER_PS_TRAILER**  
+  if `FALSE`, no trailer section is generated.
 
-<h3>Example</h3>
+### Example
 
-<div class="code"><pre>
+```shell
 export GRASS_RENDER_IMMEDIATE=ps
 export GRASS_RENDER_TRUECOLOR=TRUE
 
 g.region raster=elevation
 d.rast elevation
 d.vect roadsmajor color=red
-</pre></div>
-This writes a file named <code>map.ps</code> in your current directory.
+```
 
-<h2>NOTES</h2>
+This writes a file named `map.ps` in your current directory.
 
-The resolution of the output files is defined by current region
-extents. Use <code>g.region -p</code> to get the number of rows and cols
-and use the environment variables to set the image size. If you would
-like a larger image, multiply both rows and cols by the same whole
-number to preserve the aspect ratio.
+## NOTES
 
-<p>GRASS_RENDER_TRUECOLOR requires either PostScript level 2 or level 1 plus the
-colorimage and setrgbcolor operators (this is the case for colour
-printers which pre-date level 2 PostScript).
+The resolution of the output files is defined by current region extents.
+Use `g.region -p` to get the number of rows and cols and use the
+environment variables to set the image size. If you would like a larger
+image, multiply both rows and cols by the same whole number to preserve
+the aspect ratio.
 
-<p>Masked images (<code>d.rast</code>, <code>d.rgb</code>, <code>d.his -n</code>)
-require PostScript level 3.
+GRASS_RENDER_TRUECOLOR requires either PostScript level 2 or level 1
+plus the colorimage and setrgbcolor operators (this is the case for
+colour printers which pre-date level 2 PostScript).
 
-<h2>SEE ALSO</h2>
+Masked images (`d.rast`, `d.rgb`, `d.his -n`) require PostScript level
+3.
 
-<em>
-  <a href="cairodriver.html">Cairo driver</a>,
-  <a href="pngdriver.html">PNG driver</a>,
-  <a href="htmldriver.html">HTML driver</a>,
-  <a href="variables.html">variables</a>
-</em>
-<br><br>
-<em>
-  <a href="d.rast.html">d.rast</a>,
-  <a href="d.vect.html">d.vect</a>,
-  <a href="d.mon.html">d.mon</a>,
-  <a href="d.erase.html">d.erase</a>,
-  <a href="d.redraw.html">d.redraw</a>
-</em>
+## SEE ALSO
 
-<h2>AUTHOR</h2>
+*[Cairo driver](cairodriver.md), [PNG driver](pngdriver.md), [HTML
+driver](htmldriver.md), [variables](variables.md)*  
+  
+*[d.rast](d.rast.md), [d.vect](d.vect.md), [d.mon](d.mon.md),
+[d.erase](d.erase.md), [d.redraw](d.redraw.md)*
+
+## AUTHOR
 
 Glynn Clements, 2007

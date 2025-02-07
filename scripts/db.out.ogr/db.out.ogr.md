@@ -1,52 +1,48 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.out.ogr</em> exports GRASS GIS attribute tables into various formats
-as supported by the OGR driver on the local system (CSV, DBF,
-PostgreSQL, SQLite, MySQL, ODBC, etc.).
-<p>
-The <em>output</em> parameter is used to define the output file name (if
-the path is not defined, the module will attempt to write to the current
+*db.out.ogr* exports GRASS GIS attribute tables into various formats as
+supported by the OGR driver on the local system (CSV, DBF, PostgreSQL,
+SQLite, MySQL, ODBC, etc.).
+
+The *output* parameter is used to define the output file name (if the
+path is not defined, the module will attempt to write to the current
 directory). In case of a database connection as output, the connection
 string has to be specified.
-<p>
-The <em>layer</em> parameter is needed if the attribute table to be exported
-is linked as non-default layer to a vector map.
 
-<h2>EXAMPLES</h2>
+The *layer* parameter is needed if the attribute table to be exported is
+linked as non-default layer to a vector map.
 
-<h3>Export of GRASS GIS attribute table to a CSV table file (default format)</h3>
+## EXAMPLES
 
-<div class="code"><pre>
+### Export of GRASS GIS attribute table to a CSV table file (default format)
+
+```shell
 db.out.ogr input=precip_30ynormals output=precip_30ynormals.csv
-</pre></div>
+```
 
-<h3>Export of a GRASS GIS attribute table to a DBF table</h3>
+### Export of a GRASS GIS attribute table to a DBF table
 
-<div class="code"><pre>
+```shell
 db.out.ogr input=precip_30ynormals output=precip_30ynormals.dbf format=DBF
-</pre></div>
+```
 
-<h3>Export of GRASS GIS attribute table into a PostgreSQL table</h3>
+### Export of GRASS GIS attribute table into a PostgreSQL table
 
-<div class="code"><pre>
+```shell
 db.out.ogr input=precip_30ynormals \
            output="PG:host=localhost dbname=meteo user=neteler" \
            format=PostgreSQL
 # verify
 echo "SELECT * FROM precip_30ynormals" | psql meteo
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.tables.html">db.tables</a>
-</em>
-<p>
-<em>
-<a href="sql.html">GRASS SQL interface</a>
-</em>
+*[db.tables](db.tables.md)*
 
-<h2>AUTHORS</h2>
+*[GRASS SQL interface](sql.md)*
 
-Markus Neteler<br>
+## AUTHORS
+
+Markus Neteler  
 Converted to Python by Glynn Clements

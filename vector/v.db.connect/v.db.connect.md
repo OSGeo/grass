@@ -1,95 +1,95 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.db.connect</em> prints or sets database connection for a vector
-map. The user can add or remove link to attribute table on the certain
-layer.
+*v.db.connect* prints or sets database connection for a vector map. The
+user can add or remove link to attribute table on the certain layer.
 
-<h2>NOTE</h2>
+## NOTE
 
-Connection information (driver, database, table, key) is stored for
-each map, in the file
-<div class="code"><pre>
-&lt;database&gt;/&lt;project&gt;/&lt;mapset&gt;/vector/&lt;map&gt;/dbln
-</pre></div>
+Connection information (driver, database, table, key) is stored for each
+map, in the file
 
-<p>
+```shell
+<database>/<project>/<mapset>/vector/<map>/dbln
+```
+
 If parameters for database connection are already set with
-<a href="db.connect.html">db.connect</a>, they are taken as default values and
-do not need to be specified each time.
+[db.connect](db.connect.md), they are taken as default values and do not
+need to be specified each time.
 
-<p>When printing database connection (<em>p</em> or <em>g</em> flag) the parameter
-<em>layer</em> is ignored, i.e. <b>all</b> connections are printed to the
-output.
+When printing database connection (*p* or *g* flag) the parameter
+*layer* is ignored, i.e. **all** connections are printed to the output.
 
-<p><b>Attention:</b> Removing a vector map will also delete all tables
-linked to it! If you use <a href="db.connect.html">v.db.connect </a>to
-link further tables to your map, it is advisable to make a copy from
-those tables first and connect the copied tables to the vector map
-(see also <a href="v.overlay.html">v.overlay</a>).
+**Attention:** Removing a vector map will also delete all tables linked
+to it! If you use [v.db.connect](db.connect.md) to link further tables
+to your map, it is advisable to make a copy from those tables first and
+connect the copied tables to the vector map (see also
+[v.overlay](v.overlay.md)).
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Note: The default database backend setting is SQLite.
 
-<h3>Print database connection</h3>
+### Print database connection
 
 Print all database connection parameters for vector map.
 
-<div class="code"><pre>
+```shell
 v.db.connect -p map=roads
-</pre></div>
+```
 
-<p>Print column types and names of table linked to vector map.
+Print column types and names of table linked to vector map.
 
-<div class="code"><pre>
+```shell
 v.db.connect -c map=roads
-</pre></div>
+```
 
-<h3>Connect vector map to database (DBF driver)</h3>
+### Connect vector map to database (DBF driver)
 
-Connect vector map to DBF table without or with variables.<br>
+Connect vector map to DBF table without or with variables.  
 
-<p>Using default DB connection:
-<div class="code"><pre>
+Using default DB connection:
+
+```shell
 v.db.connect map=vectormap table=table
-</pre></div>
+```
 
-<p>Using hardcoded path to DBF directory (not recommended):<br>
-<div class="code"><pre>
+Using hardcoded path to DBF directory (not recommended):  
+
+```shell
 v.db.connect map=vectormap table=table \
              database=/home/user/grassdata/spearfish60/PERMANENT/dbf
-</pre></div>
+```
 
-<p>Using variable as DBF directory definition, single quotes must be used:<br>
-<div class="code"><pre>
+Using variable as DBF directory definition, single quotes must be
+used:  
+
+```shell
 v.db.connect map=vectormap table=table \
              database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
-</pre></div>
+```
 
-<p>Connect vector map layer 2 and key ID to database with variables
-(note: if needed, single quotes must be used for the <em>database</em>
-parameter):
-<div class="code"><pre>
+Connect vector map layer 2 and key ID to database with variables (note:
+if needed, single quotes must be used for the *database* parameter):
+
+```shell
 v.db.connect map=vectormap table=table layer=2 key=ID
-</pre></div>
+```
 
-
-<h3>Connect vector map to database (SQLite driver)</h3>
+### Connect vector map to database (SQLite driver)
 
 Very similar to DBF driver example above.
 
-<div class="code"><pre>
+```shell
 db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 db.tables -p
 v.db.connect map=vectormap table=table driver=sqlite \
              database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 v.db.connect -p map=vectormap
-</pre></div>
+```
 
+### Connect vector map to database (MySQL driver)
 
-<h3>Connect vector map to database (MySQL driver)</h3>
-
-<div class="code"><pre>
+```shell
 # note: connection which requires password
 db.connect driver=mysql database="host=dbserver.foo.org,dbname=my_database"
 db.login user=joshua [password=xxx]
@@ -100,23 +100,23 @@ db.tables -p
 # connect external table to layer 2:
 v.db.connect map=my_map table=my_mysql_table key=baz layer=2
 v.db.connect -p my_map
-</pre></div>
+```
 
-<h3>Connect vector map to database (PostgreSQL driver)</h3>
+### Connect vector map to database (PostgreSQL driver)
 
-<div class="code"><pre>
+```shell
 # note: connection without password being asked
 v.db.connect map=vectormap table=table layer=1 key=oid driver=pg \
              database="host=myserver.itc.it,dbname=mydb,user=name" \
              table=mytable key=id
-</pre></div>
+```
 
-<h3>Store geometry in GRASS but attributes in PostgreSQL</h3>
+### Store geometry in GRASS but attributes in PostgreSQL
 
-This example illustrates a mixed data storage with possibility to
-update attributes in an external PostgreSQL database:
+This example illustrates a mixed data storage with possibility to update
+attributes in an external PostgreSQL database:
 
-<div class="code"><pre>
+```shell
 # Check current settings for attribute storage:
 db.connect -p
 
@@ -143,19 +143,19 @@ v.db.connect map=mytable driver=pg database="host=localhost,dbname=meteo" \
 
 # Now the geometry is stored in GRASS while the attributes are stored
 # in PostgreSQL.
-</pre></div>
+```
 
-An alternative is to create a "view" of only ID, x, y [,z] columns and
-to use <a href="v.in.db.html">v.in.db</a> on this view, then connect the original
-table to the geometry. This will be faster if the original table
-is very large.
+An alternative is to create a "view" of only ID, x, y \[,z\] columns and
+to use [v.in.db](v.in.db.md) on this view, then connect the original
+table to the geometry. This will be faster if the original table is very
+large.
 
-<h3>Store geometry in GRASS but attributes in PostGIS</h3>
+### Store geometry in GRASS but attributes in PostGIS
 
-This example illustrated a mixed data storage with possibility
-top update attributes in external PostGIS database:
+This example illustrated a mixed data storage with possibility top
+update attributes in external PostGIS database:
 
-<div class="code"><pre>
+```shell
 # Check current settings for attribute storage:
 db.connect -p
 
@@ -182,28 +182,19 @@ v.db.connect map=mytable driver=pg database="host=localhost,dbname=meteo" \
 
 # Now the geometry is stored in GRASS while the attributes are stored
 # in PostGIS.
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.connect.html">db.connect</a>,
-<a href="db.copy.html">db.copy</a>,
-<a href="db.tables.html">db.tables</a>,
-<a href="v.db.addtable.html">v.db.addtable</a>,
-<a href="v.db.droptable.html">v.db.droptable</a>,
-<a href="v.db.addcolumn.html">v.db.addcolumn</a>,
-<a href="v.db.dropcolumn.html">v.db.dropcolumn</a>,
-<a href="v.external.html">v.external</a>,
-<a href="v.in.db.html">v.in.db</a>,
-<a href="v.overlay.html">v.overlay</a>
-</em>
+*[db.connect](db.connect.md), [db.copy](db.copy.md),
+[db.tables](db.tables.md), [v.db.addtable](v.db.addtable.md),
+[v.db.droptable](v.db.droptable.md),
+[v.db.addcolumn](v.db.addcolumn.md),
+[v.db.dropcolumn](v.db.dropcolumn.md), [v.external](v.external.md),
+[v.in.db](v.in.db.md), [v.overlay](v.overlay.md)*
 
-<p>
-<em>
-<a href="sql.html">GRASS SQL interface</a>
-</em>
+*[GRASS SQL interface](sql.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Radim Blazek, ITC-Irst, Trento, Italy

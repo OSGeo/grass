@@ -1,86 +1,89 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.out.vtk</em>
-converts a GRASS vector map in binary format to the VTK ASCII
-output.
-<p>If the <b>output</b> parameter is not given, the output will be send to stdout.
+*v.out.vtk* converts a GRASS vector map in binary format to the VTK
+ASCII output.
 
-<h2>NOTES</h2>
+If the **output** parameter is not given, the output will be send to
+stdout.
 
-The following vector types can be exported together in one VTK ascii file:
-<ul>
-<li>point</li>
-<li>line</li>
-<li>centroid</li>
-<li>boundary</li>
-<li>area</li>
-<li>face</li>
-</ul>
+## NOTES
 
-Category data (cat) for the selected vector type and layer will be written as scalar
-data with name "cat_{vectorname}". If no cat exists, the value will set to -1 as normal cat's are
-always positive.
-If a vector has more categories in one layer, only the first category
-will be exported.
-<br>
-<br>
-3d vectors are supported by default. The created VTK data always includes x, y and z coordinates
-(z = 0 if not a 3d vector map).
-Note that you can easily convert your 2d vectors into 3d vectors with v.drape.
-<br>
-<br>
-Because of the 32bit limits of OpenGL which is used by VTK, visualisation errors may occur if
-the grass region contains coordinates greater than 1.000.000 and vector coordinates
-with 0.01 - 0.001 meters precisison. For this reason, the flag "-c" was added. The coordinates are
-transformed to smaller coordinates (by decreasing the coordinates with the region center).
-<br>
-<br>
-If the "-c" flag is used and the data should be visualised together with other data exported via *.out.vtk
-modules, be sure the "-c" flag was also set in these modules.
-But this will only work with data from the SAME location
-(The reference point for the coordinates transformation is based on the default region).
-<br>
-<br>
+The following vector types can be exported together in one VTK ascii
+file:
+
+- point
+- line
+- centroid
+- boundary
+- area
+- face
+
+Category data (cat) for the selected vector type and layer will be
+written as scalar data with name "cat\_{vectorname}". If no cat exists,
+the value will set to -1 as normal cat's are always positive. If a
+vector has more categories in one layer, only the first category will be
+exported.  
+  
+3d vectors are supported by default. The created VTK data always
+includes x, y and z coordinates (z = 0 if not a 3d vector map). Note
+that you can easily convert your 2d vectors into 3d vectors with
+v.drape.  
+  
+Because of the 32bit limits of OpenGL which is used by VTK,
+visualisation errors may occur if the grass region contains coordinates
+greater than 1.000.000 and vector coordinates with 0.01 - 0.001 meters
+precisison. For this reason, the flag "-c" was added. The coordinates
+are transformed to smaller coordinates (by decreasing the coordinates
+with the region center).  
+  
+If the "-c" flag is used and the data should be visualised together with
+other data exported via \*.out.vtk modules, be sure the "-c" flag was
+also set in these modules. But this will only work with data from the
+SAME location (The reference point for the coordinates transformation is
+based on the default region).  
+  
 The GRASS vector data is converted into the polydata format of VTK:
 
-<ul>
- <li><i>vtk Vertices</i> -- representing points and centroids </li>
- <li><i>vtk lines</i> -- representing lines and boundaries </li>
- <li><i>vtk polygons</i> -- representing areas and faces </li>
-</ul>
-<p>The VTK file can be visualized with
-<em><a href="https://vtk.org/">VTK Toolkit</a></em>,
-<em><a href="https://www.paraview.org/">Paraview</a></em> and
-<em><a href="https://github.com/enthought/mayavi">MayaVi</a></em>.
+- *vtk Vertices* -- representing points and centroids
+- *vtk lines* -- representing lines and boundaries
+- *vtk polygons* -- representing areas and faces
 
-<h3>Attention</h3>
-<p>If areas or faces are exported, the data have to be triangulated within Paraview or
-MayaVi.
+The VTK file can be visualized with *[VTK Toolkit](https://vtk.org/)*,
+*[Paraview](https://www.paraview.org/)* and
+*[MayaVi](https://github.com/enthought/mayavi)*.
 
-<h2>EXAMPLE</h2>
+### Attention
+
+If areas or faces are exported, the data have to be triangulated within
+Paraview or MayaVi.
+
+## EXAMPLE
 
 Spearfish example:
-<p>Export the soils with cats in layer 1:
-<div class="code"><pre>
+
+Export the soils with cats in layer 1:
+
+```shell
 v.out.vtk input=soils type=area layer=1 output=/tmp/soils.vtk
-</pre></div>
+```
+
 Export the streams with cats in layer 1:
-<div class="code"><pre>
+
+```shell
 v.out.vtk input=streams type=line layer=1 output=/tmp/streams.vtk
-</pre></div>
+```
+
 Write the archsite vtk output to stdout with cats in layer 1:
-<div class="code"><pre>
+
+```shell
 v.out.vtk input=archsites type=point layer=1
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.out.ascii.html">v.out.ascii</a>,
-<a href="r.out.vtk.html">r.out.vtk</a>,
-<a href="r3.out.vtk.html">r3.out.vtk</a>
-</em>
+*[v.out.ascii](v.out.ascii.md), [r.out.vtk](r.out.vtk.md),
+[r3.out.vtk](r3.out.vtk.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Soeren Gebbert

@@ -1,58 +1,53 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.out.ppm</em> converts a GRASS raster map into a PPM image
-at the pixel resolution of the CURRENTLY DEFINED REGION.
-To get the resolution and region settings of the raster map, run:<p>
-<div class="code"><pre>
+*r.out.ppm* converts a GRASS raster map into a PPM image at the pixel
+resolution of the CURRENTLY DEFINED REGION. To get the resolution and
+region settings of the raster map, run:
+
+```shell
 g.region -p raster=[mapname]
-</pre></div>
+```
 
-<p>
-before running <em>r.out.ppm</em>.<p>
-By default the PPM file created is 24-bit color, rawbits storage.
-You can use the <b>-g</b> flag to force <em>r.out.ppm</em> to
-output an 8-bit greyscale instead.
-The greyscale conversion uses the NTSC conversion:
-<p>
-<div class="code"><pre>
+before running *r.out.ppm*.
+
+By default the PPM file created is 24-bit color, rawbits storage. You
+can use the **-g** flag to force *r.out.ppm* to output an 8-bit
+greyscale instead. The greyscale conversion uses the NTSC conversion:
+
+```shell
 Y = .30*Red + .59*Green + .11*Blue
-</pre></div>
+```
 
-<p>One pixel is written for each cell value, so if <code>ew_res</code> and
-<code>ns_res</code> differ, the aspect ratio of the resulting image will be off.
+One pixel is written for each cell value, so if `ew_res` and `ns_res`
+differ, the aspect ratio of the resulting image will be off.
 
-<h2>NOTES</h2>
+## NOTES
 
-A few ppm file comments are written: the name of the GRASS
-raster map, resolution, etc.  Although these are perfectly legal,
-I've found one PD image utility that chokes on them, so if you need
-a commentless PPM file, use '<code>out=-&nbsp;&gt;&nbsp;outfile.ppm</code>'. (When sending
-output to stdout, no comments are written.)
+A few ppm file comments are written: the name of the GRASS raster map,
+resolution, etc. Although these are perfectly legal, I've found one PD
+image utility that chokes on them, so if you need a commentless PPM
+file, use '`out=- > outfile.ppm`'. (When sending output to stdout, no
+comments are written.)
 
-<h2>HINTS</h2>
+## HINTS
 
 You can create a PNG image with NULL values represented by a transparent
-background by using the <a href="pngdriver.html">PNG driver</a> with
-<a href="variables.html">GRASS_RENDER_TRANSPARENT</a> set to TRUE.
-Alternatively, you can use the <em>pnmtopng</em> program from
-<a href="https://netpbm.sourceforge.net">netpbm</a> to do this:
+background by using the [PNG driver](pngdriver.md) with
+[GRASS_RENDER_TRANSPARENT](variables.md) set to TRUE. Alternatively, you
+can use the *pnmtopng* program from
+[netpbm](https://netpbm.sourceforge.net) to do this:
 
-<div class="code"><pre>
+```shell
 r.out.ppm raster
-pnmtopng -transparent white raster.ppm &gt; raster.png
-</pre></div>
+pnmtopng -transparent white raster.ppm > raster.png
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.out.file.html">d.out.file</a>,
-<a href="r.out.ascii.html">r.out.ascii</a>,
-<a href="r.out.gdal.html">r.out.gdal</a>,
-<a href="r.out.mpeg.html">r.out.mpeg</a>,
-<a href="r.out.png.html">r.out.png</a>,
-<a href="r.out.ppm3.html">r.out.ppm3</a>
-</em>
+*[d.out.file](d.out.file.md), [r.out.ascii](r.out.ascii.md),
+[r.out.gdal](r.out.gdal.md), [r.out.mpeg](r.out.mpeg.md),
+[r.out.png](r.out.png.md), [r.out.ppm3](r.out.ppm3.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Bill Brown, UIUC

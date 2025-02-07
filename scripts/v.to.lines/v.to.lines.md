@@ -1,46 +1,39 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.to.lines</em> converts vector polygons (boundaries) to lines as well
-as vector points to lines via triangulations.
+*v.to.lines* converts vector polygons (boundaries) to lines as well as
+vector points to lines via triangulations.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>v.to.lines</em> is able to convert point data (via triangulation)
-and areas to lines (via boundary to line conversion).
+*v.to.lines* is able to convert point data (via triangulation) and areas
+to lines (via boundary to line conversion). This script is a wrapper
+script to *v.category*, *v.delaunay*, and *v.edit*.
 
-This script is a wrapper script to <em>v.category</em>,
-<em>v.delaunay</em>, and <em>v.edit</em>.
-
-<p>
 In order to convert an ordered list of coordinates (ASCII table with
-x,y[,z] coordinates) into vector lines, use <em>v.in.lines</em>.
+x,y\[,z\] coordinates) into vector lines, use *v.in.lines*.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 The examples are for the North Carolina sample dataset:
 
-<h3>Area to line conversion</h3>
+### Area to line conversion
 
-<div class="code"><pre>
+```shell
 v.to.lines input=boundary_municp output=boundary_municp_lines
-</pre></div>
+```
 
-<h3>Point to line conversion</h3>
-<div class="code"><pre>
+### Point to line conversion
+
+```shell
 v.to.lines input=geodetic_pts output=geodetic_pts_lines
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.category.html">v.category</a>,
-<a href="v.delaunay.html">v.delaunay</a>,
-<a href="v.edit.html">v.edit</a>,
-<a href="v.in.lines.html">v.in.lines</a>,
-<a href="v.to.points.html">v.to.points</a>,
-<a href="v.type.html">v.type</a>
-</em>
+*[v.category](v.category.md), [v.delaunay](v.delaunay.md),
+[v.edit](v.edit.md), [v.in.lines](v.in.lines.md),
+[v.to.points](v.to.points.md), [v.type](v.type.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Luca Delucchi, Fondazione Edmund Mach

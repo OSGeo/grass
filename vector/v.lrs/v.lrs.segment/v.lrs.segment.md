@@ -1,30 +1,29 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.lrs.segment</em> creates points/segments from input lines,
-linear reference system and positions read from <code>standard in</code>
-or a file.
-<p>
-The format is as follows:<br>
+*v.lrs.segment* creates points/segments from input lines, linear
+reference system and positions read from `standard in` or a file.
 
-<div class="code"><pre>
-P &lt;point_id&gt; &lt;line_id&gt; &lt;milepost&gt;+&lt;offset&gt; [&lt;side offset&gt;]
-L &lt;segment_id&gt; &lt;line_id&gt; &lt;milepost&gt;+&lt;offset&gt; &lt;milepost&gt;+&lt;offset&gt; [&lt;side offset&gt;]
-</pre></div>
+The format is as follows:  
 
-<h2>NOTES</h2>
+```shell
+P <point_id> <line_id> <milepost>+<offset> [<side offset>]
+L <segment_id> <line_id> <milepost>+<offset> <milepost>+<offset> [<side offset>]
+```
 
-For more information and examples see the help page for <em>v.lrs.segment</em>'s
-sister module, <em><a href="v.segment.html">v.segment</a></em>.
+## NOTES
 
-<h2>EXAMPLE</h2>
+For more information and examples see the help page for
+*v.lrs.segment*'s sister module, *[v.segment](v.segment.md)*.
 
-This example is written for the Spearfish dataset (it continues the example
-from <em>v.lrs.create</em>).
-<p>
-In this example, the 'route_lrs' shall be extended for a new
-position (point) along the LRS after bus stop 4:
+## EXAMPLE
 
-<div class="code"><pre>
+This example is written for the Spearfish dataset (it continues the
+example from *v.lrs.create*).
+
+In this example, the 'route_lrs' shall be extended for a new position
+(point) along the LRS after bus stop 4:
+
+```shell
 # new point on LRS
 echo "P 7 22 4+180" | v.lrs.segment route_lrs out=route_lrs_new rstable=route_lrs
 
@@ -38,27 +37,21 @@ db.select table=route_lrs
 
 # show modified map
 d.vect route_lrs_new col=red
-</pre></div>
+```
 
-<h2>TODO</h2>
+## TODO
 
 Figure out how to merge result into existing LRS map and table.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.lrs.create.html">v.lrs.create</a>,
-<a href="v.lrs.where.html">v.lrs.where</a>,
-<a href="v.lrs.label.html">v.lrs.label</a>,
-<a href="v.segment.html">v.segment</a>
-</em>
+*[v.lrs.create](v.lrs.create.md), [v.lrs.where](v.lrs.where.md),
+[v.lrs.label](v.lrs.label.md), [v.segment](v.segment.md)*
 
-<p>
-<em>
-<a href="lrs.html">LRS tutorial</a>,<br>
-<a href="https://foss4g.asia/2004/Full%20Paper_PDF/Introducing%20the%20Linear%20Reference%20System%20in%20GRASS.pdf">Introducing the Linear Reference System in GRASS</a>
-</em>
+*[LRS tutorial](lrs.md),  
+[Introducing the Linear Reference System in
+GRASS](https://foss4g.asia/2004/Full-Paper_PDF/Introducing-the-Linear-Reference-System-in-GRASS.pdf)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Radim Blazek

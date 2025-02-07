@@ -1,34 +1,29 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.example</em> selects values from raster above value of mean plus
-standard deviation.
-See the source code for details.
+*r.example* selects values from raster above value of mean plus standard
+deviation. See the source code for details.
 
-<h2>NOTES</h2>
+## NOTES
 
 Some more detailed notes go here.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Computing the mean and standard deviation of the raster map "elevation"
 (North Carolina sample dataset):
 
-<div class="code"><pre>
+```shell
 g.region raster=elevation -p
 r.example input=elevation output=elevation_mean_stddev
 r.info elevation_mean_stddev
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.univar.html">r.univar</a>,
-<a href="r.mapcalc.html">r.mapcalc</a>,
-<a href="v.example.html">v.example</a>
-</em>
+*[r.univar](r.univar.md), [r.mapcalc](r.mapcalc.md),
+[v.example](v.example.md)* [GRASS Programmer's
+Manual](https://grass.osgeo.org/programming8/)
 
-<a href="https://grass.osgeo.org/programming8/">GRASS Programmer's Manual</a>
-
-<h2>AUTHOR</h2>
+## AUTHOR
 
 GRASS Development Team

@@ -1,34 +1,31 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.buffer.lowmem</em> creates a new raster map showing buffer
-(a.k.a. "distance" or "proximity") zones around all cells that contain
-non-NULL category values in an existing raster map. The distances of
-buffer zones from cells with non-zero category values are user-chosen.
+*r.buffer.lowmem* creates a new raster map showing buffer (a.k.a.
+"distance" or "proximity") zones around all cells that contain non-NULL
+category values in an existing raster map. The distances of buffer zones
+from cells with non-zero category values are user-chosen.
 
-<p>
-This is the low-memory alternative to the
-classic <em><a href="r.buffer.html">r.buffer</a></em> module. It is
-much slower than the classic version, but will run on massive raster
-maps without using a lot of RAM. If your raster map is larger than
-32000x32000 cells on a system with 1 GB of RAM, or larger than
-90000x90000 cells on a system with 8 GB of RAM, consider using this
-module.
+This is the low-memory alternative to the classic
+*[r.buffer](r.buffer.md)* module. It is much slower than the classic
+version, but will run on massive raster maps without using a lot of RAM.
+If your raster map is larger than 32000x32000 cells on a system with 1
+GB of RAM, or larger than 90000x90000 cells on a system with 8 GB of
+RAM, consider using this module.
 
-<p>
-For more info see manual of <em><a href="r.buffer.html">r.buffer</a></em>.
+For more info see manual of *[r.buffer](r.buffer.md)*.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-In the following example, the buffer zones would be (in the default units
-of meters): 0-100, 101-200, 201-300, 301-400 and 401-500.
+In the following example, the buffer zones would be (in the default
+units of meters): 0-100, 101-200, 201-300, 301-400 and 401-500.
 
-<div class="code"><pre>
+```shell
 r.buffer.lowmem input=roads output=roads.buf distances=100,200,300,400,500
-</pre></div>
+```
 
 Result:
 
-<div class="code"><pre>
+```shell
 r.category input=roads.buf
 
       1       distances calculated from these locations
@@ -37,26 +34,18 @@ r.category input=roads.buf
       4       200-300 meters
       5       300-400 meters
       6       400-500 meters
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="r.buffer.html">r.buffer</a>,
-<a href="r.cost.html">r.cost</a>,
-<a href="r.grow.distance.html">r.grow.distance</a>,
-<a href="r.mapcalc.html">r.mapcalc</a>,
-<a href="r.reclass.html">r.reclass</a>,
-<a href="v.buffer.html">v.buffer</a>
-</em>
+*[g.region](g.region.md), [r.buffer](r.buffer.md), [r.cost](r.cost.md),
+[r.grow.distance](r.grow.distance.md), [r.mapcalc](r.mapcalc.md),
+[r.reclass](r.reclass.md), [v.buffer](v.buffer.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Michael Shapiro, U.S. Army Construction Engineering
-Research Laboratory
-<br>
-James Westervelt, U.S. Army Construction Engineering
-Research Laboratory
-<br>
+Michael Shapiro, U.S. Army Construction Engineering Research
+Laboratory  
+James Westervelt, U.S. Army Construction Engineering Research
+Laboratory  
 Low-memory Python version by Glynn Clements

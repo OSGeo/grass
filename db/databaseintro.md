@@ -1,105 +1,107 @@
-<!-- meta page description: Database management in GRASS GIS -->
-<!-- meta page index: database -->
-<h3>Attribute management in general</h3>
+### Attribute management in general
 
 GRASS can be linked to one or many database management systems (DBMS).
-The <em>db.*</em> set of commands provides basic SQL support for
-attribute management, while the <em>v.db.*</em> set of commands operates
-on the vector map (see <a href="vectorintro.html">Vector introduction</a>).
+The *db.\** set of commands provides basic SQL support for attribute
+management, while the *v.db.\** set of commands operates on the vector
+map (see [Vector introduction](vectorintro.md)).
 
-<h3>Available drivers</h3>
+### Available drivers
 
-Available drivers are listed in <a href="sql.html">SQL support in GRASS GIS</a>.
-<p>
-<b>Notes</b>:<br>
-The DBF driver provides only very limited SQL
-support (as DBF is not an SQL DB) while the other DBMS backends (such
-as SQLite, PostgreSQL, MySQL etc) provide full SQL support since the SQL
-commands are sent directly to the DBMS. For this reason, the SQLite driver
-is the default DBMI backend.
+Available drivers are listed in [SQL support in GRASS GIS](sql.md).
 
-<h3>DB connection management</h3>
+**Notes**:  
+The DBF driver provides only very limited SQL support (as DBF is not an
+SQL DB) while the other DBMS backends (such as SQLite, PostgreSQL, MySQL
+etc) provide full SQL support since the SQL commands are sent directly
+to the DBMS. For this reason, the SQLite driver is the default DBMI
+backend.
+
+### DB connection management
 
 The current database management settings are shown or modified with
-<a href="db.connect.html">db.connect</a> for current mapset. Available DBMI drivers
-are listed with <a href="db.drivers.html">db.drivers</a>. Some DBMI backends
-require a user/password for driver/database to be set with <a href="db.login.html">db.login</a>.
-In order to test a driver, run <a href="db.test.html">db.test</a>.
+[db.connect](db.connect.md) for current mapset. Available DBMI drivers
+are listed with [db.drivers](db.drivers.md). Some DBMI backends require
+a user/password for driver/database to be set with
+[db.login](db.login.md). In order to test a driver, run
+[db.test](db.test.md).
 
-<h3>Attribute data import and export</h3>
+### Attribute data import and export
 
-Attribute data can be imported with <a href="db.in.ogr.html">db.in.ogr</a> from
-various formats and exported with <a href="db.out.ogr.html">db.out.ogr</a>. To internally
-copy a a full table or selectively parts of it, use <a href="db.copy.html">db.copy</a>.
-<p>
+Attribute data can be imported with [db.in.ogr](db.in.ogr.md) from
+various formats and exported with [db.out.ogr](db.out.ogr.md). To
+internally copy a a full table or selectively parts of it, use
+[db.copy](db.copy.md).
 
 Further conversion tools:
-<ul>
-<li><a href="https://github.com/mdbtools/mdbtools">MDB Tools</a>: Convert MS-Access data to SQL, DBF, etc.</li>
-<li><a href="https://grasswiki.osgeo.org/wiki/Openoffice.org_with_SQL_Databases">Using OpenOffice.org with SQL Databases</a></li>
-</ul>
 
+- [MDB Tools](https://github.com/mdbtools/mdbtools): Convert MS-Access
+  data to SQL, DBF, etc.
+- [Using OpenOffice.org with SQL
+  Databases](https://grasswiki.osgeo.org/wiki/Openoffice.org_with_SQL_Databases)
 
-<h3>SQL commands</h3>
+### SQL commands
 
 GRASS supports two main SQL operations, execution of an SQL statement
-(<a href="db.execute.html">db.execute</a>) and selection
-of data from a table (<a href="db.select.html">db.select</a>).
-See the <a href="sql.html">SQL help page</a> for examples.
+([db.execute](db.execute.md)) and selection of data from a table
+([db.select](db.select.md)). See the [SQL help page](sql.md) for
+examples.
 
-<h3>Managing the default DBMI settings</h3>
+### Managing the default DBMI settings
 
-Per default vector map attributes are stored in SQLite tables. This default
-definition can be modified with <a href="db.connect.html">db.connect</a>. If an
-external DBMS is used, <a href="db.login.html">db.login</a> may be required.
+Per default vector map attributes are stored in SQLite tables. This
+default definition can be modified with [db.connect](db.connect.md). If
+an external DBMS is used, [db.login](db.login.md) may be required.
 
-<h3>Creating a database</h3>
+### Creating a database
 
 Specific commands are explained on the individual driver pages (these
 pages are only available if driver was compiled in this installation):
 
-<ul>
-<li>DBF: see <a href="grass-dbf.html">DBF</a> page</li>
-<li>SQLite: <a href="grass-sqlite.html">SQLite</a> page</li>
-<li>mySQL: <a href="grass-mysql.html">mySQL</a> and <a href="grass-mesql.html">meSQL</a> pages</li>
-<li>ODBC: <a href="grass-odbc.html">ODBC</a> page  (connect to Oracle, etc.)</li>
-<li>PostgreSQL: <a href="grass-pg.html">PostgreSQL</a> and PostGIS page</li>
-</ul>
+- DBF: see [DBF](grass-dbf.md) page
+- SQLite: [SQLite](grass-sqlite.md) page
+- mySQL: [mySQL](grass-mysql.md) and [meSQL](grass-mesql.md) pages
+- ODBC: [ODBC](grass-odbc.md) page (connect to Oracle, etc.)
+- PostgreSQL: [PostgreSQL](grass-pg.md) and PostGIS page
 
-<h3>Metadata</h3>
-All columns for a given table are listed with <a href="db.columns.html">db.columns</a>.
-The command <a href="db.describe.html">db.describe</a> describes a table in detail. To
-list all available tables for a given database, run <a href="db.tables.html">db.tables</a>.
+### Metadata
 
-<h3>Table maintenance</h3>
-To drop a column from a selected attribute table, use <a href="db.dropcolumn.html">db.dropcolumn</a>.
-With <a href="db.droptable.html">db.droptable</a> an attribute table can be deleted.
+All columns for a given table are listed with
+[db.columns](db.columns.md). The command [db.describe](db.describe.md)
+describes a table in detail. To list all available tables for a given
+database, run [db.tables](db.tables.md).
 
-<h3>Database Schema</h3>
-Currently schema support only works for PostgreSQL connections. Default schema
-can be set with <a href="db.connect.html">db.connect</a>. Note that the default
-schema will be used by all db.* modules.
-<p>
-<a href="db.tables.html">db.tables</a> returns 'schema.table' if schemas are
+### Table maintenance
+
+To drop a column from a selected attribute table, use
+[db.dropcolumn](db.dropcolumn.md). With [db.droptable](db.droptable.md)
+an attribute table can be deleted.
+
+### Database Schema
+
+Currently schema support only works for PostgreSQL connections. Default
+schema can be set with [db.connect](db.connect.md). Note that the
+default schema will be used by all db.\* modules.
+
+[db.tables](db.tables.md) returns 'schema.table' if schemas are
 available in the database.
 
-<h3>Migrating to a different database engine</h3>
+### Migrating to a different database engine
 
-To migrate a GRASS database table (or a GRASS vector map) to a different DBMI engine,
-the best solution is to create a new MAPSET, define the DBMI settings accordingly
-with <a href="db.connect.html">db.connect</a> and if needed, <a href="db.login.html">db.login</a>.
-Then the table of interest can be copied over with <a href="db.copy.html">db.copy</a> from
-the original MAPSET. Likewise, a vector map including its table(s) are copied from
-the original MAPSET to the current MAPSET with <a href="g.copy.html">g.copy</a>.
+To migrate a GRASS database table (or a GRASS vector map) to a different
+DBMI engine, the best solution is to create a new MAPSET, define the
+DBMI settings accordingly with [db.connect](db.connect.md) and if
+needed, [db.login](db.login.md). Then the table of interest can be
+copied over with [db.copy](db.copy.md) from the original MAPSET.
+Likewise, a vector map including its table(s) are copied from the
+original MAPSET to the current MAPSET with [g.copy](g.copy.md).
 
-<h3>See also</h3>
+### See also
 
-<ul>
-  <li><a href="rasterintro.html">Introduction into raster data processing</a></li>
-  <li><a href="raster3dintro.html">Introduction into 3D raster data (voxel) processing</a></li>
-  <li><a href="vectorintro.html">Introduction into vector data processing</a></li>
-  <li><a href="imageryintro.html">Introduction into image processing</a></li>
-  <li><a href="temporalintro.html">Introduction into temporal data processing</a></li>
-  <li><a href="projectionintro.html">Projections and spatial transformations</a></li>
-  <li><a href="wxguiintro.html">Graphical User Interface</a></li>
-</ul>
+- [Introduction into raster data processing](rasterintro.md)
+- [Introduction into 3D raster data (voxel)
+  processing](raster3dintro.md)
+- [Introduction into vector data processing](vectorintro.md)
+- [Introduction into image processing](imageryintro.md)
+- [Introduction into temporal data processing](temporalintro.md)
+- [Projections and spatial transformations](projectionintro.md)
+- [Graphical User Interface](wxguiintro.md)

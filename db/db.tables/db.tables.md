@@ -1,43 +1,39 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.tables</em> lists all tables for a given database.
+*db.tables* lists all tables for a given database.
 
-<h2>NOTE</h2>
+## NOTE
 
 If parameters for database connection are already set with
-<a href="db.connect.html">db.connect</a>, they are taken as default values and
-do not need to be spcified each time.
+[db.connect](db.connect.md), they are taken as default values and do not
+need to be spcified each time.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>List all tables if database connection is already set</h3>
+### List all tables if database connection is already set
 
-<div class="code"><pre>
+```shell
 db.tables -p
-</pre></div>
+```
 
-<h3>List all DBF tables</h3>
+### List all DBF tables
 
-<div class="code"><pre>
+```shell
 db.tables driver=dbf database=/grassdata/nc_spm_08/user1/PERMANENT/dbf
-</pre></div>
+```
 
-<h3>List all tables in SQLite database (note that this is the default setting)</h3>
+### List all tables in SQLite database (note that this is the default setting)
 
-<div class="code"><pre>
+```shell
 db.tables -p driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.columns.html">db.columns</a>,
-<a href="db.droptable.html">db.droptable</a>,
-<a href="db.login.html">db.login</a>,
-<a href="db.execute.html">db.execute</a>,
-<a href="sql.html">GRASS SQL interface</a>
-</em>
+*[db.columns](db.columns.md), [db.droptable](db.droptable.md),
+[db.login](db.login.md), [db.execute](db.execute.md), [GRASS SQL
+interface](sql.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Unknown

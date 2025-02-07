@@ -1,131 +1,112 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.db.select</em> prints attributes of a vector map from one or several
-user selected attribute table columns.
+*v.db.select* prints attributes of a vector map from one or several user
+selected attribute table columns.
 
-<h3>Output formats</h3>
+### Output formats
 
-Four different formats can be used depending on the circumstances
-using the <b>format</b> option: plain text, CSV, JSON, and vertical
-plain text.
+Four different formats can be used depending on the circumstances using
+the **format** option: plain text, CSV, JSON, and vertical plain text.
 
-<h4>Plain text</h4>
+#### Plain text
 
-The plain text is the default output which is most suitable for reading by humans,
-e.g., when working in the command line or obtaining specific values from the attribute
-table using the <em>v.db.select</em> GUI dialog.
+The plain text is the default output which is most suitable for reading
+by humans, e.g., when working in the command line or obtaining specific
+values from the attribute table using the *v.db.select* GUI dialog.
 
-<p>
-The individual fields (attribute values) are separated by a pipe (<code>|</code>)
-which can be customized using the <b>separator</b> option.
-The records (rows) are separated by newlines.
+The individual fields (attribute values) are separated by a pipe (`|`)
+which can be customized using the **separator** option. The records
+(rows) are separated by newlines.
 
-<p>
 Example with a pipe as a separator (the default):
 
-<div class="code"><pre>
+```shell
 cat|road_name|multilane|year|length
 1|NC-50|no|2001|4825.369405
 2|NC-50|no|2002|14392.589058
 3|NC-98|no|2003|3212.981242
 4|NC-50|no|2004|13391.907552
-</pre></div>
+```
 
-When escaping is enabled, the following characters in the fields are escaped:
-backslash (<code>\\</code>), carriage return (<code>\r</code>), line feed (<code>\n</code>),
-tabulator (<code>\t</code>), form feed (<code>\f</code>), and backslash (<code>\b</code>).
+When escaping is enabled, the following characters in the fields are
+escaped: backslash (`\\`), carriage return (`\r`), line feed (`\n`),
+tabulator (`\t`), form feed (`\f`), and backslash (`\b`).
 
-<p>
-No quoting or escaping is performed by default, so if these characters are in
-the output, they look just like the separators.
-This is usually not a problem for humans looking at the output to get a general idea
+No quoting or escaping is performed by default, so if these characters
+are in the output, they look just like the separators. This is usually
+not a problem for humans looking at the output to get a general idea
 about query result or attribute table content.
 
-<p>
-Consequently, this format is not recommended for computers, e.g., for reading attribute
-data in Python scripts.
-It works for further parsing in limited cases when the values don't contain separators
-or when the separators are set to one of the escaped characters.
+Consequently, this format is not recommended for computers, e.g., for
+reading attribute data in Python scripts. It works for further parsing
+in limited cases when the values don't contain separators or when the
+separators are set to one of the escaped characters.
 
-<h4>CSV</h4>
+#### CSV
 
-CSV (comma-separated values) has many variations. This module by default produces
-CSV with comma (<code>,</code>) as the field separator (delimiter). All text fields
-(based on the type) are quoted with double quotes. Double quotes in fields are
-represented as two double quotes. Newline characters in the fields are present
-as-is in the output. Header is included by default containing column names.
+CSV (comma-separated values) has many variations. This module by default
+produces CSV with comma (`,`) as the field separator (delimiter). All
+text fields (based on the type) are quoted with double quotes. Double
+quotes in fields are represented as two double quotes. Newline
+characters in the fields are present as-is in the output. Header is
+included by default containing column names.
 
-<p>
-All full CSV parsers such as the ones in LibreOffice or Python are able to parse this
-format when configured to the above specification.
+All full CSV parsers such as the ones in LibreOffice or Python are able
+to parse this format when configured to the above specification.
 
-<p>
 Example with default settings:
 
-<div class="code"><pre>
+```shell
 cat,road_name,multilane,year,length
 1,"NC-50","no",2001,4825.369405
 2,"NC-50","no",2002,14392.589058
 3,"NC-98","no",2003,3212.981242
 4,"NC-50","no",2004,13391.907552
-</pre></div>
+```
 
-<p>
 If desired, the separator can be customized and escaping can be enabled
-with the same characters being escaped as for the plain text.
-Notably, newlines and tabs are escaped, double quotes are not, and the separator
-is not escaped either (unless it is a tab).
-However, the format is guaranteed only for the commonly used separators
-such as comma, semicolon, pipe, and tab.
+with the same characters being escaped as for the plain text. Notably,
+newlines and tabs are escaped, double quotes are not, and the separator
+is not escaped either (unless it is a tab). However, the format is
+guaranteed only for the commonly used separators such as comma,
+semicolon, pipe, and tab.
 
-<p>
-Note that using multi-character separator is allowed, but not recommended
-as it is not generally supported by CSV readers.
+Note that using multi-character separator is allowed, but not
+recommended as it is not generally supported by CSV readers.
 
-<p>
-CSV is the recommended format for further use in another analytical applications,
-especially for use with spreadsheet applications. For scripting, it is advantageous
-when tabular data is needed (rather than key-value pairs).
+CSV is the recommended format for further use in another analytical
+applications, especially for use with spreadsheet applications. For
+scripting, it is advantageous when tabular data is needed (rather than
+key-value pairs).
 
-<h4>JSON</h4>
+#### JSON
 
-JSON (JavaScript Object Notation) format is produced according to
-the specification so it is readily readable by JSON parsers.
-The standard JSON escapes are performed (backslash, carriage return, line feed,
+JSON (JavaScript Object Notation) format is produced according to the
+specification so it is readily readable by JSON parsers. The standard
+JSON escapes are performed (backslash, carriage return, line feed,
 tabulator, form feed, backslash, and double quote) for string values.
-Numbers in the database such as integers and doubles are represented as numbers,
-while texts (TEXT, VARCHAR, etc.) and dates in the database are represented
-as strings in JSON. NULL values in database are represented as JSON <code>null</code>.
-Indentation and newlines in the output are minimal and not guaranteed.
+Numbers in the database such as integers and doubles are represented as
+numbers, while texts (TEXT, VARCHAR, etc.) and dates in the database are
+represented as strings in JSON. NULL values in database are represented
+as JSON `null`. Indentation and newlines in the output are minimal and
+not guaranteed.
 
-<p>
-Records which are the result of the query are stored under key <code>records</code>
-as an array (list) of objects (collections of key-value pairs).
-The keys for attributes are lowercase or uppercase depending on how
-the columns were defined in the database.
+Records which are the result of the query are stored under key `records`
+as an array (list) of objects (collections of key-value pairs). The keys
+for attributes are lowercase or uppercase depending on how the columns
+were defined in the database.
 
-<p>
 The JSON also contains information about columns stored under key
-<code>info</code>. Column names and types are under key <code>columns</code>.
-Each column has SQL data type under <code>sql_type</code> in all caps.
-A boolean <code>is_number</code> specifies whether the value is a number, i.e.,
-integer or floating point number. The <code>is_number</code> value
-is aded for convenience and it is recommended to rely on the types derived
-from the JSON representation or the SQL types. The definition of
-<code>is_number</code> may change in the future.
+`info`. Column names and types are under key `columns`. Each column has
+SQL data type under `sql_type` in all caps. A boolean `is_number`
+specifies whether the value is a number, i.e., integer or floating point
+number. The `is_number` value is aded for convenience and it is
+recommended to rely on the types derived from the JSON representation or
+the SQL types. The definition of `is_number` may change in the future.
 
-<p>
 Example with added indentation:
 
-<!--
-  Generated using:
-
-  v.db.select roadsmajor format=json where="cat in (1, 2)" \
-    columns="ROAD_NAME AS road_name, PROPYEAR + 2001 AS year, SHAPE_LEN as length" \
-    | jq
--->
-
-<div class="code"><pre>
+```shell
 {
   "info": {
     "columns": [
@@ -159,24 +140,23 @@ Example with added indentation:
     }
   ]
 }
-</pre></div>
+```
 
-<p>
-JSON is the recommended format for reading the data in Python
-and for any uses and environments where convenient access to individual values
+JSON is the recommended format for reading the data in Python and for
+any uses and environments where convenient access to individual values
 is desired and JSON parser is available.
 
-<h4>Vertical plain text</h4>
+#### Vertical plain text
 
-In the vertical plain text format, each value is on a single line
-and is preceded by the name of the attribute (column) which is
-separated by separator. The individual records can be separated by
-the vertical separator (<b>vertical_separator</b> option).
+In the vertical plain text format, each value is on a single line and is
+preceded by the name of the attribute (column) which is separated by
+separator. The individual records can be separated by the vertical
+separator (**vertical_separator** option).
 
-<p>
-Example with (horizontal) separator <code>=</code> and vertical separator <code>newline</code>:
+Example with (horizontal) separator `=` and vertical separator
+`newline`:
 
-<div class="code"><pre>
+```shell
 cat=1
 road_name=NC-50
 multilane=no
@@ -188,41 +168,34 @@ road_name=NC-50
 multilane=no
 year=2002
 length=14392.589058
-</pre></div>
+```
 
-Newline is automatically added after a vertical separator unless it is a newline
-which allows for separating the records, e.g., by multiple dashes.
+Newline is automatically added after a vertical separator unless it is a
+newline which allows for separating the records, e.g., by multiple
+dashes. The escaping (**-e**) need to should be enabled in case the
+output is meant for reading by a computer rather than just as a data
+overview for humans. Escaping will ensure that values with newlines will
+be contained to a single line. This format is for special uses in
+scripting, for example, in combination with **columns** option set to
+one column only and escaping (**-e**) and no column names flags
+(**-c**). It is also advantageous when you need implement the parsing
+yourself.
 
-The escaping (<b>-e</b>) need to should be enabled in case the output
-is meant for reading by a computer rather than just as a data overview
-for humans. Escaping will ensure that values with newlines will be
-contained to a single line.
+## NOTES
 
-This format is for special uses in scripting, for example, in combination
-with <b>columns</b> option set to one column only and escaping (<b>-e</b>)
-and no column names flags (<b>-c</b>). It is also advantageous when you
-need implement the parsing yourself.
+- CSV and JSON were added in version 8.0 as new primary formats for
+  further consumption by scripts and other applications.
+- Escaping of plain and vertical formats was extended from just
+  backslash and newlines to all escapes from JSON except for double
+  quote character.
 
-<h2>NOTES</h2>
-
-<ul>
-    <li>
-        CSV and JSON were added in version 8.0 as new primary formats for further
-        consumption by scripts and other applications.
-    </li>
-    <li>
-        Escaping of plain and vertical formats was extended from just backslash
-        and newlines to all escapes from JSON except for double quote character.
-    </li>
-</ul>
-
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 All examples are based on the North Carolina sample dataset.
 
-<h3>Select and show entire table</h3>
+### Select and show entire table
 
-<div class="code"><pre>
+```shell
 v.db.select map=roadsmajor
 cat|MAJORRDS_|ROAD_NAME|MULTILANE|PROPYEAR|OBJECTID|SHAPE_LEN
 1|1|NC-50|no|0|1|4825.369405
@@ -230,13 +203,13 @@ cat|MAJORRDS_|ROAD_NAME|MULTILANE|PROPYEAR|OBJECTID|SHAPE_LEN
 3|3|NC-98|no|0|3|3212.981242
 4|4|NC-50|no|0|4|13391.907552
 ...
-</pre></div>
+```
 
-<h3>Select and show single column from table</h3>
+### Select and show single column from table
 
 Note: multiple columns can be specified as comma separated list.
 
-<div class="code"><pre>
+```shell
 v.db.select map=roadsmajor column=ROAD_NAME
 NC-50
 NC-50
@@ -244,41 +217,42 @@ NC-98
 NC-50
 NC-98
 ...
-</pre></div>
+```
 
-<h3>Print region extent of selected vector features</h3>
+### Print region extent of selected vector features
 
-<div class="code"><pre>
+```shell
 v.db.select -r map=roadsmajor where="ROAD_NAME = 'NC-98'"
 n=248425.389891
 s=245640.640081
 w=635906.517653
 e=661979.801880
-</pre></div>
+```
 
-<h3>Select empty vector features (no data entries)</h3>
+### Select empty vector features (no data entries)
 
-<div class="code"><pre>
+```shell
 v.db.select geonames_wake where="ALTERNATEN IS NULL"
 cat|GEONAMEID|NAME|ASCIINAME|ALTERNATEN|FEATURECLA|FEATURECOD|...
 8|4498303|West Raleigh|West Raleigh||P|PPL|US||NC|338759|123|...
 14|4459467|Cary|Cary||P|PPL|US||NC|103945|146|152|America/Iqaluit|...
 31|4452808|Apex|Apex||P|PPL|US||NC|30873|167|134|America/Iqaluit|...
 ...
-</pre></div>
+```
 
-<h3>Select not empty vector features (no data entries)</h3>
+### Select not empty vector features (no data entries)
 
-<div class="code"><pre>
+```shell
 v.db.select geonames_wake where="ALTERNATEN IS NOT NULL"
 cat|GEONAMEID|NAME|ASCIINAME|ALTERNATEN|FEATURECLA|FEATURECOD|...
 9|4487042|Raleigh|Raleigh|Raleigh,...
 31299|4487056|Raleigh-Durham Airport|Raleigh-Durham Airport|...
 ...
-</pre></div>
+```
 
-<h3>Select features with distinct road names</h3>
-<div class="code"><pre>
+### Select features with distinct road names
+
+```shell
 v.db.select map=roadsmajor columns=ROAD_NAME group=ROAD_NAME
 ROAD_NAME
 
@@ -289,10 +263,11 @@ NC-231
 NC-39
 NC-42
 ...
-</pre></div>
+```
 
-It is also possible to combine with <em>where</em> option
-<div class="code"><pre>
+It is also possible to combine with *where* option
+
+```shell
 v.db.select map=roadsmajor columns=ROAD_NAME,MULTILANE group=ROAD_NAME where='ROAD_NAME is not null'
 ROAD_NAME|MULTILANE
 I-40|yes
@@ -311,10 +286,11 @@ US-1|
 US-401|no
 US-64|yes
 US-70|yes
-</pre></div>
+```
 
-It can also use more columns in <em>group</em> option
-<div class="code"><pre>
+It can also use more columns in *group* option
+
+```shell
 v.db.select map=roadsmajor columns=ROAD_NAME,MULTILANE group=ROAD_NAME,MULTILANE where='ROAD_NAME is not null'
 ROAD_NAME|MULTILANE
 I-40|yes
@@ -335,15 +311,15 @@ US-401|no
 US-401|yes
 US-64|yes
 US-70|yes
-</pre></div>
+```
 
-<h3>Read results in Python</h3>
+### Read results in Python
 
-The <em>json</em> package in the standard Python library can load
-a JSON string obtained as output from the <em>v.db.select</em> module
-through the <em>read_command</em> function:
+The *json* package in the standard Python library can load a JSON string
+obtained as output from the *v.db.select* module through the
+*read_command* function:
 
-<div class="code"><pre>
+```shell
 import json
 import grass.script as gs
 
@@ -351,25 +327,20 @@ text = gs.read_command("v.db.select", map="roadsmajor", format="json")
 data = json.loads(text)
 for row in data["records"]:
     print(row["ROAD_NAME"])
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.select.html">db.select</a>
-</em>
+*[db.select](db.select.md)*
 
-<p>
-<em>
-<a href="sql.html">GRASS SQL interface</a>
-</em>
+*[GRASS SQL interface](sql.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek, ITC-Irst, Trento, Italy<br>
-Minimal region extent added by Martin Landa,
-FBK-irst (formerly ITC-irst), Trento, Italy<br>
-Group option added by Luca Delucchi,
-Fondazione Edmund Mach, Trento, Italy<br>
-Huidae Cho (JSON output, escaping and features-only flags)<br>
+Radim Blazek, ITC-Irst, Trento, Italy  
+Minimal region extent added by Martin Landa, FBK-irst (formerly
+ITC-irst), Trento, Italy  
+Group option added by Luca Delucchi, Fondazione Edmund Mach, Trento,
+Italy  
+Huidae Cho (JSON output, escaping and features-only flags)  
 Vaclav Petras (true CSV output, format option and documentation)

@@ -1,118 +1,105 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.mapcalc.simple</em> provides a wrapper to <em>r.mapcalc</em>.
-Up to 6 maps can be combined using simple expressions.
+*r.mapcalc.simple* provides a wrapper to *r.mapcalc*. Up to 6 maps can
+be combined using simple expressions.
 
-<p>
-The general syntax for the <b>expression</b> follows
-<em><a href="r.mapcalc.html">r.mapcalc</a></em> expression format,
-for example, <code>A + B</code> or <code>exp(A + B)</code> are valid.
-The variables A, B, ..., F represent raster maps which are provided
-as options <b>a</b>, <b>b</b>, ..., <b>f</b>.
+The general syntax for the **expression** follows
+*[r.mapcalc](r.mapcalc.md)* expression format, for example, `A + B` or
+`exp(A + B)` are valid. The variables A, B, ..., F represent raster maps
+which are provided as options **a**, **b**, ..., **f**.
 
-<p>
 The result name, i.e. the output raster map, is provided using the
-option <b>output</b> and, unlike <em>r.mapcalc</em> it is not part
-of the expression.
+option **output** and, unlike *r.mapcalc* it is not part of the
+expression.
 
-<p>
 This module is meant for convenience (for users and programmers) while
-the <em>r.mapcalc</em> module is a better choice for more complex
-expressions and advanced usage.
+the *r.mapcalc* module is a better choice for more complex expressions
+and advanced usage.
 
-<h2>NOTES</h2>
+## NOTES
 
-Differences to <em>r.mapcalc</em> module:
+Differences to *r.mapcalc* module:
 
-<ul>
-    <li>The input raster map names and the output map raster name are
-        separate from the expression (formula) which uses generic
-        variable names (A, B, C, ...).</li>
-    <li>The output raster name is not included in the expression.</li>
-    <li>The expression is expected to be a single short one liner
-        without the function <code>eval()</code>.</li>
-</ul>
+- The input raster map names and the output map raster name are separate
+  from the expression (formula) which uses generic variable names (A, B,
+  C, ...).
+- The output raster name is not included in the expression.
+- The expression is expected to be a single short one liner without the
+  function `eval()`.
 
-Differences to <em>r.mapcalc.simple</em> module in GRASS GIS 5 and 6:
+Differences to *r.mapcalc.simple* module in GRASS GIS 5 and 6:
 
-<ul>
-    <li>The primary purpose is not being a GUI front end to
-        <em>r.mapcalc</em>, but a wrapper which allows easy building of
-        interfaces to <em>r.mapcalc</em> (including GUIs).</li>
-    <li>Whitespace (most notably spaces) are allowed
-        (in the same way as for <em>r.mapcalc</em>).</li>
-    <li>The variable names are case-insensitive to allow the original
-        uppercase as well as lowercase as in option names
-        (unless the <b>-c</b> flag is used).</li>
-    <li>Option names for each map are just one letter (not amap, etc.).</li>
-    <li>Output option name is <b>output</b> as for other modules
-        (not outfile).</li>
-    <li>Raster map names can be optionally quoted (the <b>-q</b> flag).</li>
-    <li>There is no expert mode
-        (which was just running <em>r.mapcalc</em>).</li>
-    <li>The <b>expression</b> option is first, so it is possible to
-        omit its name in the command line
-        (just like with <em>r.mapcalc</em>).</li>
-    <li>Overwriting of outputs is done in the same way as with other
-        modules, so there is no flag to not overwrite outputs.</li>
-</ul>
+- The primary purpose is not being a GUI front end to *r.mapcalc*, but a
+  wrapper which allows easy building of interfaces to *r.mapcalc*
+  (including GUIs).
+- Whitespace (most notably spaces) are allowed (in the same way as for
+  *r.mapcalc*).
+- The variable names are case-insensitive to allow the original
+  uppercase as well as lowercase as in option names (unless the **-c**
+  flag is used).
+- Option names for each map are just one letter (not amap, etc.).
+- Output option name is **output** as for other modules (not outfile).
+- Raster map names can be optionally quoted (the **-q** flag).
+- There is no expert mode (which was just running *r.mapcalc*).
+- The **expression** option is first, so it is possible to omit its name
+  in the command line (just like with *r.mapcalc*).
+- Overwriting of outputs is done in the same way as with other modules,
+  so there is no flag to not overwrite outputs.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Basic examples</h3>
+### Basic examples
 
-<div class="code"><pre>
+```shell
 r.mapcalc.simple expression="0" output=zeros
 r.mapcalc.simple expression="1" output=ones
 r.mapcalc.simple expression="2" output=twos
-</pre></div>
+```
 
-<div class="code"><pre>
+```shell
 r.mapcalc.simple expression="A + B + C" a=zeros b=ones c=twos output=result1
-</pre></div>
+```
 
-<div class="code"><pre>
+```shell
 r.mapcalc.simple expression="(A * B) / 2 + 3 * C" a=zeros b=ones c=twos output=result2
-</pre></div>
+```
 
 <div align="center" style="margin: 10px">
-<img src="r_mapcalc_simple.png" width="594px" height="495px"><br>
-<i>Figure: r.mapcalc.simple graphical user interface</i>
+
+<img src="r_mapcalc_simple.png" width="594" height="495" />  
+*Figure: r.mapcalc.simple graphical user interface*
+
 </div>
 
-<h3>Example expressions</h3>
+### Example expressions
 
 Addition:
 
-<div class="code"><pre>
+```shell
 A + B
-</pre></div>
+```
 
-No spaces around operators are not recommended for readability,
-but allowed in the expression:
+No spaces around operators are not recommended for readability, but
+allowed in the expression:
 
-<div class="code"><pre>
+```shell
 A+B
-</pre></div>
+```
 
 More complex expression with a function:
 
-<p>
-<div class="code"><pre>
+```shell
 exp(A+C)+(B-2)*7
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.mapcalc.html">r.mapcalc</a>,
-<a href="r3.mapcalc.html">r3.mapcalc</a>,
-<a href="t.rast.mapcalc.html">t.rast.mapcalc</a>,
-<a href="g.region.html">g.region</a>
-</em>
+*[r.mapcalc](r.mapcalc.md), [r3.mapcalc](r3.mapcalc.md),
+[t.rast.mapcalc](t.rast.mapcalc.md), [g.region](g.region.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Vaclav Petras, <a href="https://geospatial.ncsu.edu/geoforall/">NCSU GeoForAll Lab</a><br>
-Michael Barton, Arizona State University (updated to GRASS 5.7)<br>
+Vaclav Petras, [NCSU GeoForAll
+Lab](https://geospatial.ncsu.edu/geoforall/)  
+Michael Barton, Arizona State University (updated to GRASS 5.7)  
 R. Brunzema (original 5.0 Bash version)

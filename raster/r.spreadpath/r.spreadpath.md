@@ -1,67 +1,59 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.spreadpath</em> is part of the wildfire simulation toolset. Preparational
-steps for the fire simulation are the calculation of the rate of spread (ROS)
-with <em>r.ros</em>, and the creating of spread map with <em>r.spread</em>.
+*r.spreadpath* is part of the wildfire simulation toolset. Preparational
+steps for the fire simulation are the calculation of the rate of spread
+(ROS) with *r.ros*, and the creating of spread map with *r.spread*.
 Eventually, the fire path(s) based on starting point(s) are calculated
-with <em>r.spreadpath</em>.
-<p>
+with *r.spreadpath*.
 
-<em>r.spreadpath</em> recursively traces the least cost path backwards to
-the origin, given backlink information input map layers and target locations
+*r.spreadpath* recursively traces the least cost path backwards to the
+origin, given backlink information input map layers and target locations
 from where paths are to be traced. The backlink information map layers
 record each cell's backlink UTM northing (the y_input) and easting (the
-x_input) coordinates from which the cell's cumulative cost was determined.
+x_input) coordinates from which the cell's cumulative cost was
+determined.
 
-<p>
 The backlink inputs can be generated from another GRASS raster program
-<em>r.spread</em>. One of the major applications of <em>r.spreadpath</em>
-along with <em>r.spread</em> is to accurately find the least cost corridors
-and/or paths on a raster setting. More information on <em>r.spread</em> and
-<em>r.spreadpath</em> can be found in Xu (1994).
+*r.spread*. One of the major applications of *r.spreadpath* along with
+*r.spread* is to accurately find the least cost corridors and/or paths
+on a raster setting. More information on *r.spread* and *r.spreadpath*
+can be found in Xu (1994).
 
-<h2>Parameters:</h2>
+## Parameters:
 
-<dl>
-<dt><b>x_input=</b><em>name</em>
-<dd>Name of input raster map layer containing backlink UTM easting
+**x_input=***name*  
+Name of input raster map layer containing backlink UTM easting
 coordinates.
 
-<dt><b>y_input=</b><em>name</em>
-<dd>Name of input raster map layer containing backlink UTM northing coordinates.
+**y_input=***name*  
+Name of input raster map layer containing backlink UTM northing
+coordinates.
 
-<dt><b>coordinates =</b><em>x,y[,x,y,x,y, ...]</em>
-<dd>Each x,y coordinate pair gives the easting and northing
-(respectively) geographic coordinates of a target point from which to
-backwards trace the least cost path. As many points as desired can be
-entered by the user.
+**coordinates =***x,y\[,x,y,x,y, ...\]*  
+Each x,y coordinate pair gives the easting and northing (respectively)
+geographic coordinates of a target point from which to backwards trace
+the least cost path. As many points as desired can be entered by the
+user.
 
-<dt><b>output=</b><em>name</em>
-<dd>Name of raster map layer to contain output. Also can be used as the
-map layer of the input target points. If so used, the input target
-point map will be overwritten by the output.
-</dl>
+**output=***name*  
+Name of raster map layer to contain output. Also can be used as the map
+layer of the input target points. If so used, the input target point map
+will be overwritten by the output.
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<ul>
-<li>Xu, Jianping, 1994, Simulating the spread of wildfires using a
-geographic information system and remote sensing, Ph. D. Dissertation,
-Rutgers University, New Brunswick, New Jersey
-(<a href="https://dl.acm.org/citation.cfm?id=921466">ref</a>).</li>
-</ul>
+- Xu, Jianping, 1994, Simulating the spread of wildfires using a
+  geographic information system and remote sensing, Ph. D. Dissertation,
+  Rutgers University, New Brunswick, New Jersey
+  ([ref](https://dl.acm.org/citation.cfm?id=921466)).
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.spread.html">r.spread</a>,
-<a href="r.ros.html">r.ros</a>
-</em>
-
-Sample data download: <a href="https://grass.osgeo.org/sampledata/firedemo_grass7.sh">firedemo.sh</a>
+*[r.spread](r.spread.md), [r.ros](r.ros.md)* Sample data download:
+[firedemo.sh](https://grass.osgeo.org/sampledata/firedemo_grass7.sh)
 (run this script within the "Fire simulation data set" project).
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
 Jianping Xu and Richard G. Lathrop, Jr., Center for Remote Sensing and
 Spatial Analysis, Rutgers University.

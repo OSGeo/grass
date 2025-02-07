@@ -1,13 +1,13 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The module <em>t.topology</em> lists temporal relations of the maps in
-a space time dataset.
+The module *t.topology* lists temporal relations of the maps in a space
+time dataset.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 In order to obtain information about space time dataset topology, run:
 
-<div class="code"><pre>
+```shell
 t.topology tempmean_monthly@climate_2009_2012
  +-------------------- Basic information -------------------------------------+
  | Id: ........................ tempmean_monthly@climate_2009_2012
@@ -39,15 +39,12 @@ t.topology tempmean_monthly@climate_2009_2012
  | Starts: .................... 0
  | During: .................... 0
  +----------------------------------------------------------------------------+
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
-</em>
+*[t.create](t.create.md), [t.info](t.info.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

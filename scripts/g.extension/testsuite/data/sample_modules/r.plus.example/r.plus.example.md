@@ -1,21 +1,19 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.plus.example</em>
+*r.plus.example*
 
-<h2>NOTES</h2>
+## NOTES
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<div class="code"><pre>
+```shell
 r.plus.example
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.region.html">g.region</a>
-</em>
+*[g.region](g.region.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Vaclav Petras, NCSU GeoForAll Lab

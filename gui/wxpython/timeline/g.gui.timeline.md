@@ -1,37 +1,30 @@
-<!-- meta page description: wxGUI Timeline Tool -->
-<!-- meta page index: topic_GUI|GUI -->
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The <b>Timeline Tool</b> is a <em><a href="wxGUI.html">wxGUI</a></em> component
-which allows the user to compare the extents of temporal datasets (strds, stvds,
+The **Timeline Tool** is a *[wxGUI](wxGUI.md)* component which allows
+the user to compare the extents of temporal datasets (strds, stvds,
 str3ds) in a plot.
-<p>
+
 Supported features:
-<ul>
-  <li>temporal datasets with interval/point and absolute/relative time</li>
-  <li>2D plots - temporal extent</li>
-  <li>3D plots - spatio-temporal extent (matplotlib &gt;= 1.0.0)</li>
-  <li>pop-up annotations with basic metadata</li>
-</ul>
 
-<center>
-<img src="timeline_2D.jpg" border="1" alt="Timeline Tool screenshot">
-</center>
+- temporal datasets with interval/point and absolute/relative time
+- 2D plots - temporal extent
+- 3D plots - spatio-temporal extent (matplotlib \>= 1.0.0)
+- pop-up annotations with basic metadata
 
-<h2>NOTES</h2>
+<img src="timeline_2D.jpg" data-border="1"
+alt="Timeline Tool screenshot" />
 
-<em>g.gui.timeline</em> requires the Python plotting library
-<a href="https://matplotlib.org/">Matplotlib</a>.
+## NOTES
 
-<h2>SEE ALSO</h2>
+*g.gui.timeline* requires the Python plotting library
+[Matplotlib](https://matplotlib.org/).
 
-<em>
-  <a href="temporal.html">Temporal data processing</a>,
-  <a href="wxGUI.html">wxGUI</a>,
-  <a href="wxGUI.components.html">wxGUI components</a>
-</em>
+## SEE ALSO
 
-<h2>AUTHOR</h2>
+*[Temporal data processing](temporal.md), [wxGUI](wxGUI.md), [wxGUI
+components](wxGUI.components.md)*
 
-Anna Kratochvilova,
-<a href="https://www.cvut.cz">Czech Technical University in Prague</a>, Czech Republic
+## AUTHOR
+
+Anna Kratochvilova, [Czech Technical University in
+Prague](https://www.cvut.cz), Czech Republic

@@ -1,156 +1,151 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.mon</em> allows the user to start, select, list, release, and
-stop available graphics monitors.
+*d.mon* allows the user to start, select, list, release, and stop
+available graphics monitors.
 
-<h3>Starting a monitor</h3>
+### Starting a monitor
 
-In order to display on-screen GRASS graphics, the user must
-<b>start</b> and <b>select</b> a graphics monitor. By default,
-the <b>start</b> command actually runs two commands, to both start and
-select whatever monitor is named by the user. The user can get a list
-of running monitors by setting the <b>-l</b> flag on the command
-line. Note that some monitor <a href="displaydrivers.html">drivers</a> use environment
-<em><a href="variables.html">variables</a></em> or the specific
-<em><a href="variables.html#list-of-selected-grass-environment-variables-for-rendering">driver documentation</a></em>.
+In order to display on-screen GRASS graphics, the user must **start**
+and **select** a graphics monitor. By default, the **start** command
+actually runs two commands, to both start and select whatever monitor is
+named by the user. The user can get a list of running monitors by
+setting the **-l** flag on the command line. Note that some monitor
+[drivers](displaydrivers.md) use environment *[variables](variables.md)*
+or the specific *[driver
+documentation](variables.md#list-of-selected-grass-environment-variables-for-rendering)*.
 
-<p>When a monitor is <em>started</em>, it is therefore also
-(automatically) <em>selected</em> for output, unless the
-<b>-s</b> flag is set by the user; the user can also
-explicitly <b>select</b> a monitor that has been started.
+When a monitor is *started*, it is therefore also (automatically)
+*selected* for output, unless the **-s** flag is set by the user; the
+user can also explicitly **select** a monitor that has been started.
 
-<p>The desired monitor should be started once and need not be restarted
-unless it is stopped for some reason. A monitor may continue to run
-for any length of time, even when no GRASS session is being run.
+The desired monitor should be started once and need not be restarted
+unless it is stopped for some reason. A monitor may continue to run for
+any length of time, even when no GRASS session is being run.
 
-<h3>Stopping a monitor</h3>
+### Stopping a monitor
 
-A graphics monitor has two different types of status: monitor
-program <em>not running</em>, and monitor <em>running</em>. A monitor
-that has been started and/or selected will be listed as running; a
-monitor that has been stopped (or not started) will be listed as not
-running.  The <b>-l</b> flag will list all currently running monitors.
+A graphics monitor has two different types of status: monitor program
+*not running*, and monitor *running*. A monitor that has been started
+and/or selected will be listed as running; a monitor that has been
+stopped (or not started) will be listed as not running. The **-l** flag
+will list all currently running monitors.
 
-<h3>Selecting a monitor</h3>
+### Selecting a monitor
 
-When the user <em>starts</em> a monitor, it is also
-(automatically) <em>selected</em> for graphics output unless the user
-sets the <b>-s</b> flag.  In order to use (direct graphics output to)
-a monitor, the user must <em>select</em> that monitor for use, either
-by simply starting the monitor without the <b>-s</b> flag or by
-explicitly selecting the monitor for output. Only running monitors can
-be selected for graphics output.
+When the user *starts* a monitor, it is also (automatically) *selected*
+for graphics output unless the user sets the **-s** flag. In order to
+use (direct graphics output to) a monitor, the user must *select* that
+monitor for use, either by simply starting the monitor without the
+**-s** flag or by explicitly selecting the monitor for output. Only
+running monitors can be selected for graphics output.
 
-<p>The user can run multiple graphics monitors by simply starting each of
+The user can run multiple graphics monitors by simply starting each of
 the graphics monitors the user wishes to direct output to.
 
-<h3>Releasing (unselecting) a monitor</h3>
+### Releasing (unselecting) a monitor
 
-Currently <em>selected</em> a monitor can be released by <b>-r</b>
-flag.
+Currently *selected* a monitor can be released by **-r** flag.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>d.mon</em> is designed for interactive use. If non-interactive use
-is needed (e.g., in a script) set <code>GRASS_RENDER_IMMEDIATE=png</code>
-(or <code>=cairo</code>) and use the related environment
-<a href="variables.html">variables</a> to control output size etc.
+*d.mon* is designed for interactive use. If non-interactive use is
+needed (e.g., in a script) set `GRASS_RENDER_IMMEDIATE=png` (or
+`=cairo`) and use the related environment [variables](variables.md) to
+control output size etc.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>wx0 monitor</h3>
+### wx0 monitor
 
-To start the interactive <em><a href="wxGUI.html#map-display-window">wxGUI map
-display</a></em>, run
+To start the interactive *[wxGUI map
+display](wxGUI.md#map-display-window)*, run
 
-<div class="code"><pre>
+```shell
 d.mon start=wx0
-</pre></div>
+```
 
 <div style="margin: 10px" align="center">
-<img src="d_mon_wx0.png" alt="Blank wx0 display" border="0">
-<br>
-<i>Figure: The initialization of display monitor wx0</i>
+
+<img src="d_mon_wx0.png" data-border="0" alt="Blank wx0 display" />  
+*Figure: The initialization of display monitor wx0*
+
 </div>
 
-All subsequently displayed data will be rendered on monitor <code>wx0</code>.
+All subsequently displayed data will be rendered on monitor `wx0`.
 
-<div class="code"><pre>
+```shell
 g.region raster=elevation -p
 d.rast map=elevation
-</pre></div>
+```
 
 <div style="margin: 10px" align="center">
-<img src="d_mon_wx0_raster.png" alt="Display wx0 with raster map" border="0">
-<br>
-<i>Figure: The display wx0 showing an elevation raster map</i>
+
+<img src="d_mon_wx0_raster.png" data-border="0"
+alt="Display wx0 with raster map" />  
+*Figure: The display wx0 showing an elevation raster map*
+
 </div>
 
-<h3>CAIRO file renderer monitor</h3>
+### CAIRO file renderer monitor
 
 A CAIRO monitor can be started (and selected) by
 
-<div class="code"><pre>
+```shell
 d.mon start=cairo output=out.pdf
-</pre></div>
+```
 
-From this moment on all displayed data will be rendered into
-file <code>output.pdf</code>.
+From this moment on all displayed data will be rendered into file
+`output.pdf`.
 
-<h3>List running monitors</h3>
+### List running monitors
 
 To list the currently running monitors, use
 
-<div class="code"><pre>
+```shell
 d.mon -l
 
 List of running monitors:
 wx0
 cairo
-</pre></div>
+```
 
-<h3>Show currently selected monitor</h3>
+### Show currently selected monitor
 
 To identify the currently selected monitor, use
 
-<div class="code"><pre>
+```shell
 d.mon -p
 
 cairo
-</pre></div>
+```
 
-<h3>Switching between monitors</h3>
+### Switching between monitors
 
-To switch back to interactive display mode, here to an earlier started and
-still running wxGUI monitor, use
+To switch back to interactive display mode, here to an earlier started
+and still running wxGUI monitor, use
 
-<div class="code"><pre>
+```shell
 d.mon select=wx0
-</pre></div>
+```
 
-<h3>Stopping a monitor</h3>
+### Stopping a monitor
 
 To close the wxGUI monitor, run
 
-<div class="code"><pre>
+```shell
 d.mon stop=wx0
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.erase.html">d.erase</a>,
-<a href="d.redraw.html">d.redraw</a>,
-<a href="d.rast.html">d.rast</a>,
-<a href="d.vect.html">d.vect</a>,
-<a href="d.frame.html">d.frame</a>
-</em>
+*[d.erase](d.erase.md), [d.redraw](d.redraw.md), [d.rast](d.rast.md),
+[d.vect](d.vect.md), [d.frame](d.frame.md)*
 
-<p>
-See also <a href="variables.html#list-of-selected-grass-environment-variables-for-rendering">list
-of variables for rendering</a>,
-<a href="displaydrivers.html">display drivers</a>
+See also [list of variables for
+rendering](variables.md#list-of-selected-grass-environment-variables-for-rendering),
+[display drivers](displaydrivers.md)
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Martin Landa, OSGeoREL, Czech Technical University in Prague, Czech Republic
+Martin Landa, OSGeoREL, Czech Technical University in Prague, Czech
+Republic

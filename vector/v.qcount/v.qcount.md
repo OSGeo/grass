@@ -1,125 +1,110 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.qcount</em> computes six different quadrat count statistics that provide
-a measure of how much an user defined point pattern departs from a complete
-spatial random point pattern.
+*v.qcount* computes six different quadrat count statistics that provide
+a measure of how much an user defined point pattern departs from a
+complete spatial random point pattern.
 
-<p>Points are distributed following a complete spatial randomness (CSR) pattern
-if events are equally likely to occur anywhere within an area. There are two
-types departure from a CSR: regularity and clustering. Figure 1 gives an example
-of a complete random, regular and a clustered pattern.
-
-<!-- source of figures:
-     https://github.com/OSGeo/grass-legacy/tree/releasebranch_5_4/src/sites/s.qcount/tutorial
--->
+Points are distributed following a complete spatial randomness (CSR)
+pattern if events are equally likely to occur anywhere within an area.
+There are two types departure from a CSR: regularity and clustering.
+Figure 1 gives an example of a complete random, regular and a clustered
+pattern.
 
 <div align="center" style="margin: 10px">
-<img src="v_qcount_1.png">
-<img src="v_qcount_2.png">
-<img src="v_qcount_3.png">
-<br>
-<i>Figure 1: Realization of two-dimensional Poisson processes of 50 points on
-the unit square exhibiting (a) complete spatial randomness, (b) regularity, and
-(c) clustering.</i>
+
+![](v_qcount_1.png) ![](v_qcount_2.png) ![](v_qcount_3.png)  
+*Figure 1: Realization of two-dimensional Poisson processes of 50 points
+on the unit square exhibiting (a) complete spatial randomness, (b)
+regularity, and (c) clustering.*
+
 </div>
 
-<p>Various indices and statistics measure departure from CSR. The
-<em>v.qcount</em> function implements six different <i>quadrat count</i>
-indices that are described in Cressie (1991; p. 590-591)[1] and in Ripley (1981;
-p. 102-106)[2] and summarized in Table 1.
+Various indices and statistics measure departure from CSR. The
+*v.qcount* function implements six different *quadrat count* indices
+that are described in Cressie (1991; p. 590-591)\[1\] and in Ripley
+(1981; p. 102-106)\[2\] and summarized in Table 1.
 
 <div align="center" style="margin: 10px">
-<img src="v_qcount_5.png">
-<br>
-<i>Table 1: Indices for Quadrat Count Data. Adapted from
-Cressie [1], this table shows the statistics computed for the
-quadrats in Figure 2.</i>
+
+![](v_qcount_5.png)  
+*Table 1: Indices for Quadrat Count Data. Adapted from Cressie \[1\],
+this table shows the statistics computed for the quadrats in Figure 2.*
+
 </div>
 
-<p>These indices are computed as follows: <em>v.qcount</em> chooses
-<b>nquadrads</b> circular quadrats of radius <b>radius</b> such that they are
-completely within the bounds of the current region and no two quadrats overlap.
-The number of points falling within each quadrat are counted and indices are
-calculated to estimate the departure of point locations from complete spatial
-randomness. This is illustrated in Figure 2.
+These indices are computed as follows: *v.qcount* chooses **nquadrads**
+circular quadrats of radius **radius** such that they are completely
+within the bounds of the current region and no two quadrats overlap. The
+number of points falling within each quadrat are counted and indices are
+calculated to estimate the departure of point locations from complete
+spatial randomness. This is illustrated in Figure 2.
 
 <div align="center" style="margin: 10px">
-<img src="v_qcount_4.png">
-<br>
-<i>Figure 2: Randomly placed quadrats (n = 100) with 584 sample points.</i>
+
+![](v_qcount_4.png)  
+*Figure 2: Randomly placed quadrats (n = 100) with 584 sample points.*
+
 </div>
 
-<p>The number of points is written as category to the <b>output</b> map (and not
-to an attribute table).
+The number of points is written as category to the **output** map (and
+not to an attribute table).
 
-<h2>NOTES</h2>
+## NOTES
 
-This program may not work properly with lat-long data. It uses
-<em>hypot()</em> in two files: <em>count.c</em> and
-<em>findquads.c</em>.
+This program may not work properly with lat-long data. It uses *hypot()*
+in two files: *count.c* and *findquads.c*.
 
-<!-- TODO: add example -->
-
-<h2>KNOWN ISSUES</h2>
+## KNOWN ISSUES
 
 Timestamp not working for header part of counts output. (2000-10-28)
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<b>General references include:</b>
+**General references include:**
 
-<p>[1] Noel A. C. Cressie. <em>Statistics for Spatial Data</em>.
-Wiley Series in Probability and Mathematical Statistics. John Wiley
-&amp; Sons, New York, NY, 1st edition, 1991.
-<p>[2] Brian D. Ripley. <em>Spatial Statistics</em>.
-John Wiley \&amp; Sons, New York, NY, 1981.
+\[1\] Noel A. C. Cressie. *Statistics for Spatial Data*. Wiley Series in
+Probability and Mathematical Statistics. John Wiley & Sons, New York,
+NY, 1st edition, 1991.
 
-<p>
-<b>References to the indices include:</b>
+\[2\] Brian D. Ripley. *Spatial Statistics*. John Wiley \\ Sons, New
+York, NY, 1981.
 
-<p>[3] R. A. Fisher, H. G. Thornton, and W. A. Mackenzie.
-The accuracy of the plating method of estimating the density of
-bacterial populations.
-<em>Annals of Applied Biology</em>, 9:325-359, 1922.
+**References to the indices include:**
 
-<p>[4] F. N. David and P. G. Moore. Notes on contagious distributions in
-plant populations. <em>Annals of Botany</em>, 18:47-53, 1954.
+\[3\] R. A. Fisher, H. G. Thornton, and W. A. Mackenzie. The accuracy of
+the plating method of estimating the density of bacterial populations.
+*Annals of Applied Biology*, 9:325-359, 1922.
 
-<p>[5] J. B. Douglas.  Clustering and aggregation.
-<em>Sankhya B</em>, 37:398-417, 1975.
+\[4\] F. N. David and P. G. Moore. Notes on contagious distributions in
+plant populations. *Annals of Botany*, 18:47-53, 1954.
 
-<p>[6] M. Lloyd. Mean crowding.
-<em>Journal of Animal Ecology</em>, 36:1-30, 1967.
+\[5\] J. B. Douglas. Clustering and aggregation. *Sankhya B*,
+37:398-417, 1975.
 
-<p>[7] M. Morista. Measuring the dispersion and analysis of distribution
-patterns. <em>Memoires of the Faculty of Science, Kyushu University, Series E.
-Biology</em>, 2:215-235, 1959.
+\[6\] M. Lloyd. Mean crowding. *Journal of Animal Ecology*, 36:1-30,
+1967.
 
-<p>
-<b>A more detailed background is given in the tutorial:</b>
-<!-- source of tutorial:
-     https://github.com/OSGeo/grass-legacy/tree/releasebranch_5_4/src/sites/s.qcount/tutorial
--->
+\[7\] M. Morista. Measuring the dispersion and analysis of distribution
+patterns. *Memoires of the Faculty of Science, Kyushu University, Series
+E. Biology*, 2:215-235, 1959.
 
-<p>[8] James Darrell McCauley 1993. Complete Spatial Randomness and Quadrat Methods -
-<a href="https://grass.osgeo.org/history_docs/v_qcount_tutorial.pdf">GRASS Tutorial on v.qcount</a>
+**A more detailed background is given in the tutorial:**
 
-<h2>SEE ALSO</h2>
+\[8\] James Darrell McCauley 1993. Complete Spatial Randomness and
+Quadrat Methods - [GRASS Tutorial on
+v.qcount](https://grass.osgeo.org/history_docs/v_qcount_tutorial.pdf)
 
-<em>
-<a href="v.random.html">v.random</a>,
-<a href="v.distance.html">v.distance</a>,
-<a href="v.neighbors.html">v.neighbors</a>,
-<a href="v.perturb.html">v.perturb</a>
-</em>
+## SEE ALSO
 
-<h2>AUTHORS</h2>
+*[v.random](v.random.md), [v.distance](v.distance.md),
+[v.neighbors](v.neighbors.md), [v.perturb](v.perturb.md)*
 
-<a href="http://mccauley-usa.com/">James Darrell McCauley</a>
-<br>when he was at:
-<a href="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural Engineering</a>
-<a href="http://www.purdue.edu/">Purdue University</a>
+## AUTHORS
 
-<p>Modified for GRASS 5.0 by Eric G. Miller (2000-10-28)
-<br>
+[James Darrell McCauley](http://mccauley-usa.com/)  
+when he was at: [Agricultural
+Engineering](http://ABE.www.ecn.purdue.edu/ABE/) [Purdue
+University](http://www.purdue.edu/)
+
+Modified for GRASS 5.0 by Eric G. Miller (2000-10-28)  
 Modified for GRASS 5.7 by R. Blazek (2004-10-14)

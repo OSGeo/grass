@@ -1,66 +1,64 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.histogram</em> displays the category-value distribution for a
-user-specified raster map layer, in the form of a bar chart or a pie chart.
-The display will be displayed in the active display frame on the graphics
-monitor, using the colors in the raster map layer's color table.  The
-program determines the raster map's category value distribution by counting
-cells.
+*d.histogram* displays the category-value distribution for a
+user-specified raster map layer, in the form of a bar chart or a pie
+chart. The display will be displayed in the active display frame on the
+graphics monitor, using the colors in the raster map layer's color
+table. The program determines the raster map's category value
+distribution by counting cells.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>d.histogram</em> respects the current geographic region settings
-and the current raster mask (if mask is active).
+*d.histogram* respects the current geographic region settings and the
+current raster mask (if mask is active).
 
-<p><em>d.histogram</em> uses the colors in the map's color look-up table
-(i.e., the map's <em>colr</em> or <em>colr2</em> file).
+*d.histogram* uses the colors in the map's color look-up table (i.e.,
+the map's *colr* or *colr2* file).
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-Running the command below will generate the bar graph shown in the figure:
+Running the command below will generate the bar graph shown in the
+figure:
 
-<div class="code"><pre>
+```shell
 g.region raster=elevation -p
 d.mon wx0
 d.histogram map=elevation
-</pre></div>
+```
 
 <div align="center" style="margin: 10px">
-<img src="d_histogram_bar.png" alt="d.histogram bar graph example" border="0">
-<br>
-<i>Figure: Bar graph histogram for elevation map</i>
+
+<img src="d_histogram_bar.png" data-border="0"
+alt="d.histogram bar graph example" />  
+*Figure: Bar graph histogram for elevation map*
+
 </div>
 
-<p>
-Running the command below will generate the pie graph shown in the figure:
+Running the command below will generate the pie graph shown in the
+figure:
 
-<div class="code"><pre>
+```shell
 g.region raster=landuse96_28m -p
 d.histogram map=landuse96_28m style=pie
-</pre></div>
+```
 
 <div align="center" style="margin: 10px">
-<img src="d_histogram_pie.png" alt="d.histogram pie graph example" border="0">
-<br>
-<i>Figure: Pie graph histogram for landuse map</i>
+
+<img src="d_histogram_pie.png" data-border="0"
+alt="d.histogram pie graph example" />  
+*Figure: Pie graph histogram for landuse map*
+
 </div>
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.colortable.html">d.colortable</a>,
-<a href="d.frame.html">d.frame</a>,
-<a href="d.graph.html">d.graph</a>,
-<a href="d.linegraph.html">d.linegraph</a>,
-<a href="d.mon.html">d.mon</a>,
-<a href="d.polar.html">d.polar</a>,
-<a href="g.region.html">g.region</a>,
-<a href="r.stats.html">r.stats</a>
-</em>
+*[d.colortable](d.colortable.md), [d.frame](d.frame.md),
+[d.graph](d.graph.md), [d.linegraph](d.linegraph.md), [d.mon](d.mon.md),
+[d.polar](d.polar.md), [g.region](g.region.md), [r.stats](r.stats.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Dave Johnson
-<br> DBA Systems, Inc.
-<br> 10560 Arrowhead Drive
-<br> Fairfax, Virginia 22030
+Dave Johnson  
+DBA Systems, Inc.  
+10560 Arrowhead Drive  
+Fairfax, Virginia 22030

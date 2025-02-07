@@ -1,32 +1,28 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.distance</em> finds the nearest element in vector map (<b>to</b>)
-for elements in vector map (<b>from</b>). Various information about
-the vectors' relationships (distance, category, etc.) may be uploaded to
-the attribute table attached to the first vector map, or printed to
-'stdout'. A new vector map may be created where lines connecting
-nearest points on features are written. <b>dmin</b> and/or
-<b>dmax</b> can be used to limit the search radius (in lat-long projects
-to be given in meters since they are calculated as geodesic distances on
-a sphere).
+*v.distance* finds the nearest element in vector map (**to**) for
+elements in vector map (**from**). Various information about the
+vectors' relationships (distance, category, etc.) may be uploaded to the
+attribute table attached to the first vector map, or printed to
+'stdout'. A new vector map may be created where lines connecting nearest
+points on features are written. **dmin** and/or **dmax** can be used to
+limit the search radius (in lat-long projects to be given in meters
+since they are calculated as geodesic distances on a sphere).
 
-<p>
-For lines to lines, say line A to line B, <em>v.distance</em> calculates
-the shortest distance of each vertex in A with each segment (not vertex)
-in B. The module then calculates the shortest distance of each vertex in
-B to each segment in A. The overall shortest distance of A points to B
-segments and B points to A segments is used. Additionally,
-<em>v.distance</em> checks for intersections. In case of intersections,
-the first intersection found is used and the distance set to zero.
+For lines to lines, say line A to line B, *v.distance* calculates the
+shortest distance of each vertex in A with each segment (not vertex) in
+B. The module then calculates the shortest distance of each vertex in B
+to each segment in A. The overall shortest distance of A points to B
+segments and B points to A segments is used. Additionally, *v.distance*
+checks for intersections. In case of intersections, the first
+intersection found is used and the distance set to zero.
 
-<p>
 For lines to areas, the distance is set to zero if a line is (partially)
 inside an area. The first point of the line that is inside the area is
 used as common point. The distance is also set to zero if the line
 intersects with the outer ring or any of the inner rings (isles), in
 which case the fist intersection is used as common point.
 
-<p>
 For areas to areas, the module checks first for overlap or if one area
 is (partially) inside the other area. This is computationally quite
 intensive. If the outer rings of the two areas do not overlap, the
@@ -34,130 +30,121 @@ distance is calculated as above for lines to lines, treating the outer
 rings as two lines. Again, the first point encountered falling into an
 area is used as common point, or the first intersection point.
 
-<p>
 For anything else than points to lines, there can be several common
 locations with zero distance, and the common location would then be the
 result of an overlay consisting of several points, lines, or areas.
-<em>v.distance</em> selects in these cases a single point, and does
-not create an overlay
-like <em><a href="v.overlay.html">v.overlay</a></em>. In this
-implementation, any shared point is as good as any other. Calculating
-an intersection is costlier than to check if a vertex is inside a
-polygon. For example, if a vertex of the boundary of the 'to' area is
-inside the 'from' area, it is a common location. For speed reasons,
-the distance is then set to zero and no further tests are done.
+*v.distance* selects in these cases a single point, and does not create
+an overlay like *[v.overlay](v.overlay.md)*. In this implementation, any
+shared point is as good as any other. Calculating an intersection is
+costlier than to check if a vertex is inside a polygon. For example, if
+a vertex of the boundary of the 'to' area is inside the 'from' area, it
+is a common location. For speed reasons, the distance is then set to
+zero and no further tests are done.
 
-<h2>NOTES</h2>
+## NOTES
 
 If a nearest feature does not have a category, the attribute column is
 updated to NULL.
 
-<p>The upload <b>column</b>(s) must already exist. Create one with
-<em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em>.
+The upload **column**(s) must already exist. Create one with
+*[v.db.addcolumn](v.db.addcolumn.md)*.
 
-<p>In lat-long projects <em>v.distance</em> gives distances
-(<em>dist</em>, <em>from_along</em>, and <em>to_along</em>) not in
-degrees but in meters calculated as geodesic distances on a sphere.
+In lat-long projects *v.distance* gives distances (*dist*, *from_along*,
+and *to_along*) not in degrees but in meters calculated as geodesic
+distances on a sphere.
 
-<p>
 If one or both of the input vector maps are 3D, the user is notified
 accordingly.
 
-<p>The <em>-p</em> flag prints the results to standard output. By default the
-output is in form of a linear matrix. If only only variable is upploaded and
-a square matrix is desired, the user can set the <em>-s</em> flag.
+The *-p* flag prints the results to standard output. By default the
+output is in form of a linear matrix. If only only variable is upploaded
+and a square matrix is desired, the user can set the *-s* flag.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Find nearest lines</h3>
+### Find nearest lines
 
-Find <em>nearest lines</em> in vector map &quot;ln&quot; for points from
-vector map &quot;pnt&quot; within the given threshold and write related
-line categories to column &quot;linecat&quot; in an attribute table attached
-to vector map &quot;pnt&quot;:
+Find *nearest lines* in vector map "ln" for points from vector map "pnt"
+within the given threshold and write related line categories to column
+"linecat" in an attribute table attached to vector map "pnt":
 
-<div class="code"><pre>
+```shell
 v.distance from=pnt to=ln upload=cat column=linecat
-</pre></div>
+```
 
-<h3>Find nearest area</h3>
+### Find nearest area
 
-For each point from vector map &quot;pnt&quot;, find the <em>nearest area</em>
-from map &quot;ar&quot; within the given threshold and write the related
-area categories to column &quot;areacat&quot; in an attribute table attached
-to vector map &quot;pnt&quot; (in the case that a point falls into an area,
-the distance is zero):
+For each point from vector map "pnt", find the *nearest area* from map
+"ar" within the given threshold and write the related area categories to
+column "areacat" in an attribute table attached to vector map "pnt" (in
+the case that a point falls into an area, the distance is zero):
 
-<div class="code"><pre>
+```shell
 v.distance from=pnt to=ar upload=cat column=areacat
-</pre></div>
+```
 
-<h3>Create a new vector map</h3>
+### Create a new vector map
 
-Create a new vector map which contains <em>lines connecting nearest
-features</em> of maps &quot;pnt&quot; and map &quot;ln&quot;. The resulting
-vector map can be used for example to connect points to a network as
-needed for network analysis:
+Create a new vector map which contains *lines connecting nearest
+features* of maps "pnt" and map "ln". The resulting vector map can be
+used for example to connect points to a network as needed for network
+analysis:
 
-<div class="code"><pre>
+```shell
 v.distance from=pnt to=ln out=connections upload=dist column=dist
-</pre></div>
+```
 
-<h3>Create a new vector map with from and to categories in the attribute table</h3>
+### Create a new vector map with from and to categories in the attribute table
 
-Create a new vector map that contains <em>lines connecting nearest
-features</em> of maps &quot;pnt&quot; and map &quot;ln&quot;, and a new
-attribute table that contains distances, from and to categories from the
-input maps:
+Create a new vector map that contains *lines connecting nearest
+features* of maps "pnt" and map "ln", and a new attribute table that
+contains distances, from and to categories from the input maps:
 
-<div class="code"><pre>
+```shell
 v.distance from=pnt to=ln out=connections upload=cat,dist column=to_cat,dist table=connections
-</pre></div>
+```
 
-<h3>Query information</h3>
+### Query information
 
-Query information from selected point(s). <em>v.distance</em> takes
-points from a vector map as input instead of stdin. A new vector map
-with query points has to be created before the map can be analysed.
-<p>
+Query information from selected point(s). *v.distance* takes points from
+a vector map as input instead of stdin. A new vector map with query
+points has to be created before the map can be analysed.
 
 Create query map (if not present):
 
-<div class="code"><pre>
+```shell
 echo "123456|654321|1" | v.in.ascii output=pnt
-</pre></div>
+```
 
 Find nearest features:
 
-<div class="code"><pre>
+```shell
 v.distance -p from=pnt to=map_to_query upload=cat
-</pre></div>
+```
 
-<h3>Point-in-polygon</h3>
+### Point-in-polygon
 
-The option <b>dmax=0</b> is here important because otherwise for
-points not falling into any area, the category of the nearest area is
-recorded.
-<br>
-For each point from vector map &quot;pnt&quot;, find the <em>area</em> from
-vector map &quot;ar&quot; in which the individual point falls, and
-write the related area categories to column &quot;areacat&quot; into
-the attribute table attached to vector map &quot;pnt&quot;:
+The option **dmax=0** is here important because otherwise for points not
+falling into any area, the category of the nearest area is recorded.  
+For each point from vector map "pnt", find the *area* from vector map
+"ar" in which the individual point falls, and write the related area
+categories to column "areacat" into the attribute table attached to
+vector map "pnt":
 
-<div class="code"><pre>
+```shell
 v.distance from=pnt to=ar dmax=0 upload=cat column=areacat
-</pre></div>
+```
 
-<h3>Univariate statistics on results</h3>
+### Univariate statistics on results
 
 Create a vector map containing connecting lines and investigate mean
-distance to targets. An alternative solution is to use
-the <code>v.distance upload=dist</code> option to upload distances into
-the <i>bugs</i> vector directly, then run v.univar on that. Also note
-you can upload two columns at a time, e.g. <code>v.distance
-upload=cat,dist column=nearest_id,dist_to_nr</code>.
+distance to targets. An alternative solution is to use the
+`v.distance upload=dist` option to upload distances into the *bugs*
+vector directly, then run v.univar on that. Also note you can upload two
+columns at a time, e.g.
+`v.distance upload=cat,dist column=nearest_id,dist_to_nr`.
 
-<div class="code"><pre>
+```shell
 # create working copy
 g.copy vect=bugsites,bugs
 
@@ -177,12 +164,13 @@ v.to.db map=vdistance_vectors option=length column=length
 
 # calculate statistics
 v.univar vdistance_vectors column=length
-</pre></div>
+```
 
-<h3>Print distance between points</h3>
+### Print distance between points
 
 Example for a Latitude-longitude project (EPSG 4326):
-<div class="code"><pre>
+
+```shell
 # points along the equator
 echo "0|-61|1" | v.in.ascii output=pnt1 input=-
 echo "0|-58|1" | v.in.ascii output=pnt2 input=-
@@ -191,14 +179,15 @@ echo "0|-58|1" | v.in.ascii output=pnt2 input=-
 v.distance -p --q from=pnt1 to=pnt2 upload=dist
 from_cat|distance
 1|3
-</pre></div>
+```
 
-<h3>Print distance matrix</h3>
+### Print distance matrix
 
 North Carolina sample data
 
-<p>As linear matrix:
-<div class="code"><pre>
+As linear matrix:
+
+```shell
 v.distance -pa from=hospitals to=hospitals upload=dist,to_attr to_column=NAME separator=tab
 from_cat    to_cat  dist    to_attr
 1   1   0   Cherry Hospital
@@ -206,10 +195,11 @@ from_cat    to_cat  dist    to_attr
 1   3   339112.17046729225  Watauga Medical Center
 1   4   70900.392145909267  Central Prison Hospital
 1   5   70406.227393921712  Dorothea Dix Hospital
-</pre></div>
+```
 
-<p>As square matrix (only possible with single upload option):
-<div class="code"><pre>
+As square matrix (only possible with single upload option):
+
+```shell
 v.distance -pas from=hospitals to=hospitals upload=dist separator=tab
 from_cat to_cat       dist
               1          2          3          4          5 ...
@@ -219,15 +209,15 @@ from_cat to_cat       dist
 4      70900.39   76025.46  274153.19          0     501.11 ...
 5      70406.23   75538.87  274558.98     501.11          0 ...
 ...
-</pre></div>
+```
 
-<h3>Print in JSON</h3>
+### Print in JSON
 
-<div class="code"><pre>
+```shell
 v.distance -p from=busroute_a to=busstopsall upload=dist,to_attr to_column=routes format=json
-</pre></div>
+```
 
-<div class="code"><pre>
+```shell
 [
     {
         "from_cat": 1,
@@ -258,24 +248,21 @@ v.distance -p from=busroute_a to=busstopsall upload=dist,to_attr to_column=route
         ]
     }
 ]
-</pre></div>
+```
 
+## SEE ALSO
 
-<h2>SEE ALSO</h2>
+*[r.distance](r.distance.md), [v.db.addcolumn](v.db.addcolumn.md),
+[v.what.vect](v.what.vect.md)*
 
-<em>
-<a href="r.distance.html">r.distance</a>,
-<a href="v.db.addcolumn.html">v.db.addcolumn</a>,
-<a href="v.what.vect.html">v.what.vect</a>
-</em>
+## AUTHORS
 
-<h2>AUTHORS</h2>
-
-Janne Soimasuo 1994, University of Joensuu, Faculty of Forestry, Finland<br>
-Cmd line coordinates support: Markus Neteler, ITC-irst, Trento, Italy<br>
-Updated for 5.1: Radim Blazek, ITC-irst, Trento, Italy<br>
-Matrix-like output by Martin Landa, FBK-irst, Trento, Italy<br>
-Improved processing speed: Markus Metz<br>
-Distance from any feature to any feature: Markus Metz<br>
-New table without the -p flag: Huidae Cho
-Make linear matrix the default for all outputs: Moritz Lennert
+Janne Soimasuo 1994, University of Joensuu, Faculty of Forestry,
+Finland  
+Cmd line coordinates support: Markus Neteler, ITC-irst, Trento, Italy  
+Updated for 5.1: Radim Blazek, ITC-irst, Trento, Italy  
+Matrix-like output by Martin Landa, FBK-irst, Trento, Italy  
+Improved processing speed: Markus Metz  
+Distance from any feature to any feature: Markus Metz  
+New table without the -p flag: Huidae Cho Make linear matrix the default
+for all outputs: Moritz Lennert

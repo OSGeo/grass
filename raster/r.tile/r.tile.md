@@ -1,43 +1,38 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.tile</em> retiles an existing raster map with user defined
-x and y tile size.
+*r.tile* retiles an existing raster map with user defined x and y tile
+size.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>r.tile</em> generates a separate raster for each tile.
-This is equivalent to running <em>g.region</em> along with
-<em>r.resample</em> in a double loop.
-<p>
-The module can be used to split a large raster map into smaller
-tiles, e.g. for further parallelized analysis on a cluster computing
-system.
-<p>
+*r.tile* generates a separate raster for each tile. This is equivalent
+to running *g.region* along with *r.resample* in a double loop.
+
+The module can be used to split a large raster map into smaller tiles,
+e.g. for further parallelized analysis on a cluster computing system.
+
 The overlap is defined in rows/columns.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Retiling example for the North Carolina DEM:
 
-<div class="code"><pre>
+```shell
 g.region raster=elevation -p
 # rows:       1350
 # cols:       1500
 
 # generating 2 x 2 = 4 tiles (width=1500/2, height=rows/2)
 r.tile input=elevation output=elev_tile width=750 height=675
-</pre></div>
+```
 
-creates 4 tiles with the prefix <em>elev_tile</em> (named:
-elev_tile-000-000, elev_tile-000-001, elev_tile-001-000, ...).
+creates 4 tiles with the prefix *elev_tile* (named: elev_tile-000-000,
+elev_tile-000-001, elev_tile-001-000, ...).
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="r3.retile.html">r3.retile</a>
-</em>
+*[g.region](g.region.md), [r3.retile](r3.retile.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Glynn Clements

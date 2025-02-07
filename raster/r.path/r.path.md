@@ -1,24 +1,19 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.path</em> traces a path from starting points following input
-directions. Such a movement direction map can be generated with
-<em><a href="r.walk.html">r.walk</a></em>,
-<em><a href="r.cost.html">r.cost</a></em>,
-<em><a href="r.slope.aspect.html">r.slope.aspect</a></em>,
-<em><a href="r.watershed.html">r.watershed</a></em>, or
-<em><a href="r.fill.dir.html">r.fill.dir</a></em>,
-provided that the direction is in degrees, measured counterclockwise
-from east.
+*r.path* traces a path from starting points following input directions.
+Such a movement direction map can be generated with
+*[r.walk](r.walk.md)*, *[r.cost](r.cost.md)*,
+*[r.slope.aspect](r.slope.aspect.md)*, *[r.watershed](r.watershed.md)*,
+or *[r.fill.dir](r.fill.dir.md)*, provided that the direction is in
+degrees, measured counterclockwise from east.
 
-<p>
-Alternatively, bitmask-encoded directions can be provided where each
-bit position corresponds to a specific neighbour. A path will continue
-to all neighbours with their bit set. This means a path can split and
-merge. Such bitmasked directions can be created with the <b>-b</b>
-flag of <em><a href="r.cost.html">r.cost</a></em> and
-<em><a href="r.walk.html">r.walk</a></em>.
+Alternatively, bitmask-encoded directions can be provided where each bit
+position corresponds to a specific neighbour. A path will continue to
+all neighbours with their bit set. This means a path can split and
+merge. Such bitmasked directions can be created with the **-b** flag of
+*[r.cost](r.cost.md)* and *[r.walk](r.walk.md)*.
 
-<div class="code"><pre>
+```shell
 Direction encoding for neighbors of x
 
   135  90  45          7 8 1
@@ -27,122 +22,121 @@ Direction encoding for neighbors of x
 
   degrees           bit positions
   CCW from East
-</pre></div>
+```
 
 A path stops when the direction is zero or negative, indicating a stop
 point or outlet.
-<p>
-The <b>output</b> raster map will show one or more least-cost paths
-between each user-provided location(s) and the target points (direction
-&le; 0). By default, the <b>output</b> will be an integer CELL map with
-the id of the start points along the least cost path, and null cells elsewhere.
 
-<p>
-With the <b>-c</b> (<em>copy</em>) flag, the values raster map cell values are
-copied verbatim along the path. With the <b>-a</b> (<em>accumulate</em>)
-flag, the accumulated cell value from the starting point up to the current
-cell is written on output. With either the <b>-c</b> or the <b>-a</b> flags, the
-<b>raster_path</b> map is created with the same cell type as
-the <b>values</b> raster map (integer, float or double).  With
-the <b>-n</b> (<em>number</em>) flag, the cells are numbered
-consecutively from the starting point to the final point.
-The <b>-c</b>, <b>-a</b>, and <b>-n</b> flags are mutually
+The **output** raster map will show one or more least-cost paths between
+each user-provided location(s) and the target points (direction ≤ 0). By
+default, the **output** will be an integer CELL map with the id of the
+start points along the least cost path, and null cells elsewhere.
+
+With the **-c** (*copy*) flag, the values raster map cell values are
+copied verbatim along the path. With the **-a** (*accumulate*) flag, the
+accumulated cell value from the starting point up to the current cell is
+written on output. With either the **-c** or the **-a** flags, the
+**raster_path** map is created with the same cell type as the **values**
+raster map (integer, float or double). With the **-n** (*number*) flag,
+the cells are numbered consecutively from the starting point to the
+final point. The **-c**, **-a**, and **-n** flags are mutually
 incompatible.
 
-
-<p>
-The <b>start_coordinates</b> parameter consists of map E and N grid
+The **start_coordinates** parameter consists of map E and N grid
 coordinates of a starting point. Each x,y pair is the easting and
 northing (respectively) of a starting point from which a path will be
-traced following <b>input</b> directions. The <b>start_points</b>
-parameter can take multiple vector maps containing additional starting
-points.
+traced following **input** directions. The **start_points** parameter
+can take multiple vector maps containing additional starting points.
 
-<h2>NOTES</h2>
+## NOTES
 
 The directions are recorded as degrees CCW from East, the Knight's move
 of r.cost and r.walk is considered:
-<div class="code"><pre>
+
+```shell
        112.5     67.5
 157.5  135   90  45   22.5
        180   x   0
 202.5  225  270  315  337.5
        247.5     292.5
-</pre></div>
+```
+
 i.e. a cell with the value 135 means the next cell is to the North-West,
 and a cell with the value 157.5 means that the next cell is to the
 West-North-West.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Hydrological path</h3>
+### Hydrological path
 
-We are using the full North Carolina sample dataset.
-First we create the two points from a text file using
-<em><a href="v.in.ascii.html">v.in.ascii</a></em> module
-(here the text file is CSV and we are using unix here-file syntax
-with EOF, in GUI just enter the values directly for the parameter input):
+We are using the full North Carolina sample dataset. First we create the
+two points from a text file using *[v.in.ascii](v.in.ascii.md)* module
+(here the text file is CSV and we are using unix here-file syntax with
+EOF, in GUI just enter the values directly for the parameter input):
 
-<div class="code"><pre>
-v.in.ascii input=- output=start format=point separator=comma &lt;&lt;EOF
+```shell
+v.in.ascii input=- output=start format=point separator=comma <<EOF
 638667.15686275,220610.29411765
 638610.78431373,220223.03921569
 EOF
-</pre></div>
+```
 
-We need to supply a direction raster map to the <em>r.path</em> module.
-To get these directions, we use the
-<em><a href="r.watershed.html">r.watershed</a></em> module:
+We need to supply a direction raster map to the *r.path* module. To get
+these directions, we use the *[r.watershed](r.watershed.md)* module:
 
-<div class="code"><pre>
+```shell
 r.watershed elevation=elev_lid792_1m accumulation=accum drainage=drain_dir
-</pre></div>
+```
 
 The directions are categorical and we convert them to degrees using
 raster algebra:
 
-<div class="code"><pre>
+```shell
 r.mapcalc "drain_deg = if(drain_dir != 0, 45. * abs(drain_dir), null())"
-</pre></div>
+```
 
-Now we are ready to extract the drainage paths starting at the two points.
+Now we are ready to extract the drainage paths starting at the two
+points.
 
-<div class="code"><pre>
+```shell
 r.path input=drain_deg raster_path=drain_path vector_path=drain_path start_points=start
-</pre></div>
+```
 
 Before we visualize the result, we set a color table for the elevation
 we are using and create a shaded relief map:
 
-<div class="code"><pre>
+```shell
 r.colors map=elev_lid792_1m color=elevation
 r.relief input=elev_lid792_1m output=relief
-</pre></div>
+```
 
 We visualize the input and output data:
 
-<div class="code"><pre>
+```shell
 d.shade shade=relief color=elev_lid792_1m
 d.vect map=drain_path color=0:0:61 width=4 legend_label="drainage paths"
 d.vect map=start color=none fill_color=224:0:0 icon=basic/circle size=15 legend_label=origins
 d.legend.vect -b
-</pre></div>
+```
 
 <div align="center">
-<a href="r_path_with_r_watershed_direction.png"><img src="r_path_with_r_watershed_direction.png" alt="drainage using r.watershed" width="300" height="280"></a>
-<br>
-<i>Figure: Drainage paths from two points where directions from
-r.watershed were used</i>
+
+[<img src="r_path_with_r_watershed_direction.png" width="300"
+height="280" alt="drainage using r.watershed" />](r_path_with_r_watershed_direction.png)  
+*Figure: Drainage paths from two points where directions from
+r.watershed were used*
+
 </div>
 
-<h3>Least-cost path</h3>
+### Least-cost path
 
-We compute bitmask encoded movement directions using <em>r.walk:</em>
-<div class="code"><pre>
+We compute bitmask encoded movement directions using *r.walk:*
+
+```shell
 g.region swwake_30m -p
 
 # create friction map based on land cover
-r.recode input=landclass96 output=friction rules=- &lt;&lt; EOF
+r.recode input=landclass96 output=friction rules=- << EOF
 1:3:0.1:0.1
 4:5:10.:10.
 6:6:1000.0:1000.0
@@ -169,44 +163,35 @@ r.walk elevation=elev_ned_30m friction=friction output=walkcost_s \
 
 r.path input=walkdir_s start_coordinates=640206,222795 \
     raster_path=walkpath_s vector_path=walkpath_s
-</pre></div>
+```
 
-<!--
-d.vect map=walkpath_s color=243:66:53 width=10 legend_label="Single direction"
-d.vect map=walkpath color=254:192:6 width=4 legend_label=Bitmask
-d.vect map=walkpath_k color=62:80:180 width=2 legend_label="Bitmask + knight's"
--->
+The extracted least-cost path splits and merges on the way from the
+start point to the stop point (start point for r.walk). Note the gaps in
+the raster path when using the Knight's move.
 
-The extracted least-cost path splits and merges on the way from
-the start point to the stop point (start point for r.walk). Note the
-gaps in the raster path when using the Knight's move.
-<div class="code"><pre>
-</pre></div>
+```shell
+
+```
 
 <div align="center">
-<a href="r_path_with_bitmask.png">
-    <img src="r_path_with_bitmask.png" alt="least cost path using bitmask" width="600" height="274">
-</a>
-<br>
-<i>Figure: Comparison of shortest paths using single directions and
-multiple bitmask encoded directions without and with Knight's move</i>
+
+[<img src="r_path_with_bitmask.png" width="600" height="274"
+alt="least cost path using bitmask" />](r_path_with_bitmask.png)  
+*Figure: Comparison of shortest paths using single directions and
+multiple bitmask encoded directions without and with Knight's move*
+
 </div>
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="r.basins.fill.html">r.basins.fill</a>,
-<a href="r.cost.html">r.cost</a>,
-<a href="r.fill.dir.html">r.fill.dir</a>,
-<a href="r.mapcalc.html">r.mapcalc</a>,
-<a href="r.recode.html">r.recode</a>,
-<a href="r.terraflow.html">r.terraflow</a>,
-<a href="r.walk.html">r.walk</a>,
-<a href="r.watershed.html">r.watershed</a>
-</em>
+*[g.region](g.region.md), [r.basins.fill](r.basins.fill.md),
+[r.cost](r.cost.md), [r.fill.dir](r.fill.dir.md),
+[r.mapcalc](r.mapcalc.md), [r.recode](r.recode.md),
+[r.terraflow](r.terraflow.md), [r.walk](r.walk.md),
+[r.watershed](r.watershed.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Markus Metz<br>
-Multiple path directions sponsored by <a href="https://www.mundialis.de">mundialis</a>
+Markus Metz  
+Multiple path directions sponsored by
+[mundialis](https://www.mundialis.de)

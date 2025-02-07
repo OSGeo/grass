@@ -1,20 +1,18 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<!-- this needs to be expanded -->
+The *t.vect.list* module provides the same functionality as
+[t.rast.list](t.rast.list.md), the only difference is the vector map
+layer metadata.
 
-The <em>t.vect.list</em> module provides the same functionality as
-<a href="t.rast.list.html">t.rast.list</a>, the only difference is the
-vector map layer metadata.
+## EXAMPLE
 
-<h2>EXAMPLE</h2>
-
-<h3>Default query</h3>
+### Default query
 
 This example show a relative space time vector dataset with the first
 three maps with a range of years, instead the last five are valid only
 for one year:
 
-<div class="code"><pre>
+```shell
 t.vect.list shoreline@shoreline
 name|layer|mapset|start_time|end_time
 shoreline_1849_1873|None|shoreline|1849|1873
@@ -25,15 +23,15 @@ shoreline_1998|None|shoreline|1998|None
 shoreline_2003|None|shoreline|2003|None
 shoreline_2004|None|shoreline|2004|None
 shoreline_2009|None|shoreline|2009|None
-</pre></div>
+```
 
-<h3>Using method option</h3>
+### Using method option
 
-Method option is able to show vector in different way. By default <em>cols</em>
-value is used, the value <em>deltagaps</em> will print the delta between
-maps and also the gaps if they exist (like in this example).
+Method option is able to show vector in different way. By default *cols*
+value is used, the value *deltagaps* will print the delta between maps
+and also the gaps if they exist (like in this example).
 
-<div class="code"><pre>
+```shell
 t.vect.list method=deltagaps input=shoreline
 id|name|layer|mapset|start_time|end_time|interval_length|distance_from_begin
 shoreline_1849_1873@shoreline|shoreline_1849_1873|None|shoreline|1849|1873|24|0
@@ -51,19 +49,14 @@ None|None|None|None|2003|2004|1|154
 shoreline_2004@shoreline|shoreline_2004|None|shoreline|2004|None|None|155
 None|None|None|None|2004|2009|5|155
 shoreline_2009@shoreline|shoreline_2009|None|shoreline|2009|None|None|160
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.list.html">g.list</a>,
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>,
-<a href="t.list.html">t.list</a>,
-<a href="t.rast.list.html">t.rast.list</a>,
-<a href="t.rast3d.list.html">t.rast3d.list</a>
-</em>
+*[g.list](g.list.md), [t.create](t.create.md), [t.info](t.info.md),
+[t.list](t.list.md), [t.rast.list](t.rast.list.md),
+[t.rast3d.list](t.rast3d.list.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert
+Sören Gebbert

@@ -1,15 +1,15 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.build.all</em> runs <em><a href="v.build.html">v.build</a></em>
-for all vectors in the current mapset.
+*v.build.all* runs *[v.build](v.build.md)* for all vectors in the
+current mapset.
 
-<h3>Example</h3>
+### Example
 
-<div class="code"><pre>
+```shell
 # rebuild topology for all vector maps in the current mapset
 v.build.all
-</pre></div>
+```
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Radim Blazek

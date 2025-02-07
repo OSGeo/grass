@@ -1,63 +1,59 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.series.interp</em>
-interpolates new raster maps located temporal or spatial in between existing raster maps.
-The interpolation is performed at specific sampling positions. The sampling position for each output map must be specified,
-as well as the data position of the input maps.
-
+*r.series.interp* interpolates new raster maps located temporal or
+spatial in between existing raster maps. The interpolation is performed
+at specific sampling positions. The sampling position for each output
+map must be specified, as well as the data position of the input maps.
 The following interpolation methods are supported.
-<ul>
- <li>linear: Linear interpolation. At least two input maps and data positions are required.</li>
-</ul>
 
-<h2>EXAMPLES</h2>
+- linear: Linear interpolation. At least two input maps and data
+  positions are required.
 
-Interpolate linear three new maps at 3 sampling positions in the interval (0.0;1.0)
-<br>
-First prepare the input maps:
-<br>
-<div class="code"><pre>
+## EXAMPLES
+
+Interpolate linear three new maps at 3 sampling positions in the
+interval (0.0;1.0)  
+First prepare the input maps:  
+
+```shell
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 r.mapcalc expr="prec_1 = 100"
 r.mapcalc expr="prec_5 = 500"
-</pre></div>
+```
 
-<p>Interpolate
+Interpolate
 
-<div class="code"><pre>
+```shell
 r.series.interp --v input=prec_1,prec_5 datapos=0.0,1.0 \
                   output=prec_2,prec_3,prec_4 samplingpos=0.25,0.5,0.75 \
                   method=linear
-</pre></div>
+```
 
-<p>Interpolate using the file option.
-First prepare the input file:
-<br>
-<div class="code"><pre>
+Interpolate using the file option. First prepare the input file:  
+
+```shell
 echo "prec_2|0.25
 prec_3|0.5
-prec_4|0.75" &gt;&gt; outfile.txt
-</pre></div>
+prec_4|0.75" >> outfile.txt
+```
 
-<p>Interpolate:
+Interpolate:
 
-<div class="code"><pre>
+```shell
 r.series.interp --v input=prec_1,prec_5 datapos=0.0,1.0 file=outfile.txt method=linear
-</pre></div>
+```
 
 The resulting maps will have the values 200, 300 and 400.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="r.series.html">r.series</a>,
-<a href="r.series.accumulate.html">r.series.accumulate</a>
-</em>
-<p>
-<a href="https://grasswiki.osgeo.org/wiki/Large_raster_data_processing">Hints for large raster data processing</a>
+*[g.region](g.region.md), [r.series](r.series.md),
+[r.series.accumulate](r.series.accumulate.md)*
 
-<h2>AUTHOR</h2>
+[Hints for large raster data
+processing](https://grasswiki.osgeo.org/wiki/Large_raster_data_processing)
 
-S&ouml;ren Gebbert
+## AUTHOR
+
+Sören Gebbert

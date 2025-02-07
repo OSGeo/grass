@@ -1,29 +1,29 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.what.rast3</em> reads 3D raster value for each point in the vector and updates <b>col</b>
-column in vector attribute table by this value. The column should be type double. This module is based on
-<a href="v.what.rast.html">v.what.rast</a>.
-<br>
+*v.what.rast3* reads 3D raster value for each point in the vector and
+updates **col** column in vector attribute table by this value. The
+column should be type double. This module is based on
+[v.what.rast](v.what.rast.md).  
 If more points have the same category, attribute value is set to NULL.
 If 3D raster values is NULL, attribute value is set to NULL.
 
-<h2>NOTES</h2>
+## NOTES
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-A) Reading values from 3D raster map at position of vector points, writing these values
-   into a column of the attribute table connected to the vector map:
-<br>
-<div class="code"><pre>
+A\) Reading values from 3D raster map at position of vector points,
+writing these values into a column of the attribute table connected to
+the vector map:  
+
+```shell
 v.what.rast3 map=pnts raster3d=plume column=concentration
-</pre></div>
+```
 
-<p>
-B) In case of a vector map without attached attribute table, first add
-a new attribute table. This table is then populated with values
-queried from the raster map:
-<br>
-<div class="code"><pre>
+B\) In case of a vector map without attached attribute table, first add
+a new attribute table. This table is then populated with values queried
+from the raster map:  
+
+```shell
 # create new random 3d vector points map
 v.random -z output=pnts npoints=100 zmin=0  zmax=50
 
@@ -39,18 +39,14 @@ v.db.select map=pnts
 
 # verify statistics of uploaded values:
 v.univar map=pnts column=concentration type=point
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.db.addtable.html">v.db.addtable</a>,
-<a href="v.db.select.html">v.db.select</a>,
-<a href="v.what.rast.html">v.what.rast</a>,
-<a href="v.what.vect.html">v.what.vect</a>,
-<a href="v.univar.html">v.univar</a>
-</em>
+*[v.db.addtable](v.db.addtable.md), [v.db.select](v.db.select.md),
+[v.what.rast](v.what.rast.md), [v.what.vect](v.what.vect.md),
+[v.univar](v.univar.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Soeren Gebbert, heavily based on v.what.rast by Radim Blazek

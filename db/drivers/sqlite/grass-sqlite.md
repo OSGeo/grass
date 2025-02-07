@@ -1,82 +1,54 @@
-<!-- meta page description: SQLite DATABASE DRIVER -->
-
 The SQLite driver is the default DBMI backend.
 
-<h2>Creating a SQLite database</h2>
+## Creating a SQLite database
 
 GRASS is automatically creating the SQLite database if it is not yet
-existing when the first table is created in the SQLite database. It
-is sufficient to define the connection (see next step).
+existing when the first table is created in the SQLite database. It is
+sufficient to define the connection (see next step).
 
-<h2>Connecting GRASS to SQLite</h2>
+## Connecting GRASS to SQLite
 
-The database name 'sqlite.db' is at user's choice.
-Also the file storage location can be freely chosen. If the database
-does not exist, it will be automatically created when database content
-is created:
+The database name 'sqlite.db' is at user's choice. Also the file storage
+location can be freely chosen. If the database does not exist, it will
+be automatically created when database content is created:
 
-<div class="code"><pre>
+```shell
 # example for storing DB in mapset directory (keep single quotes):
 db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 db.connect -p
-</pre></div>
+```
 
-<h2>Supported SQL commands</h2>
+## Supported SQL commands
 
-All SQL commands supported by SQLite (for limitations, see
-SQLite help page:
-<a href="https://www.sqlite.org/lang.html">SQL As Understood By SQLite</a> and
-<a href="https://www.sqlite.org/omitted.html">Unsupported SQL</a>).
+All SQL commands supported by SQLite (for limitations, see SQLite help
+page: [SQL As Understood By SQLite](https://www.sqlite.org/lang.html)
+and [Unsupported SQL](https://www.sqlite.org/omitted.html)).
 
-<h2>Operators available in conditions</h2>
+## Operators available in conditions
 
 All SQL operators supported by SQLite.
 
-<h2>Browsing table data in DB</h2>
+## Browsing table data in DB
 
-A convenient SQLite front-end is <a href="https://sqlitebrowser.org/">sqlitebrowser</a>.
-To open a DB file stored within the current mapset,
-the following way is suggested (corresponds to above database connection):
+A convenient SQLite front-end is
+[sqlitebrowser](https://sqlitebrowser.org/). To open a DB file stored
+within the current mapset, the following way is suggested (corresponds
+to above database connection):
 
-<div class="code"><pre>
+```shell
 # fetch GRASS variables as shell environment variables:
 eval `g.gisenv`
 # use double quotes:
 sqlitebrowser "$GISDBASE/$LOCATION_NAME/$MAPSET"/sqlite/sqlite.db
-</pre></div>
+```
 
-<!-- doesn't work yet, why?:
-  ah, pending patch: https://www.sqlite.org/cvstrac/tktview?tn=1476
+## SEE ALSO
 
-<h2>Adding an unique ID column</h2>
-
-Import vector module require an unique ID column which can
-be generated as follows for a SQLite table:
-
-<div class="code"><pre>
-echo "
- ALTER TABLE mytable ADD ID integer;
- CREATE SEQUENCE mytable_seq;
- UPDATE mytabe SET ID = nextval('mytable_seq');
- DROP SEQUENCE mytable_seq;
-" | db.execute
-</pre></div>
--->
-
-<h2>SEE ALSO</h2>
-
-<em>
-  <a href="db.connect.html">db.connect</a>,
-  <a href="db.execute.html">db.execute</a>,
-  <a href="db.select.html">db.select</a>
-</em>
-<br><br>
-<em>
-  <a href="sql.html">SQL support in GRASS GIS</a>
-</em>
-<br><br>
-<em>
-  <a href="https://www.sqlite.org">SQLite web site</a>,
-  <a href="https://www.sqlite.org/quickstart.html">SQLite manual</a>,
-  <a href="https://www2.sqlite.org/cvstrac/wiki?p=ManagementTools">sqlite - Management Tools</a>
-</em>
+*[db.connect](db.connect.md), [db.execute](db.execute.md),
+[db.select](db.select.md)*  
+  
+*[SQL support in GRASS GIS](sql.md)*  
+  
+*[SQLite web site](https://www.sqlite.org), [SQLite
+manual](https://www.sqlite.org/quickstart.html), [sqlite - Management
+Tools](https://www2.sqlite.org/cvstrac/wiki?p=ManagementTools)*

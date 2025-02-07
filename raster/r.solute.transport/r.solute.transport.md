@@ -1,96 +1,93 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-This numerical program calculates numerical implicit transient and steady state
-solute transport in porous media in the saturated zone of an aquifer. The computation is based on
-raster maps and the current region settings. All initial- and boundary-conditions must be provided as
-raster maps. The unit of the coordinate reference system must be meters.
-<br>
-<p>This module is sensitive to mask settings. All cells which are outside the mask
-are ignored and handled as no flow boundaries.
-<br>
-This module calculates the concentration of the solution and optional the
-velocity field, based on the hydraulic conductivity,
-the effective porosity and the initial piecometric heads.
-The vector components can be visualized with paraview if they are exported
-with r.out.vtk.
-<br>
-<br>
-Use <a href="r.gwflow.html">r.gwflow</a> to compute the piezometric heights
-of the aquifer. The piezometric heights and the hydraulic conductivity
-are used to compute the flow direction and the mean velocity of the groundwater.
-This is the base of the solute transport computation.
+This numerical program calculates numerical implicit transient and
+steady state solute transport in porous media in the saturated zone of
+an aquifer. The computation is based on raster maps and the current
+region settings. All initial- and boundary-conditions must be provided
+as raster maps. The unit of the coordinate reference system must be
+meters.  
 
-<br>
-<br>
-The solute transport will always be calculated transient.
-For stady state computation set the timestep
-to a large number (billions of seconds).
-<br>
-<br>
-To reduce the numerical dispersion, which is a consequence of the convection term and
-the finite volume discretization, you can use small time steps and choose between full
-and exponential upwinding.
+This module is sensitive to mask settings. All cells which are outside
+the mask are ignored and handled as no flow boundaries.  
+This module calculates the concentration of the solution and optional
+the velocity field, based on the hydraulic conductivity, the effective
+porosity and the initial piecometric heads. The vector components can be
+visualized with paraview if they are exported with r.out.vtk.  
+  
+Use [r.gwflow](r.gwflow.md) to compute the piezometric heights of the
+aquifer. The piezometric heights and the hydraulic conductivity are used
+to compute the flow direction and the mean velocity of the groundwater.
+This is the base of the solute transport computation.  
+  
+The solute transport will always be calculated transient. For stady
+state computation set the timestep to a large number (billions of
+seconds).  
+  
+To reduce the numerical dispersion, which is a consequence of the
+convection term and the finite volume discretization, you can use small
+time steps and choose between full and exponential upwinding.
 
-<h2>NOTES</h2>
+## NOTES
 
-The solute transport calculation is based on a diffusion/convection partial differential equation and
-a numerical implicit finite volume discretization. Specific for this kind of differential
-equation is the combination of a diffusion/dispersion term and a convection term.
-The discretization results in an unsymmetric linear equation system in form of <i>Ax = b</i>,
-which must be solved. The solute transport partial
+The solute transport calculation is based on a diffusion/convection
+partial differential equation and a numerical implicit finite volume
+discretization. Specific for this kind of differential equation is the
+combination of a diffusion/dispersion term and a convection term. The
+discretization results in an unsymmetric linear equation system in form
+of *Ax = b*, which must be solved. The solute transport partial
 differential equation is of the following form:
 
-<p>(dc/dt)*R = div ( D grad c - uc) + cs -q/nf(c - c_in)
+(dc/dt)\*R = div ( D grad c - uc) + cs -q/nf(c - c_in)
 
-<ul>
-<li>c -- the concentration [kg/m^3]</li>
-<li>u -- vector of mean groundwater flow velocity</li>
-<li>dt -- the time step for transient calculation in seconds [s]</li>
-<li>R -- the linear retardation coefficient [-]</li>
-<li>D -- the diffusion and dispersion tensor [m^2/s]</li>
-<li>cs -- inner concentration sources/sinks [kg/m^3]</li>
-<li>c_in -- the solute concentration of influent water [kg/m^3]</li>
-<li>q -- inner well sources/sinks [m^3/s]</li>
-<li>nf -- the effective porosity [-] </li>
-</ul>
+- c -- the concentration \[kg/m^3\]
+- u -- vector of mean groundwater flow velocity
+- dt -- the time step for transient calculation in seconds \[s\]
+- R -- the linear retardation coefficient \[-\]
+- D -- the diffusion and dispersion tensor \[m^2/s\]
+- cs -- inner concentration sources/sinks \[kg/m^3\]
+- c_in -- the solute concentration of influent water \[kg/m^3\]
+- q -- inner well sources/sinks \[m^3/s\]
+- nf -- the effective porosity \[-\]
 
-<br>
-<br>
-Three different boundary conditions are implemented,
-the Dirichlet, Transmission and Neumann conditions.
-The calculation and boundary status of single cells can be set with the status map.
-The following states are supported:
+  
+  
+Three different boundary conditions are implemented, the Dirichlet,
+Transmission and Neumann conditions. The calculation and boundary status
+of single cells can be set with the status map. The following states are
+supported:
 
-<ul>
-<li>0 == inactive - the cell with status 0 will not be calculated, active cells will have a no flow boundary to an inactive cell</li>
-<li>1 == active - this cell is used for sloute transport calculation, inner sources can be defined for those cells</li>
-<li>2 == Dirichlet - cells of this type will have a fixed concentration value which do not change over time </li>
-<li>3 == Transmission - cells of this type should be placed on out-flow boundaries to assure the flow of the solute stream out </li>
-</ul>
+- 0 == inactive - the cell with status 0 will not be calculated, active
+  cells will have a no flow boundary to an inactive cell
+- 1 == active - this cell is used for sloute transport calculation,
+  inner sources can be defined for those cells
+- 2 == Dirichlet - cells of this type will have a fixed concentration
+  value which do not change over time
+- 3 == Transmission - cells of this type should be placed on out-flow
+  boundaries to assure the flow of the solute stream out
 
-<br>
-<br>
-Note that all required raster maps are read into main memory. Additionally the
-linear equation system will be allocated, so the memory consumption of this
-module rapidely grow with the size of the input maps.
+  
+  
+Note that all required raster maps are read into main memory.
+Additionally the linear equation system will be allocated, so the memory
+consumption of this module rapidely grow with the size of the input
+maps.  
+  
+The resulting linear equation system *Ax = b* can be solved with several
+solvers. Several iterative solvers with unsymmetric sparse and quadratic
+matrices support are implemented. The jacobi method, the Gauss-Seidel
+method and the biconjugate gradients-stabilized (bicgstab) method.
+Additionally a direct Gauss solver and LU solver are available. Those
+direct solvers only work with quadratic matrices, so be careful using
+them with large maps (maps of size 10.000 cells will need more than one
+gigabyte of ram). Always prefer a sparse matrix solver.
 
-<br>
-<br>
-The resulting linear equation system <i>Ax = b</i> can be solved with several solvers.
-Several iterative solvers with unsymmetric sparse and quadratic matrices support are implemented.
-The jacobi method, the Gauss-Seidel method and the biconjugate gradients-stabilized (bicgstab) method.
-Additionally a direct Gauss solver and LU solver are available. Those direct solvers
-only work with quadratic matrices, so be careful using them with large maps
-(maps of size 10.000 cells will need more than one gigabyte of ram).
-Always prefer a sparse matrix solver.
+## EXAMPLE
 
-<h2>EXAMPLE</h2>
+Use this small python script to create a working groundwater flow /
+solute transport area and data. Make sure you are not in a lat/lon
+projection.
 
-Use this small python script to create a working
-groundwater flow / solute transport area and data.
-Make sure you are not in a lat/lon projection.
-
-<div class="code"><pre>
+```shell
 #!/usr/bin/env python3
 # This is an example script how groundwater flow and solute transport are
 # computed within GRASS GIS
@@ -108,7 +105,7 @@ gs.run_command("g.region", res=1, res3=1, t=10, b=0, n=100, s=0, w=0, e=200)
 gs.run_command("r.mapcalc", expression="phead = if(col() == 1 , 50, 40)")
 gs.run_command("r.mapcalc", expression="phead = if(col() ==200  , 45 + row()/40, phead)")
 gs.run_command("r.mapcalc", expression="status = if(col() == 1 || col() == 200 , 2, 1)")
-gs.run_command("r.mapcalc", expression="well = if((row() == 50 &amp;&amp; col() == 175) || (row() == 10 &amp;&amp; col() == 135) , -0.001, 0)")
+gs.run_command("r.mapcalc", expression="well = if((row() == 50 && col() == 175) || (row() == 10 && col() == 135) , -0.001, 0)")
 gs.run_command("r.mapcalc", expression="hydcond = 0.00005")
 gs.run_command("r.mapcalc", expression="recharge = 0")
 gs.run_command("r.mapcalc", expression="top_conf = 20")
@@ -124,8 +121,8 @@ gs.run_command("r.gwflow", solver="cg", top="top_conf", bottom="bottom", phead="
   recharge="recharge", output="gwresult_conf", dt=8640000000000, type="confined")
 
 gs.message(_("generate the transport data"))
-gs.run_command("r.mapcalc", expression="c = if(col() == 15 &amp;&amp; row() == 75 , 500.0, 0.0)")
-gs.run_command("r.mapcalc", expression="cs = if(col() == 15 &amp;&amp; row() == 75 , 0.0, 0.0)")
+gs.run_command("r.mapcalc", expression="c = if(col() == 15 && row() == 75 , 500.0, 0.0)")
+gs.run_command("r.mapcalc", expression="cs = if(col() == 15 && row() == 75 , 0.0, 0.0)")
 gs.run_command("r.mapcalc", expression="tstatus = if(col() == 1 || col() == 200 , 3, 1)")
 gs.run_command("r.mapcalc", expression="diff = 0.0000001")
 gs.run_command("r.mapcalc", expression="R = 1.0")
@@ -142,17 +139,18 @@ for dt in range(30):
     bottom="bottom", phead="gwresult_conf", status="tstatus", hc_x="hydcond", hc_y="hydcond",\
     rd="R", cs="cs", q="well", nf="poros", output="stresult_conf_" + str(dt + 1), dt=864000, diff_x="diff",\
     diff_y="diff", c="stresult_conf_" + str(dt), al=0.1, at=0.01)
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em><a href="r.gwflow.html">r.gwflow</a></em><br>
-<em><a href="r3.gwflow.html">r3.gwflow</a></em><br>
-<em><a href="r.out.vtk.html">r.out.vtk</a></em><br>
+*[r.gwflow](r.gwflow.md)*  
+*[r3.gwflow](r3.gwflow.md)*  
+*[r.out.vtk](r.out.vtk.md)*  
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert
-<p>This work is based on the Diploma Thesis of S&ouml;ren Gebbert available
-<a href="https://grass.osgeo.org/gdp/hydrology/gebbert2007_diplom_stroemung_grass_gis.pdf">here</a>
+Sören Gebbert
+
+This work is based on the Diploma Thesis of Sören Gebbert available
+[here](https://grass.osgeo.org/gdp/hydrology/gebbert2007_diplom_stroemung_grass_gis.pdf)
 at Technical University Berlin in Germany.

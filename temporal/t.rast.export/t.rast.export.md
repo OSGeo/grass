@@ -1,45 +1,43 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast.export</em> exports a space time raster dataset (strds) as a tar
-archive. The archive contains the raster maps either as GeoTIFF files or as GRASS
-binary files exported using <em>r.pack</em>. The map specific color tables
-are exported in case of GeoTIFF files. In addition several metadata files
-are created in the archive that describe the
-temporal layout. All time stamps are stored in the file "list.txt",
-for each map one row. The name of the map, the start time and the
-end time are written. In case of a time instance, the start time is
-equal to the end time. The "init.txt" file stores the temporal type,
-the number of maps, the chosen export format and some other
-metadata. The "proj.txt" file stores the coordinate reference system information as a
-proj4 string of the project the space time raster dataset was
-exported from. The file "readme.txt" describes the file format. The
-output of <em>r.info</em> for each raster map in the space time dataset is
-stored in "metadata.txt".
-<p>
+*t.rast.export* exports a space time raster dataset (strds) as a tar
+archive. The archive contains the raster maps either as GeoTIFF files or
+as GRASS binary files exported using *r.pack*. The map specific color
+tables are exported in case of GeoTIFF files. In addition several
+metadata files are created in the archive that describe the temporal
+layout. All time stamps are stored in the file "list.txt", for each map
+one row. The name of the map, the start time and the end time are
+written. In case of a time instance, the start time is equal to the end
+time. The "init.txt" file stores the temporal type, the number of maps,
+the chosen export format and some other metadata. The "proj.txt" file
+stores the coordinate reference system information as a proj4 string of
+the project the space time raster dataset was exported from. The file
+"readme.txt" describes the file format. The output of *r.info* for each
+raster map in the space time dataset is stored in "metadata.txt".
 
-The tar archive can be compressed using the <b>compress</b> option. Gzip
-and bzip2 (default) are available. A <b>where</b> option can be specified,
+The tar archive can be compressed using the **compress** option. Gzip
+and bzip2 (default) are available. A **where** option can be specified,
 to export only a subset of the space time dataset. Archives exported
-with <em>t.rast.export</em> can be imported with
-<em><a href="t.vect.import.html">t.rast.import</a></em>.
+with *t.rast.export* can be imported with
+*[t.rast.import](t.vect.import.md)*.
 
-<h2>NOTES</h2>
+## NOTES
 
 The name of output file has to carry the suffix of the archive type, the
 following suffix can be used:
-<ul>
-<li><b>.tar</b> in the case of <b>compress=no</b></li>
-<li><b>.tar.bzip2</b> in the case of <b>compress=bzip2</b></li>
-<li><b>.tar.gzip</b> in the case of <b>compress=gzip</b></li>
-</ul>
 
-<h2>EXAMPLE</h2>
+- **.tar** in the case of **compress=no**
+- **.tar.bzip2** in the case of **compress=bzip2**
+- **.tar.gzip** in the case of **compress=gzip**
 
-In this example, all the raster maps of 2012 of "tempmean_monthly" will be exported:
+## EXAMPLE
 
-<div class="code"><pre>
+In this example, all the raster maps of 2012 of "tempmean_monthly" will
+be exported:
+
+```shell
 t.rast.export input=tempmean_monthly output=tempmean_monthly.tar.bzip2 \
-              where="start_time &gt;= '2012-01-01' and start_time &lt; '2013-01-01'"
+              where="start_time >= '2012-01-01' and start_time < '2013-01-01'"
 
 tar xvjf precipitation_daily.tar.bzip2
 
@@ -128,19 +126,14 @@ Files:
                  time stamps in ISO-Format. Field separator is |
  metadata.txt -- The output of t.info
    readme.txt -- This file
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.rast.import.html">t.rast.import</a>,
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>,
-<a href="r.out.gdal.html">r.out.gdal</a>,
-<a href="r.pack.html">r.pack</a>,
-<a href="t.vect.export.html">t.vect.export</a>
-</em>
+*[t.rast.import](t.rast.import.md), [t.create](t.create.md),
+[t.info](t.info.md), [r.out.gdal](r.out.gdal.md), [r.pack](r.pack.md),
+[t.vect.export](t.vect.export.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

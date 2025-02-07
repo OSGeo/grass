@@ -1,50 +1,48 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.li.simpson</em> calculates the "Simpson's diversity index" as:<br>
-<!-- TODO: here should be the actual formula in alt (same for all r.li) -->
-<img src="r_li_simpson_formula.png" alt="r.li.simpson formula"> <br>
+*r.li.simpson* calculates the "Simpson's diversity index" as:  
+![r.li.simpson formula](r_li_simpson_formula.png)  
 with:
-<ul>
-<li><b>i</b>: patch type</li>
-<li><b>m</b>: number of different patch types</li>
-<li><b>p<small><small>i</small></small></b>: proportional abundance of
-patch type <i>i</i> </li>
-</ul>
 
-<h2>NOTES</h2>
+- **i**: patch type
+- **m**: number of different patch types
+- **p<span class="small"><span class="small">i</span></span>**:
+  proportional abundance of patch type *i*
 
-Do not use absolute path names for the <b>config</b> and <b>output</b>
-file/map parameters.
-If the "moving window" method was selected in <b>g.gui.rlisetup</b>, then the
-output will be a raster map, otherwise an ASCII file will be generated in
-the folder <code>C:\Users\userxy\AppData\Roaming\GRASS8\r.li\output\</code>
-(MS-Windows) or <code>$HOME/.grass8/r.li/output/</code> (GNU/Linux).
-<p>
-<!-- TODO: verify next: -->
-If the input raster map contains only NULL values then <em>r.li.simpson</em>
+## NOTES
+
+Do not use absolute path names for the **config** and **output**
+file/map parameters. If the "moving window" method was selected in
+**g.gui.rlisetup**, then the output will be a raster map, otherwise an
+ASCII file will be generated in the folder
+`C:\Users\userxy\AppData\Roaming\GRASS8\r.li\output\` (MS-Windows) or
+`$HOME/.grass8/r.li/output/` (GNU/Linux).
+
+If the input raster map contains only NULL values then *r.li.simpson*
 returns NULL.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-To calculate Simpson's diversity index on map <em>my_map</em>, using
-<em>my_conf</em> configuration file (previously defined with
-<em>g.gui.rlisetup</em>) and saving results in <em>my_out</em>, run:
-<div class="code"><pre>
+To calculate Simpson's diversity index on map *my_map*, using *my_conf*
+configuration file (previously defined with *g.gui.rlisetup*) and saving
+results in *my_out*, run:
+
+```shell
 r.li.simpson input=my_map conf=my_conf output=my_out
-</pre></div>
-<p>
+```
 
 Forest map (Spearfish sample dataset) example:
-<div class="code"><pre>
+
+```shell
 g.region raster=landcover.30m -p
-r.mapcalc "forests = if(landcover.30m &gt;= 41 &amp;&amp; landcover.30m &lt;= 43,1,null())"
+r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
 r.li.simpson input=forests conf=movwindow7 out=forests_simpson_mov7
 r.univar forests_simpson_mov7
-</pre></div>
-<p>
+```
 
 Forest map (North Carolina sample dataset) example:
-<div class="code"><pre>
+
+```shell
 g.region raster=landclass96 -p
 r.mapcalc "forests = if(landclass96 == 5, 1, null() )"
 r.li.simpson input=forests conf=movwindow7 out=forests_simpson_mov7
@@ -55,22 +53,21 @@ r.to.vect input=forests output=forests type=area
 d.mon wx0
 d.rast forests_simpson_mov7
 d.vect forests type=boundary
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.li.html">r.li</a> (package overview),
-<a href="g.gui.rlisetup.html">g.gui.rlisetup</a>
-</em>
+*[r.li](r.li.md) (package overview),
+[g.gui.rlisetup](g.gui.rlisetup.md)*
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
-Gen. Tech. Rep. PNW-351. (<a href="https://doi.org/10.2737/PNW-GTR-351">PDF</a>)
+Gen. Tech. Rep. PNW-351. ([PDF](https://doi.org/10.2737/PNW-GTR-351))
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Serena Pallecchi, student of Computer Science University of Pisa (Italy).<br>
+Serena Pallecchi, student of Computer Science University of Pisa
+(Italy).  
 Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
