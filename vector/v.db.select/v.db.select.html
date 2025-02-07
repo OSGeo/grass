@@ -16,7 +16,7 @@ e.g., when working in the command line or obtaining specific values from the att
 table using the <em>v.db.select</em> GUI dialog.
 
 <p>
-The individual fields (attribute values) are separated by a pipe (<tt>|</tt>)
+The individual fields (attribute values) are separated by a pipe (<code>|</code>)
 which can be customized using the <b>separator</b> option.
 The records (rows) are separated by newlines.
 
@@ -32,8 +32,8 @@ cat|road_name|multilane|year|length
 </pre></div>
 
 When escaping is enabled, the following characters in the fields are escaped:
-backslash (<tt>\\</tt>), carriage return (<tt>\r</tt>), line feed (<tt>\n</tt>),
-tabulator (<tt>\t</tt>), form feed (<tt>\f</tt>), and backslash (<tt>\b</tt>).
+backslash (<code>\\</code>), carriage return (<code>\r</code>), line feed (<code>\n</code>),
+tabulator (<code>\t</code>), form feed (<code>\f</code>), and backslash (<code>\b</code>).
 
 <p>
 No quoting or escaping is performed by default, so if these characters are in
@@ -50,7 +50,7 @@ or when the separators are set to one of the escaped characters.
 <h4>CSV</h4>
 
 CSV (comma-separated values) has many variations. This module by default produces
-CSV with comma (<tt>,</tt>) as the field separator (delimiter). All text fields
+CSV with comma (<code>,</code>) as the field separator (delimiter). All text fields
 (based on the type) are quoted with double quotes. Double quotes in fields are
 represented as two double quotes. Newline characters in the fields are present
 as-is in the output. Header is included by default containing column names.
@@ -95,11 +95,11 @@ The standard JSON escapes are performed (backslash, carriage return, line feed,
 tabulator, form feed, backslash, and double quote) for string values.
 Numbers in the database such as integers and doubles are represented as numbers,
 while texts (TEXT, VARCHAR, etc.) and dates in the database are represented
-as strings in JSON. NULL values in database are represented as JSON <tt>null</tt>.
+as strings in JSON. NULL values in database are represented as JSON <code>null</code>.
 Indentation and newlines in the output are minimal and not guaranteed.
 
 <p>
-Records which are the result of the query are stored under key <tt>records</tt>
+Records which are the result of the query are stored under key <code>records</code>
 as an array (list) of objects (collections of key-value pairs).
 The keys for attributes are lowercase or uppercase depending on how
 the columns were defined in the database.
@@ -174,7 +174,7 @@ separated by separator. The individual records can be separated by
 the vertical separator (<b>vertical_separator</b> option).
 
 <p>
-Example with (horizontal) separator <tt>=</tt> and vertical separator <tt>newline</tt>:
+Example with (horizontal) separator <code>=</code> and vertical separator <code>newline</code>:
 
 <div class="code"><pre>
 cat=1

@@ -1744,17 +1744,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             )
         elif spatial_relation == "is_contained":
             spatial_where_template = (
-                "(north <= {n}"
-                " AND south >= {s}"
-                " AND east <= {e}"
-                " AND west >= {w}"
+                "(north <= {n} AND south >= {s} AND east <= {e} AND west >= {w}"
             )
         elif spatial_relation == "contains":
             spatial_where_template = (
-                "(north >= {n}"
-                " AND south <= {s}"
-                " AND east >= {e}"
-                " AND west <= {w}"
+                "(north >= {n} AND south <= {s} AND east >= {e} AND west <= {w}"
             )
 
         if self.get_type() == "str3ds":

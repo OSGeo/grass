@@ -337,11 +337,9 @@ class ImportDialog(wx.Dialog):
         if self.importType == "gdal":
             nBands = int(userData.get("nbands", 1)) if userData else 1
 
-            if UserSettings.Get(group="rasterLayer", key="opaque", subkey="enabled"):
-                nFlag = True
-            else:
-                nFlag = False
-
+            nFlag = bool(
+                UserSettings.Get(group="rasterLayer", key="opaque", subkey="enabled")
+            )
             for i in range(1, nBands + 1):
                 nameOrig = name
                 if nBands > 1:
@@ -400,13 +398,12 @@ class ImportDialog(wx.Dialog):
 
             ret = dlg.ShowModal()
 
-            if ret == wx.ID_OK:
-                # do not import unchecked layers
-                for itm in reversed(list(dlg.GetData(checked=False))):
-                    idx = itm[-1]
-                    layers.pop(idx)
-            else:
+            if ret != wx.ID_OK:
                 return None
+            # do not import unchecked layers
+            for itm in reversed(list(dlg.GetData(checked=False))):
+                idx = itm[-1]
+                layers.pop(idx)
 
         return layers
 
@@ -504,8 +501,7 @@ class GdalImportDialog(ImportDialog):
                         GError(
                             parent=self,
                             message=_(
-                                "The Python GDAL package is missing."
-                                " Please install it."
+                                "The Python GDAL package is missing. Please install it."
                             ),
                         )
                         return

@@ -630,8 +630,7 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
                 import sqlite3
             except ImportError:
                 msgr.error(
-                    "Unable to locate the sqlite SQL Python interface"
-                    " module sqlite3."
+                    "Unable to locate the sqlite SQL Python interface module sqlite3."
                 )
                 raise
             dbmi = sqlite3

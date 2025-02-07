@@ -48,6 +48,7 @@ class TestCase(unittest.TestCase):
     Be especially careful and always use keyword argument syntax for *msg*
     parameter.
     """
+
     longMessage = True  # to get both standard and custom message
     maxDiff = None  # we can afford long diffs
     _temp_region = None  # to control the temporary region
@@ -133,14 +134,17 @@ class TestCase(unittest.TestCase):
         name = os.environ.pop("WIND_OVERRIDE")
         if name != cls._temp_region:
             # be strict about usage of region
-            raise RuntimeError(
+            msg = (
                 "Inconsistent use of"
                 " TestCase.use_temp_region, WIND_OVERRIDE"
                 " or temporary region in general\n"
                 "Region to which should be now deleted ({n})"
                 " by TestCase class"
                 "does not correspond to currently set"
-                " WIND_OVERRIDE ({c})",
+                " WIND_OVERRIDE ({c})"
+            )
+            raise RuntimeError(
+                msg,
                 n=cls._temp_region,
                 c=name,
             )
@@ -255,20 +259,21 @@ class TestCase(unittest.TestCase):
                     " provided in reference"
                     ": %s\n" % (module, ", ".join(missing))
                 )
-            if mismatch:
-                stdMsg = "%s difference:\n" % module
-                stdMsg += "mismatch values"
-                stdMsg += " (key, reference, actual): %s\n" % mismatch
-                stdMsg += "command: %s %s" % (module, parameters)
-            else:
+            if not mismatch:
                 # we can probably remove this once we have more tests
                 # of keyvalue_equals and diff_keyvalue against each other
-                raise RuntimeError(
+                msg = (
                     "keyvalue_equals() showed difference but"
                     " diff_keyvalue() did not. This can be"
                     " a bug in one of them or in the caller"
                     " (assertModuleKeyValue())"
                 )
+                raise RuntimeError(msg)
+            stdMsg = "%s difference:\n" % module
+            stdMsg += "mismatch values"
+            stdMsg += " (key, reference, actual): %s\n" % mismatch
+            stdMsg += "command: %s %s" % (module, parameters)
+
             self.fail(self._formatMessage(msg, stdMsg))
 
     def assertRasterFitsUnivar(self, raster, reference, precision=None, msg=None):
@@ -1331,7 +1336,7 @@ class TestCase(unittest.TestCase):
                 module.name, module.get_python(), module.returncode, errors=errors
             )
         # TODO: use this also in assert and apply when appropriate
-        if expecting_stdout and not module.outputs.stdout.strip():
+        if expecting_stdout and (not module.outputs.stdout.strip()):
             if module.outputs.stderr:
                 errors = " The errors are:\n" + module.outputs.stderr
             else:
@@ -1441,9 +1446,11 @@ class TestCase(unittest.TestCase):
 def _module_from_parameters(module, **kwargs):
     if kwargs:
         if not isinstance(module, str):
-            raise ValueError("module can be only string or PyGRASS Module")
+            msg = "module can be only string or PyGRASS Module"
+            raise ValueError(msg)
         if isinstance(module, Module):
-            raise ValueError("module can be only string if other parameters are given")
+            msg = "module can be only string if other parameters are given"
+            raise ValueError(msg)
             # allow passing all parameters in one dictionary called parameters
         if list(kwargs.keys()) == ["parameters"]:
             kwargs = kwargs["parameters"]
@@ -1454,20 +1461,24 @@ def _module_from_parameters(module, **kwargs):
 def _check_module_run_parameters(module):
     # in this case module already run and we would start it again
     if module.run_:
-        raise ValueError("Do not run the module manually, set run_=False")
+        msg = "Do not run the module manually, set run_=False"
+        raise ValueError(msg)
     if not module.finish_:
-        raise ValueError(
+        msg = (
             "This function will always finish module run,"
             " set finish_=None or finish_=True."
         )
+        raise ValueError(msg)
     # we expect most of the usages with stdout=PIPE
     # TODO: in any case capture PIPE always?
     if module.stdout_ is None:
         module.stdout_ = subprocess.PIPE
     elif module.stdout_ != subprocess.PIPE:
-        raise ValueError("stdout_ can be only PIPE or None")
+        msg = "stdout_ can be only PIPE or None"
+        raise ValueError(msg)
     if module.stderr_ is None:
         module.stderr_ = subprocess.PIPE
     elif module.stderr_ != subprocess.PIPE:
-        raise ValueError("stderr_ can be only PIPE or None")
+        msg = "stderr_ can be only PIPE or None"
+        raise ValueError(msg)
         # because we want to capture it

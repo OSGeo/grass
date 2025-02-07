@@ -152,10 +152,10 @@ v.distance from=pnt to=ar dmax=0 upload=cat column=areacat
 
 Create a vector map containing connecting lines and investigate mean
 distance to targets. An alternative solution is to use
-the <tt>v.distance upload=dist</tt> option to upload distances into
+the <code>v.distance upload=dist</code> option to upload distances into
 the <i>bugs</i> vector directly, then run v.univar on that. Also note
-you can upload two columns at a time, e.g. <tt>v.distance
-upload=cat,dist column=nearest_id,dist_to_nr</tt>.
+you can upload two columns at a time, e.g. <code>v.distance
+upload=cat,dist column=nearest_id,dist_to_nr</code>.
 
 <div class="code"><pre>
 # create working copy
@@ -220,6 +220,46 @@ from_cat to_cat       dist
 5      70406.23   75538.87  274558.98     501.11          0 ...
 ...
 </pre></div>
+
+<h3>Print in JSON</h3>
+
+<div class="code"><pre>
+v.distance -p from=busroute_a to=busstopsall upload=dist,to_attr to_column=routes format=json
+</pre></div>
+
+<div class="code"><pre>
+[
+    {
+        "from_cat": 1,
+        "to_cat": 112,
+        "distances": [
+            {
+                "value": 0.1428123184481199,
+                "name": "dist"
+            },
+            {
+                "value": "8,A",
+                "name": "to_attr"
+            }
+        ]
+    },
+    {
+        "from_cat": 2,
+        "to_cat": 44,
+        "distances": [
+            {
+                "value": 0.10232660032693719,
+                "name": "dist"
+            },
+            {
+                "value": "9,A",
+                "name": "to_attr"
+            }
+        ]
+    }
+]
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 

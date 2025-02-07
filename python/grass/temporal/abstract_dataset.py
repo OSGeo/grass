@@ -74,7 +74,7 @@ class AbstractDataset(
         topologies must be build first using the SpatioTemporalTopologyBuilder.
 
         :return: The dictionary with relations as keys and number as values or
-                 None in case the topology  wasn't build
+                 None in case the topology wasn't built
         """
         if self.is_temporal_topology_build() and not self.is_spatial_topology_build():
             return self.get_number_of_temporal_relations()
@@ -104,11 +104,10 @@ class AbstractDataset(
         :return: A dictionary with "spatial" and "temporal" as keys that
                  have boolean values
         """
-        d = {}
-        d["spatial"] = self.is_spatial_topology_build()
-        d["temporal"] = self.is_temporal_topology_build()
-
-        return d
+        return {
+            "spatial": self.is_spatial_topology_build(),
+            "temporal": self.is_temporal_topology_build(),
+        }
 
     def print_topology_info(self) -> None:
         if self.is_temporal_topology_build():
@@ -342,8 +341,7 @@ class AbstractDataset(
         Top and bottom are set to 0 in case of a two dimensional spatial
         extent.
 
-        :return: A the spatial extent as tuple (north, south, east, west,
-                 top, bottom)
+        :return: A the spatial extent as tuple (north, south, east, west, top, bottom)
         """
         return self.spatial_extent.get_spatial_extent_as_tuple()
 
