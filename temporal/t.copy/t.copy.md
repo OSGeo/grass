@@ -21,7 +21,7 @@ In the North Carolina sample dataset with the separately available
 mapset *modis_lst* included, copy the space-time raster dataset
 *LST_Day_monthly@modis_lst* to the current mapset *user1*:
 
-```shell
+```sh
 g.mapsets mapset=modis_lst operation=add
 t.copy input=LST_Day_monthly@modis_lst type=strds output=LST_Day_monthly
 ```

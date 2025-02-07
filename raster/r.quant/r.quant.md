@@ -13,7 +13,7 @@ The quant rules have to be entered interactively.
 
 If rules is specified, the input has the form:
 
-```shell
+```sh
 value1:value2:cat1:[cat2]
 ```
 

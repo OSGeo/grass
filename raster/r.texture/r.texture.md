@@ -162,48 +162,32 @@ threads to be used with the **nprocs** parameter (default 1). Figures
 below show benchmark results running on Intel® Core™ i9-10940X CPU @
 3.30GHz. See benchmark scripts in the source code for more details.
 
-<div align="center" style="margin: 10px">
-
 <img src="r_texture_mapsize_time.png" data-border="0"
 alt="time benchmark for r.texture with different map sizes" />  
 *Figure 1: Benchmark shows execution time for different number of cells
 (1M, 2M, 4M, and 8M) and the fixed size of window (3×3).*
-
-</div>
-
-<div align="center" style="margin: 10px">
 
 <img src="r_texture_mapsize_efficiency.png" data-border="0"
 alt="efficiency benchmark for r.texture with different map sizes" />  
 *Figure 2: Benchmark shows efficiency for different numbers of cells
 (1M, 2M, 4M, and 8M) and the fixed size of window (3×3).*
 
-</div>
-
-<div align="center" style="margin: 10px">
-
 <img src="r_texture_window_time.png" data-border="0"
 alt="time benchmark for r.texture with different window sizes" />  
 *Figure 3: Benchmark shows execution time for different sizes of windows
 (3×3, 9×9, 15×15, and 27×27) and the fixed number of cells (1M).*
-
-</div>
-
-<div align="center" style="margin: 10px">
 
 <img src="r_texture_window_efficiency.png" data-border="0"
 alt="efficiency benchmark for r.texture with different window sizes" />  
 *Figure 4: Benchmark shows efficiency for different sizes of windows
 (3×3, 9×9, 15×15, and 27×27) and the fixed number of cells (1M).*
 
-</div>
-
 ## EXAMPLE
 
 Calculation of Angular Second Moment of B/W orthophoto (North Carolina
 data set):
 
-```shell
+```sh
 g.region raster=ortho_2001_t792_1m -p
 # set grey level color table 0% black 100% white
 r.colors ortho_2001_t792_1m color=grey
@@ -221,7 +205,7 @@ ortho_texture_ASM_0, ortho_texture_ASM_45, ortho_texture_ASM_90,
 ortho_texture_ASM_135. Reducing the number of gray levels
 (equal-probability quantizing):
 
-```shell
+```sh
 g.region -p raster=ortho_2001_t792_1m
 
 # enter as one line or with \
@@ -235,7 +219,7 @@ before.
 Second example: analysis of IDM (homogeneity) on a simple raster with
 North-South line pattern.
 
-```shell
+```sh
 # import raster
 r.in.ascii in=- output=lines << EOF
 north: 9

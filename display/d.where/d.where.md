@@ -13,7 +13,7 @@ a file, it will be written to the file as well.
 
 Mouse buttons:
 
-```shell
+```sh
      Left:   where am i
      Middle: draw to/from here
      Right:  quit this
@@ -40,7 +40,7 @@ bottom left).
 
 Query position in map (North Carolina sample dataset):
 
-```shell
+```sh
 d.rast elevation
 d.where
 ```

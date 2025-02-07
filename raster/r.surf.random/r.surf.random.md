@@ -8,7 +8,7 @@ user's platform.
 
 ## EXAMPLE
 
-```shell
+```sh
 g.region -p n=228500 s=215000 w=630000 e=645000 res=10
 r.surf.random out=random min=0 max=100
 
@@ -16,24 +16,16 @@ r.surf.random out=random min=0 max=100
 r.univar random
 ```
 
-<div align="center" style="margin: 10px">
-
 [<img src="r_surf_random.jpg" data-border="0" width="600" height="293"
 alt="r.random.surface example (min: 10; max: 100)" />](r_surf_random.jpg)  
 *Figure: Random surface example (min: 10; max: 100)*
 
-</div>
-
 With the histogram tool the cell values versus count can be shown.
-
-<div align="center" style="margin: 10px">
 
 [<img src="r_surf_random_hist.png" data-border="0" width="600"
 height="280"
 alt="r.random.surface example histogram (min: 10; max: 100)" />](r_surf_random_hist.png)  
 *Figure: Histogram of random surface example (min: 10; max: 100)*
-
-</div>
 
 ## SEE ALSO
 

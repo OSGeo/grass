@@ -9,7 +9,7 @@ as costs to traverse a length unit (e.g. meter) of the segment. For
 example, if the speed limit is 100 km / h, the cost to traverse a 10 km
 long road segment must be calculated as
 
-```shell
+```sh
 length / speed = 10 km / (100 km/h) = 0.1 h.
 ```
 
@@ -33,7 +33,7 @@ Nodes can be
 
 The syntax is as follows:
 
-```shell
+```sh
 id start_point_category end_point_category
 ```
 
@@ -41,7 +41,7 @@ id start_point_category end_point_category
 
 or
 
-```shell
+```sh
 id start_point_x start_point_y end_point_x end_point_y
 ```
 
@@ -98,7 +98,7 @@ Shortest (red) and fastest (blue) path between two digitized nodes
 
 <img src="vnetpath.png" data-border="1" alt="v.net.path example" />
 
-```shell
+```sh
 # Spearfish
 
 echo "1|601955.1|4916944.9|start
@@ -152,7 +152,7 @@ echo "1 1 2" | v.net.path myroads_net_time arc_layer=3 node_layer=2 arc_column=c
 
 To display the result, run for example:
 
-```shell
+```sh
 g.region vector=myroads_net
 d.mon x0
 d.vect myroads_net

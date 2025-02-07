@@ -45,7 +45,7 @@ associated with it.
 
 The name is misleading. The actual conversion used is
 
-```shell
+```sh
   H.i.s + G.(1-s)
 
 where
@@ -71,7 +71,7 @@ the program *[d.his](d.his.md)*.
 Recreate the following example for *d.his* using *r.his*. First, create
 shaded relief and show it.
 
-```shell
+```sh
 g.region raster=elevation
 r.relief input=elevation output=elevation_shaded_relief
 
@@ -82,7 +82,7 @@ d.his hue=elevation intensity=elevation_shaded_relief brighten=50
 Second, compute lighter version of color of shaded relief. Then convert
 from HIS model to RGB and show the result.
 
-```shell
+```sh
 r.mapcalc "elevation_shaded_relief_bright_50 = #elevation_shaded_relief * 1.5"
 r.colors elevation_shaded_relief_bright_50 color=grey255
 r.his hue=elevation intensity=elevation_shaded_relief_bright_50 \

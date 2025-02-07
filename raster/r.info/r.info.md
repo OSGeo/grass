@@ -13,7 +13,7 @@ The user can save the tabular output to a file by using the UNIX
 redirection mechanism (\>); for example, the user might save a report on
 the *soils* map layer in a file called *soil.txt* by typing:
 
-```shell
+```sh
 r.info map=soils > soil.txt
 ```
 
@@ -32,7 +32,7 @@ after Total Cells.
 Below is a full report produced by *r.info* for the raster map *slope*
 in the North Carolina sample data base:
 
-```shell
+```sh
 r.info slope
  +----------------------------------------------------------------------------+
  | Map:      slope                          Date: Tue Nov  7 01:11:23 2006    |
@@ -75,7 +75,7 @@ module:
 Output in shell script style, useful for eval
 (`` eval `r.info -g slope` ``):
 
-```shell
+```sh
 r.info -g slope
 north=228500
 south=215000
@@ -92,7 +92,7 @@ ncats=255
 
 Output the map data range:
 
-```shell
+```sh
 r.info -r slope
 min=0
 max=38.68939
@@ -100,7 +100,7 @@ max=38.68939
 
 Output the extended map data metadata in shell style:
 
-```shell
+```sh
 r.info -e slope
 map=slope
 mapset=PERMANENT
@@ -122,11 +122,10 @@ comments="slope map elev = elev_ned10mzfactor = 1.00 format = degreesmin_slp_all
 Finally, the output from *r.info* can be output in JSON by passing the
 **format=json** option.
 
-```shell
+```sh
 r.info slope format=json
 ```
-
-```shell
+```sh
 {
     "north": 228500,
     "south": 215000,

@@ -28,7 +28,7 @@ coordinates):
 
 ## EXAMPLE
 
-```shell
+```sh
 g.region raster=soilsID
 r.object.geometry input=soilsID output=soils_geom.txt
 ```
@@ -36,11 +36,10 @@ r.object.geometry input=soilsID output=soils_geom.txt
 The **format=json** option can be used to change the output format to
 JSON:
 
-```shell
+```sh
 r.object.geometry input=zipcodes format=json
 ```
-
-```shell
+```sh
 [
     {
         "category": 1,

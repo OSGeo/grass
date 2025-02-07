@@ -8,7 +8,7 @@ objects.
 
 ### Graphically extract roads from a roads map
 
-```shell
+```sh
 d.mon x0
 d.vect roads
 d.extract input=roads output=interstate

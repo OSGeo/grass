@@ -15,7 +15,7 @@ Matlab vector line maps are simply a series of "x y" data points. Lines
 are separated by a row containing `NaN NaN`. Output from Matlab with
 this command:  
 
-```shell
+```sh
     save filename.txt arrayname -ASCII
 ```
 

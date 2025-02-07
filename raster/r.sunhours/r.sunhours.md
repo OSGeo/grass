@@ -33,7 +33,7 @@ used.
 Calculate the sun elevation angle map for 2010-10-11 at 14:00h solar
 time:
 
-```shell
+```sh
 # set computational region to North Carolina state extent
 g.region n=318500 s=-16000 w=124000 e=963000 res=500 -p
 r.sunhours elevation=sun_elev year=2010 month=10 day=11 hour=14 minute=00
@@ -55,7 +55,7 @@ Calculate photoperiod of day-of-year 001 (1st January) of 2012 for the
 current computational region, ignoring cast shadow effects of the
 terrain:
 
-```shell
+```sh
 g.region -p
 r.sunhours sunhour=photoperiod_doy_001 year=2012 day=1
 ```

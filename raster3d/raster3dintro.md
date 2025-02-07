@@ -16,13 +16,9 @@ size of the tiles can be specified at import time with a given import
 module such as [r3.in.ascii](r3.in.ascii.md) or the data can be retiled
 using [r3.retile](r3.retile.md) after import or creation.
 
-<div align="center" style="margin: 10px">
-
 <img src="raster3d_layout.png" data-border="0" />  
 *The 3D raster map coordinate system and the internal tile layout of the
 RASTER3D library*
-
-</div>
 
 ### Terminology and naming
 

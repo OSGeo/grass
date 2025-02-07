@@ -21,7 +21,7 @@ will notice that this path might go through a vertex of a line. If this
 is not what you wanted you might need to process the map in
 *[v.buffer](v.buffer.md)*, initially with a small value. Example:
 
-```shell
+```sh
 v.buffer input=map output=bufferedmap buffer=1 type=point,line,area,boundary
 ```
 
@@ -34,7 +34,7 @@ map.
 If you need to add additional points to compute a shortest path between
 them afterwards you can use the **coordinates** parameter, e.g.:
 
-```shell
+```sh
 coordinates=25556200,6686400,25556400,6686600
 ```
 
@@ -48,7 +48,7 @@ vis will be the computed visibility graph and the output the new
 visibility graph which will be the vis + the new points given with
 coordinate (edges will be computed as well).
 
-```shell
+```sh
 v.net.visibility input=map visibility=vis_map output=new_vis_map \
       coordinates=25556200,6686400,25556400,6686600
 ```
@@ -60,7 +60,7 @@ v.net.visibility input=map visibility=vis_map output=new_vis_map \
 A simple example (North Carolina sample data) showing how to use the
 module:
 
-```shell
+```sh
 v.extract input=zipcodes_wake output=areas_7_11_25 cats=7,11,25
 g.region vector=zipcodes_wake
 d.mon wx0
@@ -75,7 +75,7 @@ d.vect areas_7_11_25 color=red type=boundary
 An example on how to use *[v.buffer](v.buffer.md)* along with the
 module:
 
-```shell
+```sh
 v.buffer input=lines output=buffered_lines buffer=1
 v.net.visibility input=buffered_lines output=graph
 d.vect graph
@@ -87,7 +87,7 @@ d.vect lines col=red
 An example on how to use the coordinate parameter. This will compute the
 visibility graph of the vector map lines with the point 2555678,6686343:
 
-```shell
+```sh
 v.net.visibility input=lines output=graph coordinates=2555678,6686343
 d.vect graph
 d.vect lines col=red
@@ -100,7 +100,7 @@ parameter with the vis parameter. Here the vector map graph is computed
 then a new visibility graph is computed from it with the point
 669547.97,208348.20 extra:
 
-```shell
+```sh
 v.extract input=zipcodes_wake output=areas_7_11_25 cats=7,11,25
 g.region vector=zipcodes_wake
 d.mon wx0
@@ -119,7 +119,7 @@ d.vect areas_7_11_25 color=red type=boundary
 
 An example for connections of points (Spearfish):
 
-```shell
+```sh
 v.net.visibility input=archsites output=graph
 g.region vector=archsites
 d.mon wx0
@@ -136,7 +136,7 @@ Here is an example with artificial data.
 Load data using here document syntax (Bash and unix-like commands lines
 only):
 
-```shell
+```sh
 v.in.ascii input=- output=simple format=standard <<EOF
 VERTI:
 B  6
@@ -190,7 +190,7 @@ EOF
 
 Compute the graph:
 
-```shell
+```sh
 v.net.visibility input=simple output=graph
 ```
 

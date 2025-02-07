@@ -14,20 +14,20 @@ When *d.vect* is used with **where** parameter on MS Windows Command
 Prompt, it is important to use `ˆ` carret symbol for escaping special
 characters `< > ( ) & | , ; "`.
 
-```shell
+```sh
 d.vect map=vector_map where="cat ˆ> 10 AND cat ˆ< 20"
 ```
 
 By default *d.vect* areas are filled with **fill_color** and outlined
 with **color**. Area outlines can be suppressed with
 
-```shell
+```sh
 d.vect map=vector_map color=none
 ```
 
 and areas can be made transparent with
 
-```shell
+```sh
 d.vect map=vector_map fill_color=none
 ```
 
@@ -40,7 +40,7 @@ values.
 
 A table for a vector map might look like this:
 
-```shell
+```sh
 db.select sql="select * from testisola"
 cat|label|GRASSRGB
 0|no data|255:255:255
@@ -54,13 +54,13 @@ cat|label|GRASSRGB
 To add the GRASSRGB color column, use
 *[v.db.addcolumn](v.db.addcolumn.md)*:
 
-```shell
+```sh
 v.db.addcolumn map=testisola columns="GRASSRGB varchar(11)"
 ```
 
 To add/change a color, use *[v.db.update](v.db.update.md)*:
 
-```shell
+```sh
 v.db.update map=testisola column=GRASSRGB value="123:45:237" where="cat=139"
 ```
 
@@ -82,7 +82,7 @@ default (which might not be the same as '1').
 
 Spearfish examples:
 
-```shell
+```sh
 # display roads with category numbers:
 d.vect map=roads display=shape,cat label_color=green
 
@@ -97,7 +97,7 @@ d.vect -c map=soils where="label='VBF'" display=shape attribute_column=label
 3D lines and polygons a z height is computed by a midpoint of line/area
 bounding box):
 
-```shell
+```sh
 g.region raster=elevation.10m
 r.random input=elevation.10m n=5000 vector=random3d -d
 d.mon start=x0

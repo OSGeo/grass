@@ -37,19 +37,19 @@ applied by **layer**, **cats** or **where** parameter.
 
 ### 3D houses with fixed height
 
-```shell
+```sh
 v.extrude input=houses output=houses3D height=5 type=area
 ```
 
 ### 3D houses with individual height
 
-```shell
+```sh
 v.extrude input=houses output=houses3D elevation=dem height_column=height type=area
 ```
 
 ### Convert 2D points to 3D vertical lines with fixed height
 
-```shell
+```sh
 v.extrude input=geodetic_pts output=points3D height=200 type=point
 ```
 

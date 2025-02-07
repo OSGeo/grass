@@ -146,7 +146,7 @@ Carolina sample dataset and uses valleys determined with
 *[r.param.scale](r.param.scale.md)* to weigh an accumulation map
 produced with *[r.watershed](r.watershed.md)*.
 
-```shell
+```sh
 # set region
 g.region -p raster=elev_ned_30m@PERMANENT
 
@@ -188,7 +188,7 @@ half)
 Display both the original and the weighed accumulation map. Compare them
 and proceed if the weighed accumulation map makes sense.
 
-```shell
+```sh
 # extract streams using the original accumulation map
 r.stream.extract elevation=elev_ned_30m@PERMANENT \
                  accumulation=elev_ned_30m.acc \

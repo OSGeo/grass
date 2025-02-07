@@ -56,14 +56,10 @@ raster files when different **nprocs** parameters are used. However,
 since the work allocation among threads is static, users should expect
 to have the same results when run with the same number of threads.
 
-<div align="center" style="margin: 10px">
-
 <img src="r_univar_benchmark_size.png" data-border="0"
 alt="benchmark for number of cells" />  
 *Figure: Benchmark shows execution time for different number of cells
 and cores. See benchmark scripts in source code.*
-
-</div>
 
 ## EXAMPLES
 
@@ -72,7 +68,7 @@ and cores. See benchmark scripts in source code.*
 In this example, the raster map `elevation` in the North Carolina sample
 dataset is used to calculate univariate statistics:
 
-```shell
+```sh
 g.region raster=elevation -p
 
 # standard output, along with extended statistics
@@ -124,13 +120,13 @@ In this example, the raster polygon map `basins` in the North Carolina
 sample dataset is used to calculate raster statistics for zones for
 `elevation` raster map:
 
-```shell
+```sh
 g.region raster=basins -p
 ```
 
 This will set and print computational region in the format:
 
-```shell
+```sh
 projection: 99 (Lambert Conformal Conic)
 zone:       0
 datum:      nad83
@@ -148,13 +144,13 @@ cells:      2025000
 
 Check basin's IDs using:
 
-```shell
+```sh
 r.category basins
 ```
 
 This will print them in the format:
 
-```shell
+```sh
 2
 4
 6
@@ -174,7 +170,7 @@ This will print them in the format:
 
 Visualization of them underlying elevation map can be created as:
 
-```shell
+```sh
 d.mon wx0
 d.rast map=elevation
 r.colors map=elevation color=grey
@@ -184,26 +180,22 @@ d.legend raster=basins use=2,4,6,8,10,12,14,16,18,20,22,24,26,28,30
 d.barscale
 ```
 
-<div align="center" style="margin: 10px">
-
 [<img src="runivar_basins.png" data-border="0" width="600" height="446"
 alt="r.univar basins and their IDs" />  
 ](runivar_basins.png) *Figure: Zones (basins, opacity: 60%) with
 underlying elevation map for North Carolina sample dataset.*
 
-</div>
-
 Then statistics for elevation can be calculated separately for every
 zone, i.e. basin found in the **zones** parameter:
 
-```shell
+```sh
 r.univar -t map=elevation zones=basins separator=comma \
          output=basin_elev_zonal.csv
 ```
 
 This will print information in the format:
 
-```shell
+```sh
 zone,label,non_null_cells,null_cells,min,max,range,mean,mean_of_abs,
 stddev,variance,coeff_var,sum,sum_abs2,,116975,0,55.5787925720215,
 133.147018432617,77.5682258605957,92.1196971445722,92.1196971445722,
@@ -220,25 +212,21 @@ stddev,variance,coeff_var,sum,sum_abs2,,116975,0,55.5787925720215,
 Comma Separated Values (CSV) file is best viewed through a spreadsheet
 program such as Microsoft Excel, Libre/Open Office Calc or Google Docs:
 
-<div align="center" style="margin: 10px">
-
 [<img src="runivar_basins_elev_zonal.png" data-border="0" width="600"
 height="121" alt="r.univar raster statistics" />  
 ](runivar_basins_elev_zonal.png) *Figure: Raster statistics for zones
 (basins, North Carolina sample dataset) viewed through Libre/Open Office
 Calc.*
 
-</div>
-
 ### JSON Output
 
-```shell
+```sh
 r.univar -e elevation percentile=98 format=json
 ```
 
 will output the results in JSON format:
 
-```shell
+```sh
 [
     {
         "n": 2025000,

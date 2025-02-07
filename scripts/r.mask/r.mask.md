@@ -56,7 +56,7 @@ If a binary map with \[0,1\] values is used as input in *r.mask*, all
 raster cells with 0 and 1 will be part of the MASK. This is because
 *r.mask* converts all non-NULL cells to 1.
 
-```shell
+```sh
 r.mapcalc -s "map1 = round(rand(0,1))"
 r.mask raster=map1
 ```
@@ -65,7 +65,7 @@ On the other hand, if a binary map is used as an input in *g.copy* to
 create a MASK, only the raster cells with value 1 will be part of the
 MASK.
 
-```shell
+```sh
 r.mapcalc -s "map2 = round(rand(0,1))"
 g.copy raster=map2,MASK
 ```
@@ -79,7 +79,7 @@ parameter); all non-NULL values of the input raster map are converted to
 are part of the MASK, i.e., nothing is blocked out from analysis and/or
 display.
 
-```shell
+```sh
 r.mapcalc -s "map3 = rand(0.0,1.0)"
 r.mask raster=map3
 ```
@@ -90,7 +90,7 @@ a floating-point map, the values will be converted to integers using the
 map's quantisation rules (this defaults to round-to-nearest, but can be
 changed with r.quant).
 
-```shell
+```sh
 r.mapcalc -s "map4 = rand(0.0,1.0)"
 g.copy raster=map4,MASK
 ```
@@ -106,7 +106,7 @@ The examples are based on the North Carolina sample dataset.
 Create a raster mask, for constraining the calculation of univariate
 statistics of the elevation values for "lakes":
 
-```shell
+```sh
 # set computation region to lakes raster map
 g.region raster=lakes -p
 # use lakes as MASK
@@ -117,14 +117,14 @@ r.univar elevation
 
 Remove the raster mask ("MASK" map) with the -r flag:
 
-```shell
+```sh
 r.mask -r
 ```
 
 Creating a mask from selected categories in the North Carolina
 'geology_30m' raster map:
 
-```shell
+```sh
 g.region raster=geology_30m -p
 r.category geology_30m
 d.mon wx0

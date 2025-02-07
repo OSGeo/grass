@@ -18,14 +18,14 @@ recommended that `$$` be specified as the process-id for *g.tempfile*.
 
 For `/bin/sh` scripts the following syntax should be used:
 
-```shell
+```sh
 temp1=`g.tempfile pid=$$`
 temp2=`g.tempfile pid=$$`
 ```
 
 For `/bin/csh` scripts, the following can be used:
 
-```shell
+```sh
 set temp1=`g.tempfile pid=$$`
 set temp2=`g.tempfile pid=$$`
 ```

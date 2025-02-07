@@ -27,31 +27,25 @@ current geographic region.
 To create a random, uniformly distributed selection of possible new
 points with a radius of 100,000 map units, use the following command:
 
-```shell
+```sh
 v.perturb input=comm_colleges output=uniform_perturb parameters=100000
 ```
 
 Your map should look similar to this figure:
-
-<div align="center" style="margin: 10px">
 
 <img src="v_perturb_uniform.png" data-border="0"
 alt="v.perturb uniform distribution example" />  
 *Figure: Map showing the actual community college points and uniformly
 random chosen points.*
 
-</div>
-
 ### Normal distributed selection
 
 For a normal distribution with a mean of 5000 and standard deviation of
 2000, use the following command:
 
-```shell
+```sh
 v.perturb input=comm_colleges output=normal_perturb distribution=normal parameters=5000,2000
 ```
-
-<div align="center" style="margin: 10px">
 
 <img src="v_perturb_normal.png" data-border="0"
 alt="v.perturb normal distribution example" />  
@@ -59,13 +53,11 @@ alt="v.perturb normal distribution example" />
 random chosen and colored points. Notice that each point is closer to
 the original point.*
 
-</div>
-
 ### Normal distributed selection with a minimum value
 
 In order to include a minimum value of 500, use the following command:
 
-```shell
+```sh
 v.perturb input=comm_colleges output=min_perturb distribution=normal parameters=100000,1000 minimum=500
 ```
 

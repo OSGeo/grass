@@ -61,7 +61,7 @@ editing session).
 
 Editing raster values in a LiDAR DEM, North Carolina sample data:
 
-```shell
+```sh
 g.region raster=elev_lid792_1m -p
 
 # pan to area of interest and edit raster cells (I used "102" as value to modify cells
@@ -77,13 +77,9 @@ r.univar -g elev_lid792_1m
 r.univar -g elev_lid792_1m_modified
 ```
 
-<div align="center" style="margin: 10px">
-
 [<img src="d_rast_edit.png" data-border="0" width="600" height="281"
 alt="d.rast.edit example" />](d_rast_edit.png)  
 *Figure: Editing of pixels in an elevation raster map using d.rast.edit*
-
-</div>
 
 ## TODO
 

@@ -22,7 +22,7 @@ of categories in the raster maps will be printed.
 For example, if one raster map was specified, the output would look
 like:
 
-```shell
+```sh
 1 1350000.00
 2 4940000.00
 3 8870000.00
@@ -30,7 +30,7 @@ like:
 
 If three raster maps were specified, the output would look like:
 
-```shell
+```sh
 0 0 0 8027500.00
 0 1 0 1152500.00
 1 0 0 164227500.00
@@ -67,7 +67,7 @@ different units than are available here should use
 
 Report area for each category in the single raster map:
 
-```shell
+```sh
 g.region raster=geology_30m
 r.stats -a in=geology_30m nv=no-data sep=tab
 
@@ -91,7 +91,7 @@ no-data 33375200000.000004
 Report sorted number of cells for each category in the single raster map
 (suppress NULL data):
 
-```shell
+```sh
 g.region raster=geology_30m
 r.stats -cn input=geology_30m sort=desc
 
@@ -114,7 +114,7 @@ r.stats -cn input=geology_30m sort=desc
 Report area, number of cells, and percents (separated by tabs) for each
 category in multiple raster maps (suppress NULL data):
 
-```shell
+```sh
 g.region raster=towns
 r.stats -nacp input=towns,urban separator=tab
 
@@ -131,7 +131,7 @@ r.stats -nacp input=towns,urban separator=tab
 Report sorted area for each interval of floating-point input raster map.
 Number of intervals are given by **nsteps** option.
 
-```shell
+```sh
 g.region raster=elevation
 r.stats -an input=elevation nsteps=10 sort=desc separator=tab
 
@@ -152,7 +152,7 @@ r.stats -an input=elevation nsteps=10 sort=desc separator=tab
 Report raster cell counts of landuse and geological categories within
 zipcode areas:
 
-```shell
+```sh
 g.region raster=zipcodes
 # landuse/landcover and zipcodes
 r.stats -c input=landclass96,zipcodes separator=comma

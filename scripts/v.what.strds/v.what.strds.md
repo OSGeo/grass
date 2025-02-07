@@ -9,7 +9,7 @@ TBD.
 
 ## EXAMPLES
 
-```shell
+```sh
 v.what.strds input=mypoints strds=mystrds output=newvector
 ```
 

@@ -67,7 +67,7 @@ All examples are based on the North Carolina sample dataset.
 
 ### Buffer around input lines
 
-```shell
+```sh
 v.buffer input=roadsmajor output=roadsmajor_buffer type=line distance=100
 ```
 
@@ -77,7 +77,7 @@ line shown in black)
 
 ### Circles around input points
 
-```shell
+```sh
 v.buffer input=hospitals output=hospitals_circled type=point distance=2000
 ```
 
@@ -87,7 +87,7 @@ points shown in black, new area centroids in red)
 
 ### Circles around input points with attribute transfer
 
-```shell
+```sh
 v.buffer input=hospitals output=hospitals_circled type=point distance=1000 -t
 
 # display buffer around hospital with category 36,
@@ -99,7 +99,7 @@ v.extract in=hospitals_circled output=hospital_36_circled layer=1 cats=36 -d
 
 ### Buffer around input areas
 
-```shell
+```sh
 v.buffer input=lakes output=lakes_buffer type=area distance=100
 ```
 
@@ -112,7 +112,7 @@ shown in black)
 In this example, an internal buffer ("inward buffer" or "negative
 buffer") is generated using a negative **distance** value:
 
-```shell
+```sh
 v.buffer input=lakes output=lakes_buffer type=area distance=-50
 ```
 

@@ -14,7 +14,7 @@ a constant size, rather than being truncated whenever it is updated.
 
 (bash shell syntax)
 
-```shell
+```sh
 export GRASS_RENDER_FILE=map.bmp
 export GRASS_RENDER_WIDTH=640
 export GRASS_RENDER_HEIGHT=480

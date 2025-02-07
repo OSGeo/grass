@@ -55,7 +55,7 @@ the *v.clean* manual page.
 
 ## EXAMPLE
 
-```shell
+```sh
 # import SHAPE file at full extent and reproject to current project CRS
 v.import input=research_area.shp output=research_area extent=input
 ```

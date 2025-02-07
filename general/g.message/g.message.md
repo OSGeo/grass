@@ -24,7 +24,7 @@ don't close the "quote")
 
 A blank line may be obtained with
 
-```shell
+```sh
 g.message message=""
 ```
 
@@ -62,7 +62,7 @@ special wrappers for *g.message*.
 Note: The Python tab in the *wxGUI* can be used for entering the
 following sample code:
 
-```shell
+```sh
 import grass.script as gcore
 
 gcore.warning("This is a warning")
@@ -70,7 +70,7 @@ gcore.warning("This is a warning")
 
 is identical with
 
-```shell
+```sh
 g.message -w message="This is a warning"
 ```
 
@@ -98,13 +98,13 @@ Recommended levels:
 
 This basic example prints the message "hello" in the console:
 
-```shell
+```sh
 g.message message="hello"
 ```
 
 To print a message as an error message use the **-e** flag:
 
-```shell
+```sh
 g.message -e message="my error"
 ```
 
@@ -112,7 +112,7 @@ To print a message highlighted as a debug message ("D0/0: debug") in the
 console, use the **-d** flag. Optionally the debug level can be defined
 (see also [g.gisenv](g.gisenv.md) for details):
 
-```shell
+```sh
 # Levels: (recommended levels)
 #   0 - silence
 #   1 - message is printed once or few times per module
@@ -124,7 +124,7 @@ g.message -d message="debug" debug=0
 To print a message highlighted as a warning message ("WARNING: my
 warning") in the console, use the **-w** flag:
 
-```shell
+```sh
 g.message -w message="my warning"
 ```
 

@@ -54,7 +54,7 @@ grassdata/project/mapset/.tmp/user directory (in case of d.mon deeper in
 
 Legend file has this format:
 
-```shell
+```sh
 label|symbol_name|size|color_type|feature_color|fill_color|line_width|geometry_type|feature_count
 ```
 
@@ -63,7 +63,7 @@ interpreted as line color and fill colors (lf), or primary and secondary
 colors (ps). Module d.vect always uses 'lf' and d.vect.thematic 'ps'.
 Here is an example of legend file with subtitles:
 
-```shell
+```sh
 Infrastructure||||||||
 major roads|legend/line|5|lf|black|200:200:200|2|line|355
 bridges|extra/bridge|15|lf|black|black|1|point|10938
@@ -79,7 +79,7 @@ legend](d_legend_vect_subheadings.png)
 
 Open cairo monitor to render to file:
 
-```shell
+```sh
 g.region vector=nc_state
 d.mon cairo
 d.vect map=nc_state color=26:26:26 fill_color=229:229:229 width=2 legend_label="state boundaries"

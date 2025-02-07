@@ -68,7 +68,7 @@ middle (*patching*) raster map layer, to produce the *composite* raster
 map layer on the right. The example assumes zero values to be treated as
 NULLs (**-z** flag).
 
-```shell
+```sh
   1 1 1 0 2 2 0 0    0 0 1 1 0 0 0 0    1 1 1 1 2 2 0 0
   1 1 0 2 2 2 0 0    0 0 1 1 0 0 0 0    1 1 1 2 2 2 0 0
   3 3 3 3 2 2 0 0    0 0 0 0 0 0 0 0    3 3 3 3 2 2 0 0
@@ -80,7 +80,7 @@ NULLs (**-z** flag).
 Switching the *patched* and the *patching* raster map layers produces
 the following results:
 
-```shell
+```sh
   0 0 1 1 0 0 0 0    1 1 1 0 2 2 0 0    1 1 1 1 2 2 0 0
   0 0 1 1 0 0 0 0    1 1 0 2 2 2 0 0    1 1 1 1 2 2 0 0
   0 0 0 0 0 0 0 0    3 3 3 3 2 2 0 0    3 3 3 3 2 2 0 0
@@ -103,7 +103,7 @@ the region resolution is the resolution of the desired data. To set the
 geographic region settings to one or several raster maps, the *g.region*
 program can be used:
 
-```shell
+```sh
 g.region raster=map1[,map2[,...]]
 ```
 
@@ -127,7 +127,7 @@ typically 1024. The soft limit can be changed with e.g. `ulimit -n 1500`
 (UNIX-based operating systems) but not higher than the hard limit. If it
 is too low, you can as superuser add an entry in
 
-```shell
+```sh
 /etc/security/limits.conf
 # <domain>      <type>  <item>         <value>
 your_username  hard    nofile          1500
@@ -147,8 +147,6 @@ used instead of *r.patch*.
 By specifying the number of parallel processes with **nprocs** option,
 *r.patch* can run significantly faster, see benchmarks below.
 
-<div align="center" style="margin: 10px">
-
 <img src="r_patch_benchmark_size.png" data-border="0"
 alt="benchmark for number of cells" />
 <img src="r_patch_benchmark_memory.png" data-border="0"
@@ -157,8 +155,6 @@ alt="benchmark for memory size" />
 of cells, benchmark on the right shows execution time for different
 memory size for 5000x5000 raster. See benchmark scripts in source code.
 (Intel Core i9-10940X CPU @ 3.30GHz x 28)*
-
-</div>
 
 To reduce the memory requirements to minimum, set option **memory** to
 zero. To take advantage of the parallelization, GRASS GIS needs to
@@ -175,7 +171,7 @@ region assuming that the all three maps fully overlap and have the same
 resolution (so we can safely use the just the one without further
 modifications of the region). Then we perform the patching.
 
-```shell
+```sh
 g.region raster=roads
 r.patch input=roads,water,forest output=result
 ```
@@ -186,7 +182,7 @@ Create a list of maps matching a pattern, extend the region to include
 them all, and patch them together to create a mosaic. Overlapping maps
 will be used in the order listed.
 
-```shell
+```sh
 MAPS=`g.list type=raster separator=comma pat="map_*"`
 g.region raster=$MAPS -p
 r.patch input=$MAPS output=maps_mosaic

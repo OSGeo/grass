@@ -8,7 +8,7 @@ existing STVDS.
 The module expects an **expression** as input parameter in the following
 form:
 
-```shell
+```sh
 "result = expression"
 ```
 
@@ -36,7 +36,7 @@ additionally spatial topology evaluation.
 The expression option must be passed as **quoted** expression, for
 example:  
 
-```shell
+```sh
 t.select expression="C = A : B"
 ```
 
@@ -54,7 +54,7 @@ functions that will be presented in the following section.
 Several temporal topology relations between registered maps of space
 time datasets are supported:  
 
-```shell
+```sh
 equals            A ------
                   B ------
 
@@ -104,7 +104,7 @@ operators process the time instances and intervals of two temporal
 related maps and calculate the result temporal extent by five different
 possibilities.
 
-```shell
+```sh
 LEFT REFERENCE     l       Use the time stamp of the left space time dataset
 INTERSECTION       i       Intersection
 DISJOINT UNION     d       Disjoint union
@@ -120,7 +120,7 @@ selection operator **:** that selects parts of a space time dataset that
 are temporally equal to parts of a second one by default. The following
 expression
 
-```shell
+```sh
 C = A : B
 ```
 
@@ -130,7 +130,7 @@ store it in space time dataset C. The parts are time stamped maps.
 In addition the inverse selection operator **!:** is defined as the
 complement of the selection operator, hence the following expression
 
-```shell
+```sh
 C = A !: B
 ```
 
@@ -144,13 +144,13 @@ that must be separated by the logical OR operator **\|** and the
 temporal extent operator. All three parts are separated by comma and
 surrounded by curly braces:
 
-```shell
+```sh
 {"temporal selection operator", "topological relations", "temporal operator"}
 ```
 
 Examples:
 
-```shell
+```sh
 C = A {:, equals} B
 C = A {!:, equals} B
 ```
@@ -158,7 +158,7 @@ C = A {!:, equals} B
 We can now define arbitrary topological relations using the OR operator
 "\|" to connect them:
 
-```shell
+```sh
 C = A {:,equals|during|overlaps} B
 ```
 
@@ -166,7 +166,7 @@ Select all parts of A that are equal to B, during B or overlaps B.
 In addition we can define the temporal extent of the result STDS by
 adding the temporal operator.
 
-```shell
+```sh
 C = A {:, during,r} B
 ```
 
@@ -177,7 +177,7 @@ The selection operator is implicitly contained in the temporal topology
 selection operator, so that the following statements are exactly the
 same:
 
-```shell
+```sh
 C = A : B
 C = A {:} B
 C = A {:,equal} B
@@ -186,7 +186,7 @@ C = A {:,equal,l} B
 
 Same for the complementary selection:
 
-```shell
+```sh
 C = A !: B
 C = A {!:} B
 C = A {!:,equal} B
@@ -201,7 +201,7 @@ temporal relationship between the conditions and the conclusions can be
 defined at the beginning of the if statement. The relationship between
 then and else conclusion must be always equal.
 
-```shell
+```sh
 if statement                           decision option                        temporal relations
   if(if, then, else)
   if(conditions, A)                    A if conditions are True;              temporal topological relation between if and then is equal.
@@ -212,7 +212,7 @@ if statement                           decision option                        te
 
 #### Logical operators
 
-```shell
+```sh
 Symbol  description
 
   ==    equal
@@ -230,7 +230,7 @@ Symbol  description
 The following temporal function are evaluated only for the STDS that
 must be given in parenthesis.
 
-```shell
+```sh
 td(A)                    Returns a list of time intervals of STDS A
 
 start_time(A)            Start time as HH::MM:SS
@@ -270,7 +270,7 @@ to combine conditions:
 The structure is similar to the select operator with the extension of an
 aggregation operator:
 
-```shell
+```sh
 {"comparison operator", "topological relations", aggregation operator, "temporal operator"}
 ```
 
@@ -284,13 +284,13 @@ operator (\|\| or &&). As default the aggregation operator is related to
 the comparison operator:  
 Comparison operator -\> aggregation operator:
 
-```shell
+```sh
 || -> | and && -> &
 ```
 
 Examples:
 
-```shell
+```sh
 Condition 1 {||, equal, r} Condition 2
 Condition 1 {&&, equal|during, l} Condition 2
 Condition 1 {&&, equal|contains, |, l} Condition 2
@@ -303,7 +303,7 @@ Condition 1 {&&, equal|during, l} Condition 2 {&&,contains, |, r} Condition 3
 Additionally the number of maps in intervals can be computed and used in
 conditional statements with the hash (#) operator.  
 
-```shell
+```sh
 A{#, contains}B
 ```
 
@@ -312,7 +312,7 @@ which are during the time intervals of maps from space time dataset A.
 A list of integers (scalars) corresponding to the maps of A that contain
 maps from B will be returned.
 
-```shell
+```sh
 C = if({equal}, A {#, contains} B > 2, A {:, contains} B)
 ```
 
@@ -326,7 +326,7 @@ time dataset) for temporal processing.
 Furthermore the temporal algebra allows temporal buffering, shifting and
 snapping with the functions buff_t(), tshift() and tsnap() respectively.
 
-```shell
+```sh
 buff_t(A, size)         Buffer STDS A with granule ("1 month" or 5)
 tshift(A, size)         Shift STDS A with granule ("1 month" or 5)
 tsnap(A)                Snap time instances and intervals of STDS A
@@ -337,13 +337,13 @@ tsnap(A)                Snap time instances and intervals of STDS A
 The temporal algebra can also handle single maps with time stamps in the
 tmap function.
 
-```shell
+```sh
 tmap()
 ```
 
 For example:
 
-```shell
+```sh
  C = A {:,during} tmap(event)
 ```
 
@@ -354,7 +354,7 @@ during the temporal extent of single map 'event'
 
 The module supports the following boolean vector operations:  
 
-```shell
+```sh
  Boolean Name   Operator Meaning         Precedence   Correspondent function
 ----------------------------------------------------------------------------------
  AND            &        Intersection          1      (v.overlay operator=and)
@@ -366,7 +366,7 @@ The module supports the following boolean vector operations:
 
 And vector functions:
 
-```shell
+```sh
  buff_p(A, size)          Buffer the points of vector map layer A with size
  buff_l(A, size)          Buffer the lines of vector map layer A with size
  buff_a(A, size)          Buffer the areas of vector map layer A with size
@@ -377,7 +377,7 @@ And vector functions:
 We combine the temporal topology relations, the temporal operators and
 the spatial/select operators to create spatio-temporal vector operators:
 
-```shell
+```code
 {"spatial or select operator" , "list of temporal relations", "temporal operator" }
 ```
 
@@ -390,13 +390,13 @@ temporal extent of the single map a1 of A, then the following overlay
 calculations would implicitly aggregate all maps of B into one result
 map for a1 of A:
 
-```shell
+```sh
 C = A {&, contains} B --> c1 = a1 & b1 & b2 & b3
 ```
 
 Keep attention that the aggregation behaviour is not symmetric:
 
-```shell
+```sh
 C = B {&, during} A --> c1 = b1 & a1
                         c2 = b2 & a1
                         c3 = b3 & a1
@@ -408,7 +408,7 @@ Spatio-temporal intersect all maps from space time dataset A with all
 maps from space time dataset B which have equal time stamps and are
 temporary before Jan. 1. 2005 and store them in space time dataset D.
 
-```shell
+```sh
 D = if(start_date(A) < "2005-01-01", A & B)
 ```
 
@@ -417,7 +417,7 @@ distance of one and intersect the results with overlapping, containing,
 during and equal temporal relations to store the result in space time
 vector dataset D with intersected time stamps.
 
-```shell
+```sh
 D = buff_p(A, 1) {&,overlaps|overlapped|equal|during|contains,i} buff_p(B, 1)
 ```
 
@@ -425,7 +425,7 @@ Select all maps from space time dataset B which are during the temporal
 buffered space time dataset A with a map interval of three days, else
 select maps from C and store them in space time dataset D.
 
-```shell
+```sh
 D = if(contains, td(buff_t(A, "1 days")) == 3, B, C)
 ```
 

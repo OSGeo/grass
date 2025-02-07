@@ -46,7 +46,7 @@ limited to that number of jobs.
 
 North Carolina sample dataset:
 
-```shell
+```sh
 g.region raster=lsat7_2002_10 -p
 i.oif input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70
 ```

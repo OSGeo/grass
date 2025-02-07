@@ -8,7 +8,7 @@ location and size of the data, followed by the data itself.
 
 The header has 6 lines:
 
-```shell
+```sh
 north:   xxxxxx.xx
 south:   xxxxxx.xx
 east:    xxxxxx.xx
@@ -25,7 +25,7 @@ follow. The data which follows is *r* rows of *c* integers.
 Optionally the following parameters can be defined in the header
 section:
 
-```shell
+```sh
 null: nn
 type: float
 multiplier: 2.
@@ -63,7 +63,7 @@ SURFER (Golden Software) ASCII files may be imported by passing the
 
 The following is a sample **input** file to *r.in.ascii*:
 
-```shell
+```sh
 north:                   4299000.00
 south:                   4247000.00
 east:                     528000.00

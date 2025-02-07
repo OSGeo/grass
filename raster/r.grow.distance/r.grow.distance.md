@@ -19,7 +19,7 @@ distance between two points that one would measure with a ruler, which
 can be proven by repeated application of the Pythagorean theorem. The
 formula is given by:
 
-```shell
+```sh
 d(dx,dy) = sqrt(dx^2 + dy^2)
 ```
 
@@ -38,7 +38,7 @@ most streets on the island of Manhattan, which causes the shortest path
 a car could take between two points in the city to have length equal to
 the points' distance in taxicab geometry. The formula is given by:
 
-```shell
+```sh
 d(dx,dy) = abs(dx) + abs(dy)
 ```
 
@@ -47,7 +47,7 @@ are rhombus-shaped from a given point.
 
 The *Maximum metric* is given by the formula
 
-```shell
+```sh
 d(dx,dy) = max(abs(dx),abs(dy))
 ```
 
@@ -76,30 +76,22 @@ NULL.
 
 North Carolina sample dataset:
 
-```shell
+```sh
 g.region raster=streams_derived -p
 r.grow.distance input=streams_derived distance=dist_from_streams
 r.colors map=dist_from_streams color=rainbow
 ```
 
-<div align="center" style="margin: 10px">
-
 <img src="r_grow_distance.png" data-border="0" />  
 *Euclidean distance from the streams network in meters (map subset)*
-
-</div>
-
-<div align="center" style="margin: 10px">
 
 <img src="r_grow_distance_zoom.png" data-border="0" />  
 *Euclidean distance from the streams network in meters (detail, numbers
 shown with d.rast.num)*
 
-</div>
-
 ### Distance from sea in meters in latitude-longitude CRS
 
-```shell
+```sh
 g.region raster=sea -p
 r.grow.distance -m input=sea distance=dist_from_sea_geodetic metric=geodesic
 r.colors map=dist_from_sea_geodetic color=rainbow

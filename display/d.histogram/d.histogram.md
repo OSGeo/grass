@@ -20,35 +20,27 @@ the map's *colr* or *colr2* file).
 Running the command below will generate the bar graph shown in the
 figure:
 
-```shell
+```sh
 g.region raster=elevation -p
 d.mon wx0
 d.histogram map=elevation
 ```
 
-<div align="center" style="margin: 10px">
-
 <img src="d_histogram_bar.png" data-border="0"
 alt="d.histogram bar graph example" />  
 *Figure: Bar graph histogram for elevation map*
 
-</div>
-
 Running the command below will generate the pie graph shown in the
 figure:
 
-```shell
+```sh
 g.region raster=landuse96_28m -p
 d.histogram map=landuse96_28m style=pie
 ```
 
-<div align="center" style="margin: 10px">
-
 <img src="d_histogram_pie.png" data-border="0"
 alt="d.histogram pie graph example" />  
 *Figure: Pie graph histogram for landuse map*
-
-</div>
 
 ## SEE ALSO
 

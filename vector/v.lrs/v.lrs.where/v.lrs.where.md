@@ -11,7 +11,7 @@ example from *v.lrs.create*).
 In this example, the 'route_lrs' shall be queried for unknown positions
 (points, stored in the map *newpoints*) along the LRS:
 
-```shell
+```sh
 # generate query points
 echo "590866.15|4926737.0
 590933|4927133" | v.in.ascii out=newpoints

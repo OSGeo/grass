@@ -21,7 +21,7 @@ user for parameter settings using the standard GRASS parser interface.
 
 The user running the command:
 
-```shell
+```sh
 d.colortable map=soils color=red lines=1 columns=3
 ```
 

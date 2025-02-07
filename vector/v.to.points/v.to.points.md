@@ -63,7 +63,7 @@ Use the **-p** flag to treat **dmax** as a percentage of each line
 length. For example, to get points created for the beginning, middle and
 end only, use the **-p** flag and set **dmax** so that:
 
-```shell
+```sh
  50 < dmax <= 100
 ```
 
@@ -80,7 +80,7 @@ Use the **-r** flag to create points starting from the end node.
 In this example, the 'railroads' vector lines map of the North Carolina
 sample dataset is used to create points along the input lines:
 
-```shell
+```sh
 # The North Carolina data are metric.
 # 200m distance for points (maximum limit but not an exact distance)
 v.to.points input=railroads output=railroads_points dmax=200
@@ -94,13 +94,13 @@ v.info map=railroads_points
 
 ### Extract nodes as points
 
-```shell
+```sh
 v.to.points input=railroads output=railroads_nodes use=node
 ```
 
 ### Extract starting/ending nodes as points
 
-```shell
+```sh
 v.to.points input=railroads output=railroads_start use=start
 
 v.to.points input=railroads output=railroads_end use=end

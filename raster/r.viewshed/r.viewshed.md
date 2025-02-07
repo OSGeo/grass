@@ -147,24 +147,20 @@ Using the North Carolina dataset: Compute viewshed from a observation
 point (coordinates: 638728.087167, 220609.261501) which is 5 meters
 above ground:
 
-```shell
+```sh
 g.region raster=elev_lid792_1m -p
 r.viewshed input=elev_lid792_1m output=elev_lid792_1m_viewshed coordinates=638728,220609 observer_elevation=5.0
 ```
-
-<div align="center" style="margin: 10px">
 
 [<img src="r.viewshed.png" data-border="0" width="600" height="570"
 alt="r.viewshed example" />  
 ](r.viewshed.png) *Viewshed shown on shaded terrain (observer position
 in the north-east quadrant with white dot; 5m above ground)*
 
-</div>
-
 Using the Spearfish dataset: calculating the viewpoint from top of a
 mountain:
 
-```shell
+```sh
 g.region raster=elevation.10m
 r.viewshed input=elevation.10m output=viewshed coordinates=598869,4916642 memory=800
 ```

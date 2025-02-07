@@ -50,7 +50,7 @@ To vectorize the raster map *streams_derived* in the North Carolina
 sample dataset that represents the stream network derived from the 10m
 resolution DEM by *r.watershed*, run:
 
-```shell
+```sh
 g.region raster=elevation -p
 # create flow accumulation map
 r.watershed elevation=elevation accumulation=accum_50K thresh=50000
@@ -71,7 +71,7 @@ Raster feature thinning (skeletonizing)
 
 The resulting map cabe optionally vectorized:
 
-```shell
+```sh
 r.to.vect streams_thin output=streams_thin type=line
 # visualize
 d.rast accum_50K

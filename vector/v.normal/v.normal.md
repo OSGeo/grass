@@ -31,7 +31,7 @@ Compute the sample skewness and kurtosis, Geary's a-statistic and an
 approximate normal transformation, extreme normal deviates, and
 Royston's W for the *random* vector points:
 
-```shell
+```sh
 g.region raster=elevation -p
 v.random random n=200
 v.db.addtable random column="elev double precision"

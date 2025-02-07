@@ -8,7 +8,7 @@ GRASS. With Freetype enabled however, the module will recursively scan
 all files within a predefined hierarchy to find Freetype-compatible
 scalable fonts. The list of directories scanned is currently:
 
-```shell
+```sh
     /usr/lib/X11/fonts
     /usr/share/X11/fonts
     /usr/share/fonts
@@ -32,7 +32,7 @@ set, the output will instead be written to the file specified by that
 variable. This is useful if you don't have permission to modify
 `$GISBASE/etc/fontcap`: in this case you can use e.g.
 
-```shell
+```sh
 # use local file version instead of system copy
 GRASS_FONT_CAP=$HOME/.gfontcap
 export GRASS_FONT_CAP

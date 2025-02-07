@@ -24,7 +24,7 @@ map.
 Note: These values can be transformed to azimuth values (90 is East, 180
 is South, 270 is West, 360 is North) using [r.mapcalc](r.mapcalc.md):
 
-```shell
+```sh
 # convert angles from CCW from East to CW from North
 # modulus (%) can not be used with floating point aspect values
 r.mapcalc "azimuth_aspect = if(ccw_aspect == 0, 0, \
@@ -103,7 +103,7 @@ map of slope that groups slope values into ranges of slope. This can be
 done using *[r.reclass](r.reclass.md)*. An example of a useful
 reclassification is given below:
 
-```shell
+```sh
           category      range   category labels
                      (in degrees)    (in percent)
 
@@ -166,8 +166,6 @@ threads to be used with the **nprocs** parameter (default 1). The
 **memory** parameter (default 300) can also be provided to determine the
 size of the buffer for computation.
 
-<div align="center" style="margin: 10px">
-
 <img src="r_slope_aspect_benchmark_size.png" data-border="0"
 alt="benchmark for number of cells" />
 <img src="r_slope_aspect_benchmark_memory.png" data-border="0"
@@ -176,8 +174,6 @@ alt="benchmark for memory size" />
 of cells, benchmark on the right shows execution time for different
 memory size for 5000x5000 raster. See benchmark scripts in source code.
 (Intel Core i9-10940X CPU @ 3.30GHz x 28)*
-
-</div>
 
 To reduce the memory requirements to minimum, set option **memory** to
 zero. To take advantage of the parallelization, GRASS GIS needs to
@@ -191,7 +187,7 @@ In this example a slope, aspect, profile and tangential curvature map
 are computed from an elevation raster map (North Carolina sample
 dataset):
 
-```shell
+```sh
 g.region raster=elevation
 r.slope.aspect elevation=elevation slope=slope aspect=aspect pcurvature=pcurv tcurvature=tcurv
 
@@ -217,7 +213,7 @@ first generate the standard aspect map (oriented CCW from East), then
 convert it to compass orientation, and finally classify four major
 aspect directions (N, E, S, W):
 
-```shell
+```sh
 g.region raster=elevation -p
 
 # generate integer aspect map with degrees CCW from East

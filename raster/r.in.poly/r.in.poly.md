@@ -31,7 +31,7 @@ The input format for the **input** file consists of sections describing
 either polygonal areas, linear features, or point features. The basic
 format is:
 
-```shell
+```sh
 A                      <for polygonal areas>
     easting northing
     .
@@ -65,7 +65,7 @@ which may be omitted).
 
 An area described by four points:
 
-```shell
+```sh
 A
   591316.80   4926455.50
   591410.25   4926482.40

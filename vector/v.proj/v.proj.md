@@ -48,7 +48,7 @@ topological errors.
 Reprojection of a vector map from another project (and mapset) into the
 current mapset:
 
-```shell
+```sh
 v.proj in=mymap project=latlong mapset=user1
 ```
 

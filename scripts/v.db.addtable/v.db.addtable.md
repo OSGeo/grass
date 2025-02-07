@@ -27,7 +27,7 @@ The existing database connection(s) can be verified with *v.db.connect*.
 
 Adding a new attribute table with a single column to default layer 1:  
 
-```shell
+```sh
 g.copy vect=roadsmajor,myroads
 v.db.addtable myroads columns="slope double precision"
 v.db.connect -p myroads
@@ -36,7 +36,7 @@ v.info -c myroads
 
 Adding a new attribute table with two columns to layer 2:  
 
-```shell
+```sh
 g.copy vect=roadsmajor,myroads
 v.db.addtable myroads columns="slope double precision, roadname varchar(15)" layer=2
 v.db.connect -p myroads

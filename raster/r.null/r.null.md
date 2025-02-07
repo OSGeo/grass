@@ -32,7 +32,7 @@ reclassified maps (products of *r.reclass*).
 As a workaround, the way to recode such a map is: The user creates a
 raster map out of the reclassified map by copying it:  
 
-```shell
+```sh
 r.mapcalc "newmap = reclass"
 ```
 
@@ -60,13 +60,13 @@ to NULL (`if()` condition).
 
 Set specific values of a classified map to NULL:  
 
-```shell
+```sh
 r.null map=landcover.30m setnull=21,22
 ```
 
 Set NULL-values of a map to a specific value:  
 
-```shell
+```sh
 r.null map=fields null=99
 ```
 

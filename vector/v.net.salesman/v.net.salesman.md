@@ -52,7 +52,7 @@ Searching for the shortest path using distance and the fastest path
 using traveling time according to the speed limits of different road
 types:
 
-```shell
+```sh
 # Spearfish
 
 g.copy vect=roads,myroads
@@ -122,7 +122,7 @@ v.net.salesman myroads_net_time arc_layer=3 node_layer=2 arc_column=cost arc_bac
 
 To display the result, run for example:
 
-```shell
+```sh
 # Display the results
 g.region vector=myroads_net
 

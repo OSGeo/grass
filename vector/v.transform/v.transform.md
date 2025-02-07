@@ -29,7 +29,7 @@ Most DXF/DWG drawings are done within XY coordinate space. To transform
 them to a national grid, we can use *v.transform* together with
 *v.rectify* and a first-order transformation.
 
-```shell
+```sh
 v.transform -t in=watertowerXY out=watertower_z zscale=0.04 zshift=1320
 v.rectify in=watertower_z out=watertowerUTM points=wt.points order=1
 ```
@@ -38,7 +38,7 @@ v.rectify in=watertower_z out=watertowerUTM points=wt.points order=1
 
 Spearfish example with manual table editing for vertical shift:
 
-```shell
+```sh
 # work on own map copy:
 g.copy vect=archsites@PERMANENT,myarchsites
 # add new 'zs' column to later store height of each site:
@@ -58,7 +58,7 @@ The resulting map is a 3D vector map.
 Spearfish example with automated elevation extraction for vertical
 shift:
 
-```shell
+```sh
 # work on own map copy:
 g.copy vect=archsites@PERMANENT,myarchsites
 # add new 'zs' column to later store height of each site:

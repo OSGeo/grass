@@ -235,7 +235,7 @@ used to run a segmented calculation which consumes less memory during
 the computations. The amount of memory by **r.sun** is estimated as
 follows:
 
-```shell
+```sh
 # without input raster map partitioning:
 #  memory requirements: 4 bytes per raster cell
 #  rows,cols: rows and columns of current region (find out with g.region)
@@ -251,7 +251,7 @@ memory_bytes = rows*cols*((IR*4+horizon_steps)/npartitions  + OR*4)
 
 North Carolina example (considering also cast shadows):
 
-```shell
+```sh
 g.region raster=elevation -p
 
 # calculate horizon angles (to speed up the subsequent r.sun calculation)
@@ -272,7 +272,7 @@ Calculation of the integrated daily irradiation for a region in
 North-Carolina for a given day of the year at 30m resolution. Here day
 172 (i.e., 21 June in non-leap years):
 
-```shell
+```sh
 g.region raster=elev_ned_30m -p
 
 # considering cast shadows
@@ -289,7 +289,7 @@ d.rast.leg it172
 
 We can compute the day of year from a specific date in Python:
 
-```shell
+```sh
 >>> import datetime
 >>> datetime.datetime(2014, 6, 21).timetuple().tm_yday
 172

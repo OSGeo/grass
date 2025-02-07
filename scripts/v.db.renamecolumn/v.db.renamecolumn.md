@@ -24,7 +24,7 @@ to an intermediary name, then rename the intermediary to the final name.
 
 Renaming a column:  
 
-```shell
+```sh
 g.copy vect=roadsmajor,myroads
 v.info -c myroads
 v.db.renamecolumn myroads column=ROAD_NAME,roadname

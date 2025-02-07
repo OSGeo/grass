@@ -14,7 +14,7 @@ to specify 3D raster or vector map layer types.
 
 Specification of map names:
 
-```shell
+```sh
 a1
 a2
 a3
@@ -36,7 +36,7 @@ specific STDS without affecting other STDS.
 In this example a precipitation map it is registered into temperature
 dataset, so the wrong map will be unregister.
 
-```shell
+```sh
 
 t.register -i type=raster input=tempmean_monthly@climate_2009_2012 \
     maps=2012_01_precip \

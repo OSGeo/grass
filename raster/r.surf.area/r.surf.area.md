@@ -39,7 +39,7 @@ longer processing times.
 
 ## EXAMPLES
 
-```shell
+```sh
 g.region -p raster=elevation
 
 r.surf.area map=elevation units=hectares

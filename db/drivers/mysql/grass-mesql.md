@@ -17,7 +17,7 @@ possible to use 3 variables:
 
 Examples of connection parameters:
 
-```shell
+```sh
 db.connect driver=mesql database='$GISDBASE/$LOCATION_NAME/$MAPSET/mysql'
 db.connect driver=mesql database=/home/user1/db
 ```

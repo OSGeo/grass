@@ -51,14 +51,12 @@ meters which results in the building having 50 m in diameter. When we
 are done with digitizing, we save the result and explore cast shadows of
 the buildings with [r.sun](r.sun.md) module:
 
-```shell
+```sh
 g.region raster=elev_lid792_1m
 # now create elev_edited raster by digitizing and save
 r.slope.aspect elevation=elev_edited slope=elev_slope aspect=elev_aspect
 r.sun elevation=elev_edited aspect=elev_aspect slope=elev_slope beam_rad=beam day=172 time=6
 ```
-
-<div align="center">
 
 [<img src="wxGUI_rdigit_step1.png" width="400" height="310"
 alt="Raster digitizer example step 1" />](wxGUI_rdigit_step1.png)
@@ -71,8 +69,6 @@ alt="Raster digitizer example step 4" />](wxGUI_rdigit_step4.png)
 [<img src="wxGUI_rdigit_step5.png" width="400" height="310"
 alt="Raster digitizer example step 5" />](wxGUI_rdigit_step5.png)  
 *Figure: Steps to digitize new buildings on elev_lid792_1m raster map.*
-
-</div>
 
 ## SEE ALSO
 

@@ -17,7 +17,7 @@ the coordinates which refer to the **center** of the lower left pixel
 (e.g., N51E010: lower left cell center at 10E, 51N). To identify a tile
 name, a grid can be easily visualized by *[d.grid](d.grid.md)*:
 
-```shell
+```sh
 d.grid size=1
 ```
 

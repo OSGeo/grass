@@ -6,7 +6,7 @@ The DBF driver is a file based driver, in theory no user interaction is
 required. However, if the settings should be set back from a different
 driver to the DBF driver, the following step is required:
 
-```shell
+```sh
 # keep single quotes:
 db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
 db.connect -p
@@ -27,7 +27,7 @@ tables.
 
 ## Supported SQL commands by DBF driver
 
-```shell
+```sh
   ALTER TABLE table ADD [COLUMN] columndef
   ALTER TABLE table DROP COLUMN colname
   CREATE TABLE table ( columndefs )
@@ -45,7 +45,7 @@ tables.
 
 ## Operators available in conditions
 
-```shell
+```sh
   "="  : equal
   "<"  : smaller than
   "<=" : smaller/equal than
@@ -87,7 +87,7 @@ example,
 
 An error message such as:
 
-```shell
+```sh
 DBMI-DBF driver error:
 SQL parser error: syntax error, unexpected NAME processing 'IN'..
 ```
@@ -99,7 +99,7 @@ GIS](sql.md).
 
 An error message such as:
 
-```shell
+```sh
 DBMI-DBF driver error:
 SQL parser error: syntax error, unexpected DESC, expecting NAME processing 'DESC'
 ```

@@ -36,7 +36,7 @@ is copied to the current mapset, a new attribute column is added and the
 urban names from the 'urbanarea' polygon map are transferred to hospital
 points locations in 'myhospitals' map:
 
-```shell
+```sh
 g.copy vect=hospitals,myhospitals
 v.db.addcolumn myhospitals column="urb_name varchar(25)"
 v.what.vect myhospitals query_map=urbanarea column=urb_name query_column=NAME
@@ -51,7 +51,7 @@ are transferred to selected EU CORINE landuse/landcover classes
 Note: The example is in UTM projection to which the input maps have been
 projected beforehand.
 
-```shell
+```sh
 # extract populated places from geonames
 v.extract geonames_IT where="featurecla='P'" output=geonames_IT_cities
 # add new column

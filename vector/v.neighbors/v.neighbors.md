@@ -21,7 +21,7 @@ current region, the module will stop with an error.
 Count the number of schools for a given grid (North Carolina sample
 dataset):
 
-```shell
+```sh
 g.region vector=schools_wake res=100 -p -a
 v.neighbors input=schools_wake output=schools_wake_3000m method=count size=3000
 
@@ -36,7 +36,7 @@ the respective cell center.
 
 Calculate the mean capacity of schools for the same grid:
 
-```shell
+```sh
 v.neighbors input=schools_wake output=schools_capacity point_column=CAPACITYTO \
             method=average size=3000
 ```

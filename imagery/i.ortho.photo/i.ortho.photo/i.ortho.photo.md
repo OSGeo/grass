@@ -49,13 +49,9 @@ Five groups of input parameters are required for ortho-rectification:
   points and/or,
 - Coordinates of ground control points in the target coordinate system.
 
-<div align="center" style="margin: 10px">
-
 [<img src="i_ortho_photo_step1.png" data-border="0" width="600"
 height="512" alt="i.ortho.photo example" />](i_ortho_photo_step1.png)  
 *Example of an input oblique image in a source project*
-
-</div>
 
 To ortho-rectify aerial images the user has to follow the menu options
 step by step. Alternatively, all the steps can be performed separately
@@ -83,7 +79,7 @@ The steps to follow are described below:
     *mapset/group/name_of_group/**REF*** is created that contatins the
     names of all images in a group.
 
-    ```shell
+    ```sh
     IMG_0020 source_mapset
     IMG_0021 source_mapset
     IMG_0022 source_mapset
@@ -102,7 +98,7 @@ The steps to follow are described below:
     *mapset/group/name_of_group/**TARGET*** is created contatining the
     names of target project and mapset.
 
-    ```shell
+    ```sh
     ETRS_33N
     target_mapset
     ```
@@ -125,7 +121,7 @@ The steps to follow are described below:
     *mapset/group/name_of_group/**ELEVATION*** is created contatining
     the name and mapset of the chosen DEM.
 
-    ```shell
+    ```sh
     elevation layer :ELEVATION
     mapset elevation:target_mapset
     location        :ETRS_33N
@@ -151,7 +147,7 @@ The steps to follow are described below:
     reference camera and a file *mapset/camera/**name_of_reference***,
     contatining the camera parameters.
 
-    ```shell
+    ```sh
     CAMERA NAME   sony
     CAMERA ID     123
     CAMERA XP     0
@@ -178,7 +174,7 @@ The steps to follow are described below:
     a list of pairs of coordinates in image and photo coordinate
     systems.
 
-    ```shell
+    ```sh
     # Ground Control Points File
     #
     # target location: XY
@@ -192,13 +188,9 @@ The steps to follow are described below:
     2728 0.0     0.0 -7.7     1
     ```
 
-    <div align="center" style="margin: 10px">
-
     [<img src="i_ortho_photo_step5.png" data-border="0" width="600"
     height="636" alt="i.ortho.photo example" />](i_ortho_photo_step5.png)  
     *Step 5: Image-to-photo transformation of an oblique image*
-
-    </div>
 
 6.  *Initialize parameters of camera: [i.ortho.init](i.ortho.init.md)*
 
@@ -218,18 +210,14 @@ The steps to follow are described below:
       north: needs to be denoted as +90° for clockwise turn and -90° for
       a counter-clockwise turn.
 
-    <div align="center" style="margin: 10px">
-
     [<img src="i_ortho_photo_step6.png" data-border="0" width="394"
     height="182" alt="i.ortho.photo example" />](i_ortho_photo_step6.png)  
     *Principle of pitch and yaw*
 
-    </div>
-
     In Step 6, a new file *mapset/group/name_of_group/**INIT_EXP*** is
     created, contatining camera parameters.
 
-    ```shell
+    ```sh
     INITIAL XC    215258.345387
     INITIAL YC    6911444.022270
     INITIAL ZC    1101.991120
@@ -261,7 +249,7 @@ The steps to follow are described below:
     containing a list of pairs of coordinates of ground control points
     in photo and target coordinate systems.
 
-    ```shell
+    ```sh
     # Ground Control Points File
     #
     # target location: ETRS_33N
@@ -277,14 +265,10 @@ The steps to follow are described below:
     1570.09788497 2790.06537829 0.0     3.0 11.0 100.0             1
     ```
 
-    <div align="center" style="margin: 10px">
-
     [<img src="i_ortho_photo_step7.png" data-border="0" width="600"
     height="689" alt="i.ortho.photo example" />](i_ortho_photo_step7.png)  
     *Step 7: Detail of ground control points matching in an oblique
     image and terrain model*
-
-    </div>
 
 8.  *Ortho-rectify imagery group: [i.ortho.rectify](i.ortho.rectify.md)*
 
@@ -297,13 +281,9 @@ The steps to follow are described below:
     current window in the target project or the minimal bounding window
     for the ortho-rectified image.
 
-    <div align="center" style="margin: 10px">
-
     [<img src="i_ortho_photo_step8.png" data-border="0" width="600"
     height="459" alt="i.ortho.photo example" />](i_ortho_photo_step8.png)  
     *Step 8: Ortho-rectified oblique image*
-
-    </div>
 
     As a result, the ortho-rectified raster map is available for
     visualization and further image analysis.

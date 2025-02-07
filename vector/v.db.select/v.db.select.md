@@ -20,7 +20,7 @@ which can be customized using the **separator** option. The records
 
 Example with a pipe as a separator (the default):
 
-```shell
+```sh
 cat|road_name|multilane|year|length
 1|NC-50|no|2001|4825.369405
 2|NC-50|no|2002|14392.589058
@@ -56,7 +56,7 @@ to parse this format when configured to the above specification.
 
 Example with default settings:
 
-```shell
+```sh
 cat,road_name,multilane,year,length
 1,"NC-50","no",2001,4825.369405
 2,"NC-50","no",2002,14392.589058
@@ -106,7 +106,7 @@ the SQL types. The definition of `is_number` may change in the future.
 
 Example with added indentation:
 
-```shell
+```sh
 {
   "info": {
     "columns": [
@@ -156,7 +156,7 @@ separator (**vertical_separator** option).
 Example with (horizontal) separator `=` and vertical separator
 `newline`:
 
-```shell
+```sh
 cat=1
 road_name=NC-50
 multilane=no
@@ -195,7 +195,7 @@ All examples are based on the North Carolina sample dataset.
 
 ### Select and show entire table
 
-```shell
+```sh
 v.db.select map=roadsmajor
 cat|MAJORRDS_|ROAD_NAME|MULTILANE|PROPYEAR|OBJECTID|SHAPE_LEN
 1|1|NC-50|no|0|1|4825.369405
@@ -209,7 +209,7 @@ cat|MAJORRDS_|ROAD_NAME|MULTILANE|PROPYEAR|OBJECTID|SHAPE_LEN
 
 Note: multiple columns can be specified as comma separated list.
 
-```shell
+```sh
 v.db.select map=roadsmajor column=ROAD_NAME
 NC-50
 NC-50
@@ -221,7 +221,7 @@ NC-98
 
 ### Print region extent of selected vector features
 
-```shell
+```sh
 v.db.select -r map=roadsmajor where="ROAD_NAME = 'NC-98'"
 n=248425.389891
 s=245640.640081
@@ -231,7 +231,7 @@ e=661979.801880
 
 ### Select empty vector features (no data entries)
 
-```shell
+```sh
 v.db.select geonames_wake where="ALTERNATEN IS NULL"
 cat|GEONAMEID|NAME|ASCIINAME|ALTERNATEN|FEATURECLA|FEATURECOD|...
 8|4498303|West Raleigh|West Raleigh||P|PPL|US||NC|338759|123|...
@@ -242,7 +242,7 @@ cat|GEONAMEID|NAME|ASCIINAME|ALTERNATEN|FEATURECLA|FEATURECOD|...
 
 ### Select not empty vector features (no data entries)
 
-```shell
+```sh
 v.db.select geonames_wake where="ALTERNATEN IS NOT NULL"
 cat|GEONAMEID|NAME|ASCIINAME|ALTERNATEN|FEATURECLA|FEATURECOD|...
 9|4487042|Raleigh|Raleigh|Raleigh,...
@@ -252,7 +252,7 @@ cat|GEONAMEID|NAME|ASCIINAME|ALTERNATEN|FEATURECLA|FEATURECOD|...
 
 ### Select features with distinct road names
 
-```shell
+```sh
 v.db.select map=roadsmajor columns=ROAD_NAME group=ROAD_NAME
 ROAD_NAME
 
@@ -267,7 +267,7 @@ NC-42
 
 It is also possible to combine with *where* option
 
-```shell
+```sh
 v.db.select map=roadsmajor columns=ROAD_NAME,MULTILANE group=ROAD_NAME where='ROAD_NAME is not null'
 ROAD_NAME|MULTILANE
 I-40|yes
@@ -290,7 +290,7 @@ US-70|yes
 
 It can also use more columns in *group* option
 
-```shell
+```sh
 v.db.select map=roadsmajor columns=ROAD_NAME,MULTILANE group=ROAD_NAME,MULTILANE where='ROAD_NAME is not null'
 ROAD_NAME|MULTILANE
 I-40|yes
@@ -319,7 +319,7 @@ The *json* package in the standard Python library can load a JSON string
 obtained as output from the *v.db.select* module through the
 *read_command* function:
 
-```shell
+```sh
 import json
 import grass.script as gs
 

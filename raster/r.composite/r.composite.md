@@ -21,7 +21,7 @@ Floyd-Steinberg dithering is optionally used with the **-d** flag.
 
 Color composite of a LANDSAT scene (North Carolina sample dataset):
 
-```shell
+```sh
 g.region raster=lsat7_2002_10
 r.composite blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30 \
             output=lsat7_2002_rgb
@@ -32,7 +32,7 @@ r.composite blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30 \
 Creating a composite RGB raster using 32 color levels per layer, with
 dithering:
 
-```shell
+```sh
 r.composite -d red=elevation.r green=elevation.g blue=elevation.b \
             output=elev.composite
 ```

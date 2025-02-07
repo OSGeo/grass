@@ -105,7 +105,7 @@ logarithmic space.
 Displaying the legend along with a histogram (North Carolina Sample
 dataset):
 
-```shell
+```sh
 g.region raster=elevation -p
 d.rast elevation
 d.legend -d elevation
@@ -116,7 +116,7 @@ alt="Elevation map with legend" />
 
 Displaying the legend with custom labels and background:
 
-```shell
+```sh
 g.region raster=elevation -p
 d.rast elevation
 d.legend raster=elevation -t label_step=20 label_values=108 title=Legend -b bgcolor=255:255:204 border_color=gray
@@ -127,7 +127,7 @@ alt="Elevation map with custom legend" />
 
 Displaying the legend with logarithmic scale:
 
-```shell
+```sh
 g.region raster=elevation -p
 r.watershed -a elevation=elevation threshold=1000 accumulation=flowacc
 d.rast flowacc

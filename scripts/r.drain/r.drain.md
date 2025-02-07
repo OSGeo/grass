@@ -48,7 +48,7 @@ starting points can be input from a combination of the
 
 Consider the following example:
 
-```shell
+```sh
 Input:                          Output:
   ELEVATION SURFACE               LEAST COST PATH
 . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
@@ -76,7 +76,7 @@ landscape.
 
 With the **-c** *(copy)* flag, you get the following result:
 
-```shell
+```sh
 Input:                          Output:
   ELEVATION SURFACE               LEAST COST PATH
 . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
@@ -100,7 +100,7 @@ Note that the last 0 will not be put in the null values map.
 
 With the **-a** *(accumulate)* flag, you get the following result:
 
-```shell
+```sh
 Input:                          Output:
   ELEVATION SURFACE               LEAST COST PATH
 . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
@@ -122,7 +122,7 @@ Input:                          Output:
 
 With the **-n** *(number)* flag, you get the following result:
 
-```shell
+```sh
 Input:                          Output:
   ELEVATION SURFACE               LEAST COST PATH
 . . . . . . . . . . . . . . .    . . . . . . . . . . . . . . .
@@ -146,7 +146,7 @@ With the **-d** *(direction)* flag, the direction raster is used for the
 input, rather than the elevation surface. The output is then created
 according to one of the **-can** flags.
 
-```shell
+```sh
 The directions are recorded as degrees CCW from East:
        112.5     67.5         i.e. a cell with the value 135
 157.5  135   90  45   22.5    means the next cell is to the North-West
@@ -185,7 +185,7 @@ from a text file using *[v.in.ascii](v.in.ascii.md)* module (here the
 text file is CSV and we are using unix here-file syntax with EOF, in GUI
 just enter the values directly for the parameter input):
 
-```shell
+```sh
 v.in.ascii input=- output=start format=point separator=comma <<EOF
 638667.15686275,220610.29411765
 638610.78431373,220223.03921569
@@ -194,35 +194,31 @@ EOF
 
 Now we compute the drainage path:
 
-```shell
+```sh
 r.drain input=elev_lid792_1m output=drain_path drain=drain start_points=start
 ```
 
 Before we visualize the result, we set a color table for the elevation
 we are using and we create a shaded relief map:
 
-```shell
+```sh
 r.colors map=elev_lid792_1m color=elevation
 r.relief input=elev_lid792_1m output=relief
 ```
 
 Finally we visualize all the input and output data:
 
-```shell
+```sh
 d.shade shade=relief color=elev_lid792_1m
 d.vect map=drain_path color=0:0:61 width=4 legend_label="drainage paths"
 d.vect map=start color=none fill_color=224:0:0 icon=basic/circle size=15 legend_label=origins
 d.legend.vect -b
 ```
 
-<div align="center">
-
 [<img src="r_drain.png" width="300" height="280"
 alt="drainage using r.watershed" />](r_drain.png)  
 *Figure: Drainage paths from two points flowing into the points with
 lowest values*
-
-</div>
 
 ### Path following directions
 
@@ -231,14 +227,14 @@ direction raster map which will tell the *r.drain* module how to
 continue from the depression. To get these directions, we use the
 *[r.watershed](r.watershed.md)* module:
 
-```shell
+```sh
 r.watershed elevation=elev_lid792_1m accumulation=accum drainage=drain_dir
 ```
 
 The directions are categorical and we convert them to degrees using
 raster algebra:
 
-```shell
+```sh
 r.mapcalc "drain_deg = if(drain_dir != 0, 45. * abs(drain_dir), null())"
 ```
 
@@ -246,27 +242,23 @@ Together with directions, we need to provide the *r.drain* module with
 cost values. We don't have any cost to assign to specific cells, so we
 create a constant surface:
 
-```shell
+```sh
 r.mapcalc "const1 = 1"
 ```
 
 Now we are ready to compute the drainage paths. We are using the two
 points from the previous example.
 
-```shell
+```sh
 r.drain -d input=const1 direction=drain_deg output=drain_path_2 drain=drain_2 start_points=start
 ```
 
 We visualize the result in the same way as in the previous example.
 
-<div align="center">
-
 [<img src="r_drain_with_r_watershed_direction.png" width="300"
 height="280" alt="drainage using r.watershed" />](r_drain_with_r_watershed_direction.png)  
 *Figure: Drainage paths from two points where directions from
 r.watershed were used*
-
-</div>
 
 ## KNOWN ISSUES
 

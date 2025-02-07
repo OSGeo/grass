@@ -8,14 +8,10 @@ area while removing inner boundaries which are considered holes. The
 holes become part of the area which contained them. No boundaries of
 these holes are preserved.
 
-<div align="center" style="margin: 10px">
-
 [<img src="v_fill_holes_filled.png" data-border="0" width="600"
 alt="Several areas, some with holes (left) and the same areas but with holes filled (right)" />](v_fill_holes_filled.png)  
 *Figure: Holes inside areas are removed. (a) Original areas with holes
 and (b) the same areas but with holes filled.*
-
-</div>
 
 In case areas have empty space in between them, i.e., there are holes in
 the overall coverage, but not in the areas themselves, *v.fill.holes*
@@ -26,8 +22,6 @@ empty space into one by dissolving their common boundaries. This turns
 the empty space into a hole inside one single area which turns the
 situation into a case of one area with a hole.
 
-<div align="center" style="margin: 10px">
-
 [<img src="v_fill_holes_filled_with_dissolve.png" data-border="0"
 width="600"
 alt="Two areas with empty space in between (left), both areas merged (middle), and the empty space filled (right)" />](v_fill_holes_filled_with_dissolve.png)  
@@ -36,8 +30,6 @@ area, so it is filled only after the boundaries between areas are
 dissolved, i.e., areas merged into one. (a) Original areas with space in
 between, (b) one area with a hole after dissolving the common boundary,
 and (c) hole filled.*
-
-</div>
 
 ### Topology
 
@@ -70,25 +62,21 @@ holes created in the lakes to get the whole perimeter of the lakes
 including islands. Remove the islands by extracting everything else
 (results in holes):
 
-```shell
+```sh
 v.extract input=lakes where="FTYPE != 'ROCK/ISLAND'" output=lakes_only
 ```
 
 Remove the holes:
 
-```shell
+```sh
 v.fill.holes input=lakes_only output=lakes_filled
 ```
-
-<div align="center" style="margin: 10px">
 
 [<img src="v_fill_holes.png" data-border="0" width="600"
 alt="Lake without holes overlapping with the lines marking the original" />](v_fill_holes.png)  
 *Figure: The filled lake (blue) and borders of the original lakes with
 islands removed (light blue). Figure shows a smaller area in the north
 of the data extent.*
-
-</div>
 
 ## SEE ALSO
 

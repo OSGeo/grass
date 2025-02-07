@@ -5,7 +5,7 @@ map to a file which is suitable as input to *[r.colors](r.colors.md)*.
 
 ## EXAMPLES
 
-```shell
+```sh
 r.colors.out map=el_D782_6m rules=rules.txt
 r.colors map=el_D783_6m rules=rules.txt
 r.colors.out map=el_D782_6m rules=rules.json format=json

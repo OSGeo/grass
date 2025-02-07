@@ -29,7 +29,7 @@ current resolution settings are important.
 Comparison of "elev_ned_30m" and "elev_srtm_30m" North Carolina sample
 dataset elevation models at random positions:
 
-```shell
+```sh
 # set computational region:
  g.region raster=elev_srtm_30m -p
 # generate random points:

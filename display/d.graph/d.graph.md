@@ -128,13 +128,13 @@ A dynamic example can be found in the *d.polar* shell script.
 
 ### Draw a "star" symbol at a given map coordinate
 
-```shell
+```sh
 echo "symbol basic/star 20 2264417 5413182 black red" | d.graph -m
 ```
 
 ### Split the screen into quadrants:
 
-```shell
+```sh
 d.frame -s full_screen
 
 d.graph << EOF

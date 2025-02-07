@@ -7,7 +7,7 @@ change the *key column* away from the default of "**cat**" with the
 
 Rules file may contain on each row either pair:
 
-```shell
+```sh
 keyword value
 ```
 
@@ -32,13 +32,13 @@ Either the **rules** or **column** option must be specified.
 
 ### Example 1: Reclass by rules
 
-```shell
+```sh
 v.reclass input=land output=land_u type=boundary rules=land.rcl
 ```
 
 The rules file contains:
 
-```shell
+```sh
 # land reclass file
 cat 1
 where use = 'E13' and owner = 'Jara Cimrman'
@@ -58,7 +58,7 @@ values selected from database by SQL select statement:
 
 (North Carolina sample dataset)  
 
-```shell
+```sh
 v.reclass in=streams out=streams_by_type column=I_vs_P
 
 v.db.select streams_by_type

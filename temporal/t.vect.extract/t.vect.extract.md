@@ -9,7 +9,7 @@ dataset.
 In the following example a new space time vector dataset will be create
 with all the data later than the year 2000:
 
-```shell
+```sh
 t.vect.extract input=shoreline where="start_time > 2000" \
                output=shoreline_later_2000 basename=new_shoreline
 

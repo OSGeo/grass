@@ -27,7 +27,7 @@ to transformation.
 **points** option. The 3D format is equivalent to the format for 2D
 ground control points with an additional third coordinate:
 
-```shell
+```sh
  x y z east north height status
 ```
 

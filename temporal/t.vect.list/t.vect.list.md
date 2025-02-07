@@ -12,7 +12,7 @@ This example show a relative space time vector dataset with the first
 three maps with a range of years, instead the last five are valid only
 for one year:
 
-```shell
+```sh
 t.vect.list shoreline@shoreline
 name|layer|mapset|start_time|end_time
 shoreline_1849_1873|None|shoreline|1849|1873
@@ -31,7 +31,7 @@ Method option is able to show vector in different way. By default *cols*
 value is used, the value *deltagaps* will print the delta between maps
 and also the gaps if they exist (like in this example).
 
-```shell
+```sh
 t.vect.list method=deltagaps input=shoreline
 id|name|layer|mapset|start_time|end_time|interval_length|distance_from_begin
 shoreline_1849_1873@shoreline|shoreline_1849_1873|None|shoreline|1849|1873|24|0

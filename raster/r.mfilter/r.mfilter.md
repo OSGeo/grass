@@ -33,7 +33,7 @@ be applied to the *input* data.
 The *filter* file is a normal UNIX ASCII file designed by the user. It
 has the following format:
 
-```shell
+```sh
      TITLE      TITLE
      MATRIX     n
                   .
@@ -78,7 +78,7 @@ describes two filters:
 
 ### EXAMPLE FILTER FILE
 
-```shell
+```sh
       TITLE     3x3 average, non-null data only, followed by 5x5 average
      MATRIX    3
      1 1 1
@@ -120,8 +120,6 @@ until the final filter is applied. Then the output cell is written.
 By specifying the number of parallel processes with **nprocs** option,
 *r.mfilter* can run significantly faster, see benchmarks below.
 
-<div align="center" style="margin: 10px">
-
 <img src="r_mfilter_benchmark_1.png" data-border="0"
 alt="benchmark for number of cells" />
 <img src="r_mfilter_benchmark_2.png" data-border="0"
@@ -130,8 +128,6 @@ alt="benchmark for window size" />
 of cells for 9x9 matrix, benchmark on the right shows execution time for
 16 billion cells for different matrix sizes. (Intel Core i9-10940X CPU @
 3.30GHz x 28)*
-
-</div>
 
 Note that parallelization is implemented only for the parallel filter,
 not the sequential one. To take advantage of the parallelization, GRASS

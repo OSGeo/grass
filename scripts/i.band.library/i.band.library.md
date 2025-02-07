@@ -108,7 +108,7 @@ designed in order to support image collections in GRASS GIS.
 Band reference information is stored in JSON files with a pre-defined
 internal data structure. A minimalistic example is shown below.
 
-```shell
+```sh
 {
     "Sentinel2": {
         "description": "The Sentinel-2 A/B bands",
@@ -170,7 +170,7 @@ see [KNOWN ISSUES](#known-issues) section for details.
 
 ### Print all available band references
 
-```shell
+```sh
 i.band.library
 
 S2_1 Visible (Coastal/Aerosol)
@@ -190,7 +190,7 @@ The module prints band reference and related tag if defined.
 
 Only band identifiers related to Sentinel-2 satellite will be printed.
 
-```shell
+```sh
 i.band.library pattern=S2
 
 S2_1 Visible (Coastal/Aerosol)
@@ -202,7 +202,7 @@ S2_12 SWIR 2
 
 Print all available 2nd bands:
 
-```shell
+```sh
 i.band.library pattern=.*_2
 
 S2_2 Visible (Blue)
@@ -216,7 +216,7 @@ L8_2 Visible (Blue)
 Extended metadata related to the first band of Sentinel-2 satellite will
 be printed.
 
-```shell
+```sh
 i.band.library -e pattern=S2_1
 
 description: The Sentinel-2 A/B bands

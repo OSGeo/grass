@@ -9,7 +9,7 @@ does not have BRDF State QA, instead has Salt Pan State QA.
 
 ### MOD09A1 and MOD09Q1
 
-```shell
+```sh
 MOD09A1/Q1: MODLAND QA Bits. bits=[0-1]
 ```
 
@@ -23,7 +23,7 @@ MOD09A1/Q1: MODLAND QA Bits. bits=[0-1]
   -- some or all bands maybe be fill value (Note that a value of \[11\]
   overrides a value of \[01\])
 
-```shell
+```sh
 MOD09Q1: Cloud State. bits=[2-3] 
 ```
 
@@ -32,7 +32,7 @@ MOD09Q1: Cloud State. bits=[2-3]
 - \[10\]= class 2: Mixed
 - \[11\]= class 3: Not Set ; Assumed Clear
 
-```shell
+```sh
 MOD09Q1: Band-wise Data Quality 250m bits=[4-7][8-11]
 MOD09A1: Band-wise Data Quality 500m bits=[2-5][6-9][10-13][14-17][18-21][22-25][26-29]
 ```
@@ -51,28 +51,28 @@ MOD09A1: Band-wise Data Quality 500m bits=[2-5][6-9][10-13][14-17][18-21][22-25]
 - \[1111\]= class 9: not processed due to deep ocean or cloud
 - Class 10-15: Combination of bits unused
 
-```shell
+```sh
 MOD09A1/Q1: Atmospheric correction bit=[12]/[30]
 ```
 
 - \[0\]= class 0: Not Corrected product
 - \[1\]= class 1: Corrected product
 
-```shell
+```sh
 MOD09A1/Q1: Adjacency correction bit=[13]/[31]
 ```
 
 - \[0\]= class 0: Not Corrected product
 - \[1\]= class 1: Corrected product
 
-```shell
+```sh
 MOD09Q1: Different orbit from 500m product, bit=[14]
 ```
 
 - \[0\]= class 0: same orbit as 500m
 - \[1\]= class 1: different orbit from 500m
 
-```shell
+```sh
 MOD09A1s: Cloud State bits=[0-1]
 ```
 
@@ -81,14 +81,14 @@ MOD09A1s: Cloud State bits=[0-1]
 - \[10\]= class 2: mixed
 - \[11\]= class 3: not set, assumed clear
 
-```shell
+```sh
 MOD09A1s: Cloud shadow bits=[2]
 ```
 
 - \[0\]= class 0: no
 - \[1\]= class 1: yes
 
-```shell
+```sh
 MOD09A1s: Land/Water Flag bits=[3-5]
 ```
 
@@ -101,7 +101,7 @@ MOD09A1s: Land/Water Flag bits=[3-5]
 - \[110\]= class 6: Continental/moderate ocean
 - \[111\]= class 7: Deep ocean
 
-```shell
+```sh
 MOD09A1s: Aerosol Quantity bits=[6-7]
 ```
 
@@ -110,7 +110,7 @@ MOD09A1s: Aerosol Quantity bits=[6-7]
 - \[10\]= class 2: Average
 - \[11\]= class 3: High
 
-```shell
+```sh
 MOD09A1s: Cirrus detected bits=[8-9]
 ```
 
@@ -119,42 +119,42 @@ MOD09A1s: Cirrus detected bits=[8-9]
 - \[10\]= class 2: Average
 - \[11\]= class 3: High
 
-```shell
+```sh
 MOD09A1s: Internal Cloud Algorithm Flag bits=[10]
 ```
 
 - \[0\]= class 0: No cloud
 - \[1\]= class 1: Cloud
 
-```shell
+```sh
 MOD09A1s: Internal Fire Algorithm Flag bits=[11]
 ```
 
 - \[0\]= class 0: No fire
 - \[1\]= class 1: Fire
 
-```shell
+```sh
 MOD09A1s: MOD35 snow/ice flag bits=[12]
 ```
 
 - \[0\]= class 0: No
 - \[1\]= class 1: Yes
 
-```shell
+```sh
 MOD09A1s: Pixel adjacent to cloud bits=[13]
 ```
 
 - \[0\]= class 0: No
 - \[1\]= class 1: Yes
 
-```shell
+```sh
 MOD09A1s: BRDF correction performed bits=[14]
 ```
 
 - \[0\]= class 0: No
 - \[1\]= class 1: Yes
 
-```shell
+```sh
 MOD09A1s: Internal Snow Mask bits=[15]
 ```
 
@@ -163,7 +163,7 @@ MOD09A1s: Internal Snow Mask bits=[15]
 
 ### MOD11A1
 
-```shell
+```sh
 MOD11A1: Mandatory QA Flags bits=[0-1]
 ```
 
@@ -175,7 +175,7 @@ MOD11A1: Mandatory QA Flags bits=[0-1]
 - \[11\]= class 3: LST not produced primarily due to reasons other than
   cloud
 
-```shell
+```sh
 MOD11A1: Data Quality Flag bits=[2-3]
 ```
 
@@ -184,7 +184,7 @@ MOD11A1: Data Quality Flag bits=[2-3]
 - \[10\]= class 2: TBD
 - \[11\]= class 3: TBD
 
-```shell
+```sh
 MOD11A1: Emis Error Flag bits=[4-5]
 ```
 
@@ -193,7 +193,7 @@ MOD11A1: Emis Error Flag bits=[4-5]
 - \[10\]= class 2: Average emissivity error ≤ 0.04
 - \[11\]= class 3: Average emissivity error \> 0.04
 
-```shell
+```sh
 MOD11A1: LST Error Flag bits=[6-7]
 ```
 
@@ -204,7 +204,7 @@ MOD11A1: LST Error Flag bits=[6-7]
 
 ### MOD11A2
 
-```shell
+```sh
 MOD11A2: Mandatory QA Flags bits=[0-1]
 ```
 
@@ -216,7 +216,7 @@ MOD11A2: Mandatory QA Flags bits=[0-1]
 - \[11\]= class 3: LST not produced primarily due to reasons other than
   cloud
 
-```shell
+```sh
 MOD11A2: Data Quality Flag bits=[2-3]
 ```
 
@@ -225,7 +225,7 @@ MOD11A2: Data Quality Flag bits=[2-3]
 - \[10\]= class 2: TBD
 - \[11\]= class 3: TBD
 
-```shell
+```sh
 MOD11A2: Emis Error Flag bits=[4-5]
 ```
 
@@ -234,7 +234,7 @@ MOD11A2: Emis Error Flag bits=[4-5]
 - \[10\]= class 2: Average emissivity error ≤ 0.04
 - \[11\]= class 3: Average emissivity error \> 0.04
 
-```shell
+```sh
 MOD11A2: LST Error Flag bits=[6-7]
 ```
 
@@ -245,7 +245,7 @@ MOD11A2: LST Error Flag bits=[6-7]
 
 ### MOD13A2
 
-```shell
+```sh
 MOD13A2: Mandatory QA Flags 1km bits[0-1]
 ```
 
@@ -254,7 +254,7 @@ MOD13A2: Mandatory QA Flags 1km bits[0-1]
 - \[10\]= class 2: Pixel produced, but most probably cloud
 - \[11\]= class 3: Pixel not produced due to other reasons than clouds
 
-```shell
+```sh
 MOD13A2: VI Usefulness Flag bits[2-5]
 ```
 
@@ -270,7 +270,7 @@ MOD13A2: VI Usefulness Flag bits[2-5]
 - \[1110\]= class 9: L1B data faulty
 - \[1111\]= class 10: Not useful for any other reason/not processed
 
-```shell
+```sh
 MOD13A2: Aerosol quantity Flags 1km bits[6-7]
 ```
 
@@ -279,28 +279,28 @@ MOD13A2: Aerosol quantity Flags 1km bits[6-7]
 - \[10\]= class 2: Average
 - \[11\]= class 3: High
 
-```shell
+```sh
 MOD13A2: Adjacent cloud detected 1km bit[8]
 ```
 
 - \[00\]= class 0: No
 - \[01\]= class 1: Yes
 
-```shell
+```sh
 MOD13A2: Atmosphere BRDF correction performed 1km bit[9]
 ```
 
 - \[00\]= class 0: No
 - \[01\]= class 1: Yes
 
-```shell
+```sh
 MOD13A2: Mixed clouds 1km bit[10]
 ```
 
 - \[00\]= class 0: No
 - \[01\]= class 1: Yes
 
-```shell
+```sh
 MOD13A2: Land/Water Flags 1km bits[11-13]
 ```
 
@@ -313,14 +313,14 @@ MOD13A2: Land/Water Flags 1km bits[11-13]
 - \[110\]= class 6: Moderate or continental ocean
 - \[111\]= class 7: Deep ocean
 
-```shell
+```sh
 MOD13A2: Possible Snow/Ice 1km bits[14]
 ```
 
 - \[0\]= class 0: No
 - \[1\]= class 1: Yes
 
-```shell
+```sh
 MOD13A2: Possible Shadow 1km bits[15]
 ```
 
@@ -329,7 +329,7 @@ MOD13A2: Possible Shadow 1km bits[15]
 
 ### MOD13Q1
 
-```shell
+```sh
 MOD13Q1: Mandatory QA Flags 250m bits[0-1]
 ```
 
@@ -338,7 +338,7 @@ MOD13Q1: Mandatory QA Flags 250m bits[0-1]
 - \[10\]= class 2: Pixel produced, but most probably cloud
 - \[11\]= class 3: Pixel not produced due to other reasons than clouds
 
-```shell
+```sh
 MOD13Q1: VI Usefulness Flag 250m bits[2-5]
 ```
 
@@ -354,7 +354,7 @@ MOD13Q1: VI Usefulness Flag 250m bits[2-5]
 - \[1110\]= class 9: L1B data faulty
 - \[1111\]= class 10: Not useful for any other reason/not processed
 
-```shell
+```sh
 MOD13Q1: Aerosol quantity Flags 250m bits[6-7]
 ```
 
@@ -363,28 +363,28 @@ MOD13Q1: Aerosol quantity Flags 250m bits[6-7]
 - \[10\]= class 2: Average
 - \[11\]= class 3: High
 
-```shell
+```sh
 MOD13Q1: Adjacent cloud detected 250m bit[8]
 ```
 
 - \[00\]= class 0: No
 - \[01\]= class 1: Yes
 
-```shell
+```sh
 MOD13Q1: Atmosphere BRDF correction performed 250m bit[9]
 ```
 
 - \[00\]= class 0: No
 - \[01\]= class 1: Yes
 
-```shell
+```sh
 MOD13Q1: Mixed clouds 250m bit[10]
 ```
 
 - \[00\]= class 0: No
 - \[01\]= class 1: Yes
 
-```shell
+```sh
 MOD13Q1: Land/Water Flags 250m bits[11-13]
 ```
 
@@ -397,14 +397,14 @@ MOD13Q1: Land/Water Flags 250m bits[11-13]
 - \[110\]= class 6: Moderate or continental ocean
 - \[111\]= class 7: Deep ocean
 
-```shell
+```sh
 MOD13Q1: Possible Snow/Ice 250m bits[14]
 ```
 
 - \[0\]= class 0: No
 - \[1\]= class 1: Yes
 
-```shell
+```sh
 MOD13Q1: Possible Shadow 250m bits[15]
 ```
 
@@ -413,7 +413,7 @@ MOD13Q1: Possible Shadow 250m bits[15]
 
 ### MCD43B2
 
-```shell
+```sh
 MCD43B2: Albedo Quality Ancillary Platform Data 1km bits[0-3]
 SDS: BRDF_Albedo_Ancillary
 ```
@@ -424,7 +424,7 @@ SDS: BRDF_Albedo_Ancillary
 - \[1111\]= class 15: Fill Value
 - Classes 3-14: Not used
 
-```shell
+```sh
 MCD43B2: Albedo Quality Ancillary Land/Water Data 1km bits[4-7]
 SDS: BRDF_Albedo_Ancillary
 ```
@@ -440,12 +440,12 @@ SDS: BRDF_Albedo_Ancillary
 - \[1111\] class 15: Fill Value
 - Classes 8-14: Not used
 
-```shell
+```sh
 MCD43B2: Albedo Quality Ancillary Sun Zenith Angle at Local Solar Noon Data 1km bits[8-14]
 SDS: BRDF_Albedo_Ancillary
 ```
 
-```shell
+```sh
 MCD43B2: Band-wise Albedo Quality Data 1km
 SDS: BRDF_Albedo_Band_Quality
 ```

@@ -59,7 +59,7 @@ neighbors marked with an `X` are always considered for cumulative cost
 updates. With the **-k** option, the neighbors marked with a `K` are
 also considered.
 
-```shell
+```sh
  . . . . . . . . . . . . . . .
  .   .   . K .   . K .   .   .
  . . . . . . . . . . . . . . .
@@ -169,7 +169,7 @@ with less memory this value will have to be set to a lower value.
 
 Consider the following example:
 
-```shell
+```sh
        Input:
          COST SURFACE
        . . . . . . . . . . . . . . .
@@ -229,7 +229,7 @@ households to the nearby road. For this cost surfaces with cost value 1
 are used. The calculation is done with *r.cost* as follows (example for
 Spearfish region):
 
-```shell
+```sh
   g.region raster=roads -p
   r.mapcalc "area.one = 1"
   r.cost -k input=area.one output=distance start_raster=roads
@@ -252,7 +252,7 @@ from an end point back to the start point. The direction of each cell
 points towards the next cell. The directions are recorded as degrees CCW
 from East:
 
-```shell
+```sh
        112.5      67.5         i.e. a cell with the value 135
 157.5  135   90   45   22.5    means the next cell is to the north-west
        180   x   360
@@ -266,7 +266,7 @@ Example: calculation of the cost allocation map "costalloc" and the
 cumulative cost map "costsurf" for given starting points (map "sources")
 and given cost raster map "costs":
 
-```shell
+```sh
 r.cost input=costs start_raster=sources output=costsurf nearest=costalloc
 ```
 

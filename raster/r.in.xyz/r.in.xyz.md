@@ -92,7 +92,7 @@ You can use the **-s** scan flag to find the extent of the input data
 *[g.region](g.region.md)*. A suitable resolution can be found by
 dividing the number of input points by the area covered. e.g.
 
-```shell
+```sh
 wc -l inputfile.txt
 g.region -p
 # points_per_cell = n_points / (rows * cols)
@@ -170,7 +170,7 @@ and/or resolution as needed before proceeding.
 
 Typical commands to create a DEM using a regularized spline fit:
 
-```shell
+```sh
 r.univar lidar_min
 r.to.vect -z type=point in=lidar_min out=lidar_min_pt
 v.surf.rst in=lidar_min_pt elev=lidar_min.rst
@@ -197,7 +197,7 @@ order to register the elevation points at raster cell centers.
 Note: if the z column is separated by several spaces from the coordinate
 columns, it may be sufficient to adapt the **z** position value.
 
-```shell
+```sh
 # Important: observe the raster spacing from the ASCII file:
 # ASCII file format (example):
 # 630007.5 228492.5 141.99614
@@ -232,7 +232,7 @@ Import the [Jockey's Ridge, NC, LIDAR
 dataset](https://grassbook.org/ncexternal/index.html) (compressed file
 "lidaratm2.txt.gz"), and process it into a clean DEM:
 
-```shell
+```sh
 # scan and set region bounds
 r.in.xyz -s -g separator="," in=lidaratm2.txt
 g.region n=35.969493 s=35.949693 e=-75.620999 w=-75.639999

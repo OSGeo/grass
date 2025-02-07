@@ -24,13 +24,13 @@ present and 1 otherwise.
 
 To generate JSON output in Bash, use the **format** option:
 
-```shell
+```sh
 r.mask.status format=json
 ```
 
 In Python, use:
 
-```shell
+```sh
 import grass.script as gs
 gs.parse_command("r.mask.status", format="json")
 ```
@@ -45,13 +45,13 @@ to indicate absence of a file, so testing existence of a file with
 `test -f` gives return code 0 when the file exists. *r.mask.status* can
 be used in the same with the the **-t** flag:
 
-```shell
+```sh
 r.mask.status -t
 ```
 
 In a Bash script:
 
-```shell
+```sh
 # Bash
 if r.mask.status -t; then
     echo "Masking is active"

@@ -15,7 +15,7 @@ This script is a simple wrapper around the *v.in.mapgen* module.
 
 ## EXAMPLE
 
-```shell
+```sh
 v.in.lines in=- out=two_lines separator=, <<EOF
 167.846717,-46.516653
 167.846663,-46.516645

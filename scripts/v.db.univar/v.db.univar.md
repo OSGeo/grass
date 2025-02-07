@@ -27,7 +27,7 @@ In this example, the 30 years precipitation data table is statistically
 analysed (North Carolina sample dataset) and univariate statistics
 performed:
 
-```shell
+```sh
 # show columns of attribute table connected to precipitation map
 v.info -c precip_30ynormals
 
@@ -46,7 +46,7 @@ v.db.univar precip_30ynormals column=annual
 In this example, random points are sampled from the elevation map (North
 Carolina sample dataset) and univariate statistics performed:
 
-```shell
+```sh
 g.region raster=elevation -p
 v.random output=samples n=100
 v.db.addtable samples column="heights double precision"
@@ -62,7 +62,7 @@ This uses the JSON output of the module which is passed using a pipe (in
 Bash or other unix-like shell) to the *jq* tool which selects just the
 relevant statistic.
 
-```shell
+```sh
 v.db.univar precip_30ynormals column=annual format=json | jq .statistics.mean
 ```
 

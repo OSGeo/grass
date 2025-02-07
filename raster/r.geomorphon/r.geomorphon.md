@@ -201,7 +201,7 @@ problem.
 
 Geomorphon calculation example using the EU DEM 25m:
 
-```shell
+```sh
 g.region raster=eu_dem_25m -p
 r.geomorphon elevation=eu_dem_25m forms=eu_dem_25m_geomorph
 
@@ -227,7 +227,7 @@ alt="Geomorphon calculation example using the EU DEM 25m (with search=11)" />
 Using the resulting terrestrial landforms map, single landforms can be
 extracted, e.g. the peaks, and converted into a vector point map:
 
-```shell
+```sh
 r.mapcalc expression="eu_dem_25m_peaks = if(eu_dem_25m_geomorph == 2, 1, null())"
 r.thin input=eu_dem_25m_peaks output=eu_dem_25m_peaks_thinned
 r.to.vect input=eu_dem_25m_peaks_thinned output=eu_dem_25m_peaks type=point

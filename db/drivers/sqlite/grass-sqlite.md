@@ -12,7 +12,7 @@ The database name 'sqlite.db' is at user's choice. Also the file storage
 location can be freely chosen. If the database does not exist, it will
 be automatically created when database content is created:
 
-```shell
+```sh
 # example for storing DB in mapset directory (keep single quotes):
 db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 db.connect -p
@@ -35,7 +35,7 @@ A convenient SQLite front-end is
 within the current mapset, the following way is suggested (corresponds
 to above database connection):
 
-```shell
+```sh
 # fetch GRASS variables as shell environment variables:
 eval `g.gisenv`
 # use double quotes:

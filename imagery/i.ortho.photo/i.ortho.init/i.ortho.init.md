@@ -24,7 +24,7 @@ created in *[g.gui.image2target](g.gui.image2target.md)*.
 
 The following menu is displayed:
 
-```shell
+```sh
         Please provide the following information
 
     INITIAL XC: Meters                __________

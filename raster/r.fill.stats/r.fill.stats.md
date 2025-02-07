@@ -190,7 +190,7 @@ distance.
 The illustration below shows the precomputed weights matrix for a search
 distance of four cells from the center cell:
 
-```shell
+```sh
 000.00 000.01 000.04 000.07 000.09 000.07 000.04 000.01 000.00
 000.01 000.06 000.13 000.19 000.22 000.19 000.13 000.06 000.01
 000.04 000.13 000.25 000.37 000.42 000.37 000.25 000.13 000.04
@@ -210,7 +210,7 @@ window can be modeled more accurately as a circle. The illustration
 below shows the precomputed weights for a distance in map units that is
 approximately equivalent to four cells from the center cell:
 
-```shell
+```sh
 ...... ...... ...... 000.00 000.00 000.00 ...... ...... ......
 ...... 000.00 000.02 000.06 000.09 000.06 000.02 000.00 ......
 ...... 000.02 000.11 000.22 000.28 000.22 000.11 000.02 ......
@@ -264,20 +264,20 @@ default "double precision" output.
 Gap-fill a dataset using spatially weighted mean (IDW) and a maximum
 search radius of 3.0 map units; also produce uncertainty estimation map:
 
-```shell
+```sh
 r.fill.stats input=measurements output=result dist=3.0 -m mode=wmean uncertainty=uncert_map
 ```
 
 Run a fast low-pass filter (replacement all cells with mean value of
 neighboring cells) on the input map:
 
-```shell
+```sh
 r.fill.stats input=measurements output=result dist=10 mode=mean
 ```
 
 Fill data gaps in a categorized raster map; preserve existing data:
 
-```shell
+```sh
 r.fill.stats input=categories output=result dist=100 -m mode=mode -k
 ```
 
@@ -286,30 +286,29 @@ r.fill.stats input=categories output=result dist=100 -m mode=mode -k
 Inspect the point density and determine the extent of the point cloud
 using the *[r.in.pdal](r.in.pdal.md)* module:
 
-```shell
+```sh
 r.in.pdal -e input=points.las output=density method=n resolution=5 class_filter=2
 ```
 
 Based on the result, set computational region extent and desired
 resolution:
 
-```shell
+```sh
 g.region -pa raster=density res=1
 ```
 
 Import the point cloud as raster using binning:
 
-```shell
+```sh
 r.in.pdal input=points.las output=ground_raw method=mean class_filter=2
 ```
 
 Check that there are more non-NULL cells than NULL ("no data") cells:
 
-```shell
+```sh
 r.univar map=ground_raw
 ```
-
-```shell
+```sh
 total null and non-null cells: 2340900
 total null cells: 639184
 ...
@@ -317,7 +316,7 @@ total null cells: 639184
 
 Fill in the NULL cells using the default 3-cell search radius:
 
-```shell
+```sh
 r.fill.stats input=ground output=ground_filled uncertainty=uncertainty distance=3 mode=wmean power=2.0 cells=8
 ```
 
@@ -334,7 +333,7 @@ In this example, the SRTM elevation map in the North Carolina sample
 dataset is filtered for outlier elevation values; missing pixels are
 then re-interpolated to obtain a complete elevation map:
 
-```shell
+```sh
 g.region raster=elev_srtm_30m -p
 d.mon wx0
 d.histogram elev_srtm_30m

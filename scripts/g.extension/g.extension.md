@@ -121,14 +121,14 @@ just in case of C).
 
 Download and install *r.stream.distance* into current GRASS installation
 
-```shell
+```sh
 g.extension extension=r.stream.distance
 ```
 
 This installs the extension from the official repository. For
 convenience, a shorter syntax can be used:
 
-```shell
+```sh
 g.extension r.stream.distance
 ```
 
@@ -136,14 +136,14 @@ g.extension r.stream.distance
 
 Example for an open http proxy:
 
-```shell
+```sh
 # syntax: http://proxyurl:proxyport
 g.extension extension=r.stream.distance proxy="http=http://proxy.example.com:8080"
 ```
 
 Example for a proxy with proxy authentication:
 
-```shell
+```sh
 # syntax: http://username:password@proxyurl:proxyport
 g.extension extension=r.stream.distance proxy="http=http://username:password@proxy.example.com:8080"
 ```
@@ -153,19 +153,19 @@ g.extension extension=r.stream.distance proxy="http=http://username:password@pro
 List all available extensions in the official GRASS GIS Addons
 repository:
 
-```shell
+```sh
 g.extension -l
 ```
 
 List all locally installed extensions:
 
-```shell
+```sh
 g.extension -a
 ```
 
 Removal of a locally installed extension:
 
-```shell
+```sh
 g.extension extension=r.stream.distance operation=remove
 ```
 
@@ -173,28 +173,28 @@ g.extension extension=r.stream.distance operation=remove
 
 Simple URL to GitHub, GitLab, Bitbucket repositories:
 
-```shell
+```sh
 g.extension r.example.plus url="https://github.com/wenzeslaus/r.example.plus"
 ```
 
 Simple URL to GitHub, GitLab, Bitbucket repositories from a specific
 (e.g. development) branch:
 
-```shell
+```sh
 g.extension r.example.plus url="https://github.com/wenzeslaus/r.example.plus" branch=master
 ```
 
 Simple URL to OSGeo Trac (downloads a ZIP file, requires download to be
 enabled in Trac):
 
-```shell
+```sh
 g.extension r.example url=trac.osgeo.org/.../r.example
 ```
 
 In general, when a ZIP file or other archive is provided, the full URL
 can be used:
 
-```shell
+```sh
 g.extension r.example url=http://example.com/.../r.example?format=zip
 ```
 
@@ -208,7 +208,7 @@ URL pointing to Trac code browser and include Subversion revision
 number. For example, this installs the version number 57854 of
 r.local.relief module:
 
-```shell
+```sh
 g.extension r.local.relief url="https://trac.osgeo.org/grass/browser/grass-addons/grass7/raster/r.local.relief?rev=57854&format=zip"
 ```
 
@@ -217,7 +217,7 @@ g.extension r.local.relief url="https://trac.osgeo.org/grass/browser/grass-addon
 Having source code of a GRASS module in a directory on disk one can
 install it using:
 
-```shell
+```sh
 g.extension r.example url=/local/directory/r.example/
 ```
 

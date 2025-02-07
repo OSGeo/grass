@@ -26,14 +26,14 @@ it. This is also true for s=*value*, e=*value*, and w=*value*.
 
 Assign absolute coordinates to map:
 
-```shell
+```sh
 r.region map=mymap n=220750 s=220000 w=638300 e=639000
 ```
 
 Shift map (using offset, here by +100 map units in the NS direction, -50
 in the EW direction):
 
-```shell
+```sh
 r.region map=mymap n=n+100 e=e-50 w=w-50 s=s+100
 ```
 

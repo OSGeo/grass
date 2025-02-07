@@ -19,7 +19,7 @@ together with the arrow, unless flag **-w** is specified.
 Display a north arrow symbol as a basic compas with label NORTH, rotated
 by 8 degrees with label, with black line and gray fill:  
 
-```shell
+```sh
 d.mon wx0
 d.northarrow style=basic_compas rotation=8 label=NORTH -w color=black fill_color=gray
 d.mon -r

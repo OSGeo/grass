@@ -10,27 +10,19 @@ There are two types departure from a CSR: regularity and clustering.
 Figure 1 gives an example of a complete random, regular and a clustered
 pattern.
 
-<div align="center" style="margin: 10px">
-
 ![](v_qcount_1.png) ![](v_qcount_2.png) ![](v_qcount_3.png)  
 *Figure 1: Realization of two-dimensional Poisson processes of 50 points
 on the unit square exhibiting (a) complete spatial randomness, (b)
 regularity, and (c) clustering.*
-
-</div>
 
 Various indices and statistics measure departure from CSR. The
 *v.qcount* function implements six different *quadrat count* indices
 that are described in Cressie (1991; p. 590-591)\[1\] and in Ripley
 (1981; p. 102-106)\[2\] and summarized in Table 1.
 
-<div align="center" style="margin: 10px">
-
 ![](v_qcount_5.png)  
 *Table 1: Indices for Quadrat Count Data. Adapted from Cressie \[1\],
 this table shows the statistics computed for the quadrats in Figure 2.*
-
-</div>
 
 These indices are computed as follows: *v.qcount* chooses **nquadrads**
 circular quadrats of radius **radius** such that they are completely
@@ -39,12 +31,8 @@ number of points falling within each quadrat are counted and indices are
 calculated to estimate the departure of point locations from complete
 spatial randomness. This is illustrated in Figure 2.
 
-<div align="center" style="margin: 10px">
-
 ![](v_qcount_4.png)  
 *Figure 2: Randomly placed quadrats (n = 100) with 584 sample points.*
-
-</div>
 
 The number of points is written as category to the **output** map (and
 not to an attribute table).

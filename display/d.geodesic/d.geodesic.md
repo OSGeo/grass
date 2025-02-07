@@ -21,7 +21,7 @@ distance is not displayed.
 A geodesic line if shown over the political map of the world
 (demolocation dataset):
 
-```shell
+```sh
 g.region vector=country_boundaries -p
 d.mon wx0
 d.vect country_boundaries type=area

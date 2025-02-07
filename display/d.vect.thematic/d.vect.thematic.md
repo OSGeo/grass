@@ -28,7 +28,7 @@ legend into a file. Flag **-e** is deprecated, instead use verbose flag.
 
 ### Thematic map with classes
 
-```shell
+```sh
 d.vect.thematic -l map=communes3 column=pop \
   breaks=111393.250000,222785.500000,334177.750000 \
   colors="255:0:0,0:255:0,0:0:255,0,0,0"
@@ -40,7 +40,7 @@ The following example uses a calculated attribute (`density = pop/area`)
 and the standard deviation algorithm to calculate class breaks for 5
 classes:
 
-```shell
+```sh
 d.vect.thematic -l map=communes2 column=pop/area algorithm=std \
   nbclasses=5 colors="0:0:255,50:100:255,255:100:50,255:0:0,156:0:0"
 ```
@@ -50,7 +50,7 @@ d.vect.thematic -l map=communes2 column=pop/area algorithm=std \
 Example for the North Carolina sample dataset, colorizing basin polygons
 by average elevation and displaying school capacity:
 
-```shell
+```sh
 # create watersheds from elevation map
 g.region raster=elevation
 r.watershed elevation=elevation threshold=10000 basin=basins_10k

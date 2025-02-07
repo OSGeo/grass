@@ -26,7 +26,7 @@ are in the user's current mapset search path (managed with
 
 In order to obtain information about temporal DBMI backend, run:
 
-```shell
+```sh
 t.info -d
  +------------------- Temporal DBMI backend information ----------------------+
  | DBMI Python interface:...... sqlite3
@@ -42,7 +42,7 @@ t.info -d
 
 In order to obtain information about a space time dataset, run:
 
-```shell
+```sh
 t.info input=tempmean_monthly
  +-------------------- Space Time Raster Dataset -----------------------------+
  |                                                                            |
@@ -103,7 +103,7 @@ time series.
 
 In order to obtain information about a map in a space time dataset, run:
 
-```shell
+```sh
 t.info input=2009_01_tempmean type=raster
  +-------------------- Raster Dataset ----------------------------------------+
  |                                                                            |
@@ -143,7 +143,7 @@ This information is printed only when semantic labels have been assigned
 to registered raster maps by *[r.semantic.label](r.semantic.label.md)*
 or *[t.register](t.register.md#support-for-semantic-labels)* module.
 
-```shell
+```sh
 t.info input=test
 ...
 +-------------------- Metadata information ----------------------------------+
@@ -154,7 +154,7 @@ t.info input=test
 
 Similarly for temporal maps information:
 
-```shell
+```sh
 t.info input=T33UYP_20190331T094039_B01 type=raster
 ...
  +-------------------- Metadata information ----------------------------------+

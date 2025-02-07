@@ -125,7 +125,7 @@ dataset](https://grassbook.org/datasets/datasets-3rd-edition/) based.
 
 ### Create nodes globally for all line ends and intersections
 
-```shell
+```sh
 v.net input=streets_wake output=streets_node operation=nodes
 # verify result
 v.category streets_node option=report
@@ -133,7 +133,7 @@ v.category streets_node option=report
 
 ### Merge in nodes from a separate map within given threshold
 
-```shell
+```sh
 v.net input=streets_wake points=firestations out=streets_net \
       operation=connect threshold=500
 # verify result
@@ -147,13 +147,13 @@ The nodes are stored in layer 2 unless `node_layer=1` is used.
 For generating network for given vector point map an input file in the
 following format is required:
 
-```shell
+```sh
 [category of edge] [category of start node] [category of end node]
 ```
 
 Option 1: Save the file (e.g. "points.txt") and generate the map:
 
-```shell
+```sh
 v.net points=geodetic_swwake_pts output=geodetic_swwake_pts_net \
       operation=arcs file=points.txt
 # verify result
@@ -162,7 +162,7 @@ v.category geodetic_swwake_pts_net option=report
 
 Option 2: Read in from command line:
 
-```shell
+```sh
 v.net points=geodetic_swwake_pts output=geodetic_swwake_pts_net \
       operation=arcs file=- << EOF
 1 28000 28005
@@ -178,7 +178,7 @@ v.category geodetic_swwake_pts_net option=report
 
 Following example generates a vector map with turntable:
 
-```shell
+```sh
 v.net operation=turntable in=railroads out=railroads_ttb
 ```
 

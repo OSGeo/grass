@@ -8,19 +8,15 @@ percentage of the first map.
 Blending the aspect map with the elevation map for a shaded map (North
 Carolina sample dataset):
 
-```shell
+```sh
 g.region raster=elevation
 r.relief input=elevation output=relief zscale=10
 r.blend -c first=elevation second=relief output=blend percent=75
 ```
 
-<div align="center" style="margin: 10px">
-
 [<img src="r_blend.png" data-border="0" width="600" height="540"
 alt="r.blend example" />](r_blend.png)  
 *Figure: Elevation blended with shaded relief*
-
-</div>
 
 ## SEE ALSO
 

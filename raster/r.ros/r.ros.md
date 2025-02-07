@@ -47,7 +47,7 @@ If only one or two of the options **moisture_1h**, **moisture_10h**, and
 **moisture_100h** are given, the module will assign values to the
 missing option using the formula:
 
-```shell
+```sh
 moisture_100h = moisture_10h + 1 = moisture_1h + 2
 ```
 
@@ -65,7 +65,7 @@ given, the module will assume a topographically flat condition. Option
 Assume we have inputs, the following generates ROSes and spotting
 distances:
 
-```shell
+```sh
 r.ros -s model=fire_model moisture_1h=1hour_moisture moisture_live=live_moisture \
     velocity=wind_speed direction=wind_direction \
     slope=slope aspect=aspect elevation=elevation output=ros

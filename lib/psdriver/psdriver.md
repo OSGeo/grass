@@ -11,7 +11,7 @@ The PS driver generates a PostScript file from GRASS display commands.
 The PS driver can be enabled by setting **GRASS_RENDER_IMMEDIATE**
 variable, eg.
 
-```shell
+```sh
 export GRASS_RENDER_IMMEDIATE=ps
 ```
 
@@ -40,7 +40,7 @@ Several environment variables affect the operation of the PS driver:
 
 ### Example
 
-```shell
+```sh
 export GRASS_RENDER_IMMEDIATE=ps
 export GRASS_RENDER_TRUECOLOR=TRUE
 

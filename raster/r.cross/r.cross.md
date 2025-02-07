@@ -26,7 +26,7 @@ of the category values from these existing *input* map layers.
 For example, suppose that, using two raster map layers, the following
 combinations occur:
 
-```shell
+```sh
           map1   map2
           ___________
           NULL    1
@@ -38,7 +38,7 @@ combinations occur:
 
 *r.cross* would produce a new raster map layer with 5 categories:
 
-```shell
+```sh
           map1   map2   output
           ____________________
           NULL    1       0
@@ -59,7 +59,7 @@ The category file created for the *output* raster map layer describes
 the combinations of input map layer category values which generated each
 category. In the above example, the category labels would be:
 
-```shell
+```sh
           category   category
           value      label
           ______________________________

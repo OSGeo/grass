@@ -60,7 +60,7 @@ raster output will be created when cross-validation is selected.
 
 ### Basic interpolation
 
-```shell
+```sh
 r.resamp.bspline input=raster_surface output=interpolated_surface method=bicubic
 ```
 
@@ -71,7 +71,7 @@ estimated (i.e., interpolated) values will be created.
 
 General procedure:
 
-```shell
+```sh
 # set region to area with NULL cells, align region to input map
 g.region n=north s=south e=east w=west align=input -p
 # interpolate NULL cells
@@ -88,7 +88,7 @@ In this example, the SRTM elevation map in the North Carolina sample
 dataset is filtered for outlier elevation values; missing pixels are
 then re-interpolated to obtain a complete elevation map:
 
-```shell
+```sh
 g.region raster=elev_srtm_30m -p
 d.mon wx0
 d.histogram elev_srtm_30m
@@ -117,7 +117,7 @@ A random sample of points should be generated first with
 *[r.random](r.random.md)*, and the current region should not include
 more than 100 non-NULL random cells.
 
-```shell
+```sh
 r.resamp.bspline -c input=input_raster
 ```
 

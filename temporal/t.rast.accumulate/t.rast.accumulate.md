@@ -50,7 +50,7 @@ This is an example how to accumulate the daily mean temperature of
 Europe from 1990 to 2000 using the growing-degree-day method to detect
 grass hopper reproduction cycles that are critical to agriculture.
 
-```shell
+```sh
 # Get the temperature data
 wget http://www-pool.math.tu-berlin.de/~soeren/grass/temperature_mean_1990_2000_daily_celsius.tar.gz
 

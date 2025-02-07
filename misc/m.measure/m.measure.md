@@ -9,7 +9,7 @@ square miles, square feet, square meters and square kilometers.
 Distance example in a latitude-longitude coordinate reference system (on
 great circle, i.e. an orthodrome):
 
-```shell
+```sh
 Bonn_DE="7.09549,50.73438"
 Philadelphia_US="-75.16379,39.95233"
 
@@ -17,20 +17,16 @@ m.measure coordinates="$Bonn_DE,$Philadelphia_US" units=kilometers
 Length:  6217.916452 kilometers
 ```
 
-<div align="center" style="margin: 10px">
-
 [<img src="m_measure_distance.png" data-border="0" width="600"
 height="290"
 alt="Visualization (with d.geodesic) of m.measure distance example" />  
 ](m_measure_distance.png) *Visualization (with d.geodesic) of m.measure
 distance example*
 
-</div>
-
 As an example for the North Carolina sample dataset, here four points
 describing a square of 1000m side length:
 
-```shell
+```sh
 m.measure units=meters \
   coordinates=922000,2106000,923000,2106000,923000,2107000,922000,2107000
 Length:  3000.000000 meters

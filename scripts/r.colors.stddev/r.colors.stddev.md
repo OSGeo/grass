@@ -18,18 +18,14 @@ red at +2 S.D.
 
 North Carolina sample dataset:
 
-```shell
+```sh
 g.region raster=elevation -p
 r.colors.stddev elevation
 ```
 
-<div align="center" style="margin: 10px">
-
 [<img src="r_colors_stddev.png" data-border="0" width="600" height="540"
 alt="r.colors.stddev example" />](r_colors_stddev.png)  
 *Figure: Standard deviations from mean elevation*
-
-</div>
 
 ## SEE ALSO
 

@@ -22,7 +22,7 @@ download of legend CSV file
 from [External data for NC sample
 dataset](https://grassbook.org/wp-content/uploads/ncexternal/index.html)):
 
-```shell
+```sh
 # check original map attributes
 v.db.select geology column=GEO_NAME,SHAPE_area
 
@@ -55,7 +55,7 @@ Joining the soil type explanations from table *soils_legend* into the
 Spearfish soils map ([download
 legend](https://grassbook.org/code-examples/code-examples-1st-edition/)):
 
-```shell
+```sh
 g.copy vect=soils,mysoils
 
 # import legend table

@@ -10,13 +10,13 @@ installed extensions can be printed by `g.extension -a`.
 Rebuild locally installed extensions which were built against different
 GIS Library (see `g.version -r`)
 
-```shell
+```sh
 g.extension.rebuild.all
 ```
 
 Force to rebuild all locally installed extensions
 
-```shell
+```sh
 g.extension.rebuild.all -f
 ```
 

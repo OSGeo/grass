@@ -6,7 +6,7 @@ faces, and kernels. The GRASS ASCII vector format may contain also a
 The header is similar as the head file of vector binary format but
 contains bounding box also. Key words are:
 
-```shell
+```sh
 ORGANIZATION
 DIGIT DATE
 DIGIT NAME
@@ -24,13 +24,13 @@ MAP THRESH
 
 The body begins with the row:
 
-```shell
+```sh
 VERTI:
 ```
 
 followed by records of primitives:
 
-```shell
+```sh
 TYPE NUMBER_OF_COORDINATES [NUMBER_OF_CATEGORIES]
  X Y [Z]
 ....
@@ -61,14 +61,14 @@ layer number and the category number (ID).
 
 The order of coordinates is
 
-```shell
+```sh
 X Y [Z]
 ```
 
 In pre-GRASS 6 versions of the ASCII format, the order of coordinates
 was different:
 
-```shell
+```sh
 Y X
 ```
 
@@ -90,7 +90,7 @@ Acceptable formats:
 
 ## EXAMPLES
 
-```shell
+```sh
 ORGANIZATION: GRASS Development Team
 DIGIT DATE:   1/9/2005
 DIGIT NAME:   -

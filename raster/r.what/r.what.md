@@ -33,7 +33,7 @@ The module's **coordinates** parameter can be used to enter coordinate
 pairs directly. The maximum number of pairs will be limited by your
 system's maximum input line length (e.g. 4096 characters).
 
-```shell
+```sh
 g.region raster=landuse96_28m,aspect -p
 r.what map=landuse96_28m,aspect coordinates=633614.08,224125.12,632972.36,225382.87 -f
 
@@ -47,7 +47,7 @@ Coordinates can be read from existing vector points map by specifying
 **points** option. Other features than points or centroids are ignored.
 Example: query North Carolina county number for each community college:
 
-```shell
+```sh
 g.region raster=boundary_county_500m -p
 r.what map=boundary_county_500m points=comm_colleges
 
@@ -63,7 +63,7 @@ Coordinates can be read from existing vector points map by specifying
 Using the **v** flag you can get also the cat for each feature. Example:
 query North Carolina county number for each community college:
 
-```shell
+```sh
 g.region raster=boundary_county_500m -p
 r.what map=boundary_county_500m points=comm_colleges -v
 
@@ -79,7 +79,7 @@ Coordinates can be read from existing vector points map by specifying
 The output is stored in a CSV file including header row. Example: query
 North Carolina county number for each community college:
 
-```shell
+```sh
 g.region raster=boundary_county_500m -p
 r.what map=boundary_county_500m points=comm_colleges \
        separator=comma output=result.csv -n
@@ -99,7 +99,7 @@ follows. If we have a file called *input_coord.txt* containing the
 whitespace separated coordinates and optionally labels, the resulting
 raster map values are extracted:
 
-```shell
+```sh
 cat input_coord.txt
 633614.08 224125.12 site 1
 632972.36 225382.87 site 2
@@ -115,7 +115,7 @@ r.what map=landuse96_28m,aspect < input_coord.txt
 Input coordinates may be given directly from standard input (`stdin`),
 for example (input data appears between the "`EOF`" markers):
 
-```shell
+```sh
 r.what map=landuse96_28m,aspect << EOF
 633614.08 224125.12 site 1
 632972.36 225382.87 site 2
@@ -124,8 +124,7 @@ EOF
 633614.08|224125.12|site 1|2|209.5939
 632972.36|225382.87|site 2|15|140.7571
 ```
-
-```shell
+```sh
 echo "633614.08 224125.12" | r.what map=landuse96_28m,aspect
 
 633614.08|224125.12||2|209.5939
@@ -137,7 +136,7 @@ The input coordinates may be "piped" from the standard output (`stdout`)
 of another program. In the next example, vector point coordinates are
 piped from the *[v.out.ascii](v.out.ascii.md)* module.
 
-```shell
+```sh
 v.out.ascii comm_colleges separator=space | r.what map=boundary_county_500m
 
 145096.8591495|154534.26488388|1|39
@@ -152,7 +151,7 @@ Here we use the **-f** label flag to enable the output of category
 labels associated with the raster cell(s), as well as values
 (categorical maps only).
 
-```shell
+```sh
 r.what -f map=landuse96_28m,aspect << EOF
 633614.08 224125.12 site 1
 632972.36 225382.87 site 2

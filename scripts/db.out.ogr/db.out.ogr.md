@@ -16,19 +16,19 @@ linked as non-default layer to a vector map.
 
 ### Export of GRASS GIS attribute table to a CSV table file (default format)
 
-```shell
+```sh
 db.out.ogr input=precip_30ynormals output=precip_30ynormals.csv
 ```
 
 ### Export of a GRASS GIS attribute table to a DBF table
 
-```shell
+```sh
 db.out.ogr input=precip_30ynormals output=precip_30ynormals.dbf format=DBF
 ```
 
 ### Export of GRASS GIS attribute table into a PostgreSQL table
 
-```shell
+```sh
 db.out.ogr input=precip_30ynormals \
            output="PG:host=localhost dbname=meteo user=neteler" \
            format=PostgreSQL

@@ -15,7 +15,7 @@ A\) Reading values from 3D raster map at position of vector points,
 writing these values into a column of the attribute table connected to
 the vector map:  
 
-```shell
+```sh
 v.what.rast3 map=pnts raster3d=plume column=concentration
 ```
 
@@ -23,7 +23,7 @@ B\) In case of a vector map without attached attribute table, first add
 a new attribute table. This table is then populated with values queried
 from the raster map:  
 
-```shell
+```sh
 # create new random 3d vector points map
 v.random -z output=pnts npoints=100 zmin=0  zmax=50
 

@@ -6,7 +6,7 @@ of parallel lines or points in given destination from the line.
 
 The format is:
 
-```shell
+```sh
 P <point id>   <line cat> <offset> [<side offset>]
 L <segment id> <line cat> <start offset> <end offset> [<side offset>]
 ```
@@ -17,7 +17,7 @@ the line.
 
 The user could send to `stdin` something like:
 
-```shell
+```sh
 P 1 356 24.56
 P 2 495 12.31
 P 3 500 -12.31
@@ -59,7 +59,7 @@ The examples are based on the North Carolina sample dataset.
 
 Extract line segment from 400m to 5000m from beginning of line 1:
 
-```shell
+```sh
 # extract lines from railroad map:
 v.extract input=railroads output=myrr cats=1
 
@@ -93,7 +93,7 @@ Extract line segment from 400m to 5000m from beginning of line 1
 Creation of parallel, 1km long line segments along the first 8km of
 track, offset 500m to the left of the tracks:
 
-```shell
+```sh
 v.segment input=myrailroads output=myrailroads_segl_side << EOF
 L 1 1 1000 2000 -500
 L 2 1 3000 4000 -500
@@ -109,7 +109,7 @@ d.vect -c map=myrailroads_segl_side width=2
 
 Creation of a series of points, spaced every 2km along the tracks:
 
-```shell
+```sh
 v.segment input=myrailroads output=myrailroads_pt2km << EOF
 P 1 1 1000
 P 2 1 3000
@@ -129,7 +129,7 @@ A series of points, spaced every 2km along the tracks
 Creation of a series of points, spaced every 2km along the tracks,
 offset 500m to the right:
 
-```shell
+```sh
 v.segment input=myrailroads output=myrailroads_pt2kmO500m << EOF
 P 1 1 1000 500
 P 2 1 3000 500
@@ -151,7 +151,7 @@ Creation of a series of points, spaced every 10% of the line's length
 along the tracks from the end of the line up to the middle point, offset
 500m to the right:
 
-```shell
+```sh
 v.segment input=myrailroads output=myrailroads_pt10pctO500m << EOF
 P 1 1  -0% 500
 P 2 1 -10% 500

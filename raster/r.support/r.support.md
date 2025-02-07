@@ -20,31 +20,31 @@ These examples are based on the North Carolina dataset, more
 specifically the *landuse* raster map. Copy the landuse map to the
 current mapset
 
-```shell
+```sh
 g.copy raster=landuse,my_landuse
 ```
 
 ### Update statistics
 
-```shell
+```sh
 r.support -s map=my_landuse
 ```
 
 ### Update Title
 
-```shell
+```sh
 r.support map=my_landuse title="Landuse copied"
 ```
 
 ### Append to History Metadata
 
-```shell
+```sh
 r.support map=my_landuse history="Copied from PERMANENT mapset"
 ```
 
 ### Update Units Display
 
-```shell
+```sh
 r.support map=my_landuse units=meter
 ```
 
@@ -53,7 +53,7 @@ r.support map=my_landuse units=meter
 Note: landuse map doesn't confirm to CORINE specification. This is an
 example only.
 
-```shell
+```sh
 r.support map=my_landuse semantic_label=CORINE_LULC
 ```
 

@@ -61,7 +61,7 @@ set only those cells on the render path (thin line).
 
 Boundaries (usually without categories) can be rasterized with
 
-```shell
+```sh
 v.to.rast type=boundary layer=-1 use=value
 ```
 
@@ -69,7 +69,7 @@ v.to.rast type=boundary layer=-1 use=value
 
 ### Convert a vector map and use column SPEED from attribute table
 
-```shell
+```sh
 db.describe -c table=vect_map
 
 ncols:3
@@ -77,14 +77,13 @@ Column 1: CAT
 Column 2: SPEED
 Column 3: WIDTH
 ```
-
-```shell
+```sh
 v.to.rast input=vect_map output=raster_map attribute_column=SPEED type=line
 ```
 
 ### Calculate stream directions from a river vector map (Spearfish)
 
-```shell
+```sh
 v.to.rast input=streams output=streamsdir use=dir
 ```
 
@@ -93,7 +92,7 @@ v.to.rast input=streams output=streamsdir use=dir
 Using slope and aspect maps, compute slope along a bus route (use full
 NC sample dataset):
 
-```shell
+```sh
 g.region raster=elevation -p
 r.slope.aspect elevation=elevation slope=slope aspect=aspect
 
@@ -114,7 +113,7 @@ Slope in degrees along bus route
 In this example, the ZIP code vector map is rasterized (North Carolina
 sample dataset):
 
-```shell
+```sh
 # rasterize ZIP codes at 50m raster resolution
 g.region vector=zipcodes_wake res=50 -ap
 # vector to raster conversion, with category labels
@@ -126,7 +125,7 @@ v.to.rast input=zipcodes_wake output=myzipcodes use=attr attribute_column="ZIPNU
 In this example, the number of schools per raster cell are counted
 (North Carolina sample dataset):
 
-```shell
+```sh
 g.copy vector=schools_wake,myschools_wake
 
 # set computation region for raster binning

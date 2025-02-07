@@ -10,7 +10,7 @@ entering **rules=-**.
 
 Rules are defined in one of these formats:
 
-```shell
+```sh
 old_low:old_high:new_low:new_high
 old_low:old_high:new_val  (i.e. new_high == new_low)
 *:old_val:new_val         (interval [inf, old_val])
@@ -45,7 +45,7 @@ via stdin or a file. More than one set of arguments is accepted.
 To simply convert a raster between formats (eg. int to float) the user
 would use the first argument. For example
 
-```shell
+```sh
 10:1500:0.1:15.0
 ```
 
@@ -58,7 +58,7 @@ float raster raster with range between 0.1 and 15.0.
 formatting is as described above. In following example the values 1, 2
 and 3 are replaced by 1.1, 7.5 resp. 0.4:
 
-```shell
+```sh
 r.recode input=oldmap output=newmap rules=- << EOF
 1:1:1.1:1.1
 2:2:7.5:7.5

@@ -9,7 +9,7 @@ model.
 This file contains TOPMODEL parameters that describe the study area. Any
 lines starting with a \# sign or empty lines are ignored.
 
-```shell
+```sh
 # Subcatchment name
 Subcatchment 1
 
@@ -82,7 +82,7 @@ Subcatchment 1
 **input**    
 This file contains observed weather data.
 
-```shell
+```sh
 # dt [h]: Time step
 24
 

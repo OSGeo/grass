@@ -60,7 +60,7 @@ Example to create contour lines from elevation model, then recreating
 DEM from these contour lines along with differences analysis (North
 Carolina sample data set):
 
-```shell
+```sh
 g.region raster=elevation -p
 
 # get minimum elevation value

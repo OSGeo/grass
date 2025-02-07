@@ -85,7 +85,7 @@ SRTM collections are located under the "Digital Elevation" category.
 Example for North Carolina sample dataset (the tile name is
 "n35_w079_1arc_v3.tif"):
 
-```shell
+```sh
 # set computational region to e.g. 10m elevation model:
 g.region raster=elevation -p
 
@@ -110,7 +110,7 @@ resolutions are available, in this example we use the 2.5 arc-minutes
 resolution data. During import, we spatially subset the world data to
 the North Carolina region using the *extent* parameter:
 
-```shell
+```sh
 # download selected Bioclim data (2.5 arc-minutes resolution)
 # optionally tiles are available for the 30 arc-sec resolution
 wget https://geodata.ucdavis.edu/climate/worldclim/1_4/grid/cur/bio_2-5m_bil.zip

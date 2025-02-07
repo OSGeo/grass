@@ -48,7 +48,7 @@ no checks where done to find out required iteration count. The shell
 script code (using *[r.mapcalc](r.mapcalc.md)*) used in the original
 script is shown below:
 
-```shell
+```sh
 ${seedmap} = if( ${dem}, \
 if( if( isnull(${seedmap}),0,${seedmap} > 0), ${wlevel}-${dem}, \
  if( \
@@ -80,7 +80,7 @@ water level, this code block is called with same level numerous times
 Example of small flooding along a street (North Carolina sample
 dataset):
 
-```shell
+```sh
 g.region raster=elev_lid792_1m -p
 
 # water accumulation next to street dam

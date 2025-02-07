@@ -23,7 +23,7 @@ The formula from Aitken 1977/Langmuir 1984 (based on Naismith's rule for
 walking times) has been used to estimate the cost parameters of specific
 slope intervals:
 
-```shell
+```sh
 T = a*delta_S + b*delta_H_uphill + c*delta_H_moderate_downhill + d*delta_H_steep_downhill
 ```
 
@@ -62,7 +62,7 @@ which all cells have a value of 0.
 The **lambda** parameter is a dimensionless scaling factor of the
 friction cost:
 
-```shell
+```sh
 total cost = movement time cost + lambda * friction costs * delta_S
 ```
 
@@ -73,7 +73,7 @@ calculated. Those neighbours marked with an x are always considered for
 cumulative cost updates. With the "knight's move" option, the neighbours
 marked with a K are also considered.
 
-```shell
+```sh
   K   K
 K x x x K
   x O x
@@ -94,7 +94,7 @@ from an end point back to the start point. The direction of each cell
 points towards the next cell. The directions are recorded as degrees CCW
 from East:
 
-```shell
+```sh
        112.5      67.5         i.e. a cell with the value 135
 157.5  135   90   45   22.5    means the next cell is to the north-west
        180   x   360
@@ -124,7 +124,7 @@ We compute a map showing how far a lost person could get from the point
 where he or she was last seen while taking into account the topography
 and landcover.
 
-```shell
+```sh
 g.region swwake_30m -p
 
 # create friction map based on land cover
@@ -143,14 +143,10 @@ r.walk -k elevation=elev_ned_30m friction=friction output=walkcost \
 r.contour walkcost output=walkcost step=1000
 ```
 
-<div align="center" style="margin: 10px">
-
 [<img src="r_walk.png" data-border="0" width="600" height="600"
 alt="r.walk example" />](r_walk.png)  
 *Figure: Walkshed over a cost surface derived from topography and
 landcover*
-
-</div>
 
 ## REFERENCES
 

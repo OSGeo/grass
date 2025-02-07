@@ -10,7 +10,7 @@ mapset.
 
 A new database is created within MySQL:
 
-```shell
+```sh
 mysql> CREATE DATABASE mydb;
 ```
 
@@ -32,7 +32,7 @@ given in two formats:
 
 Examples of connection parameters:
 
-```shell
+```sh
 db.connect driver=mysql database=mytest
 db.connect driver=mysql database='dbname=mytest,host=test.grass.org'
 ```
@@ -69,7 +69,7 @@ users you have to ask your MySQL server administrator to grant select
 privilege to them on the MySQL database used for that mapset. For
 example, to allow everybody to read data in from your database 'mydb':  
 
-```shell
+```sh
 shell> mysql --user=root mysql
 mysql> GRANT SELECT ON mydb.* TO ''@'%';
 ```

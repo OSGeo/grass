@@ -26,7 +26,7 @@ working with projections.
 
 Generate fractal surface and export is as point in LAS format:
 
-```shell
+```sh
 g.region raster=elevation res=100
 r.surf.fractal output=fractals
 r.to.vect input=fractals output=fractals type=point -z

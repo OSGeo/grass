@@ -20,7 +20,7 @@ must be created with *v.in.region* and *v.overlay*, and then run
 
 North Carolina sample dataset:
 
-```shell
+```sh
 v.report zipcodes_wake option=area units=hectares
 ```
 

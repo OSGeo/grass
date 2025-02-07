@@ -35,7 +35,7 @@ changed with e.g. ulimit -n 4096 (UNIX-based operating systems) but not
 higher than the hard limit. If the latter is too low, you can as
 superuser add an entry in
 
-```shell
+```sh
 /etc/security/limits.conf
 # <domain>      <type>  <item>         <value>
 your_username  hard    nofile          4096
@@ -44,7 +44,7 @@ your_username  hard    nofile          4096
 This will raise the hard limit to 4096 files. Also have a look at the
 overall limit of the operating system
 
-```shell
+```sh
 cat /proc/sys/fs/file-max
 ```
 
@@ -55,7 +55,7 @@ which, on modern Linux systems, is several 100,000 files.
 To create a voxel map layer from a subset of the *tempmean_monthly*
 space time dataset, run:
 
-```shell
+```sh
 # create the subset for 2012 data
 t.rast.extract input=tempmean_monthly output=tempmean_monthly_later_2012 \
                where="start_time >= '2012-01-01'"

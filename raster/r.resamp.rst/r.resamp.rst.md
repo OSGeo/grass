@@ -115,7 +115,7 @@ outside *r.resamp.rst* before processing.
 
 Resampling the Spearfish 30m resolution elevation model to 15m:
 
-```shell
+```sh
 # set computation region to original map (30m)
 g.region raster=elevation.dem -p
 

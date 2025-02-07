@@ -23,7 +23,7 @@ category.
 
 ### Basic outlier removal
 
-```shell
+```sh
 v.outlier input=vector_map output=vector_output outlier=vector_outlier thres_O=25
 ```
 
@@ -31,7 +31,7 @@ In this case, a basic outlier removal is done with a threshold of 25 m.
 
 ### Basic outlier removal
 
-```shell
+```sh
 v.outlier input=vector_map output=vector_output outlier=vector_outlier qgis=vector_qgis
 ```
 
@@ -41,7 +41,7 @@ output vector available for visualizaton in QGIS
 
 ### North Carolina dataset example
 
-```shell
+```sh
 v.outlier input=elev_lid792_bepts output=elev_lid792_bepts_nooutliers \
   outlier=elev_lid792_bepts_outliers ew_step=5 ns_step=5 thres_o=0.1
 ```

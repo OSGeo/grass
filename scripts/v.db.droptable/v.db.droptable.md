@@ -14,7 +14,7 @@ The existing database connection(s) can be verified with *v.db.connect*.
 
 Removing attribute table connected to layer 1:  
 
-```shell
+```sh
 g.copy vect=roadsmajor,myroads
 v.db.droptable myroads
 v.db.droptable myroads -f

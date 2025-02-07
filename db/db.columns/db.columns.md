@@ -13,20 +13,20 @@ need to be spcified each time.
 
 ### List columns of a PostgreSQL attribute table
 
-```shell
+```sh
 db.columns table=zipcodes_wake driver=pg database=grassdb
 ```
 
 *If the database parameters are already set, the columns can be listed
 directly*  
 
-```shell
+```sh
 db.columns table=zipcodes_wake
 ```
 
 ### List columns from Shape file with DBF attribute table
 
-```shell
+```sh
 db.columns table=zipcodes_wake driver=dbf database=/grassdata/nc_spm_08/PERMANENT/dbf/
 ```
 
@@ -34,7 +34,7 @@ db.columns table=zipcodes_wake driver=dbf database=/grassdata/nc_spm_08/PERMANEN
 
 Note that the SQLite backend is the default setting.
 
-```shell
+```sh
 db.columns driver=sqlite table=archsites database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 ```
 

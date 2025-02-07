@@ -67,16 +67,12 @@ in the terrain can be assigned SFD/MFD flow directions as above. Flow
 directions are encoded using powers of two clockwise starting from
 2<sup>0</sup> for east to 2<sup>7</sup> for north-east.
 
-<div align="center">
-
 [<img src="rterraflow_direction_encoding.png" data-border="0" width="200"
 height="200" alt="r.terraflow direction encoding" />](rterraflow_direction_encoding.png)  
 Flow direction encoding clockwise starting from 2<sup>0</sup> for east
 to 2<sup>7</sup> for north-east; 0 for undetermined (sinks) and 1 for
 undefined (null cells)
 ([source](https://idea.isnew.info/how-to-import-arcgis-flow-direction-into-grass-gis.html))
-
-</div>
 
 Once flow directions are computed for every cell in the terrain,
 *r.terraflow* computes flow accumulation by routing water using the flow
@@ -158,28 +154,23 @@ raster data (CELL maps).
 Example for small area in North Carolina sample dataset to calculate
 flow accumulation:
 
-```shell
+```sh
 g.region raster=elev_lid792_1m
 r.terraflow elevation=elev_lid792_1m accumulation=elev_lid792_1m_accumulation
 ```
 
-<div align="center" style="margin: 10px">
-
 <img src="rterraflow_accumulation.png" data-border="0" />  
 *Flow accumulation*
 
-</div>
-
 Spearfish sample data set:
 
-```shell
+```sh
 g.region raster=elevation.10m -p
 r.terraflow elev=elevation.10m filled=elevation10m.filled \
     dir=elevation10m.mfdir swatershed=elevation10m.watershed \
     accumulation=elevation10m.accu tci=elevation10m.tci
 ```
-
-```shell
+```sh
 g.region raster=elevation.10m -p
 r.terraflow elev=elevation.10m filled=elevation10m.filled \
     dir=elevation10m.mfdir swatershed=elevation10m.watershed \

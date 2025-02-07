@@ -66,7 +66,7 @@ project and mapset should be allowed.
 
 The next prompt asks you to select one of two windows:
 
-```shell
+```sh
       Please select one of the following options
       1.   Use the current window in the target project
       2.   Determine the smallest window which covers the image
@@ -83,7 +83,7 @@ window in the target project if choice number one is selected.
 
 Next you are asked to select an interpolation method.
 
-```shell
+```sh
       Please select one of the following interpolation methods
       1. nearest neighbor
       2. bilinear

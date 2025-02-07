@@ -37,11 +37,10 @@ the results to be more human-friendly.
 Report sorted areas in square miles and acres for each category. No-data
 are not reported (see **-n** flag).
 
-```shell
+```sh
 r.report -n map=geology_30m units=mi,a sort=desc
 ```
-
-```shell
+```sh
 +-----------------------------------------------------------------------------+
 |                         RASTER MAP CATEGORY REPORT                          |
 |PROJECT: nc_spm_08_grass7                            Fri Dec  6 17:00:21 2013|
@@ -77,11 +76,10 @@ r.report -n map=geology_30m units=mi,a sort=desc
 Report areas for each category of land use for each zipcode (included
 only part of the table):
 
-```shell
+```sh
 r.report map=zipcodes@PERMANENT,landclass96@PERMANENT units=h,p
 ```
-
-```shell
+```sh
 +-----------------------------------------------------------------------------+
 |                         RASTER MAP CATEGORY REPORT                          |
 |PROJECT: nc_spm_08_latest                            Tue Feb 11 10:10:46 2014|
@@ -123,11 +121,10 @@ r.report map=zipcodes@PERMANENT,landclass96@PERMANENT units=h,p
 The output from *r.report* can be output in JSON by passing the
 **format=json** option.
 
-```shell
+```sh
 r.report -n -a map=towns,elevation units=miles,meters,kilometers,acres,hectares,cells,percent nsteps=2 format=json
 ```
-
-```shell
+```sh
 {
     "location": "nc_spm_08_grass7",
     "created": "2024-07-24T14:59:09+0530",

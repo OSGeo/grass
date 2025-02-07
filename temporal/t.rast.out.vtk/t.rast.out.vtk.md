@@ -13,7 +13,7 @@ space time raster dataset. All maps of this space time raster dataset
 are exported using **t.rast.out.vtk** into the directory
 **/tmp/export**.
 
-```shell
+```sh
 mkdir /tmp/export
 t.rast.out.vtk input=precip_abs directory=/tmp/export/ elevation=elevation
 

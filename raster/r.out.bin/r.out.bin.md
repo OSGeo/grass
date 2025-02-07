@@ -13,14 +13,14 @@ With the -h flag, data can be directly used by
 [GMT](https://www.generic-mapping-tools.org/) as Grid Format 1 (float)
 or 2 (short). For example:
 
-```shell
+```sh
 r.out.bin -h input=grass.raster output=new.grd
 grdinfo new.grd=1 (if float)
 ```
 
 Exported data can be piped directly into the GMT program xyz2grd.
 
-```shell
+```sh
 r.out.bin input=grass.raster output=- | xyz2grd -R....  -ZTLf -
 ```
 

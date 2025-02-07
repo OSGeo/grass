@@ -15,7 +15,7 @@ with *v.db.connect*.
 
 ### Basic metadata information
 
-```shell
+```sh
 v.info map=geology
 
  +----------------------------------------------------------------------------+
@@ -52,7 +52,7 @@ v.info map=geology
 
 ### Map history
 
-```shell
+```sh
 v.info -h map=geology
 
 COMMAND: v.in.ogr input="geol.shp" output="geology" min_area=0.0001 snap=-1
@@ -72,7 +72,7 @@ of the native vector format.
 
 ### Attribute columns for given layer
 
-```shell
+```sh
 v.info -c map=geology
 
 Displaying column types/names for database connection of layer <1>:
@@ -88,7 +88,7 @@ DOUBLE PRECISION|SHAPE_len
 
 ### Basic metadata information in shell script style
 
-```shell
+```sh
 v.info -get map=geology
 
 name=geology
@@ -122,8 +122,7 @@ areas=1832
 islands=907
 primitives=5481
 ```
-
-```shell
+```sh
 v.info -g map=geology
 
 north=318117.43741634
@@ -136,7 +135,7 @@ bottom=0.000000
 
 ### Output in JSON format
 
-```shell
+```sh
 {
     "name": "geology",
     "mapset": "PERMANENT",
@@ -187,7 +186,7 @@ more info.
 Note: The Python tab in the *wxGUI* can be used for entering the
 following code:
 
-```shell
+```sh
 import grass.script as gcore
 
 gcore.vector_columns('geology')   # for `v.info -c`
@@ -197,7 +196,7 @@ gcore.vector_info_topo('geology') # for `v.info shell=topo`
 Here is an example of how the JSON output format can be used to
 integrate Grass with other python libraries easily.
 
-```shell
+```sh
 import grass.script as gs
 import pandas as pd
 

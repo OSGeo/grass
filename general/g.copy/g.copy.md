@@ -44,7 +44,7 @@ If the user wished to copy the existing raster file *soils* to a file
 called *soils.ph* and to copy an existing vector map *roads* to a file
 called *rds.old*, the user could type:
 
-```shell
+```sh
 g.copy raster=soils,soils.ph
 g.copy vector=roads,rds.old
 
@@ -57,7 +57,7 @@ below command copies the raster map named *soils* from the mapset
 *wilson* to a new file called *soils* to be placed under the user's
 current mapset:
 
-```shell
+```sh
 g.copy raster=soils@wilson,soils
 ```
 

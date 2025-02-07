@@ -50,7 +50,7 @@ crosses, shortest paths are blue lines:
 <img src="vnetdistance.png" data-border="1"
 alt="v.net.distance example" />
 
-```shell
+```sh
 # connect schools to streets as layer 2
 v.net input=streets_wake points=schools_wake output=streets_net1 \
       operation=connect thresh=400 arc_layer=1 node_layer=2
@@ -78,7 +78,7 @@ d.vect schools_to_hospitals
 
 Example with streams of the NC sample data set.
 
-```shell
+```sh
 # add coordinates of pollution point source of pollution as vector
 pollution.txt:
 634731.563206905|216390.501834892

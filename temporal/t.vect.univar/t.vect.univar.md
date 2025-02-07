@@ -10,7 +10,7 @@ The example is based on the
 **precip_stations** space time vector dataset and after run the
 following command:
 
-```shell
+```sh
 t.vect.univar input=precip_stations col=month
 id|start|end|n|nmissing|nnull|min|max|range|mean|mean_abs|population_stddev|population_variance|population_coeff_variation|sample_stddev|sample_variance|kurtosis|skewness
 precip_stations_monthly@climate_2009_2012|2009-01-01 00:00:00|2009-02-01 00:00:00|132|0|4|-2.31832|7.27494|9.59326|3.44624|3.5316|1.79322|3.21564|0.520341|1.80005|3.24019|0.484515|-0.338519

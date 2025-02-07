@@ -27,7 +27,7 @@ which can lead to unhelpful large East-West coordinates in the exported
 file. It is also recommended to then use an export command which
 respects the user settings. Example:
 
-```shell
+```sh
 # import:
 i.in.spotvgt 0001_NDV.HDF
 

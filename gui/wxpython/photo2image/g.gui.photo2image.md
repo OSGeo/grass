@@ -21,19 +21,15 @@ an extension file (if not given, defaults to \\filename_ip2i_out)
 
 An example for project **imagery60**:
 
-```shell
+```sh
 g.gui.photo2image group=aerial@PERMANENT raster=gs13.1@PERMANENT camera=gscamera order=2 extension=try --o
 ```
 
 ### Screenshot of g.gui.photo2image
 
-<div align="center" style="margin: 10px">
-
 [<img src="wxGUI_iphoto2image_frame.jpg" data-border="0" width="600"
 height="375" alt="Screenshot of g.gui.photo2image" />](wxGUI_iphoto2image_frame.jpg)  
 *Figure: Screenshot of g.gui.photo2image*
-
-</div>
 
 ## For a detailed operation manual please read
 

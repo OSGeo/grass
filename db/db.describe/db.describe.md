@@ -14,7 +14,7 @@ need to be spcified each time.
 *List column descriptions of table in SQLite database (note that this is
 the default setting)*  
 
-```shell
+```sh
 db.describe driver=sqlite table=hospitals \
    database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 
@@ -24,7 +24,7 @@ db.describe myarchsites
 
 ### DBF example
 
-```shell
+```sh
 db.describe -c table=hospitals database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf/' \
             driver=dbf
 ncols: 16
@@ -34,8 +34,7 @@ Column 2: OBJECTID:INTEGER:11
 Column 3: AREA:DOUBLE PRECISION:20
 [...]
 ```
-
-```shell
+```sh
 db.describe table=hospitals database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf/' \
             driver=dbf
 table:hospitals
@@ -64,11 +63,10 @@ type:INTEGER
 
 ### JSON Output
 
-```shell
+```sh
 db.describe table=hospitals format=json
 ```
-
-```shell
+```sh
 {
     "table": "hospitals",
     "description": "",

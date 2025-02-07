@@ -25,7 +25,7 @@ options will be ignored.
 Example of *v.hull* 3D output (using two random 3D point clouds, North
 Carolina sample data set):
 
-```shell
+```sh
 g.region rural_1m -p
 r.mapcalc "zero = 0"
 v.random -z output=random3d_a n=10 zmin=0 zmax=200

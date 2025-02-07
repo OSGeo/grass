@@ -95,14 +95,10 @@ the integrity of the interpolation method.
 By specifying the number of parallel processes with **nprocs** option,
 *r.resamp.filter* can run faster, see benchmarks below.
 
-<div align="center" style="margin: 10px">
-
 <img src="r_resamp_filter_benchmark_size.png" data-border="0"
 alt="benchmark for number of cells" />  
 *Figure: Benchmark shows execution time for different number of cells.
 See benchmark script in the source code.*
-
-</div>
 
 To reduce the memory requirements to minimum, set option **memory** to
 zero. To take advantage of the parallelization, GRASS GIS needs to

@@ -14,7 +14,7 @@ available.
 The PNG driver can be enabled by setting **GRASS_RENDER_IMMEDIATE**
 variable, eg.
 
-```shell
+```sh
 export GRASS_RENDER_IMMEDIATE=png
 ```
 
@@ -51,7 +51,7 @@ Several environment variables affect the operation of the PNG driver:
 
 ### Example
 
-```shell
+```sh
 export GRASS_RENDER_IMMEDIATE=png
 export GRASS_RENDER_TRUECOLOR=TRUE
 

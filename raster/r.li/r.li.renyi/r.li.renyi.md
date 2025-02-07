@@ -29,13 +29,13 @@ To calculate Renyi's diversity index on map *my_map*, using *my_conf*
 configuration file (previously defined with *g.gui.rlisetup*) and saving
 results in *my_out*, run:
 
-```shell
+```sh
 r.li.renyi input=my_map conf=my_conf output=my_out alpha=0.6
 ```
 
 Forest map (Spearfish sample dataset) example:
 
-```shell
+```sh
 g.region raster=landcover.30m -p
 r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
 r.li.renyi input=forests conf=movwindow7 out=forests_renyi_mov7_a06 alpha=0.6
@@ -44,7 +44,7 @@ r.univar forests_renyi_mov7_a06
 
 Forest map (North Carolina sample dataset) example:
 
-```shell
+```sh
 g.region raster=landclass96 -p
 r.mapcalc "forests = if(landclass96 == 5, 1, null() )"
 r.li.renyi input=forests conf=movwindow7 out=forests_renyi_mov7

@@ -137,20 +137,20 @@ bandwidth selected with the **-a** flag.
 This example uses the ortho photograph included in the NC Sample
 Dataset. Set up an imagery group:
 
-```shell
+```sh
 i.group group=ortho_group input=ortho_2001_t792_1m@PERMANENT
 ```
 
 Set the region to a smaller test region (resolution taken from input
 ortho photograph).
 
-```shell
+```sh
 g.region -p raster=ortho_2001_t792_1m n=220446 s=220075 e=639151 w=638592
 ```
 
 Try out a low threshold and check the results.
 
-```shell
+```sh
 i.segment group=ortho_group output=ortho_segs_l1 threshold=0.02
 ```
 
@@ -160,7 +160,7 @@ From a visual inspection, it seems this results in too many segments.
 Increasing the threshold, using the previous results as seeds, and
 setting a minimum size of 2:
 
-```shell
+```sh
 i.segment group=ortho_group output=ortho_segs_l2 threshold=0.05 seeds=ortho_segs_l1 min=2
 
 i.segment group=ortho_group output=ortho_segs_l3 threshold=0.1 seeds=ortho_segs_l2
@@ -181,13 +181,13 @@ similar than required by our threshold):
 
 Set the region to match the entire map(s) in the group.
 
-```shell
+```sh
 g.region -p raster=ortho_2001_t792_1m@PERMANENT
 ```
 
 Run *i.segment* on the full map:
 
-```shell
+```sh
 i.segment group=ortho_group output=ortho_segs_final threshold=0.25 min=10
 ```
 
@@ -201,7 +201,7 @@ about 450 times more then for the final run.
 This example uses the panchromatic channel of the Landsat7 scene
 included in the North Carolina sample dataset:
 
-```shell
+```sh
 # create group with single channel
 i.group group=singleband input=lsat7_2002_80
 

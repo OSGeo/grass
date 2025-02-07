@@ -37,14 +37,10 @@ the integrity of the interpolation method.
 By specifying the number of parallel processes with **nprocs** option,
 *r.resamp.interp* can run significantly faster, see benchmarks below.
 
-<div align="center" style="margin: 10px">
-
 <img src="r_resamp_interp_benchmark_size.png" data-border="0"
 alt="benchmark for number of cells" />  
 *Figure: Benchmark shows execution time for different number of cells.
 See benchmark scripts in source code.*
-
-</div>
 
 To reduce the memory requirements to minimum, set option **memory** to
 zero. To take advantage of the parallelization, GRASS GIS needs to
@@ -55,7 +51,7 @@ compiled with OpenMP enabled.
 Resample elevation raster map to a higher resolution (from 500m to 250m;
 North Carolina sample dataset):
 
-```shell
+```sh
 g.region raster=elev_state_500m -p
 g.region res=250 -ap
 r.resamp.interp input=elev_state_500m output=elev_state_250m \

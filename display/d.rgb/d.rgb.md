@@ -24,7 +24,7 @@ satellite channels.
 An alternative is the assignment of grey color tables to each band with
 *[r.colors](r.colors.md)*:
 
-```shell
+```sh
 r.info -r image.1
 
 min=0
@@ -44,18 +44,14 @@ To write out the color composite to a combined R/G/B raster maps, use
 Visual color composite of a LANDSAT scene (North Carolina sample
 dataset):
 
-```shell
+```sh
 g.region raster=lsat7_2002_10 -p
 d.rgb blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30
 ```
 
-<div style="margin: 10px" align="center">
-
 <img src="d_rgb.png" data-border="0" alt="d.rgb example" />  
 *Figure: Visual color composite of a LANDSAT scene (North Carolina
 sample dataset)*
-
-</div>
 
 ## SEE ALSO
 

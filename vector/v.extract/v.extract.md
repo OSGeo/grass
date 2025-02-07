@@ -24,7 +24,7 @@ The examples are intended for the North Carolina sample dataset:
 
 ### Extract areas by category number with dissolving \#1:
 
-```shell
+```sh
 v.extract -d cats=1,2,3,4 input=soils_wake output=soil_groupa type=area new=0
 ```
 
@@ -35,7 +35,7 @@ category number 0.
 
 ### Extract areas by category number with dissolving \#2:
 
-```shell
+```sh
 v.extract -d cats=1-4 input=soils_wake output=soil_groupa type=area new=-1
 ```
 
@@ -46,7 +46,7 @@ original category numbers 1 thru 4, since **new** was set to -1.
 
 ### Extract all areas and assign the same category to all:
 
-```shell
+```sh
 v.extract input=soils_wake output=soil_groupa type=area new=1
 ```
 
@@ -56,7 +56,7 @@ will be assigned category number 1.
 
 ### Extract vectors with SQL:
 
-```shell
+```sh
 v.extract input=markveggy.shp output=markveggy.1 new=13 \
   where="(VEGTYPE = 'Wi') or (VEGTYPE = 'PS') or (PRIME_TYPE='Wi')"
 ```
@@ -66,13 +66,13 @@ is fulfilled.
 
 ### Extract vector features which have the given field empty:
 
-```shell
+```sh
 v.extract input=lakes output=lakes_gaps where="FTYPE is NULL"
 ```
 
 ### Extract vector features which have the given field not empty:
 
-```shell
+```sh
 v.extract input=lakes output=lakes_ftype where="FTYPE not NULL"
 ```
 
@@ -80,7 +80,7 @@ v.extract input=lakes output=lakes_ftype where="FTYPE not NULL"
 
 Remove meteorological stations from map which are located above 1000m:
 
-```shell
+```sh
 # check what to delete:
 v.db.select precip_30ynormals where="elev > 1000"
 
@@ -94,7 +94,7 @@ v.db.select precip_30ynormals_lowland
 
 ### Dissolving based on column attributes:
 
-```shell
+```sh
 # check column names:
 v.info -c zipcodes_wake
 
@@ -114,7 +114,7 @@ the reclassed attributes of adjacent (left/right) areas are identical.
 
 ### Extract 3 random areas from geology map
 
-```shell
+```sh
 v.extract input=geology output=random_geology type=area random=3
 ```
 

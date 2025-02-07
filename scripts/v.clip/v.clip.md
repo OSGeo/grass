@@ -28,7 +28,7 @@ performed with *[v.select](v.select.md)*.
 Clip railroads by counties Wake and Johnston in North Carolina (North
 Carolina data set).
 
-```shell
+```sh
 v.extract input=boundary_county where="NAME='WAKE' OR NAME='JOHNSTON'" output=county_WAKE_JOHNSTON
 v.clip input=railroads clip=county_WAKE_JOHNSTON output=railroads_WAKE_JOHNSTON
 ```
@@ -39,7 +39,7 @@ alt="v.clip example" />
 
 ### Retain boundaries of clip map
 
-```shell
+```sh
 v.clip -d input=railroads clip=county_WAKE_JOHNSTON output=railroads_WAKE_JOHNSTON
 ```
 
@@ -50,7 +50,7 @@ Johnston in North Carolina (North Carolina data set). It is not
 obligatory to enter name of clip map. In case it is stated, the clip map
 will be omitted.
 
-```shell
+```sh
 v.extract input=boundary_county where="NAME='WAKE' OR NAME='JOHNSTON'" output=county_WAKE_JOHNSTON
 v.clip -r input=hospitals output=hospitals_clip
 ```

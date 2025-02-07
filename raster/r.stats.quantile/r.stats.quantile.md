@@ -21,7 +21,7 @@ In this example, the raster polygon map `zipcodes` in the North Carolina
 sample dataset is used to calculate quantile raster statistics using the
 `elevation` raster map:
 
-```shell
+```sh
 g.region raster=zipcodes -p
 
 # print quantiles

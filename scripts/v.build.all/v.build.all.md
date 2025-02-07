@@ -5,7 +5,7 @@ current mapset.
 
 ### Example
 
-```shell
+```sh
 # rebuild topology for all vector maps in the current mapset
 v.build.all
 ```

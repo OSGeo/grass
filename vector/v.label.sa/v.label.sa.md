@@ -9,7 +9,7 @@ one created by [v.label](v.label.md)
 
 North Carolina example:
 
-```shell
+```sh
 # get font names:
 d.font -L
 

@@ -8,7 +8,7 @@ generator instead.
 
 ## EXAMPLE
 
-```shell
+```sh
 g.region -p n=228500 s=215000 w=630000 e=645000 res=10
 r.surf.gauss out=gauss mean=0 sigma=10
 
@@ -16,25 +16,17 @@ r.surf.gauss out=gauss mean=0 sigma=10
 r.univar gauss
 ```
 
-<div align="center" style="margin: 10px">
-
 [<img src="r_surf_gauss.jpg" data-border="0" width="600" height="295"
 alt="r.surf.gauss example (mean: 0; sigma: 10)" />](r_surf_gauss.jpg)  
 *Figure: Random Gaussian surface example (mean: 0; sigma: 10)*
 
-</div>
-
 With the histogram tool the cell values versus count can be shown.
-
-<div align="center" style="margin: 10px">
 
 [<img src="r_surf_gauss_hist.png" data-border="0" width="600"
 height="275"
 alt="r.surf.gauss example histogram (mean: 0; sigma: 10)" />](r_surf_gauss_hist.png)  
 *Figure: Histogram of random Gaussian surface example (mean: 0; sigma:
 10)*
-
-</div>
 
 ## SEE ALSO
 

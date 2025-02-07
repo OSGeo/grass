@@ -7,7 +7,7 @@ queries. Database must exist and connection must be set by *db.connect*.
 
 Test current SQL backend driver:
 
-```shell
+```sh
 db.connect -p
 db.test test=test1
 ```

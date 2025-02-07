@@ -84,7 +84,7 @@ sq.) than there are inside Forest land boundaries (0.72 mi. sq.).
 
 Following is a sample report.
 
-```shell
+```sh
 +------------------------------------------------------------+
 |                    COINCIDENCE TABULATION REPORT           |
 |------------------------------------------------------------|

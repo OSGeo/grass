@@ -57,7 +57,7 @@ calculated using any size input region.
 Example to upload DEM statistics to ZIP codes vector map (North Carolina
 sample dataset):
 
-```shell
+```sh
 g.copy vect=zipcodes_wake,myzipcodes_wake
 # set computational region to DEM:
 g.region raster=elevation -p

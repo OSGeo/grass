@@ -16,56 +16,56 @@ output or can be directed to a file (option **output**).
 
 ### Basic usage
 
-```shell
+```sh
 db.select sql="select * from roads"
 ```
 
 or
 
-```shell
+```sh
 echo "select * from roads" | db.select input=-
 ```
 
 or
 
-```shell
+```sh
 db.select input=file.sql
 ```
 
 or
 
-```shell
+```sh
 cat file.sql | db.select input=-
 ```
 
 Select all from table roads:
 
-```shell
+```sh
 db.select -c driver=odbc database=mydb table=hospitals \
           input=file.sql output=result.csv
 ```
 
 Select some string attribute, exclude others:
 
-```shell
+```sh
 db.select sql="SELECT * FROM archsites WHERE str1 <> 'No Name'"
 ```
 
 Select some string attribute with ZERO length:
 
-```shell
+```sh
 db.select sql="SELECT * FROM archsites WHERE str1 IS NULL"
 ```
 
 Select coordinates from PostGIS table:
 
-```shell
+```sh
 db.select sql="SELECT x(geo),y(geo) FROM localizzazione"
 ```
 
 ### Execute multiple SQL statements
 
-```shell
+```sh
 cat file.sql
 SELECT * FROM busstopsall WHERE cat = 1
 SELECT cat FROM busstopsall WHERE cat > 4 AND cat < 8
@@ -79,7 +79,7 @@ When multiple observation have the spatial coordinates, they can still
 be counted (if needed, coordinates can be uploaded to the attribute
 table by *v.to.db*:
 
-```shell
+```sh
 db.select sql="SELECT long,lat,site_id,department,obs,COUNT(long) as count_cases \
                FROM diseases GROUP BY long,lat"
 ```

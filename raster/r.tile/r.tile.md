@@ -17,7 +17,7 @@ The overlap is defined in rows/columns.
 
 Retiling example for the North Carolina DEM:
 
-```shell
+```sh
 g.region raster=elevation -p
 # rows:       1350
 # cols:       1500

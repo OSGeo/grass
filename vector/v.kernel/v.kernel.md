@@ -34,7 +34,7 @@ not just those in the current region.
 Compute density of points (using vector map of schools from North
 Carolina sample dataset):
 
-```shell
+```sh
 g.region region=wake_30m
 v.kernel input=schools_wake output=schools_density radius=5000 multiplier=1000000
 r.colors map=schools_density color=bcyr

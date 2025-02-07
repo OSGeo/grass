@@ -13,7 +13,7 @@ Users can also simply type *g.rename --help* without arguments on the
 command line, to receive a menu of existing data base element types and
 files from which to choose for possible renaming:
 
-```shell
+```sh
        raster   raster map(s) to be renamed
     raster_3d   3D raster map(s) to be renamed
        vector   vector map(s) to be renamed
@@ -40,7 +40,7 @@ more than case, then rename it to the intended name.
 
 ## EXAMPLE
 
-```shell
+```sh
 # rename raster map
 g.rename raster=oldrast,newrast
 

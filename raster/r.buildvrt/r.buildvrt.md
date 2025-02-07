@@ -34,7 +34,7 @@ In this exercise a low resolution DEM is resampled to a high resolution
 DEM. This is subsequently cut into small tiles and from that a virtual
 tile mosaik is created:
 
-```shell
+```sh
 # set the computational region to elevation map
 g.region raster=elev_state_500m -p
 # enforce higher resolution

@@ -12,19 +12,19 @@ need to be spcified each time.
 
 ### List all tables if database connection is already set
 
-```shell
+```sh
 db.tables -p
 ```
 
 ### List all DBF tables
 
-```shell
+```sh
 db.tables driver=dbf database=/grassdata/nc_spm_08/user1/PERMANENT/dbf
 ```
 
 ### List all tables in SQLite database (note that this is the default setting)
 
-```shell
+```sh
 db.tables -p driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 ```
 

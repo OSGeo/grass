@@ -65,7 +65,7 @@ To decide on the number of points *r.random* will create, use
 number of non-NULL cells and NULL cells in a raster map given the
 current computational region and raster mask:
 
-```shell
+```sh
 r.univar map=inputmap
 ```
 
@@ -75,7 +75,7 @@ cells (`null_cells`), and number of non-null cells (`n`). Alternatively,
 you can use the following to examine the computational region and the
 raster map:
 
-```shell
+```sh
 g.region -p
 r.report map=inputmap units=c null="*" nsteps=1
 ```
@@ -94,7 +94,7 @@ input to *r.random*.
 Random vector elevation points sampled from elevation map in the North
 Carolina sample dataset region, result stored in 2D vector map:
 
-```shell
+```sh
 g.region raster=elevation -p
 r.random elevation vector=elevrand n=100
 v.db.select elevrand
@@ -107,7 +107,7 @@ Random vector elevation points sampled from elevation map in the North
 Carolina sample dataset region with collocated values sampled from
 landuse map, result stored in 3D vector map:
 
-```shell
+```sh
 g.region raster=elevation -p
 r.random -z elevation cover=landclass96 vector=luserand3d n=100
 

@@ -34,7 +34,7 @@ of spatial autocorrelation for the map being studied.
 
 North Carolina sample dataset example:
 
-```shell
+```sh
 g.region n=228500 s=215000 w=630000 e=645000 res=100 -p
 r.random.cells output=random_500m distance=500
 ```
@@ -45,21 +45,21 @@ Here is another example where we will create given number of vector
 points with the given minimal distances. Let's star with setting the
 region (we use large cells here):
 
-```shell
+```sh
 g.region raster=elevation
 g.region rows=20 cols=20 -p
 ```
 
 Then we generate random cells and we limit their count to 20:
 
-```shell
+```sh
 r.random.cells output=random_cells distance=1500 ncells=20 seed=200
 ```
 
 Finally, we convert the raster cells to points using
 *[r.to.vect](r.to.vect.md)* module:
 
-```shell
+```sh
 r.to.vect input=random_cells output=random_points type=point
 ```
 
@@ -71,7 +71,7 @@ random spatial deviation to their position so that they are not
 perfectly aligned with the grid. We cannot perturb the points too much,
 otherwise we might seriously break the minimal distance we set earlier.
 
-```shell
+```sh
 v.perturb input=random_points output=random_points_moved parameters=50 seed=200
 ```
 

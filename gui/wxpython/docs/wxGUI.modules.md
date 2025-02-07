@@ -53,7 +53,7 @@ which must be used when the specified output map or file is already
 present. If the map or file of the specified name already exist and
 *overwrite* flag is not used, an error message appears:
 
-```shell
+```sh
 r.slope.aspect elevation=elevation slope=slope
 ERROR: option <slope>: <slope> exists. To overwrite, use the --overwrite flag
 ```
@@ -61,7 +61,7 @@ ERROR: option <slope>: <slope> exists. To overwrite, use the --overwrite flag
 If using the command instead of GUI, these flags are unlike other flags
 prefixed with double dash:
 
-```shell
+```sh
 r.slope.aspect elevation=elevation slope=slope --overwrite --quiet
 ```
 
@@ -120,7 +120,7 @@ using [g.parser](g.parser.md). Command line interface can be obtained
 when running the module with a *--help* flag. The options and flags are
 the same as in the module GUI.
 
-```shell
+```sh
 r.neighbors --help
 
 Description:

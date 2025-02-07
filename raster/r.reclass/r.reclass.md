@@ -47,7 +47,7 @@ running *[r.info](r.info.md)*) and then run
 *[r.mapcalc](r.mapcalc.md)* can be used to convert a reclass map to a
 regular raster map layer as well:
 
-```shell
+```sh
   r.mapcalc "raster_map = reclass_map"
 ```
 
@@ -112,7 +112,7 @@ the output map layer, and reclassifies input raster map layer categories
 4 and 5 to category 2 with the label "poor quality" in the output map
 layer.
 
-```shell
+```sh
     1 2 3   = 1    good quality
     4 5     = 2    poor quality
 ```
@@ -123,7 +123,7 @@ output map layer, and reclassifies input raster map layer categories 2,
 4, and 6 to category 2 with the label "good quality" in the output map
 layer. All other values are reclassified to NULL.
 
-```shell
+```sh
     1 3 5   = 1    poor quality
     2 4 6   = 2    good quality
     *       = NULL
@@ -135,7 +135,7 @@ thru 20 to output map layer category 2, and input map layer categories
 21 thru 30 to output map layer category 3, all without labels. The range
 from 30 to 40 is reclassified as NULL.
 
-```shell
+```sh
      1 thru 10  = 1
     11 thru 20  = 2
     21 thru 30  = 3
@@ -149,7 +149,7 @@ output map layer, input raster map layer categories 20 thru 24 and 26
 thru 50 to the output map layer category 2, and input raster map layer
 category 25 to the output category 3.
 
-```shell
+```sh
      1 thru 100 = 1    poor quality
     20 thru 50  = 2    medium quality
     25          = 3    good quality
@@ -157,7 +157,7 @@ category 25 to the output category 3.
 
 The previous example could also have been entered as:
 
-```shell
+```sh
      1 thru 19  51 thru 100 = 1    poor quality
     20 thru 24  26 thru 50  = 2    medium quality
     25              = 3    good quality
@@ -165,7 +165,7 @@ The previous example could also have been entered as:
 
 or as:
 
-```shell
+```sh
      1 thru 19   = 1    poor quality
     51 thru 100  = 1
     20 thru 24   = 2
@@ -184,7 +184,7 @@ in the two previous examples.
 In this example, the 21 classes of the landuse map (North Carolina
 sample dataset) are simplified to 7 classes:
 
-```shell
+```sh
 r.category landuse96_28m
 0   not classified
 1   High Intensity Developed

@@ -30,7 +30,7 @@ specify a span of time.
 
 The general format for absolute values is:
 
-```shell
+```sh
   day month year [bc] hour:minute:seconds timezone
 
          day is 1-31
@@ -45,7 +45,7 @@ The general format for absolute values is:
 
 Some parts can be missing, for example
 
-```shell
+```sh
          1994 [bc]
          Jan 1994 [bc]
          15 jan 1000 [bc]
@@ -59,7 +59,7 @@ Some parts can be missing, for example
 There are two types of relative datetime values, year-month and
 day-second. The formats are:
 
-```shell
+```sh
          [-] # years # months
          [-] # days # hours # minutes # seconds
 ```
@@ -67,7 +67,7 @@ day-second. The formats are:
 The words years, months, days, hours, minutes, seconds are literal
 words, and the \# are the numeric values. Examples:
 
-```shell
+```sh
          2 years
          5 months
          2 years 5 months
@@ -80,7 +80,7 @@ words, and the \# are the numeric values. Examples:
 The following are *illegal* because it mixes year-month and day-second
 (because the number of days in a month or in a year vary):
 
-```shell
+```sh
          3 months 15 days
          3 years 10 days
 ```
@@ -92,33 +92,33 @@ timestamp for "soils", nothing is printed. If there is a timestamp, one
 or two time strings are printed, depending on if the timestamp for the
 map consists of a single date or two dates (ie start and end dates).
 
-```shell
+```sh
 r.timestamp map=soils
 ```
 
 Sets the timestamp for "soils" to the single date "15 sep 1987".
 
-```shell
+```sh
 r.timestamp map=soils date='15 sep 1987'
 ```
 
 Sets the timestamp for "soils" to have the start date "15 sep 1987" and
 the end date "20 feb 1988".
 
-```shell
+```sh
 r.timestamp map=soils date='15 sep 1987/20 feb 1988'
 ```
 
 Sets the timestamp for "soils" to have the start date "18 feb 2005
 10:30:00" and the end date "20 jul 2007 20:30:00".
 
-```shell
+```sh
 r.timestamp map=soils date='18 feb 2005 10:30:00/20 jul 2007 20:30:00'
 ```
 
 Removes the timestamp for the "soils" raster map.
 
-```shell
+```sh
 r.timestamp map=soils date=none
 ```
 

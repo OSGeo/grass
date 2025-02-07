@@ -73,7 +73,7 @@ attributes to floating point numbers.
 The subsequent examples are based on randomly sampled elevation data
 (North Carolina sample database):
 
-```shell
+```sh
 # work on map copy for attribute editing
 g.copy vector=zipcodes_wake,myzipcodes_wake
 
@@ -98,7 +98,7 @@ These vector maps are used for the examples below.
 
 Counting points per polygon, print results to terminal:
 
-```shell
+```sh
 v.vect.stats points=rand5000 area=myzipcodes_wake -p
 ```
 
@@ -109,7 +109,7 @@ v.vect.stats points=rand5000 area=myzipcodes_wake -p
 Counting of points per polygon, with update of "num_points" column (will
 be automatically created):
 
-```shell
+```sh
 v.vect.stats points=rand5000 area=myzipcodes_wake count_column=num_points
 # verify result
 v.db.select myzipcodes_wake column=ZIPCODE_,ZIPNAME,num_points
@@ -122,7 +122,7 @@ v.db.select myzipcodes_wake column=ZIPCODE_,ZIPNAME,num_points
 Calculation of average point elevation per ZIP code polygon, printed to
 terminal in comma separated style:
 
-```shell
+```sh
 # check name of point map column:
 v.info -c rand5000
 v.vect.stats points=rand5000 area=myzipcodes_wake \
@@ -137,7 +137,7 @@ Calculation of average point elevation per ZIP code polygon, with update
 of "avg_elev" column and counting of points per polygon, with update of
 "num_points" column (new columns will be automatically created):
 
-```shell
+```sh
 # check name of point map column:
 v.info -c rand5000
 v.vect.stats points=rand5000 area=myzipcodes_wake count_column=num_points \
@@ -152,7 +152,7 @@ The grid extent and size is influenced by the current computational
 region. The extent is based on the vector map *points_of_interest* from
 the basic North Carolina sample dataset.
 
-```shell
+```sh
 g.region vector=points_of_interest res=2000 -pa
 ```
 
@@ -160,14 +160,14 @@ The hexagonal grid is created using the *[v.mkgrid](v.mkgrid.md)* module
 as a vector map based on the previously selected extent and size of the
 grid.
 
-```shell
+```sh
 v.mkgrid map=hexagons -h
 ```
 
 The *v.vect.stats* module counts the number of points and does one
 statistics on a selected column (here: *elev_m*).
 
-```shell
+```sh
 v.vect.stats points=points_of_interest areas=hexagons method=average \
   points_column=elev_m count_column=count stats_column=average
 ```
@@ -178,7 +178,7 @@ computational region extent needs to be enlarged if all points should be
 considered). The last command sets the vector map color table to
 `viridis` based on the `count` column.
 
-```shell
+```sh
 v.colors map=hexagons use=attr column=average color=viridis
 ```
 

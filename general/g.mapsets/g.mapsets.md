@@ -46,7 +46,7 @@ listed there until the program finds a file of the given name. Users can
 also specify a file by its mapset, to make explicit the mapset from
 which the file is to be drawn; e.g., the command:
 
-```shell
+```sh
 g.copy raster=soils@PERMANENT,my_soils
 ```
 
@@ -87,7 +87,7 @@ Using the **-s** flag, a convenient graphical mapset manager can be
 opened to select and deselect other mapsets (the actual mapset and the
 PERMANENT mapset are always selected):
 
-```shell
+```sh
 g.mapsets -s
 ```
 
@@ -97,7 +97,7 @@ g.mapsets -s
 
 All available mapsets in the current project can be printed out by
 
-```shell
+```sh
 g.mapsets -l
 
 Available mapsets:
@@ -107,9 +107,7 @@ PERMANENT user1 user2
 Mapsets can be also printed out as json by setting the format option to
 "json" (**format="json"**).
 
-<div class="code">
-
-```shell
+```sh
     g.mapsets format="json" -l
 
     {
@@ -122,19 +120,17 @@ Mapsets can be also printed out as json by setting the format option to
   
 ```
 
-</div>
-
 ### Add new mapset
 
 Add mapset 'user2' to the current mapset search path
 
-```shell
+```sh
 g.mapsets mapset=user2 operation=add
 ```
 
 The current mapset search path is changed accordingly
 
-```shell
+```sh
 g.mapsets -p
 
 Accessible mapsets:
@@ -145,7 +141,7 @@ user1 user2
 
 Overwrite current search path
 
-```shell
+```sh
 g.mapsets mapset=user1,PERMANENT operation=set
 ```
 
@@ -153,7 +149,7 @@ g.mapsets mapset=user1,PERMANENT operation=set
 
 The current mapset can be defined by a shortcut "." (dot)
 
-```shell
+```sh
 g.mapsets mapset=.,PERMANENT operation=set
 ```
 
@@ -161,7 +157,7 @@ g.mapsets mapset=.,PERMANENT operation=set
 the first position even if you change its position or omit the current
 mapset from the **mapset** option.
 
-```shell
+```sh
 g.mapsets -p
 
 Accessible mapsets:

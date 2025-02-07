@@ -109,15 +109,11 @@ geographic region.
 Output **drainage** raster map contains drainage direction. Provides the
 "aspect" for each cell measured CCW from East.
 
-<div align="center" style="margin: 10px">
-
 [<img src="r_watershed_drainage.png" data-border="0" width="200"
 height="200" alt="drainage" />](r_watershed_drainage.png)  
 *Figure: Drainage is 8 directions numbered counter-clockwise starting
 from 1 in north-east direction
 ([source](https://idea.isnew.info/how-to-import-arcgis-flow-direction-into-grass-gis.html))*
-
-</div>
 
 Multiplying positive values by 45 will give the direction in degrees
 that the surface runoff will travel from that cell. The value 0 (zero)
@@ -280,7 +276,7 @@ no_data).
 Problem areas, i.e. those parts of a basin with a likely underestimate
 of flow accumulation, can be easily identified with e.g.
 
-```shell
+```sh
   r.mapcalc "problems = if(flow_acc < 0, basin, null())"
 ```
 
@@ -330,7 +326,7 @@ region should be replaced by NULL (`null()` in
 *[r.mapcalc](r.mapcalc.md)*). The following command performs these
 replacements:
 
-```shell
+```sh
 r.mapcalc "drainage_degrees = if(drainage > 0, 45. * drainage, null())"
 ```
 
@@ -349,14 +345,14 @@ create lots of catchment basins, as only one stream is presented per
 catchment. The `r.to.vect -v` flag preserves the catchment ID as the
 vector category number.
 
-```shell
+```sh
   r.watershed elev=elevation.dem stream=rwater.stream
   r.to.vect -v in=rwater.stream out=rwater_stream
 ```
 
 Set a different color table for the accumulation map:
 
-```shell
+```sh
   MAP=rwater.accum
   r.watershed elev=elevation.dem accum=$MAP
 
@@ -386,7 +382,7 @@ number of upstream catchment cells (calculated in the above example by
 *[r.univar](r.univar.md)*) as the cut-off value. This only works with
 SFD, not with MFD.
 
-```shell
+```sh
   r.watershed elev=elevation.dem accum=rwater.accum
 
   r.mask raster=elevation.dem
@@ -406,7 +402,7 @@ SFD, not with MFD.
 
 ### Create watershed basins map and convert to a vector polygon map
 
-```shell
+```sh
   r.watershed elev=elevation.dem basin=rwater.basin thresh=15000
   r.to.vect -s in=rwater.basin out=rwater_basins type=area
   v.db.dropcolumn map=rwater_basins column=label
@@ -415,7 +411,7 @@ SFD, not with MFD.
 
 Display output in a nice way
 
-```shell
+```sh
   r.relief map=elevation.dem
   d.shade shade=elevation.dem.shade color=rwater.basin bright=40
   d.vect rwater_course color=orange

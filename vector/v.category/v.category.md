@@ -58,7 +58,7 @@ processed. The *feature ID* is an internal (unique) geometry ID that all
 vector primitives possess, and is separate from any category the feature
 may also possess. Use
 
-```shell
+```sh
   v.edit map=inputname tool=select
 ```
 
@@ -68,7 +68,7 @@ to find out the geometry ids of certain features.
 
 ### Report vector categories
 
-```shell
+```sh
 v.category input=testmap option=report
 
 LAYER/TABLE 1/testmap:
@@ -83,13 +83,13 @@ all         1379          1       1379
 
 ### Delete all vector categories in layer 1
 
-```shell
+```sh
 v.category input=testmap output=outmap option=del cat=-1
 ```
 
 ### Add vector categories in layer 1 with step=2
 
-```shell
+```sh
 v.category input=outmap output=stepmap option=add step=2
 
 # report
@@ -106,7 +106,7 @@ all         1379          1       2757
 
 ### Add categories/centroids to a vector map without categories
 
-```shell
+```sh
 v.category input=wkt output=wktnew option=add
 ```
 
@@ -116,7 +116,7 @@ Results can be tested using *[d.what.vect](d.what.vect.md)*.
 
 Existing layer will be overwritten, non-existing will be created.
 
-```shell
+```sh
 v.category input=observer output=observer_new option=transfer layer=1,2,3,4,5,6,7,8
 ```
 
@@ -124,7 +124,7 @@ v.category input=observer output=observer_new option=transfer layer=1,2,3,4,5,6,
 
 Print vector categories from the first layer, only for feature ids 1-50.
 
-```shell
+```sh
 v.category input=roads option=print layer=1 id=1-50
 ```
 

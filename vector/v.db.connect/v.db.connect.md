@@ -8,7 +8,7 @@ user can add or remove link to attribute table on the certain layer.
 Connection information (driver, database, table, key) is stored for each
 map, in the file
 
-```shell
+```sh
 <database>/<project>/<mapset>/vector/<map>/dbln
 ```
 
@@ -33,13 +33,13 @@ Note: The default database backend setting is SQLite.
 
 Print all database connection parameters for vector map.
 
-```shell
+```sh
 v.db.connect -p map=roads
 ```
 
 Print column types and names of table linked to vector map.
 
-```shell
+```sh
 v.db.connect -c map=roads
 ```
 
@@ -49,13 +49,13 @@ Connect vector map to DBF table without or with variables.
 
 Using default DB connection:
 
-```shell
+```sh
 v.db.connect map=vectormap table=table
 ```
 
 Using hardcoded path to DBF directory (not recommended):  
 
-```shell
+```sh
 v.db.connect map=vectormap table=table \
              database=/home/user/grassdata/spearfish60/PERMANENT/dbf
 ```
@@ -63,7 +63,7 @@ v.db.connect map=vectormap table=table \
 Using variable as DBF directory definition, single quotes must be
 used:  
 
-```shell
+```sh
 v.db.connect map=vectormap table=table \
              database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
 ```
@@ -71,7 +71,7 @@ v.db.connect map=vectormap table=table \
 Connect vector map layer 2 and key ID to database with variables (note:
 if needed, single quotes must be used for the *database* parameter):
 
-```shell
+```sh
 v.db.connect map=vectormap table=table layer=2 key=ID
 ```
 
@@ -79,7 +79,7 @@ v.db.connect map=vectormap table=table layer=2 key=ID
 
 Very similar to DBF driver example above.
 
-```shell
+```sh
 db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 db.tables -p
 v.db.connect map=vectormap table=table driver=sqlite \
@@ -89,7 +89,7 @@ v.db.connect -p map=vectormap
 
 ### Connect vector map to database (MySQL driver)
 
-```shell
+```sh
 # note: connection which requires password
 db.connect driver=mysql database="host=dbserver.foo.org,dbname=my_database"
 db.login user=joshua [password=xxx]
@@ -104,7 +104,7 @@ v.db.connect -p my_map
 
 ### Connect vector map to database (PostgreSQL driver)
 
-```shell
+```sh
 # note: connection without password being asked
 v.db.connect map=vectormap table=table layer=1 key=oid driver=pg \
              database="host=myserver.itc.it,dbname=mydb,user=name" \
@@ -116,7 +116,7 @@ v.db.connect map=vectormap table=table layer=1 key=oid driver=pg \
 This example illustrates a mixed data storage with possibility to update
 attributes in an external PostgreSQL database:
 
-```shell
+```sh
 # Check current settings for attribute storage:
 db.connect -p
 
@@ -155,7 +155,7 @@ large.
 This example illustrated a mixed data storage with possibility top
 update attributes in external PostGIS database:
 
-```shell
+```sh
 # Check current settings for attribute storage:
 db.connect -p
 

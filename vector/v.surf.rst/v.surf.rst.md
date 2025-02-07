@@ -244,23 +244,15 @@ threads to be used with the **nprocs** parameter (default 1). Figures 1
 and 2 show benchmark results running on Intel® Core™ i5-10210U CPU @
 1.60GHz × 8. See benchmark scripts in the source code for more details.
 
-<div align="center" style="margin: 10px">
-
 <img src="vsurfrst_benchmark.png" data-border="0"
 alt="benchmark for v.surf.rst" />  
 *Figure 1: Benchmark shows execution time for different number of cells
 (1M, 2M, 4M, and 8M).*
 
-</div>
-
-<div align="center" style="margin: 10px">
-
 <img src="vsurfrst_cv_benchmark.png" data-border="0"
 alt="benchmark for cross-validation of v.surf.rst" />  
 *Figure 2: Benchmark shows execution time for running cross-validation
 on different number of cells (100k, 200k, 400k, and 800k).*
-
-</div>
 
 ## EXAMPLE
 
@@ -271,7 +263,7 @@ to be dense in relation to the desired raster resolution and thus a
 different set of parameters is more advantageous, e.g. in comparison to
 a typical temperature data interpolation.
 
-```shell
+```sh
 v.surf.rst input=points elevation=elevation npmin=100
 ```
 
@@ -283,7 +275,7 @@ only a subset of the input vectors.
 North Carolina example (we simulate randomly distributed elevation
 measures which we interpolate to a gap-free elevation surface):
 
-```shell
+```sh
 g.region raster=elevation -p
 # random elevation extraction of 500 samplings
 r.random -s elevation vector=elevrand n=500

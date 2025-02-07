@@ -43,14 +43,14 @@ The following examples are from the Spearfish60 sample dataset:
 
 ### Print the full list of raster map categories
 
-```shell
+```sh
 r.describe landcover.30m
 * 11 21-23 31 32 41-43 51 71 81-83 85 91 92
 ```
 
 ### Print the raster range only
 
-```shell
+```sh
 r.describe -r landcover.30m
 11 thru 92
 *
@@ -58,14 +58,14 @@ r.describe -r landcover.30m
 
 ### Print raster map category range, suppressing nulls
 
-```shell
+```sh
 r.describe -n landcover.30m
 11 21-23 31 32 41-43 51 71 81-83 85 91 92
 ```
 
 ### Print raster map categories, one category per line
 
-```shell
+```sh
 r.describe -1 geology
 
 *

@@ -170,7 +170,7 @@ integer, ZLIB's compression level 1 will be used.
 
 Example for an uncompressed raster map:
 
-```shell
+```sh
 r.compress compressed_no -p
   <compressed_no> (method 0: NONE). Data type: <CELL>
 ```
@@ -179,7 +179,7 @@ r.compress compressed_no -p
 
 Applying ZLIB compression to a copy of the uncompressed map from above:
 
-```shell
+```sh
 # compression of map using ZLIB compression
 g.copy raster=compressed_no,compressed_ZLIB
 
@@ -195,7 +195,7 @@ unset GRASS_COMPRESSOR # switch back to default
 Applying BZIP2 compression to a copy of the ZLIB-compressed map from
 above:
 
-```shell
+```sh
 # compression of map using BZIP2 compression
 g.copy raster=compressed_ZLIB,compressed_BZIP2
 
@@ -211,7 +211,7 @@ unset GRASS_COMPRESSOR # switch back to default
 Applying ZSTD compression to a copy of the BZIP2-compressed map from
 above:
 
-```shell
+```sh
 # compression of map using ZSTD compression
 g.copy raster=compressed_BZIP2,compressed_ZSTD
 

@@ -10,13 +10,13 @@ Supported features:
 
 - show simple linear regression model line with calculated formula
 
-  ```shell
+  ```sh
   y = a + b*x (y is dependent variable, a is intercept, b is slope, x is explanatory variable)
   ```
 
   and
 
-  ```shell
+  ```sh
   r-squared (parameter of goodness-of-fit measure for linear regression model)
   ```
 
@@ -36,44 +36,32 @@ Supported features:
   [LibreOffice](https://www.libreoffice.org/) etc., you will obtain a
   different calculated formula
 
-  ```shell
+  ```sh
   y = a + b*x
   ```
 
   because these software packages use a reference date other than the
   UNIX Epoch time (00:00:00 UTC on 1 January 1970)).
 
-<div align="center" style="margin: 10px">
-
 [<img src="tplot.png" data-border="0" width="600" height="367"
 alt="Temporal Plot Tool" />](g_gui_tplot_labels.png)  
 *Figure: Temporal Plot Tool*
-
-</div>
 
 To optionally add a title to the temporal plot and/or change the x and y
 axes labels, first type the desired text and then click *Draw* as showed
 below.
 
-<div align="center" style="margin: 10px">
-
 [<img src="g_gui_tplot_labels.png" data-border="0" width="600"
 height="482" alt="g.gui.tplot add title and axes labels" />](g_gui_tplot_labels.png)  
 *Figure: Add title and labels to a time series plot*
-
-</div>
 
 To export the time series data to a text file (date and data values),
 type a name for the file and click *Draw* again. Optionally, set the
 check-box to print headers, as well.
 
-<div align="center" style="margin: 10px">
-
 [<img src="g_gui_tplot_export_csv.png" data-border="0" width="600"
 height="481" alt="g.gui.tplot export time series as csv file" />](g_gui_tplot_export_csv.png)  
 *Figure: Export time series values to a text file*
-
-</div>
 
 ## NOTES
 

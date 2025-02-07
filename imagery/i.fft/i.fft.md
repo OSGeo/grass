@@ -21,7 +21,7 @@ resulting fast Fourier transform invalid.
 
 North Carolina example:
 
-```shell
+```sh
 g.region raster=lsat7_2002_70
 i.fft input=lsat7_2002_70 real=lsat7_2002_70.real imaginary=lsat7_2002_70.imag
 

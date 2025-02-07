@@ -103,14 +103,14 @@ Export vector map "urbanarea" as feature table "urbanarea" located in
 database "grass", schema "public". Note that this database schema is
 automatically used when not defined by the user.
 
-```shell
+```sh
 v.out.postgis input=urbanarea output="PG:dbname=grass"
 ```
 
 GRASS areas are converted into polygons, isles into holes. We can check
 the number or created polygons by simple SQL query below.
 
-```shell
+```sh
 db.select driver=pg database=grass \
  sql="SELECT ST_GeometryType(geom) as geom_type, count(*) from urbanarea group by geom_type"
 
@@ -121,7 +121,7 @@ ST_Polygon|657
 *Note:* same procedure can be done by *[v.out.ogr](v.out.ogr.md)*
 module, eg.
 
-```shell
+```sh
 v.out.ogr input=urbanarea output="PG:dbname=grass" format=PostgreSQL
 ```
 
@@ -141,7 +141,7 @@ schema doesn't exist in the database, then it's automatically created.
 Export vector map "bridges" as feature table in database schema
 "grassout".
 
-```shell
+```sh
 v.out.postgis input=bridges output="PG:dbname=grass" output_layer=grassout.bridges
 ```
 
@@ -152,7 +152,7 @@ disable building spatial index. Spatial reference system is defined by
 `srid` identifier which corresponds in this case with EPSG 3358 (North
 Carolina dataset).
 
-```shell
+```sh
 v.out.postgis input=roadsmajor output="PG:dbname=grass" options="GEOMETRY_NAME=wkb_geometry,SPATIAL_INDEX=NO,SRID=3358"
 ```
 
@@ -164,13 +164,13 @@ by specifying **output_link** parameter. In the example below vector map
 database. *v.out.postgis* after successful export also creates in the
 current mapset GRASS vector map as a link to the PostGIS feature table.
 
-```shell
+```sh
 v.out.postgis input=busstopsall@PERMANENT output="PG:dbname=grass" output_link=busstopsall_pg
 ```
 
 Created link can be checked by *[v.info](v.info.md)*:
 
-```shell
+```sh
  v.info busstopsall_pg
 
 ...
@@ -193,7 +193,7 @@ features by specifying **-t** flag. Command below exports vector
 features without attributes. The feature will contain only two columns,
 the fid and geometry column.
 
-```shell
+```sh
 v.out.postgis -t input=railroads output="PG:dbname=grass"
 ```
 
@@ -204,7 +204,7 @@ allows exporting data as topological elements instead of simple
 features. Export topological elements is stored in [PostGIS
 Topology](https://postgis.net/docs/Topology.html) schema.
 
-```shell
+```sh
 v.out.postgis -l input=busroutesall output="PG:dbname=grass"
 ```
 

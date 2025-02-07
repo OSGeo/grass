@@ -65,7 +65,7 @@ Second part of the unsupervised classification of a LANDSAT subscene
 *[i.cluster](i.cluster.md)* manual page for the first part of the
 example):
 
-```shell
+```sh
 # using here the signaturefile created by i.cluster
 i.maxlik group=lsat7_2002 subgroup=res_30m \
   signaturefile=cluster_lsat2002 \

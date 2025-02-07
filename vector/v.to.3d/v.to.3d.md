@@ -22,7 +22,7 @@ contours).
 
 ### Transform 2D vector features to 3D
 
-```shell
+```sh
 # convert z-values from string to double
 v.db.addcolumn map=geodetic_pts columns="Z_VALUE_D double precision"
 v.db.update map=geodetic_pts column=Z_VALUE_D qcolumn=Z_VALUE
@@ -34,7 +34,7 @@ v.to.3d input=geodetic_pts out=geodetic_pts_3d column=Z_VALUE_D
 
 ### Transform 3D vector features to 2D
 
-```shell
+```sh
 v.to.3d -rt input=elev_lid792_bepts output=elev_lid_2d
 ```
 

@@ -76,7 +76,7 @@ to the outer polygon. This is topologically incorrect (but OGC Simple
 Features allow it). The *rmbridge* tool removes bridges and the
 *chbridge* tool changes bridges to type line:
 
-```shell
+```sh
     +-------------+             +-------------+   +-------------+
     |            P|  P: polygon |            P|   |            P|
     |    +---+    |  I: island  |    +---+    |   |    +---+    |
@@ -208,7 +208,7 @@ vector.
 
 ### Snap lines to vertex in threshold
 
-```shell
+```sh
 v.clean input=testmap output=cleanmap tool=snap threshold=1
 ```
 
@@ -217,7 +217,7 @@ v.clean input=testmap output=cleanmap tool=snap threshold=1
 Both *[v.build](v.build.md)* and *v.clean* can collect the topological
 errors into a vector map:
 
-```shell
+```sh
 v.build -e map=imported error=build_errors
 v.clean -c input=imported output=clean error=cleaning_errors tool=snap,rmdangle,rmbridge,chbridge,bpol,prune threshold=5
 ```
@@ -225,19 +225,15 @@ v.clean -c input=imported output=clean error=cleaning_errors tool=snap,rmdangle,
 The vector maps can be visualized together with the original data by the
 following set of display commands:
 
-```shell
+```sh
 d.vect map=imported color=26:26:26 fill_color=77:77:77 width=5
 d.vect map=build_errors color=255:33:36 fill_color=none width=5 icon=basic/point size=30
 d.vect map=cleaning_errors color=255:33:36 fill_color=none width=5 icon=basic/point size=30
 ```
 
-<div align="center">
-
 ![topological errors](v_clean.png)  
 *Figure: Topological errors detected in the original data (left) and
 cleaned data (right)*
-
-</div>
 
 ### Cleaning OGR imported data (Simple Feature data) such as SHAPE file
 
@@ -246,13 +242,13 @@ requires a subsequent run of *v.clean* to update the map to a
 topologically valid structure (removal of duplicate collinear lines
 etc). The tools used for that are *bpol* and *rmdupl*:
 
-```shell
+```sh
 v.clean input=areamap output=areamap_clean tool=bpol,rmdupl type=boundary
 ```
 
 ### Extracting intersection points of vector lines
 
-```shell
+```sh
 v.clean input=lines1 output=lines2 err=points tool=break type=line
 ```
 
@@ -263,7 +259,7 @@ Intersection points are written to 'points' map.
 *v.clean* will break the lines where they cross, creating new node if
 needed. Example:
 
-```shell
+```sh
 v.in.ascii -n out=crossed_lines format=standard << EOF
 L 2
  0 5
@@ -279,7 +275,7 @@ v.clean in=crossed_lines out=crossed_lines_brk \
 
 ### Remove all lines of zero length
 
-```shell
+```sh
 v.out.ascii zero format=standard
 L  2 1
  -819832.09065589 -987825.2187231
@@ -303,7 +299,7 @@ v.clean type=boundary would remove nothing.
 
 ### Repeatedly remove dangling lines up to 50m length
 
-```shell
+```sh
 v.clean input=testmap output=cleanmap type=line \
         tool=rmdangle,rmdangle,rmdangle,rmdangle threshold=5,10,20,50
 ```

@@ -29,25 +29,21 @@ its direction given by aspect and slope.
 
 The equations are
 
-```shell
+```sh
 dx = tan(slope) * cos(aspect)
 ```
 
 and
 
-```shell
+```sh
 dy = tan(slope) * sin(aspect)
 ```
-
-<div align="center" style="margin: 10px;">
 
 <img src="r_sim_water.png" style="margin: 0.5em;"
 alt="r.sim.water generated depth map" />  
 *Figure: Simulated water flow in a rural area showing the areas with
 highest water depth highlighting streams, pooling, and wet areas during
 a rainfall event.*
-
-</div>
 
 The module automatically converts horizontal distances from feet to
 metric system using database/projection information. Rainfall excess is
@@ -189,7 +185,7 @@ up the simulation.
 
 Using the North Carolina full sample dataset:
 
-```shell
+```sh
 # set computational region
 g.region raster=elev_lid792_1m -p
 
@@ -204,7 +200,7 @@ Now, let's visualize the result using rendering to a file (note the
 further management of computational region and usage of
 [d.mon](d.mon.md) module which are not needed when working in GUI):
 
-```shell
+```sh
 # increase the computational region by 350 meters
 g.region e=e+350
 # initiate the rendering
@@ -218,20 +214,16 @@ d.northarrow at=90,25
 d.mon stop=cairo
 ```
 
-<div align="center" style="margin: 10px;">
-
 <img src="r_sim_water_water_depth.png" style="margin: 0.5em;"
 alt="r.sim.water generated depth map" />  
 *Figure: Simulated water depth map in the rural area of the North
 Carolina sample dataset.*
 
-</div>
-
 ## ERROR MESSAGES
 
 If the module fails with
 
-```shell
+```sh
 ERROR: nwalk (7000001) > maxw (7000000)!
 ```
 

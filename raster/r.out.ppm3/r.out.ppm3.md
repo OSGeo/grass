@@ -8,7 +8,7 @@ the current region settings.
 
 To get the full area and resolutin of the raster map, run:
 
-```shell
+```sh
 g.region raster=[mapname]
 ```
 

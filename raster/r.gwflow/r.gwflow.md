@@ -94,7 +94,7 @@ Use this small script to create a working groundwater flow area and
 data. Make sure you are not in a lat/lon projection. It includes
 drainage and river input as well.
 
-```shell
+```sh
 # set the region accordingly
 g.region res=25 res3=25 t=100 b=0 n=1000 s=0 w=0 e=1000 -p3
 

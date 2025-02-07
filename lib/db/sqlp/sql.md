@@ -38,7 +38,7 @@ distributions of GRASS GIS:
 
 - Supported table name characters are only:  
 
-  ```shell
+  ```sh
   [A-Za-z][A-Za-z0-9_]*
   ```
 
@@ -48,7 +48,7 @@ distributions of GRASS GIS:
   When run from the command line multiple queries should be contained in
   "double quotes". e.g.  
 
-  ```shell
+  ```sh
   d.vect map where="individual='juvenile' and area='beach'"
   ```
 
@@ -73,7 +73,7 @@ all backends should support VARCHAR, INT, DOUBLE PRECISION and DATE.
 Display all vector points except for *LAMAR* valley and *extensive
 trapping* (brackets are superfluous in this example):
 
-```shell
+```sh
 g.region vector=schools_wake -p
 d.mon wx0
 d.vect roadsmajor
@@ -94,7 +94,7 @@ d.vect schools_wake fcol=red icon=basic/diamond col=white size=13 \
 Select all attributes from table where *CORECAPACI* column values are
 smaller than 200 (children):
 
-```shell
+```sh
 # must be run from the mapset which contains the table
 echo "SELECT * FROM schools_wake WHERE CORECAPACI < 200" | db.select input=-
 ```
@@ -102,13 +102,13 @@ echo "SELECT * FROM schools_wake WHERE CORECAPACI < 200" | db.select input=-
 Example of subquery expressions from a list (not supported for DBF
 driver):
 
-```shell
+```sh
 v.db.select schools_wake where="ADDRCITY IN ('Apex', 'Wendell')"
 ```
 
 ### Example of pattern matching
 
-```shell
+```sh
 # field contains string:
 #  for DBF driver:
 v.extract schools_wake out=elementary_schools where="NAMELONG LIKE 'ELEM'"
@@ -125,7 +125,7 @@ v.db.select mysites where="id LIKE 'P%'"
 
 ### Example of null handling
 
-```shell
+```sh
 v.db.addcolumn map=roads col="nulltest int"
 v.db.update map=roads col=nulltest value=1 where="cat > 2"
 d.vect roads where="nulltest is null"
@@ -136,7 +136,7 @@ v.db.update map=roads col=nulltest value=2 where="cat <= 2"
 
 Examples of complex expressions in updates (using `v.db.*` modules):
 
-```shell
+```sh
 v.db.addcolumn map=roads column="exprtest double precision"
 v.db.update map=roads column=exprtest value="cat/nulltest"
 v.db.update map=roads column=exprtest value="cat/nulltest+cat" where="cat=1"
@@ -147,7 +147,7 @@ v.db.update map=roads column=exprtest qcolumn="(cat*100.)/SHAPE_LEN."
 
 Examples of more complex expressions in updates (using `db.*` modules):
 
-```shell
+```sh
 echo "UPDATE roads SET exprtest=null"
 echo "UPDATE roads SET exprtest=cat/2" | db.execute
 echo "UPDATE roads SET exprtest=cat/2+cat/3" | db.execute
@@ -158,7 +158,7 @@ echo "UPDATE roads SET exprtest=cat/3*(cat+1) WHERE exprtest IS NULL" | db.execu
 Instead of creating and updating new columns with an expression, you can
 use the expression directly in a command:
 
-```shell
+```sh
 d.vect roads where="(cat/3*(cat+1))>8"
 d.vect roads where="cat>exprtest"
 ```
@@ -169,7 +169,7 @@ d.vect roads where="cat>exprtest"
 
 North Carolina data set: convert string column to double precision:
 
-```shell
+```sh
 # first copy map into current mapset
 g.copy vect=geodetic_pts,mygeodetic_pts
 v.db.addcolumn mygeodetic_pts col="zval double precision"
@@ -184,7 +184,7 @@ v.db.update mygeodetic_pts col=zval \
 
 *Note: not supported for [DBF driver](grass-dbf.md).*
 
-```shell
+```sh
 v.db.update vectormap column=column3 qcolumn="column1 || column2"
 ```
 
@@ -193,7 +193,7 @@ v.db.update vectormap column=column3 qcolumn="column1 || column2"
 Conditions (like if statements) are usually written as CASE statement in
 SQL:
 
-```shell
+```sh
 v.db.update vectormap column=species qcolumn="CASE WHEN col1 >= 12 THEN cat else NULL end"
 
 # a more complex example with nested conditions

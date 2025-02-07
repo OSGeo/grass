@@ -6,7 +6,7 @@
 
 Show all installed GRASS database drivers:
 
-```shell
+```sh
 db.drivers -p
 pg
 ogr

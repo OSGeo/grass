@@ -25,20 +25,16 @@ with each will be difficult to see. No data cells are indicated with
 
 Distance from the streams network (North Carolina sample dataset):
 
-```shell
+```sh
 g.region raster=streams_derived -p
 r.grow.distance input=streams_derived distance=dist_from_streams
 d.rast.num dist_from_streams -a
 ```
 
-<div align="center" style="margin: 10px">
-
 <img src="d_rast_num_zoom.png" data-border="0"
 alt="Euclidean distance from the streams network in meters" />  
 *Euclidean distance from the streams network in meters (detail, numbers
 shown with d.rast.num)*
-
-</div>
 
 ## SEE ALSO
 

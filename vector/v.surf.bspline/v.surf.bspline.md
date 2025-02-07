@@ -87,7 +87,7 @@ nor raster output will be created when cross-validation is selected.
 
 ### Basic interpolation
 
-```shell
+```sh
 v.surf.bspline input=point_vector output=interpolate_surface method=bicubic
 ```
 
@@ -96,7 +96,7 @@ with estimated (i.e., interpolated) values will be created.
 
 ### Basic interpolation and raster output with a longer spline step
 
-```shell
+```sh
 v.surf.bspline input=point_vector raster=interpolate_surface ew_step=25 ns_step=25
 ```
 
@@ -106,13 +106,13 @@ current region resolution.
 
 ### Estimation of lambda_i parameter with a cross validation process
 
-```shell
+```sh
 v.surf.bspline -c input=point_vector
 ```
 
 ### Estimation on sparse points
 
-```shell
+```sh
 v.surf.bspline input=point_vector sparse=sparse_points output=interpolate_surface
 ```
 
@@ -121,7 +121,7 @@ sparse vector layer, with interpolated values.
 
 ### Using attribute values instead z-coordinates
 
-```shell
+```sh
 v.surf.bspline input=point_vector raster=interpolate_surface layer=1 \
   column=attrib_column
 ```
@@ -131,7 +131,7 @@ the table associated with layer 1.
 
 ### North Carolina dataset example using z-coordinates for interpolation
 
-```shell
+```sh
 g.region region=rural_1m res=2 -p
 v.surf.bspline input=elev_lid792_bepts raster=elev_lid792_rast \
   ew_step=5 ns_step=5 method=bicubic lambda_i=0.1

@@ -30,7 +30,7 @@ if **chart_type** is *bar* (See Example 2).
 Pie-charts of monthly winter precipitation (North Carolina sample
 dataset):
 
-```shell
+```sh
 g.region vector=nc_state -p
 d.vect nc_state
 d.vect.chart precip_30ynormals chart_type=pie columns=nov,dec,jan,feb -l
@@ -51,7 +51,7 @@ d.vect.chart precip_30ynormals chart_type=pie columns=nov,dec,jan,feb -l -3
 
 Bar-chart of different census map values:
 
-```shell
+```sh
 d.vect.chart map=vectmap columns=cens51,cens61,cens71,cens81 chart_type=bar
 ```
 
@@ -60,7 +60,7 @@ d.vect.chart map=vectmap columns=cens51,cens61,cens71,cens81 chart_type=bar
 Creation of framed bar charts of an erodibiliy index from the Spearfish
 sample dataset:
 
-```shell
+```sh
 g.region raster=erode.index -p
 r.to.vect -s input=erode.index output=erode_index type=area
 v.extract input=erode_index output=erode_index_ctrds type=centroid

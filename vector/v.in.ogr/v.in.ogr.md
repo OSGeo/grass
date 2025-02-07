@@ -100,7 +100,7 @@ during import to the CRS of the current project.
 The characters which are eligible for table column names are limited by
 the SQL standard. Supported are:
 
-```shell
+```sh
 [A-Za-z][A-Za-z0-9_]*
 ```
 
@@ -163,13 +163,13 @@ The command imports various vector formats:
 
 ### SHAPE files
 
-```shell
+```sh
 v.in.ogr input=/home/user/shape_data/test_shape.shp output=grass_map
 ```
 
 Alternate method:
 
-```shell
+```sh
 v.in.ogr input=/home/user/shape_data layer=test_shape output=grass_map
 ```
 
@@ -179,13 +179,13 @@ attribute data in
 in Central/Eastern European languages that use Latin script, Microsoft
 Windows encoding).
 
-```shell
+```sh
 v.in.ogr input=/home/user/shape_data/test_shape.shp output=grass_map encoding=cp1250
 ```
 
 ### MapInfo files
 
-```shell
+```sh
 v.in.ogr input=./ layer=mapinfo_test output=grass_map
 ```
 
@@ -194,7 +194,7 @@ v.in.ogr input=./ layer=mapinfo_test output=grass_map
 We import the Arcs and Label points, the module takes care to build
 areas.
 
-```shell
+```sh
 v.in.ogr input=gemeinden layer=LAB,ARC type=centroid,boundary output=mymap
 ```
 
@@ -207,7 +207,7 @@ First we have to convert the E00 file to an Arc Coverage with
 tools](http://avce00.maptools.org/avce00/index.html), use *e00conv*
 first in case that *avcimport* fails):
 
-```shell
+```sh
 avcimport e00file coverage
 v.in.ogr input=coverage layer=LAB,ARC type=centroid,boundary output=mymap
 ```
@@ -216,13 +216,13 @@ v.in.ogr input=coverage layer=LAB,ARC type=centroid,boundary output=mymap
 
 You have to select the CATD file.
 
-```shell
+```sh
 v.in.ogr input=CITXCATD.DDF output=cities
 ```
 
 ### TIGER files
 
-```shell
+```sh
 v.in.ogr input=input/2000/56015/ layer=CompleteChain,PIP output=t56015_all \
 type=boundary,centroid snap=-1
 ```
@@ -231,7 +231,7 @@ type=boundary,centroid snap=-1
 
 Import polygons as areas:
 
-```shell
+```sh
 v.in.ogr input="PG:host=localhost dbname=postgis user=postgres" layer=polymap \
 output=polygons type=boundary,centroid
 ```
@@ -239,7 +239,7 @@ output=polygons type=boundary,centroid
 If the table containing the polygons are in a specific schema, you can
 use:
 
-```shell
+```sh
 v.in.ogr input="PG:host=localhost dbname=postgis user=postgres" \
 layer=myschema.polymap \
 output=polygons type=boundary,centroid
@@ -269,7 +269,7 @@ driver will categorize features into 5 layers :
 It is recommended to import one layer at a time, and to select features
 with the **where** option, e.g. to import roads, use
 
-```shell
+```sh
 v.in.ogr where="highway >< ''"
 ```
 
@@ -279,7 +279,7 @@ When importing administrative boundaries from OSM, it is important to
 not only select administrative boundaries, but also the admin level to
 be imported (valid range is 1 - 11), e.g. with
 
-```shell
+```sh
 v.in.ogr where="boundary = 'administrative' and admin_level = '1'"
 ```
 
@@ -298,7 +298,7 @@ their values. You should set "other_tags=no" to avoid problems with
 import or querying the imported vector. Once a OSM_CONFIG_FILE has been
 created, OSM data can be imported with e.g.
 
-```shell
+```sh
 export OSM_CONFIG_FILE=/path/to/osmconf.ini
 v.in.ogr input=name.pbf layer=lines output=osm_data
 ```
@@ -308,7 +308,7 @@ v.in.ogr input=name.pbf layer=lines output=osm_data
 Note that you have to set the environment-variables
 `ORACLE_BASE, ORACLE_SID, ORACLE_HOME` and `TNS_ADMIN` accordingly.
 
-```shell
+```sh
 v.in.ogr input=OCI:username/password@database_instance output=grasslayer layer=roads_oci
 ```
 
@@ -318,7 +318,7 @@ This example shows how to work with data which contain multiple geometry
 per feature. The number of geometry columns per feature can be checked
 by *[v.external](v.external.md)* together with **-t** flag.
 
-```shell
+```sh
 v.external -t input=20141130_ST_UKSH.xml.gz
 ...
 Okresy,point,1,DefinicniBod
@@ -335,7 +335,7 @@ the module will read geometry only from the specified geometry column.
 In the example below, the output vector map will contain only geometry
 saved in "OriginalniHranice" geometry column.
 
-```shell
+```sh
 v.in.ogr input=20141130_ST_UKSH.xml.gz layer=Okresy geometry=OriginalniHranice
 ```
 
@@ -343,7 +343,7 @@ v.in.ogr input=20141130_ST_UKSH.xml.gz layer=Okresy geometry=OriginalniHranice
 
 If a message like
 
-```shell
+```sh
 WARNING: Area size 1.3e-06, area not imported
 ```
 
@@ -353,7 +353,7 @@ areas are imported. Otherwise tiny areas are filtered out during import
 
 If a message like
 
-```shell
+```sh
 Try to import again, snapping with at least 1e-008: 'snap=1e-008'
 ```
 
@@ -369,7 +369,7 @@ Cleaning](v.in.ogr.md#topology-cleaning)*.
 Depending on the currently selected SQL driver, error messages such as
 follows may arise:
 
-```shell
+```sh
 DBMI-SQLite driver error:
 Error in sqlite3_prepare():
 near "ORDER": syntax error
@@ -377,7 +377,7 @@ near "ORDER": syntax error
 
 Or:
 
-```shell
+```sh
 DBMI-DBF driver error:
 SQL parser error:
 syntax error, unexpected DESC, expecting NAME processing 'DESC
@@ -393,7 +393,7 @@ using reserved SQL words. For a list of SQL reserved words for SQLite
 
 ### Projection errors
 
-```shell
+```sh
 Coordinate reference system of dataset does not appear to match the current project.
 ```
 

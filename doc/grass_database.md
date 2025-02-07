@@ -154,7 +154,7 @@ GRASS GIS can be also started with a given database, project and mapset
 from the command line. For example, the following will start in a given
 mapset with only command line interface:
 
-```shell
+```sh
 # Linux, Mac, *BSD, ...:
 grass --text ~/grassdata/nc_spm_08_grass7/user1
 
@@ -166,7 +166,7 @@ And the following will create the given project with coordinate
 reference system given by the EPSG code and it will start the default
 interface (GUI or command line):
 
-```shell
+```sh
 # Linux, Mac, *BSD, ...:
 grass -c EPSG:5514:3 ~/grassdata/myproject
 

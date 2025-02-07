@@ -12,7 +12,7 @@ Input maps may have NULL values. For example, if you have a raster mask
 set for a watershed (using basin map from *r.water.outlet*), the
 following command will create a masked elevation map (belev):
 
-```shell
+```sh
 r.mapcalc "belev = if(isnull(basin), basin, elev)"
 ```
 
@@ -27,17 +27,13 @@ reproject the data there. Please run *r.topidx* from that project.
 Running the command below will generate the topographic index map shown
 in the figure:
 
-```shell
+```sh
 g.region raster=elevation -p
 r.topidx input=elevation output=topidx_elevation
 ```
 
-<div align="center" style="margin: 10px">
-
 <img src="r_topidx.png" data-border="0" alt="r.topidx example" />  
 *Figure: topographic index map derived from elevation map*
-
-</div>
 
 ## REFERENCES
 

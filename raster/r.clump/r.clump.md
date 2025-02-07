@@ -52,7 +52,7 @@ output raster map.
 Perform clumping on "lakes" map (North Carolina sample dataset) and
 report area sizes for each lake individually rather by waterbody type:
 
-```shell
+```sh
 g.region raster=lakes -p
 
 # report sizes by waterbody type
@@ -65,21 +65,17 @@ r.clump lakes out=lakes_individual
 r.report lakes_individual units=h
 ```
 
-<div align="center" style="margin: 10px">
-
 [<img src="r_clump_lakes.png" data-border="1" width="600" height="260"
 alt="r.clump lake clumping example" />](r_clump_lakes.png)  
 *Figure: Clumping of rasterized lakes: original lakes map (left) and
 clumped lakes map (right)*
-
-</div>
 
 ### Fuzzy clumping on Landsat bands
 
 Perform fuzzy clumping on Landsat 7 2002 imagery (North Carolina sample
 dataset)
 
-```shell
+```sh
 g.region raster=lsat7_2002_10 -p
 r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
         out=lsat7_2002_clump threshold=0.045
@@ -89,14 +85,10 @@ r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50
         out=lsat7_2002_clump_min10 threshold=0.045 minsize=10
 ```
 
-<div align="center" style="margin: 10px">
-
 [<img src="r_clump_lsat.png" data-border="1" width="600" height="178"
 alt="r.clump example Landsat fuzzy clumping" />](r_clump_lakes.png)  
 *Figure: Fuzzy clumping on Landsat bands: original RGB composite (left),
 fuzzy clumped map (middle), and fuzzy clumped with minsize map (right)*
-
-</div>
 
 ## SEE ALSO
 

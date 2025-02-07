@@ -105,7 +105,7 @@ The sample LAS data are in the file "Serpent Mound Model LAS Data.laz",
 available at [Serpent Mound Model LAS
 Data.laz](https://github.com/PDAL/data/raw/4ee9ee43b195268a59113555908c1c0cdf955bd4/liblas/Serpent-Mound-Model-LAS-Data.laz)
 
-```shell
+```sh
 # print LAS file info
 v.in.lidar -p input="Serpent Mound Model LAS Data.laz"
 

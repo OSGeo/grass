@@ -14,7 +14,7 @@ a vector map to avoid accidental table removal.
 
 ### Removing an attribute table from default database
 
-```shell
+```sh
 # show default database
 db.connect -p
 
@@ -33,7 +33,7 @@ db.droptable -f table=sometable
 *db.droptable* allows defining optionally **driver** and **database**
 options different from default connection settings (`db.connect -p`).
 
-```shell
+```sh
 # drop the table from SQLite database
 db.droptable -f table=sometable driver=sqlite database=/opt/sqlite.db
 ```

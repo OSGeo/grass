@@ -24,7 +24,7 @@ floating point).
 
 A tilted plane in the North Carolina sample dataset region:
 
-```shell
+```sh
 # set computational region
 g.region raster=elev_lid792_1m -p
 
@@ -39,13 +39,9 @@ r.plane myplane30 dip=30 az=75 east=638650.0 north=220375.0 \
         elev=116.7734 type=FCELL
 ```
 
-<div align="center" style="margin: 10px">
-
 [<img src="r_plane_3d.png" data-border="0" width="600" height="360"
 alt="r.plane example" />](r_plane_3d.png)  
 *Figure: Tilted plane shown in NVIZ along with elevation map*
-
-</div>
 
 ## AUTHORS
 

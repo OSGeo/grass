@@ -100,7 +100,7 @@ from raster mask). Therefore, if the input image has NULL cells, it
 might be necessary to create a masked classification results as part of
 post-processing using e.g. *r.mapcalc*:
 
-```shell
+```sh
 r.mapcalc "masked_results = if(isnull(input_image), null(), classification_results)"
 ```
 
@@ -108,7 +108,7 @@ Similarly, if the raster mask is active, it might be necessary to
 post-process the classification results using *r.mapcalc* which will
 automatically mask the classification results:
 
-```shell
+```sh
 r.mapcalc "masked_results = classification_results"
 ```
 
@@ -116,7 +116,7 @@ r.mapcalc "masked_results = classification_results"
 
 Supervised classification of LANDSAT scene (complete NC dataset)
 
-```shell
+```sh
 # Align computation region to the scene
 g.region raster=lsat7_2002_10 -p
 
@@ -154,7 +154,7 @@ group(s), they can set semantic labels for each group member beforehand,
 i.e., before generating the signature files. Semantic labels are set by
 means of *r.support* as shown below:
 
-```shell
+```sh
 # Define semantic labels for all LANDSAT bands
 r.support map=lsat7_2002_10 semantic_label=TM7_1
 r.support map=lsat7_2002_20 semantic_label=TM7_2

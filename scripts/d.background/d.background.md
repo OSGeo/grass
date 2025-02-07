@@ -15,7 +15,7 @@ dataset is displayed with custom background color (specified using HTML
 hex color code) using *cairo* display monitor (creates file called
 *map.png*):
 
-```shell
+```sh
 g.region vector=streets_wake
 d.mon cairo
 d.background color=#ADEFD1

@@ -16,7 +16,7 @@ The example is based on the North Carolina sample data.
 
 Export of the soil map to PNG format with world file:
 
-```shell
+```sh
 g.region raster=soils_Kfactor -p
 # export PNG file with additional world file
 r.out.png input=soils_Kfactor output=soils_Kfactor -w

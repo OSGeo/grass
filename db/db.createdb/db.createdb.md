@@ -15,7 +15,7 @@ Note that the standard GRASS GIS SQLite database is by default generated
 in the user's current mapset. This example shows an out-of-mapset
 database file creation:
 
-```shell
+```sh
 db.createdb driver=sqlite database=/opt/sqlite.db
 ```
 
@@ -24,14 +24,14 @@ db.createdb driver=sqlite database=/opt/sqlite.db
 Create a new PostgreSQL database (after the PostgreSQL connection got
 established through the *pg* driver):
 
-```shell
+```sh
 db.createdb driver=pg database=grassdb
 ```
 
 Create a new PostgreSQL database (after the PostgreSQL connection got
 established through the *odbc* driver):
 
-```shell
+```sh
 db.createdb driver=odbc database=grassdb
 ```
 

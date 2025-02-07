@@ -23,7 +23,7 @@ To write a new index only two steps are needed:
     *r.li.daemon* folder, which contains all index declarations. This
     function must be of this kind:
 
-    ```shell
+    ```sh
             int index(int fd, char ** par, area_des ad, double * result)
         
     ```
@@ -41,7 +41,7 @@ To write a new index only two steps are needed:
 2.  Create a main for command line arguments parsing, and call the
     function
 
-    ```shell
+    ```sh
             int calculateIndex(char *file, rli_func *f,
                                char **parameters, char *raster, char *output);
         
@@ -68,7 +68,7 @@ implementation of *r.li* modules for details and examples.
 Using GRASS library function to access raster rows can slow down moving
 windows execution. It is recommended to use  
 
-```shell
+```sh
 RLI_get_cell_row(int, int, area_des)
 RLI_get_fcell_row(int, int, area_des)
 RLI_get_dcell_row(int, int, area_des)

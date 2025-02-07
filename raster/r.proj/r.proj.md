@@ -186,7 +186,7 @@ show the input map's bounds once reprojected into the current working
 CRS, then use that to set the region bounds before performing the
 reprojection:
 
-```shell
+```sh
 # calculate where output map will be
 r.proj input=elevation project=ll_wgs84 mapset=user1 -p
 Source cols: 8162
@@ -238,7 +238,7 @@ r.proj input=elevation project=ll_wgs84 mapset=user1 memory=800
 
 ### v.in.region method
 
-```shell
+```sh
 
 # In the source project, use v.in.region to generate a bounding box around the
 # region of interest:

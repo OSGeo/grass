@@ -49,16 +49,12 @@ The following command will print the short phrase "This is a test of
 d.text" in the active display frame using the color yellow, in bold, and
 using 4/100'ths (4%) of the active frame's vertical space per line:
 
-```shell
+```sh
 d.text text="This is a test of d.text" color=yellow bgcolor=gray size=4
 ```
 
-<div align="center" style="margin: 10px">
-
 <img src="d_text.png" data-border="1" width="600" />  
 *Displayed Text*
-
-</div>
 
 ## NOTES
 

@@ -25,7 +25,7 @@ The values of the maps are chosen so that the interpolated values can be
 estimated. We expect one map with a value of 2 for the first gap and two
 maps (values 3.666 and 4.333) for the second gap after interpolation.
 
-```shell
+```sh
 r.mapcalc expression="map1 = 1"
 r.mapcalc expression="map2 = 3"
 r.mapcalc expression="map3 = 5"

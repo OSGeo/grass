@@ -34,7 +34,7 @@ current computational region. Supported spatial relations are:
 Obtain the univariate statistics for the raster space time dataset
 "tempmean_monthly" (precision reduced to 2 decimals in this example):
 
-```shell
+```sh
 t.rast.univar -e tempmean_monthly
 id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|first_quartile|median|third_quartile|percentile_90
 2009_01_tempmean@climate_2009_2012|2009-01-01 00:00:00|2009-02-01 00:00:00|3.90|-3.38|7.43|3.95|1.79|3.20|45.91|1977967.31|503233|1010600|2.80|3.92|5.21|6.23

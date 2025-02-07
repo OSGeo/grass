@@ -97,7 +97,7 @@ Analysis of random points for areas in areas of the vector *urbanarea*
 First generate 1000 random points within the areas the vector urbanarea
 and within the subregion, then do clustering and visualize the result:
 
-```shell
+```sh
 # pick a subregion of the vector urbanarea
 g.region -p n=272950 s=188330 w=574720 e=703090 res=10
 
@@ -126,7 +126,7 @@ Generate random points for analysis (100 points per area), use different
 method for clustering and visualize using color stored the attribute
 table.
 
-```shell
+```sh
 # pick a subregion of the vector urbanarea
 g.region -p n=272950 s=188330 w=574720 e=703090 res=10
 

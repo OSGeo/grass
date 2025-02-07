@@ -23,7 +23,7 @@ or the input raster maps values.
 
 Simple Spearfish sample data set example
 
-```shell
+```sh
 g.region raster=elevation.10m -p
 g.region res=200 res3=200 t=2000 b=0 tbres=20 -p
 

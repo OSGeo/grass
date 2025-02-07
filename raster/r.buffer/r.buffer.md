@@ -9,7 +9,7 @@ around roads. This program could create the raster map shown below on
 the right based on road information contained in the raster map shown on
 the left.
 
-```shell
+```sh
       000000000000000000000000 222233333333333333444444
       111000000000000000000000 111222222222223333333333
       000111111111100000000000 222111111111122223333333
@@ -74,14 +74,14 @@ In the following example (North Carolina sample dataset), the buffer
 zones would be (in the default map units of meters): 0-100, 101-200,
 201-300, 301-400 and 401-500.  
 
-```shell
+```sh
 g.region raster=roadsmajor -p
 r.buffer input=roadsmajor output=roadsmajor_buf distances=100,200,300,400,500
 ```
 
 Result:
 
-```shell
+```sh
 r.category input=roads.buf
       1       distances calculated from these locations
       2       0-100 meters
