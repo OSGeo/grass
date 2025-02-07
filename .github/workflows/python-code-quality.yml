@@ -48,7 +48,6 @@ jobs:
           echo OS: ${{ matrix.os }}
           echo Python: ${{ env.PYTHON_VERSION }}
           echo Minimal Python version: ${{ env.MIN_PYTHON_VERSION }}
-          echo Black: ${{ env.BLACK_VERSION }}
           echo Flake8: ${{ env.FLAKE8_VERSION }}
           echo Pylint: ${{ env.PYLINT_VERSION }}
           echo Bandit: ${{ env.BANDIT_VERSION }}
