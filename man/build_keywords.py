@@ -22,17 +22,9 @@ import os
 import sys
 import glob
 
-blacklist = [
-    "Display",
-    "Database",
+keywords_to_hide_in_overview = [
     "General",
-    "Imagery",
     "Misc",
-    "Postscript",
-    "Raster",
-    "Raster3D",
-    "Temporal",
-    "Vector",
 ]
 
 addons_path = None
@@ -114,12 +106,12 @@ def build_keywords(ext):
             elif fname not in keywords[key]:
                 keywords[key].append(fname)
 
-    for black in blacklist:
+    for keyword in keywords_to_hide_in_overview:
         try:
-            del keywords[black]
+            del keywords[keyword]
         except Exception:
             try:
-                del keywords[black.lower()]
+                del keywords[keyword.lower()]
             except Exception:
                 continue
 
