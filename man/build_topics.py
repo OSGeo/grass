@@ -61,7 +61,12 @@ def build_topics(ext):
         try:
             desc = lines[index_desc].split("-", 1)[1].strip()
         except Exception:
-            desc.strip()
+            desc = desc.strip()
+
+        # Line ending can appear here.
+        key = key.strip()
+        if not key:
+            continue
 
         if key not in keywords.keys():
             keywords[key] = {}
