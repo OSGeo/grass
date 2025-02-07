@@ -1,0 +1,42 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.lrs.label</em> generates LRS labels for pretty-printing of a LRS.
+
+This example is written for the Spearfish dataset (it continues the example
+from <em>v.lrs.create</em>).
+<p>
+
+
+<div class="code"><pre>
+v.lrs.label route_lrs rstable=route_lrs output=route_lrs_labels \
+            labels=labels col=red size=50 xoffset=100
+
+g.region vector=route_lrs n=n+100 s=s-100 -p
+d.erase
+d.vect route_lrs
+d.vect route_lrs_labels col=grey type=line
+d.vect busstops disp=attr attr=cat size=10 bg=white lcol=green yref=bottom
+d.vect busstops icon=basic/circle fcol=green
+d.labels labels
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="v.lrs.create.html">v.lrs.create</a>,
+<a href="v.lrs.segment.html">v.lrs.segment</a>,
+<a href="v.lrs.where.html">v.lrs.where</a>,
+<a href="d.labels.html">d.labels</a>,
+<a href="v.label.html">v.label</a>
+</em>
+
+<p>
+<em>
+<a href="lrs.html">LRS tutorial</a>,<br>
+<a href="https://foss4g.asia/2004/Full%20Paper_PDF/Introducing%20the%20Linear%20Reference%20System%20in%20GRASS.pdf">Introducing the Linear Reference System in GRASS</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Radim Blazek, ITC-irst/MPA Solutions<br>
+Documentation update (based on above journal article and available fragments): Markus Neteler

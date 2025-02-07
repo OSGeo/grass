@@ -6,10 +6,32 @@ default: true
 fix: true
 
 MD041: false # first-line-h1
-line-length:
-  code_blocks: false
-  tables: false
-  line_length: 120
 
-no-inline-html:
-  allowed_elements: [sup]
+# Errors from .html to .md rename (first step in HTML to Markdown conversion)
+MD001: false # heading-increment
+MD003: false # heading-style
+MD004: false # ul-style
+MD007: false # ul-indent
+MD009: false # no-trailing-spaces
+MD010: false # no-hard-tabs
+MD011: false # no-reversed-links
+MD012: false # no-multiple-blanks
+MD013: false # line-length
+MD018: false # no-missing-space-atx
+MD019: false # no-multiple-space-atx
+MD020: false # no-missing-space-closed-atx
+MD022: false # blanks-around-headings
+MD023: false # heading-start-left
+MD024: false # no-duplicate-heading
+MD026: false # no-trailing-punctuation
+MD029: false # ol-prefix
+MD032: false # blanks-around-lists
+MD033: false # no-inline-html
+MD034: false # no-bare-urls
+MD037: false # no-space-in-emphasis
+MD045: false # no-alt-text
+MD049: false # emphasis-style
+MD052: false # reference-links-images
+MD055: false # table-pipe-style
+MD058: false # blanks-around-tables
+# The block above this is to be eventually removed.

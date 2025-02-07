@@ -1,0 +1,37 @@
+<!-- meta page description: wxGUI Timeline Tool -->
+<!-- meta page index: topic_GUI|GUI -->
+<h2>DESCRIPTION</h2>
+
+The <b>Timeline Tool</b> is a <em><a href="wxGUI.html">wxGUI</a></em> component
+which allows the user to compare the extents of temporal datasets (strds, stvds,
+str3ds) in a plot.
+<p>
+Supported features:
+<ul>
+  <li>temporal datasets with interval/point and absolute/relative time</li>
+  <li>2D plots - temporal extent</li>
+  <li>3D plots - spatio-temporal extent (matplotlib &gt;= 1.0.0)</li>
+  <li>pop-up annotations with basic metadata</li>
+</ul>
+
+<center>
+<img src="timeline_2D.jpg" border="1" alt="Timeline Tool screenshot">
+</center>
+
+<h2>NOTES</h2>
+
+<em>g.gui.timeline</em> requires the Python plotting library
+<a href="https://matplotlib.org/">Matplotlib</a>.
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="temporal.html">Temporal data processing</a>,
+  <a href="wxGUI.html">wxGUI</a>,
+  <a href="wxGUI.components.html">wxGUI components</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Anna Kratochvilova,
+<a href="https://www.cvut.cz">Czech Technical University in Prague</a>, Czech Republic

@@ -1,0 +1,31 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.latlong</em> creates a latitude (degree decimal) map, or longitude
+if the -l flag is used, from any map in any projection using PROJ library.
+This is an input to <em>r.sun</em> and <em>i.evapo.potrad</em>.
+
+<h2>NOTES</h2>
+
+The PROJ <a href="https://proj.org">website</a>.
+
+<h2>TODO</h2>
+
+Datum transform is not implemented, the same datum is taken as output.
+
+<h2>EXAMPLE</h2>
+
+<div class="code"><pre>
+g.region raster=elevation -p
+r.latlong input=elevation output=latitude
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.sun.html">r.sun</a>,
+<a href="r.sunhours.html">r.sunhours</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Yann Chemin, International Rice Research Institute, The Philippines

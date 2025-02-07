@@ -1,0 +1,137 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.carve</em> accepts vector stream data as input, transforms them to
+raster, and subtracts a default-depth + additional-depth from a DEM. If
+the given width is more than 1 cell, it will carve the stream with the
+given width. With the <b>-n</b> flag it should eliminate all flat cells within
+the stream, so when and if the water gets into the stream it will
+flow. The <em>points</em> option generates x,y,z for points which define the stream
+with the z-value of the bottom of the carved-in stream. These points
+can then be combined with contours to interpolate a new DEM with
+better representation of valleys.
+
+<h2>NOTES</h2>
+
+<em>r.carve</em> does not create a depressionless DEM because many
+depressions are in flat areas and not in the streams.
+
+<h2>EXAMPLE</h2>
+
+North Carolina sample dataset:
+
+<div class="code"><pre>
+# set computational region
+g.region raster=elev_lid792_1m -p
+
+# digitize a ditch for the farm pond
+echo "L  3 1
+ 638692.93595422 220198.90026383
+ 638737.42270627 220149.74706926
+ 638984.43306379 220148.19158842
+ 1     1" | v.in.ascii -n input=- output=ditch format=standard
+
+# visualize original data
+d.mon wx0
+d.rast elev_lid792_1m
+d.vect ditch
+
+# carve
+r.carve raster=elev_lid792_1m vector=ditch output=carved_dem width=3 depth=0.5
+
+# visualize resulting carved DEM map
+d.rast carved_dem
+
+# visualize
+r.relief input=elev_lid792_1m output=elev_lid792_1m_shaded
+r.relief input=carved_dem output=carved_dem_shaded
+d.rast elev_lid792_1m_shaded
+d.erase
+d.rast carved_dem_shaded
+
+# flow accumulation
+r.watershed elevation=elev_lid792_1m accumulation=elev_lid792_1m_accum
+r.watershed elevation=carved_dem accumulation=carved_dem_accum
+d.rast elev_lid792_1m_accum
+d.erase
+d.rast carved_dem_accum
+
+# differences
+r.mapcalc "accum_diff = elev_lid792_1m_accum - carved_dem_accum"
+r.colors accum_diff color=differences
+d.erase
+d.rast accum_diff
+</pre></div>
+
+<center>
+<table border="1">
+<tr>
+ <td align="center">
+  <a href="r_carve_dem_orig.png">
+  <img src="r_carve_dem_orig.png" width="300" height="321" alt="r.carve example: original DEM" border="0">
+  </a><br>
+  <i>Fig: Original 1m LiDAR based DEM with vector streams map on top</i>
+  </td>
+ <td align="center">
+  <a href="r_carve_dem_orig_shaded.png">
+  <img src="r_carve_dem_orig_shaded.png" width="300" height="321" alt="r.carve example: original DEM shaded" border="0">
+  </a><br>
+  <i>Fig: Original 1m LiDAR based DEM shown as shaded terrain</i>
+ </td>
+</tr>
+<tr>
+ <td align="center">
+  <a href="r_carve_dem_carved.png">
+  <img src="r_carve_dem_carved.png" width="300" height="321" alt="r.carve example: carved DEM" border="0">
+  </a><br>
+  <i>Fig: Carved 1m LiDAR based DEM</i>
+ </td>
+ <td align="center">
+  <a href="r_carve_dem_carved_shaded.png">
+  <img src="r_carve_dem_carved_shaded.png" width="300" height="321" alt="r.carve example: carved DEM shaded" border="0">
+  </a><br>
+  <i>Fig: Carved 1m LiDAR based DEM shown as shaded terrain</i>
+ </td>
+</tr>
+<tr>
+ <td align="center">
+  <a href="r_carve_dem_orig_accum.png">
+  <img src="r_carve_dem_orig_accum.png" width="300" height="321" alt="r.carve example: original DEM flow accumulated" border="0">
+  </a><br>
+  <i>Fig: Flow accumulation in original 1m LiDAR based DEM</i>
+ </td>
+ <td align="center">
+  <a href="r_carve_dem_carved_accum.png">
+  <img src="r_carve_dem_carved_accum.png" width="300" height="321" alt="r.carve example: carved DEM flow accumulation" border="0">
+  </a><br>
+  <i>Fig: Flow accumulation in carved 1m LiDAR based DEM</i>
+ </td>
+</tr>
+</table>
+</center>
+
+<h2>KNOWN ISSUES</h2>
+
+<!-- Is this still the case as of Jan 11, 2008? - EP -->
+The module does not operate yet in latitude-longitude coordinate reference system.  It
+has not been thoroughly tested, so not all options may work properly -
+but this was the intention.
+
+<h2>REFERENCES</h2>
+
+<a href="https://web.archive.org/web/20240310015553/http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/reports/cerl99/rep99.html">Terrain
+modeling and Soil Erosion Simulations for Fort Hood and Fort Polk test
+areas</a>, by Helena Mitasova, Lubos Mitas, William M. Brown, Douglas
+M.  Johnston, GMSL (Report for CERL 1999)
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.flow.html">r.flow</a>,
+<a href="r.fill.dir.html">r.fill.dir</a>,
+<a href="r.watershed.html">r.watershed</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Bill Brown (GMSL)<br>
+GRASS 6 update: Brad Douglas

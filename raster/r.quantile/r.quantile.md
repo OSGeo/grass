@@ -1,0 +1,57 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.quantile</em> computes quantiles in a manner suitable
+for use with large amounts of data. It is using two passes.
+
+<h2>NOTES</h2>
+
+Quantiles are calculated following algorithm 7 from Hyndman and Fan (1996),
+which is also the default in R and numpy.
+
+<h2>EXAMPLE</h2>
+
+Calculation of elevation quantiles (printed to standard-out):
+
+<div class="code"><pre>
+g.region raster=elevation -p
+r.quantile input=elevation percentiles=0.1,1,10,25,50,75,90,99,99.9
+</pre></div>
+
+The output of <em>r.quantile</em> can be used for quantile classification:
+
+<div class="code"><pre>
+g.region raster=elevation -p
+r.quantile elevation quantiles=5 -r --quiet | r.recode elevation \
+           out=elev_quant5 rules=-
+</pre></div>
+
+<h2>REFERENCES</h2>
+
+<ul>
+<li>Hyndman and Fan (1996) <i>Sample Quantiles in Statistical
+Packages</i>, <b>American Statistician</b>. American Statistical
+Association. 50 (4): 361-365. DOI:
+<a href="https://doi.org/10.2307/2684934>10.2307/2684934">10.2307/2684934</a></li>
+<li> <a href="https://www.itl.nist.gov/div898/handbook/prc/section2/prc262.htm"><i>Engineering
+Statistics Handbook: Percentile</i></a>, NIST</li>
+</ul>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.mode.html">r.mode</a>,
+<a href="r.quant.html">r.quant</a>,
+<a href="r.recode.html">r.recode</a>,
+<a href="r.series.html">r.series</a>,
+<a href="r.stats.html">r.stats</a>,
+<a href="r.stats.quantile.html">r.stats.quantile</a>,
+<a href="r.stats.zonal.html">r.stats.zonal</a>,
+<a href="r.statistics.html">r.statistics</a>,
+<a href="r.univar.html">r.univar</a>,
+<a href="v.rast.stats.html">v.rast.stats</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Glynn Clements<br>
+Markus Metz

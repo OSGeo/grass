@@ -1,0 +1,481 @@
+<!-- meta page description: wxGUI Graphical Modeler -->
+<!-- meta page index: topic_GUI|GUI -->
+<h2>DESCRIPTION</h2>
+
+<p>
+The <b>Graphical Modeler</b> is a <em><a href="wxGUI.html">wxGUI</a></em>
+component which allows the user to create, edit, and manage simple and
+complex models using an easy-to-use interface.
+When performing analytical operations in GRASS GIS, the
+operations are not isolated, but part of a chain of operations. Using the
+Graphical Modeler, a chain of processes (i.e. GRASS GIS modules)
+can be wrapped into one process (i.e. model). Subsequently it is easier to
+execute the model later on even with slightly different inputs or parameters.
+<br>
+Models represent a programming technique used in GRASS GIS to
+concatenate single steps together to accomplish a task. It is advantageous
+when the user see boxes and ovals that are connected by lines and
+represent some tasks rather than seeing lines of coded text. The Graphical
+Modeler can be used as a custom tool that automates a process. Created
+models can simplify or shorten a task which can be run many times and it can
+also be easily shared with others. Important to note is that models cannot
+perform specified tasks that one cannot also manually perform with GRASS
+GIS. It is recommended to first to develop the process manually, note down
+the steps (e.g. by using the <i>Copy</i> button in module dialogs) and later
+replicate them in model.
+
+<p>
+The Graphical Modeler allows you to:
+
+<ul>
+  <li>define data items (raster, vector, 3D raster maps)</li>
+  <li>define actions (GRASS commands)</li>
+  <li>define relations between data and action items</li>
+  <li>define loops (e.g. map series) and conditions (if-else statements)</li>
+  <li>define model variables</li>
+  <li>parameterize GRASS commands</li>
+  <li>define intermediate data</li>
+  <li>validate and run model</li>
+  <li>save model properties to a file (<i>GRASS Model File|*.gxm</i>)</li>
+  <li>export model to Python script</li>
+  <li>export model to Python script in the form of a PyWPS process</li>
+  <li>export model to an actinia process</li>
+  <li>export model to image file</li>
+</ul>
+
+<h3>Main dialog</h3>
+
+The Graphical Modeler can be launched from the Layer Manager menu
+<code>File -&gt; Graphical modeler</code> or from the main
+toolbar <img src="icons/modeler-main.png" alt="icon">. It's also
+available as stand-alone module <em>g.gui.gmodeler</em>.
+
+<p>
+The main Graphical Modeler menu contains options which enable the user
+to fully control the model. Directly under the main menu one can find
+toolbar with buttons (see figure below). There are options including
+(<font size="2" color="red">1</font>) Create new model,
+(<font size="2" color="red">2</font>) Load model from file,
+(<font size="2" color="red">3</font>) Save current model to file,
+(<font size="2" color="red">4</font>) Export model to image,
+(<font size="2" color="red">5</font>) Export model to a (Python/PyWPS/actinia) script,
+(<font size="2" color="red">6</font>) Add command (GRASS module) to model,
+(<font size="2" color="red">7</font>) Add data to model,
+(<font size="2" color="red">8</font>) Manually define relation between
+data and commands,
+(<font size="2" color="red">9</font>) Add loop/series to model,
+(<font size="2" color="red">10</font>) Add comment to model,
+(<font size="2" color="red">11</font>) Redraw model canvas,
+(<font size="2" color="red">12</font>) Validate model,
+(<font size="2" color="red">13</font>) Run model,
+(<font size="2" color="red">14</font>) Manage model variables,
+(<font size="2" color="red">15</font>) Model settings,
+(<font size="2" color="red">16</font>) Show manual,
+(<font size="2" color="red">17</font>) Quit Graphical Modeler.
+
+<p>
+<center>
+<img src="g_gui_gmodeler_toolbar.png">
+<br>
+<i>Figure: Components of Graphical Modeler menu toolbar.</i>
+</center>
+
+<p>
+There is also a lower menu bar in the Graphical modeler dialog where one can
+manage model items, visualize commands, add or manage model variables,
+define default values and descriptions. The Script editor dialog window
+allows seeing and exporting workflows as basic Python scripts, as PyWPS
+scripts, or as actinia processes. The rightmost tab of the bottom menu is
+automatically triggered when the model is activated and shows all the steps
+of running GRASS modeler modules; in the case some errors occur in
+the calculation process, they are are written at that place.
+
+<center>
+<a href="g_gui_gmodeler_lower_toolbar.png"><img src="g_gui_gmodeler_lower_toolbar.png" width="600" height="354"></a>
+<br>
+<i>Figure: Lower Graphical Modeler menu toolbar.
+</i>
+</center>
+
+<h3>Components of models</h3>
+
+The workflow is usually established from four types of diagrams. Input and
+derived model data are usually represented with oval diagrams. This type of
+model elements stores path to specific data on the user's disk. It is
+possible to insert vector data, raster data, database tables, etc.
+The type of data is clearly distinguishable in the model by its color.
+Different model elements are shown in the figures below.
+
+<ul>
+  <li> (<font size="2" color="red">A</font>) raster data: <img src="g_gui_gmodeler_raster.png" alt="raster" style="margin: 0px 0px -5px 0px"></li>
+  <li> (<font size="2" color="red">B</font>) relation: <img src="g_gui_gmodeler_relation.png" alt="relation" style="margin: 10px 0px 0px 0px"></li>
+  <li> (<font size="2" color="red">C</font>) GRASS module: <img src="g_gui_gmodeler_modul.png" alt="module" style="margin: 0px 0px -5px 0px"></li>
+  <li> (<font size="2" color="red">D</font>) loop: <img src="g_gui_gmodeler_loop.png" alt="loop" style="margin: 15px 0px -5px 0px"></li>
+  <li> (<font size="2" color="red">E</font>) database table: <img src="g_gui_gmodeler_db.png" alt="db" style="margin: 10px 0px -5px 0px"></li>
+  <li> (<font size="2" color="red">F</font>) 3D raster data: <img src="g_gui_gmodeler_raster3d.png" alt="raster3D" style="margin: 10px 0px -5px 0px"></li>
+  <li> (<font size="2" color="red">G</font>) vector data: <img src="g_gui_gmodeler_vector.png" alt="vector" style="margin: 10px 0px -5px 0px"></li>
+  <li> (<font size="2" color="red">H</font>) disabled GRASS module: <img src="g_gui_gmodeler_modulex.png" alt="module" style="margin: 10px 0px -5px 0px"></li>
+  <li> (<font size="2" color="red">I</font>) comment: <img src="g_gui_gmodeler_comment.png" alt="comment" style="margin: 10px 0px -5px 0px"></li>
+</ul>
+
+<center>
+<a href="g_gui_gmodeler_model_classification.png">
+<img src="g_gui_gmodeler_model_classification.png" width="500"></a>
+<br>
+<i>Figure: A model to perform unsupervised classification using MLC
+(<a href="i.maxlik.html">i.maxlik</a>) and SMAP (<a href="i.smap.html">i.smap</a>).
+</i>
+</center>
+
+<p>
+Another example:
+
+<center>
+<a href="g_gui_gmodeler_model_usle.png">
+<img src="g_gui_gmodeler_model_usle.png" width="600" height="284"></a>
+<br>
+<i>Figure: A model to perform estimation of average annual soil loss
+caused by sheet and rill erosion using The Universal Soil Loss
+Equation.</i>
+</center>
+
+<p>
+Example as part of landslide prediction process:
+
+<center>
+<a href="g_gui_gmodeler_model_landslides.png">
+<img src="g_gui_gmodeler_model_landslides.png" width="600" height="290"></a>
+<br>
+<i>Figure: A model to create parametric maps used by geologists
+to predict landslides in the area of interest.</i>
+</center>
+
+<h2>EXAMPLE</h2>
+
+In this example the <code>zipcodes_wake</code> vector data and the
+<code>elev_state_500m</code> raster data from the North Carolina
+sample dataset (original <a href="https://grass.osgeo.org/sampledata/north_carolina/nc_rast_geotiff.zip">raster</a> and
+<a href="https://grass.osgeo.org/sampledata/north_carolina/nc_shape.zip">vector</a>
+data) are used to calculate average elevation for every
+zone. The important part of the process is the Graphical Modeler, namely its
+possibilities of process automation.
+
+<h3>The workflow shown as a series of commands</h3>
+
+In the command console the procedure looks as follows:
+
+<div class="code"><pre>
+# input data import
+r.import input=elev_state_500m.tif output=elevation
+v.import input=zipcodes_wake.shp output=zipcodes_wake
+# computation region settings
+g.region vector=zipcodes_wake
+# raster statistics (average values), upload to vector map table calculation
+v.rast.stats -c map=zipcodes_wake raster=elevation column_prefix=rst method=average
+# univariate statistics on selected table column for zipcode map calculation
+v.db.univar map=zipcodes_wake column=rst_average
+# conversion from vector to raster layer (due to result presentation)
+v.to.rast input=zipcodes_wake output=zipcodes_avg use=attr attribute_column=rst_average
+# display settings
+r.colors -e map=zipcodes_avg color=bgyr
+d.mon start=wx0 bgcolor=white
+d.barscale style=arrow_ends color=black bgcolor=white fontsize=10
+d.rast map=zipcodes_avg bgcolor=white
+d.vect map=zipcodes_wake type=boundary color=black
+d.northarrow style=1a at=85.0,15.0 color=black fill_color=black width=0 fontsize=10
+d.legend raster=zipcodes_avg lines=50 thin=5 labelnum=5 color=black fontsize=10
+</pre></div>
+
+<h3>Defining the workflow in the Graphical Modeler</h3>
+
+To start performing above steps as an automatic process with the Graphical Modeler
+press the <img src="icons/modeler-main.png" alt="icon"> icon or
+type <em>g.gui.gmodeler</em>. The simplest way of inserting elements
+is by adding the complete GRASS command to the Command field in the GRASS command
+dialog (see figure below).  With full text search one can do faster
+module hunting. Next, the label and the command can be added. In case that only
+a module name is inserted, after pressing the <i>Enter</i> button, the
+module dialog window is displayed and it is possible to set all of the usual
+module options (parameters and flags).
+
+<p>
+<center>
+<a href="g_gui_gmodeler_dlg_module.png"><img src="g_gui_gmodeler_dlg_module.png"
+width="400"></a>
+<br>
+<i>Figure: Dialog for adding GRASS commands to model.</i>
+</center>
+
+<h3>Managing model parameters</h3>
+All used modules can be parameterized in the model. That causes launching the
+dialog with input options for model after the model is run. In this example,
+input layers (<code>zipcodes_wake</code> vector map and <code>elev_state_500m</code>
+raster map) are parameterized. Parameterized elements show their diagram border
+slightly thicker than those of unparameterized elements.
+
+<center>
+<a href="g_gui_gmodeler_parameter.png">
+<img src="g_gui_gmodeler_parameter.png" width="500"></a>
+<br>
+<i>Figure: Model parameter settings.</i>
+</center>
+
+<p>
+The final model, the list of all model items, and the Script editor window with
+<i>Save</i> and <i>Run</i> option are shown in the figures below.
+
+<center>
+<a href="g_gui_gmodeler_model_avg.png">
+<img src="g_gui_gmodeler_model_avg.png" width="600" height="272"></a>
+<br>
+<i>Figure: A model to perform average statistics for zipcode zones.</i>
+</center>
+<br>
+<center>
+<a href="g_gui_gmodeler_items.png">
+<img src="g_gui_gmodeler_items.png" width="600" height="330"></a>
+<p>
+<a href="g_gui_gmodeler_python.png">
+<img src="g_gui_gmodeler_python.png" width="600" height="330"></a>
+<br>
+<i>Figure: Items with Script editor window.</i>
+</center>
+
+<p>
+For convenience, this model for the Graphical Modeler is also available for download
+<a href="g_gui_gmodeler_zipcodes_avg_elevation.gxm">here</a>.
+
+<p>
+The model is run by clicking the <i>Run</i> button
+<img src="icons/execute.png" alt="run">. When all inputs are set, the results can
+be displayed as shown in the next Figure:
+
+<center>
+<a href="g_gui_gmodeler_avg_run.png"><img src="g_gui_gmodeler_avg_run.png" width="500"></a>
+<a href="g_gui_gmodeler_avg_map.png"><img src="g_gui_gmodeler_avg_map.png" width="300"></a>
+<br>
+<i>Figure: Average elevation for ZIP codes using North Carolina sample dataset as
+an automatic calculation performed by Graphical Modeler.</i>
+</center>
+
+<h3>Managing model properties</h3>
+When the user wants to run the model again with the same data or the same names, it is
+necessary to use <code>--overwrite</code> option. It will cause maps with identical
+names to be overwritten. Instead of setting it for every
+module separately it is handy to change the Model Property settings globally.
+This dialog includes also metadata settings, where model name, model description
+and author(s) of the model can be specified.
+
+<center>
+<a href="g_gui_gmodeler_model_properties.png">
+<img src="g_gui_gmodeler_model_properties.png" width="350"></a>
+<br>
+<i>Figure: Model properties.</i>
+</center>
+
+<h3>Defining variables</h3>
+
+Another useful trick is the possibility to set variables. Their content can be used
+as a substitute for other items. Value of variables can be values such as
+raster or vector data, integer, float, string value or they may constitute some
+region, mapset, file or direction data type.
+
+Then it is not
+necessary to set any parameters for input data. The dialog with variable settings
+is automatically displayed after the model is run. So, instead of model parameters
+(e.g. <code>r.import</code> a <code>v.import</code>, see the Figure
+<em><a href="g_gui_gmodeler_avg_run.png">Run model dialog</a></em> above)
+there are <code>Variables</code>.
+
+<center>
+<a href="g_gui_gmodeler_variables_run.png">
+<img src="g_gui_gmodeler_variables_run.png" width="500"></a>
+<br>
+<i>Figure: Model with variable inputs.</i>
+</center>
+
+<p>
+The key point is the usage of <code>%</code> before the substituting variable and
+settings in the <code>Variables</code> dialog. For example, in the case of a model variable
+<code>raster</code> that points to an input file path and which value is required to be
+used as one of inputs for a particular model, it should be specified in the
+<code>Variables</code> dialog with its respective name (<code>raster</code>), data type,
+default value and description. Then it should be set in the module dialog as
+input called <code>%raster</code>.
+
+<center>
+<a href="g_gui_gmodeler_variables.png">
+<img src="g_gui_gmodeler_variables.png" width="600" height="330"></a>
+<br>
+<i>Figure: Example of raster file variable settings.</i>
+</center>
+
+<br>
+<center>
+<a href="g_gui_gmodeler_variables_raster.png">
+<img src="g_gui_gmodeler_variables_raster.png" width="600" height="257"></a>
+<br>
+<i>Figure: Example of raster file variable usage.</i>
+</center>
+
+<h3>Saving the model file</h3>
+Finally, the model settings can be stored as a GRASS GIS Model file with
+<code>*.gxm</code> extension. The advantage is that it can be shared as a
+reusable workflow that may be run also by other users with different data.
+
+<p>
+<!-- TODO: next line, which model? -->
+For example, this model can later be used to calculate the average precipitation
+for every administrative region in Slovakia using the <code>precip</code> raster data from
+<a href="https://grass.osgeo.org/sampledata/slovakia3d_grass7.tar.gz">
+Slovakia precipitation dataset</a> and administration boundaries of Slovakia from
+<a href="https://www.geoportal.sk/sk/zbgis_smd/na-stiahnutie/">Slovak Geoportal</a>
+(only with a few clicks).
+
+<h3>Handling intermediate data</h3>
+There can be some data in a model that did not exist before the process and
+that it is not worth it to maintain after the process executes. They can
+be described as being <code>Intermediate</code> by single clicking using the right
+mouse button, see figure below. All such data should be deleted following
+model completion. The boundary of intermediate component is dotted line.
+
+<center>
+<a href="g_gui_gmodeler_intermediate_data.png">
+<img src="g_gui_gmodeler_intermediate_data.png" width="400"></a>
+<br>
+<i>Figure: Usage and definition of intermediate data in model.</i>
+</center>
+
+<h3>Using the Script editor</h3>
+By using the Script editor in the Graphical Modeler, the user can add Python code and then
+run it with <i>Run</i> button or just save it as a Python script <code>*.py</code>.
+The result is shown in the Figure below:
+
+<center>
+<a href="g_gui_gmodeler_python_code.png">
+<img src="g_gui_gmodeler_python_code.png" height="500"></a>
+<a href="g_gui_gmodeler_python_code_result.png">
+<img src="g_gui_gmodeler_python_code_result.png" height="500"></a>
+<br>
+<i>Figure: Script editor in the wxGUI Graphical Modeler.</i>
+</center>
+
+The second option in the <i>Script type</i> combobox exports a PyWPS script
+instead of a basic Python one. A PyWPS process based on the model will be
+generated then; for the PyWPS script, the <i>Run</i> button is disabled as
+users are expected to include this script in their web processing service and
+not to run it on itself.
+
+<center>
+<a href="g_gui_gmodeler_pywps_code.png">
+<img src="g_gui_gmodeler_pywps_code.png" width="500"></a>
+<br>
+<i>Figure: Script editor in the wxGUI Graphical Modeler - set to PyWPS.</i>
+</center>
+
+The third option in the <i>Script type</i> combobox exports an actinia process
+chain (non-parameterized model) or an actinia template (parameterized model).
+An actinia JSON based on the model will be generated then; as for the PyWPS
+script, the <i>Run</i> button is disabled as users are expected to include this
+JSON in their web processing service and not to run it on itself.
+
+<center>
+<a href="g_gui_gmodeler_actinia_code.png">
+<img src="g_gui_gmodeler_actinia_code.png" width="500"></a>
+<br>
+<i>Figure: Script editor in the wxGUI Graphical Modeler - set to actinia.</i>
+</center>
+
+<p>
+By default GRASS script package API is used
+(<code>grass.script.core.run_command()</code>). This can be changed in the
+settings. Alternatively also PyGRASS API is supported
+(<code>grass.pygrass.modules.Module</code>).
+
+<h3>Defining loops</h3>
+In the example below the <a href="https://e4ftl01.cr.usgs.gov/MOLT/MOD13Q1.006/">MODIS MOD13Q1</a>
+(NDVI) satellite data products are used in a loop. The original data are
+stored as coded integer values that need to be multiplied by the
+value <code>0.0001</code> to represent real <i>ndvi values</i>. Moreover, GRASS GIS
+provides a predefined color table called <code>ndvi</code> to represent <i>ndvi data</i>.
+In this case it is not necessary to work with every image separately.
+<br>
+The Graphical Modeler is an appropriate tool to
+process data in an effective way using loop and variables (<code>%map</code> for a
+particular MODIS image in mapset and <code>%ndvi</code> for original data name suffix).
+After the loop component is added to model, it is necessary to define series of maps
+with required settings of map type, mapset, etc.
+
+<center>
+<a href="g_gui_gmodeler_loop_dlg.png">
+<img src="g_gui_gmodeler_loop_dlg.png" width="300"></a>
+<br>
+<i>Figure: MODIS data representation in GRASS GIS after Graphical Modeler usage.</i>
+</center>
+
+<p>
+When the model is supplemented by all of modules, these modules should be
+ticked in the boxes of loop dialog. The final model and its results are shown below.
+
+<center>
+<a href="g_gui_gmodeler_loop_final.png">
+<img src="g_gui_gmodeler_loop_final.png" width="400"></a>
+<br>
+<i>Figure: Model with loop.</i>
+</center>
+
+<p>
+<center>
+<a href="g_gui_gmodeler_modis_1o.png">
+<img src="g_gui_gmodeler_modis_1o.png" width="300"></a>
+<a href="g_gui_gmodeler_modis_1.png">
+<img src="g_gui_gmodeler_modis_1.png" width="300"></a>
+<a href="g_gui_gmodeler_modis_2o.png">
+<img src="g_gui_gmodeler_modis_2o.png" width="300"></a><br>
+<a href="g_gui_gmodeler_modis_2.png">
+<img src="g_gui_gmodeler_modis_2.png" width="300"></a>
+<a href="g_gui_gmodeler_modis_3o.png">
+<img src="g_gui_gmodeler_modis_3o.png" width="300"></a>
+<a href="g_gui_gmodeler_modis_3.png">
+<img src="g_gui_gmodeler_modis_3.png" width="300"></a>
+<br>
+<i>Figure: MODIS data representation in GRASS GIS after Graphical Modeler usage.</i>
+</center>
+
+<p>
+The steps to enter in the command console of the Graphical Modeler would be as follows:
+
+<!-- TODO: WHY does the white space usage differ?? -->
+<div class="code"><pre>
+# note that the white space usage differs from the standard command line usage
+
+# rename original image with preselected suffix
+g.rename raster = %map,%map.%ndvi
+# convert integer values
+r.mapcalc expression = %map = %map.%ndvi * 0.0001
+# set color table appropriate for nvdi data
+r.colors = map = %map color = ndvi
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="wxGUI.html">wxGUI</a>,
+  <a href="wxGUI.components.html">wxGUI components</a>
+</em>
+
+<p>
+See also selected user models available from
+<a href="https://grass.osgeo.org/grass8/manuals/addons/">GRASS Addons repository</a>.
+
+<p>
+See also
+the <a href="https://grasswiki.osgeo.org/wiki/WxGUI_Graphical_Modeler">wiki</a> page
+(especially various <a href="https://grasswiki.osgeo.org/wiki/WxGUI_Graphical_Modeler#Video_tutorials">video
+tutorials</a>).
+
+<h2>AUTHORS</h2>
+
+Martin Landa, GeoForAll Lab, Czech Technical University in Prague, Czech Republic<br>
+PyWPS support by Ondrej Pesek, GeoForAll Lab, Czech Technical University in Prague, Czech Republic<br>
+Various manual improvements by Ludmila Furkevicova, Slovak University of Technology in Bratislava, Slovak Republic

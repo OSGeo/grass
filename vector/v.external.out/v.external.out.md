@@ -1,0 +1,205 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.external.out</em> instructs GRASS to write vector maps in
+external data format (e.g. ESRI Shapefile, Mapinfo, and others)
+using <a href="https://gdal.org/">OGR library</a>. PostGIS data can
+be also written by
+built-in <a href="https://trac.osgeo.org/grass/wiki/Grass7/VectorLib/PostGISInterface">GRASS-PostGIS
+data provider</a>.
+
+<h2>NOTES</h2>
+
+Number of available output formats (<code>v.external.out -f</code>)
+depends on OGR installation. 'PostgreSQL' format is presented also
+when GRASS comes with PostgreSQL support (check for '--with-postgres'
+in <code>g.version -b</code> output).
+
+<p>
+To store geometry and attribute data in PostGIS database ('PostgreSQL'
+format) GRASS uses built-in <em>GRASS-PostGIS data
+provider</em>. PostGIS data can be written also by OGR library
+when <code>GRASS_VECTOR_OGR</code> environmental variable is defined or
+GRASS is not compiled with PostgreSQL support.
+
+<p>
+Creation <b>options</b> refer to the output format specified
+by <b>format</b> option. See the list of valid creation options
+at <a href="https://gdal.org/en/stable/drivers/vector/">OGR formats
+specification page</a>, example
+for <a href="https://gdal.org/en/stable/drivers/vector/shapefile.html">ESRI
+Shapefile</a>
+or <a href="https://gdal.org/en/stable/drivers/vector/pg.html">PostgreSQL/PostGIS</a>
+format (section &quot;Layer Creation Options&quot;). Options are
+comma-separated pairs (<code>key=value</code>), the options are
+case-insensitive,
+eg. <code>options=&quot;SCHEMA=myschema,FID=cat&quot;</code>.
+
+<h3>PostgreSQL/PostGIS Creation Options</h3>
+
+Note that built-in <em>GRASS-PostGIS data provider</em>
+(<b>format=PostgreSQL</b>) supports different creation <b>options</b>
+compared to PostgreSQL/PostGIS driver from OGR library:
+<ul>
+  <li><code>SCHEMA=&lt;name&gt;</code> - name of schema where to create
+  feature tables. If schema doesn't exists, it's automatically created
+  when writing PostGIS data.</li>
+  <li><code>FID=&lt;column&gt;</code> - name of column which will be used as
+  primary key (feature id), default: <code>fid</code></li>
+  <li><code>GEOMETRY_NAME=&lt;column&gt;</code> name of column which will
+  be used for storing geometry data in feature table, default: <code>geom</code></li>
+  <li><code>SPATIAL_INDEX=YES|NO</code> - enable/disable spatial index on geometry column, default: YES</li>
+  <li><code>PRIMARY_KEY=YES|NO</code> - enable/disable primary key on FID column, default: YES</li>
+  <li><code>SRID=&lt;value&gt;</code> - spatial reference identifier,
+  default: not defined</li>
+  <li><code>TOPOLOGY=YES|NO</code> - enable/disable
+  native <a href="https://grasswiki.osgeo.org/wiki/PostGIS_Topology">PostGIS
+  topology</a>, default: NO</li>
+</ul>
+
+Options relevant only to topological output (<code>TOPOLOGY=YES</code>):
+
+<ul>
+  <li><code>TOPOSCHEMA_NAME=&lt;schema name&gt;</code> - name of PostGIS
+  Topology schema (relevant only for <code>TOPOLOGY=YES</code>),
+  default: <code>topo_&lt;input&gt;</code></li>
+  <li><code>TOPOGEOM_NAME=&lt;column&gt;</code> - name of column which
+  will be used for storing topogeometry data in feature table,
+  default: <code>topo</code></li>
+  <li><code>TOPO_TOLERANCE=&lt;value&gt;</code> - tolerance for PostGIS
+  Topology schema,
+  see <a href="https://postgis.net/docs/CreateTopology.html">CreateTopology</a>
+  function for defails, default: <code>0</code></li>
+  <li><code>TOPO_GEO_ONLY=YES|NO</code> - store in PostGIS Topology schema
+  only data relevant to Topo-Geo data model, default: <code>NO</code></li>
+  <li><code>SIMPLE_FEATURE=YES|NO</code> - build simple features geometry
+  in <code>GEOMETRY_NAME</code> column from topogeometry data, default:
+  NO</li>
+</ul>
+
+Note that topological output requires <b>PostGIS version 2 or later</b>.
+
+<h2>EXAMPLES</h2>
+
+<h3>ESRI Shapefile</h3>
+
+<em>v.external.out</em> can be used along with
+<em><a href="v.external.html">v.external</a></em> to process external
+geodata in GRASS while writing out the results directly eg. in ESRI
+Shapefile format:
+
+<div class="code"><pre>
+# register Shapefile in GRASS mapset:
+v.external input=/path/to/shapefiles layer=cities
+
+# define output directory for GRASS calculation results:
+v.external.out output=$HOME/gisoutput
+
+# do something (here: spatial query), write output directly as Shapefile
+v.select ainput=cities atype=point binput=forests btype=area operator=within output=fcities
+</pre></div>
+
+Current settings can be printed using <b>-p</b> or <b>-g</b> flag.
+
+<div class="code"><pre>
+v.external.out -p
+
+output: /path/to/home/gisoutput
+format: ESRI Shapefile
+</pre></div>
+
+<h3>PostGIS (simple features)</h3>
+
+PostGIS data can be accessed directly using <em>GRASS-PostGIS data
+provider</em> (GRASS must be compiled with PostgreSQL support).
+
+<div class="code"><pre>
+# register PostGIS table in GRASS mapset:
+v.external output=PG:dbname=gisdb layer=cities
+
+# define output PostGIS database for GRASS calculation results stored as simple features:
+v.external.out output=PG:dbname=gisdb format=PostgreSQL
+
+# do some processing...
+</pre></div>
+
+<i>Note:</i> If the environment variable <code>GRASS_VECTOR_OGR</code>
+is defined, or GRASS is compiled without PostgreSQL support then GRASS
+will use PostgreSQL driver from OGR library for reading and writing
+PostGIS data.
+
+<h3>PostGIS Topology</h3>
+
+<div class="code"><pre>
+# define output PostGIS database for GRASS calculation results stored as topological elements:
+v.external.out output=PG:dbname=gisdb format=PostgreSQL options=topology=YES
+
+# do some processing...
+</pre></div>
+
+<i>Note:</i> PostGIS topological access is supported only in
+built-in <em>GRASS-PostGIS data provider</em>.
+
+<h3>GRASS native format</h3>
+
+To restore original settings, ie. use the GRASS native format, type:
+
+<div class="code"><pre>
+v.external.out -r
+</pre></div>
+
+<h3>Restore settings</h3>
+
+Current settings can be stored to file by specifying <b>output</b> option.
+
+<div class="code"><pre>
+# define output PostGIS database for GRASS calculation with
+# results stored as topological elements:
+v.external.out output=PG:dbname=gisdb format=PostgreSQL \
+  options=topology=YES savesettings=gisdb_topo.txt
+
+# ... and do some processing in PostGIS Topology
+</pre></div>
+
+Back to native format:
+
+<div class="code"><pre>
+v.external.out -r
+
+# do some processing in native format
+</pre></div>
+
+Restore previous settings from &quot;gisdb_topo.txt&quot; file by
+specifying <b>loadsettings</b> option.
+
+<div class="code"><pre>
+v.external.out loadsettings=gisdb_topo.txt
+
+# ... and do some processing in PostGIS Topology
+</pre></div>
+
+<h2>REFERENCES</h2>
+
+<ul>
+  <li><a href="https://trac.osgeo.org/grass/wiki/Grass7/VectorLib/OGRInterface">GRASS-OGR data provider</a></li>
+  <li><a href="https://gdal.org/en/stable/api/">OGR vector library C API</a> documentation</li>
+  <li><a href="https://trac.osgeo.org/grass/wiki/Grass7/VectorLib/PostGISInterface">GRASS-PostGIS data provider</a></li>
+  <li><a href="https://www.postgresql.org/docs/9.1/static/libpq.html">libpq - C Library</a></li>
+</ul>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="v.external.html">v.external</a>,
+  <a href="v.in.ogr.html">v.in.ogr</a>,
+  <a href="v.out.ogr.html">v.out.ogr</a>,
+  <a href="v.out.postgis.html">v.out.postgis</a>
+</em>
+
+<p>
+See
+also GRASS <a href="https://grasswiki.osgeo.org/wiki/Working_with_external_data_in_GRASS_7">user wiki page</a> for more examples.
+
+<h2>AUTHOR</h2>
+
+Martin Landa, Czech Technical University in Prague, Czech Republic
+(development supported by Fondazione Edmund Mach and Comune di Trento, Italy)

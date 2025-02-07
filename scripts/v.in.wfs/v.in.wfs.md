@@ -1,0 +1,61 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.in.wfs</em> imports OGC WFS maps (Web Feature Service) from
+external servers.
+
+<h2>EXAMPLES</h2>
+
+<h3>WFS import without credentials</h3>
+Import of Copernicus Sentinel-2 satellite scene footprints:
+
+<p>
+<div class="code"><pre>
+# run in Latitude-Longitude project (EPGS code 4326):
+# download "sentinel:mgrs" layer:
+v.in.wfs url="https://geoserver.mundialis.de/geoserver/sentinel/wfs?" name="sentinel:mgrs" output=sentinel2_mgrs
+# download NRW ALKIS "ave:Flurstueck" attribute:
+# set the AOI beforehand with g.region and limit import to current region with -r flag
+v.in.wfs url="https://www.wfs.nrw.de/geobasis/wfs_nw_alkis_vereinfacht?" -r output=wfs_alkis_vereinfacht srs=25832
+name="ave:Flurstueck" version="2.0.0" layer="Flurstueck"
+</pre></div>
+
+<h3>WFS import with API key</h3>
+
+Download 25 ship wrecks from LINZ data service:
+<br>
+(first create yourself a free API key at
+  <a href="http://data.linz.govt.nz/p/web-services/">http://data.linz.govt.nz/p/web-services/</a>)
+
+<p>
+<div class="code"><pre>
+# run in LatLong project:
+URL='http://wfs.data.linz.govt.nz/&lt;PUT YOUR API KEY HERE&gt;/wfs?'
+
+# download list of available layers to wms_capabilities.xml
+v.in.wfs -l url="$URL"
+</pre></div>
+
+From that file we learn that the shipwreck layer is called "<code>v:x633</code>"
+and that EPSG code 4326 (LatLong WGS84) is a supported SRS for this data layer.
+
+<div class="code"><pre>
+v.in.wfs url="$URL" output=linz_hydro_25_wrecks name="v:x633" srs="EPSG:4326" max=25
+</pre></div>
+
+<h2>REQUIREMENTS</h2>
+
+The OGR library on the system needs to be compiled with Xerces C++ XML
+Parser support (for GML).
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="g.region.html">g.region</a>,
+<a href="r.in.wms.html">r.in.wms</a>,
+<a href="v.import.html">v.import</a>,
+<a href="v.in.ogr.html">v.in.ogr</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Markus Neteler, Hamish Bowman
