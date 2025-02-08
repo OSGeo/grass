@@ -794,14 +794,6 @@ void parse_history_line(const char *buf, char *command, char *gisdbase,
         snprintf(mapset_path, GPATH_MAX, "%s/%s/%s", gisdbase, location,
                  mapset);
     }
-    else {
-        // Clear the input strings before processing new entries in the history
-        // file
-        command[0] = '\0';
-        user[0] = '\0';
-        date[0] = '\0';
-        mapset_path[0] = '\0';
-    }
 }
 
 /*!
@@ -881,6 +873,13 @@ void print_history(struct Map_info *Map, enum OutputFormat format)
 
                 add_record_to_json(command, user, date, mapset_path,
                                    record_array, history_number);
+
+                // Clear the input strings before processing new
+                // entries in the history file
+                command[0] = '\0';
+                user[0] = '\0';
+                date[0] = '\0';
+                mapset_path[0] = '\0';
             }
             break;
         }
