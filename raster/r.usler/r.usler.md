@@ -1,25 +1,22 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.usler</em> calculates USLE R factor for Rainfall erosivity. It
-enables several empirical equations: Roosle (1975), Morgan (1974),
-Foster(1981) and El-Swaify (1985).
+*r.usler* calculates USLE R factor for Rainfall erosivity. It enables
+several empirical equations: Roosle (1975), Morgan (1974), Foster(1981)
+and El-Swaify (1985).
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>r.watershed</em> provides for USLE L, S, LS factors.
+*r.watershed* provides for USLE L, S, LS factors.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 TBD.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.uslek.html">r.uslek</a>,
-<a href="r.watershed.html">r.watershed</a>
-</em>
+*[r.uslek](r.uslek.md), [r.watershed](r.watershed.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Natialia Medvedeva, SIC-ISDC, Ashgabat, Turkmenistan<br>
+Natialia Medvedeva, SIC-ISDC, Ashgabat, Turkmenistan  
 Yann Chemin, SIC-ISDC, Ashgabat, Turkmenistan

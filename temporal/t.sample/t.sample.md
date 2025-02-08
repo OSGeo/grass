@@ -1,44 +1,42 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The purpose of <em>t.sample</em> is to compute and to show spatio-temporal
+The purpose of *t.sample* is to compute and to show spatio-temporal
 relations between space time datasets of different type. Several input
-space time datasets are sampled by a <em>sample</em> space time dataset
-using temporal topological relations. The types of the input space time
-datasets and the type of the sample space time dataset can be
-different.
-<p>
+space time datasets are sampled by a *sample* space time dataset using
+temporal topological relations. The types of the input space time
+datasets and the type of the sample space time dataset can be different.
+
 This module is useful to analyze temporal relationships between space
-time datasets using temporal topology. The flag <em>-s</em> enables a
+time datasets using temporal topology. The flag *-s* enables a
 spatio-temporal topology, so that only spatio-temporal related map
 layers of space time datasets are considered in the analysis.
 
-<h2>NOTES</h2>
+## NOTES
 
-The temporal relation <em>start</em> means that the start time of an
-input map layer is temporally located in an interval of a sample map
-layer.
-<p>
+The temporal relation *start* means that the start time of an input map
+layer is temporally located in an interval of a sample map layer.
+
 The textual output at the command line shows the names of the maps,
-start and end time as well as the <em>interval length</em> in days and
-the temporal <em>distance from begin</em> in days.
-<p>
-The default <em>separator</em> is the pipe symbol.
-<p>
-Temporal gaps, if present, in the input and sampling space time
-datasets will be used in the sampling process. Gaps have no map name,
-instead <em>None</em> is printed.
+start and end time as well as the *interval length* in days and the
+temporal *distance from begin* in days.
 
-<h2>EXAMPLE</h2>
+The default *separator* is the pipe symbol.
 
-In the examples below we create a space time raster dataset <em>A</em>
-and a space time vector dataset <em>P</em> that have different temporal
-layouts and number of map layers. The space time vector dataset
-contains a gap, that will be used in the sampling process.
-<p>
-We use <em>t.sample</em> to inspect the topological relations between the
-time stamped map layers in <em>A</em> and <em>P</em>.
-<p>
-<div class="code"><pre>
+Temporal gaps, if present, in the input and sampling space time datasets
+will be used in the sampling process. Gaps have no map name, instead
+*None* is printed.
+
+## EXAMPLE
+
+In the examples below we create a space time raster dataset *A* and a
+space time vector dataset *P* that have different temporal layouts and
+number of map layers. The space time vector dataset contains a gap, that
+will be used in the sampling process.
+
+We use *t.sample* to inspect the topological relations between the time
+stamped map layers in *A* and *P*.
+
+```sh
 # Set an appropriate region
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
@@ -57,7 +55,7 @@ v.random -z output=pnts2 n=20 zmin=0 zmax=100 column=height
 n1=`g.tempfile pid=1 -d`
 n2=`g.tempfile pid=2 -d`
 
-cat &gt; "${n1}" &lt;&lt; EOF
+cat > "${n1}" << EOF
 a1
 a2
 a3
@@ -66,7 +64,7 @@ a5
 a6
 EOF
 
-cat &gt; "${n2}" &lt;&lt; EOF
+cat > "${n2}" << EOF
 pnts1|2001-01-01|2001-03-01
 pnts2|2001-05-01|2001-07-01
 EOF
@@ -162,15 +160,12 @@ P@PERMANENT|A@PERMANENT|start_time|end_time|interval_length|distance_from_begin
 pnts1@PERMANENT|a3@PERMANENT|2001-01-01 00:00:00|2001-03-01 00:00:00|59.0|0.0
 None|a5@PERMANENT,a2@PERMANENT|2001-03-01 00:00:00|2001-05-01 00:00:00|61.0|59.0
 pnts2@PERMANENT|a4@PERMANENT|2001-05-01 00:00:00|2001-07-01 00:00:00|61.0|120.0
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
-</em>
+*[t.create](t.create.md), [t.info](t.info.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

@@ -1,41 +1,37 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.northarrow</em> displays a north arrow symbol at
-the given screen coordinates. If no coordinates are given it will draw the
-north arrow in the bottom right of the display. It can draw the north arrow
-in a number of styles (see the
- <a href="https://grasswiki.osgeo.org/wiki/Cartography#Display_monitors">wiki
-page</a> for details).
-With certain styles of north arrow label 'N' is displayed by default,
-and can be changed with option <b>label</b>, for example for different languages.
-The label can be hidden with <b>-t</b> flag.
-<p>
-North arrow can be rotated, for example to align with true north, not grid north.
-The angle in degrees counter-clockwise (or radians with <b>-r</b> flag)
-can be specified with option <b>rotation</b>. Label is rotated together with the
-arrow, unless flag <b>-w</b> is specified.
+*d.northarrow* displays a north arrow symbol at the given screen
+coordinates. If no coordinates are given it will draw the north arrow in
+the bottom right of the display. It can draw the north arrow in a number
+of styles (see the [wiki
+page](https://grasswiki.osgeo.org/wiki/Cartography#Display_monitors) for
+details). With certain styles of north arrow label 'N' is displayed by
+default, and can be changed with option **label**, for example for
+different languages. The label can be hidden with **-t** flag.
 
-<h2>EXAMPLES</h2>
+North arrow can be rotated, for example to align with true north, not
+grid north. The angle in degrees counter-clockwise (or radians with
+**-r** flag) can be specified with option **rotation**. Label is rotated
+together with the arrow, unless flag **-w** is specified.
 
-Display a north arrow symbol as a basic compas with label NORTH,
-rotated by 8 degrees with label, with black line and gray fill:<br>
+## EXAMPLES
 
-<div class="code"><pre>
+Display a north arrow symbol as a basic compas with label NORTH, rotated
+by 8 degrees with label, with black line and gray fill:  
+
+```sh
 d.mon wx0
 d.northarrow style=basic_compas rotation=8 label=NORTH -w color=black fill_color=gray
 d.mon -r
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.barscale.html">d.barscale</a>,
-<a href="d.graph.html">d.graph</a>,
-<a href="d.grid.html">d.grid</a>,
-<a href="d.legend.html">d.legend</a>
-</em>
+*[d.barscale](d.barscale.md), [d.graph](d.graph.md),
+[d.grid](d.grid.md), [d.legend](d.legend.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Hamish Bowman, <i>Department of Geology, University of Otago, New Zealand</i><br>
-Improvements as part of GSoC 2016 by Adam Laza, <i>CTU in Prague</i>
+Hamish Bowman, *Department of Geology, University of Otago, New
+Zealand*  
+Improvements as part of GSoC 2016 by Adam Laza, *CTU in Prague*

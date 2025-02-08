@@ -1,8 +1,8 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<p><em>g.ppmtopng</em> isn't meant for end users. It's a utility to
-convert between PPM/PGM and PNG image formats.
+*g.ppmtopng* isn't meant for end users. It's a utility to convert
+between PPM/PGM and PNG image formats.
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Glynn Clements

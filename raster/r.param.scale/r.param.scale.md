@@ -1,119 +1,84 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.param.scale</em> extracts terrain parameters from a digital elevation model. Uses a
-multi-scale approach by fitting a bivariate quadratic polynomial to a given
-window size using least squares.
+*r.param.scale* extracts terrain parameters from a digital elevation
+model. Uses a multi-scale approach by fitting a bivariate quadratic
+polynomial to a given window size using least squares.
 
-<p>The module calculates the following parameters (terminology is from Wood,
-1996 with related terminology used in other GRASS modules listed in
-brackets):
-<ul>
-<li>
-<i>elev</i>: Generalised elevation value (for resampling purposes at different
-scale)</li>
+The module calculates the following parameters (terminology is from
+Wood, 1996 with related terminology used in other GRASS modules listed
+in brackets):
 
-<li>
-<i>slope</i>: Magnitude of maximum gradient (steepest slope angle)</li>
+- *elev*: Generalised elevation value (for resampling purposes at
+  different scale)
+- *slope*: Magnitude of maximum gradient (steepest slope angle)
+- *aspect*: Direction of maximum gradient (steepest slope direction=flow
+  direction)
+- *profc*: profile curvature (curvature intersecting with the plane
+  defined by *Z* axis and maximum gradient direction). Positive values
+  describe convex profile curvature, negative values concave profile
+  curvature.
+- *planc*: plan curvature (horizontal curvature, intersecting with the
+  *XY* plane)
+- *longc*: longitudinal curvature (profile curvature intersecting with
+  the plane defined by the surface normal and maximum gradient
+  direction)
+- *crosc*: cross-sectional curvature (tangential curvature intersecting
+  with the plane defined by the surface normal and a tangent to the
+  contour - perpendicular to maximum gradient direction)
+- *maxic*: maximum curvature (can be in any direction)
+- *minic*: minimum curvature (in direction perpendicular to the
+  direction of of maximum curvature)
+- *feature*: Morphometric features: peaks, ridges, passes, channels,
+  pits and planes
 
-<li>
-<i>aspect</i>: Direction of maximum gradient (steepest slope direction=flow direction)</li>
+## NOTES
 
-<li>
-<i>profc</i>: profile curvature (curvature intersecting with the plane
-defined by <i>Z</i> axis and maximum gradient direction). Positive values
-describe convex profile curvature, negative values concave profile
-curvature.</li>
-
-<li>
-<i>planc</i>: plan curvature (horizontal curvature, intersecting with
-the <i>XY</i> plane)</li>
-
-<li>
-<i>longc</i>: longitudinal curvature (profile curvature intersecting
-with the plane defined by the surface normal and maximum gradient direction)</li>
-
-<li>
-<i>crosc</i>: cross-sectional curvature (tangential curvature intersecting
-with the plane defined by the surface normal and a tangent to the contour
-- perpendicular to maximum gradient direction)</li>
-
-<li>
-<i>maxic</i>: maximum curvature (can be in any direction)</li>
-
-<li>
-<i>minic</i>: minimum curvature (in direction perpendicular to the direction
-of of maximum curvature)</li>
-
-<!--
-<li>
-<i>meanc</i> or mean curvature (average of maximum and minimum curvatures).</li>
--->
-
-<li>
-<i>feature</i>: Morphometric features: peaks, ridges, passes, channels, pits and planes</li>
-</ul>
-
-<h2>NOTES</h2>
-
-In <i>r.param.scale</i> the direction of maximum gradient (considered
+In *r.param.scale* the direction of maximum gradient (considered
 downslope) is stored as (West is 0 degree, East is +/- 180 degree):
 
-<ul>
-<li>
-0..+180 degree from West to North to East</li>
-
-<li>
-0..-180 degree from West to South to East</li>
-</ul>
+- 0..+180 degree from West to North to East
+- 0..-180 degree from West to South to East
 
 Note that the aspect map is calculated differently from
-<em><a href="r.slope.aspect.html">r.slope.aspect</a></em>.
+*[r.slope.aspect](r.slope.aspect.md)*.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-The next commands will create a geomorphological map of the Spearfish sample
-dataset region:
+The next commands will create a geomorphological map of the Spearfish
+sample dataset region:
 
-<div class="code"><pre>
+```sh
 g.region raster=elevation.10m -p
 r.param.scale in=elevation.10m output=morphology method=feature size=9
-</pre></div>
+```
 
-<div align="center" style="margin: 10px">
-<a href="r_param_scale_morph.jpg">
-<img src="r_param_scale_morph.jpg" width="600" alt="r.param.scale example" border="0"><br>
-</a>
-<i>Figure: Geomorphological map of a subregion in the Spearfish (SD) area</i>
-</div>
+[<img src="r_param_scale_morph.jpg" data-border="0" width="600"
+alt="r.param.scale example" />  
+](r_param_scale_morph.jpg) *Figure: Geomorphological map of a subregion
+in the Spearfish (SD) area*
 
-<h2>TODO</h2>
+## TODO
 
-Fix bug when `constrain through central cell' option selected. Create color
-tables for all output files (presently only on features).
+Fix bug when \`constrain through central cell' option selected. Create
+color tables for all output files (presently only on features).
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<ul>
-  <li>Wood, J. (1996): The Geomorphological characterisation of
-    Digital Elevation Models. Diss., Department of Geography, University
-    of Leicester, U.K<br>online at:
-    <a href="http://hdl.handle.net/2381/34503">http://hdl.handle.net/2381/34503</a></li>
-  <li>Java Code in
-    <a href="http://www.geog.le.ac.uk/jwo/research/LandSerf">LandSerf</a>
-    that implements the same procedure</li>
-</ul>
+- Wood, J. (1996): The Geomorphological characterisation of Digital
+  Elevation Models. Diss., Department of Geography, University of
+  Leicester, U.K  
+  online at: <http://hdl.handle.net/2381/34503>
+- Java Code in
+  [LandSerf](http://www.geog.le.ac.uk/jwo/research/LandSerf) that
+  implements the same procedure
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="r.geomorphon.html">r.geomorphon</a>,
-  <a href="r.slope.aspect.html">r.slope.aspect</a>
-</em>
+*[r.geomorphon](r.geomorphon.md), [r.slope.aspect](r.slope.aspect.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-<address>
-<a href="MAILTO:jwo@le.ac.uk">Jo Wood</a>
-- <a href="http://www.geog.le.ac.uk/assist/index.html">ASSIST's home</a></address>
+[Jo Wood](MAILTO:jwo@le.ac.uk) - [ASSIST's
+home](http://www.geog.le.ac.uk/assist/index.html)
 
-<p>Update to FP 3/2002: L. Potrich, M. Neteler, S. Menegon (ITC-irst)
+Update to FP 3/2002: L. Potrich, M. Neteler, S. Menegon (ITC-irst)

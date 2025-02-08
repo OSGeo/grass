@@ -1,41 +1,36 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.vect.chart</em> displays charts for GRASS vector data in the active
-frame on the graphics monitor.
+*d.vect.chart* displays charts for GRASS vector data in the active frame
+on the graphics monitor.
 
-<h2>NOTES</h2>
+## NOTES
 
 The charts are positioned as follows:
-<ul>
-<li> vector points: on point position,</li>
-<li> vector lines: on line centers,</li>
-<li> vector areas: on area centroids.</li>
-</ul>
 
-Bar charts are placed with their lower edge starting from the y-coordinate
-of the feature being symbolized, and centered with respect to the x-coordinate.
-The <b>-c</b> flag can be used to center the bar chart in both x and y
-directions.
-<p>
+- vector points: on point position,
+- vector lines: on line centers,
+- vector areas: on area centroids.
+
+Bar charts are placed with their lower edge starting from the
+y-coordinate of the feature being symbolized, and centered with respect
+to the x-coordinate. The **-c** flag can be used to center the bar chart
+in both x and y directions.
+
 The 'sizecol' parameter is proportionate to the radius.
-<p>
-The optional <b>max_ref</b> parameter accepts a list of values that
+
+The optional **max_ref** parameter accepts a list of values that
 represent the maximum value for each column listed in the values for the
-parameter <b>columns</b>. These values are used to create a framed bar
-plot if <b>chart_type</b> is <em>bar</em> (See Example 2).
+parameter **columns**. These values are used to create a framed bar plot
+if **chart_type** is *bar* (See Example 2).
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Example 1</h3>
+### Example 1
 
-Pie-charts of monthly winter precipitation (North Carolina sample dataset):
+Pie-charts of monthly winter precipitation (North Carolina sample
+dataset):
 
-<!-- might be good to add this to example:
-v.voronoi input=precip_30ynormals output=precip_stations_voronoi
-d.vect precip_stations_voronoi type=boundary
--->
-
-<div class="code"><pre>
+```sh
 g.region vector=nc_state -p
 d.vect nc_state
 d.vect.chart precip_30ynormals chart_type=pie columns=nov,dec,jan,feb -l
@@ -44,32 +39,28 @@ d.vect.chart precip_30ynormals chart_type=pie columns=nov,dec,jan,feb -l
 d.erase
 d.vect nc_state
 d.vect.chart precip_30ynormals chart_type=pie columns=nov,dec,jan,feb -l -3
-</pre></div>
+```
 
-<center>
-<img src="d_vect_chart_pie_2d.png" alt="d.vect.chart 2D pie chart"><br>
+![d.vect.chart 2D pie chart](d_vect_chart_pie_2d.png)  
 2D pie-chart of monthly winter precipitation in North Carolina
-</center>
-<p>
-<center>
-<img src="d_vect_chart_pie_3d.png" alt="d.vect.chart 3D pie chart"><br>
-3D pie-chart of monthly winter precipitation in North Carolina
-</center>
 
-<h3>Example 2</h3>
+![d.vect.chart 3D pie chart](d_vect_chart_pie_3d.png)  
+3D pie-chart of monthly winter precipitation in North Carolina
+
+### Example 2
 
 Bar-chart of different census map values:
 
-<div class="code"><pre>
+```sh
 d.vect.chart map=vectmap columns=cens51,cens61,cens71,cens81 chart_type=bar
-</pre></div>
+```
 
-<h3>Example 3</h3>
+### Example 3
 
 Creation of framed bar charts of an erodibiliy index from the Spearfish
 sample dataset:
 
-<div class="code"><pre>
+```sh
 g.region raster=erode.index -p
 r.to.vect -s input=erode.index output=erode_index type=area
 v.extract input=erode_index output=erode_index_ctrds type=centroid
@@ -77,23 +68,17 @@ d.rast aspect
 d.vect.chart map=erode_index_ctrds chart_type=bar columns=cat \
              size=10 max_ref=12 scale=0.05 colors=yellow
 d.vect erode_index_ctrds icon=basic/circle fcol=black col=black size=5
-</pre></div>
+```
 
-<center>
-<img src="d.vect.chart_example.jpg" alt="d.vect.chart example"><br>
+![d.vect.chart example](d.vect.chart_example.jpg)  
 Bar charts of an erodibiliy index (spatial subset)
-</center>
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.erase.html">d.erase</a>,
-<a href="d.vect.html">d.vect</a>,
-<a href="d.vect.thematic.html">d.vect.thematic</a>,
-<a href="d.what.vect.html">d.what.vect</a>,
-<a href="d.rast.html">d.rast</a>
-</em>
+*[d.erase](d.erase.md), [d.vect](d.vect.md),
+[d.vect.thematic](d.vect.thematic.md), [d.what.vect](d.what.vect.md),
+[d.rast](d.rast.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Radim Blazek, ITC-Irst, Trento, Italy

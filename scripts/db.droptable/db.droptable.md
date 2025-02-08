@@ -1,21 +1,20 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.droptable</em> drops an attribute table.  If the <b>-f</b>
-force flag is not given then nothing is removed, instead a preview of
-the action to be taken is printed.
+*db.droptable* drops an attribute table. If the **-f** force flag is not
+given then nothing is removed, instead a preview of the action to be
+taken is printed.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>db.droptable</em> is a front-end
-to <em><a href="db.execute.html">db.execute</a></em> to allow easier
-usage. To some extent it is verified if the table is connected to a
-vector map to avoid accidental table removal.
+*db.droptable* is a front-end to *[db.execute](db.execute.md)* to allow
+easier usage. To some extent it is verified if the table is connected to
+a vector map to avoid accidental table removal.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Removing an attribute table from default database</h3>
+### Removing an attribute table from default database
 
-<div class="code"><pre>
+```sh
 # show default database
 db.connect -p
 
@@ -27,36 +26,29 @@ db.droptable table=sometable
 
 # actually drop the table
 db.droptable -f table=sometable
-</pre></div>
+```
 
-<h3>Removing an attribute table from given database</h3>
+### Removing an attribute table from given database
 
-<em>db.droptable</em> allows defining optionally <b>driver</b>
-and <b>database</b> options different from default connection settings
-(<code>db.connect -p</code>).
+*db.droptable* allows defining optionally **driver** and **database**
+options different from default connection settings (`db.connect -p`).
 
-<div class="code"><pre>
+```sh
 # drop the table from SQLite database
 db.droptable -f table=sometable driver=sqlite database=/opt/sqlite.db
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.dropdb.html">db.dropdb</a>,
-<a href="db.dropcolumn.html">db.dropcolumn</a>,
-<a href="db.execute.html">db.execute</a>,
-<a href="db.login.html">db.login</a>,
-<a href="db.connect.html">db.connect</a>,
-<a href="db.tables.html">db.tables</a>,
-<a href="db.describe.html">db.describe</a>,
-<a href="v.db.droptable.html">v.db.droptable</a>,
-</em>
+*[db.dropdb](db.dropdb.md), [db.dropcolumn](db.dropcolumn.md),
+[db.execute](db.execute.md), [db.login](db.login.md),
+[db.connect](db.connect.md), [db.tables](db.tables.md),
+[db.describe](db.describe.md), [v.db.droptable](v.db.droptable.md),*
 
-<p>
-<a href="sql.html">GRASS SQL interface</a>
+[GRASS SQL interface](sql.md)
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Markus Neteler<br>
-Driver and database options added by Martin Landa, Czech Technical University in Prague, Czech Republic
+Markus Neteler  
+Driver and database options added by Martin Landa, Czech Technical
+University in Prague, Czech Republic

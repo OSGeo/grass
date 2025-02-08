@@ -1,42 +1,47 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.net.steiner</em> calculates the optimal connection of nodes on a
-vector network.
+*v.net.steiner* calculates the optimal connection of nodes on a vector
+network.
 
-<p>A Steiner tree is used to calculate the minimum-cost vector network
-connecting some number of end nodes in a network framework.
-For example it could be used to find the path following a road system
-which will minimize the amount of fibre optic cable needed to connect
-a series of satellite offices.
+A Steiner tree is used to calculate the minimum-cost vector network
+connecting some number of end nodes in a network framework. For example
+it could be used to find the path following a road system which will
+minimize the amount of fibre optic cable needed to connect a series of
+satellite offices.
 
-<p>Costs may be either line lengths, or attributes saved in a database
+Costs may be either line lengths, or attributes saved in a database
 table. These attribute values are taken as costs of whole segments, not
-as costs to traverse a length unit (e.g. meter) of the segment.
-For example, if the speed limit is 100 km / h, the cost to traverse a
-10 km long road segment must be calculated as
-length / speed = 10 km / (100 km/h) = 0.1 h.
-Supported are cost assignments for both arcs and nodes.
+as costs to traverse a length unit (e.g. meter) of the segment. For
+example, if the speed limit is 100 km / h, the cost to traverse a 10 km
+long road segment must be calculated as length / speed = 10 km / (100
+km/h) = 0.1 h. Supported are cost assignments for both arcs and nodes.
 For areas, costs will be calculated along boundary lines.
 
-<p>Points representing nodes must be exactly on network nodes, and the
-input vector map needs to be prepared with <em>v.net operation=connect</em>.
+Points representing nodes must be exactly on network nodes, and the
+input vector map needs to be prepared with *v.net operation=connect*.
 
-<h2>NOTES</h2>
+## NOTES
 
-Current implementation of obtaining Steiner tree is not memory efficient.
-An attempt to run module on a network with large number of intersections thus
-might result in failure to allocate memory or out of memory condition.
+Current implementation of obtaining Steiner tree is not memory
+efficient. An attempt to run module on a network with large number of
+intersections thus might result in failure to allocate memory or out of
+memory condition.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Steiner tree for 6 digitized nodes (Spearfish):
-<p>Shortest path, along unimproved roads:
-<p><img src="vnetsteiner.png" alt="v.net.steiner example using distance" border="1">
 
-<p>Fastest path, along highways:
-<p><img src="vnetsteinertime.png" alt="v.net.steiner example using time" border="1">
+Shortest path, along unimproved roads:
 
-<div class="code"><pre>
+<img src="vnetsteiner.png" data-border="1"
+alt="v.net.steiner example using distance" />
+
+Fastest path, along highways:
+
+<img src="vnetsteinertime.png" data-border="1"
+alt="v.net.steiner example using time" />
+
+```sh
 # Spearfish
 
 g.copy vect=roads,myroads
@@ -88,11 +93,11 @@ v.net.steiner myroads_net_time arc_layer=3 node_layer=2 terminal_cats=1-6 out=my
 
 # fastest path
 v.net.steiner myroads_net_time arc_layer=3 node_layer=2 acol=cost terminal_cats=1-6 out=mysteiner_time
-</pre></div>
+```
 
 To display the result, run for example:
 
-<div class="code"><pre>
+```sh
 # display the results
 g.region vector=myroads_net
 
@@ -111,20 +116,15 @@ d.vect -c centers icon=basic/triangle
 d.font Vera
 d.vect centers col=red disp=attr attrcol=label lsize=12
 d.vect mysteiner_time col=blue width=2
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.path.html">d.path</a>,
-<a href="v.net.html">v.net</a>,
-<a href="v.net.alloc.html">v.net.alloc</a>,
-<a href="v.net.iso.html">v.net.iso</a>,
-<a href="v.net.path.html">v.net.path</a>,
-<a href="v.net.salesman.html">v.net.salesman</a>
-</em>
+*[d.path](d.path.md), [v.net](v.net.md), [v.net.alloc](v.net.alloc.md),
+[v.net.iso](v.net.iso.md), [v.net.path](v.net.path.md),
+[v.net.salesman](v.net.salesman.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek, ITC-Irst, Trento, Italy<br>
+Radim Blazek, ITC-Irst, Trento, Italy  
 Documentation: Markus Neteler, Markus Metz

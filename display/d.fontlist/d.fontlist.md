@@ -1,12 +1,12 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.fontlist</em> outputs a list of available fonts for use with
-GRASS display commands.
+*d.fontlist* outputs a list of available fonts for use with GRASS
+display commands.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em><a href="d.text.html">d.text</a></em>
+*[d.text](d.text.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Glynn Clements

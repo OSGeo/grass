@@ -1,13 +1,11 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-Testing module for <em>r3.flow</em>.
+Testing module for *r3.flow*.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r3.flow.html">r3.flow</a>
-</em>
+*[r3.flow](r3.flow.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Anna Petrasova

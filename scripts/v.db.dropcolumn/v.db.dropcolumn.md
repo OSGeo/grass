@@ -1,43 +1,36 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.db.dropcolumn</em> drops a column from the attribute table connected
-to a given vector map. It automatically checks the connection for the specified
-layer. <em>v.db.dropcolumn</em> omits to delete the 'cat' column which is
-relevant to keep the connection between vector map and table.
+*v.db.dropcolumn* drops a column from the attribute table connected to a
+given vector map. It automatically checks the connection for the
+specified layer. *v.db.dropcolumn* omits to delete the 'cat' column
+which is relevant to keep the connection between vector map and table.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>v.db.dropcolumn</em> is a front-end to <em>db.execute</em> to allow easier usage.
-<p>The existing database connection(s) can be verified with <em>v.db.connect</em>.
+*v.db.dropcolumn* is a front-end to *db.execute* to allow easier usage.
 
-<h2>EXAMPLES</h2>
+The existing database connection(s) can be verified with *v.db.connect*.
 
-Dropping a column:<br>
-<div class="code"><pre>
+## EXAMPLES
+
+Dropping a column:  
+
+```sh
 g.copy vect=roadsmajor,myroads
 v.info -c myroads
 v.db.dropcolumn myroads column=SHAPE_LEN
 v.info -c myroads
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.connect.html">db.connect</a>,
-<a href="db.dropcolumn.html">db.dropcolumn</a>,
-<a href="db.execute.html">db.execute</a>,
-<a href="v.db.addcolumn.html">v.db.addcolumn</a>,
-<a href="v.db.connect.html">v.db.connect</a>,
-<a href="v.db.droptable.html">v.db.droptable</a>,
-<a href="v.db.select.html">v.db.select</a>,
-<a href="v.db.update.html">v.db.update</a>
-</em>
+*[db.connect](db.connect.md), [db.dropcolumn](db.dropcolumn.md),
+[db.execute](db.execute.md), [v.db.addcolumn](v.db.addcolumn.md),
+[v.db.connect](v.db.connect.md), [v.db.droptable](v.db.droptable.md),
+[v.db.select](v.db.select.md), [v.db.update](v.db.update.md)*
 
-<p>
-<em>
-<a href="sql.html">GRASS SQL interface</a>
-</em>
+*[GRASS SQL interface](sql.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Markus Neteler

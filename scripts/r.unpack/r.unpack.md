@@ -1,38 +1,34 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.unpack</em> allows unpacking raster maps packed by <em><a href="r.pack.html">r.pack</a></em>.
+*r.unpack* allows unpacking raster maps packed by *[r.pack](r.pack.md)*.
 
-<h2>NOTES</h2>
+## NOTES
 
 Name of the raster map is determined by default from pack file
-internals. Optionally the name can be given by <b>output</b> parameter.
-
+internals. Optionally the name can be given by **output** parameter.
 Currently only 2D raster maps are supported.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-Pack up raster map <i>aspect</i> into <i>aspect.pack</i> file.
+Pack up raster map *aspect* into *aspect.pack* file.
 
-<div class="code"><pre>
+```sh
 r.pack input=aspect
-</pre></div>
+```
 
 the raster map can be afterwards unpacked by
 
-<div class="code"><pre>
+```sh
 r.unpack input=aspect.pack
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="r.pack.html">r.pack</a>,
-  <a href="r.in.gdal.html">r.in.gdal</a>,
-  <a href="v.pack.html">v.pack</a>
-</em>
+*[r.pack](r.pack.md), [r.in.gdal](r.in.gdal.md), [v.pack](v.pack.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Original Bash script written by Hamish Bowman, Otago University, New Zealand as GRASS AddOns
-<br>
-Converted to Python and updated for GRASS 7 by Martin Landa, CTU in Prague, Czech Republic
+Original Bash script written by Hamish Bowman, Otago University, New
+Zealand as GRASS AddOns  
+Converted to Python and updated for GRASS 7 by Martin Landa, CTU in
+Prague, Czech Republic

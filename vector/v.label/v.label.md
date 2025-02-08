@@ -1,61 +1,45 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.label</em> makes a label-file from a GRASS vector map
-with labels created from attributes in the attached table.
-If no label file name is given, the name of the source map is used.
+*v.label* makes a label-file from a GRASS vector map with labels created
+from attributes in the attached table. If no label file name is given,
+the name of the source map is used.
 
-<h2>NOTES</h2>
+## NOTES
 
-If the <em>fontsize</em> option is given then the <em>space</em> option
-is determined automatically <em>from the current display window</em>,
-otherwise the <em>space</em> option should be set roughly the same
-as the <em>size</em> option.
-<p>
-A description of the labels file follows.<p>
-The file is located in <code>$MAPSET/paint/labels/</code>.
-The file is a plain-text ASCII file containing the following fields:
+If the *fontsize* option is given then the *space* option is determined
+automatically *from the current display window*, otherwise the *space*
+option should be set roughly the same as the *size* option.
 
-<h4>Caution: The following information may be incomplete, out of date, and wrong!</h4>
-The label information that must be provided in the <em>labels</em> file is:
+A description of the labels file follows.
 
-<dl>
-<dt><b>TEXT</b>:
+The file is located in `$MAPSET/paint/labels/`. The file is a plain-text
+ASCII file containing the following fields:
 
-<dd><!--Up to four lines of text.-->
-Lines in multiple line labels will appear one above the next.
-More than one line of text can be specified by notating the end of a
-line with a '<b><code>\n</code></b>'.<br>
-(e.g. <code>SPEARFISH<b>\n</b>SOUTH DAKOTA)</code>.
+#### Caution: The following information may be incomplete, out of date, and wrong
 
-<!-- I don't think it exists. -HB 6/2005
-<dt><b>SKIP</b>:
+The label information that must be provided in the *labels* file is:
 
-<dd>yes|no. If <em>no</em>, label will be printed.  If
-<em>yes</em>, the label will be retained in the file but
-not printed.
--->
+**TEXT**:  
+Lines in multiple line labels will appear one above the next. More than
+one line of text can be specified by notating the end of a line with a
+'**`\n`**'.  
+(e.g. `SPEARFISH`**`\n`**`SOUTH DAKOTA)`.
 
-<dt><b>LOCATION</b>:
+**LOCATION**:  
+Determines where the text will be located on the image. The user
+specifies the easting and northing, and (optionally) specifies a
+vertical and horizontal offset from the specified easting/northing.
+These offsets are provided to allow finer placement of labels and are
+measured in local pixels. Thus in [*d.labels*](d.labels.md) the offset
+is measured in screen pixels, and in [*ps.map*](ps.map.md) the offset is
+measured in PostScript points (i.e. 1/72" steps).
 
-<dd>Determines where the text will be located on the
-image.  The user specifies the easting and northing, and
-(optionally) specifies a vertical and horizontal
-offset from the specified easting/northing.
-These offsets are provided to allow finer placement of labels and
-are measured in local pixels. Thus in
-<a href="d.labels.html"><i>d.labels</i></a> the offset is
-measured in screen pixels, and in <a href="ps.map.html"><i>ps.map</i></a>
-the offset is measured in PostScript points (i.e. 1/72" steps).
+**PLACEMENT**:  
+Determines which part of the label to which the location refers. If
+placement is unspecified, the label is centered (*center*), by default.
+Label placement may be specified as:
 
-
-<dt><b>PLACEMENT</b>:
-
-<dd>Determines which part of the label to which the
-location refers.  If placement is unspecified, the label is
-centered (<em>center</em>), by default.  Label placement
-may be specified as:
-
-<div class="code"><pre>
+```sh
     lower left    (lower left corner of the text)
     lower right    (lower right corner of the text)
     lower center    (bottom center of the text)
@@ -66,153 +50,108 @@ may be specified as:
 
     center    (center of the text)
 
-</pre></div>
+```
 
+**FONT**:  
+This specifies the font to use.
 
-<dt><b>FONT</b>:
+The following fonts are available for use with
+[*d.labels*](d.labels.md):
 
-<dd>This specifies the font to use.
-<p>The following fonts are available for use with
-  <a href="d.labels.html"><i>d.labels</i></a>:
-<p>
-<div class="code"><pre>
+```sh
   cyrilc gothgbt gothgrt gothitt greekc greekcs greekp greeks
   italicc italiccs italict romanc romancs romand romans romant
   scriptc scripts
-</pre></div>
-<p>Alternatively the path to a FreeType (.ttf) font may be given.
-(for <em>d.labels</em> only)
-<p>The word <em>standard</em> can be used to specify the default font
-(which is <em>romans</em>).
-<p>Note <a href="ps.map.html"><em>ps.map</em></a> can override this setting
-to use other fonts. Its default font is Helvetica.
+```
 
+Alternatively the path to a FreeType (.ttf) font may be given. (for
+*d.labels* only)
 
-<dt><b>TEXT SIZE</b>:
+The word *standard* can be used to specify the default font (which is
+*romans*).
 
-<dd>This determines the size of the letters. The <em>size</em>
-specifies the vertical height of the letters in meters on
-the ground. Thus text will grow or shrink depending on the
-scale at which the map is drawn.
-Alternatively <em>fontsize</em> can set the font size in normal font points.
+Note [*ps.map*](ps.map.md) can override this setting to use other fonts.
+Its default font is Helvetica.
 
+**TEXT SIZE**:  
+This determines the size of the letters. The *size* specifies the
+vertical height of the letters in meters on the ground. Thus text will
+grow or shrink depending on the scale at which the map is drawn.
+Alternatively *fontsize* can set the font size in normal font points.
 
-<dt><a name="textcolor"><b>TEXT COLOR</b></a>:
+<span id="textcolor">**TEXT COLOR**</span>:  
+This selects the text color. If unspecified, the label's text is drawn
+in *black*, by default. The text color can be specified in one of
+several ways:
 
-<dd>This selects the text color.  If unspecified, the
-label's text is drawn in <em>black</em>, by default.  The
-text color can be specified in one of several ways:
+1. By color name:  
+    `aqua black blue brown cyan gray green grey indigo magenta orange purple red violet white yellow`
+2. As red, green, blue component values. (0-255)  
+    for example: `128:100:200`
+3. Specify "`none`" to suppress the lettering.
 
-<ol>
-<li>By color name:<br>
-<code>aqua black blue brown cyan gray green grey indigo
-magenta orange purple red violet white yellow</code></li>
-
-<li>As red, green, blue component values. (0-255)<br>
-for example: <code>128:100:200</code></li>
-
-<!-- eh?
-<li>As red, green, blue percentages.
-for example: .5 .4 .7
-<br>
-(This form is not supported by
-<em><a href="d.labels.html">d.labels</a></em>.)
-
-<li>By printer color number to get the exact printer color.
-<br>
-(This form is not supported by
-<em><a href="d.labels.html">d.labels</a></em>.)
--->
-
-<li>Specify "<code>none</code>" to suppress the lettering.</li>
-</ol>
-
-
-<dt><b>WIDTH</b>:
-
-<dd>This determines the line thickness of the border box.<br>
+**WIDTH**:  
+This determines the line thickness of the border box.  
 The maximum value is 25.0.
 
-<dt><b>HIGHLIGHT COLOR</b>:
+**HIGHLIGHT COLOR**:  
+The text can be highlighted in another color so that it appears to be in
+two colors. The text is drawn first in this color at a wider line width,
+and then redrawn in the text color at the regular line width. No
+highlight color ("`none`") is used by default, if unspecified by the
+user. To specify use of no highlight color, specify "`none`". (See [TEXT
+COLOR](#textcolor) above for a list of permissible color names.)
 
-<dd>The text can be highlighted in another color so that it
-appears to be in two colors. The text is drawn first in
-this color at a wider line width, and then redrawn in the
-text color at the regular line width.  No highlight color
-("<code>none</code>") is used by default, if unspecified by the
-user.  To specify use of no highlight color, specify
-"<code>none</code>".
-(See <a href="#textcolor">TEXT COLOR</a>
-above for a list of permissible color names.)
+**HIGHLIGHT WIDTH**:  
+Specifies how far from the text lines (in units of pixels) the highlight
+color should extend. The default highlight width is set to *0* (i.e., no
+highlight color).
 
+**BACKGROUND COLOR**:  
+Text may be boxed in a solid color by specifying a background color.
+Specify "`none`" for no background. The default background color
+setting, if unspecified by the user, is *white*. (See [TEXT
+COLOR](#textcolor) above for a list of permissible color names.)
 
-<dt><b>HIGHLIGHT WIDTH</b>:
+**BORDER COLOR**:  
+Select a color for the border around the background. Specify "`none`" to
+suppress the border. The default border color used, if unspecified, is
+*black*. (See [TEXT COLOR](#textcolor) above for a list of permissible
+color names.)
 
-<dd>Specifies how far from the text lines (in units of
-pixels) the highlight color should extend.  The default
-highlight width is set to <em>0</em> (i.e., no highlight
-color).
+**OPAQUE TO VECTORS**:  
+*yes\|no*. This field only has meaning if a background color is
+selected. *yes* will prevent vector lines from entering the background.
+*no* will allow vector lines to enter the background. The default
+setting, if unspecified by the user, is *yes*.
 
-
-<dt><b>BACKGROUND COLOR</b>:
-
-<dd>Text may be boxed in a solid color by specifying a background color.
-Specify "<code>none</code>" for no background.  The default background color
-setting, if unspecified by the user, is <em>white</em>.
-(See <a href="#textcolor">TEXT COLOR</a>
-above for a list of permissible color names.)
-
-
-<dt><b>BORDER COLOR</b>:
-
-<dd>Select a color for the border around the background.
-Specify "<code>none</code>" to suppress the border.
-The default border color used, if unspecified, is <em>black</em>.
-(See <a href="#textcolor">TEXT COLOR</a>
-above for a list of permissible color names.)
-
-
-<dt><b>OPAQUE TO VECTORS</b>:
-
-<dd><em>yes|no</em>.  This field only has meaning if a
-background color is selected.  <em>yes</em> will prevent
-vector lines from entering the background.  <em>no</em>
-will allow vector lines to enter the background.  The
-default setting, if unspecified by the user, is
-<em>yes</em>.
-
-</dl>
-
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Spearfish example with TrueType font (path may differ):
 
-<div class="code"><pre>
+```sh
 v.label -a map=roads column=label labels=lroads \
         font=/usr/X11R6/lib/X11/fonts/TTF/luximri.ttf
 d.vect roads
 d.labels lroads
-</pre></div>
+```
 
 Since the label files are simple text files, you can merge them together
 if you like. For example if you set the label colors based on database
-attributes using multiple runs with the <b>where</b> option.
-This example uses the standard UNIX <code>cat</code> program.
+attributes using multiple runs with the **where** option. This example
+uses the standard UNIX `cat` program.
 
-<div class="code"><pre>
+```sh
 cd $MAPSET/paint/labels/
-cat file1 file2 file3 file4 &gt; file_all
-</pre></div>
+cat file1 file2 file3 file4 > file_all
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.labels.html">d.labels</a>,
-<a href="ps.map.html">ps.map</a>
-</em>
+*[d.labels](d.labels.md), [ps.map](ps.map.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Philip Verhagen (original s.label)<br>
-Radim Blazek (GRASS 6 port)<br>
+Philip Verhagen (original s.label)  
+Radim Blazek (GRASS 6 port)  
 Hamish Bowman (enhancements)

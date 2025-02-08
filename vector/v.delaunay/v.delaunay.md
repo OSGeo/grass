@@ -1,40 +1,38 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.delaunay</em> uses an existing vector points map (<b>input</b>)
-to create a Delaunay triangulation vector map (<b>output</b>).
-<p>
-Delaunay triangulation example (red-yellow points are the data points from which the triangulation was generated):
-<center>
-<img src="v_delaunay.png" border="1">
-</center>
+*v.delaunay* uses an existing vector points map (**input**) to create a
+Delaunay triangulation vector map (**output**).
 
-<h2>EXAMPLE</h2>
+Delaunay triangulation example (red-yellow points are the data points
+from which the triangulation was generated):
 
-Commands used with the North Carolina dataset to create the above figure (subset shown in figure).
-<div class="code"><pre>
+<img src="v_delaunay.png" data-border="1" />
+
+## EXAMPLE
+
+Commands used with the North Carolina dataset to create the above figure
+(subset shown in figure).
+
+```sh
 g.region n=220750 s=219950 w=638300 e=639000 -p
 v.delaunay input=elev_lid792_randpts output=elev_lid792_randpts_delaunay
-</pre></div>
+```
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<em>Leonid Guibas and Jorge Stolfi, (1985). Primitives for the
-Manipulation of General Subdivisions and the Computation of
-Voronoi Diagrams, ACM Transactions on Graphics, Vol 4, No. 2,
-April 1985, Pages 74-123
-</em>
+*Leonid Guibas and Jorge Stolfi, (1985). Primitives for the Manipulation
+of General Subdivisions and the Computation of Voronoi Diagrams, ACM
+Transactions on Graphics, Vol 4, No. 2, April 1985, Pages 74-123*
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.voronoi.html">v.voronoi</a>,
-<a href="v.hull.html">v.hull</a>
-</em>
-<p>
-<a href="https://en.wikipedia.org/wiki/Delaunay_triangulation">Delaunay triangulation (Wikipedia)</a>
+*[v.voronoi](v.voronoi.md), [v.hull](v.hull.md)*
 
-<h2>AUTHORS</h2>
+[Delaunay triangulation
+(Wikipedia)](https://en.wikipedia.org/wiki/Delaunay_triangulation)
 
-Martin Pavlovsky, Google Summer of Code 2008, Student<br>
-Paul Kelly, Mentor<br>
-Based on "dct" by Geoff Leach, Department of Computer Science, RMIT.<br>
+## AUTHORS
+
+Martin Pavlovsky, Google Summer of Code 2008, Student  
+Paul Kelly, Mentor  
+Based on "dct" by Geoff Leach, Department of Computer Science, RMIT.  

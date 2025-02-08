@@ -1,19 +1,14 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.profile</em> displays the profile for a specified transect.
+*d.profile* displays the profile for a specified transect.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.where.html">d.where</a>,
-<a href="r.profile.html">r.profile</a>,
-<a href="r.transect.html">r.transect</a>,
-<a href="wxGUI.html">wxGUI profile tool</a>
-</em>
+*[d.where](d.where.md), [r.profile](r.profile.md),
+[r.transect](r.transect.md), [wxGUI profile tool](wxGUI.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Glynn Clements
-
-This program has been completely re-written for 7.0. It bears no
-relation to the interactive d.profile module in previous versions.
+Glynn Clements This program has been completely re-written for 7.0. It
+bears no relation to the interactive d.profile module in previous
+versions.

@@ -1,22 +1,19 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast3d.extract</em> is used to extract a subset of a space
-time 3D raster dataset and to store that subset in a different space time
-3D raster dataset. It has exactly the same functionality as
-<a href="t.rast.extract.html">t.rast.extract</a>. The only difference is the
-that this module works on STR3DS and 3D raster maps.
-<p>
-Please refer to <a href="t.rast.extract.html">t.rast.extract</a> for
-documentation and examples.
+*t.rast3d.extract* is used to extract a subset of a space time 3D raster
+dataset and to store that subset in a different space time 3D raster
+dataset. It has exactly the same functionality as
+[t.rast.extract](t.rast.extract.md). The only difference is the that
+this module works on STR3DS and 3D raster maps.
 
-<h2>SEE ALSO</h2>
+Please refer to [t.rast.extract](t.rast.extract.md) for documentation
+and examples.
 
-<em>
-<a href="t.rast.extract.html">t.rast.extract</a>,
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
-</em>
+## SEE ALSO
 
-<h2>AUTHOR</h2>
+*[t.rast.extract](t.rast.extract.md), [t.create](t.create.md),
+[t.info](t.info.md)*
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+## AUTHOR
+
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

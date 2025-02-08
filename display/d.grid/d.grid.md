@@ -1,85 +1,72 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.grid</em> overlays a grid of user-defined size and
-color in the active display frame on the graphics monitor.
-The grid can be created as a standard rectangular grid or
-a geographic grid.
+*d.grid* overlays a grid of user-defined size and color in the active
+display frame on the graphics monitor. The grid can be created as a
+standard rectangular grid or a geographic grid.
 
-<p>
-If the user provides a <b>-g</b> flag a geographic (projected) grid
-will be drawn. With the <b>-g</b> flag the <b>size</b>
-argument accepts both decimal degrees and colon separated
-ddd:mm:ss coordinates (eg. <code>00:30:00</code> for half of a degree).
-A geographic grid cannot be drawn for a <em>latitude/longitude</em>
-or <em>XY</em> projection.
+If the user provides a **-g** flag a geographic (projected) grid will be
+drawn. With the **-g** flag the **size** argument accepts both decimal
+degrees and colon separated ddd:mm:ss coordinates (eg. `00:30:00` for
+half of a degree). A geographic grid cannot be drawn for a
+*latitude/longitude* or *XY* projection.
 
-<p>
-Colors may be standard named GRASS colors (red, green, aqua, etc.) or
-a numerical R:G:B triplet, where component values range from 0-255.
-Grid color can be set with option <b>color</b>. Options <b>text_color</b> and
-<b>bgcolor</b> set the color of the text and its background.
+Colors may be standard named GRASS colors (red, green, aqua, etc.) or a
+numerical R:G:B triplet, where component values range from 0-255. Grid
+color can be set with option **color**. Options **text_color** and
+**bgcolor** set the color of the text and its background.
 
-<p>
-The grid drawing may be turned off by using the <b>-n</b> flag.<br>
-The border drawing may be turned off by using the <b>-b</b> flag.<br>
-The coordinate text may be turned off by using the <b>-t</b> flag.<br>
+The grid drawing may be turned off by using the **-n** flag.  
+The border drawing may be turned off by using the **-b** flag.  
+The coordinate text may be turned off by using the **-t** flag.  
 
-<p>
 To draw grid lines at different intervals, e.g. at high latitudes, you
-can run the module twice, once with <b>direction</b>=<i>east-west</i>
-at one interval <b>size</b>, and again with
-<b>direction</b>=<i>north-south</i> at another interval <b>size</b>.
+can run the module twice, once with **direction**=*east-west* at one
+interval **size**, and again with **direction**=*north-south* at another
+interval **size**.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-To draw a red geographic grid with 30 minute grid spacing, run
-one of the following commands:
+To draw a red geographic grid with 30 minute grid spacing, run one of
+the following commands:
 
-<div class="code"><pre>
+```sh
 d.grid -g size=00:30:00 color=red
-</pre></div>
+```
 
 or
 
-<div class="code"><pre>
+```sh
 d.grid -g size=0.5 color=255:0:0
-</pre></div>
+```
 
-<div style="margin: 10px" align="center">
-<img src="d_grid_red_grid.png" alt="d.grid red grid example" border="0">
-<br>
-<i>Figure: Showing a geographic grid in red line color</i>
-</div>
+<img src="d_grid_red_grid.png" data-border="0"
+alt="d.grid red grid example" />  
+*Figure: Showing a geographic grid in red line color*
 
-To draw a blue standard rectangular grid at a 500 (meter) spacing run the following:
+To draw a blue standard rectangular grid at a 500 (meter) spacing run
+the following:
 
-<div class="code"><pre>
+```sh
 d.grid size=500 color=blue
-</pre></div>
+```
 
-<div style="margin: 10px" align="center">
-<img src="d_grid_blue_grid.png" alt="d.grid blue grid example" border="0">
-<br>
-<i>Figure: Showing a rectangular grid in blue line color</i>
-</div>
+<img src="d_grid_blue_grid.png" data-border="0"
+alt="d.grid blue grid example" />  
+*Figure: Showing a rectangular grid in blue line color*
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.barscale.html">d.barscale</a>,
-<a href="d.legend.html">d.legend</a>,
-<a href="d.geodesic.html">d.geodesic</a>,
-<a href="d.rhumbline.html">d.rhumbline</a>,
-<a href="d.erase.html">d.erase</a>,
-<a href="d.frame.html">d.frame</a>,
-<a href="d.rast.html">d.rast</a>,
-<a href="v.mkgrid.html">v.mkgrid</a>
-</em>
+*[d.barscale](d.barscale.md), [d.legend](d.legend.md),
+[d.geodesic](d.geodesic.md), [d.rhumbline](d.rhumbline.md),
+[d.erase](d.erase.md), [d.frame](d.frame.md), [d.rast](d.rast.md),
+[v.mkgrid](v.mkgrid.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-James Westervelt, U.S. Army Construction Engineering Research Laboratory<br>
-Geogrid support: Bob Covill<br>
-Border support: Markus Neteler<br>
-Text and RGB support: Hamish Bowman<br>
-Background color implemented as part of GSoC 2016 by Adam Laza, CTU in Prague
+James Westervelt, U.S. Army Construction Engineering Research
+Laboratory  
+Geogrid support: Bob Covill  
+Border support: Markus Neteler  
+Text and RGB support: Hamish Bowman  
+Background color implemented as part of GSoC 2016 by Adam Laza, CTU in
+Prague

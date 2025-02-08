@@ -1,18 +1,14 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>g.cairocomp</em> isn't meant for end users.
+*g.cairocomp* isn't meant for end users.
 
-<p>
-<em>g.cairocomp</em> is similar
-to <em><a href="g.pnmcomp.html">g.pnmcomp</a></em>, except that it
+*g.cairocomp* is similar to *[g.pnmcomp](g.pnmcomp.md)*, except that it
 works with X Pixmaps instead of PNM files.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.pnmcomp.html">g.pnmcomp</a>
-</em>
+*[g.pnmcomp](g.pnmcomp.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Glynn Clements

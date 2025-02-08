@@ -1,86 +1,76 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.perturb</em>
-reads a vector map of points and writes the same points but
-<em>perturbs</em> the eastings and northings by adding either a uniform
-or normal delta value. Perturbation means that a variating spatial
+*v.perturb* reads a vector map of points and writes the same points but
+*perturbs* the eastings and northings by adding either a uniform or
+normal delta value. Perturbation means that a variating spatial
 deviation is added to the coordinates.
 
-<h2>NOTES</h2>
+## NOTES
 
-The uniform distribution is always centered about zero.
-The associated <em>parameter</em> is constrained to be positive and
-specifies the maximum of the distribution; the minimum is
-the negation of that parameter. Do perturb into a ring around the
-center, the <em>minimum</em> parameter can be used.
+The uniform distribution is always centered about zero. The associated
+*parameter* is constrained to be positive and specifies the maximum of
+the distribution; the minimum is the negation of that parameter. Do
+perturb into a ring around the center, the *minimum* parameter can be
+used.
 
-<p>
-Usually, the mean (first parameter) of the normal
-distribution is zero (i.e., the distribution is centered at
-zero). The standard deviation (second parameter) is
-naturally constrained to be positive.
+Usually, the mean (first parameter) of the normal distribution is zero
+(i.e., the distribution is centered at zero). The standard deviation
+(second parameter) is naturally constrained to be positive.
 
-<p>
 Output vector points are not guaranteed to be contained within the
 current geographic region.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Random, uniformly distributed selection</h3>
+### Random, uniformly distributed selection
 
-To create a random, uniformly distributed selection of possible new points
-with a radius of 100,000 map units, use the following command:
+To create a random, uniformly distributed selection of possible new
+points with a radius of 100,000 map units, use the following command:
 
-<div class="code"><pre>
+```sh
 v.perturb input=comm_colleges output=uniform_perturb parameters=100000
-</pre></div>
+```
 
 Your map should look similar to this figure:
 
-<div align="center" style="margin: 10px">
-<img src="v_perturb_uniform.png" alt="v.perturb uniform distribution example" border="0">
-<br>
-<i>Figure: Map showing the actual community college points and uniformly
-   random chosen points.</i>
-</div>
+<img src="v_perturb_uniform.png" data-border="0"
+alt="v.perturb uniform distribution example" />  
+*Figure: Map showing the actual community college points and uniformly
+random chosen points.*
 
-<h3>Normal distributed selection</h3>
+### Normal distributed selection
 
 For a normal distribution with a mean of 5000 and standard deviation of
 2000, use the following command:
 
-<div class="code"><pre>
+```sh
 v.perturb input=comm_colleges output=normal_perturb distribution=normal parameters=5000,2000
-</pre></div>
+```
 
-<div align="center" style="margin: 10px">
-<img src="v_perturb_normal.png" alt="v.perturb normal distribution example" border="0">
-<br>
-<i>Figure: Map showing the actual community college points and normally
-   random chosen and colored points. Notice that each point is closer
-   to the original point.</i>
-</div>
+<img src="v_perturb_normal.png" data-border="0"
+alt="v.perturb normal distribution example" />  
+*Figure: Map showing the actual community college points and normally
+random chosen and colored points. Notice that each point is closer to
+the original point.*
 
-<h3>Normal distributed selection with a minimum value</h3>
+### Normal distributed selection with a minimum value
 
 In order to include a minimum value of 500, use the following command:
 
-<div class="code"><pre>
+```sh
 v.perturb input=comm_colleges output=min_perturb distribution=normal parameters=100000,1000 minimum=500
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.random.html">v.random</a>,
-<a href="v.univar.html">v.univar</a>
-</em>
+*[v.random](v.random.md), [v.univar](v.univar.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-<a href="http://mccauley-usa.com/">James Darrell McCauley</a>
-<br>when he was at:
-<a href="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural Engineering</a>
-<a href="http://www.purdue.edu/">Purdue University</a>
-<p>Random number generators originally written in FORTRAN by Wes Peterson and
-translated to C using <i>f2c</i>.
+[James Darrell McCauley](http://mccauley-usa.com/)  
+when he was at: [Agricultural
+Engineering](http://ABE.www.ecn.purdue.edu/ABE/) [Purdue
+University](http://www.purdue.edu/)
+
+Random number generators originally written in FORTRAN by Wes Peterson
+and translated to C using *f2c*.

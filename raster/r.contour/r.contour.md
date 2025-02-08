@@ -1,72 +1,69 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.contour</em> produces a vector map of specified contours from input raster map.
+*r.contour* produces a vector map of specified contours from input
+raster map. Contours can be produced using a comma-separated list of
+values in **levels**, or at some regular increment using the **step**
+parameter, using **minlevel** and **maxlevel** as minimum and maximum
+contour values, respectively. If no **minlevel** or **maxlevel** is
+specified, the minimum and maximum cell values in the **input** raster
+map will be used.
 
-Contours can be produced using a comma-separated list of values
-in <b>levels</b>, or at some regular increment using the <b>step</b>
-parameter, using <b>minlevel</b> and <b>maxlevel</b> as minimum and
-maximum contour values, respectively. If no <b>minlevel</b>
-or <b>maxlevel</b> is specified, the minimum and maximum cell values
-in the <b>input</b> raster map will be used.
+## NOTES
 
-<h2>NOTES</h2>
+*r.contour* will either step through incremental contours or produce
+contours from a list of levels, not both. If both a list of levels and a
+step are specified, the list will be produced and the step will be
+ignored.
 
-<em>r.contour</em> will either step through incremental contours or produce
-contours from a list of levels, not both. If both a list of levels and
-a step are specified, the list will be produced and the step will be ignored.
+Zero is treated as a valid data value by *r.contour*.
 
-<p>Zero is treated as a valid data value by <em>r.contour</em>.
+If a contour level exactly matches a category value in the raster map,
+the contour line may backtrack on itself, causing illegal arcs to be
+produced in the output vector map.
 
-<p>If a contour level exactly matches a category value in the raster map,
-the contour line may backtrack on itself, causing illegal arcs to be produced
-in the output vector map.
+The optional **cut** parameter allows the user to specify a minimum
+number of raster cells eligilble to be included in a contour line
+written to the **output** vector map. It acts like a filter, omitting
+spurs, single points, etc., making the output more generalized.
 
-<p>The optional <b>cut</b> parameter allows the user to specify a minimum number of
-raster cells eligilble to be included in a contour line written to the <b>output</b>
-vector map. It acts like a filter, omitting spurs, single points, etc., making the output more generalized.
+## EXAMPLES
 
-<h2>EXAMPLES</h2>
+In the Spearfish dataset, produce a vector contour map from input raster
+*elevation.dem* with contour levels from 1000m to 2000m, 100m contour
+step, and a minimum of 200 input raster points contributing to the
+contour line:
 
-In the Spearfish dataset, produce a vector contour map from input raster <i>elevation.dem</i>
-with contour levels from 1000m to 2000m, 100m contour step, and a minimum of 200 input raster
-points contributing to the contour line:
-
-<div class="code"><pre>
+```sh
 r.contour input=elevation.dem output=elevation_dem_contours \
           minlevel=1000 maxlevel=2000 step=100 cut=200
-</pre></div>
+```
 
-<p>
-For an example of using levels with <em>r.contour</em> this example uses
-the elevation map from the North Carolina database:
+For an example of using levels with *r.contour* this example uses the
+elevation map from the North Carolina database:
 
-<div class="code"><pre>
+```sh
 g.region raster=elevation
 r.contour in=elevation out=contours levels=60,90,120,150 --o
 d.mon wx0
 d.rast elevation_shade
 d.vect contours color=red
-</pre></div>
+```
 
-<div align="center" style="margin: 10px">
-<a href="r_contour_using_levels.png">
-<img src="r_contour_using_levels.png" width="600" alt="r.contours example" border="0"><br>
-</a>
-<i>Contour lines shown on shaded terrain map</i>
-</div>
+[<img src="r_contour_using_levels.png" data-border="0" width="600"
+alt="r.contours example" />  
+](r_contour_using_levels.png) *Contour lines shown on shaded terrain
+map*
 
+For an example of using steps with *r.contour* this example uses the
+LiDAR data derived elevation map from the North Carolina database:
 
-<p>
-For an example of using steps with <em>r.contour</em> this example uses
-the LiDAR data derived elevation map from the North Carolina database:
-
-<div class="code"><pre>
+```sh
 g.region raster=elev_lid792_1m -p
 r.contour input=elev_lid792_1m output=elev_lid792_1m_contours \
           minlevel=100 maxlevel=150 step=10
-</pre></div>
+```
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Terry Baker, U.S. Army Construction Engineering Research Laboratory<br>
-3/2001: cut parameter and fixes by Andrea Aime (aaime@libero.it)
+Terry Baker, U.S. Army Construction Engineering Research Laboratory  
+3/2001: cut parameter and fixes by Andrea Aime (<aaime@libero.it>)

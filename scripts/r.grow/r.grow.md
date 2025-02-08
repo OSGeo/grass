@@ -1,90 +1,91 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.grow</em> adds cells around the perimeters of all areas
-in a user-specified raster map layer and stores the output in
-a new raster map layer. The user can use it to grow by one or
-more than one cell (by varying the size of the <b>radius</b>
-parameter), or like <em>r.buffer</em>, but with the
-option of preserving the original cells (similar to combining
-<em>r.buffer</em> and <em>r.patch</em>).
+*r.grow* adds cells around the perimeters of all areas in a
+user-specified raster map layer and stores the output in a new raster
+map layer. The user can use it to grow by one or more than one cell (by
+varying the size of the **radius** parameter), or like *r.buffer*, but
+with the option of preserving the original cells (similar to combining
+*r.buffer* and *r.patch*).
 
-<p>
-If <b>radius</b> is negative,<em>r.grow</em> shrinks areas by removing
-cells around the perimeters of all areas.
+If **radius** is negative,*r.grow* shrinks areas by removing cells
+around the perimeters of all areas.
 
-<h2>NOTES</h2>
+## NOTES
 
 The user has the option of specifying three different metrics which
 control the geometry in which grown cells are created, (controlled by
-the <b>metric</b> parameter): <i>Euclidean</i>, <i>Manhattan</i>, and
-<i>Maximum</i>.
+the **metric** parameter): *Euclidean*, *Manhattan*, and *Maximum*.
 
-<p>The <i>Euclidean distance</i> or <i>Euclidean metric</i> is the "ordinary" distance
-between two points that one would measure with a ruler, which can be
-proven by repeated application of the Pythagorean theorem.
-The formula is given by:
+The *Euclidean distance* or *Euclidean metric* is the "ordinary"
+distance between two points that one would measure with a ruler, which
+can be proven by repeated application of the Pythagorean theorem. The
+formula is given by:
 
-<div class="code"><pre>d(dx,dy) = sqrt(dx^2 + dy^2)</pre></div>
+```sh
+d(dx,dy) = sqrt(dx^2 + dy^2)
+```
 
 Cells grown using this metric would form isolines of distance that are
-circular from a given point, with the distance given by the <b>radius</b>.
+circular from a given point, with the distance given by the **radius**.
 
-<p>The <i>Manhattan metric</i>, or <i>Taxicab geometry</i>, is a form of geometry in
-which the usual metric of Euclidean geometry is replaced by a new
-metric in which the distance between two points is the sum of the (absolute)
+The *Manhattan metric*, or *Taxicab geometry*, is a form of geometry in
+which the usual metric of Euclidean geometry is replaced by a new metric
+in which the distance between two points is the sum of the (absolute)
 differences of their coordinates. The name alludes to the grid layout of
-most streets on the island of Manhattan, which causes the shortest path a
-car could take between two points in the city to have length equal to the
-points' distance in taxicab geometry.
-The formula is given by:
+most streets on the island of Manhattan, which causes the shortest path
+a car could take between two points in the city to have length equal to
+the points' distance in taxicab geometry. The formula is given by:
 
-<div class="code"><pre>d(dx,dy) = abs(dx) + abs(dy)</pre></div>
+```sh
+d(dx,dy) = abs(dx) + abs(dy)
+```
 
-where cells grown using this metric would form isolines of distance that are
-rhombus-shaped from a given point.
+where cells grown using this metric would form isolines of distance that
+are rhombus-shaped from a given point.
 
-<p>The <i>Maximum metric</i> is given by the formula
+The *Maximum metric* is given by the formula
 
-<div class="code"><pre>d(dx,dy) = max(abs(dx),abs(dy))</pre></div>
+```sh
+d(dx,dy) = max(abs(dx),abs(dy))
+```
 
 where the isolines of distance from a point are squares.
 
-<p>If there are two cells which are equal candidates to grow into an empty space,
-<em>r.grow</em> will choose the northernmost candidate; if there are multiple
-candidates with the same northing, the westernmost is chosen.
+If there are two cells which are equal candidates to grow into an empty
+space, *r.grow* will choose the northernmost candidate; if there are
+multiple candidates with the same northing, the westernmost is chosen.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-In this example, the lakes map in the
-North Carolina sample dataset is buffered:
+In this example, the lakes map in the North Carolina sample dataset is
+buffered:
 
-<div class="code"><pre>
+```sh
 g.region raster=lakes -p
 # the lake raster map pixel resolution is 10m
 r.grow input=lakes output=lakes_grown_100m radius=10
-</pre></div>
+```
 
 Shrinking instead of growing:
 
-<div class="code"><pre>
+```sh
 g.region raster=lakes -p
 # the lake raster map pixel resolution is 10m
 r.grow input=lakes output=lakes_shrunk_100m radius=-10
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.buffer.html">r.buffer</a>,
-<a href="r.grow.distance.html">r.grow.distance</a>,
-<a href="r.patch.html">r.patch</a>
-</em>
+*[r.buffer](r.buffer.md), [r.grow.distance](r.grow.distance.md),
+[r.patch](r.patch.md)*
 
-<p><em><a href="https://en.wikipedia.org/wiki/Euclidean_metric">Wikipedia Entry: Euclidean Metric</a></em><br>
-<em><a href="https://en.wikipedia.org/wiki/Manhattan_metric">Wikipedia Entry: Manhattan Metric</a></em>
+*[Wikipedia Entry: Euclidean
+Metric](https://en.wikipedia.org/wiki/Euclidean_metric)*  
+*[Wikipedia Entry: Manhattan
+Metric](https://en.wikipedia.org/wiki/Manhattan_metric)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Marjorie Larson,
-U.S. Army Construction Engineering Research Laboratory
-<p>Glynn Clements
+Marjorie Larson, U.S. Army Construction Engineering Research Laboratory
+
+Glynn Clements

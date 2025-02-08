@@ -1,21 +1,17 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast3d.mapcalc</em> provides exact the same functionality as
-<em>t.rast.mapcalc</em>, but for space time 3D raster datasets. Please
-refer to <a href="t.rast.mapcalc.html">t.rast.mapcalc</a> for
-documentation.
-<p>
-It is a simple wrapper for <a href="r3.mapcalc.html">r3.mapcalc</a>
-enhanced with temporal functions.
+*t.rast3d.mapcalc* provides exact the same functionality as
+*t.rast.mapcalc*, but for space time 3D raster datasets. Please refer to
+[t.rast.mapcalc](t.rast.mapcalc.md) for documentation.
 
-<h2>SEE ALSO</h2>
+It is a simple wrapper for [r3.mapcalc](r3.mapcalc.md) enhanced with
+temporal functions.
 
-<em>
-<a href="t.rast.mapcalc.html">t.rast.mapcalc</a>,
-<a href="t.rast3d.algebra.html">t.rast3d.algebra</a>,
-<a href="r3.mapcalc.html">r3.mapcalc</a>
-</em>
+## SEE ALSO
 
-<h2>AUTHOR</h2>
+*[t.rast.mapcalc](t.rast.mapcalc.md),
+[t.rast3d.algebra](t.rast3d.algebra.md), [r3.mapcalc](r3.mapcalc.md)*
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+## AUTHOR
+
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

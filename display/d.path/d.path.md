@@ -1,46 +1,47 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.path</em> enables shortest path vector networking.
-Costs may be either line lengths, or attributes saved in a database table.
-Supported are cost assignments for both arcs and nodes, and also different
-in both directions of a vector line. For areas cost will be calculated along
+*d.path* enables shortest path vector networking. Costs may be either
+line lengths, or attributes saved in a database table. Supported are
+cost assignments for both arcs and nodes, and also different in both
+directions of a vector line. For areas cost will be calculated along
 boundary lines.
 
-<h2>NOTE</h2>
+## NOTE
 
-<!-- TODO: apparently d.path does not render into wxGUI? -->
-The user needs to display a vector map before using d.path. If no graphics monitor
-is open, a file <code>map.png</code> is generated in the current directory.
+The user needs to display a vector map before using d.path. If no
+graphics monitor is open, a file `map.png` is generated in the current
+directory.
 
-<p>
-The 'from' and 'to' points are entered by mouse into the map displayed in the GRASS monitor,
-or if the <b>coordinates</b> option is used they can be specified non-interactively.
-The actions bound to the mouse buttons are described in the terminal
-window when running the command.
-<p>To calculate shortest path non-interactively and save the path to a new vector
-map, use the <em>v.net.path</em> module.
+The 'from' and 'to' points are entered by mouse into the map displayed
+in the GRASS monitor, or if the **coordinates** option is used they can
+be specified non-interactively. The actions bound to the mouse buttons
+are described in the terminal window when running the command.
 
-<h2>EXAMPLES</h2>
+To calculate shortest path non-interactively and save the path to a new
+vector map, use the *v.net.path* module.
 
-Interactive shortest path routing on road network (North Carolina sample dataset):
-<div class="code"><pre>
+## EXAMPLES
+
+Interactive shortest path routing on road network (North Carolina sample
+dataset):
+
+```sh
 g.region vector=roadsmajor -p
 d.vect roadsmajor
 d.path roadsmajor coordinates=668646.15,224447.16,668348.83,235894.02
-</pre></div>
+```
 
-<p>
-Non-interactive shortest path routing on road network (North Carolina sample dataset):
-<div class="code"><pre>
+Non-interactive shortest path routing on road network (North Carolina
+sample dataset):
+
+```sh
 d.path -b roadsmajor coordinates=668646.15,224447.16,668348.83,235894.02
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.net.path.html">v.net.path</a>
-</em>
+*[v.net.path](v.net.path.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Radim Blazek, ITC-Irst, Trento, Italy

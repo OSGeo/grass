@@ -1,34 +1,35 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.out.pov</em> converts a user-specified raster map layer (map==name) into a
-height-field file for POVray (tga==name). The hftype==value option (where
-value is either 0 or 1) specifies the height-field type. When the user
-enters 0 the output will be actual heights. If entered 1 the cell-values
-will be normalized. If hftype is 0 (actual heights) the bias==value can
-be used to add or subtract a value from heights. Use scale==value to scale
-your heights by value. The GRASS program r.out.pov can be used to create
-height- field files for Persistence of Vision (POV) raytracer. POV can
-use a height-field defined in Targa (.TGA) image file format where the
-RGB pixel values are 24 bits (3 bytes). A 16 bit unsigned integer height-field
-value is assigned as follows: RED = high byte, GREEN = low byte, BLUE =
-empty.
+*r.out.pov* converts a user-specified raster map layer (map==name) into
+a height-field file for POVray (tga==name). The hftype==value option
+(where value is either 0 or 1) specifies the height-field type. When the
+user enters 0 the output will be actual heights. If entered 1 the
+cell-values will be normalized. If hftype is 0 (actual heights) the
+bias==value can be used to add or subtract a value from heights. Use
+scale==value to scale your heights by value. The GRASS program r.out.pov
+can be used to create height- field files for Persistence of Vision
+(POV) raytracer. POV can use a height-field defined in Targa (.TGA)
+image file format where the RGB pixel values are 24 bits (3 bytes). A 16
+bit unsigned integer height-field value is assigned as follows: RED =
+high byte, GREEN = low byte, BLUE = empty.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 An example Povray script file may look like this:
-<p><div class="code"><pre>
+
+```sh
 #include "shapes.inc"
 #include "colors.inc"
 #include "textures.inc"
 
 #declare Scale = 7;
 
-light_source { &lt;40000, Scale*3000, 5000&gt; color MainLight }
+light_source { <40000, Scale*3000, 5000> color MainLight }
 
 camera {
-   location &lt; 23000, Scale*2000, 0&gt;
+   location < 23000, Scale*2000, 0>
    angle  90
-   look_at &lt; 23000, Scale*1400, 5000&gt;
+   look_at < 23000, Scale*1400, 5000>
 }
 
 height_field  {
@@ -52,11 +53,11 @@ height_field  {
           specular 0.5
           roughness 0.05
    }
-   scale &lt; 14500, Scale*6553.6, 13000 &gt;
-   translate &lt;18300, 0, 1100&gt;
+   scale < 14500, Scale*6553.6, 13000 >
+   translate <18300, 0, 1100>
 }
-</pre></div>
+```
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Klaus D. Meyer, GEUM.tec GbR, eMail: <em>GEUM.tec@geum.de</em>
+Klaus D. Meyer, GEUM.tec GbR, eMail: *<GEUM.tec@geum.de>*

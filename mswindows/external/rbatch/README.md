@@ -1,9 +1,8 @@
+# Batchfiles
 
-<h1>Batchfiles</h1>
+Home Page: [batchfiles home page](http://batchfiles.googlecode.com).
 
-<p>
-Home Page: <a href="http://batchfiles.googlecode.com">batchfiles home page</a>.
-<p>
-Discuss: <a href="http://groups.google.com/group/sqldf">sqldf dicussion group</a> is being used for discussion of this software too.
-<p>
-SVN:  <a href="https://code.google.com/p/batchfiles/source/checkout">source</a>
+Discuss: [sqldf dicussion group](http://groups.google.com/group/sqldf)
+is being used for discussion of this software too.
+
+SVN: [source](https://code.google.com/p/batchfiles/source/checkout)

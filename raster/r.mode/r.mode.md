@@ -1,60 +1,51 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.mode</em> calculates the most frequently occurring value (i. e., mode)
-of data contained in a <em>cover</em> raster map layer for areas assigned
-the same category value in the user-specified <em>base</em> raster map
-layer. These modes are stored in the new <em>output</em> map layer.
+*r.mode* calculates the most frequently occurring value (i. e., mode) of
+data contained in a *cover* raster map layer for areas assigned the same
+category value in the user-specified *base* raster map layer. These
+modes are stored in the new *output* map layer.
 
-<p>The <em>output</em> map is actually a <em>reclass</em> of the <em>base</em>
-map.
+The *output* map is actually a *reclass* of the *base* map.
 
-<p>The <b>base</b> parameter defines an existing raster map layer in the user's
-current mapset search path. For each group of cells assigned the same
-category value in the <em>base</em> map, the mode of the values assigned
-these cells in the <em>cover</em> map will be computed.
+The **base** parameter defines an existing raster map layer in the
+user's current mapset search path. For each group of cells assigned the
+same category value in the *base* map, the mode of the values assigned
+these cells in the *cover* map will be computed.
 
-<p>The <b>cover</b> parameter defines an existing raster map layer containing
+The **cover** parameter defines an existing raster map layer containing
 the values to be used to compute the mode within each category of the
-<em>base</em> map.
+*base* map.
 
-<h2>NOTES</h2>
+## NOTES
 
-The user should use the results of <em>r.mode</em> with care.
-Since this utility assigns a value to each
-cell which is based on global information (i.e., information at spatial
-locations other than just the location of the cell itself), the resultant
-map layer is only valid if the geographic region and mask settings are
-the same as they were at the time that the result map was created.
+The user should use the results of *r.mode* with care. Since this
+utility assigns a value to each cell which is based on global
+information (i.e., information at spatial locations other than just the
+location of the cell itself), the resultant map layer is only valid if
+the geographic region and mask settings are the same as they were at the
+time that the result map was created.
 
-<p>Results are affected by the current region settings and mask.
+Results are affected by the current region settings and mask.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Mode of K-factor (erosion) for Spearfish fields:
 
-<div class="code"><pre>
+```sh
 g.region raster=fields -p
 r.mode base=fields cover=soils.Kfactor output=K.by.farm.mode
 r.univar K.by.farm.mode
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="r.category.html">r.category</a>,
-<a href="r.clump.html">r.clump</a>,
-<a href="r.describe.html">r.describe</a>,
-<a href="r.mapcalc.html">r.mapcalc</a>,
-<a href="r.mfilter.html">r.mfilter</a>,
-<a href="r.neighbors.html">r.neighbors</a>,
-<a href="r.reclass.html">r.reclass</a>,
-<a href="r.stats.html">r.stats</a>,
-<a href="r.statistics.html">r.statistics</a>,
-<a href="r.univar.html">r.univar</a>
-</em>
+*[g.region](g.region.md), [r.category](r.category.md),
+[r.clump](r.clump.md), [r.describe](r.describe.md),
+[r.mapcalc](r.mapcalc.md), [r.mfilter](r.mfilter.md),
+[r.neighbors](r.neighbors.md), [r.reclass](r.reclass.md),
+[r.stats](r.stats.md), [r.statistics](r.statistics.md),
+[r.univar](r.univar.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Michael Shapiro,
-U.S.Army Construction Engineering Research Laboratory
+Michael Shapiro, U.S.Army Construction Engineering Research Laboratory

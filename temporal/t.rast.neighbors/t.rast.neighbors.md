@@ -1,40 +1,36 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast.neighbors</em> performs <a href="r.neighbors.html">r.neighbors</a>
-computations on the maps of a space time raster dataset (STRDS). This
-module supports the options that are available in
-<a href="r.neighbors.html">r.neighbors</a>.
+*t.rast.neighbors* performs [r.neighbors](r.neighbors.md) computations
+on the maps of a space time raster dataset (STRDS). This module supports
+the options that are available in [r.neighbors](r.neighbors.md).
 
-<p>
-The user must provide an input and an output space time raster dataset and
-the basename of the resulting raster maps. The resulting STRDS will have
-the same temporal resolution as the input dataset. With the <b>-e</b> flag,
-resulting maps can be registered in an existing STRDS, that e.g. may have
-been created with a previous run of <em>t.rast.neighbors</em>.
-All maps will be processed using the current region settings unless the
-<b>-r</b> flag is selected. In the latter case, the computaional region
-is set to each raster map selected from the input STRDS.
+The user must provide an input and an output space time raster dataset
+and the basename of the resulting raster maps. The resulting STRDS will
+have the same temporal resolution as the input dataset. With the **-e**
+flag, resulting maps can be registered in an existing STRDS, that e.g.
+may have been created with a previous run of *t.rast.neighbors*. All
+maps will be processed using the current region settings unless the
+**-r** flag is selected. In the latter case, the computaional region is
+set to each raster map selected from the input STRDS.
 
-<p>
 The user can select a subset of the input space time raster dataset for
-processing using a SQL WHERE statement or using the <b>region_relation</b>
+processing using a SQL WHERE statement or using the **region_relation**
 for spatial selection of raster maps. For the spatial map selection the
-current computational region is used, even when the <b>-r</b> flag is
+current computational region is used, even when the **-r** flag is
 given. The number of CPU's to be used for parallel processing can be
-specified with the <em>nprocs</em> option to speedup the computation on
+specified with the *nprocs* option to speedup the computation on
 multi-core system.
 
-<p>
 Semantic labels are needed to relate output raster maps to input raster
-maps. E.g. with <em>method=stddev</em>, the user needs to know the
-spatial extent, the time stamp and the semantic label to determine
-which stddev map corresponds to which input map.
+maps. E.g. with *method=stddev*, the user needs to know the spatial
+extent, the time stamp and the semantic label to determine which stddev
+map corresponds to which input map.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 To smooth the maps contained in a space time dataset run:
 
-<div class="code"><pre>
+```sh
 t.rast.neighbors input=tempmean_monthly output=smooth_tempmean_monthly \
                  basename=tmean_smooth size=5 method=average nprocs=4
 
@@ -110,19 +106,15 @@ name|start_time|min|max
 2012_10_tempmean|2012-10-01 00:00:00|9.070884|18.709297
 2012_11_tempmean|2012-11-01 00:00:00|1.785653|10.911189
 2012_12_tempmean|2012-12-01 00:00:00|1.761019|11.983857
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.neighbors.html">r.neighbors</a>,
-<a href="t.rast.aggregate.ds.html">t.rast.aggregate.ds</a>,
-<a href="t.rast.extract.html">t.rast.extract</a>,
-<a href="t.info.html">t.info</a>,
-<a href="g.region.html">g.region</a>,
-<a href="r.mask.html">r.mask</a>
-</em>
+*[r.neighbors](r.neighbors.md),
+[t.rast.aggregate.ds](t.rast.aggregate.ds.md),
+[t.rast.extract](t.rast.extract.md), [t.info](t.info.md),
+[g.region](g.region.md), [r.mask](r.mask.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

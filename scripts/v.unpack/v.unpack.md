@@ -1,34 +1,30 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.unpack</em> allows unpacking vector maps packed by <em><a href="v.pack.html">v.pack</a></em>.
+*v.unpack* allows unpacking vector maps packed by *[v.pack](v.pack.md)*.
 
-<h2>NOTES</h2>
+## NOTES
 
 Name of the vector map is determined by default from pack file
-internals. Optionally the name can be given by <b>output</b> parameter.
+internals. Optionally the name can be given by **output** parameter.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-Pack up vector map <i>random_point</i> into <i>random_point.pack</i> file.
+Pack up vector map *random_point* into *random_point.pack* file.
 
-<div class="code"><pre>
+```sh
 v.pack input=random_point
-</pre></div>
+```
 
 the vector map can be afterwards unpacked by
 
-<div class="code"><pre>
+```sh
 v.unpack input=random_point.pack
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="v.pack.html">v.pack</a>,
-  <a href="v.in.ogr.html">v.in.ogr</a>,
-  <a href="r.pack.html">r.pack</a>
-</em>
+*[v.pack](v.pack.md), [v.in.ogr](v.in.ogr.md), [r.pack](r.pack.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Luca Delucchi, Fondazione E. Mach (Italy), based on the <em>r.unpack</em> code
+Luca Delucchi, Fondazione E. Mach (Italy), based on the *r.unpack* code

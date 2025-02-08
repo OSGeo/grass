@@ -1,30 +1,24 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.barscale</em> displays a barscale on the graphics monitor at the
-given screen coordinates. If no coordinates are given it will draw the
+*d.barscale* displays a barscale on the graphics monitor at the given
+screen coordinates. If no coordinates are given it will draw the
 barscale in the bottom left of the display.
 
-<p>
-The barscale can drawn in a number of styles (see <b>style</b>
-parameter for their previews).
+The barscale can drawn in a number of styles (see **style** parameter
+for their previews).
 
-<h2>NOTE</h2>
+## NOTE
 
-<em>d.barscale</em> will not work with Lat/Lon coordinate reference system
-as the horizontal scale distance changes with latitude.
-Try <em><a href="d.grid.html">d.grid</a></em> instead.
+*d.barscale* will not work with Lat/Lon coordinate reference system as
+the horizontal scale distance changes with latitude. Try
+*[d.grid](d.grid.md)* instead.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.graph.html">d.graph</a>,
-<a href="d.grid.html">d.grid</a>,
-<a href="d.legend.html">d.legend</a>,
-<a href="d.northarrow.html">d.northarrow</a>,
-<a href="g.region.html">g.region</a>
-</em>
+*[d.graph](d.graph.md), [d.grid](d.grid.md), [d.legend](d.legend.md),
+[d.northarrow](d.northarrow.md), [g.region](g.region.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Unknown, from USACE/CERL.<br>
+Unknown, from USACE/CERL.  
 Major rewrite for GRASS 7 by Hamish Bowman

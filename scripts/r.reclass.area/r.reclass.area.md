@@ -1,58 +1,50 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.reclass.area</em> reclasses a raster map greater or
-less than a user specified area size (in hectares).
-<p>
-If the <b>-c</b> flag is used, <em>r.reclass.area</em> will skip the
-creation of a clumped raster and assume that the input raster is
-already clumped.
+*r.reclass.area* reclasses a raster map greater or less than a user
+specified area size (in hectares).
 
-<h2>EXAMPLES</h2>
+If the **-c** flag is used, *r.reclass.area* will skip the creation of a
+clumped raster and assume that the input raster is already clumped.
+
+## EXAMPLES
 
 In this example, the ZIP code map in the North Carolina sample dataset
 is filtered for large areas (removing smaller areas from the map).
 
-<div class="code"><pre>
+```sh
 g.region raster=zipcodes -p
 r.report zipcodes unit=h
-</pre></div>
+```
 
 Extract only areas greater than 2000 ha, NULL otherwise:
 
-<div class="code"><pre>
+```sh
 r.reclass.area input=zipcodes output=zipcodes_larger2000ha mode=greater value=2000
 
 r.report zipcodes_larger2000ha unit=h
-</pre></div>
+```
 
-<div align="center" style="margin: 10px">
-<img src="zipcodes_larger2000ha.png" width="800px" height="264px"><br>
-<i>Figure: r.reclass.area method=reclass</i>
-</div>
+<img src="zipcodes_larger2000ha.png" width="800" height="264" />  
+*Figure: r.reclass.area method=reclass*
 
 In this example, the ZIP code map in the North Carolina sample dataset
-is filtered for smaller areas which are substituted with the
-value of the respective adjacent area with largest shared
-boundary. Reclass by substitutional removing of areas minor of 1000 ha:
+is filtered for smaller areas which are substituted with the value of
+the respective adjacent area with largest shared boundary. Reclass by
+substitutional removing of areas minor of 1000 ha:
 
-<div class="code"><pre>
+```sh
 r.reclass.area input=zipcodes output=zipcodes_minor1000ha mode=lesser value=1000 method=rmarea
-</pre></div>
+```
 
-<div align="center" style="margin: 10px">
-<img src="zipcodes_minor1000ha.png" width="800px" height="264px"><br>
-<i>Figure: r.reclass.area method=rmarea</i>
-</div>
+<img src="zipcodes_minor1000ha.png" width="800" height="264" />  
+*Figure: r.reclass.area method=rmarea*
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.reclass.html">r.reclass</a>,
-<a href="r.clump.html">r.clump</a>,
-<a href="r.stats.html">r.stats</a>
-</em>
+*[r.reclass](r.reclass.md), [r.clump](r.clump.md),
+[r.stats](r.stats.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-NRCS,<br>
+NRCS,  
 Markus Neteler

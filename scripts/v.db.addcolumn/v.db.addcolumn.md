@@ -1,51 +1,45 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.db.addcolumn</em> adds one or more column(s) to the attribute table
-connected to a given vector map. It automatically checks the connection for the
-specified layer.
+*v.db.addcolumn* adds one or more column(s) to the attribute table
+connected to a given vector map. It automatically checks the connection
+for the specified layer.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>v.db.addcolumn</em> is a front-end to <em>db.execute</em> to allow easier usage.
+*v.db.addcolumn* is a front-end to *db.execute* to allow easier usage.
+The supported types of columns depend on the database backend. However,
+all backends should support VARCHAR, INT, DOUBLE PRECISION and DATE.
 
-The supported types of columns depend on the database backend. However, all
-backends should support VARCHAR, INT, DOUBLE PRECISION and DATE.
-<p>The existing database connection(s) can be verified with <em>v.db.connect</em>.
+The existing database connection(s) can be verified with *v.db.connect*.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-Adding a single column:<br>
-<div class="code"><pre>
+Adding a single column:  
+
+```sh
 g.copy vect=roadsmajor,myroads
 v.db.addcolumn myroads columns="slope double precision"
 v.info -c myroads
-</pre></div>
+```
 
-<p>Adding two columns:<br>
-<div class="code"><pre>
+Adding two columns:  
+
+```sh
 g.copy vect=roadsmajor,myroads
 v.db.addcolumn myroads columns="slope double precision,myname varchar(15)"
 v.info -c myroads
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.connect.html">db.connect</a>,
-<a href="db.execute.html">db.execute</a>,
-<a href="v.db.addtable.html">v.db.addtable</a>,
-<a href="v.db.connect.html">v.db.connect</a>,
-<a href="v.db.dropcolumn.html">v.db.dropcolumn</a>,
-<a href="v.db.droptable.html">v.db.droptable</a>,
-<a href="v.db.select.html">v.db.select</a>,
-<a href="v.db.update.html">v.db.update</a>
-</em>
+*[db.connect](db.connect.md), [db.execute](db.execute.md),
+[v.db.addtable](v.db.addtable.md), [v.db.connect](v.db.connect.md),
+[v.db.dropcolumn](v.db.dropcolumn.md),
+[v.db.droptable](v.db.droptable.md), [v.db.select](v.db.select.md),
+[v.db.update](v.db.update.md)*
 
-<p>
-<em>
-<a href="sql.html">GRASS SQL interface</a>
-</em>
+*[GRASS SQL interface](sql.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Moritz Lennert (mlennert@club.worldonline.be)
+Moritz Lennert (<mlennert@club.worldonline.be>)

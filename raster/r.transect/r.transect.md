@@ -1,43 +1,33 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.transect</em> outputs, in ASCII, the values in a raster map
-which lie along one or more user-defined transect lines.
-The transects are described by their starting coordinates,
-azimuth, and distance.
+*r.transect* outputs, in ASCII, the values in a raster map which lie
+along one or more user-defined transect lines. The transects are
+described by their starting coordinates, azimuth, and distance.
 
-<!-- The transects may be single-cell
- wide lines, or multiple-cell wide lines.  The output, for
- each transect, may be the values at each of the cells, or a
- single aggregate value (e.g., average or median value). -->
-<p>
-The <b>line</b> parameter is a definition of (each) transect line,
-specified by the geographic coordinates of its starting point (<em>easting,
-northing</em>), the angle and direction of its travel (<em>azimuth</em>),
-and its distance (<em>distance</em>).
+The **line** parameter is a definition of (each) transect line,
+specified by the geographic coordinates of its starting point (*easting,
+northing*), the angle and direction of its travel (*azimuth*), and its
+distance (*distance*).
 
-<p>The <em>azimuth</em> is an angle, in degrees, measured to
-the east of north.  The <em>distance</em> is in map units
-(meters for a metered database, like UTM).
-<p>The <b>null</b> parameter can optionally be set to change the character
+The *azimuth* is an angle, in degrees, measured to the east of north.
+The *distance* is in map units (meters for a metered database, like
+UTM).
+
+The **null** parameter can optionally be set to change the character
 string representing null values.
 
-<h2>NOTES</h2>
+## NOTES
 
-This program is a front-end to the <em>
-<a href="r.profile.html">r.profile</a></em> program.  It simply converts the
-azimuth and distance to an ending coordinate and then runs <em>
-<a href="r.profile.html">r.profile</a></em>.
+This program is a front-end to the *[r.profile](r.profile.md)* program.
+It simply converts the azimuth and distance to an ending coordinate and
+then runs *[r.profile](r.profile.md)*. There once were **width=** and
+**result=***raw\|median\|average* options which are not currently
+implemented.
 
-There once were <b>width=</b> and <b>result=</b><em>raw|median|average</em>
- options which are not currently implemented.
+## SEE ALSO
 
-<h2>SEE ALSO</h2>
+*[r.profile](r.profile.md), [wxGUI profile tool](wxGUI.md)*
 
-<em>
-<a href="r.profile.html">r.profile</a>,
-<a href="wxGUI.html">wxGUI profile tool</a>
-</em>
-
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Michael Shapiro, U.S. Army Construction Engineering Research Laboratory

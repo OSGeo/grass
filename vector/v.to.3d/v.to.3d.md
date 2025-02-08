@@ -1,32 +1,28 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The <em>v.to.3d</em> module is used to transform 2D vector features
-to 3D. Height (z-coordinate) of 3D vector features can be specified
-by <b>height</b> parameter as fixed value or by <b>column</b>
-parameter.
+The *v.to.3d* module is used to transform 2D vector features to 3D.
+Height (z-coordinate) of 3D vector features can be specified by
+**height** parameter as fixed value or by **column** parameter.
 
-<p>
-The flag <b>-r</b> enables to perform reverse transformation, i.e.,
-transform 3D vector to 2D by omitting z-coordinate. The height of input 3D
-features can be optionally stored in <b>column</b>.
+The flag **-r** enables to perform reverse transformation, i.e.,
+transform 3D vector to 2D by omitting z-coordinate. The height of input
+3D features can be optionally stored in **column**.
 
-<h2>NOTES</h2>
+## NOTES
 
-<p>
-When transforming 2D vector features to 3D based on attribute, all
-NULL values are silently converted to height 0.0.
+When transforming 2D vector features to 3D based on attribute, all NULL
+values are silently converted to height 0.0.
 
-<p>
 The reverse transformation, 2D to 3D, is possible for points and lines.
-In the case of lines, the reverse transformation should be used
-only when all vertices of a line have the same z-coordinate
-(for example contours).
+In the case of lines, the reverse transformation should be used only
+when all vertices of a line have the same z-coordinate (for example
+contours).
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Transform 2D vector features to 3D</h3>
+### Transform 2D vector features to 3D
 
-<div class="code"><pre>
+```sh
 # convert z-values from string to double
 v.db.addcolumn map=geodetic_pts columns="Z_VALUE_D double precision"
 v.db.update map=geodetic_pts column=Z_VALUE_D qcolumn=Z_VALUE
@@ -34,22 +30,19 @@ v.db.select map=geodetic_pts columns=cat,Z_VALUE,Z_VALUE_D
 
 # convert 2D vector point map to 3D based on attribute
 v.to.3d input=geodetic_pts out=geodetic_pts_3d column=Z_VALUE_D
-</pre></div>
+```
 
-<h3>Transform 3D vector features to 2D</h3>
+### Transform 3D vector features to 2D
 
-<div class="code"><pre>
+```sh
 v.to.3d -rt input=elev_lid792_bepts output=elev_lid_2d
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.transform.html">v.transform</a>,
-<a href="v.extrude.html">v.extrude</a>,
-<a href="v.drape.html">v.drape</a>
-</em>
+*[v.transform](v.transform.md), [v.extrude](v.extrude.md),
+[v.drape](v.drape.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Martin Landa, Czech Technical University in Prague, Czech Republic

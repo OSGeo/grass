@@ -1,175 +1,133 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The <em>g.region</em> module allows the user to manage the
-settings of the current geographic region.  These regional
-boundaries can be set by the user directly and/or set from
-a region definition file (stored under the
-<code>windows</code> directory in the user's current
-mapset).  The user can create, modify, and store as many
-geographic region definitions as desired for any given
-mapset.  However, only one of these geographic region
-definitions will be current at any given moment, for a
-specified mapset;  i.e., GRASS programs that respect the
-geographic region settings will use the current geographic
-region settings.
+The *g.region* module allows the user to manage the settings of the
+current geographic region. These regional boundaries can be set by the
+user directly and/or set from a region definition file (stored under the
+`windows` directory in the user's current mapset). The user can create,
+modify, and store as many geographic region definitions as desired for
+any given mapset. However, only one of these geographic region
+definitions will be current at any given moment, for a specified mapset;
+i.e., GRASS programs that respect the geographic region settings will
+use the current geographic region settings.
 
-<h2>DEFINITIONS</h2>
+## DEFINITIONS
 
-<dl>
-<dt><b>Region:</b>
+**Region:**  
+In GRASS, a *region* refers to a geographic area with some defined
+boundaries, based on a specific map coordinate system and map
+projection. Each region also has associated with it the specific
+east-west and north-south resolutions of its smallest units (rectangular
+units called "cells").
 
-<dd>In GRASS, a <em>region</em> refers to a geographic area
-with some defined boundaries, based on a specific map
-coordinate system and map projection.  Each region also has
-associated with it the specific east-west and north-south
-resolutions of its smallest units (rectangular units called
-"cells").
+The region's boundaries are given as the northernmost, southernmost,
+easternmost, and westernmost points that define its extent (cell edges).
+The north and south boundaries are commonly called *northings*, while
+the east and west boundaries are called *eastings*.
 
-<p>
-The region's boundaries are given as the northernmost,
-southernmost, easternmost, and westernmost points that
-define its extent (cell edges).  The north and south boundaries
-are commonly called <em>northings</em>, while the east and west
-boundaries are called <em>eastings</em>.
+The region's cell resolution defines the size of the smallest piece of
+data recognized (imported, analyzed, displayed, stored, etc.) by GRASS
+modules affected by the current region settings. The north-south and
+east-west cell resolutions need not be the same, thus allowing
+non-square data cells to exist.
 
-<p>
-The region's cell resolution defines the size of the
-smallest piece of data recognized (imported, analyzed,
-displayed, stored, etc.) by GRASS modules affected by the
-current region settings. The north-south and east-west cell
-resolutions need not be the same, thus allowing non-square
-data cells to exist.
+Typically all raster and display modules are affected by the current
+region settings, but not vector modules. Some special modules diverge
+from this rule, for example raster import modules and *v.in.region*.
 
-<p>Typically all raster and display modules are affected by the current
-region settings, but not vector modules.
-Some special modules diverge from this rule, for example raster import
-modules and <em>v.in.region</em>.
+**Default Region:**  
+Each GRASS project (previously called location) has a fixed geographic
+region, called the default geographic region (stored in the region file
+`DEFAULT_WIND` under the special mapset `PERMANENT`), that defines the
+extent of the data base. While this provides a starting point for
+defining new geographic regions, user-defined geographic regions need
+not fall within this geographic region. The current region can be reset
+to the default region with the **-d** flag. The default region is
+initially set when the project is first created and can be reset using
+the **-s** flag.
 
+**Current Region:**  
+Each mapset has a current geographic region. This region defines the
+geographic area in which all GRASS displays and raster analyses will be
+done. Raster data will be resampled, if necessary, to meet the cell
+resolutions of the current geographic region setting.
 
-<dt><b>Default Region:</b>
+**Saved Regions:**  
+Each GRASS MAPSET may contain any number of pre-defined, and named,
+geographic regions. These region definitions are stored in the user's
+current mapset location under the `windows` directory (also referred to
+as the user's saved region definitions). Any of these pre-defined
+geographic regions may be selected, by name, to become the current
+geographic region. Users may also access saved region definitions stored
+under other mapsets in the current project, if these mapsets are
+included in the user's mapset search path or the '@' operator is used
+(`region_name@mapset`).
 
-<dd>Each GRASS project (previously called location) has a fixed
-geographic region, called the default geographic region
-(stored in the region file <code>DEFAULT_WIND</code> under
-the special mapset <code>PERMANENT</code>), that defines the
-extent of the data base.  While this provides a starting
-point for defining new geographic regions, user-defined
-geographic regions need not fall within this geographic
-region. The current region can be reset to the default region
-with the <b>-d</b> flag. The default region is initially set
-when the project is first created and can be reset using the
-<b>-s</b> flag.
+## NOTES
 
-<dt><b>Current Region:</b>
+After all updates have been applied, the current region's southern and
+western boundaries are (silently) adjusted so that the north/south
+distance is a multiple of the north/south resolution and that the
+east/west distance is a multiple of the east/west resolution.
 
-<dd>Each mapset has a current geographic region.  This
-region defines the geographic area in which all GRASS
-displays and raster analyses will be done. Raster data will be
-resampled, if necessary, to meet the cell resolutions of
-the current geographic region setting.
+With the **-a** flag all four boundaries are adjusted to be even
+multiples of the resolution, aligning the region to the resolution
+supplied by the user. The default is to align the region resolution to
+match the region boundaries.
 
-<dt><b>Saved Regions:</b>
-
-<dd>Each GRASS MAPSET may contain any number of
-pre-defined, and named, geographic regions.  These region
-definitions are stored in the user's current mapset
-location under the <code>windows</code> directory (also
-referred to as the user's saved region definitions).
-Any of these pre-defined geographic regions
-may be selected, by name, to become the current geographic
-region.  Users may also access saved region definitions
-stored under other mapsets in the current project, if
-these mapsets are included in the user's mapset search
-path or the '@' operator is used (<code>region_name@mapset</code>).
-</dl>
-
-<h2>NOTES</h2>
-
-After all updates have been applied, the current region's
-southern and western boundaries are (silently) adjusted so
-that the north/south distance is a multiple of the
-north/south resolution and that the east/west distance is a
-multiple of the east/west resolution.
-
-<p>With the <b>-a</b> flag all four boundaries are adjusted
-to be even multiples of the resolution, aligning the region to the
-resolution supplied by the user. The default is to
-align the region resolution to match the region boundaries.
-
-<p>The <b>-m</b> flag will report the region resolution in meters. The
+The **-m** flag will report the region resolution in meters. The
 resolution is calculated by averaging the resolution at the region
 boundaries. This resolution is calculated by dividing the geodesic
-distance in meters at the boundary by the number of rows or columns.
-For example the east / west resolution (ewres) is determined from an
-average of the geodesic distances at the North and South boundaries
-divided by the number of columns.
-<!-- add'l info. include?
-Print the region resolution in meters (from geodesic). With no other
-flags the default output format is shell stype (-g). The region resolution
-represents the center of the map. The resolutions are calculated at the four
-outside edges, then the two NS edges are averaged and the two EW edges are
-averaged, the results finally printed.
--->
+distance in meters at the boundary by the number of rows or columns. For
+example the east / west resolution (ewres) is determined from an average
+of the geodesic distances at the North and South boundaries divided by
+the number of columns.
 
+The **-p** (or **-g**) option is recognized last. This means that all
+changes are applied to the region settings before printing occurs.
 
-<p>The <b>-p</b> (or <b>-g</b>) option is recognized
-last.  This means that all changes are applied to the
-region settings before printing occurs.
-<p>The <b>-g</b> flag prints the current region settings in shell script style.
-This format can be given back to <em>g.region</em> on its command line.
-This may also be used to save region settings as shell environment variables
-with the UNIX eval command, "<code>eval `g.region -g`</code>".
+The **-g** flag prints the current region settings in shell script
+style. This format can be given back to *g.region* on its command line.
+This may also be used to save region settings as shell environment
+variables with the UNIX eval command, "`` eval `g.region -g` ``".
 
-<p>With <b>-u</b> flag current region is not updated even if one or more
-options for changing region is used (<b>res=</b>, <b>raster=</b>, etc).
-This can be used for example to print modified region values for further use
-without actually modifying the current region.
-Similarly, <b>-o</b> flag forces to update current region file even when e.g., only
-printing was specified. Flag <b>-o</b> was added in GRASS GIS version 8 to simulate
-<em>g.region</em> behavior in prior versions when current region file was
-always updated unless <b>-u</b> was specified.
+With **-u** flag current region is not updated even if one or more
+options for changing region is used (**res=**, **raster=**, etc). This
+can be used for example to print modified region values for further use
+without actually modifying the current region. Similarly, **-o** flag
+forces to update current region file even when e.g., only printing was
+specified. Flag **-o** was added in GRASS GIS version 8 to simulate
+*g.region* behavior in prior versions when current region file was
+always updated unless **-u** was specified.
 
-<h3>Additional parameter information:</h3>
+### Additional parameter information
 
-<dl>
+**zoom=***name*  
+Shrink current region settings to the smallest region encompassing all
+non-NULL data in the named raster map layer that fall inside the user's
+current region. In this way you can tightly zoom in on isolated clumps
+within a bigger map.
 
-<dt><b>zoom=</b><em>name</em>
-<dd>Shrink current region settings to the smallest region
-encompassing all non-NULL data in the named raster map
-layer that fall inside the user's current region. In this
-way you can tightly zoom in on isolated clumps within a
-bigger map.
-<p>If the user also includes the <b>raster=</b><em>name</em>
-option on the command line, <b>zoom=</b><em>name</em> will
-set the current region settings to the smallest region
-encompassing all non-NULL data in the named <b>zoom</b> map
-that fall inside the region stated in the cell header for
-the named <b>raster</b> map.
+If the user also includes the **raster=***name* option on the command
+line, **zoom=***name* will set the current region settings to the
+smallest region encompassing all non-NULL data in the named **zoom** map
+that fall inside the region stated in the cell header for the named
+**raster** map.
 
+**align=***name*  
+Set the current resolution equal to that of the named raster map, and
+align the current region to a row and column edge in the named map.
+Alignment only moves the existing region edges outward to the edges of
+the next nearest cell in the named raster map - not to the named map's
+edges. To perform the latter function, use the **raster=***name* option.
 
-<dt><b>align=</b><em>name</em>
+## EXAMPLES
 
-<dd>Set the current resolution equal to that of the named
-raster map, and align the current region to a row and
-column edge in the named map.  Alignment only moves the
-existing region edges outward to the edges of the next
-nearest cell in the named raster map - not to the named
-map's edges.  To perform the latter function, use the
-<b>raster=</b><em>name</em> option.
-</dl>
+### Printing extent and raster resolution in 2D and 3D
 
-<h2>EXAMPLES</h2>
+<span class="code">` g.region -p `</span>  
+This will print the current region in the format:
 
-<h3>Printing extent and raster resolution in 2D and 3D</h3>
-
-<dl>
-<dt><span class="code"><code>
-g.region -p
-</code></span>
-
-<dd> This will print the current region in the format:
-
-<div class="code"><pre>
+```sh
 projection: 1 (UTM)
 zone:       13
 datum:      nad27
@@ -182,17 +140,13 @@ nsres:      20
 ewres:      20
 rows:       700
 cols:       950
-</pre></div>
+```
 
-<p>
-<dt><span class="code"><code>
-g.region -p3
-</code></span>
-
-<dd> This will print the current region and the 3D region (used for voxels)
+<span class="code">` g.region -p3 `</span>  
+This will print the current region and the 3D region (used for voxels)
 in the format:
 
-<div class="code"><pre>
+```sh
 projection: 1 (UTM)
 zone:       13
 datum:      nad27
@@ -213,17 +167,13 @@ rows3:      700
 cols:       950
 cols3:      950
 depths:     1
-</pre></div>
+```
 
-<p>
-<dt><span class="code"><code>
-g.region -g
-</code></span>
+<span class="code">` g.region -g `</span>  
+The **-g** option prints the region in the following script style
+(key=value) format:
 
-<dd> The <b>-g</b> option prints the region in the
-following script style (key=value) format:
-
-<div class="code"><pre>
+```sh
 n=4928000
 s=4914000
 w=590000
@@ -232,18 +182,13 @@ nsres=20
 ewres=20
 rows=700
 cols=950
-</pre></div>
+```
 
-<p>
-<dt><span class="code"><code>
-g.region -bg
-</code></span>
+<span class="code">` g.region -bg `</span>  
+The **-bg** option prints the region in the following script style
+(key=value) format plus the boundary box in latitude-longitude/WGS84:
 
-<dd> The <b>-bg</b> option prints the region in the
-following script style (key=value) format plus the
-boundary box in latitude-longitude/WGS84:
-
-<div class="code"><pre>
+```sh
 n=4928000
 s=4914000
 w=590000
@@ -256,17 +201,12 @@ LL_W=-103.87080682
 LL_E=-103.62942884
 LL_N=44.50164277
 LL_S=44.37302019
-</pre></div>
+```
 
-<p>
-<dt><span class="code"><code>
-g.region -l
-</code></span>
+<span class="code">` g.region -l `</span>  
+The **-l** option prints the region in the following format:
 
-<dd> The <b>-l</b> option prints the region in the
-following format:
-
-<div class="code"><pre>
+```sh
 long: -103.86789484 lat: 44.50165890 (north/west corner)
 long: -103.62895703 lat: 44.49904013 (north/east corner)
 long: -103.63190061 lat: 44.37303558 (south/east corner)
@@ -275,17 +215,13 @@ rows:       700
 cols:       950
 Center longitude: 103:44:59.170374W [-103.74977]
 Center latitude:  44:26:14.439781N [44.43734]
-</pre></div>
+```
 
-<p>
-<dt><span class="code"><code>
-g.region -pm
-</code></span>
+<span class="code">` g.region -pm `</span>  
+This will print the current region in the format (latitude-longitude
+project):
 
-<dd> This will print the current region in the format
- (latitude-longitude project):
-
-<div class="code"><pre>
+```sh
 projection: 3 (Latitude-Longitude)
 zone:       0
 ellipsoid:  wgs84
@@ -297,169 +233,115 @@ nsres:      928.73944902
 ewres:      352.74269109
 rows:       6000
 cols:       4800
-</pre></div>
-Note that the resolution is here reported in meters, not decimal degrees.
-</dl>
+```
 
-<h3>Changing extent and raster resolution using values</h3>
-<dl>
-<dt><span class="code"><code>
-g.region n=7360100 e=699000
-</code></span>
+Note that the resolution is here reported in meters, not decimal
+degrees.
 
-<dd> will reset the northing and easting for the current
-region, but leave the south edge, west edge, and the region
-cell resolutions unchanged.
+### Changing extent and raster resolution using values
 
-<p>
-<dt><span class="code"><code>
-g.region n=51:36:05N e=10:10:05E s=51:29:55N w=9:59:55E res=0:00:01
-</code></span>
+<span class="code">` g.region n=7360100 e=699000 `</span>  
+will reset the northing and easting for the current region, but leave
+the south edge, west edge, and the region cell resolutions unchanged.
 
-<dd> will reset the northing, easting, southing, westing and resolution
-for the current region, here in DMS latitude-longitude style
-(decimal degrees and degrees with decimal minutes can also be used).
+<span class="code">` g.region n=51:36:05N e=10:10:05E s=51:29:55N w=9:59:55E res=0:00:01 `</span>  
+will reset the northing, easting, southing, westing and resolution for
+the current region, here in DMS latitude-longitude style (decimal
+degrees and degrees with decimal minutes can also be used).
 
-<p>
-<dt><span class="code"><code>
-g.region -dp s=698000
-</code></span>
+<span class="code">` g.region -dp s=698000 `</span>  
+will set the current region from the default region for the GRASS
+project, reset the south edge to 698000, and then print the result.
 
-<dd> will set the current region from the default region
-for the GRASS project, reset the south edge to
-698000, and then print the result.
+<span class="code">` g.region n=n+1000 w=w-500 `</span>  
+The n=*value* may also be specified as a function of its current value:
+n=n+*value* increases the current northing, while n=n-*value* decreases
+it. This is also true for s=*value*, e=*value*, and w=*value*. In this
+example the current region's northern boundary is extended by 1000 units
+and the current region's western boundary is decreased by 500 units.
 
-<p>
-<dt><span class="code"><code>
-g.region n=n+1000 w=w-500
-</code></span>
+<span class="code">` g.region n=s+1000 e=w+1000 `</span>  
+This form allows the user to set the region boundary values relative to
+one another. Here, the northern boundary coordinate is set equal to 1000
+units larger than the southern boundary's coordinate value, and the
+eastern boundary's coordinate value is set equal to 1000 units larger
+than the western boundary's coordinate value. The corresponding forms
+s=n-*value* and
 
-<dd> The n=<em>value</em> may also be specified as a
-function of its current value:  n=n+<em>value</em>
-increases the current northing, while n=n-<em>value</em>
-decreases it.  This is also true for s=<em>value</em>,
-e=<em>value</em>, and w=<em>value</em>.  In this example
-the current region's northern boundary is extended by 1000
-units and the current region's western boundary is
-decreased by 500 units.
+w=e-*value* may be used to set the values of the region's southern and
+western boundaries, relative to the northern and eastern boundary
+values.
 
-<p>
-<dt><span class="code"><code>
-g.region n=s+1000 e=w+1000
-</code></span>
+### Changing extent and raster resolution using maps
 
-<dd> This form allows the user to set the region boundary
-values relative to one another.  Here, the northern
-boundary coordinate is set equal to 1000 units larger than
-the southern boundary's coordinate value, and the eastern
-boundary's coordinate value is set equal to 1000 units
-larger than the western boundary's coordinate value.  The
-corresponding forms s=n-<em>value</em> and
+<span class="code">` g.region raster=soils `</span>  
+This form will make the current region settings exactly the same as
+those given in the cell header file for the raster map layer *soils*.
 
-<p>
-w=e-<em>value</em> may be used to set the values of the
-region's southern and western boundaries, relative to the
-northern and eastern boundary values.
-</dl>
+<span class="code">` g.region raster=soils zoom=soils `</span>  
+This form will first look up the cell header file for the raster map
+layer *soils*, use this as the current region setting, and then shrink
+the region down to the smallest region which still encompasses all
+non-NULL data in the map layer *soils*. Note that if the parameter
+*raster=soils* were not specified, the zoom would shrink to encompass
+all non-NULL data values in the soils map that were located within the
+*current region* settings.
 
-<h3>Changing extent and raster resolution using maps</h3>
-<dl>
-<dt><span class="code"><code>
-g.region raster=soils
-</code></span>
+<span class="code">` g.region -up raster=soils `</span>  
+The **-u** option suppresses the re-setting of the current region
+definition. This can be useful when it is desired to only extract region
+information. In this case, the cell header file for the soils map layer
+is printed without changing the current region settings.
 
-<dd> This form will make the current region settings
-exactly the same as those given in the cell header file for
-the raster map layer <em>soils</em>.
+<span class="code">` g.region -up zoom=soils save=soils `</span>  
+This will zoom into the smallest region which encompasses all non-NULL
+soils data values, and save the new region settings in a file to be
+called *soils* and stored under the `windows` directory in the user's
+current mapset. The current region settings are not changed.
 
-<p>
-<dt><span class="code"><code>
-g.region raster=soils zoom=soils
-</code></span>
+### Changing extent and raster resolution in 3D
 
-<dd> This form will first look up the cell header file for
-the raster map layer <em>soils</em>, use this as the
-current region setting, and then shrink the region down to
-the smallest region which still encompasses all non-NULL
-data in the map layer <em>soils</em>.  Note that if the
-parameter <em>raster=soils</em> were not specified, the
-zoom would shrink to encompass all non-NULL data values in
-the soils map that were located within the <em>current region</em>
-settings.
+<span class="code">` g.region b=0 t=3000 tbres=200 res3=100 g.region -p3 `</span>  
+This will define the 3D region for voxel computations. In this example a
+volume with bottom (0m) to top (3000m) at horizontal resolution (100m)
+and vertical resolution (200m) is defined.
 
-<p>
-<dt><span class="code"><code>
-g.region -up raster=soils
-</code></span>
+### Using g.region in a shell in combination with OGR
 
-<dd> The <b>-u</b> option suppresses the re-setting of the
-current region definition.  This can be useful when it is
-desired to only extract region information.  In this case,
-the cell header file for the soils map layer is printed
-without changing the current region settings.
+Extracting a spatial subset of the external vector map `soils.shp` into
+new external vector map `soils_cut.shp` using the OGR *ogr2ogr* tool:  
 
-<p>
-<dt><span class="code"><code>
-g.region -up zoom=soils save=soils
-</code></span>
-
-<dd> This will zoom into the smallest region which
-encompasses all non-NULL soils data values, and save the
-new region settings in a file to be called <em>soils</em>
-and stored under the <code>windows</code> directory in the
-user's current mapset.  The current region settings are not
-changed.
-</dl>
-
-<h3>Changing extent and raster resolution in 3D</h3>
-<dl>
-<dt><span class="code"><code>
-g.region b=0 t=3000 tbres=200 res3=100
-g.region -p3
-</code></span>
-
-<dd> This will define the 3D region for voxel computations.
-In this example a volume with bottom (0m) to top (3000m)
-at horizontal resolution (100m) and vertical resolution (200m)
-is defined.
-</dl>
-
-<h3>Using g.region in a shell in combination with OGR</h3>
-
-<!-- why not 'v.in.ogr spatial=' ?? -->
-Extracting a spatial subset of the external vector map
-<code>soils.shp</code> into new external vector map <code>soils_cut.shp</code>
-using the OGR <em>ogr2ogr</em> tool:<br>
-
-<div class="code"><pre>
+```sh
 eval `g.region -g`
 ogr2ogr -spat $w $s $e $n soils_cut.shp soils.shp
-</pre></div>
+```
 
 This requires that the project and the SHAPE file CRS' match.
 
-<h3>Using g.region in a shell in combination with GDAL</h3>
+### Using g.region in a shell in combination with GDAL
 
 Extracting a spatial subset of the external raster map
-<code>p016r035_7t20020524_z17_nn30.tif</code> into new external raster
-map <code>p016r035_7t20020524_nc_spm_wake_nn30.tif</code> using the GDAL
-<em>gdalwarp</em> tool:<br>
+`p016r035_7t20020524_z17_nn30.tif` into new external raster map
+`p016r035_7t20020524_nc_spm_wake_nn30.tif` using the GDAL *gdalwarp*
+tool:  
 
-<div class="code"><pre>
+```sh
 eval `g.region -g`
 gdalwarp -t_srs "`g.proj -wf`" -te $w $s $e $n \
          p016r035_7t20020524_z17_nn30.tif \
          p016r035_7t20020524_nc_spm_wake_nn30.tif
-</pre></div>
+```
 
 Here the input raster map does not have to match the project's
 coordinate reference system since it is reprojected on the fly.
 
-<h3>JSON Output</h3>
-<div class="code"><pre>
+### JSON Output
+
+```sh
 g.region -p format=json
-</pre></div>
-<div class="code"><pre>
+```
+
+```sh
 {
     "projection": "99 (Lambert Conformal Conic)",
     "zone": 0,
@@ -486,12 +368,13 @@ g.region -p format=json
     "cells": 1010600,
     "cells3": 2526500
 }
-</pre></div>
+```
 
-<div class="code"><pre>
+```sh
 g.region -l format=json
-</pre></div>
-<div class="code"><pre>
+```
+
+```sh
 {
     "nw_long": -78.688888505507336,
     "nw_lat": 35.743893244701788,
@@ -506,20 +389,15 @@ g.region -l format=json
     "rows": 165,
     "cols": 179
 }
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.access.html">g.access</a>,
-<a href="g.mapsets.html">g.mapsets</a>,
-<a href="g.proj.html">g.proj</a>
-<br>
-Environment variables: <a href="variables.html#internal">GRASS_REGION and WIND_OVERRIDE</a>
-</em>
+*[g.access](g.access.md), [g.mapsets](g.mapsets.md),
+[g.proj](g.proj.md)  
+Environment variables: [GRASS_REGION and
+WIND_OVERRIDE](variables.md#internal)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Michael Shapiro,
-U.S.Army Construction Engineering
-Research Laboratory
+Michael Shapiro, U.S.Army Construction Engineering Research Laboratory

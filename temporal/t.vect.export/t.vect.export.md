@@ -1,45 +1,42 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.vect.export</em> exports a space time vector dataset (stvds)
-to a tar archive as either GML (using <em><a href="v.out.ogr.html">v.out.ogr</a></em>)
-or GRASS pack files. In addition to the pack or GML files, several
-metadata files are also created in the archive that describe the
-temporal layout. All time stamps are stored in the file "list.txt",
-for each map one row. The name of the map, the start time and the
-end time are written. In case of a time instance, the start time is
-equal to the end time. The "init.txt" file stores the temporal type,
-the number of maps, the chosen export format and some other
-metadata. The "proj.txt" file stores the coordinate reference system information as a
-proj4 string of the project the space time vector dataset was
-exported from. The file "readme.txt" describes the file format. The
-output of <em>v.info</em> for each vector map in the space time dataset is
-stored in "metadata.txt".
-<p>
+*t.vect.export* exports a space time vector dataset (stvds) to a tar
+archive as either GML (using *[v.out.ogr](v.out.ogr.md)*) or GRASS pack
+files. In addition to the pack or GML files, several metadata files are
+also created in the archive that describe the temporal layout. All time
+stamps are stored in the file "list.txt", for each map one row. The name
+of the map, the start time and the end time are written. In case of a
+time instance, the start time is equal to the end time. The "init.txt"
+file stores the temporal type, the number of maps, the chosen export
+format and some other metadata. The "proj.txt" file stores the
+coordinate reference system information as a proj4 string of the project
+the space time vector dataset was exported from. The file "readme.txt"
+describes the file format. The output of *v.info* for each vector map in
+the space time dataset is stored in "metadata.txt".
 
-The tar archive can be compressed using the <b>compress</b> option. Gzip
-and bzip2 (default) are available. A <b>where</b> option can be specified,
+The tar archive can be compressed using the **compress** option. Gzip
+and bzip2 (default) are available. A **where** option can be specified,
 to export only a subset of the space time dataset. Archives exported
-with <em>t.vect.export</em> can be imported with
-<em><a href="t.vect.import.html">t.vect.import</a></em>.
+with *t.vect.export* can be imported with
+*[t.vect.import](t.vect.import.md)*.
 
-<h2>NOTES</h2>
+## NOTES
 
 The name of output file has to carry the suffix of the archive type, the
 following suffix can be used:
-<ul>
-<li><b>.tar</b> in the case of <b>compress=no</b></li>
-<li><b>.tar.bzip2</b> in the case of <b>compress=bzip2</b></li>
-<li><b>.tar.gzip</b> in the case of <b>compress=gzip</b></li>
-</ul>
 
-<h2>EXAMPLE</h2>
+- **.tar** in the case of **compress=no**
+- **.tar.bzip2** in the case of **compress=bzip2**
+- **.tar.gzip** in the case of **compress=gzip**
 
-In this example, five vector maps are created and
-registered in a single space time vector dataset named <em>random_locations</em>.
-Each vector map represents random locations
-within the boundary of the state taken at 1 month intervals.
+## EXAMPLE
 
-<div class="code"><pre>
+In this example, five vector maps are created and registered in a single
+space time vector dataset named *random_locations*. Each vector map
+represents random locations within the boundary of the state taken at 1
+month intervals.
+
+```sh
 t.vect.export input=shoreline output=shoreline_nc.tar.bzip2
 
 tar xvfj shoreline_nc.tar.bzip2
@@ -115,19 +112,14 @@ Files:
                  time stamps in ISO-Format. Field separator is |
  metadata.txt -- The output of t.info
    readme.txt -- This file
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.vect.import.html">t.vect.import</a>,
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>,
-<a href="v.out.ogr.html">v.out.ogr</a>,
-<a href="v.unpack.html">v.unpack</a>,
-<a href="t.rast.export.html">t.rast.export</a>
-</em>
+*[t.vect.import](t.vect.import.md), [t.create](t.create.md),
+[t.info](t.info.md), [v.out.ogr](v.out.ogr.md), [v.unpack](v.unpack.md),
+[t.rast.export](t.rast.export.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

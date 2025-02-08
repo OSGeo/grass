@@ -1,17 +1,17 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.lrs.where</em> identifies line id and real milepost+offset for
-points in vector map using linear reference system.
+*v.lrs.where* identifies line id and real milepost+offset for points in
+vector map using linear reference system.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-This example is written for the Spearfish dataset (it continues the example
-from <em>v.lrs.create</em>).
-<p>
-In this example, the 'route_lrs' shall be queried for unknown
-positions (points, stored in the map <em>newpoints</em>) along the LRS:
+This example is written for the Spearfish dataset (it continues the
+example from *v.lrs.create*).
 
-<div class="code"><pre>
+In this example, the 'route_lrs' shall be queried for unknown positions
+(points, stored in the map *newpoints*) along the LRS:
+
+```sh
 # generate query points
 echo "590866.15|4926737.0
 590933|4927133" | v.in.ascii out=newpoints
@@ -32,23 +32,19 @@ d.vect newpoints col=red
 
 # measure distance to previous bus stop:
 # use measuring tool in graphical user interface
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.lrs.create.html">v.lrs.where</a>,
-<a href="v.lrs.segment.html">v.lrs.segment</a>,
-<a href="v.lrs.label.html">v.lrs.label</a>
-</em>
+*[v.lrs.where](v.lrs.create.md), [v.lrs.segment](v.lrs.segment.md),
+[v.lrs.label](v.lrs.label.md)*
 
-<p>
-<em>
-<a href="lrs.html">LRS tutorial</a>,<br>
-<a href="https://foss4g.asia/2004/Full%20Paper_PDF/Introducing%20the%20Linear%20Reference%20System%20in%20GRASS.pdf">Introducing the Linear Reference System in GRASS</a>
-</em>
+*[LRS tutorial](lrs.md),  
+[Introducing the Linear Reference System in
+GRASS](https://foss4g.asia/2004/Full-Paper_PDF/Introducing-the-Linear-Reference-System-in-GRASS.pdf)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek, ITC-irst/MPA Solutions<br>
-Documentation update (based on above journal article and available fragments): Markus Neteler
+Radim Blazek, ITC-irst/MPA Solutions  
+Documentation update (based on above journal article and available
+fragments): Markus Neteler

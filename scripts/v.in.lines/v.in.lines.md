@@ -1,20 +1,22 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-Imports a stream of ASCII x,y[,z] coordinates as a line or series of lines.
+Imports a stream of ASCII x,y\[,z\] coordinates as a line or series of
+lines.
 
-<h2>NOTES</h2>
+## NOTES
 
-Input ASCII coordinates are simply a series of "x&nbsp;y" data points.
-Lines are separated by a row containing "<code>NaN&nbsp;NaN</code>".
-<!-- TODO:? Line categories start at 1 and increase sequentially. -->
-<p>The user can import 3D lines by providing 3 columns of data in the input
-stream and using the <b>-z</b> flag.
-<p>This script is a simple wrapper around the <em>v.in.mapgen</em> module.
+Input ASCII coordinates are simply a series of "x y" data points. Lines
+are separated by a row containing "`NaN NaN`".
 
-<h2>EXAMPLE</h2>
+The user can import 3D lines by providing 3 columns of data in the input
+stream and using the **-z** flag.
 
-<div class="code"><pre>
-v.in.lines in=- out=two_lines separator=, &lt;&lt;EOF
+This script is a simple wrapper around the *v.in.mapgen* module.
+
+## EXAMPLE
+
+```sh
+v.in.lines in=- out=two_lines separator=, <<EOF
 167.846717,-46.516653
 167.846663,-46.516645
 167.846656,-46.516644
@@ -28,21 +30,16 @@ NaN,NaN
 167.846544,-46.516489
 167.846552,-46.516493
 EOF
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.graph.html">d.graph</a>,
-<a href="v.centroids.html">v.centroids</a>,
-<a href="v.in.ascii.html">v.in.ascii</a>,
-<a href="v.in.mapgen.html">v.in.mapgen</a>,
-<a href="v.in.region.html">v.in.region</a>,
-<a href="v.out.ascii.html">v.out.ascii</a>,
-<a href="r.in.poly.html">r.in.poly</a>
-</em>
+*[d.graph](d.graph.md), [v.centroids](v.centroids.md),
+[v.in.ascii](v.in.ascii.md), [v.in.mapgen](v.in.mapgen.md),
+[v.in.region](v.in.region.md), [v.out.ascii](v.out.ascii.md),
+[r.in.poly](r.in.poly.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Hamish Bowman<br>
+Hamish Bowman  
 Dunedin, New Zealand

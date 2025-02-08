@@ -1,31 +1,30 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<b>r.out.ppm3</b> converts 3 GRASS raster layers (R,G,B) to a PPM
-image file, using the current region.
+**r.out.ppm3** converts 3 GRASS raster layers (R,G,B) to a PPM image
+file, using the current region.
 
-<p>This program converts a GRASS raster map to a PPM image file
-using the the current region settings.
+This program converts a GRASS raster map to a PPM image file using the
+the current region settings.
 
-<p>To get the full area and resolutin of the raster map, run:
+To get the full area and resolutin of the raster map, run:
 
-<div class="code"><pre>
+```sh
 g.region raster=[mapname]
-</pre></div>
+```
 
-<p>before running <em>r.out.ppm3</em>.
+before running *r.out.ppm3*.
 
-<h2>NOTES</h2>
+## NOTES
 
 One pixel is written for each cell value, so if ew_res and ns_res
 differ, the aspect ratio of the resulting image will be off.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em><a href="r.out.ppm.html">r.out.ppm</a>,</em>
-<em><a href="r.in.gdal.html">r.in.gdal</a>,</em>
-<em><a href="d.rgb.html">d.rgb</a></em>
+*[r.out.ppm](r.out.ppm.md),* *[r.in.gdal](r.in.gdal.md),*
+*[d.rgb](d.rgb.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Glynn Clements<br>
-Based upon <em>r.out.ppm</em> and <em>d.rgb</em>.
+Glynn Clements  
+Based upon *r.out.ppm* and *d.rgb*.

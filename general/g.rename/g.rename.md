@@ -1,56 +1,46 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>g.rename</em> allows the user to rename data base
-element files in the user's current mapset.  The user can
-specify all necessary information to <em>g.rename</em> on
-the command line, by specifying:  the type of data base
-element to be renamed (one or more of:  <b>raster</b>,
-<b>raster_3d</b>, <b>vector</b>, <b>icon</b>, <b>labels</b>,
-<b>region</b>, and <b>group</b>); the specific file element
-in the current mapset to be renamed (<em>old</em>); and the
-new name to be assigned to this file element (<em>new</em>)
-in the current mapset.  The file element <em>old</em> is
-then renamed to <em>new</em>.
+*g.rename* allows the user to rename data base element files in the
+user's current mapset. The user can specify all necessary information to
+*g.rename* on the command line, by specifying: the type of data base
+element to be renamed (one or more of: **raster**, **raster_3d**,
+**vector**, **icon**, **labels**, **region**, and **group**); the
+specific file element in the current mapset to be renamed (*old*); and
+the new name to be assigned to this file element (*new*) in the current
+mapset. The file element *old* is then renamed to *new*.
 
-<p>
-Users can also simply type <em>g.rename --help</em> without
-arguments on the command line, to receive a menu of
-existing data base element types and files from which to
-choose for possible renaming:
+Users can also simply type *g.rename --help* without arguments on the
+command line, to receive a menu of existing data base element types and
+files from which to choose for possible renaming:
 
-<div class="code"><pre>
+```sh
        raster   raster map(s) to be renamed
     raster_3d   3D raster map(s) to be renamed
        vector   vector map(s) to be renamed
        labels   paint label file(s) to be renamed
        region   region definition(s) to be renamed
         group   imagery group(s) to be renamed
-</pre></div>
+```
 
-<h2>NOTES</h2>
+## NOTES
 
-If a data base element has support files (e.g., as is
-commonly the case with raster maps), these support files
-also are renamed.
+If a data base element has support files (e.g., as is commonly the case
+with raster maps), these support files also are renamed.
 
-<p>
-If the user attempts to rename a file to itself by setting
-the <em>new</em> file name equal to the <em>old</em> file
-name (e.g., <b>g.rename raster=soils,soils</b>),
-<em>g.rename</em> will not execute the rename, but instead
-state that no rename is needed.  However, <em>g.rename</em>
+If the user attempts to rename a file to itself by setting the *new*
+file name equal to the *old* file name (e.g., **g.rename
+raster=soils,soils**), *g.rename* will not execute the rename, but
+instead state that no rename is needed. However, *g.rename* will allow
+the user to overwrite other existing files in the current mapset by
+making the *new* file name that of an already existing file.
 
-will allow the user to overwrite other existing files in
-the current mapset by making the <em>new</em> file name
-that of an already existing file.
-<p>For portability reasons, <em>g.rename</em> is ignoring case of
-names. To change the case of a map name, first rename the map
-to a name which differs by more than case, then rename it to
-the intended name.
+For portability reasons, *g.rename* is ignoring case of names. To change
+the case of a map name, first rename the map to a name which differs by
+more than case, then rename it to the intended name.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-<div class="code"><pre>
+```sh
 # rename raster map
 g.rename raster=oldrast,newrast
 
@@ -59,18 +49,12 @@ g.rename vector=oldvect,newvect
 
 # combined renaming
 g.rename raster=oldrast,newrast vector=oldvect,newvect
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.copy.html">g.copy</a>,
-<a href="g.list.html">g.list</a>,
-<a href="g.remove.html">g.remove</a>
-</em>
+*[g.copy](g.copy.md), [g.list](g.list.md), [g.remove](g.remove.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Michael Shapiro,
-U.S.Army Construction Engineering
-Research Laboratory
+Michael Shapiro, U.S.Army Construction Engineering Research Laboratory

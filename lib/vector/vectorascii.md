@@ -1,15 +1,12 @@
-<!-- meta page description: GRASS ASCII vector format specification -->
-<!-- meta page index: vector -->
-
 A vector map in GRASS native vector format may contain a mix of
-<i>primitives</i> including points, lines, boundaries, centroids, areas,
-faces, and kernels. The GRASS ASCII vector format may contain also
-a <i>header</i> with various metadata (see example below).
+*primitives* including points, lines, boundaries, centroids, areas,
+faces, and kernels. The GRASS ASCII vector format may contain also a
+*header* with various metadata (see example below).
 
-<p>The header is similar as the head file of vector binary format but
+The header is similar as the head file of vector binary format but
 contains bounding box also. Key words are:
 
-<div class="code"><pre>
+```sh
 ORGANIZATION
 DIGIT DATE
 DIGIT NAME
@@ -23,17 +20,17 @@ EAST EDGE
 SOUTH EDGE
 NORTH EDGE
 MAP THRESH
-</pre></div>
+```
 
-<p>The body begins with the row:
+The body begins with the row:
 
-<div class="code"><pre>
+```sh
 VERTI:
-</pre></div>
+```
 
 followed by records of primitives:
 
-<div class="code"><pre>
+```sh
 TYPE NUMBER_OF_COORDINATES [NUMBER_OF_CATEGORIES]
  X Y [Z]
 ....
@@ -41,58 +38,59 @@ TYPE NUMBER_OF_COORDINATES [NUMBER_OF_CATEGORIES]
 [ LAYER CATEGORY]
 ....
 [ LAYER CATEGORY]
-</pre></div>
+```
 
-Everything above in <code>[&nbsp;]</code> is optional.
+Everything above in `[ ]` is optional.
 
-<p>The primitive codes are as follows:
-<ul>
-  <li>'P': point</li>
-  <li>'L': line</li>
-  <li>'B': boundary</li>
-  <li>'C': centroid</li>
-  <li>'F': face (3D boundary)</li>
-  <li>'K': kernel (3D centroid)</li>
-  <li>'A': area (boundary) - better use 'B'; kept only for backward compatibility</li>
-</ul>
+The primitive codes are as follows:
+
+- 'P': point
+- 'L': line
+- 'B': boundary
+- 'C': centroid
+- 'F': face (3D boundary)
+- 'K': kernel (3D centroid)
+- 'A': area (boundary) - better use 'B'; kept only for backward
+  compatibility
 
 The coordinates are listed following the initial line containing the
 primitive code, the total number of coordinates in the series, and
-(optionally) the number of categories (1 for a single layer, higher
-for multiple layers).  Below that 1 or several lines follow to
-indicate the layer number and the category number (ID).
+(optionally) the number of categories (1 for a single layer, higher for
+multiple layers). Below that 1 or several lines follow to indicate the
+layer number and the category number (ID).
 
-<p>The order of coordinates is
-<div class="code"><pre>
+The order of coordinates is
+
+```sh
 X Y [Z]
-</pre></div>
+```
 
 In pre-GRASS 6 versions of the ASCII format, the order of coordinates
 was different:
-<div class="code"><pre>
+
+```sh
 Y X
-</pre></div>
+```
 
-<p>Latitude/Longitude data may be given in a number of ways.
-Decimal degrees must be positive or negative instead of using a hemisphere
-letter. Mixed coordinates must use a hemisphere letter. Whole minutes and
-seconds must always contain two digits (example: use <code>167:03:04.567</code>;
-and not <code>167:3:4.567</code>).
-<br><br>
-Acceptable formats:<br>
-<i>key: D=Degrees; M=Minutes; S=Seconds; h=Hemisphere (N,S,E,W)</i>
-<ul>
-  <li><code>(+/-)DDD.DDDDD</code></li>
-  <li><code>DDDh</code></li>
-  <li><code>DDD:MMh</code></li>
-  <li><code>DDD:MM.MMMMMh</code></li>
-  <li><code>DDD:MM:SSh</code></li>
-  <li><code>DDD:MM:SS.SSSSSh</code></li>
-</ul>
+Latitude/Longitude data may be given in a number of ways. Decimal
+degrees must be positive or negative instead of using a hemisphere
+letter. Mixed coordinates must use a hemisphere letter. Whole minutes
+and seconds must always contain two digits (example: use
+`167:03:04.567`; and not `167:3:4.567`).  
+  
+Acceptable formats:  
+*key: D=Degrees; M=Minutes; S=Seconds; h=Hemisphere (N,S,E,W)*
 
-<h2>EXAMPLES</h2>
+- `(+/-)DDD.DDDDD`
+- `DDDh`
+- `DDD:MMh`
+- `DDD:MM.MMMMMh`
+- `DDD:MM:SSh`
+- `DDD:MM:SS.SSSSSh`
 
-<div class="code"><pre>
+## EXAMPLES
+
+```sh
 ORGANIZATION: GRASS Development Team
 DIGIT DATE:   1/9/2005
 DIGIT NAME:   -
@@ -121,17 +119,13 @@ B  4
 C  1 1
  5959063.08352122 3401386.98533277
  1 21
-</pre></div>
+```
 
-In this case the vector map contains 2 boundaries (first boundary with
-6 vertices, second with 4 vertices) without category and 2 centroids
-with category number 20 and 21 (layer 1).
+In this case the vector map contains 2 boundaries (first boundary with 6
+vertices, second with 4 vertices) without category and 2 centroids with
+category number 20 and 21 (layer 1).
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="v.in.ascii.html">v.in.ascii</a>,
-  <a href="v.out.ascii.html">v.out.ascii</a>,
-  <a href="v.edit.html">v.edit</a>,
-  <a href="v.support.html">v.support</a>
-</em>
+*[v.in.ascii](v.in.ascii.md), [v.out.ascii](v.out.ascii.md),
+[v.edit](v.edit.md), [v.support](v.support.md)*

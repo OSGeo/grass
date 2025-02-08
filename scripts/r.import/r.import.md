@@ -1,95 +1,91 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.import</em> imports a map or selected bands from a GDAL raster datasource
-into the current project (previously called location) and mapset.
-If the coordinate reference system (CRS) of the input
-does not match the CRS of the project, the input is reprojected
-into the current project. If the CRS of the input does match
-the CRS of the project, the input is imported directly with
-<a href="r.in.gdal.html">r.in.gdal</a>.
+*r.import* imports a map or selected bands from a GDAL raster datasource
+into the current project (previously called location) and mapset. If the
+coordinate reference system (CRS) of the input does not match the CRS of
+the project, the input is reprojected into the current project. If the
+CRS of the input does match the CRS of the project, the input is
+imported directly with [r.in.gdal](r.in.gdal.md).
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>r.import</em> checks the CRS metadata of the dataset to be
-imported against the current project's CRS. If not identical a
-related error message is shown.
-<br>
-To override this projection check (i.e. to use current project's CRS)
-by assuming that the dataset has the same CRS as the current project
-the <b>-o</b> flag can be used. This is also useful when geodata to be
-imported do not contain any CRS metadata at all. The user must be
-sure that the CRS is identical in order to avoid introducing data
-errors.
+*r.import* checks the CRS metadata of the dataset to be imported against
+the current project's CRS. If not identical a related error message is
+shown.  
+To override this projection check (i.e. to use current project's CRS) by
+assuming that the dataset has the same CRS as the current project the
+**-o** flag can be used. This is also useful when geodata to be imported
+do not contain any CRS metadata at all. The user must be sure that the
+CRS is identical in order to avoid introducing data errors.
 
-<h3>Resolution</h3>
+### Resolution
 
-<em>r.import</em> reports the estimated target resolution for each
-input band. The estimated resolution will usually be some floating
-point number, e.g. 271.301. In case option <b>resolution</b> is set to
-<em>estimated</em> (default), this floating point number will be used
-as target resolution. Since the target resolution should be typically the rounded
-estimated resolution, e.g. 250 or 300 instead of 271.301, flag <b>-e</b>
-can be used first to obtain the estimate without importing the raster bands.
-Then the desired resolution is set with option <b>resolution_value</b>
-and option <b>resolution</b>=<em>value</em>.
-For latlong projects, the resolution might be set to arc seconds, e.g. 1, 3, 7.5,
-15, and 30 arc seconds are commonly used resolutions.
+*r.import* reports the estimated target resolution for each input band.
+The estimated resolution will usually be some floating point number,
+e.g. 271.301. In case option **resolution** is set to *estimated*
+(default), this floating point number will be used as target resolution.
+Since the target resolution should be typically the rounded estimated
+resolution, e.g. 250 or 300 instead of 271.301, flag **-e** can be used
+first to obtain the estimate without importing the raster bands. Then
+the desired resolution is set with option **resolution_value** and
+option **resolution**=*value*. For latlong projects, the resolution
+might be set to arc seconds, e.g. 1, 3, 7.5, 15, and 30 arc seconds are
+commonly used resolutions.
 
-<h3>Resampling methods</h3>
+### Resampling methods
 
 When reprojecting a map to a new spatial reference system, the projected
 data is resampled with one of four different methods: nearest neighbor,
 bilinear, bicubic interpolation or lanczos.
 
-<p>
 In the following, common use cases are:
-<p>
-<b>nearest</b> is the simplest method and the only possible method for
+
+**nearest** is the simplest method and the only possible method for
 categorical data.
-<p>
-<b>bilinear</b> does linear interpolation and provides smoother output
-than <b>nearest</b>. <b>bilinear</b> is recommended when reprojecting a
-DEM for hydrological analysis or for surfaces where overshoots must be
-avoided, e.g. precipitation should not become negative.
-<p>
-<b>bicubic</b> produces smoother output than <b>bilinear</b>, at
-the cost of overshoots. Here, valid pixels that are adjacent to NULL pixels
-or edge pixels are set to NULL.
-<p>
-<b>lanczos</b> produces the smoothest output of all methods and
-preserves contrast best. <b>lanczos</b> is recommended for imagery.
-Both <b>bicubic</b> and <b>lanczos</b> preserve linear features. With
-<b>nearest</b> or <b>bilinear</b>, linear features can become zigzag
-features after reprojection.
-<p>
+
+**bilinear** does linear interpolation and provides smoother output than
+**nearest**. **bilinear** is recommended when reprojecting a DEM for
+hydrological analysis or for surfaces where overshoots must be avoided,
+e.g. precipitation should not become negative.
+
+**bicubic** produces smoother output than **bilinear**, at the cost of
+overshoots. Here, valid pixels that are adjacent to NULL pixels or edge
+pixels are set to NULL.
+
+**lanczos** produces the smoothest output of all methods and preserves
+contrast best. **lanczos** is recommended for imagery. Both **bicubic**
+and **lanczos** preserve linear features. With **nearest** or
+**bilinear**, linear features can become zigzag features after
+reprojection.
+
 In the bilinear, bicubic and lanczos methods, if any of the surrounding
 cells used to interpolate the new cell value are NULL, the resulting
-cell will be NULL, even if the nearest cell is not NULL. This will
-cause some thinning along NULL borders, such as the coasts of land
-areas in a DEM. The bilinear_f, bicubic_f and lanczos_f interpolation
-methods can be used if thinning along NULL edges is not desired.
-These methods &quot;fall back&quot; to simpler interpolation methods
-along NULL borders.  That is, from lanczos to bicubic to bilinear to
-nearest.
-<p>
-For explanation of the <b>-l</b> flag, please refer to the
-<a href="r.in.gdal.html">r.in.gdal</a> manual.
-<p>
-When importing whole-world maps the user should disable map-trimming with
-the <b>-n</b> flag. For further explanations of <b>-n</b> flag, please refer
-the to <a href="r.proj.html">r.proj</a> manual.
+cell will be NULL, even if the nearest cell is not NULL. This will cause
+some thinning along NULL borders, such as the coasts of land areas in a
+DEM. The bilinear_f, bicubic_f and lanczos_f interpolation methods can
+be used if thinning along NULL edges is not desired. These methods "fall
+back" to simpler interpolation methods along NULL borders. That is, from
+lanczos to bicubic to bilinear to nearest.
 
-<h2>EXAMPLES</h2>
+For explanation of the **-l** flag, please refer to the
+[r.in.gdal](r.in.gdal.md) manual.
 
-<h3>Import of SRTM V3 global data at 1 arc-seconds resolution</h3>
+When importing whole-world maps the user should disable map-trimming
+with the **-n** flag. For further explanations of **-n** flag, please
+refer the to [r.proj](r.proj.md) manual.
 
-The SRTM V3 1 arc-second global data (~30 meters resolution) are available
-from EarthExplorer (<a href="https://earthexplorer.usgs.gov/">https://earthexplorer.usgs.gov/</a>).
-The SRTM collections are located under the "Digital Elevation" category.
-<p>
-Example for North Carolina sample dataset (the tile name is "n35_w079_1arc_v3.tif"):
+## EXAMPLES
 
-<div class="code"><pre>
+### Import of SRTM V3 global data at 1 arc-seconds resolution
+
+The SRTM V3 1 arc-second global data (~30 meters resolution) are
+available from EarthExplorer (<https://earthexplorer.usgs.gov/>). The
+SRTM collections are located under the "Digital Elevation" category.
+
+Example for North Carolina sample dataset (the tile name is
+"n35_w079_1arc_v3.tif"):
+
+```sh
 # set computational region to e.g. 10m elevation model:
 g.region raster=elevation -p
 
@@ -103,16 +99,18 @@ r.import input=n35_w079_1arc_v3.tif output=srtmv3_resamp10m resample=bilinear \
 
 # beautify colors:
 r.colors srtmv3_resamp10m color=elevation
-</pre></div>
+```
 
-<h3>Import of WorldClim data</h3>
-Import of a subset from WorldClim <a href="https://www.worldclim.org/data/bioclim.html">Bioclim data set</a>,
-to be reprojected to current project CRS (North Carolina sample dataset).
-Different resolutions are available, in this example we use the 2.5 arc-minutes
-resolution data. During import, we spatially subset the world data to the
-North Carolina region using the <em>extent</em> parameter:
+### Import of WorldClim data
 
-<div class="code"><pre>
+Import of a subset from WorldClim [Bioclim data
+set](https://www.worldclim.org/data/bioclim.html), to be reprojected to
+current project CRS (North Carolina sample dataset). Different
+resolutions are available, in this example we use the 2.5 arc-minutes
+resolution data. During import, we spatially subset the world data to
+the North Carolina region using the *extent* parameter:
+
+```sh
 # download selected Bioclim data (2.5 arc-minutes resolution)
 # optionally tiles are available for the 30 arc-sec resolution
 wget https://geodata.ucdavis.edu/climate/worldclim/1_4/grid/cur/bio_2-5m_bil.zip
@@ -131,19 +129,16 @@ g.region -d res=4000 -ap
 r.import input=bio1_fixed.tif output=bioclim01 resample=bilinear \
          extent=region resolution=region -n
 
-# temperature data are in &deg;C * 10
+# temperature data are in °C * 10
 r.info bioclim01
 r.univar -e bioclim01
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.in.gdal.html">r.in.gdal</a>,
-<a href="r.proj.html">r.proj</a>
-</em>
+*[r.in.gdal](r.in.gdal.md), [r.proj](r.proj.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Markus Metz<br>
+Markus Metz  
 Improvements: Martin Landa, Anna Petrasova

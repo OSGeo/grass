@@ -1,16 +1,13 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>i.image.mosaic</em> mosaics several images or raster maps using the
-GRASS GIS map calculator, and extends the colormap to the range of all images.
+*i.image.mosaic* mosaics several images or raster maps using the GRASS
+GIS map calculator, and extends the colormap to the range of all images.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.patch.html">r.patch</a>,
-<a href="r.mapcalc.html">r.mapcalc</a>
-</em>
+*[r.patch](r.patch.md), [r.mapcalc](r.mapcalc.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Markus Neteler, ITC-Irst, Trento, Italy
-Updated to GRASS 5.7 by Michael Barton, Arizona State University
+Markus Neteler, ITC-Irst, Trento, Italy Updated to GRASS 5.7 by Michael
+Barton, Arizona State University

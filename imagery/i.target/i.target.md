@@ -1,46 +1,33 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>i.target</em> targets an <a href="i.group.html">imagery
-group</a> to a GRASS data base project name and mapset.
+*i.target* targets an [imagery group](i.group.md) to a GRASS data base
+project name and mapset. A project name and mapset are required for the
+*[i.rectify](i.rectify.md)* imagery module, into which to write the
+rectified map just prior to completion of the program; *i.target*
+enables the user to specify this project. *i.target* must be run before
+*[g.gui.gcp](g.gui.gcp.md)* and *[i.rectify](i.rectify.md)*.
 
-A project name and mapset are required for the
-<em><a href="i.rectify.html">i.rectify</a></em> imagery module, into which
-to write the rectified map just prior to completion of the program;
-<em>i.target</em> enables the user to specify this project.
+## NOTES
 
-<em>i.target</em> must be run before
-<em><a href="g.gui.gcp.html">g.gui.gcp</a></em> and
-<em><a href="i.rectify.html">i.rectify</a></em>.
+The module's first option asks for the name of the [imagery
+group](i.group.md) that needs a target. The imagery group must be
+present in the user's current mapset. An [imagery group](i.group.md) may
+be targeted to any GRASS project.
 
-<h2>NOTES</h2>
-
-<p>The module's first option asks for the name of the
-<a href="i.group.html">imagery group</a> that needs a target.
-The imagery group must be present in the user's current mapset.
-
-An <a href="i.group.html">imagery group</a> may be targeted to any GRASS
-project.
-<p>If a group name is given without setting options, the currently targeted
+If a group name is given without setting options, the currently targeted
 group will be displayed.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-The GRASS 4 <em>
-<a href="https://grass.osgeo.org/gdp/imagery/grass4_image_processing.pdf">Image Processing manual</a></em>
+The GRASS 4 *[Image Processing
+manual](https://grass.osgeo.org/gdp/imagery/grass4_image_processing.pdf)*
 
-<p>
-<em>
-<a href="g.gui.gcp.html">g.gui.gcp</a>,
-<a href="i.group.html">i.group</a>,
-<a href="i.rectify.html">i.rectify</a>
-</em>
+*[g.gui.gcp](g.gui.gcp.md), [i.group](i.group.md),
+[i.rectify](i.rectify.md)*  
+*[Manage Ground Control Points](wxGUI.gcp.md)*
 
-<br>
-<em>
-<a href="wxGUI.gcp.html">Manage Ground Control Points</a>
-</em>
+## AUTHORS
 
-<h2>AUTHORS</h2>
+Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
 
-Michael Shapiro,
-U.S. Army Construction Engineering Research Laboratory<p>Parser support: Bob Covill
+Parser support: Bob Covill

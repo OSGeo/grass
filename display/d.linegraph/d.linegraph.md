@@ -1,169 +1,146 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.linegraph</em> is a module to draw simple x,y line graphs
-(plots) based on numerical data contained in separate files.
+*d.linegraph* is a module to draw simple x,y line graphs (plots) based
+on numerical data contained in separate files.
 
-<h3>Data format</h3>
+### Data format
 
-The X and Y data files for the graph are essentially a column of numbers in
-each file, with one input number per line.  The program expects that each X
-value will have a corresponding Y value, therefore the number of lines in
-each data input file should be the same.  Essentially, the X data becomes
-the X axis reference to which the Y data is plotted as a line. Therefore,
-the X data should be a monotonically increasing progression of numbers (i.e.
-"1,2,3,..."; "0, 10, 100, 1000,..."; "...-5,-1,0,1,5...").  If multiple Y
-data files are used, the Y axis scale will be based on the range of minimum
-and maximum values from all Y files, then all Y data given will be graphed
-according to that Y scale. Therefore, if multiple Y data inputs are used
-with dissimilar units, the graph produced comparing the two will be
-deceptive.
+The X and Y data files for the graph are essentially a column of numbers
+in each file, with one input number per line. The program expects that
+each X value will have a corresponding Y value, therefore the number of
+lines in each data input file should be the same. Essentially, the X
+data becomes the X axis reference to which the Y data is plotted as a
+line. Therefore, the X data should be a monotonically increasing
+progression of numbers (i.e. "1,2,3,..."; "0, 10, 100, 1000,...";
+"...-5,-1,0,1,5..."). If multiple Y data files are used, the Y axis
+scale will be based on the range of minimum and maximum values from all
+Y files, then all Y data given will be graphed according to that Y
+scale. Therefore, if multiple Y data inputs are used with dissimilar
+units, the graph produced comparing the two will be deceptive.
 
-<h3>File inputs</h3>
+### File inputs
 
-If the <b>directory</b> option is provided, the paths to files can (and
-should) be only relative paths to these files. While this is not recommended
-for scripting, it can be advantageous when typing the paths
+If the **directory** option is provided, the paths to files can (and
+should) be only relative paths to these files. While this is not
+recommended for scripting, it can be advantageous when typing the paths
 manually. For example when all files are stored in the directory
-<code>/home/john/data</code>, the user can provide the following in the command
+`/home/john/data`, the user can provide the following in the command
 line:
 
-<div class="code"><pre>
+```sh
 d.linegraph directory=/home/john/data x_file=x.txt y_file=y1.txt,y2.txt
-</pre></div>
+```
 
-<h3>Managing colors</h3>
+### Managing colors
 
-The user can specify the <b>y_color</b> option, the <b>color_table</b>
-option or just leave the defaults to influence the color of the
-plotted lines.
+The user can specify the **y_color** option, the **color_table** option
+or just leave the defaults to influence the color of the plotted lines.
 
-<p>
-Colors specified by <b>y_color</b> option are used for drawing the lines
-in the graph. If multiple Y data files are used, an equal number of
-colors may be used to control the colors of the lines. Colors will be
-assigned to Y data in respect to the sequence of instantiation on the
-command line. It can be one of GRASS GIS named colors or the RGB
-values from 0-255 separated by colons (RRR:GGG:BBB).
+Colors specified by **y_color** option are used for drawing the lines in
+the graph. If multiple Y data files are used, an equal number of colors
+may be used to control the colors of the lines. Colors will be assigned
+to Y data in respect to the sequence of instantiation on the command
+line. It can be one of GRASS GIS named colors or the RGB values from
+0-255 separated by colons (RRR:GGG:BBB).
 
-<p>
-Alternatively, the user can use the <b>color_table</b> option to specify one
-of the GRASS GIS predefined color tables.
+Alternatively, the user can use the **color_table** option to specify
+one of the GRASS GIS predefined color tables.
 
-<p>
 By default, a series of colors will be chosen by the module if none are
 provided upon invocation. The order of default colors is red, green,
-violet, blue, orange, gray, brown, magenta, white, and indigo. The user is
-advised not to rely on the order of default colors but to either use the
-<b>y_color</b> or the <b>color_table</b> option to obtain predictable and
+violet, blue, orange, gray, brown, magenta, white, and indigo. The user
+is advised not to rely on the order of default colors but to either use
+the **y_color** or the **color_table** option to obtain predictable and
 reproducible results.
 
-<p>
-The color to be used for titles, axis lines, tics, and scale numbers
-is determined by the <b>title_color</b> option. The user can provide
-one of the GRASS GIS named colors (such as gray, white, or black)
-or use the GRASS GIS colon-separated format for RGB (RRR:GGG:BBB).
+The color to be used for titles, axis lines, tics, and scale numbers is
+determined by the **title_color** option. The user can provide one of
+the GRASS GIS named colors (such as gray, white, or black) or use the
+GRASS GIS colon-separated format for RGB (RRR:GGG:BBB).
 
-<h3>Titles, labels, and tics</h3>
+### Titles, labels, and tics
 
-The <b>title</b> option specifies the text for the title of the graph.
-It will be centered over the top of graph.
+The **title** option specifies the text for the title of the graph. It
+will be centered over the top of graph. The **x_title** option is a text
+to describe data for X axis. It will be centered beneath the graph.
+Default is no text unless there is a need for a unit descriptor
+determined by the *d.linegraph* module, then string such as "in
+hundreds" is generated. The **y_title** option is a text to describe
+data for Y axis. It will be centered beneath the X data description.
+Similarly, to the **x_title** option, default is no text unless there is
+a need for an auto-generated description. In the case of graphs with
+multiple lines (multiple inputs for Y axis), user may wish to use more
+specific text placement using the *[d.text](d.text.md)* or
+*[v.label](v.label.md)* programs.
 
-The <b>x_title</b> option is a text to describe data for X axis. It will be
-centered beneath the graph. Default is no text unless there is a need
-for a unit descriptor determined by the <em>d.linegraph</em> module,
-then string such as "in hundreds" is generated.
+## NOTES
 
-The <b>y_title</b> option is a text to describe data for Y axis. It
-will be centered beneath the X data description. Similarly, to the
-<b>x_title</b> option, default is no text unless there is a need for an
-auto-generated description. In the case of graphs with multiple lines
-(multiple inputs for Y axis), user may wish to use more specific text
-placement using the <em><a href="d.text.html">d.text</a></em> or
-<em><a href="v.label.html">v.label</a></em> programs.
+For historical reasons, the *d.linegraph* module accepts titles of more
+than one word where the underscore character ("\_") is used to represent
+spaces (" "). For example "Census_data_1990" would be printed over the
+graph as "Census data 1990". The use of underscores is not necessary to
+use as long as the parameter is quoted in the command line. In general,
+use of underscores is not recommended and there is no need to use it at
+all in the GUI or when using *d.linegraph* in Python scripts.
 
-<h2>NOTES</h2>
+The way the program locates and labels tic marks is less than perfect:  
 
-For historical reasons, the <em>d.linegraph</em> module accepts
-titles of more than one word where the underscore character ("_")
-is used to represent spaces (" "). For example "Census_data_1990" would be
-printed over the graph as "Census data 1990". The use of underscores is not
-necessary to use as long as the parameter is quoted in the command line.
-In general, use of underscores is not recommended and there is no need to use
-it at all in the GUI or when using <em>d.linegraph</em> in Python scripts.
-
-<p>
-The way the program locates and labels tic marks is less than perfect:
-<br>
-1) although distances between Y tics are proportional to the value, they are
-not proportional on the X axis;
-<br>
+1) although distances between Y tics are proportional to the value, they
+are not proportional on the X axis;  
 2) decimal values between -1 and 1 can be printed on the X axis, but not
 on Y. (With respect to the later, the input for Y values can all be
 multiplied by a factor of 10 before graphing).
 
-<p>
-Depending on the user's needs, it might be easier or more appropriate
-to use a 3rd party tool such as xgraph, gnuplot, Matplotlib in Python,
-or R instead of <em>d.linegraph</em>.
-For a more general solution for plotting in GRASS GIS, the user is
-advised to use the <em><a href="d.graph.html">d.graph</a></em> module.
+Depending on the user's needs, it might be easier or more appropriate to
+use a 3rd party tool such as xgraph, gnuplot, Matplotlib in Python, or R
+instead of *d.linegraph*. For a more general solution for plotting in
+GRASS GIS, the user is advised to use the *[d.graph](d.graph.md)*
+module.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 The following can be executed in Bash to create the input data for this
 example. The user can just create these files in a text editor, save
 them and specify path to them.
 
-<div class="code"><pre>
-cat &gt; x.txt &lt;&lt;EOF
+```sh
+cat > x.txt <<EOF
 1
 3
 4
 6
 9
 EOF
-cat &gt; y1.txt &lt;&lt;EOF
+cat > y1.txt <<EOF
 50
 58
 65
 34
 27
 EOF
-cat &gt; y2.txt &lt;&lt;EOF
+cat > y2.txt <<EOF
 10
 20
 35
 50
 45
 EOF
-</pre></div>
+```
 
-<!--
-export GRASS_FONT=sans  # fixes bad default font
-d.mon start=cairo output=plot.png width=400 height=400
-d.erase  # previous image is not cleaned
--->
+The next command sequence creates a file `plot.png` in the current
+directory which is the drawing made by *d.linegraph*.
 
-<p>
-The next command sequence creates a file <code>plot.png</code> in the current
-directory which is the drawing made by <em>d.linegraph</em>.
-
-<div class="code"><pre>
+```sh
 d.mon start=cairo output=plot.png width=400 height=400
 d.linegraph x_file=x.txt y_file=y1.txt,y2.txt
 d.mon stop=cairo
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.frame.html">d.frame</a>,
-<a href="d.text.html">d.text</a>,
-<a href="v.label.html">v.label</a>,
-<a href="d.graph.html">d.graph</a>,
-<a href="d.histogram.html">d.histogram</a>
-</em>
+*[d.frame](d.frame.md), [d.text](d.text.md), [v.label](v.label.md),
+[d.graph](d.graph.md), [d.histogram](d.histogram.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Chris Rewerts, Agricultural Engineering, Purdue University

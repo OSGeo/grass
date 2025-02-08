@@ -1,54 +1,41 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>i.ifft</em> is an image processing program based on the algorithm given
-by Frigo et al. (1998), that converts real and imaginary frequency space
-images (produced by
-<em><a href="i.fft.html">i.fft</a></em>) into a normal image.
+*i.ifft* is an image processing program based on the algorithm given by
+Frigo et al. (1998), that converts real and imaginary frequency space
+images (produced by *[i.fft](i.fft.md)*) into a normal image.
 
-<h2>NOTES</h2>
+## NOTES
 
 The current mask is respected when reading the real and imaginary
-component files;  thus, creating a mask is a primary step for selecting
+component files; thus, creating a mask is a primary step for selecting
 the portion of the frequency space data to be included in the inverse
-transform.  The module <em><a href="wxGUI.vdigit.html">wxGUI vector digitizer</a></em>
-can be used to create masks while viewing the real
-or imaginary component image. Alternatively <em>r.circle</em> can be
-used to generate high-, low- and donut filters specifying the DC point
-as circle/ring center. When <em>i.ifft</em> is executed, it
-(automatically) uses the same GRASS region definition setting that was
-used during the original transformation done with
-<em><a href="i.fft.html">i.fft</a></em>.
+transform. The module *[wxGUI vector digitizer](wxGUI.vdigit.md)* can be
+used to create masks while viewing the real or imaginary component
+image. Alternatively *r.circle* can be used to generate high-, low- and
+donut filters specifying the DC point as circle/ring center. When
+*i.ifft* is executed, it (automatically) uses the same GRASS region
+definition setting that was used during the original transformation done
+with *[i.fft](i.fft.md)*.
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<ul>
-<li> M. Frigo and S. G. Johnson (1998): "FFTW: An Adaptive Software
-Architecture for the FFT". See <a href="https://fftw.org/">www.fftw.org</a>:
-FFTW is a C subroutine library for computing the Discrete Fourier
-Transform (DFT) in one or more dimensions, of both real and complex
-data, and of arbitrary input size.</li>
-<li> Richards, J.A (1986): <b>Remote Sensing Digital Image
-Analysis</b>, Springer-Verlag, 1986.</li>
-<li> Personal communication, between program author and Ali R. Vali,
-Space Research Center, University of Texas, Austin, 1990.</li>
-</ul>
+- M. Frigo and S. G. Johnson (1998): "FFTW: An Adaptive Software
+  Architecture for the FFT". See [www.fftw.org](https://fftw.org/): FFTW
+  is a C subroutine library for computing the Discrete Fourier Transform
+  (DFT) in one or more dimensions, of both real and complex data, and of
+  arbitrary input size.
+- Richards, J.A (1986): **Remote Sensing Digital Image Analysis**,
+  Springer-Verlag, 1986.
+- Personal communication, between program author and Ali R. Vali, Space
+  Research Center, University of Texas, Austin, 1990.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="i.cca.html">i.cca</a>,
-<a href="g.gui.iclass.html">g.gui.iclass</a>,
-<a href="i.fft.html">i.fft</a>,
-<a href="i.pca.html">i.pca</a>,
-<a href="r.circle.html">r.circle</a>,
-<a href="wxGUI.vdigit.html">wxGUI vector digitizer</a>
-</em>
+*[i.cca](i.cca.md), [g.gui.iclass](g.gui.iclass.md), [i.fft](i.fft.md),
+[i.pca](i.pca.md), [r.circle](r.circle.md), [wxGUI vector
+digitizer](wxGUI.vdigit.md)*
 
+## AUTHORS
 
-
-<h2>AUTHORS</h2>
-
-David Satnik, GIS Laboratory,
-Central Washington University
-<br>
+David Satnik, GIS Laboratory, Central Washington University  
 Glynn Clements (FFTW support)

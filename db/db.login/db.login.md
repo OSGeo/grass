@@ -1,62 +1,55 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.login</em> sets login parameters such an user name and
-optionally also a password, a hostname or a port for the connection to
-the selected <b>database</b> through the DB <b>driver</b>.
+*db.login* sets login parameters such an user name and optionally also a
+password, a hostname or a port for the connection to the selected
+**database** through the DB **driver**.
 
-<h2>NOTE</h2>
+## NOTE
 
-Options <b>host</b> and <b>port</b> are related to only SQL database
-backends like <a href="grass-pg.html">PostgreSQL</a>,
-<a href="grass-mysql.html">MySQL</a> or <a href="grass-odbc.html">ODBC</a>.
+Options **host** and **port** are related to only SQL database backends
+like [PostgreSQL](grass-pg.md), [MySQL](grass-mysql.md) or
+[ODBC](grass-odbc.md).
 
-<p>
-Note that the passwords are stored in a hidden, <i>unencrypted</i>
-file in the user account, specifically
+Note that the passwords are stored in a hidden, *unencrypted* file in
+the user account, specifically
 
-<ul>
-<li> in the 'home' directory, i.e. <code>$HOME/.grass8/dblogin</code> (Unix-like systems)</li>
-<li> <code>%APPDATA%\Roaming\GRASS8\dblogin</code> (MS-Windows)</li>
-</ul>
+- in the 'home' directory, i.e. `$HOME/.grass8/dblogin` (Unix-like
+  systems)
+- `%APPDATA%\Roaming\GRASS8\dblogin` (MS-Windows)
 
 Only the file owner can access this file.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 Only username specified (assuming locally accessible PostgreSQL DB
 without password):
 
-<div class="code"><pre>
+```sh
 db.login driver=pg database=mydb
-</pre></div>
+```
 
-<p>
 Username, password and hostname specified (note that the command lines
 history will store the password in this way):
 
-<div class="code"><pre>
+```sh
 db.login driver=pg database=mydb user=bacava password=secret host=db.example.com
-</pre></div>
+```
 
-<p>
 Username and empty password specified:
 
-<div class="code"><pre>
+```sh
 db.login driver=pg database=mydb user=bacava password=""
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.connect.html">db.connect</a>,
-<a href="db.test.html">db.test</a>,
-<a href="db.tables.html">db.tables</a>
-</em>
+*[db.connect](db.connect.md), [db.test](db.test.md),
+[db.tables](db.tables.md)*
 
-<p>
-<a href="sql.html">SQL support in GRASS GIS</a>
+[SQL support in GRASS GIS](sql.md)
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Radim Blazek<br>
-Support for hostname and port by Martin Landa, OSGeoREL, Czech Technical University in Prague, Czech Republic (GRASS 7.1)
+Radim Blazek  
+Support for hostname and port by Martin Landa, OSGeoREL, Czech Technical
+University in Prague, Czech Republic (GRASS 7.1)

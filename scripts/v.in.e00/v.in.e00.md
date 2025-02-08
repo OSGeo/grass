@@ -1,23 +1,26 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.in.e00</em> imports ASCII and binary E00 vector maps into GRASS.
+*v.in.e00* imports ASCII and binary E00 vector maps into GRASS.
 
-<h2>NOTES</h2>
+## NOTES
 
 Sometimes an .e00 coverage consists of multiple files, where a single
-data set is contained as a series of files named filename.e00, filename.e01,
-filename.e02 etc. The user must take care to download them all, the scripts
-automatically detects the presence of such multiple files.
+data set is contained as a series of files named filename.e00,
+filename.e01, filename.e02 etc. The user must take care to download them
+all, the scripts automatically detects the presence of such multiple
+files.
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<a href="http://avce00.maptools.org">AVCE00 library</a> (providing 'avcimport' and 'e00conv')<br>
-<a href="https://gdal.org/">OGR vector library</a>
+[AVCE00 library](http://avce00.maptools.org) (providing 'avcimport' and
+'e00conv')  
+[OGR vector library](https://gdal.org/)
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em><a href="v.in.ogr.html">v.in.ogr</a></em>
+*[v.in.ogr](v.in.ogr.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Markus Neteler, Otto Dassau, <a href="http://www.gdf-hannover.de/">GDF Hannover bR</a>, Germany
+Markus Neteler, Otto Dassau, [GDF Hannover
+bR](http://www.gdf-hannover.de/), Germany

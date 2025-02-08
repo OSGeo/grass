@@ -1,47 +1,40 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.pack</em> collects raster map elements and support files and
-compressed them using <em>gzip</em> algorithm for copying. The resulting
-packed file can be afterwards unpacked within a GRASS GIS session
-by <em><a href="r.unpack.html">r.unpack</a></em>.
+*r.pack* collects raster map elements and support files and compressed
+them using *gzip* algorithm for copying. The resulting packed file can
+be afterwards unpacked within a GRASS GIS session by
+*[r.unpack](r.unpack.md)*. Since the selected raster map is not exported
+but natively stored, the current region is not respected. Hence *r.pack*
+stores the entire raster map.
 
-Since the selected raster map is not exported but natively stored, the
-current region is not respected. Hence <em>r.pack</em> stores the entire
-raster map.
+## NOTES
 
-<h2>NOTES</h2>
+By default, the name of the pack file is determined from the **input**
+parameter. Optionally a different name can be given by **output**
+parameter. Currently only 2D raster maps are supported.
 
-By default, the name of the pack file is determined from the <b>input</b>
-parameter. Optionally a different name can be given by <b>output</b> parameter.
+## EXAMPLE
 
-Currently only 2D raster maps are supported.
+Pack up the entire raster map *aspect* into *aspect.pack* file:
 
-<h2>EXAMPLE</h2>
-
-Pack up the entire raster map <i>aspect</i> into <i>aspect.pack</i> file:
-
-<div class="code"><pre>
+```sh
 r.pack input=aspect
-</pre></div>
+```
 
-The packed raster map file  <i>aspect.pack</i> can afterwards be unpacked by
+The packed raster map file *aspect.pack* can afterwards be unpacked by
 
-<div class="code"><pre>
+```sh
 r.unpack input=aspect.pack
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.unpack.html">r.unpack</a>,
-<a href="r.in.gdal.html">r.in.gdal</a>,
-<a href="g.copy.html">g.copy</a>,
-<a href="r.proj.html">r.proj</a>,
-<a href="v.unpack.html">v.unpack</a>
-</em>
+*[r.unpack](r.unpack.md), [r.in.gdal](r.in.gdal.md),
+[g.copy](g.copy.md), [r.proj](r.proj.md), [v.unpack](v.unpack.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Original Bash script written by Hamish Bowman, Otago University, New Zealand
-<br>
-Converted to Python and updated for GRASS 7 by Martin Landa, Czech Technical University in Prague, Czech Republic
+Original Bash script written by Hamish Bowman, Otago University, New
+Zealand  
+Converted to Python and updated for GRASS 7 by Martin Landa, Czech
+Technical University in Prague, Czech Republic

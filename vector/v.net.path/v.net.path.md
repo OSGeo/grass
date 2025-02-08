@@ -1,111 +1,104 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.net.path</em> determines least costly, e.g. shortest or fastest
-path(s) on a vector network.
+*v.net.path* determines least costly, e.g. shortest or fastest path(s)
+on a vector network.
 
-<p>
 Costs may be either line lengths, or attributes saved in a database
 table. These attribute values are taken as costs of whole segments, not
-as costs to traverse a length unit (e.g. meter) of the segment.
-For example, if the speed limit is 100 km / h, the cost to traverse a
-10 km long road segment must be calculated as
-<div class="code"><pre>
-length / speed = 10 km / (100 km/h) = 0.1 h.
-</pre></div>
-Supported are cost assignments for both arcs and nodes,
-and also different costs for both directions of a vector line.
-For areas, costs will be calculated along boundary lines.
-<p>
-The input vector needs to be prepared with <code>v.net operation=connect</code>
-in order to connect points representing center nodes to the network.
+as costs to traverse a length unit (e.g. meter) of the segment. For
+example, if the speed limit is 100 km / h, the cost to traverse a 10 km
+long road segment must be calculated as
 
-<p>Nodes and arcs can be closed using <code>cost = -1</code>.
-<p>Least cost paths are written to the output vector map with an
-attached attribute table.
-<p>Nodes can be
-<ul>
-<li> piped into the program from file or from stdin, or</li>
-<li> defined in the graphical user interface ("enter values interactively").</li>
-</ul>
+```sh
+length / speed = 10 km / (100 km/h) = 0.1 h.
+```
+
+Supported are cost assignments for both arcs and nodes, and also
+different costs for both directions of a vector line. For areas, costs
+will be calculated along boundary lines.
+
+The input vector needs to be prepared with `v.net operation=connect` in
+order to connect points representing center nodes to the network.
+
+Nodes and arcs can be closed using `cost = -1`.
+
+Least cost paths are written to the output vector map with an attached
+attribute table.
+
+Nodes can be
+
+- piped into the program from file or from stdin, or
+- defined in the graphical user interface ("enter values
+  interactively").
 
 The syntax is as follows:
-<div class="code"><pre>
+
+```sh
 id start_point_category end_point_category
-</pre></div>
+```
 
 (Example: 1 1 2)
-<p>
+
 or
 
-<div class="code"><pre>
+```sh
 id start_point_x start_point_y end_point_x end_point_y
-</pre></div>
+```
 
-<p>
 Points specified by category must be exactly on network nodes, and the
-input vector map needs to be prepared with <code>v.net operation=connect</code>.
-<p>
+input vector map needs to be prepared with `v.net operation=connect`.
+
 When specifying coordinates, the next network node to a given coordinate
 pair is used.
 
-<p>
 The attribute table will contain the following attributes:
 
-<ul>
-    <li><code>cat</code>  - path unique category assigned by module</li>
-    <li><code>id</code>   - path id (read from input)</li>
-    <li><code>fcat</code> - from point category</li>
-    <li><code>tcat</code> - to point category</li>
-    <li><code>sp</code> - result status:
-    <ul>
-        <li>     0 - OK, path found</li>
-        <li>     1 - node is not reachable</li>
-        <li>     2 - point of given category does not exist</li>
-    </ul></li>
-    <li><code>cost</code> - travelling costs (on the network, not to/from network)</li>
-    <li><code>fdist</code> - the distance from first point to the network</li>
-    <li><code>tdist</code> - the distance from the network to second point</li>
-</ul>
+- `cat` - path unique category assigned by module
+- `id` - path id (read from input)
+- `fcat` - from point category
+- `tcat` - to point category
+- `sp` - result status:
+  - 0 - OK, path found
+  - 1 - node is not reachable
+  - 2 - point of given category does not exist
+- `cost` - travelling costs (on the network, not to/from network)
+- `fdist` - the distance from first point to the network
+- `tdist` - the distance from the network to second point
 
-<p>
+Application of flag **-t** enables a turntable support. This flag
+requires additional parameters **turn_layer** and **turn_cat_layer**
+that are otherwise ignored. The turntable allows to model e.g. traffic
+code, where some turns may be prohibited. This means that the input
+layer is expanded by turntable with costs of every possible turn on any
+possible node (intersection) in both directions. Turntable can be
+created by the *[v.net](v.net.md)* module. For more information about
+turns in the vector network analyses see [wiki
+page](https://grasswiki.osgeo.org/wiki/Turns_in_the_vector_network_analysis).
 
-Application of flag <b>-t</b> enables a turntable support.
-This flag requires additional parameters <b>turn_layer</b> and <b>turn_cat_layer</b>
-that are otherwise ignored.
- The turntable allows
-to model e.g. traffic code, where some turns may be prohibited.
-This means that the input layer is expanded by
-turntable with costs of every possible turn on any possible node
-(intersection) in both directions.
- Turntable can be created by
- the <em><a href="v.net.html">v.net</a></em> module.
-For more information about turns in the vector network analyses see
-<a href="https://grasswiki.osgeo.org/wiki/Turns_in_the_vector_network_analysis">wiki page</a>.
+## NOTES
 
-<h2>NOTES</h2>
+Nodes and arcs can be closed using `cost = -1`.
 
-Nodes and arcs can be closed using <code>cost = -1</code>.
-<p>If the cost columns <b>arc_column</b>, <b>arc_backward_column</b> and <b>node_column</b> are not
-specified, the length of network segments is measured and
-zero costs are assumed for nodes.
-<p>When using attributes, the length of segments is not used. To get
+If the cost columns **arc_column**, **arc_backward_column** and
+**node_column** are not specified, the length of network segments is
+measured and zero costs are assumed for nodes.
+
+When using attributes, the length of segments is not used. To get
 accurate results, the line length must be taken into account when
-assigning costs as attributes. For example, to get the <em>fastest path</em>,
+assigning costs as attributes. For example, to get the *fastest path*,
 the columns 'max_speed' and 'length' are required. The correct fastest
-path can then be found by specifying <code>arc_column=length/max_speed</code>. If not yet
-existing, the column containing the line length ("length") has to added to the
-attributes table using <em><a href="v.to.db.html">v.to.db</a></em>.
+path can then be found by specifying `arc_column=length/max_speed`. If
+not yet existing, the column containing the line length ("length") has
+to added to the attributes table using *[v.to.db](v.to.db.md)*.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-Shortest (red) and fastest (blue) path between two digitized nodes (Spearfish):
+Shortest (red) and fastest (blue) path between two digitized nodes
+(Spearfish):
 
-<p>
-<center>
-<img src="vnetpath.png" alt="v.net.path example" border="1">
-</center>
+<img src="vnetpath.png" data-border="1" alt="v.net.path example" />
 
-<div class="code"><pre>
+```sh
 # Spearfish
 
 echo "1|601955.1|4916944.9|start
@@ -155,11 +148,11 @@ echo "1 1 2" | v.net.path myroads_net_time arc_layer=3 node_layer=2 out=mypath
 
 # Fastest path: ID as first number, then cat1 and cat2
 echo "1 1 2" | v.net.path myroads_net_time arc_layer=3 node_layer=2 arc_column=cost arc_backward_column=bcost out=mypath_time
-</pre></div>
+```
 
 To display the result, run for example:
 
-<div class="code"><pre>
+```sh
 g.region vector=myroads_net
 d.mon x0
 d.vect myroads_net
@@ -172,30 +165,24 @@ d.vect mypath_time col=blue width=2
 d.vect myroads_net icon=basic/triangle fcol=green size=12 layer=2
 d.font font=Vera
 d.vect startend disp=cat type=point lsize=14 layer=2
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="d.path.html">d.path</a>,
-  <a href="v.net.html">v.net</a>,
-  <a href="v.net.alloc.html">v.net.alloc</a>,
-  <a href="v.net.iso.html">v.net.iso</a>,
-  <a href="v.net.salesman.html">v.net.salesman</a>,
-  <a href="v.net.steiner.html">v.net.steiner</a>,
-  <a href="v.to.db.html">v.to.db</a>
-</em>
+*[d.path](d.path.md), [v.net](v.net.md), [v.net.alloc](v.net.alloc.md),
+[v.net.iso](v.net.iso.md), [v.net.salesman](v.net.salesman.md),
+[v.net.steiner](v.net.steiner.md), [v.to.db](v.to.db.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek, ITC-Irst, Trento, Italy<br>
+Radim Blazek, ITC-Irst, Trento, Italy  
 Documentation: Markus Neteler, Markus Metz
 
-<h3>TURNS SUPPORT</h3>
+### TURNS SUPPORT
 
-The turns support was implemnented as part of GRASS GIS turns cost project at Czech Technical University in Prague, Czech Republic.
+The turns support was implemnented as part of GRASS GIS turns cost
+project at Czech Technical University in Prague, Czech Republic.
 
-<p>
-Implementation: Stepan Turek<br>
-Documentation: Lukas Bocan, Eliska Kyzlikova, Viera Bejdova<br>
+Implementation: Stepan Turek  
+Documentation: Lukas Bocan, Eliska Kyzlikova, Viera Bejdova  
 Mentor: Martin Landa

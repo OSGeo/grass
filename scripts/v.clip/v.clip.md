@@ -1,80 +1,71 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.clip</em> module enables extracting those features of input
-vector map, which overlay features of clip map, as well as their
-storing in a new vector map.
+*v.clip* module enables extracting those features of input vector map,
+which overlay features of clip map, as well as their storing in a new
+vector map.
 
-<p>In default, boundaries of clip map are dissolved before
-clipping. Alternatively, flag <b>-d</b> can be ticked to retain the
-boundaries of clip map. Flag <b>-b</b> facilitates clipping by current
-computational region.
+In default, boundaries of clip map are dissolved before clipping.
+Alternatively, flag **-d** can be ticked to retain the boundaries of
+clip map. Flag **-b** facilitates clipping by current computational
+region.
 
-<p>It is possible to clip vector maps consisting of points, lines,
-areas or combinations of these. However, the current version does not
-fully support clipping of mixed geometry containing points. In such a
-case, the output map will only store clipped lines and/or areas.
+It is possible to clip vector maps consisting of points, lines, areas or
+combinations of these. However, the current version does not fully
+support clipping of mixed geometry containing points. In such a case,
+the output map will only store clipped lines and/or areas.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>v.clip</em> is a front-end
-to <em><a href="v.overlay.html">v.overlay</a></em>, as well
-as <em><a href="v.select.html">v.select</a></em>. Clipping of areas
-and/or lines can be achieved
-using <em><a href="v.overlay.html">v.overlay</a></em>. Clipping of
-points can be performed
-with <em><a href="v.select.html">v.select</a></em>.
+*v.clip* is a front-end to *[v.overlay](v.overlay.md)*, as well as
+*[v.select](v.select.md)*. Clipping of areas and/or lines can be
+achieved using *[v.overlay](v.overlay.md)*. Clipping of points can be
+performed with *[v.select](v.select.md)*.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Basic use</h3>
+### Basic use
 
 Clip railroads by counties Wake and Johnston in North Carolina (North
 Carolina data set).
 
-<div class="code"><pre>
+```sh
 v.extract input=boundary_county where="NAME='WAKE' OR NAME='JOHNSTON'" output=county_WAKE_JOHNSTON
 v.clip input=railroads clip=county_WAKE_JOHNSTON output=railroads_WAKE_JOHNSTON
-</pre></div>
+```
 
-<center>
- <img src="v_clip_poly.png" alt="v.clip example" height="255" width="600" ><br>
- <em>Figure: v.clip example - basic use</em>
-</center>
+<img src="v_clip_poly.png" width="600" height="255"
+alt="v.clip example" />  
+*Figure: v.clip example - basic use*
 
-<h3>Retain boundaries of clip map</h3>
+### Retain boundaries of clip map
 
-<div class="code"><pre>
+```sh
 v.clip -d input=railroads clip=county_WAKE_JOHNSTON output=railroads_WAKE_JOHNSTON
-</pre></div>
+```
 
-<h3>Clip by current computational region</h3>
+### Clip by current computational region
 
 Clip hospitals by computational region adjusted to counties Wake and
-Johnston in North Carolina (North Carolina data set).
+Johnston in North Carolina (North Carolina data set). It is not
+obligatory to enter name of clip map. In case it is stated, the clip map
+will be omitted.
 
-It is not obligatory to enter name of clip map. In case it is stated,
-the clip map will be omitted.
-
-<div class="code"><pre>
+```sh
 v.extract input=boundary_county where="NAME='WAKE' OR NAME='JOHNSTON'" output=county_WAKE_JOHNSTON
 v.clip -r input=hospitals output=hospitals_clip
-</pre></div>
+```
 
-<center>
- <img src="v_clip_region.png" alt="v.clip example" height="259" width="600"><br>
- <em>Figure: v.clip example - clip by computational region</em>
-</center>
+<img src="v_clip_region.png" width="600" height="259"
+alt="v.clip example" />  
+*Figure: v.clip example - clip by computational region*
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="v.overlay.html">v.overlay</a>,
-  <a href="v.select.html">v.select</a>,
-  <a href="v.dissolve.html">v.dissolve</a>,
-  <a href="v.in.region.html">v.in.region</a>
-</em>
+*[v.overlay](v.overlay.md), [v.select](v.select.md),
+[v.dissolve](v.dissolve.md), [v.in.region](v.in.region.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Zofie Cimburova, <a href="http://geomatics.fsv.cvut.cz/research/geoforall/">GeoForAll
-Lab</a>, Czech Technical University in Prague, Czech Republic
+Zofie Cimburova, [GeoForAll
+Lab](http://geomatics.fsv.cvut.cz/research/geoforall/), Czech Technical
+University in Prague, Czech Republic

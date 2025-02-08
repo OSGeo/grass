@@ -1,21 +1,16 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast3d.list</em> provides the same functionality as
-<a href="t.rast.list.html">t.rast.list</a>, the only difference is the
-3D raster map layer metadata. Please refer to the manual page of
-<a href="t.rast.list.html">t.rast.list</a>.
+*t.rast3d.list* provides the same functionality as
+[t.rast.list](t.rast.list.md), the only difference is the 3D raster map
+layer metadata. Please refer to the manual page of
+[t.rast.list](t.rast.list.md).
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.rast.list.html">t.rast.list</a>,
-<a href="g.list.html">g.list</a>,
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>,
-<a href="t.list.html">t.list</a>,
-<a href="t.vect.list.html">t.vect.list</a>
-</em>
+*[t.rast.list](t.rast.list.md), [g.list](g.list.md),
+[t.create](t.create.md), [t.info](t.info.md), [t.list](t.list.md),
+[t.vect.list](t.vect.list.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture
