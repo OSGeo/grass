@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock
-#from your_module import snakes_displacement  # Adjust to your module name
+from displacement.c import snakes_displacement  # Adjust to your module name
 import json
 
 import grass.script as gs
