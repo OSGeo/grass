@@ -1,7 +1,9 @@
 import pytest
 from unittest.mock import MagicMock
-from your_module import snakes_displacement  # Adjust to your module name
+#from your_module import snakes_displacement  # Adjust to your module name
+import json
 
+import grass.script as gs
 # Helper function to mock the Map_info structure
 @pytest.fixture
 def mock_map_info():
