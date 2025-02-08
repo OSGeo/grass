@@ -1,7 +1,8 @@
 import json
 import grass.script as gs
 import pytest
-
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
 @pytest.mark.parametrize("method, threshold, look_ahead, reduction", [
     ("douglas", 1.0, 7, 50),
