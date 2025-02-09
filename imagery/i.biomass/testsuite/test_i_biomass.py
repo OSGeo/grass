@@ -23,18 +23,6 @@ class TestIBiomass(TestCase):
         cls.use_temp_region()
         cls.runModule("g.region", n=10, s=0, e=10, w=0, rows=10, cols=10)
 
-    def setUp(self):
-        """Reset input rasters to default state before each test."""
-        input_expressions = {
-            "fpar": "col() * 0.1",
-            "lightuse_eff": "row() * 0.1",
-            "latitude": "45.0",
-            "dayofyear": "150",
-            "transmissivity": "0.75",
-            "water": "0.8",
-        }
-        self._create_input_rasters(input_expressions)
-
     @classmethod
     def _create_input_rasters(cls, expressions):
         """Helper method to create input rasters with specified expressions."""
@@ -95,11 +83,16 @@ class TestIBiomass(TestCase):
 
     def test_biomass_linearity(self):
         """Test linearity of i.biomass by scaling inputs."""
-        self.runModule(
-            "r.mapcalc",
-            expression=f"{self.input_rasters['fpar']} = col() * 0.5",
-            overwrite=True,
-        )
+        input_expressions = {
+            "fpar": "col() * 0.5",
+            "lightuse_eff": "row() * 0.1",
+            "latitude": "45.0",
+            "dayofyear": "150",
+            "transmissivity": "0.75",
+            "water": "0.8",
+        }
+        self._create_input_rasters(input_expressions)
+
         self.assertModule(
             "i.biomass",
             fpar=self.input_rasters["fpar"],
@@ -204,12 +197,16 @@ class TestIBiomass(TestCase):
 
     def test_biomass_latitude_dependency(self):
         """Test that biomass values vary reasonably with latitude."""
+        input_expressions = {
+            "fpar": "col() * 0.1",
+            "lightuse_eff": "row() * 0.1",
+            "latitude": "0",
+            "dayofyear": "150",
+            "transmissivity": "0.75",
+            "water": "0.8",
+        }
+        self._create_input_rasters(input_expressions)
 
-        self.runModule(
-            "r.mapcalc",
-            expression=f"{self.input_rasters['latitude']} = 0",
-            overwrite=True,
-        )
         self.assertModule(
             "i.biomass",
             fpar=self.input_rasters["fpar"],
@@ -243,14 +240,12 @@ class TestIBiomass(TestCase):
 
         self.assertTrue(
             np.mean(equatorial_output) > np.mean(polar_output),
-            "Biomass at equatorial regions should generally exceed"
-            "biomass at polar regions.",
+            "Biomass at equatorial regions should generally exceed biomass at polar regions.",
         )
 
     def test_biomass_ecological_range(self):
         """Test that biomass values fall within an expected ecological range."""
-
-        test_expressions = {
+        input_expressions = {
             "fpar": "col() * 0.5",
             "lightuse_eff": "row() * 0.1",
             "latitude": "45.0",
@@ -258,7 +253,7 @@ class TestIBiomass(TestCase):
             "transmissivity": "0.75",
             "water": "0.8",
         }
-        self._create_input_rasters(test_expressions)
+        self._create_input_rasters(input_expressions)
 
         self.assertModule(
             "i.biomass",
