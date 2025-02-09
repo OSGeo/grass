@@ -105,7 +105,8 @@ int Rast__quant_import(const char *name, const char *mapset,
     if (Rast_map_type(name, mapset) == CELL_TYPE) {
         char *mname = G_fully_qualified_name(name, mapset);
         G_warning(_("Attempt to open quantization"
-                    " table for CELL raster map <%s>"), mname);
+                    " table for CELL raster map <%s>"),
+                  mname);
         G_free(mname);
         return -2;
     }
