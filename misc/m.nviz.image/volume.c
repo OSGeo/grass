@@ -243,6 +243,7 @@ int add_isosurfs(const struct GParams *params, nv_data *data UNUSED)
 
         GVL_isosurf_set_drawmode(id, draw_mode);
     }
+    G_free(vol_list);
 
     return 1;
 }
@@ -331,6 +332,7 @@ int add_slices(const struct GParams *params, nv_data *data UNUSED)
 
         GVL_slice_set_drawmode(id, draw_mode);
     }
+    G_free(vol_list);
 
     return 1;
 }
