@@ -23,6 +23,16 @@ class TestIBiomass(TestCase):
         cls.use_temp_region()
         cls.runModule("g.region", n=10, s=0, e=10, w=0, rows=10, cols=10)
 
+        input_expressions = {
+            "fpar": "col() * 0.1",
+            "lightuse_eff": "row() * 0.1",
+            "latitude": "45.0",
+            "dayofyear": "150",
+            "transmissivity": "0.75",
+            "water": "0.8",
+        }
+        cls._create_input_rasters(input_expressions)
+
     @classmethod
     def _create_input_rasters(cls, expressions):
         """Helper method to create input rasters with specified expressions."""
@@ -62,6 +72,16 @@ class TestIBiomass(TestCase):
         water_availability=test_water_availability output=biomass_reference
         r.univar -g biomass_reference
         """
+        input_expressions = {
+            "fpar": "col() * 0.1",
+            "lightuse_eff": "row() * 0.1",
+            "latitude": "45.0",
+            "dayofyear": "150",
+            "transmissivity": "0.75",
+            "water": "0.8",
+        }
+        self._create_input_rasters(input_expressions)
+
         self.assertModule(
             "i.biomass",
             fpar=self.input_rasters["fpar"],
@@ -76,7 +96,6 @@ class TestIBiomass(TestCase):
         self.assertRasterExists(self.output_raster)
 
         expected_stats = "min=0.752654\nmax=75.265445\nmean=22.767797\nstddev=17.924991"
-
         self.assertRasterFitsUnivar(
             raster=self.output_raster, reference=expected_stats, precision=1e-6
         )
