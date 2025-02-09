@@ -77,7 +77,7 @@ jobs:
       - name: Run `ruff format` fixing files
         # Run `ruff format` even when `ruff check` fixed files: fixes can require formatting
         if: ${{ !cancelled() }}
-        run: ruff format --diff
+        run: ruff format
       - name: Create and uploads code suggestions to apply for Ruff
         # Will fail fast here if there are changes required
         id: diff-ruff
