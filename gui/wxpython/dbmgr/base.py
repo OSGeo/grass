@@ -354,29 +354,27 @@ class VirtualAttributeList(
 
             self.SetItemCount(i)
 
-            if where:
-                item = -1
-                while True:
-                    item = self.GetNextItem(item)
-                    if item == -1:
-                        break
-                    self.SetItemState(
-                        item, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED
-                    )
+        if where:
+            item = -1
+            while True:
+                item = self.GetNextItem(item)
+                if item == -1:
+                    break
+                self.SetItemState(item, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED)
 
-            i = 0
-            for col in columns:
-                width = self.columns[col]["length"] * 6  # FIXME
-                width = max(width, 60)
-                width = min(width, 300)
-                self.SetColumnWidth(col=i, width=width)
-                i += 1
+        i = 0
+        for col in columns:
+            width = self.columns[col]["length"] * 6  # FIXME
+            width = max(width, 60)
+            width = min(width, 300)
+            self.SetColumnWidth(col=i, width=width)
+            i += 1
 
-            self.SendSizeEvent()
+        self.SendSizeEvent()
 
-            self.log.write(_("Number of loaded records: %d") % self.GetItemCount())
+        self.log.write(_("Number of loaded records: %d") % self.GetItemCount())
 
-            return keyId
+        return keyId
 
     def AddDataRow(self, i, record, columns, keyId):
         """Add row to the data list"""
