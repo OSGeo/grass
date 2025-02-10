@@ -1,148 +1,137 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.in.db</em> creates a new vector point map from database table or file
+*v.in.db* creates a new vector point map from database table or file
 containing coordinates.
 
-<h2>NOTES</h2>
+## NOTES
 
-If GRASS comes with <a href="grass-ogr.html">OGR</a> support
-than <em>v.in.db</em> allows importing data from different input
-files, eg. CSV or MS Excel (assuming that GDAL/OGR library is compiled
-with this support).
+If GRASS comes with [OGR](grass-ogr.md) support than *v.in.db* allows
+importing data from different input files, eg. CSV or MS Excel (assuming
+that GDAL/OGR library is compiled with this support).
 
-<p>
-<em>v.in.db</em> creates key column &quot;cat&quot; automatically
-when <b>key</b> option is not given. Note that this operation is
-possible to perform only when <b>-t</b> flag is not given. Currently,
-automated creation of key column is supported only when default DB
-driver for output vector map is <a href="grass-sqlite.html">SQLite
-driver</a> otherwise <b>key</b> option must be specified by the
-user. Default DB driver is defined
-by <em><a href="db.connect.html">db.connect</a></em>.
+*v.in.db* creates key column "cat" automatically when **key** option is
+not given. Note that this operation is possible to perform only when
+**-t** flag is not given. Currently, automated creation of key column is
+supported only when default DB driver for output vector map is [SQLite
+driver](grass-sqlite.md) otherwise **key** option must be specified by
+the user. Default DB driver is defined by *[db.connect](db.connect.md)*.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Creating a map from PostgreSQL table</h3>
+### Creating a map from PostgreSQL table
 
-<div class="code"><pre>
+```sh
 v.in.db driver=pg database="host=myserver.itc.it,dbname=mydb" \
         table=pat_stazioni x=east y=north z=quota key=id output=pat_stazioni
-</pre></div>
+```
 
-<p>If an ID column is not present in the PostgreSQL table, a new
-column should be added. See <a href="grass-pg.html">PostgreSQL DB
-driver</a> page for details.
+If an ID column is not present in the PostgreSQL table, a new column
+should be added. See [PostgreSQL DB driver](grass-pg.md) page for
+details.
 
-<h3>Creating a map from PostGIS</h3>
+### Creating a map from PostGIS
 
 To extract coordinate values from PostGIS, functions have to be used:
 
-<div class="code"><pre>
+```sh
 v.in.db driver=pg database="host=myserver.itc.it,dbname=mydb" \
         table=station x="x(geom)" y="y(geom)" z="z(geom)" key=id out=meteostations
-</pre></div>
+```
 
-<p>If an ID column is not present in the PostgreSQL table, a new
-column should be added. See <a href="grass-pg.html">PostgreSQL DB
-driver</a> page for details.
+If an ID column is not present in the PostgreSQL table, a new column
+should be added. See [PostgreSQL DB driver](grass-pg.md) page for
+details.
 
-<p>Alternatively a vector point map can be imported from PostGIS
-database using <em><a href="v.in.ogr.html">v.in.ogr</a></em>.
+Alternatively a vector point map can be imported from PostGIS database
+using *[v.in.ogr](v.in.ogr.md)*.
 
-<h3>Creating a map from Open Document spreadsheet (ODS) file</h3>
+### Creating a map from Open Document spreadsheet (ODS) file
 
 A new vector point map is created from given sheet in ODS file. The
-<b>database</b> option points to the ODS file. Option <b>table</b> is the
-name of selected spreadsheet list, the <b>key</b> option is the identifier
+**database** option points to the ODS file. Option **table** is the name
+of selected spreadsheet list, the **key** option is the identifier
 column:
 
-<div class="code"><pre>
+```sh
 # preview table structure with OGR tool (table name is "Layer name" here):
 ogrinfo -al -so meteodata.ods
 
 # import sheet from ODS into map
 v.in.db key=ID table=mysheet x=long y=lat z=height output=meteodata \
          driver=ogr database=meteodata.ods
-</pre></div>
+```
 
-<h3>Creating a map from MS Excel file</h3>
+### Creating a map from MS Excel file
 
 A new vector point map is created from given sheet in MS Excel file. The
-<b>database</b> option points to the file in MS Excel
-format. Option <b>table</b> is name of the selected spreadsheet "List1":
+**database** option points to the file in MS Excel format. Option
+**table** is name of the selected spreadsheet "List1":
 
-<div class="code"><pre>
+```sh
 v.in.db table=List1 x=long y=lat z=height output=meteodata \
          driver=ogr database=meteodata.xls
-</pre></div>
+```
 
-Note that in this example the <b>key</b> option is omitted. In this case
-<em>v.in.db</em> tries to add key column automatically. This
-requires <a href="grass-sqlite.html">SQLite</a> to be a default DB
-driver.
+Note that in this example the **key** option is omitted. In this case
+*v.in.db* tries to add key column automatically. This requires
+[SQLite](grass-sqlite.md) to be a default DB driver.
 
-<h3>Creating a map from DBF table</h3>
+### Creating a map from DBF table
 
 A new 3D point vector map is created from DBF table. Column 'idcol'
-contains unique row IDs. The <b>database</b> option is the
-directory where the DBF file is stored.
+contains unique row IDs. The **database** option is the directory where
+the DBF file is stored.
 
-<div class="code"><pre>
+```sh
 v.in.db driver=dbf database=/home/user/tables/ table=pointsfile x=x y=y z=z \
         key=idcol out=dtmpoints
-</pre></div>
+```
 
 To check result:
 
-<div class="code"><pre>
+```sh
 v.info dtmpoints
 v.info -c dtmpoints
-</pre></div>
+```
 
-<p>If DB driver for output vector map is different from SQLite driver
-and an ID column is missing in the DBF file, it has to be added
-beforehand, e.g. with OpenOffice.  Alternatively, import the table
-with <em><a href="db.in.ogr.html">db.in.ogr</a></em> into GRASS and
-then with <em>v.in.db</em> from the imported table
-(<em><a href="db.in.ogr.html">db.in.ogr</a></em> optionally adds an
-unique ID column).
+If DB driver for output vector map is different from SQLite driver and
+an ID column is missing in the DBF file, it has to be added beforehand,
+e.g. with OpenOffice. Alternatively, import the table with
+*[db.in.ogr](db.in.ogr.md)* into GRASS and then with *v.in.db* from the
+imported table (*[db.in.ogr](db.in.ogr.md)* optionally adds an unique ID
+column).
 
-<h3>Creating a point map from DBF table for selected records only</h3>
+### Creating a point map from DBF table for selected records only
 
-<p>The user can import only selected vector points from a table using
-the <b>where</b> parameter (see above for general DBF handling):
+The user can import only selected vector points from a table using the
+**where** parameter (see above for general DBF handling):
 
-<div class="code"><pre>
+```sh
 v.in.db driver=dbf  database=/home/user/tables/ table=pointsfile x=x y=y z=z \
-        key=idcol out=dtmpoints where="x NOT NULL and z &gt; 100"
-</pre></div>
+        key=idcol out=dtmpoints where="x NOT NULL and z > 100"
+```
 
-<h3>Creating a map from SQLite table</h3>
+### Creating a map from SQLite table
 
-A new vector point map is created from table in SQLite database
-file. Column 'idcol' contains unique row IDs. The
-<b>database</b> option is the the SQLite database file.
+A new vector point map is created from table in SQLite database file.
+Column 'idcol' contains unique row IDs. The **database** option is the
+the SQLite database file.
 
-<div class="code"><pre>
+```sh
 v.in.db driver=sqlite database=/home/user/tables/mysqlite.db table=pointsfile x=x y=y z=z \
         key=idcol out=dtmpoints
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.execute.html">db.execute</a>,
-<a href="db.in.ogr.html">db.in.ogr</a>,
-<a href="v.info.html">v.info</a>,
-<a href="v.in.geonames.html">v.in.geonames</a>,
-<a href="v.in.ogr.html">v.in.ogr</a>,
-<a href="v.to.db.html">v.to.db</a>
-</em>
+*[db.execute](db.execute.md), [db.in.ogr](db.in.ogr.md),
+[v.info](v.info.md), [v.in.geonames](v.in.geonames.md),
+[v.in.ogr](v.in.ogr.md), [v.to.db](v.to.db.md)*
 
-<p>
-<a href="sql.html">SQL support in GRASS GIS</a>
+[SQL support in GRASS GIS](sql.md)
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek<br>
-Various updates for GRASS 7 by Martin Landa, Czech Technical University in Prague, Czech Republic
+Radim Blazek  
+Various updates for GRASS 7 by Martin Landa, Czech Technical University
+in Prague, Czech Republic

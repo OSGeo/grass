@@ -1,112 +1,112 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.in.ascii</em> converts a vector map
-in <a href="vectorascii.html">GRASS ASCII vector format</a> to a
-vector map in binary format. The module may import two formats:
-<ul>
-<li><b>standard</b> contains all data types, each coordinate on one row</li>
-<li><b>point</b> (default) reads only points, each point defined on
-  one row. Values are separated by a user-definable delimiter. If
-  the <b>columns</b> option is not defined, default names are used. It
-  is possible to specify the column order for the x,y,z coordinates
-  and category values.</li>
-</ul>
+*v.in.ascii* converts a vector map in [GRASS ASCII vector
+format](vectorascii.md) to a vector map in binary format. The module may
+import two formats:
 
-<p><em><a href="v.out.ascii.html">v.out.ascii</a></em> performs the
-function of <em>v.in.ascii</em> in reverse; i.e., it converts vector
-maps in binary format to GRASS ASCII vector format. These two companion programs
-are useful both for importing and exporting vector maps between GRASS
-and other software, and for transferring data between machines.
+- **standard** contains all data types, each coordinate on one row
+- **point** (default) reads only points, each point defined on one row.
+  Values are separated by a user-definable delimiter. If the **columns**
+  option is not defined, default names are used. It is possible to
+  specify the column order for the x,y,z coordinates and category
+  values.
 
-<h2>NOTES</h2>
+*[v.out.ascii](v.out.ascii.md)* performs the function of *v.in.ascii* in
+reverse; i.e., it converts vector maps in binary format to GRASS ASCII
+vector format. These two companion programs are useful both for
+importing and exporting vector maps between GRASS and other software,
+and for transferring data between machines.
 
+## NOTES
 
-The input is read from the file specified by the <b>input</b> option or
+The input is read from the file specified by the **input** option or
 from standard input.
 
-<p>The field separator may be a character, the word '<code>tab</code>'
-(or '<code>\t</code>') for tab, '<code>space</code>' (or '&nbsp;') for a blank,
-or '<code>comma</code>' (or ',') for a comma.
+The field separator may be a character, the word '`tab`' (or '`\t`') for
+tab, '`space`' (or ' ') for a blank, or '`comma`' (or ',') for a comma.
 
-<p>An attribute table is only created if it is needed, i.e. when at
-least one attribute column is present in the input file besides
-geometry columns. The attribute column will be auto-scanned for type, but
-may be explicitly declared along with the geometry columns using the
-<b>columns</b> parameter.
+An attribute table is only created if it is needed, i.e. when at least
+one attribute column is present in the input file besides geometry
+columns. The attribute column will be auto-scanned for type, but may be
+explicitly declared along with the geometry columns using the
+**columns** parameter.
 
-<p>Use the <b>-z</b> flag to convert ASCII data into a 3D vector map.
+Use the **-z** flag to convert ASCII data into a 3D vector map.
 
-<p>In special cases of data import, such as the import of large LIDAR
+In special cases of data import, such as the import of large LIDAR
 datasets (millions of data points), it may be necessary to disable
-topology support (vector level 1) due to memory constraints.  This is
-done with the <b>-b</b> flag. As only very few vector modules support
+topology support (vector level 1) due to memory constraints. This is
+done with the **-b** flag. As only very few vector modules support
 points data processing at vector level 1, usually topology is required
-(vector level 2). Therefore it is recommended that the user first try
-to import the data without creating a database (the <b>-t</b> flag) or
-within a subregion (the <b>-r</b> flag) before resorting to the
-disabling of topology.
+(vector level 2). Therefore it is recommended that the user first try to
+import the data without creating a database (the **-t** flag) or within
+a subregion (the **-r** flag) before resorting to the disabling of
+topology.
 
-<p>If old version is requested, the <b>output</b> files
-from <em><a href="v.out.ascii.html">v.out.ascii</a></em> is placed in
-the <code>$LOCATION/$MAPSET/dig_ascii/</code>
-and <code>$LOCATION/$MAPSET/dig_att</code> directory.
+If old version is requested, the **output** files from
+*[v.out.ascii](v.out.ascii.md)* is placed in the
+`$LOCATION/$MAPSET/dig_ascii/` and `$LOCATION/$MAPSET/dig_att`
+directory.
 
-<h3>Import of files without category column</h3>
+### Import of files without category column
 
 If the input file does not contain a category column, there is the
 possibility to auto-generate these IDs (categories). To automatically
-add an additional column named 'cat', the <b>cat</b> parameter must be
-set to the virtual column number 0 (<code>cat=0</code>). This is the
-default action if the <b>cat</b> parameter is not set.
+add an additional column named 'cat', the **cat** parameter must be set
+to the virtual column number 0 (`cat=0`). This is the default action if
+the **cat** parameter is not set.
 
-<h3>Importing from a spreadsheet</h3>
+### Importing from a spreadsheet
 
 Data may be imported from many spreadsheet programs by saving the
 spreadsheet as a comma separated variable (.csv) text file, and then
-using the <b>separator=','</b> or <b>separator=comma</b> option
-with <em>v.in.ascii</em> in <b>points</b> mode.  If the input file
-contains any header lines, such as column headings, the
-<b>skip</b> parameter should be used. These skipped header lines will
-be written to the map's history file for later reference (read with
-<code>v.info&nbsp;-h</code>). The skip option only works in <b>points</b> mode.
+using the **separator=','** or **separator=comma** option with
+*v.in.ascii* in **points** mode. If the input file contains any header
+lines, such as column headings, the **skip** parameter should be used.
+These skipped header lines will be written to the map's history file for
+later reference (read with `v.info -h`). The skip option only works in
+**points** mode.
 
-<p>Any line starting with the hash character ('<code>#</code>') will be treated as
-a comment and skipped completely if located in the main data file. If located
-in the header, as defined by the <b>skip</b> parameter, it will be treated as
-a header line and written to the history file.
+Any line starting with the hash character ('`#`') will be treated as a
+comment and skipped completely if located in the main data file. If
+located in the header, as defined by the **skip** parameter, it will be
+treated as a header line and written to the history file.
 
-<h3>Import of sexagesimal degree (degree, minutes, seconds, DMS)</h3>
+### Import of sexagesimal degree (degree, minutes, seconds, DMS)
 
 The import of DMS formatted degrees is supported (in this case no sign
-but N/S, E/W characters are used to indicate the hemispheres).  While
-the positions are internally translated into decimal degrees during
-the import, the original DMS values are maintained in the attribute
-table. This requires both the latitude and the longitude columns to be
-defined as <code>varchar()</code>, not as numbers.  A warning will be
-issued which can be ignored. See <a href="vectorascii.html">GRASS
-ASCII vector format specification</a> for details.
+but N/S, E/W characters are used to indicate the hemispheres). While the
+positions are internally translated into decimal degrees during the
+import, the original DMS values are maintained in the attribute table.
+This requires both the latitude and the longitude columns to be defined
+as `varchar()`, not as numbers. A warning will be issued which can be
+ignored. See [GRASS ASCII vector format specification](vectorascii.md)
+for details.
 
-<h3>Importing only selected columns</h3>
-Although <em>v.in.ascii</em> doesn't have an option to specify which columns
-should be imported, you can use a shell filter to achieve the same effect,
-e.g.:
+### Importing only selected columns
 
-<div class="code"><pre>
+Although *v.in.ascii* doesn't have an option to specify which columns
+should be imported, you can use a shell filter to achieve the same
+effect, e.g.:
+
+```sh
 # Print out the column number for each field, supposing the file has a header
-head -1 input_file | tr '&lt;the_field_separator_character&gt;' '\n' | cat -n
+head -1 input_file | tr '<the_field_separator_character>' '\n' | cat -n
 # From the listing, select the columns you want and feed them to v.in.ascii
 # use input=- to read from stdin
-cut -d&lt;the_field_separator_character&gt; -f&lt;comma-separated_list_of_columns&gt; input_file | v.in.ascii in=- &lt;your_options&gt;
-</pre></div>
+cut -d<the_field_separator_character> -f<comma-separated_list_of_columns> input_file | v.in.ascii in=- <your_options>
+```
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Example 1a) - standard format mode</h3>
-Sample ASCII polygon vector map for 'standard' format mode.
-The two areas will be assigned categories 20 and 21. For details on the structure of
-standard format data files see the second reference at the bottom of this page.
+### Example 1a) - standard format mode
 
-<p><div class="code"><pre>
+Sample ASCII polygon vector map for 'standard' format mode. The two
+areas will be assigned categories 20 and 21. For details on the
+structure of standard format data files see the second reference at the
+bottom of this page.
+
+```sh
 echo "ORGANIZATION: GRASS Development Team
 DIGIT DATE:   1/9/2005
 DIGIT NAME:   -
@@ -135,19 +135,18 @@ B  4
 C  1 1
  5959063.08352122 3401386.98533277
  1 21" | v.in.ascii in=- format=standard output=test_polygons
-</pre></div>
+```
 
-<h3>Example 1b) - standard format mode</h3>
+### Example 1b) - standard format mode
 
-Sample ASCII 3D line vector map for 'standard' format mode with simplified input
-(note the space field separator).
-Note the <b>-z</b> flag indicating 3D vector input, and the <b>-n</b> flag
-indicating no vector header should be expected from the input file.
+Sample ASCII 3D line vector map for 'standard' format mode with
+simplified input (note the space field separator). Note the **-z** flag
+indicating 3D vector input, and the **-n** flag indicating no vector
+header should be expected from the input file. The first line in this
+example specifies that the line (L) has 5 vertices and 1 category. The
+last line specifies the layer (1) and the category value (321).
 
-The first line in this example specifies that the line (L) has 5 vertices and 1 category.
-The last line specifies the layer (1) and the category value (321).
-
-<div class="code"><pre>
+```sh
 echo "L 5 1
 591336 4927369 1224
 594317 4925341 1292
@@ -155,59 +154,69 @@ echo "L 5 1
 602396 4926653 1235
 607524 4925431 1216
 1 321 " | v.in.ascii -zn in=- out=line3d format=standard
-</pre></div>
+```
 
-This can be used to create a vector line of a GPS track: the GPS points have
-to be stored into a file with a preceding 'L' and the number of points (per line).
+This can be used to create a vector line of a GPS track: the GPS points
+have to be stored into a file with a preceding 'L' and the number of
+points (per line).
 
-<h3>Example 2 - point format mode</h3>
+### Example 2 - point format mode
 
 Generate a 2D points vector map 'coords.txt' as ASCII file:
-<div class="code"><pre>
+
+```sh
 1664619|5103481
 1664473|5095782
 1664273|5101919
 1663427|5105234
 1663709|5102614
-</pre></div>
+```
 
-<p>Import into GRASS:
-<div class="code"><pre>
+Import into GRASS:
+
+```sh
 v.in.ascii input=coords.txt output=mymap
-</pre></div>
-As the <b>cat</b> option is set to 0 by default, an extra column 'cat'
+```
+
+As the **cat** option is set to 0 by default, an extra column 'cat'
 containing the category numbers will be auto-generated.
 
-<h3>Example 3 - point format mode</h3>
+### Example 3 - point format mode
 
 Generate a 2D points vector map 'points.dat' as ASCII file:
-<div class="code"><pre>
+
+```sh
 1|1664619|5103481|studna
 2|1664473|5095782|kadibudka
 3|1664273|5101919|hruska
 4|1663427|5105234|mysi dira
 5|1663709|5102614|mineralni pramen
-</pre></div>
+```
 
-<p>Import into GRASS:
-<div class="code"><pre>
+Import into GRASS:
+
+```sh
 cat points.dat | v.in.ascii in=- out=mypoints x=2 y=3 cat=1 \
     columns='cat int, x double precision, y double precision, label varchar(20)'
-</pre></div>
+```
 
-<p>The module is reading from standard input, using the default '|' (pipe) delimiter.
+The module is reading from standard input, using the default '\|' (pipe)
+delimiter.
 
-<h3>Example 4 - point format mode - CSV table</h3>
+### Example 4 - point format mode - CSV table
 
 Import of a 3D points CSV table ('points3d.csv') with attributes:
-<div class="code"><pre>
+
+```sh
 "num","X","Y","Z","T"
 1,2487491.643,5112118.33,120.5,18.62
 2,2481985.459,5109162.78,123.9,18.46
 3,2478284.289,5105331.04,98.3,19.61
-</pre></div>
-<p>Import into GRASS:
-<div class="code"><pre>
+```
+
+Import into GRASS:
+
+```sh
 # import: skipping the header line, categories generated automatically,
 # column names defined with type:
 v.in.ascii -z in=points3d.csv out=mypoints3D separator=comma \
@@ -217,32 +226,38 @@ v.in.ascii -z in=points3d.csv out=mypoints3D separator=comma \
 v.info -c mypoints3D
 # verify table content
 v.db.select mypoints3D
-</pre></div>
+```
 
-<h3>Example 5 - point format mode</h3>
+### Example 5 - point format mode
 
-Generating a 3D points vector map from DBMS (idcol must be an integer column):<br>
-<div class="code"><pre>
+Generating a 3D points vector map from DBMS (idcol must be an integer
+column):  
+
+```sh
 echo "select east,north,elev,idcol from mytable" | db.select -c | v.in.ascii in=- -z out=mymap
-</pre></div>
+```
 
-With <b>in=-</b>, the module is reading from standard input, using the default '|' (pipe) delimiter.
-<br>
+With **in=-**, the module is reading from standard input, using the
+default '\|' (pipe) delimiter.  
 The import works for 2D maps as well (no elev column and no '-z' flag).
 
-<h3>Example 6 - point format mode</h3>
+### Example 6 - point format mode
 
-Generate a 3D points vector map 'points3d.dat' with attributes as ASCII file:
-<div class="code"><pre>
+Generate a 3D points vector map 'points3d.dat' with attributes as ASCII
+file:
+
+```sh
 593493.1|4914730.2|123.1|studna|well
 591950.2|4923000.5|222.3|kadibudka|outhouse
 589860.5|4922000.0|232.3|hruska|pear
 590400.5|4922820.8|143.2|mysi dira|mouse hole
 593549.3|4925500.7|442.6|mineralni pramen|mineral spring
 600375.7|4925235.6|342.2|kozi stezka|goat path
-</pre></div>
-<p>Import into GRASS:
-<div class="code"><pre>
+```
+
+Import into GRASS:
+
+```sh
 #As the 'cat' option is set to 0 by default, an extra column 'cat'
 #containing the IDs will be auto-generated (no need to define that):
 cat points3d.dat | v.in.ascii in=- -z z=3 cat=0 out=mypoints3D \
@@ -250,12 +265,13 @@ cat points3d.dat | v.in.ascii in=- -z z=3 cat=0 out=mypoints3D \
     label_cz varchar(20), label_en varchar(20)'
 v.info -c mypoints3D
 v.info mypoints3D
-</pre></div>
+```
 
-<h3>Example 7 - point format mode</h3>
+### Example 7 - point format mode
 
 Generate points file by clicking onto the map:
-<div class="code"><pre>
+
+```sh
 #For LatLong projects:
 d.where -d -l | awk '{printf "%f|%f|point\n", $1, $2}' | v.in.ascii in=- out=points \
     columns='x double precision, y double precision, label varchar(20)'
@@ -263,51 +279,41 @@ d.where -d -l | awk '{printf "%f|%f|point\n", $1, $2}' | v.in.ascii in=- out=poi
 #For other projections:
 d.where | awk '{printf "%f|%f|point\n", $1, $2}' | v.in.ascii in=- out=points \
     columns='x double precision, y double precision, label varchar(20)'
-</pre></div>
+```
 
-The 'point' string (or some similar entry) is required to generate a database table.
-When simply piping the coordinates (and optionally height) without additional column(s)
-into <em>v.in.ascii</em>, only the vector map geometry will be generated.
+The 'point' string (or some similar entry) is required to generate a
+database table. When simply piping the coordinates (and optionally
+height) without additional column(s) into *v.in.ascii*, only the vector
+map geometry will be generated.
 
-<h3>Example 8 - point format mode</h3>
+### Example 8 - point format mode
 
 Convert ground control points into vector points:
-<div class="code"><pre>
+
+```sh
 cat $MAPSET/group/$GROUP/POINTS | v.in.ascii in=- out=$GROUP_gcp separator=space skip=3 \
     col='x double precision, y double precision, x_target double precision, \
     y_target double precision, ok int'
-</pre></div>
+```
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<a href="sql.html">SQL command notes</a> for creating databases,
-<br>
-<a href="vectorascii.html">GRASS ASCII vector format</a> specification
+[SQL command notes](sql.md) for creating databases,  
+[GRASS ASCII vector format](vectorascii.md) specification
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.execute.html">db.execute</a>,
-<a href="r.in.ascii.html">r.in.ascii</a>,
-<a href="r.in.poly.html">r.in.poly</a>,
-<a href="r.in.xyz.html">r.in.xyz</a>,
-<a href="v.build.html">v.build</a>,
-<a href="v.build.polylines.html">v.build.polylines</a>,
-<a href="v.centroids.html">v.centroids</a>,
-<a href="v.clean.html">v.clean</a>,
-<a href="v.db.connect.html">v.db.connect</a>,
-<a href="v.import.html">v.import</a>,
-<a href="v.info.html">v.info</a>,
-<a href="v.in.lines.html">v.in.lines</a>,
-<a href="v.in.mapgen.html">v.in.mapgen</a>,
-<a href="v.out.ascii.html">v.out.ascii</a>
-</em>
+*[db.execute](db.execute.md), [r.in.ascii](r.in.ascii.md),
+[r.in.poly](r.in.poly.md), [r.in.xyz](r.in.xyz.md),
+[v.build](v.build.md), [v.build.polylines](v.build.polylines.md),
+[v.centroids](v.centroids.md), [v.clean](v.clean.md),
+[v.db.connect](v.db.connect.md), [v.import](v.import.md),
+[v.info](v.info.md), [v.in.lines](v.in.lines.md),
+[v.in.mapgen](v.in.mapgen.md), [v.out.ascii](v.out.ascii.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Michael Higgins,
-U.S.Army Construction Engineering
-Research Laboratory<br>
-James Westervelt, U.S.Army Construction Engineering
-Research Laboratory<br>
+Michael Higgins, U.S.Army Construction Engineering Research Laboratory  
+James Westervelt, U.S.Army Construction Engineering Research
+Laboratory  
 Radim Blazek, ITC-Irst, Trento, Italy

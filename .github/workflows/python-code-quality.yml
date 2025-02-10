@@ -36,7 +36,7 @@ jobs:
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.8.2"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.9.4"
+      RUFF_VERSION: "0.9.5"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -48,7 +48,6 @@ jobs:
           echo OS: ${{ matrix.os }}
           echo Python: ${{ env.PYTHON_VERSION }}
           echo Minimal Python version: ${{ env.MIN_PYTHON_VERSION }}
-          echo Black: ${{ env.BLACK_VERSION }}
           echo Flake8: ${{ env.FLAKE8_VERSION }}
           echo Pylint: ${{ env.PYLINT_VERSION }}
           echo Bandit: ${{ env.BANDIT_VERSION }}
@@ -78,7 +77,7 @@ jobs:
       - name: Run `ruff format` fixing files
         # Run `ruff format` even when `ruff check` fixed files: fixes can require formatting
         if: ${{ !cancelled() }}
-        run: ruff format --diff
+        run: ruff format
       - name: Create and uploads code suggestions to apply for Ruff
         # Will fail fast here if there are changes required
         id: diff-ruff
@@ -128,7 +127,7 @@ jobs:
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@dd746615b3b9d728a6a37ca2045b68ca76d4841a # v3.28.8
+        uses: github/codeql-action/upload-sarif@9e8d0789d4a0fa9ceb6b1738f7e269594bdd67f0 # v3.28.9
         with:
           sarif_file: bandit.sarif
 

@@ -1,50 +1,44 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.drape</em> converts 2D/3D vector data into 3D vector format via
-sampling of an elevation surface. Three sampling algorithms adapted
-from <em><a href="v.sample.html">v.sample</a></em> were incorporated
-into this module: nearest neighbor, bilinear, and cubic convultion.
+*v.drape* converts 2D/3D vector data into 3D vector format via sampling
+of an elevation surface. Three sampling algorithms adapted from
+*[v.sample](v.sample.md)* were incorporated into this module: nearest
+neighbor, bilinear, and cubic convultion.
 
-<p>
-<em>v.drape</em> will skip vector features outside of current
-computational region or where raster map has NULL value. It's possible
-to include all vector features by specifying height value that will be
-assigned to verticles whose values can not be determined from raster
-map.
+*v.drape* will skip vector features outside of current computational
+region or where raster map has NULL value. It's possible to include all
+vector features by specifying height value that will be assigned to
+verticles whose values can not be determined from raster map.
 
-<h2>NOTES</h2>
+## NOTES
 
-Additional vertices can be added to the input 2D vector map
-with <em><a href="v.split.html">v.split</a></em>.
+Additional vertices can be added to the input 2D vector map with
+*[v.split](v.split.md)*.
 
-<p>
-The module can be used in conjunction
-with <em><a href="v.out.pov.html">v.out.pov</a></em> and
-<em><a href="r.out.pov.html">r.out.pov</a></em> to export a complete
-set of vector and raster data for display
-in <a href="http://www.povray.org/">POVRAY</a>.
+The module can be used in conjunction with *[v.out.pov](v.out.pov.md)*
+and *[r.out.pov](r.out.pov.md)* to export a complete set of vector and
+raster data for display in [POVRAY](http://www.povray.org/).
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 Spearfish example:
 
-<div class="code"><pre>
+```sh
 v.drape in=roads elevation=elevation.10m method=bilinear out=roads3d
 v.info roads3d
-</pre></div>
+```
 
-<p>
-Create 3D vector roads map containing only "unimproved" roads. Set
-road height to 1000 m for all parts without height information.
+Create 3D vector roads map containing only "unimproved" roads. Set road
+height to 1000 m for all parts without height information.
 
-<div class="code"><pre>
+```sh
 v.drape input=roads type=line elevation=elevation.dem output=roads_3d \
         method=nearest scale=1.0 where='cat=5' layer=1 null_value=1000
-</pre></div>
+```
 
-<h3>POVRAY example</h3>
+### POVRAY example
 
-<div class="code"><pre>
+```sh
 #export the vector data
 v.drape in=roads out=roads3d elevation=elevation.10m
 v.out.pov roads3d out=roads3d.pov
@@ -53,23 +47,17 @@ r.out.pov elevation.10m tga=elevation.tga
 r.out.png landcover.30m out=landcover30m.png
 
 # now write a complete povray-script and launch povray
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.extrude.html">v.extrude</a>,
-<a href="v.to.3d.html">v.to.3d</a>,
-<a href="r.out.pov.html">r.out.pov</a>,
-<a href="v.in.region.html">v.in.region</a>,
-<a href="v.out.pov.html">v.out.pov</a>,
-<a href="v.overlay.html">v.overlay</a>,
-<a href="v.split.html">v.split</a>,
-<a href="v.what.rast.html">v.what.rast</a>
-</em>
+*[v.extrude](v.extrude.md), [v.to.3d](v.to.3d.md),
+[r.out.pov](r.out.pov.md), [v.in.region](v.in.region.md),
+[v.out.pov](v.out.pov.md), [v.overlay](v.overlay.md),
+[v.split](v.split.md), [v.what.rast](v.what.rast.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Dylan Beaudette, University of California at Davis.<br>
+Dylan Beaudette, University of California at Davis.  
 Updated for GRASS 7 by Martin Landa, Czech Technical University in
 Prague, Czech Republic

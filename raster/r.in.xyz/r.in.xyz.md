@@ -1,111 +1,98 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The <em>r.in.xyz</em> module will load and bin ungridded x,y,z ASCII data
-into a new raster map. The user may choose from a variety of statistical
+The *r.in.xyz* module will load and bin ungridded x,y,z ASCII data into
+a new raster map. The user may choose from a variety of statistical
 methods in creating the new raster. Gridded data provided as a stream of
 x,y,z points may also be imported.
 
-<p>
 Please note that the current region extents and resolution are used for
-the import. It is therefore recommended to first use the <b>-s</b>
-flag to get the extents of the input points to be imported, then
-adjust the current region accordingly, and only then proceed with the
-actual import.
+the import. It is therefore recommended to first use the **-s** flag to
+get the extents of the input points to be imported, then adjust the
+current region accordingly, and only then proceed with the actual
+import.
 
-<p>
-<em>r.in.xyz</em> is designed for processing massive point cloud datasets,
-for example raw LIDAR or sidescan sonar swath data. It has been tested with
+*r.in.xyz* is designed for processing massive point cloud datasets, for
+example raw LIDAR or sidescan sonar swath data. It has been tested with
 datasets as large as tens of billion of points (705GB in a single file).
- <!-- Doug Newcomb, US Fish & Wildlife Service -->
 
-<p>
-Available statistics for populating the raster are (<b>method</b>):
-<p>
-<blockquote>
-<table>
-<tr><td><em>n</em></td>        <td>number of points in cell</td></tr>
-<tr><td><em>min</em></td>      <td>minimum value of points in cell</td></tr>
-<tr><td><em>max</em></td>      <td>maximum value of points in cell</td></tr>
-<tr><td><em>range</em></td>    <td>range of points in cell</td></tr>
-<tr><td><em>sum</em></td>      <td>sum of points in cell</td></tr>
-<tr><td><em>mean</em></td>     <td>average value of points in cell</td></tr>
-<tr><td><em>stddev</em></td>   <td>standard deviation of points in cell</td></tr>
-<tr><td><em>variance</em></td> <td>variance of points in cell</td></tr>
-<tr><td><em>coeff_var</em></td><td>coefficient of variance of points in cell</td></tr>
-<tr><td><em>median</em></td>   <td>median value of points in cell</td></tr>
-<tr valign="baseline"><td><em>percentile</em>&nbsp;</td>
-   <td>p<sup><i>th</i></sup> percentile of points in cell</td></tr>
-<tr><td><em>skewness</em></td> <td>skewness of points in cell</td></tr>
-<tr><td><em>trimmean</em></td> <td>trimmed mean of points in cell</td></tr>
-</table>
-</blockquote>
+Available statistics for populating the raster are (**method**):
 
-<ul>
-<li><em>Variance</em> and derivatives use the biased estimator (n). [subject to change]</li>
-<li><em>Coefficient of variance</em> is given in percentage and defined as
-<code>(stddev/mean)*100</code>.</li>
-</ul>
+> |               |                                               |
+> |---------------|-----------------------------------------------|
+> | *n*           | number of points in cell                      |
+> | *min*         | minimum value of points in cell               |
+> | *max*         | maximum value of points in cell               |
+> | *range*       | range of points in cell                       |
+> | *sum*         | sum of points in cell                         |
+> | *mean*        | average value of points in cell               |
+> | *stddev*      | standard deviation of points in cell          |
+> | *variance*    | variance of points in cell                    |
+> | *coeff_var*   | coefficient of variance of points in cell     |
+> | *median*      | median value of points in cell                |
+> | *percentile*  | p<sup>*th*</sup> percentile of points in cell |
+> | *skewness*    | skewness of points in cell                    |
+> | *trimmean*    | trimmed mean of points in cell                |
 
-<p>
-It is also possible to bin and store another data column (e.g. backscatter)
-while simultaneously filtering and scaling both the data column values and
-the z range.
+- *Variance* and derivatives use the biased estimator (n). \[subject to
+  change\]
+- *Coefficient of variance* is given in percentage and defined as
+  `(stddev/mean)*100`.
 
-<h2>NOTES</h2>
+It is also possible to bin and store another data column (e.g.
+backscatter) while simultaneously filtering and scaling both the data
+column values and the z range.
 
-<h3>Gridded data</h3>
+## NOTES
 
-If data is known to be on a regular grid <em>r.in.xyz</em> can reconstruct
-the map perfectly as long as some care is taken to set up the region
+### Gridded data
+
+If data is known to be on a regular grid *r.in.xyz* can reconstruct the
+map perfectly as long as some care is taken to set up the region
 correctly and that the data's native map projection is used. A typical
 method would involve determining the grid resolution either by examining
-the data's associated documentation or by studying the text file. Next scan
-the data with <em>r.in.xyz</em>'s <b>-s</b> (or <b>-g</b>) flag to find the
+the data's associated documentation or by studying the text file. Next
+scan the data with *r.in.xyz*'s **-s** (or **-g**) flag to find the
 input data's bounds. GRASS uses the cell-center raster convention where
-data points fall within the center of a cell, as opposed to the grid-node
-convention. Therefore you will need to grow the region out by half a cell
-in all directions beyond what the scan found in the file. After the region
-bounds and resolution are set correctly with <em><a href="g.region.html">g.region</a></em>, run
-<em>r.in.xyz</em> using the <i>n</i> method and verify that n=1 at all places.
-<em><a href="r.univar.html">r.univar</a></em> can help. Once you are confident that the region exactly
-matches the data proceed to run <em>r.in.xyz</em> using one of the <i>mean,
-min, max</i>, or <i>median</i> methods. With n=1 throughout, the result
-should be identical regardless of which of those methods are used.
+data points fall within the center of a cell, as opposed to the
+grid-node convention. Therefore you will need to grow the region out by
+half a cell in all directions beyond what the scan found in the file.
+After the region bounds and resolution are set correctly with
+*[g.region](g.region.md)*, run *r.in.xyz* using the *n* method and
+verify that n=1 at all places. *[r.univar](r.univar.md)* can help. Once
+you are confident that the region exactly matches the data proceed to
+run *r.in.xyz* using one of the *mean, min, max*, or *median* methods.
+With n=1 throughout, the result should be identical regardless of which
+of those methods are used.
 
-<h3>Memory use</h3>
+### Memory use
 
-While the <b>input</b> file can be arbitrarily large, <em>r.in.xyz</em>
-will use a large amount of system memory for large raster regions (10000x10000).
-If the module refuses to start complaining that there isn't enough memory,
-use the <b>percent</b> parameter to run the module in several passes.
-In addition using a less precise map format (<code>CELL</code> [integer] or
-<code>FCELL</code> [floating point]) will use less memory than a <code>DCELL</code>
-[double precision floating point] <b>output</b> map. Methods such as <em>n,
-min, max, sum</em> will also use less memory, while <em>stddev, variance,
-and coeff_var</em> will use more.
+While the **input** file can be arbitrarily large, *r.in.xyz* will use a
+large amount of system memory for large raster regions (10000x10000). If
+the module refuses to start complaining that there isn't enough memory,
+use the **percent** parameter to run the module in several passes. In
+addition using a less precise map format (`CELL` \[integer\] or `FCELL`
+\[floating point\]) will use less memory than a `DCELL` \[double
+precision floating point\] **output** map. Methods such as *n, min, max,
+sum* will also use less memory, while *stddev, variance, and coeff_var*
+will use more. The aggregate functions *median, percentile, skewness*
+and *trimmed mean* will use even more memory and may not be appropriate
+for use with arbitrarily large input files.
 
-The aggregate functions <em>median, percentile, skewness</em> and
-<em>trimmed mean</em> will use even more memory and may not be appropriate
-for use with arbitrarily large input files<!-- without a small value for percent= -->.
-<!-- explained: memory use for regular stats will be based solely on region size,
- but for the aggregate fns it will also depend on the number of data points. (?) -->
+The default map **type**=`FCELL` is intended as compromise between
+preserving data precision and limiting system resource consumption. If
+reading data from a `stdin` stream, the program can only run using a
+single pass.
 
-<p>
-The default map <b>type</b>=<code>FCELL</code> is intended as compromise between
-preserving data precision and limiting system resource consumption.
-If reading data from a <code>stdin</code> stream, the program can only run using
-a single pass.
+### Setting region bounds and resolution
 
-<h3>Setting region bounds and resolution</h3>
-
-You can use the <b>-s</b> scan flag to find the extent of the input data
+You can use the **-s** scan flag to find the extent of the input data
 (and thus point density) before performing the full import. Use
-<em><a href="g.region.html">g.region</a></em> to adjust the region bounds to match. The <b>-g</b> shell
-style flag prints the extent suitable as parameters for <em><a href="g.region.html">g.region</a></em>.
-A suitable resolution can be found by dividing the number of input points
-by the area covered. e.g.
+*[g.region](g.region.md)* to adjust the region bounds to match. The
+**-g** shell style flag prints the extent suitable as parameters for
+*[g.region](g.region.md)*. A suitable resolution can be found by
+dividing the number of input points by the area covered. e.g.
 
-<div class="code"><pre>
+```sh
 wc -l inputfile.txt
 g.region -p
 # points_per_cell = n_points / (rows * cols)
@@ -116,106 +103,101 @@ g.region -e
 
 # Lat/Lon project:
 # points_per_sq_m = n_points / (ns_extent * ew_extent*cos(lat) * (1852*60)^2)
-</pre></div>
+```
 
-<p>
-If you only intend to interpolate the data with <em><a href="r.to.vect.html">r.to.vect</a></em> and
-<em><a href="v.surf.rst.html">v.surf.rst</a></em>, then there is little point to setting the region
-resolution so fine that you only catch one data point per cell -- you might
-as well use "<code>v.in.ascii&nbsp;-zbt</code>" directly.
+If you only intend to interpolate the data with
+*[r.to.vect](r.to.vect.md)* and *[v.surf.rst](v.surf.rst.md)*, then
+there is little point to setting the region resolution so fine that you
+only catch one data point per cell -- you might as well use
+"`v.in.ascii -zbt`" directly.
 
-<h3>Filtering</h3>
+### Filtering
 
 Points falling outside the current region will be skipped. This includes
-points falling <em>exactly</em> on the southern region bound.
-(to capture those adjust the region with "<code>g.region s=s-0.000001</code>";
-see <em><a href="g.region.html">g.region</a></em>)
-<p>Blank lines and comment lines starting with the hash symbol (<code>#</code>)
-will be skipped.
+points falling *exactly* on the southern region bound. (to capture those
+adjust the region with "`g.region s=s-0.000001`"; see
+*[g.region](g.region.md)*)
 
-<p>
-The <b>zrange</b> parameter may be used for filtering the input data by
+Blank lines and comment lines starting with the hash symbol (`#`) will
+be skipped.
+
+The **zrange** parameter may be used for filtering the input data by
 vertical extent. Example uses might include preparing multiple raster
-sections to be combined into a 3D raster array with <em><a href="r.to.rast3.html">r.to.rast3</a></em>, or
-for filtering outliers on relatively flat terrain.
+sections to be combined into a 3D raster array with
+*[r.to.rast3](r.to.rast3.md)*, or for filtering outliers on relatively
+flat terrain.
 
-<p>
-In varied terrain the user may find that <em>min</em> maps make for a good
-noise filter as most LIDAR noise is from premature hits. The <em>min</em> map
-may also be useful to find the underlying topography in a forested or urban
-environment if the cells are over sampled.
+In varied terrain the user may find that *min* maps make for a good
+noise filter as most LIDAR noise is from premature hits. The *min* map
+may also be useful to find the underlying topography in a forested or
+urban environment if the cells are over sampled.
 
-<p>
-The user can use a combination of <em>r.in.xyz</em> <b>output</b> maps to create
-custom filters. e.g. use <em><a href="r.mapcalc.html">r.mapcalc</a></em> to create a <code>mean-(2*stddev)</code>
-map. [In this example the user may want to include a lower bound filter in
-<em><a href="r.mapcalc.html">r.mapcalc</a></em> to remove highly variable points (small <em>n</em>) or run
-<em><a href="r.neighbors.html">r.neighbors</a></em> to smooth the stddev map before further use.]
+The user can use a combination of *r.in.xyz* **output** maps to create
+custom filters. e.g. use *[r.mapcalc](r.mapcalc.md)* to create a
+`mean-(2*stddev)` map. \[In this example the user may want to include a
+lower bound filter in *[r.mapcalc](r.mapcalc.md)* to remove highly
+variable points (small *n*) or run *[r.neighbors](r.neighbors.md)* to
+smooth the stddev map before further use.\]
 
-<h3>Alternate value column</h3>
+### Alternate value column
 
-The <b>value_column</b> parameter can be used in specialized cases when you
+The **value_column** parameter can be used in specialized cases when you
 want to filter by z-range but bin and store another column's data. For
-example if you wanted to look at backscatter values between 1000 and 1500
-meters elevation. This is particularly useful when using <em>r.in.xyz</em>
-to prepare depth slices for a 3D raster &mdash; the <b>zrange</b> option defines
+example if you wanted to look at backscatter values between 1000 and
+1500 meters elevation. This is particularly useful when using *r.in.xyz*
+to prepare depth slices for a 3D raster — the **zrange** option defines
 the depth slice but the data values stored in the voxels describe an
-additional dimension. As with the z column, a filtering range and scaling
-factor may be applied.
+additional dimension. As with the z column, a filtering range and
+scaling factor may be applied.
 
-<h3>Reprojection</h3>
+### Reprojection
 
-If the raster map is to be reprojected, it may be more appropriate to reproject
-the input points with <em><a href="m.proj.html">m.proj</a></em> or <em>cs2cs</em> before running
-<em>r.in.xyz</em>.
+If the raster map is to be reprojected, it may be more appropriate to
+reproject the input points with *[m.proj](m.proj.md)* or *cs2cs* before
+running *r.in.xyz*.
 
-<h3>Interpolation into a DEM</h3>
+### Interpolation into a DEM
 
-The vector engine's topographic abilities introduce a finite memory overhead
-per vector point which will typically limit a vector map to approximately
-3 million points (~ 1750^2 cells). If you want more, use the <em><a href="r.to.vect.html">r.to.vect</a></em>
-<b>-b</b> flag to skip building topology. Without topology, however, all
-you'll be able to do with the vector map is display with <em><a href="d.vect.html">d.vect</a></em> and
-interpolate with <em><a href="v.surf.rst.html">v.surf.rst</a></em>.
-Run <em><a href="r.univar.html">r.univar</a></em> on your raster map to check the number of non-NULL cells
-and adjust bounds and/or resolution as needed before proceeding.
+The vector engine's topographic abilities introduce a finite memory
+overhead per vector point which will typically limit a vector map to
+approximately 3 million points (~ 1750^2 cells). If you want more, use
+the *[r.to.vect](r.to.vect.md)* **-b** flag to skip building topology.
+Without topology, however, all you'll be able to do with the vector map
+is display with *[d.vect](d.vect.md)* and interpolate with
+*[v.surf.rst](v.surf.rst.md)*. Run *[r.univar](r.univar.md)* on your
+raster map to check the number of non-NULL cells and adjust bounds
+and/or resolution as needed before proceeding.
 
-<p>
 Typical commands to create a DEM using a regularized spline fit:
-<div class="code"><pre>
+
+```sh
 r.univar lidar_min
 r.to.vect -z type=point in=lidar_min out=lidar_min_pt
 v.surf.rst in=lidar_min_pt elev=lidar_min.rst
-</pre></div>
+```
 
-<h3>Import of x,y,string data</h3>
+### Import of x,y,string data
 
-<em>r.in.xyz</em> is expecting numeric values as z column. In order to
-perform a occurrence count operation even on x,y data with non-numeric
+*r.in.xyz* is expecting numeric values as z column. In order to perform
+a occurrence count operation even on x,y data with non-numeric
 attribute(s), the data can be imported using either the x or y
-coordinate as a fake z column for <b>method</b>=<code>n</code> (count
-number of points per grid cell), the z values are ignored anyway.
+coordinate as a fake z column for **method**=`n` (count number of points
+per grid cell), the z values are ignored anyway.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Import of x,y,z ASCII into DEM</h3>
+### Import of x,y,z ASCII into DEM
 
-Sometimes elevation data are delivered as x,y,z ASCII files instead of a raster
-matrix. The import procedure consists of a few steps: calculation of the
-map extent, setting of the computational region accordingly with an additional
-extension into all directions by half a raster cell in order to register the
-elevation points at raster cell centers.
-<p>
-Note: if the z column is separated by several spaces from the coordinate columns,
-it may be sufficient to adapt the <b>z</b> position value.
+Sometimes elevation data are delivered as x,y,z ASCII files instead of a
+raster matrix. The import procedure consists of a few steps: calculation
+of the map extent, setting of the computational region accordingly with
+an additional extension into all directions by half a raster cell in
+order to register the elevation points at raster cell centers.
 
-<!-- NC: preparation for this example
-g.region raster=elevation res=15 -p
-#
-r.stats -1g elevation &gt; elevation.xyz
--->
+Note: if the z column is separated by several spaces from the coordinate
+columns, it may be sufficient to adapt the **z** position value.
 
-<div class="code"><pre>
+```sh
 # Important: observe the raster spacing from the ASCII file:
 # ASCII file format (example):
 # 630007.5 228492.5 141.99614
@@ -242,14 +224,15 @@ r.in.xyz input=elevation.xyz separator=space method=mean output=myelev
 
 # univariate statistics for verification of raster values
 r.univar myelev
-</pre></div>
+```
 
-<h3>Import of LiDAR data and DEM creation</h3>
-Import the <a href="https://grassbook.org/ncexternal/index.html">Jockey's
-Ridge, NC, LIDAR dataset</a> (compressed file "lidaratm2.txt.gz"), and process it
-into a clean DEM:
+### Import of LiDAR data and DEM creation
 
-<div class="code"><pre>
+Import the [Jockey's Ridge, NC, LIDAR
+dataset](https://grassbook.org/ncexternal/index.html) (compressed file
+"lidaratm2.txt.gz"), and process it into a clean DEM:
+
+```sh
 # scan and set region bounds
 r.in.xyz -s -g separator="," in=lidaratm2.txt
 g.region n=35.969493 s=35.949693 e=-75.620999 w=-75.639999
@@ -281,64 +264,47 @@ r.colors lidar_min.rst rule=bcyr -n -e
 # prepare a 1:1:1 scaled version for NVIZ visualization (for lat/lon input)
 r.mapcalc "lidar_min.rst_scaled = lidar_min.rst / (1852*60)"
 r.colors lidar_min.rst_scaled rule=bcyr -n -e
-</pre></div>
+```
 
-<h2>TODO</h2>
+## TODO
 
-<ul>
-<li> Support for multiple map output from a single run.<br>
-     <code>method=string[,string,...] output=name[,name,...]</code><br>
-     This can be easily handled by a wrapper script, with the added
-     benefit of it being very simple to parallelize that way.</li>
-</ul>
+- Support for multiple map output from a single run.  
+  `method=string[,string,...] output=name[,name,...]`  
+  This can be easily handled by a wrapper script, with the added benefit
+  of it being very simple to parallelize that way.
 
-<h2>KNOWN ISSUES</h2>
+## KNOWN ISSUES
 
-<ul>
-<li> "<code>nan</code>" can leak into <em>coeff_var</em> maps.
-  <br>Cause unknown. Possible work-around: "<code>r.null setnull=nan</code>"</li>
-<!-- Another method:  r.mapcalc 'No_nan = if(map == map, map, null() )' -->
-</ul>
+- "`nan`" can leak into *coeff_var* maps.  
+  Cause unknown. Possible work-around: "`r.null setnull=nan`"
 
 If you encounter any problems (or solutions!) please contact the GRASS
 Development Team.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="m.proj.html">m.proj</a>,
-<a href="r.fillnulls.html">r.fillnulls</a>,
-<a href="r.in.ascii.html">r.in.ascii</a>,
-<a href="r.in.pdal.html">r.in.pdal</a>,
-<a href="r3.in.xyz.html">r3.in.xyz</a>,
-<a href="r.mapcalc.html">r.mapcalc</a>,
-<a href="r.neighbors.html">r.neighbors</a>,
-<a href="r.out.xyz.html">r.out.xyz</a>,
-<a href="r.to.rast3.html">r.to.rast3</a>,
-<a href="r.to.vect.html">r.to.vect</a>,
-<a href="r.univar.html">r.univar</a>,
-<a href="v.in.ascii.html">v.in.ascii</a>,
-<a href="v.surf.rst.html">v.surf.rst</a>
-</em>
-<p>
-<em>
-<a href="v.lidar.correction.html">v.lidar.correction</a>,
-<a href="v.lidar.edgedetection.html">v.lidar.edgedetection</a>,
-<a href="v.lidar.growing.html">v.lidar.growing</a>,
-<a href="v.outlier.html">v.outlier</a>,
-<a href="v.surf.bspline.html">v.surf.bspline</a>
-</em>
-<p>
-<em><a href="http://www.ivarch.com/programs/pv.shtml">pv</a></em>
- - The UNIX pipe viewer utility
+*[g.region](g.region.md), [m.proj](m.proj.md),
+[r.fillnulls](r.fillnulls.md), [r.in.ascii](r.in.ascii.md),
+[r.in.pdal](r.in.pdal.md), [r3.in.xyz](r3.in.xyz.md),
+[r.mapcalc](r.mapcalc.md), [r.neighbors](r.neighbors.md),
+[r.out.xyz](r.out.xyz.md), [r.to.rast3](r.to.rast3.md),
+[r.to.vect](r.to.vect.md), [r.univar](r.univar.md),
+[v.in.ascii](v.in.ascii.md), [v.surf.rst](v.surf.rst.md)*
 
-<p>
-Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation and Resampling</a> in GRASS GIS
+*[v.lidar.correction](v.lidar.correction.md),
+[v.lidar.edgedetection](v.lidar.edgedetection.md),
+[v.lidar.growing](v.lidar.growing.md), [v.outlier](v.outlier.md),
+[v.surf.bspline](v.surf.bspline.md)*
 
-<h2>AUTHORS</h2>
+*[pv](http://www.ivarch.com/programs/pv.shtml)* - The UNIX pipe viewer
+utility
 
-Hamish Bowman, Department of Marine Science, University of Otagom New Zealand
-<br>
-Extended by Volker Wichmann to support the aggregate functions
-<i>median, percentile, skewness</i> and <i>trimmed mean</i>.
+Overview: [Interpolation and
+Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
+
+## AUTHORS
+
+Hamish Bowman, Department of Marine Science, University of Otagom New
+Zealand  
+Extended by Volker Wichmann to support the aggregate functions *median,
+percentile, skewness* and *trimmed mean*.

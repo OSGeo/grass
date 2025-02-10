@@ -1,49 +1,42 @@
-<!-- meta page description: wxGUI Components -->
-<!-- meta page index: wxGUI -->
+## KEYWORDS
 
-<h2>KEYWORDS</h2>
+[general](general.md), [GUI](topic_GUI.md)
 
+## DESCRIPTION
 
-<a href="general.html">general</a>, <a href="topic_GUI.html">GUI</a>
+List of available *[wxGUI](wxGUI.md)* components:
 
-<h2>DESCRIPTION</h2>
+- [Module dialogs](wxGUI.modules.md)
+- [3D Viewer](wxGUI.nviz.md) (nviz)
+- [Animation tool](wxGUI.animation.md), available as a command line tool
+  *[g.gui.animation](g.gui.animation.md)*
+- [Attribute Table Manager](wxGUI.dbmgr.md), available also as a command
+  line tool *[g.gui.dbmgr](g.gui.dbmgr.md)*
+- [Cartographic Composer](wxGUI.psmap.md), available also as a command
+  line tool *[g.gui.psmap](g.gui.psmap.md)*
+- [Data Catalog](wxGUI.datacatalog.md), available also as a command line
+  tool *[g.gui.datacatalog](g.gui.datacatalog.md)*
+- [Graphical Modeler](wxGUI.gmodeler.md), available also as a command
+  line tool *[g.gui.gmodeler](g.gui.gmodeler.md)*
+- [Ground Control Points Manager](wxGUI.gcp.md), available also as a
+  command line tool *[g.gui.gcp](g.gui.gcp.md)*
+- [Interactive Scatter Plot Tool](wxGUI.iscatt.md)
+- [Map Swipe](wxGUI.mapswipe.md), available also as a command line tool
+  *[g.gui.mapswipe](g.gui.mapswipe.md)*
+- [Supervised Classification Tool](wxGUI.iclass.md), available also as a
+  command line tool *[g.gui.iclass](g.gui.iclass.md)*
+- Configuration tool for r.li modules,
+  *[g.gui.rlisetup](g.gui.rlisetup.md)*
+- [Timeline Tool](wxGUI.timeline.md), available also as a command line
+  tool *[g.gui.timeline](g.gui.timeline.md)*
+- [Temporal Plot Tool](wxGUI.tplot.md), available also as a command line
+  tool *[g.gui.tplot](g.gui.tplot.md)*
+- [Vector Digitizer](wxGUI.vdigit.md), available also as a command line
+  tool *[g.gui.vdigit](g.gui.vdigit.md)*
+- [Raster Digitizer](wxGUI.rdigit.md) available also as a command line
+  tool *[g.gui.rdigit](g.gui.rdigit.md)*
+- [Vector Network Analysis Tool](wxGUI.vnet.md)
 
-List of available <em><a href="wxGUI.html">wxGUI</a></em> components:
+## SEE ALSO
 
-<ul>
-  <li><a href="wxGUI.modules.html">Module dialogs</a></li>
-  <li><a href="wxGUI.nviz.html">3D Viewer</a> (nviz)</li>
-  <li><a href="wxGUI.animation.html">Animation tool</a>,
-    available as a command line tool <em><a href="g.gui.animation.html">g.gui.animation</a></em></li>
-  <li><a href="wxGUI.dbmgr.html">Attribute Table Manager</a>,
-    available also as a command line tool <em><a href="g.gui.dbmgr.html">g.gui.dbmgr</a></em></li>
-  <li><a href="wxGUI.psmap.html">Cartographic Composer</a>,
-    available also as a command line tool <em><a href="g.gui.psmap.html">g.gui.psmap</a></em></li>
-  <li><a href="wxGUI.datacatalog.html">Data Catalog</a>,
-    available also as a command line tool <em><a href="g.gui.datacatalog.html">g.gui.datacatalog</a></em></li>
-  <li><a href="wxGUI.gmodeler.html">Graphical Modeler</a>,
-    available also as a command line tool <em><a href="g.gui.gmodeler.html">g.gui.gmodeler</a></em></li>
-  <li><a href="wxGUI.gcp.html">Ground Control Points Manager</a>,
-    available also as a command line tool <em><a href="g.gui.gcp.html">g.gui.gcp</a></em></li>
-  <li><a href="wxGUI.iscatt.html">Interactive Scatter Plot Tool</a></li>
-  <li><a href="wxGUI.mapswipe.html">Map Swipe</a>,
-    available also as a command line tool <em><a href="g.gui.mapswipe.html">g.gui.mapswipe</a></em></li>
-  <li><a href="wxGUI.iclass.html">Supervised Classification Tool</a>,
-     available also as a command line tool <em><a href="g.gui.iclass.html">g.gui.iclass</a></em></li>
-  <li>Configuration tool for r.li modules, <em><a href="g.gui.rlisetup.html">g.gui.rlisetup</a></em></li>
-  <li><a href="wxGUI.timeline.html">Timeline Tool</a>,
-     available also as a command line tool <em><a href="g.gui.timeline.html">g.gui.timeline</a></em></li>
-  <li><a href="wxGUI.tplot.html">Temporal Plot Tool</a>,
-     available also as a command line tool <em><a href="g.gui.tplot.html">g.gui.tplot</a></em></li>
-  <li><a href="wxGUI.vdigit.html">Vector Digitizer</a>,
-     available also as a command line tool <em><a href="g.gui.vdigit.html">g.gui.vdigit</a></em></li>
-  <li><a href="wxGUI.rdigit.html">Raster Digitizer</a>
-    available also as a command line tool <em><a href="g.gui.rdigit.html">g.gui.rdigit</a></em></li>
-  <li><a href="wxGUI.vnet.html">Vector Network Analysis Tool</a></li>
-</ul>
-
-<h2>SEE ALSO</h2>
-
-<em>
-  <a href="wxGUI.html">wxGUI</a>
-</em>
+*[wxGUI](wxGUI.md)*

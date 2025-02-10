@@ -1,21 +1,17 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>i.ortho.target</em> sets the image group target project (location) and mapset.
+*i.ortho.target* sets the image group target project (location) and
+mapset.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="i.ortho.photo.html">i.ortho.photo</a>,
-<a href="i.ortho.elev.html">i.ortho.elev</a>,
-<a href="i.ortho.camera.html">i.ortho.camera</a>,
-<a href="g.gui.photo2image.html">g.gui.photo2image</a>,
-<a href="g.gui.image2target.html">g.gui.image2target</a>,
-<a href="i.ortho.init.html">i.ortho.init</a>,
-<a href="i.ortho.rectify.html">i.ortho.rectify</a>
-</em>
+*[i.ortho.photo](i.ortho.photo.md), [i.ortho.elev](i.ortho.elev.md),
+[i.ortho.camera](i.ortho.camera.md),
+[g.gui.photo2image](g.gui.photo2image.md),
+[g.gui.image2target](g.gui.image2target.md),
+[i.ortho.init](i.ortho.init.md), [i.ortho.rectify](i.ortho.rectify.md)*
 
+## AUTHOR
 
-<h2>AUTHOR</h2>
-
-Mike Baba,  DBA Systems, Inc.<br>
+Mike Baba, DBA Systems, Inc.  
 GRASS development team, 2017

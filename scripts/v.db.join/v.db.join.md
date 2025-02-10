@@ -1,25 +1,28 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.db.join</em> joins the content of another table into the connected
+*v.db.join* joins the content of another table into the connected
 attribute table of a vector map.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>v.db.join</em> is a front-end to <em>db.execute</em> to allow easier usage.
+*v.db.join* is a front-end to *db.execute* to allow easier usage. The
+vector attribute table must be stored in a SQL database (SQLite,
+PostgreSQL, MySQL, ODBC, ...). The DBF backend is not supported. Tables
+can be imported with *db.in.ogr*.
 
-The vector attribute table must be stored in a SQL database (SQLite, PostgreSQL,
-MySQL, ODBC, ...). The DBF backend is not supported. Tables can be
-imported with <em>db.in.ogr</em>.
-<p>The vector map-database connection(s) can be verified with <em>v.db.connect</em>.
+The vector map-database connection(s) can be verified with
+*v.db.connect*.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 Exercise to join North Carolina geological classes from a CSV table to
-the "geology" map of the North Carolina sample dataset (requires download
-of legend CSV file <a href="https://grassbook.org/wp-content/uploads/ncexternal/nc_geology.csv">nc_geology.csv</a>
-from <a href="https://grassbook.org/wp-content/uploads/ncexternal/index.html">External data for NC sample dataset</a>):
+the "geology" map of the North Carolina sample dataset (requires
+download of legend CSV file
+[nc_geology.csv](https://grassbook.org/wp-content/uploads/ncexternal/nc_geology.csv)
+from [External data for NC sample
+dataset](https://grassbook.org/wp-content/uploads/ncexternal/index.html)):
 
-<div class="code"><pre>
+```sh
 # check original map attributes
 v.db.select geology column=GEO_NAME,SHAPE_area
 
@@ -44,14 +47,15 @@ cat|onemap_pro|PERIMETER|GEOL250_|GEOL250_ID|GEO_NAME|SHAPE_area|SHAPE_len|geol_
 1|963738.75|4083.97998|2|1|Zml|963738.608571|4083.979839|Zml|Metagraywacke|Interlayered with metaconglomerate, ...
 2|22189124|26628.261719|3|2|Zmf|22189123.2296|26628.261112|Zmf|Metafelsite|Light-colored porphyritic extrusive rock
 ...
-</pre></div>
+```
 
-<h3>Soil map table join</h3>
+### Soil map table join
 
-Joining the soil type explanations from table <em>soils_legend</em>
-into the Spearfish soils map (<a href="https://grassbook.org/code-examples/code-examples-1st-edition/">download legend</a>):
+Joining the soil type explanations from table *soils_legend* into the
+Spearfish soils map ([download
+legend](https://grassbook.org/code-examples/code-examples-1st-edition/)):
 
-<div class="code"><pre>
+```sh
 g.copy vect=soils,mysoils
 
 # import legend table
@@ -95,22 +99,15 @@ cat|label|id|shortname|longname
 4|BcB|4|BcB|Boneek silt loam, 2 to 6
 5|BcC|5|BcC|Boneek silt loam, 6 to 9
 ...
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.execute.html">db.execute</a>,
-<a href="db.in.ogr.html">db.in.ogr</a>,
-<a href="db.select.html">db.select</a>,
-<a href="v.db.update.html">v.db.update</a>
-</em>
+*[db.execute](db.execute.md), [db.in.ogr](db.in.ogr.md),
+[db.select](db.select.md), [v.db.update](v.db.update.md)*
 
-<p>
-<em>
-<a href="sql.html">GRASS SQL interface</a>
-</em>
+*[GRASS SQL interface](sql.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Markus Neteler

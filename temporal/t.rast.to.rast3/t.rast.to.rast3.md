@@ -1,60 +1,64 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast.to.rast3</em> is designed to convert a space time raster
-dataset (STRDS) into a space time voxel cube. A space time voxel cube
-is a 3 dimensional raster map layer (3D raster map or voxel map layer)
-that as time as unit for the z-dimension.
-<p>
+*t.rast.to.rast3* is designed to convert a space time raster dataset
+(STRDS) into a space time voxel cube. A space time voxel cube is a 3
+dimensional raster map layer (3D raster map or voxel map layer) that as
+time as unit for the z-dimension.
+
 A space time raster dataset that should be converted into a space time
 voxel cube must have a valid temporal topology. Hence, overlapping or
-inclusion of time stamps is not allowed. The granularity of the STRDS
-is used to set the resolution of the 3D raster map layer and to sample
-the registered time stamped raster map layers.
-<p>
-Gaps between raster map layer in the STRDS will
-be represented by NULL values in the voxel map layer.
+inclusion of time stamps is not allowed. The granularity of the STRDS is
+used to set the resolution of the 3D raster map layer and to sample the
+registered time stamped raster map layers.
 
-<h2>NOTES</h2>
+Gaps between raster map layer in the STRDS will be represented by NULL
+values in the voxel map layer.
 
-The reference time for all space time voxel cubes is
-1900-01-0100:00:00. This allows the alignment space time voxel cubes
-with different granularities.
-<p>
+## NOTES
+
+The reference time for all space time voxel cubes is 1900-01-0100:00:00.
+This allows the alignment space time voxel cubes with different
+granularities.
+
 Be aware that the granularity of a STRDS is used to sample time stamped
 map layers! If you have gaps between monthly intervals that have the
 size of a second, the monthly intervals will be sampled by a second
 based granularity as well. This may result in millions of space time
 voxel cube layers!
 
-<h3>Management of open file limits</h3>
+### Management of open file limits
+
 The maximum number of raster maps that can be processed is given by the
-per-user limit of the operating system. For example, both the the hard and soft
-limit for users is typically 1024. The soft limit can be changed with e.g.
-ulimit -n 4096 (UNIX-based operating systems) but not higher than the
-hard limit. If the latter is too low, you can as superuser add an entry in
+per-user limit of the operating system. For example, both the the hard
+and soft limit for users is typically 1024. The soft limit can be
+changed with e.g. ulimit -n 4096 (UNIX-based operating systems) but not
+higher than the hard limit. If the latter is too low, you can as
+superuser add an entry in
 
-<div class="code"><pre>
+```sh
 /etc/security/limits.conf
-# &lt;domain&gt;      &lt;type&gt;  &lt;item&gt;         &lt;value&gt;
+# <domain>      <type>  <item>         <value>
 your_username  hard    nofile          4096
-</pre></div>
+```
 
-This will raise the hard limit to 4096 files. Also have a look at the overall
-limit of the operating system
-<div class="code"><pre>
+This will raise the hard limit to 4096 files. Also have a look at the
+overall limit of the operating system
+
+```sh
 cat /proc/sys/fs/file-max
-</pre></div>
+```
+
 which, on modern Linux systems, is several 100,000 files.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-To create a voxel map layer from a subset of the <em>tempmean_monthly</em>
+To create a voxel map layer from a subset of the *tempmean_monthly*
 space time dataset, run:
 
-<div class="code"><pre>
+```sh
 # create the subset for 2012 data
 t.rast.extract input=tempmean_monthly output=tempmean_monthly_later_2012 \
-               where="start_time &gt;= '2012-01-01'"
+               where="start_time >= '2012-01-01'"
 
 # set the right 3D region
 g.region -p3 res3=500
@@ -146,15 +150,12 @@ r3.info tempmean_monthly_2012
  |    ze=32                                                                   |
  |                                                                            |
  +----------------------------------------------------------------------------+
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r3.mapcalc.html">r3.mapcalc</a>,
-<a href="r3.info.html">r3.info</a>
-</em>
+*[r3.mapcalc](r3.mapcalc.md), [r3.info](r3.info.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

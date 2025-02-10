@@ -1,25 +1,24 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<b>r.surf.fractal</b> creates a fractal surface of a given fractal
+**r.surf.fractal** creates a fractal surface of a given fractal
 dimension. It uses the spectral synthesis method. The module can create
-intermediate layers showing the build up of different spectral coefficients
-(see Saupe, pp.106-107 for an example of this).
+intermediate layers showing the build up of different spectral
+coefficients (see Saupe, pp.106-107 for an example of this).
 
-<p>
 This module generates naturally looking synthetical elevation models
 (DEM).
 
-<h2>NOTE</h2>
+## NOTE
 
-This module requires the <a href="https://fftw.org">FFTW library</a>
-for computing Discrete Fourier Transforms.
+This module requires the [FFTW library](https://fftw.org) for computing
+Discrete Fourier Transforms.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Generate surface using fractals in selected region, set color table and
 display with shade.
 
-<div class="code"><pre>
+```sh
 g.region -p raster=elevation
 
 r.surf.fractal output=fractals
@@ -29,23 +28,14 @@ r.relief input=fractals output=fractals_shade
 
 d.mon wx0
 d.shade shade=fractals_shade color=fractals b=50
-</pre></div>
+```
 
-<center>
-<img src="r_surf_fractal_simple.png" alt="Artificial surface created with fractals"><br>
-Artificial surface created with fractals<br>
-</center>
-
-<!--
-# leave out d.mon wx0 when generating image
-mogrify -trim map.png
-optipng -o5 map.png
-mv map.png r_surf_fractal_simple.png
--->
+![Artificial surface created with fractals](r_surf_fractal_simple.png)  
+Artificial surface created with fractals  
 
 Compare results when using different fractal dimensions:
 
-<div class="code"><pre>
+```sh
 # D=2.0005
 g.region -dp
 r.surf.fractal out=dem_d2_0005 dim=2.0005
@@ -60,49 +50,27 @@ r.info -r dem_d2_90
 r.mapcalc "dem_d2_90_final = 1.0 * dem_d2_90 + abs(min(dem_d2_90))"
 r.colors dem_d2_90_final color=terrain
 r.slope.aspect dem_d2_90_final aspect=dem_d2_90_final_as
-</pre></div>
+```
 
-<!--
-d.mon wx0
-d.erase
-d.split.frame
-d.frame -s uno
-d.rast dem_d2_0005_final
-d.frame -s dos
-d.rast dem_d2_0005_final_as
-d.frame -s tres
-d.rast dem_d2_90_final
-d.frame -s cuatro
-d.rast dem_d2_90_final_as
--->
-
-<center>
-<img src="r_surf_fractal.jpg" alt="Artificial DEMs created with fractals"><br>
-Artificial DEMs created with fractals:<br>
-top: fractal dimension d=2.0005 (left: elevation map, right: aspect map)<br>
+![Artificial DEMs created with fractals](r_surf_fractal.jpg)  
+Artificial DEMs created with fractals:  
+top: fractal dimension d=2.0005 (left: elevation map, right: aspect
+map)  
 top: fractal dimension d=2.90 (left: elevation map, right: aspect map)
-</center>
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-Saupe, D. (1988) Algorithms for random fractals, in Barnsley M.,
- Devaney R., Mandelbrot B., Peitgen, H-O., Saupe D., and Voss R.
- (1988) The Science of Fractal Images, Ch. 2, pp.71-136. London:
- Springer-Verlag.
+Saupe, D. (1988) Algorithms for random fractals, in Barnsley M., Devaney
+R., Mandelbrot B., Peitgen, H-O., Saupe D., and Voss R. (1988) The
+Science of Fractal Images, Ch. 2, pp.71-136. London: Springer-Verlag.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.surf.contour.html">r.surf.contour</a>,
-<a href="r.surf.idw.html">r.surf.idw</a>,
-<a href="r.surf.gauss.html">r.surf.gauss</a>,
-<a href="r.surf.random.html">r.surf.random</a>,
-<a href="v.surf.idw.html">v.surf.idw</a>,
-<a href="v.surf.rst.html">v.surf.rst</a>
-</em>
+*[r.surf.contour](r.surf.contour.md), [r.surf.idw](r.surf.idw.md),
+[r.surf.gauss](r.surf.gauss.md), [r.surf.random](r.surf.random.md),
+[v.surf.idw](v.surf.idw.md), [v.surf.rst](v.surf.rst.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Jo Wood,
-Midlands Regional Research Laboratory (ASSIST),
-University of Leicester
+Jo Wood, Midlands Regional Research Laboratory (ASSIST), University of
+Leicester

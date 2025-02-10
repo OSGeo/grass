@@ -1,15 +1,12 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.out.gridatb</em> exports a GRASS raster map to GRIDATB.FOR map file
+*r.out.gridatb* exports a GRASS raster map to GRIDATB.FOR map file
 (TOPMODEL)
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.topmodel.html">r.topmodel</a>,
-<a href="r.in.gridatb.html">r.in.gridatb</a>
-</em>
+*[r.topmodel](r.topmodel.md), [r.in.gridatb](r.in.gridatb.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Huidae Cho based on code from Keith Beven

@@ -1,60 +1,63 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.rast.stats</em> calculates basic univariate statistics from
-a raster map only for the parts covered by the specified vector map.
-The vector map will be rasterized according to the raster map resolution.
-Then univariate statistics are calculated per vector category (cat) from
-the raster map and the results uploaded to the vector map attribute table.
-A new column is generated in the attribute table for each statistic requested
-in <b>method</b> (if not already present).
-<p>
+*v.rast.stats* calculates basic univariate statistics from a raster map
+only for the parts covered by the specified vector map. The vector map
+will be rasterized according to the raster map resolution. Then
+univariate statistics are calculated per vector category (cat) from the
+raster map and the results uploaded to the vector map attribute table. A
+new column is generated in the attribute table for each statistic
+requested in **method** (if not already present).
+
 The univariate statistics include the number of raster cells counted,
-the number of raster NULL cells counted, minimum
-and maximum cell values, range, average, <!-- r.univar: arithmetic mean -->
-standard deviation, variance, coefficient of variation, sum, first quartile,
-median, third quartile, and percentile.
+the number of raster NULL cells counted, minimum and maximum cell
+values, range, average, standard deviation, variance, coefficient of
+variation, sum, first quartile, median, third quartile, and percentile.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>v.rast.stats</em> is only meaningful for lines or polygons.
-<p>
-The module may take a long time to run if the raster region contains a large
-number of cells. In this case the <b>--verbose</b> flag may be used to track
-progress.
-<p>The script stops if a (prefixed) upload column is already present in the
-vector map attribute table, unless otherwise instructed with the <b>-c</b>
-continue flag. The column prefix will be separated from the statistic name
-with an underscore. For example with a prefix of "<code>elev</code>" the sum
-column will be named <code>elev_sum</code>.
-<p>If a DBF database is being used, note that column names are restricted by the
-DBF specification to 10 characters. Therefore it is advised to be economical
-in the use of the column prefix when using DBF as any additional characters
-will be chopped off.
-<p>The script internally aligns the raster grid cells to the grid of the first
-input raster map.
-<p>If an area has several categories in the selected layer (equivalent
-to overlapping polygons in Simple Features), only one category will be
-kept during the rasterization process. Statistics for the skipped
-categories will thus be partial.
-<p>
+*v.rast.stats* is only meaningful for lines or polygons.
+
+The module may take a long time to run if the raster region contains a
+large number of cells. In this case the **--verbose** flag may be used
+to track progress.
+
+The script stops if a (prefixed) upload column is already present in the
+vector map attribute table, unless otherwise instructed with the **-c**
+continue flag. The column prefix will be separated from the statistic
+name with an underscore. For example with a prefix of "`elev`" the sum
+column will be named `elev_sum`.
+
+If a DBF database is being used, note that column names are restricted
+by the DBF specification to 10 characters. Therefore it is advised to be
+economical in the use of the column prefix when using DBF as any
+additional characters will be chopped off.
+
+The script internally aligns the raster grid cells to the grid of the
+first input raster map.
+
+If an area has several categories in the selected layer (equivalent to
+overlapping polygons in Simple Features), only one category will be kept
+during the rasterization process. Statistics for the skipped categories
+will thus be partial.
+
 For example, if there are three areas: area 1 with cat 1, area 2 with
 cat 2, area 3 with cats 1, 2. Only one category value of area 3 will be
 used for rasterization, the other category value will be skipped. Thus
 statistics for the used category value will be complete, while
 statistics for the skipped category value will be incomplete.
-<p><!-- r.univar limitation -->
+
 Large amounts of system memory can be used when extended statistics
-(<em>first_quartile,median,third_quartile,percentile </em>) are being requested
+(*first_quartile,median,third_quartile,percentile* ) are being requested
 with a very large region setting. If the region is too large the module
-should display memory allocation errors. Basic statistics can be calculated
-using any size input region.
+should display memory allocation errors. Basic statistics can be
+calculated using any size input region.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-Example to upload DEM statistics to ZIP codes vector map
-(North Carolina sample dataset):
+Example to upload DEM statistics to ZIP codes vector map (North Carolina
+sample dataset):
 
-<div class="code"><pre>
+```sh
 g.copy vect=zipcodes_wake,myzipcodes_wake
 # set computational region to DEM:
 g.region raster=elevation -p
@@ -66,19 +69,15 @@ v.rast.stats myzipcodes_wake raster=elevation \
 v.info -c myzipcodes_wake
 v.db.select myzipcodes_wake
 v.univar myzipcodes_wake column=elev_range type=centroid
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.univar.html">r.univar</a>,
-<a href="v.univar.html">v.univar</a>,
-<a href="v.vect.stats.html">v.vect.stats</a>,
-<a href="v.what.rast.html">v.what.rast</a>,
-<a href="v.what.rast3.html">v.what.rast3</a>,
-<a href="v.what.vect.html">v.what.vect</a>
-</em>
+*[r.univar](r.univar.md), [v.univar](v.univar.md),
+[v.vect.stats](v.vect.stats.md), [v.what.rast](v.what.rast.md),
+[v.what.rast3](v.what.rast3.md), [v.what.vect](v.what.vect.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Markus Neteler, CEA (for the <a href="https://cordis.europa.eu/project/id/10284">EDEN EU/FP6 Project</a>)
+Markus Neteler, CEA (for the [EDEN EU/FP6
+Project](https://cordis.europa.eu/project/id/10284))

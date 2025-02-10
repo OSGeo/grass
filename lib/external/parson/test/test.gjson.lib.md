@@ -1,9 +1,8 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>test.gjson.lib</em>
-is a module dedicated for testing the gjson library.
+*test.gjson.lib* is a module dedicated for testing the gjson library.
 This module is used by the testing framework to perform library tests.
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Nishant Bansal

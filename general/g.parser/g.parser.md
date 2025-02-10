@@ -1,64 +1,59 @@
-<!-- meta page name: g.parser -->
-<!-- meta page name description: Provides full parser support for GRASS scripts. -->
+## KEYWORDS
 
-<h2>KEYWORDS</h2>
+[general](general.md), [support](topic_support.md),
+[scripts](keywords.md#scripts)
 
-<a href="general.html">general</a>, <a href="topic_support.html">support</a>, <a href="keywords.html#scripts">scripts</a>
+## SYNOPSIS
 
-<h2>SYNOPSIS</h2>
+**g.parser --help**  
+**g.parser** \[-**s**\] \[-**t**\] \[-**n**\] *filename*
+\[*argument*,...\]
 
-<b>g.parser --help</b><br>
-<b>g.parser</b> [-<b>s</b>] [-<b>t</b>]  [-<b>n</b>] <em>filename</em> [<em>argument</em>,...]
+### Flags
 
-<h3>Flags:</h3>
-<dl>
-<dt><b>-t</b></dt>
-<dd>Print strings for translation</dd>
-<dt><b>-s</b></dt>
-<dd>Write option values to standard output instead of reinvoking script</dd>
-<dt><b>-n</b></dt>
-<dd>Write option values to standard output separated by null character</dd>
-</dl>
+**-t**  
+Print strings for translation
 
-<h2>DESCRIPTION</h2>
+**-s**  
+Write option values to standard output instead of reinvoking script
 
-The <em>g.parser</em> module provides full parser support for GRASS
-scripts, including an auto-generated GUI interface, help page
-template, and command line option checking. In this way a simple
-script can very quickly be made into a full-fledged GRASS module.
+**-n**  
+Write option values to standard output separated by null character
 
-<h2>OPTIONS</h2>
+## DESCRIPTION
 
-Unless the <b>-s</b> or <b>-n</b> switch is used, the arguments are stored in
-environment variables for use in your scripts. These variables are
-named "GIS_FLAG_&lt;NAME&gt;" for flags and "GIS_OPT_&lt;NAME&gt;" for
-options. The names of variables are converted to upper case. For
-example if an option with key <b>input</b> was defined in the script
-header, the value will be available in variable <b>GIS_OPT_INPUT</b>
-and the value of flag with key <b>f</b> will be available in variable
-<b>GIS_FLAG_F</b>.
+The *g.parser* module provides full parser support for GRASS scripts,
+including an auto-generated GUI interface, help page template, and
+command line option checking. In this way a simple script can very
+quickly be made into a full-fledged GRASS module.
 
-<p>
-For flags, the value will be "1" if the flag was given, and "0" otherwise.
+## OPTIONS
 
-<p>
-If the <b>-s</b> or <b>-n</b> switch is used, the options and flags are written to
-standard output in the form <em>opt_&lt;name&gt;=&lt;value&gt;</em> and
-<em>flag_&lt;name&gt;=&lt;value&gt;</em>, preceded by the string
-<b>@ARGS_PARSED@</b>. If this string doesn't appear as the first line
-of standard output, it indicates that the script was invoked with a switch such
-as <b>--html-description</b>. In this case, the data written by
-<em>g.parser</em> to standard output should be copied to the script's standard output
-verbatim.
+Unless the **-s** or **-n** switch is used, the arguments are stored in
+environment variables for use in your scripts. These variables are named
+"GIS_FLAG\_\<NAME\>" for flags and "GIS_OPT\_\<NAME\>" for options. The
+names of variables are converted to upper case. For example if an option
+with key **input** was defined in the script header, the value will be
+available in variable **GIS_OPT_INPUT** and the value of flag with key
+**f** will be available in variable **GIS_FLAG_F**.
 
-If the <b>-s</b> switch is used, the options and flags are separated
-by newlines. If the <b>-n</b> switch is used, the options and flags
-are separated by null characters.
+For flags, the value will be "1" if the flag was given, and "0"
+otherwise.
 
-<p>
+If the **-s** or **-n** switch is used, the options and flags are
+written to standard output in the form *opt\_\<name\>=\<value\>* and
+*flag\_\<name\>=\<value\>*, preceded by the string **@ARGS_PARSED@**. If
+this string doesn't appear as the first line of standard output, it
+indicates that the script was invoked with a switch such as
+**--html-description**. In this case, the data written by *g.parser* to
+standard output should be copied to the script's standard output
+verbatim. If the **-s** switch is used, the options and flags are
+separated by newlines. If the **-n** switch is used, the options and
+flags are separated by null characters.
+
 Typical header definitions are as follows:
 
-<div class="code"><pre>
+```sh
 # %module
 # % description: g.parser test script
 # %end
@@ -73,18 +68,19 @@ Typical header definitions are as follows:
 # % description: Raster input map
 # % required: yes
 # %end
-</pre></div>
+```
 
-With <code>{NULL}</code> it is possible to suppress a predefined <code>description</code>
-or <code>label</code>.
+With `{NULL}` it is possible to suppress a predefined `description` or
+`label`.
 
-<p>
-The parsers allows using predefined <em>standardized options and
-flags</em>, see the list
-of <a href="https://grass.osgeo.org/programming8/parser__standard__options_8c.html#a1a5da9db1229a9bbc59d16ae84540bb8">options</a> and <a href="https://grass.osgeo.org/programming8/parser__standard__options_8c.html#ad081e95e5d4dc3daab9c820d962e6902">flags</a>
+The parsers allows using predefined *standardized options and flags*,
+see the list of
+[options](https://grass.osgeo.org/programming8/parser__standard__options_8c.html#a1a5da9db1229a9bbc59d16ae84540bb8)
+and
+[flags](https://grass.osgeo.org/programming8/parser__standard__options_8c.html#ad081e95e5d4dc3daab9c820d962e6902)
 in the programmer manual. Eg. the option
 
-<div class="code"><pre>
+```sh
 # %option
 # % key: raster
 # % type: string
@@ -92,180 +88,174 @@ in the programmer manual. Eg. the option
 # % description: Raster input map
 # % required: yes
 # %end
-</pre></div>
+```
 
 can be easily defined as
 
-<div class="code"><pre>
+```sh
 # %option G_OPT_R_MAP
 # % key: raster
 # %end
-</pre></div>
+```
 
-The parser allows defining predefined <em>rules</em>
-for used options.
+The parser allows defining predefined *rules* for used options. The
+syntax of the rules section is following:
 
-The syntax of the rules section is following:
-
-<div class="code"><pre>
+```sh
 # %rules
 # % exclusive: capfile_output, capfile
 # %end
-</pre></div>
+```
 
 The parser also allows defining "OR" conditions, e.g. requiring raster
 OR vector (for details, see below), e.g.for options:
 
-<div class="code"><pre>
+```sh
 # %rules
 # % required: raster, vector
 # %end
-</pre></div>
+```
 
 and e.g., for flags:
 
-<div class="code"><pre>
+```sh
 # %rules
 # % required: -i,-d,-c
 # %end
-</pre></div>
+```
 
-<h2>NOTES</h2>
+## NOTES
 
 An option can be instructed to allow multiple inputs by adding the
 following line:
-<div class="code"><pre>
+
+```sh
 # % multiple: yes
-</pre></div>
+```
 
-While this will only directly change the <i>Usage</i> section of the help
-screen, the option's environmental string may be easily parsed from within
-a script. For example, individual comma separated identities for an option
-named "input" can be parsed with the following Bash shell code:
+While this will only directly change the *Usage* section of the help
+screen, the option's environmental string may be easily parsed from
+within a script. For example, individual comma separated identities for
+an option named "input" can be parsed with the following Bash shell
+code:
 
-<div class="code"><pre>IFS=,
+```sh
+IFS=,
 for opt in $GIS_OPT_INPUT ; do
     ... "$opt"
 done
-</pre></div>
+```
 
-<p>
-A "<code>guisection</code>" field may be added to each option and flag to
-specify that the options should appear in multiple tabs in the
-auto-generated GUI.  Any options without a <code>guisection</code> field
-go into the "Required" or "Options" tab.  For example:
-<div class="code"><pre>
+A "`guisection`" field may be added to each option and flag to specify
+that the options should appear in multiple tabs in the auto-generated
+GUI. Any options without a `guisection` field go into the "Required" or
+"Options" tab. For example:
+
+```sh
 # % guisection: tabname
-</pre></div>
-would put that option in a tab named <i>tabname</i>.
+```
 
-<p>
-A "<code>key_desc</code>" field may be added to each option to specify the text that
-appears in the module's usage help section. For example:
-<div class="code"><pre>
+would put that option in a tab named *tabname*.
+
+A "`key_desc`" field may be added to each option to specify the text
+that appears in the module's usage help section. For example:
+
+```sh
 # % key_desc: filename
-</pre></div>
-added to an <b>input</b> option would create the usage summary
-<code>[input=filename]</code>.
+```
 
-<p>
-If a script is run with <b>--o</b>, the parser will
-set <code>GRASS_OVERWRITE=1</code>, which has the same effect as passing
-<b>--o</b> to every module which is run from the script. Similarly, passing
-<b>--q</b> or <b>--v</b> will set <code>GRASS_VERBOSE</code> to 0 or 3 respectively,
-which has the same effect as passing <b>--q</b> or <b>--v</b> to every module which
-is run from the script.  Rather than checking whether <b>--o</b>, <b>--q</b> or <b>--v</b>
-were used, you should be checking <code>GRASS_OVERWRITE</code> and/or
-<code>GRASS_VERBOSE</code> instead. If those variables are set, the script
-should behave the same way regardless of whether they were set
-by <b>--o</b>, <b>--q</b> or <b>--v</b> being passed to the script or
-set by other means.
+added to an **input** option would create the usage summary
+`[input=filename]`.
 
-<p>
-For backwards compatibility reasons, the header definitions can use
-<code>#%</code> instead of <code># %</code> as in
-<code>#% multiple: yes</code>. However, Python code should use
-<code># %</code> in order to conform to PEP8.
+If a script is run with **--o**, the parser will set
+`GRASS_OVERWRITE=1`, which has the same effect as passing **--o** to
+every module which is run from the script. Similarly, passing **--q** or
+**--v** will set `GRASS_VERBOSE` to 0 or 3 respectively, which has the
+same effect as passing **--q** or **--v** to every module which is run
+from the script. Rather than checking whether **--o**, **--q** or
+**--v** were used, you should be checking `GRASS_OVERWRITE` and/or
+`GRASS_VERBOSE` instead. If those variables are set, the script should
+behave the same way regardless of whether they were set by **--o**,
+**--q** or **--v** being passed to the script or set by other means.
 
-<h2>Conditional parameters</h2>
+For backwards compatibility reasons, the header definitions can use `#%`
+instead of `# %` as in `#% multiple: yes`. However, Python code should
+use `# %` in order to conform to PEP8.
+
+## Conditional parameters
 
 Marking an option as "required" will result in the parser raising a
 fatal error if the option is not given, with one exception: if a flag
-has the <code>suppress_required</code> option, and that flag is given, all
+has the `suppress_required` option, and that flag is given, all
 requirements are ignored. This feature is intended for flags which
-abandon "normal operation" for the module; e.g. <em>r.in.gdal</em>'s
-<b>-f</b> flag (list supported formats) uses it.
-<br>
-But in general, an option cannot be marked as required if it is
-optional except for the special case of a <code>suppress_required</code> flag.
-The parser has the ability to specify option relationships.
+abandon "normal operation" for the module; e.g. *r.in.gdal*'s **-f**
+flag (list supported formats) uses it.  
+But in general, an option cannot be marked as required if it is optional
+except for the special case of a `suppress_required` flag. The parser
+has the ability to specify option relationships.
 
-<p>
 For C, the relevant functions are those in
-<a href="https://grass.osgeo.org/programming8/parser__dependencies_8c.html">lib/gis/parser_dependencies.c</a>.
+[lib/gis/parser_dependencies.c](https://grass.osgeo.org/programming8/parser__dependencies_8c.html).
 
-<p>
 For scripts, relationships are specified using a "rules" section, e.g.
 
-<div class="code"><pre>
+```sh
 # %rules
 # % required: altitude,elevation
 # %end
-</pre></div>
+```
 
-specifies that at least one of those options must be given. Both
-options and flags can be specified (a leading "<b>-</b>" denotes a flag).
+specifies that at least one of those options must be given. Both options
+and flags can be specified (a leading "**-**" denotes a flag). The
+available rule types are:
 
-The available rule types are:
+- `exclusive`: at most one of the options may be given
+- `required`: at least one of the options must be given
+- `requires`: if the first option is given, at least one of the
+  subsequent options must also be given
+- `requires_all`: if the first option is given, all of the subsequent
+  options must also be given
+- `excludes`: if the first option is given, none of the subsequent
+  options may be given
+- `collective`: all or nothing; if any option is given, all must be
+  given
 
-<ul>
-<li> <code>exclusive</code>: at most one of the options may be given</li>
-<li> <code>required</code>: at least one of the options must be given</li>
-<li> <code>requires</code>: if the first option is given, at least one of the
-      subsequent options must also be given</li>
-<li> <code>requires_all</code>: if the first option is given, all of the
-      subsequent options must also be given</li>
-<li> <code>excludes</code>: if the first option is given, none of the
-      subsequent options may be given</li>
-<li> <code>collective</code>: all or nothing; if any option is given, all
-      must be given</li>
-</ul>
+## AUTOMATED SCRIPT CREATION
 
-<h2>AUTOMATED SCRIPT CREATION</h2>
+The flag **--script** added to a GRASS command, generates shell output.
+To write out a *g.parser* boilerplate for easy prototyping of Python
+scripts, the flag **--script** can be added to any GRASS command.
+Example:
 
-The flag <b>--script</b> added to a GRASS command, generates shell
-output. To write out a <em>g.parser</em> boilerplate for easy
-prototyping of Python scripts, the flag <b>--script</b> can be added
-to any GRASS command. Example:
-
-<div class="code"><pre>
+```sh
 v.in.db --script
-</pre></div>
+```
 
-<h2>Help page template (HTML)</h2>
+## Help page template (HTML)
 
-The flag <b>--html-description</b> added to a GRASS command
-generates a related help page template in HTML. Example:
+The flag **--html-description** added to a GRASS command generates a
+related help page template in HTML. Example:
 
-<div class="code"><pre>
+```sh
 v.in.db --html-description
-</pre></div>
+```
 
-<h2>GUI window parser (XML)</h2>
+## GUI window parser (XML)
 
-The flag <b>--interface-description</b> added to a GRASS command
-generates a related help page template in XML. Example:
+The flag **--interface-description** added to a GRASS command generates
+a related help page template in XML. Example:
 
-<div class="code"><pre>
+```sh
 v.in.db --interface-description
-</pre></div>
+```
 
-<h2>JSON</h2>
+## JSON
 
-The flag <b>--json</b> added to a GRASS command with parameters mandatorily
-to be specified generates a module interface description in JSON. Example:
+The flag **--json** added to a GRASS command with parameters mandatorily
+to be specified generates a module interface description in JSON.
+Example:
 
-<div class="code"><pre>
+```sh
 v.in.db driver=sqlite database=mysqlite.db table=pointsfile x=x y=y z=z key=idcol out=dtmpoints --json
 {
   "module": "v.in.db",
@@ -283,65 +273,59 @@ v.in.db driver=sqlite database=mysqlite.db table=pointsfile x=x y=y z=z key=idco
      {"param": "output", "value": "dtmpoints"}
    ]
 }
-</pre></div>
+```
 
-<h2>Web Processing Service (WPS)</h2>
+## Web Processing Service (WPS)
 
-The flag <b>--wps-process-description</b> added to a GRASS command
+The flag **--wps-process-description** added to a GRASS command
 generates a Web Processing Service process description. Example:
 
-<div class="code"><pre>
+```sh
 v.in.db --wps-process-description
-</pre></div>
+```
 
-<h2>reStructuredText</h2>
+## reStructuredText
 
-The flag <b>--rst-description</b> added to a GRASS command
-generates module interface description in reStructuredText, a lightweight
-markup language. Example:
+The flag **--rst-description** added to a GRASS command generates module
+interface description in reStructuredText, a lightweight markup
+language. Example:
 
-<div class="code"><pre>
+```sh
 v.in.db --rst-description
-</pre></div>
+```
 
-reStructuredText is sometimes abbreviated as reST, ReST, or RST.
-The commonly used file extension is <code>.rst</code>.
-Don't be confused with Representational State Transfer (REST) technology.
+reStructuredText is sometimes abbreviated as reST, ReST, or RST. The
+commonly used file extension is `.rst`. Don't be confused with
+Representational State Transfer (REST) technology.
 
-<h2>TRANSLATION</h2>
+## TRANSLATION
 
-<em>g.parser</em> provides some support for translating the options of
-scripts. If called with the -t switch before the script filename like
-this
+*g.parser* provides some support for translating the options of scripts.
+If called with the -t switch before the script filename like this
 
-<div class="code"><pre>
+```sh
 g.parser -t somescriptfile
-</pre></div>
+```
 
-<em>g.parser</em> will print the text of the translatable options to
-standard output, one per line, and exit. This is for internal use within
-the build system to prepare GRASS scripts for translation.
+*g.parser* will print the text of the translatable options to standard
+output, one per line, and exit. This is for internal use within the
+build system to prepare GRASS scripts for translation.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-All examples below autogenerate the graphical user interface when invoked
-without parameters of flags:
+All examples below autogenerate the graphical user interface when
+invoked without parameters of flags:
 
-<p>
-<center>
-<img src="g_parser_test.png" alt="Autogenerated GUI window">
-</center>
+![Autogenerated GUI window](g_parser_test.png)
 
-<p>
 To run properly, the script needs to be copied into a directory listed
-in <code>$GRASS_ADDON_PATH</code> environmental variable with the
-executable flag being set.
+in `$GRASS_ADDON_PATH` environmental variable with the executable flag
+being set.
 
-<p>
 The script will provide a GUI (as above) and the following usage help
 text:
 
-<div class="code"><pre>
+```sh
 test.py|sh|pl --help
 
 Description:
@@ -360,11 +344,11 @@ Parameters:
    raster   Raster input map
    vector   Vector input map
   option1   An option
-</pre></div>
+```
 
-<h3>Example code for Python</h3>
+### Example code for Python
 
-<div class="code"><pre>
+```sh
 #!/usr/bin/env python3
 
 # g.parser demo script for python programming
@@ -424,11 +408,11 @@ def main():
 if __name__ == "__main__":
     options, flags = gs.parser()
     sys.exit(main())
-</pre></div>
+```
 
-<h3>Example code for SHELL</h3>
+### Example code for SHELL
 
-<div class="code"><pre>
+```sh
 #!/bin/sh
 
 # g.parser demo script for shell programming
@@ -455,7 +439,7 @@ if __name__ == "__main__":
 # %end
 
 if [ -z "$GISBASE" ] ; then
-    echo "You must be in GRASS GIS to run this program." 1&gt;&amp;2
+    echo "You must be in GRASS GIS to run this program." 1>&2
     exit 1
 fi
 
@@ -483,11 +467,11 @@ g.message message="Value of GIS_OPT_raster: '$GIS_OPT_raster'"
 g.message message="Value of GIS_OPT_vect: '$GIS_OPT_vector'"
 
 #### end of your code ####
-</pre></div>
+```
 
-<h3>Example code for Perl</h3>
+### Example code for Perl
 
-<div class="code"><pre>
+```sh
 #!/usr/bin/perl -w
 use strict;
 
@@ -523,7 +507,7 @@ if ( !$ENV{'GISBASE'} ) {
 
 if( $ARGV[0] ne '@ARGS_PARSED@' ){
     my $arg = "";
-    for (my $i=0; $i &lt; @ARGV;$i++) {
+    for (my $i=0; $i < @ARGV;$i++) {
         $arg .= " $ARGV[$i] ";
     }
     system("$ENV{GISBASE}/bin/g.parser $0 $arg");
@@ -544,19 +528,20 @@ printf ("Value of GIS_OPT_raster: '%s'\n", $ENV{'GIS_OPT_RASTER'});
 printf ("Value of GIS_OPT_vect: '%s'\n", $ENV{'GIS_OPT_VECTOR'});
 
 #### end of your code ####
-</pre></div>
+```
 
-<h3>Easy creation of a script</h3>
+### Easy creation of a script
 
-By using the <b>--script</b> flag with any GRASS GIS module (must be run in
-a GRASS GIS session) header, description, keywords, parameters, flags and
-a template main Python script section will be printed in the terminal which
-can be saved to a file and used for further script programming.
-<p>
-In this example, the module <em>v.what.rast</em> is used as an example.
-The output is shown below:
+By using the **--script** flag with any GRASS GIS module (must be run in
+a GRASS GIS session) header, description, keywords, parameters, flags
+and a template main Python script section will be printed in the
+terminal which can be saved to a file and used for further script
+programming.
 
-<div class="code"><pre>
+In this example, the module *v.what.rast* is used as an example. The
+output is shown below:
+
+```sh
 v.what.rast --script
 
 #!/usr/bin/env python3
@@ -645,7 +630,7 @@ v.what.rast --script
 # % multiple: no
 # % key_desc: sql_query
 # % label: WHERE conditions of SQL statement without 'where' keyword
-# % description: Example: income &lt; 1000 and population &gt;= 10000
+# % description: Example: income < 1000 and population >= 10000
 # %end
 
 import sys
@@ -660,25 +645,21 @@ def main():
 if __name__ == "__main__":
     options, flags = gs.parser()
     sys.exit(main())
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.filename.html">g.filename</a>,
-<a href="g.findfile.html">g.findfile</a>,
-<a href="g.tempfile.html">g.tempfile</a>
-</em>
+*[g.filename](g.filename.md), [g.findfile](g.findfile.md),
+[g.tempfile](g.tempfile.md)*
 
-<p>
-Overview table: <a href="parser_standard_options.html">Parser standard options</a>
-<p>
-<a href="https://github.com/OSGeo/grass/blob/main/doc/development/style_guide.md#developing-python-scripts">Style Guide: Developing Python scripts</a>
+Overview table: [Parser standard options](parser_standard_options.md)
 
-<p>
-Related Wiki pages:
-<a href="https://grasswiki.osgeo.org/wiki/Category:Linking_to_other_languages">Using GRASS GIS with other programming languages</a>
+[Style Guide: Developing Python
+scripts](https://github.com/OSGeo/grass/blob/main/doc/development/style_guide.md#developing-python-scripts)
 
-<h2>AUTHOR</h2>
+Related Wiki pages: [Using GRASS GIS with other programming
+languages](https://grasswiki.osgeo.org/wiki/Category:Linking_to_other_languages)
+
+## AUTHOR
 
 Glynn Clements

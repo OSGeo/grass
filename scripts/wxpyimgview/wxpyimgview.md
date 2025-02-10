@@ -1,23 +1,19 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<i>wxpyimgview</i> is a simple wxWidgets image viewer for 32-bpp BMP images, as
-can be created with the <em><a href="pngdriver.html">PNG</a></em> and
-<em><a href="cairodriver.html">cairo</a></em> drivers. The display is
-continually refreshed.
+*wxpyimgview* is a simple wxWidgets image viewer for 32-bpp BMP images,
+as can be created with the *[PNG](pngdriver.md)* and
+*[cairo](cairodriver.md)* drivers. The display is continually refreshed.
 
-<h2>NOTES</h2>
+## NOTES
 
 The display driver must be configure to map the file, with
-<em>GRASS_RENDER_FILE_MAPPED=TRUE</em>. This ensures that the file will remain
+*GRASS_RENDER_FILE_MAPPED=TRUE*. This ensures that the file will remain
 a constant size, rather than being truncated whenever it is updated.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="pngdriver.html">PNG driver</a>,
-<a href="cairodriver.html">cairo driver</a>
-</em>
+*[PNG driver](pngdriver.md), [cairo driver](cairodriver.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Glynn Clements

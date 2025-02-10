@@ -1,32 +1,31 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>m.nviz.image</em> allows users to realistically render multiple
-<em>surfaces</em> (raster data) in a 3D space, optionally using
-thematic coloring, draping 2D <em>vector</em> data over the surfaces,
-displaying 3D vector data in the space, and visualization
-of <em>volume</em> data (3D raster data) from the command line.
+*m.nviz.image* allows users to realistically render multiple *surfaces*
+(raster data) in a 3D space, optionally using thematic coloring, draping
+2D *vector* data over the surfaces, displaying 3D vector data in the
+space, and visualization of *volume* data (3D raster data) from the
+command line.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Render elevation map in a 3D space.
 
-<div class="code"><pre>
+```sh
 g.region raster=elevation
 m.nviz.image elevation_map=elevation output=elev perspective=15
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="wxGUI.nviz.html">wxGUI 3D viewer</a>
-</em>
+*[wxGUI 3D viewer](wxGUI.nviz.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-<a href="http://geo.fsv.cvut.cz/gwiki/Landa">Martin
-Landa</a>, <a href="https://grasswiki.osgeo.org/wiki/WxNviz_GSoC_2008">Google
-Summer of Code 2008</a> (mentor: Michael Barton)
-and <a href="https://grasswiki.osgeo.org/wiki/WxNviz_GSoC_2010">Google
-Summer of Code 2010</a> (mentor: Helena Mitasova)<br>
-Anna Kratochvilova, <a href="https://grasswiki.osgeo.org/wiki/WxNviz_GSoC_2011">Google
-Summer of Code 2011</a> (mentor: Martin Landa)
+[Martin Landa](http://geo.fsv.cvut.cz/gwiki/Landa), [Google Summer of
+Code 2008](https://grasswiki.osgeo.org/wiki/WxNviz_GSoC_2008) (mentor:
+Michael Barton) and [Google Summer of Code
+2010](https://grasswiki.osgeo.org/wiki/WxNviz_GSoC_2010) (mentor: Helena
+Mitasova)  
+Anna Kratochvilova, [Google Summer of Code
+2011](https://grasswiki.osgeo.org/wiki/WxNviz_GSoC_2011) (mentor: Martin
+Landa)

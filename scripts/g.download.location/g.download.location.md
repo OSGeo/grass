@@ -1,16 +1,14 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>g.download.location</em> has been renamed to
-<a href="g.download.project.html">g.download.project</a>
-and exists for backwards compatibility reasons.
-It will be removed in the next major version.
+*g.download.location* has been renamed to
+[g.download.project](g.download.project.md) and exists for backwards
+compatibility reasons. It will be removed in the next major version.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="g.download.project.html">g.download.project</a>
-</em>
+*[g.download.project](g.download.project.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Vaclav Petras, <a href="http://geospatial.ncsu.edu/geoforall/">NCSU GeoForAll Lab</a>
+Vaclav Petras, [NCSU GeoForAll
+Lab](http://geospatial.ncsu.edu/geoforall/)

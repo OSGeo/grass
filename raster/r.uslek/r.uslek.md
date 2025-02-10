@@ -1,23 +1,25 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.uslek</em> calculates the USLE K factor, that is the Soil Erodibility
+*r.uslek* calculates the USLE K factor, that is the Soil Erodibility
 Factor. It takes input of soil texture classes (sand, clay, silt) and
-organic matter, all in range of [0.0-1.0]. The FAO World Soil CD
+organic matter, all in range of \[0.0-1.0\]. The FAO World Soil CD
 documentation was used to produce the conversion system between soil
 textures and soil classes. The soil classes are in number of 12 and
 apparently come from a USDA publication of 1951 (p.209). Once the soil
 classes have been identified (by vector cross-products tests), a general
-conversion table was applied for transforming soil classes into K factor.
+conversion table was applied for transforming soil classes into K
+factor.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>r.watershed</em> provides for USLE L, S, LS factors.
+*r.watershed* provides for USLE L, S, LS factors.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-Calculate the USLE K factor (synthetic values, North Carolina sample dataset):
+Calculate the USLE K factor (synthetic values, North Carolina sample
+dataset):
 
-<div class="code"><pre>
+```sh
 # NC data: simulation
 g.region rural_1m -p
 
@@ -29,11 +31,12 @@ r.mapcalc "organ = 0.0136"
 r.uslek psand=sand pclay=clay psilt=silt pomat=organ output=usle_k
 r.univar usle_k
 # Result: uslek = 0.25
-</pre></div>
+```
 
-<p>
-Example with small variations (condition: d_sand + d_clay + d_silt =&gt; 1.0)
-<div class="code"><pre>
+Example with small variations (condition: d_sand + d_clay + d_silt =\>
+1.0)
+
+```sh
 # NC data: simulation
 r.mapcalc -s "sand_r = rand(0.09,0.13)"
 r.mapcalc -s "clay_r = rand(0.45,0.49)"
@@ -51,15 +54,12 @@ g.remove -f rast name=sand_r,clay_r,silt_r,temp_sum,test
 r.uslek psand=sand pclay=clay psilt=silt pomat=organ output=usle_k
 r.univar usle_k
 # Result: uslek =  variable values
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.usler.html">r.usler</a>,
-<a href="r.watershed.html">r.watershed</a>
-</em>
+*[r.usler](r.usler.md), [r.watershed](r.watershed.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Yann Chemin, SIC-ISDC, Turkmenistan

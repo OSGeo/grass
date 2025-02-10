@@ -1,19 +1,14 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.erase</em> erases the contents of the active graphics frame, and
-replaces it with the color black (by default) or by whatever color is
-specified by the user.
+*d.erase* erases the contents of the active graphics frame, and replaces
+it with the color black (by default) or by whatever color is specified
+by the user.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="d.mon.html">d.mon</a>,
-  <a href="d.redraw.html">d.redraw</a>,
-  <a href="d.rast.html">d.rast</a>,
-  <a href="d.vect.html">d.vect</a>
-</em>
+*[d.mon](d.mon.md), [d.redraw](d.redraw.md), [d.rast](d.rast.md),
+[d.vect](d.vect.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-James Westervelt, U.S. Army Construction Engineering Research
-Laboratory
+James Westervelt, U.S. Army Construction Engineering Research Laboratory

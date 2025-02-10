@@ -1,70 +1,55 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.font</em> allows the user to select use of a specific text font for
-display of text on the graphics monitor.
+*d.font* allows the user to select use of a specific text font for
+display of text on the graphics monitor. If the user does not specify a
+font when using other GRASS programs that display text, the font type
+*romans* is used by default.
 
-<!--
-The GRASS program
-<em><a href="../html/show.fonts.sh.html">show.fonts.sh</a></em>
-is a UNIX Bourne shell macro which
-names and displays the fonts that can be selected using <em>d.font</em>.
--->
+The user can run this program either non-interactively or interactively.
+If the user specifies a font type name on the command line the program
+will run non-interactively. Alternately, the user can simply type
+**d.font** on the command line; in this case, the program will prompt
+the user for a display text font type.
 
-If the user does not specify a font when using other GRASS programs
-that display text, the font type <em>romans</em> is used by default.
+**Parameter:**
 
-<p>The user can run this program either non-interactively or interactively.
-If the user specifies a font type name on the command line the program will
-run non-interactively.
-Alternately, the user can simply type <b>d.font</b> on the command line;
-in this case, the program will prompt the user for a display
-text font type.
+**font=***name*  
+Name of a font type, from among the font types italicized below.  
+Default: *romans*  
+Options: (italized)  
+*cyrilc* Cyrillic  
+*gothgbt* Gothic Great Britain triplex  
+*gothgrt* Gothic German triplex  
+*gothitt* Gothic Italian triplex  
+*greekc* Greek complex  
+*greekcs* Greek complex script  
+*greekp* Greek plain  
+*greeks* Greek simplex  
+*italicc* Italian complex  
+*italiccs* Italian complex small  
+*italict* Italian triplex  
+*romanc* Roman complex  
+*romancs* Roman complex small  
+*romand* Roman duplex  
+*romanp* Roman plain  
+*romans* Roman simplex  
+*romant* Roman triplex  
+*scriptc* Script complex  
+*scripts* Script simplex
 
-<p><b>Parameter:</b>
-<dl>
-<dt><b>font=</b><em>name</em>
-<dd>Name of a font type, from among the font types italicized below.
-<br>
-Default: <em>romans</em>
-<br>
-Options: (italized)
-<br><em>cyrilc</em> Cyrillic
-<br><em>gothgbt</em> Gothic Great Britain triplex
-<br><em>gothgrt</em> Gothic German triplex
-<br><em>gothitt</em> Gothic Italian triplex
-<br><em>greekc</em> Greek complex
-<br><em>greekcs</em> Greek complex script
-<br><em>greekp</em> Greek plain
-<br><em>greeks</em> Greek simplex
-<br><em>italicc</em> Italian complex
-<br><em>italiccs</em> Italian complex small
-<br><em>italict</em> Italian triplex
-<br><em>romanc</em> Roman complex
-<br><em>romancs</em> Roman complex small
-<br><em>romand</em> Roman duplex
-<br><em>romanp</em> Roman plain
-<br><em>romans</em> Roman simplex
-<br><em>romant</em> Roman triplex
-<br><em>scriptc</em> Script complex
-<br><em>scripts</em> Script simplex
-</dl>
+## NOTES
 
-<h2>NOTES</h2>
+The font type *romans* is the fastest font type to display to the
+graphics monitor.
 
-The font type
-<em>romans</em>
-is the fastest font type to display to the graphics monitor.
+## SEE ALSO
 
-<h2>SEE ALSO</h2>
+*[d.text](d.text.md)*  
+*[d.title](d.title.md)*
 
-<em><a href="d.text.html">d.text</a></em><br>
-<em><a href="d.title.html">d.title</a></em>
+## AUTHOR
 
-<h2>AUTHOR</h2>
+James Westervelt, U.S. Army Construction Engineering Research Laboratory
 
-James Westervelt, U.S. Army Construction Engineering
-Research Laboratory
-
-<p><em>d.font</em> uses the public domain version of the Hershey Fonts created
-by Dr. A.V. Hershey while working at the U.S. National Bureau of
-Standards.
+*d.font* uses the public domain version of the Hershey Fonts created by
+Dr. A.V. Hershey while working at the U.S. National Bureau of Standards.

@@ -1,38 +1,32 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.cross</em> creates an <em>output</em> raster map layer representing
-all unique combinations of category values in the raster input layers
-(<b>input=</b><em>name,name,name</em>, ...).  At least two, but not more than
-30, <em>input</em> map layers must be specified.  The user must also
-specify a name to be assigned to the <em>output</em> raster map layer
-created by <em>r.cross</em>.
+*r.cross* creates an *output* raster map layer representing all unique
+combinations of category values in the raster input layers
+(**input=***name,name,name*, ...). At least two, but not more than 30,
+*input* map layers must be specified. The user must also specify a name
+to be assigned to the *output* raster map layer created by *r.cross*.
 
-<h2>OPTIONS</h2>
+## OPTIONS
 
-<p>
-With the <b>-z</b> flag NULL values are not crossed.
-This means that if a NULL value occurs in any input data layer,
-this combination is ignored,
-even if other data layers contain non-NULL data.
-In the example given below, use of the <b>-z</b> option
-would cause 3 categories to be generated instead of 5.
+With the **-z** flag NULL values are not crossed. This means that if a
+NULL value occurs in any input data layer, this combination is ignored,
+even if other data layers contain non-NULL data. In the example given
+below, use of the **-z** option would cause 3 categories to be generated
+instead of 5.
 
-<p>
-If the <b>-z</b> flag is not specified, then map layer combinations
-in which some values are NULL will be assigned
-a unique category value in the resulting output map.
+If the **-z** flag is not specified, then map layer combinations in
+which some values are NULL will be assigned a unique category value in
+the resulting output map.
 
-<p>
-Category values in the new <em>output</em> map layer will be the
-cross-product of the category values from these existing <em>input</em> map
-layers.
+Category values in the new *output* map layer will be the cross-product
+of the category values from these existing *input* map layers.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-For example, suppose that, using two raster map layers,
-the following combinations occur:
+For example, suppose that, using two raster map layers, the following
+combinations occur:
 
-<div class="code"><pre>
+```sh
           map1   map2
           ___________
           NULL    1
@@ -40,12 +34,11 @@ the following combinations occur:
            1      1
            1      2
            2      4
-</pre></div>
+```
 
+*r.cross* would produce a new raster map layer with 5 categories:
 
-<em>r.cross</em> would produce a new raster map layer with 5 categories:
-
-<div class="code"><pre>
+```sh
           map1   map2   output
           ____________________
           NULL    1       0
@@ -53,23 +46,20 @@ the following combinations occur:
            1      1       2
            1      2       3
            2      4       4
-</pre></div>
+```
 
-Note: The actual category value assigned to a particular combination
-in the <em>result</em> map layer is
-dependent on the order in which the combinations occur in the input map
-layer data and can be considered essentially random.
-The example given here is illustrative only.
+Note: The actual category value assigned to a particular combination in
+the *result* map layer is dependent on the order in which the
+combinations occur in the input map layer data and can be considered
+essentially random. The example given here is illustrative only.
 
-<h2>SUPPORT FILES</h2>
+## SUPPORT FILES
 
-The category file created for the <em>output</em> raster map
-layer describes the
-combinations of input map layer category values which generated
-each category.
-In the above example, the category labels would be:
+The category file created for the *output* raster map layer describes
+the combinations of input map layer category values which generated each
+category. In the above example, the category labels would be:
 
-<div class="code"><pre>
+```sh
           category   category
           value      label
           ______________________________
@@ -78,19 +68,14 @@ In the above example, the category labels would be:
              2       layer1(1) layer2(1)
              3       layer1(1) layer2(2)
              4       layer1(2) layer2(4)
-</pre></div>
+```
 
-A random color table is also generated for the <em>output</em> map layer.
+A random color table is also generated for the *output* map layer.
 
-<!-- TODO: add example -->
+## SEE ALSO
 
-<h2>SEE ALSO</h2>
+*[r.covar](r.covar.md), [r.stats](r.stats.md)*
 
-<em>
-<a href="r.covar.html">r.covar</a>,
-<a href="r.stats.html">r.stats</a>
-</em>
-
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Michael Shapiro, U.S. Army Construction Engineering Research Laboratory

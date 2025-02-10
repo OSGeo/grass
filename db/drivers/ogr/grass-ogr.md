@@ -1,15 +1,7 @@
-<!-- meta page description: OGR DATABASE DRIVER -->
+This driver is principally only used by *[v.external](v.external.md)*.
 
-This driver is principally only used
-by <em><a href="v.external.html">v.external</a></em>.
+## SEE ALSO
 
-<h2>SEE ALSO</h2>
+*[SQL support in GRASS GIS](sql.md)*
 
-<em>
-<a href="sql.html">SQL support in GRASS GIS</a>
-</em>
-
-<p>
-<em>
-<a href="v.external.html">v.external</a>
-</em>
+*[v.external](v.external.md)*

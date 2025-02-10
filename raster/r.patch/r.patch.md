@@ -1,231 +1,206 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The GRASS program <em>r.patch</em> allows the user to build a new
-raster map the size and resolution of the current region by assigning
-known data values from input raster maps to the cells in this region.
-<br>
-In case of overlapping input raster maps this is done by filling in
-"no data" cells, those that do not yet contain data, contain NULL data,
-or, optionally contain 0 data, with the data from the first input map.
-Once this is done the remaining holes are filled in by the next input map,
-and so on.
-<br>
+The GRASS program *r.patch* allows the user to build a new raster map
+the size and resolution of the current region by assigning known data
+values from input raster maps to the cells in this region.  
+In case of overlapping input raster maps this is done by filling in "no
+data" cells, those that do not yet contain data, contain NULL data, or,
+optionally contain 0 data, with the data from the first input map. Once
+this is done the remaining holes are filled in by the next input map,
+and so on.  
 In case of adjacent input raster maps the output map contains the map
 mosaic.
 
-<p>
 Hence this command is useful for
-<ul>
-<li> making a composite raster map layer from two or more adjacent map layers,</li>
-<li> for filling in "holes" in a raster map layer's data (e.g., in digital
-     elevation data), or</li>
-<li> for updating an older map layer with more recent data.</li>
-</ul>
 
-The current geographic region definition and mask settings are respected.
+- making a composite raster map layer from two or more adjacent map
+  layers,
+- for filling in "holes" in a raster map layer's data (e.g., in digital
+  elevation data), or
+- for updating an older map layer with more recent data.
 
-<center>
-<img src="r_patch.png">
-<p><em>Figure: Result of patching of two raster maps containing NULLs
-using the default settings.</em></p>
-</center>
+The current geographic region definition and mask settings are
+respected.
 
-<h3>Stacking order</h3>
+![](r_patch.png)
 
-<p>The first <em>name</em> listed in the string
-<b>input=</b><em>name</em>,<em>name</em>,<em>name</em>,... is the name
-of the first map whose data values will be used to fill in
-cells in the current region.
-Then, the second through the last input
-maps (..., <em>name</em>, <em>name</em>, ...) will be used,
-in order, to supply data values for the remaining
-"no data" cells (or cells with value 0 with <b>-z</b> flag).
+*Figure: Result of patching of two raster maps containing NULLs using
+the default settings.*
 
-<p>
+### Stacking order
+
+The first *name* listed in the string **input=***name*,*name*,*name*,...
+is the name of the first map whose data values will be used to fill in
+cells in the current region. Then, the second through the last input
+maps (..., *name*, *name*, ...) will be used, in order, to supply data
+values for the remaining "no data" cells (or cells with value 0 with
+**-z** flag).
+
 In other words, the first raster map is used first and if it had some
 "no data" cells, then second raster map is used for these cells, then
-the third and so on.
-So the formal command line syntax can be also written as
-<b>input=</b><em>primary</em>,<em>secondary</em>,<em>tertiary</em>,...
-For two raster maps, the first one can be viewed as the primary one
-or the default one and the second one as the secondary one or a fallback.
+the third and so on. So the formal command line syntax can be also
+written as **input=***primary*,*secondary*,*tertiary*,... For two raster
+maps, the first one can be viewed as the primary one or the default one
+and the second one as the secondary one or a fallback.
 
-<center>
-<img src="r_patch_zeros_as_nulls.png">
-<p><em>Figure: Result of patching of two raster maps using the
-<b>-z</b> flag to treat zeros as NULLs. Note the value 1 being preserved
-from the first raster while the value 6 is taken from the second raster
-instead of the value 0 from the first raster because zeros are replaced
-with the <b>-z</b> flag active.</em></p>
-</center>
+![](r_patch_zeros_as_nulls.png)
 
-<h3>Relation to SQL COALESCE() function</h3>
+*Figure: Result of patching of two raster maps using the **-z** flag to
+treat zeros as NULLs. Note the value 1 being preserved from the first
+raster while the value 6 is taken from the second raster instead of the
+value 0 from the first raster because zeros are replaced with the **-z**
+flag active.*
 
-The module is corresponds to the SQL COALESCE() function.
-This function takes two or more arguments and returns
-a copy of its first non-NULL argument. If all arguments are NULL,
-the function returns NULL.
+### Relation to SQL COALESCE() function
 
-<p>
-The <em>r.patch</em> module iterates over all cells and for each cell
-of the output raster map uses the first corresponding non-NULL cell
-in the series of the input raster maps.
+The module is corresponds to the SQL COALESCE() function. This function
+takes two or more arguments and returns a copy of its first non-NULL
+argument. If all arguments are NULL, the function returns NULL.
 
-<h3>Example of filling areas</h3>
+The *r.patch* module iterates over all cells and for each cell of the
+output raster map uses the first corresponding non-NULL cell in the
+series of the input raster maps.
 
-<!-- this example is also used in the tests -->
+### Example of filling areas
 
-Below, the raster map layer on the far left is <b>patched</b>
-with the middle (<em>patching</em>) raster map layer,
-to produce the <em>composite</em> raster map layer on the right.
-The example assumes zero values to be treated as NULLs (<b>-z</b> flag).
+Below, the raster map layer on the far left is **patched** with the
+middle (*patching*) raster map layer, to produce the *composite* raster
+map layer on the right. The example assumes zero values to be treated as
+NULLs (**-z** flag).
 
-<div class="code"><pre>
+```sh
   1 1 1 0 2 2 0 0    0 0 1 1 0 0 0 0    1 1 1 1 2 2 0 0
   1 1 0 2 2 2 0 0    0 0 1 1 0 0 0 0    1 1 1 2 2 2 0 0
   3 3 3 3 2 2 0 0    0 0 0 0 0 0 0 0    3 3 3 3 2 2 0 0
   3 3 3 3 0 0 0 0    4 4 4 4 4 4 4 4    3 3 3 3 4 4 4 4
   3 3 3 0 0 0 0 0    4 4 4 4 4 4 4 4    3 3 3 4 4 4 4 4
   0 0 0 0 0 0 0 0    4 4 4 4 4 4 4 4    4 4 4 4 4 4 4 4
-</pre></div>
+```
 
-Switching the <em>patched</em> and the <em>patching</em> raster map layers
-produces the following results:
+Switching the *patched* and the *patching* raster map layers produces
+the following results:
 
-<div class="code"><pre>
+```sh
   0 0 1 1 0 0 0 0    1 1 1 0 2 2 0 0    1 1 1 1 2 2 0 0
   0 0 1 1 0 0 0 0    1 1 0 2 2 2 0 0    1 1 1 1 2 2 0 0
   0 0 0 0 0 0 0 0    3 3 3 3 2 2 0 0    3 3 3 3 2 2 0 0
   4 4 4 4 4 4 4 4    3 3 3 3 0 0 0 0    4 4 4 4 4 4 4 4
   4 4 4 4 4 4 4 4    3 3 3 0 0 0 0 0    4 4 4 4 4 4 4 4
   4 4 4 4 4 4 4 4    0 0 0 0 0 0 0 0    4 4 4 4 4 4 4 4
-</pre></div>
+```
 
-<h2>NOTES</h2>
+## NOTES
 
-Frequently, this program is used to patch together adjacent map layers which
-have been digitized separately.  The program
-<em><a href="v.mkgrid.html">v.mkgrid</a></em> can be used to make adjacent
-maps align neatly.
+Frequently, this program is used to patch together adjacent map layers
+which have been digitized separately. The program
+*[v.mkgrid](v.mkgrid.md)* can be used to make adjacent maps align
+neatly.
 
-<p>The user should check the current geographic region settings before running
-<em>r.patch</em>, to ensure that the region boundaries encompass all
-of the data desired to be included in the composite map and to ensure that the
-region resolution is the resolution of the desired data. To set the
-geographic region settings to one or several raster maps, the <em>g.region</em>
+The user should check the current geographic region settings before
+running *r.patch*, to ensure that the region boundaries encompass all of
+the data desired to be included in the composite map and to ensure that
+the region resolution is the resolution of the desired data. To set the
+geographic region settings to one or several raster maps, the *g.region*
 program can be used:
 
-<div class="code"><pre>
+```sh
 g.region raster=map1[,map2[,...]]
-</pre></div>
+```
 
-<p>
-Use of <em>r.patch</em> is generally followed by use of the GRASS programs
-<em><a href="g.remove.html">g.remove</a></em> and
-<em><a href="g.rename.html">g.rename</a></em>;
-<em>g.remove</em> is used to remove the original (un-patched) raster map
-layers, while <em>g.rename</em> is used to then assign to the newly-created
-composite (patched) raster map layer the name of the original raster map
-layer.
+Use of *r.patch* is generally followed by use of the GRASS programs
+*[g.remove](g.remove.md)* and *[g.rename](g.rename.md)*; *g.remove* is
+used to remove the original (un-patched) raster map layers, while
+*g.rename* is used to then assign to the newly-created composite
+(patched) raster map layer the name of the original raster map layer.
 
-<p>
-<em>r.patch</em> reads the existing category label files and color tables
-from the <em>input</em> maps and creates these files for the patched,
-composite <em>output</em> map.  This can be quite time consuming for
-certain maps, especially if there are many different category values
-across the patched maps. The <em>-s</em> flag allows disabling the reading
-and creation of these support files,  meaning that the <em>output</em>
-map will have no category labels and no explicit color table.
+*r.patch* reads the existing category label files and color tables from
+the *input* maps and creates these files for the patched, composite
+*output* map. This can be quite time consuming for certain maps,
+especially if there are many different category values across the
+patched maps. The *-s* flag allows disabling the reading and creation of
+these support files, meaning that the *output* map will have no category
+labels and no explicit color table.
 
-<p>
 Number of raster maps to be processed is given by the limit of the
 operating system. For example, both the hard and soft limits are
-typically 1024. The soft limit can be changed with e.g. <code>ulimit -n
-1500</code> (UNIX-based operating systems) but not higher than the hard
-limit. If it is too low, you can as superuser add an entry in
+typically 1024. The soft limit can be changed with e.g. `ulimit -n 1500`
+(UNIX-based operating systems) but not higher than the hard limit. If it
+is too low, you can as superuser add an entry in
 
-<div class="code"><pre>
+```sh
 /etc/security/limits.conf
-# &lt;domain&gt;      &lt;type&gt;  &lt;item&gt;         &lt;value&gt;
+# <domain>      <type>  <item>         <value>
 your_username  hard    nofile          1500
-</pre></div>
+```
 
-This would raise the hard limit to 1500 file. Be warned that more
-files open need more RAM. See also the Wiki page
-<a href="https://grasswiki.osgeo.org/wiki/Large_raster_data_processing">Hints for large raster data processing</a>.
+This would raise the hard limit to 1500 file. Be warned that more files
+open need more RAM. See also the Wiki page [Hints for large raster data
+processing](https://grasswiki.osgeo.org/wiki/Large_raster_data_processing).
 
-<p>
-Operating systems usually limit the length of the command line
-which limits the number of input raster maps user can pass to the module
-using the option <b>input</b>. In that case,
-<em><a href="r.series.html">r.series</a></em> can be used instead of
-<em>r.patch</em>.
+Operating systems usually limit the length of the command line which
+limits the number of input raster maps user can pass to the module using
+the option **input**. In that case, *[r.series](r.series.md)* can be
+used instead of *r.patch*.
 
-<h3>PERFORMANCE</h3>
-<p>By specifying the number of parallel processes with <b>nprocs</b> option,
-<em>r.patch</em> can run significantly faster, see benchmarks below.
+### PERFORMANCE
 
-<div align="center" style="margin: 10px">
-     <img src="r_patch_benchmark_size.png" alt="benchmark for number of cells" border="0">
-     <img src="r_patch_benchmark_memory.png" alt="benchmark for memory size" border="0">
-     <br>
-     <i>Figure: Benchmark on the left shows execution time for different
-     number of cells, benchmark on the right shows execution time
-     for different memory size for 5000x5000 raster. See benchmark scripts in source code.
-     (Intel Core i9-10940X CPU @ 3.30GHz x 28) </i>
-     </div>
-<p>To reduce the memory requirements to minimum, set option <b>memory</b> to zero.
-To take advantage of the parallelization, GRASS GIS
-needs to compiled with OpenMP enabled.
+By specifying the number of parallel processes with **nprocs** option,
+*r.patch* can run significantly faster, see benchmarks below.
 
-<h2>EXAMPLES</h2>
+<img src="r_patch_benchmark_size.png" data-border="0"
+alt="benchmark for number of cells" />
+<img src="r_patch_benchmark_memory.png" data-border="0"
+alt="benchmark for memory size" />  
+*Figure: Benchmark on the left shows execution time for different number
+of cells, benchmark on the right shows execution time for different
+memory size for 5000x5000 raster. See benchmark scripts in source code.
+(Intel Core i9-10940X CPU @ 3.30GHz x 28)*
 
-<h3>Example with three maps</h3>
+To reduce the memory requirements to minimum, set option **memory** to
+zero. To take advantage of the parallelization, GRASS GIS needs to
+compiled with OpenMP enabled.
 
-The input are three maps called roads, water and forest. Primarily,
-we want to use the values from roads, then from water and if no
-other values are available we want to use forest.
-First we set the computation region assuming that the all three maps
-fully overlap and have the same resolution (so we can safely use the
-just the one without further modifications of the region).
-Then we perform the patching.
+## EXAMPLES
 
-<div class="code"><pre>
+### Example with three maps
+
+The input are three maps called roads, water and forest. Primarily, we
+want to use the values from roads, then from water and if no other
+values are available we want to use forest. First we set the computation
+region assuming that the all three maps fully overlap and have the same
+resolution (so we can safely use the just the one without further
+modifications of the region). Then we perform the patching.
+
+```sh
 g.region raster=roads
 r.patch input=roads,water,forest output=result
-</pre></div>
+```
 
-<h3>Map mosaic example using Bash syntax</h3>
+### Map mosaic example using Bash syntax
 
-Create a list of maps matching a pattern, extend the region to include them
-all, and patch them together to create a mosaic. Overlapping maps will be
-used in the order listed.
+Create a list of maps matching a pattern, extend the region to include
+them all, and patch them together to create a mosaic. Overlapping maps
+will be used in the order listed.
 
-<div class="code"><pre>
+```sh
 MAPS=`g.list type=raster separator=comma pat="map_*"`
 g.region raster=$MAPS -p
 r.patch input=$MAPS output=maps_mosaic
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="g.remove.html">g.remove</a>,
-<a href="g.rename.html">g.rename</a>,
-<a href="r.mapcalc.html">r.mapcalc</a>,
-<a href="r.support.html">r.support</a>,
-<a href="r.series.html">r.series</a>,
-<a href="v.mkgrid.html">v.mkgrid</a>
-</em>
-<p>
-<a href="https://grasswiki.osgeo.org/wiki/Large_raster_data_processing">Hints for large raster data processing</a>
+*[g.region](g.region.md), [g.remove](g.remove.md),
+[g.rename](g.rename.md), [r.mapcalc](r.mapcalc.md),
+[r.support](r.support.md), [r.series](r.series.md),
+[v.mkgrid](v.mkgrid.md)*
 
-<h2>AUTHORS</h2>
+[Hints for large raster data
+processing](https://grasswiki.osgeo.org/wiki/Large_raster_data_processing)
 
-Michael Shapiro,
-U.S. Army Construction Engineering Research Laboratory
-<br>
-Huidae Cho (-z flag and performance improvement)
-<br>
+## AUTHORS
+
+Michael Shapiro, U.S. Army Construction Engineering Research
+Laboratory  
+Huidae Cho (-z flag and performance improvement)  
 Aaron Saw Min Sern (OpenMP support).

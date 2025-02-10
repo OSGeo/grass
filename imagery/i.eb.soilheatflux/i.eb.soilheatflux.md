@@ -1,22 +1,22 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>i.eb.soilheatflux</em> calculates the soil heat flux approximation (g0)
-after Bastiaanssen (1995). The main reference for implementation is Alexandridis, 2009.
+*i.eb.soilheatflux* calculates the soil heat flux approximation (g0)
+after Bastiaanssen (1995). The main reference for implementation is
+Alexandridis, 2009. It takes input of Albedo, NDVI, Surface Skin
+temperature, Net Radiation (see *r.sun*), time of satellite overpass,
+and a flag for the Roerink empirical modification from the HAPEX-Sahel
+experiment. The "time of satellite overpass" map can be obtained as
+follows:
 
-It takes input of Albedo, NDVI, Surface Skin temperature, Net Radiation (see
-<em>r.sun</em>), time of satellite overpass, and a flag for the Roerink empirical modification from the HAPEX-Sahel experiment.
+- MODIS: a related sub dataset is included in each HDF file, and simply
+  to be imported as a raster map;
+- Landsat: to be generated as map from the overpass time stored in the
+  metadata file (given in Greenwich Mean Time - GMT), see below.
 
-The "time of satellite overpass" map can be obtained as follows:
-<ul>
-<li>MODIS: a related sub dataset is included in each HDF file, and simply
-    to be imported as a raster map;</li>
-<li>Landsat: to be generated as map from the overpass time stored in
-    the metadata file (given in Greenwich Mean Time - GMT), see below.</li>
-</ul>
+For Landsat, the overpass map can be computed by using a two-step
+method:
 
-For Landsat, the overpass map can be computed by using a two-step method:
-
-<div class="code"><pre>
+```sh
 # 1) extract the overpass time in GMT from metadata file
 
 i.landsat.toar -p input=dummy output=dummy2 \
@@ -26,47 +26,34 @@ i.landsat.toar -p input=dummy output=dummy2 \
 # 2) create map for computational region of Landsat scene
 g.region rast=LC81250452013338LGN00_B4 -p
 r.mapcalc "overpasstime = 3.211328"
-</pre></div>
+```
 
-<!--
-<h2>EXAMPLE</h2>
+## REFERENCES
 
-<div class="code"><pre>
-i.eb.soilheatflux ...
-</pre></div>
--->
+Bastiaanssen, W.G.M., 1995. Estimation of Land surface parameters by
+remote sensing under clear-sky conditions. PhD thesis, Wageningen
+University, Wageningen, The Netherlands.
+([PDF](https://edepot.wur.nl/206553))
 
-<h2>REFERENCES</h2>
+Chemin Y., Alexandridis T.A., 2001. Improving spatial resolution of ET
+seasonal for irrigated rice in Zhanghe, China. Asian Journal of
+Geoinformatics. 5(1):3-11,2004.
 
-<p>Bastiaanssen, W.G.M., 1995.
-  Estimation of Land surface parameters by remote sensing under clear-sky
-  conditions. PhD thesis, Wageningen University, Wageningen, The Netherlands.
- (<a href="https://edepot.wur.nl/206553">PDF</a>)
+Alexandridis T.K., Cherif I., Chemin Y., Silleos N.G., Stavrinos E.,
+Zalidis G.C. Integrated methodology for estimating water use in
+Mediterranean agricultural areas. Remote Sensing. 2009, 1, 445-465.
+([PDF](https://doi.org/10.3390/rs1030445))
 
-<p>Chemin Y., Alexandridis T.A., 2001. Improving spatial resolution of ET seasonal
-  for irrigated rice in Zhanghe, China. Asian Journal of Geoinformatics. 5(1):3-11,2004.
+Chemin, Y., 2012. A Distributed Benchmarking Framework for Actual ET
+Models, in: Irmak, A. (Ed.), Evapotranspiration - Remote Sensing and
+Modeling. InTech. ([PDF](https://www.intechopen.com/chapters/26115))
 
-<p>Alexandridis T.K., Cherif I., Chemin Y., Silleos N.G., Stavrinos E.,
-Zalidis G.C. Integrated methodology for estimating water use in Mediterranean
-agricultural areas. Remote Sensing. 2009, 1, 445-465.
-(<a href="https://doi.org/10.3390/rs1030445">PDF</a>)
+## SEE ALSO
 
-<p>Chemin, Y., 2012.
-A Distributed Benchmarking Framework for Actual ET Models,
-in: Irmak, A. (Ed.), Evapotranspiration - Remote Sensing and Modeling. InTech.
-(<a href="https://www.intechopen.com/chapters/26115">PDF</a>)
+*[r.sun](r.sun.md), [i.albedo](i.albedo.md),
+[i.emissivity](i.emissivity.md), [i.eb.hsebal01](i.eb.hsebal01.md),
+[i.eb.evapfr](i.eb.evapfr.md) [i.landsat.toar](i.landsat.toar.md)*
 
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="r.sun.html">r.sun</a>,
-<a href="i.albedo.html">i.albedo</a>,
-<a href="i.emissivity.html">i.emissivity</a>,
-<a href="i.eb.hsebal01.html">i.eb.hsebal01</a>,
-<a href="i.eb.evapfr.html">i.eb.evapfr</a>
-<a href="i.landsat.toar.html">i.landsat.toar</a>
-</em>
-
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Yann Chemin, Asian Institute of Technology, Thailand

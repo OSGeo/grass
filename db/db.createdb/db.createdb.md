@@ -1,65 +1,56 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.createdb</em> allows the user to create a new empty database
-through different drivers. A working database connection needs to be
-established, see <em><a href="db.login.html">db.login</a></em>.
+*db.createdb* allows the user to create a new empty database through
+different drivers. A working database connection needs to be
+established, see *[db.login](db.login.md)*.
 
-<p>
-Currently only <a href="grass-sqlite.html">SQLite</a>
-and <a href="grass-pg.html">PostgreSQL</a> database drivers are
-supported.
+Currently only [SQLite](grass-sqlite.md) and [PostgreSQL](grass-pg.md)
+database drivers are supported.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Create a new SQLite file-based database</h3>
+### Create a new SQLite file-based database
 
-Note that the standard GRASS GIS SQLite database is by default
-generated in the user's current mapset. This example shows an
-out-of-mapset database file creation:
+Note that the standard GRASS GIS SQLite database is by default generated
+in the user's current mapset. This example shows an out-of-mapset
+database file creation:
 
-<div class="code"><pre>
+```sh
 db.createdb driver=sqlite database=/opt/sqlite.db
-</pre></div>
+```
 
-<h3>Create a new PostgreSQL database</h3>
+### Create a new PostgreSQL database
 
 Create a new PostgreSQL database (after the PostgreSQL connection got
-established through the <em>pg</em> driver):
+established through the *pg* driver):
 
-<div class="code"><pre>
+```sh
 db.createdb driver=pg database=grassdb
-</pre></div>
+```
 
-<p>
 Create a new PostgreSQL database (after the PostgreSQL connection got
-established through the <em>odbc</em> driver):
+established through the *odbc* driver):
 
-<div class="code"><pre>
+```sh
 db.createdb driver=odbc database=grassdb
-</pre></div>
+```
 
-<h2>TODO</h2>
+## TODO
 
 Support other database drivers, too.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.columns.html">db.columns</a>,
-<a href="db.connect.html">db.connect</a>,
-<a href="db.describe.html">db.describe</a>,
-<a href="db.drivers.html">db.drivers</a>,
-<a href="db.dropdb.html">db.dropdb</a>,
-<a href="db.droptable.html">db.droptable</a>,
-<a href="db.execute.html">db.execute</a>,
-<a href="db.login.html">db.login</a>,
-<a href="db.tables.html">db.tables</a>
-</em>
+*[db.columns](db.columns.md), [db.connect](db.connect.md),
+[db.describe](db.describe.md), [db.drivers](db.drivers.md),
+[db.dropdb](db.dropdb.md), [db.droptable](db.droptable.md),
+[db.execute](db.execute.md), [db.login](db.login.md),
+[db.tables](db.tables.md)*
 
-<p>
-<a href="sql.html">GRASS SQL interface</a>
+[GRASS SQL interface](sql.md)
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek, ITC-Irst, Trento, Italy<br>
-SQLite and PostgreSQL support by Martin Landa, Czech Technical University in Prague, Czech Republic
+Radim Blazek, ITC-Irst, Trento, Italy  
+SQLite and PostgreSQL support by Martin Landa, Czech Technical
+University in Prague, Czech Republic

@@ -1,31 +1,30 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-Aerial photographs may be either vertical or oblique. Vertical photographs
-can be truly vertical (nadir), or slightly tilted (less than 3 degree
-from the vertical). Usually aerial photos are tilted to some degree. We
-refer to the term <i>vertical photograph</i> up to a tilt of 3 degree.
-<br>
-Oblique aerial photographs are purposely taken with an
-angle between 3 and 90 degree from the nadir direction.
-<p>
-<b>The use of <em>i.ortho.init</em> (menu 6) is only required when rectifying a
-tilted or oblique aerial photo.</b>
-<p>
-<em>i.ortho.init</em> creates or modifies entries in a camera initial exposure
-station file for imagery group referenced by a sub-block.  These entries
-include: the (XC,YC,ZC) standard (e.g. UTM) approximate coordinates of the camera exposure
-station; initial roll, pitch, and yaw angles (in degrees) of the cameras
-attitude; and the <em>a priori</em> standard deviations for these
-parameters. During the imagery program, <em>i.ortho.rectify</em>, the initial camera
-exposure station file is used for computation of the ortho-rectification
-parameters.  If no initial camera exposure station file exist, the default
-values are computed from the control points file created in
-<em><a href="g.gui.image2target.html">g.gui.image2target</a></em>.
+Aerial photographs may be either vertical or oblique. Vertical
+photographs can be truly vertical (nadir), or slightly tilted (less than
+3 degree from the vertical). Usually aerial photos are tilted to some
+degree. We refer to the term *vertical photograph* up to a tilt of 3
+degree.  
+Oblique aerial photographs are purposely taken with an angle between 3
+and 90 degree from the nadir direction.
 
-<p>
+**The use of *i.ortho.init* (menu 6) is only required when rectifying a
+tilted or oblique aerial photo.**
+
+*i.ortho.init* creates or modifies entries in a camera initial exposure
+station file for imagery group referenced by a sub-block. These entries
+include: the (XC,YC,ZC) standard (e.g. UTM) approximate coordinates of
+the camera exposure station; initial roll, pitch, and yaw angles (in
+degrees) of the cameras attitude; and the *a priori* standard deviations
+for these parameters. During the imagery program, *i.ortho.rectify*, the
+initial camera exposure station file is used for computation of the
+ortho-rectification parameters. If no initial camera exposure station
+file exist, the default values are computed from the control points file
+created in *[g.gui.image2target](g.gui.image2target.md)*.
 
 The following menu is displayed:
-<pre>
+
+```sh
         Please provide the following information
 
     INITIAL XC: Meters                __________
@@ -44,72 +43,57 @@ The following menu is displayed:
 
         Use these values at run time? (1=yes, 0=no)
 
-     AFTER COMPLETING ALL ANSWERS, HIT &lt;ESC&gt; TO CONTINUE
-                  (OR &lt;Ctrl-C&gt; TO CANCEL)
-</pre>
+     AFTER COMPLETING ALL ANSWERS, HIT <ESC> TO CONTINUE
+                  (OR <Ctrl-C> TO CANCEL)
+```
 
-<p>
-The INITIAL values for (XC,YC,ZC) are expressed in standard (e.g. UTM) coordinates, and
-represent an approximation for the location of the camera at the time of
-exposure.
+The INITIAL values for (XC,YC,ZC) are expressed in standard (e.g. UTM)
+coordinates, and represent an approximation for the location of the
+camera at the time of exposure.
 
-<ul>
-<li> X: East aircraft position;</li>
-<li> Y: North aircraft position;</li>
-<li> Z: Flight altitude above sea level</li>
-</ul>
-
-<p>
+- X: East aircraft position;
+- Y: North aircraft position;
+- Z: Flight altitude above sea level
 
 The INITIAL values for (omega,phi,kappa) are expressed in degrees, and
-represent an approximation for the cameras attitude  at the time of
+represent an approximation for the cameras attitude at the time of
 exposure.
 
-<ul>
-<li> Omega (pitch): Raising or lowering of the aircraft's front (turning
-  around the wings' axis);</li>
-<li> Phi (roll): Raising or lowering of the wings (turning around the
-  aircraft's axis);</li>
-<li> Kappa (yaw): Rotation needed to align the aerial photo to true north:
-  needs to be denoted as +90 degree for clockwise turn and -90 degree for
-  a counterclockwise turn.</li>
-</ul>
+- Omega (pitch): Raising or lowering of the aircraft's front (turning
+  around the wings' axis);
+- Phi (roll): Raising or lowering of the wings (turning around the
+  aircraft's axis);
+- Kappa (yaw): Rotation needed to align the aerial photo to true north:
+  needs to be denoted as +90 degree for clockwise turn and -90 degree
+  for a counterclockwise turn.
 
-<p>
-If ground control points are available, the INITIAL values are iteratively
-corrected. This is particularl useful when the INITIAL values are rather
-rough estimates.
+If ground control points are available, the INITIAL values are
+iteratively corrected. This is particularl useful when the INITIAL
+values are rather rough estimates.
 
-<p>
-
-The standard deviations for (XC,YC,ZC) are expressed in meters, and
-are used as <em>a priori</em> values for the standard deviations used in
+The standard deviations for (XC,YC,ZC) are expressed in meters, and are
+used as *a priori* values for the standard deviations used in
 computation of the ortho rectification parameters. Higher values improve
-the refinement of the initial camera exposure. As a rule of thumb, 5%
-of the estimated target extents should be used.
-<p>
+the refinement of the initial camera exposure. As a rule of thumb, 5% of
+the estimated target extents should be used.
 
-The standard deviations for (omega,phi,kappa) are expressed in degrees, and
-are used as <em>a priori</em> values for the standard deviations used in
-computation of the ortho rectification parameters. As a rule of thumb,
-2 degrees should be used.
+The standard deviations for (omega,phi,kappa) are expressed in degrees,
+and are used as *a priori* values for the standard deviations used in
+computation of the ortho rectification parameters. As a rule of thumb, 2
+degrees should be used.
 
-<p>
-If <i>Use these values at run time? (1=yes, 0=no)</i> is set to 0, the
-values in this menu are not used.
+If *Use these values at run time? (1=yes, 0=no)* is set to 0, the values
+in this menu are not used.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="i.ortho.photo.html">i.ortho.photo</a>,
-<a href="g.gui.photo2image.html">g.gui.photo2image</a>,
-<a href="g.gui.image2target.html">g.gui.image2target</a>,
-<a href="i.ortho.elev.html">i.ortho.elev</a>,
-<a href="i.ortho.camera.html">i.ortho.camera</a>,
-<a href="i.ortho.transform.html">i.ortho.transform</a>,
-<a href="i.ortho.rectify.html">i.ortho.rectify</a>
-</em>
+*[i.ortho.photo](i.ortho.photo.md),
+[g.gui.photo2image](g.gui.photo2image.md),
+[g.gui.image2target](g.gui.image2target.md),
+[i.ortho.elev](i.ortho.elev.md), [i.ortho.camera](i.ortho.camera.md),
+[i.ortho.transform](i.ortho.transform.md),
+[i.ortho.rectify](i.ortho.rectify.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Mike Baba,  DBA Systems, Inc.
+Mike Baba, DBA Systems, Inc.

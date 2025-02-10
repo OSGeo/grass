@@ -1,43 +1,44 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The <em>r.out.xyz</em> module exports a raster map as a list of x,y,z
-values into an ASCII text file.
+The *r.out.xyz* module exports a raster map as a list of x,y,z values
+into an ASCII text file.
 
-<h2>NOTES</h2>
+## NOTES
 
 This module will by default not export x,y coordinates for raster cells
 containing a NULL value. This includes cells masked by a raster mask.
-Using the flag <b>-i</b> also these raster cells will be included in the
+Using the flag **-i** also these raster cells will be included in the
 exported data.
-<p>
+
 This module, as all GRASS raster modules, will export cells based on the
-current region settings. See the <em>g.region</em> module for details.
-<p>
-The <em>r.out.ascii</em> module should be used to export an array (of
-size row x column) containing z values.
-<p>
-<em>r.out.xyz</em> can combine several input raster maps, which can be
+current region settings. See the *g.region* module for details.
+
+The *r.out.ascii* module should be used to export an array (of size row
+x column) containing z values.
+
+*r.out.xyz* can combine several input raster maps, which can be
 convenient when it comes to e.g. produce ASCII point cloud files.
-<p>
-<em>r.out.xyz</em> is simply a front-end to "<code>r.stats -1g[n]</code>".
 
-<h2>EXAMPLES</h2>
+*r.out.xyz* is simply a front-end to "`r.stats -1g[n]`".
 
-In this example, a LiDAR elevation map in the
-North Carolina sample dataset is exported to CSV format.
+## EXAMPLES
 
-<div class="code"><pre>
+In this example, a LiDAR elevation map in the North Carolina sample
+dataset is exported to CSV format.
+
+```sh
 g.region raster=elev_lid792_1m -p
 r.out.xyz input=elev_lid792_1m output=elev_lid792_1m.csv separator=","
-</pre></div>
+```
 
-<p>
 In this example, elevation data from the North Carolina dataset are
 exported along with R,G,B triplet of the related orthophoto into a
 combined file (requires the import of the supplementary high-resolution
-<a href="https://grass.osgeo.org/sampledata/north_carolina/ortho2010_t792_subset_20cm.tif">color orthophoto</a>, here called "ortho2010_t792"):
+[color
+orthophoto](https://grass.osgeo.org/sampledata/north_carolina/ortho2010_t792_subset_20cm.tif),
+here called "ortho2010_t792"):
 
-<div class="code"><pre>
+```sh
 g.region raster=elev_lid792_1m res=1 -a -p
 r.out.xyz input=elev_lid792_1m,ortho2010_t792.red,ortho2010_t792.green,ortho2010_t792.blue \
         separator=space output=pointcloud.asc
@@ -47,23 +48,19 @@ head -n 3 pointcloud.asc
 638300.5 220749.5 126.338218689 78 84 71
 638301.5 220749.5 126.3381958008 93 101 86
 638302.5 220749.5 126.3414840698 68 77 59
-</pre></div>
+```
 
-<h2>TODO</h2>
+## TODO
 
-Implement this script as a <em>r.out.ascii</em> option?
+Implement this script as a *r.out.ascii* option?
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="r.mask.html">r.mask</a>
-<a href="r.out.ascii.html">r.out.ascii</a>,
-<a href="r.stats.html">r.stats</a>
-</em>
+*[g.region](g.region.md), [r.mask](r.mask.md)
+[r.out.ascii](r.out.ascii.md), [r.stats](r.stats.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-M. Hamish Bowman<br>
-<i>Dept. Marine Science<br>
-Otago University, New Zealand</i>
+M. Hamish Bowman  
+*Dept. Marine Science  
+Otago University, New Zealand*

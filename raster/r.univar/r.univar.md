@@ -1,82 +1,74 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.univar</em> calculates the univariate statistics of one or several raster
-map(s). This includes the number of cells counted, minimum and maximum cell
-values, range, arithmetic mean, population variance, standard deviation,
-coefficient of variation, and sum. Statistics are calculated separately for every
-category/zone found in the <b>zones</b> input map if given.
-If the <b>-e</b> extended statistics flag is given the 1st quartile, median,
-3rd quartile, and given <b>percentile</b> are calculated.
-If the <b>-g</b> flag is given the results are presented in a format suitable
-for use in a shell script.
-If the <b>-t</b> flag is given the results are presented in tabular format
-with the given field separator. The table can immediately be converted to a
-vector attribute table which can then be linked to a vector, e.g. the vector
-that was rasterized to create the <b>zones</b> input raster.
+*r.univar* calculates the univariate statistics of one or several raster
+map(s). This includes the number of cells counted, minimum and maximum
+cell values, range, arithmetic mean, population variance, standard
+deviation, coefficient of variation, and sum. Statistics are calculated
+separately for every category/zone found in the **zones** input map if
+given. If the **-e** extended statistics flag is given the 1st quartile,
+median, 3rd quartile, and given **percentile** are calculated. If the
+**-g** flag is given the results are presented in a format suitable for
+use in a shell script. If the **-t** flag is given the results are
+presented in tabular format with the given field separator. The table
+can immediately be converted to a vector attribute table which can then
+be linked to a vector, e.g. the vector that was rasterized to create the
+**zones** input raster.
 
-<p>
-When multiple input maps are given to <em>r.univar</em>, the overall statistics
-are calculated. This is useful for a time series of the same variable, as well as
-for the case of a segmented/tiled dataset. Allowing multiple raster maps to be
-specified saves the user from using a temporary raster map for the result of
-<em>r.series</em> or <em>r.patch</em>.
+When multiple input maps are given to *r.univar*, the overall statistics
+are calculated. This is useful for a time series of the same variable,
+as well as for the case of a segmented/tiled dataset. Allowing multiple
+raster maps to be specified saves the user from using a temporary raster
+map for the result of *r.series* or *r.patch*.
 
-<h2>NOTES</h2>
+## NOTES
 
-As with most GRASS raster modules, <em>r.univar</em> operates on the raster
-array defined by the current region settings, not the original extent and
-resolution of the input map. See <em><a href="g.region.html">g.region</a></em>,
-but also
-<a href="https://grasswiki.osgeo.org/wiki/Computational_region#Understanding_the_impact_of_region_settings">
-the wiki page on the computational region</a> to understand the impact of the
-region settings on the calculations.
+As with most GRASS raster modules, *r.univar* operates on the raster
+array defined by the current region settings, not the original extent
+and resolution of the input map. See *[g.region](g.region.md)*, but also
+[the wiki page on the computational
+region](https://grasswiki.osgeo.org/wiki/Computational_region#Understanding_the_impact_of_region_settings)
+to understand the impact of the region settings on the calculations.
 
-<p>
-This module can use large amounts of system memory when the <b>-e</b>
-extended statistics flag is used with a very large region setting. If the
-region is too large the module should exit gracefully with a memory allocation
-error. Basic statistics can be calculated using any size input region.
-Extended statistics can be calculated using
-<em><a href="r.stats.quantile.html">r.stats.quantile</a></em>.
+This module can use large amounts of system memory when the **-e**
+extended statistics flag is used with a very large region setting. If
+the region is too large the module should exit gracefully with a memory
+allocation error. Basic statistics can be calculated using any size
+input region. Extended statistics can be calculated using
+*[r.stats.quantile](r.stats.quantile.md)*.
 
-<p>
-Without a <b>zones</b> input raster, the <em>r.quantile</em> module will
-be significantly more efficient for calculating percentiles with large maps.
+Without a **zones** input raster, the *r.quantile* module will be
+significantly more efficient for calculating percentiles with large
+maps.
 
-<p>
-For calculating univariate statistics from a raster map based on vector polygon
-map and uploads statistics to new attribute columns, see
-<em><a href="v.rast.stats.html">v.rast.stats</a></em>.
+For calculating univariate statistics from a raster map based on vector
+polygon map and uploads statistics to new attribute columns, see
+*[v.rast.stats](v.rast.stats.md)*.
 
-<h3>PERFORMANCE</h3>
+### PERFORMANCE
 
-<p>
-<em>r.univar</em> supports parallel processing using OpenMP. The user
-can specify the number of threads to be used with the <b>nprocs</b> parameter.
+*r.univar* supports parallel processing using OpenMP. The user can
+specify the number of threads to be used with the **nprocs** parameter.
 However, parallelization is disabled when the raster mask is set.
 
-<p>
-Due to the differences in summation order, users may encounter small floating points
-discrepancies when <em>r.univar</em> is run on very large raster files when different
-<b>nprocs</b> parameters are used. However, since the work allocation among threads
-is static, users should expect to have the same results when run with the same
-number of threads.
+Due to the differences in summation order, users may encounter small
+floating points discrepancies when *r.univar* is run on very large
+raster files when different **nprocs** parameters are used. However,
+since the work allocation among threads is static, users should expect
+to have the same results when run with the same number of threads.
 
-<div align="center" style="margin: 10px">
-    <img src="r_univar_benchmark_size.png" alt="benchmark for number of cells" border="0">
-    <br>
-    <i>Figure: Benchmark shows execution time for different
-    number of cells and cores. See benchmark scripts in source code. </i>
-    </div>
+<img src="r_univar_benchmark_size.png" data-border="0"
+alt="benchmark for number of cells" />  
+*Figure: Benchmark shows execution time for different number of cells
+and cores. See benchmark scripts in source code.*
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Univariate statistics</h3>
+### Univariate statistics
 
-In this example, the raster map <code>elevation</code> in the North
-Carolina sample dataset is used to calculate univariate statistics:
+In this example, the raster map `elevation` in the North Carolina sample
+dataset is used to calculate univariate statistics:
 
-<div class="code"><pre>
+```sh
 g.region raster=elevation -p
 
 # standard output, along with extended statistics
@@ -120,20 +112,21 @@ first_quartile=94.79
 median=108.88
 third_quartile=126.792
 percentile_98=147.727
-</pre></div>
+```
 
-<h3>Zonal statistics</h3>
-In this example, the raster polygon map <code>basins</code> in the North
-Carolina sample dataset is used to calculate raster statistics for zones
-for <code>elevation</code> raster map:
+### Zonal statistics
 
-<div class="code"><pre>
+In this example, the raster polygon map `basins` in the North Carolina
+sample dataset is used to calculate raster statistics for zones for
+`elevation` raster map:
+
+```sh
 g.region raster=basins -p
-</pre></div>
+```
 
 This will set and print computational region in the format:
 
-<div class="code"><pre>
+```sh
 projection: 99 (Lambert Conformal Conic)
 zone:       0
 datum:      nad83
@@ -147,17 +140,17 @@ ewres:      10
 rows:       1350
 cols:       1500
 cells:      2025000
-</pre></div>
+```
 
 Check basin's IDs using:
 
-<div class="code"><pre>
+```sh
 r.category basins
-</pre></div>
+```
 
 This will print them in the format:
 
-<div class="code"><pre>
+```sh
 2
 4
 6
@@ -173,11 +166,11 @@ This will print them in the format:
 26
 28
 30
-</pre></div>
+```
 
 Visualization of them underlying elevation map can be created as:
 
-<div class="code"><pre>
+```sh
 d.mon wx0
 d.rast map=elevation
 r.colors map=elevation color=grey
@@ -185,35 +178,24 @@ d.rast map=basins
 r.colors map=basins color=bgyr
 d.legend raster=basins use=2,4,6,8,10,12,14,16,18,20,22,24,26,28,30
 d.barscale
-</pre></div>
+```
 
-<!--
-g.region -a n=227228 s=220895 w=631362 e=641170
-d.out.file runivar_basins.png
-optipng -o5 runivar_basins.png width=200px
--->
+[<img src="runivar_basins.png" data-border="0" width="600" height="446"
+alt="r.univar basins and their IDs" />  
+](runivar_basins.png) *Figure: Zones (basins, opacity: 60%) with
+underlying elevation map for North Carolina sample dataset.*
 
-
-<div align="center" style="margin: 10px">
-<a href="runivar_basins.png">
-<img src="runivar_basins.png" width="600" height="446" alt="r.univar basins and their IDs" border="0"><br>
-</a>
-<i>Figure: Zones (basins, opacity: 60%) with underlying elevation map
-for North Carolina sample dataset.</i>
-</div>
-
-<p>
 Then statistics for elevation can be calculated separately for every
-zone, i.e. basin found in the <b>zones</b> parameter:
+zone, i.e. basin found in the **zones** parameter:
 
-<div class="code"><pre>
+```sh
 r.univar -t map=elevation zones=basins separator=comma \
          output=basin_elev_zonal.csv
-</pre></div>
+```
 
 This will print information in the format:
 
-<div class="code"><pre>
+```sh
 zone,label,non_null_cells,null_cells,min,max,range,mean,mean_of_abs,
 stddev,variance,coeff_var,sum,sum_abs2,,116975,0,55.5787925720215,
 133.147018432617,77.5682258605957,92.1196971445722,92.1196971445722,
@@ -225,26 +207,26 @@ stddev,variance,coeff_var,sum,sum_abs2,,116975,0,55.5787925720215,
 73.1900814395257,73.1900814395257,4.15733292896409,17.2834170822492,
 5.68018623179036,83217.1225967407,83217.12259674078,,80506,
 0,67.4670791625977,147.161514282227, ...
-</pre></div>
+```
 
 Comma Separated Values (CSV) file is best viewed through a spreadsheet
 program such as Microsoft Excel, Libre/Open Office Calc or Google Docs:
 
-<div align="center" style="margin: 10px">
-<a href="runivar_basins_elev_zonal.png">
-<img src="runivar_basins_elev_zonal.png" width="600" height="121" alt="r.univar raster statistics" border="0"><br>
-</a>
-<i>Figure: Raster statistics for zones (basins, North Carolina sample
-dataset) viewed through Libre/Open Office Calc.</i>
-</div>
+[<img src="runivar_basins_elev_zonal.png" data-border="0" width="600"
+height="121" alt="r.univar raster statistics" />  
+](runivar_basins_elev_zonal.png) *Figure: Raster statistics for zones
+(basins, North Carolina sample dataset) viewed through Libre/Open Office
+Calc.*
 
-<h3>JSON Output</h3>
-<div class="code"><pre>
+### JSON Output
+
+```sh
 r.univar -e elevation percentile=98 format=json
-</pre></div>
+```
+
 will output the results in JSON format:
 
-<div class="code"><pre>
+```sh
 [
     {
         "n": 2025000,
@@ -274,31 +256,24 @@ will output the results in JSON format:
         ]
     }
 ]
-</pre></div>
+```
 
-<h2>TODO</h2>
+## TODO
 
-To be implemented <i>mode, skewness, kurtosis</i>.
+To be implemented *mode, skewness, kurtosis*.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="r3.univar.html">r3.univar</a>,
-<a href="r.mode.html">r.mode</a>,
-<a href="r.quantile.html">r.quantile</a>,
-<a href="r.series.html">r.series</a>,
-<a href="r.stats.html">r.stats</a>,
-<a href="r.stats.quantile.html">r.stats.quantile</a>,
-<a href="r.stats.zonal.html">r.stats.zonal</a>,
-<a href="r.statistics.html">r.statistics</a>,
-<a href="v.rast.stats.html">v.rast.stats</a>,
-<a href="v.univar.html">v.univar</a>
-</em>
+*[g.region](g.region.md), [r3.univar](r3.univar.md),
+[r.mode](r.mode.md), [r.quantile](r.quantile.md),
+[r.series](r.series.md), [r.stats](r.stats.md),
+[r.stats.quantile](r.stats.quantile.md),
+[r.stats.zonal](r.stats.zonal.md), [r.statistics](r.statistics.md),
+[v.rast.stats](v.rast.stats.md), [v.univar](v.univar.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Hamish Bowman, Otago University, New Zealand<br>
-Extended statistics by Martin Landa<br>
-Multiple input map support by Ivan Shmakov<br>
+Hamish Bowman, Otago University, New Zealand  
+Extended statistics by Martin Landa  
+Multiple input map support by Ivan Shmakov  
 Zonal loop by Markus Metz

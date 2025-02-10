@@ -1,34 +1,31 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast3d.algebra</em> performs temporal and spatial map algebra
-operations on space time 3D raster datasets (STR3DS) by using the
-temporal 3D raster algebra.
+*t.rast3d.algebra* performs temporal and spatial map algebra operations
+on space time 3D raster datasets (STR3DS) by using the temporal 3D
+raster algebra.
 
-<h3>NOTES</h3>
+### NOTES
 
-The module expects an <b>expression</b> as input parameter in the following form:
-<p>
-<code>"result = expression"</code>
-<p>
+The module expects an **expression** as input parameter in the following
+form:
 
-The statement structure is exact the same as of <em>t.rast.algebra</em>,
-see <a href="t.rast.algebra.html">t.rast.algebra</a> but allows four-dimensional
+`"result = expression"`
+
+The statement structure is exact the same as of *t.rast.algebra*, see
+[t.rast.algebra](t.rast.algebra.md) but allows four-dimensional
 indexing.
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<a href="https://www.dabeaz.com/ply/">PLY(Python-Lex-Yacc)</a>
+[PLY(Python-Lex-Yacc)](https://www.dabeaz.com/ply/)
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.rast.algebra.html">t.rast.algebra</a>,
-<a href="t.rast3d.mapcalc.html">t.rast3d.mapcalc</a>,
-<a href="r.mapcalc.html">r.mapcalc</a>,
-<a href="t.vect.algebra.html">t.vect.algebra</a>,
-<a href="t.select.html">t.select</a>
-</em>
+*[t.rast.algebra](t.rast.algebra.md),
+[t.rast3d.mapcalc](t.rast3d.mapcalc.md), [r.mapcalc](r.mapcalc.md),
+[t.vect.algebra](t.vect.algebra.md), [t.select](t.select.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Thomas Leppelt, S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Thomas Leppelt, Sören Gebbert, Thünen Institute of Climate-Smart
+Agriculture

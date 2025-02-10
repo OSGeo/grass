@@ -1,22 +1,23 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.extract</em> allows a user to graphically select vector objects from
-an existing vector map and creates a new map containing only the selected
+*d.extract* allows a user to graphically select vector objects from an
+existing vector map and creates a new map containing only the selected
 objects.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-<h3>Graphically extract roads from a roads map</h3>
-<div class="code"><pre>
+### Graphically extract roads from a roads map
+
+```sh
 d.mon x0
 d.vect roads
 d.extract input=roads output=interstate
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em><a href="v.extract.html">v.extract</a></em>
+*[v.extract](v.extract.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
 Radim Blazek, Markus Neteler

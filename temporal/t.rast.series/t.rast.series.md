@@ -1,64 +1,63 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
 The input of this module is a single space time raster dataset, the
 output is a single raster map layer. A subset of the input space time
-raster dataset can be selected using the <b>where</b> option. The
-sorting of the raster map layer can be set using the <b>order</b>
-option. Be aware that the order of the maps can significantly influence
-the result of the aggregation (e.g.: slope). By default the maps are
-ordered by <b>start_time</b>.
-<p>
-<em>t.rast.series</em> is a simple wrapper for the raster module
-<b>r.series</b>. It supports a subset of the aggregation methods of
-<b>r.series</b>.
+raster dataset can be selected using the **where** option. The sorting
+of the raster map layer can be set using the **order** option. Be aware
+that the order of the maps can significantly influence the result of the
+aggregation (e.g.: slope). By default the maps are ordered by
+**start_time**.
 
-<h2>NOTES</h2>
+*t.rast.series* is a simple wrapper for the raster module **r.series**.
+It supports a subset of the aggregation methods of **r.series**.
+
+## NOTES
 
 To avoid problems with too many open files, by default, the maximum
-number of open files is set to 1000. If the number of input raster
-files exceeds this number, the <b>-z</b> flag will be invoked. Because this
-will slow down processing, the user can set a higher limit with the
-<b>file_limit</b> parameter. Note that <b>file_limit</b> limit should not exceed the
-user-specific limit on open files set by your operating system. See the
-<a href="https://grasswiki.osgeo.org/wiki/Large_raster_data_processing#Number_of_open_files_limitation">Wiki</a>
+number of open files is set to 1000. If the number of input raster files
+exceeds this number, the **-z** flag will be invoked. Because this will
+slow down processing, the user can set a higher limit with the
+**file_limit** parameter. Note that **file_limit** limit should not
+exceed the user-specific limit on open files set by your operating
+system. See the
+[Wiki](https://grasswiki.osgeo.org/wiki/Large_raster_data_processing#Number_of_open_files_limitation)
 for more information.
 
-<h2>Performance</h2>
-To enable parallel processing, the user can specify the number of threads to be
-used with the <b>nprocs</b> parameter (default 1). The <b>memory</b> parameter
-(default 300 MB) can also be provided to determine the size of the buffer in MB for
-computation. Both parameters are passed to <a href="r.series.html">r.series</a>.
-To take advantage of the parallelization, GRASS GIS
-needs to be compiled with OpenMP enabled.
+## Performance
 
+To enable parallel processing, the user can specify the number of
+threads to be used with the **nprocs** parameter (default 1). The
+**memory** parameter (default 300 MB) can also be provided to determine
+the size of the buffer in MB for computation. Both parameters are passed
+to [r.series](r.series.md). To take advantage of the parallelization,
+GRASS GIS needs to be compiled with OpenMP enabled.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Estimate the average temperature for the whole time series</h3>
+### Estimate the average temperature for the whole time series
 
 Here the entire stack of input maps is considered:
 
-<div class="code"><pre>
+```sh
 t.rast.series input=tempmean_monthly output=tempmean_average method=average
-</pre></div>
+```
 
-<h3>Estimate the average temperature for a subset of the time series</h3>
+### Estimate the average temperature for a subset of the time series
 
 Here the stack of input maps is limited to a certain period of time:
 
-<div class="code"><pre>
+```sh
 t.rast.series input=tempmean_daily output=tempmean_season method=average \
-  where="start_time &gt;= '2012-06' and start_time &lt;= '2012-08'"
-</pre></div>
+  where="start_time >= '2012-06' and start_time <= '2012-08'"
+```
 
-<h3>Climatology: single month in a multi-annual time series</h3>
+### Climatology: single month in a multi-annual time series
 
-By considering only a single month in a multi-annual time series the so-called
-climatology can be computed.
+By considering only a single month in a multi-annual time series the
+so-called climatology can be computed. Estimate average temperature for
+all January maps in the time series:
 
-Estimate average temperature for all January maps in the time series:
-
-<div class="code"><pre>
+```sh
 t.rast.series input=tempmean_monthly \
     method=average output=tempmean_january \
     where="strftime('%m', start_time)='01'"
@@ -77,30 +76,27 @@ t.rast.series input=tempmean_monthly \
 t.rast.series input=tempmean_monthly \
     output=tempmean_march method=average \
     where="start_time = datetime(start_time, 'start of year', '2 month')"
-</pre></div>
+```
 
 Generalizing a bit, we can estimate monthly climatologies for all months
 by means of different methods
 
-<div class="code"><pre>
+```sh
 for i in `seq -w 1 12` ; do
   for m in average stddev minimum maximum ; do
     t.rast.series input=tempmean_monthly method=${m} output=tempmean_${m}_${i} \
     where="strftime('%m', start_time)='${i}'"
   done
 done
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.series.html">r.series</a>,
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
-</em>
-<p>
-<a href="https://grasswiki.osgeo.org/wiki/Temporal_data_processing">Temporal data processing Wiki</a>
+*[r.series](r.series.md), [t.create](t.create.md), [t.info](t.info.md)*
 
-<h2>AUTHOR</h2>
+[Temporal data processing
+Wiki](https://grasswiki.osgeo.org/wiki/Temporal_data_processing)
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+## AUTHOR
+
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

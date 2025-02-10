@@ -1,15 +1,12 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.in.gridatb</em> imports GRIDATB.FOR map file (TOPMODEL) into GRASS
-raster map.
+*r.in.gridatb* imports GRIDATB.FOR map file (TOPMODEL) into GRASS raster
+map.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.topmodel.html">r.topmodel</a>,
-<a href="r.out.gridatb.html">r.out.gridatb</a>
-</em>
+*[r.topmodel](r.topmodel.md), [r.out.gridatb](r.out.gridatb.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Huidae Cho based on code from Keith Beven

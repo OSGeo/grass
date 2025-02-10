@@ -1,81 +1,67 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.extrude</em> creates faces, kernels or 3D lines based on input
-2D vector features. Points are converted to 3D vertical lines, lines
-to faces and areas to volumes (composition of closed set of faces and
-kernel).
+*v.extrude* creates faces, kernels or 3D lines based on input 2D vector
+features. Points are converted to 3D vertical lines, lines to faces and
+areas to volumes (composition of closed set of faces and kernel).
 
-<p>
-If <b>elevation</b> parameter is used then 3D vector features follow
-the elevation model by using individual elevation values for the
-vertices. Height for vertices is interpolated from elevation raster
-map using given interpolation <b>method</b>.
+If **elevation** parameter is used then 3D vector features follow the
+elevation model by using individual elevation values for the vertices.
+Height for vertices is interpolated from elevation raster map using
+given interpolation **method**.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>v.extrude</em> extrudes vector features which means that points
-are converted to vertical lines. Lines and area boundaries are
-extruded to a set of faces, each segment defines one face. Area
-centroids are written as kernels. Area as a composition of boundaries
-and centroid is stored as a closed set of faces and kernel which
-define a volume.
+*v.extrude* extrudes vector features which means that points are
+converted to vertical lines. Lines and area boundaries are extruded to a
+set of faces, each segment defines one face. Area centroids are written
+as kernels. Area as a composition of boundaries and centroid is stored
+as a closed set of faces and kernel which define a volume.
 
-<p>
-For conversion of 2D points or lines to 3D can be
-used <em><a href="v.to.3d.html">v.to.3d</a></em>
-or <em><a href="v.drape.html">v.drape</a></em>. In opposite
-to <em>v.extrude</em>, these modules do not extrude vector features,
-they defines z-coordinate for the features from given parameters or by
-sampling elevation raster map values. It means that no feature type
-conversion is applied, points remain still points in the output vector
-map. Same applies for the lines.
+For conversion of 2D points or lines to 3D can be used
+*[v.to.3d](v.to.3d.md)* or *[v.drape](v.drape.md)*. In opposite to
+*v.extrude*, these modules do not extrude vector features, they defines
+z-coordinate for the features from given parameters or by sampling
+elevation raster map values. It means that no feature type conversion is
+applied, points remain still points in the output vector map. Same
+applies for the lines.
 
-<p>
-<em>v.extrude</em> modifies only features geometry. Feature categories
-remain untouched and attribute data is copied from input vector map to
-the output.
+*v.extrude* modifies only features geometry. Feature categories remain
+untouched and attribute data is copied from input vector map to the
+output.
 
-<p>
 By default, all features (including features without category) from
-input vector map are processed (<b>layer=-1</b>). Feature selection
-can be applied by <b>layer</b>, <b>cats</b> or <b>where</b>
-parameter.
+input vector map are processed (**layer=-1**). Feature selection can be
+applied by **layer**, **cats** or **where** parameter.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>3D houses with fixed height</h3>
+### 3D houses with fixed height
 
-<div class="code"><pre>
+```sh
 v.extrude input=houses output=houses3D height=5 type=area
-</pre></div>
+```
 
-<h3>3D houses with individual height</h3>
+### 3D houses with individual height
 
-<div class="code"><pre>
+```sh
 v.extrude input=houses output=houses3D elevation=dem height_column=height type=area
-</pre></div>
+```
 
-<h3>Convert 2D points to 3D vertical lines with fixed height</h3>
+### Convert 2D points to 3D vertical lines with fixed height
 
-<div class="code"><pre>
+```sh
 v.extrude input=geodetic_pts output=points3D height=200 type=point
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.transform.html">v.transform</a>,
-<a href="v.drape.html">v.drape</a>,
-<a href="v.to.3d.html">v.to.3d</a>
-</em>
+*[v.transform](v.transform.md), [v.drape](v.drape.md),
+[v.to.3d](v.to.3d.md)*
 
-<p>
-<em>
-<a href="wxGUI.nviz.html">wxGUI 3D viewer</a>
-</em>
+*[wxGUI 3D viewer](wxGUI.nviz.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Jachym Cepicky,<br>
-Updated for GRASS 7 by Martin Landa, FBK-irst,
-Italy and Czech Technical University in Prague, Czech Republic
+Jachym Cepicky,  
+Updated for GRASS 7 by Martin Landa, FBK-irst, Italy and Czech Technical
+University in Prague, Czech Republic

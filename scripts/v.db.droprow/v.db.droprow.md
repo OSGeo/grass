@@ -1,21 +1,22 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.db.droprow</em> removes vector object(s) (point, line, area, face etc.)
-from a vector map through attribute selection in the table connected
-to the given vector map. It automatically checks the connection for the specified
-layer.
+*v.db.droprow* removes vector object(s) (point, line, area, face etc.)
+from a vector map through attribute selection in the table connected to
+the given vector map. It automatically checks the connection for the
+specified layer.
 
-<h2>NOTES</h2>
+## NOTES
 
-v.db.droprow is a front-end to <em>v.extract</em> (reverse selection)
-to allow easier usage.
+v.db.droprow is a front-end to *v.extract* (reverse selection) to allow
+easier usage. The existing database connection(s) can be verified with
+*v.db.connect*.
 
-The existing database connection(s) can be verified with <em>v.db.connect</em>.
+## EXAMPLES
 
-<h2>EXAMPLES</h2>
+Dropping all vector points without elevation attribute (North Carolina
+data set):  
 
-Dropping all vector points without elevation attribute (North Carolina data set):<br>
-<div class="code"><pre>
+```sh
 g.region raster=elevation -p
 v.random output=rand5k_elev n=5000
 
@@ -30,27 +31,18 @@ v.db.droprow rand5k_elev output=rand5k_elev_filt where="elevation IS NULL"
 
 # verify:
 v.univar rand5k_elev_filt type=point column=elevation
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.droptable.html">db.droptable</a>,
-<a href="db.execute.html">db.execute</a>,
-<a href="v.db.addcolumn.html">v.db.addcolumn</a>,
-<a href="v.db.addtable.html">v.db.addtable</a>,
-<a href="v.db.connect.html">v.db.connect</a>,
-<a href="v.db.dropcolumn.html">v.db.dropcolumn</a>,
-<a href="v.db.droptable.html">v.db.droptable</a>,
-<a href="v.db.select.html">v.db.select</a>,
-<a href="v.db.update.html">v.db.update</a>
-</em>
+*[db.droptable](db.droptable.md), [db.execute](db.execute.md),
+[v.db.addcolumn](v.db.addcolumn.md), [v.db.addtable](v.db.addtable.md),
+[v.db.connect](v.db.connect.md), [v.db.dropcolumn](v.db.dropcolumn.md),
+[v.db.droptable](v.db.droptable.md), [v.db.select](v.db.select.md),
+[v.db.update](v.db.update.md)*
 
-<p>
-<em>
-<a href="sql.html">GRASS SQL interface</a>
-</em>
+*[GRASS SQL interface](sql.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Markus Neteler

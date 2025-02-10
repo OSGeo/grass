@@ -1,75 +1,66 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.surf.contour</em> creates a raster elevation map from a rasterized
-contour map.  Elevation values are determined using procedures similar
-to a manual methods.
-To determine the elevation of a point on a contour map, an individual
-might interpolate its value from those of the two nearest contour lines
-(uphill and downhill).
+*r.surf.contour* creates a raster elevation map from a rasterized
+contour map. Elevation values are determined using procedures similar to
+a manual methods. To determine the elevation of a point on a contour
+map, an individual might interpolate its value from those of the two
+nearest contour lines (uphill and downhill).
 
-<p>
-<em>r.surf.contour</em> works in a similar way.  Initially, a vector map of
-the contour lines is made with the elevation of each line as an attribute.
-When the program <em><a href="v.to.rast.html">v.to.rast</a></em>
-is run on the vector map, continuous "lines" of rasters containing the
-contour line values will be the input for <em>r.surf.contour</em>. For each
-cell in the input map, either the cell is a contour line cell (which is
-given that value), or a flood fill is generated from that spot until the
-fill comes to two unique values. So the <em>r.surf.contour</em> algorithm
-<strong>linearly interpolates</strong> between contour lines. The flood fill
-is not allowed to cross over
-the rasterized contour lines, thus ensuring that an uphill and downhill
-contour value will be the two values chosen.  <em>r.surf.contour</em>
+*r.surf.contour* works in a similar way. Initially, a vector map of the
+contour lines is made with the elevation of each line as an attribute.
+When the program *[v.to.rast](v.to.rast.md)* is run on the vector map,
+continuous "lines" of rasters containing the contour line values will be
+the input for *r.surf.contour*. For each cell in the input map, either
+the cell is a contour line cell (which is given that value), or a flood
+fill is generated from that spot until the fill comes to two unique
+values. So the *r.surf.contour* algorithm **linearly interpolates**
+between contour lines. The flood fill is not allowed to cross over the
+rasterized contour lines, thus ensuring that an uphill and downhill
+contour value will be the two values chosen. *r.surf.contour*
 interpolates from the uphill and downhill values by the true distance.
 
-<h3>Parameters:</h3>
+### Parameters
 
-<dl>
+**input=***name*  
+Name of an existing raster map that contains a set of initial category
+values (i.e., some cells contain known elevation values (denoting
+contours) while the rest contain NULL values).
 
-<dt><b>input=</b><em>name</em>
+**output=***name*  
+Name to be assigned to new output raster map that represents a smooth
+(e.g., elevation) surface generated from the known category values in
+the input raster map layer.
 
-<dd>Name of an existing raster map that contains a set of
-initial category values (i.e., some cells contain known elevation
-values (denoting contours) while the rest contain NULL values).
+An existing mask raster map is respected for both reading *input* and
+writing *output*.
 
-<dt><b>output=</b><em>name</em>
+## NOTES
 
-<dd>Name to be assigned to new output raster map that represents
-a smooth (e.g., elevation) surface generated from
-the known category values in the input raster map layer.
-</dl>
+*r.surf.contour* works well under the following circumstances: 1) the
+contour lines extend to the the edge of the current region, 2) the
+program is run at the same resolution as that of the input map, 3) there
+are no disjointed contour lines, and 4) no spot elevation data BETWEEN
+contour lines exist. Spot elevations at the tops of hills and the
+bottoms of depressions, on the other hand, improve the output greatly.
+Violating these constraints will cause non-intuitive anomalies to appear
+in the output map. Run *[r.slope.aspect](r.slope.aspect.md)* on
+*r.surf.contour* results to locate potential anomalies.
 
-<p>An existing mask raster map is respected for both reading <em>input</em>
-and writing <em>output</em>.
+The running of *r.surf.contour* is very sensitive to the resolution of
+rasterized vector map. If multiple contour lines go through the same
+raster, slight anomalies may occur. The speed of *r.surf.contour* is
+dependent on how far "apart" the contour lines are from each other (as
+measured in raster cells). Since a flood fill algorithm is used, the
+program's running time will grow exponentially with the distance between
+contour lines.
 
-<h2>NOTES</h2>
+## EXAMPLE
 
-<em>r.surf.contour</em> works well under the following circumstances:
-1) the contour lines extend to the the edge of the current region,
-2) the program is run at the same resolution as that of the input map,
-3) there are no disjointed contour lines,
-and 4) no spot elevation data BETWEEN contour lines exist.  Spot elevations at
-the tops of hills and the bottoms of depressions, on the other hand, improve
-the output greatly.
-Violating these constraints will cause non-intuitive anomalies to appear in
-the output map.  Run <em> <a href="r.slope.aspect.html">r.slope.aspect</a>
-</em> on <em>r.surf.contour</em> results to locate potential anomalies.
+Example to create contour lines from elevation model, then recreating
+DEM from these contour lines along with differences analysis (North
+Carolina sample data set):
 
-
-<p>The running of <em>r.surf.contour</em> is very sensitive to the resolution of
-rasterized vector map.  If multiple contour lines go through the same raster,
-slight anomalies may occur.  The speed of <em>r.surf.contour</em> is dependent
-on how far "apart" the contour lines are from each other (as measured in
-raster cells).  Since a flood fill algorithm is used, the program's running
-time will grow exponentially with the distance between contour lines.
-
-<h2>EXAMPLE</h2>
-
-Example to create contour lines from elevation model, then recreating DEM
-from these contour lines along with differences analysis (North Carolina
-sample data set):
-
-<div class="code"><pre>
+```sh
 g.region raster=elevation -p
 
 # get minimum elevation value
@@ -91,23 +82,19 @@ r.colors diff color=differences
 
 # analyze differences statistically
 r.univar diff
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.mapcalc.html">r.mapcalc</a>,
-<a href="r.slope.aspect.html">r.slope.aspect</a>,
-<a href="r.surf.idw.html">r.surf.idw</a>,
-<a href="wxGUI.vdigit.html">wxGUI vector digitizer</a>,
-<a href="v.surf.idw.html">v.surf.idw</a>,
-<a href="v.surf.rst.html">v.surf.rst</a>,
-<a href="v.to.rast.html">v.to.rast</a>
-</em>
+*[r.mapcalc](r.mapcalc.md), [r.slope.aspect](r.slope.aspect.md),
+[r.surf.idw](r.surf.idw.md), [wxGUI vector digitizer](wxGUI.vdigit.md),
+[v.surf.idw](v.surf.idw.md), [v.surf.rst](v.surf.rst.md),
+[v.to.rast](v.to.rast.md)*
 
-<p>
-Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation and Resampling</a> in GRASS GIS
+Overview: [Interpolation and
+Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Chuck Ehlschlaeger, U.S. Army Construction Engineering Research Laboratory
+Chuck Ehlschlaeger, U.S. Army Construction Engineering Research
+Laboratory

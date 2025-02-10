@@ -1,10 +1,10 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.snap</em> is designed to convert time instances of maps into time
+*t.snap* is designed to convert time instances of maps into time
 intervals or to create valid temporal topologies for space time
-datasets. Raster, 3D raster and vector space time datasets are
-supported with absolute and relative time.
-<p>
+datasets. Raster, 3D raster and vector space time datasets are supported
+with absolute and relative time.
+
 This module "snaps" the end time of each registered map of a space time
 dataset to the start time of the map that is the temporal nearest
 neighbour in the future. Maps with equal time stamps are not modified
@@ -13,14 +13,14 @@ case the last map in the space time dataset is a time instance, the
 granularity of the space time dataset will be used to create the time
 interval.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-A raster space time dataset will be create using precipitation maps for 2012
-then using absolute time in a space time raster dataset using an increment
-of one month.
-At the end we snap the created time instances resulting in time intervals.
+A raster space time dataset will be create using precipitation maps for
+2012 then using absolute time in a space time raster dataset using an
+increment of one month. At the end we snap the created time instances
+resulting in time intervals.
 
-<div class="code"><pre>
+```sh
 # Generate data
 
 t.create type=strds temporaltype=absolute \
@@ -183,16 +183,13 @@ t.rast.list input=precipitation_daily
 2012_10_precip|climate_2009_2012|2012-10-01 00:00:00|2012-11-01 00:00:00
 2012_11_precip|climate_2009_2012|2012-11-01 00:00:00|2012-12-01 00:00:00
 2012_12_precip|climate_2009_2012|2012-12-01 00:00:00|2013-01-01 00:00:00
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.shift.html">t.shift</a>,
-<a href="t.create.html">t.create</a>,
-<a href="t.register.html">t.register</a>
-</em>
+*[t.shift](t.shift.md), [t.create](t.create.md),
+[t.register](t.register.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

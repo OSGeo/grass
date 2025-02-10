@@ -1,21 +1,16 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.what.rast</em> outputs the category value(s)
-associated with user-specified location(s) in user-specified raster map layer(s).
-The active monitor can be selected with <em>d.mon</em>.
+*d.what.rast* outputs the category value(s) associated with
+user-specified location(s) in user-specified raster map layer(s). The
+active monitor can be selected with *d.mon*.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
+*[d.what.vect](d.what.vect.md), [d.redraw](d.redraw.md),
+[d.erase](d.erase.md), [d.rast](d.rast.md), [d.vect](d.vect.md),
+[d.mon](d.mon.md)*
 
-<em>
-  <a href="d.what.vect.html">d.what.vect</a>,
-  <a href="d.redraw.html">d.redraw</a>,
-  <a href="d.erase.html">d.erase</a>,
-  <a href="d.rast.html">d.rast</a>,
-  <a href="d.vect.html">d.vect</a>,
-  <a href="d.mon.html">d.mon</a>
-</em>
+## AUTHOR
 
-<h2>AUTHOR</h2>
-
-Anna Petrasova, <a href="https://geospatial.ncsu.edu/geoforall/">NCSU GeoForAll Lab</a>
+Anna Petrasova, [NCSU GeoForAll
+Lab](https://geospatial.ncsu.edu/geoforall/)

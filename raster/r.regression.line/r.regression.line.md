@@ -1,35 +1,38 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.regression.line</em> calculates a linear regression from two
-raster maps, according to the formula
-<div class="code"><pre>
+*r.regression.line* calculates a linear regression from two raster maps,
+according to the formula
+
+```sh
 y = a + b*x
-</pre></div>
+```
+
 where
-<div class="code"><pre>
+
+```sh
 x
 y
-</pre></div>
+```
+
 represent the input raster maps.
-<p>
-Optionally, it saves regression coefficients as a ASCII file.
-The result includes the following coefficients:
-offset/intercept (a) and gain/slope (b), correlation coefficient (R),
-number of elements (N), means (medX, medY), standard deviations
-(sdX, sdY), and the F test for testing the significance of the
-regression model as a whole (F).
 
-<h2>NOTES</h2>
+Optionally, it saves regression coefficients as a ASCII file. The result
+includes the following coefficients: offset/intercept (a) and gain/slope
+(b), correlation coefficient (R), number of elements (N), means (medX,
+medY), standard deviations (sdX, sdY), and the F test for testing the
+significance of the regression model as a whole (F).
 
-The results for offset/intercept (a) and gain/slope (b) are
-identical to that obtained from R-stats's lm() function.
+## NOTES
 
-<h2>EXAMPLE</h2>
+The results for offset/intercept (a) and gain/slope (b) are identical to
+that obtained from R-stats's lm() function.
 
-Comparison of two DEMs (SRTM and NED, both at 30m resolution),
-provided in the North Carolina sample dataset:
+## EXAMPLE
 
-<div class="code"><pre>
+Comparison of two DEMs (SRTM and NED, both at 30m resolution), provided
+in the North Carolina sample dataset:
+
+```sh
 g.region raster=elev_srtm_30m -p
 r.regression.line mapx=elev_ned_30m mapy=elev_srtm_30m
  y = a + b*x
@@ -42,11 +45,12 @@ r.regression.line mapx=elev_ned_30m mapy=elev_srtm_30m
    sdX (Standard deviation of map1): 20.311998
    meanY (Mean of map2): 113.498292
    sdY (Standard deviation of map2): 23.718307
-</pre></div>
-<p>
-Using the script style flag AND <em>eval</em> to make results
-available in the shell:
-<div class="code"><pre>
+```
+
+Using the script style flag AND *eval* to make results available in the
+shell:
+
+```sh
 g.region raster=elev_srtm_30m -p
 eval `r.regression.line -g mapx=elev_ned_30m mapy=elev_srtm_30m`
 
@@ -59,19 +63,16 @@ echo $b
 
 echo $R
 0.894038
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.correlate.html">d.correlate</a>,
-<a href="r.regression.multi.html">r.regression.multi</a>,
-<a href="r.stats.html">r.stats</a>
-</em>
+*[d.correlate](d.correlate.md),
+[r.regression.multi](r.regression.multi.md), [r.stats](r.stats.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Dr. Agustin Lobo - alobo at ija.csic.es<br>
-Updated to GRASS 5.7 Michael Barton, Arizona State University<br>
-Script style output Markus Neteler<br>
+Dr. Agustin Lobo - alobo at ija.csic.es  
+Updated to GRASS 5.7 Michael Barton, Arizona State University  
+Script style output Markus Neteler  
 Conversion to C module Markus Metz

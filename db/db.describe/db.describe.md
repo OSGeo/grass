@@ -1,29 +1,30 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.describe</em> displays table information. If parameter <b>-c</b>
-is used only column names instead of full column descriptions is given.
+*db.describe* displays table information. If parameter **-c** is used
+only column names instead of full column descriptions is given.
 
-<h2>NOTE</h2>
+## NOTE
 
 If parameters for database connection are already set with
-<a href="db.connect.html">db.connect</a>, they are taken as default values and
-do not need to be spcified each time.
+[db.connect](db.connect.md), they are taken as default values and do not
+need to be spcified each time.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<em>List column descriptions of table in SQLite database (note that this
-is the default setting)</em><br>
+*List column descriptions of table in SQLite database (note that this is
+the default setting)*  
 
-<div class="code"><pre>
+```sh
 db.describe driver=sqlite table=hospitals \
    database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 
 # or simply
 db.describe myarchsites
-</pre></div>
+```
 
-<h3>DBF example</h3>
-<div class="code"><pre>
+### DBF example
+
+```sh
 db.describe -c table=hospitals database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf/' \
             driver=dbf
 ncols: 16
@@ -32,9 +33,9 @@ Column 1: cat:INTEGER:11
 Column 2: OBJECTID:INTEGER:11
 Column 3: AREA:DOUBLE PRECISION:20
 [...]
-</pre></div>
+```
 
-<div class="code"><pre>
+```sh
 db.describe table=hospitals database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf/' \
             driver=dbf
 table:hospitals
@@ -59,14 +60,15 @@ column:OBJECTID
 description:
 type:INTEGER
 [...]
-</pre></div>
+```
 
-<h3>JSON Output</h3>
-<div class="code"><pre>
+### JSON Output
+
+```sh
 db.describe table=hospitals format=json
-</pre></div>
+```
 
-<div class="code"><pre>
+```sh
 {
     "table": "hospitals",
     "description": "",
@@ -285,19 +287,14 @@ db.describe table=hospitals format=json
         }
     ]
 }
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.columns.html">db.columns</a>,
-<a href="db.droptable.html">db.droptable</a>,
-<a href="db.execute.html">db.execute</a>,
-<a href="db.login.html">db.login</a>,
-<a href="db.tables.html">db.tables</a>,
-<a href="sql.html">GRASS SQL interface</a>
-</em>
+*[db.columns](db.columns.md), [db.droptable](db.droptable.md),
+[db.execute](db.execute.md), [db.login](db.login.md),
+[db.tables](db.tables.md), [GRASS SQL interface](sql.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Radim Blazek, ITC-Irst, Trento, Italy

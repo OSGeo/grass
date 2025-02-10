@@ -1,55 +1,46 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.out.ascii</em> converts a user-specified raster map layer
-(<b>input=</b><em>name</em>) into an ASCII grid in a text file
-(<b>output=</b><em>name</em>) suitable for export to
-other computer systems.
+*r.out.ascii* converts a user-specified raster map layer
+(**input=***name*) into an ASCII grid in a text file (**output=***name*)
+suitable for export to other computer systems.
 
-<p>
-The GRASS program <em><a href="r.in.ascii.html">r.in.ascii</a></em> can be
-used to perform the reverse function, converting an ASCII file in suitable
-format to GRASS raster map format.
-<p><!--With <b>-s</b> flag SURFER .grd ASCII GRID instead of GRASS ASCII GRID is
-written (with reverted row order, different header).
-<p>With <b>-m</b> flag MODFLOW (USGS) free-format array instead of GRASS ASCII
-GRID is written.-->
+The GRASS program *[r.in.ascii](r.in.ascii.md)* can be used to perform
+the reverse function, converting an ASCII file in suitable format to
+GRASS raster map format.
 
-<p>To write a SURFER .grd ASCII GRID file (with reverted row order and different
-header) use the <em>-s</em> flag:
+To write a SURFER .grd ASCII GRID file (with reverted row order and
+different header) use the *-s* flag:
 
-<div class="code"><pre>
+```sh
 r.out.ascii -s input=inname output=outname.grd [dp=value]
-</pre></div>
+```
 
-NULL data are coded to "1.70141e+038" for SURFER ASCII GRID files (ignoring
-the <em>null=</em> parameter).
+NULL data are coded to "1.70141e+038" for SURFER ASCII GRID files
+(ignoring the *null=* parameter).
 
-<h2>NOTES</h2>
+## NOTES
 
-The output from <em>r.out.ascii</em> may be placed into a file by using the
+The output from *r.out.ascii* may be placed into a file by using the
 UNIX redirection mechanism; e.g.:
 
-<div class="code"><pre>
-r.out.ascii input=soils output=- &gt; out.file
-</pre></div>
+```sh
+r.out.ascii input=soils output=- > out.file
+```
 
-The output file out.file can then be printed or copied onto a CDROM
-or floppy disk for export purposes.
-<p>To export the raster values as x,y,z values of cell centers (one per line)
-use the <em><a href="r.out.xyz.html">r.out.xyz</a></em> module.
+The output file out.file can then be printed or copied onto a CDROM or
+floppy disk for export purposes.
 
-<h2>SEE ALSO</h2>
+To export the raster values as x,y,z values of cell centers (one per
+line) use the *[r.out.xyz](r.out.xyz.md)* module.
 
-<em>
-<a href="r.in.ascii.html">r.in.ascii</a>,
-<a href="r.in.gdal.html">r.in.gdal</a>,
-<a href="r.out.bin.html">r.out.bin</a>,
-<a href="r.out.gdal.html">r.out.gdal</a>,
-<a href="r.out.xyz.html">r.out.xyz</a>
-</em>
+## SEE ALSO
 
-<h2>AUTHORS</h2>
+*[r.in.ascii](r.in.ascii.md), [r.in.gdal](r.in.gdal.md),
+[r.out.bin](r.out.bin.md), [r.out.gdal](r.out.gdal.md),
+[r.out.xyz](r.out.xyz.md)*
 
-Michael Shapiro,
-U.S. Army Construction Engineering Research Laboratory
-<p>Surfer support by Markus Neteler
+## AUTHORS
+
+Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
+
+Surfer support by Markus Neteler

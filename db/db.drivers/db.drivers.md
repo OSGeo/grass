@@ -1,31 +1,26 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.drivers</em> lists all database drivers (DBMI backends).
+*db.drivers* lists all database drivers (DBMI backends).
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Show all installed GRASS database drivers:
 
-<p><div class="code"><pre>
+```sh
 db.drivers -p
 pg
 ogr
 sqlite
 dbf
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.connect.html">db.connect</a>,
-<a href="db.describe.html">db.describe</a>,
-<a href="db.droptable.html">db.droptable</a>,
-<a href="db.execute.html">db.execute</a>,
-<a href="db.login.html">db.login</a>,
-<a href="db.tables.html">db.tables</a>,
-<a href="sql.html">GRASS SQL interface</a>
-</em>
+*[db.connect](db.connect.md), [db.describe](db.describe.md),
+[db.droptable](db.droptable.md), [db.execute](db.execute.md),
+[db.login](db.login.md), [db.tables](db.tables.md), [GRASS SQL
+interface](sql.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Radim Blazek, ITC-Irst, Trento, Italy

@@ -1,45 +1,39 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-This program allows the user to control access to the
-current mapset.  Normally, any user can read data from any
-GRASS mapset. But sometimes it is desirable to prohibit
-access to certain sensitive data. The <em>g.access</em>
-command allows a user to restrict read and execute access
-to the current mapset (see UNIX <em>chmod</em> command).
-<em>g.access</em> will not modify write access to the
-current mapset.
+This program allows the user to control access to the current mapset.
+Normally, any user can read data from any GRASS mapset. But sometimes it
+is desirable to prohibit access to certain sensitive data. The
+*g.access* command allows a user to restrict read and execute access to
+the current mapset (see UNIX *chmod* command). *g.access* will not
+modify write access to the current mapset.
 
-<p>
-The user may, for example, allow only users in the same
-UNIX group to read data files in the mapset, or restrict
-the mapset to personal use only.
+The user may, for example, allow only users in the same UNIX group to
+read data files in the mapset, or restrict the mapset to personal use
+only.
 
-<h2>NOTES</h2>
+## NOTES
 
+Under GRASS, access to the mapset PERMANENT must be open to all users.
+This is because GRASS looks for the user's default geographic region
+definition settings and the project TITLE in files that are stored under
+the PERMANENT mapset directory. The *g.access* command, therefore, will
+not allow you to restrict access to the PERMANENT mapset.
 
-<p> Under GRASS, access to the mapset PERMANENT must be open to
-all users.  This is because GRASS looks for the user's default geographic
-region definition settings and the project TITLE in files that are stored
-under the PERMANENT mapset directory.  The <em>g.access</em> command,
-therefore, will not allow you to restrict access to the PERMANENT mapset.
-
-<p>The <em><a href="g.mapsets.html">g.mapsets</a></em> command isn't smart
-enough to tell if access to a specified mapset is restricted, and the user
-is therefore allowed to include the names of restricted mapsets in his
-search path.  However, the data in a restricted mapset is still protected;
-any attempts to look for or use data in a restricted mapset will fail.  The
+The *[g.mapsets](g.mapsets.md)* command isn't smart enough to tell if
+access to a specified mapset is restricted, and the user is therefore
+allowed to include the names of restricted mapsets in his search path.
+However, the data in a restricted mapset is still protected; any
+attempts to look for or use data in a restricted mapset will fail. The
 user will simply not see any data listed for a restricted mapset.
 
-<p>UNIX filesystem access controls and <em>g.access</em> actions are not
-supported by MS-Windows.
+UNIX filesystem access controls and *g.access* actions are not supported
+by MS-Windows.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-UNIX manual entries for <em>chmod(1)</em> and <em>group(5)</em>
-<br>
-<em><a href="g.mapsets.html">g.mapsets</a></em>
+UNIX manual entries for *chmod(1)* and *group(5)*  
+*[g.mapsets](g.mapsets.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Michael Shapiro,
-U.S. Army Construction Engineering Research Laboratory
+Michael Shapiro, U.S. Army Construction Engineering Research Laboratory

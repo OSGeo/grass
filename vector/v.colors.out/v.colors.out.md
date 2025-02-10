@@ -1,26 +1,21 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.colors.out</em> allows the user to export the color table for a
-vector map to a file which is suitable as input
-to <em><a href="v.colors.html">v.colors</a></em>.
+*v.colors.out* allows the user to export the color table for a vector
+map to a file which is suitable as input to *[v.colors](v.colors.md)*.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<div class="code"><pre>
+```sh
 v.colors.out map=soils_general rules=rules.txt
 v.colors map=soils_wake rules=rules.txt
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.colors.html">v.colors</a>,
-<a href="r.colors.html">r.colors</a>,
-<a href="r3.colors.html">r3.colors</a>,
-<a href="r.colors.out.html">r.colors.out</a>,
-<a href="r3.colors.out.html">r3.colors.out</a>
-</em>
+*[v.colors](v.colors.md), [r.colors](r.colors.md),
+[r3.colors](r3.colors.md), [r.colors.out](r.colors.out.md),
+[r3.colors.out](r3.colors.out.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Martin Landa, Czech Technical University in Prague, Czech Republic
