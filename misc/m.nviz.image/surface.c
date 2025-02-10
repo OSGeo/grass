@@ -50,7 +50,8 @@ int load_rasters(const struct GParams *params, nv_data *data)
                 G_fatal_error(_("Raster map <%s> not found"),
                               params->elev_map->answers[i]);
             }
-            char *mname = G_fully_qualified_name(params->elev_map->answers[i], mapset);
+            char *mname =
+                G_fully_qualified_name(params->elev_map->answers[i], mapset);
             id = Nviz_new_map_obj(MAP_OBJ_SURF, mname, 0.0, data);
             G_free(mname);
         }
