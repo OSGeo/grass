@@ -127,6 +127,7 @@ class TestRFillNulls(TestCase):
         )
 
         self.assertModule(module)
+        self.runModule("r.mask", flags="r")
         self.assertRasterFitsUnivar(
             raster=self.mapComplete,
             reference={
@@ -136,8 +137,6 @@ class TestRFillNulls(TestCase):
             },
             precision=1e-6,
         )
-
-        self.runModule("r.mask", flags="r")
 
 
 if __name__ == "__main__":
