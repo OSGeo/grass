@@ -355,10 +355,10 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&cellhd);
 
-    Geometry geometry;
-    Settings settings;
-    Setup setup;
-    Simulation sim;
+    Geometry geometry = {0};
+    Settings settings = {0};
+    Setup setup = {0};
+    Simulation sim = {0};
 
     WaterParams_init(&wp);
 

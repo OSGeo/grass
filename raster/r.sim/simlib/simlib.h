@@ -24,31 +24,31 @@ typedef struct {
     double halpha;
     double hbeta;
     double hhmax;
-    double frac; /* Water diffusion constant */
-    int iterout; /* Time interval for creating output maps [minutes] */
-    int timesec; /* Time how long the simulation runs [minutes] */
-    bool ts;     /* Time series output */
-    double mintimestep;
+    double frac;        // Water diffusion constant
+    int iterout;        // Time interval for creating output maps [minutes]
+    int timesec;        // Time how long the simulation runs [minutes]
+    bool ts;            // Time series output
+    double mintimestep; // Minimum time step for the simulation [seconds]
 } Settings;
 
 typedef struct {
-    int iterout;    /* Number of iterations for creating output maps */
-    int miter;      /* Total number of iterations */
-    double si0;     /* Mean rainfall excess (or sediment concentration?) */
-    double sisum;   /* Sum of rainfall excess (or sediment concentration?) */
-    double vmean;   /* Mean velocity */
-    double infmean; /* Mean infiltration */
-    double timec;
-    double deltap; /* Time step for water */
+    int iterout;    // Number of iterations for creating output maps
+    int miter;      // Total number of iterations
+    double si0;     // Mean rainfall excess (or sediment concentration?)
+    double sisum;   // Sum of rainfall excess (or sediment concentration?)
+    double vmean;   // Mean velocity
+    double infmean; // Mean infiltration
+    double timec;   // Time coefficient
+    double deltap;  // Time step for water
 } Setup;
 
 typedef struct {
-    int nwalk;             /* Number of initial walkers in a single block */
-    int nwalka;            /* Remaining walkers in an iteration */
-    int nstack;            /* Number of output walkers */
-    struct point3D *stack; /* Output 3D walkers */
-    int maxwa;             /* Number of input walkers per block */
-    double rwalk; /* Number of input walkers per block as double precision */
+    int nwalk;             // Number of initial walkers in a single block
+    int nwalka;            // Remaining walkers in an iteration
+    int nstack;            // Number of output walkers
+    struct point3D *stack; // Output 3D walkers
+    int maxwa;             // Number of input walkers per block
+    double rwalk; // Number of input walkers per block as double precision
 
 } Simulation;
 
