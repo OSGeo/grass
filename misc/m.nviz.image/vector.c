@@ -72,6 +72,7 @@ int load_vectors(const struct Option *elev_map, const struct Option *elev_const,
 
         surf_list = GS_get_surf_list(&nsurf);
         GS_set_att_const(surf_list[0], ATT_TRANSP, 255);
+        G_free(surf_list);
     }
 
     nvects = 0;
@@ -111,7 +112,7 @@ int load_vectors(const struct Option *elev_map, const struct Option *elev_const,
  */
 int vlines_set_attrb(const struct GParams *params)
 {
-    int i, layer, color, width, flat, height;
+    int i, layer = 0, color, width, flat, height;
     int *vect_list, nvects;
     int have_colors;
 
@@ -138,8 +139,10 @@ int vlines_set_attrb(const struct GParams *params)
             flat = 0;
 
         /* style (mode -- use memory by default) */
-        if (GV_set_style(vect_list[i], TRUE, color, width, flat) < 0)
+        if (GV_set_style(vect_list[i], TRUE, color, width, flat) < 0) {
+            G_free(vect_list);
             return 0;
+        }
 
         /* check for vector color table */
         have_colors = Vect_read_colors(params->vlines->answers[i], "", &colors);
@@ -147,14 +150,17 @@ int vlines_set_attrb(const struct GParams *params)
         if (have_colors || color_column || width_column)
             if (GV_set_style_thematic(vect_list[i], layer, color_column,
                                       width_column,
-                                      have_colors ? &colors : NULL) < 0)
+                                      have_colors ? &colors : NULL) < 0) {
+                G_free(vect_list);
                 return 0;
+            }
 
         /* height */
         height = atoi(params->vline_height->answers[i]);
         if (height > 0)
             GV_set_trans(vect_list[i], 0.0, 0.0, height);
     }
+    G_free(vect_list);
 
     return 1;
 }
@@ -169,7 +175,7 @@ int vlines_set_attrb(const struct GParams *params)
  */
 int vpoints_set_attrb(const struct GParams *params)
 {
-    int i, layer, have_colors, with_z;
+    int i, layer = 0, have_colors, with_z = 0;
     int *site_list, nsites;
     int marker, color, width;
     float size;
@@ -208,8 +214,10 @@ int vpoints_set_attrb(const struct GParams *params)
                 GP_set_zmode(site_list[i], TRUE);
         }
 
-        if (GP_set_style(site_list[i], color, width, size, marker) < 0)
+        if (GP_set_style(site_list[i], color, width, size, marker) < 0) {
+            G_free(site_list);
             return 0;
+        }
 
         /* check for vector color table */
         have_colors =
@@ -219,10 +227,13 @@ int vpoints_set_attrb(const struct GParams *params)
             marker_column) {
             if (GP_set_style_thematic(site_list[i], layer, color_column,
                                       width_column, size_column, marker_column,
-                                      have_colors ? &colors : NULL) < 0)
+                                      have_colors ? &colors : NULL) < 0) {
+                G_free(site_list);
                 return 0;
+            }
         }
     }
+    G_free(site_list);
 
     return 1;
 }
@@ -347,6 +358,8 @@ int check_map(const struct GParams *params, int index, int vlines, int *field,
     }
 
     Vect_close(&Map);
+    db_free_column(column);
+    Vect_destroy_field_info(Fi);
 
     return 0;
 }

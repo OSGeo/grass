@@ -27,7 +27,7 @@
  */
 int load_rasters(const struct GParams *params, nv_data *data)
 {
-    const char *mapset;
+    const char *mapset = NULL;
     int i;
     int nelevs, nelev_map, nelev_const, ncolor_map, ncolor_const, nmask_map;
     int ntransp_map, ntransp_const, nshine_map, nshine_const;
@@ -191,6 +191,7 @@ int load_rasters(const struct GParams *params, nv_data *data)
            set_default_wirecolors(data, i);
          */
     }
+    G_free(surf_list);
 
     return nsurfs;
 }
@@ -273,6 +274,7 @@ void surface_set_draw_mode(const struct GParams *params)
         /* wire color */
         GS_set_wire_color(id, Nviz_color_from_str(wire_color));
     }
+    G_free(surf_list);
 
     return;
 }
