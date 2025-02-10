@@ -106,8 +106,10 @@ int load_rasters(const struct GParams *params, nv_data *data)
                 G_fatal_error(_("Raster map <%s> not found"),
                               params->color_map->answers[i]);
             }
-            char *mname = G_fully_qualified_name(params->color_map->answers[i], mapset);
-            Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, MAP_ATT, mname, -1.0, data);
+            char *mname =
+                G_fully_qualified_name(params->color_map->answers[i], mapset);
+            Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, MAP_ATT, mname, -1.0,
+                          data);
             G_free(mname);
         }
         /* check for color value */
