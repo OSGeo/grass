@@ -82,9 +82,9 @@ int load_vectors(const struct Option *elev_map, const struct Option *elev_const,
         if (mapset == NULL) {
             G_fatal_error(_("Vector map <%s> not found"), vect->answers[i]);
         }
-        id = Nviz_new_map_obj(map_obj_type,
-                              G_fully_qualified_name(vect->answers[i], mapset),
-                              0.0, data);
+        char *mname = G_fully_qualified_name(vect->answers[i], mapset);
+        id = Nviz_new_map_obj(map_obj_type, mname, 0.0, data);
+        G_free(mname);
 
         /* set position */
         x = atof(position->answers[i * 3 + 0]);
