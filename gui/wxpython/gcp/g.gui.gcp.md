@@ -28,7 +28,7 @@ The GCP Manager is structured into three panels:
 ### Components of the GCP Manager
 
 ![GCP Manager](wxGUI_gcp_frame.jpg)
-  
+
 #### Toolbars
 
 Two toolbars are provided with the GCP Manager, one for managing the map

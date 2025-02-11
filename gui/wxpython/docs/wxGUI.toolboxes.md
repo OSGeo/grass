@@ -178,7 +178,7 @@ custom toolbox will be listed in the automatically added *Toolboxes*
 main menu item. The screenshot shows the resulting menu:
 
 ![Toolboxes - menu customization](wxGUI_toolboxes.jpg)
-  
+
 ## NOTES
 
 After the first start of wxGUI with custom toolboxes, `.grass/toolboxes`

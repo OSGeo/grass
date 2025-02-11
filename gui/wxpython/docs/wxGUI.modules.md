@@ -34,7 +34,7 @@ different platforms.
 
 ![dialog style left](wxGUI_modules_style_left.png)
 ![dialog style top](wxGUI_modules_style_top.png)  
-Figure: Example of style "left" and "top" on Ubuntu.
+*Figure: Example of style "left" and "top" on Ubuntu.*
 
 ### Flags
 
@@ -43,7 +43,7 @@ three special flags - *overwrite*, *verbose* and *quiet*. Flags
 *verbose* and *quiet* set the level of verbosity of the module (how
 detailed the messages should be).
 
-![dialog flags](wxGUI_modules_flags.png)  
+![dialog flags](wxGUI_modules_flags.png)
 
 Modules which output a new map or a new file have the flag *overwrite*
 which must be used when the specified output map or file is already
@@ -89,7 +89,7 @@ to the entry field. In case multiple maps can be specified (denoted by
 *\[multiple\]* label), selecting a map from the popup list will append
 the map names with comma in between.
 
-![widget for selecting maps](wxGUI_modules_widget_selection.png)  
+![widget for selecting maps](wxGUI_modules_widget_selection.png)
 
 If the input file is supposed to be a text file (for example color rules
 in r.colors), it is possible to type the text in the provided box
@@ -101,7 +101,7 @@ can display the content of selected file and edit it directly in the
 box.
 
 ![widget for input files](wxGUI_modules_widget_file1.png)
-![widget for input files](wxGUI_modules_widget_file2.png)  
+![widget for input files](wxGUI_modules_widget_file2.png)
 
 Figure: In the first image, user specified a full path to a file. In the
 second image, user typed color rules conveniently into the box below,

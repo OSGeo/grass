@@ -7,9 +7,6 @@
 
 ## DESCRIPTION
 
-Note: **wxNviz is currently under development. Not all planned
-functionality is already implemented.**
-
 **wxNviz** is a *[wxGUI](wxGUI.md)* **3D view mode** which allows users
 to realistically render multiple *surfaces* (2D raster maps) in a 3D
 space, optionally using thematic coloring, draping 2D *vector* data or
@@ -79,7 +76,7 @@ panel (following label *Look:*):
 - *reset* returns all current view settings to their default values.
 
 ![toolbox](wxGUI_nviz_tools_view.jpg)
-  
+
 You can adjust the viewer's height above the scene, perspective and
 twist value to rotate the scene about the horizontal axis. An angle of 0
 is flat. The scene rotates between -90 and 90 degrees.
@@ -159,7 +156,7 @@ move the surface right (looking from the south) choose *X* axis and set
 some positive value. To reset the surface position press *Reset* button.
 
 ![wxGUI nviz tools surface](wxGUI_nviz_tools_surface.jpg)
-  
+
 #### Constant surface
 
 It is possible to add constant surface and set its properties like fine
@@ -203,7 +200,7 @@ Thematic mapping can be used to determine marker color and size (and
 line color and width).
 
 ![wxGUI nviz tools vector](wxGUI_nviz_tools_vector.jpg)
-  
+
 #### 3D rasters
 
 3D raster maps (volumes, voxel models) can be displayed either as
@@ -246,7 +243,7 @@ attributes.
 3D rasters can be moved the same way like surfaces do.
 
 ![toolbox](wxGUI_nviz_tools_volume.jpg)
-  
+
 ### Analysis
 
 *Analysis* tab contains *Cutting planes* panel.
@@ -280,7 +277,7 @@ similarly to eye position. If option *Show light model* is enabled light
 model is displayed to visualize the light settings.
 
 ![toolbox](wxGUI_nviz_tools_light.jpg)
-  
+
 The *Fringe* panel allows you to draw fringes in different directions
 (North & East, South & East, South & West, North & West). It is possible
 to set the fringe color and height of the bottom edge.
@@ -315,9 +312,6 @@ parameters, or to set the background color of the Map Display Window
 - ...
 
 ## NOTE
-
-wxNviz is under active development and distributed as "Experimental
-Prototype".
 
 Please note that with wxGTK port of wxPython (Linux systems), a problem
 might appear during wxNviz initialization (nothing is rendered at all)

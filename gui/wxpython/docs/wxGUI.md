@@ -31,7 +31,7 @@ menu bar with a set of pull-down menus for all GRASS GIS functions
 GRASS functions menu is at the top of the screen.
 
 ![Layer Manager Window](wxGUI_layer_manager.png)  
-Figure: Layer Manager screenshot on Ubuntu
+*Figure: Layer Manager screenshot on Ubuntu*
 
 The top left button of the toolbar opens a new *Map Display Window*.
 Each map display has a unique set of layers to display and region
@@ -246,7 +246,7 @@ layers is displayed, and a statusbar with information about the
 geographic region of the maps displayed.
 
 ![Map Display Window](wxGUI_map_display.jpg)  
-Figure: Map Display screenshot on Ubuntu
+*Figure: Map Display screenshot on Ubuntu*
 
 Each Map Display Window has a unique layer tree (in the layer manager)
 and geographic *region* setting. At the top of the window is a toolbar

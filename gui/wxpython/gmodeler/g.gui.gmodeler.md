@@ -105,14 +105,14 @@ Different model elements are shown in the figures below.
 
 Another example:
 
-![A model to perform estimation of average annual soil loss](g_gui_gmodeler_model_usle.png)
+![A model to perform estimation of average annual soil loss](g_gui_gmodeler_model_usle.png)  
 *Figure: A model to perform estimation of average annual soil loss
 caused by sheet and rill erosion using The Universal Soil Loss
 Equation.*
 
 Example as part of landslide prediction process:
 
-![A model to create parametric maps](g_gui_gmodeler_model_landslides.png)
+![A model to create parametric maps](g_gui_gmodeler_model_landslides.png)  
 *Figure: A model to create parametric maps used by geologists to predict
 landslides in the area of interest.*
 
@@ -333,11 +333,11 @@ are shown below.
 ![Model with loop](g_gui_gmodeler_loop_final.png)  
 *Figure: Model with loop.*
 
-![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_1o.png)  
-![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_1.png)  
-![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_2o.png)  
-![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_2.png)  
-![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_3o.png)  
+![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_1o.png)
+![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_1.png)
+![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_2o.png)
+![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_2.png)
+![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_3o.png)
 ![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_3.png)  
 *Figure: MODIS data representation in GRASS GIS after Graphical Modeler
 usage.*

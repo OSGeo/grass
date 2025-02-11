@@ -18,7 +18,7 @@ Note that projects are called *locations* at some places and in old
 documentation.
 
 ![data catalog screenshot](datacatalog.png)  
-Figure: Data Catalog integrated in wxGUI.
+*Figure: Data Catalog integrated in wxGUI.*
 
 ## NOTES
 
