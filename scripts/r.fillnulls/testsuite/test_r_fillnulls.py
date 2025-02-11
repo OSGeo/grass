@@ -58,9 +58,9 @@ class TestRFillNulls(TestCase):
             raster=self.mapComplete,
             reference={
                 "null_cells": float(0),
-                "max": 130.913299560547,
-                "range": 73.6245880126953,
-                "variance": 288.817309946793,
+                "max": 130.913299,
+                "range": 73.624588,
+                "variance": 288.817309,
             },
             precision=1e-6,
         )
@@ -79,9 +79,9 @@ class TestRFillNulls(TestCase):
             raster=self.mapComplete,
             reference={
                 "null_cells": float(0),
-                "max": 135.180002254514,
-                "range": 77.891290706662,
-                "variance": 297.438443635458,
+                "max": 135.180002,
+                "range": 77.891290,
+                "variance": 297.438443,
             },
             precision=1e-6,
         )
@@ -101,9 +101,9 @@ class TestRFillNulls(TestCase):
             raster=self.mapComplete,
             reference={
                 "null_cells": float(0),
-                "max": 135.845183022905,
-                "range": 78.5564714750537,
-                "variance": 295.64079026154,
+                "max": 135.845183,
+                "range": 78.556471,
+                "variance": 295.640790,
             },
             precision=1e-6,
         )
@@ -133,7 +133,7 @@ class TestRFillNulls(TestCase):
             reference={
                 "max": float(100),
                 "range": float(43),
-                "variance": 79.5724077646504,
+                "variance": 79.572407,
             },
             precision=1e-6,
         )
