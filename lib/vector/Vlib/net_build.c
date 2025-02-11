@@ -666,6 +666,8 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
     dglInitializeSPCache(gr, &(Map->dgraph.spCache));
 
     G_message(_("Graph was built"));
+    Vect_destroy_field_info(Fi);
+    db_free_column(Column);
     return 0;
 }
 
@@ -1061,6 +1063,8 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
     dglInitializeSPCache(gr, &(Map->dgraph.spCache));
 
     G_message(_("Graph was built"));
+    Vect_destroy_field_info(Fi);
+    db_free_column(Column);
 
     return 0;
 }

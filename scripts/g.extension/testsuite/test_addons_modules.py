@@ -44,9 +44,7 @@ v.in.redwg
 v.neighborhoodmatrix
 v.transects
 wx.metadata
-""".replace(
-    "\n", os.linesep
-)
+""".replace("\n", os.linesep)
 
 
 class TestModulesMetadata(TestCase):
@@ -81,11 +79,10 @@ class TestModulesFromDifferentSources(TestCase):
         if os.path.exists(self.install_prefix):
             files = os.listdir(self.install_prefix)
             if files:
-                raise RuntimeError(
-                    "Install prefix path '{}' contains files {}".format(
-                        self.install_prefix, files
-                    )
+                msg = "Install prefix path '{}' contains files {}".format(
+                    self.install_prefix, files
                 )
+                raise RuntimeError(msg)
 
     def tearDown(self):
         """Remove created files"""

@@ -146,8 +146,7 @@ def main():
             sys.stdout.write(fmt % (p + (v,)))
     else:
         outf = open(output, "w")
-        for v, p in oif:
-            outf.write(fmt % (p + (v,)))
+        outf.writelines(fmt % (p + (v,)) for v, p in oif)
         outf.close()
 
 
