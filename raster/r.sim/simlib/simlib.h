@@ -12,18 +12,18 @@
 #endif
 
 typedef struct {
-    int mx, my;
-    double xmin, xmax, ymin, ymax;
-    double miyy, mixx;
-    double step, stepx, stepy;
-    double conv;
-    double xp0, yp0;
+    int mx, my;                    // Number of columns and rows
+    double xmin, xmax, ymin, ymax; // 0, stepx * mx, 0, stepy * my
+    double miyy, mixx;             // south * conv, west * conv
+    double step, stepx, stepy;     // Size of cell in meters
+    double conv;                   // Units to meters factor
+    double xp0, yp0;               // stepx / 2, stepy / 2;
 } Geometry;
 
 typedef struct {
-    double halpha;
-    double hbeta;
-    double hhmax;
+    double halpha;      // Diffusion increase constant
+    double hbeta;       // Weighting factor for water flow velocity vector
+    double hhmax;       // Threshold water depth [m]
     double frac;        // Water diffusion constant
     int iterout;        // Time interval for creating output maps [minutes]
     int timesec;        // Time how long the simulation runs [minutes]
