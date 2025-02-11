@@ -174,7 +174,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-proj-libs=$OSGEO4W_ROOT_MSYS/lib \
 		--with-postgres \
 		--with-postgres-includes=$OSGEO4W_ROOT_MSYS/include \
-		--with-postgres-libs=$PWD/mswindows/osgeo4w/lib \
+		--with-postgres-libs=${PWD}/mswindows/osgeo4w/lib \
 		--with-gdal=$PWD/mswindows/osgeo4w/gdal-config \
 		--with-geos=$PWD/mswindows/osgeo4w/geos-config \
 		--with-sqlite \
