@@ -55,7 +55,7 @@ Redraw model canvas, (12) Validate model, (13) Run model, (14) Manage
 model variables, (15) Model settings, (16) Show manual, (17) Quit
 Graphical Modeler.
 
-![](g_gui_gmodeler_toolbar.png)  
+![Components of Graphical Modeler menu toolbar](g_gui_gmodeler_toolbar.png)  
 *Figure: Components of Graphical Modeler menu toolbar.*
 
 There is also a lower menu bar in the Graphical modeler dialog where one
@@ -68,7 +68,7 @@ and shows all the steps of running GRASS modeler modules; in the case
 some errors occur in the calculation process, they are are written at
 that place.
 
-[<img src="g_gui_gmodeler_lower_toolbar.png" width="600" height="354" />](g_gui_gmodeler_lower_toolbar.png)  
+![Lower Graphical Modeler menu toolbar](g_gui_gmodeler_lower_toolbar.png)  
 *Figure: Lower Graphical Modeler menu toolbar.*
 
 ### Components of models
@@ -81,48 +81,38 @@ The type of data is clearly distinguishable in the model by its color.
 Different model elements are shown in the figures below.
 
 - \(A\) raster data:
-  <img src="g_gui_gmodeler_raster.png" style="margin: 0px 0px -5px 0px"
-  alt="raster" />
+  ![raster](g_gui_gmodeler_raster.png)
 - \(B\) relation:
-  <img src="g_gui_gmodeler_relation.png" style="margin: 10px 0px 0px 0px"
-  alt="relation" />
+  ![relation](g_gui_gmodeler_relation.png)
 - \(C\) GRASS module:
-  <img src="g_gui_gmodeler_modul.png" style="margin: 0px 0px -5px 0px"
-  alt="module" />
+  ![module](g_gui_gmodeler_modul.png)
 - \(D\) loop:
-  <img src="g_gui_gmodeler_loop.png" style="margin: 15px 0px -5px 0px"
-  alt="loop" />
+  ![loop](g_gui_gmodeler_loop.png)
 - \(E\) database table:
-  <img src="g_gui_gmodeler_db.png" style="margin: 10px 0px -5px 0px"
-  alt="db" />
+  ![db](g_gui_gmodeler_db.png)
 - \(F\) 3D raster data:
-  <img src="g_gui_gmodeler_raster3d.png" style="margin: 10px 0px -5px 0px"
-  alt="raster3D" />
+  ![raster3D](g_gui_gmodeler_raster3d.png)
 - \(G\) vector data:
-  <img src="g_gui_gmodeler_vector.png" style="margin: 10px 0px -5px 0px"
-  alt="vector" />
+  ![vector](g_gui_gmodeler_vector.png)
 - \(H\) disabled GRASS module:
-  <img src="g_gui_gmodeler_modulex.png" style="margin: 10px 0px -5px 0px"
-  alt="module" />
+  ![modulex](g_gui_gmodeler_modulex.png)
 - \(I\) comment:
-  <img src="g_gui_gmodeler_comment.png" style="margin: 10px 0px -5px 0px"
-  alt="comment" />
+  ![comment](g_gui_gmodeler_comment.png)
 
-[<img src="g_gui_gmodeler_model_classification.png" width="500" />](g_gui_gmodeler_model_classification.png)  
+![A model to perform unsupervised classification using MLC](g_gui_gmodeler_model_classification.png)  
 *Figure: A model to perform unsupervised classification using MLC
 ([i.maxlik](i.maxlik.md)) and SMAP ([i.smap](i.smap.md)).*
 
 Another example:
 
-[<img src="g_gui_gmodeler_model_usle.png" width="600" height="284" />](g_gui_gmodeler_model_usle.png)  
+![A model to perform estimation of average annual soil loss](g_gui_gmodeler_model_usle.png)
 *Figure: A model to perform estimation of average annual soil loss
 caused by sheet and rill erosion using The Universal Soil Loss
 Equation.*
 
 Example as part of landslide prediction process:
 
-[<img src="g_gui_gmodeler_model_landslides.png" width="600"
-height="290" />](g_gui_gmodeler_model_landslides.png)  
+![A model to create parametric maps](g_gui_gmodeler_model_landslides.png)
 *Figure: A model to create parametric maps used by geologists to predict
 landslides in the area of interest.*
 
@@ -176,7 +166,7 @@ that only a module name is inserted, after pressing the *Enter* button,
 the module dialog window is displayed and it is possible to set all of
 the usual module options (parameters and flags).
 
-[<img src="g_gui_gmodeler_dlg_module.png" width="400" />](g_gui_gmodeler_dlg_module.png)  
+![Dialog for adding GRASS commands to model](g_gui_gmodeler_dlg_module.png)  
 *Figure: Dialog for adding GRASS commands to model.*
 
 ### Managing model parameters
@@ -188,18 +178,18 @@ run. In this example, input layers (`zipcodes_wake` vector map and
 show their diagram border slightly thicker than those of unparameterized
 elements.
 
-[<img src="g_gui_gmodeler_parameter.png" width="500" />](g_gui_gmodeler_parameter.png)  
+![Model parameter settings](g_gui_gmodeler_parameter.png)  
 *Figure: Model parameter settings.*
 
 The final model, the list of all model items, and the Script editor
 window with *Save* and *Run* option are shown in the figures below.
 
-[<img src="g_gui_gmodeler_model_avg.png" width="600" height="272" />](g_gui_gmodeler_model_avg.png)  
+![A model to perform average statistics for zipcode zones](g_gui_gmodeler_model_avg.png)  
 *Figure: A model to perform average statistics for zipcode zones.*
 
-[<img src="g_gui_gmodeler_items.png" width="600" height="330" />](g_gui_gmodeler_items.png)
+![List of all model items](g_gui_gmodeler_items.png)
 
-[<img src="g_gui_gmodeler_python.png" width="600" height="330" />](g_gui_gmodeler_python.png)  
+![Items with Script editor window](g_gui_gmodeler_python.png)  
 *Figure: Items with Script editor window.*
 
 For convenience, this model for the Graphical Modeler is also available
@@ -209,8 +199,8 @@ The model is run by clicking the *Run* button ![run](icons/execute.png).
 When all inputs are set, the results can be displayed as shown in the
 next Figure:
 
-[<img src="g_gui_gmodeler_avg_run.png" width="500" />](g_gui_gmodeler_avg_run.png)
-[<img src="g_gui_gmodeler_avg_map.png" width="300" />](g_gui_gmodeler_avg_map.png)  
+![Average elevation for ZIP codes](g_gui_gmodeler_avg_run.png)
+![Average elevation for ZIP codes: map](g_gui_gmodeler_avg_map.png)  
 *Figure: Average elevation for ZIP codes using North Carolina sample
 dataset as an automatic calculation performed by Graphical Modeler.*
 
@@ -224,7 +214,7 @@ settings globally. This dialog includes also metadata settings, where
 model name, model description and author(s) of the model can be
 specified.
 
-[<img src="g_gui_gmodeler_model_properties.png" width="350" />](g_gui_gmodeler_model_properties.png)  
+![Model properties](g_gui_gmodeler_model_properties.png)  
 *Figure: Model properties.*
 
 ### Defining variables
@@ -239,7 +229,7 @@ is run. So, instead of model parameters (e.g. `r.import` a `v.import`,
 see the Figure *[Run model dialog](g_gui_gmodeler_avg_run.png)* above)
 there are `Variables`.
 
-[<img src="g_gui_gmodeler_variables_run.png" width="500" />](g_gui_gmodeler_variables_run.png)  
+![Model with variable inputs](g_gui_gmodeler_variables_run.png)  
 *Figure: Model with variable inputs.*
 
 The key point is the usage of `%` before the substituting variable and
@@ -250,11 +240,10 @@ be specified in the `Variables` dialog with its respective name
 (`raster`), data type, default value and description. Then it should be
 set in the module dialog as input called `%raster`.
 
-[<img src="g_gui_gmodeler_variables.png" width="600" height="330" />](g_gui_gmodeler_variables.png)  
+![Example of raster file variable settings](g_gui_gmodeler_variables.png)  
 *Figure: Example of raster file variable settings.*
 
-[<img src="g_gui_gmodeler_variables_raster.png" width="600"
-height="257" />](g_gui_gmodeler_variables_raster.png)  
+![Example of raster file variable usage](g_gui_gmodeler_variables_raster.png)  
 *Figure: Example of raster file variable usage.*
 
 ### Saving the model file
@@ -280,7 +269,7 @@ right mouse button, see figure below. All such data should be deleted
 following model completion. The boundary of intermediate component is
 dotted line.
 
-[<img src="g_gui_gmodeler_intermediate_data.png" width="400" />](g_gui_gmodeler_intermediate_data.png)  
+![Usage and definition of intermediate data in model](g_gui_gmodeler_intermediate_data.png)  
 *Figure: Usage and definition of intermediate data in model.*
 
 ### Using the Script editor
@@ -289,8 +278,8 @@ By using the Script editor in the Graphical Modeler, the user can add
 Python code and then run it with *Run* button or just save it as a
 Python script `*.py`. The result is shown in the Figure below:
 
-[<img src="g_gui_gmodeler_python_code.png" height="500" />](g_gui_gmodeler_python_code.png)
-[<img src="g_gui_gmodeler_python_code_result.png" height="500" />](g_gui_gmodeler_python_code_result.png)  
+![Script editor in the wxGUI Graphical Modeler: code](g_gui_gmodeler_python_code.png)
+![Script editor in the wxGUI Graphical Modeler: result](g_gui_gmodeler_python_code_result.png)  
 *Figure: Script editor in the wxGUI Graphical Modeler.*
 
 The second option in the *Script type* combobox exports a PyWPS script
@@ -299,7 +288,7 @@ be generated then; for the PyWPS script, the *Run* button is disabled as
 users are expected to include this script in their web processing
 service and not to run it on itself.
 
-[<img src="g_gui_gmodeler_pywps_code.png" width="500" />](g_gui_gmodeler_pywps_code.png)  
+![Script editor in the wxGUI Graphical Modeler - set to PyWPS](g_gui_gmodeler_pywps_code.png)  
 *Figure: Script editor in the wxGUI Graphical Modeler - set to PyWPS.*
 
 The third option in the *Script type* combobox exports an actinia
@@ -309,7 +298,7 @@ generated then; as for the PyWPS script, the *Run* button is disabled as
 users are expected to include this JSON in their web processing service
 and not to run it on itself.
 
-[<img src="g_gui_gmodeler_actinia_code.png" width="500" />](g_gui_gmodeler_actinia_code.png)  
+![Script editor in the wxGUI Graphical Modeler - set to actinia](g_gui_gmodeler_actinia_code.png)  
 *Figure: Script editor in the wxGUI Graphical Modeler - set to actinia.*
 
 By default GRASS script package API is used
@@ -332,7 +321,8 @@ image in mapset and `%ndvi` for original data name suffix). After the
 loop component is added to model, it is necessary to define series of
 maps with required settings of map type, mapset, etc.
 
-[<img src="g_gui_gmodeler_loop_dlg.png" width="300" />](g_gui_gmodeler_loop_dlg.png)  
+![MODIS data representation in GRASS GIS after Graphical Modeler
+usage](g_gui_gmodeler_loop_dlg.png)  
 *Figure: MODIS data representation in GRASS GIS after Graphical Modeler
 usage.*
 
@@ -340,15 +330,15 @@ When the model is supplemented by all of modules, these modules should
 be ticked in the boxes of loop dialog. The final model and its results
 are shown below.
 
-[<img src="g_gui_gmodeler_loop_final.png" width="400" />](g_gui_gmodeler_loop_final.png)  
+![Model with loop](g_gui_gmodeler_loop_final.png)  
 *Figure: Model with loop.*
 
-[<img src="g_gui_gmodeler_modis_1o.png" width="300" />](g_gui_gmodeler_modis_1o.png)
-[<img src="g_gui_gmodeler_modis_1.png" width="300" />](g_gui_gmodeler_modis_1.png)
-[<img src="g_gui_gmodeler_modis_2o.png" width="300" />](g_gui_gmodeler_modis_2o.png)  
-[<img src="g_gui_gmodeler_modis_2.png" width="300" />](g_gui_gmodeler_modis_2.png)
-[<img src="g_gui_gmodeler_modis_3o.png" width="300" />](g_gui_gmodeler_modis_3o.png)
-[<img src="g_gui_gmodeler_modis_3.png" width="300" />](g_gui_gmodeler_modis_3.png)  
+![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_1o.png)  
+![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_1.png)  
+![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_2o.png)  
+![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_2.png)  
+![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_3o.png)  
+![MODIS data representation in GRASS GIS](g_gui_gmodeler_modis_3.png)  
 *Figure: MODIS data representation in GRASS GIS after Graphical Modeler
 usage.*
 

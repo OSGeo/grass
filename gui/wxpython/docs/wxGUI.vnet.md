@@ -12,8 +12,7 @@ launched from Layer Manager menu *Vector → Network analysis → Vector
 network analysis tool* or from Map Display toolbar *Analyse map → Vector
 network analysis tool* ![icon](icons/vector-tools.png).
 
-<img src="wxGUI_vnet.jpg" data-border="1"
-alt="Vector Network Analysis Tool" />  
+![Vector Network Analysis Tool](wxGUI_vnet.jpg)
 Subsets for nearest centers (*[v.net.alloc](v.net.alloc.md)*)
 
 *Vector Network Analysis Tool* currently allows you to:

@@ -17,8 +17,7 @@ Data Catalog allows you to:
 Note that projects are called *locations* at some places and in old
 documentation.
 
-<img src="datacatalog.png" data-border="0"
-alt="data catalog screenshot" />  
+![data catalog screenshot](datacatalog.png)  
 Figure: Data Catalog integrated in wxGUI.
 
 ## NOTES

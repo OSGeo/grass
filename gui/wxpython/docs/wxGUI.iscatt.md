@@ -26,8 +26,7 @@ interactivity, which allows user to:
 
 ## TOOL CONTROLS LAYOUT
 
-<img src="wxGUI_iscatt.jpg" data-border="1"
-alt="Interactive Scatter Plot Tool" />  
+![Interactive Scatter Plot Tool](wxGUI_iscatt.jpg)  
   
 If editing mode is activated (the green polygon tool in toolbar), the
 areas which were selected in the scatter plots are highlighted. In the
