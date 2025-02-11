@@ -258,3 +258,8 @@ build-mkdocs:
 	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
 	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
 	mkdocs build
+
+serve-mkdocs:
+	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	mkdocs serve
