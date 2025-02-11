@@ -38,11 +38,11 @@ IDXSRC = full_index index topics keywords graphical_index manual_gallery class_g
 
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
-IDXSRC_MD = full_index index topics keywords graphical_index manual_gallery parser_standard_options $(IDXCATS)
+IDXSRC_MD = full_index index topics keywords graphical_index manual_gallery class_graphical parser_standard_options $(IDXCATS)
 INDICES_MD := $(patsubst %,$(MDDIR)/source/%.md,$(IDXSRC_MD))
 
 ALL_HTML := $(wildcard $(HTMLDIR)/*.*.html)
-ALL_MD := $(wildcard $(MDDIR)/source/*.*.html)
+ALL_MD := $(wildcard $(MDDIR)/source/*.*.md)
 
 ifneq (@(type sphinx-build2 > /dev/null),)
 SPHINXBUILD   = sphinx-build2
@@ -125,7 +125,13 @@ $(MDDIR)/source/topics.md: $(ALL_MD)
 define build_class_graphical
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
-	$(PYTHON) ./build_class_graphical.py $(HTMLDIR)
+	$(PYTHON) ./build_class_graphical.py html $(HTMLDIR)
+endef
+
+define build_class_graphical_md
+GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
+	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
+	$(PYTHON) ./build_class_graphical.py md $(MDDIR)/source
 endef
 
 $(HTMLDIR)/topics.html: $(ALL_HTML) build_topics.py
@@ -185,6 +191,11 @@ $(MDDIR)/source/parser_standard_options.md: $(ALL_MD)
 # TODO: this should be done in the same way as category_rule
 $(HTMLDIR)/class_graphical.html: $(ALL_HTML)
 	$(call build_class_graphical)
+	touch $@
+
+# TODO: this should be done in the same way as category_rule
+$(MDDIR)/source/class_graphical.md: $(ALL_MD)
+	$(call build_class_graphical_md)
 	touch $@
 
 define category_rule
