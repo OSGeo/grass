@@ -3,8 +3,6 @@ docker
 !docker/alpine/grass_tests.sh
 .gitignore
 .github
-.travis
-.travis.yml
 # Do not copy files from previous compilations
 dist.*
 

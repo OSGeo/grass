@@ -84,9 +84,7 @@ CI:
   - changed-files:
       - any-glob-to-any-file:
           - .github/**
-          - .travis/**
           - binder/**
-          - .travis.yml
           - renovate.json
           - .pre-commit-config.yaml
 Windows:
