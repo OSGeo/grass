@@ -50,8 +50,6 @@ void WaterParams_init(struct WaterParams *wp)
     wp->disch = NULL;
     wp->err = NULL;
     wp->outwalk = NULL;
-    wp->observation = NULL;
-    wp->logfile = NULL;
     wp->mapset = NULL;
     wp->tserie = NULL;
 
@@ -93,8 +91,6 @@ void init_library_globals(struct WaterParams *wp)
     disch = wp->disch;
     err = wp->err;
     outwalk = wp->outwalk;
-    observation = wp->observation;
-    logfile = wp->logfile;
     mapset = wp->mapset;
     tserie = wp->tserie;
 
@@ -255,9 +251,6 @@ int input_data(int rows, int cols, Simulation *sim)
 
     /* Array for gradient checking */
     slope = create_double_matrix(rows, cols, 0.0);
-
-    /* Create the observation points and open the logfile */
-    create_observation_points();
 
     return 1;
 }

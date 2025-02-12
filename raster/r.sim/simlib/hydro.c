@@ -32,7 +32,6 @@
  *
  */
 
-struct _points points;
 struct point2D;
 struct point3D;
 
@@ -47,8 +46,6 @@ char *depth;
 char *disch;
 char *err;
 char *outwalk;
-char *observation;
-char *logfile;
 char *mapset;
 char *tserie;
 
@@ -88,7 +85,8 @@ struct History history; /* holds meta-data (title, comments,..) */
 /*                       .......... iblock loop */
 
 void main_loop(const Setup *setup, const Geometry *geometry,
-               const Settings *settings, Simulation *sim)
+               const Settings *settings, Simulation *sim,
+               ObservationPoints *points)
 {
     int i, l, k;
     int iblock;
@@ -375,17 +373,17 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             }
 
             /* Write the water depth each time step at an observation point */
-            if (points.is_open) {
+            if (points->is_open) {
                 double value = 0.0;
                 int p;
 
-                fprintf(points.output, "%.6d ", i);
+                fprintf(points->output, "%.6d ", i);
                 /* Write for each point */
-                for (p = 0; p < points.npoints; p++) {
-                    l = (int)((points.x[p] - geometry->mixx + stxm) /
+                for (p = 0; p < points->npoints; p++) {
+                    l = (int)((points->x[p] - geometry->mixx + stxm) /
                               geometry->stepx) -
                         geometry->mx - 1;
-                    k = (int)((points.y[p] - geometry->miyy + stym) /
+                    k = (int)((points->y[p] - geometry->miyy + stym) /
                               geometry->stepy) -
                         geometry->my - 1;
 
@@ -396,14 +394,14 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                         else
                             value = gama[k][l] * slope[k][l];
 
-                        fprintf(points.output, "%2.4f ", value);
+                        fprintf(points->output, "%2.4f ", value);
                     }
                     else {
                         /* Point is invalid, so a negative value is written */
-                        fprintf(points.output, "%2.4f ", -1.0);
+                        fprintf(points->output, "%2.4f ", -1.0);
                     }
                 }
-                fprintf(points.output, "\n");
+                fprintf(points->output, "\n");
             }
         } /* miter */
 
@@ -444,8 +442,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             G_fatal_error(_("Cannot write raster maps"));
     }
     /* Close the observation logfile */
-    if (points.is_open)
-        fclose(points.output);
+    if (points->is_open)
+        fclose(points->output);
 
-    points.is_open = 0;
+    points->is_open = 0;
 }

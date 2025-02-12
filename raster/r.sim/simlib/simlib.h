@@ -5,6 +5,7 @@
  * \brief This is the interface for the simlib (SIMWE) library.
  */
 #include <stdbool.h>
+#include <stdio.h>
 
 #define NUM_THREADS "1"
 #if defined(_OPENMP)
@@ -52,6 +53,18 @@ typedef struct {
 
 } Simulation;
 
+typedef struct {
+    double *x;         // x coor for each point
+    double *y;         // y coor for each point
+    int *cats;         // Category for each point
+    int npoints;       // Number of observation points
+    int npoints_alloc; // Number of allocated points
+    FILE *output;      // Output file descriptor
+    int is_open;       // Set to 1 if open, 0 if closed
+    char *logfile;     // Log file name
+    char *observation; // Observation file name
+} ObservationPoints;
+
 struct WaterParams {
 
     double rain_val;
@@ -69,8 +82,6 @@ struct WaterParams {
     char *disch;
     char *err;
     char *outwalk;
-    char *observation;
-    char *logfile;
     char *mapset;
     char *tserie;
 
@@ -99,12 +110,14 @@ int input_data(int rows, int cols, Simulation *sim);
 int grad_check(Setup *setup, const Geometry *geometry,
                const Settings *settings);
 void main_loop(const Setup *setup, const Geometry *geometry,
-               const Settings *settings, Simulation *sim);
+               const Settings *settings, Simulation *sim,
+               ObservationPoints *points);
 int output_data(int, double, const Setup *setup, const Geometry *geometry,
                 const Settings *settings, const Simulation *sim);
 int output_et(const Geometry *geometry);
 void free_walkers(Simulation *sim);
 void erod(double **, const Setup *setup, const Geometry *geometry);
+void create_observation_points(ObservationPoints *points);
 
 struct options {
     struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,

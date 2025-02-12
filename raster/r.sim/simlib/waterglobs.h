@@ -18,8 +18,6 @@ extern char *depth;
 extern char *disch;
 extern char *err;
 extern char *outwalk;
-extern char *observation;
-extern char *logfile;
 extern char *mapset;
 extern char *tserie;
 
@@ -36,16 +34,6 @@ extern char *erdep;
 extern char *rainval;
 extern char *maninval;
 extern char *infilval;
-
-struct _points {
-    double *x;         /* x coor for each point */
-    double *y;         /* y coor for each point */
-    int *cats;         /* Category for each point */
-    int npoints;       /* Number of observation points */
-    int npoints_alloc; /* Number of allocated points */
-    FILE *output;      /* Output file descriptor */
-    int is_open;       /* Set to 1 if open, 0 if closed */
-};
 
 struct point2D {
     double x;
@@ -65,7 +53,6 @@ extern double amax1(double, double);
 extern double amin1(double, double);
 extern int min(int, int);
 extern int max(int, int);
-extern void create_observation_points(void);
 
 extern float **zz, **cchez;
 extern double **v1, **v2, **slope;

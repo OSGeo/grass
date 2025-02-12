@@ -325,6 +325,7 @@ int main(int argc, char *argv[])
     Settings settings = {0};
     Setup setup = {0};
     Simulation sim = {0};
+    ObservationPoints points = {0};
     settings.hhmax = settings.halpha = settings.hbeta = 0;
     settings.ts = false;
 
@@ -412,8 +413,9 @@ int main(int argc, char *argv[])
         G_message(_("Using metric conversion factor %f, step=%f"),
                   geometry.conv, geometry.step);
 
-    wp.observation = parm.observation->answer;
-    wp.logfile = parm.logfile->answer;
+    points.observation = parm.observation->answer;
+    points.logfile = parm.logfile->answer;
+    create_observation_points(&points);
     init_library_globals(&wp);
 
     if ((wp.tc == NULL) && (wp.et == NULL) && (wp.conc == NULL) &&
@@ -428,7 +430,7 @@ int main(int argc, char *argv[])
     grad_check(&setup, &geometry, &settings);
     init_grids_sediment(&setup, &geometry);
     /* treba dat output pre topoerdep */
-    main_loop(&setup, &geometry, &settings, &sim);
+    main_loop(&setup, &geometry, &settings, &sim, &points);
 
     /* always true for sediment? */
     if (wp.tserie == NULL) {

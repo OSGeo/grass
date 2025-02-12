@@ -359,6 +359,7 @@ int main(int argc, char *argv[])
     Settings settings = {0};
     Setup setup = {0};
     Simulation sim = {0};
+    ObservationPoints points = {0};
 
     WaterParams_init(&wp);
 
@@ -541,8 +542,10 @@ int main(int argc, char *argv[])
         G_message(_("Using metric conversion factor %f, step=%f"),
                   geometry.conv, geometry.step);
 
-    wp.observation = parm.observation->answer;
-    wp.logfile = parm.logfile->answer;
+    points.observation = parm.observation->answer;
+    points.logfile = parm.logfile->answer;
+    /* Create the observation points and open the logfile */
+    create_observation_points(&points);
     init_library_globals(&wp);
 
     if ((wp.depth == NULL) && (wp.disch == NULL) && (wp.err == NULL))
@@ -554,7 +557,7 @@ int main(int argc, char *argv[])
     alloc_grids_water(&geometry);
 
     grad_check(&setup, &geometry, &settings);
-    main_loop(&setup, &geometry, &settings, &sim);
+    main_loop(&setup, &geometry, &settings, &sim, &points);
     free_walkers(&sim);
 
     /* Exit with Success */
