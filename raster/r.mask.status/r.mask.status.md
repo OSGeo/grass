@@ -30,7 +30,7 @@ r.mask.status format=json
 
 In Python, use:
 
-```sh
+```python
 import grass.script as gs
 gs.parse_command("r.mask.status", format="json")
 ```
