@@ -43,6 +43,49 @@ theme:
     # edit: material/pencil
     view: material/eye
 
+# Customization
+extra:
+  homepage: ./index.html
+  # We can add localized versions of the site here
+  # alternate:
+  #   - name: English
+  #     lang: en
+  #   - name: Deutsch
+  #     link: /de/
+  #     lang: de
+  #   - name: Español
+  #     link: /es/
+  #     lang: es
+  #   - name: Slovenčina
+  #     link: /sk/
+  #     lang: sk
+  #   - name: Italiano
+  #     link: /it/
+  #     lang: it
+
+extra_css:
+  - grassdocs.css
+
+# Plugins
+plugins:
+  - search
+  - glightbox
+  # - social
+  # - tags
+  # - git-revision-date-localized:
+  #     enable_creation_date: true
+  # - git-committers:
+  #     repository: OSGeo/grass
+  #     branch: main
+
+# Markdown extensions
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - attr_list
+  - md_in_html
+
 # Navigation
 nav:
   - Interfaces:
@@ -271,46 +314,3 @@ nav:
   - Other:
       - Misc: miscellaneous.md
       - Postscript: postscript.md
-
-# Customization
-extra:
-  homepage: ./index.html
-  # We can add localized versions of the site here
-  # alternate:
-  #   - name: English
-  #     lang: en
-  #   - name: Deutsch
-  #     link: /de/
-  #     lang: de
-  #   - name: Español
-  #     link: /es/
-  #     lang: es
-  #   - name: Slovenčina
-  #     link: /sk/
-  #     lang: sk
-  #   - name: Italiano
-  #     link: /it/
-  #     lang: it
-
-extra_css:
-  - grassdocs.css
-
-# Plugins
-plugins:
-  - search
-  - glightbox
-  # - social
-  # - tags
-  # - git-revision-date-localized:
-  #     enable_creation_date: true
-  # - git-committers:
-  #     repository: OSGeo/grass
-  #     branch: main
-
-# Markdown extensions
-markdown_extensions:
-  - admonition
-  - pymdownx.details
-  - pymdownx.superfences
-  - attr_list
-  - md_in_html
