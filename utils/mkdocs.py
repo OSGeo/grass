@@ -404,9 +404,8 @@ def get_addon_path(base_url, pgm, major_version):
                     ]
                 )
                 shutil.move(tmp_clone_path, grass_addons_dir)
-        except (shutil.Error, OSError):
-            if not grass_addons_dir.exists():
-                raise
+        except shutil.Error:
+            pass  # Another process created it first; proceed normally
     addons_file_list = popen(
         ["git", "ls-tree", "--name-only", "-r", addons_branch],
         cwd=grass_addons_dir,
