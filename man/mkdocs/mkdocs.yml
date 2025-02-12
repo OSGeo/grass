@@ -28,9 +28,12 @@ theme:
     - search.highlight
     - content.code.copy
     - navigation.footer
-    - navigation.sections
+    # - navigation.sections
     - navigation.indexes
-    - navigation.expand
+    # - navigation.expand
+    - navigation.tabs
+    - navigation.tabs.sticky
+
     # - content.action.edit # Edit on GitHub
   palette:
     primary: custom
@@ -42,15 +45,15 @@ theme:
 
 # Navigation
 nav:
-  - Interface:
+  - Interfaces:
       - Shell:
           - Overview: grass.md
           # - Getting Started: grassintro.md # Does not exist yet
           - Environmental Variables: variables.md
       - GUI:
           - Overview: wxguiintro.md
-          - GUI Features: wxGUI.md
-          - Tools Dialogs: wxGUI.modules.md
+          - Features: wxGUI.md
+          - Tool Dialogs: wxGUI.modules.md
           - Attrribute Table Managment: wxGUI.dbmgr.md
           - Cartographic Composer: wxGUI.psmap.md
           - Data Catalog: wxGUI.datacatalog.md
@@ -69,38 +72,38 @@ nav:
       # - Jupyter Notebook: jupyter.md
 
   - Project Management:
-      - (g) General Tools: general.md
+      - General Tools: general.md
       - Projection and Transformations: projectionintro.md
 
   - Processing Tools:
       - Raster:
           - Overview: rasterintro.md
-          - (r) Raster Tools: raster.md
+          - Raster Tools: raster.md
       - Raster 3D:
           - Overview: raster3dintro.md
-          - (r3) Raster 3D Tools: raster3d.md
+          - Raster 3D Tools: raster3d.md
       - Vectors:
           - Overview: vectorintro.md
-          - (v) Vector Tools: vector.md
+          - Vector Tools: vector.md
       - GUI Tools:
           - Network Analysis: wxGUI.vnet.md
       - Imagery:
           - Overview: imageryintro.md
-          - (i) Imagery Tools: imagery.md
+          - Imagery Tools: imagery.md
           - GUI Tools:
               - Image Classification: wxGUI.iclass.md
       - Temporal:
           - Overview: temporalintro.md
-          - (t) Temporal: temporal.md
+          - Temporal: temporal.md
 
   - Database Management:
       - Overview: databaseintro.md
-      - (db) Database Tools: database.md
+      - Database Tools: database.md
       - Supported Drivers: sql.md
 
   - Visualization:
       # - Overview: visualizationintro.md # Does not exist yet
-      - (d) Display Tools: display.md
+      - Display Tools: display.md
       - GUI Tools:
           - Animation: wxGUI.animation.md
           - "3D Visualization": wxGUI.nviz.md
@@ -108,17 +111,171 @@ nav:
           - Map Swipe: wxGUI.mapswipe.md
           - Timeline: wxGUI.timeline.md
           - Temporal Plot: wxGUI.tplot.md
+  # - Keywords: keywords.md
+  - Topics:
+      - Overview: topics.md
+      - Addons:
+          - Installation: topic_installation.md
+      - Aggregation:
+          - Raster & Temporal: topic_aggregation.md
+          - Series: topic_series.md
+
+      - GUI: topic_GUI.md
+      - Cartography: topic_cartography.md
+      - Color Management:
+          - Color Tables: topic_color_table.md
+          - Composite: topic_composite.md
+      - Computational Region:
+          - Mask: topic_mask.md
+      - Databases:
+          - Connection Settings: topic_connection_settings.md
+          - Attribute Management: topic_attribute_table.md
+      - Data Management:
+          - Categories: topic_category.md
+          - Conversion: topic_conversion.md
+          - Editing: topic_editing.md
+          - Export: topic_export.md
+          - Import: topic_import.md
+          - General: topic_map_management.md # Could be more specific
+          - Metadata: topic_metadata.md
+          - Mosaic: topic_mosaic.md
+          - Reclassification: topic_reclassification.md
+          - Recode Categories: topic_recode_categories.md
+          - Tiling: topic_tiling.md
+      - Data Visualization:
+          - Distance: topic_distance.md
+          - Histogram: topic_histogram.md
+          - Polar Diagram: topic_diagram.md # Just d.polar
+          - Graphics: topic_graphics.md
+          - LatLong Map: topic_latitude.md # Not sure if this goes here
+          - Map Annotations: topic_map_annotations.md
+          - Map Labels: topic_paint_labels.md
+          - Printing: topic_printing.md
+          - Profile: topic_profile.md
+          - Projection: topic_projection.md
+          - Resampling: topic_resample.md
+          - Rescale: topic_rescale.md
+      - Display:
+          - Display: topic_display.md
+          - Color Table: topic_raster.md # Just d.colortable
+          - Manual: topic_manual.md
+          - Measurement: topic_measurement.md
+          - NVIZ: topic_visualization.md
+          - Printing: topic_printing.md
+          - Query: topic_vector.md # Includes by d.what.vect and d.what.rast
+          - Sampling: topic_sampling.md
+          - Statistics: topic_statistics.md
+      - Editing:
+          - Raster Editing: topic_editing.md
+      - Fire Modeling: topic_fire.md
+      - General:
+          - Search Tools: topic_modules.md
+          - Settings: topic_settings.md
+          - Support: topic_support.md
+          - Unit Test: topic_unit_test.md # Strange category
+      - Geomorphometry:
+          - Geomorphology: topic_geomorphology.md
+          - Geomorphons: topic_geomorphons.md
+          - Shade & Relief: topic_elevation.md # Topic Elevation is confusing
+          - Ground Water Flow: topic_groundwater_flow.md
+          - Hydrology: topic_hydrology.md
+          - Solar Radiation: topic_solar.md
+          - Surface Analysis: topic_surface.md
+          - Topographic Parameters: topic_terrain.md
+          - Viewshed: topic_viewshed.md
+      - JSON Output: topic_json.md
+      - Landscape Analysis:
+          - topic_landscape_structure_analysis.md
+      - Lidar:
+          - Point Cloud: topic_LIDAR.md
+          - Point Cloud (Clustering): topic_point_cloud.md
+      - Project Downloads: topic_data.md
+      - Raster Analysis:
+          - Map Algebra: topic_algebra.md
+          - Buffer: topic_buffer.md
+          - Cost Surface: topic_cost_surface.md
+          - Distance: topic_distance.md
+          - Profile: topic_profile.md
+          - Querying: topic_querying.md
+          - Sampling: topic_sampling.md
+          - Series: topic_series.md
+          - Statistics: topic_statistics.md
+          - Volume: topic_volume.md
+      - Raster 3D:
+          - Gradient: topic_gradient.md # Just r3.gradient
+          - Profile: topic_profile.md
+          - Statistics: topic_statistics.md
+          - Volume: topic_volume.md
+      - Remote Sensing:
+          - Albedo: topic_albedo.md
+          - Atmospheric Correction: topic_atmospheric_correction.md
+          - Automatic Cloud Cover Assessment (ACCA): topic_ACCA.md
+          - Biomass: topic_biomass.md
+          - Color Transformation: topic_color_transformation.md
+          - Edge Detection: topic_edges.md
+          - Emissivity: topic_emissivity.md
+          - Energy Balance: topic_energy_balance.md
+          - Evapotranspiration: topic_evapotranspiration.md
+          - Fusion: topic_fusion.md # Just i.pansharpen
+          - Image Classification: topic_classification.md
+          - Multispectral: topic_multispectral.md # Just i.oif
+          - Orthorectify: topic_orthorectify.md
+          - Quality Assessment: topic_imagery_quality_assessment.md
+          - Querying: topic_querying.md
+          - Radiometric Conversion: topic_radiometric_conversion.md
+          - Rectify: topic_rectify.md
+          - RGB: topic_RGB.md
+          - Sampling: topic_sampling.md
+          - Segmentation: topic_segmentation.md
+          - Semantic Labeling: topic_imagery.md
+          - Statistics: topic_statistics.md
+          - Topographic Correction: topic_terrain.md # Should have a different name
+          - Transformations: topic_transformation.md
+          - Vegetation Index: topic_vegetation_index.md
+      - Sampling: topic_sampling.md
+      - Statistics: topic_statistics.md
+      - Temporal:
+          - Accumulation: topic_accumulation.md
+          - Contours: topic_contour.md
+          - Copy: topic_copy.md
+          - Extract: topic_extract.md
+          - Interpolation: topic_interpolation.md # Would expect this topic to include more..
+          - Profile: topic_profile.md
+          - Sampling: topic_sampling.md
+          - Statistics: topic_statistics.md
+          - Vector: topic_temporal.md # Strange category needs clean up
+          - Time Management: topic_time_management.md
+      - Topology:
+          - Centroid: topic_centroid.md
+          - Network Analysis: topic_network.md
+          - Topological Managment: topic_topology.md
+      - Vector Analysis:
+          - Buffer: topic_buffer.md
+          - Clip: topic_clip.md
+          - Dissolve: topic_dissolve.md
+          - Distance: topic_distance.md
+          - Extract: topic_extract.md
+          - Generalization: topic_generalization.md
+          - Geometry: topic_geometry.md # Strange category needs clean up
+          - Kernel Density: topic_kernel_density.md # Just v.kernel
+          - Linear Referencing: topic_linear_reference_system.md
+          - Network Analysis: topic_network.md
+          - Profile: topic_profile.md
+          - Querying: topic_querying.md
+          - Rectify: topic_rectify.md
+          - Sampling: topic_sampling.md
+          - Statistics: topic_statistics.md
+          - Transformations: topic_transformation.md
+          - Voxel: topic_voxel.md
 
   - Other:
-      - (m) Misc: miscellaneous.md
-      - (ps) Postscript: postscript.md
-
-  - Keywords: keywords.md
-  - Topics: topics.md
+      - Misc: miscellaneous.md
+      - Postscript: postscript.md
 
 # Customization
 extra:
   homepage: ./index.html
+  # We can add localized versions of the site here
   # alternate:
   #   - name: English
   #     lang: en
