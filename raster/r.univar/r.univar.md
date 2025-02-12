@@ -210,8 +210,8 @@ stddev,variance,coeff_var,sum,sum_abs2,,116975,0,55.5787925720215,
 Comma Separated Values (CSV) file is best viewed through a spreadsheet
 program such as Microsoft Excel, Libre/Open Office Calc or Google Docs:
 
-[![r.univar raster statistics](runivar_basins_elev_zonal.png)  
-](runivar_basins_elev_zonal.png) *Figure: Raster statistics for zones
+![r.univar raster statistics](runivar_basins_elev_zonal.png)  
+*Figure: Raster statistics for zones
 (basins, North Carolina sample dataset) viewed through Libre/Open Office
 Calc.*
 

@@ -84,7 +84,7 @@ r.clump in=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50
         out=lsat7_2002_clump_min10 threshold=0.045 minsize=10
 ```
 
-[![r.clump example Landsat fuzzy clumping](r_clump_lsat.png)](r_clump_lakes.png)  
+![r.clump example Landsat fuzzy clumping](r_clump_lsat.png)  
 *Figure: Fuzzy clumping on Landsat bands: original RGB composite (left),
 fuzzy clumped map (middle), and fuzzy clumped with minsize map (right)*
 

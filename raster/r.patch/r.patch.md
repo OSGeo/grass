@@ -22,8 +22,7 @@ Hence this command is useful for
 The current geographic region definition and mask settings are
 respected.
 
-![](r_patch.png)
-
+![Result of patching of two raster maps containing NULLs](r_patch.png)  
 *Figure: Result of patching of two raster maps containing NULLs using
 the default settings.*
 
@@ -43,8 +42,7 @@ written as **input=***primary*,*secondary*,*tertiary*,... For two raster
 maps, the first one can be viewed as the primary one or the default one
 and the second one as the secondary one or a fallback.
 
-![](r_patch_zeros_as_nulls.png)
-
+![Result of patching of two raster maps using the z flag](r_patch_zeros_as_nulls.png)  
 *Figure: Result of patching of two raster maps using the **-z** flag to
 treat zeros as NULLs. Note the value 1 being preserved from the first
 raster while the value 6 is taken from the second raster instead of the

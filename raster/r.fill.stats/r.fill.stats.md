@@ -319,8 +319,7 @@ Fill in the NULL cells using the default 3-cell search radius:
 r.fill.stats input=ground output=ground_filled uncertainty=uncertainty distance=3 mode=wmean power=2.0 cells=8
 ```
 
-![Point density and ground surface](r_fill_stats_lidar.png)
-
+![Point density and ground surface](r_fill_stats_lidar.png)  
 *Binning of Lidar and resulting ground surface with filled gaps. Note
 the remaining NULL cells (white) in the resulting ground surface. These
 are areas with a lack of cells with values in close proximity.*
