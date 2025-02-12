@@ -25,10 +25,10 @@ The MFD method assigns multiple flow directions towards all downslope
 neighbors.
 
 ![r.terraflow SFD](rterraflow_dir2.png)  
-*Flow direction to the steepest downslope neighbor.*
+*Flow direction to the steepest downslope neighbor (SFD).*
 
 ![r.terraflow MFD](rterraflow_dir3.png)  
-*Flow direction to all downslope neighbors.*
+*Flow direction to all downslope neighbors (MFD).*
 
 The SFD and the MFD method cannot compute flow directions for cells
 which have the same height as all their neighbors (flat areas) or cells
