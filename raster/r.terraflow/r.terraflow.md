@@ -30,7 +30,6 @@ neighbors.
 ![r.terraflow MFD](rterraflow_dir3.png)  
 *Flow direction to all downslope neighbors.*
 
-
 The SFD and the MFD method cannot compute flow directions for cells
 which have the same height as all their neighbors (flat areas) or cells
 which do not have downslope neighbors (one-cell pits).
