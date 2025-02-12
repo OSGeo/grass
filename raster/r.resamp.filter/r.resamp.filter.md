@@ -95,8 +95,7 @@ the integrity of the interpolation method.
 By specifying the number of parallel processes with **nprocs** option,
 *r.resamp.filter* can run faster, see benchmarks below.
 
-<img src="r_resamp_filter_benchmark_size.png" data-border="0"
-alt="benchmark for number of cells" />  
+![benchmark for number of cells](r_resamp_filter_benchmark_size.png)  
 *Figure: Benchmark shows execution time for different number of cells.
 See benchmark script in the source code.*
 

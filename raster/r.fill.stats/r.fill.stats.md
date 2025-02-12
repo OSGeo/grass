@@ -154,9 +154,7 @@ or classified data), it might be desirable to turn off data smoothing by
 setting the **-k** (keep) flag. This will ensure that the original cell
 data is copied through to the result map without alteration.
 
-[<img src="r_fill_stats_smoothing.png" width="600" height="300"
-alt="Smooth versus preserve" />](r_fill_stats_smoothing.png)
-
+![Smooth versus preserve](r_fill_stats_smoothing.png)  
 *Effect of smoothing the original data: The top row shows a gap-filled
 surface computed from a rasterized Lidar point cloud (using `mode=wmean`
 and `power=2`), and the derived slope, aspect, and profile curvature
@@ -321,8 +319,7 @@ Fill in the NULL cells using the default 3-cell search radius:
 r.fill.stats input=ground output=ground_filled uncertainty=uncertainty distance=3 mode=wmean power=2.0 cells=8
 ```
 
-[<img src="r_fill_stats_lidar.png" width="600" height="600"
-alt="Point density and ground surface" />](r_fill_stats_lidar.png)
+![Point density and ground surface](r_fill_stats_lidar.png)
 
 *Binning of Lidar and resulting ground surface with filled gaps. Note
 the remaining NULL cells (white) in the resulting ground surface. These

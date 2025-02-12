@@ -49,8 +49,7 @@ d.rast elevation_shade
 d.vect contours color=red
 ```
 
-[<img src="r_contour_using_levels.png" data-border="0" width="600"
-alt="r.contours example" />  
+[![r.contours example](r_contour_using_levels.png)  
 ](r_contour_using_levels.png) *Contour lines shown on shaded terrain
 map*
 

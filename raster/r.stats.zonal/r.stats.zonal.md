@@ -34,8 +34,7 @@ r.stats.zonal base=zipcodes cover=elevation method=average output=zipcodes_elev_
 r.colors zipcodes_elev_avg color=elevation -g
 ```
 
-[<img src="r_stats.zonal.png" data-border="0"
-alt="Zonal (average) elevation statistics" />](r_stats.zonal.png)  
+![Zonal (average) elevation statistics](r_stats.zonal.png)  
   
 *Figure: ZIP code map on the left shows ZIP code areas, elevation map
 the respective values per pixel, zonal statistics map on the right shows

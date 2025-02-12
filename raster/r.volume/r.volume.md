@@ -82,8 +82,7 @@ r.volume input=elev_lid792_1m clump=mylake
 #                                                 Total Volume =       60692.49
 ```
 
-[<img src="r_volume_lake.png" data-border="0" width="600" height="389"
-alt="r.volume lake example" />](r_volume_lake.png)  
+![r.volume lake example](r_volume_lake.png)  
 *Figure: Water filled based shown on shaded elevation map*
 
 ### Report of geological data

@@ -147,10 +147,8 @@ used instead of *r.patch*.
 By specifying the number of parallel processes with **nprocs** option,
 *r.patch* can run significantly faster, see benchmarks below.
 
-<img src="r_patch_benchmark_size.png" data-border="0"
-alt="benchmark for number of cells" />
-<img src="r_patch_benchmark_memory.png" data-border="0"
-alt="benchmark for memory size" />  
+![benchmark for number of cells](r_patch_benchmark_size.png)
+![benchmark for memory size](r_patch_benchmark_memory.png)  
 *Figure: Benchmark on the left shows execution time for different number
 of cells, benchmark on the right shows execution time for different
 memory size for 5000x5000 raster. See benchmark scripts in source code.

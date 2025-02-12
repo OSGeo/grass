@@ -146,12 +146,9 @@ The iterations of the algorithm used in **r.horizon** depends on the
 topography. As a result, the benchmark results may vary depending on the
 topography of the study area.
 
-<img src="rhorizon_raster_time.png" data-border="0"
-alt="time for r.horizon with different map sizes" />
-<img src="rhorizon_raster_speedup.png" data-border="0"
-alt="speedup for r.horizon with different map sizes" />
-<img src="rhorizon_raster_efficiency.png" data-border="0"
-alt="efficiency for r.horizon with different map sizes" />  
+![time for r.horizon with different map sizes](rhorizon_raster_time.png)
+![speedup for r.horizon with different map sizes](rhorizon_raster_speedup.png)
+![efficiency for r.horizon with different map sizes](rhorizon_raster_efficiency.png)  
 *Figure: Benchmark shows execution time, parallel speedup and efficiency
 for different numbers of cells (1M, 2M, 4M, and 8M).*
 
