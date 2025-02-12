@@ -226,7 +226,7 @@ r.univar -e elevation percentile=98 format=json
 
 will output the results in JSON format:
 
-```sh
+```json
 [
     {
         "n": 2025000,
