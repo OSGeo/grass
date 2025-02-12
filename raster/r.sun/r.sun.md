@@ -290,7 +290,7 @@ d.rast.leg it172
 
 We can compute the day of year from a specific date in Python:
 
-```sh
+```python
 >>> import datetime
 >>> datetime.datetime(2014, 6, 21).timetuple().tm_yday
 172
