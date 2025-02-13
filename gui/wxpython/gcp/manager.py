@@ -2612,7 +2612,7 @@ class VectGroup(wx.Dialog):
         for item in vector_path.iterdir():
             if not (item / "coor").is_file():
                 continue
-            vectlist.append(item.name)
+            vectlist.append(str(item.name))
 
         utils.ListSortLower(vectlist)
 
