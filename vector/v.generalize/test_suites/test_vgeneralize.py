@@ -115,7 +115,7 @@ class TestVGeneralize(TestCase):
 
     def test_invalid_method(self):
         """Test invalid generalization method."""
-        with pytest.raises(ValueError, match="Invalid method input. Select Correct Method"):
+        with pytest.raises(ValueError, match="Select Correct Method Input"):
             self.assertModule(
                 "v.generalize",
                 input="test_lines",
