@@ -143,8 +143,7 @@ r.walk -k elevation=elev_ned_30m friction=friction output=walkcost \
 r.contour walkcost output=walkcost step=1000
 ```
 
-[<img src="r_walk.png" data-border="0" width="600" height="600"
-alt="r.walk example" />](r_walk.png)  
+![r.walk example](r_walk.png)  
 *Figure: Walkshed over a cost surface derived from topography and
 landcover*
 
