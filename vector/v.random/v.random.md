@@ -119,8 +119,7 @@ d.vect zipcodes_wake fcolor=yellow where="ZIPNAME = 'RALEIGH'"
 d.vect zipcodes_local_random_n3 color=red icon=basic/circle
 ```
 
-[<img src="v_random_points_in_polygon.png" data-border="0" width="400"
-height="368" alt="v.random example" />](v_random_points_in_polygon.png)  
+![v.random example](v_random_points_in_polygon.png)  
 *Fixed number of random points generated in selected areas*
 
 ### Generating random adjacent areas

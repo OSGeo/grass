@@ -54,20 +54,15 @@ the buildings with [r.sun](r.sun.md) module:
 ```sh
 g.region raster=elev_lid792_1m
 # now create elev_edited raster by digitizing and save
-r.slope.aspect elevation=elev_edited slope=elev_slope aspect=elev_aspect
-r.sun elevation=elev_edited aspect=elev_aspect slope=elev_slope beam_rad=beam day=172 time=6
+r.slope.aspect elevation=elev_edited slope=slope aspect=aspect
+r.sun elevation=elev_edited aspect=aspect slope=slope beam_rad=beam day=172 time=6
 ```
 
-[<img src="wxGUI_rdigit_step1.png" width="400" height="310"
-alt="Raster digitizer example step 1" />](wxGUI_rdigit_step1.png)
-[<img src="wxGUI_rdigit_step2.png" width="400" height="310"
-alt="Raster digitizer example step 2" />](wxGUI_rdigit_step2.png)
-[<img src="wxGUI_rdigit_step3.png" width="400" height="310"
-alt="Raster digitizer example step 3" />](wxGUI_rdigit_step3.png)
-[<img src="wxGUI_rdigit_step4.png" width="400" height="310"
-alt="Raster digitizer example step 4" />](wxGUI_rdigit_step4.png)
-[<img src="wxGUI_rdigit_step5.png" width="400" height="310"
-alt="Raster digitizer example step 5" />](wxGUI_rdigit_step5.png)  
+![Raster digitizer example step 1](wxGUI_rdigit_step1.png)
+![Raster digitizer example step 2](wxGUI_rdigit_step2.png)
+![Raster digitizer example step 3](wxGUI_rdigit_step3.png)
+![Raster digitizer example step 4](wxGUI_rdigit_step4.png)
+![Raster digitizer example step 5](wxGUI_rdigit_step5.png)  
 *Figure: Steps to digitize new buildings on elev_lid792_1m raster map.*
 
 ## SEE ALSO

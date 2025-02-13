@@ -381,8 +381,9 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings)
 
     if (wdepth)
         deltaw = 0.8 / (sigmax * vmax); /*time step for sediment */
-    setup->deltap = 0.25 * sqrt(geometry->stepx * geometry->stepy) /
-                    setup->vmean; /*time step for water */
+    setup->deltap =
+        0.25 * sqrt(geometry->stepx * geometry->stepy) /
+        (setup->vmean > EPS ? setup->vmean : EPS); /*time step for water */
 
     if (setup->deltap < settings->mintimestep)
         setup->deltap = settings->mintimestep;

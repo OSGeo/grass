@@ -64,130 +64,129 @@ given threshold to the features from the background map.
 
 ### DIGITIZER TOOLBAR
 
-<img src="vdigit_toolbar.jpg" data-border="1"
-alt="Vector Digitizer Toolbar" />  
-  
-![icon](icons/point-create.png)  *Digitize new point*  
+![Vector Digitizer Toolbar](vdigit_toolbar.jpg)
+
+![icon](icons/point-create.png)  *Digitize new point*:
 Add new point to vector map and optionally define its attributes
 (Ctrl+P).
 
-![icon](icons/line-create.png)  *Digitize new line*  
+![icon](icons/line-create.png)  *Digitize new line*:
 Add new line to vector map and optionally define its attributes
 (Ctrl+L).
 
-![icon](icons/boundary-create.png)  *Digitize new boundary*  
+![icon](icons/boundary-create.png)  *Digitize new boundary*:
 Add new boundary to vector map and optionally define its attributes
 (Ctrl+B).
 
-![icon](icons/centroid-create.png)  *Digitize new centroid*  
+![icon](icons/centroid-create.png)  *Digitize new centroid*:
 Add new centroid to vector map and optionally define its attributes
 (Ctrl+C).
 
-![icon](icons/polygon-create.png)  *Digitize new area*  
+![icon](icons/polygon-create.png)  *Digitize new area*:
 Add new area (closed boundary and one centroid inside) to vector map and
 optionally define its attributes (Ctrl+A).
 
-![icon](icons/vertex-move.png)  *Move vertex*  
+![icon](icons/vertex-move.png)  *Move vertex*:
 Move selected vertex of linear feature. Thus shape of linear feature is
 changed (Ctrl+G).
 
-![icon](icons/vertex-create.png)  *Add vertex*  
+![icon](icons/vertex-create.png)  *Add vertex*:
 Add new vertex to selected linear feature (shape not changed) (Ctrl+V).
 
-![icon](icons/vertex-delete.png)  *Remove vertex*  
+![icon](icons/vertex-delete.png)  *Remove vertex*:
 Remove selected vertex from linear feature (Ctrl+X). Thus shape of
 selected feature can be changed.
 
-![icon](icons/line-edit.png)  *Edit line/boundary*  
+![icon](icons/line-edit.png)  *Edit line/boundary*:
 Edit selected linear feature, add new segments or remove existing
 segments of linear feature (Ctrl+E).
 
-![icon](icons/line-move.png)  *Move feature(s)*  
+![icon](icons/line-move.png)  *Move feature(s)*:
 Move selected vector features (Ctrl+M.) Selection can be done by mouse
 or by query.
 
-![icon](icons/line-delete.png)  *Delete feature(s)*  
+![icon](icons/line-delete.png)  *Delete feature(s)*:
 Delete selected vector features (point, line, centroid, or boundary)
 (Ctrl+D). Selection can be done by mouse or by query.
 
-![icon](icons/polygon-delete.png)  *Delete areas(s)*  
+![icon](icons/polygon-delete.png)  *Delete areas(s)*:
 Delete selected vector areas (Ctrl+F). Selection can be done by mouse or
 by query.
 
-![icon](icons/cats-display.png)  *Display/update categories*  
+![icon](icons/cats-display.png)  *Display/update categories*:
 Display categories of selected vector feature (Ctrl+J). Category
 settings can be modified, new layer/category pairs added or already
 defined pairs removed.
 
-![icon](icons/attributes-display.png)  *Display/update attributes*  
+![icon](icons/attributes-display.png)  *Display/update attributes*:
 Display attributes of selected vector feature (based on its category
 settings) (Ctrl+K). Attributes can be also modified. Same functionality
 is accessible from Main toolbar "Query vector map (editable mode)".
 
-![icon](icons/tools.png)  *Additional tools*  
+![icon](icons/tools.png)  *Additional tools*:
 
-- *Break selected lines/boundaries at intersection*  
+- *Break selected lines/boundaries at intersection*:
   Split given vector line or boundary into two lines on given position
   (based on *[v.clean](v.clean.md)*, `tool=break`).
-- *Connect two selected lines/boundaries*  
+- *Connect two selected lines/boundaries*:
   Connect selected lines or boundaries, the first given line is
   connected to the second one. The second line is broken if necessary on
   each intersection. The lines are connected only if distance between
   them is not greater than snapping threshold value.
-- *Copy categories*  
+- *Copy categories*:
   Copy category settings of selected vector feature to other vector
   features. Layer/category pairs of source vector features are appended
   to the target feature category settings. Existing layer/category pairs
   are not removed from category settings of the target features.
-- *Copy features from (background) vector map*  
+- *Copy features from (background) vector map*:
   Make identical copy of selected vector features. If a background
   vector map has been selected from the Layer Manager, copy features
   from background vector map, not from the currently modified vector
   map.
-- *Copy attributes*  
+- *Copy attributes*:
   Duplicate attributes settings of selected vector feature to other
   vector features. New category(ies) is appended to the target feature
   category settings and attributes duplicated based on category settings
   of source vector features. Existing layer/category pairs are not
   removed from category settings of the target features.
-- *Feature type conversion*  
+- *Feature type conversion*:
   Change feature type of selected geometry features. Points are
   converted to centroids, centroids to points, lines to boundaries and
   boundaries to lines.
-- *Flip selected lines/boundaries*  
+- *Flip selected lines/boundaries*:
   Flip direction of selected linear features (lines or boundaries).
-- *Merge selected lines/boundaries*  
+- *Merge selected lines/boundaries*:
   Merge (at least two) selected vector lines or boundaries. The geometry
   of the merged vector lines can be changed. If the second line from two
   selected lines is in opposite direction to the first, it will be
   flipped. See also module *[v.build.polylines](v.build.polylines.md)*.
-- *Snap selected lines/boundaries (only to nodes)*  
+- *Snap selected lines/boundaries (only to nodes)*:
   Snap vector features in given threshold. See also module
   *[v.clean](v.clean.md)*. Note that this tool supports only snapping to
   nodes. Snapping to vector features from background vector map is not
   currently supported.
-- *Split line/boundary*  
+- *Split line/boundary*:
   Split selected line or boundary on given position.
-- *Query tool*  
+- *Query tool*:
   Select vector features by defining a threshold for min/max length
   value (linear features or dangles).
-- *Z-bulk labeling of 3D lines*  
+- *Z-bulk labeling of 3D lines*:
   Assign z coordinate values to 3D vector lines in bounding box. This is
   useful for labeling contour lines.
 
-![icon](icons/undo.png)  *Undo*  
+![icon](icons/undo.png)  *Undo*:
 Undo previous operations (Ctrl+Z).
 
-![icon](icons/redo.png)  *Redo*  
+![icon](icons/redo.png)  *Redo*:
 Redo previous operations (Ctrl+Y).
 
-![icon](icons/settings.png)  *Settings*  
+![icon](icons/settings.png)  *Settings*:
 Digitizer settings (Ctrl+T).
 
-![icon](icons/help.png)  *Show help*  
+![icon](icons/help.png)  *Show help*:
 Show help page for the Digitizer (Ctrl+H).
 
-![icon](icons/quit.png)  *Quit digitizing tool*  
+![icon](icons/quit.png)  *Quit digitizing tool*:
 Changes in vector map can be optionally discarded when digitizing
 session is quited (Ctrl+Q).
 

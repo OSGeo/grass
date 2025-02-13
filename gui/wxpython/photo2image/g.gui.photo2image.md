@@ -25,26 +25,21 @@ An example for project **imagery60**:
 g.gui.photo2image group=aerial@PERMANENT raster=gs13.1@PERMANENT camera=gscamera order=2 extension=try --o
 ```
 
-### Screenshot of g.gui.photo2image
-
-[<img src="wxGUI_iphoto2image_frame.jpg" data-border="0" width="600"
-height="375" alt="Screenshot of g.gui.photo2image" />](wxGUI_iphoto2image_frame.jpg)  
+![Screenshot of g.gui.photo2image](wxGUI_iphoto2image_frame.jpg)  
 *Figure: Screenshot of g.gui.photo2image*
 
-## For a detailed operation manual please read
+## SEE ALSO
 
 *[wxGUI](wxGUI.md), [wxGUI components](wxGUI.components.md)*
-
-See also [video
-tutorials](https://grasswiki.osgeo.org/wiki/WxGUI/Video_tutorials#Georectifier)
-on GRASS Wiki.
-
-## SEE ALSO
 
 *[i.ortho.photo](i.ortho.photo.md), [i.group](i.group.md),
 [i.ortho.camera](i.ortho.camera.md),
 [i.ortho.target](i.ortho.target.md), [i.rectify](i.rectify.md),
 [m.transform](m.transform.md), [v.rectify](v.rectify.md)*
+
+See also [video
+tutorials](https://grasswiki.osgeo.org/wiki/WxGUI/Video_tutorials#Georectifier)
+on GRASS Wiki.
 
 ## AUTHORS
 

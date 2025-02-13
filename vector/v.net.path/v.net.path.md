@@ -96,7 +96,7 @@ to added to the attributes table using *[v.to.db](v.to.db.md)*.
 Shortest (red) and fastest (blue) path between two digitized nodes
 (Spearfish):
 
-<img src="vnetpath.png" data-border="1" alt="v.net.path example" />
+![v.net.path example](vnetpath.png)
 
 ```sh
 # Spearfish
