@@ -123,8 +123,8 @@ int load_rasters(const struct GParams *params, nv_data *data)
         }
         else { /* use by default elevation map for coloring */
             if (nelev_map > 0) {
-                mname = G_fully_qualified_name(
-                    params->elev_map->answers[i], mapset);
+                mname = G_fully_qualified_name(params->elev_map->answers[i],
+                                               mapset);
                 Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, MAP_ATT, mname, -1.0,
                               data);
                 G_verbose_message(
