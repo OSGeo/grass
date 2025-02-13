@@ -1,50 +1,46 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.out.ascii</em> converts a GRASS vector map in binary format to a
-GRASS vector map in <a href="vectorascii.html">ASCII format</a>. Using
-flag <b>-o</b> <em>v.out.ascii</em> output will be in old (version 4)
-ASCII format.
+*v.out.ascii* converts a GRASS vector map in binary format to a GRASS
+vector map in [ASCII format](vectorascii.md). Using flag **-o**
+*v.out.ascii* output will be in old (version 4) ASCII format.
 
-<p>If the <b>output</b> parameter is not given then the data is sent
-to standard output.
+If the **output** parameter is not given then the data is sent to
+standard output.
 
-<h2>NOTES</h2>
+## NOTES
 
-The <em><a href="v.in.ascii.html">v.in.ascii</a></em> module performs
-the function of <em>v.out.ascii</em> in reverse; i.e. it converts
-vector maps in ASCII format to their binary format. These two
-companion modules are useful both for importing and exporting vector
-maps between GRASS and other software, and for transferring data
-between machines.
+The *[v.in.ascii](v.in.ascii.md)* module performs the function of
+*v.out.ascii* in reverse; i.e. it converts vector maps in ASCII format
+to their binary format. These two companion modules are useful both for
+importing and exporting vector maps between GRASS and other software,
+and for transferring data between machines.
 
-<p>If old version is requested, the <b>output</b> files
-from <em>v.out.ascii</em> is placed in
-the <code>$LOCATION/$MAPSET/dig_ascii/</code>
-and <code>$LOCATION/$MAPSET/dig_att</code> directory.
+If old version is requested, the **output** files from *v.out.ascii* is
+placed in the `$LOCATION/$MAPSET/dig_ascii/` and
+`$LOCATION/$MAPSET/dig_att` directory.
 
-<p>If <b>layer &gt; 0</b> then only features with a category number
-will be exported. Use <em><a href="v.category.html">v.category</a></em> to add
-them if needed or define <b>layer=-1</b> to export also features without category.
+If **layer \> 0** then only features with a category number will be
+exported. Use *[v.category](v.category.md)* to add them if needed or
+define **layer=-1** to export also features without category.
 
-<p><em>v.out.ascii</em> in the old version mode (<b>-o</b>) does not
-copy the <code>dig_cats</code> file associated with the binary
-vector <b>input</b> map to the new <b>output</b> file name. The user
-must copy the <code>dig_cats</code> file to the new <b>output</b> name if
-this is desired (e.g. using the UNIX <em>cp</em> command).
+*v.out.ascii* in the old version mode (**-o**) does not copy the
+`dig_cats` file associated with the binary vector **input** map to the
+new **output** file name. The user must copy the `dig_cats` file to the
+new **output** name if this is desired (e.g. using the UNIX *cp*
+command).
 
-<p>It is possible to output the coordinates of vertices in a non-points vector
-feature by first converting the vector feature to a points map with
-<em><a href="v.to.points.html">v.to.points</a></em> and then exporting
-with <em>v.out.ascii</em> in
-<b>points</b> mode.
+It is possible to output the coordinates of vertices in a non-points
+vector feature by first converting the vector feature to a points map
+with *[v.to.points](v.to.points.md)* and then exporting with
+*v.out.ascii* in **points** mode.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Standard mode</h3>
+### Standard mode
 
-See <a href="vectorascii.html">ASCII format</a> specification.
+See [ASCII format](vectorascii.md) specification.
 
-<p><div class="code"><pre>
+```sh
 v.out.ascii input=quads format=standard
 
 ORGANIZATION: US Army Const. Eng. Rsch. Lab
@@ -76,43 +72,42 @@ C  1 1
 C  1 1
  604433.84    4921087.1
  1     2
-</pre></div>
+```
 
-<h3>Point mode</h3>
+### Point mode
 
-<div class="code"><pre>
+```sh
 v.out.ascii input=quads format=point
 
 594125.63|4921115.58|1
 604433.84|4921087.1|2
-</pre></div>
+```
 
 Print also selected attributes:
 
-<div class="code"><pre>
-v.out.ascii input=geodetic_pts format=point where="cat &gt; 5 and cat &lt;= 8" columns=GEOD_NAME
+```sh
+v.out.ascii input=geodetic_pts format=point where="cat > 5 and cat <= 8" columns=GEOD_NAME
 
 573638.06289275|271623.25042595|6|27 WC 6
 574416.81289275|274116.65542595|7|27 WC 7
 575301.31189275|275303.81342595|8|27 WC 8
-</pre></div>
+```
 
-To print all attributes type <b>columns=*</b>:
+To print all attributes type **columns=\***:
 
-<div class="code"><pre>
-v.out.ascii input=geodetic_pts format=point where="cat &gt; 5 and cat &lt;= 8" columns=*
+```sh
+v.out.ascii input=geodetic_pts format=point where="cat > 5 and cat <= 8" columns=*
 573638.06289275|271623.25042595|6|6|0.00000000|0.00000000|6|6|27 WC 6|573638.09200000|271623.24100000|0.00|0|1.00000000|1.00000000
 574416.81289275|274116.65542595|7|7|0.00000000|0.00000000|7|7|27 WC 7|574416.84100000|274116.64900000|0.00|0|1.00000000|1.00000000
 575301.31189275|275303.81342595|8|8|0.00000000|0.00000000|8|8|27 WC 8|575301.30600000|275303.82600000|0.00|0|1.00000000|1.00000000
-</pre></div>
+```
 
-<h3>WKT mode</h3>
+### WKT mode
 
-WKT is abbreviation
-for <a href="https://en.wikipedia.org/wiki/Well-known_text">Well-known
-text</a>.
+WKT is abbreviation for [Well-known
+text](https://en.wikipedia.org/wiki/Well-known_text).
 
-<div class="code"><pre>
+```sh
 v.out.ascii input=quads format=wkt
 
 POLYGON((599587.18209620 4914067.53414294, 589639.15126831 4913922.56873010,
@@ -121,30 +116,22 @@ POLYGON((599587.18209620 4914067.53414294, 589639.15126831 4913922.56873010,
 POLYGON((599587.18209620 4914067.53414294, 599375.87959179 4927959.83330436,
          609316.10665227 4928116.84905550, 609541.55082390 4914236.05974820,
          599587.18209620 4914067.53414294))
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.category.html">v.category</a>,
-<a href="v.in.ascii.html">v.in.ascii</a>,
-<a href="v.to.points.html">v.to.points</a>
-</em>
-<p>
-<a href="vectorascii.html">GRASS ASCII vector format</a> specification<br>
-<a href="sql.html">GRASS SQL interface</a>
+*[v.category](v.category.md), [v.in.ascii](v.in.ascii.md),
+[v.to.points](v.to.points.md)*
 
-<h2>AUTHORS</h2>
+[GRASS ASCII vector format](vectorascii.md) specification  
+[GRASS SQL interface](sql.md)
 
-Michael Higgins,
-U.S. Army Construction Engineering
-Research Laboratory
-<br>
-James Westervelt,
-U.S. Army Construction Engineering
-Research Laboratory
-<br>
-Radim Blazek, ITC-Irst, Trento, Italy
-<br>
-Attribute selection added by Martin Landa, Czech Technical University
-in Prague, Czech Republic (2008/12)
+## AUTHORS
+
+Michael Higgins, U.S. Army Construction Engineering Research
+Laboratory  
+James Westervelt, U.S. Army Construction Engineering Research
+Laboratory  
+Radim Blazek, ITC-Irst, Trento, Italy  
+Attribute selection added by Martin Landa, Czech Technical University in
+Prague, Czech Republic (2008/12)

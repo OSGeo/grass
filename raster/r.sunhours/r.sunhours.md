@@ -1,39 +1,39 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.sunhours</em> calculates sun elevation and sun azimuth angles for
-the given time of day and each grid cell in the current region.
+*r.sunhours* calculates sun elevation and sun azimuth angles for the
+given time of day and each grid cell in the current region.
 Additionally, the photoperiod (sunshine hours on flat terrain) can be
 calculated.
 
-<p>
 Sun elevation, height, height angle, or solar altitude angle is the
 angle in degrees between the horizon and a line that points from the
 site towards the centre of the sun.
-<p>
-The sun azimuth angle is here defined as the azimuth angle in degrees
-of the sun from due north in a clockwise direction.
-<p>
+
+The sun azimuth angle is here defined as the azimuth angle in degrees of
+the sun from due north in a clockwise direction.
+
 The time used here is defined such that 12:00 (high noon) is the time
-when the sun has reached its highest point in the sky at the current site,
-unless the <em>-t</em> flag is used in which case time is interpreted as
+when the sun has reached its highest point in the sky at the current
+site, unless the *-t* flag is used in which case time is interpreted as
 Greenwich standard time.
-<p>
-If a <em>sunhour</em> output map is specified, the module calculates
-sunshine hours for the given day. This option requires both Greenwhich
-standard time and the use of the SOLPOS algorithm by NREL.
 
-<h2>NOTES</h2>
+If a *sunhour* output map is specified, the module calculates sunshine
+hours for the given day. This option requires both Greenwhich standard
+time and the use of the SOLPOS algorithm by NREL.
 
-To consider also cast shadow effects of the terrain, <em>r.sun</em> has
-to be used.
+## NOTES
 
-<h2>EXAMPLES</h2>
+To consider also cast shadow effects of the terrain, *r.sun* has to be
+used.
 
-<h3>Calculating a sun elevation angle map</h3>
+## EXAMPLES
 
-Calculate the sun elevation angle map for 2010-10-11 at 14:00h solar time:
+### Calculating a sun elevation angle map
 
-<div class="code"><pre>
+Calculate the sun elevation angle map for 2010-10-11 at 14:00h solar
+time:
+
+```sh
 # set computational region to North Carolina state extent
 g.region n=318500 s=-16000 w=124000 e=963000 res=500 -p
 r.sunhours elevation=sun_elev year=2010 month=10 day=11 hour=14 minute=00
@@ -43,38 +43,33 @@ d.mon wx0
 d.rast sun_elev
 d.vect nc_state type=boundary
 d.legend sun_elev -s
-</pre></div>
-<p>
-<center>
-<img src="r_sunhours.png" alt="Sun angle map (in degree) of NC, USA"><br>
-<i>Sun angle map (in degree) of North Carolina for the 2010-10-11 at 14:00h solar time</i>
-</center>
+```
 
-<h3>Calculate map of photoperiod (insolation time)</h3>
+![Sun angle map (in degree) of NC, USA](r_sunhours.png)  
+*Sun angle map (in degree) of North Carolina for the 2010-10-11 at
+14:00h solar time*
 
-Calculate photoperiod of day-of-year 001 (1st January) of 2012 for
-the current computational region, ignoring cast shadow effects of the
+### Calculate map of photoperiod (insolation time)
+
+Calculate photoperiod of day-of-year 001 (1st January) of 2012 for the
+current computational region, ignoring cast shadow effects of the
 terrain:
 
-<div class="code"><pre>
+```sh
 g.region -p
 r.sunhours sunhour=photoperiod_doy_001 year=2012 day=1
-</pre></div>
+```
 
-<h2>Acknowledgements</h2>
+## Acknowledgements
 
-Acknowledgements: National Renewable Energy Laboratory for their
-<a href="http://rredc.nrel.gov/solar/codesandalgorithms/solpos/">SOLPOS 2.0</a> sun position
-algorithm.
+Acknowledgements: National Renewable Energy Laboratory for their [SOLPOS
+2.0](http://rredc.nrel.gov/solar/codesandalgorithms/solpos/) sun
+position algorithm.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="r.sun.html">r.sun</a>,
-<a href="r.sunmask.html">r.sunmask</a>
-</em>
+*[g.region](g.region.md), [r.sun](r.sun.md), [r.sunmask](r.sunmask.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Markus Metz

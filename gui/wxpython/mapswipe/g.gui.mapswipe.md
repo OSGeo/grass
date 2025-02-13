@@ -1,52 +1,44 @@
-<!-- meta page description: wxGUI Map Swipe -->
-<!-- meta page index: topic_GUI|GUI -->
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The <b>Map Swipe</b> is a <em><a href="wxGUI.html">wxGUI</a></em> component
-which allows the user to interactively compare two raster maps of the same
-area by revealing different parts of the raster maps.
-It is useful e.g. for comparing raster maps from different time periods.
-Map Swipe can be launched from the menu <code>File -&gt; Map Swipe</code>.
+The **Map Swipe** is a *[wxGUI](wxGUI.md)* component which allows the
+user to interactively compare two raster maps of the same area by
+revealing different parts of the raster maps. It is useful e.g. for
+comparing raster maps from different time periods. Map Swipe can be
+launched from the menu `File -> Map Swipe`.
 
-<p>
 Map Swipe allows you to:
 
-<ul>
-  <li>switch orientation of the swipe line (horizontal or vertical)</li>
-  <li>zooming, panning</li>
-  <li>automatically load maps when opening Map Swipe with two selected raster maps in Layer Manager</li>
-  <li>compare 2 raster maps or load different combinations of raster
-      and vector maps and set transparency (advanced mode)</li>
-  <li>save display to graphics file</li>
-  <li>display text labels with map names</li>
-  <li>choose between 'swipe' mode (default) and 'mirror' mode (synchronized maps displayed side by side) </li>
-  <li>change the appearance of cursor in 'mirror' mode (available in Map Swipe settings)</li>
-</ul>
+- switch orientation of the swipe line (horizontal or vertical)
+- zooming, panning
+- automatically load maps when opening Map Swipe with two selected
+  raster maps in Layer Manager
+- compare 2 raster maps or load different combinations of raster and
+  vector maps and set transparency (advanced mode)
+- save display to graphics file
+- display text labels with map names
+- choose between 'swipe' mode (default) and 'mirror' mode (synchronized
+  maps displayed side by side)
+- change the appearance of cursor in 'mirror' mode (available in Map
+  Swipe settings)
 
-<center>
-<br>
-<img src="mapswipe_tsunami.jpg" border="1" alt="Map swipe screenshot">
-<br>
-Pre and post disaster images of the tsunami in Japan in 2011. The upper MODIS image
-taken on February 26, 2011, shows the coastline under normal conditions while the lower
-MODIS image on March 13, 2011, shows a clear view of tsunami flooding along the coastline.
-Water, black and dark blue in these false-color images, still covers the ground as much
-as five kilometers (three miles) from the coast.
-Source: <a href="https://earthobservatory.nasa.gov/images/49634/tsunami-flooding-near-sendai-japan">Earth Observatory/NASA</a>
-<br>
-</center>
+<img src="mapswipe_tsunami.jpg" data-border="1"
+alt="Map swipe screenshot" />  
+Pre and post disaster images of the tsunami in Japan in 2011. The upper
+MODIS image taken on February 26, 2011, shows the coastline under normal
+conditions while the lower MODIS image on March 13, 2011, shows a clear
+view of tsunami flooding along the coastline. Water, black and dark blue
+in these false-color images, still covers the ground as much as five
+kilometers (three miles) from the coast. Source: [Earth
+Observatory/NASA](https://earthobservatory.nasa.gov/images/49634/tsunami-flooding-near-sendai-japan)  
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="wxGUI.html">wxGUI</a>,
-  <a href="wxGUI.components.html">wxGUI components</a>
-</em>
+*[wxGUI](wxGUI.md), [wxGUI components](wxGUI.components.md)*
 
-<p>
-See also the user <a href="https://grasswiki.osgeo.org/wiki/WxGUI_Map_Swipe">wiki</a> page.
+See also the user
+[wiki](https://grasswiki.osgeo.org/wiki/WxGUI_Map_Swipe) page.
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Anna Kratochvilova,
-<a href="https://www.cvut.cz">Czech Technical University in Prague</a>, Czech Republic
+Anna Kratochvilova, [Czech Technical University in
+Prague](https://www.cvut.cz), Czech Republic

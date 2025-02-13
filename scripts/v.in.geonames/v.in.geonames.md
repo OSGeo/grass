@@ -1,34 +1,28 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.in.geonames</em> imports Geonames.org country files (Gazetteer
-data) into a GRASS vector points map. The country files can be
-downloaded from the
-<a href="https://download.geonames.org/export/dump/">GeoNames Data Dump
-Server</a>. Only original files can be processed (unzip compressed
-file first). These Geonames files are encoded in UTF-8 which is
-maintained in the GRASS database.
+*v.in.geonames* imports Geonames.org country files (Gazetteer data) into
+a GRASS vector points map. The country files can be downloaded from the
+[GeoNames Data Dump Server](https://download.geonames.org/export/dump/).
+Only original files can be processed (unzip compressed file first).
+These Geonames files are encoded in UTF-8 which is maintained in the
+GRASS database.
 
-<h2>NOTES</h2>
+## NOTES
 
-<p>
-<em>v.in.geonames</em>
-calls <em><a href="v.in.ascii.html">v.in.ascii</a></em> to import data
-into GRASS.
+*v.in.geonames* calls *[v.in.ascii](v.in.ascii.md)* to import data into
+GRASS.
 
-<p>
-The current DB connection is used to write the database table
-(see <em><a href="db.connect.html">db.connect</a></em>). If importing
-into a <a href="grass-dbf.html">DBF database</a>, the original column
-names longer that 10 characters are shortened to 10 characters to meet
-the DBF column name restrictions. If this is a problem consider
-choosing another database driver
-with <em><a href="db.connect.html">db.connect</a></em>
-(eg. to <a href="grass-sqlite.html">SQLite driver</a>).
+The current DB connection is used to write the database table (see
+*[db.connect](db.connect.md)*). If importing into a [DBF
+database](grass-dbf.md), the original column names longer that 10
+characters are shortened to 10 characters to meet the DBF column name
+restrictions. If this is a problem consider choosing another database
+driver with *[db.connect](db.connect.md)* (eg. to [SQLite
+driver](grass-sqlite.md)).
 
-<p>
 The main 'geoname' table has the following fields
 
-<div class="code"><pre>
+```sh
 geonameid         : integer id of record in geonames database
 name              : name of geographical point (utf8) varchar(200)
 asciiname         : name of geographical point in plain ascii characters, varchar(200)
@@ -48,34 +42,30 @@ elevation         : in meters, integer
 gtopo30           : average elevation of 30'x30' (ca 900mx900m) area in meters, integer
 timezone          : the timezone id (see file https://download.geonames.org/export/dump/timeZones.txt)
 modification date : date of last modification in yyyy-MM-dd format
-</pre></div>
+```
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Download and import geonames for Czech Republic.
 
-<div class="code"><pre>
+```sh
 wget https://download.geonames.org/export/dump/CZ.zip
 unzip CZ.zip
 
 v.in.geonames input=CZ.txt output=geonames_cz
-</pre></div>
+```
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<ul>
-  <li><a href="https://www.geonames.org">GeoNames Web site</a></li>
-  <li><a href="https://download.geonames.org/export/dump/">GeoNames Data Dump Server</a></li>
-</ul>
+- [GeoNames Web site](https://www.geonames.org)
+- [GeoNames Data Dump
+  Server](https://download.geonames.org/export/dump/)
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="db.connect.html">db.connect</a>,
-  <a href="v.in.ascii.html">v.in.ascii</a>,
-  <a href="v.select.html">v.select</a>
-</em>
+*[db.connect](db.connect.md), [v.in.ascii](v.in.ascii.md),
+[v.select](v.select.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-<a href="https://grassbook.org/">Markus Neteler</a>
+[Markus Neteler](https://grassbook.org/)

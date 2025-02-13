@@ -1,41 +1,40 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.buildvrt</em> builds a virtual raster (VRT) that is a mosaic of
-the list of input raster maps. The purpose of such a VRT is to provide
-fast access to small subsets of the VRT, also with multiple simultaneous
-read requests.
+*r.buildvrt* builds a virtual raster (VRT) that is a mosaic of the list
+of input raster maps. The purpose of such a VRT is to provide fast
+access to small subsets of the VRT, also with multiple simultaneous read
+requests.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>r.buildvrt</em> creates a list of raster maps that can be
-located in different mapsets. The output is a read-only link to
-the original raster maps which is only valid if the original raster
-maps remain in the originally indicated mapset. A VRT can also be built
-from raster maps registered with <em><a href="r.external.html">r.external</a></em>.
-However, GRASS VRTs built from external registered data (see below)
-are known to have performance issues.
+*r.buildvrt* creates a list of raster maps that can be located in
+different mapsets. The output is a read-only link to the original raster
+maps which is only valid if the original raster maps remain in the
+originally indicated mapset. A VRT can also be built from raster maps
+registered with *[r.external](r.external.md)*. However, GRASS VRTs built
+from external registered data (see below) are known to have performance
+issues.
 
-<p>
 Reading the whole VRT is slower than reading the equivalent single
 raster map. Only reading small parts of the VRT provides a performance
 benefit.
 
-<p>
 A GRASS virtual raster can be regarded as a simplified version of GDAL's
-<a href="https://gdal.org/en/stable/drivers/raster/vrt.html">virtual raster format</a>.
-The GRASS equivalent is simpler because issues like nodata, projection,
+[virtual raster
+format](https://gdal.org/en/stable/drivers/raster/vrt.html). The GRASS
+equivalent is simpler because issues like nodata, projection,
 resolution, resampling, masking are already handled by native GRASS
 raster routines.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>VRT from a DEM in the North Carolina sample dataset</h3>
+### VRT from a DEM in the North Carolina sample dataset
 
-In this exercise a low resolution DEM is resampled to a high
-resolution DEM. This is subsequently cut into small tiles and
-from that a virtual tile mosaik is created:
+In this exercise a low resolution DEM is resampled to a high resolution
+DEM. This is subsequently cut into small tiles and from that a virtual
+tile mosaik is created:
 
-<div class="code"><pre>
+```sh
 # set the computational region to elevation map
 g.region raster=elev_state_500m -p
 # enforce higher resolution
@@ -48,34 +47,28 @@ r.tile input=elev_state_50m output=elev_state_50m_tile_ width=1000 height=1000 o
 g.list type=raster pattern=elev_state_50m_tile_* output=tilelist.csv
 # build a mosaik as VRT from tile list
 r.buildvrt file=tilelist.csv output=elev_state_50m_vrt
-</pre></div>
+```
 
-<h2>KNOWN ISSUES</h2>
+## KNOWN ISSUES
 
-Users may experience significant performance degradation with virtual rasters built
-with <em>r.buildvrt</em> over GDAL-linked (<em>r.external</em>) raster maps,
-especially on slower file systems with latency like NFS. Performance degradation
-may also occur on local file systems, but is usually less severe. For such use cases
-consider using the GRASS GIS addon
-<a href="https://grass.osgeo.org/grass-stable/manuals/addons/r.buildvrt.gdal.html">r.buildvrt.gdal</a>
-or building GDAL VRTs, e.g. with <em>gdalbuildvrt</em>.
+Users may experience significant performance degradation with virtual
+rasters built with *r.buildvrt* over GDAL-linked (*r.external*) raster
+maps, especially on slower file systems with latency like NFS.
+Performance degradation may also occur on local file systems, but is
+usually less severe. For such use cases consider using the GRASS GIS
+addon
+[r.buildvrt.gdal](https://grass.osgeo.org/grass-stable/manuals/addons/r.buildvrt.gdal.html)
+or building GDAL VRTs, e.g. with *gdalbuildvrt*.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.tile.html">r.tile</a>,
-<a href="r.patch.html">r.patch</a>,
-<a href="r.external.html">r.external</a>
-<a href="https://grass.osgeo.org/grass-stable/manuals/addons/r.buildvrt.gdal.html">r.buildvrt.gdal</a>
-</em>
+*[r.tile](r.tile.md), [r.patch](r.patch.md), [r.external](r.external.md)
+[r.buildvrt.gdal](https://grass.osgeo.org/grass-stable/manuals/addons/r.buildvrt.gdal.html)*
 
-<p>
 The equivalent GDAL utility
-<em>
-<a href="https://gdal.org/en/stable/programs/gdalbuildvrt.html">gdalbuildvrt</a>
-</em>
+*[gdalbuildvrt](https://gdal.org/en/stable/programs/gdalbuildvrt.html)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-Markus Metz<br>
-Sponsored by <a href="https://www.mundialis.de">mundialis</a>
+Markus Metz  
+Sponsored by [mundialis](https://www.mundialis.de)

@@ -1,62 +1,47 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.report</em> allows the user to set up a series of report
-parameters to be applied to a raster map, and creates a report. The
-report will print out to the standard output if <b>output</b>
-parameter is not given.
+*r.report* allows the user to set up a series of report parameters to be
+applied to a raster map, and creates a report. The report will print out
+to the standard output if **output** parameter is not given.
 
-<p>
 The report itself consists of two parts, a header section and the main
 body of the report.
 
-<p>
 The header section of the report identifies the raster map(s) (by map
 name and title), project, mapset, report date, and the region of
 interest. The area of interest is described in two parts: the user's
 current geographic region is presented, and the mask is presented (if
 any is used).
 
-<p>
 The main body of the report consists of from one to three tables which
 present the statistics for each category and the totals for each unit
 column. Note that the statistics is always computed in the current
 geographical region.
 
-<p>
-When multiple (typically two) raster maps are specified, cross-tabulation
-table for each combination of categories in the raster maps will be computed
-and formatted in a human-readable way (see example).
+When multiple (typically two) raster maps are specified,
+cross-tabulation table for each combination of categories in the raster
+maps will be computed and formatted in a human-readable way (see
+example).
 
-<h2>NOTES</h2>
+## NOTES
 
-<!--
-If the user runs <em>r.report</em> interactively and saves the report output
-in a file, this file will be placed into the user's current working
-directory.
+Note that, unlike *[r.stats](r.stats.md)*, *r.report* allows the user to
+select the specific units of measure in which statistics will be
+reported. To output computer-friendly data suitable for importing into a
+spreadsheet use the *[r.stats](r.stats.md)* module. In fact *r.report*
+is running *[r.stats](r.stats.md)* in the background and reformatting
+the results to be more human-friendly.
 
-If the user runs <em>r.report</em> non-interactively, report output can be
-saved by redirecting it to a file or a printer using the UNIX redirection
-mechanism.
--->
+## EXAMPLE
 
-Note that, unlike <em><a href="r.stats.html">r.stats</a></em>,
-<em>r.report</em> allows the user to select the specific units of
-measure in which statistics will be reported. To output
-computer-friendly data suitable for importing into a spreadsheet use
-the <em><a href="r.stats.html">r.stats</a></em> module. In
-fact <em>r.report</em> is running
-<em><a href="r.stats.html">r.stats</a></em> in the background and
-reformatting the results to be more human-friendly.
+Report sorted areas in square miles and acres for each category. No-data
+are not reported (see **-n** flag).
 
-<h2>EXAMPLE</h2>
-
-Report sorted areas in square miles and acres for each
-category. No-data are not reported (see <b>-n</b> flag).
-
-<div class="code"><pre>
+```sh
 r.report -n map=geology_30m units=mi,a sort=desc
-</pre></div>
-<div class="code"><pre>
+```
+
+```sh
 +-----------------------------------------------------------------------------+
 |                         RASTER MAP CATEGORY REPORT                          |
 |PROJECT: nc_spm_08_grass7                            Fri Dec  6 17:00:21 2013|
@@ -87,13 +72,16 @@ r.report -n map=geology_30m units=mi,a sort=desc
 |-----------------------------------------------------------------------------|
 |TOTAL                                                  | 77.606534|49,668.182|
 +-----------------------------------------------------------------------------+
-</pre></div>
-Report areas for each category of land use for each zipcode (included only part of the table):
+```
 
-<div class="code"><pre>
+Report areas for each category of land use for each zipcode (included
+only part of the table):
+
+```sh
 r.report map=zipcodes@PERMANENT,landclass96@PERMANENT units=h,p
-</pre></div>
-<div class="code"><pre>
+```
+
+```sh
 +-----------------------------------------------------------------------------+
 |                         RASTER MAP CATEGORY REPORT                          |
 |PROJECT: nc_spm_08_latest                            Tue Feb 11 10:10:46 2014|
@@ -130,15 +118,16 @@ r.report map=zipcodes@PERMANENT,landclass96@PERMANENT units=h,p
 |-----------------------------------------------------------------------------|
 |TOTAL                                                      |22,968.900|100.00|
 +-----------------------------------------------------------------------------+
-</pre></div>
+```
 
-The output from <em>r.report</em> can be output in JSON by passing the <b>format=json</b> option.
+The output from *r.report* can be output in JSON by passing the
+**format=json** option.
 
-<div class="code"><pre>
+```sh
 r.report -n -a map=towns,elevation units=miles,meters,kilometers,acres,hectares,cells,percent nsteps=2 format=json
-</pre></div>
+```
 
-<div class="code"><pre>
+```json
 {
     "location": "nc_spm_08_grass7",
     "created": "2024-07-24T14:59:09+0530",
@@ -868,20 +857,16 @@ r.report -n -a map=towns,elevation units=miles,meters,kilometers,acres,hectares,
         }
     ]
 }
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.stats.html">r.stats</a>,
-<a href="g.region.html">g.region</a>,
-<a href="r.coin.html">r.coin</a>,
-<a href="r.describe.html">r.describe</a>,
-<a href="r.info.html">r.info</a>,
-<a href="r.univar.html">r.univar</a>
-</em>
+*[r.stats](r.stats.md), [g.region](g.region.md), [r.coin](r.coin.md),
+[r.describe](r.describe.md), [r.info](r.info.md),
+[r.univar](r.univar.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Michael Shapiro, U.S. Army Construction Engineering Research Laboratory<br>
+Michael Shapiro, U.S. Army Construction Engineering Research
+Laboratory  
 Sort option by Martin Landa, Czech Technical University in Prague, 2013

@@ -1,32 +1,32 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.lrs.create</em> generates a LRS (Linear Reference System) from
-vector line and point data.
-<p>
-It is highly recommended to work with polylines instead of segmented vector
-lines. The command <em>v.build.polylines</em> creates this map structure.
+*v.lrs.create* generates a LRS (Linear Reference System) from vector
+line and point data.
 
-<h2>NOTES</h2>
+It is highly recommended to work with polylines instead of segmented
+vector lines. The command *v.build.polylines* creates this map
+structure.
 
-The mileposts (point) vector map columns <em>start_mp</em>, <em>start_off</em>,
-<em>end_mp</em>, <em>end_off</em> must be of 'double precision' type. For
-milepost ordering, it is sufficient to enter increasing numbers into the
-<em>start_mp</em> column indicating the order along the vector line.
-<p>
-The <em>lidcol</em> and <em>pidcol</em> columns contain the line IDs which
-relate mileposts and vector line(s) to each other.
-<p>
-When creating a LRS with this module, any existing <em>rstable</em> will be
+## NOTES
+
+The mileposts (point) vector map columns *start_mp*, *start_off*,
+*end_mp*, *end_off* must be of 'double precision' type. For milepost
+ordering, it is sufficient to enter increasing numbers into the
+*start_mp* column indicating the order along the vector line.
+
+The *lidcol* and *pidcol* columns contain the line IDs which relate
+mileposts and vector line(s) to each other.
+
+When creating a LRS with this module, any existing *rstable* will be
 replaced.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 This example is written for the Spearfish dataset.
-<p>
 
 As first step, bus route data are prepared.
 
-<div class="code"><pre>
+```sh
 # break into segments for correct route selection
 v.clean roads_net out=busroute_tmp tool=break
 
@@ -44,31 +44,33 @@ v.edit -r busroute_tmp2 tool=delete coords=590273,4927304,\
 v.build.polylines busroute_tmp2 out=busroute_tmp3
 v.category busroute_tmp3 out=busroute op=add
 g.remove -f type=vector name=busroute_tmp,busroute_tmp2,busroute_tmp3
-</pre></div>
+```
 
 The result can be visualized:
-<div class="code"><pre>
+
+```sh
 g.region vector=busroute n=n+100 s=s-100 w=w-100 e=e+100
 d.mon x0
 d.vect roads_net
 d.vect busroute col=red width=2
-</pre></div>
+```
 
-The vector map 'busroute' needs have an attribute table which contain an integer column
-<em>lidcol</em> with value be '22' for this example (bus route):
+The vector map 'busroute' needs have an attribute table which contain an
+integer column *lidcol* with value be '22' for this example (bus route):
 
-<div class="code"><pre>
+```sh
 v.db.addtable busroute col="lid integer"
 v.db.update busroute col=lid value=22
 v.db.select busroute
 cat|lid
 1|22
-</pre></div>
+```
 
 A new point map 'busstops' shall contain mileposts (bus stops) along
-this line (use <em>thresh</em> to define maximal accepted deviation from this line):
+this line (use *thresh* to define maximal accepted deviation from this
+line):
 
-<div class="code"><pre>
+```sh
 # generate points map
 echo "590263|4927361
 590432|4927120
@@ -80,22 +82,22 @@ echo "590263|4927361
 
 d.vect busstops icon=basic/triangle col=blue
 d.vect busstops disp=cat lcol=blue
-</pre></div>
+```
 
 The milepost attributes table needs to be created with specific columns:
 
-<div class="code"><pre>
+```sh
 v.db.addtable busstops col="lid integer, start_mp double precision, \
             start_off double precision, end_mp double precision, \
             end_off double precision"
 v.db.update busstops col=lid value=22
-</pre></div>
+```
 
 Since the digitizing order of v.in.ascii above reflects the bus stop
-order along the route, we can simply copy the category number as milepost
-order number in column <em>start_mp</em>:
+order along the route, we can simply copy the category number as
+milepost order number in column *start_mp*:
 
-<div class="code"><pre>
+```sh
 v.db.update busstops col=start_mp qcol=cat
 # verify table
 v.db.select busstops
@@ -114,46 +116,41 @@ d.vect roads_net
 d.vect busroute col=red width=2
 d.vect busstops icon=basic/triangle col=blue
 d.vect busstops disp=attr attrcol=start_mp lcol=blue
-</pre></div>
+```
 
-Offsets (<em>start_off</em>, <em>end_off</em>) can be later used in case the route or
+Offsets (*start_off*, *end_off*) can be later used in case the route or
 mileposts get modified.
-<p>
 
 As second step, the linear reference network is created:
 
-<div class="code"><pre>
+```sh
 v.lrs.create busroute points=busstops out=route_lrs err=lrs_error \
              lidcol=lid pidcol=lid rstable=route_lrs threshold=50
-</pre></div>
+```
 
 This creates the maps 'route_lrs' containing the LRS and 'lrs_error'
-containing the errors if any. The resulting LRS table and map can
-be shown:
+containing the errors if any. The resulting LRS table and map can be
+shown:
 
-<div class="code"><pre>
+```sh
 # show LRS table
 db.select table=route_lrs
 
 d.vect route_lrs col=blue width=2
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.build.polylines.html">v.build.polylines</a>,
-<a href="v.lrs.segment.html">v.lrs.segment</a>,
-<a href="v.lrs.where.html">v.lrs.where</a>,
-<a href="v.lrs.label.html">v.lrs.label</a>
-</em>
+*[v.build.polylines](v.build.polylines.md),
+[v.lrs.segment](v.lrs.segment.md), [v.lrs.where](v.lrs.where.md),
+[v.lrs.label](v.lrs.label.md)*
 
-<p>
-<em>
-<a href="lrs.html">LRS tutorial</a>,<br>
-<a href="https://foss4g.asia/2004/Full%20Paper_PDF/Introducing%20the%20Linear%20Reference%20System%20in%20GRASS.pdf">Introducing the Linear Reference System in GRASS</a>
-</em>
+*[LRS tutorial](lrs.md),  
+[Introducing the Linear Reference System in
+GRASS](https://foss4g.asia/2004/Full-Paper_PDF/Introducing-the-Linear-Reference-System-in-GRASS.pdf)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek, ITC-irst/MPA Solutions<br>
-Documentation update (based on above journal article and available fragments): Markus Neteler
+Radim Blazek, ITC-irst/MPA Solutions  
+Documentation update (based on above journal article and available
+fragments): Markus Neteler

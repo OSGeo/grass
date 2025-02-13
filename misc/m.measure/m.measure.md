@@ -1,34 +1,30 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>m.measure</em> provides the user with a way to measure the lengths
-and areas of lines and polygons. Areas can be stated in acres,
-hectares, square miles, square feet, square meters and square kilometers.
+*m.measure* provides the user with a way to measure the lengths and
+areas of lines and polygons. Areas can be stated in acres, hectares,
+square miles, square feet, square meters and square kilometers.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-Distance example in a latitude-longitude coordinate reference system
-(on great circle, i.e. an orthodrome):
+Distance example in a latitude-longitude coordinate reference system (on
+great circle, i.e. an orthodrome):
 
-<div class="code"><pre>
+```sh
 Bonn_DE="7.09549,50.73438"
 Philadelphia_US="-75.16379,39.95233"
 
 m.measure coordinates="$Bonn_DE,$Philadelphia_US" units=kilometers
 Length:  6217.916452 kilometers
-</pre></div>
+```
 
-<div align="center" style="margin: 10px">
-<a href="m_measure_distance.png">
-<img src="m_measure_distance.png" width="600" height="290" alt="Visualization (with d.geodesic) of m.measure distance example" border="0"><br>
-</a>
-<i>Visualization (with d.geodesic) of m.measure distance example</i>
-</div>
+![Visualization (with d.geodesic) of m.measure distance example](m_measure_distance.png)  
+*Visualization (with d.geodesic) of m.measure
+distance example*
 
-<p>
 As an example for the North Carolina sample dataset, here four points
 describing a square of 1000m side length:
 
-<div class="code"><pre>
+```sh
 m.measure units=meters \
   coordinates=922000,2106000,923000,2106000,923000,2107000,922000,2107000
 Length:  3000.000000 meters
@@ -40,19 +36,16 @@ m.measure -g units=hectares \
 units=meters,square meters
 length=3000.000000
 area=1000000.000000
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.geodesic.html">d.geodesic</a>
-</em>
+*[d.geodesic](d.geodesic.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Glynn Clements
-<br>
-Some updates by Martin Landa, CTU in Prague, Czech Republic
-<br><br>
+Glynn Clements  
+Some updates by Martin Landa, CTU in Prague, Czech Republic  
+  
 Derived from d.measure by James Westervelt, Michael Shapiro, U.S. Army
 Construction Engineering Research Laboratory

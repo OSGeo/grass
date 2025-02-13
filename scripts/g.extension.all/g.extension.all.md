@@ -1,36 +1,32 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>g.extension.rebuild.all</em> reinstalls and updates all locally
-installed GRASS Addons extensions in local GRASS installation. The
-extensions can be installed
-by <em><a href="g.extension.html">g.extension</a></em>. List of
-locally installed extensions can be printed by <code>g.extension
--a</code>.
+*g.extension.rebuild.all* reinstalls and updates all locally installed
+GRASS Addons extensions in local GRASS installation. The extensions can
+be installed by *[g.extension](g.extension.md)*. List of locally
+installed extensions can be printed by `g.extension -a`.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-Rebuild locally installed extensions which were built against
-different GIS Library (see <code>g.version -r</code>)
+Rebuild locally installed extensions which were built against different
+GIS Library (see `g.version -r`)
 
-<div class="code"><pre>
+```sh
 g.extension.rebuild.all
-</pre></div>
+```
 
 Force to rebuild all locally installed extensions
 
-<div class="code"><pre>
+```sh
 g.extension.rebuild.all -f
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="g.extension.html">g.extension</a>
-</em>
+*[g.extension](g.extension.md)*
 
-<p>
-See also <a href="https://grasswiki.osgeo.org/wiki/GRASS_AddOns">GRASS Addons</a> wiki page.
+See also [GRASS Addons](https://grasswiki.osgeo.org/wiki/GRASS_AddOns)
+wiki page.
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Martin Landa, Czech Technical University in Prague, Czech Republic

@@ -1,110 +1,90 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.coin</em> tabulates the mutual occurrence of two
-raster map layers' categories with respect to one another.
-This analysis program respects the current geographic
-region and mask settings.
+*r.coin* tabulates the mutual occurrence of two raster map layers'
+categories with respect to one another. This analysis program respects
+the current geographic region and mask settings.
 
-<p>
-<em>r.coin</em>
-tabulates the coincidence of category values among the two
-map layers and prepares the basic table from which the
-report is to be created.  This tabulation is followed by an
-indication of how long the coincidence table will be.  If
-the table is extremely long, the user may decide that
-viewing it is not so important after all, and may cancel
-the request at this point.  Assuming the user continues,
-<em>r.coin</em> then allows the user to choose one of eight
-units of measure in which the report results can be given.
-These units are:
+*r.coin* tabulates the coincidence of category values among the two map
+layers and prepares the basic table from which the report is to be
+created. This tabulation is followed by an indication of how long the
+coincidence table will be. If the table is extremely long, the user may
+decide that viewing it is not so important after all, and may cancel the
+request at this point. Assuming the user continues, *r.coin* then allows
+the user to choose one of eight units of measure in which the report
+results can be given. These units are:
 
-<ul>
-<li>c: cells</li>
-<li>p: percent cover of region</li>
-<li>x: percent of &lt;map name&gt; category (column)</li>
-<li>y: percent of &lt;map name&gt; category (row)</li>
-<li>a: acres</li>
-<li>h: hectares</li>
-<li>k: square kilometers</li>
-<li>m: square miles</li>
-</ul>
+- c: cells
+- p: percent cover of region
+- x: percent of \<map name\> category (column)
+- y: percent of \<map name\> category (row)
+- a: acres
+- h: hectares
+- k: square kilometers
+- m: square miles
 
-<p>
-Note that three of these options give results as percentage
-values:  "p" is based on the grand total number of cells;
-"x" is based on only column totals; and "y" is based on
-only row totals.  Only one unit of measure can be selected
-per report output.  Type in just one of the letters
-designating a unit of measure followed by a
-&lt;RETURN&gt;.  The report will be printed to the screen
-for review.  After reviewing the report on the screen, the
-user is given several options.  The report may be saved to
-a file and/or sent to a printer.  If printed, it may be
-printed with either 80 or 132 columns.  Finally, the user
-is given the option to rerun the coincidence tabulation
-using a different unit of measurement.
+Note that three of these options give results as percentage values: "p"
+is based on the grand total number of cells; "x" is based on only column
+totals; and "y" is based on only row totals. Only one unit of measure
+can be selected per report output. Type in just one of the letters
+designating a unit of measure followed by a \<RETURN\>. The report will
+be printed to the screen for review. After reviewing the report on the
+screen, the user is given several options. The report may be saved to a
+file and/or sent to a printer. If printed, it may be printed with either
+80 or 132 columns. Finally, the user is given the option to rerun the
+coincidence tabulation using a different unit of measurement.
 
-<h2>NOTES</h2>
+## NOTES
 
-It is <b>not</b> a good idea to run <em>r.coin</em> on a
-map layer which has a monstrous number of categories (e.g.,
-unreclassed elevation).  Because <em>r.coin</em> reports
-information for each and every category, it is better to
-reclassify those categories (using <em>r.reclass</em>)
-into a more manageable number prior to running
-<em>r.coin</em> on the reclassed raster map layer.
+It is **not** a good idea to run *r.coin* on a map layer which has a
+monstrous number of categories (e.g., unreclassed elevation). Because
+*r.coin* reports information for each and every category, it is better
+to reclassify those categories (using *r.reclass*) into a more
+manageable number prior to running *r.coin* on the reclassed raster map
+layer.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-Below is a sample of tabular output produced by
-<em>r.coin</em>.  Here, map output is stated in units of
-square miles.  The report tabulates the coincidence of the
-Spearfish sample database's <em>owner</em> and
-<em>road</em> raster map layers' categories.  The
-<em>owner</em> categories in this case refer to whether the
-land is in private hands (category 1) or is owned by the
-U.S. Forest Service (category 2). The <em>roads</em> map
-layer categories refer to various types of roads (with the
-exception of category value "0", which indicates "no data";
-i.e., map locations at which no roads exist).
-<em>r.coin</em> does not report category labels. The user
-should run
-<em><a href="r.report.html">r.report</a></em> or
-<em><a href="r.category.html">r.category</a></em>
-to obtain this information.
+Below is a sample of tabular output produced by *r.coin*. Here, map
+output is stated in units of square miles. The report tabulates the
+coincidence of the Spearfish sample database's *owner* and *road* raster
+map layers' categories. The *owner* categories in this case refer to
+whether the land is in private hands (category 1) or is owned by the
+U.S. Forest Service (category 2). The *roads* map layer categories refer
+to various types of roads (with the exception of category value "0",
+which indicates "no data"; i.e., map locations at which no roads exist).
+*r.coin* does not report category labels. The user should run
+*[r.report](r.report.md)* or *[r.category](r.category.md)* to obtain
+this information.
 
-<p>
-The body of the report is arranged in panels. The map layer
-with the most categories is arranged along the vertical
-axis of the table; the other, along the horizontal axis.
-Each panel has a maximum of 5 categories (9 if printed)
-across the top. In addition, the last two columns reflect a
-cross total of each column for each row.  All of the
-categories of the map layer arranged along the vertical
-axis are included in each panel.  There is a total at the
-bottom of each column representing the sum of all the rows
-in that column. A second total represents the sum of all
-the non-zero category rows. A cross total (Table Row Total)
-of all columns for each row appears in a separate panel.
+The body of the report is arranged in panels. The map layer with the
+most categories is arranged along the vertical axis of the table; the
+other, along the horizontal axis. Each panel has a maximum of 5
+categories (9 if printed) across the top. In addition, the last two
+columns reflect a cross total of each column for each row. All of the
+categories of the map layer arranged along the vertical axis are
+included in each panel. There is a total at the bottom of each column
+representing the sum of all the rows in that column. A second total
+represents the sum of all the non-zero category rows. A cross total
+(Table Row Total) of all columns for each row appears in a separate
+panel.
 
-<p>
-Note how the following information may be obtained from the sample report.
+Note how the following information may be obtained from the sample
+report.
 
-<p>
-In the Spearfish data base, in area not owned by the Forest Service, there
-are 50.63 square miles of land not used for roads. Roads make up 9.27 square
-miles of land in this area.
-<p>Of the total 102.70 square miles in Spearfish, 42.80
-square miles is owned by the Forest Service.
-<br>
+In the Spearfish data base, in area not owned by the Forest Service,
+there are 50.63 square miles of land not used for roads. Roads make up
+9.27 square miles of land in this area.
+
+Of the total 102.70 square miles in Spearfish, 42.80 square miles is
+owned by the Forest Service.  
 In total, there are 14.58 square miles of roads.
-<p>There are more category 2 roads outside Forest Service land
-(2.92 mi. sq.)
-than there are inside Forest land boundaries (0.72 mi. sq.).
 
-<p>Following is a sample report.
+There are more category 2 roads outside Forest Service land (2.92 mi.
+sq.) than there are inside Forest land boundaries (0.72 mi. sq.).
 
-<div class="code"><pre>
+Following is a sample report.
+
+```sh
 +------------------------------------------------------------+
 |                    COINCIDENCE TABULATION REPORT           |
 |------------------------------------------------------------|
@@ -156,48 +136,21 @@ Panel #1 of 1
 |--------------------------------|
 |w/o 0   |     14.58 |     14.58 |
 +--------------------------------+
-</pre></div>
+```
 
-<p>
-<em>r.coin</em> calculates the coincidence of two raster
-map layers.  Although <em>r.coin</em> allows the user to
-rerun the report using different units, it is not possible
-to simply rerun the report with different map layers.  In
-order to choose new map layers, it is necessary to rerun
-<em>r.coin.</em>
+*r.coin* calculates the coincidence of two raster map layers. Although
+*r.coin* allows the user to rerun the report using different units, it
+is not possible to simply rerun the report with different map layers. In
+order to choose new map layers, it is necessary to rerun *r.coin.*
 
-<!-- North Carolina sample dataset:
+## SEE ALSO
 
-Show percentage of each landclass for each town as well as
-the summaries:
+*[g.region](g.region.md), [r.category](r.category.md),
+[r.describe](r.describe.md), [r.reclass](r.reclass.md),
+[r.report](r.report.md), [r.stats](r.stats.md)*
 
-<div class="code"><pre>
-g.region raster=landclass96,towns -p
-r.cats landclass96
-r.cats towns
-r.coin -w first=landclass96 second=towns unit=p
-</pre></div>
+## AUTHORS
 
-The result shows that 60% of the current region is located
-in South Raleigh, about half of the area is covered by
-forest and 30% is developed.
--->
-
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="g.region.html">g.region</a>,
-<!-- not ported to GRASS 6+ <a href="m.ipf.html">m.ipf</a>, -->
-<a href="r.category.html">r.category</a>,
-<a href="r.describe.html">r.describe</a>,
-<a href="r.reclass.html">r.reclass</a>,
-<a href="r.report.html">r.report</a>,
-<a href="r.stats.html">r.stats</a>
-</em>
-
-<h2>AUTHORS</h2>
-
-Michael O'Shea,
-<br>
-Michael Shapiro, <br>
+Michael O'Shea,  
+Michael Shapiro,  
 U.S. Army Construction Engineering Research Laboratory

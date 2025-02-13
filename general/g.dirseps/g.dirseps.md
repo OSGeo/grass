@@ -1,9 +1,9 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>g.dirseps</em> is an internal tool only. It copies input string
-to stdout, changing directory separator characters as specified by flags.
-It is used for interoperability between Unix and MS-Windows pathnames.
+*g.dirseps* is an internal tool only. It copies input string to stdout,
+changing directory separator characters as specified by flags. It is
+used for interoperability between Unix and MS-Windows pathnames.
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Paul Kelly

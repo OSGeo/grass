@@ -1,96 +1,78 @@
-<!-- meta page description: Cairo DISPLAY DRIVER -->
+*Cairo display driver* for bitmap or vector output using the Cairo
+graphics library.
 
-<em>Cairo display driver</em> for bitmap or vector output using the
-Cairo graphics library.
+## DESCRIPTION
 
-<h2>DESCRIPTION</h2>
+The Cairo driver generates PNG, BMP, PPM, PS, PDF or SVG images by GRASS
+display commands, using the [Cairo graphics
+library](https://www.cairographics.org/). The image format is selected
+from the extension of the output file. The Cairo driver is used for
+GRASS display commands by default if available, otherwise *[PNG
+driver](pngdriver.md)* is used.
 
-The Cairo driver generates PNG, BMP, PPM, PS, PDF or SVG images by
-GRASS display commands, using the
-<a href="https://www.cairographics.org/">Cairo graphics library</a>.
-The image format is selected from the extension of the output file.
+## USAGE
 
-The Cairo driver is used for GRASS display commands by default if
-available, otherwise <em><a href="pngdriver.html">PNG driver</a></em>
-is used.
+### Environment variables
 
-<h2>USAGE</h2>
+The Cairo driver can be enabled by setting **GRASS_RENDER_IMMEDIATE**
+variable, eg.
 
-<h3>Environment variables</h3>
-
-The Cairo driver can be enabled by
-setting <b>GRASS_RENDER_IMMEDIATE</b> variable, eg.
-
-<div class="code"><pre>
+```sh
 export GRASS_RENDER_IMMEDIATE=cairo
-</pre></div>
+```
 
 Several environment variables affect the operation of the Cairo driver:
 
-<ul>
-  <li><b>GRASS_RENDER_WIDTH=xxx</b><br>
-    the width of the image map (default is 640).
-  </li>
-  <li><b>GRASS_RENDER_HEIGHT=yyy</b><br>
-    the height of the image map (default is 480).
-  </li>
-  <li><b>GRASS_RENDER_BACKGROUNDCOLOR=RRGGBB</b><br>
-    specifies the background color to use in RGB notation (hex or
-    R:G:B values). Named colors are also supported. Default
-    is <b>FFFFFF</b> (white).
-  </li>
-  <li><b>GRASS_RENDER_TRANSPARENT=[TRUE|FALSE]</b><br>
-    sets transparent background on (TRUE) or off (FALSE, default).
-  </li>
-  <li><b>GRASS_RENDER_ANTIALIAS</b><br> can be <em>default</em>,
-    <em>none</em>, <em>gray</em>, or <em>subpixel</em>, corresponding to
-    <a href="https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-antialias-t">cairo_antialias_t</a>
-  </li>
-  <li><b>GRASS_RENDER_FILE=filename</b><br>
-     the name and format of the resulting image file, default is
-     <code>map.png</code>.<br>
-     The image format is determined from the file extension.<br>
-     Supported bitmap formats:
-     <ul>
-       <li><b>.png</b> - Portable Network Graphics (PNG)</li>
-       <li><b>.bmp</b> - Windows Bitmap (BMP, 32-bpp)
-           (these are not readable by some older viewers)</li>
-       <li><b>.ppm</b> - Portable Pixmap (PPM + PGM for alpha channel)</li>
-     </ul>
-     Supported vector formats:
-     <ul>
-       <li><b>.pdf</b> - Portable Document Format (PDF)</li>
-       <li><b>.ps</b> - PostScript (PS)</li>
-       <li><b>.svg</b> - Scalable Vector Graphics (SVG)</li>
-     </ul>
-     (Note: Some formats may not be available, depending on your platform and
-     the Cairo library that GRASS was built with.)
-  </li>
-  <li><b>GRASS_RENDER_FILE_READ</b><br>
-     if <code>TRUE</code>, the Cairo driver will initialize the image from
-    the contents of GRASS_RENDER_FILE.<br>
-    (<em>Note: This is only supported for bitmap formats</em>)
-  </li>
-  <li><b>GRASS_RENDER_FILE_MAPPED</b><br>
-    if <code>TRUE</code>, the Cairo driver will map GRASS_RENDER_FILE as its framebuffer,
-    rather than using memory.<br>
-    (<em>Note: This only works with BMP files.</em>)
-  </li>
-  <li><b>GRASS_RENDER_CAIRO_SCREEN</b><br>
-    defines Cairo screen
-  </li>
-  <li><b>GRASS_RENDER_CAIRO_VISUAL</b><br>
-    defines Cairo visual
-  </li>
-</ul>
+- **GRASS_RENDER_WIDTH=xxx**  
+  the width of the image map (default is 640).
+- **GRASS_RENDER_HEIGHT=yyy**  
+  the height of the image map (default is 480).
+- **GRASS_RENDER_BACKGROUNDCOLOR=RRGGBB**  
+  specifies the background color to use in RGB notation (hex or R:G:B
+  values). Named colors are also supported. Default is **FFFFFF**
+  (white).
+- **GRASS_RENDER_TRANSPARENT=\[TRUE\|FALSE\]**  
+  sets transparent background on (TRUE) or off (FALSE, default).
+- **GRASS_RENDER_ANTIALIAS**  
+  can be *default*, *none*, *gray*, or *subpixel*, corresponding to
+  [cairo_antialias_t](https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-antialias-t)
+- **GRASS_RENDER_FILE=filename**  
+  the name and format of the resulting image file, default is
+  `map.png`.  
+  The image format is determined from the file extension.  
+  Supported bitmap formats:
+  - **.png** - Portable Network Graphics (PNG)
+  - **.bmp** - Windows Bitmap (BMP, 32-bpp) (these are not readable by
+    some older viewers)
+  - **.ppm** - Portable Pixmap (PPM + PGM for alpha channel)
 
-<h2>EXAMPLES</h2>
+  Supported vector formats:
+  - **.pdf** - Portable Document Format (PDF)
+  - **.ps** - PostScript (PS)
+  - **.svg** - Scalable Vector Graphics (SVG)
 
-<h3>PNG Example</h3>
+  (Note: Some formats may not be available, depending on your platform
+  and the Cairo library that GRASS was built with.)
+- **GRASS_RENDER_FILE_READ**  
+  if `TRUE`, the Cairo driver will initialize the image from the
+  contents of GRASS_RENDER_FILE.  
+  (*Note: This is only supported for bitmap formats*)
+- **GRASS_RENDER_FILE_MAPPED**  
+  if `TRUE`, the Cairo driver will map GRASS_RENDER_FILE as its
+  framebuffer, rather than using memory.  
+  (*Note: This only works with BMP files.*)
+- **GRASS_RENDER_CAIRO_SCREEN**  
+  defines Cairo screen
+- **GRASS_RENDER_CAIRO_VISUAL**  
+  defines Cairo visual
+
+## EXAMPLES
+
+### PNG Example
 
 Example: using the driver to generate a PNG file (bash-syntax):
 
-<div class="code"><pre>
+```sh
 export GRASS_RENDER_IMMEDIATE=cairo
 export GRASS_RENDER_FILE=nc_spm.png
 export GRASS_RENDER_WIDTH=800
@@ -101,14 +83,14 @@ g.region raster=elevation
 d.rast map=elevation
 d.vect map=streams width=1 color=blue fcolor=aqua type=area,line
 d.vect map=roadsmajor width=2
-</pre></div>
+```
 
-<h3>PDF Examples</h3>
+### PDF Examples
 
 Example: using the driver to generate a PDF vector file with a vector
 map (bash-syntax):
 
-<div class="code"><pre>
+```sh
 export GRASS_RENDER_IMMEDIATE=cairo
 export GRASS_RENDER_FILE=nc_spm.pdf
 export GRASS_RENDER_WIDTH=800
@@ -118,13 +100,12 @@ g.region vector=roadsmajor
 # activate vector font
 d.font Vera
 d.vect map=roadsmajor layer=1 display=shape attrcolumn=ROAD_NAME lcolor=0:90:255
-</pre></div>
+```
 
-<p>
 Example: using the driver to generate a PDF raster file with a raster
 map (bash-syntax):
 
-<div class="code"><pre>
+```sh
 export GRASS_RENDER_IMMEDIATE=cairo
 export GRASS_RENDER_FILE=nc_spm.pdf
 export GRASS_RENDER_WIDTH=800
@@ -132,60 +113,50 @@ export GRASS_RENDER_HEIGHT=800
 
 g.region raster=elevation
 d.rast map=elevation
-</pre></div>
+```
 
-<h3>SVG Example</h3>
+### SVG Example
 
 Example: using the driver to generate a SVG vector file with a vector
 map (bash-syntax):
 
-<div class="code"><pre>
+```sh
 export GRASS_RENDER_IMMEDIATE=cairo
 export GRASS_RENDER_FILE=vectormap.svg
 
 g.region vector=roadsmajor
 d.vect map=roadsmajor -c
-</pre></div>
+```
 
-<h2>NOTES</h2>
+## NOTES
 
 The driver is still in development. Enable it by specifying
-<code>--with-cairo</code> when configuring GRASS. This
-requires a reasonably recent version of the Cairo libraries
-and a working <code>pkg-config</code>.
+`--with-cairo` when configuring GRASS. This requires a reasonably recent
+version of the Cairo libraries and a working `pkg-config`.
 
-<p>Antialiasing is enabled by default for bitmap formats. There is
+Antialiasing is enabled by default for bitmap formats. There is
 currently no way of disabling this.
 
-<p>The resolution of the output images is defined by current region
-extents. Use <code>g.region -p</code> to get the number of rows and cols
-and use the environment variables to set the image size. If you would
-like a larger image, multiply both rows and cols by the same whole
-number to preserve the aspect ratio.
+The resolution of the output images is defined by current region
+extents. Use `g.region -p` to get the number of rows and cols and use
+the environment variables to set the image size. If you would like a
+larger image, multiply both rows and cols by the same whole number to
+preserve the aspect ratio.
 
-<p>Cairo supports true vector format output whenever possible. However,
-if the selected format doesn't support a necessary feature, Cairo may
-fall back on rendering a bitmap representation of the image wrapped in
-the selected vector format.
+Cairo supports true vector format output whenever possible. However, if
+the selected format doesn't support a necessary feature, Cairo may fall
+back on rendering a bitmap representation of the image wrapped in the
+selected vector format.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="pngdriver.html">PNG driver</a>,
-<a href="psdriver.html">PS driver</a>,
-<a href="htmldriver.html">HTML driver</a>,
-<a href="variables.html">variables</a>
-</em>
-<p>
-<em>
-<a href="d.rast.html">d.rast</a>,
-<a href="d.vect.html">d.vect</a>,
-<a href="d.mon.html">d.mon</a>,
-<a href="d.erase.html">d.erase</a>,
-<a href="d.redraw.html">d.redraw</a>
-</em>
+*[PNG driver](pngdriver.md), [PS driver](psdriver.md), [HTML
+driver](htmldriver.md), [variables](variables.md)*
 
-<h2>AUTHOR</h2>
+*[d.rast](d.rast.md), [d.vect](d.vect.md), [d.mon](d.mon.md),
+[d.erase](d.erase.md), [d.redraw](d.redraw.md)*
 
-Lars Ahlzen &lt;<i>lars (at) ahlzen.com</i>&gt;<br>
+## AUTHOR
+
+Lars Ahlzen \<*lars (at) ahlzen.com*\>  
 and the GRASS Development Team.

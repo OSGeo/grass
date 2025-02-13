@@ -1,18 +1,17 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<b>r.support.stats</b> allows the user to update raster map statistics
+**r.support.stats** allows the user to update raster map statistics
 information.
 
-<h2>NOTES</h2>
+## NOTES
 
 None
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<a href="r.support.html">r.support</a>,
-<a href="r.report.html">r.report</a>
+[r.support](r.support.md), [r.report](r.report.md)
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Micharl Shapiro, CERL: Original author<br>
-<a href="MAILTO:rez@touchofmadness.com">Brad Douglas</a>: GRASS 6 Port<br>
+Micharl Shapiro, CERL: Original author  
+[Brad Douglas](MAILTO:rez@touchofmadness.com): GRASS 6 Port  

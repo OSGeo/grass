@@ -1,34 +1,30 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The module <em>t.vect.what.strds</em> samples a space time raster dataset
-(STRDS) at the spatio-temporal locations of a space time vector dataset (STVDS).
+The module *t.vect.what.strds* samples a space time raster dataset
+(STRDS) at the spatio-temporal locations of a space time vector dataset
+(STVDS).
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-The example is based on the space time vector dataset "precip_stations@climate_2009_2012"
-created in the <a href="t.vect.observe.strds.html">t.vect.observe.strds</a> example.
-In the example below, the module fills the new column "new_temp" with values
-extracted from the "tempmean_monthly" space time raster dataset:
+The example is based on the space time vector dataset
+"precip_stations@climate_2009_2012" created in the
+[t.vect.observe.strds](t.vect.observe.strds.md) example. In the example
+below, the module fills the new column "new_temp" with values extracted
+from the "tempmean_monthly" space time raster dataset:
 
-<div class="code"><pre>
+```sh
 t.vect.what.strds input=precip_stations@climate_2009_2012 \
                   strds=tempmean_monthly@climate_2009_2012 \
                   column=new_temp method=average
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.univar.html">r.univar</a>,
-<a href="v.univar.html">v.univar</a>,
-<a href="v.what.rast.html">v.what.rast</a>,
-<a href="v.what.rast3.html">v.what.rast3</a>,
-<a href="v.what.strds.html">v.what.strds</a>,
-<a href="v.what.vect.html">v.what.vect</a>,
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
-</em>
+*[r.univar](r.univar.md), [v.univar](v.univar.md),
+[v.what.rast](v.what.rast.md), [v.what.rast3](v.what.rast3.md),
+[v.what.strds](v.what.strds.md), [v.what.vect](v.what.vect.md),
+[t.create](t.create.md), [t.info](t.info.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

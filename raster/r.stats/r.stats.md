@@ -1,36 +1,36 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.stats</em> calculates the area present in each of the categories
-or floating-point intervals of user-selected <b>input</b> raster map. Area
-statistics are given in units of square meters and/or cell
-counts. This analysis uses the current geographic region
-(<em><a href="g.region.html">g.region</a></em>) and mask settings
-(<em><a href="r.mask.html">r.mask</a></em>). The output statistics can
-be saved to a <b>output</b> file.
+*r.stats* calculates the area present in each of the categories or
+floating-point intervals of user-selected **input** raster map. Area
+statistics are given in units of square meters and/or cell counts. This
+analysis uses the current geographic region (*[g.region](g.region.md)*)
+and mask settings (*[r.mask](r.mask.md)*). The output statistics can be
+saved to a **output** file.
 
-<p>
-Area statistics is printed in square meters for each category
-when <b>-a</b> is given. Similarly if <b>-c</b> flag is chosen, areas
-will be stated also in number of cells.
+Area statistics is printed in square meters for each category when
+**-a** is given. Similarly if **-c** flag is chosen, areas will be
+stated also in number of cells.
 
-<h2>NOTES</h2>
+## NOTES
 
-If a single raster map is specified, a list of categories will be printed.
-The <b>-x</b> flag will print x and y (column and row) starting with 1
-(both first row and first column are indexed with 1). If multiple raster maps
-are specified, a cross-tabulation table for each combination of categories in
-the raster maps will be printed.
+If a single raster map is specified, a list of categories will be
+printed. The **-x** flag will print x and y (column and row) starting
+with 1 (both first row and first column are indexed with 1). If multiple
+raster maps are specified, a cross-tabulation table for each combination
+of categories in the raster maps will be printed.
 
-<p>
-For example, if one raster map was specified, the output would look like:
-<div class="code"><pre>
+For example, if one raster map was specified, the output would look
+like:
+
+```sh
 1 1350000.00
 2 4940000.00
 3 8870000.00
-</pre></div>
+```
 
 If three raster maps were specified, the output would look like:
-<div class="code"><pre>
+
+```sh
 0 0 0 8027500.00
 0 1 0 1152500.00
 1 0 0 164227500.00
@@ -44,47 +44,30 @@ If three raster maps were specified, the output would look like:
 3 0 0 17140000.00
 3 1 0 11270000.00
 3 1 1 2500.00
-</pre></div>
+```
 
 Within each grouping, the first field represents the category value of
 first raster map, the second represents the category values associated
 with second raster map, the third represents category values for third
 raster map, and the last field gives the area in square meters for the
 particular combination of these three raster maps' categories. For
-example, above, combination 3,1,1 covered 2500 square meters. Fields
-are separated by the <b>separator</b> option.
+example, above, combination 3,1,1 covered 2500 square meters. Fields are
+separated by the **separator** option. The output from *r.stats* is
+sorted by category or category intervals (for floating-point raster
+maps).
 
-<!-- do not use bash commands in the manual
-<p>If a nicely formatted output is desired, pipe the output into a command
-which can create columnar output.  For example, the command:
-
-<p>    <b>r.stats input=</b>a,b,c | pr -3 | cat -s
-
-<p>will create a three-column output
-<div class="code"><pre>
-1:4:4:10000.00       2:1:5:290000.00      2:4:5:2090000.00
-1:4:5:1340000.00     2:2:5:350000.00      3:1:2:450000.00
-2:1:1:1090000.00     2:4:1:700000.00      3:1:3:5280000.00
-2:1:3:410000.00      2:4:3:10000.00       3:1:5:3140000.00
-</pre></div>
--->
-
-The output from <em>r.stats</em> is sorted by category or category
-intervals (for floating-point raster maps).
-
-<p>
 Note that the user has only the option of printing out cell statistics
 in terms of cell counts and/or area totals. Users wishing to use
-different units than are available here should
-use <em><a href="r.report.html">r.report</a></em>.
+different units than are available here should use
+*[r.report](r.report.md)*.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Report area for each category</h3>
+### Report area for each category
 
 Report area for each category in the single raster map:
 
-<div class="code"><pre>
+```sh
 g.region raster=geology_30m
 r.stats -a in=geology_30m nv=no-data sep=tab
 
@@ -101,14 +84,14 @@ r.stats -a in=geology_30m nv=no-data sep=tab
 946     360000.000000
 948     80000.000000
 no-data 33375200000.000004
-</pre></div>
+```
 
-<h3>Report sorted number of cells for each category</h3>
+### Report sorted number of cells for each category
 
-Report sorted number of cells for each category in the single raster
-map (suppress NULL data):
+Report sorted number of cells for each category in the single raster map
+(suppress NULL data):
 
-<div class="code"><pre>
+```sh
 g.region raster=geology_30m
 r.stats -cn input=geology_30m sort=desc
 
@@ -124,14 +107,14 @@ r.stats -cn input=geology_30m sort=desc
 720 12
 946 9
 948 2
-</pre></div>
+```
 
-<h3>Report area, number of cells, and percents in multiple raster maps</h3>
+### Report area, number of cells, and percents in multiple raster maps
 
-Report area, number of cells, and percents (separated by tabs) for
-each category in multiple raster maps (suppress NULL data):
+Report area, number of cells, and percents (separated by tabs) for each
+category in multiple raster maps (suppress NULL data):
 
-<div class="code"><pre>
+```sh
 g.region raster=towns
 r.stats -nacp input=towns,urban separator=tab
 
@@ -141,14 +124,14 @@ r.stats -nacp input=towns,urban separator=tab
 4       55      16040000.000000 401     8.00%
 5       55      98240000.000000 2456    48.98%
 6       55      19760000.000000 494     9.85%
-</pre></div>
+```
 
-<h3>Report sorted area intervals of floating-point raster map</h3>
+### Report sorted area intervals of floating-point raster map
 
-Report sorted area for each interval of floating-point input raster
-map. Number of intervals are given by <b>nsteps</b> option.
+Report sorted area for each interval of floating-point input raster map.
+Number of intervals are given by **nsteps** option.
 
-<div class="code"><pre>
+```sh
 g.region raster=elevation
 r.stats -an input=elevation nsteps=10 sort=desc separator=tab
 
@@ -162,36 +145,31 @@ r.stats -an input=elevation nsteps=10 sort=desc separator=tab
 65.6539-75.729007       6040000.000000
 146.254757-156.329865   5720000.000000
 55.578793-65.6539       760000.000000
-</pre></div>
+```
 
-<h3>Report raster cell counts in multiple raster maps</h3>
+### Report raster cell counts in multiple raster maps
 
 Report raster cell counts of landuse and geological categories within
 zipcode areas:
 
-<div class="code"><pre>
+```sh
 g.region raster=zipcodes
 # landuse/landcover and zipcodes
 r.stats -c input=landclass96,zipcodes separator=comma
 
 # landuse/landcover, geology and zipcodes with category labels
 r.stats -c input=landclass96,zipcodes,geology_30m separator=comma -l
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="r.report.html">r.report</a>,
-<a href="r.coin.html">r.coin</a>,
-<a href="r.describe.html">r.describe</a>,
-<a href="r.stats.quantile.html">r.stats.quantile</a>,
-<a href="r.stats.zonal.html">r.stats.zonal</a>,
-<a href="r.statistics.html">r.statistics</a>,
-<a href="r.univar.html">r.univar</a>
-</em>
+*[g.region](g.region.md), [r.report](r.report.md), [r.coin](r.coin.md),
+[r.describe](r.describe.md), [r.stats.quantile](r.stats.quantile.md),
+[r.stats.zonal](r.stats.zonal.md), [r.statistics](r.statistics.md),
+[r.univar](r.univar.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Michael Shapiro, U.S. Army Construction Engineering Research Laboratory<br>
+Michael Shapiro, U.S. Army Construction Engineering Research
+Laboratory  
 Sort option by Martin Landa, Czech Technical University in Prague, 2013

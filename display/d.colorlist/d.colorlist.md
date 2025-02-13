@@ -1,13 +1,13 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.colorlist</em> report the available color names.
-The list contains all available display colors with a configurable
-separator (default is comma).
+*d.colorlist* report the available color names. The list contains all
+available display colors with a configurable separator (default is
+comma).
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em><a href="r.colors.html">r.colors</a></em>
+*[r.colors](r.colors.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Andreas Lange

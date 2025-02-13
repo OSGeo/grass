@@ -1,102 +1,97 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>g.findfile</em> is designed for Bourne shell or Python scripts
-that need to search for mapset <em>elements</em>, including: raster,
-vector maps, region definitions
-and <em><a href="i.group.html">imagery</a></em> groups.
-<p>The list of <b>element</b> names to search for is not fixed; any
-subdirectory of the mapset directory is a valid <b>element</b> name.
-<p>However, the user can find the list of standard GRASS <b>element</b>
-names in the file <code>$GISBASE/etc/element_list</code>. This is the file
-which <em><a href="g.remove.html">g.remove</a></em>, <em><a href="g.rename.html">g.rename</a></em>
-and <em><a href="g.copy.html">g.copy</a></em> use to determine which files
-need to be deleted/renamed/copied for a given entity type.
+*g.findfile* is designed for Bourne shell or Python scripts that need to
+search for mapset *elements*, including: raster, vector maps, region
+definitions and *[imagery](i.group.md)* groups.
 
-<h2>NOTES</h2>
+The list of **element** names to search for is not fixed; any
+subdirectory of the mapset directory is a valid **element** name.
 
-<em>g.findfile</em> writes four lines to standard output:
+However, the user can find the list of standard GRASS **element** names
+in the file `$GISBASE/etc/element_list`. This is the file which
+*[g.remove](g.remove.md)*, *[g.rename](g.rename.md)* and
+*[g.copy](g.copy.md)* use to determine which files need to be
+deleted/renamed/copied for a given entity type.
 
-<div class="code"><pre>
-name='<em>file_name</em>'
-mapset='<em>mapset_name</em>'
-file='<em>unix_filename</em>'
-fullname='<em>grass_fullname</em>'
-</pre></div>
+## NOTES
 
-The output is <em>Bash</em> commands to set the variable
-<em>name</em> to the GRASS data base file name,
-<em>mapset</em> to the mapset in which the file resides,
-and <em>file</em> to the full UNIX path name for the named
-file. These variables may be set in the <em>Bash</em>
-as follows:
+*g.findfile* writes four lines to standard output:
 
-<div class="code"><pre>
+```sh
+name='file_name'
+mapset='mapset_name'
+file='unix_filename'
+fullname='grass_fullname'
+```
+
+The output is *Bash* commands to set the variable *name* to the GRASS
+data base file name, *mapset* to the mapset in which the file resides,
+and *file* to the full UNIX path name for the named file. These
+variables may be set in the *Bash* as follows:
+
+```sh
 eval `g.findfile element=name mapset=name file=name`
-</pre></div>
+```
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>SHELL</h3>
+### SHELL
 
-<b>Raster map example:</b>
+**Raster map example:**
 
-<div class="code"><pre>
+```sh
 eval `g.findfile element=cell file=elevation`
-</pre></div>
+```
 
 If the specified file (here: raster map) does not exist, the variables
 will be set as follows:
 
-<div class="code"><pre>
+```sh
 name=
 mapset=
 fullname=
 file=
-</pre></div>
+```
 
 The following is a way to test for this case:
-<div class="code"><pre>
+
+```sh
 if [ ! "$file" ]
 then
-	exit 1
+    exit 1
 fi
-</pre></div>
+```
 
-<p>
-<b>Vector map example (including error message):</b>
+**Vector map example (including error message):**
 
-<div class="code"><pre>
+```sh
 eval `g.findfile element=vector file="$G_OPT_V_INPUT"`
 if [ ! "$file" ] ; then
-   g.message -e "Vector map &lt;$G_OPT_V_INPUT&gt; not found"
+   g.message -e "Vector map <$G_OPT_V_INPUT> not found"
    exit 1
 fi
-</pre></div>
+```
 
-<h3>PYTHON</h3>
+### PYTHON
 
-See <em><a href="https://grass.osgeo.org/grass-devel/manuals/libpython/">Python
-Scripting Library</a></em> for more info.
-<p>
-Note: The Python tab in the <em>wxGUI</em> can be used for entering the
+See *[Python Scripting
+Library](https://grass.osgeo.org/grass-devel/manuals/libpython/)* for
+more info.
+
+Note: The Python tab in the *wxGUI* can be used for entering the
 following code:
-<p>
-<div class="code"><pre>
-import grass.script as gcore
 
-gcore.find_file('elevation', element = 'cell')
-</pre></div>
+```python
+import grass.script as gs
 
-<h2>SEE ALSO</h2>
+gs.find_file('elevation', element = 'cell')
+```
 
-<em>
-<a href="g.filename.html">g.filename</a>,
-<a href="g.gisenv.html">g.gisenv</a>,
-<a href="g.mapsets.html">g.mapsets</a>,
-<a href="g.parser.html">g.parser</a>
-</em>
+## SEE ALSO
 
-<h2>AUTHOR</h2>
+*[g.filename](g.filename.md), [g.gisenv](g.gisenv.md),
+[g.mapsets](g.mapsets.md), [g.parser](g.parser.md)*
 
-Michael Shapiro,
-U.S.Army Construction Engineering Research Laboratory
+## AUTHOR
+
+Michael Shapiro, U.S.Army Construction Engineering Research Laboratory

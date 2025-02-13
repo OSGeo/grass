@@ -1,60 +1,46 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.rast</em> displays the specified raster map in the active
-display frame on the graphics monitor.
+*d.rast* displays the specified raster map in the active display frame
+on the graphics monitor.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-Display raster map &quot;elevation&quot;:
-<div class="code"><pre>
+Display raster map "elevation":
+
+```sh
 d.rast map=elevation
-</pre></div>
-<div align="center" style="margin: 10px">
-<img src="d_rast_elevation.png" alt="d.rast elevation" border="0">
-<br>
-<i>Figure: elevation raster map visualization</i>
-</div>
+```
 
-Display raster map &quot;elevation&quot; but only the raster cells with
-values between 75 and 80 meters:
+![d.rast elevation](d_rast_elevation.png)  
+*Figure: elevation raster map visualization*
 
-<div class="code"><pre>
+Display raster map "elevation" but only the raster cells with values
+between 75 and 80 meters:
+
+```sh
 d.rast map=elevation values=75-80
-</pre></div>
-<div align="center" style="margin: 10px">
-<img src="d_rast_elevation_values.png" alt="d.rast elevation with values" border="0">
-<br>
-<i>Figure: elevation raster map showing values between 75 and 80 meters</i>
-</div>
+```
 
-Display raster map &quot;landuse96_28m&quot; but only categories 1 and 2:
+![d.rast elevation with values](d_rast_elevation_values.png)  
+*Figure: elevation raster map showing values between 75 and 80 meters*
 
-<div class="code"><pre>
+Display raster map "landuse96_28m" but only categories 1 and 2:
+
+```sh
 d.rast landuse96_28m values=1,2
-</pre></div>
-<div align="center" style="margin: 10px">
-<img src="d_rast_landuse.png" alt="d.rast landuse" border="0">
-<br>
-<i>Figure: landuse raster map showing categories 1 and 2</i>
-</div>
+```
 
-<h2>SEE ALSO</h2>
+![d.rast landuse](d_rast_landuse.png)  
+*Figure: landuse raster map showing categories 1 and 2*
 
-<em>
-<a href="d.rast.arrow.html">d.rast.arrow</a>,
-<a href="d.rast.num.html">d.rast.num</a>,
-<a href="d.rast.leg.html">d.rast.leg</a>,
-<a href="d.legend.html">d.legend</a>,
-<a href="d.mon.html">d.mon</a>,
-<a href="d.erase.html">d.erase</a>,
-<a href="d.vect.html">d.vect</a>
-</em>
+## SEE ALSO
 
-<p>
-<em>
-  <a href="wxGUI.html">wxGUI</a>
-</em>
+*[d.rast.arrow](d.rast.arrow.md), [d.rast.num](d.rast.num.md),
+[d.rast.leg](d.rast.leg.md), [d.legend](d.legend.md), [d.mon](d.mon.md),
+[d.erase](d.erase.md), [d.vect](d.vect.md)*
 
-<h2>AUTHOR</h2>
+*[wxGUI](wxGUI.md)*
+
+## AUTHOR
 
 James Westervelt, U.S. Army Construction Engineering Research Laboratory

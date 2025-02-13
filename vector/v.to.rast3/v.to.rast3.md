@@ -1,32 +1,26 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.to.rast3</em> converts a GRASS 3D vector point map to a GRASS 3D raster map.
+*v.to.rast3* converts a GRASS 3D vector point map to a GRASS 3D raster
+map.
 
-<h2>NOTES</h2>
+## NOTES
 
-When converting from a 3D vector point layer to a 3D raster map
-a vector point is converted into a single 3D raster cell (voxel)
-representing the location of the vector point. As 3D raster cell
-value the database  attribute of the vector point is stored with
-floating point precision.
+When converting from a 3D vector point layer to a 3D raster map a vector
+point is converted into a single 3D raster cell (voxel) representing the
+location of the vector point. As 3D raster cell value the database
+attribute of the vector point is stored with floating point precision.
 
-<center>
-<img src="v_to_rast3_test.png" border="0"><br>
-<table border="0" width="600">
-<tr><td><center>
-<i>Fig: This screenshot shows the result of the v.to.rast3 test. Visualized
-are the cube of the GRASS region, the vector points as black dots and
-the voxel cells as wireframe model. Only cells with non-null values are
-shown.</i>
-</center></td></tr>
-</table>
-</center>
+<img src="v_to_rast3_test.png" data-border="0" />  
 
-<h2>SEE ALSO</h2>
+|                                                                                                                                                                                                                                 |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *Fig: This screenshot shows the result of the v.to.rast3 test. Visualized are the cube of the GRASS region, the vector points as black dots and the voxel cells as wireframe model. Only cells with non-null values are shown.* |
 
-<em><a href="g.region.html">g.region</a></em>
+## SEE ALSO
 
-<h2>AUTHORS</h2>
+*[g.region](g.region.md)*
 
-Original s.to.rast3: Jaro Hofierka, Geomodel s.r.o.<br>
+## AUTHORS
+
+Original s.to.rast3: Jaro Hofierka, Geomodel s.r.o.  
 Updated by Radim Blazek

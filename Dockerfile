@@ -5,7 +5,7 @@
 
 ARG GUI=without
 
-FROM ubuntu:22.04@sha256:0e5e4a57c2499249aafc3b40fcd541e9a456aab7296681a3994d631587203f97 as common_start
+FROM ubuntu:22.04@sha256:ed1544e454989078f5dec1bfdabd8c5cc9c48e0705d07b678ab6ae3fb61952d2 as common_start
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Stefan Blumentrath"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
@@ -295,13 +295,13 @@ RUN ./configure $GRASS_CONFIG \
     mv module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml;
 
 # Build the GDAL-GRASS plugin
-RUN git clone https://github.com/OSGeo/gdal-grass \
+# renovate: datasource=github-tags depName=OSGeo/gdal-grass
+ARG GDAL_GRASS_VERSION=1.0.3
+RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gdal-grass.git \
     && cd "gdal-grass" \
-    && ./configure \
-      --with-gdal=/usr/bin/gdal-config \
-      --with-grass=/usr/local/grass85 \
-    && make -j $NUMTHREADS \
-    && make install -j $NUMTHREADS \
+    && cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF \
+    && cmake --build build \
+    && cmake --install build \
     && cd /src \
     && rm -rf "gdal-grass"
 

@@ -1,31 +1,28 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.latlong</em> creates a latitude (degree decimal) map, or longitude
-if the -l flag is used, from any map in any projection using PROJ library.
-This is an input to <em>r.sun</em> and <em>i.evapo.potrad</em>.
+*r.latlong* creates a latitude (degree decimal) map, or longitude if the
+-l flag is used, from any map in any projection using PROJ library. This
+is an input to *r.sun* and *i.evapo.potrad*.
 
-<h2>NOTES</h2>
+## NOTES
 
-The PROJ <a href="https://proj.org">website</a>.
+The PROJ [website](https://proj.org).
 
-<h2>TODO</h2>
+## TODO
 
 Datum transform is not implemented, the same datum is taken as output.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-<div class="code"><pre>
+```sh
 g.region raster=elevation -p
 r.latlong input=elevation output=latitude
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.sun.html">r.sun</a>,
-<a href="r.sunhours.html">r.sunhours</a>
-</em>
+*[r.sun](r.sun.md), [r.sunhours](r.sunhours.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Yann Chemin, International Rice Research Institute, The Philippines

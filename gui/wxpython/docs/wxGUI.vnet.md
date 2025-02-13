@@ -1,108 +1,89 @@
-<!-- meta page description: wxGUI Vector Network Analysis Tool -->
-<!-- meta page index: wxGUI -->
+## KEYWORDS
 
-<h2>KEYWORDS</h2>
+[vector](vector.md), [network](topic_network.md),
+[vector](keywords.md#vector)
 
-<a href="vector.html">vector</a>, <a href="topic_network.html">network</a>, <a href="keywords.html#vector">vector</a>
+## DESCRIPTION
 
-<h2>DESCRIPTION</h2>
+**Vector Network Analysis Tool** is graphical front-end for `v.net*`
+modules. It allows perform network analysis directly in
+*[wxGUI](wxGUI.md)* without need to use command line. The tool can be
+launched from Layer Manager menu *Vector → Network analysis → Vector
+network analysis tool* or from Map Display toolbar *Analyse map → Vector
+network analysis tool* ![icon](icons/vector-tools.png).
 
-<b>Vector Network Analysis Tool</b> is graphical front-end
-for <code>v.net*</code> modules. It allows perform network analysis
-directly in <em><a href="wxGUI.html">wxGUI</a></em> without need to
-use command line. The tool can be launched from Layer Manager
-menu <i>Vector &rarr; Network analysis &rarr; Vector network analysis
-tool</i> or from Map Display toolbar <i>Analyse map &rarr; Vector
-network analysis tool</i> <img src="icons/vector-tools.png" alt="icon">.
+<img src="wxGUI_vnet.jpg" data-border="1"
+alt="Vector Network Analysis Tool" />  
+Subsets for nearest centers (*[v.net.alloc](v.net.alloc.md)*)
 
-<p>
-<center>
-<img src="wxGUI_vnet.jpg" border="1" alt="Vector Network Analysis Tool">
-<br>
-Subsets for nearest centers (<em><a href="v.net.alloc.html">v.net.alloc</a></em>)
-</center>
+*Vector Network Analysis Tool* currently allows you to:
 
-<p>
-<em>Vector Network Analysis Tool</em> currently allows you to:
+- perform these network analyses:
+  - Shortest path (*[v.net.path](v.net.path.md)*)
+  - Salesman (*[v.net.salesman](v.net.salesman.md)*)
+  - Flow (*[v.net.flow](v.net.flow.md)*)
+  - Allocate subnets for nearest centers
+    (*[v.net.alloc](v.net.alloc.md)*)
+  - Steiner tree for the network and given terminals
+    (*[v.net.distance](v.net.distance.md)*)
+  - Splits net by cost isolines (*[v.net.iso](v.net.iso.md)*)
+- show and set all data needed for the analysis (points, attribute
+  tables, compute costs)
+- show analysis results (maps and it's attribute tables)
+- snapping to nodes
+- browse previous analysis results
 
-<ul>
-  <li> perform these network analyses:
-  <ul>
-    <li> Shortest path
-    (<em><a href="v.net.path.html">v.net.path</a></em>)</li>
-    <li> Salesman
-    (<em><a href="v.net.salesman.html">v.net.salesman</a></em>)</li>
-    <li> Flow (<em><a href="v.net.flow.html">v.net.flow</a></em>)</li>
-    <li> Allocate subnets for nearest centers
-    (<em><a href="v.net.alloc.html">v.net.alloc</a></em>)</li>
-    <li> Steiner tree for the network and given terminals
-    (<em><a href="v.net.distance.html">v.net.distance</a></em>)</li>
-    <li> Splits net by cost isolines
-    (<em><a href="v.net.iso.html">v.net.iso</a></em>)</li>
-  </ul>
-  </li>
-  <li>show and set all data needed for the analysis (points, attribute
-  tables, compute costs)</li>
-  <li>show analysis results (maps and it's attribute tables)</li>
-  <li>snapping to nodes</li>
-  <li>browse previous analysis results</li>
-</ul>
-
-<h2>NOTES</h2>
+## NOTES
 
 The tool is split into tabs. Every tab represents some functionality:
 
-<dl>
-  <dt><b>Parameters</b> tab</dt>
-  <dd>It is used for setting vector map and
-    it's layer on which analysis will be done. Also it is possible to
-    set columns with cost values from attribute table connected
-    to particular layer.</dd>
-  <dt><b>Points</b> tab</dt>
-  <dd>It manages points, which are used for analysis.</dd>
-  <dt><b>Output</b> tab</dt>
-  <dd>There is a output console, which shows information about running
-    analysis.</dd>
-  <dt><b>Input tables</b> tab</dt>
-  <dd>When existing vector map and it's existing layers are set
-  in <em>Parameters</em> tab, this tab is dynamically added. It shows
-  attribute tables of node and arc layers, which were chosen for
-  analysis. It is also possible to compute cost values in this
-  tab. This can be done by right mouse button click on column
-  label. Then from pop-up menu choose <em>Add column</em>, where new
-  column for cost values can be created. After that by right mouse
-  button click on the added column label can be chosen item <em>Field
-  calculator</em>. This tool computes cost values.</dd>
-  <dt><b>Result tables</b> tab</dt>
-  <dd>The result of vector network analysis is always a vector map. Some
-  vector network analysis results can also include attribute
-  tables. If such a table is connected to the result map, this tab is
-  shown and with it you can browse the data.</dd>
-</dl>
+**Parameters** tab  
+It is used for setting vector map and it's layer on which analysis will
+be done. Also it is possible to set columns with cost values from
+attribute table connected to particular layer.
 
-<h2>KNOWN ISSUES</h2>
+**Points** tab  
+It manages points, which are used for analysis.
 
-When some change is done in layer tree of Map Display, temporary
-vector map representing result of analysis is not rendered
-(use <em>Show result</em> button in toolbar to render it again).
+**Output** tab  
+There is a output console, which shows information about running
+analysis.
 
-<h2>SEE ALSO</h2>
+**Input tables** tab  
+When existing vector map and it's existing layers are set in
+*Parameters* tab, this tab is dynamically added. It shows attribute
+tables of node and arc layers, which were chosen for analysis. It is
+also possible to compute cost values in this tab. This can be done by
+right mouse button click on column label. Then from pop-up menu choose
+*Add column*, where new column for cost values can be created. After
+that by right mouse button click on the added column label can be chosen
+item *Field calculator*. This tool computes cost values.
 
-<em>
-  <a href="wxGUI.html">wxGUI</a>,
-  <a href="wxGUI.components.html">wxGUI components</a>
-</em>
+**Result tables** tab  
+The result of vector network analysis is always a vector map. Some
+vector network analysis results can also include attribute tables. If
+such a table is connected to the result map, this tab is shown and with
+it you can browse the data.
 
-<p>
-See list of <a href="topic_network.html">vector network modules</a>.
+## KNOWN ISSUES
 
-<p>
-See also the
-user <a href="https://grasswiki.osgeo.org/wiki/WxGUI_Vector_Network_Analysis_Tool">wiki</a>
-page including <a href="https://grasswiki.osgeo.org/wiki/WxGUI Vector Network Analysis Tool#Video tutorial">video tutorial</a>.
+When some change is done in layer tree of Map Display, temporary vector
+map representing result of analysis is not rendered (use *Show result*
+button in toolbar to render it again).
 
-<h2>AUTHOR</h2>
+## SEE ALSO
 
-Stepan Turek,
-<a href="https://grasswiki.osgeo.org/wiki/GRASS_GSoC_2012_WxGUI_front_end_for_vector_analysis_modules">Google
-Summer of Code 2012</a> (mentor: Martin Landa)
+*[wxGUI](wxGUI.md), [wxGUI components](wxGUI.components.md)*
+
+See list of [vector network modules](topic_network.md).
+
+See also the user
+[wiki](https://grasswiki.osgeo.org/wiki/WxGUI_Vector_Network_Analysis_Tool)
+page including [video
+tutorial](https://grasswiki.osgeo.org/wiki/WxGUI-Vector-Network-Analysis-Tool#Video-tutorial).
+
+## AUTHOR
+
+Stepan Turek, [Google Summer of Code
+2012](https://grasswiki.osgeo.org/wiki/GRASS_GSoC_2012_WxGUI_front_end_for_vector_analysis_modules)
+(mentor: Martin Landa)

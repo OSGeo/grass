@@ -1,72 +1,66 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.distance</em> locates the closest points between "objects" in two raster maps.  An
-"object" is defined as all the grid cells that have the same category
-number, and closest means having the shortest "straight-line" distance.
-The cell centers are considered for the distance calculation (two
-adjacent grid cells have the distance between their cell centers).
-<p>
-The output is an ascii list, one line per pair of objects, in the following form:
-<div class="code"><pre>
+*r.distance* locates the closest points between "objects" in two raster
+maps. An "object" is defined as all the grid cells that have the same
+category number, and closest means having the shortest "straight-line"
+distance. The cell centers are considered for the distance calculation
+(two adjacent grid cells have the distance between their cell centers).
+
+The output is an ascii list, one line per pair of objects, in the
+following form:
+
+```sh
 cat1:cat2:distance:east1:north1:east2:north2
-</pre></div>
+```
 
-<dl>
-<dt><b>cat1</b>
-<dd>Category number from map1
+**cat1**  
+Category number from map1
 
-<dt><b>cat2</b>
-<dd>Category number from map2
+**cat2**  
+Category number from map2
 
-<dt><b>distance</b>
-<dd>The distance in meters between "cat1" and "cat2"
+**distance**  
+The distance in meters between "cat1" and "cat2"
 
-<dt><b>east1,north1</b>
-<dd>The coordinates of the grid cell "cat1" which is closest to "cat2"
+**east1,north1**  
+The coordinates of the grid cell "cat1" which is closest to "cat2"
 
-<dt><b>east2,north2</b>
-<dd>The coordinates of the grid cell "cat2" which is closest to "cat1"
-</dl>
+**east2,north2**  
+The coordinates of the grid cell "cat2" which is closest to "cat1"
 
-<h3>Flags</h3>
-<b>-l</b>
-The -l flag outputs the category labels of the matched raster objects at the
-beginning of the line, if they exist.
-<p>
-<b>-o</b>
-The -o flag reports zero distance if the input rasters are overlapping.
-<p>
-<h2>NOTES</h2>
+### Flags
 
-The output format lends itself to filtering.  For example, to "see" lines
-connecting each of the category pairs in two maps, filter the output using
-awk and then into <em>d.graph</em>:
-<p>
-<div class="code"><pre>
+**-l** The -l flag outputs the category labels of the matched raster
+objects at the beginning of the line, if they exist.
+
+**-o** The -o flag reports zero distance if the input rasters are
+overlapping.
+
+## NOTES
+
+The output format lends itself to filtering. For example, to "see" lines
+connecting each of the category pairs in two maps, filter the output
+using awk and then into *d.graph*:
+
+```sh
 r.distance map=map1,map2 | \
   awk -F: '{print "move",$4,$5,"\ndraw",$6,$7}' | d.graph -m
-</pre></div>
+```
 
-<p>
-To create a vector map of all the "map1" coordinates, filter the output into
-awk and then into <em>v.in.ascii</em>:
-<p>
-<div class="code"><pre>
+To create a vector map of all the "map1" coordinates, filter the output
+into awk and then into *v.in.ascii*:
+
+```sh
 r.distance map=map1,map2 | \
   awk -F: '{print $4,$5}' | v.in.ascii format=point output=name separator=space
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.buffer.html">r.buffer</a>,
-<a href="r.cost.html">r.cost</a>,
-<a href="r.drain.html">r.drain</a>,
-<a href="r.grow.html">r.grow</a>,
-<a href="r.grow.distance.html">r.grow.distance</a>,
-<a href="v.distance.html">v.distance</a>
-</em>
+*[r.buffer](r.buffer.md), [r.cost](r.cost.md), [r.drain](r.drain.md),
+[r.grow](r.grow.md), [r.grow.distance](r.grow.distance.md),
+[v.distance](v.distance.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Michael Shapiro, U.S. Army Construction Engineering Research Laboratory

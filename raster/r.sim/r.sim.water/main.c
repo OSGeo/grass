@@ -355,35 +355,38 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&cellhd);
 
+    Geometry geometry = {0};
+    Settings settings = {0};
+    Setup setup = {0};
+    Simulation sim = {0};
+
     WaterParams_init(&wp);
 
-    wp.conv = G_database_units_to_meters_factor();
+    geometry.conv = G_database_units_to_meters_factor();
 
-    G_debug(3, "Conversion factor is set to: %f", wp.conv);
+    G_debug(3, "Conversion factor is set to: %f", geometry.conv);
 
-    wp.mixx = wp.conv * cellhd.west;
-    wp.maxx = wp.conv * cellhd.east;
-    wp.miyy = wp.conv * cellhd.south;
-    wp.mayy = wp.conv * cellhd.north;
+    geometry.mixx = geometry.conv * cellhd.west;
+    geometry.miyy = geometry.conv * cellhd.south;
 
-    wp.stepx = cellhd.ew_res * wp.conv;
-    wp.stepy = cellhd.ns_res * wp.conv;
+    geometry.stepx = cellhd.ew_res * geometry.conv;
+    geometry.stepy = cellhd.ns_res * geometry.conv;
     /*  step = amin1(stepx,stepy); */
-    wp.step = (wp.stepx + wp.stepy) / 2.;
-    wp.mx = cellhd.cols;
-    wp.my = cellhd.rows;
+    geometry.step = (geometry.stepx + geometry.stepy) / 2.;
+    geometry.mx = cellhd.cols;
+    geometry.my = cellhd.rows;
     /* x_orig = cellhd.west * wp.conv;
        y_orig = cellhd.south * wp.conv; *//* do we need this? */
-    wp.xmin = 0.;
-    wp.ymin = 0.;
-    wp.xp0 = wp.xmin + wp.stepx / 2.;
-    wp.yp0 = wp.ymin + wp.stepy / 2.;
-    wp.xmax = wp.xmin + wp.stepx * (float)wp.mx;
-    wp.ymax = wp.ymin + wp.stepy * (float)wp.my;
+    geometry.xmin = 0.;
+    geometry.ymin = 0.;
+    geometry.xp0 = geometry.xmin + geometry.stepx / 2.;
+    geometry.yp0 = geometry.ymin + geometry.stepy / 2.;
+    geometry.xmax = geometry.xmin + geometry.stepx * (float)geometry.mx;
+    geometry.ymax = geometry.ymin + geometry.stepy * (float)geometry.my;
 
-    G_debug(3, "xmax: %f, ymax: %f", wp.xmax, wp.ymax);
+    G_debug(3, "xmax: %f, ymax: %f", geometry.xmax, geometry.ymax);
 
-    wp.ts = flag.tserie->answer;
+    settings.ts = flag.tserie->answer;
 
     wp.elevin = parm.elevin->answer;
     wp.dxin = parm.dxin->answer;
@@ -399,13 +402,13 @@ int main(int argc, char *argv[])
 
     G_debug(3, "Parsing numeric parameters");
 
-    sscanf(parm.niter->answer, "%d", &wp.timesec);
-    sscanf(parm.mintimestep->answer, "%lf", &wp.mintimestep);
-    sscanf(parm.outiter->answer, "%d", &wp.iterout);
-    sscanf(parm.diffc->answer, "%lf", &wp.frac);
-    sscanf(parm.hmax->answer, "%lf", &wp.hhmax);
-    sscanf(parm.halpha->answer, "%lf", &wp.halpha);
-    sscanf(parm.hbeta->answer, "%lf", &wp.hbeta);
+    sscanf(parm.niter->answer, "%d", &settings.timesec);
+    sscanf(parm.outiter->answer, "%d", &settings.iterout);
+    sscanf(parm.mintimestep->answer, "%lf", &settings.mintimestep);
+    sscanf(parm.diffc->answer, "%lf", &settings.frac);
+    sscanf(parm.hmax->answer, "%lf", &settings.hhmax);
+    sscanf(parm.halpha->answer, "%lf", &settings.halpha);
+    sscanf(parm.hbeta->answer, "%lf", &settings.hbeta);
 
     G_debug(3, "Parsing rain parameters");
 
@@ -516,27 +519,27 @@ int main(int argc, char *argv[])
 
     /* Recompute timesec from user input in minutes
      * to real timesec in seconds */
-    wp.timesec = wp.timesec * 60.0;
-    wp.iterout = wp.iterout * 60.0;
-    if ((wp.timesec / wp.iterout) > 100.0 && wp.ts == 1)
+    settings.timesec = settings.timesec * 60.0;
+    settings.iterout = settings.iterout * 60.0;
+    if ((settings.timesec / settings.iterout) > 100.0 && settings.ts)
         G_message(_("More than 100 files are going to be created !!!!!"));
 
     /* compute how big the raster is and set this to appr 2 walkers per cell */
     if (parm.nwalk->answer == NULL) {
-        wp.maxwa = wp.mx * wp.my * 2;
-        wp.rwalk = (double)(wp.mx * wp.my * 2.);
-        G_message(_("default nwalk=%d, rwalk=%f"), wp.maxwa, wp.rwalk);
+        sim.maxwa = geometry.mx * geometry.my * 2;
+        sim.rwalk = (double)(geometry.mx * geometry.my * 2.);
+        G_message(_("default nwalk=%d, rwalk=%f"), sim.maxwa, sim.rwalk);
     }
     else {
-        sscanf(parm.nwalk->answer, "%d", &wp.maxwa);
-        wp.rwalk = (double)wp.maxwa;
+        sscanf(parm.nwalk->answer, "%d", &sim.maxwa);
+        sim.rwalk = (double)sim.maxwa;
     }
 
     /*      rwalk = (double) maxwa; */
 
-    if (wp.conv != 1.0)
-        G_message(_("Using metric conversion factor %f, step=%f"), wp.conv,
-                  wp.step);
+    if (geometry.conv != 1.0)
+        G_message(_("Using metric conversion factor %f, step=%f"),
+                  geometry.conv, geometry.step);
 
     wp.observation = parm.observation->answer;
     wp.logfile = parm.logfile->answer;
@@ -544,15 +547,15 @@ int main(int argc, char *argv[])
 
     if ((wp.depth == NULL) && (wp.disch == NULL) && (wp.err == NULL))
         G_warning(_("You are not outputting any raster maps"));
-    ret_val = input_data();
+    ret_val = input_data(geometry.my, geometry.mx, &sim);
     if (ret_val != 1)
         G_fatal_error(_("Input failed"));
 
-    alloc_grids_water();
+    alloc_grids_water(&geometry);
 
-    grad_check();
-    main_loop();
-    free_walkers();
+    grad_check(&setup, &geometry, &settings);
+    main_loop(&setup, &geometry, &settings, &sim);
+    free_walkers(&sim);
 
     /* Exit with Success */
     exit(EXIT_SUCCESS);

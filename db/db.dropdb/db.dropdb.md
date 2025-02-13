@@ -1,47 +1,41 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.dropdb</em> removes an existing database using given database
-<b>driver</b>. Currently only <a href="grass-sqlite.html">SQLite</a>
-and <a href="grass-pg.html">PostgreSQL</a> database drivers are
-supported.
+*db.dropdb* removes an existing database using given database
+**driver**. Currently only [SQLite](grass-sqlite.md) and
+[PostgreSQL](grass-pg.md) database drivers are supported.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Drop (delete) an existing database connected through SQLite driver</h3>
+### Drop (delete) an existing database connected through SQLite driver
 
-Note that the standard GRASS GIS SQLite database is by default
-found in the user's current mapset. This example shows an
-out-of-mapset database removal:
+Note that the standard GRASS GIS SQLite database is by default found in
+the user's current mapset. This example shows an out-of-mapset database
+removal:
 
-<div class="code"><pre>
+```sh
 db.dropdb driver=sqlite database=/opt/sqlite.db
-</pre></div>
+```
 
-<h3>Drop an existing database connected through PostgreSQL driver</h3>
+### Drop an existing database connected through PostgreSQL driver
 
-<div class="code"><pre>
+```sh
 db.dropdb driver=pg database=grassdb
-</pre></div>
+```
 
-<h2>TODO</h2>
+## TODO
 
 Support other database drivers, too.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.createdb.html">db.createdb</a>,
-<a href="db.describe.html">db.describe</a>,
-<a href="db.droptable.html">db.droptable</a>,
-<a href="db.execute.html">db.execute</a>,
-<a href="db.login.html">db.login</a>,
-<a href="db.tables.html">db.tables</a>
-</em>
+*[db.createdb](db.createdb.md), [db.describe](db.describe.md),
+[db.droptable](db.droptable.md), [db.execute](db.execute.md),
+[db.login](db.login.md), [db.tables](db.tables.md)*
 
-<p>
-<a href="sql.html">GRASS SQL interface</a>
+[GRASS SQL interface](sql.md)
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek, ITC-Irst, Trento, Italy<br>
-SQLite and PostgreSQL support by Martin Landa, Czech Technical University in Prague, Czech Republic
+Radim Blazek, ITC-Irst, Trento, Italy  
+SQLite and PostgreSQL support by Martin Landa, Czech Technical
+University in Prague, Czech Republic

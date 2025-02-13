@@ -1,31 +1,31 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The <em>t.merge</em> module is designed to register the maps of several input
-space time datasets in a single output dataset. The datasets to merge can be
-either space time raster, 3D raster or vector datasets and must have
-the same temporal type (absolute or relative).
-<p>
+The *t.merge* module is designed to register the maps of several input
+space time datasets in a single output dataset. The datasets to merge
+can be either space time raster, 3D raster or vector datasets and must
+have the same temporal type (absolute or relative).
+
 Existing space time datasets located in the current mapset can be
-specified as output as well. The maps from the input space time
-datasets will be added to the output.
-<p>
+specified as output as well. The maps from the input space time datasets
+will be added to the output.
+
 Maps from the input space time datasets will be registered only once in
 the output space time dataset, hence the same maps can be registered in
 different input space time datasets.
 
-<h2>NOTES</h2>
+## NOTES
 
 Temporal databases stored in other mapsets can be used as long as they
 are in the user's current mapset search path (managed with
-<a href="g.mapsets.html">g.mapsets</a>).
+[g.mapsets](g.mapsets.md)).
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 In this example we will create two space time raster datasets and
-register two unique maps in each of it. Then we merge the two space
-time raster datasets together.
+register two unique maps in each of it. Then we merge the two space time
+raster datasets together.
 
-<div class="code"><pre>
+```sh
 r.mapcalc expression="map1 = rand(0, 10)"  -s
 r.mapcalc expression="map2 = rand(10, 20)" -s
 
@@ -210,16 +210,13 @@ t.info precipitation_daily_3
  |     output="precipitation_daily_3"
  |
  +----------------------------------------------------------------------------+
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.create.html">t.create</a>,
-<a href="t.support.html">t.support</a>,
-<a href="t.register.html">t.register</a>
-</em>
+*[t.create](t.create.md), [t.support](t.support.md),
+[t.register](t.register.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

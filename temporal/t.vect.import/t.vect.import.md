@@ -1,31 +1,31 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.vect.import</em> imports a space time vector dataset archive that
-was exported with <a href="t.vect.export.html">t.vect.export</a>.
+*t.vect.import* imports a space time vector dataset archive that was
+exported with [t.vect.export](t.vect.export.md).
 
-<h2>NOTES</h2>
+## NOTES
 
-Optionally a base map name can be provided to avoid that existing
-vector maps are overwritten by the map names that are used in the STRDS
+Optionally a base map name can be provided to avoid that existing vector
+maps are overwritten by the map names that are used in the STRDS
 archive.
-<p>
-The <b>directory</b> is used as work directory in case of import but
-can also be used as a data directory when using GML for the data
-exchange.
 
-<h2>EXAMPLE</h2>
+The **directory** is used as work directory in case of import but can
+also be used as a data directory when using GML for the data exchange.
 
-In this example, five vector maps are created and registered in a single space time
-vector dataset named <em>random_locations</em>. Each vector map represents
-random locations within the boundary of the state taken at 1 month intervals.
-The space time dataset is then exported and re-imported.
+## EXAMPLE
 
-<div class="code"><pre>
+In this example, five vector maps are created and registered in a single
+space time vector dataset named *random_locations*. Each vector map
+represents random locations within the boundary of the state taken at 1
+month intervals. The space time dataset is then exported and
+re-imported.
+
+```sh
 db.connect -d
 
 for i in `seq 1 5` ; do
     v.random output=map_$i n=500 restrict=boundary_state@PERMANENT
-    echo map_$i &gt;&gt; map_list.txt
+    echo map_$i >> map_list.txt
 done
 
 t.create type=stvds temporaltype=absolute \
@@ -51,19 +51,14 @@ new_map_2@user1|new_map_2|None|user1|2012-02-01 00:00:00|2012-03-01 00:00:00
 new_map_3@user1|new_map_3|None|user1|2012-03-01 00:00:00|2012-04-01 00:00:00
 new_map_4@user1|new_map_4|None|user1|2012-04-01 00:00:00|2012-05-01 00:00:00
 new_map_5@user1|new_map_5|None|user1|2012-05-01 00:00:00|2012-06-01 00:00:00
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.vect.export.html">t.vect.export</a>,
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>,
-<a href="v.in.ogr.html">v.in.ogr</a>,
-<a href="v.pack.html">v.pack</a>,
-<a href="t.rast.import.html">t.rast.import</a>
-</em>
+*[t.vect.export](t.vect.export.md), [t.create](t.create.md),
+[t.info](t.info.md), [v.in.ogr](v.in.ogr.md), [v.pack](v.pack.md),
+[t.rast.import](t.rast.import.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

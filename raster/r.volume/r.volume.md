@@ -1,76 +1,59 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.volume</em> is a tool for summing cell values within clumps and
+*r.volume* is a tool for summing cell values within clumps and
 calculating volumes and centroids of patches or clumps.
 
-<p>
-<em>r.volume</em> generates a table containing the sum of all cells
-from a <b>input</b> raster map sorted by category on a <b>clump</b>
-raster map, and optionally generates a vector points map of the
-centroids for each clump.  If a clump map is not specified, the
-current raster mask is used. The raster mask can be defined
-by <em><a href="r.mask.html">r.mask</a></em>. The sum is multiplied by
-the area of a cell to give the volume occupied by that cell. See below
-for an example of the output table.
+*r.volume* generates a table containing the sum of all cells from a
+**input** raster map sorted by category on a **clump** raster map, and
+optionally generates a vector points map of the centroids for each
+clump. If a clump map is not specified, the current raster mask is used.
+The raster mask can be defined by *[r.mask](r.mask.md)*. The sum is
+multiplied by the area of a cell to give the volume occupied by that
+cell. See below for an example of the output table.
 
-<!-- The table is placed in the user's home directory in the file
-Gvol.report. (or not???)
+## NOTES
 
-NOTE: I can't find any evidence of this in the source code, and I have
-tested the module out as of Jan 10, 2008. I'll leave the above comment
-about automatic report generation commented out from the manpage for
-now, unless I get notification otherwise. - EP -->
+If a clump map is not given and a raster mask is not set, the program
+exits with an error message.
 
-<h2>NOTES</h2>
+*r.volume* works in the current region and respects the current raster
+mask.
 
-<p>
-If a clump map is not given and a raster mask is not set, the program exits
-with an error message.
+### CENTROIDS
 
-<p>
-<em>r.volume</em> works in the current region and respects the current
-raster mask.
+The centroid coordinates are the same as those stored in the vector map
+(if one was requested by **centroids** parameter). They are guaranteed
+to fall on a cell of the appropriate category, thus they are not always
+the true, mathematical centroid. They will always fall at a cell center.
 
-<h3>CENTROIDS</h3>
+Attribute table linked to the vector map with centroids contains several
+columns:
 
-The centroid coordinates are the same as those stored in the vector
-map (if one was requested by <b>centroids</b> parameter). They are
-guaranteed to fall on a cell of the appropriate category, thus they
-are not always the true, mathematical centroid. They will always fall
-at a cell center.
+- `cat` - category value (integer)
+- `volume` - volume value (double precision)
+- `average` - average value in the clump (double precision)
+- `sum` - sum of cell values in the clump (double precision)
+- `count` - number of cells with the category (integer)
 
-<p>
-Attribute table linked to the vector map with centroids contains several columns:
+Vector points can be converted directly to a raster map with each point
+a separate category using *[v.to.rast](v.to.rast.md)*.
 
-<ul>
-  <li><code>cat</code> - category value (integer)</li>
-  <li><code>volume</code> - volume value (double precision)</li>
-  <li><code>average</code> - average value in the clump (double precision)</li>
-  <li><code>sum</code> - sum of cell values in the clump (double precision)</li>
-  <li><code>count</code> - number of cells with the category (integer)</li>
-</ul>
+### APPLICATIONS
 
-<p>
-Vector points can be converted directly to a raster map with each
-point a separate category
-using <em><a href="v.to.rast.html">v.to.rast</a></em>.
+By preprocessing the elevation raster map with
+*[r.mapcalc](r.mapcalc.md)* and using suitable masking or clump maps,
+very interesting applications can be done with *r.volume*. Such as,
+calculating the volume of rock in a potential quarry; calculating
+cut/fill volumes for roads; finding water volumes in potential
+reservoirs.
 
-<h3>APPLICATIONS</h3>
+## EXAMPLE
 
-By preprocessing the elevation raster map
-with <em><a href="r.mapcalc.html">r.mapcalc</a></em> and using
-suitable masking or clump maps, very interesting applications can be
-done with <em>r.volume</em>.  Such as, calculating the volume of rock
-in a potential quarry; calculating cut/fill volumes for roads; finding
-water volumes in potential reservoirs.
-
-<h2>EXAMPLE</h2>
-
-<h3>Computation of a water basin volume</h3>
+### Computation of a water basin volume
 
 The example is based on the North Carolina sample dataset:
 
-<div class="code"><pre>
+```sh
 # set computational region to small basin within extent of LiDAR elevation model
 g.region n=220361 s=220123 w=638527 e=638894 align=elev_lid792_1m -p
 # generate shared relief map for better terrain visualization
@@ -97,27 +80,25 @@ r.volume input=elev_lid792_1m clump=mylake
 #        2    112.14      6504      58   638679.50   220215.50          6504.14
 # -----------------------------------------------------------------------------
 #                                                 Total Volume =       60692.49
-</pre></div>
+```
 
+[<img src="r_volume_lake.png" data-border="0" width="600" height="389"
+alt="r.volume lake example" />](r_volume_lake.png)  
+*Figure: Water filled based shown on shaded elevation map*
 
-<div align="center" style="margin: 10px">
-<a href="r_volume_lake.png">
-<img src="r_volume_lake.png" width="600" height="389" alt="r.volume lake example" border="0">
-</a><br>
-<i>Figure: Water filled based shown on shaded elevation map</i>
-</div>
+### Report of geological data
 
-<h3>Report of geological data</h3>
-The following report was generated by the command (North Carolina sample dataset):
+The following report was generated by the command (North Carolina sample
+dataset):
 
-<div class="code"><pre>
+```sh
 # set computational region
 g.region raster=elevation -p
 
 # compute volume
 r.volume input=elevation clump=geology_30m
 #
-# Volume report on data from &lt;elevation&gt; using clumps on &lt;geology_30m&gt; raster map
+# Volume report on data from <elevation> using clumps on <geology_30m> raster map
 #
 # Category   Average   Data   # Cells        Centroid             Total
 # Number     in clump  Total  in clump   Easting     Northing     Volume
@@ -137,25 +118,21 @@ r.volume input=elevation clump=geology_30m
 #      948    129.02    112632     873   630185.00   215115.00      11263181.57
 # -----------------------------------------------------------------------------
 #                                                 Total Volume = 22351026655.81
-</pre></div>
+```
 
-The <code>Data Total</code> column is the sum of the elevations for each
-in each of the fields.  The <code>Total Volume</code> is the sum
-multiplied by the east-west resolution times the north-south
-resolution. Note that the units on the volume may be difficult if the
-units of cell values on the <b>input</b> raster map and the resolution
-units differ.
+The `Data Total` column is the sum of the elevations for each in each of
+the fields. The `Total Volume` is the sum multiplied by the east-west
+resolution times the north-south resolution. Note that the units on the
+volume may be difficult if the units of cell values on the **input**
+raster map and the resolution units differ.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="r.clump.html">r.clump</a>,
-  <a href="r.mask.html">r.mask</a>,
-  <a href="r.mapcalc.html">r.mapcalc</a>
-</em>
+*[r.clump](r.clump.md), [r.mask](r.mask.md), [r.mapcalc](r.mapcalc.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
 Dr. James Hinthorne, Central Washington University GIS Laboratory,
-December 1988.<br>
-Updated to GRASS 7 by Martin Landa, Czech Technical University in Prague, Czech Republic
+December 1988.  
+Updated to GRASS 7 by Martin Landa, Czech Technical University in
+Prague, Czech Republic

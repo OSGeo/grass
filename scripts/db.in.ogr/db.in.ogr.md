@@ -1,44 +1,45 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>db.in.ogr</em> imports attribute tables in various formats as
-supported by the <a href="https://gdal.org/">OGR library</a>
-on the local system (DBF, CSV, PostgreSQL, SQLite, MySQL, ODBC,
-etc.). Optionally a unique <b>key</b> (ID) column can be
-added to the table.
+*db.in.ogr* imports attribute tables in various formats as supported by
+the [OGR library](https://gdal.org/) on the local system (DBF, CSV,
+PostgreSQL, SQLite, MySQL, ODBC, etc.). Optionally a unique **key** (ID)
+column can be added to the table.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Import CSV file</h3>
+### Import CSV file
 
-Limited type recognition can be done for Integer, Real, String, Date, Time and DateTime
-columns through a descriptive file with same name as the CSV file, but .csvt extension
-(see details <a href="https://gdal.org/en/stable/drivers/vector/csv.html">here</a>).
+Limited type recognition can be done for Integer, Real, String, Date,
+Time and DateTime columns through a descriptive file with same name as
+the CSV file, but .csvt extension (see details
+[here](https://gdal.org/en/stable/drivers/vector/csv.html)).
 
-<div class="code"><pre>
+```sh
 # NOTE: create koeppen_gridcode.csvt first for automated type recognition
 db.in.ogr input=koeppen_gridcode.csv output=koeppen_gridcode gdal_doo="AUTODETECT_TYPE=YES"
 db.describe koeppen_gridcode -c
 db.select table=koeppen_gridcode
-</pre></div>
+```
 
-<h3>Import DBF table</h3>
+### Import DBF table
 
 Import of a DBF table with additional unique key column (e.g., needed
-for <em><a href="v.in.db.html">v.in.db</a></em>).
+for *[v.in.db](v.in.db.md)*).
 
-<div class="code"><pre>
+```sh
 db.in.ogr input=/path/to/mydata.dbf output=census_raleigh key=myid
 db.describe -c census_raleigh
-</pre></div>
+```
 
-<h3>Import of a SQLite table</h3>
+### Import of a SQLite table
 
-<div class="code"><pre>
+```sh
 db.in.ogr input=/path/to/sqlite.db db_table=census_raleigh output=census_raleigh
-</pre></div>
+```
 
-<h3>Import of a PostgreSQL table</h3>
-<div class="code"><pre>
+### Import of a PostgreSQL table
+
+```sh
 # HINT: if the database contains spatial tables, but you want to import a non-spatial
 table, set the environmental variable PG_LIST_ALL_TABLES to YES before importing
 
@@ -46,30 +47,26 @@ db.in.ogr input="PG:host=localhost dbname=ecad user=neteler" \
           db_table=ecad_verona_tmean output=ecad_verona_tmean
 db.select table=ecad_verona_tmean
 db.describe -c ecad_verona_tmean
-</pre></div>
+```
 
-<h3>Import XLS file</h3>
+### Import XLS file
 
-To force reading headers, define environmental
-variable <code>OGR_XLS_HEADERS='FORCE'</code>. Parameter <b>db_table</b>
-refers to the list within XLS file.
+To force reading headers, define environmental variable
+`OGR_XLS_HEADERS='FORCE'`. Parameter **db_table** refers to the list
+within XLS file.
 
-<div class="code"><pre>
+```sh
 export OGR_XLS_HEADERS='FORCE'
 db.in.ogr input=address.xls db_table=address_data
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="db.select.html">db.select</a>,
-<a href="v.in.ogr.html">v.in.ogr</a>,
-<a href="v.in.db.html">v.in.db</a>
-</em>
+*[db.select](db.select.md), [v.in.ogr](v.in.ogr.md),
+[v.in.db](v.in.db.md)*
 
-<p>
-<a href="sql.html">GRASS SQL interface</a>
+[GRASS SQL interface](sql.md)
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Markus Neteler

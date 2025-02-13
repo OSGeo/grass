@@ -1,50 +1,46 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<p>
-<em>r.object.geometry</em> calculates form statistics of raster objects
-in the <b>input</b> map and writes it to the <b>output</b> text file
- (or standard output if no output filename or '-' is given),
-with fields separated by the chosen <b>separator</b>.  Objects are defined
- as clumps of adjacent cells with the same category value (e.g. output of
-<em><a href="r.clump.html">r.clump</a></em> or
-<em><a href="i.segment.html">i.segment</a></em>).
+*r.object.geometry* calculates form statistics of raster objects in the
+**input** map and writes it to the **output** text file (or standard
+output if no output filename or '-' is given), with fields separated by
+the chosen **separator**. Objects are defined as clumps of adjacent
+cells with the same category value (e.g. output of
+*[r.clump](r.clump.md)* or *[i.segment](i.segment.md)*).
 
-<p>
-By default, values are in pixels. If values in meters is desired, the user
-can set the <b>-m</b> flag. If the current working region is in lat-long or
-has non-square pixels, using meters is recommended.
+By default, values are in pixels. If values in meters is desired, the
+user can set the **-m** flag. If the current working region is in
+lat-long or has non-square pixels, using meters is recommended.
 
-<p>
 Statistics currently calculated are exactly the same as in
-<em><a href="v.to.db.html">v.to.db</a></em> (except for compact_square and
-mean coordinates):
+*[v.to.db](v.to.db.md)* (except for compact_square and mean
+coordinates):
 
-<ul>
-<li>area</li>
-<li>perimeter</li>
-<li>compact_square (compactness compared to a square:
-  <code>compact_square = 4 * sqrt(area) / perimeter</code>)</li>
-<li>compact_circle (compactness compared to a circle:
-  <code>compact_circle = perimeter / ( 2 * sqrt(PI * area) )</code>)</li>
-<li>fractal dimension ( <code>fd = 2 * ( log(perimeter) / log(area + 0.001) )</code> )</li>
-<li>mean x coordinate of object (in map units)</li>
-<li>mean y coordinate of object (in map units)</li>
-</ul>
+- area
+- perimeter
+- compact_square (compactness compared to a square:
+  `compact_square = 4 * sqrt(area) / perimeter`)
+- compact_circle (compactness compared to a circle:
+  `compact_circle = perimeter / ( 2 * sqrt(PI * area) )`)
+- fractal dimension ( `fd = 2 * ( log(perimeter) / log(area + 0.001) )`
+  )
+- mean x coordinate of object (in map units)
+- mean y coordinate of object (in map units)
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-<div class="code"><pre>
+```sh
 g.region raster=soilsID
 r.object.geometry input=soilsID output=soils_geom.txt
-</pre></div>
+```
 
-The <b>format=json</b> option can be used to change the output format to JSON:
+The **format=json** option can be used to change the output format to
+JSON:
 
-<div class="code"><pre>
+```sh
 r.object.geometry input=zipcodes format=json
-</pre></div>
+```
 
-<div class="code"><pre>
+```json
 [
     {
         "category": 1,
@@ -107,17 +103,14 @@ r.object.geometry input=zipcodes format=json
         "mean_y": 227219.8795180723
     }
 ]
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="i.segment.html">i.segment</a>,
-<a href="r.clump.html">r.clump</a>,
-<a href="v.to.db.html">v.to.db</a>
-</em>
+*[i.segment](i.segment.md), [r.clump](r.clump.md),
+[v.to.db](v.to.db.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Moritz Lennert<br>
+Moritz Lennert  
 Markus Metz (diagonal clump tracing)

@@ -1,24 +1,20 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>i.rgb.his</em> is an image processing program that
-processes three input raster map layers as red, green, and
-blue components and produces three output raster map layers
-representing the hue, intensity, and saturation of the
-data.  The output raster map layers are created by a
-standard red-green-blue (RGB) to hue-intensity-saturation
-(HIS) color transformation.  Each output raster map layer
-is given a linear gray scale color table.  The current
-geographic region definition and mask settings are
-respected.
+*i.rgb.his* is an image processing program that processes three input
+raster map layers as red, green, and blue components and produces three
+output raster map layers representing the hue, intensity, and saturation
+of the data. The output raster map layers are created by a standard
+red-green-blue (RGB) to hue-intensity-saturation (HIS) color
+transformation. Each output raster map layer is given a linear gray
+scale color table. The current geographic region definition and mask
+settings are respected.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em><a href="i.his.rgb.html">i.his.rgb</a></em>
+*[i.his.rgb](i.his.rgb.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-David Satnik, GIS Laboratory,
-Central Washington University,
-<br>
-with acknowledgements to Ali Vali, Space Research
-Center, for the core routine.
+David Satnik, GIS Laboratory, Central Washington University,  
+with acknowledgements to Ali Vali, Space Research Center, for the core
+routine.

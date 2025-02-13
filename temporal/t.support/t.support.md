@@ -1,42 +1,39 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The <em>t.support</em> module is dedicated to modify and update the metadata of
+The *t.support* module is dedicated to modify and update the metadata of
 a space time dataset.
-<p>
+
 The title, description and the semantic type can be modified.
-<p>
-The flag <em>-u</em> allows updating the STDS metadata from registered
-map layers. This is useful in case the map layers have been modified
-without using temporal commands.
-<p>
-The flag <em>-m</em> will update the metadata from registered maps, but
-also checks if the registered map layers have been removed from the
-spatial database. It deletes missing map layers from the space time
-dataset register table and the temporal database.
 
-<h2>EXAMPLES</h2>
+The flag *-u* allows updating the STDS metadata from registered map
+layers. This is useful in case the map layers have been modified without
+using temporal commands.
 
-Modification of title and description of space time raster dataset <em>A</em>.
-<p>
-<div class="code"><pre>
+The flag *-m* will update the metadata from registered maps, but also
+checks if the registered map layers have been removed from the spatial
+database. It deletes missing map layers from the space time dataset
+register table and the temporal database.
+
+## EXAMPLES
+
+Modification of title and description of space time raster dataset *A*.
+
+```sh
 t.support type=strds input=tempmean_monthly title="Monthly temperature for North Carolina" \
           description="Dataset with monthly temperature for North Carolina"
-</pre></div>
-<p>
-Update the metadata of space time raster dataset <em>A</em> and check
-for removed map layers.
-<p>
-<div class="code"><pre>
+```
+
+Update the metadata of space time raster dataset *A* and check for
+removed map layers.
+
+```sh
 t.support -m type=strds input=tempmean_monthly
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
-</em>
+*[t.create](t.create.md), [t.info](t.info.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

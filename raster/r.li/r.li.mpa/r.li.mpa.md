@@ -1,58 +1,60 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.li.mpa</em> (mean pixel attribute) calculates the average value of the
-attribute of all the non-null cells in the sampling area as:<br>
-<img src="rlimpa_formula.png" alt="rlimpa formula"> <br>
-with:<br>
-<ul>
-  <li><b>i</b>: attribute</li>
-  <li><b>m</b>: number of non-null attributes in the sampling area </li>
-  <li><b>w<small><small>i</small></small></b>: number of cells of attribute i</li>
-  <li><b>size</b>: size of sampling area (in cells)</li>
-</ul>
+*r.li.mpa* (mean pixel attribute) calculates the average value of the
+attribute of all the non-null cells in the sampling area as:  
+![rlimpa formula](rlimpa_formula.png)  
+with:  
 
-<h2>NOTES</h2>
+- **i**: attribute
+- **m**: number of non-null attributes in the sampling area
+- **w<span class="small"><span class="small">i</span></span>**: number
+  of cells of attribute i
+- **size**: size of sampling area (in cells)
 
-Do not use absolute path names for the <b>config</b> and <b>output</b>
-file/map parameters.
+## NOTES
 
-If the "moving window" method was selected in <b>g.gui.rlisetup</b>, then the
-output will be a raster map, otherwise an ASCII file will be generated in
-the folder <code>C:\Users\userxy\AppData\Roaming\GRASS8\r.li\output\</code>
-(MS-Windows) or <code>$HOME/.grass8/r.li/output/</code> (GNU/Linux).
-<p>
-<!-- TODO: verify next: -->
-If the input raster map contains only NULL values then <em>r.li.mpa</em> considers to
-have 0 patches.<br>
-If area is 0 <em>r.li.mpa</em> returns -1; it is possible only if the
-raster is masked <br>
-If you want to change these -1 values to NULL, run subsequently on the resulting map:
-<div class="code"><pre>
+Do not use absolute path names for the **config** and **output**
+file/map parameters. If the "moving window" method was selected in
+**g.gui.rlisetup**, then the output will be a raster map, otherwise an
+ASCII file will be generated in the folder
+`C:\Users\userxy\AppData\Roaming\GRASS8\r.li\output\` (MS-Windows) or
+`$HOME/.grass8/r.li/output/` (GNU/Linux).
+
+If the input raster map contains only NULL values then *r.li.mpa*
+considers to have 0 patches.  
+If area is 0 *r.li.mpa* returns -1; it is possible only if the raster is
+masked  
+If you want to change these -1 values to NULL, run subsequently on the
+resulting map:
+
+```sh
 r.null setnull=-1 input=my_map
-</pre></div>
+```
+
 after index calculation.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-To calculate the mean pixel attribute index on map <em>my_map</em>, using
-<em>my_conf</em> configuration file (previously defined with
-<em>g.gui.rlisetup</em>) and saving results in <em>my_out</em>, run:
-<div class="code"><pre>
+To calculate the mean pixel attribute index on map *my_map*, using
+*my_conf* configuration file (previously defined with *g.gui.rlisetup*)
+and saving results in *my_out*, run:
+
+```sh
 r.li.mpa input=my_map conf=my_conf output=my_out
-</pre></div>
-<p>
+```
 
 Forest map (Spearfish sample dataset) example:
-<div class="code"><pre>
+
+```sh
 g.region raster=landcover.30m -p
-r.mapcalc "forests = if(landcover.30m &gt;= 41 &amp;&amp; landcover.30m &lt;= 43,1,null())"
+r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
 r.li.mpa input=forests conf=movwindow7 out=forests_mpa_mov7
 r.univar forests_mpa_mov7
-</pre></div>
-<p>
+```
 
 Forest map (North Carolina sample dataset) example:
-<div class="code"><pre>
+
+```sh
 g.region raster=landclass96 -p
 r.mapcalc "forests = if(landclass96 == 5, 1, null() )"
 r.li.mpa input=forests conf=movwindow7 out=forests_mpa_mov7
@@ -63,23 +65,22 @@ r.to.vect input=forests output=forests type=area
 d.mon wx0
 d.rast forests_mpa_mov7
 d.vect forests type=boundary
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.li.html">r.li</a> (package overview),
-<a href="g.gui.rlisetup.html">g.gui.rlisetup</a>
-</em>
+*[r.li](r.li.md) (package overview),
+[g.gui.rlisetup](g.gui.rlisetup.md)*
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
-Gen. Tech. Rep. PNW-351. (<a href="https://doi.org/10.2737/PNW-GTR-351">PDF</a>)
+Gen. Tech. Rep. PNW-351. ([PDF](https://doi.org/10.2737/PNW-GTR-351))
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Serena Pallecchi, student of Computer Science University of Pisa (Italy).<br>
-Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)<br>
+Serena Pallecchi, student of Computer Science University of Pisa
+(Italy).  
+Commission from Faunalia Pontedera (PI), Italy (<www.faunalia.it>)  
 Markus Metz

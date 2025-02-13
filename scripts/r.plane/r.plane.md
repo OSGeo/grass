@@ -1,29 +1,30 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.plane</em> creates a tilted plane raster map given user-specified
+*r.plane* creates a tilted plane raster map given user-specified
 parameters for inclination, azimuth, and the geographic location of a
-point on the plane.<br>
-The angle orientations of the <em>azimuth</em> parameter increase counter-clockwise,
-i.e., 0 degree = N, 45 degree = NW, 90 degree = W etc.
-<p>
-Increasing values of the <em>dip</em> parameter progressively lower (or dip) the northern
-half of the plane, and incline the southern half, assuming the <em>azimuth</em> parameter
-is held constant at 0 degrees.
+point on the plane.  
+The angle orientations of the *azimuth* parameter increase
+counter-clockwise, i.e., 0 degree = N, 45 degree = NW, 90 degree = W
+etc.
 
-<h2>NOTES</h2>
+Increasing values of the *dip* parameter progressively lower (or dip)
+the northern half of the plane, and incline the southern half, assuming
+the *azimuth* parameter is held constant at 0 degrees.
 
-<code>g.region -c</code> provides the easting and northing coordinates for
-the center of the current region.
-<p>
-<em>CELL</em> (integer) maps take less disk space than <em>FCELL</em>s (floating point),
-which in turn take up less space than <em>DCELL</em>s (double precision floating point).
-<!-- is that true because of grass's compression? otherwise both int and float are both 4 bytes per cell -->
+## NOTES
 
-<h2>EXAMPLE</h2>
+`g.region -c` provides the easting and northing coordinates for the
+center of the current region.
+
+*CELL* (integer) maps take less disk space than *FCELL*s (floating
+point), which in turn take up less space than *DCELL*s (double precision
+floating point).
+
+## EXAMPLE
 
 A tilted plane in the North Carolina sample dataset region:
 
-<div class="code"><pre>
+```sh
 # set computational region
 g.region raster=elev_lid792_1m -p
 
@@ -36,17 +37,13 @@ r.what map=elev_lid792_1m coordinates=638650.0,220375.0
 # generate tilted plane
 r.plane myplane30 dip=30 az=75 east=638650.0 north=220375.0 \
         elev=116.7734 type=FCELL
-</pre></div>
+```
 
-<div align="center" style="margin: 10px">
-<a href="r_plane_3d.png">
-<img src="r_plane_3d.png" width="600" height="360" alt="r.plane example" border="0">
-</a><br>
-<i>Figure: Tilted plane shown in NVIZ along with elevation map</i>
-</div>
+![r.plane example](r_plane_3d.png)  
+*Figure: Tilted plane shown in NVIZ along with elevation map*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Stefan J&auml;ger (1994), University of Heidelberg during a stay at USGS<br>
-Updated to GRASS 5.7 by Michael Barton, Arizona State University<br>
+Stefan Jäger (1994), University of Heidelberg during a stay at USGS  
+Updated to GRASS 5.7 by Michael Barton, Arizona State University  
 Full rewrite for GRASS 7 by Glynn Clements

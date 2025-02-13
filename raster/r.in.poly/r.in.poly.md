@@ -1,104 +1,85 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.in.poly</em> allows the creation of GRASS binary
-raster maps from ASCII files in the current directory
-containing polygon, linear, and point features.
+*r.in.poly* allows the creation of GRASS binary raster maps from ASCII
+files in the current directory containing polygon, linear, and point
+features.
 
-<p>
-The <b>input</b> file is an ASCII text file containing the
-polygon, linear, and point feature definitions.
-The format of this file is described in the
-<em>INPUT FORMAT</em> section below.
+The **input** file is an ASCII text file containing the polygon, linear,
+and point feature definitions. The format of this file is described in
+the *INPUT FORMAT* section below.
 
-<p>
-The number of raster <b>rows</b> to hold in memory is per default 4096.
-This parameter allows users with less memory (or more) on their
-system to control how much memory <em>r.in.poly</em> uses.
-Usually the default value is fine.
+The number of raster **rows** to hold in memory is per default 4096.
+This parameter allows users with less memory (or more) on their system
+to control how much memory *r.in.poly* uses. Usually the default value
+is fine.
 
-<h2>NOTES</h2>
+## NOTES
 
-<p>
 The data will be imported using the current region settings to set the
-new raster map's bounds and resolution. Any features falling outside
-the current region will be cropped. The region settings are contolled
-with the <em>g.region</em> module.
+new raster map's bounds and resolution. Any features falling outside the
+current region will be cropped. The region settings are contolled with
+the *g.region* module.
 
-<p>
 The format is a simplified version of the standard GRASS vector ASCII
-format used by <em>v.in.ascii</em>.
+format used by *v.in.ascii*.
 
-<p>
 Polygons are filled, i.e. they define an area.
 
-<h3>Input Format</h3>
+### Input Format
 
-The input format for the <b>input</b> file consists of
-sections describing either polygonal areas, linear features, or
-point features. The basic format is:
+The input format for the **input** file consists of sections describing
+either polygonal areas, linear features, or point features. The basic
+format is:
 
-<div class="code"><pre>
-A                      &lt;for polygonal areas&gt;
+```sh
+A                      <for polygonal areas>
     easting northing
     .
     .
     .
 =   cat# label
-L                      &lt;for linear features&gt;
+L                      <for linear features>
     easting northing
     .
     .
     .
 =   cat# label
-P                      &lt;for single cell point features&gt;
+P                      <for single cell point features>
     easting northing
 =   cat# label
-</pre></div>
+```
 
+The `A` signals the beginning of a filled polygon. It must appear in the
+first column. The `L` signals the beginning of a linear feature. It also
+must appear in the first column. The `P` signals the beginning of a
+single cell point feature. Again, it must appear in the first column.
+The coordinates of the vertices of the polygon, or the coordinates
+defining the linear or point feature follow and must have a space in the
+first column and at least one space between the *easting* and the
+*northing.* To give meaning to the features, the "`=`" indicates that
+the feature currently being processed has category value *cat#* (which
+must be an integer) and a *label* (which may be more than one word, or
+which may be omitted).
 
-The <code>A</code> signals the beginning of a filled polygon.
-It must appear in the first column.
-
-The <code>L</code> signals the beginning of a linear feature.
-It also must appear in the first column.
-
-The <code>P</code> signals the beginning of a single cell point feature.
-Again, it must appear in the first column.
-
-The coordinates of the vertices of the polygon, or the coordinates defining
-the linear or point feature follow and must have a space in the first
-column and at least one space between the <em>easting</em> and the
-<em>northing.</em> To give meaning to the features, the
-"<code>=</code>" indicates that the feature currently being
-processed has category value <em>cat#</em> (which must be
-an integer) and a <em>label</em> (which may be more than
-one word, or which may be omitted).
-
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 An area described by four points:
 
-<div class="code"><pre>
+```sh
 A
   591316.80   4926455.50
   591410.25   4926482.40
   591434.60   4926393.60
   591341.20   4926368.70
 = 42 stadium
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.colors.html">r.colors</a>,
-<a href="d.rast.edit.html">d.rast.edit</a>,
-<a href="g.region.html">g.region</a>,
-<a href="r.in.xyz.html">r.in.xyz</a>,
-<a href="r.patch.html">r.patch</a>,
-<a href="v.in.ascii.html">v.in.ascii</a>,
-<a href="wxGUI.vdigit.html">wxGUI vector digitizer</a>
-</em>
+*[r.colors](r.colors.md), [d.rast.edit](d.rast.edit.md),
+[g.region](g.region.md), [r.in.xyz](r.in.xyz.md), [r.patch](r.patch.md),
+[v.in.ascii](v.in.ascii.md), [wxGUI vector digitizer](wxGUI.vdigit.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Michael Shapiro, U.S.Army Construction Engineering Research Laboratory

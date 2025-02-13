@@ -1,138 +1,115 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.grow.distance</em> generates raster maps representing the
-distance to the nearest non-null cell in the input map and/or the
-value of the nearest non-null cell.
+*r.grow.distance* generates raster maps representing the distance to the
+nearest non-null cell in the input map and/or the value of the nearest
+non-null cell.
 
-<h2>NOTES</h2>
+## NOTES
 
-The flag <b>-n</b> calculates the respective pixel distances to the
-nearest NULL cell.
-<p>
+The flag **-n** calculates the respective pixel distances to the nearest
+NULL cell.
+
 The user has the option of specifying five different metrics which
 control the geometry in which grown cells are created, (controlled by
-the <b>metric</b> parameter): <i>Euclidean</i>, <i>Squared</i>,
-<i>Manhattan</i>, <i>Maximum</i>, and <i>Geodesic</i>.
+the **metric** parameter): *Euclidean*, *Squared*, *Manhattan*,
+*Maximum*, and *Geodesic*.
 
-<p>
-The <i>Euclidean distance</i> or <i>Euclidean metric</i> is the "ordinary" distance
-between two points that one would measure with a ruler, which can be
-proven by repeated application of the Pythagorean theorem.
-The formula is given by:
+The *Euclidean distance* or *Euclidean metric* is the "ordinary"
+distance between two points that one would measure with a ruler, which
+can be proven by repeated application of the Pythagorean theorem. The
+formula is given by:
 
-<div class="code"><pre>
+```sh
 d(dx,dy) = sqrt(dx^2 + dy^2)
-</pre></div>
+```
 
 Cells grown using this metric would form isolines of distance that are
-circular from a given point, with the distance given by the <b>radius</b>.
+circular from a given point, with the distance given by the **radius**.
 
-<p>
-The <i>Squared</i> metric is the <i>Euclidean</i> distance squared,
-i.e. it simply omits the square-root calculation. This may be faster,
-and is sufficient if only relative values are required.
+The *Squared* metric is the *Euclidean* distance squared, i.e. it simply
+omits the square-root calculation. This may be faster, and is sufficient
+if only relative values are required.
 
-<p>
-The <i>Manhattan metric</i>, or <i>Taxicab geometry</i>, is a form of geometry in
-which the usual metric of Euclidean geometry is replaced by a new
-metric in which the distance between two points is the sum of the (absolute)
+The *Manhattan metric*, or *Taxicab geometry*, is a form of geometry in
+which the usual metric of Euclidean geometry is replaced by a new metric
+in which the distance between two points is the sum of the (absolute)
 differences of their coordinates. The name alludes to the grid layout of
-most streets on the island of Manhattan, which causes the shortest path a
-car could take between two points in the city to have length equal to the
-points' distance in taxicab geometry.
-The formula is given by:
+most streets on the island of Manhattan, which causes the shortest path
+a car could take between two points in the city to have length equal to
+the points' distance in taxicab geometry. The formula is given by:
 
-<div class="code"><pre>
+```sh
 d(dx,dy) = abs(dx) + abs(dy)
-</pre></div>
+```
 
-where cells grown using this metric would form isolines of distance that are
-rhombus-shaped from a given point.
+where cells grown using this metric would form isolines of distance that
+are rhombus-shaped from a given point.
 
-<p>
-The <i>Maximum metric</i> is given by the formula
+The *Maximum metric* is given by the formula
 
-<div class="code"><pre>
+```sh
 d(dx,dy) = max(abs(dx),abs(dy))
-</pre></div>
+```
 
 where the isolines of distance from a point are squares.
 
-<p>
-The <i>Geodesic metric</i> is calculated as geodesic distance, to
-be used only in latitude-longitude coordinate reference system. It is recommended
-to use it along with the <em>-m</em> flag in order to output
+The *Geodesic metric* is calculated as geodesic distance, to be used
+only in latitude-longitude coordinate reference system. It is
+recommended to use it along with the *-m* flag in order to output
 distances in meters instead of map units.
 
-<p>
-If <b>minimum_distance</b> is given, all cells with a distance smaller
-than <b>minimum_distance</b> will be set to NULL.
+If **minimum_distance** is given, all cells with a distance smaller than
+**minimum_distance** will be set to NULL.
 
-<p>
-If <b>maximum_distance</b> is given, all cells with a distance larger
-than <b>maximum_distance</b> will be set to NULL. The resultant output
-is equivalent to a buffer.
+If **maximum_distance** is given, all cells with a distance larger than
+**maximum_distance** will be set to NULL. The resultant output is
+equivalent to a buffer.
 
-<p>
-If both <b>minimum_distance</b> and <b>maximum_distance</b> are given,
-the result will be similar to a doughnut, a restricted belt for a
-given distance range. All cells outside this distance range will be set
-to NULL.
+If both **minimum_distance** and **maximum_distance** are given, the
+result will be similar to a doughnut, a restricted belt for a given
+distance range. All cells outside this distance range will be set to
+NULL.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Distance from the streams network</h3>
+### Distance from the streams network
 
 North Carolina sample dataset:
-<div class="code"><pre>
+
+```sh
 g.region raster=streams_derived -p
 r.grow.distance input=streams_derived distance=dist_from_streams
 r.colors map=dist_from_streams color=rainbow
-</pre></div>
+```
 
-<div align="center" style="margin: 10px">
-<img src="r_grow_distance.png" border="0"><br>
-<i>Euclidean distance from the streams network in meters (map subset)</i>
-</div>
+<img src="r_grow_distance.png" data-border="0" />  
+*Euclidean distance from the streams network in meters (map subset)*
 
-<div align="center" style="margin: 10px">
-<img src="r_grow_distance_zoom.png" border="0"><br>
-<i>Euclidean distance from the streams network in meters (detail, numbers shown
-   with d.rast.num)</i>
-</div>
+<img src="r_grow_distance_zoom.png" data-border="0" />  
+*Euclidean distance from the streams network in meters (detail, numbers
+shown with d.rast.num)*
 
-<h3>Distance from sea in meters in latitude-longitude CRS</h3>
+### Distance from sea in meters in latitude-longitude CRS
 
-<div class="code"><pre>
+```sh
 g.region raster=sea -p
 r.grow.distance -m input=sea distance=dist_from_sea_geodetic metric=geodesic
 r.colors map=dist_from_sea_geodetic color=rainbow
-</pre></div>
+```
 
-<p>
-<center>
-<img src="r_grow_distance_sea.png" border="1"><br>
-<i>Geodesic distances to sea in meters</i>
-</center>
+<img src="r_grow_distance_sea.png" data-border="1" />  
+*Geodesic distances to sea in meters*
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.grow.html">r.grow</a>,
-<a href="r.distance.html">r.distance</a>,
-<a href="r.buffer.html">r.buffer</a>,
-<a href="r.cost.html">r.cost</a>,
-<a href="r.patch.html">r.patch</a>
-</em>
+*[r.grow](r.grow.md), [r.distance](r.distance.md),
+[r.buffer](r.buffer.md), [r.cost](r.cost.md), [r.patch](r.patch.md)*
 
-<p>
-<em>
-<a href="https://en.wikipedia.org/wiki/Euclidean_metric">Wikipedia Entry:
-    Euclidean Metric</a><br>
-<a href="https://en.wikipedia.org/wiki/Manhattan_metric">Wikipedia Entry:
-    Manhattan Metric</a>
-</em>
+*[Wikipedia Entry: Euclidean
+Metric](https://en.wikipedia.org/wiki/Euclidean_metric)  
+[Wikipedia Entry: Manhattan
+Metric](https://en.wikipedia.org/wiki/Manhattan_metric)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Glynn Clements

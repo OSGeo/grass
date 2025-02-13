@@ -1,144 +1,110 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-This program outputs two or four column (with <b>-g</b>) data to stdout or
-an ASCII file. The default two column output consists of cumulative profile
-length and raster value. The optional four column output consists
-of easting, northing, cumulative profile length, and raster value. Profile
-end or "turning" points can be set manually with the <b>coordinates</b>
-argument. The profile resolution, or distance between profile
-points, is obtained from the current region resolution, or can be manually
-set with the <b>resolution</b> argument.
+This program outputs two or four column (with **-g**) data to stdout or
+an ASCII file. The default two column output consists of cumulative
+profile length and raster value. The optional four column output
+consists of easting, northing, cumulative profile length, and raster
+value. Profile end or "turning" points can be set manually with the
+**coordinates** argument. The profile resolution, or distance between
+profile points, is obtained from the current region resolution, or can
+be manually set with the **resolution** argument.
 
-<p>
-The <b>coordinates</b> parameter can be set to comma separated geographic
-coordinates for profile line endpoints.
-Alternatively the coordinate pairs can be piped from the text file specified
-by <b>file</b> option, or if set to "-", from <code>stdin</code>.
-In these cases the coordinate pairs should be given one comma separated pair
-per line.
+The **coordinates** parameter can be set to comma separated geographic
+coordinates for profile line endpoints. Alternatively the coordinate
+pairs can be piped from the text file specified by **file** option, or
+if set to "-", from `stdin`. In these cases the coordinate pairs should
+be given one comma separated pair per line.
 
-<p>
-The <b>resolution</b> parameter sets the distance between each profile point
-(resolution). The resolution must be provided in GRASS database units (i.e.
-decimal degrees for Lat Long databases and meters for UTM). By default
-<em>r.profile</em> uses the resolution of the current GRASS region.
+The **resolution** parameter sets the distance between each profile
+point (resolution). The resolution must be provided in GRASS database
+units (i.e. decimal degrees for Lat Long databases and meters for UTM).
+By default *r.profile* uses the resolution of the current GRASS region.
 
-<p>
-The <b>null</b> parameter can optionally be set to change the character
+The **null** parameter can optionally be set to change the character
 string representing null values.
 
-<h2>OUTPUT FORMAT</h2>
+## OUTPUT FORMAT
 
-The multi column output from <em>r.profile</em> is intended for easy use in
-other programs.  The output can be piped (|) directly into other programs or
-saved to a file for later use. Output with geographic coordinates (<em>-g</em>)
-is compatible with <em><a href="v.in.ascii.html">v.in.ascii</a></em> and can
-be piped directly into this program.
+The multi column output from *r.profile* is intended for easy use in
+other programs. The output can be piped (\|) directly into other
+programs or saved to a file for later use. Output with geographic
+coordinates (*-g*) is compatible with *[v.in.ascii](v.in.ascii.md)* and
+can be piped directly into this program.
 
-<div class="code"><pre>
+```sh
 r.profile -g input=elevation coordinates=... | v.in.ascii output=elevation_profile separator=space
-</pre></div>
+```
 
 The 2 column output is compatible with most plotting programs.
-<p>
+
 The optional RGB output provides the associated GRASS colour value for
 each profile point.
 
-<p>Option <b>units</b> enables to set units of the profile length output.
-If the units are not specified, current coordinate reference system's units will be used.
-In case of geographic CRS (latitude/longitude), meters are used as default unit.
+Option **units** enables to set units of the profile length output. If
+the units are not specified, current coordinate reference system's units
+will be used. In case of geographic CRS (latitude/longitude), meters are
+used as default unit. Finally, the output from *r.info* can be output in
+JSON by passing the **format=json** option.
 
-Finally, the output from <em>r.info</em> can be output in JSON by passing the <b>format=json</b> option.
-
-<h2>NOTES</h2>
+## NOTES
 
 The profile resolution is measured exactly from the supplied end or
-"turning" point along the profile. The end of a profile segment will be an
-exact multiple of the profile resolution and will therefore not always match
-the end point coordinates entered for the segmanet.
+"turning" point along the profile. The end of a profile segment will be
+an exact multiple of the profile resolution and will therefore not
+always match the end point coordinates entered for the segmanet.
 
-<p>To extract the numbers in scripts, following parameters can be used:
-<div class="code"><pre>
-r.profile input=dgm12.5 coordinates=3570631,5763556 2&gt;/dev/null
-</pre></div>
+To extract the numbers in scripts, following parameters can be used:
+
+```sh
+r.profile input=dgm12.5 coordinates=3570631,5763556 2>/dev/null
+```
 
 This filters out everything except the numbers.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Extraction of values along profile defined by coordinates (variant 1)</h3>
+### Extraction of values along profile defined by coordinates (variant 1)
 
-Extract a profile with coordinates (wayoints) provided on the command line
-(North Carolina data set):
+Extract a profile with coordinates (wayoints) provided on the command
+line (North Carolina data set):
 
-<div class="code"><pre>
+```sh
 g.region raster=elevation -p
 r.profile -g input=elevation output=profile_points.csv \
           coordinates=641712,226095,641546,224138,641546,222048,641049,221186
-</pre></div>
-This will extract a profile along the track defined by the three coordinate
-pairs. The output file "profile_points.csv" contains
+```
+
+This will extract a profile along the track defined by the three
+coordinate pairs. The output file "profile_points.csv" contains
 east,north,distance,value (here: elevation).
-<p><br>
 
+### Extraction of values along profile defined by coordinates (variant 2)
 
-<!-- d.where no longer there
-<b>Example 2</b><br>
-Extract a profile with coordinates provided from standard input or an external file:
-<p>First create a points file with <em><a href="d.where.html">d.where</a></em>
+Coordinate pairs can also be "piped" into *r.profile* (variant 2a):
 
-<div class="code"><pre>
-d.where &gt; saved.points
-</pre></div>
-
-Then pipe the points file into r.profile
-
-<div class="code"><pre>
-cat saved.points | r.profile input=elev.rast output=profile.pts file=-
-</pre></div>
-
-The advantage of this method is that the same profile points can be piped
-into different GRASS rasters by changing the input parameter.
-<p>
-With this method the coordinates must be given as space or tab separated
-easting and northing. Labels after these values are ignored.
-<p>
-Another example using d.where:
-
-<div class="code"><pre>
-d.where | r.profile elevation.dem
-</pre></div>
-<p><br>
--->
-
-<h3>Extraction of values along profile defined by coordinates (variant 2)</h3>
-
-Coordinate pairs can also be "piped" into <em>r.profile</em> (variant 2a):
-
-<div class="code"><pre>
-r.profile elevation resolution=1000 file=- &lt;&lt; EOF
+```sh
+r.profile elevation resolution=1000 file=- << EOF
 641712,226095
 641546,224138
 641546,222048
 641049,221186
 EOF
-</pre></div>
+```
 
-<p>
-Coordinate pairs can also be "piped" into <em>r.profile</em> (variant 2b):
+Coordinate pairs can also be "piped" into *r.profile* (variant 2b):
 
-<div class="code"><pre>
+```sh
 echo "641712,226095
 641546,224138
 641546,222048
-641049,221186" &gt; coors.txt
+641049,221186" > coors.txt
 cat coors.txt | r.profile elevation resolution=1000 file=-
-</pre></div>
+```
 
-The output is printed into the terminal (unless the <em>output</em> parameter
+The output is printed into the terminal (unless the *output* parameter
 is used) and looks as follows:
 
-<div class="code"><pre>
+```sh
 Using resolution: 1000 [meters]
 Output columns:
 Along track dist. [meters], Elevation
@@ -151,16 +117,17 @@ Approx. transect length: 2090.000000 [meters]
  3964.027749 78.497757
 Approx. transect length: 995.014070 [meters]
  4054.027749 73.988029
-</pre></div>
+```
 
-<h3>JSON Output</h3>
-<div class="code"><pre>
+### JSON Output
+
+```sh
 r.profile -g input=elevation coordinates=641712,226095,641546,224138,641546,222048,641049,221186 -c format=json resolution=1000
-</pre></div>
+```
 
 The output looks as follows:
 
-<div class="code"><pre>
+```json
 [
     {
         "easting": 641712,
@@ -217,14 +184,15 @@ The output looks as follows:
         "blue": 17
     }
 ]
-</pre></div>
+```
 
-<h3>Using JSON output with Python for plotting data</h3>
+### Using JSON output with Python for plotting data
 
-The JSON output makes for ease of integration with popular python data science libraries. For instance, here
-is an example of creating a scatterplot of distance vs elevation with color coding.
+The JSON output makes for ease of integration with popular python data
+science libraries. For instance, here is an example of creating a
+scatterplot of distance vs elevation with color coding.
 
-<div class="code"><pre>
+```python
 import grass.script as gs
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -252,17 +220,13 @@ plt.xlabel('Distance (meters)')
 plt.ylabel('Elevation')
 plt.grid(True)
 plt.show()
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.in.ascii.html">v.in.ascii</a>,
-<a href="r.what.html">r.what</a>,
-<a href="r.transect.html">r.transect</a>,
-<a href="wxGUI.html">wxGUI profile tool</a>
-</em>
+*[v.in.ascii](v.in.ascii.md), [r.what](r.what.md),
+[r.transect](r.transect.md), [wxGUI profile tool](wxGUI.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-<a href="mailto:bcovill@tekmap.ns.ca">Bob Covill</a>
+[Bob Covill](mailto:bcovill@tekmap.ns.ca)

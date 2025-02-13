@@ -1,51 +1,50 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.random</em> randomly generates vector points within the
-current region using the selected random number generator.
+*v.random* randomly generates vector points within the current region
+using the selected random number generator.
 
-<p><em>v.random</em> can generate also 3D vector points or write
-random value to the attribute table. Point height range or attribute value
-range is controlled by specifying <b>zmin</b> and <b>zmax</b> options.
-Both z values are included in range (<em>zmin &lt;= z &lt;=
-zmax</em>). Generated random attribute value type can be controlled
-by <b>column_type</b>. Use <i>integer</i> column type for integers and
-<i>double precision</i> for floating point numbers. Integer values are
-calculated by rounding random floating point number.
+*v.random* can generate also 3D vector points or write random value to
+the attribute table. Point height range or attribute value range is
+controlled by specifying **zmin** and **zmax** options. Both z values
+are included in range (*zmin \<= z \<= zmax*). Generated random
+attribute value type can be controlled by **column_type**. Use *integer*
+column type for integers and *double precision* for floating point
+numbers. Integer values are calculated by rounding random floating point
+number.
 
-<p>To produce repeatable results a random seed can be set using the
-option <b>seed</b>.
+To produce repeatable results a random seed can be set using the option
+**seed**.
 
-<h3>Restriction to vector areas</h3>
+### Restriction to vector areas
 
-If an <b>restrict</b> vector map with areas is specified, the location
-of random points is restricted to the selected areas. By default, the
+If an **restrict** vector map with areas is specified, the location of
+random points is restricted to the selected areas. By default, the
 requested number of points are distributed across all areas.
 
-<p>
-If the <b>-a</b> flag is given, the requested number of points is
-generated for each individual area. For example, if 20 points should be
-generated and the input map has 100 individual areas, 2000 points will
-be generated in total.
+If the **-a** flag is given, the requested number of points is generated
+for each individual area. For example, if 20 points should be generated
+and the input map has 100 individual areas, 2000 points will be
+generated in total.
 
-<p>
-Attributes attached to <b>restrict</b> vector map are also transferred
-if the <b>layer</b> parameter is defined &gt; 0,
-see <em><a href="#stratified-random-sampling:-random-sampling-from-vector-map-by-attribute">example</a></em>
+Attributes attached to **restrict** vector map are also transferred if
+the **layer** parameter is defined \> 0, see
+*[example](#stratified-random-sampling-random-sampling-from-vector-map-by-attribute)*
 below.
 
-<h2>NOTES</h2>
+## NOTES
 
-Importantly, attributes will only be transferred if <b>layer</b> &gt; 0
-(e.g., <code>layer=1</code>).
+Importantly, attributes will only be transferred if **layer** \> 0
+(e.g., `layer=1`).
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 All examples are based on the North Carolina sample dataset.
 
-<h3>Generating random points in 2D</h3>
+### Generating random points in 2D
 
 Generate 20 random points with binary attributes (only 0 or 1):
-<div class="code"><pre>
+
+```sh
 v.random output=binary_random npoints=20 zmin=0 zmax=1 column='binary'
 v.db.select binary_random
 cat|binary
@@ -63,12 +62,13 @@ Calculating geometric distances between 20 primitives...
 minimum: 148.515
 maximum: 16572.8
 [...]
-</pre></div>
+```
 
-<h3>Generating random points in 2D with binary attributes</h3>
+### Generating random points in 2D with binary attributes
 
 Generate 20 random points with binary attributes (only 0 or 1):
-<div class="code"><pre>
+
+```sh
 v.random output=binary_random npoints=20 zmin=0 zmax=1 column='binary' column_type=integer
 v.db.select binary_random
 cat|binary
@@ -79,12 +79,13 @@ cat|binary
 5|1
 6|0
 [...]
-</pre></div>
+```
 
-<h3>Generating random points in 3D</h3>
+### Generating random points in 3D
 
 Generate 20 random 3D points using a specific random seed:
-<div class="code"><pre>
+
+```sh
 v.random seed=52 output=height_random npoints=40 zmin=110 zmax=170 -z
 v.univar -d height_random
 Calculating geometric distances between 40 primitives...
@@ -98,27 +99,17 @@ mean of absolute values: 7266.2
 population standard deviation: 3563.95
 [...]
 skewness: 0.34703
-</pre></div>
+```
 
-<!--
-g.region raster=elev_lid792_1m
-...
-d.vect height_random color=60:60:60 icon=basic/point size=40 width=2 zcolor=gyr
-optipng -o5 map.png
-mv map.png vrandom_z.png
--->
-
-<p>
-<center>
-<img src="vrandom_z.png" border="1"><br>
+<img src="vrandom_z.png" data-border="1" />  
 Random points with different X, Y, and Z coordinates
-</center>
 
-<h3>Generating random points in selected areas</h3>
+### Generating random points in selected areas
 
 Generate 3 random points only in selected areas ("RALEIGH" related ZIP
 code areas):
-<div class="code"><pre>
+
+```sh
 v.random restrict=zipcodes_wake output=zipcodes_local_random_n3 npoints=3 where="ZIPNAME = 'RALEIGH'" -a
 
 # visualization
@@ -126,21 +117,18 @@ d.mon wx0
 d.vect zipcodes_wake
 d.vect zipcodes_wake fcolor=yellow where="ZIPNAME = 'RALEIGH'"
 d.vect zipcodes_local_random_n3 color=red icon=basic/circle
-</pre></div>
+```
 
-<div align="center" style="margin: 10px">
-<a href="v_random_points_in_polygon.png">
-<img src="v_random_points_in_polygon.png" width="400" height="368" alt="v.random example" border="0">
-</a><br>
-<i>Fixed number of random points generated in selected areas</i>
-</div>
+[<img src="v_random_points_in_polygon.png" data-border="0" width="400"
+height="368" alt="v.random example" />](v_random_points_in_polygon.png)  
+*Fixed number of random points generated in selected areas*
 
-<h3>Generating random adjacent areas</h3>
+### Generating random adjacent areas
 
 To generate random adjacent areas, first the centroids are generated as
 points, then a triangulation is run (North Carolina sample dataset:
 
-<div class="code"><pre>
+```sh
 g.region vector=nc_state
 v.random output=randpoints6k npoints=6000
 v.voronoi input=randpoints6k output=randareas6k
@@ -150,32 +138,30 @@ v.category randareas6k option=print
 # plot vector areas
 d.mon wx0
 d.vect randareas6k -c
-</pre></div>
-<p>
-<center>
-<img src="vrandom_polygons.png" border="1"><br>
-Random adjacent areas from random points (here: used as centroids)
-</center>
+```
 
-<p>
-To eventually obtain isolated areas, selected areas can be extracted with
-<em><a href="v.extract.html">v.extract</a></em>.
-<p>
+<img src="vrandom_polygons.png" data-border="1" />  
+Random adjacent areas from random points (here: used as centroids)
+
+To eventually obtain isolated areas, selected areas can be extracted
+with *[v.extract](v.extract.md)*.
 
 These vector areas can also be rasterized:
-<div class="code"><pre>
+
+```sh
 # rasterize areas
 # note: rastermaps must result in at least 6k pixel in this example
 g.region vector=nc_state res=500 -p -a
 v.to.rast randareas6k out=randareas6k use=cat
 r.colors randareas6k color=random
 d.rast randareas6k
-</pre></div>
+```
 
-<h3>Random sampling from raster map</h3>
+### Random sampling from raster map
 
 Generate 20 random samples from a raster map:
-<div class="code"><pre>
+
+```sh
 g.region -p raster=elevation
 v.random output=random_samples npoints=20
 v.db.addtable map=random_samples columns='cat INTEGER, sample DOUBLE PRECISION'
@@ -186,12 +172,14 @@ cat|sample
 2|129.1266
 3|96.01388
 [...]
-</pre></div>
+```
 
-<h3>Random sampling from vector map</h3>
+### Random sampling from vector map
 
-Generate 20 random points and sample attribute data from geology (vector) map:
-<div class="code"><pre>
+Generate 20 random points and sample attribute data from geology
+(vector) map:
+
+```sh
 g.region -p vector=geology
 v.random output=random_samples npoints=20
 v.db.addtable map=random_samples columns='cat integer, geology varchar(100)'
@@ -202,12 +190,13 @@ cat|geology
 2|
 3|Zatm
 [...]
-</pre></div>
+```
 
-<h3>Stratified random sampling: Random sampling from vector map by attribute</h3>
+### Stratified random sampling: Random sampling from vector map by attribute
 
 Generate 20 random points restricted to forested areas:
-<div class="code"><pre>
+
+```sh
 g.region -p raster=landclass96
 r.to.vect -v input=landclass96 output=landclass96 type=area
 v.random restrict=landclass96 output=random_samples npoints=20 where="label = 'forest'" layer=1
@@ -217,63 +206,40 @@ cat|landclass96_cat|landclass96_label
 2|5|forest
 3|5|forest
 ...
-</pre></div>
+```
 
-<!--
-d.font Vera
-d.rast landclass96
-d.vect random_samples icon=basic/triangle color=blue fcolor=black size=14
-d.vect random_samples color=white
--->
-<p>
-<center>
-<img src="vrandom_restricted_attr.png" border="1"><br>
-Random points only sampled in forested areas (stratified random sampling)
-</center>
+<img src="vrandom_restricted_attr.png" data-border="1" />  
+Random points only sampled in forested areas (stratified random
+sampling)
 
-<h3>Stratified random sampling: Random sampling from vector map with spatial constraints</h3>
+### Stratified random sampling: Random sampling from vector map with spatial constraints
 
 Generating n points for each individual area: in this example two random
 points in each water body:
 
-<div class="code"><pre>
+```sh
 g.region -p raster=landclass96
 r.to.vect -v input=landclass96 output=landclass96 type=area
 v.random restrict=landclass96 output=random_samples npoints=2 where="label = 'water'" layer=1 -a
-</pre></div>
+```
 
-<!--
-d.font Vera
-d.rast landclass96
-d.vect random_samples icon=basic/triangle color=blue fcolor=black size=14
-d.vect random_samples color=white
--->
-<p>
-<center>
-<img src="vrandom_restricted_area.png" border="1"><br>
+<img src="vrandom_restricted_area.png" data-border="1" />  
 Two random points sampled in each individual water body (stratified
 random sampling)
-</center>
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="r.random.html">r.random</a>,
-<a href="v.db.addtable.html">v.db.addtable</a>,
-<a href="v.perturb.html">v.perturb</a>,
-<a href="v.sample.html">v.sample</a>,
-<a href="v.univar.html">v.univar</a>,
-<a href="v.what.rast.html">v.what.rast</a>,
-<a href="v.what.vect.html">v.what.vect</a>
-</em>
-<p>
-<a href="sql.html">SQL support in GRASS GIS</a>
+*[g.region](g.region.md), [r.random](r.random.md),
+[v.db.addtable](v.db.addtable.md), [v.perturb](v.perturb.md),
+[v.sample](v.sample.md), [v.univar](v.univar.md),
+[v.what.rast](v.what.rast.md), [v.what.vect](v.what.vect.md)*
 
-<h2>AUTHOR</h2>
+[SQL support in GRASS GIS](sql.md)
 
-<a href="http://mccauley-usa.com/">James Darrell McCauley</a>
-<a href="mailto:darrell@mccauley-usa.com">&lt;darrell@mccauley-usa.com&gt;</a>,
-<br>when he was at:
-<a href="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural Engineering</a>
-<a href="http://www.purdue.edu/">Purdue University</a>
+## AUTHOR
+
+[James Darrell McCauley](http://mccauley-usa.com/)
+[\<darrell@mccauley-usa.com\>](mailto:darrell@mccauley-usa.com),  
+when he was at: [Agricultural
+Engineering](http://ABE.www.ecn.purdue.edu/ABE/) [Purdue
+University](http://www.purdue.edu/)

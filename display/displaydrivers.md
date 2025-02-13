@@ -1,32 +1,25 @@
-<!-- meta page description: Display drivers -->
-<!-- meta page index: display -->
+The current command line rendering mechanism is direct rendering into a
+file. The driver is selected by setting the `GRASS_RENDER_IMMEDIATE`
+variable or by running *[d.mon](d.mon.md)* module.
 
-The current command line rendering mechanism is direct rendering into
-a file. The driver is selected by setting
-the <code>GRASS_RENDER_IMMEDIATE</code> variable or by
-running <em><a href="d.mon.html">d.mon</a></em> module.
+**List of available display drivers:**
 
-<p>
-<b>List of available display drivers:</b>
-<ul>
-  <li><a href="cairodriver.html">Cairo driver</a></li>
-  <li><a href="pngdriver.html">PNG driver</a></li>
-  <li><a href="psdriver.html">PS driver (Postscript)</a></li>
-  <li><a href="htmldriver.html">HTMLMAP driver</a></li>
-</ul>
+- [Cairo driver](cairodriver.md)
+- [PNG driver](pngdriver.md)
+- [PS driver (Postscript)](psdriver.md)
+- [HTMLMAP driver](htmldriver.md)
 
-<h2>NOTES</h2>
+## NOTES
 
-<h3>GRASS_RENDER_COMMAND</h3>
+### GRASS_RENDER_COMMAND
 
-If environmental variable GRASS_RENDER_COMMAND is defined,
-rendering is redirected by display library to the given external command
-defined by this variable. Currently only Python scrips are supported.
+If environmental variable GRASS_RENDER_COMMAND is defined, rendering is
+redirected by display library to the given external command defined by
+this variable. Currently only Python scrips are supported.
 
-<p>
-Lets start with simple example of Python script called <i>render.py</i>:
+Lets start with simple example of Python script called *render.py*:
 
-<div class="code"><pre>
+```python
 #!/usr/bin/env python3
 
 import os
@@ -44,31 +37,27 @@ gs.run_command('d.text', text="Test of GRASS_RENDER_COMMAND redirection")
 
 os.environ['GRASS_RENDER_FILE_READ'] = 'TRUE'
 gs.run_command(cmd, **dcmd)
-</pre></div>
+```
 
 After defining GRASS_RENDER_COMMAND variable (example for Bash):
 
-<div class="code"><pre>
+```sh
 export GRASS_RENDER_COMMAND=render.py
-</pre></div>
+```
 
-Display GRASS modules like <em><a href="d.rast.html">d.rast</a></em>
-or <em><a href="d.vect.html">d.vect</a></em> will be executed
-by <i>render.py</i> program.
+Display GRASS modules like *[d.rast](d.rast.md)* or
+*[d.vect](d.vect.md)* will be executed by *render.py* program. For
+example the command
 
-For example the command
-
-<div class="code"><pre>
+```sh
 d.vect roadsmajor
-</pre></div>
+```
 
-produces output PNG file <i>output.png</i> which will contain rendered
-features from vector map <i>roadsmajor</i> and sample text <i>&quot;Test of
-GRASS_RENDER_COMMAND redirection&quot;</i>.
+produces output PNG file *output.png* which will contain rendered
+features from vector map *roadsmajor* and sample text *"Test of
+GRASS_RENDER_COMMAND redirection"*.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.mon.html">d.mon</a>,
-<a href="variables.html#list-of-selected-grass-environment-variables-for-rendering">variables</a>
-</em>
+*[d.mon](d.mon.md),
+[variables](variables.md#list-of-selected-grass-environment-variables-for-rendering)*

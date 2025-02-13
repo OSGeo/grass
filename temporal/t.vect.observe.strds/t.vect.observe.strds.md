@@ -1,38 +1,35 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The module <em>t.vect.observe.strds</em> is used to observe specific
-locations in a space time raster dataset over a period of time using
-vector points.
+The module *t.vect.observe.strds* is used to observe specific locations
+in a space time raster dataset over a period of time using vector
+points. The first input is a vector map layer with vector points. The
+second input is one or several space time raster datasets (STRDS) that
+should be sampled over time at the vector point positions. The space
+time raster dataset will be sampled over its whole temporal extent (from
+start to end). A column name must be specified for each input space time
+raster dataset.
 
-The first input is a vector map layer with vector points. The second
-input is one or several space time raster datasets (STRDS) that should
-be sampled over time at the vector point positions. The space time
-raster dataset will be sampled over its whole temporal extent (from
-start to end). A column name must be specified for each input space
-time raster dataset.
-<p>
 The result is a new space time vector dataset that contains a single
-(new) vector map which links to as many time-stamped attribute tables
-as raster map layers are present in the input space time raster dataset.
+(new) vector map which links to as many time-stamped attribute tables as
+raster map layers are present in the input space time raster dataset.
 Hence, for each time step in the space time raster dataset a new
-attribute table is created. The GRASS GIS Temporal Framework allows
-to time stamp attribute tables that can be linked to a single vector
-map layer.
-<p>
-The module <em>v.what.rast</em> is used internally for sampling the
-time stamped raster map layers. All sampled values of a single time
-stamped raster map layer are written into a new time stamped attribute
-table.
-<p>
-Use <em>t.vect.db.select</em> to print attribute values of the space
-time vector dataset to stdout.
+attribute table is created. The GRASS GIS Temporal Framework allows to
+time stamp attribute tables that can be linked to a single vector map
+layer.
 
-<h2>EXAMPLE</h2>
+The module *v.what.rast* is used internally for sampling the time
+stamped raster map layers. All sampled values of a single time stamped
+raster map layer are written into a new time stamped attribute table.
+
+Use *t.vect.db.select* to print attribute values of the space time
+vector dataset to stdout.
+
+## EXAMPLE
 
 The example shows how to create a space time vector dataset and a vector
 layer starting from a point vector and a space time raster dataset:
 
-<div class="code"><pre>
+```sh
 t.vect.observe.strds input=precip_30ynormals_3d strds=tempmean_monthly \
                      output=precip_stations vect=precip_stations_monthly \
                      columns=month
@@ -126,17 +123,14 @@ v.info precip_stations_monthly
  |   Comment:                                                                 |
  |                                                                            |
  +----------------------------------------------------------------------------+
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>,
-<a href="t.vect.db.select.html">t.vect.db.select</a>,
-<a href="t.vect.what.strds.html">t.vect.what.strds</a>
-</em>
+*[t.create](t.create.md), [t.info](t.info.md),
+[t.vect.db.select](t.vect.db.select.md),
+[t.vect.what.strds](t.vect.what.strds.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

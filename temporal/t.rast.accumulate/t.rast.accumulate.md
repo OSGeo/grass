@@ -1,64 +1,56 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast.accumulate</em> is designed to perform temporal accumulations
-of space time raster datasets.
-
-This module expects a space time raster dataset as input that will be
-sampled by a given <b>granularity</b>. All maps that have the start
-time during the actual granule will be accumulated with the predecessor
-granule accumulation result using the raster module
-<a href="r.series.accumulate.html">r.series.accumulate</a>. The default
+*t.rast.accumulate* is designed to perform temporal accumulations of
+space time raster datasets. This module expects a space time raster
+dataset as input that will be sampled by a given **granularity**. All
+maps that have the start time during the actual granule will be
+accumulated with the predecessor granule accumulation result using the
+raster module [r.series.accumulate](r.series.accumulate.md). The default
 granularity is 1 day, but any temporal granularity can be set.
 
-<p>
-The <b>start</b> time and the <b>end</b> time of the accumulation
-process must be set, eg. <b>start="2000-03-01" end="2011-01-01"</b>. In
-addition, a <b>cycle</b>, eg. <b>cycle="8 months"</b>, can be specified,
-that defines after which interval of time the accumulation process
-restarts. The <b>offset</b> option specifies the time that should be
-skipped between two cycles, eg. <b>offset="4 months"</b>.
+The **start** time and the **end** time of the accumulation process must
+be set, eg. **start="2000-03-01" end="2011-01-01"**. In addition, a
+**cycle**, eg. **cycle="8 months"**, can be specified, that defines
+after which interval of time the accumulation process restarts. The
+**offset** option specifies the time that should be skipped between two
+cycles, eg. **offset="4 months"**.
 
-<p>
-The <b>lower</b> and <b>upper</b> <b>limits</b> of the accumulation
-process can be set, either by using space time raster datasets or by
-using fixed values for all raster cells and time steps. The raster
-maps that specify the lower and upper limits of the actual granule
-will be detected using the following temporal relations: equals,
-during, overlaps, overlapped and contains. First, all maps with time
-stamps equal to the current granule will be detected, the first lower
-map and the first upper map found will be used as limit definitions.
-If no equal maps are found, then maps with a temporal during relation
-are detected, then maps that temporally overlap the actual granules,
-until maps that have a temporal contain relation are detected. If no
-maps are found or lower/upper STRDS are not defined, then the
-<b>limits</b> option is used, eg. <b>limits=10,30</b>.
+The **lower** and **upper** **limits** of the accumulation process can
+be set, either by using space time raster datasets or by using fixed
+values for all raster cells and time steps. The raster maps that specify
+the lower and upper limits of the actual granule will be detected using
+the following temporal relations: equals, during, overlaps, overlapped
+and contains. First, all maps with time stamps equal to the current
+granule will be detected, the first lower map and the first upper map
+found will be used as limit definitions. If no equal maps are found,
+then maps with a temporal during relation are detected, then maps that
+temporally overlap the actual granules, until maps that have a temporal
+contain relation are detected. If no maps are found or lower/upper STRDS
+are not defined, then the **limits** option is used, eg.
+**limits=10,30**.
 
-<p>
-The <b>upper</b> <b>limit</b> is only used in the Biologically
-Effective Degree Days calculation.
+The **upper** **limit** is only used in the Biologically Effective
+Degree Days calculation.
 
-<p>
-The options <b>shift</b>, <b>scale</b> and <b>method</b> are passed to
-<a href="r.series.accumulate.html">r.series.accumulate</a>.
-Please refer to the manual page of
-<a href="r.series.accumulate.html">r.series.accumulate</a> for detailed
-option description.
+The options **shift**, **scale** and **method** are passed to
+[r.series.accumulate](r.series.accumulate.md). Please refer to the
+manual page of [r.series.accumulate](r.series.accumulate.md) for
+detailed option description.
 
-<p>
-The <b>output</b> is a new space time raster dataset with the provided
+The **output** is a new space time raster dataset with the provided
 start time, end time and granularity containing the accumulated raster
-maps. The <b>base</b> name of the generated maps must always be set.
-The <b>output</b> space time raster dataset can then be analyzed using
-<a href="t.rast.accdetect.html">t.rast.accdetect</a> to detect specific
-accumulation patterns.
+maps. The **base** name of the generated maps must always be set. The
+**output** space time raster dataset can then be analyzed using
+[t.rast.accdetect](t.rast.accdetect.md) to detect specific accumulation
+patterns.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 This is an example how to accumulate the daily mean temperature of
 Europe from 1990 to 2000 using the growing-degree-day method to detect
 grass hopper reproduction cycles that are critical to agriculture.
 
-<div class="code"><pre>
+```sh
 # Get the temperature data
 wget http://www-pool.math.tu-berlin.de/~soeren/grass/temperature_mean_1990_2000_daily_celsius.tar.gz
 
@@ -90,8 +82,8 @@ g.region -p zoom=`t.rast.list input=temperature_mean_1990_2000_daily_celsius col
 
 # Now we compute the Biologically Effective Degree Days
 # from 1990 - 2000 for each year (12 month cycle) with
-# a granularity of one day. Base temperature is 10&deg;C, upper limit is 30&deg;C.
-# Hence the accumulation starts at 10&deg;C and does not accumulate values above 30&deg;C.
+# a granularity of one day. Base temperature is 10°C, upper limit is 30°C.
+# Hence the accumulation starts at 10°C and does not accumulate values above 30°C.
 t.rast.accumulate input="temperature_mean_1990_2000_daily_celsius" \
     output="temperature_mean_1990_2000_daily_celsius_accumulated_10_30" \
     limits="10,30" start="1990-01-01" stop="2000-01-01" cycle="12 months" \
@@ -102,17 +94,17 @@ t.rast.accumulate input="temperature_mean_1990_2000_daily_celsius" \
 #############################################################################
 # Now we detect the three grasshopper pest control cycles
 
-# First cycle at 325&deg;C - 427&deg;C GDD
+# First cycle at 325°C - 427°C GDD
 t.rast.accdetect input=temperature_mean_1990_2000_daily_celsius_accumulated_10_30@PERMANENT \
     occ=leafhopper_occurrence_c1_1990_2000 start="1990-01-01" stop="2000-01-01" \
     cycle="12 months" range=325,427 basename=lh_c1 indicator=leafhopper_indicator_c1_1990_2000
 
-# Second cycle at 685&deg;C - 813&deg;C GDD
+# Second cycle at 685°C - 813°C GDD
 t.rast.accdetect input=temperature_mean_1990_2000_daily_celsius_accumulated_10_30@PERMANENT \
     occ=leafhopper_occurrence_c2_1990_2000 start="1990-01-01" stop="2000-01-01" \
     cycle="12 months" range=685,813 basename=lh_c2 indicator=leafhopper_indicator_c2_1990_2000
 
-# Third cycle at 1047&deg;C - 1179&deg;C GDD
+# Third cycle at 1047°C - 1179°C GDD
 t.rast.accdetect input=temperature_mean_1990_2000_daily_celsius_accumulated_10_30@PERMANENT \
     occ=leafhopper_occurrence_c3_1990_2000 start="1990-01-01" stop="2000-01-01" \
     cycle="12 months" range=1047,1179 basename=lh_c3 indicator=leafhopper_indicator_c3_1990_2000
@@ -153,7 +145,7 @@ t.rast.mapcalc input=leafhopper_cycle_1_1990_2000_yearly_clean,leafhopper_cycle_
       if(isnull(leafhopper_cycle_1_1990_2000_yearly_clean), \
       null() ,1),2),3)"
 
-cat &gt; color.table &lt;&lt; EOF
+cat > color.table << EOF
 3 yellow
 2 blue
 1 red
@@ -240,7 +232,7 @@ t.rast.mapcalc input=leafhopper_indi_min_month_c3_1990_2000,leafhopper_indi_max_
     output=leafhopper_monthly_indicator_c3_1990_2000 \
     expression="if(leafhopper_indi_min_month_c3_1990_2000 == 1, 1, if(leafhopper_indi_max_month_c3_1990_2000 == 3, 3, 2))"
 
-cat &gt; color.table &lt;&lt; EOF
+cat > color.table << EOF
 3 red
 2 yellow
 1 green
@@ -271,27 +263,21 @@ g.gui.animation strds=leafhopper_monthly_indicator_c1_1990_2000
 g.gui.animation strds=leafhopper_monthly_indicator_c2_1990_2000
 # Monthly occurrence of reproduction cycle 3
 g.gui.animation strds=leafhopper_monthly_indicator_c3_1990_2000
-</pre></div>
+```
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<ul>
-<li> Jones, G.V., Duff, A.A., Hall, A., Myers, J.W., 2010.
-     Spatial Analysis of Climate in Winegrape Growing Regions in the
-     Western United States. Am. J. Enol. Vitic. 61, 313-326.</li>
-</ul>
+- Jones, G.V., Duff, A.A., Hall, A., Myers, J.W., 2010. Spatial Analysis
+  of Climate in Winegrape Growing Regions in the Western United States.
+  Am. J. Enol. Vitic. 61, 313-326.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.rast.accdetect.html">t.rast.accdetect</a>,
-<a href="t.rast.aggregate.html">t.rast.aggregate</a>,
-<a href="t.rast.mapcalc.html">t.rast.mapcalc</a>,
-<a href="t.info.html">t.info</a>,
-<a href="g.region.html">g.region</a>,
-<a href="r.series.accumulate.html">r.series.accumulate</a>
-</em>
+*[t.rast.accdetect](t.rast.accdetect.md),
+[t.rast.aggregate](t.rast.aggregate.md),
+[t.rast.mapcalc](t.rast.mapcalc.md), [t.info](t.info.md),
+[g.region](g.region.md), [r.series.accumulate](r.series.accumulate.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

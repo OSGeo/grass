@@ -1,29 +1,24 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
 A rhumbline (loxodrome) is a line following a constant angle of the
 compass (i.e., a line of constant direction). It crosses all meridians
-at the same angle, i.e. a path of constant bearing.
+at the same angle, i.e. a path of constant bearing. *d.rhumbline*
+displays the rhumbline joining any two user-specified points in the
+active frame on the user's graphics monitor. The named coordinate
+locations must fall within the boundaries of the user's current
+geographic region.
 
-<!-- There are 32 points on the compass (points are roughly 11 degrees 15
-minutes apart). -->
-<em>d.rhumbline</em> displays the
-rhumbline joining any two user-specified points in the
-active frame on the user's graphics monitor.  The named
-coordinate locations must fall within the boundaries of the
-user's current geographic region.
-
-<p>The user has to specify the starting and ending
-longitude/latitude coordinates of the rhumbline and
-(optionally) the color in which the rhumbline will be
-displayed; in this case, the program will run
+The user has to specify the starting and ending longitude/latitude
+coordinates of the rhumbline and (optionally) the color in which the
+rhumbline will be displayed; in this case, the program will run
 non-interactively.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 A geodesic line if shown over the political map of the world
 (demolocation dataset):
 
-<div class="code"><pre>
+```sh
 g.region vector=country_boundaries -p
 d.mon wx0
 d.vect country_boundaries type=area
@@ -31,26 +26,20 @@ d.rhumbline coordinates=55:58W,33:18S,26:43E,60:37N \
   line_color=yellow
 # show additionally 10 degree grid
 d.grid 10
-</pre></div>
+```
 
-<p><center>
-<img src="d_rhumbline.png" border="1"><br>
-<i>Rhumbline (loxodrome)</i>
-</center>
+<img src="d_rhumbline.png" data-border="1" />  
+*Rhumbline (loxodrome)*
 
-<h2>NOTES</h2>
+## NOTES
 
-This program works only with longitude/latitude
-coordinate system.
+This program works only with longitude/latitude coordinate system.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="d.geodesic.html">d.geodesic</a>,
-<a href="d.grid.html">d.grid</a>,
-<a href="m.measure.html">m.measure</a>
-</em>
+*[d.geodesic](d.geodesic.md), [d.grid](d.grid.md),
+[m.measure](m.measure.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Michael Shapiro, U.S. Army Construction Engineering Research Laboratory

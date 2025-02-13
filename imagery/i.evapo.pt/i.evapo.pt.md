@@ -1,39 +1,34 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>i.evapo.pt</em> Calculates the diurnal evapotranspiration after Prestley
-and Taylor (1972). The Priestley-Taylor model (Priestley and Taylor, 1972)
-is a modification of Penman's more theoretical equation.
+*i.evapo.pt* Calculates the diurnal evapotranspiration after Prestley
+and Taylor (1972). The Priestley-Taylor model (Priestley and Taylor,
+1972) is a modification of Penman's more theoretical equation.
 
-<h2>NOTES</h2>
+## NOTES
 
-RNETD optional output from <em>i.evapo.potrad</em> is giving good results as input
-for net radiation in this module.
+RNETD optional output from *i.evapo.potrad* is giving good results as
+input for net radiation in this module.
 
-<p>Alpha values:
-<ul>
-<li> 1.32 for estimates from vegetated areas as a result of the increase in
-surface roughness (Morton, 1983; Brutsaert and Stricker, 1979)</li>
-<li> 1.26 is applicable in humid climates (De Bruin and Keijman, 1979;
-Stewart and Rouse, 1976; Shuttleworth and Calder, 1979), and temperate
-hardwood swamps (Munro, 1979)</li>
-<li> 1.74 has been recommended for estimating potential evapotranspiration
-in more arid regions (ASCE, 1990). This worked well in Greece with University
-of Thessaloniki.</li>
-</ul>
+Alpha values:
 
-Alpha values extracted from:
-<a href="http://www.civil.uwaterloo.ca/Watflood/Manual/02_03_1.htm">Watflood manual</a>.
+- 1.32 for estimates from vegetated areas as a result of the increase in
+  surface roughness (Morton, 1983; Brutsaert and Stricker, 1979)
+- 1.26 is applicable in humid climates (De Bruin and Keijman, 1979;
+  Stewart and Rouse, 1976; Shuttleworth and Calder, 1979), and temperate
+  hardwood swamps (Munro, 1979)
+- 1.74 has been recommended for estimating potential evapotranspiration
+  in more arid regions (ASCE, 1990). This worked well in Greece with
+  University of Thessaloniki.
 
-<h2>SEE ALSO</h2>
+Alpha values extracted from: [Watflood
+manual](http://www.civil.uwaterloo.ca/Watflood/Manual/02_03_1.htm).
 
-<em>
-<a href="i.evapo.mh.html">i.evapo.mh</a>,
-<a href="i.evapo.pm.html">i.evapo.pm</a>,
-<a href="i.evapo.time.html">i.evapo.time</a>,
-<a href="i.eb.netrad.html">i.eb.netrad</a>,
-<a href="r.sun.html">r.sun</a>
-</em>
+## SEE ALSO
 
-<h2>AUTHOR</h2>
+*[i.evapo.mh](i.evapo.mh.md), [i.evapo.pm](i.evapo.pm.md),
+[i.evapo.time](i.evapo.time.md), [i.eb.netrad](i.eb.netrad.md),
+[r.sun](r.sun.md)*
+
+## AUTHOR
 
 Yann Chemin, GRASS Development Team, 2007-08

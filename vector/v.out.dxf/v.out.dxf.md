@@ -1,31 +1,29 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-The GRASS program <em>v.out.dxf</em> conversion program
-generates an ASCII DXF (AutoCAD) file from a GRASS vector.
-The output file is placed in the user's current
-working directory unless the user specifies a full pathname
-for the <em>output</em>.
+The GRASS program *v.out.dxf* conversion program generates an ASCII DXF
+(AutoCAD) file from a GRASS vector. The output file is placed in the
+user's current working directory unless the user specifies a full
+pathname for the *output*.
 
-<h2>NOTES</h2>
+## NOTES
 
-DXF files output by AutoCAD have the suffix <code>.dxf</code>
+DXF files output by AutoCAD have the suffix `.dxf`
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<a href="https://en.wikipedia.org/wiki/AutoCAD_DXF">AutoCad DXF</a> (from Wikipedia, the free encyclopedia)
+[AutoCad DXF](https://en.wikipedia.org/wiki/AutoCAD_DXF) (from
+Wikipedia, the free encyclopedia)
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.in.dxf.html">v.in.dxf</a>
-</em>
-<p>
-<em><a href="vectorintro.html">Introduction to GRASS vector map processing</a></em>
+*[v.in.dxf](v.in.dxf.md)*
 
-<h2>AUTHORS</h2>
+*[Introduction to GRASS vector map processing](vectorintro.md)*
 
-Charles Ehlschlaeger, U.S. Army Construction Engineering
-Research Laboratory,<br>
-wrote original <em>v.out.dxf</em> program in 4/89.
-<p>
+## AUTHORS
+
+Charles Ehlschlaeger, U.S. Army Construction Engineering Research
+Laboratory,  
+wrote original *v.out.dxf* program in 4/89.
+
 Update to GRASS 5.7 Radim Blazek, 10/2004

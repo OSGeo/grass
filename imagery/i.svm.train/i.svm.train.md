@@ -1,57 +1,57 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<p><em>i.svm.train</em> finds parameters for a Support Vector Machine
-and stores them in a signature file for later usage by
-<a href="i.svm.predict.html">i.svm.predict</a>.
-</p>
+*i.svm.train* finds parameters for a Support Vector Machine and stores
+them in a signature file for later usage by
+[i.svm.predict](i.svm.predict.md).
 
-<p>Internally the module performs input value rescaling of each of imagery
-group rasters by mean normalisation based on minimum and maximum value present
-in the raster metadata. Rescaling parameters are
-written into the signature file for use during prediction.</p>
+Internally the module performs input value rescaling of each of imagery
+group rasters by mean normalisation based on minimum and maximum value
+present in the raster metadata. Rescaling parameters are written into
+the signature file for use during prediction.
 
-<h2>NOTES</h2>
+## NOTES
 
-<p><em>i.svm.train</em> internally is using the LIBSVM. For introduction
-into value prediction or estimation with LIBSVM, see
-<a href="https://www.csie.ntu.edu.tw/~cjlin/papers/guide/guide.pdf">a
-Practical Guide to Support Vector Classification</a> by
-Chih-Wei Hsu, Chih-Chung Chang, and Chih-Jen Lin.</p>
+*i.svm.train* internally is using the LIBSVM. For introduction into
+value prediction or estimation with LIBSVM, see [a Practical Guide to
+Support Vector
+Classification](https://www.csie.ntu.edu.tw/~cjlin/papers/guide/guide.pdf)
+by Chih-Wei Hsu, Chih-Chung Chang, and Chih-Jen Lin.
 
-<p>It is strongly suggested to have semantic labels set for each raster
-map in the training data (feature value) imagery group.
-Use <a href="r.support.html">r.support</a> to set semantic labels.</p>
+It is strongly suggested to have semantic labels set for each raster map
+in the training data (feature value) imagery group. Use
+[r.support](r.support.md) to set semantic labels.
 
-<h2>PERFORMANCE</h2>
+## PERFORMANCE
 
-<p>SVM training is done by loading all training data into memory.
-In a case of large input raster files, use sparse label rasters
-(e.g. raster points or small patches instead of uninterrupted cover).</p>
+SVM training is done by loading all training data into memory. In a case
+of large input raster files, use sparse label rasters (e.g. raster
+points or small patches instead of uninterrupted cover).
 
-<p>During the training process there is no progress output printed.
+During the training process there is no progress output printed.
 Training with large number of data points can take significant time -
-just be patient.</p>
+just be patient.
 
-<p>By default the shrinking heuristics option of LIBSVM is enabled.
-It should not impact the outcome, just the training time. On some
-input parameter and data combinations training with the shrinking
-heuristics disabled might be faster.</p>
+By default the shrinking heuristics option of LIBSVM is enabled. It
+should not impact the outcome, just the training time. On some input
+parameter and data combinations training with the shrinking heuristics
+disabled might be faster.
 
-<p>The <em>cache</em> parameter determines the maximum memory allocated
-for kernel caching to enhance computational speed. It's important to
-note that the actual module's memory consumption may vary from this
-setting, as it solely impacts LIBSVM's internal caching. The cache is
-utilized on an as-needed basis, so it's unlikely to reach the specified value.</p>
+The *cache* parameter determines the maximum memory allocated for kernel
+caching to enhance computational speed. It's important to note that the
+actual module's memory consumption may vary from this setting, as it
+solely impacts LIBSVM's internal caching. The cache is utilized on an
+as-needed basis, so it's unlikely to reach the specified value.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-<p>This is the first part of classification process. See
-<a href="i.svm.predict.html">i.svm.predict</a> for the second part.</p>
+This is the first part of classification process. See
+[i.svm.predict](i.svm.predict.md) for the second part.
 
-<p>Train a SVM to identify land use classes according to the 1996 land
-use map <em>landuse96_28m</em> and then classify a LANDSAT scene from
-October of 2002. Example requires the nc_spm_08 dataset.</p>
-<div class="code"><pre>
+Train a SVM to identify land use classes according to the 1996 land use
+map *landuse96_28m* and then classify a LANDSAT scene from October of
+2002. Example requires the nc_spm_08 dataset.
+
+```sh
 # Align computation region to the scene
 g.region raster=lsat7_2002_10 -p
 
@@ -71,36 +71,30 @@ i.svm.train group=lsat7_2002 subgroup=res_30m \
     trainingmap=training signaturefile=landuse96_rnd_points
 
 # Go to i.svm.predict for the next step.
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-Predict values: <a href="i.svm.predict.html">i.svm.predict</a><br>
-Set semantic labels: <a href="r.support.html">r.support</a><br>
-Other classification modules: <a href="i.maxlik.html">i.maxlik</a>,
-<a href="i.smap.html">i.smap</a>
-</em><br>
-LIBSVM home page: <a href="https://www.csie.ntu.edu.tw/~cjlin/libsvm/">LIBSVM - A
-Library for Support Vector Machines</a>
+*Predict values: [i.svm.predict](i.svm.predict.md)  
+Set semantic labels: [r.support](r.support.md)  
+Other classification modules: [i.maxlik](i.maxlik.md),
+[i.smap](i.smap.md)*  
+LIBSVM home page: [LIBSVM - A Library for Support Vector
+Machines](https://www.csie.ntu.edu.tw/~cjlin/libsvm/)
 
-<h2>REFERENCES</h2>
+## REFERENCES
 
-<p>Please cite both - LIBSVM and i.svm.</p>
-<ul>
-    <li>
-        For i.svm.* modules:<br>
-        Nartiss, M., &amp; Melniks, R. (2023). Improving pixel-­based classification of GRASS
-        GIS with support vector machine. Transactions in GIS, 00, 1–16.
-        https://doi.org/10.1111/tgis.13102
-    </li>
-    <li>
-        For LIBSVM:<br>
-        Chang, C.-C., &amp; Lin, C.-J. (2011). LIBSVM : a library for support vector machines.
-        ACM Transactions on Intelligent Systems and Technology, 2:27:1--27:27.
-    </li>
-</ul>
+Please cite both - LIBSVM and i.svm.
 
-<h2>AUTHOR</h2>
+- For i.svm.\* modules:  
+  Nartiss, M., & Melniks, R. (2023). Improving pixel-­based
+  classification of GRASS GIS with support vector machine. Transactions
+  in GIS, 00, 1–16. <https://doi.org/10.1111/tgis.13102>
+- For LIBSVM:  
+  Chang, C.-C., & Lin, C.-J. (2011). LIBSVM : a library for support
+  vector machines. ACM Transactions on Intelligent Systems and
+  Technology, 2:27:1--27:27.
+
+## AUTHOR
 
 Maris Nartiss, University of Latvia.

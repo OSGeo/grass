@@ -72,12 +72,7 @@ int main(int argc, char *argv[])
 
     if (hist_flag || col_flag) {
         if (hist_flag) {
-            char buf[1001];
-
-            Vect_hist_rewind(&Map);
-            while (Vect_hist_read(buf, 1000, &Map) != NULL) {
-                fprintf(stdout, "%s\n", buf);
-            }
+            print_history(&Map, format);
         }
         else if (col_flag) {
             print_columns(&Map, input_opt, field_opt, format);

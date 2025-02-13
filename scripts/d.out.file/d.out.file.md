@@ -1,21 +1,15 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.out.file</em> saves the content of the currently selected
-monitor into graphic file. The active monitor can be selected
-with <em>d.mon</em>. <em>d.out.file</em> can be run from GUI
-Console tab, too.
+*d.out.file* saves the content of the currently selected monitor into
+graphic file. The active monitor can be selected with *d.mon*.
+*d.out.file* can be run from GUI Console tab, too.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
+*[d.redraw](d.redraw.md), [d.erase](d.erase.md), [d.rast](d.rast.md),
+[d.vect](d.vect.md), [d.mon](d.mon.md)*
 
-<em>
-  <a href="d.redraw.html">d.redraw</a>,
-  <a href="d.erase.html">d.erase</a>,
-  <a href="d.rast.html">d.rast</a>,
-  <a href="d.vect.html">d.vect</a>,
-  <a href="d.mon.html">d.mon</a>
-</em>
+## AUTHOR
 
-<h2>AUTHOR</h2>
-
-Anna Petrasova, <a href="https://geospatial.ncsu.edu/geoforall/">NCSU GeoForAll Lab</a>
+Anna Petrasova, [NCSU GeoForAll
+Lab](https://geospatial.ncsu.edu/geoforall/)

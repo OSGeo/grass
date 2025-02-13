@@ -1,22 +1,21 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast.colors</em> computes a color table based on all registered maps
-of a space time raster dataset and to assign this color table to each map.
-Hence the created color table reflects the data range of
-the space time raster dataset. This module is a simple
-wrapper around <a href="r.colors.html">r.colors</a>.
-All options of <em>r.colors</em> are supported.
-Internally a file with map names is created and passed
-to the <em>file</em> option of <em>r.colors</em>.
-<p>
-Please have a look at the <a href="r.colors.html">r.colors</a>
-manual page for further information.
+*t.rast.colors* computes a color table based on all registered maps of a
+space time raster dataset and to assign this color table to each map.
+Hence the created color table reflects the data range of the space time
+raster dataset. This module is a simple wrapper around
+[r.colors](r.colors.md). All options of *r.colors* are supported.
+Internally a file with map names is created and passed to the *file*
+option of *r.colors*.
 
-<h2>EXAMPLE</h2>
+Please have a look at the [r.colors](r.colors.md) manual page for
+further information.
+
+## EXAMPLE
 
 Set Celsius color table to monthly dataset
 
-<div class="code"><pre>
+```sh
 t.rast.colors input=tempmean_monthly color=celsius
 
 r.colors.out map=2009_01_tempmean
@@ -54,14 +53,12 @@ r.colors.out map=2009_01_tempmean
 80 155:10:155
 nv 255:255:255
 default 255:255:255
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.colors.html">r.colors</a>
-</em>
+*[r.colors](r.colors.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

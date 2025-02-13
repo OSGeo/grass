@@ -1,45 +1,42 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.what.rast</em> retrieves raster value from a given raster map for each point
-or centroid stored in a given vector map. It can update a <b>column</b> in the linked
-vector attribute table with the retrieved raster cell value or print it.
+*v.what.rast* retrieves raster value from a given raster map for each
+point or centroid stored in a given vector map. It can update a
+**column** in the linked vector attribute table with the retrieved
+raster cell value or print it.
 
-<p>The column type needs to be numeric (integer, float, double,
-...). If the column doesn't exist in the vector attribute table than
-the module will create the new column of type corresponding with the
-input raster map.
+The column type needs to be numeric (integer, float, double, ...). If
+the column doesn't exist in the vector attribute table than the module
+will create the new column of type corresponding with the input raster
+map.
 
-<p>
-If the <b>-p</b> flag is used, then the attribute table is not updated
-and the results are printed to standard output.
-<p>
-If the <b>-i</b> flag is used, then the value to be uploaded to the database
-is interpolated from the four nearest raster cells values using an inverse
-distance weighting method (IDW). This is useful for cases when the vector
-point density is much higher than the raster cell size.
+If the **-p** flag is used, then the attribute table is not updated and
+the results are printed to standard output.
 
-<h2>NOTES</h2>
+If the **-i** flag is used, then the value to be uploaded to the
+database is interpolated from the four nearest raster cells values using
+an inverse distance weighting method (IDW). This is useful for cases
+when the vector point density is much higher than the raster cell size.
 
-<p>
-Points and centroid with shared category number cannot be processed.
-To solved this, unique categories may be added
-with <em><a href="v.category.html">v.category</a></em> in a separate
-layer.
+## NOTES
 
-<p>
-If multiple points have the same category, the attribute value is set to NULL.
-If the raster value is NULL, then attribute value is set to NULL.
-<p>
-<em>v.what.rast</em> operates on the attribute table. To modify the vector
-geometry instead, use <em><a href="v.drape.html">v.drape</a></em>.
-<p>
-Categories and values are output unsorted with the print flag. To sort them
-pipe the output of this module into the UNIX <code>sort</code> tool
-(<code>sort&nbsp;-n</code>). If you need coordinates, after sorting use
-<em><a href="v.out.ascii.html">v.out.ascii</a></em> and the UNIX <code>paste</code> tool
-(<code>paste&nbsp;-d'|'</code>). In the case of a NULL result, a "<code>*</code>"
-will be printed in lieu of the value.
-<p>
+Points and centroid with shared category number cannot be processed. To
+solved this, unique categories may be added with
+*[v.category](v.category.md)* in a separate layer.
+
+If multiple points have the same category, the attribute value is set to
+NULL. If the raster value is NULL, then attribute value is set to NULL.
+
+*v.what.rast* operates on the attribute table. To modify the vector
+geometry instead, use *[v.drape](v.drape.md)*.
+
+Categories and values are output unsorted with the print flag. To sort
+them pipe the output of this module into the UNIX `sort` tool
+(`sort -n`). If you need coordinates, after sorting use
+*[v.out.ascii](v.out.ascii.md)* and the UNIX `paste` tool
+(`paste -d'|'`). In the case of a NULL result, a "`*`" will be printed
+in lieu of the value.
+
 The interpolation flag is only useful for continuous value raster maps,
 if a categorical raster is given as input the results will be nonsense.
 Since the search window is limited to four raster cells there may still
@@ -48,16 +45,15 @@ has been made for processing speed. If one or more of the nearest four
 raster cells is NULL, then only the raster cells containing values will
 be used in the weighted average.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
-<h3>Transferring raster values into existing attribute table of vector points map</h3>
+### Transferring raster values into existing attribute table of vector points map
 
-Reading values from raster map at position of vector points,
-writing these values into a column of the attribute table
-connected to the vector map:
-<p>
+Reading values from raster map at position of vector points, writing
+these values into a column of the attribute table connected to the
+vector map:
 
-<div class="code"><pre>
+```sh
 # work on copy of original geodetic points map
 g.copy vector=geodetic_pts,mygeodetic_pts
 
@@ -69,16 +65,15 @@ v.what.rast map=mygeodetic_pts raster=elev_state_500m column=height
 
 # compare official geodetic heights to those of elevation model
 v.db.select map=mygeodetic_pts columns=Z_VALUE,height separator=comma
-</pre></div>
+```
 
-<h3>Transferring raster values into new vector points map</h3>
+### Transferring raster values into new vector points map
 
-In case of a vector map without attached attribute table, first add
-a new attribute table. This table is then populated with values
-queried from the raster map:
-<p>
+In case of a vector map without attached attribute table, first add a
+new attribute table. This table is then populated with values queried
+from the raster map:
 
-<div class="code"><pre>
+```sh
 # create new random vector points map
 v.random pnts n=100
 
@@ -95,21 +90,16 @@ v.db.select pnts
 
 # verify statistics of uploaded values:
 v.univar map=pnts column=height type=point
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="v.category.html">v.category</a>,
-<a href="v.db.addtable.html">v.db.addtable</a>,
-<a href="v.db.select.html">v.db.select</a>,
-<a href="v.drape.html">v.drape</a>,
-<a href="v.univar.html">v.univar</a>,
-<a href="v.rast.stats.html">v.rast.stats</a>,
-<a href="v.what.vect.html">v.what.vect</a>
-</em>
+*[v.category](v.category.md), [v.db.addtable](v.db.addtable.md),
+[v.db.select](v.db.select.md), [v.drape](v.drape.md),
+[v.univar](v.univar.md), [v.rast.stats](v.rast.stats.md),
+[v.what.vect](v.what.vect.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Radim Blazek<br>
+Radim Blazek  
 Hamish Bowman (interpolation)

@@ -1,38 +1,35 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>v.sample</em> samples a GRASS raster map at the point
-locations in the input file by either cubic convolution
-interpolation, bilinear interpolation, or nearest neighbor
-sampling (default).
+*v.sample* samples a GRASS raster map at the point locations in the
+input file by either cubic convolution interpolation, bilinear
+interpolation, or nearest neighbor sampling (default).
 
-<p>This program may be especially useful when sampling for
-cross validation of interpolations whose output is a raster
-map.
+This program may be especially useful when sampling for cross validation
+of interpolations whose output is a raster map.
 
-<h2>NOTES</h2>
+## NOTES
 
-The output points will have the easting and northing of the input points.
-The input category value is used. The input attribute, raster value
-and difference is written to output.
+The output points will have the easting and northing of the input
+points. The input category value is used. The input attribute, raster
+value and difference is written to output.
 
-<p>When NULL values are encountered for a cell, zero value is used
-instead.  In these cases, more acurrate results may be obtained
-by using the default nearest neighbor comparisons.
+When NULL values are encountered for a cell, zero value is used instead.
+In these cases, more acurrate results may be obtained by using the
+default nearest neighbor comparisons.
 
-<p>This program may not work properly with lat-long data when
-the <b>-bc</b> flags are used.
+This program may not work properly with lat-long data when the **-bc**
+flags are used.
 
-<p>When interpolation is done (i.e., the <b>-bc</b> flags are
-used), values are assumed to be located at the centroid of
-grid cells.  Therefore, current resolution settings are
-important.
+When interpolation is done (i.e., the **-bc** flags are used), values
+are assumed to be located at the centroid of grid cells. Therefore,
+current resolution settings are important.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-Comparison of "elev_ned_30m" and "elev_srtm_30m" North Carolina
-sample dataset elevation models at random positions:
+Comparison of "elev_ned_30m" and "elev_srtm_30m" North Carolina sample
+dataset elevation models at random positions:
 
-<div class="code"><pre>
+```sh
 # set computational region:
  g.region raster=elev_srtm_30m -p
 # generate random points:
@@ -52,26 +49,21 @@ sample dataset elevation models at random positions:
 
 #univariate statistics of differences between elevation maps:
  v.univar elev_samples column=diff type=point
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="g.region.html">g.region</a>,
-<a href="v.random.html">v.random</a>,
-<a href="v.what.rast.html">v.what.rast</a>
-</em>
+*[g.region](g.region.md), [v.random](v.random.md),
+[v.what.rast](v.what.rast.md)* *Image Sampling Methods* - GRASS Tutorial
+on *s.sample* (available as
+[s.sample-tutorial.ps.gz](https://grass.osgeo.org/gdp/sites/))
 
-<em>Image Sampling Methods</em> - GRASS Tutorial on <em>s.sample</em>
-(available as
-<a href="https://grass.osgeo.org/gdp/sites/">s.sample-tutorial.ps.gz</a>)
+## AUTHORS
 
-<h2>AUTHORS</h2>
+[James Darrell McCauley](http://mccauley-usa.com/)  
+when he was at: [Agricultural
+Engineering](http://ABE.www.ecn.purdue.edu/ABE/) [Purdue
+University](http://www.purdue.edu/)
 
-<a href="http://mccauley-usa.com/">James Darrell McCauley</a>
-<br>when he was at:
-<a href="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural Engineering</a>
-<a href="http://www.purdue.edu/">Purdue University</a>
-<p>Updated for GRASS 5.0 by Eric G. Miller
-<br>
+Updated for GRASS 5.0 by Eric G. Miller  
 Updated for GRASS 5.7 by Radim Blazek

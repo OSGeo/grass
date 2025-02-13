@@ -1,40 +1,36 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast.contour</em> is designed to produce a space time vector dataset of
-specified contours from a space time raster dataset. This module works as a front-end to
-<a href="r.contour.html">r.contour</a> and therefore supports all parameter
-of this module. Hence, all raster map layers in a space time raster dataset
-are successively passed to <a href="r.contour.html">r.contour</a> that computes
-the contour lines.
-Please refer to the <a href="r.contour.html">r.contour</a> documentation
-for a detailed description.
-The new generated vector contour map
-layers will be registered in the output space time vector dataset, using
-the same time stamps as their raster map layer origins.
-<p>
-This module supports the parallel processing of <a href="r.contour.html">r.contour</a>
-module instances. The number of parallel processes
-can be set with the <em>nprocs</em> option.
-However, this will only work in conjunction with the <em>-t</em>
-flag, that avoids the creation of attribute tables.
-The parallel creation of attribute tables is not supported.
-<p>
-The <em>where</em> option allows selecting subsets of the input space time raster
-dataset.
-<p>
-The flag <em>-n</em> can be used to force the registration of empty
-vector map layers. Empty vector maps may occur in case that empty
-raster map layers should be converted into vector map layers, or in case the
-chosen steps or contour levels are not present in the raster map layers.
+*t.rast.contour* is designed to produce a space time vector dataset of
+specified contours from a space time raster dataset. This module works
+as a front-end to [r.contour](r.contour.md) and therefore supports all
+parameter of this module. Hence, all raster map layers in a space time
+raster dataset are successively passed to [r.contour](r.contour.md) that
+computes the contour lines. Please refer to the
+[r.contour](r.contour.md) documentation for a detailed description. The
+new generated vector contour map layers will be registered in the output
+space time vector dataset, using the same time stamps as their raster
+map layer origins.
 
-<h2>SEE ALSO</h2>
+This module supports the parallel processing of
+[r.contour](r.contour.md) module instances. The number of parallel
+processes can be set with the *nprocs* option. However, this will only
+work in conjunction with the *-t* flag, that avoids the creation of
+attribute tables. The parallel creation of attribute tables is not
+supported.
 
-<em>
-<a href="r.contour.html">r.contour</a>,
-<a href="t.vect.db.select.html">t.rast.db.select</a>,
-<a href="t.info.html">t.info</a>
-</em>
+The *where* option allows selecting subsets of the input space time
+raster dataset.
 
-<h2>AUTHOR</h2>
+The flag *-n* can be used to force the registration of empty vector map
+layers. Empty vector maps may occur in case that empty raster map layers
+should be converted into vector map layers, or in case the chosen steps
+or contour levels are not present in the raster map layers.
 
-S&ouml;ren Gebbert, Geoinformatikb&uuml;ro Dassau
+## SEE ALSO
+
+*[r.contour](r.contour.md), [t.rast.db.select](t.vect.db.select.md),
+[t.info](t.info.md)*
+
+## AUTHOR
+
+Sören Gebbert, Geoinformatikbüro Dassau

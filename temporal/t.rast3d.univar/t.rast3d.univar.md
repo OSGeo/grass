@@ -1,19 +1,16 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>t.rast3d.univar</em> provides the same functionality as
-<a href="t.rast.univar.html">t.rast.univar</a>, the only difference is the
-3D raster map layer metadata. Please refer to the manual page of
-<a href="t.rast.univar.html">t.rast.univar</a> for documentation and examples.
+*t.rast3d.univar* provides the same functionality as
+[t.rast.univar](t.rast.univar.md), the only difference is the 3D raster
+map layer metadata. Please refer to the manual page of
+[t.rast.univar](t.rast.univar.md) for documentation and examples.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="t.rast.univar.html">t.rast.univar</a>,
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
-</em>
+*[t.rast.univar](t.rast.univar.md), [t.create](t.create.md),
+[t.info](t.info.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
-S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture<br>
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture  
 Stefan Blumentrath (support for zones)

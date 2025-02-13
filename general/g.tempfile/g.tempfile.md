@@ -1,53 +1,45 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>g.tempfile</em>
-is designed for shell scripts that need to use large temporary files.
-GRASS provides a mechanism for temporary files that does not depend on
-<code>/tmp/</code>. GRASS temporary files are created in the data base with the assumption
-that there will be enough space under the data base for large files.
-GRASS periodically removes temporary files that have been left behind
-by programs that failed to remove them before terminating.
+*g.tempfile* is designed for shell scripts that need to use large
+temporary files. GRASS provides a mechanism for temporary files that
+does not depend on `/tmp/`. GRASS temporary files are created in the
+data base with the assumption that there will be enough space under the
+data base for large files. GRASS periodically removes temporary files
+that have been left behind by programs that failed to remove them before
+terminating.
 
-<p>
-<em>g.tempfile</em>
-creates an unique file and prints the name. The user is required to provide
-a process-id which will be used as part of the name of the file.
-Most Unix shells provide a way to get the process id of the current shell.
-For <code>/bin/sh</code> and <code>/bin/csh</code> this is <code>$$</code>.
-It is recommended that <code>$$</code> be specified as the process-id for
-<em>g.tempfile</em>.
+*g.tempfile* creates an unique file and prints the name. The user is
+required to provide a process-id which will be used as part of the name
+of the file. Most Unix shells provide a way to get the process id of the
+current shell. For `/bin/sh` and `/bin/csh` this is `$$`. It is
+recommended that `$$` be specified as the process-id for *g.tempfile*.
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
-For <code>/bin/sh</code> scripts the following syntax should be used:
+For `/bin/sh` scripts the following syntax should be used:
 
-<div class="code"><pre>
+```sh
 temp1=`g.tempfile pid=$$`
 temp2=`g.tempfile pid=$$`
-</pre></div>
+```
 
-For <code>/bin/csh</code> scripts, the following can be used:
+For `/bin/csh` scripts, the following can be used:
 
-<div class="code"><pre>
+```sh
 set temp1=`g.tempfile pid=$$`
 set temp2=`g.tempfile pid=$$`
-</pre></div>
+```
 
-<h2>NOTES</h2>
+## NOTES
 
-Each call to <em>g.tempfile</em>
-creates a different (i.e. unique) name.
+Each call to *g.tempfile* creates a different (i.e. unique) name.
+Although GRASS does eventually get around to removing tempfiles that
+have been left behind, the programmer should make every effort to remove
+these files. They often get large and take up disk space. If you write
+`/bin/sh` scripts, learn to use the `/bin/sh` related `trap` command. If
+you write `/bin/csh` scripts, learn to use the `/bin/csh` related
+`onintr` command.
 
-Although GRASS does eventually get around to removing
-tempfiles that have been left behind, the programmer should
-make every effort to remove these files. They often get
-large and take up disk space. If you write <code>/bin/sh</code> scripts,
-learn to use the <code>/bin/sh</code> related <code>trap</code> command. If you
-write <code>/bin/csh</code> scripts, learn to use the <code>/bin/csh</code>
-related <code>onintr</code> command.
+## AUTHOR
 
-<h2>AUTHOR</h2>
-
-Michael Shapiro,
-U.S. Army Construction Engineering
-Research Laboratory
+Michael Shapiro, U.S. Army Construction Engineering Research Laboratory

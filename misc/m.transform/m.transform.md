@@ -1,73 +1,71 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>m.transform</em> is an utility to compute transformation
-based upon GCPs and output error measurements.
+*m.transform* is an utility to compute transformation based upon GCPs
+and output error measurements.
 
-<p>
-If coordinates are given with the <b>input</b> file option or fed from
-<code>stdin</code>, both the input and the output format is "x y" with one
-coordinate pair per line. Reverse transform is performed with the
-<b>-r</b> flag.
+If coordinates are given with the **input** file option or fed from
+`stdin`, both the input and the output format is "x y" with one
+coordinate pair per line. Reverse transform is performed with the **-r**
+flag.
 
-<p>
-The <b>format</b> option determines how control points are printed out.
-A summary on the control points can be printed with the <b>-s</b> flag.
-The summary includes maximum deviation observed when transforming GCPs
-and overall RMS. The <b>format</b> option is ignored when coordinates
-are given with the <b>input</b> file option.
+The **format** option determines how control points are printed out. A
+summary on the control points can be printed with the **-s** flag. The
+summary includes maximum deviation observed when transforming GCPs and
+overall RMS. The **format** option is ignored when coordinates are given
+with the **input** file option.
 
-<h2>NOTES</h2>
+## NOTES
 
 The transformations are:
-<p>order=1:
-<div class="code"><pre>
-    e = [E0 E1][1]&middot;[1]
+
+order=1:
+
+```sh
+    e = [E0 E1][1]·[1]
         [E2  0][e] [n]
 
-    n = [N0 N1][1]&middot;[1]
+    n = [N0 N1][1]·[1]
         [N2  0][e] [n]
-</pre></div>
+```
 
 order=2:
-<div class="code"><pre>
+
+```sh
     e = [E0 E1 E3][1 ] [1 ]
-        [E2 E4  0][e ]&middot;[n ]
-        [E5  0  0][e&sup2;] [n&sup2;]
+        [E2 E4  0][e ]·[n ]
+        [E5  0  0][e²] [n²]
 
     n = [N0 N1 N3][1 ] [1 ]
-        [N2 N4  0][e ]&middot;[n ]
-        [N5  0  0][e&sup2;] [n&sup2;]
-</pre></div>
+        [N2 N4  0][e ]·[n ]
+        [N5  0  0][e²] [n²]
+```
 
 order=3:
-<div class="code"><pre>
+
+```sh
     e = [E0 E1 E3 E6][1 ] [1 ]
-        [E2 E4 E7  0][e ]&middot;[n ]
-        [E5 E8  0  0][e&sup2;] [n&sup2;]
-        [E9  0  0  0][e&sup3;] [n&sup3;]
+        [E2 E4 E7  0][e ]·[n ]
+        [E5 E8  0  0][e²] [n²]
+        [E9  0  0  0][e³] [n³]
 
     n = [N0 N1 N3 N6][1 ] [1 ]
-        [N2 N4 N7  0][e ]&middot;[n ]
-        [N5 N8  0  0][e&sup2;] [n&sup2;]
-        [N9  0  0  0][e&sup3;] [n&sup3;]
-</pre></div>
+        [N2 N4 N7  0][e ]·[n ]
+        [N5 N8  0  0][e²] [n²]
+        [N9  0  0  0][e³] [n³]
+```
 
-["&middot;" = dot-product, (AE)&middot;N = N'EA]
+\["·" = dot-product, (AE)·N = N'EA\]
 
-<p>In other words, <em>order=1</em> and <em>order=2</em> are equivalent
-to <em>order=3</em> with the higher coefficients equal to zero.
+In other words, *order=1* and *order=2* are equivalent to *order=3* with
+the higher coefficients equal to zero.
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="i.ortho.transform.html">i.ortho.transform</a>,
-<a href="i.rectify.html">i.rectify</a>,
-<a href="v.rectify.html">v.rectify</a>,
-<a href="v.transform.html">v.transform</a>
-</em>
+*[i.ortho.transform](i.ortho.transform.md), [i.rectify](i.rectify.md),
+[v.rectify](v.rectify.md), [v.transform](v.transform.md)*
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
-Brian J. Buckley<br>
-Glynn Clements<br>
+Brian J. Buckley  
+Glynn Clements  
 Hamish Bowman

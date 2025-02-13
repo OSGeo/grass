@@ -1,31 +1,29 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>r.to.rast3elev</em> creates a 3D volume map based on 2D elevation and value raster maps.
-If the 2d and 3d region settings are different,
-the 2d resolution will be adjust to the 3d resolution.
+*r.to.rast3elev* creates a 3D volume map based on 2D elevation and value
+raster maps. If the 2d and 3d region settings are different, the 2d
+resolution will be adjust to the 3d resolution.
 
-<center>
-<img src="r.to.rast3elev.png" border="0"><br>
-<table border="0" width="700">
-<tr><td><center>
-<i>How r.to.rast3elev works</i>
-</center></td></tr>
-</table>
-</center>
+<img src="r.to.rast3elev.png" data-border="0" />  
 
-<h2>NOTES</h2>
+|                            |
+|----------------------------|
+| *How r.to.rast3elev works* |
+
+## NOTES
 
 The height of the 2D elevation maps will be used to verify the position
-within the 3D region. If the cell value of the elevation raster maps is located within the 3D region, the
-cell value of the appropriate 2D input raster maps will be written to the associated 3D cell.
-There are flags and options to fill the upper and lower 3D cells with a specific value, or the
-input raster maps values.
+within the 3D region. If the cell value of the elevation raster maps is
+located within the 3D region, the cell value of the appropriate 2D input
+raster maps will be written to the associated 3D cell. There are flags
+and options to fill the upper and lower 3D cells with a specific value,
+or the input raster maps values.
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 Simple Spearfish sample data set example
 
-<div class="code"><pre>
+```sh
 g.region raster=elevation.10m -p
 g.region res=200 res3=200 t=2000 b=0 tbres=20 -p
 
@@ -71,16 +69,13 @@ paraview --data=/tmp/threelayer.vtk
 
 # Note: First you need to choose the surface representation style and
 # then color by "threelayer" in paraview.
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.to.rast3.html">r.to.rast3</a>,
-<a href="r3.cross.rast.html">r3.cross.rast</a>,
-<a href="g.region.html">g.region</a>
-</em>
+*[r.to.rast3](r.to.rast3.md), [r3.cross.rast](r3.cross.rast.md),
+[g.region](g.region.md)*
 
-<h2>AUTHOR</h2>
+## AUTHOR
 
 Soeren Gebbert

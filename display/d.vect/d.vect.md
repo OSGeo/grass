@@ -1,43 +1,46 @@
-<h2>DESCRIPTION</h2>
+## DESCRIPTION
 
-<em>d.vect</em> displays vector maps in the active frame on the
-graphics monitor.
+*d.vect* displays vector maps in the active frame on the graphics
+monitor.
 
-<h2>NOTES</h2>
+## NOTES
 
-<em>d.vect</em> can simply be used typing <code>d.vect
-map=vector_map</code>. There are a large variety of optional parameters
-which allow the user to specify vector type, colors, data fields, SQL
-queries, label size and justification, etc.
+*d.vect* can simply be used typing `d.vect map=vector_map`. There are a
+large variety of optional parameters which allow the user to specify
+vector type, colors, data fields, SQL queries, label size and
+justification, etc.
 
-<p>When <em>d.vect</em> is used with <b>where</b> parameter on MS Windows
-Command Prompt, it is important to use <code>&#710;</code>
-carret symbol for escaping special characters <code>&lt; &gt; ( ) &amp; &#124; , ; &quot;</code>.
-<div class="code"><pre>
-d.vect map=vector_map where="cat &#710;&gt; 10 AND cat &#710;&lt; 20"
-</pre></div>
+When *d.vect* is used with **where** parameter on MS Windows Command
+Prompt, it is important to use `ˆ` carret symbol for escaping special
+characters `< > ( ) & | , ; "`.
 
-<p>By default <em>d.vect</em> areas are filled with <b>fill_color</b> and
-outlined with <b>color</b>. Area outlines can be suppressed with
-<div class="code"><pre>
+```sh
+d.vect map=vector_map where="cat ˆ> 10 AND cat ˆ< 20"
+```
+
+By default *d.vect* areas are filled with **fill_color** and outlined
+with **color**. Area outlines can be suppressed with
+
+```sh
 d.vect map=vector_map color=none
-</pre></div>
+```
+
 and areas can be made transparent with
-<div class="code"><pre>
+
+```sh
 d.vect map=vector_map fill_color=none
-</pre></div>
+```
 
-<p>In order to display attributes in the map, <b>attribute_column</b> must
-be specified.
+In order to display attributes in the map, **attribute_column** must be
+specified.
 
-<p>Feature colors may be specified
-by <em><a href="v.colors.html">v.colors</a></em> in a form of color
-table or in an attribute table column containing <code>RRR:GGG:BBB</code>
+Feature colors may be specified by *[v.colors](v.colors.md)* in a form
+of color table or in an attribute table column containing `RRR:GGG:BBB`
 values.
 
-<p>A table for a vector map might look like this:
+A table for a vector map might look like this:
 
-<div class="code"><pre>
+```sh
 db.select sql="select * from testisola"
 cat|label|GRASSRGB
 0|no data|255:255:255
@@ -46,38 +49,40 @@ cat|label|GRASSRGB
 139|PERGINE VALSUGANA|223:45:237
 168|SANT'ORSOLA|223:45:67
 190|TENNA|123:45:67
-</pre></div>
+```
 
-<p>To add the GRASSRGB color column, use <em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em>:
-<div class="code"><pre>
+To add the GRASSRGB color column, use
+*[v.db.addcolumn](v.db.addcolumn.md)*:
+
+```sh
 v.db.addcolumn map=testisola columns="GRASSRGB varchar(11)"
-</pre></div>
+```
 
-<p>To add/change a color, use <em><a href="v.db.update.html">v.db.update</a></em>:
-<div class="code"><pre>
+To add/change a color, use *[v.db.update](v.db.update.md)*:
+
+```sh
 v.db.update map=testisola column=GRASSRGB value="123:45:237" where="cat=139"
-</pre></div>
+```
 
-<p>A much simpler method of color coding is by using the <b>-c</b> flag
-which displays vector elements of like category number with a random
-color.
+A much simpler method of color coding is by using the **-c** flag which
+displays vector elements of like category number with a random color.
 
-<p>This module can use FreeType/TrueType fonts if they have already been selected with
-<em><a href="d.font.html">d.font</a></em>.
+This module can use FreeType/TrueType fonts if they have already been
+selected with *[d.font](d.font.md)*.
 
-<p>Parameter <b>width</b> is set by default to '0'. XDRIVER specifies the
-precise behaviour for non-zero line width, but drivers have some
-freedom as to how zero-width lines are handled, so they can use the
-hardware's &quot;thin line&quot; drawing primitive, if it has one. A
-width of zero can potentially result in significantly faster operation. On
-drivers where there is no such thing as a "thin" line, the driver will
-use a sensible default (which might not be the same as '1').
+Parameter **width** is set by default to '0'. XDRIVER specifies the
+precise behaviour for non-zero line width, but drivers have some freedom
+as to how zero-width lines are handled, so they can use the hardware's
+"thin line" drawing primitive, if it has one. A width of zero can
+potentially result in significantly faster operation. On drivers where
+there is no such thing as a "thin" line, the driver will use a sensible
+default (which might not be the same as '1').
 
-<h2>EXAMPLES</h2>
+## EXAMPLES
 
 Spearfish examples:
 
-<div class="code"><pre>
+```sh
 # display roads with category numbers:
 d.vect map=roads display=shape,cat label_color=green
 
@@ -86,13 +91,13 @@ d.vect -c map=soils attribute_column=label
 
 # display randomly colorized selected vectors from soils map
 d.vect -c map=soils where="label='VBF'" display=shape attribute_column=label
-</pre></div>
+```
 
-<p>3D points, 3D lines and 3D polygons colorized according to z height
-(for 3D lines and polygons a z height is computed by a midpoint of
-line/area bounding box):
+3D points, 3D lines and 3D polygons colorized according to z height (for
+3D lines and polygons a z height is computed by a midpoint of line/area
+bounding box):
 
-<div class="code"><pre>
+```sh
 g.region raster=elevation.10m
 r.random input=elevation.10m n=5000 vector=random3d -d
 d.mon start=x0
@@ -109,26 +114,20 @@ d.vect map=contour20m zcolor=gyr
 v.delaunay input=random3d output=random3d_del
 # display 3D polygons colorized according to z height
 d.vect map=random3d_del type=area zcolor=gyr
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-  <a href="v.colors.html">v.colors</a>,
-  <a href="d.erase.html">d.erase</a>,
-  <a href="d.rast.html">d.rast</a>,
-  <a href="v.colors.html">v.colors</a>,
-  <a href="v.db.addcolumn.html">v.db.addcolumn</a>,
-  <a href="v.db.update.html">v.db.update</a>
-</em>
-<p>
-<em>
-  <a href="sql.html">GRASS SQL interface</a>
-</em>
+*[v.colors](v.colors.md), [d.erase](d.erase.md), [d.rast](d.rast.md),
+[v.colors](v.colors.md), [v.db.addcolumn](v.db.addcolumn.md),
+[v.db.update](v.db.update.md)*
 
-<h2>AUTHORS</h2>
+*[GRASS SQL interface](sql.md)*
 
-CERL<br>
-Radim Blazek, ITC-Irst, Trento, Italy<br>
-Support for color tables by Martin Landa, Czech Technical University in Prague (8/2011)<br>
+## AUTHORS
+
+CERL  
+Radim Blazek, ITC-Irst, Trento, Italy  
+Support for color tables by Martin Landa, Czech Technical University in
+Prague (8/2011)  
 and many other GRASS developers
