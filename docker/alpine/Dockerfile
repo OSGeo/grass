@@ -180,11 +180,9 @@ RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
 
 RUN git clone https://github.com/OSGeo/gdal-grass /src/gdal-grass
 WORKDIR /src/gdal-grass
-RUN ./configure \
-    --with-gdal=/usr/bin/gdal-config \
-    --with-grass=/usr/local/grass && \
-    make -j $NUMTHREADS && \
-    make install -j $NUMTHREADS
+RUN cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF && \
+    cmake --build build && \
+    cmake --install build
 
 
 FROM common as grass
