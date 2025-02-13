@@ -1,5 +1,4 @@
 """Test v.fill.holes outputs"""
-"""Hello"""
 import json
 
 import grass.script as gs
