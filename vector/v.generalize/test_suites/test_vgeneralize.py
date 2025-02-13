@@ -47,7 +47,7 @@ class TestVGeneralize(TestCase):
                 if line.strip().startswith("B"):
                     parts = line.strip().split()
                     if len(parts) >= 2:
-                        vertices+= int(parts[1])
+                        vertices += int(parts[1])
 
         return vertices
 
@@ -115,7 +115,7 @@ class TestVGeneralize(TestCase):
 
     def test_invalid_method(self):
         """Test invalid generalization method."""
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match="Invalid method input. Select Correct Method"):
             self.assertModule(
                 "v.generalize",
                 input="test_lines",
