@@ -151,7 +151,7 @@ then the user should check for:
 
 ## SEE ALSO
 
-*[r.support](r.support), [i.group](i.group.md), [i.smap](i.smap.md),
+*[r.support](r.support.md), [i.group](i.group.md), [i.smap](i.smap.md),
 [r.info](r.info.md), [r.univar](r.univar.md), [wxGUI vector
 digitizer](wxGUI.vdigit.md)*
 

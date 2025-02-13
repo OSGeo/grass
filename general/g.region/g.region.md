@@ -396,7 +396,7 @@ g.region -l format=json
 *[g.access](g.access.md), [g.mapsets](g.mapsets.md),
 [g.proj](g.proj.md)  
 Environment variables: [GRASS_REGION and
-WIND_OVERRIDE](variables.md#internal)*
+WIND_OVERRIDE](variables.md#list-of-selected-internal-grass-environment-variables)*
 
 ## AUTHOR
 
