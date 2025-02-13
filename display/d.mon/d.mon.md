@@ -64,7 +64,7 @@ display](wxGUI.md#map-display-window)*, run
 d.mon start=wx0
 ```
 
-<img src="d_mon_wx0.png" data-border="0" alt="Blank wx0 display" />  
+![Blank wx0 display](d_mon_wx0.png)  
 *Figure: The initialization of display monitor wx0*
 
 All subsequently displayed data will be rendered on monitor `wx0`.
@@ -74,8 +74,7 @@ g.region raster=elevation -p
 d.rast map=elevation
 ```
 
-<img src="d_mon_wx0_raster.png" data-border="0"
-alt="Display wx0 with raster map" />  
+![Display wx0 with raster map](d_mon_wx0_raster.png)  
 *Figure: The display wx0 showing an elevation raster map*
 
 ### CAIRO file renderer monitor

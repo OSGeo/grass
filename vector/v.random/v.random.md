@@ -28,7 +28,7 @@ generated in total.
 
 Attributes attached to **restrict** vector map are also transferred if
 the **layer** parameter is defined \> 0, see
-*[example](#stratified-random-sampling:-random-sampling-from-vector-map-by-attribute)*
+*[example](#stratified-random-sampling-random-sampling-from-vector-map-by-attribute)*
 below.
 
 ## NOTES
