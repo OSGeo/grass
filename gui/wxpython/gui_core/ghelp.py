@@ -805,7 +805,7 @@ class HelpWindow(HtmlWindow):
 
     def OnOpeningURL(self, type, url):
         """A workaround reloading the extracted mkdocs tool page content"""
-        if self.markdown and url.startswith(self.fspath):
+        if self.markdown and url.startswith(self.fspath) and url.endswith(".html"):
             wx.CallAfter(self.LoadPage, url)
         return (wx.html.HTML_OPEN, url)
 
