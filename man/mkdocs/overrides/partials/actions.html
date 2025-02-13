@@ -31,9 +31,9 @@
   {% if toolname in config.extra.scripts_tools %}
     {% set category = "scripts" %}
   {% endif %}
-  {{ "CUSTOM ACTIONS TEMPLATE LOADED" }}
 
-  {{ config.extra.scripts_tools }}
+  <!-- {{ "CUSTOM ACTIONS TEMPLATE LOADED" }}
+  {{ config.extra.scripts_tools }} -->
 
   {% set custom_edit_url = page.edit_url | replace(toolname, category ~ "/" ~ toolname ~ "/" ~ toolname) %}
 

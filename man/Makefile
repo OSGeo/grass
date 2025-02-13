@@ -14,11 +14,13 @@ DSTFILES := \
 	$(HTMLDIR)/parser_standard_options.css \
 	$(HTMLDIR)/parser_standard_options.js \
 	$(MDDIR)/mkdocs.yml \
+	$(MDDIR)/gh-paths.yml \
 	$(MDDIR)/source/grass_logo.png \
 	$(MDDIR)/source/grassdocs.css \
 	$(MDDIR)/scripts/hook_list_scripts.py \
 	$(MDDIR)/overrides/partials/footer.html \
-	$(MDDIR)/overrides/partials/actions.html
+	$(MDDIR)/overrides/partials/actions.html \
+
 
 categories = \
 	d:display \
@@ -264,6 +266,21 @@ $(MDDIR)/overrides/partials/actions.html: mkdocs/overrides/partials/actions.html
 
 $(MDDIR)/overrides/partials:
 	$(MKDIR) $@
+
+# Get all Markdown files from the scripts directory
+MDPATHS := $(wildcard $(MODULE_TOPDIR)/scripts/**/*.md)
+
+# Generate the YAML file listing the Markdown files
+$(MDDIR)/gh-paths.yml: | $(MDDIR)
+	@echo "scripts_tools:" > $@
+	@for file in $(MDPATHS); do \
+	  echo "  - $$file" >> $@; \
+	done
+
+# Target to list the YAML file contents
+list-md-files: $(MDDIR)/gh-paths.yml
+	@echo "Generated YAML file: $(MDDIR)/gh-paths.yml"
+	@cat $(MDDIR)/gh-paths.yml
 
 build-mkdocs:
 	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
