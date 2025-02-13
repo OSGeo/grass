@@ -143,8 +143,14 @@ prec_6|...|2001-06-01 00:00:00|None"""
         t_rast_list = SimpleModule("t.rast.list", input="precip_abs8")
         t_rast_list.run()
 
-        # Check registered raster maps
-        ref_str = """name|mapset|start_time|end_time...prec_1|...|2001-01-01 00:00:00|None...prec_2|...|2001-01-01 00:00:00|None...prec_3|...|2001-01-01 00:00:00|None...prec_4|...|2001-01-01 00:00:00|None...prec_5|...|2001-01-01 00:00:00|None...prec_6|...|2001-01-01 00:00:00|None"""
+        # Check registered raster maps - using newlines instead of ...
+        ref_str = """name|mapset|start_time|end_time
+prec_1|...|2001-01-01 00:00:00|None
+prec_2|...|2001-01-01 00:00:00|None
+prec_3|...|2001-01-01 00:00:00|None
+prec_4|...|2001-01-01 00:00:00|None
+prec_5|...|2001-01-01 00:00:00|None
+prec_6|...|2001-01-01 00:00:00|None"""
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_with_file_increment_and_intervall(self):
@@ -220,8 +226,14 @@ prec_6|2001-06-01"""
         t_rast_list = SimpleModule("t.rast.list", input="precip_abs8")
         t_rast_list.run()
 
-        # Check registered raster maps
-        ref_str = """name|mapset|start_time|end_time...prec_1|...|2001-01-01 00:00:00|None...prec_2|...|2001-02-01 00:00:00|None...prec_3|...|2001-03-01 00:00:00|None...prec_4|...|2001-04-01 00:00:00|None...prec_5|...|2001-05-01 00:00:00|None...prec_6|...|2001-06-01 00:00:00|None"""
+        # Check registered raster maps - using newlines instead of ...
+        ref_str = """name|mapset|start_time|end_time
+prec_1|...|2001-01-01 00:00:00|None
+prec_2|...|2001-02-01 00:00:00|None
+prec_3|...|2001-03-01 00:00:00|None
+prec_4|...|2001-04-01 00:00:00|None
+prec_5|...|2001-05-01 00:00:00|None
+prec_6|...|2001-06-01 00:00:00|None"""
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_with_start_in_file_and_increment(self):
@@ -312,8 +324,14 @@ prec_6|2002-04-01|2002-07-01"""
         t_rast_list = SimpleModule("t.rast.list", input="precip_abs8")
         t_rast_list.run()
 
-        # Check registered raster maps
-        ref_str = """name|mapset|start_time|end_time...prec_1|...|2001-01-01 00:00:00|2001-04-01 00:00:00...prec_2|...|2001-04-01 00:00:00|2001-07-01 00:00:00...prec_3|...|2001-07-01 00:00:00|2001-10-01 00:00:00...prec_4|...|2001-10-01 00:00:00|2002-01-01 00:00:00...prec_5|...|2002-01-01 00:00:00|2002-04-01 00:00:00...prec_6|...|2002-04-01 00:00:00|2002-07-01 00:00:00"""
+        # Check registered raster maps - using newlines instead of ...
+        ref_str = """name|mapset|start_time|end_time
+prec_1|...|2001-01-01 00:00:00|2001-04-01 00:00:00
+prec_2|...|2001-04-01 00:00:00|2001-07-01 00:00:00
+prec_3|...|2001-07-01 00:00:00|2001-10-01 00:00:00
+prec_4|...|2001-10-01 00:00:00|2002-01-01 00:00:00
+prec_5|...|2002-01-01 00:00:00|2002-04-01 00:00:00
+prec_6|...|2002-04-01 00:00:00|2002-07-01 00:00:00"""
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
 
