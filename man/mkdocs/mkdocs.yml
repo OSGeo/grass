@@ -1,6 +1,16 @@
 ---
 site_name: !ENV SITE_NAME
 site_url: https://grass.osgeo.org/grass-stable/manuals/
+# Repository information
+repo_name: GitHub
+repo_url: https://github.com/OSGeo/grass
+edit_uri_template: edit/main/{path!q}
+icon:
+  repo: fontawesome/brands/github
+  edit: material/pencil
+  view: material/eye
+hooks:
+  - scripts/hook_list_scripts.py
 docs_dir: source
 extra:
   homepage: ./index.html
@@ -12,6 +22,8 @@ theme:
   features:
     - content.code.copy
     - navigation.footer
+    - content.action.edit # Edit on GitHub
+    - content.action.view # View on GitHub
   palette:
     primary: custom
 copyright: !ENV COPYRIGHT
