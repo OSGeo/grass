@@ -28,8 +28,7 @@ v.type input=busroute11 output=busroute11_boundary from_type=line to_type=bounda
 v.centroids input=busroute11_boundary output=busroute11_area
 ```
 
-[<img src="v_centroids.png" data-border="0" width="600" height="300"
-alt="v.centroids example" />](v_centroids.png)  
+![v.centroids example](v_centroids.png)  
 *Figure: Creating area from closed line*
 
 ## SEE ALSO

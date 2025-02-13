@@ -77,8 +77,7 @@ r.univar -g elev_lid792_1m
 r.univar -g elev_lid792_1m_modified
 ```
 
-[<img src="d_rast_edit.png" data-border="0" width="600" height="281"
-alt="d.rast.edit example" />](d_rast_edit.png)  
+![d.rast.edit example](d_rast_edit.png)  
 *Figure: Editing of pixels in an elevation raster map using d.rast.edit*
 
 ## TODO
