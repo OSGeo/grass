@@ -52,8 +52,7 @@ g.region raster=elevation -p
 r.relief input=elevation output=elevation_shade
 ```
 
-<img src="r_relief.png" data-border="0"
-alt="GRASS r.relief result (subset)" />  
+![GRASS r.relief result (subset)](r_relief.png)  
 *r.relief: shaded elevation map (subset)*
 
 ### Colorizing a shaded relief map

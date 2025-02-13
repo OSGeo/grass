@@ -5,7 +5,7 @@ called geomorphons.
 
 ### What is geomorphon
 
-<img src="geomorphon.png" data-border="1" alt="What is geomorphon" />  
+![What is geomorphon](geomorphon.png)
 
 Geomorphon is a new concept of presentation and analysis of terrain
 forms. This concept utilises 8-tuple pattern of the visibility
@@ -113,7 +113,7 @@ visualisation are presented at the image.
 
 ### Forms represented by geomorphons
 
-<img src="legend.png" data-border="1" alt="forms legend" />  
+![forms legend](legend.png)
 
 **ternary**  
 returns code of one of 498 unique ternary patterns for every cell. The
@@ -219,8 +219,7 @@ r.category eu_dem_25m_geomorph
  10 pit
 ```
 
-<img src="r_geomorphon.png" data-border="0"
-alt="Geomorphon calculation example using the EU DEM 25m (with search=11)" />  
+![Geomorphon calculation example using the EU DEM 25m (with search=11)](r_geomorphon.png)
 
 ### Extraction of peaks
 
@@ -234,8 +233,7 @@ r.to.vect input=eu_dem_25m_peaks_thinned output=eu_dem_25m_peaks type=point
 v.info input=eu_dem_25m_peaks
 ```
 
-<img src="r_geomorphon_peaks.png" data-border="0"
-alt="Extraction of peaks from EU DEM 25m (with search=11)" />  
+![Extraction of peaks from EU DEM 25m (with search=11)](r_geomorphon_peaks.png)
 
 ## REFERENCES
 

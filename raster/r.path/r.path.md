@@ -119,8 +119,7 @@ d.vect map=start color=none fill_color=224:0:0 icon=basic/circle size=15 legend_
 d.legend.vect -b
 ```
 
-[<img src="r_path_with_r_watershed_direction.png" width="300"
-height="280" alt="drainage using r.watershed" />](r_path_with_r_watershed_direction.png)  
+![drainage using r.watershed](r_path_with_r_watershed_direction.png)  
 *Figure: Drainage paths from two points where directions from
 r.watershed were used*
 
@@ -169,8 +168,7 @@ the raster path when using the Knight's move.
 
 ```
 
-[<img src="r_path_with_bitmask.png" width="600" height="274"
-alt="least cost path using bitmask" />](r_path_with_bitmask.png)  
+![least cost path using bitmask](r_path_with_bitmask.png)  
 *Figure: Comparison of shortest paths using single directions and
 multiple bitmask encoded directions without and with Knight's move*
 

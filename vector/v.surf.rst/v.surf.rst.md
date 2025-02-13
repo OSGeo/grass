@@ -244,13 +244,11 @@ threads to be used with the **nprocs** parameter (default 1). Figures 1
 and 2 show benchmark results running on Intel® Core™ i5-10210U CPU @
 1.60GHz × 8. See benchmark scripts in the source code for more details.
 
-<img src="vsurfrst_benchmark.png" data-border="0"
-alt="benchmark for v.surf.rst" />  
+![benchmark for v.surf.rst](vsurfrst_benchmark.png)  
 *Figure 1: Benchmark shows execution time for different number of cells
 (1M, 2M, 4M, and 8M).*
 
-<img src="vsurfrst_cv_benchmark.png" data-border="0"
-alt="benchmark for cross-validation of v.surf.rst" />  
+![benchmark for cross-validation of v.surf.rst](vsurfrst_cv_benchmark.png)  
 *Figure 2: Benchmark shows execution time for running cross-validation
 on different number of cells (100k, 200k, 400k, and 800k).*
 

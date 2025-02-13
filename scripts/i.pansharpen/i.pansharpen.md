@@ -181,32 +181,17 @@ d.rgb b=ihs542_blue g=ihs542_green r=ihs542_red
 
 ***Results:***
 
-<table data-border="1">
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;"> <img
-src="i_pansharpen_rgb_landsat542.jpg"
-alt="R, G, B composite of Landsat at 30m" /><br />
-<em>R, G, B composite of Landsat at 30m</em></td>
-<td style="text-align: center;"> <img
-src="i_pansharpen_rgb_brovey542.jpg"
-alt="R, G, B composite of Brovey sharpened image at 15m" /><br />
-<em>R, G, B composite of Brovey sharpened image at 15m</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"> <img src="i_pansharpen_rgb_ihs542.jpg"
-alt="R, G, B composite of IHS sharpened image at 15m" /><br />
-<em>R, G, B composite of IHS sharpened image at 15m</em></td>
-<td style="text-align: center;"> <img src="i_pansharpen_rgb_pca542.jpg"
-alt="R, G, B composite of PCA sharpened image at 15m" /><br />
-<em>R, G, B composite of PCA sharpened image at 15m"</em></td>
-</tr>
-</tbody>
-</table>
+![R, G, B composite of Landsat at 30m](i_pansharpen_rgb_landsat542.jpg)  
+*R, G, B composite of Landsat at 30m*  
+
+![R, G, B composite of Brovey sharpened image at 15m](i_pansharpen_rgb_brovey542.jpg)  
+*R, G, B composite of Brovey sharpened image at 15m*  
+
+![R, G, B composite of IHS sharpened image at 15m](i_pansharpen_rgb_ihs542.jpg)  
+*R, G, B composite of IHS sharpened image at 15m*  
+
+![R, G, B composite of PCA sharpened image at 15m](i_pansharpen_rgb_pca542.jpg)  
+*R, G, B composite of PCA sharpened image at 15m*  
 
 ## REFERENCES
 

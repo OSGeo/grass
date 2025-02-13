@@ -13,7 +13,7 @@ values. The search procedure for the selection of nearest neighboring
 points will consider all input data, without regard to the mask. The
 **-e** flag is the error analysis option that interpolates values only
 for those cells of the input raster map which have non-zero values and
-outputs the difference (see [NOTES](#minuse) below).
+outputs the difference (see [NOTES](#surface-generation-error-analysis) below).
 
 The **npoints** parameter defines the number of nearest data points used
 to determine the interpolated value of an output raster cell.
