@@ -32,8 +32,7 @@ d.geodesic coordinates=55:58W,33:18S,26:43E,60:37N \
   line_color=yellow text_color=red units=kilometers
 ```
 
-<img src="d_geodesic.png" data-border="1"
-alt="Geodesic line (great circle line)" />  
+![Geodesic line (great circle line)](d_geodesic.png)  
 *Geodesic line (great circle line)*
 
 ## NOTES
