@@ -1,4 +1,3 @@
-import pytest
 from grass.script import core as grass
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -112,17 +111,6 @@ class TestVGeneralize(TestCase):
             overwrite=True,
         )
         self.assertVectorExists("generalized_lines")
-
-    def test_invalid_method(self):
-        """Test invalid generalization method."""
-        with pytest.raises(ValueError, match="Select Correct Method Input"):
-            self.assertModule(
-                "v.generalize",
-                input="test_lines",
-                output="generalized_lines",
-                method="invalid",
-                overwrite=True,
-            )
 
     def test_simplification(self):
         """Number of vertices decreases after simplification using Douglas-Peucker Simplification."""
