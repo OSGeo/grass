@@ -43,10 +43,10 @@ infinite kernel along with a finite window.
 
 To smooth a map, keeping its resolution, a good starting point is to use
 the filters **gauss,box** with the radii *0.5 \* input resolution*, *2
-\* input resolution*. See also [r.neighbors](r.neighbors.html)
+\* input resolution*. See also [r.neighbors](r.neighbors.md)
 
 When resampling a map to a higher resolution (alternative to
-interpolation, e.g. [r.resamp.interp](r.resamp.interp.html)), a good
+interpolation, e.g. [r.resamp.interp](r.resamp.interp.md)), a good
 starting point is to use the filters **gauss,box** with the radii *1.5
 \* input resolution*, *3 \* input resolution*.
 

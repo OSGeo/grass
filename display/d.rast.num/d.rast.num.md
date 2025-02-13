@@ -31,8 +31,7 @@ r.grow.distance input=streams_derived distance=dist_from_streams
 d.rast.num dist_from_streams -a
 ```
 
-<img src="d_rast_num_zoom.png" data-border="0"
-alt="Euclidean distance from the streams network in meters" />  
+![Euclidean distance from the streams network in meters](d_rast_num_zoom.png)  
 *Euclidean distance from the streams network in meters (detail, numbers
 shown with d.rast.num)*
 

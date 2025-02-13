@@ -26,8 +26,7 @@ d.mon wx0
 d.histogram map=elevation
 ```
 
-<img src="d_histogram_bar.png" data-border="0"
-alt="d.histogram bar graph example" />  
+![d.histogram bar graph example](d_histogram_bar.png)  
 *Figure: Bar graph histogram for elevation map*
 
 Running the command below will generate the pie graph shown in the
@@ -38,8 +37,7 @@ g.region raster=landuse96_28m -p
 d.histogram map=landuse96_28m style=pie
 ```
 
-<img src="d_histogram_pie.png" data-border="0"
-alt="d.histogram pie graph example" />  
+![d.histogram pie graph example](d_histogram_pie.png)  
 *Figure: Pie graph histogram for landuse map*
 
 ## SEE ALSO

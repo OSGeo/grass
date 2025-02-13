@@ -39,8 +39,7 @@ r.plane myplane30 dip=30 az=75 east=638650.0 north=220375.0 \
         elev=116.7734 type=FCELL
 ```
 
-[<img src="r_plane_3d.png" data-border="0" width="600" height="360"
-alt="r.plane example" />](r_plane_3d.png)  
+![r.plane example](r_plane_3d.png)  
 *Figure: Tilted plane shown in NVIZ along with elevation map*
 
 ## AUTHORS

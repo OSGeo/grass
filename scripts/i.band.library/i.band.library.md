@@ -108,7 +108,7 @@ designed in order to support image collections in GRASS GIS.
 Band reference information is stored in JSON files with a pre-defined
 internal data structure. A minimalistic example is shown below.
 
-```sh
+```json
 {
     "Sentinel2": {
         "description": "The Sentinel-2 A/B bands",

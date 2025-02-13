@@ -194,7 +194,7 @@ dataset [t.vect.list](t.vect.list.md#using-method-option)
 
 ### Reading raster names in Python
 
-```sh
+```python
 result = json.loads(
     gs.read_command(
         "t.rast.list", input="tempmean_monthly", format="json"

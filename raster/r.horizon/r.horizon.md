@@ -185,14 +185,14 @@ r.horizon elevation=elevation direction=0 step=5 bufferzone=200 \
 ```
 
 ![](rhorizon_shaded_dem_point.png)  
-Test point near high way intersection (North Carolina sample dataset)
+*Test point near high way intersection (North Carolina sample dataset)*
 
 ![](rhorizon_singlepoint_plot.png)  
-Horizon angles for test point (CCW from East)
+*Horizon angles for test point (CCW from East)*
 
 We can plot horizon in polar coordinates using Matplotlib in Python:
 
-```sh
+```python
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -209,7 +209,7 @@ plt.show()
 ```
 
 ![](rhorizon_polar_plot.png)  
-Horizon plot in polar coordinates.
+*Horizon plot in polar coordinates.*
 
 ### Raster map mode
 
