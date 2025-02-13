@@ -1,3 +1,4 @@
+import pytest
 from grass.script import core as grass
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -114,7 +115,7 @@ class TestVGeneralize(TestCase):
 
     def test_invalid_method(self):
         """Test invalid generalization method."""
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             self.assertModule(
                 "v.generalize",
                 input="test_lines",
@@ -152,9 +153,9 @@ class TestVGeneralize(TestCase):
                 if line.strip().startswith("B"):
                     parts = line.strip().split()
                     if len(parts) >= 2:
-                        output_vertices+= int(parts[1])
+                        output_vertices += int(parts[1])
 
-        self.assertGreater(int(input_vertices), int(output_vertices))
+        assert int(input_vertices) > int(output_vertices)
 
     def test_smoothing(self):
         """Number of vertices increases after smoothing using Chaiken Smoothing"""
@@ -186,9 +187,9 @@ class TestVGeneralize(TestCase):
                 if line.strip().startswith("B"):
                     parts = line.strip().split()
                     if len(parts) >= 2:
-                        output_vertices+= int(parts[1])
+                        output_vertices += int(parts[1])
 
-        self.assertLess(int(input_vertices), int(output_vertices))
+        assert int(input_vertices) < int(output_vertices)
 
 
 if __name__ == "__main__":
