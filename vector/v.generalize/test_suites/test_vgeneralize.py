@@ -46,7 +46,7 @@ class TestVGeneralize(TestCase):
                 if line.strip().startswith("B"):
                     parts = line.strip().split()
                     if len(parts) >= 2:
-                        vertices = vertices + int(parts[1])
+                        vertices+= int(parts[1])
 
         return vertices
 
@@ -152,7 +152,7 @@ class TestVGeneralize(TestCase):
                 if line.strip().startswith("B"):
                     parts = line.strip().split()
                     if len(parts) >= 2:
-                        output_vertices = output_vertices + int(parts[1])
+                        output_vertices+= int(parts[1])
 
         self.assertGreater(int(input_vertices), int(output_vertices))
 
@@ -186,7 +186,7 @@ class TestVGeneralize(TestCase):
                 if line.strip().startswith("B"):
                     parts = line.strip().split()
                     if len(parts) >= 2:
-                        output_vertices = output_vertices + int(parts[1])
+                        output_vertices+= int(parts[1])
 
         self.assertLess(int(input_vertices), int(output_vertices))
 
