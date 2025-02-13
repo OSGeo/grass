@@ -175,7 +175,7 @@ int vlines_set_attrb(const struct GParams *params)
  */
 int vpoints_set_attrb(const struct GParams *params)
 {
-    int i, layer = 0, have_colors, with_z = 0;
+    int i, have_colors;
     int *site_list, nsites;
     int marker, color, width;
     float size;
@@ -187,6 +187,7 @@ int vpoints_set_attrb(const struct GParams *params)
     site_list = GP_get_site_list(&nsites);
 
     for (i = 0; i < nsites; i++) {
+        int layer = -1, with_z = 0;
         check_map(params, i, FALSE, &layer, &with_z);
 
         color = Nviz_color_from_str(params->vpoint_color->answers[i]);
