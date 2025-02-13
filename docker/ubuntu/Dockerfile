@@ -297,11 +297,9 @@ RUN ./configure $GRASS_CONFIG \
 # Build the GDAL-GRASS plugin
 RUN git clone https://github.com/OSGeo/gdal-grass \
     && cd "gdal-grass" \
-    && ./configure \
-      --with-gdal=/usr/bin/gdal-config \
-      --with-grass=/usr/local/grass85 \
-    && make -j $NUMTHREADS \
-    && make install -j $NUMTHREADS \
+    && cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF \
+    && cmake --build build \
+    && cmake --install build \
     && cd /src \
     && rm -rf "gdal-grass"
 
