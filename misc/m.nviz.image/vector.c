@@ -262,6 +262,7 @@ int check_map(const struct GParams *params, int index, int vlines, int *field,
 
     Fi = NULL;
     driver = NULL;
+    column = NULL;
 
     if (vlines) {
         map = params->vlines->answers[index];
@@ -321,6 +322,8 @@ int check_map(const struct GParams *params, int index, int vlines, int *field,
 
             if (db_column_Ctype(driver, Fi->table, color) != DB_C_TYPE_STRING)
                 G_fatal_error(_("Data type of color column must be character"));
+            db_free_column(column);
+            column = NULL;
         }
         if (size) {
             db_get_column(driver, Fi->table, size, &column);
@@ -331,6 +334,8 @@ int check_map(const struct GParams *params, int index, int vlines, int *field,
             type = db_column_Ctype(driver, Fi->table, size);
             if (type != DB_C_TYPE_INT && type != DB_C_TYPE_DOUBLE)
                 G_fatal_error(_("Data type of size column must be numeric"));
+            db_free_column(column);
+            column = NULL;
         }
         if (width) {
             db_get_column(driver, Fi->table, width, &column);
@@ -341,6 +346,8 @@ int check_map(const struct GParams *params, int index, int vlines, int *field,
             type = db_column_Ctype(driver, Fi->table, width);
             if (type != DB_C_TYPE_INT && type != DB_C_TYPE_DOUBLE)
                 G_fatal_error(_("Data type of width column must be numeric"));
+            db_free_column(column);
+            column = NULL;
         }
         if (marker) {
             db_get_column(driver, Fi->table, marker, &column);
@@ -352,14 +359,15 @@ int check_map(const struct GParams *params, int index, int vlines, int *field,
             if (db_column_Ctype(driver, Fi->table, marker) != DB_C_TYPE_STRING)
                 G_fatal_error(
                     _("Data type of marker column must be character"));
+            db_free_column(column);
+            column = NULL;
         }
 
         db_close_database_shutdown_driver(driver);
+        Vect_destroy_field_info(Fi);
     }
 
     Vect_close(&Map);
-    db_free_column(column);
-    Vect_destroy_field_info(Fi);
 
     return 0;
 }
