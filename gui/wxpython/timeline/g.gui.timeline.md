@@ -11,8 +11,7 @@ Supported features:
 - 3D plots - spatio-temporal extent (matplotlib \>= 1.0.0)
 - pop-up annotations with basic metadata
 
-<img src="timeline_2D.jpg" data-border="1"
-alt="Timeline Tool screenshot" />
+![Timeline Tool screenshot](timeline_2D.jpg)
 
 ## NOTES
 

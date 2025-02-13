@@ -24,26 +24,11 @@ assigns a unique flow direction towards the steepest downslope neighbor.
 The MFD method assigns multiple flow directions towards all downslope
 neighbors.
 
-<table width="80%" data-align="center">
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th><img src="rterraflow_dir2.png" alt="r.terraflow SFD" /></th>
-<th><img src="rterraflow_dir3.png" alt="r.terraflow MFD" /></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th>Flow direction to steepest<br />
-downslope neighbor (SFD).</th>
-<th>Flow direction to all<br />
-downslope neighbors (MFD).</th>
-</tr>
-&#10;</tbody>
-</table>
+![r.terraflow SFD](rterraflow_dir2.png)  
+*Flow direction to the steepest downslope neighbor (SFD).*
+
+![r.terraflow MFD](rterraflow_dir3.png)  
+*Flow direction to all downslope neighbors (MFD).*
 
 The SFD and the MFD method cannot compute flow directions for cells
 which have the same height as all their neighbors (flat areas) or cells
@@ -67,8 +52,7 @@ in the terrain can be assigned SFD/MFD flow directions as above. Flow
 directions are encoded using powers of two clockwise starting from
 2<sup>0</sup> for east to 2<sup>7</sup> for north-east.
 
-[<img src="rterraflow_direction_encoding.png" data-border="0" width="200"
-height="200" alt="r.terraflow direction encoding" />](rterraflow_direction_encoding.png)  
+![r.terraflow direction encoding](rterraflow_direction_encoding.png)  
 Flow direction encoding clockwise starting from 2<sup>0</sup> for east
 to 2<sup>7</sup> for north-east; 0 for undetermined (sinks) and 1 for
 undefined (null cells)

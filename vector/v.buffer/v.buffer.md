@@ -38,12 +38,9 @@ backward compatibility and have no effect with GEOS buffering.
 
 The following vector line related corners (also called "cap") exist:
 
-- no cap:       <img src="v_buffer_no_cap.png" data-valign="middle"
-  alt="line buffer: no cap" />
-- rounded cap: <img src="v_buffer_rounded_cap.png" data-valign="middle"
-  alt="line buffer: rounded cap" />
-- square cap: <img src="v_buffer_square_cap.png" data-valign="middle"
-  alt="line buffer: square cap" />
+- no cap:       ![line buffer: no cap](v_buffer_no_cap.png)
+- rounded cap: ![line buffer: rounded cap](v_buffer_rounded_cap.png)
+- square cap: ![line buffer: square cap](v_buffer_square_cap.png)
 
 By default *v.buffer* creates rounded buffers (blue color on figure
 below):

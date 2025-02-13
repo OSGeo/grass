@@ -521,7 +521,7 @@ int main(int argc, char *argv[])
      * to real timesec in seconds */
     settings.timesec = settings.timesec * 60.0;
     settings.iterout = settings.iterout * 60.0;
-    if ((settings.timesec / settings.iterout) > 100.0 && settings.ts)
+    if ((settings.timesec / (double)settings.iterout) > 100.0 && settings.ts)
         G_message(_("More than 100 files are going to be created !!!!!"));
 
     /* compute how big the raster is and set this to appr 2 walkers per cell */

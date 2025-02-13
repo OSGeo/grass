@@ -137,9 +137,9 @@ sweep-line algorithm uses *O(n lg n)* time. This algorithm is efficient
 in terms of CPU operations and can be also made efficient in terms of
 I/O-operations. For all details see the REFERENCES below.
 
-| <img src="sweep1.png" data-border="0" width="200" alt="[SDF]" /> | <img src="sweep2.png" data-border="0" width="200" alt="[SDF]" /> |
+| ![[SDF]](sweep1.png) | ![[SDF]](sweep2.png) |
 |------------------------------------------------------------------|------------------------------------------------------------------|
-| The sweep-line.                                                  | The active cells.                                                |
+| The sweep-line.  | The active cells.|
 
 ## EXAMPLES
 
@@ -152,9 +152,8 @@ g.region raster=elev_lid792_1m -p
 r.viewshed input=elev_lid792_1m output=elev_lid792_1m_viewshed coordinates=638728,220609 observer_elevation=5.0
 ```
 
-[<img src="r.viewshed.png" data-border="0" width="600" height="570"
-alt="r.viewshed example" />  
-](r.viewshed.png) *Viewshed shown on shaded terrain (observer position
+![r.viewshed example](r.viewshed.png)  
+*Viewshed shown on shaded terrain (observer position
 in the north-east quadrant with white dot; 5m above ground)*
 
 Using the Spearfish dataset: calculating the viewpoint from top of a

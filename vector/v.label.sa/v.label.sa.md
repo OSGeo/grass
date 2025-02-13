@@ -36,7 +36,7 @@ Labeling Algorithm, Cartographica, Vol. 33, No. 4, Winter 1996, pp.
 
 ## SEE ALSO
 
-*[d.label](v.labels.md)  
+*[v.label](v.label.md)  
 [d.labels](d.labels.md)  
 [ps.map](ps.map.md) [Wikipedia article on simulated
 annealing](https://en.wikipedia.org/wiki/Simulated_Annealing)*  

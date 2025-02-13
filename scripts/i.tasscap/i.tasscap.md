@@ -35,30 +35,17 @@ i.tasscap sensor=landsat7_etm \
 
 Results:
 
-<table data-border="1">
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;"> <img src="i_tasscap_brightness.jpg"
-alt="&#39;Brightness&#39; Tasseled Cap component 1" /><br />
-<em>'Brightness' Tasseled Cap component 1</em></td>
-<td style="text-align: center;"> <img src="i_tasscap_greenness.jpg"
-alt="&#39;Greenness&#39; Tasseled Cap component 2" /><br />
-<em>'Greenness' Tasseled Cap component 2</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"> <img src="i_tasscap_wetness.jpg"
-alt="&#39;Wetness&#39; Tasseled Cap component 3" /><br />
-<em>'Wetness' Tasseled Cap component 3</em></td>
-<td style="text-align: center;"> <img src="i_tasscap_haze.jpg"
-alt="&#39;Atmospheric haze&#39; Tasseled Cap component 4" /><br />
-<em>'Atmospheric haze' Tasseled Cap component 4</em></td>
-</tr>
-</tbody>
-</table>
+![Brightness Tasseled Cap component 1](i_tasscap_brightness.jpg)  
+*'Brightness' Tasseled Cap component 1*  
+
+![Greenness Tasseled Cap component 2](i_tasscap_greenness.jpg)  
+*'Greenness' Tasseled Cap component 2*  
+
+![Wetness Tasseled Cap component 3](i_tasscap_wetness.jpg)  
+*'Wetness' Tasseled Cap component 3*  
+
+![Atmospheric haze Tasseled Cap component 4](i_tasscap_haze.jpg)  
+*'Atmospheric haze' Tasseled Cap component 4*  
 
 ## REFERENCES
 

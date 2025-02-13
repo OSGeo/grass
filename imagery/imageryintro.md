@@ -102,8 +102,7 @@ signature files of imagery classification tools. Therefore, signature
 files of one imagery or raster group can be used to classify a different
 group with identical semantic labels.
 
-<img src="band_references_scheme.png" data-border="0" width="600"
-height="435" alt="GRASS GIS band references scheme" />  
+![GRASS GIS band references scheme](band_references_scheme.png)  
 *New enhanced classification workflow involving semantic labels.*
 
 With [r.support](r.support.md) any sort of semantic label the user
