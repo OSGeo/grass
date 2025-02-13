@@ -127,7 +127,7 @@ v.univar -e samples column=heights type=point format=json
 
 will output the results in JSON format:
 
-```sh
+```json
 {
     "n": 1832,
     "missing": 0,

@@ -127,7 +127,7 @@ The output from *r.report* can be output in JSON by passing the
 r.report -n -a map=towns,elevation units=miles,meters,kilometers,acres,hectares,cells,percent nsteps=2 format=json
 ```
 
-```sh
+```json
 {
     "location": "nc_spm_08_grass7",
     "created": "2024-07-24T14:59:09+0530",

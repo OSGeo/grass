@@ -33,8 +33,7 @@ v.extract input=boundary_county where="NAME='WAKE' OR NAME='JOHNSTON'" output=co
 v.clip input=railroads clip=county_WAKE_JOHNSTON output=railroads_WAKE_JOHNSTON
 ```
 
-<img src="v_clip_poly.png" width="600" height="255"
-alt="v.clip example" />  
+![v.clip example](v_clip_poly.png)  
 *Figure: v.clip example - basic use*
 
 ### Retain boundaries of clip map
@@ -55,8 +54,7 @@ v.extract input=boundary_county where="NAME='WAKE' OR NAME='JOHNSTON'" output=co
 v.clip -r input=hospitals output=hospitals_clip
 ```
 
-<img src="v_clip_region.png" width="600" height="259"
-alt="v.clip example" />  
+![v.clip example](v_clip_region.png)  
 *Figure: v.clip example - clip by computational region*
 
 ## SEE ALSO

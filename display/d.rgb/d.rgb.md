@@ -49,7 +49,7 @@ g.region raster=lsat7_2002_10 -p
 d.rgb blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30
 ```
 
-<img src="d_rgb.png" data-border="0" alt="d.rgb example" />  
+![d.rgb example](d_rgb.png)  
 *Figure: Visual color composite of a LANDSAT scene (North Carolina
 sample dataset)*
 

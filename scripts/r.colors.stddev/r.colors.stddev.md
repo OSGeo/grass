@@ -23,8 +23,7 @@ g.region raster=elevation -p
 r.colors.stddev elevation
 ```
 
-[<img src="r_colors_stddev.png" data-border="0" width="600" height="540"
-alt="r.colors.stddev example" />](r_colors_stddev.png)  
+![r.colors.stddev example](r_colors_stddev.png)  
 *Figure: Standard deviations from mean elevation*
 
 ## SEE ALSO

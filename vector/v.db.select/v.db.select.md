@@ -56,7 +56,7 @@ to parse this format when configured to the above specification.
 
 Example with default settings:
 
-```sh
+```csv
 cat,road_name,multilane,year,length
 1,"NC-50","no",2001,4825.369405
 2,"NC-50","no",2002,14392.589058
@@ -106,7 +106,7 @@ the SQL types. The definition of `is_number` may change in the future.
 
 Example with added indentation:
 
-```sh
+```json
 {
   "info": {
     "columns": [
@@ -319,7 +319,7 @@ The *json* package in the standard Python library can load a JSON string
 obtained as output from the *v.db.select* module through the
 *read_command* function:
 
-```sh
+```python
 import json
 import grass.script as gs
 
