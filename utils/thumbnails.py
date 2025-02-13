@@ -15,6 +15,7 @@
 
 import os
 import atexit
+import sys
 from pathlib import Path
 
 import grass.script as gs
@@ -106,7 +107,7 @@ def make_gradient(path):
 
 
 def make_image(output_dir, table, grad, height, width):
-    outfile = os.path.join(output_dir, "colortables", "%s.png" % table)
+    outfile = os.path.join(output_dir, "%s.png" % table)
     os.environ["GRASS_RENDER_FILE"] = outfile
 
     gs.run_command("r.colors", map=grad, color=table, quiet=True)
@@ -158,7 +159,7 @@ def main():
     os.environ["GRASS_OVERWRITE"] = "1"
 
     color_dir = os.path.join(os.environ["GISBASE"], "etc", "colors")
-    output_dir = os.path.join(os.environ["GISBASE"], "docs", "html")
+    output_dir = sys.argv[1]
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)

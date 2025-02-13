@@ -1,7 +1,7 @@
 ## KEYWORDS
 
 [display](display.md), [GUI](topic_GUI.md),
-[imagery](keywords.md#imagery), [scatterplot](keywords.md#scatterplot),
+[imagery](keywords.md#imagery), [scatterplot](keywords.md),
 [plot](keywords.md#plot)
 
 ## DESCRIPTION

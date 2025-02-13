@@ -126,7 +126,7 @@ Finally, the output from *r.info* can be output in JSON by passing the
 r.info slope format=json
 ```
 
-```sh
+```json
 {
     "north": 228500,
     "south": 215000,

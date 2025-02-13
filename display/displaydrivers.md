@@ -19,7 +19,7 @@ this variable. Currently only Python scrips are supported.
 
 Lets start with simple example of Python script called *render.py*:
 
-```sh
+```python
 #!/usr/bin/env python3
 
 import os

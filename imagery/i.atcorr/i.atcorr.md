@@ -882,8 +882,7 @@ To apply atmospheric correction to the remaining bands, only the last
 line in the 6S parameters file (i.e., the sensor band) needs to be
 changed. The other parameters will remain the same.
 
-[<img src="i_atcorr_B02_atcorr.png" data-border="0" width="600"
-height="486" alt="i.atcorr example" />](i_atcorr_B02_atcorr.png)  
+![i.atcorr example](i_atcorr_B02_atcorr.png)  
 *Figure: Sentinel-2A Band 02 with applied atmospheric correction
 (histogram equalization grayscale color scheme)*
 

@@ -136,7 +136,7 @@ bottom=0.000000
 
 ### Output in JSON format
 
-```sh
+```json
 {
     "name": "geology",
     "mapset": "PERMANENT",
@@ -187,17 +187,17 @@ more info.
 Note: The Python tab in the *wxGUI* can be used for entering the
 following code:
 
-```sh
-import grass.script as gcore
+```python
+import grass.script as gs
 
-gcore.vector_columns('geology')   # for `v.info -c`
-gcore.vector_info_topo('geology') # for `v.info shell=topo`
+gs.vector_columns('geology')   # for `v.info -c`
+gs.vector_info_topo('geology') # for `v.info shell=topo`
 ```
 
 Here is an example of how the JSON output format can be used to
 integrate Grass with other python libraries easily.
 
-```sh
+```python
 import grass.script as gs
 import pandas as pd
 
