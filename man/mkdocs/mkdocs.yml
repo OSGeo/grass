@@ -46,22 +46,6 @@ theme:
 # Customization
 extra:
   homepage: ./index.html
-  # We can add localized versions of the site here
-  # alternate:
-  #   - name: English
-  #     lang: en
-  #   - name: Deutsch
-  #     link: /de/
-  #     lang: de
-  #   - name: Español
-  #     link: /es/
-  #     lang: es
-  #   - name: Slovenčina
-  #     link: /sk/
-  #     lang: sk
-  #   - name: Italiano
-  #     link: /it/
-  #     lang: it
 
 extra_css:
   - grassdocs.css
