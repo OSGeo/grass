@@ -60,12 +60,12 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
     dglGraph_s *gr;
     dglInt32_t opaqueset[16] = {360000, 0, 0, 0, 0, 0, 0, 0,
                                 0,      0, 0, 0, 0, 0, 0, 0};
-    struct field_info *Fi;
+    struct field_info *Fi = NULL;
     dbDriver *driver = NULL;
     dbDriver *ttbdriver = NULL;
     dbHandle handle;
     dbString stmt;
-    dbColumn *Column;
+    dbColumn *Column = NULL;
     dbCatValArray fvarr, bvarr;
     int fctype = 0, bctype = 0, nrec, nturns;
 
@@ -666,8 +666,13 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
     dglInitializeSPCache(gr, &(Map->dgraph.spCache));
 
     G_message(_("Graph was built"));
-    Vect_destroy_field_info(Fi);
-    db_free_column(Column);
+    if (Fi) {
+        Vect_destroy_field_info(Fi);
+    }
+    if (Column) {
+        db_free_column(Column);
+    }
+
     return 0;
 }
 
@@ -709,11 +714,11 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
     dglInt32_t dgl_cost;
     dglInt32_t opaqueset[16] = {360000, 0, 0, 0, 0, 0, 0, 0,
                                 0,      0, 0, 0, 0, 0, 0, 0};
-    struct field_info *Fi;
+    struct field_info *Fi = NULL;
     dbDriver *driver = NULL;
     dbHandle handle;
     dbString stmt;
-    dbColumn *Column;
+    dbColumn *Column = NULL;
     dbCatValArray fvarr, bvarr;
     int fctype = 0, bctype = 0, nrec;
 
@@ -1063,8 +1068,12 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
     dglInitializeSPCache(gr, &(Map->dgraph.spCache));
 
     G_message(_("Graph was built"));
-    Vect_destroy_field_info(Fi);
-    db_free_column(Column);
+    if (Fi) {
+        Vect_destroy_field_info(Fi);
+    }
+    if (Column) {
+        db_free_column(Column);
+    }
 
     return 0;
 }
