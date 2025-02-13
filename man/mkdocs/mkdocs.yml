@@ -115,6 +115,9 @@ nav:
       - Vectors:
           - Overview: vectorintro.md
           - Vector Tools: vector.md
+          - Databases Overview: databaseintro.md
+          - Database Tools: database.md
+          - Supported Database Drivers: sql.md
       # - GUI Tools:
       - Imagery:
           - Overview: imageryintro.md
@@ -124,11 +127,6 @@ nav:
       - Temporal:
           - Overview: temporalintro.md
           - Temporal: temporal.md
-
-  - Database Management:
-      - Overview: databaseintro.md
-      - Database Tools: database.md
-      - Supported Drivers: sql.md
 
   - Visualization:
       # - Overview: visualizationintro.md # Does not exist yet
