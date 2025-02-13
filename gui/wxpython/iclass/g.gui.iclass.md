@@ -28,9 +28,8 @@ supervised classification* or via command line as *g.gui.iclass*.
 - import vector map
 - export vector map with attribute table
 
-<img src="iclass_frame.jpg" data-border="1"
-alt="Supervised Classification Tool" />  
-  
+![Supervised Classification Tool](iclass_frame.jpg)
+
 *wxIClass* performs the first pass in the GRASS two-pass supervised
 image classification process; the GRASS module *[i.maxlik](i.maxlik.md)*
 executes the second pass. Both programs must be run to generate a
