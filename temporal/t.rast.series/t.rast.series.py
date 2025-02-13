@@ -94,6 +94,7 @@
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
+from pathlib import Path
 
 ############################################################################
 
@@ -136,10 +137,7 @@ def main():
     if rows:
         # Create the r.series input file
         filename = gs.tempfile(True)
-        with open(filename, "w") as file:
-            for row in rows:
-                string = "%s\n" % (row["id"])
-                file.write(string)
+        Path(filename).write_text("\n".join(str(row["id"]) for row in rows))
 
         flag = ""
         if len(rows) > max_files_open:
