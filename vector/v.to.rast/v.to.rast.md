@@ -105,9 +105,8 @@ r.mapcalc "route_slope = if(busroute11, slope)"
 r.mapcalc "route_slope_dir = abs(atan(tan(slope) * cos(aspect - busroute11_dir)))"
 ```
 
-<img src="v_to_rast_direction.png" data-border="1"
-alt="Slope along path" />  
-Slope in degrees along bus route
+![Slope along path](v_to_rast_direction.png)  
+*Slope in degrees along bus route*
 
 ### Convert a vector polygon map to raster including descriptive labels
 
@@ -150,9 +149,8 @@ d.vect schools_wake
 d.grid 5000
 ```
 
-<img src="v_to_rast_binning.png" data-border="1"
-alt="Number of schools per raster cell" />  
-Number of schools per raster cell
+![Number of schools per raster cell](v_to_rast_binning.png)  
+*Number of schools per raster cell*
 
 ## SEE ALSO
 

@@ -51,13 +51,11 @@ digitizer](wxGUI.vdigit.md)*.
 
 1\. Subnetwork allocation using distance:
 
-<img src="v_net_alloc.png" data-border="1"
-alt="v.net.alloc example using distance" />  
+![v.net.alloc example using distance](v_net_alloc.png)  
 
 2\. Subnetwork allocation using traveling time:
 
-<img src="v_net_alloc_time.png" data-border="1"
-alt="v.net.alloc example using time" />  
+![v.net.alloc example using time](v_net_alloc_time.png)  
 
 Example 1: *Calculating subnets for 3 center nodes using distances*
 
@@ -170,15 +168,13 @@ Each lane of the two-lane road is a one-way road.
 
 1\. Subnetwork allocation from centers:
 
-<img src="v_net_alloc_from_centers.png" data-border="1"
-alt="v.net.alloc example from centers" />  
-A center reaches any point following the one-way lanes.
+![v.net.alloc example from centers](v_net_alloc_from_centers.png)  
+*A center reaches any point following the one-way lanes.*
 
 2\. Subnetwork allocation to centers:
 
-<img src="v_net_alloc_to_centers.png" data-border="1"
-alt="v.net.alloc example to centers" />  
-Any node reaches reaches the nearest center following the one-way lanes.
+![v.net.alloc example to centers](v_net_alloc_to_centers.png)  
+*Any node reaches reaches the nearest center following the one-way lanes.*
 
 In case of an accident, the ambulance should come from the nearest
 'from' hospital and go to the nearest 'to' hospital.

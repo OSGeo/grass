@@ -47,8 +47,7 @@ hospital and show all paths.
 Streets are grey lines, schools are green circles, hospitals are red
 crosses, shortest paths are blue lines:
 
-<img src="vnetdistance.png" data-border="1"
-alt="v.net.distance example" />
+![v.net.distance example](vnetdistance.png)
 
 ```sh
 # connect schools to streets as layer 2
