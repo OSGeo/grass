@@ -179,6 +179,7 @@ RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
     mkdir -p /usr/local/grass/gui/wxpython/xml/; \
     mv module_items.xml /usr/local/grass/gui/wxpython/xml/module_items.xml;
 
+# renovate: datasource=github-tags depName=OSGeo/gdal-grass
 ARG GDAL_GRASS_VERSION=1.0.3
 RUN git clone --branch $GDAL_GRASS_VERSION --single-branch https://github.com/OSGeo/gdal-grass.git src/gdal-grass
 WORKDIR /src/gdal-grass

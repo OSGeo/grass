@@ -295,6 +295,7 @@ RUN ./configure $GRASS_CONFIG \
     mv module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml;
 
 # Build the GDAL-GRASS plugin
+# renovate: datasource=github-tags depName=OSGeo/gdal-grass
 ARG GDAL_GRASS_VERSION=1.0.3
 RUN git clone --branch $GDAL_GRASS_VERSION --single-branch https://github.com/OSGeo/gdal-grass.git \
     && cd "gdal-grass" \
