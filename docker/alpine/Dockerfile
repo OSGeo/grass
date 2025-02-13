@@ -179,8 +179,8 @@ RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
     mkdir -p /usr/local/grass/gui/wxpython/xml/; \
     mv module_items.xml /usr/local/grass/gui/wxpython/xml/module_items.xml;
 
-ARG GDAL_GRASS_V=1.0.3
-RUN git clone --branch $GDAL_GRASS_V --single-branch https://github.com/OSGeo/gdal-grass.git src/gdal-grass
+ARG GDAL_GRASS_VERSION=1.0.3
+RUN git clone --branch $GDAL_GRASS_VERSION --single-branch https://github.com/OSGeo/gdal-grass.git src/gdal-grass
 WORKDIR /src/gdal-grass
 RUN cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF && \
     cmake --build build && \
