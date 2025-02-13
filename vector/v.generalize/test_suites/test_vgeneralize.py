@@ -6,11 +6,11 @@ from grass.gunittest.main import test
 class TestVGeneralize(TestCase):
     @classmethod
     def setUpClass(cls):
-        """Set up the test environment by importing coordinates and creating a vector map."""
+        """Set up the test environment by importing coordinates and creating a vector map"""
         # Setting up the temporary computational region
         cls.runModule("g.region", n=3401500, s=3400800, e=5959100, w=5958800, res=10)
 
-        # Import coordinates from test_coordinates.txt which is in ascii format using v.in.ascii
+        # Import coordinates from test_coordinates.txt which is in ascii format using v.in.ascii"""
         cls.runModule(
             "v.in.ascii",
             input="test_coordinates.txt",
@@ -21,18 +21,17 @@ class TestVGeneralize(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Clean up the test environment."""
-        # Cleaning up the temporary computational region
-        cls.runModule("g.remove", type="vector", name="test_lines,generalized_lines", flags="f")
+        """Cleaning up the test environment."""
+        cls.runModule(
+            "g.remove",
+            type="vector",
+            name="test_lines,generalized_lines",
+            flags="f",
+        )
 
     def get_vertices(self, file_name):
-        """
-        Get vertices from the ASCII-based formatted file.
-
-        This function counts the number of vertices in the ASCII Standard Format File of the GRASS GIS.
-        This will help us in verifying whether simplification or smoothing algorithm works correctly or not.
-        """
-        with open(file_name, "r") as file:
+        """Getting vertices from the ascii based formatted file"""
+        with open(file_name) as file:
             lines = file.readlines()
 
         vertices = 0
@@ -47,11 +46,11 @@ class TestVGeneralize(TestCase):
                 if line.strip().startswith("B"):
                     parts = line.strip().split()
                     if len(parts) >= 2:
-                        vertices += int(parts[1])
+                        vertices = vertices + int(parts[1])
 
         return vertices
 
-    def test_douglas_peucker(self):
+    def test_douglas_peuckar(self):
         """Test Douglas-Peucker Simplification."""
         self.assertModule(
             "v.generalize",
@@ -64,7 +63,7 @@ class TestVGeneralize(TestCase):
         self.assertVectorExists("generalized_lines")
 
     def test_snakes(self):
-        """Test Snakes Smoothing."""
+        """Test Snakes Smoothing"""
         self.assertModule(
             "v.generalize",
             input="test_lines",
@@ -78,7 +77,7 @@ class TestVGeneralize(TestCase):
         self.assertVectorExists("generalized_lines")
 
     def test_chaiken(self):
-        """Test Chaiken Smoothing."""
+        """Test Chaiken Smoothing"""
         self.assertModule(
             "v.generalize",
             input="test_lines",
@@ -90,7 +89,7 @@ class TestVGeneralize(TestCase):
         self.assertVectorExists("generalized_lines")
 
     def test_hermite(self):
-        """Test Hermite Method."""
+        """Test Hermite Method"""
         self.assertModule(
             "v.generalize",
             input="test_lines",
@@ -102,7 +101,7 @@ class TestVGeneralize(TestCase):
         self.assertVectorExists("generalized_lines")
 
     def test_distance_weighting(self):
-        """Test Distance Weighting Method."""
+        """Distance Weighting Method"""
         self.assertModule(
             "v.generalize",
             input="test_lines",
@@ -136,14 +135,14 @@ class TestVGeneralize(TestCase):
         )
         self.assertVectorExists("generalized_lines")
 
-        # Exporting the output vector (generalized_lines) to ASCII file for further analysis
-        output_file = grass.read_command("v.out.ascii", input="generalized_lines", format="standard", layer=-1)
+        output_file = grass.read_command(
+            "v.out.ascii", input="generalized_lines", format="standard", layer=-1
+        )
 
         input_vertices = self.get_vertices("test_coordinates.txt")
         output_vertices = 0
         in_verti_section = False
 
-        # Extracting output vertices
         for line in output_file.splitlines():
             if line.strip() == "VERTI:":
                 in_verti_section = True
@@ -153,12 +152,12 @@ class TestVGeneralize(TestCase):
                 if line.strip().startswith("B"):
                     parts = line.strip().split()
                     if len(parts) >= 2:
-                        output_vertices += int(parts[1])
+                        output_vertices = output_vertices + int(parts[1])
 
         self.assertGreater(int(input_vertices), int(output_vertices))
 
     def test_smoothing(self):
-        """Number of vertices increases after smoothing using Chaiken Smoothing."""
+        """Number of vertices increases after smoothing using Chaiken Smoothing"""
         self.assertModule(
             "v.generalize",
             input="test_lines",
@@ -170,14 +169,14 @@ class TestVGeneralize(TestCase):
         )
         self.assertVectorExists("generalized_lines")
 
-        # Exporting the output vector (generalized_lines) to ASCII file for further analysis
-        output_file = grass.read_command("v.out.ascii", input="generalized_lines", format="standard", layer=-1)
+        output_file = grass.read_command(
+            "v.out.ascii", input="generalized_lines", format="standard", layer=-1
+        )
 
         input_vertices = self.get_vertices("test_coordinates.txt")
         output_vertices = 0
         in_verti_section = False
 
-        # Extracting output vertices
         for line in output_file.splitlines():
             if line.strip() == "VERTI:":
                 in_verti_section = True
@@ -187,7 +186,7 @@ class TestVGeneralize(TestCase):
                 if line.strip().startswith("B"):
                     parts = line.strip().split()
                     if len(parts) >= 2:
-                        output_vertices += int(parts[1])
+                        output_vertices = output_vertices + int(parts[1])
 
         self.assertLess(int(input_vertices), int(output_vertices))
 
