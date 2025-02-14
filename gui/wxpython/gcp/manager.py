@@ -2608,11 +2608,11 @@ class VectGroup(wx.Dialog):
         vector_path = (
             Path(self.grassdatabase) / self.xylocation / self.xymapset / "vector"
         )
-        vectlist = []
-        for item in vector_path.iterdir():
-            if not (item / "coor").is_file():
-                continue
-            vectlist.append(str(item.name))
+        vectlist = [
+            coor_path.parent.name
+            for coor_path in vector_path.glob("*/coor")
+            if coor_path.is_file()
+        ]
 
         utils.ListSortLower(vectlist)
 
