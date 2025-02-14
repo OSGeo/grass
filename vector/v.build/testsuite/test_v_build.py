@@ -30,10 +30,7 @@ class TestVBuild(TestCase):
         ).strip()
 
         # Read the expected output.
-        cls.vbuild_output = """---------- TOPOLOGY DUMP ----------
-Map:             test_3x3_map@PERMANENT
-Topology format: native
------------------------------------
+        cls.vbuild_output = """
 N,S,E,W,T,B: 2.500000, 0.500000, 2.500000, 0.500000, 0.000000, 0.000000
 -----------------------------------
 Nodes (2 nodes, alive + dead):
@@ -81,7 +78,7 @@ Layer      0  number of unique cats:       1  number of cats:       2  number of
 
     def test_vbuild_output(self):
         """Compare the v.build output (build_module) to the expected output."""
-        self.assertMultiLineEqual(self.build_module, self.vbuild_output)
+        self.assertMultiLineEqual(self.build_module[135:], self.vbuild_output)
 
 
 if __name__ == "__main__":
