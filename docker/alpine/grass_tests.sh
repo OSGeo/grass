@@ -5,6 +5,10 @@
 # add dependency
 apk add --no-cache py3-scikit-learn
 
+echo "Testing the GDAL-GRASS plugins:"
+gdalinfo --formats | grep -p "GRASS Rasters" && \
+ogrinfo --formats | grep -p "GRASS Vectors" || echo "...failed"
+
 # Test grass-session
 /usr/bin/python3 /scripts/test_grass_session.py
 # Test PDAL
