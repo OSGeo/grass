@@ -1,57 +1,32 @@
 {% if page.edit_url %}
 
-  {% set toolname = page.file.src_path.split("/")[-1] | replace(".md", "") %}
-  {% if toolname.startswith("r.") %}
-    {% set category = "raster" %}
-  {% elif toolname.startswith("g.") %}
-    {% set category = "general" %}
-  {% elif toolname.startswith("v.") %}
-    {% set category = "vector" %}
-  {% elif toolname.startswith("i.") %}
-    {% set category = "imagery" %}
-  {% elif toolname.startswith("t.") %}
-    {% set category = "temporal" %}
-  {% elif toolname.startswith("r3.") %}
-    {% set category = "raster3d" %}
-  {% elif toolname.startswith("m.") %}
-    {% set category = "misc" %}
-  {% elif toolname.startswith("ps.") %}
-    {% set category = "ps" %}
-  {% elif toolname.startswith("db.") %}
-    {% set category = "db" %}
-  {% elif toolname.startswith("d.") %}
-    {% set category = "display" %}
-  {% else %}
-    {% set category = "" %}
-  {% endif %}
+    {% set toolname = page.file.src_path.split("/")[-1] | replace(".md", "") %}
 
+    {# Default to the normal edit URL #}
+    {% set custom_edit_url = page.edit_url %}
+    {% set ghpath = github_path(toolname, config.extra.scripts_tools) %}
+    <!-- {{ "ghpath: " ~ ghpath }}<br>
+    {{ "toolname: " ~ toolname }}<br> -->
+    {% if ghpath %}
+        {% set custom_edit_url = page.edit_url ~ ghpath %}
+        {% set custom_edit_url = page.edit_url | replace(toolname, ghpath) %}
+        {% if "content.action.edit" in features %}
+            <a href="{{ custom_edit_url }}" title="{{ lang.t('action.edit') }}" class="md-content__button md-icon">
+                {% set icon = config.theme.icon.edit or "material/file-edit-outline" %}
+                {% include ".icons/" ~ icon ~ ".svg" %}
+            </a>
+        {% endif %}
 
-  {# Special case: Some tools always go in the scripts directory #}
-  {# script_tools is auto-generated using scripts/hooks.py #}
-  {% if toolname in config.extra.scripts_tools %}
-    {% set category = "scripts" %}
-  {% endif %}
-
-  <!-- {{ "CUSTOM ACTIONS TEMPLATE LOADED" }}
-  {{ config.extra.scripts_tools }} -->
-
-  {% set custom_edit_url = page.edit_url | replace(toolname, category ~ "/" ~ toolname ~ "/" ~ toolname) %}
-
-  {% if "content.action.edit" in features %}
-    <a href="{{ custom_edit_url }}" title="{{ lang.t('action.edit') }}" class="md-content__button md-icon">
-      {% set icon = config.theme.icon.edit or "material/file-edit-outline" %}
-      {% include ".icons/" ~ icon ~ ".svg" %}
-    </a>
-  {% endif %}
-  {% if "content.action.view" in features %}
-    {% if "/blob/" in custom_edit_url %}
-      {% set part = "blob" %}
-    {% else %}
-      {% set part = "edit" %}
+        {% if "content.action.view" in features %}
+            {% if "/blob/" in custom_edit_url %}
+                {% set part = "blob" %}
+            {% else %}
+                {% set part = "edit" %}
+            {% endif %}
+                <a href="{{ custom_edit_url | replace(part, 'tree') }}" title="{{ lang.t('action.view') }}" class="md-content__button md-icon">
+                    {% set icon = config.theme.icon.view or "material/file-eye-outline" %}
+                    {% include ".icons/" ~ icon ~ ".svg" %}
+                </a>
+        {% endif %}
     {% endif %}
-    <a href="{{ custom_edit_url | replace(part, 'tree') }}" title="{{ lang.t('action.view') }}" class="md-content__button md-icon">
-      {% set icon = config.theme.icon.view or "material/file-eye-outline" %}
-      {% include ".icons/" ~ icon ~ ".svg" %}
-    </a>
-  {% endif %}
 {% endif %}
