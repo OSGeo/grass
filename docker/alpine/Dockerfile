@@ -167,15 +167,6 @@ RUN echo "  => Configure and compile grass" && \
     make install && \
     ldconfig /etc/ld.so.conf.d
 
-# Build the GDAL-GRASS plugin
-# renovate: datasource=github-tags depName=OSGeo/gdal-grass
-ARG GDAL_GRASS_VERSION=1.0.3
-RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gdal-grass.git /src/gdal-grass
-WORKDIR /src/gdal-grass
-RUN cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF && \
-    cmake --build build && \
-    cmake --install build
-
 # Get rid of version number here, restore in next stage via symbolic link
 RUN mv $(grass --config path) /usr/local/grass
 
@@ -200,12 +191,22 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     LC_ALL="en_US.UTF-8" \
     PYTHONPATH="/usr/local/grass/etc/python:$PYTHONPATH"
 
-# Copy GRASS GIS and GDAL GRASS driver from build image
+# Copy GRASS GIS from build image
 COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
 COPY --from=build /usr/local/grass* /usr/local/grass/
-COPY --from=build /usr/lib/gdalplugins/*_GRASS.so /usr/lib/gdalplugins/
 # Set GISBASE
 ENV GISBASE /usr/local/grass
+
+# Build the GDAL-GRASS plugin
+# renovate: datasource=github-tags depName=OSGeo/gdal-grass
+ARG GDAL_GRASS_VERSION=1.0.3
+RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gdal-grass.git /src/gdal-grass
+WORKDIR /src/gdal-grass
+RUN cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF && \
+    cmake --build build && \
+    cmake --install build
+# Copy GDAL GRASS driver from build image
+COPY --from=build /usr/lib/gdalplugins/*_GRASS.so /usr/lib/gdalplugins/
 
 # run simple LAZ test
 COPY docker/testdata/simple.laz /tmp/
