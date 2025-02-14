@@ -9,7 +9,7 @@
     {{ "toolname: " ~ toolname }}<br> -->
     {% if ghpath %}
         {% set custom_edit_url = page.edit_url ~ ghpath %}
-        {% set custom_edit_url = page.edit_url | replace(toolname, ghpath) %}
+        {% set custom_edit_url = page.edit_url | replace(toolname, ghpath ~ "/" ~ toolname) %}
         {% if "content.action.edit" in features %}
             <a href="{{ custom_edit_url }}" title="{{ lang.t('action.edit') }}" class="md-content__button md-icon">
                 {% set icon = config.theme.icon.edit or "material/file-edit-outline" %}
