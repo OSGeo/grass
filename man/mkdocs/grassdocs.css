@@ -1,30 +1,33 @@
 :root > * {
   /* Colors */
-  --md-primary-fg-color:        #4CB05B; /* Dark green */
+  --md-primary-fg-color:        rgba(76, 176, 91, 1); /* Dark green */
   --md-primary-fg-color--light: rgb(239, 244, 232);
-  --md-primary-fg-color--dark:  rgb(135, 160, 106);
-  --md-primary-bg-color:        hsla(0, 0%, 100%, 1);
-  --md-primary-bg-color--light: hsla(0, 0%, 100%, 0.7);
+  --md-primary-fg-color--dark:  rgba(8, 139, 54, 1);
+  --md-primary-bg-color:        rgb(229, 255, 233);
+  --md-primary-bg-color--light: rgba(255, 255, 255, 0.7);
 
-  --md-accent-fg-color: rgba(158,210,156, 1);
+  --md-accent-fg-color:              rgba(8, 139, 54, 1);
   --md-accent-fg-color--transparent: rgba(158,210,156, 0.1);
-  --md-accent-bg-color:                #EFF4E8;
-  --md-accent-bg-color--light:         rgb(239, 244, 232);
+  --md-accent-bg-color:              rgba(239, 244, 232, 1);
+  --md-accent-bg-color--light:    rgba(158,210,156, 1);
 
   /* Footer */
-  --md-footer-bg-color:         #088B36;
-  --md-footer-bg-color--light:  #088B36;
-  --md-footer-bg-color--dark:   #088B36;
+  --md-footer-bg-color:    rgba(255, 255, 255, 0.7);
+  --md-footer-bg-color--light:     rgb(229, 255, 233);
+  --md-footer-bg-color--dark:   rgba(8, 139, 54, 1);
 
   /* Default fg color */
   /* --md-default-fg-color--light: #088B36; */
   --md-default-fg-weight: 800;
 
   /* Typeset */
-  --md-typeset-a-color: rgb(135, 160, 106);
-  --md-typeset-a-color--hover: #088B36;
+  --md-typeset-a-color: rgba(8, 139, 54, 1);
+  --md-typeset-a-color--hover: rgba(135, 160, 106, 1);
 }
 
+.md-header {
+  font-weight: bold;
+}
 
 .md-header__button.md-logo {
   margin-top: 0;
