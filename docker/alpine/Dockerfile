@@ -222,7 +222,10 @@ RUN ln -sf /usr/local/grass $(grass --config path); \
     apk del --no-cache gettext pdal-dev; \
     grass --tmp-project XY --exec g.version -rge \
     && pdal --version \
-    && python --version
+    && python --version; \
+    echo "Check GDAL plugins.."; \
+    gdalinfo --formats | grep -p "GRASS Rasters" \
+    && ogrinfo --formats | grep -p "GRASS Vectors" || echo "..failed.";
 
 # Data workdir
 WORKDIR /grassdb
