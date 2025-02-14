@@ -167,6 +167,15 @@ RUN echo "  => Configure and compile grass" && \
     make install && \
     ldconfig /etc/ld.so.conf.d
 
+# Build the GDAL-GRASS plugin
+# renovate: datasource=github-tags depName=OSGeo/gdal-grass
+ARG GDAL_GRASS_VERSION=1.0.3
+RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gdal-grass.git /src/gdal-grass
+WORKDIR /src/gdal-grass
+RUN cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF && \
+    cmake --build build && \
+    cmake --install build
+
 # Get rid of version number here, restore in next stage via symbolic link
 RUN mv $(grass --config path) /usr/local/grass
 
@@ -178,14 +187,6 @@ RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
     rm -rf /usr/local/grass/share; \
     mkdir -p /usr/local/grass/gui/wxpython/xml/; \
     mv module_items.xml /usr/local/grass/gui/wxpython/xml/module_items.xml;
-
-# renovate: datasource=github-tags depName=OSGeo/gdal-grass
-ARG GDAL_GRASS_VERSION=1.0.3
-RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gdal-grass.git src/gdal-grass
-WORKDIR /src/gdal-grass
-RUN cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF && \
-    cmake --build build && \
-    cmake --install build
 
 
 FROM common as grass
