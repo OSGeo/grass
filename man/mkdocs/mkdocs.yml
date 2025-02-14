@@ -20,7 +20,8 @@ theme:
   name: material
   custom_dir: overrides
   language: en
-  logo: grass_logo.png
+  logo: grass_logo.svg
+  favicon: grass_logo.svg
   # logo: grass_icon.png
   # favicon: grass-favicon-16x16.png
   features:

@@ -6,15 +6,15 @@ MANPAGES := $(patsubst $(HTMLDIR)/%.html,$(MANDIR)/%.$(MANSECT),$(wildcard $(HTM
 
 DSTFILES := \
 	$(HTMLDIR)/grassdocs.css \
-	$(HTMLDIR)/grass_logo.png \
+	$(HTMLDIR)/grass_logo.svg \
 	$(HTMLDIR)/hamburger_menu.svg \
 	$(HTMLDIR)/hamburger_menu_close.svg \
-	$(HTMLDIR)/grass_icon.png \
+	$(HTMLDIR)/grass_icon.svg \
 	$(HTMLDIR)/jquery.fixedheadertable.min.js \
 	$(HTMLDIR)/parser_standard_options.css \
 	$(HTMLDIR)/parser_standard_options.js \
 	$(MDDIR)/mkdocs.yml \
-	$(MDDIR)/source/grass_logo.png \
+	$(MDDIR)/source/grass_logo.svg \
 	$(MDDIR)/source/grassdocs.css \
 	$(MDDIR)/overrides/partials/footer.html
 
@@ -218,10 +218,10 @@ $(foreach cat,$(categories),$(eval $(call category_rule_md,$(firstword $(subst :
 $(HTMLDIR)/grassdocs.css: grassdocs.css
 	$(INSTALL_DATA) $< $@
 
-$(HTMLDIR)/grass_logo.png: grass_logo.png
+$(HTMLDIR)/grass_logo.svg: grass_logo.svg
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/grass_logo.png: grass_logo.png
+$(MDDIR)/source/grass_logo.svg: grass_logo.svg
 	$(INSTALL_DATA) $< $@
 
 $(HTMLDIR)/hamburger_menu.svg: hamburger_menu.svg
@@ -230,7 +230,7 @@ $(HTMLDIR)/hamburger_menu.svg: hamburger_menu.svg
 $(HTMLDIR)/hamburger_menu_close.svg: hamburger_menu_close.svg
 	$(INSTALL_DATA) $< $@
 
-$(HTMLDIR)/grass_icon.png: grass_icon.png
+$(HTMLDIR)/grass_icon.svg: grass_icon.svg
 	$(INSTALL_DATA) $< $@
 
 $(HTMLDIR)/jquery.fixedheadertable.min.js: jquery.fixedheadertable.min.js

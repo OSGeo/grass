@@ -1,11 +1,30 @@
 :root > * {
-  --md-primary-fg-color:        #088B36;
-  --md-primary-fg-color--light: #088B36;
-  --md-primary-fg-color--dark:  #088B36;
+  /* Colors */
+  --md-primary-fg-color:        #4CB05B; /* Dark green */
+  --md-primary-fg-color--light: rgb(239, 244, 232);
+  --md-primary-fg-color--dark:  rgb(135, 160, 106);
+  --md-primary-bg-color:        hsla(0, 0%, 100%, 1);
+  --md-primary-bg-color--light: hsla(0, 0%, 100%, 0.7);
+
+  --md-accent-fg-color: rgba(158,210,156, 1);
+  --md-accent-fg-color--transparent: rgba(158,210,156, 0.1);
+  --md-accent-bg-color:                #EFF4E8;
+  --md-accent-bg-color--light:         rgb(239, 244, 232);
+
+  /* Footer */
   --md-footer-bg-color:         #088B36;
   --md-footer-bg-color--light:  #088B36;
   --md-footer-bg-color--dark:   #088B36;
+
+  /* Default fg color */
+  /* --md-default-fg-color--light: #088B36; */
+  --md-default-fg-weight: 800;
+
+  /* Typeset */
+  --md-typeset-a-color: rgb(135, 160, 106);
+  --md-typeset-a-color--hover: #088B36;
 }
+
 
 .md-header__button.md-logo {
   margin-top: 0;
@@ -18,4 +37,9 @@
 .md-header__button.md-logo svg {
   height: 70%;
   width: 70%;
+}
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 3rem;
 }
