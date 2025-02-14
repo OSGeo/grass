@@ -83,9 +83,9 @@ K x x x K
 
 The minimum cumulative costs are computed using Dijkstra's algorithm,
 that find an optimum solution (for more details see *r.cost*, that uses
-the same algorithm). <span id="move"></span>
+the same algorithm).
 
-## Movement Direction
+### Movement Direction
 
 The movement direction surface is created to record the sequence of
 movements that created the cost accumulation surface. This movement

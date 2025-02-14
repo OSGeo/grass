@@ -75,11 +75,8 @@ also considered.
 
 Knight's move example:
 
-<img src="rcost_knightsmove.png" data-border="1" />  
-
-|                                                                                                                                                                                                        |
-|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *Flat cost surface without (left pane) and with the knight's move (right pane). The default is to grow the cost outwards in 8 directions. Using the knight's move grows it outwards in 16 directions.* |
+![Flat cost surface without and with the knight's move](rcost_knightsmove.png)  
+*Flat cost surface without (left pane) and with the knight's move (right pane). The default is to grow the cost outwards in 8 directions. Using the knight's move grows it outwards in 16 directions.*
 
 If the **nearest** output parameter is specified, the module will
 calculate for each cell its nearest starting point based on the
@@ -95,11 +92,8 @@ option to help the algorithm pick a particular direction.
 
 Example for solving multiple directions:
 
-<img src="rcost_solvedir.png" data-border="1" />  
-
-|                                                                                                                                                                                           |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *A field of equal cumulative costs with multiple paths (black). By default a path along the edge will be selected (red). Path selection can be controlled with the solver option (blue).* |
+![A field of equal cumulative costs with multiple paths](rcost_solvedir.png)  
+*A field of equal cumulative costs with multiple paths (black). By default a path along the edge will be selected (red). Path selection can be controlled with the solver option (blue).*
 
 Multiple directions can be solved as in the above example with the
 following steps:
@@ -241,9 +235,7 @@ Spearfish region):
   d.rast dist_meters
 ```
 
-<span id="move"></span>
-
-## Movement Direction
+### Movement Direction
 
 The movement direction surface is created to record the sequence of
 movements that created the cost accumulation surface. This movement
