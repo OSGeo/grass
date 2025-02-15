@@ -170,3 +170,11 @@ jobs:
           subject-name: docker.io/osgeo/grass-gis
           subject-digest: ${{ steps.docker_build.outputs.digest }}
           push-to-registry: ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' }}
+      - name: Attest ghcr.io image
+        uses: actions/attest-build-provenance@520d128f165991a6c774bcb264f323e3d70747f4 # v2.2.0
+        id: attest-ghcr
+        with:
+          subject-name: ghcr.io/${{ github.repository }}
+          subject-digest: ${{ steps.docker_build.outputs.digest }}
+          push-to-registry: ${{ github.event_name != 'pull_request' }}
+          # push-to-registry: ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' }}
