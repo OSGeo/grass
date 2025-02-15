@@ -159,6 +159,9 @@ jobs:
           sbom: true
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+        env:
+          docker_build_imageid: ${{ steps.docker_build.outputs.imageid }}
+          docker_build_metadata: ${{ steps.docker_build.outputs.metadata }}
       - name: Attest
         uses: actions/attest-build-provenance@520d128f165991a6c774bcb264f323e3d70747f4 # v2.2.0
         # if: ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' }}
