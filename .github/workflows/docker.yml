@@ -83,7 +83,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@ca877d9245402d1537745e0e356eab47c3520991 # v6.13.0
         with:
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           pull: true
           context: .
           tags: ${{ steps.meta.outputs.tags }}
