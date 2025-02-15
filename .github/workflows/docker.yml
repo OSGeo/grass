@@ -91,6 +91,7 @@ jobs:
       - run: git branch --all --contains "${LATEST_TAG}"
       # - run: git branch --all --contains "${LATEST_TAG_INVALID}"
       - run: git show-ref
+      - run: git branch --all --list '*releasebranch_*' --abbrev --remotes
       - run: exit 1
       - name: Docker meta
         id: meta
