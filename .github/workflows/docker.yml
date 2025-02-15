@@ -95,6 +95,7 @@ jobs:
           context: .
           tags: ${{ steps.meta.outputs.tags }}
           file: docker/${{ matrix.os }}/Dockerfile
+          annotations: ${{ steps.meta.outputs.annotations }}
           cache-from: type=gha,scope=${{ matrix.os }}
           cache-to: type=gha,mode=max,scope=${{ matrix.os }}
       - name: Image digest
