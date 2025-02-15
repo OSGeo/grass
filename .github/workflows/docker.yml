@@ -91,10 +91,19 @@ jobs:
       - name: Get enable values for meta step
         id: enable
         run: |
-          latest="${{ github.ref == format('refs/tags/{0}', steps.tag-branch.outputs.latest_tag)
+          latest="${{
+            (github.ref || format('{0}{1}', 'refs/tags/', github.event.release.tag_name))
+              == format('refs/tags/{0}', steps.tag-branch.outputs.latest_tag)
             && matrix.os == 'ubuntu' }}"
-          current="${{ github.event_name == 'tag'
-            && github.ref == format('refs/tags/{0}', steps.tag-branch.outputs.latest_tag)
+          current="${{
+            ( github.event_name == 'tag'
+              && github.ref == format('refs/tags/{0}', steps.tag-branch.outputs.latest_tag)
+            )
+            || (
+              github.event_name == 'release'
+              && (github.ref || format('{0}{1}', 'refs/tags/', github.event.release.tag_name))
+                  == format('refs/tags/{0}', steps.tag-branch.outputs.latest_tag)
+              )
             || github.ref == format('refs/heads/{0}', steps.tag-branch.outputs.latest_rel_branch)
           }}"
           echo "latest=${latest}" >> "${GITHUB_OUTPUT}"
@@ -106,7 +115,7 @@ jobs:
         uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5.6.1
         with:
           images: |
-            name=docker.io/osgeo/grass-gis,enable=${{ github.repository_owner == 'OSGeo' 
+            name=docker.io/osgeo/grass-gis,enable=${{ github.repository_owner == 'OSGeo'
               && github.event_name != 'pull_request' }}
             name=ghcr.io/${{ github.repository }}
           tags: |
