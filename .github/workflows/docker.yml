@@ -69,9 +69,10 @@ jobs:
           # Make sure tags are fetched
           git fetch --tags
           # Get sorted list of tags, keep the first that has a semver pattern (not RCs)
-          echo "LATEST_TAG=\"$(git tag --sort=-v:refname \
+          LATEST_TAG="$(git tag --sort=-v:refname \
             | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' \
-            | head -n 1)\"" >> "${GITHUB_ENV}"
+            | head -n 1)"
+          echo "LATEST_TAG=${LATEST_TAG}" >> "${GITHUB_ENV}"
           echo "LATEST_TAG is: ${LATEST_TAG}"
       - run: git branch -l
       - run: git branch -l --sort=-v:refname
