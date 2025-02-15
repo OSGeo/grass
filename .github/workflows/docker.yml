@@ -147,5 +147,6 @@ jobs:
           annotations: ${{ steps.meta.outputs.annotations }}
           cache-from: type=gha,scope=${{ matrix.os }}
           cache-to: type=gha,mode=max,scope=${{ matrix.os }}
+          provenance: mode=max
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
