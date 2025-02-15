@@ -117,7 +117,7 @@ jobs:
       - run: echo $meta
         env:
           meta: ${{ toJson(steps.meta.outputs.json) }}
-      - run: exit 1
+      # - run: exit 1
       - name: Set up QEMU
         uses: docker/setup-qemu-action@4574d27a4764455b42196d70a065bc6853246a25 # v3.4.0
       - name: Set up Docker Buildx
