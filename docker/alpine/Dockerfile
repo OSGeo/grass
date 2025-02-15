@@ -178,8 +178,9 @@ RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
     mkdir -p /usr/local/grass/gui/wxpython/xml/; \
     mv module_items.xml /usr/local/grass/gui/wxpython/xml/module_items.xml;
 
-RUN git clone https://github.com/OSGeo/gdal-grass /src/gdal-grass
+RUN git clone --depth 1 -b 1.0.3 https://github.com/OSGeo/gdal-grass /src/gdal-grass
 WORKDIR /src/gdal-grass
+
 RUN ./configure \
     --with-gdal=/usr/bin/gdal-config \
     --with-grass=/usr/local/grass && \
