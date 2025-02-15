@@ -72,17 +72,34 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
-      - name: Get the latest tag
+      - name: Get the latest tag and release branches
+        id: tag-branch
         run: |
           # Make sure tags are fetched
           git fetch --tags
           # Get sorted list of tags, keep the first that has a semver pattern (not RCs)
-          LATEST_TAG="$(git tag --sort=-v:refname \
+          latest_tag="$(git tag --sort=-v:refname \
             | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' \
             | head -n 1)"
-          echo "LATEST_TAG=${LATEST_TAG}" >> "${GITHUB_ENV}"
-          echo "LATEST_TAG is: ${LATEST_TAG}"
-      - run: exit 1
+          latest_rel_branch="$(git branch --all --list 'origin/*' \
+            --contains "${latest_tag}" --format "%(refname:lstrip=3)")"
+          echo "latest_tag=${latest_tag}" >> "${GITHUB_OUTPUT}"
+          echo "latest_tag is: ${latest_tag}"
+          echo "latest_rel_branch=${latest_rel_branch}" >> "${GITHUB_OUTPUT}"
+          echo "latest_rel_branch is: ${latest_rel_branch}"
+      - name: Get enable values for meta step
+        id: enable
+        run: |
+          latest="${{ github.ref == format('refs/tags/{0}', steps.tag-branch.outputs.latest_tag)
+            && matrix.os == 'ubuntu' }}"
+          current="${{ github.event_name == 'tag'
+            && github.ref == format('refs/tags/{0}', steps.tag-branch.outputs.latest_tag)
+            || github.ref == format('refs/heads/{0}', steps.tag-branch.outputs.latest_rel_branch)
+          }}"
+          echo "latest=${latest}" >> "${GITHUB_OUTPUT}"
+          echo "latest is $latest"
+          echo "current=${current}" >> "${GITHUB_OUTPUT}"
+          echo "current is $current"
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5.6.1
@@ -91,11 +108,15 @@ jobs:
           tags: |
             type=ref,event=tag
             type=ref,event=branch
-            type=raw,value=current,enable=${{ github.ref == format('refs/heads/{0}', 'releasebranch_8_3') }}
-            type=raw,value=latest,enable=${{ github.ref == format('refs/tags/{0}', env.LATEST_TAG ) && matrix.os == 'ubuntu' }},suffix=
+            type=raw,value=current,enable=${{ steps.enable.outputs.current }}
+            type=raw,value=latest,enable=${{ steps.enable.outputs.latest }},suffix=
           flavor: |
             latest=false
             suffix=-${{ matrix.os }}
+      - run: echo $meta
+        env:
+          meta: ${{ toJson(steps.meta.outputs.json) }}
+      - run: exit 1
       - name: Set up QEMU
         uses: docker/setup-qemu-action@4574d27a4764455b42196d70a065bc6853246a25 # v3.4.0
       - name: Set up Docker Buildx
