@@ -93,6 +93,7 @@ jobs:
       - run: git show-ref
       - run: git branch --all --list '*releasebranch_*' --abbrev --remotes
       - run: git branch --all --list '*releasebranch_*' --remotes --contains "${LATEST_TAG}"
+      - run: git branch --all --list '*releasebranch_*' --contains "${LATEST_TAG}"
       - run: exit 1
       - name: Docker meta
         id: meta
