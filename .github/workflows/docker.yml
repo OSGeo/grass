@@ -174,4 +174,3 @@ jobs:
           subject-name: ghcr.io/${{ github.repository }}
           subject-digest: ${{ steps.docker_build.outputs.digest }}
           push-to-registry: ${{ github.event_name != 'pull_request' }}
-          # push-to-registry: ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' }}
