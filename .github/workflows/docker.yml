@@ -45,7 +45,18 @@ jobs:
     name: ${{ matrix.os }} for ${{ github.ref }}
     # if: github.repository_owner == 'OSGeo'
     runs-on: ubuntu-latest
-
+    concurrency:
+      group: >-
+        ${{ github.workflow }}-${{ matrix.os }}-${{ github.event_name }}-
+        ${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
+      # ${{ github.workflow }}-${{ github.event_name }}-
+      # ${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+      # ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{ matrix.os }}
+      # Cancel in progress in pull requests.
+      # Otherwise, limit to one in progress and one queued for each type.
+      # Only the latest queued job per type and will be kept, older will be cancelled.
+      # The already running job will be completed.
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     strategy:
       matrix:
         os:
