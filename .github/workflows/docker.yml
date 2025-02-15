@@ -162,7 +162,10 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
       - name: Attest docker.io image
         uses: actions/attest-build-provenance@520d128f165991a6c774bcb264f323e3d70747f4 # v2.2.0
-        if: ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' }}
+        # If there isn't a digest, an annotation cannot be added
+        if: >-
+          ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' 
+            && steps.docker_build.outputs.digest }}
         id: attest
         with:
           subject-name: docker.io/osgeo/grass-gis
@@ -170,6 +173,8 @@ jobs:
           push-to-registry: ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' }}
       - name: Attest ghcr.io image
         uses: actions/attest-build-provenance@520d128f165991a6c774bcb264f323e3d70747f4 # v2.2.0
+        # If there isn't a digest, an annotation cannot be added
+        if: ${{ steps.docker_build.outputs.digest }}
         id: attest-ghcr
         with:
           subject-name: ghcr.io/${{ github.repository }}
