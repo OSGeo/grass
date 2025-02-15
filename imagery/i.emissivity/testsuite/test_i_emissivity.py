@@ -125,11 +125,12 @@ class TestIEmissivity(TestCase):
 
         self.assertAlmostEqual(results[1], results[0.1], delta=0.01)
 
-    def test_large_raster_performance(self):
-        """Assess performance with a larger raster."""
-        self.runModule("g.region", n=90, s=-90, e=180, w=-180, rows=1000, cols=1000)
+    def test_partial_null_values(self):
+        """Test the module behavior when NDVI has null values."""
         self.runModule(
-            "r.mapcalc", expression=f"{self.input_raster} = col()", overwrite=True
+            "r.mapcalc",
+            expression=f"{self.input_raster} = if(col() % 2 == 0, null(), 0.5)",
+            overwrite=True,
         )
         self.assertModule(
             "i.emissivity",
