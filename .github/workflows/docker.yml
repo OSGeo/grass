@@ -19,6 +19,13 @@ on:
       - "!releasebranch_7_*"
     # tags: ['*.*.*']
     paths-ignore: [doc/**]
+  pull_request:
+    paths:
+      - .github/workflows/docker.yml
+      - Dockerfile
+      - docker/**
+      - "!docker/**.md"
+  workflow_dispatch:
   release:
     types: [published]
 
