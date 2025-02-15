@@ -162,12 +162,11 @@ jobs:
         env:
           docker_build_imageid: ${{ steps.docker_build.outputs.imageid }}
           docker_build_metadata: ${{ steps.docker_build.outputs.metadata }}
-      - name: Attest
+      - name: Attest docker.io image
         uses: actions/attest-build-provenance@520d128f165991a6c774bcb264f323e3d70747f4 # v2.2.0
-        # if: ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' }}
+        if: ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' }}
         id: attest
         with:
-          # subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           subject-name: docker.io/osgeo/grass-gis
           subject-digest: ${{ steps.docker_build.outputs.digest }}
           push-to-registry: ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' }}
