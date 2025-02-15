@@ -78,6 +78,7 @@ jobs:
       - run: git branch -l --sort=-v:refname
       - run: git branch --all --sort=-v:refname
       - run: git branch --all --contains "${LATEST_TAG}"
+      - run: git branch --all --contains "${LATEST_TAG_INVALID}"
       - run: exit 1
       - name: Docker meta
         id: meta
