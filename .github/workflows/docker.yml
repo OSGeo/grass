@@ -104,7 +104,10 @@ jobs:
         id: meta
         uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5.6.1
         with:
-          images: osgeo/grass-gis
+          images: |
+            name=docker.io/osgeo/grass-gis,enable=${{ github.repository_owner == 'OSGeo' 
+              && github.event_name != 'pull_request' }}
+            name=ghcr.io/${{ github.repository }}
           tags: |
             type=ref,event=tag
             type=ref,event=branch
@@ -119,6 +122,12 @@ jobs:
         uses: docker/setup-qemu-action@4574d27a4764455b42196d70a065bc6853246a25 # v3.4.0
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f7ce87c1d6bead3e36075b2ce75da1f6cc28aaca # v3.9.0
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Login to DockerHub
         if: ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' }}
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
