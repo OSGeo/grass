@@ -156,8 +156,8 @@ jobs:
           no-cache: ${{ contains(fromJSON('["tag", "release"]'), github.event_name) && true }}
           # Don't use cache for releases. Cache is not used if `cache-from:` is empty
           cache-from: >-
-            ${{ !contains(fromJSON('["tag", "release"]'), github.event_name) && ''
-              || format('type=gha,scope={0}', matrix.os) || '' }}
+            ${{ !contains(fromJSON('["tag", "release"]'), github.event_name)
+                && format('type=gha,scope={0}', matrix.os) || '' }}
           cache-to: type=gha,mode=max,scope=${{ matrix.os }}
           provenance: mode=max
           sbom: true
