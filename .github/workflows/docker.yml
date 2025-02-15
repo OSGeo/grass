@@ -96,14 +96,10 @@ jobs:
               == format('refs/tags/{0}', steps.tag-branch.outputs.latest_tag)
             && matrix.os == 'ubuntu' }}"
           current="${{
-            ( github.event_name == 'tag'
-              && github.ref == format('refs/tags/{0}', steps.tag-branch.outputs.latest_tag)
-            )
-            || (
-              github.event_name == 'release'
+            ( contains(fromJSON('["tag", "release"]'), github.event_name)
               && (github.ref || format('{0}{1}', 'refs/tags/', github.event.release.tag_name))
                   == format('refs/tags/{0}', steps.tag-branch.outputs.latest_tag)
-              )
+            )
             || github.ref == format('refs/heads/{0}', steps.tag-branch.outputs.latest_rel_branch)
           }}"
           echo "latest=${latest}" >> "${GITHUB_OUTPUT}"
