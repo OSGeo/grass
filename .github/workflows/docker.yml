@@ -16,7 +16,7 @@ on:
     branches:
       - main
       - releasebranch_*
-      - '!releasebranch_7_*'
+      - "!releasebranch_7_*"
     # tags: ['*.*.*']
     paths-ignore: [doc/**]
   release:
