@@ -49,9 +49,6 @@ jobs:
       group: >-
         ${{ github.workflow }}-${{ matrix.os }}-${{ github.event_name }}-
         ${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
-      # ${{ github.workflow }}-${{ github.event_name }}-
-      # ${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
-      # ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{ matrix.os }}
       # Cancel in progress in pull requests.
       # Otherwise, limit to one in progress and one queued for each type.
       # Only the latest queued job per type and will be kept, older will be cancelled.
