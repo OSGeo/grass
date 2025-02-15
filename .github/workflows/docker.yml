@@ -108,6 +108,7 @@ jobs:
           tags: |
             type=ref,event=tag
             type=ref,event=branch
+            type=ref,event=pr
             type=raw,value=current,enable=${{ steps.enable.outputs.current }}
             type=raw,value=latest,enable=${{ steps.enable.outputs.latest }},suffix=
           flavor: |
