@@ -252,12 +252,20 @@ if(WITH_FFTW)
   endif()
 endif()
 
+if(WIN32)
+  set(BLA_PREFER_PKGCONFIG ON)
+  set(BLA_PKGCONFIG_BLAS "openblas")
+  set(BLA_PKGCONFIG_LAPACK "openblas")
+endif()
+
 if(WITH_BLAS)
   find_package(BLAS REQUIRED)
   if(BLAS_FOUND)
     add_library(BLAS INTERFACE IMPORTED GLOBAL)
     set_property(TARGET BLAS PROPERTY INTERFACE_LINK_LIBRARIES
                                       ${BLAS_LIBRARIES})
+    set_property(TARGET BLAS PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                      ${BLAS_INCLUDE_DIRS})
   endif()
 endif()
 
@@ -267,6 +275,8 @@ if(WITH_LAPACK)
     add_library(LAPACK INTERFACE IMPORTED GLOBAL)
     set_property(TARGET LAPACK PROPERTY INTERFACE_LINK_LIBRARIES
                                         ${LAPACK_LIBRARIES})
+    set_property(TARGET LAPACK PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                        ${LAPACK_INCLUDE_DIRS})
   endif()
 endif()
 
