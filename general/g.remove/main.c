@@ -173,7 +173,6 @@ int main(int argc, char *argv[])
     }
     if (!filter)
         G_fatal_error(_("Unable to compile pattern <%s>"), pattern);
-    exit(0);
 
     if (exclude) {
         if ((flag.regex->answer || flag.extended->answer) &&
