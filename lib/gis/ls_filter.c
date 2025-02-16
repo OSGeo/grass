@@ -273,6 +273,4 @@ void G_free_ls_filter(void *regex)
 #ifdef HAVE_PCRE_H
     pcre_free(regex);
 #endif
-
-    G_free(regex);
 }
