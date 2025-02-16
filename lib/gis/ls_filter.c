@@ -165,14 +165,6 @@ static int re_filter(const char *filename, void *closure)
                             0,                /* OPTIONS */
                             NULL, 0);         /* Length of subStrVec */
 
-    /* Optimize the regex */
-    pcreExtra = pcre_study(pcre_regex, 0, &pcreErrorStr);
-    pcreExecRet = pcre_exec(pcre_regex, pcreExtra, filename,
-                            strlen(filename), /* length of string */
-                            0,                /* Start looking at this point */
-                            0,                /* OPTIONS */
-                            NULL, 0);         /* Length of subStrVec */
-
     return filename[0] != '.' && pcreExecRet == 0;
 #endif
 }
