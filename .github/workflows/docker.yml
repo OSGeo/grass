@@ -50,7 +50,7 @@ jobs:
         ${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
       # Cancel in progress in pull requests.
       # Otherwise, limit to one in progress and one queued for each type.
-      # Only the latest queued job per type and will be kept, older will be cancelled.
+      # Only the latest queued job per event type will be kept, older will be cancelled.
       # The already running job will be completed.
       cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     strategy:
