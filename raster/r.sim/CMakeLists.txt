@@ -22,6 +22,7 @@ build_program_in_subdir(
   grass_gis
   grass_gmath
   grass_sim
+  grass_raster
   GDAL
   OPTIONAL_DEPENDS
   OPENMP
@@ -34,6 +35,7 @@ build_program_in_subdir(
   grass_gis
   grass_gmath
   grass_sim
+  grass_raster
   GDAL
   OPTIONAL_DEPENDS
   OPENMP

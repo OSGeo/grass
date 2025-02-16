@@ -728,6 +728,7 @@ build_program_in_subdir(
   grass_interpfl
   grass_qtree
   grass_vector
+  grass_raster
   GDAL
   ${LIBM}
   OPTIONAL_DEPENDS
