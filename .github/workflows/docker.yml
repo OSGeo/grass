@@ -43,7 +43,6 @@ jobs:
   #     8.3.0-alpine, 8.3.0-debian, 8.3.0-ubuntu and latest (with ubuntu)
   docker-os-matrix:
     name: ${{ matrix.os }} for ${{ github.ref }}
-    # if: github.repository_owner == 'OSGeo'
     runs-on: ubuntu-latest
     concurrency:
       group: >-
