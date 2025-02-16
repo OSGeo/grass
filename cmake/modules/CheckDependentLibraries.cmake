@@ -281,8 +281,14 @@ if(WITH_LAPACK)
 endif()
 
 if(WITH_OPENMP)
+  if(MSVC AND CMAKE_VERSION VERSION_GREATER_EQUAL "3.30")
+    # for min/max reduction
+    # get rid of warning D9025: overriding '/openmp' with '/openmp:llvm'
+    set(OpenMP_RUNTIME_MSVC "llvm")
+  endif()
   find_package(OpenMP REQUIRED)
-  if(MSVC AND OPENMP_FOUND)
+  if(OpenMP_FOUND AND MSVC AND CMAKE_VERSION VERSION_LESS "3.30")
+    # CMake < 3.30 doesn't support OpenMP_RUNTIME_MSVC
     # for min/max reduction
     add_compile_options(-openmp:llvm)
   endif()
