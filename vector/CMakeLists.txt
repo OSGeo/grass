@@ -809,13 +809,15 @@ build_program_in_subdir(v.type DEPENDS grass_gis grass_vector GDAL)
 # v.univar\main.c(77,8): error C2099: initializer is not a constant
 # REMOVEME later once the fix is released
 # https://developercommunity.visualstudio.com/t/NAN-is-no-longer-compile-time-constant-i/10688907#T-N10849410
-set(use_math_DEFS "")
+set(noisy_nan_DEFS "")
 if(WIN32)
-  set(use_math_DEFS "-D_UCRT_NOISY_NAN")
+  set(noisy_nan_DEFS "-D_UCRT_NOISY_NAN")
 endif()
 
 build_program_in_subdir(
   v.univar
+  DEFS
+  "${noisy_nan_DEFS}"
   DEPENDS
   grass_dbmibase
   grass_dbmiclient
