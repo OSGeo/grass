@@ -406,13 +406,13 @@
 #define strncasecmp _strnicmp
 #define strcasecmp _stricmp
 #define fdopen _fdopen
-#define open _open
+/* _open() and _creat() are wrapped by msvc/open.c and msvc/creat.c,
+* respectively, for compatible permission mode */
 #define read _read
 #define write _write
 #define close _close
 #define unlink _unlink
 #define getpid _getpid
-#define creat _creat
 
 /* define gid_t type */
 typedef @GID_TYPE@ gid_t;

@@ -19,13 +19,10 @@ build_library_in_subdir(
 
 add_subdirectory(proj)
 
-file(GLOB raster_SRCS "./raster/*.c")
 build_library_in_subdir(
   raster
   DEFS
   "-DGDAL_LINK=1"
-  SOURCES
-  ${raster_SRCS}
   DEPENDS
   GDAL
   PROJ
@@ -81,11 +78,8 @@ build_library_in_subdir(
   OPTIONAL_DEPENDS
   LIBPNG)
 
-file(GLOB psdriver_SRCS "./psdriver/*.c")
 build_library_in_subdir(
   psdriver
-  SOURCES
-  ${psdriver_SRCS}
   DEPENDS
   grass_driver
   grass_gis
@@ -100,11 +94,8 @@ add_custom_command(
 install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/psdriver.ps
         DESTINATION ${GRASS_INSTALL_ETCDIR})
 
-file(GLOB htmldriver_SRCS "./htmldriver/*.c")
 build_library_in_subdir(
   htmldriver
-  SOURCES
-  ${htmldriver_SRCS}
   DEPENDS
   grass_gis
   grass_driver
@@ -122,9 +113,7 @@ if(WITH_CAIRO)
     list(APPEND _cairodriver_DEPENDS X11)
   endif()
 
-  file(GLOB cairodriver_SRCS "./cairodriver/*.c")
-  build_library_in_subdir(cairodriver DEPENDS ${_cairodriver_DEPENDS} SOURCES
-                          ${cairodriver_SRCS})
+  build_library_in_subdir(cairodriver DEPENDS ${_cairodriver_DEPENDS})
 
   set(_grass_display_DEFS "-DUSE_CAIRO")
   list(APPEND _grass_display_DEPENDS grass_cairodriver)
