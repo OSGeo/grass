@@ -805,6 +805,15 @@ build_program_in_subdir(
 
 build_program_in_subdir(v.type DEPENDS grass_gis grass_vector GDAL)
 
+# XXX: to workaround an MSVC bug where NAN is not a contant
+# v.univar\main.c(77,8): error C2099: initializer is not a constant
+# REMOVEME later once the fix is released
+# https://developercommunity.visualstudio.com/t/NAN-is-no-longer-compile-time-constant-i/10688907#T-N10849410
+set(use_math_DEFS "")
+if(WIN32)
+  set(use_math_DEFS "-D_UCRT_NOISY_NAN")
+endif()
+
 build_program_in_subdir(
   v.univar
   DEPENDS
