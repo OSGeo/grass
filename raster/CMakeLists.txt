@@ -378,7 +378,7 @@ build_program_in_subdir(
 build_program_in_subdir(r.patch DEPENDS grass_gis grass_raster OPTIONAL_DEPENDS
                         OPENMP)
 
-build_program_in_subdir(r.path DEPENDS grass_gis grass_raster grass_vector GDAL)
+build_program_in_subdir(r.path DEPENDS grass_gis grass_raster grass_vector GDAL ${LIBM})
 
 build_program_in_subdir(r.profile DEPENDS grass_gis grass_raster grass_parson ${LIBM})
 
