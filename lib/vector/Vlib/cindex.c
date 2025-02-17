@@ -543,7 +543,7 @@ int Vect_cidx_open(struct Map_info *Map, int head_only)
     fp.file = G_fopen_old(path, GV_CIDX_ELEMENT, Map->mapset);
 
     if (fp.file == NULL) { /* category index file is not available */
-        const char *map_name = Vect_get_full_name(Map)
+        const char *map_name = Vect_get_full_name(Map);
         G_warning(_("Unable to open category index file for vector map <%s>"),
                   map_name);
         G_free((void *)map_name);
