@@ -206,7 +206,7 @@ vector.
 
 ## EXAMPLES
 
-### Snap lines to vertex in threshold
+### Snapping lines to vertex in threshold
 
 ```sh
 v.clean input=testmap output=cleanmap tool=snap threshold=1

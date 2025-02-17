@@ -34,7 +34,7 @@ gain in AIC (AIC without a given variable minus AIC global must be
 positive) whether the inclusion of a given explaining variable in the
 model is justified.
 
-#### The global model
+### The global model
 
 The *b* coefficients (b0 is offset), R squared or coefficient of
 determination (Rsq) and F are identical to the ones obtained from
@@ -44,7 +44,7 @@ of backwards stepping, identical to the Start value). The AIC value
 corrected for the number of explaining variables and the BIC (Bayesian
 Information Criterion) value follow the logic of AIC.
 
-#### The explaining variables
+### The explaining variables
 
 R squared for each explaining variable represents the additional amount
 of explained variance when including this variable compared to when
