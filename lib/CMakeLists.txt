@@ -46,7 +46,7 @@ build_library_in_subdir(external/ccmath)
 
 build_library_in_subdir(external/shapelib NAME grass_shape HEADERS "shapefil.h")
 
-build_library_in_subdir(external/parson NAME grass_parson HEADERS "parson.h")
+build_library_in_subdir(external/parson NAME grass_parson HEADERS "gjson.h" "parson.h")
 
 build_library_in_subdir(
   gmath
