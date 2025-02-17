@@ -311,6 +311,7 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E make_directory
           ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
   COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${THUMBNAILS_PY}
+          ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
   BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
   COMMENT "Creating thumbnails"
   DEPENDS ALL_MODULES)
