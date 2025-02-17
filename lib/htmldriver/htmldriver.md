@@ -122,7 +122,7 @@ r.out.ppm -q input=D_cell output=alien.ppm
 ppmquant 128 <alien.ppm |  ppmtogif >alien.gif
 
 # assemble some html with the image and the image map
-echo '<html><body>![alien](alien.gif)' >alien.html
+echo '<html><body><img src="alien.gif" usemap="#map">' >alien.html
 cat htmlmap                                           >>alien.html
 echo '</body></html>'                                 >>alien.html
 
