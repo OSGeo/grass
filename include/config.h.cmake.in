@@ -405,6 +405,7 @@
 #ifdef _MSC_VER
 
 #ifdef HAVE_LARGEFILES
+#include <sys/types.h>
 #define off_t __int64
 #include <stdio.h>
 #define fseek _fseeki64
