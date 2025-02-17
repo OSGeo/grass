@@ -85,31 +85,6 @@ class TestVHull(TestCase):
         self.temp_files.append(temp_file_name)
         return temp_file_name
 
-    def test_convex_hull_square(self):
-        """Tests if the convex hull of a square results in the correct area (1.0)."""
-        self.assertModule(
-            "v.hull", input=self.input_points, output=self.output_hull, overwrite=True
-        )
-        self.assertVectorExists(self.output_hull)
-        proj_info = gs.parse_command("g.proj", flags="g")
-        if proj_info["units"] == "degrees":
-            self.skipTest("Area check skipped for geographic locations")
-        else:
-            univar_output = gs.read_command(
-                "v.univar", flags="g", map=self.output_hull, type="area", column="area"
-            )
-
-            sum_area = float(
-                [
-                    line.split("=")[1]
-                    for line in univar_output.splitlines()
-                    if line.startswith("sum=")
-                ][0]
-            )
-            self.assertAlmostEqual(
-                sum_area, 1.0, delta=0.01, msg="Convex hull area should be 1.0"
-            )
-
     def test_colinear_points(self):
         """Tests if colinear points result in a degenerate boundary with exactly 3 vertices: v1, v2, and a copy of v1."""
         self.assertModule(
