@@ -104,7 +104,7 @@
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
-from pathlib import Path
+import tempfile
 
 ############################################################################
 
@@ -148,38 +148,39 @@ def main():
 
     if rows:
         # Create the r.colors input file
-        filename = gs.tempfile(True)
-        Path(filename).write_text("\n".join(str(row["id"]) for row in rows))
+        with tempfile.NamedTemporaryFile(mode="w", delete=True) as temp_file:
+            temp_file.write("\n".join(str(row["id"]) for row in rows))
+            temp_file.flush()
 
-        flags_ = ""
-        if remove:
-            flags_ += "r"
-        if write:
-            flags_ += "w"
-        if list:
-            flags_ += "l"
-        if invert:
-            flags_ += "n"
-        if log:
-            flags_ += "g"
-        if abslog:
-            flags_ += "a"
-        if equi:
-            flags_ += "e"
+            flags_ = ""
+            if remove:
+                flags_ += "r"
+            if write:
+                flags_ += "w"
+            if list:
+                flags_ += "l"
+            if invert:
+                flags_ += "n"
+            if log:
+                flags_ += "g"
+            if abslog:
+                flags_ += "a"
+            if equi:
+                flags_ += "e"
 
-        try:
-            gs.run_command(
-                "r.colors",
-                flags=flags_,
-                file=filename,
-                color=color,
-                raster=raster,
-                volume=volume,
-                rules=rules,
-                overwrite=gs.overwrite(),
-            )
-        except CalledModuleError:
-            gs.fatal(_("Error in r.colors call"))
+            try:
+                gs.run_command(
+                    "r.colors",
+                    flags=flags_,
+                    file=temp_file.name,
+                    color=color,
+                    raster=raster,
+                    volume=volume,
+                    rules=rules,
+                    overwrite=gs.overwrite(),
+                )
+            except CalledModuleError:
+                gs.fatal(_("Error in r.colors call"))
 
 
 if __name__ == "__main__":
