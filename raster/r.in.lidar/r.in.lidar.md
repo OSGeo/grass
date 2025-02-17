@@ -430,8 +430,7 @@ r.in.lidar input="Serpent Mound Model LAS Data.laz" \
            output=Serpent_Mound_Model_LAS_Data method=mean
 ```
 
-![](r_in_lidar.png)
-
+![](r_in_lidar.png)  
 *Figure: Elevation for the whole area of Serpent Mound dataset*
 
 ### Height above ground
@@ -492,7 +491,7 @@ r.in.lidar file=/home/user/data/filelist.txt output=mean_height_above_ground bas
 In Python, the list of files can be created using the *glob* Python
 module:
 
-```sh
+```python
 import glob
 import grass.script as gs
 

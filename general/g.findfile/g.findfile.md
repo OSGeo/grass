@@ -81,10 +81,10 @@ more info.
 Note: The Python tab in the *wxGUI* can be used for entering the
 following code:
 
-```sh
-import grass.script as gcore
+```python
+import grass.script as gs
 
-gcore.find_file('elevation', element = 'cell')
+gs.find_file('elevation', element = 'cell')
 ```
 
 ## SEE ALSO

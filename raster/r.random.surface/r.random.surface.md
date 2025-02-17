@@ -118,15 +118,12 @@ r.surf.random output=randomsurf min=10 max=100
 r.univar -e map=randomsurf
 ```
 
-[<img src="r_random_surface.jpg" data-border="0" width="600" height="288"
-alt="r.random.surface example (n_min: 10; n_max: 100)" />](r_random_surface.jpg)  
+![r.random.surface example (n_min: 10; n_max: 100)](r_random_surface.jpg)  
 *Figure: Random surface example (min: 10; max: 100)*
 
 With the histogram tool the cell values versus count can be shown.
 
-[<img src="r_random_surface_hist.png" data-border="0" width="600"
-height="244"
-alt="r.random.surface example histogram (n_min: 10; n_max: 100)" />](r_random_surface_hist.png)  
+![r.random.surface example histogram (n_min: 10; n_max: 100)](r_random_surface_hist.png)  
 *Figure: Histogram of random surface example (min: 10; max: 100)*
 
 ## REFERENCES

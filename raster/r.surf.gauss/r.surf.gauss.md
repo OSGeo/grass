@@ -16,15 +16,12 @@ r.surf.gauss out=gauss mean=0 sigma=10
 r.univar gauss
 ```
 
-[<img src="r_surf_gauss.jpg" data-border="0" width="600" height="295"
-alt="r.surf.gauss example (mean: 0; sigma: 10)" />](r_surf_gauss.jpg)  
+![r.surf.gauss example (mean: 0; sigma: 10)](r_surf_gauss.jpg)  
 *Figure: Random Gaussian surface example (mean: 0; sigma: 10)*
 
 With the histogram tool the cell values versus count can be shown.
 
-[<img src="r_surf_gauss_hist.png" data-border="0" width="600"
-height="275"
-alt="r.surf.gauss example histogram (mean: 0; sigma: 10)" />](r_surf_gauss_hist.png)  
+![r.surf.gauss example histogram (mean: 0; sigma: 10)](r_surf_gauss_hist.png)  
 *Figure: Histogram of random Gaussian surface example (mean: 0; sigma:
 10)*
 

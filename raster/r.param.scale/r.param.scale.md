@@ -52,9 +52,8 @@ g.region raster=elevation.10m -p
 r.param.scale in=elevation.10m output=morphology method=feature size=9
 ```
 
-[<img src="r_param_scale_morph.jpg" data-border="0" width="600"
-alt="r.param.scale example" />  
-](r_param_scale_morph.jpg) *Figure: Geomorphological map of a subregion
+![r.param.scale example](r_param_scale_morph.jpg)  
+*Figure: Geomorphological map of a subregion
 in the Spearfish (SD) area*
 
 ## TODO

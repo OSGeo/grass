@@ -61,7 +61,12 @@ def build_topics(ext):
         try:
             desc = lines[index_desc].split("-", 1)[1].strip()
         except Exception:
-            desc.strip()
+            desc = desc.strip()
+
+        # Line ending can appear here on Windows.
+        key = key.strip()
+        if not key:
+            continue
 
         if key not in keywords.keys():
             keywords[key] = {}
@@ -102,7 +107,7 @@ def build_topics(ext):
                     topicsfile.writelines(
                         [
                             moduletopics_tmpl.substitute(
-                                key=key, name=key.replace("_", " ")
+                                key=key.replace(" ", "_"), name=key.replace("_", " ")
                             )
                         ]
                     )
@@ -125,9 +130,10 @@ def build_topics(ext):
                     # expecting markdown
                     keyfile.write(
                         "*See also the corresponding keyword"
-                        " [{key}](keywords.md#{key})"
+                        " [{name}](keywords.md#{key})"
                         " for additional references.*\n".format(
-                            key=key.replace(" ", "-").replace("_", "-").lower()
+                            key=key.replace(" ", "-").replace("_", "-").lower(),
+                            name=key.replace("_", " "),
                         )
                     )
 

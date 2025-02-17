@@ -21,10 +21,10 @@ printed by **-e** flag.
 See also function `version()` from [Python Scripting
 Library](https://grasswiki.osgeo.org/wiki/GRASS_Python_Scripting_Library).
 
-```sh
-import grass.script as gcore
+```python
+import grass.script as gs
 
-print gcore.version()
+print(gs.version())
 ```
 
 ## EXAMPLES

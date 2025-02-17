@@ -154,7 +154,7 @@ r.category map=landclass96 cats=3,4 output_format=json
 
 generates the following JSON output:
 
-```sh
+```json
 [
     {
         "category": 3,

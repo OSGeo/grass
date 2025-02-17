@@ -23,9 +23,8 @@ g.region raster=lsat7_2002_30 -p
 d.correlate map=lsat7_2002_30,lsat7_2002_40
 ```
 
-<img src="d_correlate_plot.png" data-border="1"
-alt="Scatterplot of two LANDSAT TM7 channels" />  
-Scatterplot of two LANDSAT TM7 channels
+![Scatterplot of two LANDSAT TM7 channels](d_correlate_plot.png)  
+*Scatterplot of two LANDSAT TM7 channels*
 
 ## SEE ALSO
 

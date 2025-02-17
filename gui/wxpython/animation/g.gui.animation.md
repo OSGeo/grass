@@ -36,8 +36,7 @@ follow these steps:
 - choose parameter (parameter of *[m.nviz.image](m.nviz.image.md)*) to
   animate (e.g. color_map)
 
-<img src="wxGUI_animation_tool.jpg" data-border="1"
-alt="Animation Tool screenshot" />  
+![Animation Tool screenshot](wxGUI_animation_tool.jpg)
   
 ## NOTE
 

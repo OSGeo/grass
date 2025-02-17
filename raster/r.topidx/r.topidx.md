@@ -32,7 +32,7 @@ g.region raster=elevation -p
 r.topidx input=elevation output=topidx_elevation
 ```
 
-<img src="r_topidx.png" data-border="0" alt="r.topidx example" />  
+![r.topidx example](r_topidx.png)  
 *Figure: topographic index map derived from elevation map*
 
 ## REFERENCES

@@ -166,10 +166,8 @@ threads to be used with the **nprocs** parameter (default 1). The
 **memory** parameter (default 300) can also be provided to determine the
 size of the buffer for computation.
 
-<img src="r_slope_aspect_benchmark_size.png" data-border="0"
-alt="benchmark for number of cells" />
-<img src="r_slope_aspect_benchmark_memory.png" data-border="0"
-alt="benchmark for memory size" />  
+![benchmark for number of cells](r_slope_aspect_benchmark_size.png)
+![benchmark for memory size](r_slope_aspect_benchmark_memory.png)  
 *Figure: Benchmark on the left shows execution time for different number
 of cells, benchmark on the right shows execution time for different
 memory size for 5000x5000 raster. See benchmark scripts in source code.

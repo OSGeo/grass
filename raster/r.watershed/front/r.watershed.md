@@ -109,8 +109,7 @@ geographic region.
 Output **drainage** raster map contains drainage direction. Provides the
 "aspect" for each cell measured CCW from East.
 
-[<img src="r_watershed_drainage.png" data-border="0" width="200"
-height="200" alt="drainage" />](r_watershed_drainage.png)  
+![drainage](r_watershed_drainage.png)  
 *Figure: Drainage is 8 directions numbered counter-clockwise starting
 from 1 in north-east direction
 ([source](https://idea.isnew.info/how-to-import-arcgis-flow-direction-into-grass-gis.html))*

@@ -1957,6 +1957,23 @@ def download_source_code(
     return directory, url
 
 
+def create_md_if_missing(root_dir):
+    """Recursively searches for HTML files in the specified directory.
+    If an HTML file does not have a corresponding Markdown (.md) file,
+    it creates one by copying the HTML file and renaming it.
+    """
+    for dirpath, _, filenames in os.walk(root_dir):
+        html_files = [f for f in filenames if f.endswith(".html")]
+
+        for html_file in html_files:
+            md_file = os.path.splitext(html_file)[0] + ".md"
+            md_path = os.path.join(dirpath, md_file)
+
+            if not os.path.exists(md_path):
+                html_path = os.path.join(dirpath, html_file)
+                shutil.copy(html_path, md_path)
+
+
 def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
     gisbase = os.getenv("GISBASE")
@@ -1976,6 +1993,7 @@ def install_extension_std_platforms(name, source, url, branch):
         tmpdir=TMPDIR,
         branch=branch,
     )
+    create_md_if_missing(srcdir)
     os.chdir(srcdir)
 
     pgm_not_found_message = _(
