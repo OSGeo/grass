@@ -377,12 +377,12 @@
  * Defines needed to get large file support - from cdrtools-2.01
  */
 
-#define	HAVE_LARGEFILES ${HAVE_LARGEFILES}
+#cmakedefine HAVE_LARGEFILES ${HAVE_LARGEFILES}
 
 /* define if langinfo.h exists */
 #cmakedefine HAVE_LANGINFO_H  ${HAVE_LANGINFO_H}
 
-#if defined(__MINGW32__) && (!defined(_FILE_OFFSET_BITS) || (_FILE_OFFSET_BITS != 64))
+#if defined(__MINGW32__) && defined(HAVE_LARGEFILES) && (!defined(_FILE_OFFSET_BITS) || (_FILE_OFFSET_BITS != 64))
 /* add/remove as needed */
 /* redefine off_t */
 #include <sys/types.h>
@@ -403,6 +403,19 @@
 #endif /* MINGW32 LFS */
 
 #ifdef _MSC_VER
+
+#ifdef HAVE_LARGEFILES
+#define off_t __int64
+#include <stdio.h>
+#define fseek _fseeki64
+#define ftell _ftelli64
+#include <io.h>
+#define lseek _lseeki64
+#include <sys/stat.h>
+#define stat _stati64
+#define fstat _fstati64
+#endif /* _MSC_VER LFS */
+
 #define strncasecmp _strnicmp
 #define strcasecmp _stricmp
 #define fdopen _fdopen

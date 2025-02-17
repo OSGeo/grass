@@ -50,6 +50,7 @@ if(WIN32)
 elseif(APPLE)
   set(x11_default_option_enabled OFF)
 endif()
+set(lfs_default_option_enabled ON)
 
 # Configure CCache if available
 if(NOT MSVC)
@@ -125,7 +126,7 @@ option(WITH_OPENDWG "Build with OpenDWG support" OFF)
 
 # Other options
 option(WITH_LARGEFILES "Build with large file support"
-       ${default_option_enabled})
+       ${lfs_default_option_enabled})
 option(WITH_DOCS "Build documentation" ON)
 option(WITH_GUI "Build GUI" ON)
 option(WITH_FHS "Install with FHS" OFF)
