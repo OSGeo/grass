@@ -19,6 +19,8 @@ build_library_in_subdir(
 
 add_subdirectory(proj)
 
+build_library_in_subdir(external/parson NAME grass_parson HEADERS "gjson.h" "parson.h")
+
 build_library_in_subdir(
   raster
   DEFS
@@ -27,7 +29,8 @@ build_library_in_subdir(
   GDAL
   PROJ
   grass_gis
-  grass_gproj)
+  grass_gproj
+  grass_parson)
 
 if(TARGET LAPACK)
   target_link_libraries(grass_raster PRIVATE LAPACK)
@@ -45,8 +48,6 @@ configure_file(
 build_library_in_subdir(external/ccmath)
 
 build_library_in_subdir(external/shapelib NAME grass_shape HEADERS "shapefil.h")
-
-build_library_in_subdir(external/parson NAME grass_parson HEADERS "gjson.h" "parson.h")
 
 build_library_in_subdir(
   gmath
