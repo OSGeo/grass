@@ -215,6 +215,7 @@ build_program_in_subdir(
   grass_gis
   grass_gmath
   grass_vector
+  grass_parson
   GDAL
   ${LIBM})
 
@@ -390,7 +391,7 @@ build_program_in_subdir(
 build_program_in_subdir(v.proj DEPENDS grass_gis grass_gproj grass_vector GDAL ${LIBM})
 
 build_program_in_subdir(
-  v.profile 
+  v.profile
   DEPENDS
   grass_dbmibase
   grass_dbmiclient
