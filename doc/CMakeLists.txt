@@ -1,5 +1,5 @@
 file(GLOB doc_HTMLFILES "*.html")
-add_custom_target(ADD_DOC_DOCS ALL COMMENT "Generate doc/html docs.")
+add_custom_target(ADD_DOC_DOCS ALL COMMENT "Generate doc/html docs." DEPENDS LIB_PYTHON)
 
 foreach(html_file ${doc_HTMLFILES})
   get_filename_component(filename ${html_file} NAME_WLE)
