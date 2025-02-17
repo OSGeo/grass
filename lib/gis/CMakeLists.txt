@@ -1,6 +1,6 @@
 file(GLOB gislib_SRCS "*.c")
 
-if(NOT MINGW)
+if(NOT WIN32)
   list(FILTER gislib_SRCS EXCLUDE REGEX [[.*/fmode\.c$]])
 endif()
 

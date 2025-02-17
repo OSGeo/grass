@@ -161,7 +161,7 @@ static int gisinit(void)
 {
     char *zlib;
 
-#ifdef __MINGW32__
+#if defined(_MSC_VER) || defined(__MINGW32__)
     _fmode = O_BINARY;
 #endif
     /* Mark window as not set */
