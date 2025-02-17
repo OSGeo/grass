@@ -622,11 +622,6 @@ Related publications:
   spatio-temporal map algebra for big data analysis*. Data 4, 86.
   ([DOI](https://doi.org/10.3390/data4020086))
 
-## SEE ALSO
-
-*[v.overlay](v.overlay.md), [v.buffer](v.buffer.md),
-[v.patch](v.patch.md), [r.mapcalc](r.mapcalc.md)*
-
 ## AUTHORS
 
 Thomas Leppelt, Sören Gebbert, Thünen Institute of Climate-Smart

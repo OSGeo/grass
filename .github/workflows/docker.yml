@@ -88,5 +88,7 @@ jobs:
           context: .
           tags: ${{ steps.meta.outputs.tags }}
           file: docker/${{ matrix.os }}/Dockerfile
+          cache-from: type=gha,scope=${{ matrix.os }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.os }}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
