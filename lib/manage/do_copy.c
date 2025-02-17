@@ -48,8 +48,8 @@ int M_do_copy(int n, const char *old, const char *mapset, const char *new)
     if (G_strcasecmp(list[n].alias, "vector") == 0) {
         ret = Vect_copy(old, mapset, new);
         if (ret == -1) {
-            G_warning(_("Unable to copy <%s> to current mapset as <%s>"),
-                      mname, new);
+            G_warning(_("Unable to copy <%s> to current mapset as <%s>"), mname,
+                      new);
             result = 1;
         }
     }
