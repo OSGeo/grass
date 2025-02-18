@@ -72,7 +72,7 @@ trim_trailing_whitespace = false
 [*.md]
 # Two trailing whitespace in markdown means to create a line break
 # https://www.markdownguide.org/basic-syntax/#line-breaks
-# trim_trailing_whitespace = false
+trim_trailing_whitespace = false
 indent_style = space
 # TODO: To enable when files are fixed:
 # indent_size = 2
