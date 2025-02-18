@@ -43,21 +43,23 @@ int G_vasprintf(char **out, const char *fmt, va_list ap)
 #ifdef HAVE_ASPRINTF
     return vasprintf(out, fmt, ap);
 #else
-    va_list aq;
     size_t size = strlen(fmt) + 50;
     char *buf = G_malloc(size);
     int count;
 
-    va_copy(aq, ap);
-    count = vsnprintf(buf, size, fmt, ap);
-    if (count++ >= size) {
-        buf = G_realloc(buf, count);
-        if (count - 1 == size)
-            buf[count] = '\0';
-        else
-            vsnprintf(buf, count, fmt, aq);
+    for (;;) {
+        /* BUG: according to man vsnprintf,
+         * va_start() should be called immediately before vsnprintf(),
+         * and va_end() immediately after vsnprintf()
+         * otherwise there will be memory corruption */
+        count = vsnprintf(buf, size, fmt, ap);
+        if (count >= 0 && count < size)
+            break;
+        size *= 2;
+        buf = G_realloc(buf, size);
     }
-    va_end(aq);
+
+    buf = G_realloc(buf, count + 1);
     *out = buf;
 
     return count;
