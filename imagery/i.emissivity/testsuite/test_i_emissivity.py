@@ -21,7 +21,7 @@ class TestIEmissivity(TestCase):
         cls.ndvi_cases = {
             "default": "if(row() <= 5, 0.2, 0.7)",
             "valid_range": "if(col() == 1, 0.16, if(col() == 2, 0.74, 0.45))",
-            "extreme_values": "if(col() == 1, -1, if(col() == 2, 1.2, 0.5))",
+            "extreme_values": "if(col() == 1, -1, if(col() == 2, 1, 0.5))",
         }
 
         cls.runModule(
@@ -82,38 +82,46 @@ class TestIEmissivity(TestCase):
         )
         self.temp_rasters.append("MASK")
 
+        self.runModule(
+            "r.mapcalc",
+            expression=f"masked_input = if(isnull(MASK), null(), {self.input_raster})",
+            overwrite=True,
+        )
+        self.temp_rasters.append("masked_input")
+
         self.assertModule(
             "i.emissivity",
-            input=self.input_raster,
+            input="masked_input",
             output=self.output_raster,
             overwrite=True,
         )
 
-        self.runModule(
-            "r.mapcalc",
-            expression=f"masked_reference = if(isnull(MASK), null(), {self.reference_raster})",
-            overwrite=True,
-        )
-        self.temp_rasters.append("masked_reference")
-
-        self.runModule(
-            "r.mapcalc",
-            expression=f"diff_raster = abs({self.output_raster} - masked_reference)",
-            overwrite=True,
-        )
-        self.temp_rasters.append("diff_raster")
-
-        self.assertRasterMinMax("diff_raster", 0, 0.05)
         self.runModule("r.mask", flags="r")
 
-    def test_region_resolution(self):
-        """Test the module behaviour with different region resolutions."""
-        results = {}
-        for res in [1, 0.1]:
-            with self.subTest(res=res):
-                self.runModule("g.region", n=10, s=0, e=10, w=0, res=res)
+        reference_stats = {"mean": 0.969785, "min": 0.922868, "max": 0.994848}
+
+        self.assertRasterFitsUnivar(
+            raster=self.output_raster, reference=reference_stats, precision=1e-6
+        )
+
+    def test_emissivity_default_calculation(self):
+        """Test default emissivity calculation with critical NDVI values."""
+        # NDVI_soil = 0.15, NDVI_veg = 0.7, e_soil = 0.96, e_veg = 0.985
+        test_values = [
+            (0.10, 0.96),  # Below NDVI_soil - should use e_soil
+            (0.15, 0.96),  # Exactly NDVI_soil
+            (0.70, 0.985),  # Exactly NDVI_veg
+            (0.80, 0.985),  # Above NDVI_veg - should clamp to e_veg
+            (-0.5, 0.96),  # Invalid NDVI (negative) treated as soil
+            (1.50, 0.985),  # Invalid NDVI (>1) treated as vegetation
+        ]
+
+        for ndvi, expected in test_values:
+            with self.subTest(ndvi=ndvi, expected=expected):
                 self.runModule(
-                    "r.mapcalc", expression=f"{self.input_raster} = 0.6", overwrite=True
+                    "r.mapcalc",
+                    expression=f"{self.input_raster} = {ndvi}",
+                    overwrite=True,
                 )
                 self.assertModule(
                     "i.emissivity",
@@ -121,9 +129,13 @@ class TestIEmissivity(TestCase):
                     output=self.output_raster,
                     overwrite=True,
                 )
-                results[res] = self.assertRasterMinMax(self.output_raster, 0, 1)
-
-        self.assertAlmostEqual(results[1], results[0.1], delta=0.01)
+                self.assertRasterMinMax(
+                    self.output_raster,
+                    min=expected,
+                    max=expected,
+                    delta=0.001,
+                    msg=f"Emissivity calculation failed for NDVI={ndvi}",
+                )
 
     def test_partial_null_values(self):
         """Test the module behavior when NDVI has null values."""
@@ -139,7 +151,10 @@ class TestIEmissivity(TestCase):
             overwrite=True,
         )
         self.assertRasterExists(self.output_raster)
-        self.assertRasterMinMax(self.output_raster, 0, 1)
+        reference_stats = {"n": 50, "min": 0.976422, "max": 0.976422, "mean": 0.976422}
+        self.assertRasterFitsUnivar(
+            raster=self.output_raster, reference=reference_stats, precision=1e-6
+        )
 
     def test_extreme_ndvi_values(self):
         """Test with extreme NDVI values beyond the valid range."""
