@@ -147,26 +147,26 @@ def main():
     rows = sp.get_registered_maps("id", None, None, None)
 
     if rows:
+        flags_ = ""
+        if remove:
+            flags_ += "r"
+        if write:
+            flags_ += "w"
+        if list:
+            flags_ += "l"
+        if invert:
+            flags_ += "n"
+        if log:
+            flags_ += "g"
+        if abslog:
+            flags_ += "a"
+        if equi:
+            flags_ += "e"
+
         # Create the r.colors input file
         with tempfile.NamedTemporaryFile(mode="w", delete=True) as temp_file:
             temp_file.write("\n".join(str(row["id"]) for row in rows))
             temp_file.flush()
-
-            flags_ = ""
-            if remove:
-                flags_ += "r"
-            if write:
-                flags_ += "w"
-            if list:
-                flags_ += "l"
-            if invert:
-                flags_ += "n"
-            if log:
-                flags_ += "g"
-            if abslog:
-                flags_ += "a"
-            if equi:
-                flags_ += "e"
 
             try:
                 gs.run_command(
