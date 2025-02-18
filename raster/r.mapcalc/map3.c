@@ -18,7 +18,6 @@
 /****************************************************************************/
 
 static void prepare_region_from_maps(expression **, int, int);
-int columns;
 RASTER3D_Region current_region3;
 
 void setup_region(void)
