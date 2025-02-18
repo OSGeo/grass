@@ -20,11 +20,20 @@ def github_path(toolname, scripts_tools):
         "vector",
     ]
 
-    print(f"Searching for: {toolname}")
+    # Special cases for documentation pages that don't match the pattern matching scheme
+    special_docs = [
+        {"name": "projectionintro", "path": "doc"},
+        {"name": "grass_database", "path": "doc"},
+        {"name": "databaseintro", "path": "db"},
+    ]
 
     # Exit early if toolname is empty
     if not toolname:
         return None
+
+    # Handle special cases
+    if toolname in [x["name"] for x in special_docs]:
+        return next((x["path"] for x in special_docs if x["name"] == toolname), None)
 
     # Convert filter() results to a list
     tool_matches = list(filter(lambda x: toolname in x, scripts_tools))
