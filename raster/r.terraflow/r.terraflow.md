@@ -143,7 +143,7 @@ g.region raster=elev_lid792_1m
 r.terraflow elevation=elev_lid792_1m accumulation=elev_lid792_1m_accumulation
 ```
 
-<img src="rterraflow_accumulation.png" data-border="0" />  
+![Flow accumulation](rterraflow_accumulation.png)  
 *Flow accumulation*
 
 Spearfish sample data set:

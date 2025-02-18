@@ -186,10 +186,8 @@ the tool does.
 Threshold does not apply, use dummy value if *v.clean* is run with
 several tools.
 
-|                                                |
-|------------------------------------------------|
-| <img src="v_clean_rmsa.png" data-border="1" /> |
-| *tool=rmsa*                                    |
+![v_clean_rmsa](v_clean_rmsa.png)  
+*tool=rmsa*
 
 The *rmsa* tool should be followed by *break,rmdupl*. The *rmsa* tool
 followed by *break,rmdupl* may need to be run more than once to remove

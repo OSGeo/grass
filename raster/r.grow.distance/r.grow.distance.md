@@ -82,10 +82,10 @@ r.grow.distance input=streams_derived distance=dist_from_streams
 r.colors map=dist_from_streams color=rainbow
 ```
 
-<img src="r_grow_distance.png" data-border="0" />  
+![Euclidean distance from the streams network in meters (map subset)](r_grow_distance.png)  
 *Euclidean distance from the streams network in meters (map subset)*
 
-<img src="r_grow_distance_zoom.png" data-border="0" />  
+![r_grow_distance_zoom](r_grow_distance_zoom.png)  
 *Euclidean distance from the streams network in meters (detail, numbers
 shown with d.rast.num)*
 
@@ -97,7 +97,7 @@ r.grow.distance -m input=sea distance=dist_from_sea_geodetic metric=geodesic
 r.colors map=dist_from_sea_geodetic color=rainbow
 ```
 
-<img src="r_grow_distance_sea.png" data-border="1" />  
+![Geodesic distances to sea in meters](r_grow_distance_sea.png)  
 *Geodesic distances to sea in meters*
 
 ## SEE ALSO

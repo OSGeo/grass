@@ -14,11 +14,8 @@ the clusters (e.g., land cover spectral signatures) are influenced by
 six parameters set by the user. A relevant parameter set by the user is
 the initial number of clusters to be discriminated.
 
-<img src="i_cluster_landsat_clustering.png" data-norder="1" />  
-
-|                                                                      |
-|----------------------------------------------------------------------|
-| *Fig.: Land use/land cover clustering of LANDSAT scene (simplified)* |
+![Land use/land cover clustering of LANDSAT scene](i_cluster_landsat_clustering.png)  
+*Fig.: Land use/land cover clustering of LANDSAT scene (simplified)*
 
 *i.cluster* starts by generating spectral signatures for this number of
 clusters and "attempts" to end up with this number of clusters during
@@ -60,26 +57,26 @@ classify only the same imagery group used for generating signatures.
 
 ### Parameters
 
-**group=***name*  
+**group:**
 The name of the group file which contains the imagery files that the
 user wishes to classify.
 
-**subgroup=***name*  
+**subgroup:**
 The name of the subset of the group specified in group option, which
 must contain only imagery band files and more than one band file. The
 user must create a group and a subgroup by running the GRASS program
 *[i.group](i.group.md)* before running *i.cluster*.
 
-**signaturefile=***name*  
+**signaturefile:**
 The name assigned to output signature file which contains signatures of
 classes and can be used as the input file for the GRASS program
 *[i.maxlik](i.maxlik.md)* for an unsupervised classification.
 
-**classes=***value*  
+**classes:**
 The number of clusters that will initially be identified in the
 clustering process before the iterations begin.
 
-**seed=***name*  
+**seed:**
 The name of a seed signature file is optional. The seed signatures are
 signatures that contain cluster means and covariance matrices which were
 calculated prior to the current run of *i.cluster*. They may be acquired
@@ -89,22 +86,22 @@ by *[g.gui.iclass](g.gui.iclass.md)*). The purpose of seed signatures is
 to optimize the cluster decision boundaries (means) for the number of
 clusters specified.
 
-**sample=***rows,cols*  
+**sample:**
 These numbers are optional with default values based on the size of the
 data set such that the total pixels to be processed is approximately
 10,000 (consider round up). The smaller these numbers, the larger the
 sample size used to generate the signatures for the classes defined.
 
-**iterations=***value*  
+**iterations:**
 This parameter determines the maximum number of iterations which is
 greater than the number of iterations predicted to achieve the optimum
 percent convergence. The default value is 30. If the number of
 iterations reaches the maximum designated by the user; the user may want
 to rerun *i.cluster* with a higher number of iterations (see
-[*reportfile*](#reportfile)).  
-Default: 30 <span id="convergence"></span>
+*reportfile*).  
+Default: 30
 
-**convergence=***value*  
+**convergence:**
 A high percent convergence is the point at which cluster means become
 stable during the iteration process. The default value is 98.0 percent.
 When clusters are being created, their means constantly change as pixels
@@ -118,10 +115,10 @@ iterative process. The percent convergence should be reached before the
 maximum number of iterations. If the maximum number of iterations is
 reached, it is probable that the desired percent convergence was not
 reached. The number of iterations is reported in the cluster statistics
-in the report file (see [*reportfile*](#reportfile)).  
+in the report file (see *reportfile*).  
 Default: 98.0
 
-**separation=***value*  
+**separation:**
 This is the minimum separation below which clusters will be merged in
 the iteration process. The default value is 0.0. This is an
 image-specific number (a "magic" number) that depends on the image data
@@ -129,16 +126,16 @@ being classified and the number of final clusters that are acceptable.
 Its determination requires experimentation. Note that as the minimum
 class (or cluster) separation is increased, the maximum number of
 iterations should also be increased to achieve this separation with a
-high percentage of convergence (see [*convergence*](#convergence)).  
+high percentage of convergence (see *convergence*).  
 Default: 0.0
 
-**min_size=***value*  
+**min_size:**
 This is the minimum number of pixels that will be used to define a
 cluster, and is therefore the minimum number of pixels for which means
 and covariance matrices will be calculated.  
-Default: 17 <span id="reportfile"></span>
+Default: 17
 
-**reportfile=***name*  
+**reportfile:**
 The reportfile is an optional parameter which contains the result, i.e.,
 the statistics for each cluster. Also included are the resulting percent
 convergence for the clusters, the number of iterations that was required
