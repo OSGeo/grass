@@ -4,37 +4,55 @@
 /*! \file simlib.h
  * \brief This is the interface for the simlib (SIMWE) library.
  */
+#include <stdbool.h>
 
 #define NUM_THREADS "1"
 #if defined(_OPENMP)
 #include <omp.h>
 #endif
 
+typedef struct {
+    int mx, my;                    // Number of columns and rows
+    double xmin, xmax, ymin, ymax; // 0, stepx * mx, 0, stepy * my
+    double miyy, mixx;             // south * conv, west * conv
+    double step, stepx, stepy;     // Size of cell in meters
+    double conv;                   // Units to meters factor
+    double xp0, yp0;               // stepx / 2, stepy / 2;
+} Geometry;
+
+typedef struct {
+    double halpha;      // Diffusion increase constant
+    double hbeta;       // Weighting factor for water flow velocity vector
+    double hhmax;       // Threshold water depth [m]
+    double frac;        // Water diffusion constant
+    int iterout;        // Time interval for creating output maps [minutes]
+    int timesec;        // Time how long the simulation runs [minutes]
+    bool ts;            // Time series output
+    double mintimestep; // Minimum time step for the simulation [seconds]
+} Settings;
+
+typedef struct {
+    int iterout;    // Number of iterations for creating output maps
+    int miter;      // Total number of iterations
+    double si0;     // Mean rainfall excess (or sediment concentration?)
+    double sisum;   // Sum of rainfall excess (or sediment concentration?)
+    double vmean;   // Mean velocity
+    double infmean; // Mean infiltration
+    double timec;   // Time coefficient
+    double deltap;  // Time step for water
+} Setup;
+
+typedef struct {
+    int nwalk;             // Number of initial walkers in a single block
+    int nwalka;            // Remaining walkers in an iteration
+    int nstack;            // Number of output walkers
+    struct point3D *stack; // Output 3D walkers
+    int maxwa;             // Number of input walkers per block
+    double rwalk; // Number of input walkers per block as double precision
+
+} Simulation;
+
 struct WaterParams {
-    double xmin, ymin, xmax, ymax;
-    double mayy, miyy, maxx, mixx;
-    int mx, my;
-    int mx2, my2;
-
-    double bxmi, bymi, bxma, byma, bresx, bresy;
-    int maxwab;
-    double step, conv;
-
-    double frac;
-
-    double hbeta;
-    double hhmax, sisum, vmean;
-    double infsum, infmean;
-    int maxw, maxwa, nwalk;
-    double rwalk, xrand, yrand;
-    double stepx, stepy, xp0, yp0;
-    double chmean, si0, deltap, deldif, cch, hhc, halpha;
-    double eps;
-    int nstack;
-    int iterout, mx2o, my2o;
-    int miter, nwalka;
-    double timec;
-    int ts, timesec;
 
     double rain_val;
     double manin_val;
@@ -54,7 +72,6 @@ struct WaterParams {
     char *observation;
     char *logfile;
     char *mapset;
-    char *mscale;
     char *tserie;
 
     char *wdepth;
@@ -74,26 +91,31 @@ struct WaterParams {
 
 void WaterParams_init(struct WaterParams *wp);
 void init_library_globals(struct WaterParams *wp);
-void alloc_grids_water(void);
-void alloc_grids_sediment(void);
-void init_grids_sediment(void);
+void alloc_grids_water(const Geometry *geometry);
+void alloc_grids_sediment(const Geometry *geometry);
+void init_grids_sediment(const Setup *setup, const Geometry *geometry);
 
-int input_data(void);
-int grad_check(void);
-void main_loop(void);
-int output_data(int, double);
-void free_walkers(void);
+int input_data(int rows, int cols, Simulation *sim);
+int grad_check(Setup *setup, const Geometry *geometry,
+               const Settings *settings);
+void main_loop(const Setup *setup, const Geometry *geometry,
+               const Settings *settings, Simulation *sim);
+int output_data(int, double, const Setup *setup, const Geometry *geometry,
+                const Settings *settings, const Simulation *sim);
+int output_et(const Geometry *geometry);
+void free_walkers(Simulation *sim);
+void erod(double **, const Setup *setup, const Geometry *geometry);
 
 struct options {
     struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,
-        *observation, *depth, *disch, *err, *outwalk, *nwalk, *niter, *outiter,
-        *density, *diffc, *hmax, *halpha, *hbeta, *wdepth, *detin, *tranin,
-        *tauin, *tc, *et, *conc, *flux, *erdep, *rainval, *maninval, *infilval,
-        *logfile, *seed, *threads;
+        *observation, *depth, *disch, *err, *outwalk, *nwalk, *niter,
+        *mintimestep, *outiter, *density, *diffc, *hmax, *halpha, *hbeta,
+        *wdepth, *detin, *tranin, *tauin, *tc, *et, *conc, *flux, *erdep,
+        *rainval, *maninval, *infilval, *logfile, *seed, *threads;
 };
 
 struct flags {
-    struct Flag *mscale, *tserie, *generateSeed;
+    struct Flag *tserie, *generateSeed;
 };
 
 #endif /* __SIMLIB_H__ */

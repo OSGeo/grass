@@ -30,6 +30,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/vector.h>
+#include <grass/parson.h>
 #include "local_proto.h"
 
 /* Supported command lines:
@@ -69,6 +70,7 @@ int main(int argc, char *argv[])
         struct Option *out, *max, *min, *table;
         struct Option *upload, *column, *to_column;
         struct Option *sep;
+        struct Option *format;
     } opt;
     struct {
         struct Flag *print, *all, *square;
@@ -112,6 +114,10 @@ int main(int argc, char *argv[])
     dbCatValArray cvarr;
     dbColumn *column;
     char *sep;
+    enum OutputFormat format;
+    JSON_Value *root_value, *object_value;
+    JSON_Array *root_array;
+    JSON_Object *root_object;
 
     G_gisinit(argv[0]);
 
@@ -237,6 +243,9 @@ int main(int argc, char *argv[])
     opt.sep = G_define_standard_option(G_OPT_F_SEP);
     opt.sep->label = _("Field separator for printing output to stdout");
 
+    opt.format = G_define_standard_option(G_OPT_F_FORMAT);
+    opt.format->guisection = _("Print");
+
     flag.print = G_define_flag();
     flag.print->key = 'p';
     flag.print->label =
@@ -292,6 +301,15 @@ int main(int argc, char *argv[])
     update_table = !print && !create_table && opt.column->answer;
     do_all = flag.all->answer;
     print_as_matrix = flag.square->answer;
+
+    if (strcmp(opt.format->answer, "json") == 0) {
+        format = JSON;
+        root_value = json_value_init_array();
+        root_array = json_array(root_value);
+    }
+    else {
+        format = PLAIN;
+    }
 
     if (do_all && update_table)
         G_fatal_error(_("Updating the from= table is not supported with -a"));
@@ -1397,7 +1415,7 @@ int main(int argc, char *argv[])
         update_notfound = ncatexist = 0;
 
     /* Update database / print to stdout / create output map */
-    if (print) { /* print header */
+    if (print && format == PLAIN) { /* print header */
         fprintf(stdout, "from_cat");
         if (do_all)
             fprintf(stdout, "%sto_cat", sep);
@@ -1436,6 +1454,8 @@ int main(int argc, char *argv[])
                 break;
             case TO_ATTR:
                 sprintf(buf2, "%s %s", Upload[j].column, to_attr_sqltype);
+            default:
+                break;
             }
             db_append_string(&stmt, buf2);
             j++;
@@ -1504,35 +1524,51 @@ int main(int argc, char *argv[])
         }
 
         if (print) { /* print only */
-            /*
-               input and output is the same &&
-               calculate distances &&
-               only one upload option given ->
-               print as a matrix
-             */
-            if (print_as_matrix) {
-                if (i == 0) {
-                    for (j = 0; j < nfrom; j++) {
-                        if (j == 0)
-                            fprintf(stdout, " ");
-                        fprintf(stdout, "%s%d", sep, Near[j].to_cat);
+            switch (format) {
+            case PLAIN:
+                /*
+                   input and output is the same &&
+                   calculate distances &&
+                   only one upload option given ->
+                   print as a matrix
+                 */
+                if (print_as_matrix) {
+                    if (i == 0) {
+                        for (j = 0; j < nfrom; j++) {
+                            if (j == 0)
+                                fprintf(stdout, " ");
+                            fprintf(stdout, "%s%d", sep, Near[j].to_cat);
+                        }
+                        fprintf(stdout, "\n");
                     }
-                    fprintf(stdout, "\n");
+                    if (i % nfrom == 0) {
+                        fprintf(stdout, "%d", Near[i].from_cat);
+                        for (j = 0; j < nfrom; j++) {
+                            print_upload(Near, Upload, i + j, &cvarr, catval,
+                                         sep, format, NULL);
+                        }
+                        fprintf(stdout, "\n");
+                    }
                 }
-                if (i % nfrom == 0) {
+                else {
                     fprintf(stdout, "%d", Near[i].from_cat);
-                    for (j = 0; j < nfrom; j++) {
-                        print_upload(Near, Upload, i + j, &cvarr, catval, sep);
-                    }
+                    if (do_all)
+                        fprintf(stdout, "%s%d", sep, Near[i].to_cat);
+                    print_upload(Near, Upload, i, &cvarr, catval, sep, format,
+                                 NULL);
                     fprintf(stdout, "\n");
                 }
-            }
-            else {
-                fprintf(stdout, "%d", Near[i].from_cat);
-                if (do_all)
-                    fprintf(stdout, "%s%d", sep, Near[i].to_cat);
-                print_upload(Near, Upload, i, &cvarr, catval, sep);
-                fprintf(stdout, "\n");
+                break;
+            case JSON:
+                object_value = json_value_init_object();
+                root_object = json_object(object_value);
+                json_object_set_number(root_object, "from_cat",
+                                       Near[i].from_cat);
+                json_object_set_number(root_object, "to_cat", Near[i].to_cat);
+                print_upload(Near, Upload, i, &cvarr, catval, sep, format,
+                             root_object);
+                json_array_append_value(root_array, object_value);
+                break;
             }
         }
         else if (create_table) {    /* insert new record */
@@ -1606,6 +1642,8 @@ int main(int argc, char *argv[])
                     else {
                         sprintf(buf2, " null");
                     }
+                    break;
+                default:
                     break;
                 }
                 db_append_string(&stmt, buf2);
@@ -1708,6 +1746,8 @@ int main(int argc, char *argv[])
                             sprintf(buf2, " null");
                         }
                         break;
+                    default:
+                        break;
                     }
                     db_append_string(&stmt, buf2);
                 }
@@ -1726,6 +1766,17 @@ int main(int argc, char *argv[])
             }
         }
     }
+
+    if (format == JSON) {
+        char *serialized_string = json_serialize_to_string_pretty(root_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        json_free_serialized_string(serialized_string);
+        json_value_free(root_value);
+    }
+
     G_percent(count, count, 1);
 
     if (driver)

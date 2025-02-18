@@ -29,18 +29,30 @@ import os
 from typing import TYPE_CHECKING
 
 from core import globalvar
+
+# isort: split
 import wx
 import wx.aui
-
-from mapdisp.toolbars import MapToolbar, NvizIcons
-from mapdisp.gprint import PrintOptions
-from core.gcmd import GError, GMessage, RunCommand
-from core.utils import ListOfCatsToRange, GetLayerNameFromCmd
-from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
+from core.gcmd import GError, GMessage, RunCommand
+from core.giface import Notification
 from core.settings import UserSettings
-from gui_core.mapdisp import SingleMapPanel, FrameMixin
-from gui_core.query import QueryDialog, PrepareQueryResults
+from core.utils import GetLayerNameFromCmd, ListOfCatsToRange
+from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
+from gui_core.forms import GUI
+from gui_core.mapdisp import FrameMixin, SingleMapPanel
+from gui_core.query import PrepareQueryResults, QueryDialog
+from gui_core.vselect import VectorSelectBase, VectorSelectHighlighter
+from gui_core.wrap import Menu
+from main_window.page import MainPageBase
+from mapdisp import statusbar as sb
+from mapdisp.gprint import PrintOptions
+from mapdisp.toolbars import MapToolbar, NvizIcons
+from mapwin.analysis import (
+    MeasureAreaController,
+    MeasureDistanceController,
+    ProfileController,
+)
 from mapwin.buffered import BufferedMapWindow
 from mapwin.decorations import (
     ArrowController,
@@ -49,20 +61,10 @@ from mapwin.decorations import (
     LegendController,
     LegendVectController,
 )
-from mapwin.analysis import (
-    MeasureAreaController,
-    MeasureDistanceController,
-    ProfileController,
-)
-from gui_core.forms import GUI
-from core.giface import Notification
-from gui_core.vselect import VectorSelectBase, VectorSelectHighlighter
-from gui_core.wrap import Menu
-from mapdisp import statusbar as sb
-from main_window.page import MainPageBase
 
 import grass.script as gs
 from grass.pydispatch.signal import Signal
+from grass.exceptions import ScriptError
 
 if TYPE_CHECKING:
     import lmgr.frame
@@ -1102,7 +1104,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                     encoding=encoding,
                     multiple=True,
                 )
-            except gs.ScriptError:
+            except ScriptError:
                 GError(
                     parent=self,
                     message=_(
@@ -1215,23 +1217,23 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 cmd[-1].append("layer=%d" % layer)
                 cmd[-1].append("cats=%s" % ListOfCatsToRange(lcats))
 
-        if addLayer:
-            args = {}
-            if useId:
-                args["ltype"] = "vector"
-            else:
-                args["ltype"] = "command"
+        if not addLayer:
+            return cmd
 
-            return self.Map.AddLayer(
-                name=globalvar.QUERYLAYER,
-                command=cmd,
-                active=True,
-                hidden=True,
-                opacity=1.0,
-                render=True,
-                **args,
-            )
-        return cmd
+        args = {}
+        if useId:
+            args["ltype"] = "vector"
+        else:
+            args["ltype"] = "command"
+        return self.Map.AddLayer(
+            name=globalvar.QUERYLAYER,
+            command=cmd,
+            active=True,
+            hidden=True,
+            opacity=1.0,
+            render=True,
+            **args,
+        )
 
     def OnMeasureDistance(self, event):
         self._onMeasure(MeasureDistanceController)

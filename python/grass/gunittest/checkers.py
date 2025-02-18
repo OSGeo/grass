@@ -224,8 +224,7 @@ def text_to_keyvalue(
                     if kvdict:
                         # key is the one from previous line
                         msg = (
-                            "Empty line in the parsed text."
-                            " Previous line's key is <%s>"
+                            "Empty line in the parsed text. Previous line's key is <%s>"
                         ) % key
                     raise ValueError(msg)
             else:  # noqa: PLR5501
@@ -282,7 +281,9 @@ def values_equal(value_a, value_b, precision: float = 0.000001) -> bool:
         # in Python 3 None < 3 raises TypeError
         precision = float(precision)
         if precision < 0:
-            msg = "precision needs to be greater than or equal to zero: {precision} < 0"
+            msg = (
+                f"precision needs to be greater than or equal to zero: {precision} < 0"
+            )
             raise ValueError(msg)
         if abs(value_a - value_b) > precision:
             return False

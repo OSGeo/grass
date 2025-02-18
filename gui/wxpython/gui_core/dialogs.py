@@ -280,12 +280,11 @@ class VectorDialog(SimpleDialog):
         :param full: True to get fully qualified name
         """
         name = self.element.GetValue()
-        if full:
-            if "@" in name:
-                return name
-            return name + "@" + grass.gisenv()["MAPSET"]
-
-        return name.split("@", 1)[0]
+        if not full:
+            return name.split("@", 1)[0]
+        if "@" in name:
+            return name
+        return name + "@" + grass.gisenv()["MAPSET"]
 
 
 class NewVectorDialog(VectorDialog):
@@ -532,12 +531,11 @@ def CreateNewVector(
             caption=_("Overwrite?"),
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
         )
-        if dlgOw.ShowModal() == wx.ID_YES:
-            overwrite = True
-        else:
+        if dlgOw.ShowModal() != wx.ID_YES:
             dlgOw.Destroy()
             dlg.Destroy()
             return None
+        overwrite = True
 
     if UserSettings.Get(group="cmd", key="overwrite", subkey="enabled"):
         overwrite = True
@@ -2357,8 +2355,7 @@ class QuitDialog(wx.Dialog):
 
         if self._shell_running:
             text = _(
-                "Do you want to quit GRASS GIS including shell "
-                "or just close the GUI?"
+                "Do you want to quit GRASS GIS including shell or just close the GUI?"
             )
         else:
             text = _("Do you want to quit GRASS GIS?")

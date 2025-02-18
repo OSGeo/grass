@@ -14,7 +14,6 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
-
 import os
 import sys
 import glob
@@ -34,8 +33,7 @@ def main(path):
 
     with open(os.path.join(path, "__init__.py"), "w") as fd:
         fd.write("all = [%s" % os.linesep)
-        for m in modules:
-            fd.write("    '%s',%s" % (m, os.linesep))
+        fd.writelines("    '%s',%s" % (m, os.linesep) for m in modules)
         fd.write("    ]%s" % os.linesep)
     return 0
 

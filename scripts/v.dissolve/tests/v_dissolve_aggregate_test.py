@@ -102,9 +102,9 @@ def test_aggregate_column_result(dataset, backend):
         assert stats_column in columns
         column_info = columns[stats_column]
         correct_type = "integer" if stats_column.endswith("_n") else "double precision"
-        assert (
-            columns[stats_column]["type"].lower() == correct_type
-        ), f"{stats_column} has a wrong type"
+        assert columns[stats_column]["type"].lower() == correct_type, (
+            f"{stats_column} has a wrong type"
+        )
     assert dataset.str_column_name in columns
     column_info = columns[dataset.str_column_name]
     assert column_info["type"].lower() == "character"
@@ -219,9 +219,9 @@ def test_sqlite_agg_accepted(dataset):
         assert stats_column in columns
         column_info = columns[stats_column]
         correct_type = "integer" if method == "count" else "double precision"
-        assert (
-            columns[stats_column]["type"].lower() == correct_type
-        ), f"{stats_column} has a wrong type"
+        assert columns[stats_column]["type"].lower() == correct_type, (
+            f"{stats_column} has a wrong type"
+        )
     assert dataset.str_column_name in columns
     column_info = columns[dataset.str_column_name]
     assert column_info["type"].lower() == "character"

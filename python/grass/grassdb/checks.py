@@ -20,7 +20,6 @@ from pathlib import Path
 import grass.grassdb.config as cfg
 import grass.script as gs
 from grass.script import gisenv
-from itertools import starmap
 
 
 def mapset_exists(path: str | os.PathLike[str], location=None, mapset=None) -> bool:
@@ -284,19 +283,13 @@ def get_mapset_invalid_reason(database, location, mapset, none_for_no_reason=Fal
         return _("<%s> is not a GRASS Mapset because it is not a directory") % mapset
     if not (mapset_path / "WIND").is_file():
         return (
-            _(
-                "<%s> is not a valid GRASS Mapset"
-                " because it does not have a WIND file"
-            )
+            _("<%s> is not a valid GRASS Mapset because it does not have a WIND file")
             % mapset
         )
     # based on the is_mapset_valid() function
     if not os.access(mapset_path / "WIND", os.R_OK):
         return (
-            _(
-                "<%s> is not a valid GRASS Mapset"
-                " because its WIND file is not readable"
-            )
+            _("<%s> is not a valid GRASS Mapset because its WIND file is not readable")
             % mapset
         )
     # no reason for invalidity found (might be valid)
@@ -336,18 +329,12 @@ def get_location_invalid_reason(
     # permanent mapset
     if not permanent_path.exists():
         return (
-            _(
-                "<%s> is not a valid GRASS Location"
-                " because PERMANENT Mapset is missing"
-            )
+            _("<%s> is not a valid GRASS Location because PERMANENT Mapset is missing")
             % location_path
         )
     if not permanent_path.is_dir():
         return (
-            _(
-                "<%s> is not a valid GRASS Location"
-                " because PERMANENT is not a directory"
-            )
+            _("<%s> is not a valid GRASS Location because PERMANENT is not a directory")
             % location_path
         )
     # partially based on the is_location_valid() function
@@ -537,7 +524,10 @@ def get_reasons_locations_not_removable(locations):
 
     Returns messages as list if there were any failed checks, otherwise empty list.
     """
-    return list(starmap(get_reasons_location_not_removable, locations))
+    messages = []
+    for grassdb, location in locations:
+        messages += get_reasons_location_not_removable(grassdb, location)
+    return messages
 
 
 def get_reasons_location_not_removable(grassdb, location):
@@ -568,7 +558,9 @@ def get_reasons_location_not_removable(grassdb, location):
     )
 
     # Append to the list of tuples
-    mapsets = [(grassdb, location, g_mapset) for g_mapset in g_mapsets]
+    mapsets = []
+    for g_mapset in g_mapsets:
+        mapsets.append((grassdb, location, g_mapset))
 
     # Concentenate both checks
     messages += get_reasons_mapsets_not_removable(mapsets, check_permanent=False)
@@ -597,7 +589,9 @@ def get_reasons_grassdb_not_removable(grassdb):
     g_locations = get_list_of_locations(grassdb)
 
     # Append to the list of tuples
-    locations = [(grassdb, g_location) for g_location in g_locations]
+    locations = []
+    for g_location in g_locations:
+        locations.append((grassdb, g_location))
     return get_reasons_locations_not_removable(locations)
 
 
@@ -608,11 +602,12 @@ def get_list_of_locations(dbase):
 
     :return: list of locations (sorted)
     """
-    locations = [
-        os.path.basename(location)
-        for location in glob.glob(os.path.join(dbase, "*"))
-        if os.path.join(location, "PERMANENT") in glob.glob(os.path.join(location, "*"))
-    ]
+    locations = []
+    for location in glob.glob(os.path.join(dbase, "*")):
+        if os.path.join(location, "PERMANENT") in glob.glob(
+            os.path.join(location, "*")
+        ):
+            locations.append(os.path.basename(location))
 
     locations.sort(key=lambda x: x.lower())
 

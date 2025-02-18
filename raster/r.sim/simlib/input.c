@@ -1,5 +1,6 @@
 /* input.c (simlib), 20.nov.2002, JH */
 
+#include "simlib.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -33,68 +34,6 @@ void WaterParams_init(struct WaterParams *wp)
      * difference in between initialization in water and sediment
      * for the variables which are not used and would have been
      * initialized if they were just global variables */
-    wp->ymin = 0;
-    wp->xmax = 0;
-    wp->ymax = 0;
-    wp->mayy = 0;
-    wp->miyy = 0;
-    wp->maxx = 0;
-    wp->mixx = 0;
-    wp->mx = 0;
-    wp->my = 0;
-    wp->mx2 = 0;
-    wp->my2 = 0;
-
-    wp->bxmi = 0;
-    wp->bymi = 0;
-    wp->bxma = 0;
-    wp->byma = 0;
-    wp->bresx = 0;
-    wp->bresy = 0;
-    wp->maxwab = 0;
-    wp->step = 0;
-    wp->conv = 0;
-
-    wp->frac = 0;
-    wp->bxmi = 0;
-    wp->bymi = 0;
-
-    wp->hbeta = 0;
-    wp->hhmax = 0;
-    wp->sisum = 0;
-    wp->vmean = 0;
-    wp->infsum = 0;
-    wp->infmean = 0;
-    wp->maxw = 0;
-    wp->maxwa = 0;
-    wp->nwalk = 0;
-    wp->rwalk = 0;
-    wp->bresx = 0;
-    wp->bresy = 0;
-    wp->xrand = 0;
-    wp->yrand = 0;
-    wp->stepx = 0;
-    wp->stepy = 0;
-    wp->xp0 = 0;
-    wp->yp0 = 0;
-    wp->chmean = 0;
-    wp->si0 = 0;
-    wp->deltap = 0;
-    wp->deldif = 0;
-    wp->cch = 0;
-    wp->hhc = 0;
-    wp->halpha = 0;
-    wp->eps = 0;
-    wp->maxwab = 0;
-    wp->nstack = 0;
-    wp->iterout = 0;
-    wp->mx2o = 0;
-    wp->my2o = 0;
-    wp->miter = 0;
-    wp->nwalka = 0;
-    wp->timec = 0;
-    wp->ts = 0;
-    wp->timesec = 0;
 
     wp->rain_val = 0;
     wp->manin_val = 0;
@@ -114,7 +53,6 @@ void WaterParams_init(struct WaterParams *wp)
     wp->observation = NULL;
     wp->logfile = NULL;
     wp->mapset = NULL;
-    wp->mscale = NULL;
     wp->tserie = NULL;
 
     wp->wdepth = NULL;
@@ -139,68 +77,6 @@ void init_library_globals(struct WaterParams *wp)
 {
     /* this is little bit lengthy and perhaps error-prone
      * but it separates library from its interface */
-    ymin = wp->ymin;
-    xmax = wp->xmax;
-    ymax = wp->ymax;
-    mayy = wp->mayy;
-    miyy = wp->miyy;
-    maxx = wp->maxx;
-    mixx = wp->mixx;
-    mx = wp->mx;
-    my = wp->my;
-    mx2 = wp->mx2;
-    my2 = wp->my2;
-
-    bxmi = wp->bxmi;
-    bymi = wp->bymi;
-    bxma = wp->bxma;
-    byma = wp->byma;
-    bresx = wp->bresx;
-    bresy = wp->bresy;
-    maxwab = wp->maxwab;
-    step = wp->step;
-    conv = wp->conv;
-
-    frac = wp->frac;
-    bxmi = wp->bxmi;
-    bymi = wp->bymi;
-
-    hbeta = wp->hbeta;
-    hhmax = wp->hhmax;
-    sisum = wp->sisum;
-    vmean = wp->vmean;
-    infsum = wp->infsum;
-    infmean = wp->infmean;
-    maxw = wp->maxw;
-    maxwa = wp->maxwa;
-    nwalk = wp->nwalk;
-    rwalk = wp->rwalk;
-    bresx = wp->bresx;
-    bresy = wp->bresy;
-    xrand = wp->xrand;
-    yrand = wp->yrand;
-    stepx = wp->stepx;
-    stepy = wp->stepy;
-    xp0 = wp->xp0;
-    yp0 = wp->yp0;
-    chmean = wp->chmean;
-    si0 = wp->si0;
-    deltap = wp->deltap;
-    deldif = wp->deldif;
-    cch = wp->cch;
-    hhc = wp->hhc;
-    halpha = wp->halpha;
-    eps = wp->eps;
-    maxwab = wp->maxwab;
-    nstack = wp->nstack;
-    iterout = wp->iterout;
-    mx2o = wp->mx2o;
-    my2o = wp->my2o;
-    miter = wp->miter;
-    nwalka = wp->nwalka;
-    timec = wp->timec;
-    ts = wp->ts;
-    timesec = wp->timesec;
 
     rain_val = wp->rain_val;
     manin_val = wp->manin_val;
@@ -220,7 +96,6 @@ void init_library_globals(struct WaterParams *wp)
     observation = wp->observation;
     logfile = wp->logfile;
     mapset = wp->mapset;
-    mscale = wp->mscale;
     tserie = wp->tserie;
 
     wdepth = wp->wdepth;
@@ -240,46 +115,47 @@ void init_library_globals(struct WaterParams *wp)
 
 /* we do the allocation inside because we anyway need to set the variables */
 
-void alloc_grids_water(void)
+void alloc_grids_water(const Geometry *geometry)
 {
     /* memory allocation for output grids */
     G_debug(1, "beginning memory allocation for output grids");
 
-    gama = G_alloc_matrix(my, mx);
+    gama = G_alloc_matrix(geometry->my, geometry->mx);
     if (err != NULL)
-        gammas = G_alloc_matrix(my, mx);
-    dif = G_alloc_fmatrix(my, mx);
+        gammas = G_alloc_matrix(geometry->my, geometry->mx);
+    dif = G_alloc_fmatrix(geometry->my, geometry->mx);
 }
 
-void alloc_grids_sediment(void)
+void alloc_grids_sediment(const Geometry *geometry)
 {
     /* mandatory for si,sigma */
 
-    si = G_alloc_matrix(my, mx);
-    sigma = G_alloc_matrix(my, mx);
+    si = G_alloc_matrix(geometry->my, geometry->mx);
+    sigma = G_alloc_matrix(geometry->my, geometry->mx);
 
     /* memory allocation for output grids */
 
-    dif = G_alloc_fmatrix(my, mx);
+    dif = G_alloc_fmatrix(geometry->my, geometry->mx);
     if (erdep != NULL || et != NULL)
-        er = G_alloc_fmatrix(my, mx);
+        er = G_alloc_fmatrix(geometry->my, geometry->mx);
 }
 
-void init_grids_sediment(void)
+void init_grids_sediment(const Setup *setup, const Geometry *geometry)
 {
     /* this should be fulfilled for sediment but not water */
     if (et != NULL)
-        erod(si);
+        erod(si, setup, geometry);
 }
 
-void alloc_walkers(int max_walkers)
+void alloc_walkers(int max_walkers, Simulation *sim)
 {
     G_debug(1, "beginning memory allocation for walkers");
 
     w = (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
     vavg = (struct point2D *)G_calloc(max_walkers, sizeof(struct point2D));
     if (outwalk != NULL)
-        stack = (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
+        sim->stack =
+            (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
 }
 
 /* ************************************************************** */
@@ -294,9 +170,8 @@ void alloc_walkers(int max_walkers)
 
 /* ************************************************************************* */
 /* Read all input maps and input values into memory ************************ */
-int input_data(void)
+int input_data(int rows, int cols, Simulation *sim)
 {
-    int rows = my, cols = mx; /* my and mx are global variables */
     int max_walkers;
     double unitconv = 0.000000278; /* mm/hr to m/s */
 
@@ -375,8 +250,8 @@ int input_data(void)
         copy_matrix_undef_double_to_float_values(rows, cols, gama, zz);
     }
     /* allocate walkers */
-    max_walkers = maxwa + mx * my;
-    alloc_walkers(max_walkers);
+    max_walkers = sim->maxwa + cols * rows;
+    alloc_walkers(max_walkers, sim);
 
     /* Array for gradient checking */
     slope = create_double_matrix(rows, cols, 0.0);
@@ -390,7 +265,7 @@ int input_data(void)
 /* ************************************************************************* */
 
 /* data preparations, sigma, shear, etc. */
-int grad_check(void)
+int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings)
 {
     int k, l;
     double zx, zy, zd2, zd4, sinsl;
@@ -414,12 +289,12 @@ int grad_check(void)
     double hh = 1.;
     double deltaw = 1.e12;
 
-    sisum = 0.;
-    infsum = 0.;
+    setup->sisum = 0.;
+    double infsum = 0.;
     cmul2 = rhow * gacc;
 
-    for (k = 0; k < my; k++) {
-        for (l = 0; l < mx; l++) {
+    for (k = 0; k < geometry->my; k++) {
+        for (l = 0; l < geometry->mx; l++) {
             if (zz[k][l] != UNDEF) {
                 zx = v1[k][l];
                 zy = v2[k][l];
@@ -469,7 +344,7 @@ int grad_check(void)
                                  1.5)); /* rill erosion=1.5, sheet = 1.1 */
                     }
                 }
-                sisum += si[k][l];
+                setup->sisum += si[k][l];
                 smin = amin1(smin, si[k][l]);
                 smax = amax1(smax, si[k][l]);
                 if (inf) {
@@ -495,47 +370,53 @@ int grad_check(void)
         G_warning(_("Infiltration exceeds the rainfall rate everywhere! No "
                     "overland flow."));
 
-    cc = (double)mx * my;
+    cc = (double)geometry->mx * geometry->my;
 
-    si0 = sisum / cc;
-    vmean = vsum / cc;
-    chmean = chsum / cc;
+    setup->si0 = setup->sisum / cc;
+    setup->vmean = vsum / cc;
+    double chmean = chsum / cc;
 
     if (inf)
-        infmean = infsum / cc;
+        setup->infmean = infsum / cc;
 
     if (wdepth)
-        deltaw = 0.8 / (sigmax * vmax);          /*time step for sediment */
-    deltap = 0.25 * sqrt(stepx * stepy) / vmean; /*time step for water */
+        deltaw = 0.8 / (sigmax * vmax); /*time step for sediment */
+    setup->deltap =
+        0.25 * sqrt(geometry->stepx * geometry->stepy) /
+        (setup->vmean > EPS ? setup->vmean : EPS); /*time step for water */
 
-    if (deltaw > deltap)
-        timec = 4.;
+    if (setup->deltap < settings->mintimestep)
+        setup->deltap = settings->mintimestep;
+
+    if (deltaw > setup->deltap)
+        setup->timec = 4.;
     else
-        timec = 1.25;
+        setup->timec = 1.25;
 
-    miter = (int)(timesec /
-                  (deltap *
-                   timec)); /* number of iterations = number of cells to pass */
-    iterout =
-        (int)(iterout /
-              (deltap *
-               timec)); /* number of cells to pass for time series output */
+    setup->miter =
+        (int)(settings->timesec /
+              (setup->deltap * setup->timec)); /* number of iterations = number
+                                                  of cells to pass */
+    setup->iterout =
+        (int)(settings->iterout /
+              (setup->deltap * setup->timec)); /* number of cells to pass for
+                                                  time series output */
 
     fprintf(stderr, "\n");
     G_message(_("Min elevation \t= %.2f m\nMax elevation \t= %.2f m\n"), zmin,
               zmax);
     G_message(_("Mean Source Rate (rainf. excess or sediment) \t= %f m/s or "
                 "kg/m2s \n"),
-              si0);
-    G_message(_("Mean flow velocity \t= %f m/s\n"), vmean);
+              setup->si0);
+    G_message(_("Mean flow velocity \t= %f m/s\n"), setup->vmean);
     G_message(_("Mean Mannings \t= %f\n"), 1.0 / chmean);
 
-    deltap = amin1(deltap, deltaw);
+    setup->deltap = amin1(setup->deltap, deltaw);
 
     G_message(n_("Number of iterations \t= %d cell\n",
-                 "Number of iterations \t= %d cells\n", miter),
-              miter);
-    G_message(_("Time step \t= %.2f s\n"), deltap);
+                 "Number of iterations \t= %d cells\n", setup->miter),
+              setup->miter);
+    G_message(_("Time step \t= %.2f s\n"), setup->deltap);
     if (wdepth) {
         G_message(_("Sigmax \t= %f\nMax velocity \t= %f m/s\n"), sigmax, vmax);
         G_message(_("Time step used \t= %.2f s\n"), deltaw);
@@ -556,16 +437,16 @@ int grad_check(void)
      * r}) \bigl[\rho_w\, g h({\bf r}) \sin \beta ({\bf r}) \bigr]^p \f$
      * [kg/ms]=...
      */
-    for (k = 0; k < my; k++) {
-        for (l = 0; l < mx; l++) {
+    for (k = 0; k < geometry->my; k++) {
+        for (l = 0; l < geometry->mx; l++) {
             if (zz[k][l] != UNDEF) {
-                v1[k][l] *= deltap;
-                v2[k][l] *= deltap;
+                v1[k][l] *= setup->deltap;
+                v2[k][l] *= setup->deltap;
                 /*if(v1[k][l]*v1[k][l]+v2[k][l]*v2[k][l] > cellsize, warning,
                  *napocitaj ak viac ako 10%a*/
                 /* THIS IS CORRECT SOLUTION currently commented out */
                 if (inf)
-                    inf[k][l] *= timesec;
+                    inf[k][l] *= settings->timesec;
                 if (wdepth)
                     gama[k][l] = 0.;
                 if (et) {
@@ -586,8 +467,8 @@ int grad_check(void)
      *   \f$
      */
     if (et) {
-        erod(si); /* compute divergence of t.capc */
-        if (output_et() != 1)
+        erod(si, setup, geometry); /* compute divergence of t.capc */
+        if (output_et(geometry) != 1)
             G_fatal_error(_("Unable to write et file"));
     }
 
@@ -596,8 +477,8 @@ int grad_check(void)
      * operator WRITE the equation here
      */
     if (wdepth) {
-        for (k = 0; k < my; k++) {
-            for (l = 0; l < mx; l++) {
+        for (k = 0; k < geometry->my; k++) {
+            for (l = 0; l < geometry->mx; l++) {
                 if (zz[k][l] != UNDEF) {
                     /* get back from temp */
                     if (et)
@@ -608,7 +489,8 @@ int grad_check(void)
 
                         /*!!!!! not clear what's here :-\ !!!!! */
 
-                        sigma[k][l] = exp(-sigma[k][l] * deltap * slope[k][l]);
+                        sigma[k][l] =
+                            exp(-sigma[k][l] * setup->deltap * slope[k][l]);
                     /* if(sigma[k][l]<0.5) warning, napocitaj,
                      * ak vacsie ako 50% skonci, zmensi deltap)*/
                 }

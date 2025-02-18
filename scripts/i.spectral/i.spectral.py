@@ -104,8 +104,7 @@ def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
         outfile = os.path.join(tmp_dir, "data_%d" % i)
         outf = open(outfile, "w")
         xrange = max(xrange, len(row) - 2)
-        for j, val in enumerate(row[3:]):
-            outf.write("%d %s\n" % (j + 1, val))
+        outf.writelines("%d %s\n" % (j + 1, val) for j, val in enumerate(row[3:]))
         outf.close()
 
     # build gnuplot script
@@ -147,8 +146,7 @@ def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
 
     plotfile = os.path.join(tmp_dir, "spectrum.gnuplot")
     plotf = open(plotfile, "w")
-    for line in lines:
-        plotf.write(line + "\n")
+    plotf.writelines(line + "\n" for line in lines)
     plotf.close()
 
     if output:
@@ -163,15 +161,13 @@ def draw_linegraph(what):
     xfile = os.path.join(tmp_dir, "data_x")
 
     xf = open(xfile, "w")
-    for j, val in enumerate(what[0][3:]):
-        xf.write("%d\n" % (j + 1))
+    xf.writelines("%d\n" % (j + 1) for j, val in enumerate(what[0][3:]))
     xf.close()
 
     for i, row in enumerate(what):
         yfile = os.path.join(tmp_dir, "data_y_%d" % i)
         yf = open(yfile, "w")
-        for j, val in enumerate(row[3:]):
-            yf.write("%s\n" % val)
+        yf.writelines("%s\n" % val for j, val in enumerate(row[3:]))
         yf.close()
         yfiles.append(yfile)
 
@@ -193,8 +189,7 @@ def draw_linegraph(what):
     if not found:
         gcore.fatal(
             _(
-                "Supported monitor isn't running. Please launch one of the"
-                " monitors {}."
+                "Supported monitor isn't running. Please launch one of the monitors {}."
             ).format(", ".join(supported_monitors))
         )
     selected_monitor = gcore.read_command("d.mon", flags="p", quiet=True).replace(

@@ -8,7 +8,6 @@ from grass.gunittest.case import TestCase
 
 
 class TestOgrExport(TestCase):
-
     # Vector map in NC test dataset
     test_map = "boundary_county"
 
