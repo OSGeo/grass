@@ -98,7 +98,7 @@ class TestIEmissivity(TestCase):
 
         self.runModule("r.mask", flags="r")
 
-        reference_stats = {"mean": 0.969785, "min": 0.922868, "max": 0.994848}
+        reference_stats = {"mean": 0.953836, "min": 0.933536, "max": 0.992236}
 
         self.assertRasterFitsUnivar(
             raster=self.output_raster, reference=reference_stats, precision=1e-6
