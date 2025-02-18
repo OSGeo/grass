@@ -77,12 +77,12 @@ class TestVGeneralize(TestCase):
             "v.info", map=f"{vector_name}_vertices", flags="t"
         )
         # Extract the number of points from the output
+        num_vertices=0
         print(info_output)
         for line in info_output.splitlines():
             if "points" in line:
                 num_vertices = int(line.split("=")[1].strip())
-                return num_vertices
-        return 0
+        return num_vertices
 
     def test_simplification(self):
         """Test vector simplification and compare vertex count and topology."""
