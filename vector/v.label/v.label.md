@@ -15,10 +15,6 @@ A description of the labels file follows.
 The file is located in `$MAPSET/paint/labels/`. The file is a plain-text
 ASCII file containing the following fields:
 
-#### Caution: The following information may be incomplete, out of date, and wrong
-
-The label information that must be provided in the *labels* file is:
-
 **TEXT**:  
 Lines in multiple line labels will appear one above the next. More than
 one line of text can be specified by notating the end of a line with a
