@@ -57,7 +57,6 @@ ENV GRASS_RUN_PACKAGES="\
       pdal \
       pdal-dev \
       postgresql15-client \
-      proj-dev \
       proj-util \
       py3-numpy \
       py3-pillow \
