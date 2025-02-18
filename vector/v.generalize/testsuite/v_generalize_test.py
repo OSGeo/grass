@@ -62,11 +62,11 @@ class TestVGeneralize(TestCase):
 
     def create_temp_file(self, content):
         """Create a temporary file with the given content."""
-        temp_file = tempfile.NamedTemporaryFile(delete=False, mode="w")
-        temp_file.write(content)
-        temp_file.close()
-        self.temp_files.append(temp_file.name)
-        return temp_file.name
+        with tempfile.NamedTemporaryFile(mode="w", delete=False) as temp_file:
+            temp_file.write(content)
+            temp_file_name = temp_file.name
+        self.temp_files.append(temp_file_name)
+        return temp_file_name
 
     def tearDown(self):
         for temp_file in self.temp_files:
