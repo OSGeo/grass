@@ -36,7 +36,7 @@ transforms Landsat DN to radiance-at-sensor (top of atmosphere, TOA).
 The equivalent module for ASTER data is [i.aster.toar](i.aster.toar.md).
 For other satellites, [r.mapcalc](r.mapcalc.md) can be employed.
 
-**Reflection/radiance-at-sensor and surface reflectance**
+#### Reflection/radiance-at-sensor and surface reflectance
 
 When radiance-at-sensor has been obtained, still the atmosphere
 influences the signal as recorded at the sensor. This atmospheric

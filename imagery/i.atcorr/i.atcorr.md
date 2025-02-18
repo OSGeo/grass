@@ -747,7 +747,7 @@ Carolina project. The computational region was set to the extent of the
 individual bands (*B01-B12*) that we want to apply the atmospheric
 correction to. The following steps are applied to each band separately.
 
-**Create the parameters file for i.atcorr**
+#### Create the parameters file for i.atcorr
 
 In the first step we create a file containing the 6S parameters for a
 particular scene and band. To create a 6S file, we need to obtain the
@@ -851,7 +851,7 @@ text file, for example `params_B02.txt`.
 167
 ```
 
-**Compute atmospheric correction**
+#### Compute atmospheric correction
 
 In the next step we run *i.atcorr* for the selected band *B02* of our
 Sentinel 2 scene. We have to specify the following parameters:
@@ -986,7 +986,7 @@ r.mapcalc "lsat7_2002_40_rad = ((241.1 - (-5.1)) / (255.0 - 1.0)) * (lsat7_2002_
 Again, the *r.mapcalc* calculation is only needed when working with
 satellite data other than Landsat or ASTER.
 
-#### Create the parameters file for i.atcorr
+#### Create the parameters file for i.atcorr for Landsat
 
 The underlying 6S model is parametrized through a control file,
 indicated with the **parameters** option. This is a text file defining
