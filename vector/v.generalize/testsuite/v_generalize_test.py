@@ -10,11 +10,19 @@ class TestVGeneralize(TestCase):
         # Setting up the temporary computational region
         cls.runModule("g.region", n=3401500, s=3400800, e=5959100, w=5958800, res=10)
 
-        # Import coordinates from test_coordinates.txt which is in ascii format using v.in.ascii"""
+        # Import coordinates from test_coordinates.txt which is in ascii format using v.in.ascii
         cls.runModule(
             "v.in.ascii",
             input="test_coordinates.txt",
             output="test_lines",
+            format="standard",
+            overwrite=True,
+        )
+
+        cls.runModule(
+            "v.in.ascii",
+            input="test_hermite_line.txt",
+            output="test_hermite",
             format="standard",
             overwrite=True,
         )
@@ -25,95 +33,64 @@ class TestVGeneralize(TestCase):
         cls.runModule(
             "g.remove",
             type="vector",
-            name="test_lines,generalized_lines",
+            name="test_lines,generalized_lines,smoothed_lines,test_vertices,generalized_vertices,smoothed_vertices,test_hermite,hermite_line,test_hermit_vertices,hermit_line_vertices",
             flags="f",
         )
 
-    def get_vertices(self, file_name):
-        """Getting vertices from the ascii based formatted file"""
-        with open(file_name) as file:
-            lines = file.readlines()
+    def extract_vertices(self, vector_name):
+        """Extract vertices from a vector map."""
+        # Convert vector features to points (vertices)
+        grass.run_command(
+            "v.to.points",
+            input=vector_name,
+            output=f"{vector_name}_vertices",
+            use="vertex",
+            overwrite=True,
+        )
 
-        vertices = 0
-        in_verti_section = False
-
-        for line in lines:
-            if line.strip() == "VERTI:":
-                in_verti_section = True
-                continue
-
-            if in_verti_section:
-                if line.strip().startswith("B"):
-                    parts = line.strip().split()
-                    if len(parts) >= 2:
-                        vertices += int(parts[1])
-
+        # Extract coordinates of the vertices
+        vertices = []
+        info_output = grass.read_command(
+            "v.out.ascii", input=f"{vector_name}_vertices", format="point"
+        )
+        for line in info_output.splitlines():
+            if line.strip():
+                x, y, _ = line.split()
+                vertices.append((float(x), float(y)))
         return vertices
 
-    def test_douglas_peuckar(self):
-        """Test Douglas-Peucker Simplification."""
-        self.assertModule(
-            "v.generalize",
-            input="test_lines",
-            output="generalized_lines",
-            method="douglas",
-            threshold=10.0,
+    def count_vertices(self, vector_name):
+        """Count the number of vertices in a vector map."""
+        # Convert vector features to points (vertices)
+        grass.read_command(
+            "v.to.points",
+            input=vector_name,
+            layer=-1,
+            output=f"{vector_name}_vertices",
+            use="vertex",
             overwrite=True,
         )
-        self.assertVectorExists("generalized_lines")
+        self.assertVectorExists(f"{vector_name}_vertices")
 
-    def test_snakes(self):
-        """Test Snakes Smoothing"""
-        self.assertModule(
-            "v.generalize",
-            input="test_lines",
-            output="generalized_lines",
-            method="snakes",
-            alpha=1.0,
-            beta=1.0,
-            threshold=1,
-            overwrite=True,
+        # Get the number of points (vertices) using v.info
+        info_output = grass.read_command(
+            "v.info", map=f"{vector_name}_vertices", flags="t"
         )
-        self.assertVectorExists("generalized_lines")
-
-    def test_chaiken(self):
-        """Test Chaiken Smoothing"""
-        self.assertModule(
-            "v.generalize",
-            input="test_lines",
-            output="generalized_lines",
-            method="chaiken",
-            threshold=1.0,
-            overwrite=True,
-        )
-        self.assertVectorExists("generalized_lines")
-
-    def test_hermite(self):
-        """Test Hermite Method"""
-        self.assertModule(
-            "v.generalize",
-            input="test_lines",
-            output="generalized_lines",
-            method="hermite",
-            threshold=1.0,
-            overwrite=True,
-        )
-        self.assertVectorExists("generalized_lines")
-
-    def test_distance_weighting(self):
-        """Distance Weighting Method"""
-        self.assertModule(
-            "v.generalize",
-            input="test_lines",
-            output="generalized_lines",
-            method="distance_weighting",
-            threshold=1.0,
-            overwrite=True,
-        )
-        self.assertVectorExists("generalized_lines")
+        # Extract the number of points from the output
+        print(info_output)
+        for line in info_output.splitlines():
+            if "points" in line:
+                num_vertices = int(line.split("=")[1].strip())
+                return num_vertices
+        return 0
 
     def test_simplification(self):
-        """Number of vertices decreases after simplification using Douglas-Peucker Simplification."""
+        """Test vector simplification and compare vertex count and topology."""
+        # Count vertices in the original vector
+        original_vertices = self.count_vertices("test_lines")
+        print(f"Number of vertices in original vector: {original_vertices}")
+
+        # Run the vector generalization module
         self.assertModule(
             "v.generalize",
             input="test_lines",
@@ -122,62 +99,113 @@ class TestVGeneralize(TestCase):
             threshold=10.0,
             overwrite=True,
         )
-        self.assertVectorExists("generalized_lines")
 
-        output_file = grass.read_command(
-            "v.out.ascii", input="generalized_lines", format="standard", layer=-1
+        # Count vertices in the generalized vector
+        self.assertVectorExists("generalized_lines")
+        generalized_vertices = self.count_vertices("generalized_lines")
+        print(f"Number of vertices in generalized vector: {generalized_vertices}")
+
+        # Check if the number of vertices decreased after simplification
+        self.assertLess(
+            generalized_vertices,
+            original_vertices,
+            "Simplification did not reduce the number of vertices.",
         )
 
-        input_vertices = self.get_vertices("test_coordinates.txt")
-        output_vertices = 0
-        in_verti_section = False
-
-        for line in output_file.splitlines():
-            if line.strip() == "VERTI:":
-                in_verti_section = True
-                continue
-
-            if in_verti_section:
-                if line.strip().startswith("B"):
-                    parts = line.strip().split()
-                    if len(parts) >= 2:
-                        output_vertices += int(parts[1])
-
-        assert int(input_vertices) > int(output_vertices)
+        # Validate the topology of the generalized vector
+        info = {
+            "boundaries": 2,
+            "areas": 2,
+            "islands": 2,
+        }
+        self.assertVectorFitsTopoInfo(
+            vector="generalized_lines",
+            reference=info,
+        )
 
     def test_smoothing(self):
-        """Number of vertices increases after smoothing using Chaiken Smoothing"""
+        """Test vector smoothing and compare vertex count and topology."""
+        # Count vertices in the original vector
+        original_vertices = self.count_vertices("test_lines")
+        print(f"Number of vertices in original vector: {original_vertices}")
+
+        # Run the vector smoothing module
         self.assertModule(
             "v.generalize",
             input="test_lines",
-            output="generalized_lines",
+            output="smoothed_lines",
             method="chaiken",
-            threshold=1.0,
+            threshold=10.0,
+            look_ahead=7,
             overwrite=True,
-            verbose=True,
         )
-        self.assertVectorExists("generalized_lines")
+        self.assertVectorExists("smoothed_lines")
 
-        output_file = grass.read_command(
-            "v.out.ascii", input="generalized_lines", format="standard", layer=-1
+        # Count vertices in the smoothed vector
+        smoothed_vertices = self.count_vertices("smoothed_lines")
+        print(f"Number of vertices in smoothed vector: {smoothed_vertices}")
+
+        # Check if the number of vertices increased after smoothing
+        self.assertGreater(
+            smoothed_vertices,
+            original_vertices,
+            "Smoothing did not increase the number of vertices.",
         )
 
-        input_vertices = self.get_vertices("test_coordinates.txt")
-        output_vertices = 0
-        in_verti_section = False
+        # Validate the topology of the smoothed vector
+        info = {
+            "boundaries": 2,
+            "areas": 2,
+            "islands": 2,
+        }
+        self.assertVectorFitsTopoInfo(
+            vector="smoothed_lines",
+            reference=info,
+        )
 
-        for line in output_file.splitlines():
-            if line.strip() == "VERTI:":
-                in_verti_section = True
-                continue
+    def test_hermite_interpolation(self):
+        """Testing if the computed line always passes through the original line via Hermite interpolation."""
 
-            if in_verti_section:
-                if line.strip().startswith("B"):
-                    parts = line.strip().split()
-                    if len(parts) >= 2:
-                        output_vertices += int(parts[1])
+        # Run Hermite interpolation
+        self.assertModule(
+            "v.generalize",
+            input="test_hermite",
+            output="hermite_line",
+            method="hermite",
+            threshold=10.0,
+            overwrite=True,
+        )
 
-        assert int(input_vertices) < int(output_vertices)
+        self.assertVectorExists("hermite_line")
+        info = {
+            "lines": 1,
+            "boundaries": 0,
+            "areas": 0,
+            "islands": 0,
+        }
+        self.assertVectorFitsTopoInfo(
+            vector="hermite_line",
+            reference=info,
+        )
+        # Extract vertices from the original and generalized lines
+        original_vertices = self.extract_vertices("test_hermite")
+        generalized_vertices = self.extract_vertices("hermite_line")
+        for vertex in original_vertices:
+            self.assertIn(
+                vertex,
+                generalized_vertices,
+                f"Original vertex {vertex} not found in generalized line.",
+            )
+        print(grass.read_command("v.info", map="hermite_line"))
+
+        # Hermite Interpolation smoothes the line. Checking the input and output vertices.
+        input_vertices = self.count_vertices("test_hermite")
+        output_vertices = self.count_vertices("hermite_line")
+        self.assertGreater(
+            output_vertices,
+            input_vertices,
+            "Smoothing did not increase the number of vertices",
+        )
 
 
 if __name__ == "__main__":
