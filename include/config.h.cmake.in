@@ -411,6 +411,7 @@
 #define fseek _fseeki64
 #define ftell _ftelli64
 #include <io.h>
+#undef lseek
 #define lseek _lseeki64
 #include <sys/stat.h>
 #define stat _stati64

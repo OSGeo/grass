@@ -33,7 +33,6 @@
 #define getcwd        _getcwd
 #define chdir         _chdir
 #define isatty        _isatty
-#define lseek         _lseek
 /* read, write, and close are NOT being #defined here,
  * because while there are file handle specific versions for Windows,
  * they probably don't work for sockets.
