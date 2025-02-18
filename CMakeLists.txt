@@ -1,11 +1,19 @@
-#[===========================================================================[
-AUTHOR(S):  Rashad Kanavath <rashad km gmail>
-PURPOSE:    GRASS GIS root that adds options to activate/deactivate
-            3rd party libraries
-COPYRIGHT:  (C) 2020-2022 by the GRASS Development Team
-            This program is free software under the GPL (>=v2)
-            Read the file COPYING that comes with GRASS for details.
-#]===========================================================================]
+################################################################################
+#
+# AUTHOR(S):    Rashad Kanavath (original author),
+#               Markus Neteler, Loïc Bartoletti, Aaron Saw, Nicklas Larsson,
+#               Huidae Cho, Mahesh Maddineni, Kandel Nelson
+#
+# PURPOSE:      CMakeLists.txt root that adds options to activate/deactivate
+#               3rd party libraries
+#
+# COPYRIGHT:    (C) 2020-2025 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+################################################################################
 
 cmake_minimum_required(VERSION 3.16)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
