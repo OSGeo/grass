@@ -1,9 +1,11 @@
+string(TIMESTAMP YEAR %Y)
+
 add_custom_target(
   build_full_index
   COMMAND
     ${grass_env_command} ${PYTHON_EXECUTABLE}
     ${CMAKE_CURRENT_SOURCE_DIR}/build_full_index.py
-    ${OUTDIR}/${GRASS_INSTALL_DOCDIR}
+    ${YEAR}
   BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/full_index.html
   DEPENDS ALL_MODULES LIB_PYTHON GUI_WXPYTHON
   COMMENT "man generation: build full index")
@@ -36,17 +38,26 @@ add_custom_target(
   COMMENT "man generation: build index")
 
 set(target_names build_topics build_keywords build_graphical_index
-                 build_manual_gallery build_class_graphical)
+                 build_manual_gallery)
 foreach(target_name ${target_names})
   add_custom_target(
     ${target_name}
     COMMAND
       ${grass_env_command} ${PYTHON_EXECUTABLE}
       ${CMAKE_CURRENT_SOURCE_DIR}/${target_name}.py
-      ${OUTDIR}/${GRASS_INSTALL_DOCDIR}
     DEPENDS build_index
     COMMENT "man generation: ${target_name}")
 endforeach()
+
+add_custom_target(
+  build_class_graphical
+  COMMAND
+    ${grass_env_command} ${PYTHON_EXECUTABLE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/build_class_graphical.py
+    html
+    ${OUTDIR}/${GRASS_INSTALL_DOCDIR}
+  DEPENDS build_index
+  COMMENT "man generation: build_class_graphical")
 
 add_custom_target(
   build_pso
