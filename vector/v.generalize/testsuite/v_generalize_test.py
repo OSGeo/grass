@@ -1,6 +1,8 @@
 from grass.script import core as grass
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+import tempfile
+import os
 
 
 class TestVGeneralize(TestCase):
@@ -10,27 +12,40 @@ class TestVGeneralize(TestCase):
         # Setting up the temporary computational region
         cls.runModule("g.region", n=3401500, s=3400800, e=5959100, w=5958800, res=10)
 
-        # Import coordinates from files which are in ascii format using v.in.ascii
-        cls.runModule(
+    def setUp(self):
+        self.temp_files = []
+        self.temp_chaiken = self.create_temp_file(
+            "ORGANIZATION: GRASS Development Team\nDIGIT DATE:   1/9/2005\nDIGIT NAME:   - \nMAP NAME:     test\nMAP DATE:     2005\nMAP SCALE:    10000\nOTHER INFO:   Test Chaiken's Algorithm\nZONE:  0\nMAP THRESH:   0.500000\nVERTI:\nL  4\n 5958812.48844435 3400828.84221011\n 5958957.29887089 3400877.11235229\n 5959021.65906046 3400930.7458436\n 5959048.47580612 3400973.65263665"
+        )
+
+        self.runModule(
             "v.in.ascii",
-            input="test_coordinates.txt",
-            output="test_lines",
+            input=self.temp_chaiken,
+            output="test_chaiken",
             format="standard",
             overwrite=True,
         )
 
-        cls.runModule(
+        self.temp_test_boundaries = self.create_temp_file(
+            "ORGANIZATION: GRASS Development Team\nDIGIT DATE:   1/9/2005\nDIGIT NAME:   -\nMAP NAME:     test\nMAP DATE:     2005\nMAP SCALE:    10000\nOTHER INFO:   Test polygons\nZONE:  0\nMAP THRESH:   0.500000\nVERTI:\nB  6\n 5958812.48844435 3400828.84221011\n 5958957.29887089 3400877.11235229\n 5959021.65906046 3400930.7458436\n 5959048.47580612 3400973.65263665\n 5959069.92920264 3401032.64947709\n 5958812.48844435 3400828.84221011\nB  4\n 5959010.9323622 3401338.36037757\n 5959096.7459483 3401370.54047235\n 5959091.38259917 3401450.99070932\n 5959010.9323622 3401338.36037757"
+        )
+
+        self.runModule(
+            "v.in.ascii",
+            input=self.temp_test_boundaries,
+            output="test_boundaries",
+            format="standard",
+            overwrite=True,
+        )
+
+        self.temp_hermite = self.create_temp_file(
+            "ORGANIZATION: GRASS Development Team\nDIGIT DATE:   1/9/2005\nDIGIT NAME:   -\nMAP NAME:     test\nMAP DATE:     2005\nMAP SCALE:    10000\nOTHER INFO:   Test Hermite interpolation\nZONE:  0\nMAP THRESH:   0.500000\nVERTI:\nL  4\n 5958812.48844435 3400828.84221011\n 5958957.29887089 3400877.11235229\n 5959021.65906046 3400930.7458436\n 5959048.47580612 3400973.65263665"
+        )
+
+        self.runModule(
             "v.in.ascii",
             input="test_hermite_line.txt",
             output="test_hermite",
-            format="standard",
-            overwrite=True,
-        )
-
-        cls.runModule(
-            "v.in.ascii",
-            input="test_chaiken.txt",
-            output="test_chaiken",
             format="standard",
             overwrite=True,
         )
@@ -41,9 +56,21 @@ class TestVGeneralize(TestCase):
         cls.runModule(
             "g.remove",
             type="vector",
-            name="test_lines,generalized_lines,smoothed_lines,test_vertices,generalized_vertices,smoothed_vertices,test_hermite,hermite_line,test_hermit_vertices,hermit_line_vertices,test_chaiken,chaiken_line,test_chaiken_vertices,chaiken_line_vertices",
+            name="test_boundaries,generalized_boundaries,smoothed_boundaries,test_vertices,generalized_vertices,smoothed_vertices,test_hermite,hermite_line,test_hermit_vertices,hermit_line_vertices,test_chaiken,chaiken_line,test_chaiken_vertices,chaiken_line_vertices",
             flags="f",
         )
+
+    def create_temp_file(self, content):
+        """Create a temporary file with the given content."""
+        temp_file = tempfile.NamedTemporaryFile(delete=False, mode="w")
+        temp_file.write(content)
+        temp_file.close()
+        self.temp_files.append(temp_file.name)
+        return temp_file.name
+
+    def tearDown(self):
+        for temp_file in self.temp_files:
+            os.remove(temp_file)
 
     def extract_vertices(self, vector_name):
         """Extract vertices from a vector map."""
@@ -96,18 +123,18 @@ class TestVGeneralize(TestCase):
         """Test vector simplification and compare vertex count and topology."""
         self.assertModule(
             "v.generalize",
-            input="test_lines",
-            output="generalized_lines",
+            input="test_boundaries",
+            output="generalized_boundaries",
             method="douglas",
             threshold=10.0,
             overwrite=True,
         )
 
         # Count vertices in the generalized vector
-        self.assertVectorExists("generalized_lines")
-        original_vertices = self.count_vertices("test_lines")
+        self.assertVectorExists("generalized_boundaries")
+        original_vertices = self.count_vertices("test_boundaries")
         print(f"Number of vertices in original vector: {original_vertices}")
-        generalized_vertices = self.count_vertices("generalized_lines")
+        generalized_vertices = self.count_vertices("generalized_boundaries")
         print(f"Number of vertices in generalized vector: {generalized_vertices}")
 
         # Check if the number of vertices decreased after simplification
@@ -124,7 +151,7 @@ class TestVGeneralize(TestCase):
             "islands": 2,
         }
         self.assertVectorFitsTopoInfo(
-            vector="generalized_lines",
+            vector="generalized_boundaries",
             reference=info,
         )
 
@@ -132,17 +159,17 @@ class TestVGeneralize(TestCase):
         """Test vector smoothing and compare vertex count and topology."""
         self.assertModule(
             "v.generalize",
-            input="test_lines",
-            output="smoothed_lines",
+            input="test_boundaries",
+            output="smoothed_boundaries",
             method="chaiken",
             threshold=10.0,
             look_ahead=7,
             overwrite=True,
         )
-        self.assertVectorExists("smoothed_lines")
-        original_vertices = self.count_vertices("test_lines")
+        self.assertVectorExists("smoothed_boundaries")
+        original_vertices = self.count_vertices("test_boundaries")
         print(f"Number of vertices in original vector: {original_vertices}")
-        smoothed_vertices = self.count_vertices("smoothed_lines")
+        smoothed_vertices = self.count_vertices("smoothed_boundaries")
         print(f"Number of vertices in smoothed vector: {smoothed_vertices}")
 
         # Check if the number of vertices increased after smoothing
@@ -159,7 +186,7 @@ class TestVGeneralize(TestCase):
             "islands": 2,
         }
         self.assertVectorFitsTopoInfo(
-            vector="smoothed_lines",
+            vector="smoothed_boundaries",
             reference=info,
         )
 
