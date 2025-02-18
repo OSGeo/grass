@@ -44,7 +44,7 @@ class TestVGeneralize(TestCase):
 
         self.runModule(
             "v.in.ascii",
-            input="test_hermite_line.txt",
+            input=self.temp_hermite,
             output="test_hermite",
             format="standard",
             overwrite=True,
