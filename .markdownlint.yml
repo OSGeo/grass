@@ -12,6 +12,3 @@ no-inline-html: false
 no-alt-text: false
 line-length: false
 # The block above this is to be eventually removed.
-
-link-fragments: false
-no-space-in-links: false
