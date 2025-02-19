@@ -1,5 +1,6 @@
 import numpy as np
-from grass.script import core as gscript
+import json
+import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -46,45 +47,51 @@ class TestRRandomSurface(TestCase):
         self.runModule(
             "r.random.surface", output=self.output_raster, seed=42, overwrite=True
         )
-        result1 = gscript.read_command(
+        result1 = gs.read_command(
             "r.stats", input=self.output_raster, flags="n", quiet=True
         )
 
         self.runModule(
             "r.random.surface", output=self.output_raster, seed=42, overwrite=True
         )
-        result2 = gscript.read_command(
+        result2 = gs.read_command(
             "r.stats", input=self.output_raster, flags="n", quiet=True
         )
 
         self.assertEqual(result1, result2, "Outputs with the same seed differ")
 
     def test_with_mask(self):
-        """Test with a raster mask applied."""
+        """Test with a raster mask applied and validate stats."""
         self.runModule("r.mask", raster=self.mask_raster)
         self.assertModule(
             "r.random.surface", output=self.output_raster, seed=42, overwrite=True
         )
         self.runModule("r.mask", flags="r")
 
-        values = gscript.read_command(
-            "r.stats", input=self.output_raster, flags="n", quiet=True
-        ).splitlines()
-        self.assertTrue(len(values) > 0, "No values generated with mask")
+        reference_stats = {
+            "mean": 135.695,
+            "min": 1,
+            "max": 255,
+            "cells": 400,
+        }
+
+        self.assertRasterFitsUnivar(
+            raster=self.output_raster, reference=reference_stats, precision=1e-6
+        )
 
     def test_different_seeds(self):
         """Test that different seeds produce different outputs."""
         self.runModule(
             "r.random.surface", output=self.output_raster, seed=42, overwrite=True
         )
-        result1 = gscript.read_command(
+        result1 = gs.read_command(
             "r.stats", input=self.output_raster, flags="n", quiet=True
         )
 
         self.runModule(
             "r.random.surface", output=self.output_raster, seed=43, overwrite=True
         )
-        result2 = gscript.read_command(
+        result2 = gs.read_command(
             "r.stats", input=self.output_raster, flags="n", quiet=True
         )
 
@@ -93,33 +100,27 @@ class TestRRandomSurface(TestCase):
         )
 
     def test_distance_parameters(self):
-        """Test with different distance parameters."""
-        self.runModule(
-            "r.random.surface",
-            output=self.output_raster,
-            distance=2.0,
-            exponent=2.0,
-            seed=42,
-            overwrite=True,
-        )
-        result1 = gscript.read_command(
-            "r.stats", input=self.output_raster, flags="n", quiet=True
-        )
+        """Test with different distance parameters and compare to reference statistics."""
 
         self.runModule(
             "r.random.surface",
             output=self.output_raster,
             distance=5.0,
             exponent=3.0,
-            seed=42,
+            seed=43,
             overwrite=True,
         )
-        result2 = gscript.read_command(
-            "r.stats", input=self.output_raster, flags="n", quiet=True
-        )
 
-        self.assertNotEqual(
-            result1, result2, "Different distance parameters produced identical outputs"
+        reference_stats = {
+            "mean": 129.45,
+            "min": 1,
+            "max": 255,
+            "cells": 400,
+            "stddev": 53.109015,
+        }
+
+        self.assertRasterFitsUnivar(
+            raster=self.output_raster, reference=reference_stats, precision=1e-6
         )
 
     def test_distribution_properties(self):
@@ -127,11 +128,14 @@ class TestRRandomSurface(TestCase):
         self.runModule(
             "r.random.surface", output=self.output_raster, seed=42, overwrite=True
         )
-        stats = gscript.parse_command("r.univar", map=self.output_raster, flags="g")
+        stats_json = gs.read_command(
+            "r.univar", map=self.output_raster, flags="g", format="json"
+        )
+        stats = json.loads(stats_json)
 
-        n = float(stats["n"])
-        mean = float(stats["mean"])
-        stddev = float(stats["stddev"])
+        n = float(stats[0]["n"])
+        mean = float(stats[0]["mean"])
+        stddev = float(stats[0]["stddev"])
 
         self.assertGreater(n, 0, "No valid cells in output")
         self.assertTrue(0 <= mean <= 255, "Mean outside expected range")
@@ -144,9 +148,13 @@ class TestRRandomSurface(TestCase):
             "r.random.surface", output=self.output_raster, high=high_val, overwrite=True
         )
 
-        stats = gscript.parse_command("r.univar", map=self.output_raster, flags="g")
-        actual_min = float(stats["min"])
-        actual_max = float(stats["max"])
+        stats_json = gs.read_command(
+            "r.univar", map=self.output_raster, flags="g", format="json"
+        )
+        stats = json.loads(stats_json)
+
+        actual_min = float(stats[0]["min"])
+        actual_max = float(stats[0]["max"])
 
         self.assertGreaterEqual(
             actual_min, 0, f"Minimum value {actual_min} is less than 0"
@@ -175,7 +183,7 @@ class TestRRandomSurface(TestCase):
             quiet=True,
         )
 
-        stats_output = gscript.read_command(
+        stats_output = gs.read_command(
             "r.stats",
             input=f"{self.output_raster},{output_stats}",
             flags="c",
@@ -216,11 +224,15 @@ class TestRRandomSurface(TestCase):
             overwrite=True,
         )
 
-        stats = gscript.parse_command("r.univar", map=self.output_raster, flags="g")
-        n = float(stats["n"])
-        min_val = float(stats["min"])
-        max_val = float(stats["max"])
-        mean = float(stats["mean"])
+        stats_json = gs.read_command(
+            "r.univar", map=self.output_raster, flags="g", format="json"
+        )
+        stats = json.loads(stats_json)
+
+        n = float(stats[0]["n"])
+        min_val = float(stats[0]["min"])
+        max_val = float(stats[0]["max"])
+        mean = float(stats[0]["mean"])
 
         expected_mean = (min_val + max_val) / 2
         mean_tolerance = 25  # Kept high to account for randomness
@@ -246,8 +258,12 @@ class TestRRandomSurface(TestCase):
         for i, expr in enumerate(range_expr):
             tmp_map = f"tmp_range_{i}"
             self.runModule("r.mapcalc", expression=f"{tmp_map} = {expr}", quiet=True)
-            stats = gscript.parse_command("r.univar", map=tmp_map, flags="g")
-            counts.append(float(stats["sum"]))
+            stats_json = gs.read_command(
+                "r.univar", map=tmp_map, flags="g", format="json"
+            )
+            stats = json.loads(stats_json)
+            counts.append(float(stats[0]["sum"]))
+
             self.runModule(
                 "g.remove", type="raster", name=tmp_map, flags="f", quiet=True
             )
