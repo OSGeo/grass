@@ -29,8 +29,8 @@ if(TARGET POSTGRES)
   target_link_libraries(grass_vector PRIVATE POSTGRES)
 endif()
 
-if(TARGET LAPACK)
-  target_link_libraries(grass_vector PRIVATE LAPACK)
+if(TARGET LAPACKE)
+  target_link_libraries(grass_vector PRIVATE LAPACKE)
 endif()
 
 build_library_in_subdir(

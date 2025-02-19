@@ -120,8 +120,8 @@ option(WITH_NLS "Build with NLS support" ${nls_default_option_enabled})
 
 # Computing options
 option(WITH_FFTW "Build with FFTW support" ON)
-option(WITH_BLAS "Build with BLAS support" ON)
-option(WITH_LAPACK "Build with LAPACK support" ON)
+option(WITH_CBLAS "Build with CBLAS support" ON)
+option(WITH_LAPACKE "Build with LAPACKE support" ON)
 option(WITH_OPENMP "Build with OpenMP support" ON)
 
 # Data format options

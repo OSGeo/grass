@@ -32,8 +32,8 @@ build_library_in_subdir(
   grass_gproj
   grass_parson)
 
-if(TARGET LAPACK)
-  target_link_libraries(grass_raster PRIVATE LAPACK)
+if(TARGET LAPACKE)
+  target_link_libraries(grass_raster PRIVATE LAPACKE)
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
@@ -58,8 +58,8 @@ build_library_in_subdir(
   "${use_math_DEFS}"
   OPTIONAL_DEPENDS
   FFTW
-  LAPACK
-  BLAS
+  LAPACKE
+  CBLAS
   OPENMP)
 
 build_library_in_subdir(linkm)
