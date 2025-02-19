@@ -24,7 +24,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-""" Module images2gif
+"""Module images2gif
 
 Provides functionality for reading and writing animated GIF images.
 Use writeGif to write a series of numpy arrays or PIL images as an
@@ -101,8 +101,7 @@ def get_cKDTree():
 
 
 def checkImages(images):
-    """checkImages(images)
-    Check numpy images and correct intensity range etc.
+    """Check numpy images and correct intensity range etc.
     The same for all movie formats.
 
     :param images:
@@ -119,7 +118,7 @@ def checkImages(images):
             # Check and convert dtype
             if im.dtype == np.uint8:
                 images2.append(im)  # Ok
-            elif im.dtype in [np.float32, np.float64]:
+            elif im.dtype in (np.float32, np.float64):
                 im = im.copy()
                 im[im < 0] = 0
                 im[im > 1] = 1
@@ -186,7 +185,7 @@ class GifWriter:
             xy = (0, 0)
 
         # Image separator,
-        bb = "\x2C"
+        bb = "\x2c"
 
         # Image position and size
         bb += intToBin(xy[0])  # Left position
@@ -215,7 +214,7 @@ class GifWriter:
             # (the extension interprets zero loops
             # to mean an infinite number of loops)
             # Mmm, does not seem to work
-        bb = "\x21\xFF\x0B"  # application extension
+        bb = "\x21\xff\x0b"  # application extension
         bb += "NETSCAPE2.0"
         bb += "\x03\x01"
         bb += intToBin(loops)
@@ -230,9 +229,9 @@ class GifWriter:
 
           * 0 - No disposal specified.
           * 1 - Do not dispose. The graphic is to be left in place.
-          * 2 -	Restore to background color. The area used by the graphic
+          * 2 - Restore to background color. The area used by the graphic
             must be restored to the background color.
-          * 3 -	Restore to previous. The decoder is required to restore the
+          * 3 - Restore to previous. The decoder is required to restore the
             area overwritten by the graphic with what was there prior to
             rendering the graphic.
           * 4-7 -To be defined.
@@ -241,7 +240,7 @@ class GifWriter:
         :param dispose:
         """
 
-        bb = "\x21\xF9\x04"
+        bb = "\x21\xf9\x04"
         bb += chr((dispose & 3) << 2)  # low bit 1 == transparency,
         # 2nd bit 1 == user input , next 3 bits, the low two of which are used,
         # are dispose.
@@ -254,7 +253,6 @@ class GifWriter:
         """Handle the sub-rectangle stuff. If the rectangles are given by the
         user, the values are checked. Otherwise the subrectangles are
         calculated automatically.
-
         """
 
         if isinstance(subRectangles, (tuple, list)):
@@ -285,24 +283,23 @@ class GifWriter:
             # First make numpy arrays if required
             for i in range(len(images)):
                 im = images[i]
-                if isinstance(im, Image.Image):
-                    tmp = im.convert()  # Make without palette
-                    a = np.asarray(tmp)
-                    if len(a.shape) == 0:
-                        msg = "Too little memory to convert PIL image to array"
-                        raise MemoryError(msg)
-                    images[i] = a
+                if not isinstance(im, Image.Image):
+                    continue
+                tmp = im.convert()  # Make without palette
+                a = np.asarray(tmp)
+                if len(a.shape) == 0:
+                    msg = "Too little memory to convert PIL image to array"
+                    raise MemoryError(msg)
+                images[i] = a
 
             # Determine the sub rectangles
             images, xy = self.getSubRectangles(images)
 
         # Done
-        return images, xy
+        return (images, xy)
 
     def getSubRectangles(self, ims):
-        """getSubRectangles(ims)
-
-        Calculate the minimal rectangles that need updating each frame.
+        """Calculate the minimal rectangles that need updating each frame.
         Returns a two-element tuple containing the cropped images and a
         list of x-y positions.
 
@@ -314,7 +311,7 @@ class GifWriter:
 
         # Check image count
         if len(ims) < 2:
-            return ims, [(0, 0) for i in ims]
+            return (ims, [(0, 0) for i in ims])
 
         # We need NumPy
         if np is None:
@@ -337,11 +334,11 @@ class GifWriter:
             Y = np.argwhere(diff.sum(1))
             # Get rect coordinates
             if X.size and Y.size:
-                x0, x1 = int(X[0]), int(X[-1] + 1)
-                y0, y1 = int(Y[0]), int(Y[-1] + 1)
+                x0, x1 = (int(X[0]), int(X[-1] + 1))
+                y0, y1 = (int(Y[0]), int(Y[-1] + 1))
             else:  # No change ... make it minimal
-                x0, x1 = 0, 2
-                y0, y1 = 0, 2
+                x0, x1 = (0, 2)
+                y0, y1 = (0, 2)
 
             # Cut out and store
             im2 = im[y0:y1, x0:x1]
@@ -352,14 +349,13 @@ class GifWriter:
         # Done
         # print('%1.2f seconds to determine subrectangles of  %i images' %
         #    (time.time()-t0, len(ims2)))
-        return ims2, xy
+        return (ims2, xy)
 
     def convertImagesToPIL(self, images, dither, nq=0):
-        """convertImagesToPIL(images, nq=0)
-
-        Convert images to Paletted PIL images, which can then be
+        """Convert images to Paletted PIL images, which can then be
         written to a single animaged GIF.
 
+        convertImagesToPIL(images, nq=0)
         """
 
         # Convert to PIL images
@@ -377,7 +373,7 @@ class GifWriter:
                 images2.append(im)
 
         # Convert to paletted PIL images
-        images, images2 = images2, []
+        images, images2 = (images2, [])
         if nq >= 1:
             # NeuQuant algorithm
             for im in images:
@@ -400,17 +396,13 @@ class GifWriter:
         return images2
 
     def writeGifToFile(self, fp, images, durations, loops, xys, disposes):
-        """writeGifToFile(fp, images, durations, loops, xys, disposes)
-
-        Given a set of images writes the bytes to the specified stream.
+        """Given a set of images writes the bytes to the specified stream.
         Requires different handling of palette for PIL and Pillow:
         based on https://github.com/rec/echomesh/blob/master/
         code/python/external/images2gif.py
-
         """
-
         # Obtain palette for all images and count each occurrence
-        palettes, occur = [], []
+        palettes, occur = ([], [])
         for im in images:
             if not pillow:
                 palette = getheader(im)[1]
@@ -448,21 +440,20 @@ class GifWriter:
             # Write palette and image data
             # Gather info
             data = getdata(im)
-            imdes, data = data[0], data[1:]
+            imdes, data = (data[0], data[1:])
             graphext = self.getGraphicsControlExt(durations[frames], disposes[frames])
             # Make image descriptor suitable for using 256 local color palette
             lid = self.getImageDescriptor(im, xys[frames])
 
             # Write local header
+            fp.write(graphext)
             if (palette != globalPalette) or (disposes[frames] != 2):
                 # Use local color palette
-                fp.write(graphext)
                 fp.write(lid)  # write suitable image descriptor
                 fp.write(palette)  # write local color table
                 fp.write("\x08")  # LZW minimum size code
             else:
                 # Use global color palette
-                fp.write(graphext)
                 fp.write(imdes)  # write suitable image descriptor
 
             # Write image data
@@ -515,9 +506,7 @@ def writeGifPillow(filename, images, duration=0.1, repeat=True):
 
     """
     loop = 0 if repeat else 1
-    quantized = []
-    for im in images:
-        quantized.append(im.quantize())
+    quantized = [im.quantize() for im in images]
     quantized[0].save(
         filename,
         save_all=True,
@@ -547,7 +536,7 @@ def writeGifVisvis(
                         integer types, and between 0 and 1 for float types.
     :param duration: scalar or list of scalars The duration for all frames, or
                      (if a list) for each frame.
-    :param repeat: bool or integer The amount of loops. If True, loops infinitetely.
+    :param repeat: bool or integer The amount of loops. If True, loops infinitely.
     :param bool dither: whether to apply dithering
     :param int nq: If nonzero, applies the NeuQuant quantization algorithm to
                    create the color palette. This algorithm is superior, but
@@ -624,11 +613,8 @@ def writeGifVisvis(
     images = gifWriter.convertImagesToPIL(images, dither, nq)
 
     # Write
-    fp = open(filename, "wb")
-    try:
+    with open(filename, "wb") as fp:
         gifWriter.writeGifToFile(fp, images, duration, loops, xy, dispose)
-    finally:
-        fp.close()
 
 
 def readGif(filename, asNumpy=True):
@@ -674,9 +660,7 @@ def readGif(filename, asNumpy=True):
     # Convert to normal PIL images if needed
     if not asNumpy:
         images2 = images
-        images = []
-        for im in images2:
-            images.append(PIL.Image.fromarray(im))
+        images = [PIL.Image.fromarray(im) for im in images2]
 
     # Done
     return images
@@ -1086,7 +1070,7 @@ class NeuQuant:
         return Image.fromarray(px).convert("RGB").quantize(palette=self.paletteImage())
 
     def quantize_without_scipy(self, image):
-        """ " This function can be used if no scipy is available.
+        """This function can be used if no scipy is available.
         It's 7 times slower though.
 
         :param image:

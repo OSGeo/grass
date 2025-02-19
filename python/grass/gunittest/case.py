@@ -48,6 +48,7 @@ class TestCase(unittest.TestCase):
     Be especially careful and always use keyword argument syntax for *msg*
     parameter.
     """
+
     longMessage = True  # to get both standard and custom message
     maxDiff = None  # we can afford long diffs
     _temp_region = None  # to control the temporary region
@@ -258,12 +259,7 @@ class TestCase(unittest.TestCase):
                     " provided in reference"
                     ": %s\n" % (module, ", ".join(missing))
                 )
-            if mismatch:
-                stdMsg = "%s difference:\n" % module
-                stdMsg += "mismatch values"
-                stdMsg += " (key, reference, actual): %s\n" % mismatch
-                stdMsg += "command: %s %s" % (module, parameters)
-            else:
+            if not mismatch:
                 # we can probably remove this once we have more tests
                 # of keyvalue_equals and diff_keyvalue against each other
                 msg = (
@@ -273,6 +269,11 @@ class TestCase(unittest.TestCase):
                     " (assertModuleKeyValue())"
                 )
                 raise RuntimeError(msg)
+            stdMsg = "%s difference:\n" % module
+            stdMsg += "mismatch values"
+            stdMsg += " (key, reference, actual): %s\n" % mismatch
+            stdMsg += "command: %s %s" % (module, parameters)
+
             self.fail(self._formatMessage(msg, stdMsg))
 
     def assertRasterFitsUnivar(self, raster, reference, precision=None, msg=None):
@@ -1335,7 +1336,7 @@ class TestCase(unittest.TestCase):
                 module.name, module.get_python(), module.returncode, errors=errors
             )
         # TODO: use this also in assert and apply when appropriate
-        if expecting_stdout and not module.outputs.stdout.strip():
+        if expecting_stdout and (not module.outputs.stdout.strip()):
             if module.outputs.stderr:
                 errors = " The errors are:\n" + module.outputs.stderr
             else:

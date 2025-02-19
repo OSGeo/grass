@@ -1,7 +1,7 @@
 """
 Functions for mathematical datetime operations
 
-(C) 2011-2013 by the GRASS Development Team
+(C) 2011-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import copy
 from datetime import datetime, timedelta
+from typing import TypedDict
 
 from .core import get_tgis_message_interface
 
@@ -20,7 +21,7 @@ try:
     from dateutil import parser
 
     has_dateutil = True
-except:
+except (ImportError, ModuleNotFoundError):
     has_dateutil = False
 
 
@@ -490,7 +491,20 @@ def adjust_datetime_to_granularity(mydate: datetime, granularity):
 ###############################################################################
 
 
-def compute_datetime_delta(start, end):
+class datetime_delta(TypedDict):
+    """Typed dictionary to return the accumulated delta in year, month, day,
+    hour, minute and second as well as max_days. At runtime, it is a plain dict."""
+
+    year: int
+    month: int
+    day: int
+    hour: int
+    minute: int
+    second: int
+    max_days: int
+
+
+def compute_datetime_delta(start: datetime, end: datetime) -> datetime_delta:
     """Return a dictionary with the accumulated delta in year, month, day,
     hour, minute and second
 
@@ -501,136 +515,137 @@ def compute_datetime_delta(start, end):
          >>> start = datetime(2001, 1, 1, 0, 0, 0)
          >>> end = datetime(2001, 1, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 0, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 0}
 
          >>> start = datetime(2001, 1, 1, 0, 0, 14)
          >>> end = datetime(2001, 1, 1, 0, 0, 44)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 0, 'second': 30, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 0, 'minute': 0, 'second': 30, 'max_days': 0}
 
          >>> start = datetime(2001, 1, 1, 0, 0, 44)
          >>> end = datetime(2001, 1, 1, 0, 1, 14)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 0, 'second': 30, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 1}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 0, 'minute': 1, 'second': 30, 'max_days': 0}
 
          >>> start = datetime(2001, 1, 1, 0, 0, 30)
          >>> end = datetime(2001, 1, 1, 0, 5, 30)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 0, 'second': 300, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 5}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 0, 'minute': 5, 'second': 300, 'max_days': 0}
 
          >>> start = datetime(2001, 1, 1, 0, 0, 0)
          >>> end = datetime(2001, 1, 1, 0, 1, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 0, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 1}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 0, 'minute': 1, 'second': 0, 'max_days': 0}
 
          >>> start = datetime(2011, 10, 31, 0, 45, 0)
          >>> end = datetime(2011, 10, 31, 1, 45, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 1, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 60}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 1, 'minute': 60, 'second': 0, 'max_days': 0}
 
          >>> start = datetime(2011, 10, 31, 0, 45, 0)
          >>> end = datetime(2011, 10, 31, 1, 15, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 1, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 30}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 1, 'minute': 30, 'second': 0, 'max_days': 0}
 
          >>> start = datetime(2011, 10, 31, 0, 45, 0)
          >>> end = datetime(2011, 10, 31, 12, 15, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 12, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 690}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 12, 'minute': 690, 'second': 0, 'max_days': 0}
 
          >>> start = datetime(2011, 10, 31, 0, 0, 0)
          >>> end = datetime(2011, 10, 31, 1, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 1, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 1, 'minute': 0, 'second': 0, 'max_days': 0}
 
          >>> start = datetime(2011, 10, 31, 0, 0, 0)
          >>> end = datetime(2011, 11, 1, 1, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 25, 'second': 0, 'max_days': 1, 'year': 0, 'day': 1, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 1, 'hour': 25, 'minute': 0, 'second': 0, 'max_days': 1}
 
          >>> start = datetime(2011, 10, 31, 12, 0, 0)
          >>> end = datetime(2011, 11, 1, 6, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 18, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 18, 'minute': 0, 'second': 0, 'max_days': 0}
 
          >>> start = datetime(2011, 11, 1, 0, 0, 0)
          >>> end = datetime(2011, 12, 1, 1, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 721, 'month': 1, 'second': 0, 'max_days': 30, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 1, 'day': 0, 'hour': 721, 'minute': 0, 'second': 0, 'max_days': 30}
 
          >>> start = datetime(2011, 11, 1, 0, 0, 0)
          >>> end = datetime(2011, 11, 5, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'second': 0, 'max_days': 4, 'year': 0, 'day': 4, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 4, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 4}
 
          >>> start = datetime(2011, 10, 6, 0, 0, 0)
          >>> end = datetime(2011, 11, 5, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'second': 0, 'max_days': 30, 'year': 0, 'day': 30, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 30, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 30}
 
          >>> start = datetime(2011, 12, 2, 0, 0, 0)
          >>> end = datetime(2012, 1, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'second': 0, 'max_days': 30, 'year': 1, 'day': 30, 'minute': 0}
+         {'year': 1, 'month': 0, 'day': 30, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 30}
 
          >>> start = datetime(2011, 1, 1, 0, 0, 0)
          >>> end = datetime(2011, 2, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 1, 'second': 0, 'max_days': 31, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 1, 'day': 0, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 31}
 
          >>> start = datetime(2011, 12, 1, 0, 0, 0)
          >>> end = datetime(2012, 1, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 1, 'second': 0, 'max_days': 31, 'year': 1, 'day': 0, 'minute': 0}
+         {'year': 1, 'month': 1, 'day': 0, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 31}
 
          >>> start = datetime(2011, 12, 1, 0, 0, 0)
          >>> end = datetime(2012, 6, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 6, 'second': 0, 'max_days': 183, 'year': 1, 'day': 0, 'minute': 0}
+         {'year': 1, 'month': 6, 'day': 0, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 183}
 
          >>> start = datetime(2011, 6, 1, 0, 0, 0)
          >>> end = datetime(2021, 6, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 120, 'second': 0, 'max_days': 3653, 'year': 10, 'day': 0, 'minute': 0}
+         {'year': 10, 'month': 120, 'day': 0, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 3653}
 
          >>> start = datetime(2011, 6, 1, 0, 0, 0)
          >>> end = datetime(2012, 6, 1, 12, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 8796, 'month': 12, 'second': 0, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 0}
+         {'year': 1, 'month': 12, 'day': 0, 'hour': 8796, 'minute': 0, 'second': 0, 'max_days': 366}
 
          >>> start = datetime(2011, 6, 1, 0, 0, 0)
          >>> end = datetime(2012, 6, 1, 12, 30, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 8796, 'month': 12, 'second': 0, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 527790}
+         {'year': 1, 'month': 12, 'day': 0, 'hour': 8796, 'minute': 527790, 'second': 0, 'max_days': 366}
 
          >>> start = datetime(2011, 6, 1, 0, 0, 0)
          >>> end = datetime(2012, 6, 1, 12, 0, 5)
          >>> compute_datetime_delta(start, end)
-         {'hour': 8796, 'month': 12, 'second': 31665605, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 0}
+         {'year': 1, 'month': 12, 'day': 0, 'hour': 8796, 'minute': 0, 'second': 31665605, 'max_days': 366}
 
          >>> start = datetime(2011, 6, 1, 0, 0, 0)
          >>> end = datetime(2012, 6, 1, 0, 30, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 12, 'second': 0, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 527070}
+         {'year': 1, 'month': 12, 'day': 0, 'hour': 0, 'minute': 527070, 'second': 0, 'max_days': 366}
 
-         >>> start = datetime(2011, 12, 1, 0, 0, 0)
-         >>> end = datetime(2012, 6, 1, 0, 0, 0)
-         >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 12, 'second': 31622405, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 0}
-
-    :return: A dictionary with year, month, day, hour, minute and second as
-             keys()
+    :return: A dictionary with year, month, day, hour, minute, second and max_days as keys()
     """  # noqa: E501
-    comp = {}
+    # TODO: set default values here, and ensure processing below covers all situations,
+    # not leaking these default values
+    comp = datetime_delta(
+        year=0,
+        month=0,
+        day=0,
+        hour=0,
+        minute=0,
+        second=0,
+        max_days=(end - start).days,
+    )
 
-    day_diff = (end - start).days
-
-    comp["max_days"] = day_diff
+    day_diff = comp["max_days"]
 
     # Date
     # Count full years
-    d = end.year - start.year
-    comp["year"] = d
+    comp["year"] = end.year - start.year
 
     # Count full months
     if start.month == 1 and end.month == 1:
@@ -644,10 +659,7 @@ def compute_datetime_delta(start, end):
         comp["month"] = d
 
     # Count full days
-    if start.day == 1 and end.day == 1:
-        comp["day"] = 0
-    else:
-        comp["day"] = day_diff
+    comp["day"] = 0 if start.day == 1 and end.day == 1 else day_diff
 
     # Time
     # Hours
@@ -799,7 +811,7 @@ def check_datetime_string(time_string: str, use_dateutil: bool = True):
 
     try:
         return datetime.strptime(time_string, time_format)
-    except:
+    except (ValueError, TypeError):
         return _("Unable to parse time string: %s") % time_string
 
 

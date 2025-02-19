@@ -16,12 +16,12 @@ import hashlib
 import os
 import re
 import sys
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Any
 
 from grass.script.utils import encode
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Callable, Mapping
 
 try:
     from grass.script.core import KeyValue
@@ -224,8 +224,7 @@ def text_to_keyvalue(
                     if kvdict:
                         # key is the one from previous line
                         msg = (
-                            "Empty line in the parsed text."
-                            " Previous line's key is <%s>"
+                            "Empty line in the parsed text. Previous line's key is <%s>"
                         ) % key
                     raise ValueError(msg)
             else:  # noqa: PLR5501
@@ -272,7 +271,7 @@ def values_equal(value_a, value_b, precision: float = 0.000001) -> bool:
     True
     >>> values_equal("Hello", "hello")
     False
-    """
+    """  # noqa: D402; Add a summary
     # each if body needs to handle only not equal state
 
     if isinstance(value_a, float) and isinstance(value_b, float):
@@ -282,7 +281,9 @@ def values_equal(value_a, value_b, precision: float = 0.000001) -> bool:
         # in Python 3 None < 3 raises TypeError
         precision = float(precision)
         if precision < 0:
-            msg = "precision needs to be greater than or equal to zero: {precision} < 0"
+            msg = (
+                f"precision needs to be greater than or equal to zero: {precision} < 0"
+            )
             raise ValueError(msg)
         if abs(value_a - value_b) > precision:
             return False
@@ -359,8 +360,8 @@ def keyvalue_equals(
     :param dict_b: second dictionary
     :param precision: precision with which the floating point values
         are compared (passed to equality functions)
-    :param callable def_equal: function used for comparison by default
-    :param dict key_equal: dictionary of functions used for comparison
+    :param def_equal: function used for comparison by default
+    :param key_equal: dictionary of functions used for comparison
         of specific keys, `def_equal` is used for the rest,
         keys in dictionary are keys in `dict_a` and `dict_b` dictionaries,
         values are the functions used to comapare the given key
@@ -369,7 +370,7 @@ def keyvalue_equals(
 
     :return: `True` if identical, `False` if different
 
-    Use `diff_keyvalue()` to get information about differeces.
+    Use `diff_keyvalue()` to get information about differences.
     You can use this function to find out if there is a difference and then
     use `diff_keyvalue()` to determine all the differences between
     dictionaries.
@@ -407,7 +408,7 @@ def diff_keyvalue(
         (['d'], ['a'], [('c', 2, 1)])
 
     You can provide only a subset of values in dict_a, in this case
-    first item in tuple is an emptu list::
+    first item in tuple is an empty list::
 
         >>> diff_keyvalue(a, b, a_is_subset=True, precision=0)
         ([], ['a'], [('c', 2, 1)])
@@ -542,7 +543,7 @@ def check_text_ellipsis(reference, actual) -> bool:
 
     >>> check_text_ellipsis("Result: [569] (...)", "Result: 9 (too high)")
     False
-    """
+    """  # noqa: D402; Add a summary
     ref_escaped = re.escape(reference)
     exp = re.compile(r"\\\.\\\.\\\.")  # matching escaped ...
     ref_regexp = exp.sub(".+", ref_escaped) + "$"
@@ -601,7 +602,7 @@ def check_text_ellipsis_doctest(reference, actual):
     ...     optionflags=doctest.ELLIPSIS,
     ... )
     False
-    """
+    """  # noqa: D402; Add a summary
     # this can be also global
     checker = doctest.OutputChecker()
     return checker.check_output(reference, actual, optionflags=doctest.ELLIPSIS)

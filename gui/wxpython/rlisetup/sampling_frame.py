@@ -216,27 +216,25 @@ class RLiSetupMapPanel(wx.Panel):
         )
         ret = dlg.ShowModal()
         while True:
-            if ret == wx.ID_OK:
-                raster = dlg.GetValue()
-                if checkMapExists(raster):
-                    GMessage(
-                        parent=self,
-                        message=_(
-                            "The raster file %s already exists, please change name"
-                        )
-                        % raster,
-                    )
-                    ret = dlg.ShowModal()
-                else:
-                    dlg.Destroy()
-                    marea = self.writeArea(
-                        self._registeredGraphics.GetItem(0).GetCoords(), raster
-                    )
-                    self.nextRegion(next=True, area=marea)
-                    break
-            else:
+            if ret != wx.ID_OK:
                 self.nextRegion(next=False)
                 break
+
+            raster = dlg.GetValue()
+            if not checkMapExists(raster):
+                dlg.Destroy()
+                marea = self.writeArea(
+                    self._registeredGraphics.GetItem(0).GetCoords(), raster
+                )
+                self.nextRegion(next=True, area=marea)
+                break
+
+            GMessage(
+                parent=self,
+                message=_("The raster file %s already exists, please change name")
+                % raster,
+            )
+            ret = dlg.ShowModal()
 
     def nextRegion(self, next=True, area=None):
         self.mapWindow.ClearLines()
@@ -255,18 +253,16 @@ class RLiSetupMapPanel(wx.Panel):
             )
 
     def writeArea(self, coords, rasterName):
-        polyfile = tempfile.NamedTemporaryFile(delete=False)
-        polyfile.write("AREA\n")
-        for coor in coords:
-            east, north = coor
-            point = " %s %s\n" % (east, north)
-            polyfile.write(point)
+        with tempfile.NamedTemporaryFile(delete=False) as polyfile:
+            polyfile.write("AREA\n")
+            for coor in coords:
+                east, north = coor
+                point = " %s %s\n" % (east, north)
+                polyfile.write(point)
+            catbuf = "=%d a\n" % self.catId
+            polyfile.write(catbuf)
+            self.catId += 1
 
-        catbuf = "=%d a\n" % self.catId
-        polyfile.write(catbuf)
-        self.catId += 1
-
-        polyfile.close()
         region_settings = grass.parse_command("g.region", flags="p", delimiter=":")
         pname = polyfile.name.split("/")[-1]
         tmpraster = "rast_" + pname
@@ -338,25 +334,23 @@ class RLiSetupMapPanel(wx.Panel):
         )
         ret = dlg.ShowModal()
         while True:
-            if ret == wx.ID_OK:
-                raster = dlg.GetValue()
-                if checkMapExists(raster):
-                    GMessage(
-                        parent=self,
-                        message=_(
-                            "The raster file %s already exists, please change name"
-                        )
-                        % raster,
-                    )
-                    ret = dlg.ShowModal()
-                else:
-                    dlg.Destroy()
-                    circle = self.writeCircle(c, raster)
-                    self.nextCircle(next=True, circle=circle)
-                    break
-            else:
+            if ret != wx.ID_OK:
                 self.nextCircle(next=False)
                 break
+
+            raster = dlg.GetValue()
+            if not checkMapExists(raster):
+                dlg.Destroy()
+                circle = self.writeCircle(c, raster)
+                self.nextCircle(next=True, circle=circle)
+                break
+
+            GMessage(
+                parent=self,
+                message=_("The raster file %s already exists, please change name")
+                % raster,
+            )
+            ret = dlg.ShowModal()
 
     def nextCircle(self, next=True, circle=None):
         self.mapWindow.ClearLines()

@@ -24,7 +24,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-""" Module images2ims
+"""Module images2ims
 
 Use PIL to create a series of images.
 
@@ -65,7 +65,7 @@ def checkImages(images):
                 images2.append(im)  # Ok
             elif im.dtype in [np.float32, np.float64]:
                 theMax = im.max()
-                if theMax > 128 and theMax < 300:
+                if 128 < theMax < 300:
                     pass  # assume 0:255
                 else:
                     im = im.copy()
@@ -120,10 +120,9 @@ def _getSequenceNumber(filename, part1, part2):
     # Get all numeric chars
     seq2 = ""
     for c in seq:
-        if c in digits:
-            seq2 += c
-        else:
+        if c not in digits:
             break
+        seq2 += c
     # Make int and return
     return int(seq2)
 
@@ -177,9 +176,7 @@ def writeIms(filename, images):
 
 
 def readIms(filename, asNumpy=True):
-    """readIms(filename, asNumpy=True)
-
-    Read images from a series of images in a single directory. Returns a
+    """Read images from a series of images in a single directory. Returns a
     list of numpy arrays, or, if asNumpy is false, a list if PIL images.
 
     :param filename:
