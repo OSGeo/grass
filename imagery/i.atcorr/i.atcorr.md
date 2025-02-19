@@ -45,7 +45,7 @@ different reference system.
 | 2    | **goes east** observation    | enter month, day, decimal hour (universal time-hh.ddd), n. of column, n. of line. (full scale 17000×12000) |
 | 3    | **goes west** observation    | enter month, day, decimal hour (universal time-hh.ddd), n. of column, n. of line. (full scale 17000×12000) |
 | 4    | **avhrr** (PM noaa)          | enter month, day, decimal hour (universal time-hh.ddd), n. of column(1-2048), xlonan, hna, give long.(xlonan) and overpass hour (hna) at the ascendant node at equator |
-| 5    | **avhrr** (AM noaa)          | enter month, day, decimal hour (universal time-hh.ddd) <br> n. of column(1-2048), xlonan, hna, give long.(xlonan) and overpass hour (hna) at the ascendant node at equator |
+| 5    | **avhrr** (AM noaa)          | enter month, day, decimal hour (universal time-hh.ddd), n. of column(1-2048), xlonan, hna, give long.(xlonan) and overpass hour (hna) at the ascendant node at equator |
 | 6    | **hrv** (spot)               | enter month, day, hh.ddd, long., lat. * |
 | 7    | **tm** (landsat)             | enter month, day, hh.ddd, long., lat. * |
 | 8    | **etm+** (landsat7)          | enter month, day, hh.ddd, long., lat. * |
@@ -180,7 +180,7 @@ simulation. Specifically:
 |------|---------|
 | -2 | Enter wlinf, wlsup. The filter function will be equal to 1 over the whole band (as iwave=0) but step by step output will be printed. |
 | -1 | Enter wl (monochr. cond, gaseous absorption is included). |
-| 0 | Enter wlinf, wlsup.<br />The filter function will be equal to 1 over the whole band. |
+| 0 | Enter wlinf, wlsup. The filter function will be equal to 1 over the whole band. |
 | 1 | Enter wlinf, wlsup and user's filter function s(lambda) by step of 0.0025 micrometer. |
 
 Pre-defined satellite bands:
