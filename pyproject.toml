@@ -373,7 +373,6 @@ ignore = [
 "scripts/i.spectral/i.spectral.py" = ["FLY002", "SIM115"]
 "scripts/m.proj/m.proj.py" = ["SIM115"]
 "scripts/r.fillnulls/r.fillnulls.py" = ["SIM115"]
-"scripts/r.in.srtm/r.in.srtm.py" = ["FLY002", "SIM115"]
 "scripts/r.in.wms/wms_*.py" = ["SIM115"]
 "scripts/r.tileset/r.tileset.py" = ["SIM115"]
 "scripts/v.*/v.*.py" = ["SIM115"]
