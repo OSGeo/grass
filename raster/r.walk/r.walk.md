@@ -9,7 +9,7 @@ map layer whose cell values represent friction cost.
 (time) of moving between each cell and the user-specified starting
 points and 2) a second raster map showing the movement direction to the
 next cell on the path back to the start point (see [Movement
-Direction](#move)). It uses an input elevation raster map whose cell
+Direction](#movement-direction)). It uses an input elevation raster map whose cell
 category values represent elevation, combined with a second input raster
 map whose cell values represent friction costs.
 

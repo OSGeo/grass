@@ -10,7 +10,7 @@ lowest total cost of traversing the space between each cell and the
 user-specified points (diagonal costs are multiplied by a factor that
 depends on the dimensions of the cell) and 2) a second raster map layer
 showing the movement direction to the next cell on the path back to the
-start point (see [Movement Direction](#move)). This module uses the
+start point (see [Movement Direction](#movement-direction)). This module uses the
 current geographic region settings. The **output** map will be of the
 same data format as the **input** map, integer or floating point.
 
@@ -20,7 +20,7 @@ The **input** *name* is the name of a raster map whose category values
 represent the surface cost. The **output** *name* is the name of the
 resultant raster map of cumulative cost. The **outdir** *name* is the
 name of the resultant raster map of movement directions (see [Movement
-Direction](#move)).
+Direction](#movement-direction)).
 
 *r.cost* can be run with three different methods of identifying the
 starting point(s). One or more points (geographic coordinate pairs) can
