@@ -1187,7 +1187,7 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
         G_message(
             _("Calculating map %01d of %01d (angle %.2f, raster map <%s>)"),
             (k + 1), arrayNumInt, angle_deg, shad_filename);
-        
+
         int j;
 
 #pragma omp parallel for schedule(static, 1) default(shared)

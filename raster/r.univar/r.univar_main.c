@@ -395,7 +395,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
             zd->bucket.fcells = NULL;
             zd->bucket.dcells = NULL;
         }
-    
+
 #pragma omp for
         for (row = 0; row < rows; row++) {
             thread_workspace *w = &tw[t_id];

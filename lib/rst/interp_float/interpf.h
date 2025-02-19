@@ -35,8 +35,8 @@ GRASS_INTERPFL_EXPORT struct Map_info Map2;
 GRASS_INTERPFL_EXPORT struct field_info *ff;
 GRASS_INTERPFL_EXPORT int count;
 #else
-GRASS_INTERPFL_EXPORT extern  struct line_pnts *Pnts;
-GRASS_INTERPFL_EXPORT extern  struct line_cats *Cats2;
+GRASS_INTERPFL_EXPORT extern struct line_pnts *Pnts;
+GRASS_INTERPFL_EXPORT extern struct line_cats *Cats2;
 GRASS_INTERPFL_EXPORT extern dbDriver *driver2;
 GRASS_INTERPFL_EXPORT extern dbString sql2;
 GRASS_INTERPFL_EXPORT extern struct Map_info Map2;
