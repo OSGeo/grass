@@ -59,8 +59,8 @@ extra_css:
 plugins:
   - search
   - glightbox
+  - tags
   # - social
-  # - tags
   # - git-revision-date-localized:
   #     enable_creation_date: true
   # - git-committers:

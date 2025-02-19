@@ -56,8 +56,9 @@ void usage_rest_md(bool rest)
     fprintf(stdout, "---\n");
     fprintf(stdout, "name: %s\n", st->pgm_name);
     fprintf(stdout, "description: %s\n", st->module_info.description);
-    fprintf(stdout, "keywords: ");
+    fprintf(stdout, "tags: [ ");
     G__print_keywords(stdout, NULL, FALSE);
+    fprintf(stdout, " ]");
     fprintf(stdout, "\n---\n\n");
 
     /* main header */
@@ -83,22 +84,6 @@ void usage_rest_md(bool rest)
         if (st->module_info.label)
             fprintf(stdout, "\n");
         fprintf(stdout, "%s\n", st->module_info.description);
-    }
-    fprintf(stdout, "\n");
-    if (!rest)
-        fprintf(stdout, "### ");
-    fprintf(stdout, "%s\n", _("KEYWORDS"));
-    if (rest)
-        fprintf(stdout, "--------\n");
-    fprintf(stdout, "\n");
-    if (st->module_info.keywords) {
-        if (rest) {
-            G__print_keywords(stdout, NULL, FALSE);
-            fprintf(stdout, "\n");
-        }
-        else {
-            G__print_keywords(stdout, print_escaped_for_md_keywords, TRUE);
-        }
     }
     fprintf(stdout, "\n");
     if (!rest)
