@@ -104,7 +104,7 @@
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
-import tempfile
+from pathlib import Path
 
 ############################################################################
 
@@ -164,23 +164,22 @@ def main():
             flags_ += "e"
 
         # Create the r.colors input file
-        with tempfile.NamedTemporaryFile(mode="w", delete=True) as temp_file:
-            temp_file.write("\n".join(str(row["id"]) for row in rows))
-            temp_file.flush()
+        filename = gs.tempfile(True)
+        Path(filename).write_text("\n".join(str(row["id"]) for row in rows))
 
-            try:
-                gs.run_command(
-                    "r.colors",
-                    flags=flags_,
-                    file=temp_file.name,
-                    color=color,
-                    raster=raster,
-                    volume=volume,
-                    rules=rules,
-                    overwrite=gs.overwrite(),
-                )
-            except CalledModuleError:
-                gs.fatal(_("Error in r.colors call"))
+        try:
+            gs.run_command(
+                "r.colors",
+                flags=flags_,
+                file=filename,
+                color=color,
+                raster=raster,
+                volume=volume,
+                rules=rules,
+                overwrite=gs.overwrite(),
+            )
+        except CalledModuleError:
+            gs.fatal(_("Error in r.colors call"))
 
 
 if __name__ == "__main__":
