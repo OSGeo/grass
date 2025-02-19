@@ -1,0 +1,47 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.ppa</em> allows users to perform point pattern analysis with the G, F, K, L, and bivariate Ripley's K functions.
+
+<h2>Notes</h2>
+
+<h2>EXAMPLES</h2>
+
+<h3>G Function</h3>
+Determine the distribution of distances from each point to its nearest neighbor to learn if the points are clustered, dispersed, or randomly distributed across the computational region.
+<div class="code"><pre>
+   v.ppa input=crash output=crash_g.csv method=g
+</pre></div>
+
+<br>
+<h3>F Function</h3>
+Determine the distribution of the distances from random points in the computational region to the points in the input vector map.
+This function is to determine if the points are clustered, dispersed, or randomly distributed across the computational region.
+The output file will contain the distances from the random points to the
+nearest crash location.
+<div class="code"><pre>
+   v.ppa input=crash output=crash_f.csv method=f
+</pre></div>
+
+<br>
+<h3>K and L Functions</h3>
+Determine if the points are clustered, dispersed, or randomly distributed across spatial scales in the compuational region.
+<div class="code"><pre>
+   v.ppa input=crash output=crash_k.csv method=k
+</pre></div>
+
+The <em>L-Function</em> is a transformation of the K-Function that allows for easier interpretation of the results.
+
+<ul>
+   <li>If L(r) is less than the expected value, the points are dispersed.</li>
+   <li>If L(r) is greater than the expected value, the points are clustered.</li>
+   <li>If L(r) is equal to the expected value, the points are randomly distributed (Poisson Process).</li>
+</ul>
+
+<div class="code"><pre>
+   v.ppa input=crash output=crash_l.csv method=l
+</pre></div>
+
+
+<h2>AUTHORS</h2>
+Corey T. White, OpenPlains Inc.
+<br>
