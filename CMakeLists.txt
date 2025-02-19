@@ -179,16 +179,6 @@ endif()
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${GRASS_INSTALL_LIBDIR}")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-#[[ Probably not needed, but leave it here in case...
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
-     "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
-if("${isSystemDir}" STREQUAL "-1")
-  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-endif()
-]]
-
 # TODO: a proper fix to this workaround
 if(WITH_FHS)
   file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_DEMODIR}
