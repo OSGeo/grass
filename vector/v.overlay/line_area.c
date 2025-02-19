@@ -473,6 +473,10 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
             Vect_write_line(Out, ltype, Points, OCats);
         }
     }
+    Vect_destroy_cats_struct(ACats);
+    Vect_destroy_cats_struct(Cats);
+    Vect_destroy_cats_struct(OCats);
+    Vect_destroy_line_struct(Points);
 
     return 0;
 }
