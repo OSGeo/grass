@@ -89,7 +89,7 @@ r.in.wms url="https://tiles.maps.eox.at/wms?" layers=s2cloudless output=sentinel
 r.info sentinel2
 ```
 
-[<img src="r_in_wms_sentinel2.jpg" width="600" height="531" />](r_in_wms_sentinel2.jpg)  
+![Raleigh (NC, USA) seen by Sentinel-2](r_in_wms_sentinel2.jpg)  
 *Figure: Raleigh (NC, USA) seen by Sentinel-2 (10m resolution; image
 courtesy: EOX)*
 

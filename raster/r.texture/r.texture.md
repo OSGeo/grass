@@ -250,7 +250,7 @@ direction, except for those areas where there are three columns of equal
 values (as size=3). The overlaid grid highlights that the texture
 measures output maps are cropped at the margins.
 
-<img src="r_texture_directions_example.png" data-border="1" />  
+![IDM textures according to direction](r_texture_directions_example.png)  
 *IDM textures according to direction*
 
 ## REFERENCES
