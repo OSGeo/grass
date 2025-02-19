@@ -9,12 +9,13 @@ DSTFILES := \
 	$(HTMLDIR)/grass_logo.svg \
 	$(HTMLDIR)/hamburger_menu.svg \
 	$(HTMLDIR)/hamburger_menu_close.svg \
-	$(HTMLDIR)/grass_icon.svg \
+	$(HTMLDIR)/grass_icon.png \
 	$(HTMLDIR)/jquery.fixedheadertable.min.js \
 	$(HTMLDIR)/parser_standard_options.css \
 	$(HTMLDIR)/parser_standard_options.js \
 	$(MDDIR)/mkdocs.yml \
 	$(MDDIR)/source/grass_logo.svg \
+	$(MDDIR)/source/favicon.ico \
 	$(MDDIR)/source/grassdocs.css \
 	$(MDDIR)/scripts/hook_list_scripts.py \
 	$(MDDIR)/overrides/partials/footer.html \
@@ -223,16 +224,13 @@ $(HTMLDIR)/grassdocs.css: grassdocs.css
 $(HTMLDIR)/grass_logo.svg: grass_logo.svg
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/grass_logo.svg: grass_logo.svg
-	$(INSTALL_DATA) $< $@
-
 $(HTMLDIR)/hamburger_menu.svg: hamburger_menu.svg
 	$(INSTALL_DATA) $< $@
 
 $(HTMLDIR)/hamburger_menu_close.svg: hamburger_menu_close.svg
 	$(INSTALL_DATA) $< $@
 
-$(HTMLDIR)/grass_icon.svg: grass_icon.svg
+$(HTMLDIR)/grass_icon.png: grass_icon.png
 	$(INSTALL_DATA) $< $@
 
 $(HTMLDIR)/jquery.fixedheadertable.min.js: jquery.fixedheadertable.min.js
@@ -245,6 +243,12 @@ $(HTMLDIR)/parser_standard_options.css: parser_standard_options.css
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/mkdocs.yml: mkdocs/mkdocs.yml
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/grass_logo.svg: grass_logo.svg
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/favicon.ico: favicon.ico
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css

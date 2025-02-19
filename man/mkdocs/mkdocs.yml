@@ -21,15 +21,12 @@ theme:
   custom_dir: overrides
   language: en
   logo: grass_logo.svg
-  favicon: grass_logo.svg
-  # logo: grass_icon.png
-  # favicon: grass-favicon-16x16.png
+  favicon: favicon.ico
   features:
     - search.suggest
     - search.highlight
     - content.code.copy
     - navigation.footer
-    # - navigation.sections
     - navigation.indexes
     # - navigation.expand
     - navigation.tabs
