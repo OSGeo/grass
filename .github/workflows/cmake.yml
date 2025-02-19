@@ -40,7 +40,7 @@ jobs:
               run: |
                 cd ${GITHUB_WORKSPACE}
                 arch=$(uname -s)-$(uname -m)
-                wget https://github.com/Kitware/CMake/releases/download/v3.16.0/cmake-3.16.0-${os}-${arch}.tar.gz
+                wget https://github.com/Kitware/CMake/releases/download/v3.16.0/cmake-3.16.0-${arch}.tar.gz
                 tar xzf cmake-${{ env.CMakeVersion }}-${arch}.tar.gz
                 echo "CMAKE_DIR=$GITHUB_WORKSPACE/cmake-${{ env.CMakeVersion }}-${arch}/bin" >> $GITHUB_ENV
                 echo "$GITHUB_WORKSPACE/cmake-${{ env.CMakeVersion }}-${arch}/bin" >> $GITHUB_PATH
