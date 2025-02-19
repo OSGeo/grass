@@ -30,9 +30,6 @@ class TestPointPatternAnalysis(TestCase):
         cls.runModule("g.remove", type="vector", flags="f", name=cls.input)
         cls.del_temp_region()
 
-    def tearDown(cls):
-        pass
-
     def test_g_function_csv(self):
         """Testing g function csv output"""
         self.assertModule(
