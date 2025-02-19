@@ -1,46 +1,75 @@
 :root > * {
 
-  /* GRASS Variables */
-  /* ----------------------------------------------------------------------------- */
-  --primary-color: rgba(76, 176, 91, 1); /* Dark green */
-  --primary-color--light: rgba(158, 210, 156, 1); /* Light green */
-  --primary-color--dark: rgba(8, 139, 54, 1); /* Dark green */
-  --primary-bg-color: rgb(255, 255, 255); /* White */
-  --primary-bg-color--dark: rgba(135, 135, 135, 0.1);
-  --support-color: rgb(243, 57, 138); /* Pink */
+  /* GRASS Variables
+  Use these variables to customize the GRASS theme.
+  ----------------------------------------------------------------------------- */
+  --gs-osgeo-blue: rgb(0, 58, 64); /* OSGeo Blue */
+  --gs-support-color: rgb(243, 57, 138); /* Pink */
+  --gs-white-color: rgb(255, 255, 255); /* White */
+  --gs-white-color--light: rgba(255, 255, 255, 0.541);
+  --gs-white-color--lighter: rgba(255, 255, 255, 0.322);
+  --gs-white-color--lightest: rgba(255, 255, 255, 0.071);
+  --gs-black-color: rgb(0, 0, 0); /* Black */
 
-  /* MkDocs Variables */
-  /* ----------------------------------------------------------------------------- */
+  --gs-primary-color: rgb(76, 176, 91); /* Dark green */
+  --gs-primary-color--light: rgba(76, 176, 91, 0.541);
+  --gs-primary-color--lighter: rgba(76, 176, 91, 0.322);
+  --gs-primary-color--lightest: rgba(76, 176, 91, 0.071);
+  --gs-primary-color-light: rgba(158, 210, 156, 1); /* Light green */
+  --gs-primary-color-light--light: rgba(158, 210, 156, 0.541);
+  --gs-primary-color-light--lighter: rgba(158, 210, 156, 0.322);
+  --gs-primary-color-light--lightest: rgba(158, 210, 156, 0.071);
+  --gs-primary-color-dark: rgba(8, 139, 54, 1); /* Dark green */
+  --gs-secondary-color: var(--gs-osgeo-blue); /* OSGeo Blue */
+  --gs-secondary-color--light: rgba(0, 58, 64, 0.541);
+  --gs-secondary-color--lighter: rgba(0, 58, 64, 0.322);
+  --gs-secondary-color--lightest: rgba(0, 58, 64, 0.071);
+  --gs-primary-bg-color: var(--gs-white-color); /* White */
+  --gs-primary-bg-color-dark: rgba(135, 135, 135, 0.1);
+
+
+
+  /* Material MkDocs Variables
+  Customization Docs:
+    https://squidfunk.github.io/mkdocs-material/customization/
+  Color Docs:
+    https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/?h=colors
+  Color Definitions for all CSS variables:
+    https://github.com/squidfunk/mkdocs-material/blob/master/src/templates/assets/stylesheets/main/_colors.scss
+  ----------------------------------------------------------------------------- */
 
   /* Default Colors */
   /* ----------------------------------------------------------------------------- */
   --md-default-fg-weight: 800;
 
-  /* Primary Colors */
+  /* Primary color shades */
   /* ----------------------------------------------------------------------------- */
-  --md-primary-fg-color:        var(--primary-color); /* Dark green */
-  --md-primary-fg-color--light: rgb(255, 255, 255);
-  --md-primary-fg-color--dark:  var(--primary-color--dark);
-  --md-primary-bg-color:        rgb(255, 255, 255); /* Includes color for the navbar text */
-  --md-primary-bg-color--light: rgba(255, 255, 255, 0.5);
+  --md-primary-fg-color:             var(--gs-primary-color); /* Dark green */
+  --md-primary-fg-color--light:      var(--gs-primary-color--light);
+  --md-primary-fg-color--dark:       var(--gs-primary-color-dark);
+  --md-primary-bg-color:             var(--gs-white-color); /* Includes color for the navbar text */
+  --md-primary-bg-color--light:      var(--gs-white-color--light);
 
   /* Accent Colors */
   /* ----------------------------------------------------------------------------- */
-  --md-accent-fg-color:              rgba(135, 160, 106, 1); /* Link color on hover */
-  --md-accent-fg-color--transparent: rgba(158,210,156, 0.1);
-  --md-accent-bg-color:              rgb(255, 255, 255);
-  --md-accent-bg-color--light:         var(--primary-color--light);
+  --md-accent-fg-color:              var(--gs-secondary-color); /* Link color on hover */
+  --md-accent-fg-color--transparent: var(--gs-secondary-color--light);
+  --md-accent-bg-color:              var(--gs-white-color);
+  --md-accent-bg-color--light:       var(--gs-primary-color--light);
 
   /* Footer */
   /* ----------------------------------------------------------------------------- */
-  --md-footer-bg-color:              rgba(255, 255, 255, 0.7);
-  --md-footer-bg-color--light:       rgb(229, 255, 233);
-  --md-footer-bg-color--dark:          var(--primary-color--dark);
+  --md-footer-fg-color:              var(--gs-secondary-color);
+  --md-footer-fg-color--light:       var(--gs-white-color);
+  --md-footer-fg-color--lighter:     var(--gs-white-color);
+  --md-footer-bg-color:              var(--gs-primary-color-light--lightest);;
+  --md-footer-bg-color--light:       var(--gs-primary-color-light--light);
+  --md-footer-bg-color--dark:        var(--gs-primary-color);
 
   /* Typeset Colors */
   /* ----------------------------------------------------------------------------- */
-  --md-typeset-a-color: var(--primary-color--dark); /* Link color */
-  --md-typeset-a-color--hover: rgba(135, 160, 106, 1); /* Not sure */
+  --md-typeset-a-color: var(--gs-secondary-color); /* Link color */
+  --md-typeset-a-color--hover: var(--gs-secondary-color--light); /* Not sure */
 
   /* Mermaid colors */
   /* ----------------------------------------------------------------------------- */
@@ -99,7 +128,6 @@
   --md-code-hl-generic-color: var(--md-default-fg-color--light);
   --md-code-hl-variable-color: var(--md-default-fg-color--light);
   --md-typeset-color: var(--md-default-fg-color);
-  --md-typeset-a-color: var(--md-primary-fg-color);
   --md-typeset-del-color: #f5503d26;
   --md-typeset-ins-color: #0bd57026;
   --md-typeset-kbd-color: #fafafa;
@@ -112,11 +140,6 @@
   --md-admonition-bg-color: var(--md-default-bg-color);
   --md-warning-fg-color: #000000de;
   --md-warning-bg-color: #ff9;
-  --md-footer-fg-color: #fff;
-  --md-footer-fg-color--light: #ffffffb3;
-  --md-footer-fg-color--lighter: #ffffff73;
-  --md-footer-bg-color: #000000de;
-  --md-footer-bg-color--dark: #00000052;
   --md-shadow-z1: 0 0.2rem 0.5rem #0000000d, 0 0 0.05rem #0000001a;
   --md-shadow-z2: 0 0.2rem 0.5rem #0000001a, 0 0 0.05rem #00000040;
   --md-shadow-z3: 0 0.2rem 0.5rem #0003, 0 0 0.05rem #00000059;
