@@ -1424,9 +1424,8 @@ Generate map as Postsript file:
 ps.map input=simple_map.txt output=simple_map.ps
 ```
 
-![](ps_map_basic.png)
-*Figure: Result of for the a simple Wake county terrain and roads
-example*
+![Figure: Result of the simple Wake county terrain and roads example](ps_map_basic.png)  
+*Figure: Result of the simple Wake county terrain and roads example*
 
 ### More complicated example
 
@@ -1502,7 +1501,7 @@ g.region raster=elevation
 ps.map input=elevation_map.txt output=elevation.ps
 ```
 
-![](ps_map.png)
+![Figure: Result of for the more complicated Wake county, NC example](ps_map.png)  
 *Figure: Result of for the more complicated Wake county, NC example*
 
 More examples can be found on the [GRASS
