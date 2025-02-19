@@ -6,7 +6,9 @@ space time raster datasets (STRDS) using the temporal raster algebra.
 The module expects an **expression** as input parameter in the following
 form:
 
-**"result = expression"**
+```sh
+"result = expression"
+```
 
 The statement structure is similar to that of [r.mapcalc](r.mapcalc.md).
 In this statement, **result** represents the name of the space time

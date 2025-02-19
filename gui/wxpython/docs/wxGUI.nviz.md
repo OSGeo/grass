@@ -334,7 +334,7 @@ Command-line module *[m.nviz.image](m.nviz.image.md)*.
 
 ## AUTHORS
 
-**The wxNviz GUI**
+### The wxNviz GUI
 
 [Martin Landa](http://geo.fsv.cvut.cz/gwiki/Landa), [Google Summer of
 Code 2008](https://grasswiki.osgeo.org/wiki/WxNviz_GSoC_2008) (mentor:
@@ -345,7 +345,7 @@ Anna Kratochvilova, [Google Summer of Code
 2011](https://grasswiki.osgeo.org/wiki/WxNviz_GSoC_2011) (mentor: Martin
 Landa)
 
-**The OGSF library and NVIZ engine**
+### The OGSF library and NVIZ engine
 
 NVIZ (GRASS's *n*-dimensional visualization suite) was written by Bill
 Brown, Terry Baker, Mark Astley, and David Gerdes, U.S. Army Corps of

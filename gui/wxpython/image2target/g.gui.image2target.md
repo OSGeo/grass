@@ -29,12 +29,12 @@ The GCP Manager is structured into three panels:
 
 ![GCP Manager](wxGUI_gcp_frame.jpg)
   
-*Toolbars*
+#### Toolbars
 
 Two toolbars are provided with the GCP Manager, one for managing the map
 displays and one for managing the GCP list.
 
-*List of ground control points*
+#### List of ground control points
 
 The list of Ground Control Points can be sorted by clicking on a column
 header. Clicking on a column header will sort the GCPs ascending, a
@@ -48,7 +48,7 @@ is only used for RMS error calculation and georectification if its
 checkbox on the left is checked. Uncheck to deactivate a GCP (mark as
 unused GCP).
 
-*Two panels for map display*
+#### Two panels for map display
 
 The left panel is used to display a map from the source project, the
 right panel to display a map from the target project. Zooming in and out
@@ -59,7 +59,7 @@ GCPs are displayed in different colors, depending on whether a GCP has a
 high RMS error, is currently unused or is currently selected.
 Optionally, currently unused GCPs are not shown on the map display.
 
-*Statusbar*
+#### Statusbar
 
 At the bottom of the GCP Manager is a statusbar providing several
 functions. The default is set to *Go to GCP No.* (see also below).
