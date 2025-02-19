@@ -24,11 +24,11 @@ Option **threshold** defines the minimum (optionally modified) flow
 accumulation value that will initiate a new stream. If Montgomery's
 method for channel initiation is used, the cell value of the
 accumulation input map is multiplied by
-`(tan(local slope))`<sup>`mexp`</sup> and then compared to
+`(tan(local slope))^mexp` and then compared to
 **threshold**. If **mexp** is given, then the method of Montgomery and
 Foufoula-Georgiou (1993) is used to initiate a stream with this value.
 The cell value of the accumulation input map is multiplied by
-`(tan(local slope))`<sup>`mexp`</sup> and then compared to
+`(tan(local slope))^mexp` and then compared to
 **threshold**. If threshold is reached or exceeded, a new stream is
 initiated. The default value 0 disables Montgomery. Montgomery and
 Foufoula-Georgiou (1993) generally recommend to use 2.0 as exponent.
@@ -174,16 +174,16 @@ r.mapcalc expr="elev_ned_30m.acc.weighed = elev_ned_30m.acc * weight"
 r.colors map=elev_ned_30m.acc.weighed raster=elev_ned_30m.acc
 ```
 
-[<img src="r_stream_extract_weights_zoom.png" width="400" />](r_stream_extract_weights_zoom.png)  
-Weight map (spatial subset with lake in the southern half)
+![Weight map](r_stream_extract_weights_zoom.png)  
+*Weight map (spatial subset with lake in the southern half)*
 
-[<img src="r_stream_extract_accum_orig_zoom.png" width="400" />](r_stream_extract_accum_orig_zoom.png)  
-Original flow accumulation map (spatial subset with lake in the southern
-half)
+![Original flow accumulation map](r_stream_extract_accum_orig_zoom.png)  
+*Original flow accumulation map (spatial subset with lake in the southern
+half)*
 
-[<img src="r_stream_extract_accum_weighted_zoom.png" width="400" />](r_stream_extract_accum_weighted_zoom.png)  
-Weighed flow accumulation map (spatial subset with lake in the southern
-half)
+![Weighed flow accumulation map](r_stream_extract_accum_weighted_zoom.png)  
+*Weighed flow accumulation map (spatial subset with lake in the southern
+half)*
 
 Display both the original and the weighed accumulation map. Compare them
 and proceed if the weighed accumulation map makes sense.
@@ -206,11 +206,11 @@ r.stream.extract elevation=elev_ned_30m@PERMANENT \
 
 Now display both stream maps and decide which one is more realistic.
 
-[<img src="r_stream_extract_streams_noweight.png" width="400" />](r_stream_extract_streams_noweight.png)  
-Extracted streams from original flow accumulation map
+![Extracted streams from original flow accumulation map](r_stream_extract_streams_noweight.png)  
+*Extracted streams from original flow accumulation map*
 
-[<img src="r_stream_extract_streams_weighed.png" width="400" />](r_stream_extract_streams_weighed.png)  
-Extracted streams from weighed flow accumulation map
+![Extracted streams from weighed flow accumulation map](r_stream_extract_streams_weighed.png)  
+*Extracted streams from weighed flow accumulation map*
 
 ## REFERENCES
 

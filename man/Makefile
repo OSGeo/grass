@@ -16,7 +16,9 @@ DSTFILES := \
 	$(MDDIR)/mkdocs.yml \
 	$(MDDIR)/source/grass_logo.svg \
 	$(MDDIR)/source/grassdocs.css \
-	$(MDDIR)/overrides/partials/footer.html
+	$(MDDIR)/scripts/hook_list_scripts.py \
+	$(MDDIR)/overrides/partials/footer.html \
+	$(MDDIR)/overrides/partials/actions.html
 
 categories = \
 	d:display \
@@ -248,7 +250,16 @@ $(MDDIR)/mkdocs.yml: mkdocs/mkdocs.yml
 $(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css
 	$(INSTALL_DATA) $< $@
 
+$(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/scripts:
+	$(MKDIR) $@
+
 $(MDDIR)/overrides/partials/footer.html: mkdocs/overrides/partials/footer.html | $(MDDIR)/overrides/partials
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/overrides/partials/actions.html: mkdocs/overrides/partials/actions.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/overrides/partials:

@@ -39,371 +39,77 @@ different reference system.
 
 ### A. Geometrical conditions
 
-<table data-border="1">
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><strong>Code</strong></td>
-<td><strong>Description</strong></td>
-<td><strong>Details</strong></td>
-</tr>
-<tr class="even">
-<td>1</td>
-<td><strong>meteosat</strong> observation</td>
-<td>enter month,day,decimal hour (universal time-hh.ddd)<br />
-                      n. of column,n. of line. (full scale
-5000*2500) </td>
-</tr>
-<tr class="odd">
-<td>2</td>
-<td><strong>goes east</strong> observation</td>
-<td>enter month,day,decimal hour (universal time-hh.ddd)<br />
-                      n. of column,n. of line. (full scale
-17000*12000)c</td>
-</tr>
-<tr class="even">
-<td>3</td>
-<td><strong>goes west</strong> observation</td>
-<td>enter month,day,decimal hour (universal time-hh.ddd)<br />
-                      n. of column,n. of line. (full scale
-17000*12000)</td>
-</tr>
-<tr class="odd">
-<td>4</td>
-<td><strong>avhrr</strong> (PM noaa)</td>
-<td>enter month,day,decimal hour (universal time-hh.ddd)<br />
-                      n. of column(1-2048),xlonan,hna<br />
-                      give long.(xlonan) and overpass hour (hna)
-at<br />
-                      the ascendant node at equator</td>
-</tr>
-<tr class="even">
-<td>5</td>
-<td><strong>avhrr</strong> (AM noaa)</td>
-<td>enter month,day,decimal hour (universal time-hh.ddd)<br />
-                      n. of column(1-2048),xlonan,hna<br />
-                      give long.(xlonan) and overpass hour (hna)
-at<br />
-                      the ascendant node at equator</td>
-</tr>
-<tr class="odd">
-<td>6</td>
-<td><strong>hrv</strong> (spot)</td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="even">
-<td>7</td>
-<td><strong>tm</strong> (landsat)</td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="odd">
-<td>8</td>
-<td><strong>etm+</strong> (landsat7)</td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="even">
-<td>9</td>
-<td><strong>liss</strong> (IRS 1C)</td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="odd">
-<td>10</td>
-<td><strong>aster</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="even">
-<td>11</td>
-<td><strong>avnir</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="odd">
-<td>12</td>
-<td><strong>ikonos</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="even">
-<td>13</td>
-<td><strong>RapidEye</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="odd">
-<td>14</td>
-<td><strong>VGT1 (SPOT4)</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="even">
-<td>15</td>
-<td><strong>VGT2 (SPOT5)</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="odd">
-<td>16</td>
-<td><strong>WorldView 2</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="even">
-<td>17</td>
-<td><strong>QuickBird</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="odd">
-<td>18</td>
-<td><strong>LandSat 8</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="even">
-<td>19</td>
-<td><strong>Geoeye 1</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="odd">
-<td>20</td>
-<td><strong>Spot6</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="even">
-<td>21</td>
-<td><strong>Spot7</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="odd">
-<td>22</td>
-<td><strong>Pleiades1A</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="even">
-<td>23</td>
-<td><strong>Pleiades1B</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="odd">
-<td>24</td>
-<td><strong>Worldview3</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="even">
-<td>25</td>
-<td><strong>Sentinel-2A</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="odd">
-<td>26</td>
-<td><strong>Sentinel-2B</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="even">
-<td>27</td>
-<td><strong>PlanetScope 0c 0d</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="odd">
-<td>28</td>
-<td><strong>PlanetScope 0e</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="even">
-<td>29</td>
-<td><strong>PlanetScope 0f 10</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="odd">
-<td>30</td>
-<td><strong>Worldview4</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="even">
-<td>31</td>
-<td><strong>AVIRIS</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="odd">
-<td>32</td>
-<td><strong>Hyperion VNIR</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-<tr class="even">
-<td>33</td>
-<td><strong>Hyperion SWIR</strong></td>
-<td>enter month,day,hh.ddd,long.,lat. *</td>
-</tr>
-</tbody>
-</table>
+| Code | Description                  | Details |
+|------|------------------------------|---------|
+| 1    | **meteosat** observation     | enter month, day, decimal hour (universal time-hh.ddd),  n. of column, n. of line. (full scale 5000×2500) |
+| 2    | **goes east** observation    | enter month, day, decimal hour (universal time-hh.ddd), n. of column, n. of line. (full scale 17000×12000) |
+| 3    | **goes west** observation    | enter month, day, decimal hour (universal time-hh.ddd), n. of column, n. of line. (full scale 17000×12000) |
+| 4    | **avhrr** (PM noaa)          | enter month, day, decimal hour (universal time-hh.ddd), n. of column(1-2048), xlonan, hna, give long.(xlonan) and overpass hour (hna) at the ascendant node at equator |
+| 5    | **avhrr** (AM noaa)          | enter month, day, decimal hour (universal time-hh.ddd) <br> n. of column(1-2048), xlonan, hna, give long.(xlonan) and overpass hour (hna) at the ascendant node at equator |
+| 6    | **hrv** (spot)               | enter month, day, hh.ddd, long., lat. * |
+| 7    | **tm** (landsat)             | enter month, day, hh.ddd, long., lat. * |
+| 8    | **etm+** (landsat7)          | enter month, day, hh.ddd, long., lat. * |
+| 9    | **liss** (IRS 1C)            | enter month, day, hh.ddd, long., lat. * |
+| 10   | **aster**                    | enter month, day, hh.ddd, long., lat. * |
+| 11   | **avnir**                    | enter month, day, hh.ddd, long., lat. * |
+| 12   | **ikonos**                   | enter month, day, hh.ddd, long., lat. * |
+| 13   | **RapidEye**                 | enter month, day, hh.ddd, long., lat. * |
+| 14   | **VGT1 (SPOT4)**             | enter month, day, hh.ddd, long., lat. * |
+| 15   | **VGT2 (SPOT5)**             | enter month, day, hh.ddd, long., lat. * |
+| 16   | **WorldView 2**              | enter month, day, hh.ddd, long., lat. * |
+| 17   | **QuickBird**                | enter month, day, hh.ddd, long., lat. * |
+| 18   | **LandSat 8**                | enter month, day, hh.ddd, long., lat. * |
+| 19   | **Geoeye 1**                 | enter month, day, hh.ddd, long., lat. * |
+| 20   | **Spot6**                    | enter month, day, hh.ddd, long., lat. * |
+| 21   | **Spot7**                    | enter month, day, hh.ddd, long., lat. * |
+| 22   | **Pleiades1A**               | enter month, day, hh.ddd, long., lat. * |
+| 23   | **Pleiades1B**               | enter month, day, hh.ddd, long., lat. * |
+| 24   | **Worldview3**               | enter month, day, hh.ddd, long., lat. * |
+| 25   | **Sentinel-2A**              | enter month, day, hh.ddd, long., lat. * |
+| 26   | **Sentinel-2B**              | enter month, day, hh.ddd, long., lat. * |
+| 27   | **PlanetScope 0c 0d**        | enter month, day, hh.ddd, long., lat. * |
+| 28   | **PlanetScope 0e**           | enter month, day, hh.ddd, long., lat. * |
+| 29   | **PlanetScope 0f 10**        | enter month, day, hh.ddd, long., lat. * |
+| 30   | **Worldview4**               | enter month, day, hh.ddd, long., lat. * |
+| 31   | **AVIRIS**                   | enter month, day, hh.ddd, long., lat. * |
+| 32   | **Hyperion VNIR**            | enter month, day, hh.ddd, long., lat. * |
+| 33   | **Hyperion SWIR**            | enter month, day, hh.ddd, long., lat. * |
 
-> *NOTE*: for HRV, TM, ETM+, LISS and ASTER experiments, longitude and
-> latitude are the coordinates of the scene center. Latitude must be \>
-> 0 for northern hemisphere and \< 0 for southern. Longitude must be \>
-> 0 for eastern hemisphere and \< 0 for western.
+*NOTE*: for HRV, TM, ETM+, LISS and ASTER experiments, longitude and
+latitude are the coordinates of the scene center. Latitude must be \>
+0 for northern hemisphere and \< 0 for southern. Longitude must be \>
+0 for eastern hemisphere and \< 0 for western.
 
 ### B. Atmospheric model
 
-<table data-border="1">
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><strong>Code</strong></td>
-<td><strong>Meaning</strong></td>
-</tr>
-<tr class="even">
-<td>0</td>
-<td>no gaseous absorption</td>
-</tr>
-<tr class="odd">
-<td>1</td>
-<td>tropical</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>midlatitude summer</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>midlatitude winter</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td>subarctic summer</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td>subarctic winter</td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td>us standard 62</td>
-</tr>
-<tr class="odd">
-<td>7</td>
-<td>Define your own atmospheric model as a set of the following 5
-parameters per each measurement:<br />
-<br />
-altitude [km]<br />
-pressure [mb]<br />
-temperature [k]<br />
-h2o density [g/m3]<br />
-o3 density [g/m3]<br />
-<br />
-For example: there is one radiosonde measurement for each altitude of
-0-25km at a step of 1km, one measurement for each altitude of 25-50km at
-a step of 5km, and two single measurements for altitudes 70km and 100km.
-This makes 34 measurements. In that case, there are 34*5 values to
-input.</td>
-</tr>
-<tr class="even">
-<td>8</td>
-<td>Define your own atmospheric model providing values of the water
-vapor and ozone content:<br />
-<br />
-uw [g/cm2]<br />
-uo3 [cm-atm]<br />
-<br />
-The profile is taken from us62.</td>
-</tr>
-</tbody>
-</table>
+| Code | Meaning |
+|------|---------|
+| 0 | no gaseous absorption |
+| 1 | tropical |
+| 2 | midlatitude summer |
+| 3 | midlatitude winter |
+| 4 | subarctic summer |
+| 5 | subarctic winter |
+| 6 | us standard 62 |
+| 7 | Define your own atmospheric model as a set of the following 5 parameters per each measurement: altitude [km], pressure [mb], temperature [k], h2o density [g/m³], o3 density [g/m³]. For example: there is one radiosonde measurement for each altitude of 0-25km at a step of 1km, one measurement for each altitude of 25-50km at a step of 5km, and two single measurements for altitudes 70km and 100km. This makes 34 measurements. In that case, there are 34*5 values to input. |
+| 8 | Define your own atmospheric model providing values of the water vapor and ozone content: uw [g/cm²], uo3 [cm-atm]. The profile is taken from us62.|
 
 ### C. Aerosols model
 
-<table data-border="1">
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><strong>Code</strong></td>
-<td><strong>Meaning</strong></td>
-<td><strong>Details</strong></td>
-</tr>
-<tr class="even">
-<td>0</td>
-<td>no aerosols</td>
-<td> </td>
-</tr>
-<tr class="odd">
-<td>1</td>
-<td>continental model</td>
-<td> </td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>maritime model</td>
-<td> </td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>urban model</td>
-<td> </td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td>shettle model for background desert aerosol</td>
-<td> </td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td>biomass burning</td>
-<td> </td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td>stratospheric model</td>
-<td> </td>
-</tr>
-<tr class="odd">
-<td>7</td>
-<td>define your own model</td>
-<td>Enter the volumic percentage of each component:<br />
-<br />
-c(1) = volumic % of dust-like<br />
-c(2) = volumic % of water-soluble<br />
-c(3) = volumic % of oceanic<br />
-c(4) = volumic % of soot<br />
-<br />
-All values should be between 0 and 1.</td>
-</tr>
-<tr class="even">
-<td>8</td>
-<td>define your own model</td>
-<td>Size distribution function: Multimodal Log Normal (up to 4
-modes).</td>
-</tr>
-<tr class="odd">
-<td>9</td>
-<td>define your own model</td>
-<td>Size distribution function: Modified gamma.</td>
-</tr>
-<tr class="even">
-<td>10</td>
-<td>define your own model</td>
-<td>Size distribution function: Junge Power-Law.</td>
-</tr>
-<tr class="odd">
-<td>11</td>
-<td>define your own model</td>
-<td>Sun-photometer measurements, 50 values max, entered as:<br />
-<br />
-r and d V / d (logr)<br />
-<br />
-where r is the radius [micron], V is the volume, d V / d (logr)
-[cm3/cm2/micron].<br />
-<br />
-Followed by:<br />
-<br />
-nr and ni for each wavelength<br />
-<br />
-where nr and ni are respectively the real and imaginary part of the
-refractive index.</td>
-</tr>
-</tbody>
-</table>
+| Code | Meaning | Details |
+|------|---------|---------|
+| 0 | no aerosols |  |
+| 1 | continental model |  |
+| 2 | maritime model |  |
+| 3 | urban model |  |
+| 4 | shettle model for background desert aerosol |  |
+| 5 | biomass burning |  |
+| 6 | stratospheric model |  |
+| 7 | define your own model | Enter the volumic percentage of each component: c(1) = volumic % of dust-like, c(2) = volumic % of water-soluble, c(3) = volumic % of oceanic, c(4) = volumic % of soot. All values should be between 0 and 1. |
+| 8 | define your own model | Size distribution function: Multimodal Log Normal (up to 4 modes). |
+| 9 | define your own model | Size distribution function: Modified gamma. |
+| 10 | define your own model | Size distribution function: Junge Power-Law. |
+| 11 | define your own model | Sun-photometer measurements, 50 values max, entered as:r and dV/d(logr) where r is the radius [micron], V is the volume, dV/d(logr) [cm³/cm²/micron]. Followed by: nr and ni for each wavelength where nr and ni are respectively the real and imaginary part of the refractive index. |
 
 ### D. Aerosol concentration model (visibility)
 
@@ -470,44 +176,17 @@ simulation. Specifically:
 - wlsup: This represents the upper wavelength limit (or maximum
   wavelength) of the spectral band for the simulation.
 
-<table data-border="1">
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><strong>Code</strong></td>
-<td><strong>Meaning</strong></td>
-</tr>
-<tr class="even">
-<td>-2</td>
-<td>Enter wlinf, wlsup.<br />
-The filter function will be equal to 1 over the whole band (as iwave=0)
-but step by step output will be printed.</td>
-</tr>
-<tr class="odd">
-<td>-1</td>
-<td>Enter wl (monochr. cond, gaseous absorption is included).</td>
-</tr>
-<tr class="even">
-<td>0</td>
-<td>Enter wlinf, wlsup.<br />
-The filter function will be equal to 1 over the whole band.</td>
-</tr>
-<tr class="odd">
-<td>1</td>
-<td>Enter wlinf, wlsup and user's filter function s (lambda) by step of
-0.0025 micrometer.</td>
-</tr>
-</tbody>
-</table>
+| Code | Meaning |
+|------|---------|
+| -2 | Enter wlinf, wlsup. The filter function will be equal to 1 over the whole band (as iwave=0) but step by step output will be printed. |
+| -1 | Enter wl (monochr. cond, gaseous absorption is included). |
+| 0 | Enter wlinf, wlsup.<br />The filter function will be equal to 1 over the whole band. |
+| 1 | Enter wlinf, wlsup and user's filter function s(lambda) by step of 0.0025 micrometer. |
 
 Pre-defined satellite bands:
 
-|          |                                                     |
+|   Code   |         Band name (peak response)                   |
 |----------|-----------------------------------------------------|
-| **Code** | **Band name (peak response)**                       |
 | 2        | **meteosat** vis band (0.350-1.110)                 |
 | 3        | **goes east** band vis (0.490-0.900)                |
 | 4        | **goes west** band vis (0.490-0.900)                |
@@ -747,7 +426,7 @@ Carolina project. The computational region was set to the extent of the
 individual bands (*B01-B12*) that we want to apply the atmospheric
 correction to. The following steps are applied to each band separately.
 
-**Create the parameters file for i.atcorr**
+#### Create the parameters file for i.atcorr
 
 In the first step we create a file containing the 6S parameters for a
 particular scene and band. To create a 6S file, we need to obtain the
@@ -851,7 +530,7 @@ text file, for example `params_B02.txt`.
 167
 ```
 
-**Compute atmospheric correction**
+#### Compute atmospheric correction
 
 In the next step we run *i.atcorr* for the selected band *B02* of our
 Sentinel 2 scene. We have to specify the following parameters:
@@ -986,7 +665,7 @@ r.mapcalc "lsat7_2002_40_rad = ((241.1 - (-5.1)) / (255.0 - 1.0)) * (lsat7_2002_
 Again, the *r.mapcalc* calculation is only needed when working with
 satellite data other than Landsat or ASTER.
 
-#### Create the parameters file for i.atcorr
+#### Create the parameters file for i.atcorr for Landsat
 
 The underlying 6S model is parametrized through a control file,
 indicated with the **parameters** option. This is a text file defining

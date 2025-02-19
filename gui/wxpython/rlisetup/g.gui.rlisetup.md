@@ -36,8 +36,6 @@ Definition of region for analysis:
 
 The startup window shows your configuration files, you can:
 
-**TODO: description below needs further updates**
-
 1. ***View/Edit*** (Load a file) from the shown list: the configuration
     is shown in a small text editor window. Configuration files are
     saved in the folder `C:\Users\userxy\AppData\Roaming\GRASS8\r.li\`
