@@ -1,0 +1,116 @@
+---
+name: Ubuntu
+
+# Build documentation
+
+on:
+  push:
+    branches:
+      - main
+      - releasebranch_*
+  pull_request:
+
+permissions: {}
+
+jobs:
+  ubuntu:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+      cancel-in-progress: true
+
+    runs-on: ubuntu-22.04
+    env:
+      PYTHONWARNINGS: always
+
+    steps:
+      - name: Checkout core
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: OSGeo/grass
+          ref: ${{ matrix.grass-version }}
+          path: grass
+
+      - name: Checkout addons
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          path: grass-addons
+
+      - name: Get dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y wget git gawk findutils
+          xargs -a <(awk '! /^ *(#|$)/' "grass/.github/workflows/apt.txt") -r -- \
+              sudo apt-get install -y --no-install-recommends --no-install-suggests
+
+      - name: Create installation directory
+        run: |
+          mkdir "$HOME/install"
+
+      - name: Set number of cores for compilation
+        run: |
+          echo "MAKEFLAGS=-j$(nproc)" >> "$GITHUB_ENV"
+
+      - name: Set LD_LIBRARY_PATH for compilation
+        run: |
+          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> "$GITHUB_ENV"
+
+      - name: Build core
+        run: |
+          cd grass
+          ../grass/.github/workflows/build_ubuntu-22.04.sh "$HOME/install"
+
+      - name: Add the bin directory to PATH
+        run: |
+          echo "$HOME/install/bin" >> "$GITHUB_PATH"
+
+      - name: Print installed versions
+        if: always()
+        run: .github/workflows/print_versions.sh
+
+      - name: Test executing of the grass command
+        run: .github/workflows/test_simple.sh
+
+      - name: Compile addons
+        continue-on-error: true
+        run: |
+          cd grass
+          eval $(./utils/update_version.py status --bash)
+          cd ..
+          ./grass-addons/utils/cronjobs_osgeo_lxd/compile_addons_git.sh \
+            "$MAJOR" \
+            "$MINOR" \
+            $(pwd)/grass-addons/src \
+            $(grass --config path) \
+            $(pwd)/addons-build-dir \
+            grass
+
+      - name: Create env variable
+        run: |
+          echo "echo MKDOCS_DIR=$(grass --config path)/docs/mkdocs" >> "$GITHUB_ENV"
+
+      - name: Compile addons
+        continue-on-error: true
+        run: |
+          mkdir -p "$MKDOCS_DIR/source/addons"
+          mv addons-build-dir/docs/md/source/* "$MKDOCS_DIR/source/addons"
+
+      - name: Get mkdocs
+        run: |
+          pip install -r "grass/man/mkdocs/requirements.txt"
+
+      - name: Run mkdocs
+        run: |
+          cd grass
+          eval $(./utils/update_version.py status --bash)
+          cd ..
+          export SITE_NAME="GRASS GIS $(VERSION) Reference Manual"
+          export COPYRIGHT="&copy; 2003-$(YEAR) GRASS Development Team, GRASS GIS $(VERSION) Reference Manual"
+          cd $MKDOCS_DIR
+          mkdocs build
+
+      - name: Make HTML test report available
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        with:
+          name: mkdocs-site-${{ matrix.os }}-${{ matrix.config }}-${{ matrix.extra-include }}
+          path: ${{ env.MKDOCS_DIR }}/site
+          retention-days: 3
