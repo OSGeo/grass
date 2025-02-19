@@ -1,14 +1,9 @@
 {% if page.edit_url %}
 
     {% set toolname = page.file.src_path.split("/")[-1] | replace(".md", "") %}
-
     {# Default to the normal edit URL #}
-    {% set custom_edit_url = page.edit_url %}
-    {% set ghpath = github_path(toolname, config.extra.scripts_tools) %}
-    <!-- {{ "ghpath: " ~ ghpath }}<br>
-    {{ "toolname: " ~ toolname }}<br> -->
+    {% set ghpath = github_path(toolname, config.extra.source_docs) %}
     {% if ghpath %}
-        {% set custom_edit_url = page.edit_url ~ ghpath %}
         {% set custom_edit_url = page.edit_url | replace(toolname, ghpath ~ "/" ~ toolname) %}
         {% if "content.action.edit" in features %}
             <a href="{{ custom_edit_url }}" title="{{ lang.t('action.edit') }}" class="md-content__button md-icon">
