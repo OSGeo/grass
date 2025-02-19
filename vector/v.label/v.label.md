@@ -95,8 +95,8 @@ The text can be highlighted in another color so that it appears to be in
 two colors. The text is drawn first in this color at a wider line width,
 and then redrawn in the text color at the regular line width. No
 highlight color ("`none`") is used by default, if unspecified by the
-user. To specify use of no highlight color, specify "`none`". (See [TEXT
-COLOR](#textcolor) above for a list of permissible color names.)
+user. To specify use of no highlight color, specify "`none`". (See TEXT
+COLOR above for a list of permissible color names.)
 
 **HIGHLIGHT WIDTH**:  
 Specifies how far from the text lines (in units of pixels) the highlight
@@ -106,13 +106,13 @@ highlight color).
 **BACKGROUND COLOR**:  
 Text may be boxed in a solid color by specifying a background color.
 Specify "`none`" for no background. The default background color
-setting, if unspecified by the user, is *white*. (See [TEXT
-COLOR](#textcolor) above for a list of permissible color names.)
+setting, if unspecified by the user, is *white*. (See TEXT
+COLOR above for a list of permissible color names.)
 
 **BORDER COLOR**:  
 Select a color for the border around the background. Specify "`none`" to
 suppress the border. The default border color used, if unspecified, is
-*black*. (See [TEXT COLOR](#textcolor) above for a list of permissible
+*black*. (See TEXT COLOR above for a list of permissible
 color names.)
 
 **OPAQUE TO VECTORS**:  
