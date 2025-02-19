@@ -23,21 +23,18 @@ category.
 
 ### Basic outlier removal
 
+In this case, a basic outlier removal is done with a threshold of 25 m:
+
 ```sh
 v.outlier input=vector_map output=vector_output outlier=vector_outlier thres_O=25
 ```
 
-In this case, a basic outlier removal is done with a threshold of 25 m.
-
-### Basic outlier removal
+Now, the outlier removal uses the default threshold and there is also an
+output vector available for visualizaton in QGIS:
 
 ```sh
 v.outlier input=vector_map output=vector_output outlier=vector_outlier qgis=vector_qgis
 ```
-
-Now, the outlier removal uses the default threshold and there is also an
-output vector available for visualizaton in QGIS
-(<http://www.qgis.org>).
 
 ### North Carolina dataset example
 

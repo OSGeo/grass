@@ -27,14 +27,14 @@ The GCP Manager is structured into three panels:
 
 ### Components of the GCP Manager
 
-<img src="wxGUI_gcp_frame.jpg" data-border="0" alt="GCP Manager" />  
+![GCP Manager](wxGUI_gcp_frame.jpg)
   
-*Toolbars*
+#### Toolbars
 
 Two toolbars are provided with the GCP Manager, one for managing the map
 displays and one for managing the GCP list.
 
-*List of ground control points*
+#### List of ground control points
 
 The list of Ground Control Points can be sorted by clicking on a column
 header. Clicking on a column header will sort the GCPs ascending, a
@@ -48,7 +48,7 @@ is only used for RMS error calculation and georectification if its
 checkbox on the left is checked. Uncheck to deactivate a GCP (mark as
 unused GCP).
 
-*Two panels for map display*
+#### Two panels for map display
 
 The left panel is used to display a map from the source project, the
 right panel to display a map from the target project. Zooming in and out
@@ -59,7 +59,7 @@ GCPs are displayed in different colors, depending on whether a GCP has a
 high RMS error, is currently unused or is currently selected.
 Optionally, currently unused GCPs are not shown on the map display.
 
-*Statusbar*
+#### Statusbar
 
 At the bottom of the GCP Manager is a statusbar providing several
 functions. The default is set to *Go to GCP No.* (see also below).
@@ -68,29 +68,29 @@ given GCP, useful with a high zoom.
 
 #### GCP Map Display Toolbar
 
-![icon](icons/show.png)  *Display map*  
+![icon](icons/show.png)  *Display map*:
 Displays maps for source and target canvas and re-renders any layers
 that have changed since the last time the display was updated.
 
-![icon](icons/layer-redraw.png)  *Re-render map*  
+![icon](icons/layer-redraw.png)  *Re-render map*:
 Re-renders both source and target canvas regardless of whether they have
 changed or not.
 
-![icon](icons/erase.png)  *Erase display*  
+![icon](icons/erase.png)  *Erase display*:
 Erases both source and target canvas to a white background.
 
-![icon](icons/gcp-create.png)  *Define GCP (Ground Control Points)*  
+![icon](icons/gcp-create.png)  *Define GCP (Ground Control Points)*:
 On left mouse click, coordinates are defined for the currently selected
 GCP.
 
-![icon](icons/pan.png)  *Pan*  
+![icon](icons/pan.png)  *Pan*:
 Interactive selection of a new center of view in the active display
 monitor. Drag the pan cursor while pressing the left mouse button to
 pan. Alternatively left-click on the new center. Panning changes the
 location of the region displayed but not the size of the area displayed
 or the resolution.
 
-![icon](icons/zoom-in.png)  *Zoom in*  
+![icon](icons/zoom-in.png)  *Zoom in*:
 Interactive zooming with the mouse in the active map canvas (source or
 target). Drawing a box or just a left click with the mouse and zoom-in
 cursor causes the display to zoom in so that the area defined by the box
@@ -99,7 +99,7 @@ zoom-in cursor causes the display to zoom in by 30%, centered on the
 point where the mouse is clicked. Zooming changes the display region
 extents (both size and location of area displayed).
 
-![icon](icons/zoom-out.png)  *Zoom out*  
+![icon](icons/zoom-out.png)  *Zoom out*:
 Interactive zooming with the mouse in the active map canvas (source or
 target). Drawing a box or just a left click with the mouse and zoom-out
 cursor causes the display to zoom out so that the area displayed shrinks
@@ -108,43 +108,43 @@ Clicking with the zoom-out cursor causes the display to zoom out by 30%,
 centered on the point where the mouse is clicked. Zooming changes the
 display region extents (both size and location of area displayed).
 
-![icon](icons/zoom-more.png)  *Adjust display zoom*  
+![icon](icons/zoom-more.png)  *Adjust display zoom*:
 Source and target display are adjusted by using the current GCPs for
 coordinate transformation:  
   
-*Adjust source display to target display*  
+- *Adjust source display to target display*:
 The extents of the source display are adjusted to the current extents of
 the target display.
 
-*Adjust target display to source display*  
+- *Adjust target display to source display*:
 The extents of the source display are adjusted to the current extents of
 the target display.
 
-*Set active map canvas*  
+*Set active map canvas*:
 Sets the currently active map canvas (source or target). Click to set
 active map canvas for *Return to previous zoom* or *Zoom to extent of
 currently displayed map*. Alternatively, move the mouse over the map
 canvas to be used as active canvas.
 
-![icon](icons/zoom-last.png)  *Return to previous zoom*  
+![icon](icons/zoom-last.png)  *Return to previous zoom*:
 Returns to the previous zoom extent. Up to 10 levels of zoom back are
 maintained.
 
-![icon](icons/zoom-extent.png)  *Zoom to extent of currently displayed map*  
+![icon](icons/zoom-extent.png)  *Zoom to extent of currently displayed map*:
 Zoom to the extent of the currently displayed map in the active map
 canvas (source or target).
 
-![icon](icons/settings.png)  *Settings*  
+![icon](icons/settings.png)  *Settings*:
 Shows a settings dialog for GCP management and display:  
   
-*Symbology*  
+- *Symbology*:
 Settings for map and GCP display:  
   
-*Highlight highest RMS error only*  
+  - *Highlight highest RMS error only*:
 Only the GCP with the highest RMS error will be displayed in a different
 colour, both in the list of GCPs and the GCP Map Display.
 
-*Factor for RMS error threshold = M + SD \* factor:*  
+  - *Factor for RMS error threshold = M + SD \* factor:*
 All GCPs with an RMS error larger than mean RMS + RMS standard deviation
 \* this factor will be displayed in a different colour, both in the list
 of GCPs and the GCP Map Display. As a rule of thumb, GCPs with an RMS
@@ -153,77 +153,77 @@ RMS error larger than *M + SD \* 1* are worth closer inspection. This
 option is only available if *Highlight highest RMS error only* is
 unchecked.
 
-*Color*  
+  - *Color*:
 Set the color for GCPs on the GCP Map Display.
 
-*Color for high RMS error*  
+  - *Color for high RMS error*:
 Set the color for GCPs with a high RMS error on the GCP Map Display.
 
-*Color for selected GCP*  
+  - *Color for selected GCP*:
 Set the color for the currently selected GCP on the GCP Map Display.
 
-*Show unused GCPs*  
+  - *Show unused GCPs*:
 If unchecked, unused GCPs will not be shown on the GCP Map Display.
 
-*Color for unused GCPs*  
+  - *Color for unused GCPs*:
 Set the color for unused GCPs on the GCP Map Display.
 
-*Symbol size*  
+  - *Symbol size*:
 Set the symbol size for GCPs on the GCP Map Display.
 
-*Line width*  
+  - *Line width*:
 Set the line width for GCPs on the GCP Map Display.
 
-*Select source map to display*  
+  - *Select source map to display*:
 Select a source map for the left pane of the GCP Map Display.
 
-*Select target map to display*  
+  - *Select target map to display*:
 Select a target map for the right pane of the GCP Map Display.
 
-*Rectification*  
+- *Rectification*:
 Settings for georectification:  
   
-*Select rectification method*  
+  - *Select rectification method*:
 Set the polynomial order for georectification. This order will also be
 used for RMS error calculation.
 
-*Clip to computational region in target project*  
+  - *Clip to computational region in target project*:
 Clip raster maps to the current computational region in the target
 project when georectifying.
 
-*Extension for output maps*  
+  - *Extension for output maps*:
 Change the extension for output map names when doing the actual
 georectification.
 
-![icon](icons/help.png)  *Show Help*  
+![icon](icons/help.png)  *Show Help*:
 Show help page for the GCP Manager.
 
-![icon](icons/quit.png)  *Quit*  
+![icon](icons/quit.png)  *Quit*:
 Quit the GCP Manager.
 
 #### Toolbar for the GCP list
 
-![icon](icons/gcp-save.png)  *Save GCPs to POINTS file*  
+![icon](icons/gcp-save.png)  *Save GCPs to POINTS file*:
 The current list of GCPs is saved to the imagery group's POINTS file and
 to a backup copy.
 
-![icon](icons/gcp-add.png)  *Add new GCP*  
+![icon](icons/gcp-add.png)  *Add new GCP*:
 Adds a new Ground Control Point to the list and selects it for editing.
 
-![icon](icons/gcp-delete.png)  *Delete selected GCP*  
+![icon](icons/gcp-delete.png)  *Delete selected GCP*:
 Deletes the currently selected GCP from the list.
 
-![icon](icons/gcp-remove.png)  *Clear selected GCP*  
+![icon](icons/gcp-remove.png)  *Clear selected GCP*:
 Resets all coordinates of the currently selected GCP to 0 (zero).
 
-![icon](icons/reload.png)  *Reload GCPs from POINTS file*  
+![icon](icons/reload.png)  *Reload GCPs from POINTS file*:
 Reloads GCPs from the imagery group's POINTS file.
 
-![icon](icons/gcp-rms.png)  *Recalculate RMS error*  
+![icon](icons/gcp-rms.png)  *Recalculate RMS error*:
 Recalculates forward and backward RMS error for all GCP marked for use
 (activated checkbox in first row).
 
-![icon](icons/georectify.png)  *Georectify*  
+![icon](icons/georectify.png)  *Georectify*:
 Uses *[i.rectify](i.rectify.md)* to georectify all images in the source
 imagery group.
 

@@ -16,7 +16,9 @@ DSTFILES := \
 	$(MDDIR)/mkdocs.yml \
 	$(MDDIR)/source/grass_logo.png \
 	$(MDDIR)/source/grassdocs.css \
-	$(MDDIR)/overrides/partials/footer.html
+	$(MDDIR)/scripts/hook_list_scripts.py \
+	$(MDDIR)/overrides/partials/footer.html \
+	$(MDDIR)/overrides/partials/actions.html
 
 categories = \
 	d:display \
@@ -38,11 +40,11 @@ IDXSRC = full_index index topics keywords graphical_index manual_gallery class_g
 
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
-IDXSRC_MD = full_index index topics keywords graphical_index manual_gallery parser_standard_options $(IDXCATS)
+IDXSRC_MD = full_index index topics keywords graphical_index manual_gallery class_graphical parser_standard_options $(IDXCATS)
 INDICES_MD := $(patsubst %,$(MDDIR)/source/%.md,$(IDXSRC_MD))
 
 ALL_HTML := $(wildcard $(HTMLDIR)/*.*.html)
-ALL_MD := $(wildcard $(MDDIR)/source/*.*.html)
+ALL_MD := $(wildcard $(MDDIR)/source/*.*.md)
 
 ifneq (@(type sphinx-build2 > /dev/null),)
 SPHINXBUILD   = sphinx-build2
@@ -125,7 +127,13 @@ $(MDDIR)/source/topics.md: $(ALL_MD)
 define build_class_graphical
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
-	$(PYTHON) ./build_class_graphical.py $(HTMLDIR)
+	$(PYTHON) ./build_class_graphical.py html $(HTMLDIR)
+endef
+
+define build_class_graphical_md
+GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
+	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
+	$(PYTHON) ./build_class_graphical.py md $(MDDIR)/source
 endef
 
 $(HTMLDIR)/topics.html: $(ALL_HTML) build_topics.py
@@ -187,6 +195,11 @@ $(HTMLDIR)/class_graphical.html: $(ALL_HTML)
 	$(call build_class_graphical)
 	touch $@
 
+# TODO: this should be done in the same way as category_rule
+$(MDDIR)/source/class_graphical.md: $(ALL_MD)
+	$(call build_class_graphical_md)
+	touch $@
+
 define category_rule
 $$(HTMLDIR)/$(2).html: $$(wildcard $$(HTMLDIR)/$(1).*.html) build_class.py build_html.py
 	$$(call build,class,$(1) $(2))
@@ -237,7 +250,16 @@ $(MDDIR)/mkdocs.yml: mkdocs/mkdocs.yml
 $(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css
 	$(INSTALL_DATA) $< $@
 
+$(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/scripts:
+	$(MKDIR) $@
+
 $(MDDIR)/overrides/partials/footer.html: mkdocs/overrides/partials/footer.html | $(MDDIR)/overrides/partials
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/overrides/partials/actions.html: mkdocs/overrides/partials/actions.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/overrides/partials:
@@ -247,3 +269,8 @@ build-mkdocs:
 	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
 	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
 	mkdocs build
+
+serve-mkdocs:
+	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	mkdocs serve

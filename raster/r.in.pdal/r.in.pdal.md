@@ -471,8 +471,7 @@ r.in.pdal input="Serpent Mound Model LAS Data.laz" \
            output=Serpent_Mound_Model_LAS_Data method=mean
 ```
 
-![](r_in_lidar.png)
-
+![Elevation for the whole area of Serpent Mound dataset](r_in_lidar.png)  
 *Figure: Elevation for the whole area of Serpent Mound dataset*
 
 ### Height above ground

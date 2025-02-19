@@ -7,9 +7,6 @@
 
 ## DESCRIPTION
 
-Note: **wxNviz is currently under development. Not all planned
-functionality is already implemented.**
-
 **wxNviz** is a *[wxGUI](wxGUI.md)* **3D view mode** which allows users
 to realistically render multiple *surfaces* (2D raster maps) in a 3D
 space, optionally using thematic coloring, draping 2D *vector* data or
@@ -37,16 +34,16 @@ display mode.
 
 ## 3D View Toolbar
 
-<img src="wxGUI_nviz_toolbar.jpg" data-border="1" alt="toolbar" />  
-  
-![icon](icons/script-save.png)  *Generate command for m.nviz.image*  
+![toolbar](wxGUI_nviz_toolbar.jpg)
+
+![icon](icons/script-save.png)  *Generate command for m.nviz.image*:
 Generate command for m.nviz.image based on current state.
 
-![icon](icons/settings.png)  *Show 3D view mode settings*  
+![icon](icons/settings.png)  *Show 3D view mode settings*:
 Show dialog with settings for wxGUI 3D view mode. The user settings can
 be stored in wxGUI settings file.
 
-![icon](icons/help.png)  *Show help*  
+![icon](icons/help.png)  *Show help*:
 Show this help.
 
 ## 3D View Layer Manager Toolbox
@@ -78,8 +75,8 @@ panel (following label *Look:*):
 - *top* moves the current eye position above the map center.
 - *reset* returns all current view settings to their default values.
 
-<img src="wxGUI_nviz_tools_view.jpg" data-border="1" alt="toolbox" />  
-  
+![toolbox](wxGUI_nviz_tools_view.jpg)
+
 You can adjust the viewer's height above the scene, perspective and
 twist value to rotate the scene about the horizontal axis. An angle of 0
 is flat. The scene rotates between -90 and 90 degrees.
@@ -158,8 +155,8 @@ In the very bottom part of the panel position of surface can be set. To
 move the surface right (looking from the south) choose *X* axis and set
 some positive value. To reset the surface position press *Reset* button.
 
-<img src="wxGUI_nviz_tools_surface.jpg" data-border="1" alt="toolbox" />  
-  
+![wxGUI nviz tools surface](wxGUI_nviz_tools_surface.jpg)
+
 #### Constant surface
 
 It is possible to add constant surface and set its properties like fine
@@ -202,8 +199,8 @@ Currently are implemented these markers:
 Thematic mapping can be used to determine marker color and size (and
 line color and width).
 
-<img src="wxGUI_nviz_tools_vector.jpg" data-border="1" alt="toolbox" />  
-  
+![wxGUI nviz tools vector](wxGUI_nviz_tools_vector.jpg)
+
 #### 3D rasters
 
 3D raster maps (volumes, voxel models) can be displayed either as
@@ -245,8 +242,8 @@ attributes.
 
 3D rasters can be moved the same way like surfaces do.
 
-<img src="wxGUI_nviz_tools_volume.jpg" data-border="1" alt="toolbox" />  
-  
+![toolbox](wxGUI_nviz_tools_volume.jpg)
+
 ### Analysis
 
 *Analysis* tab contains *Cutting planes* panel.
@@ -279,8 +276,8 @@ light color, brightness and ambient. Light position is controlled
 similarly to eye position. If option *Show light model* is enabled light
 model is displayed to visualize the light settings.
 
-<img src="wxGUI_nviz_tools_light.jpg" data-border="1" alt="toolbox" />  
-  
+![toolbox](wxGUI_nviz_tools_light.jpg)
+
 The *Fringe* panel allows you to draw fringes in different directions
 (North & East, South & East, South & West, North & West). It is possible
 to set the fringe color and height of the bottom edge.
@@ -316,9 +313,6 @@ parameters, or to set the background color of the Map Display Window
 
 ## NOTE
 
-wxNviz is under active development and distributed as "Experimental
-Prototype".
-
 Please note that with wxGTK port of wxPython (Linux systems), a problem
 might appear during wxNviz initialization (nothing is rendered at all)
 or when rendering vectors (bad order of rendering surfaces and vectors).
@@ -340,7 +334,7 @@ Command-line module *[m.nviz.image](m.nviz.image.md)*.
 
 ## AUTHORS
 
-**The wxNviz GUI**
+### The wxNviz GUI
 
 [Martin Landa](http://geo.fsv.cvut.cz/gwiki/Landa), [Google Summer of
 Code 2008](https://grasswiki.osgeo.org/wiki/WxNviz_GSoC_2008) (mentor:
@@ -351,7 +345,7 @@ Anna Kratochvilova, [Google Summer of Code
 2011](https://grasswiki.osgeo.org/wiki/WxNviz_GSoC_2011) (mentor: Martin
 Landa)
 
-**The OGSF library and NVIZ engine**
+### The OGSF library and NVIZ engine
 
 NVIZ (GRASS's *n*-dimensional visualization suite) was written by Bill
 Brown, Terry Baker, Mark Astley, and David Gerdes, U.S. Army Corps of

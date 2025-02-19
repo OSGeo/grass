@@ -47,7 +47,7 @@ line or the GUI, or it can be invoked as OPTION 8 through
 [i.ortho.photo](i.ortho.photo.md), an interactive terminal is used to
 determine the options.
 
-#### Interactive mode
+### Interactive mode
 
 You are first asked if all images within the imagery group should be
 rectified. If this option is not chosen, you are asked to specify for

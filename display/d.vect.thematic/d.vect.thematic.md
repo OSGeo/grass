@@ -78,8 +78,7 @@ d.vect.thematic map=schools_wake@PERMANENT column=CORECAPACI algorithm=std \
 d.legend.vect -b at=2,80 font=Sans symbol_size=25
 ```
 
-[<img src="d_vect_thematic.png" width="600" height="377"
-alt="d_vect_thematic example" />](d_vect_thematic.png)  
+![d_vect_thematic example](d_vect_thematic.png)  
 *Thematic map of average elevation and school capacity*
 
 ## SEE ALSO

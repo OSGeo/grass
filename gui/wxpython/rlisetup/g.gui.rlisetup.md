@@ -36,8 +36,6 @@ Definition of region for analysis:
 
 The startup window shows your configuration files, you can:
 
-**TODO: description below needs further updates**
-
 1. ***View/Edit*** (Load a file) from the shown list: the configuration
     is shown in a small text editor window. Configuration files are
     saved in the folder `C:\Users\userxy\AppData\Roaming\GRASS8\r.li\`
@@ -119,49 +117,30 @@ using relative coordinates.
 
 Screenshots of the wizard window frames:
 
-<table data-border="0">
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;"> <img src="g_gui_rlisetup_1.png"
-alt="g.gui.rlisetup: First frame of wizard for selecting existing configuration files or creating a new one" /><br />
-<em>g.gui.rlisetup: First frame of wizard for selecting<br />
-existing configuration files or creating a new one</em></td>
-<td style="text-align: center;"> <img src="g_gui_rlisetup_2.png"
-alt="g.gui.rlisetup: Frame for selecting maps" /><br />
-<em>g.gui.rlisetup: Frame for selecting maps</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"> <img src="g_gui_rlisetup_3.png"
-alt="g.gui.rlisetup: Frame for inserting sampling areas" /><br />
-<em>g.gui.rlisetup: Frame for inserting sampling areas</em></td>
-<td style="text-align: center;"> <img src="g_gui_rlisetup_4.png"
-alt="g.gui.rlisetup: Frame for defining rectangular moving window" /><br />
-<em>g.gui.rlisetup: Frame for defining rectangular moving
-window</em></td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"> <img src="g_gui_rlisetup_5.png"
-alt="g.gui.rlisetup: Frame for defining circular moving window" /><br />
-<em>g.gui.rlisetup: Frame for defining circular moving window</em></td>
-<td style="text-align: center;"> <img src="g_gui_rlisetup_6.png"
-alt="g.gui.rlisetup: Frame for choosing the sampling frame with keyboard" /><br />
-<em>g.gui.rlisetup: Frame for choosing the sampling frame with
-keyboard</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"> <img src="g_gui_rlisetup_7.png"
-alt="g.gui.rlisetup: Frame for drawing the sampling frame" /><br />
-<em>g.gui.rlisetup: Frame for drawing the sampling frame</em></td>
-<td style="text-align: center;"> <img src="g_gui_rlisetup_8.png"
-alt="g.gui.rlisetup: Summary frame before saving" /><br />
-<em>g.gui.rlisetup: Summary frame before saving</em></td>
-</tr>
-</tbody>
-</table>
+![g.gui.rlisetup: First frame of wizard for selecting existing configuration files or creating a new one](g_gui_rlisetup_1.png)  
+*g.gui.rlisetup: First frame of wizard for selecting existing configuration files
+or creating a new one*
+
+![g.gui.rlisetup: Frame for selecting maps](g_gui_rlisetup_2.png)  
+*g.gui.rlisetup: Frame for selecting maps*
+
+![g.gui.rlisetup: Frame for inserting sampling areas](g_gui_rlisetup_3.png)  
+*g.gui.rlisetup: Frame for inserting sampling areas*
+
+![g.gui.rlisetup: Frame for defining rectangular moving window](g_gui_rlisetup_4.png)  
+*g.gui.rlisetup: Frame for defining rectangular moving window*
+
+![g.gui.rlisetup: Frame for defining circular moving window](g_gui_rlisetup_5.png)  
+*g.gui.rlisetup: Frame for defining circular moving window*
+
+![g.gui.rlisetup: Frame for choosing the sampling frame with keyboard](g_gui_rlisetup_6.png)  
+*g.gui.rlisetup: Frame for choosing the sampling frame with keyboard*
+
+![g.gui.rlisetup: Frame for drawing the sampling frame](g_gui_rlisetup_7.png)  
+*g.gui.rlisetup: Frame for drawing the sampling frame*
+
+![g.gui.rlisetup: Summary frame before saving](g_gui_rlisetup_8.png)  
+*g.gui.rlisetup: Summary frame before saving*
 
 ## EXAMPLES
 

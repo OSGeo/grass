@@ -215,8 +215,7 @@ d.vect map=start color=none fill_color=224:0:0 icon=basic/circle size=15 legend_
 d.legend.vect -b
 ```
 
-[<img src="r_drain.png" width="300" height="280"
-alt="drainage using r.watershed" />](r_drain.png)  
+![drainage using r.watershed](r_drain.png)  
 *Figure: Drainage paths from two points flowing into the points with
 lowest values*
 
@@ -255,8 +254,7 @@ r.drain -d input=const1 direction=drain_deg output=drain_path_2 drain=drain_2 st
 
 We visualize the result in the same way as in the previous example.
 
-[<img src="r_drain_with_r_watershed_direction.png" width="300"
-height="280" alt="drainage using r.watershed" />](r_drain_with_r_watershed_direction.png)  
+![drainage using r.watershed](r_drain_with_r_watershed_direction.png)  
 *Figure: Drainage paths from two points where directions from
 r.watershed were used*
 

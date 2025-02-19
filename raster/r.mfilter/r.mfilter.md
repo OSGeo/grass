@@ -4,8 +4,7 @@
 according to the matrix *filter* designed by the user (see *FILTERS*
 below).
 
-![](r_mfilter.png)
-
+![Illustration for a custom 3x3 filter](r_mfilter.png)  
 *Figure: Illustration for a custom 3x3 filter*
 
 The filter is applied *repeat* times (default *value* is 1). The
@@ -120,10 +119,8 @@ until the final filter is applied. Then the output cell is written.
 By specifying the number of parallel processes with **nprocs** option,
 *r.mfilter* can run significantly faster, see benchmarks below.
 
-<img src="r_mfilter_benchmark_1.png" data-border="0"
-alt="benchmark for number of cells" />
-<img src="r_mfilter_benchmark_2.png" data-border="0"
-alt="benchmark for window size" />  
+![benchmark for number of cells](r_mfilter_benchmark_1.png)
+![benchmark for window size](r_mfilter_benchmark_2.png)  
 *Figure: Benchmark on the left shows execution time for different number
 of cells for 9x9 matrix, benchmark on the right shows execution time for
 16 billion cells for different matrix sizes. (Intel Core i9-10940X CPU @

@@ -262,8 +262,7 @@ v.generalize input=boundary_county output=boundary_county_dp20 \
   method=douglas threshold=20 error=boundary_county_dp20_leftover
 ```
 
-[<img src="v_generalize_simplify.png" data-border="0" width="600"
-height="465" alt="v.generalize simplification example" />](v_generalize_simplify.png)  
+![v.generalize simplification example](v_generalize_simplify.png)  
 *Figure: Vector simplification example (spatial subset: original map
 shown in black, simplified map with 26% remaining vertices shown in
 red)*
@@ -278,8 +277,7 @@ v.generalize input=roads output=roads_chaiken method=chaiken \
   threshold=1 error=roads_chaiken_leftover
 ```
 
-[<img src="v_generalize_smooth.png" data-border="0" width="600"
-height="276" alt="v.generalize smoothing example" />](v_generalize_smooth.png)  
+![v.generalize smoothing example](v_generalize_smooth.png)  
 *Figure: Vector smoothing example (spatial subset: original map shown in
 black, smoothed map with 500% increased number of vertices shown in
 red)*

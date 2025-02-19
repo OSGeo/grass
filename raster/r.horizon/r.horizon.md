@@ -146,12 +146,9 @@ The iterations of the algorithm used in **r.horizon** depends on the
 topography. As a result, the benchmark results may vary depending on the
 topography of the study area.
 
-<img src="rhorizon_raster_time.png" data-border="0"
-alt="time for r.horizon with different map sizes" />
-<img src="rhorizon_raster_speedup.png" data-border="0"
-alt="speedup for r.horizon with different map sizes" />
-<img src="rhorizon_raster_efficiency.png" data-border="0"
-alt="efficiency for r.horizon with different map sizes" />  
+![time for r.horizon with different map sizes](rhorizon_raster_time.png)
+![speedup for r.horizon with different map sizes](rhorizon_raster_speedup.png)
+![efficiency for r.horizon with different map sizes](rhorizon_raster_efficiency.png)  
 *Figure: Benchmark shows execution time, parallel speedup and efficiency
 for different numbers of cells (1M, 2M, 4M, and 8M).*
 
@@ -188,14 +185,14 @@ r.horizon elevation=elevation direction=0 step=5 bufferzone=200 \
 ```
 
 ![](rhorizon_shaded_dem_point.png)  
-Test point near high way intersection (North Carolina sample dataset)
+*Test point near high way intersection (North Carolina sample dataset)*
 
 ![](rhorizon_singlepoint_plot.png)  
-Horizon angles for test point (CCW from East)
+*Horizon angles for test point (CCW from East)*
 
 We can plot horizon in polar coordinates using Matplotlib in Python:
 
-```sh
+```python
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -212,7 +209,7 @@ plt.show()
 ```
 
 ![](rhorizon_polar_plot.png)  
-Horizon plot in polar coordinates.
+*Horizon plot in polar coordinates.*
 
 ### Raster map mode
 

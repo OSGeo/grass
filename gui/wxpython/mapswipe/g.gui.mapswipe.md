@@ -21,15 +21,14 @@ Map Swipe allows you to:
 - change the appearance of cursor in 'mirror' mode (available in Map
   Swipe settings)
 
-<img src="mapswipe_tsunami.jpg" data-border="1"
-alt="Map swipe screenshot" />  
-Pre and post disaster images of the tsunami in Japan in 2011. The upper
+![Map swipe screenshot](mapswipe_tsunami.jpg)  
+*Figure: Pre and post disaster images of the tsunami in Japan in 2011. The upper
 MODIS image taken on February 26, 2011, shows the coastline under normal
 conditions while the lower MODIS image on March 13, 2011, shows a clear
 view of tsunami flooding along the coastline. Water, black and dark blue
 in these false-color images, still covers the ground as much as five
 kilometers (three miles) from the coast. Source: [Earth
-Observatory/NASA](https://earthobservatory.nasa.gov/images/49634/tsunami-flooding-near-sendai-japan)  
+Observatory/NASA](https://earthobservatory.nasa.gov/images/49634/tsunami-flooding-near-sendai-japan)*
 
 ## SEE ALSO
 

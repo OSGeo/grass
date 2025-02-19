@@ -162,23 +162,19 @@ threads to be used with the **nprocs** parameter (default 1). Figures
 below show benchmark results running on Intel® Core™ i9-10940X CPU @
 3.30GHz. See benchmark scripts in the source code for more details.
 
-<img src="r_texture_mapsize_time.png" data-border="0"
-alt="time benchmark for r.texture with different map sizes" />  
+![time benchmark for r.texture with different map sizes](r_texture_mapsize_time.png)  
 *Figure 1: Benchmark shows execution time for different number of cells
 (1M, 2M, 4M, and 8M) and the fixed size of window (3×3).*
 
-<img src="r_texture_mapsize_efficiency.png" data-border="0"
-alt="efficiency benchmark for r.texture with different map sizes" />  
+![efficiency benchmark for r.texture with different map sizes](r_texture_mapsize_efficiency.png)  
 *Figure 2: Benchmark shows efficiency for different numbers of cells
 (1M, 2M, 4M, and 8M) and the fixed size of window (3×3).*
 
-<img src="r_texture_window_time.png" data-border="0"
-alt="time benchmark for r.texture with different window sizes" />  
+![time benchmark for r.texture with different window sizes](r_texture_window_time.png)  
 *Figure 3: Benchmark shows execution time for different sizes of windows
 (3×3, 9×9, 15×15, and 27×27) and the fixed number of cells (1M).*
 
-<img src="r_texture_window_efficiency.png" data-border="0"
-alt="efficiency benchmark for r.texture with different window sizes" />  
+![efficiency benchmark for r.texture with different window sizes](r_texture_window_efficiency.png)  
 *Figure 4: Benchmark shows efficiency for different sizes of windows
 (3×3, 9×9, 15×15, and 27×27) and the fixed number of cells (1M).*
 
@@ -254,7 +250,7 @@ direction, except for those areas where there are three columns of equal
 values (as size=3). The overlaid grid highlights that the texture
 measures output maps are cropped at the margins.
 
-<img src="r_texture_directions_example.png" data-border="1" />  
+![IDM textures according to direction](r_texture_directions_example.png)  
 *IDM textures according to direction*
 
 ## REFERENCES

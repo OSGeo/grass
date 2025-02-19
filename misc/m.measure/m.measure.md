@@ -17,10 +17,8 @@ m.measure coordinates="$Bonn_DE,$Philadelphia_US" units=kilometers
 Length:  6217.916452 kilometers
 ```
 
-[<img src="m_measure_distance.png" data-border="0" width="600"
-height="290"
-alt="Visualization (with d.geodesic) of m.measure distance example" />  
-](m_measure_distance.png) *Visualization (with d.geodesic) of m.measure
+![Visualization (with d.geodesic) of m.measure distance example](m_measure_distance.png)  
+*Visualization (with d.geodesic) of m.measure
 distance example*
 
 As an example for the North Carolina sample dataset, here four points

@@ -33,13 +33,11 @@ Steiner tree for 6 digitized nodes (Spearfish):
 
 Shortest path, along unimproved roads:
 
-<img src="vnetsteiner.png" data-border="1"
-alt="v.net.steiner example using distance" />
+![v.net.steiner example using distance](vnetsteiner.png)
 
 Fastest path, along highways:
 
-<img src="vnetsteinertime.png" data-border="1"
-alt="v.net.steiner example using time" />
+![v.net.steiner example using time](vnetsteinertime.png)
 
 ```sh
 # Spearfish
