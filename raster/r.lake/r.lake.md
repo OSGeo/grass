@@ -93,8 +93,8 @@ d.rast flooding
 d.vect streets_wake
 ```
 
-<img src="r_lake_lidar_dem.jpg" data-border="1" />  
-Small flooding along a street (*r.lake*, using Lidar 1m DEM)
+![Small flooding along a street](r_lake_lidar_dem.jpg)  
+*Small flooding along a street (*r.lake*, using Lidar 1m DEM)*
 
 ## SEE ALSO
 

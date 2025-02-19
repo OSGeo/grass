@@ -75,7 +75,7 @@ vertical height of the letters in meters on the ground. Thus text will
 grow or shrink depending on the scale at which the map is drawn.
 Alternatively *fontsize* can set the font size in normal font points.
 
-<span id="textcolor">**TEXT COLOR**</span>:  
+**TEXT COLOR**:  
 This selects the text color. If unspecified, the label's text is drawn
 in *black*, by default. The text color can be specified in one of
 several ways:
