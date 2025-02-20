@@ -116,7 +116,7 @@ median
 This computes the median of point values for each cell
 
 percentile  
-p<sup>*th*</sup> (nth) percentile of points in cell
+p-*th* (nth) percentile of points in cell
 
 skewness  
 This is a skewness of point values in cell

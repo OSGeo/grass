@@ -89,15 +89,12 @@ d.rast.arrow map=direction type=grass magnitude_map=magnitude skip=3 grid=none
 
 ## AUTHORS
 
-<u>Original author</u>  
-Chris Rewerts  
-*Agricultural Engineering,  
-Purdue University*  
+Original author:  
+Chris Rewerts, *Agricultural Engineering, Purdue University*  
   
-<u>Magnitude and 360 arrow code</u>  
-Hamish Bowman  
-*Department of Marine Science,  
+Magnitude and 360 arrow code:  
+Hamish Bowman, *Department of Marine Science,
 University of Otago, New Zealand*  
   
-<u>Align grids with raster cells and Drainage aspect type</u>  
+Align grids with raster cells and Drainage aspect type:  
 Huidae Cho  

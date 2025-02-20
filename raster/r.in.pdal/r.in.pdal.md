@@ -120,7 +120,7 @@ cell. If there are more than one mode for a cell, an arbitrary one will
 be selected.
 
 percentile  
-p<sup>*th*</sup> (nth) percentile of points in cell
+p-*th* (nth) percentile of points in cell
 
 skewness  
 This is a skewness of point values in cell
