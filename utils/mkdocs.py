@@ -92,7 +92,6 @@ def get_version_branch(major_version, addons_git_repo_url):
 
 def get_addons_url():
     """Get URL to the source code in the addons repo including branch"""
-    """
     return urlparse.urljoin(
         base_url,
         urlparse.urljoin(
