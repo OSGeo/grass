@@ -32,7 +32,7 @@ def on_env(env: Environment, config, files):
     return env
 
 
-def set_extra_soucre_docs(source_dir: str):
+def set_extra_source_docs(source_dir: str):
     """
     Read the list of tools from the source directory and
     store it in MkDocs extra config. These are used to generate
@@ -76,6 +76,6 @@ def on_config(config):
     """
 
     # Store in MkDocs extra config
-    config["extra"]["source_docs"] = set_extra_soucre_docs("source")
+    config["extra"]["source_docs"] = set_extra_source_docs("source")
 
     return config
