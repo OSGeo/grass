@@ -99,12 +99,12 @@ endif()
 ]==]
 
 # configure and install grass.py
-set(GISBASE ${RUNTIME_GISBASE})
+set(SET_GISBASE ${RUNTIME_GISBASE})
 configure_file(grass.py ${OUTDIR}/${CMAKE_INSTALL_BINDIR}/${START_UP} @ONLY)
 
-set(GISBASE ${GISBASE})
+set(SET_GISBASE ${GISBASE})
 configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/${START_UP} @ONLY)
-unset(GISBASE)
+unset(SET_GISBASE)
 
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}
         DESTINATION ${CMAKE_INSTALL_BINDIR})
