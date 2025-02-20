@@ -6,7 +6,7 @@ MANPAGES := $(patsubst $(HTMLDIR)/%.html,$(MANDIR)/%.$(MANSECT),$(wildcard $(HTM
 
 DSTFILES := \
 	$(HTMLDIR)/grassdocs.css \
-	$(HTMLDIR)/grass_logo.svg \
+	$(HTMLDIR)/grass_logo.png \
 	$(HTMLDIR)/hamburger_menu.svg \
 	$(HTMLDIR)/hamburger_menu_close.svg \
 	$(HTMLDIR)/grass_icon.png \
@@ -221,7 +221,7 @@ $(foreach cat,$(categories),$(eval $(call category_rule_md,$(firstword $(subst :
 $(HTMLDIR)/grassdocs.css: grassdocs.css
 	$(INSTALL_DATA) $< $@
 
-$(HTMLDIR)/grass_logo.svg: grass_logo.svg
+$(HTMLDIR)/grass_logo.svg: grass_logo.png
 	$(INSTALL_DATA) $< $@
 
 $(HTMLDIR)/hamburger_menu.svg: hamburger_menu.svg
