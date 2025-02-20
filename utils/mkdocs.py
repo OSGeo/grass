@@ -37,16 +37,25 @@ def read_file(name):
         return ""
 
 
+_cached_version_branch = None
+
 def get_version_branch(major_version, addons_git_repo_url):
     """Check if version branch for the current GRASS version exists,
     if not, take branch for the previous version
     For the official repo we assume that at least one version branch is present
+  
+    Getting the latest version is expensive because we need to ask online for the latest
+    branch. Hence we cache the version branch in a global variable.
 
     :param major_version int: GRASS GIS major version
-    :param addons_git_repo_url str: Addons Git ropository URL
+    :param addons_git_repo_url str: Addons Git repository URL
 
     :return version_branch str: version branch
     """
+    global _cached_version_branch
+    if _cached_version_branch is not None:
+        return _cached_version_branch
+
     version_branch = f"grass{major_version}"
     if gs:
         branch = gs.Popen(
@@ -73,7 +82,27 @@ def get_version_branch(major_version, addons_git_repo_url):
             )
         if version_branch not in gs.decode(branch):
             version_branch = "grass{}".format(int(major_version) - 1)
+
+    _cached_version_branch = version_branch
     return version_branch
+
+
+def get_addons_url():
+    """Function to get the addons URL
+    
+    Getting the latest URL is expensive because we need to ask online for the latest
+    version.
+    """
+    return urlparse.urljoin(
+        base_url,
+        urlparse.urljoin(
+            "grass-addons/tree/",
+            get_version_branch(
+                major,
+                urlparse.urljoin(base_url, "grass-addons/"),
+            ),
+        ),
+    )
 
 
 def has_src_code_git(src_dir):

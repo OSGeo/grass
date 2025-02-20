@@ -29,12 +29,11 @@ except ImportError:
 
 from mkdocs import (
     read_file,
-    get_version_branch,
+    get_addons_url,
     get_last_git_commit,
     top_dir,
     get_addon_path,
 )
-
 
 def parse_source(pgm):
     """Parse source code to get source code and log message URLs,
@@ -59,25 +58,8 @@ def parse_source(pgm):
                 grass_git_branch + "/",
             ),
         )
-        addons_url = urlparse.urljoin(
-            base_url,
-            urlparse.urljoin(
-                "grass-addons/tree/",
-                get_version_branch(
-                    major,
-                    urlparse.urljoin(base_url, "grass-addons/"),
-                ),
-            ),
-        )
 
     cur_dir = os.path.abspath(os.path.curdir)
-    if cur_dir.startswith(top_dir + os.path.sep):
-        source_url = main_url
-        pgmdir = cur_dir.replace(top_dir, "").lstrip(os.path.sep)
-    else:
-        # addons
-        source_url = addons_url
-        pgmdir = os.path.sep.join(cur_dir.split(os.path.sep)[-3:])
 
     url_source = ""
     addon_path = None
@@ -87,7 +69,7 @@ def parse_source(pgm):
             # Addon is installed from the local dir
             if os.path.exists(os.getenv("SOURCE_URL")):
                 url_source = urlparse.urljoin(
-                    addons_url,
+                    get_addons_url(),
                     addon_path,
                 )
             else:
@@ -96,6 +78,13 @@ def parse_source(pgm):
                     addon_path,
                 )
     else:
+        if cur_dir.startswith(top_dir + os.path.sep):
+            source_url = main_url
+            pgmdir = cur_dir.replace(top_dir, "").lstrip(os.path.sep)
+        else:
+            # addons
+            source_url = get_addons_url()
+            pgmdir = os.path.sep.join(cur_dir.split(os.path.sep)[-3:])
         url_source = urlparse.urljoin(source_url, pgmdir)
     if sys.platform == "win32":
         url_source = url_source.replace(os.path.sep, "/")
