@@ -2,8 +2,8 @@
 AUTHOR(S):  Rashad Kanavath <rashad km gmail>
 PURPOSE:    Get host system architecuture
 COPYRIGHT:  (C) 2020 by the GRASS Development Team
-            This program is free software under the GPL (>=v2)
-            Read the file COPYING that comes with GRASS for details.
+
+SPDX-License-Identifier: GPL-2.0-or-later
 #]]
 
 function(get_host_arch var_arch)

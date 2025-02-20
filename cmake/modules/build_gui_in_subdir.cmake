@@ -2,8 +2,8 @@
 AUTHOR(S):  Rashad Kanavath <rashad km gmail>
 PURPOSE:    build_gui_in_subdir is the cmake function that builds g.gui.* modules
 COPYRIGHT:  (C) 2020 by the GRASS Development Team
-            This program is free software under the GPL (>=v2)
-            Read the file COPYING that comes with GRASS for details.
+
+SPDX-License-Identifier: GPL-2.0-or-later
 #]]
 
 function(build_gui_in_subdir dir_name)

@@ -4,8 +4,8 @@ PURPOSE:    Simply copy python file in given subdirectory
             Destination will be relative to GISBASE directory set in root
             CMakeLists.txt
 COPYRIGHT:  (C) 2020 by the GRASS Development Team
-            This program is free software under the GPL (>=v2)
-            Read the file COPYING that comes with GRASS for details.
+
+SPDX-License-Identifier: GPL-2.0-or-later
 #]]
 
 function(copy_python_files_in_subdir dir_name dst_prefix)
