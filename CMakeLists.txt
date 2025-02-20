@@ -1,8 +1,6 @@
 ################################################################################
 #
-# AUTHOR(S):    Rashad Kanavath (original author),
-#               Markus Neteler, Loïc Bartoletti, Aaron Saw, Nicklas Larsson,
-#               Huidae Cho, Mahesh Maddineni, Kandel Nelson
+# AUTHOR(S):    Rashad Kanavath, Huidae Cho and Nicklas Larsson (main authors)
 #
 # PURPOSE:      CMakeLists.txt root that adds options to activate/deactivate
 #               3rd party libraries
