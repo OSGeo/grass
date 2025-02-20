@@ -77,7 +77,7 @@ r.mapcalc "direction = atan(U_map, V_map)"
 d.rast.arrow map=direction type=grass magnitude_map=magnitude skip=3 grid=none
 ```
 
-![](d_rast_arrow_wind.png)  
+![Sea wind speed (magnitude) and direction shown in the Tasmanian Sea](d_rast_arrow_wind.png)  
 *Sea wind speed (magnitude) and direction shown in the Tasmanian Sea*
 
 ## SEE ALSO
