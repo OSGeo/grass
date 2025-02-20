@@ -27,12 +27,14 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           repository: OSGeo/grass
-          ref: ${{ matrix.grass-version }}
           path: grass
 
       - name: Checkout addons
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
+          repository: OSGeo/grass-addons
+          # This could be taken from the source code by the utils script.
+          ref: grass8
           path: grass-addons
 
       - name: Get dependencies
@@ -111,6 +113,6 @@ jobs:
       - name: Make the result available
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
-          name: mkdocs-site-${{ matrix.os }}-${{ matrix.config }}-${{ matrix.extra-include }}
+          name: mkdocs-site
           path: ${{ env.MKDOCS_DIR }}/site
           retention-days: 3
