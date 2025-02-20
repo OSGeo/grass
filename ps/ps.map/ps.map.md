@@ -99,7 +99,7 @@ The default is Helvetica.
 The size of the PostScript font (in 1/72nds of an inch). The default is
 10 point.
 
-<span id="NAMED_COLORS"></span>**color** *name*  
+**color** *name*  
 The following colors names are accepted by *ps.map*:
 ` aqua, black, blue, brown, cyan, gray, grey, green, indigo, magenta, orange, purple, red, violet, white, yellow `.  
   
@@ -114,9 +114,7 @@ and you only need to specify one if you wish to override it.
 
 ### Command usage
 
-<span id="border"></span>
-
-## border
+#### border
 
 Controls the border which is drawn around the map area.
 
@@ -146,9 +144,7 @@ EXAMPLE:
     end
 ```
 
-<span id="colortable"></span>
-
-## colortable
+#### colortable
 
 Prints the color table legend for the raster map layer anywhere on the
 page.
@@ -190,7 +186,7 @@ as a single line instruction.
 See also the [vlegend](#vlegend) command for creating vector map
 legends.
 
-### Categorical (CELL) Maps
+##### Categorical (CELL) Maps
 
 Adding the **nodata N** instruction will prevent the "no data" box from
 being drawn (category based legends only). If you have manually added a
@@ -205,7 +201,7 @@ continuous color gradient legend.
 Be aware that the color table only includes categories which have a
 label. You can use the *r.category* module to add labels.
 
-### Floating point (FCELL and DCELL) Maps
+##### Floating point (FCELL and DCELL) Maps
 
 The legend's **range** can be adjusted for floating point rasters, but
 if set beyond the extent of the map's range be sure that you have set up
@@ -233,9 +229,7 @@ EXAMPLE:
         end
 ```
 
-<span id="comments"></span>
-
-## comments
+#### comments
 
 Prints comments anywhere on the page.
 
@@ -274,9 +268,7 @@ Presumably, the file *veg.comments* contain comments pertaining to the
 raster map layer *vegetation*, such as "This map was created by
 classifying a LANDSAT TM image".
 
-<span id="copies"></span>
-
-## copies
+#### copies
 
 Specifies the number of copies to be printed.
 
@@ -288,9 +280,7 @@ Each page will be printed n times.
 
 This instruction is identical to the *copies* command line parameter.
 
-<span id="eps"></span>
-
-## eps
+#### eps
 
 Places EPS (Encapsulated PostScript) pictures on the output map.
 
@@ -331,9 +321,7 @@ EXAMPLE:
 Of course, multiple EPS pictures may be drawn with multiple *eps*
 instructions.
 
-<span id="geogrid"></span>
-
-## geogrid
+#### geogrid
 
 Overlays a geographic grid onto the output map.
 
@@ -373,9 +361,7 @@ EXAMPLE:
     end
 ```
 
-<span id="greyrast"></span>
-
-## greyrast
+#### greyrast
 
 Selects a raster map layer for output in shades of grey.
 
@@ -386,9 +372,7 @@ USAGE:    greyrast mapname
 For each *ps.map* run, only one raster map layer can be requested (using
 either the *greyrast* or the *raster* instruction).
 
-<span id="grid"></span>
-
-## grid
+#### grid
 
 Overlays a coordinate grid onto the output map.
 
@@ -425,9 +409,7 @@ EXAMPLE:
     end
 ```
 
-<span id="group"></span>
-
-## group
+#### group
 
 Selects an RGB imagery group for output.
 
@@ -439,9 +421,7 @@ This is similar to *raster*, except that it uses an imagery group
 instead of a raster map layer. The group must contain three raster map
 layers, comprising the red, green and blue bands of the image.
 
-<span id="header"></span>
-
-## header
+#### header
 
 Prints the map header above the map.
 
@@ -501,9 +481,7 @@ EXAMPLE:
     end
 ```
 
-<span id="labels"></span>
-
-## labels
+#### labels
 
 Selects a labels file for output (see manual entry for
 *[v.label](v.label.md) ).*
@@ -527,9 +505,7 @@ EXAMPLE:
     end
 ```
 
-<span id="line"></span>
-
-## line
+#### line
 
 Draws lines on the output map.
 
@@ -568,9 +544,7 @@ EXAMPLE:
 Of course, multiple lines may be drawn with multiple *line*
 instructions.
 
-<span id="mapinfo"></span>
-
-## mapinfo
+#### mapinfo
 
 Prints the portion of the map legend containing the scale, grid and
 region information, on or below the map.
@@ -591,7 +565,7 @@ edge of the map. The default text color is black. The default background
 box color is white.
 
 *border* will draw a border around the legend using the specified color.
-(see [NAMED COLORS](#NAMED_COLORS))
+(see [color instruction](#common-instructions))
 
 This example prints (in brown) the scale, grid and region information
 immediately below the map and starting 1.5 inches from the left edge of
@@ -607,9 +581,7 @@ EXAMPLE:
     end
 ```
 
-<span id="maploc"></span>
-
-## maploc
+#### maploc
 
 Positions the map on the page.
 
@@ -630,9 +602,7 @@ EXAMPLE:
     maploc 2.0 3.5
 ```
 
-<span id="maskcolor"></span>
-
-## maskcolor
+#### maskcolor
 
 Color to be used for mask.
 
@@ -640,9 +610,7 @@ Color to be used for mask.
 USAGE:    maskcolor  color
 ```
 
-<span id="outline"></span>
-
-## outline
+#### outline
 
 Outlines the areas of a raster map layer with a specified color.
 
@@ -673,9 +641,7 @@ EXAMPLE:
     end
 ```
 
-<span id="paper"></span>
-
-## paper
+#### paper
 
 Specifies paper size and margins.
 
@@ -715,9 +681,7 @@ EXAMPLE:
     end
 ```
 
-<span id="point"></span>
-
-## point
+#### point
 
 Places additional points or icons on the output map.
 
@@ -762,9 +726,7 @@ EXAMPLE:
 Of course, multiple points may be drawn with multiple *point*
 instructions.
 
-<span id="psfile"></span>
-
-## psfile
+#### psfile
 
 Copies a file containing PostScript commands into the output file.
 
@@ -784,9 +746,7 @@ EXAMPLE:
     psfile logo.ps
 ```
 
-<span id="raster"></span>
-
-## raster
+#### raster
 
 Selects a raster map layer for output.
 
@@ -814,9 +774,7 @@ EXAMPLE:
     raster soils
 ```
 
-<span id="read"></span>
-
-## read
+#### read
 
 Provides *ps.map* with a previously prepared input stream.
 
@@ -846,9 +804,7 @@ option, the user need not enter all the input for the **vector**
 instruction, but simply **read** the previously prepared file with the
 correct instructions.
 
-<span id="rectangle"></span>
-
-## rectangle
+#### rectangle
 
 Draws rectangle on the output map.
 
@@ -888,9 +844,7 @@ EXAMPLE:
     end
 ```
 
-<span id="region"></span>
-
-## region
+#### region
 
 Places the outline of a smaller geographic region on the output.
 
@@ -923,9 +877,7 @@ EXAMPLE:
     end
 ```
 
-<span id="rgb"></span>
-
-## rgb
+#### rgb
 
 Selects three raster map layers for output as an RGB color image.
 
@@ -942,9 +894,7 @@ used: the red component for the red layer, and so on. This will give the
 desired result if all of the layers have a grey-scale color table, or if
 each layer's color table uses the hue appropriate to the layer.
 
-<span id="scale"></span>
-
-## scale
+#### scale
 
 Selects a scale for the output map.
 
@@ -970,9 +920,7 @@ EXAMPLE:
     scale 1:25000
 ```
 
-<span id="scalebar"></span>
-
-## scalebar
+#### scalebar
 
 Draws a scalebar on the map.
 
@@ -1022,9 +970,7 @@ EXAMPLE:
     end
 ```
 
-<span id="setcolor"></span>
-
-## setcolor
+#### setcolor
 
 Overrides the color assigned to one or more categories of the raster map
 layer.
@@ -1051,9 +997,7 @@ commas (but with no spaces). Also ranges can be included, for example
 "1,2,6-10,12". Colors for "`null`" and the "`default`" (i.e.
 out-of-range) color may also be reassigned.
 
-<span id="text"></span>
-
-## text
+#### text
 
 Places text on the map.
 
@@ -1088,7 +1032,7 @@ The user can then specify various text features:
 **font:** the PostScript font. Common possibilities are listed at the
 start of this help page. The default is `Helvetica`.
 
-**color** (see [NAMED COLORS](#NAMED_COLORS));
+**color** (see [color instruction](#common-instructions));
 
 **width** of the lines used to draw the text to make thicker letters
 (accepts decimal points \[floating points\] as well as integers);
@@ -1151,9 +1095,7 @@ EXAMPLE:
     end
 ```
 
-<span id="vareas"></span>
-
-## vareas
+#### vareas
 
 Selects a vector map layer for output and plots areas.
 
@@ -1240,9 +1182,7 @@ EXAMPLE:
     end
 ```
 
-<span id="vlines"></span>
-
-## vlines
+#### vlines
 
 Selects a vector map layer for output and plots lines.
 
@@ -1341,9 +1281,7 @@ EXAMPLE:
     end
 ```
 
-<span id="vpoints"></span>
-
-## vpoints
+#### vpoints
 
 Selects vector point data to be placed on the output map
 
@@ -1371,7 +1309,7 @@ USAGE:    vpoints vectormap
 ```
 
 The user may specify the the **color** of the sites (see section on
-[NAMED COLORS](#NAMED_COLORS)); either the GRASS **symbol** or the
+[color instruction](#common-instructions)); either the GRASS **symbol** or the
 **eps** Encapsulated Postscript file to be used to represent the
 presence of a site (if '**\$**' is used in the EPS file path it will be
 replaced by category number); and **rotate** (in degrees) for
@@ -1393,9 +1331,7 @@ EXAMPLE:
     end
 ```
 
-<span id="vlegend"></span>
-
-## vlegend
+#### vlegend
 
 Prints the portion of the map legend containing the vector information,
 on or below the map.
@@ -1431,7 +1367,7 @@ automatic scaling based on the left margin and the right hand side of
 the map box.
 
 *border* will draw a border around the legend using the specified color.
-(see [NAMED COLORS](#NAMED_COLORS))
+(see [color instruction](#common-instructions))
 
 Alternatively, the user can create a custom legend by using the
 [rectangle](#rectangle), [point](#point), and [text](#text)
@@ -1453,9 +1389,7 @@ EXAMPLE:
     end
 ```
 
-<span id="end"></span>
-
-## end
+#### end
 
 Terminates input and begin painting the map.
 
