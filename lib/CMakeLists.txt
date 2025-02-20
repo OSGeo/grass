@@ -209,7 +209,7 @@ build_library_in_subdir(stats DEPENDS grass_gis grass_raster)
 
 build_library_in_subdir(arraystats DEPENDS grass_gis)
 
-if(WITH_OPENGL AND OPENGL_GLU_FOUND AND OpenGL_GLX_FOUND)
+if(WITH_OPENGL)
   build_library_in_subdir(
     ogsf
     DEPENDS

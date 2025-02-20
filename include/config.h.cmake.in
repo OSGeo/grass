@@ -146,12 +146,6 @@
 /* Define to 1 if you have the <OpenCL/opencl.h> header file. */
 #cmakedefine HAVE_OPENCL_OPENCL_H ${HAVE_OPENCL_OPENCL_H}
 
-/* Define to 1 if you have the <OpenGL/glu.h> header file. */
-#cmakedefine HAVE_OPENGL_GLU_H ${HAVE_OPENGL_GLU_H}
-
-/* Define to 1 if you have the <OpenGL/gl.h> header file. */
-#cmakedefine HAVE_OPENGL_GL_H ${HAVE_OPENGL_GL_H}
-
 /* Define to 1 if glXCreatePbuffer exists. */
 #cmakedefine HAVE_PBUFFERS ${HAVE_PBUFFERS}
 
