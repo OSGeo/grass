@@ -11,7 +11,6 @@ if(WITH_DOCS)
 endif()
 
 # START_UP is the variable used in grass.py, grass.sh.in and grass.bat.in
-# set(START_UP "grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.py")
 set(START_UP "grass")
 if(WIN32)
   set(START_UP "${START_UP}.py")
@@ -44,24 +43,11 @@ endif()
 mark_as_advanced(gdal_share_dir)
 
 file(TO_NATIVE_PATH "${gdal_share_dir}/gdal" GDAL_DATA)
-#[==[
-if(MSVC)
-  find_path(geotiff_share_dir "epsg_csv" PATH_SUFFIXES share)
-  mark_as_advanced(geotiff_share_dir)
-  if(geotiff_share_dir)
-    file(TO_NATIVE_PATH "${geotiff_share_dir}/epsg_csv" GEOTIFF_CSV)
-  else()
-    message(FATAL_ERROR "Cannot find share/epsg_csv.")
-  endif()
-endif() # MSVC
-]==]
 get_filename_component(GDAL_DIR ${GDAL_LIBRARY} PATH)
 get_filename_component(GDAL_DIR ${GDAL_DIR} PATH)
 
 file(TO_NATIVE_PATH ${GDAL_DIR}/bin DEPS_DLL_PATH)
 list(APPEND DLL_PATH_LIST ${DEPS_DLL_PATH})
-
-# file(TO_NATIVE_PATH ${PYTHON_EXECUTABLE} GRASS_PYTHON)
 
 # For install tree (first do install tree)
 set(LD_LIBRARY_PATH_VAR "LD_LIBRARY_PATH")
@@ -71,32 +57,6 @@ if(APPLE)
 elseif(WIN32)
   set(LD_LIBRARY_PATH_VAR "PATH")
 endif()
-
-#[==[ SKIP THIS
-if(WIN32)
-  set(app_data_dir $ENV{APPDATA})
-  if(NOT EXISTS ${app_data_dir})
-    # this can happen with some strange settings
-    message(
-      FATAL_ERROR
-        "The APPDATA variable is not set, ask your operating system support")
-  endif()
-  file(TO_NATIVE_PATH "${app_data_dir}/GRASS8" grass_config_dir)
-else()
-  set(grass_config_dir "$ENV{HOME}/.grass8")
-endif()
-
-file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}" gisbase_init_dir)
-message(STATUS "GISBASE (install) : ${gisbase_init_dir}")
-message(STATUS "grass config directory (install): ${grass_config_dir}")
-
-# configure and install env.sh
-if(NOT MSVC)
-  configure_file(env.sh ${CMAKE_CURRENT_BINARY_DIR}/bashrc @ONLY)
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/bashrc
-          DESTINATION ${grass_config_dir})
-endif()
-]==]
 
 # configure and install grass.py
 set(GISBASE_INSTALL_PATH ${RUNTIME_GISBASE})
@@ -108,53 +68,6 @@ unset(GISBASE_INSTALL_PATH)
 
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}
         DESTINATION ${CMAKE_INSTALL_BINDIR})
-
-#[====================[ SKIP THIS
-# configure and install grass wrapper script (grass.bat or grass.sh
-configure_file(${script_input_file_name}
-               ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name} @ONLY)
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name}
-        DESTINATION ${CMAKE_INSTALL_BINDIR})
-
-
-# For build tree
-file(TO_NATIVE_PATH ${GISBASE} gisbase_init_dir)
-file(TO_NATIVE_PATH "${GISBASE}/etc/config" grass_config_dir)
-
-if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.20)
-  configure_file(
-    ${script_input_file_name}
-    ${GISBASE}/${script_file_name}
-    FILE_PERMISSIONS
-    OWNER_READ
-    OWNER_WRITE
-    OWNER_EXECUTE
-    GROUP_READ
-    GROUP_EXECUTE
-    WORLD_READ
-    WORLD_EXECUTE
-    @ONLY)
-else()
-  configure_file(${script_input_file_name} ${GISBASE}/${script_file_name} @ONLY)
-  if(UNIX OR MINGW)
-    if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.19)
-      file(
-        CHMOD
-        ${GISBASE}/${script_file_name}
-        FILE_PERMISSIONS
-        OWNER_READ
-        OWNER_WRITE
-        OWNER_EXECUTE
-        GROUP_READ
-        GROUP_EXECUTE
-        WORLD_READ
-        WORLD_EXECUTE)
-    else()
-      execute_process(COMMAND /bin/chmod 755 ${GISBASE}/${script_file_name})
-    endif()
-  endif()
-endif()
-]====================]
 
 file(TO_NATIVE_PATH "${OUTDIR}/${GISBASE_DIR}" gisbase_init_dir)
 
@@ -184,15 +97,7 @@ if(UNIX OR MINGW)
 endif()
 message(STATUS "GISBASE (build) : ${GISBASE_DIR}")
 message(STATUS "grass config directory (build): ${grass_config_dir}")
-#[[
-if(NOT MSVC)
-  configure_file(env.sh ${grass_config_dir}/bashrc @ONLY)
-  message(STATUS "env variables: ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/config/bashrc")
-endif()
-]]
 
-# configure_file(grass.py ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/${START_UP} @ONLY)
-# message(STATUS "Startup (build): ${GISBASE}/${script_file_name}")
 message(STATUS "gisrc (build): ${GISRC}")
 
 # finish installtree and buildtree configurations
