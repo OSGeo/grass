@@ -164,9 +164,6 @@
 /* Define to 1 if PostgreSQL is to be used. */
 #cmakedefine HAVE_POSTGRES ${HAVE_POSTGRES}
 
-/* Define to 1 if PQcmdTuples in lpq. */
-#cmakedefine HAVE_PQCMDTUPLES ${HAVE_PQCMDTUPLES}
-
 /* Define to 1 if you have the <proj_api.h> header file. */
 #cmakedefine HAVE_PROJ_API_H ${HAVE_PROJ_API_H}
 

@@ -53,16 +53,6 @@ endif()
 # check_target(FREETYPE HAVE_FT2BUILD_H) check_target(POSTGRES HAVE_POSTGRES)
 # check_target(ODBC HAVE_SQL_H)
 #
-# if(TARGET POSTGRES) try_compile( HAVE_PQCMDTUPLES ${CMAKE_CURRENT_BINARY_DIR}
-# ${CMAKE_SOURCE_DIR}/cmake/tests/have_pqcmdtuples.c CMAKE_FLAGS
-# "-DINCLUDE_DIRECTORIES:PATH=${PostgreSQL_INCLUDE_DIR}" "-w"
-# "-DLINK_LIBRARIES:STRING=${PostgreSQL_LIBRARY}" OUTPUT_VARIABLE
-# COMPILE_HAVE_PQCMDTUPLES) if(NOT COMPILE_HAVE_PQCMDTUPLES) message(
-# "Performing Test HAVE_PQCMDTUPLES - Failed\n
-# COMPILE_OUTPUT:${COMPILE_HAVE_PQCMDTUPLES}\n" ) else() message(STATUS
-# "Performing Test HAVE_PQCMDTUPLES - Success") set(HAVE_PQCMDTUPLES 1) endif()
-# endif()
-#
 # if(MSVC) check_target(PCRE HAVE_PCRE_H) endif()
 #
 # check_target(POSTGRES HAVE_LIBPQ_FE_H)
