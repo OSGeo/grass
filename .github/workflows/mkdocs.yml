@@ -65,10 +65,10 @@ jobs:
 
       - name: Print installed versions
         if: always()
-        run: .github/workflows/print_versions.sh
+        run: ./grass/.github/workflows/print_versions.sh
 
       - name: Test executing of the grass command
-        run: .github/workflows/test_simple.sh
+        run: ./grass/.github/workflows/test_simple.sh
 
       - name: Compile addons
         continue-on-error: true
@@ -108,7 +108,7 @@ jobs:
           cd $MKDOCS_DIR
           mkdocs build
 
-      - name: Make HTML test report available
+      - name: Make the result available
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: mkdocs-site-${{ matrix.os }}-${{ matrix.config }}-${{ matrix.extra-include }}
