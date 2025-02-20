@@ -42,6 +42,7 @@ jobs:
   # For a release, e.g. 8.3.0, created tags are:
   #     8.3.0-alpine, 8.3.0-debian, 8.3.0-ubuntu and latest (with ubuntu)
   docker-os-matrix:
+    name: ${{ matrix.os }}
     runs-on: ubuntu-latest
     concurrency:
       group: >-
