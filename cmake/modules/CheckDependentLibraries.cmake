@@ -268,13 +268,14 @@ if(WITH_CBLAS)
     add_library(CBLAS INTERFACE IMPORTED GLOBAL)
     set_property(TARGET CBLAS PROPERTY INTERFACE_LINK_LIBRARIES
                                       ${CBLAS_LIBRARIES})
+    set_property(TARGET CBLAS PROPERTY INTERFACE_LINK_DIRECTORIES
+                                      ${CBLAS_LIBRARY_DIRS})
     set_property(TARGET CBLAS PROPERTY INTERFACE_INCLUDE_DIRECTORIES
                                       ${CBLAS_INCLUDEDIR})
   endif()
   include(FindPackageHandleStandardArgs)
   find_package_handle_standard_args(CBLAS REQUIRED_VARS CBLAS_LIBRARIES
                                     CBLAS_INCLUDEDIR)
-
 endif()
 
 if(WITH_LAPACKE)
@@ -284,6 +285,8 @@ if(WITH_LAPACKE)
     add_library(LAPACKE INTERFACE IMPORTED GLOBAL)
     set_property(TARGET LAPACKE PROPERTY INTERFACE_LINK_LIBRARIES
                                         ${LAPACKE_LIBRARIES})
+    set_property(TARGET LAPACKE PROPERTY INTERFACE_LINK_DIRECTORIES
+                                        ${LAPACKE_LIBRARY_DIRS})
     set_property(TARGET LAPACKE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
                                         ${LAPACKE_INCLUDEDIR})
   endif()
