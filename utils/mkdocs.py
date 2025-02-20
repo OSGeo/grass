@@ -90,14 +90,14 @@ def get_version_branch(major_version, addons_git_repo_url):
     return version_branch
 
 
-def get_addons_url():
+def get_addons_url(base_url, major_version):
     """Get URL to the source code in the addons repo including branch"""
     return urlparse.urljoin(
         base_url,
         urlparse.urljoin(
             "grass-addons/tree/",
             get_version_branch(
-                major,
+                major_version,
                 urlparse.urljoin(base_url, "grass-addons/"),
             ),
         ),

@@ -44,7 +44,6 @@ from mkdocs import (
 
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
 trunk_url = ""
-addons_url = ""
 grass_git_branch = "main"
 major, minor, patch = None, None, None
 if grass_version != "unknown":
@@ -469,7 +468,7 @@ if os.getenv("SOURCE_URL", ""):
         # Addon is installed from the local dir
         if os.path.exists(os.getenv("SOURCE_URL")):
             url_source = urlparse.urljoin(
-                get_addons_url(),
+                get_addons_url(base_url=base_url, major_version=major),
                 addon_path,
             )
         else:
@@ -484,7 +483,7 @@ else:
         pgmdir = curdir.replace(topdir, "").lstrip(os.path.sep)
     else:
         # addons
-        source_url = get_addons_url()
+        source_url = get_addons_url(base_url=base_url, major_version=major)
         pgmdir = os.path.sep.join(curdir.split(os.path.sep)[-3:])
     url_source = urlparse.urljoin(source_url, pgmdir)
 if sys.platform == "win32":
