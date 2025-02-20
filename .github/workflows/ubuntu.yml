@@ -148,7 +148,7 @@ jobs:
 
       - name: Cache GRASS Sample Dataset
         id: cached-data
-        uses: actions/cache@v4
+        uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.1
         with:
           path: sample-data/nc_spm_full_v2alpha2.tar.gz
           key: nc_spm_full_v2alpha2.tar.gz
@@ -164,15 +164,9 @@ jobs:
             nc_spm_full_v2alpha2.tar.gz"
 
       - name: Run tests
-        run: |
-          grass --tmp-project XY --exec \
-                g.download.project url=${{ env.SAMPLE_DATA }} path=$HOME
-          grass --tmp-project XY --exec \
-              python3 -m grass.gunittest.main \
-              --grassdata $HOME --location nc_spm_full_v2alpha2 --location-type nc \
-              --min-success 100 --config .gunittest.extra.cfg
+        run: .github/workflows/test_thorough.sh --config .gunittest.extra.cfg
         env:
-          SAMPLE_DATA: "file://${{ github.workspace }}/sample-data/\
+          SAMPLE_DATA_URL: "file://${{ github.workspace }}/sample-data/\
             nc_spm_full_v2alpha2.tar.gz"
 
       - name: Make HTML test report available
