@@ -1,5 +1,5 @@
 ---
-name: Ubuntu
+name: Documentation
 
 # Build documentation
 
@@ -86,7 +86,7 @@ jobs:
 
       - name: Create env variable
         run: |
-          echo "echo MKDOCS_DIR=$(grass --config path)/docs/mkdocs" >> "$GITHUB_ENV"
+          echo MKDOCS_DIR="$(grass --config path)/docs/mkdocs" >> "$GITHUB_ENV"
 
       - name: Compile addons
         continue-on-error: true
@@ -103,8 +103,8 @@ jobs:
           cd grass
           eval $(./utils/update_version.py status --bash)
           cd ..
-          export SITE_NAME="GRASS GIS $(VERSION) Reference Manual"
-          export COPYRIGHT="&copy; 2003-$(YEAR) GRASS Development Team, GRASS GIS $(VERSION) Reference Manual"
+          export SITE_NAME="GRASS GIS $VERSION Reference Manual"
+          export COPYRIGHT="&copy; 2003-$YEAR GRASS Development Team, GRASS GIS $VERSION Reference Manual"
           cd $MKDOCS_DIR
           mkdocs build
 
