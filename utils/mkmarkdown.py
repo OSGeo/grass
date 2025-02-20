@@ -35,6 +35,7 @@ from mkdocs import (
     get_addon_path,
 )
 
+
 def parse_source(pgm):
     """Parse source code to get source code and log message URLs,
     and date time of the last modification.

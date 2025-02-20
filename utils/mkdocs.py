@@ -39,11 +39,11 @@ def read_file(name):
 
 _cached_version_branch = None
 
+
 def get_version_branch(major_version, addons_git_repo_url):
     """Check if version branch for the current GRASS version exists,
     if not, take branch for the previous version
     For the official repo we assume that at least one version branch is present
-  
     Getting the latest version is expensive because we need to ask online for the latest
     branch. Hence we cache the version branch in a global variable.
 
@@ -89,7 +89,6 @@ def get_version_branch(major_version, addons_git_repo_url):
 
 def get_addons_url():
     """Function to get the addons URL
-    
     Getting the latest URL is expensive because we need to ask online for the latest
     version.
     """
