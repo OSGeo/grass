@@ -1,40 +1,70 @@
-/* Adopted from GPL-3 SDRangel
- * https://github.com/f4exb/sdrangel/blob/master/custom/windows/windows_time.h
+/*
+ * Copied from vcpkg under the MIT license
+ * https://github.com/microsoft/vcpkg/blob/master/ports/gettimeofday/gettimeofday.c
  */
 
 /*
- * missing gettimeofday implementation
- * for windows; based on postgresql
+ * Copied from PostgreSQL source:
+ *  http://doxygen.postgresql.org/gettimeofday_8c_source.html
+ *
  */
 
-#define WIN32_LEAN_AND_MEAN  /* stops windows.h including winsock.h; \
-                              * timeval redefine */
-#include <Windows.h>
-#include <stdint.h> /* portable: uint64_t   MSVC: __int64 */
+/*
+ * gettimeofday.c
+ *	  Win32 gettimeofday() replacement
+ *
+ * src/port/gettimeofday.c
+ *
+ * Copyright (c) 2003 SRA, Inc.
+ * Copyright (c) 2003 SKC, Inc.
+ *
+ * Permission to use, copy, modify, and distribute this software and
+ * its documentation for any purpose, without fee, and without a
+ * written agreement is hereby granted, provided that the above
+ * copyright notice and this paragraph and the following two
+ * paragraphs appear in all copies.
+ *
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE TO ANY PARTY FOR DIRECT,
+ * INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING
+ * LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS
+ * DOCUMENTATION, EVEN IF THE UNIVERSITY OF CALIFORNIA HAS BEEN ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * THE AUTHOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS ON AN "AS
+ * IS" BASIS, AND THE AUTHOR HAS NO OBLIGATIONS TO PROVIDE MAINTENANCE,
+ * SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ */
 
-/* MSVC defines this in winsock2.h!? */
-typedef struct timeval {
-    long tv_sec;
-    long tv_usec;
-} timeval;
+#ifdef _MSC_VER
 
+#include <winsock2.h>
+
+/* FILETIME of Jan 1 1970 00:00:00. */
+static const unsigned __int64 epoch = 116444736000000000Ui64;
+
+/*
+ * timezone information is stored outside the kernel so tzp isn't used anymore.
+ *
+ * Note: this function is not for Win32 high precision timing purpose. See
+ * elapsed_time().
+ */
 int gettimeofday(struct timeval *tp, struct timezone *tzp)
 {
-    /* Note: some broken versions only have 8 trailing zero's, the correct epoch
-     * has 9 trailing zero's This magic number is the number of 100 nanosecond
-     * intervals since January 1, 1601 (UTC) until 00:00:00 January 1, 1970 */
-    static const uint64_t EPOCH = ((uint64_t)116444736000000000ULL);
-
-    SYSTEMTIME system_time;
     FILETIME file_time;
-    uint64_t time;
+    SYSTEMTIME system_time;
+    ULARGE_INTEGER ularge;
 
     GetSystemTime(&system_time);
     SystemTimeToFileTime(&system_time, &file_time);
-    time = ((uint64_t)file_time.dwLowDateTime);
-    time += ((uint64_t)file_time.dwHighDateTime) << 32;
+    ularge.LowPart = file_time.dwLowDateTime;
+    ularge.HighPart = file_time.dwHighDateTime;
 
-    tp->tv_sec = (long)((time - EPOCH) / 10000000L);
+    tp->tv_sec = (long)((ularge.QuadPart - epoch) / 10000000L);
     tp->tv_usec = (long)(system_time.wMilliseconds * 1000);
+
     return 0;
 }
+
+#endif /* _MSC_VER */
