@@ -15,6 +15,7 @@ DSTFILES := \
 	$(HTMLDIR)/parser_standard_options.js \
 	$(MDDIR)/mkdocs.yml \
 	$(MDDIR)/source/grass_logo.svg \
+	$(MDDIR)/source/grass_icon.png \
 	$(MDDIR)/source/favicon.ico \
 	$(MDDIR)/source/grassdocs.css \
 	$(MDDIR)/scripts/hook_list_scripts.py \
@@ -246,6 +247,9 @@ $(MDDIR)/mkdocs.yml: mkdocs/mkdocs.yml
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/grass_logo.svg: grass_logo.svg
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/grass_icon.png: grass_icon.png
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/favicon.ico: favicon.ico
