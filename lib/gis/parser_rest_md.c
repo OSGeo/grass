@@ -56,6 +56,9 @@ void usage_rest_md(bool rest)
     fprintf(stdout, "---\n");
     fprintf(stdout, "name: %s\n", st->pgm_name);
     fprintf(stdout, "description: %s\n", st->module_info.description);
+    fprintf(stdout, "keywords: ");
+    G__print_keywords(stdout, NULL, FALSE);
+    fprintf(stdout, "\n");
     fprintf(stdout, "tags: [ ");
     G__print_keywords(stdout, NULL, FALSE);
     fprintf(stdout, " ]");
