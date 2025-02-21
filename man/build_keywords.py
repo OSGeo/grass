@@ -100,6 +100,11 @@ def build_keywords(ext):
                     break
 
         for key in keys:
+            if not key:
+                print(
+                    f"Empty keyword in {fname}, all keywords: {keys}", file=sys.stderr
+                )
+                continue
             if key not in keywords.keys():
                 keywords[key] = []
                 keywords[key].append(fname)
