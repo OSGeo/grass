@@ -485,7 +485,7 @@ void G_ls(const char *, FILE *);
 void G_ls_format(char **, int, int, FILE *);
 
 /* ls_filter.c */
-#ifdef HAVE_REGEX_H
+#if defined(HAVE_REGEX_H) || defined(HAVE_PCRE_H)
 void *G_ls_regex_filter(const char *, int, int, int);
 void *G_ls_glob_filter(const char *, int, int);
 void G_free_ls_filter(void *);

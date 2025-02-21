@@ -14,8 +14,11 @@ void write_into_legfile(struct Map_info *Map, int type, const char *leglab,
     char map[GNAME_MAX];
     char *ptr;
     strcpy(map, name_map);
+#ifdef _MSC_VER
+    strtok_s(map, "@", &ptr);
+#else
     strtok_r(map, "@", &ptr);
-
+#endif
     if (size_column)
         size = "-1";
 

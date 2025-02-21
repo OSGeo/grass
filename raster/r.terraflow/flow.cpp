@@ -62,7 +62,7 @@ void computeFlowAccumulation(AMI_STREAM<waterWindowBaseType> *fillStream,
             perror("time");
             exit(1);
         }
-#ifdef __MINGW32__
+#ifdef _WIN32
         strcpy(buf, ctime(&t));
 #else
         ctime_r(&t, buf);

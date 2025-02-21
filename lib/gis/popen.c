@@ -6,7 +6,7 @@
 #include <grass/gis.h>
 #include <grass/spawn.h>
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <io.h>
 #include <fcntl.h>
 #define pipe(fds) _pipe(fds, 4096, O_BINARY | O_NOINHERIT)

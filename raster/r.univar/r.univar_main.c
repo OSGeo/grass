@@ -370,6 +370,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
 #endif
 
     int computed = 0;
+    int row;
 
 #pragma omp parallel
     {
@@ -396,7 +397,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
         }
 
 #pragma omp for
-        for (int row = 0; row < rows; row++) {
+        for (row = 0; row < rows; row++) {
             thread_workspace *w = &tw[t_id];
 
             Rast_get_row(w->fd, w->raster_row, row, map_type);

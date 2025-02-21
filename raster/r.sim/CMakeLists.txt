@@ -1,0 +1,43 @@
+build_library_in_subdir(
+  simlib
+  NAME
+  grass_sim
+  DEPENDS
+  grass_gis
+  grass_datetime
+  grass_raster
+  grass_vector
+  grass_gmath
+  GDAL
+  ${LIBM}
+  OPTIONAL_DEPENDS
+  OPENMP
+  HEADERS
+  "waterglobs.h"
+  "simlib.h")
+
+build_program_in_subdir(
+  r.sim.water
+  DEPENDS
+  grass_gis
+  grass_gmath
+  grass_sim
+  grass_raster
+  GDAL
+  OPTIONAL_DEPENDS
+  OPENMP
+  INCLUDES
+  "../simlib")
+
+build_program_in_subdir(
+  r.sim.sediment
+  DEPENDS
+  grass_gis
+  grass_gmath
+  grass_sim
+  grass_raster
+  GDAL
+  OPTIONAL_DEPENDS
+  OPENMP
+  INCLUDES
+  "../simlib")
