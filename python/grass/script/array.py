@@ -4,7 +4,7 @@ Functions to use GRASS 2D and 3D rasters with NumPy.
 Usage:
 
 >>> import grass.script as gs
->>> from grass.script import array as garray
+>>> from grass.script import garray
 >>>
 >>> # We create a temporary region that is only valid in this python session
 ... gs.use_temp_region()
@@ -130,7 +130,7 @@ class _tempfile:
 ###############################################################################
 
 
-class array(np.memmap):
+class garray(np.memmap):  # renamed from array to garray
     # pylint: disable-next=signature-differs; W0222
     def __new__(cls, mapname=None, null=None, dtype=np.double, env=None):
         """Define new numpy array
