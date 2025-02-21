@@ -17,6 +17,7 @@ set(script_DIRS
     db.test
     db.univar
     g.download.location
+    g.download.project
     g.extension
     g.extension.all
     g.manual
