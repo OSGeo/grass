@@ -106,7 +106,7 @@ Commit with a commit message suggested by the script, e.g.:
 
 ```bash
 git diff
-git commit include/VERSION -m "version: $VERSION"
+git commit include/VERSION -m "version: GRASS GIS $VERSION"
 ```
 
 If you lost the script output with the suggested message use
