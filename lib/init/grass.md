@@ -1,3 +1,9 @@
+---
+description: GRASS startup program
+---
+
+# GRASS startup program
+
 ## SYNOPSIS
 
 **grass** \[**-h** \| **-help** \| **--help**\] \[**-v** \|
@@ -341,7 +347,7 @@ grass /path/to/grassdata/test1/PERMANENT/ --exec python test.py
 
 A very simple Python script ("test.py") may look like this:
 
-```sh
+```python
 #!/usr/bin/env python3
 
 # import GRASS Python bindings (see also pygrass)

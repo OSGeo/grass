@@ -62,56 +62,28 @@ d.erase
 d.rast accum_diff
 ```
 
-<table data-border="1">
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;"><a href="r_carve_dem_orig.png"><img
-src="r_carve_dem_orig.png" data-border="0" width="300" height="321"
-alt="r.carve example: original DEM" /></a><br />
-<em>Fig: Original 1m LiDAR based DEM with vector streams map on
-top</em></td>
-<td style="text-align: center;"><a
-href="r_carve_dem_orig_shaded.png"><img
-src="r_carve_dem_orig_shaded.png" data-border="0" width="300"
-height="321" alt="r.carve example: original DEM shaded" /></a><br />
-<em>Fig: Original 1m LiDAR based DEM shown as shaded terrain</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: center;"><a href="r_carve_dem_carved.png"><img
-src="r_carve_dem_carved.png" data-border="0" width="300" height="321"
-alt="r.carve example: carved DEM" /></a><br />
-<em>Fig: Carved 1m LiDAR based DEM</em></td>
-<td style="text-align: center;"><a
-href="r_carve_dem_carved_shaded.png"><img
-src="r_carve_dem_carved_shaded.png" data-border="0" width="300"
-height="321" alt="r.carve example: carved DEM shaded" /></a><br />
-<em>Fig: Carved 1m LiDAR based DEM shown as shaded terrain</em></td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;"><a
-href="r_carve_dem_orig_accum.png"><img src="r_carve_dem_orig_accum.png"
-data-border="0" width="300" height="321"
-alt="r.carve example: original DEM flow accumulated" /></a><br />
-<em>Fig: Flow accumulation in original 1m LiDAR based DEM</em></td>
-<td style="text-align: center;"><a
-href="r_carve_dem_carved_accum.png"><img
-src="r_carve_dem_carved_accum.png" data-border="0" width="300"
-height="321"
-alt="r.carve example: carved DEM flow accumulation" /></a><br />
-<em>Fig: Flow accumulation in carved 1m LiDAR based DEM</em></td>
-</tr>
-</tbody>
-</table>
+![Original DEM with vector streams](r_carve_dem_orig.png)  
+*Fig: Original 1m LiDAR based DEM with vector streams map on top*
+
+![Original DEM shaded](r_carve_dem_orig_shaded.png)  
+*Fig: Original 1m LiDAR based DEM shown as shaded terrain*
+
+![Carved DEM](r_carve_dem_carved.png)  
+*Fig: Carved 1m LiDAR based DEM*
+
+![Carved DEM shaded](r_carve_dem_carved_shaded.png)  
+*Fig: Carved 1m LiDAR based DEM shown as shaded terrain*
+
+![Flow accumulation in original DEM](r_carve_dem_orig_accum.png)  
+*Fig: Flow accumulation in original 1m LiDAR based DEM*
+
+![Flow accumulation in carved DEM](r_carve_dem_carved_accum.png)  
+*Fig: Flow accumulation in carved 1m LiDAR based DEM*
 
 ## KNOWN ISSUES
 
 The module does not operate yet in latitude-longitude coordinate
-reference system. It has not been thoroughly tested, so not all options
-may work properly - but this was the intention.
+reference system.
 
 ## REFERENCES
 

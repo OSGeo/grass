@@ -44,6 +44,15 @@ daag*.s
 # notebook helper files
 .ipynb_checkpoints
 
+# python environment
+venv/
+env/
+.venv/
+.env/
+
+# VSCode Settings
+.vscode/
+
 # ignore gunittest helper and result files
 testreport/*
 testsuite/examples/testreports/

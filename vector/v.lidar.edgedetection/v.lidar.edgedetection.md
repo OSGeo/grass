@@ -96,13 +96,11 @@ v.surf.rst input=only_terrain elevation=terrain
 v.extract input=correction layer=2 cats=2,3,4 output=objects
 ```
 
-![](v_lidar_edgedetection.png)
-
+![Example output from complete workflow](v_lidar_edgedetection.png)  
 *Figure 1: Example output from complete workflow (red: objects, green:
 terrain)*
 
-![](v_lidar_edgedetection_objects.png)
-
+![3D visualization of filtered object points](v_lidar_edgedetection_objects.png)  
 *Figure 2: 3D visualization of filtered object points (red) and terrain
 created from terrain points (gray)*
 

@@ -1,4 +1,11 @@
-### 3D raster maps in general
+---
+description: 3D raster data in GRASS GIS
+index: raster3d
+---
+
+# 3D raster data in GRASS GIS
+
+## 3D raster maps in general
 
 GRASS GIS is one of the few GIS software packages with 3D raster data
 support. Data are stored as a 3D raster with 3D cells of a given volume.
@@ -16,11 +23,11 @@ size of the tiles can be specified at import time with a given import
 module such as [r3.in.ascii](r3.in.ascii.md) or the data can be retiled
 using [r3.retile](r3.retile.md) after import or creation.
 
-<img src="raster3d_layout.png" data-border="0" />  
+![3D raster map coordinate system](raster3d_layout.png)  
 *The 3D raster map coordinate system and the internal tile layout of the
 RASTER3D library*
 
-### Terminology and naming
+## Terminology and naming
 
 In GRASS GIS terminology, continuous 3D data represented by regular grid
 or lattice is called *3D raster map*. 3D raster map works in 3D in the
@@ -69,9 +76,9 @@ time 3D raster can be referred to as space time cubes (STC) or space
 time cube 3D raster. Some literature may also use space time voxel cube,
 space time voxel model or some other combination.
 
-### 3D raster import
+## 3D raster import
 
-#### Import from external files
+### Import from external files
 
 The modules [r3.in.ascii](r3.in.ascii.md) and [r3.in.bin](r3.in.bin.md)
 supports generic x,y,z ASCII and binary array import.
@@ -84,12 +91,12 @@ Import of 3D (LiDAR) points and their statistics can be done using
 [r3.in.lidar](r3.in.lidar.md) for LiDAR data and
 [r3.in.xyz](r3.in.xyz.md) for CSV and other ASCII text formats.
 
-#### Conversion from 3D vector points
+### Conversion from 3D vector points
 
 3D rasters can be generated from 3D point vector data
 ([v.to.rast3](v.to.rast3.md)). Always the full map is imported.
 
-#### Conversion from 2D raster maps
+### Conversion from 2D raster maps
 
 3D raster can also be created based on 2D elevation map(s) and value
 raster map(s) ([r.to.rast3elev](r.to.rast3elev.md)). Alternatively, a 3D
@@ -97,7 +104,7 @@ raster can be composed of several 2D raster maps (stack of maps). 2D
 rasters are considered as slices in this case and merged into one 3D
 raster map ([r.to.rast3](r.to.rast3.md)).
 
-### 3D region settings and 3D mask
+## 3D region settings and 3D mask
 
 GRASS GIS 3D raster map processing is always performed in the current 3D
 region settings (see [g.region](g.region.md), *-p3* flags), i.e. the
@@ -108,31 +115,31 @@ this is not desired, the input map(s) has/have to be reinterpolated
 beforehand with one of the dedicated modules. Masks can be set
 ([r3.mask](r3.mask.md)).
 
-### 3D raster analyses and operations
+## 3D raster analyses and operations
 
 Powerful 3D raster map algebra is implemented in
 [r3.mapcalc](r3.mapcalc.md). A 3D groundwater flow model is implemented
 in [r3.gwflow](r3.gwflow.md).
 
-### 3D raster conversion to vector or 2D raster maps
+## 3D raster conversion to vector or 2D raster maps
 
 Slices from a 3D raster map can be converted to a 2D raster map
 ([r3.to.rast](r3.to.rast.md)). Cross sectional 2D raster map can be
 extracted from 3D raster map based on a 2D elevation map
 ([r3.cross.rast](r3.cross.rast.md)).
 
-### 3D raster statistics
+## 3D raster statistics
 
 3D raster statistics can be calculated with [r3.stats](r3.stats.md) and
 [r3.univar](r3.univar.md).
 
-### 3D raster interpolation
+## 3D raster interpolation
 
 From 3D vector points, GRASS 3D raster maps can be interpolated
 ([v.vol.rst](v.vol.rst.md)). Results are 3D raster maps, however 2D
 raster maps can be also extracted.
 
-### 3D raster export
+## 3D raster export
 
 The modules [r3.out.ascii](r3.out.ascii.md) and
 [r3.out.bin](r3.out.bin.md) support the export of 3D raster maps as
@@ -143,7 +150,7 @@ NetCDF export of 3D raster maps can be performed using the module
 [r3.out.netcdf](r3.out.netcdf.md). It supports 3D raster maps with
 spatial dimensions and temporal (vertical) dimension.
 
-### Working with 3D visualization software
+## Working with 3D visualization software
 
 GRASS GIS can be used for visualization of 3D rasters, however it has
 also tools to easily export the data into other visualization packages.
@@ -160,12 +167,12 @@ Alternatively, GRASS 3D raster maps can be imported and exported from/to
 *[Vis5D](https://vis5d.sourceforge.net/)* ([r3.in.v5d](r3.in.v5d.md),
 [r3.out.v5d](r3.out.v5d.md)).
 
-### 3D raster data types
+## 3D raster data types
 
 3D raster's single-precision data type is most often called "FCELL" or
 "float", and the double-precision one "DCELL" or "double".
 
-### See also
+## See also
 
 - [Introduction into raster data processing](rasterintro.md)
 - [Introduction into vector data processing](vectorintro.md)

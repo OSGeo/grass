@@ -108,7 +108,7 @@ v.to.db mysoils option=sides columns=left,right layer=2
 v.db.select mysoils layer=2
 ```
 
-Compute D<sub>L</sub>, the Fractal Dimension (Mandelbrot, 1982), of the
+Compute *D_L*, the Fractal Dimension (Mandelbrot, 1982), of the
 boundary defining a polygon based on the formula:  
 `D = 2 * (log perimeter) / (log area):`  
 

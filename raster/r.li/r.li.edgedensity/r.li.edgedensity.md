@@ -12,8 +12,7 @@ with:
 - **k**: patch type
 - **m**: number of patch types
 - **n**: number of edge segments of patch type k
-- **e<span class="small"><span class="small">ik</span></span>** :total
-  edge length in the landscape involving patch type k
+- **e_ik** :total edge length in the landscape involving patch type *k*
 - **Area**: total landscape area
 
 The unit is meters per hectare.

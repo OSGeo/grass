@@ -43,10 +43,10 @@ infinite kernel along with a finite window.
 
 To smooth a map, keeping its resolution, a good starting point is to use
 the filters **gauss,box** with the radii *0.5 \* input resolution*, *2
-\* input resolution*. See also [r.neighbors](r.neighbors.html)
+\* input resolution*. See also [r.neighbors](r.neighbors.md)
 
 When resampling a map to a higher resolution (alternative to
-interpolation, e.g. [r.resamp.interp](r.resamp.interp.html)), a good
+interpolation, e.g. [r.resamp.interp](r.resamp.interp.md)), a good
 starting point is to use the filters **gauss,box** with the radii *1.5
 \* input resolution*, *3 \* input resolution*.
 
@@ -95,8 +95,7 @@ the integrity of the interpolation method.
 By specifying the number of parallel processes with **nprocs** option,
 *r.resamp.filter* can run faster, see benchmarks below.
 
-<img src="r_resamp_filter_benchmark_size.png" data-border="0"
-alt="benchmark for number of cells" />  
+![benchmark for number of cells](r_resamp_filter_benchmark_size.png)  
 *Figure: Benchmark shows execution time for different number of cells.
 See benchmark script in the source code.*
 

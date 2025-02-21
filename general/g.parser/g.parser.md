@@ -1,3 +1,10 @@
+---
+name: g.parser
+description: Provides full parser support for GRASS scripts.
+---
+
+# Provides full parser support for GRASS scripts
+
 ## KEYWORDS
 
 [general](general.md), [support](topic_support.md),
@@ -257,6 +264,9 @@ Example:
 
 ```sh
 v.in.db driver=sqlite database=mysqlite.db table=pointsfile x=x y=y z=z key=idcol out=dtmpoints --json
+```
+
+```json
 {
   "module": "v.in.db",
   "id": "v.in.db_1804289383",
@@ -348,7 +358,7 @@ Parameters:
 
 ### Example code for Python
 
-```sh
+```python
 #!/usr/bin/env python3
 
 # g.parser demo script for python programming
@@ -471,7 +481,7 @@ g.message message="Value of GIS_OPT_vect: '$GIS_OPT_vector'"
 
 ### Example code for Perl
 
-```sh
+```perl
 #!/usr/bin/perl -w
 use strict;
 
@@ -543,7 +553,9 @@ output is shown below:
 
 ```sh
 v.what.rast --script
+```
 
+```python
 #!/usr/bin/env python3
 ############################################################################
 #

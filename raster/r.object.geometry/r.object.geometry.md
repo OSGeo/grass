@@ -40,7 +40,7 @@ JSON:
 r.object.geometry input=zipcodes format=json
 ```
 
-```sh
+```json
 [
     {
         "category": 1,

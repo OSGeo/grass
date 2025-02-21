@@ -41,7 +41,7 @@ output map.
 *[g.proj](g.proj.md), [m.proj](m.proj.md), [r.proj](r.proj.md),
 [v.proj](v.proj.md), [PROJ](https://proj.org) site*
 
-**Further reading**
+Further reading:
 
 - A guide to [Map
   Projections](https://web.archive.org/web/20080513234144/http://erg.usgs.gov/isb/pubs/MapProjections/projections.html)

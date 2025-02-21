@@ -111,8 +111,7 @@ d.rast elevation
 d.legend -d elevation
 ```
 
-<img src="d_legend.png" data-border="1"
-alt="Elevation map with legend" />
+![Elevation map with legend](d_legend.png)
 
 Displaying the legend with custom labels and background:
 
@@ -122,8 +121,7 @@ d.rast elevation
 d.legend raster=elevation -t label_step=20 label_values=108 title=Legend -b bgcolor=255:255:204 border_color=gray
 ```
 
-<img src="d_legend_custom_labels_and_background.png" data-border="1"
-alt="Elevation map with custom legend" />
+![Elevation map with custom legend](d_legend_custom_labels_and_background.png)
 
 Displaying the legend with logarithmic scale:
 
@@ -134,8 +132,7 @@ d.rast flowacc
 d.legend raster=flowacc -t -l label_step=1
 ```
 
-<img src="d_legend_logarithmic.png" data-border="1"
-alt="Flow accumulation map with logarithmic legend" />
+![Flow accumulation map with logarithmic legend](d_legend_logarithmic.png)
 
 ## SEE ALSO
 
