@@ -300,7 +300,6 @@ ignore = [
 "gui/wxpython/photo2image/ip2i_manager.py" = ["SIM115"]
 "gui/wxpython/psmap/dialogs.py" = ["PTH208"]
 "gui/wxpython/psmap/instructions.py" = ["SIM115"]
-"gui/wxpython/psmap/utils.py" = ["PGH004"]
 "gui/wxpython/rlisetup/frame.py" = ["PTH208"]
 "gui/wxpython/timeline/frame.py" = ["FLY002"]
 "gui/wxpython/tools/update_menudata.py" = ["SIM115"]
