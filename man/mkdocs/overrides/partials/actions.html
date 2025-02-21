@@ -4,7 +4,7 @@
     {# Default to the normal edit URL #}
     {% set ghpath = github_path(toolname, config.extra.source_docs) %}
     {% if ghpath %}
-        {% set custom_edit_url = page.edit_url | replace(toolname, ghpath ~ "/" ~ toolname) %}
+        {% set custom_edit_url = page.edit_url | replace(page.edit_url, ghpath ~ "/" ~ toolname ~ ".md") %}
         {% if "content.action.edit" in features %}
             <a href="{{ custom_edit_url }}" title="{{ lang.t('action.edit') }}" class="md-content__button md-icon">
                 {% set icon = config.theme.icon.edit or "material/file-edit-outline" %}
