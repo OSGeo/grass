@@ -3,25 +3,25 @@ When [launching](grass.md) GRASS GIS for the first time, you will open a
 called "country_boundaries" showing a world map in the WGS84 coordinate
 system.
 
-![\[GRASS GIS after first startup\]](grass_start.png)
+![GRASS GIS after first startup](grass_start.png)
 
 The main component of the Data tab is the *Data Catalog* which shows the
-GRASS GIS hierarchical structure consisting of database ![\[GRASS
-Database\]](grassdb.png), project ![\[project\]](location.png) and
-mapset ![\[mapset\]](mapset.png).
+GRASS GIS hierarchical structure consisting of database ![GRASS
+Database](grassdb.png), project ![project](location.png) and
+mapset ![mapset](mapset.png).
 
-![\[GRASS Database\]](grassdb.png) **GRASS database** (directory with projects)  
+![GRASS Database](grassdb.png) **GRASS database** (directory with projects)  
 Running GRASS GIS for the first time, a folder named "grassdata" is
 automatically created. Depending on your operating system, you can find
 it in your $HOME directory (\*nix) or My Documents (MS Windows).
 
-![\[project\]](location.png) **project** (previously called location)  
+![project](location.png) **project** (previously called location)  
 A project is defined by its coordinate reference system (CRS). In the
 case of the default project, it is a geographic coordinate reference
 system WGS84 (EPSG:4326). If you have data in another CRS than WGS84,
 you should create a new project corresponding to your system.
 
-![\[mapset\]](mapset.png) **mapset** (a subproject)  
+![mapset](mapset.png) **mapset** (a subproject)  
 Each project can have many mapsets for managing different aspects of a
 project or project's subregions. When creating a new project, GRASS GIS
 automatically creates a special mapset called PERMANENT where the core
@@ -35,14 +35,14 @@ Database](grass_database.md) page.
 First, if you would like to get to know GRASS better before importing
 your own data, please download provided samples such as the "North
 Carolina" dataset. You can simply reach them through "Download sample
-project to current database" management icon ![\[Download
-project\]](location-download.png).
+project to current database" management icon ![Download
+project](location-download.png).
 
 To work with your own data, you typically want to first create a new
 project with a [coordinate reference system
 (CRS)](https://en.wikipedia.org/wiki/Spatial_reference_system) suitable
 for your study area or one that matches your data's CRS. The Project
-Wizard ![\[Add project\]](location-add.png) will help you with that by
+Wizard ![Add project](location-add.png) will help you with that by
 guiding you through a series of dialogs to browse and select predefined
 projections (also via EPSG code) or to define individual projections.
 
@@ -58,8 +58,8 @@ included).
 ### Importing data
 
 After creating a new project, you are ready to import your data. You can
-use simple raster or vector data import ![\[Raster
-import\]](raster-import.png), ![\[Vector import\]](vector-import.png) or
+use simple raster or vector data import ![Raster
+import](raster-import.png), ![Vector import](vector-import.png) or
 a variety of more specialized tools. If the data's CRS does not match
 your project's CRS, data will be automatically reprojected. After import
 your raster or vector data are added as a layer to Map Display. To

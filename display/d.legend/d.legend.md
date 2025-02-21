@@ -34,11 +34,11 @@ obscure. When using **lines**, auto-scaled text similar to "4 of 16
 categories" will be placed at the bottom of the legend.
 
 The **thin** option sets the thinning factor. For raster maps with a 0th
-category, **thin=***10* gives cats \[0,10,20,...\]. For raster maps
-starting at category 1, **thin=***10* gives cats \[1,11,21,...\].
+category, **thin**=*10* gives cats \[0,10,20,...\]. For raster maps
+starting at category 1, **thin**=*10* gives cats \[1,11,21,...\].
 
 The **use** option lets the user create a legend made up of arbitrary
-category values. e.g. **use=***1000,100,10,0,-10,-100,-1000*
+category values. e.g. **use**=*1000,100,10,0,-10,-100,-1000*
 
 The **range** option lets the user define the minimum and maximum
 categories to be used in the legend. It may also be used to define the

@@ -28,7 +28,7 @@ the default settings.*
 
 ### Stacking order
 
-The first *name* listed in the string **input=***name*,*name*,*name*,...
+The first *name* listed in the string **input**=*name*,*name*,*name*,...
 is the name of the first map whose data values will be used to fill in
 cells in the current region. Then, the second through the last input
 maps (..., *name*, *name*, ...) will be used, in order, to supply data
@@ -38,7 +38,7 @@ values for the remaining "no data" cells (or cells with value 0 with
 In other words, the first raster map is used first and if it had some
 "no data" cells, then second raster map is used for these cells, then
 the third and so on. So the formal command line syntax can be also
-written as **input=***primary*,*secondary*,*tertiary*,... For two raster
+written as **input**=*primary*,*secondary*,*tertiary*,... For two raster
 maps, the first one can be viewed as the primary one or the default one
 and the second one as the secondary one or a fallback.
 

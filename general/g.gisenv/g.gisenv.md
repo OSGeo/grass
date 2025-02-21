@@ -21,7 +21,7 @@ MAPSET=/user1
 GUI=gui
 ```
 
-If the user specifies a **get=***variable_name* on the command line
+If the user specifies a `get=variable_name` on the command line
 
 ```sh
 g.gisenv MAPSET
@@ -36,7 +36,8 @@ While other variables may be associated with each GRASS session (e.g.,
 GRASS_GUI, GIS_LOCK, and other variables), those stated below are
 essential.
 
-*GISDBASE*  
+### GISDBASE
+
 The *GISDBASE* is a directory in which all users' GRASS data are stored.
 Within the *GISDBASE*, data are segregated into subdirectories (called
 "projects") based on the map coordinate system used and the geographic
@@ -45,7 +46,8 @@ subdirectories called "mapsets"; each "mapset" stores "data base
 elements" - the directories (e.g., the `cell`, `cellhd`, `vector`, etc.,
 directories) in which GRASS data files are actually stored.
 
-*LOCATION_NAME*  
+### LOCATION_NAME
+
 The user must choose to work with the data under a single GRASS project
 (previously called "location") within any given GRASS session; this
 project is then called the *current GRASS project*, and is specified by
@@ -58,7 +60,8 @@ under the same GRASS *LOCATION_NAME* (and/or within the same *MAPSET*)
 must use the same coordinate system and typically fall within the
 boundaries of the same geographic region.
 
-*MAPSET*  
+### MAPSET
+
 Each "mapset" contains a set of maps relevant to the *LOCATION_NAME*
 directory in which it appears. Each *LOCATION_NAME* can contain multiple
 mapsets. (Mapsets which fall under the same *LOCATION_NAME* all contain
