@@ -472,7 +472,7 @@ class LocationPage(TitledPage):
         for item in location_path.iterdir():
             if item.is_dir() and (item / "WIND").exists():
                 if item.name != "PERMANENT":
-                    self.mapsetList.append(str(item.name))
+                    self.mapsetList.append(item.name)
 
         self.xymapset = "PERMANENT"
         utils.ListSortLower(self.mapsetList)
