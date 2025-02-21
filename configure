@@ -740,10 +740,11 @@ HISTORYLIB
 READLINELIB
 READLINELIBPATH
 READLINEINCPATH
-USE_REGEX
 REGEXLIB
 REGEXLIBPATH
 REGEXINCPATH
+USE_PCRE
+USE_REGEX
 PROJSHARE
 PROJLIB
 PROJINC
@@ -907,6 +908,7 @@ with_freetype
 with_nls
 with_readline
 with_regex
+with_pcre
 with_pthread
 with_openmp
 with_opencl
@@ -957,6 +959,8 @@ with_proj_libs
 with_proj_share
 with_regex_includes
 with_regex_libs
+with_pcre_includes
+with_pcre_libs
 with_pthread_includes
 with_pthread_libs
 with_openmp_includes
@@ -1635,6 +1639,7 @@ Optional Packages:
   --with-nls              support NLS functionality (default: no)
   --with-readline         support Readline functionality (default: no)
   --with-regex            support regex functionality (default: yes)
+  --with-pcre             support pcre functionality (default: no)
   --with-pthread          support POSIX threads functionality (default: no)
   --with-openmp           support OpenMP functionality (default: no)
   --with-opencl           support OpenCL functionality (default: no)
@@ -1725,6 +1730,9 @@ Optional Packages:
   --with-regex-includes=DIRS
                           regex include files are in DIRS
   --with-regex-libs=DIRS  regex library files are in DIRS
+  --with-pcre-includes=DIRS
+                          pcre include files are in DIRS
+  --with-pcre-libs=DIRS   pcre library files are in DIRS
   --with-pthread-includes=DIRS
                           POSIX threads include files are in DIRS
   --with-pthread-libs=DIRS
@@ -5539,6 +5547,17 @@ fi
 
 
 
+# Check whether --with-pcre was given.
+if test ${with_pcre+y}
+then :
+  withval=$with_pcre;
+else $as_nop
+  with_pcre=no
+fi
+
+
+
+
 # Check whether --with-pthread was given.
 if test ${with_pthread+y}
 then :
@@ -6016,6 +6035,25 @@ fi
 if test ${with_regex_libs+y}
 then :
   withval=$with_regex_libs;
+fi
+
+
+
+
+
+# Check whether --with-pcre-includes was given.
+if test ${with_pcre_includes+y}
+then :
+  withval=$with_pcre_includes;
+fi
+
+
+
+
+# Check whether --with-pcre-libs was given.
+if test ${with_pcre_libs+y}
+then :
+  withval=$with_pcre_libs;
 fi
 
 
@@ -9551,6 +9589,18 @@ esac
 
 
 
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether to use pcre" >&5
+printf %s "checking whether to use pcre... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: \"$with_pcre\"" >&5
+printf "%s\n" "\"$with_pcre\"" >&6; }
+case "$with_pcre" in
+	"no")	USE_PCRE=	;;
+	"yes")	USE_PCRE="1"	;;
+	*)	as_fn_error $? "*** You must answer yes or no." "$LINENO" 5	;;
+esac
+
+
+
 REGEXINCPATH=
 REGEXLIBPATH=
 REGEXLIB=
@@ -9700,8 +9750,155 @@ LIBS=${ac_save_libs}
 LDFLAGS=${ac_save_ldflags}
 
 
-fi # $USE_REGEX
 
+elif test -n "$USE_PCRE"; then
+
+# With pcre includes directory
+
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of pcre includes" >&5
+printf %s "checking for location of pcre includes... " >&6; }
+case "$with_pcre_includes" in
+y | ye | yes | n | no)
+	as_fn_error $? "*** You must supply a directory to --with-pcre-includes." "$LINENO" 5
+	;;
+esac
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $with_pcre_includes" >&5
+printf "%s\n" "$with_pcre_includes" >&6; }
+
+if test -n "$with_pcre_includes" ; then
+    for dir in $with_pcre_includes; do
+        if test -d "$dir"; then
+            REGEXINCPATH="$REGEXINCPATH -I$dir"
+        else
+            as_fn_error $? "*** pcre includes directory $dir does not exist." "$LINENO" 5
+        fi
+    done
+fi
+
+
+
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$REGEXINCPATH $CPPFLAGS"
+       for ac_header in pcre.h
+do :
+  ac_fn_c_check_header_compile "$LINENO" "pcre.h" "ac_cv_header_pcre_h" "$ac_includes_default"
+if test "x$ac_cv_header_pcre_h" = xyes
+then :
+  printf "%s\n" "#define HAVE_PCRE_H 1" >>confdefs.h
+
+else $as_nop
+
+    as_fn_error $? "*** Unable to locate pcre includes." "$LINENO" 5
+
+fi
+
+done
+CPPFLAGS=$ac_save_cppflags
+
+
+# With pcre library directory
+
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of pcre library" >&5
+printf %s "checking for location of pcre library... " >&6; }
+case "$with_pcre_libs" in
+y | ye | yes | n | no)
+	as_fn_error $? "*** You must supply a directory to --with-pcre-libs." "$LINENO" 5
+	;;
+esac
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $with_pcre_libs" >&5
+printf "%s\n" "$with_pcre_libs" >&6; }
+
+if test -n "$with_pcre_libs"; then
+    for dir in $with_pcre_libs; do
+        if test -d "$dir"; then
+            REGEXLIBPATH="$REGEXLIBPATH -L$dir"
+        else
+            as_fn_error $? "*** pcre library directory $dir does not exist." "$LINENO" 5
+        fi
+    done
+fi
+
+
+
+ac_save_libs="$LIBS"
+ac_save_ldflags="$LDFLAGS"
+LIBS="  $LIBS"
+LDFLAGS=" $LDFLAGS"
+ac_fn_c_check_func "$LINENO" "pcre_compile" "ac_cv_func_pcre_compile"
+if test "x$ac_cv_func_pcre_compile" = xyes
+then :
+
+
+    REGEXLIB="$REGEXLIB "
+
+
+else $as_nop
+
+
+ac_save_ldflags="$LDFLAGS"
+LDFLAGS="$REGEXLIBPATH $LDFLAGS"
+
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for pcre_compile in -lpcre" >&5
+printf %s "checking for pcre_compile in -lpcre... " >&6; }
+
+ac_check_lib_save_LIBS=$LIBS
+LIBS="-lpcre  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+char pcre_compile ();
+int
+main (void)
+{
+return pcre_compile ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"
+then :
+  ac_cv_lib_pcre_pcre_compile=yes
+else $as_nop
+  ac_cv_lib_pcre_pcre_compile=no
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_pcre_pcre_compile" >&5
+printf "%s\n" "$ac_cv_lib_pcre_pcre_compile" >&6; }
+if test "x$ac_cv_lib_pcre_pcre_compile" = xyes
+then :
+  REGEXLIB="$REGEXLIB -lpcre "
+else $as_nop
+
+LDFLAGS=${ac_save_ldflags}
+
+    as_fn_error $? "*** Unable to locate pcre library." "$LINENO" 5
+
+
+fi
+
+
+
+LDFLAGS=${ac_save_ldflags}
+
+
+
+fi
+
+LIBS=${ac_save_libs}
+LDFLAGS=${ac_save_ldflags}
+
+
+
+
+fi # $USE_REGEX
 
 
 
@@ -16888,6 +17085,8 @@ echo "  PostgreSQL support:         `if test -n "${USE_POSTGRES}" ; then echo ye
 echo "  Readline support:           `if test -n "${USE_READLINE}" ; then echo yes ; else echo no ; fi`"
 
 echo "  Regex support:              `if test -n "${USE_REGEX}" ; then echo yes ; else echo no ; fi`"
+
+echo "  PCRE support:               `if test -n "${USE_PCRE}" ; then echo yes ; else echo no ; fi`"
 
 echo "  SQLite support:             `if test -n "${USE_SQLITE}" ; then echo yes ; else echo no ; fi`"
 
