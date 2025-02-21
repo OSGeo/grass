@@ -91,6 +91,22 @@ void usage_rest_md(bool rest)
     fprintf(stdout, "\n");
     if (!rest)
         fprintf(stdout, "### ");
+    fprintf(stdout, "%s\n", _("KEYWORDS"));
+    if (rest)
+        fprintf(stdout, "--------\n");
+    fprintf(stdout, "\n");
+    if (st->module_info.keywords) {
+        if (rest) {
+            G__print_keywords(stdout, NULL, FALSE);
+            fprintf(stdout, "\n");
+        }
+        else {
+            G__print_keywords(stdout, print_escaped_for_md_keywords, TRUE);
+        }
+    }
+    fprintf(stdout, "\n");
+    if (!rest)
+        fprintf(stdout, "### ");
     fprintf(stdout, "%s\n", _("SYNOPSIS"));
     if (rest) {
         fprintf(stdout, "--------\n\n");
