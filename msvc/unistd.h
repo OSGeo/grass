@@ -15,6 +15,15 @@
 #define chdir  _chdir
 
 #include <process.h>
-#define getpid _getpid
+#define getpid        _getpid
+
+#define F_OK          0 /* Test for existence. */
+#define X_OK          1 /* Test for execute permission. */
+#define W_OK          2 /* Test for write permission. */
+#define R_OK          4 /* Test for read permission. */
+
+#define STDIN_FILENO  0 /* Standard input. */
+#define STDOUT_FILENO 1 /* Standard output. */
+#define STDERR_FILENO 2 /* Standard error output. */
 
 #endif
