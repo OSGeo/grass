@@ -316,7 +316,6 @@ install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
 
 set(misc_files
     AUTHORS
-    CHANGES
     CITING
     contributors_extra.csv
     contributors.csv
