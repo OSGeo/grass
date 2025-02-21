@@ -21,7 +21,7 @@ MAPSET=/user1
 GUI=gui
 ```
 
-If the user specifies a `get=variable_name` on the command line
+If the user specifies a **get**=*variable_name* on the command line
 
 ```sh
 g.gisenv MAPSET

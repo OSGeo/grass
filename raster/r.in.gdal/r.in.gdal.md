@@ -193,6 +193,7 @@ GRASS integer cells. This includes 16bit integer data sources. Complex
 point cell layers (\*.real and \*.imaginary).  
 
 ### Georeferencing
+
 If the dataset has affine georeferencing information, this will be used
 to set the north, south, east and west edges. Rotational coefficients
 will be ignored, resulting in incorrect positioning for rotated
@@ -206,6 +207,7 @@ Known Text format. A large subset of the total set of GRASS CRSs are
 supported.  
 
 ### Null Values
+
 Raster bands for which a null value is recognised by GDAL will have the
 null pixels transformed into GRASS style nulls during import. Many
 generic formats (and formats poorly supported by GDAL) do not have a way
@@ -213,6 +215,7 @@ of recognising null pixels in which case r.null should be used after the
 import.  
 
 ### GCPs
+
 Datasets that have Ground Control Points will have them imported as a
 POINTS file associated with the imagery group. Datasets with only one
 band that would otherwise have been translated as a simple raster map
