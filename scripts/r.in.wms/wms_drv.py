@@ -24,6 +24,7 @@ import grass.script as gs
 
 try:
     from osgeo import gdal
+
     # Explicitly enable GDAL exceptions to suppress FutureWarning
     gdal.UseExceptions()
 except ImportError:
@@ -318,7 +319,8 @@ class WMSDrv(WMSBase):
                 dst_data = np.take(band_lookup, src_data)
                 tif_ds.GetRasterBand(iBand + 1).WriteArray(dst_data, 0, iY)
 
-        return tif_ds   
+        return tif_ds
+
 
 class BaseRequestMgr:
     """!Base class for request managers."""
