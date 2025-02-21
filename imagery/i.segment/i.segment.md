@@ -63,7 +63,11 @@ the distance calculation will also take into account the shape
 characteristics of the segments. The normal distances are then
 multiplied by the input radiometric weight. Next an additional
 contribution is added:
-`(1-radioweight) * {smoothness * smoothness weight + compactness * (1-smoothness weight)}`,
+
+```text
+(1-radioweight) * {smoothness * smoothness weight + compactness * (1-smoothness weight)}
+```
+
 where `compactness = Perimeter Length / sqrt( Area )` and
 `smoothness = Perimeter Length / Bounding Box`. The perimeter length is
 estimated as the number of pixel sides the segment has.

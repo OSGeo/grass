@@ -164,8 +164,10 @@ d.vect map=myrailroads display=shape,dir
 d.vect map=myrailroads_pt10pctO500m icon=basic/circle color=red fcolor=black size=5
 ```
 
-![A series of points, spaced every 10% of the line's length along the tracks from the end of the line up to the middle point, offset 500m to the right](v_segment_spaced_percent_points.jpg)  
-*A series of points, spaced every 10% of the line's length along the tracks from the end of the line up to the middle point, offset 500m to the right*
+![A series of points, spaced every 10% of the line's length along the tracks
+from the end of the line up to the middle point, offset 500m to the right](v_segment_spaced_percent_points.jpg)  
+*A series of points, spaced every 10% of the line's length along the tracks
+from the end of the line up to the middle point, offset 500m to the right*
 
 ## KNOWN ISSUES
 

@@ -80,8 +80,9 @@ This selects the text color. If unspecified, the label's text is drawn
 in *black*, by default. The text color can be specified in one of
 several ways:
 
-1. By color name:  
-    `aqua black blue brown cyan gray green grey indigo magenta orange purple red violet white yellow`
+1. By color name: *aqua*, *black*, *blue*, *brown*, *cyan*, *gray*,
+   *green*, *grey*, *indigo*, *magenta*, *orange*, *purple*, *red*,
+   *violet*, *white*, *yellow*
 2. As red, green, blue component values. (0-255)  
     for example: `128:100:200`
 3. Specify "`none`" to suppress the lettering.
