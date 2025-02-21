@@ -26,6 +26,8 @@ theme:
     - search.suggest
     - search.highlight
     - content.code.copy
+    - content.tabs.link
+    - content.tooltips
     - navigation.footer
     - navigation.indexes
     # - navigation.expand
@@ -40,6 +42,7 @@ theme:
     repo: fontawesome/brands/github
     edit: material/pencil
     view: material/eye
+    logo: material/library
 
 # Customization
 extra:
@@ -70,8 +73,15 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.tasklist
+  - pymdownx.snippets
+  - pymdownx.tabbed
+  - pymdownx.magiclink
   - attr_list
   - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 # Navigation
 nav:
