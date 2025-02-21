@@ -1,6 +1,13 @@
-### Introduction to the GRASS GIS Graphical User Interface
+---
+description: wxGUI in GRASS GIS
+index: wxgui
+---
 
-#### Overview
+# wxGUI in GRASS GIS
+
+## Introduction to the GRASS GIS Graphical User Interface
+
+### Overview
 
 The wxGUI (wxPython-based Graphical User Interface) is the primary user
 interface for GRASS GIS. Designed for efficiency and ease of use, the
@@ -10,7 +17,7 @@ visualisation of spatial data, the execution of geoprocessing tasks or
 the management of complex workflows and offers a comprehensive set of
 tools.
 
-#### Features
+### Features
 
 The wxGUI is designed to cater to both novice and advanced users with
 the following features:
@@ -24,7 +31,7 @@ the following features:
 - Advanced debugging and scripting capabilities for developers and power
   users.
 
-#### Getting Started
+### Getting Started
 
 To launch the wxGUI, simply start GRASS GIS. Upon startup, the wxGUI
 will load, providing access to its various components. The wxGUI usage
@@ -33,7 +40,7 @@ explore the integrated help system or visit the [GRASS GIS
 documentation](https://grass.osgeo.org/documentation/) for tutorials and
 guides.
 
-#### Key Components
+### Key Components
 
 The wxGUI is composed of several modules and features:
 
@@ -52,7 +59,7 @@ The wxGUI is composed of several modules and features:
 The wxGUI components are explained in greater detail
 [here](wxGUI.components.md).
 
-### See also
+## See also
 
 - [Introduction to raster data processing](rasterintro.md)
 - [Introduction to 3D raster data (voxel) processing](raster3dintro.md)

@@ -1,3 +1,10 @@
+---
+description: wxGUI Example Tool
+index: wxGUI
+---
+
+# wxGUI Example Tool
+
 ## DESCRIPTION
 
 The purpose of the **Example Tool** is to make life easier for new wxGUI

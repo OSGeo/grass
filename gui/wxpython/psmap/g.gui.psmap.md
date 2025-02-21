@@ -1,3 +1,10 @@
+---
+description: wxGUI Cartographic Composer
+index: topic_GUI|GUI
+---
+
+# wxGUI Cartographic Composer
+
 ## DESCRIPTION
 
 **wxGUI Cartographic Composer** also called *wx.psmap* is a
