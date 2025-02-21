@@ -44,6 +44,39 @@ theme:
 # Customization
 extra:
   homepage: ./index.html
+  analytics:
+    provider: matomo
+    url: https://2022.foss4g.org/matomo/
+    site_id: '2'
+  consent:
+    actions:
+      - accept
+      - manage
+
+    cookies:
+      analytics:
+        name: Matomo
+        checked: true
+      github:
+        name: GitHub
+        checked: true
+
+    title: Analytics Consent
+    description: >-
+      <strong>Matomo</strong><br>
+      This website uses the open source web analytics service
+      <a href="https://matomo.org/" target="_blank">Matomo</a>.
+      Matomo uses technologies that enable the recognition of
+      the user across pages for the analysis of user behaviour.
+      In our case no cookies are collected. The information collected by
+      Matomo about the use of this website is stored on our server.<br>
+      <strong>GitHub</strong><br>
+      This website uses the GitHub API to fetch
+      <a href="https://https://github.com/OSGeo/grass" target="_blank">OSGeo/grass</a>
+       and <a href="https://github.com/OSGeo/grass-addons" target="_blank">OSGeo/grass-addons</a> statistics.<br>
+      <br>
+      For more information, please read our
+      <a href="https://grass.osgeo.org/about/privacy/" target="_blank">privacy policy</a>.
 
 # Hooks
 hooks:
@@ -52,6 +85,10 @@ hooks:
 # Custom CSS
 extra_css:
   - grassdocs.css
+
+# Custom JavaScript
+extra_javascript:
+  - javascripts/consent.js
 
 # Plugins
 plugins:

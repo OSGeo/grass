@@ -20,7 +20,9 @@ DSTFILES := \
 	$(MDDIR)/source/grassdocs.css \
 	$(MDDIR)/scripts/hook_list_scripts.py \
 	$(MDDIR)/overrides/partials/footer.html \
-	$(MDDIR)/overrides/partials/actions.html
+	$(MDDIR)/overrides/partials/actions.html \
+	$(MDDIR)/overrides/partials/integrations/analytics/matomo.html \
+	$(MDDIR)/overrides/javascripts/consent.js
 
 categories = \
 	d:display \
@@ -271,6 +273,18 @@ $(MDDIR)/overrides/partials/actions.html: mkdocs/overrides/partials/actions.html
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/overrides/partials:
+	$(MKDIR) $@
+
+$(MDDIR)/overrides/partials/integrations/analytics/matomo.html: mkdocs/overrides/partials/integrations/analytics/matomo.html | $(MDDIR)/overrides/partials/integrations/analytics
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/overrides/partials/integrations/analytics:
+	$(MKDIR) $@
+
+$(MDDIR)/overrides/javascripts/consent.js: mkdocs/overrides/javascripts/consent.js | $(MDDIR)/overrides/javascripts
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/overrides/javascripts:
 	$(MKDIR) $@
 
 build-mkdocs:
