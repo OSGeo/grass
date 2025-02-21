@@ -2623,17 +2623,20 @@ class GdalSelect(wx.Panel):
         """Get Rasterlite DB rasters
 
         :param str dsn: Rasterlite DB data source name
-
         :return list: list of Rasterlite DB rasters
         """
-        try:
-            from osgeo import gdal
-        except ImportError:
-            GError(
-                parent=self,
-                message=_("The Python GDAL package is missing. Please install it."),
-            )
-            return []
+
+    try:
+        rasterlite = gdal.Open(dsn)
+        if rasterlite is None:
+            raise RuntimeError(f"Failed to open Rasterlite database: {dsn}")
+
+        rasters = rasterlite.GetSubDatasets()
+        return rasters
+    except RuntimeError as e:
+        GError(parent=self, message=f"GDAL error while opening Rasterlite DB: {e}")
+        return []
+
         rasterlite = gdal.Open(dsn)
         rasters = rasterlite.GetSubDatasets()
         if rasters:
