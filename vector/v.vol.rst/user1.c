@@ -221,6 +221,8 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
                 G_warning(_("Can't insert %lf,%lf,%lf,%lf,%lf a=%d"), x, y, z,
                           w, sm, a);
                 Vect_destroy_field_info(Fi);
+                db_close_database_shutdown_driver(Driver);
+                db_CatValArray_free(&cvarr);
                 return -1;
             }
 
@@ -324,6 +326,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
         else {
             fprintf(stderr, "ERROR: zero points in the given region!\n");
             Vect_destroy_field_info(Fi);
+            db_close_database_shutdown_driver(Driver);
             return -1;
         }
     }
@@ -335,6 +338,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
         fprintf(stderr, "for smooth connection of segments, npmin > segmax "
                         "(see manual) \n");
         Vect_destroy_field_info(Fi);
+        db_close_database_shutdown_driver(Driver);
         return -1;
     }
 
@@ -386,6 +390,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
         G_message(_("Bitmap mask created"));
     }
     Vect_destroy_field_info(Fi);
+    db_close_database_shutdown_driver(Driver);
 
     return 1;
 }
