@@ -1,3 +1,10 @@
+---
+description: wxGUI 3D View Mode
+index: wxGUI
+---
+
+# wxGUI 3D View Mode
+
 ## KEYWORDS
 
 [display](display.md), [GUI](topic_GUI.md),

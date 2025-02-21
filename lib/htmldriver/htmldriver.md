@@ -1,3 +1,9 @@
+---
+description: HTML DISPLAY DRIVER
+---
+
+# HTML DISPLAY DRIVER
+
 *HTML display driver* to create HTML image maps.
 
 ## DESCRIPTION

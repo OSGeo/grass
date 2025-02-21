@@ -85,15 +85,14 @@ r.mapcalc "lsat7_2002_cluster_classes_filtered = \
            if(lsat7_2002_cluster_reject <= 12, lsat7_2002_cluster_classes, null())"
 ```
 
-![](i_maxlik_rgb.png)  
-RGB composite of input data
+![RGB composite of input data](i_maxlik_rgb.png)  
+*RGB composite of input data*
 
-![](i_maxlik_classes.png)  
-Output raster map with pixels classified (10 classes)
+![Output raster map with pixels classified (10 classes)](i_maxlik_classes.png)  
+*Output raster map with pixels classified (10 classes)*
 
-![](i_maxlik_rejection.png)  
-Output raster map with rejection probability values (pixel
-classification confidence levels)
+![Output raster map with rejection probability values (pixel classification confidence levels)](i_maxlik_rejection.png)  
+*Output raster map with rejection probability values (pixel classification confidence levels)*
 
 ## SEE ALSO
 

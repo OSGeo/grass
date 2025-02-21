@@ -221,9 +221,9 @@ as an alternative, although disk space requirements of
 
 ### Large regions with many cells
 
-The upper limit of the *ram* version is 2 billion (2<sup>31</sup> - 1)
+The upper limit of the *ram* version is 2 billion (2^31 - 1)
 cells, whereas the upper limit for the *seg* version is 9
-billion-billion (2<sup>63</sup> - 1 =
+billion-billion (2^63 - 1 =
 [9.223372e+18](https://en.wikipedia.org/wiki/9223372036854775807))
 cells.  
 In some situations, the region size (number of cells) may be too large

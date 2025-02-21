@@ -1,3 +1,10 @@
+---
+description: wxGUI Vector Digitizer
+index: topic_GUI|GUI
+---
+
+# wxGUI Vector Digitizer
+
 ## DESCRIPTION
 
 The **vector digitizer** is a *[wxGUI](wxGUI.md)* component intended for

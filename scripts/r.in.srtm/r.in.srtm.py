@@ -76,6 +76,7 @@ import shutil
 import atexit
 import grass.script as gs
 import zipfile as zfile
+from pathlib import Path
 from grass.exceptions import CalledModuleError
 
 
@@ -130,19 +131,7 @@ XDIM 0.000833333333333
 YDIM 0.000833333333333
 """
 
-proj = "".join(
-    [
-        "GEOGCS[",
-        '"wgs84",',
-        (
-            'DATUM["WGS_1984",SPHEROID["wgs84",6378137,298.257223563],TOWGS84[0.000000,'
-            "0.000000,0.000000]],"
-        ),
-        'PRIMEM["Greenwich",0],',
-        'UNIT["degree",0.0174532925199433]',
-        "]",
-    ]
-)
+proj = 'GEOGCS["wgs84",DATUM["WGS_1984",SPHEROID["wgs84",6378137,298.257223563],TOWGS84[0.000000,0.000000,0.000000]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433]]'
 
 
 def cleanup():
@@ -186,8 +175,8 @@ def main():
         suff = ".raw"
         swbd = True
 
-    zipfile = "{im}{su}.zip".format(im=infile, su=suff)
-    hgtfile = "{im}{su}".format(im=infile, su=suff)
+    zipfile = f"{infile}{suff}.zip"
+    hgtfile = f"{infile}{suff}"
 
     if os.path.isfile(zipfile):
         # really a ZIP file?
@@ -206,19 +195,15 @@ def main():
     gs.try_remove(tmpdir)
     os.mkdir(tmpdir)
     if is_zip:
-        shutil.copyfile(
-            zipfile, os.path.join(tmpdir, "{im}{su}.zip".format(im=tile, su=suff))
-        )
+        shutil.copyfile(zipfile, os.path.join(tmpdir, f"{tile}{suff}.zip"))
     else:
-        shutil.copyfile(
-            hgtfile, os.path.join(tmpdir, "{im}{su}".format(im=tile[:7], su=suff))
-        )
+        shutil.copyfile(hgtfile, os.path.join(tmpdir, f"{tile[:7]}{suff}"))
     # change to temporary directory
     os.chdir(tmpdir)
     in_temp = True
 
-    zipfile = "{im}{su}.zip".format(im=tile, su=suff)
-    hgtfile = "{im}{su}".format(im=tile[:7], su=suff)
+    zipfile = f"{tile}{suff}.zip"
+    hgtfile = f"{tile[:7]}{suff}"
 
     bilfile = tile + ".bil"
 
@@ -226,8 +211,8 @@ def main():
         # unzip & rename data file:
         gs.message(_("Extracting '%s'...") % infile)
         try:
-            zf = zfile.ZipFile(zipfile)
-            zf.extractall()
+            with zfile.ZipFile(zipfile) as zf:
+                zf.extractall()
         except (zfile.BadZipfile, zfile.LargeZipFile, PermissionError):
             gs.fatal(_("Unable to unzip file."))
 
@@ -263,15 +248,11 @@ def main():
 
     header = tmpl % (ulxmap, ulymap)
     hdrfile = tile + ".hdr"
-    outf = open(hdrfile, "w")
-    outf.write(header)
-    outf.close()
+    Path(hdrfile).write_text(header)
 
     # create prj file: To be precise, we would need EGS96! But who really cares...
     prjfile = tile + ".prj"
-    outf = open(prjfile, "w")
-    outf.write(proj)
-    outf.close()
+    Path(prjfile).write_text(proj)
 
     try:
         gs.run_command("r.in.gdal", input=bilfile, out=tileout)
