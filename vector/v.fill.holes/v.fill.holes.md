@@ -8,8 +8,7 @@ area while removing inner boundaries which are considered holes. The
 holes become part of the area which contained them. No boundaries of
 these holes are preserved.
 
-[<img src="v_fill_holes_filled.png" data-border="0" width="600"
-alt="Several areas, some with holes (left) and the same areas but with holes filled (right)" />](v_fill_holes_filled.png)  
+![Several areas, some with holes (left) and the same areas but with holes filled (right)](v_fill_holes_filled.png)  
 *Figure: Holes inside areas are removed. (a) Original areas with holes
 and (b) the same areas but with holes filled.*
 
@@ -22,9 +21,7 @@ empty space into one by dissolving their common boundaries. This turns
 the empty space into a hole inside one single area which turns the
 situation into a case of one area with a hole.
 
-[<img src="v_fill_holes_filled_with_dissolve.png" data-border="0"
-width="600"
-alt="Two areas with empty space in between (left), both areas merged (middle), and the empty space filled (right)" />](v_fill_holes_filled_with_dissolve.png)  
+![Two areas with empty space in between (left), both areas merged (middle), and the empty space filled (right)](v_fill_holes_filled_with_dissolve.png)  
 *Figure: Empty space in between two areas does not belong to either
 area, so it is filled only after the boundaries between areas are
 dissolved, i.e., areas merged into one. (a) Original areas with space in
@@ -72,8 +69,7 @@ Remove the holes:
 v.fill.holes input=lakes_only output=lakes_filled
 ```
 
-[<img src="v_fill_holes.png" data-border="0" width="600"
-alt="Lake without holes overlapping with the lines marking the original" />](v_fill_holes.png)  
+![Lake without holes overlapping with the lines marking the original](v_fill_holes.png)  
 *Figure: The filled lake (blue) and borders of the original lakes with
 islands removed (light blue). Figure shows a smaller area in the north
 of the data extent.*

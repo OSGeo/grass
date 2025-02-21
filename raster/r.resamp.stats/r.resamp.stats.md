@@ -33,8 +33,7 @@ g.region res=20 -ap
 r.resamp.stats -w input=el_D782_6m output=el_D782_20m
 ```
 
-<img src="r_resamp_stats_6m_20m.png" data-border="0"
-alt="GRASS r.resamp.stats result (subset)" />  
+![GRASS r.resamp.stats result (subset)](r_resamp_stats_6m_20m.png)  
 *Resampling of 6m DEM (left) to 20m DEM (right) with weighted resampling
 (subset)*
 

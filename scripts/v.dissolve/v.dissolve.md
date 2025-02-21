@@ -4,8 +4,10 @@ The *v.dissolve* module is used to merge adjacent or overlapping
 features in a vector map that share the same category value. The
 resulting merged feature(s) retain this category value.
 
-![](v_dissolve_zipcodes.png) ![](v_dissolve_towns.png)
-
+![Areas with the same attribute value (first image) are merged
+into one (second image)](v_dissolve_zipcodes.png)
+![Areas with the same attribute value (first image) are merged
+into one (second image)](v_dissolve_towns.png)  
 *Figure: Areas with the same attribute value (first image) are merged
 into one (second image).*
 
@@ -175,7 +177,7 @@ v.clean clc2000_patched out=clc2000_clean tool=snap,break,rmdupl thresh=.01
 v.dissolve input=clc2000_clean output=clc2000_final col=CODE_00
 ```
 
-### Attribute aggregation
+### Aggregating attributes
 
 While dissolving, we can aggregate attribute values of the original
 features. Let's aggregate area in acres (ACRES) of all municipal

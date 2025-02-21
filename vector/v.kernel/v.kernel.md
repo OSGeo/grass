@@ -40,8 +40,8 @@ v.kernel input=schools_wake output=schools_density radius=5000 multiplier=100000
 r.colors map=schools_density color=bcyr
 ```
 
-<img src="v_kernel.png" data-border="0" alt="Density of schools" />  
-School density
+![Density of schools](v_kernel.png)  
+*School density*
 
 ## KNOWN ISSUES
 

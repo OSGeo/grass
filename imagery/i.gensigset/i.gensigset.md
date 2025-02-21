@@ -109,11 +109,11 @@ accurate training data.
 This clustering algorithm estimates both the number of distinct
 subclasses in each class, and the spectral mean and covariance for each
 subclass. The number of subclasses is estimated using Rissanen's minimum
-description length (MDL) criteria \[[1](#rissanen83)\]. This criteria
+description length (MDL) criteria (Rissanen, 1983). This criteria
 attempts to determine the number of subclasses which "best" describe the
 data. The approximate maximum likelihood estimates of the mean and
 covariance of the subclasses are computed using the expectation
-maximization (EM) algorithm \[[2](#dempster77),[3](#redner84)\].
+maximization (EM) algorithm (Dempster, 1977 and Redner, 1984).
 
 ## WARNINGS
 
@@ -139,13 +139,13 @@ then the user should check for:
 
 ## REFERENCES
 
-- <span id="rissanen83">J. Rissanen,</span> "A Universal Prior for
+1. J. Rissanen, "A Universal Prior for
   Integers and Estimation by Minimum Description Length," *Annals of
   Statistics,* vol. 11, no. 2, pp. 417-431, 1983.
-- <span id="dempster77">A. Dempster, N. Laird and D. Rubin,</span>
+2. A. Dempster, N. Laird and D. Rubin,
   "Maximum Likelihood from Incomplete Data via the EM Algorithm," *J.
   Roy. Statist. Soc. B,* vol. 39, no. 1, pp. 1-38, 1977.
-- <span id="redner84">E. Redner and H. Walker,</span> "Mixture
+3. E. Redner and H. Walker, "Mixture
   Densities, Maximum Likelihood and the EM Algorithm," *SIAM Review,*
   vol. 26, no. 2, April 1984.
 

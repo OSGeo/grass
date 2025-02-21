@@ -33,22 +33,17 @@ be used instead.
 
 The graphics language is simple, and uses the following commands:  
 
-\[ [\#](#comment) \| [move](#move) \| [draw](#draw) \|
-[polygon](#polygon) \| [polyline](#polyline) \| [color](#color) \|
-[text](#text) \| [size](#size) \| [symbol](#symbol) \|
-[rotation](#rotation) \| [icon](#icon) \| [width](#width) \]
-
-<span id="comment"></span>**\#** *comment*  
+**\#** *comment*  
 A line of comment which is ignored in the processing.
 
-<span id="move"></span>**move** *xpos ypos*  
+**move** *xpos ypos*  
 The current location is updated to *xpos ypos*. Unless the **-m** flag
 is used, values are stated as a percent of the active display frame's
 horizontal (*xpos*) and vertical (*ypos*) size, and may be floating
 point values. Values are between 0-100. **Note.** A space must separate
 *xpos* and *ypos*.
 
-<span id="draw"></span>**draw** *xpos ypos*  
+**draw** *xpos ypos*  
 A line is drawn in the current color from the current location to the
 new location *xpos ypos*, which then becomes the current location.
 Unless the **-m** flag is used, values are stated as a percent of the
@@ -56,21 +51,21 @@ active display frame's horizontal (*xpos*) and vertical (*ypos*) size,
 and may be floating point values. Values are between 0-100. **Note.** A
 space must separate *xpos* and *ypos*.
 
-<span id="polygon"></span>**polygon**  
+**polygon**  
    *xpos ypos*  
    *xpos ypos*  
   ...  
 The coordinates appearing beneath the word *polygon*, one pair per line,
 circumscribe a polygon that is to be filled with the current color.
 
-<span id="polyline"></span>**polyline**  
+**polyline**  
    *xpos ypos*  
    *xpos ypos*  
   ...  
 The coordinates appearing beneath the word *polyline*, one pair per
 line, circumscribe a polygon that is not to be filled with color.
 
-<span id="color"></span>**color** *color*  
+**color** *color*  
 Sets the current color to that stated; subsequent graphics will be drawn
 in the stated color, until the current color is set to a different
 color. Options are *red*, *orange*, *yellow*, *green*, *blue*, *indigo*,
@@ -78,20 +73,20 @@ color. Options are *red*, *orange*, *yellow*, *green*, *blue*, *indigo*,
 (separated by colons), or the word "none" (draws in the default
 background color).
 
-<span id="text"></span>**text** *line-of-text*  
+**text** *line-of-text*  
 The stated text is drawn at the current location using the current
 color, and the new current location is then positioned at the end of the
 text string.
 
-<span id="size"></span>**size** *xper yper*  
+**size** *xper yper*  
 Subsequent text will be drawn such that the text is *xper* percent of
 the graphics monitor display frame wide and *yper* percent of the frame
 high. By default, the text size is set to 5 percent of the active
 frame's width and 5 percent of the frame's height. If only one value is
-given, then that value will be used for both x and y scaling.  
-**Note.** A space must separate *xper* and *yper*.
+given, then that value will be used for both x and y scaling.
+A space must separate *xper* and *yper*.
 
-<span id="symbol"></span>**symbol** *type size xper yper \[line_color \[fill_color\]\]*  
+**symbol** *type size xper yper \[line_color \[fill_color\]\]*  
 A symbol is drawn at the given size on the display monitor. The *xper*
 and *yper* options define the center of the icon and are given as a
 percentage of the display frame (`0,0` is lower left). The symbol can be
@@ -102,15 +97,15 @@ name, an R:G:B triplet, or "none". If using an R:G:B triplet, each color
 value can range from 0-255. If not specified the default *line_color* is
 black and the default *fill_color* is grey.
 
-<span id="rotation"></span>**rotation** *angle*  
+**rotation** *angle*  
 Subsequent text and symbols will be drawn such that they are rotated
 *angle* degrees counter-clockwise from east.
 
-<span id="icon"></span>**icon** *type size x y*  
+**icon** *type size x y*  
 Draws an icon of types *o*, *x*, or *+* with specified *size* (in %) at
 location *x,y*. Note: type *o* designates a square.
 
-<span id="width"></span>**width** *value*  
+**width** *value*  
 Subsequent lines (including non-FreeType text) will be drawn with the
 given pixel thickness.  
 The default value is 0.

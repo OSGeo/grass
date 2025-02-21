@@ -1,3 +1,10 @@
+---
+description: wxGUI Attribute Table Manager
+index: topic_GUI|GUI
+---
+
+# wxGUI Attribute Table Manager
+
 ## DESCRIPTION
 
 The **Attribute Table Manager** is a *[wxGUI](wxGUI.md)* component to
@@ -17,14 +24,12 @@ stand-alone module *g.gui.dbmgr*.
 - modify vector map DB connection settings - add, remove or modify
   layers.
 
-[<img src="dbmgr_frame.png" width="600" height="401"
-alt="Attribute Table Manager" />](dbmgr_frame.png)  
+![Attribute Table Manager](dbmgr_frame.png)  
 *Figure: Simple attribute filtering using Attribute Table Manager.*
 
 ### SQL Builder
 
-[<img src="dbmgr_sql_builder.png" width="700" height="287"
-alt="Attribute Table Manager and SQL Builder" />](dbmgr_sql_builder.png)  
+![Attribute Table Manager and SQL Builder](dbmgr_sql_builder.png)  
 *Figure: Attribute filtering using Attribute Table Manager and SQL
 Builder.*
 

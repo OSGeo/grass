@@ -4,11 +4,8 @@
 raster maps. If the 2d and 3d region settings are different, the 2d
 resolution will be adjust to the 3d resolution.
 
-<img src="r.to.rast3elev.png" data-border="0" />  
-
-|                            |
-|----------------------------|
-| *How r.to.rast3elev works* |
+![How r.to.rast3elev works](r.to.rast3elev.png)  
+*How r.to.rast3elev works*
 
 ## NOTES
 
