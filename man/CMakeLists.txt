@@ -97,6 +97,7 @@ foreach(category ${categories})
     COMMENT "man generation: build class ${class_name}")
 endforeach()
 
+# TODO: this shouldn't depend on GUI_WXPYTHON
 add_custom_target(
   build_check ALL
   COMMAND
