@@ -136,13 +136,10 @@ def main():
     if rows:
         # Create the r.series input file
         filename = gs.tempfile(True)
-        file = open(filename, "w")
-
-        for row in rows:
-            string = "%s\n" % (row["id"])
-            file.write(string)
-
-        file.close()
+        with open(filename, "w") as file:
+            for row in rows:
+                string = "%s\n" % (row["id"])
+                file.write(string)
 
         flag = ""
         if len(rows) > max_files_open:
