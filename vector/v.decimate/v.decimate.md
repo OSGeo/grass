@@ -72,9 +72,9 @@ region) which has unique categories (e.g. LIDAR classes):
 v.decimate input=points_all output=points_decimated_unique_cats layer=1 -g -c
 ```
 
-![](v_decimate_original.png) ![](v_decimate_count.png)
-![](v_decimate_grid_cat.png)
-
+![original points](v_decimate_original.png)
+![decimation result with every forth point preserved](v_decimate_count.png)
+![grid-based decimation result with points with unique categories in each grid cell](v_decimate_grid_cat.png)  
 *Figure 1: Comparison of original points, decimation result with every
 forth point preserved, and grid-based decimation result with points with
 unique categories in each grid cell*
