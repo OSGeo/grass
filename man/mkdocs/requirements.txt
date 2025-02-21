@@ -3,3 +3,4 @@ mkdocs-glightbox
 mkdocs-material
 pymdown-extensions
 pyyaml-env-tag
+mkdocs-material[imaging]
