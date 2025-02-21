@@ -28,10 +28,7 @@ An usage example can be found in [i.smap](i.smap.md) documentation.
 
 ### Parameters
 
-**trainingmap=***name*  
-ground truth training map
-
-This raster layer, supplied as input by the user, has some of its pixels
+The **trainingmap** raster layer, supplied as input by the user, has some of its pixels
 already classified, and the rest (probably most) of the pixels
 unclassified. Classified means that the pixel has a non-zero value and
 unclassified means that the pixel has a zero value.
@@ -46,31 +43,20 @@ to define the areas representative of the classes in the image.
 At present, there is no fully-interactive tool specifically designed for
 producing this layer.
 
-**group=***name*  
-imagery group
-
-This is the name of the group that contains the band files which
+Option **group** is the name of the group that contains the band files which
 comprise the image to be analyzed. The *[i.group](i.group.md)* command
 is used to construct groups of raster layers which comprise an image.
 
-**subgroup=***name*  
-subgroup containing image files
-
-This names the subgroup within the group that selects a subset of the
+Option **subgroup** names the subgroup within the group that selects a subset of the
 bands to be analyzed. The *[i.group](i.group.md)* command is also used
 to prepare this subgroup. The subgroup mechanism allows the user to
 select a subset of all the band files that form an image.
 
-**signaturefile=***name*  
-resultant signature file
-
-This is the resultant signature file (containing the means and
+Option **signaturefile** is the resultant signature file (containing the means and
 covariance matrices) for each class in the training map that is
 associated with the band files in the subgroup selected.
 
-**maxsig=***value*  
-maximum number of sub-signatures in any class  
-default: 5
+Option **maxsig** is the maximum number of sub-signatures in any class (default: 5).
 
 The spectral signatures which are produced by this program are "mixed"
 signatures (see [NOTES](#notes)). Each signature contains one or more
@@ -115,7 +101,7 @@ data. The approximate maximum likelihood estimates of the mean and
 covariance of the subclasses are computed using the expectation
 maximization (EM) algorithm (Dempster, 1977 and Redner, 1984).
 
-## WARNINGS
+### WARNINGS
 
 If warnings like this occur, reducing the remaining classes to 0:
 

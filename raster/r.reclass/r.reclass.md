@@ -78,7 +78,7 @@ the user will be reclassified to NULL.
 
 Each line of input must have the following format:
 
-**input_categories=***output_category* \[*label*\]
+**input_categories**=*output_category* \[*label*\]
 
 where each line of input specifies the category values in the input
 raster map layer to be reclassified to the new *output_category*

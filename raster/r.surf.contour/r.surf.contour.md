@@ -21,12 +21,12 @@ interpolates from the uphill and downhill values by the true distance.
 
 ### Parameters
 
-**input=***name*  
+**input**=*name*  
 Name of an existing raster map that contains a set of initial category
 values (i.e., some cells contain known elevation values (denoting
 contours) while the rest contain NULL values).
 
-**output=***name*  
+**output**=*name*  
 Name to be assigned to new output raster map that represents a smooth
 (e.g., elevation) surface generated from the known category values in
 the input raster map layer.

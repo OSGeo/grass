@@ -28,23 +28,23 @@ to use SMAP estimation (see NOTES below).
 
 ### Parameters
 
-**group=***name*  
+**group**=*name*  
 imagery group  
 The imagery group that defines the image to be classified.
 
-**subgroup=***name*  
+**subgroup**=*name*  
 imagery subgroup  
 The subgroup within the group specified that specifies the subset of the
 band files that are to be used as image data to be classified.
 
-**signaturefile=***name*  
+**signaturefile**=*name*  
 imagery signaturefile  
 The signature file that contains the spectral signatures (i.e., the
 statistics) for the classes to be identified in the image. This
 signature file is produced by the program
 *[i.gensigset](i.gensigset.md)* (see NOTES below).
 
-**blocksize=***value*  
+**blocksize**=*value*  
 size of submatrix to process at one time  
 default: 1024  
 This option specifies the size of the "window" to be used when reading
@@ -69,7 +69,7 @@ region of the image.
 The submatrix size has no effect on the performance of the ML
 segmentation method.
 
-**output=***name*  
+**output**=*name*  
 output raster map.  
 The name of a raster map that will contain the classification results.
 This new raster map layer will contain categories that can be related to
