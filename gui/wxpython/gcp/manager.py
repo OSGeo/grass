@@ -700,7 +700,7 @@ class GroupPage(TitledPage):
         if group_path.is_dir():
             for item in group_path.iterdir():
                 if item.is_dir():
-                    self.groupList.append(str(item.name))
+                    self.groupList.append(item.name)
 
         if maptype == "raster":
             self.btn_vgroup.Hide()
