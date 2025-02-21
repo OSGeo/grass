@@ -182,8 +182,10 @@ considered). The last command sets the vector map color table to
 v.colors map=hexagons use=attr column=average color=viridis
 ```
 
-![Point statistics in a hexagonal grid (count of points, average of values associated with point, standard deviation)](v_vect_stats.png)  
-*Point statistics in a hexagonal grid (count of points, average of values associated with point, standard deviation)*
+![Point statistics in a hexagonal grid (count of points,
+ average of values associated with point, standard deviation)](v_vect_stats.png)  
+*Point statistics in a hexagonal grid (count of points,
+ average of values associated with point, standard deviation)*
 
 ## SEE ALSO
 
