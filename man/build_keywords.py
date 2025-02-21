@@ -19,6 +19,7 @@ python man/build_keywords.py <dir_path_to_core_modules_html_man_files>
 """
 
 import os
+import re
 import sys
 import glob
 
@@ -95,14 +96,26 @@ def build_keywords(ext):
         else:
             keys = []
             for line in lines:
-                if "keywords:" in line:
-                    keys = [x.strip() for x in line.split(":", 1)[1].strip().split(",")]
+                match = re.match(r"keywords:\s*(.*)", line)
+                if match:
+                    text = match.group(1)
+                    if not text:
+                        print(
+                            f"Warning: Empty keyword list in {fname}", file=sys.stderr
+                        )
+                        break
+                    keys = [item.strip() for item in text.split(",")]
                     break
+
+        # No keywords in file is allowed because some non-tool pages don't have
+        # keywords, so we don't check for that specifically (only set but broken
+        # keywords are flagged).
 
         for key in keys:
             if not key:
                 print(
-                    f"Empty keyword in {fname}, all keywords: {keys}", file=sys.stderr
+                    f"Warning: Empty keyword in {fname}, all keywords: {keys}",
+                    file=sys.stderr,
                 )
                 continue
             if key not in keywords.keys():
