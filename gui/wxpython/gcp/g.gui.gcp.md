@@ -1,3 +1,10 @@
+---
+description: wxGUI GCP Manager
+index: topic_GUI|GUI
+---
+
+# wxGUI GCP Manager
+
 ## DESCRIPTION
 
 The **GCP Manager** is a *[wxGUI](wxGUI.md)* extension which allows the

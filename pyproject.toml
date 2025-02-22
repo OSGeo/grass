@@ -284,9 +284,7 @@ ignore = [
 # Other ignores:
 "**.py" = ["PYI066"]
 "*/testsuite/**.py" = ["PT009", "PT027"]
-"gui/wxpython/dbmgr/base.py" = ["SIM115"]
 "gui/wxpython/gcp/manager.py" = ["PTH208"]
-"gui/wxpython/gmodeler/panels.py" = ["SIM115"]
 "gui/wxpython/gui_core/dialogs.py" = ["PTH208"]
 "gui/wxpython/gui_core/forms.py" = ["SIM115"]
 "gui/wxpython/gui_core/goutput.py" = ["SIM115"]
@@ -374,7 +372,6 @@ ignore = [
 "scripts/i.spectral/i.spectral.py" = ["FLY002", "SIM115"]
 "scripts/m.proj/m.proj.py" = ["SIM115"]
 "scripts/r.fillnulls/r.fillnulls.py" = ["SIM115"]
-"scripts/r.in.srtm/r.in.srtm.py" = ["FLY002", "SIM115"]
 "scripts/r.in.wms/wms_*.py" = ["SIM115"]
 "scripts/r.tileset/r.tileset.py" = ["SIM115"]
 "scripts/v.*/v.*.py" = ["SIM115"]

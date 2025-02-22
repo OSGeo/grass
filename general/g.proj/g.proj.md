@@ -226,7 +226,7 @@ ogr2ogr -t_srs "`g.proj -wf`" polbnda_italy_GB_ovest.shp polbnda_italy_LL.shp
 [GDAL raster library and toolset](https://gdal.org)  
 [OGR vector library and toolset](https://gdal.org/)
 
-**Further reading**
+Further reading:
 
 - [ASPRS Grids and
   Datum](https://www.asprs.org/asprs-publications/grids-and-datums)

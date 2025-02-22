@@ -4,8 +4,10 @@ The *v.dissolve* module is used to merge adjacent or overlapping
 features in a vector map that share the same category value. The
 resulting merged feature(s) retain this category value.
 
-![](v_dissolve_zipcodes.png) ![](v_dissolve_towns.png)
-
+![Areas with the same attribute value (first image) are merged
+into one (second image)](v_dissolve_zipcodes.png)
+![Areas with the same attribute value (first image) are merged
+into one (second image)](v_dissolve_towns.png)  
 *Figure: Areas with the same attribute value (first image) are merged
 into one (second image).*
 
