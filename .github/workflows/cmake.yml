@@ -30,7 +30,7 @@ jobs:
             CMakeVersion: "3.16.0"
         steps:
             - name: Checkout GRASS
-              uses: actions/checkout@v4.1.1
+              uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
             - name: Install CMake
               run: |
                 cd ${GITHUB_WORKSPACE}
