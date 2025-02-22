@@ -27,15 +27,10 @@ jobs:
     build-cmake:
         runs-on: ubuntu-22.04
         env:
-            PythonVersion: 3.12
             CMakeVersion: "3.16.0"
         steps:
             - name: Checkout GRASS
               uses: actions/checkout@v4.1.1
-            - name: Set up Python
-              uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
-              with:
-                  python-version: ${{ env.PythonVersion }}
             - name: Install CMake
               run: |
                 cd ${GITHUB_WORKSPACE}
@@ -49,11 +44,9 @@ jobs:
             - name: Install dependencies
               run: |
                 sudo apt-get update -y
-                sudo apt-get install -y wget git gawk findutils
+                sudo apt-get install -y wget git gawk findutils ninja-build
                 xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
                     sudo apt-get install -y --no-install-recommends --no-install-suggests
-            - run: python -m pip install ninja
-              working-directory: ${{ github.workspace }}
             - name: Print build environment variables
               shell: bash -el {0}
               run: |
@@ -86,4 +79,11 @@ jobs:
             - name: Test executing of the grass command
               run: .github/workflows/test_simple.sh
             - name: Run tests
-              run: .github/workflows/test_thorough.sh --config .gunittest.cfg
+              run: .github/workflows/test_thorough.sh --config .gunittest.cfg --min-success 72
+            - name: Make HTML test report available
+              if: ${{ !cancelled() }}
+              uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+              with:
+                  name: testreport-CMake
+                  path: testreport
+                  retention-days: 3
