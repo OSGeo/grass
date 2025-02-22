@@ -27,8 +27,8 @@ jobs:
     build-cmake:
         runs-on: ubuntu-22.04
         env:
-            PythonVersion: "3.12"
-            CMakeVersion: "3.16.8"
+            PythonVersion: 3.12
+            CMakeVersion: "3.16.0"
         steps:
             - name: Checkout GRASS
               uses: actions/checkout@v4.1.1
@@ -36,14 +36,23 @@ jobs:
               uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
               with:
                   python-version: ${{ env.PythonVersion }}
+            - name: Install CMake
+              run: |
+                cd ${GITHUB_WORKSPACE}
+                arch=$(uname -s)-$(uname -m)
+                wget https://github.com/Kitware/CMake/releases/download/v3.16.0/cmake-3.16.0-${arch}.tar.gz
+                tar xzf cmake-${{ env.CMakeVersion }}-${arch}.tar.gz
+                echo "CMAKE_DIR=$GITHUB_WORKSPACE/cmake-${{ env.CMakeVersion }}-${arch}/bin" >> $GITHUB_ENV
+                echo "$GITHUB_WORKSPACE/cmake-${{ env.CMakeVersion }}-${arch}/bin" >> $GITHUB_PATH
+            - run: |
+                cmake --version
             - name: Install dependencies
               run: |
                 sudo apt-get update -y
                 sudo apt-get install -y wget git gawk findutils
                 xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
                     sudo apt-get install -y --no-install-recommends --no-install-suggests
-            - name: Install Python packages
-              run: python -m pip install ninja cmake==${{ env.CMakeVersion }}
+            - run: python -m pip install ninja
               working-directory: ${{ github.workspace }}
             - name: Print build environment variables
               shell: bash -el {0}
@@ -51,7 +60,6 @@ jobs:
                 printenv | sort
                 gcc --version
                 ldd --version
-                cmake --version
             - name: Create installation directory
               run: |
                 mkdir $HOME/install
