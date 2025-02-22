@@ -586,4 +586,3 @@ echo PATH.  (From the Windows cmd line the command PATH shows your current
 echo Windows path.)  You may optionally make copies of this script with names
 echo like R.bat, Rscript.bat, Rcmd.bat so that each has a different default.
 echo.
-
