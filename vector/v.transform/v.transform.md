@@ -53,7 +53,7 @@ echo "drop table archsites_t" | db.execute
 
 The resulting map is a 3D vector map.
 
-### Extrude 2D vector points to 3D based on attribute column values
+### Extrude 2D vector points to 3D with automated elevation extraction
 
 Spearfish example with automated elevation extraction for vertical
 shift:
