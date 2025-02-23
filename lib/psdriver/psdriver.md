@@ -1,3 +1,9 @@
+---
+description: PostScript DISPLAY DRIVER
+---
+
+# PostScript DISPLAY DRIVER
+
 *PS display driver* to create PostScript files.
 
 ## DESCRIPTION

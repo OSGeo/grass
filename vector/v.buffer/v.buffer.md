@@ -45,18 +45,18 @@ The following vector line related corners (also called "cap") exist:
 By default *v.buffer* creates rounded buffers (blue color on figure
 below):
 
-![](v_buffer_line.png)
+![v_buffer_line](v_buffer_line.png)
 
 Straight corners with caps are created using the **-s** flag (red color
 on the figure below), while the **-c** flag doesn't make caps at the
 ends of polylines (green color on the figure below):
 
-![](v_buffer_line_s.png) ![](v_buffer_line_c.png)
+![v_buffer_line_s](v_buffer_line_s.png)
 
 With a point vector map as input data, square buffers are created
 instead of round buffers by using the **-s** flag.
 
-![](v_buffer_point_s.png)
+![v_buffer_point_s](v_buffer_point_s.png)
 
 ## EXAMPLES
 
