@@ -56,7 +56,7 @@ void partition(T *data, size_t n, size_t &pivot, CMPR &cmp)
     // Try to get a good partition value and avoid being bitten by already
     // sorted input.
     // ptpart = data + (random() % n);
-#ifdef __MINGW32__
+#ifdef _WIN32
     ptpart = data + (rand() % n);
 #else
     ptpart = data + (random() % n);
