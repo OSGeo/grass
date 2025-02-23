@@ -21,6 +21,8 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       PYTHONWARNINGS: always
+      # renovate: datasource=python-version depName=python 
+      PYTHON_VERSION: "3.12" 
 
     steps:
       - name: Checkout core
@@ -39,7 +41,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
         with:
-          python-version: "3.12"
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
 
       - name: Create installation directory
@@ -134,13 +136,14 @@ jobs:
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: mkdocs-site
+          if-no-files-found: warn
           path: ${{ env.MKDOCS_DIR }}/site
           retention-days: 3
 
       - name: Make logs available
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-        continue-on-error: true
+        if-no-files-found: warn
         with:
           name: grass-addon-build-logs
-          path: mv addons-build-dir/docs/logs
+          path: addons-build-dir/docs/logs
           retention-days: 3
