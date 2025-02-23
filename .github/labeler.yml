@@ -103,8 +103,12 @@ CMake:
 Windows:
   - changed-files:
       - any-glob-to-any-file:
-          - mswindows/**
+          - "**/**.bat"
+          - "**/**.bat.*"
+          - "**/*OSGeo4W**"
+          - "**/*osgeo4w**"
           - msvc/**
+          - mswindows/**
 macOS:
   - changed-files:
       - any-glob-to-any-file:
