@@ -28,7 +28,7 @@ import grass.script as gs
 from grass.exceptions import ScriptError
 
 try:
-    from PIL import Image as PILImage  # noqa
+    from PIL import Image as PILImage  # noqa: F401
 
     havePILImage = True
 except ImportError:
