@@ -160,7 +160,9 @@ HTML:
 JavaScript:
   - changed-files:
       - any-glob-to-any-file: '**/*.js'
-
+markdown:
+  - changed-files:
+      - any-glob-to-any-file: "**/*.md"
 # test suite
 tests:
   - changed-files:
