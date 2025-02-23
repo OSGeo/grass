@@ -83,10 +83,17 @@ vector:
 CI:
   - changed-files:
       - any-glob-to-any-file:
+          - "**/.editorconfig"
+          - .clang-format
+          - .codecov.yml
+          - .coveragerc
+          - .cppcheck-suppressions
+          - .flake8
           - .github/**
+          - .pre-commit-config.yaml
+          - .yamllint
           - binder/**
           - renovate.json
-          - .pre-commit-config.yaml
 CMake:
   - changed-files:
       - any-glob-to-any-file:
