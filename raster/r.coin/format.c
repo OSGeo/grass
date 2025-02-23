@@ -19,11 +19,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef _MSC_VER
-#include <BaseTsd.h>
-typedef SSIZE_T ssize_t;
-#endif
-
 int format_double(double v, char *buf, int n)
 {
     char fmt[15];
