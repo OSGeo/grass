@@ -1,3 +1,10 @@
+---
+description: wxGUI Interactive Scatter Plot Tool
+index: wxGUI
+---
+
+# wxGUI Interactive Scatter Plot Tool
+
 ## KEYWORDS
 
 [display](display.md), [GUI](topic_GUI.md),

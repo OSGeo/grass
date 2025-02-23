@@ -106,8 +106,8 @@ v.mkgrid type=point map=pointpattern2
 v.patch input=pointpattern1,pointpattern2 output=pointpattern3
 ```
 
-![](v_mkgrid_ppattern.png)  
-Different point patterns for sampling design
+![Different point patterns for sampling design](v_mkgrid_ppattern.png)  
+*Different point patterns for sampling design*
 
 ### Creating hexagons in a metric projection
 
@@ -122,8 +122,8 @@ v.mkgrid map=hexagons -h
 d.grid 5000
 ```
 
-![](v_mkgrid_hexagons.png)  
-Hexagon map
+![Hexagon map](v_mkgrid_hexagons.png)  
+*Hexagon map*
 
 ### Using hexagons for point density
 
@@ -160,8 +160,8 @@ considered). The last command sets the vector map color table to
 v.colors map=hexagons use=attr column=count color=viridis
 ```
 
-![](v_mkgrid.png)  
-Point density in a hexagonal grid
+![Point density in a hexagonal grid](v_mkgrid.png)  
+*Point density in a hexagonal grid*
 
 ## SEE ALSO
 

@@ -68,6 +68,16 @@ r.out.vtk can export raster cells with different representations.
   hold different values, but the user can only visualize one value at a
   time.
 
+### Paraview RGB visualization notes
+
+To achieve proper RGB overlay:
+
+- In Paraview, click "Apply"
+- Select the "Display" tab and choose "Color by" to switch from input
+  scalars to rgb scalars
+- Disable the "Map Scalars" check button in the display tab to avoid the
+  use of a lookup table
+
 ## EXAMPLE
 
 ### Simple Spearfish example
@@ -100,16 +110,6 @@ r.out.vtk rgbmaps=wms_global_mosaic.red,wms_global_mosaic.green,wms_global_mosai
 # visualize in Paraview or other VTK viewer:
 paraview --data=/tmp/out.vtk
 ```
-
-**Paraview RGB visualization notes**
-
-To achieve proper RGB overlay:
-
-- In Paraview, click "Apply"
-- Select the "Display" tab and choose "Color by" to switch from input
-  scalars to rgb scalars
-- Disable the "Map Scalars" check button in the display tab to avoid the
-  use of a lookup table
 
 ## SEE ALSO
 

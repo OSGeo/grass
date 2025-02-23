@@ -4,8 +4,7 @@
 according to the matrix *filter* designed by the user (see *FILTERS*
 below).
 
-![](r_mfilter.png)
-
+![Illustration for a custom 3x3 filter](r_mfilter.png)  
 *Figure: Illustration for a custom 3x3 filter*
 
 The filter is applied *repeat* times (default *value* is 1). The
