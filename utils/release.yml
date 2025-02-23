@@ -50,7 +50,7 @@ notes:
       example: 'Singularity:'
 
     - title: Continuous Integration, Infrastructure, Tests and Code Quality
-      regexp: '(CI|ci|[Tt]ests|[Cc]hecks|style|perf|CQ|[Rr]efactoring|utils|pytest|unittest)(\(\w[\w.-]*\))?: '
+      regexp: '(CI|ci|[Tt]ests|[Cc]hecks|style|perf|CQ|[Rr]efactoring|utils|pytest|unittest|chore)(\(\w[\w.-]*\))?: '
       example: 'CI:'
 
     - title: Contributing and Management
