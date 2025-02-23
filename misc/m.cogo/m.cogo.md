@@ -5,7 +5,7 @@ coordinates. Only simple bearing/distance or coordinate pairs are
 handled. It assumes a cartesian coordinate system.
 
 Input can be entered via standard input (default) or from the file
-**input=***name*. Specifying the input as "-" also specifies standard
+**input**=*name*. Specifying the input as "-" also specifies standard
 input, and is useful for using the program in a pipeline. Output will be
 to standard output unless a file name other than "-" is specified. The
 input file must closely adhere to the following format, where up to a 10

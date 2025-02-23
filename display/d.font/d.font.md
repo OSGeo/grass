@@ -11,31 +11,27 @@ will run non-interactively. Alternately, the user can simply type
 **d.font** on the command line; in this case, the program will prompt
 the user for a display text font type.
 
-**Parameter:**
+Font options (italized):
 
-**font=***name*  
-Name of a font type, from among the font types italicized below.  
-Default: *romans*  
-Options: (italized)  
-*cyrilc* Cyrillic  
-*gothgbt* Gothic Great Britain triplex  
-*gothgrt* Gothic German triplex  
-*gothitt* Gothic Italian triplex  
-*greekc* Greek complex  
-*greekcs* Greek complex script  
-*greekp* Greek plain  
-*greeks* Greek simplex  
-*italicc* Italian complex  
-*italiccs* Italian complex small  
-*italict* Italian triplex  
-*romanc* Roman complex  
-*romancs* Roman complex small  
-*romand* Roman duplex  
-*romanp* Roman plain  
-*romans* Roman simplex  
-*romant* Roman triplex  
-*scriptc* Script complex  
-*scripts* Script simplex
+- *cyrilc*: Cyrillic
+- *gothgbt*: Gothic Great Britain triplex
+- *gothgrt*: Gothic German triplex
+- *gothitt*: Gothic Italian triplex
+- *greekc*: Greek complex
+- *greekcs*: Greek complex script
+- *greekp*: Greek plain
+- *greeks*: Greek simplex
+- *italicc*: Italian complex
+- *italiccs*: Italian complex small
+- *italict*: Italian triplex
+- *romanc*: Roman complex
+- *romancs*: Roman complex small
+- *romand*: Roman duplex
+- *romanp*: Roman plain
+- *romans*: Roman simplex
+- *romant*: Roman triplex
+- *scriptc*: Script complex
+- *scripts*: Script simplex
 
 ## NOTES
 

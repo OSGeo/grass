@@ -205,10 +205,7 @@ v.overlay ainput=roadsmajor atype=line binput=raleigh out=roadsmajor_raleigh ope
 ```
 
 ![GRASS v.overlay: Line to polygon clipping](v_overlay_area_lines.png)  
-
-|                                               |
-|-----------------------------------------------|
-| *Figure: v.overlay: Line to polygon clipping* |
+*Figure: v.overlay: Line to polygon clipping*
 
 ## SEE ALSO
 

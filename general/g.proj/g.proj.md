@@ -22,26 +22,22 @@ proprietary GIS. In addition, if one of the parameters *georef*, *wkt*,
 project, the CRS information is imported from an external source as
 follows:
 
-georef=*filename*  
-*g.proj* attempts to invoke GDAL and OGR in turn to read a georeferenced
+- With **georef**=*filename* g.proj attempts to invoke GDAL and OGR in turn to read a georeferenced
 file *filename*. The CRS information will be read from this file. If the
 file is not georeferenced or cannot be read, XY (unprojected) will be
 used.
 
-wkt=*filename* or **-**  
-The file *filename* should contain a CRS description in WKT format with
+- When using **wkt**=*filename*, the file *filename* should contain a CRS description in WKT format with
 or without line-breaks (e.g. a '.prj' file). If **-** is given for the
 filename, the WKT description will be read from stdin rather than a
 file.
 
-proj4=*description* or **-**  
-*description* should be a CRS description in [PROJ](https://proj.org/)
+- **proj4**=*description* should be a CRS description in [PROJ](https://proj.org/)
 format, enclosed in quotation marks if there are any spaces. If **-** is
 given for *description*, the PROJ description will be read from stdin
 rather than as a directly-supplied command-line parameter.
 
-epsg=*number*  
-*number* should correspond to the index number of a valid co-ordinate
+- **epsg**=*number* should correspond to the index number of a valid co-ordinate
 system in the [EPSG database](https://epsg.org/search/by-name). EPSG
 code support is based upon a local copy of the GDAL CSV co-ordinate
 system and datum information files, stored in the directory
