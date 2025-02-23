@@ -13,7 +13,7 @@
 /****************************************************************************/
 
 int current_depth, current_row;
-int depths, rows;
+int depths, rows, columns;
 
 /* Local variables for map management */
 static expression **map_list = NULL;

@@ -1,3 +1,10 @@
+---
+description: wxGUI RLi Setup
+index: topic_GUI|GUI
+---
+
+# wxGUI RLi Setup
+
 ## DESCRIPTION
 
 The **g.gui.rlisetup** is a *[wxGUI](wxGUI.md)* component which allows
