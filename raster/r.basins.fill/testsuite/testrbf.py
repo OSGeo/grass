@@ -87,6 +87,7 @@ class TestRasterbasin(TestCase):
             tnetwork=self.tgeology,
             output=self.output,
             number="3",
+            overwrite=True,
         )
         self.assertRasterMinMax(
             map="soilsID",
@@ -102,6 +103,7 @@ class TestRasterbasin(TestCase):
             tnetwork=self.tgeology,
             output=self.output,
             number="4",
+            overwrite=True,
         )
         self.assertRasterMinMax(
             map="landclass96",
@@ -117,6 +119,7 @@ class TestRasterbasin(TestCase):
             tnetwork=self.tgeology,
             output=self.output,
             number="5",
+            overwrite=True,
         )
         self.assertRasterMinMax(
             map=self.rand_cell,
