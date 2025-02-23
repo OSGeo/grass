@@ -30,7 +30,7 @@ notes:
       example: 'i18n:'
 
     - title: Windows
-      regexp: '(?:Revert \")?(winGRASS|win|[Ww]indows): '
+      regexp: '(?:Revert \")?(winGRASS|win|[Ww]indows|msvc|MSVC): '
       example: 'win:'
 
     - title: macOS
