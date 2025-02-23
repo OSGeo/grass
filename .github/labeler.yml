@@ -91,6 +91,7 @@ Windows:
   - changed-files:
       - any-glob-to-any-file:
           - mswindows/**
+          - msvc/**
 macOS:
   - changed-files:
       - any-glob-to-any-file:
