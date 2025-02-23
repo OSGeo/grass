@@ -126,6 +126,13 @@ docker:
           - '**/*Dockerfile*'
           - '**/*dockerfile*'
           - .dockerignore
+nix:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/workflows/test-nix.yml
+          - flake.lock
+          - flake.nix
+          - package.nix
 
 docs:
   - all:
