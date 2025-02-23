@@ -188,7 +188,9 @@ JavaScript:
       - any-glob-to-any-file: '**/*.js'
 markdown:
   - changed-files:
-      - any-glob-to-any-file: "**/*.md"
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - .markdownlint.yml
 # test suite
 tests:
   - changed-files:
