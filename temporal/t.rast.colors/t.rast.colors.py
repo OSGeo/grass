@@ -146,10 +146,6 @@ def main():
     rows = sp.get_registered_maps("id", None, None, None)
 
     if rows:
-        # Create the r.colors input file
-        filename = gs.tempfile(True)
-        Path(filename).write_text("\n".join(str(row["id"]) for row in rows))
-
         flags_ = ""
         if remove:
             flags_ += "r"
