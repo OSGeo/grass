@@ -24,6 +24,9 @@ import grass.script as gs
 
 try:
     from osgeo import gdal
+
+    # Explicitly enable GDAL exceptions to suppress FutureWarning
+    gdal.UseExceptions()
 except ImportError:
     gs.fatal(
         _(
@@ -44,6 +47,7 @@ from wms_base import GetEpsg, GetSRSParamVal, WMSBase
 from wms_cap_parsers import OnEarthCapabilitiesTree, WMTSCapabilitiesTree
 
 
+# Rest of the file remains unchanged...
 class WMSDrv(WMSBase):
     def _download(self):
         """!Downloads data from WMS server using own driver
