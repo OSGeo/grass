@@ -112,6 +112,7 @@ Windows:
 macOS:
   - changed-files:
       - any-glob-to-any-file:
+          - "**/*macos**"
           - macos/**
 Linux:
   - changed-files:
