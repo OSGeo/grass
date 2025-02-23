@@ -1,3 +1,10 @@
+---
+description: Temporal data processing in GRASS GIS
+index: temporal
+---
+
+# Temporal data processing in GRASS GIS
+
 The temporal enabled GRASS introduces three new data types that are
 designed to handle time series data:
 
@@ -14,7 +21,7 @@ designed to handle time series data:
 These new data types can be managed, analyzed and processed with
 temporal modules that are based on the GRASS GIS temporal framework.
 
-### Temporal data management in general
+## Temporal data management in general
 
 Space time datasets are stored in a temporal database. A core principle
 of the temporal framework is that temporal databases are mapset
@@ -103,14 +110,14 @@ List of general management modules:
 - [t.support](t.support.md)
 - [t.topology](t.topology.md)
 
-### Modules to visualize space-time datasets and temporal data
+## Modules to visualize space-time datasets and temporal data
 
 - [g.gui.animation](g.gui.animation.md)
 - [g.gui.timeline](g.gui.timeline.md)
 - [g.gui.mapswipe](g.gui.mapswipe.md)
 - [g.gui.tplot](g.gui.tplot.md)
 
-### Modules to process space-time raster datasets
+## Modules to process space-time raster datasets
 
 The focus of the temporal GIS framework is the processing and analysis
 of raster time series. Hence, the majority of the temporal modules are
@@ -118,7 +125,7 @@ designed to process space-time raster datasets (strds). However, there
 are several modules to process space-time 3D raster datasets and
 space-time vector datasets as well.
 
-#### Querying and map calculation
+### Querying and map calculation
 
 Maps registered in a space-time raster dataset can be listed using
 [t.rast.list](t.rast.list.md). This module supports several methods to
@@ -164,7 +171,7 @@ Moreover, there is [v.what.strds](v.what.strds.md), that uploads
 space-time raster dataset values at positions of vector points, to the
 attribute table of the vector map.
 
-#### Aggregation and accumulation analysis
+### Aggregation and accumulation analysis
 
 The temporal framework supports the aggregation of space-time raster
 datasets. It provides three modules to perform aggregation using
@@ -184,7 +191,7 @@ space-time raster dataset or a subset of it.
 - [t.rast.accumulate](t.rast.accumulate.md)
 - [t.rast.accdetect](t.rast.accdetect.md)
 
-#### Export/import conversion
+### Export/import conversion
 
 Space-time raster datasets can be exported with
 [t.rast.export](t.rast.export.md) as a compressed tar archive. Such
@@ -202,12 +209,12 @@ dimension.
 - [t.rast.to.rast3](t.rast.to.rast3.md)
 - [r3.out.netcdf](r3.out.netcdf.md)
 
-#### Statistics and gap filling
+### Statistics and gap filling
 
 - [t.rast.univar](t.rast.univar.md)
 - [t.rast.gapfill](t.rast.gapfill.md)
 
-### Modules to manage, process and analyze STR3DS and STVDS
+## Modules to manage, process and analyze STR3DS and STVDS
 
 Several space-time vector dataset modules were developed to allow the
 handling of vector time series data.
@@ -228,7 +235,7 @@ their raster pendants, but with 3D raster map layers:
 - [t.rast3d.mapcalc](t.rast3d.mapcalc.md)
 - [t.rast3d.univar](t.rast3d.univar.md)
 
-#### See also
+### See also
 
 - Gebbert, S., Pebesma, E. 2014. *TGRASS: A temporal GIS for field based
   environmental modeling*. Environmental Modelling & Software 53, 1-12

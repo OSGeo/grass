@@ -1188,8 +1188,10 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
             _("Calculating map %01d of %01d (angle %.2f, raster map <%s>)"),
             (k + 1), arrayNumInt, angle_deg, shad_filename);
 
+        int j;
+
 #pragma omp parallel for schedule(static, 1) default(shared)
-        for (int j = hor_row_start; j < hor_row_end; j++) {
+        for (j = hor_row_start; j < hor_row_end; j++) {
             G_percent(j - hor_row_start, hor_numrows - 1, 2);
             for (int i = hor_col_start; i < hor_col_end; i++) {
                 OriginPoint origin_point;

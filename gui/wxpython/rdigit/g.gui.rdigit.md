@@ -1,3 +1,10 @@
+---
+description: wxGUI Raster Digitizer
+index: wxGUI
+---
+
+# wxGUI Raster Digitizer
+
 ## KEYWORDS
 
 [display](display.md), [GUI](topic_GUI.md),

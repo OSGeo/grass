@@ -1,3 +1,10 @@
+---
+description: wxGUI Timeline Tool
+index: topic_GUI|GUI
+---
+
+# wxGUI Timeline Tool
+
 ## DESCRIPTION
 
 The **Timeline Tool** is a *[wxGUI](wxGUI.md)* component which allows
