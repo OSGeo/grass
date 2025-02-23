@@ -38,7 +38,7 @@ notes:
       example: 'macOS:'
 
     - title: Packaging, Configuration, Portability, and Compilation
-      regexp: '(packaging|pkg|rpm|deb|nix|pkg-config|configure|config|[Mm]ake|build): '
+      regexp: '(packaging|pkg|rpm|deb|nix|pkg-config|configure|config|[Cc]?[Mm]ake|build|conda): '
       example: 'build:'
 
     - title: Docker
