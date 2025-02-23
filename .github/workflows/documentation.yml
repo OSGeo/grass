@@ -9,6 +9,7 @@ on:
       - main
       - releasebranch_*
   pull_request:
+  workflow_dispatch:
 
 permissions: {}
 
@@ -132,18 +133,18 @@ jobs:
           cd $MKDOCS_DIR
           mkdocs build
 
-      - name: Make the result available
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-        with:
-          name: mkdocs-site
-          if-no-files-found: warn
-          path: ${{ env.MKDOCS_DIR }}/site
-          retention-days: 3
-
       - name: Make logs available
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: grass-addon-build-logs
           if-no-files-found: warn
           path: addons-build-dir/docs/logs
+          retention-days: 3
+
+      - name: Make the result available
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        with:
+          name: mkdocs-site
+          if-no-files-found: error
+          path: ${{ env.MKDOCS_DIR }}/site
           retention-days: 3
