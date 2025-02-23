@@ -9,19 +9,23 @@ Licence:    This program is free software under the GNU General Public
             for details.
 """
 
-import unittest
 from grass.gunittest.case import TestCase
 
 
-@unittest.skip("See #3822")
 class TestRasterbasin(TestCase):
-    celevation = "elevation"
-    tgeology = "geology"
+    celevation = "test_elevation"
+    tgeology = "test_geology_30m"
     output = "basinsoutput"
-    input = "lakes"
+    input = "test_lakes"
+    rand_cell = "rand_cell"
 
     @classmethod
     def setUpClass(cls):
+        """Copy raster maps."""
+        cls.runModule("g.copy", raster=["elevation", cls.celevation], overwrite=True)
+        cls.runModule("g.copy", raster=["geology_30m", cls.tgeology])
+        cls.runModule("g.copy", raster=["lakes", cls.input])
+
         seed = 500
         cls.use_temp_region()
         cls.runModule("g.region", raster=cls.tgeology, flags="p")
@@ -45,13 +49,22 @@ class TestRasterbasin(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        """Remove temporary region and generated maps."""
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=[
+                cls.output,
+                cls.rand_cell,
+                cls.tgeology,
+                cls.celevation,
+                cls.input,
+            ],
+        )
         cls.del_temp_region()
 
-    def tearDown(self):
-        self.runModule("g.remove", flags="f", type="raster", name=self.output)
-
-    def test_no1(self):
-        lakes = "lakes"
+    def test_r_basins_fill_number_1(self):
         self.assertModule(
             "r.basins.fill",
             cnetwork=self.celevation,
@@ -61,14 +74,13 @@ class TestRasterbasin(TestCase):
             overwrite=True,
         )
         self.assertRasterMinMax(
-            map=lakes,
+            map=self.input,
             refmin=34300,
             refmax=43600,
-            msg="lakes in degrees must be between 34300 and 43600",
+            msg="test_lakes in degrees must be between 34300 and 43600",
         )
 
-    def test_no2(self):
-        soils = "soils"
+    def test_r_basins_fill_number_3(self):
         self.assertModule(
             "r.basins.fill",
             cnetwork=self.celevation,
@@ -77,14 +89,13 @@ class TestRasterbasin(TestCase):
             number="3",
         )
         self.assertRasterMinMax(
-            map=soils,
+            map="soilsID",
             refmin=18683,
             refmax=46555,
-            msg="soils in degrees must be between 18683 and 46555",
+            msg="soilsID in degrees must be between 18683 and 46555",
         )
 
-    def test_no3(self):
-        landuse = "landuse"
+    def test_r_basins_fill_number_4(self):
         self.assertModule(
             "r.basins.fill",
             cnetwork=self.celevation,
@@ -93,14 +104,13 @@ class TestRasterbasin(TestCase):
             number="4",
         )
         self.assertRasterMinMax(
-            map=landuse,
+            map="landclass96",
             refmin=1,
             refmax=7,
-            msg="landuse in degrees must be between 1 and 7",
+            msg="landclass96 in degrees must be between 1 and 7",
         )
 
-    def test_no4(self):
-        rand_cell = "rand_cell"
+    def test_r_basins_fill_number_5(self):
         self.assertModule(
             "r.basins.fill",
             cnetwork=self.celevation,
@@ -109,7 +119,7 @@ class TestRasterbasin(TestCase):
             number="5",
         )
         self.assertRasterMinMax(
-            map=rand_cell,
+            map=self.rand_cell,
             refmin=1,
             refmax=199,
             msg="rand_cell in degrees must be between 1 and 199",
