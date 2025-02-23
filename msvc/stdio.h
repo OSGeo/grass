@@ -3,11 +3,9 @@
 
 #include <../ucrt/stdio.h>
 
-/* if not defined by another GRASS header */
-#ifndef ssize_t_defined
-#define ssize_t_defined
+#define fdopen _fdopen
+
 #include <BaseTsd.h>
 typedef SSIZE_T ssize_t;
-#endif
 
 #endif
