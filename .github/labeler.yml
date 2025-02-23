@@ -87,6 +87,12 @@ CI:
           - binder/**
           - renovate.json
           - .pre-commit-config.yaml
+CMake:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/**.cmake*"
+          - "**/CMakeLists.txt"
+          - cmake/**
 Windows:
   - changed-files:
       - any-glob-to-any-file:
