@@ -2,6 +2,7 @@
 notes:
   categories:
     - title: Tools
+      # yamllint disable-line rule:line-length
       regexp: '(?:Revert \")?((d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)(, (d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)?: |(modules|tools|temporal): '
       example: 'r.slope.aspect:'
 
@@ -50,6 +51,7 @@ notes:
       example: 'Singularity:'
 
     - title: Continuous Integration, Infrastructure, Tests and Code Quality
+      # yamllint disable-line rule:line-length
       regexp: '(?:Revert \")?(CI|ci|[Tt]ests|[Cc]hecks|style|perf|CQ|[Rr]efactoring|utils|pytest|unittest|chore)(\(\w[\w.-]*\))?: '
       example: 'CI:'
 
