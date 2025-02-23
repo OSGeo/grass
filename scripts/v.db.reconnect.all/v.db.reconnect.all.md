@@ -83,7 +83,7 @@ the vector maps use **-d** flag. Note that attribute tables will be
 deleted *permanently* from the source database. This option should be
 used very carefully!
 
-### Convert GRASS 6 vector map to GRASS 7 including attribute transfer from DBF to SQLite
+### Convert GRASS 6 vector map to GRASS 7
 
 To become usable in GRASS 7, all vector maps in a mapset need to be
 updated:

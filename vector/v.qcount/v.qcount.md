@@ -10,7 +10,9 @@ There are two types departure from a CSR: regularity and clustering.
 Figure 1 gives an example of a complete random, regular and a clustered
 pattern.
 
-![complete spatial randomness](v_qcount_1.png) ![regularity](v_qcount_2.png) ![clustering](v_qcount_3.png)  
+![complete spatial randomness](v_qcount_1.png)
+![regularity](v_qcount_2.png)
+![clustering](v_qcount_3.png)  
 *Figure 1: Realization of two-dimensional Poisson processes of 50 points
 on the unit square exhibiting (a) complete spatial randomness, (b)
 regularity, and (c) clustering.*

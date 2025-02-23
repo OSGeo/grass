@@ -21,7 +21,8 @@ member of the imagery group. Signatures generated for one scene are
 suitable for classification of other scenes as long as they consist of
 same raster bands (semantic labels match).
 
-Input **trainingmap** map must be prepared by the user in advance using vector or raster
+Input **trainingmap** map must be prepared by the user in advance
+using vector or raster
 digitizer. Of course other methods could be devised by the user for
 creating this training map - *i.gensig* makes no assumption about the
 origin of this map layer. It simply creates signatures for the classes
@@ -41,7 +42,8 @@ select a subset of all the band files that form an image.
 
 Input **signaturefile** is the resultant signature file (containing the means and
 covariance matrices) for each class in the training map that is
-associated with the band files in the subgroup select. Resultant singature file can be used with any other
+associated with the band files in the subgroup select.
+Resultant singature file can be used with any other
 imagery group as long as semantic labels match.
 
 ## NOTES
