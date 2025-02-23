@@ -181,4 +181,11 @@ markdown:
 tests:
   - changed-files:
       - any-glob-to-any-file:
-          - '**/testsuite/**'
+          - "**/*_gunittest.cfg"
+          - "**/.gunittest*.cfg"
+          - "**/test/**"
+          - "**/tests/**"
+          - "**/testsuite/**"
+          - "**test**"
+          - .codecov.yml
+          - .coveragerc
