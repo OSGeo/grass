@@ -33,6 +33,10 @@ notes:
       regexp: '(winGRASS|win|[Ww]indows): '
       example: 'win:'
 
+    - title: macOS
+      regexp: '(macOS): '
+      example: 'macOS:'
+
     - title: Packaging, Configuration, Portability, and Compilation
       regexp: '(packaging|pkg|rpm|deb|nix|pkg-config|configure|config|[Mm]ake|build): '
       example: 'build:'
