@@ -166,6 +166,10 @@ def main():
         if equi:
             flags_ += "e"
 
+        # Create the r.colors input file
+        filename = gs.tempfile(True)
+        Path(filename).write_text("\n".join(str(row["id"]) for row in rows))
+
         try:
             gs.run_command(
                 "r.colors",
