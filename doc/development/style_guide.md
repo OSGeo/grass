@@ -622,8 +622,8 @@ with gs.MaskManager():
     gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope)
 ```
 
-To disable the mask, which may be needed in processing steps of import tool,
-we can do:
+To disable the mask, which may be needed, e.g., in processing steps of
+an import tool, we can do:
 
 ```python
 # Mask applies here if set.
