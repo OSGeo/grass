@@ -360,6 +360,7 @@ int main(int argc, char *argv[])
     Setup setup = {0};
     Simulation sim = {0};
     ObservationPoints points = {0};
+    Inputs inputs = {0};
 
     WaterParams_init(&wp);
 
@@ -389,13 +390,13 @@ int main(int argc, char *argv[])
 
     settings.ts = flag.tserie->answer;
 
-    wp.elevin = parm.elevin->answer;
-    wp.dxin = parm.dxin->answer;
-    wp.dyin = parm.dyin->answer;
-    wp.rain = parm.rain->answer;
-    wp.infil = parm.infil->answer;
-    wp.traps = parm.traps->answer;
-    wp.manin = parm.manin->answer;
+    inputs.elevin = parm.elevin->answer;
+    inputs.dxin = parm.dxin->answer;
+    inputs.dyin = parm.dyin->answer;
+    inputs.rain = parm.rain->answer;
+    inputs.infil = parm.infil->answer;
+    inputs.traps = parm.traps->answer;
+    inputs.manin = parm.manin->answer;
     wp.depth = parm.depth->answer;
     wp.disch = parm.disch->answer;
     wp.err = parm.err->answer;
@@ -437,28 +438,28 @@ int main(int argc, char *argv[])
         /* if no rain unique value input */
         if (parm.rainval->answer == NULL) {
             /*No rain input so use default */
-            sscanf(RAINVAL, "%lf", &wp.rain_val);
+            sscanf(RAINVAL, "%lf", &inputs.rain_val);
             /* if rain unique input exist, load it */
         }
         else {
             /*Unique value input only */
-            sscanf(parm.rainval->answer, "%lf", &wp.rain_val);
+            sscanf(parm.rainval->answer, "%lf", &inputs.rain_val);
         }
         /* if Rain map exists */
     }
     else {
         /*Map input, so set rain_val to -999.99 */
         if (parm.rainval->answer == NULL) {
-            wp.rain_val = -999.99;
+            inputs.rain_val = -999.99;
         }
         else {
             /*both map and unique value exist */
             /*Choose the map, discard the unique value */
-            wp.rain_val = -999.99;
+            inputs.rain_val = -999.99;
         }
     }
     /* Report the final value of rain_val */
-    G_debug(3, "rain_val is set to: %f\n", wp.rain_val);
+    G_debug(3, "rain_val is set to: %f\n", inputs.rain_val);
 
     /* if no Mannings map, then: */
     if (parm.manin->answer == NULL) {
@@ -466,28 +467,28 @@ int main(int argc, char *argv[])
         /* if no Mannings unique value input */
         if (parm.maninval->answer == NULL) {
             /*No Mannings input so use default */
-            sscanf(MANINVAL, "%lf", &wp.manin_val);
+            sscanf(MANINVAL, "%lf", &inputs.manin_val);
             /* if Mannings unique input value exists, load it */
         }
         else {
             /*Unique value input only */
-            sscanf(parm.maninval->answer, "%lf", &wp.manin_val);
+            sscanf(parm.maninval->answer, "%lf", &inputs.manin_val);
         }
         /* if Mannings map exists */
     }
     else {
         /* Map input, set manin_val to -999.99 */
         if (parm.maninval->answer == NULL) {
-            wp.manin_val = -999.99;
+            inputs.manin_val = -999.99;
         }
         else {
             /*both map and unique value exist */
             /*Choose map, discard the unique value */
-            wp.manin_val = -999.99;
+            inputs.manin_val = -999.99;
         }
     }
     /* Report the final value of manin_val */
-    G_debug(1, "manin_val is set to: %f\n", wp.manin_val);
+    G_debug(1, "manin_val is set to: %f\n", inputs.manin_val);
 
     /* if no infiltration map, then: */
     if (parm.infil->answer == NULL) {
@@ -495,28 +496,28 @@ int main(int argc, char *argv[])
         /*if no infiltration unique value input */
         if (parm.infilval->answer == NULL) {
             /*No infiltration unique value so use default */
-            sscanf(INFILVAL, "%lf", &wp.infil_val);
+            sscanf(INFILVAL, "%lf", &inputs.infil_val);
             /* if infiltration unique value exists, load it */
         }
         else {
             /*unique value input only */
-            sscanf(parm.infilval->answer, "%lf", &wp.infil_val);
+            sscanf(parm.infilval->answer, "%lf", &inputs.infil_val);
         }
         /* if infiltration map exists */
     }
     else {
         /* Map input, set infil_val to -999.99 */
         if (parm.infilval->answer == NULL) {
-            wp.infil_val = -999.99;
+            inputs.infil_val = -999.99;
         }
         else {
             /*both map and unique value exist */
             /*Choose map, discard the unique value */
-            wp.infil_val = -999.99;
+            inputs.infil_val = -999.99;
         }
     }
     /* Report the final value of infil_val */
-    G_debug(1, "infil_val is set to: %f\n", wp.infil_val);
+    G_debug(1, "infil_val is set to: %f\n", inputs.infil_val);
 
     /* Recompute timesec from user input in minutes
      * to real timesec in seconds */
@@ -550,14 +551,14 @@ int main(int argc, char *argv[])
 
     if ((wp.depth == NULL) && (wp.disch == NULL) && (wp.err == NULL))
         G_warning(_("You are not outputting any raster maps"));
-    ret_val = input_data(geometry.my, geometry.mx, &sim);
+    ret_val = input_data(geometry.my, geometry.mx, &sim, &inputs);
     if (ret_val != 1)
         G_fatal_error(_("Input failed"));
 
     alloc_grids_water(&geometry);
 
-    grad_check(&setup, &geometry, &settings);
-    main_loop(&setup, &geometry, &settings, &sim, &points);
+    grad_check(&setup, &geometry, &settings, &inputs);
+    main_loop(&setup, &geometry, &settings, &sim, &points, &inputs);
     free_walkers(&sim);
 
     /* Exit with Success */

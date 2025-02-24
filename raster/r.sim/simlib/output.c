@@ -96,7 +96,7 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
  * This function needs to be refractured and splittet into smaller parts */
 int output_data(int tt, double ft UNUSED, const Setup *setup,
                 const Geometry *geometry, const Settings *settings,
-                const Simulation *sim)
+                const Simulation *sim, const Inputs *inputs)
 {
 
     FCELL *depth_cell, *disch_cell, *err_cell;
@@ -519,9 +519,9 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
                                    setup->si0, setup->infmean);
 
         Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
-                            elevin, dxin, dyin);
-        Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s", rain,
-                            infil, manin);
+                            inputs->elevin, inputs->dxin, inputs->dyin);
+        Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s",
+                            inputs->rain, inputs->infil, inputs->manin);
 
         Rast_command_history(&hist);
 
@@ -559,9 +559,9 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
                                    setup->si0, setup->infmean);
 
         Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
-                            elevin, dxin, dyin);
-        Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s", rain,
-                            infil, manin);
+                            inputs->elevin, inputs->dxin, inputs->dyin);
+        Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s",
+                            inputs->rain, inputs->infil, inputs->manin);
 
         Rast_command_history(&hist);
 
@@ -598,9 +598,10 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
         Rast_append_format_history(&hist, "mean source (si)=%f", setup->si0);
 
         Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
-                            wdepth, dxin, dyin);
+                            inputs->wdepth, inputs->dxin, inputs->dyin);
         Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s %s",
-                            manin, detin, tranin, tauin);
+                            inputs->manin, inputs->detin, inputs->tranin,
+                            inputs->tauin);
 
         Rast_command_history(&hist);
 

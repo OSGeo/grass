@@ -65,39 +65,35 @@ typedef struct {
     char *observation; // Observation file name
 } ObservationPoints;
 
+typedef struct {
+    char *rain;       // Rainfall excess raster name (water flow only)
+    double rain_val;  // Rainfall excess value (water flow only)
+    char *manin;      // Manning's n raster name
+    double manin_val; // Manning's n value
+    char *infil;      // Infiltration raster name (water flow only)
+    double infil_val; // Infiltration value (water flow only)
+    char *elevin;     // Elevation raster name
+    char *dxin;       // Name of x-derivatives raster map
+    char *dyin;       // Name of y-derivatives raster map
+    char *traps;      // Traps raster name (water flow only)
+    char *wdepth;     // Water depth raster name (sediment only)
+    char *detin;      // Detachment coefficient raster name (sediment only)
+    char *tranin; // Transport capacity coefficient raster name (sediment only)
+    char *tauin;  // Critical shear stress raster name (sediment only)
+} Inputs;
+
 struct WaterParams {
 
-    double rain_val;
-    double manin_val;
-    double infil_val;
-
-    char *elevin;
-    char *dxin;
-    char *dyin;
-    char *rain;
-    char *infil;
-    char *traps;
-    char *manin;
     char *depth;
     char *disch;
     char *err;
     char *outwalk;
-    char *mapset;
-    char *tserie;
 
-    char *wdepth;
-    char *detin;
-    char *tranin;
-    char *tauin;
     char *tc;
     char *et;
     char *conc;
     char *flux;
     char *erdep;
-
-    char *rainval;
-    char *maninval;
-    char *infilval;
 };
 
 void WaterParams_init(struct WaterParams *wp);
@@ -106,14 +102,15 @@ void alloc_grids_water(const Geometry *geometry);
 void alloc_grids_sediment(const Geometry *geometry);
 void init_grids_sediment(const Setup *setup, const Geometry *geometry);
 
-int input_data(int rows, int cols, Simulation *sim);
-int grad_check(Setup *setup, const Geometry *geometry,
-               const Settings *settings);
+int input_data(int rows, int cols, Simulation *sim, const Inputs *inputs);
+int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
+               Inputs *inputs);
 void main_loop(const Setup *setup, const Geometry *geometry,
                const Settings *settings, Simulation *sim,
-               ObservationPoints *points);
+               ObservationPoints *points, const Inputs *inputs);
 int output_data(int, double, const Setup *setup, const Geometry *geometry,
-                const Settings *settings, const Simulation *sim);
+                const Settings *settings, const Simulation *sim,
+                const Inputs *inputs);
 int output_et(const Geometry *geometry);
 void free_walkers(Simulation *sim);
 void erod(double **, const Setup *setup, const Geometry *geometry);

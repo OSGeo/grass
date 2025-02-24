@@ -35,33 +35,16 @@
 struct point2D;
 struct point3D;
 
-char *elevin;
-char *dxin;
-char *dyin;
-char *rain;
-char *infil;
-char *traps;
-char *manin;
 char *depth;
 char *disch;
 char *err;
 char *outwalk;
-char *mapset;
-char *tserie;
 
-char *wdepth;
-char *detin;
-char *tranin;
-char *tauin;
 char *tc;
 char *et;
 char *conc;
 char *flux;
 char *erdep;
-
-char *rainval;
-char *maninval;
-char *infilval;
 
 float **zz, **cchez;
 double **v1, **v2, **slope;
@@ -73,10 +56,6 @@ float **dif;
 struct point3D *w;
 struct point2D *vavg;
 
-double rain_val;
-double manin_val;
-double infil_val;
-
 struct History history; /* holds meta-data (title, comments,..) */
 
 /* **************************************************** */
@@ -86,7 +65,7 @@ struct History history; /* holds meta-data (title, comments,..) */
 
 void main_loop(const Setup *setup, const Geometry *geometry,
                const Settings *settings, Simulation *sim,
-               ObservationPoints *points)
+               ObservationPoints *points, const Inputs *inputs)
 {
     int i, l, k;
     int iblock;
@@ -260,8 +239,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                             double hhc = pow(d1, 3. / 5.);
                             double velx, vely;
                             if (hhc > settings->hhmax &&
-                                wdepth == NULL) { /* increased diffusion if
-                                                     w.depth > hhmax */
+                                inputs->wdepth == NULL) { /* increased diffusion
+                                                     if w.depth > hhmax */
                                 dif[k][l] = (settings->halpha + 1) * deldif;
                                 velx = vavg[lw].x;
                                 vely = vavg[lw].y;
@@ -272,7 +251,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                                 vely = v2[k][l];
                             }
 
-                            if (traps != NULL && trap[k][l] != 0.) { /* traps */
+                            if (inputs->traps != NULL &&
+                                trap[k][l] != 0.) { /* traps */
 
                                 float eff = simwe_rand(); /* random generator */
 
@@ -287,7 +267,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                                 (velx + dif[k][l] * gaux); /* move the walker */
                             w[lw].y += (vely + dif[k][l] * gauy);
 
-                            if (hhc > settings->hhmax && wdepth == NULL) {
+                            if (hhc > settings->hhmax &&
+                                inputs->wdepth == NULL) {
                                 vavg[lw].x =
                                     settings->hbeta * (vavg[lw].x + v1[k][l]);
                                 vavg[lw].y =
@@ -302,7 +283,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                                                     out of area */
                             }
                             else {
-                                if (wdepth != NULL) {
+                                if (inputs->wdepth != NULL) {
                                     l = (int)((w[lw].x + stxm) /
                                               geometry->stepx) -
                                         geometry->mx - 1;
@@ -366,8 +347,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 
                 conn = (double)nblock / (double)iblock;
                 int itime = (int)(i * setup->deltap * setup->timec);
-                int ii =
-                    output_data(itime, conn, setup, geometry, settings, sim);
+                int ii = output_data(itime, conn, setup, geometry, settings,
+                                     sim, inputs);
                 if (ii != 1)
                     G_fatal_error(_("Unable to write raster maps"));
             }
@@ -389,7 +370,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 
                     if (zz[k][l] != UNDEF) {
 
-                        if (wdepth == NULL)
+                        if (inputs->wdepth == NULL)
                             value = geometry->step * gama[k][l] * cchez[k][l];
                         else
                             value = gama[k][l] * slope[k][l];
@@ -437,7 +418,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
     if (!settings->ts) {
         conn = (double)nblock / (double)iblock;
         int itime = (int)(i * setup->deltap * setup->timec);
-        int ii = output_data(itime, conn, setup, geometry, settings, sim);
+        int ii =
+            output_data(itime, conn, setup, geometry, settings, sim, inputs);
         if (ii != 1)
             G_fatal_error(_("Cannot write raster maps"));
     }

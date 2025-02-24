@@ -328,6 +328,7 @@ int main(int argc, char *argv[])
     ObservationPoints points = {0};
     settings.hhmax = settings.halpha = settings.hbeta = 0;
     settings.ts = false;
+    Inputs inputs = {0};
 
     WaterParams_init(&wp);
 
@@ -349,14 +350,14 @@ int main(int argc, char *argv[])
     geometry.xmax = geometry.xmin + geometry.stepx * (float)geometry.mx;
     geometry.ymax = geometry.ymin + geometry.stepy * (float)geometry.my;
 
-    wp.elevin = parm.elevin->answer;
-    wp.wdepth = parm.wdepth->answer;
-    wp.dxin = parm.dxin->answer;
-    wp.dyin = parm.dyin->answer;
-    wp.detin = parm.detin->answer;
-    wp.tranin = parm.tranin->answer;
-    wp.tauin = parm.tauin->answer;
-    wp.manin = parm.manin->answer;
+    inputs.elevin = parm.elevin->answer;
+    inputs.wdepth = parm.wdepth->answer;
+    inputs.dxin = parm.dxin->answer;
+    inputs.dyin = parm.dyin->answer;
+    inputs.detin = parm.detin->answer;
+    inputs.tranin = parm.tranin->answer;
+    inputs.tauin = parm.tauin->answer;
+    inputs.manin = parm.manin->answer;
     wp.tc = parm.tc->answer;
     wp.et = parm.et->answer;
     wp.conc = parm.conc->answer;
@@ -388,7 +389,7 @@ int main(int argc, char *argv[])
     sscanf(parm.mintimestep->answer, "%lf", &settings.mintimestep);
     /*    sscanf(parm.density->answer, "%d", &wp.ldemo); */
     sscanf(parm.diffc->answer, "%lf", &settings.frac);
-    sscanf(parm.maninval->answer, "%lf", &wp.manin_val);
+    sscanf(parm.maninval->answer, "%lf", &inputs.manin_val);
 
     /* Recompute timesec from user input in minutes
      * to real timesec in seconds */
@@ -421,23 +422,16 @@ int main(int argc, char *argv[])
     if ((wp.tc == NULL) && (wp.et == NULL) && (wp.conc == NULL) &&
         (wp.flux == NULL) && (wp.erdep == NULL))
         G_warning(_("You are not outputting any raster or site files"));
-    ret_val = input_data(geometry.my, geometry.mx, &sim);
+    ret_val = input_data(geometry.my, geometry.mx, &sim, &inputs);
     if (ret_val != 1)
         G_fatal_error(_("Input failed"));
 
     alloc_grids_sediment(&geometry);
 
-    grad_check(&setup, &geometry, &settings);
+    grad_check(&setup, &geometry, &settings, &inputs);
     init_grids_sediment(&setup, &geometry);
     /* treba dat output pre topoerdep */
-    main_loop(&setup, &geometry, &settings, &sim, &points);
-
-    /* always true for sediment? */
-    if (wp.tserie == NULL) {
-        ii = output_data(0, 1., &setup, &geometry, &settings, &sim);
-        if (ii != 1)
-            G_fatal_error(_("Cannot write raster maps"));
-    }
+    main_loop(&setup, &geometry, &settings, &sim, &points, &inputs);
     free_walkers(&sim);
 
     /* Exit with Success */
