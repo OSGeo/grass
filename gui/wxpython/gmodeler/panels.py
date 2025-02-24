@@ -530,16 +530,18 @@ class ModelerPanel(wx.Panel, MainPageBase):
                     data.Update()
 
                 # remove dead data items
-                if not p.get("value", ""):
-                    data = layer.FindData(p.get("name", ""))
-                    if data:
-                        remList, upList = self.model.RemoveItem(data, layer)
-                        for item in remList:
-                            self.canvas.diagram.RemoveShape(item)
-                            item.__del__()  # noqa: PLC2801, C2801
+                if p.get("value", ""):
+                    continue
+                data = layer.FindData(p.get("name", ""))
+                if not data:
+                    continue
+                remList, upList = self.model.RemoveItem(data, layer)
+                for item in remList:
+                    self.canvas.diagram.RemoveShape(item)
+                    item.__del__()  # noqa: PLC2801, C2801
 
-                        for item in upList:
-                            item.Update()
+                for item in upList:
+                    item.Update()
 
             # valid / parameterized ?
             layer.SetValid(params)
@@ -1768,15 +1770,13 @@ class PythonPanel(wx.Panel):
         """Run Python script"""
         self.filename = grass.tempfile()
         try:
-            fd = open(self.filename, "w")
-            fd.write(self.body.GetText())
+            Path(self.filename).write_text(self.body.GetText())
         except OSError as e:
             GError(_("Unable to launch Python script. %s") % e, parent=self)
             return
-        finally:
-            fd.close()
-            mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
-            os.chmod(self.filename, mode | stat.S_IXUSR)
+
+        mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
+        os.chmod(self.filename, mode | stat.S_IXUSR)
 
         for item in self.parent.GetModel().GetItems():
             if (
@@ -1785,12 +1785,12 @@ class PythonPanel(wx.Panel):
                 > 0
             ):
                 self.parent._gconsole.RunCmd(
-                    [fd.name, "--ui"], skipInterface=False, onDone=self.OnDone
+                    [self.filename, "--ui"], skipInterface=False, onDone=self.OnDone
                 )
                 break
         else:
             self.parent._gconsole.RunCmd(
-                [fd.name], skipInterface=True, onDone=self.OnDone
+                [self.filename], skipInterface=True, onDone=self.OnDone
             )
 
         event.Skip()

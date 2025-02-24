@@ -146,18 +146,18 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
                 params.append((idx, p, v))
 
         if len(params) < 1:
-            if len(dcmd) > 1:
-                i = 1
-                while i < len(dcmd):
-                    if "=" not in dcmd[i] and not dcmd[i].startswith("-"):
-                        task = gtask.parse_interface(dcmd[0])
-                        # this expects the first parameter to be the right one
-                        p = task.get_options()["params"][0].get("name", "")
-                        params.append((i, p, dcmd[i]))
-                        break
-                    i += 1
-            else:
-                return mapname, False
+            if len(dcmd) <= 1:
+                return (mapname, False)
+
+            i = 1
+            while i < len(dcmd):
+                if "=" not in dcmd[i] and (not dcmd[i].startswith("-")):
+                    task = gtask.parse_interface(dcmd[0])
+                    # this expects the first parameter to be the right one
+                    p = task.get_options()["params"][0].get("name", "")
+                    params.append((i, p, dcmd[i]))
+                    break
+                i += 1
 
         if len(params) < 1:
             return mapname, False
@@ -267,10 +267,9 @@ def ListOfCatsToRange(cats):
         next = 0
         j = i + 1
         while j < len(cats):
-            if cats[i + next] == cats[j] - 1:
-                next += 1
-            else:
+            if cats[i + next] != cats[j] - 1:
                 break
+            next += 1
             j += 1
 
         if next > 1:
@@ -302,22 +301,21 @@ def ListOfMapsets(get="ordered"):
         if get == "all":
             return mapsets_all
 
-    if get in {"accessible", "ordered"}:
-        ret = RunCommand("g.mapsets", read=True, quiet=True, flags="p", sep="newline")
-        if not ret:
-            return []
-        mapsets_accessible = ret.splitlines()
-        if get == "accessible":
-            return mapsets_accessible
+    if get not in {"accessible", "ordered"}:
+        msg = "Invalid value for 'get' parameter of ListOfMapsets()"
+        raise ValueError(msg)
+    ret = RunCommand("g.mapsets", read=True, quiet=True, flags="p", sep="newline")
+    if not ret:
+        return []
+    mapsets_accessible = ret.splitlines()
+    if get == "accessible":
+        return mapsets_accessible
 
-        mapsets_ordered = mapsets_accessible.copy()
-        for mapset in mapsets_all:
-            if mapset not in mapsets_accessible:
-                mapsets_ordered.append(mapset)
-        return mapsets_ordered
-
-    msg = "Invalid value for 'get' parameter of ListOfMapsets()"
-    raise ValueError(msg)
+    mapsets_ordered = mapsets_accessible.copy()
+    for mapset in mapsets_all:
+        if mapset not in mapsets_accessible:
+            mapsets_ordered.append(mapset)
+    return mapsets_ordered
 
 
 def ListSortLower(list):

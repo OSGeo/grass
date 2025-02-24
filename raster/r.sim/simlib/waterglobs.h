@@ -6,6 +6,10 @@
 #define UNDEF -9999
 
 #include <grass/raster.h>
+#ifdef _MSC_VER
+#undef min
+#undef max
+#endif
 
 extern char *elevin;
 extern char *dxin;
@@ -21,7 +25,6 @@ extern char *outwalk;
 extern char *observation;
 extern char *logfile;
 extern char *mapset;
-extern char *mscale;
 extern char *tserie;
 
 extern char *wdepth;
@@ -37,12 +40,6 @@ extern char *erdep;
 extern char *rainval;
 extern char *maninval;
 extern char *infilval;
-
-struct seed {
-    long int is1, is2;
-};
-
-extern struct seed seed;
 
 struct _points {
     double *x;         /* x coor for each point */
@@ -65,8 +62,6 @@ struct point3D {
 };
 
 extern struct _points points;
-extern void erod(double **);
-extern int output_et(void);
 extern double simwe_rand(void);
 extern double gasdev(void);
 extern void gasdev_for_paralel(double *, double *);
@@ -76,18 +71,6 @@ extern int min(int, int);
 extern int max(int, int);
 extern void create_observation_points(void);
 
-extern double xmin, ymin, xmax, ymax;
-extern double mayy, miyy, maxx, mixx;
-extern int mx, my;
-extern int mx2, my2;
-
-extern double bxmi, bymi, bxma, byma, bresx, bresy;
-extern int maxwab;
-extern double step, conv;
-
-extern double frac;
-extern double bxmi, bymi;
-
 extern float **zz, **cchez;
 extern double **v1, **v2, **slope;
 extern double **gama, **gammas, **si, **inf, **sigma;
@@ -95,23 +78,7 @@ extern float **dc, **tau, **er, **ct, **trap;
 extern float **dif;
 
 extern struct point3D *w;
-extern struct point3D *stack;
 extern struct point2D *vavg;
-
-extern double hbeta;
-extern double hhmax, sisum, vmean;
-extern double infsum, infmean;
-extern int maxw, maxwa, nwalk;
-extern double rwalk, bresx, bresy, xrand, yrand;
-extern double stepx, stepy, xp0, yp0;
-extern double chmean, si0, deltap, deldif, cch, hhc, halpha;
-extern double eps;
-extern int maxwab, nstack;
-extern int iterout, mx2o, my2o;
-extern int miter, nwalka;
-extern double timec;
-extern int ts, timesec;
-extern double mintimestep;
 
 extern double rain_val;
 extern double manin_val;
