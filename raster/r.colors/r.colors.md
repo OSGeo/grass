@@ -12,7 +12,7 @@ The **raster_3d** option allows user to specify a 3D raster map *name*
 from which to copy the color map.
 
 The **-e** flag equalizes the original raster's color table. It can
-preclude the need for *grey.eq* rule, when used as **-e color=***grey*.
+preclude the need for *grey.eq* rule, when used as **-e color**=*grey*.
 Note however, that this will not yield a color table identical to
 *color=grey.eq*, because *grey.eq* scales the fraction by 256 to get a
 grey level, while **-e** uses it to interpolate the original color
@@ -24,9 +24,9 @@ and the integer raster maps.
 The **-g** flag divides the raster's grey value range into 100
 logarithmically equal steps (where "step" is a rule with the same grey
 level for the start and end points). It can preclude the need for
-*grey.log* rule, when used as **-g color=***grey*. Note however, that
+*grey.log* rule, when used as **-g color**=*grey*. Note however, that
 this will not yield a color table identical to *color=grey.log*.
-Different algorithms are used. Unlike **color=***grey.log*, **-g** is
+Different algorithms are used. Unlike **color**=*grey.log*, **-g** is
 designed to work with both floating point and integer rasters, without
 performance issues with large datasets, of any original color table.
 Logarithmic scaling doesn't work on negative values. In the case when

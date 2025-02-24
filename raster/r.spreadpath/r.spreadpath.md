@@ -21,21 +21,21 @@ can be found in Xu (1994).
 
 ## Parameters
 
-**x_input=***name*  
+**x_input**=*name*  
 Name of input raster map layer containing backlink UTM easting
 coordinates.
 
-**y_input=***name*  
+**y_input**=*name*  
 Name of input raster map layer containing backlink UTM northing
 coordinates.
 
-**coordinates =***x,y\[,x,y,x,y, ...\]*  
+**coordinates**=*x,y\[,x,y,x,y, ...\]*  
 Each x,y coordinate pair gives the easting and northing (respectively)
 geographic coordinates of a target point from which to backwards trace
 the least cost path. As many points as desired can be entered by the
 user.
 
-**output=***name*  
+**output**=*name*  
 Name of raster map layer to contain output. Also can be used as the map
 layer of the input target points. If so used, the input target point map
 will be overwritten by the output.
