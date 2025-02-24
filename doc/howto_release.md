@@ -336,7 +336,7 @@ wget https://github.com/OSGeo/grass/releases/download/$REL_VERSION/ChangeLog.gz 
 Fetch a tarball from GitHub we also publish on OSGeo servers:
 
 ```bash
-wget https://github.com/OSGeo/grass/archive/$REL_VERSION.tar.gz -O grass-$REL_VERSION.tar.gz
+wget https://github.com/OSGeo/grass/releases/download/$REL_VERSION/grass-$REL_VERSION.tar.gz
 md5sum grass-$REL_VERSION.tar.gz > grass-$REL_VERSION.md5sum
 ```
 
