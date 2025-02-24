@@ -83,15 +83,15 @@ typedef struct {
 } Inputs;
 
 typedef struct {
-    char *depth;
-    char *disch;
-    char *err;
-    char *outwalk;
-    char *tc;
-    char *et;
-    char *conc;
-    char *flux;
-    char *erdep;
+    char *depth;   // Water depth raster name (water flow only)
+    char *disch;   // Discharge raster name (water flow only)
+    char *err;     // Error raster name (water flow only)
+    char *outwalk; // Output walker map name
+    char *tc;      // Transport capacity raster name (sediment only)
+    char *et;   // Transport limited erosion/deposition map name (sediment only)
+    char *conc; // Sediment concentration raster name (sediment only)
+    char *flux; // Sediment flux raster name (sediment only)
+    char *erdep; // Erosion/deposition raster name (sediment only)
 } Outputs;
 
 void alloc_grids_water(const Geometry *geometry, const Outputs *outputs);
