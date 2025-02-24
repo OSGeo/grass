@@ -271,7 +271,7 @@ Eventually, commit with the suggested commit message and push, e.g.:
 ```bash
 git show
 eval $(./utils/update_version.py status --bash)
-git commit include/VERSION -m "version: Back to $VERSION"
+git commit include/VERSION -m "version: Start $VERSION"
 git push upstream
 ```
 
