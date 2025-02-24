@@ -19,6 +19,7 @@ DSTFILES := \
 	$(MDDIR)/source/favicon.ico \
 	$(MDDIR)/source/grassdocs.css \
 	$(MDDIR)/scripts/hook_list_scripts.py \
+	$(MDDIR)/source/index.md \
 	$(MDDIR)/overrides/partials/footer.html \
 	$(MDDIR)/overrides/partials/actions.html
 
@@ -158,10 +159,6 @@ $(HTMLDIR)/index.html: build_index.py build_html.py
 	$(call build,index)
 	touch $@
 
-$(MDDIR)/source/index.md: build_index.py build_md.py
-	$(call build,index)
-	touch $@
-
 $(HTMLDIR)/keywords.html: $(ALL_HTML)
 	$(call build_keywords)
 	touch $@
@@ -244,6 +241,9 @@ $(HTMLDIR)/parser_standard_options.css: parser_standard_options.css
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/mkdocs.yml: mkdocs/mkdocs.yml
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/index.md: mkdocs/index.md
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/grass_logo.svg: grass_logo.svg

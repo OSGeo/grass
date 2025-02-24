@@ -21,7 +21,7 @@ author: GRASS Development Team
     - [Graphical index of functionality](graphical_index.md)
 
     ---
-    [:material-arrow-right-circle: Getting started](helptext.md)
+    [Getting started :material-arrow-right-circle:](helptext.md){ .md-button .md-button--primary }
 
 -   :computer: **Graphical User Interface (GUI)**
 
@@ -35,7 +35,7 @@ author: GRASS Development Team
     - [Display Drivers](displaydrivers.md)
 
     ---
-    [:material-arrow-right-circle: GUI Overview](wxguiintro.md)
+    [GUI Overview :material-arrow-right-circle:](wxguiintro.md){ .md-button .md-button--primary }
 
 -   :earth_americas: **Spatial Data Processing**
 
@@ -49,7 +49,7 @@ author: GRASS Development Team
     - [Imagery Commands Manual](imagery.md)
 
     ---
-    [:material-arrow-right-circle: Raster & Imagery](rasterintro.md)
+    [Raster & Imagery :material-arrow-right-circle:](rasterintro.md){ .md-button .md-button--primary }
 
 -   :material-vector-square: **Vector Processing & Database**
 
@@ -63,7 +63,7 @@ author: GRASS Development Team
     - [Database Commands Manual](database.md)
 
     ---
-    [:material-arrow-right-circle: Vector & Database](vectorintro.md)
+    [Vector & Database :material-arrow-right-circle:](vectorintro.md){ .md-button .md-button--primary }
 
 -   :material-clock-time-three: **Temporal Processing**
 
@@ -73,7 +73,7 @@ author: GRASS Development Team
     - [Temporal Commands Manual](temporal.md)
 
     ---
-    [:material-arrow-right-circle: Temporal Data](temporalintro.md)
+    [:material-arrow-right-circle: Temporal Data](temporalintro.md){ .md-button .md-button--primary }
 
 -   :material-map: **Cartography & Visualization**
 
@@ -84,7 +84,7 @@ author: GRASS Development Team
     - [GRASS Environment Variables](variables.md)
 
     ---
-    [:material-arrow-right-circle: Cartography](postscript.md)
+    [:material-arrow-right-circle: Cartography](postscript.md){ .md-button .md-button--primary }
 
 -    :fontawesome-solid-prescription: **Python for GRASS GIS**
 
@@ -95,7 +95,7 @@ author: GRASS Development Team
       - [GRASS GIS in Jupyter Notebooks](https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/grass.jupyter.html)
 
     ---
-    [:material-arrow-right-circle: Python API](https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/index.html)
+    [:material-arrow-right-circle: Python API](https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/index.html){ .md-button .md-button--primary }
 
 </div>
 <!-- markdownlint-enable MD030 -->
