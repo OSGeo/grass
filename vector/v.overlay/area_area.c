@@ -213,7 +213,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 
     /* Query input maps */
     for (input = 0; input < 2; input++) {
-        const char *mname = Vect_get_full_name(&(In[input]))
+        const char *mname = Vect_get_full_name(&(In[input]));
         G_message(_("Querying vector map <%s>..."), mname);
         G_free((void *)mname);
 
