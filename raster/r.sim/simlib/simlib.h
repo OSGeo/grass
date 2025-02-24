@@ -94,6 +94,16 @@ typedef struct {
     char *erdep; // Erosion/deposition raster name (sediment only)
 } Outputs;
 
+struct point2D {
+    double x;
+    double y;
+};
+struct point3D {
+    double x;
+    double y;
+    double m;
+};
+
 void alloc_grids_water(const Geometry *geometry, const Outputs *outputs);
 void alloc_grids_sediment(const Geometry *geometry, const Outputs *outputs);
 void init_grids_sediment(const Setup *setup, const Geometry *geometry,

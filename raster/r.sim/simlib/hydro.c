@@ -45,8 +45,6 @@ float **dif;
 struct point3D *w;
 struct point2D *vavg;
 
-struct History history; /* holds meta-data (title, comments,..) */
-
 /* **************************************************** */
 /*       create walker representation of si */
 /* ******************************************************** */

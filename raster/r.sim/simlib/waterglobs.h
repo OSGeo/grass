@@ -11,16 +11,6 @@
 #undef max
 #endif
 
-struct point2D {
-    double x;
-    double y;
-};
-struct point3D {
-    double x;
-    double y;
-    double m;
-};
-
 extern double simwe_rand(void);
 extern double gasdev(void);
 extern void gasdev_for_paralel(double *, double *);
@@ -37,7 +27,5 @@ extern float **dif;
 
 extern struct point3D *w;
 extern struct point2D *vavg;
-
-extern struct History history; /* holds meta-data (title, comments,..) */
 
 #endif /* __WATERGLOBS_H__ */
