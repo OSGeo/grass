@@ -53,15 +53,13 @@ which can be patched into with [v.net](v.net.md).
 
 Isonetwork using distance:
 
-<img src="vnetiso.png" data-border="1"
-alt="v.net.iso example with distance" />
+![v.net.iso example with distance](vnetiso.png)
 
 Isonetwork using time:
 
-<img src="vnetisotime.png" data-border="1"
-alt="v.net.iso example with traveling time" />
+![v.net.iso example with traveling time](vnetisotime.png)
 
-#### Subdivision of a network using distance
+### Subdivision of a network using distance
 
 ```sh
 # Spearfish
@@ -101,7 +99,7 @@ d.vect myroads_net_iso col=magenta  cats=4
 d.vect myroads_net col=red icon=basic/triangle fcol=green size=12 layer=2
 ```
 
-#### Subdivision of a network using traveling time
+### Subdivision of a network using traveling time
 
 Prepare the network as above:
 

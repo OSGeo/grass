@@ -1,3 +1,10 @@
+---
+description: wxGUI Toolboxes
+index: wxGUI
+---
+
+# wxGUI Toolboxes
+
 ## KEYWORDS
 
 [general](general.md), [GUI](topic_GUI.md)
@@ -33,7 +40,7 @@ Following lines can be copied to `.grass8/toolboxes/main_menu.xml` and
 by removing, adding or reordering lines users can change the main menu
 items. See further examples.
 
-```sh
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <toolbox name="MyMainMenu">
   <label>Default GRASS GIS main menu bar</label>
@@ -62,7 +69,7 @@ toolboxes are linked through `name` attribute.
 Apart from `subtoolbox` tag, tag `toolbox` can contain individual items
 (modules) and separators (for visual separation in the menu tree).
 
-```sh
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <toolboxes>
   <toolbox name="Raster">
@@ -104,7 +111,7 @@ If we are for example working only with raster data, we can hide menu
 items *Vector* and *Database*. The file `main_menu.xml` then contains
 the following lines where we omitted the two toolboxes:
 
-```sh
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <toolbox name="CustomizedMainMenu">
   <label>Default GRASS GIS main menu bar</label>
@@ -126,7 +133,7 @@ In this example we create a new toolbox *Favorites* containing existing
 GRASS module and toolbox, custom module created by the user and addon
 module. The `toolboxes.xml` file contains following lines:
 
-```sh
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <toolboxes>
   <toolbox name="MyFavorites">
@@ -154,7 +161,7 @@ module. The `toolboxes.xml` file contains following lines:
 Optionally, we can add this toolbox to the main menu items. The
 `main_menu.xml` file contains following lines:
 
-```sh
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <toolbox name="CustomizedMainMenu">
   <label>Default GRASS GIS main menu bar</label>
@@ -177,9 +184,8 @@ If we have `user-toolboxes-list` tag in the `main_menu.xml` file, our
 custom toolbox will be listed in the automatically added *Toolboxes*
 main menu item. The screenshot shows the resulting menu:
 
-<img src="wxGUI_toolboxes.jpg" data-border="0"
-alt="Toolboxes - menu customization" />  
-  
+![Toolboxes - menu customization](wxGUI_toolboxes.jpg)
+
 ## NOTES
 
 After the first start of wxGUI with custom toolboxes, `.grass/toolboxes`

@@ -109,9 +109,9 @@ and steep slopes.
 
 The core of the algorithm is determining, for each cell, the
 line-of-sight and its intersections with the cells in the terrain. For a
-(square) grid of *n* cells, there can be *O(n <sup>1/2</sup>)* cells
+(square) grid of *n* cells, there can be *O(n^1/2)* cells
 that intersect the LOS. If we test every single such cell for every
-point in the grid, this adds up to *O(n<sup>3/2</sup>)* tests. We can do
+point in the grid, this adds up to *O(n^3/2)* tests. We can do
 all these tests faster if we re-use information from one point to the
 next (two grid points that are close to each other will be intersected
 by a lot of the same points) and organize the computation differently.
@@ -132,14 +132,14 @@ gradient among these. If the cell's gradient is higher, it is marked as
 visible, whereas if it is lower, it is marked as invisible.
 
 For a (square) raster of *n* point in total, the standard viewshed
-algorithm uses *O(n sqrt(n))= O(n<sup>3/2</sup>)* time, while the
+algorithm uses *O(n sqrt(n))= O(n^3/2)* time, while the
 sweep-line algorithm uses *O(n lg n)* time. This algorithm is efficient
 in terms of CPU operations and can be also made efficient in terms of
 I/O-operations. For all details see the REFERENCES below.
 
-| <img src="sweep1.png" data-border="0" width="200" alt="[SDF]" /> | <img src="sweep2.png" data-border="0" width="200" alt="[SDF]" /> |
+| ![[SDF]](sweep1.png) | ![[SDF]](sweep2.png) |
 |------------------------------------------------------------------|------------------------------------------------------------------|
-| The sweep-line.                                                  | The active cells.                                                |
+| The sweep-line.  | The active cells.|
 
 ## EXAMPLES
 
@@ -152,9 +152,8 @@ g.region raster=elev_lid792_1m -p
 r.viewshed input=elev_lid792_1m output=elev_lid792_1m_viewshed coordinates=638728,220609 observer_elevation=5.0
 ```
 
-[<img src="r.viewshed.png" data-border="0" width="600" height="570"
-alt="r.viewshed example" />  
-](r.viewshed.png) *Viewshed shown on shaded terrain (observer position
+![r.viewshed example](r.viewshed.png)  
+*Viewshed shown on shaded terrain (observer position
 in the north-east quadrant with white dot; 5m above ground)*
 
 Using the Spearfish dataset: calculating the viewpoint from top of a

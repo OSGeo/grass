@@ -24,7 +24,4 @@ $(HTMLDIR)/colortables: $(HTMLDIR)
 $(MDDIR)/source/colortables: $(MDDIR)
 	$(MKDIR) $@
 
-$(BIN)/r.mapcalc$(EXE):
-	$(MAKE) -C ../r.mapcalc
-
 .PHONY: thumbnails

@@ -14,8 +14,7 @@ r.relief input=elevation output=relief zscale=10
 r.blend -c first=elevation second=relief output=blend percent=75
 ```
 
-[<img src="r_blend.png" data-border="0" width="600" height="540"
-alt="r.blend example" />](r_blend.png)  
+![r.blend example](r_blend.png)  
 *Figure: Elevation blended with shaded relief*
 
 ## SEE ALSO
