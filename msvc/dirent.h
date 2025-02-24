@@ -1,5 +1,5 @@
-#ifndef DIRENT_INCLUDED
-#define DIRENT_INCLUDED
+#ifndef GRASS_MSVC_DIRENT_H
+#define GRASS_MSVC_DIRENT_H
 
 /*
 

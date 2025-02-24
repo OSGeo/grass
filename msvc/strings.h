@@ -1,5 +1,10 @@
 /* MSVC does not have strings.h */
-#ifndef _INC_STRINGS_H
-#define _INC_STRINGS_H 1
-#include <string.h>
+#ifndef GRASS_MSVC_STRINGS_H
+#define GRASS_MSVC_STRINGS_H
+
+#include <../ucrt/string.h>
+
+#define strncasecmp _strnicmp
+#define strcasecmp  _stricmp
+
 #endif
