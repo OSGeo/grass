@@ -82,37 +82,36 @@ typedef struct {
     char *tauin;  // Critical shear stress raster name (sediment only)
 } Inputs;
 
-struct WaterParams {
-
+typedef struct {
     char *depth;
     char *disch;
     char *err;
     char *outwalk;
-
     char *tc;
     char *et;
     char *conc;
     char *flux;
     char *erdep;
-};
+} Outputs;
 
-void WaterParams_init(struct WaterParams *wp);
-void init_library_globals(struct WaterParams *wp);
-void alloc_grids_water(const Geometry *geometry);
-void alloc_grids_sediment(const Geometry *geometry);
-void init_grids_sediment(const Setup *setup, const Geometry *geometry);
+void alloc_grids_water(const Geometry *geometry, const Outputs *outputs);
+void alloc_grids_sediment(const Geometry *geometry, const Outputs *outputs);
+void init_grids_sediment(const Setup *setup, const Geometry *geometry,
+                         const Outputs *outputs);
 
-int input_data(int rows, int cols, Simulation *sim, const Inputs *inputs);
+int input_data(int rows, int cols, Simulation *sim, const Inputs *inputs,
+               const Outputs *outputs);
 int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
-               Inputs *inputs);
+               const Inputs *inputs, const Outputs *outputs);
 void main_loop(const Setup *setup, const Geometry *geometry,
                const Settings *settings, Simulation *sim,
-               ObservationPoints *points, const Inputs *inputs);
+               ObservationPoints *points, const Inputs *inputs,
+               const Outputs *outputs);
 int output_data(int, double, const Setup *setup, const Geometry *geometry,
                 const Settings *settings, const Simulation *sim,
-                const Inputs *inputs);
-int output_et(const Geometry *geometry);
-void free_walkers(Simulation *sim);
+                const Inputs *inputs, const Outputs *outputs);
+int output_et(const Geometry *geometry, const Outputs *outputs);
+void free_walkers(Simulation *sim, const char *outwalk);
 void erod(double **, const Setup *setup, const Geometry *geometry);
 void create_observation_points(ObservationPoints *points);
 

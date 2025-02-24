@@ -103,7 +103,6 @@ int main(int argc, char *argv[])
     int threads;
     int ret_val;
     struct Cell_head cellhd;
-    struct WaterParams wp;
     struct options parm;
     struct flags flag;
     long seed_value;
@@ -329,8 +328,7 @@ int main(int argc, char *argv[])
     settings.hhmax = settings.halpha = settings.hbeta = 0;
     settings.ts = false;
     Inputs inputs = {0};
-
-    WaterParams_init(&wp);
+    Outputs outputs = {0};
 
     geometry.conv = G_database_units_to_meters_factor();
 
@@ -358,12 +356,12 @@ int main(int argc, char *argv[])
     inputs.tranin = parm.tranin->answer;
     inputs.tauin = parm.tauin->answer;
     inputs.manin = parm.manin->answer;
-    wp.tc = parm.tc->answer;
-    wp.et = parm.et->answer;
-    wp.conc = parm.conc->answer;
-    wp.flux = parm.flux->answer;
-    wp.erdep = parm.erdep->answer;
-    wp.outwalk = parm.outwalk->answer;
+    outputs.tc = parm.tc->answer;
+    outputs.et = parm.et->answer;
+    outputs.conc = parm.conc->answer;
+    outputs.flux = parm.flux->answer;
+    outputs.erdep = parm.erdep->answer;
+    outputs.outwalk = parm.outwalk->answer;
 
     sscanf(parm.threads->answer, "%d", &threads);
     if (threads < 1) {
@@ -417,22 +415,22 @@ int main(int argc, char *argv[])
     points.observation = parm.observation->answer;
     points.logfile = parm.logfile->answer;
     create_observation_points(&points);
-    init_library_globals(&wp);
 
-    if ((wp.tc == NULL) && (wp.et == NULL) && (wp.conc == NULL) &&
-        (wp.flux == NULL) && (wp.erdep == NULL))
+    if ((outputs.tc == NULL) && (outputs.et == NULL) &&
+        (outputs.conc == NULL) && (outputs.flux == NULL) &&
+        (outputs.erdep == NULL))
         G_warning(_("You are not outputting any raster or site files"));
-    ret_val = input_data(geometry.my, geometry.mx, &sim, &inputs);
+    ret_val = input_data(geometry.my, geometry.mx, &sim, &inputs, &outputs);
     if (ret_val != 1)
         G_fatal_error(_("Input failed"));
 
-    alloc_grids_sediment(&geometry);
+    alloc_grids_sediment(&geometry, &outputs);
 
-    grad_check(&setup, &geometry, &settings, &inputs);
-    init_grids_sediment(&setup, &geometry);
+    grad_check(&setup, &geometry, &settings, &inputs, &outputs);
+    init_grids_sediment(&setup, &geometry, &outputs);
     /* treba dat output pre topoerdep */
-    main_loop(&setup, &geometry, &settings, &sim, &points, &inputs);
-    free_walkers(&sim);
+    main_loop(&setup, &geometry, &settings, &sim, &points, &inputs, &outputs);
+    free_walkers(&sim, outputs.outwalk);
 
     /* Exit with Success */
     exit(EXIT_SUCCESS);

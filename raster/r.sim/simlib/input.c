@@ -24,63 +24,20 @@ static void copy_matrix_undef_double_to_float_values(int rows, int cols,
 static void copy_matrix_undef_float_values(int rows, int cols, float **source,
                                            float **target);
 
-/*!
- * \brief Initialize WaterParams structure.
- */
-void WaterParams_init(struct WaterParams *wp)
-{
-    /* this is little bit lengthy and perhaps error-prone
-     * but it simplifies initialization since then there is no
-     * difference in between initialization in water and sediment
-     * for the variables which are not used and would have been
-     * initialized if they were just global variables */
-
-    wp->depth = NULL;
-    wp->disch = NULL;
-    wp->err = NULL;
-    wp->outwalk = NULL;
-
-    wp->tc = NULL;
-    wp->et = NULL;
-    wp->conc = NULL;
-    wp->flux = NULL;
-    wp->erdep = NULL;
-}
-
-/*!
- * \brief Initialize global variables in the library.
- */
-void init_library_globals(struct WaterParams *wp)
-{
-    /* this is little bit lengthy and perhaps error-prone
-     * but it separates library from its interface */
-
-    depth = wp->depth;
-    disch = wp->disch;
-    err = wp->err;
-    outwalk = wp->outwalk;
-
-    tc = wp->tc;
-    et = wp->et;
-    conc = wp->conc;
-    flux = wp->flux;
-    erdep = wp->erdep;
-}
-
 /* we do the allocation inside because we anyway need to set the variables */
 
-void alloc_grids_water(const Geometry *geometry)
+void alloc_grids_water(const Geometry *geometry, const Outputs *outputs)
 {
     /* memory allocation for output grids */
     G_debug(1, "beginning memory allocation for output grids");
 
     gama = G_alloc_matrix(geometry->my, geometry->mx);
-    if (err != NULL)
+    if (outputs->err != NULL)
         gammas = G_alloc_matrix(geometry->my, geometry->mx);
     dif = G_alloc_fmatrix(geometry->my, geometry->mx);
 }
 
-void alloc_grids_sediment(const Geometry *geometry)
+void alloc_grids_sediment(const Geometry *geometry, const Outputs *outputs)
 {
     /* mandatory for si,sigma */
 
@@ -90,24 +47,25 @@ void alloc_grids_sediment(const Geometry *geometry)
     /* memory allocation for output grids */
 
     dif = G_alloc_fmatrix(geometry->my, geometry->mx);
-    if (erdep != NULL || et != NULL)
+    if (outputs->erdep != NULL || outputs->et != NULL)
         er = G_alloc_fmatrix(geometry->my, geometry->mx);
 }
 
-void init_grids_sediment(const Setup *setup, const Geometry *geometry)
+void init_grids_sediment(const Setup *setup, const Geometry *geometry,
+                         const Outputs *outputs)
 {
     /* this should be fulfilled for sediment but not water */
-    if (et != NULL)
+    if (outputs->et != NULL)
         erod(si, setup, geometry);
 }
 
-void alloc_walkers(int max_walkers, Simulation *sim)
+void alloc_walkers(int max_walkers, Simulation *sim, const Outputs *outputs)
 {
     G_debug(1, "beginning memory allocation for walkers");
 
     w = (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
     vavg = (struct point2D *)G_calloc(max_walkers, sizeof(struct point2D));
-    if (outwalk != NULL)
+    if (outputs->outwalk != NULL)
         sim->stack =
             (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
 }
@@ -124,7 +82,8 @@ void alloc_walkers(int max_walkers, Simulation *sim)
 
 /* ************************************************************************* */
 /* Read all input maps and input values into memory ************************ */
-int input_data(int rows, int cols, Simulation *sim, const Inputs *inputs)
+int input_data(int rows, int cols, Simulation *sim, const Inputs *inputs,
+               const Outputs *outputs)
 {
     int max_walkers;
     double unitconv = 0.000000278; /* mm/hr to m/s */
@@ -207,7 +166,7 @@ int input_data(int rows, int cols, Simulation *sim, const Inputs *inputs)
     }
     /* allocate walkers */
     max_walkers = sim->maxwa + cols * rows;
-    alloc_walkers(max_walkers, sim);
+    alloc_walkers(max_walkers, sim, outputs);
 
     /* Array for gradient checking */
     slope = create_double_matrix(rows, cols, 0.0);
@@ -219,7 +178,7 @@ int input_data(int rows, int cols, Simulation *sim, const Inputs *inputs)
 
 /* data preparations, sigma, shear, etc. */
 int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
-               Inputs *inputs)
+               const Inputs *inputs, const Outputs *outputs)
 {
     int k, l;
     double zx, zy, zd2, zd4, sinsl;
@@ -403,7 +362,7 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
                     inf[k][l] *= settings->timesec;
                 if (inputs->wdepth)
                     gama[k][l] = 0.;
-                if (et) {
+                if (outputs->et) {
                     if (sigma[k][l] == 0. || slope[k][l] == 0.)
                         si[k][l] = 0.;
                     else
@@ -420,9 +379,9 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
      D_T({\bf r})= \nabla\cdot {\bf T}({\bf r})
      *   \f$
      */
-    if (et) {
+    if (outputs->et) {
         erod(si, setup, geometry); /* compute divergence of t.capc */
-        if (output_et(geometry) != 1)
+        if (output_et(geometry, outputs) != 1)
             G_fatal_error(_("Unable to write et file"));
     }
 
@@ -435,7 +394,7 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
             for (l = 0; l < geometry->mx; l++) {
                 if (zz[k][l] != UNDEF) {
                     /* get back from temp */
-                    if (et)
+                    if (outputs->et)
                         si[k][l] = si[k][l] * slope[k][l] * sigma[k][l];
                     if (sigma[k][l] != 0.)
                         /* rate of weight loss - w=w*sigma ,

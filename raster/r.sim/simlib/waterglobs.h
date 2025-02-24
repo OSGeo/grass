@@ -11,17 +11,6 @@
 #undef max
 #endif
 
-extern char *depth;
-extern char *disch;
-extern char *err;
-extern char *outwalk;
-
-extern char *tc;
-extern char *et;
-extern char *conc;
-extern char *flux;
-extern char *erdep;
-
 struct point2D {
     double x;
     double y;

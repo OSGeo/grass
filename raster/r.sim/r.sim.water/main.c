@@ -102,7 +102,6 @@ int main(int argc, char *argv[])
     /* double x_orig, y_orig; */
     struct GModule *module;
     struct Cell_head cellhd;
-    struct WaterParams wp;
     struct options parm;
     struct flags flag;
     long seed_value;
@@ -361,8 +360,7 @@ int main(int argc, char *argv[])
     Simulation sim = {0};
     ObservationPoints points = {0};
     Inputs inputs = {0};
-
-    WaterParams_init(&wp);
+    Outputs outputs = {0};
 
     geometry.conv = G_database_units_to_meters_factor();
 
@@ -397,10 +395,10 @@ int main(int argc, char *argv[])
     inputs.infil = parm.infil->answer;
     inputs.traps = parm.traps->answer;
     inputs.manin = parm.manin->answer;
-    wp.depth = parm.depth->answer;
-    wp.disch = parm.disch->answer;
-    wp.err = parm.err->answer;
-    wp.outwalk = parm.outwalk->answer;
+    outputs.depth = parm.depth->answer;
+    outputs.disch = parm.disch->answer;
+    outputs.err = parm.err->answer;
+    outputs.outwalk = parm.outwalk->answer;
 
     G_debug(3, "Parsing numeric parameters");
 
@@ -547,19 +545,19 @@ int main(int argc, char *argv[])
     points.logfile = parm.logfile->answer;
     /* Create the observation points and open the logfile */
     create_observation_points(&points);
-    init_library_globals(&wp);
 
-    if ((wp.depth == NULL) && (wp.disch == NULL) && (wp.err == NULL))
+    if ((outputs.depth == NULL) && (outputs.disch == NULL) &&
+        (outputs.err == NULL))
         G_warning(_("You are not outputting any raster maps"));
-    ret_val = input_data(geometry.my, geometry.mx, &sim, &inputs);
+    ret_val = input_data(geometry.my, geometry.mx, &sim, &inputs, &outputs);
     if (ret_val != 1)
         G_fatal_error(_("Input failed"));
 
-    alloc_grids_water(&geometry);
+    alloc_grids_water(&geometry, &outputs);
 
-    grad_check(&setup, &geometry, &settings, &inputs);
-    main_loop(&setup, &geometry, &settings, &sim, &points, &inputs);
-    free_walkers(&sim);
+    grad_check(&setup, &geometry, &settings, &inputs, &outputs);
+    main_loop(&setup, &geometry, &settings, &sim, &points, &inputs, &outputs);
+    free_walkers(&sim, outputs.outwalk);
 
     /* Exit with Success */
     exit(EXIT_SUCCESS);

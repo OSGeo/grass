@@ -35,17 +35,6 @@
 struct point2D;
 struct point3D;
 
-char *depth;
-char *disch;
-char *err;
-char *outwalk;
-
-char *tc;
-char *et;
-char *conc;
-char *flux;
-char *erdep;
-
 float **zz, **cchez;
 double **v1, **v2, **slope;
 double **gama, **gammas, **si, **inf, **sigma;
@@ -65,7 +54,8 @@ struct History history; /* holds meta-data (title, comments,..) */
 
 void main_loop(const Setup *setup, const Geometry *geometry,
                const Settings *settings, Simulation *sim,
-               ObservationPoints *points, const Inputs *inputs)
+               ObservationPoints *points, const Inputs *inputs,
+               const Outputs *outputs)
 {
     int i, l, k;
     int iblock;
@@ -309,7 +299,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
              * output implementation */
             /* Save all walkers located within the computational region and with
                valid z coordinates */
-            if (outwalk != NULL && (i == setup->miter || i == iter1)) {
+            if (outputs->outwalk != NULL && (i == setup->miter || i == iter1)) {
                 sim->nstack = 0;
 
                 for (lw = 0; lw < sim->nwalk; lw++) {
@@ -342,13 +332,13 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 
             if (i == iter1 && settings->ts) {
                 /* call output for iteration output */
-                if (erdep != NULL)
+                if (outputs->erdep != NULL)
                     erod(gama, setup, geometry); /* divergence of gama field */
 
                 conn = (double)nblock / (double)iblock;
                 int itime = (int)(i * setup->deltap * setup->timec);
                 int ii = output_data(itime, conn, setup, geometry, settings,
-                                     sim, inputs);
+                                     sim, inputs, outputs);
                 if (ii != 1)
                     G_fatal_error(_("Unable to write raster maps"));
             }
@@ -399,7 +389,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
            }
            } */
 
-        if (err != NULL) {
+        if (outputs->err != NULL) {
             for (k = 0; k < geometry->my; k++) {
                 for (l = 0; l < geometry->mx; l++) {
                     if (zz[k][l] != UNDEF) {
@@ -409,7 +399,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                 }
             }
         }
-        if (erdep != NULL)
+        if (outputs->erdep != NULL)
             erod(gama, setup, geometry);
     }
     /*                       ........ end of iblock loop */
@@ -418,8 +408,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
     if (!settings->ts) {
         conn = (double)nblock / (double)iblock;
         int itime = (int)(i * setup->deltap * setup->timec);
-        int ii =
-            output_data(itime, conn, setup, geometry, settings, sim, inputs);
+        int ii = output_data(itime, conn, setup, geometry, settings, sim,
+                             inputs, outputs);
         if (ii != 1)
             G_fatal_error(_("Cannot write raster maps"));
     }
