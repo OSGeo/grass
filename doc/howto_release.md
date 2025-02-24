@@ -224,10 +224,10 @@ if there are any.
 ### Modify the release draft
 
 After the automated release job completes, a new release draft will be available
-in the GitHub web interface. You can copy-paste the created release notes to
-GitHub and further modify as needed.
-
-Older release description may or may not be a good inspiration:
+in the [GitHub releases web interface](https://github.com/OSGeo/grass/releases).
+You can copy-paste the locally created release notes to GitHub and further modify
+in the web interface as needed, following the typical document structure.
+Here, older release description may or may not be a good inspiration:
 <https://github.com/OSGeo/grass/releases>.
 
 If RC, mark it as a pre-release, check:
