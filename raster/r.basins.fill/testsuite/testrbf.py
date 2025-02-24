@@ -22,7 +22,7 @@ class TestRasterbasin(TestCase):
     @classmethod
     def setUpClass(cls):
         """Copy raster maps."""
-        cls.runModule("g.copy", raster=["elevation", cls.celevation], overwrite=True)
+        cls.runModule("g.copy", raster=["elevation", cls.celevation])
         cls.runModule("g.copy", raster=["geology_30m", cls.tgeology])
         cls.runModule("g.copy", raster=["lakes", cls.input])
 
