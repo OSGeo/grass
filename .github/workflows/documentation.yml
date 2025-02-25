@@ -113,11 +113,11 @@ jobs:
       - name: Rebuild keywords
         continue-on-error: true
         run: |
-          export ARCH="linux"
+          export ARCH="$(grass --config arch)"
           export ARCH_DISTDIR="$(grass --config path)"
-          export TOP_DOCS_DIR="${ARCH_DISTDIR}/docs"
           export VERSION_NUMBER="$VERSION"
-          grass --tmp-project XY --exec python grass/man/build_keywords.py "$TOP_DOCS_DIR" "$MKDOCS_DIR/source/addons"
+          grass --tmp-project XY --exec \
+            python grass/man/build_keywords.py md "$MKDOCS_DIR/source" "$MKDOCS_DIR/source/addons"
 
       - name: Get mkdocs
         run: |
@@ -138,7 +138,7 @@ jobs:
         with:
           name: grass-addon-build-logs
           if-no-files-found: warn
-          path: addons-build-dir/docs/logs
+          path: addons-build-dir/logs
           retention-days: 3
 
       - name: Make the result available
