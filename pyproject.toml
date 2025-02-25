@@ -284,8 +284,6 @@ ignore = [
 # Other ignores:
 "**.py" = ["PYI066"]
 "*/testsuite/**.py" = ["PT009", "PT027"]
-"gui/wxpython/gcp/manager.py" = ["PTH208"]
-"gui/wxpython/gmodeler/panels.py" = ["SIM115"]
 "gui/wxpython/gui_core/dialogs.py" = ["PTH208"]
 "gui/wxpython/gui_core/forms.py" = ["SIM115"]
 "gui/wxpython/gui_core/goutput.py" = ["SIM115"]
@@ -300,7 +298,6 @@ ignore = [
 "gui/wxpython/photo2image/ip2i_manager.py" = ["SIM115"]
 "gui/wxpython/psmap/dialogs.py" = ["PTH208"]
 "gui/wxpython/psmap/instructions.py" = ["SIM115"]
-"gui/wxpython/psmap/utils.py" = ["PGH004"]
 "gui/wxpython/rlisetup/frame.py" = ["PTH208"]
 "gui/wxpython/timeline/frame.py" = ["FLY002"]
 "gui/wxpython/tools/update_menudata.py" = ["SIM115"]
@@ -378,13 +375,6 @@ ignore = [
 "scripts/v.*/v.*.py" = ["SIM115"]
 "scripts/wxpyimgview/wxpyimgview_gui.py" = ["SIM115"]
 "temporal/t.rast.algebra/testsu*/*_algebra_arithmetic.py" = ["FLY002"]
-"temporal/t.rast.colors/t.rast.colors.py" = ["SIM115"]
-"temporal/t.rast.series/t.rast.series.py" = ["SIM115"]
-"temporal/t.rast.what/t.rast.what.py" = ["SIM115"]
-"temporal/t.register/testsu*/*_raster_different_local.py" = ["FLY002"]
-"temporal/t.register/testsu*/*_raster_mapmetadata.py" = ["FLY002"]
-"temporal/t.register/testsuite/test_t_register_raster.py" = ["FLY002"]
-"temporal/t.register/testsuite/test_t_register_raster_file.py" = ["FLY002"]
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
 # Declare a custom aliases, checked with rule ICN001

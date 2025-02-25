@@ -58,7 +58,9 @@ plugins:
   - search
   - glightbox
   - tags
-  # - social
+  - social:
+      cards_layout_options:
+        background_image: null
   # - git-revision-date-localized:
   #     enable_creation_date: true
   # - git-committers:
