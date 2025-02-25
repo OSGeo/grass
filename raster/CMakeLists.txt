@@ -42,6 +42,7 @@ set(raster_modules_list
     r.latlong
     r.li
     r.mapcalc
+    r.mask.status
     r.mfilter
     r.mode
     r.neighbors
@@ -295,6 +296,14 @@ build_program_in_subdir(r.kappa DEPENDS grass_gis grass_raster ${LIBM})
 build_program_in_subdir(r.latlong DEPENDS grass_gis grass_raster grass_gproj GDAL)
 
 build_program_in_subdir(r.lake DEPENDS grass_gis grass_raster)
+
+build_program_in_subdir(
+  r.mask.status
+  DEPENDS
+  grass_gis
+  grass_manage
+  grass_parson
+  grass_raster)
 
 build_program_in_subdir(
   r.mfilter
