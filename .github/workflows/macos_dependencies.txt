@@ -44,6 +44,6 @@ python
 python.app
 setuptools
 six
-sqlite<3.49.0
 wxpython
+sqlite
 zstd
