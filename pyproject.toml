@@ -299,9 +299,7 @@ ignore = [
 "gui/wxpython/psmap/dialogs.py" = ["PTH208"]
 "gui/wxpython/psmap/instructions.py" = ["SIM115"]
 "gui/wxpython/rlisetup/frame.py" = ["PTH208"]
-"gui/wxpython/timeline/frame.py" = ["FLY002"]
 "gui/wxpython/tools/update_menudata.py" = ["SIM115"]
-"gui/wxpython/tplot/frame.py" = ["FLY002"]
 "gui/wxpython/vnet/vnet_data.py" = ["SIM115"]
 "gui/wxpython/web_services/dialogs.py" = ["SIM115"]
 "gui/wxpython/wxplot/profile.py" = ["A005", "SIM115"]
@@ -351,8 +349,6 @@ ignore = [
 "python/grass/utils/download.py" = ["PTH208", "SIM115"]
 "raster/r.*/testsuite/*.py" = ["SIM115"]
 "raster/r.topidx/*.py" = ["SIM115"]
-"raster3d/r3.flow/testsuite/r3flow_test.py" = ["FLY002"]
-"raster3d/r3.gradient/testsuite/r3gradient_test.py" = ["FLY002"]
 "scripts/d.correlate/d.correlate.py" = ["SIM115"]
 "scripts/d.frame/d.frame.py" = ["SIM115"]
 "scripts/d.polar/d.polar.py" = ["FURB154", "SIM115"]
@@ -374,7 +370,6 @@ ignore = [
 "scripts/r.tileset/r.tileset.py" = ["SIM115"]
 "scripts/v.*/v.*.py" = ["SIM115"]
 "scripts/wxpyimgview/wxpyimgview_gui.py" = ["SIM115"]
-"temporal/t.rast.algebra/testsu*/*_algebra_arithmetic.py" = ["FLY002"]
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
 # Declare a custom aliases, checked with rule ICN001
