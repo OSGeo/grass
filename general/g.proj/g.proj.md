@@ -23,7 +23,7 @@ project, the CRS information is imported from an external source as
 follows:
 
 - With **georef**=*filename* g.proj attempts to invoke GDAL and OGR in turn
-to read a georeferenced file *filename*.The CRS information will be read
+to read a georeferenced file *filename*. The CRS information will be read
 from this file. If the file is not georeferenced or cannot be read,
 XY (unprojected) will be used.
 
