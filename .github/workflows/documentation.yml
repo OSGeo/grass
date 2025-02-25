@@ -45,6 +45,14 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
 
+      - name: Install Python dependencies
+        # We install both core and addon dependencies, but we don't install any
+        # dependencies from the extra list in addons because we don't actually
+        # run them (and they should be lazy-imported).
+        run: |
+          pip install -r grass/.github/workflows/python_requirements.txt
+          pip install -r grass-addons/.github/workflows/python_requirements.txt
+
       - name: Create installation directory
         run: |
           mkdir "$HOME/install"
