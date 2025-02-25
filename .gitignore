@@ -6,6 +6,7 @@ OBJ.*
 locale/scriptstrings/*
 bin.*/*
 build
+/out/
 dist.*/*
 config.log
 config.status*
@@ -53,6 +54,9 @@ env/
 
 # VSCode Settings
 .vscode/
+
+# Visual Studio
+/.vs
 
 # ignore gunittest helper and result files
 testreport/*
