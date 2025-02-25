@@ -44,6 +44,17 @@ theme:
 # Customization
 extra:
   homepage: ./index.html
+  social:
+    - icon: /fontawesome/brands/discourse
+      link: https://discourse.osgeo.org/c/grass/62
+    - icon: fontawesome/brands/linkedin
+      link: linkedin.com/company/grass-gis
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/GRASSGIS
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/r/osgeo/grass-gis
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/@grass-gis
 
 # Hooks
 hooks:
