@@ -11,7 +11,7 @@ def github_path(toolname: str, source_docs: dict[str, str]):
         return None
 
 
-def github_edit_path(ghpath: str):
+def github_edit_path(ghpath: str, base_repo_url: str):
     """Return the GitHub edit path for the given path"""
     path_parts = ghpath.split("/")
 
@@ -21,8 +21,7 @@ def github_edit_path(ghpath: str):
 
     repo = path_parts[0].strip()
     doc_path = "/".join(path_parts[2:]).strip()  # Drop repo_name/tree
-    osgeo_org = "https://github.com/OSGeo"
-    return f"{osgeo_org}/{repo}/edit/{doc_path}"
+    return f"{base_repo_url}/{repo}/edit/{doc_path}"
 
 
 def on_env(env: Environment, config, files):
@@ -32,12 +31,14 @@ def on_env(env: Environment, config, files):
     return env
 
 
-def set_extra_source_docs(source_dir: str):
+def set_extra_source_docs(source_dir: str, config: dict):
     """
     Read the list of tools from the source directory and
     store it in MkDocs extra config. These are used to generate
     the correct links to the documentation in GitHub.
     """
+
+    base_repo_url = config["repo_url"]  # Set in mkdocs.yml as repo_url
     source_dir = Path(source_dir)
 
     # Dict to store the documentation path for each tool in GitHub
@@ -46,7 +47,6 @@ def set_extra_source_docs(source_dir: str):
 
     # Read the source files and extract the GitHub path from the Available at link at the bottom of the page
     pattern = re.compile(
-        # r"Available at:\s*\[(?P<text>.*?)\]\(https://github\.com/OSGeo/(grass|grass-addons)/tree/(main|grass8)/(?P<gh_path>.*?)\)"
         r"Available at:\s*\[(?P<text>.*?)\]\(https://github\.com/OSGeo/(?P<gh_path>.*?)\)"
     )
 
@@ -64,7 +64,7 @@ def set_extra_source_docs(source_dir: str):
                         r"\s*source\s+code\s*$", "", text, flags=re.IGNORECASE
                     ).strip()
                     print(f"Found {toolname} at {gh_path}")
-                    source_docs[toolname] = github_edit_path(gh_path)
+                    source_docs[toolname] = github_edit_path(gh_path, base_repo_url)
 
     # Store in MkDocs extra config
     return source_docs
@@ -76,6 +76,6 @@ def on_config(config):
     """
 
     # Store in MkDocs extra config
-    config["extra"]["source_docs"] = set_extra_source_docs("source")
+    config["extra"]["source_docs"] = set_extra_source_docs("source", config)
 
     return config
