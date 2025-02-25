@@ -10,7 +10,7 @@ named raster map, and align the boundaries to a row and column edge in
 the named map. Alignment only moves the existing boundaries outward to
 the edges of the next nearest cell in the named raster map -- not to the
 named map's edges. To perform the latter function, use the
-**raster=***name* option.
+**raster**=*name* option.
 
 ## NOTES
 

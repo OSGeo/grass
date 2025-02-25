@@ -409,17 +409,6 @@
 #define fstat _fstati64
 #endif /* _MSC_VER LFS */
 
-#define strncasecmp _strnicmp
-#define strcasecmp _stricmp
-#define fdopen _fdopen
-/* _open() and _creat() are wrapped by msvc/open.c and msvc/creat.c,
-* respectively, for compatible permission mode */
-#define read _read
-#define write _write
-#define close _close
-#define unlink _unlink
-#define getpid _getpid
-
 /* define gid_t type */
 typedef @GID_TYPE@ gid_t;
 
@@ -428,16 +417,6 @@ typedef @UID_TYPE@ uid_t;
 
 /* define pid_t type */
 typedef @PID_TYPE@ pid_t;
-
-#ifndef S_ISDIR
-#define S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
-#endif
-
-#include <BaseTsd.h>
-typedef SSIZE_T ssize_t;
-
-/* open for reading, writing, or both (not in fcntl.h) */
-#define O_ACCMODE (_O_RDONLY | _O_WRONLY | _O_RDWR)
 
 #endif //_MSC_VER
 
