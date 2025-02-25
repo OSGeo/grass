@@ -175,14 +175,16 @@ Import of large files can be significantly faster when setting
 The *r.in.gdal* command does support the following features, as long as
 the underlying format driver supports it:
 
-Color Table  
+### Color Table
+
 Bands with associated colortables will have the color tables
 transferred. Note that if the source has no colormap, r.in.gdal in GRASS
 5.0 will emit no colormap. Use r.colors map=... color=grey to assign a
 greyscale colormap. In a future version of GRASS r.in.gdal will likely
 be upgraded to automatically emit greyscale colormaps.  
 
-Data Types  
+### Data Types
+
 Most GDAL data types are supported. Float32 and Float64 type bands are
 translated as GRASS floating point cells (but not double precision ...
 this could be added if needed), and most other types are translated as
@@ -190,26 +192,30 @@ GRASS integer cells. This includes 16bit integer data sources. Complex
 (some SAR signal data formats) data bands are translated to two floating
 point cell layers (\*.real and \*.imaginary).  
 
-Georeferencing  
+### Georeferencing
+
 If the dataset has affine georeferencing information, this will be used
 to set the north, south, east and west edges. Rotational coefficients
 will be ignored, resulting in incorrect positioning for rotated
 datasets.  
 
-Coordinate reference system  
+#### Coordinate reference system
+
 The dataset's CRS will be used to compare to the current project or to
 define a new project. Internally GDAL represents CRS in OpenGIS Well
 Known Text format. A large subset of the total set of GRASS CRSs are
 supported.  
 
-Null Values  
+### Null Values
+
 Raster bands for which a null value is recognised by GDAL will have the
 null pixels transformed into GRASS style nulls during import. Many
 generic formats (and formats poorly supported by GDAL) do not have a way
 of recognising null pixels in which case r.null should be used after the
 import.  
 
-GCPs  
+### GCPs
+
 Datasets that have Ground Control Points will have them imported as a
 POINTS file associated with the imagery group. Datasets with only one
 band that would otherwise have been translated as a simple raster map
@@ -219,7 +225,8 @@ by r.in.gdal but not preserved. It is up to the user to ensure that the
 project established with i.target has a compatible coordinate system
 before using the points with i.rectify.  
 
-Raster Attribute Tables  
+### Raster Attribute Tables
+
 *r.in.gdal* can write out raster attribute tables as CSV files.
 Moreover, information in raster attribute tables is automatically
 imported as long as the field definitions contain information about how

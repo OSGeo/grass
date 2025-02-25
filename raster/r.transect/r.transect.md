@@ -21,7 +21,7 @@ string representing null values.
 This program is a front-end to the *[r.profile](r.profile.md)* program.
 It simply converts the azimuth and distance to an ending coordinate and
 then runs *[r.profile](r.profile.md)*. There once were **width=** and
-**result=***raw\|median\|average* options which are not currently
+**result**=*raw\|median\|average* options which are not currently
 implemented.
 
 ## SEE ALSO
