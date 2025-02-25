@@ -1,3 +1,9 @@
+---
+description: Support for landscape index calculations on raster
+---
+
+# Support for landscape index calculations on raster
+
 ## DESCRIPTION
 
 This documentation is focused on scientists and developers who wants to
