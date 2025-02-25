@@ -20,18 +20,18 @@ the output raster map name specified on the command line.
 
 ### Parameters
 
-**group=***name*  
+**group**=*name*  
 Name of the [imagery](i.group.md) group to which the raster band files
 used belong.
 
-**subgroup=***name*  
+**subgroup**=*name*  
 Name of the [imagery](i.group.md) subgroup to which the raster band
 files used belong.
 
-**signature=***name*  
+**signature**=*name*  
 Name of an ASCII file containing spectral signatures.
 
-**output=***name*  
+**output**=*name*  
 Output raster map prefix name. The output raster map layer names are
 built by appending a ".1", ".2", etc. onto the *output* name specified
 by the user.

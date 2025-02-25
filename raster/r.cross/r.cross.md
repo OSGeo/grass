@@ -2,7 +2,7 @@
 
 *r.cross* creates an *output* raster map layer representing all unique
 combinations of category values in the raster input layers
-(**input=***name,name,name*, ...). At least two, but not more than 30,
+(**input**=*name,name,name*, ...). At least two, but not more than 30,
 *input* map layers must be specified. The user must also specify a name
 to be assigned to the *output* raster map layer created by *r.cross*.
 

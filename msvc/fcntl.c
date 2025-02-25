@@ -1,7 +1,8 @@
 /*!
- * \file msvc/open.c
+ * \file msvc/fcntl.c
  *
- * \brief A wrapper function for MSVC _open() that converts permission mode.
+ * \brief Wrapper functions for MSVC _open() and _creat() that convert
+ * permission mode.
  *
  * (C) 2025 by the GRASS Development Team
  *
@@ -34,4 +35,10 @@ int __open(const char *pathname, int flags, ...)
     }
 
     return _open(pathname, flags);
+}
+
+int __creat(const char *pathname, int mode)
+{
+    return _creat(pathname,
+                  (mode & 0400 ? _S_IREAD : 0) | (mode & 0200 ? _S_IWRITE : 0));
 }
