@@ -1,7 +1,7 @@
 ## DESCRIPTION
 
 *r.out.ascii* converts a user-specified raster map layer
-(**input=***name*) into an ASCII grid in a text file (**output=***name*)
+(**input**=*name*) into an ASCII grid in a text file (**output**=*name*)
 suitable for export to other computer systems.
 
 The GRASS program *[r.in.ascii](r.in.ascii.md)* can be used to perform
