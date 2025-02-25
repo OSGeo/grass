@@ -94,7 +94,10 @@ extra_javascript:
 plugins:
   - search
   - glightbox
-  # - social
+  - social:
+      cards_layout_options:
+        background_image: null
+
   # - tags
   # - git-revision-date-localized:
   #     enable_creation_date: true

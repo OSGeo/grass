@@ -1,3 +1,9 @@
+---
+description: Cairo DISPLAY DRIVER
+---
+
+# Cairo DISPLAY DRIVER
+
 *Cairo display driver* for bitmap or vector output using the Cairo
 graphics library.
 

@@ -117,8 +117,6 @@ struct History hist;
 
 int INPUT_part(int offset, double *zmax);
 int OUTGR(void);
-int min(int, int);
-int max(int, int);
 
 /*void cube(int, int);
    void (*func) (int, int); */

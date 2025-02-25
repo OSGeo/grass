@@ -1,3 +1,9 @@
+---
+description: wxGUI
+---
+
+# wxGUI
+
 ## DESCRIPTION
 
 **wxGUI** is a native *Graphical User Interface* (GUI) for GRASS GIS.
