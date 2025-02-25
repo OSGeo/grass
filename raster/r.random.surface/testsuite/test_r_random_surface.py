@@ -224,15 +224,12 @@ class TestRRandomSurface(TestCase):
             overwrite=True,
         )
 
-        stats_json = gs.read_command(
-            "r.univar", map=self.output_raster, flags="g", format="json"
-        )
-        stats = json.loads(stats_json)
+        stats = gs.parse_command("r.univar", map=self.output_raster, format="json")
 
-        n = float(stats[0]["n"])
-        min_val = float(stats[0]["min"])
-        max_val = float(stats[0]["max"])
-        mean = float(stats[0]["mean"])
+        n = stats[0]["n"]
+        min_val = stats[0]["min"]
+        max_val = stats[0]["max"]
+        mean = stats[0]["mean"]
 
         expected_mean = (min_val + max_val) / 2
         mean_tolerance = 25  # Kept high to account for randomness
