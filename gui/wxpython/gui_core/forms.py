@@ -2631,12 +2631,9 @@ class CmdPanel(wx.Panel):
                 enc = locale.getdefaultlocale()[1]
 
             with codecs.open(filename, encoding=enc, mode="w", errors="replace") as f:
-                try:
-                    f.write(text)
-                    if text[-1] != os.linesep:
-                        f.write(os.linesep)
-                finally:
-                    f.close()
+                f.write(text)
+                if text[-1] != os.linesep:
+                    f.write(os.linesep)
         else:
             win.SetValue("")
 
