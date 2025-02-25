@@ -12,7 +12,8 @@ use the current geographic region settings.
 
 ## DEFINITIONS
 
-**Region:**  
+### Region
+
 In GRASS, a *region* refers to a geographic area with some defined
 boundaries, based on a specific map coordinate system and map
 projection. Each region also has associated with it the specific
@@ -34,7 +35,8 @@ Typically all raster and display modules are affected by the current
 region settings, but not vector modules. Some special modules diverge
 from this rule, for example raster import modules and *v.in.region*.
 
-**Default Region:**  
+### Default Region
+
 Each GRASS project (previously called location) has a fixed geographic
 region, called the default geographic region (stored in the region file
 `DEFAULT_WIND` under the special mapset `PERMANENT`), that defines the
@@ -45,13 +47,15 @@ to the default region with the **-d** flag. The default region is
 initially set when the project is first created and can be reset using
 the **-s** flag.
 
-**Current Region:**  
+### Current Region
+
 Each mapset has a current geographic region. This region defines the
 geographic area in which all GRASS displays and raster analyses will be
 done. Raster data will be resampled, if necessary, to meet the cell
 resolutions of the current geographic region setting.
 
-**Saved Regions:**  
+### Saved Region
+
 Each GRASS MAPSET may contain any number of pre-defined, and named,
 geographic regions. These region definitions are stored in the user's
 current mapset location under the `windows` directory (also referred to
@@ -101,24 +105,22 @@ always updated unless **-u** was specified.
 
 ### Additional parameter information
 
-**zoom=***name*  
-Shrink current region settings to the smallest region encompassing all
-non-NULL data in the named raster map layer that fall inside the user's
-current region. In this way you can tightly zoom in on isolated clumps
-within a bigger map.
+Option **zoom** shrinks current region settings to the smallest region
+encompassing all non-NULL data in the named raster map layer that fall
+inside the user's current region. In this way you can tightly zoom in on
+isolated clumps within a bigger map.
 
-If the user also includes the **raster=***name* option on the command
-line, **zoom=***name* will set the current region settings to the
+If the user also includes the **raster** option on the command
+line, **zoom** will set the current region settings to the
 smallest region encompassing all non-NULL data in the named **zoom** map
 that fall inside the region stated in the cell header for the named
 **raster** map.
 
-**align=***name*  
-Set the current resolution equal to that of the named raster map, and
-align the current region to a row and column edge in the named map.
-Alignment only moves the existing region edges outward to the edges of
-the next nearest cell in the named raster map - not to the named map's
-edges. To perform the latter function, use the **raster=***name* option.
+Option **align** sets the current resolution equal to that of the provided
+raster map, and align the current region to a row and column edge in the
+named map. Alignment only moves the existing region edges outward to the edges
+of the next nearest cell in the named raster map - not to the named map's
+edges. To perform the latter function, use the **raster**=*name* option.
 
 ## EXAMPLES
 

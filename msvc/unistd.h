@@ -2,6 +2,8 @@
 #define GRASS_MSVC_UNISTD_H
 
 #include <io.h>
+#define read   _read
+#define write  _write
 #define access _access
 #define close  _close
 #define dup    _dup

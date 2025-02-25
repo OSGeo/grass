@@ -1,5 +1,5 @@
 /*!
- * \file msvc/io.h
+ * \file msvc/fcntl.h
  *
  * \brief Header file for msvc/open.c and msvc/creat.c
  *
@@ -12,10 +12,10 @@
  * \date 2025
  */
 
-#ifndef GRASS_MSVC_IO_H
-#define GRASS_MSVC_IO_H
+#ifndef GRASS_MSVC_FCNTL_H
+#define GRASS_MSVC_FCNTL_H
 
-#include <../ucrt/io.h>
+#include <../ucrt/fcntl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,9 +29,11 @@ int __creat(const char *, int);
 }
 #endif
 
+#include <io.h>
 #define open      __open
 #define creat     __creat
 
 #define O_TMPFILE O_TEMPORARY
+#define O_ACCMODE (_O_RDONLY | _O_WRONLY | _O_RDWR)
 
 #endif

@@ -115,8 +115,7 @@ v.info -t test
 
 #### Geometry Converters
 
-- [PostGIS with
-  shp2pgsql](https://postgis.net/workshops/postgis-intro/loading_data.html#loading-with-shp2pgsql):  
+- [PostGIS with shp2pgsql](https://postgis.net/workshops/postgis-intro/loading_data.html#loading-with-shp2pgsql):
   `shp2pgsql -D lakespy2 lakespy2 test > lakespy2.sql`
 - [e00pg](https://e00pg.sourceforge.net/): E00 to PostGIS filter, see
   also *[v.in.e00](v.in.e00.md)*.
