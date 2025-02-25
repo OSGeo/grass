@@ -105,10 +105,10 @@ always updated unless **-u** was specified.
 
 ### Additional parameter information
 
-Option **zoom** shrinks current region settings to the smallest region encompassing all
-non-NULL data in the named raster map layer that fall inside the user's
-current region. In this way you can tightly zoom in on isolated clumps
-within a bigger map.
+Option **zoom** shrinks current region settings to the smallest region
+encompassing all non-NULL data in the named raster map layer that fall
+inside the user's current region. In this way you can tightly zoom in on
+isolated clumps within a bigger map.
 
 If the user also includes the **raster** option on the command
 line, **zoom** will set the current region settings to the
@@ -116,10 +116,10 @@ smallest region encompassing all non-NULL data in the named **zoom** map
 that fall inside the region stated in the cell header for the named
 **raster** map.
 
-Option **align** sets the current resolution equal to that of the provided raster map, and
-align the current region to a row and column edge in the named map.
-Alignment only moves the existing region edges outward to the edges of
-the next nearest cell in the named raster map - not to the named map's
+Option **align** sets the current resolution equal to that of the provided
+raster map, and align the current region to a row and column edge in the
+named map. Alignment only moves the existing region edges outward to the edges
+of the next nearest cell in the named raster map - not to the named map's
 edges. To perform the latter function, use the **raster**=*name* option.
 
 ## EXAMPLES

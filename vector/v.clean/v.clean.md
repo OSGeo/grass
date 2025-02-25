@@ -113,7 +113,7 @@ deleting boundaries.
 Threshold does not apply (it is ignored), use an arbitrary value (e.g.,
 0) if *v.clean* is run with several tools.
 
-### Break (topologically clean) areas (imported from a non topological format like ShapeFile)
+### Break (topologically clean) areas (imported from a non topological format)
 
 Setting *tool=bpol* breaks boundaries on each point shared between 2 and
 more areas where angles of boundary segments are different and on all
