@@ -434,7 +434,7 @@ Release is done.
 
 For final releases only, go to [Zenodo](https://doi.org/10.5281/zenodo.5176030)
 and get a Markdown badge for the release which Zenodo creates with a DOI
-for the published release.
+for the published release. Add the badge to the release description.
 
 For all releases, click the Binder badge to get Binder to build. Use it to test
 it and to cache the built image. Add more links to (or badges for) more notebooks
