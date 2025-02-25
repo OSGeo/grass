@@ -99,7 +99,6 @@ char msg[1024];
 /****************************************/
 int main(int argc, char *argv[])
 {
-    int ii;
     int threads;
     int ret_val;
     struct Cell_head cellhd;
