@@ -42,6 +42,7 @@ set(raster_modules_list
     r.latlong
     r.li
     r.mapcalc
+    r.mask.status
     r.mfilter
     r.mode
     r.neighbors
