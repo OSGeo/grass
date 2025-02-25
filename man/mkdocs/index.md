@@ -9,30 +9,50 @@ author: GRASS Development Team
 <!-- markdownlint-disable MD007 -->
 <!-- markdownlint-disable MD030 -->
 <!-- markdownlint-disable-next-line MD033 -->
-<div class="grid cards" markdown>
+<!-- <div class="grid cards" markdown> -->
 
--   :checkered_flag: **Quick Start**
-
-    ---
-
-    - [How to start with GRASS GIS](helptext.md)
-    - Index of [Topics](topics.md) and [Keywords](keywords.md)
-    - [Intro: Projections and Spatial Transformations](projectionintro.md)
-    - [Graphical index of functionality](graphical_index.md)
+<!-- -   :material-download: **Download**
 
     ---
-    [Getting started :material-arrow-right-circle:](helptext.md){ .md-button .md-button--primary }
 
--   :computer: **Graphical User Interface (GUI)**
+    - [Download](https://grass.osgeo.org/download/)
+    - [Installation Guide](https://grass.osgeo.org/download/software/)
 
     ---
-  
-    - [Intro: Graphical User Interface](wxguiintro.md)
-    - [wxGUI](wxGUI.md)
-    - [wxGUI Components](wxGUI.components.md)
-    - [wxGUI Toolboxes](wxGUI.toolboxes.md)
+    [Download :material-arrow-right-circle:](https://grass.osgeo.org/download/){ .md-button .md-button--primary } -->
+
+## :checkered_flag: **Quick Start**
+
+Get started with GRASS by following the tutorials below.
+
+---
+
+- [Jupyter Notebooks (Linux)](https://grass-tutorials.osgeo.org/content/tutorials/get_started/fast_track_grass_and_python.html)
+- [Jupyter Notebooks (Windows)](https://grass-tutorials.osgeo.org/content/tutorials/get_started/JupyterOnWindows_OSGeo4W_Tutorial.html)
+- [R with rgrass](https://grass-tutorials.osgeo.org/content/tutorials/get_started/JupyterOnLinux_Tutorial.html)
+- [GRASS GUI](https://grass-tutorials.osgeo.org/content/tutorials/get_started/fast_track.html)
+- [Full list of tutorials](https://grass-tutorials.osgeo.org/)
+
+---
+<!-- [Tutorials :material-arrow-right-circle:](https://grass-tutorials.osgeo.org/){ .md-button .md-button--primary } -->
+
+<!-- -   :checkered_flag: **Tutorials**
+
+    ---
+    - [Jupyter Notebooks (Linux)](https://grass-tutorials.osgeo.org/content/tutorials/get_started/fast_track_grass_and_python.html)
+    - [Jupyter Notebooks (Windows)](https://grass-tutorials.osgeo.org/content/tutorials/get_started/JupyterOnWindows_OSGeo4W_Tutorial.html)
+    - [R with rgrass](https://grass-tutorials.osgeo.org/content/tutorials/get_started/JupyterOnLinux_Tutorial.html)
+    - [GRASS GUI](https://grass-tutorials.osgeo.org/content/tutorials/get_started/fast_track.html)
+
+    ---
+    [Getting started :material-arrow-right-circle:](helptext.md){ .md-button .md-button--primary } -->
+
+<!-- -   :computer: **Interfaces**
+
+    ---
+    - [Command Line Interface](grass.md)
+    - [Graphical User Interface](wxguiintro.md)
     - [Display Commands Manual](display.md)
-    - [Display Drivers](displaydrivers.md)
 
     ---
     [GUI Overview :material-arrow-right-circle:](wxguiintro.md){ .md-button .md-button--primary }
@@ -41,7 +61,7 @@ author: GRASS Development Team
 
     ---
   
-    - [Intro: 2D Raster Processing](rasterintro.md)
+    - ![Raster Icon](raster.png) [Intro: 2D Raster Processing](rasterintro.md)
     - [Raster Commands Manual](raster.md)
     - [Intro: 3D Raster (Voxel) Processing](raster3dintro.md)
     - [3D Raster Commands Manual](raster3d.md)
@@ -55,10 +75,10 @@ author: GRASS Development Team
 
     ---
   
-    - [Intro: Vector Processing & Network Analysis](vectorintro.md)
+    - ![Vector Icon](vector.png) [Intro: Vector Processing & Network Analysis](vectorintro.md)
     - [Vector Commands Manual](vector.md)
-    - [GRASS ASCII Vector Format](vectorascii.md)
-    - [Intro: Database Management](databaseintro.md)
+
+    - ![GRASS Database Icon](grassdb.png) [Database Management](databaseintro.md)
     - [SQL Support in GRASS GIS](sql.md)
     - [Database Commands Manual](database.md)
 
@@ -69,7 +89,7 @@ author: GRASS Development Team
 
     ---
   
-    - [Intro: Temporal Data Processing](temporalintro.md)
+    - [Temporal Data Processing](temporalintro.md)
     - [Temporal Commands Manual](temporal.md)
 
     ---
@@ -81,12 +101,11 @@ author: GRASS Development Team
 
     - [PostScript Commands Manual](postscript.md)
     - [wxGUI Cartographic Composer](g.gui.psmap.md)
-    - [GRASS Environment Variables](variables.md)
 
     ---
     [:material-arrow-right-circle: Cartography](postscript.md){ .md-button .md-button--primary }
 
--    :fontawesome-solid-prescription: **Python for GRASS GIS**
+-    ![Python Icon](python.png) **Python for GRASS GIS**
 
       ---
 
@@ -95,8 +114,44 @@ author: GRASS Development Team
       - [GRASS GIS in Jupyter Notebooks](https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/grass.jupyter.html)
 
     ---
-    [:material-arrow-right-circle: Python API](https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/index.html){ .md-button .md-button--primary }
+    [:material-arrow-right-circle: Python API](https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/index.html){ .md-button .md-button--primary } -->
 
-</div>
+<!-- </div> -->
 <!-- markdownlint-enable MD030 -->
 <!-- markdownlint-enable MD007 -->
+
+## :book: Basic Concepts
+
+```mermaid
+flowchart TB
+    A@{ shape: docs, label: "grassdata"} --> P1[Project1]
+
+    P1 --> P1P[PERMANENT]
+   
+    P1 -- sub-project --> P1M1[mapset1]
+    P1M1 --> P1M1D@{ shape: docs, label: "Mutable Sub-project Data"}
+    P1PD --> P1M1D
+    P1M1D --> P1M1R(Raster)
+    P1M1D --> P1M1V(Vector)
+    P1M1D --> P1M1T(Temporal)
+
+    P1P --> P1PD@{ shape: docs, label: "Immutable Shared Project Data"}
+    P1PD --> P1PDR(Raster)
+    P1PD --> P1PDV(Vector)
+
+    P1 -- sub-project --> P1M2[mapset2]
+    P1M2 --> P1M2D@{ shape: docs, label: "Mutable Sub-project Data"}
+    P1PD --> P1M2D
+    P1M2D --> P1M2R(Raster)
+    P1M2D --> P1M2V(Vector)
+    P1M2D --> P1M2T(Temporal)
+```
+
+- [Basic Concepts](helptext.md)
+- [Project Managment](grass_database.md)
+- [Projections and Spatial Transformations](projectionintro.md)
+
+## :books: Advanced Concepts
+
+- [GRASS ASCII Vector Format](vectorascii.md)
+- [GRASS Environment Variables](variables.md)

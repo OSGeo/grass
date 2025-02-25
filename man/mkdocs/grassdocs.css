@@ -170,3 +170,11 @@
 .md-typeset table:not([class]) tbody tr:hover {
   background-color: transparent;
 }
+
+.gs-icon-primary {
+  color: var(--gs-primary-color);
+}
+
+.gs-icon-accent {
+  color: var(--gs-secondary-color);
+}

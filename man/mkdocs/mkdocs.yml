@@ -83,10 +83,17 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 
 # Navigation
 nav:
-  - Overview: index.md
+  - Getting Started:
+      - Overview: index.md
+      - Download: https://grass.osgeo.org/download/
   - Interfaces:
       - Shell:
           - Overview: grass.md
@@ -117,6 +124,7 @@ nav:
       # - Jupyter Notebook: jupyter.md
 
   - Project Management:
+      - Overview: grass_database.md
       - General Tools: general.md
       - Projection and Transformations: projectionintro.md
 
@@ -145,7 +153,9 @@ nav:
 
   - Visualization:
       # - Overview: visualizationintro.md # Does not exist yet
-      - Display Tools: display.md
+      - Display Tools:
+          - Overview: display.md
+          - Display Drivers: displaydrivers.md
       - GUI Tools:
           - Animation: wxGUI.animation.md
           - "3D Visualization": wxGUI.nviz.md
