@@ -32,14 +32,14 @@ export INSTALL_PREFIX=$1
 ./configure \
     --enable-largefile \
     --prefix="$INSTALL_PREFIX/" \
-    --with-blas \
+    --without-blas \
+    --without-lapack \
     --with-bzlib \
     --with-cxx \
     --with-fftw \
     --with-freetype \
     --with-freetype-includes="/usr/include/freetype2/" \
     --with-geos \
-    --with-lapack \
     --with-netcdf \
     --with-pdal \
     --with-proj-share=/usr/share/proj \

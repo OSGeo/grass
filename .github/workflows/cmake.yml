@@ -1,0 +1,91 @@
+---
+name: CMake
+
+on:
+    push:
+        paths-ignore:
+            - 'doc/**'
+        branches:
+            - main
+            - releasebranch_*
+    pull_request:
+        paths-ignore:
+            - 'doc/**'
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+    cancel-in-progress: true
+
+env:
+    CMAKE_UNITY_BUILD: OFF
+
+permissions:
+    contents: read
+
+jobs:
+
+    build-cmake:
+        runs-on: ubuntu-22.04
+        env:
+            CMakeVersion: "3.16.0"
+        steps:
+            - name: Checkout GRASS
+              uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+            - name: Install CMake
+              run: |
+                cd ${GITHUB_WORKSPACE}
+                arch=$(uname -s)-$(uname -m)
+                wget https://github.com/Kitware/CMake/releases/download/v3.16.0/cmake-3.16.0-${arch}.tar.gz
+                tar xzf cmake-${{ env.CMakeVersion }}-${arch}.tar.gz
+                echo "CMAKE_DIR=$GITHUB_WORKSPACE/cmake-${{ env.CMakeVersion }}-${arch}/bin" >> $GITHUB_ENV
+                echo "$GITHUB_WORKSPACE/cmake-${{ env.CMakeVersion }}-${arch}/bin" >> $GITHUB_PATH
+            - run: |
+                cmake --version
+            - name: Install dependencies
+              run: |
+                sudo apt-get update -y
+                sudo apt-get install -y wget git gawk findutils ninja-build
+                xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+                    sudo apt-get install -y --no-install-recommends --no-install-suggests
+            - name: Print build environment variables
+              shell: bash -el {0}
+              run: |
+                printenv | sort
+                gcc --version
+                ldd --version
+            - name: Create installation directory
+              run: |
+                mkdir $HOME/install
+            - name: Configure
+              run: |
+                cmake ${CMAKE_OPTIONS} -S $GITHUB_WORKSPACE -B $GITHUB_WORKSPACE/build -G Ninja \
+                  -DCMAKE_C_FLAGS="-I/usr/include -I/usr/include/gdal" \
+                  -DCMAKE_CXX_FLAGS="-I/usr/include -I/usr/include/gdal" \
+                  -DCMAKE_INSTALL_PREFIX=$HOME/install -DWITH_NLS=OFF -DWITH_GUI=OFF -DWITH_DOCS=OFF
+            - name: Print CMakeCache.txt
+              shell: bash -el {0}
+              run: |
+                cat ${GITHUB_WORKSPACE}/build/CMakeCache.txt
+            - name: Build
+              run: |
+                cmake --build build --verbose -j$(nproc)
+            - name: Install
+              run: |
+                cmake --install $GITHUB_WORKSPACE/build --verbose
+            - name: Add the bin directory to PATH
+              run: |
+                echo "$HOME/install/bin" >> $GITHUB_PATH
+            - name: Print installed versions
+              if: always()
+              run: .github/workflows/print_versions.sh
+            - name: Test executing of the grass command
+              run: .github/workflows/test_simple.sh
+            - name: Run tests
+              run: .github/workflows/test_thorough.sh --config .gunittest.cfg --min-success 72
+            - name: Make HTML test report available
+              if: ${{ !cancelled() }}
+              uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+              with:
+                  name: testreport-CMake
+                  path: testreport
+                  retention-days: 3

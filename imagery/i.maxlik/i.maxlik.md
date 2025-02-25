@@ -91,8 +91,10 @@ r.mapcalc "lsat7_2002_cluster_classes_filtered = \
 ![Output raster map with pixels classified (10 classes)](i_maxlik_classes.png)  
 *Output raster map with pixels classified (10 classes)*
 
-![Output raster map with rejection probability values (pixel classification confidence levels)](i_maxlik_rejection.png)  
-*Output raster map with rejection probability values (pixel classification confidence levels)*
+![Output raster map with rejection probability values
+(pixel classification confidence levels)](i_maxlik_rejection.png)  
+*Output raster map with rejection probability values
+(pixel classification confidence levels)*
 
 ## SEE ALSO
 
