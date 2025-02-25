@@ -619,12 +619,13 @@ class GStc(stc.StyledTextCtrl):
             for c in message:
                 if c == "\b":
                     self.linePos -= 1
-                else:
-                    self.SetCurrentPos(self.linePos)
-                    self.ReplaceSelection(c)
-                    self.linePos = self.GetCurrentPos()
-                    if c != " ":
-                        last_c = c
+                    continue
+
+                self.SetCurrentPos(self.linePos)
+                self.ReplaceSelection(c)
+                self.linePos = self.GetCurrentPos()
+                if c != " ":
+                    last_c = c
             if last_c not in (digits):
                 self.AddTextWrapped("\n", wrap=None)
                 self.linePos = -1

@@ -301,10 +301,9 @@ class NvizTask:
             raise GException(_("Please add only one layer in the list."))
             return None
         layer = layerList[0]
-        if hasattr(layer, "maps"):
-            series = layer.maps
-        else:
+        if not hasattr(layer, "maps"):
             raise GException(_("No map series nor space-time dataset is added."))
+        series = layer.maps
 
         for value in series:
             self.task.set_param(paramName, value)

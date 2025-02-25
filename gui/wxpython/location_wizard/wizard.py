@@ -73,7 +73,7 @@ from gui_core.wrap import (
 )
 from location_wizard.dialogs import SelectTransformDialog
 
-from grass.exceptions import OpenError
+from grass.exceptions import OpenError, ScriptError
 from grass.grassdb.checks import location_exists
 from grass.script import core as grass
 from grass.script import decode
@@ -2739,7 +2739,7 @@ class LocationWizard(wx.Object):
                     desc=self.startpage.locTitle,
                 )
 
-        except grass.ScriptError as e:
+        except ScriptError as e:
             return e.value
 
         return None
