@@ -112,7 +112,7 @@ int load_vectors(const struct Option *elev_map, const struct Option *elev_const,
  */
 int vlines_set_attrb(const struct GParams *params)
 {
-    int i, layer = 0, color, width, flat, height;
+    int i, layer = -1, color, width, flat, height;
     int *vect_list, nvects;
     int have_colors;
 
