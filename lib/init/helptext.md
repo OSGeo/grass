@@ -16,7 +16,7 @@ GRASS GIS hierarchical structure consisting of database ![GRASS
 Database](grassdb.png), project ![project](location.png) and
 mapset ![mapset](mapset.png).
 
-![GRASS Database](grassdb.png) **GRASS database** (directory with projects)
+![GRASS Database](grassdb.png) **GRASS database** (directory with projects)  
 Running GRASS GIS for the first time, a folder named "grassdata" is
 automatically created. Depending on your operating system, you can find
 it in your $HOME directory (\*nix) or My Documents (MS Windows).
