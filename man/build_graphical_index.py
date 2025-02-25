@@ -87,8 +87,8 @@ def main(ext):
                 )
             else:
                 output.write(
-                    "- [![{name}]({img})]({link})".format(
-                        link=html_file, img=image, name=label
+                    "- [![{name}]({img})]({link}.md)".format(
+                        link=html_file.removesuffix(".html"), img=image, name=label
                     )
                 )
 
