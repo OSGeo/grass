@@ -58,11 +58,11 @@ void print_projinfo(enum OutputFormat format)
             continue;
         switch (format) {
         case PLAIN:
-            fprintf(stdout, "%s=%s\n", projinfo->key[i], projinfo->value[i]);
-            break;
-        case SHELL:
             fprintf(stdout, "%-11s: %s\n", projinfo->key[i],
                     projinfo->value[i]);
+            break;
+        case SHELL:
+            fprintf(stdout, "%s=%s\n", projinfo->key[i], projinfo->value[i]);
             break;
         case JSON:
             json_object_set_string(object, projinfo->key[i],
