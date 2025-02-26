@@ -4,7 +4,6 @@ from grass.gunittest.gmodules import SimpleModule
 
 
 class TestRDistance(TestCase):
-
     @classmethod
     def setUpClass(cls):
         """Set up a temporary region and generate test data."""

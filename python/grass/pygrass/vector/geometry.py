@@ -200,31 +200,27 @@ class Attrs:
         >>> test_vect.close()
 
         """
-        if self.writeable:
-            if np.isscalar(keys):
-                keys, values = (keys,), (values,)
-            # check if key is a column of the table or not
-            for key in keys:
-                if key not in self.table.columns:
-                    raise KeyError("Column: %s not in table" % key)
-            # prepare the string using as paramstyle: qmark
-            vals = ",".join(["%s=?" % k for k in keys])
-            # "UPDATE {tname} SET {values} WHERE {condition};"
-            sqlcode = sql.UPDATE_WHERE.format(
-                tname=self.table.name, values=vals, condition=self.cond
-            )
-            self.table.execute(sqlcode, values=values)
-            # self.table.conn.commit()
-        else:
+        if not self.writeable:
             str_err = "You can only read the attributes if the map is in another mapset"
             raise GrassError(str_err)
+        if np.isscalar(keys):
+            keys, values = ((keys,), (values,))
+        # check if key is a column of the table or not
+        for key in keys:
+            if key not in self.table.columns:
+                raise KeyError("Column: %s not in table" % key)
+        # prepare the string using as paramstyle: qmark
+        vals = ",".join(["%s=?" % k for k in keys])
+        # "UPDATE {tname} SET {values} WHERE {condition};"
+        sqlcode = sql.UPDATE_WHERE.format(
+            tname=self.table.name, values=vals, condition=self.cond
+        )
+        self.table.execute(sqlcode, values=values)
+        # self.table.conn.commit()
 
     def __dict__(self):
         """Return a dict of the attribute table row."""
-        dic = {}
-        for key, val in zip(self.keys(), self.values()):
-            dic[key] = val
-        return dic
+        return dict(zip(self.keys(), self.values()))
 
     def values(self):
         """Return the values of the attribute table row.
@@ -594,8 +590,7 @@ class Point(Geo):
         :type angle: num
         :param round_: to make corners round
         :type round_: bool
-        :param tol: fix the maximum distance between theoretical arc and
-                    output segments
+        :param tol: fix the maximum distance between theoretical arc and output segments
         :type tol: float
         :returns: the buffer as Area object
 
@@ -1051,11 +1046,9 @@ class Line(Geo):
     def segment(self, start, end):
         """Create line segment. using the ``Vect_line_segment`` C function.
 
-        :param start: distance from the beginning of the line where
-                      the segment start
+        :param start: distance from the beginning of the line where the segment starts
         :type start: float
-        :param end: distance from the beginning of the line where
-                    the segment end
+        :param end: distance from the beginning of the line where the segment ends
         :type end: float
 
         ::
@@ -1158,8 +1151,7 @@ class Line(Geo):
         :type angle: num
         :param round_: to make corners round
         :type round_: bool
-        :param tol: fix the maximum distance between theoretical arc and
-                    output segments
+        :param tol: fix the maximum distance between theoretical arc and output segments
         :type tol: float
         :returns: the buffer as Area object
 
@@ -1720,8 +1712,7 @@ class Area(Geo):
         :type angle: num
         :param round_: to make corners round
         :type round_: bool
-        :param tol: fix the maximum distance between theoretical arc and
-                    output segments
+        :param tol: fix the maximum distance between theoretical arc and output segments
         :type tol: float
         :returns: the buffer as line, centroid, isles object tuple
 

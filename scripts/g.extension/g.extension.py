@@ -517,8 +517,7 @@ def get_version_branch(major_version):
     if stderr:
         gs.fatal(
             _(
-                "Failed to get branch from the Git repository <{repo_path}>.\n"
-                "{error}"
+                "Failed to get branch from the Git repository <{repo_path}>.\n{error}"
             ).format(
                 repo_path=GIT_URL,
                 error=gs.decode(stderr),
@@ -990,7 +989,7 @@ def get_wxgui_extensions(url):
     file_ = urlopen(url)
     if not file_:
         gs.warning(_("Unable to fetch '%s'") % url)
-        return
+        return None
 
     for line in file_.readlines():
         # list extensions
@@ -1041,11 +1040,11 @@ def write_xml_modules(name, tree=None):
             if bnode is not None:
                 file_.write("%s<binary>\n" % (" " * indent))
                 indent += 4
-                for fnode in bnode.findall("file"):
-                    file_.write(
-                        "%s<file>%s</file>\n"
-                        % (" " * indent, os.path.join(options["prefix"], fnode.text))
-                    )
+                file_.writelines(
+                    "%s<file>%s</file>\n"
+                    % (" " * indent, os.path.join(options["prefix"], fnode.text))
+                    for fnode in bnode.findall("file")
+                )
                 indent -= 4
                 file_.write("%s</binary>\n" % (" " * indent))
             file_.write('%s<libgis revision="%s" />\n' % (" " * indent, libgis_revison))
@@ -1091,11 +1090,11 @@ def write_xml_extensions(name, tree=None):
             if bnode is not None:
                 file_.write("%s<binary>\n" % (" " * indent))
                 indent += 4
-                for fnode in bnode.findall("file"):
-                    file_.write(
-                        "%s<file>%s</file>\n"
-                        % (" " * indent, os.path.join(options["prefix"], fnode.text))
-                    )
+                file_.writelines(
+                    "%s<file>%s</file>\n"
+                    % (" " * indent, os.path.join(options["prefix"], fnode.text))
+                    for fnode in bnode.findall("file")
+                )
                 indent -= 4
                 file_.write("%s</binary>\n" % (" " * indent))
             # extension modules
@@ -1103,8 +1102,10 @@ def write_xml_extensions(name, tree=None):
             if mnode is not None:
                 file_.write("%s<modules>\n" % (" " * indent))
                 indent += 4
-                for fnode in mnode.findall("module"):
-                    file_.write("%s<module>%s</module>\n" % (" " * indent, fnode.text))
+                file_.writelines(
+                    "%s<module>%s</module>\n" % (" " * indent, fnode.text)
+                    for fnode in mnode.findall("module")
+                )
                 indent -= 4
                 file_.write("%s</modules>\n" % (" " * indent))
 
@@ -1136,14 +1137,14 @@ def write_xml_toolboxes(name, tree=None):
                 % (" " * indent, tnode.get("name"), tnode.get("code"))
             )
             indent += 4
-            for cnode in tnode.findall("correlate"):
-                file_.write(
-                    '%s<correlate code="%s" />\n' % (" " * indent, tnode.get("code"))
-                )
-            for mnode in tnode.findall("task"):
-                file_.write(
-                    '%s<task name="%s" />\n' % (" " * indent, mnode.get("name"))
-                )
+            file_.writelines(
+                '%s<correlate code="%s" />\n' % (" " * indent, tnode.get("code"))
+                for cnode in tnode.findall("correlate")
+            )
+            file_.writelines(
+                '%s<task name="%s" />\n' % (" " * indent, mnode.get("name"))
+                for mnode in tnode.findall("task")
+            )
             indent -= 4
             file_.write("%s</toolbox>\n" % (" " * indent))
 
@@ -1801,8 +1802,9 @@ def fix_newlines(directory):
 def extract_zip(name, directory, tmpdir):
     """Extract a ZIP file into a directory"""
     gs.debug(
-        "extract_zip(name={name}, directory={directory},"
-        " tmpdir={tmpdir})".format(name=name, directory=directory, tmpdir=tmpdir),
+        "extract_zip(name={name}, directory={directory}, tmpdir={tmpdir})".format(
+            name=name, directory=directory, tmpdir=tmpdir
+        ),
         3,
     )
     try:
@@ -1826,8 +1828,9 @@ def extract_zip(name, directory, tmpdir):
 def extract_tar(name, directory, tmpdir):
     """Extract a TAR or a similar file into a directory"""
     gs.debug(
-        "extract_tar(name={name}, directory={directory},"
-        " tmpdir={tmpdir})".format(name=name, directory=directory, tmpdir=tmpdir),
+        "extract_tar(name={name}, directory={directory}, tmpdir={tmpdir})".format(
+            name=name, directory=directory, tmpdir=tmpdir
+        ),
         3,
     )
     import tarfile
@@ -1954,6 +1957,23 @@ def download_source_code(
     return directory, url
 
 
+def create_md_if_missing(root_dir):
+    """Recursively searches for HTML files in the specified directory.
+    If an HTML file does not have a corresponding Markdown (.md) file,
+    it creates one by copying the HTML file and renaming it.
+    """
+    for dirpath, _, filenames in os.walk(root_dir):
+        html_files = [f for f in filenames if f.endswith(".html")]
+
+        for html_file in html_files:
+            md_file = os.path.splitext(html_file)[0] + ".md"
+            md_path = os.path.join(dirpath, md_file)
+
+            if not os.path.exists(md_path):
+                html_path = os.path.join(dirpath, html_file)
+                shutil.copy(html_path, md_path)
+
+
 def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
     gisbase = os.getenv("GISBASE")
@@ -1973,6 +1993,7 @@ def install_extension_std_platforms(name, source, url, branch):
         tmpdir=TMPDIR,
         branch=branch,
     )
+    create_md_if_missing(srcdir)
     os.chdir(srcdir)
 
     pgm_not_found_message = _(
@@ -2017,6 +2038,7 @@ def install_extension_std_platforms(name, source, url, branch):
         "bin": os.path.join(srcdir, "bin"),
         "docs": os.path.join(srcdir, "docs"),
         "html": os.path.join(srcdir, "docs", "html"),
+        "mkdocs": os.path.join(srcdir, "docs", "mkdocs"),
         "rest": os.path.join(srcdir, "docs", "rest"),
         "man": os.path.join(srcdir, "docs", "man"),
         "script": os.path.join(srcdir, "scripts"),
@@ -2032,6 +2054,7 @@ def install_extension_std_platforms(name, source, url, branch):
         "RUN_GISRC=%s" % os.environ["GISRC"],
         "BIN=%s" % dirs["bin"],
         "HTMLDIR=%s" % dirs["html"],
+        "MDDIR=%s" % dirs["mkdocs"],
         "RESTDIR=%s" % dirs["rest"],
         "MANBASEDIR=%s" % dirs["man"],
         "SCRIPTDIR=%s" % dirs["script"],
@@ -2184,18 +2207,12 @@ def remove_extension(force=False):
                     gs.message(_("Extension <%s> successfully uninstalled.") % ename)
     elif flags["t"]:
         gs.warning(
-            _(
-                "Toolbox <%s> not removed. "
-                "Re-run '%s' with '-f' flag to force removal"
-            )
+            _("Toolbox <%s> not removed. Re-run '%s' with '-f' flag to force removal")
             % (options["extension"], "g.extension")
         )
     else:
         gs.warning(
-            _(
-                "Extension <%s> not removed. "
-                "Re-run '%s' with '-f' flag to force removal"
-            )
+            _("Extension <%s> not removed. Re-run '%s' with '-f' flag to force removal")
             % (options["extension"], "g.extension")
         )
 
@@ -2822,8 +2839,7 @@ def main():
         if options["operation"] != "add":
             gs.warning(
                 _(
-                    "Flag '{}' is relevant only to"
-                    " 'operation=add'. Ignoring this flag."
+                    "Flag '{}' is relevant only to 'operation=add'. Ignoring this flag."
                 ).format(flag)
             )
         else:

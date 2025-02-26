@@ -118,31 +118,31 @@ class SpatialTopologyDatasetConnector:
         relations = {}
         try:
             relations["equivalent"] = len(self._spatial_topology["EQUIVALENT"])
-        except:
+        except KeyError:
             relations["equivalent"] = 0
         try:
             relations["overlap"] = len(self._spatial_topology["OVERLAP"])
-        except:
+        except KeyError:
             relations["overlap"] = 0
         try:
             relations["in"] = len(self._spatial_topology["IN"])
-        except:
+        except KeyError:
             relations["in"] = 0
         try:
             relations["contain"] = len(self._spatial_topology["CONTAIN"])
-        except:
+        except KeyError:
             relations["contain"] = 0
         try:
             relations["meet"] = len(self._spatial_topology["MEET"])
-        except:
+        except KeyError:
             relations["meet"] = 0
         try:
             relations["cover"] = len(self._spatial_topology["COVER"])
-        except:
+        except KeyError:
             relations["cover"] = 0
         try:
             relations["covered"] = len(self._spatial_topology["COVERED"])
-        except:
+        except KeyError:
             relations["covered"] = 0
 
         return relations
@@ -296,7 +296,7 @@ class SpatialTopologyDatasetConnector:
         count = 0
         string = ""
         for map_ in map_list:
-            if line_wrap and count > 0 and count % 3 == 0:
+            if line_wrap and count > 0 and (count % 3 == 0):
                 string += "\n | ............................ "
                 count = 0
             if count == 0:

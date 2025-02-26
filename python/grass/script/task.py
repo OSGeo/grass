@@ -86,12 +86,12 @@ class grassTask:
 
     def get_name(self):
         """Get task name"""
-        if sys.platform == "win32":
-            name, ext = os.path.splitext(self.name)
-            if ext in {".py", ".sh"}:
-                return name
+        if sys.platform != "win32":
             return self.name
 
+        name, ext = os.path.splitext(self.name)
+        if ext in {".py", ".sh"}:
+            return name
         return self.name
 
     def get_description(self, full=True):
@@ -99,11 +99,11 @@ class grassTask:
 
         :param bool full: True for label + desc
         """
-        if self.label:
-            if full:
-                return self.label + " " + self.description
-            return self.label
-        return self.description
+        if not self.label:
+            return self.description
+        if full:
+            return self.label + " " + self.description
+        return self.label
 
     def get_keywords(self):
         """Get module's keywords"""
@@ -114,22 +114,14 @@ class grassTask:
 
         :param str element: element name
         """
-        params = []
-        for p in self.params:
-            params.append(p[element])
-
-        return params
+        return [p[element] for p in self.params]
 
     def get_list_flags(self, element="name"):
         """Get list of flags
 
         :param str element: element name
         """
-        flags = []
-        for p in self.flags:
-            flags.append(p[element])
-
-        return flags
+        return [p[element] for p in self.flags]
 
     def get_param(self, value, element="name", raiseError=True):
         """Find and return a param by name
@@ -548,12 +540,14 @@ def command_info(cmd):
     :param str cmd: the command to query
     """
     task = parse_interface(cmd)
-    cmdinfo = {}
-
-    cmdinfo["description"] = task.get_description()
-    cmdinfo["keywords"] = task.get_keywords()
-    cmdinfo["flags"] = flags = task.get_options()["flags"]
-    cmdinfo["params"] = params = task.get_options()["params"]
+    flags = task.get_options()["flags"]
+    params = task.get_options()["params"]
+    cmdinfo = {
+        "description": task.get_description(),
+        "keywords": task.get_keywords(),
+        "flags": flags,
+        "params": params,
+    }
 
     usage = task.get_name()
     flags_short = []

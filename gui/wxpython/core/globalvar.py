@@ -23,6 +23,7 @@ if not os.getenv("GISBASE"):
 from grass.script.core import get_commands
 
 from core.debug import Debug
+from pathlib import Path
 
 # path to python scripts
 ETCDIR = os.path.join(os.getenv("GISBASE"), "etc")
@@ -206,7 +207,8 @@ def UpdateGRASSAddOnCommands(eList=None):
         if pathList and path not in pathList:
             os.environ["PATH"] = path + os.pathsep + os.environ["PATH"]
 
-        for fname in os.listdir(path):
+        for file_path in Path(path).iterdir():
+            fname = file_path.name
             if fname in {"docs", "modules.xml"}:
                 continue
             if grassScripts:  # win32

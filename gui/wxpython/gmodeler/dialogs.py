@@ -132,7 +132,7 @@ class ModelDataDialog(SimpleDialog):
     def GetType(self):
         """Get element type"""
         if not self.etype:
-            return
+            return None
         return self.element.tcp.GetType()
 
     def OnType(self, event):
@@ -469,8 +469,7 @@ class ModelRelationDialog(wx.Dialog):
             GError(
                 parent=self.parent,
                 message=_(
-                    "Relation doesn't point to GRASS command.\n"
-                    "Unable to add relation."
+                    "Relation doesn't point to GRASS command.\nUnable to add relation."
                 ),
             )
             return items
@@ -978,9 +977,7 @@ class ItemListCtrl(ModelListCtrl):
                 bId = action.GetBlockId()
                 bId = _("No") if not bId else _("Yes")
                 options = action.GetParameterizedParams()
-                params = []
-                for f in options["flags"]:
-                    params.append("-{0}".format(f["name"]))
+                params = ["-{0}".format(f["name"]) for f in options["flags"]]
                 for p in options["params"]:
                     params.append(p["name"])
 

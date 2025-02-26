@@ -25,27 +25,24 @@ with PEP8, consistent formatting, and readable and error-free code:
 
 - [Flake8](https://flake8.pycqa.org/en/latest/) tool to ensure compliance with
   PEP8
-- [Black](https://black.readthedocs.io/en/stable/) code formatter to ensure
-  consistent code formatting
+- [Ruff](https://docs.astral.sh/ruff/) linter and code formatter to ensure
+  code quality and consistent code formatting
 - [Pylint](https://pylint.readthedocs.io/en/latest/) static code analyser to
   find bad code practices or errors
 
-Note that while the entire GRASS code base is Black formatted, full compliance
-with PEP8, Flake8, and Pylint practices is still work in progress.
+Note that while the entire GRASS code base is formatted with `ruff format`,
+full compliance with PEP8, Flake8, and Pylint practices is still work in progress.
 
 See [using pre-commit](#using-pre-commit) for pre-commit setup and usage to
 simplify performing of these checks.
 
-#### Black
+#### Formatting
 
-Use Black to format files:
+Use Ruff's formatter to format files:
 
 ```bash
-black {source_file_or_directory}
+ruff format
 ```
-
-Black is configured via [pyproject.toml](../../pyproject.toml). The line
-length is set to 88 characters.
 
 #### Flake8
 
@@ -157,8 +154,9 @@ In that case review the changes and run again `git add` and
 It is also possible to run pre-commit manually, e.g:
 
 ```bash
+pre-commit run --all-files
 pre-commit run clang-format --all-files
-pre-commit run black --all-files
+pre-commit run ruff-format --all-files
 ```
 
 Or to target a specific set of files:
@@ -463,15 +461,21 @@ The `--overwrite` flag can be globally enabled by setting the environment variab
 #### Mask
 
 GRASS GIS has a global mask managed by the _r.mask_ tool and represented by a
-raster called MASK. Raster tools called as a subprocess will automatically
+raster called MASK by default. Raster tools called as a subprocess will automatically
 respect the globally set mask when reading the data. For outputs, respecting of
 the mask is optional.
 
-Tools **should not set or remove the global mask**. If the tool cannot avoid
-setting the mask internally, it should check for presence of the mask and fail
-if the mask is present. The tools should not remove and later restore the
-original mask because that creates confusing behavior for interactive use and
-breaks parallel processing.
+Tools should generally respect the global mask set by a user. If the mask set
+by the user is not respected by a tool, the exact behavior should be described
+in the documentation. On the other hand, ignoring mask is usually the desired
+behavior for import tools which corresponds with the mask being applied only
+when reading existing raster data in a project.
+
+Tools **should not set or remove the global mask** to prevent unintended
+behavior during interactive sessions and to maintain parallel processing
+integrity. If a tool requires a mask for its operation, it should implement
+a temporary mask using _MaskManager_ in Python or by setting the `GRASS_MASK`
+environment variable.
 
 Generally, any mask behavior should be documented unless it is the standard case
 where masked cells do not participate in the computation and are represented as
@@ -576,6 +580,76 @@ gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope, env=env)
 
 This approach makes the computational region completely safe for parallel
 processes as no region-related files are modified.
+
+#### Changing raster mask
+
+The _MaskManager_ in Python API provides a way for tools to change, or possibly
+to ignore, a raster mask for part of the computation.
+
+In the following example, _MaskManager_ modifies the global system environment
+for the tool (aka _os.environ_) so that custom mask can be applied:
+
+```python
+# Previously user-set mask applies here (if any).
+gs.run_command("r.slope.aspect", elevation=input_raster, aspect=aspect)
+
+with gs.MaskManager():
+    # Only the mask we set here will apply.
+    gs.run_command("r.mask", raster=mask_raster)
+    gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope)
+# Mask is disabled and the mask raster is removed at the end of the with block.
+
+# Previously user-set mask applies here again.
+```
+
+Because tools should generally respect the provided mask, the mask in a tool
+should act as an additional mask. This can be achieved when preparing the new
+mask raster using a tool which reads an existing raster:
+
+```python
+# Here we create an initial mask by creating a raster from vector,
+# but that does not use mask.
+gs.run_command(
+    "v.to.rast", input=input_vector, where="name == 'Town'", output=town_boundary
+)
+# So, we use a raster algebra expression. Mask will be applied if set
+# because in the expression, we are reading an existing raster.
+gs.mapcalc(f"{raster_mask} = {town_boundary}")
+
+with gs.MaskManager():
+    gs.run_command("r.mask", raster=mask_raster)
+    # Both user mask and the town_boundary are used here.
+    gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope)
+```
+
+To disable the mask, which may be needed, e.g., in processing steps of
+an import tool, we can do:
+
+```python
+# Mask applies here if set.
+gs.run_command("r.slope.aspect", elevation=input_raster, aspect=aspect)
+
+with gs.MaskManager():
+    # No mask was set in this context, so the tool runs without a mask.
+    gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope)
+
+# Mask applies again.
+```
+
+If needed, tools can implement optional support for a user-set raster mask by
+passing or not passing the current name of a mask obtained from _r.mask.status_
+and by preparing the internal mask raster beforehand with the user mask active.
+
+If different subprocesses, running in parallel, use different masks,
+it is best to create mask rasters beforehand (to avoid limitations of _r.mask_
+and the underlying _r.reclass_ tool). The name of the mask raster can then be
+passed to the manager:
+
+```python
+env = os.environ.copy()
+with gs.MaskManager(mask_name=mask_raster, env=env):
+    gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope, env=env)
+```
 
 #### Temporary Maps
 

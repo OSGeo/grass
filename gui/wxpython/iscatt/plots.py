@@ -154,7 +154,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
     def GetCoords(self):
         coords = self.polygon_drawer.GetCoords()
         if coords is None:
-            return
+            return None
 
         if self.transpose:
             for c in coords:
@@ -175,7 +175,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self.canvas.draw()
 
     def OnPress(self, event):
-        "on button press we will see if the mouse is over us and store some data"
+        """on button press we will see if the mouse is over us and store some data"""
         if not event.inaxes:
             return
         if self.mode == "zoom_extend":
@@ -189,7 +189,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
             self.zoom_rect_coords = None
 
     def _stopCategoryEdit(self):
-        "disconnect all the stored connection ids"
+        """disconnect all the stored connection ids"""
 
         if self.cidpress:
             self.canvas.mpl_disconnect(self.cidpress)
@@ -389,7 +389,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self.cursorMove.emit(x=None, y=None, scatt_id=self.scatt_id)
 
     def PanMotion(self, event):
-        "on mouse movement"
+        """on mouse movement"""
         if self.mode != "pan":
             return
         if event.inaxes is None:
@@ -667,13 +667,14 @@ class PolygonDrawer:
         self.it = 0
 
     def _getPolygonStyle(self):
-        style = {}
-        style["sel_pol"] = UserSettings.Get(
-            group="scatt", key="selection", subkey="sel_pol"
-        )
-        style["sel_pol_vertex"] = UserSettings.Get(
-            group="scatt", key="selection", subkey="sel_pol_vertex"
-        )
+        style = {
+            "sel_pol": UserSettings.Get(
+                group="scatt", key="selection", subkey="sel_pol"
+            ),
+            "sel_pol_vertex": UserSettings.Get(
+                group="scatt", key="selection", subkey="sel_pol_vertex"
+            ),
+        }
 
         style["sel_pol"] = [i / 255.0 for i in style["sel_pol"]]
         style["sel_pol_vertex"] = [i / 255.0 for i in style["sel_pol_vertex"]]
@@ -739,14 +740,14 @@ class PolygonDrawer:
         self.ax.draw_artist(self.line)
 
     def poly_changed(self, pol):
-        "this method is called whenever the polygon object is called"
+        """this method is called whenever the polygon object is called"""
         # only copy the artist props to the line (except visibility)
         vis = self.line.get_visible()
         Artist.update_from(self.line, pol)
         self.line.set_visible(vis)  # don't use the pol visibility state
 
     def get_ind_under_point(self, event):
-        "get the index of the vertex under point if within threshold"
+        """get the index of the vertex under point if within threshold"""
 
         # display coords
         xy = np.asarray(self.pol.xy)
@@ -779,7 +780,7 @@ class PolygonDrawer:
         self.moving_ver_idx = self.get_ind_under_point(event)
 
     def ButtonReleaseCallback(self, event):
-        "whenever a mouse button is released"
+        """whenever a mouse button is released"""
         if not self.showverts:
             return
         if event.button != 1:
@@ -859,7 +860,7 @@ class PolygonDrawer:
         self.Redraw()
 
     def motion_notify_callback(self, event):
-        "on mouse movement"
+        """on mouse movement"""
         if self.mode != "move_vertex":
             return
         if not self.showverts:

@@ -228,8 +228,7 @@ Maintainer: Vaclav Petras
 - Details: <https://github.com/OSGeo/grass/pull/525>
 - CI workflow with:
   - A build job which is not parallelized and is meant for clear & relatively fast
-    check of compilation and building in general. (Duplicating what is running
-    on Travis)
+    check of compilation and building in general.
   - A test job which of course needs to build, but the main focus is to run tests,
     so the compilation is parallelized (depending on nproc) and thus potentially
     less readable. This runs the whole test suite. (You need to run it locally to

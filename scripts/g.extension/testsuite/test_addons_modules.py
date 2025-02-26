@@ -44,9 +44,7 @@ v.in.redwg
 v.neighborhoodmatrix
 v.transects
 wx.metadata
-""".replace(
-    "\n", os.linesep
-)
+""".replace("\n", os.linesep)
 
 
 class TestModulesMetadata(TestCase):

@@ -413,13 +413,13 @@ def main_page(
                 )
             )
         page.write("</tbody></table>")
-        for image, caption in itertools.izip(images, captions):
-            page.write(
-                "<h3>{caption}<h3>"
-                '<img src="{image}" alt="{caption}" title="{caption}">'.format(
-                    image=image, caption=caption
-                )
+        page.writelines(
+            "<h3>{caption}<h3>"
+            '<img src="{image}" alt="{caption}" title="{caption}">'.format(
+                image=image, caption=caption
             )
+            for image, caption in itertools.izip(images, captions)
+        )
         page.write("</body></html>")
 
 

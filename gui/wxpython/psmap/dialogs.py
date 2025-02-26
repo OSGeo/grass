@@ -51,6 +51,7 @@ else:
     from wx import PyValidator as Validator
 
 import grass.script as gs
+from grass.exceptions import ScriptError
 from core.gcmd import GError, GMessage, RunCommand
 from core.utils import PilImageToWxImage, cmp
 from dbmgr.vinfo import VectorDBInfo
@@ -792,11 +793,12 @@ class PageSetupDialog(PsmapDialog):
         currPaper = self.paperTable[self.getCtrl("Format").GetSelection()]
         currUnit = self.unitConv.findUnit(self.getCtrl("Units").GetStringSelection())
         currOrientIdx = self.getCtrl("Orientation").GetSelection()
-        newSize = {}
-        for item in self.cat[3:]:
-            newSize[item] = self.unitConv.convert(
+        newSize = {
+            item: self.unitConv.convert(
                 float(currPaper[item]), fromUnit="inch", toUnit=currUnit
             )
+            for item in self.cat[3:]
+        }
 
         enable = True
         if currPaper["Format"] != _("custom"):
@@ -1393,106 +1395,7 @@ class MapFramePanel(Panel):
         mapFrameDict["scaleType"] = scaleType
 
         if mapFrameDict["scaleType"] == 0:
-            if self.select.GetValue():
-                mapFrameDict["drawMap"] = self.drawMap.GetValue()
-                mapFrameDict["map"] = self.select.GetValue()
-                mapFrameDict["mapType"] = self.mapType
-                mapFrameDict["region"] = None
-
-                if mapFrameDict["drawMap"]:
-                    if mapFrameDict["mapType"] == "raster":
-                        mapFile = gs.find_file(mapFrameDict["map"], element="cell")
-                        if mapFile["file"] == "":
-                            GMessage("Raster %s not found" % mapFrameDict["map"])
-                            return False
-                        raster = self.instruction.FindInstructionByType("raster")
-                        if raster:
-                            raster["raster"] = mapFrameDict["map"]
-                        else:
-                            raster = Raster(NewId(), env=self.env)
-                            raster["raster"] = mapFrameDict["map"]
-                            raster["isRaster"] = True
-                            self.instruction.AddInstruction(raster)
-
-                    elif mapFrameDict["mapType"] == "vector":
-                        mapFile = gs.find_file(mapFrameDict["map"], element="vector")
-                        if mapFile["file"] == "":
-                            GMessage("Vector %s not found" % mapFrameDict["map"])
-                            return False
-
-                        vector = self.instruction.FindInstructionByType("vector")
-                        isAdded = False
-                        if vector:
-                            for each in vector["list"]:
-                                if each[0] == mapFrameDict["map"]:
-                                    isAdded = True
-                        if not isAdded:
-                            topoInfo = gs.vector_info_topo(map=mapFrameDict["map"])
-                            if topoInfo:
-                                if bool(topoInfo["areas"]):
-                                    topoType = "areas"
-                                elif bool(topoInfo["lines"]):
-                                    topoType = "lines"
-                                else:
-                                    topoType = "points"
-                                label = "(".join(mapFrameDict["map"].split("@")) + ")"
-
-                                if not vector:
-                                    vector = Vector(NewId(), env=self.env)
-                                    vector["list"] = []
-                                    self.instruction.AddInstruction(vector)
-                                id = NewId()
-                                vector["list"].insert(
-                                    0, [mapFrameDict["map"], topoType, id, 1, label]
-                                )
-                                vProp = VProperties(id, topoType, env=self.env)
-                                vProp["name"], vProp["label"], vProp["lpos"] = (
-                                    mapFrameDict["map"],
-                                    label,
-                                    1,
-                                )
-                                self.instruction.AddInstruction(vProp)
-                            else:
-                                return False
-
-                self.scale[0], self.center[0], self.rectAdjusted = AutoAdjust(
-                    self,
-                    scaleType=0,
-                    map=mapFrameDict["map"],
-                    env=self.env,
-                    mapType=self.mapType,
-                    rect=self.mapFrameDict["rect"],
-                )
-
-                if self.rectAdjusted:
-                    mapFrameDict["rect"] = self.rectAdjusted
-                else:
-                    mapFrameDict["rect"] = self.mapFrameDict["rect"]
-
-                mapFrameDict["scale"] = self.scale[0]
-
-                mapFrameDict["center"] = self.center[0]
-                # set region
-                if self.mapType == "raster":
-                    self.env["GRASS_REGION"] = gs.region_env(
-                        raster=mapFrameDict["map"], env=self.env
-                    )
-                if self.mapType == "vector":
-                    raster = self.instruction.FindInstructionByType("raster")
-                    rasterId = raster.id if raster else None
-
-                    if rasterId:
-                        self.env["GRASS_REGION"] = gs.region_env(
-                            vector=mapFrameDict["map"],
-                            raster=self.instruction[rasterId]["raster"],
-                            env=self.env,
-                        )
-                    else:
-                        self.env["GRASS_REGION"] = gs.region_env(
-                            vector=mapFrameDict["map"], env=self.env
-                        )
-
-            else:
+            if not self.select.GetValue():
                 wx.MessageBox(
                     message=_("No map selected!"),
                     caption=_("Invalid input"),
@@ -1500,37 +1403,135 @@ class MapFramePanel(Panel):
                 )
                 return False
 
-        elif mapFrameDict["scaleType"] == 1:
-            if self.select.GetValue():
-                mapFrameDict["drawMap"] = False
-                mapFrameDict["map"] = None
-                mapFrameDict["mapType"] = None
-                mapFrameDict["region"] = self.select.GetValue()
-                self.scale[1], self.center[1], self.rectAdjusted = AutoAdjust(
-                    self,
-                    scaleType=1,
-                    region=mapFrameDict["region"],
-                    rect=self.mapFrameDict["rect"],
-                    env=self.env,
-                )
-                if self.rectAdjusted:
-                    mapFrameDict["rect"] = self.rectAdjusted
-                else:
-                    mapFrameDict["rect"] = self.mapFrameDict["rect"]
+            mapFrameDict["drawMap"] = self.drawMap.GetValue()
+            mapFrameDict["map"] = self.select.GetValue()
+            mapFrameDict["mapType"] = self.mapType
+            mapFrameDict["region"] = None
 
-                mapFrameDict["scale"] = self.scale[1]
-                mapFrameDict["center"] = self.center[1]
-                # set region
-                self.env["GRASS_REGION"] = gs.region_env(
-                    region=mapFrameDict["region"], env=self.env
-                )
+            if mapFrameDict["drawMap"]:
+                if mapFrameDict["mapType"] == "raster":
+                    mapFile = gs.find_file(mapFrameDict["map"], element="cell")
+                    if mapFile["file"] == "":
+                        GMessage("Raster %s not found" % mapFrameDict["map"])
+                        return False
+                    raster = self.instruction.FindInstructionByType("raster")
+                    if raster:
+                        raster["raster"] = mapFrameDict["map"]
+                    else:
+                        raster = Raster(NewId(), env=self.env)
+                        raster["raster"] = mapFrameDict["map"]
+                        raster["isRaster"] = True
+                        self.instruction.AddInstruction(raster)
+
+                elif mapFrameDict["mapType"] == "vector":
+                    mapFile = gs.find_file(mapFrameDict["map"], element="vector")
+                    if mapFile["file"] == "":
+                        GMessage("Vector %s not found" % mapFrameDict["map"])
+                        return False
+
+                    vector = self.instruction.FindInstructionByType("vector")
+                    isAdded = False
+                    if vector:
+                        for each in vector["list"]:
+                            if each[0] == mapFrameDict["map"]:
+                                isAdded = True
+                    if not isAdded:
+                        topoInfo = gs.vector_info_topo(map=mapFrameDict["map"])
+                        if topoInfo:
+                            if bool(topoInfo["areas"]):
+                                topoType = "areas"
+                            elif bool(topoInfo["lines"]):
+                                topoType = "lines"
+                            else:
+                                topoType = "points"
+                            label = "(".join(mapFrameDict["map"].split("@")) + ")"
+
+                            if not vector:
+                                vector = Vector(NewId(), env=self.env)
+                                vector["list"] = []
+                                self.instruction.AddInstruction(vector)
+                            id = NewId()
+                            vector["list"].insert(
+                                0, [mapFrameDict["map"], topoType, id, 1, label]
+                            )
+                            vProp = VProperties(id, topoType, env=self.env)
+                            vProp["name"], vProp["label"], vProp["lpos"] = (
+                                mapFrameDict["map"],
+                                label,
+                                1,
+                            )
+                            self.instruction.AddInstruction(vProp)
+                        else:
+                            return False
+
+            self.scale[0], self.center[0], self.rectAdjusted = AutoAdjust(
+                self,
+                scaleType=0,
+                map=mapFrameDict["map"],
+                env=self.env,
+                mapType=self.mapType,
+                rect=self.mapFrameDict["rect"],
+            )
+
+            if self.rectAdjusted:
+                mapFrameDict["rect"] = self.rectAdjusted
             else:
+                mapFrameDict["rect"] = self.mapFrameDict["rect"]
+
+            mapFrameDict["scale"] = self.scale[0]
+
+            mapFrameDict["center"] = self.center[0]
+            # set region
+            if self.mapType == "raster":
+                self.env["GRASS_REGION"] = gs.region_env(
+                    raster=mapFrameDict["map"], env=self.env
+                )
+            if self.mapType == "vector":
+                raster = self.instruction.FindInstructionByType("raster")
+                rasterId = raster.id if raster else None
+
+                if rasterId:
+                    self.env["GRASS_REGION"] = gs.region_env(
+                        vector=mapFrameDict["map"],
+                        raster=self.instruction[rasterId]["raster"],
+                        env=self.env,
+                    )
+                else:
+                    self.env["GRASS_REGION"] = gs.region_env(
+                        vector=mapFrameDict["map"], env=self.env
+                    )
+
+        elif mapFrameDict["scaleType"] == 1:
+            if not self.select.GetValue():
                 wx.MessageBox(
                     message=_("No region selected!"),
                     caption=_("Invalid input"),
                     style=wx.OK | wx.ICON_ERROR,
                 )
                 return False
+
+            mapFrameDict["drawMap"] = False
+            mapFrameDict["map"] = None
+            mapFrameDict["mapType"] = None
+            mapFrameDict["region"] = self.select.GetValue()
+            self.scale[1], self.center[1], self.rectAdjusted = AutoAdjust(
+                self,
+                scaleType=1,
+                region=mapFrameDict["region"],
+                rect=self.mapFrameDict["rect"],
+                env=self.env,
+            )
+            if self.rectAdjusted:
+                mapFrameDict["rect"] = self.rectAdjusted
+            else:
+                mapFrameDict["rect"] = self.mapFrameDict["rect"]
+
+            mapFrameDict["scale"] = self.scale[1]
+            mapFrameDict["center"] = self.center[1]
+            # set region
+            self.env["GRASS_REGION"] = gs.region_env(
+                region=mapFrameDict["region"], env=self.env
+            )
 
         elif scaleType == 2:
             mapFrameDict["drawMap"] = False
@@ -1725,7 +1726,7 @@ class RasterPanel(Panel):
         mapInstr = self.instruction.FindInstructionByType("map")
         if not mapInstr:  # no map frame
             GMessage(message=_("Please, create map frame first."))
-            return
+            return None
 
         if self.rasterNoRadio.GetValue() or not self.rasterSelect.GetValue():
             self.rasterDict["isRaster"] = False
@@ -2192,7 +2193,7 @@ class VPropertiesDialog(Dialog):
         try:
             self.mapDBInfo = VectorDBInfo(self.vectorName)
             self.layers = self.mapDBInfo.layers.keys()
-        except gs.ScriptError:
+        except ScriptError:
             self.connection = False
             self.layers = []
         if not self.layers:
@@ -4966,8 +4967,9 @@ class ScalebarDialog(PsmapDialog):
         sbTypeText = StaticText(panel, id=wx.ID_ANY, label=_("Type:"))
         self.sbCombo = BitmapComboBox(panel, style=wx.CB_READONLY)
         # only temporary, images must be moved away
-        imagePath = os.path.join(globalvar.IMGDIR, "scalebar-fancy.png"), os.path.join(
-            globalvar.IMGDIR, "scalebar-simple.png"
+        imagePath = (
+            os.path.join(globalvar.IMGDIR, "scalebar-fancy.png"),
+            os.path.join(globalvar.IMGDIR, "scalebar-simple.png"),
         )
         for item, path in zip(["fancy", "simple"], imagePath):
             bitmap = EmptyBitmap(0, 0) if not os.path.exists(path) else wx.Bitmap(path)
@@ -5470,10 +5472,11 @@ class TextDialog(PsmapDialog):
         )
         sizerR = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexSizer = wx.FlexGridSizer(rows=3, cols=3, hgap=5, vgap=5)
-        ref = []
-        for row in ["upper", "center", "lower"]:
-            for col in ["left", "center", "right"]:
-                ref.append(row + " " + col)
+        ref = [
+            row + " " + col
+            for row in ["upper", "center", "lower"]
+            for col in ["left", "center", "right"]
+        ]
         self.radio = [
             RadioButton(panel, id=wx.ID_ANY, label="", style=wx.RB_GROUP, name=ref[0])
         ]

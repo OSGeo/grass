@@ -155,12 +155,12 @@ class Core:
             b1, b2 = idScattToidBands(scatt_id, len(self.an_data.GetBands()))
             b = self.scatts_dt.GetBandsInfo(scatt_id)
 
-            region = {}
-            region["s"] = b["b2"]["min"] - 0.5
-            region["n"] = b["b2"]["max"] + 0.5
-
-            region["w"] = b["b1"]["min"] - 0.5
-            region["e"] = b["b1"]["max"] + 0.5
+            region = {
+                "s": b["b2"]["min"] - 0.5,
+                "n": b["b2"]["max"] + 0.5,
+                "w": b["b1"]["min"] - 0.5,
+                "e": b["b1"]["max"] + 0.5,
+            }
 
             arr = self.scatt_conds_dt.GetValuesArr(cat_id, scatt_id)
             arr = Rasterize(polygon=coords, rast=arr, region=region, value=value)
@@ -218,11 +218,12 @@ class CatRastUpdater:
 
         region = self.an_data.GetRegion()
 
-        bbox = {}
-        bbox["maxx"] = region["e"]
-        bbox["minx"] = region["w"]
-        bbox["maxy"] = region["n"]
-        bbox["miny"] = region["s"]
+        bbox = {
+            "maxx": region["e"],
+            "minx": region["w"],
+            "maxy": region["n"],
+            "miny": region["s"],
+        }
 
         updated_cats = []
 
@@ -551,8 +552,7 @@ class ScattPlotsCondsData:
 
 
 class ScattPlotsData(ScattPlotsCondsData):
-    """Data structure for computed points (classes) in scatter plots.\
-    """
+    """Data structure for computed points (classes) in scatter plots."""
 
     def __init__(self, an_data):
         self.cats_rasts = {}

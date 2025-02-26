@@ -1111,9 +1111,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def OnHistogram(self, event):
         """Plot histogram for given raster map layer"""
-        rasterList = []
-        for layer in self.GetSelectedLayers():
-            rasterList.append(self.GetLayerInfo(layer, key="maplayer").GetName())
+        rasterList = [
+            self.GetLayerInfo(layer, key="maplayer").GetName()
+            for layer in self.GetSelectedLayers()
+        ]
 
         if not rasterList:
             GError(
@@ -1151,11 +1152,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def OnReportStats(self, event):
         """Print 2D statistics"""
-        rasters = []
         # TODO: Implement self.GetSelectedLayers(ltype='raster')
-        for layer in self.GetSelectedLayers():
-            if self.GetLayerInfo(layer, key="type") == "raster":
-                rasters.append(self.GetLayerInfo(layer, key="maplayer").GetName())
+        rasters = [
+            self.GetLayerInfo(layer, key="maplayer").GetName()
+            for layer in self.GetSelectedLayers()
+            if self.GetLayerInfo(layer, key="type") == "raster"
+        ]
 
         if rasters:
             self._giface.RunCmd(
@@ -1460,7 +1462,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 if self.GetLayerInfo(item, key="type") == "vector":
                     name = self.GetLayerInfo(item, key="maplayer").GetName()
                     if name == lname:
-                        return
+                        return None
                 item = self.GetNextItem(item)
 
         selectedLayer = self.GetSelectedLayer()
@@ -2256,9 +2258,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             win = self.FindWindowById(self.GetLayerInfo(item, key="ctrl"))
             if win.GetValue() is not None:
                 cmd = win.GetValue().split(";")
-                cmdlist = []
-                for c in cmd:
-                    cmdlist.append(c.split(" "))
+                cmdlist = [c.split(" ") for c in cmd]
                 opac = 1.0
                 chk = self.IsItemChecked(item)
                 hidden = not self.IsVisible(item)
