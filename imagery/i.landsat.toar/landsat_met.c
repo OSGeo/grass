@@ -117,7 +117,13 @@ void lsat_metadata(char *metafile, lsat_data *lsat)
     /* store metadata in ram */
     if ((f = fopen(metafile, "r")) == NULL)
         G_fatal_error(_("Metadata file <%s> not found"), metafile);
-    i = fread(mtldata, METADATA_SIZE, 1, f);
+    i = fread(mtldata, 1, METADATA_SIZE - 1, f);
+    if (i < METADATA_SIZE - 1) {
+        if (ferror(f)) {
+            G_fatal_error(_("Error reading metadata file <%s>"), metafile);
+        }
+    }
+    mtldata[i] = '\0';
     (void)fclose(f);
 
     /* set version of the metadata file */
