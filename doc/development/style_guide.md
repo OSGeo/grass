@@ -290,7 +290,8 @@ More notes on markup:
 - Emphasized phrases `*should use italics*`.
 - In order to minimize potential git merge conflicts, please break a line at
   approximately 70-80 chars.
-- Line break is done with 2 spaces.
+- A line break in the resulting HTML is created by adding two spaces at the end
+  of a line. Use this sparingly and only when necessary.
 
 Examples should be coded like this:
 
@@ -378,7 +379,7 @@ image is displayed as shrunk, both **width** and **height** HTML parameters
 north-east quadrant with white dot; 5m above ground)*
 ```
 
-*Note the 2 spaces after the image._
+_Note the 2 spaces after the image._
 
 ## Best Practices
 
