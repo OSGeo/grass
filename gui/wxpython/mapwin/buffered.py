@@ -378,7 +378,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             pdc.EndDrawing()
 
             self.Refresh()
-            return
+            return None
 
         if pdctype == "image":  # draw selected image
             bitmap = BitmapFromImage(img)
@@ -421,7 +421,7 @@ class BufferedMapWindow(MapWindowBase, Window):
                 pdc.SetBrush(wx.Brush(wx.CYAN, wx.TRANSPARENT))
                 pdc.SetPen(pen)
                 if len(coords) < 2:
-                    return
+                    return None
                 if pdctype == "polyline":
                     i = 1
                     while i < len(coords):
@@ -497,7 +497,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         elif pdctype == "text":  # draw text on top of map
             if not img["active"]:
-                return  # only draw active text
+                return None  # only draw active text
             rotation = float(img["rotation"]) if "rotation" in img else 0.0
             w, h = self.GetFullTextExtent(img["text"])[0:2]
             pdc.SetFont(img["font"])
