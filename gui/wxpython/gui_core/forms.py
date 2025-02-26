@@ -2559,9 +2559,8 @@ class CmdPanel(wx.Panel):
             gcmd.GMessage(parent=self, message=_("Nothing to load."))
             return
 
-        data = ""
         try:
-            f = open(path)
+            data = Path(path).read_text()
         except OSError as e:
             gcmd.GError(
                 parent=self,
@@ -2569,11 +2568,6 @@ class CmdPanel(wx.Panel):
                 message=_("Unable to load file.\n\nReason: %s") % e,
             )
             return
-
-        try:
-            data = f.read()
-        finally:
-            f.close()
 
         win["text"].SetValue(data)
 
@@ -2609,11 +2603,9 @@ class CmdPanel(wx.Panel):
                 enc = locale.getencoding()
             except AttributeError:
                 enc = locale.getdefaultlocale()[1]
-            f = codecs.open(path, encoding=enc, mode="w", errors="replace")
-            try:
+
+            with codecs.open(path, encoding=enc, mode="w", errors="replace") as f:
                 f.write(text + os.linesep)
-            finally:
-                f.close()
 
             win["file"].SetValue(path)
 
@@ -2637,13 +2629,11 @@ class CmdPanel(wx.Panel):
                 enc = locale.getencoding()
             except AttributeError:
                 enc = locale.getdefaultlocale()[1]
-            f = codecs.open(filename, encoding=enc, mode="w", errors="replace")
-            try:
+
+            with codecs.open(filename, encoding=enc, mode="w", errors="replace") as f:
                 f.write(text)
                 if text[-1] != os.linesep:
                     f.write(os.linesep)
-            finally:
-                f.close()
         else:
             win.SetValue("")
 

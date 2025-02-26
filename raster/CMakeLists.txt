@@ -298,6 +298,14 @@ build_program_in_subdir(r.latlong DEPENDS grass_gis grass_raster grass_gproj GDA
 build_program_in_subdir(r.lake DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(
+  r.mask.status
+  DEPENDS
+  grass_gis
+  grass_manage
+  grass_parson
+  grass_raster)
+
+build_program_in_subdir(
   r.mfilter
   DEPENDS
   grass_gis

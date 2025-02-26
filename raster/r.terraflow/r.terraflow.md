@@ -165,16 +165,16 @@ r.terraflow elev=elevation.10m filled=elevation10m.filled \
 
 ## REFERENCES
 
-1. The [TerraFlow](http://www.cs.duke.edu/geo*/terraflow/) project at Duke University
-2. [I/O-efficient algorithms for problems on grid-based
-    terrains](http://www.cs.duke.edu/geo*/terraflow/papers/alenex00_drainage.ps.gz). Lars Arge, Laura Toma, and Jeffrey S. Vitter. In
+1. [I/O-efficient algorithms for problems on grid-based terrains](https://dl.acm.org/doi/10.1145/945394.945395).
+   Lars Arge, Laura Toma, and Jeffrey S. Vitter. In
     *Proc. Workshop on Algorithm Engineering and Experimentation*, 2000.
     To appear in *Journal of Experimental Algorithms*.
-3. [Flow computation on massive grids](http://www.cs.duke.edu/geo*/terraflow/papers/acmgis01_terraflow.pdf). Lars
-    Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura Toma, Jeffrey S.
+2. [Flow computation on massive grids](https://dl.acm.org/doi/10.1145/512161.512180).
+    Lars Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura Toma, Jeffrey S.
     Vitter, Dean Urban and Rajiv Wickremesinghe. In *Proc. ACM Symposium
     on Advances in Geographic Information Systems*, 2001.
-4. [Flow computation on massive grid terrains](http://www.cs.duke.edu/geo*/terraflow/papers/journal_terraflow.pdf). Lars Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura
+3. [Flow computation on massive grid terrain datasets](https://link.springer.com/article/10.1023/A:1025526421410).
+    Lars Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura
     Toma, Jeffrey S. Vitter, Dean Urban and Rajiv Wickremesinghe. In
     *GeoInformatica, International Journal on Advances of Computer
     Science for Geographic Information Systems*, 7(4):283-313, December
