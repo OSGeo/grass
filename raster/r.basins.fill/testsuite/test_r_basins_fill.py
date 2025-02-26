@@ -46,11 +46,16 @@ class TestRasterbasin(TestCase):
 
         # Run r.geomorphon to generate geomorphometric forms.
         cls.runModule(
-            "r.geomorphon", elevation="elevation", forms=cls.geomorphons, quiet=True
+            "r.geomorphon",
+            elevation="elevation",
+            forms=cls.geomorphons,
+            search=36,
+            skip=6,
+            quiet=True,
         )
         # Extract ridges from the geomorphon output.
         cls.runModule(
-            "r.mapcalc", expression=f"{cls.ridges} = if({cls.geomorphons}==3,1,null())"
+            "r.mapcalc", expression=f"{cls.ridges} = if({cls.geomorphons}==3,1,0)"
         )
 
     @classmethod
@@ -76,6 +81,12 @@ class TestRasterbasin(TestCase):
         )
 
         self.assertRasterExists(self.subbasins)
+        self.assertRasterMinMax(
+            map=self.subbasins,
+            refmin=0,
+            refmax=2482,
+            msg="subbasins in degrees must be between 0 and 2482",
+        )
 
         # Retrieve unique category values from the streams and subbasins maps.
         streams_cats = get_categories(self.streams)
