@@ -26,7 +26,7 @@ int main(void)
 {
     struct timeval t;
 
-    if (gettimeofday(&t, NULL) == -1) {
+    if (gettimeofday(&t, NULL) != 0) {
         fprintf(stderr, "gettimeofday error");
         return 1;
     }
