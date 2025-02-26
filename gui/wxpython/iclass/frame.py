@@ -1201,7 +1201,7 @@ class IClassMapPanel(DoubleMapPanel):
 
     def _addSuffix(self, name):
         suffix = _("results")
-        return "_".join((name, suffix))
+        return f"{name}_{suffix}"
 
     def OnSaveSigFile(self, event):
         """Asks for signature file name and saves it."""
