@@ -99,11 +99,9 @@ char msg[1024];
 /****************************************/
 int main(int argc, char *argv[])
 {
-    int ii;
     int threads;
     int ret_val;
     struct Cell_head cellhd;
-    struct WaterParams wp;
     struct options parm;
     struct flags flag;
     long seed_value;
@@ -325,10 +323,11 @@ int main(int argc, char *argv[])
     Settings settings = {0};
     Setup setup = {0};
     Simulation sim = {0};
+    ObservationPoints points = {0};
     settings.hhmax = settings.halpha = settings.hbeta = 0;
     settings.ts = false;
-
-    WaterParams_init(&wp);
+    Inputs inputs = {0};
+    Outputs outputs = {0};
 
     geometry.conv = G_database_units_to_meters_factor();
 
@@ -348,20 +347,20 @@ int main(int argc, char *argv[])
     geometry.xmax = geometry.xmin + geometry.stepx * (float)geometry.mx;
     geometry.ymax = geometry.ymin + geometry.stepy * (float)geometry.my;
 
-    wp.elevin = parm.elevin->answer;
-    wp.wdepth = parm.wdepth->answer;
-    wp.dxin = parm.dxin->answer;
-    wp.dyin = parm.dyin->answer;
-    wp.detin = parm.detin->answer;
-    wp.tranin = parm.tranin->answer;
-    wp.tauin = parm.tauin->answer;
-    wp.manin = parm.manin->answer;
-    wp.tc = parm.tc->answer;
-    wp.et = parm.et->answer;
-    wp.conc = parm.conc->answer;
-    wp.flux = parm.flux->answer;
-    wp.erdep = parm.erdep->answer;
-    wp.outwalk = parm.outwalk->answer;
+    inputs.elevin = parm.elevin->answer;
+    inputs.wdepth = parm.wdepth->answer;
+    inputs.dxin = parm.dxin->answer;
+    inputs.dyin = parm.dyin->answer;
+    inputs.detin = parm.detin->answer;
+    inputs.tranin = parm.tranin->answer;
+    inputs.tauin = parm.tauin->answer;
+    inputs.manin = parm.manin->answer;
+    outputs.tc = parm.tc->answer;
+    outputs.et = parm.et->answer;
+    outputs.conc = parm.conc->answer;
+    outputs.flux = parm.flux->answer;
+    outputs.erdep = parm.erdep->answer;
+    outputs.outwalk = parm.outwalk->answer;
 
     sscanf(parm.threads->answer, "%d", &threads);
     if (threads < 1) {
@@ -387,7 +386,7 @@ int main(int argc, char *argv[])
     sscanf(parm.mintimestep->answer, "%lf", &settings.mintimestep);
     /*    sscanf(parm.density->answer, "%d", &wp.ldemo); */
     sscanf(parm.diffc->answer, "%lf", &settings.frac);
-    sscanf(parm.maninval->answer, "%lf", &wp.manin_val);
+    sscanf(parm.maninval->answer, "%lf", &inputs.manin_val);
 
     /* Recompute timesec from user input in minutes
      * to real timesec in seconds */
@@ -412,31 +411,25 @@ int main(int argc, char *argv[])
         G_message(_("Using metric conversion factor %f, step=%f"),
                   geometry.conv, geometry.step);
 
-    wp.observation = parm.observation->answer;
-    wp.logfile = parm.logfile->answer;
-    init_library_globals(&wp);
+    points.observation = parm.observation->answer;
+    points.logfile = parm.logfile->answer;
+    create_observation_points(&points);
 
-    if ((wp.tc == NULL) && (wp.et == NULL) && (wp.conc == NULL) &&
-        (wp.flux == NULL) && (wp.erdep == NULL))
+    if ((outputs.tc == NULL) && (outputs.et == NULL) &&
+        (outputs.conc == NULL) && (outputs.flux == NULL) &&
+        (outputs.erdep == NULL))
         G_warning(_("You are not outputting any raster or site files"));
-    ret_val = input_data(geometry.my, geometry.mx, &sim);
+    ret_val = input_data(geometry.my, geometry.mx, &sim, &inputs, &outputs);
     if (ret_val != 1)
         G_fatal_error(_("Input failed"));
 
-    alloc_grids_sediment(&geometry);
+    alloc_grids_sediment(&geometry, &outputs);
 
-    grad_check(&setup, &geometry, &settings);
-    init_grids_sediment(&setup, &geometry);
+    grad_check(&setup, &geometry, &settings, &inputs, &outputs);
+    init_grids_sediment(&setup, &geometry, &outputs);
     /* treba dat output pre topoerdep */
-    main_loop(&setup, &geometry, &settings, &sim);
-
-    /* always true for sediment? */
-    if (wp.tserie == NULL) {
-        ii = output_data(0, 1., &setup, &geometry, &settings, &sim);
-        if (ii != 1)
-            G_fatal_error(_("Cannot write raster maps"));
-    }
-    free_walkers(&sim);
+    main_loop(&setup, &geometry, &settings, &sim, &points, &inputs, &outputs);
+    free_walkers(&sim, outputs.outwalk);
 
     /* Exit with Success */
     exit(EXIT_SUCCESS);

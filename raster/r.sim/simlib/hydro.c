@@ -32,39 +32,8 @@
  *
  */
 
-struct _points points;
 struct point2D;
 struct point3D;
-
-char *elevin;
-char *dxin;
-char *dyin;
-char *rain;
-char *infil;
-char *traps;
-char *manin;
-char *depth;
-char *disch;
-char *err;
-char *outwalk;
-char *observation;
-char *logfile;
-char *mapset;
-char *tserie;
-
-char *wdepth;
-char *detin;
-char *tranin;
-char *tauin;
-char *tc;
-char *et;
-char *conc;
-char *flux;
-char *erdep;
-
-char *rainval;
-char *maninval;
-char *infilval;
 
 float **zz, **cchez;
 double **v1, **v2, **slope;
@@ -76,19 +45,15 @@ float **dif;
 struct point3D *w;
 struct point2D *vavg;
 
-double rain_val;
-double manin_val;
-double infil_val;
-
-struct History history; /* holds meta-data (title, comments,..) */
-
 /* **************************************************** */
 /*       create walker representation of si */
 /* ******************************************************** */
 /*                       .......... iblock loop */
 
 void main_loop(const Setup *setup, const Geometry *geometry,
-               const Settings *settings, Simulation *sim)
+               const Settings *settings, Simulation *sim,
+               ObservationPoints *points, const Inputs *inputs,
+               const Outputs *outputs)
 {
     int i, l, k;
     int iblock;
@@ -262,8 +227,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                             double hhc = pow(d1, 3. / 5.);
                             double velx, vely;
                             if (hhc > settings->hhmax &&
-                                wdepth == NULL) { /* increased diffusion if
-                                                     w.depth > hhmax */
+                                inputs->wdepth == NULL) { /* increased diffusion
+                                                     if w.depth > hhmax */
                                 dif[k][l] = (settings->halpha + 1) * deldif;
                                 velx = vavg[lw].x;
                                 vely = vavg[lw].y;
@@ -274,7 +239,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                                 vely = v2[k][l];
                             }
 
-                            if (traps != NULL && trap[k][l] != 0.) { /* traps */
+                            if (inputs->traps != NULL &&
+                                trap[k][l] != 0.) { /* traps */
 
                                 float eff = simwe_rand(); /* random generator */
 
@@ -289,7 +255,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                                 (velx + dif[k][l] * gaux); /* move the walker */
                             w[lw].y += (vely + dif[k][l] * gauy);
 
-                            if (hhc > settings->hhmax && wdepth == NULL) {
+                            if (hhc > settings->hhmax &&
+                                inputs->wdepth == NULL) {
                                 vavg[lw].x =
                                     settings->hbeta * (vavg[lw].x + v1[k][l]);
                                 vavg[lw].y =
@@ -304,7 +271,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                                                     out of area */
                             }
                             else {
-                                if (wdepth != NULL) {
+                                if (inputs->wdepth != NULL) {
                                     l = (int)((w[lw].x + stxm) /
                                               geometry->stepx) -
                                         geometry->mx - 1;
@@ -330,7 +297,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
              * output implementation */
             /* Save all walkers located within the computational region and with
                valid z coordinates */
-            if (outwalk != NULL && (i == setup->miter || i == iter1)) {
+            if (outputs->outwalk != NULL && (i == setup->miter || i == iter1)) {
                 sim->nstack = 0;
 
                 for (lw = 0; lw < sim->nwalk; lw++) {
@@ -363,47 +330,47 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 
             if (i == iter1 && settings->ts) {
                 /* call output for iteration output */
-                if (erdep != NULL)
+                if (outputs->erdep != NULL)
                     erod(gama, setup, geometry); /* divergence of gama field */
 
                 conn = (double)nblock / (double)iblock;
                 int itime = (int)(i * setup->deltap * setup->timec);
-                int ii =
-                    output_data(itime, conn, setup, geometry, settings, sim);
+                int ii = output_data(itime, conn, setup, geometry, settings,
+                                     sim, inputs, outputs);
                 if (ii != 1)
                     G_fatal_error(_("Unable to write raster maps"));
             }
 
             /* Write the water depth each time step at an observation point */
-            if (points.is_open) {
+            if (points->is_open) {
                 double value = 0.0;
                 int p;
 
-                fprintf(points.output, "%.6d ", i);
+                fprintf(points->output, "%.6d ", i);
                 /* Write for each point */
-                for (p = 0; p < points.npoints; p++) {
-                    l = (int)((points.x[p] - geometry->mixx + stxm) /
+                for (p = 0; p < points->npoints; p++) {
+                    l = (int)((points->x[p] - geometry->mixx + stxm) /
                               geometry->stepx) -
                         geometry->mx - 1;
-                    k = (int)((points.y[p] - geometry->miyy + stym) /
+                    k = (int)((points->y[p] - geometry->miyy + stym) /
                               geometry->stepy) -
                         geometry->my - 1;
 
                     if (zz[k][l] != UNDEF) {
 
-                        if (wdepth == NULL)
+                        if (inputs->wdepth == NULL)
                             value = geometry->step * gama[k][l] * cchez[k][l];
                         else
                             value = gama[k][l] * slope[k][l];
 
-                        fprintf(points.output, "%2.4f ", value);
+                        fprintf(points->output, "%2.4f ", value);
                     }
                     else {
                         /* Point is invalid, so a negative value is written */
-                        fprintf(points.output, "%2.4f ", -1.0);
+                        fprintf(points->output, "%2.4f ", -1.0);
                     }
                 }
-                fprintf(points.output, "\n");
+                fprintf(points->output, "\n");
             }
         } /* miter */
 
@@ -420,7 +387,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
            }
            } */
 
-        if (err != NULL) {
+        if (outputs->err != NULL) {
             for (k = 0; k < geometry->my; k++) {
                 for (l = 0; l < geometry->mx; l++) {
                     if (zz[k][l] != UNDEF) {
@@ -430,7 +397,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                 }
             }
         }
-        if (erdep != NULL)
+        if (outputs->erdep != NULL)
             erod(gama, setup, geometry);
     }
     /*                       ........ end of iblock loop */
@@ -439,13 +406,14 @@ void main_loop(const Setup *setup, const Geometry *geometry,
     if (!settings->ts) {
         conn = (double)nblock / (double)iblock;
         int itime = (int)(i * setup->deltap * setup->timec);
-        int ii = output_data(itime, conn, setup, geometry, settings, sim);
+        int ii = output_data(itime, conn, setup, geometry, settings, sim,
+                             inputs, outputs);
         if (ii != 1)
             G_fatal_error(_("Cannot write raster maps"));
     }
     /* Close the observation logfile */
-    if (points.is_open)
-        fclose(points.output);
+    if (points->is_open)
+        fclose(points->output);
 
-    points.is_open = 0;
+    points->is_open = 0;
 }
