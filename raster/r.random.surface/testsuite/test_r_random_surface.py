@@ -1,5 +1,4 @@
 import numpy as np
-import json
 import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -128,14 +127,11 @@ class TestRRandomSurface(TestCase):
         self.runModule(
             "r.random.surface", output=self.output_raster, seed=42, overwrite=True
         )
-        stats_json = gs.read_command(
-            "r.univar", map=self.output_raster, flags="g", format="json"
-        )
-        stats = json.loads(stats_json)
+        stats = gs.parse_command("r.univar", map=self.output_raster, format="json")
 
-        n = float(stats[0]["n"])
-        mean = float(stats[0]["mean"])
-        stddev = float(stats[0]["stddev"])
+        n = stats[0]["n"]
+        mean = stats[0]["mean"]
+        stddev = stats[0]["stddev"]
 
         self.assertGreater(n, 0, "No valid cells in output")
         self.assertTrue(0 <= mean <= 255, "Mean outside expected range")
@@ -148,13 +144,10 @@ class TestRRandomSurface(TestCase):
             "r.random.surface", output=self.output_raster, high=high_val, overwrite=True
         )
 
-        stats_json = gs.read_command(
-            "r.univar", map=self.output_raster, flags="g", format="json"
-        )
-        stats = json.loads(stats_json)
+        stats = gs.parse_command("r.univar", map=self.output_raster, format="json")
 
-        actual_min = float(stats[0]["min"])
-        actual_max = float(stats[0]["max"])
+        actual_min = stats[0]["min"]
+        actual_max = stats[0]["max"]
 
         self.assertGreaterEqual(
             actual_min, 0, f"Minimum value {actual_min} is less than 0"
@@ -255,11 +248,8 @@ class TestRRandomSurface(TestCase):
         for i, expr in enumerate(range_expr):
             tmp_map = f"tmp_range_{i}"
             self.runModule("r.mapcalc", expression=f"{tmp_map} = {expr}", quiet=True)
-            stats_json = gs.read_command(
-                "r.univar", map=tmp_map, flags="g", format="json"
-            )
-            stats = json.loads(stats_json)
-            counts.append(float(stats[0]["sum"]))
+            stats = gs.parse_command("r.univar", map=tmp_map, format="json")
+            counts.append(stats[0]["sum"])
 
             self.runModule(
                 "g.remove", type="raster", name=tmp_map, flags="f", quiet=True
