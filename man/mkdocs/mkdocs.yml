@@ -5,7 +5,7 @@ site_url: https://grass.osgeo.org/grass-stable/manuals/
 
 # Repository information
 repo_name: GitHub
-repo_url: https://github.com/OSGeo/grass
+repo_url: https://github.com/OSGeo # Set to OSGeo so we can added grass and grass-addons
 edit_uri_template: edit/main/{path!q}
 
 # Project Configuration
@@ -61,11 +61,10 @@ extra_css:
 plugins:
   - search
   - glightbox
+  - tags
   - social:
       cards_layout_options:
         background_image: null
-
-  # - tags
   # - git-revision-date-localized:
   #     enable_creation_date: true
   # - git-committers:
