@@ -57,11 +57,10 @@ extra_css:
 plugins:
   - search
   - glightbox
+  - tags
   - social:
       cards_layout_options:
         background_image: null
-
-  # - tags
   # - git-revision-date-localized:
   #     enable_creation_date: true
   # - git-committers:

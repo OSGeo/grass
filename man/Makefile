@@ -20,7 +20,8 @@ DSTFILES := \
 	$(MDDIR)/source/grassdocs.css \
 	$(MDDIR)/scripts/hook_list_scripts.py \
 	$(MDDIR)/overrides/partials/footer.html \
-	$(MDDIR)/overrides/partials/actions.html
+	$(MDDIR)/overrides/partials/actions.html \
+	$(MDDIR)/source/tags.md
 
 categories = \
 	d:display \
@@ -256,6 +257,9 @@ $(MDDIR)/source/favicon.ico: favicon.ico
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/tags.md: mkdocs/tags.md
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
