@@ -25,9 +25,13 @@ As a general rule in GRASS GIS:
     of the current computational region.
 2. Raster input maps are automatically cropped/padded and rescaled
     (using nearest-neighbour resampling) to match the current region.
-3. Raster input maps are automatically masked if a raster map named
-    MASK exists. The MASK is only applied when *reading* maps from the
-    disk.
+3. Processing NULL (no data) values produces NULL values.
+4. Input raster maps are automatically masked if a raster mask is active,
+   The mask is managed by the [r.mask](r.mask.html) tool, and
+   it is represented by a raster map called `MASK` by default.
+   Unless specified otherwise, the raster mask is only applied
+   when *reading* raster maps which typically results in NULL values
+   in the output for areas outside of the mask.
 
 There are a few exceptions to this: `r.in.*` programs read the data
 cell-for-cell, with no resampling. When reading non-georeferenced data,
@@ -161,15 +165,21 @@ statistical methods in creating the new raster map.
 Otherwise, for interpolation of scattered data, use the *v.surf.\** set
 of modules.
 
-### Raster MASKs
+### Raster masks
 
 If a raster map named "MASK" exists, most GRASS raster modules will
 operate only on data falling inside the masked area, and treat any data
 falling outside of the mask as if its value were NULL. The mask is only
 applied when *reading* an existing GRASS raster map, for example when
 used in a module as an input map.
+While the mask raster map can be managed directly,
+the [r.mask](r.mask.html) tool is a convenient way to create
+and manage masks.
 
-The mask is read as an integer map. If MASK is actually a floating-point
+Alternatively, `GRASS_MASK` environment variable can be used to specify
+the raster map which will be used as a mask.
+
+The mask is read as an integer map. If the mask raster is actually a floating-point
 map, the values will be converted to integers using the map's
 quantisation rules (this defaults to round-to-nearest, but can be
 changed with r.quant).

@@ -202,7 +202,7 @@ class VirtualAttributeList(
                         )
                         % {"column": col, "table": tableName},
                     )
-                    return
+                    return None
 
         try:
             # for maps connected via v.external
