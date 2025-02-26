@@ -482,6 +482,11 @@ This allows programs such as the GUI to run external commands on an
 alternate region without having to modify the WIND file then change it
 back afterwards.
 
+GRASS_MASK  
+\[libgis\]  
+use the raster map specified by name as mask, instead of a raster called
+MASK in the current mapset.
+
 ## List of selected GRASS gisenv variables
 
 > \[ Use *[g.gisenv](g.gisenv.md)* to get/set/unset/change them \]
