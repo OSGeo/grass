@@ -465,11 +465,11 @@ raster called MASK by default. Raster tools called as a subprocess will automati
 respect the globally set mask when reading the data. For outputs, respecting of
 the mask is optional.
 
-Tools should generally respect the global mask set by a user. If the mask set by the
-user is not respected by a tool, the exact behavior should be described in the
-documentation. On the other hand, ignoring mask is usually the desired behavior
-for import tools which corresponds with the mask being applied only when reading
-existing raster data in a project.
+Tools should generally respect the global mask set by a user. If the mask set
+by the user is not respected by a tool, the exact behavior should be described
+in the documentation. On the other hand, ignoring mask is usually the desired
+behavior for import tools which corresponds with the mask being applied only
+when reading existing raster data in a project.
 
 Tools **should not set or remove the global mask** to prevent unintended
 behavior during interactive sessions and to maintain parallel processing
@@ -641,9 +641,9 @@ passing or not passing the current name of a mask obtained from _r.mask.status_
 and by preparing the internal mask raster beforehand with the user mask active.
 
 If different subprocesses, running in parallel, use different masks,
-it is best to create mask rasters beforehand (to avoid limitations of _r.mask_ and
-the underlying _r.reclass_ tool). The name of the mask raster can then be passed to
-the manager:
+it is best to create mask rasters beforehand (to avoid limitations of _r.mask_
+and the underlying _r.reclass_ tool). The name of the mask raster can then be
+passed to the manager:
 
 ```python
 env = os.environ.copy()
