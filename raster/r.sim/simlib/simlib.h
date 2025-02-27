@@ -5,6 +5,7 @@
  * \brief This is the interface for the simlib (SIMWE) library.
  */
 #include <stdbool.h>
+#include <stdio.h>
 
 #define NUM_THREADS "1"
 #if defined(_OPENMP)
@@ -52,59 +53,77 @@ typedef struct {
 
 } Simulation;
 
-struct WaterParams {
+typedef struct {
+    double *x;         // x coor for each point
+    double *y;         // y coor for each point
+    int *cats;         // Category for each point
+    int npoints;       // Number of observation points
+    int npoints_alloc; // Number of allocated points
+    FILE *output;      // Output file descriptor
+    int is_open;       // Set to 1 if open, 0 if closed
+    char *logfile;     // Log file name
+    char *observation; // Observation file name
+} ObservationPoints;
 
-    double rain_val;
-    double manin_val;
-    double infil_val;
+typedef struct {
+    char *rain;       // Rainfall excess raster name (water flow only)
+    double rain_val;  // Rainfall excess value (water flow only)
+    char *manin;      // Manning's n raster name
+    double manin_val; // Manning's n value
+    char *infil;      // Infiltration raster name (water flow only)
+    double infil_val; // Infiltration value (water flow only)
+    char *elevin;     // Elevation raster name
+    char *dxin;       // Name of x-derivatives raster map
+    char *dyin;       // Name of y-derivatives raster map
+    char *traps;      // Traps raster name (water flow only)
+    char *wdepth;     // Water depth raster name (sediment only)
+    char *detin;      // Detachment coefficient raster name (sediment only)
+    char *tranin; // Transport capacity coefficient raster name (sediment only)
+    char *tauin;  // Critical shear stress raster name (sediment only)
+} Inputs;
 
-    char *elevin;
-    char *dxin;
-    char *dyin;
-    char *rain;
-    char *infil;
-    char *traps;
-    char *manin;
-    char *depth;
-    char *disch;
-    char *err;
-    char *outwalk;
-    char *observation;
-    char *logfile;
-    char *mapset;
-    char *tserie;
+typedef struct {
+    char *depth;   // Water depth raster name (water flow only)
+    char *disch;   // Discharge raster name (water flow only)
+    char *err;     // Error raster name (water flow only)
+    char *outwalk; // Output walker map name
+    char *tc;      // Transport capacity raster name (sediment only)
+    char *et;   // Transport limited erosion/deposition map name (sediment only)
+    char *conc; // Sediment concentration raster name (sediment only)
+    char *flux; // Sediment flux raster name (sediment only)
+    char *erdep; // Erosion/deposition raster name (sediment only)
+} Outputs;
 
-    char *wdepth;
-    char *detin;
-    char *tranin;
-    char *tauin;
-    char *tc;
-    char *et;
-    char *conc;
-    char *flux;
-    char *erdep;
-
-    char *rainval;
-    char *maninval;
-    char *infilval;
+struct point2D {
+    double x;
+    double y;
+};
+struct point3D {
+    double x;
+    double y;
+    double m;
 };
 
-void WaterParams_init(struct WaterParams *wp);
-void init_library_globals(struct WaterParams *wp);
-void alloc_grids_water(const Geometry *geometry);
-void alloc_grids_sediment(const Geometry *geometry);
-void init_grids_sediment(const Setup *setup, const Geometry *geometry);
+void alloc_grids_water(const Geometry *geometry, const Outputs *outputs);
+void alloc_grids_sediment(const Geometry *geometry, const Outputs *outputs);
+void init_grids_sediment(const Setup *setup, const Geometry *geometry,
+                         const Outputs *outputs);
 
-int input_data(int rows, int cols, Simulation *sim);
-int grad_check(Setup *setup, const Geometry *geometry,
-               const Settings *settings);
+int input_data(int rows, int cols, Simulation *sim, const Inputs *inputs,
+               const Outputs *outputs);
+int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
+               const Inputs *inputs, const Outputs *outputs);
 void main_loop(const Setup *setup, const Geometry *geometry,
-               const Settings *settings, Simulation *sim);
+               const Settings *settings, Simulation *sim,
+               ObservationPoints *points, const Inputs *inputs,
+               const Outputs *outputs);
 int output_data(int, double, const Setup *setup, const Geometry *geometry,
-                const Settings *settings, const Simulation *sim);
-int output_et(const Geometry *geometry);
-void free_walkers(Simulation *sim);
+                const Settings *settings, const Simulation *sim,
+                const Inputs *inputs, const Outputs *outputs);
+int output_et(const Geometry *geometry, const Outputs *outputs);
+void free_walkers(Simulation *sim, const char *outwalk);
 void erod(double **, const Setup *setup, const Geometry *geometry);
+void create_observation_points(ObservationPoints *points);
 
 struct options {
     struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,

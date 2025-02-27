@@ -26,6 +26,11 @@
 #include <grass/ogsf.h>
 
 /*!
+   Free linked list of geopoint objects
+ */
+static void free_geopoint_list(geopoint *top);
+
+/*!
    \brief Load to points to memory
 
    The other alternative may be to load to a tmp file.
@@ -91,8 +96,7 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
         case -1: {
             G_warning(_("Unable to read vector map <%s>"), mname);
             G_free(mname);
-            G_free(top);
-            G_free(gpt);
+            free_geopoint_list(top);
             return NULL;
         }
         case -2: /* EOF */
@@ -132,6 +136,7 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
                 (geopoint *)G_malloc(sizeof(geopoint)); /* G_fatal_error */
             G_zero(gpt->next, sizeof(geopoint));
             if (!gpt->next) {
+                free_geopoint_list(top);
                 return NULL;
             }
 
@@ -151,7 +156,7 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
             _("No points from vector map <%s> fall within current region"),
             mname);
         G_free(mname);
-        G_free(top);
+        free_geopoint_list(top);
         return (NULL);
     }
     else {
@@ -308,4 +313,13 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
         db_close_database_shutdown_driver(driver);
     Vect_destroy_field_info(Fi);
     return npts;
+}
+
+static void free_geopoint_list(geopoint *top)
+{
+    while (top) {
+        geopoint *next = top->next;
+        G_free(top);
+        top = next;
+    }
 }
