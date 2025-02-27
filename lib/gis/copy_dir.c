@@ -101,7 +101,7 @@ int G_recursive_copy(const char *src, const char *dst)
         }
 
         while ((len = read(fd, buf, sizeof(buf))) > 0) {
-            while (len && (len2 = write(fd2, buf, len)) >= 0)
+            while ((len > 0) && (len2 = write(fd2, buf, (size_t)len)) >= 0)
                 len -= len2;
         }
 
