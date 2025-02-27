@@ -141,7 +141,7 @@ def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
         cmd.append(" '%s' title '%s'" % (x_datafile, title))
 
     cmd = ",".join(cmd)
-    cmd = " ".join(["plot", cmd, "with linespoints pt 779"])
+    cmd = f"plot {cmd} with linespoints pt 779"
     lines.append(cmd)
 
     plotfile = os.path.join(tmp_dir, "spectrum.gnuplot")

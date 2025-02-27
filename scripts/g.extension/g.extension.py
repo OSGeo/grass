@@ -989,7 +989,7 @@ def get_wxgui_extensions(url):
     file_ = urlopen(url)
     if not file_:
         gs.warning(_("Unable to fetch '%s'") % url)
-        return
+        return None
 
     for line in file_.readlines():
         # list extensions
