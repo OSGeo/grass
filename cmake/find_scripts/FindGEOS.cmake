@@ -15,9 +15,8 @@
 #]]
 
 find_package(GEOS CONFIG)
-message(STATUS "!!! GEOS_FOUND: ${GEOS_FOUND}")
+
 if(NOT GEOS_FOUND)
-  # include(${CMAKE_SOURCE_DIR}/cmake/MacPlistMacros.cmake)
 
   if(WIN32)
 
@@ -38,6 +37,7 @@ if(NOT GEOS_FOUND)
         PATHS "$ENV{LIB_DIR}/lib" $ENV{LIB})
     endif(MSVC)
 
+  #[[
   elseif(APPLE AND QGIS_MAC_DEPS_DIR)
 
     find_path(GEOS_INCLUDE_DIR geos_c.h "$ENV{LIB_DIR}/include")
@@ -45,7 +45,7 @@ if(NOT GEOS_FOUND)
       GEOS_LIBRARY
       NAMES geos_c
       PATHS "$ENV{LIB_DIR}/lib")
-
+  #]]
   else(WIN32)
 
     if(UNIX)

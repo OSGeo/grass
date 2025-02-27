@@ -333,6 +333,7 @@ endif()
 
 if(WITH_GEOS)
   find_package(GEOS REQUIRED)
+  message(STATUS "Found GEOS: ${GEOS_DIR} (found version \"${GEOS_VERSION}\")")
 endif()
 
 if(WITH_PDAL)
