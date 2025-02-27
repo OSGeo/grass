@@ -227,8 +227,6 @@ ignore = [
     "PTH202",  # os-path-getsize
     "PTH204",  # os-path-getmtime
     "PTH207",  # glob
-    "RET501",  # unnecessary-return-none
-    "RET502",  # implicit-return-value
     "RET503",  # implicit-return
     "RUF003",  # ambiguous-unicode-character-comment
     "RUF005",  # collection-literal-concatenation
@@ -284,7 +282,6 @@ ignore = [
 # Other ignores:
 "**.py" = ["PYI066"]
 "*/testsuite/**.py" = ["PT009", "PT027"]
-"gui/wxpython/iclass/frame.py" = ["FLY002", "SIM115"]
 "gui/wxpython/iclass/statistics.py" = ["A005"]
 "gui/wxpython/icons/grass_icons.py" = ["PTH208"]
 "gui/wxpython/image2target/ii2t_manager.py" = ["PTH208", "SIM115"]

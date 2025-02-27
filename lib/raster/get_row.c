@@ -764,7 +764,7 @@ void Rast_get_d_row_nomask(int fd, DCELL *buf, int row)
  *            two particular types check the functions).
  *    - Step 4:  read or simmulate null value row and zero out cells
  * corresponding to null value cells. The masked out cells are set to null when
- * the mask exists. (the MASK is taken care of by null values (if the null file
+ * the mask exists. (the mask is taken care of by null values (if the null file
  * doesn't exist for this map, then the null row is simulated by assuming that
  * all zero are nulls *** in case of Rast_get_row() and assuming that all data
  * is valid in case of G_get_f/d_raster_row(). In case of deprecated function
@@ -1089,7 +1089,7 @@ static void embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 
    Read or simulate null value row and set the cells corresponding
    to null value to 1. The masked out cells are set to null when the
-   mask exists. (the MASK is taken care of by null values
+   mask exists. (the mask is taken care of by null values
    (if the null file doesn't exist for this map, then the null row
    is simulated by assuming that all zeros in raster map are nulls.
    Also all masked out cells become nulls.

@@ -491,7 +491,7 @@ def CreateNewVector(
             % outmap,
         )
         dlg.Destroy()
-        return
+        return None
 
     if outmap == "":  # should not happen
         dlg.Destroy()
