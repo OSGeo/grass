@@ -1462,7 +1462,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 if self.GetLayerInfo(item, key="type") == "vector":
                     name = self.GetLayerInfo(item, key="maplayer").GetName()
                     if name == lname:
-                        return
+                        return None
                 item = self.GetNextItem(item)
 
         selectedLayer = self.GetSelectedLayer()

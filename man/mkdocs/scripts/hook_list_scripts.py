@@ -18,9 +18,8 @@ def github_edit_path(ghpath: str, base_repo_url: str):
     # Gracefully handle invalid paths
     if len(path_parts) < 3:
         return None
-
     repo = path_parts[0].strip()
-    doc_path = "/".join(path_parts[2:]).strip()  # Drop repo_name/tree
+    doc_path = "/".join(path_parts[2:]).strip().rstrip("/")  # Drop repo_name/tree
     return f"{base_repo_url}/{repo}/edit/{doc_path}"
 
 

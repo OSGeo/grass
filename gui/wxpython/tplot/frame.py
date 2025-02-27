@@ -424,7 +424,7 @@ class TplotFrame(wx.Frame):
             return
         mode = None
         unit = None
-        columns = ",".join(["name", "start_time", "end_time"])
+        columns = "name,start_time,end_time"
         for series in timeseries:
             name = series[0]
             fullname = name + "@" + series[1]
@@ -559,7 +559,7 @@ class TplotFrame(wx.Frame):
                 ),
             )
             return
-        columns = ",".join(["name", "start_time", "end_time", "id", "layer"])
+        columns = "name,start_time,end_time,id,layer"
         for series in timeseries:
             name = series[0]
             fullname = name + "@" + series[1]

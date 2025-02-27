@@ -233,9 +233,7 @@ class TimelineFrame(wx.Frame):
             self.timeData[name]["west"] = []
             self.timeData[name]["east"] = []
 
-            columns = ",".join(
-                ["name", "start_time", "end_time", "north", "south", "west", "east"]
-            )
+            columns = "name,start_time,end_time,north,south,west,east"
 
             rows = sp.get_registered_maps(
                 columns=columns, where=None, order="start_time", dbif=self.dbif

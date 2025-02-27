@@ -653,7 +653,7 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
         cmd2 = "$outg = 1 * round(($panmatch2 * $b2evect1) + ($pca2 * $b2evect2) + ($pca3 * $b2evect3) + $b2mean)"  # noqa: E501
         cmd3 = "$outr = 1 * round(($panmatch3 * $b3evect1) + ($pca2 * $b3evect2) + ($pca3 * $b3evect3) + $b3mean)"  # noqa: E501
 
-        cmd = "\n".join([cmd1, cmd2, cmd3])
+        cmd = f"{cmd1}\n{cmd2}\n{cmd3}"
 
         gs.mapcalc(
             cmd,
