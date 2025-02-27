@@ -34,8 +34,7 @@ class TestRasterbasin(TestCase):
     def setUpClass(cls):
         cls.use_temp_region()
         # Set the computational region based on the "elevation" map.
-        cls.runModule("g.region", raster="elevation", flags="p")
-
+        cls.runModule("g.region", n=220000, s=218000, e=640000, w=632000, res=10)
         # Run r.watershed to generate the coded stream network.
         cls.runModule(
             "r.watershed",
@@ -43,6 +42,8 @@ class TestRasterbasin(TestCase):
             threshold=1000,
             stream=cls.streams,
         )
+        # Ensure null values are replaced with 0 in streams
+        cls.runModule("r.null", map=cls.streams, null=0)
 
         # Run r.geomorphon to generate geomorphometric forms.
         cls.runModule(
@@ -94,9 +95,6 @@ class TestRasterbasin(TestCase):
 
         subbasins_cats = get_categories(self.subbasins)
         self.assertTrue(subbasins_cats, "No categories found in the 'subbasins' map.")
-
-        # Remove the 0 category (which typically represents null).
-        subbasins_cats.discard(0)
 
         # Check that every nonzero channel code in subbasins is present in the streams map.
         self.assertTrue(
