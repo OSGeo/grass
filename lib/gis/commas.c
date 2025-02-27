@@ -41,7 +41,7 @@ int G_insert_commas(char *buf)
 
     while (*buf == ' ')
         buf++;
-    strcpy(number, buf);
+    G_strlcpy(number, buf, sizeof(number));
     for (len = 0; number[len]; len++)
         if (number[len] == '.')
             break;
