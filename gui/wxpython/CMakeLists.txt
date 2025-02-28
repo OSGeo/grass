@@ -55,7 +55,7 @@ if(WITH_DOCS)
   add_subdirectory(docs)
 endif()
 
-install(FILES README DESTINATION ${GRASS_INSTALL_GUIDIR}/wxpython)
+install(FILES README.md DESTINATION ${GRASS_INSTALL_GUIDIR}/wxpython)
 
 # copy all python files gui/ lib/python compile all python files so below target
 # depends on MODULD_LIST
