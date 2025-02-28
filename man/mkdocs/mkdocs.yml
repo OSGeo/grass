@@ -26,6 +26,8 @@ theme:
     - search.suggest
     - search.highlight
     - content.code.copy
+    - content.tabs.link
+    - content.tooltips
     - navigation.footer
     - navigation.indexes
     # - navigation.expand
@@ -35,15 +37,17 @@ theme:
     - content.action.edit # Edit on GitHub
   palette:
     primary: custom
-    # accent: custom
+    accent: custom
+
   icon:
     repo: fontawesome/brands/github
     edit: material/pencil
     view: material/eye
+    logo: material/library
 
 # Customization
 extra:
-  homepage: ./index.html
+  homepage: index.html
 
 # Hooks
 hooks:
@@ -72,11 +76,30 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.tasklist
+  - pymdownx.snippets
+  - pymdownx.tabbed
+  - pymdownx.magiclink
   - attr_list
   - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 
 # Navigation
 nav:
+  - Getting Started:
+      - Welcome: index.md
+      - Download: https://grass.osgeo.org/download/
+      - Quickstart: quickstart.md
+      - Core Concepts: core.md
+      - Advanced Topics: advanced.md
+      - FAQ: faq.md
   - Interfaces:
       - Shell:
           - Overview: grass.md
@@ -107,6 +130,7 @@ nav:
       # - Jupyter Notebook: jupyter.md
 
   - Project Management:
+      - Overview: grass_database.md
       - General Tools: general.md
       - Projection and Transformations: projectionintro.md
 
@@ -135,7 +159,9 @@ nav:
 
   - Visualization:
       # - Overview: visualizationintro.md # Does not exist yet
-      - Display Tools: display.md
+      - Display Tools:
+          - Overview: display.md
+          - Display Drivers: displaydrivers.md
       - GUI Tools:
           - Animation: wxGUI.animation.md
           - "3D Visualization": wxGUI.nviz.md
