@@ -1,55 +1,121 @@
----
-title: GRASS GIS 8.5.0dev Reference Manual
-author: GRASS Development Team
----
-
-
-## **What is GRASS?**
+## What is GRASS?
 
 [GRASS](https://grass.osgeo.org/) is a geosptial processing engine for
 advance analysis and visualization of geospatial data. It is a powerful tool for
 processing and analyzing geospatial data sets. GRASS is a free and open source
 software, released under an open source [GNU GPLed](https://www.gnu.org/licenses/gpl.html).
 
-## **User and Development Community**
+Downloaded and installed GRASS here.
 
-The [GRASS community](https://grass.osgeo.org/support/community/) of users and
-developers, and is used in academic, government, and commercial settings around
-the world. GRASS can be used for a wide range of applications, including
-environmental modeling, land use planning, and spatial data analysis.
+<!-- markdownlint-disable-next-line MD013 -->
+[:material-download: Download and Install](https://grass.osgeo.org/download/){ .md-button }
 
-## :book: Basic Concepts
+## Tutorials
 
-```mermaid
-flowchart TB
-    A@{ shape: docs, label: "grassdata"} --> P1[Project1]
+Get started with GRASS by following the
+[tutorials](https://grass-tutorials.osgeo.org/) below.
 
-    P1 --> P1P[PERMANENT]
-   
-    P1 -- sub-project --> P1M1[mapset1]
-    P1M1 --> P1M1D@{ shape: docs, label: "Mutable Sub-project Data"}
-    P1PD --> P1M1D
-    P1M1D --> P1M1R(Raster)
-    P1M1D --> P1M1V(Vector)
-    P1M1D --> P1M1T(Temporal)
+## Interfaces
 
-    P1P --> P1PD@{ shape: docs, label: "Immutable Shared Project Data"}
-    P1PD --> P1PDR(Raster)
-    P1PD --> P1PDV(Vector)
+GRASS provides a number of interfaces for interacting with the software. The
+most common interfaces are:
 
-    P1 -- sub-project --> P1M2[mapset2]
-    P1M2 --> P1M2D@{ shape: docs, label: "Mutable Sub-project Data"}
-    P1PD --> P1M2D
-    P1M2D --> P1M2R(Raster)
-    P1M2D --> P1M2V(Vector)
-    P1M2D --> P1M2T(Temporal)
+### [Terminal](grass.md)
+
+The terminal interface is...
+
+```bash
+
+grass -c EPSG:3385 {project directory} --gtext
+
+Starting GRASS GIS...
+
+          __________  ___   __________    _______________
+         / ____/ __ \/   | / ___/ ___/   / ____/  _/ ___/
+        / / __/ /_/ / /| | \__ \\_  \   / / __ / / \__ \
+       / /_/ / _, _/ ___ |___/ /__/ /  / /_/ // / ___/ /
+       \____/_/ |_/_/  |_/____/____/   \____/___//____/
+
+Welcome to GRASS GIS 8.5.0dev (5ffc9ea669)
+GRASS GIS homepage:                      https://grass.osgeo.org
+This version running through:            Bash Shell (/bin/bash)
+Help is available with the command:      g.manual -i
+See the licence terms with:              g.version -c
+See citation options with:               g.version -x
+If required, restart the GUI with:       g.gui wxpython
+When ready to quit enter:                exit
+
+
+GRASS {project directory}/PERMANENT:{Working directory} > 
+
 ```
 
-- [Basic Concepts](helptext.md)
-- [Project Managment](grass_database.md)
-- [Projections and Spatial Transformations](projectionintro.md)
+Now you can run GRASS commands in the terminal.
 
-## :books: Advanced Concepts
+```sh
+g.region raster=elevation
+r.slope.aspect elevation=elevation slope=slope aspect=aspect
+```
 
-- [GRASS ASCII Vector Format](vectorascii.md)
-- [GRASS Environment Variables](variables.md)
+### Python Scripts
+
+The `grass.script` module provides a Python interface to GRASS. This allows
+users to write Python scripts to interact with GRASS. The `grass.script` module
+contains the gs.script.core module which provides the core functionality for the
+GRASS Python interface, the `grass.script.raster` module which provides
+functionality for working with raster data, and the `grass.script.vector` module
+which provides functionality for working with vector data.
+
+```python
+import grass.script as gs
+
+gs.run_command('g.region', raster='elevation')
+gs.run_command('r.slope.aspect', elevation='elevation', slope='slope', aspect='aspect')
+```
+
+### Jupyter Notebooks
+
+Jupyter Notebooks are a great way to interact with GRASS. The `grass.jupyter`
+module provides a Jupyter interface to GRASS. This allows users to write Jupyter
+Notebooks to interact with GRASS. The `grass.jupyter` module contains the `Map`,
+`InteractiveMap`, `Map3D`, `TimeSeriesMap`, and `SeriesMap` classes which
+provide functionality for working with maps in Jupyter Notebooks.
+
+```python
+import grass.jupyter as gj
+
+slope_map = gj.Map()  # Create a new map
+slope_map.d_rast(map='slope')  # Add the slope raster to the map
+slope_map.d_barscale(at=(80, 10))  # Add a bar scale to the map
+slope_map.d_legend(raster='slope', at=(80, 90))  # Add a legend to the map
+slope_map.show()  # Display the map
+```
+
+![Slope Map](r_slope_aspect_slope.png)
+
+### [GRASS Desktop GUI](wxguiintro.md)
+
+Add content here.
+
+## [Project Management](grass_database.md)
+
+Add Content here.
+
+## Processing Tools
+
+### GRASS Tool Prefixes
+
+| Prefix | Category                         | Description                        | Link                                      |
+|--------|----------------------------------|------------------------------------|-------------------------------------------|
+| `g.`   | General                          | General GIS management tools       | [General Tools](general.md)               |
+| `r.`   | Raster                           | Raster data processing tools       | [Raster Tools](raster.md)                 |
+| `r3.`  | 3D Raster                        | 3D Raster data processing tools    | [3D Raster Tools](raster3d.md)            |
+| `v.`   | Vector                           | Vector data processing tools       | [Vector Tools](vector.md)                 |
+| `i.`   | Imagery                          | Imagery processing tools           | [Imagery Tools](imagery.md)               |
+| `t.`   | Temporal                         | Temporal data processing tools     | [Temporal Tools](temporal.md)             |
+| `db.`  | Database                         | Database management tools          | [Database Tools](database.md)             |
+| `d.`   | Display                          | Display and visualization tools    | [Display Tools](display.md)               |
+| `m.`   | Miscellaneous                    | Miscellaneous tools                | [Miscellaneous Tools](miscellaneous.md)   |
+| `ps.`  | Postscript                       | Postscript tools                   | [Postscript Tools](postscript.md)         |
+
+## Data Visualization

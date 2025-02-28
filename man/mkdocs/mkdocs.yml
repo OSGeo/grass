@@ -93,20 +93,15 @@ markdown_extensions:
 
 # Navigation
 nav:
-  - Getting Started:
-      - Welcome: index.md
-      - Download: https://grass.osgeo.org/download/
-      - Quickstart: quickstart.md
-      - Core Concepts: core.md
-      - Advanced Topics: advanced.md
-      - FAQ: faq.md
+  - Getting Started: index.md
   - Interfaces:
-      - Shell:
-          - Overview: grass.md
+      - Interfaces Overview: quickstart.md # Make me
+      - Terminal:
+          - Terminal Overview: grass.md
           # - Getting Started: grassintro.md # Does not exist yet
           - Environmental Variables: variables.md
       - GUI:
-          - Overview: wxguiintro.md
+          - GUI Overview: wxguiintro.md
           - Features: wxGUI.md
           - Project Management: grass_database.md
           - Tool Dialogs: wxGUI.modules.md
@@ -130,30 +125,30 @@ nav:
       # - Jupyter Notebook: jupyter.md
 
   - Project Management:
-      - Overview: grass_database.md
-      - General Tools: general.md
+      - GRASS Database: grass_database.md
       - Projection and Transformations: projectionintro.md
 
   - Processing Tools:
-      - Raster:
+      - General Tools: general.md
+      - Raster Tools:
           - Overview: rasterintro.md
           - Raster Tools: raster.md
-      - Raster 3D:
+      - Raster 3D Tools:
           - Overview: raster3dintro.md
           - Raster 3D Tools: raster3d.md
-      - Vectors:
+      - Vector Tools:
           - Overview: vectorintro.md
           - Vector Tools: vector.md
           - Databases Overview: databaseintro.md
           - Database Tools: database.md
           - Supported Database Drivers: sql.md
       # - GUI Tools:
-      - Imagery:
+      - Imagery Tools:
           - Overview: imageryintro.md
           - Imagery Tools: imagery.md
           - GUI Tools:
               - Image Classification: wxGUI.iclass.md
-      - Temporal:
+      - Temporal Tools:
           - Overview: temporalintro.md
           - Temporal: temporal.md
 
