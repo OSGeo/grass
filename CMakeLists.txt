@@ -123,7 +123,7 @@ option(WITH_OPENMP "Build with OpenMP support" ON)
 # Data format options
 option(WITH_TIFF "Build with LibTIFF support ." ON)
 option(WITH_NETCDF "Build with NetCDF support" OFF)
-option(WITH_GEOS "Build with GEOS support" OFF)
+option(WITH_GEOS "Build with GEOS support" ON)
 option(WITH_PDAL "Build with PDAL support" ON)
 option(WITH_LIBLAS "Build with libLAS support" OFF)
 option(WITH_OPENDWG "Build with OpenDWG support" OFF)

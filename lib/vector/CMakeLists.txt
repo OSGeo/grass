@@ -21,7 +21,7 @@ build_library_in_subdir(
   grass_raster
   grass_rtree
   OPTIONAL_DEPENDS
-  GEOS)
+  GEOS::geos_c)
 
 if(TARGET POSTGRES)
   # target_include_directories(grass_vector SYSTEM PUBLIC
