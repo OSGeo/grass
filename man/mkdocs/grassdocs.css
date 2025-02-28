@@ -10,6 +10,10 @@
   --gs-white-color--lighter: rgba(255, 255, 255, 0.322);
   --gs-white-color--lightest: rgba(255, 255, 255, 0.071);
   --gs-black-color: rgb(0, 0, 0); /* Black */
+  --gs-gray-color: rgb(135, 135, 135); /* Gray */
+  --gs-gray-color--light: rgba(135, 135, 135, 0.541);
+  --gs-gray-color--lighter: rgba(135, 135, 135, 0.322);
+  --gs-gray-color--lightest: rgba(135, 135, 135, 0.071);
 
   --gs-primary-color: rgb(76, 176, 91); /* Dark green */
   --gs-primary-color--light: rgba(76, 176, 91, 0.541);
@@ -169,4 +173,17 @@
 
 .md-typeset table:not([class]) tbody tr:hover {
   background-color: transparent;
+}
+
+/* Analytics consent styling */
+#__consent > aside > form > p {
+  font-size: 0.7rem;
+}
+
+/* Sets the checkbox colors for analytics consent */
+.md-typeset [type=checkbox]:checked+.task-list-indicator:before {
+  background-color: var(--gs-secondary-color);
+}
+.md-typeset .task-list-indicator:before {
+  background-color: var(--gs-gray-color--lighter);
 }
