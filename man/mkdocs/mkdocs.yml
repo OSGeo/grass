@@ -94,8 +94,12 @@ markdown_extensions:
 # Navigation
 nav:
   - Getting Started:
-      - Overview: index.md
+      - Welcome: index.md
       - Download: https://grass.osgeo.org/download/
+      - Quickstart: quickstart.md
+      - Core Concepts: core.md
+      - Advanced Topics: advanced.md
+      - FAQ: faq.md
   - Interfaces:
       - Shell:
           - Overview: grass.md
