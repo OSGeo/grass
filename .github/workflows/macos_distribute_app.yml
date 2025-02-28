@@ -21,6 +21,7 @@ env:
 jobs:
   macos_build:
     name: macOS distribute
+    if: ${{ github.repository == 'OSGeo/grass' }}
 
     concurrency:
       group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{

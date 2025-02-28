@@ -146,8 +146,28 @@ jobs:
       - name: Test executing of the grass command
         run: .github/workflows/test_simple.sh
 
+      - name: Cache GRASS Sample Dataset
+        id: cached-data
+        uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.1
+        with:
+          path: sample-data/nc_spm_full_v2alpha2.tar.gz
+          key: nc_spm_full_v2alpha2.tar.gz
+          enableCrossOsArchive: true
+
+      - name: Download GRASS Sample Dataset
+        if: steps.cached-data.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p sample-data
+          curl -L "$SAMPLE_DATA" -o sample-data/nc_spm_full_v2alpha2.tar.gz
+        env:
+          SAMPLE_DATA: "https://grass.osgeo.org/sampledata/north_carolina/\
+            nc_spm_full_v2alpha2.tar.gz"
+
       - name: Run tests
         run: .github/workflows/test_thorough.sh --config .gunittest.extra.cfg
+        env:
+          SAMPLE_DATA_URL: "file://${{ github.workspace }}/sample-data/\
+            nc_spm_full_v2alpha2.tar.gz"
 
       - name: Make HTML test report available
         if: ${{ always() }}
