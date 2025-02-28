@@ -1,14 +1,17 @@
 """
-Created on Fri Jun 26 19:10:58 2015
+Copyright 2015-2025 by Pietro Zambelli and the GRASS Development Team
 
-@author: pietro
+@author: Pietro Zambelli
+@author: Vaclav Petras (Markdown output)
 """
 
 import argparse
 import os
+import re
 import sys
 
 from urllib.request import urlopen
+from collections import defaultdict
 
 
 def parse_options(lines, startswith="Opt"):
@@ -24,8 +27,6 @@ def parse_options(lines, startswith="Opt"):
             if line.startswith("case"):
                 optname = line.split()[1][:-1]
                 res = []
-            #                if optname == 'G_OPT_R_BASENAME_INPUT':
-            #                    import ipdb; ipdb.set_trace()
             elif line == "break;":
                 diff = 0
                 yield optname, res
@@ -40,7 +41,6 @@ def parse_options(lines, startswith="Opt"):
         index = line.index("=")
         key = line[:index].strip()
         default = line[index + 1 :].strip()
-        default = default.removeprefix("_(")
         return key, default
 
     def parse_glines(glines):
@@ -48,6 +48,10 @@ def parse_options(lines, startswith="Opt"):
         key = None
         dynamic_answer = False
         for line in glines:
+            # Dynamic answer block is ignored, if non-dynamic default is set,
+            # it will be used. (That's not ideal as that requires to have a hardcoded
+            # value there, that value in in documentation and is ignored most of the
+            # time.)
             if line.strip() == "/* start dynamic answer */":
                 dynamic_answer = True
             if line.strip() == "/* end dynamic answer */":
@@ -67,31 +71,24 @@ def parse_options(lines, startswith="Opt"):
             elif key is not None:
                 if key not in res:
                     res[key] = []
-                start, end = 0, -1
-                if line.startswith("_("):
-                    start = 2
-                if line.endswith(");"):
-                    end = -3
-                elif line.endswith(";"):
-                    end = -2
-                res[key].append(line[start:end])
-        # pprint(glines)
-        # pprint(res)
+                res[key].append(line)
         return res
 
     def clean_value(val):
         if isinstance(val, list):
-            val = " ".join(val)
-        return (
-            (val.replace('"', "").replace("'", "'").strip().strip(";"))
-            .strip()
-            .strip("_(")
-            .strip()
-            .strip(")")
-            .strip()
-        )
+            val = "".join(val)
+        val = val.strip()
+        # semicolon at the end of the statement
+        val = re.sub(r"^(.*)[\s]*;$", r"\1", val)
+        # translation parenthesis
+        val = re.sub(r"^_\((.*)\)$", r"\1", val)
+        # string double quotes on the outside
+        val = re.sub(r'^"(.*)"$', r"\1", val)
+        # double quotes from a multiline string
+        val = re.sub(r'"[\s]*"', "", val)
+        # escape double quotes to show as quotes
+        return val.replace(r"\"", '"')
 
-    # with open(optionfile, mode='r') as optfile:
     lines = [line.strip() for line in lines]
     result = []
     for optname, glines in split_in_groups(lines):
@@ -102,6 +99,152 @@ def parse_options(lines, startswith="Opt"):
                     res[key] = clean_value(val)
                 result.append((optname, res))
     return result
+
+
+def write_markdown_option(md: list, name: str, option: dict, keys: list) -> None:
+    """Return single option in Markdown format"""
+    md.extend(
+        [
+            "### {0}\n".format(name),
+            f"The standard option {name} has the following default values:\n",
+            "| item | value |",
+            "| ---- | ----- |",
+        ]
+    )
+    key_aka_name = None
+    for item in keys:
+        value = option.get(item, "")
+        if re.match(r"G_[a-zA-Z0-9_]+\(.*\)", value):
+            value = f"Computed dynamically by *{value}*"
+        if value in ["YES", "NO"]:
+            value = f"{value} (`{item}: {value.lower()}`)"
+        result = re.match(r"TYPE_([A-Z0-9_]+)", value)
+        if result:
+            value = f"{value} (`{item}: {result.group(1).lower()}`)"
+        if value:
+            md.append(f"| {item} | {value} |")
+            if item == "key":
+                key_aka_name = value
+    md.extend(
+        [
+            "\nPython usage:\n",
+            "```python",
+            f"# %option {name}",
+            "# %end",
+            "```",
+        ]
+    )
+    if key_aka_name:
+        # More developer doc if we have a key.
+        md.extend(
+            [
+                "\nTo use the value in Python:\n",
+                "```python",
+                f'{key_aka_name} = options["{key_aka_name}"]',
+                "```"
+                # Example from user perspective.
+                "\nWhat a tool user (caller) may write:\n",
+                "```python",
+            ]
+        )
+        answer = option.get("answer")
+        key_desc = option.get("key_desc")
+        if answer and not answer.startswith("DEFAULT_"):
+            # The value of answer a great example except when it is a constant
+            # such as DEFAULT_FG_COLOR.
+            value = answer
+        elif key_desc:
+            value = key_desc
+        else:
+            value = "..."
+        if option.get("type") and option.get("type") == "TYPE_STRING":
+            md.append(f'{key_aka_name}="{value}"')
+        else:
+            md.append(f"{key_aka_name}={value}")
+        md.append("```\n")
+
+
+MARKDOWN_INTRO_TEXT = """\
+Standard parser options are simplifying definitions of common
+parameters when writing GRASS tools. Their identifiers are the same
+across (programming) languages. In Python, place an identifier right
+after `# %option` (on the same line separated by a space).
+In C, use function `G_define_standard_option()`.
+The individual items in the definition can be overridden if the tool
+needs, for example, a different key (parameter name) or description.
+The use of standard parser options is strongly recommended, with or without
+overrides, for all common GRASS parameters of such as raster and vector inputs.
+See *[g.parser](g.parser.md)* documentation for details on defining
+tool parameters.
+"""
+
+
+OPTIONS_TO_HEADINGS = {
+    "DB": "Database",
+    "I": "Imagery",
+    "R": "Raster",
+    "R3": "Raster 3D",
+    "V": "Vector",
+    "V3": "Vector",  # We have only one V3 which is G_OPT_V3_TYPE.
+    "F": "File",
+    "C": "Color",
+    "CN": "Color",  # Legacy naming convention.
+    "MAP": "Map (of Any Type)",
+    "T": "Temporal",
+    "STDS": "Temporal",
+    "STRDS": "Temporal",
+    "STR3DS": "Temporal",
+    "STVDS": "Temporal",
+    "M": "Miscellaneous",
+}
+
+OTHER_HEADING = "Other"
+
+
+def get_heading(std_option_name):
+    match = re.search(r"G_OPT_([^_]+).*", std_option_name)
+    if match:
+        try:
+            return OPTIONS_TO_HEADINGS[match.group(1)]
+        except KeyError:
+            return OTHER_HEADING
+    msg = f"Strangely formatted standard option identifier {std_option_name}"
+    raise ValueError(msg)
+
+
+def markdown(options, columns, endline="\n") -> str:
+    """Return a Markdown table with the options"""
+    md = []
+
+    md.append(MARKDOWN_INTRO_TEXT)
+
+    top_keys = [
+        "key",
+        "label",
+        "description",
+        "required",
+        "multiple",
+        "answer",
+        "type",
+        "gisprompt",
+        "key_desc",
+        "options",
+    ]
+    keys = list(top_keys)
+    keys.extend(key for key in columns if key not in top_keys)
+
+    options_by_heading = defaultdict(list)
+    for name, option in options:
+        heading = get_heading(name)
+        options_by_heading[heading].append((name, option))
+
+    headings = sorted(set(OPTIONS_TO_HEADINGS.values()))
+    headings.append(OTHER_HEADING)
+    for heading in headings:
+        md.append("## {0}\n".format(heading))
+        for name, option in options_by_heading[heading]:
+            write_markdown_option(md, name, option, keys)
+    return endline.join(md)
 
 
 class OptTable:
@@ -126,19 +269,7 @@ class OptTable:
         return endline.join(csv)
 
     def markdown(self, endline="\n"):
-        """Return a Markdown table with the options"""
-        # write header
-        md = ["| " + " | ".join(self.columns) + " |"]
-        md.append("| " + " | ".join(len(x) * "-" for x in self.columns) + " |")
-
-        # write body
-        for optname, options in self.options:
-            row = "| {0} ".format(optname)
-            for col in self.columns:
-                row += "| {0} ".format(options.get(col, ""))
-            md.append(row + "|")
-
-        return endline.join(md)
+        return markdown(options=self.options, columns=self.columns, endline=endline)
 
     def html(self, endline="\n", indent="  ", toptions="border=1"):
         """Return a HTML table with the options"""
@@ -239,12 +370,7 @@ if __name__ == "__main__":
 
         def write_output(ext):
             with open(name, "w") as outfile:
-                outfile.write(
-                    header1_tmpl.substitute(
-                        title=f"GRASS GIS {grass_version} Reference Manual: "
-                        "Parser standard options index"
-                    )
-                )
+                outfile.write(header1_tmpl.substitute(title="Standard Parser Options"))
                 outfile.write(headerpso_tmpl)
                 if ext == "html":
                     outfile.write(options.html(toptions=args.htmlparmas))
@@ -253,7 +379,6 @@ if __name__ == "__main__":
                 write_footer(outfile, f"index.{ext}", year, template=ext)
 
         from build import (
-            grass_version,
             write_footer,
         )
 
