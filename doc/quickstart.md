@@ -32,7 +32,7 @@ Get started with GRASS by following the
     - [:fontawesome-solid-user-graduate: Jupyter Notebooks (Windows)](https://grass-tutorials.osgeo.org/content/tutorials/get_started/JupyterOnWindows_OSGeo4W_Tutorial.html)
    
     ---
-    [:material-arrow-right-circle: GRASS Jupyter](https://grass-tutorials.osgeo.org/?search=jupyter#category=Jupyter){ .md-button .md-button--primary }
+    [:material-arrow-right-circle: Python](https://grass-tutorials.osgeo.org/#category=Python){ .md-button .md-button--primary }
 
 -    :octicons-terminal-24: **Shell Scripting**
 
@@ -42,7 +42,7 @@ Get started with GRASS by following the
     - [:material-github: rgrass](https://github.com/OSGeo/rgrass)
    
     ---
-    [:material-arrow-right-circle: R Tutorials](https://grass-tutorials.osgeo.org/#category=R){ .md-button .md-button--primary }
+    [:material-arrow-right-circle: Shell Tutorials](https://grass-tutorials.osgeo.org/#category=R){ .md-button .md-button--primary }
 
 -    :material-language-r: **GRASS for R**
 
@@ -62,7 +62,7 @@ Get started with GRASS by following the
     - [:fontawesome-solid-user-graduate: GUI Over](https://grass-tutorials.osgeo.org/#category=GUI)
    
     ---
-    [:material-arrow-right-circle: All GUI Tutorials](https://grass-tutorials.osgeo.org/?search=jupyter#category=GUI){ .md-button .md-button--primary }
+    [:material-arrow-right-circle: GUI Tutorials](https://grass-tutorials.osgeo.org/?search=jupyter#category=GUI){ .md-button .md-button--primary }
 
 </div>
 <!-- markdownlint-enable MD030 -->
