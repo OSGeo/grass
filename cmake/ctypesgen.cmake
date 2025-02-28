@@ -32,6 +32,11 @@ foreach(HDR ${HDRS})
   list(APPEND HEADERS "${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass/${HDR}")
 endforeach()
 
+set(SYSHEADERS)
+foreach(SYSHDR ${SYSHDRS})
+  list(APPEND SYSHEADERS "--includedir=${SYSHDR}")
+endforeach()
+
 foreach(req OUT_FILE HDRS LIBS CTYPESGEN_PY COMPILER)
   if(NOT DEFINED ${req} OR "${${req}}" STREQUAL "")
     message(FATAL_ERROR "you must set ${req}")
@@ -46,15 +51,15 @@ else()
 endif()
 
 message(
-  STATUS
-    "Running ${PYTHON_EXECUTABLE} ${CTYPESGEN_PY} --cpp=${CTYPESFLAGS} --no-embed-preamble --strip-build-path ${RUNTIME_GISBASE} --includedir=\"${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}\" ${LIBRARIES} ${HEADERS} --output=${OUT_FILE}"
-)
+  STATUS "Running ${PYTHON_EXECUTABLE} ${CTYPESGEN_PY} --cpp=${CTYPESFLAGS} \
+    --no-embed-preamble --strip-build-path ${RUNTIME_GISBASE} ${SYSHEADERS} \
+    ${C_FLAGS} ${LIBRARIES} ${HEADERS} --output=${OUT_FILE}")
 execute_process(
   COMMAND
     ${PYTHON_EXECUTABLE} ${CTYPESGEN_PY} --cpp=${CTYPESFLAGS}
-    --no-embed-preamble --strip-build-path ${RUNTIME_GISBASE}
-    --includedir="${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}" ${LIBRARIES} ${HEADERS}
-    --output=${OUT_FILE}
+    --no-embed-preamble --strip-build-path ${RUNTIME_GISBASE} ${SYSHEADERS}
+    --includedir="${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}" ${C_FLAGS} ${LIBRARIES}
+    ${HEADERS} --output=${OUT_FILE}
   OUTPUT_VARIABLE ctypesgen_OV
   ERROR_VARIABLE ctypesgen_EV
   RESULT_VARIABLE ctypesgen_RV)
