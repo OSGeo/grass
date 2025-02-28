@@ -1658,7 +1658,9 @@ def install_extension_win(name):
 
     # copy Addons copy tree to destination directory
     move_extracted_files(
-        extract_dir=srcdir, target_dir=options["prefix"], files=os.listdir(srcdir)
+        extract_dir=srcdir,
+        target_dir=options["prefix"],
+        files=[p.name for p in Path(srcdir).iterdir()],
     )
 
     # collect new files
@@ -1818,7 +1820,7 @@ def extract_zip(name, directory, tmpdir):
             if "__pycache__" in subfile:
                 continue
             zip_file.extract(subfile, extract_dir)
-        files = os.listdir(extract_dir)
+        files = [p.name for p in Path(extract_dir).iterdir()]
         move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
     except zipfile.BadZipfile as error:
         gs.fatal(_("ZIP file is unreadable: {0}").format(error))
@@ -1854,7 +1856,7 @@ def extract_tar(name, directory, tmpdir):
             gs.warning(_("Extracting may be unsafe; consider updating Python"))
             tar.extractall(path=extract_dir)
 
-        files = os.listdir(extract_dir)
+        files = [p.name for p in Path(extract_dir).iterdir()]
         move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
     except tarfile.TarError as error:
         gs.fatal(_("Archive file is unreadable: {0}").format(error))

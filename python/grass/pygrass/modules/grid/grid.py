@@ -13,7 +13,7 @@ from grass.pygrass.gis import Mapset, Location
 from grass.pygrass.gis.region import Region
 from grass.pygrass.modules import Module
 from grass.pygrass.utils import get_mapset_raster, findmaps
-
+from pathlib import Path
 from grass.pygrass.modules.grid.split import (
     split_region_tiles,
     split_region_in_overlapping_tiles,
@@ -58,7 +58,7 @@ def copy_special_mapset_files(path_src, path_dst):
     :param path_dst: the path to the new mapset
     :type path_dst: str
     """
-    for fil in (fi for fi in os.listdir(path_src) if fi.isupper()):
+    for fil in (fi for fi in Path(path_src).iterdir() if fi.isupper()):
         sht.copy(os.path.join(path_src, fil), path_dst)
 
 

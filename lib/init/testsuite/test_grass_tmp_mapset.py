@@ -15,11 +15,10 @@ for details.
 """
 
 import unittest
-import os
 import shutil
 import subprocess
 from grass.gunittest.utils import xfail_windows
-
+from pathlib import Path
 
 # Note that unlike rest of GRASS GIS, here we are using unittest package
 # directly. The grass.gunittest machinery for mapsets is not needed here.
@@ -38,7 +37,7 @@ class TestTmpMapset(unittest.TestCase):
     def setUp(self):
         """Creates a location used in the tests"""
         subprocess.check_call([self.executable, "-c", "XY", self.location, "-e"])
-        self.subdirs = os.listdir(self.location)
+        self.subdirs = [p.name for p in Path(self.location).iterdir()]
 
     def tearDown(self):
         """Deletes the location"""
@@ -101,9 +100,9 @@ class TestTmpMapset(unittest.TestCase):
         subprocess.check_call(
             [self.executable, "--tmp-mapset", self.location, "--exec", "g.proj", "-p"]
         )
-        for directory in os.listdir(self.location):
+        for directory in Path(self.location).iterdir():
             self.assertTrue(
-                directory in self.subdirs,
+                directory.name in self.subdirs,
                 msg="Directory {directory} should have been deleted".format(**locals()),
             )
 

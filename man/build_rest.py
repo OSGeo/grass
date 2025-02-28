@@ -308,7 +308,7 @@ def copy_file(src, dst):
 
 
 def rest_files(cls=None):
-    for cmd in sorted(os.listdir(rest_dir)):
+    for cmd in sorted([p.name for p in Path(rest_dir).iterdir()]):
         if (
             cmd.endswith(".txt")
             and (cls in {None, "*"} or cmd.startswith(cls + "."))

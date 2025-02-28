@@ -83,7 +83,7 @@ def copy_file(src, dst):
 
 
 def get_files(man_dir, cls=None, ignore_gui=True, extension="html"):
-    for cmd in sorted(os.listdir(man_dir)):
+    for cmd in sorted([p.name for p in Path(man_dir).iterdir()]):
         if (
             cmd.endswith(f".{extension}")
             and (cls in (None, "*") or cmd.startswith(cls + "."))

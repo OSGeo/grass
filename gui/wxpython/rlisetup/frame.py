@@ -6,6 +6,7 @@ Created on Mon Nov 26 11:57:54 2012
 
 import wx
 import os
+from pathlib import Path
 
 from core import globalvar, gcmd
 from grass.script.utils import try_remove
@@ -209,15 +210,10 @@ class RLiSetupFrame(wx.Frame):
         self.Layout()
 
     def ListFiles(self):
-        """Check the configuration files inside the path"""
-        # list of configuration file
-        # return all the configuration files in self.rlipath, check if there are
+        """Return a sorted list of configuration files"""
+        # check in each configuration file if it is a real file, not a symbolic
         # link or directory and doesn't add them
-        listfiles = [
-            rli_conf
-            for rli_conf in os.listdir(self.rlipath)
-            if os.path.isfile(os.path.join(self.rlipath, rli_conf))
-        ]
+        listfiles = [p.name for p in Path(self.rlipath).iterdir() if p.is_file()]
         return sorted(listfiles)
 
     def OnClose(self, event):

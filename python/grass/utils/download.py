@@ -72,7 +72,7 @@ def extract_tar(name, directory, tmpdir):
             debug(_("Extracting may be unsafe; consider updating Python"))
             tar.extractall(path=extract_dir)
 
-        files = os.listdir(extract_dir)
+        files = [p.name for p in Path(extract_dir).iterdir()]
         _move_extracted_files(
             extract_dir=extract_dir, target_dir=directory, files=files
         )
@@ -107,7 +107,7 @@ def extract_zip(name, directory, tmpdir):
         for subfile in file_list:
             # this should be safe in Python 2.7.4
             zip_file.extract(subfile, extract_dir)
-        files = os.listdir(extract_dir)
+        files = [p.name for p in Path(extract_dir).iterdir()]
         _move_extracted_files(
             extract_dir=extract_dir, target_dir=directory, files=files
         )

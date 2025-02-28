@@ -37,6 +37,7 @@ import os
 import shutil
 import sys
 from copy import copy
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import wx
@@ -490,7 +491,10 @@ class LocationPage(TitledPage):
         self.xylocation = event.GetString()
 
         # create a list of valid mapsets
-        tmplist = os.listdir(os.path.join(self.grassdatabase, self.xylocation))
+        tmplist = [
+            p.name
+            for p in Path(os.path.join(self.grassdatabase, self.xylocation)).iterdir()
+        ]
         self.mapsetList = []
         for item in tmplist:
             if os.path.isdir(
@@ -711,11 +715,14 @@ class GroupPage(TitledPage):
         if os.path.isdir(
             os.path.join(self.grassdatabase, self.xylocation, self.xymapset, "group")
         ):
-            tmplist = os.listdir(
-                os.path.join(
-                    self.grassdatabase, self.xylocation, self.xymapset, "group"
-                )
-            )
+            tmplist = [
+                p.name
+                for p in Path(
+                    os.path.join(
+                        self.grassdatabase, self.xylocation, self.xymapset, "group"
+                    )
+                ).iterdir()
+            ]
             for item in tmplist:
                 if os.path.isdir(
                     os.path.join(
@@ -2579,9 +2586,14 @@ class VectGroup(wx.Dialog):
         #
         # get list of valid vector directories
         #
-        vectlist = os.listdir(
-            os.path.join(self.grassdatabase, self.xylocation, self.xymapset, "vector")
-        )
+        vectlist = [
+            p.name
+            for p in Path(
+                os.path.join(
+                    self.grassdatabase, self.xylocation, self.xymapset, "vector"
+                )
+            ).iterdir()
+        ]
         for dir in vectlist:
             if not os.path.isfile(
                 os.path.join(

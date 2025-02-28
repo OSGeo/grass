@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-from os import listdir
-from os.path import join, isdir
+from os.path import join
 import shutil
 import ctypes as ct
 import fnmatch
@@ -11,6 +10,7 @@ import grass.lib.gis as libgis
 from grass.pygrass.errors import GrassError
 from grass.script.utils import encode, decode
 from grass.pygrass.utils import getenv
+from pathlib import Path
 
 test_vector_name = "Gis_test_vector"
 test_raster_name = "Gis_test_raster"
@@ -188,7 +188,7 @@ class Gisdbase:
         return sorted(
             [
                 loc
-                for loc in listdir(self.name)
+                for loc in Path(self.name).iterdir()
                 if libgis.G_is_location(encode(join(self.name, loc)))
             ]
         )
@@ -242,8 +242,8 @@ class Location:
         lpath = self.path()
         return (
             m
-            for m in listdir(lpath)
-            if (isdir(join(lpath, m)) and is_valid(m, lpath, "MAPSET"))
+            for m in Path(lpath).iterdir()
+            if (m.is_dir() and is_valid(m.name, lpath, "MAPSET"))
         )
 
     def __len__(self):

@@ -16,7 +16,7 @@ import fnmatch
 import os
 import re
 import unittest
-from pathlib import PurePath
+from pathlib import PurePath, Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -118,7 +118,7 @@ def discover_modules(
         dirs.remove(testsuite_dir)  # do not recurse to testsuite
         full = os.path.join(root, testsuite_dir)
 
-        files = os.listdir(full)
+        files = [p.name for p in Path(full).iterdir()]
         if file_pattern:
             files = fnmatch.filter(files, file_pattern)
         if file_regexp:
