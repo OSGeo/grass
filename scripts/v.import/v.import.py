@@ -259,19 +259,16 @@ def main():
 
     # create temp location from input without import
     gs.verbose(_("Creating temporary project for <%s>...") % OGRdatasource)
+
     try:
         if OGRdatasource.lower().endswith("gml"):
-            try:
-                from osgeo import gdal
-            except ImportError:
-                gs.fatal(
-                    _(
-                        "Unable to load GDAL Python bindings (requires package "
-                        "'python-gdal' being installed)"
-                    )
-                )
-            if int(gdal.VersionInfo("VERSION_NUM")) < GDAL_COMPUTE_VERSION(2, 4, 1):
-                fix_gfsfile(OGRdatasource)
+            from osgeo import gdal
+
+            gdal.UseExceptions()  # Proper indentation for GDAL config
+
+        if int(gdal.VersionInfo("VERSION_NUM")) < GDAL_COMPUTE_VERSION(2, 4, 1):
+            fix_gfsfile(OGRdatasource)
+
         gs.run_command(
             "v.in.ogr",
             input=OGRdatasource,
@@ -281,9 +278,10 @@ def main():
             overwrite=overwrite,
             **vopts,
         )
+    except RuntimeError as e:
+        gs.fatal(f"GDAL error while checking version: {e}")
     except CalledModuleError:
         gs.fatal(_("Unable to create project from OGR datasource <%s>") % OGRdatasource)
-
     # switch to temp location
     os.environ["GISRC"] = str(SRCGISRC)
 
