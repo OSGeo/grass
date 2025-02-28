@@ -37,13 +37,25 @@ def read_file(name):
         return ""
 
 
+def set_proxy():
+    """Set proxy"""
+    proxy = os.getenv("GRASS_PROXY")
+    if proxy:
+        proxies = {}
+        for ptype, purl in (p.split("=") for p in proxy.split(",")):
+            proxies[ptype] = purl
+        urlrequest.install_opener(
+            urlrequest.build_opener(urlrequest.ProxyHandler(proxies))
+        )
+
+
 def get_version_branch(major_version, addons_git_repo_url):
     """Check if version branch for the current GRASS version exists,
     if not, take branch for the previous version
     For the official repo we assume that at least one version branch is present
 
     :param major_version int: GRASS GIS major version
-    :param addons_git_repo_url str: Addons Git ropository URL
+    :param addons_git_repo_url str: Addons Git repository URL
 
     :return version_branch str: version branch
     """
