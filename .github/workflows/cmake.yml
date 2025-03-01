@@ -81,7 +81,7 @@ jobs:
             - name: Test executing of the grass command
               run: .github/workflows/test_simple.sh
             - name: Run tests
-              run: .github/workflows/test_thorough.sh --config .gunittest.cfg --min-success 72
+              run: .github/workflows/test_thorough.sh --config .gunittest.cfg --min-success 98
             - name: Make HTML test report available
               if: ${{ !cancelled() }}
               uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1

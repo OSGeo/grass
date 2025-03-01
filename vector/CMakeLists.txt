@@ -1,5 +1,4 @@
 set(vector_modules_list
-    v.buffer
     v.build
     v.build.polylines
     v.category
@@ -106,6 +105,11 @@ set(vector_modules_list
 if(WITH_OPENDWG)
   list(APPEND vector_modules_list v.in.dwg)
 endif()
+if(WITH_GEOS)
+  list(APPEND vector_modules_list v.buffer)
+endif()
+
+
 
 add_custom_target(
   ALL_VECTOR_MODULES ALL
@@ -118,16 +122,21 @@ if(WITH_DOCS)
                 ${CMAKE_CURRENT_SOURCE_DIR}/v.lrs)
 endif()
 
-build_program_in_subdir(
-  v.buffer
-  DEPENDS
-  grass_dbmibase
-  grass_dbmiclient
-  grass_dbmidriver
-  grass_gis
-  grass_vector
-  GDAL
-  ${LIBM})
+if(WITH_GEOS)
+  # build v.buffer only with GEOS
+  # following e5ae98f9a02d81f89be5776c8be5841f1d259b7f
+  build_program_in_subdir(
+    v.buffer
+    DEPENDS
+    grass_dbmibase
+    grass_dbmiclient
+    grass_dbmidriver
+    grass_gis
+    grass_vector
+    GDAL
+    GEOS::geos_c
+    ${LIBM})
+endif()
 
 build_program_in_subdir(v.build DEPENDS grass_gis grass_vector GDAL)
 
@@ -397,7 +406,9 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_gis
   grass_vector
-  GDAL)
+  GDAL
+  OPTIONAL_DEPENDS
+  GEOS::geos_c)
 
 add_subdirectory(v.lrs)
 
@@ -685,7 +696,9 @@ build_program_in_subdir(
   grass_dbmidriver
   grass_gis
   grass_vector
-  GDAL)
+  GDAL
+  OPTIONAL_DEPENDS
+  GEOS::geos_c)
 
 build_program_in_subdir(v.support DEPENDS grass_gis grass_vector GDAL)
 
