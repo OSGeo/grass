@@ -65,6 +65,8 @@ void write_rgb_values(struct Map_info *Map, int layer, const char *column_name,
     nrec = db_select_int(driver, fi->table, fi->key, NULL, &pval);
     if (nrec < 1) {
         G_warning(_("No categories found"));
+        G_free(pval);
+        Vect_destroy_field_info(fi);
         return;
     }
 
