@@ -20,7 +20,7 @@
 
 #define MD_NEWLINE "  "
 
-static void usage_md();
+static void usage_md(void);
 static void print_flag(const char *key, const char *label,
                        const char *description);
 void print_option(const struct Option *opt);
@@ -32,7 +32,7 @@ static void print_escaped_for_md_options(FILE *f, const char *str);
 /*!
    \brief Print module usage description in Markdown format.
  */
-void usage_md()
+void usage_md(void)
 {
     struct Option *opt;
     struct Flag *flag;
