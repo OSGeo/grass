@@ -87,7 +87,7 @@ nav:
           - Features: wxGUI.md
           - Project Management: grass_database.md
           - Tool Dialogs: wxGUI.modules.md
-          - Attrribute Table Management: wxGUI.dbmgr.md
+          - Attribute Table Management: wxGUI.dbmgr.md
           - Cartographic Composer: wxGUI.psmap.md
           - Data Catalog: wxGUI.datacatalog.md
           - Vector Digitizer: wxGUI.vdigit.md
