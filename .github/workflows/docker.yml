@@ -160,7 +160,7 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
       - name: Attest docker.io image
-        uses: actions/attest-build-provenance@520d128f165991a6c774bcb264f323e3d70747f4 # v2.2.0
+        uses: actions/attest-build-provenance@bd77c077858b8d561b7a36cbe48ef4cc642ca39d # v2.2.2
         # If there isn't a digest, an annotation cannot be added
         if: >-
           ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request'
@@ -171,7 +171,7 @@ jobs:
           subject-digest: ${{ steps.docker_build.outputs.digest }}
           push-to-registry: ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' }}
       - name: Attest ghcr.io image
-        uses: actions/attest-build-provenance@520d128f165991a6c774bcb264f323e3d70747f4 # v2.2.0
+        uses: actions/attest-build-provenance@bd77c077858b8d561b7a36cbe48ef4cc642ca39d # v2.2.2
         # If there isn't a digest, an annotation cannot be added
         if: ${{ steps.docker_build.outputs.digest }}
         id: attest-ghcr
