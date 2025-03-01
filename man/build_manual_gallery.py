@@ -100,7 +100,7 @@ def img_in_file(filename: str | os.PathLike[str], imagename: str, ext: str) -> b
         pattern = re.compile("<img .*src=.{0}.*>".format(imagename))
     else:
         # expecting markdown
-        pattern = re.compile(r"!\[(.*?)\]\({0}\)".format(imagename))
+        pattern = re.compile(r"!\[(.*?)\]\({0}\)".format(imagename), flags=re.MULTILINE | re.DOTALL)
     return bool(re.search(pattern, Path(filename).read_text()))
 
 
@@ -173,9 +173,13 @@ def main(ext):
                     # for now suppose one image per manual filename
 
     with open(Path(man_dir, output_name), "w") as output:
+        if ext == "html":
+            title = "GRASS GIS %s Reference Manual: Manual gallery" % grass_version
+        else:
+            title = "Manual gallery"
         output.write(
             header1_tmpl.substitute(
-                title="GRASS GIS %s Reference Manual: Manual gallery" % grass_version
+                title=title
             )
         )
         if ext == "html":
@@ -197,7 +201,7 @@ def main(ext):
                 output.write(f'[![{name}]({image} "{title}")]({filename})\n')
         if ext == "html":
             output.write("</ul>")
-        write_footer(output, f"index.{ext}", year)
+        write_footer(output, f"index.{ext}", year, template=ext)
 
     return img_files
 
