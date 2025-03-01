@@ -100,7 +100,7 @@ def img_in_file(filename: str | os.PathLike[str], imagename: str, ext: str) -> b
         pattern = re.compile("<img .*src=.{0}.*>".format(imagename))
     else:
         # expecting markdown
-        pattern = re.compile(r"!\[(.*?)\]\({0}\)".format(imagename), flags=re.MULTILINE | re.DOTALL)
+        pattern = re.compile(r"\]\({0}\)".format(imagename))
     return bool(re.search(pattern, Path(filename).read_text()))
 
 
@@ -171,6 +171,7 @@ def main(ext):
                 if img_in_file(Path(man_dir, man_filename), filename, ext):
                     img_files[filename] = man_filename
                     # for now suppose one image per manual filename
+                    continue
 
     with open(Path(man_dir, output_name), "w") as output:
         if ext == "html":
