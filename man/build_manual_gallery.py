@@ -19,6 +19,7 @@ from pathlib import Path
 import fnmatch
 import re
 from typing import TYPE_CHECKING
+import operator
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -198,7 +199,7 @@ def main(ext):
         if ext == "html":
             output.write(header_graphical_index_tmpl)
             output.write('<ul class="img-list">\n')
-        for image, filename in sorted(img_files.items(), key=lambda x: x[1]):
+        for image, filename in sorted(img_files.items(), key=operator.itemgetter(1)):
             name = get_module_name(filename, ext)
             title = title_from_names(name, image)
             if ext == "html":
@@ -211,7 +212,9 @@ def main(ext):
                     "</li>\n".format(fn=filename, img=image, title=title, name=name)
                 )
             else:
-                output.write(f'[![{name}]({image} "{title}")]({filename})  \n*{title}*\n\n')
+                output.write(
+                    f'[![{name}]({image} "{title}")]({filename})  \n*{title}*\n\n'
+                )
         if ext == "html":
             output.write("</ul>")
         write_footer(output, f"index.{ext}", year)
