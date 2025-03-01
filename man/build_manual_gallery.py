@@ -178,11 +178,7 @@ def main(ext):
             title = "GRASS GIS %s Reference Manual: Manual gallery" % grass_version
         else:
             title = "Manual gallery"
-        output.write(
-            header1_tmpl.substitute(
-                title=title
-            )
-        )
+        output.write(header1_tmpl.substitute(title=title))
         if ext == "html":
             output.write(header_graphical_index_tmpl)
             output.write('<ul class="img-list">\n')
