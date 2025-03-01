@@ -107,7 +107,7 @@ void get_mtlformat(const char metadata[], char *key, char value[])
 void lsat_metadata(char *metafile, lsat_data *lsat)
 {
     FILE *f;
-    char mtldata[METADATA_SIZE] = {'\0'};;
+    char mtldata[METADATA_SIZE] = {'\0'};
     char key[MAX_STR], value[MAX_STR];
     void (*get_mtldata)(const char[], char *, char[]);
 
