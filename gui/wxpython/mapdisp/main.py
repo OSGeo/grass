@@ -227,8 +227,8 @@ class DMonMap(Map):
                         layersOrder[i] = next_layer
                         next_layer += 1
                     # layer must be put higher in render order (same cmd was
-                    # insered more times)
-                    # TODO delete rendurant cmds from cmd file?
+                    # inserted more times)
+                    # TODO delete rendundant cmds from cmd file?
                     else:
                         for j, l_order in enumerate(layersOrder):
                             if l_order > layersOrder[i]:
@@ -462,7 +462,7 @@ class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
 
 
 class DMonDisplay(FrameMixin, MapPanel):
-    """Map display for wrapping map panel with d.mon mathods and frame methods"""
+    """Map display for wrapping map panel with d.mon methods and frame methods"""
 
     def __init__(self, parent, giface, id, Map, title, toolbars, statusbar):
         # init map panel
