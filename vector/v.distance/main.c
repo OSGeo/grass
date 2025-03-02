@@ -1454,6 +1454,8 @@ int main(int argc, char *argv[])
                 break;
             case TO_ATTR:
                 sprintf(buf2, "%s %s", Upload[j].column, to_attr_sqltype);
+            default:
+                break;
             }
             db_append_string(&stmt, buf2);
             j++;
@@ -1641,6 +1643,8 @@ int main(int argc, char *argv[])
                         sprintf(buf2, " null");
                     }
                     break;
+                default:
+                    break;
                 }
                 db_append_string(&stmt, buf2);
                 j++;
@@ -1741,6 +1745,8 @@ int main(int argc, char *argv[])
                         else {
                             sprintf(buf2, " null");
                         }
+                        break;
+                    default:
                         break;
                     }
                     db_append_string(&stmt, buf2);

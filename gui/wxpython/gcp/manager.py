@@ -33,6 +33,7 @@ import os
 import shutil
 import sys
 from copy import copy
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import wx
@@ -466,16 +467,12 @@ class LocationPage(TitledPage):
         self.xylocation = event.GetString()
 
         # create a list of valid mapsets
-        tmplist = os.listdir(os.path.join(self.grassdatabase, self.xylocation))
+        location_path = Path(self.grassdatabase) / self.xylocation
         self.mapsetList = []
-        for item in tmplist:
-            if os.path.isdir(
-                os.path.join(self.grassdatabase, self.xylocation, item)
-            ) and os.path.exists(
-                os.path.join(self.grassdatabase, self.xylocation, item, "WIND")
-            ):
-                if item != "PERMANENT":
-                    self.mapsetList.append(item)
+        for item in location_path.iterdir():
+            if item.is_dir() and (item / "WIND").exists():
+                if item.name != "PERMANENT":
+                    self.mapsetList.append(item.name)
 
         self.xymapset = "PERMANENT"
         utils.ListSortLower(self.mapsetList)
@@ -697,25 +694,13 @@ class GroupPage(TitledPage):
         self.xymapset = self.parent.gisrc_dict["MAPSET"]
 
         # create a list of groups in selected mapset
-        if os.path.isdir(
-            os.path.join(self.grassdatabase, self.xylocation, self.xymapset, "group")
-        ):
-            tmplist = os.listdir(
-                os.path.join(
-                    self.grassdatabase, self.xylocation, self.xymapset, "group"
-                )
-            )
-            for item in tmplist:
-                if os.path.isdir(
-                    os.path.join(
-                        self.grassdatabase,
-                        self.xylocation,
-                        self.xymapset,
-                        "group",
-                        item,
-                    )
-                ):
-                    self.groupList.append(item)
+        group_path = (
+            Path(self.grassdatabase) / self.xylocation / self.xymapset / "group"
+        )
+        if group_path.is_dir():
+            for item in group_path.iterdir():
+                if item.is_dir():
+                    self.groupList.append(item.name)
 
         if maptype == "raster":
             self.btn_vgroup.Hide()
@@ -2032,8 +2017,8 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         highest_idx = 0
 
         for index in range(self.list.GetItemCount()):
-            key = self.list.GetItemData(index)
             if self.list.IsItemChecked(index):
+                key = self.list.GetItemData(index)
                 fwd_err, bkw_err = errlist[GCPcount].split()
                 self.list.SetItem(index, 5, fwd_err)
                 self.list.SetItem(index, 6, bkw_err)
@@ -2109,7 +2094,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         if not self.CheckGCPcount(msg=True):
             self.gr_order = order
-            return
+            return None
 
         self.gr_order = order
 
@@ -2150,7 +2135,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     "Could not calculate new extends.\nPossible error with m.transform."
                 ),
             )
-            return
+            return None
         errlist = ret.splitlines()
 
         # fist corner
@@ -2491,7 +2476,7 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
     def DeleteGCPItem(self):
         """Deletes selected item in GCP list."""
         if self.selected == wx.NOT_FOUND:
-            return
+            return None
 
         key = self.GetItemData(self.selected)
         self.DeleteItem(self.selected)
@@ -2620,21 +2605,14 @@ class VectGroup(wx.Dialog):
         #
         # get list of valid vector directories
         #
-        vectlist = os.listdir(
-            os.path.join(self.grassdatabase, self.xylocation, self.xymapset, "vector")
+        vector_path = (
+            Path(self.grassdatabase) / self.xylocation / self.xymapset / "vector"
         )
-        for dir in vectlist:
-            if not os.path.isfile(
-                os.path.join(
-                    self.grassdatabase,
-                    self.xylocation,
-                    self.xymapset,
-                    "vector",
-                    dir,
-                    "coor",
-                )
-            ):
-                vectlist.remove(dir)
+        vectlist = [
+            coor_path.parent.name
+            for coor_path in vector_path.glob("*/coor")
+            if coor_path.is_file()
+        ]
 
         utils.ListSortLower(vectlist)
 
