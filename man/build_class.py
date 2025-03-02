@@ -33,41 +33,39 @@ def build_class(ext):
     os.chdir(man_dir)
 
     filename = modclass + f".{ext}"
-    f = open(filename + ".tmp", "w")
-
-    write_header(
-        f,
-        "{} modules - GRASS GIS {} Reference Manual".format(
-            modclass.capitalize(), grass_version
-        ),
-        template=ext,
-    )
-    modclass_lower = modclass.lower()
-    modclass_visible = modclass
-    if modclass_lower not in no_intro_page_classes:
-        if modclass_visible == "raster3d":
-            # convert keyword to nice form
-            modclass_visible = "3D raster"
-        f.write(
-            modclass_intro_tmpl.substitute(
-                modclass=modclass_visible, modclass_lower=modclass_lower
-            )
+    with open(filename + ".tmp", "w") as f:
+        write_header(
+            f,
+            "{} modules - GRASS GIS {} Reference Manual".format(
+                modclass.capitalize(), grass_version
+            ),
+            template=ext,
         )
-    f.write(modclass_tmpl.substitute(modclass=to_title(modclass_visible)))
+        modclass_lower = modclass.lower()
+        modclass_visible = modclass
+        if modclass_lower not in no_intro_page_classes:
+            if modclass_visible == "raster3d":
+                # convert keyword to nice form
+                modclass_visible = "3D raster"
+            f.write(
+                modclass_intro_tmpl.substitute(
+                    modclass=modclass_visible, modclass_lower=modclass_lower
+                )
+            )
+        f.write(modclass_tmpl.substitute(modclass=to_title(modclass_visible)))
 
-    # for all modules:
-    for cmd in get_files(man_dir, cls, extension=ext):
-        basename = os.path.splitext(cmd)[0]
-        desc = check_for_desc_override(basename)
-        if desc is None:
-            desc = get_desc(cmd)
-        f.write(desc2_tmpl.substitute(cmd=cmd, basename=basename, desc=desc))
-    if ext == "html":
-        f.write("</table>\n")
+        # for all modules:
+        for cmd in get_files(man_dir, cls, extension=ext):
+            basename = os.path.splitext(cmd)[0]
+            desc = check_for_desc_override(basename)
+            if desc is None:
+                desc = get_desc(cmd)
+            f.write(desc2_tmpl.substitute(cmd=cmd, basename=basename, desc=desc))
+        if ext == "html":
+            f.write("</table>\n")
 
-    write_footer(f, f"index.{ext}", year, template=ext)
+        write_footer(f, f"index.{ext}", year, template=ext)
 
-    f.close()
     replace_file(filename)
 
 

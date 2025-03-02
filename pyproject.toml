@@ -14,7 +14,7 @@ extend-exclude = '''
 '''
 
 [tool.ruff]
-required-version = ">=0.6.0"
+required-version = ">=0.8.0"
 
 builtins = ["_"]
 
@@ -183,7 +183,6 @@ ignore = [
     "PLW1641", # eq-without-hash
     "PLW2901", # redefined-loop-name
     "PLW3201", # bad-dunder-method-name
-    "PT004",   # pytest-missing-fixture-name-underscore # deprecated, so doesn't appear with --preview
     "PTH100",  # os-path-abspath
     "PTH101",  # os-chmod
     "PTH102",  # os-mkdir
@@ -260,6 +259,7 @@ ignore = [
 # See https://docs.astral.sh/ruff/settings/#lint_per-file-ignores
 # "A005", # builtin-module-shadowing
 # "PLW0108", # unnecessary-lambda
+# "SIM115", # open-file-with-context-handler
 # Ignore `E402` (import violations) in all `__init__.py` files
 "**.py" = ["PYI066"]
 "*/testsuite/**.py" = ["PT009", "PT027"]
@@ -268,14 +268,20 @@ ignore = [
 "gui/**" = ["PLW0108"] # See https://github.com/OSGeo/grass/issues/4124
 "gui/wxpython/animation/temporal_manager.py" = ["SIM115"]
 "gui/wxpython/core/*.py" = ["SIM115"]
+"gui/wxpython/core/globalvar.py" = ["PTH208"]
+"gui/wxpython/core/settings.py" = ["PTH208"]
+"gui/wxpython/datacatalog/catalog.py" = ["PTH208"]
 "gui/wxpython/dbmgr/base.py" = ["SIM115"]
-"gui/wxpython/gcp/manager.py" = ["SIM115"]
+"gui/wxpython/gcp/manager.py" = ["PTH208", "SIM115"]
 "gui/wxpython/gmodeler/*.py" = ["SIM115"]
 "gui/wxpython/gui_core/*.py" = ["SIM115"]
+"gui/wxpython/gui_core/dialogs.py" = ["PTH208"]
 "gui/wxpython/iclass/frame*.py" = ["SIM115"]
 "gui/wxpython/iclass/frame.py" = ["FLY002"]
 "gui/wxpython/iclass/statistics.py" = ["A005"]
+"gui/wxpython/icons/grass_icons.py" = ["PTH208"]
 "gui/wxpython/image2target/*.py" = ["SIM115"]
+"gui/wxpython/image2target/ii2t_manager.py" = ["PTH208"]
 "gui/wxpython/iscatt/plots.py" = ["PLW0108"]
 "gui/wxpython/lmgr/workspace.py" = ["SIM115"]
 "gui/wxpython/location_wizard/wizard.py" = ["SIM115"]
@@ -284,9 +290,11 @@ ignore = [
 "gui/wxpython/modules/mcalc_builder.py" = ["SIM115"]
 "gui/wxpython/photo2image/*.py" = ["SIM115"]
 "gui/wxpython/psmap/*.py" = ["SIM115"]
+"gui/wxpython/psmap/dialogs.py" = ["PTH208"]
 "gui/wxpython/psmap/utils.py" = ["PGH004"]
 "gui/wxpython/rdigit/controller.py" = ["SIM115"]
 "gui/wxpython/rlisetup/*.py" = ["SIM115"]
+"gui/wxpython/rlisetup/frame.py" = ["PTH208"]
 "gui/wxpython/timeline/frame.py" = ["FLY002"]
 "gui/wxpython/tools/update_menudata.py" = ["SIM115"]
 "gui/wxpython/tplot/frame.py" = ["FLY002"]
@@ -299,33 +307,39 @@ ignore = [
 "lib/imagery/testsuite/test_imagery_signature_management.py" = ["SIM115"]
 "lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
 "lib/init/grass.py" = ["SIM115"]
+"lib/init/testsuite/test_grass_tmp_mapset.py" = ["PTH208"]
 "locale/grass_po_stats.py" = ["SIM115"]
-"man/build_*.py" = ["SIM115"]
-"man/parser_standard_options.py" = ["SIM115"]
+"man/build.py" = ["PTH208"]
+"man/build_class_graphical.py" = ["PTH208"]
+"man/build_manual_gallery.py" = ["PTH208"]
+"man/build_rest.py" = ["PTH208"]
 "python/grass/__init__.py" = ["PYI056"]
 "python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
 "python/grass/exp*/tests/grass_script_tmp_mapset_session_test.py" = ["SIM117"]
 "python/grass/gunittest/case.py" = ["PT009"]
-"python/grass/gunittest/loader.py" = ["PYI024"]
+"python/grass/gunittest/loader.py" = ["PTH208", "PYI024"]
 "python/grass/gunittest/multireport.py" = ["PYI024"]
 "python/grass/gunittest/testsu*/d*/s*/s*/subsub*/t*/test_segfaut.py" = ["B018"]
 "python/grass/gunittest/testsuite/test_assertions_rast3d.py" = ["FLY002"]
 "python/grass/imaging/images2*.py" = ["SIM115"]
+"python/grass/imaging/images2ims.py" = ["PTH208"]
 "python/grass/jupyter/testsuite/interactivemap_test.py" = ["PGH004"]
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
 "python/grass/pydispatch/signal.py" = ["A005"]
-"python/grass/pygrass/modules/grid/grid.py" = ["SIM115"]
+"python/grass/pygrass/gis/__init__.py" = ["PTH208"]
+"python/grass/pygrass/modules/grid/grid.py" = ["PTH208", "SIM115"]
 "python/grass/pygrass/modules/grid/testsuite/test_*_modules_grid_doctests.py" = ["F401"]
 "python/grass/pygrass/modules/interface/env.py" = ["SIM115"]
 "python/grass/pygrass/modules/testsuite/test_pygrass_modules_doctests.py" = ["F401"]
 "python/grass/pygrass/raster/category.py" = ["FURB189"]
 "python/grass/pygrass/raster/segment.py" = ["SIM115"]
 "python/grass/pygrass/tests/*.py" = ["SIM115"]
+"python/grass/pygrass/utils.py" = ["PTH208"]
 "python/grass/pygrass/vector/geometry.py" = ["PYI024"]
 "python/grass/pygrass/vector/sql.py" = ["FLY002"]
 "python/grass/pygrass/vector/testsuite/test_table.py" = ["PLW0108"]
 "python/grass/script/array.py" = ["A005"]
-"python/grass/script/core.py" = ["SIM115"]
+"python/grass/script/core.py" = ["PTH208", "SIM115"]
 "python/grass/script/db.py" = ["SIM115"]
 "python/grass/script/raster.py" = ["SIM115"]
 "python/grass/script/utils.py" = ["FURB189", "SIM115"]
@@ -334,7 +348,7 @@ ignore = [
 "python/grass/temporal/stds_export.py" = ["SIM115"]
 "python/grass/temporal/stds_import.py" = ["SIM115"]
 "python/grass/temporal/univar_statistics.py" = ["SIM115"]
-"python/grass/utils/download.py" = ["SIM115"]
+"python/grass/utils/download.py" = ["PTH208", "SIM115"]
 "raster/r.*/testsuite/*.py" = ["SIM115"]
 "raster/r.topidx/*.py" = ["SIM115"]
 "raster3d/r3.flow/testsuite/r3flow_test.py" = ["FLY002"]
@@ -345,8 +359,10 @@ ignore = [
 "scripts/db.in.ogr/db.in.ogr.py" = ["SIM115"]
 "scripts/db.test/db.test.py" = ["SIM115"]
 "scripts/db.univar/db.univar.py" = ["SIM115"]
+"scripts/g.download.project/g.download.project.py" = ["PTH208"]
 "scripts/g.extension.all/g.extension.all.py" = ["SIM115"]
-"scripts/g.extension/g.extension.py" = ["SIM115"]
+"scripts/g.extension/g.extension.py" = ["PTH208", "SIM115"]
+"scripts/g.extension/testsuite/test_addons_modules.py" = ["PTH208"]
 "scripts/g.search.modules/g.search.modules.py" = ["SIM115"]
 "scripts/i.in.spotvgt/i.in.spotvgt.py" = ["SIM115"]
 "scripts/i.oif/i.oif*.py" = ["SIM115"]
@@ -372,6 +388,7 @@ ignore = [
 "temporal/t.unregister/t.unregister.py" = ["SIM115"]
 "utils/**.py" = ["SIM115"]
 "utils/generate_release_notes.py" = ["PGH004"]
+"utils/thumbnails.py" = ["PTH208"]
 "vector/v.fill.holes/examples.ipynb" = ["PTH201"]
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
@@ -380,7 +397,7 @@ ignore = [
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-python_files = "*/tests/*_test.py"
+python_files = "*/tests/*_test.py */tests/test_*.py"
 addopts = """
     --ignore-glob='dist.*'
     --ignore-glob='bin.*'

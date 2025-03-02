@@ -306,22 +306,22 @@ db.select table=river
 is recommended because file sizes are smaller. The OSM driver will
 categorize features into 5 layers :
 <ul>
-    <li><b>points</b>: "node" features that have significant tags attached.
-    <li><b>lines</b>: "way" features that are recognized as non-area.
+    <li><b>points</b>: "node" features that have significant tags attached.</li>
+    <li><b>lines</b>: "way" features that are recognized as non-area.</li>
     <li><b>multilinestrings</b>: "relation" features that form a
-multilinestring(type = 'multilinestring' or type = 'route').
+multilinestring(type = 'multilinestring' or type = 'route').</li>
     <li><b>multipolygons</b>: "relation" features that form a multipolygon (type
 = 'multipolygon' or type = 'boundary'), and "way" features that are
-recognized as area.
+recognized as area.</li>
     <li><b>other_relations</b>: "relation" features that do
-not belong to any of the above layers.
+not belong to any of the above layers.</li>
 </ul>
 
 It is recommended to import one layer at a time, and to select features
 with the <b>where</b> option, e.g. to import roads, use
 
 <div class="code"><pre>
-v.in.ogr where="highway <> ''"
+v.in.ogr where="highway &gt;&lt; ''"
 </pre></div>
 i.e. the OSM tag <em>highway</em> must be set.
 
