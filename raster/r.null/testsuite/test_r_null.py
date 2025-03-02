@@ -4,8 +4,8 @@ from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
 
-class TestRCross(TestCase):
-    """Test case for r.cross module"""
+class TestRNull(TestCase):
+    """Test case for r.null module"""
 
     @classmethod
     def setUpClass(cls):
@@ -16,7 +16,13 @@ class TestRCross(TestCase):
         # Create map1: categories 1, 2, 3 as rows
         cls.runModule(
             "r.mapcalc",
-            expression="map1 = if(row() == 1, 1, if(row() == 2, 2, if(row() == 3, 3, null())))",
+            expression="map_basic = if(row() == 1, 1, if(row() == 2, 2, if(row() == 3, 3, null())))",
+            overwrite=True,
+        )
+
+        cls.runModule(
+            "r.mapcalc",
+            expression="map_fill_nulls = if(row() == 1, 1, if(row() == 2, 2, if(row() == 3, 3, null())))",
             overwrite=True,
         )
 
@@ -30,17 +36,25 @@ class TestRCross(TestCase):
     @classmethod
     def tearDownClass(cls):
         """Remove temporary maps and region"""
-        cls.runModule("g.remove", flags="f", type="raster", name=["map1", "map2"])
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=["map_basic", "map_fill_nulls", "map2"],
+        )
         cls.del_temp_region()
 
     def test_basic(self):
         """Verify module execute with -i flag"""
-        module = SimpleModule("r.null", map="map1", setnull="1", flags="i")
+        module = SimpleModule("r.null", map="map_basic", setnull="1", flags="i")
         self.assertModule(module)
 
         # Validate category mappings using r.category
-        category_output = gs.parse_command("r.category", map="map1")
-        expected_output = {"2": None, "3": None}
+        category_output = gs.parse_command("r.describe", map="map_basic", format="json")
+        expected_output = {
+            "has_nulls": True,
+            "ranges": [{"min": 2, "max": 2}, {"min": 3, "max": 3}],
+        }
 
         self.assertEqual(category_output, expected_output)
 
@@ -49,18 +63,26 @@ class TestRCross(TestCase):
         module = SimpleModule("r.null", map="map2", setnull="1", flags="f")
         self.assertModule(module)
 
-        category_output = gs.parse_command("r.describe", map="map2")
-        expected_output = {"* 2.500000-2.501961 2.998039-3.000000": None}
+        category_output = gs.parse_command("r.describe", map="map2", format="json")
+        expected_output = {
+            "has_nulls": True,
+            "ranges": [
+                {"min": 2.5, "max": 2.5019607843137255},
+                {"min": 2.9980392156862745, "max": 3},
+            ],
+        }
 
         self.assertEqual(category_output, expected_output)
 
     def test_fill_nulls(self):
         """Verify module fills nulls"""
-        module = SimpleModule("r.null", map="map1", null="1")
+        module = SimpleModule("r.null", map="map_fill_nulls", null="1")
         self.assertModule(module)
 
-        category_output = gs.parse_command("r.category", map="map1")
-        expected_output = {"1": None, "2": None, "3": None}
+        category_output = gs.parse_command(
+            "r.describe", map="map_fill_nulls", format="json"
+        )
+        expected_output = {"has_nulls": False, "ranges": [{"min": 1, "max": 3}]}
 
         self.assertEqual(category_output, expected_output)
 
