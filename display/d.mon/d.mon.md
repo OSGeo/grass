@@ -22,7 +22,7 @@ The desired monitor should be started once and need not be restarted
 unless it is stopped for some reason. A monitor may continue to run for
 any length of time, even when no GRASS session is being run.
 
-### Stopping a monitor
+### Listing currently running monitors
 
 A graphics monitor has two different types of status: monitor program
 *not running*, and monitor *running*. A monitor that has been started

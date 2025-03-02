@@ -50,11 +50,11 @@ terrain. Flooding produces a sink-less terrain in which every cell has a
 downslope flow path leading outside the terrain and therefore every cell
 in the terrain can be assigned SFD/MFD flow directions as above. Flow
 directions are encoded using powers of two clockwise starting from
-2<sup>0</sup> for east to 2<sup>7</sup> for north-east.
+2^0 for east to 2^7 for north-east.
 
 ![r.terraflow direction encoding](rterraflow_direction_encoding.png)  
-Flow direction encoding clockwise starting from 2<sup>0</sup> for east
-to 2<sup>7</sup> for north-east; 0 for undetermined (sinks) and 1 for
+Flow direction encoding clockwise starting from 2^0 for east
+to 2^7 for north-east; 0 for undetermined (sinks) and 1 for
 undefined (null cells)
 ([source](https://idea.isnew.info/how-to-import-arcgis-flow-direction-into-grass-gis.html))
 
@@ -143,7 +143,7 @@ g.region raster=elev_lid792_1m
 r.terraflow elevation=elev_lid792_1m accumulation=elev_lid792_1m_accumulation
 ```
 
-<img src="rterraflow_accumulation.png" data-border="0" />  
+![Flow accumulation](rterraflow_accumulation.png)  
 *Flow accumulation*
 
 Spearfish sample data set:
@@ -165,24 +165,16 @@ r.terraflow elev=elevation.10m filled=elevation10m.filled \
 
 ## REFERENCES
 
-1. The [TerraFlow](http://www.cs.duke.edu/geo*/terraflow/) project at
-    Duke University
-2. <a
-    href="http://www.cs.duke.edu/geo*/terraflow/papers/alenex00_drainage.ps.gz"
-    id="arge:drainage">I/O-efficient algorithms for problems on grid-based
-    terrains</a>. Lars Arge, Laura Toma, and Jeffrey S. Vitter. In
+1. The [TerraFlow](http://www.cs.duke.edu/geo*/terraflow/) project at Duke University
+2. [I/O-efficient algorithms for problems on grid-based
+    terrains](http://www.cs.duke.edu/geo*/terraflow/papers/alenex00_drainage.ps.gz). Lars Arge, Laura Toma, and Jeffrey S. Vitter. In
     *Proc. Workshop on Algorithm Engineering and Experimentation*, 2000.
     To appear in *Journal of Experimental Algorithms*.
-3. <a
-    href="http://www.cs.duke.edu/geo*/terraflow/papers/acmgis01_terraflow.pdf"
-    id="terraflow:acmgis01">Flow computation on massive grids</a>. Lars
+3. [Flow computation on massive grids](http://www.cs.duke.edu/geo*/terraflow/papers/acmgis01_terraflow.pdf). Lars
     Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura Toma, Jeffrey S.
     Vitter, Dean Urban and Rajiv Wickremesinghe. In *Proc. ACM Symposium
     on Advances in Geographic Information Systems*, 2001.
-4. <a
-    href="http://www.cs.duke.edu/geo*/terraflow/papers/journal_terraflow.pdf"
-    id="terraflow:geoinformatica">Flow computation on massive grid
-    terrains</a>. Lars Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura
+4. [Flow computation on massive grid terrains](http://www.cs.duke.edu/geo*/terraflow/papers/journal_terraflow.pdf). Lars Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura
     Toma, Jeffrey S. Vitter, Dean Urban and Rajiv Wickremesinghe. In
     *GeoInformatica, International Journal on Advances of Computer
     Science for Geographic Information Systems*, 7(4):283-313, December

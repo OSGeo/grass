@@ -18,9 +18,9 @@ i.spectral -g raster=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsa
            coordinates=636069,215440,637958,223393,633277,223605
 ```
 
-<img src="i_spectral.png" data-border="1" />  
-Spectral plot of 3 different land cover types: (1) water, (2) green
-vegetation, and (3) highway
+![Spectral plot of 3 different land cover types](i_spectral.png)  
+*Spectral plot of 3 different land cover types: (1) water, (2) green
+vegetation, and (3) highway*
 
 North Carolina sample dataset:
 
