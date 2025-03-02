@@ -6,9 +6,7 @@ space time raster datasets (STRDS) using the temporal raster algebra.
 The module expects an **expression** as input parameter in the following
 form:
 
-```sh
-"result = expression"
-```
+**"result = expression"**
 
 The statement structure is similar to that of [r.mapcalc](r.mapcalc.md).
 In this statement, **result** represents the name of the space time
@@ -623,6 +621,11 @@ Related publications:
 - Gebbert, S., Leppelt, T., Pebesma, E., 2019. *A topology based
   spatio-temporal map algebra for big data analysis*. Data 4, 86.
   ([DOI](https://doi.org/10.3390/data4020086))
+
+## SEE ALSO
+
+*[v.overlay](v.overlay.md), [v.buffer](v.buffer.md),
+[v.patch](v.patch.md), [r.mapcalc](r.mapcalc.md)*
 
 ## AUTHORS
 

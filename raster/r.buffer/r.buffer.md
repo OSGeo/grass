@@ -91,7 +91,7 @@ r.category input=roads.buf
       6       400-500 meters
 ```
 
-![Distances to road](r_buffer_road.png)  
+<img src="r_buffer_road.png" data-border="1" />  
 *Distances to road*
 
 ## SEE ALSO

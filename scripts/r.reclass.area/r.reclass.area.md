@@ -24,7 +24,7 @@ r.reclass.area input=zipcodes output=zipcodes_larger2000ha mode=greater value=20
 r.report zipcodes_larger2000ha unit=h
 ```
 
-![Figure: r.reclass.area method=reclass](zipcodes_larger2000ha.png)  
+<img src="zipcodes_larger2000ha.png" width="800" height="264" />  
 *Figure: r.reclass.area method=reclass*
 
 In this example, the ZIP code map in the North Carolina sample dataset
@@ -36,7 +36,7 @@ substitutional removing of areas minor of 1000 ha:
 r.reclass.area input=zipcodes output=zipcodes_minor1000ha mode=lesser value=1000 method=rmarea
 ```
 
-![Figure: r.reclass.area method=rmarea](zipcodes_minor1000ha.png)  
+<img src="zipcodes_minor1000ha.png" width="800" height="264" />  
 *Figure: r.reclass.area method=rmarea*
 
 ## SEE ALSO

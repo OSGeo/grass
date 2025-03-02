@@ -1,9 +1,3 @@
----
-description: GRASS variables and environment variables
----
-
-# GRASS variables and environment variables
-
 A variable in scripting is a symbolic name that holds data which can be
 used and modified during script execution. Variables allow scripts to
 store and manipulate values dynamically, making them more flexible and

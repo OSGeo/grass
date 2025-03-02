@@ -64,7 +64,7 @@ r.mapcalc.simple expression="A + B + C" a=zeros b=ones c=twos output=result1
 r.mapcalc.simple expression="(A * B) / 2 + 3 * C" a=zeros b=ones c=twos output=result2
 ```
 
-![Figure: r.mapcalc.simple graphical user interface](r_mapcalc_simple.png)  
+<img src="r_mapcalc_simple.png" width="594" height="495" />  
 *Figure: r.mapcalc.simple graphical user interface*
 
 ### Example expressions

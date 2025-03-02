@@ -9,8 +9,11 @@ project's coordinate reference system must be meters.
 This module is sensitive to mask settings. All cells which are outside
 the mask are ignored and handled as no flow boundaries.
 
-![Workflow of r.gwflow](r_gwflow_concept.png)  
-*Workflow of r.gwflow*
+<img src="r_gwflow_concept.png" data-border="0" />  
+
+|                        |
+|------------------------|
+| *Workflow of r.gwflow* |
 
 *r.gwflow* calculates the piezometric head and optionally the water
 budget and the filter velocity field, based on the hydraulic

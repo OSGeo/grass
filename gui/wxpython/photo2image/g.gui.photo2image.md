@@ -1,10 +1,3 @@
----
-description: wxGUI GCP Manager for photo to image registration
-index: topic_GUI|GUI
----
-
-# wxGUI GCP Manager for photo to image registration
-
 ## DESCRIPTION
 
 This module is based on **g.gui.gcp**, the GCP manager of GRASS GIS. It

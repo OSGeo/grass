@@ -85,8 +85,8 @@ echo "P 1 1 5000" | v.segment input=myrailroads output=myrailroads_segp
 d.vect map=myrailroads_segp icon=basic/circle color=red fcolor=red size=5
 ```
 
-![Extract line segment from 400m to 5000m from beginning of line 1](v_segment_subline.jpg)  
-*Extract line segment from 400m to 5000m from beginning of line 1*
+![](v_segment_subline.jpg)  
+Extract line segment from 400m to 5000m from beginning of line 1
 
 ### Parallel line segments
 
@@ -121,8 +121,8 @@ d.vect map=myrailroads display=shape,dir
 d.vect map=myrailroads_pt2km icon=basic/circle color=blue fcolor=blue size=5
 ```
 
-![A series of points, spaced every 2km along the tracks](v_segment_spaced_points.jpg)  
-*A series of points, spaced every 2km along the tracks*
+![](v_segment_spaced_points.jpg)  
+A series of points, spaced every 2km along the tracks
 
 ### Points equidistant along and offset the tracks
 
@@ -141,8 +141,9 @@ d.vect map=myrailroads display=shape,dir
 d.vect map=myrailroads_pt2kmO500m icon=basic/circle color=aqua fcolor=aqua size=5
 ```
 
-![A series of points, spaced every 2km along the tracks, offset 500m to the right](v_segment_spaced_right_points.jpg)  
-*A series of points, spaced every 2km along the tracks, offset 500m to the right*
+![](v_segment_spaced_right_points.jpg)  
+A series of points, spaced every 2km along the tracks, offset 500m to
+the right
 
 ### Points equidistant in percent along and offset the tracks
 
@@ -164,8 +165,10 @@ d.vect map=myrailroads display=shape,dir
 d.vect map=myrailroads_pt10pctO500m icon=basic/circle color=red fcolor=black size=5
 ```
 
-![A series of points, spaced every 10% of the line's length along the tracks from the end of the line up to the middle point, offset 500m to the right](v_segment_spaced_percent_points.jpg)  
-*A series of points, spaced every 10% of the line's length along the tracks from the end of the line up to the middle point, offset 500m to the right*
+![](v_segment_spaced_percent_points.jpg)  
+A series of points, spaced every 10% of the line's length along the
+tracks from the end of the line up to the middle point, offset 500m to
+the right
 
 ## KNOWN ISSUES
 

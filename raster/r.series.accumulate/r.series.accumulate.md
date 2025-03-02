@@ -27,9 +27,9 @@ In case the flag was set, the calculation changes to arithmetic mean
 ```
 
 In case the **-a** is set, the Winkler indices are calculated instead of
-GDD, usually accumulated for the period April 1st to October
-31st (northern hemisphere) or the period October
-1st to April 30t (southern hemisphere).
+GDD, usually accumulated for the period April 1<sup>st</sup> to October
+31<sup>st</sup> (northern hemisphere) or the period October
+1<sup>st</sup> to April 30<sup>th</sup> (southern hemisphere).
 
 **BEDDs** Biologically Effective Degree Days are calculated as
 
@@ -46,9 +46,9 @@ The **Huglin heliothermal index** is calculated as
     huglin = (average + max) / 2 - lower
 ```
 
-usually accumulated for the period April 1st to September
-30th (northern hemisphere) or the period September
-1st to April 30th (southern hemisphere).
+usually accumulated for the period April 1<sup>st</sup> to September
+30<sup>th</sup> (northern hemisphere) or the period September
+1<sup>st</sup> to April 30<sup>th</sup> (southern hemisphere).
 
 **Mean** raster values are calculated as
 

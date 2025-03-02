@@ -96,7 +96,7 @@ TPS combines a linear affine transformation with individual
 transformation coefficients for each GCP, using the radial basis kernel
 function with the distance *dist* between any two points:
 
-dist^2 \* log(dist)
+dist<sup>2</sup> \* log(dist)
 
 As a consequence, localized distortions can be removed with TPS
 transformation. For example, scan line sensors will have due to the

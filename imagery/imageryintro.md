@@ -1,11 +1,4 @@
----
-description: Image processing in GRASS GIS
-index: imagery
----
-
-# Image processing in GRASS GIS
-
-## Image processing in general
+### Image processing in general
 
 GRASS GIS provides a powerful suite of tools for the processing and
 analysis of geospatial raster data, including satellite imagery and
@@ -43,7 +36,7 @@ transforms Landsat DN to radiance-at-sensor (top of atmosphere, TOA).
 The equivalent module for ASTER data is [i.aster.toar](i.aster.toar.md).
 For other satellites, [r.mapcalc](r.mapcalc.md) can be employed.
 
-### Reflection/radiance-at-sensor and surface reflectance
+**Reflection/radiance-at-sensor and surface reflectance**
 
 When radiance-at-sensor has been obtained, still the atmosphere
 influences the signal as recorded at the sensor. This atmospheric
@@ -81,7 +74,7 @@ As a general rule in GRASS:
     rescaled (using nearest-neighbor resampling) to match the current
     region.
 
-## Imagery import
+### Imagery import
 
 The module [r.in.gdal](r.in.gdal.md) offers a common interface for many
 different raster and satellite image formats. Additionally, it also
@@ -97,7 +90,7 @@ raster format (e.g. tiff, jpeg, png, pbm) and then use
 [r.in.gdal](r.in.gdal.md) to import it. Based on reference points the
 scanned map can be rectified to obtain geocoded data.
 
-## Semantic label information
+### Semantic label information
 
 Semantic labels are a description which can be stored as metadata. To
 print available semantic labels relevant for multispectral satellite
@@ -117,7 +110,7 @@ wishes may be added (i.e., not only those registered in
 *i.band.library*). Semantic labels are supported also by the
 [temporal](temporalintro.md) GRASS modules.
 
-## Image processing operations
+### Image processing operations
 
 GRASS raster/imagery map processing is always performed in the current
 region settings (see [g.region](g.region.md)), i.e. the current region
@@ -126,7 +119,7 @@ from that of the input raster map(s), on-the-fly resampling is performed
 (nearest neighbor resampling). If this is not desired, the input map(s)
 has/have to be resampled beforehand with one of the dedicated modules.
 
-## Geocoding of imagery data
+### Geocoding of imagery data
 
 GRASS is able to geocode raster and image data of various types:
 
@@ -143,7 +136,7 @@ GRASS is able to geocode raster and image data of various types:
 - digital handheld camera geocoding: modified procedure for
   [i.ortho.photo](i.ortho.photo.md)
 
-## Visualizing (true) color composites
+### Visualizing (true) color composites
 
 To quickly combine the first three channels to a near natural color
 image, the GRASS command [d.rgb](d.rgb.md) can be used or the graphical
@@ -152,7 +145,7 @@ which is then mixed while displayed. With a bit more work of tuning the
 grey scales of the channels, nearly perfect colors can be achieved.
 Channel histograms can be shown with [d.histogram](d.histogram.md).
 
-## Calculation of vegetation indices
+### Calculation of vegetation indices
 
 An example for indices derived from multispectral data is the NDVI
 (normalized difference vegetation index). To study the vegetation status
@@ -162,7 +155,7 @@ used as input for simple map algebra in the GRASS command
 [r.colors](r.colors.md) an optimized "ndvi" color table can be assigned
 afterward. Also other vegetation indices can be generated likewise.
 
-## Calibration of thermal channel
+### Calibration of thermal channel
 
 The encoded digital numbers of a thermal infrared channel can be
 transformed to degree Celsius (or other temperature units) which
@@ -170,7 +163,7 @@ represent the temperature of the observed land surface. This requires a
 few algebraic steps with [r.mapcalc](r.mapcalc.md) which are outlined in
 the literature to apply gain and bias values from the image metadata.
 
-## Image classification
+### Image classification
 
 Single and multispectral data can be classified to user defined land
 use/land cover classes. In case of a single channel, segmentation will
@@ -200,7 +193,7 @@ bands (semantic labels match). This comes handy when classifying
 multiple scenes from a single sensor taken in different areas or
 different times.
 
-## Image fusion
+### Image fusion
 
 In case of using multispectral data, improvements of the resolution can
 be gained by merging the panchromatic channel with color channels. GRASS
@@ -208,7 +201,7 @@ provides the HIS ([i.rgb.his](i.rgb.his.md), [i.his.rgb](i.his.rgb.md))
 and the Brovey and PCA transform ([i.pansharpen](i.pansharpen.md))
 methods.
 
-## Radiometric corrections
+### Radiometric corrections
 
 Atmospheric effects can be removed with [i.atcorr](i.atcorr.md).
 Correction for topographic/terrain effects is offered in
@@ -218,14 +211,14 @@ numbers of LANDSAT and ASTER imagery may be converted to
 top-of-atmosphere radiance or reflectance and temperature
 ([i.aster.toar](i.aster.toar.md), [i.landsat.toar](i.landsat.toar.md)).
 
-## Time series processing
+### Time series processing
 
 GRASS also offers support for time series processing
 ([r.series](r.series.md)). Statistics can be derived from a set of
 coregistered input maps such as multitemporal satellite data. The common
 univariate statistics and also linear regression can be calculated.
 
-## Evapotranspiration modeling
+### Evapotranspiration modeling
 
 In GRASS, several types of evapotranspiration (ET) modeling methods are
 available:
@@ -238,7 +231,7 @@ available:
 Evaporative fraction: [i.eb.evapfr](i.eb.evapfr.md),
 [i.eb.hsebal01](i.eb.hsebal01.md).
 
-## Energy balance
+### Energy balance
 
 Emissivity can be calculated with [i.emissivity](i.emissivity.md).
 Several modules support the calculation of the energy balance:
@@ -252,7 +245,7 @@ Several modules support the calculation of the energy balance:
 - Soil heat flux approximation
   ([i.eb.soilheatflux](i.eb.soilheatflux.md)).
 
-## See also
+### See also
 
 - GRASS GIS Wiki page: [Image
   processing](https://grasswiki.osgeo.org/wiki/Image_processing)

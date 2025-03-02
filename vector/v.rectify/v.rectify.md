@@ -10,7 +10,7 @@ was rectified).
 The *-o* flag enforces orthogonal rotation (currently for 3D only) where
 the axes remain orthogonal to each other, e.g. a cube with right angles
 remains a cube with right angles after transformation. This is not
-guaranteed even with affine (1st order) 3D transformation.
+guaranteed even with affine (1<sup>st</sup> order) 3D transformation.
 
 Great care should be taken with the placement of Ground Control Points.
 For 2D transformation, the control points must not lie on a line,

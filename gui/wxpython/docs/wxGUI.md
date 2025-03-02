@@ -1,9 +1,3 @@
----
-description: wxGUI
----
-
-# wxGUI
-
 ## DESCRIPTION
 
 **wxGUI** is a native *Graphical User Interface* (GUI) for GRASS GIS.
@@ -462,7 +456,7 @@ Quit
 Ctrl+R:
 Render map in all map displays
 
-##### Workspace
+**Workspace**
 
 Ctrl+N:
 Create new workspace
@@ -473,7 +467,7 @@ Load workspace from file
 Ctrl+S:
 Close workspace
 
-##### Layers
+**Layers**
 
 Ctrl+Shift+L:
 Add multiple raster or vector map layers to current map display
@@ -487,7 +481,7 @@ Add vector map layer to current map display
 Ctrl+W:
 Close current map display
 
-##### Console
+**Console**
 
 Tab:
 Show command tooltips

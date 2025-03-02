@@ -5,10 +5,11 @@ attribute of all the non-null cells in the sampling area as:
 ![rlimpa formula](rlimpa_formula.png)  
 with:  
 
-- *i*: attribute
-- *m*: number of non-null attributes in the sampling area
-- *w_i*: number of cells of attribute *i*
-- *size*: size of sampling area (in cells)
+- **i**: attribute
+- **m**: number of non-null attributes in the sampling area
+- **w<span class="small"><span class="small">i</span></span>**: number
+  of cells of attribute i
+- **size**: size of sampling area (in cells)
 
 ## NOTES
 

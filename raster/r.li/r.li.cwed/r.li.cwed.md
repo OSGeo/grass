@@ -9,19 +9,16 @@ with:
 
 - **k**: attribute
 - **m**: number of non-null attributes in the sampling area
-- **e_ik**: total
+- **e<span class="small"><span class="small">ik</span></span>**: total
   length of edge in landscape between patch types i and k
-- **d_ik**:
+- **d<span class="small"><span class="small">ik</span></span>**:
   dissimilarity (edge contrast weight) between patch types i and k
 - **Area**: total landscape area
 
 The input file contains a row for each couple of patch type that we want
 to consider in the calculation. Each row must be saved using this
-syntax:
-
-```sh
-patchType1,patchType2,dissimilarityBetweenPatchType1andPatchType2
-```
+syntax:  
+<span class="small">patchType1,patchType2,dissimilarityBetweenPatchType1andPatchType2</span>
 
 ## NOTES
 

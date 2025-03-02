@@ -3,7 +3,8 @@
 *r.series* makes each output cell value a function of the values
 assigned to the corresponding cells in the input raster map layers.
 
-![Illustration for an average of three input rasters](r_series.png)  
+![](r_series.png)
+
 *Figure: Illustration for an average of three input rasters*
 
 Following methods are available:

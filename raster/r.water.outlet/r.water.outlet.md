@@ -46,7 +46,7 @@ d.his h=accum_5K i=basin_A30
 r.report map=basin_A30 units=h
 ```
 
-![Figure: Watershed draped over flow accumulation](r_water_outlet.png)  
+<img src="r_water_outlet.png" data-border="0" />  
 *Figure: Watershed draped over flow accumulation*
 
 ## SEE ALSO

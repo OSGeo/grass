@@ -26,10 +26,10 @@ reference literature (see suggested values in Notes and References).
 
 Output includes transport capacity raster map *transport_capacity* in
 \[kg/ms\], transport capacity limited erosion/deposition raster map
-*tlimit_erosion_deposition* \[kg/m^2s\] that are output
+*tlimit_erosion_deposition* \[kg/m<sup>2</sup>s\]i that are output
 almost immediately and can be viewed while the simulation continues.
 Sediment flow rate raster map *sediment_flux* \[kg/ms\], and net
-erosion/deposition raster map \[kg/m^2s\] can take longer time
+erosion/deposition raster map \[kg/m<sup>2</sup>s\] can take longer time
 depending on time step and simulation time. Simulation time is
 controlled by *niterations* \[minutes\] parameter. If the resulting
 erosion/deposition map is noisy, higher number of walkers, given by

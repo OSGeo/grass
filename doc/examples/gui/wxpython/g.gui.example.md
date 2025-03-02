@@ -1,10 +1,3 @@
----
-description: wxGUI Example Tool
-index: wxGUI
----
-
-# wxGUI Example Tool
-
 ## DESCRIPTION
 
 The purpose of the **Example Tool** is to make life easier for new wxGUI
@@ -30,7 +23,7 @@ See README to learn how to get Example Tool to work.
 
 ### EXAMPLE TOOL TOOLBAR
 
-![Select raster layer](icons/layer-raster-add.png)  *Select raster layer*  
+![](icons/layer-raster-add.png)  *Select raster layer*  
 Select raster layer and compute statistics related to this layer.
 
 ## SEE ALSO

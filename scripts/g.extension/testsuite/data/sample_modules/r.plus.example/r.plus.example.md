@@ -1,6 +1,6 @@
 ## DESCRIPTION
 
-The tool *r.plus.example* adds two raster maps.
+*r.plus.example*
 
 ## NOTES
 

@@ -376,7 +376,7 @@ class WSDialogBase(wx.Dialog):
             self.Fit()
 
         self.statusbar.SetStatusText(
-            _("Connecting to <%s>...") % self.server.GetValue().strip()
+            _("Connecting to <$s>...") % self.server.GetValue().strip()
         )
 
         # number of panels already connected

@@ -12,9 +12,8 @@ include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 # images
 IMGSRC := $(wildcard *.png) $(wildcard *.jpg) $(wildcard *.gif)
 IMGDST := $(patsubst %,$(HTMLDIR)/%,$(IMGSRC))
-MDIMGDST := $(patsubst %,$(MDDIR)/source/%,$(IMGSRC))
 
-default: $(IMGDST) $(MDIMGDST) lib
+default: $(IMGDST) lib
 
 #doxygen:
 DOXNAME=imagery

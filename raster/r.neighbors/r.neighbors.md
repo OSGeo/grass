@@ -9,7 +9,8 @@ might be assigned a value equal to the average of the values appearing
 in its 3 x 3 cell "neighborhood" in the input layer. Note that the
 centre cell is also included in the calculation.
 
-![Illustration for an 3x3 average neighborhood](r_neighbors.png)  
+![](r_neighbors.png)
+
 *Figure: Illustration for an 3x3 average neighborhood*
 
 ### OPTIONS

@@ -1,10 +1,3 @@
----
-description: wxGUI Animation tool
-index: topic_GUI|GUI
----
-
-# wxGUI Animation tool
-
 ## DESCRIPTION
 
 The **Animation Tool** is a *[wxGUI](wxGUI.md)* component for animating

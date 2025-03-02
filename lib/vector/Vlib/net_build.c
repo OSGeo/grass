@@ -167,7 +167,6 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                           tcols[i], Fi->table);
 
         tctype[i] = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
-        db_free_column(Column);
 
         if ((tctype[i] == DB_C_TYPE_INT || tctype[i] == DB_C_TYPE_DOUBLE) &&
             !strcmp(tcols[i], "cost"))
@@ -184,8 +183,6 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                                        NULL, &tvarrs[i]);
         ++i;
     }
-
-    Vect_destroy_field_info(Fi);
 
     G_debug(1, "forward costs: nrec = %d", nturns);
 
@@ -215,7 +212,6 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                           Fi->table);
 
         fctype = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
-        db_free_column(Column);
 
         if (fctype != DB_C_TYPE_INT && fctype != DB_C_TYPE_DOUBLE)
             G_fatal_error(
@@ -227,7 +223,6 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
         nrec = db_select_CatValArray(driver, Fi->table, Fi->key, ncol, NULL,
                                      &fvarr);
         G_debug(1, "node costs: nrec = %d", nrec);
-        Vect_destroy_field_info(Fi);
 
         tucfield_idx = Vect_cidx_get_field_index(Map, tucfield);
     }
@@ -509,7 +504,6 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                           Fi->table);
 
         fctype = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
-        db_free_column(Column);
 
         if (fctype != DB_C_TYPE_INT && fctype != DB_C_TYPE_DOUBLE)
             G_fatal_error(
@@ -527,7 +521,6 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                               Fi->table);
 
             bctype = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
-            db_free_column(Column);
 
             if (bctype != DB_C_TYPE_INT && bctype != DB_C_TYPE_DOUBLE)
                 G_fatal_error(_("Data type of column <%s> not supported (must "
@@ -539,7 +532,6 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                                          NULL, &bvarr);
             G_debug(1, "backward costs: nrec = %d", nrec);
         }
-        Vect_destroy_field_info(Fi);
     }
 
     skipped = 0;
@@ -674,6 +666,12 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
     dglInitializeSPCache(gr, &(Map->dgraph.spCache));
 
     G_message(_("Graph was built"));
+    if (Fi) {
+        Vect_destroy_field_info(Fi);
+    }
+    if (Column) {
+        db_free_column(Column);
+    }
 
     return 0;
 }
@@ -806,7 +804,6 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
                           Fi->table);
 
         fctype = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
-        db_free_column(Column);
 
         if (fctype != DB_C_TYPE_INT && fctype != DB_C_TYPE_DOUBLE)
             G_fatal_error(
@@ -824,7 +821,6 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
                               Fi->table);
 
             bctype = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
-            db_free_column(Column);
 
             if (bctype != DB_C_TYPE_INT && bctype != DB_C_TYPE_DOUBLE)
                 G_fatal_error(_("Data type of column <%s> not supported (must "
@@ -836,7 +832,6 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
                                          NULL, &bvarr);
             G_debug(1, "backward costs: nrec = %d", nrec);
         }
-        Vect_destroy_field_info(Fi);
     }
 
     skipped = 0;
@@ -982,7 +977,6 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
                           Fi->table);
 
         fctype = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
-        db_free_column(Column);
 
         if (fctype != DB_C_TYPE_INT && fctype != DB_C_TYPE_DOUBLE)
             G_fatal_error(
@@ -993,7 +987,6 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
         nrec = db_select_CatValArray(driver, Fi->table, Fi->key, ncol, NULL,
                                      &fvarr);
         G_debug(1, "node costs: nrec = %d", nrec);
-        Vect_destroy_field_info(Fi);
 
         for (i = 1; i <= nnodes; i++) {
             /* TODO: what happens if we set attributes of not existing node
@@ -1075,6 +1068,12 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
     dglInitializeSPCache(gr, &(Map->dgraph.spCache));
 
     G_message(_("Graph was built"));
+    if (Fi) {
+        Vect_destroy_field_info(Fi);
+    }
+    if (Column) {
+        db_free_column(Column);
+    }
 
     return 0;
 }

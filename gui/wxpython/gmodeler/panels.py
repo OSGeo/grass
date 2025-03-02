@@ -1770,13 +1770,15 @@ class PythonPanel(wx.Panel):
         """Run Python script"""
         self.filename = grass.tempfile()
         try:
-            Path(self.filename).write_text(self.body.GetText())
+            fd = open(self.filename, "w")
+            fd.write(self.body.GetText())
         except OSError as e:
             GError(_("Unable to launch Python script. %s") % e, parent=self)
             return
-
-        mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
-        os.chmod(self.filename, mode | stat.S_IXUSR)
+        finally:
+            fd.close()
+            mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
+            os.chmod(self.filename, mode | stat.S_IXUSR)
 
         for item in self.parent.GetModel().GetItems():
             if (
@@ -1785,12 +1787,12 @@ class PythonPanel(wx.Panel):
                 > 0
             ):
                 self.parent._gconsole.RunCmd(
-                    [self.filename, "--ui"], skipInterface=False, onDone=self.OnDone
+                    [fd.name, "--ui"], skipInterface=False, onDone=self.OnDone
                 )
                 break
         else:
             self.parent._gconsole.RunCmd(
-                [self.filename], skipInterface=True, onDone=self.OnDone
+                [fd.name], skipInterface=True, onDone=self.OnDone
             )
 
         event.Skip()

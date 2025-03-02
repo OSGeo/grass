@@ -131,7 +131,7 @@ d.vect archsites col=red
 
 Here is an example with artificial data.
 
-![v_net_visibility](v_net_visibility.png)
+![](v_net_visibility.png)
 
 Load data using here document syntax (Bash and unix-like commands lines
 only):

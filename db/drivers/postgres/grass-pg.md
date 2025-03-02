@@ -1,9 +1,3 @@
----
-description: PostgreSQL DATABASE DRIVER
----
-
-# PostgreSQL DATABASE DRIVER
-
 PostgreSQL database driver enables GRASS to store vector attributes in
 PostgreSQL server.
 

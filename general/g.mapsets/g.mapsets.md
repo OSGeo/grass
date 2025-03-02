@@ -91,7 +91,7 @@ PERMANENT mapset are always selected):
 g.mapsets -s
 ```
 
-![g_mapsets_gui](g_mapsets_gui.png)
+![](g_mapsets_gui.png)  
 
 ### Print available mapsets
 

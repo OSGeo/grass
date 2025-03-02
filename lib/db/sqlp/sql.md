@@ -1,9 +1,3 @@
----
-description: SQL support in GRASS GIS
----
-
-# SQL support in GRASS GIS
-
 Vector points, lines and areas usually have attribute data that are
 stored in DBMS. The attributes are linked to each vector object using a
 category number (attribute ID, usually the "cat" integer column). The

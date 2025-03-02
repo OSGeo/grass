@@ -1,9 +1,3 @@
----
-description: GRASS startup program
----
-
-# GRASS startup program
-
 ## SYNOPSIS
 
 **grass** \[**-h** \| **-help** \| **--help**\] \[**-v** \|

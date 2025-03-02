@@ -59,7 +59,7 @@ proper level of correction to use with *i.vi*.
 
 ### Vegetation Indices
 
-#### ARVI: Atmospheric Resistant Vegetation Index
+**ARVI: Atmospheric Resistant Vegetation Index**
 
 ARVI is resistant to atmospheric effects (in comparison to the NDVI) and
 is accomplished by a self correcting process for the atmospheric effect
@@ -73,7 +73,7 @@ ARVI = (nirchan - (2.0*redchan - bluechan)) /
        ( nirchan + (2.0*redchan - bluechan))
 ```
 
-#### CI: Crust Index
+**CI: Crust Index**
 
 Advantage is taken of a unique spectral feature of soil biogenic crust
 containing cyanobacteria. It has been shown that the special phycobilin
@@ -90,7 +90,7 @@ CI = 1 - (redchan - bluechan) /
        (redchan + bluechan)
 ```
 
-#### DVI: Difference Vegetation Index
+**DVI: Difference Vegetation Index**
 
 ```sh
 dvi( redchan, nirchan )
@@ -98,7 +98,7 @@ dvi( redchan, nirchan )
 DVI = ( nirchan - redchan )
 ```
 
-#### EVI: Enhanced Vegetation Index
+**EVI: Enhanced Vegetation Index**
 
 The enhanced vegetation index (EVI) is an optimized index designed to
 enhance the vegetation signal with improved sensitivity in high biomass
@@ -115,7 +115,7 @@ EVI = 2.5 * ( nirchan - redchan ) /
       ( nirchan + 6.0 * redchan - 7.5 * bluechan + 1.0 )
 ```
 
-#### EVI2: Enhanced Vegetation Index 2
+**EVI2: Enhanced Vegetation Index 2**
 
 A 2-band EVI (EVI2), without a blue band, which has the best similarity
 with the 3-band EVI, particularly when atmospheric effects are
@@ -133,7 +133,7 @@ EVI2 = 2.5 * ( nirchan - redchan ) /
        ( nirchan + 2.4 * redchan + 1.0 )
 ```
 
-#### GARI: green atmospherically resistant vegetation index
+**GARI: green atmospherically resistant vegetation index**
 
 The formula was actually defined: Gitelson, Anatoly A.; Kaufman, Yoram
 J.; Merzlyak, Mark N. (1996) Use of a green channel in remote sensing of
@@ -148,7 +148,7 @@ GARI = ( nirchan - (greenchan - (bluechan - redchan))) /
        ( nirchan + (greenchan - (bluechan - redchan)))
 ```
 
-#### GEMI: Global Environmental Monitoring Index
+**GEMI: Global Environmental Monitoring Index**
 
 ```sh
 gemi( redchan, nirchan )
@@ -160,7 +160,7 @@ GEMI = (( (2*((nirchan * nirchan)-(redchan * redchan)) +
        ( (redchan - 0.125) / (1 - redchan))
 ```
 
-#### GVI: Green Vegetation Index
+**GVI: Green Vegetation Index**
 
 ```sh
 gvi( bluechan, greenchan, redchan, nirchan, chan5chan, chan7chan)
@@ -170,7 +170,7 @@ GVI = ( -0.2848 * bluechan - 0.2435 * greenchan -
       0.1800 * chan7chan)
 ```
 
-#### IPVI: Infrared Percentage Vegetation Index
+**IPVI: Infrared Percentage Vegetation Index**
 
 ```sh
 ipvi( redchan, nirchan )
@@ -178,7 +178,7 @@ ipvi( redchan, nirchan )
 IPVI = nirchan/(nirchan+redchan)
 ```
 
-#### MSAVI2: second Modified Soil Adjusted Vegetation Index
+**MSAVI2: second Modified Soil Adjusted Vegetation Index**
 
 ```sh
 msavi2( redchan, nirchan )
@@ -186,7 +186,7 @@ msavi2( redchan, nirchan )
 MSAVI2 = (1/2)*(2*NIR+1-sqrt((2*NIR+1)^2-8*(NIR-red)))
 ```
 
-#### MSAVI: Modified Soil Adjusted Vegetation Index
+**MSAVI: Modified Soil Adjusted Vegetation Index**
 
 ```sh
 msavi( redchan, nirchan )
@@ -198,7 +198,7 @@ where a is the soil line intercept, s is the soil line slope, and X is
 an adjustment factor which is set to minimize soil noise (0.08 in
 original papers).
 
-#### NDVI: Normalized Difference Vegetation Index
+**NDVI: Normalized Difference Vegetation Index**
 
 ```sh
 ndvi( redchan, nirchan )
@@ -216,7 +216,7 @@ Satellite specific band numbers ([NIR, Red]):
 NDVI = (NIR - Red) / (NIR + Red)
 ```
 
-#### NDWI: Normalized Difference Water Index (after McFeeters, 1996)
+**NDWI: Normalized Difference Water Index** (after McFeeters, 1996)
 
 This index is suitable to detect water bodies.
 
@@ -238,7 +238,7 @@ NDWI = (NIR - SWIR) / (NIR + SWIR)
 This index is important for monitoring vegetation health (not
 implemented).
 
-#### PVI: Perpendicular Vegetation Index
+**PVI: Perpendicular Vegetation Index**
 
 ```sh
 pvi( redchan, nirchan, soil_line_slope )
@@ -246,7 +246,7 @@ pvi( redchan, nirchan, soil_line_slope )
 PVI = sin(a)NIR-cos(a)red
 ```
 
-#### SAVI: Soil Adjusted Vegetation Index
+**SAVI: Soil Adjusted Vegetation Index**
 
 ```sh
 savi( redchan, nirchan )
@@ -254,7 +254,7 @@ savi( redchan, nirchan )
 SAVI = ((1.0+0.5)*(nirchan - redchan)) / (nirchan + redchan +0.5)
 ```
 
-#### SR: Simple Vegetation ratio
+**SR: Simple Vegetation ratio**
 
 ```sh
 sr( redchan, nirchan )
@@ -262,9 +262,7 @@ sr( redchan, nirchan )
 SR = (nirchan/redchan)
 ```
 
-#### VARI: Visible Atmospherically Resistant Index
-
-VARI was designed to
+**VARI: Visible Atmospherically Resistant Index** VARI was designed to
 introduce an atmospheric self-correction (Gitelson A.A., Kaufman Y.J.,
 Stark R., Rundquist D., 2002. Novel algorithms for estimation of
 vegetation fraction Remote Sensing of Environment (80), pp76-87.)
@@ -275,7 +273,7 @@ vari = ( bluechan, greenchan, redchan )
 VARI = (green - red ) / (green + red - blue)
 ```
 
-#### WDVI: Weighted Difference Vegetation Index
+**WDVI: Weighted Difference Vegetation Index**
 
 ```sh
 wdvi( redchan, nirchan, soil_line_weight )
@@ -466,7 +464,7 @@ i.landsat.toar input=lsat7_2002. output=lsat7_2002_toar. sensor=tm7 \
 The resulting Landsat channels are names
 `lsat7_2002_toar.1 .. lsat7_2002_toar.8`.
 
-#### NDVI
+#### Calculation of NDVI
 
 The calculation of NDVI from the reflectance values is done as follows:
 
@@ -483,7 +481,7 @@ d.rast.leg lsat7_2002.ndvi
 ![North Carolina dataset: NDVI](i_vi_ndvi.png)  
 North Carolina dataset: NDVI
 
-#### ARVI
+#### Calculation of ARVI
 
 The calculation of ARVI from the reflectance values is done as follows:
 
@@ -499,7 +497,7 @@ d.rast.leg lsat7_2002.arvi
 ![North Carolina dataset: ARVI](i_vi_arvi.png)  
 North Carolina dataset: ARVI
 
-#### GARI
+#### Calculation of GARI
 
 The calculation of GARI from the reflectance values is done as follows:
 

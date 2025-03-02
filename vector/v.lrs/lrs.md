@@ -1,10 +1,3 @@
----
-name: LRS
-description: Toolset for LRS (Linear Referencing System)
----
-
-# Toolset for LRS (Linear Referencing System)
-
 ## DESCRIPTION
 
 A Linear Referencing System (LRS) is a system where features (points or

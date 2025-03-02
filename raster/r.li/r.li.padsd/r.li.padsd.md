@@ -5,9 +5,10 @@ hectares as:
 ![r.li.padsd formula](rlipadsd_formula.png)  
 with:  
 
-- *MPS*: mean patch area size
-- *a_i*: area of patch *i*
-- *N_patch*: number of patches
+- **MPS**: mean patch area size
+- **a<span class="small"><span class="small">i</span></span>**: area of
+  patch i
+- **N<span class="small">patch</span>**: number of patches
 
 This index is calculated using a 4 neighbour algorithm, diagonal cells
 are ignored when tracing a patch.

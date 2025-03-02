@@ -109,9 +109,9 @@ and steep slopes.
 
 The core of the algorithm is determining, for each cell, the
 line-of-sight and its intersections with the cells in the terrain. For a
-(square) grid of *n* cells, there can be *O(n^1/2)* cells
+(square) grid of *n* cells, there can be *O(n <sup>1/2</sup>)* cells
 that intersect the LOS. If we test every single such cell for every
-point in the grid, this adds up to *O(n^3/2)* tests. We can do
+point in the grid, this adds up to *O(n<sup>3/2</sup>)* tests. We can do
 all these tests faster if we re-use information from one point to the
 next (two grid points that are close to each other will be intersected
 by a lot of the same points) and organize the computation differently.
@@ -132,7 +132,7 @@ gradient among these. If the cell's gradient is higher, it is marked as
 visible, whereas if it is lower, it is marked as invisible.
 
 For a (square) raster of *n* point in total, the standard viewshed
-algorithm uses *O(n sqrt(n))= O(n^3/2)* time, while the
+algorithm uses *O(n sqrt(n))= O(n<sup>3/2</sup>)* time, while the
 sweep-line algorithm uses *O(n lg n)* time. This algorithm is efficient
 in terms of CPU operations and can be also made efficient in terms of
 I/O-operations. For all details see the REFERENCES below.

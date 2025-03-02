@@ -124,11 +124,8 @@ edges. To perform the latter function, use the **raster=***name* option.
 
 ### Printing extent and raster resolution in 2D and 3D
 
+<span class="code">` g.region -p `</span>  
 This will print the current region in the format:
-
-```sh
-g.region -p
-```
 
 ```sh
 projection: 1 (UTM)
@@ -145,12 +142,9 @@ rows:       700
 cols:       950
 ```
 
+<span class="code">` g.region -p3 `</span>  
 This will print the current region and the 3D region (used for voxels)
 in the format:
-
-```sh
-g.region -p3
-```
 
 ```sh
 projection: 1 (UTM)
@@ -175,12 +169,9 @@ cols3:      950
 depths:     1
 ```
 
+<span class="code">` g.region -g `</span>  
 The **-g** option prints the region in the following script style
 (key=value) format:
-
-```sh
-g.region -g
-```
 
 ```sh
 n=4928000
@@ -193,12 +184,9 @@ rows=700
 cols=950
 ```
 
+<span class="code">` g.region -bg `</span>  
 The **-bg** option prints the region in the following script style
 (key=value) format plus the boundary box in latitude-longitude/WGS84:
-
-```sh
-g.region -bg
-```
 
 ```sh
 n=4928000
@@ -215,11 +203,8 @@ LL_N=44.50164277
 LL_S=44.37302019
 ```
 
+<span class="code">` g.region -l `</span>  
 The **-l** option prints the region in the following format:
-
-```sh
-g.region -l
-```
 
 ```sh
 long: -103.86789484 lat: 44.50165890 (north/west corner)
@@ -232,12 +217,9 @@ Center longitude: 103:44:59.170374W [-103.74977]
 Center latitude:  44:26:14.439781N [44.43734]
 ```
 
+<span class="code">` g.region -pm `</span>  
 This will print the current region in the format (latitude-longitude
 project):
-
-```sh
-g.region -pm
-```
 
 ```sh
 projection: 3 (Latitude-Longitude)
@@ -258,44 +240,45 @@ degrees.
 
 ### Changing extent and raster resolution using values
 
-`g.region n=7360100 e=699000`  
-This will reset the northing and easting for the current region, but leave
+<span class="code">` g.region n=7360100 e=699000 `</span>  
+will reset the northing and easting for the current region, but leave
 the south edge, west edge, and the region cell resolutions unchanged.
 
-`g.region n=51:36:05N e=10:10:05E s=51:29:55N w=9:59:55E res=0:00:01`  
-This will reset the northing, easting, southing, westing and resolution for
+<span class="code">` g.region n=51:36:05N e=10:10:05E s=51:29:55N w=9:59:55E res=0:00:01 `</span>  
+will reset the northing, easting, southing, westing and resolution for
 the current region, here in DMS latitude-longitude style (decimal
 degrees and degrees with decimal minutes can also be used).
 
-`g.region -dp s=698000`  
-This will set the current region from the default region for the GRASS
+<span class="code">` g.region -dp s=698000 `</span>  
+will set the current region from the default region for the GRASS
 project, reset the south edge to 698000, and then print the result.
 
-`g.region n=n+1000 w=w-500`  
+<span class="code">` g.region n=n+1000 w=w-500 `</span>  
 The n=*value* may also be specified as a function of its current value:
 n=n+*value* increases the current northing, while n=n-*value* decreases
 it. This is also true for s=*value*, e=*value*, and w=*value*. In this
 example the current region's northern boundary is extended by 1000 units
 and the current region's western boundary is decreased by 500 units.
 
-`g.region n=s+1000 e=w+1000`  
+<span class="code">` g.region n=s+1000 e=w+1000 `</span>  
 This form allows the user to set the region boundary values relative to
 one another. Here, the northern boundary coordinate is set equal to 1000
 units larger than the southern boundary's coordinate value, and the
 eastern boundary's coordinate value is set equal to 1000 units larger
 than the western boundary's coordinate value. The corresponding forms
-`s=n-value` and
-`w=e-value` may be used to set the values of the region's southern and
+s=n-*value* and
+
+w=e-*value* may be used to set the values of the region's southern and
 western boundaries, relative to the northern and eastern boundary
 values.
 
 ### Changing extent and raster resolution using maps
 
-`g.region raster=soils`  
+<span class="code">` g.region raster=soils `</span>  
 This form will make the current region settings exactly the same as
 those given in the cell header file for the raster map layer *soils*.
 
-`g.region raster=soils zoom=soils`  
+<span class="code">` g.region raster=soils zoom=soils `</span>  
 This form will first look up the cell header file for the raster map
 layer *soils*, use this as the current region setting, and then shrink
 the region down to the smallest region which still encompasses all
@@ -304,13 +287,13 @@ non-NULL data in the map layer *soils*. Note that if the parameter
 all non-NULL data values in the soils map that were located within the
 *current region* settings.
 
-`g.region -up raster=soils`  
+<span class="code">` g.region -up raster=soils `</span>  
 The **-u** option suppresses the re-setting of the current region
 definition. This can be useful when it is desired to only extract region
 information. In this case, the cell header file for the soils map layer
 is printed without changing the current region settings.
 
-`g.region -up zoom=soils save=soils`  
+<span class="code">` g.region -up zoom=soils save=soils `</span>  
 This will zoom into the smallest region which encompasses all non-NULL
 soils data values, and save the new region settings in a file to be
 called *soils* and stored under the `windows` directory in the user's
@@ -318,7 +301,7 @@ current mapset. The current region settings are not changed.
 
 ### Changing extent and raster resolution in 3D
 
-`g.region b=0 t=3000 tbres=200 res3=100 g.region -p3`  
+<span class="code">` g.region b=0 t=3000 tbres=200 res3=100 g.region -p3 `</span>  
 This will define the 3D region for voxel computations. In this example a
 volume with bottom (0m) to top (3000m) at horizontal resolution (100m)
 and vertical resolution (200m) is defined.

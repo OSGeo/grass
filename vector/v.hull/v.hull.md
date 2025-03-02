@@ -10,8 +10,8 @@ In the case of 3D input points, the hull will be a 3D hull as well,
 unless the user specifies the **-f** flag. The 3D hull will be composed
 of triangular faces.
 
-![Convex hull polygon](v_hull.png)  
-*Fig: Convex hull polygon created with v.hull*
+<img src="v_hull.png" data-border="1" />  
+Fig: Convex hull polygon created with *v.hull*
 
 ## NOTES
 
@@ -43,8 +43,8 @@ d.vect random3d_b color=red
 # 3D view in wxGUI (g.gui)
 ```
 
-![Convex hull in 3D](v_hull_3d.png)  
-*Fig: Convex hull in 3D from 3D points created with v.hull*
+<img src="v_hull_3d.png" data-border="1" />  
+Fig: Convex hull in 3D from 3D points created with *v.hull*
 
 ## REFERENCES
 

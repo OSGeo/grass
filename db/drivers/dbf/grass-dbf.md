@@ -1,9 +1,3 @@
----
-description: DBF DATABASE DRIVER
----
-
-# DBF DATABASE DRIVER
-
 The DBF driver is a file based attribute table driver.
 
 ## Defining the DBF driver

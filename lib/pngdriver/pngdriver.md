@@ -1,9 +1,3 @@
----
-description: PNG DISPLAY DRIVER
----
-
-# PNG DISPLAY DRIVER
-
 *PNG display driver* to create PNG, PPM, or BMP images.
 
 ## DESCRIPTION

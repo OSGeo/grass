@@ -4,11 +4,12 @@
 ![r.li.renyi formula](r_li_renyi.png)  
 with:
 
-- *H*: Renyi entropy
-- *alpha*: order of the generalized entropy
-- *i*: patch type
-- *S*: number of different patch types
-- *p_i*: proportional abundance of patch type *i*
+- **H**: Renyi entropy
+- **alpha**: order of the generalized entropy
+- **i**: patch type
+- **S**: number of different patch types
+- **p<span class="small"><span class="small">i</span></span>**:
+  proportional abundance of patch type *i*
 
 ## NOTES
 

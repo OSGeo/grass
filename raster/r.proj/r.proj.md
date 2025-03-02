@@ -273,7 +273,7 @@ r.proj input=elevation.dem output=elevation.dem.reproj \
 
 [PROJ](https://proj.org): Projection/datum support library
 
-Further reading:
+**Further reading**
 
 - [ASPRS Grids and
   Datum](https://www.asprs.org/asprs-publications/grids-and-datums)

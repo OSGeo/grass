@@ -28,7 +28,7 @@ d.rhumbline coordinates=55:58W,33:18S,26:43E,60:37N \
 d.grid 10
 ```
 
-![Rhumbline (loxodrome)](d_rhumbline.png)  
+<img src="d_rhumbline.png" data-border="1" />  
 *Rhumbline (loxodrome)*
 
 ## NOTES

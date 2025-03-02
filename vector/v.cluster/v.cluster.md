@@ -117,8 +117,8 @@ d.mon wx0
 d.vect map=clusters_optics layer=2 icon=basic/point size=10 color=none
 ```
 
-![Four different methods with default settings applied to 1000
-random points](v_cluster_4_methods.png)  
+![](v_cluster_4_methods.png)
+
 *Figure: Four different methods with default settings applied to 1000
 random points generated in the same way as in the example.*
 

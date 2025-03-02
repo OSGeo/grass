@@ -90,7 +90,6 @@
 import sys
 
 import grass.script as gs
-from contextlib import nullcontext
 
 ############################################################################
 
@@ -120,66 +119,73 @@ def main():
     if gs.verbosity() > 0 and not outpath:
         sys.stderr.write("----------------------------------------------\n")
 
-    # Replace separate "if outpath" and "else" blocks with a unified context manager:
-    with (
-        open(outpath, "w")
-        if (outpath and outpath != "-")
-        else nullcontext(sys.stdout) as out_file
-    ):
-        for ttype in temporal_type.split(","):
-            time = "absolute time" if ttype == "absolute" else "relative time"
+    if outpath:
+        outfile = open(outpath, "w")
 
-            stds_list = tgis.get_dataset_list(
-                type, ttype, columns, where, order, dbif=dbif
-            )
+    for ttype in temporal_type.split(","):
+        time = "absolute time" if ttype == "absolute" else "relative time"
 
-            mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
+        stds_list = tgis.get_dataset_list(type, ttype, columns, where, order, dbif=dbif)
 
-            for key in mapsets:
-                if key in stds_list.keys():
-                    rows = stds_list[key]
+        # Use the correct order of the mapsets, hence first the current mapset, then
+        # alphabetic ordering
+        mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
 
-                    if rows:
-                        if gs.verbosity() > 0 and (not outpath or outpath == "-"):
-                            if issubclass(sp.__class__, tgis.AbstractMapDataset):
-                                sys.stderr.write(
-                                    _(
-                                        "Time stamped %s maps with %s available in mapset "
-                                        "<%s>:\n"
-                                    )
-                                    % (sp.get_type(), time, key)
+        # Print for each mapset separately
+        for key in mapsets:
+            if key in stds_list.keys():
+                rows = stds_list[key]
+
+                if rows:
+                    if gs.verbosity() > 0 and not outpath:
+                        if issubclass(sp.__class__, tgis.AbstractMapDataset):
+                            sys.stderr.write(
+                                _(
+                                    "Time stamped %s maps with %s available in mapset "
+                                    "<%s>:\n"
                                 )
+                                % (sp.get_type(), time, key)
+                            )
+                        else:
+                            sys.stderr.write(
+                                _(
+                                    "Space time %s datasets with %s available in "
+                                    "mapset <%s>:\n"
+                                )
+                                % (sp.get_new_map_instance(None).get_type(), time, key)
+                            )
+
+                    # Print the column names if requested
+                    if colhead and first:
+                        output = ""
+                        count = 0
+                        for key in rows[0].keys():
+                            if count > 0:
+                                output += separator + str(key)
                             else:
-                                sys.stderr.write(
-                                    _(
-                                        "Space time %s datasets with %s available in "
-                                        "mapset <%s>:\n"
-                                    )
-                                    % (
-                                        sp.get_new_map_instance(None).get_type(),
-                                        time,
-                                        key,
-                                    )
-                                )
+                                output += str(key)
+                            count += 1
+                        if outpath:
+                            outfile.write("{st}\n".format(st=output))
+                        else:
+                            print(output)
+                        first = False
 
-                        if colhead and first:
-                            output = ""
-                            count = 0
-                            for col_key in rows[0].keys():
-                                output += (separator if count > 0 else "") + str(
-                                    col_key
-                                )
-                                count += 1
-                            out_file.write("{st}\n".format(st=output))
-                            first = False
-
-                        for row in rows:
-                            output = ""
-                            count = 0
-                            for col in row:
-                                output += (separator if count > 0 else "") + str(col)
-                                count += 1
-                            out_file.write("{st}\n".format(st=output))
+                    for row in rows:
+                        output = ""
+                        count = 0
+                        for col in row:
+                            if count > 0:
+                                output += separator + str(col)
+                            else:
+                                output += str(col)
+                            count += 1
+                        if outpath:
+                            outfile.write("{st}\n".format(st=output))
+                        else:
+                            print(output)
+    if outpath:
+        outfile.close()
     dbif.close()
 
 

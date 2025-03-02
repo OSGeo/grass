@@ -1,10 +1,3 @@
----
-description: wxGUI Graphical Modeler
-index: topic_GUI|GUI
----
-
-# wxGUI Graphical Modeler
-
 ## DESCRIPTION
 
 The **Graphical Modeler** is a *[wxGUI](wxGUI.md)* component which

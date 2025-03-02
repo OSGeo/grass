@@ -8,7 +8,9 @@ erroneous geometries.
 
 ### Break lines/boundaries
 
-Setting *tool=break* breaks lines/boundaries at intersections and it also
+*tool=break*
+
+The *break* tool breaks lines/boundaries at intersections and it also
 breaks lines/boundaries forming a collapsed loop. For example,
 0.0;1.0;0.0 is broken at 1.0.
 
@@ -21,7 +23,9 @@ Hint: Breaking lines should be followed by removing duplicates, e.g.
 
 ### Remove duplicate geometry features
 
-Setting *tool=rmdupl* removes geometry features with identical coordinates.
+*tool=rmdupl*
+
+The *rmdupl* tool removes geometry features with identical coordinates.
 Categories are merged. If a point and a centroid have identical
 coordinates, one of them will be removed if both points and centroids
 are selected with *v.clean ... type=point,centroid*. The same applies
@@ -35,10 +39,12 @@ polygons.
 
 ### Remove dangles or change boundary dangles to type line
 
+*tool=rmdangle* and *tool=chdangle*
+
 A line/boundary is considered to be a dangle if no other line of given
 *type* is on at least one end node. If a dangle is formed by several
 lines, such a string of lines is taken as one dangle and line lengths
-are summarized. Setting *tool=rmdangle* deletes a dangle if the (combined)
+are summarized. The *rmdangle* tool deletes a dangle if the (combined)
 length is shorter than *thresh* or *thresh* \< 0. If the combined length
 is larger than *thresh*, nothing is deleted.
 
@@ -57,16 +63,18 @@ small *thresh* value can be followed by subsequent passes with higher
 *thresh* values. This can be done as one *v.clean* job by listing the
 tool several times and by defining a list of increasing *thresh* values.
 
-Setting *tool=chdangle* is similar to the *rmdangle* tool, but works only on
+The *chdangle* tool is similar to the *rmdangle* tool, but works only on
 boundaries and changes dangling boundaries to lines instead of removing
 them.
 
 ### Remove or change bridges connecting an area and an island or two islands
 
+*tool=rmbridge* and *tool=chbridge*
+
 A bridge is an area type connection of an island (polygon in a polygon)
 to the outer polygon. This is topologically incorrect (but OGC Simple
-Features allow it). Setting *tool=rmbridge* removes bridges and setting
-*tool=chbridge* changes bridges to type line:
+Features allow it). The *rmbridge* tool removes bridges and the
+*chbridge* tool changes bridges to type line:
 
 ```sh
     +-------------+             +-------------+   +-------------+
@@ -90,7 +98,9 @@ Threshold does not apply (it is ignored), use an arbitrary value (e.g.,
 
 ### Snap lines to vertex in threshold
 
-Setting *tool=snap* snaps vertices to another vertex not farther away than
+*tool=snap*
+
+The *snap* tool snaps vertices to another vertex not farther away than
 *thresh*. If there is no other vertex within *thresh*, no snapping will
 be done. The *type* option can have a strong influence on the result. A
 too large threshold and *type=boundary* can severely damage area
@@ -107,7 +117,9 @@ more small angles a left. Additional cleaning with e.g.
 
 ### Remove duplicate area centroids
 
-Setting *tool=rmdac* removes duplicate area centroids that can result from
+*tool=rmdac*
+
+The *rmdac* tool removes duplicate area centroids that can result from
 deleting boundaries.
 
 Threshold does not apply (it is ignored), use an arbitrary value (e.g.,
@@ -115,7 +127,9 @@ Threshold does not apply (it is ignored), use an arbitrary value (e.g.,
 
 ### Break (topologically clean) areas (imported from a non topological format like ShapeFile)
 
-Setting *tool=bpol* breaks boundaries on each point shared between 2 and
+*tool=bpol*
+
+The *bpol* tool breaks boundaries on each point shared between 2 and
 more areas where angles of boundary segments are different and on all
 boundary nodes (start and end points of each boundary). The *bpol* tool
 behaves similar to *break* for boundaries, but does not break collapsed
@@ -130,7 +144,9 @@ with *v.clean ... tool=bpol*, duplicates are automatically removed.
 
 ### Remove vertices in threshold from lines and boundaries
 
-Setting *tool=prune* simplifies lines and boundaries by removing vertices
+*tool=prune*
+
+The *prune* tool simplifies lines and boundaries by removing vertices
 according to threshold. This tool preserves area topology, areas are
 never deleted and centroid attachment is never changed.
 *[v.generalize](v.generalize.md)* offers much more functionality for
@@ -138,7 +154,9 @@ line simplification but does not preserve area topology.
 
 ### Remove small areas
 
-Setting *tool=rmarea* removes all areas \<= *thresh*. The longest boundary
+*tool=rmarea*
+
+The *rmarea* tool removes all areas \<= *thresh*. The longest boundary
 with an adjacent area is removed or all boundaries if there is no
 adjacent area. Area categories are not combined when a small area is
 merged with a larger area.
@@ -148,7 +166,9 @@ projects or projects with units other than meters.
 
 ### Remove all lines or boundaries of zero length
 
-Setting *tool=rmline* removes all lines or boundaries of zero length that
+*tool=rmline*
+
+The *rmline* tool removes all lines or boundaries of zero length that
 may have resulted from other cleaning operations. Zero length boundaries
 are redundant and do not influence area topology.
 
@@ -157,15 +177,19 @@ Threshold does not apply (it is ignored), use an arbitrary value (e.g.,
 
 ### Remove small angles between lines at nodes
 
-Setting *tool=rmsa* only concerns angles which are so small that the
+*tool=rmsa*
+
+The *rmsa* tool only concerns angles which are so small that the
 calculated angle is 0. The following figure should help demonstrate what
 the tool does.
 
 Threshold does not apply, use dummy value if *v.clean* is run with
 several tools.
 
-![v_clean_rmsa](v_clean_rmsa.png)  
-*tool=rmsa*
+|                                                |
+|------------------------------------------------|
+| <img src="v_clean_rmsa.png" data-border="1" /> |
+| *tool=rmsa*                                    |
 
 The *rmsa* tool should be followed by *break,rmdupl*. The *rmsa* tool
 followed by *break,rmdupl* may need to be run more than once to remove
@@ -182,7 +206,7 @@ vector.
 
 ## EXAMPLES
 
-### Snapping lines to vertex in threshold
+### Snap lines to vertex in threshold
 
 ```sh
 v.clean input=testmap output=cleanmap tool=snap threshold=1

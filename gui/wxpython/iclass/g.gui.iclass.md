@@ -1,10 +1,3 @@
----
-description: wxGUI Supervised Classification Tool
-index: topic_GUI|GUI
----
-
-# wxGUI Supervised Classification Tool
-
 ## KEYWORDS
 
 [display](display.md), [GUI](topic_GUI.md),

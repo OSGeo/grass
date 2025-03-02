@@ -4,9 +4,10 @@
 ![r.li.simpson formula](r_li_simpson_formula.png)  
 with:
 
-- *i*: patch type
-- *m*: number of different patch types
-- *p_i*: proportional abundance of patch type *i*
+- **i**: patch type
+- **m**: number of different patch types
+- **p<span class="small"><span class="small">i</span></span>**:
+  proportional abundance of patch type *i*
 
 ## NOTES
 

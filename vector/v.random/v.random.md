@@ -101,8 +101,8 @@ population standard deviation: 3563.95
 skewness: 0.34703
 ```
 
-![Random points with different X, Y, and Z coordinates](vrandom_z.png)  
-*Random points with different X, Y, and Z coordinates*
+<img src="vrandom_z.png" data-border="1" />  
+Random points with different X, Y, and Z coordinates
 
 ### Generating random points in selected areas
 
@@ -139,8 +139,8 @@ d.mon wx0
 d.vect randareas6k -c
 ```
 
-![Random adjacent areas from random points](vrandom_polygons.png)  
-*Random adjacent areas from random points (here: used as centroids)*
+<img src="vrandom_polygons.png" data-border="1" />  
+Random adjacent areas from random points (here: used as centroids)
 
 To eventually obtain isolated areas, selected areas can be extracted
 with *[v.extract](v.extract.md)*.
@@ -207,8 +207,9 @@ cat|landclass96_cat|landclass96_label
 ...
 ```
 
-![Random points only sampled in forested areas](vrandom_restricted_attr.png)  
-*Random points only sampled in forested areas (stratified random sampling)*
+<img src="vrandom_restricted_attr.png" data-border="1" />  
+Random points only sampled in forested areas (stratified random
+sampling)
 
 ### Stratified random sampling: Random sampling from vector map with spatial constraints
 
@@ -221,9 +222,9 @@ r.to.vect -v input=landclass96 output=landclass96 type=area
 v.random restrict=landclass96 output=random_samples npoints=2 where="label = 'water'" layer=1 -a
 ```
 
-![Two random points sampled in each individual water body](vrandom_restricted_area.png)  
-*Two random points sampled in each individual water body (stratified
-random sampling)*
+<img src="vrandom_restricted_area.png" data-border="1" />  
+Two random points sampled in each individual water body (stratified
+random sampling)
 
 ## SEE ALSO
 

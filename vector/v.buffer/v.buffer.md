@@ -45,18 +45,18 @@ The following vector line related corners (also called "cap") exist:
 By default *v.buffer* creates rounded buffers (blue color on figure
 below):
 
-![v_buffer_line](v_buffer_line.png)
+![](v_buffer_line.png)
 
 Straight corners with caps are created using the **-s** flag (red color
 on the figure below), while the **-c** flag doesn't make caps at the
 ends of polylines (green color on the figure below):
 
-![v_buffer_line_s](v_buffer_line_s.png)
+![](v_buffer_line_s.png) ![](v_buffer_line_c.png)
 
 With a point vector map as input data, square buffers are created
 instead of round buffers by using the **-s** flag.
 
-![v_buffer_point_s](v_buffer_point_s.png)
+![](v_buffer_point_s.png)
 
 ## EXAMPLES
 
@@ -68,9 +68,9 @@ All examples are based on the North Carolina sample dataset.
 v.buffer input=roadsmajor output=roadsmajor_buffer type=line distance=100
 ```
 
-![Buffer of 100m along the roadsmajor lines](v_buffer_lines.png)  
-*Buffer of 100m along the "roadsmajor" lines (map subset, original center
-line shown in black)*
+<img src="v_buffer_lines.png" data-border="1" />  
+Buffer of 100m along the "roadsmajor" lines (map subset, original center
+line shown in black)
 
 ### Circles around input points
 
@@ -78,9 +78,9 @@ line shown in black)*
 v.buffer input=hospitals output=hospitals_circled type=point distance=2000
 ```
 
-![Buffer of 2000m around the hospitals points](v_buffer_points.png)  
-*Buffer of 2000m around the "hospitals" points (map subset, original
-points shown in black, new area centroids in red)*
+<img src="v_buffer_points.png" data-border="1" />  
+Buffer of 2000m around the "hospitals" points (map subset, original
+points shown in black, new area centroids in red)
 
 ### Circles around input points with attribute transfer
 
@@ -100,9 +100,9 @@ v.extract in=hospitals_circled output=hospital_36_circled layer=1 cats=36 -d
 v.buffer input=lakes output=lakes_buffer type=area distance=100
 ```
 
-![Buffer of 100m around the "lakes" polygons](v_buffer_areas.png)  
-*Buffer of 100m around the "lakes" polygons (map subset, original areas
-shown in black)*
+<img src="v_buffer_areas.png" data-border="1" />  
+Buffer of 100m around the "lakes" polygons (map subset, original areas
+shown in black)
 
 ### Buffer inside input areas
 
@@ -113,10 +113,9 @@ buffer") is generated using a negative **distance** value:
 v.buffer input=lakes output=lakes_buffer type=area distance=-50
 ```
 
-![Internal buffer of 50m inside the lakes polygons](v_buffer_areas_int.png)  
-*Internal buffer of 50m inside the "lakes" polygons (map subset, original
-areas shown in black)*
-
+<img src="v_buffer_areas_int.png" data-border="1" />  
+Internal buffer of 50m inside the "lakes" polygons (map subset, original
+areas shown in black)  
 Not all features are buffered, only the polygons that allow creation
 inside a topological cleaned polygon.
 

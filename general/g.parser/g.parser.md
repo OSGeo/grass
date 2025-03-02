@@ -1,10 +1,3 @@
----
-name: g.parser
-description: Provides full parser support for GRASS scripts.
----
-
-# Provides full parser support for GRASS scripts
-
 ## KEYWORDS
 
 [general](general.md), [support](topic_support.md),

@@ -1,10 +1,3 @@
----
-description: GRASS ASCII vector format specification
-index: vector
----
-
-# GRASS ASCII vector format specification
-
 A vector map in GRASS native vector format may contain a mix of
 *primitives* including points, lines, boundaries, centroids, areas,
 faces, and kernels. The GRASS ASCII vector format may contain also a

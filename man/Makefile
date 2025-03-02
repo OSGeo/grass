@@ -14,13 +14,9 @@ DSTFILES := \
 	$(HTMLDIR)/parser_standard_options.css \
 	$(HTMLDIR)/parser_standard_options.js \
 	$(MDDIR)/mkdocs.yml \
-	$(MDDIR)/source/grass_logo.svg \
-	$(MDDIR)/source/grass_icon.png \
-	$(MDDIR)/source/favicon.ico \
+	$(MDDIR)/source/grass_logo.png \
 	$(MDDIR)/source/grassdocs.css \
-	$(MDDIR)/scripts/hook_list_scripts.py \
-	$(MDDIR)/overrides/partials/footer.html \
-	$(MDDIR)/overrides/partials/actions.html
+	$(MDDIR)/overrides/partials/footer.html
 
 categories = \
 	d:display \
@@ -225,6 +221,9 @@ $(HTMLDIR)/grassdocs.css: grassdocs.css
 $(HTMLDIR)/grass_logo.png: grass_logo.png
 	$(INSTALL_DATA) $< $@
 
+$(MDDIR)/source/grass_logo.png: grass_logo.png
+	$(INSTALL_DATA) $< $@
+
 $(HTMLDIR)/hamburger_menu.svg: hamburger_menu.svg
 	$(INSTALL_DATA) $< $@
 
@@ -246,28 +245,10 @@ $(HTMLDIR)/parser_standard_options.css: parser_standard_options.css
 $(MDDIR)/mkdocs.yml: mkdocs/mkdocs.yml
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/grass_logo.svg: grass_logo.svg
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/grass_icon.png: grass_icon.png
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/source/favicon.ico: favicon.ico
-	$(INSTALL_DATA) $< $@
-
 $(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/scripts:
-	$(MKDIR) $@
-
 $(MDDIR)/overrides/partials/footer.html: mkdocs/overrides/partials/footer.html | $(MDDIR)/overrides/partials
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/overrides/partials/actions.html: mkdocs/overrides/partials/actions.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/overrides/partials:

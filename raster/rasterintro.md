@@ -1,11 +1,4 @@
----
-description: Raster data processing in GRASS GIS
-index: raster
----
-
-# Raster data processing in GRASS GIS
-
-## Raster maps in general
+### Raster maps in general
 
 A "raster map" is a data layer consisting of a gridded array of cells.
 It has a certain number of rows and columns, with a data point (or null
@@ -43,7 +36,7 @@ resolution then do the resampling themselves.
 destination) simultaneously; both will have an impact upon the final
 result.
 
-## Raster import and export
+### Raster import and export
 
 The module [r.in.gdal](r.in.gdal.md) offers a common interface for many
 different raster formats. Additionally, it also offers options such as
@@ -76,7 +69,7 @@ GRASS GIS raster map exchange between different projects with the same
 CRS can be done in a lossless way using the [r.pack](r.pack.md) and
 [r.unpack](r.unpack.md) modules.
 
-## Metadata
+### Metadata
 
 The [r.info](r.info.md) module displays general information about a map
 such as region extent, data range, data type, creation history, and
@@ -85,9 +78,9 @@ can be updated with [r.support](r.support.md). Timestamps are managed
 with [r.timestamp](r.timestamp.md). Region extent and resolution are
 mangaged with [r.region](r.region.md).
 
-## Raster map operations
+### Raster map operations
 
-### Resampling methods and interpolation methods
+#### Resampling methods and interpolation methods
 
 GRASS raster map processing is always performed in the current region
 settings (see [g.region](g.region.md)), i.e. the current region extent
@@ -161,7 +154,7 @@ statistical methods in creating the new raster map.
 Otherwise, for interpolation of scattered data, use the *v.surf.\** set
 of modules.
 
-### Raster MASKs
+#### Raster MASKs
 
 If a raster map named "MASK" exists, most GRASS raster modules will
 operate only on data falling inside the masked area, and treat any data
@@ -176,7 +169,7 @@ changed with r.quant).
 
 (see [r.mask](r.mask.md))
 
-## Raster map statistics
+### Raster map statistics
 
 A couple of commands are available to calculate local statistics
 ([r.neighbors](r.neighbors.md)), and global statistics
@@ -200,7 +193,7 @@ cover map support for this, see the alternative
 support for floating-point cover maps, see the alternative
 [r.stats.quantile](r.stats.quantile.md).
 
-## Raster map algebra and aggregation
+### Raster map algebra and aggregation
 
 The [r.mapcalc](r.mapcalc.md) command provides raster map algebra
 methods. The [r.resamp.stats](r.resamp.stats.md) command resamples
@@ -209,12 +202,12 @@ raster map layers using various aggregation methods, the
 second map. [r.resamp.interp](r.resamp.interp.md) resamples raster map
 layers using interpolation.
 
-## Regression analysis
+### Regression analysis
 
 Both linear ([r.regression.line](r.regression.line.md)) and multiple
 regression ([r.regression.multi](r.regression.multi.md)) are supported.
 
-## Hydrologic modeling toolbox
+### Hydrologic modeling toolbox
 
 Watershed modeling related modules are
 [r.basins.fill](r.basins.fill.md), [r.water.outlet](r.water.outlet.md),
@@ -226,11 +219,11 @@ simulated with [r.lake](r.lake.md). Hydrologic simulation model are
 available as [r.sim.sediment](r.sim.sediment.md),
 [r.sim.water](r.sim.water.md), and [r.topmodel](r.topmodel.md).
 
-## Raster format
+### Raster format
 
 In GRASS GIS, raster data can be stored as 2D or 3D grids.
 
-### 2D raster maps
+#### 2D raster maps
 
 2D rasters support three data types (for technical details, please refer
 to the Wiki article [GRASS raster
@@ -243,7 +236,7 @@ semantics](https://grasswiki.osgeo.org/wiki/GRASS_raster_semantics)):
 In most GRASS GIS resources, 2D raster maps are usually called "raster"
 maps.
 
-### 3D raster maps
+#### 3D raster maps
 
 The 3D raster map type is usually called "3D raster" but other names
 like "RASTER3D", "voxel", "volume", "GRID3D" or "3d cell" are yet
@@ -251,7 +244,7 @@ common. 3D rasters support only single- and double-precision
 floating-point. 3D raster's single-precision data type is most often
 called "float", and the double-precision one "double".
 
-### No-data management and data portability
+#### No-data management and data portability
 
 GRASS GIS distinguishes NULL and zero. When working with NULL data, it
 is important to know that operations on NULL cells lead to NULL cells.
@@ -259,7 +252,7 @@ is important to know that operations on NULL cells lead to NULL cells.
 The GRASS GIS raster format is architecture independent and portable
 between 32bit and 64bit machines.
 
-## Raster compression
+### Raster compression
 
 All GRASS GIS raster map types are by default ZSTD compressed if
 available, otherwise ZLIB compressed. Through the environment variable
@@ -321,7 +314,7 @@ for ZLIB, 3 for LZ4,4 for BZIP2, and 5 for ZSTD.
 Obviously, decompression is controlled by the raster map's compression,
 not the environment variable.
 
-## See also
+### See also
 
 - [Introduction into 3D raster data (voxel)
   processing](raster3dintro.md)

@@ -9,7 +9,7 @@ map layer whose cell values represent friction cost.
 (time) of moving between each cell and the user-specified starting
 points and 2) a second raster map showing the movement direction to the
 next cell on the path back to the start point (see [Movement
-Direction](#movement-direction)). It uses an input elevation raster map whose cell
+Direction](#move)). It uses an input elevation raster map whose cell
 category values represent elevation, combined with a second input raster
 map whose cell values represent friction costs.
 
@@ -83,9 +83,9 @@ K x x x K
 
 The minimum cumulative costs are computed using Dijkstra's algorithm,
 that find an optimum solution (for more details see *r.cost*, that uses
-the same algorithm).
+the same algorithm). <span id="move"></span>
 
-### Movement Direction
+## Movement Direction
 
 The movement direction surface is created to record the sequence of
 movements that created the cost accumulation surface. This movement

@@ -1,9 +1,3 @@
----
-description: GRASS GIS Database
----
-
-# GRASS GIS Database
-
 A GRASS GIS Database is simply a set of directories and files with
 certain structure which GRASS GIS works efficiently with. Project is a
 directory with data related to one geographic location or a project. All
@@ -19,7 +13,7 @@ project and mapset specified by the user.
 ![example: nc_spm - highway - elevation](grass_database.png)  
 *Fig. 1: GRASS GIS Database structure as visible to the user*
 
-## GRASS GIS Database Directory
+### GRASS GIS Database
 
 All data for GRASS GIS must be in GRASS GIS Database which is a
 directory (visible on the disk) containing subdirectories which are
@@ -39,7 +33,7 @@ information inside in a specific format and is accessible by specific
 tools. GRASS GIS Databases is in GRASS GIS often called GISDBASE or
 DATABASE.
 
-## GRASS Projects
+### GRASS Projects
 
 A project is further organized into mapsets which are subdirectories of
 the project directory. All data in one project have the same coordinate
@@ -62,7 +56,7 @@ PostgreSQL can view projects as individual databases inside a storage
 area (the GRASS GIS Database). Mapsets in a project are like namespaces
 or schemas inside a database.
 
-## GRASS Mapsets
+### GRASS Mapsets
 
 Mapsets contains the actual data, mostly geospatial data, referred to as
 maps in GRASS GIS. Mapsets are a tool for organizing maps in a
@@ -102,7 +96,7 @@ coordinate reference systems, it is recommended to use
 The files and directories should not be moved or modified directly, but
 only using GRASS GIS tools.
 
-## The role of the PERMANENT Mapset
+### The role of the PERMANENT Mapset
 
 When creating a new project, GRASS GIS automatically creates a special
 mapset called PERMANENT where the core data for the project are stored.
@@ -127,7 +121,7 @@ the default computational region's extent and resolution values for the
 project (which all mapsets will inherit when they are created). Users
 have the option of switching back to the default region at any time.
 
-## Importing, exporting and linking data
+### Importing, exporting and linking data
 
 GRASS GIS works only with data which are imported into a GRASS Database,
 so all data needs to be imported, e.g. by [*r.in.gdal*](r.in.gdal.md) or
@@ -149,7 +143,7 @@ raster maps. Similarly for newly created maps,
 where the actual data will be stored, however in GRASS Database the data
 will be created as standard maps.
 
-## Starting GRASS GIS
+### Starting GRASS GIS
 
 After launching GRASS GIS for the first time, the GUI opens in a default
 project `world_latlong_wgs84`. From there a new project can be created.
@@ -182,7 +176,7 @@ grass -c EPSG:5514:3 D:\grassdata\myproject
 
 See [*grass*](grass.md) command manual for more details.
 
-## Creating a New Project with the Project Wizard
+### Creating a New Project with the Project Wizard
 
 The [GUI](wxGUI.md) provides a graphical *Project Wizard* which lets you
 easily create a new project for your own data. You will be guided

@@ -45,7 +45,7 @@ where the terrain is almost flat. A option **min_slope** can be used to
 specify the minimum slope for which aspect is computed. For all cells
 with slope \< **min_slope**, both slope and aspect are set to zero.
 
-![aspect_diagram](aspect_diagram.png)
+<img src="aspect_diagram.png" data-border="0" />
 
 The **slope** output raster map contains slope values, stated in degrees
 of inclination from the horizontal if **format**=degrees option (the
@@ -58,20 +58,45 @@ The curvatures are expressed as 1/metres, e.g. a curvature of 0.05
 corresponds to a radius of curvature of 20m. Convex form values are
 positive and concave form values are negative.
 
-![dem](dem.png)  
-*Example DEM*
-
-![slope](slope.png)  
-*Slope (degree) from example DEM*
-
-![aspect](aspect.png)  
-*Aspect (degree) from example DEM*
-
-![tcurv](tcurv.png)  
-*Tangential curvature (1/m) from example DEM*
-
-![pcurv](pcurv.png)  
-*Profile curvature (1/m) from example DEM*
+<table width="100%" data-border="0">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<tbody>
+<tr class="odd" data-valign="baseline">
+<td><img src="dem.png" data-border="1" />
+<p>Example DEM<br />
+<br />
+</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even" data-valign="baseline">
+<td><img src="slope.png" data-border="1" />
+<p>Slope (degree) from example DEM<br />
+<br />
+</p></td>
+<td><img src="aspect.png" data-border="1" />
+<p>Aspect (degree) from example DEM<br />
+<br />
+</p></td>
+<td></td>
+</tr>
+<tr class="odd" data-valign="baseline">
+<td><img src="tcurv.png" data-border="1" />
+<p>Tangential curvature (m<sup>-1</sup>) from example DEM<br />
+<br />
+</p></td>
+<td><img src="pcurv.png" data-border="1" />
+<p>Profile curvature (m<sup>-1</sup>) from example DEM<br />
+<br />
+</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 
 For some applications, the user will wish to use a reclassified raster
 map of slope that groups slope values into ranges of slope. This can be
@@ -89,11 +114,10 @@ reclassification is given below:
              5         9- 11            16- 20%
              6        12- 14            21- 25%
              7        15- 90            26% and higher
-```
 
-The following color table works well with the above reclassification.
+     The following color table works well with the above
+     reclassification.
 
-```sh
           category   red   green   blue
 
              0       179    179     179
@@ -172,10 +196,10 @@ r.colors map=pcurv color=curvature
 r.colors map=tcurv color=curvature
 ```
 
-![r_slope_aspect_slope](r_slope_aspect_slope.png)
-![r_slope_aspect_aspect](r_slope_aspect_aspect.png)
-![r_slope_aspect_pcurv](r_slope_aspect_pcurv.png)
-![r_slope_aspect_tcurv](r_slope_aspect_tcurv.png)
+<img src="r_slope_aspect_slope.png" data-border="0" />
+<img src="r_slope_aspect_aspect.png" data-border="0" />
+<img src="r_slope_aspect_pcurv.png" data-border="0" />
+<img src="r_slope_aspect_tcurv.png" data-border="0" />
 
 Figure: Slope, aspect, profile and tangential curvature raster map
 (North Carolina dataset)

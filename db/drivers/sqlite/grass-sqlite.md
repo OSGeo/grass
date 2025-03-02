@@ -1,9 +1,3 @@
----
-description: SQLite DATABASE DRIVER
----
-
-# SQLite DATABASE DRIVER
-
 The SQLite driver is the default DBMI backend.
 
 ## Creating a SQLite database

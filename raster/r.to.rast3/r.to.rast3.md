@@ -5,8 +5,11 @@ important to properly set the 3D region settings, especially number or
 layers and depth of layers. If the 2D and 3D region settings are
 different, the 2D resolution will be adjusted to the 3D resolution.
 
-![How r.to.rast3 works](r.to.rast3.png)  
-*How r.to.rast3 works*
+<img src="r.to.rast3.png" data-border="0" />  
+
+|                        |
+|------------------------|
+| *How r.to.rast3 works* |
 
 ## NOTES
 

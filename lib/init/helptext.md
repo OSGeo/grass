@@ -1,9 +1,3 @@
----
-description: GRASS GIS Quickstart
----
-
-# GRASS GIS Quickstart
-
 When [launching](grass.md) GRASS GIS for the first time, you will open a
 **default project** "world_latlog_wgs84" where you can find a map layer
 called "country_boundaries" showing a world map in the WGS84 coordinate

@@ -6,7 +6,7 @@ Delaunay triangulation vector map (**output**).
 Delaunay triangulation example (red-yellow points are the data points
 from which the triangulation was generated):
 
-![v_delaunay](v_delaunay.png)
+<img src="v_delaunay.png" data-border="1" />
 
 ## EXAMPLE
 
