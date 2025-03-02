@@ -33,7 +33,7 @@ from core.gthread import gThread
 try:
     from osgeo import gdal
 
-    gdal.UseExceptions()  # Enable exception handling for GDAL
+    gdal.UseExceptions()
     haveGdal = True
 except ImportError:
     haveGdal = False
@@ -302,7 +302,7 @@ class GDALRasterMerger:
             self.tGeotransform, region
         )
 
-        driver = gdal.GetDriverByName(self.gdalDrvType)  # Align with method body
+        driver = gdal.GetDriverByName(self.gdalDrvType)
         if not driver:
             grass.fatal(f"GDAL driver {self.gdalDrvType} not found.")
 
@@ -310,23 +310,20 @@ class GDALRasterMerger:
             targetFile, region["cols"], region["rows"], bandsNum, gdal.GDT_Byte
         )
         if self.tDataset is None:
-            grass.fatal("Failed to create target dataset.")  # Remove stray parenthesis
+            grass.fatal("Failed to create target dataset.")
 
         if fillValue is not None:
-            # fill raster bands with a constant value
             for iBand in range(1, self.tDataset.RasterCount + 1):
                 self.tDataset.GetRasterBand(iBand).Fill(fillValue)
 
         def AddRasterBands(self, sourceFile, sTBands):
             """Add raster bands from sourceFile into the merging raster."""
 
-        try:
-            sDataset = gdal.Open(sourceFile, gdal.GA_ReadOnly)  # Proper 4-space indent
-            if sDataset is None:
-                raise RuntimeError(f"Failed to open source file: {sourceFile}")
-        except RuntimeError as e:  # Align with 'try'
-            grass.warning(f"AddRasterBands Warning: {e}")
-            return
+    try:
+        sDataset = gdal.Open(sourceFile, gdal.GA_ReadOnly)
+    except RuntimeError as e:
+        grass.warning(f"AddRasterBands Warning: {e}")
+        return
 
         sGeotransform = sDataset.GetGeoTransform()
 
