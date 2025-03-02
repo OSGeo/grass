@@ -36,7 +36,7 @@ int get_stats(struct maps_info *input_maps, struct Cell_stats *statf)
         nrows = Rast_window_rows();
         ncols = Rast_window_cols();
         char *mname = G_fully_qualified_name(input_maps->names[i],
-                       input_maps->mapsets[i]);
+                                             input_maps->mapsets[i]);
 
         G_verbose_message(_("(%i/%i) Reading raster map <%s>..."), i + 1,
                           input_maps->num, mname);
