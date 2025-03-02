@@ -1,3 +1,4 @@
+import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
@@ -47,37 +48,15 @@ class TestRCross(TestCase):
         )
 
         # Validate category mappings using r.category
-        category_module = SimpleModule("r.category", map="crossed_map")
-        self.assertModule(category_module)
-
-        # Parse r.category output
-        category_output = category_module.outputs.stdout.strip().split("\n")
-        actual_categories = {
-            int(line.split("\t")[0]): line.split("\t")[1].strip()
-            for line in category_output
-            if "\t" in line
-        }
+        category_module = gs.parse_command(
+            "r.describe", map="crossed_map", format="json"
+        )
 
         # Define expected categories
-        expected_categories = {
-            0: "category 1; NULL",
-            1: "category 1; category 1",
-            2: "category 1; category 2",
-            3: "category 2; NULL",
-            4: "category 2; category 1",
-            5: "category 2; category 2",
-            6: "category 3; NULL",
-            7: "category 3; category 1",
-            8: "category 3; category 2",
-        }
+        expected_categories = {"has_nulls": False, "ranges": [{"min": 0, "max": 8}]}
 
         # Compare actual and expected categories
-        for category, label in expected_categories.items():
-            self.assertEqual(
-                actual_categories[category],
-                label,
-                msg=f"Category {category} should have label '{label}', but got '{actual_categories[category]}'",
-            )
+        self.assertEqual(category_module, expected_categories)
 
     def test_cross_with_z_flag(self):
         """Test cross product with the -z flag to exclude NULL values"""
@@ -95,33 +74,13 @@ class TestRCross(TestCase):
             "crossed_map", msg="Output raster map 'crossed_map' should exist"
         )
 
-        category_module = SimpleModule("r.category", map="crossed_map")
-        self.assertModule(category_module)
+        category_module = gs.parse_command(
+            "r.describe", map="crossed_map", format="json"
+        )
 
-        category_output = category_module.outputs.stdout.strip().split("\n")
-        actual_categories = {
-            int(line.split("\t")[0]): line.split("\t")[1].strip()
-            for line in category_output
-            if "\t" in line
-        }
+        expected_categories = {"has_nulls": True, "ranges": [{"min": 0, "max": 5}]}
 
-        # Define expected categories (NULL values excluded)
-        expected_categories = {
-            0: "category 1; category 1",
-            1: "category 1; category 2",
-            2: "category 2; category 1",
-            3: "category 2; category 2",
-            4: "category 3; category 1",
-            5: "category 3; category 2",
-        }
-
-        # Compare actual and expected categories
-        for category, label in expected_categories.items():
-            self.assertEqual(
-                actual_categories[category],
-                label,
-                msg=f"Category {category} should have label '{label}', but got '{actual_categories[category]}'",
-            )
+        self.assertEqual(category_module, expected_categories)
 
 
 if __name__ == "__main__":
