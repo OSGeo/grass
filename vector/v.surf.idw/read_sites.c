@@ -37,7 +37,8 @@ void read_sites(const char *name, const char *field_name, const char *col,
         const char *mname = Vect_get_full_name(&Map);
         if (!with_z)
             G_important_message(_("Input vector map <%s> is 2D - using "
-                                  "categories to interpolate"), mname);
+                                  "categories to interpolate"),
+                                mname);
         else
             G_important_message(_("Input vector map <%s> is 3D - using "
                                   "z-coordinates to interpolate"), mname);
