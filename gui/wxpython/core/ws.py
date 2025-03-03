@@ -31,10 +31,13 @@ from core.debug import Debug
 from core.gthread import gThread
 
 try:
-    haveGdal = True
     from osgeo import gdal
+
+    gdal.UseExceptions()
+    haveGdal = True
 except ImportError:
     haveGdal = False
+
 
 from grass.pydispatch.signal import Signal
 
@@ -300,20 +303,27 @@ class GDALRasterMerger:
         )
 
         driver = gdal.GetDriverByName(self.gdalDrvType)
+        if not driver:
+            grass.fatal(f"GDAL driver {self.gdalDrvType} not found.")
+
         self.tDataset = driver.Create(
             targetFile, region["cols"], region["rows"], bandsNum, gdal.GDT_Byte
         )
+        if self.tDataset is None:
+            grass.fatal("Failed to create target dataset.")
 
         if fillValue is not None:
-            # fill raster bands with a constant value
             for iBand in range(1, self.tDataset.RasterCount + 1):
                 self.tDataset.GetRasterBand(iBand).Fill(fillValue)
 
-    def AddRasterBands(self, sourceFile, sTBands):
-        """Add raster bands from sourceFile into the merging raster."""
+        def AddRasterBands(self, sourceFile, sTBands):
+            """Add raster bands from sourceFile into the merging raster."""
+
+    try:
         sDataset = gdal.Open(sourceFile, gdal.GA_ReadOnly)
-        if sDataset is None:
-            return
+    except RuntimeError as e:
+        grass.warning(f"AddRasterBands Warning: {e}")
+        return
 
         sGeotransform = sDataset.GetGeoTransform()
 

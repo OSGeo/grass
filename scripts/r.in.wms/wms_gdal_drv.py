@@ -163,10 +163,13 @@ class WMSGdalDrv(WMSBase):
             gdal.SetConfigOption("GDAL_HTTP_PROXY", str(self.proxy))
         if self.proxy_user_pw:
             gdal.SetConfigOption("GDAL_HTTP_PROXYUSERPWD", str(self.proxy_user_pw))
-        wms_dataset = gdal.Open(xml_file, gdal.GA_ReadOnly)
-        gs.try_remove(xml_file)
-        if wms_dataset is None:
-            gs.fatal(_("Unable to open GDAL WMS driver"))
+
+        try:
+            driver = gdal.GetDriverByName(self.gdal_drv_format)
+            if driver is None:
+                raise RuntimeError(f"Unable to find {self.gdal_drv_format} driver")
+        except RuntimeError as e:
+            gs.fatal(f"GDAL Driver Error: {e}")
 
         self._debug("_download", "GDAL dataset created")
 
