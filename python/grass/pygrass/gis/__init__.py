@@ -187,7 +187,7 @@ class Gisdbase:
         """
         return sorted(
             [
-                loc
+                loc.name
                 for loc in Path(self.name).iterdir()
                 if libgis.G_is_location(encode(join(self.name, loc)))
             ]
@@ -241,7 +241,7 @@ class Location:
     def __iter__(self):
         lpath = self.path()
         return (
-            m
+            m.name
             for m in Path(lpath).iterdir()
             if (m.is_dir() and is_valid(m.name, lpath, "MAPSET"))
         )
