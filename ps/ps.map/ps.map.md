@@ -92,7 +92,10 @@ zero, the default vertical location is used.
 **font** *font name*  
 The name of the PostScript font. Fonts present in all PostScript
 implementations are:
-`Times-Roman, Times-Italic, Times-Bold, Times-BoldItalic, Helvetica, Helvetica-Oblique, Helvetica-Bold, Helvetica-BoldOblique, Courier, Courier-Oblique, Courier-Bold, and Courier-BoldOblique`.  
+*Times-Roman*, *Times-Italic*, *Times-Bold*, *Times-BoldItalic*, *Helvetica*,
+*Helvetica-Oblique*, *Helvetica-Bold*, *Helvetica-BoldOblique*, *Courier*,
+*Courier-Oblique*, *Courier-Bold*, *Courier-BoldOblique*
+.  
 The default is Helvetica.
 
 **fontsize** *font size*  
@@ -101,8 +104,9 @@ The size of the PostScript font (in 1/72nds of an inch). The default is
 
 **color** *name*  
 The following colors names are accepted by *ps.map*:
-` aqua, black, blue, brown, cyan, gray, grey, green, indigo, magenta, orange, purple, red, violet, white, yellow `.  
-  
+*aqua*, *black*, *blue*, *brown*, *cyan*, *gray*, *grey*, *green*,
+*indigo*, *magenta*, *orange*, *purple*, *red*, *violet*, *white*, *yellow*.  
+
 For vectors and some plotting commands you can also specify '`none`' or
 '`R:G:B`' (e.g '`255:0:0`').
 
@@ -1424,9 +1428,8 @@ Generate map as Postsript file:
 ps.map input=simple_map.txt output=simple_map.ps
 ```
 
-![](ps_map_basic.png)
-*Figure: Result of for the a simple Wake county terrain and roads
-example*
+![Figure: Result of the simple Wake county terrain and roads example](ps_map_basic.png)  
+*Figure: Result of the simple Wake county terrain and roads example*
 
 ### More complicated example
 
@@ -1502,7 +1505,7 @@ g.region raster=elevation
 ps.map input=elevation_map.txt output=elevation.ps
 ```
 
-![](ps_map.png)
+![Figure: Result of for the more complicated Wake county, NC example](ps_map.png)  
 *Figure: Result of for the more complicated Wake county, NC example*
 
 More examples can be found on the [GRASS

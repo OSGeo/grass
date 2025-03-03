@@ -6,9 +6,9 @@ in hectares as:
 with:  
 
 - *SD*: standard deviation of patch area size
-  ![](rlipadcv_formula2.png)
+  ![standard deviation of patch area size](rlipadcv_formula2.png)
 - *MPS*: mean patch area size
-- **a_i*: area of patch *i*
+- *a_i*: area of patch *i*
 - *N_patch*: number of patches
 
 ## NOTES

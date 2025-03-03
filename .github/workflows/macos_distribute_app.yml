@@ -21,6 +21,7 @@ env:
 jobs:
   macos_build:
     name: macOS distribute
+    if: ${{ github.repository == 'OSGeo/grass' }}
 
     concurrency:
       group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
@@ -123,7 +124,7 @@ jobs:
 
       - name: Upload DMG file as artifact
         if: ${{ success() && !cancelled() }}
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: ${{ env.DMG_NAME }}
           path: ${{ env.DMG_FILE }}

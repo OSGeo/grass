@@ -5,7 +5,7 @@ site_url: https://grass.osgeo.org/grass-stable/manuals/
 
 # Repository information
 repo_name: GitHub
-repo_url: https://github.com/OSGeo/grass
+repo_url: https://github.com/OSGeo # Set to OSGeo so we can added grass and grass-addons
 edit_uri_template: edit/main/{path!q}
 
 # Project Configuration
@@ -20,15 +20,13 @@ theme:
   name: material
   custom_dir: overrides
   language: en
-  logo: grass_logo.png
-  # logo: grass_icon.png
-  # favicon: grass-favicon-16x16.png
+  logo: grass_logo.svg
+  favicon: favicon.ico
   features:
     - search.suggest
     - search.highlight
     - content.code.copy
     - navigation.footer
-    # - navigation.sections
     - navigation.indexes
     # - navigation.expand
     - navigation.tabs
@@ -59,8 +57,10 @@ extra_css:
 plugins:
   - search
   - glightbox
-  # - social
-  # - tags
+  - tags
+  - social:
+      cards_layout_options:
+        background_image: null
   # - git-revision-date-localized:
   #     enable_creation_date: true
   # - git-committers:
@@ -87,7 +87,7 @@ nav:
           - Features: wxGUI.md
           - Project Management: grass_database.md
           - Tool Dialogs: wxGUI.modules.md
-          - Attrribute Table Management: wxGUI.dbmgr.md
+          - Attribute Table Management: wxGUI.dbmgr.md
           - Cartographic Composer: wxGUI.psmap.md
           - Data Catalog: wxGUI.datacatalog.md
           - Vector Digitizer: wxGUI.vdigit.md

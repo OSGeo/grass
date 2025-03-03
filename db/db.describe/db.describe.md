@@ -7,7 +7,7 @@ only column names instead of full column descriptions is given.
 
 If parameters for database connection are already set with
 [db.connect](db.connect.md), they are taken as default values and do not
-need to be spcified each time.
+need to be specified each time.
 
 ## EXAMPLES
 

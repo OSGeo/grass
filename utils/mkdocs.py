@@ -37,6 +37,18 @@ def read_file(name):
         return ""
 
 
+def set_proxy():
+    """Set proxy"""
+    proxy = os.getenv("GRASS_PROXY")
+    if proxy:
+        proxies = {}
+        for ptype, purl in (p.split("=") for p in proxy.split(",")):
+            proxies[ptype] = purl
+        urlrequest.install_opener(
+            urlrequest.build_opener(urlrequest.ProxyHandler(proxies))
+        )
+
+
 _cached_version_branch = None
 
 

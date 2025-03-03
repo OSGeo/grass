@@ -187,7 +187,7 @@ class Category(list):
         )
         # Manage C function Errors
         if err == 1:
-            return None
+            return
         if err == 0:
             raise GrassError(_("Null value detected"))
         if err == -1:

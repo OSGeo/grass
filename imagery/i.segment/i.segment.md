@@ -63,7 +63,11 @@ the distance calculation will also take into account the shape
 characteristics of the segments. The normal distances are then
 multiplied by the input radiometric weight. Next an additional
 contribution is added:
-`(1-radioweight) * {smoothness * smoothness weight + compactness * (1-smoothness weight)}`,
+
+```text
+(1-radioweight) * {smoothness * smoothness weight + compactness * (1-smoothness weight)}
+```
+
 where `compactness = Perimeter Length / sqrt( Area )` and
 `smoothness = Perimeter Length / Bounding Box`. The perimeter length is
 estimated as the number of pixel sides the segment has.
@@ -154,7 +158,7 @@ Try out a low threshold and check the results.
 i.segment group=ortho_group output=ortho_segs_l1 threshold=0.02
 ```
 
-![](i_segment_ortho_segs_l1.jpg)
+![i_segment_ortho_segs_l1](i_segment_ortho_segs_l1.jpg)
 
 From a visual inspection, it seems this results in too many segments.
 Increasing the threshold, using the previous results as seeds, and
@@ -170,7 +174,7 @@ i.segment group=ortho_group output=ortho_segs_l4 threshold=0.2 seeds=ortho_segs_
 i.segment group=ortho_group output=ortho_segs_l5 threshold=0.3 seeds=ortho_segs_l4
 ```
 
-![](i_segment_ortho_segs_l2_l5.jpg)
+![i_segment_ortho_segs_l2_l5](i_segment_ortho_segs_l2_l5.jpg)
 
 The output `ortho_segs_l4` with **threshold**=0.2 still has too many
 segments, but the output with **threshold**=0.3 has too few segments. A
@@ -191,7 +195,7 @@ Run *i.segment* on the full map:
 i.segment group=ortho_group output=ortho_segs_final threshold=0.25 min=10
 ```
 
-![](i_segment_ortho_segs_final.jpg)
+![i_segment_ortho_segs_final](i_segment_ortho_segs_final.jpg)
 
 Processing the entire ortho image with nearly 10 million pixels took
 about 450 times more then for the final run.
@@ -217,14 +221,14 @@ i.segment group=singleband threshold=0.05 minsize=100
   output=lsat7_2002_80_segmented_min100 goodness=lsat7_2002_80_goodness_min100
 ```
 
-![](i_segment_lsat7_pan.png)  
-Original panchromatic channel of the Landsat7 scene
+![Original panchromatic channel of the Landsat7 scene](i_segment_lsat7_pan.png)  
+*Original panchromatic channel of the Landsat7 scene*
 
-![](i_segment_lsat7_seg_min5.png)  
-Segmented panchromatic channel, minsize=5
+![Segmented panchromatic channel, minsize=5](i_segment_lsat7_seg_min5.png)  
+*Segmented panchromatic channel, minsize=5*
 
-![](i_segment_lsat7_seg_min100.png)  
-Segmented panchromatic channel, minsize=100
+![Segmented panchromatic channel, minsize=100](i_segment_lsat7_seg_min100.png)  
+*Segmented panchromatic channel, minsize=100*
 
 ## TODO
 

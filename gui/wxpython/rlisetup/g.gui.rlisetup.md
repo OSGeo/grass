@@ -1,3 +1,10 @@
+---
+description: wxGUI RLi Setup
+index: topic_GUI|GUI
+---
+
+# wxGUI RLi Setup
+
 ## DESCRIPTION
 
 The **g.gui.rlisetup** is a *[wxGUI](wxGUI.md)* component which allows
@@ -176,7 +183,7 @@ Select type of shape:
 3\. Save settings: click on button  
 (4.) Close
 
-Now an anaysis can be performed using one of the analytical modules,
+Now an analysis can be performed using one of the analytical modules,
 e.g.
 
 ```sh
@@ -209,7 +216,7 @@ Example for a whole region analysis, the output is a text file: Click on
 3\. Save settings: click on button  
 (4.) Close
 
-Now an anaysis can be performed using one of the analytical modules,
+Now an analysis can be performed using one of the analytical modules,
 e.g.
 
 ```sh
