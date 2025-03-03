@@ -116,7 +116,7 @@ GridHeader *read_header(char *rastName, Cell_head *region)
         G_warning(
             _("East-west resolution does not equal north-south resolution. "
               "The viewshed computation assumes the cells are square, so in "
-              "this case this may result in innacuracies."));
+              "this case this may result in inaccuracies."));
         //    exit(EXIT_FAILURE);
     }
     hd->ew_res = region->ew_res;

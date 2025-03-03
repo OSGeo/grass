@@ -301,7 +301,7 @@ int main(int argc, char *argv[])
         N_write_array_3d_to_rast3d(budget, param.budget->answer, 1);
     }
 
-    /*Compute the the velocity field if required and write the result into three
+    /*Compute the velocity field if required and write the result into three
      * rast3d maps */
     if (param.vector_x->answer || param.vector_y->answer ||
         param.vector_z->answer) {

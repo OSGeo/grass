@@ -22,7 +22,7 @@ double point_in_triangle(double point_x, double point_y, double point_z,
     double answer2_x, answer2_y, answer2_z;
     double answer3_x, answer3_y, answer3_z;
 
-    /* Consider three points forming a trinagle from a given soil class boundary
+    /* Consider three points forming a triangle from a given soil class boundary
      * ABC */
     /* Consider F an additional point in space */
     double af1, af2, af3; /*Points for vector AF */

@@ -198,7 +198,7 @@ int ll_correction = FALSE;
 double coslatsq;
 
 /* why not use G_distance() here which switches to geodesic/great
-   circle distace as needed? */
+   circle distance as needed? */
 double distance(double x1, double x2, double y1, double y2)
 {
     if (ll_correction) {

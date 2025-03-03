@@ -6,7 +6,7 @@ file, using the current region.
 This program converts a GRASS raster map to a PPM image file using the
 the current region settings.
 
-To get the full area and resolutin of the raster map, run:
+To get the full area and resolution of the raster map, run:
 
 ```sh
 g.region raster=[mapname]

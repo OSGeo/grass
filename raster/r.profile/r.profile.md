@@ -65,7 +65,7 @@ This filters out everything except the numbers.
 
 ### Extraction of values along profile defined by coordinates (variant 1)
 
-Extract a profile with coordinates (wayoints) provided on the command
+Extract a profile with coordinates (waypoints) provided on the command
 line (North Carolina data set):
 
 ```sh

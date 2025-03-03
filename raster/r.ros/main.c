@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
         etaM_dead,              /*dead fuel misture damping coefficient */
         etaM_live,              /*live fuel misture damping coefficient */
         xmext,                  /*live fuel moisture of extinction */
-        phi_ws,                 /*wind and slope conbined coefficient */
+        phi_ws,                 /*wind and slope combined coefficient */
         wmfd, fdmois, fined, finel;
 
     /*other local variables */

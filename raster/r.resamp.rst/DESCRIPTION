@@ -150,7 +150,7 @@ IL_write_temp_2d(ngstc,nszc,offset2,Tmp_fd_z,Tmp_fd_dx,Tmp_fd_dy,Tmp_fd_xx,
     FILE   *Tmp_fd_z,*Tmp_fd_dx,*Tmp_fd_dy,  /* Temp files */
            *Tmp_fd_xx,*Tmp_fd_yy,*Tmp_fd_xy;
     double *az,*adx,*ady,*adxx,*adyy,*adxy;  /* interpolated values */
-    int    scik1,scik2,scik3;                /* mutipliers for interp. values */
+    int    scik1,scik2,scik3;                /* multipliers for interp. values */
 
 Writes az,adx,...,adxy into appropriate place (depending on ngstc, nszc and
 offset) in corresponding temp file */

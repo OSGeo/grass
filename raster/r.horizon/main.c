@@ -523,7 +523,7 @@ int main(int argc, char *argv[])
             settings.fixedMaxLength); /* predefined as BIG */
 
     /* TODO: fixing BIG, there is a bug with distant mountains not being seen:
-       attempt to contrain to current region
+       attempt to constrain to current region
 
        fixedMaxLength = (fixedMaxLength < AMAX1(deltx, delty)) ? fixedMaxLength
        : AMAX1(deltx, delty); G_debug(1,"Using maxdistance %f", fixedMaxLength);
@@ -846,7 +846,7 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     double printangle = settings->single_direction;
 
     origin_point.maxlength = settings->fixedMaxLength;
-    /* JSON variables and formating */
+    /* JSON variables and formatting */
 
     JSON_Value *horizons_value;
     JSON_Array *horizons;

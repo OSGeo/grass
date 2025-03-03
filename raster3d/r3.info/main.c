@@ -18,7 +18,7 @@
 
 /* \todo
  *    History support still not full implemented.
- *    Only parts of the timestep functionality are implemented, the timzone is
+ *    Only parts of the timestep functionality are implemented, the timezone is
  * missed ;).
  */
 

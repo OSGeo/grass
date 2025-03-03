@@ -29,7 +29,7 @@ occurs, this will be indicated. The range report will generally run
 faster than the full list (the default output).
 
 The **-d** flag can be used to force *r.describe* to respect the current
-region extents when repoting raster map categories. The default behavior
+region extents when reporting raster map categories. The default behavior
 is to read the full extent of the input raster map.
 
 If the **-1** flag is specified, the output appears with one category

@@ -127,8 +127,7 @@ void insert_event_in_sector_no_drop(AEvent *e, int s, AMI_STREAM<AEvent> *str,
 /* returns 1 if the center of event is occluded by the gradient, which
    is assumed to be in line with the event  */
 int is_center_gradient_occluded(AEvent *e, double gradient, Viewpoint *vp);
-
-/* called when dropping an event e, high is the highest gradiant value
+/* called when dropping an event e, high is the highest gradient value
    in its sector */
 void print_dropped(AEvent *e, Viewpoint *vp, double high);
 
