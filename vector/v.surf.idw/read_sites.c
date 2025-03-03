@@ -41,7 +41,8 @@ void read_sites(const char *name, const char *field_name, const char *col,
                                 mname);
         else
             G_important_message(_("Input vector map <%s> is 3D - using "
-                                  "z-coordinates to interpolate"), mname);
+                                  "z-coordinates to interpolate"),
+                                mname);
         G_free((void *)mname);
     }
 
