@@ -228,7 +228,7 @@ class DMonMap(Map):
                         next_layer += 1
                     # layer must be put higher in render order (same cmd was
                     # inserted more times)
-                    # TODO delete rendundant cmds from cmd file?
+                    # TODO delete redundant cmds from cmd file?
                     else:
                         for j, l_order in enumerate(layersOrder):
                             if l_order > layersOrder[i]:
