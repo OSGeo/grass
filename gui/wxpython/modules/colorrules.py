@@ -574,7 +574,7 @@ class ColorTable(wx.Frame):
         )
 
         row += 1
-        # add ckeck all and clear all
+        # add check all and clear all
         bodySizer.Add(
             self.rulesPanel.checkAll, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0)
         )
@@ -1838,7 +1838,7 @@ class VectorColorTable(ColorTable):
         else:
             if not self.properties["storeColumn"]:
                 GError(_("No color column defined. Operation canceled."), parent=self)
-                return
+                return None
 
             self.UseAttrColumn(True)
 

@@ -120,14 +120,14 @@ int Rast_open_old(const char *name, const char *mapset)
        R__.mask_buf = Rast_allocate_c_buf();
        now we don't ever free it!, so no need to allocate it  (Olga)
      */
-    /* mask_buf is used for reading MASK file when mask is set and
+    /* mask_buf is used for reading mask file when mask is set and
        for reading map rows when the null file doesn't exist */
 
     return fd;
 }
 
 /*!  \brief Lower level function, open cell files, supercell files,
-   and the MASK file.
+   and the mask file.
 
    Actions:
    - opens the named cell file, following reclass reference if
@@ -140,7 +140,7 @@ int Rast_open_old(const char *name, const char *mapset)
    are left to the calling routine since the masking logic will want to
    issue a different warning.
 
-   Note: This routine does NOT open the MASK layer. If it did we would
+   Note: This routine does NOT open the mask layer. If it did we would
    get infinite recursion.  This routine is called to open the mask by
    Rast__check_for_auto_masking() which is called by Rast_open_old().
 

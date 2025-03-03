@@ -202,7 +202,7 @@ class VirtualAttributeList(
                         )
                         % {"column": col, "table": tableName},
                     )
-                    return
+                    return None
 
         try:
             # for maps connected via v.external
@@ -220,133 +220,139 @@ class VirtualAttributeList(
         # values, so while sticking with ASCII we make it something
         # highly unlikely to exist naturally.
         fs = "{_sep_}"
+        with tempfile.NamedTemporaryFile(mode="w+b") as outFile:
+            cmdParams = {"quiet": True, "parent": self, "flags": "c", "separator": fs}
 
-        outFile = tempfile.NamedTemporaryFile(mode="w+b")
-
-        cmdParams = {"quiet": True, "parent": self, "flags": "c", "separator": fs}
-
-        if sql:
-            cmdParams.update({"sql": sql, "output": outFile.name, "overwrite": True})
-            RunCommand("db.select", **cmdParams)
-            self.sqlFilter = {"sql": sql}
-        else:
-            cmdParams.update(
-                {
-                    "map": self.mapDBInfo.map,
-                    "layer": layer,
-                    "where": where,
-                    "stdout": outFile,
-                }
-            )
-
-            self.sqlFilter = {"where": where}
-
-            if columns:
-                # Enclose column name with SQL standard double quotes
-                cmdParams.update({"columns": ",".join([f'"{col}"' for col in columns])})
-
-            RunCommand("v.db.select", **cmdParams)
-
-        # These two should probably be passed to init more cleanly
-        # setting the numbers of items = number of elements in the dictionary
-        self.itemDataMap = {}
-        self.itemIndexMap = []
-        self.itemCatsMap = {}
-
-        self.DeleteAllItems()
-
-        # self.ClearAll()
-        for i in range(self.GetColumnCount()):
-            self.DeleteColumn(0)
-
-        i = 0
-        info = wx.ListItem()
-        if globalvar.wxPythonPhoenix:
-            info.Mask = wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT
-            info.Image = -1
-            info.Format = 0
-        else:
-            info.m_mask = wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT
-            info.m_image = -1
-            info.m_format = 0
-        for column in columns:
-            if globalvar.wxPythonPhoenix:
-                info.Text = column
-                self.InsertColumn(i, info)
+            if sql:
+                cmdParams.update(
+                    {"sql": sql, "output": outFile.name, "overwrite": True}
+                )
+                RunCommand("db.select", **cmdParams)
+                self.sqlFilter = {"sql": sql}
             else:
-                info.m_text = column
-                self.InsertColumnInfo(i, info)
-            i += 1
-            if i >= 256:
-                self.log.write(_("Can display only 256 columns."))
-
-        i = 0
-        outFile.seek(0)
-
-        enc = GetDbEncoding()
-        first_wrong_encoding = True
-        while True:
-            # os.linesep doesn't work here (MSYS)
-            # not sure what the replace is for?
-            # but we need strip to get rid of the ending newline
-            # which on windows leaves \r in a last empty attribute table cell
-            # and causes error
-            try:
-                record = (
-                    decode(outFile.readline(), encoding=enc).strip().replace("\n", "")
+                cmdParams.update(
+                    {
+                        "map": self.mapDBInfo.map,
+                        "layer": layer,
+                        "where": where,
+                        "stdout": outFile,
+                    }
                 )
-            except UnicodeDecodeError:
-                record = (
-                    outFile.readline()
-                    .decode(encoding=enc, errors="replace")
-                    .strip()
-                    .replace("\n", "")
-                )
-                if first_wrong_encoding:
-                    first_wrong_encoding = False
-                    GWarning(
-                        parent=self,
-                        message=_(
-                            "Incorrect encoding {enc} used. Set encoding in GUI "
-                            "Settings or set GRASS_DB_ENCODING variable."
-                        ).format(enc=enc),
+
+                self.sqlFilter = {"where": where}
+
+                if columns:
+                    # Enclose column name with SQL standard double quotes
+                    cmdParams.update(
+                        {"columns": ",".join([f'"{col}"' for col in columns])}
                     )
 
-            if not record:
-                break
+                RunCommand("v.db.select", **cmdParams)
 
-            record = record.split(fs)
-            if len(columns) != len(record):
-                # Assuming there will be always at least one.
-                last = record[-1]
-                show_max = 3
-                if len(record) > show_max:
-                    record = record[:show_max]
-                # TODO: The real fix here is to use JSON output from v.db.select or
-                # proper CSV output and real CSV reader here (Python csv and json
-                # packages).
-                raise GException(
-                    _(
-                        "Unable to read the table <{table}> from the database due"
-                        " to seemingly inconsistent number of columns in the data"
-                        " transfer."
-                        " Check row: {row}..."
-                        " Likely, a newline character is present in the attribute value"
-                        " starting with: '{value}'"
-                        " Use the v.db.select module to investigate."
-                    ).format(table=tableName, row=" | ".join(record), value=last)
+            # These two should probably be passed to init more cleanly
+            # setting the numbers of items = number of elements in the dictionary
+            self.itemDataMap = {}
+            self.itemIndexMap = []
+            self.itemCatsMap = {}
+
+            self.DeleteAllItems()
+
+            # self.ClearAll()
+            for i in range(self.GetColumnCount()):
+                self.DeleteColumn(0)
+
+            i = 0
+            info = wx.ListItem()
+            if globalvar.wxPythonPhoenix:
+                info.Mask = wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT
+                info.Image = -1
+                info.Format = 0
+            else:
+                info.m_mask = (
+                    wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT
                 )
-                self.columns = {}  # because of IsEmpty method
-                return None
+                info.m_image = -1
+                info.m_format = 0
+            for column in columns:
+                if globalvar.wxPythonPhoenix:
+                    info.Text = column
+                    self.InsertColumn(i, info)
+                else:
+                    info.m_text = column
+                    self.InsertColumnInfo(i, info)
+                i += 1
+                if i >= 256:
+                    self.log.write(_("Can display only 256 columns."))
 
-            self.AddDataRow(i, record, columns, keyId)
+            i = 0
+            outFile.seek(0)
 
-            i += 1
-            if i >= 100000:
-                self.log.write(_("Viewing limit: 100000 records."))
-                break
+            enc = GetDbEncoding()
+            first_wrong_encoding = True
+            while True:
+                # os.linesep doesn't work here (MSYS)
+                # not sure what the replace is for?
+                # but we need strip to get rid of the ending newline
+                # which on windows leaves \r in a last empty attribute table cell
+                # and causes error
+                try:
+                    record = (
+                        decode(outFile.readline(), encoding=enc)
+                        .strip()
+                        .replace("\n", "")
+                    )
+                except UnicodeDecodeError:
+                    record = (
+                        outFile.readline()
+                        .decode(encoding=enc, errors="replace")
+                        .strip()
+                        .replace("\n", "")
+                    )
+                    if first_wrong_encoding:
+                        first_wrong_encoding = False
+                        GWarning(
+                            parent=self,
+                            message=_(
+                                "Incorrect encoding {enc} used. Set encoding in GUI "
+                                "Settings or set GRASS_DB_ENCODING variable."
+                            ).format(enc=enc),
+                        )
 
-        self.SetItemCount(i)
+                if not record:
+                    break
+
+                record = record.split(fs)
+                if len(columns) != len(record):
+                    # Assuming there will be always at least one.
+                    last = record[-1]
+                    show_max = 3
+                    if len(record) > show_max:
+                        record = record[:show_max]
+                    # TODO: The real fix here is to use JSON output from v.db.select or
+                    # proper CSV output and real CSV reader here (Python csv and json
+                    # packages).
+                    raise GException(
+                        _(
+                            "Unable to read the table <{table}> from the database due"
+                            " to seemingly inconsistent number of columns in the data"
+                            " transfer."
+                            " Check row: {row}..."
+                            " Likely, a newline character is present in the attribute value"
+                            " starting with: '{value}'"
+                            " Use the v.db.select module to investigate."
+                        ).format(table=tableName, row=" | ".join(record), value=last)
+                    )
+                    self.columns = {}  # because of IsEmpty method
+                    return None
+
+                self.AddDataRow(i, record, columns, keyId)
+
+                i += 1
+                if i >= 100000:
+                    self.log.write(_("Viewing limit: 100000 records."))
+                    break
+
+            self.SetItemCount(i)
 
         if where:
             item = -1
@@ -2668,8 +2674,8 @@ class DbMgrTablesPage(DbMgrNotebookBase):
 
         item = tlist.GetFirstSelected()
         if UserSettings.Get(group="atm", key="askOnDeleteRec", subkey="enabled"):
-            # if the user select more columns to delete, all the columns name
-            # will appear the the warning dialog
+            # if the user selects more columns to delete, all the columns names
+            # will appear with a warning dialog
             if tlist.GetSelectedItemCount() > 1:
                 deleteColumns = "columns '%s'" % tlist.GetItemText(item)
                 while item != -1:

@@ -18,11 +18,12 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import annotations
+
 import os
 import string
 import time
 from pathlib import Path
-
 
 from .core import (
     gisenv,
@@ -36,7 +37,14 @@ from .core import (
     fatal,
 )
 from grass.exceptions import CalledModuleError
-from .utils import encode, float_or_dms, parse_key_val, try_remove
+from .utils import (
+    encode,
+    float_or_dms,
+    parse_key_val,
+    try_remove,
+    append_node_pid,
+    append_uuid,
+)
 
 
 def raster_history(map, overwrite=False, env=None):
@@ -261,3 +269,139 @@ def raster_what(map, coord, env=None, localized=False):
             data.append(tmp_dict)
 
     return data
+
+
+class MaskManager:
+    """Context manager for setting and managing 2D raster mask.
+
+    The context manager makes it possible to have custom mask for the current process.
+    In the following example, we set the mask using _r.mask_ which creates a new
+    raster which represents the mask. The mask is deactivated at the end of the
+    context by the context manager and the raster is removed.
+
+    >>> with gs.MaskManager():
+    ...     gs.run_command("r.mask", raster="state_boundary")
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    The _mask_name_ can be a name of an existing raster map and in that case,
+    that raster map is used directly as is. If the raster map does not exist,
+    the name will be used for the mask once it is created (with _r.mask_).
+
+    The following example uses an existing raster map directly as the mask.
+    The mask is disabled at the end of the context, but the raster map is not
+    removed.
+
+    >>> with gs.MaskManager(mask_name="state_boundary"):
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    Note the difference between using the name of an existing raster map directly
+    and using *r.mask* to create a new mask. Both zeros and NULL values are used
+    to represent mask resulting in NULL cells, while *r.mask*
+    by default sets the mask in the way that only NULL values in the original raster
+    result in NULL cells.
+
+    If _mask_name_ is not provided, it generates a unique name using node (computer)
+    name, PID (current process ID), and unique ID (UUID).
+    In this case, the raster map representing the mask is removed if it exists at the
+    end of the context.
+    Optionally, the context manager can remove the raster map at the end of the context
+    when _remove_ is set to `True`.
+    The defaults for the removal of a mask raster are set to align with the two main use
+    cases which is creating the mask within the context and using an existing raster as
+    a mask.
+
+    Name of the raster mask is available as the _mask_name_ attribute and can be used to
+    directly create a mask (without the need to use *r.mask*). The following example
+    uses the attribute to create a mask directly by name. This is equivalent to the
+    basic case where a raster named `MASK` is created directly by the user in an
+    interactive session.
+
+    >>> with gs.MaskManager() as manager:
+    ...     gs.run_command(
+                "r.mapcalc", expression=f"{manager.mask_name} = row() < col()"
+            )
+    ...     gs.run_command(
+                "r.mapcalc", expression=f"masked_elevation = elevation"
+            )
+
+    In the background, this class manages the `GRASS_MASK` environment variable.
+    It modifies the current system environment or the one provided. It does not
+    create a copy internally. However, the modified environment is available as
+    the _env_ attribute for convenience and consistency with other managers
+    which provide this attribute.
+
+    The following code creates a copy of the global environment and lets the manager
+    modify it. The copy is then available as the _env_ attribute.
+
+    >>> with gs.MaskManager(env=os.environ.copy()) as manager:
+    ...     gs.run_command(
+    ...         "r.mapcalc",
+    ...         expression=f"{manager.mask_name} = row() < col()",
+    ...         env=manager.env
+    ...     )
+    ...     gs.run_command(
+    ...         "r.mapcalc", expression=f"masked_elevation = elevation", env=manager.env
+    ...     )
+    """
+
+    def __init__(
+        self,
+        mask_name: str | None = None,
+        env: dict[str, str] | None = None,
+        remove: bool | None = None,
+    ):
+        """
+        Initializes the MaskManager.
+
+        :param mask_name: Name of the raster mask. Generated if not provided.
+        :param env: Environment to use. Defaults to modifying os.environ.
+        :param remove: If True, the raster mask will be removed when the context exits.
+                       Defaults to True if the mask name is generated,
+                       and False if a mask name is provided.
+        """
+        self.env = env if env is not None else os.environ
+        self._original_value = None
+
+        if mask_name is None:
+            self.mask_name = append_uuid(append_node_pid("mask"))
+            self._remove = True if remove is None else remove
+        else:
+            self.mask_name = mask_name
+            self._remove = False if remove is None else remove
+
+    def __enter__(self):
+        """Set mask in the given environment.
+
+        Sets the `GRASS_MASK` environment variable to the provided or
+        generated mask name.
+
+        :return: Returns the MaskManager instance.
+        """
+        self._original_value = self.env.get("GRASS_MASK")
+        self.env["GRASS_MASK"] = self.mask_name
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Restore the previous mask state.
+
+        Restores the original value of `GRASS_MASK` and optionally removes
+        the raster mask.
+
+        :param exc_type: Exception type, if any.
+        :param exc_val: Exception value, if any.
+        :param exc_tb: Traceback, if any.
+        """
+        if self._original_value is not None:
+            self.env["GRASS_MASK"] = self._original_value
+        else:
+            self.env.pop("GRASS_MASK", None)
+
+        if self._remove:
+            run_command(
+                "g.remove",
+                type="raster",
+                name=self.mask_name,
+                flags="f",
+                env=self.env,
+                quiet=True,
+            )

@@ -987,7 +987,7 @@ class Settings:
                 os.mkdir(dirPath)
             except OSError:
                 GError(_("Unable to create settings directory"))
-                return
+                return None
         try:
             with open(self.filePath, "w") as f:
                 json.dump(settings, f, indent=2, cls=SettingsJSONEncoder)

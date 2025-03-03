@@ -7,7 +7,7 @@
  * PURPOSE:      Prints terse list of category values found in a raster
  *               map layer.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2025 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -29,7 +29,8 @@ static void output_pretty_json(JSON_Value *);
 static int show(CELL, CELL, int *, DCELL, DCELL, RASTER_MAP_TYPE, int,
                 enum OutputFormat, JSON_Array *);
 
-void initialize_json_object(JSON_Value **root_value, JSON_Object **root_object)
+static void initialize_json_object(JSON_Value **root_value,
+                                   JSON_Object **root_object)
 {
     *root_value = json_value_init_object();
     if (*root_value == NULL) {
@@ -38,7 +39,8 @@ void initialize_json_object(JSON_Value **root_value, JSON_Object **root_object)
     *root_object = json_object(*root_value);
 }
 
-void initialize_json_array(JSON_Value **root_value, JSON_Array **root_array)
+static void initialize_json_array(JSON_Value **root_value,
+                                  JSON_Array **root_array)
 {
     *root_value = json_value_init_array();
     if (*root_value == NULL) {
@@ -47,7 +49,7 @@ void initialize_json_array(JSON_Value **root_value, JSON_Array **root_array)
     *root_array = json_array(*root_value);
 }
 
-void append_category_ranges(JSON_Array *range_array, long min, long max)
+static void append_category_ranges(JSON_Array *range_array, long min, long max)
 {
     JSON_Object *cat_object;
     JSON_Value *cat_value;
@@ -59,7 +61,7 @@ void append_category_ranges(JSON_Array *range_array, long min, long max)
     json_array_append_value(range_array, cat_value);
 }
 
-void output_pretty_json(JSON_Value *root_value)
+static void output_pretty_json(JSON_Value *root_value)
 {
     char *serialized_string = json_serialize_to_string_pretty(root_value);
     if (!serialized_string) {
@@ -162,7 +164,7 @@ int compact_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
     long count; /* not used, but required by cell stats call */
     JSON_Value *root_value, *range_value;
     JSON_Object *root_object;
-    JSON_Array *range_array;
+    JSON_Array *range_array = NULL;
 
     if (format == JSON) {
         initialize_json_object(&root_value, &root_object);
@@ -221,7 +223,7 @@ static int show(CELL low, CELL high, int *len, DCELL dmin, DCELL dmax,
                 RASTER_MAP_TYPE map_type, int nsteps, enum OutputFormat format,
                 JSON_Array *root_array)
 {
-    char text[100];
+    char text[100] = {0};
     char xlen;
     JSON_Object *cat_object;
     JSON_Value *cat_value;
