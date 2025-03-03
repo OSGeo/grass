@@ -34,14 +34,14 @@ void read_sites(const char *name, const char *field_name, const char *col,
                                                  only when column is
                                                  not defined */
     if (!col) {
+        const char *mname = Vect_get_full_name(&Map);
         if (!with_z)
             G_important_message(_("Input vector map <%s> is 2D - using "
-                                  "categories to interpolate"),
-                                Vect_get_full_name(&Map));
+                                  "categories to interpolate"), mname);
         else
             G_important_message(_("Input vector map <%s> is 3D - using "
-                                  "z-coordinates to interpolate"),
-                                Vect_get_full_name(&Map));
+                                  "z-coordinates to interpolate"), mname);
+        G_free((void *)mname);
     }
 
     if (col) {
