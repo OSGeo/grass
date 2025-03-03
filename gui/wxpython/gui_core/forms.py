@@ -1121,7 +1121,7 @@ class CmdPanel(wx.Panel):
             which_sizer = tabsizer[p["guisection"]]
             which_panel = tab[p["guisection"]]
             # if label is given -> label and description -> tooltip
-            # otherwise description -> lavel
+            # otherwise description -> label
             if p.get("label", "") != "":
                 title = text_beautify(p["label"])
                 tooltip = text_beautify(p["description"], width=-1)

@@ -112,13 +112,13 @@ def main():
         order = options["order"]
     else:
         gs.fatal(
-            _("Please provive an order value (1 if 4 Fiducials, 2 if 8 Fiducials)")
+            _("Please provide an order value (1 if 4 Fiducials, 2 if 8 Fiducials)")
         )
 
     if options["extension"]:
         extension = options["extension"]
     else:
-        gs.fatal(_("Please provive an output files extension (used by i.rectify)"))
+        gs.fatal(_("Please provide an output files extension (used by i.rectify)"))
 
     app = wx.App()
 
