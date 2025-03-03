@@ -125,12 +125,12 @@ char *G_file_name_misc(char *path, const char *dir, const char *element,
 char *G_file_name_tmp(char *path, const char *element, const char *name,
                       const char *mapset)
 {
-    const char *env, *tmp_path;
+    const char *env;
+    char tmp_path[GPATH_MAX] = {0};
 
-    tmp_path = NULL;
     env = getenv("GRASS_VECTOR_TMPDIR_MAPSET");
     if (env && strcmp(env, "0") == 0) {
-        tmp_path = getenv("TMPDIR");
+        snprintf(tmp_path, GPATH_MAX, "%s", getenv("TMPDIR"));
     }
 
     return file_name(path, NULL, element, name, mapset, tmp_path);
