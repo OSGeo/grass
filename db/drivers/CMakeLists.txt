@@ -98,7 +98,7 @@ build_program_in_subdir(
   DEPENDS
   grass_gis
   grass_dbstubs
-  grass_dbmibase 
+  grass_dbmibase
   grass_dbmidriver
   grass_sqlp
   DEFS

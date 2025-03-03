@@ -131,7 +131,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         # or avoid duplication, define in map window base class?
 
         # Emitted when mouse us moving (mouse motion event)
-        # Parametres are x and y of the mouse position in map (cell) units
+        # Parameters are x and y of the mouse position in map (cell) units
         self.mouseMoving = Signal("GLWindow.mouseMoving")
 
         # Emitted when the zoom history stack is emptied
