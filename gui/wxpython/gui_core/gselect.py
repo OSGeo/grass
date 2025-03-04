@@ -2627,6 +2627,9 @@ class GdalSelect(wx.Panel):
         """
 
     try:
+        from osgeo import gdal
+
+        gdal.DontUseExceptions()
         rasterlite = gdal.Open(dsn)
         if rasterlite is None:
             raise RuntimeError(f"Failed to open Rasterlite database: {dsn}")

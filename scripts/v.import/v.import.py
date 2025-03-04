@@ -264,7 +264,7 @@ def main():
         if OGRdatasource.lower().endswith("gml"):
             from osgeo import gdal
 
-            gdal.UseExceptions()  # Proper indentation for GDAL config
+            gdal.DontUseExceptions()
 
         if int(gdal.VersionInfo("VERSION_NUM")) < GDAL_COMPUTE_VERSION(2, 4, 1):
             fix_gfsfile(OGRdatasource)

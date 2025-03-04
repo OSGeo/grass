@@ -24,7 +24,7 @@ except ImportError:
             "installed)"
         )
     )
-
+    gdal.DontUseExceptions()
 import xml.etree.ElementTree as ET
 
 from wms_base import WMSBase, GetSRSParamVal

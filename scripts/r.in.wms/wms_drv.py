@@ -25,7 +25,7 @@ import grass.script as gs
 try:
     from osgeo import gdal
 
-    gdal.UseExceptions()
+    gdal.DontUseExceptions()
 except ImportError:
     gs.fatal(
         _(

@@ -490,7 +490,7 @@ class GdalImportDialog(ImportDialog):
     try:
         from osgeo import gdal
 
-        gdal.UseExceptions()
+        gdal.DontUseExceptions()
     except ImportError:
         GError(
             parent=self,
