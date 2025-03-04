@@ -170,8 +170,9 @@ build_program_in_subdir(
   test.raster3d.lib
   DEPENDS
   grass_gis
-  grass_raster3d
+  grass_interpfl
   grass_raster
+  grass_raster3d
   GDAL::GDAL)
 
 build_library_in_subdir(

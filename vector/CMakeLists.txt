@@ -899,7 +899,7 @@ build_program_in_subdir(
   PRIMARY_DEPENDS
   GDAL::GDAL
   OPTIONAL_DEPENDS
-  POSTGRES)
+  PostgreSQL::PostgreSQL)
 
 build_program_in_subdir(v.external.out DEPENDS grass_gis grass_vector
                         PRIMARY_DEPENDS GDAL::GDAL)
@@ -981,7 +981,7 @@ build_program_in_subdir(
   grass_gis
   grass_vector
   PRIMARY_DEPENDS
-  POSTGRES)
+  PostgreSQL::PostgreSQL)
 
 if(WITH_OPENDWG)
   build_program_in_subdir(v.in.dwg DEPENDS grass_gis grass_vector ${LIBM})
