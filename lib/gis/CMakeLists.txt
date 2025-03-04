@@ -26,6 +26,7 @@ build_module(
   BZIP2
   ZSTD
   ICONV
+  Intl::Intl
   # REGEX
   POSTGRES
   DEFS
