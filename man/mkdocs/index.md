@@ -22,40 +22,26 @@ most common interfaces are:
 
 ### [Terminal](grass.md)
 
-The terminal interface is...
+The terminal interface allows you to start a GRASS session to run GRASS
+commands, execute scripts, or open the GUI.
 
-```bash
+Here we creating a new project for the NAD83(HARN)/North Carolina coordinate
+reference system (EPSG:3358) and start a GRASS session in the terminal.
 
-grass -c EPSG:3385 {project directory} --gtext
-
-Starting GRASS GIS...
-
-          __________  ___   __________    _______________
-         / ____/ __ \/   | / ___/ ___/   / ____/  _/ ___/
-        / / __/ /_/ / /| | \__ \\_  \   / / __ / / \__ \
-       / /_/ / _, _/ ___ |___/ /__/ /  / /_/ // / ___/ /
-       \____/_/ |_/_/  |_/____/____/   \____/___//____/
-
-Welcome to GRASS GIS 8.5.0dev (5ffc9ea669)
-GRASS GIS homepage:                      https://grass.osgeo.org
-This version running through:            Bash Shell (/bin/bash)
-Help is available with the command:      g.manual -i
-See the licence terms with:              g.version -c
-See citation options with:               g.version -x
-If required, restart the GUI with:       g.gui wxpython
-When ready to quit enter:                exit
-
-
-GRASS {project directory}/PERMANENT:{Working directory} > 
+```sh
+grass -c EPSG:3358 {project directory} --text
 
 ```
 
-Now you can run GRASS commands in the terminal.
+The terminal can now execute GRASS commands.
 
 ```sh
 g.region raster=elevation
 r.slope.aspect elevation=elevation slope=slope aspect=aspect
 ```
+
+To learn more about the terminal interface, see the
+[Terminal Interface](grass.md) page.
 
 ### Python Scripts
 
@@ -66,9 +52,23 @@ GRASS Python interface, the `grass.script.raster` module which provides
 functionality for working with raster data, and the `grass.script.vector` module
 which provides functionality for working with vector data.
 
+To get started Python, create a new project and run the
+
 ```python
+import sys
+import subprocess
+
+# Append GRASS to the python system path
+sys.path.append(
+    subprocess.check_output(["grass", "--config", "python_path"], text=True).strip()
+)
+
 import grass.script as gs
 
+# Create a new project
+gs.create_project(path=grassdata, name=project_name, epsg="3358", overwrite=False)
+
+# Run GRASS commands
 gs.run_command('g.region', raster='elevation')
 gs.run_command('r.slope.aspect', elevation='elevation', slope='slope', aspect='aspect')
 ```
@@ -83,6 +83,8 @@ provide functionality for working with maps in Jupyter Notebooks.
 
 ```python
 import grass.jupyter as gj
+
+session = gj.init(Path(grassdata, project_name))
 
 slope_map = gj.Map()  # Create a new map
 slope_map.d_rast(map='slope')  # Add the slope raster to the map
