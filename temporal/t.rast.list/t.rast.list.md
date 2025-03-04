@@ -208,7 +208,7 @@ for item in result["data"]:
 
 Semantic label can be assigned to raster maps by
 *[r.semantic.label](r.semantic.label.md)* module or even when
-registrating raster maps into STRDS by
+registering raster maps into STRDS by
 *[t.register](t.register.md#support-for-semantic-labels)*.
 
 Name of STRDS can be extended by semantic label used for filtering. Name

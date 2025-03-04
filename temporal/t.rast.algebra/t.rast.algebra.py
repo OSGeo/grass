@@ -101,7 +101,7 @@ def main():
     granularity = flags["g"]
     dry_run = flags["d"]
 
-    # Check for PLY istallation
+    # Check for PLY installation
     try:
         # Intentionally unused imports
         from ply import lex  # noqa: F401

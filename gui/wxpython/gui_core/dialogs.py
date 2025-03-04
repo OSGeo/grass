@@ -1715,7 +1715,7 @@ class MapLayersDialog(MapLayersDialogBase):
 
 
 class MapLayersDialogForGroups(MapLayersDialogBase):
-    """Subclass of MapLayersDialogBase used for specyfying maps in an imagery group.
+    """Subclass of MapLayersDialogBase used for specifying maps in an imagery group.
 
     Shows only raster maps.
     """

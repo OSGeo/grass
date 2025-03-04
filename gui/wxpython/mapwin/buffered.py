@@ -169,7 +169,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         # Emitted after double-click
         self.mouseDClick = Signal("BufferedWindow.mouseDClick")
         # Emitted when mouse us moving (mouse motion event)
-        # Parametres are x and y of the mouse position in map (cell) units
+        # Parameters are x and y of the mouse position in map (cell) units
         self.mouseMoving = Signal("BufferedWindow.mouseMoving")
 
         # event bindings
@@ -1708,7 +1708,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         event.Skip()
 
     def OnCopyCoordinates(self, event):
-        """Copy coordinates to cliboard"""
+        """Copy coordinates to clipboard"""
         e, n = self.GetLastEN()
         if wx.TheClipboard.Open():
             do = wx.TextDataObject()
@@ -2026,7 +2026,7 @@ class BufferedMapWindow(MapWindowBase, Window):
     def ZoomToDefault(self):
         """Set display geometry to match default region settings"""
         self.Map.region = self.Map.GetRegion(default=True)
-        self.Map.AdjustRegion()  # aling region extent to the display
+        self.Map.AdjustRegion()  # align region extent to the display
 
         self.ZoomHistory(
             self.Map.region["n"],
