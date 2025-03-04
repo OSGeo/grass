@@ -122,7 +122,6 @@ nav:
           - Databases Overview: databaseintro.md
           - Database Tools: database.md
           - Supported Database Drivers: sql.md
-      # - GUI Tools:
       - Imagery:
           - Overview: imageryintro.md
           - Imagery Tools: imagery.md
@@ -133,7 +132,6 @@ nav:
           - Temporal: temporal.md
 
   - Visualization:
-      # - Overview: visualizationintro.md # Does not exist yet
       - Display Tools: display.md
       - GUI Tools:
           - Animation: wxGUI.animation.md
