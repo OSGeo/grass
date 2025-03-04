@@ -91,4 +91,6 @@ void write_rgb_values(struct Map_info *Map, int layer, const char *column_name,
     db_commit_transaction(driver);
 
     db_close_database_shutdown_driver(driver);
+    G_free(pval);
+    Vect_destroy_field_info(fi);
 }
