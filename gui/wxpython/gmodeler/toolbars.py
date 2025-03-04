@@ -33,10 +33,10 @@ class ModelerToolbar(BaseToolbar):
         if sys.platform == "darwin" and not CheckWxVersion([4, 2, 1]):
             parent.SetToolBar(self)
 
+        self.InitToolbar(self._toolbarData())
+
         # realize the toolbar
         self.Realize()
-
-        self.InitToolbar(self._toolbarData())
 
     def _toolbarData(self):
         """Toolbar data"""
