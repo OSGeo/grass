@@ -193,8 +193,14 @@ int plot1(struct Map_info *Map, int type, int area UNUSED,
     while (1) {
         if (Vect_level(Map) >= 2) {
             line++;
-            if (line > nlines)
+            if (line > nlines) {
+                G_free(primary_color);
+                G_free(fill_color);
+                G_free(line_color);
+                Vect_destroy_cats_struct(Cats);
+                Vect_destroy_line_struct(Points);
                 return 0;
+            }
             if (!Vect_line_alive(Map, line))
                 continue;
             ltype = Vect_read_line(Map, Points, Cats, line);
@@ -204,6 +210,9 @@ int plot1(struct Map_info *Map, int type, int area UNUSED,
             switch (ltype) {
             case -1:
                 fprintf(stderr, _("\nERROR: vector map - can't read\n"));
+                G_free(primary_color);
+                G_free(fill_color);
+                G_free(line_color);
                 return -1;
             case -2: /* EOF */
                 return 0;
