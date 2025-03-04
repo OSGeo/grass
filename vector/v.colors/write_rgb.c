@@ -9,7 +9,7 @@ void write_rgb_values(struct Map_info *Map, int layer, const char *column_name,
 {
     int ctype, nrec, i;
     int red, grn, blu;
-    int *pval;
+    int *pval = NULL;
     char buf[1024];
     struct field_info *fi;
     dbDriver *driver;
