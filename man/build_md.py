@@ -115,7 +115,7 @@ headerkey_tmpl = string.Template(
 
 
 headerpso_tmpl = r"""
-## Parser standard options
+# Standard Parser Options
 """
 
 header_graphical_index_tmpl = """# Graphical index of GRASS GIS modules
