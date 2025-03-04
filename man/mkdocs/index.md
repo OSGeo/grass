@@ -1,3 +1,10 @@
+---
+authors: 
+    - Corey T. White
+    - GRASS Development Team
+title: Getting Started
+---
+
 ## What is GRASS?
 
 [GRASS](https://grass.osgeo.org/) is a geosptial processing engine for
@@ -10,17 +17,12 @@ Downloaded and installed GRASS here.
 <!-- markdownlint-disable-next-line MD013 -->
 [:material-download: Download and Install](https://grass.osgeo.org/download/){ .md-button }
 
-## Tutorials
-
-Get started with GRASS by following the
-[tutorials](https://grass-tutorials.osgeo.org/) below.
-
 ## Interfaces
 
 GRASS provides a number of interfaces for interacting with the software. The
 most common interfaces are:
 
-### [Terminal](grass.md)
+### Terminal
 
 The terminal interface allows you to start a GRASS session to run GRASS
 commands, execute scripts, or open the GUI.
@@ -30,7 +32,6 @@ reference system (EPSG:3358) and start a GRASS session in the terminal.
 
 ```sh
 grass -c EPSG:3358 {project directory} --text
-
 ```
 
 The terminal can now execute GRASS commands.
@@ -41,22 +42,25 @@ r.slope.aspect elevation=elevation slope=slope aspect=aspect
 ```
 
 To learn more about the terminal interface, see the
-[Terminal Interface](grass.md) page.
+[Terminal Interface](terminalintro.md) page.
 
-### Python Scripts
+### Python
 
 The `grass.script` module provides a Python interface to GRASS. This allows
 users to write Python scripts to interact with GRASS. The `grass.script` module
-contains the gs.script.core module which provides the core functionality for the
+contains the `gs.script.core` module which provides the core functionality for the
 GRASS Python interface, the `grass.script.raster` module which provides
 functionality for working with raster data, and the `grass.script.vector` module
 which provides functionality for working with vector data.
 
-To get started Python, create a new project and run the
+To get started Python, create a new project with `gs.create_project` and start a
+GRASS session with the `grass.script.setup.init` function to initialize the
+GRASS environment.
 
 ```python
 import sys
 import subprocess
+from pathlib import Path
 
 # Append GRASS to the python system path
 sys.path.append(
@@ -68,10 +72,16 @@ import grass.script as gs
 # Create a new project
 gs.create_project(path=grassdata, name=project_name, epsg="3358", overwrite=False)
 
-# Run GRASS commands
-gs.run_command('g.region', raster='elevation')
-gs.run_command('r.slope.aspect', elevation='elevation', slope='slope', aspect='aspect')
+# Initialize the GRASS session
+with gs.setup.init(Path("grassdata/project_name")) as session:
+
+    # Run GRASS commands
+    gs.run_command('g.region', raster='elevation')
+    gs.run_command('r.slope.aspect', elevation='elevation', slope='slope', aspect='aspect')
 ```
+
+To learn more about the GRASS Python Scripting library, see the
+[grass.script package](pythonintro.md) page.
 
 ### Jupyter Notebooks
 
@@ -82,6 +92,7 @@ Notebooks to interact with GRASS. The `grass.jupyter` module contains the `Map`,
 provide functionality for working with maps in Jupyter Notebooks.
 
 ```python
+from pathlib import Path
 import grass.jupyter as gj
 
 session = gj.init(Path(grassdata, project_name))
@@ -95,13 +106,18 @@ slope_map.show()  # Display the map
 
 ![Slope Map](r_slope_aspect_slope.png)
 
-### [GRASS Desktop GUI](wxguiintro.md)
+Learn more about the GRASS Jupyter interface on the
+[Jupyter Notebooks](jupyterintro.md) page.
 
-Add content here.
+### [Desktop GUI](wxguiintro.md)
 
-## [Project Management](grass_database.md)
+The GRASS Desktop GUI is a graphical user interface for GRASS. The GUI provides
+a visual interface for interacting with GRASS. The GUI provides a number of tools
+for interactive data processing, analysis, and visualization. The GUI is
+avaliable on Windows, macOS, and Linux.
 
-Add Content here.
+Learn more about the GRASS Desktop GUI on the
+[Desktop GUI](wxguiintro.md) page.
 
 ## Processing Tools
 
@@ -114,8 +130,6 @@ The following table provides a list of the prefixes and the categories they repr
 Follow the topics links to see a complete list of tools in each category. Or try
 using the search feature to find a specific tool or topic by subject
 matter (e.g. hydrology, landscapes).
-
-### GRASS Tools
 
 | Prefix | Category                         | Description                        | Topic                                      |
 |--------|----------------------------------|------------------------------------|-------------------------------------------|
@@ -130,10 +144,12 @@ matter (e.g. hydrology, landscapes).
 | `m.`   | Miscellaneous                    | Miscellaneous tools                | [Miscellaneous Tools](miscellaneous.md)   |
 | `ps.`  | Postscript                       | Postscript tools                   | [Postscript Tools](postscript.md)         |
 
-### Addons
+## Development
 
-In addition to the core tools, GRASS also provides a number of addons that
-extend the functionality of GRASS. Addons are part of the [OSGeo/grass-addons](https://github.com/OSGeo/grass-addons)
-repository and are a great place to plubish and share custom tools, models, and reserach.
-The addons are maintained by the GRASS community and are a great way to extend the
-functionality of GRASS.
+GRASS is an open source project and welcomes contributions from the community.
+The GRASS Development documentation provides information on how to get started
+developing for GRASS, how to contribute to the project, and how to get involved
+with the GRASS community.
+
+For more information on developing for GRASS, see the
+[Development Introduction](developmentintro.md) page.

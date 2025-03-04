@@ -22,7 +22,11 @@ DSTFILES := \
 	$(MDDIR)/source/index.md \
 	$(MDDIR)/overrides/partials/footer.html \
 	$(MDDIR)/overrides/partials/actions.html \
-	$(MDDIR)/source/tags.md
+	$(MDDIR)/source/tags.md \
+	$(MDDIR)/source/developmentintro.md \
+	$(MDDIR)/source/jupyterintro.md \
+	$(MDDIR)/source/pythonintro.md \
+	$(MDDIR)/source/terminalintro.md
 
 categories = \
 	d:display \
@@ -260,6 +264,18 @@ $(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/tags.md: mkdocs/tags.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/developmentintro.md: mkdocs/docs/developmentintro.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/jupyterintro.md: mkdocs/docs/jupyterintro.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/pythonintro.md: mkdocs/docs/pythonintro.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/terminalintro.md: mkdocs/docs/terminalintro.md
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
