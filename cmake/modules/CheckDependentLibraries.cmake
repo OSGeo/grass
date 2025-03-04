@@ -171,12 +171,6 @@ if(WITH_NLS)
     set(MSGMERGE ${GETTEXT_MSGMERGE_EXECUTABLE})
   endif()
   find_package(Intl REQUIRED)
-  if(Intl_FOUND AND NOT TARGET Intl::Intl)
-    add_library(Intl::Intl INTERFACE IMPORTED GLOBAL)
-    set_target_properties(
-      Intl::Intl PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${Intl_INCLUDE_DIR}"
-                            INTERFACE_LINK_LIBRARIES "${Intl_LIBRARY}")
-  endif()
 endif()
 
 # Computing options
