@@ -45,16 +45,12 @@ theme:
 extra:
   homepage: ./index.html
   social:
-    - icon: material/web
-      link: https://grass.osgeo.org
-    - icon: fontawesome/brands/github
-      link: https://github.com/OSGeo/grass
     - icon: simple/opencollective
       link: https://opencollective.com/grass
     - icon: fontawesome/brands/gitter
       link: https://gitter.im/grassgis/community
     - icon: fontawesome/brands/mastodon
-      link: https://mastodon.osm-hr.org/@grass
+      link: https://fosstodon.org/@grassgis/
     - icon: fontawesome/brands/discourse
       link: https://discourse.osgeo.org/c/grass/62
     - icon: fontawesome/brands/linkedin
