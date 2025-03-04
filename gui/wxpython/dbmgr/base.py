@@ -2674,8 +2674,8 @@ class DbMgrTablesPage(DbMgrNotebookBase):
 
         item = tlist.GetFirstSelected()
         if UserSettings.Get(group="atm", key="askOnDeleteRec", subkey="enabled"):
-            # if the user select more columns to delete, all the columns name
-            # will appear the the warning dialog
+            # if the user selects more columns to delete, all the columns names
+            # will appear with a warning dialog
             if tlist.GetSelectedItemCount() > 1:
                 deleteColumns = "columns '%s'" % tlist.GetItemText(item)
                 while item != -1:

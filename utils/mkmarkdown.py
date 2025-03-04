@@ -34,6 +34,7 @@ from mkdocs import (
     get_last_git_commit,
     top_dir,
     get_addon_path,
+    set_proxy,
 )
 
 
@@ -200,6 +201,8 @@ def merge_md_files(md1, md2, content_modifier1, content_modifier2):
 
 def main():
     pgm = sys.argv[1]
+
+    set_proxy()
 
     src_file = f"{pgm}.md"
     tmp_file = f"{pgm}.tmp.md"

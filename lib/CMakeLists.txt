@@ -20,13 +20,14 @@ build_library_in_subdir(
 add_subdirectory(proj)
 
 build_library_in_subdir(external/parson NAME grass_parson HEADERS "gjson.h" "parson.h")
+build_program_in_subdir(external/parson/test NAME test.gjson.lib DEPENDS grass_gis grass_parson)
 
 build_library_in_subdir(
   raster
   DEFS
   "-DGDAL_LINK=1"
   DEPENDS
-  GDAL
+  GDAL::GDAL
   PROJ
   grass_gis
   grass_gproj
@@ -77,7 +78,7 @@ build_library_in_subdir(
   grass_gis
   ZLIB
   OPTIONAL_DEPENDS
-  LIBPNG)
+  PNG::PNG)
 
 build_library_in_subdir(
   psdriver
@@ -136,7 +137,7 @@ add_subdirectory(fonts)
 
 add_subdirectory(vector)
 
-build_library_in_subdir(imagery DEPENDS grass_gis grass_vector grass_raster GDAL)
+build_library_in_subdir(imagery DEPENDS grass_gis grass_vector grass_raster GDAL::GDAL)
 
 build_library_in_subdir(cluster DEPENDS grass_imagery grass_gis grass_raster)
 
@@ -158,7 +159,7 @@ build_library_in_subdir(
   grass_dbmidriver
   grass_gmath
   grass_segment
-  GDAL
+  GDAL::GDAL
   HEADERS
   "lidar.h")
 
@@ -173,7 +174,7 @@ build_program_in_subdir(
   grass_gis
   grass_raster3d
   grass_raster
-  GDAL)
+  GDAL::GDAL)
 
 build_library_in_subdir(
   gpde
@@ -221,7 +222,7 @@ if(WITH_OPENGL)
     grass_raster
     grass_raster3d
     grass_vector
-    GDAL
+    GDAL::GDAL
     OPENGL
     TIFF)
 
@@ -243,7 +244,7 @@ add_subdirectory(temporal)
 build_library_in_subdir(iostream SRC_REGEX "*.cpp" DEPENDS grass_gis)
 
 build_library_in_subdir(manage DEPENDS grass_gis grass_raster grass_vector
-                        grass_raster3d GDAL)
+                        grass_raster3d GDAL::GDAL)
 file(COPY manage/element_list DESTINATION ${OUTDIR}/${GRASS_INSTALL_ETCDIR})
 install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/element_list
         DESTINATION ${GRASS_INSTALL_ETCDIR})

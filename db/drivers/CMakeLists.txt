@@ -64,7 +64,8 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmidriver
   grass_sqlp
-  GDAL
+  PRIMARY_DEPENDS
+  GDAL::GDAL
   DEFS
   "${grass_dbstubs_DEFS}"
   HTML_FILE_NAME
@@ -98,7 +99,7 @@ build_program_in_subdir(
   DEPENDS
   grass_gis
   grass_dbstubs
-  grass_dbmibase 
+  grass_dbmibase
   grass_dbmidriver
   grass_sqlp
   DEFS

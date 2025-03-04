@@ -95,7 +95,7 @@ endif()
 option(WITH_X11 "Build with X11 support ." ${x11_default_option_enabled})
 option(WITH_OPENGL "Build with opengl support ." ON)
 option(WITH_CAIRO "Build with cairo support ." ON)
-option(WITH_LIBPNG "Build with libpng support ." OFF)
+option(WITH_LIBPNG "Build with libpng support ." ON)
 
 # Data storage options
 option(WITH_SQLITE "Build with SQLite support" ON)
@@ -123,7 +123,7 @@ option(WITH_OPENMP "Build with OpenMP support" ON)
 # Data format options
 option(WITH_TIFF "Build with LibTIFF support ." ON)
 option(WITH_NETCDF "Build with NetCDF support" OFF)
-option(WITH_GEOS "Build with GEOS support" OFF)
+option(WITH_GEOS "Build with GEOS support" ON)
 option(WITH_PDAL "Build with PDAL support" ON)
 option(WITH_LIBLAS "Build with libLAS support" OFF)
 option(WITH_OPENDWG "Build with OpenDWG support" OFF)
