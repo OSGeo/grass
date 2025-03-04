@@ -29,12 +29,12 @@ class ModelerToolbar(BaseToolbar):
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
 
-        # realize the toolbar
-        self.Realize()
-
         # workaround for http://trac.wxwidgets.org/ticket/13888
         if sys.platform == "darwin" and not CheckWxVersion([4, 2, 1]):
             parent.SetToolBar(self)
+
+        # realize the toolbar
+        self.Realize()
 
         self.InitToolbar(self._toolbarData())
 
