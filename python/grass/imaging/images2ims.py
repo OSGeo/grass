@@ -33,6 +33,7 @@ Use PIL to create a series of images.
 import os
 from operator import itemgetter
 from string import digits
+from pathlib import Path
 
 try:
     import numpy as np
@@ -208,10 +209,10 @@ def readIms(filename, asNumpy=True):
     images = []
 
     # Get all files in directory
-    for fname in os.listdir(dirname):
-        if fname.startswith(part1) and fname.endswith(part2):
+    for fname in Path(dirname).iterdir():
+        if fname.name.startswith(part1) and fname.name.endswith(part2):
             # Get sequence number
-            nr = _getSequenceNumber(fname, part1, part2)
+            nr = _getSequenceNumber(fname.name, part1, part2)
             # Get Pil image and store copy (to prevent keeping the file)
             im = PIL.Image.open(os.path.join(dirname, fname))
             images.append((im.copy(), nr))

@@ -19,6 +19,7 @@ from grass.gunittest.utils import silent_rmtree, xfail_windows
 from grass.script.utils import decode
 
 import os
+from pathlib import Path
 
 
 MODULES_OUTPUT = """\
@@ -77,7 +78,7 @@ class TestModulesFromDifferentSources(TestCase):
     def setUp(self):
         """Make sure we are not dealing with some old files"""
         if os.path.exists(self.install_prefix):
-            files = os.listdir(self.install_prefix)
+            files = list(Path(self.install_prefix).iterdir())
             if files:
                 msg = "Install prefix path '{}' contains files {}".format(
                     self.install_prefix, files

@@ -172,7 +172,7 @@ def get_commands(*, env=None):
     def scan(gisbase, directory):
         dir_path = os.path.join(gisbase, directory)
         if os.path.exists(dir_path):
-            for fname in os.listdir(os.path.join(gisbase, directory)):
+            for fname in Path(os.path.join(gisbase, directory)).iterdir():
                 if scripts:  # win32
                     name, ext = os.path.splitext(fname)
                     if ext != ".manifest":
@@ -189,7 +189,7 @@ def get_commands(*, env=None):
     gui_path = os.path.join(gisbase, "etc", "gui", "scripts")
     if os.path.exists(gui_path):
         os.environ["PATH"] = os.getenv("PATH") + os.pathsep + gui_path
-        cmd += os.listdir(gui_path)
+        cmd += [p.name for p in Path(gui_path).iterdir()]
 
     return set(cmd), scripts
 

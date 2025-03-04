@@ -13,6 +13,7 @@ libgis.G_gisinit("")
 import grass.lib.raster as libraster
 from grass.lib.ctypes_preamble import String
 from grass.pygrass.errors import GrassError
+from pathlib import Path
 
 # flake8: qa
 
@@ -37,7 +38,7 @@ def looking(obj, filter_string):
 def findfiles(dirpath, match=None):
     """Return a list of the files"""
     res = []
-    for f in sorted(os.listdir(dirpath)):
+    for f in sorted(Path(dirpath).iterdir()):
         abspath = os.path.join(dirpath, f)
         if os.path.isdir(abspath):
             res.extend(findfiles(abspath, match))
