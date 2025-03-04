@@ -30,12 +30,6 @@ if(PROJ_FOUND)
 endif()
 
 find_package(GDAL REQUIRED)
-if(GDAL_FOUND)
-  add_library(GDAL INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET GDAL PROPERTY INTERFACE_LINK_LIBRARIES ${GDAL_LIBRARY})
-  set_property(TARGET GDAL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${GDAL_INCLUDE_DIR})
-endif()
 
 find_package(ZLIB REQUIRED)
 if(ZLIB_FOUND)
@@ -369,8 +363,8 @@ if(Python3_FOUND)
 endif()
 
 check_target(PROJ HAVE_PROJ_H)
-check_target(GDAL HAVE_GDAL)
-check_target(GDAL HAVE_OGR)
+check_target(GDAL::GDAL HAVE_GDAL)
+check_target(GDAL::GDAL HAVE_OGR)
 check_target(ZLIB HAVE_ZLIB_H)
 check_target(ICONV HAVE_ICONV_H)
 check_target(LIBPNG HAVE_PNG_H)

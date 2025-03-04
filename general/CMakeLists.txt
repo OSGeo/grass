@@ -22,9 +22,8 @@ build_program_in_subdir(g.pnmcomp DEPENDS grass_gis)
 if(WITH_LIBPNG)
   build_program_in_subdir(g.ppmtopng DEPENDS grass_gis LIBPNG)
 endif()
-build_program_in_subdir(g.proj DEPENDS grass_gis grass_gproj GDAL PROJ)
-# LIBES = $(GPROJLIB) $(VECTORLIB) $(DIG2LIB) $(RASTER3DLIB) $(RASTERLIB)
-# $(GISLIB) $(MATHLIB) $(PROJLIB)
+build_program_in_subdir(g.proj DEPENDS grass_gis grass_gproj PROJ OPTIONAL_DEPENDS GDAL::GDAL)
+
 build_program_in_subdir(
   g.region
   DEPENDS
@@ -36,7 +35,6 @@ build_program_in_subdir(
   grass_gmath
   grass_parson
   PROJ
-  GDAL
   ${LIBM})
 
 build_program_in_subdir(g.rename DEPENDS grass_gis grass_manage grass_raster)
@@ -46,11 +44,11 @@ build_program_in_subdir(
   g.version
   DEPENDS
   grass_gis
-  PROJ
-  GDAL
-  SQLITE
   OPTIONAL_DEPENDS
+  GDAL::GDAL
   GEOS::geos_c
+  PROJ
+  SQLITE
   DEFS
   "-DGRASS_VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
   "-DGRASS_VERSION_GIT=\"${GRASS_VERSION_GIT}\""
@@ -74,8 +72,7 @@ build_program_in_subdir(
   grass_manage
   grass_raster
   grass_raster3d
-  grass_vector
-  GDAL)
+  grass_vector)
 add_dependencies(g.list cell vector)
 
 build_program_in_subdir(g.remove DEPENDS grass_gis grass_manage grass_raster)
