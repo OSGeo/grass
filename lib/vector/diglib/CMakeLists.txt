@@ -34,5 +34,5 @@ build_module(
   grass_gmath
   grass_gis
   grass_rtree
-  GDAL
+  GDAL::GDAL
   ${LIBM})
