@@ -20,7 +20,7 @@ build_module(
   "${gislib_SRCS}"
   DEPENDS
   grass_datetime
-  ZLIB
+  ZLIB::ZLIB
   OPTIONAL_DEPENDS
   PTHREAD
   BZIP2
@@ -73,6 +73,8 @@ install(
         projections
   DESTINATION ${GRASS_INSTALL_ETCDIR}/proj)
 install(FILES colors.desc renamed_options DESTINATION ${GRASS_INSTALL_ETCDIR})
+
+target_include_directories(grass_gis PUBLIC ${ZLIB_INCLUDE_DIR})
 
 if(UNIX)
   target_link_libraries(grass_gis PRIVATE ${LIBM})

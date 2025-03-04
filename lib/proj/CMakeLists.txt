@@ -14,7 +14,6 @@ build_module(
   grass_driver
   grass_gis
   GDAL::GDAL
-  ZLIB
   PROJ
   SOURCES
   "${grass_gproj_SOURCES}"

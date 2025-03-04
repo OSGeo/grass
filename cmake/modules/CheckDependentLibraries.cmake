@@ -32,13 +32,6 @@ endif()
 find_package(GDAL REQUIRED)
 
 find_package(ZLIB REQUIRED)
-if(ZLIB_FOUND)
-  add_library(ZLIB INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET ZLIB PROPERTY INTERFACE_LINK_LIBRARIES
-                                    ${ZLIB_LIBRARY${find_library_suffix}})
-  set_property(TARGET ZLIB PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${ZLIB_INCLUDE_DIR})
-endif()
 
 # Optional dependencies
 
@@ -358,7 +351,7 @@ endif()
 check_target(PROJ HAVE_PROJ_H)
 check_target(GDAL::GDAL HAVE_GDAL)
 check_target(GDAL::GDAL HAVE_OGR)
-check_target(ZLIB HAVE_ZLIB_H)
+check_target(ZLIB::ZLIB HAVE_ZLIB_H)
 check_target(ICONV HAVE_ICONV_H)
 check_target(PNG::PNG HAVE_PNG_H)
 check_target(LIBJPEG HAVE_JPEGLIB_H)

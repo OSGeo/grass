@@ -14,8 +14,7 @@ build_library_in_subdir(
   DEPENDS
   grass_gis
   FREETYPE
-  ICONV
-  ZLIB)
+  ICONV)
 
 add_subdirectory(proj)
 
@@ -76,7 +75,6 @@ build_library_in_subdir(
   DEPENDS
   grass_driver
   grass_gis
-  ZLIB
   OPTIONAL_DEPENDS
   PNG::PNG)
 
