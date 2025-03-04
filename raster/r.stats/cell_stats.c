@@ -1,9 +1,11 @@
 #include <stdlib.h>
+#include <grass/parson.h>
 #include <grass/glocale.h>
 #include "global.h"
 
 int cell_stats(int fd[], int with_percents, int with_counts, int with_areas,
-               int do_sort, int with_labels, char *fmt)
+               int do_sort, int with_labels, char *fmt,
+               enum OutputFormat format, JSON_Array *root_array)
 {
     CELL **cell;
     int i;
@@ -65,7 +67,7 @@ int cell_stats(int fd[], int with_percents, int with_counts, int with_areas,
 
     sort_cell_stats(do_sort);
     print_cell_stats(fmt, with_percents, with_counts, with_areas, with_labels,
-                     fs);
+                     fs, format, root_array);
     for (i = 0; i < nfiles; i++) {
         G_free(cell[i]);
     }
