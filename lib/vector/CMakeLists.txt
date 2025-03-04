@@ -25,10 +25,9 @@ build_library_in_subdir(
 
 target_include_directories(grass_vector PUBLIC ${GDAL_INCLUDE_DIR})
 
-if(TARGET POSTGRES)
-  # target_include_directories(grass_vector SYSTEM PUBLIC
-  # ${PostgreSQL_INCLUDE_DIR})
-  target_link_libraries(grass_vector PRIVATE POSTGRES)
+if(TARGET PostgreSQL::PostgreSQL)
+  target_link_libraries(grass_vector PRIVATE PostgreSQL::PostgreSQL)
+  target_include_directories(grass_vector PUBLIC ${PostgreSQL_INCLUDE_DIR})
 endif()
 
 if(TARGET LAPACKE)

@@ -38,3 +38,6 @@ build_library_in_subdir(
   "interpf.h")
 
 target_include_directories(grass_interpfl PUBLIC ${GDAL_INCLUDE_DIR})
+if(TARGET PostgreSQL::PostgreSQL)
+  target_include_directories(grass_interpfl PUBLIC ${PostgreSQL_INCLUDE_DIR})
+endif()

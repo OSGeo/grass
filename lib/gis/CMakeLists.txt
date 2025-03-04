@@ -27,7 +27,7 @@ build_module(
   ZSTD
   ICONV
   # REGEX
-  POSTGRES
+  PostgreSQL::PostgreSQL
   DEFS
   "${grass_gis_DEFS}")
 
