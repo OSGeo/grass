@@ -105,7 +105,7 @@ Add Content here.
 
 ## Processing Tools
 
-### GRASS Tool Prefixes
+### GRASS Tools
 
 | Prefix | Category                         | Description                        | Link                                      |
 |--------|----------------------------------|------------------------------------|-------------------------------------------|
