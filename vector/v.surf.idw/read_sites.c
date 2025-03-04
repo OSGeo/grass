@@ -73,6 +73,7 @@ void read_sites(const char *name, const char *field_name, const char *col,
                           nrec);
 
         db_close_database_shutdown_driver(Driver);
+        Vect_destroy_field_info(Fi);
     }
 
     Points = Vect_new_line_struct();
@@ -124,4 +125,6 @@ void read_sites(const char *name, const char *field_name, const char *col,
     Vect_close(&Map);
 
     G_message(n_("%ld point loaded", "%ld points loaded", npoints), npoints);
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
 }
