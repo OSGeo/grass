@@ -224,6 +224,7 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist,
         cats_colors_flag, default_width, width_scale, z_style ? &zcolors : NULL,
         rgb_column ? &cvarr_rgb : NULL, have_colors ? &colors : NULL,
         &cvarr_width, nrec_width, &cvarr_size, nrec_size, &cvarr_rot, nrec_rot);
+    Vect_destroy_field_info(fi);
 
     return stat;
 }
