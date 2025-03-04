@@ -78,7 +78,7 @@ build_library_in_subdir(
   grass_gis
   ZLIB
   OPTIONAL_DEPENDS
-  LIBPNG)
+  PNG::PNG)
 
 build_library_in_subdir(
   psdriver

@@ -292,9 +292,14 @@ build_program_in_subdir(
   PRIMARY_DEPENDS
   PDAL)
 
-if(WITH_LIBPNG)
-  build_program_in_subdir(r.in.png DEPENDS grass_gis grass_raster LIBPNG)
-endif()
+build_program_in_subdir(
+  r.in.png
+  DEPENDS
+  grass_gis
+  grass_raster
+  ${LIBM}
+  PRIMARY_DEPENDS
+  PNG::PNG)
 
 build_program_in_subdir(r.in.poly DEPENDS grass_gis grass_raster)
 
@@ -376,9 +381,8 @@ build_program_in_subdir(r.out.mat DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(r.out.mpeg DEPENDS grass_gis grass_raster)
 
-if(WITH_LIBPNG)
-  build_program_in_subdir(r.out.png DEPENDS grass_gis grass_raster LIBPNG)
-endif()
+build_program_in_subdir(r.out.png DEPENDS grass_gis grass_raster
+                        PRIMARY_DEPENDS PNG::PNG)
 
 build_program_in_subdir(r.out.pov DEPENDS grass_gis grass_raster)
 

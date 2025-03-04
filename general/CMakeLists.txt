@@ -19,9 +19,7 @@ install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/fontcap
         DESTINATION ${GRASS_INSTALL_ETCDIR})
 build_program_in_subdir(g.parser DEPENDS grass_gis FREETYPE)
 build_program_in_subdir(g.pnmcomp DEPENDS grass_gis)
-if(WITH_LIBPNG)
-  build_program_in_subdir(g.ppmtopng DEPENDS grass_gis LIBPNG)
-endif()
+build_program_in_subdir(g.ppmtopng DEPENDS grass_gis PRIMARY_DEPENDS PNG::PNG)
 build_program_in_subdir(g.proj DEPENDS grass_gis grass_gproj PROJ OPTIONAL_DEPENDS GDAL::GDAL)
 
 build_program_in_subdir(
