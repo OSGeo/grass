@@ -26,6 +26,7 @@ theme:
     - search.suggest
     - search.highlight
     - content.code.copy
+    - contet.tabs.link
     - navigation.footer
     - navigation.indexes
     # - navigation.expand
