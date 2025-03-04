@@ -105,9 +105,19 @@ Add Content here.
 
 ## Processing Tools
 
+GRASS provide a wide range of tools for geospatial processing, modeling,
+analysis, and visualization. The tools are organized into categories based
+on the type of data they process. The tools are prefixed with a letter to
+indicate the type of data they process.
+
+The following table provides a list of the prefixes and the categories they represent.
+Follow the topics links to see a complete list of tools in each category. Or try
+using the search feature to find a specific tool or topic by subject
+matter (e.g. hydrology, landscapes).
+
 ### GRASS Tools
 
-| Prefix | Category                         | Description                        | Link                                      |
+| Prefix | Category                         | Description                        | Topic                                      |
 |--------|----------------------------------|------------------------------------|-------------------------------------------|
 | `g.`   | General                          | General GIS management tools       | [General Tools](general.md)               |
 | `r.`   | Raster                           | Raster data processing tools       | [Raster Tools](raster.md)                 |
@@ -120,4 +130,10 @@ Add Content here.
 | `m.`   | Miscellaneous                    | Miscellaneous tools                | [Miscellaneous Tools](miscellaneous.md)   |
 | `ps.`  | Postscript                       | Postscript tools                   | [Postscript Tools](postscript.md)         |
 
-## Data Visualization
+### Addons
+
+In addition to the core tools, GRASS also provides a number of addons that
+extend the functionality of GRASS. Addons are part of the [OSGeo/grass-addons](https://github.com/OSGeo/grass-addons)
+repository and are a great place to plubish and share custom tools, models, and reserach.
+The addons are maintained by the GRASS community and are a great way to extend the
+functionality of GRASS.
