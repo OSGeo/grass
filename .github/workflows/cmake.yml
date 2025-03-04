@@ -44,7 +44,7 @@ jobs:
             - name: Install dependencies
               run: |
                 sudo apt-get update -y
-                sudo apt-get install -y wget git gawk findutils ninja-build
+                sudo apt-get install -y wget git gawk findutils ninja-build libpq-dev
                 xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
                     sudo apt-get install -y --no-install-recommends --no-install-suggests
             - name: Print build environment variables
