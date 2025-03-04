@@ -452,7 +452,7 @@ float **create_float_matrix(int rows, int cols, float fill_value)
 
     G_verbose_message("Creating float matrix with value %g", fill_value);
 
-    /* Allocate the float marix */
+    /* Allocate the float matrix */
     matrix = G_alloc_fmatrix(rows, cols);
 
     for (row = 0; row < rows; row++) {
@@ -473,7 +473,7 @@ double **create_double_matrix(int rows, int cols, double fill_value)
 
     G_verbose_message("Creating double matrix with value %g", fill_value);
 
-    /* Allocate the float marix */
+    /* Allocate the float matrix */
     matrix = G_alloc_matrix(rows, cols);
 
     for (row = 0; row < rows; row++) {
@@ -502,7 +502,7 @@ float **read_float_raster_map(int rows, int cols, char *name, float unitconv)
     /* Allocate the row buffer */
     row_buff = Rast_allocate_f_buf();
 
-    /* Allocate the float marix */
+    /* Allocate the float matrix */
     matrix = G_alloc_fmatrix(rows, cols);
 
     for (row = 0; row < rows; row++) {
@@ -545,7 +545,7 @@ double **read_double_raster_map(int rows, int cols, char *name, double unitconv)
     /* Allocate the row buffer */
     row_buff = Rast_allocate_d_buf();
 
-    /* Allocate the double marix */
+    /* Allocate the double matrix */
     matrix = G_alloc_matrix(rows, cols);
 
     for (row = 0; row < rows; row++) {

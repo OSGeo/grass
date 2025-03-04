@@ -105,7 +105,7 @@ void fix_max_fp_val(CELL *cell, int ncols)
 
 /* we can't compute hash on null values, so we change all
  *  nulls to max+1, set NULL_CELL to max+1, and later compare
- *  with NULL_CELL to chack for nulls */
+ *  with NULL_CELL to check for nulls */
 void reset_null_vals(CELL *cell, int ncols)
 {
     while (ncols-- > 0) {

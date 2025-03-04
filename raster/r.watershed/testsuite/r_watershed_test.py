@@ -124,7 +124,7 @@ class TestWatershed(TestCase):
             stream=self.stream_2,
             length_slope=self.lengthslope_2,
         )
-        # Use the assertRastersNoDifference with precsion 100 to see if close
+        # Use the assertRastersNoDifference with precision 100 to see if close
         # Compare stream output
         self.assertRastersNoDifference(self.stream_2, self.stream, 100)
         # Compare length_slope output

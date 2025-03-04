@@ -29,7 +29,7 @@
  *   value is added a small quantity (the smaller one that makes cell[i] +
  *   small != cell[i], I've taken into consideration double encoding)
  * o one can specify a minimum number of point for a contour line to be put
- *   into outout, so that small spurs, single points and so on won't be
+ *   into output, so that small spurs, single points and so on won't be
  *   present and the output will be more clear (that's optional anyway);
  * o in my opinion there were minor memory handling problems in r.contour,
  *   I've corrected them (Head.map_name was not guaranteed to be properly

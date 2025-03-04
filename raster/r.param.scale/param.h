@@ -93,5 +93,5 @@ extern int fd_in, /* File descriptor for input and        */
 extern double resoln, /* Planimetric resolution.              */
     exponent,         /* Distance weighting exponent.         */
     zscale,           /* Vertical scaling factor.             */
-    slope_tol,        /* Vertical tolerences for surface      */
+    slope_tol,        /* Vertical tolerances for surface      */
     curve_tol;        /* feature identification.              */

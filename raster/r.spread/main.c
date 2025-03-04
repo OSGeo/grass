@@ -426,7 +426,7 @@ int main(int argc, char *argv[])
     ncols = Rast_window_cols();
 
     /*transfor measurement unit from meters to centimeters due to ROS unit
-     *if the input ROSs are in m/min units, cancell the following*/
+     *if the input ROSs are in m/min units, cancel the following*/
     window.ns_res = 100 * window.ns_res;
     window.ew_res = 100 * window.ew_res;
 

@@ -106,7 +106,7 @@ int dseg_read_raster(DSEG *dseg, char *map_name, char *mapset)
         if (Segment_put_row(&(dseg->seg), (DCELL *)dbuffer, row) < 0) {
             G_free(dbuffer);
             Rast_close(map_fd);
-            G_warning(_("Inable to segment put row %d for raster <%s>"), row,
+            G_warning(_("Unable to segment put row %d for raster <%s>"), row,
                       map_name);
             return -1;
         }

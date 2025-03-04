@@ -113,7 +113,7 @@ struct area_entry {
 
 /**
  * \brief function prototype for index calculation
- * \param fd file descripter of opened raster map
+ * \param fd file descriptor of opened raster map
  * \param par optional parameters
  * \param ad definition of the sample area
  * \param result pointer to store the result

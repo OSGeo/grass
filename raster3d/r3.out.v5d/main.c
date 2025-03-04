@@ -212,8 +212,8 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
        for loops are different to r3.out.ascii and r3.to.sites - hmpf */
 
     /*AV*/
-    /* IT WORKS WHIT A PARTICULAR FOR LOOP PROBABLY BECAUSE THE DATA
-       ARE NOT STORED IN A 3D MATRIX [z,y,x] BUT IN A POINTER
+    /* IT WORKS WITH A PARTICULAR FOR LOOP PROBABLY BECAUSE THE DATA
+       IS NOT STORED IN A 3D MATRIX [z,y,x] BUT IN A POINTER
        MANAGED AS (z,x,y) */
     for (z = 0; z < depths; z++) {
         G_percent(z, depths, 1);

@@ -408,7 +408,7 @@ void v5dPrintStruct(const v5dstruct *v)
         printf("Rotated equidistant projection:\n");
         printf("\tLatitude of grid(0,0): %f\n", v->ProjArgs[0]);
         printf("\tLongitude of grid(0,0): %f\n", v->ProjArgs[1]);
-        printf("\tRow Increment: %f degress\n", v->ProjArgs[2]);
+        printf("\tRow Increment: %f degrees\n", v->ProjArgs[2]);
         printf("\tColumn Increment: %f degrees\n", v->ProjArgs[3]);
         printf("\tCenter Latitude: %f\n", v->ProjArgs[4]);
         printf("\tCenter Longitude: %f\n", v->ProjArgs[5]);

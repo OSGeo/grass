@@ -87,7 +87,7 @@ such as region extent, data range, data type, creation history, and
 other metadata. Metadata such as map title, units, vertical datum etc.
 can be updated with [r.support](r.support.md). Timestamps are managed
 with [r.timestamp](r.timestamp.md). Region extent and resolution are
-mangaged with [r.region](r.region.md).
+managed with [r.region](r.region.md).
 
 ## Raster map operations
 

@@ -300,8 +300,8 @@ int main(int argc, char *argv[])
             BASE_CASE = 1;
 
             /*if the user set the FORCE_DISTRIBUTION flag, then the
-               algorithm runs in the fuly recursive mode (even if this is
-               not necessary). This is used solely for debugging purpses  */
+               algorithm runs in the fully recursive mode (even if this is
+               not necessary). This is used solely for debugging purposes */
 #ifdef FORCE_DISTRIBUTION
         BASE_CASE = 0;
 #endif

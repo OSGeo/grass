@@ -178,7 +178,7 @@ r.category diseasemap separator=":" rules=- << EOF
 EOF
 ```
 
-This sets the categoy values 1 and 2 to respective text labels.
+This sets the category values 1 and 2 to respective text labels.
 Alternatively, the rules can be stored in an ASCII text file and loaded
 via the *rules* parameter.
 

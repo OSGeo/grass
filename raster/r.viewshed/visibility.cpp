@@ -238,7 +238,7 @@ float angleVisibilityOutput(float x)
 /* ------------------------------------------------------------ */
 /* visgrid is the structure that records the visibility information
    after the sweep is done.  Use it to write the visibility output
-   grid and then distroy it.
+   grid and then destroy it.
  */
 void save_inmem_visibilitygrid(MemoryVisibilityGrid *visgrid,
                                ViewOptions viewOptions, Viewpoint vp)
