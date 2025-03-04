@@ -18,6 +18,7 @@ import os
 import tempfile
 import weakref
 from pathlib import Path
+
 import grass.script as gs
 from .map import Map
 from .utils import (
@@ -26,7 +27,7 @@ from .utils import (
     reproject_region,
     setup_location,
 )
-from .region import RegionManagerForInteractiveMap
+from .region import RegionManagerForInteractiveMap, RegionManagerForDirectRenderer
 
 
 class ReprojectionRenderer:
@@ -68,10 +69,10 @@ class ReprojectionRenderer:
         # We need two because folium uses WGS84 for vectors and coordinates
         # and Pseudo-Mercator for raster overlays
         self._rcfile_psmerc, self._psmerc_env = setup_location(
-            "psmerc", self._tmp_dir.name, "3857", self._src_env
+            "psmerc", self._tmp_dir.name, self._src_env, epsg="3857"
         )
         self._rcfile_wgs84, self._wgs84_env = setup_location(
-            "wgs84", self._tmp_dir.name, "4326", self._src_env
+            "wgs84", self._tmp_dir.name, self._src_env, epsg="4326"
         )
 
         # region handling
@@ -165,6 +166,74 @@ class ReprojectionRenderer:
             output=json_file,
             format="GeoJSON",
             env=self._wgs84_env,
+        )
+
+        return json_file
+
+
+class DirectRenderer:
+    def __init__(self, crs, use_region=False, saved_region=None, work_dir=None):
+
+        if not work_dir:
+            self._tmp_dir = tempfile.TemporaryDirectory()
+        else:
+            self._tmp_dir = work_dir
+
+        self._src_env = os.environ.copy()
+        self._proj_string = get_location_proj_string(env=self._src_env)
+        self._crs = crs
+        self._region_manager = RegionManagerForDirectRenderer(
+            use_region, saved_region, self._src_env
+        )
+
+    def get_bbox(self):
+        return self._region_manager.bbox
+
+    def get_resolution(self):
+        return self._region_manager.resolution
+
+    def get_origin(self):
+        return self._region_manager.origin
+
+    def render_raster(self, name):
+        file_info = gs.find_file(name, element="cell", env=self._src_env)
+        full_name = file_info["fullname"]
+
+        self._region_manager.set_region_from_raster(full_name)
+        raster_info = gs.raster_info(full_name, env=self._src_env)
+        filename = os.path.join(
+            self._tmp_dir.name, f"{full_name.replace('@', '_')}.png"
+        )
+        img = Map(
+            width=int(raster_info["cols"]),
+            height=int(raster_info["rows"]),
+            env=self._src_env,
+            filename=filename,
+            use_region=True,
+        )
+        img.run("d.rast", map=full_name)
+
+        bounds = get_region(self._src_env)
+        new_bounds = [
+            [bounds["north"], bounds["west"]],
+            [bounds["south"], bounds["east"]],
+        ]
+
+        return filename, new_bounds
+
+    def render_vector(self, name):
+        file_info = gs.find_file(name, element="vector")
+        full_name = file_info["fullname"]
+
+        self._region_manager.set_bbox_vector(full_name)
+
+        json_file = Path(self._tmp_dir.name) / f"{full_name.replace('@', '_')}.json"
+        gs.run_command(
+            "v.out.ogr",
+            input=full_name,
+            output=json_file,
+            format="GeoJSON",
+            env=self._src_env,
         )
 
         return json_file
