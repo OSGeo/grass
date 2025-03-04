@@ -49,8 +49,6 @@ extra:
       link: https://grass.osgeo.org
     - icon: fontawesome/brands/github
       link: https://github.com/OSGeo/grass
-    - icon: fontawesome/brands/docker
-      link: https://hub.docker.com/r/osgeo/grass-gis
     - icon: simple/opencollective
       link: https://opencollective.com/grass
     - icon: fontawesome/brands/gitter
@@ -63,12 +61,8 @@ extra:
       link: https://linkedin.com/company/grass-gis
     - icon: fontawesome/brands/x-twitter
       link: https://x.com/GRASSGIS
-    - icon: fontawesome/brands/facebook
-      link: https://www.facebook.com/groups/GRASS
     - icon: fontawesome/brands/youtube
       link: https://www.youtube.com/@grass-gis
-    - icon: fontawesome/solid/rss
-      link: https://grass.osgeo.org/index.xml
 
 # Hooks
 hooks:
