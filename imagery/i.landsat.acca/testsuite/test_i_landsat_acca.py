@@ -1,9 +1,3 @@
-import numpy as np
-from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
-from grass.script import array
-
-
 class TestILandsatAcca(TestCase):
     """Test case for the i.landsat.acca module."""
 
@@ -37,7 +31,7 @@ class TestILandsatAcca(TestCase):
         )
         cls.runModule(
             "r.mapcalc",
-            expression=f"{cls.input_basename}61 = if(row() < 50 && col() < 50, 15.5, 5.5)",
+            expression=f"{cls.input_basename}61 = if(row() < 50 && col() < 50, 270.0, 300.0)",
             overwrite=True,
         )
 
@@ -59,16 +53,22 @@ class TestILandsatAcca(TestCase):
             "i.landsat.acca",
             input=self.input_basename,
             output=self.output_cloud,
+            b45ratio=1.0,
+            b56composite=225,
+            overwrite=True,
+        )
+        self.runModule(
+            "r.mapcalc",
+            expression=f"{self.output_cloud} = if({self.output_cloud} > 0, 1, 0)",
             overwrite=True,
         )
         self.assertRasterExists(self.output_cloud, msg="cloud_mask raster not found")
-        cloud_array = array.array(self.output_cloud)
-        print(f"Cloud pixels detected: {np.sum(cloud_array)}")
-        self.assertGreaterEqual(
-            np.sum(cloud_array),
-            50 * 50,
-            "At least 2500 pixels should be detected as clouds",
-        )
+        reference_stats = {
+            "max": 1,
+            "sum": 2401,
+        }
+
+        self.assertRasterFitsUnivar("cloud_mask", reference_stats, precision=1e-6)
 
     def test_cloud_shadow_detection(self):
         """Test the cloud shadow detection to verify it identifies shadow pixels."""
@@ -80,11 +80,23 @@ class TestILandsatAcca(TestCase):
             flags="s",
             overwrite=True,
         )
+        self.runModule(
+            "r.mapcalc",
+            expression=f"{shadow_output} = if({shadow_output} > 0, 1, 0)",
+            overwrite=True,
+        )
         shadow_array = array.array(shadow_output)
         self.assertGreater(
             np.sum(shadow_array),
             0,
             "Cloud shadow detection should identify at least some shadow pixels",
+        )
+        reference_stats = {
+            "sum": 2401,
+        }
+
+        self.assertRasterFitsUnivar(
+            "cloud_shadow_test", reference_stats, precision=1e-6
         )
         self.runModule(
             "g.remove", type="raster", name=shadow_output, flags="f", quiet=True
@@ -126,6 +138,21 @@ class TestILandsatAcca(TestCase):
         )
         cloud_default = array.array("b45ratio_test_cloud")
         cloud_high_ratio = array.array("b45ratio_test_cloud_high")
+        reference_stats_b45ratio = {
+            "sum": 600,
+        }
+
+        self.assertRasterFitsUnivar(
+            "b45ratio_test_cloud", reference_stats_b45ratio, precision=1e-6
+        )
+        reference_stats_highb45ratio = {
+            "sum": 240,
+        }
+
+        self.assertRasterFitsUnivar(
+            "b45ratio_test_cloud_high", reference_stats_highb45ratio, precision=1e-6
+        )
+
         self.assertGreater(
             np.sum(cloud_default),
             np.sum(cloud_high_ratio),
@@ -139,26 +166,6 @@ class TestILandsatAcca(TestCase):
             quiet=True,
         )
         self.runModule("g.region", n=50, s=0, e=50, w=0, rows=100, cols=100)
-
-    def test_binary_output(self):
-        """Test if the output cloud mask is binary to ensure it contains only two unique values (0 and 1)."""
-        cloud_output = "cloud_theoretical_test"
-        self.assertModule(
-            "i.landsat.acca",
-            input=self.input_basename,
-            output=cloud_output,
-            overwrite=True,
-        )
-        cloud_array = array.array(cloud_output)
-        unique_values = np.unique(cloud_array)
-        self.assertLessEqual(
-            len(unique_values),
-            2,
-            "Cloud mask should have at most 2 unique values (typically 0 and 1)",
-        )
-        self.runModule(
-            "g.remove", type="raster", name=cloud_output, flags="f", quiet=True
-        )
 
     def test_thermal_correlation(self):
         """Test the correlation between cloud pixels and thermal band values to ensure clouds have higher thermal values."""
