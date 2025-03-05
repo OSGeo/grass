@@ -1,3 +1,7 @@
+import numpy as np
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
+from grass.script import array
 class TestILandsatAcca(TestCase):
     """Test case for the i.landsat.acca module."""
 
