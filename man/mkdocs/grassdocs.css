@@ -27,6 +27,7 @@
   --gs-primary-bg-color: var(--gs-white-color); /* White */
   --gs-primary-bg-color-dark: rgba(135, 135, 135, 0.1);
 
+  --md-admonition-icon--grass-icon: url('grass_logo.svg');
 
 
   /* Material MkDocs Variables
@@ -177,4 +178,20 @@
 
 .gs-icon-accent {
   color: var(--gs-secondary-color);
+}
+
+/* Custom GRASS admonition (callout) style: */
+.md-typeset .admonition.grass-tip,
+.md-typeset details.grass-tip {
+  border-color: var(--gs-primary-color-light);
+}
+.md-typeset .grass-tip > .admonition-title,
+.md-typeset .grass-tip > summary {
+  background-color: var(--gs-primary-color--lightest);
+}
+.md-typeset .grass-tip > .admonition-title::before,
+.md-typeset .grass-tip > summary::before {
+  background-color: var(--gs-primary-color);
+  -webkit-mask-image: var(--md-admonition-icon--grass-icon);
+          mask-image: var(--md-admonition-icon--grass-icon);
 }
