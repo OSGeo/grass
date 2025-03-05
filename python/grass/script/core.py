@@ -174,13 +174,13 @@ def get_commands(*, env=None):
         if os.path.exists(dir_path):
             for fname in Path(os.path.join(gisbase, directory)).iterdir():
                 if scripts:  # win32
-                    name, ext = os.path.splitext(fname)
+                    name, ext = os.path.splitext(fname.name)
                     if ext != ".manifest":
                         cmd.append(name)
                     if ext in scripts.keys():
                         scripts[ext].append(name)
                 else:
-                    cmd.append(fname)
+                    cmd.append(fname.name)
 
     for directory in ("bin", "scripts"):
         scan(gisbase, directory)
