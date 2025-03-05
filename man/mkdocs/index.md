@@ -22,12 +22,12 @@ Downloaded and installed GRASS here.
 GRASS provides a number of interfaces for interacting with the software. The
 most common interfaces are:
 
-### Terminal
+### Command Line
 
-The terminal interface allows you to start a GRASS session to run GRASS
+The command line interface allows you to start a GRASS session to run GRASS
 commands, execute scripts, or open the GUI.
 
-Here we creating a new project for the NAD83(HARN)/North Carolina coordinate
+Here we create a new project for the NAD83(HARN)/North Carolina coordinate
 reference system (EPSG:3358) and start a GRASS session in the terminal.
 
 ```sh
