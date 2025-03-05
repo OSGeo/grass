@@ -126,15 +126,64 @@ univar_json = gs.parse_command(
 )
 ```
 
-Full Documentation: [GRASS Python Library](https://grass.osgeo.org/grass85/manuals/libpython/script_intro.html)
+Full Documentation: [GRASS Python Library](https://grass.osgeo.org/grass-stable/manuals/libpython/script_intro.html)
 
 ## PyGRASS
 
+PyGRASS is a Python library that provides access to the internal data structures
+of GRASS for more advanced scripting and modeling. PyGRASS works directly with the
+C libraries of GRASS and providing a Pythonic interface. The core packages of
+PyGRASS include the [gis](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_gis.html),
+[raster](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html)
+and [vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html)
+data access, and [modules](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_modules.html).
+
+- gis: Project and Region Management
+- raster: Raster Data Access
+- vector: Vector Data Access
+- modules: GRASS Tool Access
+
+For a complete reference of the PyGRASS library, see the Full Documentation:
+[PyGRASS Library](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html)
+
+### Project and Region Management
+
+#### Project Management
+
+The `grass.pygrass.gis` module provides access to the project and region management
+of GRASS. The core classes include `Gisdbase`, `Location`, `Mapset`,
+and `VisibleMapset`. The `Gisdbase` class provides access to the GRASS database
+and where you can manage GRASS projects and mapsets.
+
+For example, to list all projects in your GRASS database directory you can use:
+
 ```python
-import grass.pygrass as pgs
+from grass.pygrass import gis
+
+grassdata = gis.Gisdbase()
+projects = grassdata.locations()
+print(projects)
 ```
 
-Full Documentation: [PyGRASS Library](https://grass.osgeo.org/grass85/manuals/libpython/pygrass_index.html)
+This will return a list of all projects in the GRASS database directory as
+`Location` objects. The `Location` object provides access to the specific project
+and its mapsets.
+
+```text
+['nc_spm_08_grass7', 'my_project']
+```
+
+For more details about the `gis` module, see the Full Documentation:
+[GIS Module](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_gis.html)
+
+#### Region Management
+
+```python
+from grass.pygrass.gis.region import Region
+
+region = Region()
+
+```
 
 ## Temporal Framework
 
@@ -143,3 +192,33 @@ import grass.temporal as tgis
 ```
 
 Full Documentation: [Temporal Framework](https://grass.osgeo.org/grass85/manuals/libpython/temporal.html)
+
+## Message and Error Handling
+
+```python
+gs.Message("Hello World")
+
+gs.Warning(_("This is a warning"))
+```
+
+```python
+
+try:
+    gs.run_command('g.region', raster='elevation')
+except gs.CalledModuleError as e:
+    gs.error(_("Failed to set region: {e}"))
+
+```
+
+!!! grass-tip "Use Formated Strings"
+    <!-- markdownlint-disable-next-line MD046 MD033-->
+    When using the `gs.Message` and `gs.error` functions, it is a good idea to
+    use formated strings to provide more information about the message or error.
+    However, f-strings are not safe to use with the `gs.error` function as they
+    <!-- markdownlint-disable-next-line MD046 MD033-->
+    can expose the user to injection attacks. Instead, use the `str.format` method.<br>
+    <!-- markdownlint-disable-next-line MD046 MD033-->
+    :x: `gs.fatal(_(f"Error calculating height above nearest drainage: {e.stderr}"))`<br>
+    <!-- markdownlint-disable-next-line MD046 MD033-->
+    :white_check_mark: `gs.fatal(_("Error calculating height above nearest
+    drainage: %s") % e.stderr)`
