@@ -382,7 +382,7 @@ class ImportDialog(wx.Dialog):
         for itm in data:
             layerId = itm[-1]
 
-            # select only layers with different projetion
+            # select only layers with different projection
             if self.layersData[layerId][projMatch_idx] == 0:
                 dt = [itm[0], itm[grassName_idx]]
                 differentProjLayers.append(tuple(dt))
@@ -717,7 +717,7 @@ class OgrImportDialog(ImportDialog):
         return "v.import"
 
     def _getBlackListedParameters(self):
-        """Get parametrs which will not be showed in Settings page"""
+        """Get parameters which will not be showed in Settings page"""
         return ["input", "output", "layer"]
 
     def _getBlackListedFlags(self):
@@ -946,7 +946,7 @@ class DxfImportDialog(ImportDialog):
         return "v.in.dxf"
 
     def _getBlackListedParameters(self):
-        """Get parametrs which will not be showed in Settings page"""
+        """Get parameters which will not be showed in Settings page"""
         return ["input", "output", "layers"]
 
     def _getBlackListedFlags(self):

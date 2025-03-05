@@ -49,9 +49,9 @@ set(stats_HDRS stats.h defs/stats.h)
 set(raster3d_HDRS raster3d.h defs/raster3d.h)
 set(cluster_HDRS cluster.h defs/cluster.h)
 
-# TODO set(VECT_INC         ${PQINCPATH} ) set(proj_INC "${PROJ_INCLUDE_DIR}")
-# set(vector_INC      "${PQINCPATH};${GDAL_INCLUDE_DIR}") set(vedit_INC
-# "${GDAL_INCLUDE_DIR}")
+set(proj_SYSHDRS ${PROJ_INCLUDE_DIR} ${GDAL_INCLUDE_DIR})
+set(vector_SYSHDRS ${PostgreSQL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR})
+set(vedit_SYSHDRS ${PostgreSQL_INCLUDE_DIR} ${GDAL_INCLUDE_DIR})
 
 foreach(module ${MODULES})
   if(NOT ${module}_LIBS)
@@ -62,7 +62,13 @@ foreach(module ${MODULES})
     message(FATAL_ERROR "${module}_HDRS is not set")
   endif()
 
-#[[
+  if(NOT ${module}_SYSHDRS)
+    set(${module}_SYSHDRS})
+  endif()
+  list(INSERT ${module}_SYSHDRS 0 ${CMAKE_INSTALL_PREFIX})
+  list(REMOVE_DUPLICATES ${module}_SYSHDRS)
+
+  #[[
   foreach(${module}_LIB ${${module}_LIBS})
     if(NOT TARGET ${${module}_LIB})
       message(FATAL_ERROR "${${module}_LIB} is not a target")
@@ -87,6 +93,7 @@ foreach(module ${MODULES})
       ${CMAKE_COMMAND} -DCTYPESGEN_PY=${CMAKE_CURRENT_SOURCE_DIR}/run.py
       -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} -DCOMPILER=${CMAKE_C_COMPILER}
       "-DHDRS=${${module}_HDRS}" "-DLIBS=${${module}_LIBS}" -DOUTDIR=${OUTDIR}
+      "-DSYSHDRS=${${module}_SYSHDRS}" -DC_FLAGS=${CMAKE_C_FLAGS}
       -DGRASS_INSTALL_INCLUDEDIR=${GRASS_INSTALL_INCLUDEDIR}
       -DGRASS_INSTALL_SCRIPTDIR=${GRASS_INSTALL_SCRIPTDIR}
       -DGRASS_INSTALL_DEMODIR=${GRASS_INSTALL_DEMODIR}

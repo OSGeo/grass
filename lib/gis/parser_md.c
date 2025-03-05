@@ -1,16 +1,14 @@
 /*!
-   \file lib/gis/parser_rest_md.c
+   \file lib/gis/parser_md.c
 
-   \brief GIS Library - Argument parsing functions (reStructuredText and
-   Markdown output)
+   \brief GIS Library - Argument parsing functions (Markdown output)
 
-   (C) 2012-2024 by the GRASS Development Team
+   (C) 2012-2025 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Luca Delucchi
-   \author Martin Landa (Markdown added)
+   \author Martin Landa
  */
 #include <stdio.h>
 #include <string.h>
@@ -22,23 +20,18 @@
 
 #define MD_NEWLINE "  "
 
-static void usage_rest_md(bool rest);
 static void print_flag(const char *key, const char *label,
-                       const char *description, bool rest);
-void print_option(const struct Option *opt, bool rest, char *);
-static void print_escaped(FILE *f, const char *str, bool rest);
-static void print_escaped_for_rest(FILE *f, const char *str);
+                       const char *description);
+void print_option(const struct Option *opt);
+static void print_escaped(FILE *f, const char *str);
 static void print_escaped_for_md(FILE *f, const char *str);
-static void print_escaped_for_rest_options(FILE *f, const char *str);
 static void print_escaped_for_md_keywords(FILE *f, const char *str);
+static void print_escaped_for_md_options(FILE *f, const char *str);
 
 /*!
-   \brief Print module usage description in reStructuredText or in Markdown
-   format.
-
-   \param bool rest TRUE for reStructuredText otherwise Markdown
+   \brief Print module usage description in Markdown format.
  */
-void usage_rest_md(bool rest)
+void G__usage_markdown(void)
 {
     struct Option *opt;
     struct Flag *flag;
@@ -65,15 +58,11 @@ void usage_rest_md(bool rest)
     fprintf(stdout, "\n---\n\n");
 
     /* main header */
-    if (!rest)
-        fprintf(stdout, "# %s\n\n", st->pgm_name);
+    fprintf(stdout, "# %s\n\n", st->pgm_name);
 
     /* header - GRASS module */
-    if (!rest)
-        fprintf(stdout, "## ");
+    fprintf(stdout, "## ");
     fprintf(stdout, "%s\n", _("NAME"));
-    if (rest)
-        fprintf(stdout, "----");
     fprintf(stdout, "\n");
     fprintf(stdout, "***%s***", st->pgm_name);
 
@@ -89,44 +78,22 @@ void usage_rest_md(bool rest)
         fprintf(stdout, "%s\n", st->module_info.description);
     }
     fprintf(stdout, "\n");
-    if (!rest)
-        fprintf(stdout, "### ");
+    fprintf(stdout, "### ");
     fprintf(stdout, "%s\n", _("KEYWORDS"));
-    if (rest)
-        fprintf(stdout, "--------\n");
     fprintf(stdout, "\n");
     if (st->module_info.keywords) {
-        if (rest) {
-            G__print_keywords(stdout, NULL, FALSE);
-            fprintf(stdout, "\n");
-        }
-        else {
-            G__print_keywords(stdout, print_escaped_for_md_keywords, TRUE);
-        }
+        G__print_keywords(stdout, print_escaped_for_md_keywords, TRUE);
     }
     fprintf(stdout, "\n");
-    if (!rest)
-        fprintf(stdout, "### ");
+    fprintf(stdout, "### ");
     fprintf(stdout, "%s\n", _("SYNOPSIS"));
-    if (rest) {
-        fprintf(stdout, "--------\n\n");
-        fprintf(stdout, "| ");
-    }
-    else {
-        fprintf(stdout, "\n");
-    }
+    fprintf(stdout, "\n");
     fprintf(stdout, "**%s**", st->pgm_name);
-    if (!rest)
-        fprintf(stdout, MD_NEWLINE);
+    fprintf(stdout, MD_NEWLINE);
     fprintf(stdout, "\n");
-    if (rest)
-        fprintf(stdout, "| ");
     fprintf(stdout, "**%s --help**", st->pgm_name);
-    if (!rest)
-        fprintf(stdout, MD_NEWLINE);
+    fprintf(stdout, MD_NEWLINE);
     fprintf(stdout, "\n");
-    if (rest)
-        fprintf(stdout, "| ");
     fprintf(stdout, "**%s**", st->pgm_name);
 
     /* print short version first */
@@ -167,21 +134,14 @@ void usage_rest_md(bool rest)
             if (!opt->required)
                 fprintf(stdout, "[");
             fprintf(stdout, "**%s**=", opt->key);
-            if (rest)
-                fprintf(stdout, "\\ ");
             fprintf(stdout, "*%s*", type);
             if (opt->multiple) {
                 fprintf(stdout, " [,");
-                if (rest)
-                    fprintf(stdout, "\\ ");
                 fprintf(stdout, "*%s*,...]", type);
             }
             if (!opt->required)
                 fprintf(stdout, "]");
-            if (rest)
-                fprintf(stdout, " ");
-            else
-                fprintf(stdout, "\n");
+            fprintf(stdout, "\n");
 
             opt = opt->next_opt;
         }
@@ -197,100 +157,72 @@ void usage_rest_md(bool rest)
     fprintf(stdout, "\n");
     if (st->n_flags || new_prompt) {
         flag = &st->first_flag;
-        if (!rest)
-            fprintf(stdout, "#### ");
+        fprintf(stdout, "#### ");
         fprintf(stdout, "%s\n", _("Flags"));
-        if (rest)
-            fprintf(stdout, "~~~~~~\n");
         fprintf(stdout, "\n");
         while (st->n_flags && flag != NULL) {
-            print_flag(&flag->key, flag->label, flag->description, rest);
-            if (!rest)
-                fprintf(stdout, MD_NEWLINE);
+            print_flag(&flag->key, flag->label, flag->description);
+            fprintf(stdout, MD_NEWLINE);
             fprintf(stdout, "\n");
             flag = flag->next_flag;
         }
         if (new_prompt) {
             print_flag("overwrite", NULL,
-                       _("Allow output files to overwrite existing files"),
-                       rest);
-            if (!rest)
-                fprintf(stdout, MD_NEWLINE);
+                       _("Allow output files to overwrite existing files"));
+            fprintf(stdout, MD_NEWLINE);
             fprintf(stdout, "\n");
         }
     }
-    print_flag("help", NULL, _("Print usage summary"), rest);
-    if (!rest)
-        fprintf(stdout, MD_NEWLINE);
+    print_flag("help", NULL, _("Print usage summary"));
+    fprintf(stdout, MD_NEWLINE);
     fprintf(stdout, "\n");
-    print_flag("verbose", NULL, _("Verbose module output"), rest);
-    if (!rest)
-        fprintf(stdout, MD_NEWLINE);
+    print_flag("verbose", NULL, _("Verbose module output"));
+    fprintf(stdout, MD_NEWLINE);
     fprintf(stdout, "\n");
-    print_flag("quiet", NULL, _("Quiet module output"), rest);
-    if (!rest)
-        fprintf(stdout, MD_NEWLINE);
+    print_flag("quiet", NULL, _("Quiet module output"));
+    fprintf(stdout, MD_NEWLINE);
     fprintf(stdout, "\n");
-    print_flag("ui", NULL, _("Force launching GUI dialog"), rest);
+    print_flag("ui", NULL, _("Force launching GUI dialog"));
     fprintf(stdout, "\n");
 
     if (st->n_opts) {
         fprintf(stdout, "\n");
         opt = &st->first_option;
-        if (!rest)
-            fprintf(stdout, "#### ");
+        fprintf(stdout, "#### ");
         fprintf(stdout, "%s\n", _("Parameters"));
-        if (rest)
-            fprintf(stdout, "~~~~~~~~~~~\n");
         fprintf(stdout, "\n");
-        char image_spec_rest[GPATH_MAX];
-        image_spec_rest[0] = '\0';
         while (opt != NULL) {
-            print_option(opt, rest, image_spec_rest);
+            print_option(opt);
             opt = opt->next_opt;
             if (opt != NULL) {
-                if (!rest)
-                    fprintf(stdout, MD_NEWLINE);
+                fprintf(stdout, MD_NEWLINE);
             }
             fprintf(stdout, "\n");
-        }
-        if (strlen(image_spec_rest) > 0) {
-            fprintf(stdout, "\n");
-            fprintf(stdout, "%s", image_spec_rest);
         }
     }
 }
 
-void print_flag(const char *key, const char *label, const char *description,
-                bool rest)
+void print_flag(const char *key, const char *label, const char *description)
 {
-    if (rest)
-        fprintf(stdout, "| ");
     fprintf(stdout, "**");
     if (strlen(key) > 1)
         fprintf(stdout, "-");
     fprintf(stdout, "-%s**", key);
-    if (!rest)
-        fprintf(stdout, MD_NEWLINE);
+    fprintf(stdout, MD_NEWLINE);
     fprintf(stdout, "\n");
     if (label != NULL) {
-        if (rest)
-            fprintf(stdout, "| ");
-        print_escaped(stdout, "\t", rest);
-        print_escaped(stdout, label, rest);
-        if (!rest)
-            fprintf(stdout, MD_NEWLINE);
+        print_escaped(stdout, "\t");
+        print_escaped(stdout, label);
+        fprintf(stdout, MD_NEWLINE);
         fprintf(stdout, "\n");
     }
     if (description != NULL) {
-        if (rest)
-            fprintf(stdout, "| ");
-        print_escaped(stdout, "\t", rest);
-        print_escaped(stdout, description, rest);
+        print_escaped(stdout, "\t");
+        print_escaped(stdout, description);
     }
 }
 
-void print_option(const struct Option *opt, bool rest, char *image_spec_rest)
+void print_option(const struct Option *opt)
 {
     const char *type;
 
@@ -312,68 +244,49 @@ void print_option(const struct Option *opt, bool rest, char *image_spec_rest)
             type = "string";
             break;
         }
-
-    if (rest)
-        fprintf(stdout, "| ");
     fprintf(stdout, "**%s**=", opt->key);
-    if (rest)
-        fprintf(stdout, "\\ ");
     fprintf(stdout, "*%s*", type);
     if (opt->multiple) {
         fprintf(stdout, " [,");
-        if (rest)
-            fprintf(stdout, "\\ ");
         fprintf(stdout, "*%s*,...]", type);
     }
     /* fprintf(stdout, "*"); */
     if (opt->required) {
         fprintf(stdout, " **[required]**");
     }
-    if (!rest)
-        fprintf(stdout, MD_NEWLINE);
+    fprintf(stdout, MD_NEWLINE);
     fprintf(stdout, "\n");
     if (opt->label) {
-        if (rest)
-            fprintf(stdout, "| ");
-        print_escaped(stdout, "\t", rest);
-        print_escaped(stdout, opt->label, rest);
+        print_escaped(stdout, "\t");
+        print_escaped(stdout, opt->label);
     }
     if (opt->description) {
         if (opt->label) {
-            if (!rest)
-                fprintf(stdout, MD_NEWLINE);
+            fprintf(stdout, MD_NEWLINE);
             fprintf(stdout, "\n");
         }
-        if (rest)
-            fprintf(stdout, "| ");
-        print_escaped(stdout, "\t", rest);
-        print_escaped(stdout, opt->description, rest);
+        print_escaped(stdout, "\t");
+        print_escaped(stdout, opt->description);
     }
 
     if (opt->options) {
-        if (!rest)
-            fprintf(stdout, MD_NEWLINE);
+        fprintf(stdout, MD_NEWLINE);
         fprintf(stdout, "\n");
-        if (rest)
-            fprintf(stdout, "| ");
-        print_escaped(stdout, "\t", rest);
+        print_escaped(stdout, "\t");
         fprintf(stdout, "%s: *", _("Options"));
-        print_escaped_for_rest_options(stdout, opt->options);
+        print_escaped_for_md_options(stdout, opt->options);
         fprintf(stdout, "*");
     }
 
     if (opt->def) {
-        if (!rest)
-            fprintf(stdout, MD_NEWLINE);
+        fprintf(stdout, MD_NEWLINE);
         fprintf(stdout, "\n");
-        if (rest)
-            fprintf(stdout, "| ");
-        print_escaped(stdout, "\t", rest);
+        print_escaped(stdout, "\t");
         fprintf(stdout, "%s:", _("Default"));
         /* TODO check if value is empty
            if (!opt->def.empty()){ */
         fprintf(stdout, " *");
-        print_escaped(stdout, opt->def, rest);
+        print_escaped(stdout, opt->def);
         fprintf(stdout, "*");
     }
 
@@ -382,8 +295,7 @@ void print_option(const struct Option *opt, bool rest, char *image_spec_rest)
 
         while (opt->opts[i]) {
             if (opt->descs[i]) {
-                if (!rest)
-                    fprintf(stdout, MD_NEWLINE);
+                fprintf(stdout, MD_NEWLINE);
                 fprintf(stdout, "\n");
                 char *thumbnails = NULL;
                 if (opt->gisprompt) {
@@ -398,39 +310,19 @@ void print_option(const struct Option *opt, bool rest, char *image_spec_rest)
                         thumbnails = "northarrows";
 
                     if (thumbnails) {
-                        if (rest) {
-                            char *image_spec;
-                            G_asprintf(&image_spec,
-                                       ".. |%s| image:: %s/%s.png\n",
-                                       opt->opts[i], thumbnails, opt->opts[i]);
-                            strcat(image_spec_rest, image_spec);
-                        }
-                        else {
-                            print_escaped(stdout, "\t\t", rest);
-                            fprintf(stdout, "![%s](%s/%s.png) ", opt->opts[i],
-                                    thumbnails, opt->opts[i]);
-                        }
+                        print_escaped(stdout, "\t\t");
+                        fprintf(stdout, "![%s](%s/%s.png) ", opt->opts[i],
+                                thumbnails, opt->opts[i]);
                     }
                     else {
-                        if (rest)
-                            fprintf(stdout, "| ");
-                        print_escaped(stdout, "\t\t", rest);
-                        if (rest)
-                            fprintf(stdout, "\\ ");
+                        print_escaped(stdout, "\t\t");
                     }
                 }
-
-                if (rest && thumbnails) {
-                    fprintf(stdout, "| ");
-                    print_escaped(stdout, "\t\t", rest);
-                    fprintf(stdout, "|%s| ", opt->opts[i]);
-                }
-                if (!rest)
-                    print_escaped(stdout, "\t", rest);
+                print_escaped(stdout, "\t");
                 fprintf(stdout, "**");
-                print_escaped(stdout, opt->opts[i], rest);
+                print_escaped(stdout, opt->opts[i]);
                 fprintf(stdout, "**: ");
-                print_escaped(stdout, opt->descs[i], rest);
+                print_escaped(stdout, opt->descs[i]);
             }
             i++;
         }
@@ -438,33 +330,16 @@ void print_option(const struct Option *opt, bool rest, char *image_spec_rest)
 }
 
 /*!
- * \brief Format text for reStructuredText output
+ * \brief Format text for Markdown output
  */
 #define do_escape(c, escaped) \
     case c:                   \
         fputs(escaped, f);    \
         break
 
-void print_escaped(FILE *f, const char *str, bool rest)
+void print_escaped(FILE *f, const char *str)
 {
-    if (rest)
-        print_escaped_for_rest(f, str);
-    else
-        print_escaped_for_md(f, str);
-}
-
-void print_escaped_for_rest(FILE *f, const char *str)
-{
-    const char *s;
-
-    for (s = str; *s; s++) {
-        switch (*s) {
-            do_escape('\n', "\n\n");
-            do_escape('\t', "    ");
-        default:
-            fputc(*s, f);
-        }
-    }
+    print_escaped_for_md(f, str);
 }
 
 void print_escaped_for_md(FILE *f, const char *str)
@@ -484,7 +359,7 @@ void print_escaped_for_md(FILE *f, const char *str)
     }
 }
 
-void print_escaped_for_rest_options(FILE *f, const char *str)
+void print_escaped_for_md_options(FILE *f, const char *str)
 {
     const char *s;
 
@@ -552,19 +427,3 @@ void print_escaped_for_md_keywords(FILE *f, const char *str)
 }
 
 #undef do_escape
-
-/*!
-  \brief Print module usage description in reStructuredText format.
-*/
-void G__usage_rest(void)
-{
-    usage_rest_md(TRUE);
-}
-
-/*!
-  \brief Print module usage description in Markdown format.
-*/
-void G__usage_markdown(void)
-{
-    usage_rest_md(FALSE);
-}

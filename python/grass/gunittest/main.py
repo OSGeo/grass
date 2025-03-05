@@ -194,7 +194,7 @@ def main():
         dest="min_success",
         action="store",
         default="100",
-        type=int,
+        type=float,
         help=(
             "Minimum success percentage (lower percentage"
             " than this will result in a non-zero return code; values 0-100)"

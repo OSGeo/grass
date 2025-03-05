@@ -8,7 +8,7 @@ build_library_in_subdir(
   NAME
   grass_vector
   DEPENDS
-  GDAL
+  GDAL::GDAL
   grass_btree2
   grass_dbmibase
   grass_dbmiclient
@@ -21,12 +21,13 @@ build_library_in_subdir(
   grass_raster
   grass_rtree
   OPTIONAL_DEPENDS
-  GEOS)
+  GEOS::geos_c)
 
-if(TARGET POSTGRES)
-  # target_include_directories(grass_vector SYSTEM PUBLIC
-  # ${PostgreSQL_INCLUDE_DIR})
-  target_link_libraries(grass_vector PRIVATE POSTGRES)
+target_include_directories(grass_vector PUBLIC ${GDAL_INCLUDE_DIR})
+
+if(TARGET PostgreSQL::PostgreSQL)
+  target_link_libraries(grass_vector PRIVATE PostgreSQL::PostgreSQL)
+  target_include_directories(grass_vector PUBLIC ${PostgreSQL_INCLUDE_DIR})
 endif()
 
 if(TARGET LAPACKE)
@@ -43,7 +44,7 @@ build_library_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
-  GDAL)
+  GDAL::GDAL)
 
 build_library_in_subdir(
   neta
@@ -56,7 +57,7 @@ build_library_in_subdir(
   grass_gis
   grass_dgl
   grass_vector
-  GDAL)
+  GDAL::GDAL)
 
 if(WITH_DOCS)
   generate_html(TARGET grass_vector NAME vectorascii)
