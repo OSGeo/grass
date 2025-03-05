@@ -44,6 +44,21 @@ theme:
 # Customization
 extra:
   homepage: ./index.html
+  social:
+    - icon: simple/opencollective
+      link: https://opencollective.com/grass
+    - icon: fontawesome/brands/gitter
+      link: https://gitter.im/grassgis/community
+    - icon: fontawesome/brands/mastodon
+      link: https://fosstodon.org/@grassgis/
+    - icon: fontawesome/brands/discourse
+      link: https://discourse.osgeo.org/c/grass/62
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/company/grass-gis
+    - icon: fontawesome/brands/x-twitter
+      link: https://x.com/GRASSGIS
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/@grass-gis
 
 # Hooks
 hooks:
