@@ -25,6 +25,13 @@ DSTFILES := \
 	$(MDDIR)/source/tags.md \
 	$(MDDIR)/source/developmentintro.md \
 	$(MDDIR)/source/jupyterintro.md \
+	$(MDDIR)/source/jupyterintro_static_map.png \
+	$(MDDIR)/source/jupyterintro_relief_map.png \
+	$(MDDIR)/source/jupyterintro_3D_map.png \
+	$(MDDIR)/source/jupyterintro_polar_plot.png \
+	$(MDDIR)/source/jupyterintro_hist_plot.png \
+	$(MDDIR)/source/jupyterintro_interactive.png \
+	$(MDDIR)/source/jupyterintro_series_map.gif \
 	$(MDDIR)/source/pythonintro.md \
 	$(MDDIR)/source/terminalintro.md
 
@@ -270,6 +277,27 @@ $(MDDIR)/source/developmentintro.md: mkdocs/docs/developmentintro.md
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/jupyterintro.md: mkdocs/docs/jupyterintro.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/jupyterintro_static_map.png: mkdocs/docs/images/jupyterintro_static_map.png
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/jupyterintro_relief_map.png: mkdocs/docs/images/jupyterintro_relief_map.png
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/jupyterintro_3D_map.png: mkdocs/docs/images/jupyterintro_3D_map.png
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/jupyterintro_polar_plot.png: mkdocs/docs/images/jupyterintro_polar_plot.png
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/jupyterintro_hist_plot.png: mkdocs/docs/images/jupyterintro_hist_plot.png
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/jupyterintro_interactive.png: mkdocs/docs/images/jupyterintro_interactive.png
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/jupyterintro_series_map.gif: mkdocs/docs/images/jupyterintro_series_map.gif
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/pythonintro.md: mkdocs/docs/pythonintro.md
