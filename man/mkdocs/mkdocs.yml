@@ -110,16 +110,14 @@ nav:
           - GRASS Database: grass_database.md
           - Projection and Transformations: projectionintro.md
   - Interfaces:
-      - Terminal:
-          - Terminal Overview: terminalintro.md
+      - Terminal Overview:
+          - terminalintro.md
           - The 'grass' Command: grass.md
           - Environmental Variables: variables.md
-      - Python:
-          - Python Overview: pythonintro.md
-      - Jupyter Notebook:
-          - Jupyter Overview: jupyterintro.md
-      - Desktop GUI:
-          - GUI Overview: wxguiintro.md
+      - Python Overview: pythonintro.md
+      - Jupyter Notebooks: jupyterintro.md
+      - Desktop GUI Overview:
+          - wxguiintro.md
           - Features: wxGUI.md
           - Tool Dialogs: wxGUI.modules.md
           - Attribute Table Management: wxGUI.dbmgr.md
