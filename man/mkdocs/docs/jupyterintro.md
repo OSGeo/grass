@@ -103,7 +103,7 @@ m.show()
     on top of the raster map.
 
 In fact the `gj.Map` object doesn't even need to be a map! You can use other
-display tools like [d.histogram](d.histogram) or
+display tools like [d.histogram](d.histogram.md) or
 [d.polar](d.polar.md), to create plots in Jupyter:
 
 ```python
@@ -189,6 +189,11 @@ m.save("series_map.gif")
 
 ![Series Map](jupyterintro_series_map.gif)
 
+!!! grass-tip "Use Regions"
+    <!-- markdownlint-disable-next-line MD046 -->
+    Set the zoom level based on the compuational region of the map by setting
+    `use_region=True` in the `grass.jupyter` class.
+
 ## Time Series
 
 The `gj.TimeSeriesMap` class in `grass.jupyter` provides a way visualize
@@ -196,11 +201,25 @@ GRASS' [space time datasets](temporalintro.md) in Jupyter. Here we create a time
 series map of flood inundation extent at different depths:
 
 ```python
-m = gj.TimeSeriesMap("series_name", height=600, width=800)
-m.d_legend()
-m.show()
-m.save("change.gif")
+flood_map = gj.TimeSeriesMap()
+
+# Add the base map
+flood_map.d_rast(map="naip_2022_rgb")
+flood_map.d_vect(map="ncssm", fill_color="none", color="white", width=2)
+flood_map.d_vect(map="roads")
+
+# Add the time series data
+flood_map.add_raster_series("flooding")
+
+# Add map features
+flood_map.d_legend()
+
+#Display the map
+flood_map.show()
 ```
+
+![Time Series Map](jupyterintro_time_series_map.png)
+*Flood Inundation Time Series Map*
 
 !!! grass-tip "Render Large Time Series"
     <!-- markdownlint-disable-next-line MD046 -->
@@ -216,9 +235,58 @@ like [pandas](https://pandas.pydata.org/), [numpy](https://scipy.org/),
 [matplotlib](https://matplotlib.org/), [seaborn](https://seaborn.pydata.org/),
 and many more.
 
+Here we will use the [r.profile](r.profile.md) tool to extract elevation values
+across a transect of the elevation raster as JSON data. We will then load the
+JSON data into a pandas dataframe and create a scatter plot of
+distance vs. elevation with color coding:
+
+```python
+import grass.script as gs
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Run r.profile command
+elevation = gs.parse_command(
+    "r.profile",
+    input="elevation",
+    coordinates="641712,226095,641546,224138,641546,222048,641049,221186",
+    format="json",
+    flags="gc"
+)
+
+# Load the JSON data into a dataframe
+df = pd.DataFrame(elevation)
+
+# Convert the RGB color values to hex format for matplotlib
+df["color"] = df.apply(
+        lambda x: "#{:02x}{:02x}{:02x}".format(
+            int(x["red"]),
+            int(x["green"]),
+            int(x["blue"])
+        ),
+        axis=1
+    )
+
+# Create the scatter plot
+plt.figure(figsize=(10, 6))
+plt.scatter(df['distance'], df['elevation'], c=df['color'], marker='o')
+plt.title('Profile of Distance vs. Elevation with Color Coding')
+plt.xlabel('Distance (meters)')
+plt.ylabel('Elevation')
+plt.grid(True)
+plt.show()
+```
+
+*Example from [r.profile](r.profile.md) tool*
+
+![Profile Plot](jupyterintro_profile_plot.png)
+*Profile Plot of Distance vs. Elevation with Color Coding*
+
 ## Python Library Documentation
 
+For complete documentation on the `grass.jupyter` package, see the
 [grass.jupyter](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.jupyter.html)
+library documentation page.
 
 ## Tutorials
 

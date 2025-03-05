@@ -32,6 +32,8 @@ DSTFILES := \
 	$(MDDIR)/source/jupyterintro_hist_plot.png \
 	$(MDDIR)/source/jupyterintro_interactive.png \
 	$(MDDIR)/source/jupyterintro_series_map.gif \
+	$(MDDIR)/source/jupyterintro_profile_plot.png \
+	$(MDDIR)/source/jupyterintro_time_series_map.png \
 	$(MDDIR)/source/pythonintro.md \
 	$(MDDIR)/source/terminalintro.md
 
@@ -298,6 +300,12 @@ $(MDDIR)/source/jupyterintro_interactive.png: mkdocs/docs/images/jupyterintro_in
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/jupyterintro_series_map.gif: mkdocs/docs/images/jupyterintro_series_map.gif
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/jupyterintro_profile_plot.png: mkdocs/docs/images/jupyterintro_profile_plot.png
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/jupyterintro_time_series_map.png: mkdocs/docs/images/jupyterintro_time_series_map.png
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/pythonintro.md: mkdocs/docs/pythonintro.md

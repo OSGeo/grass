@@ -169,16 +169,5 @@ nav:
           - Postscript Overview: postscript.md
       - Miscellaneous Tools:
           - Miscellaneous Overview: miscellaneous.md
-  
+
   - Development: developmentintro.md
-
-  - Visualization:
-      - Display Tools: display.md
-      - GUI Tools:
-          - Animation: wxGUI.animation.md
-          - "3D Visualization": wxGUI.nviz.md
-          - Interactive Scatter Plot: wxGUI.iscatt.md
-          - Map Swipe: wxGUI.mapswipe.md
-          - Timeline: wxGUI.timeline.md
-          - Temporal Plot: wxGUI.tplot.md
-
