@@ -16,13 +16,14 @@ class TestRNull(TestCase):
         # Create map1: categories 1, 2, 3 as rows
         cls.runModule(
             "r.mapcalc",
-            expression="map_basic = if(row() == 1, 1, if(row() == 2, 2, if(row() == 3, 3, null())))",
+            expression="map_basic = row()",
             overwrite=True,
         )
 
+        # Create map1: categories null, 2, 3 as rows
         cls.runModule(
             "r.mapcalc",
-            expression="map_fill_nulls = if(row() == 1, 1, if(row() == 2, 2, if(row() == 3, 3, null())))",
+            expression="map_fill_nulls = if(row() == 1, null(), if(row() == 2, 2, if(row() == 3, 3, null())))",
             overwrite=True,
         )
 
@@ -50,11 +51,10 @@ class TestRNull(TestCase):
         self.assertModule(module)
 
         # Validate category mappings using r.category
-        category_output = gs.parse_command("r.describe", map="map_basic", format="json")
-        expected_output = {
-            "has_nulls": True,
-            "ranges": [{"min": 2, "max": 2}, {"min": 3, "max": 3}],
-        }
+        category_output = gs.parse_command(
+            "r.describe", map="map_basic", format="json", flags="1"
+        )
+        expected_output = {"has_nulls": True, "values": [2, 3]}
 
         self.assertEqual(category_output, expected_output)
 
@@ -63,14 +63,10 @@ class TestRNull(TestCase):
         module = SimpleModule("r.null", map="map2", setnull="1", flags="f")
         self.assertModule(module)
 
-        category_output = gs.parse_command("r.describe", map="map2", format="json")
-        expected_output = {
-            "has_nulls": True,
-            "ranges": [
-                {"min": 2.5, "max": 2.5019607843137255},
-                {"min": 2.9980392156862745, "max": 3},
-            ],
-        }
+        category_output = gs.parse_command(
+            "r.describe", map="map2", format="json", flags="r"
+        )
+        expected_output = {"has_nulls": True, "ranges": [{"min": 2.5, "max": 3}]}
 
         self.assertEqual(category_output, expected_output)
 
@@ -80,9 +76,9 @@ class TestRNull(TestCase):
         self.assertModule(module)
 
         category_output = gs.parse_command(
-            "r.describe", map="map_fill_nulls", format="json"
+            "r.describe", map="map_fill_nulls", format="json", flags="1"
         )
-        expected_output = {"has_nulls": False, "ranges": [{"min": 1, "max": 3}]}
+        expected_output = {"has_nulls": False, "values": [1, 2, 3]}
 
         self.assertEqual(category_output, expected_output)
 
