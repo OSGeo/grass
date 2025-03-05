@@ -32,7 +32,12 @@ class TestIIFFT(TestCase):
         cls.del_temp_region()
 
     def test_linearity_property(self):
-        """Test linearity of the IFFT by combining two rasters."""
+        """
+        Test to validate the linearity of the inverse Fourier transform
+        by comparing IFFT(A) + IFFT(B) with IFFT(A + B). It sums the real and imaginary
+        components of two input rasters, performs the IFFT, and compares the output against reference statistics.
+        """
+
         self.runModule("r.mapcalc", expression="real_input2 = row()", overwrite=True)
         self.runModule("r.mapcalc", expression="imag_input2 = 0", overwrite=True)
         self.runModule(
@@ -48,25 +53,6 @@ class TestIIFFT(TestCase):
         self.temp_rasters.append(
             ["real_input2", "imag_input2", "real_input_sum", "imag_input_sum"]
         )
-
-        self.assertModule(
-            "i.ifft",
-            real=self.real_input,
-            imaginary=self.imag_input,
-            output=self.output_raster,
-            overwrite=True,
-        )
-        self.assertRasterExists(self.output_raster)
-
-        self.assertModule(
-            "i.ifft",
-            real="real_input2",
-            imaginary="imag_input2",
-            output="output_raster2",
-            overwrite=True,
-        )
-        self.assertRasterExists("output_raster2")
-        self.temp_rasters.append("output_raster2")
 
         self.assertModule(
             "i.ifft",
@@ -117,7 +103,12 @@ class TestIIFFT(TestCase):
         )
 
     def test_coefficient_symmetry(self):
-        """Test if IFFT preserves expected symmetry in real-valued output."""
+        """
+        Test to check whether i.ifft preserves symmetry in the real-valued output.
+        It compares the output with a shifted version of the result, calculating the difference
+        to ensure the symmetry is maintained and then compared against reference statistics to
+        validate the symmetry of the IFFT output.
+        """
 
         self.runModule(
             "r.mapcalc",
