@@ -151,7 +151,7 @@ $(HTMLDIR)/full_index.html: $(ALL_HTML) build_full_index.py build_html.py
 	$(call build,full_index)
 	touch $@
 
-$(MDDIR)/source/full_index.md: $(ALL_MD) build_full_index.py build_html.py
+$(MDDIR)/source/full_index.md: $(ALL_MD) build_full_index.py build_md.py
 	$(call build,full_index)
 	touch $@
 

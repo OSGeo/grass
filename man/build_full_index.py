@@ -11,8 +11,18 @@ import os
 
 from operator import itemgetter
 
+from build import (
+    get_files,
+    write_footer,
+    write_header,
+    to_title,
+    grass_version,
+    check_for_desc_override,
+    replace_file,
+)
 
-def build_full_index(ext):
+
+def build_full_index(ext, index_name, source_dir, year):
     if ext == "html":
         from build_html import (
             man_dir,
@@ -31,7 +41,10 @@ def build_full_index(ext):
             get_desc,
         )
 
-    os.chdir(man_dir)
+    if source_dir is None:
+        source_dir = man_dir
+
+    os.chdir(source_dir)
 
     # TODO: create some master function/dict somewhere
     class_labels = {
@@ -48,14 +61,14 @@ def build_full_index(ext):
     }
 
     classes = []
-    for cmd in get_files(man_dir, "*", extension=ext):
+    for cmd in get_files(source_dir, "*", extension=ext):
         prefix = cmd.split(".")[0]
         if prefix not in [item[0] for item in classes]:
             classes.append((prefix, class_labels.get(prefix, prefix)))
     classes.sort(key=itemgetter(0))
 
     # begin full index:
-    filename = f"full_index.{ext}"
+    filename = f"{index_name}.{ext}"
     with open(filename + ".tmp", "w") as f:
         write_header(
             f,
@@ -74,7 +87,7 @@ def build_full_index(ext):
         for cls, cls_label in classes:
             f.write(cmd2_tmpl.substitute(cmd_label=to_title(cls_label), cmd=cls))
             # for all modules:
-            for cmd in get_files(man_dir, cls, extension=ext):
+            for cmd in get_files(source_dir, cls, extension=ext):
                 basename = os.path.splitext(cmd)[0]
                 desc = check_for_desc_override(basename)
                 if desc is None:
@@ -88,21 +101,35 @@ def build_full_index(ext):
     replace_file(filename)
 
 
-if __name__ == "__main__":
+def main():
+    ext = None
     year = None
+    index_name = "full_index"
+    source_dir = None
     if len(sys.argv) > 1:
-        year = sys.argv[1]
+        if sys.argv[1] in ["html", "md"]:
+            ext = sys.argv[1]
+        else:
+            year = sys.argv[1]
+    if len(sys.argv) > 3:
+        print(sys.argv)
+        index_name = sys.argv[2]
+        source_dir = sys.argv[3]
+    if len(sys.argv) > 4:
+        year = sys.argv[4]
 
-    from build import (
-        get_files,
-        write_footer,
-        write_header,
-        to_title,
-        grass_version,
-        check_for_desc_override,
-        replace_file,
-    )
+    if ext is None:
+        build_full_index("html", index_name=index_name, year=year)
+        build_full_index("md", index_name=index_name, year=year, source_dir=None)
+    elif ext == "html":
+        build_full_index(
+            "html", index_name=index_name, year=year, source_dir=source_dir
+        )
+    elif ext == "md":
+        build_full_index("md", index_name=index_name, year=year, source_dir=source_dir)
+    else:
+        raise ValueError("Unknown extension: %s" % ext)
 
-    build_full_index("html")
 
-    build_full_index("md")
+if __name__ == "__main__":
+    main()
