@@ -449,6 +449,8 @@ class GridModule:
     ):
         kargs["run_"] = False
         self.mset = Mapset()
+        if isinstance(cmd, Path):
+            cmd = str(cmd)
         self.module = Module(cmd, *args, **kargs)
         self.width = width
         self.height = height
@@ -499,7 +501,10 @@ class GridModule:
         if mapset_prefix:
             self.mapset_prefix = mapset_prefix
         else:
-            self.mapset_prefix = append_node_pid("grid_" + legalize_vector_name(cmd))
+            self.mapset_prefix = append_node_pid(
+                "grid_"
+                + legalize_vector_name(str(cmd) if isinstance(cmd, Path) else cmd)
+            )
         self.msetstr = self.mapset_prefix + "_%03d_%03d"
         self.inlist = None
         if split:
