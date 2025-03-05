@@ -1,7 +1,7 @@
 /*
  * i.svm.train Functions filling svm_problem struct
  *
- *   Copyright 2023 by Maris Nartiss, and The GRASS Development Team
+ *   Copyright 2023 by Maris Nartiss, and the GRASS Development Team
  *   Author: Maris Nartiss
  *
  *   This program is free software licensed under the GPL (>=v2).

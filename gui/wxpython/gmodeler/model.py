@@ -959,10 +959,10 @@ class ModelObject:
             self.inBlock.append(item)
 
     def UnSetBlock(self, item):
-        """Remove object from the block (loop/consition)
+        """Remove object from the block (loop/condition)
 
         :param item: reference to ModelLoop or ModelCondition which
-                     defines loops/codition
+                     defines loops/condition
         """
         if item in self.inBlock:
             self.inBlock.remove(item)
