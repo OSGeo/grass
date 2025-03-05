@@ -15,7 +15,7 @@ software, released under an open source [GNU GPLed](https://www.gnu.org/licenses
 Downloaded and installed GRASS here.
 
 <!-- markdownlint-disable-next-line MD013 -->
-[:material-download: Download and Install](https://grass.osgeo.org/download/){ .md-button }
+[:material-download: Download and Install](https://grass.osgeo.org/download/){ .md-button }[Grow GRASS :octicons-heart-fill-24:](https://opencollective.com/grass/contribute){ .md-button .gs-support-button}
 
 ## Interfaces
 

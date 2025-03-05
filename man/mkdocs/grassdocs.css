@@ -5,6 +5,8 @@
   ----------------------------------------------------------------------------- */
   --gs-osgeo-blue: rgb(0, 58, 64); /* OSGeo Blue */
   --gs-support-color: rgb(243, 57, 138); /* Pink */
+  --gs-support-color--dark: rgba(243, 57, 138, 0.541);
+  --gs-support-color--light: rgba(243, 57, 138, 0.322);
   --gs-white-color: rgb(255, 255, 255); /* White */
   --gs-white-color--light: rgba(255, 255, 255, 0.541);
   --gs-white-color--lighter: rgba(255, 255, 255, 0.322);
@@ -178,6 +180,17 @@
 
 .gs-icon-accent {
   color: var(--gs-secondary-color);
+}
+
+/* Custom GRASS support button style: */
+.md-button.gs-support-button {
+  color: var(--gs-support-color);
+}
+
+.md-button.gs-support-button:focus, .md-button.gs-support-button:hover {
+  background-color: var(--gs-support-color);
+  border-color: var(--gs-support-color);
+  color: var(--gs-white-color);
 }
 
 /* Custom GRASS admonition (callout) style: */
