@@ -59,7 +59,7 @@ def copy_special_mapset_files(path_src, path_dst):
     :type path_dst: str
     """
     for fil in (fi for fi in Path(path_src).iterdir() if fi.name.isupper()):
-        sht.copy(os.path.join(path_src, fil.name), path_dst)
+        sht.copy(fil, os.path.join(path_dst, fil.name))
 
 
 def copy_mapset(mapset, path):
