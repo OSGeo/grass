@@ -32,13 +32,6 @@ endif()
 find_package(GDAL REQUIRED)
 
 find_package(ZLIB REQUIRED)
-if(ZLIB_FOUND)
-  add_library(ZLIB INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET ZLIB PROPERTY INTERFACE_LINK_LIBRARIES
-                                    ${ZLIB_LIBRARY${find_library_suffix}})
-  set_property(TARGET ZLIB PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${ZLIB_INCLUDE_DIR})
-endif()
 
 # Optional dependencies
 
@@ -128,19 +121,15 @@ if(WITH_SQLITE)
     set_property(TARGET SQLITE PROPERTY INTERFACE_LINK_LIBRARIES
                                         ${SQLITE_LIBRARY})
     set_property(TARGET SQLITE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                        ${SQLITE_INCLUDE_DIRS})
+                                        ${SQLITE_INCLUDE_DIR})
   endif()
 endif()
 
 if(WITH_POSTGRES)
-  find_package(PostgreSQL REQUIRED)
-  if(PostgreSQL_FOUND)
-    add_library(POSTGRES INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET POSTGRES PROPERTY INTERFACE_LINK_LIBRARIES
-                                          ${PostgreSQL_LIBRARY})
-    set_property(TARGET POSTGRES PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                          ${PostgreSQL_INCLUDE_DIR})
+  if(NOT PostgreSQL_ADDITIONAL_VERSIONS)
+    set(PostgreSQL_ADDITIONAL_VERSIONS "17" "16" "15" "14" "13")
   endif()
+  find_package(PostgreSQL REQUIRED)
 endif()
 
 if(WITH_MYSQL)
@@ -358,12 +347,13 @@ endif()
 check_target(PROJ HAVE_PROJ_H)
 check_target(GDAL::GDAL HAVE_GDAL)
 check_target(GDAL::GDAL HAVE_OGR)
-check_target(ZLIB HAVE_ZLIB_H)
+check_target(ZLIB::ZLIB HAVE_ZLIB_H)
 check_target(ICONV HAVE_ICONV_H)
 check_target(PNG::PNG HAVE_PNG_H)
 check_target(LIBJPEG HAVE_JPEGLIB_H)
 check_target(SQLITE HAVE_SQLITE)
-check_target(POSTGRES HAVE_POSTGRES)
+check_target(PostgreSQL::PostgreSQL HAVE_POSTGRES)
+check_target(PostgreSQL::PostgreSQL HAVE_LIBPQ_FE_H)
 check_target(MYSQL HAVE_MYSQL_H)
 check_target(ODBC HAVE_SQL_H)
 check_target(ZSTD HAVE_ZSTD_H)
@@ -386,7 +376,6 @@ if(MSVC)
   check_target(PCRE HAVE_PCRE_H)
 endif()
 
-check_target(POSTGRES HAVE_LIBPQ_FE_H)
 
 set(HAVE_PBUFFERS 0)
 set(HAVE_PIXMAPS 0)
