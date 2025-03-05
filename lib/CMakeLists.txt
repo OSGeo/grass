@@ -14,7 +14,8 @@ build_library_in_subdir(
   DEPENDS
   grass_gis
   FREETYPE
-  ICONV)
+  OPTIONAL_DEPENDS
+  Iconv::Iconv)
 
 add_subdirectory(proj)
 
@@ -108,7 +109,8 @@ set(_grass_display_DEPENDS grass_driver grass_raster grass_htmldriver
                            grass_pngdriver grass_psdriver grass_gis)
 
 if(WITH_CAIRO)
-  set(_cairodriver_DEPENDS CAIRO FREETYPE grass_gis grass_driver ICONV)
+  set(_cairodriver_DEPENDS CAIRO FREETYPE grass_gis grass_driver
+                           OPTIONAL_DEPENDS Iconv::Iconv)
   if(WITH_X11)
     list(APPEND _cairodriver_DEPENDS X11)
   endif()
