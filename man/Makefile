@@ -24,6 +24,7 @@ DSTFILES := \
 	$(MDDIR)/overrides/partials/actions.html \
 	$(MDDIR)/source/tags.md \
 	$(MDDIR)/source/developmentintro.md \
+	$(MDDIR)/source/interfaces_overview.md \
 	$(MDDIR)/source/jupyterintro.md \
 	$(MDDIR)/source/jupyterintro_static_map.png \
 	$(MDDIR)/source/jupyterintro_relief_map.png \
@@ -312,6 +313,9 @@ $(MDDIR)/source/pythonintro.md: mkdocs/docs/pythonintro.md
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/terminalintro.md: mkdocs/docs/terminalintro.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/interfaces_overview.md: mkdocs/docs/interfaces_overview.md
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
