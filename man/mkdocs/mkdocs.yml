@@ -1,5 +1,6 @@
 ---
 # Project information
+site_author: The GRASS Development Team  # Default author to all pages
 site_name: !ENV SITE_NAME
 site_url: https://grass.osgeo.org/grass-stable/manuals/
 
@@ -23,21 +24,23 @@ theme:
   logo: grass_logo.svg
   favicon: favicon.ico
   features:
-    - search.suggest
-    - search.highlight
+    - content.action.edit # Edit on GitHub
+    - content.action.view
     - content.code.copy
     - content.tabs.link
     - content.tooltips
+    - search.suggest
+    - search.highlight
     - navigation.footer
     - navigation.indexes
-    # - navigation.expand
+    - navigation.instant
+    - navigation.instant.progress
     - navigation.tabs
     - navigation.tabs.sticky
-    - content.action.view
-    - content.action.edit # Edit on GitHub
+    - navigation.top
+
   palette:
     primary: custom
-    accent: custom
 
   icon:
     repo: fontawesome/brands/github
@@ -79,6 +82,7 @@ plugins:
   - tags
   - social:
       cards_layout_options:
+        background_color: rgb(76, 176, 91)
         background_image: null
 
 # Markdown extensions
@@ -165,5 +169,16 @@ nav:
           - Postscript Overview: postscript.md
       - Miscellaneous Tools:
           - Miscellaneous Overview: miscellaneous.md
-
+  
   - Development: developmentintro.md
+
+  - Visualization:
+      - Display Tools: display.md
+      - GUI Tools:
+          - Animation: wxGUI.animation.md
+          - "3D Visualization": wxGUI.nviz.md
+          - Interactive Scatter Plot: wxGUI.iscatt.md
+          - Map Swipe: wxGUI.mapswipe.md
+          - Timeline: wxGUI.timeline.md
+          - Temporal Plot: wxGUI.tplot.md
+
