@@ -109,19 +109,23 @@ markdown_extensions:
 nav:
   - Getting Started:
       - Getting Started: index.md
-      - Basic Concepts:
-          - Overview: helptext.md
-          - GRASS Database: grass_database.md
-          - Projection and Transformations: projectionintro.md
+      # These are linking to interfaces, but they would eventually be new pages
+      # which would provide more context, but less detail.
+      - Command Line: terminalintro.md
+      - Python: pythonintro.md
+      - Jupyter Notebook: jupyterintro.md
+      - Graphical User Interface: helptext.md
+      - Tutorials: https://grass-tutorials.osgeo.org/
   - Interfaces:
+      - Interfaces: interfaces_overview.md
       - Terminal Overview:
-          - terminalintro.md
+          - Terminal Overview: terminalintro.md
           - The 'grass' Command: grass.md
           - Environmental Variables: variables.md
       - Python Overview: pythonintro.md
       - Jupyter Notebooks: jupyterintro.md
       - Desktop GUI Overview:
-          - wxguiintro.md
+          - GUI Overview: wxguiintro.md
           - Features: wxGUI.md
           - Tool Dialogs: wxGUI.modules.md
           - Attribute Table Management: wxGUI.dbmgr.md
@@ -141,33 +145,29 @@ nav:
               - Temporal Plot: wxGUI.tplot.md
           - List of Components: wxGUI.components.md
 
+  - Key Concepts:
+      - Raster Overview: rasterintro.md
+      - Raster 3D Overview: raster3dintro.md
+      - Vector Overview: vectorintro.md
+      - Databases Overview: databaseintro.md
+      - Imagery Overview: imageryintro.md
+      - Supported Database Drivers: sql.md
+      - Temporal Overview: temporalintro.md
+      - Display Drivers: displaydrivers.md
+      - GRASS GIS Database: grass_database.md
+      - Projection and Transformations: projectionintro.md
+
   - Processing Tools:
-      - General Tools:
-          - General Overview: general.md
-      - Raster Tools:
-          - Raster Overview: rasterintro.md
-          - Raster Tools: raster.md
-      - Raster 3D Tools:
-          - Raster 3D Overview: raster3dintro.md
-          - Raster 3D Tools: raster3d.md
-      - Vector Tools:
-          - Vector Overview: vectorintro.md
-          - Vector Tools: vector.md
-          - Databases Overview: databaseintro.md
-          - Database Tools: database.md
-          - Supported Database Drivers: sql.md
-      - Imagery Tools:
-          - Imagery Overview: imageryintro.md
-          - Imagery Tools: imagery.md
-      - Temporal Tools:
-          - Overview: temporalintro.md
-          - Temporal: temporal.md
-      - Display Tools:
-          - Topic Overview: display.md
-          - Display Drivers: displaydrivers.md
-      - Postscript Tools:
-          - Postscript Overview: postscript.md
-      - Miscellaneous Tools:
-          - Miscellaneous Overview: miscellaneous.md
+      - Processing Tools: full_index.md
+      - General Tools: general.md
+      - Raster Tools: raster.md
+      - Raster 3D Tools: raster3d.md
+      - Vector Tools: vector.md
+      - Database Tools: database.md
+      - Imagery Tools: imagery.md
+      - Temporal Tools: temporal.md
+      - Display Tools: display.md
+      - Postscript Tools: postscript.md
+      - Miscellaneous Tools: miscellaneous.md
 
   - Development: developmentintro.md
