@@ -16,9 +16,44 @@ library provides access to the internal data structures of GRASS, and the
 `grass.temporal` library provides a Python interface to the temporal framework
 in GRASS.
 
+To help you decide which library to use try answering the following questions:
+
+```mermaid
+graph TD
+    A[Use GRASS GIS Python API?];
+    A -- Yes --> B[Need GRASS Core Functionalities?];
+    B -- No --> Y[Consider PostGIS or QGIS Processing Toolbox];
+
+    B -- Yes --> C[Working with Raster Data?];
+    C -- No --> E[Working with Vector Data?];
+
+    subgraph Raster Processing
+        C -- Yes --> D[Advanced Raster Operations?];
+        D -- Yes --> F[Use grass.script - Raster Modules];
+        D -- No --> G[Use PyGRASS Raster API];
+        F -- Alternative --> L[r.series, r.mapcalc, r.neighbors];
+    end
+
+    subgraph Vector Processing
+        E -- Yes --> H[Complex Vector Processing?];
+        H -- Yes --> J[Use grass.script - Vector Modules];
+        H -- No --> K[Use PyGRASS Vector API];
+        J -- Alternative --> M[v.overlay, v.to.db, v.extract];
+    end
+
+    subgraph Low-Level Access
+        G -- More Control? --> N[Use ctypes with Raster API];
+        K -- More Control? --> O[Use ctypes with Vector API];
+        N --> P[ctypes for C-based Raster Functions];
+        O --> Q[ctypes for C-based Vector Functions];
+    end
+```
+
 Full Documentation: [GRASS Python Library](https://grass.osgeo.org/grass-stable/manuals/libpython/index.html)
 
-## GRASS Scripts
+## GRASS Script
+
+### Setup
 
 To get started with the GRASS Python interface, you must first append the GRASS
 Python path to the system path and then import the `grass.script` library. From
@@ -61,17 +96,24 @@ with gs.setup.init(Path("grassdata/project_name")) as session:
     be imported into other scripts without running the GRASS session setup or executed
     as a standalone script.
 
+### Tool Execution
+
 The `gs.run_command`, `gs.read_command`, `gs.write_command`, and
 `gs.parse_command` functions are the four main `grass.scripts`
 functions used to execute GRASS tools with Python.
+
+| Function            | Description                                      |
+|---------------------|--------------------------------------------------|
+| `gs.run_command`    | Run a GRASS command with no return value         |
+| `gs.read_command`   | Run a GRASS command and return the `stdout`      |
+| `gs.write_command`  | Run a GRASS command and write to `stdin`         |
+| `gs.parse_command`  | Run a GRASS command and parse the `stdout`       |
 
 !!! grass-tip "Command Syntax"
     <!-- markdownlint-disable-next-line MD046 -->
     The syntax for the `gs.run_command`, `gs.read_command`, `gs.write_command`,
     and `gs.parse_command` function follows the pattern:
     `function_name(*module.name*, option1=*value1*, option2=*...*, flags=*'flagletters'*)`
-
-### run_command
 
 The `gs.run_command` function is used to run a GRASS command when you require
 no return value from the command. For example, when setting the computational region
@@ -81,16 +123,12 @@ with `g.region`:
 gs.run_command('g.region', raster='elevation')
 ```
 
-### read_command
-
 The `gs.read_command` function is used to run a GRASS command when you require
 the results sent to the `stdout`. For example, when reading the output of `r.univar`:
 
 ```python
 stats = gs.read_command('r.univar', map='elevation', flags='g')
 ```
-
-### write_command
 
 The `gs.write_command` function is used to run send data to a GRASS command
 through the `stdin`. For example, when writing a custom color scheme to
@@ -111,8 +149,6 @@ gs.write_command('r.colors',
 )
 ```
 
-### parse_command
-
 The `gs.parse_command` function is used to run a GRASS command when you require
 the results sent to the `stdout` and parsed as a key-value pair. For example,
 to parse the output of `r.univar` as JSON data:
@@ -126,33 +162,111 @@ univar_json = gs.parse_command(
 )
 ```
 
+!!! grass-tip "Use `JSON Format`"
+    <!-- markdownlint-disable-next-line MD046 -->
+    It is a good idea to use the `JSON` format when parsing the output of a GRASS
+    command with `gs.parse_command`. The `JSON` format provides a consistent
+    structure for the output and is easy to work with in Python.
+
 Full Documentation: [GRASS Python Library](https://grass.osgeo.org/grass-stable/manuals/libpython/script_intro.html)
 
-## PyGRASS
+### Rasters
 
-PyGRASS is a Python library that provides access to the internal data structures
-of GRASS for more advanced scripting and modeling. PyGRASS works directly with the
-C libraries of GRASS and providing a Pythonic interface. The core packages of
-PyGRASS include the [gis](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_gis.html),
-[raster](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html)
-and [vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html)
-data access, and [modules](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_modules.html).
+The `grass.script.raster` library provides provides functional access to raster metadata
+and processing tools. Some of the core functions include `raster_info`, `raster_what`,
+`history`, and `mapcalc`.
 
-- gis: Project and Region Management
-- raster: Raster Data Access
-- vector: Vector Data Access
-- modules: GRASS Tool Access
+| Function      | Description                                |
+|---------------|--------------------------------------------|
+| `raster_info` | Get information about a raster map         |
+| `raster_what` | Get information about a raster map         |
+| `history`     | Get the history of a raster map            |
+| `mapcalc`     | Run a mapcalc expression                   |
+
+Here is an example of how to use the `raster` module:
+
+```python
+from grass.script import raster as rgrass
+
+# Get metadata about the elevation raster
+rgrass.raster_info('elevation')
+
+# Create a new raster map with the mapcalc expression
+rgrass.mapcalc(expression="elevation_2x = elevation * 2")
+```
+
+!!! grass-tip "Why not use the tool directly?"
+    <!-- markdownlint-disable-next-line MD046 -->
+    The `raster` module provides a more functional approach to working with raster
+    maps in GRASS.
+
+### Vectors
+
+The `grass.script.vector` library provides functional access to vector metadata
+and processing tools. Some of the core functions include `vector_columns`, `vector_info`,
+`vector_db`, `vector_db_select`, and `vector_info_topo`.
+
+| Function            | Description                                      |
+|---------------------|--------------------------------------------------|
+| `vector_columns`    | Get the columns of a vector map                  |
+| `vector_info`       | Get information about a vector map               |
+| `vector_db`         | Get the database connection of a vector map      |
+| `vector_db_select`  | Select data from a vector map                    |
+| `vector_info_topo`  | Get topology information about a vector map      |
+
+Here we will use the `vector` module to get the topoloical information about the
+`geology` vector map:
+
+```python
+from grass.script import vector as vgrass
+
+# Get the topology information about the geology vector map
+geology_topo = vgrass.vector_info_topo("geology")
+
+# Get the number nodes
+nodes = geology_topo.nodes
+
+```
+
+### 3D Rasters
+
+```python
+from grass.script import raster3d as r3grass
+```
+
+### Database Management
+
+```python
+from grass.script import db as dbgrass
+```
+
+## Object-Oriented GRASS
+
+PyGRASS is an object-oriented Python library that provides access to the internal
+data structures of GRASS for more advanced scripting and modeling. PyGRASS works
+directly with the C libraries of GRASS and providing a Pythonic interface. The
+core packages of `grass.pygrass` include:
+
+| Topic                        | Documentation Link                                                                 |
+|------------------------------|------------------------------------------------------------------------------------|
+| Project and Region Management| [grass.pygrass.gis](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_gis.html) |
+| Raster Data Access           | [grass.pygrass.raster](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html) |
+| Vector Data Access           | [grass.pygrass.vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html) |
+| GRASS Tool Access            | [grass.pygrass.modules](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_modules.html) |
 
 For a complete reference of the PyGRASS library, see the Full Documentation:
 [PyGRASS Library](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html)
 
-### Project and Region Management
-
-#### Project Management
+### Project Management
 
 The `grass.pygrass.gis` module provides access to the project and region management
-of GRASS. The core classes include `Gisdbase`, `Location`, `Mapset`,
-and `VisibleMapset`. The `Gisdbase` class provides access to the GRASS database
+of GRASS. The `grass.pygrass.gis` module provides functions to create, manage,
+and delete GRASS projects and mapsets. The core classes include `Gisdbase`,
+`Location`, `Mapset`, and `VisibleMapset`.
+
+#### Gisdbase
+
+The `Gisdbase` class provides access to the GRASS database
 and where you can manage GRASS projects and mapsets.
 
 For example, to list all projects in your GRASS database directory you can use:
@@ -166,23 +280,142 @@ print(projects)
 ```
 
 This will return a list of all projects in the GRASS database directory as
-`Location` objects. The `Location` object provides access to the specific project
-and its mapsets.
+`Location` objects.
 
 ```text
 ['nc_spm_08_grass7', 'my_project']
 ```
 
+#### Location
+
+The `Location` object provides access to the specific project
+and its mapsets.
+
+```python
+from grass.pygrass.gis import Location
+
+location = Location()
+
+# Get the name of the location
+print(location.name)
+
+# Get list of mapsets in the location
+mapsets = location.mapsets()
+```
+
+#### Mapset
+
+The `Mapset` object provides access to the specific mapset
+and its layers.
+
+```python
+from grass.pygrass.gis import Mapset
+
+# Get the current mapset
+mapset = Mapset()
+
+# List all rasters in the mapset
+rasters = mapset.glist(type='raster')
+
+```
+
 For more details about the `gis` module, see the Full Documentation:
 [GIS Module](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_gis.html)
 
-#### Region Management
+#### Region
+
+The `grass.pygrass.gis.region` module gives access to read and modify computational
+regions. For example, to get the current extent and resolution of the active mapset:
 
 ```python
 from grass.pygrass.gis.region import Region
 
 region = Region()
 
+extent = region.get_bbox()
+resolution = [region.nsres, region.ewres]
+
+print(f"""
+Extent: {extent}
+Resolution: {resolution}
+""")
+```
+
+```text
+Extent: Bbox(252984.0, 251460.0, 617223.0, 615696.0)
+Resolution: [1.0, 1.0]
+```
+
+To set the computational region you can adjust the current `Region` with the
+`adjust` method or set it to a specific map to a specific map with `from_rast`
+or `from_vect` methods.:
+
+```python
+from grass.pygrass.gis.region import Region
+
+region = Region()
+
+# Set the region from the elevation raster
+region.from_rast('elevation')
+
+# Adjust the region by adding 100 map units
+# to the east and north
+region.east += 100
+region.north += 100
+
+# Apply the changes
+region.adjust()
+
+# Lets compare the new region
+extent = region.get_bbox()
+resolution = [region.nsres, region.ewres]
+
+print(f"""
+Extent: {extent}
+Resolution: {resolution}
+""")
+
+```
+
+Here we can see that the region has been adjusted by 100 map units to the east
+and north while the spatial resolution remains the same.
+
+```text
+Extent: Bbox(253084.0, 251460.0, 617323.0, 615696.0)
+Resolution: [1.0, 1.0]
+```
+
+For more details about the `region` module, see the Full Documentation:
+[Region Module](https://grass.osgeo.org/grass85/manuals/libpython/pygrass.gis.html#module-pygrass.gis)
+
+### Raster Data Access
+
+Do you have an idea that requires more advanced raster processing? PyGRASS provides
+direct read and write access to raster data with the `grass.pygrass.raster` module.
+The core classes include `RasterRow`, `RasterRowIO`, and `RasterSegment`. Each
+class provides a different level of access to the raster data with its own set
+of read and write capabilities, as shown in the table below:
+
+| Class          | Description                                             | Read | Write |
+|----------------|-------------------------------------------------------- |-------|------|
+| `RasterRow`    | Provides access to a single row of raster data                | :rabbit2: Random  | :rabbit2: Squental |
+| `RasterRowIO`  | Provides read and write access to a single row of raster data | :rabbit2: Cached | :x: |
+| `RasterSegment`| Provides access to a segment of raster data             | :turtle: Cached | :turtle: Random |
+
+```python
+from grass.pygrass import raster
+```
+
+### Vector Data Access
+
+```python
+from grass.pygrass import vector
+```
+
+### GRASS Tool Access
+
+```python
+from grass.pygrass.modules import Module
 ```
 
 ## Temporal Framework
