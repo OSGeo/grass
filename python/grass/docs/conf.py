@@ -208,6 +208,10 @@ html_theme = "traditional"
 # pixels large.
 # html_favicon = None
 
+# The base URL which points to the root of the HTML documentation. It is used
+# to indicate the location of document using the Canonical Link Relation.
+html_baseurl = "https://grass.osgeo.org/grass-stable/manuals/libpython/"
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
