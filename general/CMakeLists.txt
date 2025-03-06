@@ -8,7 +8,7 @@ build_program_in_subdir(g.gisenv DEPENDS grass_gis)
 build_program_in_subdir(g.mapset DEPENDS grass_gis)
 build_program_in_subdir(g.mapsets DEPENDS grass_gis grass_parson)
 build_program_in_subdir(g.message DEPENDS grass_gis)
-build_program_in_subdir(g.mkfontcap DEPENDS grass_gis FREETYPE)
+build_program_in_subdir(g.mkfontcap DEPENDS grass_gis Freetype::Freetype)
 add_dependencies(g.mkfontcap fonts)
 add_custom_command(
   TARGET g.mkfontcap
@@ -17,7 +17,7 @@ add_custom_command(
           > ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/fontcap)
 install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/fontcap
         DESTINATION ${GRASS_INSTALL_ETCDIR})
-build_program_in_subdir(g.parser DEPENDS grass_gis FREETYPE)
+build_program_in_subdir(g.parser DEPENDS grass_gis)
 build_program_in_subdir(g.pnmcomp DEPENDS grass_gis)
 build_program_in_subdir(g.ppmtopng DEPENDS grass_gis PRIMARY_DEPENDS PNG::PNG)
 build_program_in_subdir(g.proj DEPENDS grass_gis grass_gproj PROJ OPTIONAL_DEPENDS GDAL::GDAL)

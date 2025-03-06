@@ -369,7 +369,7 @@ build_program_in_subdir(
 build_program_in_subdir(
   v.label.sa
   DEPENDS
-  FREETYPE
+  Freetype::Freetype
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
