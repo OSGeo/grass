@@ -13,10 +13,11 @@ build_module(
   DEPENDS
   grass_driver
   grass_gis
-  GDAL
-  ZLIB
+  GDAL::GDAL
   PROJ
   SOURCES
   "${grass_gproj_SOURCES}"
   INCLUDES
   "../driver")
+
+target_include_directories(grass_gproj PUBLIC ${GDAL_INCLUDE_DIR})

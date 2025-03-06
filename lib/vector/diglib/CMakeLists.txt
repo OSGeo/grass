@@ -34,5 +34,9 @@ build_module(
   grass_gmath
   grass_gis
   grass_rtree
-  GDAL
+  GDAL::GDAL
   ${LIBM})
+
+if(TARGET PostgreSQL::PostgreSQL)
+  target_include_directories(grass_dig2 PUBLIC ${PostgreSQL_INCLUDE_DIR})
+endif()

@@ -14,8 +14,8 @@ build_library_in_subdir(
   DEPENDS
   grass_gis
   FREETYPE
-  ICONV
-  ZLIB)
+  OPTIONAL_DEPENDS
+  Iconv::Iconv)
 
 add_subdirectory(proj)
 
@@ -27,7 +27,7 @@ build_library_in_subdir(
   DEFS
   "-DGDAL_LINK=1"
   DEPENDS
-  GDAL
+  GDAL::GDAL
   PROJ
   grass_gis
   grass_gproj
@@ -76,9 +76,8 @@ build_library_in_subdir(
   DEPENDS
   grass_driver
   grass_gis
-  ZLIB
   OPTIONAL_DEPENDS
-  LIBPNG)
+  PNG::PNG)
 
 build_library_in_subdir(
   psdriver
@@ -110,7 +109,8 @@ set(_grass_display_DEPENDS grass_driver grass_raster grass_htmldriver
                            grass_pngdriver grass_psdriver grass_gis)
 
 if(WITH_CAIRO)
-  set(_cairodriver_DEPENDS CAIRO FREETYPE grass_gis grass_driver ICONV)
+  set(_cairodriver_DEPENDS CAIRO FREETYPE grass_gis grass_driver
+                           OPTIONAL_DEPENDS Iconv::Iconv)
   if(WITH_X11)
     list(APPEND _cairodriver_DEPENDS X11)
   endif()
@@ -137,7 +137,7 @@ add_subdirectory(fonts)
 
 add_subdirectory(vector)
 
-build_library_in_subdir(imagery DEPENDS grass_gis grass_vector grass_raster GDAL)
+build_library_in_subdir(imagery DEPENDS grass_gis grass_vector grass_raster GDAL::GDAL)
 
 build_library_in_subdir(cluster DEPENDS grass_imagery grass_gis grass_raster)
 
@@ -159,7 +159,7 @@ build_library_in_subdir(
   grass_dbmidriver
   grass_gmath
   grass_segment
-  GDAL
+  GDAL::GDAL
   HEADERS
   "lidar.h")
 
@@ -172,9 +172,10 @@ build_program_in_subdir(
   test.raster3d.lib
   DEPENDS
   grass_gis
-  grass_raster3d
+  grass_interpfl
   grass_raster
-  GDAL)
+  grass_raster3d
+  GDAL::GDAL)
 
 build_library_in_subdir(
   gpde
@@ -222,7 +223,7 @@ if(WITH_OPENGL)
     grass_raster
     grass_raster3d
     grass_vector
-    GDAL
+    GDAL::GDAL
     OPENGL
     TIFF)
 
@@ -244,7 +245,7 @@ add_subdirectory(temporal)
 build_library_in_subdir(iostream SRC_REGEX "*.cpp" DEPENDS grass_gis)
 
 build_library_in_subdir(manage DEPENDS grass_gis grass_raster grass_vector
-                        grass_raster3d GDAL)
+                        grass_raster3d GDAL::GDAL)
 file(COPY manage/element_list DESTINATION ${OUTDIR}/${GRASS_INSTALL_ETCDIR})
 install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/element_list
         DESTINATION ${GRASS_INSTALL_ETCDIR})

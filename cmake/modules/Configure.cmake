@@ -82,7 +82,6 @@ set(USE_NLS 0)
 if(WITH_NLS)
   set(USE_NLS 1)
 endif()
-set(HAVE_READLINE_READLINE_H 0)
 
 if(MSVC)
   set(PID_TYPE int)
