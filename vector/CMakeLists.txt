@@ -369,7 +369,6 @@ build_program_in_subdir(
 build_program_in_subdir(
   v.label.sa
   DEPENDS
-  Freetype::Freetype
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
@@ -377,7 +376,9 @@ build_program_in_subdir(
   grass_display
   grass_gis
   grass_vector
-  ${LIBM})
+  ${LIBM}
+  PRIMARY_DEPENDS
+  Freetype::Freetype)
 
 build_program_in_subdir(v.proj DEPENDS grass_gis grass_gproj grass_vector
                         ${LIBM})
