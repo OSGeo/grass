@@ -169,21 +169,7 @@ endif()
 
 # Command-line options
 if(WITH_READLINE)
-  find_package(Readline REQUIRED)
-  if(Readline_FOUND)
-    add_library(READLINE INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET READLINE PROPERTY INTERFACE_LINK_LIBRARIES
-                                          ${Readline_LIBRARIES})
-    set_property(TARGET READLINE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                          ${Readline_INCLUDE_DIRS})
-  endif()
-  if(History_FOUND)
-    add_library(HISTORY INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET HISTORY PROPERTY INTERFACE_LINK_LIBRARIES
-                                         ${History_LIBRARIES})
-    set_property(TARGET HISTORY PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                         ${History_INCLUDE_DIRS})
-  endif()
+  find_package(Readline REQUIRED COMPONENTS History)
 endif()
 
 # Language options
@@ -349,8 +335,8 @@ check_target(MYSQL HAVE_MYSQL_H)
 check_target(ODBC HAVE_SQL_H)
 check_target(ZSTD HAVE_ZSTD_H)
 check_target(BZIP2 HAVE_BZLIB_H)
-check_target(READLINE HAVE_READLINE_READLINE_H)
-check_target(HISTORY HAVE_READLINE_HISTORY_H)
+check_target(Readline::Readline HAVE_READLINE_READLINE_H)
+check_target(Readline::History HAVE_READLINE_HISTORY_H)
 check_target(FREETYPE HAVE_FT2BUILD_H)
 # set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}") no target ATLAS in
 # thirdpary/CMakeLists.txt
