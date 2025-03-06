@@ -324,8 +324,9 @@ For more details about the `gis` module, see the Full Documentation:
 
 #### Region
 
-The `grass.pygrass.gis.region` module gives access to read and modify computational
-regions. For example, to get the current extent and resolution of the active mapset:
+The [grass.pygrass.gis.region](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.region.Region)
+module gives access to read and modify computational regions. For example, to
+get the current extent and resolution of the active mapset:
 
 ```python
 from grass.pygrass.gis.region import Region
@@ -388,19 +389,20 @@ Resolution: [1.0, 1.0]
 For more details about the `region` module, see the Full Documentation:
 [Region Module](https://grass.osgeo.org/grass85/manuals/libpython/pygrass.gis.html#module-pygrass.gis)
 
-### Raster Data Access
+### Raster Data
 
 Do you have an idea that requires more advanced raster processing? PyGRASS provides
-direct read and write access to raster data with the `grass.pygrass.raster` module.
-The core classes include `RasterRow`, `RasterRowIO`, and `RasterSegment`. Each
-class provides a different level of access to the raster data with its own set
-of read and write capabilities, as shown in the table below:
+direct read and write access to raster data with the
+[grass.pygrass.raster](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html)
+module. The core classes include `RasterRow`, `RasterRowIO`, and `RasterSegment`.
+Each class provides a different level of access to the raster data with its own set
+of read and write capabilities, as shown in the table below.
 
 | Class          | Description                                             | Read | Write |
 |----------------|-------------------------------------------------------- |-------|------|
-| `RasterRow`    | Read write access to raster row data.                       | :rabbit2: Random  | :rabbit2: Squental |
-| `RasterRowIO`  | Fast read only access to raster row data.                   | :rabbit2: Cached | :x: No |
-| `RasterSegment`| Simultaneous read write access to tiled raster segments stored on disk.       | :turtle: Cached | :turtle: Random |
+| [RasterRow](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrow)    | Read write access to raster row data.                       | :rabbit2: Random  | :rabbit2: Squental |
+| [RasterRowIO](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrowio)  | Fast read only access to raster row data.                   | :rabbit2: Cached | :x: No |
+| [RasterSegment](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rastersegment) | Simultaneous read write access to tiled raster segments stored on disk.       | :turtle: Cached | :turtle: Random |
 
 The `RasterRow` class allows for either read or write access to raster row data
 and provides methods to access raster state and metadata. To read all rows of the
@@ -450,10 +452,92 @@ with raster.RasterRow('elevation') as elev:
     raster segments stored on disk. This class is useful for working with large
     raster datasets that do not fit into memory.
 
-### Vector Data Access
+### Vector Data
+
+The [grass.pygrass.vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vector)
+module provides direct read and write access to vector data in GRASS.
+The core classes include `Vector` and `VectorTopo`.
+
+| Class          | Description  |
+|----------------|--------------|
+| [Vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.Vector) | Provides basic information about vector data. |
+| [VectorTopo](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vectortopo-label) | Read and write access to vector data. |
+
+Using the `VectorTopo` class you can get the same basic information about the
+vector map returned by the `Vector` class in addition to read and write access.
 
 ```python
-from grass.pygrass import vector
+from grass.pygrass.vector import Vector
+
+# Check if the roads vector map exists
+geology = Vector('roadsmajor')
+
+if roads.exists():
+    mapset = roads.mapset
+    print(f"The roads vector map exists in the {mapset} mapset")
+
+from grass.pygrass.vector import VectorTopo
+
+# Open the roads vector map as a VectorTopo object
+with VectorTopo('roadsmajor') as roads:
+
+    # Get the first feature
+    first_feature = roads.next()
+    print(first_feature)
+
+    # Get the number of nodes
+    roads.number_of('nodes')
+
+```
+
+#### Geometry and Attributes
+
+In GRASS vector [geometry](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#geometry-classes)
+and attributes are treated separately. This means that the attributes of a
+vector are not automatically read when the geometry is read.
+
+Here is an example of how to read the attributes of a feature in a vector map.
+
+```python
+from grass.pygrass.vector import VectorTopo
+
+with VectorTopo('roadsmajor') as roads:
+
+    # Read attribute
+    read_feature = roads.read(1)
+    print(dict(read_feature.attrs))
+
+```
+
+To write a new feature to the `roads` vector map with attributes
+we need to access the database of the vector map with the `VectorTopo`.
+
+Here is an example of how to write a new feature to the `roads` vector map.
+
+```python
+from grass.pygrass.vector import VectorTopo
+
+# WIP - Need to finish this example
+with VectorTopo('roadsmajor', mode='rw') as roads:
+
+    # Create a new feature
+    new_feature = roads.new()
+
+    # Set the geometry of the feature
+    new_feature.geometry = "LINESTRING(0 0, 1 1, 2 2)"
+
+    # Set the attributes of the feature
+    new_feature.attrs['cat'] = 2
+    new_feature.attrs['MAJORRDS_'] = 2.0
+    new_feature.attrs['ROAD_NAME'] = 'New Road'
+    new_feature.attrs['MULTILINE'] = 'No'
+    new_feature.attrs['PROPYEAR'] = 0
+
+    # Write the feature to the vector map
+    new_feature.write()
+
+    # Write the attributes to the database
+    new_feature.table.conn.commit()
 ```
 
 ### GRASS Tool Access
@@ -461,14 +545,6 @@ from grass.pygrass import vector
 ```python
 from grass.pygrass.modules import Module
 ```
-
-## Temporal Framework
-
-```python
-import grass.temporal as tgis
-```
-
-Full Documentation: [Temporal Framework](https://grass.osgeo.org/grass85/manuals/libpython/temporal.html)
 
 ## Message and Error Handling
 
