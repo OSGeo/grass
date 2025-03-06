@@ -212,9 +212,6 @@ desc2_tmpl = string.Template(
 """
 )
 
-full_index_header = r"""Go [back to help overview](index.md)
-"""
-
 moduletopics_tmpl = string.Template(
     r"""
 - [${name}](topic_${key}.md)
