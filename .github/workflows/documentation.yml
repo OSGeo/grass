@@ -122,7 +122,7 @@ jobs:
           export ARCH_DISTDIR="$(grass --config path)"
           export VERSION_NUMBER="$VERSION"
           grass --tmp-project XY --exec \
-            python ./man/build_full_index.py md index "$MKDOCS_DIR/source/addons" addons
+            python grass/man/build_full_index.py md index "$MKDOCS_DIR/source/addons" addons
           grass --tmp-project XY --exec \
             python grass/man/build_keywords.py md "$MKDOCS_DIR/source" "$MKDOCS_DIR/source/addons"
 
