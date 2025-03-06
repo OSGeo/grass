@@ -162,7 +162,7 @@ univar_json = gs.parse_command(
 )
 ```
 
-!!! grass-tip "Use `JSON Format`"
+!!! grass-tip "Use JSON Format"
     <!-- markdownlint-disable-next-line MD046 -->
     It is a good idea to use the `JSON` format when parsing the output of a GRASS
     command with `gs.parse_command`. The `JSON` format provides a consistent
@@ -228,7 +228,8 @@ nodes = geology_topo.nodes
 
 ```
 
-### 3D Rasters
+<!-- These both still need to get finished, but will address in another PR. -->
+<!-- ### 3D Rasters
 
 ```python
 from grass.script import raster3d as r3grass
@@ -238,7 +239,7 @@ from grass.script import raster3d as r3grass
 
 ```python
 from grass.script import db as dbgrass
-```
+``` -->
 
 ## Object-Oriented GRASS
 
@@ -343,8 +344,8 @@ Resolution: {resolution}
 ```
 
 ```text
-Extent: Bbox(252984.0, 251460.0, 617223.0, 615696.0)
-Resolution: [1.0, 1.0]
+Extent: Bbox(228500.0, 215000.0, 645000.0, 630000.0)
+Resolution: [10.0, 10.0]
 ```
 
 To set the computational region you can adjust the current `Region` with the
@@ -382,14 +383,16 @@ Here we can see that the region has been adjusted by 100 map units to the east
 and north while the spatial resolution remains the same.
 
 ```text
-Extent: Bbox(253084.0, 251460.0, 617323.0, 615696.0)
-Resolution: [1.0, 1.0]
+Extent: Bbox(228600.0, 215000.0, 645100.0, 630000.0)
+Resolution: [10.0, 10.0]
 ```
 
 For more details about the `region` module, see the Full Documentation:
 [Region Module](https://grass.osgeo.org/grass85/manuals/libpython/pygrass.gis.html#module-pygrass.gis)
 
-### Raster Data
+### Data Management
+
+#### Raster
 
 Do you have an idea that requires more advanced raster processing? PyGRASS provides
 direct read and write access to raster data with the
@@ -452,7 +455,7 @@ with raster.RasterRow('elevation') as elev:
     raster segments stored on disk. This class is useful for working with large
     raster datasets that do not fit into memory.
 
-### Vector Data
+#### Vector
 
 The [grass.pygrass.vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vector)
 module provides direct read and write access to vector data in GRASS.
@@ -463,8 +466,8 @@ The core classes include `Vector` and `VectorTopo`.
 | [Vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.Vector) | Provides basic information about vector data. |
 | [VectorTopo](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vectortopo-label) | Read and write access to vector data. |
 
-Using the `VectorTopo` class you can get the same basic information about the
-vector map returned by the `Vector` class in addition to read and write access.
+Here is a simple example with `Vector` to check if a vector map exists and
+print the mapset it is in.
 
 ```python
 from grass.pygrass.vector import Vector
@@ -476,7 +479,13 @@ if roads.exists():
     mapset = roads.mapset
     print(f"The roads vector map exists in the {mapset} mapset")
 
-from grass.pygrass.vector import VectorTopo
+```
+
+With the `VectorTopo` class you can get the same basic information about the
+vector map returned by the `Vector` class in addition to read and write access.
+
+```python
+from grass.pygrass.vector import Vector
 
 # Open the roads vector map as a VectorTopo object
 with VectorTopo('roadsmajor') as roads:
@@ -496,15 +505,47 @@ In GRASS vector [geometry](https://grass.osgeo.org/grass-stable/manuals/libpytho
 and attributes are treated separately. This means that the attributes of a
 vector are not automatically read when the geometry is read.
 
-Here is an example of how to read the attributes of a feature in a vector map.
+To build a geometry object, you can use the geometory class in the
+[grass.pygrass.vector.geometry](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#module-pygrass.vector.geometry)
+module.
+
+| Geometry Class | Description |
+|----------------|-------------|
+| [Area](https://grass.osgeo.org/grass84/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Area) | Represents the topological composition of a closed ring of boundaries and a centroid. |
+| [Boundary](https://grass.osgeo.org/grass84/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Boundary) | Represents the border line to describe an area. |
+| [Centroid](https://grass.osgeo.org/grass84/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Centroid) | Represents a centroid feature in a vector map. |
+| [Isle](https://grass.osgeo.org/grass84/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Isle) | Represents an isle feature in a vector map. |
+| [Line](https://grass.osgeo.org/grass84/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Line) | Represents a line feature in a vector map. |
+| [Point](https://grass.osgeo.org/grass84/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Point) | Represents a point feature in a vector map. |
+
+Each geomemtry class has its own set of methods to help extract useful
+infomation. For example, let's built a `Boundary` object from a list of points
+and calculate the area of the boundary.
+
+```python
+from grass.pygrass.vector.geometry import Boundary
+
+# Create a new boundary object
+border = Boundary(points=[(0, 0), (0, 2), (2, 2), (2, 0), (0, 0)])
+
+# Get the area of the boundary
+area = border.area
+```
+
+To access the attributes of a vector map, you can use the `attrs` attribute
+of the `VectorTopo` object. The `attrs` attribute is a dictionary that contains
+the attributes of the current feature.
 
 ```python
 from grass.pygrass.vector import VectorTopo
 
+# Open the roads vector map in read mode
 with VectorTopo('roadsmajor') as roads:
-
-    # Read attribute
+    # Read attribute the first feature
     read_feature = roads.read(1)
+    # Prints the LINESTRING geometry
+    print(read_feature)
+    # Prints a dictionary of the attributes
     print(dict(read_feature.attrs))
 
 ```
@@ -516,46 +557,212 @@ Here is an example of how to write a new feature to the `roads` vector map.
 
 ```python
 from grass.pygrass.vector import VectorTopo
+from grass.pygrass.vector.geometry import Line
 
-# WIP - Need to finish this example
 with VectorTopo('roadsmajor', mode='rw') as roads:
 
     # Create a new feature
-    new_feature = roads.new()
+    # The tuple is shorthand for a list of Point(x, y)
+    new_geom = Line([(636981.33, 256517.60), (636983.10, 256526.59)])
+    
+    # Get the last cat value (primary key)
+    last_record = roads.read(-1)
+    last_cat = last_record.cat
 
-    # Set the geometry of the feature
-    new_feature.geometry = "LINESTRING(0 0, 1 1, 2 2)"
+    # Create an empty feature from the last record
+    new_dict = {key: None for key in last_record.attrs}
+    new_dict['cat'] = last_cat + 1
+    new_dict['MAJORRDS_'] = 2.0
+    new_dict['ROAD_NAME'] = 'New Road'
+    new_dict['MULTILINE'] = 'No'
+    new_dict['PROPYEAR'] = 2025
 
-    # Set the attributes of the feature
-    new_feature.attrs['cat'] = 2
-    new_feature.attrs['MAJORRDS_'] = 2.0
-    new_feature.attrs['ROAD_NAME'] = 'New Road'
-    new_feature.attrs['MULTILINE'] = 'No'
-    new_feature.attrs['PROPYEAR'] = 0
-
-    # Write the feature to the vector map
-    new_feature.write()
+    # Write the new feature to the vector map
+    roads.write(new_geom, new_dict)
 
     # Write the attributes to the database
-    new_feature.table.conn.commit()
+    roads.table.conn.commit()
+
+    # Build the topology
+    roads.build()
 ```
+
+Featurs can also be updated by using the [rewrite](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.VectorTopo.rewrite)
+method instead of the `write`. If the geometry of the feature has not changed,
+you can save the attributes to the database table without rebuilding the
+topology using `table.conn.commit`.
+
+#### Querying Vector Data
+
+You can also query the vector map for specific features using the `where` method.
+For example, to get all features where the `ROAD_NAME` attribute is `NC-50` and
+the line segment length is greater than 1000.
+
+```python
+from grass.pygrass.vector import VectorTopo
+
+# Open the roads vector map as a VectorTopo object
+with VectorTopo('roadsmajor') as roads:
+    # Interate over each feature in the vector map
+    for feature in roads.viter('line'):
+        # Check if the feature is a line and the length is greater than 1000
+        # And the ROAD_NAME attribute is 'NC-50'
+        if feature.lenght() < 100 and feature['ROAD_NAME'] == 'NC-50':
+            print(feature)
+```
+
+You can also use many of `Geometry` and `Attribute` methods to filter
+features in a more concise way.
+
+For example, to test if a random point is within 5000 meters of a road segent
+you can use the [distance](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Line.distance)
+method of the [Line](https://grass.osgeo.org/grass84/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Line)
+geometry object. The [distance](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Line.distance)
+method returns a [LineDist](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.LineDist)
+object that contains the distance and the closest point on the line.
+
+```python
+from grass.pygrass.vector import VectorTopo
+from grass.pygrass.vector.geometry import Point
+
+with VectorTopo('roadsmajor') as roads:
+    # Get the extent of the roads vector map
+    extent = roads.bbox()
+
+    # Create a random point within the extent
+    x = random.uniform(extent.east, extent.west)
+    y = random.uniform(extent.north, extent.south) 
+    random_point = Point(x, y)
+
+    # Iterate over each feature in the vector map
+    for feature in roads.viter('lines'):
+        # Check if the random point is within a 5000 meters of the line
+        line_distance = feature.distance(random_point)
+        if line_distance.dist < 5000:
+            print(f"""
+                The random point {random_point} is within 5000 m 
+                of the road segment: {feature.cat}
+            """)
+```
+
+Or to simple filter a table using `SQL` you can use the `where` method with
+[table_to_dict](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.VectorTopo.table_to_dict)
+to get a dictionary of the features that match the query, the [table.Filter](https://grass.osgeo.org/grass84/manuals/libpython/pygrass.vector.html#pygrass.vector.table.Filters)
+class for more advanced operations.
+
+```python
+from grass.pygrass.vector import VectorTopo
+
+# Open the roads vector map as a VectorTopo object
+roads = VectorTopo('roadsmajor')
+roads.open("r")
+
+# Query the vector map for all features where the
+# ROAD_NAME attribute is 'NC-50'
+roads.table_to_dict(where="ROAD_NAME = 'NC-50'")
+sql_1 = roads.table.filters.get_sql()
+
+# Query the vector map for the first 5 features where the 
+# ROAD_NAME attribute is 'NC-70'
+roads.table.filters.where("ROAD_NAME = 'NC-70'").limit(5)
+sql_2 = roads.table.filters.get_sql()
+
+# Close the vector map
+roads.close()
+```
+
+The values of the `sql_1` and `sql_2` variable will be the SQL query that was
+used to filter the features.
+
+```sql
+-- Value of sql_1
+SELECT * FROM roadsmajor WHERE ROAD_NAME = 'NC-50' ORDER BY cat;
+
+-- Value of sql_2
+SELECT * FROM roadsmajor WHERE ROAD_NAME = 'NC-50' ORDER BY cat LIMIT 5;
+```
+
+!!! grass-tip "Used Different SQL Database"
+    <!-- markdownlint-disable-next-line MD046 MD033-->
+    The default database for GRASS is SQLite, but you can use other SQL databases
+    like PostgreSQL with the `driver` option in the `VectorTopo` object.
 
 ### GRASS Tool Access
 
+The [grass.pygrass.modules](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_modules.html)
+module provides access to the GRASS tools and modules. The `Module` class
+provides a Pythonic interface to the GRASS modules and tools.
+
+Here we use the `Module` class to create an Module object of the [r.slope.aspect](r.slope.aspect.md)
+tool.
+
 ```python
 from grass.pygrass.modules import Module
+
+slope_aspect_tool = Module(
+    "r.slope.aspect", 
+    elevation='elevation',
+    slope='slope',
+    aspect='aspect'
+)
 ```
+
+The `Module` object provides a `run` method to execute the GRASS tool.
+
+```python
+slope_aspect_tool.run()
+```
+
+but you can also exectute the tool with the `()` operator.
+
+```python
+slope_aspect_tool()
+```
+
+The `Module` object also provides a the access to the tool attributes
+such as the name, discription, keywords, and inputs.
+
+```python
+slope_aspect_tool.name
+slope_aspect_tool.description
+slope_aspect_tool.keywords
+slope_aspect_tool.inputs
+```
+
+The [grass.pygrass.modules](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_modules.html)
+module provides an alteravative approach to running GRASS tools.
+
+To learn more about the `Module` class, see the Full Documentation:
+[Module Class](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_modules.html#module-class)
 
 ## Message and Error Handling
 
+The `grass.script` library provides functions to display messages and errors.
+
+| Function | Description |
+|----------|-------------|
+| `Message` | Display a message to the user |
+| `Warning` | Display a warning to the user |
+| `Error` | Display an error to the user |
+| `Fatal` | Display a fatal error to the user |
+
+Here is an example of how to use the `Message` and `Warning` functions:
+
 ```python
+import grass.script as gs
+# Not localized
 gs.Message("Hello World")
 
+# Translation Function
+import gettext
+_ = gettext.gettext
 gs.Warning(_("This is a warning"))
 ```
 
-```python
+Here we can use the GRASS `Error` function to display an error message to the user
+when the `g.region` command fails with a `CalledModuleError`.
 
+```python
 try:
     gs.run_command('g.region', raster='elevation')
 except gs.CalledModuleError as e:
