@@ -398,13 +398,57 @@ of read and write capabilities, as shown in the table below:
 
 | Class          | Description                                             | Read | Write |
 |----------------|-------------------------------------------------------- |-------|------|
-| `RasterRow`    | Provides access to a single row of raster data                | :rabbit2: Random  | :rabbit2: Squental |
-| `RasterRowIO`  | Provides read and write access to a single row of raster data | :rabbit2: Cached | :x: |
-| `RasterSegment`| Provides access to a segment of raster data             | :turtle: Cached | :turtle: Random |
+| `RasterRow`    | Read write access to raster row data.                       | :rabbit2: Random  | :rabbit2: Squental |
+| `RasterRowIO`  | Fast read only access to raster row data.                   | :rabbit2: Cached | :x: No |
+| `RasterSegment`| Simultaneous read write access to tiled raster segments stored on disk.       | :turtle: Cached | :turtle: Random |
+
+The `RasterRow` class allows for either read or write access to raster row data
+and provides methods to access raster state and metadata. To read all rows of the
+`elevation` raster:
 
 ```python
 from grass.pygrass import raster
+
+with raster.RasterRow('elevation') as elev:
+
+    # Get the total number of rows
+    nrows = elev.info.rows
+    print(f"Total Rows: {nrows}")
+
+    for row in elev:
+        print(row)
 ```
+
+For practice, let's read a value from a row and column in the `elevation`
+raster, double it, and write the value back to a new raster `elevation_new`.
+
+```python
+from grass.pygrass import raster
+
+# Open the elevation raster in read mode
+with raster.RasterRow('elevation') as elev:
+
+    # Read a random row and column
+    value = elev[5][10]
+
+    # Open the new elevation raster in write mode
+    with raster.RasterRow('elevation_new', mode='w', mtype="FCELL") as new_elev:
+        # Sequentially iterate over the rows and columns
+        for row_id, row in enumerate(elev, start=0):
+            # When we reach the row and column we want to change
+            if row_id == 5:
+                # Set the value
+                row[10] = value * 2
+
+            # Write the rows to the new raster
+            new_elev.put_row(row)
+```
+
+!!! grass-tip "RasterSegment"
+    <!-- markdownlint-disable-next-line MD046 -->
+    The `RasterSegment` class provides simultaneous read and write access to tiled
+    raster segments stored on disk. This class is useful for working with large
+    raster datasets that do not fit into memory.
 
 ### Vector Data Access
 
