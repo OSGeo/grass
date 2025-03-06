@@ -75,8 +75,7 @@ extra_css:
 plugins:
   - search
   - glightbox
-  - tags:
-      tags_name_property: keywords
+  - tags
   - social:
       cards_layout_options:
         background_color: rgb(76, 176, 91)

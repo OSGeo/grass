@@ -52,6 +52,9 @@ void G__usage_markdown(void)
     fprintf(stdout, "keywords: [ ");
     G__print_keywords(stdout, NULL, FALSE);
     fprintf(stdout, " ]");
+    fprintf(stdout, "tags: [ ");
+    G__print_keywords(stdout, NULL, FALSE);
+    fprintf(stdout, " ]");
     fprintf(stdout, "\n---\n\n");
 
     /* main header */
