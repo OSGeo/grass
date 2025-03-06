@@ -46,6 +46,11 @@ if(MSVC)
   endif()
 endif()
 
+# many conda packages use libiconv instead of the build-in iconv; disable
+# detecting the built-in version to avoid linking conflicts
+if(DEFINED ENV{CONDA_PREFIX})
+  set(Iconv_IS_BUILT_IN FALSE)
+endif()
 find_package(Iconv)
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
