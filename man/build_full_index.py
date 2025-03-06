@@ -119,7 +119,7 @@ def main():
         year = sys.argv[4]
 
     if ext is None:
-        build_full_index("html", index_name=index_name, year=year)
+        build_full_index("html", index_name=index_name, year=year, source_dir=None)
         build_full_index("md", index_name=index_name, year=year, source_dir=None)
     elif ext == "html":
         build_full_index(
