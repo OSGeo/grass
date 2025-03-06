@@ -46,16 +46,7 @@ if(MSVC)
   endif()
 endif()
 
-find_package(Iconv QUIET)
-if(ICONV_FOUND)
-  add_library(ICONV INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET ICONV PROPERTY INTERFACE_LINK_LIBRARIES
-                                     ${ICONV_LIBRARIES})
-  set_property(TARGET ICONV PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                     ${ICONV_INCLUDE_DIR})
-  # if(ICONV_SECOND_ARGUMENT_IS_CONST) set() update this value in
-  # include/config.cmake.in
-endif()
+find_package(Iconv)
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)
@@ -348,7 +339,7 @@ check_target(PROJ HAVE_PROJ_H)
 check_target(GDAL::GDAL HAVE_GDAL)
 check_target(GDAL::GDAL HAVE_OGR)
 check_target(ZLIB::ZLIB HAVE_ZLIB_H)
-check_target(ICONV HAVE_ICONV_H)
+check_target(Iconv::Iconv HAVE_ICONV_H)
 check_target(PNG::PNG HAVE_PNG_H)
 check_target(LIBJPEG HAVE_JPEGLIB_H)
 check_target(SQLITE HAVE_SQLITE)

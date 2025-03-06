@@ -25,7 +25,7 @@ build_module(
   PTHREAD
   BZIP2
   ZSTD
-  ICONV
+  Iconv::Iconv
   # REGEX
   PostgreSQL::PostgreSQL
   DEFS

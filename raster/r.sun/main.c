@@ -8,7 +8,7 @@ See manual pages for details.
               and GeoModel, s.r.o., Bratislava, Slovakia
 email: hofierka@geomodel.sk,marcel.suri@jrc.it,
        suri@geomodel.sk Thomas.Huld@jrc.it
-(c) 2003-2013 by The GRASS Development Team
+(c) 2003-2013 by the GRASS Development Team
 ******************************************************************************/
 /*
  * This program is free software; you can redistribute it and/or
