@@ -124,6 +124,15 @@ jobs:
           grass --tmp-project XY --exec \
             python grass/man/build_keywords.py md "$MKDOCS_DIR/source" "$MKDOCS_DIR/source/addons"
 
+      - name: Copy shared files to addons
+        run: |
+          cd "$MKDOCS_DIR/source"
+          # This should match directories with color tables and other files
+          # linked from the pages.
+          for name in $(ls -1d */ | grep -vE "^(addons|libpython)/$"); do
+            cp -rv $name addons
+          done
+
       - name: Get mkdocs
         run: |
           pip install -r "grass/man/mkdocs/requirements.txt"
