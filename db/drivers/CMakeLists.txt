@@ -80,12 +80,13 @@ build_program_in_subdir(
   DEPENDS
   grass_gis
   grass_dbstubs
+  grass_dbmibase
   grass_dbmidriver
   grass_sqlp
   DEFS
   "${grass_dbstubs_DEFS}"
   PRIMARY_DEPENDS
-  ODBC
+  ODBC::ODBC
   HTML_FILE_NAME
   grass-odbc
   RUNTIME_OUTPUT_DIR
