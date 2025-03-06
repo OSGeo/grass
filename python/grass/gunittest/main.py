@@ -113,6 +113,9 @@ def test():
     sys.exit(not program.result.wasSuccessful())
 
 
+test.__test__ = False  # prevent running this function as a test in pytest
+
+
 def discovery():
     """Recursively find all tests in testsuite directories and run them
 
