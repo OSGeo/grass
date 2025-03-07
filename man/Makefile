@@ -26,14 +26,6 @@ DSTFILES := \
 	$(MDDIR)/source/development_intro.md \
 	$(MDDIR)/source/interfaces_overview.md \
 	$(MDDIR)/source/jupyter_intro.md \
-	$(MDDIR)/source/jupyter_intro_static_map.png \
-	$(MDDIR)/source/jupyter_intro_relief_map.png \
-	$(MDDIR)/source/jupyter_intro_3D_map.png \
-	$(MDDIR)/source/jupyter_intro_polar_plot.png \
-	$(MDDIR)/source/jupyter_intro_hist_plot.png \
-	$(MDDIR)/source/jupyter_intro_interactive.png \
-	$(MDDIR)/source/jupyter_intro_profile_plot.png \
-	$(MDDIR)/source/jupyter_intro_time_series_map.png \
 	$(MDDIR)/source/python_intro.md \
 	$(MDDIR)/source/command_line_intro.md
 
