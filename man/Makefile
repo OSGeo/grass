@@ -23,20 +23,19 @@ DSTFILES := \
 	$(MDDIR)/overrides/partials/footer.html \
 	$(MDDIR)/overrides/partials/actions.html \
 	$(MDDIR)/source/tags.md \
-	$(MDDIR)/source/developmentintro.md \
+	$(MDDIR)/source/development_intro.md \
 	$(MDDIR)/source/interfaces_overview.md \
-	$(MDDIR)/source/jupyterintro.md \
-	$(MDDIR)/source/jupyterintro_static_map.png \
-	$(MDDIR)/source/jupyterintro_relief_map.png \
-	$(MDDIR)/source/jupyterintro_3D_map.png \
-	$(MDDIR)/source/jupyterintro_polar_plot.png \
-	$(MDDIR)/source/jupyterintro_hist_plot.png \
-	$(MDDIR)/source/jupyterintro_interactive.png \
-	$(MDDIR)/source/jupyterintro_series_map.gif \
-	$(MDDIR)/source/jupyterintro_profile_plot.png \
-	$(MDDIR)/source/jupyterintro_time_series_map.png \
-	$(MDDIR)/source/pythonintro.md \
-	$(MDDIR)/source/terminalintro.md
+	$(MDDIR)/source/jupyter_intro.md \
+	$(MDDIR)/source/jupyter_intro_static_map.png \
+	$(MDDIR)/source/jupyter_intro_relief_map.png \
+	$(MDDIR)/source/jupyter_intro_3D_map.png \
+	$(MDDIR)/source/jupyter_intro_polar_plot.png \
+	$(MDDIR)/source/jupyter_intro_hist_plot.png \
+	$(MDDIR)/source/jupyter_intro_interactive.png \
+	$(MDDIR)/source/jupyter_intro_profile_plot.png \
+	$(MDDIR)/source/jupyter_intro_time_series_map.png \
+	$(MDDIR)/source/python_intro.md \
+	$(MDDIR)/source/command_line_intro.md
 
 categories = \
 	d:display \
@@ -276,43 +275,16 @@ $(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css
 $(MDDIR)/source/tags.md: mkdocs/tags.md
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/developmentintro.md: mkdocs/docs/developmentintro.md
+$(MDDIR)/source/development_intro.md: mkdocs/docs/development_intro.md
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/jupyterintro.md: mkdocs/docs/jupyterintro.md
+$(MDDIR)/source/jupyter_intro.md: mkdocs/docs/jupyter_intro.md
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/jupyterintro_static_map.png: mkdocs/docs/images/jupyterintro_static_map.png
+$(MDDIR)/source/python_intro.md: mkdocs/docs/python_intro.md
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/jupyterintro_relief_map.png: mkdocs/docs/images/jupyterintro_relief_map.png
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/source/jupyterintro_3D_map.png: mkdocs/docs/images/jupyterintro_3D_map.png
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/source/jupyterintro_polar_plot.png: mkdocs/docs/images/jupyterintro_polar_plot.png
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/source/jupyterintro_hist_plot.png: mkdocs/docs/images/jupyterintro_hist_plot.png
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/source/jupyterintro_interactive.png: mkdocs/docs/images/jupyterintro_interactive.png
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/source/jupyterintro_series_map.gif: mkdocs/docs/images/jupyterintro_series_map.gif
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/source/jupyterintro_profile_plot.png: mkdocs/docs/images/jupyterintro_profile_plot.png
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/source/jupyterintro_time_series_map.png: mkdocs/docs/images/jupyterintro_time_series_map.png
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/source/pythonintro.md: mkdocs/docs/pythonintro.md
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/source/terminalintro.md: mkdocs/docs/terminalintro.md
+$(MDDIR)/source/command_line_intro.md: mkdocs/docs/command_line_intro.md
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/interfaces_overview.md: mkdocs/docs/interfaces_overview.md

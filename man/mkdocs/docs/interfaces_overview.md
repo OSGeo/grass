@@ -2,34 +2,39 @@
 authors:
     - Corey T. White
     - GRASS Development Team
-title: Getting Started
 ---
 
-## Interfaces
+# Interfaces
 
-### Command Line
+GRASS provides a number of interfaces for interacting with the software.
+The most common interfaces are command line, Python, Jupyter Notebooks,
+and graphical user interface.
 
-The command line interface allows you to start a GRASS session to run GRASS
-commands, execute scripts, or open the GUI.
+## Command Line
+
+The command line, also know as terminal or shell, interface allows you to start
+a GRASS session to run GRASS commands, execute scripts, or open the graphical
+user interface.
 
 Here we create a new project for the NAD83(HARN)/North Carolina coordinate
-reference system (EPSG:3358) and start a GRASS session in the terminal.
+reference system (EPSG:3358) and start a GRASS session as a new shell in
+your terminal:
 
 ```sh
 grass -c EPSG:3358 {project directory} --text
 ```
 
-The terminal can now execute GRASS commands.
+The shell can now execute GRASS commands.
 
 ```sh
 g.region raster=elevation
 r.slope.aspect elevation=elevation slope=slope aspect=aspect
 ```
 
-To learn more about the terminal interface, see the
-[Terminal Interface](terminalintro.md) page.
+To learn more about the command line interface, see the
+[Command Line Interface](command_line_intro.md) page.
 
-### Python
+## Python
 
 The `grass.script` module provides a Python interface to GRASS. This allows
 users to write Python scripts to interact with GRASS. The `grass.script` module
@@ -66,9 +71,9 @@ with gs.setup.init(Path("grassdata/project_name")) as session:
 ```
 
 To learn more about the GRASS Python Scripting library, see the
-[grass.script package](pythonintro.md) page.
+[grass.script package](python_intro.md) page.
 
-### Jupyter Notebooks
+## Jupyter Notebooks
 
 Jupyter Notebooks are a great way to interact with GRASS. The `grass.jupyter`
 module provides a Jupyter interface to GRASS. This allows users to write Jupyter
@@ -92,9 +97,9 @@ slope_map.show()  # Display the map
 ![Slope Map](r_slope_aspect_slope.png)
 
 Learn more about the GRASS Jupyter interface on the
-[Jupyter Notebooks](jupyterintro.md) page.
+[Jupyter Notebooks](jupyter_intro.md) page.
 
-### [Desktop GUI](wxguiintro.md)
+## Desktop Graphical User Interface
 
 The GRASS Desktop GUI is a graphical user interface for GRASS. The GUI provides
 a visual interface for interacting with GRASS. The GUI provides a number of tools

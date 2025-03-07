@@ -1,5 +1,5 @@
 ---
-authors: 
+authors:
     - Corey T. White
     - GRASS Development Team
 title: Development Introduction

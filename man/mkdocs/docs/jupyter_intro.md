@@ -1,9 +1,10 @@
 ---
-authors: 
+authors:
     - Corey T. White
     - GRASS Development Team
-title: Jupyter Notebooks
 ---
+
+# Jupyter Notebooks
 
 The `grass.jupyter` Python package provides a [Jupyter](https://jupyter.org/)
 notebook interface to GRASS. The package contains modules for creating map figures,
@@ -38,7 +39,7 @@ Here we create a map of the elevation raster and save it to a file:
 
 ```python
 # Create a new map, set the dimensions, and save the map to a file
-m = gj.Map(height=600, width=800, filename="static_map.png")
+m = gj.Map()
 
 # Add a raster map to the map object
 m.d_rast(map="elevation")
@@ -50,15 +51,9 @@ m.d_vect(map="roadsmajor", color="black")
 m.show()
 ```
 
-![Static Map](jupyterintro_static_map.png)
-*Elevation Map*
-
 !!! grass-tip "Reserved Keywords"
-    <!-- markdownlint-disable-next-line MD046 MD033-->
-    Avoid using the reserved keyword `map` as a variable name in Python.<br>
-    <!-- markdownlint-disable-next-line MD046 MD033 -->
-    :x: `map = gj.Map()`<br>
-    <!-- markdownlint-disable-next-line MD046 -->
+    Avoid using the reserved keyword `map` as a variable name in Python.  
+    :x: `map = gj.Map()`  
     :white_check_mark: `m = gj.Map()`
 
 In addition to displaying raster and vector maps, the `gj.Map` can access many
@@ -69,7 +64,7 @@ For example, let's add a legend, barscale, and shaded relief to the map:
 
 ```python
 # Create a map object
-m = gj.Map(height=600, width=800, filename="relief_map.png")
+m = gj.Map()
 
 # Add a shaded relief map
 m.d_shade(color="elevation", shade="aspect")
@@ -93,9 +88,6 @@ m.d_barscale(at=(50,7), flags="n")
 m.show()
 ```
 
-![Shaded Releif Map](jupyterintro_relief_map.png)
-*Shaded Relief Elevation Map*
-
 !!! grass-tip "Order Matters"
     <!-- markdownlint-disable-next-line MD046 -->
     Map features are added to the map in the order they are called. For example,
@@ -107,22 +99,16 @@ display tools like [d.histogram](d.histogram.md) or
 [d.polar](d.polar.md), to create plots in Jupyter:
 
 ```python
-hist_plot = gj.Map(filename="histogram.png")
+hist_plot = gj.Map()
 hist_plot.d_histogram(map="elevation")
 hist_plot.show()
 ```
 
-![Histogram](jupyterintro_hist_plot.png)
-*Elevation Histogram*
-
 ```python
-polar_plot = gj.Map(font="sans", height=600, width=800)
+polar_plot = gj.Map()
 polar_plot.d_polar(map="aspect", undef=0)
 polar_plot.show()
 ```
-
-![Polar Plot](jupyterintro_polar_plot.png)
-*Aspect Polar Plot*
 
 ## Interactive Maps
 
@@ -137,7 +123,7 @@ vector map:
 
 ```python
 # Create an interactive map
-m = gj.InteractiveMap(height=600, width=800)
+m = gj.InteractiveMap()
 m.add_raster("aspect", opacity=0.5)
 m.add_raster("aspect", opacity=0.7)
 m.add_raster("elevation", opacity=0.7)
@@ -145,18 +131,13 @@ m.add_vector("roadsmajor")
 m.show()
 ```
 
-![Interactive Map](jupyterintro_interactive.png)
-*Interactive Web Map (ipyleafet)*
-
 The map gives you the ability to query the map, zoom in and out, and pan around,
-set the compuational region, and add vector data to the map.
+set the computational region, and add vector data to the map.
 
 ## 3D Visualization
 
 ```python
-elevation_3dmap = gj.Map3D(width=800, height=600)
-# Full list of options m.nviz.image
-# https://grass.osgeo.org/grass-stable/manuals/m.nviz.image.html
+elevation_3dmap = gj.Map3D()
 elevation_3dmap.render(
     elevation_map="elevation",
     color_map="landuse",
@@ -173,13 +154,13 @@ elevation_3dmap.overlay.d_legend(raster="landuse", at=(5,35,5,9), flags="b")
 elevation_3dmap.show()
 ```
 
-![3D Map](jupyterintro_3D_map.png)
-*Shaded Relief Elevation Map*
+The parameters are the same as parameters of
+the [m.nviz.image](m.nviz.image.md) tool.
 
 ## Series Maps
 
 ```python
-m = gj.SeriesMap(height=600, width=800)
+m = gj.SeriesMap()
 m.add_rasters(["elevation", "slope", "aspect"])
 m.add_vectors(["roads", "buildings"])
 m.d_barscale(at=(80, 10))
@@ -187,11 +168,9 @@ m.show()
 m.save("series_map.gif")
 ```
 
-![Series Map](jupyterintro_series_map.gif)
-
 !!! grass-tip "Use Regions"
     <!-- markdownlint-disable-next-line MD046 -->
-    Set the zoom level based on the compuational region of the map by setting
+    Set the zoom level based on the computational region of the map by setting
     `use_region=True` in the `grass.jupyter` class.
 
 ## Time Series
@@ -218,13 +197,10 @@ flood_map.d_legend()
 flood_map.show()
 ```
 
-![Time Series Map](jupyterintro_time_series_map.png)
-*Flood Inundation Time Series Map*
-
 !!! grass-tip "Render Large Time Series"
     <!-- markdownlint-disable-next-line MD046 -->
     Large time series can take a long time to render. To speed things up
-    you can use the `m.render()` function to render the png files to a
+    you can use the `m.render()` function to render the PNG files to a
     temporary directory and then use the `m.save()` or `m.show()` to display
     the time series.
 
@@ -237,7 +213,7 @@ and many more.
 
 Here we will use the [r.profile](r.profile.md) tool to extract elevation values
 across a transect of the elevation raster as JSON data. We will then load the
-JSON data into a pandas dataframe and create a scatter plot of
+JSON data into a pandas DataFrame and create a scatter plot of
 distance vs. elevation with color coding:
 
 ```python
@@ -254,10 +230,10 @@ elevation = gs.parse_command(
     flags="gc"
 )
 
-# Load the JSON data into a dataframe
+# Load the JSON data into a DataFrame
 df = pd.DataFrame(elevation)
 
-# Convert the RGB color values to hex format for matplotlib
+# Convert the RGB color values to hex format for Matplotlib
 df["color"] = df.apply(
         lambda x: "#{:02x}{:02x}{:02x}".format(
             int(x["red"]),
@@ -278,9 +254,6 @@ plt.show()
 ```
 
 *Example from [r.profile](r.profile.md) tool*
-
-![Profile Plot](jupyterintro_profile_plot.png)
-*Profile Plot of Distance vs. Elevation with Color Coding*
 
 ## Python Library Documentation
 

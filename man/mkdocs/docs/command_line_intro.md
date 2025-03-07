@@ -1,32 +1,36 @@
 ---
-authors: 
+authors:
     - Corey T. White
     - GRASS Development Team
-title: Terminal Introduction
 ---
+
+# Command Line Introduction
+
+## Interactive Shell
 
 ```text
 Starting GRASS...
           __________  ___   __________
          / ____/ __ \/   | / ___/ ___/
-        / / __/ /_/ / /| | \__ \\_  \ 
-       / /_/ / _, _/ ___ |___/ /__/ / 
-       \____/_/ |_/_/  |_/____/____/ 
+        / / __/ /_/ / /| | \__ \\_  \
+       / /_/ / _, _/ ___ |___/ /__/ /
+       \____/_/ |_/_/  |_/____/____/
 
 ```
 
-The GRASS terminal interface allows you to start a GRASS session to run GRASS
-commands, execute scripts, or open the GUI.
+The GRASS command line interface allows you to start a GRASS session to
+run GRASS commands, execute scripts, or open the GUI.
 
 Here we create a new project for the NAD83(HARN)/North Carolina coordinate
-reference system (EPSG:3358) and start a GRASS session in the terminal.
+reference system (EPSG:3358) and start a GRASS session:
 
 ```sh
 grass -c EPSG:3358 {project directory} --text
 ```
 
-We can now execute GRASS commands in the terminal. For example, we can import
-an elevation raster and calculate its [univariate statistics](r.univar.md).
+We can now execute GRASS tools as commands in a new shell. For example, we can
+import an elevation raster and calculate its
+[univariate statistics](r.univar.md).
 
 ```sh
 r.import input=elevation.tif output=elevation resample=bilinear
@@ -89,7 +93,7 @@ grass {project directory} --exec \
 
 ## Scripting
 
-The terminal can also execute scripts. Here we create a bash script,
+The *grass* command can also execute scripts. Here we create a Bash script,
 `export_slope.sh`,  to export the slope map as a PNG.
 
 ```bash
@@ -101,11 +105,12 @@ r.out.png input=slope output=slope -w
 ```
 
 ```sh
-grass {project directory} --exec sh export_slope.sh
+grass {project directory} --exec bash export_slope.sh
 ```
 
-Python scripts can also be executed in the terminal. Here we create a Python
-script, `export_aspect.py`, to export the aspect map as a PNG.
+Python scripts can also be executed by the *grass* command when a Python
+interpreter is provided. Here we create a Python script, `export_aspect.py`,
+to export the aspect map as a PNG.
 
 ```python
 import grass.script as gs
@@ -121,3 +126,6 @@ Now execute the Python script.
 ```sh
 grass {project directory} --exec python export_aspect.py
 ```
+
+Scripts can also run from the interactive shell providing adding to
+the flexibility of the command line interface.
