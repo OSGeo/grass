@@ -189,15 +189,14 @@ def projectPoints(points, source, dest):
     """Projects a list of points"""
     dest_points = []
 
-    with tempfile.NamedTemporaryFile(mode="wt", delete=False) as temp_file:
+    with tempfile.NamedTemporaryFile(mode="wt") as input:
         for point in points:
-            temp_file.write(
+            input.write(
                 "%f;%f\n" % (point[0] * source["scale"], point[1] * source["scale"])
             )
-        temp_file.flush()
-        temp_filename = temp_file.name
+        input.flush()
 
-    dest_points, errors = project(temp_filename, source, dest)
+        dest_points, errors = project(input.name, source, dest)
 
     return dest_points, errors
 
