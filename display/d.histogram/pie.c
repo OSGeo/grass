@@ -13,7 +13,7 @@
  *
  * NOTES:
  *
- * 1) see dhist.h for a decalaration of the structure stat_list.
+ * 1) see dhist.h for a declaration of the structure stat_list.
  * 2) see pie.h for normalized coordinates of the different parts
  *    of the pie-chart, like the origin of the pie, the label
  *    positions, etc.
