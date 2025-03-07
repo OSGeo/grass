@@ -1,13 +1,5 @@
 import grass.script as gs
-
-
-def results_check(actual_categories, expected_categories):
-    # Test if keys match
-    assert set(actual_categories.keys()) == set(expected_categories.keys())
-
-    # Test to check if labels are empty
-    for key in expected_categories.keys():
-        assert actual_categories[key] == expected_categories[key]
+import json
 
 
 def test_clump_basic(setup_maps):
@@ -24,16 +16,21 @@ def test_clump_basic(setup_maps):
     output_maps = gs.parse_command("g.list", type="raster", env=session.env)
     assert "clumped_map" in output_maps, "Output raster map 'clumped_map' should exist"
 
-    category_output = gs.parse_command("r.category", map="clumped_map", env=session.env)
+    category_output = gs.read_command(
+        "r.category", map="clumped_map", output_format="json", env=session.env
+    )
+    category_data = json.loads(category_output)
 
-    actual_categories = {
-        int(line.split("\t")[0]): line.split("\t")[1].strip() if "\t" in line else ""
-        for line in category_output
-    }
+    expected_categories = [
+        {"category": 1, "description": ""},
+        {"category": 2, "description": ""},
+        {"category": 3, "description": ""},
+        {"category": 4, "description": ""},
+    ]
 
-    expected_categories = {1: "", 2: "", 3: "", 4: ""}
-
-    results_check(actual_categories, expected_categories)
+    assert category_data == expected_categories, (
+        "Category data does not match expected categories"
+    )
 
 
 def test_clump_diagonal(setup_maps):
@@ -51,16 +48,19 @@ def test_clump_diagonal(setup_maps):
     output_maps = gs.parse_command("g.list", type="raster", env=session.env)
     assert "clumped_map" in output_maps, "Output raster map 'clumped_map' should exist"
 
-    category_output = gs.parse_command("r.category", map="clumped_map", env=session.env)
+    category_output = gs.read_command(
+        "r.category", map="clumped_map", output_format="json", env=session.env
+    )
+    category_data = json.loads(category_output)
 
-    actual_categories = {
-        int(line.split("\t")[0]): line.split("\t")[1].strip() if "\t" in line else ""
-        for line in category_output
-    }
-
-    expected_categories = {1: "", 2: "", 3: ""}
-
-    results_check(actual_categories, expected_categories)
+    expected_categories = [
+        {"category": 1, "description": ""},
+        {"category": 2, "description": ""},
+        {"category": 3, "description": ""},
+    ]
+    assert category_data == expected_categories, (
+        "Category data does not match expected categories"
+    )
 
 
 def test_clump_minsize(setup_maps):
@@ -78,16 +78,19 @@ def test_clump_minsize(setup_maps):
     output_maps = gs.parse_command("g.list", type="raster", env=session.env)
     assert "clumped_map" in output_maps, "Output raster map 'clumped_map' should exist"
 
-    category_output = gs.parse_command("r.category", map="clumped_map", env=session.env)
+    category_output = gs.read_command(
+        "r.category", map="clumped_map", output_format="json", env=session.env
+    )
+    category_data = json.loads(category_output)
 
-    actual_categories = {
-        int(line.split("\t")[0]): line.split("\t")[1].strip() if "\t" in line else ""
-        for line in category_output
-    }
+    expected_categories = [
+        {"category": 1, "description": ""},
+        {"category": 2, "description": ""},
+    ]
 
-    expected_categories = {1: "", 2: ""}
-
-    results_check(actual_categories, expected_categories)
+    assert category_data == expected_categories, (
+        "Category data does not match expected categories"
+    )
 
 
 def test_clump_threshold(setup_maps):
@@ -105,13 +108,17 @@ def test_clump_threshold(setup_maps):
     output_maps = gs.parse_command("g.list", type="raster", env=session.env)
     assert "clumped_map" in output_maps, "Output raster map 'clumped_map' should exist"
 
-    category_output = gs.parse_command("r.category", map="clumped_map", env=session.env)
+    category_output = gs.read_command(
+        "r.category", map="clumped_map", output_format="json", env=session.env
+    )
+    category_data = json.loads(category_output)
 
-    actual_categories = {
-        int(line.split("\t")[0]): line.split("\t")[1].strip() if "\t" in line else ""
-        for line in category_output
-    }
+    expected_categories = [
+        {"category": 1, "description": ""},
+        {"category": 2, "description": ""},
+        {"category": 3, "description": ""},
+    ]
 
-    expected_categories = {1: "", 2: "", 3: ""}
-
-    results_check(actual_categories, expected_categories)
+    assert category_data == expected_categories, (
+        "Category data does not match expected categories"
+    )
