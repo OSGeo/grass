@@ -106,7 +106,10 @@ def build_keywords(ext, main_path, addons_path):
         else:
             keys = []
             for line in lines:
-                match = re.match(r"keywords:\s*(.*)", line)
+                # We accept, but don't require, YAML inline list syntax.
+                match = re.match(r"keywords:\s*\[\s*(.*)\s*\]\s*", line)
+                if not match:
+                    match = re.match(r"keywords:\s*(.*)\s*", line)
                 if match:
                     text = match.group(1)
                     if not text:
@@ -114,6 +117,7 @@ def build_keywords(ext, main_path, addons_path):
                             f"Warning: Empty keyword list in {fname}", file=sys.stderr
                         )
                         break
+                    # We accept only non-quoted YAML strings.
                     keys = [item.strip() for item in text.split(",")]
                     break
 

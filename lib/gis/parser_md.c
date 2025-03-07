@@ -49,9 +49,9 @@ void G__usage_markdown(void)
     fprintf(stdout, "---\n");
     fprintf(stdout, "name: %s\n", st->pgm_name);
     fprintf(stdout, "description: %s\n", st->module_info.description);
-    fprintf(stdout, "keywords: ");
+    fprintf(stdout, "keywords: [ ");
     G__print_keywords(stdout, NULL, FALSE);
-    fprintf(stdout, "\n");
+    fprintf(stdout, " ]");
     fprintf(stdout, "tags: [ ");
     G__print_keywords(stdout, NULL, FALSE);
     fprintf(stdout, " ]");
