@@ -27,8 +27,7 @@ theme:
     - content.action.edit # Edit on GitHub
     - content.action.view
     - content.code.copy
-    - content.code.copy
-    - contet.tabs.link
+    - content.tabs.link
     - search.suggest
     - search.highlight
     - navigation.footer
@@ -90,6 +89,8 @@ markdown_extensions:
   - pymdownx.superfences
   - attr_list
   - md_in_html
+  - pymdownx.tabbed:
+      alternate_style: true
 
 # Navigation
 nav:
