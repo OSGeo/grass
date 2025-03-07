@@ -2,55 +2,61 @@
 notes:
   categories:
     - title: Tools
-      regexp: '((d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)(, (d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)?: |(modules|tools|temporal): '
+      # yamllint disable-line rule:line-length
+      regexp: '(?:Revert \")?((d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)(, (d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)?: |(modules|tools|temporal): '
       example: 'r.slope.aspect:'
 
     - title: Graphical User Interface
-      regexp: '(wxGUI.*|gui|GUI)(\(\w[\w.-]*\))?: '
+      regexp: '(?:Revert \")?(wxGUI.*|gui|GUI)(\(\w[\w.-]*\))?: '
       example: 'wxGUI:'
 
     - title: Python
-      regexp: '(grass\.[^ ]*|libpython.*|pythonlib.*|ctypesgen|ctypes|[Pp]ython|[Bb]inder): '
+      regexp: '(?:Revert \")?(grass\.[^ ]*|libpython.*|pythonlib.*|ctypesgen|ctypes|[Pp]ython|[Bb]inder): '
       example: 'grass.script:'
 
     - title: Documentation and Messages
-      regexp: '(docs?|man|manual|manual pages|[Ss]phinx|mkhtml|MkDocs|mkdocs|messages?): '
+      regexp: '(?:Revert \")?(docs?|man|manual|manual pages|[Ss]phinx|mkhtml|MkDocs|mkdocs|messages?): '
       example: 'doc:'
 
     - title: Libraries and General Functionality
-      regexp: '(grass_|lib|TGIS|tgis|raster|vector)[^ ]*: '
+      regexp: '(?:Revert \")?(grass_|lib|TGIS|tgis|raster|vector)[^ ]*: '
       example: 'grass_btree: or lib/btree:'
 
     - title: Startup, Initialization, and Environment
-      regexp: '(init|startup): '
+      regexp: '(?:Revert \")?(init|startup): '
       example: 'startup:'
 
     - title: Translations, Internationalization, and Localization
-      regexp: '(i18n|i18N|L10n|L10N|t9n|translations?): |Translations update from '
+      regexp: '(?:Revert \")?(i18n|i18N|L10n|L10N|t9n|translations?): |Translations update from '
       example: 'i18n:'
 
     - title: Windows
-      regexp: '(winGRASS|win|[Ww]indows): '
+      regexp: '(?:Revert \")?(winGRASS|win|[Ww]indows|msvc|MSVC): '
       example: 'win:'
 
+    - title: macOS
+      regexp: '(?:Revert \")?(macOS): '
+      example: 'macOS:'
+
     - title: Packaging, Configuration, Portability, and Compilation
-      regexp: '(packaging|pkg|rpm|deb|nix|pkg-config|configure|config|[Mm]ake|build): '
+      regexp: '(?:Revert \")?(packaging|pkg|rpm|deb|nix|pkg-config|configure|config|[Cc]?[Mm]ake|build|conda): '
       example: 'build:'
 
     - title: Docker
-      regexp: '[Dd]ocker(/[^ ]+)?(\(\w[\w.-]*\))?: '
+      regexp: '(?:Revert \")?[Dd]ocker(/[^ ]+)?(\(\w[\w.-]*\))?: '
       example: 'Docker:'
 
     - title: Singularity
-      regexp: '[Ss]ingularity(\(\w[\w.-]*\))?: '
+      regexp: '(?:Revert \")?[Ss]ingularity(\(\w[\w.-]*\))?: '
       example: 'Singularity:'
 
     - title: Continuous Integration, Infrastructure, Tests and Code Quality
-      regexp: '(CI|ci|[Tt]ests|[Cc]hecks|style|perf|CQ|[Rr]efactoring|utils|pytest|unittest)(\(\w[\w.-]*\))?: '
+      # yamllint disable-line rule:line-length
+      regexp: '(?:Revert \")?(CI|ci|[Tt]ests|[Cc]hecks|style|perf|CQ|[Rr]efactoring|utils|pytest|unittest|chore)(\(\w[\w.-]*\))?: '
       example: 'CI:'
 
     - title: Contributing and Management
-      regexp: '(contributing|CONTRIBUTING.md|contributors|contributors.csv): '
+      regexp: '(?:Revert \")?(contributing|CONTRIBUTING.md|contributors|contributors.csv): '
       example: 'contributing:'
 
   exclude:
