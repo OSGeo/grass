@@ -5,6 +5,8 @@
   ----------------------------------------------------------------------------- */
   --gs-osgeo-blue: rgb(0, 58, 64); /* OSGeo Blue */
   --gs-support-color: rgb(243, 57, 138); /* Pink */
+  --gs-support-color--dark: rgba(243, 57, 138, 0.541);
+  --gs-support-color--light: rgba(243, 57, 138, 0.322);
   --gs-white-color: rgb(255, 255, 255); /* White */
   --gs-white-color--light: rgba(255, 255, 255, 0.541);
   --gs-white-color--lighter: rgba(255, 255, 255, 0.322);
@@ -27,6 +29,7 @@
   --gs-primary-bg-color: var(--gs-white-color); /* White */
   --gs-primary-bg-color-dark: rgba(135, 135, 135, 0.1);
 
+  --md-admonition-icon--grass-icon: url('grass_logo.svg');
 
 
   /* Material MkDocs Variables
@@ -75,8 +78,8 @@
   /* ----------------------------------------------------------------------------- */
   --md-mermaid-font-family: var(--md-text-font-family), sans-serif;
   --md-mermaid-edge-color: var(--md-code-fg-color);
-  --md-mermaid-node-bg-color: var(--md-accent-fg-color--transparent);
-  --md-mermaid-node-fg-color: var(--md-accent-fg-color);
+  --md-mermaid-node-bg-color: var(--md-primary-fg-color--light);
+  --md-mermaid-node-fg-color: var(--md-primary-fg-color);
   --md-mermaid-label-bg-color: var(--md-default-bg-color);
   --md-mermaid-label-fg-color: var(--md-code-fg-color);
   --md-mermaid-sequence-actor-bg-color: var(--md-mermaid-label-bg-color);
@@ -169,4 +172,39 @@
 
 .md-typeset table:not([class]) tbody tr:hover {
   background-color: transparent;
+}
+
+.gs-icon-primary {
+  color: var(--gs-primary-color);
+}
+
+.gs-icon-accent {
+  color: var(--gs-secondary-color);
+}
+
+/* Custom GRASS support button style: */
+.md-button.gs-support-button {
+  color: var(--gs-support-color);
+}
+
+.md-button.gs-support-button:focus, .md-button.gs-support-button:hover {
+  background-color: var(--gs-support-color);
+  border-color: var(--gs-support-color);
+  color: var(--gs-white-color);
+}
+
+/* Custom GRASS admonition (callout) style: */
+.md-typeset .admonition.grass-tip,
+.md-typeset details.grass-tip {
+  border-color: var(--gs-primary-color-light);
+}
+.md-typeset .grass-tip > .admonition-title,
+.md-typeset .grass-tip > summary {
+  background-color: var(--gs-primary-color--lightest);
+}
+.md-typeset .grass-tip > .admonition-title::before,
+.md-typeset .grass-tip > summary::before {
+  background-color: var(--gs-primary-color);
+  -webkit-mask-image: var(--md-admonition-icon--grass-icon);
+          mask-image: var(--md-admonition-icon--grass-icon);
 }
