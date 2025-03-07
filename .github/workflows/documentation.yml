@@ -31,6 +31,7 @@ jobs:
         with:
           repository: OSGeo/grass
           path: grass
+          fetch-depth: 0
 
       - name: Get dependencies
         run: |
@@ -60,6 +61,7 @@ jobs:
           repository: OSGeo/grass-addons
           ref: grass${{ env.MAJOR }}
           path: grass-addons
+          fetch-depth: 0
 
       - name: Install Python dependencies
         # We install both core and addon dependencies, but we don't install any
