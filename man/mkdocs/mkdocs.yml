@@ -173,3 +173,26 @@ nav:
       - Miscellaneous Tools: miscellaneous.md
 
   - Development: development_intro.md
+
+not_in_nav: |
+  r.*
+  v.*
+  r3.*
+  i.*
+  t.*
+  db.*
+  d.*
+  g.*
+  m.*
+  ps.*
+  wxGUI.*
+  test.*
+  topic_*
+  *_graphical.md
+  *driver.md
+  grass-dbf.md
+  grass-ogr.md
+  grass-pg.md
+  grass-sqlite.md
+  wxpyimgview.md
+  ximgview.md
