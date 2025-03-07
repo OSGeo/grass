@@ -192,7 +192,7 @@ def merge_md_files(md1, md2, content_modifier1, content_modifier2):
     combined_yaml = "\n".join(yaml_items)
 
     # Attach the rest of the document.
-    return ["---\n", combined_yaml, "\n---\n\n", content1, "\n", content2, "\n"]
+    return ["---\n", combined_yaml, "\n---\n\n", content1, "\n\n", content2, "\n"]
 
 
 def main():
