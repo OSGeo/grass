@@ -22,7 +22,7 @@ examples of how to use the libraries to create scripts and access the internal
 data structures of GRASS. However, it is important to note that this is not comprehensive
 documentation. For a complete reference of the GRASS Python interface, see the
 
-<!-- markdownlint-disable-next-line MD013 -->
+<!-- markdownlint-disable-next-line line-length -->
 [Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/index.html){ .md-button }
 
 ## GRASS Script
@@ -64,7 +64,6 @@ with gs.setup.init(Path("grassdata/project_name")) as session:
 ```
 
 !!! grass-tip "Use `if __name__ == '__main__':`"
-    <!-- markdownlint-disable-next-line MD046 -->
     When writing GRASS scripts, it is a good idea to include the GRASS session
     setup in a `if __name__ == '__main__':` block. This will allow the script to
     be imported into other scripts without running the GRASS session setup or executed
@@ -84,7 +83,6 @@ functions used to execute GRASS tools with Python.
 | `gs.parse_command`  | Run a GRASS command and parse the `stdout`       |
 
 !!! grass-tip "Command Syntax"
-    <!-- markdownlint-disable-next-line MD046 -->
     The syntax for the `gs.run_command`, `gs.read_command`, `gs.write_command`,
     and `gs.parse_command` function follows the pattern:
     `function_name(module.name, option1=value1, option2=..., flags='flagletters')`
@@ -137,12 +135,11 @@ univar_json = gs.parse_command(
 ```
 
 !!! grass-tip "Use JSON Format"
-    <!-- markdownlint-disable-next-line MD046 -->
     It is a good idea to use the `JSON` format when parsing the output of a GRASS
     command with `gs.parse_command`. The `JSON` format provides a consistent
     structure for the output and is easy to work with in Python.
 
-<!-- markdownlint-disable-next-line MD013 -->
+<!-- markdownlint-disable-next-line line-length -->
 [Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/script_intro.html){ .md-button }
 
 ### Rasters
@@ -170,11 +167,10 @@ gs.mapcalc(expression="elevation_2x = elevation * 2")
 ```
 
 !!! grass-tip "Why not use the tool directly?"
-    <!-- markdownlint-disable-next-line MD046 -->
     The `raster` module provides a more functional approach to working with raster
     maps in GRASS.
 
-<!-- markdownlint-disable-next-line MD013 -->
+<!-- markdownlint-disable-next-line line-length -->
 [Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#module-script.raster){ .md-button }
 
 ### Vectors
@@ -202,7 +198,7 @@ geology_topo = gs.vector_info_topo("geology")
 nodes = geology_topo.nodes
 ```
 
-<!-- markdownlint-disable-next-line MD013 -->
+<!-- markdownlint-disable-next-line line-length -->
 [Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#module-script.vector){ .md-button }
 
 ### 3D Rasters
@@ -215,7 +211,7 @@ r3grass.raster3d_info('elevation3d')
 r3grass.mapcalc3d('volume = row() + col() + depth()')
 ```
 
-<!-- markdownlint-disable-next-line MD013 -->
+<!-- markdownlint-disable-next-line line-length -->
 [Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#module-script.raster3d){ .md-button }
 
 ### Database Management
@@ -226,7 +222,7 @@ Incomplete Section
 from grass.script import db as dbgrass
 ```
 
-<!-- markdownlint-disable-next-line MD013 -->
+<!-- markdownlint-disable-next-line line-length -->
 [Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#module-script.db){ .md-button }
 
 ## Object-Oriented GRASS
@@ -245,7 +241,7 @@ core packages of `grass.pygrass` include:
 
 For a complete reference of the PyGRASS library, see the Full Documentation:
 
-<!-- markdownlint-disable-next-line MD013 -->
+<!-- markdownlint-disable-next-line line-length -->
 [Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html){ .md-button }
 
 ### Project Management
@@ -383,7 +379,7 @@ Resolution: [10.0, 10.0]
 
 For more details about the `region` module, see the Full Documentation:
 
-<!-- markdownlint-disable-next-line MD013 -->
+<!-- markdownlint-disable-next-line line-length -->
 [Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#module-pygrass.gis){ .md-button }
 
 ### Data Management
@@ -449,7 +445,6 @@ with raster.RasterRow('elevation') as elev:
 ```
 
 !!! grass-tip "RasterSegment"
-    <!-- markdownlint-disable-next-line MD046 -->
     The [RasterSegment](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rastersegment)
     class provides simultaneous read and write access to tiled
     raster segments stored on disk. This class is useful for working with large
@@ -457,7 +452,7 @@ with raster.RasterRow('elevation') as elev:
 
 For more details about the `raster` module, see the Full Documentation:
 
-<!-- markdownlint-disable-next-line MD013 -->
+<!-- markdownlint-disable-next-line line-length -->
 [Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html){ .md-button }
 
 #### Vector
@@ -696,7 +691,7 @@ SELECT * FROM roadsmajor WHERE ROAD_NAME = 'NC-50' ORDER BY cat LIMIT 5;
 
 For more details about the `vector` module, see the Full Documentation:
 
-<!-- markdownlint-disable-next-line MD013 -->
+<!-- markdownlint-disable-next-line line-length -->
 [Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html){ .md-button }
 
 ### GRASS Tool Access
@@ -746,7 +741,7 @@ module provides an alterative approach to running GRASS tools.
 
 To learn more about the `Module` class, see the Full Documentation:
 
-<!-- markdownlint-disable-next-line MD013 -->
+<!-- markdownlint-disable-next-line line-length -->
 [Full Documentation :material-arrow-right-bold:](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_modules.html#module-class){ .md-button }
 
 ## Message and Error Handling
