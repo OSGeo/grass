@@ -89,8 +89,8 @@ def cleanup():
 
 
 def write2textf(what, output):
+    i = 0
     with open(output, "w") as outf:
-        i = 0
         for row in enumerate(what):
             i += 1
             outf.write("%d, %s\n" % (i, row))
@@ -101,8 +101,8 @@ def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
 
     for i, row in enumerate(what):
         outfile = os.path.join(tmp_dir, "data_%d" % i)
+        xrange = max(xrange, len(row) - 2)
         with open(outfile, "w") as outf:
-            xrange = max(xrange, len(row) - 2)
             outf.writelines("%d %s\n" % (j + 1, val) for j, val in enumerate(row[3:]))
 
     # build gnuplot script

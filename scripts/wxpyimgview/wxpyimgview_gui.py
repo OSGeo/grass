@@ -166,7 +166,7 @@ class Application(wx.App):
     def map_file(self):
         with open(self.image, "rb") as f:
             header = f.read(self.HEADER_SIZE)
-            self.read_bmp_header(header)
+        self.read_bmp_header(header)
 
         self.imgbuf = np.memmap(
             self.image, mode="r", offset=self.HEADER_SIZE, dtype=np.uint8
