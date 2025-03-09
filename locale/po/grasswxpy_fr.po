@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2024-05-27 09:55+0000\n"
+"PO-Revision-Date: 2025-02-10 17:33+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
 "grasswxpy/fr/>\n"
@@ -8266,7 +8266,7 @@ msgstr "Gestion interactive des tables de couleur vecteur."
 
 #: ../gui/wxpython/menustrings.py:612 ../gui/wxpython/menustrings.py:1577
 msgid "Exports the color table associated with a vector map."
-msgstr "Exporter la table de couleur associée  une carte vecteur."
+msgstr "Exporter la table de couleur associée à une carte vecteur."
 
 #: ../gui/wxpython/menustrings.py:613 ../gui/wxpython/menustrings.py:1578
 msgid "Query vector map"

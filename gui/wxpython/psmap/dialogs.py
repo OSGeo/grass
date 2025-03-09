@@ -1726,7 +1726,7 @@ class RasterPanel(Panel):
         mapInstr = self.instruction.FindInstructionByType("map")
         if not mapInstr:  # no map frame
             GMessage(message=_("Please, create map frame first."))
-            return
+            return None
 
         if self.rasterNoRadio.GetValue() or not self.rasterSelect.GetValue():
             self.rasterDict["isRaster"] = False
@@ -1906,7 +1906,7 @@ class VectorPanel(Panel):
         self.Bind(wx.EVT_LISTBOX_DCLICK, self.OnProperties, self.listbox)
 
     def OnVector(self, event):
-        """Gets info about toplogy and enables/disables choices point/line/area"""
+        """Gets info about topology and enables/disables choices point/line/area"""
         vmap = self.select.GetValue()
         if not gs.find_file(
             vmap,

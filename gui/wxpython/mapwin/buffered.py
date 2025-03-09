@@ -169,7 +169,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         # Emitted after double-click
         self.mouseDClick = Signal("BufferedWindow.mouseDClick")
         # Emitted when mouse us moving (mouse motion event)
-        # Parametres are x and y of the mouse position in map (cell) units
+        # Parameters are x and y of the mouse position in map (cell) units
         self.mouseMoving = Signal("BufferedWindow.mouseMoving")
 
         # event bindings
@@ -378,7 +378,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             pdc.EndDrawing()
 
             self.Refresh()
-            return
+            return None
 
         if pdctype == "image":  # draw selected image
             bitmap = BitmapFromImage(img)
@@ -421,7 +421,7 @@ class BufferedMapWindow(MapWindowBase, Window):
                 pdc.SetBrush(wx.Brush(wx.CYAN, wx.TRANSPARENT))
                 pdc.SetPen(pen)
                 if len(coords) < 2:
-                    return
+                    return None
                 if pdctype == "polyline":
                     i = 1
                     while i < len(coords):
@@ -497,7 +497,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         elif pdctype == "text":  # draw text on top of map
             if not img["active"]:
-                return  # only draw active text
+                return None  # only draw active text
             rotation = float(img["rotation"]) if "rotation" in img else 0.0
             w, h = self.GetFullTextExtent(img["text"])[0:2]
             pdc.SetFont(img["font"])
@@ -1708,7 +1708,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         event.Skip()
 
     def OnCopyCoordinates(self, event):
-        """Copy coordinates to cliboard"""
+        """Copy coordinates to clipboard"""
         e, n = self.GetLastEN()
         if wx.TheClipboard.Open():
             do = wx.TextDataObject()
@@ -2026,7 +2026,7 @@ class BufferedMapWindow(MapWindowBase, Window):
     def ZoomToDefault(self):
         """Set display geometry to match default region settings"""
         self.Map.region = self.Map.GetRegion(default=True)
-        self.Map.AdjustRegion()  # aling region extent to the display
+        self.Map.AdjustRegion()  # align region extent to the display
 
         self.ZoomHistory(
             self.Map.region["n"],

@@ -285,7 +285,7 @@ def ListOfCatsToRange(cats):
 def ListOfMapsets(get="ordered"):
     """Get list of available/accessible mapsets.
     Option 'ordered' returns list of all mapsets, first accessible
-    then not accessible. Raises ValueError for wrong paramater value.
+    then not accessible. Raises ValueError for wrong parameter values.
 
     :param str get: method ('all', 'accessible', 'ordered')
 

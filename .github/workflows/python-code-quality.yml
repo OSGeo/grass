@@ -30,13 +30,13 @@ jobs:
       PYTHON_VERSION: "3.13"
       MIN_PYTHON_VERSION: "3.9"
       # renovate: datasource=pypi depName=flake8
-      FLAKE8_VERSION: "7.1.1"
+      FLAKE8_VERSION: "7.1.2"
       # renovate: datasource=pypi depName=pylint
       PYLINT_VERSION: "3.3.4"
       # renovate: datasource=pypi depName=bandit
-      BANDIT_VERSION: "1.8.2"
+      BANDIT_VERSION: "1.8.3"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.9.4"
+      RUFF_VERSION: "0.9.10"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -48,7 +48,6 @@ jobs:
           echo OS: ${{ matrix.os }}
           echo Python: ${{ env.PYTHON_VERSION }}
           echo Minimal Python version: ${{ env.MIN_PYTHON_VERSION }}
-          echo Black: ${{ env.BLACK_VERSION }}
           echo Flake8: ${{ env.FLAKE8_VERSION }}
           echo Pylint: ${{ env.PYLINT_VERSION }}
           echo Bandit: ${{ env.BANDIT_VERSION }}
@@ -78,7 +77,7 @@ jobs:
       - name: Run `ruff format` fixing files
         # Run `ruff format` even when `ruff check` fixed files: fixes can require formatting
         if: ${{ !cancelled() }}
-        run: ruff format --diff
+        run: ruff format
       - name: Create and uploads code suggestions to apply for Ruff
         # Will fail fast here if there are changes required
         id: diff-ruff
@@ -122,13 +121,13 @@ jobs:
           bandit -c pyproject.toml -iii -r . -f sarif -o bandit.sarif --exit-zero
 
       - name: Upload Bandit Scan Results
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: bandit.sarif
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@dd746615b3b9d728a6a37ca2045b68ca76d4841a # v3.28.8
+        uses: github/codeql-action/upload-sarif@6bb031afdd8eb862ea3fc1848194185e076637e5 # v3.28.11
         with:
           sarif_file: bandit.sarif
 
@@ -187,20 +186,6 @@ jobs:
         run: |
           ( cd doc/examples/raster/r.example/ && make )
           ( cd doc/examples/vector/v.example/ && make )
-
-      - name: Run Sphinx to check API documentation build
-        run: |
-          pip install sphinx
-          make sphinxdoclib
-          ARCH=$(cat include/Make/Platform.make | grep ^ARCH | cut -d'=' -f2 | xargs)
-          cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
-
-      - name: Make Sphinx documentation available
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-        with:
-          name: sphinx-grass
-          path: sphinx-grass
-          retention-days: 3
 
   python-success:
     name: Python Code Quality Result

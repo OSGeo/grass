@@ -2090,7 +2090,7 @@ class GdalSelect(wx.Panel):
                 )
                 if not ret:
                     GError(parent=self, message=message)
-                    return
+                    return None
 
                 connection_string = None
                 for conn in ret.splitlines():
@@ -2112,7 +2112,7 @@ class GdalSelect(wx.Panel):
                     return connection_string
                 if not connection_string:
                     GError(parent=self, message=message)
-                    return
+                    return None
             else:
                 name = self._getCurrentDbWidgetName()
                 if name == "choice":

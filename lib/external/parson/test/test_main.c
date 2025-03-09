@@ -53,7 +53,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    G_add_keyword(_("gjson"));
+    G_add_keyword(_("general"));
+    G_add_keyword(_("json"));
     G_add_keyword(_("unit test"));
     module->description = _("Performs unit tests "
                             "for the gjson library");

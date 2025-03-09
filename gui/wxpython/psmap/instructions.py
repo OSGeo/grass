@@ -155,7 +155,7 @@ class Instruction:
             file = open(filename, encoding="Latin_1", errors="ignore")
         except OSError:
             GError(message=_("Unable to open file\n%s") % filename)
-            return
+            return None
         # first read file to get information about region and scaletype
         isRegionComment = False
         orientation = "Portrait"

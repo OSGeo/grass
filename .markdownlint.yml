@@ -6,3 +6,9 @@ default: true
 fix: true
 
 MD041: false # first-line-h1
+
+# Errors from .html to .md rename (first step in HTML to Markdown conversion)
+MD013:
+  code_blocks: false
+  tables: false
+# The block above this is to be eventually removed.
