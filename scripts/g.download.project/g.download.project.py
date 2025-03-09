@@ -69,16 +69,21 @@ def find_location_in_directory(path, recurse=0):
     :param recurse: How many additional levels of subdirectories to explore
     """
     assert recurse >= 0
-    full_paths = [os.path.join(path, i) for i in os.listdir(path)]
-    candidates = sorted([i for i in full_paths if os.path.isdir(i)])
+
+    # Fully pathlib-based approach
+    path_obj = Path(path)
+    candidates = sorted([p for p in path_obj.iterdir() if p.is_dir()])
+
     for candidate in candidates:
-        if is_location_valid(candidate):
-            return candidate
+        if is_location_valid(str(candidate)):
+            return str(candidate)
+
     if recurse:
         for candidate in candidates:
-            result = find_location_in_directory(candidate, recurse - 1)
-            if result:
-                return result
+            location = find_location_in_directory(candidate, recurse - 1)
+            if location:
+                return location
+
     return None
 
 
@@ -136,7 +141,7 @@ def main(options, unused_flags):
         else:
             # The list is similarly misleading as the relative path above
             # as it misses the root directory, but it still should be useful.
-            files_and_dirs = os.listdir(directory)
+            files_and_dirs = [p.name for p in Path(directory).iterdir()]
             gs.fatal(
                 _(
                     "The downloaded file is not a valid GRASS project."
