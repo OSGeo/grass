@@ -37,7 +37,7 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist,
     if (open_db) {
         field = Clist->field > 0 ? Clist->field : 1;
         fi = Vect_get_field(Map, field);
-        if (!fi) {
+        if (fi == NULL) {
             G_fatal_error(_("Database connection not defined for layer %d"),
                           field);
         }
