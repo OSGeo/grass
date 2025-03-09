@@ -395,7 +395,7 @@ Update the GRASS version at <https://github.com/landam/wingrass-maintenance-scri
 
 - On major or minor version change (on release branch creation) update
   [dev_packages.csv](https://github.com/landam/wingrass-maintenance-scripts/blob/master/dev_packages.csv)
-- On release (inluding RC) update
+- On release (including RC) update
   [releases.csv](https://github.com/landam/wingrass-maintenance-scripts/blob/master/releases.csv)
   and
   [grass_packager_release.bat](https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_packager_release.bat#L12)
@@ -537,7 +537,7 @@ Add release to history page:
   - <grass-user@lists.osgeo.org>
 
 If final release, send out an announcement (press release)
-which is a shortened version of release desciption and website news item.
+which is a shortened version of release description and website news item.
 Note: Do not use relative links.
 
 - Our main mailing lists:
