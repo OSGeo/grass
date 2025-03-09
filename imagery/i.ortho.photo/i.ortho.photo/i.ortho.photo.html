@@ -46,7 +46,7 @@ the surface of the earth by matching the coordinate system of the aerial
 image in pixels (<em>image coordinate system</em>) and the coordinate
 system of the camera sensor in millimetres (<em>photo coordinate system</em>)
 for the interior orientation of the image, and further to the georeferenced
-coordinate system defined by projection parametres
+coordinate system defined by projection parameters
 (<em>target coordinate system</em>) for exterior orientation.
 
 <h2>EXAMPLE</h2>
@@ -96,7 +96,7 @@ of the menu. You may select a new or existing imagery
 group for the ortho-rectification. After choosing this option you will
 be prompted for the name of a new or existing imagery group. As a result,
 a new file <em>mapset/group/name_of_group/<b>REF</b></em>
-is created that contatins the names of all images in a group.
+is created that contains the names of all images in a group.
 
 <div class="code"><pre>
 IMG_0020 source_mapset
@@ -116,7 +116,7 @@ mapset where the ortho-rectified raster maps will reside. The target
 project is also the project from which the elevation model (raster
 map) will be selected (see Step 3). In Step 2, a new file
 <em>mapset/group/name_of_group/<b>TARGET</b></em>
-is created contatining the names of target project and mapset.
+is created containing the names of target project and mapset.
 
 <div class="code"><pre>
 ETRS_33N
@@ -139,7 +139,7 @@ suitable for use as elevation model in the ortho-rectification program.
 In Step 3 you will be prompted for the name of the raster map in the
 target project that you want to use as the elevation model. As a result
 of this step, a new file <em>mapset/group/name_of_group/<b>ELEVATION</b></em>
-is created contatining the name and mapset of the chosen DEM.
+is created containing the name and mapset of the chosen DEM.
 
 <div class="code"><pre>
 elevation layer :ELEVATION
@@ -163,9 +163,9 @@ as the geometry of the fiducial or reseau marks. The most important
 characteristic of the camera is its focal length. Fiducial or reseau marks
 locations are required to compute the scanned image to photo coordinate
 transformation parameter (Step 5). Two new files are created in this step:
-a file <em>mapset/group/name_of_group/<b>CAMERA</b></em>, contatining
+a file <em>mapset/group/name_of_group/<b>CAMERA</b></em>, containing
 the name of the reference camera and a file
-<em>mapset/camera/<b>name_of_reference</b></em>, contatining the
+<em>mapset/camera/<b>name_of_reference</b></em>, containing the
 camera parameters.
 
 <div class="code"><pre>
@@ -192,7 +192,7 @@ The scanned image to photo coordinate transformation parameters, i.e. the
 associate the scanned reference points (fiducials, reseau marks, etc.)
 with their known photo coordinates from the camera reference file. A new
 file <em>mapset/group/name_of_group/<b>REF_POINTS</b></em>
-is created, contatining a list of pairs of coordinates in image and photo
+is created, containing a list of pairs of coordinates in image and photo
 coordinate systems.
 
 <div class="code"><pre>
@@ -245,7 +245,7 @@ may be selected or modified.
 </div>
 
 <p>In Step 6, a new file <em>mapset/group/name_of_group/<b>INIT_EXP</b></em>
-is created, contatining camera parameters.
+is created, containing camera parameters.
 
 <div class="code"><pre>
 INITIAL XC    215258.345387

@@ -61,7 +61,7 @@ Option **maxsig** is the maximum number of sub-signatures in any class
 
 The spectral signatures which are produced by this program are "mixed"
 signatures (see [NOTES](#notes)). Each signature contains one or more
-subsignatures (represeting subclasses). The algorithm in this program
+subsignatures (representing subclasses). The algorithm in this program
 starts with a maximum number of subclasses and reduces this number to a
 minimal number of subclasses which are spectrally distinct. The user has
 the option to set this starting value with this option.

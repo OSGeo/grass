@@ -43,7 +43,7 @@ select a subset of all the band files that form an image.
 Input **signaturefile** is the resultant signature file (containing the means and
 covariance matrices) for each class in the training map that is
 associated with the band files in the subgroup select.
-Resultant singature file can be used with any other
+Resultant signature file can be used with any other
 imagery group as long as semantic labels match.
 
 ## NOTES
