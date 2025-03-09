@@ -49,6 +49,7 @@ int plot1(struct Map_info *Map, int type, int area UNUSED,
     double *x, *y;
     struct line_pnts *Points /* , *PPoints */;
     struct line_cats *Cats;
+    int ret = 0;
 
     /* double msize; */
     int x0, y0;
@@ -194,12 +195,8 @@ int plot1(struct Map_info *Map, int type, int area UNUSED,
         if (Vect_level(Map) >= 2) {
             line++;
             if (line > nlines) {
-                G_free(primary_color);
-                G_free(fill_color);
-                G_free(line_color);
-                Vect_destroy_cats_struct(Cats);
-                Vect_destroy_line_struct(Points);
-                return 0;
+                ret = 0;
+                goto cleanup;
             }
             if (!Vect_line_alive(Map, line))
                 continue;
@@ -210,12 +207,11 @@ int plot1(struct Map_info *Map, int type, int area UNUSED,
             switch (ltype) {
             case -1:
                 fprintf(stderr, _("\nERROR: vector map - can't read\n"));
-                G_free(primary_color);
-                G_free(fill_color);
-                G_free(line_color);
-                return -1;
+                ret = -1;
+                goto cleanup;
             case -2: /* EOF */
-                return 0;
+                ret = 0;
+                goto cleanup;
             }
         }
 
@@ -424,8 +420,11 @@ int plot1(struct Map_info *Map, int type, int area UNUSED,
         }
     }
 
-    Vect_destroy_line_struct(Points);
+cleanup:
+    G_free(primary_color);
+    G_free(fill_color);
+    G_free(line_color);
     Vect_destroy_cats_struct(Cats);
-
-    return 0; /* not reached */
+    Vect_destroy_line_struct(Points);
+    return ret;
 }
