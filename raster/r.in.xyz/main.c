@@ -4,7 +4,7 @@
  *   Calculates univariate statistics from the non-null cells of a GRASS
  *   raster map
  *
- *   Copyright 2006-2014 by M. Hamish Bowman, and The GRASS Development Team
+ *   Copyright 2006-2014 by M. Hamish Bowman, and the GRASS Development Team
  *   Author: M. Hamish Bowman, University of Otago, Dunedin, New Zealand
  *
  *   Extended 2007 by Volker Wichmann to support the aggregate functions

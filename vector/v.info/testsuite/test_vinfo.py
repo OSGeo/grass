@@ -12,6 +12,7 @@ class TestVInfo(TestCase):
     test_vinfo_no_db = "test_vinfo_no_db"
     test_vinfo_with_db = "test_vinfo_with_db"
     test_vinfo_with_db_3d = "test_vinfo_with_db_3d"
+    test_vinfo_with_hist = "test_vinfo_with_hist"
 
     # All maps should be tested against these references
     reference = {
@@ -56,6 +57,17 @@ class TestVInfo(TestCase):
             flags="z",
         )
 
+        cls.runModule(
+            "v.random", output=cls.test_vinfo_with_hist, npoints=5, zmin=0, zmax=100
+        )
+
+        # For testing vector history file with multiple commands
+        cls.runModule(
+            "v.support",
+            map=cls.test_vinfo_with_hist,
+            cmdhist='v.mkgrid map="test_vinfo_with_hist" grid=10,10 type="point"',
+        )
+
         cls.runModule("v.timestamp", map=cls.test_vinfo_with_db_3d, date="15 jan 1994")
 
     @classmethod
@@ -69,6 +81,7 @@ class TestVInfo(TestCase):
                 cls.test_vinfo_no_db,
                 cls.test_vinfo_with_db,
                 cls.test_vinfo_with_db_3d,
+                cls.test_vinfo_with_hist,
             ],
         )
 
@@ -268,6 +281,38 @@ class TestVInfo(TestCase):
         }
 
         result = json.loads(module.outputs.stdout)
+
+        self.assertDictEqual(expected_json, result)
+
+    def test_json_histroy(self):
+        """Test the JSON output format of v.info with the history flag, using a history file containing multiple commands."""
+        module = SimpleModule(
+            "v.info", map=self.test_vinfo_with_hist, format="json", flags="h"
+        )
+        self.runModule(module)
+        result = json.loads(module.outputs.stdout)
+
+        expected_json = {
+            "records": [
+                {
+                    "history_number": 1,
+                    "command": 'v.random output="test_vinfo_with_hist" npoints=5 layer="-1" zmin=0 zmax=100 column_type="double precision"',
+                },
+                {
+                    "history_number": 2,
+                    "command": 'v.mkgrid map="test_vinfo_with_hist" grid=10,10 type="point"',
+                },
+            ]
+        }
+
+        # The following fields vary depending on the test data's path,
+        # date, and user. Therefore, only check for their presence in
+        # the JSON output and not for their exact values.
+        remove_fields = ["mapset_path", "date", "user"]
+        for record in result["records"]:
+            for field in remove_fields:
+                self.assertIn(field, record)
+                record.pop(field)
 
         self.assertDictEqual(expected_json, result)
 

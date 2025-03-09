@@ -1,5 +1,4 @@
-"""GRASS GIS interface to Python exceptions
-"""
+"""GRASS GIS interface to Python exceptions"""
 
 import subprocess
 

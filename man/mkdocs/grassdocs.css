@@ -1,10 +1,155 @@
 :root > * {
-  --md-primary-fg-color:        #088B36;
-  --md-primary-fg-color--light: #088B36;
-  --md-primary-fg-color--dark:  #088B36;
-  --md-footer-bg-color:         #088B36;
-  --md-footer-bg-color--light:  #088B36;
-  --md-footer-bg-color--dark:   #088B36;
+
+  /* GRASS Variables
+  Use these variables to customize the GRASS theme.
+  ----------------------------------------------------------------------------- */
+  --gs-osgeo-blue: rgb(0, 58, 64); /* OSGeo Blue */
+  --gs-support-color: rgb(243, 57, 138); /* Pink */
+  --gs-support-color--dark: rgba(243, 57, 138, 0.541);
+  --gs-support-color--light: rgba(243, 57, 138, 0.322);
+  --gs-white-color: rgb(255, 255, 255); /* White */
+  --gs-white-color--light: rgba(255, 255, 255, 0.541);
+  --gs-white-color--lighter: rgba(255, 255, 255, 0.322);
+  --gs-white-color--lightest: rgba(255, 255, 255, 0.071);
+  --gs-black-color: rgb(0, 0, 0); /* Black */
+
+  --gs-primary-color: rgb(76, 176, 91); /* Dark green */
+  --gs-primary-color--light: rgba(76, 176, 91, 0.541);
+  --gs-primary-color--lighter: rgba(76, 176, 91, 0.322);
+  --gs-primary-color--lightest: rgba(76, 176, 91, 0.071);
+  --gs-primary-color-light: rgba(158, 210, 156, 1); /* Light green */
+  --gs-primary-color-light--light: rgba(158, 210, 156, 0.541);
+  --gs-primary-color-light--lighter: rgba(158, 210, 156, 0.322);
+  --gs-primary-color-light--lightest: rgba(158, 210, 156, 0.071);
+  --gs-primary-color-dark: rgba(8, 139, 54, 1); /* Dark green */
+  --gs-secondary-color: var(--gs-osgeo-blue); /* OSGeo Blue */
+  --gs-secondary-color--light: rgba(0, 58, 64, 0.541);
+  --gs-secondary-color--lighter: rgba(0, 58, 64, 0.322);
+  --gs-secondary-color--lightest: rgba(0, 58, 64, 0.071);
+  --gs-primary-bg-color: var(--gs-white-color); /* White */
+  --gs-primary-bg-color-dark: rgba(135, 135, 135, 0.1);
+
+  --md-admonition-icon--grass-icon: url('grass_logo.svg');
+
+
+  /* Material MkDocs Variables
+  Customization Docs:
+    https://squidfunk.github.io/mkdocs-material/customization/
+  Color Docs:
+    https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/?h=colors
+  Color Definitions for all CSS variables:
+    https://github.com/squidfunk/mkdocs-material/blob/master/src/templates/assets/stylesheets/main/_colors.scss
+  ----------------------------------------------------------------------------- */
+
+  /* Default Colors */
+  /* ----------------------------------------------------------------------------- */
+  --md-default-fg-weight: 800;
+
+  /* Primary color shades */
+  /* ----------------------------------------------------------------------------- */
+  --md-primary-fg-color:             var(--gs-primary-color); /* Dark green */
+  --md-primary-fg-color--light:      var(--gs-primary-color--light);
+  --md-primary-fg-color--dark:       var(--gs-primary-color-dark);
+  --md-primary-bg-color:             var(--gs-white-color); /* Includes color for the navbar text */
+  --md-primary-bg-color--light:      var(--gs-white-color--light);
+
+  /* Accent Colors */
+  /* ----------------------------------------------------------------------------- */
+  --md-accent-fg-color:              var(--gs-secondary-color); /* Link color on hover */
+  --md-accent-fg-color--transparent: var(--gs-secondary-color--light);
+  --md-accent-bg-color:              var(--gs-white-color);
+  --md-accent-bg-color--light:       var(--gs-primary-color--light);
+
+  /* Footer */
+  /* ----------------------------------------------------------------------------- */
+  --md-footer-fg-color:              var(--gs-secondary-color);
+  --md-footer-fg-color--light:       var(--gs-white-color);
+  --md-footer-fg-color--lighter:     var(--gs-white-color);
+  --md-footer-bg-color:              var(--gs-primary-color-light--lightest);;
+  --md-footer-bg-color--light:       var(--gs-primary-color-light--light);
+  --md-footer-bg-color--dark:        var(--gs-primary-color);
+
+  /* Typeset Colors */
+  /* ----------------------------------------------------------------------------- */
+  --md-typeset-a-color: var(--gs-secondary-color); /* Link color */
+  --md-typeset-a-color--hover: var(--gs-secondary-color--light); /* Not sure */
+
+  /* Mermaid colors */
+  /* ----------------------------------------------------------------------------- */
+  --md-mermaid-font-family: var(--md-text-font-family), sans-serif;
+  --md-mermaid-edge-color: var(--md-code-fg-color);
+  --md-mermaid-node-bg-color: var(--md-primary-fg-color--light);
+  --md-mermaid-node-fg-color: var(--md-primary-fg-color);
+  --md-mermaid-label-bg-color: var(--md-default-bg-color);
+  --md-mermaid-label-fg-color: var(--md-code-fg-color);
+  --md-mermaid-sequence-actor-bg-color: var(--md-mermaid-label-bg-color);
+  --md-mermaid-sequence-actor-fg-color: var(--md-mermaid-label-fg-color);
+  --md-mermaid-sequence-actor-border-color: var(--md-mermaid-node-fg-color);
+  --md-mermaid-sequence-actor-line-color: var(--md-default-fg-color--lighter);
+  --md-mermaid-sequence-actorman-bg-color: var(--md-mermaid-label-bg-color);
+  --md-mermaid-sequence-actorman-line-color: var(--md-mermaid-node-fg-color);
+  --md-mermaid-sequence-box-bg-color: var(--md-mermaid-node-bg-color);
+  --md-mermaid-sequence-box-fg-color: var(--md-mermaid-edge-color);
+  --md-mermaid-sequence-label-bg-color: var(--md-mermaid-node-bg-color);
+  --md-mermaid-sequence-label-fg-color: var(--md-mermaid-node-fg-color);
+  --md-mermaid-sequence-loop-bg-color: var(--md-mermaid-node-bg-color);
+  --md-mermaid-sequence-loop-fg-color: var(--md-mermaid-edge-color);
+  --md-mermaid-sequence-loop-border-color: var(--md-mermaid-node-fg-color);
+  --md-mermaid-sequence-message-fg-color: var(--md-mermaid-edge-color);
+  --md-mermaid-sequence-message-line-color: var(--md-mermaid-edge-color);
+  --md-mermaid-sequence-note-bg-color: var(--md-mermaid-label-bg-color);
+  --md-mermaid-sequence-note-fg-color: var(--md-mermaid-edge-color);
+  --md-mermaid-sequence-note-border-color: var(--md-mermaid-label-fg-color);
+  --md-mermaid-sequence-number-bg-color: var(--md-mermaid-node-fg-color);
+  --md-mermaid-sequence-number-fg-color: var(--md-accent-bg-color);
+
+  /* Unset Colors */
+  /* ----------------------------------------------------------------------------- */
+  --md-hue: 225deg;
+  --md-default-fg-color: #000000de;
+  --md-default-fg-color--light: #0000008a;
+  --md-default-fg-color--lighter: #00000052;
+  --md-default-fg-color--lightest: #00000012;
+  --md-default-bg-color: #fff;
+  --md-default-bg-color--light: #ffffffb3;
+  --md-default-bg-color--lighter: #ffffff4d;
+  --md-default-bg-color--lightest: #ffffff1f;
+  --md-code-fg-color: #36464e;
+  --md-code-bg-color: #f5f5f5;
+  --md-code-hl-color: #4287ff;
+  --md-code-hl-color--light: #4287ff1a;
+  --md-code-hl-number-color: #d52a2a;
+  --md-code-hl-special-color: #db1457;
+  --md-code-hl-function-color: #a846b9;
+  --md-code-hl-constant-color: #6e59d9;
+  --md-code-hl-keyword-color: #3f6ec6;
+  --md-code-hl-string-color: #1c7d4d;
+  --md-code-hl-name-color: var(--md-code-fg-color);
+  --md-code-hl-operator-color: var(--md-default-fg-color--light);
+  --md-code-hl-punctuation-color: var(--md-default-fg-color--light);
+  --md-code-hl-comment-color: var(--md-default-fg-color--light);
+  --md-code-hl-generic-color: var(--md-default-fg-color--light);
+  --md-code-hl-variable-color: var(--md-default-fg-color--light);
+  --md-typeset-color: var(--md-default-fg-color);
+  --md-typeset-del-color: #f5503d26;
+  --md-typeset-ins-color: #0bd57026;
+  --md-typeset-kbd-color: #fafafa;
+  --md-typeset-kbd-accent-color: #fff;
+  --md-typeset-kbd-border-color: #b8b8b8;
+  --md-typeset-mark-color: #ffff0080;
+  --md-typeset-table-color: #0000001f;
+  --md-typeset-table-color--light: rgba(0, 0, 0, .035);
+  --md-admonition-fg-color: var(--md-default-fg-color);
+  --md-admonition-bg-color: var(--md-default-bg-color);
+  --md-warning-fg-color: #000000de;
+  --md-warning-bg-color: #ff9;
+  --md-shadow-z1: 0 0.2rem 0.5rem #0000000d, 0 0 0.05rem #0000001a;
+  --md-shadow-z2: 0 0.2rem 0.5rem #0000001a, 0 0 0.05rem #00000040;
+  --md-shadow-z3: 0 0.2rem 0.5rem #0003, 0 0 0.05rem #00000059;
+}
+
+.md-header {
+  font-weight: bold;
 }
 
 .md-header__button.md-logo {
@@ -18,4 +163,48 @@
 .md-header__button.md-logo svg {
   height: 70%;
   width: 70%;
+}
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 3rem;
+}
+
+.md-typeset table:not([class]) tbody tr:hover {
+  background-color: transparent;
+}
+
+.gs-icon-primary {
+  color: var(--gs-primary-color);
+}
+
+.gs-icon-accent {
+  color: var(--gs-secondary-color);
+}
+
+/* Custom GRASS support button style: */
+.md-button.gs-support-button {
+  color: var(--gs-support-color);
+}
+
+.md-button.gs-support-button:focus, .md-button.gs-support-button:hover {
+  background-color: var(--gs-support-color);
+  border-color: var(--gs-support-color);
+  color: var(--gs-white-color);
+}
+
+/* Custom GRASS admonition (callout) style: */
+.md-typeset .admonition.grass-tip,
+.md-typeset details.grass-tip {
+  border-color: var(--gs-primary-color-light);
+}
+.md-typeset .grass-tip > .admonition-title,
+.md-typeset .grass-tip > summary {
+  background-color: var(--gs-primary-color--lightest);
+}
+.md-typeset .grass-tip > .admonition-title::before,
+.md-typeset .grass-tip > summary::before {
+  background-color: var(--gs-primary-color);
+  -webkit-mask-image: var(--md-admonition-icon--grass-icon);
+          mask-image: var(--md-admonition-icon--grass-icon);
 }

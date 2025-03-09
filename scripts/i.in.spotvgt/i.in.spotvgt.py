@@ -260,10 +260,7 @@ def main():
 
         gs.message(_("Imported SPOT VEGETATION SM quality map <%s>.") % smfile)
         gs.message(
-            _(
-                "Note: A snow map can be extracted by category "
-                "252 (d.rast %s cat=252)"
-            )
+            _("Note: A snow map can be extracted by category 252 (d.rast %s cat=252)")
             % smfile
         )
         gs.message("")

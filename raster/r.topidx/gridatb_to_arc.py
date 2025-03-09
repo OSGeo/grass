@@ -54,8 +54,7 @@ cellsize      {cellsize}
 NODATA_value  9999
 """
 )
-for inline in inf:
-    outf.write(inline)
+outf.writelines(inf)
 
 inf.close()
 outf.close()

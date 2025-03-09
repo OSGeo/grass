@@ -290,7 +290,7 @@ class VDigitWindow(BufferedMapWindow):
         """Left mouse button pressed - add new feature"""
         try:
             mapLayer = self.toolbar.GetLayer().GetName()
-        except:
+        except AttributeError:
             return
 
         if self.toolbar.GetAction("type") in {"point", "centroid"}:
@@ -394,40 +394,37 @@ class VDigitWindow(BufferedMapWindow):
             return
 
         dbInfo = gselect.VectorDBInfo(vectorName)
-        sqlfile = tempfile.NamedTemporaryFile(mode="w")
-        for fid in fids:
-            for layer, cats in self.digit.GetLineCats(fid).items():
-                table = dbInfo.GetTable(layer)
-                for attrb, item in vdigit["geomAttr"].items():
-                    val = -1
-                    if attrb == "length":
-                        val = self.digit.GetLineLength(fid)
-                        type = attrb
-                    elif attrb == "area":
-                        val = self.digit.GetAreaSize(fid)
-                        type = attrb
-                    elif attrb == "perimeter":
-                        val = self.digit.GetAreaPerimeter(fid)
-                        type = "length"
-
-                    if val < 0:
-                        continue
-                    val = UnitsConvertValue(val, type, item["units"])
-
-                    for cat in cats:
-                        sqlfile.write(
-                            "UPDATE %s SET %s = %f WHERE %s = %d;\n"
-                            % (
-                                table,
-                                item["column"],
-                                val,
-                                dbInfo.GetKeyColumn(layer),
-                                cat,
+        with tempfile.NamedTemporaryFile(mode="w") as sqlfile:
+            for fid in fids:
+                for layer, cats in self.digit.GetLineCats(fid).items():
+                    table = dbInfo.GetTable(layer)
+                    for attrb, item in vdigit["geomAttr"].items():
+                        val = -1
+                        if attrb == "length":
+                            val = self.digit.GetLineLength(fid)
+                            type = attrb
+                        elif attrb == "area":
+                            val = self.digit.GetAreaSize(fid)
+                            type = attrb
+                        elif attrb == "perimeter":
+                            val = self.digit.GetAreaPerimeter(fid)
+                            type = "length"
+                        if val < 0:
+                            continue
+                        val = UnitsConvertValue(val, type, item["units"])
+                        for cat in cats:
+                            sqlfile.write(
+                                "UPDATE %s SET %s = %f WHERE %s = %d;\n"
+                                % (
+                                    table,
+                                    item["column"],
+                                    val,
+                                    dbInfo.GetKeyColumn(layer),
+                                    cat,
+                                )
                             )
-                        )
-
-            sqlfile.file.flush()
-            RunCommand("db.execute", parent=True, quiet=True, input=sqlfile.name)
+                sqlfile.file.flush()
+                RunCommand("db.execute", parent=True, quiet=True, input=sqlfile.name)
 
     def _updateATM(self):
         """Update open Attribute Table Manager
@@ -482,7 +479,7 @@ class VDigitWindow(BufferedMapWindow):
         """
         try:
             mapLayer = self.toolbar.GetLayer().GetName()
-        except:
+        except AttributeError:
             return
 
         coords = self.Pixel2Cell(self.mouse["begin"])
@@ -624,8 +621,7 @@ class VDigitWindow(BufferedMapWindow):
                         removed,
                     ],
                 )
-                # self.mouse['begin'] = self.Cell2Pixel(self.polycoords[-1])
-            except:
+            except IndexError:
                 pass
 
         if action == "editLine":
@@ -690,8 +686,8 @@ class VDigitWindow(BufferedMapWindow):
     def _onLeftDown(self, event):
         """Left mouse button donw - vector digitizer various actions"""
         try:
-            mapLayer = self.toolbar.GetLayer().GetName()
-        except:
+            self.toolbar.GetLayer().GetName()
+        except AttributeError:
             GMessage(parent=self, message=_("No vector map selected for editing."))
             event.Skip()
             return
@@ -1095,7 +1091,7 @@ class VDigitWindow(BufferedMapWindow):
             # -> add new line / boundary
             try:
                 mapName = self.toolbar.GetLayer().GetName()
-            except:
+            except AttributeError:
                 mapName = None
                 GError(parent=self, message=_("No vector map selected for editing."))
 

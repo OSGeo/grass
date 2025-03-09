@@ -619,15 +619,15 @@ or to the length of a formula.
 the map title will contain only some of it, but most (if not all) of
 the formula will be placed into the history file for the <em>result</em> map.
 
-<h3>Raster MASK handling</h3>
+<h3>Raster mask handling</h3>
 <p>
-<em>r.mapcalc</em> follows the common GRASS behavior of raster MASK handling,
-so the MASK is only applied when reading an existing GRASS raster map.
+<em>r.mapcalc</em> follows the common GRASS behavior of raster mask handling,
+so the mask is only applied when reading an existing GRASS raster map.
 This implies that, for example, the command:
 <div class="code"><pre>
 r.mapcalc "elevation_exaggerated = elevation * 3"
 </pre></div>
-create a map respecting the masked pixels if MASK is active.
+create a map with NULL cells for the masked-out cells if raster mask is active.
 
 <p>
 However, when creating a map which is not based on any map,
@@ -636,17 +636,19 @@ e.g. a map from a constant:
 r.mapcalc "base_height = 200.0"
 </pre></div>
 the created raster map is limited only by a computation region
-but it is not affected by an active MASK.
-This is expected because, as mentioned above, MASK is only applied when reading,
-not when writing a raster map.
-<p>
-If also in this case the MASK should be applied, an if() statement including the
-MASK should be used, e.g.:
+but it is not affected by an active raster mask.
+This is expected because, as mentioned above, the mask is only applied
+when reading, not when writing a raster map.
+If the raster mask should be applied in this case, an <code>if()</code>
+function including the mask raster should be used, e.g.
+(assuming the mask is called <code>MASK</code>):
 <div class="code"><pre>
 r.mapcalc "base_height = if(MASK, 200.0, null())"
 </pre></div>
 
-When testing MASK related expressions keep in mind that when MASK is active
+<p>
+When testing expressions related to mask handling keep in mind that
+when the raster mask is active,
 you don't see data in masked areas even if they are not NULL.
 See <em><a href="r.mask.html">r.mask</a></em> for details.
 
@@ -840,7 +842,7 @@ by Anil K. Jain (Prentice Hall, NJ, 1989; p 67).
 
 <em>
 <a href="g.region.html">g.region</a>,
-<a href="r.bitpattern.html">r.bitpattern</a>,
+<a href="https://grass.osgeo.org/grass-stable/manuals/addons/r.bitpattern.html">r.bitpattern</a>,
 <a href="r.blend.html">r.blend</a>,
 <a href="r.colors.html">r.colors</a>,
 <a href="r.fillnulls.html">r.fillnulls</a>,

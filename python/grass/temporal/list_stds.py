@@ -188,9 +188,7 @@ def _write_json(rows, column_names, file) -> None:
 
     dict_rows = []
     for row in rows:
-        new_row = {}
-        for key, value in zip(column_names, row):
-            new_row[key] = value
+        new_row = dict(zip(column_names, row))
         dict_rows.append(new_row)
     meta = {"column_names": column_names}
     with _open_output_file(file) as stream:
@@ -221,9 +219,7 @@ def _write_yaml(rows, column_names, file=sys.stdout) -> None:
 
     dict_rows = []
     for row in rows:
-        new_row = {}
-        for key, value in zip(column_names, row):
-            new_row[key] = value
+        new_row = dict(zip(column_names, row))
         dict_rows.append(new_row)
     meta = {"column_names": column_names}
     with _open_output_file(file) as stream:
@@ -275,7 +271,8 @@ def _write_table(rows, column_names, output_format, separator, file):
             separator = ","
         _write_csv(rows=rows, column_names=column_names, separator=separator, file=file)
     else:
-        raise ValueError(f"Unknown value '{output_format}' for output_format")
+        msg = f"Unknown value '{output_format}' for output_format"
+        raise ValueError(msg)
 
 
 def _get_get_registered_maps_as_objects_with_method(dataset, where, method, gran, dbif):
@@ -285,17 +282,17 @@ def _get_get_registered_maps_as_objects_with_method(dataset, where, method, gran
         return dataset.get_registered_maps_as_objects(
             where=where, order="start_time", dbif=dbif
         )
-    if method == "gran":
-        if where:
-            raise ValueError(
-                f"The where parameter is not supported with method={method}"
-            )
-        if gran is not None and gran != "":
-            return dataset.get_registered_maps_as_objects_by_granularity(
-                gran=gran, dbif=dbif
-            )
-        return dataset.get_registered_maps_as_objects_by_granularity(dbif=dbif)
-    raise ValueError(f"Invalid method '{method}'")
+    if method != "gran":
+        msg = f"Invalid method '{method}'"
+        raise ValueError(msg)
+    if where:
+        msg = f"The where parameter is not supported with method={method}"
+        raise ValueError(msg)
+    if gran is not None and gran != "":
+        return dataset.get_registered_maps_as_objects_by_granularity(
+            gran=gran, dbif=dbif
+        )
+    return dataset.get_registered_maps_as_objects_by_granularity(dbif=dbif)
 
 
 def _get_get_registered_maps_as_objects_delta_gran(
@@ -308,11 +305,10 @@ def _get_get_registered_maps_as_objects_delta_gran(
         return []
 
     if isinstance(maps[0], list):
-        if len(maps[0]) > 0:
-            first_time, unused = maps[0][0].get_temporal_extent_as_tuple()
-        else:
+        if len(maps[0]) <= 0:
             msgr.warning(_("Empty map list"))
             return []
+        first_time, unused = maps[0][0].get_temporal_extent_as_tuple()
     else:
         first_time, unused = maps[0].get_temporal_extent_as_tuple()
 
@@ -363,7 +359,8 @@ def _get_list_of_maps_delta_gran(dataset, columns, where, method, gran, dbif, ms
             elif column == "distance_from_begin":
                 row.append(delta_first)
             else:
-                raise ValueError(f"Unsupported column '{column}'")
+                msg = f"Unsupported column '{column}'"
+                raise ValueError(msg)
         rows.append(row)
     return rows
 
@@ -386,14 +383,14 @@ def _get_list_of_maps_stds(
 
     def check_columns(column_names, output_format, element_type):
         if element_type != "stvds" and "layer" in columns:
-            raise ValueError(
-                f"Column 'layer' is not allowed with temporal type '{element_type}'"
-            )
+            msg = f"Column 'layer' is not allowed with temporal type '{element_type}'"
+            raise ValueError(msg)
         if output_format == "line" and len(column_names) > 1:
-            raise ValueError(
+            msg = (
                 f"'{output_format}' output_format can have only 1 column, "
                 f"not {len(column_names)}"
             )
+            raise ValueError(msg)
 
     # This method expects a list of objects for gap detection
     if method in {"delta", "deltagaps", "gran"}:
@@ -498,7 +495,7 @@ def list_maps_of_stds(
                   e.g: start_time < "2001-01-01" and end_time > "2001-01-01"
     :param separator: The field separator character between the columns
     :param method: String identifier to select a method out of cols,
-                   comma,delta or deltagaps
+                   comma, delta or deltagaps
     :param dbif: The database interface to be used
 
         - "cols" Print preselected columns specified by columns

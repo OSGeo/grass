@@ -92,18 +92,18 @@ def validateMapNames(names, etype):
     for name in names:
         if name.find("@") >= 0:
             nameShort, mapset = name.split("@", 1)
-            if nameShort in mapDict[mapset]:
-                newNames.append(name)
-            else:
+            if nameShort not in mapDict[mapset]:
                 raise GException(_("Map <%s> not found.") % name)
-        else:
-            found = False
-            for mapset, mapNames in mapDict.items():
-                if name in mapNames:
-                    found = True
-                    newNames.append(name + "@" + mapset)
-            if not found:
-                raise GException(_("Map <%s> not found.") % name)
+            newNames.append(name)
+
+            continue
+        found = False
+        for mapset, mapNames in mapDict.items():
+            if name in mapNames:
+                found = True
+                newNames.append(name + "@" + mapset)
+        if not found:
+            raise GException(_("Map <%s> not found.") % name)
     return newNames
 
 
@@ -212,8 +212,7 @@ def checkSeriesCompatibility(mapSeriesList=None, timeseriesList=None):
         )
 
     if mapSeriesList:
-        count = set()
-        count.update(len(mapSeries) for mapSeries in mapSeriesList)
+        count = {len(mapSeries) for mapSeries in mapSeriesList}
         if len(count) > 1:
             raise GException(
                 _(
@@ -240,10 +239,8 @@ def ComputeScaledRect(sourceSize, destSize):
     """Fits source rectangle into destination rectangle
     by scaling and centering.
 
-
         >>> ComputeScaledRect(sourceSize = (10, 40), destSize = (100, 50))
         {'height': 50, 'scale': 1.25, 'width': 13, 'x': 44, 'y': 0}
-
 
     :param sourceSize: size of source rectangle
     :param destSize: size of destination rectangle
@@ -334,21 +331,22 @@ def layerListToCmdsMatrix(layerList):
             continue
         if hasattr(layer, "maps"):
             for i, part in enumerate(layer.cmd):
-                if part.startswith("map="):
-                    cmd = layer.cmd[:]
-                    cmds = []
-                    for map_ in layer.maps:
-                        # check if dataset uses layers instead of maps
-                        mapName, mapLayer = getNameAndLayer(map_)
-                        cmd[i] = "map={name}".format(name=mapName)
-                        if mapLayer:
-                            try:
-                                idx = cmd.index("layer")
-                                cmd[idx] = "layer={layer}".format(layer=mapLayer)
-                            except ValueError:
-                                cmd.append("layer={layer}".format(layer=mapLayer))
-                        cmds.append(cmd[:])
-                    cmdsForComposition.append(cmds)
+                if not part.startswith("map="):
+                    continue
+                cmd = layer.cmd[:]
+                cmds = []
+                for map_ in layer.maps:
+                    # check if dataset uses layers instead of maps
+                    mapName, mapLayer = getNameAndLayer(map_)
+                    cmd[i] = "map={name}".format(name=mapName)
+                    if mapLayer:
+                        try:
+                            idx = cmd.index("layer")
+                            cmd[idx] = "layer={layer}".format(layer=mapLayer)
+                        except ValueError:
+                            cmd.append("layer={layer}".format(layer=mapLayer))
+                    cmds.append(cmd[:])
+                cmdsForComposition.append(cmds)
         else:
             cmdsForComposition.append([layer.cmd] * count)
 

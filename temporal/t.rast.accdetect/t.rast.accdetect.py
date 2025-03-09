@@ -45,7 +45,7 @@
 
 # %option G_OPT_STRDS_OUTPUT
 # % key: occurrence
-# % description: The output space time raster dataset that stores the occurrence of the the accumulation pattern using the provided data range
+# % description: The output space time raster dataset that stores the occurrence of the accumulation pattern using the provided data range
 # % required: yes
 # %end
 
@@ -402,7 +402,7 @@ def main():
                         prev_map = curr_map
                         subexpr1 = "null()"
                         subexpr3 = "%i" % (indicator_start)
-                    elif i > 0 and i < num_maps - 1:
+                    elif 0 < i < num_maps - 1:
                         prev_map = occurrence_maps[map.next().get_id()].get_name()
                         next_map = occurrence_maps[map.prev().get_id()].get_name()
                         # In case the previous map is null() set null() or the start
@@ -444,7 +444,7 @@ def main():
                         prev_map = curr_map
                         subexpr1 = "null()"
                         subexpr3 = "%i" % (indicator_start)
-                    elif i > 0 and i < num_maps - 1:
+                    elif 0 < i < num_maps - 1:
                         prev_map = occurrence_maps[map.prev().get_id()].get_name()
                         next_map = occurrence_maps[map.next().get_id()].get_name()
                         # In case the previous map is null() set null() or the start

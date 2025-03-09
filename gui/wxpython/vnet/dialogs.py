@@ -581,13 +581,10 @@ class VNETDialog(wx.Dialog):
     def OnPageChanged(self, event):
         """Tab switched"""
         if event.GetEventObject() == self.notebook:
-            dbMgrIndxs = []
-            dbMgrIndxs.extend(
-                (
-                    self.notebook.GetPageIndexByName("inputDbMgr"),
-                    self.notebook.GetPageIndexByName("resultDbMgr"),
-                )
-            )
+            dbMgrIndxs = [
+                self.notebook.GetPageIndexByName("inputDbMgr"),
+                self.notebook.GetPageIndexByName("resultDbMgr"),
+            ]
             if self.notebook.GetSelection() in dbMgrIndxs:
                 self.stBar.AddStatusItem(
                     text=_("Loading tables..."),
@@ -834,9 +831,7 @@ class VNETDialog(wx.Dialog):
         self._setInputData()
 
     def _setInputData(self):
-        params = {}
-        for k, v in self.inputData.items():
-            params[k] = v.GetValue()
+        params = {k: v.GetValue() for k, v in self.inputData.items()}
         flags = {}
         self.vnet_mgr.SetParams(params, flags)
 
@@ -1194,15 +1189,16 @@ class PtsList(PointsList):
                     self.CheckItem(idx, True)
                 elif not v and self.IsItemChecked(idx):
                     self.CheckItem(idx, False)
-            else:
-                found = 0
-                for col in self.colsData:
-                    if k == col[0]:
-                        found = 1
-                        break
+                continue
 
-                if found:
-                    self.EditCellKey(key, k, v)
+            found = 0
+            for col in self.colsData:
+                if k == col[0]:
+                    found = 1
+                    break
+
+            if found:
+                self.EditCellKey(key, k, v)
 
     def OnItemSelected(self, event):
         """Item selected"""
@@ -1218,7 +1214,7 @@ class PtsList(PointsList):
             self.pts_data.SetSelected(self.selectedkey)
 
     def OnCheckItem(self, index, flag):
-        "flag is True if the item was checked, False if unchecked"
+        """flag is True if the item was checked, False if unchecked"""
         key = self.GetItemData(index)
         if self.pts_data.GetPointData(key)["use"] != flag:
             self.pts_data.SetPointData(key, {"use": flag})
@@ -1258,11 +1254,13 @@ class SettingsDialog(wx.Dialog):
 
         rules = RunCommand("v.colors", read=True, flags="l")
 
-        settsLabels = {}
-
-        settsLabels["color_table"] = StaticText(
-            parent=self, id=wx.ID_ANY, label=_("Color table style %s:") % "(v.net.flow)"
-        )
+        settsLabels = {
+            "color_table": StaticText(
+                parent=self,
+                id=wx.ID_ANY,
+                label=_("Color table style %s:") % "(v.net.flow)",
+            )
+        }
         self.settings["color_table"] = ComboBox(
             parent=self,
             id=wx.ID_ANY,
@@ -1651,11 +1649,7 @@ class CreateTtbDialog(wx.Dialog):
             self._updateInputDbMgrPage(show=True)
 
     def GetData(self):
-        params = {}
-        for param, sel in self.inputData.items():
-            params[param] = sel.GetValue()
-
-        return params
+        return {param: sel.GetValue() for param, sel in self.inputData.items()}
 
 
 class OutputVectorDialog(wx.Dialog):
