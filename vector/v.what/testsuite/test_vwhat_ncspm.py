@@ -184,12 +184,10 @@ class TestNCMaps(TestCase):
             distance=1000,
         )
 
-    @unittest.expectedFailure
     def test_multiple_maps(self):
         self.assertModule(self.vwhat)
         self.assertMultiLineEqual(first=out1, second=self.vwhat.outputs.stdout)
 
-    @unittest.expectedFailure
     def test_print_options(self):
         self.vwhat.flags["a"].value = True
         self.assertModule(self.vwhat)
@@ -199,7 +197,6 @@ class TestNCMaps(TestCase):
         self.assertModule(self.vwhat)
         self.assertLooksLike(reference=out3, actual=self.vwhat.outputs.stdout)
 
-    @unittest.expectedFailure
     def test_threshold(self):
         self.vwhat.inputs["distance"].value = 100
         self.assertModule(self.vwhat)
