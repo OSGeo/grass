@@ -20,7 +20,14 @@ install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/fontcap
 build_program_in_subdir(g.parser DEPENDS grass_gis FREETYPE)
 build_program_in_subdir(g.pnmcomp DEPENDS grass_gis)
 build_program_in_subdir(g.ppmtopng DEPENDS grass_gis PRIMARY_DEPENDS PNG::PNG)
-build_program_in_subdir(g.proj DEPENDS grass_gis grass_gproj PROJ OPTIONAL_DEPENDS GDAL::GDAL)
+build_program_in_subdir(
+  g.proj
+  DEPENDS
+  grass_gis
+  grass_gproj
+  PROJ::proj
+  OPTIONAL_DEPENDS
+  GDAL::GDAL)
 
 build_program_in_subdir(
   g.region
@@ -32,7 +39,7 @@ build_program_in_subdir(
   grass_raster3d
   grass_gmath
   grass_parson
-  PROJ
+  PROJ::proj
   ${LIBM})
 
 build_program_in_subdir(g.rename DEPENDS grass_gis grass_manage grass_raster)
@@ -45,7 +52,7 @@ build_program_in_subdir(
   OPTIONAL_DEPENDS
   GDAL::GDAL
   GEOS::geos_c
-  PROJ
+  PROJ::proj
   SQLite::SQLite3
   DEFS
   "-DGRASS_VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""

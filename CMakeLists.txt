@@ -260,9 +260,6 @@ if(MSVC)
   include_directories("${CMAKE_SOURCE_DIR}/msvc")
 endif()
 
-# # TODO: fix this hack
-include_directories(${PROJ_INCLUDE_DIR})
-
 add_subdirectory(lib)
 add_subdirectory(python)
 add_subdirectory(utils)

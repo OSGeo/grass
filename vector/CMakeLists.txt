@@ -870,7 +870,7 @@ build_program_in_subdir(
   grass_gproj
   grass_vector
   PRIMARY_DEPENDS
-  PROJ
+  PROJ::proj
   GDAL::GDAL)
 
 build_program_in_subdir(
@@ -895,7 +895,7 @@ build_program_in_subdir(
   grass_gis
   grass_gproj
   grass_vector
-  PROJ
+  PROJ::proj
   PRIMARY_DEPENDS
   GDAL::GDAL
   OPTIONAL_DEPENDS

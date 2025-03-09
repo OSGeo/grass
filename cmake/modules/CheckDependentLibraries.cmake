@@ -21,13 +21,6 @@ if(UNIX)
 endif()
 
 find_package(PROJ REQUIRED)
-if(PROJ_FOUND)
-  add_library(PROJ INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET PROJ PROPERTY INTERFACE_LINK_LIBRARIES
-                                    ${PROJ_LIBRARY${find_library_suffix}})
-  set_property(TARGET PROJ PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${PROJ_INCLUDE_DIR})
-endif()
 
 find_package(GDAL REQUIRED)
 
@@ -307,7 +300,7 @@ if(Python3_FOUND)
   #]]
 endif()
 
-check_target(PROJ HAVE_PROJ_H)
+check_target(PROJ::proj HAVE_PROJ_H)
 check_target(GDAL::GDAL HAVE_GDAL)
 check_target(GDAL::GDAL HAVE_OGR)
 check_target(ZLIB::ZLIB HAVE_ZLIB_H)

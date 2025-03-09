@@ -28,7 +28,7 @@ build_library_in_subdir(
   "-DGDAL_LINK=1"
   DEPENDS
   GDAL::GDAL
-  PROJ
+  PROJ::proj
   grass_gis
   grass_gproj
   grass_parson)

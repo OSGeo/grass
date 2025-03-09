@@ -23,7 +23,7 @@ endif()
 
 file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR}/bin BINARY_DIR)
 set(CONFIG_PROJSHARE)
-get_filename_component(PROJ_INSTALL_PREFIX ${PROJ_INCLUDE_DIR} PATH)
+get_filename_component(PROJ_INSTALL_PREFIX ${PROJ_INCLUDE_DIRS} PATH)
 if(DEFINED ENV{PROJSHARE})
   message(WARNING "External PROJ directory not specified; default will be used")
   set(CONFIG_PROJSHARE "$ENV{PROJSHARE}")
