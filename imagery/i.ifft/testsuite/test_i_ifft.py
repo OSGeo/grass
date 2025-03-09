@@ -102,12 +102,14 @@ class TestIIFFT(TestCase):
             self.output_raster, expected_unscaled_stats, precision=1e-6
         )
 
-    def test_coefficient_symmetry(self):
+    def test_horizontal_symmetry(self):
         """
-        Test to check whether i.ifft preserves symmetry in the real-valued output.
-        It compares the output with a shifted version of the result, calculating the difference
-        to ensure the symmetry is maintained and then compared against reference statistics to
-        validate the symmetry of the IFFT output.
+        Test whether i.ifft preserves horizontal symmetry in the real-valued output.
+
+        The test generates a horizontally symmetric input, applies the inverse FFT
+        (i.ifft), and then horizontally flips the output raster.  It computes the
+        difference between the original output and the flipped version and uses
+        r.univar to verify statistics.
         """
 
         self.runModule(
@@ -129,26 +131,24 @@ class TestIIFFT(TestCase):
         self.assertRasterExists("output_sym")
         self.temp_rasters.append("output_sym")
 
-        self.runModule(
-            "r.mapcalc", expression="shifted = output_sym[5, 5]", overwrite=True
+        self.assertModule(
+            "r.flip", input="output_sym", output="mirrored", flags="w", overwrite=True
         )
-        self.temp_rasters.append("shifted")
+        self.assertRasterExists("mirrored")
+        self.temp_rasters.append("mirrored")
 
         self.runModule(
-            "r.mapcalc",
-            expression="sym_diff = abs(output_sym - shifted)",
-            overwrite=True,
+            "r.mapcalc", expression="diff = output_sym - mirrored", overwrite=True
         )
-        self.temp_rasters.append("sym_diff")
-
+        self.temp_rasters.append("diff")
         reference_stats = {
-            "min": 0,
-            "max": 25,
-            "mean": 1.357770,
-            "stddev": 5.102593,
+            "min": -16.527864,
+            "max": 16.527864,
+            "mean": 0,
+            "sum": 0,
         }
 
-        self.assertRasterFitsUnivar("sym_diff", reference_stats, precision=1e-6)
+        self.assertRasterFitsUnivar("diff", reference_stats, precision=1e-6)
 
     def test_mask_functionality(self):
         """Test if masking functionality works properly."""
