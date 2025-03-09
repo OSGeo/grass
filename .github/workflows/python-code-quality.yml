@@ -36,7 +36,7 @@ jobs:
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.8.3"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.9.9"
+      RUFF_VERSION: "0.9.10"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -127,7 +127,7 @@ jobs:
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@b56ba49b26e50535fa1e7f7db0f4f7b4bf65d80d # v3.28.10
+        uses: github/codeql-action/upload-sarif@6bb031afdd8eb862ea3fc1848194185e076637e5 # v3.28.11
         with:
           sarif_file: bandit.sarif
 
@@ -186,20 +186,6 @@ jobs:
         run: |
           ( cd doc/examples/raster/r.example/ && make )
           ( cd doc/examples/vector/v.example/ && make )
-
-      - name: Run Sphinx to check API documentation build
-        run: |
-          pip install sphinx
-          make sphinxdoclib
-          ARCH=$(cat include/Make/Platform.make | grep ^ARCH | cut -d'=' -f2 | xargs)
-          cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
-
-      - name: Make Sphinx documentation available
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
-        with:
-          name: sphinx-grass
-          path: sphinx-grass
-          retention-days: 3
 
   python-success:
     name: Python Code Quality Result
