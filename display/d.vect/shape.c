@@ -32,6 +32,7 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist,
 
     stat = 0;
     nrec_rgb = nrec_width = nrec_size = nrec_rot = 0;
+    fi = NULL;
 
     open_db = rgb_column || width_column || size_column || rot_column;
     if (open_db) {
