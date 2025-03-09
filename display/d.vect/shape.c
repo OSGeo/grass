@@ -179,8 +179,6 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist,
         }
     }
 
-    
-
     if (z_style) {
         if (!Vect_is_3d(Map)) {
             G_warning(_("Vector map is not 3D. Unable to colorize features "
