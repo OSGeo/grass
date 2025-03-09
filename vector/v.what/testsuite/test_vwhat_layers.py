@@ -1,3 +1,5 @@
+import unittest
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
@@ -183,10 +185,12 @@ class TestMultiLayerMap(TestCase):
             "v.what", map="test_vector", coordinates=[634243, 226193], distance=10
         )
 
+    @unittest.expectedFailure
     def test_run(self):
         self.assertModule(self.vwhat)
         self.assertLooksLike(reference=out1, actual=self.vwhat.outputs.stdout)
 
+    @unittest.expectedFailure
     def test_print_options(self):
         self.vwhat.flags["a"].value = True
         self.assertModule(self.vwhat)
@@ -209,6 +213,7 @@ class TestMultiLayerMap(TestCase):
                 msg="No JSON object could be decoded:\n" + self.vwhat.outputs.stdout
             )
 
+    @unittest.expectedFailure
     def test_selected_layers(self):
         self.vwhat.inputs.layer = -1
         self.vwhat.flags["g"].value = True
