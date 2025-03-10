@@ -221,7 +221,7 @@ build_program_in_subdir(
   PRIMARY_DEPENDS
   GDAL::GDAL)
 
-build_program_in_subdir(r.external.out DEPENDS grass_gis grass_raster
+build_program_in_subdir(r.external.out DEPENDS grass_gis grass_raster grass_gproj
                         PRIMARY_DEPENDS GDAL::GDAL)
 
 build_program_in_subdir(r.fill.dir DEPENDS grass_gis grass_raster)
@@ -366,7 +366,7 @@ build_program_in_subdir(
   grass_dbmibase
   grass_imagery
   ${LIBM}
-  PROJ
+  PROJ::proj
   PRIMARY_DEPENDS
   GDAL::GDAL)
 
