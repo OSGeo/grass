@@ -370,7 +370,7 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                     Map[i].name, Map[i].mapset);
             break;
         default:
-            fprintf(stdout, "%s\nMap: %s \nMapset: %s\n", SEP, Map[i].name,
+            fprintf(stdout, "%s\nMap: %s\nMapset: %s\n", SEP, Map[i].name,
                     Map[i].mapset);
             break;
         }
