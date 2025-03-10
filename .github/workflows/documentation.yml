@@ -151,7 +151,7 @@ jobs:
 
       - name: Build Sphinx documentation
         run: |
-          pip install sphinx
+          pip install sphinx sphinx-sitemap
           cd grass
           make sphinxdoclib
           ARCH="$(grass --config arch)"
