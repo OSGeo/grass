@@ -22,7 +22,7 @@ variable or by running *[d.mon](d.mon.md)* module.
 
 If environmental variable GRASS_RENDER_COMMAND is defined, rendering is
 redirected by display library to the given external command defined by
-this variable. Currently only Python scrips are supported.
+this variable. Currently only Python scripts are supported.
 
 Lets start with simple example of Python script called *render.py*:
 

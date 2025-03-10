@@ -1,7 +1,7 @@
 /*
  * r.in.pdal Functions printing out various information on input LAS files
  *
- *   Copyright 2021-2024 by Maris Nartiss, and The GRASS Development Team
+ *   Copyright 2021-2024 by Maris Nartiss, and the GRASS Development Team
  *   Author: Maris Nartiss
  *
  *   This program is free software licensed under the GPL (>=v2).

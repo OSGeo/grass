@@ -54,30 +54,23 @@ def parse_source(pgm):
     if grass_version != "unknown":
         major, minor, patch = grass_version.split(".")
         base_url = "https://github.com/OSGeo/"
-        main_url = urlparse.urljoin(
-            base_url,
-            urlparse.urljoin(
-                "grass/tree/",
-                grass_git_branch + "/",
-            ),
+        main_repo_url = urlparse.urljoin(base_url, "grass")
+        main_url = f"{main_repo_url}/tree/{grass_git_branch}/"
+        addons_repo_url = urlparse.urljoin(base_url, "grass-addons")
+        version_branch = get_version_branch(
+            major,
+            urlparse.urljoin(base_url, "grass-addons"),
         )
-        addons_url = urlparse.urljoin(
-            base_url,
-            urlparse.urljoin(
-                "grass-addons/tree/",
-                get_version_branch(
-                    major,
-                    urlparse.urljoin(base_url, "grass-addons/"),
-                ),
-            ),
-        )
+        addons_url = f"{addons_repo_url}/tree/{version_branch}/"
 
     cur_dir = os.path.abspath(os.path.curdir)
     if cur_dir.startswith(top_dir + os.path.sep):
+        repo_url = main_repo_url
         source_url = main_url
         pgmdir = cur_dir.replace(top_dir, "").lstrip(os.path.sep)
     else:
         # addons
+        repo_url = addons_repo_url
         source_url = addons_url
         pgmdir = os.path.sep.join(cur_dir.split(os.path.sep)[-3:])
 
@@ -97,6 +90,11 @@ def parse_source(pgm):
                     os.environ["SOURCE_URL"].split("src")[0],
                     addon_path,
                 )
+                res = urlparse.urlsplit(url_source)
+                # Calling the underscore method to create a new object
+                # is according to the doc.
+                res = res._replace(path="/".join(res.path.split("/")[:3]))
+                repo_url = urlparse.urlunsplit(res)
     else:
         url_source = urlparse.urljoin(source_url, pgmdir)
     if sys.platform == "win32":
@@ -124,12 +122,10 @@ def parse_source(pgm):
         date_tag = "Accessed: {date}".format(date=git_commit["date"])
     else:
         commit = git_commit["commit"]
-        date_tag = (
-            "Latest change: {date} in commit: "
-            "[{commit_short}](https://github.com/OSGeo/grass/commit/{commit})".format(
-                date=git_commit["date"], commit=commit, commit_short=commit[:7]
-            )
-        )
+        display_commit = commit[:7]
+        date = git_commit["date"]
+        commit_url = f"{repo_url}/commit/{commit}"
+        date_tag = f"Latest change: {date} in commit [{display_commit}]({commit_url})"
 
     return url_source, url_log, date_tag
 

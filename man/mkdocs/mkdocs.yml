@@ -1,5 +1,6 @@
 ---
 # Project information
+site_author: The GRASS Development Team  # Default author to all pages
 site_name: !ENV SITE_NAME
 site_url: https://grass.osgeo.org/grass-stable/manuals/
 
@@ -23,27 +24,48 @@ theme:
   logo: grass_logo.svg
   favicon: favicon.ico
   features:
+    - content.action.edit # Edit on GitHub
+    - content.action.view
+    - content.code.copy
+    - content.tabs.link
+    - content.tooltips
     - search.suggest
     - search.highlight
-    - content.code.copy
     - navigation.footer
     - navigation.indexes
-    # - navigation.expand
+    - navigation.instant
+    - navigation.instant.progress
     - navigation.tabs
     - navigation.tabs.sticky
-    - content.action.view
-    - content.action.edit # Edit on GitHub
+    - navigation.top
+
   palette:
     primary: custom
-    # accent: custom
+
   icon:
     repo: fontawesome/brands/github
     edit: material/pencil
     view: material/eye
+    logo: material/library
 
 # Customization
 extra:
-  homepage: ./index.html
+  homepage: index.html
+  social:
+    - icon: simple/opencollective
+      link: https://opencollective.com/grass
+    - icon: fontawesome/brands/gitter
+      link: https://gitter.im/grassgis/community
+    - icon: fontawesome/brands/mastodon
+      link: https://fosstodon.org/@grassgis/
+    - icon: fontawesome/brands/discourse
+      link: https://discourse.osgeo.org/c/grass/62
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/company/grass-gis
+    - icon: fontawesome/brands/x-twitter
+      link: https://x.com/GRASSGIS
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/@grass-gis
 
 # Hooks
 hooks:
@@ -60,32 +82,53 @@ plugins:
   - tags
   - social:
       cards_layout_options:
+        background_color: rgb(76, 176, 91)
         background_image: null
-  # - git-revision-date-localized:
-  #     enable_creation_date: true
-  # - git-committers:
-  #     repository: OSGeo/grass
-  #     branch: main
 
 # Markdown extensions
 markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.tasklist
+  - pymdownx.snippets
+  - pymdownx.tabbed
+  - pymdownx.magiclink
   - attr_list
   - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
 
 # Navigation
 nav:
+  - Getting Started:
+      - Getting Started: index.md
+      # These are linking to interfaces, but they would eventually be new pages
+      # which would provide more context, but less detail.
+      - Command Line: command_line_intro.md
+      - Python: python_intro.md
+      - Jupyter Notebook: jupyter_intro.md
+      - Graphical User Interface: helptext.md
+      - Tutorials: https://grass-tutorials.osgeo.org/
   - Interfaces:
-      - Shell:
-          - Overview: grass.md
-          # - Getting Started: grassintro.md # Does not exist yet
+      - Interfaces: interfaces_overview.md
+      - Command Line:
+          - Command Line Introduction: command_line_intro.md
+          - The grass Command: grass.md
           - Environmental Variables: variables.md
-      - GUI:
-          - Overview: wxguiintro.md
+      - Python Overview: python_intro.md
+      - Jupyter Notebooks: jupyter_intro.md
+      - Desktop GUI:
+          - GUI Overview: wxguiintro.md
           - Features: wxGUI.md
-          - Project Management: grass_database.md
           - Tool Dialogs: wxGUI.modules.md
           - Attribute Table Management: wxGUI.dbmgr.md
           - Cartographic Composer: wxGUI.psmap.md
@@ -95,55 +138,38 @@ nav:
           - Graphical Modeler: wxGUI.gmodeler.md
           - Ground Control Points Manager: wxGUI.gcp.md
           - Network Analysis: wxGUI.vnet.md
-          - Help: helptext.md
+          - Visualization:
+              - Animation: wxGUI.animation.md
+              - 3D Visualization: wxGUI.nviz.md
+              - Interactive Scatter Plot: wxGUI.iscatt.md
+              - Map Swipe: wxGUI.mapswipe.md
+              - Timeline: wxGUI.timeline.md
+              - Temporal Plot: wxGUI.tplot.md
           - List of Components: wxGUI.components.md
 
-      # - Scripting:
-      #     - Overview: scriptingintro.md
-      #     - Python: python.md
-      #     - Shell Scripting: shell.md
-      #     - Batch Processing: batch.md
-      #     - R: r.md
-      # - Jupyter Notebook: jupyter.md
-
-  - Project Management:
-      - General Tools: general.md
+  - Key Concepts:
+      - Raster Overview: rasterintro.md
+      - Raster 3D Overview: raster3dintro.md
+      - Vector Overview: vectorintro.md
+      - Databases Overview: databaseintro.md
+      - Database Drivers: sql.md
+      - Imagery Overview: imageryintro.md
+      - Temporal Overview: temporalintro.md
+      - Display Drivers: displaydrivers.md
+      - GRASS Projects: grass_database.md
       - Projection and Transformations: projectionintro.md
 
   - Processing Tools:
-      - Raster:
-          - Overview: rasterintro.md
-          - Raster Tools: raster.md
-      - Raster 3D:
-          - Overview: raster3dintro.md
-          - Raster 3D Tools: raster3d.md
-      - Vectors:
-          - Overview: vectorintro.md
-          - Vector Tools: vector.md
-          - Databases Overview: databaseintro.md
-          - Database Tools: database.md
-          - Supported Database Drivers: sql.md
-      # - GUI Tools:
-      - Imagery:
-          - Overview: imageryintro.md
-          - Imagery Tools: imagery.md
-          - GUI Tools:
-              - Image Classification: wxGUI.iclass.md
-      - Temporal:
-          - Overview: temporalintro.md
-          - Temporal: temporal.md
-
-  - Visualization:
-      # - Overview: visualizationintro.md # Does not exist yet
+      - Processing Tools: full_index.md
+      - General Tools: general.md
+      - Raster Tools: raster.md
+      - Raster 3D Tools: raster3d.md
+      - Vector Tools: vector.md
+      - Database Tools: database.md
+      - Imagery Tools: imagery.md
+      - Temporal Tools: temporal.md
       - Display Tools: display.md
-      - GUI Tools:
-          - Animation: wxGUI.animation.md
-          - "3D Visualization": wxGUI.nviz.md
-          - Interactive Scatter Plot: wxGUI.iscatt.md
-          - Map Swipe: wxGUI.mapswipe.md
-          - Timeline: wxGUI.timeline.md
-          - Temporal Plot: wxGUI.tplot.md
+      - Postscript Tools: postscript.md
+      - Miscellaneous Tools: miscellaneous.md
 
-  # - Other:
-  #     - Misc: miscellaneous.md
-  #     - Postscript: postscript.md
+  - Development: development_intro.md

@@ -22,10 +22,10 @@
 
 # %module
 # % description: Plots the values of temporal datasets.
-# % keywords: general
-# % keywords: GUI
-# % keywords: temporal
-# % keywords: plot
+# % keyword: general
+# % keyword: GUI
+# % keyword: temporal
+# % keyword: plot
 # %end
 
 # %flag

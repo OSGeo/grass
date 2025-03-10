@@ -233,6 +233,7 @@ ignore = [
     "RUF012",  # mutable-class-default
     "RUF015",  # unnecessary-iterable-allocation-for-first-element
     "RUF019",  # unnecessary-key-check
+    "RUF059",  # unused-unpacked-variable
     "RUF100",  # unused-noqa
     "S101",    # assert
     "S108",    # hardcoded-temp-file
@@ -354,13 +355,9 @@ ignore = [
 "scripts/i.in.spotvgt/i.in.spotvgt.py" = ["SIM115"]
 "scripts/i.oif/i.oif*.py" = ["SIM115"]
 "scripts/i.pansharpen/i.pansharpen.py" = ["SIM115"]
-"scripts/i.spectral/i.spectral.py" = ["SIM115"]
 "scripts/m.proj/m.proj.py" = ["SIM115"]
-"scripts/r.fillnulls/r.fillnulls.py" = ["SIM115"]
 "scripts/r.in.wms/wms_*.py" = ["SIM115"]
-"scripts/r.tileset/r.tileset.py" = ["SIM115"]
 "scripts/v.*/v.*.py" = ["SIM115"]
-"scripts/wxpyimgview/wxpyimgview_gui.py" = ["SIM115"]
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
 # Declare a custom aliases, checked with rule ICN001
