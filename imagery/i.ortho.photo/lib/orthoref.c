@@ -87,7 +87,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 #ifdef DEBUG
     debug = fopen("ortho_compute.rst", "w");
     if (debug == NULL) {
-        sprintf(msg, "Cant open debug file ortho_compute.rst\n");
+        sprintf(msg, "Cannot open debug file ortho_compute.rst\n");
         G_fatal_error(msg);
     }
 #endif
