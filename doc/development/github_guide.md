@@ -192,7 +192,7 @@ git fetch upstream
 git merge upstream/main
 ```
 
-Git will ask you to edit the merge commit messsage, you can leave the default
+Git will ask you to edit the merge commit message, you can leave the default
 and close the editor. You may run into a conflict,
 in that case you need to resolve it.
 
