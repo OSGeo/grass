@@ -170,6 +170,7 @@ if(WITH_NLS)
     set(MSGFMT ${GETTEXT_MSGFMT_EXECUTABLE})
     set(MSGMERGE ${GETTEXT_MSGMERGE_EXECUTABLE})
   endif()
+  find_package(Intl REQUIRED)
 endif()
 
 # Computing options
