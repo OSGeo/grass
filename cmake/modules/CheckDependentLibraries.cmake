@@ -82,14 +82,8 @@ if(WITH_OPENGL)
 endif()
 
 if(WITH_CAIRO)
+  find_package(Fontconfig REQUIRED)
   find_package(Cairo REQUIRED)
-  if(CAIRO_FOUND)
-    add_library(CAIRO INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET CAIRO PROPERTY INTERFACE_LINK_LIBRARIES
-                                       ${CAIRO_LIBRARIES})
-    set_property(TARGET CAIRO PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                       ${CAIRO_INCLUDE_DIRS})
-  endif()
 endif()
 
 if(WITH_LIBPNG)
@@ -311,6 +305,7 @@ check_target(BZIP2 HAVE_BZLIB_H)
 check_target(Readline::Readline HAVE_READLINE_READLINE_H)
 check_target(Readline::History HAVE_READLINE_HISTORY_H)
 check_target(Freetype::Freetype HAVE_FT2BUILD_H)
+check_target(Cairo::Cairo HAVE_CAIRO_H)
 # set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}") no target ATLAS in
 # thirdpary/CMakeLists.txt
 check_target(ATLAS HAVE_LIBATLAS)
