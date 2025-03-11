@@ -154,14 +154,6 @@ endif()
 # Language options
 if(WITH_FREETYPE)
   find_package(Freetype REQUIRED)
-  if(FREETYPE_FOUND)
-    add_library(FREETYPE INTERFACE IMPORTED GLOBAL)
-    set_property(
-      TARGET FREETYPE PROPERTY INTERFACE_LINK_LIBRARIES
-                               ${FREETYPE_LIBRARY${find_library_suffix}})
-    set_property(TARGET FREETYPE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                          ${FREETYPE_INCLUDE_DIRS})
-  endif()
 endif()
 
 if(WITH_NLS)
@@ -318,7 +310,7 @@ check_target(ZSTD HAVE_ZSTD_H)
 check_target(BZIP2 HAVE_BZLIB_H)
 check_target(Readline::Readline HAVE_READLINE_READLINE_H)
 check_target(Readline::History HAVE_READLINE_HISTORY_H)
-check_target(FREETYPE HAVE_FT2BUILD_H)
+check_target(Freetype::Freetype HAVE_FT2BUILD_H)
 # set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}") no target ATLAS in
 # thirdpary/CMakeLists.txt
 check_target(ATLAS HAVE_LIBATLAS)
