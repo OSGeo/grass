@@ -85,6 +85,12 @@ def main():
         help="The version manual, (default: %(default)s)",
         default="grass-stable",
     )
+    parser.add_argument(
+        "--output",
+        type=str,
+        help="The path to the output file (default: %(default)s)",
+        default="sitemap_merged.xml",
+    )
     parser.add_argument("-o", "--overwrite", dest="overwrite", action="store_true")
 
     # Check arguments
@@ -103,7 +109,7 @@ def main():
 
     version = args.version
 
-    output = Path(args.mkdocs_sitemap.replace("sitemap.xml", "sitemap_merged.xml"))
+    output = Path(args.output)
     if output.exists() and not args.overwrite:
         print(
             "{} already exists. If you want overwrite please use '-o' parameter".format(
