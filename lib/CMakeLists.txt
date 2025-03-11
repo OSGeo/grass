@@ -229,7 +229,8 @@ if(WITH_OPENGL)
     grass_raster3d
     grass_vector
     GDAL::GDAL
-    OPENGL
+    OpenGL::GL
+    OpenGL::GLU
     TIFF)
 
   build_library_in_subdir(
@@ -241,7 +242,7 @@ if(WITH_OPENGL)
     grass_bitmap
     grass_ogsf
     grass_gis
-    OPENGL
+    OpenGL::GL
     TIFF
     OPTIONAL_DEPENDS
     X11::X11)
