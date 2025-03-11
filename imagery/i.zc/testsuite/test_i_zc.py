@@ -27,7 +27,7 @@ class TestIZC(TestCase):
 
         cls.del_temp_region()
 
-    def count_nonzero_cells(cls, stats_str):
+    def count_nonzero_cells(self, stats_str):
         """Helper function to count non-zero cells from r.stats output."""
         count = 0
         for line in stats_str.strip().splitlines():
@@ -59,7 +59,7 @@ class TestIZC(TestCase):
         self.assertRasterFitsUnivar(self.output_raster, reference=stats, precision=1e-6)
 
     def test_orientation_effect(self):
-        """Test orientation binning with different category counts."""
+        """Test the effect of different orientation bin counts on zero-crossing detection."""
         expected_category_counts = {
             8: {"0": 229, "2": 4, "4": 6, "6": 11, "8": 6},
             16: {"0": 229, "3": 4, "6": 4, "7": 2, "11": 11, "15": 2, "16": 4},
@@ -88,7 +88,10 @@ class TestIZC(TestCase):
             self.assertEqual(actual_category_counts, expected)
 
     def test_threshold_effect(self):
-        """Test threshold impact on edge detection sensitivity by counting non-zero cells."""
+        """
+        Test the impact of threshold values on edge detection sensitivity.
+        Ensuring that the lower threshold detects more edges.
+        """
         self.runModule("g.region", n=16, s=0, e=16, w=0, rows=32, cols=32)
         complex_input_raster = "complex_input"
         self.runModule(
@@ -127,7 +130,10 @@ class TestIZC(TestCase):
         self.runModule("g.region", n=16, s=0, e=16, w=0, rows=16, cols=16)
 
     def test_width_effect(self):
-        """Test if larger width increases edge detection sensitivity."""
+        """
+        Test the effect of edge detection width on sensitivity.
+        Ensure that a smaller width detects more edges.
+        """
         self.runModule("g.region", n=16, s=0, e=16, w=0, rows=512, cols=512)
         gradual_increase_raster = "gradual_increase"
         self.runModule(
@@ -162,7 +168,6 @@ class TestIZC(TestCase):
         high_stats_str = gs.read_command("r.stats", flags="c", input=high_width)
 
         low_edge_count = self.count_nonzero_cells(low_stats_str)
-
         high_edge_count = self.count_nonzero_cells(high_stats_str)
 
         self.assertGreater(low_edge_count, high_edge_count)
