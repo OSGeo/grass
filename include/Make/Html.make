@@ -12,7 +12,7 @@ $(MDDIR)/source/%.md: %.md %.tmp.md $(HTMLSRC) $(IMGDST_MD) | $(MDDIR)
         $(PYTHON) $(GISBASE)/utils/mkmarkdown.py $* > $@
 
 $(MANDIR)/%.$(MANSECT): $(MDDIR)/source/%.md
-       $(MD2MAN) "$<" "$@"
+	$(MD2MAN) "$<" "$@"
 
 %.tmp.html: $(HTMLSRC)
 	if [ "$(HTMLSRC)" != "" ] ; then $(call htmldesc,$<,$@) ; fi
