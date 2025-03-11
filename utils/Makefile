@@ -7,6 +7,7 @@ include $(MODULE_TOPDIR)/include/Make/Compile.make
 
 default: parsubdirs $(UTILSDIR)/mkdocs.py $(UTILSDIR)/mkhtml.py $(UTILSDIR)/mkmarkdown.py \
 	$(UTILSDIR)/generate_last_commit_file.py \
+	$(UTILSDIR)/markdown2man.py \
 	$(UTILSDIR)/g.echo$(EXE)
 
 $(UTILSDIR)/mkdocs.py: mkdocs.py
@@ -19,6 +20,9 @@ $(UTILSDIR)/mkmarkdown.py: mkmarkdown.py
 	$(INSTALL) $< $@
 
 $(UTILSDIR)/generate_last_commit_file.py: generate_last_commit_file.py
+	$(INSTALL) $< $@
+
+$(UTILSDIR)/markdown2man.py: markdown2man.py
 	$(INSTALL) $< $@
 
 $(UTILSDIR)/g.echo$(EXE): $(OBJDIR)/g.echo.o

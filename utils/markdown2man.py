@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import argparse
 import re
 from pathlib import Path
@@ -39,19 +40,6 @@ def parse_markdown(content):
         if state == "code":
             processing_block.append(line)
             continue
-
-        # if line.strip().startswith("- ") or line.strip().startswith("* "):
-        #     if buffer:
-        #         processing_block.append(buffer)
-        #         buffer = ""
-
-        #     # start of list
-        #     if state != "list":
-        #         processed_content.append(
-        #             {"markdown": "\n".join(processing_block), "type": state}
-        #         )
-        #         processing_block = []
-        #         state = "list"
 
         if re.match(r"^(\s*)([-*]|\d+\.)\s+(.*)", line.strip()):
             if buffer:
