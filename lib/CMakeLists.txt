@@ -118,7 +118,7 @@ if(WITH_CAIRO)
       OPTIONAL_DEPENDS
       Iconv::Iconv)
   if(WITH_X11)
-    list(PREPEND _cairodriver_DEPENDS X11)
+    list(PREPEND _cairodriver_DEPENDS X11::X11)
   endif()
   build_library_in_subdir(cairodriver DEPENDS ${_cairodriver_DEPENDS})
 
@@ -242,7 +242,9 @@ if(WITH_OPENGL)
     grass_ogsf
     grass_gis
     OPENGL
-    TIFF)
+    TIFF
+    OPTIONAL_DEPENDS
+    X11::X11)
 endif()
 
 add_subdirectory(temporal)

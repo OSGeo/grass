@@ -58,12 +58,6 @@ endif()
 
 if(WITH_X11)
   find_package(X11 REQUIRED)
-  if(X11_FOUND)
-    add_library(X11 INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET X11 PROPERTY INTERFACE_LINK_LIBRARIES ${X11_LIBRARIES})
-    set_property(TARGET X11 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                     ${X11_INCLUDE_DIR})
-  endif()
 endif()
 
 if(WITH_OPENGL)
