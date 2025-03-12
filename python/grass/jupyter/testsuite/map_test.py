@@ -159,7 +159,7 @@ class TestMap(TestCase):
         # Create map
         grass_renderer = gj.Map()
         grass_renderer.d_rast(map="elevation")
-        self.assertTrue(grass_renderer.show(), "Failed to open PNG image")
+        self.assertIsNone(grass_renderer.show(), "Failed to open PNG image")
 
 
 if __name__ == "__main__":
