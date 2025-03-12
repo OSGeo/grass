@@ -3,7 +3,7 @@
 #include "pv.h"
 
 /*
- * Use centers of GRASS CELLS as vertexes for grid.
+ * Use centers of GRASS CELLS as vertices for grid.
  * Currently, grid space is "unitized" so that the
  * largest dimension of the current region in GRASS == 1.0
  */

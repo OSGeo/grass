@@ -11,7 +11,6 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_symb
-  GDAL
   ${LIBM})
 
 add_custom_command(

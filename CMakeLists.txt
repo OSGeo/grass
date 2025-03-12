@@ -11,7 +11,7 @@
 #
 ################################################################################
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
 #[[
@@ -95,15 +95,13 @@ endif()
 option(WITH_X11 "Build with X11 support ." ${x11_default_option_enabled})
 option(WITH_OPENGL "Build with opengl support ." ON)
 option(WITH_CAIRO "Build with cairo support ." ON)
-option(WITH_LIBPNG "Build with libpng support ." OFF)
+option(WITH_LIBPNG "Build with libpng support ." ON)
 
 # Data storage options
 option(WITH_SQLITE "Build with SQLite support" ON)
-option(WITH_POSTGRES "Build with Postgres support" OFF)
+option(WITH_POSTGRES "Build with Postgres support" ON)
 option(WITH_MYSQL "Build with MySQL support" OFF)
-if(WIN32)
-  option(WITH_ODBC "Build with ODBC support" OFF)
-endif()
+option(WITH_ODBC "Build with ODBC support" OFF)
 option(WITH_ZSTD "Build with zstd support" ON)
 option(WITH_BZLIB "Build with bzlib support" OFF)
 
@@ -261,11 +259,6 @@ include_directories("${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}")
 if(MSVC)
   include_directories("${CMAKE_SOURCE_DIR}/msvc")
 endif()
-
-# TODO: fix this hack
-include_directories(${PostgreSQL_INCLUDE_DIR})
-include_directories(${PROJ_INCLUDE_DIR})
-include_directories(/opt/local/include)
 
 add_subdirectory(lib)
 add_subdirectory(python)

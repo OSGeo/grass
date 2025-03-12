@@ -27,15 +27,16 @@ jobs:
     build-cmake:
         runs-on: ubuntu-22.04
         env:
-            CMakeVersion: "3.16.0"
+            CMakeVersion: "3.22.0"
         steps:
             - name: Checkout GRASS
               uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
             - name: Install CMake
               run: |
                 cd ${GITHUB_WORKSPACE}
-                arch=$(uname -s)-$(uname -m)
-                wget https://github.com/Kitware/CMake/releases/download/v3.16.0/cmake-3.16.0-${arch}.tar.gz
+                arch=$(echo $(uname -s)-$(uname -m) | awk '{print tolower($0)}')
+                v=v${{ env.CMakeVersion }}/cmake-${{ env.CMakeVersion }}-${arch}.tar.gz
+                wget https://github.com/Kitware/CMake/releases/download/$v
                 tar xzf cmake-${{ env.CMakeVersion }}-${arch}.tar.gz
                 echo "CMAKE_DIR=$GITHUB_WORKSPACE/cmake-${{ env.CMakeVersion }}-${arch}/bin" >> $GITHUB_ENV
                 echo "$GITHUB_WORKSPACE/cmake-${{ env.CMakeVersion }}-${arch}/bin" >> $GITHUB_PATH
@@ -44,7 +45,7 @@ jobs:
             - name: Install dependencies
               run: |
                 sudo apt-get update -y
-                sudo apt-get install -y wget git gawk findutils ninja-build
+                sudo apt-get install -y wget git gawk findutils ninja-build libpq-dev gettext unixodbc-dev
                 xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
                     sudo apt-get install -y --no-install-recommends --no-install-suggests
             - name: Print build environment variables
@@ -59,9 +60,8 @@ jobs:
             - name: Configure
               run: |
                 cmake ${CMAKE_OPTIONS} -S $GITHUB_WORKSPACE -B $GITHUB_WORKSPACE/build -G Ninja \
-                  -DCMAKE_C_FLAGS="-I/usr/include -I/usr/include/gdal" \
-                  -DCMAKE_CXX_FLAGS="-I/usr/include -I/usr/include/gdal" \
-                  -DCMAKE_INSTALL_PREFIX=$HOME/install -DWITH_NLS=OFF -DWITH_GUI=OFF -DWITH_DOCS=OFF
+                  -DCMAKE_INSTALL_PREFIX=$HOME/install -DWITH_NLS=ON -DWITH_GUI=OFF -DWITH_DOCS=OFF \
+                  -DWITH_READLINE=ON -DWITH_ODBC=ON
             - name: Print CMakeCache.txt
               shell: bash -el {0}
               run: |

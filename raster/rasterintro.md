@@ -27,7 +27,7 @@ As a general rule in GRASS GIS:
     (using nearest-neighbour resampling) to match the current region.
 3. Processing NULL (no data) values produces NULL values.
 4. Input raster maps are automatically masked if a raster mask is active,
-   The mask is managed by the [r.mask](r.mask.html) tool, and
+   The mask is managed by the [r.mask](r.mask.md) tool, and
    it is represented by a raster map called `MASK` by default.
    Unless specified otherwise, the raster mask is only applied
    when *reading* raster maps which typically results in NULL values
@@ -87,7 +87,7 @@ such as region extent, data range, data type, creation history, and
 other metadata. Metadata such as map title, units, vertical datum etc.
 can be updated with [r.support](r.support.md). Timestamps are managed
 with [r.timestamp](r.timestamp.md). Region extent and resolution are
-mangaged with [r.region](r.region.md).
+managed with [r.region](r.region.md).
 
 ## Raster map operations
 
@@ -173,7 +173,7 @@ falling outside of the mask as if its value were NULL. The mask is only
 applied when *reading* an existing GRASS raster map, for example when
 used in a module as an input map.
 While the mask raster map can be managed directly,
-the [r.mask](r.mask.html) tool is a convenient way to create
+the [r.mask](r.mask.md) tool is a convenient way to create
 and manage masks.
 
 Alternatively, `GRASS_MASK` environment variable can be used to specify

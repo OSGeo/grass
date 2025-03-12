@@ -58,10 +58,10 @@ static int get_point_below(Point3 **, geosurf **, int, int, int, int *);
 static int FCmode;
 
 /************************************************************************/
-/* Notes on exageration:
-   vertical exageration is of two forms:
-   1) global exageration (from geoview struct)
-   2) vertical exageration for each surface (UN-IMPLEMENTED)
+/* Notes on exaggeration:
+   vertical exaggeration is of two forms:
+   1) global exaggeration (from geoview struct)
+   2) vertical exaggeration for each surface (UN-IMPLEMENTED)
  */
 
 /************************************************************************/
@@ -1734,7 +1734,7 @@ int gsd_wall(float *bgn, float *end, float *norm)
 
         if (n) {
             if (npts != npts1) {
-                G_warning(_("Cut-plane points mis-match between surfaces. "
+                G_warning(_("Cut-plane points mismatch between surfaces. "
                             "Check resolution(s)."));
                 err = 1;
                 nsurfs = n;

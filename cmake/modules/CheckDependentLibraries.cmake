@@ -21,30 +21,10 @@ if(UNIX)
 endif()
 
 find_package(PROJ REQUIRED)
-if(PROJ_FOUND)
-  add_library(PROJ INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET PROJ PROPERTY INTERFACE_LINK_LIBRARIES
-                                    ${PROJ_LIBRARY${find_library_suffix}})
-  set_property(TARGET PROJ PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${PROJ_INCLUDE_DIR})
-endif()
 
 find_package(GDAL REQUIRED)
-if(GDAL_FOUND)
-  add_library(GDAL INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET GDAL PROPERTY INTERFACE_LINK_LIBRARIES ${GDAL_LIBRARY})
-  set_property(TARGET GDAL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${GDAL_INCLUDE_DIR})
-endif()
 
 find_package(ZLIB REQUIRED)
-if(ZLIB_FOUND)
-  add_library(ZLIB INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET ZLIB PROPERTY INTERFACE_LINK_LIBRARIES
-                                    ${ZLIB_LIBRARY${find_library_suffix}})
-  set_property(TARGET ZLIB PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${ZLIB_INCLUDE_DIR})
-endif()
 
 # Optional dependencies
 
@@ -59,16 +39,7 @@ if(MSVC)
   endif()
 endif()
 
-find_package(Iconv QUIET)
-if(ICONV_FOUND)
-  add_library(ICONV INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET ICONV PROPERTY INTERFACE_LINK_LIBRARIES
-                                     ${ICONV_LIBRARIES})
-  set_property(TARGET ICONV PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                     ${ICONV_INCLUDE_DIR})
-  # if(ICONV_SECOND_ARGUMENT_IS_CONST) set() update this value in
-  # include/config.cmake.in
-endif()
+find_package(Iconv)
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)
@@ -123,37 +94,19 @@ endif()
 
 if(WITH_LIBPNG)
   find_package(PNG REQUIRED)
-  if(PNG_FOUND)
-    add_library(LIBPNG INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET LIBPNG PROPERTY INTERFACE_LINK_LIBRARIES
-                                        ${PNG_LIBRARY${find_library_suffix}})
-    set_property(TARGET LIBPNG PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                        ${PNG_INCLUDE_DIR})
-  endif()
 endif()
 
 # Data storage options
 
 if(WITH_SQLITE)
-  find_package(SQLite REQUIRED)
-  if(SQLITE_FOUND)
-    add_library(SQLITE INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET SQLITE PROPERTY INTERFACE_LINK_LIBRARIES
-                                        ${SQLITE_LIBRARY})
-    set_property(TARGET SQLITE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                        ${SQLITE_INCLUDE_DIRS})
-  endif()
+  find_package(SQLite3 REQUIRED)
 endif()
 
 if(WITH_POSTGRES)
-  find_package(PostgreSQL REQUIRED)
-  if(PostgreSQL_FOUND)
-    add_library(POSTGRES INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET POSTGRES PROPERTY INTERFACE_LINK_LIBRARIES
-                                          ${PostgreSQL_LIBRARY})
-    set_property(TARGET POSTGRES PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                          ${PostgreSQL_INCLUDE_DIR})
+  if(NOT PostgreSQL_ADDITIONAL_VERSIONS)
+    set(PostgreSQL_ADDITIONAL_VERSIONS "17" "16" "15" "14" "13")
   endif()
+  find_package(PostgreSQL REQUIRED)
 endif()
 
 if(WITH_MYSQL)
@@ -167,15 +120,8 @@ if(WITH_MYSQL)
   endif()
 endif()
 
-if(WITH_ODBC AND WIN32)
-  find_package(ODBC QUIET)
-  if(ODBC_FOUND)
-    add_library(ODBC INTERFACE IMPORTED GLOBAL)
-    #[[
-    set_property(TARGET ODBC PROPERTY INTERFACE_LINK_LIBRARIES ${ODBC_LIBRARIES})
-    set_property(TARGET PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${ODBC_INCLUDE_DIRS})
-    #]]
-  endif()
+if(WITH_ODBC)
+  find_package(ODBC REQUIRED)
 endif()
 
 if(WITH_ZSTD)
@@ -202,34 +148,12 @@ endif()
 
 # Command-line options
 if(WITH_READLINE)
-  find_package(Readline REQUIRED)
-  if(Readline_FOUND)
-    add_library(READLINE INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET READLINE PROPERTY INTERFACE_LINK_LIBRARIES
-                                          ${Readline_LIBRARIES})
-    set_property(TARGET READLINE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                          ${Readline_INCLUDE_DIRS})
-  endif()
-  if(History_FOUND)
-    add_library(HISTORY INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET HISTORY PROPERTY INTERFACE_LINK_LIBRARIES
-                                         ${History_LIBRARIES})
-    set_property(TARGET HISTORY PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                         ${History_INCLUDE_DIRS})
-  endif()
+  find_package(Readline REQUIRED COMPONENTS History)
 endif()
 
 # Language options
 if(WITH_FREETYPE)
   find_package(Freetype REQUIRED)
-  if(FREETYPE_FOUND)
-    add_library(FREETYPE INTERFACE IMPORTED GLOBAL)
-    set_property(
-      TARGET FREETYPE PROPERTY INTERFACE_LINK_LIBRARIES
-                               ${FREETYPE_LIBRARY${find_library_suffix}})
-    set_property(TARGET FREETYPE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                          ${FREETYPE_INCLUDE_DIRS})
-  endif()
 endif()
 
 if(WITH_NLS)
@@ -238,6 +162,7 @@ if(WITH_NLS)
     set(MSGFMT ${GETTEXT_MSGFMT_EXECUTABLE})
     set(MSGMERGE ${GETTEXT_MSGMERGE_EXECUTABLE})
   endif()
+  find_package(Intl REQUIRED)
 endif()
 
 # Computing options
@@ -368,22 +293,24 @@ if(Python3_FOUND)
   #]]
 endif()
 
-check_target(PROJ HAVE_PROJ_H)
-check_target(GDAL HAVE_GDAL)
-check_target(GDAL HAVE_OGR)
-check_target(ZLIB HAVE_ZLIB_H)
-check_target(ICONV HAVE_ICONV_H)
-check_target(LIBPNG HAVE_PNG_H)
+check_target(PROJ::proj HAVE_PROJ_H)
+check_target(GDAL::GDAL HAVE_GDAL)
+check_target(GDAL::GDAL HAVE_OGR)
+check_target(ZLIB::ZLIB HAVE_ZLIB_H)
+check_target(Iconv::Iconv HAVE_ICONV_H)
+check_target(PNG::PNG HAVE_PNG_H)
 check_target(LIBJPEG HAVE_JPEGLIB_H)
-check_target(SQLITE HAVE_SQLITE)
-check_target(POSTGRES HAVE_POSTGRES)
+check_target(SQLite::SQLite3 HAVE_SQLITE)
+check_target(SQLite::SQLite3 HAVE_SQLITE3_H)
+check_target(PostgreSQL::PostgreSQL HAVE_POSTGRES)
+check_target(PostgreSQL::PostgreSQL HAVE_LIBPQ_FE_H)
 check_target(MYSQL HAVE_MYSQL_H)
-check_target(ODBC HAVE_SQL_H)
+check_target(ODBC::ODBC HAVE_SQL_H)
 check_target(ZSTD HAVE_ZSTD_H)
 check_target(BZIP2 HAVE_BZLIB_H)
-check_target(READLINE HAVE_READLINE_READLINE_H)
-check_target(HISTORY HAVE_READLINE_HISTORY_H)
-check_target(FREETYPE HAVE_FT2BUILD_H)
+check_target(Readline::Readline HAVE_READLINE_READLINE_H)
+check_target(Readline::History HAVE_READLINE_HISTORY_H)
+check_target(Freetype::Freetype HAVE_FT2BUILD_H)
 # set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}") no target ATLAS in
 # thirdpary/CMakeLists.txt
 check_target(ATLAS HAVE_LIBATLAS)
@@ -399,7 +326,6 @@ if(MSVC)
   check_target(PCRE HAVE_PCRE_H)
 endif()
 
-check_target(POSTGRES HAVE_LIBPQ_FE_H)
 
 set(HAVE_PBUFFERS 0)
 set(HAVE_PIXMAPS 0)

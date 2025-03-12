@@ -183,7 +183,7 @@ Select type of shape:
 3\. Save settings: click on button  
 (4.) Close
 
-Now an anaysis can be performed using one of the analytical modules,
+Now an analysis can be performed using one of the analytical modules,
 e.g.
 
 ```sh
@@ -216,7 +216,7 @@ Example for a whole region analysis, the output is a text file: Click on
 3\. Save settings: click on button  
 (4.) Close
 
-Now an anaysis can be performed using one of the analytical modules,
+Now an analysis can be performed using one of the analytical modules,
 e.g.
 
 ```sh
