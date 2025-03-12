@@ -17,26 +17,15 @@ class TestIZC(TestCase):
         cls.runModule("g.region", n=16, s=0, e=16, w=0, rows=16, cols=16)
         cls.temp_rasters = []
         cls.runModule("r.mapcalc", expression=f"{cls.input_raster} = col() + row()")
-        cls.temp_rasters.append([cls.input_raster])
+        cls.temp_rasters.append(cls.input_raster)
 
     @classmethod
     def tearDownClass(cls):
         """Clean up generated data and reset the region."""
-        for raster in cls.temp_rasters + [cls.output_raster]:
-            cls.runModule("g.remove", type="raster", name=raster, flags="f")
-
+        cls.temp_rasters.append(cls.output_raster)
+        raster_list = ",".join(cls.temp_rasters)
+        cls.runModule("g.remove", type="raster", name=raster_list, flags="f")
         cls.del_temp_region()
-
-    def count_nonzero_cells(self, stats_str):
-        """Helper function to count non-zero cells from r.stats output."""
-        count = 0
-        for line in stats_str.strip().splitlines():
-            parts = line.split()
-            if len(parts) == 2:
-                category, num_cells = parts
-                if category != "0":
-                    count += int(num_cells)
-        return count
 
     def test_zero_crossing_pattern(self):
         """Test zero-crossing detection on a vertical split pattern."""
@@ -120,11 +109,11 @@ class TestIZC(TestCase):
         )
         self.temp_rasters.extend([low_thresh, high_thresh])
 
-        low_stats_str = gs.read_command("r.stats", flags="c", input=low_thresh)
-        high_stats_str = gs.read_command("r.stats", flags="c", input=high_thresh)
+        low_stats_str = gs.parse_command("r.univar", map=low_thresh, format="json")
+        high_stats_str = gs.parse_command("r.univar", map=high_thresh, format="json")
 
-        low_edge_count = self.count_nonzero_cells(low_stats_str)
-        high_edge_count = self.count_nonzero_cells(high_stats_str)
+        low_edge_count = low_stats_str[0]["sum"]
+        high_edge_count = high_stats_str[0]["sum"]
 
         self.assertGreater(low_edge_count, high_edge_count)
         self.runModule("g.region", n=16, s=0, e=16, w=0, rows=16, cols=16)
@@ -164,11 +153,11 @@ class TestIZC(TestCase):
         )
         self.temp_rasters.extend([low_width, high_width])
 
-        low_stats_str = gs.read_command("r.stats", flags="c", input=low_width)
-        high_stats_str = gs.read_command("r.stats", flags="c", input=high_width)
+        low_stats_str = gs.parse_command("r.univar", map=low_width, format="json")
+        high_stats_str = gs.parse_command("r.univar", map=high_width, format="json")
 
-        low_edge_count = self.count_nonzero_cells(low_stats_str)
-        high_edge_count = self.count_nonzero_cells(high_stats_str)
+        low_edge_count = low_stats_str[0]["sum"]
+        high_edge_count = high_stats_str[0]["sum"]
 
         self.assertGreater(low_edge_count, high_edge_count)
         self.runModule("g.region", n=16, s=0, e=16, w=0, rows=16, cols=16)
