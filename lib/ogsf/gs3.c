@@ -958,7 +958,7 @@ int Gs_load_3dview(const char *vname, geoview *gv, geodisplay *gd UNUSED,
     if (ret >= 0) {
         if (strcmp((v.pgm_id), "Nvision-ALPHA!")) {
             G_warning(_("View not saved by this program,"
-                        "there may be some inconsistancies"));
+                        "there may be some inconsistencies"));
         }
 
         /* set poly and mesh resolutions */

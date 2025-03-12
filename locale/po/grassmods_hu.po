@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: grasslibs_hu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2018-03-10 17:22+0100\n"
-"Last-Translator: Zoltan Siki <siki@agt.bme.hu>, 2018\n"
-"Language-Team: Hungarian (https://www.transifex.com/grass-gis/teams/45198/"
-"hu/)\n"
+"PO-Revision-Date: 2025-03-12 12:05+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"Language-Team: Hungarian <https://weblate.osgeo.org/projects/grass-gis/"
+"grassmods/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../temporal/t.connect/main.c:34
 #: ../locale/scriptstrings/t.merge_to_translate.c:2
@@ -61295,7 +61296,7 @@ msgstr ""
 #: ../vector/v.info/print.c:30 ../vector/v.info/print.c:32
 #, c-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #: ../vector/v.info/print.c:141
 #, c-format
