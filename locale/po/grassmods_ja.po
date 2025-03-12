@@ -14,14 +14,16 @@ msgstr ""
 "Project-Id-Version: grassmods_ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2012-03-08 17:49+0900\n"
-"Last-Translator: taniguchi <taniguti@apptec.co.jp>\n"
-"Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2025-03-12 12:05+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"Language-Team: Japanese <https://weblate.osgeo.org/projects/grass-gis/"
+"grassmods/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../temporal/t.connect/main.c:34
 #: ../locale/scriptstrings/t.merge_to_translate.c:2
@@ -62525,7 +62527,7 @@ msgstr ""
 #: ../vector/v.info/print.c:30 ../vector/v.info/print.c:32
 #, c-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #: ../vector/v.info/print.c:141
 #, c-format
