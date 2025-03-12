@@ -46,9 +46,7 @@ class TestIClusterWithSyntheticData(TestCase):
     def tearDownClass(cls):
         """Cleanup test environment"""
         cls.runModule("g.remove", flags="f", type="group", name=cls.group_name)
-        cls.runModule(
-            "g.remove", flags="f", type="raster", name=",".join(cls.input_maps)
-        )
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.input_maps)
 
     def setUp(self):
         """Ensure clean signature file state before each test"""
