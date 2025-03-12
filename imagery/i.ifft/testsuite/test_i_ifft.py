@@ -21,23 +21,22 @@ class TestIIFFT(TestCase):
             "r.mapcalc", expression=f"{cls.real_input} = col()", overwrite=True
         )
         cls.runModule("r.mapcalc", expression=f"{cls.imag_input} = 0", overwrite=True)
-        cls.temp_rasters.append([cls.real_input, cls.imag_input])
+        cls.temp_rasters.extend([cls.real_input, cls.imag_input])
 
     @classmethod
     def tearDownClass(cls):
         """Clean up generated data and reset the region."""
-        for raster in cls.temp_rasters + [cls.output_raster]:
-            cls.runModule("g.remove", type="raster", name=raster, flags="f")
-
+        cls.temp_rasters.append(cls.output_raster)
+        raster_list = ",".join(cls.temp_rasters)
+        cls.runModule("g.remove", type="raster", name=raster_list, flags="f")
         cls.del_temp_region()
 
     def test_linearity_property(self):
         """
         Test to validate the linearity of the inverse Fourier transform
         by comparing IFFT(A) + IFFT(B) with IFFT(A + B). It sums the real and imaginary
-        components of two input rasters, performs the IFFT, and compares the output against reference statistics.
+        components of two input rasters, performs the IFFT, and compares it to output raster.
         """
-
         self.runModule("r.mapcalc", expression="real_input2 = row()", overwrite=True)
         self.runModule("r.mapcalc", expression="imag_input2 = 0", overwrite=True)
         self.runModule(
@@ -50,9 +49,36 @@ class TestIIFFT(TestCase):
             expression="imag_input_sum = imag_input_raster + imag_input2",
             overwrite=True,
         )
-        self.temp_rasters.append(
+        self.temp_rasters.extend(
             ["real_input2", "imag_input2", "real_input_sum", "imag_input_sum"]
         )
+
+        self.assertModule(
+            "i.ifft",
+            real=self.real_input,
+            imaginary=self.imag_input,
+            output=self.output_raster,
+            overwrite=True,
+        )
+        self.assertRasterExists(self.output_raster)
+
+        self.assertModule(
+            "i.ifft",
+            real="real_input2",
+            imaginary="imag_input2",
+            output="output_raster2",
+            overwrite=True,
+        )
+        self.assertRasterExists("output_raster2")
+        self.temp_rasters.append("output_raster2")
+
+        self.runModule(
+            "r.mapcalc",
+            expression="output_raster_combined = output_raster + output_raster2",
+            overwrite=True,
+        )
+        self.assertRasterExists("output_raster_combined")
+        self.temp_rasters.append("output_raster_combined")
 
         self.assertModule(
             "i.ifft",
@@ -64,16 +90,7 @@ class TestIIFFT(TestCase):
         self.assertRasterExists("output_raster_sum")
         self.temp_rasters.append("output_raster_sum")
 
-        reference_stats = {
-            "min": -5,
-            "max": 110,
-            "mean": 1.2,
-            "stddev": 11.138222,
-        }
-
-        self.assertRasterFitsUnivar(
-            "output_raster_sum", reference_stats, precision=1e-6
-        )
+        self.assertRastersEqual("output_raster_sum", "output_raster_combined")
 
     def test_scaling_property(self):
         """Test the scaling property of the IFFT: verify that ifft(2.5 * x) == 2.5 * ifft(x)."""
@@ -131,9 +148,13 @@ class TestIIFFT(TestCase):
         self.assertRasterExists("output_sym")
         self.temp_rasters.append("output_sym")
 
-        self.assertModule(
-            "r.flip", input="output_sym", output="mirrored", flags="w", overwrite=True
-        )
+        output_arr = array.array("output_sym")
+        flipped = np.flip(output_arr, axis=1)
+
+        mirrored_raster = array.array()
+        mirrored_raster[...] = flipped
+        mirrored_raster.write("mirrored", overwrite=True)
+
         self.assertRasterExists("mirrored")
         self.temp_rasters.append("mirrored")
 
