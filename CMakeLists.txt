@@ -11,7 +11,7 @@
 #
 ################################################################################
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
 #[[
@@ -259,9 +259,6 @@ include_directories("${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}")
 if(MSVC)
   include_directories("${CMAKE_SOURCE_DIR}/msvc")
 endif()
-
-# # TODO: fix this hack
-include_directories(${PROJ_INCLUDE_DIR})
 
 add_subdirectory(lib)
 add_subdirectory(python)

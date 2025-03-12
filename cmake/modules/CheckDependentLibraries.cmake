@@ -21,13 +21,6 @@ if(UNIX)
 endif()
 
 find_package(PROJ REQUIRED)
-if(PROJ_FOUND)
-  add_library(PROJ INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET PROJ PROPERTY INTERFACE_LINK_LIBRARIES
-                                    ${PROJ_LIBRARY${find_library_suffix}})
-  set_property(TARGET PROJ PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${PROJ_INCLUDE_DIR})
-endif()
 
 find_package(GDAL REQUIRED)
 
@@ -161,14 +154,6 @@ endif()
 # Language options
 if(WITH_FREETYPE)
   find_package(Freetype REQUIRED)
-  if(FREETYPE_FOUND)
-    add_library(FREETYPE INTERFACE IMPORTED GLOBAL)
-    set_property(
-      TARGET FREETYPE PROPERTY INTERFACE_LINK_LIBRARIES
-                               ${FREETYPE_LIBRARY${find_library_suffix}})
-    set_property(TARGET FREETYPE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                          ${FREETYPE_INCLUDE_DIRS})
-  endif()
 endif()
 
 if(WITH_NLS)
@@ -177,6 +162,7 @@ if(WITH_NLS)
     set(MSGFMT ${GETTEXT_MSGFMT_EXECUTABLE})
     set(MSGMERGE ${GETTEXT_MSGMERGE_EXECUTABLE})
   endif()
+  find_package(Intl REQUIRED)
 endif()
 
 # Computing options
@@ -307,7 +293,7 @@ if(Python3_FOUND)
   #]]
 endif()
 
-check_target(PROJ HAVE_PROJ_H)
+check_target(PROJ::proj HAVE_PROJ_H)
 check_target(GDAL::GDAL HAVE_GDAL)
 check_target(GDAL::GDAL HAVE_OGR)
 check_target(ZLIB::ZLIB HAVE_ZLIB_H)
@@ -324,7 +310,7 @@ check_target(ZSTD HAVE_ZSTD_H)
 check_target(BZIP2 HAVE_BZLIB_H)
 check_target(Readline::Readline HAVE_READLINE_READLINE_H)
 check_target(Readline::History HAVE_READLINE_HISTORY_H)
-check_target(FREETYPE HAVE_FT2BUILD_H)
+check_target(Freetype::Freetype HAVE_FT2BUILD_H)
 # set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}") no target ATLAS in
 # thirdpary/CMakeLists.txt
 check_target(ATLAS HAVE_LIBATLAS)
