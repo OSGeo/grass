@@ -1241,7 +1241,7 @@ msgid "Selected PROJ pipeline:"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:835
-#, c-format, fuzzy
+#, c-format
 msgid "%s"
 msgstr "%s"
 
