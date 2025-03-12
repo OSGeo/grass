@@ -190,7 +190,8 @@ Using report option in JSON format with pandas:
 1    all      1  10938    1  10938
 ```
 
-Using print option with the first layer, only for feature ids 1-5 in JSON format with pandas:
+Using print option with the first layer, only for feature ids 1-5 in JSON
+format with pandas:
 
 ```python
   import json
