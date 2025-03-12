@@ -196,7 +196,7 @@ int plot1(struct Map_info *Map, int type, int area UNUSED,
             line++;
             if (line > nlines) {
                 ret = 0;
-                goto cleanup;
+                goto cleanup_and_exit;
             }
             if (!Vect_line_alive(Map, line))
                 continue;
@@ -208,10 +208,10 @@ int plot1(struct Map_info *Map, int type, int area UNUSED,
             case -1:
                 fprintf(stderr, _("\nERROR: vector map - can't read\n"));
                 ret = -1;
-                goto cleanup;
+                goto cleanup_and_exit;
             case -2: /* EOF */
                 ret = 0;
-                goto cleanup;
+                goto cleanup_and_exit;
             }
         }
 
@@ -420,7 +420,7 @@ int plot1(struct Map_info *Map, int type, int area UNUSED,
         }
     }
 
-cleanup:
+cleanup_and_exit:
     G_free(primary_color);
     G_free(fill_color);
     G_free(line_color);
