@@ -11,14 +11,16 @@ msgstr ""
 "Project-Id-Version: grassmods_el\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2009-02-19 10:29+0200\n"
-"Last-Translator: Vasilios Antoniou <vantoniou@gmail.com>\n"
-"Language-Team: Greek <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2025-03-12 12:05+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"Language-Team: Greek <https://weblate.osgeo.org/projects/grass-gis/grassmods/"
+"el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../temporal/t.connect/main.c:34
 #: ../locale/scriptstrings/t.merge_to_translate.c:2
@@ -61611,7 +61613,7 @@ msgstr ""
 #: ../vector/v.info/print.c:30 ../vector/v.info/print.c:32
 #, c-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #: ../vector/v.info/print.c:141
 #, c-format
