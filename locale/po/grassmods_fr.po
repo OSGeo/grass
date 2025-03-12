@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2025-02-10 17:33+0000\n"
+"PO-Revision-Date: 2025-03-12 12:05+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
 "grassmods/fr/>\n"
@@ -64024,7 +64024,7 @@ msgid "Outputs basic information about a vector map."
 msgstr "Affiche les métadonnées d'une carte vecteur."
 
 #: ../vector/v.info/print.c:30 ../vector/v.info/print.c:32
-#, c-format, fuzzy
+#, c-format
 msgid "%s"
 msgstr "%s"
 
