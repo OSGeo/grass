@@ -81,6 +81,29 @@ area           0          0          0
 all         1379          1       1379
 ```
 
+Report vector categories in JSON format:
+
+```sh
+v.category input=testmap option=report format=json
+
+[
+  {
+      "type": "line",
+      "field": 1,
+      "count": 1379,
+      "min": 1,
+      "max": 1379
+  },
+  {
+      "type": "all",
+      "field": 1,
+      "count": 1379,
+      "min": 1,
+      "max": 1379
+  }
+]
+```
+
 ### Delete all vector categories in layer 1
 
 ```sh
@@ -126,6 +149,83 @@ Print vector categories from the first layer, only for feature ids 1-50.
 
 ```sh
 v.category input=roads option=print layer=1 id=1-50
+```
+
+Print vector categories from the first layer, only for feature ids 1-50 in JSON format.
+
+```sh
+v.category input=roads option=print layer=1 id=1-50 format=json
+```
+
+### Print only layer numbers in JSON format
+
+```sh
+v.category input=roads option=layers format=json
+```
+
+### Using v.category JSON output with pandas
+
+Using report option in JSON format with pandas:
+```python
+  import json, io
+  import grass.script as gs
+  import pandas as pd
+
+  # Run v.category command with report option.
+  data = gs.read_command(
+      "v.category",
+      input="bridges",
+      option="report",
+      format="json",
+  )
+
+  df = pd.read_json(io.StringIO(data))
+  print(df)
+```
+
+```sh
+    type  field  count  min    max
+0  point      1  10938    1  10938
+1    all      1  10938    1  10938
+```
+
+
+Using print option with the first layer, only for feature ids 1-5 in JSON format with pandas:
+```python
+  import json
+  import grass.script as gs
+  import pandas as pd
+
+  # Run v.category command with print option.
+  data = json.loads(
+      gs.read_command(
+          "v.category",
+          input="bridges",
+          option="print",
+          ids="1-5",
+          format="json",
+      )
+  )
+
+  df = (
+      pd.json_normalize(data, record_path="ids")
+      .explode("layers")
+      .reset_index(drop=True)
+      .pipe(lambda x: x.join(pd.json_normalize(x["layers"])))
+      .drop(columns=["layers"])
+      .explode("categories")
+      .reset_index(drop=True)
+  )
+  print(df)
+```
+
+```sh
+    id  layer categories
+0   1      1          1
+1   2      1          2
+2   3      1          3
+3   4      1          4
+4   5      1          5
 ```
 
 ## SEE ALSO
