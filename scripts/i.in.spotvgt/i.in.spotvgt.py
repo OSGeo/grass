@@ -263,7 +263,6 @@ def main():
             _("Note: A snow map can be extracted by category 252 (d.rast %s cat=252)")
             % smfile
         )
-        gs.message("")
         gs.message(_("Filtering NDVI map by Status Map quality layer..."))
 
         filtfile = "%s_filt" % name

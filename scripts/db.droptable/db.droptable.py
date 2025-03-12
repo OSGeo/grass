@@ -79,7 +79,6 @@ def main():
 
     if not force:
         gs.message(_("The table <%s> would be deleted.") % table)
-        gs.message("")
         gs.message(_("You must use the force flag to actually remove it. Exiting."))
         sys.exit(0)
 
