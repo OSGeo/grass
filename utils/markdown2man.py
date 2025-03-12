@@ -1,4 +1,18 @@
 #!/usr/bin/env python3
+
+###############################################################################
+# Convert manual pages from markdown to MAN format
+#
+# Author(s): Anna Petrasova
+#
+# COPYRIGHT: (C) 2025 by the GRASS Development Team
+#
+#            This program is free software under the GNU General Public
+#            License (>=v2). Read the file COPYING that comes with GRASS
+#            for details.
+#
+###############################################################################
+
 import argparse
 import re
 from pathlib import Path
