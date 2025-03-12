@@ -166,6 +166,7 @@ v.category input=roads option=layers format=json
 ### Using v.category JSON output with pandas
 
 Using report option in JSON format with pandas:
+
 ```python
   import json, io
   import grass.script as gs
@@ -189,8 +190,8 @@ Using report option in JSON format with pandas:
 1    all      1  10938    1  10938
 ```
 
-
 Using print option with the first layer, only for feature ids 1-5 in JSON format with pandas:
+
 ```python
   import json
   import grass.script as gs
