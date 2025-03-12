@@ -58,9 +58,9 @@ build_library_in_subdir(
   DEFS
   "${use_math_DEFS}"
   OPTIONAL_DEPENDS
+  CBLAS::CBLAS
   FFTW
-  LAPACKE
-  CBLAS
+  LAPACKE::LAPACKE
   OPENMP)
 
 build_library_in_subdir(linkm)

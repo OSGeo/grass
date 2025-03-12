@@ -177,46 +177,18 @@ if(WITH_FFTW)
   endif()
 endif()
 
-if(WIN32)
-  set(BLA_PREFER_PKGCONFIG ON)
-  set(BLA_PKGCONFIG_BLAS "openblas")
-  set(BLA_PKGCONFIG_LAPACK "openblas")
-else()
-  set(BLA_PKGCONFIG_BLAS "blas-netlib")
-  set(BLA_PKGCONFIG_LAPACK "lapacke")
-endif()
-
 if(WITH_CBLAS)
-  # find_package(CBLAS CONFIG REQUIRED)
-  pkg_check_modules(CBLAS QUIET ${BLA_PKGCONFIG_BLAS})
-  if (CBLAS_FOUND)
-    add_library(CBLAS INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET CBLAS PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${CBLAS_LIBRARIES})
-    set_property(TARGET CBLAS PROPERTY INTERFACE_LINK_DIRECTORIES
-                                      ${CBLAS_LIBRARY_DIRS})
-    set_property(TARGET CBLAS PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${CBLAS_INCLUDEDIR})
+  if(NOT CBLAS_PREFER_PKGCONFIG)
+    set(CBLAS_PREFER_PKGCONFIG ON)
   endif()
-  include(FindPackageHandleStandardArgs)
-  find_package_handle_standard_args(CBLAS REQUIRED_VARS CBLAS_LIBRARIES
-                                    CBLAS_INCLUDEDIR)
+  find_package(CBLAS REQUIRED)
 endif()
 
 if(WITH_LAPACKE)
-  # find_package(LAPACKE CONFIG REQUIRED)
-  pkg_check_modules(LAPACKE QUIET ${BLA_PKGCONFIG_LAPACK})
-  if(LAPACKE_FOUND)
-    add_library(LAPACKE INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET LAPACKE PROPERTY INTERFACE_LINK_LIBRARIES
-                                        ${LAPACKE_LIBRARIES})
-    set_property(TARGET LAPACKE PROPERTY INTERFACE_LINK_DIRECTORIES
-                                        ${LAPACKE_LIBRARY_DIRS})
-    set_property(TARGET LAPACKE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                        ${LAPACKE_INCLUDEDIR})
+  if(NOT WITH_CBLAS)
+    message(FATAL_ERROR "LAPACKE support requires CBLAS")
   endif()
-  find_package_handle_standard_args(LAPACKE REQUIRED_VARS LAPACKE_LIBRARIES
-                                    LAPACKE_INCLUDEDIR)
+  find_package(LAPACKE REQUIRED)
 endif()
 
 if(WITH_OPENMP)
@@ -314,10 +286,8 @@ check_target(Freetype::Freetype HAVE_FT2BUILD_H)
 # set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}") no target ATLAS in
 # thirdpary/CMakeLists.txt
 check_target(ATLAS HAVE_LIBATLAS)
-check_target(CBLAS HAVE_LIBBLAS)
-check_target(CBLAS HAVE_CBLAS_H)
-check_target(LAPACKE HAVE_LIBLAPACK)
-check_target(LAPACKE HAVE_CLAPACK_H)
+check_target(CBLAS::CBLAS HAVE_LIBBLAS)
+check_target(LAPACKE::LAPACKE HAVE_LIBLAPACK)
 check_target(TIFF HAVE_TIFFIO_H)
 check_target(NETCDF HAVE_NETCDF)
 check_target(GEOS::geos_c HAVE_GEOS)
