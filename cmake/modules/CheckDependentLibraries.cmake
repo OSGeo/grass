@@ -58,26 +58,16 @@ endif()
 
 if(WITH_X11)
   find_package(X11 REQUIRED)
-  if(X11_FOUND)
-    add_library(X11 INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET X11 PROPERTY INTERFACE_LINK_LIBRARIES ${X11_LIBRARIES})
-    set_property(TARGET X11 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                     ${X11_INCLUDE_DIR})
-  endif()
 endif()
 
 if(WITH_OPENGL)
-  find_package(OpenGL REQUIRED)
-  if(OPENGL_FOUND)
-    add_library(OPENGL INTERFACE IMPORTED GLOBAL)
-    if(APPLE)
-      find_library(AGL_FRAMEWORK AGL DOC "AGL lib for OSX")
-      set(APP "-framework AGL -framework ApplicationServices")
-    endif()
-    set_property(TARGET OPENGL PROPERTY INTERFACE_LINK_LIBRARIES
-                                        ${OPENGL_LIBRARIES} ${AGL_FRAMEWORK})
-    set_property(TARGET OPENGL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                        ${OPENGL_INCLUDE_DIR} ${AGL_FRAMEWORK})
+  find_package(OpenGL REQUIRED COMPONENTS OpenGL)
+  if(APPLE)
+    find_library(AGL_FRAMEWORK AGL REQUIRED)
+    set_property(
+      TARGET OpenGL::GL
+      APPEND
+      PROPERTY INTERFACE_LINK_LIBRARIES ${AGL_FRAMEWORK})
   endif()
 endif()
 
@@ -313,7 +303,6 @@ check_target(GEOS::geos_c HAVE_GEOS)
 if(MSVC)
   check_target(PCRE HAVE_PCRE_H)
 endif()
-
 
 set(HAVE_PBUFFERS 0)
 set(HAVE_PIXMAPS 0)
