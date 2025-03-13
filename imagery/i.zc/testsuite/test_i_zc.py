@@ -23,8 +23,7 @@ class TestIZC(TestCase):
     def tearDownClass(cls):
         """Clean up generated data and reset the region."""
         cls.temp_rasters.append(cls.output_raster)
-        raster_list = ",".join(cls.temp_rasters)
-        cls.runModule("g.remove", type="raster", name=raster_list, flags="f")
+        cls.runModule("g.remove", type="raster", name=cls.temp_rasters, flags="f")
         cls.del_temp_region()
 
     def test_zero_crossing_pattern(self):
