@@ -109,12 +109,17 @@ set(_grass_display_DEPENDS grass_driver grass_raster grass_htmldriver
                            grass_pngdriver grass_psdriver grass_gis)
 
 if(WITH_CAIRO)
-  set(_cairodriver_DEPENDS CAIRO Freetype::Freetype grass_gis grass_driver
-                           OPTIONAL_DEPENDS Iconv::Iconv)
+  set(_cairodriver_DEPENDS
+      Cairo::Cairo
+      Fontconfig::Fontconfig
+      Freetype::Freetype
+      grass_gis
+      grass_driver
+      OPTIONAL_DEPENDS
+      Iconv::Iconv)
   if(WITH_X11)
-    list(APPEND _cairodriver_DEPENDS X11)
+    list(PREPEND _cairodriver_DEPENDS X11)
   endif()
-
   build_library_in_subdir(cairodriver DEPENDS ${_cairodriver_DEPENDS})
 
   set(_grass_display_DEFS "-DUSE_CAIRO")
