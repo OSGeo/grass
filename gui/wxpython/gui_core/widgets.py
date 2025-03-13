@@ -1321,7 +1321,7 @@ class SearchModuleWidget(wx.Panel):
         """Search modules by keys
 
         :param keys: list of keys
-        :param value: patter to match
+        :param value: pattern to match
         """
         nodes = set()
         for key in keys:

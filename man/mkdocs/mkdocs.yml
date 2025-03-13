@@ -5,7 +5,7 @@ site_name: !ENV SITE_NAME
 site_url: https://grass.osgeo.org/grass-stable/manuals/
 
 # Repository information
-repo_name: GitHub
+repo_name: OSGeo/grass
 repo_url: https://github.com/OSGeo # Set to OSGeo so we can added grass and grass-addons
 edit_uri_template: edit/main/{path!q}
 
@@ -66,6 +66,10 @@ extra:
       link: https://x.com/GRASSGIS
     - icon: fontawesome/brands/youtube
       link: https://www.youtube.com/@grass-gis
+  github:
+    repos:
+      grass: grass
+      grass_addons: grass-addons
 
 # Hooks
 hooks:
@@ -174,3 +178,26 @@ nav:
       - Miscellaneous Tools: miscellaneous.md
 
   - Development: development_intro.md
+
+not_in_nav: |
+  r.*
+  v.*
+  r3.*
+  i.*
+  t.*
+  db.*
+  d.*
+  g.*
+  m.*
+  ps.*
+  wxGUI.*
+  test.*
+  topic_*
+  *_graphical.md
+  *driver.md
+  grass-dbf.md
+  grass-ogr.md
+  grass-pg.md
+  grass-sqlite.md
+  wxpyimgview.md
+  ximgview.md

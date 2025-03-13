@@ -92,7 +92,7 @@ set(_REENTRANT 0)
 # #######################TODO########################
 
 set(X_DISPLAY_MISSING 1)
-if(TARGET X11)
+if(TARGET X11::X11)
   set(X_DISPLAY_MISSING 0)
 endif()
 
