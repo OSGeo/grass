@@ -189,6 +189,7 @@ void G_read_datum_table(void)
     qsort(table.datums, table.count, sizeof(struct datum), compare_table_names);
 
     G_initialize_done(&table.initialized);
+    fclose(fd);
 }
 
 static int compare_table_names(const void *aa, const void *bb)
