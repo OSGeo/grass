@@ -231,7 +231,7 @@ if(WITH_OPENGL)
     GDAL::GDAL
     OpenGL::GL
     OpenGL::GLU
-    TIFF)
+    TIFF::TIFF)
 
   build_library_in_subdir(
     nviz
@@ -243,7 +243,6 @@ if(WITH_OPENGL)
     grass_ogsf
     grass_gis
     OpenGL::GL
-    TIFF
     OPTIONAL_DEPENDS
     X11::X11)
 endif()

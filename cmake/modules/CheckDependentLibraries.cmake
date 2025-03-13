@@ -220,13 +220,6 @@ endif()
 # Data format options
 if(WITH_TIFF)
   find_package(TIFF REQUIRED)
-  if(TIFF_FOUND)
-    add_library(TIFF INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET TIFF PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${TIFF_LIBRARY${find_library_suffix}})
-    set_property(TARGET TIFF PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${TIFF_INCLUDE_DIR})
-  endif()
 endif()
 
 if(WITH_NETCDF)
@@ -303,7 +296,7 @@ check_target(CBLAS HAVE_LIBBLAS)
 check_target(CBLAS HAVE_CBLAS_H)
 check_target(LAPACKE HAVE_LIBLAPACK)
 check_target(LAPACKE HAVE_CLAPACK_H)
-check_target(TIFF HAVE_TIFFIO_H)
+check_target(TIFF::TIFF HAVE_TIFFIO_H)
 check_target(NETCDF HAVE_NETCDF)
 check_target(GEOS::geos_c HAVE_GEOS)
 
