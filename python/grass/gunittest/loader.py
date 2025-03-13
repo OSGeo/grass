@@ -122,7 +122,12 @@ def discover_modules(
         if file_pattern:
             files = fnmatch.filter(files, file_pattern)
         if file_regexp:
-            files = [f for f in files if re.match(file_regexp, f)]
+            pattern = (
+                file_regexp
+                if isinstance(file_regexp, str) and file_regexp.startswith('r"')
+                else r"{}".format(file_regexp)
+            )
+            files = [f for f in files if re.search(pattern, f)]
         if exclude:
             files = fnmatch_exclude_with_base(files, full, exclude)
         files = sorted(files)
