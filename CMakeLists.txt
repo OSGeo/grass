@@ -94,7 +94,7 @@ endif()
 # Graphics options
 option(WITH_X11 "Build with X11 support ." ${x11_default_option_enabled})
 option(WITH_OPENGL "Build with opengl support ." ON)
-option(WITH_CAIRO "Build with cairo support ." ON)
+option(WITH_CAIRO "Build with Cairo support" ON)
 option(WITH_LIBPNG "Build with libpng support ." ON)
 
 # Data storage options
