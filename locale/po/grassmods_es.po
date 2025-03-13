@@ -14,17 +14,18 @@ msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2016-07-18 12:34-0500\n"
-"Last-Translator: \n"
-"Language-Team: Español <grass-translations@lists.osgeo.org>\n"
-"Language: es_ES\n"
+"PO-Revision-Date: 2025-03-12 12:05+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/"
+"grassmods/es/>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: SPAIN\n"
-"X-Generator: Lokalize 1.5\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../temporal/t.connect/main.c:34
 #: ../locale/scriptstrings/t.merge_to_translate.c:2
@@ -65569,7 +65570,7 @@ msgstr "Muestra información básica sobre un mapa vectorial."
 #: ../vector/v.info/print.c:30 ../vector/v.info/print.c:32
 #, c-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #: ../vector/v.info/print.c:141
 #, c-format

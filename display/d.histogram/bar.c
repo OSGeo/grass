@@ -12,7 +12,7 @@
  *
  * NOTES:
  *
- * 1) see dhist.h for a decalaration of the structure stat_list.
+ * 1) see dhist.h for a declaration of the structure stat_list.
  * 2) see bar.h for normalized coordinates of the different parts
  *    of the bar-chart, like the origin of the chart, the label
  *    positions, etc.

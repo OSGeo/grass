@@ -72,7 +72,7 @@ void interface(int argc, char **argv)
 
     /* Each option has a 'key' (short descriptn), a 'description` (longer one)
      */
-    /* a 'type' (eg int, or string), and an indication whether manditory or not
+    /* a 'type' (eg int, or string), and an indication whether mandatory or not
      */
 
     rast_out->description =

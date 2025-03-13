@@ -70,11 +70,7 @@ int main(int argc, char *argv[])
     MaxCells->options = "1-";
     MaxCells->description = _("Maximum number of cells to be created");
 
-    SeedStuff = G_define_option();
-    SeedStuff->key = "seed";
-    SeedStuff->type = TYPE_INTEGER;
-    SeedStuff->required = NO;
-    SeedStuff->description = _("Random seed, default [random]");
+    SeedStuff = G_define_standard_option(G_OPT_M_SEED);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);

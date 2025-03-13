@@ -33,13 +33,13 @@ Ronlad T. Chin in *Transactions on Pattern Analysis and Machine
 Intelligence*, vol. 12, No. 6, June 1990. The definition Jang and Chin
 give of the thinning process is "successive removal of outer layers of
 pixels from an object while retaining any pixels whose removal would
-alter the connectivity or shorten the legs of the sceleton."
+alter the connectivity or shorten the legs of the skeleton."
 
-The sceleton is finally thinned when the thinning process converges;
+The skeleton is finally thinned when the thinning process converges;
 i.e., "no further pixels can be removed without altering the
-connectivity or shortening the sceleton legs" (p. 541). The authors
+connectivity or shortening the skeleton legs" (p. 541). The authors
 prove that the thinning process described always converges and produces
-one-pixel thick sceletons. The number of iterations depends on the
+one-pixel thick skeletons. The number of iterations depends on the
 original thickness of the object. Each iteration peels off the outside
 pixels from the object. Therefore, if the object is \<= n pixels thick,
 the algorithm should converge in \<= iterations.

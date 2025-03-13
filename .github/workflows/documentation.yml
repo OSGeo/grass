@@ -31,6 +31,7 @@ jobs:
         with:
           repository: OSGeo/grass
           path: grass
+          fetch-depth: 0
 
       - name: Get dependencies
         run: |
@@ -60,6 +61,7 @@ jobs:
           repository: OSGeo/grass-addons
           ref: grass${{ env.MAJOR }}
           path: grass-addons
+          fetch-depth: 0
 
       - name: Install Python dependencies
         # We install both core and addon dependencies, but we don't install any
@@ -116,13 +118,24 @@ jobs:
           mkdir "$MKDOCS_DIR/source/addons"
           mv -v addons-build-dir/docs/md/source/* "$MKDOCS_DIR/source/addons"
 
-      - name: Rebuild keywords
+      - name: Build index and rebuild keywords
         run: |
           export ARCH="$(grass --config arch)"
           export ARCH_DISTDIR="$(grass --config path)"
           export VERSION_NUMBER="$VERSION"
           grass --tmp-project XY --exec \
+            python grass/man/build_full_index.py md index "$MKDOCS_DIR/source/addons" addons
+          grass --tmp-project XY --exec \
             python grass/man/build_keywords.py md "$MKDOCS_DIR/source" "$MKDOCS_DIR/source/addons"
+
+      - name: Copy shared files to addons
+        run: |
+          cd "$MKDOCS_DIR/source"
+          # This should match directories with color tables and other files
+          # linked from the pages.
+          for name in $(ls -1d */ | grep -vE "^(addons|libpython)/$"); do
+            cp -rv $name addons
+          done
 
       - name: Get mkdocs
         run: |
@@ -137,6 +150,14 @@ jobs:
           export COPYRIGHT="&copy; 2003-$YEAR GRASS Development Team, GRASS GIS $VERSION Reference Manual"
           cd $MKDOCS_DIR
           mkdocs build
+
+      - name: Build Sphinx documentation
+        run: |
+          pip install sphinx
+          cd grass
+          make sphinxdoclib
+          ARCH="$(grass --config arch)"
+          mv -v dist.$ARCH/docs/html/libpython $MKDOCS_DIR/site
 
       - name: Make logs available
         uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
