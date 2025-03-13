@@ -2037,7 +2037,7 @@ class GMFrame(wx.Frame):
         """Changes bookcontrol page to page associated with display."""
         # moved from mapdisp/frame.py
         # TODO: why it is called 3 times when getting focus?
-        # and one times when loosing focus?
+        # and one times when losing focus?
         pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)
         if pgnum > -1:
             self.notebookLayers.SetSelection(pgnum)
