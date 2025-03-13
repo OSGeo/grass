@@ -18,7 +18,7 @@ The following variables may be set to influence this module's behavior:
 
 ``CBLAS_PREFER_PKGCONFIG``
 
-  If set ``pkg-config`` will be used to search for a CBLAS library
+  If set, ``pkg-config`` will be used to search for a CBLAS library
   and if one is found that is used.
   Note: this is currently the only method.
 
