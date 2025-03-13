@@ -351,7 +351,9 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
                 exit(EXIT_SUCCESS);
             }
         }
-    G_free_key_value(loc_proj_units);
-    G_free_key_value(loc_proj_info);
+        G_free_key_value(loc_proj_units);
+        G_free_key_value(loc_proj_info);
     }
+    G_free_key_value(proj_info);
+    G_free_key_value(proj_units);
 }
