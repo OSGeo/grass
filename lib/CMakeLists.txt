@@ -230,7 +230,7 @@ if(WITH_OPENGL)
     grass_vector
     GDAL::GDAL
     OPENGL
-    TIFF)
+    TIFF::TIFF)
 
   build_library_in_subdir(
     nviz
@@ -241,8 +241,7 @@ if(WITH_OPENGL)
     grass_bitmap
     grass_ogsf
     grass_gis
-    OPENGL
-    TIFF)
+    OPENGL)
 endif()
 
 add_subdirectory(temporal)
