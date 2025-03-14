@@ -29,7 +29,8 @@ build_program(
   grass_raster
   OPTIONAL_DEPENDS
   Readline::Readline
-  Readline::History)
+  Readline::History
+  Threads::Threads)
 
 build_program(
   NAME
@@ -44,4 +45,5 @@ build_program(
   grass_raster3d
   OPTIONAL_DEPENDS
   Readline::Readline
-  Readline::History)
+  Readline::History
+  Threads::Threads)
