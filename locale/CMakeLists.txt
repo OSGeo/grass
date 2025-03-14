@@ -31,7 +31,7 @@ unset(_locales)
 foreach(po_file ${po_files})
   get_filename_component(po_file_name ${po_file} NAME)
   string(REGEX REPLACE "^([^_]+)_(.*)\.po$" "\\2" _locale ${po_file_name})
-  string(REGEX REPLACE "^([^_]+)_(.*)\.po" "\\2/LC_MESSAGES/\\1.mo" mo_file
+  string(REGEX REPLACE "^([^_]+)_(.*)\.po$" "\\2/LC_MESSAGES/\\1.mo" mo_file
                        ${po_file_name})
   get_filename_component(mo_dir ${mo_file} DIRECTORY)
 
