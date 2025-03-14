@@ -22,6 +22,7 @@ DSTFILES := \
 	$(MDDIR)/source/index.md \
 	$(MDDIR)/overrides/partials/footer.html \
 	$(MDDIR)/overrides/partials/actions.html \
+	$(MDDIR)/overrides/partials/source.html \
 	$(MDDIR)/source/tags.md \
 	$(MDDIR)/source/development_intro.md \
 	$(MDDIR)/source/interfaces_overview.md \
@@ -157,7 +158,7 @@ $(HTMLDIR)/full_index.html: $(ALL_HTML) build_full_index.py build_html.py
 	$(call build,full_index)
 	touch $@
 
-$(MDDIR)/source/full_index.md: $(ALL_MD) build_full_index.py build_html.py
+$(MDDIR)/source/full_index.md: $(ALL_MD) build_full_index.py build_md.py
 	$(call build,full_index)
 	touch $@
 
@@ -292,6 +293,9 @@ $(MDDIR)/overrides/partials/footer.html: mkdocs/overrides/partials/footer.html |
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/overrides/partials/actions.html: mkdocs/overrides/partials/actions.html | $(MDDIR)/overrides/partials
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/overrides/partials/source.html: mkdocs/overrides/partials/source.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/overrides/partials:
