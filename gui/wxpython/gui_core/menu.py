@@ -8,6 +8,7 @@ Classes:
  - menu::Menu
  - menu::MenuItem
  - menu::SearchModuleWindow
+ - menu::RecentFilesConfig
  - menu::RecentFilesMenu
 
 (C) 2010-2024 by the GRASS Development Team
@@ -20,7 +21,7 @@ This program is free software under the GNU General Public License
 @author Milena Nowotarska (menu customization)
 @author Robert Szczepanek (menu customization)
 @author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
-@author Tomas Zigo <tomas.zigo slovanet.sk> RecentFilesMenu
+@author Tomas Zigo <tomas.zigo slovanet.sk> RecentFilesConfig, RecentFilesMenu
 """
 
 import re
@@ -327,6 +328,48 @@ class SearchModuleWindow(wx.Panel):
         self.showNotification.emit(message=label)
 
 
+class RecentFilesConfig(wx.FileConfig):
+    """Storing and retrieving recent files using plain text files"""
+
+    def __init__(
+        self,
+        appName,
+        style=wx.CONFIG_USE_LOCAL_FILE,
+        localFilename=None,
+        *args,
+        **kwargs,
+    ):
+        if not localFilename:
+            localFilename = os.path.join(
+                utils.GetSettingsPath(),
+                ".recent_files",
+            )
+
+        super().__init__(
+            appName,
+            style=style,
+            localFilename=localFilename,
+            *args,
+            **kwargs,
+        )
+        self.SetPath(strPath=appName)
+
+    def GetRecentFiles(self):
+        """Get recent files
+
+        :return list: list of recent files
+        """
+        recent_files = []
+        num_of_entries = self.GetNumberOfEntries()
+        for i in range(num_of_entries):
+            entry = self.GetNextEntry(index=i)
+            if entry[0]:
+                file_path = self.Read(key=entry[1])
+                if file_path and os.path.exists(file_path):
+                    recent_files.append(file_path)
+        return recent_files
+
+
 class RecentFilesMenu:
     """Add recent files history menu
 
@@ -347,8 +390,6 @@ class RecentFilesMenu:
                             into the .recent_files file to app name group
     """
 
-    recent_files = ".recent_files"
-
     def __init__(self, app_name, parent_menu, pos, history_len=10):
         self._history_len = history_len
         self._parent_menu = parent_menu
@@ -359,14 +400,7 @@ class RecentFilesMenu:
         self._filehistory = wx.FileHistory(maxFiles=history_len)
         # Recent files path stored in GRASS GIS config dir in the
         # .recent_files file in the group by application name
-        self._config = wx.FileConfig(
-            style=wx.CONFIG_USE_LOCAL_FILE,
-            localFilename=os.path.join(
-                utils.GetSettingsPath(),
-                self.recent_files,
-            ),
-        )
-        self._config.SetPath(strPath=app_name)
+        self._config = RecentFilesConfig(appName=app_name)
         self._filehistory.Load(self._config)
         self.RemoveNonExistentFiles()
 
