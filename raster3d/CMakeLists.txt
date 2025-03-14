@@ -98,8 +98,17 @@ build_program_in_subdir(
   PRIMARY_DEPENDS
   LIBLAS)
 
-build_program_in_subdir(r3.out.netcdf DEPENDS grass_gis grass_raster3d
-                        PRIMARY_DEPENDS NETCDF)
+build_program_in_subdir(
+  r3.out.netcdf
+  DEPENDS
+  grass_datetime
+  grass_gis
+  grass_gproj
+  grass_raster3d
+  PRIMARY_DEPENDS
+  NetCDF::NetCDF
+  OPTIONAL_DEPENDS
+  PROJ::proj)
 
 # mode_t is not available on msvc. Discuss
 if(NOT MSVC)

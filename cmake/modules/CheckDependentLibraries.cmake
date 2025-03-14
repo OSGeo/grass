@@ -186,13 +186,6 @@ endif()
 
 if(WITH_NETCDF)
   find_package(NetCDF REQUIRED)
-  if(NetCDF_FOUND)
-    add_library(NETCDF INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET NETCDF PROPERTY INTERFACE_LINK_LIBRARIES
-                                        ${NetCDF_LIBRARY})
-    set_property(TARGET NETCDF PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                        ${NetCDF_INCLUDE_DIR})
-  endif()
 endif()
 
 if(WITH_GEOS)
