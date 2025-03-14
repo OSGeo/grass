@@ -325,7 +325,7 @@ build_program_in_subdir(
   grass_vector
   ${LIBM}
   PRIMARY_DEPENDS
-  PDAL)
+  ${PDAL})
 
 build_program_in_subdir(
   v.in.region

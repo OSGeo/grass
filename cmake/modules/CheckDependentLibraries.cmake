@@ -201,14 +201,15 @@ if(WITH_GEOS)
 endif()
 
 if(WITH_PDAL)
-  find_package(PDAL REQUIRED)
-  if(PDAL_FOUND)
-    add_library(PDAL INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET PDAL PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${PDAL_LIBRARIES})
-    set_property(TARGET PDAL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${PDAL_INCLUDE_DIRS})
+  find_package(PDAL REQUIRED CONFIG)
+  set(PDAL pdalcpp)
+  if(NOT TARGET pdalcpp
+     AND TARGET pdal_base
+     AND TARGET pdal_util)
+    # Workaround for PDAL <2.6
+    set(PDAL pdal_base pdal_util)
   endif()
+  message(STATUS "Found PDAL: ${PDAL_DIR} (found version \"${PDAL_VERSION}\")")
 endif()
 
 if(WITH_LIBLAS)
