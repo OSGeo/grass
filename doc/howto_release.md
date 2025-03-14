@@ -447,7 +447,7 @@ if there are any which show well specific features added or updated in the relea
 Only in case of major releases:
 
 - update '[cronjob(s)](https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/)'
-  on grass.osgeo.org to next but one release tag for the differences
+  which are run on grass.osgeo.org to next but one release tag for the addons
 
 ### Update Hugo web site
 
