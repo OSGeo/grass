@@ -1610,12 +1610,12 @@ class NvizToolWindow(GNotebook):
         checkThematicWidth = wx.CheckBox(
             parent=panel, id=wx.ID_ANY, label=_("use width for thematic mapping")
         )
-        self.win["vector"]["lines"]["thematic"][
-            "checkcolor"
-        ] = checkThematicColor.GetId()
-        self.win["vector"]["lines"]["thematic"][
-            "checkwidth"
-        ] = checkThematicWidth.GetId()
+        self.win["vector"]["lines"]["thematic"]["checkcolor"] = (
+            checkThematicColor.GetId()
+        )
+        self.win["vector"]["lines"]["thematic"]["checkwidth"] = (
+            checkThematicWidth.GetId()
+        )
         checkThematicColor.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
         checkThematicWidth.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
         checkThematicColor.SetValue(False)
@@ -1825,12 +1825,12 @@ class NvizToolWindow(GNotebook):
         checkThematicSize = wx.CheckBox(
             parent=panel, id=wx.ID_ANY, label=_("use size for thematic mapping")
         )
-        self.win["vector"]["points"]["thematic"][
-            "checkcolor"
-        ] = checkThematicColor.GetId()
-        self.win["vector"]["points"]["thematic"][
-            "checksize"
-        ] = checkThematicSize.GetId()
+        self.win["vector"]["points"]["thematic"]["checkcolor"] = (
+            checkThematicColor.GetId()
+        )
+        self.win["vector"]["points"]["thematic"]["checksize"] = (
+            checkThematicSize.GetId()
+        )
         checkThematicColor.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
         checkThematicSize.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
         checkThematicColor.SetValue(False)
@@ -5457,18 +5457,19 @@ class NvizToolWindow(GNotebook):
                     display.SetSelection(1)
                 else:
                     display.SetSelection(0)
-            if data[vtype]["mode"]["type"] == "surface":
-                rasters = self.mapWindow.GetLayerNames("raster")
-                constants = self.mapWindow.GetLayerNames("constant")
-                surfaces = rasters + constants
-                surfaceWin = self.FindWindowById(self.win["vector"][vtype]["surface"])
-                surfaceWin.SetItems(surfaces)
-                for idx, surface in enumerate(surfaces):
-                    try:  # TODO fix this mess
-                        selected = data[vtype]["mode"]["surface"]["show"][idx]
-                    except (TypeError, IndexError, KeyError):
-                        selected = False
-                    surfaceWin.Check(idx, selected)
+            if data[vtype]["mode"]["type"] != "surface":
+                continue
+            rasters = self.mapWindow.GetLayerNames("raster")
+            constants = self.mapWindow.GetLayerNames("constant")
+            surfaces = rasters + constants
+            surfaceWin = self.FindWindowById(self.win["vector"][vtype]["surface"])
+            surfaceWin.SetItems(surfaces)
+            for idx, surface in enumerate(surfaces):
+                try:  # TODO fix this mess
+                    selected = data[vtype]["mode"]["surface"]["show"][idx]
+                except (TypeError, IndexError, KeyError):
+                    selected = False
+                surfaceWin.Check(idx, selected)
 
         for type in ("slider", "text"):
             win = self.FindWindowById(self.win["vector"]["lines"]["height"][type])

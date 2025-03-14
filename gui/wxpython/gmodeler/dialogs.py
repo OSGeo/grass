@@ -132,7 +132,7 @@ class ModelDataDialog(SimpleDialog):
     def GetType(self):
         """Get element type"""
         if not self.etype:
-            return
+            return None
         return self.element.tcp.GetType()
 
     def OnType(self, event):
@@ -469,8 +469,7 @@ class ModelRelationDialog(wx.Dialog):
             GError(
                 parent=self.parent,
                 message=_(
-                    "Relation doesn't point to GRASS command.\n"
-                    "Unable to add relation."
+                    "Relation doesn't point to GRASS command.\nUnable to add relation."
                 ),
             )
             return items

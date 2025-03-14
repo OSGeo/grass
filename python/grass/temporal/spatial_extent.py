@@ -1323,7 +1323,9 @@ class SpatialExtent(SQLDatabaseInterface):
             or self.meet(extent)
         )
 
-    def spatial_relation_2d(self, extent) -> Literal[
+    def spatial_relation_2d(
+        self, extent
+    ) -> Literal[
         "equivalent",
         "contain",
         "in",
@@ -1370,7 +1372,9 @@ class SpatialExtent(SQLDatabaseInterface):
 
         return "unknown"
 
-    def spatial_relation(self, extent) -> Literal[
+    def spatial_relation(
+        self, extent
+    ) -> Literal[
         "equivalent",
         "contain",
         "in",

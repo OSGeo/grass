@@ -67,22 +67,13 @@ maptype = "raster"
 
 
 def getSmallUpArrowImage():
-    stream = open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb")
-    try:
-        img = wx.Image(stream)
-    finally:
-        stream.close()
-    return img
+    with open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb") as stream:
+        return wx.Image(stream)
 
 
 def getSmallDnArrowImage():
-    stream = open(os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb")
-    try:
-        img = wx.Image(stream)
-    finally:
-        stream.close()
-    stream.close()
-    return img
+    with open(os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb") as stream:
+        return wx.Image(stream)
 
 
 class GCPWizard:
@@ -255,8 +246,9 @@ class GCPWizard:
 
         try:
             f = open(self.source_gisrc, mode="w")
-            for line in self.gisrc_dict.items():
-                f.write(line[0] + ": " + line[1] + "\n")
+            f.writelines(
+                line[0] + ": " + line[1] + "\n" for line in self.gisrc_dict.items()
+            )
         finally:
             f.close()
 
@@ -1056,7 +1048,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             targetMapWin = self.TgtMapWindow
             targetMapWin.UpdateMap(render=False)
 
-    def CheckGCPcount(self, msg=False):
+    def CheckGCPcount(self, msg: bool = False) -> bool:
         """
         Checks to make sure that the minimum number of GCPs have been defined and
         are active for the selected transformation order
@@ -1078,9 +1070,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     )
                     % self.gr_order,
                 )
-                return False
-        else:
-            return True
+
+            return False
+
+        return True
 
     def OnGeorect(self, event):
         """
@@ -1274,17 +1267,15 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         self.grwiz.SwitchEnv("target")
 
-        if ret:
-            errlist = ret.splitlines()
-        else:
+        if not ret:
             GError(
                 parent=self,
                 message=_(
-                    "Could not calculate RMS Error.\n"
-                    "Possible error with m.transform."
+                    "Could not calculate RMS Error.\nPossible error with m.transform."
                 ),
             )
             return
+        errlist = ret.splitlines()
 
         # insert error values into GCP list for checked items
         sdfactor = float(UserSettings.Get(group="gcpman", key="rms", subkey="sdfactor"))
@@ -1315,12 +1306,13 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 sumsq_bkw_err += float(bkw_err) ** 2
                 sum_fwd_err += float(fwd_err)
                 GCPcount += 1
-            else:
-                self.list.SetItem(index, 5, "")
-                self.list.SetItem(index, 6, "")
-                self.mapcoordlist[key][5] = 0.0
-                self.mapcoordlist[key][6] = 0.0
-                self.list.SetItemTextColour(index, wx.BLACK)
+
+                continue
+            self.list.SetItem(index, 5, "")
+            self.list.SetItem(index, 6, "")
+            self.mapcoordlist[key][5] = 0.0
+            self.mapcoordlist[key][6] = 0.0
+            self.list.SetItemTextColour(index, wx.BLACK)
 
         # SD
         if GCPcount > 0:
@@ -1376,7 +1368,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         if not self.CheckGCPcount(msg=True):
             self.gr_order = order
-            return
+            return None
 
         self.gr_order = order
 
@@ -1410,17 +1402,15 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         self.grwiz.SwitchEnv("target")
 
-        if ret:
-            errlist = ret.splitlines()
-        else:
+        if not ret:
             GError(
                 parent=self,
                 message=_(
-                    "Could not calculate new extends.\n"
-                    "Possible error with m.transform."
+                    "Could not calculate new extends.\nPossible error with m.transform."
                 ),
             )
-            return
+            return None
+        errlist = ret.splitlines()
 
         # fist corner
         e, n = errlist[0].split()
@@ -1761,7 +1751,7 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
     def DeleteGCPItem(self):
         """Deletes selected item in GCP list."""
         if self.selected == wx.NOT_FOUND:
-            return
+            return None
 
         key = self.GetItemData(self.selected)
         self.DeleteItem(self.selected)
@@ -2354,8 +2344,7 @@ class GrSettingsDialog(wx.Dialog):
             GError(
                 parent=self,
                 message=_(
-                    "RMS threshold factor is < 1\n"
-                    "Too many points might be highlighted"
+                    "RMS threshold factor is < 1\nToo many points might be highlighted"
                 ),
             )
 

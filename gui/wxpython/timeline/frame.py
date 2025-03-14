@@ -233,9 +233,7 @@ class TimelineFrame(wx.Frame):
             self.timeData[name]["west"] = []
             self.timeData[name]["east"] = []
 
-            columns = ",".join(
-                ["name", "start_time", "end_time", "north", "south", "west", "east"]
-            )
+            columns = "name,start_time,end_time,north,south,west,east"
 
             rows = sp.get_registered_maps(
                 columns=columns, where=None, order="start_time", dbif=self.dbif
@@ -271,9 +269,7 @@ class TimelineFrame(wx.Frame):
         self.axes3d.clear()
         self.axes3d.grid(False)
         # self.axes3d.grid(True)
-        convert = (
-            mdates.date2num if self.temporalType == "absolute" else lambda x: x
-        )  # noqa: E731
+        convert = mdates.date2num if self.temporalType == "absolute" else lambda x: x  # noqa: E731
 
         colors = cycle(COLORS)
         plots = []
@@ -319,9 +315,7 @@ class TimelineFrame(wx.Frame):
         """Draws 2D plot (temporal extents)"""
         self.axes2d.clear()
         self.axes2d.grid(True)
-        convert = (
-            mdates.date2num if self.temporalType == "absolute" else lambda x: x
-        )  # noqa: E731
+        convert = mdates.date2num if self.temporalType == "absolute" else lambda x: x  # noqa: E731
 
         colors = cycle(COLORS)
 

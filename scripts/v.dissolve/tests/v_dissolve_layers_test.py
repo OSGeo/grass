@@ -51,9 +51,9 @@ def test_layer_2(dataset_layer_2):
         assert stats_column in columns
         column_info = columns[stats_column]
         correct_type = "integer" if method == "count" else "double precision"
-        assert (
-            columns[stats_column]["type"].lower() == correct_type
-        ), f"{stats_column} has a wrong type"
+        assert columns[stats_column]["type"].lower() == correct_type, (
+            f"{stats_column} has a wrong type"
+        )
     assert dataset.str_column_name in columns
     column_info = columns[dataset.str_column_name]
     assert column_info["type"].lower() == "character"

@@ -18,22 +18,106 @@ This program is free software under the GNU General Public License
 """
 
 import locale
-
 import os
 import sys
-import wx
+from ctypes import CFUNCTYPE, byref, c_double, c_int, pointer
+from grass.lib.ctypes_preamble import UNCHECKED, String
 
+import wx
 from core.debug import Debug
-from core.settings import UserSettings
 from core.gcmd import DecodeString
-from gui_core.wrap import Rect
+from core.settings import UserSettings
 
 try:
-    from grass.lib.gis import *
-    from grass.lib.vector import *
-    from grass.lib.vedit import *
+    from grass.lib.gis import (
+        G_gisinit,
+        G_set_error_routine,
+        G_set_percent_routine,
+        G_unset_error_routine,
+        G_unset_percent_routine,
+    )
+    from grass.lib.vector import (  # Types; Functions; Classes
+        GV_BOUNDARY,
+        GV_BUILD_NONE,
+        GV_CENTROID,
+        GV_LINE,
+        GV_LINES,
+        GV_MODE_RW,
+        GV_POINT,
+        GV_POINTS,
+        WITHOUT_Z,
+        Map_info,
+        Vect_append_point,
+        Vect_box_copy,
+        Vect_box_extend,
+        Vect_build,
+        Vect_build_partial,
+        Vect_close,
+        Vect_destroy_cats_struct,
+        Vect_destroy_line_struct,
+        Vect_destroy_list,
+        Vect_find_line_list,
+        Vect_get_area_box,
+        Vect_get_area_centroid,
+        Vect_get_centroid_area,
+        Vect_get_line_box,
+        Vect_get_map_box,
+        Vect_get_num_areas,
+        Vect_get_num_lines,
+        Vect_is_3d,
+        Vect_line_alive,
+        Vect_line_check_duplicate,
+        Vect_line_distance,
+        Vect_list_append,
+        Vect_new_cats_struct,
+        Vect_new_line_struct,
+        Vect_new_list,
+        Vect_open_old,
+        Vect_open_tmp_old,
+        Vect_open_tmp_update,
+        Vect_open_update,
+        Vect_point_in_area,
+        Vect_point_in_poly,
+        Vect_points_distance,
+        Vect_read_line,
+        Vect_select_lines_by_polygon,
+        Vect_set_updated,
+        bound_box,
+        PORT_DOUBLE_MAX,
+    )
+    from grass.lib.vedit import (  # Types; Draw flags; Functions
+        DRAW_AREA,
+        DRAW_BOUNDARYNO,
+        DRAW_BOUNDARYONE,
+        DRAW_BOUNDARYTWO,
+        DRAW_CENTROIDDUP,
+        DRAW_CENTROIDIN,
+        DRAW_CENTROIDOUT,
+        DRAW_DIRECTION,
+        DRAW_LINE,
+        DRAW_NODEONE,
+        DRAW_NODETWO,
+        DRAW_POINT,
+        DRAW_VERTEX,
+        TYPE_AREA,
+        TYPE_BOUNDARYNO,
+        TYPE_BOUNDARYONE,
+        TYPE_BOUNDARYTWO,
+        TYPE_CENTROIDDUP,
+        TYPE_CENTROIDIN,
+        TYPE_CENTROIDOUT,
+        TYPE_DIRECTION,
+        TYPE_ISLE,
+        TYPE_LINE,
+        TYPE_NODEONE,
+        TYPE_NODETWO,
+        TYPE_POINT,
+        TYPE_VERTEX,
+        Vedit_render_map,
+    )
 except (ImportError, OSError, TypeError) as e:
-    print("wxdigit.py: {}".format(e), file=sys.stderr)
+    print("wxdisplay.py: {}".format(e), file=sys.stderr)
+from gui_core.wrap import Rect
 
 log = None
 progress = None
@@ -260,7 +344,7 @@ class DisplayDriver:
             dcId = 1
             self.topology["highlight"] += 1
             if not self._drawSelected:
-                return
+                return None
         elif robj.type != TYPE_AREA and self._isSelected(robj.fid):
             pdc = self.dcTmp
             if self.settings["highlightDupl"]["enabled"] and self._isDuplicated(
@@ -279,7 +363,7 @@ class DisplayDriver:
             dcId = 1
             self.topology["highlight"] += 1
             if not self._drawSelected:
-                return
+                return None
         else:
             pdc = self.dc
             pen, brush = self._definePen(robj.type)
@@ -360,7 +444,7 @@ class DisplayDriver:
                         "Use v.clean to remove it."
                     )
                 )
-                return
+                return None
             if robj.type == TYPE_AREA:
                 pdc.DrawPolygon(points)
             else:
@@ -1120,7 +1204,7 @@ class DisplayDriver:
     def GetDuplicates(self):
         """Return ids of (selected) duplicated vector features"""
         if not self.poMapInfo:
-            return
+            return None
 
         ids = {}
         APoints = Vect_new_line_struct()
@@ -1141,14 +1225,15 @@ class DisplayDriver:
 
                 Vect_read_line(self.poMapInfo, BPoints, None, line2)
 
-                if Vect_line_check_duplicate(APoints, BPoints, WITHOUT_Z):
-                    if i not in ids:
-                        ids[i] = []
-                        ids[i].append((line1, self._getCatString(line1)))
-                        self.selected["idsDupl"].append(line1)
+                if not Vect_line_check_duplicate(APoints, BPoints, WITHOUT_Z):
+                    continue
+                if i not in ids:
+                    ids[i] = []
+                    ids[i].append((line1, self._getCatString(line1)))
+                    self.selected["idsDupl"].append(line1)
 
-                    ids[i].append((line2, self._getCatString(line2)))
-                    self.selected["idsDupl"].append(line2)
+                ids[i].append((line2, self._getCatString(line2)))
+                self.selected["idsDupl"].append(line2)
 
         Vect_destroy_line_struct(APoints)
         Vect_destroy_line_struct(BPoints)

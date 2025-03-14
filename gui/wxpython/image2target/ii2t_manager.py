@@ -90,22 +90,13 @@ maptype = "raster"
 
 
 def getSmallUpArrowImage():
-    stream = open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb")
-    try:
-        img = wx.Image(stream)
-    finally:
-        stream.close()
-    return img
+    with open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb") as stream:
+        return wx.Image(stream)
 
 
 def getSmallDnArrowImage():
-    stream = open(os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb")
-    try:
-        img = wx.Image(stream)
-    finally:
-        stream.close()
-    stream.close()
-    return img
+    with open(os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb") as stream:
+        return wx.Image(stream)
 
 
 class GCPWizard:
@@ -364,8 +355,9 @@ class GCPWizard:
 
         try:
             f = open(self.source_gisrc, mode="w")
-            for line in self.gisrc_dict.items():
-                f.write(line[0] + ": " + line[1] + "\n")
+            f.writelines(
+                line[0] + ": " + line[1] + "\n" for line in self.gisrc_dict.items()
+            )
         finally:
             f.close()
 
@@ -535,10 +527,7 @@ class LocationPage(TitledPage):
     def OnPageChanging(self, event: WizardEvent | None = None) -> None:
         if event.GetDirection() and (self.xylocation == "" or self.xymapset == ""):
             GMessage(
-                _(
-                    "You must select a valid location "
-                    "and mapset in order to continue"
-                ),
+                _("You must select a valid location and mapset in order to continue"),
                 parent=self,
             )
             event.Veto()
@@ -921,9 +910,7 @@ class DispMapPage(TitledPage):
                 flags="g",
             )
 
-            if ret:
-                self.parent.src_maps = ret.splitlines()
-            else:
+            if not ret:
                 GError(
                     parent=self,
                     message=_(
@@ -933,6 +920,7 @@ class DispMapPage(TitledPage):
                     % self.parent.grouppage.xygroup,
                 )
                 return
+            self.parent.src_maps = ret.splitlines()
 
         elif maptype == "vector":
             grassdatabase = self.parent.grassdatabase
@@ -949,15 +937,12 @@ class DispMapPage(TitledPage):
                 "VREF",
             )
 
-            f = open(vgrpfile)
-            try:
+            with open(vgrpfile) as f:
                 for vect in f:
                     vect = vect.strip("\n")
                     if len(vect) < 1:
                         continue
                     self.parent.src_maps.append(vect)
-            finally:
-                f.close()
 
             if len(self.parent.src_maps) < 1:
                 GError(
@@ -1693,7 +1678,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             targetMapWin.UpdateMap(render=False, renderVector=False)
 
     def OnFocus(self, event):
-        # TODO: it is here just to remove old or obsolete beavior of base class
+        # TODO: it is here just to remove old or obsolete behavior of base class
         #       gcp/MapPanel?
         # self.grwiz.SwitchEnv('source')
         pass
@@ -1717,7 +1702,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             targetMapWin = self.TgtMapWindow
             targetMapWin.UpdateMap(render=False, renderVector=False)
 
-    def CheckGCPcount(self, msg=False):
+    def CheckGCPcount(self, msg: bool = False) -> bool:
         """
         Checks to make sure that the minimum number of GCPs have been defined and
         are active for the selected transformation order
@@ -1739,9 +1724,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     )
                     % self.gr_order,
                 )
-                return False
-        else:
-            return True
+
+            return False
+
+        return True
 
     def OnGeorect(self, event):
         """
@@ -1782,16 +1768,13 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             self.grwiz.SwitchEnv("source")
 
             # make list of vectors to georectify from VREF
-            f = open(self.file["vgrp"])
             vectlist = []
-            try:
+            with open(self.file["vgrp"]) as f:
                 for vect in f:
                     vect = vect.strip("\n")
                     if len(vect) < 1:
                         continue
                     vectlist.append(vect)
-            finally:
-                f.close()
 
             # georectify each vector in VREF using v.rectify
             for vect in vectlist:
@@ -1976,9 +1959,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         self.grwiz.SwitchEnv("target")
 
-        if ret:
-            errlist = ret.splitlines()
-        else:
+        if not ret:
             GError(
                 parent=self,
                 message=_(
@@ -1987,6 +1968,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 ),
             )
             return
+        errlist = ret.splitlines()
 
         # insert error values into GCP list for checked items
         sdfactor = float(UserSettings.Get(group="gcpman", key="rms", subkey="sdfactor"))
@@ -2017,12 +1999,13 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 sumsq_bkw_err += float(bkw_err) ** 2
                 sum_fwd_err += float(fwd_err)
                 GCPcount += 1
-            else:
-                self.list.SetItem(index, 7, "")
-                self.list.SetItem(index, 8, "")
-                self.mapcoordlist[key][7] = 0.0
-                self.mapcoordlist[key][8] = 0.0
-                self.list.SetItemTextColour(index, wx.BLACK)
+                continue
+
+            self.list.SetItem(index, 7, "")
+            self.list.SetItem(index, 8, "")
+            self.mapcoordlist[key][7] = 0.0
+            self.mapcoordlist[key][8] = 0.0
+            self.list.SetItemTextColour(index, wx.BLACK)
 
         # SD
         if GCPcount > 0:
@@ -2078,7 +2061,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         if not self.CheckGCPcount(msg=True):
             self.gr_order = order
-            return
+            return None
 
         self.gr_order = order
 
@@ -2110,9 +2093,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         self.grwiz.SwitchEnv("target")
 
-        if ret:
-            errlist = ret.splitlines()
-        else:
+        if not ret:
             GError(
                 parent=self,
                 message=_(
@@ -2120,7 +2101,8 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     "Possible error with i.ortho.transform."
                 ),
             )
-            return
+            return None
+        errlist = ret.splitlines()
 
         # fist corner
         e, n = errlist[0].split()
@@ -2466,7 +2448,7 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
     def DeleteGCPItem(self):
         """Deletes selected item in GCP list."""
         if self.selected == wx.NOT_FOUND:
-            return
+            return None
 
         key = self.GetItemData(self.selected)
         self.DeleteItem(self.selected)
@@ -2638,8 +2620,7 @@ class VectGroup(wx.Dialog):
         self.listMap = CheckListBox(parent=self, id=wx.ID_ANY, choices=vectlist)
 
         if os.path.isfile(self.vgrpfile):
-            f = open(self.vgrpfile)
-            try:
+            with open(self.vgrpfile) as f:
                 checked = []
                 for line in f:
                     line = line.replace("\n", "")
@@ -2647,8 +2628,6 @@ class VectGroup(wx.Dialog):
                         continue
                     checked.append(line)
                 self.listMap.SetCheckedStrings(checked)
-            finally:
-                f.close()
 
         line = wx.StaticLine(
             parent=self, id=wx.ID_ANY, size=(20, -1), style=wx.LI_HORIZONTAL
@@ -2707,12 +2686,8 @@ class VectGroup(wx.Dialog):
                 continue
             vgrouplist.append(self.listMap.GetString(item) + "@" + self.xymapset)
 
-        f = open(self.vgrpfile, mode="w")
-        try:
-            for vect in vgrouplist:
-                f.write(vect + "\n")
-        finally:
-            f.close()
+        with open(self.vgrpfile, mode="w") as f:
+            f.writelines(vect + "\n" for vect in vgrouplist)
 
 
 class EditGCP(wx.Dialog):
@@ -3241,8 +3216,7 @@ class GrSettingsDialog(wx.Dialog):
             GError(
                 parent=self,
                 message=_(
-                    "RMS threshold factor is < 1\n"
-                    "Too many points might be highlighted"
+                    "RMS threshold factor is < 1\nToo many points might be highlighted"
                 ),
             )
 

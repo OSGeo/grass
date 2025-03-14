@@ -32,9 +32,9 @@ and try again. If you are not sure what to do, let others know in a pull
 request comment.
 
 Note that there are some steps you can do locally to improve your code.
-For Python, run `black .` to apply standardized formatting. You can
-also run linter tools such as Pylint which will suggest different improvements
-to your code.
+For Python, run `ruff format` to apply standardized formatting. You can
+also run linter tools such as `ruff check` or Pylint which will suggest
+different improvements to your code.
 
 ## Compilation
 

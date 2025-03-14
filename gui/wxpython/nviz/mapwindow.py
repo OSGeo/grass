@@ -26,26 +26,27 @@ import os
 import sys
 import time
 from threading import Thread
-from typing import TYPE_CHECKING
-
-import wx
-from wx.lib.newevent import NewEvent
-from wx import glcanvas
-from wx.glcanvas import WX_GL_DEPTH_SIZE, WX_GL_DOUBLEBUFFER, WX_GL_RGBA
+from typing import TYPE_CHECKING, Literal, TypedDict
 
 import grass.script as gs
 from grass.pydispatch.signal import Signal
 
-from core.gcmd import GMessage, GException, GError
+# isort: split
+
+import wx
 from core.debug import Debug
-from mapwin.base import MapWindowBase
-from core.settings import UserSettings
-from nviz.workspace import NvizSettings
-from nviz.animation import Animation
-from nviz import wxnviz
-from core.globalvar import CheckWxVersion
-from core.utils import str2rgb
+from core.gcmd import GError, GException, GMessage
 from core.giface import Notification
+from core.globalvar import CheckWxVersion
+from core.settings import UserSettings
+from core.utils import str2rgb
+from mapwin.base import MapWindowBase
+from nviz import wxnviz
+from nviz.animation import Animation
+from nviz.workspace import NvizSettings
+from wx import glcanvas
+from wx.glcanvas import WX_GL_DEPTH_SIZE, WX_GL_DOUBLEBUFFER, WX_GL_RGBA
+from wx.lib.newevent import NewEvent
 
 if TYPE_CHECKING:
     import lmgr.frame
@@ -57,22 +58,32 @@ wxUpdateLight, EVT_UPDATE_LIGHT = NewEvent()
 wxUpdateCPlane, EVT_UPDATE_CPLANE = NewEvent()
 
 
+class RenderTypedDict(TypedDict):
+    """Typed dictionary to store the render flags for GLWindow.
+    At runtime, it is a plain dict."""
+
+    quick: bool
+    vlines: bool
+    vpoints: bool
+    overlays: bool
+
+
 class NvizThread(Thread):
-    def __init__(self, log, progressbar, window):
+    def __init__(self, log, progressbar, window) -> None:
         Thread.__init__(self)
         Debug.msg(5, "NvizThread.__init__():")
         self.log = log
         self.progressbar = progressbar
         self.window = window
 
-        self._display = None
+        self._display: wxnviz.Nviz | None = None
 
         self.daemon = True
 
-    def run(self):
+    def run(self) -> None:
         self._display = wxnviz.Nviz(self.log, self.progressbar)
 
-    def GetDisplay(self):
+    def GetDisplay(self) -> wxnviz.Nviz | None:
         """Get display instance"""
         return self._display
 
@@ -120,7 +131,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         # or avoid duplication, define in map window base class?
 
         # Emitted when mouse us moving (mouse motion event)
-        # Parametres are x and y of the mouse position in map (cell) units
+        # Parameters are x and y of the mouse position in map (cell) units
         self.mouseMoving = Signal("GLWindow.mouseMoving")
 
         # Emitted when the zoom history stack is emptied
@@ -134,12 +145,12 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         self.init = False
         self.initView = False
-        self.context = None
+        self.context: glcanvas.GLContext | None = None
         if CheckWxVersion(version=[2, 9]):
             self.context = glcanvas.GLContext(self)
 
         # render mode
-        self.render = {
+        self.render: RenderTypedDict = {
             "quick": False,
             # do not render vector lines in quick mode
             "vlines": False,
@@ -187,7 +198,10 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         self.nvizThread = NvizThread(logerr, self.parent.GetProgressBar(), logmsg)
         self.nvizThread.start()
         time.sleep(0.1)
-        self._display = self.nvizThread.GetDisplay()
+        # self.nvizThread.start() invokes NvizThread.run() in a separate thread,
+        # which sets the _display attribute returned by GetDisplay(),
+        # so GetDisplay() shouldn't return None after calling self.nvizThread.start().
+        self._display: wxnviz.Nviz | None = self.nvizThread.GetDisplay()
 
         # GRASS_REGION needed only for initialization
         del os.environ["GRASS_REGION"]
@@ -251,7 +265,15 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             )
             GMessage(message)
 
-    def GetContentScaleFactor(self):
+    def GetContentScaleFactor(self) -> float:
+        """See note that wx.glcanvas.GLContext always uses physical pixels, even on the
+        platforms where wx.Window uses logical pixels, in wx.glcanvas.GLCanvas docs
+        https://docs.wxpython.org/wx.glcanvas.GLCanvas.html
+
+        Docs for wx.glcanvas.GLCanvas.GetContentScaleFactor() point to
+        wx.Window.GetContentScaleFactor() at
+        https://docs.wxpython.org/wx.Window.html#wx.Window.GetContentScaleFactor
+        """
         if sys.platform == "darwin" and not CheckWxVersion(version=[4, 1, 0]):
             return 1
         return super().GetContentScaleFactor()
@@ -750,7 +772,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         event.Skip()
 
-    def Pixel2Cell(self, xyCoords):
+    def Pixel2Cell(self, xyCoords) -> tuple[float, float] | None:
         """Convert image coordinates to real word coordinates
 
         :param xyCoords: image coordinates
@@ -770,9 +792,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         return (x, y)
 
-    def DoZoom(self, zoomtype, pos):
+    def DoZoom(self, zoomtype, pos) -> None:
         """Change perspective and focus"""
-
+        if self.view is None:
+            # Cannot do any useful actions here if self.view is None
+            return
         prev_value = self.view["persp"]["value"]
         if zoomtype > 0:
             value = -1 * self.view["persp"]["step"]
@@ -785,7 +809,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.view["persp"]["value"] = 180
 
         if prev_value != self.view["persp"]["value"]:
-            if hasattr(self.lmgr, "nviz"):
+            if hasattr(self.lmgr, "nviz") and self._display is not None:
                 self.lmgr.nviz.UpdateSettings()
                 x, y = pos[0], self.GetClientSize()[1] - pos[1]
                 result = self._display.GetPointOnSurface(
@@ -795,14 +819,16 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     self._display.LookHere(x, y, self.GetContentScaleFactor())
                     focus = self._display.GetFocus()
                     for i, coord in enumerate(("x", "y", "z")):
-                        self.iview["focus"][coord] = focus[i]
-                self._display.SetView(
-                    self.view["position"]["x"],
-                    self.view["position"]["y"],
-                    self.iview["height"]["value"],
-                    self.view["persp"]["value"],
-                    self.view["twist"]["value"],
-                )
+                        if self.iview is not None:
+                            self.iview["focus"][coord] = focus[i]
+                if self.iview is not None:
+                    self._display.SetView(
+                        self.view["position"]["x"],
+                        self.view["position"]["y"],
+                        self.iview["height"]["value"],
+                        self.view["persp"]["value"],
+                        self.view["twist"]["value"],
+                    )
                 self.saveHistory = True
             # redraw map
             self.DoPaint()
@@ -878,6 +904,9 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     def FocusPanning(self, event):
         """Simulation of panning using focus"""
         size = self.GetClientSize()
+        if self._display is None:
+            msg = "self._display should not be None after starting NvizThread"
+            raise GException(msg)
         id1, x1, y1, z1 = self._display.GetPointOnSurface(
             self.mouse["tmp"][0],
             size[1] - self.mouse["tmp"][1],
@@ -886,6 +915,18 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         id2, x2, y2, z2 = self._display.GetPointOnSurface(
             event.GetX(), size[1] - event.GetY(), self.GetContentScaleFactor()
         )
+        if (
+            id1 is None
+            or id2 is None
+            or x1 is None
+            or x2 is None
+            or y1 is None
+            or y2 is None
+            or z1 is None
+            or z2 is None
+            or self.iview is None
+        ):
+            return
         if id1 and id1 == id2:
             dx, dy, dz = x2 - x1, y2 - y1, z2 - z1
             focus = self.iview["focus"]
@@ -901,11 +942,14 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             self.render["quick"] = True
             self.Refresh(False)
 
-    def HorizontalPanning(self, event):
+    def HorizontalPanning(self, event) -> None:
         """Move all layers in horizontal (x, y) direction.
         Currently not used.
         """
-        size = self.GetClientSize()
+        size: wx.Size | tuple[int, int] = self.GetClientSize()
+        if self._display is None:
+            msg = "self._display should not be None after starting NvizThread"
+            raise GException(msg)
         id1, x1, y1, z1 = self._display.GetPointOnSurface(
             self.mouse["tmp"][0],
             size[1] - self.mouse["tmp"][1],
@@ -1042,7 +1086,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
     def QuerySurface(self, x, y):
         """Query surface on given position"""
         size = self.GetClientSize()
-        result = self._display.QueryMap(x, size[1] - y, self.GetContentScaleFactor())
+        result = None
+        if self._display is not None:
+            result = self._display.QueryMap(
+                x, size[1] - y, self.GetContentScaleFactor()
+            )
         if result:
             self.qpoints.append((result["x"], result["y"], result["z"]))
             self.log.WriteLog("%-30s: %.3f" % (_("Easting"), result["x"]))
@@ -1185,16 +1233,15 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         if event.refresh:
             self.Refresh(False)
 
-    def UpdateMap(self, render=True, reRenderTool=False):
+    def UpdateMap(self, render: bool = True, reRenderTool: bool = False) -> None:
         """Updates the canvas anytime there is a change to the
         underlying images or to the geometry of the canvas.
 
         :param render: re-render map composition
-        :type render: bool
-        :param reRenderTool bool: enable re-render map if True, when
-                                  auto re-render map is disabled and
-                                  Render map tool is activated from the
-                                  Map Display toolbar
+        :param reRenderTool: enable re-render map if True, when
+                             auto re-render map is disabled and
+                             Render map tool is activated from the
+                             Map Display toolbar
         """
         if not self.parent.mapWindowProperties.autoRender and not reRenderTool:
             return
@@ -1254,7 +1301,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         Debug.msg(
             3,
             "GLWindow.UpdateMap(): quick = %d, -> time = %g"
-            % (self.render["quick"], (stop - start)),
+            % (int(self.render["quick"]), (stop - start)),
         )
 
     def EraseMap(self):
@@ -1595,7 +1642,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         layer = self.tree.GetLayerInfo(item, key="maplayer")
 
         if layer.type not in {"raster", "raster_3d"}:
-            return
+            return None
 
         if layer.type == "raster":
             id = self._display.LoadSurface(str(layer.name), None, None)
@@ -1779,7 +1826,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """
         layer = self.tree.GetLayerInfo(item, key="maplayer")
         if layer.type != "vector":
-            return
+            return None
 
         # set default properties
         if points is None:
@@ -2063,7 +2110,9 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             data["position"].pop("update")
         data["draw"]["all"] = False
 
-    def UpdateVolumeProperties(self, id, data, isosurfId=None):
+    def UpdateVolumeProperties(
+        self, id: wxnviz.VolumeId, data, isosurfId: wxnviz.IsosurfaceId | None = None
+    ) -> None:
         """Update volume (isosurface/slice) map object properties"""
         if "update" in data["draw"]["resolution"]:
             if data["draw"]["mode"]["value"] == 0:
@@ -2099,7 +2148,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         #
         # isosurface attributes
         #
-        isosurfId = 0
+        isosurfId: wxnviz.IsosurfaceId = 0
         for isosurf in data["isosurface"]:
             self._display.AddIsosurface(id, 0, isosurf_id=isosurfId)
             for attrb in ("topo", "color", "mask", "transp", "shine"):
@@ -2186,7 +2235,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         else:
             self.UpdateVectorLinesProperties(id, data[type])
 
-    def UpdateVectorLinesProperties(self, id, data):
+    def UpdateVectorLinesProperties(self, id: wxnviz.VectorId, data) -> None:
         """Update vector line map object properties"""
         # mode
         if (
@@ -2253,8 +2302,11 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         if "update" in data["mode"]:
             data["mode"].pop("update")
 
-    def UpdateVectorPointsProperties(self, id, data):
+    def UpdateVectorPointsProperties(self, id: wxnviz.PointId, data) -> None:
         """Update vector point map object properties"""
+        if self._display is None:
+            msg = "self._display should not be None after starting NvizThread"
+            raise GException(msg)
         if (
             "update" in data["size"]
             or "update" in data["width"]
@@ -2543,16 +2595,18 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     cmdLColor += "%s," % nvizData["lines"]["color"]["value"]
                     cmdLMode += "%s," % nvizData["lines"]["mode"]["type"]
                     cmdLPos += "0,0,%d," % nvizData["lines"]["height"]["value"]
-                if (vInfo["points"] + vInfo["centroids"]) > 0:
-                    cmdPoints += (
-                        "%s," % self.tree.GetLayerInfo(vector, key="maplayer").GetName()
-                    )
-                    cmdPWidth += "%d," % nvizData["points"]["width"]["value"]
-                    cmdPSize += "%d," % nvizData["points"]["size"]["value"]
-                    cmdPColor += "%s," % nvizData["points"]["color"]["value"]
-                    cmdPMarker += "%s," % markers[nvizData["points"]["marker"]["value"]]
-                    cmdPPos += "0,0,%d," % nvizData["points"]["height"]["value"]
-                    cmdPLayer += "1,1,"
+                if vInfo["points"] + vInfo["centroids"] <= 0:
+                    continue
+                cmdPoints += (
+                    "%s," % self.tree.GetLayerInfo(vector, key="maplayer").GetName()
+                )
+                cmdPWidth += "%d," % nvizData["points"]["width"]["value"]
+                cmdPSize += "%d," % nvizData["points"]["size"]["value"]
+                cmdPColor += "%s," % nvizData["points"]["color"]["value"]
+                cmdPMarker += "%s," % markers[nvizData["points"]["marker"]["value"]]
+                cmdPPos += "0,0,%d," % nvizData["points"]["height"]["value"]
+                cmdPLayer += "1,1,"
+
             if cmdLines:
                 cmd += "vline=" + cmdLines.strip(",") + " "
                 cmd += "vline_width=" + cmdLWidth.strip(",") + " "
@@ -2728,7 +2782,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """Generate and write command to command output"""
         self.log.WriteLog(self.NvizCmdCommand(), notification=Notification.RAISE_WINDOW)
 
-    def SaveToFile(self, FileName, FileType, width, height):
+    def SaveToFile(self, FileName, FileType: Literal["ppm", "tif"], width, height):
         """This draws the DC to a buffer that can be saved to a file.
 
         .. todo::
@@ -2753,7 +2807,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """Get display instance"""
         return self._display
 
-    def ZoomToMap(self, layers):
+    def ZoomToMap(self, layers: list | None = None) -> None:
         """Reset view
 
         :param layers: so far unused

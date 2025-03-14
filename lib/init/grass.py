@@ -92,7 +92,7 @@ if ENCODING is None:
 if "GISBASE" in os.environ and len(os.getenv("GISBASE")) > 0:
     GISBASE = os.path.normpath(os.environ["GISBASE"])
 else:
-    GISBASE = os.path.normpath("@GISBASE@")
+    GISBASE = os.path.normpath("@GISBASE_INSTALL_PATH@")
     os.environ["GISBASE"] = GISBASE
 CMD_NAME = "@START_UP@"
 GRASS_VERSION = "@GRASS_VERSION_NUMBER@"
@@ -525,8 +525,7 @@ def write_gisrcrc(gisrcrc, gisrc, skip_variable=None):
                 del lines[number]
             number += 1
     with open(gisrcrc, "w") as f:
-        for line in lines:
-            f.write(line)
+        f.writelines(lines)
 
 
 def read_env_file(path):
@@ -543,8 +542,7 @@ def write_gisrc(kv, filename, append=False):
     # use append=True to avoid a race condition between write_gisrc() and
     # grass_prompt() on startup (PR #548)
     f = open(filename, "a" if append else "w")
-    for k, v in kv.items():
-        f.write("%s: %s\n" % (k, v))
+    f.writelines("%s: %s\n" % (k, v) for k, v in kv.items())
     f.close()
 
 
@@ -605,13 +603,10 @@ def read_gui(gisrc, default_gui):
 
 def create_initial_gisrc(filename):
     # for convenience, define GISDBASE as pwd:
-    s = (
-        r"""GISDBASE: %s
+    s = r"""GISDBASE: %s
 LOCATION_NAME: <UNKNOWN>
 MAPSET: <UNKNOWN>
-"""
-        % Path.cwd()
-    )
+""" % Path.cwd()
     writefile(filename, s)
 
 
@@ -738,9 +733,7 @@ def cannot_create_location_reason(gisdbase, location):
             " already exists."
         ).format(**locals())
     return _(
-        "Unable to create new project in"
-        " the directory <{path}>"
-        " for an unknown reason."
+        "Unable to create new project in the directory <{path}> for an unknown reason."
     ).format(**locals())
 
 
@@ -1666,9 +1659,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         fc -R
         _grass_old_mapset="$MAPSET_PATH"
     fi
-    """.format(
-            sh_history=sh_history
-        )
+    """.format(sh_history=sh_history)
     elif sh == "bash":
         # Append existing history to file ("flush").
         # Clear the (in-memory) history.
@@ -1682,9 +1673,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         history -r
         _grass_old_mapset="$MAPSET_PATH"
     fi
-    """.format(
-            sh_history=sh_history
-        )
+    """.format(sh_history=sh_history)
         # Ubuntu sudo creates a file .sudo_as_admin_successful and bash checks
         # for this file in the home directory from /etc/bash.bashrc and prints a
         # message if it's not detected. This can be suppressed with either
@@ -1717,9 +1706,9 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
     fi
 }}
 PROMPT_COMMAND=grass_prompt\n""".format(
-            both_masks=_("2D and 3D raster MASKs present"),
-            mask2d=_("Raster MASK present"),
-            mask3d=_("3D raster MASK present"),
+            both_masks=_("2D and 3D raster masks present"),
+            mask2d=_("Raster mask present"),
+            mask3d=_("3D raster mask present"),
             mask2d_test=mask2d_test,
             mask3d_test=mask3d_test,
             specific_addition=specific_addition,

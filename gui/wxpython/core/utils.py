@@ -12,6 +12,8 @@ This program is free software under the GNU General Public License
 @author Jachym Cepicky
 """
 
+from __future__ import annotations
+
 import os
 import sys
 import platform
@@ -21,6 +23,8 @@ import re
 import inspect
 import operator
 from string import digits
+from typing import TYPE_CHECKING
+
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -29,6 +33,11 @@ from grass.app.runtime import get_grass_config_dir
 from core.gcmd import RunCommand
 from core.debug import Debug
 from core.globalvar import wxPythonPhoenix
+
+
+if TYPE_CHECKING:
+    import wx
+    import PIL.Image
 
 
 def cmp(a, b):
@@ -137,18 +146,18 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
                 params.append((idx, p, v))
 
         if len(params) < 1:
-            if len(dcmd) > 1:
-                i = 1
-                while i < len(dcmd):
-                    if "=" not in dcmd[i] and not dcmd[i].startswith("-"):
-                        task = gtask.parse_interface(dcmd[0])
-                        # this expects the first parameter to be the right one
-                        p = task.get_options()["params"][0].get("name", "")
-                        params.append((i, p, dcmd[i]))
-                        break
-                    i += 1
-            else:
-                return mapname, False
+            if len(dcmd) <= 1:
+                return (mapname, False)
+
+            i = 1
+            while i < len(dcmd):
+                if "=" not in dcmd[i] and (not dcmd[i].startswith("-")):
+                    task = gtask.parse_interface(dcmd[0])
+                    # this expects the first parameter to be the right one
+                    p = task.get_options()["params"][0].get("name", "")
+                    params.append((i, p, dcmd[i]))
+                    break
+                i += 1
 
         if len(params) < 1:
             return mapname, False
@@ -258,10 +267,9 @@ def ListOfCatsToRange(cats):
         next = 0
         j = i + 1
         while j < len(cats):
-            if cats[i + next] == cats[j] - 1:
-                next += 1
-            else:
+            if cats[i + next] != cats[j] - 1:
                 break
+            next += 1
             j += 1
 
         if next > 1:
@@ -277,7 +285,7 @@ def ListOfCatsToRange(cats):
 def ListOfMapsets(get="ordered"):
     """Get list of available/accessible mapsets.
     Option 'ordered' returns list of all mapsets, first accessible
-    then not accessible. Raises ValueError for wrong paramater value.
+    then not accessible. Raises ValueError for wrong parameter values.
 
     :param str get: method ('all', 'accessible', 'ordered')
 
@@ -293,22 +301,21 @@ def ListOfMapsets(get="ordered"):
         if get == "all":
             return mapsets_all
 
-    if get in {"accessible", "ordered"}:
-        ret = RunCommand("g.mapsets", read=True, quiet=True, flags="p", sep="newline")
-        if not ret:
-            return []
-        mapsets_accessible = ret.splitlines()
-        if get == "accessible":
-            return mapsets_accessible
+    if get not in {"accessible", "ordered"}:
+        msg = "Invalid value for 'get' parameter of ListOfMapsets()"
+        raise ValueError(msg)
+    ret = RunCommand("g.mapsets", read=True, quiet=True, flags="p", sep="newline")
+    if not ret:
+        return []
+    mapsets_accessible = ret.splitlines()
+    if get == "accessible":
+        return mapsets_accessible
 
-        mapsets_ordered = mapsets_accessible.copy()
-        for mapset in mapsets_all:
-            if mapset not in mapsets_accessible:
-                mapsets_ordered.append(mapset)
-        return mapsets_ordered
-
-    msg = "Invalid value for 'get' parameter of ListOfMapsets()"
-    raise ValueError(msg)
+    mapsets_ordered = mapsets_accessible.copy()
+    for mapset in mapsets_all:
+        if mapset not in mapsets_accessible:
+            mapsets_ordered.append(mapset)
+    return mapsets_ordered
 
 
 def ListSortLower(list):
@@ -819,7 +826,21 @@ def StoreEnvVariable(key, value=None, envFile=None):
     lineSkipped = []
     if os.path.exists(envFile):
         try:
-            fd = open(envFile)
+            with open(envFile) as fd:
+                for line in fd:
+                    line = line.rstrip(os.linesep)
+                    try:
+                        k, v = (x.strip() for x in line.split(" ", 1)[1].split("=", 1))
+                    except Exception as e:
+                        sys.stderr.write(
+                            _("%s: line skipped - unable to parse '%s'\nReason: %s\n")
+                            % (envFile, line, e)
+                        )
+                        lineSkipped.append(line)
+                        continue
+                    if k in environ:
+                        sys.stderr.write(_("Duplicated key: %s\n") % k)
+                    environ[k] = v
         except OSError as error:
             sys.stderr.write(
                 _("Unable to open file '{name}': {error}\n").format(
@@ -827,22 +848,6 @@ def StoreEnvVariable(key, value=None, envFile=None):
                 )
             )
             return
-        for line in fd:
-            line = line.rstrip(os.linesep)
-            try:
-                k, v = (x.strip() for x in line.split(" ", 1)[1].split("=", 1))
-            except Exception as e:
-                sys.stderr.write(
-                    _("%s: line skipped - unable to parse '%s'\nReason: %s\n")
-                    % (envFile, line, e)
-                )
-                lineSkipped.append(line)
-                continue
-            if k in environ:
-                sys.stderr.write(_("Duplicated key: %s\n") % k)
-            environ[k] = v
-
-        fd.close()
 
     # update environmental variables
     if value is None:
@@ -852,7 +857,15 @@ def StoreEnvVariable(key, value=None, envFile=None):
 
     # write update env file
     try:
-        fd = open(envFile, "w")
+        with open(envFile, "w") as fd:
+            expCmd = "set" if windows else "export"
+
+            fd.writelines(
+                "%s %s=%s\n" % (expCmd, key, value) for key, value in environ.items()
+            )
+
+            # write also skipped lines
+            fd.writelines(line + os.linesep for line in lineSkipped)
     except OSError as error:
         sys.stderr.write(
             _("Unable to create file '{name}': {error}\n").format(
@@ -860,16 +873,6 @@ def StoreEnvVariable(key, value=None, envFile=None):
             )
         )
         return
-    expCmd = "set" if windows else "export"
-
-    for key, value in environ.items():
-        fd.write("%s %s=%s\n" % (expCmd, key, value))
-
-    # write also skipped lines
-    for line in lineSkipped:
-        fd.write(line + os.linesep)
-
-    fd.close()
 
 
 def SetAddOnPath(addonPath=None, key="PATH"):
@@ -1011,7 +1014,7 @@ def GetGEventAttribsForHandler(method, event):
     return kwargs, missing_args
 
 
-def PilImageToWxImage(pilImage, copyAlpha=True):
+def PilImageToWxImage(pilImage: PIL.Image.Image, copyAlpha: bool = True) -> wx.Image:
     """Convert PIL image to wx.Image
 
     Based on http://wiki.wxpython.org/WorkingWithImages
@@ -1040,7 +1043,7 @@ def PilImageToWxImage(pilImage, copyAlpha=True):
     return wxImage
 
 
-def autoCropImageFromFile(filename):
+def autoCropImageFromFile(filename) -> wx.Image:
     """Loads image from file and crops it automatically.
 
     If PIL is not installed, it does not crop it.

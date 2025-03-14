@@ -9,14 +9,17 @@ msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2005-06-10 11:15+0200\n"
-"Last-Translator: Miha Staut <mihastaut@yahoo.co.uk>\n"
-"Language-Team: Slovenščina <grass-translations@lists.osgeo.org>\n"
-"Language: sl_SL\n"
+"PO-Revision-Date: 2025-03-12 12:06+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/"
+"grassmods/sl/>\n"
+"Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../temporal/t.connect/main.c:34
 #: ../locale/scriptstrings/t.merge_to_translate.c:2
@@ -66583,7 +66586,7 @@ msgid "Outputs basic information about a vector map."
 msgstr "Izpiše osnovne informacije o določenem rastrskem sloju."
 
 #: ../vector/v.info/print.c:30 ../vector/v.info/print.c:32
-#, fuzzy, c-format
+#, c-format
 msgid "%s"
 msgstr "%s"
 

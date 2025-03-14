@@ -39,6 +39,7 @@ import mimetypes
 import time
 
 import xml.etree.ElementTree as ET
+from pathlib import Path
 from xml.sax import saxutils
 
 import wx
@@ -494,25 +495,25 @@ class Model:
                     continue
                 key, value = opt.split("=", 1)
                 sval = pattern.search(value)
-                if sval:
-                    var = sval.group(2).strip()[1:]  # strip '%' from beginning
-                    found = False
-                    for v in variables:
-                        if var.startswith(v):
-                            found = True
-                            break
-                    if not found:
-                        report = True
-                        for item in filter(
-                            lambda x: isinstance(x, ModelLoop), action.GetBlock()
-                        ):
-                            if var in item.GetLabel():
-                                report = False
-                                break
-                        if report:
-                            errList.append(
-                                cmd[0] + ": " + _("undefined variable '%s'") % var
-                            )
+                if not sval:
+                    continue
+                var = sval.group(2).strip()[1:]  # strip '%' from beginning
+                found = False
+                for v in variables:
+                    if var.startswith(v):
+                        found = True
+                        break
+                if found:
+                    continue
+                report = True
+                for item in filter(
+                    lambda x: isinstance(x, ModelLoop), action.GetBlock()
+                ):
+                    if var in item.GetLabel():
+                        report = False
+                        break
+                if report:
+                    errList.append(cmd[0] + ": " + _("undefined variable '%s'") % var)
             # TODO: check variables in file only optionally
             # errList += self._substituteFile(action, checkOnly = True)
 
@@ -542,11 +543,8 @@ class Model:
 
         for finput in self.fileInput:
             # read lines
-            fd = open(finput)
-            try:
-                data = self.fileInput[finput] = fd.read()
-            finally:
-                fd.close()
+            data = Path(finput).read_text()
+            self.fileInput[finput] = data
 
             # substitute variables
             write = False
@@ -579,11 +577,7 @@ class Model:
 
             if not checkOnly:
                 if write:
-                    fd = open(finput, "w")
-                    try:
-                        fd.write(data)
-                    finally:
-                        fd.close()
+                    Path(finput).write_text(data)
                 else:
                     self.fileInput[finput] = None
 
@@ -708,24 +702,24 @@ class Model:
                 variables = self.GetVariables()
                 for variable in variables:
                     pattern = re.compile("%" + variable)
-                    if pattern.search(cond):
-                        value = ""
-                        if params and "variables" in params:
-                            for p in params["variables"]["params"]:
-                                if variable == p.get("name", ""):
-                                    value = p.get("value", "")
-                                    break
+                    if not pattern.search(cond):
+                        continue
+                    value = ""
+                    if params and "variables" in params:
+                        for p in params["variables"]["params"]:
+                            if variable == p.get("name", ""):
+                                value = p.get("value", "")
+                                break
 
-                        if not value:
-                            value = variables[variable].get("value", "")
+                    if not value:
+                        value = variables[variable].get("value", "")
 
-                        if not value:
-                            continue
-
-                        vtype = variables[variable].get("type", "string")
-                        if vtype == "string":
-                            value = '"' + value + '"'
-                        cond = pattern.sub(value, cond)
+                    if not value:
+                        continue
+                    vtype = variables[variable].get("type", "string")
+                    if vtype == "string":
+                        value = '"' + value + '"'
+                    cond = pattern.sub(value, cond)
 
                 # split condition
                 # TODO: this part needs some better solution
@@ -965,10 +959,10 @@ class ModelObject:
             self.inBlock.append(item)
 
     def UnSetBlock(self, item):
-        """Remove object from the block (loop/consition)
+        """Remove object from the block (loop/condition)
 
         :param item: reference to ModelLoop or ModelCondition which
-                     defines loops/codition
+                     defines loops/condition
         """
         if item in self.inBlock:
             self.inBlock.remove(item)
@@ -1217,12 +1211,11 @@ class ModelAction(ModelObject, ogl.DividedShape):
                         cmd[idx] = pattern.sub(value, cmd[idx])
                     idx += 1
 
-        if string:
-            if cmd is None:
-                return ""
-            return " ".join(cmd)
-
-        return cmd
+        if not string:
+            return cmd
+        if cmd is None:
+            return ""
+        return " ".join(cmd)
 
     def GetLabel(self):
         """Get name"""
@@ -1981,12 +1974,11 @@ class ProcessModelFile:
     def _getNodeText(self, node, tag, default=""):
         """Get node text"""
         p = node.find(tag)
-        if p is not None:
-            if p.text:
-                return utils.normalize_whitespace(p.text)
-            return ""
-
-        return default
+        if p is None:
+            return default
+        if p.text:
+            return utils.normalize_whitespace(p.text)
+        return ""
 
     def _processWindow(self):
         """Process window properties"""
@@ -2710,9 +2702,9 @@ class WriteActiniaFile(WriteScriptFile):
 
         self.fd.write(
             f"""{{
-{' ' * self.indent * 1}"id": "model",
-{' ' * self.indent * 1}"description": "{'""'.join(description.splitlines())}",
-{' ' * self.indent * 1}"version": "1",
+{" " * self.indent * 1}"id": "model",
+{" " * self.indent * 1}"description": "{'""'.join(description.splitlines())}",
+{" " * self.indent * 1}"version": "1",
 """
         )
 
@@ -2729,12 +2721,12 @@ class WriteActiniaFile(WriteScriptFile):
         if parameterized is True:
             self.fd.write(f'{" " * self.indent * 1}"template": {{\n')
             self.fd.write(
-                f"""{' ' * self.indent * 2}"list": [
+                f"""{" " * self.indent * 2}"list": [
     """
             )
         else:
             self.fd.write(
-                f"""{' ' * self.indent}"list": [
+                f"""{" " * self.indent}"list": [
     """
             )
 
@@ -2786,23 +2778,23 @@ class WriteActiniaFile(WriteScriptFile):
             name = p.get("name", None)
             value = p.get("value", None)
 
-            if (name and value) or (name in parameterizedParams):
+            if (not name or not value) and name not in parameterizedParams:
+                continue
 
-                if name in parameterizedParams:
-                    parameterizedParam = self._getParamName(name, item)
-                    default_val = p.get("value", "")
+            if name in parameterizedParams:
+                parameterizedParam = self._getParamName(name, item)
+                default_val = p.get("value", "")
 
-                    if len(default_val) > 0:
-                        parameterizedParam += f"|default({default_val})"
+                if len(default_val) > 0:
+                    parameterizedParam += f"|default({default_val})"
+                value = f"{{{{ {parameterizedParam} }}}}"
 
-                    value = f"{{{{ {parameterizedParam} }}}}"
-
-                param_string = f'{{"param": "{name}", "value": "{value}"}}'
-                age = p.get("age", "old")
-                if age == "new":
-                    outputs.append(param_string)
-                else:
-                    inputs.append(param_string)
+            param_string = f'{{"param": "{name}", "value": "{value}"}}'
+            age = p.get("age", "old")
+            if age == "new":
+                outputs.append(param_string)
+            else:
+                inputs.append(param_string)
 
         ret += f'{" " * self.indent * 4}"module": "{task.get_name()}",\n'
         ret += f'{" " * self.indent * 4}"id": "{self._getModuleNickname(item)}",\n'
@@ -3003,19 +2995,20 @@ if __name__ == "__main__":
             # ComplexOutput if: outputting a new non-intermediate layer and
             # either not empty or parameterized
             if (
-                age == "new"
-                and not any(value in i for i in intermediates)
-                and (value != "" or param in item.GetParameterizedParams()["params"])
-            ):
-                io_data = "outputs"
-                object_type = "ComplexOutput"
-                format_spec = self._getSupportedFormats(param["prompt"])
-
-                self._write_input_output_object(
-                    io_data, object_type, param["name"], item, desc, format_spec, ""
+                age != "new"
+                or any(value in i for i in intermediates)
+                or (
+                    value == "" and param not in item.GetParameterizedParams()["params"]
                 )
-
-                self.fd.write("\n")
+            ):
+                continue
+            io_data = "outputs"
+            object_type = "ComplexOutput"
+            format_spec = self._getSupportedFormats(param["prompt"])
+            self._write_input_output_object(
+                io_data, object_type, param["name"], item, desc, format_spec, ""
+            )
+            self.fd.write("\n")
 
     def _write_input_output_object(
         self,
@@ -3067,45 +3060,49 @@ if __name__ == "__main__":
             # output if: outputting a new non-intermediate layer and
             # either not empty or parameterized
             if (
-                age == "new"
-                and not any(value in i for i in intermediates)
-                and (value != "" or param in item.GetParameterizedParams()["params"])
+                age != "new"
+                or any(value in i for i in intermediates)
+                or (
+                    value == "" and param not in item.GetParameterizedParams()["params"]
+                )
             ):
-                if param["prompt"] == "vector":
-                    command = "v.out.ogr"
-                    format = '"GML"'
-                    extension = ".gml"
-                elif param["prompt"] == "raster":
-                    command = "r.out.gdal"
-                    format = '"GTiff"'
-                    extension = ".tif"
-                else:
-                    # TODO: Support 3D
-                    command = "WRITE YOUR EXPORT COMMAND"
-                    format = '"WRITE YOUR EXPORT FORMAT"'
-                    extension = "WRITE YOUR EXPORT EXTENSION"
+                continue
 
-                n = param.get("name", None)
-                param_name = self._getParamName(n, item)
+            if param["prompt"] == "vector":
+                command = "v.out.ogr"
+                format = '"GML"'
+                extension = ".gml"
+            elif param["prompt"] == "raster":
+                command = "r.out.gdal"
+                format = '"GTiff"'
+                extension = ".tif"
+            else:
+                # TODO: Support 3D
+                command = "WRITE YOUR EXPORT COMMAND"
+                format = '"WRITE YOUR EXPORT FORMAT"'
+                extension = "WRITE YOUR EXPORT EXTENSION"
 
-                keys = param.keys()
-                if "parameterized" in keys and param["parameterized"] is True:
-                    param_request = 'request.inputs["{}"][0].data'.format(param_name)
-                else:
-                    param_request = '"{}"'.format(param["value"])
+            n = param.get("name", None)
+            param_name = self._getParamName(n, item)
 
-                # if True, write the overwrite parameter to the model command
-                overwrite = self.model.GetProperties().get("overwrite", False)
-                if overwrite is True:
-                    overwrite_string = ",\n{}overwrite=True".format(
-                        " " * (self.indent + 12)
-                    )
-                else:
-                    overwrite_string = ""
+            keys = param.keys()
+            if "parameterized" in keys and param["parameterized"] is True:
+                param_request = 'request.inputs["{}"][0].data'.format(param_name)
+            else:
+                param_request = '"{}"'.format(param["value"])
 
-                strcmd_len = len(strcmd.strip())
-                self.fd.write(
-                    """
+            # if True, write the overwrite parameter to the model command
+            overwrite = self.model.GetProperties().get("overwrite", False)
+            if overwrite is True:
+                overwrite_string = ",\n{}overwrite=True".format(
+                    " " * (self.indent + 12)
+                )
+            else:
+                overwrite_string = ""
+
+            strcmd_len = len(strcmd.strip())
+            self.fd.write(
+                """
 {run_command}"{cmd}",
 {indent1}input={input},
 {indent2}output=os.path.join(
@@ -3113,37 +3110,35 @@ if __name__ == "__main__":
 {indent4}{out} + "{format_ext}"),
 {indent5}format={format}{overwrite_string})
 """.format(
-                        run_command=strcmd,
-                        cmd=command,
-                        indent1=" " * (self.indent + strcmd_len),
-                        input=param_request,
-                        indent2=" " * (self.indent + strcmd_len),
-                        indent3=" " * (self.indent * 2 + strcmd_len),
-                        indent4=" " * (self.indent * 2 + strcmd_len),
-                        out=param_request,
-                        format_ext=extension,
-                        indent5=" " * (self.indent + strcmd_len),
-                        format=format,
-                        overwrite_string=overwrite_string,
-                    )
+                    run_command=strcmd,
+                    cmd=command,
+                    indent1=" " * (self.indent + strcmd_len),
+                    input=param_request,
+                    indent2=" " * (self.indent + strcmd_len),
+                    indent3=" " * (self.indent * 2 + strcmd_len),
+                    indent4=" " * (self.indent * 2 + strcmd_len),
+                    out=param_request,
+                    format_ext=extension,
+                    indent5=" " * (self.indent + strcmd_len),
+                    format=format,
+                    overwrite_string=overwrite_string,
                 )
+            )
 
-                left_side_out = 'response.outputs["{}"].file'.format(param_name)
-                right_side_out = (
-                    "os.path.join(\n{indent1}"
-                    'tempfile.gettempdir(),\n{indent2}{out} + "'
-                    '{format_ext}")'.format(
-                        indent1=" " * (self.indent + 4),
-                        indent2=" " * (self.indent + 4),
-                        out=param_request,
-                        format_ext=extension,
-                    )
+            left_side_out = 'response.outputs["{}"].file'.format(param_name)
+            right_side_out = (
+                "os.path.join(\n{indent1}"
+                'tempfile.gettempdir(),\n{indent2}{out} + "'
+                '{format_ext}")'.format(
+                    indent1=" " * (self.indent + 4),
+                    indent2=" " * (self.indent + 4),
+                    out=param_request,
+                    format_ext=extension,
                 )
-                self.fd.write(
-                    "\n{}{} = {}".format(
-                        " " * self.indent, left_side_out, right_side_out
-                    )
-                )
+            )
+            self.fd.write(
+                "\n{}{} = {}".format(" " * self.indent, left_side_out, right_side_out)
+            )
 
     def _getPythonActionCmd(self, item, task, cmdIndent, variables={}):
         opts = task.get_options()
@@ -3161,25 +3156,26 @@ if __name__ == "__main__":
             name = p.get("name", None)
             value = p.get("value", None)
 
-            if (name and value) or (name in parameterizedParams):
-                ptype = p.get("type", "string")
-                foundVar = False
+            if (not name or not value) and name not in parameterizedParams:
+                continue
 
-                if name in parameterizedParams:
-                    foundVar = True
-                    if "input" in name:
-                        value = 'request.inputs["{}"][0].file'.format(
-                            self._getParamName(name, item)
-                        )
-                    else:
-                        value = 'request.inputs["{}"][0].data'.format(
-                            self._getParamName(name, item)
-                        )
+            ptype = p.get("type", "string")
+            foundVar = False
 
-                if foundVar or ptype != "string":
-                    params.append("{}={}".format(name, value))
+            if name in parameterizedParams:
+                foundVar = True
+                if "input" in name:
+                    value = 'request.inputs["{}"][0].file'.format(
+                        self._getParamName(name, item)
+                    )
                 else:
-                    params.append('{}="{}"'.format(name, value))
+                    value = 'request.inputs["{}"][0].data'.format(
+                        self._getParamName(name, item)
+                    )
+            if foundVar or ptype != "string":
+                params.append("{}={}".format(name, value))
+            else:
+                params.append('{}="{}"'.format(name, value))
 
         ret += '"%s"' % task.get_name()
         if flags:
@@ -3314,9 +3310,7 @@ class WritePythonFile(WriteScriptFile):
 # %module
 # % description: {description}
 # %end
-""".format(
-                description=" ".join(properties["description"].splitlines())
-            )
+""".format(description=" ".join(properties["description"].splitlines()))
         )
 
         modelItems = self.model.GetItems(ModelAction)
@@ -3550,28 +3544,29 @@ if __name__ == "__main__":
                 elif ptype == "float":
                     value = list(map(float, value))
 
-            if (name and value) or (name in parameterizedParams):
-                if isinstance(value, list):
-                    foundVar = False
-                    for idx in range(len(value)):
-                        foundVar_, value[idx] = self._substitutePythonParamValue(
-                            value[idx], name, parameterizedParams, variables, item
-                        )
-                        if foundVar_ is True:
-                            foundVar = True
-                else:
-                    foundVar, value = self._substitutePythonParamValue(
-                        value, name, parameterizedParams, variables, item
-                    )
+            if (not name or not value) and name not in parameterizedParams:
+                continue
 
-                if (
-                    foundVar
-                    or isinstance(value, list)
-                    or (ptype != "string" and len(p.get("key_desc", [])) < 2)
-                ):
-                    params.append("{}={}".format(name, value))
-                else:
-                    params.append('{}="{}"'.format(name, value))
+            if isinstance(value, list):
+                foundVar = False
+                for idx in range(len(value)):
+                    foundVar_, value[idx] = self._substitutePythonParamValue(
+                        value[idx], name, parameterizedParams, variables, item
+                    )
+                    if foundVar_ is True:
+                        foundVar = True
+            else:
+                foundVar, value = self._substitutePythonParamValue(
+                    value, name, parameterizedParams, variables, item
+                )
+            if (
+                foundVar
+                or isinstance(value, list)
+                or (ptype != "string" and len(p.get("key_desc", [])) < 2)
+            ):
+                params.append("{}={}".format(name, value))
+            else:
+                params.append('{}="{}"'.format(name, value))
 
         ret += '"%s"' % task.get_name()
         if flags:

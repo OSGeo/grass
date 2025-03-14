@@ -8,6 +8,8 @@ on:
       - releasebranch_*
   pull_request:
 
+permissions: {}
+
 jobs:
   python-checks:
     name: Python Code Quality Checks
@@ -27,16 +29,14 @@ jobs:
       # renovate: datasource=python-version depName=python
       PYTHON_VERSION: "3.13"
       MIN_PYTHON_VERSION: "3.9"
-      # renovate: datasource=pypi depName=black
-      BLACK_VERSION: "24.10.0"
       # renovate: datasource=pypi depName=flake8
-      FLAKE8_VERSION: "7.1.1"
+      FLAKE8_VERSION: "7.1.2"
       # renovate: datasource=pypi depName=pylint
-      PYLINT_VERSION: "3.3.3"
+      PYLINT_VERSION: "3.3.5"
       # renovate: datasource=pypi depName=bandit
-      BANDIT_VERSION: "1.8.0"
+      BANDIT_VERSION: "1.8.3"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.9.1"
+      RUFF_VERSION: "0.9.10"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -48,7 +48,6 @@ jobs:
           echo OS: ${{ matrix.os }}
           echo Python: ${{ env.PYTHON_VERSION }}
           echo Minimal Python version: ${{ env.MIN_PYTHON_VERSION }}
-          echo Black: ${{ env.BLACK_VERSION }}
           echo Flake8: ${{ env.FLAKE8_VERSION }}
           echo Pylint: ${{ env.PYLINT_VERSION }}
           echo Bandit: ${{ env.BANDIT_VERSION }}
@@ -57,7 +56,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Set up Python
-        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
@@ -71,6 +70,14 @@ jobs:
         continue-on-error: true
       - name: Run Ruff (apply fixes for suggestions)
         run: ruff check . --preview --fix --unsafe-fixes
+      - name: Run `ruff format` showing diff without failing
+        continue-on-error: true
+        if: ${{ !cancelled() }}
+        run: ruff format --diff
+      - name: Run `ruff format` fixing files
+        # Run `ruff format` even when `ruff check` fixed files: fixes can require formatting
+        if: ${{ !cancelled() }}
+        run: ruff format
       - name: Create and uploads code suggestions to apply for Ruff
         # Will fail fast here if there are changes required
         id: diff-ruff
@@ -81,21 +88,6 @@ jobs:
           tool-name: ruff
           # To keep repo's file structure in formatted changes artifact
           extra-upload-changes: pyproject.toml
-
-      - name: Install Black only
-        run: pip install black[jupyter]==${{ env.BLACK_VERSION }}
-
-      - name: Run Black
-        run: black .
-
-      - name: Create and uploads code suggestions to apply for Black
-        # Will fail fast here if there are changes required
-        id: diff-black
-        uses: ./.github/actions/create-upload-suggestions
-        with:
-          tool-name: black
-          # To keep repo's file structure in formatted changes artifact
-          extra-upload-changes: .clang-format
 
       - name: Install non-Python dependencies
         run: |
@@ -129,13 +121,13 @@ jobs:
           bandit -c pyproject.toml -iii -r . -f sarif -o bandit.sarif --exit-zero
 
       - name: Upload Bandit Scan Results
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: bandit.sarif
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@b6a472f63d85b9c78a3ac5e89422239fc15e9b3c # v3.28.1
+        uses: github/codeql-action/upload-sarif@6bb031afdd8eb862ea3fc1848194185e076637e5 # v3.28.11
         with:
           sarif_file: bandit.sarif
 
@@ -147,7 +139,7 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
 
-      - uses: rui314/setup-mold@8ec40be1d14871f7ce8fbf273c4b33f3ff75f1d1 # v1
+      - uses: rui314/setup-mold@f80524ca6eeaa76759b57fb78ddce5d87a20c720 # v1
       - name: Build
         run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
 
@@ -194,20 +186,6 @@ jobs:
         run: |
           ( cd doc/examples/raster/r.example/ && make )
           ( cd doc/examples/vector/v.example/ && make )
-
-      - name: Run Sphinx to check API documentation build
-        run: |
-          pip install sphinx
-          make sphinxdoclib
-          ARCH=$(cat include/Make/Platform.make | grep ^ARCH | cut -d'=' -f2 | xargs)
-          cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
-
-      - name: Make Sphinx documentation available
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-        with:
-          name: sphinx-grass
-          path: sphinx-grass
-          retention-days: 3
 
   python-success:
     name: Python Code Quality Result

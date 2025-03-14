@@ -113,6 +113,9 @@ def test():
     sys.exit(not program.result.wasSuccessful())
 
 
+test.__test__ = False  # prevent running this function as a test in pytest
+
+
 def discovery():
     """Recursively find all tests in testsuite directories and run them
 
@@ -194,7 +197,7 @@ def main():
         dest="min_success",
         action="store",
         default="100",
-        type=int,
+        type=float,
         help=(
             "Minimum success percentage (lower percentage"
             " than this will result in a non-zero return code; values 0-100)"

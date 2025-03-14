@@ -574,7 +574,7 @@ class ColorTable(wx.Frame):
         )
 
         row += 1
-        # add ckeck all and clear all
+        # add check all and clear all
         bodySizer.Add(
             self.rulesPanel.checkAll, flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0)
         )
@@ -687,9 +687,7 @@ class ColorTable(wx.Frame):
             GMessage(message=_("Nothing to save."), parent=self)
             return
 
-        fd = open(path, "w")
-        fd.write(rulestxt)
-        fd.close()
+        Path(path).write_text(rulestxt)
 
     def OnLoadRulesFile(self, event):
         """Load color table from file"""
@@ -698,10 +696,7 @@ class ColorTable(wx.Frame):
             return
 
         self.rulesPanel.Clear()
-
-        fd = open(path)
-        self.ReadColorTable(ctable=fd.read())
-        fd.close()
+        self.ReadColorTable(ctable=Path(path).read_text())
 
     def ReadColorTable(self, ctable):
         """Read color table
@@ -801,11 +796,7 @@ class ColorTable(wx.Frame):
             return False
 
         gtemp = utils.GetTempfile()
-        output = open(gtemp, "w")
-        try:
-            output.write(rulestxt)
-        finally:
-            output.close()
+        Path(gtemp).write_text(rulestxt)
 
         cmd = [
             "%s.colors" % self.mapType[0],  # r.colors/v.colors
@@ -1826,11 +1817,7 @@ class VectorColorTable(ColorTable):
             return False
 
         gtemp = utils.GetTempfile()
-        output = open(gtemp, "w")
-        try:
-            output.write(rulestxt)
-        finally:
-            output.close()
+        Path(gtemp).write_text(rulestxt)
 
         RunCommand("db.execute", parent=self, input=gtemp)
         return True
@@ -1851,7 +1838,7 @@ class VectorColorTable(ColorTable):
         else:
             if not self.properties["storeColumn"]:
                 GError(_("No color column defined. Operation canceled."), parent=self)
-                return
+                return None
 
             self.UseAttrColumn(True)
 

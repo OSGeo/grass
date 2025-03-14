@@ -45,7 +45,7 @@
 
 # %option G_OPT_STRDS_OUTPUT
 # % key: occurrence
-# % description: The output space time raster dataset that stores the occurrence of the the accumulation pattern using the provided data range
+# % description: The output space time raster dataset that stores the occurrence of the accumulation pattern using the provided data range
 # % required: yes
 # %end
 
