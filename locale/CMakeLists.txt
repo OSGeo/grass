@@ -14,7 +14,7 @@ add_custom_command(
   BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_LOCALEDIR})
 
 set(_locales ${po_files})
-list(TRANSFORM _locales REPLACE "^([^_]+)_(.*)\.po$" "\\2")
+list(TRANSFORM _locales REPLACE "^.*/[^_]+_(.*)\.po$" "\\1")
 list(REMOVE_DUPLICATES _locales)
 foreach(_locale ${_locales})
   add_custom_target(
@@ -31,7 +31,7 @@ unset(_locales)
 foreach(po_file ${po_files})
   get_filename_component(po_file_name ${po_file} NAME)
   string(REGEX REPLACE "^([^_]+)_(.*)\.po$" "\\2" _locale ${po_file_name})
-  string(REGEX REPLACE "^([^_]+)_(.*)\.po" "\\2/LC_MESSAGES/\\1.mo" mo_file
+  string(REGEX REPLACE "^([^_]+)_(.*)\.po$" "\\2/LC_MESSAGES/\\1.mo" mo_file
                        ${po_file_name})
   get_filename_component(mo_dir ${mo_file} DIRECTORY)
 
