@@ -206,7 +206,6 @@ format with pandas:
   )
 
   df = pd.DataFrame(data)
-
   print(df)
 ```
 
