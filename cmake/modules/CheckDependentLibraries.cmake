@@ -43,16 +43,6 @@ find_package(Iconv)
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)
-if(Threads_FOUND)
-  add_library(PTHREAD INTERFACE IMPORTED GLOBAL)
-  if(THREADS_HAVE_PTHREAD_ARG)
-    set_property(TARGET PTHREAD PROPERTY INTERFACE_COMPILE_OPTIONS "-pthread")
-  endif()
-  if(CMAKE_THREAD_LIBS_INIT)
-    set_property(TARGET PTHREAD PROPERTY INTERFACE_LINK_LIBRARIES
-                                         "${CMAKE_THREAD_LIBS_INIT}")
-  endif()
-endif()
 
 # Graphics options
 
@@ -196,13 +186,6 @@ endif()
 
 if(WITH_NETCDF)
   find_package(NetCDF REQUIRED)
-  if(NetCDF_FOUND)
-    add_library(NETCDF INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET NETCDF PROPERTY INTERFACE_LINK_LIBRARIES
-                                        ${NetCDF_LIBRARY})
-    set_property(TARGET NETCDF PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                        ${NetCDF_INCLUDE_DIR})
-  endif()
 endif()
 
 if(WITH_GEOS)
