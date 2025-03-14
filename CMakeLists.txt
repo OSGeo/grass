@@ -11,7 +11,7 @@
 #
 ################################################################################
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
 #[[
@@ -92,9 +92,9 @@ else()
 endif()
 
 # Graphics options
-option(WITH_X11 "Build with X11 support ." ${x11_default_option_enabled})
-option(WITH_OPENGL "Build with opengl support ." ON)
-option(WITH_CAIRO "Build with cairo support ." ON)
+option(WITH_X11 "Build with X11 support" ${x11_default_option_enabled})
+option(WITH_OPENGL "Build with OpenGL support" ON)
+option(WITH_CAIRO "Build with Cairo support" ON)
 option(WITH_LIBPNG "Build with libpng support ." ON)
 
 # Data storage options
@@ -326,5 +326,5 @@ endif()
 # TODO: To be discussed - add_subdirectory(testsuite) - add_subdirectory(macosx)
 
 if(WITH_X11)
-  build_program_in_subdir(visualization/ximgview DEPENDS grass_gis X11)
+  build_program_in_subdir(visualization/ximgview DEPENDS grass_gis X11::X11)
 endif()

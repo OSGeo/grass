@@ -8,7 +8,8 @@ build_program_in_subdir(g.gisenv DEPENDS grass_gis)
 build_program_in_subdir(g.mapset DEPENDS grass_gis)
 build_program_in_subdir(g.mapsets DEPENDS grass_gis grass_parson)
 build_program_in_subdir(g.message DEPENDS grass_gis)
-build_program_in_subdir(g.mkfontcap DEPENDS grass_gis FREETYPE)
+build_program_in_subdir(g.mkfontcap DEPENDS grass_gis PRIMARY_DEPENDS
+                        Freetype::Freetype)
 add_dependencies(g.mkfontcap fonts)
 add_custom_command(
   TARGET g.mkfontcap
@@ -17,7 +18,7 @@ add_custom_command(
           > ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/fontcap)
 install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/fontcap
         DESTINATION ${GRASS_INSTALL_ETCDIR})
-build_program_in_subdir(g.parser DEPENDS grass_gis FREETYPE)
+build_program_in_subdir(g.parser DEPENDS grass_gis)
 build_program_in_subdir(g.pnmcomp DEPENDS grass_gis)
 build_program_in_subdir(g.ppmtopng DEPENDS grass_gis PRIMARY_DEPENDS PNG::PNG)
 build_program_in_subdir(
@@ -60,11 +61,18 @@ build_program_in_subdir(
   "-DGRASS_VERSION_UPDATE_PKG=${GRASS_VERSION_UPDATE_PKG}"
   "-DARCH=\"${BUILD_ARCH}\"")
 
-# TODO: add CAIRO_HAS_XRENDER and CAIRO_HAS_XRENDER_SURFACE to if clause
-if(WITH_CAIRO AND USE_X11)
+if(WITH_CAIRO
+   AND WITH_X11
+   AND CAIRO_HAS_XLIB_XRENDER_SURFACE)
   if(NOT MSVC)
-    build_program_in_subdir(g.cairocomp DEPENDS grass_gis CAIRO
-                            grass_cairodriver)
+    build_program_in_subdir(
+      g.cairocomp
+      DEPENDS
+      grass_gis
+      Fontconfig::Fontconfig
+      X11::X11
+      PRIMARY_DEPENDS
+      Cairo::Cairo)
   endif()
 endif()
 

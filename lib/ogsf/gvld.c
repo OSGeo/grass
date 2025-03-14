@@ -319,7 +319,7 @@ int gvld_isosurf(geovol *gvl)
                             /* set position in data to current edge data */
                             pos[i] = edge_pos[crnt_ev];
 
-                            /* triagle vertex */
+                            /* triangle vertex */
                             if (crnt_ev == 12) {
                                 pt[X] = xc + (READ() / 255. * xres);
                                 pt[Y] = yc + (-(READ() / 255. * yres));
@@ -600,7 +600,7 @@ int gvld_slice(geovol *gvl, int ndx)
                     ((slice->data[offset + 1] & 0xff) << 8) |
                     ((slice->data[offset + 2] & 0xff) << 16);
 
-            /* triagle vertices */
+            /* triangle vertices */
             pt[ptX] = nextx * resx;
             pt[ptY] = nexty * resy;
             pt[ptZ] = z * resz;
