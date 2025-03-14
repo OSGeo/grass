@@ -138,7 +138,7 @@ build_program_in_subdir(v.build DEPENDS grass_gis grass_vector)
 
 build_program_in_subdir(v.build.polylines DEPENDS grass_gis grass_vector)
 
-build_program_in_subdir(v.category DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.category DEPENDS grass_gis grass_vector grass_parson)
 
 build_program_in_subdir(
   v.class
