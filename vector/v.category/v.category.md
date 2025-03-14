@@ -89,14 +89,14 @@ v.category input=testmap option=report format=json
 [
   {
       "type": "line",
-      "field": 1,
+      "layer": 1,
       "count": 1379,
       "min": 1,
       "max": 1379
   },
   {
       "type": "all",
-      "field": 1,
+      "layer": 1,
       "count": 1379,
       "min": 1,
       "max": 1379
@@ -168,24 +168,23 @@ v.category input=roads option=layers format=json
 Using report option in JSON format with pandas:
 
 ```python
-  import json, io
   import grass.script as gs
   import pandas as pd
 
   # Run v.category command with report option.
-  data = gs.read_command(
+  data = gs.parse_command(
       "v.category",
       input="bridges",
       option="report",
       format="json",
   )
 
-  df = pd.read_json(io.StringIO(data))
+  df = pd.DataFrame(data)
   print(df)
 ```
 
 ```sh
-    type  field  count  min    max
+    type  layer  count  min    max
 0  point      1  10938    1  10938
 1    all      1  10938    1  10938
 ```
@@ -194,40 +193,30 @@ Using print option with the first layer, only for feature ids 1-5 in JSON
 format with pandas:
 
 ```python
-  import json
   import grass.script as gs
   import pandas as pd
 
   # Run v.category command with print option.
-  data = json.loads(
-      gs.read_command(
-          "v.category",
-          input="bridges",
-          option="print",
-          ids="1-5",
-          format="json",
-      )
+  data = gs.parse_command(
+      "v.category",
+      input="bridges",
+      option="print",
+      ids="1-5",
+      format="json",
   )
 
-  df = (
-      pd.json_normalize(data, record_path="ids")
-      .explode("layers")
-      .reset_index(drop=True)
-      .pipe(lambda x: x.join(pd.json_normalize(x["layers"])))
-      .drop(columns=["layers"])
-      .explode("categories")
-      .reset_index(drop=True)
-  )
+  df = pd.DataFrame(data)
+
   print(df)
 ```
 
 ```sh
-    id  layer categories
-0   1      1          1
-1   2      1          2
-2   3      1          3
-3   4      1          4
-4   5      1          5
+    id  layer  category
+0   1      1         1
+1   2      1         2
+2   3      1         3
+3   4      1         4
+4   5      1         5
 ```
 
 ## SEE ALSO

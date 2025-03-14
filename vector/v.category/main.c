@@ -62,7 +62,7 @@ void format_json_fr(FREPORT *freport, int fr_type, char *name,
         value = json_value_init_object();
         object = json_object(value);
         json_object_set_string(object, "type", name);
-        json_object_set_number(object, "field", freport->field);
+        json_object_set_number(object, "layer", freport->field);
         json_object_set_number(object, "count", freport->count[fr_type]);
         json_object_set_number(object, "min", freport->min[fr_type]);
         json_object_set_number(object, "max", freport->max[fr_type]);
@@ -171,7 +171,9 @@ int main(int argc, char *argv[])
     shell = G_define_flag();
     shell->key = 'g';
     shell->label = _("Shell script style, currently only for report");
-    shell->description = _("Format: layer type count min max");
+    shell->description = _(
+        "[DEPRECATED] Format: layer type count min max. This flag is obsolete "
+        "and will be removed in a future release. Use format=shell instead.");
 
     notab = G_define_standard_flag(G_FLG_V_TABLE);
     notab->description = _("Do not copy attribute table(s)");
@@ -225,6 +227,8 @@ int main(int argc, char *argv[])
         break;
     }
     if (shell->answer) {
+        G_warning(_("Flag 'g' is deprecated and will be removed in a future "
+                    "release. Please use format=shell instead."));
         if (format == JSON) {
             G_fatal_error(_(
                 "JSON output and shell output cannot be used simultaneously."));
@@ -306,6 +310,14 @@ int main(int argc, char *argv[])
         }
         Vect_close(&In);
         exit(EXIT_SUCCESS);
+    }
+
+    if ((option == O_REP || option == O_PRN) && format == JSON) {
+        root_value = json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_array = json_array(root_value);
     }
 
     cat = atoi(cat_opt->answer);
@@ -592,14 +604,6 @@ int main(int argc, char *argv[])
         break;
 
     case (O_REP):
-        if (format == JSON) {
-            root_value = json_value_init_array();
-            if (root_value == NULL) {
-                G_fatal_error(
-                    _("Failed to initialize JSON array. Out of memory?"));
-            }
-            root_array = json_array(root_value);
-        }
         nfreps = 0;
         freps = NULL;
         while ((type = Vect_read_next_line(&In, Points, Cats)) > 0) {
@@ -867,25 +871,7 @@ int main(int argc, char *argv[])
         }
         break;
 
-    case (O_PRN): {
-        JSON_Value *ids_value = NULL;
-        JSON_Array *ids_array = NULL;
-        if (format == JSON) {
-            root_value = json_value_init_object();
-            if (root_value == NULL) {
-                G_fatal_error(
-                    _("Failed to initialize JSON object. Out of memory?"));
-            }
-            root_object = json_object(root_value);
-
-            ids_value = json_value_init_array();
-            if (ids_value == NULL) {
-                G_fatal_error(_("Failed to initialize JSON array. Out "
-                                "of memory?"));
-            }
-            ids_array = json_array(ids_value);
-        }
-
+    case (O_PRN):
         while ((type = Vect_read_next_line(&In, Points, Cats)) > 0) {
             id++;
             int has = 0;
@@ -909,54 +895,26 @@ int main(int argc, char *argv[])
             if (!has)
                 continue;
 
-            JSON_Object *id_object = NULL;
-            JSON_Value *id_value = NULL;
-            JSON_Array *layers_array = NULL;
-            JSON_Value *layers_value = NULL;
-            if (format == JSON) {
-                id_value = json_value_init_object();
-                if (id_value == NULL) {
-                    G_fatal_error(
-                        _("Failed to initialize JSON object. Out of memory?"));
-                }
-                id_object = json_object(id_value);
-
-                layers_value = json_value_init_array();
-                if (layers_value == NULL) {
-                    G_fatal_error(_("Failed to initialize JSON array. Out "
-                                    "of memory?"));
-                }
-                layers_array = json_array(layers_value);
-            }
-
             for (i = 0; i < nfields; i++) {
-                JSON_Object *layer_object = NULL;
-                JSON_Value *layer_value = NULL;
-                JSON_Array *cat_array = NULL;
-                JSON_Value *cat_value = NULL;
-                if (format == JSON) {
-                    layer_value = json_value_init_object();
-                    if (layer_value == NULL) {
-                        G_fatal_error(_("Failed to initialize JSON object. Out "
-                                        "of memory?"));
-                    }
-                    layer_object = json_object(layer_value);
-
-                    cat_value = json_value_init_array();
-                    if (cat_value == NULL) {
-                        G_fatal_error(_("Failed to initialize JSON array. Out "
-                                        "of memory?"));
-                    }
-                    cat_array = json_array(cat_value);
-                }
                 int first = 1;
 
                 if (i > 0 && format != JSON)
                     fprintf(stdout, "|");
                 for (j = 0; j < Cats->n_cats; j++) {
                     if (Cats->field[j] == fields[i]) {
-                        if (!first)
+                        if (!first && format != JSON)
                             fprintf(stdout, "/");
+
+                        JSON_Object *cat_object = NULL;
+                        JSON_Value *cat_value = NULL;
+                        if (format == JSON) {
+                            cat_value = json_value_init_object();
+                            if (cat_value == NULL) {
+                                G_fatal_error(_("Failed to initialize JSON "
+                                                "object. Out of memory?"));
+                            }
+                            cat_object = json_object(cat_value);
+                        }
 
                         switch (format) {
                         case SHELL:
@@ -965,41 +923,26 @@ int main(int argc, char *argv[])
                             break;
 
                         case JSON:
-                            json_array_append_number(cat_array, Cats->cat[j]);
+                            json_object_set_number(cat_object, "id", id);
+                            json_object_set_number(cat_object, "layer",
+                                                   fields[i]);
+                            json_object_set_number(cat_object, "category",
+                                                   Cats->cat[j]);
+
+                            json_array_append_value(root_array, cat_value);
                             break;
                         }
 
                         first = 0;
                     }
                 }
-
-                if (format == JSON) {
-                    json_object_set_number(layer_object, "layer", fields[i]);
-                    json_object_set_value(layer_object, "categories",
-                                          cat_value);
-                    json_array_append_value(layers_array, layer_value);
-                }
             }
 
-            switch (format) {
-            case SHELL:
-            case PLAIN:
+            if (format != JSON) {
                 fprintf(stdout, "\n");
-                break;
-
-            case JSON:
-                json_object_set_number(id_object, "id", id);
-                json_object_set_value(id_object, "layers", layers_value);
-                json_array_append_value(ids_array, id_value);
-                break;
             }
-        }
-
-        if (format == JSON) {
-            json_object_set_value(root_object, "ids", ids_value);
         }
         break;
-    }
     }
 
     if ((option == O_REP || option == O_PRN) && format == JSON) {
