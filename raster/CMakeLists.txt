@@ -290,7 +290,7 @@ build_program_in_subdir(
   grass_gproj
   ${LIBM}
   PRIMARY_DEPENDS
-  PDAL)
+  ${PDAL})
 
 build_program_in_subdir(
   r.in.png
