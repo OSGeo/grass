@@ -32,6 +32,7 @@ NSURL *mainExecutableParentDir(void) {
     return url.URLByDeletingLastPathComponent;
 }
 
+
 int main(int argc, const char *argv[]) {
     @autoreleasepool {
         NSURL *script_path = mainExecutableParentDir();
