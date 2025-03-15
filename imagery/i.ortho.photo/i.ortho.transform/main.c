@@ -423,7 +423,7 @@ static void do_pt_xforms(void)
         /* ? sscanf(buf, "%s %s", &east_str, &north_str)
            ? G_scan_easting(,,-1)
            ? G_scan_northing(,,-1) */
-        /* ? muliple delims with sscanf(buf, "%[ ,|\t]", &dummy) ? */
+        /* ? multiple delims with sscanf(buf, "%[ ,|\t]", &dummy) ? */
 
         ret = sscanf(buf, "%lf %lf %lf", &easting, &northing, &height);
         if (ret != 3)

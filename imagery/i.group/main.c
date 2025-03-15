@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    /* backward comaptibility -> simple list implied l flag list, if there was
+    /* backward compatibility -> simple list implied l flag list, if there was
        only l flag (with s flag added it is not clear, simple_flag is linked to
        both) */
     if ((simple_flag->answer && !s->answer) && !l->answer)
