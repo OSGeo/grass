@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
     case ('s'):
         format = SHELL;
         break;
-    case ('p'):
+    default:
         format = PLAIN;
         break;
     }
