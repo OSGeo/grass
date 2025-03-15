@@ -111,13 +111,6 @@ endif()
 
 if(WITH_BZLIB)
   find_package(BZip2 REQUIRED)
-  if(BZIP2_FOUND)
-    add_library(BZIP2 INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET BZIP2 PROPERTY INTERFACE_LINK_LIBRARIES
-                                       ${BZIP2_LIBRARY${find_library_suffix}})
-    set_property(TARGET BZIP2 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                       ${BZIP2_INCLUDE_DIR})
-  endif()
 endif()
 
 # Command-line options
@@ -240,7 +233,7 @@ check_target(PostgreSQL::PostgreSQL HAVE_LIBPQ_FE_H)
 check_target(MYSQL HAVE_MYSQL_H)
 check_target(ODBC::ODBC HAVE_SQL_H)
 check_target(ZSTD HAVE_ZSTD_H)
-check_target(BZIP2 HAVE_BZLIB_H)
+check_target(BZip2::BZip2 HAVE_BZLIB_H)
 check_target(Readline::Readline HAVE_READLINE_READLINE_H)
 check_target(Readline::History HAVE_READLINE_HISTORY_H)
 check_target(Freetype::Freetype HAVE_FT2BUILD_H)
