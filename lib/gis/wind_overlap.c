@@ -69,7 +69,7 @@ int G_window_overlap(const struct Cell_head *window, double N, double S,
  * level-two startup so only those arcs that enter the window are
  * actually read.
  *
- * \param[in] window pointer to widnow structure
+ * \param[in] window pointer to window structure
  * \param[in] N north
  * \param[in] S south
  * \param[in] E east

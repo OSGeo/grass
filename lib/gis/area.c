@@ -33,7 +33,7 @@ static struct state *st = &state;
  * \brief Begin cell area calculations.
  *
  * This routine must be called once before any call to
- * G_area_of_cell_at_row(). It perform all inititalizations needed to
+ * G_area_of_cell_at_row(). It perform all initializations needed to
  * do area calculations for grid cells, based on the current window
  * "projection" field. It can be used in either planimetric
  * projections or the latitude-longitude projection.

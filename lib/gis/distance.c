@@ -35,7 +35,7 @@ static struct state *st = &state;
    Initializes the distance calculations. It is used both for the
    planimetric and latitude-longitude projections.
 
-   \return 0 if projection has no metrix (ie. imagery)
+   \return 0 if projection has no metrics (ie. imagery)
    \return 1 if projection is planimetric
    \return 2 if projection is latitude-longitude
  */

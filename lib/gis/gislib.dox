@@ -275,7 +275,7 @@ exit(). G_setenv_nogisrc() just returns the NULL pointer.
 
  - G_setenv_nogisrc()
 
-These routines set the the GRASS environment variable <em>name</em> to
+These routines set the GRASS environment variable <em>name</em> to
 <em>value</em>. If <em>value</em> is NULL, the <em>name</em> is unset.
 
 Both routines set the value in module memory, but only G_setenv()
