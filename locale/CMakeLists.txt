@@ -22,9 +22,9 @@ foreach(_locale ${_locales})
     DEPENDS generate_mo_files_dir
     COMMENT "Create locale specific directories")
   add_custom_command(
-    OUTPUT generate_mo_files_dir_${_locale}
+    TARGET generate_mo_files_dir_${_locale}
     COMMAND ${CMAKE_COMMAND} -E make_directory
-            ${OUTDIR}/${GRASS_INSTALL_LOCALEDIR}/${_locale})
+            ${OUTDIR}/${GRASS_INSTALL_LOCALEDIR}/${_locale}/LC_MESSAGES)
 endforeach()
 unset(_locales)
 
