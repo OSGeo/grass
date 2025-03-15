@@ -35,6 +35,7 @@ from build_html import (
 )
 
 import build_md
+from pathlib import Path
 
 
 graphical_index_style = """\
@@ -275,7 +276,7 @@ def main():
     img_extensions = ["png", "jpg", "gif"]
     img_patterns = ["*." + extension for extension in img_extensions]
     imgs = []
-    for filename in sorted(os.listdir(html_dir)):
+    for filename in sorted([p.name for p in Path(html_dir).iterdir()]):
         if file_matches(filename, img_patterns):
             imgs.append(filename)
 
