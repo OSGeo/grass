@@ -163,7 +163,7 @@ jobs:
         run: |
           python utils/merge_sitemaps.py \
             --mkdocs-sitemap "$MKDOCS_DIR/site/sitemap.xml" \
-            --sphinx-sitemap "dist.$ARCH/docs/html/libpython/sitemap.xml" \
+            --sphinx-sitemap "$MKDOCS_DIR/site/libpython/sitemap.xml" \
             --output "$MKDOCS_DIR/site/sitemap.xml" \
             --version $VERSION -o
 
