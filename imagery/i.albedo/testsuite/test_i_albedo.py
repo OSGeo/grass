@@ -1,7 +1,6 @@
 from grass.script import core
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from parameterized import parameterized
 
 
 class TestIAlbedo(TestCase):
@@ -10,7 +9,7 @@ class TestIAlbedo(TestCase):
     output_raster = "albedo_output"
 
     def setUp(self):
-        """Initialize temporary region with 10x10 grid."""
+        """Initialize temporary region with 10x10 grid"""
         self.use_temp_region()
         self.runModule("g.region", n=10, s=0, e=10, w=0, rows=10, cols=10)
 
@@ -33,31 +32,9 @@ class TestIAlbedo(TestCase):
             self.runModule("r.mapcalc", expression=f"{band} = {value}", overwrite=True)
         return bands
 
-    @parameterized.expand(
-        [
-            (
-                "modis",
-                "m",
-                [0.1 * i for i in range(1, 8)],
-                {"mean": 0.38995, "sum": 38.995},
-            ),
-            (
-                "landsat",
-                "l",
-                [0.1 * i for i in [1, 2, 3, 4, 5, 7]],
-                {"mean": 0.2406, "sum": 24.06},
-            ),
-            ("noaa", "n", [0.5, 0.8], {"mean": 0.311, "sum": 31.0999989}),
-            (
-                "aster",
-                "a",
-                [0.1 * i for i in [1, 3, 5, 6, 8, 9]],
-                {"mean": 0.2297, "sum": 22.9699999},
-            ),
-        ]
-    )
-    def test_sensor_albedo(self, sensor, flag, values, reference_stats):
-        """Verify albedo calculations for MODIS, Landsat, NOAA, and ASTER sensors against expected statistical results."""
+    def _test_sensor_albedo(self, sensor, flag, values, reference_stats):
+        """Core test runner for sensor-specific albedo calculations.
+        Validates output against precomputed statistical references."""
         input_rasters = self._create_input_rasters(sensor, values)
         self.assertModule(
             "i.albedo",
@@ -67,9 +44,36 @@ class TestIAlbedo(TestCase):
             overwrite=True,
         )
         self.assertRasterFitsUnivar(
-            raster=self.output_raster,
-            reference=reference_stats,
-            precision=1e-6,
+            raster=self.output_raster, reference=reference_stats, precision=1e-6
+        )
+
+    def test_modis_albedo(self):
+        self._test_sensor_albedo(
+            "modis",
+            "m",
+            [0.1 * i for i in range(1, 8)],
+            {"mean": 0.38995, "sum": 38.995},
+        )
+
+    def test_landsat_albedo(self):
+        self._test_sensor_albedo(
+            "landsat",
+            "l",
+            [0.1 * i for i in [1, 2, 3, 4, 5, 7]],
+            {"mean": 0.2406, "sum": 24.06},
+        )
+
+    def test_noaa_albedo(self):
+        self._test_sensor_albedo(
+            "noaa", "n", [0.5, 0.8], {"mean": 0.311, "sum": 31.0999989}
+        )
+
+    def test_aster_albedo(self):
+        self._test_sensor_albedo(
+            "aster",
+            "a",
+            [0.1 * i for i in [1, 3, 5, 6, 8, 9]],
+            {"mean": 0.2297, "sum": 22.9699999},
         )
 
     def test_albedo_output_range(self):
@@ -145,14 +149,14 @@ class TestIAlbedo(TestCase):
         self.assertAlmostEqual(
             max_diff,
             0.0,
-            places=2,
-            msg="Albedo does not scale linearly with input (max difference)",
+            places=6,
+            msg="Albedo does not scale linearly with input (max difference).",
         )
         self.assertAlmostEqual(
             min_diff,
             0.0,
-            places=2,
-            msg="Albedo does not scale linearly with input (min difference)",
+            places=6,
+            msg="Albedo does not scale linearly with input (min difference).",
         )
 
 
