@@ -127,6 +127,10 @@ class TestIIFFT(TestCase):
         (i.ifft), and then horizontally flips the output raster.  It computes the
         difference between the original output and the flipped version and uses
         r.univar to verify statistics.
+
+        The non-zero statistics (observed min ~-16.5 and max ~16.5) suggest the output
+        fails to maintain horizontal symmetry. This discrepancy requires investigation
+        into the i.ifft implementation.
         """
 
         self.runModule(
