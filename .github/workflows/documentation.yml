@@ -161,7 +161,7 @@ jobs:
 
       - name: Merge Sphinx and MkDocs Sitemaps
         run: |
-          python utils/merge_sitemaps.py \
+          python ./utils/merge_sitemaps.py \
             --mkdocs-sitemap "$MKDOCS_DIR/site/sitemap.xml" \
             --sphinx-sitemap "$MKDOCS_DIR/site/libpython/sitemap.xml" \
             --output "$MKDOCS_DIR/site/sitemap.xml" \
