@@ -75,6 +75,7 @@ from gui_core.wrap import (
     TextCtrl,
 )
 from location_wizard.wizard import GridBagSizerTitledPage as TitledPage
+from pathlib import Path
 
 if TYPE_CHECKING:
     from wx.adv import WizardEvent
@@ -153,13 +154,13 @@ class GCPWizard:
         self.target_gisrc = os.environ["GISRC"]
         self.gisrc_dict = {}
         try:
-            f = open(self.target_gisrc)
-            for line in f:
-                line = line.replace("\n", "").strip()
-                if len(line) < 1:
-                    continue
-                key, value = line.split(":", 1)
-                self.gisrc_dict[key.strip()] = value.strip()
+            with open(self.target_gisrc) as f:
+                for line in f:
+                    line = line.replace("\n", "").strip()
+                    if len(line) < 1:
+                        continue
+                    key, value = line.split(":", 1)
+                    self.gisrc_dict[key.strip()] = value.strip()
         finally:
             f.close()
 
@@ -354,10 +355,10 @@ class GCPWizard:
         self.source_gisrc = utils.GetTempfile()
 
         try:
-            f = open(self.source_gisrc, mode="w")
-            f.writelines(
-                line[0] + ": " + line[1] + "\n" for line in self.gisrc_dict.items()
-            )
+            with open(self.source_gisrc, mode="w") as f:
+                f.writelines(
+                    line[0] + ": " + line[1] + "\n" for line in self.gisrc_dict.items()
+                )
         finally:
             f.close()
 
@@ -1228,7 +1229,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         # initialize column sorter
         self.itemDataMap = self.mapcoordlist
         ncols = self.list.GetColumnCount()
-        ColumnSorterMixin.__init__(self, ncols)  # noqa: PLC2801, C2801
+        ColumnSorterMixin.__init__(self, ncols)  # noqa: PLC2801
         # init to ascending sort on first click
         self._colSortFlag = [1] * ncols
 
@@ -1469,7 +1470,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             if os.path.exists(self.file["elevation"]):
                 # Parse the i.ortho.elev generated file
                 # Get all lines from file
-                lines = open(self.file["elevation"]).read().splitlines()
+                lines = Path(self.file["elevation"]).read_text().splitlines()
                 # Remove empty spaces in lines
                 lines = [x.replace(" ", "") for x in lines]
                 # Extract map@mapset
@@ -1514,46 +1515,48 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         """
         self.GCPcount = 0
         try:
-            f = open(self.file["control_points"], mode="w")
-            # use os.linesep or '\n' here ???
-            f.write("# Ground Control Points File\n")
-            f.write("# \n")
-            f.write("# target location: " + self.currentlocation + "\n")
-            f.write("# target mapset: " + self.currentmapset + "\n")
-            f.write("#\tsource\t\t\ttarget\t\t\tstatus\n")
-            f.write("#\teast\tnorth\theight\teast\tnorth\theight\t(1=ok, 0=ignore)\n")
-            f.write(
-                "#----------------------------     ---------------------------     ---------------\n"  # noqa: E501
-            )
-
-            for index in range(self.list.GetItemCount()):
-                if self.list.IsItemChecked(index):
-                    check = "1"
-                    self.GCPcount += 1
-                else:
-                    check = "0"
-                coord0 = self.list.GetItem(index, 1).GetText()
-                coord1 = self.list.GetItem(index, 2).GetText()
-                coord2 = self.list.GetItem(index, 3).GetText()
-                coord3 = self.list.GetItem(index, 4).GetText()
-                coord4 = self.list.GetItem(index, 5).GetText()
-                coord5 = self.list.GetItem(index, 6).GetText()
+            with open(self.file["control_points"], mode="w") as f:
+                # use os.linesep or '\n' here ???
+                f.write("# Ground Control Points File\n")
+                f.write("# \n")
+                f.write("# target location: " + self.currentlocation + "\n")
+                f.write("# target mapset: " + self.currentmapset + "\n")
+                f.write("#\tsource\t\t\ttarget\t\t\tstatus\n")
                 f.write(
-                    coord0
-                    + " "
-                    + coord1
-                    + "     "
-                    + coord2
-                    + " "
-                    + coord3
-                    + "     "
-                    + coord4
-                    + "     "
-                    + coord5
-                    + "     "
-                    + check
-                    + "\n"
+                    "#\teast\tnorth\theight\teast\tnorth\theight\t(1=ok, 0=ignore)\n"
                 )
+                f.write(
+                    "#----------------------------     ---------------------------     ---------------\n"  # noqa: E501
+                )
+
+                for index in range(self.list.GetItemCount()):
+                    if self.list.IsItemChecked(index):
+                        check = "1"
+                        self.GCPcount += 1
+                    else:
+                        check = "0"
+                    coord0 = self.list.GetItem(index, 1).GetText()
+                    coord1 = self.list.GetItem(index, 2).GetText()
+                    coord2 = self.list.GetItem(index, 3).GetText()
+                    coord3 = self.list.GetItem(index, 4).GetText()
+                    coord4 = self.list.GetItem(index, 5).GetText()
+                    coord5 = self.list.GetItem(index, 6).GetText()
+                    f.write(
+                        coord0
+                        + " "
+                        + coord1
+                        + "     "
+                        + coord2
+                        + " "
+                        + coord3
+                        + "     "
+                        + coord4
+                        + "     "
+                        + coord5
+                        + "     "
+                        + check
+                        + "\n"
+                    )
 
         except OSError as err:
             GError(
@@ -1567,8 +1570,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 ),
             )
             return
-
-        f.close()
 
         # if event != None save also to backup file
         if event:
@@ -1595,27 +1596,27 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             GError(parent=self, message=_("target mapwin not defined"))
 
         try:
-            f = open(self.file["control_points"])
-            GCPcnt = 0
+            with open(self.file["control_points"]) as f:
+                GCPcnt = 0
 
-            for line in f:
-                if line[0] == "#" or line == "":
-                    continue
-                line = line.replace("\n", "").strip()
-                coords = list(map(float, line.split()))
-                if coords[6] == 1:
-                    check = True
-                    self.GCPcount += 1
-                else:
-                    check = False
+                for line in f:
+                    if line[0] == "#" or line == "":
+                        continue
+                    line = line.replace("\n", "").strip()
+                    coords = list(map(float, line.split()))
+                    if coords[6] == 1:
+                        check = True
+                        self.GCPcount += 1
+                    else:
+                        check = False
 
-                self.AddGCP(event=None)
-                self.SetGCPData("source", (coords[0], coords[1]), sourceMapWin)
-                self.SetGCPData("target", (coords[3], coords[4]), targetMapWin)
-                index = self.list.GetSelected()
-                if index != wx.NOT_FOUND:
-                    self.list.CheckItem(index, check)
-                GCPcnt += 1
+                    self.AddGCP(event=None)
+                    self.SetGCPData("source", (coords[0], coords[1]), sourceMapWin)
+                    self.SetGCPData("target", (coords[3], coords[4]), targetMapWin)
+                    index = self.list.GetSelected()
+                    if index != wx.NOT_FOUND:
+                        self.list.CheckItem(index, check)
+                    GCPcnt += 1
 
         except OSError as err:
             GError(
@@ -1629,8 +1630,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 ),
             )
             return
-
-        f.close()
 
         if GCPcnt == 0:
             # 3 gcp is minimum
@@ -2041,15 +2040,15 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         }
 
         try:
-            f = open(coord_file, mode="w")
-            # NW corner
-            f.write(str(region["e"]) + " " + str(region["n"]) + "\n")
-            # NE corner
-            f.write(str(region["e"]) + " " + str(region["s"]) + "\n")
-            # SW corner
-            f.write(str(region["w"]) + " " + str(region["n"]) + "\n")
-            # SE corner
-            f.write(str(region["w"]) + " " + str(region["s"]) + "\n")
+            with open(coord_file, mode="w") as f:
+                # NW corner
+                f.write(str(region["e"]) + " " + str(region["n"]) + "\n")
+                # NE corner
+                f.write(str(region["e"]) + " " + str(region["s"]) + "\n")
+                # SW corner
+                f.write(str(region["w"]) + " " + str(region["n"]) + "\n")
+                # SE corner
+                f.write(str(region["w"]) + " " + str(region["s"]) + "\n")
         finally:
             f.close()
 
