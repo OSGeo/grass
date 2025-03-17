@@ -1227,7 +1227,9 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         # initialize column sorter
         self.itemDataMap = self.mapcoordlist
         ncols = self.list.GetColumnCount()
-        ColumnSorterMixin.__init__(self, ncols)  # noqa: PLC2801, C2801
+        # pylint: disable=C2801
+        # ruff: noqa: PLC2801
+        ColumnSorterMixin.__init__(self, ncols)
         # init to ascending sort on first click
         self._colSortFlag = [1] * ncols
 

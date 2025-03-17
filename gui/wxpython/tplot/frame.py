@@ -146,7 +146,9 @@ class TplotFrame(wx.Frame):
 
         # __del__() and del keyword seem to have differences,
         # how can self.Destroy(), called after del, work otherwise
-        self.__del__()  # noqa: PLC2801, C2801
+        # pylint: disable=C2801
+        # ruff: noqa: PLC2801
+        self.__del__()
         self.Destroy()
 
     def _layout(self):
