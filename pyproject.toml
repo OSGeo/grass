@@ -557,7 +557,6 @@ disable = [
     "C0415",  # (import-outside-toplevel)
     "C1802",  # Do not use `len(SEQUENCE)` without comparison to determine if a sequence is empty (use-implicit-booleaness-not-len)
     "C1803",  # "%s" can be simplified to "%s", if it is strictly a sequence, as an empty %s is falsey (use-implicit-booleaness-not-comparison)
-    "C2801",  # Unnecessarily calls dunder method %s. %s. (unnecessary-dunder-call)
     "E0102",  # %s already defined line %s (function-redefined)
     "E0203",  # Access to member %r before its definition line %s (access-member-before-definition)
     "E0213",  # Method %r should have "self" as first argument (no-self-argument)
