@@ -246,8 +246,7 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
     }
     else {
         /* "range" file does not exist */
-        G_warning(_("Missing range file for <%s> (run r.support -s)"),
-                  mname);
+        G_warning(_("Missing range file for <%s> (run r.support -s)"), mname);
         return -1;
     }
     G_free(mname);
@@ -320,8 +319,7 @@ int Rast_read_rstats(const char *name, const char *mapset,
     if (read(fd, &nbytes, 1) != 1) {
         /* if the stats file exists, but empty file, meaning Nulls */
         close(fd);
-        G_debug(1, "Unable to read byte count in stats file for <%s>",
-                mname);
+        G_debug(1, "Unable to read byte count in stats file for <%s>", mname);
         return -1;
     }
 
@@ -339,8 +337,7 @@ int Rast_read_rstats(const char *name, const char *mapset,
     if (read(fd, cc, nbytes) != nbytes) {
         /* incorrect number of bytes for count */
         close(fd);
-        G_debug(1, "Unable to read count in stats file for <%s>",
-                mname);
+        G_debug(1, "Unable to read count in stats file for <%s>", mname);
         return -1;
     }
 
