@@ -13,7 +13,7 @@ from grass.pygrass.gis import Mapset, Location
 from grass.pygrass.gis.region import Region
 from grass.pygrass.modules import Module
 from grass.pygrass.utils import get_mapset_raster, findmaps
-
+from pathlib import Path
 from grass.pygrass.modules.grid.split import (
     split_region_tiles,
     split_region_in_overlapping_tiles,
@@ -58,8 +58,8 @@ def copy_special_mapset_files(path_src, path_dst):
     :param path_dst: the path to the new mapset
     :type path_dst: str
     """
-    for fil in (fi for fi in os.listdir(path_src) if fi.isupper()):
-        sht.copy(os.path.join(path_src, fil), path_dst)
+    for fil in (fi for fi in Path(path_src).iterdir() if fi.name.isupper()):
+        sht.copy(fil, os.path.join(path_dst, fil.name))
 
 
 def copy_mapset(mapset, path):
@@ -449,6 +449,8 @@ class GridModule:
     ):
         kargs["run_"] = False
         self.mset = Mapset()
+        if isinstance(cmd, Path):
+            cmd = str(cmd)
         self.module = Module(cmd, *args, **kargs)
         self.width = width
         self.height = height
@@ -499,7 +501,10 @@ class GridModule:
         if mapset_prefix:
             self.mapset_prefix = mapset_prefix
         else:
-            self.mapset_prefix = append_node_pid("grid_" + legalize_vector_name(cmd))
+            self.mapset_prefix = append_node_pid(
+                "grid_"
+                + legalize_vector_name(str(cmd) if isinstance(cmd, Path) else cmd)
+            )
         self.msetstr = self.mapset_prefix + "_%03d_%03d"
         self.inlist = None
         if split:

@@ -124,7 +124,7 @@ def file_matches(filename: str, patterns: Iterable[str]):
 
 def get_files(directory, patterns, exclude_patterns):
     files = []
-    for filename in sorted(os.listdir(directory)):
+    for filename in sorted([p.name for p in Path(directory).iterdir()]):
         if file_matches(filename, patterns):
             if not file_matches(filename, exclude_patterns):
                 files.append(filename)
@@ -177,10 +177,10 @@ def main(ext):
     )
     img_files = {}
 
-    for filename in os.listdir(man_dir):
-        if filename in img_blacklist:
+    for filename in Path(man_dir).iterdir():
+        if filename.name in img_blacklist:
             continue
-        if file_matches(filename, img_patterns):
+        if file_matches(filename.name, img_patterns):
             width = image_width(Path(man_dir, filename))
             if width is not None and width < MIN_IMAGE_WIDTH:
                 # Skip small images.
