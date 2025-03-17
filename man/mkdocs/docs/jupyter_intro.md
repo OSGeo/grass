@@ -31,6 +31,18 @@ session = gj.init("path/to/my_project")
 Now you can import raster or vector data with [r.import](r.import.md)
 and [v.import](v.import.md).
 
+!!! grass-tip "Importing packages"
+    <!-- markdownlint-disable-next-line MD046 -->
+    To import the grass.script and grass.jupyter packages, you need to tell
+    Python where the GRASS Python package is unless you are running a notebook
+    in a GRASS session.
+    <!-- markdownlint-disable-next-line MD046 -->
+    ```python
+    sys.path.append(
+        subprocess.check_output(["grass", "--config", "python_path"], text=True).strip()
+    )
+    ```
+
 !!! grass-tip "Mapsets"
     If not specified otherwise in the `gj.init` function, the session will
     start in the default
@@ -84,7 +96,7 @@ m.d_legend(
 )
 
 # Add a scale bar to the map
-m.d_barscale(at=(50,7), flags="n")
+m.d_barscale(at=(50, 7), flags="n")
 
 # Display the map
 m.show()
@@ -144,8 +156,14 @@ The `gj.SeriesMap` class animates a series of maps, allowing users to slide betw
 maps and play a continuous loop.
 
 ```python
+directions = [0, 90, 180, 270]
+for azimuth in directions:
+    gs.run_command("r.relief",
+                   input="elevation",
+                   output=f"relief_{azimuth}",
+                   azimuth=azimuth)
 m = gj.SeriesMap()
-m.add_rasters(["elevation", "slope", "aspect"])
+m.add_rasters(f"relief_{azimuth}" for azimuth in directions)
 m.d_vect(map="roads")
 m.d_barscale(at=(80, 10))
 m.show()
