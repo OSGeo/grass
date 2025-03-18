@@ -19,9 +19,16 @@ DSTFILES := \
 	$(MDDIR)/source/favicon.ico \
 	$(MDDIR)/source/grassdocs.css \
 	$(MDDIR)/scripts/hook_list_scripts.py \
+	$(MDDIR)/source/index.md \
 	$(MDDIR)/overrides/partials/footer.html \
 	$(MDDIR)/overrides/partials/actions.html \
-	$(MDDIR)/source/tags.md
+	$(MDDIR)/overrides/partials/source.html \
+	$(MDDIR)/source/tags.md \
+	$(MDDIR)/source/development_intro.md \
+	$(MDDIR)/source/interfaces_overview.md \
+	$(MDDIR)/source/jupyter_intro.md \
+	$(MDDIR)/source/python_intro.md \
+	$(MDDIR)/source/command_line_intro.md
 
 categories = \
 	d:display \
@@ -151,15 +158,11 @@ $(HTMLDIR)/full_index.html: $(ALL_HTML) build_full_index.py build_html.py
 	$(call build,full_index)
 	touch $@
 
-$(MDDIR)/source/full_index.md: $(ALL_MD) build_full_index.py build_html.py
+$(MDDIR)/source/full_index.md: $(ALL_MD) build_full_index.py build_md.py
 	$(call build,full_index)
 	touch $@
 
 $(HTMLDIR)/index.html: build_index.py build_html.py
-	$(call build,index)
-	touch $@
-
-$(MDDIR)/source/index.md: build_index.py build_md.py
 	$(call build,index)
 	touch $@
 
@@ -247,6 +250,9 @@ $(HTMLDIR)/parser_standard_options.css: parser_standard_options.css
 $(MDDIR)/mkdocs.yml: mkdocs/mkdocs.yml
 	$(INSTALL_DATA) $< $@
 
+$(MDDIR)/source/index.md: mkdocs/index.md
+	$(INSTALL_DATA) $< $@
+
 $(MDDIR)/source/grass_logo.svg: grass_logo.svg
 	$(INSTALL_DATA) $< $@
 
@@ -262,6 +268,21 @@ $(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css
 $(MDDIR)/source/tags.md: mkdocs/tags.md
 	$(INSTALL_DATA) $< $@
 
+$(MDDIR)/source/development_intro.md: mkdocs/docs/development_intro.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/jupyter_intro.md: mkdocs/docs/jupyter_intro.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/python_intro.md: mkdocs/docs/python_intro.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/command_line_intro.md: mkdocs/docs/command_line_intro.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/interfaces_overview.md: mkdocs/docs/interfaces_overview.md
+	$(INSTALL_DATA) $< $@
+
 $(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
 	$(INSTALL_DATA) $< $@
 
@@ -272,6 +293,9 @@ $(MDDIR)/overrides/partials/footer.html: mkdocs/overrides/partials/footer.html |
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/overrides/partials/actions.html: mkdocs/overrides/partials/actions.html | $(MDDIR)/overrides/partials
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/overrides/partials/source.html: mkdocs/overrides/partials/source.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/overrides/partials:

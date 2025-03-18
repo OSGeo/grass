@@ -41,7 +41,7 @@ histogram because a histogram is used in univariate statistics (in one
 dimension) to count the number samples falling into a given bin.
 
 ![r_in_lidar_binning_count](r_in_lidar_binning_count.png)
-
+![r_in_lidar_binning_mean](r_in_lidar_binning_mean.png)  
 *Figure: The binning on left was used to count number of points per
 (sometimes also called 2D histogram). The numbers in cells are examples
 of counts, the rest is represented by the color. The binning on right

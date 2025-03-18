@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2025-02-10 17:33+0000\n"
+"PO-Revision-Date: 2025-03-12 12:05+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
 "grasslibs/fr/>\n"
@@ -1286,7 +1286,7 @@ msgid "Selected PROJ pipeline:"
 msgstr ""
 
 #: ../lib/proj/do_proj.c:835
-#, c-format, fuzzy
+#, c-format
 msgid "%s"
 msgstr "%s"
 
@@ -2081,9 +2081,9 @@ msgid "Unable to open %s file <%s>: %s"
 msgstr "Impossible d'ouvrir le fichier %s <%s> : %s"
 
 #: ../lib/gis/parser.c:1943
-#, c-format
+#, c-format, fuzzy
 msgid "Unable to create %s file <%s>: %s"
-msgstr ""
+msgstr "Impossible de créer le fichier %s <%s> : %s"
 
 #: ../lib/gis/open.c:69
 #, c-format
@@ -2275,12 +2275,14 @@ msgid "East must be larger than West, but %g (east) <= %g (west)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:112 ../lib/gis/adj_cellhd.c:271
+#, fuzzy
 msgid "Invalid coordinates: negative number of columns"
-msgstr ""
+msgstr "Coordonnées invalides : nombre de colonnes négatif"
 
 #: ../lib/gis/adj_cellhd.c:115 ../lib/gis/adj_cellhd.c:274
+#, fuzzy
 msgid "Invalid coordinates: negative number of rows"
-msgstr ""
+msgstr "Coordonnées invalides : Nombre de lignes négatif"
 
 #: ../lib/gis/adj_cellhd.c:122 ../lib/gis/adj_cellhd.c:284
 msgid "NS resolution has been changed"
@@ -2330,8 +2332,9 @@ msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:277
+#, fuzzy
 msgid "Invalid coordinates: negative number of depths"
-msgstr ""
+msgstr "Coordonnées invalides : Nombre de profondeurs négatif"
 
 #: ../lib/gis/adj_cellhd.c:311
 #, c-format
@@ -4635,10 +4638,13 @@ msgstr ""
 "raison inconnue."
 
 #: ../lib/init/grass.py:1089
+#, fuzzy
 msgid ""
 "Mapset <{}> already exists. Unable to create a new temporary mapset of that "
 "name."
 msgstr ""
+"Le jeu de cartes <{}> existe déjà. Impossible de créer un nouveau jeu de "
+"cartes temporaire de ce nom."
 
 #: ../lib/init/grass.py:1094
 msgid "Mapset <{}> already exists."
@@ -4879,8 +4885,9 @@ msgid "use temporary mapset in project %(metavar)s"
 msgstr ""
 
 #: ../lib/init/grass.py:2296
+#, fuzzy
 msgid "path to mapset (or project if creating one)"
-msgstr ""
+msgstr "chemin d'accès au jeu de cartes (ou au projet s'il est créé)."
 
 #: ../lib/init/grass.py:2299
 msgid "use temporary mapset"
@@ -4896,8 +4903,10 @@ msgid "remove lock if present"
 msgstr ""
 
 #: ../lib/init/grass.py:2331
+#, fuzzy
 msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
 msgstr ""
+"L'option --tmp-location est obsolète, utilisez --tmp-project à la place.\n"
 
 #: ../lib/init/grass.py:2375
 msgid "execute module or script (followed by executable with arguments)"

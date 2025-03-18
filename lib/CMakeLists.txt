@@ -13,8 +13,9 @@ build_library_in_subdir(
   "${use_math_DEFS}"
   DEPENDS
   grass_gis
-  FREETYPE
-  ICONV)
+  OPTIONAL_DEPENDS
+  Freetype::Freetype
+  Iconv::Iconv)
 
 add_subdirectory(proj)
 
@@ -27,7 +28,7 @@ build_library_in_subdir(
   "-DGDAL_LINK=1"
   DEPENDS
   GDAL::GDAL
-  PROJ
+  PROJ::proj
   grass_gis
   grass_gproj
   grass_parson)
@@ -57,9 +58,9 @@ build_library_in_subdir(
   DEFS
   "${use_math_DEFS}"
   OPTIONAL_DEPENDS
+  CBLAS::CBLAS
   FFTW
-  LAPACKE
-  CBLAS
+  LAPACKE::LAPACKE
   OPENMP)
 
 build_library_in_subdir(linkm)
@@ -108,11 +109,17 @@ set(_grass_display_DEPENDS grass_driver grass_raster grass_htmldriver
                            grass_pngdriver grass_psdriver grass_gis)
 
 if(WITH_CAIRO)
-  set(_cairodriver_DEPENDS CAIRO FREETYPE grass_gis grass_driver ICONV)
+  set(_cairodriver_DEPENDS
+      Cairo::Cairo
+      Fontconfig::Fontconfig
+      Freetype::Freetype
+      grass_gis
+      grass_driver
+      OPTIONAL_DEPENDS
+      Iconv::Iconv)
   if(WITH_X11)
-    list(APPEND _cairodriver_DEPENDS X11)
+    list(PREPEND _cairodriver_DEPENDS X11::X11)
   endif()
-
   build_library_in_subdir(cairodriver DEPENDS ${_cairodriver_DEPENDS})
 
   set(_grass_display_DEFS "-DUSE_CAIRO")
@@ -170,8 +177,9 @@ build_program_in_subdir(
   test.raster3d.lib
   DEPENDS
   grass_gis
-  grass_raster3d
+  grass_interpfl
   grass_raster
+  grass_raster3d
   GDAL::GDAL)
 
 build_library_in_subdir(
@@ -221,8 +229,9 @@ if(WITH_OPENGL)
     grass_raster3d
     grass_vector
     GDAL::GDAL
-    OPENGL
-    TIFF)
+    OpenGL::GL
+    OpenGL::GLU
+    TIFF::TIFF)
 
   build_library_in_subdir(
     nviz
@@ -233,8 +242,9 @@ if(WITH_OPENGL)
     grass_bitmap
     grass_ogsf
     grass_gis
-    OPENGL
-    TIFF)
+    OpenGL::GL
+    OPTIONAL_DEPENDS
+    X11::X11)
 endif()
 
 add_subdirectory(temporal)
