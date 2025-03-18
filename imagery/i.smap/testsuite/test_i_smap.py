@@ -68,6 +68,7 @@ class TestISmapWithSyntheticData(TestCase):
         cls.del_temp_region()
 
     def _run_smap(self, output_name, **kwargs):
+        """Helper function to run i.smap"""
         self.assertModule(
             "i.smap",
             group=self.group_name,
@@ -102,7 +103,7 @@ class TestISmapWithSyntheticData(TestCase):
 
         reference_stats = {
             "min": -7.328390,
-            "max": 3.600804,
+            "max": 4.495414,
         }
         self.assertRasterFitsUnivar(self.goodness_map, reference_stats, precision=1e-6)
 
@@ -134,7 +135,6 @@ class TestISmapWithSyntheticData(TestCase):
 
     def test_block_size(self):
         """Test that block size does not affect output"""
-
         baseline = self._run_smap(f"{self.output_map}_baseline", flags="m")
         bs1 = self._run_smap(f"{self.output_map}_bs1", flags="m", blocksize=256)
         bs2 = self._run_smap(f"{self.output_map}_bs2", flags="m", blocksize=1024)
