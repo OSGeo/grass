@@ -3,7 +3,9 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
 
-class TestISmapWithSyntheticData(TestCase):
+class TestISmap(TestCase):
+    """Regression tests for i.smap GRASS GIS module."""
+
     group_name = "test_smap_group"
     subgroup_name = "test_smap_subgroup"
     input_maps = ["synth_map1", "synth_map2", "synth_map3"]
@@ -15,7 +17,7 @@ class TestISmapWithSyntheticData(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """Set up test environment"""
+        """Set up the input data and configure test environment."""
         cls.use_temp_region()
         cls.runModule("g.region", n=50, s=0, e=50, w=0, rows=100, cols=100)
         cls.runModule(
@@ -60,7 +62,7 @@ class TestISmapWithSyntheticData(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Cleanup test environment"""
+        """Clean up generated data and reset the region."""
         cls.runModule("g.remove", flags="f", type="group", name=cls.group_name)
         cls.temp_rasters.append(cls.output_map)
         cls.runModule("g.remove", flags="f", type="raster", name=cls.temp_rasters)
@@ -68,7 +70,7 @@ class TestISmapWithSyntheticData(TestCase):
         cls.del_temp_region()
 
     def _run_smap(self, output_name, **kwargs):
-        """Helper function to run i.smap"""
+        """Helper function to execute i.smap with common parameters."""
         self.assertModule(
             "i.smap",
             group=self.group_name,
@@ -82,7 +84,7 @@ class TestISmapWithSyntheticData(TestCase):
         return output_name
 
     def test_basic_classification(self):
-        """Test basic SMAP classification with default parameters"""
+        """Verify basic SMAP classification produces valid results."""
         self._run_smap(f"{self.output_map}_basic")
         self.assertRasterExists(f"{self.output_map}_basic")
         self.temp_rasters.append(f"{self.output_map}_basic")
@@ -96,7 +98,10 @@ class TestISmapWithSyntheticData(TestCase):
         )
 
     def test_with_goodness_map(self):
-        """Test that goodness of fit map is properly generated"""
+        """
+        Validate goodness of fit map generation and
+        verify if map values fall within expected statistical range
+        """
         self._run_smap(f"{self.output_map}_goodness", goodness=self.goodness_map)
         self.assertRasterExists(self.goodness_map)
         self.temp_rasters.extend([self.goodness_map, f"{self.output_map}_goodness"])
@@ -108,7 +113,7 @@ class TestISmapWithSyntheticData(TestCase):
         self.assertRasterFitsUnivar(self.goodness_map, reference_stats, precision=1e-6)
 
     def test_maximum_likelihood_flag(self):
-        """Test the -m flag for maximum likelihood estimation"""
+        """Compare SMAP and Maximum Likelihood Estimation (-m flag) approaches"""
         self._run_smap(f"{self.output_map}_smap")
         self.assertRasterExists(f"{self.output_map}_smap")
         self.temp_rasters.append(f"{self.output_map}_smap")
@@ -134,10 +139,10 @@ class TestISmapWithSyntheticData(TestCase):
         )
 
     def test_block_size(self):
-        """Test that block size does not affect output"""
-        baseline = self._run_smap(f"{self.output_map}_baseline", flags="m")
-        bs1 = self._run_smap(f"{self.output_map}_bs1", flags="m", blocksize=256)
-        bs2 = self._run_smap(f"{self.output_map}_bs2", flags="m", blocksize=1024)
+        """Ensure block size parameter doesn't affect results"""
+        baseline = self._run_smap(f"{self.output_map}_baseline")
+        bs1 = self._run_smap(f"{self.output_map}_bs1", blocksize=256)
+        bs2 = self._run_smap(f"{self.output_map}_bs2", blocksize=1024)
 
         self.temp_rasters.extend(
             [
