@@ -771,3 +771,131 @@ void print_info(struct Map_info *Map)
     divider('+');
     fprintf(stdout, "\n");
 }
+
+/*!
+   \brief Extracts and assigns values from a history line to command, gisdbase,
+   location, mapset, user, date, and mapset_path based on specific prefixes.
+
+ */
+void parse_history_line(const char *buf, char *command, char *gisdbase,
+                        char *location, char *mapset, char *user, char *date,
+                        char *mapset_path)
+{
+    if (strncmp(buf, "COMMAND:", 8) == 0) {
+        sscanf(buf, "COMMAND: %[^\n]", command);
+    }
+    else if (strncmp(buf, "GISDBASE:", 9) == 0) {
+        sscanf(buf, "GISDBASE: %[^\n]", gisdbase);
+    }
+    else if (strncmp(buf, "LOCATION:", 9) == 0) {
+        sscanf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %[^\n]", location,
+               mapset, user, date);
+
+        snprintf(mapset_path, GPATH_MAX, "%s/%s/%s", gisdbase, location,
+                 mapset);
+    }
+}
+
+/*!
+   \brief Creates a JSON object with fields for command, user, date, and
+   mapset_path, appends it to a JSON array.
+
+ */
+void add_record_to_json(char *command, char *user, char *date,
+                        char *mapset_path, JSON_Array *record_array,
+                        int history_number)
+{
+
+    JSON_Value *info_value = json_value_init_object();
+    if (info_value == NULL) {
+        G_fatal_error(_("Failed to initialize JSON object. Out of memory?"));
+    }
+    JSON_Object *info_object = json_object(info_value);
+
+    json_object_set_number(info_object, "history_number", history_number);
+    json_object_set_string(info_object, "command", command);
+    json_object_set_string(info_object, "mapset_path", mapset_path);
+    json_object_set_string(info_object, "user", user);
+    json_object_set_string(info_object, "date", date);
+
+    json_array_append_value(record_array, info_value);
+}
+
+/*!
+   \brief Reads history entries from a map, formats them based on the specified
+   output format (PLAIN, SHELL, or JSON), and prints the results.
+
+ */
+void print_history(struct Map_info *Map, enum OutputFormat format)
+{
+    int history_number = 0;
+
+    char buf[STR_LEN] = {0};
+    char command[STR_LEN] = {0}, gisdbase[STR_LEN] = {0};
+    char location[STR_LEN] = {0}, mapset[STR_LEN] = {0};
+    char user[STR_LEN] = {0}, date[STR_LEN] = {0};
+    char mapset_path[GPATH_MAX] = {0};
+
+    JSON_Value *root_value = NULL, *record_value = NULL;
+    JSON_Object *root_object = NULL;
+    JSON_Array *record_array = NULL;
+
+    if (format == JSON) {
+        root_value = json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        root_object = json_object(root_value);
+
+        record_value = json_value_init_array();
+        if (record_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        record_array = json_array(record_value);
+    }
+
+    Vect_hist_rewind(Map);
+    while (Vect_hist_read(buf, sizeof(buf) - 1, Map) != NULL) {
+        switch (format) {
+        case PLAIN:
+        case SHELL:
+            fprintf(stdout, "%s\n", buf);
+            break;
+        case JSON:
+            // Parse each line based on its prefix
+            parse_history_line(buf, command, gisdbase, location, mapset, user,
+                               date, mapset_path);
+            if (command[0] != '\0' && mapset_path[0] != '\0' &&
+                user[0] != '\0' && date[0] != '\0') {
+                // Increment history counter
+                history_number++;
+
+                add_record_to_json(command, user, date, mapset_path,
+                                   record_array, history_number);
+
+                // Clear the input strings before processing new
+                // entries in the history file
+                command[0] = '\0';
+                user[0] = '\0';
+                date[0] = '\0';
+                mapset_path[0] = '\0';
+            }
+            break;
+        }
+    }
+
+    if (format == JSON) {
+        json_object_set_value(root_object, "records", record_value);
+
+        char *serialized_string = json_serialize_to_string_pretty(root_value);
+        if (!serialized_string) {
+            json_value_free(root_value);
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+
+        json_free_serialized_string(serialized_string);
+        json_value_free(root_value);
+    }
+}

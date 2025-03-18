@@ -523,7 +523,7 @@ int main(int argc, char *argv[])
             settings.fixedMaxLength); /* predefined as BIG */
 
     /* TODO: fixing BIG, there is a bug with distant mountains not being seen:
-       attempt to contrain to current region
+       attempt to constrain to current region
 
        fixedMaxLength = (fixedMaxLength < AMAX1(deltx, delty)) ? fixedMaxLength
        : AMAX1(deltx, delty); G_debug(1,"Using maxdistance %f", fixedMaxLength);
@@ -846,7 +846,7 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     double printangle = settings->single_direction;
 
     origin_point.maxlength = settings->fixedMaxLength;
-    /* JSON variables and formating */
+    /* JSON variables and formatting */
 
     JSON_Value *horizons_value;
     JSON_Array *horizons;
@@ -1188,8 +1188,10 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
             _("Calculating map %01d of %01d (angle %.2f, raster map <%s>)"),
             (k + 1), arrayNumInt, angle_deg, shad_filename);
 
+        int j;
+
 #pragma omp parallel for schedule(static, 1) default(shared)
-        for (int j = hor_row_start; j < hor_row_end; j++) {
+        for (j = hor_row_start; j < hor_row_end; j++) {
             G_percent(j - hor_row_start, hor_numrows - 1, 2);
             for (int i = hor_col_start; i < hor_col_end; i++) {
                 OriginPoint origin_point;

@@ -164,12 +164,13 @@ class Application(wx.App):
             raise SyntaxError(msg)
 
     def map_file(self):
-        f = open(self.image, "rb")
-
-        header = f.read(self.HEADER_SIZE)
+        with open(self.image, "rb") as f:
+            header = f.read(self.HEADER_SIZE)
         self.read_bmp_header(header)
 
-        self.imgbuf = np.memmap(f, mode="r", offset=self.HEADER_SIZE)
+        self.imgbuf = np.memmap(
+            self.image, mode="r", offset=self.HEADER_SIZE, dtype=np.uint8
+        )
 
     def signal_handler(self, sig, frame):
         wx.CallAfter(self.mainwin.Refresh)

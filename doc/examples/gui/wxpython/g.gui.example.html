@@ -1,0 +1,66 @@
+<!-- meta page description: wxGUI Example Tool -->
+<!-- meta page index: wxGUI -->
+<h2>DESCRIPTION</h2>
+
+<p>
+The purpose of the <b>Example Tool</b> is to make life easier
+for new wxGUI developers. It can serve as a basic template when
+creating standalone GRASS GUI-based application. Example tool
+can display one raster map a show information about it.
+</p>
+
+<p>
+Following topics are covered:
+</p>
+
+<ul>
+  <li>creating standalone window</li>
+  <li>adding toolbars, statusbar</li>
+  <li>displaying raster map</li>
+  <li>running GRASS modules from application</li>
+  <li>creating dialog for element (raster, vector, ...) selection</li>
+  <li>using temporary region</li>
+  <li>access from main menu</li>
+  <li>writing programmer documentation</li>
+  <li>writing user documentation</li>
+</ul>
+
+<h2>NOTE</h2>
+
+See README to learn how to get Example Tool to work.
+
+<!--
+Put screenshot here
+<center>
+<br><img src="wxGUI_example.jpg" border="1"><br><br>
+</center>
+
+-->
+
+<h3>EXAMPLE TOOL TOOLBAR</h3>
+
+<dl>
+  <dt><img src="icons/layer-raster-add.png">&nbsp;
+    <em>Select raster layer</em></dt>
+  <dd>Select raster layer and compute statistics related to this layer.</dd>
+</dl>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="wxGUI.html">wxGUI</a>,
+  <a href="wxGUI.components.html">wxGUI components</a>
+</em>
+
+<!--
+Create wiki page and put the link here:
+<p>
+See also
+user <a href="https://grasswiki.osgeo.org/wiki/WxGUI_...">wiki</a> page.
+</p>
+-->
+
+<h2>AUTHOR</h2>
+
+Anna Kratochvilova,
+<a href="https://www.cvut.cz">Czech Technical University in Prague</a>, Czech Republic

@@ -80,7 +80,7 @@ def sortfile(infile, outfile):
     inf = open(infile)
     outf = open(outfile, "w")
 
-    if gs.find_program("sort", "--help"):
+    if (not gs.setup.WINDOWS) and gs.find_program("sort", "--help"):
         gs.run_command("sort", flags="n", stdin=inf, stdout=outf)
     else:
         # FIXME: we need a large-file sorting function
@@ -89,8 +89,7 @@ def sortfile(infile, outfile):
         for i in range(len(lines)):
             lines[i] = float(lines[i].rstrip("\r\n"))
         lines.sort()
-        for line in lines:
-            outf.write(str(line) + "\n")
+        outf.writelines(str(line) + "\n" for line in lines)
 
     inf.close()
     outf.close()

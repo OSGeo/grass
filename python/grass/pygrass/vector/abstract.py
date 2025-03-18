@@ -281,11 +281,11 @@ class Info:
         :type newname: str
         """
         if self.exist():
-            if not self.is_open():
-                utils.rename(self.name, newname, "vect")
-            else:
+            if self.is_open():
                 msg = "The map is open, not able to rename it."
                 raise GrassError(msg)
+            utils.rename(self.name, newname, "vect")
+
         self._name = newname
 
     def is_3D(self):
@@ -294,13 +294,13 @@ class Info:
 
     def exist(self):
         """Return if the Vector exists or not"""
-        if self.name:
-            if self.mapset == "":
-                mapset = utils.get_mapset_vector(self.name, self.mapset)
-                self.mapset = mapset or ""
-                return bool(mapset)
-            return bool(utils.get_mapset_vector(self.name, self.mapset))
-        return False
+        if not self.name:
+            return False
+        if self.mapset == "":
+            mapset = utils.get_mapset_vector(self.name, self.mapset)
+            self.mapset = mapset or ""
+            return bool(mapset)
+        return bool(utils.get_mapset_vector(self.name, self.mapset))
 
     def is_open(self):
         """Return if the Vector is open"""
@@ -337,12 +337,11 @@ class Info:
         :param tab_name: define the name of the table that will be generate
         :type tab_name: str
         :param tab_cols: define the name and type of the columns of the
-                         attribute table of the vecto map
+                         attribute table of the vector map
         :type tab_cols: list of pairs
-        :param link_name: define the name of the link connection with the
-                          database
+        :param link_name: define the name of the link connection with the database
         :type link_name: str
-        :param link_key: define the nema of the column that will be use as
+        :param link_key: define the name of the column that will be use as
                          vector category
         :type link_key: str
         :param link_db: define the database connection parameters

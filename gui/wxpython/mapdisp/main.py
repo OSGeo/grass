@@ -123,9 +123,8 @@ class DMonMap(Map):
 
         nlayers = 0
         try:
-            fd = open(self.cmdfile)
-            lines = fd.readlines()
-            fd.close()
+            with open(self.cmdfile) as fd:
+                lines = fd.readlines()
             # detect d.out.file, delete the line from the cmd file and export
             # graphics
             if len(lines) > 0:
@@ -133,9 +132,8 @@ class DMonMap(Map):
                     "d.to.rast"
                 ):
                     dCmd = lines[-1].strip()
-                    fd = open(self.cmdfile, "w")
-                    fd.writelines(lines[:-1])
-                    fd.close()
+                    with open(self.cmdfile, "w") as fd:
+                        fd.writelines(lines[:-1])
                     if lines[-1].startswith("d.out.file"):
                         self.saveToFile.emit(cmd=utils.split(dCmd))
                     else:
@@ -143,9 +141,8 @@ class DMonMap(Map):
                     return
                 if lines[-1].startswith("d.what"):
                     dWhatCmd = lines[-1].strip()
-                    fd = open(self.cmdfile, "w")
-                    fd.writelines(lines[:-1])
-                    fd.close()
+                    with open(self.cmdfile, "w") as fd:
+                        fd.writelines(lines[:-1])
                     if "=" in utils.split(dWhatCmd)[1]:
                         maps = utils.split(dWhatCmd)[1].split("=")[1].split(",")
                     else:
@@ -176,7 +173,7 @@ class DMonMap(Map):
                         mapFile = line.split("=", 1)[1].strip()
                     try:
                         k, v = line[2:].strip().split("=", 1)
-                    except:
+                    except (ValueError, IndexError):
                         pass
                     render_env[k] = v
                     continue
@@ -219,24 +216,26 @@ class DMonMap(Map):
 
                 exists = False
                 for i, layer in enumerate(existingLayers):
-                    if layer.GetCmd(string=True) == utils.GetCmdString(
+                    if layer.GetCmd(string=True) != utils.GetCmdString(
                         cmdlist_to_tuple(cmd)
                     ):
-                        exists = True
+                        continue
 
-                        if layersOrder[i] == -1:
-                            layersOrder[i] = next_layer
-                            next_layer += 1
-                        # layer must be put higher in render order (same cmd was
-                        # insered more times)
-                        # TODO delete rendurant cmds from cmd file?
-                        else:
-                            for j, l_order in enumerate(layersOrder):
-                                if l_order > layersOrder[i]:
-                                    layersOrder[j] -= 1
-                            layersOrder[i] = next_layer - 1
+                    exists = True
 
-                        break
+                    if layersOrder[i] == -1:
+                        layersOrder[i] = next_layer
+                        next_layer += 1
+                    # layer must be put higher in render order (same cmd was
+                    # inserted more times)
+                    # TODO delete redundant cmds from cmd file?
+                    else:
+                        for j, l_order in enumerate(layersOrder):
+                            if l_order > layersOrder[i]:
+                                layersOrder[j] -= 1
+                        layersOrder[i] = next_layer - 1
+
+                    break
                 if exists:
                     continue
 
@@ -463,7 +462,7 @@ class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
 
 
 class DMonDisplay(FrameMixin, MapPanel):
-    """Map display for wrapping map panel with d.mon mathods and frame methods"""
+    """Map display for wrapping map panel with d.mon methods and frame methods"""
 
     def __init__(self, parent, giface, id, Map, title, toolbars, statusbar):
         # init map panel
@@ -493,13 +492,14 @@ class DMonDisplay(FrameMixin, MapPanel):
 
         # update env file
         width, height = self.MapWindow.GetClientSize()
-        for line in fileinput.input(monFile["env"], inplace=True):
-            if "GRASS_RENDER_WIDTH" in line:
-                print("GRASS_RENDER_WIDTH={0}".format(width))
-            elif "GRASS_RENDER_HEIGHT" in line:
-                print("GRASS_RENDER_HEIGHT={0}".format(height))
-            else:
-                print(line.rstrip("\n"))
+        with fileinput.input(monFile["env"], inplace=True) as file:
+            for line in file:
+                if "GRASS_RENDER_WIDTH" in line:
+                    print("GRASS_RENDER_WIDTH={0}".format(width))
+                elif "GRASS_RENDER_HEIGHT" in line:
+                    print("GRASS_RENDER_HEIGHT={0}".format(height))
+                else:
+                    print(line.rstrip("\n"))
 
         # add Map Display panel to Map Display frame
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -655,11 +655,10 @@ if __name__ == "__main__":
 
     # create pid file
     pidFile = os.path.join(monPath, "pid")
-    fd = open(pidFile, "w")
-    if not fd:
-        grass.fatal(_("Unable to create file <%s>") % pidFile)
-    fd.write("%s\n" % os.getpid())
-    fd.close()
+    with open(pidFile, "w") as fd:
+        if not fd:
+            grass.fatal(_("Unable to create file <%s>") % pidFile)
+        fd.write("%s\n" % os.getpid())
 
     RunCommand("g.gisenv", set="MONITOR_%s_PID=%d" % (monName.upper(), os.getpid()))
 

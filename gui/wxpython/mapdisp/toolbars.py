@@ -67,8 +67,7 @@ NvizIcons = {
         img="flythrough",
         label=_("Fly-through mode"),
         desc=_(
-            "Drag with mouse, hold Ctrl down for different mode"
-            " or Shift to accelerate"
+            "Drag with mouse, hold Ctrl down for different mode or Shift to accelerate"
         ),
     ),
     "zoomIn": BaseIcons["zoomIn"].SetLabel(desc=_("Click mouse to zoom")),

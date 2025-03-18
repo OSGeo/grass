@@ -1,5 +1,4 @@
-"""Python interface to launch GRASS GIS modules in scripts
-"""
+"""Python interface to launch GRASS GIS modules in scripts"""
 
 from . import setup
 from .core import (
@@ -69,7 +68,14 @@ from .db import (
     db_table_in_vector,
 )
 from .imagery import group_to_dict
-from .raster import mapcalc, mapcalc_start, raster_history, raster_info, raster_what
+from .raster import (
+    mapcalc,
+    mapcalc_start,
+    raster_history,
+    raster_info,
+    raster_what,
+    MaskManager,
+)
 from .raster3d import mapcalc3d, raster3d_info
 from .utils import (
     KeyValue,
@@ -109,6 +115,7 @@ from .vector import (
 __all__ = [
     "PIPE",
     "KeyValue",
+    "MaskManager",
     "Popen",
     "append_node_pid",
     "append_random",

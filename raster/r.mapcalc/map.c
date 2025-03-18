@@ -22,7 +22,6 @@
 /****************************************************************************/
 
 static void prepare_region_from_maps(expression **, int, int);
-int columns;
 struct Cell_head current_region2;
 
 void setup_region(void)
@@ -294,7 +293,7 @@ static void translate_from_colors(struct map *m, DCELL *rast, CELL *cell,
  * category file.
  *
  * This requires performing sscanf() of the category label
- * and only do it it for new categories. Must maintain
+ * and only do it for new categories. Must maintain
  * some kind of maps of already scanned values.
  *
  * This maps is a hybrid tree, where the data in each node
