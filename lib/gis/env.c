@@ -335,7 +335,7 @@ static FILE *open_env(const char *mode, int loc)
         if (!st->gisrc) {
             return NULL;
         }
-        strcpy(buf, st->gisrc);
+        G_strlcpy(buf, st->gisrc, sizeof(buf));
     }
     else if (loc == G_VAR_MAPSET) {
         /* Warning: G_VAR_GISRC must be previously read -> */
