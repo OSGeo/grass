@@ -175,6 +175,10 @@ class TimeSeriesMap(BaseSeriesMap):
         self.baseseries = baseseries
         self._fill_gaps = fill_gaps
         self._baseseries_added = True
+
+        # NEW CODE: Reset overlays and legend when adding a new series
+        self._base_calls = []
+        self._legend = None
         # create list of layers to render and date/times
         self._layers, self._labels = collect_layers(
             self.baseseries, self._element_type, self._fill_gaps
@@ -199,6 +203,9 @@ class TimeSeriesMap(BaseSeriesMap):
         self.baseseries = baseseries
         self._fill_gaps = fill_gaps
         self._baseseries_added = True
+         # NEW CODE: Reset overlays and legend when adding a new series
+        self._base_calls = []
+        self._legend = None
         # create list of layers to render and date/times
         self._layers, self._labels = collect_layers(
             self.baseseries, self._element_type, self._fill_gaps
@@ -271,6 +278,10 @@ class TimeSeriesMap(BaseSeriesMap):
             env=self._env,
             read_file=True,
         )
+
+        # NEW CODE: Clear existing layers before rendering new ones
+        img.run("d.erase", flags="f")
+
         if self._element_type == "strds":
             img.d_rast(map=layer)
         elif self._element_type == "stvds":
