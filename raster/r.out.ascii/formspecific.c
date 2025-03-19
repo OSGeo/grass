@@ -227,5 +227,3 @@ int writeLISFLOODheader(FILE *fp, char *nodataval)
 
     return 0;
 }
-
-

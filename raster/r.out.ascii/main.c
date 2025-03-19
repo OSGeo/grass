@@ -132,10 +132,8 @@ int main(int argc, char *argv[])
 
     if (flag.surfer->answer && flag.modflow->answer)
         G_fatal_error(_("Use -m or -s, not both"));
-    
     if (flag.surfer->answer && flag.lisflood->answer)
         G_fatal_error(_("Use -l or -s, not both"));
-    
     if (flag.lisflood->answer && flag.modflow->answer)
         G_fatal_error(_("Use -m or -l, not both"));
 
