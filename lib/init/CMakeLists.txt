@@ -71,16 +71,6 @@ install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}
 
 file(TO_NATIVE_PATH "${OUTDIR}/${GISBASE_DIR}" gisbase_init_dir)
 
-file(COPY ${CMAKE_SOURCE_DIR}/demolocation/PERMANENT
-     DESTINATION ${OUTDIR}/${GRASS_INSTALL_DEMODIR})
-
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/demolocation/PERMANENT/
-        DESTINATION ${GRASS_INSTALL_DEMODIR}/PERMANENT)
-
-set(GISDBASE ${OUTDIR}/${GISBASE_DIR})
-configure_file(${CMAKE_SOURCE_DIR}/demolocation/grassrc.tmpl "${GISRC}" @ONLY)
-unset(GISDBASE)
-
 file(TO_NATIVE_PATH ${OUTDIR}/${GRASS_INSTALL_BINDIR} grass_dll_dir)
 set(DLL_PATH_LIST)
 list(APPEND DLL_PATH_LIST ${grass_dll_dir})

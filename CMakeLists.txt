@@ -253,6 +253,8 @@ endif()
 
 set(NO_HTML_DESCR_TARGETS "g.parser;ximgview;test.raster3d.lib")
 
+add_subdirectory(demolocation)
+
 add_subdirectory(include)
 
 include_directories("${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}")
