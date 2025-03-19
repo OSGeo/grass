@@ -26,7 +26,7 @@ if(NOT MSVC)
   set(_d
       "${OUTDIR}/${GRASS_INSTALL_LIBDIR}:${OUTDIR}/${GRASS_INSTALL_BINDIR}:${OUTDIR}/${GRASS_INSTALL_SCRIPTDIR}"
   )
-  set(ENV{${LD_LIBRARY_PATH_VAR}} "${_d}:$ENV{LD_RUN_PATH}")
+  set(ENV{${LD_LIBRARY_PATH_VAR}} "${_d}:$ENV{${LD_LIBRARY_PATH_VAR}}")
   unset(_d)
 endif()
 set(ENV{LC_ALL} C)
