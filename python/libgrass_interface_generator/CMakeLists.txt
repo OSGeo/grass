@@ -77,9 +77,13 @@ foreach(module ${MODULES})
     set(${module}_INCHDRS})
   endif()
   list(INSERT ${module}_INCHDRS 0 ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR})
-  list(INSERT ${module}_INCHDRS 0
-       ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR})
-  list(INSERT ${module}_INCHDRS 0 ${CMAKE_PREFIX_PATH})
+  if(CMAKE_INSTALL_INCLUDEDIR)
+    list(INSERT ${module}_INCHDRS 0
+         ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR})
+  endif()
+  if(CMAKE_PREFIX_PATH)
+    list(INSERT ${module}_INCHDRS 0 ${CMAKE_PREFIX_PATH})
+  endif()
   list(REMOVE_DUPLICATES ${module}_INCHDRS)
 
   if(NOT ${module}_TARGET_NAME)
