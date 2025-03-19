@@ -13,12 +13,8 @@
 #           for details.
 """Create and display visualizations for a series of rasters."""
 
-import os
-import shutil
-
 from grass.grassdb.data import map_exists
 
-from .map import Map
 from .region import RegionManagerForSeries
 from .baseseriesmap import BaseSeriesMap
 
@@ -87,12 +83,12 @@ class SeriesMap(BaseSeriesMap):
             )
             for i in range(self.baseseries):
                 kwargs["map"] = rasters[i]
-                self._base_calls[i].append(("d.rast", kwargs.copy()))
+                self._calls[i].append(("d.rast", kwargs.copy()))
         else:
             self.baseseries = len(rasters)
             for raster in rasters:
                 kwargs["map"] = raster
-                self._base_calls.append([("d.rast", kwargs.copy())])
+                self._calls.append([("d.rast", kwargs.copy())])
             self._baseseries_added = True
         if not self._labels:
             self._labels = rasters
@@ -114,12 +110,12 @@ class SeriesMap(BaseSeriesMap):
             )
             for i in range(self.baseseries):
                 kwargs["map"] = vectors[i]
-                self._base_calls[i].append(("d.vect", kwargs.copy()))
+                self._calls[i].append(("d.vect", kwargs.copy()))
         else:
             self.baseseries = len(vectors)
             for vector in vectors:
                 kwargs["map"] = vector
-                self._base_calls.append([("d.vect", kwargs.copy())])
+                self._calls.append([("d.vect", kwargs.copy())])
             self._baseseries_added = True
         if not self._labels:
             self._labels = vectors
@@ -134,34 +130,3 @@ class SeriesMap(BaseSeriesMap):
         )
         self._labels = names
         self._indices = list(range(len(self._labels)))
-
-    def _render_worker(self, i):
-        """Function to render a single layer."""
-        filename = os.path.join(self._tmpdir.name, f"{i}.png")
-        shutil.copyfile(self.base_file, filename)
-        img = Map(
-            width=self._width,
-            height=self._height,
-            filename=filename,
-            use_region=True,
-            env=self._env,
-            read_file=True,
-        )
-        for grass_module, kwargs in self._base_calls[i]:
-            img.run(grass_module, **kwargs)
-        return i, filename
-
-    def render(self):
-        """Renders image for each raster in series.
-
-        Save PNGs to temporary directory. Must be run before creating a visualization
-        (i.e. show or save).
-        """
-        if not self._baseseries_added:
-            msg = (
-                "Cannot render series since none has been added."
-                "Use SeriesMap.add_rasters() or SeriesMap.add_vectors()"
-            )
-            raise RuntimeError(msg)
-        tasks = [(i,) for i in range(self.baseseries)]
-        self._render(tasks)
