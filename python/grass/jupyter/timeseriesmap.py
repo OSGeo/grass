@@ -176,7 +176,6 @@ class TimeSeriesMap(BaseSeriesMap):
         self._fill_gaps = fill_gaps
         self._baseseries_added = True
 
-        # NEW CODE: Reset overlays and legend when adding a new series
         self._base_calls = []
         self._legend = None
         # create list of layers to render and date/times
@@ -279,7 +278,7 @@ class TimeSeriesMap(BaseSeriesMap):
             read_file=True,
         )
 
-        # NEW CODE: Clear existing layers before rendering new ones
+
         img.run("d.erase", flags="f")
 
         if self._element_type == "strds":
