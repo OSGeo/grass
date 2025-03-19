@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 
 import platform
 import os
+from itertools import starmap
 
 import wx
 from wx.lib.agw import aui
@@ -243,10 +244,7 @@ class ToolbarController:
 
     def _getToolbarData(self, data):
         """Define tool"""
-        retData = []
-        for args in data:
-            retData.append(self._defineTool(*args))
-        return retData
+        return list(starmap(self._defineTool, data))
 
     def _defineTool(
         self, name=None, icon=None, handler=None, item=wx.ITEM_NORMAL, pos=-1
@@ -328,7 +326,6 @@ class BaseToolbar(ToolBar):
 
     Following code shows how to create new basic toolbar:
 
-
         class MyToolbar(BaseToolbar):
             def __init__(self, parent):
                 BaseToolbar.__init__(self, parent)
@@ -366,7 +363,7 @@ class BaseToolbar(ToolBar):
 
     def _toolbarData(self):
         """Toolbar data (virtual)"""
-        return None
+        return
 
     def Enable(self, tool, enable=True):
         """@copydoc ToolbarController::Enable()"""
@@ -414,7 +411,7 @@ class AuiToolbar(aui.AuiToolBar):
 
     def _toolbarData(self):
         """Toolbar data (virtual)"""
-        return None
+        return
 
     def Enable(self, tool, enable=True):
         """@copydoc ToolbarController::Enable()"""

@@ -86,12 +86,12 @@ class grassTask:
 
     def get_name(self):
         """Get task name"""
-        if sys.platform == "win32":
-            name, ext = os.path.splitext(self.name)
-            if ext in {".py", ".sh"}:
-                return name
+        if sys.platform != "win32":
             return self.name
 
+        name, ext = os.path.splitext(self.name)
+        if ext in {".py", ".sh"}:
+            return name
         return self.name
 
     def get_description(self, full=True):
@@ -99,11 +99,11 @@ class grassTask:
 
         :param bool full: True for label + desc
         """
-        if self.label:
-            if full:
-                return self.label + " " + self.description
-            return self.label
-        return self.description
+        if not self.label:
+            return self.description
+        if full:
+            return self.label + " " + self.description
+        return self.label
 
     def get_keywords(self):
         """Get module's keywords"""
@@ -114,22 +114,14 @@ class grassTask:
 
         :param str element: element name
         """
-        params = []
-        for p in self.params:
-            params.append(p[element])
-
-        return params
+        return [p[element] for p in self.params]
 
     def get_list_flags(self, element="name"):
         """Get list of flags
 
         :param str element: element name
         """
-        flags = []
-        for p in self.flags:
-            flags.append(p[element])
-
-        return flags
+        return [p[element] for p in self.flags]
 
     def get_param(self, value, element="name", raiseError=True):
         """Find and return a param by name
@@ -313,7 +305,7 @@ class processTask:
         self.task.label = self._get_node_text(self.root, "label")
         self.task.description = self._get_node_text(self.root, "description")
 
-    def _process_params(self):
+    def _process_params(self) -> None:
         """Process parameters"""
         for p in self.root.findall("parameter"):
             # gisprompt
@@ -347,15 +339,12 @@ class processTask:
             multiple = p.get("multiple", "no") == "yes"
             required = p.get("required", "no") == "yes"
 
-            if (
+            hidden: bool = bool(
                 self.task.blackList["enabled"]
                 and self.task.name in self.task.blackList["items"]
                 and p.get("name")
                 in self.task.blackList["items"][self.task.name].get("params", [])
-            ):
-                hidden = True
-            else:
-                hidden = False
+            )
 
             self.task.params.append(
                 {
@@ -380,23 +369,17 @@ class processTask:
                 }
             )
 
-    def _process_flags(self):
+    def _process_flags(self) -> None:
         """Process flags"""
         for p in self.root.findall("flag"):
-            if (
+            hidden: bool = bool(
                 self.task.blackList["enabled"]
                 and self.task.name in self.task.blackList["items"]
                 and p.get("name")
                 in self.task.blackList["items"][self.task.name].get("flags", [])
-            ):
-                hidden = True
-            else:
-                hidden = False
+            )
 
-            if p.find("suppress_required") is not None:
-                suppress_required = True
-            else:
-                suppress_required = False
+            suppress_required: bool = bool(p.find("suppress_required") is not None)
 
             self.task.flags.append(
                 {
@@ -557,12 +540,14 @@ def command_info(cmd):
     :param str cmd: the command to query
     """
     task = parse_interface(cmd)
-    cmdinfo = {}
-
-    cmdinfo["description"] = task.get_description()
-    cmdinfo["keywords"] = task.get_keywords()
-    cmdinfo["flags"] = flags = task.get_options()["flags"]
-    cmdinfo["params"] = params = task.get_options()["params"]
+    flags = task.get_options()["flags"]
+    params = task.get_options()["params"]
+    cmdinfo = {
+        "description": task.get_description(),
+        "keywords": task.get_keywords(),
+        "flags": flags,
+        "params": params,
+    }
 
     usage = task.get_name()
     flags_short = []

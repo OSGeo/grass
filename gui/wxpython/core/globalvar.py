@@ -23,6 +23,7 @@ if not os.getenv("GISBASE"):
 from grass.script.core import get_commands
 
 from core.debug import Debug
+from pathlib import Path
 
 # path to python scripts
 ETCDIR = os.path.join(os.getenv("GISBASE"), "etc")
@@ -95,7 +96,8 @@ def CheckForWx():
 
         version = parse_version_string(wx.__version__)
         if version < WXPY3_MIN_VERSION:
-            raise ValueError("Your wxPython version is {}".format(wx.__version__))
+            msg = "Your wxPython version is {}".format(wx.__version__)
+            raise ValueError(msg)
         return
     except ImportError as e:
         print("ERROR: wxGUI requires wxPython. {}".format(e), file=sys.stderr)
@@ -123,14 +125,12 @@ else:
     import wx.lib.flatnotebook as FN
 
 
-"""
-Query layer (generated for example by selecting item in the Attribute Table Manager)
-Deleted automatically on re-render action
-"""
+# Query layer (generated for example by selecting item in the Attribute Table Manager)
+# Deleted automatically on re-render action
 # temporal query layer (removed on re-render action)
 QUERYLAYER = "qlayer"
 
-"""Style definition for FlatNotebook pages"""
+# Style definition for FlatNotebook pages
 FNPageStyle = (
     FN.FNB_NODRAG
     | FN.FNB_TABS_BORDER_SIMPLE
@@ -142,7 +142,7 @@ FNPageDStyle = (
     FN.FNB_BOTTOM | FN.FNB_NODRAG | FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON
 )
 
-"""Dialog widget dimension"""
+# Dialog widget dimension
 DIALOG_SPIN_SIZE = (150, -1)
 DIALOG_COMBOBOX_SIZE = (300, -1)
 DIALOG_GSELECT_SIZE = (400, -1)
@@ -207,7 +207,8 @@ def UpdateGRASSAddOnCommands(eList=None):
         if pathList and path not in pathList:
             os.environ["PATH"] = path + os.pathsep + os.environ["PATH"]
 
-        for fname in os.listdir(path):
+        for file_path in Path(path).iterdir():
+            fname = file_path.name
             if fname in {"docs", "modules.xml"}:
                 continue
             if grassScripts:  # win32
@@ -233,21 +234,21 @@ def UpdateGRASSAddOnCommands(eList=None):
     Debug.msg(1, "Number of GRASS AddOn commands: %d", nCmd)
 
 
-"""@brief Collected GRASS-relared binaries/scripts"""
+# Collected GRASS-related binaries/scripts
 grassCmd, grassScripts = get_commands()
 Debug.msg(1, "Number of core GRASS commands: %d", len(grassCmd))
 UpdateGRASSAddOnCommands()
 
-"""@Toolbar icon size"""
+# Toolbar icon size
 toolbarSize = (24, 24)
 
-"""@Check version of wxPython, use agwStyle for 2.8.11+"""
+# Check version of wxPython, use agwStyle for 2.8.11+
 hasAgw = CheckWxVersion([2, 8, 11, 0])
-wxPythonPhoenix = CheckWxPhoenix()
+wxPythonPhoenix: bool = CheckWxPhoenix()
 
 gtk3 = "gtk3" in wx.PlatformInfo
 
-"""@Add GUIDIR/scripts into path"""
+# Add GUIDIR/scripts into path
 os.environ["PATH"] = os.path.join(GUIDIR, "scripts") + os.pathsep + os.environ["PATH"]
 
 ignoredCmdPattern = (

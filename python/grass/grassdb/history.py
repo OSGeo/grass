@@ -257,13 +257,14 @@ def get_initial_command_info(env_run):
     # Execution timestamp in ISO 8601 format
     exec_time = datetime.now().isoformat()
 
-    # 2D raster MASK presence
+    # 2D raster mask presence
+    mask2d_status = gs.parse_command("r.mask.status", format="json", env=env_run)
+
+    # 3D raster mask presence
     env = gs.gisenv(env_run)
     mapset_path = Path(env["GISDBASE"]) / env["LOCATION_NAME"] / env["MAPSET"]
-    mask2d_present = (mapset_path / "cell" / "MASK").exists()
-
-    # 3D raster MASK presence
     mask3d_present = (mapset_path / "grid3" / "RASTER3D_MASK").exists()
+    mask3d_name = f"RASTER3D_MASK@{env['MAPSET']}"
 
     # Computational region settings
     region_settings = gs.region(env=env_run)
@@ -271,8 +272,10 @@ def get_initial_command_info(env_run):
     # Finalize the command info dictionary
     return {
         "timestamp": exec_time,
-        "mask2d": mask2d_present,
+        "mask2d": mask2d_status["present"],
+        "mask2d_name": mask2d_status["name"],
         "mask3d": mask3d_present,
+        "mask3d_name": mask3d_name,
         "region": region_settings,
         "status": Status.RUNNING.value,
     }
@@ -310,10 +313,10 @@ def add_entry(history_path, entry):
     :param str history_path: path to the history log file
     :param dict entry: entry consisting of 'command' and 'command_info' keys
     """
-    if get_history_file_extension(history_path) == ".json":
-        _add_entry_to_JSON(history_path, entry)
-    else:
-        raise ValueError("Adding entries is supported only for JSON format.")
+    if get_history_file_extension(history_path) != ".json":
+        msg = "Adding entries is supported only for JSON format."
+        raise ValueError(msg)
+    _add_entry_to_JSON(history_path, entry)
 
 
 def _update_entry_in_JSON(history_path, command_info, index=None):
@@ -357,10 +360,10 @@ def update_entry(history_path, command_info, index=None):
     :param dict command_info: command info entry for update
     :param int|None index: index of the command to be updated
     """
-    if get_history_file_extension(history_path) == ".json":
-        _update_entry_in_JSON(history_path, command_info, index)
-    else:
-        raise ValueError("Updating entries is supported only for JSON format.")
+    if get_history_file_extension(history_path) != ".json":
+        msg = "Updating entries is supported only for JSON format."
+        raise ValueError(msg)
+    _update_entry_in_JSON(history_path, command_info, index)
 
 
 def copy(history_path, target_path):

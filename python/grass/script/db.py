@@ -94,23 +94,20 @@ def db_table_exist(table, env=None, **args):
 
     :return: True for success, False otherwise
     """
-    nuldev = open(os.devnull, "w+")
     ok = True
-    try:
-        run_command(
-            "db.describe",
-            flags="c",
-            table=table,
-            stdout=nuldev,
-            stderr=nuldev,
-            env=env,
-            **args,
-        )
-    except CalledModuleError:
-        ok = False
-    finally:
-        nuldev.close()
-
+    with open(os.devnull, "w+") as nuldev:
+        try:
+            run_command(
+                "db.describe",
+                flags="c",
+                table=table,
+                stdout=nuldev,
+                stderr=nuldev,
+                env=env,
+                **args,
+            )
+        except CalledModuleError:
+            ok = False
     return ok
 
 
@@ -127,9 +124,8 @@ def db_connection(force=False, env=None):
     :return: parsed output of db.connect
     """  # noqa: E501
     try:
-        nuldev = open(os.devnull, "w")
-        conn = parse_command("db.connect", flags="g", stderr=nuldev, env=env)
-        nuldev.close()
+        with open(os.devnull, "w") as nuldev:
+            conn = parse_command("db.connect", flags="g", stderr=nuldev, env=env)
     except CalledModuleError:
         conn = None
 
@@ -191,9 +187,8 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
     except CalledModuleError:
         fatal(_("Fetching data failed"), env=env)
 
-    ofile = open(fname)
-    result = [tuple(x.rstrip(os.linesep).split(args["sep"])) for x in ofile]
-    ofile.close()
+    with open(fname) as ofile:
+        result = [tuple(x.rstrip(os.linesep).split(args["sep"])) for x in ofile]
     try_remove(fname)
 
     return tuple(result)
@@ -218,16 +213,16 @@ def db_table_in_vector(table, mapset=".", env=None):
     """
     from .vector import vector_db
 
-    nuldev = open(os.devnull, "w")
     used = []
     vects = list_strings("vector", mapset=mapset, env=env)
-    for vect in vects:
-        for f in vector_db(vect, stderr=nuldev, env=env).values():
-            if not f:
-                continue
-            if f["table"] == table:
-                used.append(vect)
-                break
+    with open(os.devnull, "w") as nuldev:
+        for vect in vects:
+            for f in vector_db(vect, stderr=nuldev, env=env).values():
+                if not f:
+                    continue
+                if f["table"] == table:
+                    used.append(vect)
+                    break
     if len(used) > 0:
         return used
     return None

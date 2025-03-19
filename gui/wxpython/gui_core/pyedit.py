@@ -305,8 +305,7 @@ class PyEditController:
         except PermissionError:
             GError(
                 message=_(
-                    "Permission denied <{}>. Please change file "
-                    "permission for reading."
+                    "Permission denied <{}>. Please change file permission for reading."
                 ).format(file_path),
                 parent=self.guiparent,
                 showTraceback=False,

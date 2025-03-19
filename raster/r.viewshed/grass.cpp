@@ -116,7 +116,7 @@ GridHeader *read_header(char *rastName, Cell_head *region)
         G_warning(
             _("East-west resolution does not equal north-south resolution. "
               "The viewshed computation assumes the cells are square, so in "
-              "this case this may result in innacuracies."));
+              "this case this may result in inaccuracies."));
         //    exit(EXIT_FAILURE);
     }
     hd->ew_res = region->ew_res;
@@ -778,6 +778,8 @@ void save_vis_elev_to_GRASS(Grid *visgrid, char *elevfname, char *visfname,
 
     Rast_close(elevfd);
     Rast_close(visfd);
+    G_free(visrast);
+    G_free(elevrast);
     return;
 }
 
@@ -893,6 +895,7 @@ void save_io_visibilitygrid_to_GRASS(IOVisibilityGrid *visgrid, char *fname,
     } /* for i */
 
     Rast_close(visfd);
+    G_free(visrast);
 }
 
 /* ************************************************************ */
@@ -1014,5 +1017,7 @@ void save_io_vis_and_elev_to_GRASS(IOVisibilityGrid *visgrid, char *elevfname,
 
     Rast_close(elevfd);
     Rast_close(visfd);
+    G_free(visrast);
+    G_free(elevrast);
     return;
 }

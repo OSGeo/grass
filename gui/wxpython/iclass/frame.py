@@ -18,17 +18,38 @@ for details.
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-import os
 import copy
+import os
 import tempfile
+from ctypes import byref, pointer
 
 import wx
 
-from ctypes import *
-
 try:
-    from grass.lib.imagery import *
-    from grass.lib.vector import *
+    from grass.lib.imagery import (
+        I_free_group_ref,
+        I_free_signatures,
+        I_iclass_add_signature,
+        I_iclass_analysis,
+        I_iclass_create_raster,
+        I_iclass_free_statistics,
+        I_iclass_init_group,
+        I_iclass_init_signatures,
+        I_iclass_init_statistics,
+        I_iclass_statistics_set_nstd,
+        I_iclass_write_signatures,
+        I_init_group_ref,
+        I_init_signatures,
+        IClass_statistics,
+        Ref,
+        Signature,
+    )
+    from grass.lib.vector import (
+        Vect_area_alive,
+        Vect_get_map_box,
+        Vect_get_num_areas,
+        bound_box,
+    )
 
     haveIClass = True
     errMsg = ""
@@ -37,37 +58,35 @@ except ImportError as e:
     errMsg = _("Loading imagery lib failed.\n%s") % e
 
 import grass.script as gs
-
+from core import globalvar
+from core.gcmd import GError, GMessage, RunCommand
+from core.render import Map
+from dbmgr.vinfo import VectorDBInfo
+from grass.pydispatch.signal import Signal
+from gui_core.dialogs import SetOpacityDialog
+from gui_core.mapdisp import DoubleMapPanel, FrameMixin
+from gui_core.wrap import Menu
 from mapdisp import statusbar as sb
 from mapdisp.main import StandaloneMapDisplayGrassInterface
 from mapwin.buffered import BufferedMapWindow
 from vdigit.toolbars import VDigitToolbar
-from gui_core.mapdisp import DoubleMapPanel, FrameMixin
-from core import globalvar
-from core.render import Map
-from core.gcmd import RunCommand, GMessage, GError
-from gui_core.dialogs import SetOpacityDialog
-from gui_core.wrap import Menu
-from dbmgr.vinfo import VectorDBInfo
 
-from iclass.digit import IClassVDigitWindow, IClassVDigit
+from iclass.dialogs import (
+    IClassCategoryManagerDialog,
+    IClassExportAreasDialog,
+    IClassGroupDialog,
+    IClassMapDialog,
+    IClassSignatureFileDialog,
+)
+from iclass.digit import IClassVDigit, IClassVDigitWindow
+from iclass.plots import PlotPanel
+from iclass.statistics import StatisticsData
 from iclass.toolbars import (
+    IClassMapManagerToolbar,
     IClassMapToolbar,
     IClassMiscToolbar,
     IClassToolbar,
-    IClassMapManagerToolbar,
 )
-from iclass.statistics import StatisticsData
-from iclass.dialogs import (
-    IClassCategoryManagerDialog,
-    IClassGroupDialog,
-    IClassSignatureFileDialog,
-    IClassExportAreasDialog,
-    IClassMapDialog,
-)
-from iclass.plots import PlotPanel
-
-from grass.pydispatch.signal import Signal
 
 
 class IClassMapPanel(DoubleMapPanel):
@@ -668,7 +687,7 @@ class IClassMapPanel(DoubleMapPanel):
         warning = self._checkImportedTopo(vector)
         if warning:
             GMessage(parent=self, message=warning)
-            return
+            return None
 
         wx.BeginBusyCursor()
         wx.GetApp().Yield()
@@ -679,7 +698,7 @@ class IClassMapPanel(DoubleMapPanel):
         # open vector map to be imported
         if digitClass.OpenMap(vector, update=False) is None:
             GError(parent=self, message=_("Unable to open vector map <%s>") % vector)
-            return
+            return None
 
         # copy features to the temporary map
         vname = self._getTempVectorName()
@@ -690,7 +709,7 @@ class IClassMapPanel(DoubleMapPanel):
                 parent=self,
                 message=_("Unable to copy vector features from <%s>") % vector,
             )
-            return
+            return None
         del os.environ["GRASS_VECTOR_TEMPORARY"]
 
         # close map
@@ -700,7 +719,7 @@ class IClassMapPanel(DoubleMapPanel):
         self.poMapInfo = digitClass.OpenMap(vname, tmp=True)
         if self.poMapInfo is None:
             GError(parent=self, message=_("Unable to open temporary vector map"))
-            return
+            return None
 
         # remove temporary rasters
         for cat in self.stats_data.GetCategories():
@@ -773,25 +792,25 @@ class IClassMapPanel(DoubleMapPanel):
 
             for cat in cats:
                 listCtrl.AddCategory(cat=cat, name="class_%d" % cat, color="0:0:0")
+
+            return
+
         # connection, table and columns exists
-        else:
-            columns = ["cat", "class", "color"]
-            ret = RunCommand(
-                "v.db.select",
-                quiet=True,
-                parent=self,
-                flags="c",
-                map=vector,
-                layer=1,
-                columns=",".join(columns),
-                read=True,
-            )
-            records = ret.strip().splitlines()
-            for record in records:
-                record = record.split("|")
-                listCtrl.AddCategory(
-                    cat=int(record[0]), name=record[1], color=record[2]
-                )
+        columns = ["cat", "class", "color"]
+        ret = RunCommand(
+            "v.db.select",
+            quiet=True,
+            parent=self,
+            flags="c",
+            map=vector,
+            layer=1,
+            columns=",".join(columns),
+            read=True,
+        )
+        records = ret.strip().splitlines()
+        for record in records:
+            record = record.split("|")
+            listCtrl.AddCategory(cat=int(record[0]), name=record[1], color=record[2])
 
     def OnExportAreas(self, event):
         """Export training areas"""
@@ -871,66 +890,80 @@ class IClassMapPanel(DoubleMapPanel):
             wx.EndBusyCursor()
             return False
 
-        dbFile = tempfile.NamedTemporaryFile(mode="w", delete=False)
-        if dbInfo["driver"] != "dbf":
-            dbFile.write("BEGIN\n")
-        # populate table
-        for cat in self.stats_data.GetCategories():
-            stat = self.stats_data.GetStatistics(cat)
+        with tempfile.NamedTemporaryFile(mode="w", delete=False) as dbFile:
+            temp_path = dbFile.name
+            if dbInfo["driver"] != "dbf":
+                dbFile.write("BEGIN\n")
+            # populate table
+            for cat in self.stats_data.GetCategories():
+                stat = self.stats_data.GetStatistics(cat)
 
-            self._runDBUpdate(
-                dbFile, table=dbInfo["table"], column="class", value=stat.name, cat=cat
-            )
-            self._runDBUpdate(
-                dbFile, table=dbInfo["table"], column="color", value=stat.color, cat=cat
-            )
-
-            if not stat.IsReady():
-                continue
-
-            self._runDBUpdate(
-                dbFile,
-                table=dbInfo["table"],
-                column="n_cells",
-                value=stat.ncells,
-                cat=cat,
-            )
-
-            for i in range(nbands):
                 self._runDBUpdate(
                     dbFile,
                     table=dbInfo["table"],
-                    column="band%d_min" % (i + 1),
-                    value=stat.bands[i].min,
+                    column="class",
+                    value=stat.name,
                     cat=cat,
                 )
                 self._runDBUpdate(
                     dbFile,
                     table=dbInfo["table"],
-                    column="band%d_mean" % (i + 1),
-                    value=stat.bands[i].mean,
+                    column="color",
+                    value=stat.color,
                     cat=cat,
                 )
+
+                if not stat.IsReady():
+                    continue
+
                 self._runDBUpdate(
                     dbFile,
                     table=dbInfo["table"],
-                    column="band%d_max" % (i + 1),
-                    value=stat.bands[i].max,
+                    column="n_cells",
+                    value=stat.ncells,
                     cat=cat,
                 )
 
-        if dbInfo["driver"] != "dbf":
-            dbFile.write("COMMIT\n")
-        dbFile.file.close()
+                for i in range(nbands):
+                    self._runDBUpdate(
+                        dbFile,
+                        table=dbInfo["table"],
+                        column="band%d_min" % (i + 1),
+                        value=stat.bands[i].min,
+                        cat=cat,
+                    )
+                    self._runDBUpdate(
+                        dbFile,
+                        table=dbInfo["table"],
+                        column="band%d_mean" % (i + 1),
+                        value=stat.bands[i].mean,
+                        cat=cat,
+                    )
+                    self._runDBUpdate(
+                        dbFile,
+                        table=dbInfo["table"],
+                        column="band%d_max" % (i + 1),
+                        value=stat.bands[i].max,
+                        cat=cat,
+                    )
 
-        ret = RunCommand(
-            "db.execute",
-            input=dbFile.name,
-            driver=dbInfo["driver"],
-            database=dbInfo["database"],
-        )
+            if dbInfo["driver"] != "dbf":
+                dbFile.write("COMMIT\n")
+
+        try:
+            ret = RunCommand(
+                "db.execute",
+                input=temp_path,
+                driver=dbInfo["driver"],
+                database=dbInfo["database"],
+            )
+        finally:
+            try:
+                os.remove(temp_path)
+            except OSError:
+                pass
+
         wx.EndBusyCursor()
-        os.remove(dbFile.name)
         return bool(ret == 0)
 
     def _runDBUpdate(self, tmpFile, table, column, value, cat):
@@ -1100,7 +1133,7 @@ class IClassMapPanel(DoubleMapPanel):
         Signatures are created but signature file is not.
         """
         if not self.CheckInput(group=self.g["group"], vector=self.trainingAreaVector):
-            return
+            return None
 
         for statistic in self.cStatisticsDict.values():
             I_iclass_free_statistics(statistic)
@@ -1182,7 +1215,7 @@ class IClassMapPanel(DoubleMapPanel):
 
     def _addSuffix(self, name):
         suffix = _("results")
-        return "_".join((name, suffix))
+        return f"{name}_{suffix}"
 
     def OnSaveSigFile(self, event):
         """Asks for signature file name and saves it."""
@@ -1483,10 +1516,7 @@ class MapManager:
 
         :param cmd: d.rgb command as a list
         """
-        name = []
-        for param in cmd:
-            if "=" in param:
-                name.append(param.split("=")[1])
+        name = [param.split("=")[1] for param in cmd if "=" in param]
         name = ",".join(name)
         self.map.AddLayer(
             ltype="rgb",

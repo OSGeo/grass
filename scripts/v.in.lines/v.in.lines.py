@@ -8,7 +8,7 @@
 #
 # PURPOSE:      Import point data as lines ('v.in.mapgen -f' wrapper script)
 #
-# COPYRIGHT:    (c) 2009-2010 The GRASS Development Team
+# COPYRIGHT:    (c) 2009-2010 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
