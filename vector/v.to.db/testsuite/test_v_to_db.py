@@ -8,7 +8,6 @@ from grass.gunittest.gmodules import SimpleModule
 
 
 class TestVToDb(TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
