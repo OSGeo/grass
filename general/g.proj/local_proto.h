@@ -4,6 +4,8 @@ extern struct Key_Value *projinfo, *projunits, *projepsg;
 extern char *projsrid, *projwkt;
 extern struct Cell_head cellhd;
 
+enum OutputFormat { PLAIN, JSON, SHELL };
+
 /* input.c */
 void input_currloc(void);
 
@@ -16,12 +18,12 @@ int input_georef(char *);
 #endif
 
 /* output.c */
-void print_projinfo(int);
+void print_projinfo(enum OutputFormat);
 void print_datuminfo(void);
-void print_proj4(int);
+void print_proj4(int, enum OutputFormat);
 
 #ifdef HAVE_OGR
-void print_wkt(int, int);
+void print_wkt(int, int, enum OutputFormat);
 #endif
 
 /* datumtrans.c */

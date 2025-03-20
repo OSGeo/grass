@@ -21,6 +21,7 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 #include <grass/config.h>
+#include <grass/parson.h>
 
 #ifdef HAVE_OGR
 #include <cpl_csv.h>
@@ -28,55 +29,92 @@
 
 #include "local_proto.h"
 
-static int check_xy(int shell);
+static int check_xy(enum OutputFormat);
+static void print_json(JSON_Value *);
 
 /* print projection information gathered from one of the possible inputs
  * in GRASS format */
-void print_projinfo(int shell)
+void print_projinfo(enum OutputFormat format)
 {
     int i;
+    JSON_Value *value = NULL;
+    JSON_Object *object = NULL;
 
-    if (check_xy(shell))
+    if (check_xy(format))
         return;
 
-    if (!shell)
+    if (format == PLAIN)
         fprintf(
             stdout,
             "-PROJ_INFO-------------------------------------------------\n");
+    else if (format == JSON) {
+        value = json_value_init_object();
+        if (value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        object = json_object(value);
+    }
+
     for (i = 0; i < projinfo->nitems; i++) {
         if (strcmp(projinfo->key[i], "init") == 0)
             continue;
-        if (shell)
+        switch (format) {
+        case SHELL:
             fprintf(stdout, "%s=%s\n", projinfo->key[i], projinfo->value[i]);
-        else
+            break;
+        case PLAIN:
             fprintf(stdout, "%-11s: %s\n", projinfo->key[i],
                     projinfo->value[i]);
+            break;
+        case JSON:
+            json_object_set_string(object, projinfo->key[i],
+                                   projinfo->value[i]);
+            break;
+        }
     }
 
     /* TODO: use projsrid instead */
     if (projsrid) {
-
-        if (!shell) {
+        switch (format) {
+        case PLAIN:
             fprintf(stdout, "-PROJ_SRID----------------------------------------"
                             "---------\n");
             fprintf(stdout, "%-11s: %s\n", "SRID", projsrid);
-        }
-        else
+            break;
+        case SHELL:
             fprintf(stdout, "%s=%s\n", "srid", projsrid);
+            break;
+        case JSON:
+            json_object_set_string(object, "srid", projsrid);
+            break;
+        }
     }
 
     if (projunits) {
-        if (!shell)
+        if (format == PLAIN)
             fprintf(stdout, "-PROJ_UNITS---------------------------------------"
                             "---------\n");
         for (i = 0; i < projunits->nitems; i++) {
-            if (shell)
-                fprintf(stdout, "%s=%s\n", projunits->key[i],
-                        projunits->value[i]);
-            else
+            switch (format) {
+            case PLAIN:
                 fprintf(stdout, "%-11s: %s\n", projunits->key[i],
                         projunits->value[i]);
+                break;
+            case SHELL:
+                fprintf(stdout, "%s=%s\n", projunits->key[i],
+                        projunits->value[i]);
+                break;
+            case JSON:
+                json_object_set_string(object, projunits->key[i],
+                                       projunits->value[i]);
+                break;
+            }
         }
+    }
+
+    if (format == JSON) {
+        print_json(value);
     }
 
     return;
@@ -133,14 +171,16 @@ void print_datuminfo(void)
 }
 
 /* print input projection information in PROJ format */
-void print_proj4(int dontprettify)
+void print_proj4(int dontprettify, enum OutputFormat format)
 {
     struct pj_info pjinfo = {0};
     char *i, *projstrmod;
     const char *projstr;
     const char *unfact;
+    JSON_Value *value = NULL;
+    JSON_Object *object = NULL;
 
-    if (check_xy(FALSE))
+    if (check_xy(PLAIN))
         return;
 
     projstr = NULL;
@@ -190,17 +230,34 @@ void print_proj4(int dontprettify)
     if (!projstrmod)
         projstrmod = G_store(projstr);
 
-    for (i = projstrmod; *i; i++) {
-        /* Don't print the first space */
-        if (i == projstrmod && *i == ' ')
-            continue;
+    switch (format) {
+    case JSON:
+        value = json_value_init_object();
+        if (value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        object = json_object(value);
 
-        if (*i == ' ' && *(i + 1) == '+' && !(dontprettify))
-            fputc('\n', stdout);
-        else
-            fputc(*i, stdout);
+        json_object_set_string(object, "proj4", projstrmod);
+
+        print_json(value);
+        break;
+    default:
+        for (i = projstrmod; *i; i++) {
+            /* Don't print the first space */
+            if (i == projstrmod && *i == ' ')
+                continue;
+            if (*i == ' ' && *(i + 1) == '+' && !(dontprettify))
+                fputc('\n', stdout);
+            else
+                fputc(*i, stdout);
+        }
+
+        fputc('\n', stdout);
+        break;
     }
-    fputc('\n', stdout);
+
     G_free(projstrmod);
     G_free(pjinfo.srid);
     G_free(pjinfo.def);
@@ -210,11 +267,13 @@ void print_proj4(int dontprettify)
 }
 
 #ifdef HAVE_OGR
-void print_wkt(int esristyle, int dontprettify)
+void print_wkt(int esristyle, int dontprettify, enum OutputFormat format)
 {
     char *outwkt;
+    JSON_Value *value = NULL;
+    JSON_Object *object = NULL;
 
-    if (check_xy(FALSE))
+    if (check_xy(PLAIN))
         return;
 
     outwkt = NULL;
@@ -283,7 +342,23 @@ void print_wkt(int esristyle, int dontprettify)
 #endif
 
     if (outwkt != NULL) {
-        fprintf(stdout, "%s\n", outwkt);
+        switch (format) {
+        case JSON:
+            value = json_value_init_object();
+            if (value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            object = json_object(value);
+
+            json_object_set_string(object, "wkt", outwkt);
+
+            print_json(value);
+            break;
+        default:
+            fprintf(stdout, "%s\n", outwkt);
+            break;
+        }
         CPLFree(outwkt);
     }
     else
@@ -293,15 +368,46 @@ void print_wkt(int esristyle, int dontprettify)
 }
 #endif
 
-static int check_xy(int shell)
+static int check_xy(enum OutputFormat format)
 {
+    JSON_Value *value = NULL;
+    JSON_Object *object = NULL;
+
     if (cellhd.proj == PROJECTION_XY) {
-        if (shell)
+        switch (format) {
+        case SHELL:
             fprintf(stdout, "name=xy_location_unprojected\n");
-        else
+            break;
+        case PLAIN:
             fprintf(stdout, "XY location (unprojected)\n");
+            break;
+        case JSON:
+            value = json_value_init_object();
+            if (value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            object = json_object(value);
+
+            json_object_set_string(object, "name", "xy_location_unprojected");
+
+            print_json(value);
+            break;
+        }
         return 1;
     }
     else
         return 0;
+}
+
+void print_json(JSON_Value *value)
+{
+    char *serialized_string = json_serialize_to_string_pretty(value);
+    if (serialized_string == NULL) {
+        G_fatal_error(_("Failed to initialize pretty JSON string."));
+    }
+    puts(serialized_string);
+
+    json_free_serialized_string(serialized_string);
+    json_value_free(value);
 }
