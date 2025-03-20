@@ -76,15 +76,6 @@ set(DLL_PATH_LIST)
 list(APPEND DLL_PATH_LIST ${grass_dll_dir})
 separate_arguments(DLL_PATH_LIST)
 
-set(LD_LIBRARY_PATH_VAR)
-if(UNIX OR MINGW)
-  if(DEFINED ENV{LD_LIBRARY_PATH})
-    set(LD_LIBRARY_PATH_VAR
-        "${OUTDIR}/${GRASS_INSTALL_LIBDIR}:$ENV{LD_LIBRARY_PATH}")
-  else()
-    set(LD_LIBRARY_PATH_VAR "${OUTDIR}/${GRASS_INSTALL_LIBDIR}")
-  endif()
-endif()
 message(STATUS "GISBASE (build) : ${GISBASE_DIR}")
 message(STATUS "grass config directory (build): ${grass_config_dir}")
 
