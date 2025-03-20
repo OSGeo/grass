@@ -5,9 +5,9 @@
 
 int report(enum OutputFormat format)
 {
-    JSON_Value *records_value, *record_value, *root_value;
-    JSON_Array *records_array;
-    JSON_Object *record, *root_object;
+    JSON_Value *records_value = NULL, *record_value = NULL, *root_value = NULL;
+    JSON_Array *records_array = NULL;
+    JSON_Object *record = NULL, *root_object = NULL;
     // todo: add measurement unit
 
     if (format == JSON) {
