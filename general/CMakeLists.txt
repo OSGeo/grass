@@ -22,7 +22,7 @@ build_program_in_subdir(g.pnmcomp DEPENDS grass_gis)
 if(WITH_LIBPNG)
   build_program_in_subdir(g.ppmtopng DEPENDS grass_gis LIBPNG)
 endif()
-build_program_in_subdir(g.proj DEPENDS grass_gis grass_gproj GDAL PROJ)
+build_program_in_subdir(g.proj DEPENDS grass_gis grass_gproj grass_parson GDAL PROJ)
 # LIBES = $(GPROJLIB) $(VECTORLIB) $(DIG2LIB) $(RASTER3DLIB) $(RASTERLIB)
 # $(GISLIB) $(MATHLIB) $(PROJLIB)
 build_program_in_subdir(
