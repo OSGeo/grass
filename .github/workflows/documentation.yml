@@ -19,7 +19,7 @@ jobs:
       group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
       cancel-in-progress: true
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
       PYTHONWARNINGS: always
       # renovate: datasource=python-version depName=python
