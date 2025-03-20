@@ -25,6 +25,7 @@ import wx.aui
 
 from core.settings import UserSettings
 from core.gcmd import RunCommand, GError, GMessage
+from core.globalvar import RECENT_FILES_WXGUI_APP_NAMES
 from core.workspace import ProcessWorkspaceFile, WriteWorkspaceFile
 from core.debug import Debug
 from gui_core.menu import RecentFilesMenu
@@ -529,10 +530,11 @@ class WorkspaceManager:
                     return
             workspace_item = file_menu.FindItemById(workspace_index)
 
+            recent_files_conf = RECENT_FILES_WXGUI_APP_NAMES["main"]
             self._recent_files = RecentFilesMenu(
-                app_name="main",
+                app_name=recent_files_conf["name"],
                 parent_menu=workspace_item.GetSubMenu(),
-                pos=0,
+                pos=recent_files_conf["pos"],
             )
             self._recent_files.file_requested.connect(self.OpenRecentFile)
 

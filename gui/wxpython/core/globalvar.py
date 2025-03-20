@@ -257,3 +257,8 @@ ignoredCmdPattern = (
     r"^v.import$|^v.external$|^v.external.out$|"
     r"^cd$|^cd .*"
 )
+
+RECENT_FILES_WXGUI_APP_NAMES = {
+    "main": {"name": "main", "pos": 0},
+    "pyedit": {"name": "pyedit", "pos": 1},
+}
