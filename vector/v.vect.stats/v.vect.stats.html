@@ -213,17 +213,17 @@ d.text text="points" at=60,5 size=10 color=black
 
 d.frame frame=f2 at=50,100,50,100 -c
 v.colors map=hexagons use=attr column=count color=viridis
-d.vect map=hexagons where="count > 0"
+d.vect map=hexagons where="count &gt; 0"
 d.text text="count" at=60,5 size=10 color=black
 
 d.frame frame=f3 at=0,50,0,50 -c
 v.colors map=hexagons use=attr column=average color=viridis
-d.vect map=hexagons where="count > 0"
+d.vect map=hexagons where="count &gt; 0"
 d.text text="average" at=60,5 size=10 color=black
 
 d.frame frame=f4 at=0,50,50,100 -c
 v.colors map=hexagons use=attr column=stddev color=viridis
-d.vect map=hexagons where="count > 0"
+d.vect map=hexagons where="count &gt; 0"
 d.text text="stddev" at=60,5 size=10 color=black
 
 d.mon stop=cairo

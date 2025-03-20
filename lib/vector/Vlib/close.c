@@ -98,7 +98,7 @@ int Vect_close(struct Map_info *Map)
         Vect_copy_map_dblinks(Map, &Out, TRUE);
         /* afterwords, dblinks must be removed from temporary map
            otherwise when deleting temporary map also original
-           attribute tables would be deteled */
+           attribute tables would be deleted */
         Vect_map_del_dblink(Map, -1); /* delete db links for all layers */
 
         if (0 != Vect_copy_map_lines_field(
@@ -216,8 +216,9 @@ int Vect_close(struct Map_info *Map)
     /* close level 1 files / data sources if not head_only */
     if (!Map->head_only) {
         if (create_link && ((*Close_array[Map->format][1])(Map)) != 0) {
-            G_warning(_("Unable to close vector <%s>"),
-                      Vect_get_full_name(Map));
+            const char *mname = Vect_get_full_name(Map);
+            G_warning(_("Unable to close vector <%s>"), mname);
+            G_free((void *)mname);
             return 1;
         }
     }

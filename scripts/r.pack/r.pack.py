@@ -63,8 +63,8 @@ def main():
 
     global tmp
     tmp = grass.tempdir()
-    tmp_dir = os.path.join(tmp, infile)
-    os.mkdir(tmp_dir)
+    tmp_dir = Path(tmp, infile)
+    tmp_dir.mkdir(exist_ok=True)
     grass.debug("tmp_dir = %s" % tmp_dir)
 
     gfile = grass.find_file(name=infile, element="cell", mapset=mapset)
@@ -101,9 +101,7 @@ def main():
                         map_basedir = os.path.sep.join(
                             os.path.normpath(
                                 map_file["file"],
-                            ).split(
-                                os.path.sep
-                            )[:-2],
+                            ).split(os.path.sep)[:-2],
                         )
                         vrt_files[map] = map_basedir
 
@@ -150,7 +148,7 @@ def main():
                             os.path.join(f_tmp_dir, element),
                         )
 
-    if not os.listdir(tmp_dir):
+    if not any(tmp_dir.iterdir()):
         grass.fatal(_("No raster map components found"))
 
     # copy projection info

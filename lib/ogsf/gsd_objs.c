@@ -726,7 +726,7 @@ void gsd_3dcursor(float *pt)
 
    \param dir
    \param slope
-   \param ascpect
+   \param aspect
    \param degrees
  */
 void dir_to_slope_aspect(float *dir, float *slope, float *aspect, int degrees)

@@ -9,79 +9,185 @@
 import sys
 import os
 
+from datetime import date
 from operator import itemgetter
 
-from build_html import (
-    html_dir,
-    grass_version,
-    html_files,
-    write_html_header,
-    write_html_footer,
-    check_for_desc_override,
-    get_desc,
-    replace_file,
+from build import (
+    get_files,
+    write_footer,
+    write_header,
     to_title,
-    full_index_header,
-    toc,
-    cmd2_tmpl,
-    desc1_tmpl,
+    grass_version,
+    grass_version_major,
+    grass_version_minor,
+    check_for_desc_override,
+    replace_file,
 )
 
-year = None
-if len(sys.argv) > 1:
-    year = sys.argv[1]
+CORE_TEXT = """\
+# Processing Tools
+"""
 
-os.chdir(html_dir)
+ADDONS_TEXT = """\
+# Addon Tools
 
-# TODO: create some master function/dict somewhere
-class_labels = {
-    "d": "display",
-    "db": "database",
-    "g": "general",
-    "i": "imagery",
-    "m": "miscellaneous",
-    "ps": "PostScript",
-    "r": "raster",
-    "r3": "3D raster",
-    "t": "temporal",
-    "v": "vector",
-}
+GRASS is free and open source software,
+anyone may develop their own extensions (addons).
+The <a href="https://github.com/OSGeo/grass-addons">GRASS GIS
+Addons repository</a> on GitHub contains a growing list of GRASS
+tools, which are currently not part of the core software package, but
+can easily be  <b>installed</b> in your local GRASS installation
+through the graphical user interface (<i>Menu - Settings - Addons
+Extension - Install</i>) or via the <a
+href="../g.extension.html">g.extension</a> command.
 
-classes = []
-for cmd in html_files("*"):
-    prefix = cmd.split(".")[0]
-    if prefix not in [item[0] for item in classes]:
-        classes.append((prefix, class_labels.get(prefix, prefix)))
-classes.sort(key=itemgetter(0))
+## How to contribute?
+<!-- TODO: Link this with development guidelines. -->
+You may propose your Addon to the <a href="https://github.com/OSGeo/grass-addons">GRASS GIS
+Addons repository</a>. Please read the <a href="https://github.com/OSGeo/grass-addons/blob/grass8/CONTRIBUTING.md">Contributing</a>
+document as well as the <a href="https://trac.osgeo.org/grass/wiki/Submitting">GRASS GIS programming best practice</a>.
 
-# begin full index:
-filename = "full_index.html"
-f = open(filename + ".tmp", "w")
+These manual pages are updated daily. Last run: {date}.
+If you don't see an addon you know exists, please check the log files of compilation:
+<a href="{linux_logs}">Linux log files</a> |
+<a href="{windows_logs}">Windows log files</a>
 
-write_html_header(
-    f, "GRASS GIS %s Reference Manual: Full index" % grass_version, body_width="80%"
-)
+## Tools
+"""
 
-# generate main index of all modules:
-f.write(full_index_header)
 
-f.write(toc)
+def build_full_index(ext, index_name, source_dir, year, text_type):
+    """Generate index with all tools"""
+    if ext == "html":
+        from build_html import (
+            man_dir,
+            full_index_header,
+            cmd2_tmpl,
+            desc1_tmpl,
+            get_desc,
+            toc,
+        )
+    else:
+        from build_md import (
+            man_dir,
+            cmd2_tmpl,
+            desc1_tmpl,
+            get_desc,
+        )
 
-# for all module groups:
-for cls, cls_label in classes:
-    f.write(cmd2_tmpl.substitute(cmd_label=to_title(cls_label), cmd=cls))
-    # for all modules:
-    for cmd in html_files(cls):
-        basename = os.path.splitext(cmd)[0]
-        desc = check_for_desc_override(basename)
-        if desc is None:
-            desc = get_desc(cmd)
-        f.write(desc1_tmpl.substitute(cmd=cmd, basename=basename, desc=desc))
-    f.write("</table>\n")
+    if source_dir is None:
+        source_dir = man_dir
 
-write_html_footer(f, "index.html", year)
+    os.chdir(source_dir)
 
-f.close()
-replace_file(filename)
+    # TODO: create some master function/dict somewhere
+    class_labels = {
+        "d": "display",
+        "db": "database",
+        "g": "general",
+        "i": "imagery",
+        "m": "miscellaneous",
+        "ps": "PostScript",
+        "r": "raster",
+        "r3": "3D raster",
+        "t": "temporal",
+        "v": "vector",
+    }
 
-# done full index
+    classes = []
+    for cmd in get_files(source_dir, "*", extension=ext):
+        prefix = cmd.split(".")[0]
+        if prefix not in [item[0] for item in classes]:
+            classes.append((prefix, class_labels.get(prefix, prefix)))
+    classes.sort(key=itemgetter(0))
+
+    # begin full index:
+    filename = f"{index_name}.{ext}"
+    with open(filename + ".tmp", "w") as f:
+        if ext == "html":
+            text = f"GRASS GIS {grass_version} Reference Manual - Full index"
+            write_header(
+                f,
+                text,
+                body_width="80%",
+                template=ext,
+            )
+            f.write(full_index_header)
+        elif text_type == "core":
+            f.write(CORE_TEXT)
+        elif text_type == "addons":
+            linux = f"https://grass.osgeo.org/addons/grass{grass_version_major}/logs"
+            windows = f"https://wingrass.fsv.cvut.cz/grass{grass_version_major}{grass_version_minor}/addons/grass-{grass_version}/logs/"
+            f.write(
+                ADDONS_TEXT.format(
+                    date=date.today(), linux_logs=linux, windows_logs=windows
+                )
+            )
+        else:
+            msg = f"Unknown text type: {text_type}"
+            raise ValueError(msg)
+
+        if ext == "html":
+            f.write(toc)
+
+        # for all module groups:
+        for cls, cls_label in classes:
+            f.write(cmd2_tmpl.substitute(cmd_label=to_title(cls_label), cmd=cls))
+            # for all modules:
+            for cmd in get_files(source_dir, cls, extension=ext):
+                basename = os.path.splitext(cmd)[0]
+                desc = check_for_desc_override(basename)
+                if desc is None:
+                    desc = get_desc(cmd)
+                f.write(desc1_tmpl.substitute(cmd=cmd, basename=basename, desc=desc))
+            if ext == "html":
+                f.write("</table>\n")
+
+        write_footer(f, f"index.{ext}", year, template=ext)
+
+    replace_file(filename)
+
+
+def main():
+    ext = None
+    year = None
+    index_name = "full_index"
+    source_dir = None
+    text_type = "core"
+    if len(sys.argv) > 1:
+        if sys.argv[1] in ["html", "md"]:
+            ext = sys.argv[1]
+        else:
+            year = sys.argv[1]
+    if len(sys.argv) > 3:
+        index_name = sys.argv[2]
+        source_dir = sys.argv[3]
+    if len(sys.argv) > 4:
+        text_type = sys.argv[4]
+    if len(sys.argv) > 5:
+        year = sys.argv[5]
+
+    if ext is None:
+        for ext in ["html", "md"]:
+            build_full_index(
+                ext,
+                index_name=index_name,
+                year=year,
+                source_dir=source_dir,
+                text_type=text_type,
+            )
+    elif ext in ["html", "md"]:
+        build_full_index(
+            ext,
+            index_name=index_name,
+            year=year,
+            source_dir=source_dir,
+            text_type=text_type,
+        )
+    else:
+        msg = f"Unknown extension: {ext}"
+        raise ValueError(msg)
+
+
+if __name__ == "__main__":
+    main()

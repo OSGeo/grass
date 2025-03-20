@@ -128,7 +128,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "Python library documentation"
-copyright = "2024, GRASS Development Team"
+copyright = "2025, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -207,6 +207,10 @@ html_theme = "traditional"
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
 # html_favicon = None
+
+# The base URL which points to the root of the HTML documentation. It is used
+# to indicate the location of document using the Canonical Link Relation.
+html_baseurl = "https://grass.osgeo.org/grass-stable/manuals/libpython/"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

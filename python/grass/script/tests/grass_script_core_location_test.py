@@ -35,9 +35,7 @@ def create_and_get_srid(tmp_path):
     """Create location on the same path as the current one"""
     bootstrap_location = "bootstrap"
     desired_location = "desired"
-    gs.core._create_location_xy(
-        tmp_path, bootstrap_location
-    )  # pylint: disable=protected-access
+    gs.core._create_location_xy(tmp_path, bootstrap_location)  # pylint: disable=protected-access
     with gs.setup.init(tmp_path / bootstrap_location, env=os.environ.copy()) as session:
         gs.create_location(tmp_path, desired_location, epsg="3358")
         assert (tmp_path / desired_location).exists()
@@ -101,9 +99,7 @@ def test_with_different_path(tmp_path):
     tmp_path_a = tmp_path / "a"
     tmp_path_b = tmp_path / "b"
     tmp_path_a.mkdir()
-    gs.core._create_location_xy(
-        tmp_path_a, bootstrap_location
-    )  # pylint: disable=protected-access
+    gs.core._create_location_xy(tmp_path_a, bootstrap_location)  # pylint: disable=protected-access
     with gs.setup.init(
         tmp_path_a / bootstrap_location, env=os.environ.copy()
     ) as session:
@@ -149,9 +145,7 @@ def test_files(tmp_path):
     """Check expected files are created"""
     bootstrap_location = "bootstrap"
     desired_location = "desired"
-    gs.core._create_location_xy(
-        tmp_path, bootstrap_location
-    )  # pylint: disable=protected-access
+    gs.core._create_location_xy(tmp_path, bootstrap_location)  # pylint: disable=protected-access
     with gs.setup.init(tmp_path / bootstrap_location, env=os.environ.copy()):
         description = "This is a test (not Gauss-Krüger or Křovák)"
         gs.create_location(tmp_path, desired_location, epsg="3358", desc=description)
