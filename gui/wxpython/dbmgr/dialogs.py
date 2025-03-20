@@ -580,7 +580,7 @@ class DisplayAttributesDialog(wx.Dialog):
         return True
 
     def SetColumnValue(self, layer, column, value):
-        """Set attrbute value
+        """Set attribute value
 
         :param column: column name
         :param value: value

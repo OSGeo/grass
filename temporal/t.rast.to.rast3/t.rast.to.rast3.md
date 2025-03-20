@@ -29,7 +29,7 @@ voxel cube layers!
 ### Management of open file limits
 
 The maximum number of raster maps that can be processed is given by the
-per-user limit of the operating system. For example, both the the hard
+per-user limit of the operating system. For example, both the hard
 and soft limit for users is typically 1024. The soft limit can be
 changed with e.g. ulimit -n 4096 (UNIX-based operating systems) but not
 higher than the hard limit. If the latter is too low, you can as

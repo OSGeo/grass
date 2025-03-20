@@ -52,6 +52,7 @@ import atexit
 import string
 import grass.script as gs
 from grass.exceptions import CalledModuleError
+from pathlib import Path
 
 
 vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
@@ -73,14 +74,13 @@ vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
 
 
 def create_VRT_file(projfile, vrtfile, infile):
-    fh = open(projfile)
     kv = {}
-    for line in fh:
-        f = line.rstrip("\r\n").split()
-        if f < 2:
-            continue
-        kv[f[0]] = f[1]
-    fh.close()
+    with open(projfile) as fh:
+        for line in fh:
+            f = line.rstrip("\r\n").split()
+            if f < 2:
+                continue
+            kv[f[0]] = f[1]
 
     north_center = kv["CARTO_UPPER_LEFT_Y"]
     # south_center = kv['CARTO_LOWER_LEFT_Y']
@@ -105,9 +105,7 @@ def create_VRT_file(projfile, vrtfile, infile):
         RESOLUTION=map_proj_res,
         FILENAME=infile,
     )
-    outf = open(vrtfile, "w")
-    outf.write(s)
-    outf.close()
+    Path(vrtfile).write_text(s)
 
 
 def cleanup():
@@ -263,7 +261,6 @@ def main():
             _("Note: A snow map can be extracted by category 252 (d.rast %s cat=252)")
             % smfile
         )
-        gs.message("")
         gs.message(_("Filtering NDVI map by Status Map quality layer..."))
 
         filtfile = "%s_filt" % name

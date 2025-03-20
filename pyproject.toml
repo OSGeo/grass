@@ -233,6 +233,7 @@ ignore = [
     "RUF012",  # mutable-class-default
     "RUF015",  # unnecessary-iterable-allocation-for-first-element
     "RUF019",  # unnecessary-key-check
+    "RUF059",  # unused-unpacked-variable
     "RUF100",  # unused-noqa
     "S101",    # assert
     "S108",    # hardcoded-temp-file
@@ -285,16 +286,11 @@ ignore = [
 "gui/wxpython/iclass/statistics.py" = ["A005"]
 "gui/wxpython/icons/grass_icons.py" = ["PTH208"]
 "gui/wxpython/image2target/ii2t_manager.py" = ["PTH208", "SIM115"]
-"gui/wxpython/mapdisp/main.py" = ["SIM115"]
-"gui/wxpython/modules/colorrules.py" = ["SIM115"]
-"gui/wxpython/modules/mcalc_builder.py" = ["SIM115"]
 "gui/wxpython/photo2image/ip2i_manager.py" = ["SIM115"]
 "gui/wxpython/psmap/dialogs.py" = ["PTH208"]
 "gui/wxpython/psmap/instructions.py" = ["SIM115"]
 "gui/wxpython/rlisetup/frame.py" = ["PTH208"]
-"gui/wxpython/timeline/frame.py" = ["FLY002"]
 "gui/wxpython/tools/update_menudata.py" = ["SIM115"]
-"gui/wxpython/tplot/frame.py" = ["FLY002"]
 "gui/wxpython/vnet/vnet_data.py" = ["SIM115"]
 "gui/wxpython/web_services/dialogs.py" = ["SIM115"]
 "gui/wxpython/wxplot/profile.py" = ["A005", "SIM115"]
@@ -314,7 +310,6 @@ ignore = [
 "python/grass/gunittest/loader.py" = ["PTH208", "PYI024"]
 "python/grass/gunittest/multireport.py" = ["PYI024"]
 "python/grass/gunittest/testsu*/d*/s*/s*/subsub*/t*/test_segfaut.py" = ["B018"]
-"python/grass/gunittest/testsuite/test_assertions_rast3d.py" = ["FLY002"]
 "python/grass/imaging/images2ims.py" = ["PTH208"]
 "python/grass/jupyter/testsuite/interactivemap_test.py" = ["PGH004"]
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
@@ -329,7 +324,6 @@ ignore = [
 "python/grass/pygrass/tests/*.py" = ["SIM115"]
 "python/grass/pygrass/utils.py" = ["PTH208"]
 "python/grass/pygrass/vector/geometry.py" = ["PYI024"]
-"python/grass/pygrass/vector/sql.py" = ["FLY002"]
 "python/grass/pygrass/vector/testsuite/test_table.py" = ["PLW0108"]
 "python/grass/script/array.py" = ["A005"]
 "python/grass/script/core.py" = ["PTH208"]
@@ -344,8 +338,6 @@ ignore = [
 "python/grass/utils/download.py" = ["PTH208", "SIM115"]
 "raster/r.*/testsuite/*.py" = ["SIM115"]
 "raster/r.topidx/*.py" = ["SIM115"]
-"raster3d/r3.flow/testsuite/r3flow_test.py" = ["FLY002"]
-"raster3d/r3.gradient/testsuite/r3gradient_test.py" = ["FLY002"]
 "scripts/d.correlate/d.correlate.py" = ["SIM115"]
 "scripts/d.frame/d.frame.py" = ["SIM115"]
 "scripts/d.polar/d.polar.py" = ["FURB154", "SIM115"]
@@ -357,17 +349,10 @@ ignore = [
 "scripts/g.extension/g.extension.py" = ["PTH208", "SIM115"]
 "scripts/g.extension/testsuite/test_addons_modules.py" = ["PTH208"]
 "scripts/g.search.modules/g.search.modules.py" = ["SIM115"]
-"scripts/i.in.spotvgt/i.in.spotvgt.py" = ["SIM115"]
 "scripts/i.oif/i.oif*.py" = ["SIM115"]
-"scripts/i.pansharpen/i.pansharpen.py" = ["FLY002", "SIM115"]
-"scripts/i.spectral/i.spectral.py" = ["FLY002", "SIM115"]
 "scripts/m.proj/m.proj.py" = ["SIM115"]
-"scripts/r.fillnulls/r.fillnulls.py" = ["SIM115"]
 "scripts/r.in.wms/wms_*.py" = ["SIM115"]
-"scripts/r.tileset/r.tileset.py" = ["SIM115"]
 "scripts/v.*/v.*.py" = ["SIM115"]
-"scripts/wxpyimgview/wxpyimgview_gui.py" = ["SIM115"]
-"temporal/t.rast.algebra/testsu*/*_algebra_arithmetic.py" = ["FLY002"]
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
 # Declare a custom aliases, checked with rule ICN001

@@ -22,6 +22,9 @@ check_include_file(sys/types.h HAVE_SYS_TYPES_H)
 check_include_file(sys/utsname.h HAVE_SYS_UTSNAME_H)
 check_include_file(g2c.h HAVE_G2C_H)
 check_include_file(f2c.h HAVE_F2C_H)
+check_include_file(cblas.h HAVE_CBLAS_H)
+check_include_file(cblas-atlas.h HAVE_CBLAS_ATLAS_H)
+
 
 if(MSVC)
   set(HAVE_PTHREAD_H 0)
@@ -45,10 +48,6 @@ endif()
 # HAVE_SQLITE)
 #
 # check_target(PROJ HAVE_PROJ_H)
-#
-# check_target(BLAS HAVE_LIBBLAS) check_target(BLAS HAVE_CBLAS_H)
-#
-# check_target(LAPACK HAVE_LIBLAPACK) check_target(LAPACK HAVE_CLAPACK_H)
 #
 # check_target(FREETYPE HAVE_FT2BUILD_H) check_target(POSTGRES HAVE_POSTGRES)
 # check_target(ODBC HAVE_SQL_H)
@@ -82,7 +81,6 @@ set(USE_NLS 0)
 if(WITH_NLS)
   set(USE_NLS 1)
 endif()
-set(HAVE_READLINE_READLINE_H 0)
 
 if(MSVC)
   set(PID_TYPE int)
@@ -94,7 +92,7 @@ set(_REENTRANT 0)
 # #######################TODO########################
 
 set(X_DISPLAY_MISSING 1)
-if(TARGET X11)
+if(TARGET X11::X11)
   set(X_DISPLAY_MISSING 0)
 endif()
 

@@ -15,7 +15,7 @@ Some of the information stored in the label file is unused by
 *d.labels*. This extra information is used by such programs as
 *[ps.map](ps.map.md)*.
 
-This module was formerly known as *d.paint.labels*. The the old version
+This module was formerly known as *d.paint.labels*. The old version
 of *d.labels* from GRASS 5, which provided interactive placement and
 modification of paint labels, still needs to have its functionality
 merged into this module.

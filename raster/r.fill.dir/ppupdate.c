@@ -35,8 +35,8 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
     CELL *here;
     CELL that_basin;
     void *barrier_height;
-    void *this_elev;
-    void *that_elev;
+    void *this_elev = NULL;
+    void *that_elev = NULL;
 
     struct links *list;
 

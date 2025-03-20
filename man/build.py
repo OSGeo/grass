@@ -27,7 +27,7 @@ exclude_mods = [
 # these modules don't use G_parser()
 
 desc_override = {
-    "g.parser": "Provides automated parser, GUI, and help support for GRASS scipts.",
+    "g.parser": "Provides automated parser, GUI, and help support for GRASS scripts.",
     "r.li.daemon": "Support module for r.li landscape index calculations.",
 }
 
@@ -109,16 +109,15 @@ def write_header(f, title, ismain=False, body_width="99%", template="html"):
 
 
 def write_cmd_overview(f, template="html"):
+    from build_html import overview_tmpl
+
     if template == "html":
-        from build_html import overview_tmpl
-    else:
-        from build_md import overview_tmpl
-    f.write(
-        overview_tmpl.substitute(
-            grass_version_major=grass_version_major,
-            grass_version_minor=grass_version_minor,
+        f.write(
+            overview_tmpl.substitute(
+                grass_version_major=grass_version_major,
+                grass_version_minor=grass_version_minor,
+            )
         )
-    )
 
 
 def write_footer(f, index_url, year=None, template="html"):

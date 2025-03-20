@@ -11,7 +11,7 @@
 #
 ################################################################################
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
 #[[
@@ -92,18 +92,16 @@ else()
 endif()
 
 # Graphics options
-option(WITH_X11 "Build with X11 support ." ${x11_default_option_enabled})
-option(WITH_OPENGL "Build with opengl support ." ON)
-option(WITH_CAIRO "Build with cairo support ." ON)
-option(WITH_LIBPNG "Build with libpng support ." OFF)
+option(WITH_X11 "Build with X11 support" ${x11_default_option_enabled})
+option(WITH_OPENGL "Build with OpenGL support" ON)
+option(WITH_CAIRO "Build with Cairo support" ON)
+option(WITH_LIBPNG "Build with libpng support ." ON)
 
 # Data storage options
 option(WITH_SQLITE "Build with SQLite support" ON)
-option(WITH_POSTGRES "Build with Postgres support" OFF)
+option(WITH_POSTGRES "Build with Postgres support" ON)
 option(WITH_MYSQL "Build with MySQL support" OFF)
-if(WIN32)
-  option(WITH_ODBC "Build with ODBC support" OFF)
-endif()
+option(WITH_ODBC "Build with ODBC support" OFF)
 option(WITH_ZSTD "Build with zstd support" ON)
 option(WITH_BZLIB "Build with bzlib support" OFF)
 
@@ -123,7 +121,7 @@ option(WITH_OPENMP "Build with OpenMP support" ON)
 # Data format options
 option(WITH_TIFF "Build with LibTIFF support ." ON)
 option(WITH_NETCDF "Build with NetCDF support" OFF)
-option(WITH_GEOS "Build with GEOS support" OFF)
+option(WITH_GEOS "Build with GEOS support" ON)
 option(WITH_PDAL "Build with PDAL support" ON)
 option(WITH_LIBLAS "Build with libLAS support" OFF)
 option(WITH_OPENDWG "Build with OpenDWG support" OFF)
@@ -255,17 +253,14 @@ endif()
 
 set(NO_HTML_DESCR_TARGETS "g.parser;ximgview;test.raster3d.lib")
 
+add_subdirectory(demolocation)
+
 add_subdirectory(include)
 
 include_directories("${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}")
 if(MSVC)
   include_directories("${CMAKE_SOURCE_DIR}/msvc")
 endif()
-
-# TODO: fix this hack
-include_directories(${PostgreSQL_INCLUDE_DIR})
-include_directories(${PROJ_INCLUDE_DIR})
-include_directories(/opt/local/include)
 
 add_subdirectory(lib)
 add_subdirectory(python)
@@ -333,5 +328,5 @@ endif()
 # TODO: To be discussed - add_subdirectory(testsuite) - add_subdirectory(macosx)
 
 if(WITH_X11)
-  build_program_in_subdir(visualization/ximgview DEPENDS grass_gis X11)
+  build_program_in_subdir(visualization/ximgview DEPENDS grass_gis X11::X11)
 endif()

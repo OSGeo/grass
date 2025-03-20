@@ -13,21 +13,22 @@ build_library_in_subdir(
   "${use_math_DEFS}"
   DEPENDS
   grass_gis
-  FREETYPE
-  ICONV
-  ZLIB)
+  OPTIONAL_DEPENDS
+  Freetype::Freetype
+  Iconv::Iconv)
 
 add_subdirectory(proj)
 
 build_library_in_subdir(external/parson NAME grass_parson HEADERS "gjson.h" "parson.h")
+build_program_in_subdir(external/parson/test NAME test.gjson.lib DEPENDS grass_gis grass_parson)
 
 build_library_in_subdir(
   raster
   DEFS
   "-DGDAL_LINK=1"
   DEPENDS
-  GDAL
-  PROJ
+  GDAL::GDAL
+  PROJ::proj
   grass_gis
   grass_gproj
   grass_parson)
@@ -57,9 +58,9 @@ build_library_in_subdir(
   DEFS
   "${use_math_DEFS}"
   OPTIONAL_DEPENDS
+  CBLAS::CBLAS
   FFTW
-  LAPACKE
-  CBLAS
+  LAPACKE::LAPACKE
   OPENMP)
 
 build_library_in_subdir(linkm)
@@ -75,9 +76,8 @@ build_library_in_subdir(
   DEPENDS
   grass_driver
   grass_gis
-  ZLIB
   OPTIONAL_DEPENDS
-  LIBPNG)
+  PNG::PNG)
 
 build_library_in_subdir(
   psdriver
@@ -109,11 +109,17 @@ set(_grass_display_DEPENDS grass_driver grass_raster grass_htmldriver
                            grass_pngdriver grass_psdriver grass_gis)
 
 if(WITH_CAIRO)
-  set(_cairodriver_DEPENDS CAIRO FREETYPE grass_gis grass_driver ICONV)
+  set(_cairodriver_DEPENDS
+      Cairo::Cairo
+      Fontconfig::Fontconfig
+      Freetype::Freetype
+      grass_gis
+      grass_driver
+      OPTIONAL_DEPENDS
+      Iconv::Iconv)
   if(WITH_X11)
-    list(APPEND _cairodriver_DEPENDS X11)
+    list(PREPEND _cairodriver_DEPENDS X11::X11)
   endif()
-
   build_library_in_subdir(cairodriver DEPENDS ${_cairodriver_DEPENDS})
 
   set(_grass_display_DEFS "-DUSE_CAIRO")
@@ -136,7 +142,7 @@ add_subdirectory(fonts)
 
 add_subdirectory(vector)
 
-build_library_in_subdir(imagery DEPENDS grass_gis grass_vector grass_raster GDAL)
+build_library_in_subdir(imagery DEPENDS grass_gis grass_vector grass_raster GDAL::GDAL)
 
 build_library_in_subdir(cluster DEPENDS grass_imagery grass_gis grass_raster)
 
@@ -158,7 +164,7 @@ build_library_in_subdir(
   grass_dbmidriver
   grass_gmath
   grass_segment
-  GDAL
+  GDAL::GDAL
   HEADERS
   "lidar.h")
 
@@ -171,9 +177,10 @@ build_program_in_subdir(
   test.raster3d.lib
   DEPENDS
   grass_gis
-  grass_raster3d
+  grass_interpfl
   grass_raster
-  GDAL)
+  grass_raster3d
+  GDAL::GDAL)
 
 build_library_in_subdir(
   gpde
@@ -221,9 +228,10 @@ if(WITH_OPENGL)
     grass_raster
     grass_raster3d
     grass_vector
-    GDAL
-    OPENGL
-    TIFF)
+    GDAL::GDAL
+    OpenGL::GL
+    OpenGL::GLU
+    TIFF::TIFF)
 
   build_library_in_subdir(
     nviz
@@ -234,8 +242,9 @@ if(WITH_OPENGL)
     grass_bitmap
     grass_ogsf
     grass_gis
-    OPENGL
-    TIFF)
+    OpenGL::GL
+    OPTIONAL_DEPENDS
+    X11::X11)
 endif()
 
 add_subdirectory(temporal)
@@ -243,7 +252,7 @@ add_subdirectory(temporal)
 build_library_in_subdir(iostream SRC_REGEX "*.cpp" DEPENDS grass_gis)
 
 build_library_in_subdir(manage DEPENDS grass_gis grass_raster grass_vector
-                        grass_raster3d GDAL)
+                        grass_raster3d GDAL::GDAL)
 file(COPY manage/element_list DESTINATION ${OUTDIR}/${GRASS_INSTALL_ETCDIR})
 install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/element_list
         DESTINATION ${GRASS_INSTALL_ETCDIR})
