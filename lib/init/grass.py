@@ -672,9 +672,14 @@ def create_location(gisdbase, location, geostring):
     :param location: name of new Location
     :param geostring: path to a georeferenced file or EPSG code
     """
+    global _
     if gpath("etc", "python") not in sys.path:
         sys.path.append(gpath("etc", "python"))
+    # importing the core module installs a new _() function?
+    __ = _
     from grass.script import core as gcore  # pylint: disable=E0611
+
+    _ = __
 
     try:
         if geostring and geostring.upper().find("EPSG:") > -1:
@@ -1450,9 +1455,14 @@ def start_gui(grass_gui):
 
 def close_gui():
     """Close GUI if running"""
+    global _
     if gpath("etc", "python") not in sys.path:
         sys.path.append(gpath("etc", "python"))
+    # importing the core module installs a new _() function?
+    __ = _
     from grass.script import core as gcore  # pylint: disable=E0611
+
+    _ = __
 
     env = gcore.gisenv()
     if "GUI_PID" not in env:
