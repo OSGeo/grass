@@ -124,7 +124,6 @@ option(WITH_NETCDF "Build with NetCDF support" OFF)
 option(WITH_GEOS "Build with GEOS support" ON)
 option(WITH_PDAL "Build with PDAL support" ON)
 option(WITH_LIBLAS "Build with libLAS support" OFF)
-option(WITH_OPENDWG "Build with OpenDWG support" OFF)
 
 # Other options
 option(WITH_LARGEFILES "Build with large file support"
