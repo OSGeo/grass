@@ -26,6 +26,7 @@ build_program_in_subdir(
   DEPENDS
   grass_gis
   grass_gproj
+  grass_parson
   PROJ::proj
   OPTIONAL_DEPENDS
   GDAL::GDAL)

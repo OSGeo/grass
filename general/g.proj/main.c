@@ -53,10 +53,12 @@ int main(int argc, char *argv[])
 #endif
         *listcodes, /* list codes of given authority */
         *datum,     /* datum to add (or replace existing datum) */
-        *dtrans;    /* index to datum transform option          */
+        *dtrans,    /* index to datum transform option          */
+        *format;    /* output format */
     struct GModule *module;
 
     int formats;
+    enum OutputFormat outputFormat;
     const char *epsg = NULL;
 
     /* We don't call G_gisinit() here because it validates the
@@ -223,10 +225,30 @@ int main(int argc, char *argv[])
     location->guisection = _("Create");
     location->description = _("Name of new project (location) to create");
 
+    format = G_define_standard_option(G_OPT_F_FORMAT);
+    format->guisection = _("Print");
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
     /* Initialisation & Validation */
+
+    if (strcmp(format->answer, "json") == 0) {
+        outputFormat = JSON;
+    }
+    else if (shellinfo->answer) {
+        outputFormat = SHELL;
+    }
+    else {
+        outputFormat = PLAIN;
+    }
+
+    if (outputFormat == JSON &&
+        !(printinfo->answer || printproj4->answer || printwkt->answer)) {
+        G_fatal_error(_("The 'format=json' option can only be used with one of "
+                        "the -%c, -%c, or -%c flags"),
+                      printinfo->key, printproj4->key, printwkt->key);
+    }
 
     /* list codes for given authority */
     if (listcodes->answer) {
@@ -326,14 +348,14 @@ int main(int argc, char *argv[])
 #endif
     }
     if (printinfo->answer || shellinfo->answer)
-        print_projinfo(shellinfo->answer);
+        print_projinfo(outputFormat);
     else if (datuminfo->answer)
         print_datuminfo();
     else if (printproj4->answer)
-        print_proj4(dontprettify->answer);
+        print_proj4(dontprettify->answer, outputFormat);
 #ifdef HAVE_OGR
     else if (printwkt->answer)
-        print_wkt(esristyle->answer, dontprettify->answer);
+        print_wkt(esristyle->answer, dontprettify->answer, outputFormat);
 #endif
     else if (location->answer)
         create_location(location->answer);
