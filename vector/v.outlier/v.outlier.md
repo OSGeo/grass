@@ -30,7 +30,7 @@ v.outlier input=vector_map output=vector_output outlier=vector_outlier thres_O=2
 ```
 
 Now, the outlier removal uses the default threshold and there is also an
-output vector available for visualizaton in QGIS:
+output vector available for visualization in QGIS:
 
 ```sh
 v.outlier input=vector_map output=vector_output outlier=vector_outlier qgis=vector_qgis

@@ -1,5 +1,5 @@
 /* write_dxf.c is a file to facilitate the transfer of information to the dxf
- * format.  It attempts to be input nuetral (so when digit gets replaced ten
+ * format.  It attempts to be input neutral (so when digit gets replaced ten
  * years from now it will still be good...).
  *
  * This file supports Version 10 of dxf.

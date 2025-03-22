@@ -36,7 +36,7 @@
 
 /* MP is milepost */
 
-/* the same as specified fo from_ */
+/* the same as specified for from_ */
 #define TO_TYPE_FROM     1
 /* calculated from map along the line from previous MP */
 #define TO_TYPE_MAP      2
@@ -276,10 +276,10 @@ int main(int argc, char **argv)
     }
 
     /* Because the line feature identified by one id (lidcol) may be split
-     *  to more line parts, and milepost may be in threshold for more such
+     * to more line parts, and milepost may be in threshold for more such
      * parts, so that if each line part would be processed separately, it could
-     * be attached to more parts, it is better to process always whole line
-     * feature (all parts) of one id at the same time, and attache mileposts
+     * be attached to more parts. It is better always to process a whole line
+     * feature (all parts) of one id at the same time, and attach mileposts
      * always to nearest one */
 
     /* Open the database for lines and points */
@@ -399,7 +399,7 @@ int main(int argc, char **argv)
     rlines = (RLINE *)G_malloc(Vect_get_num_lines(&In) * sizeof(RLINE));
     mposts = (MILEPOST *)G_malloc(Vect_get_num_lines(&PMap) * sizeof(MILEPOST));
 
-    /* Go throuhg each line id */
+    /* Go through each line id */
     G_debug(debug, "Process each line id");
     rsid = 1;
     for (i = 0; i < nLid; i++) {
@@ -630,7 +630,7 @@ int main(int argc, char **argv)
 
         /* 1) Check number of MP
          * 2) Guess direction: find direction for each segment between 2 MPs and
-         * at the end compare number of segmnets in both directions, if equal
+         * at the end compare number of segments in both directions, if equal
          * assign DIR_UNKNOWN. */
         for (j = 0; j < nrlines; j++) {
             G_debug(debug,

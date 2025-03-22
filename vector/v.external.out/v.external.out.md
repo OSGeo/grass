@@ -58,7 +58,7 @@ Options relevant only to topological output (`TOPOLOGY=YES`):
   storing topogeometry data in feature table, default: `topo`
 - `TOPO_TOLERANCE=<value>` - tolerance for PostGIS Topology schema, see
   [CreateTopology](https://postgis.net/docs/CreateTopology.html)
-  function for defails, default: `0`
+  function for details, default: `0`
 - `TOPO_GEO_ONLY=YES|NO` - store in PostGIS Topology schema only data
   relevant to Topo-Geo data model, default: `NO`
 - `SIMPLE_FEATURE=YES|NO` - build simple features geometry in

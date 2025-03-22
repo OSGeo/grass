@@ -184,7 +184,7 @@ def import_data(path, areas_name, areas_with_space_in_between, env):
     attribute_types = path / "test.csvt"
     attribute_types.write_text(AREAS_WITH_SPACE_ATTRIBUTE_TYPES)
     # Attributes need to be created first because no vector map of the same name
-    # can exist when table is imported (interally using v.in.ogr and vector part
+    # can exist when table is imported (internally using v.in.ogr and vector part
     # is deleted).
     gs.run_command(
         "db.in.ogr", input=attributes, output=areas_with_space_in_between, env=env
