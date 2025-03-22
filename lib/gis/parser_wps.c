@@ -384,7 +384,7 @@ void G__wps_print_process_description(void)
                                             abstract, 2048, data_type);
                 }
                 else {
-                    /* The keyword array is missused for options, type means the
+                    /* The keyword array is misused for options, type means the
                      * type of the value (integer, float ... ) */
                     wps_print_literal_input_output(
                         WPS_INPUT, min, max, identifier, title, abstract, type,
@@ -553,7 +553,7 @@ void G__wps_print_process_description(void)
 /**************************************************************************
  *
  * The remaining routines are all local (static) routines used to support
- * the the creation of the WPS process_description document.
+ * the creation of the WPS process_description document.
  *
  **************************************************************************/
 
@@ -1213,7 +1213,7 @@ static void wps_print_bounding_box_data(void)
     fprintf(stdout, "\t\t\t<Input minOccurs=\"0\" maxOccurs=\"1\">\n");
     wps_print_ident_title_abstract(
         "BoundingBox", "Bounding box to process data",
-        "The bounding box is uesed to create the reference coordinate system "
+        "The bounding box is used to create the reference coordinate system "
         "in grass, as well as the lower left and upper right corner of the "
         "processing area.");
     fprintf(stdout, "\t\t\t\t<BoundingBoxData>\n");

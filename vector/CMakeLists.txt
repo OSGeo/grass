@@ -102,9 +102,6 @@ set(vector_modules_list
     v.what.rast
     v.what.rast3)
 
-if(WITH_OPENDWG)
-  list(APPEND vector_modules_list v.in.dwg)
-endif()
 if(WITH_GEOS)
   list(APPEND vector_modules_list v.buffer)
 endif()
@@ -138,7 +135,7 @@ build_program_in_subdir(v.build DEPENDS grass_gis grass_vector)
 
 build_program_in_subdir(v.build.polylines DEPENDS grass_gis grass_vector)
 
-build_program_in_subdir(v.category DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.category DEPENDS grass_gis grass_vector grass_parson)
 
 build_program_in_subdir(
   v.class
@@ -325,7 +322,7 @@ build_program_in_subdir(
   grass_vector
   ${LIBM}
   PRIMARY_DEPENDS
-  PDAL)
+  ${PDAL})
 
 build_program_in_subdir(
   v.in.region
@@ -983,7 +980,3 @@ build_program_in_subdir(
   grass_vector
   PRIMARY_DEPENDS
   PostgreSQL::PostgreSQL)
-
-if(WITH_OPENDWG)
-  build_program_in_subdir(v.in.dwg DEPENDS grass_gis grass_vector ${LIBM})
-endif()

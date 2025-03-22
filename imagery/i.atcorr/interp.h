@@ -25,7 +25,7 @@ struct InterpStruct {
 
 /*
    To estimate the different atmospheric functions r(mS,mv,fS,fv), T(q) and S at
-   any wavelength from the 10 discret computations (subroutine DISCOM).
+   any wavelength from the 10 discrete computations (subroutine DISCOM).
  */
 void interp(const int iaer, const int idatmp, const double wl,
             const double taer55, const double taer55p, const double xmud,
