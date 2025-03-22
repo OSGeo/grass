@@ -948,7 +948,7 @@ static void buffer_lines(struct line_pnts *area_outer,
                 }
 
                 /* we need to check if the area is in the buffer.
-                   I've simplfied convolution_line(), so that it runs faster,
+                   I've simplified convolution_line(), so that it runs faster,
                    however that leads to occasional problems */
                 if (check_poly &&
                     Vect_point_in_poly(cPoints->x[0], cPoints->y[0],

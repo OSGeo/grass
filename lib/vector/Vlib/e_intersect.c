@@ -61,7 +61,7 @@ void initialize_mpf_vars()
 }
 
 /*
-   Caclulates:
+   Calculates:
    |a11-b11  a12-b12|
    |a21-b21  a22-b22|
  */

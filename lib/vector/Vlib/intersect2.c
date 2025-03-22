@@ -1122,7 +1122,7 @@ int Vect_line_intersection2(struct line_pnts *APoints,
                 /* add first points of segments between last and current seg */
                 for (j = last_seg + 1; j <= seg; j++) {
                     G_debug(2, "  segment j = %d", j);
-                    /* skipp vertex identical to last break */
+                    /* skip vertex identical to last break */
                     if ((j == last_seg + 1) && Points->x[j] == last_x &&
                         Points->y[j] == last_y) {
                         G_debug(2, "   -> skip (identical to last break)");
