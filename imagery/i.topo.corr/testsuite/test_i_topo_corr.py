@@ -14,16 +14,14 @@ class TestITopoCorr(TestCase):
     azimuth = 315.0
 
     def setUp(self):
-        """Set up synthetic test data including elevation, slope, aspect, and reflectance."""
+        """Set up synthetic test data."""
         self.use_temp_region()
         self.runModule("g.region", n=10, s=0, e=10, w=0, rows=10, cols=10)
-
         self.runModule(
             "r.mapcalc",
             expression=f"{self.basemap} = 100 + row()*5 + col()*3 + sin(row()*2) + cos(col()*2)",
             overwrite=True,
         )
-
         self.runModule(
             "r.slope.aspect",
             elevation=self.basemap,
@@ -31,7 +29,6 @@ class TestITopoCorr(TestCase):
             aspect="aspect",
             overwrite=True,
         )
-
         self.runModule(
             "r.mapcalc",
             expression=f"{self.input_reflectance} = 0.1 + (row() + col())/200 + rand(0, 0.05)",
@@ -40,7 +37,7 @@ class TestITopoCorr(TestCase):
         )
 
     def tearDown(self):
-        """Clean up generated data including elevation, slope, aspect, and reflectance maps."""
+        """Clean up generated data."""
         self.runModule(
             "g.remove",
             type="raster",
@@ -59,9 +56,9 @@ class TestITopoCorr(TestCase):
         )
         self.del_temp_region()
 
-    def test_illumination_model(self):
-        """Verify the illumination model creation with the -i flag."""
-        self.assertModule(
+    def _create_illumination_map(self):
+        """Helper to generate illumination map."""
+        self.runModule(
             "i.topo.corr",
             flags="i",
             basemap=self.basemap,
@@ -70,6 +67,10 @@ class TestITopoCorr(TestCase):
             azimuth=self.azimuth,
             overwrite=True,
         )
+
+    def test_illumination_model(self):
+        """Verify illumination model stats."""
+        self._create_illumination_map()
         self.assertRasterFitsUnivar(
             raster=self.illumination_map,
             reference={
@@ -81,74 +82,109 @@ class TestITopoCorr(TestCase):
             precision=1e-6,
         )
 
-    def test_correction_methods(self):
-        """Test all correction methods (cosine, c-factor, percent, minnaert)and verify their outputs against precomputed statistics."""
-        method_params = [
-            (
-                "cosine",
-                {
-                    "mean": 0.122379,
-                    "sum": 5.874195,
-                    "min": 0.100521,
-                    "max": 0.14709,
-                    "stddev": 0.013583,
-                },
-            ),
-            (
-                "c-factor",
-                {
-                    "mean": -2.907636,
-                    "sum": -139.566538,
-                    "min": -3.521683,
-                    "max": -2.375210,
-                    "stddev": 0.328621,
-                },
-            ),
-            (
-                "percent",
-                {
-                    "mean": 0.143380,
-                    "sum": 6.882254,
-                    "min": 0.117771,
-                    "max": 0.172332,
-                    "stddev": 0.015914,
-                },
-            ),
-            (
-                "minnaert",
-                {
-                    "mean": 1.65201574070458e25,
-                    "sum": 7.929675555382e26,
-                    "min": 1.37470402005548e25,
-                    "max": 1.9772016973516e25,
-                    "stddev": 1.79829002960606e24,
-                },
-            ),
-        ]
-        self.test_illumination_model()
-        for method, reference in method_params:
-            with self.subTest(method=method):
-                output_name = f"corr_{method}"
+    def test_cosine_method(self):
+        """Test cosine correction method."""
+        self._create_illumination_map()
+        output_name = "corr_cosine"
+        self.assertModule(
+            "i.topo.corr",
+            basemap=self.illumination_map,
+            input=self.input_reflectance,
+            output=output_name,
+            zenith=self.zenith,
+            method="cosine",
+            overwrite=True,
+        )
+        self.assertRasterFitsUnivar(
+            raster=f"{output_name}.{self.input_reflectance}",
+            reference={
+                "mean": 0.122379,
+                "sum": 5.874195,
+                "min": 0.100521,
+                "max": 0.14709,
+                "stddev": 0.013583,
+            },
+            precision=1e-6,
+        )
 
-                self.assertModule(
-                    "i.topo.corr",
-                    basemap=self.illumination_map,
-                    input=self.input_reflectance,
-                    output=output_name,
-                    zenith=self.zenith,
-                    method=method,
-                    overwrite=True,
-                )
+    def test_cfactor_method(self):
+        """Test c-factor correction method."""
+        self._create_illumination_map()
+        output_name = "corr_c-factor"
+        self.assertModule(
+            "i.topo.corr",
+            basemap=self.illumination_map,
+            input=self.input_reflectance,
+            output=output_name,
+            zenith=self.zenith,
+            method="c-factor",
+            overwrite=True,
+        )
+        self.assertRasterFitsUnivar(
+            raster=f"{output_name}.{self.input_reflectance}",
+            reference={
+                "mean": -2.907636,
+                "sum": -139.566538,
+                "min": -3.521683,
+                "max": -2.375210,
+                "stddev": 0.328621,
+            },
+            precision=1e-6,
+        )
 
-                self.assertRasterFitsUnivar(
-                    raster=f"{output_name}.{self.input_reflectance}",
-                    reference=reference,
-                    precision=1e-6,
-                )
+    def test_percent_method(self):
+        """Test percent correction method."""
+        self._create_illumination_map()
+        output_name = "corr_percent"
+        self.assertModule(
+            "i.topo.corr",
+            basemap=self.illumination_map,
+            input=self.input_reflectance,
+            output=output_name,
+            zenith=self.zenith,
+            method="percent",
+            overwrite=True,
+        )
+        self.assertRasterFitsUnivar(
+            raster=f"{output_name}.{self.input_reflectance}",
+            reference={
+                "mean": 0.143380,
+                "sum": 6.882254,
+                "min": 0.117771,
+                "max": 0.172332,
+                "stddev": 0.015914,
+            },
+            precision=1e-6,
+        )
+
+    def test_minnaert_method(self):
+        """Test minnaert correction method."""
+        self._create_illumination_map()
+        output_name = "corr_minnaert"
+        self.assertModule(
+            "i.topo.corr",
+            basemap=self.illumination_map,
+            input=self.input_reflectance,
+            output=output_name,
+            zenith=self.zenith,
+            method="minnaert",
+            overwrite=True,
+        )
+        self.assertRasterFitsUnivar(
+            raster=f"{output_name}.{self.input_reflectance}",
+            reference={
+                "mean": 1.65201574070458e25,
+                "sum": 7.929675555382e26,
+                "min": 1.37470402005548e25,
+                "max": 1.9772016973516e25,
+                "stddev": 1.79829002960606e24,
+            },
+            precision=1e-6,
+        )
 
     def test_scale_flag(self):
-        """Verify the -s flag maintains input range and copies color rules"""
-        self.test_illumination_model()
+        """Verify the -s flag preserves range and colors."""
+        self._create_illumination_map()
         self.assertModule(
             "i.topo.corr",
             basemap=self.illumination_map,
@@ -160,12 +196,10 @@ class TestITopoCorr(TestCase):
             overwrite=True,
         )
         output_map = f"{self.output_corrected}.{self.input_reflectance}"
-
         orig_stats = core.parse_command(
             "r.univar", map=self.input_reflectance, flags="g"
         )
         corr_stats = core.parse_command("r.univar", map=output_map, flags="g")
-
         self.assertAlmostEqual(
             float(orig_stats["min"]),
             float(corr_stats["min"]),
@@ -178,17 +212,13 @@ class TestITopoCorr(TestCase):
             delta=1e-2,
             msg="Max value not preserved",
         )
-
         orig_colors = core.parse_command("r.colors.out", map=self.input_reflectance)
         corr_colors = core.parse_command("r.colors.out", map=output_map)
-
-        self.assertEqual(
-            orig_colors, corr_colors, msg="Color rules not copied correctly"
-        )
+        self.assertEqual(orig_colors, corr_colors, "Color rules not copied")
 
     def test_linearity(self):
         """Verify that the topographic correction scales linearly with input reflectance values by testing with scaled inputs."""
-        self.test_illumination_model()
+        self._create_illumination_map()
         scales = [0.5, 1.0, 2.0]
         results = []
         for scale in scales:
