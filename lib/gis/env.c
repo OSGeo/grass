@@ -90,7 +90,7 @@ void G_init_env(void)
  * \brief Force to read the mapset environment file VAR
  *
  * The mapset specific VAR file of the mapset set with G_setenv()
- * will be read into memory, ignoring if it was readed before.
+ * will be read into memory, ignoring if it was read before.
  * Existing values will be overwritten, new values appended.
  *
  * \return
@@ -104,7 +104,7 @@ void G__read_mapset_env(void)
  * \brief Force to read the GISRC environment file
  *
  * The GISRC file
- * will be read into memory, ignoring if it was readed before.
+ * will be read into memory, ignoring if it was read before.
  * Existing values will be overwritten, new values appended.
  *
  * \return
@@ -335,7 +335,7 @@ static FILE *open_env(const char *mode, int loc)
         if (!st->gisrc) {
             return NULL;
         }
-        strcpy(buf, st->gisrc);
+        G_strlcpy(buf, st->gisrc, sizeof(buf));
     }
     else if (loc == G_VAR_MAPSET) {
         /* Warning: G_VAR_GISRC must be previously read -> */

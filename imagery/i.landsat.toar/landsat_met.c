@@ -165,7 +165,7 @@ void lsat_metadata(char *metafile, lsat_data *lsat)
         chrncpy(lsat->date, value, 10);
     }
     else
-        G_warning("Using adquisition date from the command line 'date'");
+        G_warning("Using acquisition date from the command line 'date'");
 
     get_mtldata(mtldata, "FILE_DATE", value);
     if (value[0] == '\0') {

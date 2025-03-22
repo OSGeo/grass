@@ -22,7 +22,7 @@ build_module(
   grass_datetime
   ZLIB::ZLIB
   OPTIONAL_DEPENDS
-  BZIP2
+  BZip2::BZip2
   Iconv::Iconv
   Intl::Intl
   PostgreSQL::PostgreSQL

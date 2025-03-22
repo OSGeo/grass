@@ -89,7 +89,7 @@ starting segment IDs. Segment IDs are assigned whenever a yet
 unprocessed pixel is merged with another segment. Integer overflow can
 happen for computational regions with more than 2 billion cells and very
 low threshold values, resulting in many segments. If integer overflow
-occurs durin region growing, starting segments can be used (created by
+occurs during region growing, starting segments can be used (created by
 initial classification or other methods).
 
 #### Goodness of Fit
