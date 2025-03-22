@@ -13,8 +13,12 @@ add_custom_command(
           ${OUTDIR}/${GRASS_INSTALL_LOCALEDIR}
   BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_LOCALEDIR})
 
-set(_locales ${po_files})
-list(TRANSFORM _locales REPLACE "^.*/[^_]+_(.*)\.po$" "\\1")
+set(_locales)
+foreach(_locale ${po_files})
+  get_filename_component(_loc ${_locale} NAME)
+  list(APPEND _locales ${loc})
+endforeach()
+list(TRANSFORM _locales REPLACE "^[^_]+_(.*)\.po$" "\\1")
 list(REMOVE_DUPLICATES _locales)
 foreach(_locale ${_locales})
   add_custom_target(
