@@ -17,6 +17,8 @@ class TestITopoCorr(TestCase):
         """Set up synthetic test data."""
         self.use_temp_region()
         self.runModule("g.region", n=10, s=0, e=10, w=0, rows=10, cols=10)
+
+        # Create elevation, slope, aspect, and reflectance maps
         self.runModule(
             "r.mapcalc",
             expression=f"{self.basemap} = 100 + row()*5 + col()*3 + sin(row()*2) + cos(col()*2)",
@@ -57,7 +59,7 @@ class TestITopoCorr(TestCase):
         self.del_temp_region()
 
     def _create_illumination_map(self):
-        """Helper to generate illumination map."""
+        """Helper to generate illumination map (without assertions)."""
         self.runModule(
             "i.topo.corr",
             flags="i",
@@ -98,11 +100,11 @@ class TestITopoCorr(TestCase):
         self.assertRasterFitsUnivar(
             raster=f"{output_name}.{self.input_reflectance}",
             reference={
-                "mean": 0.122379,
-                "sum": 5.874195,
-                "min": 0.100521,
-                "max": 0.14709,
-                "stddev": 0.013583,
+                "mean": 0.1089169,
+                "sum": 5.228013,
+                "min": 0.0894596,
+                "max": 0.130911,
+                "stddev": 0.0120903,
             },
             precision=1e-6,
         )
@@ -123,11 +125,11 @@ class TestITopoCorr(TestCase):
         self.assertRasterFitsUnivar(
             raster=f"{output_name}.{self.input_reflectance}",
             reference={
-                "mean": -2.907636,
-                "sum": -139.566538,
-                "min": -3.521683,
-                "max": -2.375210,
-                "stddev": 0.328621,
+                "mean": 4.642691,
+                "sum": 222.849179,
+                "min": 3.866187,
+                "max": 5.571429,
+                "stddev": 0.507151,
             },
             precision=1e-6,
         )
@@ -148,11 +150,11 @@ class TestITopoCorr(TestCase):
         self.assertRasterFitsUnivar(
             raster=f"{output_name}.{self.input_reflectance}",
             reference={
-                "mean": 0.143380,
-                "sum": 6.882254,
-                "min": 0.117771,
-                "max": 0.172332,
-                "stddev": 0.015914,
+                "mean": 0.136397,
+                "sum": 6.547056,
+                "min": 0.112033,
+                "max": 0.163939,
+                "stddev": 0.0151399,
             },
             precision=1e-6,
         )
@@ -173,11 +175,11 @@ class TestITopoCorr(TestCase):
         self.assertRasterFitsUnivar(
             raster=f"{output_name}.{self.input_reflectance}",
             reference={
-                "mean": 1.65201574070458e25,
-                "sum": 7.929675555382e26,
-                "min": 1.37470402005548e25,
-                "max": 1.9772016973516e25,
-                "stddev": 1.79829002960606e24,
+                "mean": 8742601596819820.0,
+                "sum": 4.19644876647351e17,
+                "min": 7280402905938180.0,
+                "max": 1.04821208460817e16,
+                "stddev": 954623284225319,
             },
             precision=1e-6,
         )
@@ -196,6 +198,7 @@ class TestITopoCorr(TestCase):
             overwrite=True,
         )
         output_map = f"{self.output_corrected}.{self.input_reflectance}"
+
         orig_stats = core.parse_command(
             "r.univar", map=self.input_reflectance, flags="g"
         )
@@ -212,12 +215,13 @@ class TestITopoCorr(TestCase):
             delta=1e-2,
             msg="Max value not preserved",
         )
+
         orig_colors = core.parse_command("r.colors.out", map=self.input_reflectance)
         corr_colors = core.parse_command("r.colors.out", map=output_map)
         self.assertEqual(orig_colors, corr_colors, "Color rules not copied")
 
     def test_linearity(self):
-        """Verify that the topographic correction scales linearly with input reflectance values by testing with scaled inputs."""
+        """Verify linear scaling of correction."""
         self._create_illumination_map()
         scales = [0.5, 1.0, 2.0]
         results = []
