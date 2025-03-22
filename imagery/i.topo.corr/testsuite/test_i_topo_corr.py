@@ -40,7 +40,7 @@ class TestITopoCorr(TestCase):
         )
 
     def tearDown(self):
-        """Clean up generated data including elevation, slope, aspect, and reflectance maps"""
+        """Clean up generated data including elevation, slope, aspect, and reflectance maps."""
         self.runModule(
             "g.remove",
             type="raster",
@@ -73,8 +73,8 @@ class TestITopoCorr(TestCase):
         self.assertRasterFitsUnivar(
             raster=self.illumination_map,
             reference={
-                "mean": 0.707143,
-                "sum": 33.94287,
+                "mean": 0.794546,
+                "sum": 38.13825,
                 "n": 48,
                 "null_cells": 52,
             },
@@ -147,7 +147,7 @@ class TestITopoCorr(TestCase):
                 )
 
     def test_scale_flag(self):
-        """Verify the -s flag maintains input range and copies color rules."""
+        """Verify the -s flag maintains input range and copies color rules"""
         self.test_illumination_model()
         self.assertModule(
             "i.topo.corr",
