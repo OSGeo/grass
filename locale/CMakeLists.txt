@@ -16,7 +16,7 @@ add_custom_command(
 set(_locales)
 foreach(_locale ${po_files})
   get_filename_component(_loc ${_locale} NAME)
-  list(APPEND _locales ${loc})
+  list(APPEND _locales ${_loc})
 endforeach()
 list(TRANSFORM _locales REPLACE "^[^_]+_(.*)\.po$" "\\1")
 list(REMOVE_DUPLICATES _locales)
