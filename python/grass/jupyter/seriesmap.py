@@ -22,7 +22,6 @@ from .map import Map
 from .region import RegionManagerForSeries
 from .baseseriesmap import BaseSeriesMap
 
-
 class SeriesMap(BaseSeriesMap):
     """Creates visualizations from a series of rasters or vectors in Jupyter
     Notebooks.
@@ -79,25 +78,16 @@ class SeriesMap(BaseSeriesMap):
         for raster in rasters:
             if not map_exists(name=raster, element="raster"):
                 raise NameError(_("Could not find a raster named {}").format(raster))
-        # Update region to rasters if not use_region or saved_region
-        self._region_manager.set_region_from_rasters(rasters)
-        if self._baseseries_added:
-            assert self.baseseries == len(rasters), _(
-                "Number of vectors in series must match number of vectors"
-            )
-            for i in range(self.baseseries):
-                kwargs["map"] = rasters[i]
-                self._base_calls[i].append(("d.rast", kwargs.copy()))
-        else:
-            self.baseseries = len(rasters)
-            for raster in rasters:
-                kwargs["map"] = raster
-                self._base_calls.append([("d.rast", kwargs.copy())])
-            self._baseseries_added = True
-        if not self._labels:
-            self._labels = rasters
+        # Update region
+        self._region_manager.set_region_from_rasters(rasters) 
+        # Add overlays via BaseSeriesMap
+        for raster in rasters:
+            self.d_rast(map=raster, **kwargs)
+        
+        # Set labels and indices
+        self._labels = rasters
+        self._indices = list(range(len(rasters)))
         self._layers_rendered = False
-        self._indices = list(range(len(self._labels)))
 
     def add_vectors(self, vectors, **kwargs):
         """
@@ -106,62 +96,45 @@ class SeriesMap(BaseSeriesMap):
         for vector in vectors:
             if not map_exists(name=vector, element="vector"):
                 raise NameError(_("Could not find a vector named {}").format(vector))
-        # Update region extent to vectors if not use_region or saved_region
+        # Update region
         self._region_manager.set_region_from_vectors(vectors)
-        if self._baseseries_added:
-            assert self.baseseries == len(vectors), _(
-                "Number of rasters in series must match number of vectors"
-            )
-            for i in range(self.baseseries):
-                kwargs["map"] = vectors[i]
-                self._base_calls[i].append(("d.vect", kwargs.copy()))
-        else:
-            self.baseseries = len(vectors)
-            for vector in vectors:
-                kwargs["map"] = vector
-                self._base_calls.append([("d.vect", kwargs.copy())])
-            self._baseseries_added = True
-        if not self._labels:
-            self._labels = vectors
+        # Add overlays via BaseSeriesMap
+        for vector in vectors:
+            self.d_vect(map=vector, **kwargs)
+        
+        # Set labels and indices
+        self._labels = vectors
+        self._indices = list(range(len(vectors)))
         self._layers_rendered = False
-        self._indices = range(len(self._labels))
 
     def add_names(self, names):
-        """Add list of names associated with layers.
-        Default will be names of first series added."""
-        assert self.baseseries == len(names), _(
-            "Number of vectors in series must match number of vectors"
-        )
+        """Add list of names associated with layers."""
+        assert len(self._labels) == len(names), "Names must match layer count"
         self._labels = names
-        self._indices = list(range(len(self._labels)))
 
     def _render_worker(self, i):
-        """Function to render a single layer."""
+        """Render a single layer with overlays/legends"""
         filename = os.path.join(self._tmpdir.name, f"{i}.png")
-        shutil.copyfile(self.base_file, filename)
         img = Map(
             width=self._width,
             height=self._height,
             filename=filename,
             use_region=True,
             env=self._env,
-            read_file=True,
+            read_file=False,
         )
-        for grass_module, kwargs in self._base_calls[i]:
-            img.run(grass_module, **kwargs)
-        return i, filename
+        img.d_erase()
+        
+        # Apply overlays and legend via BaseSeriesMap
+        self._apply_overlays(img)
+        self._apply_legend(img)
+        
+        img.save(filename)
+        return (i, filename)
 
     def render(self):
-        """Renders image for each raster in series.
-
-        Save PNGs to temporary directory. Must be run before creating a visualization
-        (i.e. show or save).
-        """
+        """Renders image for each raster in series."""
         if not self._baseseries_added:
-            msg = (
-                "Cannot render series since none has been added."
-                "Use SeriesMap.add_rasters() or SeriesMap.add_vectors()"
-            )
-            raise RuntimeError(msg)
-        tasks = [(i,) for i in range(self.baseseries)]
+            raise RuntimeError("Add series using add_rasters() or add_vectors()")
+        tasks = [(i,) for i in range(len(self._labels))]
         self._render(tasks)

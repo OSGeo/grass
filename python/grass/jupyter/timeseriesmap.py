@@ -175,9 +175,6 @@ class TimeSeriesMap(BaseSeriesMap):
         self.baseseries = baseseries
         self._fill_gaps = fill_gaps
         self._baseseries_added = True
-
-        self._base_calls = []
-        self._legend = None
         # create list of layers to render and date/times
         self._layers, self._labels = collect_layers(
             self.baseseries, self._element_type, self._fill_gaps
@@ -202,9 +199,6 @@ class TimeSeriesMap(BaseSeriesMap):
         self.baseseries = baseseries
         self._fill_gaps = fill_gaps
         self._baseseries_added = True
-         # NEW CODE: Reset overlays and legend when adding a new series
-        self._base_calls = []
-        self._legend = None
         # create list of layers to render and date/times
         self._layers, self._labels = collect_layers(
             self.baseseries, self._element_type, self._fill_gaps
@@ -217,108 +211,74 @@ class TimeSeriesMap(BaseSeriesMap):
         self._indices = self._labels
 
     def d_legend(self, **kwargs):
-        """Display legend.
-
-        Wraps d.legend and uses same keyword arguments.
+        """Display legend for all timesteps.
+    
+        Wraps `d.legend` and uses the same keyword arguments.
         """
-        if "raster" in kwargs and not self._baseseries_added:
-            self._base_layer_calls.append(("d.legend", kwargs))
-        if "raster" in kwargs and self._baseseries_added:
-            self._base_calls.append(("d.legend", kwargs))
-        else:
-            self._legend = kwargs
-            # If d_legend has been called, we need to re-render layers
-            self._layers_rendered = False
+        self._legend = kwargs
+        self._layers_rendered = False
 
-    def _render_legend(self, img):
-        """Add legend to Map instance"""
-        info = gs.parse_command(
-            "t.info", input=self.baseseries, flags="g", env=self._env
-        )
-        min_min = info["min_min"]
-        max_max = info["max_max"]
-        img.d_legend(
-            raster=self._layers[0],
-            range=f"{min_min}, {max_max}",
-            **self._legend,
-        )
-
-    def _render_overlays(self, img):
-        """Add collected overlays to Map instance"""
-        for grass_module, kwargs in self._base_calls:
-            img.run(grass_module, **kwargs)
-
-    def _render_blank_layer(self, filename):
-        """Write blank image for gaps in time series.
-
-        Adds overlays and legend to base map.
-        """
-        img = Map(
-            width=self._width,
-            height=self._height,
-            filename=filename,
-            use_region=True,
-            env=self._env,
-            read_file=True,
-        )
-        # Add overlays
-        self._render_overlays(img)
-        # Add legend if needed
+    def _apply_legend(self, img):
+        """Override BaseSeriesMap to set dynamic legend range for time series."""
         if self._legend:
-            self._render_legend(img)
+            info = gs.parse_command(
+                "t.info", input=self.baseseries, flags="g", env=self._env
+            )
+            min_min = info["min_min"]
+            max_max = info["max_max"]
+            img.d_legend(
+                raster=self._layers[0],  # Use first layer for range
+                range=f"{min_min}, {max_max}",
+                **self._legend,
+            )    
 
-    def _render_layer(self, layer, filename):
-        """Render layer to file with overlays and legend"""
-        img = Map(
-            width=self._width,
-            height=self._height,
-            filename=filename,
-            use_region=True,
-            env=self._env,
-            read_file=True,
-        )
+    def _render_worker(self, date, layer, filename):
+     """Render a timestep with overlays/legends"""
+    img = Map(
+        width=self._width,
+        height=self._height,
+        filename=filename,
+        use_region=True,
+        env=self._env,
+        read_file=False,
+    )
+    img.d_erase()
 
-
-        img.run("d.erase", flags="f")
-
+    # Render base layer only if not "None"
+    if layer != "None":
         if self._element_type == "strds":
             img.d_rast(map=layer)
         elif self._element_type == "stvds":
             img.d_vect(map=layer)
-        # Add overlays
-        self._render_overlays(img)
-        # Add legend if needed
-        if self._legend:
-            self._render_legend(img)
 
-    def _render_worker(self, date, layer, filename):
-        """Function to render a single layer."""
-        shutil.copyfile(self.base_file, filename)
-        if layer == "None":
-            self._render_blank_layer(filename)
-        else:
-            self._render_layer(layer, filename)
-        return date, filename
+    #Apply overlays/legend to ALL layers (including "None")
+        self._apply_overlays(img)  # Fixed indentation
+        self._apply_legend(img)    # Fixed indentation
+
+        img.save(filename)
+        return (date, filename)
 
     def render(self):
-        """Renders image for each time-step in space-time dataset."""
-        if not self._baseseries_added:
-            msg = (
-                "Cannot render space time dataset since none has been added."
-                " Use TimeSeriesMap.add_raster_series() or "
-                "TimeSeriesMap.add_vector_series() to add dataset"
+     """Renders image for each time-step in space-time dataset."""
+    if not self._baseseries_added:
+        msg = (
+            "Cannot render space time dataset since none has been added."
+            " Use TimeSeriesMap.add_raster_series() or "
+            "TimeSeriesMap.add_vector_series() to add dataset"
+        )
+        raise RuntimeError(msg)
+
+    # Prepare tasks with tuples
+    tasks = []
+    for date, layer in self._date_layer_dict.items():
+        if layer == "None":
+            # Generate unique filename for each "None" layer
+            filename = os.path.join(
+                self._tmpdir.name, 
+                f"none_{gs.append_random('', 8)}.png"  # Unique random name
             )
-            raise RuntimeError(msg)
-
-        # Create name for empty layers
-        random_name_none = gs.append_random("none", 8) + ".png"
-
-        # Prepare tasks with tuples
-        tasks = []
-        for date, layer in self._date_layer_dict.items():
-            if layer == "None":
-                filename = os.path.join(self._tmpdir.name, random_name_none)
-            else:
-                filename = os.path.join(self._tmpdir.name, f"{layer}.png")
-            tasks.append((date, layer, filename))
-        self._render(tasks)
+        else:
+            filename = os.path.join(self._tmpdir.name, f"{layer}.png")
+            
+        tasks.append((date, layer, filename))  
+    self._render(tasks)
