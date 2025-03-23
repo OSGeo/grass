@@ -2,7 +2,7 @@ import pytest
 from grass.jupyter import TimeSeriesMap
 
 def test_timeseriesmap_render():
-    """Test if TimeSeriesMap renders layers and overlays correctly."""
+    """Test if TimeSeriesMap renders layers, overlays, and legends correctly."""
     
     # Create instance
     precip_map = TimeSeriesMap(use_region=True)
@@ -15,11 +15,20 @@ def test_timeseriesmap_render():
     precip_map.d_barscale()
     precip_map.d_legend(color="black", at=(10, 40, 2, 6))
     
-    # Render (headless mode)
+    # Render frames (headless)
     precip_map.render()
     
-    # Verify layers, overlays, and legend
+    # Verify layers
     assert precip_map._layers is not None, "No layers loaded"
     assert len(precip_map._layers) > 0, "Layers list is empty"
-    assert len(precip_map._base_calls) >= 2, "Overlays (d_vect/d_barscale) not added"
-    assert precip_map._legend is not None, "Legend not configured"
+    
+    # Verify overlays (d_vect and d_barscale)
+    assert len(precip_map._base_calls) >= 2, (
+        f"Expected ≥2 overlay calls, got {len(precip_map._base_calls)}"
+    )
+    
+    # Verify legend
+    assert precip_map._legend == {
+        "color": "black",
+        "at": (10, 40, 2, 6),
+    }, "Legend not configured correctly"
