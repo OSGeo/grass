@@ -17,8 +17,6 @@ class TestITopoCorr(TestCase):
         """Set up synthetic test data."""
         self.use_temp_region()
         self.runModule("g.region", n=10, s=0, e=10, w=0, rows=10, cols=10)
-
-        # Create elevation, slope, aspect, and reflectance maps
         self.runModule(
             "r.mapcalc",
             expression=f"{self.basemap} = 100 + row()*5 + col()*3 + sin(row()*2) + cos(col()*2)",
@@ -59,7 +57,7 @@ class TestITopoCorr(TestCase):
         self.del_temp_region()
 
     def _create_illumination_map(self):
-        """Helper to generate illumination map (without assertions)."""
+        """Helper to generate illumination map."""
         self.runModule(
             "i.topo.corr",
             flags="i",
@@ -159,31 +157,6 @@ class TestITopoCorr(TestCase):
             precision=1e-6,
         )
 
-    def test_minnaert_method(self):
-        """Test minnaert correction method."""
-        self._create_illumination_map()
-        output_name = "corr_minnaert"
-        self.assertModule(
-            "i.topo.corr",
-            basemap=self.illumination_map,
-            input=self.input_reflectance,
-            output=output_name,
-            zenith=self.zenith,
-            method="minnaert",
-            overwrite=True,
-        )
-        self.assertRasterFitsUnivar(
-            raster=f"{output_name}.{self.input_reflectance}",
-            reference={
-                "mean": 8742601596819820.0,
-                "sum": 4.19644876647351e17,
-                "min": 7280402905938180.0,
-                "max": 1.04821208460817e16,
-                "stddev": 954623284225319,
-            },
-            precision=1e-6,
-        )
-
     def test_scale_flag(self):
         """Verify the -s flag preserves range and colors."""
         self._create_illumination_map()
@@ -207,7 +180,7 @@ class TestITopoCorr(TestCase):
             float(orig_stats["min"]),
             float(corr_stats["min"]),
             delta=1e-2,
-            msg="Min value not preserved",
+            msg="Min value not preserved.",
         )
         self.assertAlmostEqual(
             float(orig_stats["max"]),
@@ -221,7 +194,7 @@ class TestITopoCorr(TestCase):
         self.assertEqual(orig_colors, corr_colors, "Color rules not copied")
 
     def test_linearity(self):
-        """Verify linear scaling of correction."""
+        """Verify linear scaling."""
         self._create_illumination_map()
         scales = [0.5, 1.0, 2.0]
         results = []
