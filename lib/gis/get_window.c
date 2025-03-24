@@ -65,8 +65,12 @@ void G_get_window(struct Cell_head *window)
     else {
         char *wind = getenv("WIND_OVERRIDE");
 
-        if (wind)
-            G_get_element_window(&st->dbwindow, "windows", wind, G_mapset());
+        if (wind) {
+            char wind_env[GNAME_MAX] = {0};
+            snprintf(wind_env, GNAME_MAX, "%s", wind);
+            G_get_element_window(&st->dbwindow, "windows", wind_env,
+                                 G_mapset());
+        }
         else
             G_get_element_window(&st->dbwindow, "", "WIND", G_mapset());
     }
