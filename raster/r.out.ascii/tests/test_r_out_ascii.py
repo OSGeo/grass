@@ -8,7 +8,7 @@ def setup_maps(tmp_path):
     """Set up a GRASS session and create test raster maps."""
 
     # Initialize GRASS project
-    project = tmp_path / "r_clump_project"
+    project = tmp_path / "r_out_ascii_project"
     gs.create_project(project)
     with gs.setup.init(project, env=os.environ.copy()) as session:
         # Set the region
