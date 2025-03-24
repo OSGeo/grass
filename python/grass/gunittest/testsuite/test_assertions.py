@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 
 import grass.script.core as gcore
+from grass.script import tempname
 from grass.pygrass.modules import Module
 
 from grass.gunittest.case import TestCase
@@ -179,6 +180,16 @@ class TestRasterMapAssertions(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
+
+    def test_assertRasterMinMax(self):
+        test_map = tempname(10)
+        self.runModule("r.mapcalc", expression=f"{test_map} = null()")
+        with self.assertRaises(AssertionError) as context:
+            self.assertRasterMinMax(test_map, refmin=1, refmax=10)
+        self.assertEqual(
+            str(context.exception),
+            f"The actual minimum is null for raster map {test_map}, but a reference minimum (1) was provided",
+        )
 
     def test_assertRasterFitsUnivar(self):
         self.assertRasterFitsUnivar(

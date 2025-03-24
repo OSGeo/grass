@@ -524,7 +524,27 @@ class TestCase(unittest.TestCase):
         """
         stdout = call_module("r.info", map=map, flags="r")
         actual = text_to_keyvalue(stdout, sep="=")
-        if refmin > actual["min"]:
+        if actual["min"] == "NULL":
+            actual["min"] = None
+        if actual["max"] == "NULL":
+            actual["max"] = None
+
+        if actual["min"] is None and refmin is not None:
+            stdmsg = (
+                "The actual minimum is null for raster map {m}, "
+                "but a reference minimum ({r}) was provided".format(r=refmin, m=map)
+            )
+            self.fail(self._formatMessage(msg, stdmsg))
+        if actual["min"] is not None and refmin is None:
+            stdmsg = (
+                "The actual minimum is ({a}) for raster map {m}, "
+                "but the provided reference minimum was null".format(
+                    a=actual["min"], m=map
+                )
+            )
+            self.fail(self._formatMessage(msg, stdmsg))
+
+        if actual["min"] is not None and refmin is not None and refmin > actual["min"]:
             stdmsg = (
                 "The actual minimum ({a}) is smaller than the reference"
                 " one ({r}) for raster map {m}"
@@ -533,7 +553,24 @@ class TestCase(unittest.TestCase):
                 )
             )
             self.fail(self._formatMessage(msg, stdmsg))
-        if refmax < actual["max"]:
+
+        if actual["max"] is None and refmax is not None:
+            stdmsg = (
+                "The actual maximum is null for raster map {m}, "
+                "but a reference maximum ({r}) was provided".format(r=refmax, m=map)
+            )
+            self.fail(self._formatMessage(msg, stdmsg))
+
+        if actual["max"] is not None and refmax is None:
+            stdmsg = (
+                "The actual maximum is ({a}) for raster map {m}, "
+                "but the provided reference maximum was null".format(
+                    a=actual["max"], m=map
+                )
+            )
+            self.fail(self._formatMessage(msg, stdmsg))
+
+        if actual["max"] is not None and refmax is not None and refmax < actual["max"]:
             stdmsg = (
                 "The actual maximum ({a}) is greater than the reference"
                 " one ({r}) for raster map {m}"
