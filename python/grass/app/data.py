@@ -201,13 +201,14 @@ def acquire_mapset_lock(
     total_sleep = 0
     try_number = 0
     initial_sleep = min(initial_sleep, timeout)
-    # Convert to float for text output consistency. It may be a float.
-    sleep_time = float(initial_sleep)
+    sleep_time = initial_sleep
+    start_time = time.time()
     while True:
         return_code = subprocess.run(
             [locker_path, lock_file, f"{process_id}"], check=False
         ).returncode
-        if return_code == 0 or total_sleep >= timeout:
+        elapsed_time = time.time() - start_time
+        if return_code == 0 or elapsed_time >= timeout or total_sleep >= timeout:
             # If we successfully acquired the lock or we did our last attempt,
             # stop the loop and report whatever the result is.
             break
@@ -219,7 +220,7 @@ def acquire_mapset_lock(
                 _(
                     "Mapset <{mapset}> locked "
                     "(attempt {try_number}), "
-                    "but will retry in {sleep_time} seconds..."
+                    "but will retry in {sleep_time:.2f} seconds..."
                 ).format(
                     mapset=display_mapset,
                     try_number=try_number,
@@ -230,7 +231,12 @@ def acquire_mapset_lock(
         total_sleep += sleep_time
         # New sleep time as double of the old one, but limited by the initial one.
         # Don't sleep longer than the timeout allows.
-        sleep_time = min(2 * sleep_time, 1000 * initial_sleep, timeout - total_sleep)
+        sleep_time = min(
+            2 * sleep_time,
+            1000 * initial_sleep,
+            timeout - elapsed_time,
+            timeout - total_sleep,
+        )
     return return_code, lock_file
 
 
