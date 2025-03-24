@@ -173,53 +173,70 @@ class MapsetLockingException(Exception):
     pass
 
 
-def acquire_mapset_lock(mapset_path, *, process_id=None, timeout=30, max_tries=5):
+def acquire_mapset_lock(
+    mapset_path, *, process_id=None, timeout=30, initial_sleep=1, message_callback=None
+):
     """
     Lock a mapset and return lock process return code and name of new lock file
 
     Acquires a lock for a mapset by calling the lock program. Returns lock process
     return code and name of new lock file.
 
+    When locking fails, it will re-attempt locking again until it succeeds
+    or it times out. The initial sleep time is used the first time and then
+    it is doubled after each failed attempt. However, the sleep time is limited
+    to thousand times the initial sleep time, so for longer timeouts, the attempts
+    will start happening in equal intervals.
+
     :param mapset_path: path to mapset
     :param process_id: process id to use for locking
-    :param timeout: total timeout in seconds (for all tries combined)
-    :param max_tries: maximum number of tries
+    :param timeout: give up in *timeout* in seconds
+    :param initial_sleep: initial sleep time in seconds
+    :param message_callback: callback to show messages when locked
     """
     if process_id is None:
         process_id = os.getpid()
     lock_file = os.path.join(mapset_path, ".gislock")
     locker_path = os.path.join(os.environ["GISBASE"], "etc", "lock")
-    # Derive sleep times from total timeout and number of tries. There is one more more
-    # lock attempt than there are sleep times, so we won't be using the last sleep time.
-    sleep_times = [timeout / (max_tries - 1)] * (max_tries)
     total_sleep = 0
-    for i, sleep_time in enumerate(sleep_times):
-        try_number = i + 1
+    try_number = 0
+    initial_sleep = min(initial_sleep, timeout)
+    # Convert to float for text output consistency. It may be a float.
+    sleep_time = float(initial_sleep)
+    while True:
         return_code = subprocess.run(
             [locker_path, lock_file, f"{process_id}"], check=False
         ).returncode
-        if return_code == 0 or try_number == max_tries:
+        if return_code == 0 or total_sleep >= timeout:
             # If we successfully acquired the lock or we did our last attempt,
             # stop the loop and report whatever the result is.
             break
-        gs.message(
-            _(
-                "Mapset <{mapset}> locked "
-                "(attempt {try_number}/{max_tries}), "
-                "but will retry in {sleep_time} seconds..."
-            ).format(
-                mapset=Path("...").joinpath(*(Path(mapset_path).parts[-2:])),
-                try_number=try_number,
-                max_tries=max_tries,
-                sleep_time=sleep_time,
+        try_number += 1
+        if message_callback:
+            # Show project and mapset name, but not the whole path.
+            display_mapset = Path("...").joinpath(*(Path(mapset_path).parts[-2:]))
+            message_callback(
+                _(
+                    "Mapset <{mapset}> locked "
+                    "(attempt {try_number}), "
+                    "but will retry in {sleep_time} seconds..."
+                ).format(
+                    mapset=display_mapset,
+                    try_number=try_number,
+                    sleep_time=sleep_time,
+                )
             )
-        )
         time.sleep(sleep_time)
         total_sleep += sleep_time
+        # New sleep time as double of the old one, but limited by the initial one.
+        # Don't sleep longer than the timeout allows.
+        sleep_time = min(2 * sleep_time, 1000 * initial_sleep, timeout - total_sleep)
     return return_code, lock_file
 
 
-def lock_mapset(mapset_path, force_lock_removal, message_callback):
+def lock_mapset(
+    mapset_path, *, force_lock_removal, timeout, message_callback, process_id=None
+):
     """Acquire a lock for a mapset and return name of new lock file
 
     Raises MapsetLockingException when it is not possible to acquire a lock for the
@@ -245,7 +262,12 @@ def lock_mapset(mapset_path, force_lock_removal, message_callback):
                 detail=_("You are not the owner of '{}'.").format(mapset_path),
             )
         raise MapsetLockingException(error)
-    ret, lockfile = acquire_mapset_lock(mapset_path)
+    ret, lockfile = acquire_mapset_lock(
+        mapset_path,
+        timeout=timeout,
+        message_callback=message_callback,
+        process_id=process_id,
+    )
     msg = None
     if ret == 2:
         if not force_lock_removal:
