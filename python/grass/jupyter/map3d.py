@@ -232,4 +232,4 @@ class Map3D:
         # Lazy import to avoid an import-time dependency on IPython.
         from IPython.display import Image  # pylint: disable=import-outside-toplevel
 
-        return Image(self._filename)
+        display(Image(self._filename))
