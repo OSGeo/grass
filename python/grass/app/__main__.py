@@ -11,6 +11,7 @@ for details.
 This is not a stable part of the API. Use at your own risk.
 """
 
+import argparse
 import os
 import sys
 from pathlib import Path
@@ -39,8 +40,6 @@ def subcommand_unlock_mapset(args):
 
 
 def main():
-    import argparse
-
     # Top-level parser
     program = os.path.basename(sys.argv[0])
     if program == "__main__.py":

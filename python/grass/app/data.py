@@ -188,11 +188,19 @@ def acquire_mapset_lock(
     to thousand times the initial sleep time, so for longer timeouts, the attempts
     will start happening in equal intervals.
 
-    :param mapset_path: path to mapset
+    A *timeout* is the maximum time to wait for the lock to be released in seconds.
+
+    A *process_id* is the process ID of the process locking the mapset. If not
+    given, the current process ID is used.
+
+    :param mapset_path: full path to the mapset
     :param process_id: process id to use for locking
     :param timeout: give up in *timeout* in seconds
     :param initial_sleep: initial sleep time in seconds
     :param message_callback: callback to show messages when locked
+
+    The function assumes the `GISBASE` variable is in the environment. The variable is
+    used to find the lock program.
     """
     if process_id is None:
         process_id = os.getpid()
@@ -249,6 +257,9 @@ def lock_mapset(
     given mapset either because of existing lock or due to insufficient permissions.
     A corresponding localized message is given in the exception.
 
+    The *timeout* and *process_id* parameters are the same as for the
+    :func:`acquire_mapset_lock` function. *force_lock_removal* implies zero *timeout*.
+
     A *message_callback* is a function which will be called to report messages about
     certain states. Specifically, the function is called when forcibly unlocking the
     mapset.
@@ -268,6 +279,9 @@ def lock_mapset(
                 detail=_("You are not the owner of '{}'.").format(mapset_path),
             )
         raise MapsetLockingException(error)
+    if force_lock_removal:
+        # Do not wait when removing the lock anyway.
+        timeout = 0
     ret, lockfile = acquire_mapset_lock(
         mapset_path,
         timeout=timeout,
