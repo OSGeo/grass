@@ -1,6 +1,6 @@
 """Provides functions for the main GRASS GIS executable
 
-(C) 2020 by Vaclav Petras and the GRASS Development Team
+(C) 2020-2025 by Vaclav Petras and the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -17,6 +17,7 @@ import tempfile
 import getpass
 import subprocess
 import sys
+import time
 from shutil import copytree, ignore_patterns
 from pathlib import Path
 
@@ -172,6 +173,52 @@ class MapsetLockingException(Exception):
     pass
 
 
+def acquire_mapset_lock(mapset_path, *, process_id=None, timeout=30, max_tries=5):
+    """
+    Lock a mapset and return lock process return code and name of new lock file
+
+    Acquires a lock for a mapset by calling the lock program. Returns lock process
+    return code and name of new lock file.
+
+    :param mapset_path: path to mapset
+    :param process_id: process id to use for locking
+    :param timeout: total timeout in seconds (for all tries combined)
+    :param max_tries: maximum number of tries
+    """
+    if process_id is None:
+        process_id = os.getpid()
+    lock_file = os.path.join(mapset_path, ".gislock")
+    locker_path = os.path.join(os.environ["GISBASE"], "etc", "lock")
+    # Derive sleep times from total timeout and number of tries. There is one more more
+    # lock attempt than there are sleep times, so we won't be using the last sleep time.
+    sleep_times = [timeout / (max_tries - 1)] * (max_tries)
+    total_sleep = 0
+    for i, sleep_time in enumerate(sleep_times):
+        try_number = i + 1
+        return_code = subprocess.run(
+            [locker_path, lock_file, f"{process_id}"], check=False
+        ).returncode
+        if return_code == 0 or try_number == max_tries:
+            # If we successfully acquired the lock or we did our last attempt,
+            # stop the loop and report whatever the result is.
+            break
+        gs.message(
+            _(
+                "Mapset <{mapset}> locked "
+                "(attempt {try_number}/{max_tries}), "
+                "but will retry in {sleep_time} seconds..."
+            ).format(
+                mapset=Path("...").joinpath(*(Path(mapset_path).parts[-2:])),
+                try_number=try_number,
+                max_tries=max_tries,
+                sleep_time=sleep_time,
+            )
+        )
+        time.sleep(sleep_time)
+        total_sleep += sleep_time
+    return return_code, lock_file
+
+
 def lock_mapset(mapset_path, force_lock_removal, message_callback):
     """Acquire a lock for a mapset and return name of new lock file
 
@@ -198,12 +245,7 @@ def lock_mapset(mapset_path, force_lock_removal, message_callback):
                 detail=_("You are not the owner of '{}'.").format(mapset_path),
             )
         raise MapsetLockingException(error)
-    # Check for concurrent use
-    lockfile = os.path.join(mapset_path, ".gislock")
-    locker_path = os.path.join(os.environ["GISBASE"], "etc", "lock")
-    ret = subprocess.run(
-        [locker_path, lockfile, "%d" % os.getpid()], check=False
-    ).returncode
+    ret, lockfile = acquire_mapset_lock(mapset_path)
     msg = None
     if ret == 2:
         if not force_lock_removal:
