@@ -316,3 +316,9 @@ def lock_mapset(
     if msg:
         raise MapsetLockingException(msg)
     return lockfile
+
+
+def unlock_mapset(mapset_path):
+    """Unlock a mapset"""
+    lockfile = os.path.join(mapset_path, ".gislock")
+    gs.try_remove(lockfile)

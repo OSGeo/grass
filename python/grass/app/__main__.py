@@ -17,7 +17,7 @@ import sys
 from pathlib import Path
 
 import grass.script as gs
-from grass.app.data import lock_mapset, MapsetLockingException
+from grass.app.data import lock_mapset, unlock_mapset, MapsetLockingException
 
 
 def subcommand_lock_mapset(args):
@@ -35,8 +35,7 @@ def subcommand_lock_mapset(args):
 
 
 def subcommand_unlock_mapset(args):
-    lockfile = os.path.join(args.mapset_path, ".gislock")
-    gs.try_remove(lockfile)
+    unlock_mapset(args.mapset_path)
 
 
 def main():
@@ -59,7 +58,10 @@ def main():
         metavar="PID",
         type=int,
         default=1,
-        help=_("process ID of the process locking the mapset"),
+        help=_(
+            "process ID of the process locking the mapset (a mapset can be "
+            "automatically unlocked if there is no process with this PID)"
+        ),
     )
     parser_foo.add_argument(
         "--timeout",
