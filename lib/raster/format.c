@@ -151,6 +151,7 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
     return 1;
 
 badread:
+    G_free(buf);
     return -1;
 }
 
