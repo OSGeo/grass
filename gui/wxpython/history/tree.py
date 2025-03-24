@@ -163,6 +163,7 @@ class HistoryBrowserTree(CTreeView):
             Status.RUNNING.value,
             Status.SUCCESS.value,
             Status.UNKNOWN.value,
+            "favorite", 
         ]
 
         self._initImages()
@@ -179,7 +180,7 @@ class HistoryBrowserTree(CTreeView):
         self._giface.entryInHistoryUpdated.connect(
             lambda entry: self.UpdateCommand(entry)
         )
-
+        self.Bind(wx.EVT_CHAR_HOOK, self.OnKeyPressed)  
         self.SetToolTip(_("Double-click to open the tool"))
         self.selectionChanged.connect(self.OnItemSelected)
         self.itemActivated.connect(self.OnDoubleClick)
@@ -199,6 +200,7 @@ class HistoryBrowserTree(CTreeView):
             Status.RUNNING.value: MetaIcon(img="circle").GetBitmap(bmpsize),
             Status.SUCCESS.value: MetaIcon(img="success").GetBitmap(bmpsize),
             Status.UNKNOWN.value: MetaIcon(img="question-mark").GetBitmap(bmpsize),
+            "favorite": MetaIcon(img="star").GetBitmap(bmpsize)
         }
         il = wx.ImageList(bmpsize[0], bmpsize[1], mask=False)
         for each in self._iconTypes:
@@ -309,8 +311,36 @@ class HistoryBrowserTree(CTreeView):
                     self._timestampToDatetime(timestamp) if timestamp else None
                 ),
                 "status": status,
+                "favorite": False,
             },
         )
+    def OnKeyPressed(self, event):
+     """Handle keyboard shortcuts (Ctrl+F to toggle favorite)."""
+    if event.ControlDown() and event.GetKeyCode() == ord('F'):
+        self.ToggleFavorite()
+        return
+    event.Skip()
+
+    def ToggleFavorite(self):
+     """Toggle favorite status and store it in JSON."""
+    selected_nodes = self.GetSelected()
+    if not selected_nodes:
+        return
+
+    node = selected_nodes[0]
+    if node.data["type"] != COMMAND:
+        return
+
+    is_favorite = not node.data.get("favorite", False)
+    node.data["favorite"] = is_favorite
+
+    # Save to JSON history
+    self.mark_command_favorite(node.data["name"], is_favorite)
+
+    self.RefreshNode(node)
+    if node.parent:
+        self._reloadNode(node.parent)
+
 
     def _initHistoryModel(self):
         """
@@ -483,37 +513,44 @@ class HistoryBrowserTree(CTreeView):
         return day
 
     def InsertCommand(self, entry):
-        """Insert command node to the model and reload it.
+     """Insert command node to the model and reload it.
 
-        :param entry dict: Dictionary with 'command' and 'command_info' keys
-        """
-        # Check if time period node exists or create it
-        today_node = self.GetHistoryNode(entry=entry)
-        command_info = entry["command_info"]
+     :param entry dict: Dictionary with 'command' and 'command_info' keys
+     """
+    # Check if time period node exists or create it
+    today_node = self.GetHistoryNode(entry=entry)
+    command_info = entry["command_info"]
 
-        if not today_node:
-            today_node = self._model.AppendNode(
-                parent=self._model.root,
-                data={
-                    "type": TIME_PERIOD,
-                    "day": self._timestampToDay(
-                        self._timestampToDatetime(command_info["timestamp"])
-                    ),
-                },
-            )
-            self._model.SortChildren(self._model.root)
-            self.RefreshItems()
+    if not today_node:
+        today_node = self._model.AppendNode(
+            parent=self._model.root,
+            data={
+                "type": TIME_PERIOD,
+                "day": self._timestampToDay(
+                    self._timestampToDatetime(command_info["timestamp"])
+                ),
+            },
+        )
+        self._model.SortChildren(self._model.root)
+        self.RefreshItems()
 
-        # Populate today's node by executed command
-        command_node = self._populateDayItem(today_node, entry)
-        self._reloadNode(today_node)
+    # Check if command is a favorite in JSON
+    is_favorite = entry.get("favorite", False)  # Load favorite status from history JSON
 
-        # Select and expand the newly added command node
-        self.Select(command_node)
-        self.ExpandNode(command_node)
+    # Populate today's node by executed command, including favorite status
+    command_node = self._model.AppendNode(
+        parent=today_node,
+        data={
+            "type": COMMAND,
+            "name": entry["command"].strip(),
+            "timestamp": self._timestampToDatetime(command_info["timestamp"]) if "timestamp" in command_info else None,
+            "status": command_info.get("status", Status.UNKNOWN.value),
+            "favorite": is_favorite,  # Apply favorite status
+        },
+    )
 
-        # Show command info in info panel
-        self.infoPanel.showCommandInfo(command_info)
+    self._reloadNode(today_node)
+
 
     def UpdateCommand(self, entry):
         """Update first command node in the model and refresh it.
@@ -575,17 +612,31 @@ class HistoryBrowserTree(CTreeView):
                 caption=_("Cannot be parsed into command"),
                 showTraceback=False,
             )
+    def mark_command_favorite(self, command, is_favorite):
+     """Update the JSON history file to store favorite status."""
+    history_path = history.get_current_mapset_gui_history_path()
+    content_list = history.read(history_path)
+
+    for entry in content_list:
+        if entry["command"] == command:
+            entry["favorite"] = is_favorite
+            break
+
+    history.write(history_path, content_list)
+        
 
     def OnGetItemImage(self, index, which=wx.TreeItemIcon_Normal, column=0):
-        """Overridden method to return image for each item."""
-        node = self._model.GetNodeByIndex(index)
-        try:
-            if node.data["type"] == TIME_PERIOD:
-                return self._iconTypes.index(node.data["type"])
-            if node.data["type"] == COMMAND:
-                return self._iconTypes.index(node.data["status"])
-        except ValueError:
-            return 0
+     """Return image index for the item (favorite icon takes precedence)."""
+    node = self._model.GetNodeByIndex(index)
+    try:
+        if node.data["type"] == TIME_PERIOD:
+            return self._iconTypes.index(node.data["type"])
+        if node.data["type"] == COMMAND:
+            if node.data.get("favorite", False):
+                return self._iconTypes.index("favorite")
+            return self._iconTypes.index(node.data["status"])
+    except ValueError:
+        return 0
 
     def OnRemoveCmd(self, event):
         """Remove cmd from the history file"""
