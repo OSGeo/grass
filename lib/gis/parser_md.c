@@ -76,11 +76,6 @@ void G__usage_markdown(void)
     }
     fprintf(stdout, "\n");
     fprintf(stdout, "### ");
-    fprintf(stdout, "%s\n", _("KEYWORDS"));
-    fprintf(stdout, "\n");
-    if (st->module_info.keywords) {
-        G__print_keywords(stdout, print_escaped_for_md_keywords, TRUE);
-    }
     fprintf(stdout, "\n");
     fprintf(stdout, "### ");
     fprintf(stdout, "%s\n", _("SYNOPSIS"));

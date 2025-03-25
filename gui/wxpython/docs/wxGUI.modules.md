@@ -1,13 +1,10 @@
 ---
 description: wxGUI Module dialogs
 index: wxGUI
+keywords: [general, GUI]
 ---
 
 # wxGUI Module dialogs
-
-## KEYWORDS
-
-[general](general.md), [GUI](topic_GUI.md)
 
 ## DESCRIPTION
 
