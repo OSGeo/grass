@@ -30,6 +30,7 @@ session = gj.init("path/to/my_project")
 
 Now you can import raster or vector data with [r.import](r.import.md)
 and [v.import](v.import.md).
+The following examples will use the [North Carolina dataset](https://grass.osgeo.org/download/data/#NorthCarolinaDataset).
 
 !!! grass-tip "Importing packages"
     <!-- markdownlint-disable-next-line MD046 -->
@@ -38,6 +39,7 @@ and [v.import](v.import.md).
     in a GRASS session.
     <!-- markdownlint-disable-next-line MD046 -->
     ```python
+    import sys
     sys.path.append(
         subprocess.check_output(["grass", "--config", "python_path"], text=True).strip()
     )
@@ -46,13 +48,13 @@ and [v.import](v.import.md).
 !!! grass-tip "Mapsets"
     If not specified otherwise in the `gj.init` function, the session will
     start in the default
-    mapset (subproject) of a project. If you need to switch to a different mapset,
-    you can use the `gj.switch_mapset` function.
+    mapset (subproject) of a project. If you need later to switch to a
+    different mapset, you can use the `gj.switch_mapset` function.
 
 ## Map
 
 The `gj.Map` class in `grass.jupyter` provides a way to create static maps in Jupyter.
-Here we create a map of the elevation raster overlayed with roads vector map:
+Here we create a map of elevation overlayed with streets:
 
 ```python
 # Create a new map
@@ -62,11 +64,13 @@ m = gj.Map()
 m.d_rast(map="elevation")
 
 # Add a vector map to the map object
-m.d_vect(map="roadsmajor", color="black")
+m.d_vect(map="streets", color="black")
 
 # Display the map
 m.show()
 ```
+
+![Elevation map overlayed with streets with gj.Map](jupyter_map.png)
 
 !!! grass-tip "Order Matters"
     <!-- markdownlint-disable-next-line MD046 -->
@@ -81,22 +85,27 @@ features you can refer to the [Cartography](topic_cartography.md) topic page.
 For example, let's add a legend, barscale, and shaded relief to the map:
 
 ```python
+
+# Compute shaded relief
+gs.run_command("r.relief", input="elevation", output="relief")
+
+# Create a new map
 m = gj.Map()
 
 # Add a shaded relief map
-m.d_shade(color="elevation", shade="aspect")
+m.d_shade(color="elevation", shade="relief")
 
 # Add a raster legend
 m.d_legend(
     raster="elevation",
-    at=(5, 40, 11, 14),
+    at=(1, 50, 1, 8),
     title="Elevation (m)",
-    font="sans",
-    flags="b"
+    border_color="none",
+    flags="bt"
 )
 
 # Add a scale bar to the map
-m.d_barscale(at=(50, 7), flags="n")
+m.d_barscale(at=(55, 5), flags="n")
 
 # Display the map
 m.show()
@@ -125,6 +134,8 @@ m.add_vector("roadsmajor")
 m.show()
 ```
 
+![Elevation and roads in gj.InteractiveMap](jupyter_interactive_map.png)
+
 The map gives you the ability to query the map, zoom in and out, and pan around,
 set the computational region, and create simple vector data by digitizing.
 To change the default basemap, see [documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.jupyter.html#module-grass.jupyter.interactivemap).
@@ -138,14 +149,20 @@ elevation_3dmap = gj.Map3D()
 elevation_3dmap.render(
     elevation_map="elevation",
     color_map="landuse",
-    perspective=35,
+    position=[0.5, 1],
+    perspective=10,
     height=5000,
     resolution_fine=1,
     zexag=5
 )
-elevation_3dmap.overlay.d_legend(raster="landuse", at=(5, 35, 5, 9), flags="b")
+elevation_3dmap.overlay.d_legend(raster="landuse",
+                                 at=(0, 30, 87, 100),
+                                 flags="b",
+                                 border_color="none")
 elevation_3dmap.show()
 ```
+
+![Landuse map draped over elevation with gj.Map3D](jupyter_3d_map.png)
 
 The parameters of the `render()` function are the same as parameters of the
 [m.nviz.image](m.nviz.image.md) tool, which is used in the background.
@@ -156,6 +173,7 @@ The `gj.SeriesMap` class animates a series of maps, allowing users to slide betw
 maps and play a continuous loop.
 
 ```python
+# Create a series of relief maps with different angles
 directions = [0, 90, 180, 270]
 for azimuth in directions:
     gs.run_command("r.relief",
@@ -171,28 +189,63 @@ m.show()
 m.save("series_map.gif")
 ```
 
+![Changing relief direction example with gj.SeriesMap](jupyter_series_map.png)
+
 ## Time Series
 
 The `gj.TimeSeriesMap` class provides a way to visualize
 GRASS' [space time datasets](temporalintro.md) in Jupyter. Here we create a time
-series map of flood inundation extent at different depths:
+series map of overland water flow:
 
 ```python
-flood_map = gj.TimeSeriesMap()
+# Zoom in to the study area
+gs.run_command("g.region", n=226040, s=223780, e=639170, w=636190)
+# Compute topography dx and dy derivatives
+gs.run_command("r.slope.aspect",
+               elevation="elevation",
+               dx="dx",
+               dy="dy")
+# Compute overland flow
+gs.run_command("r.sim.water",
+               flags="t",
+               elevation="elevation",
+               dx="dx",
+               dy="dy",
+               depth="depth",
+               niterations=30)
+
+# Create a time series
+gs.run_command("t.create",
+               output="depth",
+               temporaltype="relative",
+               title="Overland flow depth",
+               description="Overland flow depth")
+# Register the time series
+maps = gs.list_strings(type="raster", pattern="depth*")
+gs.run_command("t.register", input="depth", maps=maps)
+
+# Create a time series map
+flow_map = gj.TimeSeriesMap()
 
 # Add the base map
-flood_map.d_rast(map="elevation")
-flood_map.d_vect(map="roadsmajor")
-
+flow_map.d_rast(map="elevation")
 # Add the time series data
-flood_map.add_raster_series("flooding")
+flow_map.add_raster_series("depth", values="0.025-1.25")
+# Overlay the vector map
+flow_map.d_vect(map="streets")
 
 # Add map features
-flood_map.d_legend()
+flow_map.d_legend(raster="depth.30",
+                  title="Depth [m]",
+                  flags="bt",
+                  border_color="none",
+                  at=(1, 50, 0, 5))
 
-#Display the map
-flood_map.show()
+# Display the map
+flow_map.show()
 ```
+
+![Water flow example with gj.TimeSeriesMap](jupyter_timeseries_map.png)
 
 ## Python Library Documentation
 
