@@ -174,7 +174,13 @@ class MapsetLockingException(Exception):
 
 
 def acquire_mapset_lock(
-    mapset_path, *, process_id=None, timeout=30, initial_sleep=1, message_callback=None
+    mapset_path,
+    *,
+    process_id=None,
+    timeout=30,
+    initial_sleep=1,
+    message_callback=None,
+    env=None,
 ):
     """
     Lock a mapset and return lock process return code and name of new lock file
@@ -198,14 +204,17 @@ def acquire_mapset_lock(
     :param timeout: give up in *timeout* in seconds
     :param initial_sleep: initial sleep time in seconds
     :param message_callback: callback to show messages when locked
+    :param env: system environment variables
 
     The function assumes the `GISBASE` variable is in the environment. The variable is
-    used to find the lock program.
+    used to find the lock program. If *env* is not provided, `os.environ` is used.
     """
     if process_id is None:
         process_id = os.getpid()
+    if not env:
+        env = os.environ
     lock_file = os.path.join(mapset_path, ".gislock")
-    locker_path = os.path.join(os.environ["GISBASE"], "etc", "lock")
+    locker_path = os.path.join(env["GISBASE"], "etc", "lock")
     total_sleep = 0
     try_number = 0
     initial_sleep = min(initial_sleep, timeout)
@@ -249,7 +258,13 @@ def acquire_mapset_lock(
 
 
 def lock_mapset(
-    mapset_path, *, force_lock_removal, timeout, message_callback, process_id=None
+    mapset_path,
+    *,
+    force_lock_removal,
+    timeout,
+    message_callback,
+    process_id=None,
+    env=None,
 ):
     """Acquire a lock for a mapset and return name of new lock file
 
@@ -257,7 +272,7 @@ def lock_mapset(
     given mapset either because of existing lock or due to insufficient permissions.
     A corresponding localized message is given in the exception.
 
-    The *timeout* and *process_id* parameters are the same as for the
+    The *timeout*, *process_id*, and *env* parameters are the same as for the
     :func:`acquire_mapset_lock` function. *force_lock_removal* implies zero *timeout*.
 
     A *message_callback* is a function which will be called to report messages about
@@ -265,7 +280,7 @@ def lock_mapset(
     mapset.
 
     Assumes that the runtime is set up (specifically that GISBASE is in
-    the environment).
+    the environment). Environment can be provided as *env*.
     """
     if not os.path.exists(mapset_path):
         raise MapsetLockingException(_("Path '{}' doesn't exist").format(mapset_path))
@@ -287,6 +302,7 @@ def lock_mapset(
         timeout=timeout,
         message_callback=message_callback,
         process_id=process_id,
+        env=env,
     )
     msg = None
     if ret == 2:

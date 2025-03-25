@@ -349,6 +349,7 @@ def init(
             timeout=timeout,
             process_id=process_id,
             message_callback=print,
+            env=env,
         )
 
     env["GISRC"] = write_gisrc(
