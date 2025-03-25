@@ -94,6 +94,8 @@ def build_topics(ext):
                             % (grass_version, key.replace("_", " "))
                         )
                     )
+                if ext == "md":
+                    keyfile.write("---\nhide:\n  - toc\n---\n\n")
                 keyfile.write(headerkey_tmpl.substitute(keyword=key.replace("_", " ")))
                 num_modules = 0
                 for mod, desc in sorted(values.items()):
@@ -130,10 +132,9 @@ def build_topics(ext):
                     # expecting markdown
                     keyfile.write(
                         "*See also the corresponding keyword"
-                        " [{name}](keywords.md#{key})"
-                        " for additional references.*\n".format(
-                            key=key.replace(" ", "-").replace("_", "-").lower(),
-                            name=key.replace("_", " "),
+                        " for additional references:*\n"
+                        "\n<!-- material/tags {{ include: [{key}] }} -->\n".format(
+                            key=key,
                         )
                     )
 
