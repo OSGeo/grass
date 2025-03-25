@@ -389,4 +389,8 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
             }
         }
     }
+    G_free_key_value(loc_proj_units);
+    G_free_key_value(loc_proj_info);
+    G_free_key_value(proj_units);
+    G_free_key_value(proj_info);
 }
