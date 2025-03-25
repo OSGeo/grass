@@ -66,7 +66,7 @@ class TestISmap(TestCase):
         cls.runModule("g.remove", flags="f", type="group", name=cls.group_name)
         cls.temp_rasters.append(cls.output_map)
         cls.runModule("g.remove", flags="f", type="raster", name=cls.temp_rasters)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.signature_file)
+        cls.runModule("i.signatures", remove=cls.signature_file, type="sigset")
         cls.del_temp_region()
 
     def _run_smap(self, output_name, **kwargs):
