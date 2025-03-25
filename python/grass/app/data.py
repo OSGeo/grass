@@ -306,28 +306,45 @@ def lock_mapset(
     )
     msg = None
     if ret == 2:
+        lock_info = _("File {file} owned by {user} found.").format(
+            user=Path(lockfile).owner(), file=lockfile
+        )
         if not force_lock_removal:
+            cli_solution = _(
+                "On the command line, you can force GRASS to start by using the -f flag."
+            )
+            python_solution = _(
+                "In Python, you can start a session with force_unlock=True."
+            )
             msg = _(
-                "{user} is currently running GRASS in selected mapset"
-                " (file {file} found). Concurrent use of one mapset not allowed.\n"
-                "You can force launching GRASS using -f flag"
-                " (assuming your have sufficient access permissions)."
-                " Confirm in a process manager "
-                "that there is no other process using the mapset."
-            ).format(user=Path(lockfile).owner(), file=lockfile)
+                "Selected mapset is currently being used by another GRASS session. "
+                "{lock_info} "
+                "Concurrent access to a mapset is not allowed. However, you can either "
+                "use another mapset within the same project or remove the lock if you "
+                "are sure that no other session is active.\n"
+                "{cli_solution}\n"
+                "{python_solution}\n"
+                "Make sure you have sufficient access permissions to remove the lock "
+                "file. You may want to use a process manager "
+                "to check that no other process is using the mapset."
+            ).format(
+                lock_info=lock_info,
+                cli_solution=cli_solution,
+                python_solution=python_solution,
+            )
         else:
             message_callback(
-                _(
-                    "{user} is currently running GRASS in selected mapset"
-                    " (file {file} found), but forcing to launch GRASS anyway..."
-                ).format(user=Path(lockfile).owner(), file=lockfile)
+                _("Removing lock in the selected mapset: {lock_info}").format(
+                    lock_info=lock_info
+                )
             )
             gs.try_remove(lockfile)
     elif ret != 0:
         msg = _(
-            "Unable to properly access lock file '{name}'.\n"
-            "Please resolve this with your system administrator."
-        ).format(name=lockfile)
+            "Unable to properly access lock file '{name}' or run the lock program.\n"
+            "Please resolve this with your system administrator. "
+            "(Lock program return code: {returncode})"
+        ).format(name=lockfile, returncode=ret)
 
     if msg:
         raise MapsetLockingException(msg)
