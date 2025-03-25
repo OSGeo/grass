@@ -15,37 +15,40 @@ class TestVGeneralize(TestCase):
     def setUp(self):
         self.temp_files = []
         self.temp_chaiken = self.create_temp_file(
-            "ORGANIZATION: GRASS Development Team\nDIGIT DATE:   1/9/2005\nDIGIT NAME:   - \nMAP NAME:     test\nMAP DATE:     2005\nMAP SCALE:    10000\nOTHER INFO:   Test Chaiken's Algorithm\nZONE:  0\nMAP THRESH:   0.500000\nVERTI:\nL  4\n 5958812.48844435 3400828.84221011\n 5958957.29887089 3400877.11235229\n 5959021.65906046 3400930.7458436\n 5959048.47580612 3400973.65263665"
+            "L  4\n 5958812.48844435 3400828.84221011\n 5958957.29887089 3400877.11235229\n 5959021.65906046 3400930.7458436\n 5959048.47580612 3400973.65263665"
         )
 
         self.runModule(
             "v.in.ascii",
             input=self.temp_chaiken,
             output="test_chaiken",
+            flags="n",
             format="standard",
             overwrite=True,
         )
 
         self.temp_test_boundaries = self.create_temp_file(
-            "ORGANIZATION: GRASS Development Team\nDIGIT DATE:   1/9/2005\nDIGIT NAME:   -\nMAP NAME:     test\nMAP DATE:     2005\nMAP SCALE:    10000\nOTHER INFO:   Test polygons\nZONE:  0\nMAP THRESH:   0.500000\nVERTI:\nB  6\n 5958812.48844435 3400828.84221011\n 5958957.29887089 3400877.11235229\n 5959021.65906046 3400930.7458436\n 5959048.47580612 3400973.65263665\n 5959069.92920264 3401032.64947709\n 5958812.48844435 3400828.84221011\nB  4\n 5959010.9323622 3401338.36037757\n 5959096.7459483 3401370.54047235\n 5959091.38259917 3401450.99070932\n 5959010.9323622 3401338.36037757"
+            "B  6\n 5958812.48844435 3400828.84221011\n 5958957.29887089 3400877.11235229\n 5959021.65906046 3400930.7458436\n 5959048.47580612 3400973.65263665\n 5959069.92920264 3401032.64947709\n 5958812.48844435 3400828.84221011\nB  4\n 5959010.9323622 3401338.36037757\n 5959096.7459483 3401370.54047235\n 5959091.38259917 3401450.99070932\n 5959010.9323622 3401338.36037757"
         )
 
         self.runModule(
             "v.in.ascii",
             input=self.temp_test_boundaries,
             output="test_boundaries",
+            flags="n",
             format="standard",
             overwrite=True,
         )
 
         self.temp_hermite = self.create_temp_file(
-            "ORGANIZATION: GRASS Development Team\nDIGIT DATE:   1/9/2005\nDIGIT NAME:   -\nMAP NAME:     test\nMAP DATE:     2005\nMAP SCALE:    10000\nOTHER INFO:   Test Hermite interpolation\nZONE:  0\nMAP THRESH:   0.500000\nVERTI:\nL  4\n 5958812.48844435 3400828.84221011\n 5958957.29887089 3400877.11235229\n 5959021.65906046 3400930.7458436\n 5959048.47580612 3400973.65263665"
+            "L  4\n 5958812.48844435 3400828.84221011\n 5958957.29887089 3400877.11235229\n 5959021.65906046 3400930.7458436\n 5959048.47580612 3400973.65263665"
         )
 
         self.runModule(
             "v.in.ascii",
             input=self.temp_hermite,
             output="test_hermite",
+            flags="n",
             format="standard",
             overwrite=True,
         )
@@ -133,7 +136,7 @@ class TestVGeneralize(TestCase):
         self.assertVectorExists("generalized_boundaries")
         original_vertices = self.count_vertices("test_boundaries")
         generalized_vertices = self.count_vertices("generalized_boundaries")
-        
+
         # Check if the number of vertices decreased after simplification
         self.assertLess(
             generalized_vertices,
@@ -166,7 +169,7 @@ class TestVGeneralize(TestCase):
         self.assertVectorExists("smoothed_boundaries")
         original_vertices = self.count_vertices("test_boundaries")
         smoothed_vertices = self.count_vertices("smoothed_boundaries")
-        
+
         # Check if the number of vertices increased after smoothing
         self.assertGreater(
             smoothed_vertices,
@@ -216,7 +219,7 @@ class TestVGeneralize(TestCase):
                 generalized_vertices,
                 f"Original vertex {vertex} not found in generalized line.",
             )
-        
+
         # Hermite Interpolation smoothes the line. Checking the input and output vertices.
         input_vertices = self.count_vertices("test_hermite")
         output_vertices = self.count_vertices("hermite_line")
