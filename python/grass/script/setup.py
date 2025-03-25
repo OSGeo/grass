@@ -246,6 +246,7 @@ def init(
     env=None,
     lock=False,
     timeout=0,
+    force_unlock=False,
 ):
     """Initialize system variables to run GRASS modules
 
@@ -345,7 +346,7 @@ def init(
 
         lock_mapset(
             mapset_path.path,
-            force_lock_removal=False,
+            force_lock_removal=force_unlock,
             timeout=timeout,
             process_id=process_id,
             message_callback=print,
