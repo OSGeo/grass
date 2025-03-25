@@ -113,7 +113,6 @@ class TestVGeneralize(TestCase):
         )
         # Extract the number of points from the output
         num_vertices = 0
-        print(info_output)
         for line in info_output.splitlines():
             if "points" in line:
                 num_vertices = int(line.split("=")[1].strip())
@@ -133,10 +132,8 @@ class TestVGeneralize(TestCase):
         # Count vertices in the generalized vector
         self.assertVectorExists("generalized_boundaries")
         original_vertices = self.count_vertices("test_boundaries")
-        print(f"Number of vertices in original vector: {original_vertices}")
         generalized_vertices = self.count_vertices("generalized_boundaries")
-        print(f"Number of vertices in generalized vector: {generalized_vertices}")
-
+        
         # Check if the number of vertices decreased after simplification
         self.assertLess(
             generalized_vertices,
@@ -168,10 +165,8 @@ class TestVGeneralize(TestCase):
         )
         self.assertVectorExists("smoothed_boundaries")
         original_vertices = self.count_vertices("test_boundaries")
-        print(f"Number of vertices in original vector: {original_vertices}")
         smoothed_vertices = self.count_vertices("smoothed_boundaries")
-        print(f"Number of vertices in smoothed vector: {smoothed_vertices}")
-
+        
         # Check if the number of vertices increased after smoothing
         self.assertGreater(
             smoothed_vertices,
@@ -221,8 +216,7 @@ class TestVGeneralize(TestCase):
                 generalized_vertices,
                 f"Original vertex {vertex} not found in generalized line.",
             )
-        print(grass.read_command("v.info", map="hermite_line"))
-
+        
         # Hermite Interpolation smoothes the line. Checking the input and output vertices.
         input_vertices = self.count_vertices("test_hermite")
         output_vertices = self.count_vertices("hermite_line")
