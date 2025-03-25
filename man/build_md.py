@@ -58,7 +58,7 @@ footer_tmpl = string.Template("")
 
 cmd2_tmpl = string.Template(
     r"""
-### ${cmd_label} commands (${cmd}.*)
+### ${cmd_label} tools (${cmd}.*)
 
 | Module | Description |
 |--------|-------------|
@@ -74,12 +74,10 @@ modclass_intro_tmpl = string.Template(
     r"""Go to [${modclass} introduction](${modclass_lower}intro.md) | [topics](topics.md)
 """
 )
-# "
-
 
 modclass_tmpl = string.Template(
-    r"""Go [back to help overview](index.md)
-### ${modclass} commands
+    r"""
+## ${modclass} tools
 | Module | Description |
 |--------|-------------|
 """

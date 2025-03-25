@@ -164,18 +164,18 @@ nav:
       - GRASS Projects: grass_database.md
       - Projection and Transformations: projectionintro.md
 
-  - Processing Tools:
-      - Processing Tools: full_index.md
-      - General Tools: general.md
-      - Raster Tools: raster.md
-      - Raster 3D Tools: raster3d.md
-      - Vector Tools: vector.md
-      - Database Tools: database.md
-      - Imagery Tools: imagery.md
-      - Temporal Tools: temporal.md
-      - Display Tools: display.md
-      - Postscript Tools: postscript.md
-      - Miscellaneous Tools: miscellaneous.md
+  - Tools:
+      - Tools: full_index.md
+      - General tools: general.md
+      - Raster tools: raster.md
+      - Raster 3D tools: raster3d.md
+      - Vector tools: vector.md
+      - Database tools: database.md
+      - Imagery tools: imagery.md
+      - Temporal tools: temporal.md
+      - Display tools: display.md
+      - Postscript tools: postscript.md
+      - Miscellaneous tools: miscellaneous.md
 
   - Development: development_intro.md
 
