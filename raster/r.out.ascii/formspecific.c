@@ -62,6 +62,7 @@ int write_GRASS(int fd, FILE *fp, int nrows, int ncols, int out_type, int dp,
         }
         fprintf(fp, "\n");
     }
+    G_free(raster);
 
     return (0);
 }
@@ -118,6 +119,7 @@ int write_MODFLOW(int fd, FILE *fp, int nrows, int ncols, int out_type, int dp,
         if (colcnt > 0)
             fprintf(fp, "\n");
     }
+    G_free(raster);
 
     return (0);
 }
@@ -204,6 +206,7 @@ int write_GSGRID(int fd, FILE *fp, int nrows, int ncols, int out_type, int dp,
             fprintf(fp, "\n");
         fprintf(fp, "\n");
     }
+    G_free(raster);
 
     return (0);
 }

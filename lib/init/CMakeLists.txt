@@ -71,30 +71,11 @@ install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}
 
 file(TO_NATIVE_PATH "${OUTDIR}/${GISBASE_DIR}" gisbase_init_dir)
 
-file(COPY ${CMAKE_SOURCE_DIR}/demolocation/PERMANENT
-     DESTINATION ${OUTDIR}/${GRASS_INSTALL_DEMODIR})
-
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/demolocation/PERMANENT/
-        DESTINATION ${GRASS_INSTALL_DEMODIR}/PERMANENT)
-
-set(GISDBASE ${OUTDIR}/${GISBASE_DIR})
-configure_file(${CMAKE_SOURCE_DIR}/demolocation/grassrc.tmpl "${GISRC}" @ONLY)
-unset(GISDBASE)
-
 file(TO_NATIVE_PATH ${OUTDIR}/${GRASS_INSTALL_BINDIR} grass_dll_dir)
 set(DLL_PATH_LIST)
 list(APPEND DLL_PATH_LIST ${grass_dll_dir})
 separate_arguments(DLL_PATH_LIST)
 
-set(LD_LIBRARY_PATH_VAR)
-if(UNIX OR MINGW)
-  if(DEFINED ENV{LD_LIBRARY_PATH})
-    set(LD_LIBRARY_PATH_VAR
-        "${OUTDIR}/${GRASS_INSTALL_LIBDIR}:$ENV{LD_LIBRARY_PATH}")
-  else()
-    set(LD_LIBRARY_PATH_VAR "${OUTDIR}/${GRASS_INSTALL_LIBDIR}")
-  endif()
-endif()
 message(STATUS "GISBASE (build) : ${GISBASE_DIR}")
 message(STATUS "grass config directory (build): ${grass_config_dir}")
 

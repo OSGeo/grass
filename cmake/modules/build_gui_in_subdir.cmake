@@ -129,6 +129,10 @@ function(build_gui_in_subdir dir_name)
   endif()
 
   install(
+    DIRECTORY "${OUTDIR}/${GRASS_INSTALL_GUIDIR}/wxpython/${G_NAME}"
+    DESTINATION "${GRASS_INSTALL_GUIDIR}/wxpython")
+
+  install(
     PROGRAMS ${OUTDIR}/${GRASS_INSTALL_SCRIPTDIR}/${G_TARGET_NAME}${SCRIPT_EXT}
     DESTINATION ${GRASS_INSTALL_SCRIPTDIR})
 
