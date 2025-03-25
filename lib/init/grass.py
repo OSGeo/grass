@@ -1953,7 +1953,7 @@ def add_mapset_arguments(parser, mapset_as_option):
     )
     parser.add_argument(
         "--timeout",
-        metavar="TIMEOUT",
+        metavar="SECONDS",
         type=float,
         default=30,
         help=_("mapset locking timeout in seconds"),
