@@ -205,7 +205,7 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
             else {
                 G_free(mname);
                 return -1;
-            }        
+            }
         }
         else
             Rast_quant_get_limits(&quant, &dmin, &dmax, &x[0], &x[1]);
