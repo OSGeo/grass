@@ -292,6 +292,12 @@ def init(
         with gs.setup.init("~/grassdata/nc_spm_08/user1")
             # ... use GRASS modules here
 
+    A mapset can be locked which will prevent other session from locking it. A timeout can be
+    specified to allow concurrent processes to wait for the lock to be released::
+
+        with gs.setup.init("~/grassdata/nc_spm_08/user1", lock=True, timeout=30):
+            # ... use GRASS modules here
+
     :param path: path to GRASS database
     :param location: location name
     :param mapset: mapset within given location (default: 'PERMANENT')
