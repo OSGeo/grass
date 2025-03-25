@@ -102,6 +102,7 @@ int Rast_read_fp_range(const char *name, const char *mapset,
         fd = G_open_old_misc("cell_misc", "f_range", name, mapset);
         if (fd < 0) {
             G_warning(_("Unable to read fp range file for <%s>"), mname);
+            G_free(mname);
             return -1;
         }
 
@@ -109,6 +110,7 @@ int Rast_read_fp_range(const char *name, const char *mapset,
             /* if the f_range file exists, but empty file, meaning Nulls */
             close(fd);
             G_debug(1, "Empty fp range file meaning Nulls for <%s>", mname);
+            G_free(mname);
             return 2;
         }
 
@@ -123,6 +125,7 @@ int Rast_read_fp_range(const char *name, const char *mapset,
         /* "f_range" file does not exist */
         G_warning(_("Missing fp range file for <%s> (run r.support -s)"),
                   mname);
+        G_free(mname);
         return -1;
     }
     G_free(mname);
@@ -177,6 +180,7 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
         if (Rast_read_quant(name, mapset, &quant) < 0) {
             G_warning(_("Unable to read quant rules for raster map <%s>"),
                       mname);
+            G_free(mname);
             return -1;
         }
         if (Rast_quant_is_truncate(&quant) || Rast_quant_is_round(&quant)) {
@@ -198,14 +202,17 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
                         x[1] = (CELL)(dmax - .5);
                 }
             }
-            else
+            else {
+                G_free(mname);
                 return -1;
+            }        
         }
         else
             Rast_quant_get_limits(&quant, &dmin, &dmax, &x[0], &x[1]);
 
         Rast_update_range(x[0], range);
         Rast_update_range(x[1], range);
+        G_free(mname);
         return 3;
     }
 
@@ -213,6 +220,7 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
         fd = G_fopen_old_misc("cell_misc", "range", name, mapset);
         if (!fd) {
             G_warning(_("Unable to read range file for <%s>"), mname);
+            G_free(mname);
             return -1;
         }
 
@@ -220,6 +228,7 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
         if (!fgets(buf, sizeof buf, fd)) {
             if (fd)
                 fclose(fd);
+            G_free(mname);
             return 2;
         }
 
@@ -233,6 +242,7 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
 
             G_warning(_("Unable to read range file for <%s>"),
                       G_fully_qualified_name(name, mapset));
+            G_free(mname);
             return -1;
         }
 
@@ -247,6 +257,7 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
     else {
         /* "range" file does not exist */
         G_warning(_("Missing range file for <%s> (run r.support -s)"), mname);
+        G_free(mname);
         return -1;
     }
     G_free(mname);
@@ -288,16 +299,18 @@ int Rast_read_rstats(const char *name, const char *mapset,
     init_rstats(rstats);
 
     fd = -1;
-    char *mname = G_fully_qualified_name(name, mapset);
 
     if (!G_find_file2_misc("cell_misc", "stats", name, mapset)) {
         G_debug(1, "Stats file does not exist");
         return -1;
     }
 
+    char *mname = G_fully_qualified_name(name, mapset);
+
     fd = G_open_old_misc("cell_misc", "stats", name, mapset);
     if (fd < 0) {
         G_warning(_("Unable to read stats file for <%s>"), mname);
+        G_free(mname);
         return -1;
     }
 
@@ -305,6 +318,7 @@ int Rast_read_rstats(const char *name, const char *mapset,
         /* if the stats file exists, but empty file, meaning Nulls */
         close(fd);
         G_debug(1, "Empty stats file meaning Nulls for <%s>", mname);
+        G_free(mname);
         return 2;
     }
 
@@ -320,24 +334,28 @@ int Rast_read_rstats(const char *name, const char *mapset,
         /* if the stats file exists, but empty file, meaning Nulls */
         close(fd);
         G_debug(1, "Unable to read byte count in stats file for <%s>", mname);
+        G_free(mname);
         return -1;
     }
 
     count = 0;
     if (nbytes == 0) {
         close(fd);
+        G_free(mname);
         return 1;
     }
 
     if (nbytes < 1 || (unsigned char)nbytes > sizeof(grass_int64)) {
         close(fd);
         G_debug(1, "Invalid byte count in stats file for <%s>", mname);
+        G_free(mname);
         return -1;
     }
     if (read(fd, cc, nbytes) != nbytes) {
         /* incorrect number of bytes for count */
         close(fd);
         G_debug(1, "Unable to read count in stats file for <%s>", mname);
+        G_free(mname);
         return -1;
     }
 
