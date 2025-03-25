@@ -2,6 +2,7 @@
 
 import multiprocessing
 import os
+import sys
 from functools import partial
 
 import pytest
@@ -249,6 +250,9 @@ def test_init_environment_isolation(tmp_path):
     assert not os.environ.get("GISBASE")
 
 
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="Locking is disabled on Windows"
+)
 def test_init_lock_global_environment(tmp_path):
     """Check that init function can lock a mapset and respect that lock.
 
@@ -262,10 +266,17 @@ def test_init_lock_global_environment(tmp_path):
         # An attempt to lock a locked mapset should fail.
         with (
             pytest.raises(MapsetLockingException, match=r"Concurrent.*mapset"),
-            gs.setup.init(project, env=os.environ.copy(), lock=True) as nested_session,
+            gs.setup.init(project, env=os.environ.copy(), lock=True),
         ):
             pass
-        # No locking ignores the present lock.
+
+
+def test_init_ignore_lock_global_environment(tmp_path):
+    """Check that no locking ignores the present lock"""
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy(), lock=True) as top_session:
+        gs.run_command("g.region", flags="p", env=top_session.env)
         with gs.setup.init(
             project, env=os.environ.copy(), lock=False
         ) as nested_session:
@@ -275,6 +286,9 @@ def test_init_lock_global_environment(tmp_path):
             gs.run_command("g.region", flags="p", env=nested_session.env)
 
 
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="Locking is disabled on Windows"
+)
 def test_init_lock_nested_environments(tmp_path):
     """Check that init function can lock a mapset using nested environments"""
     project = tmp_path / "test"
@@ -284,12 +298,17 @@ def test_init_lock_nested_environments(tmp_path):
         # An attempt to lock a locked mapset should fail.
         with (
             pytest.raises(MapsetLockingException, match=r"Concurrent.*mapset"),
-            gs.setup.init(
-                project, env=top_session.env.copy(), lock=True
-            ) as nested_session,
+            gs.setup.init(project, env=top_session.env.copy(), lock=True),
         ):
             pass
-        # No locking ignores the present lock.
+
+
+def test_init_ignore_lock_nested_environments(tmp_path):
+    """Check that No locking ignores the present lock using nested environments"""
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy(), lock=True) as top_session:
+        gs.run_command("g.region", flags="p", env=top_session.env)
         with gs.setup.init(
             project, env=top_session.env.copy(), lock=False
         ) as nested_session:
@@ -311,6 +330,9 @@ def test_init_force_unlock(tmp_path):
             gs.run_command("g.region", flags="p", env=nested_session.env)
 
 
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="Locking is disabled on Windows"
+)
 def test_init_lock_fail_with_unlock_false(tmp_path):
     """No force-unlocking should fail if there is an existing lock"""
     project = tmp_path / "test"
@@ -326,6 +348,9 @@ def test_init_lock_fail_with_unlock_false(tmp_path):
             pass
 
 
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="Locking is disabled on Windows"
+)
 def test_init_lock_fail_without_unlock(tmp_path):
     """No force-unlocking is the default and it should fail with an existing lock"""
     project = tmp_path / "test"
@@ -339,6 +364,9 @@ def test_init_lock_fail_without_unlock(tmp_path):
             pass
 
 
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="Locking is disabled on Windows"
+)
 def test_init_lock_timeout_fail(tmp_path):
     """Fail with locked mapset with non-zero timeout"""
     project = tmp_path / "test"
