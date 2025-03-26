@@ -69,6 +69,6 @@ repos:
                 .*\.ipynb$
           )
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.35.1
+    rev: v1.37.0
     hooks:
       - id: yamllint

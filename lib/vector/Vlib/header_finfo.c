@@ -49,8 +49,9 @@ const char *Vect_get_finfo_dsn_name(struct Map_info *Map)
         return Map->fInfo.pg.db_name;
     }
 
-    G_debug(1, "Native vector format detected for <%s>",
-            Vect_get_full_name(Map));
+    const char *mname = Vect_get_full_name(Map);
+    G_debug(1, "Native vector format detected for <%s>", mname);
+    G_free((void *)mname);
 
     return NULL;
 }
@@ -89,8 +90,9 @@ char *Vect_get_finfo_layer_name(struct Map_info *Map)
                    Map->fInfo.pg.table_name);
     }
     else {
-        G_debug(1, "Native vector format detected for <%s>",
-                Vect_get_full_name(Map));
+        const char *mname = Vect_get_full_name(Map);
+        G_debug(1, "Native vector format detected for <%s>", mname);
+        G_free((void *)mname);
     }
 
     return name;
