@@ -61,9 +61,9 @@ class TestIRGBHIS(TestCase):
             ("test_intensity", 0, 255),
             ("test_saturation", 0, 255),
         ]:
-            univar = gs.parse_command("r.univar", map=map_name, format="json")
-            min_actual = univar[0]["min"]
-            max_actual = univar[0]["max"]
+            info = gs.parse_command("r.info", map=map_name, format="json")
+            min_actual = info["min"]
+            max_actual = info["max"]
             self.assertGreaterEqual(
                 min_actual,
                 min_val,
