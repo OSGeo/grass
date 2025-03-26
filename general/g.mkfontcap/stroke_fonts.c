@@ -52,7 +52,7 @@ void find_stroke_fonts(void)
     char **dirlisting;
     int numfiles, i;
 
-    G_asprintf(&dirpath, "%s/fonts", G_gisbase());
+    G_asprintf(&dirpath, "%s/fonts", G_share_dir());
 
     dirlisting = G_ls2(dirpath, &numfiles);
 
