@@ -1,4 +1,4 @@
-from grass.script import core
+import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -86,9 +86,9 @@ class TestIAlbedo(TestCase):
             flags="l",
             overwrite=True,
         )
-        stats = core.parse_command("r.info", map=self.output_raster, flags="r")
-        min_val = float(stats["min"])
-        max_val = float(stats["max"])
+        stats = gs.parse_command("r.info", map=self.output_raster, format="json")
+        min_val = stats["min"]
+        max_val = stats["max"]
         self.assertGreaterEqual(min_val, 0, "Albedo values < 0 detected")
         self.assertLessEqual(max_val, 1, "Albedo values > 1 detected")
 
@@ -111,16 +111,16 @@ class TestIAlbedo(TestCase):
                 overwrite=True,
             )
 
-        std_stats = core.parse_command("r.univar", map="albedo_standard", flags="g")
-        agg_stats = core.parse_command("r.univar", map="albedo_aggressive", flags="g")
+        std_stats = gs.parse_command("r.univar", map="albedo_standard", format="json")
+        agg_stats = gs.parse_command("r.univar", map="albedo_aggressive", format="json")
         self.assertLess(
-            float(agg_stats["max"]) - float(agg_stats["min"]),
-            float(std_stats["max"]) - float(std_stats["min"]),
+            agg_stats[0]["max"] - agg_stats[0]["min"],
+            std_stats[0]["max"] - std_stats[0]["min"],
             "Aggressive mode should reduce dynamic range",
         )
         self.assertNotAlmostEqual(
-            float(std_stats["mean"]),
-            float(agg_stats["mean"]),
+            std_stats[0]["mean"],
+            agg_stats[0]["mean"],
             places=3,
             msg="Aggressive mode should shift the mean",
         )
@@ -143,9 +143,9 @@ class TestIAlbedo(TestCase):
         self.runModule(
             "r.mapcalc", expression="diff=albedo_high-2*albedo_low", overwrite=True
         )
-        diff_stats = core.parse_command("r.univar", map="diff", flags="g")
-        max_diff = float(diff_stats["max"])
-        min_diff = float(diff_stats["min"])
+        diff_stats = gs.parse_command("r.univar", map="diff", format="json")
+        max_diff = diff_stats[0]["max"]
+        min_diff = diff_stats[0]["min"]
         self.assertAlmostEqual(
             max_diff,
             0.0,
