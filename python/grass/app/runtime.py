@@ -31,8 +31,21 @@ class RuntimePaths:
     The resource paths are also set as environmental variables.
     """
 
-    def __init__(self, env=os.environ):
+    def __init__(self, env=os.environ, init_env_vars=False):
         self.env = env
+        if init_env_vars:
+            self._gisbase = self.gisbase
+            self._prefix = self.prefix
+            self._colors_dir = self.colors_dir
+            self._etcbin_dir = self.etcbin_dir
+            self._etc_dir = self.etc_dir
+            self._fonts_dir = self.fonts_dir
+            self._graphics_dir = self.graphics_dir
+            self._guires_dir = self.guires_dir
+            self._guiscript_dir = self.guiscript_dir
+            self._guiwx_dir = self.guiwx_dir
+            self._locale_dir = self.locale_dir
+            self._share_dir = self.share_dir
 
     @property
     def version(self):
@@ -65,6 +78,46 @@ class RuntimePaths:
     @property
     def prefix(self):
         return self.__get_dir("GRASS_PREFIX")
+
+    @property
+    def colors_dir(self):
+        return self.__get_dir("GRASS_COLORSDIR")
+
+    @property
+    def etc_dir(self):
+        return self.__get_dir("GRASS_ETCDIR")
+
+    @property
+    def etcbin_dir(self):
+        return self.__get_dir("GRASS_ETCBINDIR")
+
+    @property
+    def fonts_dir(self):
+        return self.__get_dir("GRASS_FONTSDIR")
+
+    @property
+    def graphics_dir(self):
+        return self.__get_dir("GRASS_GRAPHICSDIR")
+
+    @property
+    def guires_dir(self):
+        return self.__get_dir("GRASS_GUIRESDIR")
+
+    @property
+    def guiscript_dir(self):
+        return self.__get_dir("GRASS_GUISCRIPTDIR")
+
+    @property
+    def guiwx_dir(self):
+        return self.__get_dir("GRASS_GUIWXDIR")
+
+    @property
+    def locale_dir(self):
+        return self.__get_dir("GRASS_LOCALEDIR")
+
+    @property
+    def share_dir(self):
+        return self.__get_dir("GRASS_SHAREDIR")
 
     @property
     def config_projshare(self):

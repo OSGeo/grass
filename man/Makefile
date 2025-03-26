@@ -81,35 +81,40 @@ manpages:
 
 define build
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_$(1).py $(2)
 endef
 
 define build_topics
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_topics.py
 endef
 
 define build_keywords
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_keywords.py
 endef
 
 define build_graphical_index
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_graphical_index.py
 endef
 
 define build_manual_gallery
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_manual_gallery.py
 endef
@@ -117,13 +122,15 @@ endef
 define build_pso
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
+	GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	$(PYTHON) ./parser_standard_options.py -t "$(GRASS_HOME)/lib/gis/parser_standard_options.c" \
 	-f "grass" -o "$(HTMLDIR)/parser_standard_options.html" -p 'id="opts_table" class="scroolTable"'
 endef
 
 define build_pso_md
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./parser_standard_options.py -t "$(GRASS_HOME)/lib/gis/parser_standard_options.c" \
 	-f "grass" -o "$(MDDIR)/source/parser_standard_options.md"
@@ -136,11 +143,13 @@ $(MDDIR)/source/topics.md: $(ALL_MD)
 define build_class_graphical
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
+	GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	$(PYTHON) ./build_class_graphical.py html $(HTMLDIR)
 endef
 
 define build_class_graphical_md
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
+	GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_class_graphical.py md $(MDDIR)/source
 endef
