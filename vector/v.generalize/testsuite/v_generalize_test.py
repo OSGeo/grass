@@ -1,6 +1,7 @@
 from grass.script import core as grass
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.script import vector_info_topo
 import tempfile
 import os
 
@@ -108,18 +109,9 @@ class TestVGeneralize(TestCase):
             use="vertex",
             overwrite=True,
         )
-        self.assertVectorExists(f"{vector_name}_vertices")
 
-        # Get the number of points (vertices) using v.info
-        info_output = grass.read_command(
-            "v.info", map=f"{vector_name}_vertices", flags="t"
-        )
-        # Extract the number of points from the output
-        num_vertices = 0
-        for line in info_output.splitlines():
-            if "points" in line:
-                num_vertices = int(line.split("=")[1].strip())
-        return num_vertices
+        topo_info = vector_info_topo(f"{vector_name}_vertices")
+        return topo_info["points"]
 
     def test_simplification(self):
         """Test vector simplification and compare vertex count and topology."""
