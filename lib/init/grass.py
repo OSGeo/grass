@@ -107,6 +107,12 @@ else:
     GRASS_SHARE_DIR = os.path.normpath("@GRASS_SHARE_DIR@")
     os.environ["GRASS_SHARE_DIR"] = GRASS_SHARE_DIR
 
+if "GRASS_LOCALEDIR" in os.environ and len(os.getenv("GRASS_LOCALEDIR")) > 0:
+    GRASS_LOCALEDIR = os.path.normpath(os.environ["GRASS_LOCALEDIR"])
+else:
+    GRASS_LOCALEDIR = os.path.normpath("@GRASS_LOCALE@")
+    os.environ["GRASS_LOCALEDIR"] = GRASS_LOCALEDIR
+
 CMD_NAME = "@START_UP@"
 GRASS_VERSION = "@GRASS_VERSION_NUMBER@"
 GRASS_VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
@@ -1195,7 +1201,7 @@ def set_language(grass_config_dir: StrPath) -> None:
                         os.environ["LC_MESSAGES"] = "C"
                         os.environ["LC_NUMERIC"] = "C"
                         os.environ["LC_TIME"] = "C"
-                        gettext.install("grasslibs", gpath("locale"))
+                        gettext.install("grasslibs", os.environ["GRASS_LOCALEDIR"])
                         sys.stderr.write(
                             "All attempts to enable English language have"
                             " failed. GRASS running with C locale.\n"
@@ -1276,7 +1282,7 @@ def set_language(grass_config_dir: StrPath) -> None:
         del os.environ["LC_ALL"]  # Remove LC_ALL to not override LC_NUMERIC
 
     # From now on enforce the new language
-    gettext.install("grasslibs", gpath("locale"))
+    gettext.install("grasslibs", os.environ["GRASS_LOCALEDIR"])
 
 
 # TODO: the gisrcrc here does not make sense, remove it from load_gisrc
