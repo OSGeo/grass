@@ -61,7 +61,6 @@ set(vedit_INCHDRS ${PostgreSQL_INCLUDE_DIRS} ${GDAL_INCLUDE_DIRS})
 set(_c_flags ${CMAKE_C_FLAGS})
 if(APPLE AND CMAKE_OSX_SYSROOT)
   string(APPEND _c_flags " --sysroot ${CMAKE_OSX_SYSROOT}")
-  message("_c_flags")
 endif()
 
 foreach(module ${MODULES})
