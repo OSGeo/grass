@@ -99,8 +99,8 @@ def _get_startup_location_in_distribution():
 
     Returns startup location if found or None if nothing was found.
     """
-    gisbase = os.getenv("GISBASE")
-    startup_location = os.path.join(gisbase, "demolocation")
+    share_dir = os.getenv("GRASS_SHARE_DIR")
+    startup_location = os.path.join(share_dir, "demolocation")
 
     # Find out if startup location exists
     if os.path.exists(startup_location):
