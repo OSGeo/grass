@@ -446,8 +446,8 @@ def get_tgis_database_string():
 
 
 def get_sql_template_path():
-    base = os.getenv("GISBASE")
-    base_etc = os.path.join(base, "etc")
+    grass_share_dir = os.getenv("GRASS_SHARE_DIR")
+    base_etc = os.path.join(grass_share_dir, "etc")
     return os.path.join(base_etc, "sql")
 
 

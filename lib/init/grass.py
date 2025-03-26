@@ -100,6 +100,13 @@ if "GISBASE" in os.environ and len(os.getenv("GISBASE")) > 0:
 else:
     GISBASE = os.path.normpath("@GISBASE_INSTALL_PATH@")
     os.environ["GISBASE"] = GISBASE
+
+if "GRASS_SHARE_DIR" in os.environ and len(os.getenv("GRASS_SHARE_DIR")) > 0:
+    GRASS_SHARE_DIR = os.path.normpath(os.environ["GRASS_SHARE_DIR"])
+else:
+    GRASS_SHARE_DIR = os.path.normpath("@GRASS_SHARE_DIR@")
+    os.environ["GRASS_SHARE_DIR"] = GRASS_SHARE_DIR
+
 CMD_NAME = "@START_UP@"
 GRASS_VERSION = "@GRASS_VERSION_NUMBER@"
 GRASS_VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
