@@ -67,7 +67,7 @@ int draw_scale(double east, double north, int length, int seg, int units,
     double x_pos, y_pos;
     double t, b, l, r;
     double pt = 0.0, pb = 0.0, pl = 0.0, pr = 0.0; /* background box */
-    double tt, tb, tl, tr; /* text box */
+    double tt, tb, tl, tr;                         /* text box */
     double xarr[5], yarr[5];
     double seg_len;
     const struct scale *scales = all_scales[use_feet];
