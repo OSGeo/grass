@@ -251,7 +251,6 @@ void write_vtk_points(input_maps *in, FILE *fp, RASTER3D_Region region, int dp,
                     region.depths); /*We have pointdata */
     G_free(rast_top);
     G_free(rast_bottom);
-    
     return;
 }
 
