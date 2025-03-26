@@ -395,6 +395,7 @@ void G__no_gisinit(const char *);
 void G_init_all(void);
 
 /* grass_install_dirs.c */
+const char *G_locale_dir(void);
 const char *G_share_dir(void);
 
 /* handler.c */

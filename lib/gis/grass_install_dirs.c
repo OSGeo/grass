@@ -22,6 +22,11 @@ const char *G_share_dir(void)
     return get_g_env("GRASS_SHARE_DIR");
 }
 
+const char *G_locale_dir(void)
+{
+    return get_g_env("GRASS_LOCALEDIR");
+}
+
 static const char *get_g_env(const char *env_var)
 {
     const char *value = getenv(env_var);
