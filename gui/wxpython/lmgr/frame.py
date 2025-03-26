@@ -35,9 +35,6 @@ try:
 except ImportError:
     import wx.lib.flatnotebook as FN
 
-if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
-    sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
-
 from grass.script import core as grass
 from grass.script.utils import decode
 
@@ -1463,7 +1460,7 @@ class GMFrame(wx.Frame):
 
         # check also OSGeo4W on MS Windows
         if sys.platform == "win32" and not os.path.exists(
-            os.path.join(os.getenv("GISBASE"), "WinGRASS-README.url")
+            os.path.join(os.getenv("GRASS_MISCDIR"), "WinGRASS-README.url")
         ):
             osgeo4w = " (OSGeo4W)"
         else:

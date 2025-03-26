@@ -48,12 +48,11 @@ static const char *get_desc(const char *);
 
 void find_stroke_fonts(void)
 {
-    char *dirpath, *fonttable;
+    char *fonttable;
     char **dirlisting;
     int numfiles, i;
 
-    G_asprintf(&dirpath, "%s/fonts", G_gisbase());
-
+    const char *dirpath = G_fonts_dir();
     dirlisting = G_ls2(dirpath, &numfiles);
 
     G_asprintf(&fonttable, "%s/fonts.table", dirpath);

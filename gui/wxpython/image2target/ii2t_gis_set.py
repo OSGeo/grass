@@ -88,11 +88,9 @@ class GRASSStartup(wx.Frame):
         # image
         try:
             if os.getenv("ISISROOT"):
-                name = os.path.join(
-                    globalvar.GUIDIR, "images", "startup_banner_isis.png"
-                )
+                name = os.path.join(globalvar.IMGDIR, "startup_banner_isis.png")
             else:
-                name = os.path.join(globalvar.GUIDIR, "images", "startup_banner.png")
+                name = os.path.join(globalvar.IMGDIR, "startup_banner.png")
             self.hbitmap = wx.StaticBitmap(
                 self.panel, wx.ID_ANY, wx.Bitmap(name=name, type=wx.BITMAP_TYPE_PNG)
             )

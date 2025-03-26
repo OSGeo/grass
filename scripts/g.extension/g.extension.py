@@ -2355,7 +2355,7 @@ def check_style_file(name):
 
     If the files are missing, a warning is issued.
     """
-    dist_file = os.path.join(os.getenv("GISBASE"), "docs", "html", name)
+    dist_file = os.path.join(os.getenv("GRASS_DOCDIR"), name)
     addons_file = os.path.join(options["prefix"], "docs", "html", name)
 
     try:

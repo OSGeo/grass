@@ -92,9 +92,6 @@ import tempfile as tmpfile
 WINDOWS = sys.platform.startswith("win")
 MACOS = sys.platform.startswith("darwin")
 
-VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
-VERSION_MINOR = "@GRASS_VERSION_MINOR@"
-
 
 def write_gisrc(dbase, location, mapset):
     """Write the ``gisrc`` file and return its path."""
@@ -108,7 +105,7 @@ def write_gisrc(dbase, location, mapset):
 
 def set_gui_path():
     """Insert wxPython GRASS path to sys.path."""
-    gui_path = os.path.join(os.environ["GISBASE"], "gui", "wxpython")
+    gui_path = os.environ["GRASS_GUIWXDIR"]
     if gui_path and gui_path not in sys.path:
         sys.path.insert(0, gui_path)
 
@@ -222,17 +219,21 @@ def setup_runtime_env(gisbase=None, *, env=None):
         set_executable_paths,
         set_path_to_python_executable,
         set_python_path_variable,
+        RuntimePaths,
     )
 
+    runtime_paths = RuntimePaths(env=env, init_env_vars=True)
+    gisbase = runtime_paths.gisbase
     # Set GISBASE
-    env["GISBASE"] = gisbase
     set_executable_paths(
         install_path=gisbase,
-        grass_config_dir=get_grass_config_dir(VERSION_MAJOR, VERSION_MINOR, env=env),
+        grass_config_dir=get_grass_config_dir(
+            runtime_paths.version_major, runtime_paths.version_minor, env=env
+        ),
         env=env,
     )
     set_dynamic_library_path(
-        variable_name="@LD_LIBRARY_PATH_VAR@", install_path=gisbase, env=env
+        variable_name=runtime_paths.ld_library_path_var, install_path=gisbase, env=env
     )
     set_python_path_variable(install_path=gisbase, env=env)
     set_path_to_python_executable(env=env)
@@ -383,7 +384,7 @@ def init(
     # If environment is not provided, use the global one.
     if not env:
         env = os.environ
-    setup_runtime_env(grass_path, env=env)
+    setup_runtime_env(None, env=env)
 
     process_id = os.getpid()
     env["GIS_LOCK"] = str(process_id)
@@ -574,9 +575,10 @@ def clean_temp(env=None):
         env = os.environ
 
     gs.verbose(_("Cleaning up temporary files..."), env=env)
-    gisbase = env["GISBASE"]
     call(
-        [os.path.join(gisbase, "etc", "clean_temp")], stdout=subprocess.DEVNULL, env=env
+        [os.path.join(env["GRASS_ETCBINDIR"], "clean_temp")],
+        stdout=subprocess.DEVNULL,
+        env=env,
     )
 
 
