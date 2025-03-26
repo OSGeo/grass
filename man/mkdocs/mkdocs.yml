@@ -120,7 +120,7 @@ nav:
       # which would provide more context, but less detail.
       - Command Line: command_line_intro.md
       - Python: python_intro.md
-      - Jupyter Notebook: jupyter_intro.md
+      - Jupyter Notebook: jupyter_get_started.md
       - Graphical User Interface: helptext.md
       - Tutorials: https://grass-tutorials.osgeo.org/
   - Interfaces:

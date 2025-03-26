@@ -271,9 +271,6 @@ $(MDDIR)/source/tags.md: mkdocs/tags.md
 $(MDDIR)/source/development_intro.md: mkdocs/docs/development_intro.md
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/jupyter_intro.md: mkdocs/docs/jupyter_intro.md
-	$(INSTALL_DATA) $< $@
-
 $(MDDIR)/source/python_intro.md: mkdocs/docs/python_intro.md
 	$(INSTALL_DATA) $< $@
 

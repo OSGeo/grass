@@ -4,7 +4,7 @@ authors:
     - GRASS Development Team
 ---
 
-# Jupyter Notebooks
+# Jupyter notebooks
 
 The `grass.jupyter` Python package provides a [Jupyter](https://jupyter.org/)
 notebook interface to GRASS. It includes modules for creating map figures,
@@ -115,7 +115,7 @@ m.show()
     See [detailed documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.jupyter.html#module-grass.jupyter.map)
     for changing the map size and geographic extent.
 
-## Interactive Maps
+## Interactive map
 
 The `gj.InteractiveMap` class provides a way to create interactive
 web maps in Jupyter. Interactive maps are created using the
@@ -140,7 +140,7 @@ The map gives you the ability to query the map, zoom in and out, and pan around,
 set the computational region, and create simple vector data by digitizing.
 To change the default basemap, see [documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.jupyter.html#module-grass.jupyter.interactivemap).
 
-## 3D Visualization
+## 3D map
 
 The `gj.Map3D` class creates 3D visualizations as static images.
 
@@ -167,7 +167,7 @@ elevation_3dmap.show()
 The parameters of the `render()` function are the same as parameters of the
 [m.nviz.image](m.nviz.image.md) tool, which is used in the background.
 
-## Series Maps
+## Series map
 
 The `gj.SeriesMap` class animates a series of maps, allowing users to slide between
 maps and play a continuous loop.
@@ -191,7 +191,7 @@ m.save("series_map.gif")
 
 ![Changing relief direction example with gj.SeriesMap](jupyter_series_map.png)
 
-## Time Series
+## Time series map
 
 The `gj.TimeSeriesMap` class provides a way to visualize
 GRASS' [space time datasets](temporalintro.md) in Jupyter. Here we create a time
@@ -247,7 +247,7 @@ flow_map.show()
 
 ![Water flow example with gj.TimeSeriesMap](jupyter_timeseries_map.png)
 
-## Python Library Documentation
+## Python library documentation
 
 For complete documentation on the `grass.jupyter` package, see the
 [grass.jupyter](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.jupyter.html)
@@ -257,4 +257,4 @@ library documentation page.
 
 - [Get started with GRASS in Jupyter Notebooks on Windows](https://grass-tutorials.osgeo.org/content/tutorials/get_started/JupyterOnWindows_OSGeo4W_Tutorial.html)
 - [Get started with GRASS & Python in Jupyter Notebooks (Unix/Linux)](https://grass-tutorials.osgeo.org/content/tutorials/get_started/fast_track_grass_and_python.html)
-- [Get started with GRASS GIS in Google Colab](https://grass-tutorials.osgeo.org/content/tutorials/get_started/grass_gis_in_google_colab.html)
+- [Get started with GRASS in Google Colab](https://grass-tutorials.osgeo.org/content/tutorials/get_started/grass_gis_in_google_colab.html)
