@@ -151,7 +151,8 @@ def generate_page_for_category(
                 module_family = "3D raster"
             output.write(
                 modclass_intro_tmpl.substitute(
-                    modclass=module_family, modclass_lower=module_family.lower()
+                    modclass=to_title(module_family),
+                    modclass_lower=module_family.lower(),
                 )
             )
         if module_family == "wxGUI":

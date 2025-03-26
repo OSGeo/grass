@@ -24,7 +24,7 @@ with the software. The most common interfaces are:
 - [Jupyter Notebooks](jupyter_intro.md)
 - [Graphical user interface](helptext.md)
 
-## Processing Tools
+## Tools
 
 GRASS provides a wide range of tools for geospatial processing, modeling,
 analysis, and visualization. The tools are organized into categories based
@@ -40,14 +40,14 @@ matter (e.g. hydrology, landscape).
 |--------|-----------------------------------|------------------------------------|
 | `g.`   | [General](general.md)             | General GIS management tools       |
 | `r.`   | [Raster](raster.md)               | Raster data processing tools       |
-| `r3.`  | [3D Raster](raster3d.md)          | 3D Raster data processing tools    |
+| `r3.`  | [3D raster](raster3d.md)          | 3D Raster data processing tools    |
 | `v.`   | [Vector](vector.md)               | Vector data processing tools       |
 | `i.`   | [Imagery](imagery.md)             | Imagery processing tools           |
 | `t.`   | [Temporal](temporal.md)           | Temporal data processing tools     |
 | `db.`  | [Database](database.md)           | Database management tools          |
 | `d.`   | [Display](display.md)             | Display and visualization tools    |
 | `m.`   | [Miscellaneous](miscellaneous.md) | Miscellaneous tools                |
-| `ps.`  | [Postscript](postscript.md)       | Postscript tools                   |
+| `ps.`  | [PostScript](postscript.md)       | PostScript tools                   |
 
 ## Development
 
