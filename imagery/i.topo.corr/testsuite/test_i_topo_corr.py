@@ -1,4 +1,4 @@
-from grass.script import core
+import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -172,25 +172,25 @@ class TestITopoCorr(TestCase):
         )
         output_map = f"{self.output_corrected}.{self.input_reflectance}"
 
-        orig_stats = core.parse_command(
-            "r.univar", map=self.input_reflectance, flags="g"
+        orig_stats = gs.parse_command(
+            "r.univar", map=self.input_reflectance, format="json"
         )
-        corr_stats = core.parse_command("r.univar", map=output_map, flags="g")
+        corr_stats = gs.parse_command("r.univar", map=output_map, format="json")
         self.assertAlmostEqual(
-            float(orig_stats["min"]),
-            float(corr_stats["min"]),
+            orig_stats[0]["min"],
+            corr_stats[0]["min"],
             delta=1e-2,
             msg="Min value not preserved.",
         )
         self.assertAlmostEqual(
-            float(orig_stats["max"]),
-            float(corr_stats["max"]),
+            orig_stats[0]["max"],
+            corr_stats[0]["max"],
             delta=1e-2,
             msg="Max value not preserved",
         )
 
-        orig_colors = core.parse_command("r.colors.out", map=self.input_reflectance)
-        corr_colors = core.parse_command("r.colors.out", map=output_map)
+        orig_colors = gs.parse_command("r.colors.out", map=self.input_reflectance)
+        corr_colors = gs.parse_command("r.colors.out", map=output_map)
         self.assertEqual(orig_colors, corr_colors, "Color rules not copied")
 
     def test_linearity(self):
@@ -215,10 +215,10 @@ class TestITopoCorr(TestCase):
                 method="cosine",
                 overwrite=True,
             )
-            stats = core.parse_command(
-                "r.univar", map=f"{output_name}.{scaled_input}", flags="g"
+            stats = gs.parse_command(
+                "r.univar", map=f"{output_name}.{scaled_input}", format="json"
             )
-            results.append(float(stats["mean"]))
+            results.append(stats[0]["mean"])
         self.assertAlmostEqual(
             results[1] / results[0], scales[1] / scales[0], delta=1e-6
         )
