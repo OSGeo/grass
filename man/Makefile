@@ -23,6 +23,7 @@ DSTFILES := \
 	$(MDDIR)/overrides/partials/footer.html \
 	$(MDDIR)/overrides/partials/actions.html \
 	$(MDDIR)/overrides/partials/source.html \
+	$(MDDIR)/overrides/fragments/tags/default/listing.html \
 	$(MDDIR)/source/keywords.md \
 	$(MDDIR)/source/development_intro.md \
 	$(MDDIR)/source/interfaces_overview.md \
@@ -296,6 +297,12 @@ $(MDDIR)/overrides/partials/source.html: mkdocs/overrides/partials/source.html |
 
 $(MDDIR)/overrides/partials:
 	$(MKDIR) $@
+
+$(MDDIR)/overrides/fragments/tags/default:
+	$(MKDIR) $@
+
+$(MDDIR)/overrides/fragments/tags/default/listing.html: mkdocs/overrides/fragments/tags/default/listing.html | $(MDDIR)/overrides/fragments/tags/default
+	$(INSTALL_DATA) $< $@
 
 build-mkdocs:
 	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
