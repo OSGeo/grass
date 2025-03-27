@@ -118,15 +118,13 @@ jobs:
           mkdir "$MKDOCS_DIR/source/addons"
           mv -v addons-build-dir/docs/md/source/* "$MKDOCS_DIR/source/addons"
 
-      - name: Build index and rebuild keywords
+      - name: Build index
         run: |
           export ARCH="$(grass --config arch)"
           export ARCH_DISTDIR="$(grass --config path)"
           export VERSION_NUMBER="$VERSION"
           grass --tmp-project XY --exec \
             python grass/man/build_full_index.py md index "$MKDOCS_DIR/source/addons" addons
-          grass --tmp-project XY --exec \
-            python grass/man/build_keywords.py md "$MKDOCS_DIR/source" "$MKDOCS_DIR/source/addons"
 
       - name: Copy shared files to addons
         run: |

@@ -23,7 +23,8 @@ DSTFILES := \
 	$(MDDIR)/overrides/partials/footer.html \
 	$(MDDIR)/overrides/partials/actions.html \
 	$(MDDIR)/overrides/partials/source.html \
-	$(MDDIR)/source/tags.md \
+	$(MDDIR)/overrides/fragments/tags/default/listing.html \
+	$(MDDIR)/source/keywords.md \
 	$(MDDIR)/source/development_intro.md \
 	$(MDDIR)/source/interfaces_overview.md \
 	$(MDDIR)/source/jupyter_intro.md \
@@ -50,7 +51,7 @@ IDXSRC = full_index index topics keywords graphical_index manual_gallery class_g
 
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
-IDXSRC_MD = full_index index topics keywords graphical_index manual_gallery class_graphical parser_standard_options $(IDXCATS)
+IDXSRC_MD = full_index index topics graphical_index manual_gallery class_graphical parser_standard_options $(IDXCATS)
 INDICES_MD := $(patsubst %,$(MDDIR)/source/%.md,$(IDXSRC_MD))
 
 ALL_HTML := $(wildcard $(HTMLDIR)/*.*.html)
@@ -170,10 +171,6 @@ $(HTMLDIR)/keywords.html: $(ALL_HTML)
 	$(call build_keywords)
 	touch $@
 
-$(MDDIR)/source/keywords.md: $(ALL_MD)
-	$(call build_keywords)
-	touch $@
-
 $(HTMLDIR)/graphical_index.html: $(ALL_HTML)
 	$(call build_graphical_index)
 	touch $@
@@ -265,7 +262,7 @@ $(MDDIR)/source/favicon.ico: favicon.ico
 $(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/tags.md: mkdocs/tags.md
+$(MDDIR)/source/keywords.md: mkdocs/keywords.md
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/development_intro.md: mkdocs/docs/development_intro.md
@@ -300,6 +297,12 @@ $(MDDIR)/overrides/partials/source.html: mkdocs/overrides/partials/source.html |
 
 $(MDDIR)/overrides/partials:
 	$(MKDIR) $@
+
+$(MDDIR)/overrides/fragments/tags/default:
+	$(MKDIR) $@
+
+$(MDDIR)/overrides/fragments/tags/default/listing.html: mkdocs/overrides/fragments/tags/default/listing.html | $(MDDIR)/overrides/fragments/tags/default
+	$(INSTALL_DATA) $< $@
 
 build-mkdocs:
 	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \

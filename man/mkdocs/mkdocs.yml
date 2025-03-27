@@ -85,6 +85,7 @@ plugins:
   - glightbox
   - tags:
       tags_name_property: keywords
+      tags_slugify_format: "{slug}"
   - social:
       cards_layout_options:
         background_color: rgb(76, 176, 91)
