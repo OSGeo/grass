@@ -206,7 +206,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
     def _updateGeneralInfoBox(self, command_info):
         """Update general info box with error message if command failed."""
 
-    self.sizer_general_info.Clear(True)
+        self.sizer_general_info.Clear(True)
 
     idx = 0
     for key, value in command_info.items():
