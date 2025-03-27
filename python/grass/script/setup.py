@@ -107,7 +107,7 @@ def write_gisrc(dbase, location, mapset):
 
 def set_gui_path():
     """Insert wxPython GRASS path to sys.path."""
-    gui_path = os.path.join(os.environ["GISBASE"], "gui", "wxpython")
+    gui_path = os.environ["GRASS_GUIWXDIR"]
     if gui_path and gui_path not in sys.path:
         sys.path.insert(0, gui_path)
 
