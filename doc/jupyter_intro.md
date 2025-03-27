@@ -4,7 +4,7 @@ authors:
     - GRASS Development Team
 ---
 
-# Jupyter notebooks
+# Jupyter notebooks introduction
 
 The `grass.jupyter` Python package provides a [Jupyter](https://jupyter.org/)
 notebook interface to GRASS. It includes modules for creating map figures,

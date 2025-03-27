@@ -4,7 +4,7 @@ authors:
     - GRASS Development Team
 ---
 
-# Jupyter notebooks
+# Get started with Jupyter notebooks
 
 Jupyter notebooks provide an interactive environment for writing and running code,
 combining text, code, and visualizations in a single document.
