@@ -988,8 +988,12 @@ int module_gui_wx(void)
     if (!st->pgm_path)
         G_fatal_error(_("Unable to determine program name"));
 
-    snprintf(script, GPATH_MAX, "%s/gui/wxpython/gui_core/forms.py",
-             getenv("GISBASE"));
+    const char *wxdir = getenv("GRASS_GUIWXDIR");
+    if (!wxdir)
+        G_fatal_error(_("Incomplete GRASS session: Variable '%s' not set"),
+                      "GRASS_GUIWXDIR");
+
+    snprintf(script, GPATH_MAX, "%s/gui_core/forms.py", wxdir);
     if (access(script, F_OK) != -1)
         G_spawn(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), script,
                 G_recreate_command_original_path(), NULL);
