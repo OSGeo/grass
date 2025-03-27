@@ -34,19 +34,17 @@ def build_class(ext):
 
     filename = modclass + f".{ext}"
     with open(filename + ".tmp", "w") as f:
+        modclass_lower = modclass.lower()
+        # convert keyword to nice form
+        modclass_visible = "3D raster" if modclass_lower == "raster3d" else modclass
         write_header(
             f,
-            "{} modules - GRASS GIS {} Reference Manual".format(
-                modclass.capitalize(), grass_version
+            "{} tools - GRASS GIS {} Reference Manual".format(
+                to_title(modclass_visible), grass_version
             ),
             template=ext,
         )
-        modclass_lower = modclass.lower()
-        modclass_visible = modclass
         if modclass_lower not in no_intro_page_classes:
-            if modclass_visible == "raster3d":
-                # convert keyword to nice form
-                modclass_visible = "3D raster"
             f.write(
                 modclass_intro_tmpl.substitute(
                     modclass=modclass_visible, modclass_lower=modclass_lower

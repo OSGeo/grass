@@ -224,10 +224,8 @@ def build_keywords(ext, main_path, addons_path):
 
 def main():
     if len(sys.argv) == 1:
-        # Usage according to a Makefile in core after the initial Markdown doc
-        # implementation.
+        # Build only HTML by default.
         build_keywords("html", main_path=None, addons_path=None)
-        build_keywords("md", main_path=None, addons_path=None)
         return
 
     if len(sys.argv) >= 2:
