@@ -16,7 +16,6 @@ from build import (
     get_files,
     write_footer,
     write_header,
-    to_title,
     grass_version,
     grass_version_major,
     grass_version_minor,
@@ -25,7 +24,7 @@ from build import (
 )
 
 CORE_TEXT = """\
-# Processing Tools
+# Tools
 """
 
 ADDONS_TEXT = """\
@@ -82,23 +81,28 @@ def build_full_index(ext, index_name, source_dir, year, text_type):
 
     # TODO: create some master function/dict somewhere
     class_labels = {
-        "d": "display",
-        "db": "database",
-        "g": "general",
-        "i": "imagery",
-        "m": "miscellaneous",
+        "d": "Display",
+        "db": "Database",
+        "g": "General",
+        "i": "Imagery",
+        "m": "Miscellaneous",
         "ps": "PostScript",
-        "r": "raster",
+        "r": "Raster",
         "r3": "3D raster",
-        "t": "temporal",
-        "v": "vector",
+        "t": "Temporal",
+        "v": "Vector",
     }
+
+    ignore_classes = ["test"]
 
     classes = []
     for cmd in get_files(source_dir, "*", extension=ext):
         prefix = cmd.split(".")[0]
+        if prefix in ignore_classes:
+            continue
         if prefix not in [item[0] for item in classes]:
             classes.append((prefix, class_labels.get(prefix, prefix)))
+    # Sort by prefix.
     classes.sort(key=itemgetter(0))
 
     # begin full index:
@@ -132,7 +136,7 @@ def build_full_index(ext, index_name, source_dir, year, text_type):
 
         # for all module groups:
         for cls, cls_label in classes:
-            f.write(cmd2_tmpl.substitute(cmd_label=to_title(cls_label), cmd=cls))
+            f.write(cmd2_tmpl.substitute(cmd_label=cls_label, cmd=cls))
             # for all modules:
             for cmd in get_files(source_dir, cls, extension=ext):
                 basename = os.path.splitext(cmd)[0]
