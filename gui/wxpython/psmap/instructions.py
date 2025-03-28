@@ -58,6 +58,9 @@ from psmap.utils import (  # Add any additional required names from psmap.utils 
     projInfo,
 )
 
+# Import Path from pathlib at the top of the file if not already there
+from pathlib import Path
+
 
 def NewId():
     return int(wxNewId())
@@ -152,14 +155,14 @@ class Instruction:
         self.filename = filename
         # open file
         try:
-            file = open(filename, encoding="Latin_1", errors="ignore")
+            content = Path(filename).read_text(encoding="Latin_1", errors="ignore")
         except OSError:
             GError(message=_("Unable to open file\n%s") % filename)
             return None
         # first read file to get information about region and scaletype
         isRegionComment = False
         orientation = "Portrait"
-        for line in file:
+        for line in content.split("\n"):
             if "# g.region" in line:
                 self.SetRegion(regionInstruction=line)
                 isRegionComment = True
@@ -195,8 +198,7 @@ class Instruction:
         buffer = []
         instruction = None
         vectorMapNumber = 1
-        file.seek(0)
-        for line in file:
+        for line in content.split("\n"):
             if not line.strip():
                 continue
             line = line.strip()
