@@ -166,7 +166,7 @@ def build_topics(ext):
                     keyfile.write(
                         "*See also the corresponding keyword"
                         " for additional references:*\n"
-                        "\n<!-- material/tags {{ include: [{key}] }} -->\n".format(
+                        "\n<!-- topic_keyword {{ include: [{key}] }} -->\n".format(
                             key=key,
                         )
                     )
