@@ -39,15 +39,13 @@ def build_class(ext):
         modclass_visible = "3D raster" if modclass_lower == "raster3d" else modclass
         write_header(
             f,
-            "{} tools - GRASS GIS {} Reference Manual".format(
-                to_title(modclass_visible), grass_version
-            ),
+            "{} tools".format(to_title(modclass_visible)),
             template=ext,
         )
         if modclass_lower not in no_intro_page_classes:
             f.write(
                 modclass_intro_tmpl.substitute(
-                    modclass=modclass_visible, modclass_lower=modclass_lower
+                    modclass=to_title(modclass_visible), modclass_lower=modclass_lower
                 )
             )
         f.write(modclass_tmpl.substitute(modclass=to_title(modclass_visible)))
@@ -76,7 +74,6 @@ if __name__ == "__main__":
         year = sys.argv[3]
 
     from build import (
-        grass_version,
         to_title,
         check_for_desc_override,
         replace_file,
