@@ -135,8 +135,10 @@ def write_footer(f, index_url, year=None, template="html"):
 
 def to_title(name):
     """Convert name of command class/family to form suitable for title"""
-    if name == "PostScript":
-        return name
+    if name.lower() == "postscript":
+        return "PostScript"
+    if name.lower() == "3d raster":
+        return "3D raster"
     return name.capitalize()
 
 

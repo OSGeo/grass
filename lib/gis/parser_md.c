@@ -25,7 +25,6 @@ static void print_flag(const char *key, const char *label,
 void print_option(const struct Option *opt);
 static void print_escaped(FILE *f, const char *str);
 static void print_escaped_for_md(FILE *f, const char *str);
-static void print_escaped_for_md_keywords(FILE *f, const char *str);
 static void print_escaped_for_md_options(FILE *f, const char *str);
 
 /*!
@@ -76,11 +75,6 @@ void G__usage_markdown(void)
     }
     fprintf(stdout, "\n");
     fprintf(stdout, "### ");
-    fprintf(stdout, "%s\n", _("KEYWORDS"));
-    fprintf(stdout, "\n");
-    if (st->module_info.keywords) {
-        G__print_keywords(stdout, print_escaped_for_md_keywords, TRUE);
-    }
     fprintf(stdout, "\n");
     fprintf(stdout, "### ");
     fprintf(stdout, "%s\n", _("SYNOPSIS"));
@@ -368,59 +362,6 @@ void print_escaped_for_md_options(FILE *f, const char *str)
             fputc(*s, f);
         }
     }
-}
-
-/* generate HTML links */
-void print_escaped_for_md_keywords(FILE *f, const char *str)
-{
-    /* removes all leading and trailing white space from keyword
-       string, as spotted in Japanese and other locales. */
-    char *str_s;
-    str_s = G_store(str);
-    G_strip(str_s);
-
-    /* HTML link only for second keyword = topic */
-    if (st->n_keys > 1 && strcmp(st->module_info.keywords[1], str) == 0) {
-
-        const char *s;
-
-        /* TODO: fprintf(f, _("topic: ")); */
-        fprintf(f, "[%s](topic_", str_s);
-        for (s = str_s; *s; s++) {
-            switch (*s) {
-                do_escape(' ', "_");
-            default:
-                fputc(*s, f);
-            }
-        }
-        fprintf(f, ".md)");
-    }
-    else { /* first and other than second keyword */
-        if (st->n_keys > 0 && strcmp(st->module_info.keywords[0], str) == 0) {
-            /* command family */
-            const char *s;
-
-            fprintf(f, "[%s](", str_s);
-            for (s = str_s; *s; s++) {
-                switch (*s) {
-                    do_escape(' ', "_");
-                default:
-                    fputc(*s, f);
-                }
-            }
-            fprintf(f, ".md)");
-        }
-        else {
-            /* keyword index, mkdocs expects dash */
-            char *str_link;
-            str_link = G_str_replace(str_s, " ", "-");
-            G_str_to_lower(str_link);
-            fprintf(f, "[%s](keywords.md#%s)", str_s, str_link);
-            G_free(str_link);
-        }
-    }
-
-    G_free(str_s);
 }
 
 #undef do_escape
