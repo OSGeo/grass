@@ -24,6 +24,8 @@ extend-exclude = ["python/libgrass_interface_generator"]
 
 [tool.ruff.lint]
 # See https://docs.astral.sh/ruff/rules/
+external = ["C2801"]
+
 select = [
     "A",      # flake8-builtins (A)
     "AIR",    # Airflow (AIR)
