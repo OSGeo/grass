@@ -2203,18 +2203,16 @@ class Color:
     @style.setter
     def style(self, value):
         if value not in self.styles:
-            raise ValueError(
-                "Color Style must be one of: {styles}".format(
-                    styles=", ".join(self.styles)
-                )
+            msg = "Color Style must be one of: {styles}".format(
+                styles=", ".join(self.styles)
             )
+            raise ValueError(msg)
         self._style = self.styles.index(value)
 
     def _parse_color(self, value):
         if value not in self.colors:
-            raise ValueError(
-                "Color must be one of: {colors}".format(colors=", ".join(self.colors))
-            )
+            msg = "Color must be one of: {colors}".format(colors=", ".join(self.colors))
+            raise ValueError(msg)
         return self.colors.index(value)
 
     def _color_to_string(self, value):
@@ -2283,12 +2281,11 @@ class Color:
             return s
 
         color_end = Color()
-        ret = "{color}{string}{end}".format(
+        return "{color}{string}{end}".format(
             color=self._ansi(raw=raw, escape=escape),
             string=s,
             end=color_end.raw(escape=escape),
         )
-        return ret
 
 
 class Colors:
