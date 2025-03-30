@@ -1071,9 +1071,8 @@ def load_color_config(grass_config_dir):
     If there is no color config file, create a default color setup.
     """
     try:
-        f = open(os.path.join(grass_config_dir, "colors.json"))
-        colors = json.load(f)
-        f.close()
+        with open(os.path.join(grass_config_dir, "colors.json")) as f:
+            colors = json.load(f)
     except FileNotFoundError:
         # Return with default colors if color config doesn't exist
         return Colors()
