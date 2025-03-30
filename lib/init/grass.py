@@ -1839,17 +1839,21 @@ PROMPT_COMMAND=grass_prompt\n""".format(
 def default_startup(location, location_name, params):
     """Start shell making no assumptions about what is supported in PS1"""
 
-    os.environ[
-        "PS1"
-    ] = "┌Mapset <{mapset}> in <{location}>\n└{name} : {path} > ".format(
-        name=params.colors.get("grass").colorize("GRASS", params.no_color, raw=True),
-        path=params.colors.get("path").colorize("${PWD}", params.no_color, raw=True),
-        mapset=params.colors.get("mapset").colorize(
-            "$(g.gisenv get=MAPSET)", params.no_color, raw=True
-        ),
-        location=params.colors.get("location").colorize(
-            "$(g.gisenv get=LOCATION_NAME)", params.no_color, raw=True
-        ),
+    os.environ["PS1"] = (
+        "┌Mapset <{mapset}> in <{location}>\n└{name} : {path} > ".format(
+            name=params.colors.get("grass").colorize(
+                "GRASS", params.no_color, raw=True
+            ),
+            path=params.colors.get("path").colorize(
+                "${PWD}", params.no_color, raw=True
+            ),
+            mapset=params.colors.get("mapset").colorize(
+                "$(g.gisenv get=MAPSET)", params.no_color, raw=True
+            ),
+            location=params.colors.get("location").colorize(
+                "$(g.gisenv get=LOCATION_NAME)", params.no_color, raw=True
+            ),
+        )
     )
     return start_shell()
 
