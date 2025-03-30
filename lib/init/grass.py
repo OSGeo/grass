@@ -1488,7 +1488,6 @@ def close_gui():
 
 def show_banner(params):
     """Write GRASS GIS ASCII name to stderr"""
-
     banner = r"""
           __________  ___   __________    _______________
          / ____/ __ \/   | / ___/ ___/   / ____/  _/ ___/
