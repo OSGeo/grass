@@ -233,3 +233,9 @@ class Map3D:
         from IPython.display import Image, display  # pylint: disable=import-outside-toplevel
 
         display(Image(self._filename))
+
+    def save(self, filename):
+        """Saves a PNG image of map3d to the specified *filename*"""        
+        img = Image.open(self._filename)
+        img.save(filename)
+    
