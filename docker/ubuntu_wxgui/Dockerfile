@@ -70,6 +70,7 @@ RUN apt-get update && apt-get upgrade -y && \
     libpython3-all-dev \
     libreadline-dev \
     librsvg2-common \
+    libsecret-1-0 \
     libsdl2-2.0-0 \
     libsqlite3-dev \
     libtiff-dev \
