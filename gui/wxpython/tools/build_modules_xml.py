@@ -22,7 +22,7 @@ from grass.exceptions import ScriptError
 def escapeXML(text):
     """This is a duplicate of function in core/toolboxes.
 
-    >>> escapeXML('<>&')
+    >>> escapeXML("<>&")
     '&amp;lt;&gt;&amp;'
     """
     return text.replace("<", "&lt;").replace("&", "&amp;").replace(">", "&gt;")
@@ -55,7 +55,7 @@ def parse_modules(fd):
     indent = 4
     for m in sorted(mlist):
         # TODO: get rid of g.mapsets_picker.py
-        if m == "g.mapsets_picker.py" or m == "g.parser":
+        if m in {"g.mapsets_picker.py", "g.parser"}:
             continue
         desc, keyw = get_module_metadata(m)
         fd.write('%s<module-item name="%s">\n' % (" " * indent, m))
@@ -70,13 +70,13 @@ def parse_modules(fd):
 
 
 def get_module_metadata(name):
-    """
+    """Gets the module's metadata for a given module name
 
-    >>> get_module_metadata('g.region')
+    >>> get_module_metadata("g.region")
     ('Manages the boundary definitions for the geographic region.', ['general', 'settings'])
-    >>> get_module_metadata('m.proj')
+    >>> get_module_metadata("m.proj")
     ('Converts coordinates from one projection to another (cs2cs frontend).', ['miscellaneous', 'projection'])
-    """
+    """  # noqa: E501
     try:
         task = gtask.parse_interface(name)
     except ScriptError as exc:

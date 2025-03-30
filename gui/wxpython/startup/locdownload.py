@@ -32,35 +32,38 @@ from grass.script.setup import set_gui_path
 
 set_gui_path()
 
+# flake8: noqa: E402
 from core.debug import Debug
 from core.gthread import gThread
 from gui_core.wrap import Button, StaticText
+
+# flakes8: qa
 
 
 # TODO: labels (and descriptions) translatable?
 LOCATIONS = [
     {
-        "label": "Complete NC location",
-        "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_spm_08_grass7.tar.gz",
+        "label": "Complete North Carolina dataset",
+        "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_spm_08_grass7.tar.gz",  # noqa: E501
     },
     {
-        "label": "Basic NC location",
-        "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.tar.gz",
+        "label": "Basic North Carolina dataset",
+        "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.tar.gz",  # noqa: E501
     },
     {
-        "label": "World location in LatLong/WGS84",
+        "label": "World dataset in LatLong/WGS84",
         "url": "https://grass.osgeo.org/sampledata/worldlocation.tar.gz",
     },
     {
-        "label": "Spearfish (SD) location",
+        "label": "Spearfish (SD) dataset",
         "url": "https://grass.osgeo.org/sampledata/spearfish_grass70data-0.3.tar.gz",
     },
     {
-        "label": "Piemonte, Italy data set",
-        "url": "http://geodati.fmach.it/gfoss_geodata/libro_gfoss/grassdata_piemonte_utm32n_wgs84_grass7.tar.gz",
+        "label": "Piemonte, Italy dataset",
+        "url": "https://grass.osgeo.org/sampledata/grassdata_piemonte_utm32n_wgs84_grass7.tar.gz",  # noqa: E501
     },
     {
-        "label": "Slovakia 3D precipitation voxel data set",
+        "label": "Slovakia 3D precipitation voxel dataset",
         "url": "https://grass.osgeo.org/sampledata/slovakia3d_grass7.tar.gz",
     },
     {
@@ -68,13 +71,13 @@ LOCATIONS = [
         "url": "https://grass.osgeo.org/sampledata/fire_grass6data.tar.gz",
     },
     {
-        "label": "GISMentors location, Czech Republic",
+        "label": "GISMentors dataset, Czech Republic",
         "url": "http://training.gismentors.eu/geodata/grass/gismentors.zip",
     },
     {
         "label": "Natural Earth Dataset in WGS84",
-        "url": "https://zenodo.org/record/3968936/files/natural-earth-dataset.tar.gz",
-        "size": "207 MB",
+        "url": "https://zenodo.org/records/13370131/files/natural_earth_dataset.zip",
+        "size": "121.3 MB",
         "epsg": "4326",
         "license": "ODC Public Domain Dedication and License 1.0",
         "maintainer": "Brendan Harmon (brendan.harmon@gmail.com)",
@@ -90,11 +93,11 @@ class RedirectText:
         try:
             if self.out:
                 string = self._wrap_string(string)
-                heigth = self._get_heigth(string)
+                height = self._get_height(string)
                 wx.CallAfter(self.out.SetLabel, string)
-                self._resize(heigth)
-        except:
-            # window closed -> PyDeadObjectError
+                self._resize(height)
+        except (RuntimeError, AttributeError):
+            # window closed or destroyed
             pass
 
     def flush(self):
@@ -111,33 +114,34 @@ class RedirectText:
         wrapper = textwrap.TextWrapper(width=width)
         return wrapper.fill(text=string)
 
-    def _get_heigth(self, string):
-        """Get widget new heigth
+    def _get_height(self, string):
+        """Get widget new height
 
         :param str string: input string
 
-        :return int: widget heigth
+        :return int: widget height
         """
         n_lines = string.count("\n")
         attr = self.out.GetClassDefaultAttributes()
         font_size = attr.font.GetPointSize()
-        heigth = int((n_lines + 2) * font_size // 0.75)  # 1 px = 0.75 pt
-        return heigth
+        return int((n_lines + 2) * font_size // 0.75)  # 1 px = 0.75 pt
 
-    def _resize(self, heigth=-1):
-        """Resize widget heigth
+    def _resize(self, height=-1):
+        """Resize widget height
 
-        :param int heigth: widget heigth
+        :param int height: widget height
         """
         wx.CallAfter(self.out.GetParent().SetMinSize, (-1, -1))
-        wx.CallAfter(self.out.SetMinSize, (-1, heigth))
+        wx.CallAfter(self.out.SetMinSize, (-1, height))
         wx.CallAfter(
             self.out.GetParent().parent.sizer.Fit,
             self.out.GetParent().parent,
         )
 
 
-# based on https://blog.shichao.io/2012/10/04/progress_speed_indicator_for_urlretrieve_in_python.html
+# based on
+# https://blog.shichao.io/2012/10/04/
+# progress_speed_indicator_for_urlretrieve_in_python.html
 def reporthook(count, block_size, total_size):
     global start_time
     if count == 0:
@@ -155,12 +159,12 @@ def reporthook(count, block_size, total_size):
     sys.stdout.write(
         _(
             "Download in progress, wait until it is finished "
-            "{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed".format(
-                percent,
-                progress_size / (1024 * 1024),
-                speed,
-                duration,
-            ),
+            "{0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed"
+        ).format(
+            percent,
+            progress_size / (1024 * 1024),
+            speed,
+            duration,
         ),
     )
 
@@ -176,7 +180,7 @@ def download_location(url, name, database):
         directory = download_and_extract(source=url, reporthook=reporthook)
         destination = os.path.join(database, name)
         if not is_location_valid(directory):
-            return _("Downloaded location is not valid")
+            return _("Downloaded project is not valid")
         shutil.copytree(src=directory, dst=destination)
         try_rmdir(directory)
     except DownloadError as error:
@@ -221,15 +225,13 @@ class LocationDownloadPanel(wx.Panel):
         self.database = database
         self.locations = locations
         self._abort_btn_label = _("Abort")
-        self._abort_btn_tooltip = _("Abort download location")
+        self._abort_btn_tooltip = _("Abort download")
 
         self.label = StaticText(
-            parent=self, label=_("Select sample location to download:")
+            parent=self, label=_("Select sample project to download:")
         )
 
-        choices = []
-        for item in self.locations:
-            choices.append(item["label"])
+        choices = [item["label"] for item in self.locations]
         self.choice = wx.Choice(parent=self, choices=choices)
 
         self.choice.Bind(wx.EVT_CHOICE, self.OnChangeChoice)
@@ -243,7 +245,8 @@ class LocationDownloadPanel(wx.Panel):
 
         # It is not clear if all wx versions supports color, so try-except.
         # The color itself may not be correct for all platforms/system settings
-        # but in http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
+        # but in
+        # http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
         # there is no 'warning' color.
         try:
             self.message.SetForegroundColour(wx.Colour(255, 0, 0))
@@ -289,7 +292,7 @@ class LocationDownloadPanel(wx.Panel):
         self.SetMinSize(self.GetBestSize())
 
     def _change_download_btn_label(
-        self, label=_("Do&wnload"), tooltip=_("Download selected location")
+        self, label=_("Do&wnload"), tooltip=_("Download selected project")
     ):
         """Change download button label/tooltip"""
         if self.parent.download_button:
@@ -299,7 +302,7 @@ class LocationDownloadPanel(wx.Panel):
     def OnDownload(self, event):
         """Handle user-initiated action of download"""
         button_label = self.parent.download_button.GetLabel()
-        if button_label in (_("Download"), _("Do&wnload")):
+        if button_label in {_("Download"), _("Do&wnload")}:
             self._change_download_btn_label(
                 label=self._abort_btn_label,
                 tooltip=self._abort_btn_tooltip,
@@ -321,7 +324,9 @@ class LocationDownloadPanel(wx.Panel):
         destination = os.path.join(self.database, dirname)
         if os.path.exists(destination):
             self._error(
-                _("Location named <%s> already exists," " download canceled") % dirname
+                _(
+                    "Project name {name} already exists in {path}, download canceled"
+                ).format(name=dirname, path=self.database)
             )
             self._change_download_btn_label()
             return
@@ -335,8 +340,8 @@ class LocationDownloadPanel(wx.Panel):
                 self._last_downloaded_location_name = dirname
                 self._warning(
                     _(
-                        "Download completed. The downloaded sample data is listed "
-                        "in the location/mapset tabs upon closing of this window"
+                        "Download completed. The downloaded sample data is available "
+                        "now in the data tree"
                     )
                 )
             self._change_download_btn_label()
@@ -376,12 +381,13 @@ class LocationDownloadPanel(wx.Panel):
         destination = os.path.join(self.database, dirname)
         if os.path.exists(destination):
             self._warning(
-                _("Location named <%s> already exists," " rename it first") % dirname
+                _("Project named {name} already exists, rename it first").format(
+                    name=dirname
+                )
             )
             self.parent.download_button.SetLabel(label=_("Download"))
             return
-        else:
-            self._clearMessage()
+        self._clearMessage()
 
     def GetLocation(self):
         """Get the name of the last location downloaded by the user"""
@@ -429,15 +435,15 @@ class LocationDownloadDialog(wx.Dialog):
     Contains the panel and Cancel button.
     """
 
-    def __init__(self, parent, database, title=_("Location Download")):
+    def __init__(self, parent, database, title=_("Dataset Download")):
         """
-        :param database: database to download the location to
+        :param database: database to download the project (location) to
         :param title: window title if the default is not appropriate
         """
         wx.Dialog.__init__(self, parent=parent, title=title)
         cancel_button = Button(self, id=wx.ID_CANCEL)
         self.download_button = Button(parent=self, id=wx.ID_ANY, label=_("Do&wnload"))
-        self.download_button.SetToolTip(_("Download selected location"))
+        self.download_button.SetToolTip(_("Download selected dataset"))
         self.panel = LocationDownloadPanel(parent=self, database=database)
         cancel_button.Bind(wx.EVT_BUTTON, self.OnCancel)
         self.Bind(wx.EVT_CLOSE, self.OnCancel)
@@ -480,7 +486,7 @@ class LocationDownloadDialog(wx.Dialog):
             # running thread
             dlg = wx.MessageDialog(
                 parent=self,
-                message=_("Do you want to cancel location download?"),
+                message=_("Do you want to cancel dataset download?"),
                 caption=_("Abort download"),
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
@@ -490,9 +496,8 @@ class LocationDownloadDialog(wx.Dialog):
 
             if ret == wx.ID_NO:
                 return
-            else:
-                self.panel.thread.Terminate()
-                self.panel._change_download_btn_label()
+            self.panel.thread.Terminate()
+            self.panel._change_download_btn_label()
 
         if event:
             self.EndModal(wx.ID_CANCEL)

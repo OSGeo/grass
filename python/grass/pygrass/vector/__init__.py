@@ -1,22 +1,25 @@
 from os.path import join, exists
 import grass.lib.gis as libgis
-
-libgis.G_gisinit("")
-import grass.lib.vector as libvect
 import ctypes
 
-#
-# import pygrass modules
-#
+
+# flake8: noqa: E402
+libgis.G_gisinit("")
+
+import grass.lib.vector as libvect
 from grass.pygrass.vector.vector_type import VTYPE
 from grass.pygrass.errors import GrassError, must_be_open
 from grass.pygrass.gis import Location
-
-from grass.pygrass.vector.geometry import GEOOBJ as _GEOOBJ
-from grass.pygrass.vector.geometry import read_line, read_next_line
-from grass.pygrass.vector.geometry import Area as _Area
+from grass.pygrass.vector.geometry import (
+    GEOOBJ as _GEOOBJ,
+    read_line,
+    read_next_line,
+    Area as _Area,
+)
 from grass.pygrass.vector.abstract import Info
 from grass.pygrass.vector.basic import Bbox, Cats, Ilist
+
+# flake8: qa
 
 
 _NUMOF = {
@@ -71,21 +74,20 @@ class Vector(Info):
     def __repr__(self):
         if self.exist():
             return "%s(%r, %r)" % (self._class_name, self.name, self.mapset)
-        else:
-            return "%s(%r)" % (self._class_name, self.name)
+        return "%s(%r)" % (self._class_name, self.name)
 
     def __iter__(self):
         """::
 
             >>> test_vect = Vector(test_vector_name)
-            >>> test_vect.open(mode='r')
+            >>> test_vect.open(mode="r")
             >>> features = [feature for feature in test_vect]
             >>> features[:3]
             [Point(10.000000, 6.000000), Point(12.000000, 6.000000), Point(14.000000, 6.000000)]
             >>> test_vect.close()
 
         ..
-        """
+        """  # noqa: E501
         # return (self.read(f_id) for f_id in xrange(self.num_of_features()))
         return self
 
@@ -94,7 +96,7 @@ class Vector(Info):
         """::
 
             >>> test_vect = Vector(test_vector_name)
-            >>> test_vect.open(mode='r')
+            >>> test_vect.open(mode="r")
             >>> test_vect.next()
             Point(10.000000, 6.000000)
             >>> test_vect.next()
@@ -109,13 +111,14 @@ class Vector(Info):
 
     @must_be_open
     def next(self):
-        return self.__next__()
+        return next(self)
 
     @must_be_open
     def rewind(self):
         """Rewind vector map to cause reads to start at beginning."""
         if libvect.Vect_rewind(self.c_mapinfo) == -1:
-            raise GrassError("Vect_rewind raise an error.")
+            msg = "Vect_rewind raise an error."
+            raise GrassError(msg)
 
     @must_be_open
     def write(self, geo_obj, cat=None, attrs=None):
@@ -124,7 +127,7 @@ class Vector(Info):
         :param geo_obj: a geometry grass object define in
                         grass.pygrass.vector.geometry
         :type geo_obj: geometry GRASS object
-        :param attrs: a list with the values that will be insert in the
+        :param attrs: a list with the values that will be inserted in the
                       attribute table.
         :type attrs: list
         :param cat: The category of the geometry feature, otherwise the
@@ -133,18 +136,17 @@ class Vector(Info):
 
         Open a new vector map ::
 
-            >>> new = VectorTopo('newvect')
+            >>> new = VectorTopo("newvect")
             >>> new.exist()
             False
 
         define the new columns of the attribute table ::
 
-            >>> cols = [(u'cat',       'INTEGER PRIMARY KEY'),
-            ...         (u'name',      'TEXT')]
+            >>> cols = [("cat", "INTEGER PRIMARY KEY"), ("name", "TEXT")]
 
         open the vector map in write mode
 
-            >>> new.open('w', tab_name='newvect', tab_cols=cols)
+            >>> new.open("w", tab_name="newvect", tab_cols=cols)
 
         import a geometry feature ::
 
@@ -157,8 +159,8 @@ class Vector(Info):
 
         then write the two points on the map, with ::
 
-            >>> new.write(point0, cat=1, attrs=('pub',))
-            >>> new.write(point1, cat=2, attrs=('resturant',))
+            >>> new.write(point0, cat=1, attrs=("pub",))
+            >>> new.write(point1, cat=2, attrs=("resturant",))
 
         commit the db changes ::
 
@@ -174,14 +176,14 @@ class Vector(Info):
 
         then play with the map ::
 
-            >>> new.open(mode='r')
+            >>> new.open(mode="r")
             >>> new.read(1)
             Point(0.000000, 0.000000)
             >>> new.read(2)
             Point(1.000000, 1.000000)
-            >>> new.read(1).attrs['name']
+            >>> new.read(1).attrs["name"]
             'pub'
-            >>> new.read(2).attrs['name']
+            >>> new.read(2).attrs["name"]
             'resturant'
             >>> new.close()
             >>> new.remove()
@@ -208,10 +210,7 @@ class Vector(Info):
         if cat is not None and cat not in self._cats:
             self._cats.append(cat)
             if self.table is not None and attrs is not None:
-                attr = [
-                    cat,
-                ]
-                attr.extend(attrs)
+                attr = [cat, *attrs]
                 cur = self.table.conn.cursor()
                 cur.execute(self.table.columns.insert_str, attr)
                 cur.close()
@@ -227,7 +226,8 @@ class Vector(Info):
             self.c_mapinfo, geo_obj.gtype, geo_obj.c_points, geo_obj.c_cats
         )
         if result == -1:
-            raise GrassError("Not able to write the vector feature.")
+            msg = "Not able to write the vector feature."
+            raise GrassError(msg)
         if self._topo_level == 2:
             # return new feature id (on level 2)
             geo_obj.id = result
@@ -241,26 +241,26 @@ class Vector(Info):
         Color table stored in the vector's attribute table well be not checked
 
         >>> test_vect = Vector(test_vector_name)
-        >>> test_vect.open(mode='r')
+        >>> test_vect.open(mode="r")
         >>> test_vect.has_color_table()
         False
 
         >>> test_vect.close()
         >>> from grass.pygrass.utils import copy, remove
-        >>> copy(test_vector_name,'mytest_vect','vect')
+        >>> copy(test_vector_name, "mytest_vect", "vect")
         >>> from grass.pygrass.modules.shortcuts import vector as v
-        >>> v.colors(map='mytest_vect', color='population', column='value')
+        >>> v.colors(map="mytest_vect", color="population", column="value")
         Module('v.colors')
-        >>> mytest_vect = Vector('mytest_vect')
-        >>> mytest_vect.open(mode='r')
+        >>> mytest_vect = Vector("mytest_vect")
+        >>> mytest_vect.open(mode="r")
         >>> mytest_vect.has_color_table()
         True
         >>> mytest_vect.close()
-        >>> remove('mytest_vect', 'vect')
+        >>> remove("mytest_vect", "vect")
         """
         loc = Location()
         path = join(loc.path(), self.mapset, "vector", self.name, "colr")
-        return True if exists(path) else False
+        return bool(exists(path))
 
 
 # =============================================
@@ -273,9 +273,9 @@ class VectorTopo(Vector):
 
     Open a vector map using the *with statement*: ::
 
-        >>> with VectorTopo(test_vector_name, mode='r') as test_vect:
+        >>> with VectorTopo(test_vector_name, mode="r") as test_vect:
         ...     for feature in test_vect[:7]:
-        ...         print(feature.attrs['name'])
+        ...         print(feature.attrs["name"])
         ...
         point
         point
@@ -301,26 +301,25 @@ class VectorTopo(Vector):
         """::
 
             >>> test_vect = VectorTopo(test_vector_name)
-            >>> test_vect.open(mode='r')
+            >>> test_vect.open(mode="r")
             >>> test_vect[:4]
             [Point(10.000000, 6.000000), Point(12.000000, 6.000000), Point(14.000000, 6.000000)]
             >>> test_vect.close()
 
         ..
-        """
+        """  # noqa: E501
         if isinstance(key, slice):
             return [
                 self.read(indx)
                 for indx in range(
-                    key.start if key.start else 1,
-                    key.stop if key.stop else len(self),
-                    key.step if key.step else 1,
+                    key.start or 1,
+                    key.stop or len(self),
+                    key.step or 1,
                 )
             ]
-        elif isinstance(key, int):
+        if isinstance(key, int):
             return self.read(key)
-        else:
-            raise ValueError("Invalid argument type: %r." % key)
+        raise ValueError("Invalid argument type: %r." % key)
 
     @must_be_open
     def num_primitive_of(self, primitive):
@@ -342,14 +341,14 @@ class VectorTopo(Vector):
         ::
 
             >>> test_vect = VectorTopo(test_vector_name)
-            >>> test_vect.open(mode='r')
-            >>> test_vect.num_primitive_of('point')
+            >>> test_vect.open(mode="r")
+            >>> test_vect.num_primitive_of("point")
             3
-            >>> test_vect.num_primitive_of('line')
+            >>> test_vect.num_primitive_of("line")
             3
-            >>> test_vect.num_primitive_of('centroid')
+            >>> test_vect.num_primitive_of("centroid")
             4
-            >>> test_vect.num_primitive_of('boundary')
+            >>> test_vect.num_primitive_of("boundary")
             11
             >>> test_vect.close()
 
@@ -369,7 +368,7 @@ class VectorTopo(Vector):
         :type vtype: str
 
             >>> test_vect = VectorTopo(test_vector_name)
-            >>> test_vect.open(mode='r')
+            >>> test_vect.open(mode="r")
             >>> test_vect.number_of("areas")
             4
             >>> test_vect.number_of("islands")
@@ -381,7 +380,7 @@ class VectorTopo(Vector):
             >>> test_vect.number_of("nodes")
             15
             >>> test_vect.number_of("pizza")
-            ...                     # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+            ... # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
             Traceback (most recent call last):
                 ...
             ValueError: vtype not supported, use one of: 'areas', ...
@@ -390,23 +389,18 @@ class VectorTopo(Vector):
 
         ..
         """
-        if vtype in _NUMOF.keys():
-            if isinstance(_NUMOF[vtype], tuple):
-                fn, ptype = _NUMOF[vtype]
-                return fn(self.c_mapinfo, ptype)
-            else:
-                return _NUMOF[vtype](self.c_mapinfo)
-        else:
+        if vtype not in _NUMOF.keys():
             keys = "', '".join(sorted(_NUMOF.keys()))
             raise ValueError("vtype not supported, use one of: '%s'" % keys)
+        if isinstance(_NUMOF[vtype], tuple):
+            fn, ptype = _NUMOF[vtype]
+            return fn(self.c_mapinfo, ptype)
+        return _NUMOF[vtype](self.c_mapinfo)
 
     @must_be_open
     def num_primitives(self):
         """Return dictionary with the number of all primitives"""
-        output = {}
-        for prim in VTYPE.keys():
-            output[prim] = self.num_primitive_of(prim)
-        return output
+        return {prim: self.num_primitive_of(prim) for prim in VTYPE.keys()}
 
     @must_be_open
     def viter(self, vtype, idonly=False):
@@ -421,9 +415,9 @@ class VectorTopo(Vector):
                        full features
         :type idonly: bool
 
-            >>> test_vect = VectorTopo(test_vector_name, mode='r')
-            >>> test_vect.open(mode='r')
-            >>> areas = [area for area in test_vect.viter('areas')]
+            >>> test_vect = VectorTopo(test_vector_name, mode="r")
+            >>> test_vect.open(mode="r")
+            >>> areas = [area for area in test_vect.viter("areas")]
             >>> areas[:3]
             [Area(1), Area(2), Area(3)]
 
@@ -431,16 +425,17 @@ class VectorTopo(Vector):
         to sort the result in a efficient way, use: ::
 
             >>> from operator import methodcaller as method
-            >>> areas.sort(key=method('area'), reverse=True)  # sort the list
+            >>> areas.sort(key=method("area"), reverse=True)  # sort the list
             >>> for area in areas[:3]:
             ...     print(area, area.area())
             Area(1) 12.0
             Area(2) 8.0
             Area(4) 8.0
 
-            >>> areas = [area for area in test_vect.viter('areas')]
+            >>> areas = [area for area in test_vect.viter("areas")]
             >>> for area in areas:
             ...     print(area.centroid().cat)
+            ...
             3
             3
             3
@@ -449,31 +444,30 @@ class VectorTopo(Vector):
             >>> test_vect.close()
         """
         is2D = not self.is_3D()
-        if vtype in _GEOOBJ.keys():
-            if _GEOOBJ[vtype] is not None:
-                ids = (indx for indx in range(1, self.number_of(vtype) + 1))
-                if idonly:
-                    return ids
-                return (
-                    _GEOOBJ[vtype](
-                        v_id=indx,
-                        c_mapinfo=self.c_mapinfo,
-                        table=self.table,
-                        writeable=self.writeable,
-                        is2D=is2D,
-                    )
-                    for indx in ids
-                )
-        else:
+        if vtype not in _GEOOBJ.keys():
             keys = "', '".join(sorted(_GEOOBJ.keys()))
             raise ValueError("vtype not supported, use one of: '%s'" % keys)
+        if _GEOOBJ[vtype] is not None:
+            ids = (indx for indx in range(1, self.number_of(vtype) + 1))
+            if idonly:
+                return ids
+            return (
+                _GEOOBJ[vtype](
+                    v_id=indx,
+                    c_mapinfo=self.c_mapinfo,
+                    table=self.table,
+                    writeable=self.writeable,
+                    is2D=is2D,
+                )
+                for indx in ids
+            )
 
     @must_be_open
     def rewind(self):
         """Rewind vector map to cause reads to start at beginning. ::
 
             >>> test_vect = VectorTopo(test_vector_name)
-            >>> test_vect.open(mode='r')
+            >>> test_vect.open(mode="r")
             >>> test_vect.next()
             Point(10.000000, 6.000000)
             >>> test_vect.next()
@@ -510,7 +504,7 @@ class VectorTopo(Vector):
         ilist = Ilist()
         libvect.Vect_cidx_find_all(
             self.c_mapinfo,
-            layer if layer else self.layer,
+            layer or self.layer,
             Obj.gtype,
             cat_id,
             ilist.c_ilist,
@@ -527,17 +521,16 @@ class VectorTopo(Vector):
                 )
                 for v_id in ilist
             )
-        else:
-            return [
-                read_line(
-                    feature_id=v_id,
-                    c_mapinfo=self.c_mapinfo,
-                    table=self.table,
-                    writeable=self.writeable,
-                    is2D=is2D,
-                )
-                for v_id in ilist
-            ]
+        return [
+            read_line(
+                feature_id=v_id,
+                c_mapinfo=self.c_mapinfo,
+                table=self.table,
+                writeable=self.writeable,
+                is2D=is2D,
+            )
+            for v_id in ilist
+        ]
 
     @must_be_open
     def read(self, feature_id):
@@ -546,8 +539,8 @@ class VectorTopo(Vector):
         :param int feature_id: the id of feature to obtain
 
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open(mode='r')
-        >>> feature1 = test_vect.read(0)                     #doctest: +ELLIPSIS
+        >>> test_vect.open(mode="r")
+        >>> feature1 = test_vect.read(0)  # doctest: +ELLIPSIS
         Traceback (most recent call last):
             ...
         ValueError: The index must be >0, 0 given.
@@ -562,13 +555,13 @@ class VectorTopo(Vector):
         21
         >>> test_vect.read(21)
         Centroid(7.500000, 3.500000)
-        >>> test_vect.read(22)                             #doctest: +ELLIPSIS
+        >>> test_vect.read(22)  # doctest: +ELLIPSIS
         Traceback (most recent call last):
           ...
         IndexError: Index out of range
         >>> test_vect.close()
 
-        """
+        """  # noqa: E501
         return read_line(
             feature_id,
             self.c_mapinfo,
@@ -592,14 +585,12 @@ class VectorTopo(Vector):
     def rewrite(self, geo_obj, cat, attrs=None, **kargs):
         """Rewrite a geometry features
 
-            >>> cols = [(u'cat',       'INTEGER PRIMARY KEY'),
-            ...         (u'name',      'TEXT')]
+            >>> cols = [("cat", "INTEGER PRIMARY KEY"), ("name", "TEXT")]
 
         Generate a new vector map
 
-            >>> test_vect = VectorTopo('newvect_2')
-            >>> test_vect.open('w', tab_name='newvect_2', tab_cols=cols,
-            ...                overwrite=True)
+            >>> test_vect = VectorTopo("newvect_2")
+            >>> test_vect.open("w", tab_name="newvect_2", tab_cols=cols, overwrite=True)
 
         import a geometry feature ::
 
@@ -613,8 +604,8 @@ class VectorTopo(Vector):
 
         then write the two points on the map, with ::
 
-            >>> test_vect.write(point0, cat=1, attrs=('pub',))
-            >>> test_vect.write(point1, cat=2, attrs=('resturant',))
+            >>> test_vect.write(point0, cat=1, attrs=("pub",))
+            >>> test_vect.write(point1, cat=2, attrs=("resturant",))
             >>> test_vect.table.conn.commit()  # save changes in the DB
             >>> test_vect.table_to_dict()
             {1: [1, 'pub'], 2: [2, 'resturant']}
@@ -622,17 +613,17 @@ class VectorTopo(Vector):
 
         Now rewrite one point of the vector map: ::
 
-            >>> test_vect.open('rw')
-            >>> test_vect.rewrite(point2, cat=1, attrs=('Irish Pub',))
+            >>> test_vect.open("rw")
+            >>> test_vect.rewrite(point2, cat=1, attrs=("Irish Pub",))
             >>> test_vect.table.conn.commit()  # save changes in the DB
             >>> test_vect.close()
 
         Check the output:
 
-            >>> test_vect.open('r')
+            >>> test_vect.open("r")
             >>> test_vect[1] == point2
             True
-            >>> test_vect[1].attrs['name'] == 'Irish Pub'
+            >>> test_vect[1].attrs["name"] == "Irish Pub"
             True
             >>> test_vect.close()
             >>> test_vect.remove()
@@ -641,15 +632,17 @@ class VectorTopo(Vector):
             self.table.update(key=cat, values=attrs)
         elif self.table is None and attrs:
             print(
-                "Table for vector {name} does not exist, attributes not"
-                " loaded".format(name=self.name)
+                "Table for vector {name} does not exist, attributes not loaded".format(
+                    name=self.name
+                )
             )
         libvect.Vect_cat_set(geo_obj.c_cats, self.layer, cat)
         result = libvect.Vect_rewrite_line(
             self.c_mapinfo, cat, geo_obj.gtype, geo_obj.c_points, geo_obj.c_cats
         )
         if result == -1:
-            raise GrassError("Not able to write the vector feature.")
+            msg = "Not able to write the vector feature."
+            raise GrassError(msg)
 
         # return offset into file where the feature starts
         geo_obj.offset = result
@@ -662,25 +655,25 @@ class VectorTopo(Vector):
         :type feature_id: int
         """
         if libvect.Vect_rewrite_line(self.c_mapinfo, feature_id) == -1:
-            raise GrassError("C function: Vect_rewrite_line.")
+            msg = "C function: Vect_rewrite_line."
+            raise GrassError(msg)
 
     @must_be_open
     def restore(self, geo_obj):
-        if hasattr(geo_obj, "offset"):
-            if (
-                libvect.Vect_restore_line(self.c_mapinfo, geo_obj.offset, geo_obj.id)
-                == -1
-            ):
-                raise GrassError("C function: Vect_restore_line.")
-        else:
-            raise ValueError("The value have not an offset attribute.")
+        if not hasattr(geo_obj, "offset"):
+            msg = "The value have not an offset attribute."
+            raise ValueError(msg)
+        if libvect.Vect_restore_line(self.c_mapinfo, geo_obj.offset, geo_obj.id) == -1:
+            msg = "C function: Vect_restore_line."
+            raise GrassError(msg)
 
     @must_be_open
     def bbox(self):
-        """Return the BBox of the vecor map"""
+        """Return the BBox of the vector map"""
         bbox = Bbox()
         if libvect.Vect_get_map_box(self.c_mapinfo, bbox.c_bbox) == 0:
-            raise GrassError("I can not find the Bbox.")
+            msg = "I can not find the Bbox."
+            raise GrassError(msg)
         return bbox
 
     def close(self, build=True, release=True):
@@ -701,7 +694,7 @@ class VectorTopo(Vector):
         >>> from grass.pygrass.vector import VectorTopo
         >>> from grass.pygrass.vector.basic import Bbox
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open('r')
+        >>> test_vect.open("r")
 
         >>> test_vect.table_to_dict()
         {1: [1, 'point', 1.0], 2: [2, 'line', 2.0], 3: [3, 'centroid', 3.0]}
@@ -717,27 +710,26 @@ class VectorTopo(Vector):
 
         """
 
-        if self.table is not None:
-            table_dict = {}
-            # Get the category index
-            cat_index = self.table.columns.names().index("cat")
-            # Prepare a filter
-            if where is not None:
-                self.table.filters.where(where)
+        if self.table is None:
+            return None
+        table_dict = {}
+        # Get the category index
+        cat_index = self.table.columns.names().index("cat")
+        # Prepare a filter
+        if where is not None:
+            self.table.filters.where(where)
 
-            self.table.filters.order_by("cat")
+        self.table.filters.order_by("cat")
 
-            self.table.filters.select(",".join(self.table.columns.names()))
-            # Execute the query and fetch the result
-            cur = self.table.execute()
-            entries = cur.fetchall()
-            # Generate the dictionary
-            for entry in entries:
-                table_dict[entry[cat_index]] = list(entry)
+        self.table.filters.select(",".join(self.table.columns.names()))
+        # Execute the query and fetch the result
+        cur = self.table.execute()
+        entries = cur.fetchall()
+        # Generate the dictionary
+        for entry in entries:
+            table_dict[entry[cat_index]] = list(entry)
 
-            return table_dict
-
-        return None
+        return table_dict
 
     @must_be_open
     def features_to_wkb_list(self, bbox=None, feature_type="point", field=1):
@@ -772,58 +764,56 @@ class VectorTopo(Vector):
          >>> from grass.pygrass.vector import VectorTopo
          >>> from grass.pygrass.vector.basic import Bbox
          >>> test_vect = VectorTopo(test_vector_name)
-         >>> test_vect.open('r')
+         >>> test_vect.open("r")
 
          >>> bbox = Bbox(north=20, south=-1, east=20, west=-1)
-         >>> result = test_vect.features_to_wkb_list(bbox=bbox,
-         ...                                         feature_type="point")
+         >>> result = test_vect.features_to_wkb_list(bbox=bbox, feature_type="point")
          >>> len(result)
          3
          >>> for entry in result:
          ...     f_id, cat, wkb = entry
          ...     print((f_id, cat, len(wkb)))
+         ...
          (1, 1, 21)
          (2, 1, 21)
          (3, 1, 21)
 
-         >>> result = test_vect.features_to_wkb_list(bbox=None,
-         ...                                         feature_type="line")
+         >>> result = test_vect.features_to_wkb_list(bbox=None, feature_type="line")
          >>> len(result)
          3
          >>> for entry in result:
          ...     f_id, cat, wkb = entry
          ...     print((f_id, cat, len(wkb)))
+         ...
          (4, 2, 57)
          (5, 2, 57)
          (6, 2, 57)
 
-         >>> result = test_vect.features_to_wkb_list(bbox=bbox,
-         ...                                         feature_type="boundary")
+         >>> result = test_vect.features_to_wkb_list(bbox=bbox, feature_type="boundary")
          >>> len(result)
          11
 
-         >>> result = test_vect.features_to_wkb_list(bbox=None,
-         ...                                         feature_type="centroid")
+         >>> result = test_vect.features_to_wkb_list(bbox=None, feature_type="centroid")
          >>> len(result)
          4
 
          >>> for entry in result:
          ...     f_id, cat, wkb = entry
          ...     print((f_id, cat, len(wkb)))
+         ...
          (19, 3, 21)
          (18, 3, 21)
          (20, 3, 21)
          (21, 3, 21)
 
-         >>> result = test_vect.features_to_wkb_list(bbox=bbox,
-         ...                                         feature_type="blub")
+         >>> result = test_vect.features_to_wkb_list(bbox=bbox, feature_type="blub")
          Traceback (most recent call last):
          ...
          grass.exceptions.GrassError: Unsupported feature type <blub>, supported are <point,line,boundary,centroid>
 
          >>> test_vect.close()
 
-        """
+        """  # noqa: E501
 
         supported = ["point", "line", "boundary", "centroid"]
 
@@ -840,45 +830,38 @@ class VectorTopo(Vector):
             bbox, type=feature_type.lower(), bboxlist_only=True
         )
 
-        if bboxlist is not None and len(bboxlist) > 0:
-            wkb_list = []
-            line_p = libvect.line_pnts()
-            line_c = libvect.line_cats()
-            size = ctypes.c_size_t()
-            cat = ctypes.c_int()
-            error = ctypes.c_int()
+        if bboxlist is None or len(bboxlist) <= 0:
+            return None
 
-            for f_id in bboxlist.ids:
-                barray = libvect.Vect_read_line_to_wkb(
-                    self.c_mapinfo,
-                    ctypes.byref(line_p),
-                    ctypes.byref(line_c),
-                    f_id,
-                    ctypes.byref(size),
-                    ctypes.byref(error),
-                )
-                if not barray:
-                    if error == -1:
-                        raise GrassError(
-                            _("Unable to read line of feature %i" % (f_id))
-                        )
-                    if error == -2:
-                        print("Empty feature %i" % (f_id))
-                    continue
+        wkb_list = []
+        line_p = libvect.line_pnts()
+        line_c = libvect.line_cats()
+        size = ctypes.c_size_t()
+        cat = ctypes.c_int()
+        error = ctypes.c_int()
 
-                ok = libvect.Vect_cat_get(
-                    ctypes.byref(line_c), field, ctypes.byref(cat)
-                )
-                if ok < 1:
-                    pcat = None
-                else:
-                    pcat = cat.value
+        for f_id in bboxlist.ids:
+            barray = libvect.Vect_read_line_to_wkb(
+                self.c_mapinfo,
+                ctypes.byref(line_p),
+                ctypes.byref(line_c),
+                f_id,
+                ctypes.byref(size),
+                ctypes.byref(error),
+            )
+            if not barray:
+                if error == -1:
+                    raise GrassError(_("Unable to read line of feature %i") % f_id)
+                if error == -2:
+                    print("Empty feature %i" % f_id)
+                continue
+            ok = libvect.Vect_cat_get(ctypes.byref(line_c), field, ctypes.byref(cat))
+            pcat = None if ok < 1 else cat.value
 
-                wkb_list.append((f_id, pcat, ctypes.string_at(barray, size.value)))
-                libgis.G_free(barray)
+            wkb_list.append((f_id, pcat, ctypes.string_at(barray, size.value)))
+            libgis.G_free(barray)
 
-            return wkb_list
-        return None
+        return wkb_list
 
     @must_be_open
     def areas_to_wkb_list(self, bbox=None, field=1):
@@ -905,7 +888,7 @@ class VectorTopo(Vector):
          >>> from grass.pygrass.vector import VectorTopo
          >>> from grass.pygrass.vector.basic import Bbox
          >>> test_vect = VectorTopo(test_vector_name)
-         >>> test_vect.open('r')
+         >>> test_vect.open("r")
 
          >>> bbox = Bbox(north=20, south=-1, east=20, west=-1)
          >>> result = test_vect.areas_to_wkb_list(bbox=bbox)
@@ -914,6 +897,7 @@ class VectorTopo(Vector):
          >>> for entry in result:
          ...     a_id, cat, wkb = entry
          ...     print((a_id, cat, len(wkb)))
+         ...
          (1, 3, 225)
          (2, 3, 141)
          (3, 3, 93)
@@ -925,6 +909,7 @@ class VectorTopo(Vector):
          >>> for entry in result:
          ...     a_id, cat, wkb = entry
          ...     print((a_id, cat, len(wkb)))
+         ...
          (1, 3, 225)
          (2, 3, 141)
          (3, 3, 93)
@@ -939,35 +924,36 @@ class VectorTopo(Vector):
 
         bboxlist = self.find_by_bbox.areas(bbox, bboxlist_only=True)
 
-        if bboxlist is not None and len(bboxlist) > 0:
-            wkb_list = []
-            line_c = libvect.line_cats()
-            size = ctypes.c_size_t()
-            cat = ctypes.c_int()
+        if bboxlist is None or len(bboxlist) <= 0:
+            return None
 
-            for a_id in bboxlist.ids:
-                barray = libvect.Vect_read_area_to_wkb(
-                    self.c_mapinfo, a_id, ctypes.byref(size)
+        wkb_list = []
+        line_c = libvect.line_cats()
+        size = ctypes.c_size_t()
+        cat = ctypes.c_int()
+
+        for a_id in bboxlist.ids:
+            barray = libvect.Vect_read_area_to_wkb(
+                self.c_mapinfo, a_id, ctypes.byref(size)
+            )
+            if not barray:
+                raise GrassError(_("Unable to read area with id %i") % a_id)
+
+            pcat = None
+            c_ok = libvect.Vect_get_area_cats(
+                self.c_mapinfo, a_id, ctypes.byref(line_c)
+            )
+            if c_ok == 0:  # Centroid found
+                ok = libvect.Vect_cat_get(
+                    ctypes.byref(line_c), field, ctypes.byref(cat)
                 )
-                if not barray:
-                    raise GrassError(_("Unable to read area with id %i" % (a_id)))
+                if ok > 0:
+                    pcat = cat.value
 
-                pcat = None
-                c_ok = libvect.Vect_get_area_cats(
-                    self.c_mapinfo, a_id, ctypes.byref(line_c)
-                )
-                if c_ok == 0:  # Centroid found
-                    ok = libvect.Vect_cat_get(
-                        ctypes.byref(line_c), field, ctypes.byref(cat)
-                    )
-                    if ok > 0:
-                        pcat = cat.value
+            wkb_list.append((a_id, pcat, ctypes.string_at(barray, size.value)))
+            libgis.G_free(barray)
 
-                wkb_list.append((a_id, pcat, ctypes.string_at(barray, size.value)))
-                libgis.G_free(barray)
-
-            return wkb_list
-        return None
+        return wkb_list
 
 
 if __name__ == "__main__":
@@ -977,10 +963,10 @@ if __name__ == "__main__":
     utils.create_test_vector_map(test_vector_name)
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
     from grass.pygrass.utils import get_mapset_vector
     from grass.script.core import run_command
 
     mset = get_mapset_vector(test_vector_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)

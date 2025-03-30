@@ -32,7 +32,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stddef.h>
-#ifndef __MINGW32__
+#ifndef _WIN32
 #include <pwd.h>
 #endif
 #include <sys/types.h>
@@ -46,7 +46,7 @@
  * path [caller must G_free ()] on success, or NULL on failure
  *************************************************************************/
 
-#ifndef __MINGW32__ /* TODO */
+#ifndef _WIN32 /* TODO */
 static char *_make_toplevel(void)
 {
     size_t len;
@@ -156,7 +156,9 @@ static int _elem_count_split(char *elems)
 
     /* Some basic assertions */
     assert(elems != NULL);
-    assert((len = strlen(elems)) > 0);
+
+    len = strlen(elems);
+    assert(len > 0);
     assert(len < PTRDIFF_MAX);
     assert(*elems != '/');
 

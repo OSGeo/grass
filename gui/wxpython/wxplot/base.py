@@ -1,7 +1,7 @@
 """
 @package wxplot.base
 
-@brief Base classes for iinteractive plotting using PyPlot
+@brief Base classes for interactive plotting using PyPlot
 
 Classes:
  - base::PlotIcons
@@ -20,7 +20,7 @@ import os
 import wx
 from random import randint
 
-import wx.lib.plot as plot
+from wx.lib import plot
 from core.globalvar import ICONDIR
 from core.settings import UserSettings
 from wxplot.dialogs import TextDialog, OptDialog
@@ -29,7 +29,8 @@ from icons.icon import MetaIcon
 from gui_core.toolbars import BaseIcons
 from gui_core.wrap import Menu
 
-import grass.script as grass
+import grass.script as gs
+from grass.exceptions import CalledModuleError
 
 PlotIcons = {
     "draw": MetaIcon(img="show", label=_("Draw/re-draw plot")),
@@ -116,12 +117,12 @@ class BasePlotFrame(wx.Frame):
         for assigning colors to images in imagery groups"""
 
         self.colorDict = {}
-        for clr in grass.named_colors.keys():
+        for clr in gs.named_colors.keys():
             if clr == "white":
                 continue
-            r = int(grass.named_colors[clr][0] * 255)
-            g = int(grass.named_colors[clr][1] * 255)
-            b = int(grass.named_colors[clr][2] * 255)
+            r = int(gs.named_colors[clr][0] * 255)
+            g = int(gs.named_colors[clr][1] * 255)
+            b = int(gs.named_colors[clr][2] * 255)
             self.colorDict[clr] = (r, g, b, 255)
 
     def InitPlotOpts(self, plottype):
@@ -203,8 +204,8 @@ class BasePlotFrame(wx.Frame):
             idx = rasterList.index(r)
 
             try:
-                ret = grass.raster_info(r)
-            except:
+                ret = gs.raster_info(r)
+            except CalledModuleError:
                 continue
                 # if r.info cannot parse map, skip it
 
@@ -212,7 +213,7 @@ class BasePlotFrame(wx.Frame):
             rdict[r] = {}  # initialize sub-dictionaries for each raster in the list
 
             rdict[r]["units"] = ""
-            if ret["units"] not in ("(none)", '"none"', "", None):
+            if ret["units"] not in {"(none)", '"none"', "", None}:
                 rdict[r]["units"] = ret["units"]
 
             rdict[r]["plegend"] = r  # use fully-qualified names
@@ -246,11 +247,12 @@ class BasePlotFrame(wx.Frame):
                         rdict[r]["pcolor"] = self.colorDict[self.colorList[idx]]
                 else:
                     rdict[r]["pcolor"] = self.colorDict[self.colorList[idx]]
-            else:
-                r = randint(0, 255)
-                b = randint(0, 255)
-                g = randint(0, 255)
-                rdict[r]["pcolor"] = (r, g, b, 255)
+                continue
+
+            r = randint(0, 255)
+            b = randint(0, 255)
+            g = randint(0, 255)
+            rdict[r]["pcolor"] = (r, g, b, 255)
 
         return rdict
 
@@ -260,17 +262,17 @@ class BasePlotFrame(wx.Frame):
         """
 
         if len(rasterList) == 0:
-            return
+            return None
 
         rdict = {}  # initialize a dictionary
         for rpair in rasterList:
             idx = rasterList.index(rpair)
 
             try:
-                ret0 = grass.raster_info(rpair[0])
-                ret1 = grass.raster_info(rpair[1])
+                ret0 = gs.raster_info(rpair[0])
+                ret1 = gs.raster_info(rpair[1])
 
-            except:
+            except (IndexError, CalledModuleError):
                 continue
                 # if r.info cannot parse map, skip it
 
@@ -284,9 +286,9 @@ class BasePlotFrame(wx.Frame):
             rdict[rpair][0]["units"] = ""
             rdict[rpair][1]["units"] = ""
 
-            if ret0["units"] not in ("(none)", '"none"', "", None):
+            if ret0["units"] not in {"(none)", '"none"', "", None}:
                 rdict[rpair][0]["units"] = ret0["units"]
-            if ret1["units"] not in ("(none)", '"none"', "", None):
+            if ret1["units"] not in {"(none)", '"none"', "", None}:
                 rdict[rpair][1]["units"] = ret1["units"]
 
             rdict[rpair]["plegend"] = (
@@ -321,11 +323,12 @@ class BasePlotFrame(wx.Frame):
 
             if idx <= len(self.colorList):
                 rdict[rpair]["pcolor"] = self.colorDict[self.colorList[idx]]
-            else:
-                r = randint(0, 255)
-                b = randint(0, 255)
-                g = randint(0, 255)
-                rdict[rpair]["pcolor"] = (r, g, b, 255)
+                continue
+
+            r = randint(0, 255)
+            b = randint(0, 255)
+            g = randint(0, 255)
+            rdict[rpair]["pcolor"] = (r, g, b, 255)
 
         return rdict
 
@@ -510,7 +513,6 @@ class BasePlotFrame(wx.Frame):
 
     def PlotOptionsMenu(self, event):
         """Popup menu for plot and text options"""
-        point = wx.GetMousePosition()
         popt = Menu()
         # Add items to the menu
         settext = wx.MenuItem(popt, wx.ID_ANY, _("Text settings"))
@@ -584,7 +586,7 @@ class BasePlotFrame(wx.Frame):
         )
 
         btnval = dlg.ShowModal()
-        if btnval == wx.ID_SAVE or btnval == wx.ID_OK or btnval == wx.ID_CANCEL:
+        if btnval in {wx.ID_SAVE, wx.ID_OK, wx.ID_CANCEL}:
             dlg.Destroy()
 
     def PlotOptions(self, event):
@@ -602,13 +604,12 @@ class BasePlotFrame(wx.Frame):
         )
         btnval = dlg.ShowModal()
 
-        if btnval == wx.ID_SAVE or btnval == wx.ID_OK or btnval == wx.ID_CANCEL:
+        if btnval in {wx.ID_SAVE, wx.ID_OK, wx.ID_CANCEL}:
             dlg.Destroy()
         self.Update()
 
     def PrintMenu(self, event):
         """Print options and output menu"""
-        point = wx.GetMousePosition()
         printmenu = Menu()
         for title, handler in (
             (_("Page setup"), self.OnPageSetup),

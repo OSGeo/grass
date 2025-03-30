@@ -1,17 +1,20 @@
-import itertools
 import fnmatch
+import itertools
 import os
 from sqlite3 import OperationalError
 
 import grass.lib.gis as libgis
-
-libgis.G_gisinit("")
-import grass.lib.raster as libraster
-from grass.lib.ctypes_preamble import String
 from grass.script import core as grasscore
 from grass.script import utils as grassutils
 
+# flake8: noqa: E402
+libgis.G_gisinit("")
+
+import grass.lib.raster as libraster
+from grass.lib.ctypes_preamble import String
 from grass.pygrass.errors import GrassError
+
+# flake8: qa
 
 
 test_vector_name = "Utils_test_vector"
@@ -21,7 +24,7 @@ test_raster_name = "Utils_test_raster"
 def looking(obj, filter_string):
     """
     >>> import grass.lib.vector as libvect
-    >>> sorted(looking(libvect, '*by_box*'))  # doctest: +NORMALIZE_WHITESPACE
+    >>> sorted(looking(libvect, "*by_box*"))  # doctest: +NORMALIZE_WHITESPACE
     ['Vect_select_areas_by_box', 'Vect_select_isles_by_box',
      'Vect_select_lines_by_box', 'Vect_select_nodes_by_box']
 
@@ -71,10 +74,11 @@ def findmaps(type, pattern=None, mapset="", location="", gisdbase=""):
         return res
 
     def find_in_gisdbase(type, pattern, gisdbase):
-        res = []
-        for loc in gisdbase.locations():
-            res.extend(find_in_location(type, pattern, Location(loc, gisdbase.name)))
-        return res
+        return [
+            a
+            for loc in gisdbase.locations()
+            for a in find_in_location(type, pattern, Location(loc, gisdbase.name))
+        ]
 
     if gisdbase and location and mapset:
         mset = Mapset(mapset, location, gisdbase)
@@ -82,24 +86,23 @@ def findmaps(type, pattern=None, mapset="", location="", gisdbase=""):
             (m, mset.name, mset.location, mset.gisdbase)
             for m in mset.glist(type, pattern)
         ]
-    elif gisdbase and location:
+    if gisdbase and location:
         loc = Location(location, gisdbase)
         return find_in_location(type, pattern, loc)
-    elif gisdbase:
+    if gisdbase:
         gis = Gisdbase(gisdbase)
         return find_in_gisdbase(type, pattern, gis)
-    elif location:
+    if location:
         loc = Location(location)
         return find_in_location(type, pattern, loc)
-    elif mapset:
+    if mapset:
         mset = Mapset(mapset)
         return [
             (m, mset.name, mset.location, mset.gisdbase)
             for m in mset.glist(type, pattern)
         ]
-    else:
-        gis = Gisdbase()
-        return find_in_gisdbase(type, pattern, gis)
+    gis = Gisdbase()
+    return find_in_gisdbase(type, pattern, gis)
 
 
 def remove(oldname, maptype):
@@ -120,9 +123,9 @@ def rename(oldname, newname, maptype, **kwargs):
 def copy(existingmap, newmap, maptype, **kwargs):
     """Copy a map
 
-    >>> copy(test_vector_name, 'mycensus', 'vector')
-    >>> rename('mycensus', 'mynewcensus', 'vector')
-    >>> remove('mynewcensus', 'vector')
+    >>> copy(test_vector_name, "mycensus", "vector")
+    >>> rename("mycensus", "mynewcensus", "vector")
+    >>> remove("mynewcensus", "vector")
 
     """
     kwargs.update({maptype: "{old},{new}".format(old=existingmap, new=newmap)})
@@ -135,11 +138,10 @@ def decode(obj, encoding=None):
     """
     if isinstance(obj, String):
         return grassutils.decode(obj.data, encoding=encoding)
-    elif isinstance(obj, bytes):
+    if isinstance(obj, bytes):
         return grassutils.decode(obj)
-    else:
-        # eg None
-        return obj
+    # eg None
+    return obj
 
 
 def getenv(env):
@@ -173,22 +175,20 @@ def get_mapset_vector(mapname, mapset=""):
     return decode(libgis.G_find_vector2(mapname, mapset))
 
 
-def is_clean_name(name):
+def is_clean_name(name) -> bool:
     """Return if the name is valid
 
-    >>> is_clean_name('census')
+    >>> is_clean_name("census")
     True
-    >>> is_clean_name('0census')
+    >>> is_clean_name("0census")
     True
-    >>> is_clean_name('census?')
+    >>> is_clean_name("census?")
     True
-    >>> is_clean_name('cénsus')
+    >>> is_clean_name("cénsus")
     False
 
     """
-    if libgis.G_legal_filename(name) < 0:
-        return False
-    return True
+    return libgis.G_legal_filename(name) >= 0
 
 
 def coor2pixel(coord, region):
@@ -239,14 +239,30 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
 
     Create a vector map
 
-    >>> cols = [(u'cat', 'INTEGER PRIMARY KEY'),
-    ...         (u'value', 'double precision')]
+    >>> cols = [("cat", "INTEGER PRIMARY KEY"), ("value", "double precision")]
     >>> vect = VectorTopo("test_vect_2")
-    >>> vect.open("w",tab_name="test_vect_2",
-    ...           tab_cols=cols)
-    >>> vect.write(Point(10, 6), cat=1, attrs=[10, ])
-    >>> vect.write(Point(12, 6), cat=2, attrs=[12, ])
-    >>> vect.write(Point(14, 6), cat=3, attrs=[14, ])
+    >>> vect.open("w", tab_name="test_vect_2", tab_cols=cols)
+    >>> vect.write(
+    ...     Point(10, 6),
+    ...     cat=1,
+    ...     attrs=[
+    ...         10,
+    ...     ],
+    ... )
+    >>> vect.write(
+    ...     Point(12, 6),
+    ...     cat=2,
+    ...     attrs=[
+    ...         12,
+    ...     ],
+    ... )
+    >>> vect.write(
+    ...     Point(14, 6),
+    ...     cat=3,
+    ...     attrs=[
+    ...         14,
+    ...     ],
+    ... )
     >>> vect.table.conn.commit()
     >>> vect.close()
 
@@ -260,38 +276,40 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
     Sample the raster layer at the given points, return a list of values
 
     >>> l = get_raster_for_points(vect, ele, region=region)
-    >>> l[0]                                        # doctest: +ELLIPSIS
+    >>> l[0]  # doctest: +ELLIPSIS
     (1, 10.0, 6.0, 1)
-    >>> l[1]                                        # doctest: +ELLIPSIS
+    >>> l[1]  # doctest: +ELLIPSIS
     (2, 12.0, 6.0, 1)
 
     Add a new column and sample again
 
     >>> vect.open("r")
-    >>> vect.table.columns.add(test_raster_name,'double precision')
+    >>> vect.table.columns.add(test_raster_name, "double precision")
     >>> vect.table.conn.commit()
     >>> test_raster_name in vect.table.columns
     True
     >>> get_raster_for_points(vect, ele, column=test_raster_name, region=region)
     True
-    >>> vect.table.filters.select('value', test_raster_name)
+    >>> vect.table.filters.select("value", test_raster_name)
     Filters('SELECT value, Utils_test_raster FROM test_vect_2;')
     >>> cur = vect.table.execute()
     >>> r = cur.fetchall()
-    >>> r[0]                                        # doctest: +ELLIPSIS
+    >>> r[0]  # doctest: +ELLIPSIS
     (10.0, 1.0)
-    >>> r[1]                                        # doctest: +ELLIPSIS
+    >>> r[1]  # doctest: +ELLIPSIS
     (12.0, 1.0)
-    >>> remove('test_vect_2','vect')
+    >>> remove("test_vect_2", "vect")
 
     :param poi_vector: A VectorTopo object that contains points
     :param raster: raster object
     :param str column: column name to update in the attrinute table,
                        if set to None a list of sampled values will be returned
-    :param region: The region to work with, if not set the current computational region will be used
+    :param region: The region to work with, if not set the current computational region
+                   will be used
 
     :return: True in case of success and a specified column for update,
-             if column name for update was not set a list of (id, x, y, value) is returned
+             if column name for update was not set a list of (id, x, y, value) is
+             returned
     """
     from math import isnan
 
@@ -313,23 +331,22 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
         if column:
             if val is not None and not isnan(val):
                 poi.attrs[column] = val
-        else:
+        else:  # noqa: PLR5501
             if val is not None and not isnan(val):
                 result.append((poi.id, poi.x, poi.y, val))
             else:
                 result.append((poi.id, poi.x, poi.y, None))
     if not column:
         return result
-    else:
-        poi.attrs.commit()
-        return True
+    poi.attrs.commit()
+    return True
 
 
 def r_export(rast, output="", fmt="png", **kargs):
     from grass.pygrass.modules import Module
 
     if rast.exist():
-        output = output if output else "%s_%s.%s" % (rast.name, rast.mapset, fmt)
+        output = output or "%s_%s.%s" % (rast.name, rast.mapset, fmt)
         Module(
             "r.out.%s" % fmt,
             input=rast.fullname(),
@@ -338,8 +355,8 @@ def r_export(rast, output="", fmt="png", **kargs):
             **kargs,
         )
         return output
-    else:
-        raise ValueError("Raster map does not exist.")
+    msg = "Raster map does not exist."
+    raise ValueError(msg)
 
 
 def get_lib_path(modname, libname=None):
@@ -372,11 +389,15 @@ def set_path(modulename, dirname=None, path="."):
 def split_in_chunk(iterable, length=10):
     """Split a list in chunk.
 
-    >>> for chunk in split_in_chunk(range(25)): print (chunk)
+    >>> for chunk in split_in_chunk(range(25)):
+    ...     print(chunk)
+    ...
     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
     (10, 11, 12, 13, 14, 15, 16, 17, 18, 19)
     (20, 21, 22, 23, 24)
-    >>> for chunk in split_in_chunk(range(25), 3): print (chunk)
+    >>> for chunk in split_in_chunk(range(25), 3):
+    ...     print(chunk)
+    ...
     (0, 1, 2)
     (3, 4, 5)
     (6, 7, 8)
@@ -414,7 +435,7 @@ def table_exist(cursor, table_name):
         except OperationalError:
             return False
     one = cursor.fetchone() if cursor else None
-    return True if one and one[0] else False
+    return bool(one and one[0])
 
 
 def create_test_vector_map(map_name="test_vector"):
@@ -444,7 +465,7 @@ def create_test_vector_map(map_name="test_vector"):
     """
 
     from grass.pygrass.vector import VectorTopo
-    from grass.pygrass.vector.geometry import Point, Line, Centroid, Boundary
+    from grass.pygrass.vector.geometry import Boundary, Centroid, Line, Point
 
     cols = [
         ("cat", "INTEGER PRIMARY KEY"),
@@ -572,19 +593,20 @@ def create_test_stream_network_map(map_name="streams"):
 
 if __name__ == "__main__":
     import doctest
-    from grass.pygrass import utils
+
     from grass.script.core import run_command
 
-    utils.create_test_vector_map(test_vector_name)
+    create_test_vector_map(test_vector_name)
     run_command("g.region", n=50, s=0, e=60, w=0, res=1)
     run_command("r.mapcalc", expression="%s = 1" % (test_raster_name), overwrite=True)
 
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
-    mset = utils.get_mapset_vector(test_vector_name, mapset="")
+    mset = get_mapset_vector(test_vector_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)
-    mset = utils.get_mapset_raster(test_raster_name, mapset="")
+    mset = get_mapset_raster(test_raster_name, mapset="")
     if mset:
+        # Remove the generated raster map, if exists
         run_command("g.remove", flags="f", type="raster", name=test_raster_name)

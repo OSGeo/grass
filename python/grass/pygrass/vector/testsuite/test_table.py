@@ -3,25 +3,26 @@ Created on Wed Jun 25 11:08:22 2014
 
 @author: pietro
 """
+
 import os
 import sqlite3
 import tempfile as tmp
-from string import ascii_letters, digits
 from random import choice
+from string import ascii_letters, digits
+
 import numpy as np
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
 from grass.pygrass.vector.table import Table, get_path
 
-
 # dictionary that generate random data
+RNG = np.random.default_rng()
 COL2VALS = {
-    "INT": lambda n: np.random.randint(9, size=n),
-    "INTEGER": lambda n: np.random.randint(9, size=n),
+    "INT": lambda n: RNG.integers(low=0, high=9, size=n),
+    "INTEGER": lambda n: RNG.integers(low=0, high=9, size=n),
     "INTEGER PRIMARY KEY": lambda n: np.arange(1, n + 1, dtype=int),
-    "REAL": lambda n: np.random.rand(n),
+    "REAL": lambda n: RNG.random(n),
     "TEXT": lambda n: np.array([randstr() for _ in range(n)]),
 }
 
@@ -63,7 +64,7 @@ def get_table_random_values(nrows, columns):
             raise TypeError("Unknown column type %s for: %s" % (ctype, cname))
         vals.append(COL2VALS[ctype](nrows))
         dtype.append((cname, vals[-1].dtype.str))
-    return np.array([v for v in zip(*vals)], dtype=dtype)
+    return np.array(list(zip(*vals)), dtype=dtype)
 
 
 class DBconnection:
@@ -153,7 +154,6 @@ class DBconnection:
         self.cols = self.table.columns
 
     def tearDown(self):
-        """Remove the generated vector map, if exist"""
         self.table.drop(force=True)
         self.table = None
         self.cols = None
@@ -175,7 +175,6 @@ class TableInsertTestCase(DBconnection, TestCase):
         self.cols = self.table.columns
 
     def tearDown(self):
-        """Remove the generated vector map, if exist"""
         self.table.drop(force=True)
         self.table = None
         self.cols = None

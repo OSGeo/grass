@@ -27,7 +27,7 @@ quadrangles, because USGS quads are not exact rectangles.
 
 <h3>Creating a global grid in a latitude-longitude</h3>
 
-To be run in a latitude-longitude location (WGS84)
+To be run in a latitude-longitude project (WGS84)
 <div class="code"><pre>
 # set the region:
 g.region n=90 s=-90 w=-180 e=180 res=10 -p
@@ -64,9 +64,10 @@ v.mkgrid map=coro_grid grid=4,3 position=coor coordinates=2716500,6447000 box=20
 
 Creating a 10x12 lat/lon grid, cells 2 arc-min a side, with lower left corner
 at 167deg 52min east, 47deg 6min south. For use with e.g. QGIS you can then
-pull this grid into a projected location with <em>v.proj</em> before
-exporting as a Shapefile with <em>v.out.ogr</em> (within GRASS GIS you could
-just use <em>d.grid -w</em> from the projected location for the same effect):
+pull this grid into a project with projected coordinate reference system (CRS)
+using <em>v.proj</em> before
+exporting as a vector file with <em>v.out.ogr</em> (within GRASS GIS you could
+just use <em>d.grid -w</em> from the project with projected CRS for the same effect):
 
 <div class="code"><pre>
 v.mkgrid map=p2min_grid grid=10,12 position=coor coordinates=167:52E,47:06S box=0:02,0:02
@@ -152,21 +153,16 @@ The following counts the number of points per hexagon using the
 v.vect.stats points=points_of_interest areas=hexagons count_column=count
 </pre></div>
 
-User should note that some of the points may be outside the grid
+Users should note that some of the points may be outside the grid
 since the hexagons cannot cover all the area around the edges
 (the computational region extent needs to be enlarged if all points
 should be considered).
-The last command sets the vector map color table to <tt>viridis</tt>
-based on the <tt>count</tt> column.
+The last command sets the vector map color table to <code>viridis</code>
+based on the <code>count</code> column.
 
 <div class="code"><pre>
 v.colors map=hexagons use=attr column=count color=viridis
 </pre></div>
-
-<!--
-d.erase 77:77:77
-mogrify -trim .png
--->
 
 <center>
 <img src="v_mkgrid.png"><br>

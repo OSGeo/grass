@@ -12,7 +12,7 @@ since these functions (<em><a href="r.reclass.html">r.reclass</a></em> and
 also ignore the current <em>geographic region</em>
 and <em>mask</em>.
 
-<p>The <em><b>nv</b></em> parameter sets the string to be used to represent <tt>NULL</tt>
+<p>The <em><b>nv</b></em> parameter sets the string to be used to represent <code>NULL</code>
 values in the module output; the default is '*'.
 
 <p>The <em><b>nsteps</b></em> parameter sets the number of quantisation steps to divide into
@@ -31,38 +31,41 @@ report will generally run faster than the full list (the default output).
 
 <p>
 The <b>-d</b> flag can be used to force <em>r.describe</em> to respect the current region
-extents when repoting raster map categories. The default behavior is to read the full
+extents when reporting raster map categories. The default behavior is to read the full
 extent of the input raster map.
 
 <p>If the <b>-1</b> flag is specified, the output appears with one category value/range per line.
 
-<p>The <b>-n</b> flag suppresses the reporting of <tt>NULL</tt> values.
+<p>The <b>-n</b> flag suppresses the reporting of <code>NULL</code> values.
 
 <h2>EXAMPLES</h2>
 
-The following examples are from the Spearfish60 sample Location:
+The following examples are from the Spearfish60 sample dataset:
 
-<p>
-# Print the full list of raster map categories:
+<h3>Print the full list of raster map categories</h3>
+
 <div class="code"><pre>
 r.describe landcover.30m
 * 11 21-23 31 32 41-43 51 71 81-83 85 91 92
 </pre></div>
-<p>
-# Print the raster range only:
+
+<h3>Print the raster range only</h3>
+
 <div class="code"><pre>
 r.describe -r landcover.30m
 11 thru 92
 *
 </pre></div>
 
-# Print raster map category range, suppressing nulls:
+<h3>Print raster map category range, suppressing nulls</h3>
+
 <div class="code"><pre>
 r.describe -n landcover.30m
 11 21-23 31 32 41-43 51 71 81-83 85 91 92
 </pre></div>
-<p>
-# Print raster map categories, one category per line:
+
+<h3>Print raster map categories, one category per line</h3>
+
 <div class="code"><pre>
 r.describe -1 geology
 
@@ -77,7 +80,7 @@ r.describe -1 geology
 8
 9
 </pre></div>
-<p>
+
 <h2>SEE ALSO</h2>
 
 <em>

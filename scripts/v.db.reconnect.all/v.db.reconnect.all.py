@@ -19,6 +19,8 @@
 # % keyword: vector
 # % keyword: attribute table
 # % keyword: database
+# % keyword: DBF
+# % keyword: SQLite
 # %end
 # %flag
 # % key: c
@@ -53,14 +55,14 @@ import sys
 import os
 import string
 
-import grass.script as gscript
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 # substitute variables (gisdbase, location_name, mapset)
 
 
 def substitute_db(database):
-    gisenv = gscript.gisenv()
+    gisenv = gs.gisenv()
     tmpl = string.Template(database)
 
     return tmpl.substitute(
@@ -92,21 +94,18 @@ def create_db(driver, database):
 
     if (
         subst_database
-        in gscript.read_command("db.databases", quiet=True, driver=driver).splitlines()
+        in gs.read_command("db.databases", quiet=True, driver=driver).splitlines()
     ):
         return False
 
-    gscript.info(
-        _(
-            "Target database doesn't exist, "
-            "creating a new database using <%s> driver..."
-        )
+    gs.info(
+        _("Target database doesn't exist, creating a new database using <%s> driver...")
         % driver
     )
     try:
-        gscript.run_command("db.createdb", driver=driver, database=subst_database)
+        gs.run_command("db.createdb", driver=driver, database=subst_database)
     except CalledModuleError:
-        gscript.fatal(
+        gs.fatal(
             _("Unable to create database <%s> by driver <%s>")
             % (subst_database, driver)
         )
@@ -120,7 +119,7 @@ def create_db(driver, database):
 def copy_tab(from_driver, from_database, from_table, to_driver, to_database, to_table):
     if (
         to_table
-        in gscript.read_command(
+        in gs.read_command(
             "db.tables",
             quiet=True,
             driver=to_driver,
@@ -130,9 +129,9 @@ def copy_tab(from_driver, from_database, from_table, to_driver, to_database, to_
     ):
         return False
 
-    gscript.info("Copying table <%s> to target database..." % to_table)
+    gs.info("Copying table <%s> to target database..." % to_table)
     try:
-        gscript.run_command(
+        gs.run_command(
             "db.copy",
             from_driver=from_driver,
             from_database=from_database,
@@ -142,7 +141,7 @@ def copy_tab(from_driver, from_database, from_table, to_driver, to_database, to_
             to_table=to_table,
         )
     except CalledModuleError:
-        gscript.fatal(_("Unable to copy table <%s>") % from_table)
+        gs.fatal(_("Unable to copy table <%s>") % from_table)
 
     return True
 
@@ -153,16 +152,16 @@ def copy_tab(from_driver, from_database, from_table, to_driver, to_database, to_
 def drop_tab(vector, layer, table, driver, database):
     # disconnect
     try:
-        gscript.run_command(
+        gs.run_command(
             "v.db.connect", flags="d", quiet=True, map=vector, layer=layer, table=table
         )
     except CalledModuleError:
-        gscript.warning(
+        gs.warning(
             _("Unable to disconnect table <%s> from vector <%s>") % (table, vector)
         )
     # drop table
     try:
-        gscript.run_command(
+        gs.run_command(
             "db.droptable",
             quiet=True,
             flags="f",
@@ -171,7 +170,7 @@ def drop_tab(vector, layer, table, driver, database):
             table=table,
         )
     except CalledModuleError:
-        gscript.fatal(_("Unable to drop table <%s>") % table)
+        gs.fatal(_("Unable to drop table <%s>") % table)
 
 
 # create index on key column
@@ -181,9 +180,9 @@ def create_index(driver, database, table, index_name, key):
     if driver == "dbf":
         return False
 
-    gscript.info(_("Creating index <%s>...") % index_name)
+    gs.info(_("Creating index <%s>...") % index_name)
     try:
-        gscript.run_command(
+        gs.run_command(
             "db.execute",
             quiet=True,
             driver=driver,
@@ -191,7 +190,7 @@ def create_index(driver, database, table, index_name, key):
             sql="create unique index %s on %s(%s)" % (index_name, table, key),
         )
     except CalledModuleError:
-        gscript.warning(_("Unable to create index <%s>") % index_name)
+        gs.warning(_("Unable to create index <%s>") % index_name)
 
 
 def main():
@@ -199,7 +198,7 @@ def main():
     old_database = options["old_database"]
     old_schema = options["old_schema"]
     # new connection
-    default_connection = gscript.db_connection()
+    default_connection = gs.db_connection()
     if options["new_driver"]:
         new_driver = options["new_driver"]
     else:
@@ -222,13 +221,11 @@ def main():
     new_database_subst = substitute_db(new_database)
 
     if old_database_subst == new_database_subst and old_schema == new_schema:
-        gscript.fatal(
-            _("Old and new database connection is identical. " "Nothing to do.")
-        )
+        gs.fatal(_("Old and new database connection is identical. Nothing to do."))
 
-    mapset = gscript.gisenv()["MAPSET"]
+    mapset = gs.gisenv()["MAPSET"]
 
-    vectors = gscript.list_grouped("vect")[mapset]
+    vectors = gs.list_grouped("vect")[mapset]
     num_vectors = len(vectors)
 
     if flags["c"]:
@@ -239,11 +236,11 @@ def main():
     for vect in vectors:
         vect = "%s@%s" % (vect, mapset)
         i += 1
-        gscript.message(
-            _("%s\nReconnecting vector map <%s> " "(%d of %d)...\n%s")
+        gs.message(
+            _("%s\nReconnecting vector map <%s> (%d of %d)...\n%s")
             % ("-" * 80, vect, i, num_vectors, "-" * 80)
         )
-        for f in gscript.vector_db(vect, stderr=nuldev).values():
+        for f in gs.vector_db(vect, stderr=nuldev).values():
             layer = f["layer"]
             schema_table = f["table"]
             key = f["key"]
@@ -257,12 +254,9 @@ def main():
                 schema = ""
                 table = schema_table
 
-            if new_schema:
-                new_schema_table = "%s.%s" % (new_schema, table)
-            else:
-                new_schema_table = table
+            new_schema_table = "%s.%s" % (new_schema, table) if new_schema else table
 
-            gscript.debug(
+            gs.debug(
                 "DATABASE = '%s' SCHEMA = '%s' TABLE = '%s' ->\n"
                 "      NEW_DATABASE = '%s' NEW_SCHEMA_TABLE = '%s'"
                 % (old_database, schema, table, new_database, new_schema_table)
@@ -278,7 +272,7 @@ def main():
                 do_reconnect = False
 
             if do_reconnect:
-                gscript.verbose(_("Reconnecting layer %d...") % layer)
+                gs.verbose(_("Reconnecting layer %d...") % layer)
 
                 if flags["c"]:
                     # check if table exists in new database
@@ -298,9 +292,9 @@ def main():
                 # reconnect tables (don't use substituted new_database)
                 # NOTE: v.db.connect creates an index on the key column
                 try:
-                    gscript.run_command(
+                    gs.run_command(
                         "v.db.connect",
-                        flags="o",
+                        overwrite=True,
                         quiet=True,
                         map=vect,
                         layer=layer,
@@ -310,28 +304,24 @@ def main():
                         key=key,
                     )
                 except CalledModuleError:
-                    gscript.warning(
-                        _(
-                            "Unable to connect table <%s> to vector "
-                            "<%s> on layer <%s>"
-                        )
+                    gs.warning(
+                        _("Unable to connect table <%s> to vector <%s> on layer <%s>")
                         % (table, vect, str(layer))
                     )
 
-            else:
-                if database != new_database_subst:
-                    gscript.warning(
-                        _(
-                            "Layer <%d> will not be reconnected "
-                            "because database or schema do not "
-                            "match."
-                        )
-                        % layer
+            elif database != new_database_subst:
+                gs.warning(
+                    _(
+                        "Layer <%d> will not be reconnected "
+                        "because database or schema do not "
+                        "match."
                     )
+                    % layer
+                )
     return 0
 
 
 if __name__ == "__main__":
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     nuldev = open(os.devnull, "w")
     sys.exit(main())

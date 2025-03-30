@@ -101,7 +101,7 @@ int G_recursive_copy(const char *src, const char *dst)
         }
 
         while ((len = read(fd, buf, sizeof(buf))) > 0) {
-            while (len && (len2 = write(fd2, buf, len)) >= 0)
+            while ((len > 0) && (len2 = write(fd2, buf, (size_t)len)) >= 0)
                 len -= len2;
         }
 
@@ -141,8 +141,10 @@ int G_recursive_copy(const char *src, const char *dst)
         sprintf(path, "%s/%s", src, dp->d_name);
         sprintf(path2, "%s/%s", dst, dp->d_name);
 
-        if (G_recursive_copy(path, path2) != 0)
+        if (G_recursive_copy(path, path2) != 0) {
+            closedir(dirp);
             return 1;
+        }
     }
 
     closedir(dirp);

@@ -33,12 +33,19 @@
 #endif
 
 /* Complex Types */
-
 #ifndef CPX
+#ifndef _MSC_VER
 struct complex {
     double re, im;
 };
 typedef struct complex Cpx;
+#else
+/* _MSVC has complex struct and cannot be used */
+struct gcomplex {
+    double re, im;
+};
+typedef struct gcomplex Cpx;
+#endif /* _MSC_VER */
 
 #define CPX 1
 #endif
@@ -168,6 +175,8 @@ void cmcpy(Cpx *a, Cpx *b, int n);
 void unitary(Cpx *u, int n);
 
 void hmgen(Cpx *h, double *eval, Cpx *u, int n);
+
+int csolv(Cpx *a, Cpx *b, int n);
 
 /* utility routines for hermitian eigen problems */
 

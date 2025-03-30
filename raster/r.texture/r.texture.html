@@ -42,7 +42,7 @@ tree species. The usefulness and use of texture is highly dependent on the
 resolution of satellite imagery and on the scale of the human intervention or
 the phenomenon that created the texture (also see the discussion of scale
 dependency below). The user should observe the phenomenon visually in order to
-determine an adequat setting of the <em>size</em> parameter.
+determine an adequate setting of the <em>size</em> parameter.
 
 <p>
 The output of <em>r.texture</em> can constitute very useful additional variables
@@ -52,8 +52,8 @@ It can be used in supervised classification algorithms such as
 or for the identification of objects in <a href="i.segment.html">i.segment</a>,
 and/or for the characterization of these objects and thus, for example, as one
 of the raster inputs of the
-<a href="https://grass.osgeo.org/grass8/manuals/addons/i.segment.stats.html">
-	i.segment.stats</a> addon.
+<a href="https://grass.osgeo.org/grass-stable/manuals/addons/i.segment.stats.html">i.segment.stats</a>
+addon.
 
 <p>
 In general, several variables constitute texture: differences in grey level values,
@@ -68,7 +68,15 @@ level co-occurrence matrix as described by Haralick et al (1973). This matrix
 is a two-dimensional histogram of grey levels for a pair of pixels which are
 separated by a fixed spatial relationship. The matrix approximates the joint
 probability distribution of a pair of pixels. Several texture measures are
-directly computed from the grey level co-occurrence matrix.
+directly computed from the Grey Level Co-occurrence Matrix (GLCM).
+
+The provided measures can be categorized under first-order and
+second-order statistics, with each playing a unique role in texture
+analysis. First-order statistics consider the distribution of
+individual pixel values without regard to spatial relationships, while
+second-order statistics, particularly those derived from the Grey Level
+Co-occurrence Matrix (GLCM), consider the spatial relationship of
+pixels.
 
 <p>
 The following part offers brief explanations of the Haralick et al texture
@@ -76,24 +84,45 @@ measures (after Jensen 1996).
 
 <h3>First-order statistics in the spatial domain</h3>
 <ul>
-<li> Sum Average (SA)</li>
+<li> Sum Average (SA):
+ Sum Average measures the average gray level intensity of the sum of
+ pixel pairs within the moving window. It reflects the average intensity
+ of pixel pairs at specific distances and orientations, highlighting the
+ overall brightness level within the area.</li>
 
 <li> Entropy (ENT):
  This measure analyses the randomness. It is high when the values of the
  moving window have similar values. It is low when the values are close
- to either 0 or 1 (i.e. when the pixels in the local window are uniform).</li>
+ to either 0 or 1 (i.e. when the pixels in the local window are
+ uniform).</li>
 
-<li> Difference Entropy (DE)</li>
+<li> Difference Entropy (DE):
+ This metric quantifies the randomness or unpredictability in the
+ distribution of differences between the grey levels of pixel pairs. It
+ is a measure of the entropy of the pixel-pair difference histogram,
+ capturing texture granularity.</li>
 
-<li> Sum Entropy (SE)</li>
+<li> Sum Entropy (SE): Similar to Difference Entropy, Sum Entropy measures
+ the randomness or unpredictability, but in the context of the sum of the
+ grey levels of pixel pairs. It evaluates the entropy of the pixel-pair
+ sum distribution, providing insight into the complexity of texture in
+ terms of intensity variation.</li>
 
 <li> Variance (VAR):
-  A measure of gray tone variance within the moving window (second-order
-moment about the mean)</li>
+ A measure of gray tone variance within the moving window (second-order
+ moment about the mean)</li>
 
-<li> Difference Variance (DV)</li>
+<li> Difference Variance (DV):
+ This is a measure of the variance or spread of the differences in grey
+ levels between pairs of pixels within the moving window. It quantifies
+ the contrast variability between pixels, indicating texture smoothness
+ or roughness.</li>
 
-<li> Sum Variance (SV)</li>
+<li> Sum Variance (SV):
+ In contrast to Difference Variance, Sum Variance measures the variance
+ of the sum of grey levels of pixel pairs. It assesses the variability
+ in the intensity levels of pairs of pixels, contributing to an
+ understanding of texture brightness or intensity variation.</li>
 </ul>
 
 Note that measures "mean", "kurtosis", "range", "skewness", and "standard
@@ -128,9 +157,19 @@ level co-occurrence matrices (GLCM; after Haralick 1979).
  pixels. Typically high, when the scale of local texture is larger than the
  <em>distance</em>.</li>
 
-<li> Information Measures of Correlation (MOC)</li>
+<li> Information Measures of Correlation (MOC):
+ These measures evaluate the complexity of the texture in terms of the
+ mutual dependence between the grey levels of pixel pairs. They
+ quantify how one pixel value informs or correlates with another,
+ offering insight into pattern predictability and structure regularity.</li>
 
-<li> Maximal Correlation Coefficient (MCC)</li>
+<li> Maximal Correlation Coefficient (MCC):
+ This statistic measures the highest correlation between any two
+ features of the texture, providing a single value that summarizes the
+ degree of linear dependency between grey levels in the texture. It's
+ often used to assess the overall correlation in the image, indicating
+ how predictable the texture patterns are from one pixel to the
+ next.</li>
 </ul>
 
 <p>
@@ -147,6 +186,50 @@ will contain a value. The output will thus appear cropped at the margins.
 
 <p>
 Importantly, the input raster map cannot have more than 255 categories.
+
+<h3>Performance</h3>
+To enable parallel processing, the user can specify the number of threads
+to be used with the <b>nprocs</b> parameter (default 1).
+Figures below show benchmark results running on
+Intel® Core™ i9-10940X CPU @ 3.30GHz. See benchmark scripts
+in the source code for more details.
+
+<div align="center" style="margin: 10px">
+  <img src="r_texture_mapsize_time.png"
+  alt="time benchmark for r.texture with different map sizes" border="0">
+  <br>
+  <i>Figure 1: Benchmark shows execution time for different
+    number of cells (1M, 2M, 4M, and 8M) and
+    the fixed size of window (3<span>&#215;</span>3).</i>
+</div>
+<div align="center" style="margin: 10px">
+  <img src="r_texture_mapsize_efficiency.png"
+  alt="efficiency benchmark for r.texture with different map sizes" border="0">
+  <br>
+  <i>Figure 2: Benchmark shows efficiency for different
+    numbers of cells (1M, 2M, 4M, and 8M) and
+    the fixed size of window (3<span>&#215;</span>3).</i>
+</div>
+<div align="center" style="margin: 10px">
+  <img src="r_texture_window_time.png"
+  alt="time benchmark for r.texture with different window sizes" border="0">
+  <br>
+  <i>Figure 3: Benchmark shows execution time for different
+    sizes of windows
+    (3<span>&#215;</span>3, 9<span>&#215;</span>9,
+    15<span>&#215;</span>15, and 27<span>&#215;</span>27)
+    and the fixed number of cells (1M).</i>
+</div>
+<div align="center" style="margin: 10px">
+  <img src="r_texture_window_efficiency.png"
+  alt="efficiency benchmark for r.texture with different window sizes"  border="0">
+  <br>
+  <i>Figure 4: Benchmark shows efficiency for different
+    sizes of windows (3<span>&#215;</span>3, 9<span>&#215;</span>9,
+    15<span>&#215;</span>15, and 27<span>&#215;</span>27)
+    and the fixed number of cells (1M).</i>
+</div>
+
 
 <h2>EXAMPLE</h2>
 
@@ -221,14 +304,9 @@ The overlaid grid highlights that the texture measures output maps
 are cropped at the margins.
 
 <center>
-	<img src="r_texture_directions_example.png" border=1><br>
-	<i>IDM textures according to direction</i>
+<img src="r_texture_directions_example.png" border="1"><br>
+<i>IDM textures according to direction</i>
 </center>
-
-<h2>KNOWN ISSUES</h2>
-
-The program can run incredibly slow for large raster maps and large
-moving windows (<em>size</em> option).
 
 <h2>REFERENCES</h2>
 
@@ -238,7 +316,7 @@ The algorithm was implemented after Haralick et al., 1973 and 1979.
 The original code was taken by permission from <em>pgmtexture</em>, part of
 PBMPLUS (Copyright 1991, Jef Poskanser and Texas Agricultural Experiment
 Station, employer for hire of James Darrell McCauley). Manual page
-of <a href="http://netpbm.sourceforge.net/doc/pgmtexture.html">pgmtexture</a>.
+of <a href="https://netpbm.sourceforge.net/doc/pgmtexture.html">pgmtexture</a>.
 Over the years, the source code of <em>r.texture</em> was further improved.
 
 <ul>
@@ -252,7 +330,7 @@ Over the years, the source code of <em>r.texture</em> was further improved.
 <li>Haralick, R. (May 1979). <i>Statistical and structural approaches to texture</i>,
    Proceedings of the IEEE, vol. 67, No.5, pp. 786-804</li>
 <li>Hall-Beyer, M. (2007). <a href="http://www.fp.ucalgary.ca/mhallbey/tutorial.htm">The GLCM Tutorial Home Page</a>
-  (Grey-Level Co-occurrence Matrix texture measurements). University of Calgary, Canada
+  (Grey-Level Co-occurrence Matrix texture measurements). University of Calgary, Canada</li>
 </ul>
 
 <h2>SEE ALSO</h2>
@@ -262,8 +340,7 @@ Over the years, the source code of <em>r.texture</em> was further improved.
 <a href="i.gensig.html">i.gensig</a>,
 <a href="i.smap.html">i.smap</a>,
 <a href="i.gensigset.html">i.gensigset</a>,
-<a href="https://grass.osgeo.org/grass8/manuals/addons/i.segment.stats.html">
-	        i.segment.stats</a>,
+<a href="https://grass.osgeo.org/grass8/manuals/addons/i.segment.stats.html">i.segment.stats</a>,
 <a href="i.pca.html">i.pca</a>,
 <a href="r.neighbors.html">r.neighbors</a>,
 <a href="r.rescale.html">r.rescale</a>

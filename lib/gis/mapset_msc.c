@@ -183,14 +183,15 @@ int G_make_mapset_object_group_basedir(const char *type, const char *basedir)
 int make_mapset_element_impl(const char *p_path, const char *p_element,
                              bool race_ok)
 {
-    char path[GPATH_MAX], *p;
+    char path[GPATH_MAX] = {'\0'};
+    char *p;
     const char *element;
 
     element = p_element;
     if (*element == 0)
         return 0;
 
-    strncpy(path, p_path, GPATH_MAX);
+    strncpy(path, p_path, GPATH_MAX - 1);
     p = path;
     while (*p)
         p++;
@@ -263,7 +264,7 @@ int G__make_mapset_element_misc(const char *dir, const char *name)
 
 static int check_owner(const struct stat *info)
 {
-#if defined(__MINGW32__) || defined(SKIP_MAPSET_OWN_CHK)
+#if defined(_WIN32) || defined(SKIP_MAPSET_OWN_CHK)
     return 1;
 #else
     const char *check = getenv("GRASS_SKIP_MAPSET_OWNER_CHECK");

@@ -1,15 +1,23 @@
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
+#            Riya Saxena <29riyasaxena AT gmail>
 #
 # PURPOSE:   This module contains utility functions for InteractiveMap.
 #
-# COPYRIGHT: (C) 2021-2022 Caitlin Haedrich, and by the GRASS Development Team
+# COPYRIGHT: (C) 2021-2024 Caitlin Haedrich, and by the GRASS Development Team
 #
 #            This program is free software under the GNU General Public
 #            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
 """Utility functions warpping existing processes in a suitable way"""
+
+from collections.abc import Mapping
+import tempfile
+import json
+import os
+import multiprocessing
+
 from pathlib import Path
 import grass.script as gs
 
@@ -87,34 +95,244 @@ def reproject_region(region, from_proj, to_proj):
     return region
 
 
-def estimate_resolution(raster, mapset, location, dbase, env):
+def reproject_latlon(coord):
+    """Reproject coordinates
+
+    :param coord: coordinates given as tuple (latitude, longitude)
+    :return: reprojected coordinates (returned as tuple)
+    """
+    # Prepare the input coordinate string
+    coord_str = f"{coord[1]} {coord[0]}\n"
+
+    # Start the m.proj command
+    proc = gs.start_command(
+        "m.proj",
+        input="-",
+        flags="i",
+        separator=",",
+        stdin=gs.PIPE,
+        stdout=gs.PIPE,
+        stderr=gs.PIPE,
+    )
+
+    proc.stdin.write(gs.encode(coord_str))
+    proc.stdin.close()
+    proc.stdin = None
+    proj_output, _ = proc.communicate()
+
+    output = gs.decode(proj_output).splitlines()
+    east, north, elev = map(float, output[0].split(","))
+
+    return east, north, elev
+
+
+def _style_table(html_content):
+    """
+    Use to style table displayed in popup.
+
+    :param html_content: HTML content to be displayed
+
+    :return str: formatted HTML content
+    """
+    css = """
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+        }
+        th {
+            background-color: #666666;
+            color: white;
+            text-align: center;
+            font-size: 12px;
+        }
+        td {
+            padding-left: 3px;
+            padding-right: 3px;
+            border: 1px solid #ddd;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        td:last-child {
+            text-align: right;
+        }
+    </style>
+    """
+    return f"{css}{html_content}"
+
+
+def _format_nested_table(attributes):
+    """
+    Format nested attributes into an HTML table row.
+
+    :param attributes: Dictionary of nested attributes to format.
+
+    :return: str: HTML formatted string containing rows for each non-empty attribute.
+    """
+    nested_table = ""
+    for sub_key, sub_value in attributes.items():
+        if sub_value:
+            nested_table += f"""
+            <tr>
+            <td>{sub_key}</td>
+            <td>{sub_value}</td>
+            </tr>
+            """
+    return nested_table
+
+
+def _format_regular_output(items):
+    """
+    Format attributes into an HTML table.
+
+    :param items: List of key-value pairs (tuples) to process.
+
+    :return: str: HTML formatted string containing rows for specified attributes.
+    """
+    regular_output = ""
+    for key, value in items:
+        if key in {"Category", "Layer"}:
+            regular_output += f"""
+            <tr>
+            <td>{key}</td>
+            <td>{value}</td>
+            </tr>
+            """
+    return regular_output
+
+
+def query_raster(coord, raster_list):
+    """
+    Queries raster data at specified coordinates.
+
+    :param coord: Coordinates given as a tuple (latitude, longitude).
+    :param list raster_list: List of raster names to query.
+
+    :return: str: HTML formatted string containing the results of the raster queries.
+    """
+    output_list = ["""<table>"""]
+
+    for raster in raster_list:
+        raster_output = gs.raster.raster_what(map=raster, coord=coord)
+
+        output = f"""<tr>
+        <th colspan='2'>Raster: {raster}</th></tr>"""
+
+        if raster in raster_output[0]:
+            if "value" in raster_output[0][raster]:
+                value = raster_output[0][raster]["value"]
+                output += f"""
+                <tr>
+                <td>Value</td>
+                <td>{value}</td>
+                </tr>
+                """
+            items = raster_output[0][raster].items()
+            formatted_output = _format_regular_output(items)
+            output += formatted_output
+
+        output_list.append(output)
+
+    if len(output_list) == 1:
+        return ""
+
+    output_list.extend(("</table>", "<br>"))
+    final_output = "".join(output_list)
+    return _style_table(final_output)
+
+
+def _process_vector_output(vector, coord, distance):
+    """
+    Process the output of a vector query.
+
+    :param vector: Name of the vector map to query.
+    :param coord: Coordinates given as a tuple for querying.
+    :param distance: Distance within which to query the vector attributes.
+
+    :return: str: HTML formatted string containing the vector output, including regular
+                   attributes and any nested attribute tables.
+    """
+    vector_output = gs.vector.vector_what(map=vector, coord=coord, distance=distance)
+    if len(vector_output[0]) <= 2:
+        return ""
+
+    items = list(vector_output[0].items())
+    attributes_output = ""
+    regular_output = _format_regular_output(items)
+
+    for key, value in items:
+        if key == "Attributes" and isinstance(value, dict):
+            attributes_output = _format_nested_table(value)
+
+    vector_html = f"""
+    <tr>
+    <th colspan='2'>
+    Vector: {vector}
+    </th>
+    </tr>
+    """
+    return vector_html + attributes_output + regular_output
+
+
+def query_vector(coord, vector_list, distance):
+    """
+    Queries vector data at specified coordinates.
+
+    :param coord: Coordinates given as a tuple (latitude, longitude).
+    :param list vector_list: List of vector names to query.
+    :param distance: Distance within which to query the vector attributes.
+
+    :return: str: HTML formatted string containing the results of the vector queries.
+    """
+    output_list = ["<table>"]
+
+    for vector in vector_list:
+        vector_html = _process_vector_output(vector, coord, distance)
+        if vector_html:
+            output_list.append(vector_html)
+
+    if len(output_list) == 1:
+        return ""
+
+    output_list.extend(("</table>", "<br>"))
+    final_output = "".join(output_list)
+    return _style_table(final_output)
+
+
+def estimate_resolution(
+    raster: str, mapset: str, location: str, dbase: str, env: Mapping
+) -> float:
     """Estimates resolution of reprojected raster.
 
-    :param str raster: name of raster
-    :param str mapset: mapset of raster
-    :param str location: name of source location
-    :param str dbase: path to source database
+    :param raster: name of raster
+    :param mapset: mapset of raster
+    :param location: name of source location
+    :param dbase: path to source database
     :param dict env: target environment
 
-    :return float estimate: estimated resolution of raster in destination
-                            environment
+    :return estimate: estimated resolution of raster in destination environment
     """
     output = gs.read_command(
         "r.proj",
         flags="g",
         input=raster,
         mapset=mapset,
-        location=location,
+        project=location,
         dbase=dbase,
         env=env,
     ).strip()
     params = gs.parse_key_val(output, vsep=" ")
     output = gs.read_command("g.region", flags="ug", env=env, **params)
-    output = gs.parse_key_val(output, val_type=float)
-    cell_ns = (output["n"] - output["s"]) / output["rows"]
-    cell_ew = (output["e"] - output["w"]) / output["cols"]
-    estimate = (cell_ew + cell_ns) / 2.0
-    return estimate
+    keyval = gs.parse_key_val(output, val_type=float)
+    cell_ns = (keyval["n"] - keyval["s"]) / keyval["rows"]
+    cell_ew = (keyval["e"] - keyval["w"]) / keyval["cols"]
+    return (cell_ew + cell_ns) / 2.0
 
 
 def setup_location(name, path, epsg, src_env):
@@ -202,6 +420,74 @@ def get_rendering_size(region, width, height, default_width=600, default_height=
     return (default_width, round(default_width * region_height / region_width))
 
 
+def save_vector(name, geo_json):
+    """Saves the user drawn vector.
+
+    :param geo_json: name of the geojson file to be saved
+    :param name: name with which vector should be saved
+    """
+    with tempfile.NamedTemporaryFile(
+        suffix=".geojson", delete=False, mode="w"
+    ) as temp_file:
+        temp_filename = temp_file.name
+        for each in geo_json["features"]:
+            each["properties"].clear()
+        json.dump(geo_json, temp_file)
+    gs.run_command("v.import", input=temp_filename, output=name)
+    os.remove(temp_filename)
+
+
+def get_number_of_cores(requested, env=None):
+    """Get the number of cores to use for multiprocessing.
+
+    :param int requested: Desired number of cores.
+    :param dict env: Optional process environment.
+
+    :return int: Number of cores to use, constrained by system availability.
+    """
+    nprocs = gs.gisenv(env).get("NPROCS")
+    if nprocs is not None:
+        return int(nprocs)
+
+    try:
+        num_cores = len(os.sched_getaffinity(0))
+    except AttributeError:
+        num_cores = multiprocessing.cpu_count()
+    return min(requested, max(1, num_cores - 1))
+
+
+def get_region_bounds_latlon():
+    """Gets the current computational region bounds in latlon.
+
+    :return list of tuples: represent the southwest and northeast
+                            corners of the region in (latitude, longitude) format.
+    """
+    region = gs.parse_command("g.region", flags="gbp")
+    return [
+        (float(region["ll_s"]), float(region["ll_w"])),
+        (float(region["ll_n"]), float(region["ll_e"])),
+    ]
+
+
+def update_region(region):
+    """Updates the computational region bounds.
+
+    :param dict region: region dictionary
+    :return: the new region
+    """
+    current = gs.region()
+    return gs.parse_command(
+        "g.region",
+        flags="ga",
+        n=region["north"],
+        s=region["south"],
+        e=region["east"],
+        w=region["west"],
+        nsres=current["nsres"],
+        ewres=current["ewres"],
+    )
+
+
 def save_gif(
     input_files,
     output_filename,
@@ -212,8 +498,7 @@ def save_gif(
     text_size=12,
     text_color="gray",
 ):
-    """
-    Creates a GIF animation
+    """Creates a GIF animation
 
     param list input_files: list of paths to source
     param str output_filename: destination gif filename

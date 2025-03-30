@@ -1,3 +1,4 @@
+from pathlib import Path
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script.raster import raster_info
@@ -628,8 +629,9 @@ class TestNeighbors(TestCase):
         self.to_remove.extend(outputs_threaded)
 
         weights = tempfile()
-        with open(weights, "w") as w:
-            w.write("0 1 1 1 0\n1 0 0 0 1\n1 0 0 0 1\n1 0 0 0 1\n0 1 1 1 0")
+        Path(weights).write_text(
+            "0 1 1 1 0\n1 0 0 0 1\n1 0 0 0 1\n1 0 0 0 1\n0 1 1 1 0"
+        )
 
         self.assertModule(
             "r.neighbors",
@@ -708,7 +710,7 @@ class TestNeighbors(TestCase):
             rinfo = raster_info(rmap)
             self.assertTrue(
                 rinfo["datatype"] == "CELL"
-                if rinfo["datatype"] in ["diversity", "range", "mode"]
+                if rinfo["datatype"] in {"diversity", "range", "mode"}
                 else "DCELL"
             )
 

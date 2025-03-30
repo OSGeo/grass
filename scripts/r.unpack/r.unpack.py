@@ -30,8 +30,8 @@
 # %end
 # %flag
 # % key: o
-# % label: Override projection check (use current location's projection)
-# % description: Assume that the dataset has same projection as the current location
+# % label: Override projection check (use current projects's CRS)
+# % description: Assume that the dataset has same coordinate reference system as the current project
 # % guisection: Output settings
 # %end
 # %flag
@@ -41,6 +41,7 @@
 # %end
 
 import os
+from pathlib import Path
 import sys
 import shutil
 import tarfile
@@ -62,7 +63,7 @@ def main():
     grass.debug("tmp_dir = {tmpdir}".format(tmpdir=tmp_dir))
 
     if not os.path.exists(infile):
-        grass.fatal(_("File {name} not found.".format(name=infile)))
+        grass.fatal(_("File {name} not found.").format(name=infile))
 
     gisenv = grass.gisenv()
     mset_dir = os.path.join(
@@ -86,26 +87,21 @@ def main():
                 f = tar.extractfile("{}/{}".format(data_names[0], fname))
                 sys.stdout.write(f.read().decode())
         except KeyError:
-            grass.fatal(_("Pack file unreadable: file '{}' missing".format(fname)))
+            grass.fatal(_("Pack file unreadable: file '{}' missing").format(fname))
         tar.close()
 
         return 0
 
-    if options["output"]:
-        map_name = options["output"]
-    else:
-        map_name = data_names[0].split("@")[0]
+    map_name = options["output"] or data_names[0].split("@")[0]
 
     gfile = grass.find_file(name=map_name, element="cell", mapset=".")
     if gfile["file"]:
         if os.environ.get("GRASS_OVERWRITE", "0") != "1":
-            grass.fatal(_("Raster map <{name}> already exists".format(name=map_name)))
+            grass.fatal(_("Raster map <{name}> already exists").format(name=map_name))
         else:
             grass.warning(
-                _(
-                    "Raster map <{name}> already exists and will be overwritten".format(
-                        name=map_name
-                    )
+                _("Raster map <{name}> already exists and will be overwritten").format(
+                    name=map_name
                 )
             )
 
@@ -131,18 +127,17 @@ def main():
         grass.fatal(
             _(
                 "This GRASS GIS pack file contains vector data. Use "
-                "v.unpack to unpack <{name}>".format(name=map_name)
-            )
+                "v.unpack to unpack <{name}>"
+            ).format(name=map_name)
         )
+
     else:
         grass.fatal(_("Pack file unreadable"))
 
     # check projection compatibility in a rather crappy way
 
     if flags["o"]:
-        grass.warning(
-            _("Overriding projection check (using current location's projection).")
-        )
+        grass.warning(_("Overriding projection check (using current project's CRS)."))
 
     else:
         diff_result_1 = diff_result_2 = None
@@ -155,7 +150,8 @@ def main():
             if os.path.exists(proj_info_file_2):
                 grass.fatal(
                     _(
-                        "PROJ_INFO file is missing, unpack raster map in XY (unprojected) location."
+                        "PROJ_INFO file is missing, unpack raster map in XY "
+                        "(unprojected) project."
                     )
                 )
             skip_projection_check = True  # XY location
@@ -179,22 +175,23 @@ def main():
                     grass.warning(
                         _(
                             "Difference between PROJ_INFO file of packed map "
-                            "and of current location:\n{diff}"
+                            "and of current project:\n{diff}"
                         ).format(diff="".join(diff_result_1))
                     )
                 if diff_result_2:
                     grass.warning(
                         _(
                             "Difference between PROJ_UNITS file of packed map "
-                            "and of current location:\n{diff}"
+                            "and of current project:\n{diff}"
                         ).format(diff="".join(diff_result_2))
                     )
                 grass.fatal(
                     _(
-                        "Projection of dataset does not appear to match current location."
-                        " In case of no significant differences in the projection definitions,"
+                        "Coordinate reference system of dataset does"
+                        " not appear to match current project."
+                        " In case of no significant differences in the CRS definitions,"
                         " use the -o flag to ignore them and use"
-                        " current location definition."
+                        " current project definition."
                     )
                 )
 
@@ -243,10 +240,9 @@ def main():
     if maps:
         if vrt_file and os.path.exists(vrt_file):
             files = "\n".join(maps)
-            with open(vrt_file, "w") as f:
-                f.write(files)
+            Path(vrt_file).write_text(files)
 
-    grass.message(_("Raster map <{name}> unpacked".format(name=map_name)))
+    grass.message(_("Raster map <{name}> unpacked").format(name=map_name))
 
 
 if __name__ == "__main__":

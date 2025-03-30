@@ -67,8 +67,7 @@ NvizIcons = {
         img="flythrough",
         label=_("Fly-through mode"),
         desc=_(
-            "Drag with mouse, hold Ctrl down for different mode"
-            " or Shift to accelerate"
+            "Drag with mouse, hold Ctrl down for different mode or Shift to accelerate"
         ),
     ),
     "zoomIn": BaseIcons["zoomIn"].SetLabel(desc=_("Click mouse to zoom")),
@@ -120,7 +119,8 @@ class MapToolbar(BaseToolbar):
             self._giface.WriteWarning(_("Reason: %s") % errorMsg)
             self._giface.WriteLog(
                 _(
-                    "Note that the wxGUI's vector digitizer is disabled in this installation. "
+                    "Note that the wxGUI's vector digitizer is disabled in this "
+                    "installation."
                     "Please keep an eye out for updated versions of GRASS. "
                     'In the meantime you can use "v.edit" for non-interactive editing '
                     "from the Develop vector map menu."
@@ -251,10 +251,10 @@ class MapToolbar(BaseToolbar):
             ),
         )
         if self.parent.IsDockable():
-            data = data + (
+            data += (
                 (
-                    ("mapDispDocking", BaseIcons["mapDispDocking"].label),
-                    BaseIcons["mapDispDocking"],
+                    ("docking", BaseIcons["docking"].label),
+                    BaseIcons["docking"],
                     self.parent.OnDockUndock,
                     wx.ITEM_CHECK,
                 ),
@@ -284,10 +284,7 @@ class MapToolbar(BaseToolbar):
 
     def ChangeToolsDesc(self, mode2d):
         """Change description of zoom tools for 2D/3D view"""
-        if mode2d:
-            icons = BaseIcons
-        else:
-            icons = NvizIcons
+        icons = BaseIcons if mode2d else NvizIcons
         for i, data in enumerate(self.controller.data):
             for tool in ("zoomIn", "zoomOut"):
                 if data[0] == tool:

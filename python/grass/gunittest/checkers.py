@@ -9,13 +9,19 @@ for details.
 :authors: Vaclav Petras, Soeren Gebbert
 """
 
-import os
-import sys
-import re
+from __future__ import annotations
+
 import doctest
 import hashlib
+import os
+import re
+import sys
+from typing import TYPE_CHECKING, Any
 
 from grass.script.utils import encode
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Mapping
 
 try:
     from grass.script.core import KeyValue
@@ -23,7 +29,8 @@ except (ImportError, AttributeError):
     # TODO: we are silent about the error and use a object with different
     # interface, should be replaced by central keyvalue module
     # this can happen when translations are not available
-    # TODO: grass should survive are give better error when tranlsations are not available
+    # TODO: grass should survive and give better errors when translations are not
+    # available
     # even the lazy loading after first _ call would be interesting
     # File "...grass/script/core.py", line 40, in <module>
     # AttributeError: 'NoneType' object has no attribute 'endswith'
@@ -41,7 +48,7 @@ def unify_projection(dic):
 
     Example of common typo in UTM replaced by correct spelling::
 
-        >>> unify_projection({'name': ['Universe Transverse Mercator']})
+        >>> unify_projection({"name": ["Universe Transverse Mercator"]})
         {'name': ['Universal Transverse Mercator']}
 
     :param dic: The dictionary containing information about projection
@@ -67,7 +74,7 @@ def unify_units(dic):
 
     Example of British English spelling replaced by US English spelling::
 
-        >>> unify_units({'units': ['metres'], 'unit': ['metre']})  # doctest: +SKIP
+        >>> unify_units({"units": ["metres"], "unit": ["metre"]})  # doctest: +SKIP
         {'units': ['meters'], 'unit': ['meter']}
 
     :param dic: The dictionary containing information about units
@@ -92,14 +99,14 @@ def unify_units(dic):
             for n in range(len(dic["unit"])):
                 if dic["unit"][n] in item:
                     dic["unit"][n] = item[0]
-        else:
+        else:  # noqa: PLR5501
             if dic["unit"] in item:
                 dic["unit"] = item[0]
         if not isinstance(dic["units"], str):
             for n in range(len(dic["units"])):
                 if dic["units"][n] in item:
                     dic["units"][n] = item[0]
-        else:
+        else:  # noqa: PLR5501
             if dic["units"] in item:
                 dic["units"] = item[0]
     return dic
@@ -111,13 +118,13 @@ def value_from_string(value):
     Type conversions are applied in order ``int``, ``float``, ``string``
     where string is no conversion.
 
-    >>> value_from_string('1')
+    >>> value_from_string("1")
     1
-    >>> value_from_string('5.6')
+    >>> value_from_string("5.6")
     5.6
-    >>> value_from_string('  5.6\t  ')
+    >>> value_from_string("  5.6\t  ")
     5.6
-    >>> value_from_string('hello')
+    >>> value_from_string("hello")
     'hello'
     """
     not_float = False
@@ -178,10 +185,14 @@ def text_to_keyvalue(
     And example of converting text with text, floats, integers and list
     to a dictionary::
 
-        >>> sorted(text_to_keyvalue('''a: Hello
+        >>> sorted(
+        ...     text_to_keyvalue(
+        ...         '''a: Hello
         ... b: 1.0
         ... c: 1,2,3,4,5
-        ... d : hello,8,0.1''').items())  # sorted items from the dictionary
+        ... d : hello,8,0.1'''
+        ...     ).items()
+        ... )  # sorted items from the dictionary
         [('a', 'Hello'), ('b', 1.0), ('c', [1, 2, 3, 4, 5]), ('d', ['hello', 8, 0.1])]
 
     .. warning::
@@ -213,19 +224,17 @@ def text_to_keyvalue(
                     if kvdict:
                         # key is the one from previous line
                         msg = (
-                            "Empty line in the parsed text."
-                            " Previous line's key is <%s>"
+                            "Empty line in the parsed text. Previous line's key is <%s>"
                         ) % key
                     raise ValueError(msg)
-            else:
+            else:  # noqa: PLR5501
                 # line contains something but not separator
                 if not skip_invalid:
                     # TODO: here should go _ for translation
-                    raise ValueError(
-                        ("Line <{l}> does not contain" " separator <{s}>.").format(
-                            l=line, s=sep
-                        )
+                    msg = ("Line <{l}> does not contain separator <{s}>.").format(
+                        l=line, s=sep
                     )
+                    raise ValueError(msg)
             # if we get here we are silently ignoring the line
             # because it is invalid (does not contain key-value separator) or
             # because it is empty
@@ -250,8 +259,9 @@ def text_to_keyvalue(
 # TODO: define standard precisions for DCELL, FCELL, CELL, mm, ft, cm, ...
 # TODO: decide if None is valid, and use some default or no compare
 # TODO: is None a valid value for precision?
-def values_equal(value_a, value_b, precision=0.000001):
-    """
+def values_equal(value_a, value_b, precision: float = 0.000001) -> bool:
+    """Compare two values for equality within a given precision.
+
     >>> values_equal(1.022, 1.02, precision=0.01)
     True
     >>> values_equal([1.2, 5.3, 6.8], [1.1, 5.2, 6.9], precision=0.2)
@@ -260,9 +270,10 @@ def values_equal(value_a, value_b, precision=0.000001):
     True
     >>> values_equal(1, 5.9, precision=10)
     True
-    >>> values_equal('Hello', 'hello')
+    >>> values_equal("Hello", "hello")
     False
-    """
+    """  # noqa: D402
+    # Add a summary
     # each if body needs to handle only not equal state
 
     if isinstance(value_a, float) and isinstance(value_b, float):
@@ -271,6 +282,11 @@ def values_equal(value_a, value_b, precision=0.000001):
         # in Python 2 None is smaller than anything
         # in Python 3 None < 3 raises TypeError
         precision = float(precision)
+        if precision < 0:
+            msg = (
+                f"precision needs to be greater than or equal to zero: {precision} < 0"
+            )
+            raise ValueError(msg)
         if abs(value_a - value_b) > precision:
             return False
 
@@ -303,15 +319,19 @@ def values_equal(value_a, value_b, precision=0.000001):
             # apply this function for comparison of items in the list
             if not values_equal(value_a[i], value_b[i], precision):
                 return False
-    else:
-        if value_a != value_b:
-            return False
+    elif value_a != value_b:
+        return False
     return True
 
 
 def keyvalue_equals(
-    dict_a, dict_b, precision, def_equal=values_equal, key_equal=None, a_is_subset=False
-):
+    dict_a: Mapping,
+    dict_b: Mapping,
+    precision: float,
+    def_equal: Callable = values_equal,
+    key_equal: Mapping[Any, Callable] | None = None,
+    a_is_subset: bool = False,
+) -> bool:
     """Compare two dictionaries.
 
     .. note::
@@ -321,22 +341,29 @@ def keyvalue_equals(
 
     An example of key-value texts comparison::
 
-        >>> keyvalue_equals(text_to_keyvalue('''a: Hello
+        >>> keyvalue_equals(
+        ...     text_to_keyvalue(
+        ...         '''a: Hello
         ... b: 1.0
         ... c: 1,2,3,4,5
-        ... d: hello,8,0.1'''),
-        ... text_to_keyvalue('''a: Hello
+        ... d: hello,8,0.1'''
+        ...     ),
+        ...     text_to_keyvalue(
+        ...         '''a: Hello
         ... b: 1.1
         ... c: 1,22,3,4,5
-        ... d: hello,8,0.1'''), precision=0.1)
+        ... d: hello,8,0.1'''
+        ...     ),
+        ...     precision=0.1,
+        ... )
         False
 
     :param dict_a: first dictionary
     :param dict_b: second dictionary
     :param precision: precision with which the floating point values
         are compared (passed to equality functions)
-    :param callable def_equal: function used for comparison by default
-    :param dict key_equal: dictionary of functions used for comparison
+    :param def_equal: function used for comparison by default
+    :param key_equal: dictionary of functions used for comparison
         of specific keys, `def_equal` is used for the rest,
         keys in dictionary are keys in `dict_a` and `dict_b` dictionaries,
         values are the functions used to comapare the given key
@@ -345,7 +372,7 @@ def keyvalue_equals(
 
     :return: `True` if identical, `False` if different
 
-    Use `diff_keyvalue()` to get information about differeces.
+    Use `diff_keyvalue()` to get information about differences.
     You can use this function to find out if there is a difference and then
     use `diff_keyvalue()` to determine all the differences between
     dictionaries.
@@ -354,7 +381,7 @@ def keyvalue_equals(
 
     if not a_is_subset and sorted(dict_a.keys()) != sorted(dict_b.keys()):
         return False
-    b_keys = dict_b.keys() if a_is_subset else None
+    b_keys = dict_b.keys() if a_is_subset else set()
 
     # iterate over subset or just any if not a_is_subset
     # check for missing keys in superset
@@ -377,13 +404,13 @@ def diff_keyvalue(
 
     The function returns missing keys and different values for common keys::
 
-        >>> a = {'c': 2, 'b': 3, 'a': 4}
-        >>> b = {'c': 1, 'b': 3, 'd': 5}
+        >>> a = {"c": 2, "b": 3, "a": 4}
+        >>> b = {"c": 1, "b": 3, "d": 5}
         >>> diff_keyvalue(a, b, precision=0)
         (['d'], ['a'], [('c', 2, 1)])
 
     You can provide only a subset of values in dict_a, in this case
-    first item in tuple is an emptu list::
+    first item in tuple is an empty list::
 
         >>> diff_keyvalue(a, b, a_is_subset=True, precision=0)
         ([], ['a'], [('c', 2, 1)])
@@ -480,34 +507,34 @@ def proj_units_equals(text_a, text_b):
 # TODO: change checking over lines?
 # TODO: change parameter order?
 # TODO: the behavior with last \n is strange but now using DOTALL and $
-def check_text_ellipsis(reference, actual):
-    r"""
-    >>> check_text_ellipsis("Vector map <...> contains ... points.",
-    ...                     "Vector map <bridges> contains 5268 points.")
+def check_text_ellipsis(reference, actual) -> bool:
+    r"""Check if actual text matches reference text with ellipsis as wildcards.
+
+    >>> check_text_ellipsis(
+    ...     "Vector map <...> contains ... points.",
+    ...     "Vector map <bridges> contains 5268 points.",
+    ... )
     True
-    >>> check_text_ellipsis("user: ...\\nname: elevation",
-    ...                     "user: some_user\\nname: elevation")
+    >>> check_text_ellipsis(
+    ...     "user: ...\\nname: elevation", "user: some_user\\nname: elevation"
+    ... )
     True
-    >>> check_text_ellipsis("user: ...\\nname: elevation",
-    ...                     "user: \\nname: elevation")
+    >>> check_text_ellipsis("user: ...\\nname: elevation", "user: \\nname: elevation")
     False
 
     The ellipsis is always considered even if it is followed by another
     dots. Consequently, a dot at the end of the sentence with preceding
     ellipsis will work as well as a line filled with undefined number of dots.
 
-    >>> check_text_ellipsis("The result is ....",
-    ...                     "The result is 25.")
+    >>> check_text_ellipsis("The result is ....", "The result is 25.")
     True
-    >>> check_text_ellipsis("max ..... ...",
-    ...                     "max ....... 6")
+    >>> check_text_ellipsis("max ..... ...", "max ....... 6")
     True
 
     However, there is no way how to express that the dot should be in the
     beginning and the ellipsis is at the end of the group of dots.
 
-    >>> check_text_ellipsis("The result is ....",
-    ...                     "The result is .25")
+    >>> check_text_ellipsis("The result is ....", "The result is .25")
     False
 
     The matching goes over lines (TODO: should this be changed?):
@@ -517,60 +544,71 @@ def check_text_ellipsis(reference, actual):
     This function is based on regular expression containing .+ but no other
     regular expression matching will be done.
 
-    >>> check_text_ellipsis("Result: [569] (...)",
-    ...                     "Result: 9 (too high)")
+    >>> check_text_ellipsis("Result: [569] (...)", "Result: 9 (too high)")
     False
-    """
+    """  # noqa: D402
+    # Add a summary
     ref_escaped = re.escape(reference)
     exp = re.compile(r"\\\.\\\.\\\.")  # matching escaped ...
     ref_regexp = exp.sub(".+", ref_escaped) + "$"
-    if re.match(ref_regexp, actual, re.DOTALL):
-        return True
-    else:
-        return False
+    return bool(re.match(ref_regexp, actual, re.DOTALL))
 
 
 def check_text_ellipsis_doctest(reference, actual):
-    """
-    >>> check_text_ellipsis_doctest("user: ...\\nname: elevation",
-    ...                     "user: some_user\\nname: elevation")
+    """Check if actual text matches reference with ellipsis using doctest's matching.
+
+    >>> check_text_ellipsis_doctest(
+    ...     "user: ...\\nname: elevation", "user: some_user\\nname: elevation"
+    ... )
     True
-    >>> check_text_ellipsis_doctest("user: ...\\nname: elevation",
-    ...                     "user: \\nname: elevation")
+    >>> check_text_ellipsis_doctest(
+    ...     "user: ...\\nname: elevation", "user: \\nname: elevation"
+    ... )
     True
 
     This function is using doctest's function to check the result, so we
     will discuss here how the underlying function behaves.
 
     >>> checker = doctest.OutputChecker()
-    >>> checker.check_output("user: some_user\\nname: elevation",
-    ...                      "user: some_user\\nname: elevation",
-    ...                      optionflags=None)
+    >>> checker.check_output(
+    ...     "user: some_user\\nname: elevation",
+    ...     "user: some_user\\nname: elevation",
+    ...     optionflags=None,
+    ... )
     True
-    >>> checker.check_output("user: user1\\nname: elevation",
-    ...                      "user: some_user\\nname: elevation",
-    ...                      optionflags=doctest.ELLIPSIS)
+    >>> checker.check_output(
+    ...     "user: user1\\nname: elevation",
+    ...     "user: some_user\\nname: elevation",
+    ...     optionflags=doctest.ELLIPSIS,
+    ... )
     False
-    >>> checker.check_output("user: ...\\nname: elevation",
-    ...                      "user: some_user\\nname: elevation",
-    ...                      optionflags=doctest.ELLIPSIS)
+    >>> checker.check_output(
+    ...     "user: ...\\nname: elevation",
+    ...     "user: some_user\\nname: elevation",
+    ...     optionflags=doctest.ELLIPSIS,
+    ... )
     True
 
     The ellipsis matches also an empty string, so the following matches:
 
-    >>> checker.check_output("user: ...\\nname: elevation",
-    ...                      "user: \\nname: elevation",
-    ...                      optionflags=doctest.ELLIPSIS)
+    >>> checker.check_output(
+    ...     "user: ...\\nname: elevation",
+    ...     "user: \\nname: elevation",
+    ...     optionflags=doctest.ELLIPSIS,
+    ... )
     True
 
     It is robust concerning misspelled matching string but does not allow
     ellipsis followed by a dot, e.g. at the end of the sentence:
 
-    >>> checker.check_output("user: ....\\nname: elevation",
-    ...                      "user: some_user\\nname: elevation",
-    ...                      optionflags=doctest.ELLIPSIS)
+    >>> checker.check_output(
+    ...     "user: ....\\nname: elevation",
+    ...     "user: some_user\\nname: elevation",
+    ...     optionflags=doctest.ELLIPSIS,
+    ... )
     False
-    """
+    """  # noqa: D402
+    # Add a summary
     # this can be also global
     checker = doctest.OutputChecker()
     return checker.check_output(reference, actual, optionflags=doctest.ELLIPSIS)
@@ -616,7 +654,7 @@ def text_file_md5(
     if prepend_lines:
         for line in prepend_lines:
             hasher.update(encode(line))
-    with open(filename, "r") as f:
+    with open(filename) as f:
         for line in f:
             # replace platform newlines by standard newline
             if os.linesep != "\n":

@@ -17,24 +17,107 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-
 import locale
-
 import os
 import sys
-import wx
+from ctypes import CFUNCTYPE, byref, c_double, c_int, pointer
+from grass.lib.ctypes_preamble import UNCHECKED, String
 
+import wx
 from core.debug import Debug
-from core.settings import UserSettings
 from core.gcmd import DecodeString
-from gui_core.wrap import Rect
+from core.settings import UserSettings
 
 try:
-    from grass.lib.gis import *
-    from grass.lib.vector import *
-    from grass.lib.vedit import *
+    from grass.lib.gis import (
+        G_gisinit,
+        G_set_error_routine,
+        G_set_percent_routine,
+        G_unset_error_routine,
+        G_unset_percent_routine,
+    )
+    from grass.lib.vector import (  # Types; Functions; Classes
+        GV_BOUNDARY,
+        GV_BUILD_NONE,
+        GV_CENTROID,
+        GV_LINE,
+        GV_LINES,
+        GV_MODE_RW,
+        GV_POINT,
+        GV_POINTS,
+        WITHOUT_Z,
+        Map_info,
+        Vect_append_point,
+        Vect_box_copy,
+        Vect_box_extend,
+        Vect_build,
+        Vect_build_partial,
+        Vect_close,
+        Vect_destroy_cats_struct,
+        Vect_destroy_line_struct,
+        Vect_destroy_list,
+        Vect_find_line_list,
+        Vect_get_area_box,
+        Vect_get_area_centroid,
+        Vect_get_centroid_area,
+        Vect_get_line_box,
+        Vect_get_map_box,
+        Vect_get_num_areas,
+        Vect_get_num_lines,
+        Vect_is_3d,
+        Vect_line_alive,
+        Vect_line_check_duplicate,
+        Vect_line_distance,
+        Vect_list_append,
+        Vect_new_cats_struct,
+        Vect_new_line_struct,
+        Vect_new_list,
+        Vect_open_old,
+        Vect_open_tmp_old,
+        Vect_open_tmp_update,
+        Vect_open_update,
+        Vect_point_in_area,
+        Vect_point_in_poly,
+        Vect_points_distance,
+        Vect_read_line,
+        Vect_select_lines_by_polygon,
+        Vect_set_updated,
+        bound_box,
+        PORT_DOUBLE_MAX,
+    )
+    from grass.lib.vedit import (  # Types; Draw flags; Functions
+        DRAW_AREA,
+        DRAW_BOUNDARYNO,
+        DRAW_BOUNDARYONE,
+        DRAW_BOUNDARYTWO,
+        DRAW_CENTROIDDUP,
+        DRAW_CENTROIDIN,
+        DRAW_CENTROIDOUT,
+        DRAW_DIRECTION,
+        DRAW_LINE,
+        DRAW_NODEONE,
+        DRAW_NODETWO,
+        DRAW_POINT,
+        DRAW_VERTEX,
+        TYPE_AREA,
+        TYPE_BOUNDARYNO,
+        TYPE_BOUNDARYONE,
+        TYPE_BOUNDARYTWO,
+        TYPE_CENTROIDDUP,
+        TYPE_CENTROIDIN,
+        TYPE_CENTROIDOUT,
+        TYPE_DIRECTION,
+        TYPE_ISLE,
+        TYPE_LINE,
+        TYPE_NODEONE,
+        TYPE_NODETWO,
+        TYPE_POINT,
+        TYPE_VERTEX,
+        Vedit_render_map,
+    )
 except (ImportError, OSError, TypeError) as e:
-    print("wxdigit.py: {}".format(e), file=sys.stderr)
+    print("wxdisplay.py: {}".format(e), file=sys.stderr)
+from gui_core.wrap import Rect
 
 log = None
 progress = None
@@ -129,9 +212,9 @@ class DisplayDriver:
         # selected objects
         self.selected = {
             "field": -1,  # field number
-            "cats": list(),  # list of cats
-            "ids": list(),  # list of ids
-            "idsDupl": list(),  # list of duplicated features
+            "cats": [],  # list of cats
+            "ids": [],  # list of ids
+            "idsDupl": [],  # list of duplicated features
         }
 
         # digitizer settings
@@ -261,7 +344,7 @@ class DisplayDriver:
             dcId = 1
             self.topology["highlight"] += 1
             if not self._drawSelected:
-                return
+                return None
         elif robj.type != TYPE_AREA and self._isSelected(robj.fid):
             pdc = self.dcTmp
             if self.settings["highlightDupl"]["enabled"] and self._isDuplicated(
@@ -280,7 +363,7 @@ class DisplayDriver:
             dcId = 1
             self.topology["highlight"] += 1
             if not self._drawSelected:
-                return
+                return None
         else:
             pdc = self.dc
             pen, brush = self._definePen(robj.type)
@@ -316,57 +399,56 @@ class DisplayDriver:
                     pdc.SetId(dcId)
                     dcId += 2
                 self._drawCross(pdc, p)
-        else:
-            if dcId > 0 and self._drawSegments:
-                self.fisrtNode = True
-                self.lastNodeId = robj.npoints * 2 - 1
-                dcId = 2  # first segment
-                i = 0
-                while i < robj.npoints - 1:
-                    point_beg = wx.Point(robj.point[i].x, robj.point[i].y)
-                    point_end = wx.Point(robj.point[i + 1].x, robj.point[i + 1].y)
-                    # set unique id & set bbox for each segment
-                    pdc.SetId(dcId)
-                    pdc.SetPen(pen)
-                    pdc.SetIdBounds(dcId - 1, Rect(point_beg.x, point_beg.y, 0, 0))
-                    pdc.SetIdBounds(
-                        dcId,
-                        Rect(
-                            point_beg.x,
-                            point_beg.y,
-                            point_end.x - point_beg.x,
-                            point_end.y - point_beg.y,
-                        ),
-                    )
-                    pdc.DrawLine(point_beg.x, point_beg.y, point_end.x, point_end.y)
-                    i += 1
-                    dcId += 2
+        elif dcId > 0 and self._drawSegments:
+            self.fisrtNode = True
+            self.lastNodeId = robj.npoints * 2 - 1
+            dcId = 2  # first segment
+            i = 0
+            while i < robj.npoints - 1:
+                point_beg = wx.Point(robj.point[i].x, robj.point[i].y)
+                point_end = wx.Point(robj.point[i + 1].x, robj.point[i + 1].y)
+                # set unique id & set bbox for each segment
+                pdc.SetId(dcId)
+                pdc.SetPen(pen)
+                pdc.SetIdBounds(dcId - 1, Rect(point_beg.x, point_beg.y, 0, 0))
                 pdc.SetIdBounds(
-                    dcId - 1,
+                    dcId,
                     Rect(
-                        robj.point[robj.npoints - 1].x,
-                        robj.point[robj.npoints - 1].y,
-                        0,
-                        0,
+                        point_beg.x,
+                        point_beg.y,
+                        point_end.x - point_beg.x,
+                        point_end.y - point_beg.y,
                     ),
                 )
-            else:
-                points = list()
-                for i in range(robj.npoints):
-                    p = robj.point[i]
-                    points.append(wx.Point(p.x, p.y))
-                if len(points) <= 1:
-                    self.log.write(
-                        _(
-                            "WARNING: Zero-length line or boundary drawing skipped. "
-                            "Use v.clean to remove it."
-                        )
+                pdc.DrawLine(point_beg.x, point_beg.y, point_end.x, point_end.y)
+                i += 1
+                dcId += 2
+            pdc.SetIdBounds(
+                dcId - 1,
+                Rect(
+                    robj.point[robj.npoints - 1].x,
+                    robj.point[robj.npoints - 1].y,
+                    0,
+                    0,
+                ),
+            )
+        else:
+            points = []
+            for i in range(robj.npoints):
+                p = robj.point[i]
+                points.append(wx.Point(p.x, p.y))
+            if len(points) <= 1:
+                self.log.write(
+                    _(
+                        "WARNING: Zero-length line or boundary drawing skipped. "
+                        "Use v.clean to remove it."
                     )
-                    return
-                if robj.type == TYPE_AREA:
-                    pdc.DrawPolygon(points)
-                else:
-                    pdc.DrawLines(points)
+                )
+                return None
+            if robj.type == TYPE_AREA:
+                pdc.DrawPolygon(points)
+            else:
+                pdc.DrawLines(points)
 
     def _definePen(self, rtype):
         """Define pen/brush based on rendered object)
@@ -375,6 +457,8 @@ class DisplayDriver:
 
         :return: pen, brush
         """
+
+        key = None
         if rtype == TYPE_POINT:
             key = "point"
         elif rtype == TYPE_LINE:
@@ -404,10 +488,10 @@ class DisplayDriver:
         elif rtype == TYPE_DIRECTION:
             key = "direction"
 
-        if key not in ("direction", "area", "isle"):
+        if key not in {"direction", "area", "isle"}:
             self.topology[key] += 1
 
-        if key in ("area", "isle"):
+        if key in {"area", "isle"}:
             pen = wx.TRANSPARENT_PEN
             if key == "area":
                 brush = wx.Brush(self.settings[key]["color"], wx.SOLID)
@@ -458,7 +542,7 @@ class DisplayDriver:
 
         return ret
 
-    def _isSelected(self, line, force=False):
+    def _isSelected(self, line, force=False) -> bool:
         """Check if vector object selected?
 
         :param line: feature id
@@ -466,10 +550,7 @@ class DisplayDriver:
         :return: True if vector object is selected
         :return: False if vector object is not selected
         """
-        if line in self.selected["ids"]:
-            return True
-
-        return False
+        return line in self.selected["ids"]
 
     def _isDuplicated(self, line):
         """Check for already marked duplicates
@@ -537,7 +618,7 @@ class DisplayDriver:
         # reset list of selected features by cat
         # list of ids - see IsSelected()
         self.selected["field"] = -1
-        self.selected["cats"] = list()
+        self.selected["cats"] = []
 
     def _getSelectType(self):
         """Get type(s) to be selected
@@ -558,7 +639,7 @@ class DisplayDriver:
 
         return ftype
 
-    def _validLine(self, line):
+    def _validLine(self, line) -> bool:
         """Check if feature id is valid
 
         :param line: feature id
@@ -566,10 +647,7 @@ class DisplayDriver:
         :return: True valid feature id
         :return: False invalid
         """
-        if line > 0 and line <= Vect_get_num_lines(self.poMapInfo):
-            return True
-
-        return False
+        return bool(0 < line <= Vect_get_num_lines(self.poMapInfo))
 
     def SelectLinesByBox(self, bbox, ltype=None, drawSeg=False, poMapInfo=None):
         """Select vector objects by given bounding box
@@ -597,7 +675,7 @@ class DisplayDriver:
             self._drawSelected = True
 
             # select by ids
-            self.selected["cats"] = list()
+            self.selected["cats"] = []
 
         poList = Vect_new_list()
         x1, y1 = bbox[0]
@@ -690,7 +768,7 @@ class DisplayDriver:
         if thisMapInfo:
             self._drawSelected = True
             # select by ids
-            self.selected["cats"] = list()
+            self.selected["cats"] = []
 
         poFound = Vect_new_list()
 
@@ -720,7 +798,7 @@ class DisplayDriver:
         pz = c_double()
         if not self._validLine(lineNearest):
             return {"line": -1, "point": None}
-        ftype = Vect_read_line(poMapInfo, self.poPoints, self.poCats, lineNearest)
+        Vect_read_line(poMapInfo, self.poPoints, self.poCats, lineNearest)
         Vect_line_distance(
             self.poPoints,
             point[0],
@@ -789,7 +867,7 @@ class DisplayDriver:
         if grassId:
             return self.selected["ids"]
 
-        dc_ids = list()
+        dc_ids = []
 
         if not self._drawSegments:
             dc_ids.append(1)
@@ -817,9 +895,10 @@ class DisplayDriver:
         self.selected["field"] = layer
         if layer > 0:
             self.selected["cats"] = ids
-            self.selected["ids"] = list()
+            self.selected["ids"] = []
             # cidx is not up-to-date
-            # Vect_cidx_find_all(self.poMapInfo, layer, GV_POINTS | GV_LINES, lid, ilist)
+            # Vect_cidx_find_all(self.poMapInfo,
+            # layer, GV_POINTS | GV_LINES, lid, ilist)
             nlines = Vect_get_num_lines(self.poMapInfo)
             for line in range(1, nlines + 1):
                 if not Vect_line_alive(self.poMapInfo, line):
@@ -831,7 +910,7 @@ class DisplayDriver:
 
                 found = False
                 cats = self.poCats.contents
-                for i in range(0, cats.n_cats):
+                for i in range(cats.n_cats):
                     for cat in self.selected["cats"]:
                         if cats.cat[i] == cat:
                             found = True
@@ -853,7 +932,7 @@ class DisplayDriver:
         :return: 0 no line found
         :return: -1 on error
         """
-        returnId = list()
+        returnId = []
         # only one object can be selected
         if len(self.selected["ids"]) != 1 or not self._drawSegments:
             return returnId
@@ -863,7 +942,7 @@ class DisplayDriver:
 
         if not self._validLine(line):
             return -1
-        ftype = Vect_read_line(self.poMapInfo, self.poPoints, self.poCats, line)
+        Vect_read_line(self.poMapInfo, self.poPoints, self.poCats, line)
 
         minDist = 0.0
         Gid = -1
@@ -875,13 +954,9 @@ class DisplayDriver:
                 pos[0], pos[1], 0.0, points.x[idx], points.y[idx], points.z[idx], 0
             )
 
-            if idx == 0:
+            if idx == 0 or minDist > dist:
                 minDist = dist
                 Gid = idx
-            else:
-                if minDist > dist:
-                    minDist = dist
-                    Gid = idx
 
             vx, vy = self._cell2Pixel(points.x[idx], points.y[idx], points.z[idx])
             rect = Rect(vx, vy, 0, 0)
@@ -922,10 +997,10 @@ class DisplayDriver:
         for line in self.selected["ids"]:
             area = Vect_get_centroid_area(self.poMapInfo, line)
 
-            if area > 0 and area <= nareas:
+            if 0 < area <= nareas:
                 if not Vect_get_area_box(self.poMapInfo, area, byref(lineBox)):
                     continue
-            else:
+            else:  # noqa: PLR5501
                 if not Vect_get_line_box(self.poMapInfo, line, byref(lineBox)):
                     continue
 
@@ -993,15 +1068,9 @@ class DisplayDriver:
 
         # open existing map
         if update:
-            if tmp:
-                open_fn = Vect_open_tmp_update
-            else:
-                open_fn = Vect_open_update
+            open_fn = Vect_open_tmp_update if tmp else Vect_open_update
         else:
-            if tmp:
-                open_fn = Vect_open_tmp_old
-            else:
-                open_fn = Vect_open_old
+            open_fn = Vect_open_tmp_old if tmp else Vect_open_old
 
         ret = open_fn(self.poMapInfo, name, mapset)
 
@@ -1059,7 +1128,7 @@ class DisplayDriver:
 
         :param alpha: color value for alpha channel
         """
-        color = dict()
+        color = {}
         for key in self.settings.keys():
             if key == "lineWidth":
                 self.settings[key] = int(
@@ -1135,13 +1204,13 @@ class DisplayDriver:
     def GetDuplicates(self):
         """Return ids of (selected) duplicated vector features"""
         if not self.poMapInfo:
-            return
+            return None
 
-        ids = dict()
+        ids = {}
         APoints = Vect_new_line_struct()
         BPoints = Vect_new_line_struct()
 
-        self.selected["idsDupl"] = list()
+        self.selected["idsDupl"] = []
 
         for i in range(len(self.selected["ids"])):
             line1 = self.selected["ids"][i]
@@ -1156,14 +1225,15 @@ class DisplayDriver:
 
                 Vect_read_line(self.poMapInfo, BPoints, None, line2)
 
-                if Vect_line_check_duplicate(APoints, BPoints, WITHOUT_Z):
-                    if i not in ids:
-                        ids[i] = list()
-                        ids[i].append((line1, self._getCatString(line1)))
-                        self.selected["idsDupl"].append(line1)
+                if not Vect_line_check_duplicate(APoints, BPoints, WITHOUT_Z):
+                    continue
+                if i not in ids:
+                    ids[i] = []
+                    ids[i].append((line1, self._getCatString(line1)))
+                    self.selected["idsDupl"].append(line1)
 
-                    ids[i].append((line2, self._getCatString(line2)))
-                    self.selected["idsDupl"].append(line2)
+                ids[i].append((line2, self._getCatString(line2)))
+                self.selected["idsDupl"].append(line2)
 
         Vect_destroy_line_struct(APoints)
         Vect_destroy_line_struct(BPoints)
@@ -1174,16 +1244,16 @@ class DisplayDriver:
         Vect_read_line(self.poMapInfo, None, self.poCats, line)
 
         cats = self.poCats.contents
-        catsDict = dict()
+        catsDict = {}
         for i in range(cats.n_cats):
             layer = cats.field[i]
             if layer not in catsDict:
-                catsDict[layer] = list()
+                catsDict[layer] = []
             catsDict[layer].append(cats.cat[i])
 
         catsStr = ""
-        for l, c in catsDict.items():
-            catsStr = "%d: (%s)" % (l, ",".join(map(str, c)))
+        for layer_num, c in catsDict.items():
+            catsStr = "%d: (%s)" % (layer_num, ",".join(map(str, c)))
 
         return catsStr
 

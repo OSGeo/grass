@@ -9,14 +9,17 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
+import grass.script as gs
+from grass.exceptions import ScriptError
+
 from .core import get_available_temporal_mapsets, init_dbif
 from .factory import dataset_factory
-import grass.script as gscript
 
 ###############################################################################
 
 
-def tlist_grouped(type, group_type=False, dbif=None):
+def tlist_grouped(type, group_type: bool = False, dbif=None):
     """List of temporal elements grouped by mapsets.
 
     Returns a dictionary where the keys are mapset
@@ -25,7 +28,7 @@ def tlist_grouped(type, group_type=False, dbif=None):
 
     .. code-block:: python
 
-        >>> import grass.temporalas tgis
+        >>> import grass.temporal as tgis
         >>> tgis.tlist_grouped('strds')['PERMANENT']
         ['precipitation', 'temperature']
 
@@ -35,25 +38,23 @@ def tlist_grouped(type, group_type=False, dbif=None):
     :return: directory of mapsets/elements
     """
     result = {}
+    type_ = type
     dbif, connection_state_changed = init_dbif(dbif)
 
     mapset = None
-    if type == "stds":
-        types = ["strds", "str3ds", "stvds"]
-    else:
-        types = [type]
-    for type in types:
+    types = ["strds", "str3ds", "stvds"] if type_ == "stds" else [type_]
+    for type_ in types:
         try:
-            tlist_result = tlist(type=type, dbif=dbif)
-        except gscript.ScriptError as e:
-            gscript.warning(e)
+            tlist_result = tlist(type=type_, dbif=dbif)
+        except ScriptError as e:
+            gs.warning(e)
             continue
 
         for line in tlist_result:
             try:
                 name, mapset = line.split("@")
             except ValueError:
-                gscript.warning(_("Invalid element '%s'") % line)
+                gs.warning(_("Invalid element '%s'") % line)
                 continue
 
             if mapset not in result:
@@ -63,10 +64,10 @@ def tlist_grouped(type, group_type=False, dbif=None):
                     result[mapset] = []
 
             if group_type:
-                if type in result[mapset]:
-                    result[mapset][type].append(name)
+                if type_ in result[mapset]:
+                    result[mapset][type_].append(name)
                 else:
-                    result[mapset][type] = [
+                    result[mapset][type_] = [
                         name,
                     ]
             else:
@@ -88,19 +89,20 @@ def tlist(type, dbif=None):
 
     :return: a list of space time dataset ids
     """
+    type_ = type
     id = None
-    sp = dataset_factory(type, id)
+    sp = dataset_factory(type_, id)
     dbif, connection_state_changed = init_dbif(dbif)
 
     mapsets = get_available_temporal_mapsets()
 
     output = []
     temporal_type = ["absolute", "relative"]
-    for type in temporal_type:
+    for type_ in temporal_type:
         # For each available mapset
         for mapset in mapsets.keys():
             # Table name
-            if type == "absolute":
+            if type_ == "absolute":
                 table = sp.get_type() + "_view_abs_time"
             else:
                 table = sp.get_type() + "_view_rel_time"

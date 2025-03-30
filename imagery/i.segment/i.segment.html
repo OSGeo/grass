@@ -1,5 +1,8 @@
 <h2>DESCRIPTION</h2>
 
+<em>i.segment</em> identifies segments (objects) from
+imagery data.
+<p>
 Image segmentation or object recognition is the process of grouping
 similar pixels into unique segments, also referred to as objects.
 Boundary and region based algorithms are described in the literature,
@@ -64,10 +67,10 @@ considering each raster in the image group as a dimension.
 In future, the distance calculation will also take into account the
 shape characteristics of the segments. The normal distances are then
 multiplied by the input radiometric weight. Next an additional
-contribution is added: <tt>(1-radioweight) * {smoothness * smoothness
-weight + compactness * (1-smoothness weight)}</tt>,
-where <tt>compactness = Perimeter Length / sqrt( Area )</tt>
-and <tt>smoothness = Perimeter Length / Bounding Box</tt>. The
+contribution is added: <code>(1-radioweight) * {smoothness * smoothness
+weight + compactness * (1-smoothness weight)}</code>,
+where <code>compactness = Perimeter Length / sqrt( Area )</code>
+and <code>smoothness = Perimeter Length / Bounding Box</code>. The
 perimeter length is estimated as the number of pixel sides the segment
 has.
 
@@ -87,7 +90,7 @@ billion starting segment IDs. Segment IDs are assigned whenever a yet
 unprocessed pixel is merged with another segment. Integer overflow can
 happen for computational regions with more than 2 billion cells and
 very low threshold values, resulting in many segments. If integer
-overflow occurs durin region growing, starting segments can be used
+overflow occurs during region growing, starting segments can be used
 (created by initial classification or other methods).
 
 <h4>Goodness of Fit</h4>
@@ -100,11 +103,11 @@ distance, worst possible fit.
 <h3>Mean shift</h3>
 Mean shift image segmentation consists of 2 steps: anisotrophic
 filtering and 2. clustering. For anisotrophic filtering new cell values
-are calculated from all pixels not farther than <b>hs</b> pixels away
+are calculated from all pixels not farther than <b>radius</b> pixels away
 from the current pixel and with a spectral difference not larger than
 <b>hr</b>. That means that pixels that are too different from the current
 pixel are not considered in the calculation of new pixel values.
-<b>hs</b> and <b>hr</b> are the spatial and spectral (range) bandwidths
+<b>radius</b> and <b>hr</b> are the spatial and spectral (range) bandwidths
 for anisotrophic filtering. Cell values are iteratively recalculated
 (shifted to the segment's mean) until the maximum number of iterations
 is reached or until the largest shift is smaller than <b>threshold</b>.
@@ -118,7 +121,7 @@ resampling.
 <h3>Boundary Constraints</h3>
 Boundary constraints limit the adjacency of pixels and segments.
 Each unique value present in the <b>bounds</b> raster are
-considered as a MASK. Thus no segments in the final segmentated map
+considered as a mask. Thus, no segments in the final segmented map
 will cross a boundary, even if their spectral data is very similar.
 
 <h3>Minimum Segment Size</h3>
@@ -175,7 +178,7 @@ i.segment group=ortho_group output=ortho_segs_l5 threshold=0.3 seeds=ortho_segs_
 </center>
 
 <p>
-The output <tt>ortho_segs_l4</tt> with <b>threshold</b>=0.2 still has
+The output <code>ortho_segs_l4</code> with <b>threshold</b>=0.2 still has
 too many segments, but the output with <b>threshold</b>=0.3 has too few
 segments. A threshold value of 0.25 seems to be a good choice. There
 is also some noise in the image, lets next force all segments smaller
@@ -251,8 +254,6 @@ compactness), if it looks good it should be added.
 </ul>
 <h3>Use of Segmentation Results</h3>
 <ul>
-<li>Improve the optional output from this module, or better yet, add a
-module for <em>i.segment.metrics</em>.</li>
 <li>Providing updates to <em><a href="i.maxlik.html">i.maxlik</a></em>
 to ensure the segmentation output can be used as input for the
 existing classification functionality.</li>
@@ -277,6 +278,9 @@ is at available on the wiki.
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="https://grass.osgeo.org/grass8/manuals/addons/i.segment.stats.html">i.segment.stats</a> (addon),
+<a href="https://grass.osgeo.org/grass8/manuals/addons/i.segment.uspo.html">i.segment.uspo</a> (addon),
+<a href="https://grass.osgeo.org/grass8/manuals/addons/i.segment.hierarchical.html">i.segment.hierarchical</a> (addon)
 <a href="g.gui.iclass.html">g.gui.iclass</a>,
 <a href="i.group.html">i.group</a>,
 <a href="i.maxlik.html">i.maxlik</a>,

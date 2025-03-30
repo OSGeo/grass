@@ -102,9 +102,9 @@
 # % guisection: Define
 # %end
 
-import grass.script as grass
+import grass.script as gs
 from grass.exceptions import CalledModuleError
-
+from pathlib import Path
 ############################################################################
 
 
@@ -146,16 +146,6 @@ def main():
     rows = sp.get_registered_maps("id", None, None, None)
 
     if rows:
-        # Create the r.colors input file
-        filename = grass.tempfile(True)
-        file = open(filename, "w")
-
-        for row in rows:
-            string = "%s\n" % (row["id"])
-            file.write(string)
-
-        file.close()
-
         flags_ = ""
         if remove:
             flags_ += "r"
@@ -172,8 +162,12 @@ def main():
         if equi:
             flags_ += "e"
 
+        # Create the r.colors input file
+        filename = gs.tempfile(True)
+        Path(filename).write_text("\n".join(str(row["id"]) for row in rows))
+
         try:
-            grass.run_command(
+            gs.run_command(
                 "r.colors",
                 flags=flags_,
                 file=filename,
@@ -181,12 +175,12 @@ def main():
                 raster=raster,
                 volume=volume,
                 rules=rules,
-                overwrite=grass.overwrite(),
+                overwrite=gs.overwrite(),
             )
         except CalledModuleError:
-            grass.fatal(_("Error in r.colors call"))
+            gs.fatal(_("Error in r.colors call"))
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

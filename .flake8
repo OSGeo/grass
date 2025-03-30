@@ -2,6 +2,10 @@
 ignore =
     # whitespace before ':' (Black)
     E203,
+    # E501 line too long
+    E501,
+    # global unused (TODO: Solve and remove exclusion)
+    F824,
     # line break before binary operator (Black)
     W503,
 
@@ -15,221 +19,49 @@ per-file-ignores =
     # E501 line too long
     # E722 do not use bare 'except'
     # W605 invalid escape sequence
-    # F401 imported but unused
     # F821 undefined name 'unicode'
     # F841 local variable assigned to but never used
     # E741 ambiguous variable name 'l'
-    lib/init/grass.py: E501, E722, F821, F841, W605
-    utils/mkrest.py: E501, W605
-    utils/gitlog2changelog.py: E722, E712, W605
-    utils/g.html2man/ggroff.py: W605
-    man/build_check_rest.py: F403, F405
-    man/build_full_index_rest.py: F403, F405
-    man/parser_standard_options.py: F403, F405
-    man/build_class.py: F403, F405
-    man/build_class_rest.py: F403, F405
-    man/build_check.py: F403, F405
-    man/build_full_index.py: F403, F405
-    man/build_index.py: F403, F405
-    man/build_index_rest.py: F403, F405
-    man/build_keywords.py: F403, F405, E722
-    man/build_topics.py: F403, F405, E722
     man/build_html.py: E501
-    man/build_rest.py: E501
-    imagery/i.atcorr/create_iwave.py: E501, F632, F821, W293
-    doc/python/raster_example_ctypes.py: F403, F405
-    doc/python/vector_example_ctypes.py: F403, F405
-    doc/python/m.distance.py: F403, F405, E501
-    doc/gui/wxpython/example/dialogs.py: F401
-    doc/gui/wxpython/example/g.gui.example.py: E501
-    locale/grass_po_stats.py: E122, E128, E231, E401, E501, E722, E741
-    gui/scripts/d.rast3d.py: E501
+    man/build_md.py: E501
+    doc/examples/python/m.distance.py: E501
     gui/scripts/d.wms.py: E501
-    gui/wxpython/core/debug.py: E501
-    gui/wxpython/core/gcmd.py: E402, E501
-    gui/wxpython/core/giface.py: E501
-    gui/wxpython/core/gthread.py: F841
-    gui/wxpython/core/gconsole.py: E722, W605
-    gui/wxpython/core/globalvar.py: W605
-    gui/wxpython/core/toolboxes.py: E722, E501
-    gui/wxpython/core/utils.py: E722, F841, W605
-    gui/wxpython/core/workspace.py: E722, E501
-    gui/wxpython/core/render.py: E722, F841, E501
-    gui/wxpython/core/ws.py: F841, E501
-    gui/wxpython/core/settings.py: E722
-    gui/wxpython/core/watchdog.py: E402
-    gui/wxpython/datacatalog/tree.py: E731, E402, E501
-    gui/wxpython/dbmgr/base.py: E501, E722, F841
-    gui/wxpython/dbmgr/dialogs.py: E501, F841, E722
-    gui/wxpython/dbmgr/sqlbuilder.py: E501, E722, F841
-    gui/wxpython/dbmgr/manager.py: E501, E722
-    gui/wxpython/dbmgr/vinfo.py: F841
-    gui/wxpython/docs/wxgui_sphinx/conf.py: E402, E501
-    gui/wxpython/gcp/g.gui.gcp.py: F841
-    gui/wxpython/gcp/manager.py: E501, F841, E722
-    gui/wxpython/gcp/mapdisplay.py: F841
-    gui/wxpython/gmodeler/*: F841, E722, W605, F405, F403, E402
-    gui/wxpython/gui_core/*: F841, E266, E722, W605
-    gui/wxpython/gui_core/dialogs.py: E501, E722, F841, W605
-    gui/wxpython/gui_core/forms.py: E501, E722, F841
-    gui/wxpython/gui_core/ghelp.py: E501, E722
-    gui/wxpython/gui_core/gselect.py: E501, F841, E266, E722
-    gui/wxpython/gui_core/preferences.py: E501, E266, F841
-    gui/wxpython/gui_core/treeview.py: E501, F841
-    gui/wxpython/gui_core/widgets.py: E501, F841, E722, E266
-    gui/wxpython/image2target/*: F841, E722, E265, E501
-    gui/wxpython/iscatt/*: F841, E722, E741, F405, F403, E501
-    gui/wxpython/lmgr/giface.py: E501, E741
-    gui/wxpython/lmgr/frame.py: F841, E722, W605, E501
-    # layertree still includes some formatting issues (it is ignored by Black)
-    gui/wxpython/lmgr/layertree.py: E722, E266, W504, E225, E501
-    gui/wxpython/lmgr/workspace.py: F841
-    gui/wxpython/modules/*: F841, E722, W605, E501
-    gui/wxpython/nviz/*: F841, E266, E722, W605, F403, F405, E501
-    gui/wxpython/photo2image/*: F841, E722, E265, E501
-    gui/wxpython/psmap/*: F841, E266, E722, F405, F403, E501
-    gui/wxpython/vdigit/*: F841, E722, E741, F405, F403, E501
-    gui/wxpython/vnet/*: F841, E501
-    gui/wxpython/wxgui.py: F841
+    gui/wxpython/image2target/g.gui.image2target.py: E501
+    gui/wxpython/photo2image/g.gui.photo2image.py: E501
+    gui/wxpython/psmap/*: E501
     gui/wxpython/animation/g.gui.animation.py: E501
-    gui/wxpython/animation/mapwindow.py: F841
-    gui/wxpython/animation/provider.py: F841, E501
-    gui/wxpython/animation/temporal_manager.py: E501
-    gui/wxpython/tplot/frame.py: F841, E722
     gui/wxpython/tplot/g.gui.tplot.py: E501
-    gui/wxpython/rdigit/g.gui.rdigit.py: F841
-    gui/wxpython/rdigit/toolbars.py: E501
-    gui/wxpython/iclass/dialogs.py: E741, E501
-    gui/wxpython/iclass/digit.py: F405, F403
-    gui/wxpython/iclass/frame.py: F405, F403, E501
     gui/wxpython/iclass/g.gui.iclass.py: E501
-    gui/wxpython/iclass/statistics.py: F841, F405, F403
-    gui/wxpython/wxplot/dialogs.py: E501
-    gui/wxpython/wxplot/histogram.py: E722
-    gui/wxpython/wxplot/profile.py: F841, E722
-    gui/wxpython/wxplot/base.py: F841, E722
-    gui/wxpython/wxplot/scatter.py: E501
-    gui/wxpython/location_wizard/dialogs.py: F841, E501
-    gui/wxpython/location_wizard/wizard.py: E722
-    gui/wxpython/mapdisp/frame.py: E501
-    gui/wxpython/mapdisp/main.py: E722, E501
     gui/wxpython/mapdisp/test_mapdisp.py: E501
-    gui/wxpython/mapdisp/toolbars.py: E501
-    gui/wxpython/mapdisp/statusbar.py: F841, E501
     gui/wxpython/mapswipe/g.gui.mapswipe.py: E501
-    gui/wxpython/mapwin/base.py: E722, E501
-    gui/wxpython/mapwin/buffered.py: E722, E501
-    gui/wxpython/mapwin/decorations.py: E501
-    gui/wxpython/mapwin/graphics.py: E722
-    gui/wxpython/startup/locdownload.py: E722, E402, E501
     gui/wxpython/timeline/g.gui.timeline.py: E501
-    gui/wxpython/tools/build_modules_xml.py: E722, E501
-    gui/wxpython/web_services/cap_interface.py: E501
-    gui/wxpython/web_services/dialogs.py: E501
-    gui/wxpython/web_services/widgets.py: F841, E741, W605, E402, E501
-    gui/wxpython/rlisetup/frame.py: E741
-    gui/wxpython/rlisetup/sampling_frame.py: F841
-    gui/wxpython/rlisetup/wizard.py: E722, E741
     # Generated file
     gui/wxpython/menustrings.py: E501
-    # F821 undefined name 'cmp'
-    # https://github.com/OSGeo/grass/issues/1809
-    python/grass/pydispatch/saferef.py: F821
     # C wrappers call libgis.G_gisinit before importing other modules.
     # TODO: Is this really needed?
-    python/grass/pygrass/vector/__init__.py: E402,
-    python/grass/pygrass/raster/__init__.py: E402,
-    python/grass/gunittest/*.py: E501  # These are mainly just todo comments
-    python/grass/gunittest/gmodules.py: E501, W605
-    python/grass/pygrass/vector/geometry.py: W605
-    python/grass/pygrass/vector/table.py: E501
-    python/grass/pygrass/vector/__init__.py: E501, E402
-    python/grass/pygrass/modules/interface/*.py: E501, F401
-    python/grass/pygrass/modules/interface/module.py: E501, W605
-    python/grass/pygrass/modules/interface/parameter.py: E501, W605
-    python/grass/pygrass/modules/grid/*.py: E501, F401
-    python/grass/pygrass/raster/*.py: E501
-    python/grass/pygrass/raster/rowio.py: E741
-    python/grass/pygrass/rpc/__init__.py: E501, F401, F403
-    python/grass/pygrass/utils.py: E402, E501
-    python/grass/script/db.py: E501
-    python/grass/script/task.py: W605
-    python/grass/script/vector.py: E501  # Long doctest lines which need review anyway
-    python/grass/temporal/abstract_map_dataset.py: E501
-    python/grass/temporal/abstract_space_time_dataset.py: W605, E501, F841, E722
-    python/grass/temporal/aggregation.py: E501
-    python/grass/temporal/base.py: E501
-    python/grass/temporal/c_libraries_interface.py: E501, F841, E722
-    python/grass/temporal/core.py: E501, E722
-    python/grass/temporal/datetime_math.py: E501, F841, E722
-    python/grass/temporal/list_stds.py: E501
-    python/grass/temporal/metadata.py: E501
-    python/grass/temporal/open_stds.py: F841
-    python/grass/temporal/register.py: E501
-    python/grass/temporal/space_time_datasets.py: E501
-    python/grass/temporal/spatial_extent.py: E501
-    python/grass/temporal/spatial_topology_dataset_connector.py: E501, E722
-    python/grass/temporal/spatio_temporal_relationships.py: E501
-    python/grass/temporal/temporal_algebra.py: E741, E501, F841, E722
-    python/grass/temporal/temporal_extent.py: E501
-    python/grass/temporal/temporal_granularity.py: E501, F841, E722
-    python/grass/temporal/temporal_operator.py: E501
-    python/grass/temporal/temporal_raster_algebra.py: E741
-    python/grass/temporal/temporal_raster_base_algebra.py: E501, F841, E722
-    python/grass/temporal/temporal_raster3d_algebra.py: E741
-    python/grass/temporal/temporal_topology_dataset_connector.py: E501, E722
-    python/grass/temporal/temporal_vector_algebra.py: E741, E501, F841
-    python/grass/temporal/univar_statistics.py: E501
-    # Current benchmarks/tests are changing sys.path before import.
-    # Possibly, a different approach should be taken there anyway.
-    python/grass/pygrass/tests/benchmark.py: E501, E402, F401, F821
+    python/grass/jupyter/__init__.py: E501
     # Configuration file for Sphinx:
     # Ignoring import/code mix and line length.
-    python/grass/docs/conf.py: E402, E501,
     # Files not managed by Black
-    python/grass/imaging/images2gif.py: E226, E501
-    # Unused imports in init files
-    # F401 imported but unused
-    # F403 star import used; unable to detect undefined names
-    python/grass/*/__init__.py: F401, F403
-    python/grass/*/*/__init__.py: F401, F403
-    python/grass/*/*/*/__init__.py: F401, F403
     # E402 module level import not at top of file
-    scripts/d.polar/d.polar.py: F841, E501
-    scripts/r.in.wms/wms_gdal_drv.py: F841, E722, E501
-    scripts/r.in.wms/wms_cap_parsers.py: F841, E741, E501
-    scripts/r.in.wms/wms_drv.py: E402, E722, E501
-    scripts/r.in.wms/srs.py: E722, E501
-    scripts/r.semantic.label/r.semantic.label.py: F841, E501
-    scripts/v.report/v.report.py: F841, E501
-    scripts/db.out.ogr/db.out.ogr.py: F841
-    scripts/g.extension/g.extension.py: F841, E722, E501
-    scripts/r.unpack/r.unpack.py: E501
-    scripts/v.unpack/v.unpack.py: F841, E722, E501
-    scripts/v.import/v.import.py: F841, E722, E501
-    scripts/db.univar/db.univar.py: E741, E501
-    scripts/d.rast.leg/d.rast.leg.py: E741
-    scripts/d.frame/d.frame.py: E722, E501
-    scripts/i.pansharpen/i.pansharpen.py: E722, E501
-    scripts/r.in.srtm/r.in.srtm.py: E722, E501
-    scripts/r.fillnulls/r.fillnulls.py: E722, E501
-    scripts/d.rast.edit/d.rast.edit.py: E722, E501
-    scripts/v.what.strds/v.what.strds.py: E722, E501
-    scripts/i.in.spotvgt/i.in.spotvgt.py: E501
+    scripts/r.semantic.label/r.semantic.label.py: E501
+    scripts/g.extension/g.extension.py: E501
+    scripts/v.unpack/v.unpack.py: E501
+    scripts/v.import/v.import.py: E501
+    scripts/db.univar/db.univar.py: E501
+    scripts/i.pansharpen/i.pansharpen.py: E501
+    scripts/v.what.strds/v.what.strds.py: E501
     # Line too long (esp. module interface definitions)
     scripts/*/*.py: E501
-    # local variable 'column' is assigned to but never used
-    temporal/t.rast.to.vect/t.rast.to.vect.py: F841, E501
-    # local variable 'stdstype' is assigned to but never used
-    temporal/t.vect.algebra/t.vect.algebra.py: F841, E501
-    # ## used (##% key: r etc)
-    # local variable 'map_list' is assigned to but never used
-    temporal/t.rast.what/t.rast.what.py: E265, E266, F841, E501
+    temporal/t.rast.to.vect/t.rast.to.vect.py: E501
+    temporal/t.vect.algebra/t.vect.algebra.py: E501
+    temporal/t.rast.what/t.rast.what.py: E501
     # Line too long (esp. module interface definitions)
     temporal/*/*.py: E501
 
 
 max-line-length = 88
+# Remember to remove the exclusions from .pre-commit-config.yaml when removing here
 exclude =
     .git,
     __pycache__,

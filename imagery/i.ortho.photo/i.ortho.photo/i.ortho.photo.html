@@ -11,9 +11,9 @@ all the steps can be performed separately by running the appropriate modules.
 <ul>
 <li><em>Initialization Options</em>
 <ol>
-<li value=1>Create/Modify imagery group to be orthorectified:
+<li value="1">Create/Modify imagery group to be orthorectified:
 <a href="i.group.html">i.group</a></li>
-<li>Select/Modify target location and mapset for orthorectification:
+<li>Select/Modify target project (formerly known as location) and mapset for orthorectification:
 <a href="i.ortho.target.html">i.ortho.target</a></li>
 <li>Select/Modify target elevation model used for orthorectification:
 <a href="i.ortho.elev.html">i.ortho.elev</a></li>
@@ -23,7 +23,7 @@ all the steps can be performed separately by running the appropriate modules.
 </li>
 <li><em>Transformation Parameters Computation</em>
 <ol>
-<li value=5> Compute image-to-photo transformation:
+<li value="5"> Compute image-to-photo transformation:
 <a href="g.gui.photo2image.html">g.gui.photo2image</a></li>
 <li> Initialize parameters of camera:
 <a href="i.ortho.init.html">i.ortho.init</a></li>
@@ -34,7 +34,7 @@ all the steps can be performed separately by running the appropriate modules.
 
 <li><em>Ortho-rectification</em>
 <ol>
-<li value=8> Ortho-rectify imagery group:
+<li value="8"> Ortho-rectify imagery group:
 <a href="i.ortho.rectify.html">i.ortho.rectify</a></li>
 </ol>
 </li>
@@ -46,7 +46,7 @@ the surface of the earth by matching the coordinate system of the aerial
 image in pixels (<em>image coordinate system</em>) and the coordinate
 system of the camera sensor in millimetres (<em>photo coordinate system</em>)
 for the interior orientation of the image, and further to the georeferenced
-coordinate system defined by projection parametres
+coordinate system defined by projection parameters
 (<em>target coordinate system</em>) for exterior orientation.
 
 <h2>EXAMPLE</h2>
@@ -69,7 +69,7 @@ points and/or,</li>
 <a href="i_ortho_photo_step1.png">
 <img src="i_ortho_photo_step1.png" width="600" height="512" alt="i.ortho.photo example" border="0">
 </a><br>
-<i>Example of an input oblique image in a source location</i>
+<i>Example of an input oblique image in a source project</i>
 </div>
 
 <p>
@@ -77,10 +77,10 @@ To ortho-rectify aerial images the user has to follow the menu options
 step by step. Alternatively, all the steps can be performed separately
 by running the corresponding modules.
 <p>
-The aerial photos shall be stored in a <b>source location</b> - a general
+The aerial photos shall be stored in a <b>source project</b> - a general
 Cartesian coordinate system (XY). Digital elevation model and a map reference
 (topo sheet or other map used for ground control point matching) shall
-be stored in a <b>target location</b> in a real-world coordinate system
+be stored in a <b>target project</b> in a real-world coordinate system
 (e.g. ETRS33).
 <p>
 The steps to follow are described below:
@@ -88,7 +88,7 @@ The steps to follow are described below:
 <li><em>Create/Modify imagery group to be orthorectified:
 <a href="i.group.html">i.group</a></em>
 <p>
-This step is to be run in the <b>source location</b>.
+This step is to be run in the <b>source project</b>.
 <p>
 In this first step an imagery group of aerial images for ortho-rectification
 is created or modified. The current imagery group is displayed at the top
@@ -96,7 +96,7 @@ of the menu. You may select a new or existing imagery
 group for the ortho-rectification. After choosing this option you will
 be prompted for the name of a new or existing imagery group. As a result,
 a new file <em>mapset/group/name_of_group/<b>REF</b></em>
-is created that contatins the names of all images in a group.
+is created that contains the names of all images in a group.
 
 <div class="code"><pre>
 IMG_0020 source_mapset
@@ -105,18 +105,18 @@ IMG_0022 source_mapset
 </pre></div>
 </li>
 
-<li><em>Select/Modify target location and mapset for orthorectification:
+<li><em>Select/Modify target project and mapset for orthorectification:
 <a href="i.ortho.target.html">i.ortho.target</a></em>
 <p>
-This step is to be run in the <b>source location</b>.
+This step is to be run in the <b>source project</b>.
 <p>
-The target location and mapset may be selected or modified in Step 2.
-You will be prompted for the names of the projected target location and
+The target project and mapset may be selected or modified in Step 2.
+You will be prompted for the names of the projected target project and
 mapset where the ortho-rectified raster maps will reside. The target
-location is also the location from which the elevation model (raster
+project is also the project from which the elevation model (raster
 map) will be selected (see Step 3). In Step 2, a new file
 <em>mapset/group/name_of_group/<b>TARGET</b></em>
-is created contatining the names of target location and mapset.
+is created containing the names of target project and mapset.
 
 <div class="code"><pre>
 ETRS_33N
@@ -127,9 +127,9 @@ target_mapset
 <li><em>Select/Modify target elevation model used for orthorectification:
 <a href="i.ortho.elev.html">i.ortho.elev</a></em>
 <p>
-This step is to be run in the <b>source location</b>.
+This step is to be run in the <b>source project</b>.
 <p>
-Step 3 allows you to select the raster map from the target location to be
+Step 3 allows you to select the raster map from the target project to be
 used as the elevation model. The elevation model is required for both the
 computation of photo-to-target parameters (Step 6) and for the
 ortho-rectification of the imagery group files (Step 8).
@@ -137,9 +137,9 @@ The raster map selected for the elevation model should cover the entire
 area of the image group to be ortho-rectified. DTED and DEM files are
 suitable for use as elevation model in the ortho-rectification program.
 In Step 3 you will be prompted for the name of the raster map in the
-target location that you want to use as the elevation model. As a result
+target project that you want to use as the elevation model. As a result
 of this step, a new file <em>mapset/group/name_of_group/<b>ELEVATION</b></em>
-is created contatining the name and mapset of the chosen DEM.
+is created containing the name and mapset of the chosen DEM.
 
 <div class="code"><pre>
 elevation layer :ELEVATION
@@ -154,7 +154,7 @@ no data values  :(null)
 <li><em> Create/Modify camera file of imagery group:
 <a href="i.ortho.camera.html">i.ortho.camera</a></em>
 <p>
-This step is to be run in the <b>source location</b>.
+This step is to be run in the <b>source project</b>.
 <p>
 In Step 4 you may select or create a camera reference file that will be
 used with the current imagery group. A camera reference file contains
@@ -163,9 +163,9 @@ as the geometry of the fiducial or reseau marks. The most important
 characteristic of the camera is its focal length. Fiducial or reseau marks
 locations are required to compute the scanned image to photo coordinate
 transformation parameter (Step 5). Two new files are created in this step:
-a file <em>mapset/group/name_of_group/<b>CAMERA</b></em>, contatining
+a file <em>mapset/group/name_of_group/<b>CAMERA</b></em>, containing
 the name of the reference camera and a file
-<em>mapset/camera/<b>name_of_reference</b></em>, contatining the
+<em>mapset/camera/<b>name_of_reference</b></em>, containing the
 camera parameters.
 
 <div class="code"><pre>
@@ -185,14 +185,14 @@ NUM FID       4
 <li><em> Compute image-to-photo transformation:
 <a href="g.gui.photo2image.html">g.gui.photo2image</a></em>
 <p>
-This step is to be run in the <b>source location</b>.
+This step is to be run in the <b>source project</b>.
 <p>
 The scanned image to photo coordinate transformation parameters, i.e. the
 "interior orientation", is computed in Step 5. In this interactive step you
 associate the scanned reference points (fiducials, reseau marks, etc.)
 with their known photo coordinates from the camera reference file. A new
 file <em>mapset/group/name_of_group/<b>REF_POINTS</b></em>
-is created, contatining a list of pairs of coordinates in image and photo
+is created, containing a list of pairs of coordinates in image and photo
 coordinate systems.
 
 <div class="code"><pre>
@@ -220,7 +220,7 @@ coordinate systems.
 <li><em> Initialize parameters of camera:
 <a href="i.ortho.init.html">i.ortho.init</a></em>
 <p>
-This step is to be run in the <b>source location</b>.
+This step is to be run in the <b>source project</b>.
 <p>
 In Step 6, initial camera exposure station parameters and initial variances
 may be selected or modified.
@@ -229,7 +229,7 @@ may be selected or modified.
     <li><b>Y</b>: North aircraft position;</li>
     <li><b>Z</b>: Flight height above surface;</li>
     <li><b>Omega (pitch)</b>: Raising or lowering of the aircraft's front
-	(turning around the wings' axis);</li>
+        (turning around the wings' axis);</li>
     <li><b>Phi (roll)</b>: Raising or lowering of the wings (turning
     around the aircraft's axis);</li>
     <li><b>Kappa (yaw)</b>: Rotation needed to align the aerial photo to
@@ -245,7 +245,7 @@ may be selected or modified.
 </div>
 
 <p>In Step 6, a new file <em>mapset/group/name_of_group/<b>INIT_EXP</b></em>
-is created, contatining camera parameters.
+is created, containing camera parameters.
 
 <div class="code"><pre>
 INITIAL XC    215258.345387
@@ -267,7 +267,7 @@ STATUS (1=OK, 0=NOT OK) 0
 <li><em> Compute ortho-rectification parameters from ground control points:
 <a href="g.gui.image2target.html">g.gui.image2target</a></em>
 <p>
-This step is to be run in the <b>target location</b>.
+This step is to be run in the <b>target project</b>.
 <p>
 The photo to target transformation parameters, i.e. the "exterior
 orientation", is computed in Step 7. In this interactive step, control
@@ -276,7 +276,7 @@ the known standard (e.g. UTM) and elevation coordinates.
 Reasonable rectification results can be obtained with around twelve
 control points well distributed over the image.
 In this step, a new file <em>mapset/group/name_of_group/<b>CONTROL_POINTS</b></em>
-is created, contatining a list of pairs of coordinates of ground control
+is created, containing a list of pairs of coordinates of ground control
 points in photo and target coordinate systems.
 
 <div class="code"><pre>
@@ -306,13 +306,13 @@ points in photo and target coordinate systems.
 <li><em> Ortho-rectify imagery group:
 <a href="i.ortho.rectify.html">i.ortho.rectify</a></em>
 <p>
-This step is to be run in the <b>source location</b>.
+This step is to be run in the <b>source project</b>.
 <p>
 Step 8 is used to perform the actual image ortho-rectification after all
 of the transformation parameters have been computed. Ortho-rectified raster
-files will be created in the target location for each selected imagery
+files will be created in the target project for each selected imagery
 group file. You may select either the current window in the target
-location or the minimal bounding window for the ortho-rectified image.
+project or the minimal bounding window for the ortho-rectified image.
 
 <div align="center" style="margin: 10px">
 <a href="i_ortho_photo_step8.png">

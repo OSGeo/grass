@@ -76,16 +76,14 @@
 import sys
 import os
 import atexit
-import grass.script as grass
+import grass.script as gs
 from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
 
 
 def cleanup():
     if rastertmp:
-        grass.run_command(
-            "g.remove", flags="f", type="raster", name=rastertmp, quiet=True
-        )
+        gs.run_command("g.remove", flags="f", type="raster", name=rastertmp, quiet=True)
 
 
 #    for f in [tmp, tmpname, sqltmp]:
@@ -96,10 +94,10 @@ def main():
     global tmp, sqltmp, tmpname, nuldev, vector, rastertmp
     rastertmp = False
     # setup temporary files
-    tmp = grass.tempfile()
+    tmp = gs.tempfile()
     sqltmp = tmp + ".sql"
     # we need a random name
-    tmpname = grass.basename(tmp)
+    tmpname = gs.basename(tmp)
 
     nuldev = open(os.devnull, "w")
 
@@ -113,27 +111,25 @@ def main():
     basecols = options["method"].split(",")
 
     # Get current mapset
-    env = grass.gisenv()
+    env = gs.gisenv()
     mapset = env["MAPSET"]
 
     # Get mapset of the vector
     vs = vector.split("@")
-    if len(vs) > 1:
-        vect_mapset = vs[1]
-    else:
-        vect_mapset = mapset
+    vect_mapset = vs[1] if len(vs) > 1 else mapset
 
     # does map exist in CURRENT mapset?
-    if vect_mapset != mapset or not grass.find_file(vector, "vector", mapset)["file"]:
-        grass.fatal(_("Vector map <%s> not found in current mapset") % vector)
+    if vect_mapset != mapset or not gs.find_file(vector, "vector", mapset)["file"]:
+        gs.fatal(_("Vector map <%s> not found in current mapset") % vector)
 
     # check if DBF driver used, in this case cut to 10 chars col names:
     try:
-        fi = grass.vector_db(map=vector)[int(layer)]
+        fi = gs.vector_db(map=vector)[int(layer)]
     except KeyError:
-        grass.fatal(
+        gs.fatal(
             _(
-                "There is no table connected to this map. Run v.db.connect or v.db.addtable first."
+                "There is no table connected to this map. Run v.db.connect or "
+                "v.db.addtable first."
             )
         )
     # we need this for non-DBF driver:
@@ -141,13 +137,11 @@ def main():
 
     # colprefix for every raster map?
     if len(colprefixes) != len(rasters):
-        grass.fatal(
+        gs.fatal(
             _(
                 "Number of raster maps ({0}) different from \
-                      number of column prefixes ({1})".format(
-                    len(rasters), len(colprefixes)
-                )
-            )
+                      number of column prefixes ({1})"
+            ).format(len(rasters), len(colprefixes))
         )
 
     vector = vs[0]
@@ -156,21 +150,21 @@ def main():
 
     for raster in rasters:
         # check the input raster map
-        if not grass.find_file(raster, "cell")["file"]:
-            grass.fatal(_("Raster map <%s> not found") % raster)
+        if not gs.find_file(raster, "cell")["file"]:
+            gs.fatal(_("Raster map <%s> not found") % raster)
 
     # save current settings:
-    grass.use_temp_region()
+    gs.use_temp_region()
 
-    # Temporarily aligning region resolution to $RASTER resolution
-    # keep boundary settings
-    grass.run_command("g.region", align=rasters[0])
+    # Align region cells with the first input raster,
+    # keeping the (approximate) extent settings.
+    gs.run_command("g.region", align=rasters[0])
 
     # check if DBF driver used, in this case cut to 10 chars col names:
     try:
-        fi = grass.vector_db(map=vector)[int(layer)]
+        fi = gs.vector_db(map=vector)[int(layer)]
     except KeyError:
-        grass.fatal(
+        gs.fatal(
             _(
                 "There is no table connected to this map. "
                 "Run v.db.connect or v.db.addtable first."
@@ -181,7 +175,7 @@ def main():
 
     # Find out which table is linked to the vector map on the given layer
     if not fi["table"]:
-        grass.fatal(
+        gs.fatal(
             _(
                 "There is no table connected to this map. "
                 "Run v.db.connect or v.db.addtable first."
@@ -205,7 +199,7 @@ def main():
     )
 
     # calculate statistics:
-    grass.message(_("Processing input data (%d categories)...") % number)
+    gs.message(_("Processing input data (%d categories)...") % number)
 
     for i in range(len(rasters)):
         raster = rasters[i]
@@ -215,7 +209,7 @@ def main():
         )
 
         # get rid of any earlier attempts
-        grass.try_remove(sqltmp)
+        gs.try_remove(sqltmp)
 
         # do the stats
         perform_stats(
@@ -230,13 +224,13 @@ def main():
             extstat,
         )
 
-        grass.message(_("Updating the database ..."))
+        gs.message(_("Updating the database ..."))
         exitcode = 0
         try:
-            grass.run_command(
+            gs.run_command(
                 "db.execute", input=sqltmp, database=fi["database"], driver=fi["driver"]
             )
-            grass.verbose(
+            gs.verbose(
                 _(
                     "Statistics calculated from raster map <{raster}>"
                     " and uploaded to attribute table"
@@ -244,7 +238,7 @@ def main():
                 ).format(raster=raster, vector=vector)
             )
         except CalledModuleError:
-            grass.warning(
+            gs.warning(
                 _("Failed to upload statistics to attribute table of vector map <%s>.")
                 % vector
             )
@@ -263,7 +257,7 @@ def prepare_base_raster(vector, layer, rastertmp, vtypes, where):
     :param vtypes: input feature type
     """
     try:
-        nlines = grass.vector_info_topo(vector)["lines"]
+        nlines = gs.vector_info_topo(vector)["lines"]
         kwargs = {}
         if where:
             kwargs["where"] = where
@@ -271,7 +265,7 @@ def prepare_base_raster(vector, layer, rastertmp, vtypes, where):
         if flags["d"] and nlines > 0:
             kwargs["flags"] = "d"
 
-        grass.run_command(
+        gs.run_command(
             "v.to.rast",
             input=vector,
             layer=layer,
@@ -282,7 +276,7 @@ def prepare_base_raster(vector, layer, rastertmp, vtypes, where):
             **kwargs,
         )
     except CalledModuleError:
-        grass.fatal(_("An error occurred while converting vector to raster"))
+        gs.fatal(_("An error occurred while converting vector to raster"))
 
 
 def get_nr_of_categories(
@@ -299,7 +293,7 @@ def get_nr_of_categories(
     :return: number of raster categories or exit (if no categories found)
     """
     # dump cats to file to avoid "too many argument" problem:
-    p = grass.pipe_command("r.category", map=rastertmp, sep=";", quiet=True)
+    p = gs.pipe_command("r.category", map=rastertmp, sep=";", quiet=True)
     cats = []
 
     for line in p.stdout:
@@ -310,7 +304,7 @@ def get_nr_of_categories(
     number = len(cats)
     if number < 1:
         # create columns and exit
-        grass.warning(_("No categories found in raster map"))
+        gs.warning(_("No categories found in raster map"))
         for i in range(len(rasters)):
             set_up_columns(
                 vector,
@@ -326,7 +320,7 @@ def get_nr_of_categories(
     # Check if all categories got converted
     # Report categories from vector map
     vect_cats = (
-        grass.read_command("v.category", input=vector, option="report", flags="g")
+        gs.read_command("v.category", input=vector, option="report", flags="g")
         .rstrip("\n")
         .split("\n")
     )
@@ -338,13 +332,11 @@ def get_nr_of_categories(
             vect_cats_n = int(vcl.split(" ")[2])
 
     if vect_cats_n != number:
-        grass.warning(
+        gs.warning(
             _(
                 "Not all vector categories converted to raster. \
-                        Converted {0} of {1}.".format(
-                    number, vect_cats_n
-                )
-            )
+                        Converted {0} of {1}."
+            ).format(number, vect_cats_n)
         )
 
     return number
@@ -378,10 +370,7 @@ def set_up_columns(vector, layer, percentile, colprefix, basecols, dbfdriver, c)
             perc = b
     if perc:
         # namespace is limited in DBF but the % value is important
-        if dbfdriver:
-            perccol = "per" + percentile
-        else:
-            perccol = "percentile_" + percentile
+        perccol = "per" + percentile if dbfdriver else "percentile_" + percentile
         percindex = basecols.index(perc)
         basecols[percindex] = perccol
 
@@ -422,27 +411,22 @@ def set_up_columns(vector, layer, percentile, colprefix, basecols, dbfdriver, c)
             variables_dbf[currcolumn.replace("%s_" % colprefix, "")] = i
 
         colnames.append(currcolumn)
-        if currcolumn in grass.vector_columns(vector, layer).keys():
+        if currcolumn in gs.vector_columns(vector, layer).keys():
             if not c:
-                grass.fatal(
-                    (_("Cannot create column " "<%s> (already present). ") % currcolumn)
+                gs.fatal(
+                    (_("Cannot create column <%s> (already present). ") % currcolumn)
                     + _("Use -c flag to update values in this column.")
                 )
         else:
-            if i == "n":
-                coltype = "INTEGER"
-            else:
-                coltype = "DOUBLE PRECISION"
+            coltype = "INTEGER" if i == "n" else "DOUBLE PRECISION"
             addcols.append(currcolumn + " " + coltype)
 
     if addcols:
-        grass.verbose(_("Adding columns '%s'") % addcols)
+        gs.verbose(_("Adding columns '%s'") % addcols)
         try:
-            grass.run_command(
-                "v.db.addcolumn", map=vector, columns=addcols, layer=layer
-            )
+            gs.run_command("v.db.addcolumn", map=vector, columns=addcols, layer=layer)
         except CalledModuleError:
-            grass.fatal(_("Adding columns failed. Exiting."))
+            gs.fatal(_("Adding columns failed. Exiting."))
 
     return colprefix, variables_dbf, variables, colnames, extstat
 
@@ -460,7 +444,7 @@ def perform_stats(
 ):
     with open(sqltmp, "w") as f:
         # do the stats
-        p = grass.pipe_command(
+        p = gs.pipe_command(
             "r.univar",
             flags="t" + extstat,
             map=raster,
@@ -471,7 +455,7 @@ def perform_stats(
 
         first_line = 1
 
-        f.write("{0}\n".format(grass.db_begin_transaction(fi["driver"])))
+        f.write("{0}\n".format(gs.db_begin_transaction(fi["driver"])))
         for line in p.stdout:
             if first_line:
                 first_line = 0
@@ -498,11 +482,11 @@ def perform_stats(
                 f.write(" %s=%s" % (colname, value))
 
             f.write(" WHERE %s=%s;\n" % (fi["key"], vars[0]))
-        f.write("{0}\n".format(grass.db_commit_transaction(fi["driver"])))
+        f.write("{0}\n".format(gs.db_commit_transaction(fi["driver"])))
         p.wait()
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     atexit.register(cleanup)
     main()

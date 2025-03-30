@@ -8,6 +8,7 @@ Licence:   This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.
 """
+
 import os
 import unittest
 import ctypes
@@ -176,7 +177,7 @@ class IOValidationTest(TestCase):
 
     @unittest.skipIf(shutil.which("i.svm.train") is None, "i.svm.train not found.")
     def test_wrong_svm_param(self):
-        """Attempt to use invalid SVM parametres"""
+        """Attempt to use invalid SVM parameters"""
         sigfile = grass.tempname(10)
         isvm = SimpleModule(
             "i.svm.train",

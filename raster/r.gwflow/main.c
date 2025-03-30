@@ -212,7 +212,6 @@ int main(int argc, char *argv[])
     N_gradient_field_2d *field = NULL;
     N_array_2d *xcomp = NULL;
     N_array_2d *ycomp = NULL;
-    char *buff = NULL;
     int with_river = 0, with_drain = 0;
 
     /* Initialize GRASS */
@@ -234,7 +233,7 @@ int main(int argc, char *argv[])
 
     /* Make sure that the current projection is not lat/long */
     if ((G_projection() == PROJECTION_LL))
-        G_fatal_error(_("Lat/Long location is not supported by %s. Please "
+        G_fatal_error(_("Lat/Long project is not supported by %s. Please "
                         "reproject map first."),
                       G_program_name());
 
@@ -378,7 +377,7 @@ int main(int argc, char *argv[])
     N_convert_array_2d_null_to_zero(data->phead);
 
     /****************************************************/
-    /*explicite calculation of free groundwater surface */
+    /*explicit calculation of free groundwater surface  */
 
     /****************************************************/
     if (data->gwtype == N_GW_UNCONFINED) {
@@ -447,7 +446,7 @@ int main(int argc, char *argv[])
         N_write_array_2d_to_rast(budget, param.budget->answer);
     }
 
-    /*Compute the the velocity field if required and write the result into two
+    /*Compute the velocity field if required and write the result into two
      * raster maps */
     if (param.vector_x->answer && param.vector_y->answer) {
         field = N_compute_gradient_field_2d(data->phead, data->hc_x, data->hc_y,
@@ -460,9 +459,6 @@ int main(int argc, char *argv[])
 
         N_write_array_2d_to_rast(xcomp, param.vector_x->answer);
         N_write_array_2d_to_rast(ycomp, param.vector_y->answer);
-        if (buff)
-            G_free(buff);
-
         if (xcomp)
             N_free_array_2d(xcomp);
         if (ycomp)

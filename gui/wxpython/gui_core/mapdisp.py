@@ -43,9 +43,6 @@ class MapPanelBase(wx.Panel):
     Several methods has to be overridden or
     \c NotImplementedError("MethodName") will be raised.
 
-    If derived class enables and disables auto-rendering,
-    it should override IsAutoRendered method.
-
     It is expected that derived class will call _setUpMapWindow().
 
     Derived class can has one or more map windows (and map renders)
@@ -115,6 +112,7 @@ class MapPanelBase(wx.Panel):
             (self.OnCloseWindow, wx.ACCEL_CTRL, ord("W")),
             (self.OnRender, wx.ACCEL_CTRL, ord("R")),
             (self.OnRender, wx.ACCEL_NORMAL, wx.WXK_F5),
+            (self.OnEnableDisableRender, wx.ACCEL_NORMAL, wx.WXK_F6),
         ]
 
         self._initShortcuts()
@@ -132,7 +130,7 @@ class MapPanelBase(wx.Panel):
         """Initialize map display, set dimensions and map region"""
         if not grass.find_program("g.region", "--help"):
             sys.exit(
-                _("GRASS module '%s' not found. Unable to start map " "display window.")
+                _("GRASS module '%s' not found. Unable to start map display window.")
                 % "g.region"
             )
 
@@ -178,8 +176,7 @@ class MapPanelBase(wx.Panel):
         """Returns property"""
         if hasattr(self.mapWindowProperties, name):
             return getattr(self.mapWindowProperties, name)
-        else:
-            return self.statusbarManager.GetProperty(name)
+        return self.statusbarManager.GetProperty(name)
 
     def HasProperty(self, name):
         """Checks whether object has property"""
@@ -288,19 +285,23 @@ class MapPanelBase(wx.Panel):
 
     def GetMap(self):
         """Returns current map (renderer) instance"""
-        raise NotImplementedError("GetMap")
+        msg = self.GetMap.__name__
+        raise NotImplementedError(msg)
 
     def GetWindow(self):
         """Returns current map window"""
-        raise NotImplementedError("GetWindow")
+        msg = self.GetWindow.__name__
+        raise NotImplementedError(msg)
 
     def GetWindows(self):
         """Returns list of map windows"""
-        raise NotImplementedError("GetWindows")
+        msg = self.GetWindows.__name__
+        raise NotImplementedError(msg)
 
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
-        raise NotImplementedError("GetMapToolbar")
+        msg = self.GetMapToolbar.__name__
+        raise NotImplementedError(msg)
 
     def GetToolbar(self, name):
         """Returns toolbar if exists and is active, else None."""
@@ -315,18 +316,10 @@ class MapPanelBase(wx.Panel):
             Debug.msg(5, "MapPanelBase.StatusbarUpdate()")
             self.statusbarManager.Update()
 
-    def IsAutoRendered(self):
-        """Check if auto-rendering is enabled"""
-        # TODO: this is now not the right place to access this attribute
-        # TODO: add mapWindowProperties to init parameters
-        # and pass the right object in the init of derived class?
-        # or do not use this method at all, let mapwindow decide
-        return self.mapWindowProperties.autoRender
-
     def CoordinatesChanged(self):
         """Shows current coordinates on statusbar."""
         # assuming that the first mode is coordinates
-        # probably shold not be here but good solution is not available now
+        # probably shouldn't be here but a better solution isn't available now
         if self.statusbarManager:
             if self.statusbarManager.GetMode() == 0:
                 self.statusbarManager.ShowItem("coordinates")
@@ -391,10 +384,7 @@ class MapPanelBase(wx.Panel):
                 toolbar.EnableLongHelp(enable)
 
     def ShowAllToolbars(self, show=True):
-        if not show:  # hide
-            action = self.RemoveToolbar
-        else:
-            action = self.AddToolbar
+        action = self.RemoveToolbar if not show else self.AddToolbar
         for toolbar in self.GetToolbarNames():
             action(toolbar)
 
@@ -407,7 +397,8 @@ class MapPanelBase(wx.Panel):
 
     def AddToolbar(self):
         """Add defined toolbar to the window"""
-        raise NotImplementedError("AddToolbar")
+        msg = self.AddToolbar.__name__
+        raise NotImplementedError(msg)
 
     def RemoveToolbar(self, name, destroy=False):
         """Removes defined toolbar from the window
@@ -433,7 +424,15 @@ class MapPanelBase(wx.Panel):
 
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
-        raise NotImplementedError("OnRender")
+        msg = self.OnRender.__name__
+        raise NotImplementedError(msg)
+
+    def OnEnableDisableRender(self, event):
+        """Enable/disable auto-rendering map composition (each map layer)"""
+        if self.MapWindow.parent.mapWindowProperties.autoRender:
+            self.MapWindow.parent.mapWindowProperties.autoRender = False
+        else:
+            self.MapWindow.parent.mapWindowProperties.autoRender = True
 
     def OnDraw(self, event):
         """Re-display current map composition"""
@@ -587,7 +586,7 @@ class DoubleMapPanel(MapPanelBase):
     It is expected that derived class will call _bindWindowsActivation()
     when both map windows will be initialized.
 
-    Drived class should have method GetMapToolbar() returns toolbar
+    Derived classes should have method GetMapToolbar() returns toolbar
     which has methods SetActiveMap() and Enable().
 
     @note To access maps use getters only
@@ -612,7 +611,7 @@ class DoubleMapPanel(MapPanelBase):
         r"""
 
         \a firstMap is set as active (by assign it to \c self.Map).
-        Derived class should assging to \c self.MapWindow to make one
+        Derived class should assigning to \c self.MapWindow to make one
         map window current by default.
 
         :param parent: gui parent
@@ -723,7 +722,7 @@ class DoubleMapPanel(MapPanelBase):
                 self.firstMapWindow.zoomChanged.connect(self.OnZoomChangedFirstMap)
             else:
                 self.secondMapWindow.zoomChanged.connect(self.OnZoomChangedSecondMap)
-        else:
+        else:  # noqa: PLR5501
             if self.MapWindow == self.firstMapWindow:
                 self.firstMapWindow.zoomChanged.disconnect(self.OnZoomChangedFirstMap)
             else:
@@ -776,13 +775,20 @@ class DoubleMapPanel(MapPanelBase):
 
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
-        self.Render(mapToRender=self.GetFirstWindow())
-        self.Render(mapToRender=self.GetSecondWindow())
+        kwargs = {}
+        # Handle re-render map event (mouse click on toolbar Render map
+        # tool, F5/Ctrl + R keyboard shortcut)
+        if event and event.GetEventType() == wx.EVT_TOOL.typeId:
+            kwargs = {"reRenderTool": True}
+        self.Render(mapToRender=self.GetFirstWindow(), **kwargs)
+        self.Render(mapToRender=self.GetSecondWindow(), **kwargs)
 
-    def Render(self, mapToRender):
+    def Render(self, mapToRender, reRenderTool=False):
         """Re-render map composition"""
         mapToRender.UpdateMap(
-            render=True, renderVector=mapToRender == self.GetFirstWindow()
+            render=True,
+            renderVector=mapToRender == self.GetFirstWindow(),
+            reRenderTool=reRenderTool,
         )
 
         # update statusbar
@@ -799,12 +805,17 @@ class DoubleMapPanel(MapPanelBase):
 
     def OnDraw(self, event):
         """Re-display current map composition"""
-        self.Draw(mapToDraw=self.GetFirstWindow())
-        self.Draw(mapToDraw=self.GetSecondWindow())
+        kwargs = {}
+        # Handle display map event (mouse click on toolbar Display map
+        # tool)
+        if event and event.GetEventType() == wx.EVT_TOOL.typeId:
+            kwargs = {"reRenderTool": True}
+        self.Draw(mapToDraw=self.GetFirstWindow(), **kwargs)
+        self.Draw(mapToDraw=self.GetSecondWindow(), **kwargs)
 
-    def Draw(self, mapToDraw):
+    def Draw(self, mapToDraw, reRenderTool=False):
         """Re-display current map composition"""
-        mapToDraw.UpdateMap(render=False)
+        mapToDraw.UpdateMap(render=False, reRenderTool=reRenderTool)
 
 
 class FrameMixin:

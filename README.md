@@ -1,6 +1,5 @@
 # GRASS GIS Repository
 
-[![Build Status](https://travis-ci.com/OSGeo/grass.svg?branch=main)](https://travis-ci.com/OSGeo/grass)
 [![GCC C/C++ standards check](https://github.com/OSGeo/grass/workflows/GCC%20C/C++%20standards%20check/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22GCC+C%2FC%2B%2B+standards+check%22)
 [![Python code quality check](https://github.com/OSGeo/grass/workflows/Python%20code%20quality%20check/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22Python+code+quality+check%22)
 [![General linting](https://github.com/OSGeo/grass/workflows/General%20linting/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22General+linting%22)
@@ -8,8 +7,10 @@
 [![OSGeo4W](https://github.com/OSGeo/grass/workflows/OSGeo4W/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3AOSGeo4W)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/OSGeo/grass/badge)](https://securityscorecards.dev/viewer/?uri=github.com/OSGeo/grass)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/2470/badge)](https://www.bestpractices.dev/projects/2470)
+[![Coverity](https://scan.coverity.com/projects/1038/badge.svg)](https://scan.coverity.com/projects/grass)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5176030.svg)](https://doi.org/10.5281/zenodo.5176030)
 [![Join the chat at https://gitter.im/grassgis/community](https://badges.gitter.im/grassgis/community.svg)](https://gitter.im/grassgis/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
 ## Description
 
@@ -21,18 +22,13 @@ visualization.
 Launch this repository in Binder and experiment with GRASS's Python API in
 Jupyter Notebooks by clicking the button below:
 
-[![Binder](https://camo.githubusercontent.com/581c077bdbc6ca6899c86d0acc6145ae85e9d80e6f805a1071793dbe48917982/68747470733a2f2f6d7962696e6465722e6f72672f62616467655f6c6f676f2e737667)](https://mybinder.org/v2/gh/OSGeo/grass/main?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fjupyter_example.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OSGeo/grass/main?labpath=doc%2Fexamples%2Fnotebooks%2Fjupyter_example.ipynb)
 
 ## Contributing
 
 In general: you don't really need write access as you can simply open
 a [pull request](https://github.com/OSGeo/grass/pulls) to contribute to
 GRASS GIS. See [CONTRIBUTING file](CONTRIBUTING.md) for more details.
-
-How to get write access here
-
-Want to become a core developer? See
-[Procedure for gaining Git write access](https://trac.osgeo.org/grass/wiki/HowToContribute#WriteaccesstotheGRASScorerepository)
 
 ## How to compile GRASS
 
@@ -108,6 +104,11 @@ this issue, clean all the compiled files from the source code:
 ```bash
 make distclean
 ```
+
+## Further documents
+
+- [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md)
+- [Roadmap](https://grass.osgeo.org/about/roadmap/)
 
 ## Thanks to all contributors ❤
 

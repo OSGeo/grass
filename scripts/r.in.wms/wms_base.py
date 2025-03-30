@@ -1,5 +1,6 @@
 """!
-@brief Preparation of parameters for drivers, which download it, and managing downloaded data.
+@brief Preparation of parameters for drivers, which download it, and managing
+    downloaded data.
 
 List of classes:
  - wms_base::WMSBase
@@ -18,11 +19,12 @@ import base64
 import os
 from http.client import HTTPException
 from math import ceil
+from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
 
 
-import grass.script as grass
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 
 
@@ -42,10 +44,10 @@ class WMSBase:
         # removed before, implemented just in case of unexpected
         # stop of module
         for temp_file in self.temp_files_to_cleanup:
-            grass.try_remove(temp_file)
+            gs.try_remove(temp_file)
 
     def _debug(self, fn, msg):
-        grass.debug("%s.%s: %s" % (self.__class__.__name__, fn, msg))
+        gs.debug("%s.%s: %s" % (self.__class__.__name__, fn, msg))
 
     def _initializeParameters(self, options, flags):
         self._debug("_initialize_parameters", "started")
@@ -75,11 +77,9 @@ class WMSBase:
         if (self.params["password"] and self.params["username"] == "") or (
             self.params["password"] == "" and self.params["username"]
         ):
-            grass.fatal(
-                _(
-                    "Please insert both %s and %s parameters or none of them."
-                    % ("password", "username")
-                )
+            gs.fatal(
+                _("Please insert both %s and %s parameters or none of them.")
+                % ("password", "username")
             )
 
         self.params["bgcolor"] = options["bgcolor"].strip()
@@ -89,7 +89,7 @@ class WMSBase:
             and "format" not in driver_props["ignored_params"]
         ):
             if not flags["o"] and "WMS" in self.params["driver"]:
-                grass.warning(_("JPEG format does not support transparency"))
+                gs.warning(_("JPEG format does not support transparency"))
 
         self.params["format"] = drv_info.GetFormat(options["format"])
         if not self.params["format"]:
@@ -98,7 +98,7 @@ class WMSBase:
         # TODO: get srs from Tile Service file in OnEarth_GRASS driver
         self.params["srs"] = int(options["srs"])
         if self.params["srs"] <= 0 and "srs" not in driver_props["ignored_params"]:
-            grass.fatal(_("Invalid EPSG code %d") % self.params["srs"])
+            gs.fatal(_("Invalid EPSG code %d") % self.params["srs"])
 
         self.params["wms_version"] = options["wms_version"]
         if (
@@ -106,9 +106,10 @@ class WMSBase:
             and self.params["wms_version"] == "1.1.1"
         ):
             self.params["wms_version"] = "1.3.0"
-            grass.warning(
+            gs.warning(
                 _(
-                    "WMS version <1.3.0> will be used, because version <1.1.1> does not support <%s>projection"
+                    "WMS version <1.3.0> will be used, because version <1.1.1> does "
+                    "not support <%s>projection"
                 )
                 % GetSRSParamVal(self.params["srs"])
             )
@@ -119,23 +120,24 @@ class WMSBase:
             self.params["proj_name"] = "SRS"
 
         # read projection info
-        self.proj_location = grass.read_command("g.proj", flags="jf").rstrip("\n")
+        self.proj_location = gs.read_command("g.proj", flags="jf").rstrip("\n")
         self.proj_location = self._modifyProj(self.proj_location)
 
         self.source_epsg = str(GetEpsg(self.params["srs"]))
         self.target_epsg = None
-        target_crs = grass.parse_command("g.proj", flags="g", delimiter="=")
+        target_crs = gs.parse_command("g.proj", flags="g", delimiter="=")
         if "epsg" in target_crs.keys():
             self.target_epsg = target_crs["epsg"]
             if self.source_epsg != self.target_epsg:
-                grass.warning(
+                gs.warning(
                     _(
-                        "SRS differences: WMS source EPSG %s != location EPSG %s (use srs=%s to adjust)"
+                        "SRS differences: WMS source EPSG %s != location EPSG %s (use "
+                        "srs=%s to adjust)"
                     )
                     % (self.source_epsg, self.target_epsg, self.target_epsg)
                 )
 
-        self.proj_srs = grass.read_command(
+        self.proj_srs = gs.read_command(
             "g.proj", flags="jf", epsg=str(GetEpsg(self.params["srs"]))
         )
         self.proj_srs = self.proj_srs.rstrip("\n")
@@ -143,18 +145,18 @@ class WMSBase:
         self.proj_srs = self._modifyProj(self.proj_srs)
 
         if not self.proj_srs or not self.proj_location:
-            grass.fatal(_("Unable to get projection info"))
+            gs.fatal(_("Unable to get projection info"))
 
         self.region = options["region"]
 
         min_tile_size = 100
         maxcols = int(options["maxcols"])
         if maxcols <= min_tile_size:
-            grass.fatal(_("Maxcols must be greater than 100"))
+            gs.fatal(_("Maxcols must be greater than 100"))
 
         maxrows = int(options["maxrows"])
         if maxrows <= min_tile_size:
-            grass.fatal(_("Maxrows must be greater than 100"))
+            gs.fatal(_("Maxrows must be greater than 100"))
 
         # setting optimal tile size according to maxcols and maxrows constraint
         # and region cols and rows
@@ -173,31 +175,33 @@ class WMSBase:
     def _modifyProj(self, proj):
         """!Modify proj.4 string for usage in this module"""
 
-        # add +wktext parameter to avoid dropping of +nadgrids parameter (if presented) in gdalwarp
+        # add +wktext parameter to avoid dropping of +nadgrids parameter (if presented)
+        # in gdalwarp
         if "+nadgrids=" in proj and " +wktext" not in proj:
             proj += " +wktext"
 
         return proj
 
     def _checkIgnoeredParams(self, options, flags, driver_props):
-        """!Write warnings for set parameters and flags, which chosen driver does not use."""
+        """!Write warnings for set parameters and flags, which chosen driver does not
+        use."""
 
         not_relevant_params = []
         for i_param in driver_props["ignored_params"]:
             if (
                 i_param in options
                 and options[i_param]
-                and i_param not in ["srs", "wms_version", "format"]
+                and i_param not in {"srs", "wms_version", "format"}
             ):  # params with default value
                 not_relevant_params.append("<" + i_param + ">")
 
         if len(not_relevant_params) > 0:
-            grass.warning(
+            gs.warning(
                 _(
                     "These parameter are ignored: %s\n\
                              %s driver does not support the parameters."
-                    % (",".join(not_relevant_params), options["driver"])
                 )
+                % (",".join(not_relevant_params), options["driver"])
             )
 
         not_relevant_flags = []
@@ -206,12 +210,12 @@ class WMSBase:
                 not_relevant_flags.append("<" + i_flag + ">")
 
         if len(not_relevant_flags) > 0:
-            grass.warning(
+            gs.warning(
                 _(
                     "These flags are ignored: %s\n\
                              %s driver does not support the flags."
-                    % (",".join(not_relevant_flags), options["driver"])
                 )
+                % (",".join(not_relevant_flags), options["driver"])
             )
 
     def GetMap(self, options, flags):
@@ -223,7 +227,7 @@ class WMSBase:
         self.temp_map = self._download()
 
         if not self.temp_map:
-            return
+            return None
 
         self._reprojectMap()
 
@@ -250,7 +254,7 @@ class WMSBase:
         if options["urlparams"]:
             cap_url += "&" + options["urlparams"]
 
-        grass.debug("Fetching capabilities file.\n%s" % cap_url)
+        gs.debug("Fetching capabilities file.\n%s" % cap_url)
 
         try:
             cap = self._fetchDataFromServer(
@@ -258,7 +262,7 @@ class WMSBase:
             )
         except (OSError, HTTPException) as e:
             if isinstance(e, HTTPError) and e.code == 401:
-                grass.fatal(
+                gs.fatal(
                     _("Authorization failed to <%s> when fetching capabilities")
                     % options["url"]
                 )
@@ -272,10 +276,10 @@ class WMSBase:
                 else:
                     msg += "{0}".format(e)
 
-                grass.fatal(msg)
+                gs.fatal(msg)
 
-        grass.debug("Fetching capabilities OK")
-        return grass.decode(cap.read())
+        gs.debug("Fetching capabilities OK")
+        return gs.decode(cap.read())
 
     def _fetchDataFromServer(self, url, username=None, password=None):
         """!Fetch data from server"""
@@ -289,7 +293,7 @@ class WMSBase:
         try:
             return urlopen(request)
         except ValueError as error:
-            grass.fatal("%s" % error)
+            gs.fatal("%s" % error)
 
     def GetCapabilities(self, options):
         """!Get capabilities from WMS server"""
@@ -299,13 +303,10 @@ class WMSBase:
         # save to file
         if capfile_output:
             try:
-                with open(capfile_output, "w") as temp:
-                    temp.write(cap)
+                Path(capfile_output).write_text(cap)
                 return
             except OSError as error:
-                grass.fatal(
-                    _("Unable to open file '%s'.\n%s\n" % (capfile_output, error))
-                )
+                gs.fatal(_("Unable to open file '%s'.\n%s\n") % (capfile_output, error))
 
         # print to output
         print(cap)
@@ -347,31 +348,35 @@ class WMSBase:
                     )
                 )
             except OSError:
-                grass.fatal(_("Unable to write data into tempfile"))
+                gs.fatal(_("Unable to write data into tempfile"))
             finally:
                 temp_region_opened.close()
+            try:
+                points = gs.read_command(
+                    "m.proj",
+                    flags="d",
+                    proj_out=self.proj_srs,
+                    proj_in=self.proj_location,
+                    input=temp_region,
+                    quiet=True,
+                )  # TODO: stdin
+            except CalledModuleError:
+                points = None
+            finally:
+                gs.try_remove(temp_region)
 
-            points = grass.read_command(
-                "m.proj",
-                flags="d",
-                proj_out=self.proj_srs,
-                proj_in=self.proj_location,
-                input=temp_region,
-                quiet=True,
-            )  # TODO: stdin
-            grass.try_remove(temp_region)
             if not points:
-                grass.fatal(_("Unable to determine region, %s failed") % "m.proj")
+                gs.fatal(_("Unable to determine region, %s failed") % "m.proj")
 
             points = points.splitlines()
             if len(points) != 4:
-                grass.fatal(_("Region definition: 4 points required"))
+                gs.fatal(_("Region definition: 4 points required"))
 
             for point in points:
                 try:
                     point = list(map(float, point.split("|")))
                 except ValueError:
-                    grass.fatal(_("Reprojection of region using m.proj failed."))
+                    gs.fatal(_("Reprojection of region using m.proj failed."))
                 if not bbox["maxy"]:
                     bbox["maxy"] = point[1]
                     bbox["miny"] = point[1]
@@ -411,8 +416,8 @@ class WMSBase:
         if do_reproject and self.proj_srs == self.proj_location:
             do_reproject = False
         if do_reproject:
-            grass.message(_("Reprojecting raster..."))
-            self.temp_warpmap = grass.tempfile() + ".tif"
+            gs.message(_("Reprojecting raster..."))
+            self.temp_warpmap = gs.tempfile() + ".tif"
 
             if int(os.getenv("GRASS_VERBOSE", "2")) <= 2:
                 nuldev = open(os.devnull, "w+")
@@ -429,7 +434,7 @@ class WMSBase:
             # RGB rasters - alpha layer is added for cropping edges of projected raster
             try:
                 if self.temp_map_bands_num == 3:
-                    ps = grass.Popen(
+                    ps = gs.Popen(
                         [
                             "gdalwarp",
                             "-s_srs",
@@ -446,7 +451,7 @@ class WMSBase:
                     )
                 # RGBA rasters
                 else:
-                    ps = grass.Popen(
+                    ps = gs.Popen(
                         [
                             "gdalwarp",
                             "-s_srs",
@@ -462,7 +467,7 @@ class WMSBase:
                     )
                 ps.wait()
             except OSError as e:
-                grass.fatal(
+                gs.fatal(
                     "%s \nThis can be caused by missing %s utility. " % (e, "gdalwarp")
                 )
 
@@ -470,8 +475,8 @@ class WMSBase:
                 nuldev.close()
 
             if ps.returncode != 0:
-                grass.fatal(_("%s failed") % "gdalwarp")
-            grass.try_remove(self.temp_map)
+                gs.fatal(_("%s failed") % "gdalwarp")
+            gs.try_remove(self.temp_map)
         # raster projection is same as projection of location
         else:
             self.temp_warpmap = self.temp_map
@@ -485,9 +490,9 @@ class WMSBase:
 
         @return string path to temp_file
         """
-        temp_file = grass.tempfile()
+        temp_file = gs.tempfile()
         if temp_file is None:
-            grass.fatal(_("Unable to create temporary files"))
+            gs.fatal(_("Unable to create temporary files"))
 
         # list of created tempfiles for destructor
         self.temp_files_to_cleanup.append(temp_file)
@@ -497,25 +502,20 @@ class WMSBase:
 
 class GRASSImporter:
     def __init__(self, opt_output, cleanup_bands):
-        self.cleanup_mask = False
         self.cleanup_bands = cleanup_bands
 
         # output map name
         self.opt_output = opt_output
 
-        # suffix for existing mask (during overriding will be saved
-        # into raster named:self.opt_output + this suffix)
-        self.original_mask_suffix = "_temp_MASK"
-
         # check names of temporary rasters, which module may create
         maps = []
-        for suffix in (".red", ".green", ".blue", ".alpha", self.original_mask_suffix):
+        for suffix in (".red", ".green", ".blue", ".alpha"):
             rast = self.opt_output + suffix
-            if grass.find_file(rast, element="cell", mapset=".")["file"]:
+            if gs.find_file(rast, element="cell", mapset=".")["file"]:
                 maps.append(rast)
 
         if len(maps) != 0:
-            grass.fatal(
+            gs.fatal(
                 _(
                     "Please change output name, or change names of these rasters: %s, "
                     "module needs to create this temporary maps during execution."
@@ -524,38 +524,20 @@ class GRASSImporter:
             )
 
     def __del__(self):
-        # removes temporary mask, used for import transparent or warped temp_map
-        if self.cleanup_mask:
-            # clear temporary mask, which was set by module
-            try:
-                grass.run_command("r.mask", quiet=True, flags="r")
-            except CalledModuleError:
-                grass.fatal(_("%s failed") % "r.mask")
-
-            # restore original mask, if exists
-            if grass.find_file(
-                self.opt_output + self.original_mask_suffix, element="cell", mapset="."
-            )["name"]:
-                try:
-                    mask_copy = self.opt_output + self.original_mask_suffix
-                    grass.run_command("g.copy", quiet=True, raster=mask_copy + ",MASK")
-                except CalledModuleError:
-                    grass.fatal(_("%s failed") % "g.copy")
-
         # remove temporary created rasters
         maps = []
         rast = self.opt_output + ".alpha"
-        if grass.find_file(rast, element="cell", mapset=".")["file"]:
+        if gs.find_file(rast, element="cell", mapset=".")["file"]:
             maps.append(rast)
 
         if self.cleanup_bands:
-            for suffix in (".red", ".green", ".blue", self.original_mask_suffix):
+            for suffix in (".red", ".green", ".blue"):
                 rast = self.opt_output + suffix
-                if grass.find_file(rast, element="cell", mapset=".")["file"]:
+                if gs.find_file(rast, element="cell", mapset=".")["file"]:
                     maps.append(rast)
 
         if maps:
-            grass.run_command(
+            gs.run_command(
                 "g.remove", quiet=True, flags="fb", type="raster", name=",".join(maps)
             )
 
@@ -563,7 +545,7 @@ class GRASSImporter:
         if "GRASS_REGION" in os.environ.keys():
             os.environ.pop("GRASS_REGION")
 
-        maplist = grass.read_command(
+        maplist = gs.read_command(
             "g.list",
             type="raster",
             pattern="%s*" % (self.opt_output),
@@ -572,21 +554,21 @@ class GRASSImporter:
         ).rstrip("\n")
 
         if len(maplist) == 0:
-            grass.fatal(_("WMS import failed, nothing imported"))
+            gs.fatal(_("WMS import failed, nothing imported"))
         else:
             for raster in maplist.split(","):
-                grass.raster_history(raster, overwrite=True)
-                grass.run_command(
+                gs.raster_history(raster, overwrite=True)
+                gs.run_command(
                     "r.support", map=raster, description="generated by r.in.wms"
                 )
-                grass.message(_("<%s> created.") % raster)
+                gs.message(_("<%s> created.") % raster)
 
     def ImportMapIntoGRASS(self, raster):
         """!Import raster into GRASS."""
         # importing temp_map into GRASS
         try:
             # do not use -o flag !
-            grass.run_command(
+            gs.run_command(
                 "r.in.gdal",
                 flags="o",
                 quiet=True,
@@ -595,38 +577,29 @@ class GRASSImporter:
                 output=self.opt_output,
             )
         except CalledModuleError:
-            grass.fatal(_("%s failed") % "r.in.gdal")
+            gs.fatal(_("%s failed") % "r.in.gdal")
 
         # information for destructor to cleanup temp_layers, created
         # with r.in.gdal
 
         # setting region for full extend of imported raster
-        if grass.find_file(self.opt_output + ".red", element="cell", mapset=".")[
-            "file"
-        ]:
+        if gs.find_file(self.opt_output + ".red", element="cell", mapset=".")["file"]:
             region_map = self.opt_output + ".red"
         else:
             region_map = self.opt_output
-        os.environ["GRASS_REGION"] = grass.region_env(rast=region_map)
+        os.environ["GRASS_REGION"] = gs.region_env(rast=region_map)
 
         # mask created from alpha layer, which describes real extend
         # of warped layer (may not be a rectangle), also mask contains
         # transparent parts of raster
-        if grass.find_file(self.opt_output + ".alpha", element="cell", mapset=".")[
-            "name"
-        ]:
-            # saving current mask (if exists) into temp raster
-            if grass.find_file("MASK", element="cell", mapset=".")["name"]:
-                try:
-                    mask_copy = self.opt_output + self.original_mask_suffix
-                    grass.run_command("g.copy", quiet=True, raster="MASK," + mask_copy)
-                except CalledModuleError:
-                    grass.fatal(_("%s failed") % "g.copy")
+        with gs.MaskManager():
+            self._post_process()
 
-            # info for destructor
-            self.cleanup_mask = True
+    def _post_process(self):
+        """Embed nulls from alpha and create RGB composite"""
+        if gs.find_file(self.opt_output + ".alpha", element="cell", mapset=".")["name"]:
             try:
-                grass.run_command(
+                gs.run_command(
                     "r.mask",
                     quiet=True,
                     overwrite=True,
@@ -635,24 +608,24 @@ class GRASSImporter:
                     raster=self.opt_output + ".alpha",
                 )
             except CalledModuleError:
-                grass.fatal(_("%s failed") % "r.mask")
+                gs.fatal(_("%s failed") % "r.mask")
 
             if not self.cleanup_bands:
-                # use the MASK to set NULL values
+                # Use the alpha-derived mask to set NULL values.
                 for suffix in (".red", ".green", ".blue"):
                     rast = self.opt_output + suffix
-                    if grass.find_file(rast, element="cell", mapset=".")["file"]:
-                        grass.run_command(
+                    if gs.find_file(rast, element="cell", mapset=".")["file"]:
+                        gs.run_command(
                             "g.rename",
                             rast="%s,%s" % (rast, rast + "_null"),
                             quiet=True,
                         )
-                        grass.run_command(
+                        gs.run_command(
                             "r.mapcalc",
                             expression="%s = %s" % (rast, rast + "_null"),
                             quiet=True,
                         )
-                        grass.run_command(
+                        gs.run_command(
                             "g.remove",
                             type="raster",
                             name="%s" % (rast + "_null"),
@@ -662,13 +635,11 @@ class GRASSImporter:
 
         # TODO one band + alpha band?
         if (
-            grass.find_file(self.opt_output + ".red", element="cell", mapset=".")[
-                "file"
-            ]
+            gs.find_file(self.opt_output + ".red", element="cell", mapset=".")["file"]
             and self.cleanup_bands
         ):
             try:
-                grass.run_command(
+                gs.run_command(
                     "r.composite",
                     quiet=True,
                     overwrite=True,
@@ -678,7 +649,7 @@ class GRASSImporter:
                     output=self.opt_output,
                 )
             except CalledModuleError:
-                grass.fatal(_("%s failed") % "r.composite")
+                gs.fatal(_("%s failed") % "r.composite")
 
 
 class WMSDriversInfo:
@@ -781,10 +752,9 @@ class WMSDriversInfo:
 def GetSRSParamVal(srs):
     """!Decides whether to use CRS or EPSG prefix according to srs number."""
 
-    if srs in [84, 83, 27]:
+    if srs in {84, 83, 27}:
         return "OGC:CRS{}".format(srs)
-    else:
-        return "EPSG:{}".format(srs)
+    return "EPSG:{}".format(srs)
 
 
 def GetEpsg(srs):

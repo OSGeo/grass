@@ -5,8 +5,8 @@
 <b>grass</b> [<b>-h</b> | <b>-help</b> | <b>--help</b>] [<b>-v</b> | <b>--version</b>] |
 [<b>-c</b> | <b>-c geofile</b> | <b>-c EPSG:code[:datum_trans]</b>] | <b>-e</b> | <b>-f</b> |
 [<b>--text</b> | <b>--gtext</b> | <b>--gui</b>] | <b>--config</b> |
-[<b>--tmp-location</b> | <b>--tmp-mapset</b>]
-    [[[<b>&lt;GISDBASE&gt;/</b>]<b>&lt;LOCATION&gt;/</b>]
+[<b>--tmp-project</b> | <b>--tmp-mapset</b>]
+    [[[<b>&lt;GISDBASE&gt;/</b>]<b>&lt;PROJECT&gt;/</b>]
     	<b>&lt;MAPSET&gt;</b>]
 [<b>--exec EXECUTABLE</b>]
 
@@ -20,20 +20,20 @@
 <dt><b>-v</b> | <b>--version</b>
 <dd> Prints the version of GRASS and exits
 
-<dt><b>-c</b>
-<dd> Creates new GRASS unprojected location in specified GISDBASE
+<dt><b>-c XY</b>
+<dd> Creates new GRASS project (location) without coordinate reference system in specified GISDBASE
 
 <dt><b>-c geofile</b>
-<dd> Creates new GRASS projected location in specified GISDBASE based on georeferenced file
+<dd> Creates new GRASS project in specified GISDBASE with coordinate reference system based on georeferenced file
 
 <dt><b>-c EPSG:code</b>
-<dd> Creates new GRASS projected location in specified GISDBASE with given EPSG code
+<dd> Creates new GRASS project in specified GISDBASE with coordinate reference system defined by EPSG code
 
 <dt><b>-c EPSG:code:datum_trans</b>
-<dd> Creates new GRASS projected location in specified GISDBASE with given EPSG code and datum transform parameters
+<dd> Creates new GRASS project in specified GISDBASE with coordinate reference system defined by EPSG code and datum transform parameters
 
 <dt><b>-e</b>
-<dd> Exit after creation of location or mapset. Only with <b>-c</b> flag
+<dd> Exit after creation of project or mapset. Only with <b>-c</b> flag
 
 <dt><b>-f</b>
 <dd> Forces removal of .gislock if exists (use with care!). Only with --text flag
@@ -54,15 +54,15 @@
 <dt><b>--exec EXECUTABLE</b>
 <dd> Execute GRASS module or script. The provided executable will be executed in a GRASS GIS non-interactive session.
 
-<dt><b>--tmp-location</b>
-<dd> Run using a temporary location which is created based on the given
+<dt><b>--tmp-project</b>
+<dd> Run using a temporary project which is created based on the given
 coordinate reference system and deleted at the end of the execution
 (use with the --exec flag).
 The active mapset will be the PERMANENT mapset.
 
 <dt><b>--tmp-mapset</b>
 <dd> Run using a temporary mapset which is created in the specified
-location and deleted at the end of the execution
+project and deleted at the end of the execution
 (use with the --exec flag).
 
 </dl>
@@ -72,13 +72,14 @@ location and deleted at the end of the execution
 <dl>
 <dt><b>GISDBASE</b>
 <dd> Initial database directory which should be a fully qualified path
-    (e.g., <tt>/usr/local/share/grassdata</tt>)
+    (e.g., <code>/usr/local/share/grassdata</code>)
 
-<dt><b>LOCATION</b>
-<dd> Initial location directory which is a subdirectory of GISDBASE
+<dt><b>PROJECT</b>
+<dd> Initial project directory which is a subdirectory of GISDBASE
+    (project was previously called location)
 
 <dt><b>MAPSET</b>
-<dd> Initial mapset directory which is a subdirectory of LOCATION
+<dd> Initial mapset directory which is a subdirectory of PROJECT
 </dl>
 
 <i>Note</i>: These parameters must be specified in one of the
@@ -86,8 +87,8 @@ following ways:
 
 <div class="code"><pre>
     MAPSET
-    LOCATION/MAPSET
-    GISDBASE/LOCATION/MAPSET
+    PROJECT/MAPSET
+    GISDBASE/PROJECT/MAPSET
 </pre></div>
 
 <h2>DESCRIPTION</h2>
@@ -127,21 +128,21 @@ The flag <b>--config option</b> prints GRASS GIS configuration and
 version parameters, with the options:
 
 <ul>
-<li><b>arch</b>: system architecture (e.g., <tt>x86_64-pc-linux-gnu</tt>)</li>
-<li><b>build</b>: (e.g., <tt>./configure --with-cxx --enable-largefile --with-proj [...]</tt>)</li>
-<li><b>compiler</b>: (e.g., <tt>gcc</tt>)</li>
-<li><b>date</b>: (e.g., <tt>Tue Mar 31 20:34:57 2020 +0200</tt>)</li>
-<li><b>path</b>: (e.g., <tt>/usr/lib64/grass</tt>)</li>
-<li><b>python_path</b>: (e.g., <tt>/usr/lib64/grass/etc/python</tt>)</li>
-<li><b>revision</b>: (e.g., <tt>745ee7ec9</tt>)</li>
-<li><b>svn_revision</b>: (e.g., <tt>062bffc8</tt>)</li>
-<li><b>version</b>: (e.g., <tt>8.2.0dev</tt>)</li>
+<li><b>arch</b>: system architecture (e.g., <code>x86_64-pc-linux-gnu</code>)</li>
+<li><b>build</b>: (e.g., <code>./configure --with-cxx --enable-largefile --with-proj [...]</code>)</li>
+<li><b>compiler</b>: (e.g., <code>gcc</code>)</li>
+<li><b>date</b>: (e.g., <code>2024-04-10T11:44:54+00:00</code>)</li>
+<li><b>path</b>: (e.g., <code>/usr/lib64/grass</code>)</li>
+<li><b>python_path</b>: (e.g., <code>/usr/lib64/grass/etc/python</code>)</li>
+<li><b>revision</b>: (e.g., <code>745ee7ec9</code>)</li>
+<li><b>svn_revision</b>: (e.g., <code>062bffc8</code>)</li>
+<li><b>version</b>: (e.g., <code>8.4.0</code>)</li>
 </ul>
 
 <h2>SAMPLE DATA</h2>
 
 The GRASS GIS project provides several free sample geospatial datasets
-as ready-to-use locations. They are available to download at
+as ready-to-use projects. They are available to download at
 <a href="https://grass.osgeo.org/download/sample-data/">https://grass.osgeo.org/download/sample-data/</a>.
 
 The "North Carolina data set" is a modern package of geospatial data from
@@ -156,7 +157,7 @@ assist with automation and customization. Most users will not need to
 bother with these.
 
 <p>In addition to these shell environment variables GRASS maintains a
-number of GIS environment variables in the <tt>$HOME/.grass8/rc</tt>
+number of GIS environment variables in the <code>$HOME/.grass8/rc</code>
 file. User changes to this file will be read during the next startup
 of GRASS. If this file becomes corrupted the user may edit it by hand
 or remove it to start afresh.  See the list
@@ -166,7 +167,7 @@ shell environment variables.
 
 <p>Note that you will need to set these variables using the
 appropriate method required for the UNIX shell that you use (e.g. in a
-Bash shell you must <tt>export</tt> the variables for them to
+Bash shell you must <code>export</code> the variables for them to
 propagate).
 
 <h3>User Interface Environment Variable</h3>
@@ -175,28 +176,28 @@ propagate).
 environment variable called GRASS_GUI which indicates the type of user
 interface for GRASS to use. If this variable is not set
 when <em>grass</em> is run, then it will be created and then saved
-in the <tt>$HOME/.grass8/rc</tt> file for the next time GRASS is
-run. It can be set to <tt>text</tt>, <tt>gtext</tt> or <tt>gui</tt>.
+in the <code>$HOME/.grass8/rc</code> file for the next time GRASS is
+run. It can be set to <code>text</code>, <code>gtext</code> or <code>gui</code>.
 
 <p>There is an order of precedence in the way <em>grass</em>
 determines the user interface to use. The following is the hierarchy
 from highest precedence to lowest.
 <ol>
-  <li>Command line argument
-  <li>Environment variable GRASS_GUI
-  <li>Value set in <tt>$HOME/.grass8/rc</tt> (GUI)
-  <li>Default value - <tt>gui</tt>
+  <li>Command line argument</li>
+  <li>Environment variable GRASS_GUI</li>
+  <li>Value set in <code>$HOME/.grass8/rc</code> (GUI)</li>
+  <li>Default value - <code>gui</code></li>
 </ol>
 
 <h3>Python Environment Variables</h3>
 
 <p>If you choose to use <em><a href="wxGUI.html">wxGUI</a></em>
 interface, then the GRASS_PYTHON environment variable can be used to
-override your system default <tt>python</tt> command.
+override your system default <code>python</code> command.
 
 <p>Suppose for example your system has Python 3.6 installed and you
 install a personal version of the Python 3.8 binaries
-under <tt>$HOME/bin</tt>. You can use the above variables to have
+under <code>$HOME/bin</code>. You can use the above variables to have
 GRASS use the Python 3.8 binaries instead.
 
 <div class="code"><pre>
@@ -232,8 +233,8 @@ modules which are not distributed with the standard GRASS release.
 path environment.
 
 <p>If not defined by user, this variable is set by GRASS startup program
-to <tt>$HOME/.grass8/addons</tt> on GNU/Linux
-and <tt>%APPDATA%\Roaming\GRASS8\addons</tt> on MS Windows.
+to <code>$HOME/.grass8/addons</code> on GNU/Linux
+and <code>%APPDATA%\Roaming\GRASS8\addons</code> on MS Windows.
 
 <h3>HTML Browser Variable</h3>
 
@@ -247,20 +248,20 @@ HTML web browser to use for displaying help pages.
 <dl>
 <dt><b>grass</b>
 <dd> Start GRASS using the default user interface. The user will be
-    prompted to choose the appropriate location and mapset.
+    prompted to choose the appropriate project and mapset.
 
 <dt><b>grass --gui</b>
 <dd> Start GRASS using the graphical user interface. The user will be
-    prompted to choose the appropriate location and mapset.
+    prompted to choose the appropriate project and mapset.
 
 <dt><b>grass --text</b>
 <dd> Start GRASS using the text-based user interface. Appropriate
-location and mapset must be set by environmental variables (see
+project and mapset must be set by environmental variables (see
 examples below) otherwise taken from the last GRASS session.</dd>
 
 <dt><b>grass --gtext</b>
 <dd> Start GRASS using the text-based user interface. The user will be
-    prompted to choose the appropriate location and mapset.
+    prompted to choose the appropriate project and mapset.
 
 <dt><b>grass $HOME/grassdata/spearfish70/user1</b>
 <dd> Start GRASS using the default user interface and automatically
@@ -268,27 +269,27 @@ examples below) otherwise taken from the last GRASS session.</dd>
 
 <dt><b>grass --gui -</b>
 <dd> Start GRASS using the graphical user interface and try to
-    obtain the location and mapset from environment variables.
+    obtain the project and mapset from environment variables.
 
-<dt><b>grass -c EPSG:4326 $HOME/grassdata/mylocation</b>
-<dd> Creates a new GRASS location with EPSG code 4326 (latitude-longitude, WGS84)
+<dt><b>grass -c EPSG:4326 $HOME/grassdata/myproject</b>
+<dd> Creates a new GRASS project with EPSG code 4326 (latitude-longitude, WGS84)
     in the specified GISDBASE
 
-<dt><b>grass -c EPSG:5514:3 $HOME/grassdata/mylocation</b>
-<dd> Creates a new GRASS location with EPSG code 5514 (S-JTSK / Krovak
+<dt><b>grass -c EPSG:5514:3 $HOME/grassdata/myproject</b>
+<dd> Creates a new GRASS project with EPSG code 5514 (S-JTSK / Krovak
     East North - SJTSK) with datum transformation parameters used in
     Czech Republic in the specified GISDBASE
 
 <dt><b>grass -c XY $HOME/grassdata/gnomonic --exec g.proj -c proj4='+proj=gnom +lat_0=90 +lon_0=-50'</b>
-<dd>  Creates a new GRASS location from PROJ definition string
+<dd>  Creates a new GRASS project from PROJ definition string
     (here: <a href="https://proj4.org/operations/projections/gnom.html">gnomonic</a>)
     in the specified GISDBASE
 
-<dt><b>grass -c myvector.shp $HOME/grassdata/mylocation</b>
-<dd> Creates a new GRASS location based on georeferenced Shapefile
+<dt><b>grass -c myvector.shp $HOME/grassdata/myproject</b>
+<dd> Creates a new GRASS project based on georeferenced Shapefile
 
-<dt><b>grass -c myraster.tif $HOME/grassdata/mylocation</b>
-<dd> Creates a new GRASS location based on georeferenced GeoTIFF file
+<dt><b>grass -c myraster.tif $HOME/grassdata/myproject</b>
+<dd> Creates a new GRASS project based on georeferenced GeoTIFF file
 </dl>
 
 <h3>Batch jobs with the exec interface</h3>
@@ -300,7 +301,7 @@ r.out.gdal input=basin_50K output=basins.tiff
 Region issues ignored.
 -->
 
-Creating a new Location based on a geodata file's projection (<b>-c</b>)
+Creating a new project based on a geodata file's projection (<b>-c</b>)
 and exit (<b>-e</b>) immediately:
 
 <div class="code"><pre>
@@ -374,45 +375,45 @@ for vector in gs.list_strings(type='vector'):
     print(vector)
 </pre></div>
 
-<h4>Using temporary location</h4>
+<h4>Using temporary project</h4>
 
-Creating a new temporary location based on a georeferenced file's
-projection coordinate reference system (CRS) and simultaneously starting
+Creating a new temporary project based on a georeferenced file's
+coordinate reference system (CRS) and simultaneously starting
 computation in a shell script:
 
 <div class="code"><pre>
-grass --tmp-location elevation.tiff --exec test.sh
+grass --tmp-project elevation.tiff --exec test.sh
 </pre></div>
 
 The same, but using an EPSG code and a Python script:
 
 <div class="code"><pre>
-grass --tmp-location EPSG:3358 --exec test.py
+grass --tmp-project EPSG:3358 --exec test.py
 </pre></div>
 
-Finally, for special cases, we can create an XY location without any CRS:
+Finally, for special cases, we can create an XY project without any CRS:
 
 <div class="code"><pre>
-grass --tmp-location XY --exec test.py
+grass --tmp-project XY --exec test.py
 </pre></div>
 
-Temporary location is automatically deleted after computation,
+Temporary project is automatically deleted after computation,
 so the script is expected to export, link or otherwise preserve the
 output data before ending.
 
 <p>
 A single command can be also executed, e.g. to examine properties of the
-temporary location:
+temporary project:
 
 <div class="code"><pre>
-grass --tmp-location EPSG:3358 --exec g.proj -p
+grass --tmp-project EPSG:3358 --exec g.proj -p
 </pre></div>
 
-A temporary XY location with single command is useful, e.g. to show
+A temporary XY project with single command is useful, e.g. to show
 help text of a module:
 
 <div class="code"><pre>
-grass --tmp-location XY --exec r.neighbors --help
+grass --tmp-project XY --exec r.neighbors --help
 </pre></div>
 
 
@@ -420,7 +421,7 @@ grass --tmp-location XY --exec r.neighbors --help
 
 <p>
 A single command can be executed, e.g., to examine properties of a
-location (here using the NC SPM sample location):
+project (here using the NC SPM sample dataset):
 
 <div class="code"><pre>
 grass --tmp-mapset /path/to/grassdata/nc_spm_08/ --exec g.proj -p
@@ -454,20 +455,20 @@ output data before ending.
 
 
 <h4>Troubleshooting</h4>
-Importantly, to avoid an <tt>"[Errno 8] Exec format error"</tt> there must be a
+Importantly, to avoid an <code>"[Errno 8] Exec format error"</code> there must be a
 <a href="https://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a> line at the top of
-the script (like <tt>#!/bin/sh</tt>, <tt>#!/bin/bash</tt>, or <tt>#!/usr/bin/env python3</tt>)
+the script (like <code>#!/bin/sh</code>, <code>#!/bin/bash</code>, or <code>#!/usr/bin/env python3</code>)
 indicating which interpreter to be used for the script. The script file must
 have its executable bit set.
 
 <h2>CAVEAT</h2>
 
 If you start GRASS using the <em><a href="wxGUI.html">wxGUI</a></em>
-interface you must have a <tt>python</tt> command in your $PATH
+interface you must have a <code>python</code> command in your $PATH
 variable. That is, the command must be named
-<tt>python</tt> and not something like <tt>python3.6</tt>. Rarely some
-Python installations do not create a <tt>python</tt> command. In these
-cases you can override <tt>python</tt> by GRASS_PYTHON environmental
+<code>python</code> and not something like <code>python3.6</code>. Rarely some
+Python installations do not create a <code>python</code> command. In these
+cases you can override <code>python</code> by GRASS_PYTHON environmental
 variable.
 
 <p>Furthermore, if you have more than one version of Python installed,

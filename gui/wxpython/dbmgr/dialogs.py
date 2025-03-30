@@ -14,7 +14,8 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
-@author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
+@author Refactoring by Stepan Turek <stepan.turek seznam.cz>
+        (GSoC 2012, mentor: Martin Landa)
 """
 
 import wx
@@ -188,7 +189,6 @@ class DisplayAttributesDialog(wx.Dialog):
 
     def OnSQLStatement(self, event):
         """Update SQL statement"""
-        pass
 
     def IsFound(self):
         """Check for status
@@ -222,10 +222,11 @@ class DisplayAttributesDialog(wx.Dialog):
                     ctype = columns[name]["ctype"]
                     value = columns[name]["values"][idx]
                     id = columns[name]["ids"][idx]
+                    widget = self.FindWindowById(id)
                     try:
-                        newvalue = self.FindWindowById(id).GetValue()
-                    except:
-                        newvalue = self.FindWindowById(id).GetLabel()
+                        newvalue = widget.GetValue()
+                    except AttributeError:
+                        newvalue = widget.GetLabel()
 
                     if newvalue:
                         try:
@@ -237,7 +238,8 @@ class DisplayAttributesDialog(wx.Dialog):
                             GError(
                                 parent=self,
                                 message=_(
-                                    "Column <%(col)s>: Value '%(value)s' needs to be entered as %(type)s."
+                                    "Column <%(col)s>: Value '%(value)s' needs to be "
+                                    "entered as %(type)s."
                                 )
                                 % {
                                     "col": name,
@@ -248,21 +250,19 @@ class DisplayAttributesDialog(wx.Dialog):
                             )
                             sqlCommands.append(None)
                             continue
-                    else:
-                        if self.action == "add":
-                            continue
+                    elif self.action == "add":
+                        continue
 
                     if newvalue != value:
                         updatedColumns.append(name)
                         if newvalue == "":
                             updatedValues.append("NULL")
+                        elif ctype != str:
+                            updatedValues.append(str(newvalue))
                         else:
-                            if ctype != str:
-                                updatedValues.append(str(newvalue))
-                            else:
-                                updatedValues.append(
-                                    "'" + newvalue.replace("'", "''") + "'"
-                                )
+                            updatedValues.append(
+                                "'" + newvalue.replace("'", "''") + "'"
+                            )
                         columns[name]["values"][idx] = newvalue
 
                 if self.action != "add" and len(updatedValues) == 0:
@@ -306,7 +306,6 @@ class DisplayAttributesDialog(wx.Dialog):
             columns = self.mapDBInfo.tables[table]
             for idx in range(len(columns[key]["values"])):
                 for name in columns.keys():
-                    type = columns[name]["type"]
                     value = columns[name]["values"][idx]
                     if value is None:
                         value = ""
@@ -324,9 +323,8 @@ class DisplayAttributesDialog(wx.Dialog):
         frame.dialogs["attributes"] = None
         if hasattr(self, "digit"):
             self.parent.digit.GetDisplay().SetSelected([])
-            if frame.IsAutoRendered():
-                self.parent.UpdateMap(render=False)
-        elif frame.IsAutoRendered():
+            self.parent.UpdateMap(render=False)
+        else:
             frame.RemoveQueryLayer()
             self.parent.UpdateMap(render=True)
         if self.IsModal():
@@ -395,10 +393,7 @@ class DisplayAttributesDialog(wx.Dialog):
         """
         if action:
             self.action = action
-            if action == "display":
-                enabled = False
-            else:
-                enabled = True
+            enabled = action != "display"
             self.closeDialog.Enable(enabled)
             self.FindWindowById(wx.ID_OK).Enable(enabled)
 
@@ -422,10 +417,7 @@ class DisplayAttributesDialog(wx.Dialog):
                 idx = 0
                 for layer in data["Layer"]:
                     layer = int(layer)
-                    if data["Id"][idx] is not None:
-                        tfid = int(data["Id"][idx])
-                    else:
-                        tfid = 0  # Area / Volume
+                    tfid = int(data["Id"][idx]) if data["Id"][idx] is not None else 0
                     if tfid not in self.cats:
                         self.cats[tfid] = {}
                     if layer not in self.cats[tfid]:
@@ -588,7 +580,7 @@ class DisplayAttributesDialog(wx.Dialog):
         return True
 
     def SetColumnValue(self, layer, column, value):
-        """Set attrbute value
+        """Set attribute value
 
         :param column: column name
         :param value: value
@@ -656,15 +648,14 @@ class ModifyTableRecord(wx.Dialog):
                     self.boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
                     cId += 1
                     continue
-                else:
-                    valueWin = SpinCtrl(
-                        parent=self.dataPanel,
-                        id=wx.ID_ANY,
-                        value=value,
-                        min=-1e9,
-                        max=1e9,
-                        size=(250, -1),
-                    )
+                valueWin = SpinCtrl(
+                    parent=self.dataPanel,
+                    id=wx.ID_ANY,
+                    value=value,
+                    min=-1e9,
+                    max=1e9,
+                    size=(250, -1),
+                )
             else:
                 valueWin = TextCtrl(
                     parent=self.dataPanel, id=wx.ID_ANY, value=value, size=(250, -1)
@@ -744,7 +735,7 @@ class ModifyTableRecord(wx.Dialog):
 
         If columns is given (list), return only values of given columns.
         """
-        valueList = list()
+        valueList = []
         for labelId, ctypeId, valueId in self.widgets:
             column = self.FindWindowById(labelId).GetLabel()
             if columns is None or column in columns:

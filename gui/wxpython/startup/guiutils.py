@@ -14,7 +14,6 @@ This program is free software under the GNU General Public License
 This is for code which depend on something from GUI (wx or wxGUI).
 """
 
-
 import os
 import wx
 
@@ -110,7 +109,7 @@ class LocationDialog(TextEntryDialog):
 
     def _showLocationNameInvalidReason(self, ctrl):
         message = get_location_name_invalid_reason(self.database, ctrl.GetValue())
-        GError(parent=self, message=message, caption=_("Invalid location name"))
+        GError(parent=self, message=message, caption=_("Invalid project name"))
 
     def _isLocationNameValid(self, text):
         """Check whether user's input location is valid or not."""
@@ -166,14 +165,13 @@ def create_location_interactively(guiparent, grassdb):
     gWizard = LocationWizard(parent=guiparent, grassdatabase=grassdb)
 
     if gWizard.location is None:
-        gWizard_output = (None, None, None)
+        return (None, None, None)
         # Returns Nones after Cancel
-        return gWizard_output
 
     if gWizard.georeffile:
-        message = _(
-            "Do you want to import {} " "to the newly created location?"
-        ).format(gWizard.georeffile)
+        message = _("Do you want to import {} to the newly created project?").format(
+            gWizard.georeffile
+        )
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=message,
@@ -201,11 +199,9 @@ def create_location_interactively(guiparent, grassdb):
         )
         # Returns database and location created by user
         # and a mapset user may want to switch to
-        gWizard_output = (gWizard.grassdatabase, gWizard.location, mapset)
-    else:
-        # Returns PERMANENT mapset when user mapset not defined
-        gWizard_output = (gWizard.grassdatabase, gWizard.location, "PERMANENT")
-    return gWizard_output
+        return (gWizard.grassdatabase, gWizard.location, mapset)
+    # Returns PERMANENT mapset when user mapset not defined
+    return (gWizard.grassdatabase, gWizard.location, "PERMANENT")
 
 
 def rename_mapset_interactively(guiparent, grassdb, location, mapset):
@@ -282,11 +278,11 @@ def rename_location_interactively(guiparent, grassdb, location):
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_(
-                "Cannot rename location <{location}> for the following reasons:\n\n"
+                "Cannot rename project <{location}> for the following reasons:\n\n"
                 "{reasons}\n\n"
-                "No location will be renamed."
+                "No project will be renamed."
             ).format(location=location, reasons="\n".join(messages)),
-            caption=_("Unable to rename selected location"),
+            caption=_("Unable to rename selected project"),
             style=wx.OK | wx.ICON_WARNING,
         )
         dlg.ShowModal()
@@ -298,7 +294,7 @@ def rename_location_interactively(guiparent, grassdb, location):
         parent=guiparent,
         default=location,
         message=_("Current name: {}\n\nEnter new name:").format(location),
-        caption=_("Rename selected location"),
+        caption=_("Rename selected project"),
         database=grassdb,
     )
     if dlg.ShowModal() == wx.ID_OK:
@@ -310,7 +306,7 @@ def rename_location_interactively(guiparent, grassdb, location):
             wx.MessageBox(
                 parent=guiparent,
                 caption=_("Error"),
-                message=_("Unable to rename location.\n\n{}").format(err),
+                message=_("Unable to rename project.\n\n{}").format(err),
                 style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
             )
     dlg.Destroy()
@@ -457,11 +453,11 @@ def delete_locations_interactively(guiparent, locations):
         dlg = wx.MessageDialog(
             parent=guiparent,
             message=_(
-                "Cannot delete one or more locations for the following reasons:\n\n"
+                "Cannot delete one or more projects for the following reasons:\n\n"
                 "{reasons}\n\n"
-                "No locations will be deleted."
+                "No projects will be deleted."
             ).format(reasons="\n".join(messages)),
-            caption=_("Unable to delete selected locations"),
+            caption=_("Unable to delete selected projects"),
             style=wx.OK | wx.ICON_WARNING,
         )
         dlg.ShowModal()
@@ -478,11 +474,11 @@ def delete_locations_interactively(guiparent, locations):
         parent=guiparent,
         message=_(
             "Do you want to continue with deleting"
-            " one or more of the following locations?\n\n"
+            " one or more of the following projects?\n\n"
             "{deletes}\n\n"
-            "All mapsets included in these locations will be permanently deleted!"
+            "All mapsets included in these projects will be permanently deleted!"
         ).format(deletes="\n".join(deletes)),
-        caption=_("Delete selected locations"),
+        caption=_("Delete selected projects"),
         style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
     )
     if dlg.ShowModal() == wx.ID_YES:
@@ -495,11 +491,11 @@ def delete_locations_interactively(guiparent, locations):
         except OSError as error:
             wx.MessageBox(
                 parent=guiparent,
-                caption=_("Error when deleting locations"),
+                caption=_("Error when deleting projects"),
                 message=_(
-                    "The following error occurred when deleting location <{path}>:"
+                    "The following error occurred when deleting project <{path}>:"
                     "\n\n{error}\n\n"
-                    "Deleting of locations was interrupted."
+                    "Deleting of projects was interrupted."
                 ).format(
                     path=os.path.join(grassdb, location),
                     error=error,
@@ -587,7 +583,7 @@ def can_switch_mapset_interactive(guiparent, grassdb, location, mapset):
 
     if is_mapset_locked(mapset_path):
         info = get_mapset_lock_info(mapset_path)
-        user = info["owner"] if info["owner"] else _("unknown")
+        user = info["owner"] or _("unknown")
         lockpath = info["lockpath"]
         timestamp = info["timestamp"]
 
@@ -654,14 +650,14 @@ def import_file(guiparent, filePath, env):
     if returncode != 0:
         GError(
             parent=guiparent,
-            message=_("Import of <%(name)s> failed.\n" "Reason: %(msg)s")
+            message=_("Import of <%(name)s> failed.\nReason: %(msg)s")
             % ({"name": filePath, "msg": error}),
         )
     else:
         GMessage(
             message=_(
                 "Data file <%(name)s> imported successfully. "
-                "The location's default region was set from "
+                "The project's default region was set from "
                 "this imported map."
             )
             % {"name": filePath},
@@ -681,7 +677,7 @@ def switch_mapset_interactively(
             RunCommand(
                 "g.mapset",
                 parent=guiparent,
-                location=location,
+                project=location,
                 mapset=mapset,
                 dbase=dbase,
             )
@@ -692,7 +688,7 @@ def switch_mapset_interactively(
                     parent=guiparent,
                     message=_(
                         "Current GRASS database is <%(dbase)s>.\n"
-                        "Current location is <%(loc)s>.\n"
+                        "Current project is <%(loc)s>.\n"
                         "Current mapset is <%(mapset)s>."
                     )
                     % {"dbase": dbase, "loc": location, "mapset": mapset},
@@ -702,22 +698,21 @@ def switch_mapset_interactively(
             )
     elif location:
         if (
-            RunCommand("g.mapset", parent=guiparent, location=location, mapset=mapset)
+            RunCommand("g.mapset", parent=guiparent, project=location, mapset=mapset)
             == 0
         ):
             if show_confirmation:
                 GMessage(
                     parent=guiparent,
                     message=_(
-                        "Current location is <%(loc)s>.\n"
-                        "Current mapset is <%(mapset)s>."
+                        "Current project is <%(loc)s>.\nCurrent mapset is <%(mapset)s>."
                     )
                     % {"loc": location, "mapset": mapset},
                 )
             giface.currentMapsetChanged.emit(
                 dbase=None, location=location, mapset=mapset
             )
-    else:
+    else:  # noqa: PLR5501
         if RunCommand("g.mapset", parent=guiparent, mapset=mapset) == 0:
             if show_confirmation:
                 GMessage(

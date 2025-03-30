@@ -12,17 +12,21 @@ import collections
 import copy
 import cProfile
 import sys
-import os
 from jinja2 import Template
+from pathlib import Path
 
-sys.path.append(os.getcwd())
-sys.path.append("%s/.." % (os.getcwd()))
 
+sys.path.append(str(Path.cwd()))
+sys.path.append("%s/.." % (str(Path.cwd())))
+
+
+# flake8: noqa: E402
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
-import grass.script as core
-import grass.pygrass
+import grass.script as gs
 import ctypes
+
+# flake8: qa
 
 
 def test__RasterSegment_value_access__if():
@@ -238,11 +242,11 @@ def test__RasterRow_row_access__if():
 
 
 def test__mapcalc__add():
-    core.mapcalc("test_c = test_a + test_b", quite=True, overwrite=True)
+    gs.mapcalc("test_c = test_a + test_b", quite=True, overwrite=True)
 
 
 def test__mapcalc__if():
-    core.mapcalc("test_c = if(test_a > 50, 1, 0)", quite=True, overwrite=True)
+    gs.mapcalc("test_c = if(test_a > 50, 1, 0)", quite=True, overwrite=True)
 
 
 def mytimer(func, runs=1):
@@ -261,10 +265,8 @@ def mytimer(func, runs=1):
 def run_benchmark(resolution_list, runs, testdict, profile):
     regions = []
     for resolution in resolution_list:
-        core.use_temp_region()
-        core.run_command(
-            "g.region", e=50, w=-50, n=50, s=-50, res=resolution, flags="p"
-        )
+        gs.use_temp_region()
+        gs.run_command("g.region", e=50, w=-50, n=50, s=-50, res=resolution, flags="p")
 
         # Adjust the computational region for this process
         region = libgis.Cell_head()
@@ -282,8 +284,8 @@ def run_benchmark(resolution_list, runs, testdict, profile):
         libgis.G_set_window(ctypes.byref(region))
 
         # Create two raster maps with random numbers
-        core.mapcalc("test_a = rand(0, 100)", quite=True, overwrite=True)
-        core.mapcalc("test_b = rand(0.0, 1.0)", quite=True, overwrite=True)
+        gs.mapcalc("test_a = rand(0, 100)", quite=True, overwrite=True)
+        gs.mapcalc("test_b = rand(0.0, 1.0)", quite=True, overwrite=True)
         result = collections.OrderedDict()
         result["res"] = resolution
         result["cols"] = region.cols
@@ -306,7 +308,7 @@ def run_benchmark(resolution_list, runs, testdict, profile):
                 del operdict["func"]
 
         regions.append(result)
-        core.del_temp_region()
+        gs.del_temp_region()
 
     return regions
 
@@ -337,14 +339,14 @@ def print_test(testdict):
         print(execmode)
         for oper, operdict in operation.items():
             print("    ", oper)
-            for key, value in operdict.items():
+            for key in operdict.keys():
                 print("        ", key)
 
 
 TXT = """
 {% for region in regions %}
 {{ '#'*60 }}
-### Benchmark cols = {{ region.cols }} rows = {{ region.rows}} cells = {{ region.cells }}
+# Benchmark cols = {{ region.cols }} rows = {{ region.rows }} cells = {{ region.cells }}
 {{ '#'*60 }}
 
     # equation: c = a + b
@@ -383,7 +385,7 @@ class OptionWithDefault(optparse.Option):
     ATTRS = optparse.Option.ATTRS + [strREQUIRED]
 
     def __init__(self, *opts, **attrs):
-        if attrs.get(strREQUIRED, False):
+        if attrs.get(strREQUIRED):
             attrs["help"] = "(Required) " + attrs.get("help", "")
         optparse.Option.__init__(self, *opts, **attrs)
 

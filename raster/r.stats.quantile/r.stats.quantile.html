@@ -5,7 +5,7 @@ floating-point "cover layer" according to how it intersects with objects
 in a "base layer". It provides quantile calculations as selected
 "zonal statistics".
 
-<h2>NOTES</H2>
+<h2>NOTES</h2>
 
 <em>r.stats.quantile</em> is intended to be a partial replacement for
 <em><a href="r.statistics.html">r.statistics</a></em>, with support
@@ -19,9 +19,9 @@ which is also the default in R and numpy.
 
 <h2>EXAMPLE</h2>
 
-In this example, the raster polygon map <tt>zipcodes</tt> in the North
+In this example, the raster polygon map <code>zipcodes</code> in the North
 Carolina sample dataset is used to calculate quantile raster statistics using
-the <tt>elevation</tt> raster map:
+the <code>elevation</code> raster map:
 
 <div class="code"><pre>
 g.region raster=zipcodes -p
@@ -46,10 +46,9 @@ r.stats.quantile base=zipcodes cover=elevation percentiles=25,50,75 \
 <ul>
 <li>Hyndman and Fan (1996) <i>Sample Quantiles in Statistical
 Packages</i>, <b>American Statistician</b>. American Statistical
-Association. 50 (4): 361-365. DOI: <a
-href="https://doi.org/10.2307/2684934>10.2307/2684934">10.2307/2684934</a></li>
-<li><a
-href="https://www.itl.nist.gov/div898/handbook/prc/section2/prc262.htm"><i>Engineering
+Association. 50 (4): 361-365. DOI:
+<a href="https://doi.org/10.2307/2684934>10.2307/2684934">10.2307/2684934</a></li>
+<li><a href="https://www.itl.nist.gov/div898/handbook/prc/section2/prc262.htm"><i>Engineering
 Statistics Handbook: Percentile</i></a>, NIST</li>
 </ul>
 

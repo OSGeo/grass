@@ -9,7 +9,6 @@ for details.
 :authors: Vaclav Petras
 """
 
-
 import sys
 import os
 import argparse
@@ -17,15 +16,16 @@ import itertools
 import datetime
 import operator
 from collections import defaultdict, namedtuple
+from pathlib import Path
 
 from grass.gunittest.checkers import text_to_keyvalue
 from grass.gunittest.utils import ensure_dir
 from grass.gunittest.reporters import success_to_html_percent
 
 # TODO: we should be able to work without matplotlib
-import matplotlib
+import matplotlib as mpl
 
-matplotlib.use("Agg")
+mpl.use("Agg")
 # This counts as code already, so silence "import not at top of file".
 # Perhaps in the future, switch_backend() could be used.
 import matplotlib.pyplot as plt  # noqa: E402
@@ -104,8 +104,7 @@ def plot_percent_successful(x, xticks, xlabels, successes, filename, style):
         sorted_values = sorted(values)
         if n % 2 == 0:
             return (sorted_values[n / 2 - 1] + sorted_values[n / 2]) / 2
-        else:
-            return sorted_values[n / 2]
+        return sorted_values[n / 2]
 
     # this is useful for debugging or some other stat
     # cmeans = []
@@ -120,10 +119,7 @@ def plot_percent_successful(x, xticks, xlabels, successes, filename, style):
 
     smedian = median(successes)
     smax = max(successes)
-    if successes[-1] < smedian:
-        color = "r"
-    else:
-        color = "g"
+    color = "r" if successes[-1] < smedian else "g"
     # another possibility is to color according to the gradient, ideally
     # on the whole curve but that's much more complicated
 
@@ -417,13 +413,13 @@ def main_page(
                 )
             )
         page.write("</tbody></table>")
-        for image, caption in itertools.izip(images, captions):
-            page.write(
-                "<h3>{caption}<h3>"
-                '<img src="{image}" alt="{caption}" title="{caption}">'.format(
-                    image=image, caption=caption
-                )
+        page.writelines(
+            "<h3>{caption}<h3>"
+            '<img src="{image}" alt="{caption}" title="{caption}">'.format(
+                image=image, caption=caption
             )
+            for image, caption in itertools.izip(images, captions)
+        )
         page.write("</body></html>")
 
 
@@ -473,7 +469,7 @@ def main():
                 # skipping incomplete reports
                 # use only results list for further processing
                 continue
-            summary = text_to_keyvalue(open(summary_file).read(), sep="=")
+            summary = text_to_keyvalue(Path(summary_file).read_text(), sep="=")
             if use_timestamps:
                 test_timestamp = datetime.datetime.fromtimestamp(
                     os.path.getmtime(summary_file)
@@ -517,147 +513,156 @@ def main():
         except KeyError as e:
             print("File %s does not have right values (%s)" % (report, e.message))
 
-    locations_main_page = open(os.path.join(output, "index.html"), "w")
-    locations_main_page.write(
-        "<html><body>"
-        "<h1>Test reports grouped by location type</h1>"
-        "<table>"
-        "<thead><tr>"
-        "<th>Location</th>"
-        "<th>Successful files</th><th>Successful tests</th>"
-        "</tr></thead>"
-        "<tbody>"
-    )
+    with open(os.path.join(output, "index.html"), "w") as locations_main_page:
+        locations_main_page.write(
+            "<html><body>"
+            "<h1>Test reports grouped by location type</h1>"
+            "<table>"
+            "<thead><tr>"
+            "<th>Location</th>"
+            "<th>Successful files</th><th>Successful tests</th>"
+            "</tr></thead>"
+            "<tbody>"
+        )
 
-    PlotStyle = namedtuple(
-        "PlotStyle",
-        ["linestyle", "linewidth", "success_color", "fail_color", "total_color"],
-    )
-    plot_style = PlotStyle(
-        linestyle="-", linewidth=4.0, success_color="g", fail_color="r", total_color="b"
-    )
+        PlotStyle = namedtuple(
+            "PlotStyle",
+            ["linestyle", "linewidth", "success_color", "fail_color", "total_color"],
+        )
+        plot_style = PlotStyle(
+            linestyle="-",
+            linewidth=4.0,
+            success_color="g",
+            fail_color="r",
+            total_color="b",
+        )
 
-    for location_type, results in results_in_locations.items():
-        results = sorted(results, key=operator.attrgetter("timestamp"))
-        # TODO: document: location type must be a valid dir name
-        directory = os.path.join(output, location_type)
-        ensure_dir(directory)
+        for location_type, results in results_in_locations.items():
+            results = sorted(results, key=operator.attrgetter("timestamp"))
+            # TODO: document: location type must be a valid dir name
+            directory = os.path.join(output, location_type)
+            ensure_dir(directory)
 
-        if location_type == "unknown":
-            title = "Test reports"
-        else:
-            title = "Test reports for &lt;{type}&gt; location type".format(
-                type=location_type
+            if location_type == "unknown":
+                title = "Test reports"
+            else:
+                title = "Test reports for &lt;{type}&gt; location type".format(
+                    type=location_type
+                )
+
+            x = [date2num(result.timestamp) for result in results]
+            # the following would be an alternative but it does not work with
+            # labels and automatic axis limits even after removing another date fun
+            # x = [result.svn_revision for result in results]
+            xlabels = [
+                result.timestamp.strftime("%Y-%m-%d")
+                + " (r"
+                + result.svn_revision
+                + ")"
+                for result in results
+            ]
+            step = len(x) / 10
+            xticks = x[step::step]
+            xlabels = xlabels[step::step]
+            tests_successful_plot(
+                x=x,
+                xticks=xticks,
+                xlabels=xlabels,
+                results=results,
+                filename=os.path.join(directory, "tests_successful_plot.png"),
+                style=plot_style,
+            )
+            files_successful_plot(
+                x=x,
+                xticks=xticks,
+                xlabels=xlabels,
+                results=results,
+                filename=os.path.join(directory, "files_successful_plot.png"),
+                style=plot_style,
+            )
+            tests_plot(
+                x=x,
+                xticks=xticks,
+                xlabels=xlabels,
+                results=results,
+                filename=os.path.join(directory, "tests_plot.png"),
+                style=plot_style,
+            )
+            tests_percent_plot(
+                x=x,
+                xticks=xticks,
+                xlabels=xlabels,
+                results=results,
+                filename=os.path.join(directory, "tests_percent_plot.png"),
+                style=plot_style,
+            )
+            files_plot(
+                x=x,
+                xticks=xticks,
+                xlabels=xlabels,
+                results=results,
+                filename=os.path.join(directory, "files_plot.png"),
+                style=plot_style,
+            )
+            files_percent_plot(
+                x=x,
+                xticks=xticks,
+                xlabels=xlabels,
+                results=results,
+                filename=os.path.join(directory, "files_percent_plot.png"),
+                style=plot_style,
+            )
+            info_plot(
+                x=x,
+                xticks=xticks,
+                xlabels=xlabels,
+                results=results,
+                filename=os.path.join(directory, "info_plot.png"),
+                style=plot_style,
             )
 
-        x = [date2num(result.timestamp) for result in results]
-        # the following would be an alternative but it does not work with
-        # labels and automatic axis limits even after removing another date fun
-        # x = [result.svn_revision for result in results]
-        xlabels = [
-            result.timestamp.strftime("%Y-%m-%d") + " (r" + result.svn_revision + ")"
-            for result in results
-        ]
-        step = len(x) / 10
-        xticks = x[step::step]
-        xlabels = xlabels[step::step]
-        tests_successful_plot(
-            x=x,
-            xticks=xticks,
-            xlabels=xlabels,
-            results=results,
-            filename=os.path.join(directory, "tests_successful_plot.png"),
-            style=plot_style,
-        )
-        files_successful_plot(
-            x=x,
-            xticks=xticks,
-            xlabels=xlabels,
-            results=results,
-            filename=os.path.join(directory, "files_successful_plot.png"),
-            style=plot_style,
-        )
-        tests_plot(
-            x=x,
-            xticks=xticks,
-            xlabels=xlabels,
-            results=results,
-            filename=os.path.join(directory, "tests_plot.png"),
-            style=plot_style,
-        )
-        tests_percent_plot(
-            x=x,
-            xticks=xticks,
-            xlabels=xlabels,
-            results=results,
-            filename=os.path.join(directory, "tests_percent_plot.png"),
-            style=plot_style,
-        )
-        files_plot(
-            x=x,
-            xticks=xticks,
-            xlabels=xlabels,
-            results=results,
-            filename=os.path.join(directory, "files_plot.png"),
-            style=plot_style,
-        )
-        files_percent_plot(
-            x=x,
-            xticks=xticks,
-            xlabels=xlabels,
-            results=results,
-            filename=os.path.join(directory, "files_percent_plot.png"),
-            style=plot_style,
-        )
-        info_plot(
-            x=x,
-            xticks=xticks,
-            xlabels=xlabels,
-            results=results,
-            filename=os.path.join(directory, "info_plot.png"),
-            style=plot_style,
-        )
+            main_page(
+                results=results,
+                filename="index.html",
+                images=[
+                    "tests_successful_plot.png",
+                    "files_successful_plot.png",
+                    "tests_plot.png",
+                    "files_plot.png",
+                    "tests_percent_plot.png",
+                    "files_percent_plot.png",
+                    "info_plot.png",
+                ],
+                captions=[
+                    "Success of individual tests in percents",
+                    "Success of test files in percents",
+                    "Successes, failures and number of individual tests",
+                    "Successes, failures and number of test files",
+                    "Successes and failures of individual tests in percent",
+                    "Successes and failures of test files in percents",
+                    "Additional information",
+                ],
+                directory=directory,
+                title=title,
+            )
 
-        main_page(
-            results=results,
-            filename="index.html",
-            images=[
-                "tests_successful_plot.png",
-                "files_successful_plot.png",
-                "tests_plot.png",
-                "files_plot.png",
-                "tests_percent_plot.png",
-                "files_percent_plot.png",
-                "info_plot.png",
-            ],
-            captions=[
-                "Success of individual tests in percents",
-                "Success of test files in percents",
-                "Successes, failures and number of individual tests",
-                "Successes, failures and number of test files",
-                "Successes and failures of individual tests in percent",
-                "Successes and failures of test files in percents",
-                "Additional information",
-            ],
-            directory=directory,
-            title=title,
-        )
+            files_successes = sum(result.files_successes for result in results)
+            files_total = sum(result.files_total for result in results)
+            successes = sum(result.successes for result in results)
+            total = sum(result.total for result in results)
+            per_test = success_to_html_percent(total=total, successes=successes)
+            per_file = success_to_html_percent(
+                total=files_total, successes=files_successes
+            )
+            locations_main_page.write(
+                "<tr>"
+                "<td><a href={location}/index.html>{location}</a></td>"
+                "<td>{pfiles}</td><td>{ptests}</td>"
+                "</tr>".format(location=location_type, pfiles=per_file, ptests=per_test)
+            )
+        locations_main_page.write("</tbody></table>")
+        locations_main_page.write("</body></html>")
 
-        files_successes = sum(result.files_successes for result in results)
-        files_total = sum(result.files_total for result in results)
-        successes = sum(result.successes for result in results)
-        total = sum(result.total for result in results)
-        per_test = success_to_html_percent(total=total, successes=successes)
-        per_file = success_to_html_percent(total=files_total, successes=files_successes)
-        locations_main_page.write(
-            "<tr>"
-            "<td><a href={location}/index.html>{location}</a></td>"
-            "<td>{pfiles}</td><td>{ptests}</td>"
-            "</tr>".format(location=location_type, pfiles=per_file, ptests=per_test)
-        )
-    locations_main_page.write("</tbody></table>")
-    locations_main_page.write("</body></html>")
-    locations_main_page.close()
     return 0
 
 

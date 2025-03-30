@@ -17,7 +17,7 @@ int o_skew(const char *basemap, const char *covermap, const char *outputmap,
 {
     struct Popen stats_child, reclass_child;
     FILE *stats, *reclass;
-    int first, i, count;
+    int first, i, count = 0;
     size_t mem;
     long basecat, covercat, catb, catc;
     double value, var, x;
@@ -70,6 +70,7 @@ int o_skew(const char *basemap, const char *covermap, const char *outputmap,
 
     G_popen_close(&stats_child);
     G_popen_close(&reclass_child);
+    G_free(tab);
 
     return 0;
 }

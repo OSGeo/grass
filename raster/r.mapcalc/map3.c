@@ -242,7 +242,7 @@ static void translate_from_colors(map *m, DCELL *rast, CELL *cell, int ncols,
  * category file.
  *
  * This requires performing sscanf() of the category label
- * and only do it it for new categories. Must maintain
+ * and only do it for new categories. Must maintain
  * some kind of maps of already scanned values.
  *
  * This maps is a hybrid tree, where the data in each node
@@ -265,7 +265,7 @@ static void translate_from_cats(map *m, CELL *cell, DCELL *xcell, int ncols)
 {
     struct Categories *pcats;
     BTREE *btree;
-    int i, idx;
+    int i = 0, idx = 0;
     CELL cat, key;
     double vbuf[1 << SHIFT];
     double *values;

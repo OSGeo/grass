@@ -99,7 +99,7 @@ static int get_target(void)
 
     sprintf(buf, "%s/%s", G_gisdbase(), location);
     if (access(buf, 0) != 0) {
-        sprintf(buf, _("Target location <%s> not found"), location);
+        sprintf(buf, _("Target project (location) <%s> not found"), location);
         goto error;
     }
     select_target_env();
@@ -110,7 +110,8 @@ static int get_target(void)
         select_current_env();
         return 1;
     }
-    sprintf(buf, _("Mapset <%s> in target location <%s> - "), mapset, location);
+    sprintf(buf, _("Mapset <%s> in target project (location) <%s> - "), mapset,
+            location);
     strcat(buf, stat == 0 ? _("permission denied") : _("not found"));
 error:
     strcat(buf, "\n");
@@ -422,7 +423,7 @@ static void do_pt_xforms(void)
         /* ? sscanf(buf, "%s %s", &east_str, &north_str)
            ? G_scan_easting(,,-1)
            ? G_scan_northing(,,-1) */
-        /* ? muliple delims with sscanf(buf, "%[ ,|\t]", &dummy) ? */
+        /* ? multiple delims with sscanf(buf, "%[ ,|\t]", &dummy) ? */
 
         ret = sscanf(buf, "%lf %lf %lf", &easting, &northing, &height);
         if (ret != 3)

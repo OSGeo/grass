@@ -81,8 +81,7 @@
 # %end
 
 
-import grass.script as grass
-
+import grass.script as gs
 
 ############################################################################
 
@@ -143,7 +142,7 @@ def main():
         for map in maps:
             count += 1
             if count % 10 == 0:
-                grass.percent(count, len(maps), 1)
+                gs.percent(count, len(maps), 1)
 
             map.select(dbif=dbif)
 
@@ -181,5 +180,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

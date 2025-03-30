@@ -6,17 +6,28 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS GIS
 for details.
 
-:authors: Vaclav Petras
+:authors: Vaclav Petras, Edouard Choinière
 """
 
-import os
-import fnmatch
-import unittest
+from __future__ import annotations
+
 import collections
+import fnmatch
+import os
 import re
+import unittest
+from pathlib import PurePath
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 
-def fnmatch_exclude_with_base(files, base, exclude):
+def fnmatch_exclude_with_base(
+    files: Iterable[str],
+    base: str | os.PathLike,
+    exclude: Iterable[str | os.PathLike | PurePath],
+) -> list[str]:
     """Return list of files not matching any exclusion pattern
 
     :param files: list of file names
@@ -24,23 +35,13 @@ def fnmatch_exclude_with_base(files, base, exclude):
     :param exclude: list of fnmatch glob patterns for exclusion
     """
     not_excluded = []
-    patterns = []
-    # Make all dir separators slashes and drop leading current dir
-    # for both patterns and (later) for files.
-    for pattern in exclude:
-        pattern = pattern.replace(os.sep, "/")
-        if pattern.startswith("./"):
-            patterns.append(pattern[2:])
-        else:
-            patterns.append(pattern)
+    patterns = {str(PurePath(item)) for item in exclude}
+    base_path = PurePath(base)
     for filename in files:
-        full_file_path = os.path.join(base, filename)
-        test_filename = full_file_path.replace(os.sep, "/")
-        if full_file_path.startswith("./"):
-            test_filename = full_file_path[2:]
+        test_filename: PurePath = base_path / filename
         matches = False
         for pattern in patterns:
-            if fnmatch.fnmatch(test_filename, pattern):
+            if fnmatch.fnmatch(str(test_filename), pattern):
                 matches = True
                 break
         if not matches:
@@ -112,87 +113,88 @@ def discover_modules(
             for skip in to_skip:
                 dirs.remove(skip)
 
-        if testsuite_dir in dirs:
-            dirs.remove(testsuite_dir)  # do not recurse to testsuite
-            full = os.path.join(root, testsuite_dir)
+        if testsuite_dir not in dirs:
+            continue
+        dirs.remove(testsuite_dir)  # do not recurse to testsuite
+        full = os.path.join(root, testsuite_dir)
 
-            all_files = os.listdir(full)
-            if file_pattern:
-                files = fnmatch.filter(all_files, file_pattern)
-            if file_regexp:
-                files = [f for f in all_files if re.match(file_regexp, f)]
-            if exclude:
-                files = fnmatch_exclude_with_base(files, full, exclude)
-            files = sorted(files)
-            # get test/module name without .py
-            # extpecting all files to end with .py
-            # this will not work for invoking bat files but it works fine
-            # as long as we handle only Python files (and using Python
-            # interpreter for invoking)
+        files = os.listdir(full)
+        if file_pattern:
+            files = fnmatch.filter(files, file_pattern)
+        if file_regexp:
+            files = [f for f in files if re.match(file_regexp, f)]
+        if exclude:
+            files = fnmatch_exclude_with_base(files, full, exclude)
+        files = sorted(files)
+        # get test/module name without .py
+        # expecting all files to end with .py
+        # this will not work for invoking bat files but it works fine
+        # as long as we handle only Python files (and using Python
+        # interpreter for invoking)
 
-            # TODO: warning about no tests in a testsuite
-            # (in what way?)
-            for file_name in files:
-                # TODO: add also import if requested
-                # (see older versions of this file)
-                # TODO: check if there is some main in .py
-                # otherwise we can have successful test just because
-                # everything was loaded into Python
-                # TODO: check if there is set -e or exit !0 or ?
-                # otherwise we can have successful because nothing was reported
-                abspath = os.path.abspath(full)
-                abs_file_path = os.path.join(abspath, file_name)
-                if file_name.endswith(".py"):
-                    if file_name == "__init__.py":
-                        # we always ignore __init__.py
-                        continue
-                    file_type = "py"
-                    name = file_name[:-3]
-                elif file_name.endswith(".sh"):
-                    file_type = "sh"
-                    name = file_name[:-3]
+        # TODO: warning about no tests in a testsuite
+        # (in what way?)
+        for file_name in files:
+            # TODO: add also import if requested
+            # (see older versions of this file)
+            # TODO: check if there is some main in .py
+            # otherwise we can have successful test just because
+            # everything was loaded into Python
+            # TODO: check if there is set -e or exit !0 or ?
+            # otherwise we can have successful because nothing was reported
+            abspath = os.path.abspath(full)
+            abs_file_path = os.path.join(abspath, file_name)
+            if file_name.endswith(".py"):
+                if file_name == "__init__.py":
+                    # we always ignore __init__.py
+                    continue
+                file_type = "py"
+                name = file_name[:-3]
+            elif file_name.endswith(".sh"):
+                file_type = "sh"
+                name = file_name[:-3]
+            else:
+                file_type = None  # alternative would be '', now equivalent
+                name = file_name
+
+            add = False
+            try:
+                if grass_location == all_locations_value:
+                    add = True
                 else:
-                    file_type = None  # alternative would be '', now equivalent
-                    name = file_name
-
-                add = False
-                try:
-                    if grass_location == all_locations_value:
-                        add = True
+                    try:
+                        locations = ["nc", "stdmaps", "all"]
+                    except AttributeError:
+                        add = True  # test is universal
                     else:
-                        try:
-                            locations = ["nc", "stdmaps", "all"]
-                        except AttributeError:
-                            add = True  # test is universal
-                        else:
-                            if universal_location_value in locations:
-                                add = True  # cases when it is explicit
-                            if grass_location in locations:
-                                add = True  # standard case with given location
-                            if not locations:
-                                add = True  # count not specified as universal
-                except ImportError as e:
-                    if add_failed_imports:
-                        add = True
-                    else:
-                        raise ImportError(
-                            "Cannot import module named"
-                            " %s in %s (%s)" % (name, full, e.message)
-                        )
-                        # alternative is to create TestClass which will raise
-                        # see unittest.loader
-                if add:
-                    modules.append(
-                        GrassTestPythonModule(
-                            name=name,
-                            module=None,
-                            tested_dir=root,
-                            file_dir=full,
-                            abs_file_path=abs_file_path,
-                            file_path=os.path.join(full, file_name),
-                            file_type=file_type,
-                        )
+                        if universal_location_value in locations:
+                            add = True  # cases when it is explicit
+                        if grass_location in locations:
+                            add = True  # standard case with given location
+                        if not locations:
+                            add = True  # count not specified as universal
+            except ImportError as e:
+                if add_failed_imports:
+                    add = True
+                else:
+                    raise ImportError(
+                        "Cannot import module named %s in %s (%s)"
+                        % (name, full, e.message)
                     )
+                    # alternative is to create TestClass which will raise
+                    # see unittest.loader
+            if add:
+                modules.append(
+                    GrassTestPythonModule(
+                        name=name,
+                        module=None,
+                        tested_dir=root,
+                        file_dir=full,
+                        abs_file_path=abs_file_path,
+                        file_path=os.path.join(full, file_name),
+                        file_type=file_type,
+                    )
+                )
                 # in else with some verbose we could tell about skipped test
     return modules
 
@@ -227,11 +229,23 @@ class GrassTestLoader(unittest.TestLoader):
             universal_location_value=self.universal_tests_value,
             import_modules=True,
         )
-        tests = []
-        for module in modules:
-            tests.append(self.loadTestsFromModule(module.module))
+        tests = [self.loadTestsFromModule(module.module) for module in modules]
         return self.suiteClass(tests)
 
 
 if __name__ == "__main__":
-    GrassTestLoader().discover()
+    for expression in [r".*\.py$", r".*\.sh$"]:
+        modules = discover_modules(
+            start_dir=".",
+            grass_location="all",
+            file_regexp=expression,
+            skip_dirs=GrassTestLoader.skip_dirs,
+            testsuite_dir=GrassTestLoader.testsuite_dir,
+            all_locations_value=GrassTestLoader.all_tests_value,
+            universal_location_value=GrassTestLoader.universal_tests_value,
+            import_modules=False,
+            exclude=None,
+        )
+        print("Expression:", expression)
+        print(len(modules))
+        print([module.file_path for module in modules])

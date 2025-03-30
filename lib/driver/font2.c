@@ -146,7 +146,7 @@ static void read_fontmap(const char *name)
     fp = fopen(buf, "r");
     if (!fp) {
         G_warning("Unable to open font map '%s': %s. "
-                  "Try running 'g.mkfontcap -o'",
+                  "Try running 'g.mkfontcap --overwrite'",
                   buf, strerror(errno));
         return;
     }

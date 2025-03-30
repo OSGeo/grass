@@ -26,23 +26,152 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+import os
+import sys
+from ctypes import byref, c_double, c_int, create_string_buffer, pointer
 
 import grass.script.core as grass
-
-from grass.pydispatch.signal import Signal
-
-from core.gcmd import GError
 from core.debug import Debug
+from core.gcmd import GError
 from core.settings import UserSettings
-from vdigit.wxdisplay import DisplayDriver, GetLastError
 
 try:
-    from grass.lib.gis import *
-    from grass.lib.vector import *
-    from grass.lib.vedit import *
-    from grass.lib.dbmi import *
+    from grass.lib.dbmi import (
+        DB_C_TYPE_STRING,
+        DB_NEXT,
+        DB_OK,
+        DB_SEQUENTIAL,
+        db_append_string,
+        db_close_database_shutdown_driver,
+        db_convert_column_value_to_string,
+        db_execute_immediate,
+        db_fetch,
+        db_get_column_name,
+        db_get_column_sqltype,
+        db_get_column_value,
+        db_get_cursor_table,
+        db_get_string,
+        db_get_table_column,
+        db_get_table_number_of_columns,
+        db_init_handle,
+        db_init_string,
+        db_open_database,
+        db_open_select_cursor,
+        db_set_handle,
+        db_set_string,
+        db_shutdown_driver,
+        db_sqltype_to_Ctype,
+        db_start_driver,
+        db_test_value_isnull,
+        dbCursor,
+        dbHandle,
+        dbString,
+    )
+    from grass.lib.gis import (
+        GMAPSET_MAX,
+        GNAME_MAX,
+        G_find_vector2,
+        G_free,
+        G_name_is_fully_qualified,
+    )
+    from grass.lib.vector import (
+        GV_AREA,
+        GV_BOUNDARY,
+        GV_CENTROID,
+        GV_LINE,
+        GV_LINES,
+        GV_POINT,
+        GV_POINTS,
+        GV_TOPO_PSEUDO,
+        WITHOUT_Z,
+        Map_info,
+        Vect_append_point,
+        Vect_area_alive,
+        Vect_get_area_perimeter,
+        Vect_break_lines_list,
+        Vect_cat_set,
+        Vect_cidx_get_cat_by_index,
+        Vect_cidx_get_field_number,
+        Vect_cidx_get_num_cats_by_index,
+        Vect_cidx_get_num_fields,
+        Vect_close,
+        Vect_delete_line,
+        Vect_destroy_boxlist,
+        Vect_destroy_cats_struct,
+        Vect_destroy_line_struct,
+        Vect_destroy_list,
+        Vect_field_cat_del,
+        Vect_get_area_area,
+        Vect_get_area_boundaries,
+        Vect_get_area_centroid,
+        Vect_get_area_points,
+        Vect_get_centroid_area,
+        Vect_get_dblink,
+        Vect_get_field,
+        Vect_get_finfo_geometry_type,
+        Vect_get_finfo_topology_info,
+        Vect_get_line_areas,
+        Vect_get_line_box,
+        Vect_get_line_type,
+        Vect_get_mapset,
+        Vect_get_name,
+        Vect_get_num_dblinks,
+        Vect_get_num_lines,
+        Vect_get_num_updated_lines,
+        Vect_get_point_in_area,
+        Vect_get_updated_line,
+        Vect_get_updated_line_offset,
+        Vect_is_3d,
+        Vect_line_alive,
+        Vect_line_check_intersection,
+        Vect_line_length,
+        Vect_list_append,
+        Vect_new_boxlist,
+        Vect_new_cats_struct,
+        Vect_new_line_struct,
+        Vect_new_list,
+        Vect_open_old,
+        Vect_points_distance,
+        Vect_read_line,
+        Vect_reset_cats,
+        Vect_reset_line,
+        Vect_reset_updated,
+        Vect_restore_line,
+        Vect_rewrite_line,
+        Vect_select_lines_by_box,
+        Vect_select_lines_by_polygon,
+        Vect_set_updated,
+        Vect_snap_lines_list,
+        Vect_write_line,
+        bound_box,
+    )
+    from grass.lib.vedit import (
+        NO_SNAP,
+        SNAP,
+        SNAPVERTEX,
+        Vedit_add_vertex,
+        Vedit_bulk_labeling,
+        Vedit_chtype_lines,
+        Vedit_connect_lines,
+        Vedit_copy_lines,
+        Vedit_delete_area_centroid,
+        Vedit_delete_lines,
+        Vedit_flip_lines,
+        Vedit_merge_lines,
+        Vedit_move_lines,
+        Vedit_move_vertex,
+        Vedit_remove_vertex,
+        Vedit_select_by_query,
+        Vedit_snap_line,
+        Vedit_split_lines,
+        QUERY_UNKNOWN,
+        QUERY_LENGTH,
+        QUERY_DANGLE,
+    )
 except (ImportError, OSError, TypeError) as e:
     print("wxdigit.py: {}".format(e), file=sys.stderr)
+from grass.pydispatch.signal import Signal
+from vdigit.wxdisplay import DisplayDriver, GetLastError
 
 
 class VDigitError:
@@ -69,9 +198,7 @@ class VDigitError:
     def WriteLine(self):
         """Writing line failed"""
         GError(
-            message=_(
-                "Writing new feature failed. " "Operation canceled.\n\n" "Reason: %s"
-            )
+            message=_("Writing new feature failed. Operation canceled.\n\nReason: %s")
             % GetLastError(),
             parent=self.parent,
             caption=self.caption,
@@ -80,7 +207,7 @@ class VDigitError:
     def ReadLine(self, line):
         """Reading line failed"""
         GError(
-            message=_("Reading feature id %d failed. " "Operation canceled.") % line,
+            message=_("Reading feature id %d failed. Operation canceled.") % line,
             parent=self.parent,
             caption=self.caption,
         )
@@ -88,8 +215,7 @@ class VDigitError:
     def DbLink(self, dblink):
         """No dblink available"""
         GError(
-            message=_("Database link %d not available. " "Operation canceled.")
-            % dblink,
+            message=_("Database link %d not available. Operation canceled.") % dblink,
             parent=self.parent,
             caption=self.caption,
         )
@@ -97,7 +223,7 @@ class VDigitError:
     def Driver(self, driver):
         """Staring driver failed"""
         GError(
-            message=_("Unable to start database driver <%s>. " "Operation canceled.")
+            message=_("Unable to start database driver <%s>. Operation canceled.")
             % driver,
             parent=self.parent,
             caption=self.caption,
@@ -118,7 +244,7 @@ class VDigitError:
     def DbExecute(self, sql):
         """Sql query failed"""
         GError(
-            message=_("Unable to execute SQL query '%s'. " "Operation canceled.") % sql,
+            message=_("Unable to execute SQL query '%s'. Operation canceled.") % sql,
             parent=self.parent,
             caption=self.caption,
         )
@@ -126,7 +252,7 @@ class VDigitError:
     def DeadLine(self, line):
         """Dead line"""
         GError(
-            message=_("Feature id %d is marked as dead. " "Operation canceled.") % line,
+            message=_("Feature id %d is marked as dead. Operation canceled.") % line,
             parent=self.parent,
             caption=self.caption,
         )
@@ -134,7 +260,7 @@ class VDigitError:
     def FeatureType(self, ftype):
         """Unknown feature type"""
         GError(
-            message=_("Unsupported feature type %d. " "Operation canceled.") % ftype,
+            message=_("Unsupported feature type %d. Operation canceled.") % ftype,
             parent=self.parent,
             caption=self.caption,
         )
@@ -178,13 +304,13 @@ class IVDigit:
         # self.SetCategory()
 
         # layer / max category
-        self.cats = dict()
+        self.cats = {}
 
-        self._settings = dict()
+        self._settings = {}
         self.UpdateSettings()  # -> self._settings
 
         # undo/redo
-        self.changesets = list()
+        self.changesets = []
         self.changesetCurrent = -1  # first changeset to apply
 
         if self.poMapInfo:
@@ -201,7 +327,8 @@ class IVDigit:
         # signals parameter description:
         # old_bboxs - list of bboxes of boundary features, which covers changed areas
         # it is bbox of old state (before edit)
-        # old_areas_cats - list of area categories of boundary features of old state (before edit)
+        # old_areas_cats -
+        # list of area categories of boundary features of old state (before edit)
         # same position in both lists corresponds to same feature
 
         # new_bboxs = list of bboxes of created features / after edit
@@ -238,7 +365,8 @@ class IVDigit:
             del self.bgMapInfo
 
     def EmitSignals(self, emit):
-        """Activate/deactivate signals which describes features changes during digitization."""
+        """Activate/deactivate signals which describes features changes during
+        digitization."""
         self.emit_signals = emit
 
     def CloseBackgroundMap(self):
@@ -293,13 +421,11 @@ class IVDigit:
         :return: snap mode
         """
         threshold = self._display.GetThreshold()
-        if threshold > 0.0:
-            if UserSettings.Get(group="vdigit", key="snapToVertex", subkey="enabled"):
-                return SNAPVERTEX
-            else:
-                return SNAP
-        else:
+        if threshold <= 0.0:
             return NO_SNAP
+        if UserSettings.Get(group="vdigit", key="snapToVertex", subkey="enabled"):
+            return SNAPVERTEX
+        return SNAP
 
     def _getNewFeaturesLayer(self):
         """Returns layer of new feature (from settings)"""
@@ -343,9 +469,6 @@ class IVDigit:
             if Vect_read_line(self.poMapInfo, self.poPoints, None, line) < 0:
                 self._error.ReadLine(line)
                 return -1
-            points = self.poPoints
-        else:
-            points = pointsLine
 
         listLine = Vect_new_boxlist(0)
         listRef = Vect_new_list()
@@ -390,7 +513,7 @@ class IVDigit:
             del self.changesets[self.changesetCurrent + 1 : changesetLast + 1]
             self.toolbar.EnableRedo(False)
 
-        data = list()
+        data = []
         for i in range(Vect_get_num_updated_lines(self.poMapInfo) - 1, -1, -1):
             line = Vect_get_updated_line(self.poMapInfo, i)
             offset = Vect_get_updated_line_offset(self.poMapInfo, i)
@@ -435,7 +558,8 @@ class IVDigit:
                 if Vect_line_alive(self.poMapInfo, line):
                     Debug.msg(
                         3,
-                        "IVDigit._applyChangeset(): changeset=%d, action=add, line=%d -> deleted",
+                        "IVDigit._applyChangeset(): "
+                        "changeset=%d, action=add, line=%d -> deleted",
                         changeset,
                         line,
                     )
@@ -445,7 +569,8 @@ class IVDigit:
                 else:
                     Debug.msg(
                         3,
-                        "Digit.ApplyChangeset(): changeset=%d, action=add, line=%d dead",
+                        "Digit.ApplyChangeset(): "
+                        "changeset=%d, action=add, line=%d dead",
                         changeset,
                         line,
                     )
@@ -456,7 +581,8 @@ class IVDigit:
                 if not Vect_line_alive(self.poMapInfo, line):
                     Debug.msg(
                         3,
-                        "Digit.ApplyChangeset(): changeset=%d, action=delete, line=%d -> added",
+                        "Digit.ApplyChangeset(): "
+                        "changeset=%d, action=delete, line=%d -> added",
                         changeset,
                         line,
                     )
@@ -467,7 +593,8 @@ class IVDigit:
                 else:
                     Debug.msg(
                         3,
-                        "Digit.ApplyChangeset(): changeset=%d, action=delete, line=%d alive",
+                        "Digit.ApplyChangeset(): "
+                        "changeset=%d, action=delete, line=%d alive",
                         changeset,
                         line,
                     )
@@ -531,7 +658,7 @@ class IVDigit:
 
         # collect categories for deleting if requested
         deleteRec = UserSettings.Get(group="vdigit", key="delRecord", subkey="enabled")
-        catDict = dict()
+        catDict = {}
 
         old_bboxs = []
         old_areas_cats = []
@@ -557,7 +684,7 @@ class IVDigit:
         nlines = Vedit_delete_lines(self.poMapInfo, poList)
 
         Vect_destroy_list(poList)
-        self._display.selected["ids"] = list()
+        self._display.selected["ids"] = []
 
         if nlines > 0:
             if deleteRec:
@@ -667,11 +794,10 @@ class IVDigit:
         ltype = Vect_read_line(self.poMapInfo, None, None, ln_id)
 
         if ltype == GV_CENTROID:
-            # TODO centroid opttimization, can be edited also its area -> it
+            # TODO centroid optimization, can be edited also its area -> it
             # will appear two times in new_ lists
             return self._getCentroidAreaBboxCats(ln_id)
-        else:
-            return [self._getBbox(ln_id)], [self._getLineAreasCategories(ln_id)]
+        return [self._getBbox(ln_id)], [self._getLineAreasCategories(ln_id)]
 
     def _getCentroidAreaBboxCats(self, centroid):
         """Helper function
@@ -686,16 +812,14 @@ class IVDigit:
         area = Vect_get_centroid_area(self.poMapInfo, centroid)
         if area > 0:
             return self._getaAreaBboxCats(area)
-        else:
-            return None
+        return None
 
     def _getaAreaBboxCats(self, area):
         """Helper function
 
         :param area: area id
         :return: list of categories :func:`_getLineAreasCategories` and
-                 list of bboxes :func:`_getBbox` of area boundary
-                 features
+                 list of bboxes :func:`_getBbox` of area boundary features
         """
         po_b_list = Vect_new_list()
         Vect_get_area_boundaries(self.poMapInfo, area, po_b_list)
@@ -744,13 +868,14 @@ class IVDigit:
             areas = [left.value, right.value]
 
             for i, a in enumerate(areas):
-                if a > 0:
-                    centroid = Vect_get_area_centroid(self.poMapInfo, a)
-                    if centroid <= 0:
-                        continue
-                    c = self._getCategories(centroid)
-                    if c:
-                        cats[i] = c
+                if a <= 0:
+                    continue
+                centroid = Vect_get_area_centroid(self.poMapInfo, a)
+                if centroid <= 0:
+                    continue
+                c = self._getCategories(centroid)
+                if c:
+                    cats[i] = c
 
         return cats
 
@@ -762,7 +887,7 @@ class IVDigit:
         :return: None feature does not exist
         """
         if not Vect_line_alive(self.poMapInfo, ln_id):
-            return none
+            return None
 
         poCats = Vect_new_cats_struct()
         if Vect_read_line(self.poMapInfo, None, poCats, ln_id) < 0:
@@ -828,18 +953,13 @@ class IVDigit:
         return bbox
 
     def _convertGeom(self, poPoints):
-        """Helper function convert geom from ctypes line_pts to python
-        list
+        """Helper function convert geom from ctypes line_pts to Python list
 
         :return: coords in python list [(x, y),...]
         """
         Points = poPoints.contents
 
-        pts_geom = []
-        for j in range(Points.n_points):
-            pts_geom.append((Points.x[j], Points.y[j]))
-
-        return pts_geom
+        return [(Points.x[j], Points.y[j]) for j in range(Points.n_points)]
 
     def MoveSelectedLines(self, move):
         """Move selected features
@@ -897,7 +1017,7 @@ class IVDigit:
 
         if nlines > 0 and self._settings["breakLines"]:
             for i in range(1, nlines):
-                self._breakLineAtIntersection(nlines + i, None, changeset)
+                self._breakLineAtIntersection(nlines + i, None)
 
         if nlines > 0:
             self._addChangeset()
@@ -1082,7 +1202,7 @@ class IVDigit:
         # apply snapping (node or vertex)
         snap = self._getSnapMode()
         if snap != NO_SNAP:
-            modeSnap = not (snap == SNAP)
+            modeSnap = snap != SNAP
             Vedit_snap_line(
                 self.poMapInfo,
                 self.popoBgMapInfo,
@@ -1097,7 +1217,7 @@ class IVDigit:
             self.poMapInfo, line, ltype, self.poPoints, self.poCats
         )
         if newline > 0 and self.emit_signals:
-            new_geom = [self._getBbox(newline)]
+            new_bboxs = [self._getBbox(newline)]
             new_areas_cats = [self._getLineAreasCategories(newline)]
 
         if newline > 0 and self._settings["breakLines"]:
@@ -1125,8 +1245,6 @@ class IVDigit:
         """
         if not self._checkMap():
             return -1
-
-        nlines = Vect_get_num_lines(self.poMapInfo)
 
         poList = self._display.GetSelectedIList()
         ret = Vedit_flip_lines(self.poMapInfo, poList)
@@ -1282,95 +1400,94 @@ class IVDigit:
                     if not copyAttrb:
                         # duplicate category
                         cat = catsFrom.cat[i]
-                    else:
-                        # duplicate attributes
-                        cat = self.cats[catsFrom.field[i]] + 1
-                        self.cats[catsFrom.field[i]] = cat
-                        poFi = Vect_get_field(self.poMapInfo, catsFrom.field[i])
-                        if not poFi:
-                            self._error.DbLink(i)
-                            return -1
+                        continue
 
-                        fi = poFi.contents
-                        driver = db_start_driver(fi.driver)
-                        if not driver:
-                            self._error.Driver(fi.driver)
-                            return -1
+                    # duplicate attributes
+                    cat = self.cats[catsFrom.field[i]] + 1
+                    self.cats[catsFrom.field[i]] = cat
+                    poFi = Vect_get_field(self.poMapInfo, catsFrom.field[i])
+                    if not poFi:
+                        self._error.DbLink(i)
+                        return -1
 
-                        handle = dbHandle()
-                        db_init_handle(byref(handle))
-                        db_set_handle(byref(handle), fi.database, None)
-                        if db_open_database(driver, byref(handle)) != DB_OK:
-                            db_shutdown_driver(driver)
-                            self._error.Database(fi.driver, fi.database)
-                            return -1
+                    fi = poFi.contents
+                    driver = db_start_driver(fi.driver)
+                    if not driver:
+                        self._error.Driver(fi.driver)
+                        return -1
 
-                        stmt = dbString()
-                        db_init_string(byref(stmt))
-                        db_set_string(
-                            byref(stmt),
-                            "SELECT * FROM %s WHERE %s=%d"
-                            % (fi.table, fi.key, catsFrom.cat[i]),
+                    handle = dbHandle()
+                    db_init_handle(byref(handle))
+                    db_set_handle(byref(handle), fi.database, None)
+                    if db_open_database(driver, byref(handle)) != DB_OK:
+                        db_shutdown_driver(driver)
+                        self._error.Database(fi.driver, fi.database)
+                        return -1
+
+                    stmt = dbString()
+                    db_init_string(byref(stmt))
+                    db_set_string(
+                        byref(stmt),
+                        "SELECT * FROM %s WHERE %s=%d"
+                        % (fi.table, fi.key, catsFrom.cat[i]),
+                    )
+
+                    cursor = dbCursor()
+                    if (
+                        db_open_select_cursor(
+                            driver, byref(stmt), byref(cursor), DB_SEQUENTIAL
                         )
-
-                        cursor = dbCursor()
-                        if (
-                            db_open_select_cursor(
-                                driver, byref(stmt), byref(cursor), DB_SEQUENTIAL
-                            )
-                            != DB_OK
-                        ):
-                            db_close_database_shutdown_driver(driver)
-                            return -1
-
-                        table = db_get_cursor_table(byref(cursor))
-                        ncols = db_get_table_number_of_columns(table)
-
-                        sql = "INSERT INTO %s VALUES (" % fi.table
-                        # fetch the data
-                        more = c_int()
-                        while True:
-                            if db_fetch(byref(cursor), DB_NEXT, byref(more)) != DB_OK:
-                                db_close_database_shutdown_driver(driver)
-                                return -1
-                            if not more.value:
-                                break
-
-                            value_string = dbString()
-                            for col in range(ncols):
-                                if col > 0:
-                                    sql += ","
-
-                                column = db_get_table_column(table, col)
-                                if db_get_column_name(column) == fi.key:
-                                    sql += "%d" % cat
-                                    continue
-
-                                value = db_get_column_value(column)
-                                db_convert_column_value_to_string(
-                                    column, byref(value_string)
-                                )
-                                if db_test_value_isnull(value):
-                                    sql += "NULL"
-                                else:
-                                    ctype = db_sqltype_to_Ctype(
-                                        db_get_column_sqltype(column)
-                                    )
-                                    if ctype != DB_C_TYPE_STRING:
-                                        sql += db_get_string(byref(value_string))
-                                    else:
-                                        sql += "'%s'" % db_get_string(
-                                            byref(value_string)
-                                        )
-
-                        sql += ")"
-                        db_set_string(byref(stmt), sql)
-                        if db_execute_immediate(driver, byref(stmt)) != DB_OK:
-                            db_close_database_shutdown_driver(driver)
-                            return -1
-
+                        != DB_OK
+                    ):
                         db_close_database_shutdown_driver(driver)
-                        G_free(poFi)
+                        return -1
+
+                    table = db_get_cursor_table(byref(cursor))
+                    ncols = db_get_table_number_of_columns(table)
+
+                    sql = "INSERT INTO %s VALUES (" % fi.table
+                    # fetch the data
+                    more = c_int()
+                    while True:
+                        if db_fetch(byref(cursor), DB_NEXT, byref(more)) != DB_OK:
+                            db_close_database_shutdown_driver(driver)
+                            return -1
+                        if not more.value:
+                            break
+
+                        value_string = dbString()
+                        for col in range(ncols):
+                            if col > 0:
+                                sql += ","
+
+                            column = db_get_table_column(table, col)
+                            if db_get_column_name(column) == fi.key:
+                                sql += "%d" % cat
+                                continue
+
+                            value = db_get_column_value(column)
+                            db_convert_column_value_to_string(
+                                column, byref(value_string)
+                            )
+                            if db_test_value_isnull(value):
+                                sql += "NULL"
+                            else:
+                                ctype = db_sqltype_to_Ctype(
+                                    db_get_column_sqltype(column)
+                                )
+                                if ctype != DB_C_TYPE_STRING:
+                                    sql += db_get_string(byref(value_string))
+                                else:
+                                    sql += "'%s'" % db_get_string(byref(value_string))
+
+                    sql += ")"
+                    db_set_string(byref(stmt), sql)
+                    if db_execute_immediate(driver, byref(stmt)) != DB_OK:
+                        db_close_database_shutdown_driver(driver)
+                        return -1
+
+                    db_close_database_shutdown_driver(driver)
+                    G_free(poFi)
 
                 if Vect_cat_set(poCatsTo, catsFrom.field[i], cat) < 1:
                     continue
@@ -1444,7 +1561,7 @@ class IVDigit:
         ftype = GV_POINTS | GV_LINES  # TODO: 3D
         layer = 1  # TODO
 
-        ids = list()
+        ids = []
         poList = Vect_new_list()
         coList = poList.contents
         if UserSettings.Get(group="vdigit", key="query", subkey="box"):
@@ -1500,7 +1617,7 @@ class IVDigit:
         ltype = Vect_read_line(self.poMapInfo, self.poPoints, None, line)
         if ltype < 0:
             self._error.ReadLine(line)
-            return ret
+            return -1
 
         length = -1
         if ltype & GV_LINES:  # lines & boundaries
@@ -1521,8 +1638,8 @@ class IVDigit:
 
         ltype = Vect_read_line(self.poMapInfo, None, None, centroid)
         if ltype < 0:
-            self._error.ReadLine(line)
-            return ret
+            self._error.ReadLine(centroid)
+            return -1
 
         if ltype != GV_CENTROID:
             return -1
@@ -1550,8 +1667,8 @@ class IVDigit:
 
         ltype = Vect_read_line(self.poMapInfo, None, None, centroid)
         if ltype < 0:
-            self._error.ReadLine(line)
-            return ret
+            self._error.ReadLine(centroid)
+            return -1
 
         if ltype != GV_CENTROID:
             return -1
@@ -1563,7 +1680,7 @@ class IVDigit:
                 return -1
 
             Vect_get_area_points(self.poMapInfo, area, self.poPoints)
-            perimeter = Vect_area_perimeter(self.poPoints)
+            perimeter = Vect_get_area_perimeter(self.poPoints)
 
         return perimeter
 
@@ -1833,7 +1950,7 @@ class IVDigit:
         :return: tuple (number of added features, list of fids)
         :return: number of features -1 on error
         """
-        fids = list()
+        fids = []
         if not self._checkMap():
             return (-1, None)
 
@@ -1887,7 +2004,7 @@ class IVDigit:
 
         if snap != NO_SNAP:
             # apply snapping (node or vertex)
-            modeSnap = not (snap == SNAP)
+            modeSnap = snap != SNAP
             Vedit_snap_line(
                 self.poMapInfo,
                 self.popoBgMapInfo,
@@ -1898,10 +2015,7 @@ class IVDigit:
                 modeSnap,
             )
 
-        if ftype == GV_AREA:
-            ltype = GV_BOUNDARY
-        else:
-            ltype = ftype
+        ltype = GV_BOUNDARY if ftype == GV_AREA else ftype
         newline = Vect_write_line(self.poMapInfo, ltype, self.poPoints, self.poCats)
         if newline < 0:
             self._error.WriteLine()
@@ -1944,8 +2058,7 @@ class IVDigit:
                     if newc < 0:
                         self._error.WriteLine()
                         return (len(fids), fids)
-                    else:
-                        fids.append(newc)
+                    fids.append(newc)
 
             if right > 0 and Vect_get_area_centroid(self.poMapInfo, right) == 0:
                 # if Vect_get_area_points(byref(self.poMapInfo), right, bpoints) > 0 and
@@ -1961,9 +2074,8 @@ class IVDigit:
                     )
                     if newc < 0:
                         self._error.WriteLine()
-                        return len(fids, fids)
-                    else:
-                        fids.append(newc)
+                        return len(fids), fids
+                    fids.append(newc)
 
             Vect_destroy_line_struct(bpoints)
 
@@ -2058,7 +2170,7 @@ class IVDigit:
 
         :return: list of layer/cats
         """
-        ret = dict()
+        ret = {}
         if not self._checkMap():
             return ret
 
@@ -2080,7 +2192,7 @@ class IVDigit:
         for i in range(cats.n_cats):
             field = cats.field[i]
             if field not in ret:
-                ret[field] = list()
+                ret[field] = []
             ret[field].append(cats.cat[i])
 
         return ret

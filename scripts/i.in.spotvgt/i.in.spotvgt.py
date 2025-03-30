@@ -20,7 +20,7 @@
 #############################################################################
 #
 # REQUIREMENTS:
-#      -  gdal: http://www.gdal.org
+#      -  gdal: https://gdal.org
 #
 # Notes:
 # * According to the faq (http://www.vgt.vito.be/faq/faq.html), SPOT vegetation
@@ -50,8 +50,9 @@
 import os
 import atexit
 import string
-import grass.script as gscript
+import grass.script as gs
 from grass.exceptions import CalledModuleError
+from pathlib import Path
 
 
 vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
@@ -67,20 +68,19 @@ vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
       <DstRect xOff="0" yOff="0" xSize="$XSIZE" ySize="$YSIZE"/>
     </SimpleSource>
  </VRTRasterBand>
-</VRTDataset>"""
+</VRTDataset>"""  # noqa: E501
 
 # a function for writing VRT files
 
 
 def create_VRT_file(projfile, vrtfile, infile):
-    fh = open(projfile)
     kv = {}
-    for line in fh:
-        f = line.rstrip("\r\n").split()
-        if f < 2:
-            continue
-        kv[f[0]] = f[1]
-    fh.close()
+    with open(projfile) as fh:
+        for line in fh:
+            f = line.rstrip("\r\n").split()
+            if f < 2:
+                continue
+            kv[f[0]] = f[1]
 
     north_center = kv["CARTO_UPPER_LEFT_Y"]
     # south_center = kv['CARTO_LOWER_LEFT_Y']
@@ -105,15 +105,13 @@ def create_VRT_file(projfile, vrtfile, infile):
         RESOLUTION=map_proj_res,
         FILENAME=infile,
     )
-    outf = open(vrtfile, "w")
-    outf.write(s)
-    outf.close()
+    Path(vrtfile).write_text(s)
 
 
 def cleanup():
     # clean up the mess
-    gscript.try_remove(vrtfile)
-    gscript.try_remove(tmpfile)
+    gs.try_remove(vrtfile)
+    gs.try_remove(tmpfile)
 
 
 def main():
@@ -124,37 +122,31 @@ def main():
     also = flags["a"]
 
     # check for gdalinfo (just to check if installation is complete)
-    if not gscript.find_program("gdalinfo", "--help"):
-        gscript.fatal(
-            _("'gdalinfo' not found, install GDAL tools first " "(http://www.gdal.org)")
-        )
+    if not gs.find_program("gdalinfo", "--help"):
+        gs.fatal(_("'gdalinfo' not found, install GDAL tools first (https://gdal.org)"))
 
     pid = str(os.getpid())
-    tmpfile = gscript.tempfile()
+    tmpfile = gs.tempfile()
 
     # let's go
 
     spotdir = os.path.dirname(infile)
-    spotname = gscript.basename(infile, "hdf")
+    spotname = gs.basename(infile, "hdf")
+    name = rast or spotname
 
-    if rast:
-        name = rast
-    else:
-        name = spotname
-
-    if not gscript.overwrite() and gscript.find_file(name)["file"]:
-        gscript.fatal(_("<%s> already exists. Aborting.") % name)
+    if not gs.overwrite() and gs.find_file(name)["file"]:
+        gs.fatal(_("<%s> already exists. Aborting.") % name)
 
     # still a ZIP file?  (is this portable?? see the r.in.srtm script for
     # ideas)
     if infile.lower().endswith(".zip"):
-        gscript.fatal(_("Please extract %s before import.") % infile)
+        gs.fatal(_("Please extract %s before import.") % infile)
 
     try:
-        p = gscript.Popen(["file", "-ib", infile], stdout=gscript.PIPE)
+        p = gs.Popen(["file", "-ib", infile], stdout=gs.PIPE)
         s = p.communicate()[0]
         if s == "application/x-zip":
-            gscript.fatal(_("Please extract %s before import.") % infile)
+            gs.fatal(_("Please extract %s before import.") % infile)
     except Exception:
         pass
 
@@ -164,17 +156,17 @@ def main():
     vrtfile = tmpfile + ".vrt"
 
     # first process the NDVI:
-    gscript.try_remove(vrtfile)
+    gs.try_remove(vrtfile)
     create_VRT_file(projfile, vrtfile, infile)
 
     # let's import the NDVI map...
-    gscript.message(_("Importing SPOT VGT NDVI map..."))
+    gs.message(_("Importing SPOT VGT NDVI map..."))
     try:
-        gscript.run_command("r.in.gdal", input=vrtfile, output=name)
+        gs.run_command("r.in.gdal", input=vrtfile, output=name)
     except CalledModuleError:
-        gscript.fatal(_("An error occurred. Stop."))
+        gs.fatal(_("An error occurred. Stop."))
 
-    gscript.message(_("Imported SPOT VEGETATION NDVI map <%s>.") % name)
+    gs.message(_("Imported SPOT VEGETATION NDVI map <%s>.") % name)
 
     #################
     # http://www.vgt.vito.be/faq/FAQS/faq19.html
@@ -187,21 +179,21 @@ def main():
 
     # clone current region
     # switch to a temporary region
-    gscript.use_temp_region()
+    gs.use_temp_region()
 
-    gscript.run_command("g.region", raster=name, quiet=True)
+    gs.run_command("g.region", raster=name, quiet=True)
 
-    gscript.message(_("Remapping digital numbers to NDVI..."))
+    gs.message(_("Remapping digital numbers to NDVI..."))
     tmpname = "%s_%s" % (name, pid)
-    gscript.mapcalc("$tmpname = 0.004 * $name - 0.1", tmpname=tmpname, name=name)
-    gscript.run_command("g.remove", type="raster", name=name, quiet=True, flags="f")
-    gscript.run_command("g.rename", raster=(tmpname, name), quiet=True)
+    gs.mapcalc("$tmpname = 0.004 * $name - 0.1", tmpname=tmpname, name=name)
+    gs.run_command("g.remove", type="raster", name=name, quiet=True, flags="f")
+    gs.run_command("g.rename", raster=(tmpname, name), quiet=True)
 
     # write cmd history:
-    gscript.raster_history(name)
+    gs.raster_history(name)
 
     # apply color table:
-    gscript.run_command("r.colors", map=name, color="ndvi", quiet=True)
+    gs.run_command("r.colors", map=name, color="ndvi", quiet=True)
 
     ##########################
     # second, optionally process the SM quality map:
@@ -232,8 +224,8 @@ def main():
     # A good map threshold: >= 248
 
     if also:
-        gscript.message(_("Importing SPOT VGT NDVI quality map..."))
-        gscript.try_remove(vrtfile)
+        gs.message(_("Importing SPOT VGT NDVI quality map..."))
+        gs.try_remove(vrtfile)
         qname = spotname.replace("NDV", "SM")
         qfile = os.path.join(spotdir, qname)
         create_VRT_file(projfile, vrtfile, qfile)
@@ -241,9 +233,9 @@ def main():
         # let's import the SM quality map...
         smfile = name + ".sm"
         try:
-            gscript.run_command("r.in.gdal", input=vrtfile, output=smfile)
+            gs.run_command("r.in.gdal", input=vrtfile, output=smfile)
         except CalledModuleError:
-            gscript.fatal(_("An error occurred. Stop."))
+            gs.fatal(_("An error occurred. Stop."))
 
         # some of the possible values:
         rules = [
@@ -262,38 +254,34 @@ def main():
                 "252 green",
             ]
         ]
-        gscript.write_command("r.colors", map=smfile, rules="-", stdin=rules)
+        gs.write_command("r.colors", map=smfile, rules="-", stdin=rules)
 
-        gscript.message(_("Imported SPOT VEGETATION SM quality map <%s>.") % smfile)
-        gscript.message(
-            _(
-                "Note: A snow map can be extracted by category "
-                "252 (d.rast %s cat=252)"
-            )
+        gs.message(_("Imported SPOT VEGETATION SM quality map <%s>.") % smfile)
+        gs.message(
+            _("Note: A snow map can be extracted by category 252 (d.rast %s cat=252)")
             % smfile
         )
-        gscript.message("")
-        gscript.message(_("Filtering NDVI map by Status Map quality layer..."))
+        gs.message(_("Filtering NDVI map by Status Map quality layer..."))
 
         filtfile = "%s_filt" % name
-        gscript.mapcalc(
+        gs.mapcalc(
             "$filtfile = if($smfile % 4 == 3 || "
             "($smfile / 16) % 16 == 0, null(), $name)",
             filtfile=filtfile,
             smfile=smfile,
             name=name,
         )
-        gscript.run_command("r.colors", map=filtfile, color="ndvi", quiet=True)
-        gscript.message(_("Filtered SPOT VEGETATION NDVI map <%s>.") % filtfile)
+        gs.run_command("r.colors", map=filtfile, color="ndvi", quiet=True)
+        gs.message(_("Filtered SPOT VEGETATION NDVI map <%s>.") % filtfile)
 
         # write cmd history:
-        gscript.raster_history(smfile)
-        gscript.raster_history(filtfile)
+        gs.raster_history(smfile)
+        gs.raster_history(filtfile)
 
-    gscript.message(_("Done."))
+    gs.message(_("Done."))
 
 
 if __name__ == "__main__":
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     atexit.register(cleanup)
     main()

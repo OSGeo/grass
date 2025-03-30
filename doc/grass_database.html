@@ -2,16 +2,17 @@
 
 A GRASS GIS Database is simply a set of directories and files
 with certain structure which GRASS GIS works efficiently with.
-Location is a directory with data related to
+Project is a directory with data related to
 one geographic location or a project.
-All data within one Location has the same cartographic projection.
-A Location contains Mapsets and each Mapset contains data related to
+All data within one project has the same coordinate reference system.
+A project contains mapsets and each mapset contains data related to
 a specific task, user or a smaller project.
-Within each Location, a mandatory PERMANENT Mapset exists
-which can contain commonly used data within a Location such as base maps.
-PERMANENT Mapset also contains metadata related to Location
-such as projection.
-When GRASS GIS is started it connects to a Database, Location and Mapset
+Within each project, a mandatory PERMANENT mapset exists
+which can contain commonly used data within one GRASS project
+such as base maps.
+The PERMANENT mapset also contains metadata related to the project
+such as the coordinate reference system.
+When GRASS GIS is started it connects to a database, project and mapset
 specified by the user.
 
 <p>
@@ -34,7 +35,7 @@ multiple users
 <h3>GRASS GIS Database</h3>
 
 All data for GRASS GIS must be in GRASS GIS Database which is a directory
-(visible on the disk) containing subdirectories which are GRASS Locations.
+(visible on the disk) containing subdirectories which are GRASS projects.
 User can have one or more of Databases on the disk. Typically users have
 one directory called <code>grassdata</code> in their home directory.
 In multi-user environment users often have a <code>grassdata</code> directory
@@ -52,29 +53,31 @@ is similar to, e.g. PostGIS, database, as it stores all information
 inside in a specific format and is accessible by specific tools.
 GRASS GIS Databases is in GRASS GIS often called GISDBASE or DATABASE.
 
-<h3>GRASS Locations</h3>
+<h3>GRASS Projects</h3>
 
-Location is a directory which contains GRASS Mapsets which are its subdirectories.
-All data in one Location have the same projection (coordinate system, datum).
-Each Location must contain Mapset called PERMANENT.
-Typically, a Location contains all data related to one project
+A project is further organized into mapsets which are subdirectories of
+the project directory. All data in one project have the same coordinate
+reference system (projection, datum).
+Each project contains a mapset called PERMANENT.
+Typically, a project contains all data related to one real-world project
 or a geographic area (geographic location or region).
-Alternatively, Location can simply contain all data in a given projection.
+Alternatively, a project can simply contain data in a given coordinate
+reference system.
 
 <p>
-GRASS Locations can be safely copied or moved as any other directories.
-Compressed Location is usually what GRASS users exchange between each other
+GRASS projects can be safely copied or moved as any other directories.
+Compressed projects are usually what GRASS users exchange between each other
 when they want to share a lot of data.
-For example, GRASS GIS sample data are provided as Locations.
+For example, GRASS GIS sample data are provided as projects.
 
 <p>
-Don't be confused with location as a place (file or directory) in a file system.
-The word location in GRASS Location refers to a location or area on Earth
-(or whatever is applicable).
+Note that a GRASS project used to be called <em>location</em> and
+this name has not been completely removed from code and documentation yet.
+
+<p>
 Users and programmers familiar with relational databases such as PostgreSQL
-can view Location as an individual database inside the system or a storage area
-which would be equivalent to GRASS GIS Database. Mapsets in a Locations
-are like namespaces or schemas inside a database.
+can view projects as individual databases inside a storage area (the GRASS GIS Database).
+Mapsets in a project are like namespaces or schemas inside a database.
 
 <!-- TODO: naming limitations and best practices -->
 
@@ -86,17 +89,17 @@ Mapsets are a tool for organizing maps in a transparent way
 as well as a tool for isolating different tasks to prevent data loss.
 
 <p>
-GRASS GIS is always connected to one particular Mapset.
+GRASS GIS is always connected to one particular mapset.
 GRASS GIS modules can create, modify, change, or delete a data only in
-the current Mapset.
-By default, only the data from the current Mapset and PERMANENT Mapset
+the current mapset.
+By default, only the data from the current mapset and PERMANENT mapset
 are visible. Using
 <a href="g.mapsets.html"><em>g.mapsets</em></a>
-module or in GUI other Mapsets can be made visible and seamlessly accessible.
-All data are available for reading when Mapset is specified explicitly,
-for example to access map <code>streets</code> in Mapset
+module or in GUI other mapsets can be made visible and seamlessly accessible.
+All data are available for reading when mapset is specified explicitly,
+for example to access map <code>streets</code> in mapset
 <code>new_highway</code> user can use <code>streets@new_highway</code>.
-For maps which are in the current or PERMAENT Mapsets or Mapsets
+For maps which are in the current or PERMAENT mapsets or mapsets
 sets as visible (accessible), there is no need to use
 <code>@mapset</code> syntax.
 
@@ -104,27 +107,27 @@ sets as visible (accessible), there is no need to use
 <p>
 Mapsets are used to store maps related to one project, smaller project,
 specific task, issue or subregions.
-In multi-user environment, when a team works together on one project,
-Mapsets support simultaneous access of several users to the maps
-stored within the same Location.
-Besides access to his or her own
-Mapset, each user can also read maps in PERMANENT Mapsent
-and in other users' Mapsets when set.
+In a multi-user environment, where team members work together on a single
+project, individual mapsets support simultaneous access of several users to
+the maps stored within the same project.
+Besides access to their own
+mapset, each user can also read maps in PERMANENT Mapsent
+and in other users' mapsets when set.
 However, each user can modify or remove only the maps
-in his or her own Mapset.
+in his or her own mapset.
 
 <p>
-Besides the geospatial data, Mapset holds additional data such as
+Besides the geospatial data, mapset holds additional data such as
 color tables (managed e.g. by <a href="r.colors.html"><em>r.colors</em></a>)
 and the current computational region's extent and resolution
 stored in a file called <code>WIND</code>
 and managed by <a href="g.region.html"><em>g.region</em></a>.
 
 <p>
-Mapsets can be copied and moved as directories, however only when it is clear
-that the projections of both Locations
+Mapsets can be copied and moved as directories only when it is clear
+that their coordinate reference systems
 (as reported by <a href="g.proj.html"><em>g.proj</em></a>)
-match each other. Since this is sometimes hard to to establish,
+match. In case of data coming with different coordinate reference systems,
 it is recommended to use <a href="r.proj.html"><em>r.proj</em></a>
 or <a href="v.proj.html"><em>v.proj</em></a> to reproject the data.
 The files and directories should not be moved or modified directly,
@@ -132,28 +135,28 @@ but only using GRASS GIS tools.
 
 <h3>The role of the PERMANENT Mapset</h3>
 
-When creating a new Location, GRASS GIS automatically creates a special
-Mapset called PERMANENT where the core data for the Location are stored.
+When creating a new project, GRASS GIS automatically creates a special
+mapset called PERMANENT where the core data for the project are stored.
 
 <p>
-Since the maps in PERMANENT Mapset are visible from all the other Mapsets,
+Since the maps in PERMANENT mapset are visible from all the other mapsets,
 it can be used to store the base maps (base cartography), data common
-to all projects or needed for different analyses done is separate Mapsets.
+to all projects or needed for different analyses done is separate mapsets.
 
 <p>
-In multi-user environment, data in the PERMANENT Mapset can only be added,
-modified or removed by the owner of the PERMANENT Mapset; however, they can be
-accessed, analyzed, and copied into their own Mapset by the other
-users. The PERMANENT Mapset is useful for providing general spatial
+In multi-user environment, data in the PERMANENT mapset can only be added,
+modified or removed by the owner of the PERMANENT mapset; however, they can be
+accessed, analyzed, and copied into their own mapset by the other
+users. The PERMANENT mapset is useful for providing general spatial
 data (e.g. an elevation model), accessible but write-protected to all
-users who are working in the same Location as the database owner.
+users who are working with the same GRASS project as the database owner.
 To manipulate or add data to PERMANENT, the owner can start
-GRASS GIS and choose the relevant Location and the PERMANENT Mapset.
+GRASS GIS and choose the relevant project and the PERMANENT mapset.
 
 <p>
-The PERMANENT Mapset also contains the <code>DEFAULT_WIND</code> file which holds
+The PERMANENT mapset also contains the <code>DEFAULT_WIND</code> file which holds
 the default computational region's extent and resolution values
-for the Location (which all Mapsets will inherit when they are created).
+for the project (which all mapsets will inherit when they are created).
 Users have the option of switching back to the default region at any time.
 
 <h3>Importing, exporting and linking data</h3>
@@ -168,7 +171,8 @@ Data in GRASS Datable can be exported using for example
 
 <p>
 For cases when import is not desirable, an option to link external data exists.
-Projection of the linked data must match the Location's projection
+The coordinate reference system of the linked data must match the project's
+coordinate reference system
 otherwise the external data cannot be linked. (Linking data in different
 projection is not allowed as it would require on-the-fly reprojection
 which could cause inconsistencies in the data.
@@ -184,17 +188,17 @@ however in GRASS Database the data will be created as standard maps.
 <h3>Starting GRASS GIS</h3>
 
 After launching GRASS GIS for the first time,
-the GUI opens in a default Location <code>world_latlong_wgs84</code>.
-From there a new Location and Mapset can be created.
+the GUI opens in a default project <code>world_latlong_wgs84</code>.
+From there a new project can be created.
 
 <p>
 <center>
   <img src="grass_start.png" alt="GRASS GIS GUI after first start"><br>
 </center>
 
-GRASS GIS can be also started with a given Database, Location and Mapset
+GRASS GIS can be also started with a given database, project and mapset
 from the command line. For example, the following will start
-in a given Mapset with only command line interface:
+in a given mapset with only command line interface:
 
 <div class="code"><pre>
 # Linux, Mac, *BSD, ...:
@@ -204,34 +208,34 @@ grass --text ~/grassdata/nc_spm_08_grass7/user1
 grass --text D:\grassdata\nc_spm_08_grass7\user1
 </pre></div>
 
-And the following will create the given Location with projection given
-by the EPSG code and it will start the default interface
+And the following will create the given project with coordinate reference
+system given by the EPSG code and it will start the default interface
 (GUI or command line):
 
 <div class="code"><pre>
 # Linux, Mac, *BSD, ...:
-grass -c EPSG:5514:3 ~/grassdata/mylocation
+grass -c EPSG:5514:3 ~/grassdata/myproject
 
 # Windows
-grass -c EPSG:5514:3 D:\grassdata\mylocation
+grass -c EPSG:5514:3 D:\grassdata\myproject
 </pre></div>
 
 See <a href="grass.html"><em>grass</em></a> command manual for more details.
 
-<h3>Creating a New Location with the Location Wizard</h3>
+<h3>Creating a New Project with the Project Wizard</h3>
 
 The <a href="wxGUI.html">GUI</a> provides a
-graphical <em>Location Wizard</em> which lets you easily create a
-new Location for your own data. You will be guided through a series of
+graphical <em>Project Wizard</em> which lets you easily create a
+new project for your own data. You will be guided through a series of
 dialogues to browse and select predefined projections or to
 define custom projections.
 
 <p>
-The most convenient way of using <em>Location Wizard</em> is creating new
-Location based on a georeferenced file, such as Shapefile or GeoTIFF,
-or by selecting the corresponding EPSG projection code.
+The most convenient way of using the <em>Project Wizard</em> is creating new
+project based on a georeferenced file, such as Shapefile or GeoTIFF,
+or by selecting the corresponding EPSG code of the coordinate reference system.
 In case of using georeferenced file, you are asked whether the data itself
-should be imported into the new Location.
+should be imported into the new project.
 <!-- TODO: some of this should be or already is automatic
 dialog with checkboxes would be also more convenient than multiple questions -->
 The default region is then set to match imported map.
@@ -244,13 +248,13 @@ TODO: some notes about resolution and extent would be nice
 this was in the text pointing to some unknown text:
 * The rules to define the resolution as described above also apply here.
 * Find below also some rules to define the default raster resolution
-  for a new Location.
+  for a new project.
 -->
 
 <p>
 If data were already imported, you can add them into the Layer Manager now
 and display them.
-More data can be imported into the Location, e.g. using import options in
+More data can be imported into the project, e.g. using import options in
 the <em>File</em> menu in <em>Layer Manager</em> or
 <a href="r.import.html"><em>r.import</em></a>.
 

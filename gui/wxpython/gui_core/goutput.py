@@ -20,17 +20,13 @@ This program is free software under the GNU General Public License
 """
 
 import textwrap
+from string import digits
 
-import os
 import wx
 from wx import stc
 
 from grass.pydispatch.signal import Signal
-from grass.grassdb.history import (
-    read_history,
-    create_history_file,
-    get_current_mapset_gui_history_path,
-)
+from pathlib import Path
 
 # needed just for testing
 if __name__ == "__main__":
@@ -142,20 +138,6 @@ class GConsoleWindow(wx.SplitterWindow):
         if not self._gcstyle & GC_PROMPT:
             self.cmdPrompt.Hide()
 
-        # read history file
-        self._loadHistory()
-        if self.giface:
-            self.giface.currentMapsetChanged.connect(self._loadHistory)
-
-            if self._gcstyle == GC_PROMPT:
-                # connect update history signals only for main Console Window
-                self.giface.entryToHistoryAdded.connect(
-                    lambda cmd: self.cmdPrompt.AddEntryToCmdHistoryBuffer(cmd)
-                )
-                self.giface.entryFromHistoryRemoved.connect(
-                    lambda index: self.cmdPrompt.RemoveEntryFromCmdHistoryBuffer(index)
-                )
-
         # buttons
         self.btnClear = ClearButton(parent=self.panelPrompt)
         self.btnClear.SetToolTip(_("Clear prompt and output window"))
@@ -243,17 +225,6 @@ class GConsoleWindow(wx.SplitterWindow):
         # layout
         self.SetAutoLayout(True)
         self.Layout()
-
-    def _loadHistory(self):
-        """Load history from a history file to data structures"""
-        history_path = get_current_mapset_gui_history_path()
-        try:
-            if not os.path.exists(history_path):
-                create_history_file(history_path)
-            self.cmdPrompt.cmdbuffer = read_history(history_path)
-            self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
-        except OSError as e:
-            GError(str(e))
 
     def GetPanel(self, prompt=True):
         """Get panel
@@ -382,15 +353,12 @@ class GConsoleWindow(wx.SplitterWindow):
             path = dlg.GetPath()
 
             try:
-                output = open(path, "w")
-                output.write(text)
+                Path(path).write_text(text)
             except OSError as e:
                 GError(
                     _("Unable to write file '%(path)s'.\n\nDetails: %(error)s")
                     % {"path": path, "error": e}
                 )
-            finally:
-                output.close()
             message = _("Command output saved into '%s'") % path
             self.showNotification.emit(message=message)
 
@@ -423,7 +391,7 @@ class GConsoleWindow(wx.SplitterWindow):
 
         self.cmdOutput.AddStyledMessage(message, type)
 
-        if event.type in ("warning", "error"):
+        if event.type in {"warning", "error"}:
             self.contentChanged.emit(notification=Notification.MAKE_VISIBLE)
         else:
             self.contentChanged.emit(notification=Notification.HIGHLIGHT)
@@ -604,9 +572,8 @@ class GStc(stc.StyledTextCtrl):
 
         if wrap:
             txt = textwrap.fill(txt, wrap) + "\n"
-        else:
-            if txt[-1] != "\n":
-                txt += "\n"
+        elif txt[-1] != "\n":
+            txt += "\n"
 
         if "\r" in txt:
             self.linePos = -1
@@ -650,17 +617,14 @@ class GStc(stc.StyledTextCtrl):
             for c in message:
                 if c == "\b":
                     self.linePos -= 1
-                else:
-                    if c == "\r":
-                        pos = self.GetCurLine()[1]
-                        # self.SetCurrentPos(pos)
-                    else:
-                        self.SetCurrentPos(self.linePos)
-                    self.ReplaceSelection(c)
-                    self.linePos = self.GetCurrentPos()
-                    if c != " ":
-                        last_c = c
-            if last_c not in ("0123456789"):
+                    continue
+
+                self.SetCurrentPos(self.linePos)
+                self.ReplaceSelection(c)
+                self.linePos = self.GetCurrentPos()
+                if c != " ":
+                    last_c = c
+            if last_c not in (digits):
                 self.AddTextWrapped("\n", wrap=None)
                 self.linePos = -1
         else:

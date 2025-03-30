@@ -37,37 +37,40 @@ This program is free software under the GNU General Public License
 import os
 import string
 from copy import deepcopy
+from operator import itemgetter
+from pathlib import Path
 
 import wx
 import wx.lib.agw.floatspin as fs
-from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
-
 from core import globalvar
+from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
 
 if globalvar.wxPythonPhoenix:
     from wx import Validator
 else:
     from wx import PyValidator as Validator
 
-import grass.script as grass
-
-from core.utils import PilImageToWxImage
+import grass.script as gs
+from grass.exceptions import ScriptError
+from core.gcmd import GError, GMessage, RunCommand
+from core.utils import PilImageToWxImage, cmp
 from dbmgr.vinfo import VectorDBInfo
-from gui_core.gselect import Select
-from core.gcmd import RunCommand, GError, GMessage
 from gui_core.dialogs import SymbolDialog
+from gui_core.gselect import Select
 from gui_core.wrap import (
     BitmapButton,
     BitmapComboBox,
     BitmapFromImage,
     Button,
     CheckBox,
+    CheckListCtrlMixin,
     Choice,
     ClientDC,
     ColourPickerCtrl,
     Dialog,
     DirBrowseButton,
     EmptyBitmap,
+    EmptyImage,
     ExpandoTextCtrl,
     FileBrowseButton,
     FloatSpin,
@@ -84,11 +87,44 @@ from gui_core.wrap import (
     StaticText,
     TextCtrl,
     TextEntryDialog,
-    EmptyImage,
-    CheckListCtrlMixin,
 )
-from psmap.utils import *
-from psmap.instructions import *
+
+# Explicit imports from psmap.instructions
+from psmap.instructions import (
+    Image,
+    Labels,
+    Line,
+    MapFrame,
+    Mapinfo,
+    NewId,
+    NorthArrow,
+    Point,
+    Raster,
+    RasterLegend,
+    Rectangle,
+    Scalebar,
+    Text,
+    Vector,
+    VectorLegend,
+    VProperties,
+)
+
+# Explicit imports from psmap.utils
+from psmap.utils import (
+    AutoAdjust,
+    BBoxAfterRotation,
+    ComputeSetRegion,
+    PaperMapCoordinates,
+    PILImage,
+    Rect2D,
+    Rect2DPP,
+    SetResolution,
+    UnitConversion,
+    convertRGB,
+    getRasterType,
+    havePILImage,
+    projInfo,
+)
 
 # grass.set_raise_on_error(True)
 
@@ -263,7 +299,7 @@ class PsmapDialog(Dialog):
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     def AddUnits(self, parent, dialogDict):
-        parent.units = dict()
+        parent.units = {}
         parent.units["unitsLabel"] = StaticText(parent, id=wx.ID_ANY, label=_("Units:"))
         choices = self.unitConv.getPageUnitsNames()
         parent.units["unitsCtrl"] = Choice(parent, id=wx.ID_ANY, choices=choices)
@@ -273,7 +309,7 @@ class PsmapDialog(Dialog):
 
     def AddPosition(self, parent, dialogDict):
         if not hasattr(parent, "position"):
-            parent.position = dict()
+            parent.position = {}
         parent.position["comment"] = StaticText(
             parent,
             id=wx.ID_ANY,
@@ -307,7 +343,7 @@ class PsmapDialog(Dialog):
 
     def AddExtendedPosition(self, panel, gridBagSizer, dialogDict):
         """Add widgets for setting position relative to paper and to map"""
-        panel.position = dict()
+        panel.position = {}
         positionLabel = StaticText(panel, id=wx.ID_ANY, label=_("Position is given:"))
         panel.position["toPaper"] = RadioButton(
             panel, id=wx.ID_ANY, label=_("relative to paper"), style=wx.RB_GROUP
@@ -435,20 +471,29 @@ class PsmapDialog(Dialog):
         gridBagSizer.Add(sizerM, pos=(2, 1), flag=wx.ALIGN_LEFT | wx.EXPAND, border=0)
 
     def AddFont(self, parent, dialogDict, color=True):
-        parent.font = dict()
-        ##        parent.font['fontLabel'] = wx.StaticText(parent, id = wx.ID_ANY, label = _("Choose font:"))
-        ##        parent.font['fontCtrl'] = wx.FontPickerCtrl(parent, id = wx.ID_ANY)
-        ##
-        # parent.font['fontCtrl'].SetSelectedFont(
-        # wx.FontFromNativeInfoString(dialogDict['font'] + " " + str(dialogDict['fontsize'])))
-        # parent.font['fontCtrl'].SetMaxPointSize(50)
-        ##
+        parent.font = {}
+        # parent.font["fontLabel"] = wx.StaticText(
+        #     parent, id=wx.ID_ANY, label=_("Choose font:")
+        # )
+        # parent.font["fontCtrl"] = wx.FontPickerCtrl(parent, id=wx.ID_ANY)
+        #
+        # parent.font["fontCtrl"].SetSelectedFont(
+        #     wx.FontFromNativeInfoString(
+        #         dialogDict["font"] + " " + str(dialogDict["fontsize"])
+        #     )
+        # )
+        # parent.font["fontCtrl"].SetMaxPointSize(50)
+        #
         # if color:
-        ##            parent.font['colorLabel'] = wx.StaticText(parent, id = wx.ID_ANY, label = _("Choose color:"))
-        ##            parent.font['colorCtrl'] = ColourPickerCtrl(parent, id = wx.ID_ANY, style=wx.FNTP_FONTDESC_AS_LABEL)
-        # parent.font['colorCtrl'].SetColour(dialogDict['color'])
-
-        # parent.font['colorCtrl'].SetColour(convertRGB(dialogDict['color']))
+        #     parent.font["colorLabel"] = wx.StaticText(
+        #         parent, id=wx.ID_ANY, label=_("Choose color:")
+        #     )
+        #     parent.font["colorCtrl"] = ColourPickerCtrl(
+        #         parent, id=wx.ID_ANY, style=wx.FNTP_FONTDESC_AS_LABEL
+        #     )
+        # parent.font["colorCtrl"].SetColour(dialogDict["color"])
+        #
+        # parent.font["colorCtrl"].SetColour(convertRGB(dialogDict["color"]))
 
         parent.font["fontLabel"] = StaticText(parent, id=wx.ID_ANY, label=_("Font:"))
         parent.font["fontSizeLabel"] = StaticText(
@@ -485,21 +530,37 @@ class PsmapDialog(Dialog):
             parent.font["colorCtrl"] = ColourPickerCtrl(parent, id=wx.ID_ANY)
             parent.font["colorCtrl"].SetColour(convertRGB(dialogDict["color"]))
 
-    ##            parent.font['colorLabel'] = wx.StaticText(parent, id = wx.ID_ANY, label = _("Color:"))
-    # colorChoices = [  'aqua', 'black', 'blue', 'brown', 'cyan', 'gray', 'green', 'indigo', 'magenta',\
-    # 'orange', 'purple', 'red', 'violet', 'white', 'yellow']
-    ##            parent.colorCtrl = Choice(parent, id = wx.ID_ANY, choices = colorChoices)
-    # parent.colorCtrl.SetStringSelection(parent.rLegendDict['color'])
-    ##            parent.font['colorCtrl'] = ColourPickerCtrl(parent, id = wx.ID_ANY)
-    # parent.font['colorCtrl'].SetColour(dialogDict['color'])
+    # parent.font["colorLabel"] = wx.StaticText(
+    #     parent, id=wx.ID_ANY, label=_("Color:")
+    # )
+    # colorChoices = [
+    #     "aqua",
+    #     "black",
+    #     "blue",
+    #     "brown",
+    #     "cyan",
+    #     "gray",
+    #     "green",
+    #     "indigo",
+    #     "magenta",
+    #     "orange",
+    #     "purple",
+    #     "red",
+    #     "violet",
+    #     "white",
+    #     "yellow",
+    # ]
+    # parent.colorCtrl = Choice(parent, id=wx.ID_ANY, choices=colorChoices)
+    # parent.colorCtrl.SetStringSelection(parent.rLegendDict["color"])
+    # parent.font["colorCtrl"] = ColourPickerCtrl(parent, id=wx.ID_ANY)
+    # parent.font["colorCtrl"].SetColour(dialogDict["color"])
 
     def OnApply(self, event):
         ok = self.update()
         if ok:
             self.parent.DialogDataChanged(id=self.id)
             return True
-        else:
-            return False
+        return False
 
     def OnOK(self, event):
         """Apply changes, close dialog"""
@@ -732,11 +793,12 @@ class PageSetupDialog(PsmapDialog):
         currPaper = self.paperTable[self.getCtrl("Format").GetSelection()]
         currUnit = self.unitConv.findUnit(self.getCtrl("Units").GetStringSelection())
         currOrientIdx = self.getCtrl("Orientation").GetSelection()
-        newSize = dict()
-        for item in self.cat[3:]:
-            newSize[item] = self.unitConv.convert(
+        newSize = {
+            item: self.unitConv.convert(
                 float(currPaper[item]), fromUnit="inch", toUnit=currUnit
             )
+            for item in self.cat[3:]
+        }
 
         enable = True
         if currPaper["Format"] != _("custom"):
@@ -756,7 +818,7 @@ class PageSetupDialog(PsmapDialog):
         return self.hBoxDict[item].GetItem(1).GetWindow()
 
     def _toList(self, paperStr):
-        sizeList = list()
+        sizeList = []
         for line in paperStr.strip().split("\n"):
             d = dict(zip([self.cat[1]] + self.cat[3:], line.split()))
             sizeList.append(d)
@@ -865,7 +927,7 @@ class MapDialog(PsmapDialog):
                         self.mPanel.drawMap.SetValue(True)
                     else:
                         self.mPanel.drawMap.SetValue(False)
-            else:
+            else:  # noqa: PLR5501
                 if "vector" in self.parent.openDialogs:
                     found = False
                     for each in self.parent.openDialogs["vector"].vPanel.vectorList:
@@ -1196,10 +1258,7 @@ class MapFramePanel(Panel):
 
         if self.scaleChoice.GetSelection() == 0:
             self.selectedMap = self.selected
-            if self.rasterTypeRadio.GetValue():
-                mapType = "raster"
-            else:
-                mapType = "vector"
+            mapType = "raster" if self.rasterTypeRadio.GetValue() else "vector"
 
             self.scale[0], self.center[0], foo = AutoAdjust(
                 self,
@@ -1241,23 +1300,21 @@ class MapFramePanel(Panel):
             self.scaleType = scaleType
             self.select.SetValue("")
 
-        if scaleType in (0, 1):  # automatic - region from raster map, saved region
+        if scaleType in {0, 1}:  # automatic - region from raster map, saved region
             if scaleType == 0:
                 # set map selection
                 self.rasterTypeRadio.Show()
                 self.vectorTypeRadio.Show()
                 self.drawMap.Show()
                 self.staticBox.SetLabel(" %s " % _("Map selection"))
-                if self.rasterTypeRadio.GetValue():
-                    stype = "raster"
-                else:
-                    stype = "vector"
+                stype = "raster" if self.rasterTypeRadio.GetValue() else "vector"
 
                 self.select.SetElementList(type=stype)
                 self.mapText.SetLabel(self.mapOrRegionText[0])
                 self.select.SetToolTip(
                     _(
-                        "Region is set to match this map,\nraster or vector map must be added later"
+                        "Region is set to match this map,\nraster or vector map must "
+                        "be added later"
                     )
                 )
 
@@ -1307,10 +1364,7 @@ class MapFramePanel(Panel):
 
     def OnElementType(self, event):
         """Changes data in map selection tree ctrl popup"""
-        if self.rasterTypeRadio.GetValue():
-            mapType = "raster"
-        else:
-            mapType = "vector"
+        mapType = "raster" if self.rasterTypeRadio.GetValue() else "vector"
         self.select.SetElementList(type=mapType)
         if self.mapType != mapType and event is not None:
             self.mapType = mapType
@@ -1341,109 +1395,7 @@ class MapFramePanel(Panel):
         mapFrameDict["scaleType"] = scaleType
 
         if mapFrameDict["scaleType"] == 0:
-            if self.select.GetValue():
-                mapFrameDict["drawMap"] = self.drawMap.GetValue()
-                mapFrameDict["map"] = self.select.GetValue()
-                mapFrameDict["mapType"] = self.mapType
-                mapFrameDict["region"] = None
-
-                if mapFrameDict["drawMap"]:
-                    if mapFrameDict["mapType"] == "raster":
-                        mapFile = grass.find_file(mapFrameDict["map"], element="cell")
-                        if mapFile["file"] == "":
-                            GMessage("Raster %s not found" % mapFrameDict["map"])
-                            return False
-                        raster = self.instruction.FindInstructionByType("raster")
-                        if raster:
-                            raster["raster"] = mapFrameDict["map"]
-                        else:
-                            raster = Raster(NewId(), env=self.env)
-                            raster["raster"] = mapFrameDict["map"]
-                            raster["isRaster"] = True
-                            self.instruction.AddInstruction(raster)
-
-                    elif mapFrameDict["mapType"] == "vector":
-                        mapFile = grass.find_file(mapFrameDict["map"], element="vector")
-                        if mapFile["file"] == "":
-                            GMessage("Vector %s not found" % mapFrameDict["map"])
-                            return False
-
-                        vector = self.instruction.FindInstructionByType("vector")
-                        isAdded = False
-                        if vector:
-                            for each in vector["list"]:
-                                if each[0] == mapFrameDict["map"]:
-                                    isAdded = True
-                        if not isAdded:
-                            topoInfo = grass.vector_info_topo(map=mapFrameDict["map"])
-                            if topoInfo:
-                                if bool(topoInfo["areas"]):
-                                    topoType = "areas"
-                                elif bool(topoInfo["lines"]):
-                                    topoType = "lines"
-                                else:
-                                    topoType = "points"
-                                label = "(".join(mapFrameDict["map"].split("@")) + ")"
-
-                                if not vector:
-                                    vector = Vector(NewId(), env=self.env)
-                                    vector["list"] = []
-                                    self.instruction.AddInstruction(vector)
-                                id = NewId()
-                                vector["list"].insert(
-                                    0, [mapFrameDict["map"], topoType, id, 1, label]
-                                )
-                                vProp = VProperties(id, topoType, env=self.env)
-                                vProp["name"], vProp["label"], vProp["lpos"] = (
-                                    mapFrameDict["map"],
-                                    label,
-                                    1,
-                                )
-                                self.instruction.AddInstruction(vProp)
-                            else:
-                                return False
-
-                self.scale[0], self.center[0], self.rectAdjusted = AutoAdjust(
-                    self,
-                    scaleType=0,
-                    map=mapFrameDict["map"],
-                    env=self.env,
-                    mapType=self.mapType,
-                    rect=self.mapFrameDict["rect"],
-                )
-
-                if self.rectAdjusted:
-                    mapFrameDict["rect"] = self.rectAdjusted
-                else:
-                    mapFrameDict["rect"] = self.mapFrameDict["rect"]
-
-                mapFrameDict["scale"] = self.scale[0]
-
-                mapFrameDict["center"] = self.center[0]
-                # set region
-                if self.mapType == "raster":
-                    self.env["GRASS_REGION"] = grass.region_env(
-                        raster=mapFrameDict["map"], env=self.env
-                    )
-                if self.mapType == "vector":
-                    raster = self.instruction.FindInstructionByType("raster")
-                    if raster:
-                        rasterId = raster.id
-                    else:
-                        rasterId = None
-
-                    if rasterId:
-                        self.env["GRASS_REGION"] = grass.region_env(
-                            vector=mapFrameDict["map"],
-                            raster=self.instruction[rasterId]["raster"],
-                            env=self.env,
-                        )
-                    else:
-                        self.env["GRASS_REGION"] = grass.region_env(
-                            vector=mapFrameDict["map"], env=self.env
-                        )
-
-            else:
+            if not self.select.GetValue():
                 wx.MessageBox(
                     message=_("No map selected!"),
                     caption=_("Invalid input"),
@@ -1451,37 +1403,135 @@ class MapFramePanel(Panel):
                 )
                 return False
 
-        elif mapFrameDict["scaleType"] == 1:
-            if self.select.GetValue():
-                mapFrameDict["drawMap"] = False
-                mapFrameDict["map"] = None
-                mapFrameDict["mapType"] = None
-                mapFrameDict["region"] = self.select.GetValue()
-                self.scale[1], self.center[1], self.rectAdjusted = AutoAdjust(
-                    self,
-                    scaleType=1,
-                    region=mapFrameDict["region"],
-                    rect=self.mapFrameDict["rect"],
-                    env=self.env,
-                )
-                if self.rectAdjusted:
-                    mapFrameDict["rect"] = self.rectAdjusted
-                else:
-                    mapFrameDict["rect"] = self.mapFrameDict["rect"]
+            mapFrameDict["drawMap"] = self.drawMap.GetValue()
+            mapFrameDict["map"] = self.select.GetValue()
+            mapFrameDict["mapType"] = self.mapType
+            mapFrameDict["region"] = None
 
-                mapFrameDict["scale"] = self.scale[1]
-                mapFrameDict["center"] = self.center[1]
-                # set region
-                self.env["GRASS_REGION"] = grass.region_env(
-                    region=mapFrameDict["region"], env=self.env
-                )
+            if mapFrameDict["drawMap"]:
+                if mapFrameDict["mapType"] == "raster":
+                    mapFile = gs.find_file(mapFrameDict["map"], element="cell")
+                    if mapFile["file"] == "":
+                        GMessage("Raster %s not found" % mapFrameDict["map"])
+                        return False
+                    raster = self.instruction.FindInstructionByType("raster")
+                    if raster:
+                        raster["raster"] = mapFrameDict["map"]
+                    else:
+                        raster = Raster(NewId(), env=self.env)
+                        raster["raster"] = mapFrameDict["map"]
+                        raster["isRaster"] = True
+                        self.instruction.AddInstruction(raster)
+
+                elif mapFrameDict["mapType"] == "vector":
+                    mapFile = gs.find_file(mapFrameDict["map"], element="vector")
+                    if mapFile["file"] == "":
+                        GMessage("Vector %s not found" % mapFrameDict["map"])
+                        return False
+
+                    vector = self.instruction.FindInstructionByType("vector")
+                    isAdded = False
+                    if vector:
+                        for each in vector["list"]:
+                            if each[0] == mapFrameDict["map"]:
+                                isAdded = True
+                    if not isAdded:
+                        topoInfo = gs.vector_info_topo(map=mapFrameDict["map"])
+                        if topoInfo:
+                            if bool(topoInfo["areas"]):
+                                topoType = "areas"
+                            elif bool(topoInfo["lines"]):
+                                topoType = "lines"
+                            else:
+                                topoType = "points"
+                            label = "(".join(mapFrameDict["map"].split("@")) + ")"
+
+                            if not vector:
+                                vector = Vector(NewId(), env=self.env)
+                                vector["list"] = []
+                                self.instruction.AddInstruction(vector)
+                            id = NewId()
+                            vector["list"].insert(
+                                0, [mapFrameDict["map"], topoType, id, 1, label]
+                            )
+                            vProp = VProperties(id, topoType, env=self.env)
+                            vProp["name"], vProp["label"], vProp["lpos"] = (
+                                mapFrameDict["map"],
+                                label,
+                                1,
+                            )
+                            self.instruction.AddInstruction(vProp)
+                        else:
+                            return False
+
+            self.scale[0], self.center[0], self.rectAdjusted = AutoAdjust(
+                self,
+                scaleType=0,
+                map=mapFrameDict["map"],
+                env=self.env,
+                mapType=self.mapType,
+                rect=self.mapFrameDict["rect"],
+            )
+
+            if self.rectAdjusted:
+                mapFrameDict["rect"] = self.rectAdjusted
             else:
+                mapFrameDict["rect"] = self.mapFrameDict["rect"]
+
+            mapFrameDict["scale"] = self.scale[0]
+
+            mapFrameDict["center"] = self.center[0]
+            # set region
+            if self.mapType == "raster":
+                self.env["GRASS_REGION"] = gs.region_env(
+                    raster=mapFrameDict["map"], env=self.env
+                )
+            if self.mapType == "vector":
+                raster = self.instruction.FindInstructionByType("raster")
+                rasterId = raster.id if raster else None
+
+                if rasterId:
+                    self.env["GRASS_REGION"] = gs.region_env(
+                        vector=mapFrameDict["map"],
+                        raster=self.instruction[rasterId]["raster"],
+                        env=self.env,
+                    )
+                else:
+                    self.env["GRASS_REGION"] = gs.region_env(
+                        vector=mapFrameDict["map"], env=self.env
+                    )
+
+        elif mapFrameDict["scaleType"] == 1:
+            if not self.select.GetValue():
                 wx.MessageBox(
                     message=_("No region selected!"),
                     caption=_("Invalid input"),
                     style=wx.OK | wx.ICON_ERROR,
                 )
                 return False
+
+            mapFrameDict["drawMap"] = False
+            mapFrameDict["map"] = None
+            mapFrameDict["mapType"] = None
+            mapFrameDict["region"] = self.select.GetValue()
+            self.scale[1], self.center[1], self.rectAdjusted = AutoAdjust(
+                self,
+                scaleType=1,
+                region=mapFrameDict["region"],
+                rect=self.mapFrameDict["rect"],
+                env=self.env,
+            )
+            if self.rectAdjusted:
+                mapFrameDict["rect"] = self.rectAdjusted
+            else:
+                mapFrameDict["rect"] = self.mapFrameDict["rect"]
+
+            mapFrameDict["scale"] = self.scale[1]
+            mapFrameDict["center"] = self.center[1]
+            # set region
+            self.env["GRASS_REGION"] = gs.region_env(
+                region=mapFrameDict["region"], env=self.env
+            )
 
         elif scaleType == 2:
             mapFrameDict["drawMap"] = False
@@ -1498,16 +1548,13 @@ class MapFramePanel(Panel):
 
             mapFrameDict["scale"] = self.scale[2]
             mapFrameDict["center"] = self.center[2]
-            region = grass.region(env=None)
+            region = gs.region(env=None)
 
             raster = self.instruction.FindInstructionByType("raster")
-            if raster:
-                rasterId = raster.id
-            else:
-                rasterId = None
+            rasterId = raster.id if raster else None
 
             if rasterId:  # because of resolution
-                self.env["GRASS_REGION"] = grass.region_env(
+                self.env["GRASS_REGION"] = gs.region_env(
                     n=region["n"],
                     s=region["s"],
                     e=region["e"],
@@ -1516,7 +1563,7 @@ class MapFramePanel(Panel):
                     env=self.env,
                 )
             else:
-                self.env["GRASS_REGION"] = grass.region_env(
+                self.env["GRASS_REGION"] = gs.region_env(
                     n=region["n"],
                     s=region["s"],
                     e=region["e"],
@@ -1679,7 +1726,7 @@ class RasterPanel(Panel):
         mapInstr = self.instruction.FindInstructionByType("map")
         if not mapInstr:  # no map frame
             GMessage(message=_("Please, create map frame first."))
-            return
+            return None
 
         if self.rasterNoRadio.GetValue() or not self.rasterSelect.GetValue():
             self.rasterDict["isRaster"] = False
@@ -1859,15 +1906,15 @@ class VectorPanel(Panel):
         self.Bind(wx.EVT_LISTBOX_DCLICK, self.OnProperties, self.listbox)
 
     def OnVector(self, event):
-        """Gets info about toplogy and enables/disables choices point/line/area"""
+        """Gets info about topology and enables/disables choices point/line/area"""
         vmap = self.select.GetValue()
-        if not grass.find_file(
+        if not gs.find_file(
             vmap,
             element="vector",
         )["name"]:
             return
 
-        topoInfo = grass.vector_info_topo(map=vmap)
+        topoInfo = gs.vector_info_topo(map=vmap)
         if topoInfo:
             self.vectorType.EnableItem(2, bool(topoInfo["areas"]))
             self.vectorType.EnableItem(
@@ -2026,9 +2073,8 @@ class VectorPanel(Panel):
                 vLayer["label"] = item[4]
                 vLayer["lpos"] = item[3]
 
-        else:
-            if self.id in self.instruction:
-                del self.instruction[self.id]
+        elif self.id in self.instruction:
+            del self.instruction[self.id]
 
         if "map" in self.parent.parent.openDialogs:
             self.parent.parent.openDialogs["map"].updateDialog()
@@ -2059,11 +2105,9 @@ class RasterDialog(PsmapDialog):
         self.id = self.rPanel.getId()
         self._layout(self.rPanel)
 
-    def update(self):
+    def update(self) -> bool:
         ok = self.rPanel.update()
-        if ok:
-            return True
-        return False
+        return bool(ok)
 
     def OnApply(self, event):
         ok = self.update()
@@ -2079,14 +2123,17 @@ class RasterDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update information (not used)"""
-        pass
 
 
-# if 'map' in self.parent.openDialogs:
-# if self.parent.openDialogs['map'].mPanel.rasterTypeRadio.GetValue()\
-# and self.parent.openDialogs['map'].mPanel.select.GetValue():
-# if self.parent.openDialogs['map'].mPanel.drawMap.IsChecked():
-# self.rPanel.rasterSelect.SetValue(self.parent.openDialogs['map'].mPanel.select.GetValue())
+# if "map" in self.parent.openDialogs:
+#     if (
+#         self.parent.openDialogs["map"].mPanel.rasterTypeRadio.GetValue()
+#         and self.parent.openDialogs["map"].mPanel.select.GetValue()
+#     ):
+#         if self.parent.openDialogs["map"].mPanel.drawMap.IsChecked():
+#             self.rPanel.rasterSelect.SetValue(
+#                 self.parent.openDialogs["map"].mPanel.select.GetValue()
+#             )
 
 
 class MainVectorDialog(PsmapDialog):
@@ -2121,7 +2168,6 @@ class MainVectorDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update information (not used)"""
-        pass
 
 
 class VPropertiesDialog(Dialog):
@@ -2147,7 +2193,7 @@ class VPropertiesDialog(Dialog):
         try:
             self.mapDBInfo = VectorDBInfo(self.vectorName)
             self.layers = self.mapDBInfo.layers.keys()
-        except grass.ScriptError:
+        except ScriptError:
             self.connection = False
             self.layers = []
         if not self.layers:
@@ -2160,9 +2206,9 @@ class VPropertiesDialog(Dialog):
         gisbase = os.getenv("GISBASE")
         self.symbolPath = os.path.join(gisbase, "etc", "symbol")
         self.symbols = []
-        for dir in os.listdir(self.symbolPath):
-            for symbol in os.listdir(os.path.join(self.symbolPath, dir)):
-                self.symbols.append(os.path.join(dir, symbol))
+        for dir in Path(self.symbolPath).iterdir():
+            for symbol in Path(self.symbolPath).joinpath(dir.name).iterdir():
+                self.symbols.append(os.path.join(dir.name, symbol.name))
         self.patternPath = os.path.join(gisbase, "etc", "paint", "patterns")
 
         # notebook
@@ -2177,7 +2223,7 @@ class VPropertiesDialog(Dialog):
         self.ColorsPanel = selectPanel[self.type][0](notebook)
 
         self.OnOutline(None)
-        if self.type in ("points", "areas"):
+        if self.type in {"points", "areas"}:
             self.OnFill(None)
         self.OnColor(None)
 
@@ -2221,7 +2267,7 @@ class VPropertiesDialog(Dialog):
 
         # data type
         self.checkType1 = self.checkType2 = None
-        if self.type in ("lines", "points"):
+        if self.type in {"lines", "points"}:
             box = StaticBox(
                 parent=panel, id=wx.ID_ANY, label=" %s " % _("Feature type")
             )
@@ -2941,13 +2987,21 @@ class VPropertiesDialog(Dialog):
         styleText = StaticText(panel, id=wx.ID_ANY, label=_("Choose line style:"))
         penStyles = ["solid", "dashed", "dotted", "dashdotted"]
         self.styleCombo = PenStyleComboBox(panel, choices=penStyles)
-        # self.styleCombo = wx.ComboBox(panel, id = wx.ID_ANY,
-        ##                            choices = ["solid", "dashed", "dotted", "dashdotted"],
-        # validator = TCValidator(flag = 'ZERO_AND_ONE_ONLY'))
-        # self.styleCombo.SetToolTipString(_("It's possible to enter a series of 0's and 1's too. "\
-        ##                                    "The first block of repeated zeros or ones represents 'draw', "\
-        ##                                    "the second block represents 'blank'. An even number of blocks "\
-        # "will repeat the pattern, an odd number of blocks will alternate the pattern."))
+        # self.styleCombo = wx.ComboBox(
+        #     panel,
+        #     id=wx.ID_ANY,
+        #     choices=["solid", "dashed", "dotted", "dashdotted"],
+        #     validator=TCValidator(flag="ZERO_AND_ONE_ONLY"),
+        # )
+        # self.styleCombo.SetToolTipString(
+        #     _(
+        #         "It's possible to enter a series of 0's and 1's too. "
+        #         "The first block of repeated zeros or ones represents 'draw', "
+        #         "the second block represents 'blank'. An even number of blocks "
+        #         "will repeat the pattern, an odd number of blocks will alternate "
+        #         "the pattern."
+        #     )
+        # )
         linecapText = StaticText(panel, id=wx.ID_ANY, label=_("Choose linecap:"))
         self.linecapChoice = Choice(
             panel, id=wx.ID_ANY, choices=["butt", "round", "extended_butt"]
@@ -3069,7 +3123,7 @@ class VPropertiesDialog(Dialog):
         self.choiceColumns.SetItems(cols)
 
         self.choiceColumns.SetSelection(0)
-        if self.type in ("points", "lines"):
+        if self.type in {"points", "lines"}:
             self.colorColChoice.SetItems(cols)
             self.colorColChoice.SetSelection(0)
 
@@ -3161,12 +3215,11 @@ class VPropertiesDialog(Dialog):
         else:
             cols = []
 
-        choice = Choice(parent=parent, id=wx.ID_ANY, choices=cols)
-        return choice
+        return Choice(parent=parent, id=wx.ID_ANY, choices=cols)
 
     def update(self):
         # feature type
-        if self.type in ("lines", "points"):
+        if self.type in {"lines", "points"}:
             featureType = None
             if self.checkType1.GetValue():
                 featureType = self.checkType1.GetName()
@@ -3196,7 +3249,7 @@ class VPropertiesDialog(Dialog):
             self.vPropertiesDict["masked"] = "n"
 
         # colors
-        if self.type in ("points", "areas"):
+        if self.type in {"points", "areas"}:
             if self.outlineCheck.GetValue():
                 self.vPropertiesDict["color"] = convertRGB(self.colorPicker.GetColour())
                 self.vPropertiesDict["width"] = self.widthSpin.GetValue()
@@ -3212,9 +3265,9 @@ class VPropertiesDialog(Dialog):
                 if self.colorColRadio.GetValue():
                     # this color is taken in case of no record in rgb column
                     self.vPropertiesDict["fcolor"] = "none"
-                    self.vPropertiesDict[
-                        "rgbcolumn"
-                    ] = self.colorColChoice.GetStringSelection()
+                    self.vPropertiesDict["rgbcolumn"] = (
+                        self.colorColChoice.GetStringSelection()
+                    )
             else:
                 self.vPropertiesDict["fcolor"] = "none"
 
@@ -3238,9 +3291,9 @@ class VPropertiesDialog(Dialog):
             if self.colorColRadio.GetValue():
                 # this color is taken in case of no record in rgb column
                 self.vPropertiesDict["color"] = "none"
-                self.vPropertiesDict[
-                    "rgbcolumn"
-                ] = self.colorColChoice.GetStringSelection()
+                self.vPropertiesDict["rgbcolumn"] = (
+                    self.colorColChoice.GetStringSelection()
+                )
         #
         # size and style
         #
@@ -3258,9 +3311,9 @@ class VPropertiesDialog(Dialog):
                 self.vPropertiesDict["sizecolumn"] = None
                 self.vPropertiesDict["scale"] = None
             else:
-                self.vPropertiesDict[
-                    "sizecolumn"
-                ] = self.sizeColChoice.GetStringSelection()
+                self.vPropertiesDict["sizecolumn"] = (
+                    self.sizeColChoice.GetStringSelection()
+                )
                 self.vPropertiesDict["scale"] = self.scaleSpin.GetValue()
                 self.vPropertiesDict["size"] = None
 
@@ -3273,9 +3326,9 @@ class VPropertiesDialog(Dialog):
             if self.rotateRadio.GetValue():
                 self.vPropertiesDict["rotate"] = self.rotateSpin.GetValue()
             else:
-                self.vPropertiesDict[
-                    "rotatecolumn"
-                ] = self.rotateColChoice.GetStringSelection()
+                self.vPropertiesDict["rotatecolumn"] = (
+                    self.rotateColChoice.GetStringSelection()
+                )
 
         if self.type == "areas":
             # pattern
@@ -3501,7 +3554,7 @@ class LegendDialog(PsmapDialog):
             self.ticks.SetValue(False)
         # range
         if self.rasterId and self.instruction[self.rasterId]["raster"]:
-            rinfo = grass.raster_info(self.instruction[self.rasterId]["raster"])
+            rinfo = gs.raster_info(self.instruction[self.rasterId]["raster"])
             self.minim, self.maxim = rinfo["min"], rinfo["max"]
         else:
             self.minim, self.maxim = 0, 0
@@ -3552,7 +3605,7 @@ class LegendDialog(PsmapDialog):
         self.Bind(wx.EVT_CHECKBOX, self.OnIsLegend, self.isRLegend)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnDiscrete, self.discrete)
         self.Bind(wx.EVT_RADIOBUTTON, self.OnDiscrete, self.continuous)
-        ##        self.Bind(wx.EVT_CHECKBOX, self.OnDefaultSize, panel.defaultSize)
+        # self.Bind(wx.EVT_CHECKBOX, self.OnDefaultSize, panel.defaultSize)
         self.Bind(wx.EVT_CHECKBOX, self.OnRange, self.range)
         self.rasterSelect.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnRaster)
 
@@ -3589,9 +3642,7 @@ class LegendDialog(PsmapDialog):
         self.vectorListCtrl.InsertColumn(0, _("Vector map"))
         self.vectorListCtrl.InsertColumn(1, _("Label"))
         if self.vectorId:
-            vectors = sorted(
-                self.instruction[self.vectorId]["list"], key=lambda x: x[3]
-            )
+            vectors = sorted(self.instruction[self.vectorId]["list"], key=itemgetter(3))
 
             for vector in vectors:
                 index = self.vectorListCtrl.InsertItem(
@@ -3683,10 +3734,7 @@ class LegendDialog(PsmapDialog):
 
     def sizePositionFont(self, legendType, parent, mainSizer):
         """Insert widgets for size, position and font control"""
-        if legendType == "raster":
-            legendDict = self.rLegendDict
-        else:
-            legendDict = self.vLegendDict
+        legendDict = self.rLegendDict if legendType == "raster" else self.vLegendDict
         panel = parent
         border = mainSizer
 
@@ -3763,8 +3811,10 @@ class LegendDialog(PsmapDialog):
         )
 
         if legendType == "raster":
-            ##            panel.defaultSize = wx.CheckBox(panel, id = wx.ID_ANY, label = _("Use default size"))
-            # panel.defaultSize.SetValue(legendDict['defaultSize'])
+            # panel.defaultSize = wx.CheckBox(
+            #     panel, id=wx.ID_ANY, label=_("Use default size")
+            # )
+            # panel.defaultSize.SetValue(legendDict["defaultSize"])
 
             panel.heightOrColumnsLabel = StaticText(
                 panel, id=wx.ID_ANY, label=_("Height:")
@@ -3782,7 +3832,13 @@ class LegendDialog(PsmapDialog):
             )
 
             self.rSizeGBSizer = wx.GridBagSizer(hgap=5, vgap=5)
-            ##            self.rSizeGBSizer.Add(panel.defaultSize, pos = (0,0), span = (1,2), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+            # self.rSizeGBSizer.Add(
+            #     panel.defaultSize,
+            #     pos=(0, 0),
+            #     span=(1, 2),
+            #     flag=wx.ALIGN_CENTER_VERTICAL,
+            #     border=0,
+            # )
             self.rSizeGBSizer.Add(
                 width, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL, border=0
             )
@@ -3926,12 +3982,13 @@ class LegendDialog(PsmapDialog):
     #   some enable/disable methods
 
     def OnIsLegend(self, event):
-        """Enables and disables controls, it depends if raster or vector legend is checked"""
+        """Enables and disables controls, it depends if raster or vector legend is
+        checked"""
         page = self.notebook.GetSelection()
         if page == 0 or event is None:
             children = self.panelRaster.GetChildren()
             if self.isRLegend.GetValue():
-                for i, widget in enumerate(children):
+                for widget in children:
                     widget.Enable()
                 self.OnRaster(None)
                 self.OnRange(None)
@@ -3943,7 +4000,7 @@ class LegendDialog(PsmapDialog):
         if page == 1 or event is None:
             children = self.panelVector.GetChildren()
             if self.isVLegend.GetValue():
-                for i, widget in enumerate(children):
+                for widget in children:
                     widget.Enable()
                 self.OnSpan(None)
                 self.OnBorder(None)
@@ -3963,7 +4020,7 @@ class LegendDialog(PsmapDialog):
 
         if type == "CELL":
             self.discrete.SetValue(True)
-        elif type in ("FCELL", "DCELL"):
+        elif type in {"FCELL", "DCELL"}:
             self.continuous.SetValue(True)
         if event is None:
             if self.rLegendDict["discrete"] == "y":
@@ -4051,10 +4108,7 @@ class LegendDialog(PsmapDialog):
                 self.vectorListCtrl.SetItemData(pos, idx1)
                 self.vectorListCtrl.SetItemData(pos - 1, idx2)
                 self.vectorListCtrl.SortItems(cmp)
-                if pos > 0:
-                    selected = pos - 1
-                else:
-                    selected = 0
+                selected = pos - 1 if pos > 0 else 0
 
                 self.vectorListCtrl.Select(selected)
 
@@ -4096,8 +4150,9 @@ class LegendDialog(PsmapDialog):
         self.panelVector.spanTextCtrl.Enable(self.panelVector.spanRadio.GetValue())
 
     def OnFont(self, event):
-        """Changes default width according to fontsize, width [inch] = fontsize[pt]/24"""
-        ##        fontsize = self.panelVector.font['fontCtrl'].GetSelectedFont().GetPointSize()
+        """Changes default width according to fontsize,
+        width [inch] = fontsize[pt]/24"""
+        # fontsize = self.panelVector.font["fontCtrl"].GetSelectedFont().GetPointSize()
         fontsize = self.panelVector.font["fontSizeCtrl"].GetValue()
         unit = self.unitConv.findUnit(
             self.panelVector.units["unitsCtrl"].GetStringSelection()
@@ -4235,7 +4290,7 @@ class LegendDialog(PsmapDialog):
                 else:
                     self.rLegendDict["range"] = False
 
-        if not self.id[0] in self.instruction:
+        if self.id[0] not in self.instruction:
             rasterLegend = RasterLegend(self.id[0], env=self.env)
             self.instruction.AddInstruction(rasterLegend)
         self.instruction[self.id[0]].SetInstruction(self.rLegendDict)
@@ -4355,7 +4410,7 @@ class LegendDialog(PsmapDialog):
                 else:
                     self.vLegendDict["border"] = "none"
 
-        if not self.id[1] in self.instruction:
+        if self.id[1] not in self.instruction:
             vectorLegend = VectorLegend(self.id[1], env=self.env)
             self.instruction.AddInstruction(vectorLegend)
         self.instruction[self.id[1]].SetInstruction(self.vLegendDict)
@@ -4363,12 +4418,10 @@ class LegendDialog(PsmapDialog):
             self.parent.objectId.append(self.id[1])
         return True
 
-    def update(self):
+    def update(self) -> bool:
         okR = self.updateRasterLegend()
         okV = self.updateVectorLegend()
-        if okR and okV:
-            return True
-        return False
+        return bool(okR and okV)
 
     def updateDialog(self):
         """Update legend coordinates after moving"""
@@ -4390,11 +4443,7 @@ class LegendDialog(PsmapDialog):
         else:
             self.rasterId = None
 
-        if raster:
-            currRaster = raster["raster"]
-        else:
-            currRaster = None
-
+        currRaster = raster["raster"] if raster else None
         rasterType = getRasterType(map=currRaster)
         self.rasterCurrent.SetLabel(
             _("%(rast)s: type %(type)s") % {"rast": currRaster, "type": str(rasterType)}
@@ -4414,7 +4463,7 @@ class LegendDialog(PsmapDialog):
         if self.instruction.FindInstructionByType("vector"):
             vectors = sorted(
                 self.instruction.FindInstructionByType("vector")["list"],
-                key=lambda x: x[3],
+                key=itemgetter(3),
             )
             self.vectorListCtrl.DeleteAllItems()
             for vector in vectors:
@@ -4856,20 +4905,19 @@ class ScalebarDialog(PsmapDialog):
         unitName = self.unitConv.findName(self.scalebarDict["unitsLength"])
         if unitName:
             self.unitsLength.SetStringSelection(unitName)
-        else:
-            if self.scalebarDict["unitsLength"] == "auto":
-                self.unitsLength.SetSelection(0)
-            elif self.scalebarDict["unitsLength"] == "nautmiles":
-                self.unitsLength.SetStringSelection(
-                    self.unitConv.findName("nautical miles")
-                )
+        elif self.scalebarDict["unitsLength"] == "auto":
+            self.unitsLength.SetSelection(0)
+        elif self.scalebarDict["unitsLength"] == "nautmiles":
+            self.unitsLength.SetStringSelection(
+                self.unitConv.findName("nautical miles")
+            )
         self.unitsHeight.SetStringSelection(
             self.unitConv.findName(self.scalebarDict["unitsHeight"])
         )
         if self.scalebarDict["length"]:
             self.lengthTextCtrl.SetValue(str(self.scalebarDict["length"]))
         else:  # estimate default
-            reg = grass.region(env=self.env)
+            reg = gs.region(env=self.env)
             w = int((reg["e"] - reg["w"]) / 3)
             w = round(w, -len(str(w)) + 2)  # 12345 -> 12000
             self.lengthTextCtrl.SetValue(str(w))
@@ -4919,16 +4967,18 @@ class ScalebarDialog(PsmapDialog):
         sbTypeText = StaticText(panel, id=wx.ID_ANY, label=_("Type:"))
         self.sbCombo = BitmapComboBox(panel, style=wx.CB_READONLY)
         # only temporary, images must be moved away
-        imagePath = os.path.join(globalvar.IMGDIR, "scalebar-fancy.png"), os.path.join(
-            globalvar.IMGDIR, "scalebar-simple.png"
+        imagePath = (
+            os.path.join(globalvar.IMGDIR, "scalebar-fancy.png"),
+            os.path.join(globalvar.IMGDIR, "scalebar-simple.png"),
         )
         for item, path in zip(["fancy", "simple"], imagePath):
-            if not os.path.exists(path):
-                bitmap = EmptyBitmap(0, 0)
-            else:
-                bitmap = wx.Bitmap(path)
+            bitmap = EmptyBitmap(0, 0) if not os.path.exists(path) else wx.Bitmap(path)
             self.sbCombo.Append(item="", bitmap=bitmap, clientData=item[0])
-        # self.sbCombo.Append(item = 'simple', bitmap = wx.Bitmap("./images/scalebar-simple.png"), clientData = 's')
+        # self.sbCombo.Append(
+        #     item="simple",
+        #     bitmap=wx.Bitmap("./images/scalebar-simple.png"),
+        #     clientData="s",
+        # )
         if self.scalebarDict["scalebar"] == "f":
             self.sbCombo.SetSelection(0)
         elif self.scalebarDict["scalebar"] == "s":
@@ -5422,10 +5472,11 @@ class TextDialog(PsmapDialog):
         )
         sizerR = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexSizer = wx.FlexGridSizer(rows=3, cols=3, hgap=5, vgap=5)
-        ref = []
-        for row in ["upper", "center", "lower"]:
-            for col in ["left", "center", "right"]:
-                ref.append(row + " " + col)
+        ref = [
+            row + " " + col
+            for row in ["upper", "center", "lower"]
+            for col in ["left", "center", "right"]
+        ]
         self.radio = [
             RadioButton(panel, id=wx.ID_ANY, label="", style=wx.RB_GROUP, name=ref[0])
         ]
@@ -5655,8 +5706,6 @@ class TextDialog(PsmapDialog):
         y = self.unitConv.convert(value=y, fromUnit="inch", toUnit=currUnit)
         self.positionPanel.position["xCtrl"].SetValue("%5.3f" % x)
         self.positionPanel.position["yCtrl"].SetValue("%5.3f" % y)
-        # EN coordinates
-        e, n = self.textDict["east"], self.textDict["north"]
         self.positionPanel.position["eCtrl"].SetValue(str(self.textDict["east"]))
         self.positionPanel.position["nCtrl"].SetValue(str(self.textDict["north"]))
 
@@ -5808,11 +5857,7 @@ class ImageDialog(PsmapDialog):
         panel.image["scale"].SetFormat("%f")
         panel.image["scale"].SetDigits(1)
 
-        if self.imageDict["scale"]:
-            value = float(self.imageDict["scale"])
-        else:
-            value = 0
-
+        value = float(self.imageDict["scale"]) if self.imageDict["scale"] else 0
         panel.image["scale"].SetValue(value)
 
         gridSizer.Add(scaleLabel, pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
@@ -5884,7 +5929,7 @@ class ImageDialog(PsmapDialog):
         """Image directory changed"""
         path = self.imagePanel.image["dir"].GetValue()
         try:
-            files = os.listdir(path)
+            files = [file.name for file in Path(path).iterdir()]
         except OSError:  # no such directory
             files = []
         imageList = []
@@ -5921,7 +5966,7 @@ class ImageDialog(PsmapDialog):
 
     def _getImageDirectory(self):
         """Default image directory"""
-        return os.getcwd()
+        return str(Path.cwd())
 
     def _addConvergence(self, panel, gridBagSizer):
         pass
@@ -5951,7 +5996,7 @@ class ImageDialog(PsmapDialog):
                 pImg = PILImage.open(file)
                 img = PilImageToWxImage(pImg)
             except OSError as e:
-                GError(message=_("Unable to read file %s") % file)
+                GError(message=_("Unable to read file %s: %s") % (file, str(e)))
                 self.ClearPreview()
                 return
             self.SetSizeInfoLabel(img)
@@ -6064,15 +6109,6 @@ class ImageDialog(PsmapDialog):
 
         else:
             self.imageDict["XY"] = False
-            if self.positionPanel.position["eCtrl"].GetValue():
-                e = self.positionPanel.position["eCtrl"].GetValue()
-            else:
-                self.imageDict["east"] = self.imageDict["east"]
-
-            if self.positionPanel.position["nCtrl"].GetValue():
-                n = self.positionPanel.position["nCtrl"].GetValue()
-            else:
-                self.imageDict["north"] = self.imageDict["north"]
 
             x, y = PaperMapCoordinates(
                 mapInstr=self.instruction[self.mapId],
@@ -6135,7 +6171,6 @@ class ImageDialog(PsmapDialog):
         self.positionPanel.position["xCtrl"].SetValue("%5.3f" % x)
         self.positionPanel.position["yCtrl"].SetValue("%5.3f" % y)
         # EN coordinates
-        e, n = self.imageDict["east"], self.imageDict["north"]
         self.positionPanel.position["eCtrl"].SetValue(str(self.imageDict["east"]))
         self.positionPanel.position["nCtrl"].SetValue(str(self.imageDict["north"]))
 
@@ -6450,15 +6485,6 @@ class PointDialog(PsmapDialog):
 
         else:
             self.pointDict["XY"] = False
-            if self.positionPanel.position["eCtrl"].GetValue():
-                e = self.positionPanel.position["eCtrl"].GetValue()
-            else:
-                self.pointDict["east"] = self.pointDict["east"]
-
-            if self.positionPanel.position["nCtrl"].GetValue():
-                n = self.positionPanel.position["nCtrl"].GetValue()
-            else:
-                self.pointDict["north"] = self.pointDict["north"]
 
             x, y = PaperMapCoordinates(
                 mapInstr=self.instruction[self.mapId],
@@ -6514,7 +6540,6 @@ class PointDialog(PsmapDialog):
         self.positionPanel.position["xCtrl"].SetValue("%5.3f" % x)
         self.positionPanel.position["yCtrl"].SetValue("%5.3f" % y)
         # EN coordinates
-        e, n = self.pointDict["east"], self.pointDict["north"]
         self.positionPanel.position["eCtrl"].SetValue(str(self.pointDict["east"]))
         self.positionPanel.position["nCtrl"].SetValue(str(self.pointDict["north"]))
 
@@ -6525,10 +6550,7 @@ class RectangleDialog(PsmapDialog):
 
         :param coordinates: begin and end point coordinate (wx.Point, wx.Point)
         """
-        if type == "rectangle":
-            title = _("Rectangle settings")
-        else:
-            title = _("Line settings")
+        title = _("Rectangle settings") if type == "rectangle" else _("Line settings")
         PsmapDialog.__init__(
             self, parent=parent, id=id, title=title, settings=settings, env=env
         )
@@ -6683,7 +6705,6 @@ class RectangleDialog(PsmapDialog):
 
     def updateDialog(self):
         """Update text coordinates, after moving"""
-        pass
 
 
 class LabelsDialog(PsmapDialog):

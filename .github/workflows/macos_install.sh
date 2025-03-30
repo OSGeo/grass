@@ -7,72 +7,65 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-# recommended in https://gitter.im/conda-forge/conda-forge.github.io?at=5c40da7f95e17b45256960ce
-find ${CONDA_PREFIX}/lib -name '*.la' -delete
-
 CONDA_ARCH=$(uname -m)
 INSTALL_PREFIX=$1
 
 CONFIGURE_FLAGS="\
   --prefix=${INSTALL_PREFIX} \
-  --with-opengl=aqua \
-  --with-openmp \
-  --without-x \
+  --with-blas=openblas \
+  --with-bzlib \
+  --with-bzlib-includes=${CONDA_PREFIX}/include \
+  --with-bzlib-libs=${CONDA_PREFIX}/lib \
+  --with-cairo \
+  --with-cairo-includes=${CONDA_PREFIX}/include/cairo \
+  --with-cairo-ldflags="-lcairo" \
+  --with-cairo-libs=${CONDA_PREFIX}/lib \
+  --with-cxx \
+  --with-fftw-includes=${CONDA_PREFIX}/include \
+  --with-fftw-libs=${CONDA_PREFIX}/lib \
   --with-freetype \
   --with-freetype-includes=${CONDA_PREFIX}/include/freetype2 \
   --with-freetype-libs=${CONDA_PREFIX}/lib \
   --with-gdal=${CONDA_PREFIX}/bin/gdal-config \
+  --with-geos=${CONDA_PREFIX}/bin/geos-config \
+  --with-includes=${CONDA_PREFIX}/include \
+  --with-lapack=openblas \
+  --with-libpng=${CONDA_PREFIX}/bin/libpng-config \
+  --with-libs=${CONDA_PREFIX}/lib \
+  --with-netcdf=${CONDA_PREFIX}/bin/nc-config \
+  --with-netcdf=${CONDA_PREFIX}/bin/nc-config \
+  --with-nls \
+  --with-opengl=aqua \
+  --with-openmp \
+  --with-pdal \
+  --with-postgres-includes=${CONDA_PREFIX}/include \
+  --with-postgres-libs=${CONDA_PREFIX}/lib \
+  --with-postgres=yes \
   --with-proj-includes=${CONDA_PREFIX}/include \
   --with-proj-libs=${CONDA_PREFIX}/lib \
   --with-proj-share=${CONDA_PREFIX}/share/proj \
-  --with-geos=${CONDA_PREFIX}/bin/geos-config \
-  --with-libpng=${CONDA_PREFIX}/bin/libpng-config \
-  --with-tiff-includes=${CONDA_PREFIX}/include \
-  --with-tiff-libs=${CONDA_PREFIX}/lib \
-  --with-postgres=yes \
-  --with-postgres-includes=${CONDA_PREFIX}/include \
-  --with-postgres-libs=${CONDA_PREFIX}/lib \
-  --without-mysql \
-  --with-sqlite \
-  --with-sqlite-libs=${CONDA_PREFIX}/lib \
-  --with-sqlite-includes=${CONDA_PREFIX}/include \
-  --with-fftw-includes=${CONDA_PREFIX}/include \
-  --with-fftw-libs=${CONDA_PREFIX}/lib \
-  --with-cxx \
-  --with-cairo \
-  --with-cairo-includes=${CONDA_PREFIX}/include/cairo \
-  --with-cairo-libs=${CONDA_PREFIX}/lib \
-  --with-cairo-ldflags="-lcairo" \
-  --with-zstd \
-  --with-zstd-libs=${CONDA_PREFIX}/lib \
-  --with-zstd-includes=${CONDA_PREFIX}/include \
-  --with-bzlib \
-  --with-bzlib-libs=${CONDA_PREFIX}/lib \
-  --with-bzlib-includes=${CONDA_PREFIX}/include \
-  --with-netcdf=${CONDA_PREFIX}/bin/nc-config \
-  --with-blas \
-  --with-blas-libs=${CONDA_PREFIX}/lib \
-  --with-blas-includes=${CONDA_PREFIX}/include \
-  --with-lapack
-  --with-lapack-includes=${CONDA_PREFIX}/include \
-  --with-lapack-libs=${CONDA_PREFIX}/lib \
-  --with-netcdf=${CONDA_PREFIX}/bin/nc-config \
-  --with-nls \
-  --with-libs=${CONDA_PREFIX}/lib \
-  --with-includes=${CONDA_PREFIX}/include \
-  --with-pdal \
   --with-readline \
   --with-readline-includes=${CONDA_PREFIX}/include/readline \
   --with-readline-libs=${CONDA_PREFIX}/lib
+  --with-sqlite \
+  --with-sqlite-includes=${CONDA_PREFIX}/include \
+  --with-sqlite-libs=${CONDA_PREFIX}/lib \
+  --with-tiff-includes=${CONDA_PREFIX}/include \
+  --with-tiff-libs=${CONDA_PREFIX}/lib \
+  --with-zstd \
+  --with-zstd-includes=${CONDA_PREFIX}/include \
+  --with-zstd-libs=${CONDA_PREFIX}/lib \
+  --without-mysql \
+  --without-x \
 "
 
-export CFLAGS="-O2 -pipe -arch ${CONDA_ARCH} -DGL_SILENCE_DEPRECATION -Wall -Wextra -Wpedantic -Wvla"
-export CXXFLAGS="-O2 -pipe -stdlib=libc++ -arch ${CONDA_ARCH} -Wall -Wextra -Wpedantic"
+export CFLAGS="-O2 -pipe -ffp-contract=off -arch ${CONDA_ARCH} -DGL_SILENCE_DEPRECATION -Wall -Wextra -Wpedantic -Wvla"
+export CXXFLAGS="-O2 -pipe -ffp-contract=off -stdlib=libc++ -arch ${CONDA_ARCH} -Wall -Wextra -Wpedantic"
 export CPPFLAGS="-isystem${CONDA_PREFIX}/include"
 
 ./configure $CONFIGURE_FLAGS
 
-EXEMPT="-Wno-error=deprecated-non-prototype -Wno-error=strict-prototypes"
+EXEMPT=""
 make -j$(sysctl -n hw.ncpu) CFLAGS="$CFLAGS -Werror $EXEMPT" \
   CXXFLAGS="$CXXFLAGS -Werror $EXEMPT"
 

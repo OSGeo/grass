@@ -7,7 +7,7 @@
 #               Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
-# COPYRIGHT:    (C) 2007-2024 by Glynn Clements
+# COPYRIGHT:    (C) 2007-2025 by Glynn Clements
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -16,21 +16,15 @@
 #
 #############################################################################
 
-import http
 import sys
 import os
 import string
 import re
 from datetime import datetime
 import locale
-import json
-import pathlib
-import subprocess
 
 from html.parser import HTMLParser
 
-from urllib import request as urlrequest
-from urllib.error import HTTPError, URLError
 import urllib.parse as urlparse
 
 try:
@@ -39,52 +33,14 @@ except ImportError:
     # During compilation GRASS GIS
     gs = None
 
-from generate_last_commit_file import COMMIT_DATE_FORMAT
-
-HEADERS = {
-    "User-Agent": "Mozilla/5.0",
-}
-HTTP_STATUS_CODES = list(http.HTTPStatus)
-
-
-def get_version_branch(major_version, addons_git_repo_url):
-    """Check if version branch for the current GRASS version exists,
-    if not, take branch for the previous version
-    For the official repo we assume that at least one version branch is present
-
-    :param major_version int: GRASS GIS major version
-    :param addons_git_repo_url str: Addons Git ropository URL
-
-    :return version_branch str: version branch
-    """
-    version_branch = f"grass{major_version}"
-    if gs:
-        branch = gs.Popen(
-            [
-                "git",
-                "ls-remote",
-                "--heads",
-                addons_git_repo_url,
-                f"refs/heads/{version_branch}",
-            ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        branch, stderr = branch.communicate()
-        if stderr:
-            gs.fatal(
-                _(
-                    "Failed to get branch from the Git repository"
-                    " <{repo_path}>.\n{error}"
-                ).format(
-                    repo_path=addons_git_repo_url,
-                    error=gs.decode(stderr),
-                )
-            )
-        if version_branch not in gs.decode(branch):
-            version_branch = "grass{}".format(int(major_version) - 1)
-    return version_branch
-
+from mkdocs import (
+    read_file,
+    get_version_branch,
+    get_last_git_commit,
+    top_dir as topdir,
+    get_addon_path,
+    set_proxy,
+)
 
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
 trunk_url = ""
@@ -124,296 +80,9 @@ def _get_encoding():
     return encoding
 
 
-def urlopen(url, *args, **kwargs):
-    """Wrapper around urlopen. Same function as 'urlopen', but with the
-    ability to define headers.
-    """
-    request = urlrequest.Request(url, headers=HEADERS)
-    return urlrequest.urlopen(request, *args, **kwargs)
-
-
-def set_proxy():
-    """Set proxy"""
-    proxy = os.getenv("GRASS_PROXY")
-    if proxy:
-        proxies = {}
-        for ptype, purl in (p.split("=") for p in proxy.split(",")):
-            proxies[ptype] = purl
-        urlrequest.install_opener(
-            urlrequest.build_opener(urlrequest.ProxyHandler(proxies))
-        )
-
-
 set_proxy()
 
-
-def download_git_commit(url, response_format, *args, **kwargs):
-    """Download module/addon last commit from GitHub API
-
-    :param str url: url address
-    :param str response_format: content type
-
-    :return urllib.request.urlopen or None response: response object or
-                                                     None
-    """
-    try:
-        response = urlopen(url, *args, **kwargs)
-        if not response.code == 200:
-            index = HTTP_STATUS_CODES.index(response.code)
-            desc = HTTP_STATUS_CODES[index].description
-            gs.fatal(
-                _(
-                    "Download commit from <{url}>, return status code "
-                    "{code}, {desc}".format(
-                        url=url,
-                        code=response.code,
-                        desc=desc,
-                    ),
-                ),
-            )
-        if response_format not in response.getheader("Content-Type"):
-            gs.fatal(
-                _(
-                    "Wrong downloaded commit file format. "
-                    "Check url <{url}>. Allowed file format is "
-                    "{response_format}.".format(
-                        url=url,
-                        response_format=response_format,
-                    ),
-                ),
-            )
-        return response
-    except HTTPError as err:
-        gs.warning(
-            _(
-                "The download of the commit from the GitHub API "
-                "server wasn't successful, <{}>. Commit and commit "
-                "date will not be included in the <{}> addon html manual "
-                "page.".format(err.msg, pgm)
-            ),
-        )
-    except URLError:
-        gs.warning(
-            _(
-                "Download file from <{url}>, failed. Check internet "
-                "connection. Commit and commit date will not be included "
-                "in the <{pgm}> addon manual page.".format(url=url, pgm=pgm)
-            ),
-        )
-
-
-def get_default_git_log(src_dir, datetime_format="%A %b %d %H:%M:%S %Y"):
-    """Get default Git commit and commit date, when getting commit from
-    local Git, local JSON file and remote GitHub REST API server wasn't
-    successful.
-
-    :param str src_dir: addon source dir
-    :param str datetime_format: output commit datetime format
-                                e.g. Sunday Jan 16 23:09:35 2022
-
-    :return dict: dict which store last commit and commnit date
-    """
-    return {
-        "commit": "unknown",
-        "date": datetime.fromtimestamp(os.path.getmtime(src_dir)).strftime(
-            datetime_format
-        ),
-    }
-
-
-def parse_git_commit(
-    commit,
-    src_dir,
-    git_log=None,
-):
-    """Parse Git commit
-
-    :param str commit: commit message
-    :param str src_dir: addon source dir
-    :param dict git_log: dict which store last commit and commnit
-                         date
-
-    :return dict git_log: dict which store last commit and commnit date
-    """
-    if not git_log:
-        git_log = get_default_git_log(src_dir=src_dir)
-    if commit:
-        git_log["commit"], commit_date = commit.strip().split(",")
-        git_log["date"] = format_git_commit_date_from_local_git(
-            commit_datetime=commit_date,
-        )
-    return git_log
-
-
-def get_git_commit_from_file(
-    src_dir,
-    git_log=None,
-):
-    """Get Git commit from JSON file
-
-    :param str src_dir: addon source dir
-    :param dict git_log: dict which store last commit and commnit date
-
-    :return dict git_log: dict which store last commit and commnit date
-    """
-    # Accessed date time if getting commit from JSON file wasn't successful
-    if not git_log:
-        git_log = get_default_git_log(src_dir=src_dir)
-    json_file_path = os.path.join(
-        topdir,
-        "core_modules_with_last_commit.json",
-    )
-    if os.path.exists(json_file_path):
-        with open(json_file_path) as f:
-            core_modules_with_last_commit = json.load(f)
-        if pgm in core_modules_with_last_commit:
-            core_module = core_modules_with_last_commit[pgm]
-            git_log["commit"] = core_module["commit"]
-            git_log["date"] = format_git_commit_date_from_local_git(
-                commit_datetime=core_module["date"],
-            )
-    return git_log
-
-
-def get_git_commit_from_rest_api_for_addon_repo(
-    addon_path,
-    src_dir,
-    git_log=None,
-):
-    """Get Git commit from remote GitHub REST API for addon repository
-
-    :param str addon_path: addon path
-    :param str src_dir: addon source dir
-    :param dict git_log: dict which store last commit and commnit date
-
-    :return dict git_log: dict which store last commit and commnit date
-    """
-    # Accessed date time if getting commit from GitHub REST API wasn't successful
-    if not git_log:
-        git_log = get_default_git_log(src_dir=src_dir)
-    grass_addons_url = (
-        "https://api.github.com/repos/osgeo/grass-addons/commits?"
-        "path={path}&page=1&per_page=1&sha=grass{major}".format(
-            path=addon_path,
-            major=major,
-        )
-    )  # sha=git_branch_name
-
-    response = download_git_commit(
-        url=grass_addons_url,
-        response_format="application/json",
-    )
-    if response:
-        commit = json.loads(response.read())
-        if commit:
-            git_log["commit"] = commit[0]["sha"]
-            git_log["date"] = format_git_commit_date_from_rest_api(
-                commit_datetime=commit[0]["commit"]["author"]["date"],
-            )
-    return git_log
-
-
-def format_git_commit_date_from_rest_api(
-    commit_datetime, datetime_format="%A %b %d %H:%M:%S %Y"
-):
-    """Format datetime from remote GitHub REST API
-
-    :param str commit_datetime: commit datetime
-    :param str datetime_format: output commit datetime format
-                                e.g. Sunday Jan 16 23:09:35 2022
-
-    :return str: output formatted commit datetime
-    """
-    return datetime.strptime(
-        commit_datetime,
-        "%Y-%m-%dT%H:%M:%SZ",  # ISO 8601 YYYY-MM-DDTHH:MM:SSZ
-    ).strftime(datetime_format)
-
-
-def format_git_commit_date_from_local_git(
-    commit_datetime, datetime_format="%A %b %d %H:%M:%S %Y"
-):
-    """Format datetime from local Git or JSON file
-
-    :param str commit_datetime: commit datetime
-    :param str datetime_format: output commit datetime format
-                                e.g. Sunday Jan 16 23:09:35 2022
-
-    :return str: output formatted commit datetime
-    """
-    return datetime.fromisoformat(
-        commit_datetime,
-    ).strftime(datetime_format)
-
-
-def has_src_code_git(src_dir, is_addon):
-    """Has core module or addon source code Git
-
-    :param str src_dir: core module or addon root directory
-    :param bool is_addon: True if it is addon
-
-    :return subprocess.CompletedProcess or None: subprocess.CompletedProcess
-                                                 if core module or addon
-                                                 source code has Git
-    """
-    actual_dir = os.getcwd()
-    if is_addon:
-        os.chdir(src_dir)
-    else:
-        os.chdir(topdir)
-    try:
-        process_result = subprocess.run(
-            [
-                "git",
-                "log",
-                "-1",
-                f"--format=%H,{COMMIT_DATE_FORMAT}",
-                src_dir,
-            ],
-            stderr=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-        )  # --format=%H,COMMIT_DATE_FORMAT commit hash,author date
-        os.chdir(actual_dir)
-        return process_result if process_result.returncode == 0 else None
-    except FileNotFoundError:
-        os.chdir(actual_dir)
-        return None
-
-
-def get_last_git_commit(src_dir, addon_path, is_addon):
-    """Get last module/addon git commit
-
-    :param str src_dir: module/addon source dir
-    :param str addon_path: addon path
-    :param bool is_addon: True if it is addon
-
-    :return dict git_log: dict with key commit and date, if not
-                          possible download commit from GitHub REST API
-                          server values of keys have "unknown" string
-    """
-    process_result = has_src_code_git(src_dir=src_dir, is_addon=is_addon)
-    if process_result:
-        return parse_git_commit(
-            commit=process_result.stdout.decode(),
-            src_dir=src_dir,
-        )
-    else:
-        if gs:
-            # Addons installation
-            return get_git_commit_from_rest_api_for_addon_repo(
-                addon_path=addon_path,
-                src_dir=src_dir,
-            )
-        # During GRASS GIS compilation from source code without Git
-        else:
-            return get_git_commit_from_file(src_dir=src_dir)
-
-
-html_page_footer_pages_path = (
-    os.getenv("HTML_PAGE_FOOTER_PAGES_PATH")
-    if os.getenv("HTML_PAGE_FOOTER_PAGES_PATH")
-    else ""
-)
+html_page_footer_pages_path = os.getenv("HTML_PAGE_FOOTER_PAGES_PATH") or ""
 
 pgm = sys.argv[1]
 
@@ -506,15 +175,6 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
 )
 
 
-def read_file(name):
-    try:
-        with open(name) as f:
-            s = f.read()
-        return s
-    except OSError:
-        return ""
-
-
 def create_toc(src_data):
     class MyHTMLParser(HTMLParser):
         def __init__(self):
@@ -561,7 +221,7 @@ def create_toc(src_data):
 
 def escape_href(label):
     # remove html tags
-    label = re.sub("<[^<]+?>", "", label)
+    label = re.sub(r"<[^<]+?>", "", label)
     # fix &nbsp;
     label = label.replace("&nbsp;", "")
     # fix "
@@ -676,105 +336,27 @@ def update_toc(data):
     return "\n".join(ret_data)
 
 
-def get_addon_path():
-    """Check if pgm is in the addons list and get addon path
-
-    Make or update list of the official addons source
-    code paths g.extension prefix parameter plus /grass-addons directory
-    using Git repository
-
-    :return str|None: pgm path if pgm is addon else None
-    """
-    addons_base_dir = os.getenv("GRASS_ADDON_BASE")
-    if addons_base_dir and major:
-        grass_addons_dir = pathlib.Path(addons_base_dir) / "grass-addons"
-        if gs:
-            call = gs.call
-            popen = gs.Popen
-            fatal = gs.fatal
-        else:
-            call = subprocess.call
-            popen = subprocess.Popen
-            fatal = sys.stderr.write
-        addons_branch = get_version_branch(
-            major_version=major,
-            addons_git_repo_url=urlparse.urljoin(base_url, "grass-addons/"),
-        )
-        if not pathlib.Path(addons_base_dir).exists():
-            pathlib.Path(addons_base_dir).mkdir(parents=True, exist_ok=True)
-        if not grass_addons_dir.exists():
-            call(
-                [
-                    "git",
-                    "clone",
-                    "-q",
-                    "--no-checkout",
-                    f"--branch={addons_branch}",
-                    "--filter=blob:none",
-                    urlparse.urljoin(base_url, "grass-addons/"),
-                ],
-                cwd=addons_base_dir,
-            )
-        addons_file_list = popen(
-            ["git", "ls-tree", "--name-only", "-r", addons_branch],
-            cwd=grass_addons_dir,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        addons_file_list, stderr = addons_file_list.communicate()
-        if stderr:
-            message = (
-                "Failed to get addons files list from the"
-                " Git repository <{repo_path}>.\n{error}"
-            )
-            if gs:
-                fatal(
-                    _(
-                        message,
-                    ).format(
-                        repo_path=grass_addons_dir,
-                        error=gs.decode(stderr),
-                    )
-                )
-            else:
-                message += "\n"
-                fatal(
-                    message.format(
-                        repo_path=grass_addons_dir,
-                        error=stderr.decode(),
-                    )
-                )
-        addon_paths = re.findall(
-            rf".*{pgm}*.",
-            gs.decode(addons_file_list) if gs else addons_file_list.decode(),
-        )
-        for addon_path in addon_paths:
-            if pgm == pathlib.Path(addon_path).name:
-                return addon_path
-
-
 # process header
 src_data = read_file(src_file)
-name = re.search("(<!-- meta page name:)(.*)(-->)", src_data, re.IGNORECASE)
+name = re.search(r"(<!-- meta page name:)(.*)(-->)", src_data, re.IGNORECASE)
 pgm_desc = "GRASS GIS Reference Manual"
 if name:
     pgm = name.group(2).strip().split("-", 1)[0].strip()
     name_desc = re.search(
-        "(<!-- meta page name description:)(.*)(-->)", src_data, re.IGNORECASE
+        r"(<!-- meta page name description:)(.*)(-->)", src_data, re.IGNORECASE
     )
     if name_desc:
         pgm_desc = name_desc.group(2).strip()
-desc = re.search("(<!-- meta page description:)(.*)(-->)", src_data, re.IGNORECASE)
+desc = re.search(r"(<!-- meta page description:)(.*)(-->)", src_data, re.IGNORECASE)
 if desc:
     pgm = desc.group(2).strip()
     header_tmpl = string.Template(header_base + header_nopgm)
+elif not pgm_desc:
+    header_tmpl = string.Template(header_base + header_pgm)
 else:
-    if not pgm_desc:
-        header_tmpl = string.Template(header_base + header_pgm)
-    else:
-        header_tmpl = string.Template(header_base + header_pgm_desc)
+    header_tmpl = string.Template(header_base + header_pgm_desc)
 
-if not re.search("<html>", src_data, re.IGNORECASE):
+if not re.search(r"<html>", src_data, re.IGNORECASE):
     tmp_data = read_file(tmp_file)
     """
     Adjusting keywords html pages paths if add-on html man page
@@ -800,7 +382,7 @@ if not re.search("<html>", src_data, re.IGNORECASE):
                 orig_keywords_paths.group(1),
                 ",".join(new_keywords_paths),
             )
-    if not re.search("<html>", tmp_data, re.IGNORECASE):
+    if not re.search(r"<html>", tmp_data, re.IGNORECASE):
         sys.stdout.write(header_tmpl.substitute(PGM=pgm, PGM_DESC=pgm_desc))
 
     if tmp_data:
@@ -808,7 +390,7 @@ if not re.search("<html>", src_data, re.IGNORECASE):
         for line in tmp_data.splitlines(True):
             # The cleanup happens on Makefile level too.
             if not re.search(
-                "</body>|</html>|</div> <!-- end container -->", line, re.IGNORECASE
+                r"</body>|</html>|</div> <!-- end container -->", line, re.IGNORECASE
             ):
                 if header_logo_img_el in line:
                     sys.stdout.write(line)
@@ -825,7 +407,7 @@ sys.stdout.write(update_toc(src_data))
 
 # if </html> is found, suppose a complete html is provided.
 # otherwise, generate module class reference:
-if re.search("</html>", src_data, re.IGNORECASE):
+if re.search(r"</html>", src_data, re.IGNORECASE):
     sys.exit()
 
 index_names = {
@@ -848,10 +430,9 @@ def to_title(name):
     """Convert name of command class/family to form suitable for title"""
     if name == "raster3d":
         return "3D raster"
-    elif name == "postscript":
+    if name == "postscript":
         return "PostScript"
-    else:
-        return name.capitalize()
+    return name.capitalize()
 
 
 index_titles = {}
@@ -859,7 +440,7 @@ for key, name in index_names.items():
     index_titles[key] = to_title(name)
 
 # process footer
-index = re.search("(<!-- meta page index:)(.*)(-->)", src_data, re.IGNORECASE)
+index = re.search(r"(<!-- meta page index:)(.*)(-->)", src_data, re.IGNORECASE)
 if index:
     index_name = index.group(2).strip()
     if "|" in index_name:
@@ -876,7 +457,6 @@ if not year:
     year = str(datetime.now().year)
 
 # check the names of scripts to assign the right folder
-topdir = os.path.abspath(os.getenv("MODULE_TOPDIR"))
 curdir = os.path.abspath(os.path.curdir)
 if curdir.startswith(topdir + os.path.sep):
     source_url = trunk_url
@@ -888,7 +468,7 @@ else:
 url_source = ""
 addon_path = None
 if os.getenv("SOURCE_URL", ""):
-    addon_path = get_addon_path()
+    addon_path = get_addon_path(base_url=base_url, pgm=pgm, major_version=major)
     if addon_path:
         # Addon is installed from the local dir
         if os.path.exists(os.getenv("SOURCE_URL")):
@@ -919,8 +499,10 @@ else:
 
 git_commit = get_last_git_commit(
     src_dir=curdir,
-    addon_path=addon_path if addon_path else None,
-    is_addon=True if addon_path else False,
+    top_dir=topdir,
+    pgm=pgm,
+    addon_path=addon_path or None,
+    major_version=major,
 )
 if git_commit["commit"] == "unknown":
     date_tag = "Accessed: {date}".format(date=git_commit["date"])

@@ -16,10 +16,10 @@ a trained slope and curvature at the edges, in order to avoid that such a flat p
 is generated in a hole. The width of edge area can be adjusted by
 changing the edge parameter.
 <p>During the interpolation following warning may occur when using the RST method:<p>
-<tt>
+<code>
 Warning: strip exists with insufficient data<br>
 Warning: taking too long to find points for interpolation--please change
-the region to area where your points are</tt>
+the region to area where your points are</code>
 <p>
 This warning is generated if large data holes exist within the surface.
 As the idea of <em>r.fillnulls</em> is to fill such holes, the user may
@@ -34,7 +34,7 @@ When using the default RST method, the algorithm is based
 on <em><a href="v.surf.rst.html">v.surf.rst</a></em> regularized
 splines with tension interpolation module which interpolates the
 raster cell values for NULL data areas from the boundary values of the
-NULL data area. An eventual raster MASK is respected during the NULL
+NULL data area. An eventual raster mask is respected during the NULL
 data area(s) filling. The interpolated values are patched into the
 NULL data area(s) of the input map and saved into a new raster map.
 
@@ -61,7 +61,7 @@ free space as one extra input raster map takes.
 <h2>EXAMPLE</h2>
 
 In this example, the SRTM elevation map in the
-North Carolina sample dataset location is filtered for outlier
+North Carolina sample dataset is filtered for outlier
 elevation values; missing pixels are then re-interpolated to obtain
 a complete elevation map:
 
@@ -71,7 +71,7 @@ d.mon wx0
 d.histogram elev_srtm_30m
 
 # remove SRTM outliers, i.e. SRTM below 50m (esp. lakes), leading to no data areas
-r.mapcalc "elev_srtm_30m_filt = if(elev_srtm_30m < 50.0, null(), elev_srtm_30m)"
+r.mapcalc "elev_srtm_30m_filt = if(elev_srtm_30m &lt; 50.0, null(), elev_srtm_30m)"
 d.histogram elev_srtm_30m_filt
 d.rast elev_srtm_30m_filt
 
@@ -103,22 +103,22 @@ d.legend diff_rst_bilin
 <li> Mitas, L., Mitasova, H., 1999, Spatial Interpolation. In: P.Longley,
 M.F. Goodchild, D.J. Maguire, D.W.Rhind (Eds.), Geographical Information
 Systems: Principles, Techniques, Management and Applications, Wiley,
-pp.481-492
+pp.481-492</li>
 
 <li>Mitasova H., Mitas L.,&nbsp; Brown W.M.,&nbsp; D.P. Gerdes, I.
 Kosinovsky, Baker, T.1995, Modeling spatially and temporally distributed
 phenomena: New methods and tools for GRASS GIS. <i>International Journal of
 GIS</i>, 9 (4), special issue on Integrating GIS and Environmental modeling,
-433-446.
+433-446.</li>
 
-<li><a href="http://www4.ncsu.edu/~hmitaso/gmslab/papers/lmg.rev1.ps">Mitasova H.
+<li><a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/lmg.rev1.ps">Mitasova H.
 and Mitas L. 1993</a>: Interpolation by Regularized Spline with Tension: I.
-Theory and Implementation, <i>Mathematical Geology</i> 25, 641-655.
+Theory and Implementation, <i>Mathematical Geology</i> 25, 641-655.</li>
 
-<li><a href="http://www4.ncsu.edu/~hmitaso/gmslab/papers/hmg.rev1.ps">Mitasova H.
+<li><a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/hmg.rev1.ps">Mitasova H.
 and Hofierka L. 1993</a>: Interpolation by Regularized Spline with Tension:
 II. Application to Terrain Modeling and Surface Geometry Analysis,
-<i>Mathematical Geology</i> 25, 657-667.
+<i>Mathematical Geology</i> 25, 657-667.</li>
 </ul>
 
 <h2>SEE ALSO</h2>

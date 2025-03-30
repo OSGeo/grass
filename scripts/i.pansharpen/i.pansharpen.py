@@ -93,6 +93,7 @@
 # %end
 
 import os
+from grass.exceptions import CalledModuleError
 
 try:
     import numpy as np
@@ -101,12 +102,12 @@ try:
 except ImportError:
     hasNumPy = False
 
-import grass.script as grass
+import grass.script as gs
 
 
 def main():
     if not hasNumPy:
-        grass.fatal(_("Required dependency NumPy not found. Exiting."))
+        gs.fatal(_("Required dependency NumPy not found. Exiting."))
 
     sharpen = options["method"]  # sharpening algorithm
     ms1_orig = options["blue"]  # blue channel
@@ -122,17 +123,17 @@ def main():
     # Checking bit depth
     bits = float(bits)
     if bits < 2 or bits > 30:
-        grass.warning(_("Bit depth is outside acceptable range"))
+        gs.warning(_("Bit depth is outside acceptable range"))
         return
 
-    outb = grass.core.find_file("%s_blue" % out)
-    outg = grass.core.find_file("%s_green" % out)
-    outr = grass.core.find_file("%s_red" % out)
+    outb = gs.core.find_file("%s_blue" % out)
+    outg = gs.core.find_file("%s_green" % out)
+    outr = gs.core.find_file("%s_red" % out)
 
     if (
         outb["name"] != "" or outg["name"] != "" or outr["name"] != ""
-    ) and not grass.overwrite():
-        grass.warning(
+    ) and not gs.overwrite():
+        gs.warning(
             _(
                 "Maps with selected output prefix names already exist."
                 " Delete them or use overwrite flag"
@@ -150,28 +151,28 @@ def main():
 
     if not rescale:
         if bits == 8:
-            grass.message(_("Using 8bit image channels"))
+            gs.message(_("Using 8bit image channels"))
             if sproc:
                 # serial processing
-                grass.run_command(
+                gs.run_command(
                     "g.copy",
                     raster="%s,%s" % (ms1_orig, ms1),
                     quiet=True,
                     overwrite=True,
                 )
-                grass.run_command(
+                gs.run_command(
                     "g.copy",
                     raster="%s,%s" % (ms2_orig, ms2),
                     quiet=True,
                     overwrite=True,
                 )
-                grass.run_command(
+                gs.run_command(
                     "g.copy",
                     raster="%s,%s" % (ms3_orig, ms3),
                     quiet=True,
                     overwrite=True,
                 )
-                grass.run_command(
+                gs.run_command(
                     "g.copy",
                     raster="%s,%s" % (pan_orig, pan),
                     quiet=True,
@@ -179,25 +180,25 @@ def main():
                 )
             else:
                 # parallel processing
-                pb = grass.start_command(
+                pb = gs.start_command(
                     "g.copy",
                     raster="%s,%s" % (ms1_orig, ms1),
                     quiet=True,
                     overwrite=True,
                 )
-                pg = grass.start_command(
+                pg = gs.start_command(
                     "g.copy",
                     raster="%s,%s" % (ms2_orig, ms2),
                     quiet=True,
                     overwrite=True,
                 )
-                pr = grass.start_command(
+                pr = gs.start_command(
                     "g.copy",
                     raster="%s,%s" % (ms3_orig, ms3),
                     quiet=True,
                     overwrite=True,
                 )
-                pp = grass.start_command(
+                pp = gs.start_command(
                     "g.copy",
                     raster="%s,%s" % (pan_orig, pan),
                     quiet=True,
@@ -210,11 +211,11 @@ def main():
                 pp.wait()
 
         else:
-            grass.message(_("Converting image channels to 8bit for processing"))
+            gs.message(_("Converting image channels to 8bit for processing"))
             maxval = pow(2, bits) - 1
             if sproc:
                 # serial processing
-                grass.run_command(
+                gs.run_command(
                     "r.rescale",
                     input=ms1_orig,
                     from_="0,%f" % maxval,
@@ -223,7 +224,7 @@ def main():
                     quiet=True,
                     overwrite=True,
                 )
-                grass.run_command(
+                gs.run_command(
                     "r.rescale",
                     input=ms2_orig,
                     from_="0,%f" % maxval,
@@ -232,7 +233,7 @@ def main():
                     quiet=True,
                     overwrite=True,
                 )
-                grass.run_command(
+                gs.run_command(
                     "r.rescale",
                     input=ms3_orig,
                     from_="0,%f" % maxval,
@@ -241,7 +242,7 @@ def main():
                     quiet=True,
                     overwrite=True,
                 )
-                grass.run_command(
+                gs.run_command(
                     "r.rescale",
                     input=pan_orig,
                     from_="0,%f" % maxval,
@@ -253,7 +254,7 @@ def main():
 
             else:
                 # parallel processing
-                pb = grass.start_command(
+                pb = gs.start_command(
                     "r.rescale",
                     input=ms1_orig,
                     from_="0,%f" % maxval,
@@ -262,7 +263,7 @@ def main():
                     quiet=True,
                     overwrite=True,
                 )
-                pg = grass.start_command(
+                pg = gs.start_command(
                     "r.rescale",
                     input=ms2_orig,
                     from_="0,%f" % maxval,
@@ -271,7 +272,7 @@ def main():
                     quiet=True,
                     overwrite=True,
                 )
-                pr = grass.start_command(
+                pr = gs.start_command(
                     "r.rescale",
                     input=ms3_orig,
                     from_="0,%f" % maxval,
@@ -280,7 +281,7 @@ def main():
                     quiet=True,
                     overwrite=True,
                 )
-                pp = grass.start_command(
+                pp = gs.start_command(
                     "r.rescale",
                     input=pan_orig,
                     from_="0,%f" % maxval,
@@ -296,21 +297,21 @@ def main():
                 pp.wait()
 
     else:
-        grass.message(_("Rescaling image channels to 8bit for processing"))
+        gs.message(_("Rescaling image channels to 8bit for processing"))
 
-        min_ms1 = int(grass.raster_info(ms1_orig)["min"])
-        max_ms1 = int(grass.raster_info(ms1_orig)["max"])
-        min_ms2 = int(grass.raster_info(ms2_orig)["min"])
-        max_ms2 = int(grass.raster_info(ms2_orig)["max"])
-        min_ms3 = int(grass.raster_info(ms3_orig)["min"])
-        max_ms3 = int(grass.raster_info(ms3_orig)["max"])
-        min_pan = int(grass.raster_info(pan_orig)["min"])
-        max_pan = int(grass.raster_info(pan_orig)["max"])
+        min_ms1 = int(gs.raster_info(ms1_orig)["min"])
+        max_ms1 = int(gs.raster_info(ms1_orig)["max"])
+        min_ms2 = int(gs.raster_info(ms2_orig)["min"])
+        max_ms2 = int(gs.raster_info(ms2_orig)["max"])
+        min_ms3 = int(gs.raster_info(ms3_orig)["min"])
+        max_ms3 = int(gs.raster_info(ms3_orig)["max"])
+        min_pan = int(gs.raster_info(pan_orig)["min"])
+        max_pan = int(gs.raster_info(pan_orig)["max"])
 
         maxval = pow(2, bits) - 1
         if sproc:
             # serial processing
-            grass.run_command(
+            gs.run_command(
                 "r.rescale",
                 input=ms1_orig,
                 from_="%f,%f" % (min_ms1, max_ms1),
@@ -319,7 +320,7 @@ def main():
                 quiet=True,
                 overwrite=True,
             )
-            grass.run_command(
+            gs.run_command(
                 "r.rescale",
                 input=ms2_orig,
                 from_="%f,%f" % (min_ms2, max_ms2),
@@ -328,7 +329,7 @@ def main():
                 quiet=True,
                 overwrite=True,
             )
-            grass.run_command(
+            gs.run_command(
                 "r.rescale",
                 input=ms3_orig,
                 from_="%f,%f" % (min_ms3, max_ms3),
@@ -337,7 +338,7 @@ def main():
                 quiet=True,
                 overwrite=True,
             )
-            grass.run_command(
+            gs.run_command(
                 "r.rescale",
                 input=pan_orig,
                 from_="%f,%f" % (min_pan, max_pan),
@@ -349,7 +350,7 @@ def main():
 
         else:
             # parallel processing
-            pb = grass.start_command(
+            pb = gs.start_command(
                 "r.rescale",
                 input=ms1_orig,
                 from_="%f,%f" % (min_ms1, max_ms1),
@@ -358,7 +359,7 @@ def main():
                 quiet=True,
                 overwrite=True,
             )
-            pg = grass.start_command(
+            pg = gs.start_command(
                 "r.rescale",
                 input=ms2_orig,
                 from_="%f,%f" % (min_ms2, max_ms2),
@@ -367,7 +368,7 @@ def main():
                 quiet=True,
                 overwrite=True,
             )
-            pr = grass.start_command(
+            pr = gs.start_command(
                 "r.rescale",
                 input=ms3_orig,
                 from_="%f,%f" % (min_ms3, max_ms3),
@@ -376,7 +377,7 @@ def main():
                 quiet=True,
                 overwrite=True,
             )
-            pp = grass.start_command(
+            pp = gs.start_command(
                 "r.rescale",
                 input=pan_orig,
                 from_="%f,%f" % (min_pan, max_pan),
@@ -392,17 +393,17 @@ def main():
             pp.wait()
 
     # get PAN resolution:
-    kv = grass.raster_info(map=pan)
+    kv = gs.raster_info(map=pan)
     nsres = kv["nsres"]
     ewres = kv["ewres"]
     panres = (nsres + ewres) / 2
 
     # clone current region
-    grass.use_temp_region()
-    grass.run_command("g.region", res=panres, align=pan)
+    gs.use_temp_region()
+    gs.run_command("g.region", res=panres, align=pan)
 
     # Select sharpening method
-    grass.message(_("Performing pan sharpening with hi res pan image: %f" % panres))
+    gs.message(_("Performing pan sharpening with hi res pan image: %f") % panres)
     if sharpen == "brovey":
         brovey(pan, ms1, ms2, ms3, out, pid, sproc)
     elif sharpen == "ihs":
@@ -411,61 +412,62 @@ def main():
         pca(pan, ms1, ms2, ms3, out, pid, sproc)
     # Could add other sharpening algorithms here, e.g. wavelet transformation
 
-    grass.message(_("Assigning grey equalized color tables to output images..."))
+    gs.message(_("Assigning grey equalized color tables to output images..."))
 
     # equalized grey scales give best contrast
-    grass.message(_("setting pan-sharpened channels to equalized grey scale"))
+    gs.message(_("setting pan-sharpened channels to equalized grey scale"))
     for ch in ["red", "green", "blue"]:
-        grass.run_command(
+        gs.run_command(
             "r.colors", quiet=True, map="%s_%s" % (out, ch), flags="e", color="grey"
         )
 
     # Landsat too blue-ish because panchromatic band less sensitive to blue
     # light, so output blue channed can be modified
     if bladjust:
-        grass.message(_("Adjusting blue channel color table..."))
+        gs.message(_("Adjusting blue channel color table..."))
         blue_colors = ["0 0 0 0\n5% 0 0 0\n67% 255 255 255\n100% 255 255 255"]
         # these previous colors are way too blue for landsat
-        # blue_colors = ['0 0 0 0\n10% 0 0 0\n20% 200 200 200\n40% 230 230 230\n67% 255 255 255\n100% 255 255 255']
-        bc = grass.feed_command("r.colors", quiet=True, map="%s_blue" % out, rules="-")
-        bc.stdin.write(grass.encode("\n".join(blue_colors)))
+        # blue_colors = ['0 0 0 0\n10% 0 0 0\n20% 200 200 200\n40% 230 230 230\n67%
+        # 255 255 255\n100% 255 255 255']
+        bc = gs.feed_command("r.colors", quiet=True, map="%s_blue" % out, rules="-")
+        bc.stdin.write(gs.encode("\n".join(blue_colors)))
         bc.stdin.close()
 
     # output notice
-    grass.verbose(_("The following pan-sharpened output maps have been generated:"))
+    gs.verbose(_("The following pan-sharpened output maps have been generated:"))
     for ch in ["red", "green", "blue"]:
-        grass.verbose(_("%s_%s") % (out, ch))
+        gs.verbose(_("%s_%s") % (out, ch))
 
-    grass.verbose(_("To visualize output, run: g.region -p raster=%s_red" % out))
-    grass.verbose(_("d.rgb r=%s_red g=%s_green b=%s_blue" % (out, out, out)))
-    grass.verbose(
+    gs.verbose(_("To visualize output, run: g.region -p raster=%s_red") % out)
+    gs.verbose(_("d.rgb r=%s_red g=%s_green b=%s_blue") % (out, out, out))
+    gs.verbose(
         _("If desired, combine channels into a single RGB map with 'r.composite'.")
     )
-    grass.verbose(_("Channel colors can be rebalanced using i.colors.enhance."))
+    gs.verbose(_("Channel colors can be rebalanced using i.colors.enhance."))
 
     # write cmd history:
     for ch in ["red", "green", "blue"]:
-        grass.raster_history("%s_%s" % (out, ch))
+        gs.raster_history("%s_%s" % (out, ch))
 
     # create a group with the three outputs
-    # grass.run_command('i.group', group=out,
+    # gs.run_command('i.group', group=out,
     #                  input="{n}_red,{n}_blue,{n}_green".format(n=out))
 
     # Cleanup
-    grass.message(_("cleaning up temp files"))
+    gs.message(_("cleaning up temp files"))
     try:
-        grass.run_command(
+        gs.run_command(
             "g.remove", flags="f", type="raster", pattern="tmp%s*" % pid, quiet=True
         )
-    except:
+    except CalledModuleError:
         pass
 
 
 def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
-    grass.verbose(_("Using Brovey algorithm"))
+    gs.verbose(_("Using Brovey algorithm"))
 
     # pan/intensity histogram matching using linear regression
-    grass.message(_("Pan channel/intensity histogram matching using linear regression"))
+    gs.message(_("Pan channel/intensity histogram matching using linear regression"))
     outname = "tmp%s_pan1" % pid
     panmatch1 = matchhist(pan, ms1, outname)
 
@@ -480,7 +482,7 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
     outb = "%s_blue" % out
 
     # calculate brovey transformation
-    grass.message(_("Calculating Brovey transformation..."))
+    gs.message(_("Calculating Brovey transformation..."))
 
     if sproc:
         # serial processing
@@ -488,7 +490,7 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
             "$outr" = 1 * round("$ms3" * "$panmatch3" / k)
             "$outg" = 1 * round("$ms2" * "$panmatch2" / k)
             "$outb" = 1 * round("$ms1" * "$panmatch1" / k)"""
-        grass.mapcalc(
+        gs.mapcalc(
             e,
             outr=outr,
             outg=outg,
@@ -503,17 +505,17 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
         )
     else:
         # parallel processing
-        pb = grass.mapcalc_start(
+        pb = gs.mapcalc_start(
             "%s_blue = 1 * round((%s * %s) / (%s + %s + %s))"
             % (out, ms1, panmatch1, ms1, ms2, ms3),
             overwrite=True,
         )
-        pg = grass.mapcalc_start(
+        pg = gs.mapcalc_start(
             "%s_green = 1 * round((%s * %s) / (%s + %s + %s))"
             % (out, ms2, panmatch2, ms1, ms2, ms3),
             overwrite=True,
         )
-        pr = grass.mapcalc_start(
+        pr = gs.mapcalc_start(
             "%s_red = 1 * round((%s * %s) / (%s + %s + %s))"
             % (out, ms3, panmatch3, ms1, ms2, ms3),
             overwrite=True,
@@ -522,27 +524,27 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
         pb.wait(), pg.wait(), pr.wait()
         try:
             pb.terminate(), pg.terminate(), pr.terminate()
-        except:
+        except OSError:
             pass
 
     # Cleanup
     try:
-        grass.run_command(
+        gs.run_command(
             "g.remove",
             flags="f",
             quiet=True,
             type="raster",
             name="%s,%s,%s" % (panmatch1, panmatch2, panmatch3),
         )
-    except:
+    except CalledModuleError:
         pass
 
 
 def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
-    grass.verbose(_("Using IHS<->RGB algorithm"))
+    gs.verbose(_("Using IHS<->RGB algorithm"))
     # transform RGB channels into IHS color space
-    grass.message(_("Transforming to IHS color space..."))
-    grass.run_command(
+    gs.message(_("Transforming to IHS color space..."))
+    gs.run_command(
         "i.rgb.his",
         overwrite=True,
         red=ms3,
@@ -559,8 +561,8 @@ def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
     panmatch = matchhist(pan, target, outname)
 
     # substitute pan for intensity channel and transform back to RGB color space
-    grass.message(_("Transforming back to RGB color space and sharpening..."))
-    grass.run_command(
+    gs.message(_("Transforming back to RGB color space and sharpening..."))
+    gs.run_command(
         "i.his.rgb",
         overwrite=True,
         hue="tmp%s_hue" % pid,
@@ -573,19 +575,17 @@ def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
 
     # Cleanup
     try:
-        grass.run_command(
-            "g.remove", flags="f", quiet=True, type="raster", name=panmatch
-        )
-    except:
+        gs.run_command("g.remove", flags="f", quiet=True, type="raster", name=panmatch)
+    except CalledModuleError:
         pass
 
 
 def pca(pan, ms1, ms2, ms3, out, pid, sproc):
-    grass.verbose(_("Using PCA/inverse PCA algorithm"))
-    grass.message(_("Creating PCA images and calculating eigenvectors..."))
+    gs.verbose(_("Using PCA/inverse PCA algorithm"))
+    gs.message(_("Creating PCA images and calculating eigenvectors..."))
 
     # initial PCA with RGB channels
-    pca_out = grass.read_command(
+    pca_out = gs.read_command(
         "i.pca",
         quiet=True,
         rescale="0,0",
@@ -593,7 +593,7 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
         output="tmp%s.pca" % pid,
     )
     if len(pca_out) < 1:
-        grass.fatal(_("Input has no data. Check region settings."))
+        gs.fatal(_("Input has no data. Check region settings."))
 
     b1evect = []
     b2evect = []
@@ -626,17 +626,17 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
     outname = "tmp%s_pan3" % pid
     panmatch3 = matchhist(pan, ms3, outname)
 
-    grass.message(_("Performing inverse PCA ..."))
+    gs.message(_("Performing inverse PCA ..."))
 
     # Get mean value of each channel
-    stats1 = grass.parse_command(
-        "r.univar", map=ms1, flags="g", parse=(grass.parse_key_val, {"sep": "="})
+    stats1 = gs.parse_command(
+        "r.univar", map=ms1, flags="g", parse=(gs.parse_key_val, {"sep": "="})
     )
-    stats2 = grass.parse_command(
-        "r.univar", map=ms2, flags="g", parse=(grass.parse_key_val, {"sep": "="})
+    stats2 = gs.parse_command(
+        "r.univar", map=ms2, flags="g", parse=(gs.parse_key_val, {"sep": "="})
     )
-    stats3 = grass.parse_command(
-        "r.univar", map=ms3, flags="g", parse=(grass.parse_key_val, {"sep": "="})
+    stats3 = gs.parse_command(
+        "r.univar", map=ms3, flags="g", parse=(gs.parse_key_val, {"sep": "="})
     )
 
     b1mean = float(stats1["mean"])
@@ -649,13 +649,13 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
         outg = "%s_green" % out
         outb = "%s_blue" % out
 
-        cmd1 = "$outb = 1 * round(($panmatch1 * $b1evect1) + ($pca2 * $b1evect2) + ($pca3 * $b1evect3) + $b1mean)"
-        cmd2 = "$outg = 1 * round(($panmatch2 * $b2evect1) + ($pca2 * $b2evect2) + ($pca3 * $b2evect3) + $b2mean)"
-        cmd3 = "$outr = 1 * round(($panmatch3 * $b3evect1) + ($pca2 * $b3evect2) + ($pca3 * $b3evect3) + $b3mean)"
+        cmd1 = "$outb = 1 * round(($panmatch1 * $b1evect1) + ($pca2 * $b1evect2) + ($pca3 * $b1evect3) + $b1mean)"  # noqa: E501
+        cmd2 = "$outg = 1 * round(($panmatch2 * $b2evect1) + ($pca2 * $b2evect2) + ($pca3 * $b2evect3) + $b2mean)"  # noqa: E501
+        cmd3 = "$outr = 1 * round(($panmatch3 * $b3evect1) + ($pca2 * $b3evect2) + ($pca3 * $b3evect3) + $b3mean)"  # noqa: E501
 
-        cmd = "\n".join([cmd1, cmd2, cmd3])
+        cmd = f"{cmd1}\n{cmd2}\n{cmd3}"
 
-        grass.mapcalc(
+        gs.mapcalc(
             cmd,
             outb=outb,
             outg=outg,
@@ -681,19 +681,19 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
         )
     else:
         # parallel processing
-        pb = grass.mapcalc_start(
+        pb = gs.mapcalc_start(
             "%s_blue = 1 * round((%s * %f) + (%s * %f) + (%s * %f) + %f)"
             % (out, panmatch1, b1evect1, pca2, b1evect2, pca3, b1evect3, b1mean),
             overwrite=True,
         )
 
-        pg = grass.mapcalc_start(
+        pg = gs.mapcalc_start(
             "%s_green = 1 * round((%s * %f) + (%s * %f) + (%s * %f) + %f)"
             % (out, panmatch2, b2evect1, pca2, b2evect2, pca3, b2evect3, b2mean),
             overwrite=True,
         )
 
-        pr = grass.mapcalc_start(
+        pr = gs.mapcalc_start(
             "%s_red = 1 * round((%s * %f) + (%s * %f) + (%s * %f) + %f)"
             % (out, panmatch3, b3evect1, pca2, b3evect2, pca3, b3evect3, b3mean),
             overwrite=True,
@@ -702,11 +702,11 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
         pb.wait(), pg.wait(), pr.wait()
         try:
             pb.terminate(), pg.terminate(), pr.terminate()
-        except:
+        except OSError:
             pass
 
     # Cleanup
-    grass.run_command(
+    gs.run_command(
         "g.remove",
         flags="f",
         quiet=True,
@@ -717,7 +717,7 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
 
 def matchhist(original, target, matched):
     # pan/intensity histogram matching using numpy arrays
-    grass.message(_("Histogram matching..."))
+    gs.message(_("Histogram matching..."))
 
     # input images
     original = original.split("@")[0]
@@ -729,17 +729,17 @@ def matchhist(original, target, matched):
 
     for img in images:
         # calculate number of cells for each grey value for for each image
-        stats_out = grass.pipe_command("r.stats", flags="cin", input=img, sep=":")
-        stats = grass.decode(stats_out.communicate()[0]).split("\n")[:-1]
+        stats_out = gs.pipe_command("r.stats", flags="cin", input=img, sep=":")
+        stats = gs.decode(stats_out.communicate()[0]).split("\n")[:-1]
         stats_dict = dict(s.split(":", 1) for s in stats)
         total_cells = 0  # total non-null cells
-        for j in stats_dict:
+        for j in stats_dict.keys():  # noqa: PLC0206
             stats_dict[j] = int(stats_dict[j])
             if j != "*":
                 total_cells += stats_dict[j]
 
         if total_cells < 1:
-            grass.fatal(_("Input has no data. Check region settings."))
+            gs.fatal(_("Input has no data. Check region settings."))
 
         # Make a 2x256 structured array for each image with a
         #   cumulative distribution function (CDF) for each grey value.
@@ -750,11 +750,8 @@ def matchhist(original, target, matched):
             0  # cumulative total of cells for sum of current and all lower grey values
         )
 
-        for n in range(0, 256):
-            if str(n) in stats_dict:
-                num_cells = stats_dict[str(n)]
-            else:
-                num_cells = 0
+        for n in range(256):
+            num_cells = stats_dict.get(str(n), 0)
 
             cum_cells += num_cells
 
@@ -766,50 +763,45 @@ def matchhist(original, target, matched):
             arrays[img][n] = (n, cdf)
 
     # open file for reclass rules
-    outfile = open(grass.tempfile(), "w")
+    with open(gs.tempfile(), "w") as outfile:
+        for i in arrays[original]:
+            # for each grey value and corresponding cdf value in original, find the
+            #   cdf value in target that is closest to the target cdf value
+            difference_list = []
+            for j in arrays[target]:
+                # make a list of the difference between each original cdf value and
+                #   the target cdf value
+                difference_list.append(abs(i[1] - j[1]))
 
-    for i in arrays[original]:
-        # for each grey value and corresponding cdf value in original, find the
-        #   cdf value in target that is closest to the target cdf value
-        difference_list = []
-        for j in arrays[target]:
-            # make a list of the difference between each original cdf value and
-            #   the target cdf value
-            difference_list.append(abs(i[1] - j[1]))
+            # get the smallest difference in the list
+            min_difference = min(difference_list)
 
-        # get the smallest difference in the list
-        min_difference = min(difference_list)
-
-        for j in arrays[target]:
-            # find the grey value in target that corresponds to the cdf
-            #   closest to the original cdf
-            if j[1] <= i[1] + min_difference and j[1] >= i[1] - min_difference:
-                # build a reclass rules file from the original grey value and
-                #   corresponding grey value from target
-                out_line = "%d = %d\n" % (i[0], j[0])
-                outfile.write(out_line)
-                break
-
-    outfile.close()
+            for j in arrays[target]:
+                # find the grey value in target that corresponds to the cdf
+                #   closest to the original cdf
+                if j[1] <= i[1] + min_difference and j[1] >= i[1] - min_difference:
+                    # build a reclass rules file from the original grey value and
+                    #   corresponding grey value from target
+                    out_line = "%d = %d\n" % (i[0], j[0])
+                    outfile.write(out_line)
+                    break
 
     # create reclass of target from reclass rules file
-    result = grass.core.find_file(matched, element="cell")
+    result = gs.core.find_file(matched, element="cell")
     if result["fullname"]:
-        grass.run_command(
-            "g.remove", flags="f", quiet=True, type="raster", name=matched
-        )
-        grass.run_command("r.reclass", input=original, out=matched, rules=outfile.name)
+        gs.run_command("g.remove", flags="f", quiet=True, type="raster", name=matched)
+        gs.run_command("r.reclass", input=original, out=matched, rules=outfile.name)
     else:
-        grass.run_command("r.reclass", input=original, out=matched, rules=outfile.name)
+        gs.run_command("r.reclass", input=original, out=matched, rules=outfile.name)
 
     # Cleanup
     # remove the rules file
-    grass.try_remove(outfile.name)
+    gs.try_remove(outfile.name)
 
     # return reclass of target with histogram that matches original
     return matched
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

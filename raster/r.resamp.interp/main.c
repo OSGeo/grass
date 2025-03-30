@@ -132,7 +132,10 @@ int main(int argc, char *argv[])
                     "threads setting."));
     threads = 1;
 #endif
-
+    if (threads > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
+        threads = 1;
+    }
     bufrows = atoi(memory->answer) * (((1 << 20) / sizeof(DCELL)) / dst_w.cols);
     /* set the output buffer rows to be at most covering the entire map */
     if (bufrows > dst_w.rows) {

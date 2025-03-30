@@ -13,7 +13,7 @@
 #            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
-"""The *grass.jupyter* is a convenient GRASS GIS interface for Jupyter notebooks.
+"""A convenient GRASS GIS interface for Jupyter notebooks.
 
 Python is a great tool for data science and scientific computing. Jupyter_ is an
 environment with computational notebooks which makes it even better tool for
@@ -50,6 +50,14 @@ To use existing data, we start a GRASS session in an existing mapset::
 
 >>> gj.init("grassdata/nc_basic_spm_grass7/user1")
 
+.. note::
+    Contrary to typical command line / GUI module usage, grass.jupyter
+    enables output overwrite by default to align with behaviour of other
+    Python packages and to allow repeated executions of the same cells and
+    of the whole notebook. The default command line behaviour can be
+    restored by setting GRASS_OVERWRITE environmental variable to "0" after
+    `gj.init()` call: `os.environ["GRASS_OVERWRITE"] = "0"`.
+
 All classes and functions for interaction in notebooks are now available under *gj*,
 for example we can display a map with a selected raster and vector::
 
@@ -64,7 +72,7 @@ and interactive ones with live code are available on Binder:
 
 .. image:: https://mybinder.org/badge_logo.svg
     :target:
-        https://mybinder.org/v2/gh/OSGeo/grass/main?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fjupyter_example.ipynb
+        https://mybinder.org/v2/gh/OSGeo/grass/main?urlpath=lab%2Ftree%2Fdoc%2Fexamples%2Fnotebooks%2Fjupyter_example.ipynb
 
 There are also internal classes and functions which are not guaranteed to have
 as stable API, although they are available through their specific submodules.
@@ -95,12 +103,23 @@ mentored by Vaclav Petras, Stephan Blumentrath, and Helena Mitasova.
 
 .. _Jupyter: https://jupyter.org/
 .. _wiki: https://grasswiki.osgeo.org/wiki/GRASS_GIS_Jupyter_notebooks
-.. _GitHub: https://github.com/OSGeo/grass/blob/main/doc/notebooks/jupyter_example.ipynb
+.. _GitHub: https://github.com/OSGeo/grass/blob/main/doc/examples/notebooks/jupyter_example.ipynb
 """
 
 from .interactivemap import InteractiveMap, Raster, Vector
 from .map import Map
 from .map3d import Map3D
+from .seriesmap import SeriesMap
 from .setup import init
 from .timeseriesmap import TimeSeriesMap
-from .seriesmap import SeriesMap
+
+__all__ = [
+    "InteractiveMap",
+    "Map",
+    "Map3D",
+    "Raster",
+    "SeriesMap",
+    "TimeSeriesMap",
+    "Vector",
+    "init",
+]

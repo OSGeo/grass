@@ -73,13 +73,17 @@ sys.path.insert(
     ),
 )
 
-from grass.script import core
+from grass.script import core  # noqa: E402
 
 footer_tmpl = string.Template(
     r"""
 {% block footer %}<hr class="header">
-<p><a href="../index.html">Help Index</a> | <a href="../topics.html">Topics Index</a> | <a href="../keywords.html">Keywords Index</a> | <a href="../full_index.html">Full Index</a></p>
-<p>&copy; 2003-${year} <a href="https://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
+<p><a href="../index.html">Help Index</a>
+ | <a href="../topics.html">Topics Index</a>
+ | <a href="../keywords.html">Keywords Index</a>
+ | <a href="../full_index.html">Full Index</a></p>
+<p>&copy; 2003-${year} <a href="https://grass.osgeo.org">
+GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
 {% endblock %}
 """
 )
@@ -108,6 +112,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.ifconfig",
     "sphinx.ext.viewcode",
+    "sphinx_sitemap",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -124,14 +129,14 @@ master_doc = "index"
 
 # General information about the project.
 project = "Python library documentation"
-copyright = "2024, GRASS Development Team"
+copyright = "2025, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 # The short X.Y version.
-# version = '0.1'
+version = grass_version
 # The full version, including alpha/beta/rc tags.
 # release = '0.1'
 
@@ -203,6 +208,10 @@ html_theme = "traditional"
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
 # html_favicon = None
+
+# The base URL which points to the root of the HTML documentation. It is used
+# to indicate the location of document using the Canonical Link Relation.
+html_baseurl = "https://grass.osgeo.org/grass-stable/manuals/libpython/"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -423,3 +432,14 @@ epub_exclude_files = ["search.html"]
 
 # Where class documentation comes from (class or __init__ docstring).
 autoclass_content = "both"
+
+# sphinx-sitemap extension config
+# https://sphinx-sitemap.readthedocs.io/en/latest/advanced-configuration.html
+sitemap_filename = "sitemap.xml"
+html_baseurl = "https://grass.osgeo.org/"
+sitemap_url_scheme = "grass{version}manuals/libpython/{link}"
+
+sitemap_excludes = [
+    "search.html",
+    "genindex.html",
+]

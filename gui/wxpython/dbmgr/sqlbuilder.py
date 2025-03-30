@@ -21,7 +21,8 @@ This program is free software under the GNU General Public License
 @author Jachym Cepicky <jachym.cepicky gmail.com> (original author)
 @author Martin Landa <landa.martin gmail.com>
 @author Hamish Bowman <hamish_b yahoo.com>
-@author Refactoring, SQLBUilderUpdate by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
+@author Refactoring, SQLBUilderUpdate by Stepan Turek <stepan.turek seznam.cz>
+        (GSoC 2012, mentor: Martin Landa)
 """
 
 import os
@@ -44,11 +45,11 @@ from gui_core.wrap import (
     StaticBox,
 )
 
-import grass.script as grass
+import grass.script as gs
 
 
 class SQLBuilder(wx.Frame):
-    """SQLBuider class
+    """SQLBuilder class
     Base class for classes, which builds SQL statements.
     """
 
@@ -66,9 +67,9 @@ class SQLBuilder(wx.Frame):
         # variables
         self.vectmap = vectmap  # fullname
         if "@" not in self.vectmap:
-            self.vectmap = grass.find_file(self.vectmap, element="vector")["fullname"]
+            self.vectmap = gs.find_file(self.vectmap, element="vector")["fullname"]
             if not self.vectmap:
-                grass.fatal(_("Vector map <%s> not found") % vectmap)
+                gs.fatal(_("Vector map <%s> not found") % vectmap)
         self.mapname, self.mapset = self.vectmap.split("@", 1)
 
         # db info
@@ -313,8 +314,8 @@ class SQLBuilder(wx.Frame):
             flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
             border=5,
         )
-        # self.pagesizer.Add(self.btn_uniqe,0,wx.ALIGN_LEFT|wx.TOP,border=5)
-        # self.pagesizer.Add(self.btn_uniqesample,0,wx.ALIGN_LEFT|wx.TOP,border=5)
+        # self.pagesizer.Add(self.btn_unique,0,wx.ALIGN_LEFT|wx.TOP,border=5)
+        # self.pagesizer.Add(self.btn_uniquesample,0,wx.ALIGN_LEFT|wx.TOP,border=5)
         self.pagesizer.Add(
             self.btn_logicpanel, proportion=0, flag=wx.ALIGN_CENTER_HORIZONTAL
         )
@@ -355,22 +356,21 @@ class SQLBuilder(wx.Frame):
 
     def OnUniqueValues(self, event, justsample=False):
         """Get unique values"""
-        vals = []
         try:
             idx = self.list_columns.GetSelections()[0]
             column = self.list_columns.GetString(idx)
-        except:
+        except IndexError:
             self.list_values.Clear()
             return
 
         self.list_values.Clear()
-
-        sql = "SELECT DISTINCT {column} FROM {table} ORDER BY {column}".format(
+        # Enclose column name with SQL standard double quotes
+        sql = 'SELECT DISTINCT "{column}" FROM {table} ORDER BY "{column}"'.format(
             column=column, table=self.tablename
         )
         if justsample:
             sql += " LIMIT {}".format(255)
-        data = grass.db_select(
+        data = gs.db_select(
             sql=sql, database=self.database, driver=self.driver, sep="{_sep_}"
         )
         if not data:
@@ -381,7 +381,7 @@ class SQLBuilder(wx.Frame):
         i = 0
         items = []
         for item in data:  # sorted(set(map(lambda x: desc['ctype'](x[0]), data))):
-            if desc["type"] not in ("character", "text"):
+            if desc["type"] not in {"character", "text"}:
                 items.append(str(item[0]))
             else:
                 items.append("'{}'".format(GetUnicodeValue(item[0])))
@@ -398,7 +398,8 @@ class SQLBuilder(wx.Frame):
         idx = self.list_columns.GetSelections()
         for i in idx:
             column = self.list_columns.GetString(i)
-            self._add(element="column", value=column)
+            # Enclose column name with SQL standard double quotes
+            self._add(element="column", value=f'"{column}"')
 
         if not self.btn_uniquesample.IsEnabled():
             self.btn_uniquesample.Enable(True)
@@ -413,12 +414,6 @@ class SQLBuilder(wx.Frame):
 
         idx = selection[0]
         value = self.list_values.GetString(idx)
-        idx = self.list_columns.GetSelections()[0]
-        column = self.list_columns.GetString(idx)
-
-        ctype = self.dbInfo.GetTableDesc(self.dbInfo.GetTable(self.layer))[column][
-            "type"
-        ]
 
         self._add(element="value", value=value)
 
@@ -452,7 +447,7 @@ class SQLBuilder(wx.Frame):
         elif self.btn_arithmeticpanel and self.btn_arithmeticpanel.IsShown():
             btns = self.btn_arithmetic
 
-        for key, value in btns.items():
+        for value in btns.values():
             if event.GetId() == value[1]:
                 mark = value[0]
                 break
@@ -579,10 +574,7 @@ class SQLBuilderSelect(SQLBuilder):
                 idx1 = len("select")
                 idx2 = sqlstr.lower().find("from")
                 colstr = sqlstr[idx1:idx2].strip()
-                if colstr == "*":
-                    cols = []
-                else:
-                    cols = colstr.split(",")
+                cols = [] if colstr == "*" else colstr.split(",")
                 if value in cols:
                     cols.remove(value)
                 else:
@@ -603,7 +595,7 @@ class SQLBuilderSelect(SQLBuilder):
                 curspos = self.text_sql.GetLastPosition() + len(newsqlstr)
                 newsqlstr = sqlstr + newsqlstr
 
-        elif element in ["value", "mark"]:
+        elif element in {"value", "mark"}:
             addstr = " " + value + " "
             newsqlstr = sqlstr[:curspos] + addstr + sqlstr[curspos:]
             curspos += len(addstr)
@@ -818,7 +810,7 @@ class SQLBuilderUpdate(SQLBuilder):
         curspos = self.text_sql.GetInsertionPoint()
         newsqlstr = ""
 
-        if element in ["value", "mark", "func"] or (
+        if element in {"value", "mark", "func"} or (
             element == "column" and self.mode.GetSelection() == 2
         ):
             addstr = " " + value + " "
@@ -923,14 +915,11 @@ class SQLBuilderWhere(SQLBuilder):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) not in [3, 4]:
+    if len(sys.argv) not in {3, 4}:
         print(__doc__, file=sys.stderr)
         sys.exit()
 
-    if len(sys.argv) == 3:
-        layer = 1
-    else:
-        layer = int(sys.argv[3])
+    layer = 1 if len(sys.argv) == 3 else int(sys.argv[3])
 
     if sys.argv[1] == "select":
         sqlBuilder = SQLBuilderSelect

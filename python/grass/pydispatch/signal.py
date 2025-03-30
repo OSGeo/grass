@@ -4,11 +4,10 @@ Created on Mon Mar 11 18:39:13 2013
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
-
 from grass.pydispatch import dispatcher
 
 
-def _islambda(function):
+def _islambda(function) -> bool:
     """
     Tests if object is a lambda function.
 
@@ -147,10 +146,7 @@ class Signal:
         will print
         """
         if weak is None:
-            if _islambda(handler):
-                weak = False
-            else:
-                weak = True
+            weak = not _islambda(handler)
         dispatcher.connect(receiver=handler, signal=self, weak=weak)
 
     def disconnect(self, handler, weak=True):
@@ -270,8 +266,7 @@ class Signal:
         Traceback (most recent call last):
         TypeError: mywrite() takes exactly 1 argument (0 given)
         """
-        if "signal" in kwargs:
-            del kwargs["signal"]
+        kwargs.pop("signal", None)
         self.emit(*args, **kwargs)
 
 

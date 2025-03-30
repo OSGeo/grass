@@ -1,75 +1,56 @@
 """
 Functions for mathematical datetime operations
 
-(C) 2011-2013 by the GRASS Development Team
+(C) 2011-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Soeren Gebbert
 """
-from datetime import datetime, timedelta
-from .core import get_tgis_message_interface
+
+from __future__ import annotations
+
 import copy
+from datetime import datetime, timedelta
+from typing import TypedDict
+
+from .core import get_tgis_message_interface
 
 try:
-    import dateutil.parser as parser
+    from dateutil import parser
 
     has_dateutil = True
-except:
+except (ImportError, ModuleNotFoundError):
     has_dateutil = False
 
 
 DAY_IN_SECONDS = 86400
 SECOND_AS_DAY = 1.1574074074074073e-05
 
-###############################################################################
 
-
-def relative_time_to_time_delta(value):
-    """Convert the double value representing days
-    into a timedelta object.
-    """
-
+def relative_time_to_time_delta(value: float) -> timedelta:
+    """Convert the double value representing days into a timedelta object."""
     days = int(value)
     seconds = value % 1
     seconds = round(seconds * DAY_IN_SECONDS)
-
     return timedelta(days, seconds)
 
 
-###############################################################################
-
-
-def time_delta_to_relative_time(delta):
-    """Convert the time delta into a
-    double value, representing days.
-    """
-
+def time_delta_to_relative_time(delta: timedelta) -> float:
+    """Convert the time delta into a double value, representing days."""
     return float(delta.days) + float(delta.seconds * SECOND_AS_DAY)
 
 
-###############################################################################
-
-
-def relative_time_to_time_delta_seconds(value):
-    """Convert the double value representing seconds
-    into a timedelta object.
-    """
-
+def relative_time_to_time_delta_seconds(value: float) -> timedelta:
+    """Convert the double value representing seconds into a timedelta object."""
     days = value / 86400
     seconds = int(value % 86400)
-
     return timedelta(days, seconds)
 
 
-###############################################################################
-
-
-def time_delta_to_relative_time_seconds(delta):
-    """Convert the time delta into a
-    double value, representing seconds.
-    """
+def time_delta_to_relative_time_seconds(delta: timedelta) -> float:
+    """Convert the time delta into a double value, representing seconds."""
 
     return float(delta.days * DAY_IN_SECONDS) + float(delta.seconds)
 
@@ -77,7 +58,9 @@ def time_delta_to_relative_time_seconds(delta):
 ###############################################################################
 
 
-def decrement_datetime_by_string(mydate, increment, mult=1):
+def decrement_datetime_by_string(
+    mydate: datetime, increment: str, mult=1
+) -> datetime | None:
     """Return a new datetime object decremented with the provided
     relative dates specified as string.
     Additional a multiplier can be specified to multiply the increment
@@ -139,13 +122,12 @@ def decrement_datetime_by_string(mydate, increment, mult=1):
     :param mult: A multiplier, default is 1
     :return: The new datetime object or none in case of an error
     """
-    return modify_datetime_by_string(mydate, increment, mult, sign=int(-1))
+    return modify_datetime_by_string(mydate, increment, mult, sign=-1)
 
 
-###############################################################################
-
-
-def increment_datetime_by_string(mydate, increment, mult=1):
+def increment_datetime_by_string(
+    mydate: datetime, increment: str, mult=1
+) -> datetime | None:
     """Return a new datetime object incremented with the provided
     relative dates specified as string.
     Additional a multiplier can be specified to multiply the increment
@@ -156,7 +138,9 @@ def increment_datetime_by_string(mydate, increment, mult=1):
     .. code-block:: python
 
          >>> dt = datetime(2001, 9, 1, 0, 0, 0)
-         >>> string = "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
+         >>> string = (
+         ...     "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
+         ... )
          >>> increment_datetime_by_string(dt, string)
          datetime.datetime(2003, 2, 18, 12, 5)
 
@@ -215,10 +199,9 @@ def increment_datetime_by_string(mydate, increment, mult=1):
     return modify_datetime_by_string(mydate, increment, mult, sign=1)
 
 
-###############################################################################
-
-
-def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
+def modify_datetime_by_string(
+    mydate: datetime, increment: str, mult=1, sign: int = 1
+) -> datetime | None:
     """Return a new datetime object incremented with the provided
     relative dates specified as string.
     Additional a multiplier can be specified to multiply the increment
@@ -238,7 +221,7 @@ def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
     :return: The new datetime object or none in case of an error
     """
     sign = int(sign)
-    if sign != 1 and sign != -1:
+    if sign not in {1, -1}:
         return None
 
     if increment:
@@ -290,8 +273,8 @@ def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
 
 
 def modify_datetime(
-    mydate, years=0, months=0, weeks=0, days=0, hours=0, minutes=0, seconds=0
-):
+    mydate: datetime, years=0, months=0, weeks=0, days=0, hours=0, minutes=0, seconds=0
+) -> datetime:
     """Return a new datetime object incremented with the provided
     relative dates and times"""
 
@@ -319,10 +302,7 @@ def modify_datetime(
         if residual_months == 0:
             residual_months = 1
 
-        try:
-            dt1 = dt1.replace(year=year + years_to_add, month=residual_months)
-        except:
-            raise
+        dt1 = dt1.replace(year=year + years_to_add, month=residual_months)
 
         tdelta_months = dt1 - mydate
     elif months < 0:
@@ -346,10 +326,7 @@ def modify_datetime(
         if residual_months <= 0:
             residual_months += 12
 
-        try:
-            dt1 = dt1.replace(year=year - years_to_remove, month=residual_months)
-        except:
-            raise
+        dt1 = dt1.replace(year=year - years_to_remove, month=residual_months)
 
         tdelta_months = dt1 - mydate
 
@@ -375,7 +352,7 @@ def modify_datetime(
 ###############################################################################
 
 
-def adjust_datetime_to_granularity(mydate, granularity):
+def adjust_datetime_to_granularity(mydate: datetime, granularity):
     """Modify the datetime object to fit the given granularity
 
     - Years will start at the first of January
@@ -388,7 +365,7 @@ def adjust_datetime_to_granularity(mydate, granularity):
 
     .. code-block:: python
 
-        >>> dt = datetime(2001, 8, 8, 12,30,30)
+        >>> dt = datetime(2001, 8, 8, 12, 30, 30)
         >>> adjust_datetime_to_granularity(dt, "5 seconds")
         datetime.datetime(2001, 8, 8, 12, 30, 30)
 
@@ -413,7 +390,9 @@ def adjust_datetime_to_granularity(mydate, granularity):
         >>> adjust_datetime_to_granularity(dt, "2 years")
         datetime.datetime(2001, 1, 1, 0, 0)
 
-        >>> adjust_datetime_to_granularity(dt, "2 years, 3 months, 5 days, 3 hours, 3 minutes, 2 seconds")
+        >>> adjust_datetime_to_granularity(
+        ...     dt, "2 years, 3 months, 5 days, 3 hours, 3 minutes, 2 seconds"
+        ... )
         datetime.datetime(2001, 8, 8, 12, 30, 30)
 
         >>> adjust_datetime_to_granularity(dt, "3 months, 5 days, 3 minutes")
@@ -483,9 +462,9 @@ def adjust_datetime_to_granularity(mydate, granularity):
             minutes = 0
             hours = 0
             if days > weekday:
-                days = days - weekday  # this needs to be fixed
+                days -= weekday  # this needs to be fixed
             else:
-                days = days + weekday  # this needs to be fixed
+                days += weekday  # this needs to be fixed
         elif has_months:  # Start at the first day of the month at 00:00:00
             seconds = 0
             minutes = 0
@@ -512,7 +491,20 @@ def adjust_datetime_to_granularity(mydate, granularity):
 ###############################################################################
 
 
-def compute_datetime_delta(start, end):
+class datetime_delta(TypedDict):
+    """Typed dictionary to return the accumulated delta in year, month, day,
+    hour, minute and second as well as max_days. At runtime, it is a plain dict."""
+
+    year: int
+    month: int
+    day: int
+    hour: int
+    minute: int
+    second: int
+    max_days: int
+
+
+def compute_datetime_delta(start: datetime, end: datetime) -> datetime_delta:
     """Return a dictionary with the accumulated delta in year, month, day,
     hour, minute and second
 
@@ -520,139 +512,140 @@ def compute_datetime_delta(start, end):
 
      .. code-block:: python
 
-         >>> start = datetime(2001, 1, 1, 00,00,00)
-         >>> end = datetime(2001, 1, 1, 00,00,00)
+         >>> start = datetime(2001, 1, 1, 0, 0, 0)
+         >>> end = datetime(2001, 1, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 0, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 0}
 
-         >>> start = datetime(2001, 1, 1, 00,00,14)
-         >>> end = datetime(2001, 1, 1, 00,00,44)
+         >>> start = datetime(2001, 1, 1, 0, 0, 14)
+         >>> end = datetime(2001, 1, 1, 0, 0, 44)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 0, 'second': 30, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 0, 'minute': 0, 'second': 30, 'max_days': 0}
 
-         >>> start = datetime(2001, 1, 1, 00,00,44)
-         >>> end = datetime(2001, 1, 1, 00,01,14)
+         >>> start = datetime(2001, 1, 1, 0, 0, 44)
+         >>> end = datetime(2001, 1, 1, 0, 1, 14)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 0, 'second': 30, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 1}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 0, 'minute': 1, 'second': 30, 'max_days': 0}
 
-         >>> start = datetime(2001, 1, 1, 00,00,30)
-         >>> end = datetime(2001, 1, 1, 00,05,30)
+         >>> start = datetime(2001, 1, 1, 0, 0, 30)
+         >>> end = datetime(2001, 1, 1, 0, 5, 30)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 0, 'second': 300, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 5}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 0, 'minute': 5, 'second': 300, 'max_days': 0}
 
-         >>> start = datetime(2001, 1, 1, 00,00,00)
-         >>> end = datetime(2001, 1, 1, 00,01,00)
+         >>> start = datetime(2001, 1, 1, 0, 0, 0)
+         >>> end = datetime(2001, 1, 1, 0, 1, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 0, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 1}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 0, 'minute': 1, 'second': 0, 'max_days': 0}
 
-         >>> start = datetime(2011,10,31, 00,45,00)
-         >>> end = datetime(2011,10,31, 01,45,00)
+         >>> start = datetime(2011, 10, 31, 0, 45, 0)
+         >>> end = datetime(2011, 10, 31, 1, 45, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 1, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 60}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 1, 'minute': 60, 'second': 0, 'max_days': 0}
 
-         >>> start = datetime(2011,10,31, 00,45,00)
-         >>> end = datetime(2011,10,31, 01,15,00)
+         >>> start = datetime(2011, 10, 31, 0, 45, 0)
+         >>> end = datetime(2011, 10, 31, 1, 15, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 1, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 30}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 1, 'minute': 30, 'second': 0, 'max_days': 0}
 
-         >>> start = datetime(2011,10,31, 00,45,00)
-         >>> end = datetime(2011,10,31, 12,15,00)
+         >>> start = datetime(2011, 10, 31, 0, 45, 0)
+         >>> end = datetime(2011, 10, 31, 12, 15, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 12, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 690}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 12, 'minute': 690, 'second': 0, 'max_days': 0}
 
-         >>> start = datetime(2011,10,31, 00,00,00)
-         >>> end = datetime(2011,10,31, 01,00,00)
+         >>> start = datetime(2011, 10, 31, 0, 0, 0)
+         >>> end = datetime(2011, 10, 31, 1, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 1, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 1, 'minute': 0, 'second': 0, 'max_days': 0}
 
-         >>> start = datetime(2011,10,31, 00,00,00)
-         >>> end = datetime(2011,11,01, 01,00,00)
+         >>> start = datetime(2011, 10, 31, 0, 0, 0)
+         >>> end = datetime(2011, 11, 1, 1, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 25, 'second': 0, 'max_days': 1, 'year': 0, 'day': 1, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 1, 'hour': 25, 'minute': 0, 'second': 0, 'max_days': 1}
 
-         >>> start = datetime(2011,10,31, 12,00,00)
-         >>> end = datetime(2011,11,01, 06,00,00)
+         >>> start = datetime(2011, 10, 31, 12, 0, 0)
+         >>> end = datetime(2011, 11, 1, 6, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 18, 'second': 0, 'max_days': 0, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 0, 'hour': 18, 'minute': 0, 'second': 0, 'max_days': 0}
 
-         >>> start = datetime(2011,11,01, 00,00,00)
-         >>> end = datetime(2011,12,01, 01,00,00)
+         >>> start = datetime(2011, 11, 1, 0, 0, 0)
+         >>> end = datetime(2011, 12, 1, 1, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 721, 'month': 1, 'second': 0, 'max_days': 30, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 1, 'day': 0, 'hour': 721, 'minute': 0, 'second': 0, 'max_days': 30}
 
-         >>> start = datetime(2011,11,01, 00,00,00)
-         >>> end = datetime(2011,11,05, 00,00,00)
+         >>> start = datetime(2011, 11, 1, 0, 0, 0)
+         >>> end = datetime(2011, 11, 5, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'second': 0, 'max_days': 4, 'year': 0, 'day': 4, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 4, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 4}
 
-         >>> start = datetime(2011,10,06, 00,00,00)
-         >>> end = datetime(2011,11,05, 00,00,00)
+         >>> start = datetime(2011, 10, 6, 0, 0, 0)
+         >>> end = datetime(2011, 11, 5, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'second': 0, 'max_days': 30, 'year': 0, 'day': 30, 'minute': 0}
+         {'year': 0, 'month': 0, 'day': 30, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 30}
 
-         >>> start = datetime(2011,12,02, 00,00,00)
-         >>> end = datetime(2012,01,01, 00,00,00)
+         >>> start = datetime(2011, 12, 2, 0, 0, 0)
+         >>> end = datetime(2012, 1, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'second': 0, 'max_days': 30, 'year': 1, 'day': 30, 'minute': 0}
+         {'year': 1, 'month': 0, 'day': 30, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 30}
 
-         >>> start = datetime(2011,01,01, 00,00,00)
-         >>> end = datetime(2011,02,01, 00,00,00)
+         >>> start = datetime(2011, 1, 1, 0, 0, 0)
+         >>> end = datetime(2011, 2, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 1, 'second': 0, 'max_days': 31, 'year': 0, 'day': 0, 'minute': 0}
+         {'year': 0, 'month': 1, 'day': 0, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 31}
 
-         >>> start = datetime(2011,12,01, 00,00,00)
-         >>> end = datetime(2012,01,01, 00,00,00)
+         >>> start = datetime(2011, 12, 1, 0, 0, 0)
+         >>> end = datetime(2012, 1, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 1, 'second': 0, 'max_days': 31, 'year': 1, 'day': 0, 'minute': 0}
+         {'year': 1, 'month': 1, 'day': 0, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 31}
 
-         >>> start = datetime(2011,12,01, 00,00,00)
-         >>> end = datetime(2012,06,01, 00,00,00)
+         >>> start = datetime(2011, 12, 1, 0, 0, 0)
+         >>> end = datetime(2012, 6, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 6, 'second': 0, 'max_days': 183, 'year': 1, 'day': 0, 'minute': 0}
+         {'year': 1, 'month': 6, 'day': 0, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 183}
 
-         >>> start = datetime(2011,06,01, 00,00,00)
-         >>> end = datetime(2021,06,01, 00,00,00)
+         >>> start = datetime(2011, 6, 1, 0, 0, 0)
+         >>> end = datetime(2021, 6, 1, 0, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 120, 'second': 0, 'max_days': 3653, 'year': 10, 'day': 0, 'minute': 0}
+         {'year': 10, 'month': 120, 'day': 0, 'hour': 0, 'minute': 0, 'second': 0, 'max_days': 3653}
 
-         >>> start = datetime(2011,06,01, 00,00,00)
-         >>> end = datetime(2012,06,01, 12,00,00)
+         >>> start = datetime(2011, 6, 1, 0, 0, 0)
+         >>> end = datetime(2012, 6, 1, 12, 0, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 8796, 'month': 12, 'second': 0, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 0}
+         {'year': 1, 'month': 12, 'day': 0, 'hour': 8796, 'minute': 0, 'second': 0, 'max_days': 366}
 
-         >>> start = datetime(2011,06,01, 00,00,00)
-         >>> end = datetime(2012,06,01, 12,30,00)
+         >>> start = datetime(2011, 6, 1, 0, 0, 0)
+         >>> end = datetime(2012, 6, 1, 12, 30, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 8796, 'month': 12, 'second': 0, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 527790}
+         {'year': 1, 'month': 12, 'day': 0, 'hour': 8796, 'minute': 527790, 'second': 0, 'max_days': 366}
 
-         >>> start = datetime(2011,06,01, 00,00,00)
-         >>> end = datetime(2012,06,01, 12,00,05)
+         >>> start = datetime(2011, 6, 1, 0, 0, 0)
+         >>> end = datetime(2012, 6, 1, 12, 0, 5)
          >>> compute_datetime_delta(start, end)
-         {'hour': 8796, 'month': 12, 'second': 31665605, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 0}
+         {'year': 1, 'month': 12, 'day': 0, 'hour': 8796, 'minute': 0, 'second': 31665605, 'max_days': 366}
 
-         >>> start = datetime(2011,06,01, 00,00,00)
-         >>> end = datetime(2012,06,01, 00,30,00)
+         >>> start = datetime(2011, 6, 1, 0, 0, 0)
+         >>> end = datetime(2012, 6, 1, 0, 30, 0)
          >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 12, 'second': 0, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 527070}
+         {'year': 1, 'month': 12, 'day': 0, 'hour': 0, 'minute': 527070, 'second': 0, 'max_days': 366}
 
-         >>> start = datetime(2011,06,01, 00,00,00)
-         >>> end = datetime(2012,06,01, 00,00,05)
-         >>> compute_datetime_delta(start, end)
-         {'hour': 0, 'month': 12, 'second': 31622405, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 0}
+    :return: A dictionary with year, month, day, hour, minute, second and max_days as keys()
+    """  # noqa: E501
+    # TODO: set default values here, and ensure processing below covers all situations,
+    # not leaking these default values
+    comp = datetime_delta(
+        year=0,
+        month=0,
+        day=0,
+        hour=0,
+        minute=0,
+        second=0,
+        max_days=(end - start).days,
+    )
 
-    :return: A dictionary with year, month, day, hour, minute and second as
-             keys()
-    """
-    comp = {}
-
-    day_diff = (end - start).days
-
-    comp["max_days"] = day_diff
+    day_diff = comp["max_days"]
 
     # Date
     # Count full years
-    d = end.year - start.year
-    comp["year"] = d
+    comp["year"] = end.year - start.year
 
     # Count full months
     if start.month == 1 and end.month == 1:
@@ -660,16 +653,13 @@ def compute_datetime_delta(start, end):
     elif start.day == 1 and end.day == 1:
         d = end.month - start.month
         if d < 0:
-            d = d + 12 * comp["year"]
+            d += 12 * comp["year"]
         elif d == 0:
             d = 12 * comp["year"]
         comp["month"] = d
 
     # Count full days
-    if start.day == 1 and end.day == 1:
-        comp["day"] = 0
-    else:
-        comp["day"] = day_diff
+    comp["day"] = 0 if start.day == 1 and end.day == 1 else day_diff
 
     # Time
     # Hours
@@ -678,9 +668,9 @@ def compute_datetime_delta(start, end):
     else:
         d = end.hour - start.hour
         if d < 0:
-            d = d + 24 + 24 * day_diff
+            d += 24 + 24 * day_diff
         else:
-            d = d + 24 * day_diff
+            d += 24 * day_diff
         comp["hour"] = d
 
     # Minutes
@@ -690,14 +680,11 @@ def compute_datetime_delta(start, end):
         d = end.minute - start.minute
         if d != 0:
             if comp["hour"]:
-                d = d + 60 * comp["hour"]
+                d += 60 * comp["hour"]
             else:
-                d = d + 24 * 60 * day_diff
+                d += 24 * 60 * day_diff
         elif d == 0:
-            if comp["hour"]:
-                d = 60 * comp["hour"]
-            else:
-                d = 24 * 60 * day_diff
+            d = 60 * comp["hour"] if comp["hour"] else 24 * 60 * day_diff
 
         comp["minute"] = d
 
@@ -708,11 +695,11 @@ def compute_datetime_delta(start, end):
         d = end.second - start.second
         if d != 0:
             if comp["minute"]:
-                d = d + 60 * comp["minute"]
+                d += 60 * comp["minute"]
             elif comp["hour"]:
-                d = d + 3600 * comp["hour"]
+                d += 3600 * comp["hour"]
             else:
-                d = d + 24 * 60 * 60 * day_diff
+                d += 24 * 60 * 60 * day_diff
         elif d == 0:
             if comp["minute"]:
                 d = 60 * comp["minute"]
@@ -725,13 +712,10 @@ def compute_datetime_delta(start, end):
     return comp
 
 
-###############################################################################
-
-
-def check_datetime_string(time_string, use_dateutil=True):
+def check_datetime_string(time_string: str, use_dateutil: bool = True):
     """Check if  a string can be converted into a datetime object and return the object
 
-    In case datutil is not installed the supported ISO string formats are:
+    In case dateutil is not installed the supported ISO string formats are:
 
     - YYYY-mm-dd
     - YYYY-mm-dd HH:MM:SS
@@ -791,7 +775,7 @@ def check_datetime_string(time_string, use_dateutil=True):
         # relative time. dateutil will interpret a single number as a valid
         # time string, so we have to catch this case beforehand
         try:
-            value = int(time_string)
+            int(time_string)
             return _("Time string seems to specify relative time")
         except ValueError:
             pass
@@ -803,10 +787,10 @@ def check_datetime_string(time_string, use_dateutil=True):
         return time_object
 
     # BC is not supported
-    if "bc" in time_string > 0:
+    if "bc" in time_string:
         return _("Dates Before Christ (BC) are not supported")
 
-    # BC is not supported
+    # Time zones are not supported
     if "+" in time_string:
         return _("Time zones are not supported")
 
@@ -817,7 +801,7 @@ def check_datetime_string(time_string, use_dateutil=True):
                 time_format = "%Y-%m-%dT%H:%M:%S.%f"
             else:
                 time_format = "%Y-%m-%d %H:%M:%S.%f"
-        else:
+        else:  # noqa: PLR5501
             if "T" in time_string:
                 time_format = "%Y-%m-%dT%H:%M:%S"
             else:
@@ -827,14 +811,11 @@ def check_datetime_string(time_string, use_dateutil=True):
 
     try:
         return datetime.strptime(time_string, time_format)
-    except:
-        return _("Unable to parse time string: %s" % time_string)
+    except (ValueError, TypeError):
+        return _("Unable to parse time string: %s") % time_string
 
 
-###############################################################################
-
-
-def string_to_datetime(time_string):
+def string_to_datetime(time_string: str) -> datetime | None:
     """Convert a string into a datetime object
 
     In case datutil is not installed the supported ISO string formats are:
@@ -867,10 +848,7 @@ def string_to_datetime(time_string):
     return time_object
 
 
-###############################################################################
-
-
-def datetime_to_grass_datetime_string(dt):
+def datetime_to_grass_datetime_string(dt: datetime | None) -> str:
     """Convert a python datetime object into a GRASS datetime string
 
     .. code-block:: python
@@ -909,15 +887,13 @@ def datetime_to_grass_datetime_string(dt):
     ]
 
     if dt is None:
-        raise Exception("Empty datetime object in datetime_to_grass_datetime_string")
+        msg = "Empty datetime object in datetime_to_grass_datetime_string"
+        raise Exception(msg)
 
     # Check for time zone info in the datetime object
     if dt.tzinfo is not None:
         tz = dt.tzinfo.utcoffset(0)
-        if tz.seconds > 86400 / 2:
-            tz = (tz.seconds - 86400) / 60
-        else:
-            tz = tz.seconds / 60
+        tz = (tz.seconds - 86400) / 60 if tz.seconds > 86400 / 2 else tz.seconds / 60
 
         string = "%.2i %s %.2i %.2i:%.2i:%.2i %+.4i" % (
             dt.day,
@@ -942,6 +918,8 @@ def datetime_to_grass_datetime_string(dt):
 
 
 ###############################################################################
+
+
 suffix_units = {
     "years": "%Y",
     "year": "%Y",
@@ -958,7 +936,7 @@ suffix_units = {
 }
 
 
-def create_suffix_from_datetime(start_time, granularity):
+def create_suffix_from_datetime(start_time: datetime, granularity) -> str:
     """Create a datetime string based on a datetime object and a provided
     granularity that can be used as suffix for map names.
 
@@ -972,7 +950,7 @@ def create_suffix_from_datetime(start_time, granularity):
     return start_time.strftime(suffix_units[granularity.split(" ")[1]])
 
 
-def create_time_suffix(mapp, end=False):
+def create_time_suffix(mapp, end: bool = False):
     """Create a datetime string based on a map datetime object
 
     :param mapp: a temporal map dataset
@@ -987,21 +965,19 @@ def create_time_suffix(mapp, end=False):
     return sstring
 
 
-def create_numeric_suffix(base, count, zeros):
+def create_numeric_suffix(base, count: int, zeros: str) -> str:
     """Create a string based on count and number of zeros decided by zeros
 
     :param base: the basename for new map
     :param count: a number
-    :param zeros: a string containing the expected number, coming from suffix option like "%05"
+    :param zeros: a string containing the expected number, coming from suffix option
+                  like "%05"
     """
     spli = zeros.split("%")
     if len(spli) == 2:
         suff = spli[1]
         if suff.isdigit():
-            if int(suff[0]) == 0:
-                zero = suff
-            else:
-                zero = "0{nu}".format(nu=suff)
+            zero = suff if int(suff[0]) == 0 else "0{nu}".format(nu=suff)
         else:
             zero = "05"
     else:

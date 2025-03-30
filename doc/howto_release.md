@@ -133,7 +133,7 @@ see: <https://help.github.com/en/articles/creating-releases>.
 ### Tag release
 
 Before creating the tag, it is a good idea to see if the CI jobs are not failing.
-Check on GitHub or use GitHub CLI:
+Check on [GitHub Actions](https://github.com/OSGeo/grass/actions) or use GitHub CLI:
 
 ```bash
 gh run list --branch releasebranch_8_4
@@ -152,7 +152,7 @@ stored for annotated tags including a date; message is suggested by the
 `./utils/update_version.py` script):
 
 ```bash
-git tag $TAG -a -m "..."
+git tag $TAG -a -m "GRASS GIS $VERSION"
 ```
 
 List all tags (annotated will be at the top of both lists):
@@ -174,15 +174,15 @@ so that you can continue in the release process.
 
 ### Create release notes
 
-Generate a draft of release notes using a script. The script the script needs to
+Generate a draft of release notes using a script. The script needs to be
 run from the top directory and will expect its configuration files
 to be in the _utils_ directory.
 
-#### Major and minor releases
+#### First RC of a major and minor releases
 
-For major (X.y.z) and minor (x.Y.z) releases, GitHub API gives good results for the
-first release candidate because it contains contributor handles and can identify
-new contributors, so use with the _api_ backend, e.g.:
+For a first RC of a major (X.y.z) and minor (x.Y.z) release, the GitHub API gives
+good results for the first release candidate because it contains contributor handles
+and can identify new contributors, so use with the _api_ backend, e.g.:
 
 ```bash
 python ./utils/generate_release_notes.py api releasebranch_8_4 8.3.0 $VERSION
@@ -198,7 +198,7 @@ The _git log_ command operates on commits, so use use the _log_ backend:
 python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0 $VERSION
 ```
 
-#### RCs
+#### Between RCs and from last RC to final release
 
 In between RCs and between last RC and final release, the _log_ backend is useful
 for showing updates since the last RC:
@@ -214,7 +214,7 @@ added manually to the result from the _api_ backend.
 
 The script sorts them into categories defined in _utils/release.yml_.
 However, these notes need to be manually edited to collapse related items into
-one. Additionally, a _Highlights_ section needs to be added with manually
+one. Additionally, a _Highlights_ section needs to be added on top with manually
 identified new major features for major and minor releases. For all releases, a
 _Major_ section may need to be added showing critical fixes or breaking changes
 if there are any.
@@ -260,7 +260,8 @@ Eventually, commit with the suggested commit message and push, e.g.:
 
 ```bash
 git show
-git commit include/VERSION -m "..."
+eval $(./utils/update_version.py status --bash)
+git commit include/VERSION -m "version: Back to $VERSION"
 git push upstream
 ```
 
@@ -349,11 +350,14 @@ SERVER2=osgeo7-download
 SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
 echo $SERVER1:$SERVER1DIR
 echo $SERVER2:$SERVER2DIR
+eval $(ssh-agent) && ssh-add
 
-# upload along with associated files:
+# upload along with associated files, creating target dir if still needed
+ssh $USER@$SERVER1 "mkdir -p $SERVER1DIR"
 scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
   INSTALL.md REQUIREMENTS.md CONTRIBUTING.md $USER@$SERVER1:$SERVER1DIR
 
+ssh $USER@$SERVER2 "mkdir -p $SERVER2DIR"
 scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
   INSTALL.md REQUIREMENTS.md CONTRIBUTING.md $USER@$SERVER2:$SERVER2DIR
 
@@ -391,7 +395,7 @@ Update the GRASS version at <https://github.com/landam/wingrass-maintenance-scri
 
 - On major or minor version change (on release branch creation) update
   [dev_packages.csv](https://github.com/landam/wingrass-maintenance-scripts/blob/master/dev_packages.csv)
-- On release (inluding RC) update
+- On release (including RC) update
   [releases.csv](https://github.com/landam/wingrass-maintenance-scripts/blob/master/releases.csv)
   and
   [grass_packager_release.bat](https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_packager_release.bat#L12)
@@ -528,12 +532,12 @@ Add release to history page:
 
 ## Tell others about release
 
-- If release candidate (just a short invitation to test):
+- If release candidate (just a short invitation to test it):
   - <grass-dev@lists.osgeo.org>
   - <grass-user@lists.osgeo.org>
 
 If final release, send out an announcement (press release)
-which is a shortened version of release desciption and website news item.
+which is a shortened version of release description and website news item.
 Note: Do not use relative links.
 
 - Our main mailing lists:

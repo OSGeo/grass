@@ -38,36 +38,46 @@ def get_path(path, vect_name=None):
 
     >>> from grass.script.core import gisenv
     >>> import os
-    >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+    >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
     >>> new_path = get_path(path)
-    >>> new_path2 = os.path.join(gisenv()['GISDBASE'], gisenv()['LOCATION_NAME'],
-    ...                          gisenv()['MAPSET'], 'sqlite', 'sqlite.db')
-    >>> new_path.replace("//","/") == new_path2.replace("//","/")
+    >>> new_path2 = os.path.join(
+    ...     gisenv()["GISDBASE"],
+    ...     gisenv()["LOCATION_NAME"],
+    ...     gisenv()["MAPSET"],
+    ...     "sqlite",
+    ...     "sqlite.db",
+    ... )
+    >>> new_path.replace("//", "/") == new_path2.replace("//", "/")
     True
-    >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/vector/$MAP/sqlite.db'
+    >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/vector/$MAP/sqlite.db"
     >>> new_path = get_path(path, "test")
-    >>> new_path2 = os.path.join(gisenv()['GISDBASE'], gisenv()['LOCATION_NAME'],
-    ...                          gisenv()['MAPSET'], 'vector', 'test', 'sqlite.db')
-    >>> new_path.replace("//","/") == new_path2.replace("//","/")
+    >>> new_path2 = os.path.join(
+    ...     gisenv()["GISDBASE"],
+    ...     gisenv()["LOCATION_NAME"],
+    ...     gisenv()["MAPSET"],
+    ...     "vector",
+    ...     "test",
+    ...     "sqlite.db",
+    ... )
+    >>> new_path.replace("//", "/") == new_path2.replace("//", "/")
     True
 
     """
     if "$" not in path:
         return path
-    else:
-        mapset = Mapset()
-        path = path.replace("$GISDBASE", mapset.gisdbase)
-        path = path.replace("$LOCATION_NAME", mapset.location)
-        path = path.replace("$MAPSET", mapset.name)
-        if vect_name is not None:
-            path = path.replace("$MAP", vect_name)
-        return path
+    mapset = Mapset()
+    path = path.replace("$GISDBASE", mapset.gisdbase)
+    path = path.replace("$LOCATION_NAME", mapset.location)
+    path = path.replace("$MAPSET", mapset.name)
+    if vect_name is not None:
+        path = path.replace("$MAP", vect_name)
+    return path
 
 
 class Filters:
     """Help user to build a simple sql query.
 
-    >>> filter = Filters('table')
+    >>> filter = Filters("table")
     >>> filter.get_sql()
     'SELECT * FROM table;'
     >>> filter.where("area<10000").get_sql()
@@ -123,9 +133,9 @@ class Filters:
         :type number: int
         """
         if not isinstance(number, int):
-            raise ValueError("Must be an integer.")
-        else:
-            self._limit = "LIMIT {number}".format(number=number)
+            msg = "Must be an integer."
+            raise ValueError(msg)
+        self._limit = "LIMIT {number}".format(number=number)
         return self
 
     def group_by(self, *groupby):
@@ -139,7 +149,7 @@ class Filters:
 
     def get_sql(self):
         """Return the SQL query"""
-        sql_list = list()
+        sql_list = []
         if self._select is None:
             self.select()
         sql_list.append(self._select)
@@ -172,18 +182,18 @@ class Columns:
     For a sqlite table:
 
     >>> import sqlite3
-    >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-    >>> cols_sqlite = Columns(test_vector_name,
-    ...                       sqlite3.connect(get_path(path)))
+    >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
+    >>> cols_sqlite = Columns(test_vector_name, sqlite3.connect(get_path(path)))
     >>> cols_sqlite.tname
     'table_doctest_map'
 
     For a postgreSQL table:
 
-    >>> import psycopg2 as pg                              #doctest: +SKIP
-    >>> cols_pg = Columns(test_vector_name,
-    ...                   pg.connect('host=localhost dbname=grassdb')) #doctest: +SKIP
-    >>> cols_pg.tname #doctest: +SKIP
+    >>> import psycopg2 as pg  # doctest: +SKIP
+    >>> cols_pg = Columns(
+    ...     test_vector_name, pg.connect("host=localhost dbname=grassdb")
+    ... )  # doctest: +SKIP
+    >>> cols_pg.tname  # doctest: +SKIP
     'table_doctest_map'                                   #doctest: +SKIP
 
     """
@@ -218,7 +228,7 @@ class Columns:
         """Return True if two table have the same columns.
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> connection = sqlite3.connect(get_path(path))
         >>> cols0 = Columns(test_vector_name, connection)
         >>> cols1 = Columns(test_vector_name, connection)
@@ -237,15 +247,15 @@ class Columns:
         """Return True if is a psycopg connection.
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-        >>> cols_sqlite = Columns(test_vector_name,
-        ...                       sqlite3.connect(get_path(path)))
+        >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
+        >>> cols_sqlite = Columns(test_vector_name, sqlite3.connect(get_path(path)))
         >>> cols_sqlite.is_pg()
         False
-        >>> import psycopg2 as pg #doctest: +SKIP
-        >>> cols_pg = Columns(test_vector_name,
-        ...                   pg.connect('host=localhost dbname=grassdb')) #doctest: +SKIP
-        >>> cols_pg.is_pg() #doctest: +SKIP
+        >>> import psycopg2 as pg  # doctest: +SKIP
+        >>> cols_pg = Columns(
+        ...     test_vector_name, pg.connect("host=localhost dbname=grassdb")
+        ... )  # doctest: +SKIP
+        >>> cols_pg.is_pg()  # doctest: +SKIP
         True
 
         """
@@ -255,9 +265,9 @@ class Columns:
         """Read columns name and types from table and update the odict
         attribute.
         """
+        cur = self.conn.cursor()
         if self.is_pg():
             # is a postgres connection
-            cur = self.conn.cursor()
             cur.execute("SELECT oid,typname FROM pg_type")
             diz = dict(cur.fetchall())
             odict = OrderedDict()
@@ -271,22 +281,20 @@ class Columns:
                     odict[name] = diz[ctype]
             except pg.ProgrammingError:
                 pass
-            self.odict = odict
         else:
             # is a sqlite connection
-            cur = self.conn.cursor()
             cur.execute(sql.PRAGMA.format(tname=self.tname))
             descr = cur.fetchall()
             odict = OrderedDict()
             for column in descr:
                 name, ctype = column[1:3]
                 odict[name] = ctype
-            self.odict = odict
+        self.odict = odict
         values = ",".join(
             [
                 "?",
             ]
-            * self.__len__()
+            * (len(self))
         )
         kv = ",".join(["%s=?" % k for k in self.odict.keys() if k != self.key])
         where = "%s=?" % self.key
@@ -300,37 +308,36 @@ class Columns:
         Remove it is used to remove a columns.
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-        >>> cols_sqlite = Columns(test_vector_name,
-        ...                       sqlite3.connect(get_path(path)))
-        >>> cols_sqlite.sql_descr()                   # doctest: +ELLIPSIS
+        >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
+        >>> cols_sqlite = Columns(test_vector_name, sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.sql_descr()  # doctest: +ELLIPSIS
         'cat INTEGER, name varchar(50), value double precision'
-        >>> import psycopg2 as pg                         # doctest: +SKIP
-        >>> cols_pg = Columns(test_vector_name,
-        ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
-        >>> cols_pg.sql_descr()                 # doctest: +ELLIPSIS +SKIP
+        >>> import psycopg2 as pg  # doctest: +SKIP
+        >>> cols_pg = Columns(
+        ...     test_vector_name, pg.connect("host=localhost dbname=grassdb")
+        ... )  # doctest: +SKIP
+        >>> cols_pg.sql_descr()  # doctest: +ELLIPSIS +SKIP
         'cat INTEGER, name varchar(50), value double precision'
         """
         if remove:
             return ", ".join(
                 ["%s %s" % (key, val) for key, val in self.items() if key != remove]
             )
-        else:
-            return ", ".join(["%s %s" % (key, val) for key, val in self.items()])
+        return ", ".join(["%s %s" % (key, val) for key, val in self.items()])
 
     def types(self):
         """Return a list with the column types.
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-        >>> cols_sqlite = Columns(test_vector_name,
-        ...                       sqlite3.connect(get_path(path)))
-        >>> cols_sqlite.types()                       # doctest: +ELLIPSIS
+        >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
+        >>> cols_sqlite = Columns(test_vector_name, sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.types()  # doctest: +ELLIPSIS
         ['INTEGER', 'varchar(50)', 'double precision']
-        >>> import psycopg2 as pg                         # doctest: +SKIP
-        >>> cols_pg = Columns(test_vector_name,
-        ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
-        >>> cols_pg.types()                     # doctest: +ELLIPSIS +SKIP
+        >>> import psycopg2 as pg  # doctest: +SKIP
+        >>> cols_pg = Columns(
+        ...     test_vector_name, pg.connect("host=localhost dbname=grassdb")
+        ... )  # doctest: +SKIP
+        >>> cols_pg.types()  # doctest: +ELLIPSIS +SKIP
         ['INTEGER', 'varchar(50)', 'double precision']
 
         """
@@ -341,41 +348,39 @@ class Columns:
         Remove it is used to remove a columns.
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-        >>> cols_sqlite = Columns(test_vector_name,
-        ...                       sqlite3.connect(get_path(path)))
-        >>> cols_sqlite.names()                      # doctest: +ELLIPSIS
+        >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
+        >>> cols_sqlite = Columns(test_vector_name, sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.names()  # doctest: +ELLIPSIS
         ['cat', 'name', 'value']
-        >>> import psycopg2 as pg                         # doctest: +SKIP
-        >>> cols_pg = Columns(test_vector_name,       # doctest: +SKIP
-        ...                   pg.connect('host=localhost dbname=grassdb'))
-        >>> cols_pg.names()                     # doctest: +ELLIPSIS +SKIP
+        >>> import psycopg2 as pg  # doctest: +SKIP
+        >>> cols_pg = Columns(
+        ...     test_vector_name,  # doctest: +SKIP
+        ...     pg.connect("host=localhost dbname=grassdb"),
+        ... )
+        >>> cols_pg.names()  # doctest: +ELLIPSIS +SKIP
         ['cat', 'name', 'value']
 
         """
+        nams = list(self.odict.keys())
         if remove:
-            nams = list(self.odict.keys())
             nams.remove(remove)
-        else:
-            nams = list(self.odict.keys())
         if unicod:
             return nams
-        else:
-            return [str(name) for name in nams]
+        return [str(name) for name in nams]
 
     def items(self):
         """Return a list of tuple with column name and column type.
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-        >>> cols_sqlite = Columns(test_vector_name,
-        ...                       sqlite3.connect(get_path(path)))
-        >>> cols_sqlite.items()                       # doctest: +ELLIPSIS
+        >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
+        >>> cols_sqlite = Columns(test_vector_name, sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.items()  # doctest: +ELLIPSIS
         [('cat', 'INTEGER'), ('name', 'varchar(50)'), ('value', 'double precision')]
-        >>> import psycopg2 as pg                         # doctest: +SKIP
-        >>> cols_pg = Columns(test_vector_name,
-        ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
-        >>> cols_pg.items()                     # doctest: +ELLIPSIS +SKIP
+        >>> import psycopg2 as pg  # doctest: +SKIP
+        >>> cols_pg = Columns(
+        ...     test_vector_name, pg.connect("host=localhost dbname=grassdb")
+        ... )  # doctest: +SKIP
+        >>> cols_pg.items()  # doctest: +ELLIPSIS +SKIP
         [('cat', 'INTEGER'), ('name', 'varchar(50)'), ('value', 'double precision')]
 
         """
@@ -390,21 +395,21 @@ class Columns:
         :type col_type: str
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> from grass.pygrass.utils import copy, remove
-        >>> copy(test_vector_name,'mycensus','vect')
-        >>> cols_sqlite = Columns('mycensus',
-        ...                       sqlite3.connect(get_path(path)))
-        >>> cols_sqlite.add(['n_pizza'], ['INT'])
-        >>> 'n_pizza' in cols_sqlite
+        >>> copy(test_vector_name, "mycensus", "vect")
+        >>> cols_sqlite = Columns("mycensus", sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.add(["n_pizza"], ["INT"])
+        >>> "n_pizza" in cols_sqlite
         True
-        >>> import psycopg2 as pg                         # doctest: +SKIP
-        >>> cols_pg = Columns('boundary_municp_pg',
-        ...                   pg.connect('host=localhost dbname=grassdb'))  #doctest: +SKIP
-        >>> cols_pg.add('n_pizza', 'INT')                 # doctest: +SKIP
-        >>> 'n_pizza' in cols_pg                          # doctest: +SKIP
+        >>> import psycopg2 as pg  # doctest: +SKIP
+        >>> cols_pg = Columns(
+        ...     "boundary_municp_pg", pg.connect("host=localhost dbname=grassdb")
+        ... )  # doctest: +SKIP
+        >>> cols_pg.add("n_pizza", "INT")  # doctest: +SKIP
+        >>> "n_pizza" in cols_pg  # doctest: +SKIP
         True
-        >>> remove('mycensus', 'vect')
+        >>> remove("mycensus", "vect")
 
         """
 
@@ -425,7 +430,7 @@ class Columns:
             col = col_type.upper()
             valid = [col.startswith(tp) for tp in valid_type]
             if not any(valid):
-                str_err = "Type: %r is not supported." "\nSupported types are: %s"
+                str_err = "Type: %r is not supported.\nSupported types are: %s"
                 raise TypeError(str_err % (col_type, ", ".join(valid_type)))
             return col_type
 
@@ -462,29 +467,29 @@ class Columns:
         :type new_name: str
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> from grass.pygrass.utils import copy, remove
-        >>> copy(test_vector_name,'mycensus','vect')
-        >>> cols_sqlite = Columns('mycensus',
-        ...                       sqlite3.connect(get_path(path)))
-        >>> cols_sqlite.add(['n_pizza'], ['INT'])
-        >>> 'n_pizza' in cols_sqlite
+        >>> copy(test_vector_name, "mycensus", "vect")
+        >>> cols_sqlite = Columns("mycensus", sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.add(["n_pizza"], ["INT"])
+        >>> "n_pizza" in cols_sqlite
         True
-        >>> cols_sqlite.rename('n_pizza', 'n_pizzas')  # doctest: +ELLIPSIS
-        >>> 'n_pizza' in cols_sqlite
+        >>> cols_sqlite.rename("n_pizza", "n_pizzas")  # doctest: +ELLIPSIS
+        >>> "n_pizza" in cols_sqlite
         False
-        >>> 'n_pizzas' in cols_sqlite
+        >>> "n_pizzas" in cols_sqlite
         True
 
-        >>> import psycopg2 as pg                         # doctest: +SKIP
-        >>> cols_pg = Columns(test_vector_name,
-        ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
-        >>> cols_pg.rename('n_pizza', 'n_pizzas')         # doctest: +SKIP
-        >>> 'n_pizza' in cols_pg                          # doctest: +SKIP
+        >>> import psycopg2 as pg  # doctest: +SKIP
+        >>> cols_pg = Columns(
+        ...     test_vector_name, pg.connect("host=localhost dbname=grassdb")
+        ... )  # doctest: +SKIP
+        >>> cols_pg.rename("n_pizza", "n_pizzas")  # doctest: +SKIP
+        >>> "n_pizza" in cols_pg  # doctest: +SKIP
         False
-        >>> 'n_pizzas' in cols_pg                         # doctest: +SKIP
+        >>> "n_pizzas" in cols_pg  # doctest: +SKIP
         True
-        >>> remove('mycensus', 'vect')
+        >>> remove("mycensus", "vect")
 
         """
         cur = self.conn.cursor()
@@ -520,40 +525,38 @@ class Columns:
         :type new_type: str
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> from grass.pygrass.utils import copy, remove
-        >>> copy(test_vector_name,'mycensus','vect')
-        >>> cols_sqlite = Columns('mycensus',
-        ...                       sqlite3.connect(get_path(path)))
-        >>> cols_sqlite.add(['n_pizzas'], ['INT'])
-        >>> cols_sqlite.cast('n_pizzas', 'float8')  # doctest: +ELLIPSIS
+        >>> copy(test_vector_name, "mycensus", "vect")
+        >>> cols_sqlite = Columns("mycensus", sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.add(["n_pizzas"], ["INT"])
+        >>> cols_sqlite.cast("n_pizzas", "float8")  # doctest: +ELLIPSIS
         Traceback (most recent call last):
           ...
         grass.exceptions.DBError: SQLite does not support to cast columns.
-        >>> import psycopg2 as pg                         # doctest: +SKIP
-        >>> cols_pg = Columns(test_vector_name,
-        ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
-        >>> cols_pg.cast('n_pizzas', 'float8')            # doctest: +SKIP
-        >>> cols_pg['n_pizzas']                           # doctest: +SKIP
+        >>> import psycopg2 as pg  # doctest: +SKIP
+        >>> cols_pg = Columns(
+        ...     test_vector_name, pg.connect("host=localhost dbname=grassdb")
+        ... )  # doctest: +SKIP
+        >>> cols_pg.cast("n_pizzas", "float8")  # doctest: +SKIP
+        >>> cols_pg["n_pizzas"]  # doctest: +SKIP
         'float8'
-        >>> remove('mycensus', 'vect')
+        >>> remove("mycensus", "vect")
 
         .. warning ::
 
            It is not possible to cast a column with sqlite
 
         """
-        if self.is_pg():
-            cur = self.conn.cursor()
-            cur.execute(
-                sql.CAST_COL.format(tname=self.tname, col=col_name, ctype=new_type)
-            )
-            self.conn.commit()
-            cur.close()
-            self.update_odict()
-        else:
+        if not self.is_pg():
             # sqlite does not support rename columns:
-            raise DBError("SQLite does not support to cast columns.")
+            msg = "SQLite does not support to cast columns."
+            raise DBError(msg)
+        cur = self.conn.cursor()
+        cur.execute(sql.CAST_COL.format(tname=self.tname, col=col_name, ctype=new_type))
+        self.conn.commit()
+        cur.close()
+        self.update_odict()
 
     def drop(self, col_name):
         """Drop a column from the table.
@@ -562,22 +565,22 @@ class Columns:
         :type col_name: str
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> from grass.pygrass.utils import copy, remove
-        >>> copy(test_vector_name,'mycensus','vect')
-        >>> cols_sqlite = Columns('mycensus',
-        ...                       sqlite3.connect(get_path(path)))
-        >>> cols_sqlite.drop('name')                 # doctest: +ELLIPSIS
-        >>> 'name' in cols_sqlite
+        >>> copy(test_vector_name, "mycensus", "vect")
+        >>> cols_sqlite = Columns("mycensus", sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.drop("name")  # doctest: +ELLIPSIS
+        >>> "name" in cols_sqlite
         False
 
-        >>> import psycopg2 as pg                         # doctest: +SKIP
-        >>> cols_pg = Columns(test_vector_name,
-        ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
-        >>> cols_pg.drop('name') # doctest: +SKIP
-        >>> 'name' in cols_pg # doctest: +SKIP
+        >>> import psycopg2 as pg  # doctest: +SKIP
+        >>> cols_pg = Columns(
+        ...     test_vector_name, pg.connect("host=localhost dbname=grassdb")
+        ... )  # doctest: +SKIP
+        >>> cols_pg.drop("name")  # doctest: +SKIP
+        >>> "name" in cols_pg  # doctest: +SKIP
         False
-        >>> remove('mycensus','vect')
+        >>> remove("mycensus", "vect")
 
         """
         cur = self.conn.cursor()
@@ -602,8 +605,14 @@ class Link:
     It is possible to define a Link object or given all the information
     (layer, name, table name, key, database, driver):
 
-    >>> link = Link(1, 'link0', test_vector_name, 'cat',
-    ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db', 'sqlite')
+    >>> link = Link(
+    ...     1,
+    ...     "link0",
+    ...     test_vector_name,
+    ...     "cat",
+    ...     "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db",
+    ...     "sqlite",
+    ... )
     >>> link.layer
     1
     >>> link.name
@@ -622,16 +631,16 @@ class Link:
 
     It is possible to change parameters with:
 
-    >>> link.driver = 'pg'                                # doctest: +SKIP
-    >>> link.driver                                       # doctest: +SKIP
+    >>> link.driver = "pg"  # doctest: +SKIP
+    >>> link.driver  # doctest: +SKIP
     'pg'
-    >>> link.driver = 'postgres'                # doctest: +ELLIPSIS +SKIP
+    >>> link.driver = "postgres"  # doctest: +ELLIPSIS +SKIP
     Traceback (most recent call last):
       ...
     TypeError: Driver not supported, use: sqlite, pg.
-    >>> link.driver                                       # doctest: +SKIP
+    >>> link.driver  # doctest: +SKIP
     'pg'
-    >>> link.number = 0                         # doctest: +ELLIPSIS +SKIP
+    >>> link.number = 0  # doctest: +ELLIPSIS +SKIP
     Traceback (most recent call last):
       ...
     TypeError: Number must be positive and greater than 0.
@@ -640,7 +649,7 @@ class Link:
     Or given a c_fieldinfo object that is a ctypes pointer to the field_info C
     struct. ::
 
-    >>> link = Link(c_fieldinfo = ctypes.pointer(libvect.field_info()))
+    >>> link = Link(c_fieldinfo=ctypes.pointer(libvect.field_info()))
 
     """
 
@@ -649,7 +658,8 @@ class Link:
 
     def _set_layer(self, number):
         if number <= 0:
-            raise TypeError("Number must be positive and greater than 0.")
+            msg = "Number must be positive and greater than 0."
+            raise TypeError(msg)
         self.c_fieldinfo.contents.number = number
 
     layer = property(
@@ -696,18 +706,17 @@ class Link:
         return decode(self.c_fieldinfo.contents.driver)
 
     def _set_driver(self, driver):
-        if driver in DRIVERS:
-            self.c_fieldinfo.contents.driver = ReturnString(driver)
-        elif driver in UNSUPPORTED_DRIVERS:
-            raise NotImplementedError(
-                "The database driver %s is not supported by PyGRASS, "
-                "use: %s." % (driver, ", ".join(DRIVERS))
-            )
-        else:
+        if driver not in DRIVERS:
+            if driver in UNSUPPORTED_DRIVERS:
+                raise NotImplementedError(
+                    "The database driver %s is not supported by PyGRASS, use: %s."
+                    % (driver, ", ".join(DRIVERS))
+                )
             raise ValueError(
-                "The database driver %s is not known to PyGRASS, "
-                "use: %s." % (driver, ", ".join(DRIVERS))
+                "The database driver %s is not known to PyGRASS, use: %s."
+                % (driver, ", ".join(DRIVERS))
             )
+        self.c_fieldinfo.contents.driver = ReturnString(driver)
 
     driver = property(
         fget=_get_driver,
@@ -722,7 +731,7 @@ class Link:
         name=None,
         table=None,
         key="cat",
-        database="$GISDBASE/$LOCATION_NAME/" "$MAPSET/sqlite/sqlite.db",
+        database="$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db",
         driver="sqlite",
         c_fieldinfo=None,
     ):
@@ -743,22 +752,37 @@ class Link:
     def __eq__(self, link):
         """Return True if two Link instance have the same parameters.
 
-        >>> l0 = Link(1, 'link0', test_vector_name, 'cat',
-        ...           '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db', 'sqlite')
-        >>> l1 = Link(1, 'link0', test_vector_name, 'cat',
-        ...           '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db', 'sqlite')
-        >>> l2 = Link(2, 'link0', test_vector_name, 'cat',
-        ...           '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db', 'sqlite')
+        >>> l0 = Link(
+        ...     1,
+        ...     "link0",
+        ...     test_vector_name,
+        ...     "cat",
+        ...     "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db",
+        ...     "sqlite",
+        ... )
+        >>> l1 = Link(
+        ...     1,
+        ...     "link0",
+        ...     test_vector_name,
+        ...     "cat",
+        ...     "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db",
+        ...     "sqlite",
+        ... )
+        >>> l2 = Link(
+        ...     2,
+        ...     "link0",
+        ...     test_vector_name,
+        ...     "cat",
+        ...     "$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db",
+        ...     "sqlite",
+        ... )
         >>> l0 == l1
         True
         >>> l1 == l2
         False
         """
         attrs = ["layer", "name", "table_name", "key", "driver"]
-        for attr in attrs:
-            if getattr(self, attr) != getattr(link, attr):
-                return False
-        return True
+        return all(getattr(self, attr) == getattr(link, attr) for attr in attrs)
 
     def __ne__(self, other):
         return not self == other
@@ -769,17 +793,23 @@ class Link:
     def connection(self):
         """Return a connection object.
 
-        >>> link = Link(1, 'link0', test_vector_name, 'cat',
-        ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db',
-        ...             'sqlite')
+        >>> link = Link(
+        ...     1,
+        ...     "link0",
+        ...     test_vector_name,
+        ...     "cat",
+        ...     "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db",
+        ...     "sqlite",
+        ... )
         >>> conn = link.connection()
         >>> cur = conn.cursor()
         >>> link.table_name
         'table_doctest_map'
-        >>> cur.execute("SELECT cat, name, value from %s" %
-        ...             link.table_name)              # doctest: +ELLIPSIS
+        >>> cur.execute(
+        ...     "SELECT cat, name, value from %s" % link.table_name
+        ... )  # doctest: +ELLIPSIS
         <sqlite3.Cursor object at ...>
-        >>> cur.fetchone()     #doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> cur.fetchone()  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         (1, 'point', 1.0)
         >>> cur.close()
         >>> conn.close()
@@ -789,7 +819,7 @@ class Link:
         if driver == "sqlite":
             import sqlite3
 
-            # Numpy is using some custom integer data types to efficiently
+            # NumPy is using some custom integer data types to efficiently
             # pack data into memory. Since these types aren't familiar to
             # sqlite, you'll have to tell it about how to handle them.
             for t in (
@@ -808,7 +838,7 @@ class Link:
             if not os.path.exists(dbdirpath):
                 os.mkdir(dbdirpath)
             return sqlite3.connect(dbpath)
-        elif driver == "pg":
+        if driver == "pg":
             try:
                 import psycopg2
 
@@ -818,18 +848,23 @@ class Link:
             except ImportError:
                 er = "You need to install psycopg2 to connect with this table."
                 raise ImportError(er)
-        else:
-            str_err = "Driver is not supported yet, pleas use: sqlite or pg"
-            raise TypeError(str_err)
+
+        str_err = "Driver is not supported yet, pleas use: sqlite or pg"
+        raise TypeError(str_err)
 
     def table(self):
         """Return a Table object.
 
-        >>> link = Link(1, 'link0', test_vector_name, 'cat',
-        ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db',
-        ...             'sqlite')
+        >>> link = Link(
+        ...     1,
+        ...     "link0",
+        ...     test_vector_name,
+        ...     "cat",
+        ...     "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db",
+        ...     "sqlite",
+        ... )
         >>> table = link.table()
-        >>> table.filters.select('cat', 'name', 'value')
+        >>> table.filters.select("cat", "name", "value")
         Filters('SELECT cat, name, value FROM table_doctest_map;')
         >>> cur = table.execute()
         >>> cur.fetchone()
@@ -842,9 +877,14 @@ class Link:
     def info(self):
         """Print information of the link.
 
-        >>> link = Link(1, 'link0', test_vector_name, 'cat',
-        ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db',
-        ...             'sqlite')
+        >>> link = Link(
+        ...     1,
+        ...     "link0",
+        ...     test_vector_name,
+        ...     "cat",
+        ...     "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db",
+        ...     "sqlite",
+        ... )
         >>> link.info()
         layer:     1
         name:      link0
@@ -867,7 +907,7 @@ class DBlinks:
 
     >>> from grass.pygrass.vector import VectorTopo
     >>> cens = VectorTopo(test_vector_name)
-    >>> cens.open(mode='r')
+    >>> cens.open(mode="r")
     >>> dblinks = DBlinks(cens.c_mapinfo)
     >>> dblinks
     DBlinks([Link(1, table_doctest_map, sqlite)])
@@ -891,11 +931,10 @@ class DBlinks:
     def __getitem__(self, item):
         if isinstance(item, int):
             return self.by_index(item)
-        else:
-            return self.by_name(item)
+        return self.by_name(item)
 
     def __repr__(self):
-        return "DBlinks(%r)" % [link for link in self.__iter__()]
+        return "DBlinks(%r)" % list(self.__iter__())
 
     def by_index(self, indx):
         """Return a Link object by index
@@ -943,14 +982,20 @@ class DBlinks:
 
          >>> from grass.pygrass.vector import VectorTopo
          >>> test_vect = VectorTopo(test_vector_name)
-         >>> test_vect.open(mode='r')
+         >>> test_vect.open(mode="r")
          >>> dblinks = DBlinks(test_vect.c_mapinfo)
          >>> dblinks
          DBlinks([Link(1, table_doctest_map, sqlite)])
-         >>> link = Link(2, 'pg_link', test_vector_name, 'cat',
-         ...             'host=localhost dbname=grassdb', 'pg') # doctest: +SKIP
-         >>> dblinks.add(link)                             # doctest: +SKIP
-         >>> dblinks                                       # doctest: +SKIP
+         >>> link = Link(
+         ...     2,
+         ...     "pg_link",
+         ...     test_vector_name,
+         ...     "cat",
+         ...     "host=localhost dbname=grassdb",
+         ...     "pg",
+         ... )  # doctest: +SKIP
+         >>> dblinks.add(link)  # doctest: +SKIP
+         >>> dblinks  # doctest: +SKIP
          DBlinks([Link(1, table_doctest_map, sqlite)])
 
         """
@@ -976,14 +1021,13 @@ class DBlinks:
 
         >>> from grass.pygrass.vector import VectorTopo
         >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open(mode='r')
+        >>> test_vect.open(mode="r")
         >>> dblinks = DBlinks(test_vect.c_mapinfo)
         >>> dblinks
         DBlinks([Link(1, table_doctest_map, sqlite)])
-        >>> dblinks.remove('pg_link')                     # doctest: +SKIP
+        >>> dblinks.remove("pg_link")  # doctest: +SKIP
         >>> dblinks  # need to open vector map in write mode
         DBlinks([Link(1, table_doctest_map, sqlite)])
-
 
         """
         if force:
@@ -1005,16 +1049,17 @@ class Table:
     """
 
     >>> import sqlite3
-    >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-    >>> tab_sqlite = Table(name=test_vector_name,
-    ...                    connection=sqlite3.connect(get_path(path)))
+    >>> path = "$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db"
+    >>> tab_sqlite = Table(
+    ...     name=test_vector_name, connection=sqlite3.connect(get_path(path))
+    ... )
     >>> tab_sqlite.name
     'table_doctest_map'
-    >>> import psycopg2                                   # doctest: +SKIP
-    >>> tab_pg = Table(test_vector_name,
-    ...                psycopg2.connect('host=localhost dbname=grassdb',
-    ...                                 'pg'))            # doctest: +SKIP
-    >>> tab_pg.columns                          # doctest: +ELLIPSIS +SKIP
+    >>> import psycopg2  # doctest: +SKIP
+    >>> tab_pg = Table(
+    ...     test_vector_name, psycopg2.connect("host=localhost dbname=grassdb", "pg")
+    ... )  # doctest: +SKIP
+    >>> tab_pg.columns  # doctest: +ELLIPSIS +SKIP
     Columns([('cat', 'int4'), ...])
 
     """
@@ -1048,9 +1093,10 @@ class Table:
         """
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-        >>> tab_sqlite = Table(name=test_vector_name,
-        ...                    connection=sqlite3.connect(get_path(path)))
+        >>> path = "$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db"
+        >>> tab_sqlite = Table(
+        ...     name=test_vector_name, connection=sqlite3.connect(get_path(path))
+        ... )
         >>> tab_sqlite
         Table('table_doctest_map')
 
@@ -1071,24 +1117,21 @@ class Table:
         :param cursor: the cursor to connect, if None it use the cursor
                        of connection table object
         :type cursor: Cursor object
-        :param force: True to remove the table, by default False to print
-                      advice
+        :param force: True to remove the table, by default False to print advice
         :type force: bool
         """
 
-        cur = cursor if cursor else self.conn.cursor()
+        cur = cursor or self.conn.cursor()
         if self.exist(cursor=cur):
             used = db_table_in_vector(self.name)
             if used is not None and len(used) > 0 and not force:
                 print(
-                    _("Deleting table <%s> which is attached" " to following map(s):")
+                    _("Deleting table <%s> which is attached to following map(s):")
                     % self.name
                 )
                 for vect in used:
                     warning("%s" % vect)
-                print(
-                    _("You must use the force flag to actually" " remove it. Exiting.")
-                )
+                print(_("You must use the force flag to actually remove it. Exiting."))
             else:
                 cur.execute(sql.DROP_TAB.format(tname=self.name))
 
@@ -1096,9 +1139,10 @@ class Table:
         """Return the number of rows
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-        >>> tab_sqlite = Table(name=test_vector_name,
-        ...                    connection=sqlite3.connect(get_path(path)))
+        >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
+        >>> tab_sqlite = Table(
+        ...     name=test_vector_name, connection=sqlite3.connect(get_path(path))
+        ... )
         >>> tab_sqlite.n_rows()
         3
         """
@@ -1112,8 +1156,7 @@ class Table:
         """Execute SQL code from a given string or build with filters and
         return a cursor object.
 
-        :param sql_code: the SQL code to execute, if not pass it use filters
-                         variable
+        :param sql_code: the SQL code to execute, if not pass it use filters variable
         :type sql_code: str
         :param cursor: the cursor to connect, if None it use the cursor
                      of connection table object
@@ -1124,19 +1167,20 @@ class Table:
         :type values: list of tuple
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-        >>> tab_sqlite = Table(name=test_vector_name,
-        ...                    connection=sqlite3.connect(get_path(path)))
-        >>> tab_sqlite.filters.select('cat', 'name').order_by('value')
+        >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
+        >>> tab_sqlite = Table(
+        ...     name=test_vector_name, connection=sqlite3.connect(get_path(path))
+        ... )
+        >>> tab_sqlite.filters.select("cat", "name").order_by("value")
         Filters('SELECT cat, name FROM table_doctest_map ORDER BY value;')
         >>> cur = tab_sqlite.execute()
-        >>> cur.fetchone()     #doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> cur.fetchone()  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
          (1, 'point')
 
         """
         try:
-            sqlc = sql_code if sql_code else self.filters.get_sql()
-            cur = cursor if cursor else self.conn.cursor()
+            sqlc = sql_code or self.filters.get_sql()
+            cur = cursor or self.conn.cursor()
             if many and values:
                 return cur.executemany(sqlc, values)
             return cur.execute(sqlc, values) if values else cur.execute(sqlc)
@@ -1153,7 +1197,7 @@ class Table:
         :param cursor: the cursor to connect, if None it use the cursor
                        of connection table object
         """
-        cur = cursor if cursor else self.conn.cursor()
+        cur = cursor or self.conn.cursor()
         return table_exist(cur, self.name)
 
     def insert(self, values, cursor=None, many=False):
@@ -1168,7 +1212,7 @@ class Table:
         :param many: True to run executemany function
         :type many: bool
         """
-        cur = cursor if cursor else self.conn.cursor()
+        cur = cursor or self.conn.cursor()
         if many:
             return cur.executemany(self.columns.insert_str, values)
         return cur.execute(self.columns.insert_str, values)
@@ -1187,7 +1231,7 @@ class Table:
                        of connection table object
         :type cursor: Cursor object
         """
-        cur = cursor if cursor else self.conn.cursor()
+        cur = cursor or self.conn.cursor()
         vals = list(values) + [
             key,
         ]
@@ -1207,12 +1251,9 @@ class Table:
         :type cursor: Cursor object
 
         """
-        cur = cursor if cursor else self.conn.cursor()
+        cur = cursor or self.conn.cursor()
         coldef = ",\n".join(["%s %s" % col for col in cols])
-        if name:
-            newname = name
-        else:
-            newname = self.name
+        newname = name or self.name
         try:
             cur.execute(sql.CREATE_TAB.format(tname=newname, coldef=coldef))
             self.conn.commit()
@@ -1234,10 +1275,10 @@ if __name__ == "__main__":
     utils.create_test_vector_map(test_vector_name)
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
     from grass.pygrass.utils import get_mapset_vector
     from grass.script.core import run_command
 
     mset = get_mapset_vector(test_vector_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)

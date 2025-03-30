@@ -1,7 +1,7 @@
 /*! \mainpage GRASS GIS 8 Programmer's Manual
 <!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004
-     * updated 8/2005, 2006-2024
+     * updated 8/2005, 2006-2025
   -->
 
 <a href="https://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
@@ -23,7 +23,7 @@ Team</a>, an international team of programmers, GRASS module authors
 are cited within their module's source code and the contributed manual
 pages.
 
-&copy; 2000-2024 by the GRASS Development Team
+&copy; 2000-2025 by the GRASS Development Team
 
 This manual is published under <a
 href="http://www.fsf.org/copyleft/fdl.html">GNU Free Documentation
@@ -203,9 +203,9 @@ as follows:
 
 <!--
   original:
-  doc/help_loc_structure.odg
+  doc/help_project_structure.odg
 -->
-\image html "loc_struct.png" "Diagram of GRASS file structure"
+\image html "help_project_structure.png" "Diagram of GRASS file structure"
 
 \section Compiling_and_Installing_GRASS_Modules Compiling and Installing GRASS Modules
 

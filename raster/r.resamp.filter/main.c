@@ -494,7 +494,10 @@ int main(int argc, char *argv[])
                     "threads setting."));
     nprocs = 1;
 #endif
-
+    if (nprocs > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active make."));
+        nprocs = 1;
+    }
     if (parm.radius->answer) {
         if (parm.x_radius->answer || parm.y_radius->answer)
             G_fatal_error(_("%s= and %s=/%s= are mutually exclusive"),

@@ -82,7 +82,8 @@ def test():
     """Run a test of a module."""
     # TODO: put the link to to the report only if available
     # TODO: how to disable Python code coverage for module and C tests?
-    # TODO: we probably need to have different test  functions for C, Python modules, and Python code
+    # TODO: we probably need to have different test  functions for C, Python modules,
+    # and Python code
     # TODO: combine the results using python -m coverage --help | grep combine
     # TODO: function to anonymize/beautify file names (in content and actual filenames)
     # TODO: implement coverage but only when requested by invoker and only if
@@ -110,6 +111,9 @@ def test():
 
     # TODO: is sys.exit the right thing here
     sys.exit(not program.result.wasSuccessful())
+
+
+test.__test__ = False  # prevent running this function as a test in pytest
 
 
 def discovery():
@@ -146,7 +150,8 @@ def get_config(start_directory, config_file):
         # Does not check presence of the file
         config_parser.read(config_file)
     else:
-        raise ValueError("Either start_directory or config_file must be set")
+        msg = "Either start_directory or config_file must be set"
+        raise ValueError(msg)
     if "gunittest" not in config_parser:
         # Create an empty section if file is not available or section is not present.
         config_parser.read_dict({"gunittest": {}})
@@ -171,14 +176,14 @@ def main():
         dest="location_type",
         action="store",
         default="nc",
-        help="Type of tests which should be run" " (tag corresponding to location)",
+        help="Type of tests which should be run (tag corresponding to location)",
     )
     parser.add_argument(
         "--grassdata",
         dest="gisdbase",
         action="store",
         default=None,
-        help="GRASS data(base) (GISDBASE) directory" " (current GISDBASE by default)",
+        help="GRASS data(base) (GISDBASE) directory (current GISDBASE by default)",
     )
     parser.add_argument(
         "--output",
@@ -192,7 +197,7 @@ def main():
         dest="min_success",
         action="store",
         default="100",
-        type=int,
+        type=float,
         help=(
             "Minimum success percentage (lower percentage"
             " than this will result in a non-zero return code; values 0-100)"

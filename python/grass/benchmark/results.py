@@ -15,6 +15,7 @@
 
 import copy
 import json
+from pathlib import Path
 from types import SimpleNamespace
 
 
@@ -38,7 +39,7 @@ def save_results(data):
     Returns JSON as str.
     """
     if not hasattr(data, "results"):
-        data = dict(results=data)
+        data = {"results": data}
     return json.dumps(data, cls=ResultsEncoder)
 
 
@@ -48,8 +49,7 @@ def save_results_to_file(results, filename):
     See :func:`save_results` for details.
     """
     text = save_results(results)
-    with open(filename, "w", encoding="utf-8") as file:
-        file.write(text)
+    Path(filename).write_text(text, encoding="utf-8")
 
 
 def load_results(data):
@@ -67,8 +67,7 @@ def load_results_from_file(filename):
 
     See :func:`load_results` for details.
     """
-    with open(filename, "r", encoding="utf-8") as file:
-        return load_results(file.read())
+    return load_results(Path(filename).read_text(encoding="utf-8"))
 
 
 def join_results(results, prefixes=None, select=None, prefixes_as_labels=False):
@@ -104,9 +103,7 @@ def join_results_from_files(
     source_filenames, prefixes=None, select=None, prefixes_as_labels=False
 ):
     """Join multiple files into one results object."""
-    to_merge = []
-    for result_file in source_filenames:
-        to_merge.append(load_results_from_file(result_file))
+    to_merge = [load_results_from_file(result_file) for result_file in source_filenames]
     return join_results(
         to_merge,
         prefixes=prefixes,

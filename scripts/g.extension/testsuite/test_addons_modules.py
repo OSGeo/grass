@@ -15,7 +15,7 @@ COPYRIGHT: (C) 2015 Vaclav Petras, and by the GRASS Development Team
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-from grass.gunittest.utils import silent_rmtree
+from grass.gunittest.utils import silent_rmtree, xfail_windows
 from grass.script.utils import decode
 
 import os
@@ -44,14 +44,13 @@ v.in.redwg
 v.neighborhoodmatrix
 v.transects
 wx.metadata
-""".replace(
-    "\n", os.linesep
-)
+""".replace("\n", os.linesep)
 
 
 class TestModulesMetadata(TestCase):
     url = "file://" + os.path.abspath("data")
 
+    @xfail_windows
     def test_listing(self):
         """List individual extensions/modules/addons"""
         module = SimpleModule("g.extension", flags="l", url=self.url)
@@ -80,16 +79,16 @@ class TestModulesFromDifferentSources(TestCase):
         if os.path.exists(self.install_prefix):
             files = os.listdir(self.install_prefix)
             if files:
-                RuntimeError(
-                    "Install prefix path '{}' contains files {}".format(
-                        self.install_prefix, files
-                    )
+                msg = "Install prefix path '{}' contains files {}".format(
+                    self.install_prefix, files
                 )
+                raise RuntimeError(msg)
 
     def tearDown(self):
         """Remove created files"""
         silent_rmtree(self.install_prefix)
 
+    @xfail_windows
     def test_directory_install(self):
         """Test installing extension from directory"""
         self.assertModule(
@@ -102,6 +101,7 @@ class TestModulesFromDifferentSources(TestCase):
         for file in self.files:
             self.assertFileExists(file)
 
+    @xfail_windows
     def test_targz_install(self):
         """Test installing extension from local .tar.gz"""
         self.assertModule(
@@ -113,6 +113,7 @@ class TestModulesFromDifferentSources(TestCase):
         for file in self.files:
             self.assertFileExists(file)
 
+    @xfail_windows
     def test_remote_targz_without_dir_install(self):
         """Test installing extension from (remote) .tar.gz without main dir"""
         self.assertModule(
@@ -125,6 +126,7 @@ class TestModulesFromDifferentSources(TestCase):
         for file in self.files:
             self.assertFileExists(file)
 
+    @xfail_windows
     def test_remote_zip_install(self):
         """Test installing extension from .zip specified by URL (local)"""
         self.assertModule(

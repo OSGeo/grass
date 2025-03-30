@@ -10,18 +10,17 @@ covariance parameters.
 
 <p>
 <em>i.smap</em> has two modes of operation. The first mode
-is the sequential maximum a posteriori (SMAP) mode
-[<a href="#ref1">1</a>,<a href="#ref2">2</a>].  The SMAP
+is the sequential maximum a posteriori (SMAP) mode (see
+Bouman and Shapiro, 1992; Bouman and Shapiro, 1994). The SMAP
 segmentation algorithm attempts to improve segmentation
 accuracy by segmenting the image into regions rather than
-segmenting each pixel separately
-(see <a href="#notes">NOTES</a>).
+segmenting each pixel separately (see NOTES below).
 
 <p>
 The second mode is the more conventional maximum likelihood (ML)
 classification which classifies each pixel separately,
 but requires somewhat less computation. This mode is selected with
-the <b>-m</b> flag (see <a href="#mflag.html">below</a>).
+the <b>-m</b> flag (see below).
 
 <h2>OPTIONS</h2>
 
@@ -30,9 +29,7 @@ the <b>-m</b> flag (see <a href="#mflag.html">below</a>).
 <dl>
 <dt><b>-m</b>
 <dd>Use maximum likelihood estimation (instead of smap).
-Normal operation is to use SMAP estimation (see
-<a href="#notes">NOTES</a>).
-
+Normal operation is to use SMAP estimation (see NOTES below).
 </dl>
 
 <h3>Parameters:</h3>
@@ -57,7 +54,7 @@ The signature file that contains the spectral signatures (i.e., the
 statistics) for the classes to be identified in the image.
 This signature file is produced by the program
 <em><a href="i.gensigset.html">i.gensigset</a></em>
-(see <a href="#notes">NOTES</a>).
+(see NOTES below).
 
 <dt><b>blocksize=</b><em>value</em>
 
@@ -102,7 +99,7 @@ categories on the ground.
 </dl>
 
 
-<h2 id="notes">NOTES</h2>
+<h2>NOTES</h2>
 
 The SMAP algorithm exploits the fact that nearby pixels in
 an image are likely to have the same class.  It works by
@@ -127,16 +124,28 @@ of fit output map. Lower values indicate a better fit. The largest 5 to
 15% of the goodness values may need some closer inspection.
 
 <p>
-The module <em>i.smap</em> does not support MASKed or NULL cells. Therefore
-it might be necessary to create a copy of the classification results
-using e.g. r.mapcalc:
-<p><div class="code"><pre>
-r.mapcalc "MASKed_map = classification_results"
+The module <em>i.smap</em> does not support NULL cells (in the
+raster image or from raster mask). Therefore, if the input image has NULL
+cells, it might be necessary to create a masked classification results
+as part of post-processing using e.g. <em>r.mapcalc</em>:
+
+<div class="code"><pre>
+r.mapcalc "masked_results = if(isnull(input_image), null(), classification_results)"
+</pre></div>
+
+<p>
+Similarly, if the raster mask is active,
+it might be necessary to post-process the classification results
+using <em>r.mapcalc</em> which will automatically mask the classification
+results:
+
+<div class="code"><pre>
+r.mapcalc "masked_results = classification_results"
 </pre></div>
 
 <h2>EXAMPLE</h2>
 
-Supervised classification of LANDSAT scene (complete NC location)
+Supervised classification of LANDSAT scene (complete NC dataset)
 
 <div class="code"><pre>
 # Align computation region to the scene
@@ -198,16 +207,16 @@ r.support map=lsat7_2002_80 semantic_label=TM7_8
 <li>C. Bouman and M. Shapiro,
 "Multispectral Image Segmentation using a Multiscale Image Model",
 <em>Proc. of IEEE Int'l Conf. on Acoust., Speech and Sig. Proc.,</em>
-pp. III-565 - III-568, San Francisco, California, March 23-26, 1992.
+pp. III-565 - III-568, San Francisco, California, March 23-26, 1992.</li>
 
 <li>C. Bouman and M. Shapiro 1994,
 "A Multiscale Random Field Model for Bayesian Image Segmentation",
 <em>IEEE Trans. on Image Processing., 3(2), 162-177"
-(<a href="http://dynamo.ecn.purdue.edu/~bouman/publications/pdf/ip2.pdf">PDF</a>)</em>
+(<a href="http://dynamo.ecn.purdue.edu/~bouman/publications/pdf/ip2.pdf">PDF</a>)</em></li>
 
 <li>McCauley, J.D. and B.A. Engel 1995,
 "Comparison of Scene Segmentations: SMAP, ECHO and Maximum Likelihood",
-<em>IEEE Trans. on Geoscience and Remote Sensing, 33(6): 1313-1316.</em>
+<em>IEEE Trans. on Geoscience and Remote Sensing, 33(6): 1313-1316.</em></li>
 </ul>
 
 <h2>SEE ALSO</h2>
@@ -216,10 +225,10 @@ pp. III-565 - III-568, San Francisco, California, March 23-26, 1992.
 <a href="r.support.html">r.support</a></em> for setting semantic labels,
 <br>
 <em>
-<a href="i.group.html">i.group</a></em> for creating groups and subgroups
+<a href="i.group.html">i.group</a></em> for creating groups and subgroups,
 <br>
 <em><a href="r.mapcalc.html">r.mapcalc</a></em>
-to copy classification result in order to cut out MASKed subareas
+to copy classification result in order to cut out masked subareas,
 <br>
 <em><a href="i.gensigset.html">i.gensigset</a></em>
 to generate the signature file required by this program

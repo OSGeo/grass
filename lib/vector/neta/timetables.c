@@ -69,7 +69,10 @@ int NetA_init_distinct(dbDriver *driver, dbString *sql, int **lengths,
         G_warning(_("Out of memory"));
         return -1;
     }
-    db_open_select_cursor(driver, sql, &cursor, DB_SEQUENTIAL);
+    if (db_open_select_cursor(driver, sql, &cursor, DB_SEQUENTIAL) != DB_OK) {
+        G_warning(_("Unable to open select cursor: %s"), db_get_string(sql));
+        return -1;
+    }
     count = index = 0;
     /*calculate the lengths of the routes */
     table = db_get_cursor_table(&cursor);
@@ -128,6 +131,10 @@ int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
     struct field_info *Fi;
 
     Fi = Vect_get_field(In, route_layer);
+    if (Fi == NULL)
+        G_fatal_error(_("Database connection not defined for layer %d"),
+                      route_layer);
+
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
     if (driver == NULL)
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
@@ -308,6 +315,7 @@ int NetA_init_timetable_from_db(struct Map_info *In, int route_layer,
         }
         db_close_cursor(&cursor);
     }
+    Vect_destroy_field_info(Fi);
     db_close_database_shutdown_driver(driver);
 
     return 0;

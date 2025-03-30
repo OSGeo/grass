@@ -3,10 +3,11 @@ Created on Fri May 25 12:57:10 2012
 
 @author: Pietro Zambelli
 """
+
 import ctypes
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
-import grass.script as grass
+import grass.script as gs
 
 from grass.pygrass.errors import GrassError
 from grass.pygrass.shell.conversion import dict2html
@@ -112,7 +113,7 @@ class Region:
         return ctypes.pointer(self.c_region)
 
     def _set_param(self, key, value):
-        grass.run_command("g.region", **{key: value})
+        gs.run_command("g.region", **{key: value})
 
     # ----------LIMITS----------
     def _get_n(self):
@@ -330,10 +331,7 @@ class Region:
             "zone",
             "proj",
         ]
-        for attr in attrs:
-            if getattr(self, attr) != getattr(reg, attr):
-                return False
-        return True
+        return all(getattr(self, attr) == getattr(reg, attr) for attr in attrs)
 
     def __ne__(self, other):
         return not self == other
@@ -345,7 +343,7 @@ class Region:
         """Return a list of valid keys. ::
 
             >>> reg = Region()
-            >>> reg.keys()                               # doctest: +ELLIPSIS
+            >>> reg.keys()  # doctest: +ELLIPSIS
             ['proj', 'zone', ..., 'cols', 'cells']
 
         ..
@@ -369,7 +367,7 @@ class Region:
 
     def items(self):
         """Return a list of tuple with key and value."""
-        return [(k, self.__getattribute__(k)) for k in self.keys()]
+        return [(k, getattr(self, k)) for k in self.keys()]
 
     # ----------METHODS----------
     def zoom(self, raster_name):
@@ -450,7 +448,8 @@ class Region:
         ..
         """
         if not raster_name:
-            raise ValueError("Raster name or mapset are invalid")
+            msg = "Raster name or mapset are invalid"
+            raise ValueError(msg)
 
         mapset = get_mapset_raster(raster_name)
 
@@ -458,7 +457,8 @@ class Region:
             libraster.Rast_get_cellhd(raster_name, mapset, self.byref())
 
     def set_raster_region(self):
-        """Set the computational region (window) for all raster maps in the current process.
+        """Set the computational region (window) for all raster maps in the current
+        process.
 
         Attention: All raster objects must be closed or the
                    process will be terminated.
@@ -603,7 +603,8 @@ class Region:
         """
         self.adjust()
         if libgis.G_put_window(self.byref()) < 0:
-            raise GrassError("Cannot change region (WIND file).")
+            msg = "Cannot change region (WIND file)."
+            raise GrassError(msg)
 
     def read_default(self):
         """
@@ -673,7 +674,7 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
+    # Remove the generated vector map, if exists
     mset = utils.get_mapset_vector(test_vector_name, mapset="")
     if mset:
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)

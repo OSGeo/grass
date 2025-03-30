@@ -25,7 +25,7 @@ FILES = \
 	$(ETC)/echo$(EXE) \
 	$(ETC)/license \
 	$(ETC)/VERSIONNUMBER \
-	$(HTMLDIR)/help_loc_struct.png \
+	$(HTMLDIR)/help_project_structure.png \
 	$(HTMLDIR)/grassdb.png \
 	$(HTMLDIR)/location.png \
 	$(HTMLDIR)/location-add.png \
@@ -47,8 +47,9 @@ ifneq ($(strip $(MINGW)),)
 endif
 
 HTMLFILES := $(wildcard *.html)
+MDFILES := $(wildcard *.md)
 
-default: $(FILES) $(patsubst %,$(HTMLDIR)/%,$(HTMLFILES))
+default: $(FILES) $(patsubst %,$(HTMLDIR)/%,$(HTMLFILES)) $(patsubst %,$(MDDIR)/source/%,$(MDFILES))
 
 ifneq ($(strip $(MINGW)),)
 $(ARCH_BINDIR)/$(START_UP): grass.sh
@@ -68,7 +69,7 @@ $(ARCH_BINDIR)/$(START_UP): grass.py
 endif
 	rm -f $@
 	sed \
-	-e 's#@GISBASE@#$(RUN_GISBASE)#' \
+	-e 's#@GISBASE_INSTALL_PATH@#$(RUN_GISBASE)#' \
 	-e 's#@GRASS_VERSION_NUMBER@#$(GRASS_VERSION_NUMBER)#' \
 	-e 's#@GRASS_VERSION_MAJOR@#$(GRASS_VERSION_MAJOR)#' \
 	-e 's#@GRASS_VERSION_MINOR@#$(GRASS_VERSION_MINOR)#' \

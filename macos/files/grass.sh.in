@@ -1,0 +1,64 @@
+#!/bin/bash
+
+#############################################################################
+#
+# MODULE:       GRASS Initialization
+# AUTHOR(S):    Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th
+#               William Kyngesburye - kyngchaos@kyngchaos.com
+#               Eric Hutton
+#               Michael Barton - michael.barton@asu.edu
+# PURPOSE:      The GRASS GIS startup script for the macOS application.
+# COPYRIGHT:    (c) 2000-2025 by the GRASS Development Team
+#
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+#############################################################################
+
+# script_dir=$(dirname "$(dirname "$0")")
+app_dir="$(cd "$(dirname "$0")/../.."; pwd -P)"
+
+# Mac app only startup shell - complete rewrite for starting from a GRASS.app
+# in Mac OS X.  Sets defaults for unset env, adds some Mac-only config.
+
+trap "echo 'User break!' ; exit" 2 3 9 15
+
+export GISBASE=$app_dir/Contents/Resources
+grass_ver=$(cut -d . -f 1-2 "$GISBASE/etc/VERSIONNUMBER")
+
+export GISBASE_USER="$HOME/Library/GRASS/$grass_ver"
+export GISBASE_SYSTEM="/Library/GRASS/$grass_ver"
+
+# add some OS X style app support paths, and create user one if missing.
+mkdir -p "$GISBASE_USER/Addons/bin"
+mkdir -p "$GISBASE_USER/Addons/scripts"
+if [ ! "$GRASS_ADDON_BASE" ] ; then
+	GRASS_ADDON_BASE="$GISBASE_USER/Addons"
+fi
+export GRASS_ADDON_BASE
+
+mkdir -p "$GISBASE_USER/Addons/etc"
+addpath="$GISBASE_USER/Addons/etc:$GISBASE_SYSTEM/Addons/etc"
+if [ "$GRASS_ADDON_ETC" ] ; then
+	GRASS_ADDON_ETC="$GRASS_ADDON_ETC:$addpath"
+else
+	GRASS_ADDON_ETC="$addpath"
+fi
+export GRASS_ADDON_ETC
+
+mkdir -p "$GISBASE_USER/Addons/lib"
+mkdir -p "$GISBASE_USER/Addons/docs/html"
+
+# user fontcap files
+if [ ! "$GRASS_FONT_CAP" ] ; then
+	GRASS_FONT_CAP="$GISBASE_USER/Addons/etc/fontcap"
+fi
+export GRASS_FONT_CAP
+
+# location of epsg database and other files needed by GDAL
+export GDAL_DATA="$GISBASE/share/gdal"
+
+# set Python
+export GRASS_PYTHON="$GISBASE/python.app/Contents/MacOS/python"
+
+# start GRASS
+"$GRASS_PYTHON" "$GISBASE/bin/@GRASSBIN@" "--gui" "$@"

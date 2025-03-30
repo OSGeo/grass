@@ -18,17 +18,26 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import math
-import numpy
+import numpy as np
+
+from pathlib import Path
 
 import wx
 
-import wx.lib.plot as plot
-import grass.script as grass
+from wx.lib import plot
+import grass.script as gs
 from wxplot.base import BasePlotFrame, PlotIcons
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from gui_core.wrap import StockCursor
 from wxplot.dialogs import ProfileRasterDialog, PlotStatsFrame
 from core.gcmd import RunCommand, GWarning, GError, GMessage
+
+try:
+    import grass.lib.gis as gislib
+
+    haveCtypes = True
+except (ImportError, TypeError):
+    haveCtypes = False
 
 
 class ProfileFrame(BasePlotFrame):
@@ -56,6 +65,7 @@ class ProfileFrame(BasePlotFrame):
         self.SetTitle(_("GRASS Profile Analysis Tool"))
         # in case of degrees, we want to use meters
         self._units = units if "degree" not in units else "meters"
+        self._is_lat_lon_proj = self.Map.projinfo.get("proj") == "ll"
 
         #
         # Init variables
@@ -150,11 +160,13 @@ class ProfileFrame(BasePlotFrame):
         """
         # create list of coordinate points for r.profile
         dist = 0
+        segment_geodesic_dist = 0
         cumdist = 0
+        segment_geodesic_cum_dist = 0
         self.coordstr = ""
         lasteast = lastnorth = None
 
-        region = grass.region()
+        region = gs.region()
         insideRegion = True
         if len(self.transect) > 0:
             for point in self.transect:
@@ -181,6 +193,10 @@ class ProfileFrame(BasePlotFrame):
         # title of window
         self.ptitle = _("Profile of")
 
+        # Initialize latitude-longitude geodesic distance calculation
+        if self._is_lat_lon_proj and haveCtypes:
+            gislib.G_begin_distance_calculations()
+
         # create list of coordinates for transect segment markers
         if len(self.transect) > 0:
             self.seglist = []
@@ -205,21 +221,36 @@ class ProfileFrame(BasePlotFrame):
                         math.pow((lasteast - point[0]), 2)
                         + math.pow((lastnorth - point[1]), 2)
                     )
+                    if self._is_lat_lon_proj and haveCtypes:
+                        segment_geodesic_dist = gislib.G_distance(
+                            lasteast, lastnorth, point[0], point[1]
+                        )
                 cumdist += dist
+                if self._is_lat_lon_proj and haveCtypes:
+                    segment_geodesic_cum_dist += segment_geodesic_dist
 
                 # store total transect length
                 self.transect_length = cumdist
 
                 # build a list of distance,value pairs for each segment of
                 # transect
-                self.seglist.append((cumdist, val))
+                self.seglist.append(
+                    (
+                        (
+                            segment_geodesic_cum_dist
+                            if self._is_lat_lon_proj and haveCtypes
+                            else cumdist
+                        ),
+                        val,
+                    )
+                )
                 lasteast = point[0]
                 lastnorth = point[1]
 
             # delete extra first segment point
             try:
                 self.seglist.pop(0)
-            except:
+            except IndexError:
                 pass
 
         #
@@ -231,16 +262,18 @@ class ProfileFrame(BasePlotFrame):
         for r in self.raster.keys():
             self.raster[r]["datalist"] = []
             datalist = self.CreateDatalist(r, self.coordstr)
-            if len(datalist) > 0:
-                self.raster[r]["datalist"] = datalist
+            if len(datalist) <= 0:
+                continue
 
-                # update ylabel to match units if they exist
-                if self.raster[r]["units"] != "":
-                    self.ylabel += "%s (%d)," % (self.raster[r]["units"], i)
-                i += 1
+            self.raster[r]["datalist"] = datalist
 
-                # update title
-                self.ptitle += " %s ," % r.split("@")[0]
+            # update ylabel to match units if they exist
+            if self.raster[r]["units"] != "":
+                self.ylabel += "%s (%d)," % (self.raster[r]["units"], i)
+            i += 1
+
+            # update title
+            self.ptitle += " %s ," % r.split("@")[0]
 
         self.ptitle = self.ptitle.rstrip(",")
 
@@ -258,9 +291,8 @@ class ProfileFrame(BasePlotFrame):
 
         # keep total number of transect points to 500 or less to avoid
         # freezing with large, high resolution maps
-        region = grass.region()
+        region = gs.region()
         curr_res = min(float(region["nsres"]), float(region["ewres"]))
-        transect_rec = 0
         if self.transect_length / curr_res > 500:
             transect_res = self.transect_length / 500
         else:
@@ -284,11 +316,9 @@ class ProfileFrame(BasePlotFrame):
             dist, elev = line.strip().split(" ")
             if (
                 dist is None
-                or dist == ""
-                or dist == "nan"
+                or dist in ("", "nan")
                 or elev is None
-                or elev == ""
-                or elev == "nan"
+                or elev in ("", "nan")
             ):
                 continue
             dist = float(dist)
@@ -369,8 +399,7 @@ class ProfileFrame(BasePlotFrame):
 
         if len(self.plotlist) > 0:
             return self.plotlist
-        else:
-            return None
+        return None
 
     def Update(self):
         """Update profile after changing options"""
@@ -383,7 +412,7 @@ class ProfileFrame(BasePlotFrame):
         dlg = wx.FileDialog(
             parent=self,
             message=_("Choose prefix for file(s) where to save profile values..."),
-            defaultDir=os.getcwd(),
+            defaultDir=str(Path.cwd()),
             wildcard=_("Comma separated value (*.csv)|*.csv"),
             style=wx.FD_SAVE,
         )
@@ -413,16 +442,16 @@ class ProfileFrame(BasePlotFrame):
                 except OSError as e:
                     GError(
                         parent=self,
-                        message=_(
-                            "Unable to open file <%s> for writing.\n" "Reason: %s"
-                        )
+                        message=_("Unable to open file <%s> for writing.\nReason: %s")
                         % (pfile[-1], e),
                     )
                     dlg.Destroy()
                     return
 
-                for datapair in self.raster[r]["datalist"]:
-                    fd.write("%.6f,%.6f\n" % (float(datapair[0]), float(datapair[1])))
+                fd.writelines(
+                    "%.6f,%.6f\n" % (float(datapair[0]), float(datapair[1]))
+                    for datapair in self.raster[r]["datalist"]
+                )
 
                 fd.close()
 
@@ -445,22 +474,22 @@ class ProfileFrame(BasePlotFrame):
                 statstr = "Profile of %s\n\n" % rast
 
                 iterable = (i[1] for i in self.raster[r]["datalist"])
-                a = numpy.fromiter(iterable, numpy.float)
+                a = np.fromiter(iterable, float)
 
                 statstr += "n: %f\n" % a.size
-                statstr += "minimum: %f\n" % numpy.amin(a)
-                statstr += "maximum: %f\n" % numpy.amax(a)
-                statstr += "range: %f\n" % numpy.ptp(a)
-                statstr += "mean: %f\n" % numpy.mean(a)
-                statstr += "standard deviation: %f\n" % numpy.std(a)
-                statstr += "variance: %f\n" % numpy.var(a)
-                cv = numpy.std(a) / numpy.mean(a)
+                statstr += "minimum: %f\n" % np.amin(a)
+                statstr += "maximum: %f\n" % np.amax(a)
+                statstr += "range: %f\n" % np.ptp(a)
+                statstr += "mean: %f\n" % np.mean(a)
+                statstr += "standard deviation: %f\n" % np.std(a)
+                statstr += "variance: %f\n" % np.var(a)
+                cv = np.std(a) / np.mean(a)
                 statstr += "coefficient of variation: %f\n" % cv
-                statstr += "sum: %f\n" % numpy.sum(a)
-                statstr += "median: %f\n" % numpy.median(a)
+                statstr += "sum: %f\n" % np.sum(a)
+                statstr += "median: %f\n" % np.median(a)
                 statstr += "distance along transect: %f\n\n" % self.transect_length
                 message.append(statstr)
-            except:
+            except (ValueError, TypeError, KeyError, IndexError):
                 pass
 
         stats = PlotStatsFrame(self, id=wx.ID_ANY, message=message, title=title)

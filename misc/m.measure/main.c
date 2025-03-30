@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 
     units = G_define_standard_option(G_OPT_M_UNITS);
     units->label = _("Units");
-    units->description = _("Default: location map units");
+    units->description = _("Default: project map units");
 
     shell = G_define_flag();
     shell->key = 'g';

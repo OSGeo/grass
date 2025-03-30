@@ -22,10 +22,10 @@ The region setting should work for UTM and LL test locations
 """
 
 from datetime import datetime
+from pathlib import Path
 
 import grass.script as gs
 import grass.temporal as tgis
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
@@ -80,8 +80,7 @@ class TestRegisterFile(TestCase):
 
     def test_with_file_and_increment(self):
         tmp_file = gs.tempfile()
-        with open(tmp_file, "w") as register_file:
-            register_file.write("prec_1\nprec_2\nprec_3\nprec_4\nprec_5\nprec_6")
+        Path(tmp_file).write_text("prec_1\nprec_2\nprec_3\nprec_4\nprec_5\nprec_6")
 
         register_module = SimpleModule(
             "t.register",
@@ -108,23 +107,18 @@ class TestRegisterFile(TestCase):
         t_rast_list.run()
 
         # Check registered raster maps
-        ref_str = "...".join(
-            [
-                "name|mapset|start_time|end_time",
-                "prec_1|...|2001-01-01 00:00:00|None",
-                "prec_2|...|2001-02-01 00:00:00|None",
-                "prec_3|...|2001-03-01 00:00:00|None",
-                "prec_4|...|2001-04-01 00:00:00|None",
-                "prec_5|...|2001-05-01 00:00:00|None",
-                "prec_6|...|2001-06-01 00:00:00|None",
-            ]
-        )
+        ref_str = """name|mapset|start_time|end_time
+prec_1|...|2001-01-01 00:00:00|None
+prec_2|...|2001-02-01 00:00:00|None
+prec_3|...|2001-03-01 00:00:00|None
+prec_4|...|2001-04-01 00:00:00|None
+prec_5|...|2001-05-01 00:00:00|None
+prec_6|...|2001-06-01 00:00:00|None"""
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_with_file_and_no_increment(self):
         tmp_file = gs.tempfile()
-        with open(tmp_file, "w") as register_file:
-            register_file.write("prec_1\nprec_2\nprec_3\nprec_4\nprec_5\nprec_6")
+        Path(tmp_file).write_text("prec_1\nprec_2\nprec_3\nprec_4\nprec_5\nprec_6")
 
         register_module = SimpleModule(
             "t.register",
@@ -149,24 +143,19 @@ class TestRegisterFile(TestCase):
         t_rast_list = SimpleModule("t.rast.list", input="precip_abs8")
         t_rast_list.run()
 
-        # Check registered raster maps
-        ref_str = "...".join(
-            [
-                "name|mapset|start_time|end_time",
-                "prec_1|...|2001-01-01 00:00:00|None",
-                "prec_2|...|2001-01-01 00:00:00|None",
-                "prec_3|...|2001-01-01 00:00:00|None",
-                "prec_4|...|2001-01-01 00:00:00|None",
-                "prec_5|...|2001-01-01 00:00:00|None",
-                "prec_6|...|2001-01-01 00:00:00|None",
-            ]
-        )
+        # Check registered raster maps - using newlines instead of ...
+        ref_str = """name|mapset|start_time|end_time
+prec_1|...|2001-01-01 00:00:00|None
+prec_2|...|2001-01-01 00:00:00|None
+prec_3|...|2001-01-01 00:00:00|None
+prec_4|...|2001-01-01 00:00:00|None
+prec_5|...|2001-01-01 00:00:00|None
+prec_6|...|2001-01-01 00:00:00|None"""
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_with_file_increment_and_intervall(self):
         tmp_file = gs.tempfile()
-        with open(tmp_file, "w") as register_file:
-            register_file.write("prec_1\nprec_2\nprec_3\nprec_4\nprec_5\nprec_6")
+        Path(tmp_file).write_text("prec_1\nprec_2\nprec_3\nprec_4\nprec_5\nprec_6")
 
         register_module = SimpleModule(
             "t.register",
@@ -195,34 +184,25 @@ class TestRegisterFile(TestCase):
         t_rast_list.run()
 
         # Check registered raster maps
-        ref_str = "\n".join(
-            [
-                "name|mapset|start_time|end_time",
-                "prec_1|...|2001-01-01 00:00:00|2001-02-01 00:00:00",
-                "prec_2|...|2001-02-01 00:00:00|2001-03-01 00:00:00",
-                "prec_3|...|2001-03-01 00:00:00|2001-04-01 00:00:00",
-                "prec_4|...|2001-04-01 00:00:00|2001-05-01 00:00:00",
-                "prec_5|...|2001-05-01 00:00:00|2001-06-01 00:00:00",
-                "prec_6|...|2001-06-01 00:00:00|2001-07-01 00:00:00",
-            ]
-        )
+        ref_str = """name|mapset|start_time|end_time
+prec_1|...|2001-01-01 00:00:00|2001-02-01 00:00:00
+prec_2|...|2001-02-01 00:00:00|2001-03-01 00:00:00
+prec_3|...|2001-03-01 00:00:00|2001-04-01 00:00:00
+prec_4|...|2001-04-01 00:00:00|2001-05-01 00:00:00
+prec_5|...|2001-05-01 00:00:00|2001-06-01 00:00:00
+prec_6|...|2001-06-01 00:00:00|2001-07-01 00:00:00"""
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_with_start_in_file(self):
         tmp_file = gs.tempfile()
-        with open(tmp_file, "w") as register_file:
-            register_file.write(
-                "\n".join(
-                    [
-                        "prec_1|2001-01-01",
-                        "prec_2|2001-02-01",
-                        "prec_3|2001-03-01",
-                        "prec_4|2001-04-01",
-                        "prec_5|2001-05-01",
-                        "prec_6|2001-06-01",
-                    ]
-                )
-            )
+        Path(tmp_file).write_text(
+            """prec_1|2001-01-01
+prec_2|2001-02-01
+prec_3|2001-03-01
+prec_4|2001-04-01
+prec_5|2001-05-01
+prec_6|2001-06-01"""
+        )
 
         register_module = SimpleModule(
             "t.register",
@@ -246,35 +226,26 @@ class TestRegisterFile(TestCase):
         t_rast_list = SimpleModule("t.rast.list", input="precip_abs8")
         t_rast_list.run()
 
-        # Check registered raster maps
-        ref_str = "...".join(
-            [
-                "name|mapset|start_time|end_time",
-                "prec_1|...|2001-01-01 00:00:00|None",
-                "prec_2|...|2001-02-01 00:00:00|None",
-                "prec_3|...|2001-03-01 00:00:00|None",
-                "prec_4|...|2001-04-01 00:00:00|None",
-                "prec_5|...|2001-05-01 00:00:00|None",
-                "prec_6|...|2001-06-01 00:00:00|None",
-            ]
-        )
+        # Check registered raster maps - using newlines instead of ...
+        ref_str = """name|mapset|start_time|end_time
+prec_1|...|2001-01-01 00:00:00|None
+prec_2|...|2001-02-01 00:00:00|None
+prec_3|...|2001-03-01 00:00:00|None
+prec_4|...|2001-04-01 00:00:00|None
+prec_5|...|2001-05-01 00:00:00|None
+prec_6|...|2001-06-01 00:00:00|None"""
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_with_start_in_file_and_increment(self):
         tmp_file = gs.tempfile()
-        with open(tmp_file, "w") as register_file:
-            register_file.write(
-                "\n".join(
-                    [
-                        "prec_1|2001-01-01",
-                        "prec_2|2001-02-01",
-                        "prec_3|2001-03-01",
-                        "prec_4|2001-04-01",
-                        "prec_5|2001-05-01",
-                        "prec_6|2001-06-01",
-                    ]
-                )
-            )
+        Path(tmp_file).write_text(
+            """prec_1|2001-01-01
+prec_2|2001-02-01
+prec_3|2001-03-01
+prec_4|2001-04-01
+prec_5|2001-05-01
+prec_6|2001-06-01"""
+        )
 
         register_module = SimpleModule(
             "t.register",
@@ -291,19 +262,14 @@ class TestRegisterFile(TestCase):
 
     def test_with_start_and_end_in_file_and_interval(self):
         tmp_file = gs.tempfile()
-        with open(tmp_file, "w") as register_file:
-            register_file.write(
-                "\n".join(
-                    [
-                        "prec_1|2001-01-01|2001-04-01",
-                        "prec_2|2001-04-01|2001-07-01",
-                        "prec_3|2001-07-01|2001-10-01",
-                        "prec_4|2001-10-01|2002-01-01",
-                        "prec_5|2002-01-01|2002-04-01",
-                        "prec_6|2002-04-01|2002-07-01",
-                    ]
-                )
-            )
+        Path(tmp_file).write_text(
+            """prec_1|2001-01-01|2001-04-01
+prec_2|2001-04-01|2001-07-01
+prec_3|2001-07-01|2001-10-01
+prec_4|2001-10-01|2002-01-01
+prec_5|2002-01-01|2002-04-01
+prec_6|2002-04-01|2002-07-01"""
+        )
 
         register_module = SimpleModule(
             "t.register",
@@ -321,19 +287,18 @@ class TestRegisterFile(TestCase):
     def test_with_mapset_and_semantic_label(self):
         mapset = gs.gisenv()["MAPSET"]
         tmp_file = gs.tempfile()
-        with open(tmp_file, "w") as register_file:
-            register_file.write(
-                "\n".join(
-                    [
-                        f"prec_1@{mapset}|2001-01-01|2001-04-01|semantic_label",
-                        f"prec_2@{mapset}|2001-04-01|2001-07-01|semantic_label",
-                        f"prec_3@{mapset}|2001-07-01|2001-10-01|semantic_label",
-                        f"prec_4@{mapset}|2001-10-01|2002-01-01|semantic_label",
-                        f"prec_5@{mapset}|2002-01-01|2002-04-01|semantic_label",
-                        f"prec_6@{mapset}|2002-04-01|2002-07-01|semantic_label",
-                    ]
-                )
+        Path(tmp_file).write_text(
+            "\n".join(
+                [
+                    f"prec_1@{mapset}|2001-01-01|2001-04-01|semantic_label",
+                    f"prec_2@{mapset}|2001-04-01|2001-07-01|semantic_label",
+                    f"prec_3@{mapset}|2001-07-01|2001-10-01|semantic_label",
+                    f"prec_4@{mapset}|2001-10-01|2002-01-01|semantic_label",
+                    f"prec_5@{mapset}|2002-01-01|2002-04-01|semantic_label",
+                    f"prec_6@{mapset}|2002-04-01|2002-07-01|semantic_label",
+                ]
             )
+        )
 
         register_module = SimpleModule(
             "t.register",
@@ -359,18 +324,14 @@ class TestRegisterFile(TestCase):
         t_rast_list = SimpleModule("t.rast.list", input="precip_abs8")
         t_rast_list.run()
 
-        # Check registered raster maps
-        ref_str = "...".join(
-            [
-                "name|mapset|start_time|end_time",
-                "prec_1|...|2001-01-01 00:00:00|2001-04-01 00:00:00",
-                "prec_2|...|2001-04-01 00:00:00|2001-07-01 00:00:00",
-                "prec_3|...|2001-07-01 00:00:00|2001-10-01 00:00:00",
-                "prec_4|...|2001-10-01 00:00:00|2002-01-01 00:00:00",
-                "prec_5|...|2002-01-01 00:00:00|2002-04-01 00:00:00",
-                "prec_6|...|2002-04-01 00:00:00|2002-07-01 00:00:00",
-            ]
-        )
+        # Check registered raster maps - using newlines instead of ...
+        ref_str = """name|mapset|start_time|end_time
+prec_1|...|2001-01-01 00:00:00|2001-04-01 00:00:00
+prec_2|...|2001-04-01 00:00:00|2001-07-01 00:00:00
+prec_3|...|2001-07-01 00:00:00|2001-10-01 00:00:00
+prec_4|...|2001-10-01 00:00:00|2002-01-01 00:00:00
+prec_5|...|2002-01-01 00:00:00|2002-04-01 00:00:00
+prec_6|...|2002-04-01 00:00:00|2002-07-01 00:00:00"""
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
 

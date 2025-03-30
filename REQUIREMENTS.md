@@ -33,8 +33,10 @@ for other platforms you may have to install some of them.
   PROJ: [https://proj.org/](https://proj.org/)
 - **GDAL/OGR** for import and export of most external raster and vector map formats
   GDAL: [https://gdal.org](https://gdal.org)
-- **Python >= 3.7** (for temporal framework, scripts, wxGUI, and ctypes interface)
+- **Python >= 3.8** (for temporal framework, scripts, wxGUI, and ctypes interface)
   [https://www.python.org](https://www.python.org)
+- **MkDocs** with "Material" theme Python packages for the manual pages:
+  See `man/mkdocs/requirements.txt`.
 
 ## Optional packages
 
@@ -49,7 +51,7 @@ Note: also the respective development packages (commonly named `xxx-dev` or
   [https://facebook.github.io/zstd](https://facebook.github.io/zstd)
 - **FFTW 2.x or 3.x** (library for computing the Discrete Fourier Transform),
   required for `i.fft` and `i.ifft` and other modules
-  [http://www.fftw.org](http://www.fftw.org)
+  [https://fftw.org](https://fftw.org)
 - **GEOS** (Geometry Engine library),
   needed for `v.buffer` and adds extended options to the `v.select` module
   [https://libgeos.org/](https://libgeos.org/)
@@ -65,11 +67,15 @@ Note: also the respective development packages (commonly named `xxx-dev` or
   [https://mesa3d.org/](https://mesa3d.org/)
 - **libpng** (for `r.out.png` and the PNG driver), usually already installed.
   [http://www.libpng.org/pub/png/libpng.html](http://www.libpng.org/pub/png/libpng.html)
+- **LIBSVM** (for SVM classification modules `i.svm.train` and `i.svm.predict`)
+  [https://www.csie.ntu.edu.tw/~cjlin/libsvm/](https://www.csie.ntu.edu.tw/~cjlin/libsvm/)
 - **libtiff** (for `r.out.tiff`), usually already installed.
   [https://gitlab.com/libtiff/libtiff](https://gitlab.com/libtiff/libtiff)
 - **readline** for extra command prompt functionality
   [https://tiswww.case.edu/~chet/readline/rltop.html](https://tiswww.case.edu/~chet/readline/rltop.html)
   [ftp://ftp.gnu.org/gnu/readline](ftp://ftp.gnu.org/gnu/readline)
+- **PDAL** ( for LAS import modules `r.in.pdal` and `v.in.pdal`)
+  [https://pdal.io](https://pdal.io)
 - **PostgreSQL libraries** (for the PostgreSQL database interface and PostGIS support)
   [https://www.postgresql.org](https://www.postgresql.org)
 - **MariaDB/MySQL libraries** (for the MySQL database interface)
@@ -77,7 +83,7 @@ Note: also the respective development packages (commonly named `xxx-dev` or
 - **SQLite libraries** (for the SQLite database interface)
   [https://www.sqlite.org](https://www.sqlite.org)
 - **unixODBC** (for the ODBC database interface)
-  [http://www.unixodbc.org](http://www.unixodbc.org)
+  [https://www.unixodbc.org](https://www.unixodbc.org)
 - **R Statistics** (for the R statistical language interface)
   [https://cran.r-project.org](https://cran.r-project.org)
 - **FreeType2** (for TrueType font support and `d.text.freetype`)
@@ -131,7 +137,7 @@ MacOSX users may go here to download precompiled libraries etc.:
 
 ---
 
-© _GRASS Development Team 1997-2024_
+© _GRASS Development Team 1997-2025_
 
 Please report bugs here:
 [https://grass.osgeo.org/contribute/](https://grass.osgeo.org/contribute/)

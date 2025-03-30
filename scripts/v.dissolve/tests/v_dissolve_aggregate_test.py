@@ -28,8 +28,9 @@ def test_aggregate_methods(dataset, aggregate_methods):
         output=dissolved_vector,
         aggregate_column=dataset.float_column_name,
         aggregate_method=aggregate_methods,
+        env=dataset.session.env,
     )
-    columns = gs.vector_columns(dissolved_vector)
+    columns = gs.vector_columns(dissolved_vector, env=dataset.session.env)
     stats_columns = [
         f"{dataset.float_column_name}_{method}" for method in aggregate_methods
     ]
@@ -50,13 +51,14 @@ def test_aggregate_two_columns(dataset):
         output=dissolved_vector,
         aggregate_column=aggregate_columns,
         aggregate_method=aggregate_methods,
+        env=dataset.session.env,
     )
     stats_columns = [
         f"{column}_{method}"
         for method in aggregate_methods
         for column in aggregate_columns
     ]
-    columns = gs.vector_columns(dissolved_vector)
+    columns = gs.vector_columns(dissolved_vector, env=dataset.session.env)
     assert sorted(columns.keys()) == sorted(
         ["cat", dataset.str_column_name] + stats_columns
     )
@@ -81,16 +83,17 @@ def test_aggregate_column_result(dataset, backend):
         aggregate_method=stats,
         result_column=stats_columns,
         aggregate_backend=backend,
+        env=dataset.session.env,
     )
 
-    vector_info = gs.vector_info(dissolved_vector)
+    vector_info = gs.vector_info(dissolved_vector, env=dataset.session.env)
     assert vector_info["level"] == 2
     assert vector_info["centroids"] == 3
     assert vector_info["areas"] == 3
     assert vector_info["num_dblinks"] == 1
     assert vector_info["attribute_primary_key"] == "cat"
 
-    columns = gs.vector_columns(dissolved_vector)
+    columns = gs.vector_columns(dissolved_vector, env=dataset.session.env)
     assert len(columns) == len(stats_columns) + 2
     assert sorted(columns.keys()) == sorted(
         ["cat", dataset.str_column_name] + stats_columns
@@ -98,22 +101,17 @@ def test_aggregate_column_result(dataset, backend):
     for stats_column in stats_columns:
         assert stats_column in columns
         column_info = columns[stats_column]
-        if stats_column.endswith("_n"):
-            correct_type = "integer"
-        else:
-            correct_type = "double precision"
-        assert (
-            columns[stats_column]["type"].lower() == correct_type
-        ), f"{stats_column} has a wrong type"
+        correct_type = "integer" if stats_column.endswith("_n") else "double precision"
+        assert columns[stats_column]["type"].lower() == correct_type, (
+            f"{stats_column} has a wrong type"
+        )
     assert dataset.str_column_name in columns
     column_info = columns[dataset.str_column_name]
     assert column_info["type"].lower() == "character"
 
     records = json.loads(
         gs.read_command(
-            "v.db.select",
-            map=dissolved_vector,
-            format="json",
+            "v.db.select", map=dissolved_vector, format="json", env=dataset.session.env
         )
     )["records"]
     ref_unique_values = set(dataset.str_column_values)
@@ -122,7 +120,10 @@ def test_aggregate_column_result(dataset, backend):
     assert set(actual_values) == ref_unique_values
 
     aggregate_n = [record["value_n"] for record in records]
-    assert sum(aggregate_n) == gs.vector_info(dataset.vector_name)["areas"]
+    assert (
+        sum(aggregate_n)
+        == gs.vector_info(dataset.vector_name, env=dataset.session.env)["areas"]
+    )
     assert sorted(aggregate_n) == [1, 2, 3]
     aggregate_sum = [record["value_sum"] for record in records]
     assert sorted(aggregate_sum) == [
@@ -199,16 +200,17 @@ def test_sqlite_agg_accepted(dataset):
         aggregate_column=dataset.float_column_name,
         aggregate_method=stats,
         aggregate_backend="sql",
+        env=dataset.session.env,
     )
 
-    vector_info = gs.vector_info(dissolved_vector)
+    vector_info = gs.vector_info(dissolved_vector, env=dataset.session.env)
     assert vector_info["level"] == 2
     assert vector_info["centroids"] == 3
     assert vector_info["areas"] == 3
     assert vector_info["num_dblinks"] == 1
     assert vector_info["attribute_primary_key"] == "cat"
 
-    columns = gs.vector_columns(dissolved_vector)
+    columns = gs.vector_columns(dissolved_vector, env=dataset.session.env)
     assert len(columns) == len(expected_stats_columns) + 2
     assert sorted(columns.keys()) == sorted(
         ["cat", dataset.str_column_name] + expected_stats_columns
@@ -216,22 +218,17 @@ def test_sqlite_agg_accepted(dataset):
     for method, stats_column in zip(stats, expected_stats_columns):
         assert stats_column in columns
         column_info = columns[stats_column]
-        if method == "count":
-            correct_type = "integer"
-        else:
-            correct_type = "double precision"
-        assert (
-            columns[stats_column]["type"].lower() == correct_type
-        ), f"{stats_column} has a wrong type"
+        correct_type = "integer" if method == "count" else "double precision"
+        assert columns[stats_column]["type"].lower() == correct_type, (
+            f"{stats_column} has a wrong type"
+        )
     assert dataset.str_column_name in columns
     column_info = columns[dataset.str_column_name]
     assert column_info["type"].lower() == "character"
 
     records = json.loads(
         gs.read_command(
-            "v.db.select",
-            map=dissolved_vector,
-            format="json",
+            "v.db.select", map=dissolved_vector, format="json", env=dataset.session.env
         )
     )["records"]
     ref_unique_values = set(dataset.str_column_values)
@@ -240,7 +237,10 @@ def test_sqlite_agg_accepted(dataset):
     assert set(actual_values) == ref_unique_values
 
     aggregate_n = [record[f"{dataset.float_column_name}_count"] for record in records]
-    assert sum(aggregate_n) == gs.vector_info(dataset.vector_name)["areas"]
+    assert (
+        sum(aggregate_n)
+        == gs.vector_info(dataset.vector_name, env=dataset.session.env)["areas"]
+    )
     assert sorted(aggregate_n) == [1, 2, 3]
 
 
@@ -255,12 +255,11 @@ def test_sqlite_concat(dataset):
         aggregate_column=f"group_concat({dataset.int_column_name})",
         result_column="concat_values text",
         aggregate_backend="sql",
+        env=dataset.session.env,
     )
     records = json.loads(
         gs.read_command(
-            "v.db.select",
-            map=dissolved_vector,
-            format="json",
+            "v.db.select", map=dissolved_vector, format="json", env=dataset.session.env
         )
     )["records"]
     # Order of records is ignored - they are just sorted.
@@ -283,12 +282,11 @@ def test_sqlite_concat_with_two_parameters(dataset):
         aggregate_column=f"group_concat({dataset.int_column_name}, '{separator}')",
         result_column="concat_values text",
         aggregate_backend="sql",
+        env=dataset.session.env,
     )
     records = json.loads(
         gs.read_command(
-            "v.db.select",
-            map=dissolved_vector,
-            format="json",
+            "v.db.select", map=dissolved_vector, format="json", env=dataset.session.env
         )
     )["records"]
     # Order of records is ignored - they are just sorted.
@@ -315,16 +313,17 @@ def test_duplicate_columns_and_methods_accepted(dataset):
         aggregate_column=[dataset.float_column_name, dataset.float_column_name],
         aggregate_method=stats,
         aggregate_backend="sql",
+        env=dataset.session.env,
     )
 
-    vector_info = gs.vector_info(dissolved_vector)
+    vector_info = gs.vector_info(dissolved_vector, env=dataset.session.env)
     assert vector_info["level"] == 2
     assert vector_info["centroids"] == 3
     assert vector_info["areas"] == 3
     assert vector_info["num_dblinks"] == 1
     assert vector_info["attribute_primary_key"] == "cat"
 
-    columns = gs.vector_columns(dissolved_vector)
+    columns = gs.vector_columns(dissolved_vector, env=dataset.session.env)
     assert sorted(columns.keys()) == sorted(
         ["cat", dataset.str_column_name] + expected_stats_columns
     ), "Unexpected autogenerated column names"
@@ -350,16 +349,17 @@ def test_sql_expressions_accepted(dataset):
         aggregate_column=aggregate_columns,
         result_column=result_columns,
         aggregate_backend="sql",
+        env=dataset.session.env,
     )
 
-    vector_info = gs.vector_info(dissolved_vector)
+    vector_info = gs.vector_info(dissolved_vector, env=dataset.session.env)
     assert vector_info["level"] == 2
     assert vector_info["centroids"] == 3
     assert vector_info["areas"] == 3
     assert vector_info["num_dblinks"] == 1
     assert vector_info["attribute_primary_key"] == "cat"
 
-    columns = gs.vector_columns(dissolved_vector)
+    columns = gs.vector_columns(dissolved_vector, env=dataset.session.env)
     assert sorted(columns.keys()) == sorted(
         ["cat", dataset.str_column_name] + expected_stats_columns
     )
@@ -383,6 +383,7 @@ def test_no_methods_with_univar_and_result_columns_fail(dataset):
             result_column=result_columns,
             aggregate_backend="univar",
             errors="status",
+            env=dataset.session.env,
         )
         != 0
     )
@@ -400,6 +401,7 @@ def test_int_fails(dataset):
             aggregate_column=dataset.float_column_name,
             aggregate_method="n",
             errors="status",
+            env=dataset.session.env,
         )
         != 0
     )

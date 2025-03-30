@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("topology"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("snapping"));
-    G_add_keyword(_("create location"));
+    G_add_keyword(_("create project"));
     module->description =
         _("Imports vector data into a GRASS vector map using OGR library.");
 
@@ -307,10 +307,10 @@ int main(int argc, char *argv[])
     param.snap->description = _("'-1' for no snap");
 
     param.outloc = G_define_option();
-    param.outloc->key = "location";
+    param.outloc->key = "project";
     param.outloc->type = TYPE_STRING;
     param.outloc->required = NO;
-    param.outloc->description = _("Name for new location to create");
+    param.outloc->description = _("Name for new project (location) to create");
     param.outloc->key_desc = "name";
     param.outloc->guisection = _("Output");
 
@@ -377,9 +377,10 @@ int main(int argc, char *argv[])
     flag.over = G_define_flag();
     flag.over->key = 'o';
     flag.over->label =
-        _("Override projection check (use current location's projection)");
-    flag.over->description = _("Assume that the dataset has the same "
-                               "projection as the current location");
+        _("Override projection check (use current project's CRS)");
+    flag.over->description =
+        _("Assume that the dataset has the same "
+          "coordinate reference system (CRS) as the current project");
 
     flag.proj = G_define_flag();
     flag.proj->key = 'j';
@@ -406,9 +407,9 @@ int main(int argc, char *argv[])
 
     flag.no_import = G_define_flag();
     flag.no_import->key = 'i';
-    flag.no_import->description = _(
-        "Create the location specified by the \"location\" parameter and exit."
-        " Do not import the vector data.");
+    flag.no_import->description =
+        _("Create the project specified by the \"project\" parameter and exit."
+          " Do not import the vector data.");
     flag.no_import->guisection = _("Output");
 
     /* The parser checks if the map already exists in current mapset, this is
@@ -715,7 +716,7 @@ int main(int argc, char *argv[])
 
     /* create spatial filters */
     if (param.outloc->answer && flag.region->answer) {
-        G_warning(_("When creating a new location, the current region "
+        G_warning(_("When creating a new project, the current region "
                     "can not be used as spatial filter, disabling"));
         flag.region->answer = 0;
     }
@@ -896,10 +897,10 @@ int main(int argc, char *argv[])
      * polygons are written to the vector then cleaned and centroids are
      * calculated for all areas in clean vector. Then second pass through finds
      * all centroids in each polygon feature and adds its category to the
-     * centroid. The result is that one centroid may have 0, 1 ore more
-     * categories of one ore more (more input layers) fields. */
+     * centroid. The result is that one centroid may have 0, 1 or more
+     * categories of one or more (more input layers) fields. */
 
-    /* get input column to use for categoy values, create tables */
+    /* get input column to use for category values, create tables */
     OGR_iterator_reset(&OGR_iter);
     key_column = G_malloc(nlayers * sizeof(char *));
     key_idx = G_malloc(nlayers * sizeof(int));
@@ -1144,12 +1145,12 @@ int main(int argc, char *argv[])
 
             /* Create table */
             i = 0;
-            sprintf(buf, "create table %s (%s %s", Fi->table, col_info[i].name,
-                    col_info[i].type);
+            sprintf(buf, "create table %s (\"%s\" %s", Fi->table,
+                    col_info[i].name, col_info[i].type);
             db_set_string(&sql, buf);
 
             for (i = 1; i < ncols_out; i++) {
-                sprintf(buf, ", %s %s", col_info[i].name, col_info[i].type);
+                sprintf(buf, ", \"%s\" %s", col_info[i].name, col_info[i].type);
                 db_append_string(&sql, buf);
             }
 
@@ -1443,7 +1444,7 @@ int main(int argc, char *argv[])
          * centroids were not identical */
         /* Disabled, because the mechanism has changed:
          * at this stage, there are no centroids yet, centroids are calculated
-         * later for output areas, not fo input polygons */
+         * later for output areas, not for input polygons */
         /*
            fprintf ( stderr, separator );
            fprintf ( stderr, "Snap centroids (threshold 0.000001):\n" );
@@ -1972,7 +1973,7 @@ int main(int argc, char *argv[])
 
         if (strcmp(G_mapset(), "PERMANENT") == 0) {
             G_put_element_window(&cur_wind, "", "DEFAULT_WIND");
-            G_message(_("Default region for this location updated"));
+            G_message(_("Default region for this project updated"));
         }
         G_put_window(&cur_wind);
         G_message(_("Region for the current mapset updated"));

@@ -41,9 +41,9 @@ Available statistics for populating the raster are (<b>method</b>):
 </blockquote>
 
 <ul>
-<li><em>Variance</em> and derivatives use the biased estimator (n). [subject to change]
+<li><em>Variance</em> and derivatives use the biased estimator (n). [subject to change]</li>
 <li><em>Coefficient of variance</em> is given in percentage and defined as
-<tt>(stddev/mean)*100</tt>.
+<code>(stddev/mean)*100</code>.</li>
 </ul>
 
 <p>
@@ -78,8 +78,8 @@ While the <b>input</b> file can be arbitrarily large, <em>r.in.xyz</em>
 will use a large amount of system memory for large raster regions (10000x10000).
 If the module refuses to start complaining that there isn't enough memory,
 use the <b>percent</b> parameter to run the module in several passes.
-In addition using a less precise map format (<tt>CELL</tt> [integer] or
-<tt>FCELL</tt> [floating point]) will use less memory than a <tt>DCELL</tt>
+In addition using a less precise map format (<code>CELL</code> [integer] or
+<code>FCELL</code> [floating point]) will use less memory than a <code>DCELL</code>
 [double precision floating point] <b>output</b> map. Methods such as <em>n,
 min, max, sum</em> will also use less memory, while <em>stddev, variance,
 and coeff_var</em> will use more.
@@ -91,9 +91,9 @@ for use with arbitrarily large input files<!-- without a small value for percent
  but for the aggregate fns it will also depend on the number of data points. (?) -->
 
 <p>
-The default map <b>type</b>=<tt>FCELL</tt> is intended as compromise between
+The default map <b>type</b>=<code>FCELL</code> is intended as compromise between
 preserving data precision and limiting system resource consumption.
-If reading data from a <tt>stdin</tt> stream, the program can only run using
+If reading data from a <code>stdin</code> stream, the program can only run using
 a single pass.
 
 <h3>Setting region bounds and resolution</h3>
@@ -111,10 +111,10 @@ g.region -p
 # points_per_cell = n_points / (rows * cols)
 
 g.region -e
-# UTM location:
+# UTM project:
 # points_per_sq_m = n_points / (ns_extent * ew_extent)
 
-# Lat/Lon location:
+# Lat/Lon project:
 # points_per_sq_m = n_points / (ns_extent * ew_extent*cos(lat) * (1852*60)^2)
 </pre></div>
 
@@ -122,15 +122,15 @@ g.region -e
 If you only intend to interpolate the data with <em><a href="r.to.vect.html">r.to.vect</a></em> and
 <em><a href="v.surf.rst.html">v.surf.rst</a></em>, then there is little point to setting the region
 resolution so fine that you only catch one data point per cell -- you might
-as well use "<tt>v.in.ascii&nbsp;-zbt</tt>" directly.
+as well use "<code>v.in.ascii&nbsp;-zbt</code>" directly.
 
 <h3>Filtering</h3>
 
 Points falling outside the current region will be skipped. This includes
 points falling <em>exactly</em> on the southern region bound.
-(to capture those adjust the region with "<tt>g.region s=s-0.000001</tt>";
+(to capture those adjust the region with "<code>g.region s=s-0.000001</code>";
 see <em><a href="g.region.html">g.region</a></em>)
-<p>Blank lines and comment lines starting with the hash symbol (<tt>#</tt>)
+<p>Blank lines and comment lines starting with the hash symbol (<code>#</code>)
 will be skipped.
 
 <p>
@@ -147,7 +147,7 @@ environment if the cells are over sampled.
 
 <p>
 The user can use a combination of <em>r.in.xyz</em> <b>output</b> maps to create
-custom filters. e.g. use <em><a href="r.mapcalc.html">r.mapcalc</a></em> to create a <tt>mean-(2*stddev)</tt>
+custom filters. e.g. use <em><a href="r.mapcalc.html">r.mapcalc</a></em> to create a <code>mean-(2*stddev)</code>
 map. [In this example the user may want to include a lower bound filter in
 <em><a href="r.mapcalc.html">r.mapcalc</a></em> to remove highly variable points (small <em>n</em>) or run
 <em><a href="r.neighbors.html">r.neighbors</a></em> to smooth the stddev map before further use.]
@@ -193,7 +193,7 @@ v.surf.rst in=lidar_min_pt elev=lidar_min.rst
 <em>r.in.xyz</em> is expecting numeric values as z column. In order to
 perform a occurrence count operation even on x,y data with non-numeric
 attribute(s), the data can be imported using either the x or y
-coordinate as a fake z column for <b>method</b>=<tt>n</tt> (count
+coordinate as a fake z column for <b>method</b>=<code>n</code> (count
 number of points per grid cell), the z values are ignored anyway.
 
 <h2>EXAMPLES</h2>
@@ -212,7 +212,7 @@ it may be sufficient to adapt the <b>z</b> position value.
 <!-- NC: preparation for this example
 g.region raster=elevation res=15 -p
 #
-r.stats -1g elevation > elevation.xyz
+r.stats -1g elevation &gt; elevation.xyz
 -->
 
 <div class="code"><pre>
@@ -245,7 +245,7 @@ r.univar myelev
 </pre></div>
 
 <h3>Import of LiDAR data and DEM creation</h3>
-Import the <a href="http://www.grassbook.org/ncexternal/index.html">Jockey's
+Import the <a href="https://grassbook.org/ncexternal/index.html">Jockey's
 Ridge, NC, LIDAR dataset</a> (compressed file "lidaratm2.txt.gz"), and process it
 into a clean DEM:
 
@@ -287,16 +287,16 @@ r.colors lidar_min.rst_scaled rule=bcyr -n -e
 
 <ul>
 <li> Support for multiple map output from a single run.<br>
-     <tt>method=string[,string,...] output=name[,name,...]</tt><br>
+     <code>method=string[,string,...] output=name[,name,...]</code><br>
      This can be easily handled by a wrapper script, with the added
-     benefit of it being very simple to parallelize that way.
+     benefit of it being very simple to parallelize that way.</li>
 </ul>
 
 <h2>KNOWN ISSUES</h2>
 
 <ul>
-<li> "<tt>nan</tt>" can leak into <em>coeff_var</em> maps.
-  <br>Cause unknown. Possible work-around: "<tt>r.null setnull=nan</tt>"
+<li> "<code>nan</code>" can leak into <em>coeff_var</em> maps.
+  <br>Cause unknown. Possible work-around: "<code>r.null setnull=nan</code>"</li>
 <!-- Another method:  r.mapcalc 'No_nan = if(map == map, map, null() )' -->
 </ul>
 
@@ -310,7 +310,7 @@ Development Team.
 <a href="m.proj.html">m.proj</a>,
 <a href="r.fillnulls.html">r.fillnulls</a>,
 <a href="r.in.ascii.html">r.in.ascii</a>,
-<a href="r.in.lidar.html">r.in.lidar</a>,
+<a href="r.in.pdal.html">r.in.pdal</a>,
 <a href="r3.in.xyz.html">r3.in.xyz</a>,
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.neighbors.html">r.neighbors</a>,

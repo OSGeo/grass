@@ -20,14 +20,14 @@ category number falls into different <b>query_map</b> polygons.
 <p>When transferring attributes from a point map into a polygon map,
 <b>dmax</b> has to be larger than zero, i.e., it will be determined by the
 distance between query points and polygon centroids. Importantly, distance
-is in meters for latitude-longitude locations.
+is in meters for latitude-longitude projects.
 <p>In case that one or both input vector maps are 3D, features need to
 touch also in the 3rd dimension (z coordinate) in order to transfer
 attributes.
 
 <h2>EXAMPLES</h2>
 
-In this example, the 'hospitals' point map in the North Carolina location is
+In this example, the 'hospitals' point map in the North Carolina dataset is
 copied to the current mapset, a new attribute column is added and the urban
 names from the 'urbanarea' polygon map are transferred to hospital points
 locations in 'myhospitals' map:
@@ -41,7 +41,7 @@ v.db.select myhospitals
 </pre></div>
 <p>
 In this example, city names, population data and others from
-<a href="http://download.geonames.org/export/dump/">Geonames.org country files</a> are
+<a href="https://download.geonames.org/export/dump/">Geonames.org country files</a> are
 transferred to selected EU CORINE landuse/landcover classes
 ("Continuous urban fabric", 111, and "Discontinuous urban fabric", 112).
 Note: The example is in UTM projection to which the input maps have been

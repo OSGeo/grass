@@ -16,7 +16,7 @@ geometric parameters of the interpolated
 phenomenon can be computed (magnitude of gradient, direction of
 gradient defined by horizontal and vertical angles), change of gradient,
 Gauss-Kronecker curvature, or mean curvature). These geometric
-parameteres are saved as
+parameters are saved as
 3D raster maps <b>gradient, aspect_horizontal, aspect_vertical, ncurvature, gcurvature, mcurvature</b>,
 respectively. Maps <b>aspect_horizontal</b> and <b>aspect_vertical</b> are in degrees.
 
@@ -68,7 +68,7 @@ only a subset of the input vectors.
 
 <div class="code"><pre>
 # preparation as in above example
-v.vol.rst elevrand_3d wcol=soilrange elevation=soilrange zscale=100 where="soilrange > 3"
+v.vol.rst elevrand_3d wcol=soilrange elevation=soilrange zscale=100 where="soilrange &gt; 3"
 </pre></div>
 
 <h3>Cross validation procedure</h3>
@@ -85,7 +85,7 @@ very long time, so it might be worth to use just a sample data
 representing the whole dataset.
 
 <p><i>Example
- (based on <a href="http://www.grassbook.org/data_menu2nd.php">Slovakia3d dataset</a>):</i>
+ (based on <a href="https://grassbook.org/data_menu2nd.php">Slovakia3d dataset</a>):</i>
 <p><div class="code"><pre>
 v.info -c precip3d
 g.region n=5530000 s=5275000 w=4186000 e=4631000 res=500 -p
@@ -172,10 +172,9 @@ g.region res=100 tbres=100 res3=100 b=0 t=1500 -ap3
 
 ### First part: generate synthetic 3D data (true 3D soil data preferred)
 # generate random positions from elevation map (2D)
-r.random elevation.10m vector_output=elevrand n=200
+r.random elevation.10m vector=elevrand n=200 seed=42
 
 # generate synthetic values
-v.db.addcolumn elevrand col="x double precision, y double precision"
 v.to.db elevrand option=coor col=x,y
 v.db.select elevrand
 
@@ -202,7 +201,7 @@ v.db.update elevrand_3d col=soilrange value=NULL where="soilrange=0"
 v.db.select elevrand_3d
 
 # optionally: check 3D points in Paraview
-v.out.vtk input=elevrand_3d output=elevrand_3d.vtk type=point dp=2
+v.out.vtk input=elevrand_3d output=elevrand_3d.vtk type=point precision=2
 paraview --data=elevrand_3d.vtk
 
 ### Second part: 3D interpolation from 3D point data
@@ -230,13 +229,13 @@ paraview --data=volume.vtk
 Interpolation of Precipitation Using Regularized Spline with Tension.
 Transactions in
 GIS&nbsp; 6, pp. 135-150.
-<p><a href="http://www4.ncsu.edu/~hmitaso/gmslab/">Mitas, L.,
+<p><a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/">Mitas, L.,
 Mitasova, H.</a>, 1999, Spatial Interpolation. In: P.Longley, M.F.
 Goodchild, D.J. Maguire, D.W.Rhind (Eds.), Geographical Information
 Systems: Principles, Techniques, Management and Applications, Wiley,
 pp.481-492
 <p>Mitas L., Brown W. M., Mitasova H., 1997,
-<a href="http://www4.ncsu.edu/~hmitaso/gmslab/lcgfin/cg-mitas.html">Role
+<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/lcgfin/cg-mitas.html">Role
 of dynamic cartography in simulations of landscape processes based on
 multi-variate fields.</a> Computers and Geosciences, Vol. 23, No. 4,
 pp. 437-446 (includes CDROM and WWW: www.elsevier.nl/locate/cgvis)
@@ -248,13 +247,13 @@ New methods and tools for GRASS GIS. International Journal of GIS, 9
 special issue on Integrating GIS and Environmental modeling, 433-446.
 <p> Mitasova, H., Mitas, L., Brown, B., Kosinovsky, I., Baker, T.,
 Gerdes, D. (1994):
-<a href="http://www4.ncsu.edu/~hmitaso/gmslab/viz/ches.html">Multidimensional
+<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/viz/ches.html">Multidimensional
 interpolation and visualization in GRASS GIS</a>
-<p><a href="http://www4.ncsu.edu/~hmitaso/gmslab/papers/lmg.rev1.ps">Mitasova
+<p><a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/lmg.rev1.ps">Mitasova
 H. and Mitas L. 1993</a>: Interpolation by Regularized Spline with
 Tension: I. Theory and Implementation, <i>Mathematical Geology</i> 25,
 641-655.
-<p><a href="http://www4.ncsu.edu/~hmitaso/gmslab/papers/hmg.rev1.ps">Mitasova
+<p><a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/hmg.rev1.ps">Mitasova
 H. and Hofierka J. 1993</a>: Interpolation by Regularized Spline with
 Tension: II. Application to Terrain Modeling and Surface Geometry
 Analysis, <i>Mathematical Geology</i> 25, 657-667.

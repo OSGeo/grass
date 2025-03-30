@@ -47,7 +47,7 @@ from grass.script import core as grass
 
 
 def oifcalc(sdev, corr, k1, k2, k3):
-    grass.debug(_("Calculating OIF for combination: %s, %s, %s" % (k1, k2, k3)), 1)
+    grass.debug(_("Calculating OIF for combination: %s, %s, %s") % (k1, k2, k3), 1)
     # calculate SUM of Stddeviations:
     ssdev = [sdev[k1], sdev[k2], sdev[k3]]
     numer = sum(ssdev)
@@ -63,7 +63,7 @@ def oifcalc(sdev, corr, k1, k2, k3):
 
 def perms(bands):
     n = len(bands)
-    for i in range(0, n - 2):
+    for i in range(n - 2):
         for j in range(i + 1, n - 1):
             for k in range(j + 1, n):
                 yield (bands[i], bands[j], bands[k])
@@ -90,10 +90,7 @@ def main():
             stddev[band] = float(kv["stddev"])
     else:
         # run all bands in parallel
-        if "WORKERS" in os.environ:
-            workers = int(os.environ["WORKERS"])
-        else:
-            workers = len(bands)
+        workers = int(os.environ["WORKERS"]) if "WORKERS" in os.environ else len(bands)
         proc = {}
         pout = {}
 
@@ -107,7 +104,7 @@ def main():
                     if not proc[bandp].stdout.closed:
                         pout[bandp] = proc[bandp].communicate()[0]
                     proc[bandp].wait()
-            n = n + 1
+            n += 1
 
         # wait for jobs to finish, collect the output
         for band in bands:
@@ -122,9 +119,7 @@ def main():
 
     grass.message(_("Calculating Correlation Matrix..."))
     correlation = {}
-    s = grass.read_command(
-        "r.covar", flags="r", map=[band for band in bands], quiet=True
-    )
+    s = grass.read_command("r.covar", flags="r", map=list(bands), quiet=True)
 
     # We need to skip the first line, since r.covar prints the number of values
     lines = s.splitlines()
@@ -141,21 +136,17 @@ def main():
     oif.sort(reverse=True)
 
     grass.verbose(
-        _("The Optimum Index Factor analysis result " "(best combination shown first):")
+        _("The Optimum Index Factor analysis result (best combination shown first):")
     )
 
-    if shell:
-        fmt = "%s,%s,%s:%.4f\n"
-    else:
-        fmt = "%s, %s, %s:  %.4f\n"
+    fmt = "%s,%s,%s:%.4f\n" if shell else "%s, %s, %s:  %.4f\n"
 
     if not output or output == "-":
         for v, p in oif:
             sys.stdout.write(fmt % (p + (v,)))
     else:
         outf = open(output, "w")
-        for v, p in oif:
-            outf.write(fmt % (p + (v,)))
+        outf.writelines(fmt % (p + (v,)) for v, p in oif)
         outf.close()
 
 

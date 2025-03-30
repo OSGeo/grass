@@ -35,31 +35,43 @@
 # % required : yes
 # %end
 
+# %option G_OPT_DB_DATABASE
+# %end
+
+# %option G_OPT_DB_DRIVER
+# % options: dbf,odbc,ogr,sqlite,pg
+# %end
+
 import sys
 import string
 
 from grass.exceptions import CalledModuleError
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
     table = options["table"]
     column = options["column"]
+    database = options["database"]
+    driver = options["driver"]
     force = flags["f"]
 
     # check if DB parameters are set, and if not set them.
-    gscript.run_command("db.connect", flags="c")
+    gs.run_command("db.connect", flags="c")
 
-    kv = gscript.db_connection()
-    database = kv["database"]
-    driver = kv["driver"]
+    if not database or not driver:
+        kv = gs.db_connection()
+        if not database:
+            database = kv["database"]
+        if not driver:
+            driver = kv["driver"]
     # schema needed for PG?
 
     if force:
-        gscript.message(_("Forcing ..."))
+        gs.message(_("Forcing ..."))
 
     if column == "cat":
-        gscript.warning(
+        gs.warning(
             _(
                 "Deleting <%s> column which may be needed to keep "
                 "table connected to a vector map"
@@ -67,20 +79,21 @@ def main():
             % column
         )
 
-    cols = [f[0] for f in gscript.db_describe(table)["cols"]]
+    cols = [
+        f[0] for f in gs.db_describe(table, database=database, driver=driver)["cols"]
+    ]
     if column not in cols:
-        gscript.fatal(_("Column <%s> not found in table") % column)
+        gs.fatal(_("Column <%s> not found in table") % column)
 
     if not force:
-        gscript.message(_("Column <%s> would be deleted.") % column)
-        gscript.message("")
-        gscript.message(
-            _("You must use the force flag (-f) to actually " "remove it. Exiting.")
+        gs.message(_("Column <%s> would be deleted.") % column)
+        gs.message(
+            _("You must use the force flag (-f) to actually remove it. Exiting.")
         )
         return 0
 
     if driver == "sqlite":
-        sqlite3_version = gscript.read_command(
+        sqlite3_version = gs.read_command(
             "db.select",
             sql="SELECT sqlite_version();",
             flags="c",
@@ -88,7 +101,8 @@ def main():
             driver=driver,
         ).split(".")[0:2]
 
-        if [int(i) for i in sqlite3_version] >= [int(i) for i in "3.35".split(".")]:
+        # sqlite version 3.35 compared here
+        if [int(i) for i in sqlite3_version] >= [int(i) for i in ["3", "35"]]:
             sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
             if column == "cat":
                 sql = "DROP INDEX %s_%s; %s" % (table, column, sql)
@@ -96,7 +110,7 @@ def main():
             # for older sqlite3 versions, use old way to remove column
             colnames = []
             coltypes = []
-            for f in gscript.db_describe(table)["cols"]:
+            for f in gs.db_describe(table)["cols"]:
                 if f[0] != column:
                     colnames.append(f[0])
                     coltypes.append("%s %s" % (f[0], f[1]))
@@ -107,11 +121,11 @@ def main():
             cmds = [
                 "BEGIN TRANSACTION",
                 "CREATE TEMPORARY TABLE ${table}_backup(${coldef})",
-                "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",
-                "DROP TABLE ${table}",
+                "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",  # noqa: RUF027
+                "DROP TABLE ${table}",  # noqa: RUF027
                 "CREATE TABLE ${table}(${coldef})",
-                "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",
-                "DROP TABLE ${table}_backup",
+                "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",  # noqa: RUF027
+                "DROP TABLE ${table}_backup",  # noqa: RUF027
                 "COMMIT",
             ]
             tmpl = string.Template(";\n".join(cmds))
@@ -120,15 +134,15 @@ def main():
         sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
 
     try:
-        gscript.write_command(
+        gs.write_command(
             "db.execute", input="-", database=database, driver=driver, stdin=sql
         )
     except CalledModuleError:
-        gscript.fatal(_("Cannot continue (problem deleting column)"))
+        gs.fatal(_("Cannot continue (problem deleting column)"))
 
     return 0
 
 
 if __name__ == "__main__":
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
     sys.exit(main())

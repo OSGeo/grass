@@ -7,13 +7,16 @@ Needs PyYAML, Git, and GitHub CLI.
 
 import argparse
 import csv
+import itertools
 import json
+import random
 import re
 import subprocess
 import sys
 from collections import defaultdict
 from pathlib import Path
 
+import requests
 import yaml
 
 PRETTY_TEMPLATE = (
@@ -23,6 +26,7 @@ PRETTY_TEMPLATE = (
     "    date: %ad%n"
     "    message: |-%n      %s"
 )
+CONFIG_DIRECTORY = Path("utils")
 
 
 def remove_excluded_changes(changes, exclude):
@@ -65,7 +69,7 @@ def split_to_categories(changes, categories):
 
 
 def print_section_heading_2(text, file=None):
-    print(f"### {text}\n", file=file)
+    print(f"## {text}\n", file=file)
 
 
 def print_section_heading_3(text, file=None):
@@ -81,9 +85,34 @@ def print_category(category, changes, file=None):
     if not items:
         return
     print_section_heading_3(category, file=file)
+    bot_file = Path("utils") / "known_bot_names.txt"
+    known_bot_names = bot_file.read_text().splitlines()
+    visible = []
+    hidden = []
+    overflow = []
+    max_section_length = 25
     for item in sorted(items):
+        # Relies on author being specified after the last "by".
+        author = item.rsplit(" by ", maxsplit=1)[-1]
+        # Relies on author being specified as username.
+        if " " in author:
+            author = author.split(" ", maxsplit=1)[0]
+        author = author.removeprefix("@")
+        if author in known_bot_names or author.endswith("[bot]"):
+            hidden.append(item)
+        elif len(visible) > max_section_length:
+            overflow.append(item)
+        else:
+            visible.append(item)
+    for item in visible:
         print(f"* {item}", file=file)
-    print("")
+    if hidden or overflow:
+        print("\n<details>")
+        print(" <summary>Show more</summary>\n")
+        for item in itertools.chain(overflow, hidden):
+            print(f"  * {item}", file=file)
+        print("\n</details>")
+    print()
 
 
 def print_by_category(changes, categories, file=None):
@@ -95,9 +124,47 @@ def print_by_category(changes, categories, file=None):
 
 def binder_badge(tag):
     """Get mybinder Binder badge from a given tag, hash, or branch"""
-    binder_image_url = "https://camo.githubusercontent.com/581c077bdbc6ca6899c86d0acc6145ae85e9d80e6f805a1071793dbe48917982/68747470733a2f2f6d7962696e6465722e6f72672f62616467655f6c6f676f2e737667"  # noqa
-    binder_url = f"https://mybinder.org/v2/gh/OSGeo/grass/{tag}?urlpath=lab%2Ftree%2Fdoc%2Fnotebooks%2Fjupyter_example.ipynb"  # noqa
+    binder_image_url = "https://mybinder.org/badge_logo.svg"
+    binder_url = f"https://mybinder.org/v2/gh/OSGeo/grass/{tag}?urlpath=lab%2Ftree%2Fdoc%2Fexamples%2Fnotebooks%2Fjupyter_example.ipynb"
     return f"[![Binder]({binder_image_url})]({binder_url})"
+
+
+def print_support(file=None):
+    url = "https://opencollective.com/grass/tiers/supporter/all.json"
+    response = requests.get(url=url, timeout=7)
+    data = response.json()
+    if data:
+        print_section_heading_3("Monthly Financial Supporters", file=file)
+        random.shuffle(data)
+        supporters = []
+        for member in data:
+            supporters.append(f"""[{member["name"]}]({member["profile"]})""")
+        print(", ".join(supporters))
+        print()
+
+
+def adjust_after(lines):
+    """Adjust new contributor lines in the last part of the generated notes"""
+    bot_file = Path("utils") / "known_bot_names.txt"
+    known_bot_names = bot_file.read_text().splitlines()
+    new_lines = []
+    for line in lines:
+        if line.startswith("* @"):
+            unused, username, text = line.split(" ", maxsplit=2)
+            username = username.replace("@", "")
+            if username in known_bot_names:
+                continue
+            output = subprocess.run(
+                ["gh", "api", f"users/{username}"],
+                capture_output=True,
+                text=True,
+                check=True,
+            ).stdout
+            name = json.loads(output)["name"]
+            if name and name != username:
+                line = f"* {name} (@{username}) {text}"
+        new_lines.append(line)
+    return new_lines
 
 
 def print_notes(
@@ -117,12 +184,20 @@ def print_notes(
 
     if before:
         print(before)
+    print_section_heading_2("Highlights", file=file)
+    print("* _Put handcrafted list of 2-15 items here._\n")
+    print_section_heading_2("New Addon Tools", file=file)
+    print(
+        "* _Put here a list of new addos since last release "
+        "or delete the section if there are none._\n"
+    )
+    print_support(file=file)
     print_section_heading_2("What's Changed", file=file)
     changes_by_category = split_to_categories(changes, categories=categories)
     print_by_category(changes_by_category, categories=categories, file=file)
     if after:
         print(after)
-        print("")
+        print()
     print(binder_badge(end_tag))
 
 
@@ -152,17 +227,18 @@ def notes_from_gh_api(start_tag, end_tag, branch, categories, exclude):
     raw_changes = lines[start_whats_changed + 1 : end_whats_changed]
     changes = []
     for change in raw_changes:
-        if change.startswith("* ") or change.startswith("- "):
+        if change.startswith(("* ", "- ")):
             changes.append(change[2:])
         else:
             changes.append(change)
     changes = remove_excluded_changes(changes=changes, exclude=exclude)
+    after = adjust_after(lines[end_whats_changed + 1 :])
     print_notes(
         start_tag=start_tag,
         end_tag=end_tag,
         changes=changes,
         before="\n".join(lines[:start_whats_changed]),
-        after="\n".join(lines[end_whats_changed + 1 :]),
+        after="\n".join(after),
         categories=categories,
     )
 
@@ -187,26 +263,28 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
     ).stdout
     commits = yaml.safe_load(text)
     if not commits:
-        raise RuntimeError("No commits retrieved from git log (try different tags)")
+        msg = "No commits retrieved from git log (try different tags)"
+        raise RuntimeError(msg)
 
-    config_directory = Path("utils")
     svn_name_by_git_author = csv_to_dict(
-        config_directory / "svn_name_git_author.csv",
+        CONFIG_DIRECTORY / "svn_name_git_author.csv",
         key="git_author",
         value="svn_name",
     )
     github_name_by_svn_name = csv_to_dict(
-        config_directory / "svn_name_github_name.csv",
+        CONFIG_DIRECTORY / "svn_name_github_name.csv",
         key="svn_name",
         value="github_name",
     )
+    github_name_by_git_author_file = CONFIG_DIRECTORY / "git_author_github_name.csv"
     github_name_by_git_author = csv_to_dict(
-        config_directory / "git_author_github_name.csv",
+        github_name_by_git_author_file,
         key="git_author",
         value="github_name",
     )
 
     lines = []
+    unknow_authors = []
     for commit in commits:
         if commit["author_email"].endswith("users.noreply.github.com"):
             github_name = commit["author_email"].split("@")[0]
@@ -217,10 +295,7 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
             # Emails are stored with @ replaced by a space.
             email = commit["author_email"].replace("@", " ")
             git_author = f"{commit['author_name']} <{email}>"
-            if (
-                git_author not in svn_name_by_git_author
-                and git_author in github_name_by_git_author
-            ):
+            if git_author in github_name_by_git_author:
                 github_name = github_name_by_git_author[git_author]
                 github_name = f"@{github_name}"
             else:
@@ -230,6 +305,7 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
                     github_name = f"@{github_name}"
                 except KeyError:
                     github_name = git_author
+                    unknow_authors.append((git_author, commit["message"]))
         lines.append(f"{commit['message']} by {github_name}")
     lines = remove_excluded_changes(changes=lines, exclude=exclude)
     print_notes(
@@ -242,6 +318,16 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
         ),
         categories=categories,
     )
+    processed_authors = []
+    if unknow_authors:
+        print(
+            f"\n\nAuthors who need to be added to {github_name_by_git_author_file}:\n"
+        )
+        for author, message in unknow_authors:
+            if author in processed_authors:
+                continue
+            print(f"{author} -- authored {message}")
+            processed_authors.append(author)
 
 
 def create_release_notes(args):
@@ -256,9 +342,8 @@ def create_release_notes(args):
             check=True,
         ).stdout.strip()
 
-    config_directory = Path("utils")
-    with open(config_directory / "release.yml", encoding="utf-8") as file:
-        config = yaml.safe_load(file.read())["notes"]
+    config_file = CONFIG_DIRECTORY / "release.yml"
+    config = yaml.safe_load(config_file.read_text(encoding="utf-8"))["notes"]
 
     if args.backend == "api":
         notes_from_gh_api(
@@ -284,10 +369,13 @@ def main():
         epilog="Run in utils directory to access the helper files.",
     )
     parser.add_argument(
-        "backend", choices=["log", "api"], help="use git log or GitHub API"
+        "backend",
+        choices=["log", "api", "check"],
+        help="use git log or GitHub API (or check a PR title)",
     )
     parser.add_argument(
-        "branch", help="needed for the GitHub API when tag does not exist"
+        "branch",
+        help="needed for the GitHub API when tag does not exist (or a PR title)",
     )
     parser.add_argument("start_tag", help="old tag to compare against")
     parser.add_argument(
@@ -299,6 +387,35 @@ def main():
         ),
     )
     args = parser.parse_args()
+    if args.backend == "check":
+        config_file = Path("utils") / "release.yml"
+        config = yaml.safe_load(Path(config_file).read_text(encoding="utf-8"))
+        has_match = False
+        for category in config["notes"]["categories"]:
+            if re.match(category["regexp"], args.branch):
+                has_match = True
+                break
+        for item in config["notes"]["exclude"]["regexp"]:
+            if re.match(item, args.branch):
+                has_match = True
+                break
+        if has_match:
+            sys.exit(0)
+        else:
+            expressions = "\n".join(
+                [category["regexp"] for category in config["notes"]["categories"]]
+            )
+            suggestions = "\n".join(
+                [category["example"] for category in config["notes"]["categories"]]
+            )
+            sys.exit(
+                f"Title '{args.branch}' does not fit into one of "
+                f"the categories specified in {config_file}. "
+                "Try to make it fit one of these regular expressions:\n"
+                f"{expressions}\n"
+                "Here are some examples:\n"
+                f"{suggestions}"
+            )
     try:
         create_release_notes(args)
     except subprocess.CalledProcessError as error:

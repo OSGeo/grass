@@ -1,11 +1,11 @@
 # How the GRASS GIS Webserver and related infrastructure works
 
 Author: Markus Neteler
-Last update: Dec 2023
+Last update: Sep 2024
 
 ## GRASS GIS Source code repository
 
-Maintainer: Markus Neteler, Martin Landa, OSGeo-SAC, <http://wiki.osgeo.org/wiki/SAC>
+Maintainer: Markus Neteler, Martin Landa, OSGeo-SAC, <https://wiki.osgeo.org/wiki/SAC>
 
 Important update April 2019: The source code is now managed on GitHub (rather
 than in SVN).
@@ -17,12 +17,12 @@ The GitHub repositories are:
 - GRASS GIS Add-ons: <https://github.com/OSGeo/grass-addons>
 - GRASS GIS promotional material: <https://github.com/OSGeo/grass-promo>
 - GRASS GIS Website (Hugo site): <https://github.com/OSGeo/grass-website>
-- Github mirror at OSGeo: <https://git.osgeo.org/gitea/grass_gis/grass>
+- Github mirror at OSGeo (updated daily): <https://git.osgeo.org/gitea/grass_gis/grass>
 
 Git usage:
 
 - [CONTRIBUTING.md file](../CONTRIBUTING.md)
-- <https://trac.osgeo.org/grass/wiki/HowToGit>
+- [Guide to contributing on GitHub](development/github_guide.md)
 
 Issues:
 
@@ -39,8 +39,8 @@ Maintainer: M. Neteler
 
 - <https://grass.osgeo.org>
 
-  - osgeo7-grass: LXD container on osgeo7 (<https://wiki.osgeo.org/wiki/SAC_Service_Status#osgeo_7>)
-    - OS: Debian Buster
+  - osgeo8-grass: LXD container on osgeo8 (<https://wiki.osgeo.org/wiki/SAC_Service_Status#osgeo_8>)
+    - OS: Debian GNU/Linux 11 bullseye
     - Apache Server with Hugo (<https://github.com/OSGeo/grass-website>)
   - for migration details (7/2020), see <https://github.com/OSGeo/grass-website/issues/180>
   - ssh login: via jumphost hop.osgeo8.osgeo.org
@@ -48,17 +48,14 @@ Maintainer: M. Neteler
 
 - <https://old.grass.osgeo.org> (CMSMS, replaced in 2020 by above Hugo based solution)
 
-  - Shared virtual OSGeo machine (osgeo6) hosted at Oregon State University
-    Open Source Lab server: osgeo6.osgeo.osuosl.org)
-  - Login: via OSGeo LDAP, there is a "grass" LDAP group
-  - Software:
-    - OS: Debian Wheezy
-    - Apache Server with PHP
-  - Login: via OSGeo LDAP, there is a "grass" LDAP group
+  - a static copy of the old site is found at
+    `neteler@grasslxd:old-grass-website/old.grass.osgeo.org/` (13 GB)
+  - otherwise: <https://web.archive.org/web/20191220035849/https://grass.osgeo.org/>
 
 - Backups:
 
-  - osgeo7-grass: container on osgeo8 is backup'ed, see <http://wiki.osgeo.org/wiki/SAC:Backups>
+  - osgeo8-grass + wiki: container on osgeo8 is backup'ed,
+    see <https://wiki.osgeo.org/wiki/SAC:Backups>
 
 - Mirrors:
 
@@ -70,18 +67,18 @@ Maintainer: M. Neteler
 - Weekly software snapshots (generated Saturday morning Portland (OR), US time):
 
   - Source code tarball of git (GitHub) <https://github.com/OSGeo/grass>
-  - Linux binary snapshot is compiled on osgeo7-grass
+  - Linux binary snapshot is compiled on osgeo8-grass
     - GRASS is compiled with GDAL, PROJ, SQLite, MySQL, PostgreSQL, FFTW, C++ support,
       see <https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/>
     - binary tar.gz and manuals are moved into Web space
 
 - GRASS user manual HTML:
 
-  - generated during compilation of weekly Linux binary snapshot on osgeo7-grass
+  - generated during compilation of weekly Linux binary snapshot on osgeo8-grass
 
 - GRASS addons manual HTML:
 
-  - generated during compilation of weekly Linux binary snapshot on osgeo7-grass
+  - generated during compilation of weekly Linux binary snapshot on osgeo8-grass
 
 - GRASS programmer's manual (<https://grass.osgeo.org/programming8/>)
 
@@ -89,13 +86,15 @@ Maintainer: M. Neteler
   - HTML: cronjob run Saturday morning Portland (OR), US time
   - disabled: PDF: cronjob run Saturday morning Portland (OR), US time
 
-- Mailman mailing lists + automated greylisting (at lists.osgeo.org since 11/2007)
+- Mailman mailing lists + automated greylisting
+  (at <https://lists.osgeo.org/mailman/listinfo>, since 11/2007)
 
   - Mailman is doing the job, only registered users can post
   - messages from unsubscribed people is auto-discarded without notification
   - the open "weblist" operates instead like this:
-    - User -> grass-web at lists osgeo.org -> greylisting -> Mailman
-    - for greylisting, see <http://postgrey.schweikert.ch/>
+    - mails goes to grass-web at lists osgeo.org -> greylisting -> Mailman
+    - for greylisting, see <https://postgrey.schweikert.ch/>
+    - Moderation of queue: <https://lists.osgeo.org/mailman/admindb/grass-web>
 
 - Backup of mailing lists (mbox files)
 
@@ -104,7 +103,7 @@ Maintainer: M. Neteler
 - Web statistics
   - Matomo: <https://2022.foss4g.org/matomo/> (not publicly accessible;
     access: Markus Neteler)
-  - Selected stats: <http://wiki.osgeo.org/wiki/Project_Stats>
+  - Selected stats: <https://wiki.osgeo.org/wiki/Project_Stats> and <https://wiki.osgeo.org/wiki/VisibilityStats#Mailing_list_subscribers>
 
 Summary: The system should run almost autonomously.
 
@@ -148,11 +147,9 @@ Maintainer: Martin Landa, Markus Neteler
 
 - <https://grasswiki.osgeo.org>
 - Mediawiki software
-- requires registration to keep spammers out
-
-Summary: The system should run almost autonomous. An eye must be be kept
-on people trying to spam the site. Several layers of registration protection
-are in place due to excessive spam.
+- requires registration at
+  [OSGeo-LDAP](https://www.osgeo.org/community/getting-started-osgeo/osgeo_userid/)
+  (to keep spammers out)
 
 Macros for manual pages (src, cmd, API, ...):
 
@@ -163,9 +160,15 @@ Macros for manual pages (src, cmd, API, ...):
 Channel: irc://irc.libera.chat/grass
 Web based client: See <https://grasswiki.osgeo.org/wiki/IRC>
 
+Libera IRC:
+
+- Founder: jmckenna, markusN
+
+Former freenode IRC:
+
 - channel owner: Alessandro Frigeri ("geoalf")
 - quasi guru level: Markus Neteler ("markusN")
-- original (freenode) operators:
+- original operators:
   - Jachym ("jachym")
   - Luca ("doktoreas")
   - Soeren ("huhabla")
@@ -181,16 +184,16 @@ Old bugtrackers: see <https://grasswiki.osgeo.org/wiki/Bug_tracking>
 
 ## GRASS GIS Addons
 
-Maintainer: Martin Landa and Markus Neteler
+Maintainer: Martin Landa, Tomas Zigo, and Markus Neteler
 
 Details:
 
-- Windows-addons: grass-addons/utils/addons/README.txt
+- Windows-addons: `grass-addons/utils/addons/README.txt`
 - Addon manual pages cronjob: <https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd>
 - Rendered manuals: <https://grass.osgeo.org/grass8/manuals/addons/>
 
-The redirect to the latest grassX directory is defined on grass.osgeo.org:
-/etc/apache2/includes/grass.osgeo.org.inc
+The redirect to the latest `grassX` directory is defined on grass.osgeo.org:
+`/etc/apache2/includes/grass.osgeo.org.inc`
 
 Procedure building of binaries (Windows):
 
@@ -199,8 +202,8 @@ Procedure building of binaries (Windows):
 - A new compilation is triggered every time a commit is done in the Addons repo.
 - Logs:
   - Linux log files: <https://grass.osgeo.org/addons/grass8/logs> (compiled on
-    `grasslxd` on `osgeo7`)
-  - Windows log files: <http://wingrass.fsv.cvut.cz/grass8X/addons/grass-XXXdev/logs/>
+    `grasslxd` on `osgeo8`)
+  - Windows log files: <https://wingrass.fsv.cvut.cz/grass8X/addons/grass-XXXdev/logs/>
 
 Procedure of granting write access to Addons repo:
 
@@ -213,14 +216,7 @@ Procedure of granting write access to Addons repo:
 
 XML file for g.extension: <https://grass.osgeo.org/addons/grass8/modules.xml>
 
-- generated in grass-addons/utils/addons/grass-addons-publish.sh
-
-## GRASS Travis CI
-
-Maintainer: Martin Landa
-
-- <https://app.travis-ci.com/github/OSGeo/grass>
-- <https://github.com/OSGeo/grass/tree/main/.travis/>
+- generated in `grass-addons/utils/addons/grass-addons-publish.sh`
 
 ## GRASS CI: GitHub Actions
 
@@ -232,8 +228,7 @@ Maintainer: Vaclav Petras
 - Details: <https://github.com/OSGeo/grass/pull/525>
 - CI workflow with:
   - A build job which is not parallelized and is meant for clear & relatively fast
-    check of compilation and building in general. (Duplicating what is running
-    on Travis)
+    check of compilation and building in general.
   - A test job which of course needs to build, but the main focus is to run tests,
     so the compilation is parallelized (depending on nproc) and thus potentially
     less readable. This runs the whole test suite. (You need to run it locally to
@@ -266,6 +261,24 @@ User settings:
   through OSGeo-SAC
 
 Helper files placed in .github/workflows/
+
+## GRASS Zenodo.org repository: citable source code with DOI
+
+Zenodo page with DOI (for all versions, shows latest release on top):
+[10.5281/zenodo.5176030](https://doi.org/10.5281/zenodo.5176030)
+
+**GitHub - Zenodo Integration**: The settings are accessible with any
+GitHub account which has write access to the GRASS GIS GitHub repo and
+they are managed here:
+
+<https://zenodo.org/account/settings/github/repository/OSGeo/grass>
+
+In the settings, the GRASS GIS GitHub repository needs to be enabled.
+
+Upcoming releases should automatically show up and get a DOI
+assigned.
+
+Explanations: <https://grasswiki.osgeo.org/wiki/GitHub-Zenodo_linkage>
 
 ## GRASS Coverity Scan
 

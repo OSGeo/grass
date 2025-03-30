@@ -64,7 +64,7 @@
 # % multiple: no
 # %end
 
-import grass.script as grass
+import grass.script as gs
 
 ############################################################################
 
@@ -85,10 +85,10 @@ def main():
     tgis.init()
 
     tgis.open_new_stds(
-        name, type, temporaltype, title, descr, semantic, None, grass.overwrite()
+        name, type, temporaltype, title, descr, semantic, None, gs.overwrite()
     )
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

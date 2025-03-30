@@ -11,14 +11,23 @@ for details.
 
 import errno
 import os
+from pathlib import Path
 import shutil
 import sys
+from unittest import expectedFailure
+import warnings
 
 
 def ensure_dir(directory):
     """Create all directories in the given path if needed."""
     if not os.path.exists(directory):
         os.makedirs(directory)
+
+
+def add_gitignore_to_dir(directory):
+    gitignore_path = Path(directory) / ".gitignore"
+    if not Path(gitignore_path).exists():
+        Path(gitignore_path).write_text("*")
 
 
 def silent_rmtree(filename):
@@ -69,7 +78,21 @@ def safe_repr(obj, short=False):
     try:
         result = repr(obj)
     except Exception:
-        result = object.__repr__(obj)
+        result = object.__repr__(obj)  # noqa: PLC2801
     if not short or len(result) < _MAX_LENGTH:
         return result
     return result[:_MAX_LENGTH] + " [truncated]..."
+
+
+def xfail_windows(test_item):
+    """Marks a test as an expected failure or error only on Windows
+    Equivalent to applying @unittest.expectedFailure only when running
+    on Windows.
+    """
+    if not sys.platform.startswith("win"):
+        return test_item
+    warnings.warn(
+        "Once the test is fixed and passing, remove the @xfail_windows decorator",
+        stacklevel=2,
+    )
+    return expectedFailure(test_item)

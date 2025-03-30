@@ -12,7 +12,6 @@ File content taken from Python's  ``unittest.runner``, it will be used as
 a template. It is not expected that something will left.
 """
 
-
 import sys
 import time
 
@@ -27,8 +26,8 @@ class _WritelnDecorator:
     def __init__(self, stream):
         self.stream = stream
 
-    def __getattr__(self, attr):
-        if attr in ("stream", "__getstate__"):
+    def __getattr__(self, attr: str):
+        if attr in {"stream", "__getstate__"}:
             raise AttributeError(attr)
         return getattr(self.stream, attr)
 
@@ -84,8 +83,7 @@ class TextTestResult(TestResult):
         doc_first_line = test.shortDescription()
         if self.descriptions and doc_first_line:
             return "\n".join((str(test), doc_first_line))
-        else:
-            return str(test)
+        return str(test)
 
     def startTest(self, test):
         super().startTest(test)
@@ -165,7 +163,7 @@ class TextTestResult(TestResult):
         self.printErrors()
         self.stream.writeln(self.separator2)
         run = self.testsRun
-        self.stream.write("Ran %d test%s" % (run, run != 1 and "s" or ""))
+        self.stream.write("Ran %d test%s" % (run, (run != 1 and "s") or ""))
         if self.time_taken:
             self.stream.write(" in %.3fs" % (self.time_taken))
         self.stream.writeln()
@@ -270,28 +268,28 @@ class KeyValueTestResult(TestResult):
         # write test details and just write status=failed
         if not run:
             run = errored + failed + succeeded
-        infos.append("total=%d" % (run))
-
-        infos.append("failures=%d" % failed)
-        infos.append("errors=%d" % errored)
-        infos.append("successes=%d" % succeeded)
-        infos.append("skipped=%d" % skipped)
-
-        # TODO: document this: if not supported by view,
-        # expected_failures should be counted as failures and vice versa
-        # or both add to skipped as unclear?
-        infos.append("expected_failures=%d" % expectedFails)
-        infos.append("unexpected_successes=%d" % unexpectedSuccesses)
-
-        # TODO: include each module just once? list good and bad modules?
-        infos.append("tested_modules=%s" % ",".join(self._grass_modules))
-        infos.append("supplementary_files=%s" % ",".join(self._supplementary_files))
-
-        # module, modules?, c, c++?, python
-        # TODO: include also type modules?
-        # TODO: include also C++ code?
-        # TODO: distinguish C and Python modules?
-        infos.append("test_type=%s" % (self.test_type))
+        infos.extend(
+            (
+                "total=%d" % (run),
+                "failures=%d" % failed,
+                "errors=%d" % errored,
+                "successes=%d" % succeeded,
+                "skipped=%d" % skipped,
+                # TODO: document this: if not supported by view,
+                # expected_failures should be counted as failures and vice versa
+                # or both add to skipped as unclear?
+                "expected_failures=%d" % expectedFails,
+                "unexpected_successes=%d" % unexpectedSuccesses,
+                # TODO: include each module just once? list good and bad modules?
+                "tested_modules=%s" % ",".join(self._grass_modules),
+                "supplementary_files=%s" % ",".join(self._supplementary_files),
+                # module, modules?, c, c++?, python
+                # TODO: include also type modules?
+                # TODO: include also C++ code?
+                # TODO: distinguish C and Python modules?
+                "test_type=%s" % (self.test_type),
+            )
+        )
 
         self._stream.write("\n".join(infos))
         self._stream.write("\n")
@@ -398,7 +396,7 @@ class MultiTestResult(TestResult):
                     raise
 
     def printErrors(self):
-        "Called by TestRunner after test run"
+        """Called by TestRunner after test run"""
         super().printErrors()
         for result in self._results:
             try:
@@ -472,7 +470,7 @@ class GrassTestRunner:
         self._result = result
 
     def run(self, test):
-        "Run the given test case or test suite."
+        """Run the given test case or test suite."""
         result = self._result
         unittest.registerResult(result)
         result.failfast = self.failfast

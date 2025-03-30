@@ -1,9 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.proj</em> projects a raster map in a specified mapset of a
-specified location from the projection of the input location to a raster map
-in the current location. The projection information is taken from the
-current PROJ_INFO files, as set and viewed with
+<em>r.proj</em> is used to reproject a raster map from the coordinate
+reference system (CRS) of the input project into a CRS of a
+specified project (previously called location). The CRS information
+is taken from the current PROJ_INFO files, as set and viewed with
 <em><a href="g.proj.html">g.proj</a></em>.
 
 <h3>Introduction</h3>
@@ -59,38 +59,38 @@ raster maps involves an interpolation step in which the values of
 points at intermediate locations relative to the source grid are
 estimated.
 
-<h4>Projecting vector maps within the GRASS GIS</h4>
+<h4>Reprojecting vector maps within the GRASS GIS</h4>
 <!-- move this into v.proj.html !! -->
-GIS data capture, import and transfer often requires a projection
+GIS data capture, import and transfer often requires a reprojection
 step, since the source or client will frequently be in a different
-projection to the working projection.
+CRS to the working CRS.
 <p>In some cases it is convenient to do the conversion outside the
 package, prior to import or after export, using software such
 as <i>PROJ</i>'s <em><a href="https://proj.org/apps/cs2cs.html">cs2cs</a></em>
 [1]. This is an easy method for converting an ASCII file containing a list
 of coordinate points, since there is no topology to be preserved and
 <i>cs2cs</i> can be used to process simple lists using a one-line command.
-The <em>m.proj</em> module provides a handy front end to <tt>cs2cs</tt>.
+The <em>m.proj</em> module provides a handy front end to <code>cs2cs</code>.
 
 <p>Vector maps is generally more complex, as parts of the data stored in
 the files will describe topology, and not just coordinates. In GRASS
 GIS the
 <em><a href="v.proj.html">v.proj</a></em> module is provided to reproject
 vector maps, transferring topology and attributes as well as node coordinates.
-This program uses the projection definition and parameters which are stored in
+This program uses the CRS definition and parameters which are stored in
 the PROJ_INFO and PROJ_UNITS files in the PERMANENT mapset directory for every
-GRASS location.
+GRASS project.
 
 <h3>Design of r.proj</h3>
 
-As discussed briefly above, the fundamental step in re-projecting a
+As discussed briefly above, the fundamental step in reprojecting a
 raster is resampling the source grid at locations corresponding to the
-intersections of a grid in the target projection. The basic procedure
+intersections of a grid in the target CRS. The basic procedure
 for accomplishing this, therefore, is as follows:
 <p>
-<em>r.proj</em> converts a map to a new geographic projection. It
-reads a map from a different location, projects it and write it out to
-the current location. The projected data is resampled with one of four
+<em>r.proj</em> converts a map to a new CRS. It
+reads a map from a different project, reprojects it and writes it out to
+the current project. The reprojected data is resampled with one of four
 different methods: nearest neighbor, bilinear, bicubic interpolation or
 lanczos.
 <p>
@@ -156,16 +156,16 @@ as the current mapset's name.
 <br>
 If <b>dbase</b> is not specified it is assumed to be the current
 database. The user only has to specify <b>dbase</b> if the source
-location is stored in another separate GRASS database.
+project is stored in another separate GRASS database.
 
 <p>
 To avoid excessive time consumption when reprojecting a map the region
-and resolution of the target location should be set appropriately
+and resolution of the target project should be set appropriately
 beforehand.
 
 <p>
 A simple way to do this is to check the projected bounds of the input
-map in the current location's projection using the <b>-p</b>
+map in the current project's CRS using the <b>-p</b>
 flag. The <b>-g</b> flag reports the same thing, but in a form which
 can be directly cut and pasted into
 a <em><a href="g.region.html">g.region</a></em> command. After setting
@@ -173,18 +173,18 @@ the region in that way you might check the cell resolution with
 "<em>g.region -p</em>" then snap it to a regular grid
 with <em><a href="g.region.html">g.region</a></em>'s <b>-a</b>
 flag. E.g.
-<tt>g.region -a res=5 -p</tt>. Note that this is just a rough guide.
+<code>g.region -a res=5 -p</code>. Note that this is just a rough guide.
 
 <p>
 A more involved, but more accurate, way to do this is to generate a
-vector "box" map of the region in the source location using
+vector "box" map of the region in the source project using
  <em><a href="v.in.region.html">v.in.region -d</a></em>.
-This "box" map is then reprojected into the target location with
+This "box" map is then reprojected into the target project with
 <em><a href="v.proj.html">v.proj</a></em>. Next the region in the
-target location is set to the extent of the new vector map
+target project is set to the extent of the new vector map
 with <em><a href="g.region.html">g.region</a></em> along with the
 desired raster resolution (<em>g.region -m</em> can be used in
-Latitude/Longitude locations to measure the geodetic length of a
+Latitude/Longitude projects to measure the geodetic length of a
 pixel).
 <em>r.proj</em> is then run for the raster map the user wants to
 reproject.  In this case a little preparation goes a long way.
@@ -192,21 +192,21 @@ reproject.  In this case a little preparation goes a long way.
 When reprojecting whole-world maps the user should disable
 map-trimming with the <b>-n</b> flag. Trimming is not useful here
 because the module has the whole map in memory anyway. Besides that,
-world "edges" are hard (or impossible) to find in projections other
+world "edges" are hard (or impossible) to find in CRSs other
 than latitude-longitude so results may be odd with trimming.
 
 <h2>EXAMPLES</h2>
 
 <h3>Inline method</h3>
 
-With GRASS running in the destination location use the <b>-g</b> flag
-to show the input map's bounds once projected into the current working
-projection, then use that to set the region bounds before performing
+With GRASS running in the destination project use the <b>-g</b> flag
+to show the input map's bounds once reprojected into the current working
+CRS, then use that to set the region bounds before performing
 the reprojection:
 
 <div class="code"><pre>
 # calculate where output map will be
-r.proj input=elevation location=ll_wgs84 mapset=user1 -p
+r.proj input=elevation project=ll_wgs84 mapset=user1 -p
 Source cols: 8162
 Source rows: 12277
 Local north: -4265502.30382993
@@ -215,7 +215,7 @@ Local west: 14271663.19157564
 Local east: 14409956.2693866
 
 # same calculation, but in a form which can be cut and pasted into a g.region call
-r.proj input=elevation location=ll_wgs84 mapset=user1 -g
+r.proj input=elevation project=ll_wgs84 mapset=user1 -g
 n=-4265502.30382993 s=-4473453.15255565 w=14271663.19157564 e=14409956.2693866 rows=12277 cols=8162
 
 g.region n=-4265502.30382993 s=-4473453.15255565 \
@@ -251,33 +251,33 @@ cols:       8136
 cells:      99535824
 
 # finally, perform the reprojection
-r.proj input=elevation location=ll_wgs84 mapset=user1 memory=800
+r.proj input=elevation project=ll_wgs84 mapset=user1 memory=800
 </pre></div>
 
 <h3>v.in.region method</h3>
 
 <div class="code"><pre>
 
-# In the source location, use v.in.region to generate a bounding box around the
+# In the source project, use v.in.region to generate a bounding box around the
 # region of interest:
 
 v.in.region -d output=bounds type=area
 
-# Now switch to the target location and import the vector bounding box
-# (you can run v.proj -l to get a list of vector maps in the source location):
+# Now switch to the target project and import the vector bounding box
+# (you can run v.proj -l to get a list of vector maps in the source project):
 
-v.proj input=bounds location=source_location_name output=bounds_reprojected
+v.proj input=bounds project=source_project_name output=bounds_reprojected
 
-# Set the region in the target location with that of the newly-imported vector
+# Set the region in the target project with that of the newly-imported vector
 # bounds map, and align the resolution to the desired cell resolution of the
 # final, reprojected raster map:
 
 g.region vector=bounds_reprojected res=5 -a
 
-# Now reproject the raster into the target location
+# Now reproject the raster into the target project
 
 r.proj input=elevation.dem output=elevation.dem.reproj \
-location=source_location_name mapset=PERMANENT res=5 method=bicubic
+  project=source_project_name mapset=PERMANENT res=5 method=bicubic
 </pre></div>
 
 <h2>REFERENCES</h2>
@@ -286,9 +286,9 @@ location=source_location_name mapset=PERMANENT res=5 method=bicubic
   <li> Evenden, G.I. (1990) <a href="https://proj.org">Cartographic
       projection procedures for the UNIX environment - a user's manual.</a>
     USGS Open-File Report 90-284 (OF90-284.pdf)
-    See also there: Interim Report and 2nd Interim Report on Release 4, Evenden 1994).
+    See also there: Interim Report and 2nd Interim Report on Release 4, Evenden 1994).</li>
   <li> Richards, John A. (1993), Remote Sensing Digital Image Analysis,
-    Springer-Verlag, Berlin, 2nd edition.
+    Springer-Verlag, Berlin, 2nd edition.</li>
 </ol>
 
 <a href="https://proj.org">PROJ</a>: Projection/datum support library
@@ -296,12 +296,12 @@ location=source_location_name mapset=PERMANENT res=5 method=bicubic
 <p>
 <b>Further reading</b>
 <ul>
-  <li> <a href="https://www.asprs.org/asprs-publications/grids-and-datums">ASPRS Grids and Datum</a>
-  <li> <a href="http://geotiff.maptools.org/proj_list/">Projections Transform List</a> (PROJ)
-  <li> <a href="https://proj.org/operations/index.html">Coordinate operations</a> by PROJ (projections, conversions, transformations, pipeline operator)
-  <li> <a href="http://www.mapref.org">MapRef -
-      The Collection of Map Projections and Reference Systems for Europe</a>
-  <li> <a href="http://www.crs-geo.eu">Information and Service System for European Coordinate Reference Systems - CRS</a>
+  <li> <a href="https://www.asprs.org/asprs-publications/grids-and-datums">ASPRS Grids and Datum</a></li>
+  <li> <a href="http://geotiff.maptools.org/proj_list/">Projections Transform List</a> (PROJ)</li>
+  <li> <a href="https://proj.org/operations/index.html">Coordinate operations</a> by PROJ (projections, conversions, transformations, pipeline operator)</li>
+  <li> <a href="https://mapref.org">MapRef -
+      The Collection of Map Projections and Reference Systems for Europe</a></li>
+  <li> <a href="https://www.crs-geo.eu">Information and Service System for European Coordinate Reference Systems - CRS</a></li>
 </ul>
 
 <h2>SEE ALSO</h2>
@@ -319,7 +319,7 @@ location=source_location_name mapset=PERMANENT res=5 method=bicubic
 
 <p>
 The 'gdalwarp' and 'gdal_translate' utilities are available from the
-<a href="https://www.gdal.org">GDAL</a> project.
+<a href="https://gdal.org/en/stable/programs/index.html">GDAL</a> project.
 
 <h2>AUTHORS</h2>
 

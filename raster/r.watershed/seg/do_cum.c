@@ -232,6 +232,8 @@ int do_cum(void)
     G_percent(do_points, do_points, 1); /* finish it */
 
     seg_close(&astar_pts);
+    G_free(dist_to_nbr);
+    G_free(contour);
 
     return 0;
 }
@@ -293,7 +295,7 @@ int do_cum_mfd(void)
     int r_nbr, c_nbr, r_max, c_max, ct_dir, np_side /* , max_side */;
     CELL ele, *ele_nbr;
     double prop, max_val;
-    int workedon, edge, is_swale, flat;
+    int workedon, edge, is_swale = 0, flat;
     char *flag_nbr;
     int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
     int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
@@ -697,6 +699,7 @@ int do_cum_mfd(void)
     G_free(wat_nbr);
     G_free(ele_nbr);
     G_free(flag_nbr);
+    G_free(contour);
 
     return 0;
 }
