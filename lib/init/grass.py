@@ -1593,7 +1593,7 @@ def csh_startup(location, grass_env_file, sh, params):
                 mapset=params.colors.get("mapset").colorize(
                     "%$MAPSET_NAME", params.no_color, escape=sh
                 ),
-                project=params.colors.get("location").colorize(
+                project=params.colors.get("project").colorize(
                     "%$LOCATION_NAME", params.no_color, escape=sh
                 ),
             )
@@ -1610,7 +1610,7 @@ def csh_startup(location, grass_env_file, sh, params):
                 mapset=params.colors.get("mapset").colorize(
                     "`_mapset`", params.no_color, raw=True
                 ),
-                project=params.colors.get("location").colorize(
+                project=params.colors.get("project").colorize(
                     "`_location`", params.no_color, raw=True
                 ),
             )
@@ -1704,12 +1704,12 @@ def sh_like_startup(location, location_name, grass_env_file, sh, params):
     if sh == "zsh":
         f.write("setopt PROMPT_SUBST\n")
         f.write(
-            "PS1=$'┌Mapset <{mapset}> in <{location}>\\n└{name} : {path} > '\n".format(
+            "PS1=$'┌Mapset <{mapset}> in <{project}>\\n└{name} : {path} > '\n".format(
                 name=grass_name,
                 mapset=params.colors.get("mapset").colorize(
                     "${MAPSET_NAME}", params.no_color, escape=sh
                 ),
-                location=params.colors.get("location").colorize(
+                project=params.colors.get("project").colorize(
                     "${LOCATION_NAME}", params.no_color, escape=sh
                 ),
                 path=params.colors.get("path").colorize(
@@ -1733,7 +1733,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh, params):
         specific_addition = """
     local z_lo=`g.gisenv get=LOCATION_NAME`
     local z_ms=`g.gisenv get=MAPSET`
-    ZLOC="Mapset <{mapset}> in <{location}>"
+    ZLOC="Mapset <{mapset}> in <{project}>"
     if [ "$_grass_old_mapset" != "$MAPSET_PATH" ] ; then
         fc -A -I
         HISTFILE="$MAPSET_PATH/{sh_history}"
@@ -1745,7 +1745,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh, params):
             mapset=params.colors.get("mapset").colorize(
                 "${z_ms}", params.no_color, raw=True
             ),
-            location=params.colors.get("location").colorize(
+            project=params.colors.get("project").colorize(
                 "${z_lo}", params.no_color, raw=True
             ),
         )
@@ -1838,21 +1838,15 @@ PROMPT_COMMAND=grass_prompt\n""".format(
 def default_startup(location, location_name, params):
     """Start shell making no assumptions about what is supported in PS1"""
 
-    os.environ["PS1"] = (
-        "┌Mapset <{mapset}> in <{location}>\n└{name} : {path} > ".format(
-            name=params.colors.get("grass").colorize(
-                "GRASS", params.no_color, raw=True
-            ),
-            path=params.colors.get("path").colorize(
-                "${PWD}", params.no_color, raw=True
-            ),
-            mapset=params.colors.get("mapset").colorize(
-                "$(g.gisenv get=MAPSET)", params.no_color, raw=True
-            ),
-            location=params.colors.get("location").colorize(
-                "$(g.gisenv get=LOCATION_NAME)", params.no_color, raw=True
-            ),
-        )
+    os.environ["PS1"] = "┌Mapset <{mapset}> in <{project}>\n└{name} : {path} > ".format(
+        name=params.colors.get("grass").colorize("GRASS", params.no_color, raw=True),
+        path=params.colors.get("path").colorize("${PWD}", params.no_color, raw=True),
+        mapset=params.colors.get("mapset").colorize(
+            "$(g.gisenv get=MAPSET)", params.no_color, raw=True
+        ),
+        project=params.colors.get("project").colorize(
+            "$(g.gisenv get=LOCATION_NAME)", params.no_color, raw=True
+        ),
     )
     return start_shell()
 
@@ -2110,7 +2104,7 @@ def classic_parser(argv, default_gui, color_config=None):
     parser.add_argument("--config", nargs="*")
     parser.add_argument("--no-color", dest="no_color", action="store_true")
     parser.add_argument(
-        "--location-color", nargs="+", action="store", dest="location_color"
+        "--project-color", nargs="+", action="store", dest="project_color"
     )
     parser.add_argument(
         "--mapset-color", nargs="+", action="store", dest="mapset_color"
@@ -2163,7 +2157,7 @@ def classic_parser(argv, default_gui, color_config=None):
     # Color handling
     if parsed_args.no_color:
         params.no_color = True
-        params.colors = Colors(path=Color(), mapset=Color(), location=Color())
+        params.colors = Colors(path=Color(), mapset=Color(), project=Color())
     else:
         params.colors = color_config
         debug("params.colors = {colors}".format(colors=params.colors.json()))
@@ -2299,7 +2293,7 @@ class Colors:
         colors=None,
         path=Color(fg="cyan"),
         mapset=Color(style="bold"),
-        location=Color(style="bold"),
+        project=Color(style="bold"),
     ):
         self._color = {}
         if colors:
@@ -2313,7 +2307,7 @@ class Colors:
                 "isis-grass": Color(fg="purple"),
                 "path": path,
                 "mapset": mapset,
-                "location": location,
+                "project": project,
             }
 
     def get(self, category):
