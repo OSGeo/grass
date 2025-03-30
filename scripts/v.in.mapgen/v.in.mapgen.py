@@ -73,18 +73,12 @@ def main():
     if not os.path.isfile(infile):
         grass.fatal(_("Input file <%s> not found") % infile)
 
-    if output:
-        name = output
-    else:
-        name = ""
+    name = output or ""
 
     if threeD:
         matlab = True
 
-    if threeD:
-        do3D = "z"
-    else:
-        do3D = ""
+    do3D = "z" if threeD else ""
 
     tmp = grass.tempfile()
 
@@ -112,8 +106,10 @@ def main():
             if f[0].lower() == "nan":
                 if points != []:
                     outf.write("L %d 1\n" % len(points))
-                    for point in points:
-                        outf.write(" %.15g %.15g %.15g\n" % tuple(map(float, point)))
+                    outf.writelines(
+                        " %.15g %.15g %.15g\n" % tuple(map(float, point))
+                        for point in points
+                    )
                     outf.write(" 1 %d\n" % cat)
                     cat += 1
                 points = []
@@ -140,8 +136,9 @@ def main():
             if line[0] == "#":
                 if points != []:
                     outf.write("L %d 1\n" % len(points))
-                    for point in points:
-                        outf.write(" %.15g %.15g\n" % tuple(map(float, point)))
+                    outf.writelines(
+                        " %.15g %.15g\n" % tuple(map(float, point)) for point in points
+                    )
                     outf.write(" 1 %d\n" % cat)
                     cat += 1
                 points = []
@@ -150,8 +147,9 @@ def main():
 
         if points != []:
             outf.write("L %d 1\n" % len(points))
-            for point in points:
-                outf.write(" %.15g %.15g\n" % tuple(map(float, point)))
+            outf.writelines(
+                " %.15g %.15g\n" % tuple(map(float, point)) for point in points
+            )
             outf.write(" 1 %d\n" % cat)
             cat += 1
     outf.close()

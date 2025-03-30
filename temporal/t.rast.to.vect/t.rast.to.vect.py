@@ -163,7 +163,7 @@ def main(options, flags):
         return
 
     # Check the new stvds
-    new_sp = tgis.check_new_stds(output, "stvds", dbif=dbif, overwrite=overwrite)
+    tgis.check_new_stds(output, "stvds", dbif=dbif, overwrite=overwrite)
 
     # Setup the flags
     flags = ""
@@ -189,6 +189,7 @@ def main(options, flags):
         type=method,
         overwrite=overwrite,
         quiet=True,
+        column=column,
     )
 
     # The module queue for parallel execution, except if attribute tables should
@@ -198,7 +199,7 @@ def main(options, flags):
             nprocs = 1
             gs.warning(
                 _(
-                    "The number of parellel r.to.vect processes was "
+                    "The number of parallel r.to.vect processes was "
                     "reduced to 1 because of the table attribute "
                     "creation"
                 )

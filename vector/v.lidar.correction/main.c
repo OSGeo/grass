@@ -443,7 +443,7 @@ int main(int argc, char *argv[])
             }
             G_free(lcat);
         } /*! END WHILE; last_column = TRUE */
-    }     /*! END WHILE; last_row = TRUE */
+    } /*! END WHILE; last_row = TRUE */
 
     /* Dropping auxiliary table */
     if (npoints > 0) {

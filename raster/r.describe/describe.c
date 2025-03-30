@@ -7,7 +7,7 @@
  * PURPOSE:      Prints terse list of category values found in a raster
  *               map layer.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2025 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -18,10 +18,12 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
+
 #include "local_proto.h"
 
 int describe(const char *name, int compact, char *no_data_str, int range,
-             int windowed, int nsteps, int as_int, int skip_nulls)
+             int windowed, int nsteps, int as_int, int skip_nulls,
+             enum OutputFormat format)
 {
     int fd;
     struct Cell_stats statf;
@@ -34,7 +36,7 @@ int describe(const char *name, int compact, char *no_data_str, int range,
     RASTER_MAP_TYPE map_type;
     struct Quant q;
     struct FPRange r;
-    DCELL dmin, dmax;
+    DCELL dmin = 0.0, dmax = 0.0;
     void (*get_row)(int, CELL *, int);
 
     if (windowed) {
@@ -127,20 +129,20 @@ int describe(const char *name, int compact, char *no_data_str, int range,
     if (range) {
         if (compact)
             compact_range_list(negmin, negmax, zero, posmin, posmax, null,
-                               no_data_str, skip_nulls);
+                               no_data_str, skip_nulls, format);
         else
             range_list(negmin, negmax, zero, posmin, posmax, null, no_data_str,
-                       skip_nulls);
+                       skip_nulls, format);
     }
     else {
         Rast_rewind_cell_stats(&statf);
 
         if (compact)
             compact_list(&statf, dmin, dmax, no_data_str, skip_nulls, map_type,
-                         nsteps);
+                         nsteps, format);
         else
             long_list(&statf, dmin, dmax, no_data_str, skip_nulls, map_type,
-                      nsteps);
+                      nsteps, format);
 
         Rast_free_cell_stats(&statf);
     }

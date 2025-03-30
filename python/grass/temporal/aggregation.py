@@ -115,7 +115,7 @@ def collect_map_names(sp, dbif, start, end, sampling):
 
 
 def aggregate_raster_maps(
-    inputs, base, start, end, count, method, register_null, dbif, offset=0
+    inputs, base, start, end, count: int, method, register_null, dbif, offset: int = 0
 ):
     """Aggregate a list of raster input maps with r.series
 
@@ -154,27 +154,23 @@ def aggregate_raster_maps(
                 _(
                     "Raster map <%(name)s> is already in temporal "
                     "database, use overwrite flag to overwrite"
-                    % ({"name": new_map.get_name()})
                 )
+                % ({"name": new_map.get_name()})
             )
-            return
+            return None
 
     msgr.verbose(
-        _(
-            "Computing aggregation of maps between %(st)s - %(end)s"
-            % {"st": str(start), "end": str(end)}
-        )
+        _("Computing aggregation of maps between %(st)s - %(end)s")
+        % {"st": str(start), "end": str(end)}
     )
 
     # Create the r.series input file
     filename = gs.tempfile(True)
-    file = open(filename, "w")
+    with open(filename, "w") as out_file:
+        for name in inputs:
+            string = "%s\n" % (name)
+            out_file.write(string)
 
-    for name in inputs:
-        string = "%s\n" % (name)
-        file.write(string)
-
-    file.close()
     # Run r.series
     try:
         if len(inputs) > 1000:
@@ -221,13 +217,13 @@ def aggregate_by_topology(
     topo_list,
     basename,
     time_suffix,
-    offset=0,
+    offset: int = 0,
     method="average",
-    nprocs=1,
+    nprocs: int = 1,
     spatial=None,
     dbif=None,
-    overwrite=False,
-    file_limit=1000,
+    overwrite: bool = False,
+    file_limit: int = 1000,
 ):
     """Aggregate a list of raster input maps with r.series
 
@@ -356,8 +352,9 @@ def aggregate_by_topology(
                     _(
                         "Unable to perform aggregation. Output raster "
                         "map <%(name)s> exists and overwrite flag was "
-                        "not set" % ({"name": output_name})
+                        "not set"
                     )
+                    % ({"name": output_name})
                 )
 
             output_list.append(map_layer)
@@ -365,11 +362,10 @@ def aggregate_by_topology(
             if len(aggregation_list) > 1:
                 # Create the r.series input file
                 filename = gs.tempfile(True)
-                file = open(filename, "w")
-                for name in aggregation_list:
-                    string = "%s\n" % (name)
-                    file.write(string)
-                file.close()
+                with open(filename, "w") as out_file:
+                    for name in aggregation_list:
+                        string = "%s\n" % (name)
+                        out_file.write(string)
 
                 mod = copy.deepcopy(r_series)
                 mod(file=filename, output=output_name)
@@ -380,8 +376,8 @@ def aggregate_by_topology(
                             "reached (%i). The module r.series will "
                             "be run with flag z, to avoid open "
                             "files limit exceeding."
-                            % (int(file_limit), len(aggregation_list))
                         )
+                        % (int(file_limit), len(aggregation_list))
                     )
                     mod(flags="z")
                 process_queue.put(mod)

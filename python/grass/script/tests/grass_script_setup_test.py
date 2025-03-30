@@ -2,10 +2,21 @@
 
 import multiprocessing
 import os
+from functools import partial
 
 import pytest
 
 import grass.script as gs
+
+RUNTIME_GISBASE_SHOULD_BE_PRESENT = "Runtime (GISBASE) should be present"
+SESSION_FILE_NOT_DELETED = "Session file not deleted"
+
+xfail_mp_spawn = pytest.mark.xfail(
+    multiprocessing.get_start_method() == "spawn",
+    reason="Multiprocessing using 'spawn' start method requires pickable functions",
+    raises=AttributeError,
+    strict=True,
+)
 
 
 # This is useful when we want to ensure that function like init does
@@ -43,7 +54,7 @@ def test_init_session_finish(tmp_path):
     gs.run_command("g.region", flags="p", env=session.env)
     session_file = session.env["GISRC"]
     session.finish()
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # noqa: PT011
         session.finish()
     assert not session.active
     assert not os.path.exists(session_file)
@@ -62,6 +73,32 @@ def test_init_finish_global_functions_with_env(tmp_path):
     assert not os.path.exists(session_file)
 
 
+def init_finish_global_functions_capture_strerr0_partial(tmp_path, queue):
+    gs.set_capture_stderr(True)
+    location = "test"
+    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
+    gs.setup.init(tmp_path / location)
+    gs.run_command("g.region", flags="p")
+    runtime_present = bool(os.environ.get("GISBASE"))
+    queue.put((os.environ["GISRC"], runtime_present))
+    gs.setup.finish()
+
+
+def test_init_finish_global_functions_capture_strerr0_partial(tmp_path):
+    """Check that init and finish global functions work with global env using a partial
+    function
+    """
+
+    init_finish = partial(
+        init_finish_global_functions_capture_strerr0_partial, tmp_path
+    )
+    session_file, runtime_present = run_in_subprocess(init_finish)
+    assert session_file, "Expected file name from the subprocess"
+    assert runtime_present, RUNTIME_GISBASE_SHOULD_BE_PRESENT
+    assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
+
+
+@xfail_mp_spawn
 def test_init_finish_global_functions_capture_strerr0(tmp_path):
     """Check that init and finish global functions work with global env"""
 
@@ -79,10 +116,11 @@ def test_init_finish_global_functions_capture_strerr0(tmp_path):
 
     session_file, runtime_present = run_in_subprocess(init_finish)
     assert session_file, "Expected file name from the subprocess"
-    assert runtime_present, "Runtime (GISBASE) should be present"
-    assert not os.path.exists(session_file), "Session file not deleted"
+    assert runtime_present, RUNTIME_GISBASE_SHOULD_BE_PRESENT
+    assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
 
 
+@xfail_mp_spawn
 def test_init_finish_global_functions_capture_strerrX(tmp_path):
     """Check that init and finish global functions work with global env"""
 
@@ -104,13 +142,14 @@ def test_init_finish_global_functions_capture_strerrX(tmp_path):
         init_finish
     )
     assert session_file, "Expected file name from the subprocess"
-    assert runtime_present, "Runtime (GISBASE) should be present"
-    assert not os.path.exists(session_file), "Session file not deleted"
+    assert runtime_present, RUNTIME_GISBASE_SHOULD_BE_PRESENT
+    assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
     # This is testing the current implementation behavior, but it is not required
     # to be this way in terms of design.
     assert runtime_present_after, "Runtime should continue to be present"
 
 
+@xfail_mp_spawn
 def test_init_finish_global_functions_isolated(tmp_path):
     """Check that init and finish global functions work with global env"""
 
@@ -153,7 +192,7 @@ def test_init_finish_global_functions_isolated(tmp_path):
     ) = run_in_subprocess(init_finish)
 
     # Runtime
-    assert runtime_present_during, "Runtime (GISBASE) should be present"
+    assert runtime_present_during, RUNTIME_GISBASE_SHOULD_BE_PRESENT
     # This is testing the current implementation behavior, but it is not required
     # to be this way in terms of design.
     assert runtime_present_after, "Expected GISBASE to be present when finished"
@@ -162,18 +201,19 @@ def test_init_finish_global_functions_isolated(tmp_path):
     assert session_file_present_during, "Expected session file to be present"
     assert session_file_variable_present_during, "Variable GISRC should be present"
     assert not session_file_variable_present_after, "Not expecting GISRC when finished"
-    assert not os.path.exists(session_file), "Session file not deleted"
+    assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
 
 
+@xfail_mp_spawn
 @pytest.mark.usefixtures("mock_no_session")
 def test_init_as_context_manager_env_attribute(tmp_path):
     """Check that session has global environment as attribute"""
 
     def workload(queue):
         location = "test"
-        gs.core._create_location_xy(
+        gs.core._create_location_xy(  # pylint: disable=protected-access
             tmp_path, location
-        )  # pylint: disable=protected-access
+        )
         with gs.setup.init(tmp_path / location) as session:
             gs.run_command("g.region", flags="p", env=session.env)
             session_file = os.environ["GISRC"]
@@ -183,8 +223,8 @@ def test_init_as_context_manager_env_attribute(tmp_path):
     session_file, file_existed, runtime_present = run_in_subprocess(workload)
     assert session_file, "Expected file name from the subprocess"
     assert file_existed, "File should have been present"
-    assert runtime_present, "Runtime (GISBASE) should be present"
-    assert not os.path.exists(session_file), "Session file not deleted"
+    assert runtime_present, RUNTIME_GISBASE_SHOULD_BE_PRESENT
+    assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
     assert not os.environ.get("GISRC")
     assert not os.environ.get("GISBASE")
 

@@ -12,15 +12,15 @@ from core.gcmd import GError
 
 
 class SamplingType:
-    """ "
+    """
     KMVWINC = samplingtype=moving, regionbox=keyboard, shape=circle
     KMVWINR = samplingtype moving, regionbox=keyboard, shape=rectangle
     MMVWINC = samplingtype=moving, regionbox=mouse, shape=circle
     MMVWINR = samplingtype moving, regionbox=mouse, shape=rectangle
 
-    KUNITSC = samplingtype=units, regionbox=keyboard, shape=cirlce
+    KUNITSC = samplingtype=units, regionbox=keyboard, shape=circle
     KUNITSR = samplingtype=units, regionbox=keyboard, shape=rectangle
-    MUNITSC = samplingtype=units, regionbox=mouse, shape=cirlce
+    MUNITSC = samplingtype=units, regionbox=mouse, shape=circle
     MUNITSR = samplingtype=units, regionbox=mouse, shape=rectangle
     """
 
@@ -60,9 +60,8 @@ def retRLiPath():
     rlipath = os.path.join(grass_config_dir, "r.li")
     if os.path.exists(rlipath):
         return rlipath
-    else:
-        os.mkdir(rlipath)
-        return rlipath
+    os.mkdir(rlipath)
+    return rlipath
 
 
 def checkMapExists(name, typ="raster") -> bool:
@@ -142,7 +141,7 @@ def sampleAreaVector(
             vect=vect.split("@")[0], rast=rast.split("@")[0]
         )
         rast_name = "{pref}{cat}".format(pref=outpref, cat=cat)
-        # check if raster already axist
+        # check if raster already exists
 
         if (
             len(grass.list_strings("raster", pattern=rast_name, mapset=".")) == 1
@@ -153,8 +152,9 @@ def sampleAreaVector(
                     "The raster map <%s> already exists."
                     " Please remove or rename the maps "
                     "with the prefix '%s' or select the "
-                    "option to overwrite existing maps" % (rast_name, outpref)
+                    "option to overwrite existing maps"
                 )
+                % (rast_name, outpref)
             )
             return None
         convertFeature(vect, rast_name, cat, rast, layer, overwrite)

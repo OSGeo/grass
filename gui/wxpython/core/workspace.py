@@ -123,7 +123,7 @@ class ProcessWorkspaceFile:
                 try:
                     self.layerManager["pos"] = (posVal[0], posVal[1])
                     self.layerManager["size"] = (posVal[2], posVal[3])
-                except:
+                except IndexError:
                     pass
             # current working directory
             cwdPath = self.__getNodeText(node_lm, "cwd")
@@ -155,7 +155,7 @@ class ProcessWorkspaceFile:
                 try:
                     pos = (posVal[0], posVal[1])
                     size = (posVal[2], posVal[3])
-                except:
+                except IndexError:
                     pos = None
                     size = None
                 # this happens on Windows when mapwindow is minimized when
@@ -169,11 +169,8 @@ class ProcessWorkspaceFile:
                 size = None
 
             extentAttr = display.get("extent", "")
-            if extentAttr:
-                # w, s, e, n
-                extent = map(float, extentAttr.split(","))
-            else:
-                extent = None
+            # w, s, e, n
+            extent = map(float, extentAttr.split(",")) if extentAttr else None
 
             # projection
             node_projection = display.find("projection")
@@ -312,10 +309,7 @@ class ProcessWorkspaceFile:
                     )
                 )
 
-        if layer.find("selected") is not None:
-            selected = True
-        else:
-            selected = False
+        selected = layer.find("selected") is not None
 
         #
         # Vector digitizer settings
@@ -330,10 +324,7 @@ class ProcessWorkspaceFile:
         # Nviz (3D settings)
         #
         node_nviz = layer.find("nviz")
-        if node_nviz is not None:
-            nviz = self.__processLayerNviz(node_nviz)
-        else:
-            nviz = None
+        nviz = self.__processLayerNviz(node_nviz) if node_nviz is not None else None
 
         return (cmd, selected, vdigit, nviz)
 
@@ -729,10 +720,7 @@ class ProcessWorkspaceFile:
                 try:
                     value = cast(node_tag.text)
                 except ValueError:
-                    if cast == str:
-                        value = ""
-                    else:
-                        value = None
+                    value = "" if cast == str else None
             if dc:
                 dc[tag] = {}
                 dc[tag]["value"] = value
@@ -933,7 +921,7 @@ class WriteWorkspaceFile:
             file.write("{indent}</layout>\n".format(indent=" " * self.indent))
 
         # list of displays
-        for page in range(0, self.lmgr.GetLayerNotebook().GetPageCount()):
+        for page in range(self.lmgr.GetLayerNotebook().GetPageCount()):
             dispName = self.lmgr.GetLayerNotebook().GetPageText(page)
             mapTree = self.lmgr.GetLayerNotebook().GetPage(page).maptree
             region = mapTree.GetMap().GetCurrentRegion()
@@ -1473,7 +1461,7 @@ class WriteWorkspaceFile:
         self.indent -= 4
 
     def __writeNvizState(self, view, iview, light, constants):
-        """ "Save Nviz properties (view, light) to workspace
+        """Save Nviz properties (view, light) to workspace
 
         :param view: Nviz view properties
         :param iview: Nviz internal view properties
@@ -1608,15 +1596,15 @@ class WriteWorkspaceFile:
         if constants:
             self.file.write("%s<constant_planes>\n" % (" " * self.indent))
             self.indent += 4
-            for idx, plane in enumerate(constants):
+            for plane in constants:
                 self.file.write("%s<plane>\n" % (" " * self.indent))
                 self.indent += 4
-                self.__writeTagWithValue("height", constants[idx]["constant"]["value"])
+                self.__writeTagWithValue("height", plane["constant"]["value"])
                 self.__writeTagWithValue(
-                    "fine_resolution", constants[idx]["constant"]["resolution"]
+                    "fine_resolution", plane["constant"]["resolution"]
                 )
                 self.__writeTagWithValue(
-                    "color", constants[idx]["constant"]["color"], format="s"
+                    "color", plane["constant"]["color"], format="s"
                 )
                 self.indent -= 4
                 self.file.write("%s</plane>\n" % (" " * self.indent))
@@ -1742,7 +1730,11 @@ class ProcessGrcFile:
         :return: list of map layers
         """
         try:
-            file = open(self.filename, "r")
+            with open(self.filename) as file:  # Changed to context manager
+                line_id = 1
+                for line in file:
+                    self.process_line(line.rstrip("\n"), line_id)
+                    line_id += 1
         except OSError:
             wx.MessageBox(
                 parent=parent,
@@ -1751,13 +1743,6 @@ class ProcessGrcFile:
                 style=wx.OK | wx.ICON_ERROR,
             )
             return []
-
-        line_id = 1
-        for line in file:
-            self.process_line(line.rstrip("\n"), line_id)
-            line_id += 1
-
-        file.close()
 
         if self.num_error > 0:
             wx.MessageBox(
@@ -2019,7 +2004,7 @@ class ProcessGrcFile:
         """Get value of element"""
         try:
             return line.strip(" ").split(" ")[1].strip(" ")
-        except:
+        except IndexError:
             return ""
 
     def _get_element(self, line):

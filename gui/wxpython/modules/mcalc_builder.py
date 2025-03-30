@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 
 import os
 import re
+from pathlib import Path
 
 import wx
 import grass.script as gs
@@ -608,7 +609,7 @@ class MapCalcFrame(wx.Frame):
             if newmcalcstr[-1] != " ":
                 newmcalcstr += " "
                 position_offset += 1
-        except:
+        except IndexError:
             pass
 
         newmcalcstr += what
@@ -617,7 +618,7 @@ class MapCalcFrame(wx.Frame):
         try:
             if newmcalcstr[-1] != " " and mcalcstr[position] != " ":
                 newmcalcstr += " "
-        except:
+        except IndexError:
             newmcalcstr += " "
 
         newmcalcstr += mcalcstr[position:]
@@ -632,7 +633,7 @@ class MapCalcFrame(wx.Frame):
                 try:
                     if newmcalcstr[position + position_offset] == " ":
                         position_offset += 1
-                except:
+                except IndexError:
                     pass
 
         self.text_mcalc.SetInsertionPoint(position + position_offset)
@@ -681,10 +682,7 @@ class MapCalcFrame(wx.Frame):
             self.log.RunCmd(cmd, onDone=self.OnDone)
             self.parent.Raise()
         else:
-            if self.overwrite.IsChecked():
-                overwrite = True
-            else:
-                overwrite = False
+            overwrite = bool(self.overwrite.IsChecked())
             params = {"expression": "%s=%s" % (name, expr), "overwrite": overwrite}
             if seed_flag:
                 params["flags"] = "s"
@@ -736,11 +734,7 @@ class MapCalcFrame(wx.Frame):
                 dlg.Destroy()
                 return
 
-            try:
-                fobj = open(path, "w")
-                fobj.write(mctxt)
-            finally:
-                fobj.close()
+            Path(path).write_text(mctxt)
 
         dlg.Destroy()
 
@@ -758,11 +752,7 @@ class MapCalcFrame(wx.Frame):
                 dlg.Destroy()
                 return
 
-            try:
-                fobj = open(path, "r")
-                mctxt = fobj.read()
-            finally:
-                fobj.close()
+            mctxt = Path(path).read_text()
 
             try:
                 result, exp = mctxt.split("=", 1)

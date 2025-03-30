@@ -176,7 +176,7 @@ void print_topo(struct Map_info *Map, enum OutputFormat format,
 }
 
 void print_columns(struct Map_info *Map, const char *input_opt,
-                   const char *field_opt)
+                   const char *field_opt, enum OutputFormat format)
 {
     int num_dblinks, col, ncols;
 
@@ -189,6 +189,7 @@ void print_columns(struct Map_info *Map, const char *input_opt,
     num_dblinks = Vect_get_num_dblinks(Map);
 
     if (num_dblinks <= 0) {
+        Vect_close(Map);
         G_fatal_error(
             _("Database connection for map <%s> is not defined in DB file"),
             input_opt);
@@ -198,32 +199,97 @@ void print_columns(struct Map_info *Map, const char *input_opt,
                 "layer <%s>:"),
               field_opt);
 
-    if ((fi = Vect_get_field2(Map, field_opt)) == NULL)
+    if ((fi = Vect_get_field2(Map, field_opt)) == NULL) {
+        Vect_close(Map);
         G_fatal_error(
             _("Database connection not defined for layer <%s> of <%s>"),
             field_opt, input_opt);
+    }
     driver = db_start_driver(fi->driver);
-    if (driver == NULL)
+    if (driver == NULL) {
+        Vect_close(Map);
         G_fatal_error(_("Unable to open driver <%s>"), fi->driver);
+    }
     db_init_handle(&handle);
     db_set_handle(&handle, fi->database, NULL);
-    if (db_open_database(driver, &handle) != DB_OK)
+    if (db_open_database(driver, &handle) != DB_OK) {
+        db_shutdown_driver(driver);
+        Vect_close(Map);
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                       fi->database, fi->driver);
+    }
     db_init_string(&table_name);
     db_set_string(&table_name, fi->table);
-    if (db_describe_table(driver, &table_name, &table) != DB_OK)
+    if (db_describe_table(driver, &table_name, &table) != DB_OK) {
+        db_close_database_shutdown_driver(driver);
+        Vect_close(Map);
         G_fatal_error(_("Unable to describe table <%s>"), fi->table);
+    }
+
+    JSON_Value *root_value = NULL, *columns_value = NULL, *column_value = NULL;
+    JSON_Object *root_object = NULL, *column_object = NULL;
+    JSON_Array *columns_array = NULL;
+
+    if (format == JSON) {
+        root_value = json_value_init_object();
+        root_object = json_object(root_value);
+        columns_value = json_value_init_array();
+        columns_array = json_array(columns_value);
+        json_object_set_value(root_object, "columns", columns_value);
+    }
 
     ncols = db_get_table_number_of_columns(table);
-    for (col = 0; col < ncols; col++)
-        fprintf(stdout, "%s|%s\n",
-                db_sqltype_name(
-                    db_get_column_sqltype(db_get_table_column(table, col))),
+    for (col = 0; col < ncols; col++) {
+        switch (format) {
+        case SHELL:
+            break;
+
+        case JSON:
+            column_value = json_value_init_object();
+            column_object = json_object(column_value);
+
+            json_object_set_string(
+                column_object, "name",
                 db_get_column_name(db_get_table_column(table, col)));
 
-    db_close_database(driver);
-    db_shutdown_driver(driver);
+            int sql_type =
+                db_get_column_sqltype(db_get_table_column(table, col));
+            json_object_set_string(column_object, "sql_type",
+                                   db_sqltype_name(sql_type));
+
+            int c_type = db_sqltype_to_Ctype(sql_type);
+            json_object_set_boolean(
+                column_object, "is_number",
+                (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE));
+
+            json_array_append_value(columns_array, column_value);
+            break;
+
+        case PLAIN:
+            fprintf(stdout, "%s|%s\n",
+                    db_sqltype_name(
+                        db_get_column_sqltype(db_get_table_column(table, col))),
+                    db_get_column_name(db_get_table_column(table, col)));
+            break;
+        }
+    }
+
+    if (format == JSON) {
+        char *serialized_string = NULL;
+        serialized_string = json_serialize_to_string_pretty(root_value);
+        if (serialized_string == NULL) {
+            json_value_free(root_value);
+            db_close_database_shutdown_driver(driver);
+            Vect_close(Map);
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        json_free_serialized_string(serialized_string);
+        json_value_free(root_value);
+    }
+
+    Vect_destroy_field_info(fi);
+    db_close_database_shutdown_driver(driver);
 }
 
 void print_shell(struct Map_info *Map, const char *field_opt,
@@ -704,4 +770,132 @@ void print_info(struct Map_info *Map)
     printline(line);
     divider('+');
     fprintf(stdout, "\n");
+}
+
+/*!
+   \brief Extracts and assigns values from a history line to command, gisdbase,
+   location, mapset, user, date, and mapset_path based on specific prefixes.
+
+ */
+void parse_history_line(const char *buf, char *command, char *gisdbase,
+                        char *location, char *mapset, char *user, char *date,
+                        char *mapset_path)
+{
+    if (strncmp(buf, "COMMAND:", 8) == 0) {
+        sscanf(buf, "COMMAND: %[^\n]", command);
+    }
+    else if (strncmp(buf, "GISDBASE:", 9) == 0) {
+        sscanf(buf, "GISDBASE: %[^\n]", gisdbase);
+    }
+    else if (strncmp(buf, "LOCATION:", 9) == 0) {
+        sscanf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %[^\n]", location,
+               mapset, user, date);
+
+        snprintf(mapset_path, GPATH_MAX, "%s/%s/%s", gisdbase, location,
+                 mapset);
+    }
+}
+
+/*!
+   \brief Creates a JSON object with fields for command, user, date, and
+   mapset_path, appends it to a JSON array.
+
+ */
+void add_record_to_json(char *command, char *user, char *date,
+                        char *mapset_path, JSON_Array *record_array,
+                        int history_number)
+{
+
+    JSON_Value *info_value = json_value_init_object();
+    if (info_value == NULL) {
+        G_fatal_error(_("Failed to initialize JSON object. Out of memory?"));
+    }
+    JSON_Object *info_object = json_object(info_value);
+
+    json_object_set_number(info_object, "history_number", history_number);
+    json_object_set_string(info_object, "command", command);
+    json_object_set_string(info_object, "mapset_path", mapset_path);
+    json_object_set_string(info_object, "user", user);
+    json_object_set_string(info_object, "date", date);
+
+    json_array_append_value(record_array, info_value);
+}
+
+/*!
+   \brief Reads history entries from a map, formats them based on the specified
+   output format (PLAIN, SHELL, or JSON), and prints the results.
+
+ */
+void print_history(struct Map_info *Map, enum OutputFormat format)
+{
+    int history_number = 0;
+
+    char buf[STR_LEN] = {0};
+    char command[STR_LEN] = {0}, gisdbase[STR_LEN] = {0};
+    char location[STR_LEN] = {0}, mapset[STR_LEN] = {0};
+    char user[STR_LEN] = {0}, date[STR_LEN] = {0};
+    char mapset_path[GPATH_MAX] = {0};
+
+    JSON_Value *root_value = NULL, *record_value = NULL;
+    JSON_Object *root_object = NULL;
+    JSON_Array *record_array = NULL;
+
+    if (format == JSON) {
+        root_value = json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        root_object = json_object(root_value);
+
+        record_value = json_value_init_array();
+        if (record_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        record_array = json_array(record_value);
+    }
+
+    Vect_hist_rewind(Map);
+    while (Vect_hist_read(buf, sizeof(buf) - 1, Map) != NULL) {
+        switch (format) {
+        case PLAIN:
+        case SHELL:
+            fprintf(stdout, "%s\n", buf);
+            break;
+        case JSON:
+            // Parse each line based on its prefix
+            parse_history_line(buf, command, gisdbase, location, mapset, user,
+                               date, mapset_path);
+            if (command[0] != '\0' && mapset_path[0] != '\0' &&
+                user[0] != '\0' && date[0] != '\0') {
+                // Increment history counter
+                history_number++;
+
+                add_record_to_json(command, user, date, mapset_path,
+                                   record_array, history_number);
+
+                // Clear the input strings before processing new
+                // entries in the history file
+                command[0] = '\0';
+                user[0] = '\0';
+                date[0] = '\0';
+                mapset_path[0] = '\0';
+            }
+            break;
+        }
+    }
+
+    if (format == JSON) {
+        json_object_set_value(root_object, "records", record_value);
+
+        char *serialized_string = json_serialize_to_string_pretty(root_value);
+        if (!serialized_string) {
+            json_value_free(root_value);
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+
+        json_free_serialized_string(serialized_string);
+        json_value_free(root_value);
+    }
 }

@@ -68,7 +68,7 @@ class Category(list):
 
     def _set_mtype(self, mtype):
         if mtype.upper() not in {"CELL", "FCELL", "DCELL"}:
-            raise ValueError(_("Raster type: {0} not supported".format(mtype)))
+            raise ValueError(_("Raster type: {0} not supported").format(mtype))
         self._mtype = mtype
         self._gtype = RTYPE[self.mtype]["grass type"]
 
@@ -97,7 +97,7 @@ class Category(list):
         diz = {}
         for cat in self.__iter__():
             label, min_cat, max_cat = cat
-            diz[(min_cat, max_cat)] = label
+            diz[min_cat, max_cat] = label
         return diz
 
     def __repr__(self):
@@ -107,7 +107,7 @@ class Category(list):
         return "[{0}]".format(",\n ".join(cats))
 
     def _chk_index(self, index):
-        if type(index) == str:
+        if isinstance(index, str):
             try:
                 index = self.labels().index(index)
             except ValueError as error:
@@ -115,15 +115,16 @@ class Category(list):
         return index
 
     def _chk_value(self, value):
-        if type(value) == tuple:
-            length = len(value)
-            if length == 2:
-                label, min_cat = value
-                value = (label, min_cat, None)
-            elif length < 2 or length > 3:
-                raise TypeError("Tuple with a length that is not supported.")
-        else:
-            raise TypeError("Only Tuple are supported.")
+        if not isinstance(value, tuple):
+            msg = "Only tuples are supported."
+            raise TypeError(msg)
+        length = len(value)
+        if length == 2:
+            label, min_cat = value
+            value = (label, min_cat, None)
+        elif length < 2 or length > 3:
+            msg = "Tuple with a length that is not supported."
+            raise TypeError(msg)
         return value
 
     def __getitem__(self, index):
@@ -186,25 +187,26 @@ class Category(list):
         )
         # Manage C function Errors
         if err == 1:
-            return None
-        elif err == 0:
+            return
+        if err == 0:
             raise GrassError(_("Null value detected"))
-        elif err == -1:
+        if err == -1:
             raise GrassError(_("Error executing: Rast_set_cat"))
 
     def __del__(self):
         libraster.Rast_free_cats(ctypes.byref(self.c_cats))
 
     def get_cat(self, index):
-        return self.__getitem__(index)
+        return self[index]
 
     def set_cat(self, index, value):
         if index is None:
             self.append(value)
-        elif index < self.__len__():
-            self.__setitem__(index, value)
+        elif index < (len(self)):
+            self[index] = value
         else:
-            raise TypeError("Index outside range.")
+            msg = "Index outside range."
+            raise TypeError(msg)
 
     def reset(self):
         for i in range(len(self) - 1, -1, -1):
@@ -221,7 +223,7 @@ class Category(list):
         # reset only the C struct
         libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
         # write to the c struct
-        for cat in self.__iter__():
+        for cat in iter(self):
             label, min_cat, max_cat = cat
             if max_cat is None:
                 max_cat = min_cat
@@ -244,7 +246,8 @@ class Category(list):
             self.name, self.mapset, ctypes.byref(self.c_cats)
         )
         if err == -1:
-            raise GrassError("Can not read the categories.")
+            msg = "Can not read the categories."
+            raise GrassError(msg)
         # copy from C struct to list
         self._read_cats()
 
@@ -268,19 +271,21 @@ class Category(list):
         :type category: Category object
         """
         libraster.Rast_copy_cats(
-            ctypes.byref(self.c_cats), ctypes.byref(category.c_cats)  # to
-        )  # from
+            ctypes.byref(self.c_cats),  # to
+            ctypes.byref(category.c_cats),  # from
+        )
         self._read_cats()
 
     def ncats(self):
-        return self.__len__()
+        return len(self)
 
     def set_cats_fmt(self, fmt, m1, a1, m2, a2):
         """Not implemented yet.
         void Rast_set_cats_fmt()
         """
         # TODO: add
-        raise ImplementationError("set_cats_fmt() is not implemented yet.")
+        msg = f"{self.set_cats_fmt.__name__}() is not implemented yet."
+        raise ImplementationError(msg)
 
     def read_rules(self, filename, sep=":"):
         """Copy categories from a rules file, default separator is ':', the
@@ -299,7 +304,7 @@ class Category(list):
 
         """
         self.reset()
-        with open(filename, "r") as f:
+        with open(filename) as f:
             for row in f:
                 cat = row.strip().split(sep)
                 if len(cat) == 2:
@@ -308,7 +313,8 @@ class Category(list):
                 elif len(cat) == 3:
                     label, min_cat, max_cat = cat
                 else:
-                    raise TypeError("Row length is greater than 3")
+                    msg = "Row length is greater than 3"
+                    raise TypeError(msg)
                 self.append((label, min_cat, max_cat))
 
     def write_rules(self, filename, sep=":"):
@@ -327,7 +333,7 @@ class Category(list):
         :param str sep: the separator used to divide values and category
         """
         cats = []
-        for cat in self.__iter__():
+        for cat in iter(self):
             if cat[-1] is None:
                 cat = cat[:-1]
             cats.append(sep.join([str(i) for i in cat]))

@@ -14,7 +14,7 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 
 from core.workspace import ProcessWorkspaceFile
 from core.gcmd import RunCommand, GException
@@ -33,7 +33,7 @@ class NvizTask:
         self.task = gtask.grassTask("m.nviz.image")
         self.filename = filename
         try:
-            gxwXml = ProcessWorkspaceFile(etree.parse(self.filename))
+            gxwXml = ProcessWorkspaceFile(ET.parse(self.filename))
         except Exception:
             raise GException(
                 _(
@@ -136,9 +136,7 @@ class NvizTask:
             self._setMultiTaskParam(mode2, value)
 
         # position
-        pos = []
-        for coor in ("x", "y", "z"):
-            pos.append(str(surface["position"][coor]))
+        pos = [str(surface["position"][coor]) for coor in ("x", "y", "z")]
         value = ",".join(pos)
         self._setMultiTaskParam("surface_position", value)
 
@@ -301,12 +299,11 @@ class NvizTask:
 
         if len(layerList) > 1:
             raise GException(_("Please add only one layer in the list."))
-            return
+            return None
         layer = layerList[0]
-        if hasattr(layer, "maps"):
-            series = layer.maps
-        else:
+        if not hasattr(layer, "maps"):
             raise GException(_("No map series nor space-time dataset is added."))
+        series = layer.maps
 
         for value in series:
             self.task.set_param(paramName, value)

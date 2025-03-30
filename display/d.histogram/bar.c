@@ -12,7 +12,7 @@
  *
  * NOTES:
  *
- * 1) see dhist.h for a decalaration of the structure stat_list.
+ * 1) see dhist.h for a declaration of the structure stat_list.
  * 2) see bar.h for normalized coordinates of the different parts
  *    of the bar-chart, like the origin of the chart, the label
  *    positions, etc.
@@ -249,7 +249,7 @@ int bar(struct stat_list *dist_stats, /* list of distribution statistics */
                         y_box[1] = y_box[2] = bar_height;
                         D_polygon_abs(x_box, y_box, 4);
                     }
-                }      /* fp */
+                } /* fp */
                 else { /* 1-color bar for int data or null */
 
                     D_color((CELL)bar_color, colors);

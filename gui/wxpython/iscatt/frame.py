@@ -221,9 +221,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
 
         self.Bind(aui.EVT_AUI_PANE_CLOSE, self.OnPlotPaneClosed)
 
-        dlgSize = (-1, 400)
-        # self.SetBestSize(dlgSize)
-        # self.SetInitialSize(dlgSize)
         self.SetAutoLayout(1)
         # fix goutput's pane size (required for Mac OSX)
         # if self.gwindow:
@@ -246,10 +243,10 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
 
     def CursorPlotMove(self, x, y, scatt_id):
         try:
-            x = int(round(x))
-            y = int(round(y))
+            x = round(x)
+            y = round(y)
             coords = True
-        except:
+        except TypeError:
             coords = False
 
         pane = self._getPane(scatt_id)
@@ -504,9 +501,8 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
             index = self.GetNextItem(lastFound, wx.LIST_NEXT_ALL, state)
             if index == -1:
                 break
-            else:
-                lastFound = index
-                indices.append(index)
+            lastFound = index
+            indices.append(index)
         return indices
 
     def DeselectAll(self):
@@ -571,11 +567,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         item = menu.Append(wx.ID_ANY, _("Change opacity level"))
         self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, item)
 
-        if showed:
-            text = _("Hide")
-        else:
-            text = _("Show")
-
+        text = _("Hide") if showed else _("Show")
         item = menu.Append(wx.ID_ANY, text)
         self.Bind(
             wx.EVT_MENU,
@@ -681,7 +673,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         name = cat_attrs["name"]
 
         dlg = SetOpacityDialog(
-            self, opacity=value, title=_("Change opacity of class <%s>" % name)
+            self, opacity=value, title=_("Change opacity of class <%s>") % name
         )
 
         dlg.applyOpacity.connect(
@@ -702,15 +694,14 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         dlg.CentreOnParent()
 
         while True:
-            if dlg.ShowModal() == wx.ID_OK:
-                name = dlg.GetNewName().strip()
-                if not name:
-                    GMessage(parent=self, message=_("Empty name was inserted."))
-                else:
-                    self.cats_mgr.SetCategoryAttrs(cat_id, {"name": name})
-                    break
-            else:
+            if dlg.ShowModal() != wx.ID_OK:
                 break
+
+            name = dlg.GetNewName().strip()
+            if name:
+                self.cats_mgr.SetCategoryAttrs(cat_id, {"name": name})
+                break
+            GMessage(parent=self, message=_("Empty name was inserted."))
 
         dlg.Destroy()
 

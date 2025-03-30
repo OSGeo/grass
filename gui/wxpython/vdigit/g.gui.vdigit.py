@@ -63,7 +63,7 @@ def main():
     # define classes which needs imports as local
     # for longer definitions, a separate file would be a better option
     class VDigitMapDisplay(FrameMixin, MapPanel):
-        """Map display for wrapping map panel with v.digit mathods and frame methods"""
+        """Map display for wrapping map panel with v.digit methods and frame methods"""
 
         def __init__(self, parent, vectorMap):
             MapPanel.__init__(
@@ -84,7 +84,7 @@ def main():
             )
             self._initShortcuts()
 
-            # this giface issue not solved yet, we must set mapframe aferwards
+            # this giface issue not solved yet, we must set mapframe afterwards
             self._giface._mapframe = self
             # load vector map
             mapLayer = self.GetMap().AddLayer(
@@ -104,7 +104,7 @@ def main():
             self.toolbars["vdigit"].StartEditing(mapLayer)
             # use Close instead of QuitVDigit for standalone tool
             self.toolbars["vdigit"].quitDigitizer.disconnect(self.QuitVDigit)
-            self.toolbars["vdigit"].quitDigitizer.connect(self.Close)
+            self.toolbars["vdigit"].quitDigitizer.connect(lambda: self.Close())
 
             # add Map Display panel to Map Display frame
             sizer = wx.BoxSizer(wx.VERTICAL)

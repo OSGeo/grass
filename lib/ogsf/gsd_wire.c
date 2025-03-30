@@ -25,10 +25,10 @@
 #define DO_ARROWS
 
 /************************************************************************/
-/* Notes on exageration:
-   vertical exageration is of two forms:
-   1) global exageration (from geoview struct)
-   2) vertical exageration for each surface - not implemented
+/* Notes on exaggeration:
+   vertical exaggeration is of two forms:
+   1) global exaggeration (from geoview struct)
+   2) vertical exaggeration for each surface - not implemented
  */
 
 /************************************************************************/
@@ -544,7 +544,7 @@ int gsd_wire_arrows(geosurf *surf)
 
             gsd_arrow(pt, curcolor, xres * 2, n, sz, surf);
         } /* ea col */
-    }     /* ea row */
+    } /* ea row */
 
     gsd_popmatrix();
     gsd_colormode(CM_DIFFUSE);
@@ -556,7 +556,7 @@ int gsd_wire_arrows(geosurf *surf)
    \brief Draw coarse surface
 
    New (TEST) wire routine that draws low res surface
-   Based on new Trinagle Fan routine
+   Based on new Triangle Fan routine
    Resolution is a function of current surface resolution
    times wire resolution
 
@@ -645,7 +645,7 @@ int gsd_coarse_surf_map(geosurf *surf)
      */
     check_transp = 0;
     tratt = &(surf->att[ATT_TRANSP]);
-    ktrans = (255 << 24);
+    ktrans = (255U << 24);
     trans_src = surf->att[ATT_TRANSP].att_src;
 
     if (CONST_ATT == trans_src && surf->att[ATT_TRANSP].constant != 0.0) {
@@ -798,7 +798,7 @@ int gsd_coarse_surf_map(geosurf *surf)
                 if (check_transp) {
                     GET_MAPATT(trbuff, offset2[ii], ttr);
                     ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                    ktrans = (char)(255 - ktrans) << 24;
+                    ktrans = (char)(255U - ktrans) << 24;
                 }
 
                 if (check_material) {

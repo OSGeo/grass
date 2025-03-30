@@ -209,10 +209,7 @@ class CTreeView(AbstractTreeViewMixin, CustomTreeCtrl):
     """Tree view class inheriting from wx.TreeCtrl"""
 
     def __init__(self, model, parent, **kw):
-        if hasAgw:
-            style = "agwStyle"
-        else:
-            style = "style"
+        style = "agwStyle" if hasAgw else "style"
 
         if style not in kw:
             kw[style] = (
@@ -256,8 +253,7 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, TreeListCtrl):
         # remove & because of & needed in menu (&Files)
         if column > 0:
             return node.data.get(self._columns[column], "")
-        else:
-            return node.label.replace("&", "")
+        return node.label.replace("&", "")
 
     def OnRightClick(self, event):
         """Select item on right click.
@@ -303,17 +299,19 @@ def main():
     root = tree.root
     n1 = tree.AppendNode(parent=root, data={"label": "node1"})
     n2 = tree.AppendNode(parent=root, data={"label": "node2"})
-    n3 = tree.AppendNode(parent=root, data={"label": "node3"})  # pylint: disable=W0612
+    n3 = tree.AppendNode(  # noqa: F841 # pylint: disable=W0612
+        parent=root, data={"label": "node3"}
+    )
     n11 = tree.AppendNode(parent=n1, data={"label": "node11", "xxx": "A"})
-    n12 = tree.AppendNode(
+    n12 = tree.AppendNode(  # noqa: F841 # pylint: disable=W0612
         parent=n1, data={"label": "node12", "xxx": "B"}
-    )  # pylint: disable=W0612
-    n21 = tree.AppendNode(
+    )
+    n21 = tree.AppendNode(  # noqa: F841 # pylint: disable=W0612
         parent=n2, data={"label": "node21", "xxx": "A"}
-    )  # pylint: disable=W0612
-    n111 = tree.AppendNode(
+    )
+    n111 = tree.AppendNode(  # noqa: F841 # pylint: disable=W0612
         parent=n11, data={"label": "node111", "xxx": "A"}
-    )  # pylint: disable=W0612
+    )
 
     app = wx.App()
     frame = TreeFrame(model=tree)

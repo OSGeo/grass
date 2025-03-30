@@ -107,7 +107,7 @@ void get_mtlformat(const char metadata[], char *key, char value[])
 void lsat_metadata(char *metafile, lsat_data *lsat)
 {
     FILE *f;
-    char mtldata[METADATA_SIZE];
+    char mtldata[METADATA_SIZE] = {'\0'};
     char key[MAX_STR], value[MAX_STR];
     void (*get_mtldata)(const char[], char *, char[]);
 
@@ -117,7 +117,7 @@ void lsat_metadata(char *metafile, lsat_data *lsat)
     /* store metadata in ram */
     if ((f = fopen(metafile, "r")) == NULL)
         G_fatal_error(_("Metadata file <%s> not found"), metafile);
-    i = fread(mtldata, METADATA_SIZE, 1, f);
+    i = fread(mtldata, METADATA_SIZE - 1, 1, f);
     (void)fclose(f);
 
     /* set version of the metadata file */
@@ -165,7 +165,7 @@ void lsat_metadata(char *metafile, lsat_data *lsat)
         chrncpy(lsat->date, value, 10);
     }
     else
-        G_warning("Using adquisition date from the command line 'date'");
+        G_warning("Using acquisition date from the command line 'date'");
 
     get_mtldata(mtldata, "FILE_DATE", value);
     if (value[0] == '\0') {

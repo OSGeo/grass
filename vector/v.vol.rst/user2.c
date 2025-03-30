@@ -92,6 +92,7 @@ int interp_call(struct octtree *root, struct octtree *tree)
     int skip_index, segtest;
     double xx, yy, zz /*, ww */;
 
+    skip_point.x = skip_point.y = skip_point.z = skip_point.w = 0.0;
     if (tree == NULL)
         return -1;
     if (tree->data == NULL)
@@ -294,6 +295,7 @@ int interp_call(struct octtree *root, struct octtree *tree)
         if (totsegm != 0) {
             G_percent(cursegm, totsegm, 1);
         }
+        G_free(point);
 
         return 1;
     }

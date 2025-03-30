@@ -9,7 +9,7 @@
 # PURPOSE:  	It provides the commands necessary to compile, install,
 #   	    	clean, and uninstall GRASS
 #   	    	See INSTALL.md file for usage.
-# COPYRIGHT:    (C) 2002-2024 by the GRASS Development Team
+# COPYRIGHT:    (C) 2002-2025 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -46,12 +46,11 @@ DIRS = \
 	visualization \
 	locale \
 	man \
-	macosx \
 	mswindows
 
 SUBDIRS = $(DIRS)
 
-FILES = AUTHORS CHANGES CITING COPYING GPL.TXT INSTALL.md REQUIREMENTS.md contributors.csv contributors_extra.csv translators.csv
+FILES = AUTHORS CITING COPYING GPL.TXT INSTALL.md REQUIREMENTS.md contributors.csv contributors_extra.csv translators.csv
 FILES_DST = $(patsubst %,$(ARCH_DISTDIR)/%,$(FILES))
 
 default:

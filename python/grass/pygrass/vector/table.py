@@ -65,14 +65,13 @@ def get_path(path, vect_name=None):
     """
     if "$" not in path:
         return path
-    else:
-        mapset = Mapset()
-        path = path.replace("$GISDBASE", mapset.gisdbase)
-        path = path.replace("$LOCATION_NAME", mapset.location)
-        path = path.replace("$MAPSET", mapset.name)
-        if vect_name is not None:
-            path = path.replace("$MAP", vect_name)
-        return path
+    mapset = Mapset()
+    path = path.replace("$GISDBASE", mapset.gisdbase)
+    path = path.replace("$LOCATION_NAME", mapset.location)
+    path = path.replace("$MAPSET", mapset.name)
+    if vect_name is not None:
+        path = path.replace("$MAP", vect_name)
+    return path
 
 
 class Filters:
@@ -134,9 +133,9 @@ class Filters:
         :type number: int
         """
         if not isinstance(number, int):
-            raise ValueError("Must be an integer.")
-        else:
-            self._limit = "LIMIT {number}".format(number=number)
+            msg = "Must be an integer."
+            raise ValueError(msg)
+        self._limit = "LIMIT {number}".format(number=number)
         return self
 
     def group_by(self, *groupby):
@@ -266,9 +265,9 @@ class Columns:
         """Read columns name and types from table and update the odict
         attribute.
         """
+        cur = self.conn.cursor()
         if self.is_pg():
             # is a postgres connection
-            cur = self.conn.cursor()
             cur.execute("SELECT oid,typname FROM pg_type")
             diz = dict(cur.fetchall())
             odict = OrderedDict()
@@ -282,22 +281,20 @@ class Columns:
                     odict[name] = diz[ctype]
             except pg.ProgrammingError:
                 pass
-            self.odict = odict
         else:
             # is a sqlite connection
-            cur = self.conn.cursor()
             cur.execute(sql.PRAGMA.format(tname=self.tname))
             descr = cur.fetchall()
             odict = OrderedDict()
             for column in descr:
                 name, ctype = column[1:3]
                 odict[name] = ctype
-            self.odict = odict
+        self.odict = odict
         values = ",".join(
             [
                 "?",
             ]
-            * self.__len__()
+            * (len(self))
         )
         kv = ",".join(["%s=?" % k for k in self.odict.keys() if k != self.key])
         where = "%s=?" % self.key
@@ -326,8 +323,7 @@ class Columns:
             return ", ".join(
                 ["%s %s" % (key, val) for key, val in self.items() if key != remove]
             )
-        else:
-            return ", ".join(["%s %s" % (key, val) for key, val in self.items()])
+        return ", ".join(["%s %s" % (key, val) for key, val in self.items()])
 
     def types(self):
         """Return a list with the column types.
@@ -365,15 +361,12 @@ class Columns:
         ['cat', 'name', 'value']
 
         """
+        nams = list(self.odict.keys())
         if remove:
-            nams = list(self.odict.keys())
             nams.remove(remove)
-        else:
-            nams = list(self.odict.keys())
         if unicod:
             return nams
-        else:
-            return [str(name) for name in nams]
+        return [str(name) for name in nams]
 
     def items(self):
         """Return a list of tuple with column name and column type.
@@ -555,17 +548,15 @@ class Columns:
            It is not possible to cast a column with sqlite
 
         """
-        if self.is_pg():
-            cur = self.conn.cursor()
-            cur.execute(
-                sql.CAST_COL.format(tname=self.tname, col=col_name, ctype=new_type)
-            )
-            self.conn.commit()
-            cur.close()
-            self.update_odict()
-        else:
+        if not self.is_pg():
             # sqlite does not support rename columns:
-            raise DBError("SQLite does not support to cast columns.")
+            msg = "SQLite does not support to cast columns."
+            raise DBError(msg)
+        cur = self.conn.cursor()
+        cur.execute(sql.CAST_COL.format(tname=self.tname, col=col_name, ctype=new_type))
+        self.conn.commit()
+        cur.close()
+        self.update_odict()
 
     def drop(self, col_name):
         """Drop a column from the table.
@@ -667,7 +658,8 @@ class Link:
 
     def _set_layer(self, number):
         if number <= 0:
-            raise TypeError("Number must be positive and greater than 0.")
+            msg = "Number must be positive and greater than 0."
+            raise TypeError(msg)
         self.c_fieldinfo.contents.number = number
 
     layer = property(
@@ -714,18 +706,17 @@ class Link:
         return decode(self.c_fieldinfo.contents.driver)
 
     def _set_driver(self, driver):
-        if driver in DRIVERS:
-            self.c_fieldinfo.contents.driver = ReturnString(driver)
-        elif driver in UNSUPPORTED_DRIVERS:
-            raise NotImplementedError(
-                "The database driver %s is not supported by PyGRASS, "
-                "use: %s." % (driver, ", ".join(DRIVERS))
-            )
-        else:
+        if driver not in DRIVERS:
+            if driver in UNSUPPORTED_DRIVERS:
+                raise NotImplementedError(
+                    "The database driver %s is not supported by PyGRASS, use: %s."
+                    % (driver, ", ".join(DRIVERS))
+                )
             raise ValueError(
-                "The database driver %s is not known to PyGRASS, "
-                "use: %s." % (driver, ", ".join(DRIVERS))
+                "The database driver %s is not known to PyGRASS, use: %s."
+                % (driver, ", ".join(DRIVERS))
             )
+        self.c_fieldinfo.contents.driver = ReturnString(driver)
 
     driver = property(
         fget=_get_driver,
@@ -791,10 +782,7 @@ class Link:
         False
         """
         attrs = ["layer", "name", "table_name", "key", "driver"]
-        for attr in attrs:
-            if getattr(self, attr) != getattr(link, attr):
-                return False
-        return True
+        return all(getattr(self, attr) == getattr(link, attr) for attr in attrs)
 
     def __ne__(self, other):
         return not self == other
@@ -831,7 +819,7 @@ class Link:
         if driver == "sqlite":
             import sqlite3
 
-            # Numpy is using some custom integer data types to efficiently
+            # NumPy is using some custom integer data types to efficiently
             # pack data into memory. Since these types aren't familiar to
             # sqlite, you'll have to tell it about how to handle them.
             for t in (
@@ -850,7 +838,7 @@ class Link:
             if not os.path.exists(dbdirpath):
                 os.mkdir(dbdirpath)
             return sqlite3.connect(dbpath)
-        elif driver == "pg":
+        if driver == "pg":
             try:
                 import psycopg2
 
@@ -860,9 +848,9 @@ class Link:
             except ImportError:
                 er = "You need to install psycopg2 to connect with this table."
                 raise ImportError(er) from None
-        else:
-            str_err = "Driver is not supported yet, pleas use: sqlite or pg"
-            raise TypeError(str_err) from None
+
+        str_err = "Driver is not supported yet, pleas use: sqlite or pg"
+        raise TypeError(str_err) from None
 
     def table(self):
         """Return a Table object.
@@ -943,11 +931,10 @@ class DBlinks:
     def __getitem__(self, item):
         if isinstance(item, int):
             return self.by_index(item)
-        else:
-            return self.by_name(item)
+        return self.by_name(item)
 
     def __repr__(self):
-        return "DBlinks(%r)" % [link for link in self.__iter__()]
+        return "DBlinks(%r)" % list(self.__iter__())
 
     def by_index(self, indx):
         """Return a Link object by index
@@ -1130,8 +1117,7 @@ class Table:
         :param cursor: the cursor to connect, if None it use the cursor
                        of connection table object
         :type cursor: Cursor object
-        :param force: True to remove the table, by default False to print
-                      advice
+        :param force: True to remove the table, by default False to print advice
         :type force: bool
         """
 
@@ -1170,8 +1156,7 @@ class Table:
         """Execute SQL code from a given string or build with filters and
         return a cursor object.
 
-        :param sql_code: the SQL code to execute, if not pass it use filters
-                         variable
+        :param sql_code: the SQL code to execute, if not pass it use filters variable
         :type sql_code: str
         :param cursor: the cursor to connect, if None it use the cursor
                      of connection table object
@@ -1268,10 +1253,7 @@ class Table:
         """
         cur = cursor or self.conn.cursor()
         coldef = ",\n".join(["%s %s" % col for col in cols])
-        if name:
-            newname = name
-        else:
-            newname = self.name
+        newname = name or self.name
         try:
             cur.execute(sql.CREATE_TAB.format(tname=newname, coldef=coldef))
             self.conn.commit()
@@ -1293,10 +1275,10 @@ if __name__ == "__main__":
     utils.create_test_vector_map(test_vector_name)
     doctest.testmod()
 
-    """Remove the generated vector map, if exist"""
     from grass.pygrass.utils import get_mapset_vector
     from grass.script.core import run_command
 
     mset = get_mapset_vector(test_vector_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)

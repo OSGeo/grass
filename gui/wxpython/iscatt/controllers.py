@@ -149,10 +149,7 @@ class ScattsManager:
             callable=self.core.CleanUp, ondone=lambda event: self.CleanUpDone()
         )
 
-        if self.show_add_scatt_plot:
-            show_add = True
-        else:
-            show_add = False
+        show_add = bool(self.show_add_scatt_plot)
 
         self.all_bands_to_bands = dict(zip(bands, [-1] * len(bands)))
         self.all_bands = bands
@@ -192,9 +189,7 @@ class ScattsManager:
         del self.busy
         self.data_set = True
 
-        todo = event.ret
         self.bad_bands = event.ret
-        bands = self.core.GetBands()
 
         self.bad_rasts = event.ret
         self.cats_mgr.SetData()
@@ -234,12 +229,13 @@ class ScattsManager:
                         "Number of cells (rows*cols) <%d> in current region"
                         "is higher than maximum limit <%d>.\n\n"
                         "You can reduce number of cells in current region using "
-                        "<g.region> command." % (ncells, MAX_NCELLS)
-                    ),
+                        "<g.region> command."
+                    )
+                    % (ncells, MAX_NCELLS),
                 )
             )
             return
-        elif ncells > WARN_NCELLS:
+        if ncells > WARN_NCELLS:
             dlg = wx.MessageDialog(
                 parent=self.guiparent,
                 message=_(
@@ -250,8 +246,8 @@ class ScattsManager:
                     "It can be done by <g.region> command.\n\n"
                     "Do you want to continue using "
                     "Interactive Scatter Plot Tool with this region?"
-                    % (ncells, WARN_NCELLS)
-                ),
+                )
+                % (ncells, WARN_NCELLS),
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_WARNING,
             )
             ret = dlg.ShowModal()
@@ -318,11 +314,11 @@ class ScattsManager:
         err = ""
         for b in [b_1_name, b_2_name]:
             if self.bands_info[b] is None:
-                err += _("Band <%s> is not CELL (integer) type.\n" % b)
+                err += _("Band <%s> is not CELL (integer) type.\n") % b
         if err:
             GMessage(
                 parent=self.guiparent,
-                message=_("Scatter plot cannot be added.\n" + err),
+                message=_("Scatter plot cannot be added.\n") + err,
             )
             return False
 
@@ -334,18 +330,18 @@ class ScattsManager:
                     "Scatter plot cannot be added.\n"
                     "Multiple of bands ranges <%s:%d * %s:%d = %d> "
                     "is higher than maximum limit <%d>.\n"
-                    % (
-                        b_1_name,
-                        b_1_i["range"],
-                        b_1_name,
-                        b_2_i["range"],
-                        mrange,
-                        MAX_SCATT_SIZE,
-                    )
+                )
+                % (
+                    b_1_name,
+                    b_1_i["range"],
+                    b_1_name,
+                    b_2_i["range"],
+                    mrange,
+                    MAX_SCATT_SIZE,
                 ),
             )
             return False
-        elif mrange > WARN_SCATT_SIZE:
+        if mrange > WARN_SCATT_SIZE:
             dlg = wx.MessageDialog(
                 parent=self.guiparent,
                 message=_(
@@ -354,14 +350,14 @@ class ScattsManager:
                     "It is strongly advised to reduce range extend of bands"
                     "(e. g. using r.rescale) below recommended threshold.\n\n"
                     "Do you really want to add this scatter plot?"
-                    % (
-                        b_1_name,
-                        b_1_i["range"],
-                        b_1_name,
-                        b_2_i["range"],
-                        mrange,
-                        WARN_SCATT_SIZE,
-                    )
+                )
+                % (
+                    b_1_name,
+                    b_1_i["range"],
+                    b_1_name,
+                    b_2_i["range"],
+                    mrange,
+                    WARN_SCATT_SIZE,
                 ),
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_WARNING,
             )
@@ -509,7 +505,7 @@ class PlotsRenderingManager:
     """Manages rendering of scatter plot.
 
     .. todo::
-        still space for optimalization
+        still space for optimization
     """
 
     def __init__(self, scatt_mgr, cats_mgr, core):
@@ -596,7 +592,7 @@ class PlotsRenderingManager:
                 try:
                     self.cat_ids.remove(c)
                     scatt_dt[c]["render"] = True
-                except:
+                except ValueError:
                     scatt_dt[c]["render"] = False
 
             if self.scatt_mgr.pol_sel_mode[0]:
@@ -673,7 +669,7 @@ class CategoriesManager:
 
         try:
             pos = self.cats_ids.index(cat_id)
-        except:
+        except ValueError:
             return False
 
         if pos > new_pos:
@@ -698,10 +694,7 @@ class CategoriesManager:
 
     def AddCategory(self, cat_id=None, name=None, color=None, nstd=None):
         if cat_id is None:
-            if self.cats_ids:
-                cat_id = max(self.cats_ids) + 1
-            else:
-                cat_id = 1
+            cat_id = max(self.cats_ids) + 1 if self.cats_ids else 1
 
         if self.scatt_mgr.data_set:
             self.scatt_mgr.thread.Run(callable=self.core.AddCategory, cat_id=cat_id)
@@ -808,7 +801,6 @@ class CategoriesManager:
     def OnExportCatRastDone(self, event):
         ret, err = event.ret
         if ret == 0:
-            cat_attrs = self.GetCategoryAttrs(event.kwds["cat_id"])
             GMessage(
                 _("Scatter plot raster of class <%s> exported to raster map <%s>.")
                 % (event.userdata["name"], event.kwds["rast_name"])
@@ -965,16 +957,15 @@ class IMapDispConnection:
 
         bands = []
         while True:
-            if dlg.ShowModal() == wx.ID_OK:
-                bands = dlg.GetGroupBandsErr(parent=self.scatt_mgr.guiparent)
-                if bands:
-                    name, s = dlg.GetData()
-                    group = gs.find_file(name=name, element="group")
-                    self.set_g["group"] = group["name"]
-                    self.set_g["subg"] = s
+            if dlg.ShowModal() != wx.ID_OK:
+                break
+            bands = dlg.GetGroupBandsErr(parent=self.scatt_mgr.guiparent)
+            if bands:
+                name, s = dlg.GetData()
+                group = gs.find_file(name=name, element="group")
+                self.set_g["group"] = group["name"]
+                self.set_g["subg"] = s
 
-                    break
-            else:
                 break
 
         dlg.Destroy()
@@ -1141,11 +1132,9 @@ class IClassConnection:
 
     def SetCategory(self, cat, stats):
         self.cats_mgr.setCategoryAttrs.disconnect(self.SetStatistics)
-        cats_attr = {}
-
-        for attr in ["name", "color", "nstd"]:
-            if attr in stats:
-                cats_attr[attr] = stats[attr]
+        cats_attr = {
+            attr: stats[attr] for attr in ["name", "color", "nstd"] if attr in stats
+        }
 
         if cats_attr:
             self.cats_mgr.SetCategoryAttrs(cat, cats_attr)

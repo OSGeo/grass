@@ -94,7 +94,7 @@ def main():
         if not passflags:
             passflags = "g"
         else:
-            passflags = passflags + "g"
+            passflags += "g"
     output_format = options["format"]
 
     try:

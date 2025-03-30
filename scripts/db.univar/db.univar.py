@@ -77,10 +77,10 @@ def cleanup():
 
 
 def sortfile(infile, outfile):
-    inf = open(infile, "r")
+    inf = open(infile)
     outf = open(outfile, "w")
 
-    if gs.find_program("sort", "--help"):
+    if (not gs.setup.WINDOWS) and gs.find_program("sort", "--help"):
         gs.run_command("sort", flags="n", stdin=inf, stdout=outf)
     else:
         # FIXME: we need a large-file sorting function
@@ -89,8 +89,7 @@ def sortfile(infile, outfile):
         for i in range(len(lines)):
             lines[i] = float(lines[i].rstrip("\r\n"))
         lines.sort()
-        for line in lines:
-            outf.write(str(line) + "\n")
+        outf.writelines(str(line) + "\n" for line in lines)
 
     inf.close()
     outf.close()
@@ -118,10 +117,7 @@ def main():
     perc = [float(p) for p in perc.split(",")]
 
     if not output_format:
-        if shellstyle:
-            output_format = "shell"
-        else:
-            output_format = "plain"
+        output_format = "shell" if shellstyle else "plain"
     elif shellstyle:
         # This can be a message or warning in future versions.
         # In version 9, -g may be removed.
@@ -280,7 +276,8 @@ def main():
             sys.stdout.write("coeff_var=0\n")
         sys.stdout.write("sum=%.15g\n" % sum)
     else:
-        raise ValueError(f"Unknown output format {output_format}")
+        msg = f"Unknown output format {output_format}"
+        raise ValueError(msg)
 
     if not extend:
         return

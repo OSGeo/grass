@@ -22,45 +22,53 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
 
-import os
+from __future__ import annotations
+
 import copy
+import os
+from typing import TYPE_CHECKING
 
 from core import globalvar
+
+# isort: split
 import wx
 import wx.aui
-
-from mapdisp.toolbars import MapToolbar, NvizIcons
-from mapdisp.gprint import PrintOptions
-from core.gcmd import GError, GMessage, RunCommand
-from core.utils import ListOfCatsToRange, GetLayerNameFromCmd
-from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
 from core.debug import Debug
-from core.settings import UserSettings
-from gui_core.mapdisp import SingleMapPanel, FrameMixin
-from gui_core.query import QueryDialog, PrepareQueryResults
-from mapwin.buffered import BufferedMapWindow
-from mapwin.decorations import (
-    LegendController,
-    BarscaleController,
-    ArrowController,
-    DtextController,
-    LegendVectController,
-)
-from mapwin.analysis import (
-    ProfileController,
-    MeasureDistanceController,
-    MeasureAreaController,
-)
-from gui_core.forms import GUI
+from core.gcmd import GError, GMessage, RunCommand
 from core.giface import Notification
+from core.settings import UserSettings
+from core.utils import GetLayerNameFromCmd, ListOfCatsToRange
+from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
+from gui_core.forms import GUI
+from gui_core.mapdisp import FrameMixin, SingleMapPanel
+from gui_core.query import PrepareQueryResults, QueryDialog
 from gui_core.vselect import VectorSelectBase, VectorSelectHighlighter
 from gui_core.wrap import Menu
-from mapdisp import statusbar as sb
 from main_window.page import MainPageBase
+from mapdisp import statusbar as sb
+from mapdisp.gprint import PrintOptions
+from mapdisp.toolbars import MapToolbar, NvizIcons
+from mapwin.analysis import (
+    MeasureAreaController,
+    MeasureDistanceController,
+    ProfileController,
+)
+from mapwin.buffered import BufferedMapWindow
+from mapwin.decorations import (
+    ArrowController,
+    BarscaleController,
+    DtextController,
+    LegendController,
+    LegendVectController,
+)
 
 import grass.script as gs
-
 from grass.pydispatch.signal import Signal
+from grass.exceptions import ScriptError
+
+if TYPE_CHECKING:
+    import lmgr.frame
+    import main_window.frame
 
 
 class MapPanel(SingleMapPanel, MainPageBase):
@@ -76,7 +84,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         toolbars=["map"],
         statusbar=True,
         tree=None,
-        lmgr=None,
+        lmgr: main_window.frame.GMFrame | lmgr.frame.GMFrame | None = None,
         Map=None,
         auimgr=None,
         dockable=False,
@@ -296,7 +304,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
     def _addToolbarVDigit(self):
         """Add vector digitizer toolbar"""
-        from vdigit.main import haveVDigit, VDigit
+        from vdigit.main import VDigit, haveVDigit
         from vdigit.toolbars import VDigitToolbar
 
         if not haveVDigit:
@@ -324,7 +332,9 @@ class MapPanel(SingleMapPanel, MainPageBase):
             )
             self._setUpMapWindow(self.MapWindowVDigit)
             self.MapWindowVDigit.digitizingInfo.connect(
-                self.statusbarManager.statusbarItems["coordinates"].SetAdditionalInfo
+                lambda text: self.statusbarManager.statusbarItems[
+                    "coordinates"
+                ].SetAdditionalInfo(text)
             )
             self.MapWindowVDigit.digitizingInfoUnavailable.connect(
                 lambda: self.statusbarManager.statusbarItems[
@@ -364,7 +374,9 @@ class MapPanel(SingleMapPanel, MainPageBase):
             def openATM(selection):
                 self._layerManager.OnShowAttributeTable(None, selection=selection)
 
-            self.toolbars["vdigit"].openATM.connect(openATM)
+            self.toolbars["vdigit"].openATM.connect(
+                lambda selection: openATM(selection)
+            )
             self.Map.layerAdded.connect(self._updateVDigitLayers)
         self.MapWindowVDigit.SetToolbar(self.toolbars["vdigit"])
 
@@ -397,7 +409,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
     def AddNviz(self):
         """Add 3D view mode window"""
-        from nviz.main import haveNviz, GLWindow, errorMsg
+        from nviz.main import GLWindow, errorMsg, haveNviz
 
         # check for GLCanvas and OpenGL
         if not haveNviz:
@@ -407,8 +419,9 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 message=_(
                     "Unable to switch to 3D display mode.\nThe Nviz python extension "
                     "was not found or loaded properly.\n"
-                    "Switching back to 2D display mode.\n\nDetails: %s" % errorMsg
-                ),
+                    "Switching back to 2D display mode.\n\nDetails: %s"
+                )
+                % errorMsg,
             )
             return
 
@@ -778,10 +791,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 # --overwrite
                 continue
             if p == "format":  # must be there
-                if self.IsPaneShown("3d"):
-                    extType = "ppm"
-                else:
-                    extType = val
+                extType = "ppm" if self.IsPaneShown("3d") else val
             if p == "output":  # must be there
                 name = val
             elif p == "size":
@@ -793,10 +803,8 @@ class MapPanel(SingleMapPanel, MainPageBase):
         elif ext[1:] != extType:
             extType = ext[1:]
 
-        if self.IsPaneShown("3d"):
-            bitmapType = "ppm"
-        else:
-            bitmapType = wx.BITMAP_TYPE_PNG  # default type
+        # default type is PNG
+        bitmapType = "ppm" if self.IsPaneShown("3d") else wx.BITMAP_TYPE_PNG
         for each in ltype:
             if each["ext"] == extType:
                 bitmapType = each["type"]
@@ -826,7 +834,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 overwrite=overwrite,
                 getErrorMsg=True,
             )
-            if not returncode == 0:
+            if returncode != 0:
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 return
             # set region for composite
@@ -834,7 +842,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             returncode, messages = RunCommand(
                 "g.region", raster=tmpName + ".red", quiet=True, getErrorMsg=True
             )
-            if not returncode == 0:
+            if returncode != 0:
                 gs.del_temp_region()
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 return
@@ -857,7 +865,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 quiet=True,
                 name=[tmpName + ".red", tmpName + ".green", tmpName + ".blue"],
             )
-            if not returncode == 0:
+            if returncode != 0:
                 self._giface.WriteError(_("Failed to run d.to.rast:\n") + messages)
                 gs.try_remove(pngFile)
                 return
@@ -1096,7 +1104,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                     encoding=encoding,
                     multiple=True,
                 )
-            except gs.ScriptError:
+            except ScriptError:
                 GError(
                     parent=self,
                     message=_(
@@ -1142,9 +1150,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             self._highlighter_layer.SetMap(
                 vectQuery[0]["Map"] + "@" + vectQuery[0]["Mapset"]
             )
-            tmp = []
-            for i in vectQuery:
-                tmp.append(i["Category"])
+            tmp = [i["Category"] for i in vectQuery]
 
             self._highlighter_layer.SetCats(tmp)
             self._highlighter_layer.DrawSelected()
@@ -1158,7 +1164,9 @@ class MapPanel(SingleMapPanel, MainPageBase):
         # change the cursor
         self.MapWindow.SetNamedCursor("cross")
 
-    def AddTmpVectorMapLayer(self, name, cats, useId=False, addLayer=True):
+    def AddTmpVectorMapLayer(
+        self, name, cats, useId: bool = False, addLayer: bool = True
+    ):
         """Add temporal vector map layer to map composition
 
         :param name: name of map layer
@@ -1209,24 +1217,23 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 cmd[-1].append("layer=%d" % layer)
                 cmd[-1].append("cats=%s" % ListOfCatsToRange(lcats))
 
-        if addLayer:
-            args = {}
-            if useId:
-                args["ltype"] = "vector"
-            else:
-                args["ltype"] = "command"
-
-            return self.Map.AddLayer(
-                name=globalvar.QUERYLAYER,
-                command=cmd,
-                active=True,
-                hidden=True,
-                opacity=1.0,
-                render=True,
-                **args,
-            )
-        else:
+        if not addLayer:
             return cmd
+
+        args = {}
+        if useId:
+            args["ltype"] = "vector"
+        else:
+            args["ltype"] = "command"
+        return self.Map.AddLayer(
+            name=globalvar.QUERYLAYER,
+            command=cmd,
+            active=True,
+            hidden=True,
+            opacity=1.0,
+            render=True,
+            **args,
+        )
 
     def OnMeasureDistance(self, event):
         self._onMeasure(MeasureDistanceController)
@@ -1243,7 +1250,9 @@ class MapPanel(SingleMapPanel, MainPageBase):
         self.measureController = controller(self._giface, mapWindow=self.GetMapWindow())
         # assure that the mode is ended and lines are cleared whenever other
         # tool is selected
-        self._toolSwitcher.toggleToolChanged.connect(self.measureController.Stop)
+        self._toolSwitcher.toggleToolChanged.connect(
+            lambda: self.measureController.Stop()
+        )
         self.measureController.Start()
 
     def OnProfile(self, event):
@@ -1276,11 +1285,11 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
     def OnHistogramPyPlot(self, event):
         """Init PyPlot histogram display canvas and tools"""
-        raster = []
-
-        for layer in self._giface.GetLayerList().GetSelectedLayers():
-            if layer.maplayer.GetType() == "raster":
-                raster.append(layer.maplayer.GetName())
+        raster = [
+            layer.maplayer.GetName()
+            for layer in self._giface.GetLayerList().GetSelectedLayers()
+            if layer.maplayer.GetType() == "raster"
+        ]
 
         from wxplot.histogram import HistogramPlotFrame
 
@@ -1290,11 +1299,11 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
     def OnScatterplot(self, event):
         """Init PyPlot scatterplot display canvas and tools"""
-        raster = []
-
-        for layer in self._giface.GetLayerList().GetSelectedLayers():
-            if layer.maplayer.GetType() == "raster":
-                raster.append(layer.maplayer.GetName())
+        raster = [
+            layer.maplayer.GetName()
+            for layer in self._giface.GetLayerList().GetSelectedLayers()
+            if layer.maplayer.GetType() == "raster"
+        ]
 
         from wxplot.scatter import ScatterFrame
 
@@ -1499,7 +1508,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         self.MapWindow.SetRegion(zoomOnly=False)
 
     def OnSetExtentToWind(self, event):
-        """Set compulational region extent interactively"""
+        """Set computational region extent interactively"""
         self.MapWindow.SetModeDrawRegion()
 
     def OnSaveDisplayRegion(self, event):
@@ -1563,7 +1572,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
-        return self.toolbars["map"] if "map" in self.toolbars else None
+        return self.toolbars.get("map", None)
 
     def GetDialog(self, name):
         """Get selected dialog if exist"""
@@ -1600,7 +1609,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
     def AddRDigit(self):
         """Adds raster digitizer: creates toolbar and digitizer controller,
         binds events and signals."""
-        from rdigit.controller import RDigitController, EVT_UPDATE_PROGRESS
+        from rdigit.controller import EVT_UPDATE_PROGRESS, RDigitController
         from rdigit.toolbars import RDigitToolbar
 
         self.rdigit = RDigitController(self._giface, mapWindow=self.GetMapWindow())

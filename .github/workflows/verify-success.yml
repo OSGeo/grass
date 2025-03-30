@@ -45,38 +45,40 @@ on:
         type: string
         required: true
         # Can't escape the handlebars in the description
-        description:
+        description: >-
           In the calling job that defines all the needed jobs,
           send `toJson(needs)` inside `$` followed by `{{ }}`
       fail_if_failure:
         type: boolean
         default: true
-        description:
+        description: >-
           If true, this workflow will fail if any job from 'needs_context was
           failed
       fail_if_cancelled:
         type: boolean
         default: true
-        description:
+        description: >-
           If true, this workflow will fail if any job from 'needs_context' was
           cancelled
       fail_if_skipped:
         type: boolean
         default: false
-        description:
+        description: >-
           If true, this workflow will fail if any job from 'needs_context' was
           skipped
       require_success:
         type: boolean
         default: true
-        description:
+        description: >-
           If true, this workflow will fail if no job from 'needs_context' was
           successful
+
+permissions: {}
 
 jobs:
   verify-success:
     name: Success
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     continue-on-error: true
     steps:
       - name: Set outputs for each job result type

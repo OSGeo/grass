@@ -47,6 +47,8 @@ import sys
 import glob
 import ctypes
 
+from pathlib import Path
+
 import wx
 
 from core import globalvar
@@ -279,8 +281,7 @@ class ListCtrlComboPopup(ComboPopup):
     def GetComboCtrl(self):
         if globalvar.wxPythonPhoenix:
             return super().GetComboCtrl()
-        else:
-            return self.GetCombo()
+        return self.GetCombo()
 
     def GetStringValue(self):
         """Get value as a string separated by commas"""
@@ -414,7 +415,7 @@ class ListCtrlComboPopup(ComboPopup):
             self.multiple = kargs["multiple"]
         if "onPopup" in kargs:
             self.onPopup = kargs["onPopup"]
-        if kargs.get("layerTree", None):
+        if kargs.get("layerTree"):
             self.filterItems = []  # reset
             ltype = kargs["type"]
             for layer in kargs["layerTree"].GetVisibleLayers(skipDigitized=True):
@@ -482,7 +483,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             try:
                 self.seltree.EnsureVisible(item)
                 self.seltree.SelectItem(item)
-            except:
+            except Exception:
                 pass
 
     def _getElementList(self, element, mapsets=None, elements=None, exclude=False):
@@ -522,8 +523,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             if elem not in elementdict:
                 self.AddItem(_("Not selectable element"), node=False)
                 return
-            else:
-                renamed_elements.append(elementdict[elem])
+            renamed_elements.append(elementdict[elem])
 
         if element in {"stds", "strds", "str3ds", "stvds"}:
             if not self.tgis_error:
@@ -596,30 +596,32 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 sys.stderr.write(_("GSelect: invalid item: %s") % e)
                 continue
 
-            if self.seltree.ItemHasChildren(mapset_node):
-                sel = UserSettings.Get(
-                    group="appearance", key="elementListExpand", subkey="selection"
-                )
-                collapse = True
+            if not self.seltree.ItemHasChildren(mapset_node):
+                continue
 
-                if sel == 0:  # collapse all except PERMANENT and current
-                    if mapset in {"PERMANENT", curr_mapset}:
-                        collapse = False
-                elif sel == 1:  # collapse all except PERMANENT
-                    if mapset == "PERMANENT":
-                        collapse = False
-                elif sel == 2:  # collapse all except current
-                    if mapset == curr_mapset:
-                        collapse = False
-                elif sel == 3:  # collapse all
-                    pass
-                elif sel == 4:  # expand all
+            sel = UserSettings.Get(
+                group="appearance", key="elementListExpand", subkey="selection"
+            )
+            collapse = True
+
+            if sel == 0:  # collapse all except PERMANENT and current
+                if mapset in {"PERMANENT", curr_mapset}:
                     collapse = False
+            elif sel == 1:  # collapse all except PERMANENT
+                if mapset == "PERMANENT":
+                    collapse = False
+            elif sel == 2:  # collapse all except current
+                if mapset == curr_mapset:
+                    collapse = False
+            elif sel == 3:  # collapse all
+                pass
+            elif sel == 4:  # expand all
+                collapse = False
 
-                if collapse:
-                    self.seltree.CollapseAllChildren(mapset_node)
-                else:
-                    self.seltree.ExpandAllChildren(mapset_node)
+            if collapse:
+                self.seltree.CollapseAllChildren(mapset_node)
+            else:
+                self.seltree.ExpandAllChildren(mapset_node)
 
         if first_mapset:
             # select first mapset (MSW hack)
@@ -637,22 +639,24 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         """
         elist = gs.naturally_sorted(elist)
         for elem in elist:
-            if elem != "":
-                fullqElem = elem + "@" + mapset
-                if self.filterItems and fullqElem not in self.filterItems:
-                    continue  # skip items missed in self.filterItems
+            if elem == "":
+                continue
 
-                if elements is not None:
-                    if (exclude and fullqElem in elements) or (
-                        not exclude and fullqElem not in elements
-                    ):
-                        continue
+            fullqElem = elem + "@" + mapset
+            if self.filterItems and fullqElem not in self.filterItems:
+                continue  # skip items missed in self.filterItems
 
-                if self.filterElements:
-                    if self.filterElements(fullqElem):
-                        self.AddItem(elem, mapset=mapset, node=False, parent=node)
-                else:
+            if elements is not None:
+                if (exclude and fullqElem in elements) or (
+                    not exclude and fullqElem not in elements
+                ):
+                    continue
+
+            if self.filterElements:
+                if self.filterElements(fullqElem):
                     self.AddItem(elem, mapset=mapset, node=False, parent=node)
+            else:
+                self.AddItem(elem, mapset=mapset, node=False, parent=node)
 
     def AddItem(self, value, mapset=None, node=True, parent=None):
         if not parent:
@@ -832,17 +836,15 @@ class VectorDBInfo:
 
     def _CheckDBConnection(self):
         """Check DB connection"""
-        nuldev = open(os.devnull, "w+")
-        # if map is not defined (happens with vnet initialization) or it
-        # doesn't exist
-        try:
-            self.layers = gs.vector_db(map=self.map, stderr=nuldev)
-        except CalledModuleError:
-            return False
-        finally:  # always close nuldev
-            nuldev.close()
+        with open(os.devnull, "w+") as nuldev:
+            # if map is not defined (happens with vnet initialization) or it
+            # doesn't exist
+            try:
+                self.layers = gs.vector_db(map=self.map, stderr=nuldev)
+            except CalledModuleError:
+                return False
 
-        return bool(len(self.layers.keys()) > 0)
+            return bool(len(self.layers.keys()) > 0)
 
     def _DescribeTables(self):
         """Describe linked tables"""
@@ -921,7 +923,7 @@ class VectorDBInfo:
         :param layer: vector layer number
         """
         if layer not in self.layers:
-            raise GException(_("No table linked to layer <{}>.".format(layer)))
+            raise GException(_("No table linked to layer <{}>.").format(layer))
         return self.layers[layer]["table"]
 
     def GetDbSettings(self, layer):
@@ -1289,7 +1291,7 @@ class MapsetSelect(wx.ComboBox):
         style = 0
         # disabled, read-only widget has no TextCtrl children (TODO: rewrite)
         # if not new and not multiple:
-        ###     style = wx.CB_READONLY
+        #     style = wx.CB_READONLY
 
         wx.ComboBox.__init__(self, parent, id, size=size, style=style, **kwargs)
         self.searchPath = searchPath
@@ -1328,8 +1330,7 @@ class MapsetSelect(wx.ComboBox):
     def UpdateItems(self, location, dbase=None):
         """Update list of mapsets for given location
 
-        :param str dbase: path to GIS database (None to use currently
-                          selected)
+        :param str dbase: path to GIS database (None to use currently selected)
         :param str location: name of location
         """
         if dbase:
@@ -1373,12 +1374,6 @@ class SubGroupSelect(wx.ComboBox):
         """Insert subgroups for defined group"""
         if not group:
             return
-        gisenv = gs.gisenv()
-        try:
-            name, mapset = group.split("@", 1)
-        except ValueError:
-            name = group
-            mapset = gisenv["MAPSET"]
 
         mlist = RunCommand("i.group", group=group, read=True, flags="sg").splitlines()
         try:
@@ -1400,21 +1395,14 @@ class FormatSelect(wx.Choice):
         super().__init__(parent, id=wx.ID_ANY, size=size, **kwargs)
         self.SetName("FormatSelect")
 
-        if ogr:
-            ftype = "ogr"
-        else:
-            ftype = "gdal"
+        ftype = "ogr" if ogr else "gdal"
 
-        formats = []
-        for f in GetFormats()[ftype][srcType].items():
-            formats += f
+        formats = list(GetFormats()[ftype][srcType].items())
         self.SetItems(formats)
 
     def GetExtension(self, name):
         """Get file extension by format name"""
-        formatToExt = {}
-        formatToExt.update(rasterFormatExtension)
-        formatToExt.update(vectorFormatExtension)
+        formatToExt = {**rasterFormatExtension, **vectorFormatExtension}
 
         return formatToExt.get(name, "")
 
@@ -1510,10 +1498,7 @@ class GdalSelect(wx.Panel):
         self.protocolWidgets = {}
         self.pgWidgets = {}
 
-        if ogr:
-            fType = "ogr"
-        else:
-            fType = "gdal"
+        fType = "ogr" if ogr else "gdal"
 
         # file
         fileMask = "%(all)s (*)|*|" % {"all": _("All files")}
@@ -1564,7 +1549,7 @@ class GdalSelect(wx.Panel):
             labelText=_("File:"),
             dialogTitle=_("Choose file to import"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
             fileMask=fileMask,
         )
@@ -1581,7 +1566,7 @@ class GdalSelect(wx.Panel):
             labelText=_("Directory:"),
             dialogTitle=_("Choose input directory"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
         )
         browse.GetChildren()[1].SetName("GdalSelectDataSource")
@@ -1634,7 +1619,7 @@ class GdalSelect(wx.Panel):
             labelText=_("Name:"),
             dialogTitle=_("Choose file"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
         )
         browse.GetChildren()[1].SetName("GdalSelectDataSource")
@@ -1669,7 +1654,7 @@ class GdalSelect(wx.Panel):
             labelText=_("Directory:"),
             dialogTitle=_("Choose input directory"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=str(Path.cwd()),
             changeCallback=self.OnUpdate,
         )
         self.dbWidgets["dirbrowse"] = browse
@@ -1962,9 +1947,7 @@ class GdalSelect(wx.Panel):
 
     def _getExtension(self, name):
         """Get file extension by format name"""
-        formatToExt = {}
-        formatToExt.update(rasterFormatExtension)
-        formatToExt.update(vectorFormatExtension)
+        formatToExt = {**rasterFormatExtension, **vectorFormatExtension}
 
         return formatToExt.get(name, "")
 
@@ -2107,28 +2090,29 @@ class GdalSelect(wx.Panel):
                 )
                 if not ret:
                     GError(parent=self, message=message)
-                    return
+                    return None
 
                 connection_string = None
                 for conn in ret.splitlines():
                     db_login = conn.split("|")
-                    if db_login[0] == "pg":
-                        user, password, host, port = db_login[2:]
-                        connection_string = (
-                            f"PG:dbname={self.dbWidgets['choice'].GetStringSelection()}"
-                        )
-                        if user:
-                            connection_string += f" user={user}"
-                        if password:
-                            connection_string += f" password={password}"
-                        if host:
-                            connection_string += f" host={host}"
-                        if port:
-                            connection_string += f" port={port}"
-                        return connection_string
+                    if db_login[0] != "pg":
+                        continue
+                    user, password, host, port = db_login[2:]
+                    connection_string = (
+                        f"PG:dbname={self.dbWidgets['choice'].GetStringSelection()}"
+                    )
+                    if user:
+                        connection_string += f" user={user}"
+                    if password:
+                        connection_string += f" password={password}"
+                    if host:
+                        connection_string += f" host={host}"
+                    if port:
+                        connection_string += f" port={port}"
+                    return connection_string
                 if not connection_string:
                     GError(parent=self, message=message)
-                    return
+                    return None
             else:
                 name = self._getCurrentDbWidgetName()
                 if name == "choice":
@@ -2234,8 +2218,7 @@ class GdalSelect(wx.Panel):
             :param str dsn: data source name
             :param str table: PG DB table name, default value is None
 
-            :return str: 1 if raster projection match location
-                         projection else 0
+            :return str: 1 if raster projection matches location projection, else 0
             """
             projectionMatch = "0"
 
@@ -2259,18 +2242,18 @@ class GdalSelect(wx.Panel):
                         message=_(
                             "Getting raster <{table}> SRID from PostgreSQL"
                             " DB <{db}>, host <{host}> failed."
-                            " {error}.".format(
-                                table=table,
-                                db=self._getPDDBConnectionParam(
-                                    dsn,
-                                    conn_param="dbname",
-                                ),
-                                host=self._getPDDBConnectionParam(
-                                    dsn,
-                                    conn_param="host",
-                                ),
-                                error=gs.utils.decode(error),
+                            " {error}."
+                        ).format(
+                            table=table,
+                            db=self._getPDDBConnectionParam(
+                                dsn,
+                                conn_param="dbname",
                             ),
+                            host=self._getPDDBConnectionParam(
+                                dsn,
+                                conn_param="host",
+                            ),
+                            error=gs.utils.decode(error),
                         ),
                     )
                 if ret:
@@ -2296,12 +2279,7 @@ class GdalSelect(wx.Panel):
             return projectionMatch
 
         def getProjMatchCaption(projectionMatch):
-            if projectionMatch == "0":
-                projectionMatchCaption = _("No")
-            else:
-                projectionMatchCaption = _("Yes")
-
-            return projectionMatchCaption
+            return _("No") if projectionMatch == "0" else _("Yes")
 
         dsn = self.GetDsn()
         if not dsn:
@@ -2446,15 +2424,9 @@ class GdalSelect(wx.Panel):
         """Show related manual page"""
         cmd = ""
         if self.dest:
-            if self.ogr:
-                cmd = "v.external.out"
-            else:
-                cmd = "r.external.out"
+            cmd = "v.external.out" if self.ogr else "r.external.out"
         elif self.link:
-            if self.ogr:
-                cmd = "v.external"
-            else:
-                cmd = "r.external"
+            cmd = "v.external" if self.ogr else "r.external"
         elif self.ogr:
             cmd = "v.in.ogr"
         else:
@@ -2522,17 +2494,17 @@ class GdalSelect(wx.Panel):
                 parent=self,
                 message=_(
                     "Getting list of tables from PostgreSQL DB <{db}>,"
-                    " host <{host}> failed. {error}.".format(
-                        db=self._getPGDBConnectionParam(
-                            dsn,
-                            conn_param="dbname",
-                        ),
-                        host=self._getPGDBConnectionParam(
-                            dsn,
-                            conn_param="host",
-                        ),
-                        error=gs.utils.decode(error),
+                    " host <{host}> failed. {error}."
+                ).format(
+                    db=self._getPGDBConnectionParam(
+                        dsn,
+                        conn_param="dbname",
                     ),
+                    host=self._getPGDBConnectionParam(
+                        dsn,
+                        conn_param="host",
+                    ),
+                    error=gs.utils.decode(error),
                 ),
             )
         if ret:
@@ -2544,10 +2516,8 @@ class GdalSelect(wx.Panel):
     def _getPGDBTablesColumnsTypesSql(self, tables):
         """Get PostGIS DB tables columns data type SQL command
 
-        :param list tables: list of PG DB tables with
-                            simple quotes ["'table'", ...]
-        :return str: SQL string for query all PG DB tables with
-                     columns data types
+        :param list tables: list of PG DB tables with simple quotes ["'table'", ...]
+        :return str: SQL string for query all PG DB tables with columns data types
         """
         return f"""
             SELECT
@@ -2567,7 +2537,7 @@ class GdalSelect(wx.Panel):
                   pg_catalog.pg_table_is_visible(c.oid)
               ) AS o ON a.attrelid = o.oid
             WHERE
-              relname IN ({', '.join(tables)})
+              relname IN ({", ".join(tables)})
               AND NOT a.attisdropped;
         """
 
@@ -2614,17 +2584,17 @@ class GdalSelect(wx.Panel):
                         message=_(
                             "Getting list of tables columns data types"
                             " from PostGIS DB <{db}>, host <{host}> failed."
-                            " {error}.".format(
-                                db=self._getPGDBConnectionParam(
-                                    dsn,
-                                    conn_param="dbname",
-                                ),
-                                host=self._getPGDBConnectionParam(
-                                    dsn,
-                                    conn_param="host",
-                                ),
-                                error=gs.utils.decode(error),
+                            " {error}."
+                        ).format(
+                            db=self._getPGDBConnectionParam(
+                                dsn,
+                                conn_param="dbname",
                             ),
+                            host=self._getPGDBConnectionParam(
+                                dsn,
+                                conn_param="host",
+                            ),
+                            error=gs.utils.decode(error),
                         ),
                     )
                 if ret:
@@ -2643,9 +2613,8 @@ class GdalSelect(wx.Panel):
             GError(
                 parent=self,
                 message=_(
-                    "PostgreSQL DB <{psql}> program was not found."
-                    " Please, install it.".format(psql=self._psql)
-                ),
+                    "PostgreSQL DB <{psql}> program was not found. Please, install it."
+                ).format(psql=self._psql),
             )
         Debug.msg(3, f"GdalSelect._getPGDBRasters(): return {rasters}")
         return rasters
@@ -2749,7 +2718,7 @@ class ElementSelect(wx.Choice):
         if elements:
             values = []
             valuesDesc = []
-            for idx in range(0, len(self.values)):
+            for idx in range(len(self.values)):
                 value = self.values[idx]
                 if value in elements:
                     values.append(value)
@@ -2809,9 +2778,9 @@ class OgrTypeSelect(wx.Panel):
         sel = self.ftype.GetSelection()
         if sel == 0:
             return "point"
-        elif sel == 1:
+        if sel == 1:
             return "line"
-        elif sel == 2:
+        if sel == 2:
             return "boundary"
 
 
@@ -2903,7 +2872,7 @@ class CoordinatesSelect(Panel):
             coords = self._getCoords()
             if coords is not None:
                 for i in range(len(coords) // 2):
-                    i = i * 2
+                    i *= 2
                     self.pointsToDraw.AddItem(coords=(coords[i], coords[i + 1]))
 
             self._giface.updateMap.emit(render=False, renderVector=False, delay=delay)
@@ -3004,26 +2973,26 @@ class VectorCategorySelect(wx.Panel):
     def _chckMap(self):
         """Check if selected map in 'input' widget is the same as selected map in
         lmgr"""
-        if self._isMapSelected():
-            layerList = self.giface.GetLayerList()
-            layerSelected = layerList.GetSelectedLayer()
-            # d.vect module
-            inputName = self.task.get_param(value="map", raiseError=False)
-            if not inputName:
-                inputName = self.task.get_param("input")
-            if inputName["value"] != str(layerSelected):
-                if inputName["value"] == "" or inputName["value"] is None:
-                    GWarning(_("Input vector map is not selected"))
-                    return False
-                GWarning(
-                    _(
-                        "Input vector map <%s> and selected map <%s> in layer manager "
-                        "are different. Operation canceled."
-                    )
-                    % (inputName["value"], str(layerSelected))
-                )
-                return False
+        if not self._isMapSelected():
+            return False
+        layerList = self.giface.GetLayerList()
+        layerSelected = layerList.GetSelectedLayer()
+        # d.vect module
+        inputName = self.task.get_param(value="map", raiseError=False)
+        if not inputName:
+            inputName = self.task.get_param("input")
+        if inputName["value"] == str(layerSelected):
             return True
+        if inputName["value"] == "" or inputName["value"] is None:
+            GWarning(_("Input vector map is not selected"))
+            return False
+        GWarning(
+            _(
+                "Input vector map <%s> and selected map <%s> in layer manager "
+                "are different. Operation canceled."
+            )
+            % (inputName["value"], str(layerSelected))
+        )
         return False
 
     def _onClick(self, evt=None):

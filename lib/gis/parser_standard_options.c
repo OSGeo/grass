@@ -97,6 +97,7 @@
    - colors
    - G_OPT_C
    - G_OPT_CN
+   - G_OPT_C_FORMAT
 
    - misc
    - G_OPT_M_DIR
@@ -110,6 +111,7 @@
    - G_OPT_M_REGION
    - G_OPT_M_NULL_VALUE
    - G_OPT_M_NPROCS
+   - G_OPT_M_SEED
 
    - temporal GIS framework
    - G_OPT_STDS_INPUT
@@ -652,6 +654,22 @@ struct Option *G_define_standard_option(int opt)
         Opt->description =
             _("Either a standard color name, R:G:B triplet, or \"none\"");
         break;
+    case G_OPT_C_FORMAT:
+        Opt->key = "color_format";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = YES;
+        Opt->multiple = NO;
+        Opt->answer = "hex";
+        Opt->options = "rgb,hex,hsv,triplet";
+        Opt->label = _("Color format");
+        Opt->description = _("Color format for output values.");
+        G_asprintf(
+            (char **)&(Opt->descriptions), "rgb;%s;hex;%s;hsv;%s;triplet;%s",
+            _("output color in RGB format"), _("output color in HEX format"),
+            _("output color in HSV format (experimental)"),
+            _("output color in colon-separated RGB format"));
+        break;
 
         /* misc */
 
@@ -767,6 +785,17 @@ struct Option *G_define_standard_option(int opt)
             Opt->answer = memstr;
         /* end dynamic answer */
         Opt->description = _("Number of threads for parallel computing");
+        break;
+
+    case G_OPT_M_SEED:
+        Opt->key = "seed";
+        Opt->type = TYPE_INTEGER;
+        Opt->required = NO;
+        Opt->label = _("Seed value for the random number generator");
+        Opt->description =
+            _("Using the same seed ensures identical results, "
+              "while a randomly generated seed produces different outcomes "
+              "in each run.");
         break;
 
         /* Spatio-temporal modules of the temporal GIS framework */

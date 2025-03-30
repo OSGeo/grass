@@ -15,6 +15,8 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
+from __future__ import annotations
+
 import sys
 import wx
 import wx.lib.agw.floatspin as fs
@@ -80,7 +82,7 @@ def convertToInt(argsOrKwargs, roundVal=False):
     return result
 
 
-def IsDark():
+def IsDark() -> bool:
     """Detects if used theme is dark.
     Wraps wx method for different versions."""
 
@@ -96,39 +98,34 @@ def IsDark():
     return luminance(fg) - luminance(bg) > 0.2
 
 
-def BitmapFromImage(image, depth=-1):
+def BitmapFromImage(image: wx.Image, depth=-1) -> wx.Bitmap:
     if wxPythonPhoenix:
         return wx.Bitmap(img=image, depth=depth)
-    else:
-        return wx.BitmapFromImage(image, depth=depth)
+    return wx.BitmapFromImage(image, depth=depth)
 
 
-def ImageFromBitmap(bitmap):
+def ImageFromBitmap(bitmap: wx.Bitmap) -> wx.Image:
     if wxPythonPhoenix:
         return bitmap.ConvertToImage()
-    else:
-        return wx.ImageFromBitmap(bitmap)
+    return wx.ImageFromBitmap(bitmap)
 
 
-def EmptyBitmap(width, height, depth=-1):
+def EmptyBitmap(width, height, depth=-1) -> wx.Bitmap:
     if wxPythonPhoenix:
         return wx.Bitmap(width=width, height=height, depth=depth)
-    else:
-        return wx.EmptyBitmap(width=width, height=height, depth=depth)
+    return wx.EmptyBitmap(width=width, height=height, depth=depth)
 
 
-def EmptyImage(width, height, clear=True):
+def EmptyImage(width, height, clear=True) -> wx.Image:
     if wxPythonPhoenix:
         return wx.Image(width=width, height=height, clear=clear)
-    else:
-        return wx.EmptyImage(width=width, height=height, clear=clear)
+    return wx.EmptyImage(width=width, height=height, clear=clear)
 
 
 def StockCursor(cursorId):
     if wxPythonPhoenix:
         return wx.Cursor(cursorId=cursorId)
-    else:
-        return wx.StockCursor(cursorId)
+    return wx.StockCursor(cursorId)
 
 
 class Window(wx.Window):
@@ -437,20 +434,18 @@ class ListCtrl(wx.ListCtrl):
             return wx.ListCtrl.InsertItem(
                 self, index=index, label=label, imageIndex=imageIndex
             )
-        else:
-            return wx.ListCtrl.InsertStringItem(
-                self, index=index, label=label, imageIndex=imageIndex
-            )
+        return wx.ListCtrl.InsertStringItem(
+            self, index=index, label=label, imageIndex=imageIndex
+        )
 
     def SetItem(self, index, column, label, imageId=-1):
         if wxPythonPhoenix:
             return wx.ListCtrl.SetItem(
                 self, index=index, column=column, label=label, imageId=imageId
             )
-        else:
-            return wx.ListCtrl.SetStringItem(
-                self, index=index, col=column, label=label, imageId=imageId
-            )
+        return wx.ListCtrl.SetStringItem(
+            self, index=index, col=column, label=label, imageId=imageId
+        )
 
     def CheckItem(self, item, check=True):
         """Uses either deprecated listmix.CheckListCtrlMixin
@@ -463,8 +458,7 @@ class ListCtrl(wx.ListCtrl):
     def IsItemChecked(self, item):
         if hasattr(self, "HasCheckBoxes"):
             return wx.ListCtrl.IsItemChecked(self, item)
-        else:
-            return super().IsChecked(item)
+        return super().IsChecked(item)
 
 
 if CheckWxVersion([4, 1, 0]):
@@ -497,16 +491,14 @@ class TreeCtrl(wx.TreeCtrl):
     def AppendItem(self, parent, text, image=-1, selImage=-1, data=None):
         if wxPythonPhoenix:
             return wx.TreeCtrl.AppendItem(self, parent, text, image, selImage, data)
-        else:
-            return wx.TreeCtrl.AppendItem(
-                self, parent, text, image, selImage, wx.TreeItemData(data)
-            )
+        return wx.TreeCtrl.AppendItem(
+            self, parent, text, image, selImage, wx.TreeItemData(data)
+        )
 
     def GetItemData(self, item):
         if wxPythonPhoenix:
             return wx.TreeCtrl.GetItemData(self, item)
-        else:
-            return wx.TreeCtrl.GetPyData(self, item)
+        return wx.TreeCtrl.GetPyData(self, item)
 
 
 class CustomTreeCtrl(CT.CustomTreeCtrl):
@@ -553,18 +545,17 @@ class ToolBar(wx.ToolBar):
                 longHelp=longHelpString,
                 clientData=clientData,
             )
-        else:
-            return wx.ToolBar.AddLabelTool(
-                self,
-                toolId,
-                label,
-                bitmap,
-                bmpDisabled,
-                kind,
-                shortHelpString,
-                longHelpString,
-                clientData,
-            )
+        return wx.ToolBar.AddLabelTool(
+            self,
+            toolId,
+            label,
+            bitmap,
+            bmpDisabled,
+            kind,
+            shortHelpString,
+            longHelpString,
+            clientData,
+        )
 
     def InsertLabelTool(
         self,
@@ -591,19 +582,18 @@ class ToolBar(wx.ToolBar):
                 longHelp=longHelpString,
                 clientData=clientData,
             )
-        else:
-            return wx.ToolBar.InsertLabelTool(
-                self,
-                pos,
-                toolId,
-                label,
-                bitmap,
-                bmpDisabled,
-                kind,
-                shortHelpString,
-                longHelpString,
-                clientData,
-            )
+        return wx.ToolBar.InsertLabelTool(
+            self,
+            pos,
+            toolId,
+            label,
+            bitmap,
+            bmpDisabled,
+            kind,
+            shortHelpString,
+            longHelpString,
+            clientData,
+        )
 
 
 class Menu(wx.Menu):
@@ -630,16 +620,10 @@ class DragImage(wx.GenericDragImage if wxPythonPhoenix else wx.DragImage):
     """Wrapper around wx.DragImage to have more control
     over the widget on different platforms/wxpython versions"""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
 
 class PseudoDC(wx.adv.PseudoDC if wxPythonPhoenix else wx.PseudoDC):
     """Wrapper around wx.PseudoDC to have more control
     over the widget on different platforms/wxpython versions"""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
     def DrawLinePoint(self, *args, **kwargs):
         args = convertToInt(argsOrKwargs=args, roundVal=True)
@@ -683,14 +667,10 @@ class ClientDC(wx.ClientDC):
     """Wrapper around wx.ClientDC to have more control
     over the widget on different platforms/wxpython versions"""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def GetFullMultiLineTextExtent(self, string, font=None):
         if wxPythonPhoenix:
             return super().GetFullMultiLineTextExtent(string, font)
-        else:
-            return super().GetMultiLineTextExtent(string, font)
+        return super().GetMultiLineTextExtent(string, font)
 
 
 class Rect(wx.Rect):
@@ -702,23 +682,20 @@ class Rect(wx.Rect):
         kwargs = convertToInt(argsOrKwargs=kwargs)
         wx.Rect.__init__(self, *args, **kwargs)
 
-    def ContainsXY(self, x, y):
+    def ContainsXY(self, x: float, y: float) -> bool:
         if wxPythonPhoenix:
             return wx.Rect.Contains(self, x=int(x), y=int(y))
-        else:
-            return wx.Rect.ContainsXY(self, int(x), int(y))
+        return wx.Rect.ContainsXY(self, int(x), int(y))
 
-    def ContainsRect(self, rect):
+    def ContainsRect(self, rect: wx.Rect) -> bool:
         if wxPythonPhoenix:
             return wx.Rect.Contains(self, rect=rect)
-        else:
-            return wx.Rect.ContainsRect(self, rect)
+        return wx.Rect.ContainsRect(self, rect)
 
-    def OffsetXY(self, dx, dy):
+    def OffsetXY(self, dx: float, dy: float) -> wx.Rect:
         if wxPythonPhoenix:
             return wx.Rect.Offset(self, int(dx), int(dy))
-        else:
-            return wx.Rect.OffsetXY(self, int(dx), int(dy))
+        return wx.Rect.OffsetXY(self, int(dx), int(dy))
 
 
 class CheckBox(wx.CheckBox):

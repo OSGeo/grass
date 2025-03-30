@@ -27,6 +27,8 @@ import copy
 import platform
 import getpass
 
+from pathlib import Path
+
 from core import globalvar
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -94,7 +96,7 @@ class GRASSStartup(wx.Frame):
             self.hbitmap = wx.StaticBitmap(
                 self.panel, wx.ID_ANY, wx.Bitmap(name=name, type=wx.BITMAP_TYPE_PNG)
             )
-        except:
+        except Exception:
             self.hbitmap = wx.StaticBitmap(
                 self.panel, wx.ID_ANY, BitmapFromImage(wx.EmptyImage(530, 150))
             )
@@ -102,9 +104,8 @@ class GRASSStartup(wx.Frame):
         # labels
         # crashes when LOCATION doesn't exist
         # get version & revision
-        versionFile = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
-        versionLine = versionFile.readline().rstrip("\n")
-        versionFile.close()
+        with open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER")) as versionFile:
+            versionLine = versionFile.readline().rstrip("\n")
         try:
             grassVersion, grassRevision = versionLine.split(" ", 1)
             if grassVersion.endswith("dev"):
@@ -315,7 +316,7 @@ class GRASSStartup(wx.Frame):
             if os.path.isdir(os.getenv("HOME")):
                 self.gisdbase = os.getenv("HOME")
             else:
-                self.gisdbase = os.getcwd()
+                self.gisdbase = str(Path.cwd())
         try:
             self.tgisdbase.SetValue(self.gisdbase)
         except UnicodeDecodeError:
@@ -344,12 +345,11 @@ class GRASSStartup(wx.Frame):
             sys.stderr.write(
                 _("ERROR: Location <%s> not found\n") % self.GetRCValue("LOCATION_NAME")
             )
-            if len(self.listOfLocations) > 0:
-                self.lblocations.SetSelection(0, force=True)
-                self.lblocations.EnsureVisible(0)
-                location = self.listOfLocations[0]
-            else:
+            if len(self.listOfLocations) <= 0:
                 return
+            self.lblocations.SetSelection(0, force=True)
+            self.lblocations.EnsureVisible(0)
+            location = self.listOfLocations[0]
 
         # list of mapsets
         self.UpdateMapsets(os.path.join(self.gisdbase, location))
@@ -540,18 +540,15 @@ class GRASSStartup(wx.Frame):
         gisrc = os.getenv("GISRC")
 
         if gisrc and os.path.isfile(gisrc):
-            try:
-                rc = open(gisrc, "r")
+            with open(gisrc) as rc:
                 for line in rc:
                     try:
                         key, val = line.split(":", 1)
                     except ValueError as e:
                         sys.stderr.write(
-                            _("Invalid line in GISRC file (%s):%s\n" % (e, line))
+                            _("Invalid line in GISRC file (%s):%s\n") % (e, line)
                         )
                     grassrc[key.strip()] = DecodeString(val.strip())
-            finally:
-                rc.close()
 
         return grassrc
 
@@ -594,8 +591,7 @@ class GRASSStartup(wx.Frame):
         """Return GRASS variable (read from GISRC)"""
         if value in self.grassrc:
             return self.grassrc[value]
-        else:
-            return None
+        return None
 
     def OnWizard(self, event):
         """Location wizard started"""
@@ -822,8 +818,8 @@ class GRASSStartup(wx.Frame):
                 shutil.rmtree(os.path.join(self.gisdbase, location, mapset))
                 self.OnSelectLocation(None)
                 self.lbmapsets.SetSelection(0)
-            except:
-                wx.MessageBox(message=_("Unable to delete mapset"))
+            except OSError as e:
+                wx.MessageBox(message=_("Unable to delete mapset: %s") % str(e))
 
         dlg.Destroy()
 
@@ -854,8 +850,8 @@ class GRASSStartup(wx.Frame):
                 self.lblocations.SetSelection(0)
                 self.OnSelectLocation(None)
                 self.lbmapsets.SetSelection(0)
-            except:
-                wx.MessageBox(message=_("Unable to delete location"))
+            except OSError as e:
+                wx.MessageBox(message=_("Unable to delete location: %s") % str(e))
 
         dlg.Destroy()
 
@@ -867,8 +863,7 @@ class GRASSStartup(wx.Frame):
             GError(
                 parent=self,
                 message=_(
-                    "Unicode error detected. "
-                    "Check your locale settings. Details: {0}"
+                    "Unicode error detected. Check your locale settings. Details: {0}"
                 ).format(e),
                 showTraceback=False,
             )
@@ -1013,10 +1008,7 @@ class GRASSStartup(wx.Frame):
 
     def OnBrowse(self, event):
         """'Browse' button clicked"""
-        if not event:
-            defaultPath = os.getenv("HOME")
-        else:
-            defaultPath = ""
+        defaultPath = os.getenv("HOME") if not event else ""
 
         dlg = wx.DirDialog(
             parent=self,
@@ -1044,8 +1036,7 @@ class GRASSStartup(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetValue()
             return self.CreateNewMapset(mapset=mapset)
-        else:
-            return False
+        return False
 
     def CreateNewMapset(self, mapset):
         if mapset in self.listOfMapsets:
@@ -1119,34 +1110,32 @@ class GRASSStartup(wx.Frame):
 
             ret = dlg.ShowModal()
             dlg.Destroy()
-            if ret == wx.ID_YES:
-                dlg1 = wx.MessageDialog(
-                    parent=self,
-                    message=_(
-                        "ARE YOU REALLY SURE?\n\n"
-                        "If you really are running another GRASS session doing this "
-                        "could corrupt your data. Have another look in the processor "
-                        "manager just to be sure..."
-                    ),
-                    caption=_("Lock file found"),
-                    style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
-                )
-
-                ret = dlg1.ShowModal()
-                dlg1.Destroy()
-
-                if ret == wx.ID_YES:
-                    try:
-                        os.remove(lockfile)
-                    except OSError as e:
-                        GError(
-                            _("Unable to remove '%(lock)s'.\n\nDetails: %(reason)s")
-                            % {"lock": lockfile, "reason": e}
-                        )
-                else:
-                    return
-            else:
+            if ret != wx.ID_YES:
                 return
+
+            dlg1 = wx.MessageDialog(
+                parent=self,
+                message=_(
+                    "ARE YOU REALLY SURE?\n\n"
+                    "If you really are running another GRASS session doing this "
+                    "could corrupt your data. Have another look in the processor "
+                    "manager just to be sure..."
+                ),
+                caption=_("Lock file found"),
+                style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
+            )
+            ret = dlg1.ShowModal()
+            dlg1.Destroy()
+
+            if ret != wx.ID_YES:
+                return
+            try:
+                os.remove(lockfile)
+            except OSError as e:
+                GError(
+                    _("Unable to remove '%(lock)s'.\n\nDetails: %(reason)s")
+                    % {"lock": lockfile, "reason": e}
+                )
         self.SetLocation(dbase, location, mapset)
         self.ExitSuccessfully()
 
@@ -1161,7 +1150,7 @@ class GRASSStartup(wx.Frame):
             defaultName = getpass.getuser()
             # raise error if not ascii (not valid mapset name)
             defaultName.encode("ascii")
-        except:  # whatever might go wrong
+        except Exception:  # whatever might go wrong
             defaultName = "user"
 
         return defaultName

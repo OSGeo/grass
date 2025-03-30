@@ -192,6 +192,10 @@ int main(int argc, char *argv[])
     sscanf(param.nprocs->answer, "%d", &nprocs);
     if (nprocs < 1)
         G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
+    if (nprocs > 1 && Rast_mask_is_present()) {
+        G_warning(_("Parallel processing disabled due to active mask."));
+        nprocs = 1;
+    }
 #if defined(_OPENMP)
     omp_set_num_threads(nprocs);
 #else
@@ -200,10 +204,6 @@ int main(int argc, char *argv[])
                     "threads setting."));
     nprocs = 1;
 #endif
-    if (nprocs > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
-        G_warning(_("Parallel processing disabled due to active MASK."));
-        nprocs = 1;
-    }
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
 
@@ -370,6 +370,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
 #endif
 
     int computed = 0;
+    int row;
 
 #pragma omp parallel
     {
@@ -396,7 +397,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
         }
 
 #pragma omp for
-        for (int row = 0; row < rows; row++) {
+        for (row = 0; row < rows; row++) {
             thread_workspace *w = &tw[t_id];
 
             Rast_get_row(w->fd, w->raster_row, row, map_type);

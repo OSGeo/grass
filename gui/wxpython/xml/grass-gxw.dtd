@@ -27,7 +27,7 @@
 	element added 2008/04
 -->
 <!ELEMENT layer_manager (cwd?)>
-<!-- window dimension (x, y (ur), width, heigth -->
+<!-- window dimension (x, y (ur), width, height -->
 <!ATTLIST layer_manager  dim       CDATA   #IMPLIED>
 
 <!--    value of current working directory
@@ -35,7 +35,7 @@
 <!ELEMENT cwd         (#PCDATA)>
 
 <!--    a display element defines map layer connected to given
-	map display widnow
+	map display window
 
         render, mode and showCompExtent (added 2004/08)
 -->
@@ -44,7 +44,7 @@
 <!ATTLIST display  mode            (0 | 1 | 2 | 3 | 4 | 5 | 6) #IMPLIED>
 <!ATTLIST display  showCompExtent  (0 | 1) #IMPLIED>
 <!ATTLIST display  constrainRes    (0 | 1) #IMPLIED>
-<!-- window dimension (x, y (ur), width, heigth -->
+<!-- window dimension (x, y (ur), width, height -->
 <!ATTLIST display  dim             CDATA   #IMPLIED>
 <!ATTLIST display  extent          CDATA   #IMPLIED>
 <!ATTLIST display  viewMode        (2d | 3d) #IMPLIED>

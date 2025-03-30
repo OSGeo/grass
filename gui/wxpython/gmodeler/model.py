@@ -38,7 +38,8 @@ import re
 import mimetypes
 import time
 
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
+from pathlib import Path
 from xml.sax import saxutils
 
 import wx
@@ -100,12 +101,7 @@ class Model:
         if not objType:
             return self.items
 
-        result = []
-        for item in self.items:
-            if isinstance(item, objType):
-                result.append(item)
-
-        return result
+        return [item for item in self.items if isinstance(item, objType)]
 
     def GetItem(self, aId, objType=None):
         """Get item of given id
@@ -161,7 +157,7 @@ class Model:
                     self.canvas.parent.DefineCondition(mo)
 
     def Normalize(self):
-        # check for inconsistecies
+        # check for inconsistencies
         for idx in range(1, len(self.items)):
             if not self.items[idx].GetBlock() and isinstance(
                 self.items[idx - 1], ModelLoop
@@ -323,9 +319,10 @@ class Model:
         """
         # parse workspace file
         try:
-            gxmXml = ProcessModelFile(etree.parse(filename))
+            gxmXml = ProcessModelFile(ET.parse(filename))
         except Exception as e:
-            raise GException("{}".format(e))
+            msg = "{}".format(e)
+            raise GException(msg)
 
         if self.canvas:
             win = self.canvas.parent
@@ -498,25 +495,25 @@ class Model:
                     continue
                 key, value = opt.split("=", 1)
                 sval = pattern.search(value)
-                if sval:
-                    var = sval.group(2).strip()[1:]  # strip '%' from beginning
-                    found = False
-                    for v in variables:
-                        if var.startswith(v):
-                            found = True
-                            break
-                    if not found:
-                        report = True
-                        for item in filter(
-                            lambda x: isinstance(x, ModelLoop), action.GetBlock()
-                        ):
-                            if var in item.GetLabel():
-                                report = False
-                                break
-                        if report:
-                            errList.append(
-                                cmd[0] + ": " + _("undefined variable '%s'") % var
-                            )
+                if not sval:
+                    continue
+                var = sval.group(2).strip()[1:]  # strip '%' from beginning
+                found = False
+                for v in variables:
+                    if var.startswith(v):
+                        found = True
+                        break
+                if found:
+                    continue
+                report = True
+                for item in filter(
+                    lambda x: isinstance(x, ModelLoop), action.GetBlock()
+                ):
+                    if var in item.GetLabel():
+                        report = False
+                        break
+                if report:
+                    errList.append(cmd[0] + ": " + _("undefined variable '%s'") % var)
             # TODO: check variables in file only optionally
             # errList += self._substituteFile(action, checkOnly = True)
 
@@ -525,7 +522,7 @@ class Model:
     def _substituteFile(self, item, params=None, checkOnly=False):
         """Substitute variables in command file inputs
 
-        :param bool checkOnly: tuble - True to check variable, don't touch files
+        :param bool checkOnly: True to check variable, don't touch files
 
         :return: list of undefined variables
         """
@@ -546,11 +543,8 @@ class Model:
 
         for finput in self.fileInput:
             # read lines
-            fd = open(finput, "r")
-            try:
-                data = self.fileInput[finput] = fd.read()
-            finally:
-                fd.close()
+            data = Path(finput).read_text()
+            self.fileInput[finput] = data
 
             # substitute variables
             write = False
@@ -583,11 +577,7 @@ class Model:
 
             if not checkOnly:
                 if write:
-                    fd = open(finput, "w")
-                    try:
-                        fd.write(data)
-                    finally:
-                        fd.close()
+                    Path(finput).write_text(data)
                 else:
                     self.fileInput[finput] = None
 
@@ -682,11 +672,12 @@ class Model:
                 GError(parent=parent, message="\n".join(err))
                 return
 
-            err = []
-            for key, item in params.items():
-                for p in item["params"]:
-                    if p.get("value", "") == "":
-                        err.append((key, p.get("name", ""), p.get("description", "")))
+            err = [
+                (key, p.get("name", ""), p.get("description", ""))
+                for key, item in params.items()
+                for p in item["params"]
+                if p.get("value", "") == ""
+            ]
             if err:
                 GError(
                     parent=parent,
@@ -711,24 +702,24 @@ class Model:
                 variables = self.GetVariables()
                 for variable in variables:
                     pattern = re.compile("%" + variable)
-                    if pattern.search(cond):
-                        value = ""
-                        if params and "variables" in params:
-                            for p in params["variables"]["params"]:
-                                if variable == p.get("name", ""):
-                                    value = p.get("value", "")
-                                    break
+                    if not pattern.search(cond):
+                        continue
+                    value = ""
+                    if params and "variables" in params:
+                        for p in params["variables"]["params"]:
+                            if variable == p.get("name", ""):
+                                value = p.get("value", "")
+                                break
 
-                        if not value:
-                            value = variables[variable].get("value", "")
+                    if not value:
+                        value = variables[variable].get("value", "")
 
-                        if not value:
-                            continue
-
-                        vtype = variables[variable].get("type", "string")
-                        if vtype == "string":
-                            value = '"' + value + '"'
-                        cond = pattern.sub(value, cond)
+                    if not value:
+                        continue
+                    vtype = variables[variable].get("type", "string")
+                    if vtype == "string":
+                        value = '"' + value + '"'
+                    cond = pattern.sub(value, cond)
 
                 # split condition
                 # TODO: this part needs some better solution
@@ -770,7 +761,7 @@ class Model:
                     p["value"] = ""
 
     def DeleteIntermediateData(self, log):
-        """Detele intermediate data"""
+        """Delete intermediate data"""
         rast, vect, rast3d, msg = self.GetIntermediateData()
 
         if rast:
@@ -833,10 +824,7 @@ class Model:
                 if gtype in {"raster", "vector", "mapset", "file", "region", "dir"}:
                     gisprompt = True
                     prompt = gtype
-                    if gtype == "raster":
-                        element = "cell"
-                    else:
-                        element = gtype
+                    element = "cell" if gtype == "raster" else gtype
                     ptype = "string"
                 else:
                     gisprompt = False
@@ -941,8 +929,9 @@ class ModelObject:
 
         result = []
         for rel in self.rels:
-            if fdir == "from" and rel.GetFrom() == self:
-                result.append(rel)
+            if fdir == "from":
+                if rel.GetFrom() == self:
+                    result.append(rel)
             elif rel.GetTo() == self:
                 result.append(rel)
 
@@ -970,10 +959,10 @@ class ModelObject:
             self.inBlock.append(item)
 
     def UnSetBlock(self, item):
-        """Remove object from the block (loop/consition)
+        """Remove object from the block (loop/condition)
 
         :param item: reference to ModelLoop or ModelCondition which
-                     defines loops/codition
+                     defines loops/condition
         """
         if item in self.inBlock:
             self.inBlock.remove(item)
@@ -991,11 +980,7 @@ class ModelObject:
 
         :return: list of ids
         """
-        ret = []
-        for mo in self.inBlock:
-            ret.append(mo.GetId())
-
-        return ret
+        return [mo.GetId() for mo in self.inBlock]
 
 
 class ModelAction(ModelObject, ogl.DividedShape):
@@ -1101,10 +1086,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
                     group="modeler", key="action", subkey=("width", "default")
                 )
             )
-        if self.isEnabled:
-            style = wx.SOLID
-        else:
-            style = wx.DOT
+        style = wx.SOLID if self.isEnabled else wx.DOT
 
         pen = wx.Pen(wx.BLACK, width, style)
         self.SetPen(pen)
@@ -1229,13 +1211,11 @@ class ModelAction(ModelObject, ogl.DividedShape):
                         cmd[idx] = pattern.sub(value, cmd[idx])
                     idx += 1
 
-        if string:
-            if cmd is None:
-                return ""
-            else:
-                return " ".join(cmd)
-
-        return cmd
+        if not string:
+            return cmd
+        if cmd is None:
+            return ""
+        return " ".join(cmd)
 
     def GetLabel(self):
         """Get name"""
@@ -1390,7 +1370,6 @@ class ModelData(ModelObject):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        pass
 
     def IsIntermediate(self):
         """Checks if data item is intermediate"""
@@ -1415,21 +1394,14 @@ class ModelData(ModelObject):
 
     def GetLog(self, string=True):
         """Get logging info"""
-        name = []
-        for rel in self.GetRelations():
-            name.append(rel.GetLabel())
+        name = [rel.GetLabel() for rel in self.GetRelations()]
         if name:
             return "/".join(name) + "=" + self.value + " (" + self.prompt + ")"
-        else:
-            return self.value + " (" + self.prompt + ")"
+        return self.value + " (" + self.prompt + ")"
 
     def GetLabel(self):
         """Get list of names"""
-        name = []
-        for rel in self.GetRelations():
-            name.append(rel.GetLabel())
-
-        return name
+        return [rel.GetLabel() for rel in self.GetRelations()]
 
     def GetPrompt(self):
         """Get prompt"""
@@ -1455,10 +1427,7 @@ class ModelData(ModelObject):
         self.SetLabel()
         for direction in ("from", "to"):
             for rel in self.GetRelations(direction):
-                if direction == "from":
-                    action = rel.GetTo()
-                else:
-                    action = rel.GetFrom()
+                action = rel.GetTo() if direction == "from" else rel.GetFrom()
 
                 task = GUI(show=None).ParseCommand(cmd=action.GetLog(string=False))
                 task.set_param(rel.GetLabel(), self.value)
@@ -1527,10 +1496,7 @@ class ModelData(ModelObject):
                     group="modeler", key="action", subkey=("width", "default")
                 )
             )
-        if self.intermediate:
-            style = wx.DOT
-        else:
-            style = wx.SOLID
+        style = wx.DOT if self.intermediate else wx.SOLID
 
         return wx.Pen(wx.BLACK, width, style)
 
@@ -1541,9 +1507,7 @@ class ModelData(ModelObject):
     def SetLabel(self):
         """Update text"""
         self.ClearText()
-        name = []
-        for rel in self.GetRelations():
-            name.append(rel.GetLabel())
+        name = [rel.GetLabel() for rel in self.GetRelations()]
         self.AddText("/".join(name))
         if self.value:
             self.AddText(self.value)
@@ -1564,7 +1528,8 @@ class ModelData(ModelObject):
         elif self.prompt == "vector":
             cmd.append("d.vect")
         else:
-            raise GException("Unsupported display prompt: {}".format(self.prompt))
+            msg = "Unsupported display prompt: {}".format(self.prompt)
+            raise GException(msg)
 
         cmd.append("map=" + self.value)
 
@@ -1578,7 +1543,7 @@ class ModelDataSingle(ModelData, ogl.EllipseShape):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        ogl.EllipseShape.__init__(self, width, height)
+        ogl.EllipseShape.__init__(self, width, height)  # noqa: PLC2801, C2801
         if self.parent.GetCanvas():
             self.SetCanvas(self.parent.GetCanvas())
 
@@ -1593,7 +1558,7 @@ class ModelDataSeries(ModelData, ogl.CompositeShape):
         :param width, height: dimension of the shape
         :param x, y: position of the shape
         """
-        ogl.CompositeShape.__init__(self)
+        ogl.CompositeShape.__init__(self)  # noqa: PLC2801, C2801
         if self.parent.GetCanvas():
             self.SetCanvas(self.parent.GetCanvas())
 
@@ -1672,7 +1637,7 @@ class ModelRelation(ogl.LineShape):
         """
         if isinstance(self.fromShape, ModelData):
             return self.fromShape
-        elif isinstance(self.toShape, ModelData):
+        if isinstance(self.toShape, ModelData):
             return self.toShape
 
         return None
@@ -1720,10 +1685,7 @@ class ModelItem(ModelObject):
 
     def _setPen(self):
         """Set pen"""
-        if self.isEnabled:
-            style = wx.SOLID
-        else:
-            style = wx.DOT
+        style = wx.SOLID if self.isEnabled else wx.DOT
 
         pen = wx.Pen(wx.BLACK, 1, style)
         self.SetPen(pen)
@@ -1743,8 +1705,7 @@ class ModelItem(ModelObject):
         """Get log info"""
         if self.label:
             return _("Condition: ") + self.label
-        else:
-            return _("Condition: not defined")
+        return _("Condition: not defined")
 
     def AddRelation(self, rel):
         """Record relation"""
@@ -1811,12 +1772,7 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
 
     def GetItems(self, items):
         """Get sorted items by id"""
-        result = []
-        for item in items:
-            if item.GetId() in self.itemIds:
-                result.append(item)
-
-        return result
+        return [item for item in items if item.GetId() in self.itemIds]
 
     def SetItems(self, items):
         """Set items (id)"""
@@ -1989,10 +1945,7 @@ class ProcessModelFile:
         self.root = self.tree.getroot()
         # check if input is a valid GXM file
         if self.root is None or self.root.tag != "gxm":
-            if self.root is not None:
-                tagName = self.root.tag
-            else:
-                tagName = _("empty")
+            tagName = self.root.tag if self.root is not None else _("empty")
             raise GException(_("Details: unsupported tag name '{0}'.").format(tagName))
 
         # list of actions, data
@@ -2021,13 +1974,11 @@ class ProcessModelFile:
     def _getNodeText(self, node, tag, default=""):
         """Get node text"""
         p = node.find(tag)
-        if p is not None:
-            if p.text:
-                return utils.normalize_whitespace(p.text)
-            else:
-                return ""
-
-        return default
+        if p is None:
+            return default
+        if p.text:
+            return utils.normalize_whitespace(p.text)
+        return ""
 
     def _processWindow(self):
         """Process window properties"""
@@ -2103,10 +2054,7 @@ class ProcessModelFile:
             aId = int(action.get("id", -1))
             label = action.get("name")
             comment = action.find("comment")
-            if comment is not None:
-                commentString = comment.text
-            else:
-                commentString = ""
+            commentString = comment.text if comment is not None else ""
 
             self.actions.append(
                 {
@@ -2257,7 +2205,7 @@ class ProcessModelFile:
             pos, size = self._getDim(node)
             text = self._filterValue(self._getNodeText(node, "condition")).strip()
             aid = {"if": [], "else": []}
-            for b in aid.keys():
+            for b in aid.keys():  # noqa: PLC0206
                 bnode = node.find(b)
                 if bnode is None:
                     continue
@@ -2289,7 +2237,6 @@ class ProcessModelFile:
                     "size": size,
                     "text": text,
                     "id": int(node.get("id", -1)),
-                    "text": text,
                 }
             )
 
@@ -2520,10 +2467,7 @@ class WriteModelFile:
             # relations
             for ft in ("from", "to"):
                 for rel in data.GetRelations(ft):
-                    if ft == "from":
-                        aid = rel.GetTo().GetId()
-                    else:
-                        aid = rel.GetFrom().GetId()
+                    aid = rel.GetTo().GetId() if ft == "from" else rel.GetFrom().GetId()
                     self.fd.write(
                         '%s<relation dir="%s" id="%d" name="%s">\n'
                         % (" " * self.indent, ft, aid, rel.GetLabel())
@@ -2641,7 +2585,7 @@ class WriteScriptFile(ABC):
             self._writePythonAction(
                 item, variables, self.model.GetIntermediateData()[:3]
             )
-        elif isinstance(item, ModelLoop) or isinstance(item, ModelCondition):
+        elif isinstance(item, (ModelLoop, ModelCondition)):
             # substitute condition
             cond = item.GetLabel()
             for variable in self.model.GetVariables():
@@ -2701,7 +2645,7 @@ class WriteScriptFile(ABC):
     @staticmethod
     def _getModuleNickname(item):
         return "{module_name}{module_id}".format(
-            module_name=re.sub("[^a-zA-Z]+", "", item.GetLabel()),
+            module_name=re.sub(r"[^a-zA-Z]+", "", item.GetLabel()),
             module_id=item.GetId(),
         )
 
@@ -2758,9 +2702,9 @@ class WriteActiniaFile(WriteScriptFile):
 
         self.fd.write(
             f"""{{
-{' ' * self.indent * 1}"id": "model",
-{' ' * self.indent * 1}"description": "{'""'.join(description.splitlines())}",
-{' ' * self.indent * 1}"version": "1",
+{" " * self.indent * 1}"id": "model",
+{" " * self.indent * 1}"description": "{'""'.join(description.splitlines())}",
+{" " * self.indent * 1}"version": "1",
 """
         )
 
@@ -2777,12 +2721,12 @@ class WriteActiniaFile(WriteScriptFile):
         if parameterized is True:
             self.fd.write(f'{" " * self.indent * 1}"template": {{\n')
             self.fd.write(
-                f"""{' ' * self.indent * 2}"list": [
+                f"""{" " * self.indent * 2}"list": [
     """
             )
         else:
             self.fd.write(
-                f"""{' ' * self.indent}"list": [
+                f"""{" " * self.indent}"list": [
     """
             )
 
@@ -2819,12 +2763,11 @@ class WriteActiniaFile(WriteScriptFile):
             dlg = wx.MessageDialog(
                 self.model.canvas,
                 message=_(
-                    f"Module {task.get_name()} in your model contains "
-                    f"parameterized flags. actinia does not support "
-                    f"parameterized flags. The following flags are therefore "
-                    f"not being written in the generated json: "
-                    f"{itemParameterizedFlags}"
-                ),
+                    "Module {task_name} in your model contains "
+                    "parameterized flags. Actinia does not support "
+                    "parameterized flags. The following flags are therefore "
+                    "not being written in the generated JSON: {flags}"
+                ).format(task_name=task.get_name(), flags=itemParameterizedFlags),
                 caption=_("Warning"),
                 style=wx.OK_DEFAULT | wx.ICON_WARNING,
             )
@@ -2835,23 +2778,23 @@ class WriteActiniaFile(WriteScriptFile):
             name = p.get("name", None)
             value = p.get("value", None)
 
-            if (name and value) or (name in parameterizedParams):
+            if (not name or not value) and name not in parameterizedParams:
+                continue
 
-                if name in parameterizedParams:
-                    parameterizedParam = self._getParamName(name, item)
-                    default_val = p.get("value", "")
+            if name in parameterizedParams:
+                parameterizedParam = self._getParamName(name, item)
+                default_val = p.get("value", "")
 
-                    if len(default_val) > 0:
-                        parameterizedParam += f"|default({default_val})"
+                if len(default_val) > 0:
+                    parameterizedParam += f"|default({default_val})"
+                value = f"{{{{ {parameterizedParam} }}}}"
 
-                    value = f"{{{{ {parameterizedParam} }}}}"
-
-                param_string = f'{{"param": "{name}", "value": "{value}"}}'
-                age = p.get("age", "old")
-                if age == "new":
-                    outputs.append(param_string)
-                else:
-                    inputs.append(param_string)
+            param_string = f'{{"param": "{name}", "value": "{value}"}}'
+            age = p.get("age", "old")
+            if age == "new":
+                outputs.append(param_string)
+            else:
+                inputs.append(param_string)
 
         ret += f'{" " * self.indent * 4}"module": "{task.get_name()}",\n'
         ret += f'{" " * self.indent * 4}"id": "{self._getModuleNickname(item)}",\n'
@@ -2993,10 +2936,7 @@ if __name__ == "__main__":
         parameterized_params = item.GetParameterizedParams()
 
         for flag in parameterized_params["flags"]:
-            if flag["label"]:
-                desc = flag["label"]
-            else:
-                desc = flag["description"]
+            desc = flag["label"] or flag["description"]
 
             if flag["value"]:
                 value = '\n{}default="{}"'.format(
@@ -3055,19 +2995,20 @@ if __name__ == "__main__":
             # ComplexOutput if: outputting a new non-intermediate layer and
             # either not empty or parameterized
             if (
-                age == "new"
-                and not any(value in i for i in intermediates)
-                and (value != "" or param in item.GetParameterizedParams()["params"])
-            ):
-                io_data = "outputs"
-                object_type = "ComplexOutput"
-                format_spec = self._getSupportedFormats(param["prompt"])
-
-                self._write_input_output_object(
-                    io_data, object_type, param["name"], item, desc, format_spec, ""
+                age != "new"
+                or any(value in i for i in intermediates)
+                or (
+                    value == "" and param not in item.GetParameterizedParams()["params"]
                 )
-
-                self.fd.write("\n")
+            ):
+                continue
+            io_data = "outputs"
+            object_type = "ComplexOutput"
+            format_spec = self._getSupportedFormats(param["prompt"])
+            self._write_input_output_object(
+                io_data, object_type, param["name"], item, desc, format_spec, ""
+            )
+            self.fd.write("\n")
 
     def _write_input_output_object(
         self,
@@ -3119,45 +3060,49 @@ if __name__ == "__main__":
             # output if: outputting a new non-intermediate layer and
             # either not empty or parameterized
             if (
-                age == "new"
-                and not any(value in i for i in intermediates)
-                and (value != "" or param in item.GetParameterizedParams()["params"])
+                age != "new"
+                or any(value in i for i in intermediates)
+                or (
+                    value == "" and param not in item.GetParameterizedParams()["params"]
+                )
             ):
-                if param["prompt"] == "vector":
-                    command = "v.out.ogr"
-                    format = '"GML"'
-                    extension = ".gml"
-                elif param["prompt"] == "raster":
-                    command = "r.out.gdal"
-                    format = '"GTiff"'
-                    extension = ".tif"
-                else:
-                    # TODO: Support 3D
-                    command = "WRITE YOUR EXPORT COMMAND"
-                    format = '"WRITE YOUR EXPORT FORMAT"'
-                    extension = "WRITE YOUR EXPORT EXTENSION"
+                continue
 
-                n = param.get("name", None)
-                param_name = self._getParamName(n, item)
+            if param["prompt"] == "vector":
+                command = "v.out.ogr"
+                format = '"GML"'
+                extension = ".gml"
+            elif param["prompt"] == "raster":
+                command = "r.out.gdal"
+                format = '"GTiff"'
+                extension = ".tif"
+            else:
+                # TODO: Support 3D
+                command = "WRITE YOUR EXPORT COMMAND"
+                format = '"WRITE YOUR EXPORT FORMAT"'
+                extension = "WRITE YOUR EXPORT EXTENSION"
 
-                keys = param.keys()
-                if "parameterized" in keys and param["parameterized"] is True:
-                    param_request = 'request.inputs["{}"][0].data'.format(param_name)
-                else:
-                    param_request = '"{}"'.format(param["value"])
+            n = param.get("name", None)
+            param_name = self._getParamName(n, item)
 
-                # if True, write the overwrite parameter to the model command
-                overwrite = self.model.GetProperties().get("overwrite", False)
-                if overwrite is True:
-                    overwrite_string = ",\n{}overwrite=True".format(
-                        " " * (self.indent + 12)
-                    )
-                else:
-                    overwrite_string = ""
+            keys = param.keys()
+            if "parameterized" in keys and param["parameterized"] is True:
+                param_request = 'request.inputs["{}"][0].data'.format(param_name)
+            else:
+                param_request = '"{}"'.format(param["value"])
 
-                strcmd_len = len(strcmd.strip())
-                self.fd.write(
-                    """
+            # if True, write the overwrite parameter to the model command
+            overwrite = self.model.GetProperties().get("overwrite", False)
+            if overwrite is True:
+                overwrite_string = ",\n{}overwrite=True".format(
+                    " " * (self.indent + 12)
+                )
+            else:
+                overwrite_string = ""
+
+            strcmd_len = len(strcmd.strip())
+            self.fd.write(
+                """
 {run_command}"{cmd}",
 {indent1}input={input},
 {indent2}output=os.path.join(
@@ -3165,37 +3110,35 @@ if __name__ == "__main__":
 {indent4}{out} + "{format_ext}"),
 {indent5}format={format}{overwrite_string})
 """.format(
-                        run_command=strcmd,
-                        cmd=command,
-                        indent1=" " * (self.indent + strcmd_len),
-                        input=param_request,
-                        indent2=" " * (self.indent + strcmd_len),
-                        indent3=" " * (self.indent * 2 + strcmd_len),
-                        indent4=" " * (self.indent * 2 + strcmd_len),
-                        out=param_request,
-                        format_ext=extension,
-                        indent5=" " * (self.indent + strcmd_len),
-                        format=format,
-                        overwrite_string=overwrite_string,
-                    )
+                    run_command=strcmd,
+                    cmd=command,
+                    indent1=" " * (self.indent + strcmd_len),
+                    input=param_request,
+                    indent2=" " * (self.indent + strcmd_len),
+                    indent3=" " * (self.indent * 2 + strcmd_len),
+                    indent4=" " * (self.indent * 2 + strcmd_len),
+                    out=param_request,
+                    format_ext=extension,
+                    indent5=" " * (self.indent + strcmd_len),
+                    format=format,
+                    overwrite_string=overwrite_string,
                 )
+            )
 
-                left_side_out = 'response.outputs["{}"].file'.format(param_name)
-                right_side_out = (
-                    "os.path.join(\n{indent1}"
-                    'tempfile.gettempdir(),\n{indent2}{out} + "'
-                    '{format_ext}")'.format(
-                        indent1=" " * (self.indent + 4),
-                        indent2=" " * (self.indent + 4),
-                        out=param_request,
-                        format_ext=extension,
-                    )
+            left_side_out = 'response.outputs["{}"].file'.format(param_name)
+            right_side_out = (
+                "os.path.join(\n{indent1}"
+                'tempfile.gettempdir(),\n{indent2}{out} + "'
+                '{format_ext}")'.format(
+                    indent1=" " * (self.indent + 4),
+                    indent2=" " * (self.indent + 4),
+                    out=param_request,
+                    format_ext=extension,
                 )
-                self.fd.write(
-                    "\n{}{} = {}".format(
-                        " " * self.indent, left_side_out, right_side_out
-                    )
-                )
+            )
+            self.fd.write(
+                "\n{}{} = {}".format(" " * self.indent, left_side_out, right_side_out)
+            )
 
     def _getPythonActionCmd(self, item, task, cmdIndent, variables={}):
         opts = task.get_options()
@@ -3213,25 +3156,26 @@ if __name__ == "__main__":
             name = p.get("name", None)
             value = p.get("value", None)
 
-            if (name and value) or (name in parameterizedParams):
-                ptype = p.get("type", "string")
-                foundVar = False
+            if (not name or not value) and name not in parameterizedParams:
+                continue
 
-                if name in parameterizedParams:
-                    foundVar = True
-                    if "input" in name:
-                        value = 'request.inputs["{}"][0].file'.format(
-                            self._getParamName(name, item)
-                        )
-                    else:
-                        value = 'request.inputs["{}"][0].data'.format(
-                            self._getParamName(name, item)
-                        )
+            ptype = p.get("type", "string")
+            foundVar = False
 
-                if foundVar or ptype != "string":
-                    params.append("{}={}".format(name, value))
+            if name in parameterizedParams:
+                foundVar = True
+                if "input" in name:
+                    value = 'request.inputs["{}"][0].file'.format(
+                        self._getParamName(name, item)
+                    )
                 else:
-                    params.append('{}="{}"'.format(name, value))
+                    value = 'request.inputs["{}"][0].data'.format(
+                        self._getParamName(name, item)
+                    )
+            if foundVar or ptype != "string":
+                params.append("{}={}".format(name, value))
+            else:
+                params.append('{}="{}"'.format(name, value))
 
         ret += '"%s"' % task.get_name()
         if flags:
@@ -3262,12 +3206,7 @@ if __name__ == "__main__":
         return ret
 
     def _getParamDesc(self, param):
-        if param["label"]:
-            desc = param["label"]
-        else:
-            desc = param["description"]
-
-        return desc
+        return param["label"] or param["description"]
 
     def _getParamValue(self, param):
         if param["value"] and "output" not in param["name"]:
@@ -3323,15 +3262,15 @@ class WritePythonFile(WriteScriptFile):
         """
         if string == "raster":
             return "G_OPT_R_MAP"
-        elif string == "vector":
+        if string == "vector":
             return "G_OPT_V_MAP"
-        elif string == "mapset":
+        if string == "mapset":
             return "G_OPT_M_MAPSET"
-        elif string == "file":
+        if string == "file":
             return "G_OPT_F_INPUT"
-        elif string == "dir":
+        if string == "dir":
             return "G_OPT_M_DIR"
-        elif string == "region":
+        if string == "region":
             return "G_OPT_M_REGION"
 
         return None
@@ -3371,19 +3310,14 @@ class WritePythonFile(WriteScriptFile):
 # %module
 # % description: {description}
 # %end
-""".format(
-                description=" ".join(properties["description"].splitlines())
-            )
+""".format(description=" ".join(properties["description"].splitlines()))
         )
 
         modelItems = self.model.GetItems(ModelAction)
         for item in modelItems:
             parametrizedParams = item.GetParameterizedParams()
             for flag in parametrizedParams["flags"]:
-                if flag["label"]:
-                    desc = flag["label"]
-                else:
-                    desc = flag["description"]
+                desc = flag["label"] or flag["description"]
                 self.fd.write(
                     r"""# %option
 # % key: {flag_name}
@@ -3404,10 +3338,7 @@ class WritePythonFile(WriteScriptFile):
                 self.fd.write("# %end\n")
 
             for param in parametrizedParams["params"]:
-                if param["label"]:
-                    desc = param["label"]
-                else:
-                    desc = param["description"]
+                desc = param["label"] or param["description"]
                 self.fd.write(
                     r"""# %option
 # % key: {param_name}
@@ -3488,7 +3419,7 @@ def cleanup():
                 r"""    %s("g.remove", flags="f", type="vector",
                 name=%s)
 """
-                % (run_command, ",".join(('"' + x + '"' for x in vect)))
+                % (run_command, ",".join(f'"{x}"' for x in vect))
             )
         if rast3d:
             self.fd.write(
@@ -3613,28 +3544,29 @@ if __name__ == "__main__":
                 elif ptype == "float":
                     value = list(map(float, value))
 
-            if (name and value) or (name in parameterizedParams):
-                if isinstance(value, list):
-                    foundVar = False
-                    for idx in range(len(value)):
-                        foundVar_, value[idx] = self._substitutePythonParamValue(
-                            value[idx], name, parameterizedParams, variables, item
-                        )
-                        if foundVar_ is True:
-                            foundVar = True
-                else:
-                    foundVar, value = self._substitutePythonParamValue(
-                        value, name, parameterizedParams, variables, item
-                    )
+            if (not name or not value) and name not in parameterizedParams:
+                continue
 
-                if (
-                    foundVar
-                    or isinstance(value, list)
-                    or (ptype != "string" and len(p.get("key_desc", [])) < 2)
-                ):
-                    params.append("{}={}".format(name, value))
-                else:
-                    params.append('{}="{}"'.format(name, value))
+            if isinstance(value, list):
+                foundVar = False
+                for idx in range(len(value)):
+                    foundVar_, value[idx] = self._substitutePythonParamValue(
+                        value[idx], name, parameterizedParams, variables, item
+                    )
+                    if foundVar_ is True:
+                        foundVar = True
+            else:
+                foundVar, value = self._substitutePythonParamValue(
+                    value, name, parameterizedParams, variables, item
+                )
+            if (
+                foundVar
+                or isinstance(value, list)
+                or (ptype != "string" and len(p.get("key_desc", [])) < 2)
+            ):
+                params.append("{}={}".format(name, value))
+            else:
+                params.append('{}="{}"'.format(name, value))
 
         ret += '"%s"' % task.get_name()
         if flags:
@@ -3773,12 +3705,8 @@ class ModelParamDialog(wx.Dialog):
 
     def GetErrors(self):
         """Check for errors, get list of messages"""
-        errList = []
-        for task in self.tasks:
-            errList += task.get_cmd_error()
-
-        return errList
+        return [task.get_cmd_error() for task in self.tasks]
 
     def DeleteIntermediateData(self) -> bool:
-        """Check if to detele intermediate data"""
+        """Check if to delete intermediate data"""
         return bool(self.interData.IsShown() and self.interData.IsChecked())

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2024-05-27 09:55+0000\n"
+"PO-Revision-Date: 2025-02-10 17:33+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
 "grasswxpy/fr/>\n"
@@ -1127,12 +1127,12 @@ msgstr "Paramètres de vue 3D enregistrés dans le fichier <%s>."
 msgid ""
 "This module requires the NumPy module, which could not be imported. It "
 "probably is not installed (it's not part of the standard Python "
-"distribution). See the Numeric Python site (http://numpy.scipy.org) for "
+"distribution). See the Numeric Python site (https://numpy.org) for "
 "information on downloading source or binaries."
 msgstr ""
 "Ce module requiert le module NumPy, qui n'a pas pu être importé. Il n'est "
 "probablement pas installé (ne fait pas partie de la distribution standard "
-"Python). Voir le site Numeric Python (http://numpy.scipy.org) pour "
+"Python). Voir le site Numeric Python (https://numpy.org) pour "
 "télécharger les binaires ou le code source."
 
 #: ../gui/wxpython/nviz/wxnviz.py:361 ../gui/wxpython/nviz/wxnviz.py:372
@@ -8108,7 +8108,7 @@ msgstr "Fusionner des contours"
 #: ../gui/wxpython/menustrings.py:572 ../gui/wxpython/menustrings.py:1537
 #, fuzzy
 msgid ""
-"Dissolves adjacent or overlaping features sharing a common category number "
+"Dissolves adjacent or overlapping features sharing a common category number "
 "or attribute."
 msgstr ""
 "Fusionne des contours entre surfaces adjacentes partageant un attribut ou "
@@ -8266,7 +8266,7 @@ msgstr "Gestion interactive des tables de couleur vecteur."
 
 #: ../gui/wxpython/menustrings.py:612 ../gui/wxpython/menustrings.py:1577
 msgid "Exports the color table associated with a vector map."
-msgstr "Exporter la table de couleur associée  une carte vecteur."
+msgstr "Exporter la table de couleur associée à une carte vecteur."
 
 #: ../gui/wxpython/menustrings.py:613 ../gui/wxpython/menustrings.py:1578
 msgid "Query vector map"
@@ -11908,8 +11908,8 @@ msgstr "Niveau de verbosité :"
 #: ../gui/wxpython/gui_core/preferences.py:1294
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""
-"Nombre de threads pour le calcul parallèle (outils pris en charge uniquement)"
-" :"
+"Nombre de threads pour le calcul parallèle (outils pris en charge "
+"uniquement) :"
 
 #: ../gui/wxpython/gui_core/preferences.py:1319
 msgid "Maximum memory in MB to be used (supported tools only):"
@@ -13849,7 +13849,7 @@ msgid "Zoom to saved region extents"
 msgstr "Zoomer sur les limites de la région enregistrée"
 
 #: ../gui/wxpython/mapwin/buffered.py:2103
-msgid "Set compulational region from named region"
+msgid "Set computational region from named region"
 msgstr "Définir la région de calcul à partir d'une région enregistrée"
 
 #: ../gui/wxpython/mapwin/buffered.py:2114
@@ -15300,7 +15300,7 @@ msgstr "Erreur :"
 
 #: ../gui/wxpython/core/gcmd.py:504
 #, python-format
-msgid "Unable to exectute command: '%s'"
+msgid "Unable to execute command: '%s'"
 msgstr "Impossible d'exécuter la commande : '%s'"
 
 #: ../gui/wxpython/core/utils.py:50
@@ -15379,7 +15379,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/menutree.py:155
 #, python-format
-msgid "Unknow tag %s"
+msgid "Unknown tag %s"
 msgstr "Étiquette inconnue %s"
 
 #: ../gui/wxpython/core/debug.py:46
@@ -16053,10 +16053,6 @@ msgstr "Définir la région calculée à partir de celle de l'écran"
 #: ../gui/wxpython/mapdisp/frame.py:1528
 msgid "Set computational region extent interactively"
 msgstr "Définir l'emprise de la région de calcul de manière interactive"
-
-#: ../gui/wxpython/mapdisp/frame.py:1531
-msgid "Set computational region from named region"
-msgstr "Définir la région calculée depuis un nom de région"
 
 #: ../gui/wxpython/mapdisp/frame.py:1534
 msgid "Save computational region to named region"
@@ -19232,19 +19228,19 @@ msgid "Statistics is not support for DBF tables."
 msgstr "Les statistiques ne sont pas suportées pour les tables DBF."
 
 #: ../gui/wxpython/dbmgr/base.py:4062
-msgid "Unable to calculte statistics."
+msgid "Unable to calculate statistics."
 msgstr "Impossible de calculer les statistiques"
 
 #: ../gui/wxpython/dbmgr/base.py:4071
 #, python-format
 msgid ""
-"Unable to calculte statistics. Invalid number of lines %d (should be %d)."
+"Unable to calculate statistics. Invalid number of lines %d (should be %d)."
 msgstr ""
 "Impossible de calculer les statistiques. Nombre de lignes %d invalides "
 "(devrait être %d)."
 
 #: ../gui/wxpython/dbmgr/base.py:4098
-msgid "Unable to calculte standard deviation."
+msgid "Unable to calculate standard deviation."
 msgstr "Impossible de calculer l'écart-type."
 
 #: ../gui/wxpython/dbmgr/base.py:4106
@@ -21053,6 +21049,9 @@ msgstr "Cliquez-déposez pour redimensionner l'objet"
 msgid "labels: "
 msgstr "étiquettes :"
 
+msgid "supported tools only"
+msgstr "outils pris en charge uniquement"
+
 #~ msgid "Location Name:"
 #~ msgstr "Nom du secteur : "
 
@@ -22505,12 +22504,6 @@ msgstr "étiquettes :"
 #~ msgid "Deactive overwrite"
 #~ msgstr "Désactiver l'écrasement"
 
-#~ msgid "Systematic contiguos"
-#~ msgstr "systématiquement contigüs"
-
-#~ msgid "Systematic non contiguos"
-#~ msgstr "Systématiquement non contigüs"
-
 #, python-format
 #~ msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
 #~ msgstr ""
@@ -22522,6 +22515,3 @@ msgstr "étiquettes :"
 #~ msgstr ""
 #~ "Impossible d'obtenir l’extension géographique courante. Sortie forcée de "
 #~ "wxGUI. Merci d'exécuter manuellement g.region pour résoudre ce problème."
-
-msgid "supported tools only"
-msgstr "outils pris en charge uniquement"

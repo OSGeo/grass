@@ -178,7 +178,7 @@ class WSDialogBase(wx.Dialog):
             border=5,
         )
 
-        # connectin settings
+        # connection settings
         settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.VERTICAL)
 
         serverSizer = wx.FlexGridSizer(cols=3, vgap=5, hgap=5)
@@ -331,17 +331,15 @@ class WSDialogBase(wx.Dialog):
 
     def OnClose(self, event):
         """Close the dialog"""
-        """Close dialog"""
         if not self.IsModal():
             self.Destroy()
         event.Skip()
 
     def _getCapFiles(self):
-        ws_cap_files = {}
-        for v in self.ws_panels.values():
-            ws_cap_files[v["panel"].GetWebService()] = v["panel"].GetCapFile()
-
-        return ws_cap_files
+        return {
+            v["panel"].GetWebService(): v["panel"].GetCapFile()
+            for v in self.ws_panels.values()
+        }
 
     def OnServer(self, event):
         """Server settings edited"""
@@ -378,7 +376,7 @@ class WSDialogBase(wx.Dialog):
             self.Fit()
 
         self.statusbar.SetStatusText(
-            _("Connecting to <%s>..." % self.server.GetValue().strip())
+            _("Connecting to <%s>...") % self.server.GetValue().strip()
         )
 
         # number of panels already connected
@@ -417,12 +415,9 @@ class WSDialogBase(wx.Dialog):
         :return: list of found web services on server (identified as keys in
                  self.ws_panels)
         """
-        conn_ws = []
-        for ws, data in self.ws_panels.items():
-            if data["panel"].IsConnected():
-                conn_ws.append(ws)
-
-        return conn_ws
+        return [
+            ws for ws, data in self.ws_panels.items() if data["panel"].IsConnected()
+        ]
 
     def UpdateDialogAfterConnection(self):
         """Update dialog after all web service panels downloaded and parsed
@@ -464,14 +459,14 @@ class WSDialogBase(wx.Dialog):
             )
             self._showWsPanel(self.web_service_sel[self.choose_ws_rb.GetSelection()])
             self.statusbar.SetStatusText(
-                _("Connected to <%s>" % self.server.GetValue().strip())
+                _("Connected to <%s>") % self.server.GetValue().strip()
             )
             for btn in self.run_btns:
                 btn.Enable(True)
         # no web service found on server
         else:
             self.statusbar.SetStatusText(
-                _("Unable to connect to <%s>" % self.server.GetValue().strip())
+                _("Unable to connect to <%s>") % self.server.GetValue().strip()
             )
             for btn in self.run_btns:
                 btn.Enable(False)
@@ -570,7 +565,7 @@ class AddWSDialog(WSDialogBase):
 
         lcmd = self.active_ws_panel.CreateCmd()
         if not lcmd:
-            return None
+            return
 
         # TODO: It is not clear how to do GetOptData in giface
         # knowing what GetOptData is doing might help
@@ -681,7 +676,7 @@ class WSPropertiesDialog(WSDialogBase):
 
     def _setRevertCapFiles(self, ws_cap_files):
         for ws, f in ws_cap_files.items():
-            if os.path.isfile(ws_cap_files[ws]):
+            if os.path.isfile(f):
                 shutil.copyfile(f, self.revert_ws_cap_files[ws])
             else:
                 # delete file content
@@ -749,12 +744,9 @@ class WSPropertiesDialog(WSDialogBase):
             )
 
     def _getServerConnFromCmd(self, cmd):
-        """Get url/server/passwod from cmd tuple"""
+        """Get url/server/password from cmd tuple"""
         conn = {"url": "", "username": "", "password": ""}
-
-        for k in conn.keys():
-            if k in cmd[1]:
-                conn[k] = cmd[1][k]
+        conn |= {k: cmd[1][k] for k in conn.keys() if k in cmd[1]}
         return conn
 
     def _apply(self):
@@ -1029,7 +1021,7 @@ class SaveWMSLayerDialog(wx.Dialog):
             not self.overwrite.IsChecked()
             and gs.find_file(self.output, "cell", ".")["fullname"]
         ):
-            msg = _("Output map <%s> already exists" % self.output)
+            msg = _("Output map <%s> already exists") % self.output
 
         if msg:
             GMessage(parent=self, message=msg)
@@ -1047,8 +1039,8 @@ class SaveWMSLayerDialog(wx.Dialog):
 
         if self.region_types["named"].GetValue():
             if not gs.find_file(reg_spl[0], "windows", reg_mapset)["fullname"]:
-                msg = _(
-                    "Region <%s> does not exist." % self.params["region"].GetValue()
+                msg = (
+                    _("Region <%s> does not exist.") % self.params["region"].GetValue()
                 )
                 GWarning(parent=self, message=msg)
                 return

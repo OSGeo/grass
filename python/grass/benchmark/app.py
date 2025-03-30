@@ -39,19 +39,16 @@ class CliUsageError(ValueError):
 def join_results_cli(args):
     """Translate CLI parser result to API calls."""
     if args.prefixes and len(args.results) != len(args.prefixes):
-        raise CliUsageError(
+        msg = (
             f"Number of prefixes ({len(args.prefixes)}) needs to be the same"
             f" as the number of input result files ({len(args.results)})"
         )
+        raise CliUsageError(msg)
 
     def select_only(result):
         return result.label == args.only
 
-    if args.only:
-        select_function = select_only
-    else:
-        select_function = None
-
+    select_function = select_only if args.only else None
     results = join_results_from_files(
         source_filenames=args.results,
         prefixes=args.prefixes,

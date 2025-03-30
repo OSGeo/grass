@@ -53,7 +53,7 @@ map and uploads statistics to new attribute columns, see
 <p>
 <em>r.univar</em> supports parallel processing using OpenMP. The user
 can specify the number of threads to be used with the <b>nprocs</b> parameter.
-However, parallelization is disabled when the MASK is set.
+However, parallelization is disabled when the raster mask is set.
 
 <p>
 Due to the differences in summation order, users may encounter small floating points
@@ -73,7 +73,7 @@ number of threads.
 
 <h3>Univariate statistics</h3>
 
-In this example, the raster map <tt>elevation</tt> in the North
+In this example, the raster map <code>elevation</code> in the North
 Carolina sample dataset is used to calculate univariate statistics:
 
 <div class="code"><pre>
@@ -123,9 +123,9 @@ percentile_98=147.727
 </pre></div>
 
 <h3>Zonal statistics</h3>
-In this example, the raster polygon map <tt>basins</tt> in the North
+In this example, the raster polygon map <code>basins</code> in the North
 Carolina sample dataset is used to calculate raster statistics for zones
-for <tt>elevation</tt> raster map:
+for <code>elevation</code> raster map:
 
 <div class="code"><pre>
 g.region raster=basins -p
@@ -196,7 +196,7 @@ optipng -o5 runivar_basins.png width=200px
 
 <div align="center" style="margin: 10px">
 <a href="runivar_basins.png">
-<img src="runivar_basins.png" width="600" height="446" alt="r.univar basins and their IDs" border=0><br>
+<img src="runivar_basins.png" width="600" height="446" alt="r.univar basins and their IDs" border="0"><br>
 </a>
 <i>Figure: Zones (basins, opacity: 60%) with underlying elevation map
 for North Carolina sample dataset.</i>
@@ -232,7 +232,7 @@ program such as Microsoft Excel, Libre/Open Office Calc or Google Docs:
 
 <div align="center" style="margin: 10px">
 <a href="runivar_basins_elev_zonal.png">
-<img src="runivar_basins_elev_zonal.png" width="600" height="121" alt="r.univar raster statistics" border=0><br>
+<img src="runivar_basins_elev_zonal.png" width="600" height="121" alt="r.univar raster statistics" border="0"><br>
 </a>
 <i>Figure: Raster statistics for zones (basins, North Carolina sample
 dataset) viewed through Libre/Open Office Calc.</i>

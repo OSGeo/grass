@@ -3,12 +3,13 @@ ci:
   skip: [flake8]
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: trailing-whitespace
         exclude: |
           (?x)^(
                 configure$|
+                .*\.md$|
                 .*\.ascii$|
                 .*\.asc$|
                 .*\.ref$|
@@ -37,27 +38,19 @@ repos:
           )
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.5.5
+    rev: v0.11.2
     hooks:
       # Run the linter.
       - id: ruff
-        types_or: [python, pyi, jupyter]
         args: [--fix, --preview]
+      # Run the formatter.
+      - id: ruff-format
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.41.0
+    rev: v0.44.0
     hooks:
       - id: markdownlint-fix
-  # Using this mirror lets us use mypyc-compiled black, which is about 2x faster
-  - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.4.2
-    hooks:
-      - id: black-jupyter
-        exclude: |
-          (?x)^(
-                python/libgrass_interface_generator/
-          )
   - repo: https://github.com/pycqa/flake8
-    rev: 7.1.0
+    rev: 7.2.0
     hooks:
       - id: flake8
         exclude: |
@@ -66,7 +59,7 @@ repos:
                 .*/testsuite/.*
           )
   - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v17.0.6
+    rev: v18.1.8
     hooks:
       - id: clang-format
         types_or: [c, c++, javascript, json, objective-c]
@@ -76,6 +69,6 @@ repos:
                 .*\.ipynb$
           )
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.35.1
+    rev: v1.37.0
     hooks:
       - id: yamllint

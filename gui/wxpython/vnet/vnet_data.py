@@ -78,16 +78,14 @@ class VNETData:
     def GetRelevantParams(self, analysis=None):
         if analysis:
             return self.an_props.GetRelevantParams(analysis)
-        else:
-            analysis, valid = self.an_params.GetParam("analysis")
-            return self.an_props.GetRelevantParams(analysis)
+        analysis, valid = self.an_params.GetParam("analysis")
+        return self.an_props.GetRelevantParams(analysis)
 
     def GetAnalysisProperties(self, analysis=None):
         if analysis:
             return self.an_props[analysis]
-        else:
-            analysis, valid = self.an_params.GetParam("analysis")
-            return self.an_props[analysis]
+        analysis, valid = self.an_params.GetParam("analysis")
+        return self.an_props[analysis]
 
     def GetParam(self, param):
         return self.an_params.GetParam(param)
@@ -154,7 +152,7 @@ class VNETData:
         if flags["t"] and "turn_layer" not in relevant_params:
             GMessage(
                 parent=self.guiparent,
-                message=_("Module <%s> does not support turns costs." % analysis),
+                message=_("Module <%s> does not support turns costs.") % analysis,
             )
             return False
 
@@ -357,10 +355,8 @@ class VNETPointsData:
             item.hide = False
         elif len(cats) > 1:
             idx = self.data[itemIndex][1]
-            if idx == 2:  # End/To/Sink point
-                wxPen = "used2cat"
-            else:
-                wxPen = "used1cat"
+            # End/To/Sink point
+            wxPen = "used2cat" if idx == 2 else "used1cat"
         else:
             wxPen = "used1cat"
 
@@ -431,11 +427,7 @@ class VNETPointsData:
         return pt_list_data
 
     def _ptListDataToPtData(self, pt_list_data):
-        pt_data = {}
-        for i, val in enumerate(pt_list_data):
-            pt_data[self.cols["name"][i]] = val
-
-        return pt_data
+        return {self.cols["name"][i]: val for i, val in enumerate(pt_list_data)}
 
     def _usePoint(self, pt_id, use):
         """Item is checked/unchecked"""
@@ -561,8 +553,7 @@ class VNETPointsData:
     def GetColumns(self, only_relevant=True):
         cols_data = deepcopy(self.cols)
 
-        hidden_cols = []
-        hidden_cols.extend((self.cols["name"].index("e"), self.cols["name"].index("n")))
+        hidden_cols = [self.cols["name"].index("e"), self.cols["name"].index("n")]
 
         analysis, valid = self.an_params.GetParam("analysis")
         if only_relevant and len(self.an_data[analysis]["cmdParams"]["cats"]) <= 1:
@@ -843,10 +834,7 @@ class VNETAnalysesProperties:
         cols = self.vnetProperties[analysis]["cmdParams"]["cols"]
 
         for col, v in cols.items():
-            if "inputField" in col:
-                colInptF = v["inputField"]
-            else:
-                colInptF = col
+            colInptF = v["inputField"] if "inputField" in col else col
             relevant_params.append(colInptF)
 
         return relevant_params
@@ -902,10 +890,7 @@ class VNETTmpVectMaps:
         """
 
         mapValSpl = vectMapName.strip().split("@")
-        if len(mapValSpl) > 1:
-            mapSet = mapValSpl[1]
-        else:
-            mapSet = grass.gisenv()["MAPSET"]
+        mapSet = mapValSpl[1] if len(mapValSpl) > 1 else grass.gisenv()["MAPSET"]
         mapName = mapValSpl[0]
         fullName = mapName + "@" + mapSet
 
@@ -943,14 +928,12 @@ class VNETTmpVectMaps:
         :return: True if was removed
         :return: False if does not contain the map
         """
-        if vectMap:
-            vectMap.DeleteRenderLayer()
-            RunCommand(
-                "g.remove", flags="f", type="vector", name=vectMap.GetVectMapName()
-            )
-            self.RemoveFromTmpMaps(vectMap)
-            return True
-        return False
+        if not vectMap:
+            return False
+        vectMap.DeleteRenderLayer()
+        RunCommand("g.remove", flags="f", type="vector", name=vectMap.GetVectMapName())
+        self.RemoveFromTmpMaps(vectMap)
+        return True
 
     def DeleteAllTmpMaps(self):
         """Delete all temporary maps in the class"""
@@ -1070,7 +1053,7 @@ class VectMap:
             "head",
         )
         try:
-            head = open(headPath, "r")
+            head = open(headPath)
             for line in head:
                 i = line.find(
                     "MAP DATE:",
@@ -1159,15 +1142,11 @@ class History:
         self.currHistStep = 0
 
         newHistFile = grass.tempfile()
-        newHist = open(newHistFile, "w")
+        with open(newHistFile, "w") as newHist:
+            self._saveNewHistStep(newHist)
+            with open(self.histFile) as oldHist:
+                removedHistData = self._savePreviousHist(newHist, oldHist)
 
-        self._saveNewHistStep(newHist)
-
-        oldHist = open(self.histFile)
-        removedHistData = self._savePreviousHist(newHist, oldHist)
-
-        oldHist.close()
-        newHist.close()
         try_remove(self.histFile)
         self.histFile = newHistFile
 
@@ -1197,9 +1176,8 @@ class History:
                 if newHistStepsNum >= self.maxHistSteps:
                     removedHistStep = removedHistData[line] = {}
                     continue
-                else:
-                    newHist.write("%s%s%s" % ("\n", line, "\n"))
-                    self.histStepsNum = newHistStepsNum
+                newHist.write("%s%s%s" % ("\n", line, "\n"))
+                self.histStepsNum = newHistStepsNum
             elif newHistStepsNum >= self.maxHistSteps:
                 self._parseLine(line, removedHistStep)
             else:
@@ -1291,27 +1269,25 @@ class History:
 
     def _getHistStepData(self, histStep):
         """Load data saved in history step"""
-        hist = open(self.histFile)
         histStepData = {}
-
         newHistStep = False
         isSearchedHistStep = False
-        for line in hist:
-            if not line.strip() and isSearchedHistStep:
-                break
-            elif not line.strip():
-                newHistStep = True
-                continue
-            elif isSearchedHistStep:
-                self._parseLine(line, histStepData)
+        with open(self.histFile) as hist:
+            for line in hist:
+                if not line.strip() and isSearchedHistStep:
+                    break
+                if not line.strip():
+                    newHistStep = True
+                    continue
+                if isSearchedHistStep:
+                    self._parseLine(line, histStepData)
 
-            if newHistStep:
-                line = line.split("=")
-                if int(line[1]) == histStep:
-                    isSearchedHistStep = True
-                newHistStep = False
+                if newHistStep:
+                    line = line.split("=")
+                    if int(line[1]) == histStep:
+                        isSearchedHistStep = True
+                    newHistStep = False
 
-        hist.close()
         return histStepData
 
     def _parseLine(self, line, histStepData):
@@ -1326,10 +1302,7 @@ class History:
             del kv[0]
         idx = 0
         while idx < len(kv):
-            if subkeyMaster:
-                subkey = [subkeyMaster, kv[idx]]
-            else:
-                subkey = kv[idx]
+            subkey = [subkeyMaster, kv[idx]] if subkeyMaster else kv[idx]
             value = kv[idx + 1]
             value = self._parseValue(value, read=True)
             if key not in histStepData:
@@ -1361,11 +1334,7 @@ class VNETGlobalTurnsData:
         ]
 
     def GetData(self):
-        data = []
-        for ival in self.turn_data:
-            data.append(ival[1:])
-
-        return data
+        return [ival[1:] for ival in self.turn_data]
 
     def GetValue(self, line, col):
         return self.turn_data[line][col]
@@ -1378,8 +1347,8 @@ class VNETGlobalTurnsData:
         self.turn_data[line][col] = value
 
     def SetUTurns(self, value):
-        """Checked if checeBox is checed"""
-        useUTurns = value
+        """Checked if checkBox is checked"""
+        self.useUTurns = value
 
     def AppendRow(self, values):
         self.turn_data.append(values)
@@ -1446,21 +1415,14 @@ class VNETGlobalTurnsData:
             self.turn_data[i_row][1] = new_to_angle
 
         for i_row in inside_new:
-            if col == 1:
-                angle = new_from_angle
-            else:
-                angle = new_to_angle
+            angle = new_from_angle if col == 1 else new_to_angle
 
             self.turn_data[i_row][1] = angle
             self.turn_data[i_row][2] = angle
 
     def RemoveDataValidator(self, row):
         """Angle recalculation due to direction remove"""
-        if row == 0:
-            prev_row = self.GetLinesCount() - 1
-        else:
-            prev_row = row - 1
-
+        prev_row = self.GetLinesCount() - 1 if row == 0 else row - 1
         remove_to_angle = self.turn_data[row][2]
         self.turn_data[prev_row][2] = remove_to_angle
 
@@ -1471,4 +1433,4 @@ class VNETGlobalTurnsData:
         if angle < from_angle:
             angle = math.pi * 2 + angle
 
-        return bool(angle > from_angle and angle < to_angle)
+        return bool(from_angle < angle < to_angle)

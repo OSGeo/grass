@@ -49,8 +49,8 @@ class DebugMsg:
             sys.stderr.write(
                 _(
                     "WARNING: Ignoring unsupported wx debug level (must be >=0 and "
-                    "<=5). {0}\n".format(e)
-                )
+                    "<=5). {0}\n"
+                ).format(e)
             )
 
     def msg(self, level, message, *args):
@@ -61,7 +61,7 @@ class DebugMsg:
         :param args: formatting params
         """
         # self.SetLevel()
-        if self.debuglevel > 0 and level > 0 and level <= self.debuglevel:
+        if 0 < level <= self.debuglevel:
             if args:
                 sys.stderr.write(
                     "GUI D%d/%d: " % (level, self.debuglevel)

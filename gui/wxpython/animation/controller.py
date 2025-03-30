@@ -36,7 +36,6 @@ from animation.utils import (
     HashCmds,
 )
 from animation.data import AnimationData
-from itertools import starmap
 
 
 class AnimationController(wx.EvtHandler):
@@ -369,7 +368,7 @@ class AnimationController(wx.EvtHandler):
                 if anim.viewMode == "3d":
                     regions = [None] * len(regions)
                 self.animations[i].SetFrames(
-                    list(starmap(HashCmds, zip(anim.cmdMatrix, regions)))
+                    list(map(HashCmds, anim.cmdMatrix, regions))
                 )
                 self.animations[i].SetActive(True)
         else:
@@ -465,9 +464,7 @@ class AnimationController(wx.EvtHandler):
                     mapCount.add(len(layer.maps))
             windowIndex.append(anim.windowIndex)
 
-        if maps and stds:
-            temporalMode = TemporalMode.NONTEMPORAL
-        elif maps:
+        if (maps and stds) or maps:
             temporalMode = TemporalMode.NONTEMPORAL
         elif stds:
             temporalMode = TemporalMode.TEMPORAL
@@ -629,7 +626,6 @@ class AnimationController(wx.EvtHandler):
                 del self.busy
                 if error:
                     GError(parent=self.frame, message=error)
-                    return
 
             if exportInfo["method"] == "sequence":
                 filename = os.path.join(

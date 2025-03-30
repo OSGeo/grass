@@ -32,6 +32,7 @@ for details.
 import os
 import os.path
 import tarfile
+from pathlib import Path
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
@@ -53,8 +54,15 @@ imported_maps = {}
 
 
 def _import_raster_maps_from_gdal(
-    maplist, overr, exp, location, link, format_, set_current_region=False, memory=300
-):
+    maplist,
+    overr,
+    exp,
+    location,
+    link,
+    format_,
+    set_current_region: bool = False,
+    memory=300,
+) -> None:
     impflags = ""
     if overr:
         impflags += "o"
@@ -112,7 +120,7 @@ def _import_raster_maps_from_gdal(
 ############################################################################
 
 
-def _import_raster_maps(maplist, set_current_region=False):
+def _import_raster_maps(maplist, set_current_region: bool = False) -> None:
     # We need to disable the projection check because of its
     # simple implementation
     impflags = "o"
@@ -142,7 +150,7 @@ def _import_raster_maps(maplist, set_current_region=False):
 ############################################################################
 
 
-def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
+def _import_vector_maps_from_gml(maplist, overr, exp, location, link) -> None:
     impflags = "o"
     if exp or location:
         impflags += "e"
@@ -168,7 +176,7 @@ def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
 ############################################################################
 
 
-def _import_vector_maps(maplist):
+def _import_vector_maps(maplist) -> None:
     # We need to disable the projection check because of its
     # simple implementation
     impflags = "o"
@@ -207,23 +215,22 @@ def import_stds(
     title=None,
     descr=None,
     location=None,
-    link=False,
-    exp=False,
-    overr=False,
-    create=False,
+    link: bool = False,
+    exp: bool = False,
+    overr: bool = False,
+    create: bool = False,
     stds_type="strds",
     base=None,
-    set_current_region=False,
+    set_current_region: bool = False,
     memory=300,
-):
+) -> None:
     """Import space time datasets of type raster and vector
 
     :param input: Name of the input archive file
     :param output: The name of the output space time dataset
     :param directory: The extraction directory
     :param title: The title of the new created space time dataset
-    :param descr: The description of the new created
-                 space time dataset
+    :param descr: The description of the new created space time dataset
     :param location: The name of the location that should be created,
                     maps are imported into this location
     :param link: Switch to link raster maps instead importing them
@@ -232,14 +239,13 @@ def import_stds(
     :param create: Create the location specified by the "location"
                   parameter and exit.
                   Do not import the space time datasets.
-    :param stds_type: The type of the space time dataset that
-                     should be imported
+    :param stds_type: The type of the space time dataset that should be imported
     :param base: The base name of the new imported maps, it will be
                  extended using a numerical index.
     :param memory: Cache size for raster rows, used in r.in.gdal
     """
 
-    old_state = gs.raise_on_error
+    old_state = gs.get_raise_on_error()
     gs.set_raise_on_error(True)
 
     # Check if input file and extraction directory exits
@@ -253,10 +259,8 @@ def import_stds(
     # Check for important files
     msgr = get_tgis_message_interface()
     msgr.message(
-        _(
-            "Checking validity of input file (size: %0.1f MB). Make take a while..."
-            % (os.path.getsize(input) / (1024 * 1024.0))
-        )
+        _("Checking validity of input file (size: %0.1f MB). Make take a while...")
+        % (os.path.getsize(input) / (1024 * 1024.0))
     )
     members = tar.getnames()
     # Make sure that the basenames of the files are used for comparison
@@ -287,7 +291,7 @@ def import_stds(
     # We use a new list file name for map registration
     new_list_file_name = list_file_name + "_new"
     # Save current working directory path
-    old_cwd = os.getcwd()
+    old_cwd = Path.cwd()
 
     # Switch into the data directory
     os.chdir(directory)
@@ -295,27 +299,22 @@ def import_stds(
     # Check projection information
     if not location:
         temp_name = gs.tempfile()
-        temp_file = open(temp_name, "w")
         proj_name = os.path.abspath(proj_file_name)
 
         # We need to convert projection strings generated
         # from other programs than g.proj into
         # new line format so that the grass file comparison function
         # can be used to compare the projections
-        proj_name_tmp = temp_name + "_in_projection"
-        proj_file = open(proj_name, "r")
-        proj_content = proj_file.read()
+        proj_content = Path(proj_name).read_text()
         proj_content = proj_content.replace(" +", "\n+")
         proj_content = proj_content.replace("\t+", "\n+")
-        proj_file.close()
 
-        proj_file = open(proj_name_tmp, "w")
-        proj_file.write(proj_content)
-        proj_file.close()
+        proj_name_tmp = f"{temp_name}_in_projection"
+        Path(proj_name_tmp).write_text(proj_content)
 
-        p = gs.start_command("g.proj", flags="j", stdout=temp_file)
-        p.communicate()
-        temp_file.close()
+        with open(temp_name, "w") as temp_file:
+            p = gs.start_command("g.proj", flags="j", stdout=temp_file)
+            p.communicate()
 
         if not gs.compare_key_value_text_files(temp_name, proj_name_tmp, sep="="):
             if overr:
@@ -336,7 +335,7 @@ def import_stds(
     old_env = gs.gisenv()
     if location:
         try:
-            proj4_string = open(proj_file_name, "r").read()
+            proj4_string = Path(proj_file_name).read_text()
             gs.create_location(
                 dbase=old_env["GISDBASE"], location=location, proj4=proj4_string
             )
@@ -377,7 +376,7 @@ def import_stds(
         fs = "|"
         maplist = []
         mapset = get_current_mapset()
-        list_file = open(list_file_name, "r")
+        list_file = open(list_file_name)
         new_list_file = open(new_list_file_name, "w")
 
         # get number of lines to correctly form the suffix
@@ -409,13 +408,14 @@ def import_stds(
                 mapname = filename
                 mapid = mapname + "@" + mapset
 
-            row = {}
-            row["filename"] = filename
-            row["name"] = mapname
-            row["id"] = mapid
-            row["start"] = line_list[1].strip()
-            row["end"] = line_list[2].strip()
-            row["semantic_label"] = line_list[3].strip() if len(line_list) == 4 else ""
+            row = {
+                "filename": filename,
+                "name": mapname,
+                "id": mapid,
+                "start": line_list[1].strip(),
+                "end": line_list[2].strip(),
+                "semantic_label": line_list[3].strip() if len(line_list) == 4 else "",
+            }
 
             new_list_file.write(
                 f"{mapname}{fs}{row['start']}{fs}{row['end']}"
@@ -431,7 +431,7 @@ def import_stds(
         # Read the init file
         fs = "="
         init = {}
-        init_file = open(init_file_name, "r")
+        init_file = open(init_file_name)
         while True:
             line = init_file.readline()
             if not line:

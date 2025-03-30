@@ -116,10 +116,7 @@ def main():
 
     # Get mapset of the vector
     vs = vector.split("@")
-    if len(vs) > 1:
-        vect_mapset = vs[1]
-    else:
-        vect_mapset = mapset
+    vect_mapset = vs[1] if len(vs) > 1 else mapset
 
     # does map exist in CURRENT mapset?
     if vect_mapset != mapset or not gs.find_file(vector, "vector", mapset)["file"]:
@@ -143,10 +140,8 @@ def main():
         gs.fatal(
             _(
                 "Number of raster maps ({0}) different from \
-                      number of column prefixes ({1})".format(
-                    len(rasters), len(colprefixes)
-                )
-            )
+                      number of column prefixes ({1})"
+            ).format(len(rasters), len(colprefixes))
         )
 
     vector = vs[0]
@@ -161,8 +156,8 @@ def main():
     # save current settings:
     gs.use_temp_region()
 
-    # Temporarily aligning region resolution to $RASTER resolution
-    # keep boundary settings
+    # Align region cells with the first input raster,
+    # keeping the (approximate) extent settings.
     gs.run_command("g.region", align=rasters[0])
 
     # check if DBF driver used, in this case cut to 10 chars col names:
@@ -340,10 +335,8 @@ def get_nr_of_categories(
         gs.warning(
             _(
                 "Not all vector categories converted to raster. \
-                        Converted {0} of {1}.".format(
-                    number, vect_cats_n
-                )
-            )
+                        Converted {0} of {1}."
+            ).format(number, vect_cats_n)
         )
 
     return number
@@ -377,10 +370,7 @@ def set_up_columns(vector, layer, percentile, colprefix, basecols, dbfdriver, c)
             perc = b
     if perc:
         # namespace is limited in DBF but the % value is important
-        if dbfdriver:
-            perccol = "per" + percentile
-        else:
-            perccol = "percentile_" + percentile
+        perccol = "per" + percentile if dbfdriver else "percentile_" + percentile
         percindex = basecols.index(perc)
         basecols[percindex] = perccol
 
@@ -428,10 +418,7 @@ def set_up_columns(vector, layer, percentile, colprefix, basecols, dbfdriver, c)
                     + _("Use -c flag to update values in this column.")
                 )
         else:
-            if i == "n":
-                coltype = "INTEGER"
-            else:
-                coltype = "DOUBLE PRECISION"
+            coltype = "INTEGER" if i == "n" else "DOUBLE PRECISION"
             addcols.append(currcolumn + " " + coltype)
 
     if addcols:

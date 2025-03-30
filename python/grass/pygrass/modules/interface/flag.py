@@ -49,13 +49,11 @@ class Flag:
         >>> flag.get_bash()
         '--o'
         """
-        if self.value:
-            if self.special:
-                return "--%s" % self.name[0]
-            else:
-                return "-%s" % self.name
-        else:
+        if not self.value:
             return ""
+        if self.special:
+            return "--%s" % self.name[0]
+        return "-%s" % self.name
 
     def get_python(self):
         """Return the python representation of a flag.

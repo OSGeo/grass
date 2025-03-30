@@ -70,6 +70,8 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from typing import Literal
+
 from .base import SQLDatabaseInterface
 
 
@@ -137,7 +139,7 @@ class SpatialExtent(SQLDatabaseInterface):
         top=None,
         bottom=None,
         proj="XY",
-    ):
+    ) -> None:
         SQLDatabaseInterface.__init__(self, table, ident)
         self.set_id(ident)
         self.set_spatial_extent_from_values(north, south, east, west, top, bottom)
@@ -866,16 +868,16 @@ class SpatialExtent(SQLDatabaseInterface):
 
         # We check that at least one edge of extent is located in self
         edge_count = 0
-        if eW > W and eW < E:
+        if W < eW < E:
             edge_count += 1
-        if eE < E and eE > W:
+        if W < eE < E:
             edge_count += 1
-        if eN < N and eN > S:
+        if S < eN < N:
             edge_count += 1
-        if eS > S and eS < N:
+        if S < eS < N:
             edge_count += 1
 
-        return not edge_count == 0
+        return edge_count != 0
 
     def cover(self, extent) -> bool:
         """Return True if this extent covers the provided spatial
@@ -939,24 +941,24 @@ class SpatialExtent(SQLDatabaseInterface):
 
         # We check that at least one edge of extent is located in self
         edge_count = 0
-        if eW > W and eW < E:
+        if W < eW < E:
             edge_count += 1
-        if eE < E and eE > W:
+        if W < eE < E:
             edge_count += 1
-        if eN < N and eN > S:
+        if S < eN < N:
             edge_count += 1
-        if eS > S and eS < N:
+        if S < eS < N:
             edge_count += 1
-        if eN < N and eN > S:
+        if S < eN < N:
             edge_count += 1
-        if eS > S and eS < N:
+        if S < eS < N:
             edge_count += 1
-        if eT < T and eT > B:
+        if B < eT < T:
             edge_count += 1
-        if eB > B and eB < T:
+        if B < eB < T:
             edge_count += 1
 
-        return not edge_count == 0
+        return edge_count != 0
 
     def covered_2d(self, extent):
         """Return True if this extent is covered by the provided spatial
@@ -1110,7 +1112,7 @@ class SpatialExtent(SQLDatabaseInterface):
             or self.get_bottom() >= T
         )
 
-    def meet_2d(self, extent):
+    def meet_2d(self, extent) -> bool:
         """Return True if this extent (A) meets with the provided spatial
         extent (B) in two dimensions.
 
@@ -1303,7 +1305,7 @@ class SpatialExtent(SQLDatabaseInterface):
             or self.meet_2d(extent)
         )
 
-    def disjoint(self, extent):
+    def disjoint(self, extent) -> bool:
         """Return True if this extent is disjoint with the provided spatial
         extent in three dimensions.
 
@@ -1321,7 +1323,19 @@ class SpatialExtent(SQLDatabaseInterface):
             or self.meet(extent)
         )
 
-    def spatial_relation_2d(self, extent):
+    def spatial_relation_2d(
+        self, extent
+    ) -> Literal[
+        "equivalent",
+        "contain",
+        "in",
+        "cover",
+        "covered",
+        "overlap",
+        "meet",
+        "disjoint",
+        "unknown",
+    ]:
         """Returns the two dimensional spatial relation between this
         extent and the provided spatial extent in two dimensions.
 
@@ -1358,7 +1372,19 @@ class SpatialExtent(SQLDatabaseInterface):
 
         return "unknown"
 
-    def spatial_relation(self, extent):
+    def spatial_relation(
+        self, extent
+    ) -> Literal[
+        "equivalent",
+        "contain",
+        "in",
+        "cover",
+        "covered",
+        "overlap",
+        "meet",
+        "disjoint",
+        "unknown",
+    ]:
         """Returns the two dimensional spatial relation between this
         extent and the provided spatial extent in three dimensions.
 
@@ -1667,7 +1693,9 @@ class SpatialExtent(SQLDatabaseInterface):
 
         return "unknown"
 
-    def set_spatial_extent_from_values(self, north, south, east, west, top, bottom):
+    def set_spatial_extent_from_values(
+        self, north, south, east, west, top, bottom
+    ) -> None:
         """Set the three dimensional spatial extent
 
         :param north: The northern edge
@@ -1685,11 +1713,10 @@ class SpatialExtent(SQLDatabaseInterface):
         self.set_top(top)
         self.set_bottom(bottom)
 
-    def set_spatial_extent(self, spatial_extent):
+    def set_spatial_extent(self, spatial_extent) -> None:
         """Set the three dimensional spatial extent
 
-        :param spatial_extent: An object of type SpatialExtent or its
-                               subclasses
+        :param spatial_extent: An object of type SpatialExtent or its subclasses
         """
 
         self.set_north(spatial_extent.get_north())
@@ -1699,7 +1726,7 @@ class SpatialExtent(SQLDatabaseInterface):
         self.set_top(spatial_extent.get_top())
         self.set_bottom(spatial_extent.get_bottom())
 
-    def set_projection(self, proj):
+    def set_projection(self, proj) -> None:
         """Set the projection of the spatial extent it should be XY or LL.
         As default the projection is XY
         """
@@ -1708,7 +1735,7 @@ class SpatialExtent(SQLDatabaseInterface):
         else:
             self.D["proj"] = proj
 
-    def set_spatial_extent_from_values_2d(self, north, south, east, west):
+    def set_spatial_extent_from_values_2d(self, north, south, east, west) -> None:
         """Set the two dimensional spatial extent from values
 
         :param north: The northern edge
@@ -1722,11 +1749,10 @@ class SpatialExtent(SQLDatabaseInterface):
         self.set_east(east)
         self.set_west(west)
 
-    def set_spatial_extent_2d(self, spatial_extent):
+    def set_spatial_extent_2d(self, spatial_extent) -> None:
         """Set the three dimensional spatial extent
 
-        :param spatial_extent: An object of type SpatialExtent or its
-                               subclasses
+        :param spatial_extent: An object of type SpatialExtent or its subclasses
         """
 
         self.set_north(spatial_extent.north)
@@ -1734,47 +1760,47 @@ class SpatialExtent(SQLDatabaseInterface):
         self.set_east(spatial_extent.east)
         self.set_west(spatial_extent.west)
 
-    def set_id(self, ident):
+    def set_id(self, ident) -> None:
         """Convenient method to set the unique identifier (primary key)"""
         self.ident = ident
         self.D["id"] = ident
 
-    def set_north(self, north):
+    def set_north(self, north) -> None:
         """Set the northern edge of the map"""
         if north is not None:
             self.D["north"] = float(north)
         else:
             self.D["north"] = None
 
-    def set_south(self, south):
+    def set_south(self, south) -> None:
         """Set the southern edge of the map"""
         if south is not None:
             self.D["south"] = float(south)
         else:
             self.D["south"] = None
 
-    def set_west(self, west):
+    def set_west(self, west) -> None:
         """Set the western edge of the map"""
         if west is not None:
             self.D["west"] = float(west)
         else:
             self.D["west"] = None
 
-    def set_east(self, east):
+    def set_east(self, east) -> None:
         """Set the eastern edge of the map"""
         if east is not None:
             self.D["east"] = float(east)
         else:
             self.D["east"] = None
 
-    def set_top(self, top):
+    def set_top(self, top) -> None:
         """Set the top edge of the map"""
         if top is not None:
             self.D["top"] = float(top)
         else:
             self.D["top"] = None
 
-    def set_bottom(self, bottom):
+    def set_bottom(self, bottom) -> None:
         """Set the bottom edge of the map"""
         if bottom is not None:
             self.D["bottom"] = float(bottom)
@@ -1787,8 +1813,7 @@ class SpatialExtent(SQLDatabaseInterface):
         """
         if "id" in self.D:
             return self.D["id"]
-        else:
-            return None
+        return None
 
     def get_projection(self):
         """Get the projection of the spatial extent"""
@@ -1840,48 +1865,42 @@ class SpatialExtent(SQLDatabaseInterface):
         :return: None if not found"""
         if "north" in self.D:
             return self.D["north"]
-        else:
-            return None
+        return None
 
     def get_south(self):
         """Get the southern edge of the map
         :return: None if not found"""
         if "south" in self.D:
             return self.D["south"]
-        else:
-            return None
+        return None
 
     def get_east(self):
         """Get the eastern edge of the map
         :return: None if not found"""
         if "east" in self.D:
             return self.D["east"]
-        else:
-            return None
+        return None
 
     def get_west(self):
         """Get the western edge of the map
         :return: None if not found"""
         if "west" in self.D:
             return self.D["west"]
-        else:
-            return None
+        return None
 
     def get_top(self):
         """Get the top edge of the map
         :return: None if not found"""
         if "top" in self.D:
             return self.D["top"]
-        else:
-            return None
+        return None
 
     def get_bottom(self):
         """Get the bottom edge of the map
         :return: None if not found"""
         if "bottom" in self.D:
             return self.D["bottom"]
-        else:
-            return None
+        return None
 
     id = property(fget=get_id, fset=set_id)
     north = property(fget=get_north, fset=set_north)
@@ -1891,7 +1910,7 @@ class SpatialExtent(SQLDatabaseInterface):
     top = property(fget=get_top, fset=set_top)
     bottom = property(fget=get_bottom, fset=set_bottom)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(
@@ -1904,7 +1923,7 @@ class SpatialExtent(SQLDatabaseInterface):
         print(" | Top:........................ " + str(self.get_top()))
         print(" | Bottom:..................... " + str(self.get_bottom()))
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         print("north=" + str(self.get_north()))
         print("south=" + str(self.get_south()))
@@ -1927,7 +1946,7 @@ class RasterSpatialExtent(SpatialExtent):
         west=None,
         top=None,
         bottom=None,
-    ):
+    ) -> None:
         SpatialExtent.__init__(
             self, "raster_spatial_extent", ident, north, south, east, west, top, bottom
         )
@@ -1943,7 +1962,7 @@ class Raster3DSpatialExtent(SpatialExtent):
         west=None,
         top=None,
         bottom=None,
-    ):
+    ) -> None:
         SpatialExtent.__init__(
             self,
             "raster3d_spatial_extent",
@@ -1967,7 +1986,7 @@ class VectorSpatialExtent(SpatialExtent):
         west=None,
         top=None,
         bottom=None,
-    ):
+    ) -> None:
         SpatialExtent.__init__(
             self, "vector_spatial_extent", ident, north, south, east, west, top, bottom
         )
@@ -1983,7 +2002,7 @@ class STRDSSpatialExtent(SpatialExtent):
         west=None,
         top=None,
         bottom=None,
-    ):
+    ) -> None:
         SpatialExtent.__init__(
             self, "strds_spatial_extent", ident, north, south, east, west, top, bottom
         )
@@ -1999,7 +2018,7 @@ class STR3DSSpatialExtent(SpatialExtent):
         west=None,
         top=None,
         bottom=None,
-    ):
+    ) -> None:
         SpatialExtent.__init__(
             self, "str3ds_spatial_extent", ident, north, south, east, west, top, bottom
         )
@@ -2015,7 +2034,7 @@ class STVDSSpatialExtent(SpatialExtent):
         west=None,
         top=None,
         bottom=None,
-    ):
+    ) -> None:
         SpatialExtent.__init__(
             self, "stvds_spatial_extent", ident, north, south, east, west, top, bottom
         )

@@ -10,12 +10,16 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 import copy
 import os
 import sys
 import uuid
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
+from pathlib import Path
+from grass.exceptions import FatalError
 
 from .abstract_dataset import AbstractDataset, AbstractDatasetComparisonKeyStartTime
 from .core import (
@@ -58,7 +62,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, ident):
+    def __init__(self, ident) -> None:
         AbstractDataset.__init__(self)
         self.reset(ident)
         self.map_counter = 0
@@ -66,7 +70,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # SpaceTimeRasterDataset related only
         self.semantic_label = None
 
-    def get_name(self, semantic_label=True):
+    def get_name(self, semantic_label: bool = True):
         """Get dataset name including semantic label filter if enabled.
 
         :param bool semantic_label: True to return dataset name
@@ -127,14 +131,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param name: The name of the register table
         """
 
-    def print_self(self):
+    def print_self(self) -> None:
         """Print the content of the internal structure to stdout"""
         self.base.print_self()
         self.temporal_extent.print_self()
         self.spatial_extent.print_self()
         self.metadata.print_self()
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
 
         if self.get_type() == "strds":
@@ -166,22 +170,26 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             " +----------------------------------------------------------------------------+"  # noqa: E501
         )
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         self.base.print_shell_info()
         self.temporal_extent.print_shell_info()
         self.spatial_extent.print_shell_info()
         self.metadata.print_shell_info()
 
-    def print_history(self):
+    def print_history(self) -> None:
         """Print history information about this class in human readable
         shell style
         """
         self.metadata.print_history()
 
     def set_initial_values(
-        self, temporal_type, semantic_type=None, title=None, description=None
-    ):
+        self,
+        temporal_type,
+        semantic_type=None,
+        title=None,
+        description: str | None = None,
+    ) -> None:
         """Set the initial values of the space time dataset
 
          In addition the command creation string is generated
@@ -212,7 +220,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.metadata.set_description(description)
         self.metadata.set_command(self.create_command_string())
 
-    def set_aggregation_type(self, aggregation_type):
+    def set_aggregation_type(self, aggregation_type) -> None:
         """Set the aggregation type of the space time dataset
 
         :param aggregation_type: The aggregation type of the space time
@@ -220,7 +228,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
         self.metadata.set_aggregation_type(aggregation_type)
 
-    def update_command_string(self, dbif=None):
+    def update_command_string(self, dbif=None) -> None:
         """Append the current command string to any existing command string
         in the metadata class and calls metadata update
 
@@ -310,7 +318,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return self.temporal_extent.get_granularity()
 
-    def set_granularity(self, granularity):
+    def set_granularity(self, granularity) -> None:
         """Set the granularity
 
         The granularity is usually computed by the space time dataset at
@@ -342,7 +350,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         self.temporal_extent.set_granularity(granularity)
 
-    def set_relative_time_unit(self, unit):
+    def set_relative_time_unit(self, unit) -> None:
         """Set the relative time unit which may be of type:
         years, months, days, hours, minutes or seconds
 
@@ -362,7 +370,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 self.msgr.fatal(_("Unsupported temporal unit: %s") % (unit))
             self.relative_time.set_unit(unit)
 
-    def insert(self, dbif=None, execute=True):
+    def insert(self, dbif=None, execute: bool = True):
         """Insert the space time dataset content into the database from the internal
         structure
 
@@ -395,9 +403,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             # %s;"%(stds_register_table + "_index", stds_register_table))
 
             # Read the SQL template
-            sql = open(
-                os.path.join(sql_path, "stds_map_register_table_template.sql"), "r"
-            ).read()
+            sql = Path(sql_path, "stds_map_register_table_template.sql").read_text()
 
             # Create a raster, raster3d or vector tables
             sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
@@ -501,7 +507,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return gaps
 
-    def print_spatio_temporal_relationships(self, maps=None, spatial=None, dbif=None):
+    def print_spatio_temporal_relationships(
+        self, maps=None, spatial=None, dbif=None
+    ) -> None:
         """Print the spatio-temporal relationships for each map of the space
         time dataset or for each map of the optional list of maps
 
@@ -542,7 +550,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return count_temporal_topology_relationships(maps1=maps, dbif=dbif)
 
-    def check_temporal_topology(self, maps=None, dbif=None):
+    def check_temporal_topology(self, maps=None, dbif=None) -> bool:
         """Check the temporal topology of all maps of the current space time
         dataset or of an optional list of maps
 
@@ -614,7 +622,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return True
 
-    def sample_by_dataset(self, stds, method=None, spatial=False, dbif=None):
+    def sample_by_dataset(self, stds, method=None, spatial: bool = False, dbif=None):
         """Sample this space time dataset with the temporal topology
         of a second space time dataset
 
@@ -780,10 +788,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         #  print(relations)
 
         tb = SpatioTemporalTopologyBuilder()
-        if spatial:
-            spatial = "2D"
-        else:
-            spatial = None
+        spatial = "2D" if spatial else None
 
         mapsA = self.get_registered_maps_as_objects(dbif=dbif)
         mapsB = stds.get_registered_maps_as_objects_with_gaps(dbif=dbif)
@@ -824,7 +829,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return obj_list
 
-    def sample_by_dataset_sql(self, stds, method=None, spatial=False, dbif=None):
+    def sample_by_dataset_sql(
+        self, stds, method=None, spatial: bool = False, dbif=None
+    ):
         """Sample this space time dataset with the temporal topology
         of a second space time dataset using SQL queries.
 
@@ -1134,7 +1141,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             if self.is_time_absolute():
                 end = increment_datetime_by_string(end, gran)
             else:
-                end = end + gran
+                end += gran
 
         maplist = AbstractSpaceTimeDataset.resample_maplist_by_granularity(
             maps, start, end, gran
@@ -1430,10 +1437,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                         start1, end1 = maps[i].get_temporal_extent_as_tuple()
                         start2, end2 = maps[i + 1].get_temporal_extent_as_tuple()
                         end = start2
-                        if end1 is not None:
-                            start = end1
-                        else:
-                            start = start1
+                        start = end1 if end1 is not None else start1
 
                         map = self.get_new_map_instance(None)
 
@@ -1627,8 +1631,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             try:
                 if value.startswith("0"):
                     return value.lstrip("0")
-                else:
-                    return "{0:02d}".format(int(value))
+                return "{0:02d}".format(int(value))
             except ValueError:
                 return None
 
@@ -1741,17 +1744,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             )
         elif spatial_relation == "is_contained":
             spatial_where_template = (
-                "(north <= {n}"
-                " AND south >= {s}"
-                " AND east <= {e}"
-                " AND west >= {w}"
+                "(north <= {n} AND south >= {s} AND east <= {e} AND west >= {w}"
             )
         elif spatial_relation == "contains":
             spatial_where_template = (
-                "(north >= {n}"
-                " AND south <= {s}"
-                " AND east >= {e}"
-                " AND west <= {w}"
+                "(north >= {n} AND south <= {s} AND east >= {e} AND west <= {w}"
             )
 
         if self.get_type() == "str3ds":
@@ -1997,14 +1994,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     end = increment_datetime_by_string(end, gran)
                 map.set_absolute_time(start, end)
             elif map.is_time_relative():
-                start = start + int(gran)
+                start += int(gran)
                 if end is not None:
-                    end = end + int(gran)
+                    end += int(gran)
                 map.set_relative_time(start, end, map.get_relative_time_unit())
 
         return maps
 
-    def shift(self, gran, dbif=None):
+    def shift(self, gran, dbif=None) -> bool:
         """Temporally shift each registered map with the provided granularity
 
         :param gran: The granularity to be used for shifting
@@ -2025,7 +2022,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             )
 
         if not check_granularity_string(gran, self.get_temporal_type()):
-            self.msgr.error(_("Wrong granularity format: %s" % (gran)))
+            self.msgr.error(_("Wrong granularity format: %s") % (gran))
             return False
 
         dbif, connection_state_changed = init_dbif(dbif)
@@ -2048,9 +2045,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 if end is not None:
                     end = increment_datetime_by_string(end, gran)
             elif self.is_time_relative():
-                start = start + int(gran)
+                start += int(gran)
                 if end is not None:
-                    end = end + int(gran)
+                    end += int(gran)
 
             date_list.append((start, end))
 
@@ -2181,7 +2178,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return maps
 
-    def snap(self, dbif=None):
+    def snap(self, dbif=None) -> None:
         """For each registered map snap the end time to the start time of
         its temporal nearest neighbor in the future
 
@@ -2239,7 +2236,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if connection_state_changed:
             dbif.close()
 
-    def _update_map_timestamps(self, maps, date_list, dbif):
+    def _update_map_timestamps(self, maps, date_list, dbif) -> None:
         """Update the timestamps of maps with the start and end time
         stored in the date_list.
 
@@ -2286,7 +2283,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     ds.select(dbif)
                     ds.update_from_registered_maps(dbif)
 
-    def rename(self, ident, dbif=None):
+    def rename(self, ident, dbif=None) -> None:
         """Rename the space time dataset
 
         This method renames the space time dataset, the map register table
@@ -2364,7 +2361,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if connection_state_changed:
             dbif.close()
 
-    def delete(self, dbif=None, execute=True):
+    def delete(self, dbif=None, execute: bool = True):
         """Delete a space time dataset from the temporal database
 
         This method removes the space time dataset from the temporal
@@ -2461,7 +2458,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             try:
                 dbif.execute(sql, (map_id,), mapset=self.base.mapset)
                 row = dbif.fetchone(mapset=self.base.mapset)
-            except:
+            except FatalError:
+                raise
+            except Exception:
                 self.msgr.warning(_("Error in register table request"))
                 raise
 
@@ -2473,7 +2472,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return is_registered
 
-    def register_map(self, map, dbif=None):
+    def register_map(self, map, dbif=None) -> bool:
         """Register a map in the space time dataset.
 
          This method takes care of the registration of a map
@@ -2549,7 +2548,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Get basic info
         map_id = map.base.get_id()
-        map_mapset = map.base.get_mapset()
         map_rel_time_unit = map.get_relative_time_unit()
         map_ttype = map.get_temporal_type()
 
@@ -2557,7 +2555,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         stds_register_table = self.get_map_register()
         stds_ttype = self.get_temporal_type()
 
-        # The gathered SQL statemets are stroed here
+        # The gathered SQL statements are stored here
         statement = ""
 
         # Check temporal types
@@ -2673,7 +2671,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return True
 
-    def unregister_map(self, map, dbif=None, execute=True):
+    def unregister_map(self, map, dbif=None, execute: bool = True):
         """Unregister a map from the space time dataset.
 
         This method takes care of the un-registration of a map
@@ -2758,7 +2756,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return statement
 
-    def update_from_registered_maps(self, dbif=None):
+    def update_from_registered_maps(self, dbif=None) -> None:
         """This methods updates the modification time, the spatial and
         temporal extent as well as type specific metadata. It should always
         been called after maps are registered or unregistered/deleted from
@@ -2804,8 +2802,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         use_start_time = False
 
         # Get basic info
-        stds_name = self.base.get_name()
-        stds_mapset = self.base.get_mapset()
         sql_path = get_sql_template_path()
         stds_register_table = self.get_map_register()
 
@@ -2821,13 +2817,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         )
         if old_sqlite_version:
             template_suffix = "_old"
-        sql = open(
-            os.path.join(
-                sql_path,
-                f"update_stds_spatial_temporal_extent_template{template_suffix}.sql",
-            ),
-            "r",
-        ).read()
+        sql = Path(
+            sql_path,
+            f"update_stds_spatial_temporal_extent_template{template_suffix}.sql",
+        ).read_text()
         sql = sql.replace("GRASS_MAP", self.get_new_map_instance(None).get_type())
         sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
         sql = sql.replace("SPACETIME_ID", self.base.get_id())
@@ -2837,13 +2830,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         sql_script += "\n"
 
         # Update type specific metadata
-        sql = open(
-            os.path.join(
-                sql_path,
-                f"update_{self.get_type()}_metadata_template{template_suffix}.sql",
-            ),
-            "r",
-        ).read()
+        sql = Path(
+            sql_path,
+            f"update_{self.get_type()}_metadata_template{template_suffix}.sql",
+        ).read_text()
 
         # Comment out update of semantic labels for DB version < 3
         if get_tgis_db_version_from_metadata() < 3:
@@ -2856,10 +2846,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 "-- count(distinct semantic_label)",
             )
         elif old_sqlite_version and self.get_type() == "strds":
-            semantic_label_sql = open(
-                os.path.join(sql_path, "update_strds_metadata_template_v3.sql"),
-                "r",
-            ).read()
+            semantic_label_sql = Path(
+                sql_path, "update_strds_metadata_template_v3.sql"
+            ).read_text()
             sql = sql + "\n" + semantic_label_sql
 
         sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)

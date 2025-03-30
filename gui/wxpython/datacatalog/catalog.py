@@ -17,7 +17,8 @@ for details.
 """
 
 import wx
-import os
+
+from pathlib import Path
 
 from core.debug import Debug
 from datacatalog.tree import DataCatalogTree
@@ -200,14 +201,17 @@ class DataCatalog(wx.Panel):
     def OnAddGrassDB(self, event):
         """Add grass database"""
         dlg = wx.DirDialog(
-            self, _("Choose GRASS data directory:"), os.getcwd(), wx.DD_DEFAULT_STYLE
+            self,
+            _("Choose GRASS data directory:"),
+            str(Path.cwd()),
+            wx.DD_DEFAULT_STYLE,
         )
         if dlg.ShowModal() == wx.ID_OK:
             grassdatabase = dlg.GetPath()
             grassdb_node = self.tree.InsertGrassDb(name=grassdatabase)
 
             # Offer to create a new location
-            if grassdb_node and not os.listdir(grassdatabase):
+            if grassdb_node and not any(Path(grassdatabase).iterdir()):
                 message = _(
                     "Do you want to create a new project (also known as location)?"
                 )

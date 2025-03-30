@@ -281,10 +281,11 @@ class Info:
         :type newname: str
         """
         if self.exist():
-            if not self.is_open():
-                utils.rename(self.name, newname, "vect")
-            else:
-                raise GrassError("The map is open, not able to renamed it.")
+            if self.is_open():
+                msg = "The map is open, not able to rename it."
+                raise GrassError(msg)
+            utils.rename(self.name, newname, "vect")
+
         self._name = newname
 
     def is_3D(self):
@@ -293,14 +294,13 @@ class Info:
 
     def exist(self):
         """Return if the Vector exists or not"""
-        if self.name:
-            if self.mapset == "":
-                mapset = utils.get_mapset_vector(self.name, self.mapset)
-                self.mapset = mapset or ""
-                return bool(mapset)
-            return bool(utils.get_mapset_vector(self.name, self.mapset))
-        else:
+        if not self.name:
             return False
+        if self.mapset == "":
+            mapset = utils.get_mapset_vector(self.name, self.mapset)
+            self.mapset = mapset or ""
+            return bool(mapset)
+        return bool(utils.get_mapset_vector(self.name, self.mapset))
 
     def is_open(self):
         """Return if the Vector is open"""
@@ -337,12 +337,11 @@ class Info:
         :param tab_name: define the name of the table that will be generate
         :type tab_name: str
         :param tab_cols: define the name and type of the columns of the
-                         attribute table of the vecto map
+                         attribute table of the vector map
         :type tab_cols: list of pairs
-        :param link_name: define the name of the link connection with the
-                          database
+        :param link_name: define the name of the link connection with the database
         :type link_name: str
-        :param link_key: define the nema of the column that will be use as
+        :param link_key: define the name of the column that will be use as
                          vector category
         :type link_key: str
         :param link_db: define the database connection parameters
@@ -361,12 +360,14 @@ class Info:
         if not self.exist() and self.mode != "w":
             raise OpenError("Map <%s> not found." % self._name)
         if libvect.Vect_set_open_level(self._topo_level) != 0:
-            raise OpenError("Invalid access level.")
+            msg = "Invalid access level."
+            raise OpenError(msg)
         # update the overwrite attribute
         self.overwrite = overwrite if overwrite is not None else self.overwrite
         # check if the mode is valid
         if self.mode not in {"r", "rw", "w"}:
-            raise ValueError("Mode not supported. Use one of: 'r', 'rw', 'w'.")
+            msg = "Mode not supported. Use one of: 'r', 'rw', 'w'."
+            raise ValueError(msg)
 
         # check if the map exist
         if self.exist() and self.mode in {"r", "rw"}:
@@ -458,14 +459,14 @@ class Info:
         if hasattr(self, "table") and self.table is not None:
             self.table.conn.close()
         if self.is_open():
-            if libvect.Vect_close(self.c_mapinfo) != 0:
-                str_err = "Error when trying to close the map with Vect_close"
-                raise GrassError(str_err)
             if (
                 self.c_mapinfo.contents.mode
                 in {libvect.GV_MODE_RW, libvect.GV_MODE_WRITE}
             ) and build:
                 self.build()
+            if libvect.Vect_close(self.c_mapinfo) != 0:
+                str_err = "Error when trying to close the map with Vect_close"
+                raise GrassError(str_err)
 
     def remove(self):
         """Remove vector map"""
@@ -475,16 +476,11 @@ class Info:
 
     def build(self):
         """Close the vector map and build vector Topology"""
-        self.close()
-        libvect.Vect_set_open_level(1)
-        if libvect.Vect_open_old2(self.c_mapinfo, self.name, self.mapset, "0") != 1:
-            str_err = "Error when trying to open the vector map."
-            raise GrassError(str_err)
-        # Vect_build returns 1 on success and 0 on error (bool approach)
-        if libvect.Vect_build(self.c_mapinfo) != 1:
-            str_err = "Error when trying build topology with Vect_build"
-            raise GrassError(str_err)
-        libvect.Vect_close(self.c_mapinfo)
+        if self.is_open():
+            # Vect_build returns 1 on success and 0 on error (bool approach)
+            if libvect.Vect_build(self.c_mapinfo) != 1:
+                str_err = "Error when trying build topology with Vect_build"
+                raise GrassError(str_err)
 
 
 if __name__ == "__main__":

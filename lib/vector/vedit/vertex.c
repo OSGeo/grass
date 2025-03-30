@@ -325,7 +325,7 @@ int Vedit_remove_vertex(struct Map_info *Map, struct ilist *List,
                     rewrite = 1;
                 }
             } /* for each point */
-        }     /* for each bounding box */
+        } /* for each bounding box */
 
         if (rewrite) {
             /* rewrite the line */

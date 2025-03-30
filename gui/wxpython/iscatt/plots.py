@@ -154,7 +154,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
     def GetCoords(self):
         coords = self.polygon_drawer.GetCoords()
         if coords is None:
-            return
+            return None
 
         if self.transpose:
             for c in coords:
@@ -168,14 +168,14 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         return self.polygon_drawer.SetEmpty()
 
     def OnRelease(self, event):
-        if not self.mode == "zoom":
+        if self.mode != "zoom":
             return
         self.zoom_rect.set_visible(False)
         self.ZoomRectangle(event)
         self.canvas.draw()
 
     def OnPress(self, event):
-        "on button press we will see if the mouse is over us and store some data"
+        """on button press we will see if the mouse is over us and store some data"""
         if not event.inaxes:
             return
         if self.mode == "zoom_extend":
@@ -189,7 +189,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
             self.zoom_rect_coords = None
 
     def _stopCategoryEdit(self):
-        "disconnect all the stored connection ids"
+        """disconnect all the stored connection ids"""
 
         if self.cidpress:
             self.canvas.mpl_disconnect(self.cidpress)
@@ -235,7 +235,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         img = imshow(
             self.axes,
             merged_img,
-            extent=[int(ceil(x)) for x in self.full_extend],
+            extent=[ceil(x) for x in self.full_extend],
             origin="lower",
             interpolation="nearest",
             aspect="equal",
@@ -255,7 +255,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
             if not e:
                 continue
 
-            colors = styles[cat_id]["color"].split(":")
             if self.transpose:
                 e["theta"] = 360 - e["theta"] + 90
                 if e["theta"] >= 360:
@@ -322,7 +321,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         if not event.inaxes:
             return
         # tcaswell
-        # http://stackoverflow.com/questions/11551049/matplotlib-plot-zooming-with-scroll-wheel
+        # https://stackoverflow.com/questions/11551049/matplotlib-plot-zooming-with-scroll-wheel
         cur_xlim = self.axes.get_xlim()
         cur_ylim = self.axes.get_ylim()
 
@@ -348,15 +347,12 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
     def ZoomRectangle(self, event):
         # get the current x and y limits
-        if not self.mode == "zoom":
+        if self.mode != "zoom":
             return
         if event.inaxes is None:
             return
         if event.button != 1:
             return
-
-        cur_xlim = self.axes.get_xlim()
-        cur_ylim = self.axes.get_ylim()
 
         x1, y1 = event.xdata, event.ydata
         x2 = deepcopy(self.zoom_rect_coords["x"])
@@ -393,8 +389,8 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self.cursorMove.emit(x=None, y=None, scatt_id=self.scatt_id)
 
     def PanMotion(self, event):
-        "on mouse movement"
-        if not self.mode == "pan":
+        """on mouse movement"""
+        if self.mode != "pan":
             return
         if event.inaxes is None:
             return
@@ -426,7 +422,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self.canvas.draw()
 
     def ZoomRectMotion(self, event):
-        if not self.mode == "zoom":
+        if self.mode != "zoom":
             return
         if event.inaxes is None:
             return
@@ -517,30 +513,29 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
         else:
             MergeArrays(merged_img, rend_dt[cat_id]["dt"], styles[cat_id]["opacity"])
 
-        """
-            # c_img_a = np.memmap(
-            #     grass.tempfile(), dtype="uint16", mode="w+", shape=shape
-            # )
-            c_img_a = colored_cat.astype("uint16")[:, :, 3] * styles[cat_id]["opacity"]
+            # # c_img_a = np.memmap(
+            # #     grass.tempfile(), dtype="uint16", mode="w+", shape=shape
+            # # )
+            # c_img_a = colored_cat.astype("uint16")[:,:, 3] * styles[cat_id]["opacity"]
+            #
+            # # TODO apply strides and there will be no need for loop
+            # # b = as_strided(
+            # #     a,
+            # #     strides=(0, a.strides[3], a.strides[3], a.strides[3]),
+            # #     shape=(3, a.shape[0], a.shape[1]),
+            # # )
+            #
+            # for i in range(3):
+            #     merged_img[:, :, i] = (
+            #         merged_img[:, :, i] * (255 - c_img_a)
+            #         + colored_cat[:, :, i] * c_img_a
+            #     ) / 255
+            # merged_img[:, :, 3] = (
+            #     merged_img[:, :, 3] * (255 - c_img_a) + 255 * c_img_a
+            # ) / 255
+            #
+            # del c_img_a
 
-            # TODO apply strides and there will be no need for loop
-            # b = as_strided(
-            #     a,
-            #     strides=(0, a.strides[3], a.strides[3], a.strides[3]),
-            #     shape=(3, a.shape[0], a.shape[1]),
-            # )
-
-            for i in range(3):
-                merged_img[:, :, i] = (
-                    merged_img[:, :, i] * (255 - c_img_a)
-                    + colored_cat[:, :, i] * c_img_a
-                ) / 255
-            merged_img[:, :, 3] = (
-                merged_img[:, :, 3] * (255 - c_img_a) + 255 * c_img_a
-            ) / 255
-
-            del c_img_a
-        """
     _rendDtMemmapsToFiles(rend_dt)
 
     merged_img = {"dt": merged_img.filename, "sh": merged_img.shape}
@@ -637,10 +632,11 @@ class PolygonDrawer:
 
     def __init__(self, ax, pol, empty_pol):
         if pol.figure is None:
-            raise RuntimeError(
+            msg = (
                 "You must first add the polygon to a figure or canvas before defining "
                 "the interactor"
             )
+            raise RuntimeError(msg)
         self.ax = ax
         self.canvas = pol.figure.canvas
 
@@ -651,13 +647,11 @@ class PolygonDrawer:
 
         x, y = zip(*self.pol.xy)
 
-        style = self._getPolygonStyle()
-
         self.line = Line2D(x, y, marker="o", markerfacecolor="r", animated=True)
         self.ax.add_line(self.line)
         # self._update_line(pol)
 
-        cid = self.pol.add_callback(self.poly_changed)
+        self.pol.add_callback(self.poly_changed)
         self.moving_ver_idx = None  # the active vert
 
         self.mode = None
@@ -673,13 +667,14 @@ class PolygonDrawer:
         self.it = 0
 
     def _getPolygonStyle(self):
-        style = {}
-        style["sel_pol"] = UserSettings.Get(
-            group="scatt", key="selection", subkey="sel_pol"
-        )
-        style["sel_pol_vertex"] = UserSettings.Get(
-            group="scatt", key="selection", subkey="sel_pol_vertex"
-        )
+        style = {
+            "sel_pol": UserSettings.Get(
+                group="scatt", key="selection", subkey="sel_pol"
+            ),
+            "sel_pol_vertex": UserSettings.Get(
+                group="scatt", key="selection", subkey="sel_pol_vertex"
+            ),
+        }
 
         style["sel_pol"] = [i / 255.0 for i in style["sel_pol"]]
         style["sel_pol_vertex"] = [i / 255.0 for i in style["sel_pol_vertex"]]
@@ -745,14 +740,14 @@ class PolygonDrawer:
         self.ax.draw_artist(self.line)
 
     def poly_changed(self, pol):
-        "this method is called whenever the polygon object is called"
+        """this method is called whenever the polygon object is called"""
         # only copy the artist props to the line (except visibility)
         vis = self.line.get_visible()
         Artist.update_from(self.line, pol)
         self.line.set_visible(vis)  # don't use the pol visibility state
 
     def get_ind_under_point(self, event):
-        "get the index of the vertex under point if within threshold"
+        """get the index of the vertex under point if within threshold"""
 
         # display coords
         xy = np.asarray(self.pol.xy)
@@ -785,7 +780,7 @@ class PolygonDrawer:
         self.moving_ver_idx = self.get_ind_under_point(event)
 
     def ButtonReleaseCallback(self, event):
-        "whenever a mouse button is released"
+        """whenever a mouse button is released"""
         if not self.showverts:
             return
         if event.button != 1:
@@ -811,11 +806,11 @@ class PolygonDrawer:
 
         coords = []
         for i, tup in enumerate(self.pol.xy):
-            if i == ind:
-                continue
-            elif i == 0 and ind == len(self.pol.xy) - 1:
-                continue
-            elif i == len(self.pol.xy) - 1 and ind == 0:
+            if (
+                i == ind
+                or (i == 0 and ind == len(self.pol.xy) - 1)
+                or (i == len(self.pol.xy) - 1 and ind == 0)
+            ):
                 continue
 
             coords.append(tup)
@@ -865,8 +860,8 @@ class PolygonDrawer:
         self.Redraw()
 
     def motion_notify_callback(self, event):
-        "on mouse movement"
-        if not self.mode == "move_vertex":
+        """on mouse movement"""
+        if self.mode != "move_vertex":
             return
         if not self.showverts:
             return
@@ -918,7 +913,8 @@ class ModestImage(mi.AxesImage):
 
     def __init__(self, minx=0.0, miny=0.0, *args, **kwargs):
         if "extent" in kwargs and kwargs["extent"] is not None:
-            raise NotImplementedError("ModestImage does not support extents")
+            msg = f"{ModestImage.__name__} does not support extents"
+            raise NotImplementedError(msg)
 
         self._full_res = None
         self._sx, self._sy = None, None
@@ -938,12 +934,14 @@ class ModestImage(mi.AxesImage):
         self._A = A
 
         if self._A.dtype != np.uint8 and not np.can_cast(self._A.dtype, float):
-            raise TypeError("Image data can not convert to float")
+            msg = "Image data can not convert to float"
+            raise TypeError(msg)
 
         if self._A.ndim not in (2, 3) or (
             self._A.ndim == 3 and self._A.shape[-1] not in (3, 4)
         ):
-            raise TypeError("Invalid dimensions for image data")
+            msg = "Invalid dimensions for image data"
+            raise TypeError(msg)
 
         self._imcache = None
         self._rgbacache = None

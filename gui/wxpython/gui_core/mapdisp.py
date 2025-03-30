@@ -176,8 +176,7 @@ class MapPanelBase(wx.Panel):
         """Returns property"""
         if hasattr(self.mapWindowProperties, name):
             return getattr(self.mapWindowProperties, name)
-        else:
-            return self.statusbarManager.GetProperty(name)
+        return self.statusbarManager.GetProperty(name)
 
     def HasProperty(self, name):
         """Checks whether object has property"""
@@ -286,19 +285,23 @@ class MapPanelBase(wx.Panel):
 
     def GetMap(self):
         """Returns current map (renderer) instance"""
-        raise NotImplementedError("GetMap")
+        msg = self.GetMap.__name__
+        raise NotImplementedError(msg)
 
     def GetWindow(self):
         """Returns current map window"""
-        raise NotImplementedError("GetWindow")
+        msg = self.GetWindow.__name__
+        raise NotImplementedError(msg)
 
     def GetWindows(self):
         """Returns list of map windows"""
-        raise NotImplementedError("GetWindows")
+        msg = self.GetWindows.__name__
+        raise NotImplementedError(msg)
 
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
-        raise NotImplementedError("GetMapToolbar")
+        msg = self.GetMapToolbar.__name__
+        raise NotImplementedError(msg)
 
     def GetToolbar(self, name):
         """Returns toolbar if exists and is active, else None."""
@@ -316,7 +319,7 @@ class MapPanelBase(wx.Panel):
     def CoordinatesChanged(self):
         """Shows current coordinates on statusbar."""
         # assuming that the first mode is coordinates
-        # probably shold not be here but good solution is not available now
+        # probably shouldn't be here but a better solution isn't available now
         if self.statusbarManager:
             if self.statusbarManager.GetMode() == 0:
                 self.statusbarManager.ShowItem("coordinates")
@@ -381,10 +384,7 @@ class MapPanelBase(wx.Panel):
                 toolbar.EnableLongHelp(enable)
 
     def ShowAllToolbars(self, show=True):
-        if not show:  # hide
-            action = self.RemoveToolbar
-        else:
-            action = self.AddToolbar
+        action = self.RemoveToolbar if not show else self.AddToolbar
         for toolbar in self.GetToolbarNames():
             action(toolbar)
 
@@ -397,7 +397,8 @@ class MapPanelBase(wx.Panel):
 
     def AddToolbar(self):
         """Add defined toolbar to the window"""
-        raise NotImplementedError("AddToolbar")
+        msg = self.AddToolbar.__name__
+        raise NotImplementedError(msg)
 
     def RemoveToolbar(self, name, destroy=False):
         """Removes defined toolbar from the window
@@ -423,7 +424,8 @@ class MapPanelBase(wx.Panel):
 
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
-        raise NotImplementedError("OnRender")
+        msg = self.OnRender.__name__
+        raise NotImplementedError(msg)
 
     def OnEnableDisableRender(self, event):
         """Enable/disable auto-rendering map composition (each map layer)"""
@@ -584,7 +586,7 @@ class DoubleMapPanel(MapPanelBase):
     It is expected that derived class will call _bindWindowsActivation()
     when both map windows will be initialized.
 
-    Drived class should have method GetMapToolbar() returns toolbar
+    Derived classes should have method GetMapToolbar() returns toolbar
     which has methods SetActiveMap() and Enable().
 
     @note To access maps use getters only
@@ -609,7 +611,7 @@ class DoubleMapPanel(MapPanelBase):
         r"""
 
         \a firstMap is set as active (by assign it to \c self.Map).
-        Derived class should assging to \c self.MapWindow to make one
+        Derived class should assigning to \c self.MapWindow to make one
         map window current by default.
 
         :param parent: gui parent

@@ -28,7 +28,7 @@
 #
 # changes of this file GRASS (PNG instead of JPG) by Anna Petrasova 2013
 
-""" Module images2avi
+"""Module images2avi
 
 Uses ffmpeg to read and write AVI files. Requires PIL
 
@@ -137,25 +137,22 @@ def writeAvi(
                 + "\n"
                 + _("Could not write avi.")
             )
-        else:
-            # An error occurred, show
-            print(gs.decode(outPut))
-            print(gs.decode(S.stderr.read()))
-            raise RuntimeError(_("Could not write avi."))
-    else:
-        try:
-            # Copy avi
-            shutil.copy(os.path.join(tempDir, "output.avi"), filename)
-        except Exception as err:
-            # Clean up
-            _cleanDir(tempDir)
-            if bg_task:
-                return str(err)
-            else:
-                raise
-
+        # An error occurred, show
+        print(gs.decode(outPut))
+        print(gs.decode(S.stderr.read()))
+        raise RuntimeError(_("Could not write avi."))
+    try:
+        # Copy avi
+        shutil.copy(os.path.join(tempDir, "output.avi"), filename)
+    except Exception as err:
         # Clean up
         _cleanDir(tempDir)
+        if bg_task:
+            return str(err)
+        raise
+
+    # Clean up
+    _cleanDir(tempDir)
 
 
 def readAvi(filename, asNumpy=True):
@@ -183,25 +180,26 @@ def readAvi(filename, asNumpy=True):
 
     # Run ffmpeg
     command = "ffmpeg -i input.avi im%d.jpg"
-    S = subprocess.Popen(
-        command, shell=True, cwd=tempDir, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-
-    # Show what mencodec has to say
-    outPut = S.stdout.read()
-
-    if S.wait():
-        # An error occurred, show
-        print(outPut)
-        print(S.stderr.read())
-        # Clean up
-        _cleanDir(tempDir)
-        raise RuntimeError("Could not read avi.")
-    else:
-        # Read images
-        images = images2ims.readIms(os.path.join(tempDir, "im*.jpg"), asNumpy)
-        # Clean up
-        _cleanDir(tempDir)
+    with subprocess.Popen(
+        command,
+        cwd=tempDir,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ) as S:
+        # Show what mencodec has to say
+        outPut = S.stdout.read()
+        if S.wait():
+            # An error occurred, show
+            print(outPut)
+            print(S.stderr.read())
+            # Clean up
+            _cleanDir(tempDir)
+            msg = "Could not read avi."
+            raise RuntimeError(msg)
+    # Read images
+    images = images2ims.readIms(os.path.join(tempDir, "im*.jpg"), asNumpy)
+    # Clean up
+    _cleanDir(tempDir)
 
     # Done
     return images

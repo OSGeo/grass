@@ -274,17 +274,11 @@ class AnimationFrame(wx.Frame):
         self.controller.EndAnimation()
 
     def OnOneDirectionReplay(self, event):
-        if event.IsChecked():
-            mode = ReplayMode.REPEAT
-        else:
-            mode = ReplayMode.ONESHOT
+        mode = ReplayMode.REPEAT if event.IsChecked() else ReplayMode.ONESHOT
         self.controller.SetReplayMode(mode)
 
     def OnBothDirectionReplay(self, event):
-        if event.IsChecked():
-            mode = ReplayMode.REVERSE
-        else:
-            mode = ReplayMode.ONESHOT
+        mode = ReplayMode.REVERSE if event.IsChecked() else ReplayMode.ONESHOT
         self.controller.SetReplayMode(mode)
 
     def OnAdjustSpeed(self, event):
@@ -353,7 +347,7 @@ class AnimationFrame(wx.Frame):
         if not self.dialogs["preferences"]:
             dlg = PreferencesDialog(parent=self, giface=self._giface)
             self.dialogs["preferences"] = dlg
-            dlg.formatChanged.connect(self.controller.UpdateAnimations)
+            dlg.formatChanged.connect(lambda: self.controller.UpdateAnimations())
             dlg.CenterOnParent()
 
         self.dialogs["preferences"].Show()
@@ -642,11 +636,8 @@ class TimeAnimationSlider(AnimationSliderBase):
                 }
             else:
                 label = _("to %(to)s") % {"to": self.timeLabels[index][1]}
-        else:  # noqa: PLR5501
-            if self.temporalType == TemporalType.ABSOLUTE:
-                label = start
-            else:
-                label = ""
+        else:
+            label = start if self.temporalType == TemporalType.ABSOLUTE else ""
         self.label2.SetLabel(label)
         if self.temporalType == TemporalType.RELATIVE:
             self.indexField.SetValue(start)

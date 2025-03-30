@@ -9,8 +9,9 @@ interpolate NULL cells will considerably speed up the module.
 <p>
 The input raster map is read at its native resolution, the output raster
 map will be produced for the current computational region set with
-<em><a href="g.region.html">g.region</a></em>. Any MASK will be respected, masked
-values will be treated as NULL cells in both the input and the output map.
+<em><a href="g.region.html">g.region</a></em>. A raster mask, if present,
+will be respected. Masked values will be treated like other NULL cells
+in both the input and output maps.
 <p>Spline step values <b>ew_step</b> for the east-west direction and
 <b>ns_step</b> for the north-south direction should not be smaller than
 the east-west and north-south resolutions of the input map. For a raster
@@ -38,7 +39,7 @@ is defined by <b>ew_step</b> for the east-west direction and
 spline step values should be no less than the east-west and north-south
 resolutions of the input map. Each non-NULL cell observation is modeled as a
 linear function of the non-zero splines in the area around the observation.
-The least squares regression predicts the the coefficients of these linear functions.
+The least squares regression predicts the coefficients of these linear functions.
 Regularization avoids the need to have one one observation and one coefficient
 for each spline (in order to avoid instability).
 
