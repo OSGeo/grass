@@ -1071,7 +1071,7 @@ def load_color_config(grass_config_dir):
     If there is no color config file, create a default color setup.
     """
     try:
-        f = open(os.path.join(grass_config_dir, "colors.json"), "r")
+        f = open(os.path.join(grass_config_dir, "colors.json"))
         colors = json.load(f)
         f.close()
     except FileNotFoundError:
@@ -2169,7 +2169,7 @@ def classic_parser(argv, default_gui, color_config=None):
     return params
 
 
-class Color(object):
+class Color:
     """Holds an ANSI Color Code
 
     Provides some nice helper functions to return it as a string, number,
@@ -2291,7 +2291,7 @@ class Color(object):
         return ret
 
 
-class Colors(object):
+class Colors:
     """Holds all colors for GRASS, and provides JSON serialization."""
 
     def __init__(
