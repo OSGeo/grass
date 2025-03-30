@@ -992,12 +992,12 @@ class Settings:
             with open(self.filePath, "w") as f:
                 json.dump(settings, f, indent=2, cls=SettingsJSONEncoder)
         except OSError as e:
-            raise GException(e)
+            raise GException(e) from e
         except Exception as e:
             raise GException(
                 _("Writing settings to file <%(file)s> failed.\n\nDetails: %(detail)s")
                 % {"file": self.filePath, "detail": e}
-            )
+            ) from e
         return self.filePath
 
     def _parseValue(self, value, read=False):
@@ -1099,10 +1099,10 @@ class Settings:
             settings[group][key][subkey] = value
             return
 
-        except KeyError:
+        except KeyError as e:
             raise GException(
                 "%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey)
-            )
+            ) from e
 
     def Append(self, dict, group, key, subkey, value, overwrite=True):
         """Set value of key/subkey

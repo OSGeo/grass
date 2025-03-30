@@ -364,7 +364,7 @@ class LayerList:
         try:
             result = items[self._index]
         except IndexError:
-            raise StopIteration
+            raise StopIteration from None
         self._index += 1
         return result
 
